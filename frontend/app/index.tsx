@@ -69,11 +69,12 @@ const TRANSLATIONS: Record<string, Record<string, string>> = {
 
 export default function HomeScreen() {
   const router = useRouter();
-  const { language, setLanguage, deviceId, setProgress, progress, colors } = useAppStore();
+  const { language, setLanguage, deviceId, setProgress, progress, colors, isPremium, freeRemaining } = useAppStore();
   const [loading, setLoading] = useState(true);
   const [totalQuestions, setTotalQuestions] = useState(0);
   const t = TRANSLATIONS[language] || TRANSLATIONS.no;
   const c = colors;
+  const remaining = freeRemaining();
 
   useEffect(() => {
     loadData();
@@ -219,6 +220,32 @@ export default function HomeScreen() {
           </TouchableOpacity>
         </View>
 
+        {/* Premium Banner */}
+        {!isPremium ? (
+          <TouchableOpacity
+            testID="home-premium-btn"
+            style={[styles.premiumBanner, { backgroundColor: c.card, borderColor: `${c.accent}40` }]}
+            onPress={() => router.push('/paywall')}
+            activeOpacity={0.8}
+          >
+            <View style={[styles.premiumIconBg, { backgroundColor: c.accentBg }]}>
+              <Ionicons name="diamond" size={20} color={c.accent} />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={[styles.premiumTitle, { color: c.text }]}>Unlock Premium</Text>
+              <Text style={[styles.premiumSub, { color: c.textSecondary }]}>
+                {remaining > 0 ? `${remaining} free questions left` : 'Free limit reached'}
+              </Text>
+            </View>
+            <Ionicons name="chevron-forward" size={20} color={c.accent} />
+          </TouchableOpacity>
+        ) : (
+          <View style={[styles.premiumBadge, { backgroundColor: `${c.correct}12`, borderColor: `${c.correct}30` }]}>
+            <Ionicons name="diamond" size={16} color={c.correct} />
+            <Text style={[styles.premiumBadgeText, { color: c.correct }]}>Premium Active</Text>
+          </View>
+        )}
+
         <View style={styles.footerInfo}>
           <Ionicons name="library-outline" size={16} color={c.textMuted} />
           <Text style={[styles.footerText, { color: c.textMuted }]}>{totalQuestions} {t.questionsAvailable}</Text>
@@ -258,4 +285,10 @@ const styles = StyleSheet.create({
   actionText: { fontSize: 14, fontWeight: '600' },
   footerInfo: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 24, gap: 6 },
   footerText: { fontSize: 13 },
+  premiumBanner: { flexDirection: 'row', alignItems: 'center', borderRadius: 16, padding: 14, marginTop: 16, borderWidth: 1, gap: 12 },
+  premiumIconBg: { width: 40, height: 40, borderRadius: 12, justifyContent: 'center', alignItems: 'center' },
+  premiumTitle: { fontSize: 15, fontWeight: '700' },
+  premiumSub: { fontSize: 12, marginTop: 2 },
+  premiumBadge: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 12, paddingVertical: 10, marginTop: 16, gap: 6, borderWidth: 1 },
+  premiumBadgeText: { fontSize: 13, fontWeight: '700' },
 });

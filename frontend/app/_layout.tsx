@@ -45,6 +45,7 @@ export default function RootLayout() {
         <Stack.Screen name="history" />
         <Stack.Screen name="bookmarks" />
         <Stack.Screen name="settings" />
+        <Stack.Screen name="paywall" options={{ presentation: 'modal', animation: 'slide_from_bottom' }} />
       </Stack>
     </SafeAreaProvider>
   );

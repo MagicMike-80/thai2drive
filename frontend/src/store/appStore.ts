@@ -34,6 +34,13 @@ interface AppState {
   // Sound
   soundEnabled: boolean;
   setSoundEnabled: (enabled: boolean) => void;
+  // Premium
+  isPremium: boolean;
+  freeQuestionsUsed: number;
+  setPremium: (val: boolean) => void;
+  incrementFreeQuestions: () => void;
+  canAnswerFree: () => boolean;
+  freeRemaining: () => number;
 }
 
 const generateDeviceId = () => {
@@ -80,6 +87,12 @@ export const useAppStore = create<AppState>((set, get) => ({
     // Load sound preference
     const savedSound = await AsyncStorage.getItem('soundEnabled');
     if (savedSound !== null) set({ soundEnabled: savedSound === 'true' });
+
+    // Load premium state
+    const savedPremium = await AsyncStorage.getItem('isPremium');
+    if (savedPremium === 'true') set({ isPremium: true });
+    const savedFreeUsed = await AsyncStorage.getItem('freeQuestionsUsed');
+    if (savedFreeUsed) set({ freeQuestionsUsed: parseInt(savedFreeUsed, 10) || 0 });
 
     await get().loadBookmarks();
   },
@@ -137,5 +150,27 @@ export const useAppStore = create<AppState>((set, get) => ({
   setSoundEnabled: async (enabled) => {
     set({ soundEnabled: enabled });
     await AsyncStorage.setItem('soundEnabled', enabled.toString());
+  },
+
+  // Premium
+  isPremium: false,
+  freeQuestionsUsed: 0,
+  setPremium: async (val) => {
+    set({ isPremium: val });
+    await AsyncStorage.setItem('isPremium', val.toString());
+  },
+  incrementFreeQuestions: async () => {
+    const next = get().freeQuestionsUsed + 1;
+    set({ freeQuestionsUsed: next });
+    await AsyncStorage.setItem('freeQuestionsUsed', next.toString());
+  },
+  canAnswerFree: () => {
+    const { isPremium, freeQuestionsUsed } = get();
+    return isPremium || freeQuestionsUsed < 5;
+  },
+  freeRemaining: () => {
+    const { isPremium, freeQuestionsUsed } = get();
+    if (isPremium) return Infinity;
+    return Math.max(0, 5 - freeQuestionsUsed);
   },
 }));

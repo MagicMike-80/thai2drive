@@ -21,7 +21,7 @@ const T: Record<string, Record<string, string>> = {
 export default function QuizScreen() {
   const router = useRouter();
   const { mode, category } = useLocalSearchParams<{ mode: string; category: string }>();
-  const { language, deviceId, addBookmark, removeBookmark, isBookmarked, setProgress, colors, soundEnabled } = useAppStore();
+  const { language, deviceId, addBookmark, removeBookmark, isBookmarked, setProgress, colors, soundEnabled, isPremium, incrementFreeQuestions, canAnswerFree } = useAppStore();
   const t = T[language] || T.no;
   const c = colors;
 
@@ -84,6 +84,8 @@ export default function QuizScreen() {
     }
 
     setHistory((p) => [...p, { question_id: q.id, selected_answer: selected, correct }]);
+    // Increment free question counter
+    if (!isPremium) incrementFreeQuestions();
     try {
       await api.updateProgress(deviceId, correct, q.category);
       setProgress(await api.getProgress(deviceId));
@@ -92,6 +94,11 @@ export default function QuizScreen() {
 
   const handleNext = () => {
     if (idx >= questions.length - 1) { finishQuiz(); return; }
+    // Paywall gate: after answering, check if free limit reached
+    if (!canAnswerFree()) {
+      router.push('/paywall');
+      return;
+    }
     Animated.sequence([
       Animated.timing(fade, { toValue: 0, duration: 100, useNativeDriver: true }),
       Animated.timing(fade, { toValue: 1, duration: 100, useNativeDriver: true }),
