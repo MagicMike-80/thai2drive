@@ -386,25 +386,24 @@ export default function QuizScreen() {
             })}
           </View>
 
-          {/* Explanation */}
+          {/* Inline Feedback */}
           {isAnswered && (
-            <View style={styles.explanationCard}>
-              <View style={styles.explanationHeader}>
+            <View style={styles.feedbackInline}>
+              <View style={styles.feedbackRow}>
                 <Ionicons
                   name={selectedAnswer === currentQuestion.correct_answer ? 'checkmark-circle' : 'close-circle'}
-                  size={22}
+                  size={18}
                   color={selectedAnswer === currentQuestion.correct_answer ? '#10B981' : '#EF4444'}
                 />
-                <Text style={[styles.explanationStatus, {
+                <Text style={[styles.feedbackStatus, {
                   color: selectedAnswer === currentQuestion.correct_answer ? '#10B981' : '#EF4444',
                 }]}>
                   {selectedAnswer === currentQuestion.correct_answer ? t.correct : t.incorrect}
                 </Text>
               </View>
-              <Text style={styles.explanationLabel}>{t.explanation}:</Text>
-              <Text style={styles.explanationText}>{getExplanation(currentQuestion)}</Text>
+              <Text style={styles.feedbackExplanation}>{getExplanation(currentQuestion)}</Text>
               {language !== 'th' && (
-                <Text style={styles.explanationThai}>{getExplanation(currentQuestion, 'th')}</Text>
+                <Text style={styles.feedbackExplanationThai}>{getExplanation(currentQuestion, 'th')}</Text>
               )}
             </View>
           )}
@@ -450,9 +449,9 @@ const styles = StyleSheet.create({
   timerBarWarning: { backgroundColor: 'rgba(239, 68, 68, 0.08)', borderBottomColor: 'rgba(239, 68, 68, 0.15)' },
   timerText: { fontSize: 16, fontWeight: '700', color: '#F59E0B', fontVariant: ['tabular-nums'] },
   timerTextWarning: { color: '#EF4444' },
-  scrollContent: { padding: 16, paddingBottom: 24 },
-  questionCard: { backgroundColor: '#1E293B', borderRadius: 20, padding: 24, marginBottom: 20, borderWidth: 1, borderColor: 'rgba(51, 65, 85, 0.5)' },
-  questionText: { fontSize: 20, fontWeight: '700', color: '#F8FAFC', lineHeight: 28 },
+  scrollContent: { padding: 16, paddingBottom: 16 },
+  questionCard: { backgroundColor: '#1E293B', borderRadius: 16, padding: 20, marginBottom: 16, borderWidth: 1, borderColor: 'rgba(51, 65, 85, 0.4)' },
+  questionText: { fontSize: 19, fontWeight: '700', color: '#F8FAFC', lineHeight: 27 },
   translateHint: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 12, opacity: 0.7 },
   translateHintText: { fontSize: 12, color: '#F59E0B' },
   translationContainer: { marginTop: 12 },
@@ -460,25 +459,24 @@ const styles = StyleSheet.create({
   translationText: { fontSize: 16, color: '#F59E0B', lineHeight: 24 },
   ttsButton: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 10, alignSelf: 'flex-start', backgroundColor: 'rgba(245, 158, 11, 0.1)', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20 },
   ttsButtonText: { fontSize: 14 },
-  answersContainer: { gap: 10 },
-  answerButton: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#1E293B', borderRadius: 16, padding: 16, borderWidth: 2, borderColor: 'rgba(51, 65, 85, 0.5)' },
-  selectedAnswer: { borderColor: '#F59E0B', backgroundColor: 'rgba(245, 158, 11, 0.08)' },
-  correctAnswer: { borderColor: '#10B981', backgroundColor: 'rgba(16, 185, 129, 0.08)' },
-  incorrectAnswer: { borderColor: '#EF4444', backgroundColor: 'rgba(239, 68, 68, 0.08)' },
-  dimmedAnswer: { opacity: 0.5 },
-  answerLetterBg: { width: 36, height: 36, borderRadius: 12, backgroundColor: '#334155', justifyContent: 'center', alignItems: 'center', marginRight: 12 },
+  answersContainer: { gap: 12 },
+  answerButton: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#1E293B', borderRadius: 14, padding: 14, borderWidth: 1.5, borderColor: 'rgba(51, 65, 85, 0.4)' },
+  selectedAnswer: { borderColor: '#F59E0B', backgroundColor: 'rgba(245, 158, 11, 0.06)' },
+  correctAnswer: { borderColor: '#10B981', backgroundColor: 'rgba(16, 185, 129, 0.06)' },
+  incorrectAnswer: { borderColor: '#EF4444', backgroundColor: 'rgba(239, 68, 68, 0.06)' },
+  dimmedAnswer: { opacity: 0.4 },
+  answerLetterBg: { width: 34, height: 34, borderRadius: 10, backgroundColor: '#334155', justifyContent: 'center', alignItems: 'center', marginRight: 12 },
   selectedLetterBg: { backgroundColor: '#F59E0B' },
   correctLetterBg: { backgroundColor: '#10B981' },
   incorrectLetterBg: { backgroundColor: '#EF4444' },
   letterText: { fontSize: 15, fontWeight: '700', color: '#F8FAFC' },
-  answerText: { flex: 1, fontSize: 16, color: '#E2E8F0', lineHeight: 22 },
-  explanationCard: { backgroundColor: '#1E293B', borderRadius: 20, padding: 20, marginTop: 20, borderWidth: 1, borderColor: 'rgba(51, 65, 85, 0.5)' },
-  explanationHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 12, gap: 8 },
-  explanationStatus: { fontSize: 18, fontWeight: '700' },
-  explanationLabel: { fontSize: 13, color: '#64748B', textTransform: 'uppercase', letterSpacing: 1, fontWeight: '600', marginBottom: 8 },
-  explanationText: { fontSize: 15, color: '#E2E8F0', lineHeight: 22 },
-  explanationThai: { fontSize: 14, color: '#F59E0B', lineHeight: 22, marginTop: 8, opacity: 0.85 },
-  actionContainer: { padding: 16, borderTopWidth: 1, borderTopColor: 'rgba(51, 65, 85, 0.5)' },
+  answerText: { flex: 1, fontSize: 15, color: '#E2E8F0', lineHeight: 21 },
+  feedbackInline: { marginTop: 16, paddingHorizontal: 2 },
+  feedbackRow: { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 6 },
+  feedbackStatus: { fontSize: 14, fontWeight: '700' },
+  feedbackExplanation: { fontSize: 13, color: '#94A3B8', lineHeight: 20 },
+  feedbackExplanationThai: { fontSize: 13, color: 'rgba(245, 158, 11, 0.7)', lineHeight: 20, marginTop: 4 },
+  actionContainer: { paddingHorizontal: 16, paddingTop: 12, paddingBottom: 16 },
   actionButton: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: '#F59E0B', borderRadius: 16, paddingVertical: 16, gap: 8 },
   actionButtonDisabled: { backgroundColor: '#334155' },
   actionButtonText: { fontSize: 16, fontWeight: '700', color: '#0F172A' },
