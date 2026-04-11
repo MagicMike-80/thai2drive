@@ -1,0 +1,142 @@
+{
+  "theme": "Dark",
+  "archetype": "Archetype 4 (Swiss & High-Contrast)",
+  "emotional_tone": "Trustworthy, Clear, Authoritative, Focused",
+  "colors": {
+    "background": {
+      "base": "#0F172A",
+      "card": "#1E293B",
+      "glass": "rgba(15, 23, 42, 0.8)",
+      "overlay": "rgba(15, 23, 42, 0.7)"
+    },
+    "text": {
+      "primary": "#F8FAFC",
+      "secondary": "#94A3B8",
+      "muted": "#64748B",
+      "inverse": "#0F172A"
+    },
+    "brand": {
+      "primary": "#F59E0B",
+      "primary_hover": "#D97706",
+      "primary_muted": "rgba(245, 158, 11, 0.15)"
+    },
+    "state": {
+      "correct": "#10B981",
+      "correct_bg": "rgba(16, 185, 129, 0.15)",
+      "incorrect": "#EF4444",
+      "incorrect_bg": "rgba(239, 68, 68, 0.15)",
+      "warning": "#F59E0B"
+    },
+    "border": {
+      "default": "rgba(51, 65, 85, 0.5)",
+      "hover": "rgba(71, 85, 105, 0.8)",
+      "active": "#F59E0B"
+    }
+  },
+  "typography": {
+    "font_family": {
+      "heading": "Manrope, sans-serif",
+      "body": "Figtree, sans-serif"
+    },
+    "sizes": {
+      "h1": "text-3xl sm:text-4xl tracking-tight font-extrabold",
+      "h2": "text-2xl sm:text-3xl tracking-tight font-bold",
+      "h3": "text-xl sm:text-2xl tracking-tight font-semibold",
+      "body": "text-base leading-relaxed",
+      "body_small": "text-sm leading-relaxed",
+      "overline": "text-xs tracking-[0.2em] uppercase font-bold"
+    }
+  },
+  "spacing_and_layout": {
+    "container": "max-w-md mx-auto w-full min-h-screen flex flex-col relative",
+    "padding": {
+      "section": "p-6",
+      "card": "p-5",
+      "button": "py-3 px-6"
+    },
+    "border_radius": {
+      "card": "rounded-2xl",
+      "button": "rounded-xl",
+      "chip": "rounded-full"
+    },
+    "grid": {
+      "bento_mobile": "grid grid-cols-2 gap-4"
+    }
+  },
+  "components": {
+    "header": {
+      "style": "sticky top-0 z-50 backdrop-blur-xl bg-[#0F172A]/80 border-b border-slate-800",
+      "instructions": "Must contain back button (if applicable), language switcher toggle (NO/TH/EN), and title. Height should be h-16."
+    },
+    "bottom_navigation": {
+      "style": "fixed bottom-0 left-0 right-0 max-w-md mx-auto z-50 backdrop-blur-xl bg-[#0F172A]/90 border-t border-slate-800 flex justify-between px-6 py-4 pb-safe",
+      "instructions": "Use lucide-react icons for Home, History, Bookmarks."
+    },
+    "quiz_option_button": {
+      "default": "w-full text-left p-4 rounded-xl border border-slate-700 bg-slate-800 hover:bg-slate-700/50 transition-all duration-200",
+      "selected": "border-[#F59E0B] bg-[#F59E0B]/10",
+      "correct": "border-[#10B981] bg-[#10B981]/15 text-[#10B981]",
+      "incorrect": "border-[#EF4444] bg-[#EF4444]/15 text-[#EF4444]",
+      "instructions": "Must have an alphabetical prefix (A, B, C, D) wrapped in a circular container. Text must be vertically centered."
+    },
+    "progress_bar": {
+      "style": "w-full h-1.5 bg-slate-800 rounded-full overflow-hidden",
+      "fill": "h-full bg-[#F59E0B] transition-all duration-300 ease-out"
+    },
+    "language_tap_translation": {
+      "instructions": "Wrap questions in a clickable container. Tap toggles a motion.div expanding downwards to reveal Thai translation in text-amber-500 font-medium. Includes small 'Translate' icon."
+    },
+    "explanation_panel": {
+      "style": "mt-6 p-5 rounded-2xl bg-slate-800 border border-slate-700",
+      "instructions": "Use a soft top-left inner glow and include a Lucide icon (Info). Text should be readable, explaining the driving rule clearly."
+    }
+  },
+  "motion": {
+    "page_transition": "animate-in fade-in slide-in-from-bottom-4 duration-300",
+    "hover": "transition-colors duration-200 ease-in-out",
+    "tap": "active:scale-[0.98]",
+    "reveal": "Animate presence for explanation panels and translations."
+  },
+  "assets": {
+    "icons_library": "lucide-react",
+    "images": [
+      {
+        "category": "home_hero_bg",
+        "url": "https://images.unsplash.com/photo-1608823240964-d7f1d8e2ac85?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2ODh8MHwxfHNlYXJjaHwyfHxub3J3YXklMjByb2FkJTIwZHJpdmluZ3xlbnwwfHx8fDE3NzU5MTYxNTJ8MA&ixlib=rb-4.1.0&q=85",
+        "description": "Norwegian road for home screen banner, ensure heavy gradient overlay to maintain text contrast."
+      },
+      {
+        "category": "category_signs",
+        "url": "https://images.unsplash.com/photo-1608201663097-cb4112f7a5eb?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NzR8MHwxfHNlYXJjaHwzfHx0cmFmZmljJTIwc2lnbnMlMjBkcml2aW5nJTIwdGVzdHxlbnwwfHx8fDE3NzU5MTYxNTJ8MA&ixlib=rb-4.1.0&q=85",
+        "description": "Thumbnail for Traffic Signs category."
+      },
+      {
+        "category": "category_rules",
+        "url": "https://images.unsplash.com/photo-1678448946429-999c2d9d94d2?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NzR8MHwxfHNlYXJjaHwxfHx0cmFmZmljJTIwc2lnbnMlMjBkcml2aW5nJTIwdGVzdHxlbnwwfHx8fDE3NzU5MTYxNTJ8MA&ixlib=rb-4.1.0&q=85",
+        "description": "Thumbnail for Driving Rules / Right of Way category."
+      },
+      {
+        "category": "quiz_pass",
+        "url": "https://static.prod-images.emergentagent.com/jobs/190c8f57-ff39-4045-b2e4-abe76402caf3/images/e994300fcd1fbbd5fd599d9a180a7bf750706dcee90384f8b6c77175b1be649d.png",
+        "description": "3D glowing green checkmark icon for exam pass screen."
+      },
+      {
+        "category": "quiz_fail",
+        "url": "https://static.prod-images.emergentagent.com/jobs/190c8f57-ff39-4045-b2e4-abe76402caf3/images/c9cef550c633f52ff39d11494f84a7fef16e7dcc536acda77f09aaf582ae31d1.png",
+        "description": "3D glowing red cross icon for exam fail screen."
+      }
+    ]
+  },
+  "testing": {
+    "instructions": "All interactive elements MUST have a data-testid attribute formatted as kebab-case, role-based. e.g., data-testid='quiz-option-button', data-testid='language-switcher'."
+  },
+  "instructions_to_main_agent": [
+    "Build the application as a React web app using Tailwind CSS, optimized strictly for mobile widths (max-w-md mx-auto).",
+    "Implement pure HTML/Tailwind for layout structure but leverage Shadcn/ui where complex state management is needed (e.g., Progress, Tabs).",
+    "The Dark Theme is critical: maintain high contrast for legibility, utilizing the tinted Slate grays and Amber accents.",
+    "Implement Tap-to-Translate as an intuitive inline expansion—when tapping a question, animate the Thai translation below it seamlessly.",
+    "Integrate lucide-react for all iconography (Play, CheckCircle, XCircle, Languages, Volume2 for Text-to-Speech).",
+    "Never use generic sans fonts like Inter or Roboto for headings; implement Manrope for Headings and Figtree for Body.",
+    "Do not use generic placeholder images. Map the provided assets exactly to their respective sections."
+  ]
+}
