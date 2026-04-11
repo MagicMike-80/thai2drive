@@ -7,26 +7,22 @@ import { useAppStore } from '../src/store/appStore';
 
 export default function RootLayout() {
   const [isReady, setIsReady] = useState(false);
-  const initDeviceId = useAppStore((state) => state.initDeviceId);
+  const initDeviceId = useAppStore((s) => s.initDeviceId);
+  const colors = useAppStore((s) => s.colors);
+  const isDark = useAppStore((s) => s.isDark);
 
   useEffect(() => {
-    const init = async () => {
-      try {
-        await initDeviceId();
-      } catch (error) {
-        console.error('Error initializing app:', error);
-      } finally {
-        setIsReady(true);
-      }
-    };
-    init();
+    (async () => {
+      try { await initDeviceId(); } catch (e) { console.error(e); }
+      finally { setIsReady(true); }
+    })();
   }, []);
 
   if (!isReady) {
     return (
       <SafeAreaProvider>
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#3B82F6" />
+        <View style={[styles.loading, { backgroundColor: colors.bg }]}>
+          <ActivityIndicator size="large" color={colors.accent} />
         </View>
       </SafeAreaProvider>
     );
@@ -34,11 +30,11 @@ export default function RootLayout() {
 
   return (
     <SafeAreaProvider>
-      <StatusBar style="light" />
+      <StatusBar style={isDark ? 'light' : 'dark'} />
       <Stack
         screenOptions={{
           headerShown: false,
-          contentStyle: { backgroundColor: '#0F172A' },
+          contentStyle: { backgroundColor: colors.bg },
           animation: 'slide_from_right',
         }}
       >
@@ -48,16 +44,12 @@ export default function RootLayout() {
         <Stack.Screen name="results" />
         <Stack.Screen name="history" />
         <Stack.Screen name="bookmarks" />
+        <Stack.Screen name="settings" />
       </Stack>
     </SafeAreaProvider>
   );
 }
 
 const styles = StyleSheet.create({
-  loadingContainer: {
-    flex: 1,
-    backgroundColor: '#0F172A',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+  loading: { flex: 1, justifyContent: 'center', alignItems: 'center' },
 });

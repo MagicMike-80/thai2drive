@@ -1,432 +1,238 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
-  ActivityIndicator,
-  Animated,
-  Platform,
-} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator, Animated } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import * as Speech from 'expo-speech';
 import { useAppStore } from '../src/store/appStore';
 import { api, Question } from '../src/services/api';
+import { playCorrectSound, playIncorrectSound, cleanupSounds } from '../src/sounds';
 
 const ANSWER_LETTERS = ['A', 'B', 'C', 'D'];
-const EXAM_TIME_SECONDS = 90 * 60; // 90 minutes
+const EXAM_TIME_SECONDS = 90 * 60;
 const EXAM_PASS_THRESHOLD = 85;
 
-const TRANSLATIONS: Record<string, Record<string, string>> = {
-  no: {
-    question: 'Spørsmål', of: 'av', checkAnswer: 'Sjekk svar', nextQuestion: 'Neste',
-    finish: 'Fullfør', explanation: 'Forklaring', correct: 'Riktig!', incorrect: 'Feil!',
-    exit: 'Avslutt', tapTranslate: 'Trykk for oversettelse', timeRemaining: 'Tid igjen',
-  },
-  th: {
-    question: 'คำถาม', of: 'จาก', checkAnswer: 'ตรวจคำตอบ', nextQuestion: 'ถัดไป',
-    finish: 'เสร็จสิ้น', explanation: 'คำอธิบาย', correct: 'ถูกต้อง!', incorrect: 'ผิด!',
-    exit: 'ออก', tapTranslate: 'แตะเพื่อแปล', timeRemaining: 'เวลาที่เหลือ',
-  },
-  en: {
-    question: 'Question', of: 'of', checkAnswer: 'Check Answer', nextQuestion: 'Next',
-    finish: 'Finish', explanation: 'Explanation', correct: 'Correct!', incorrect: 'Incorrect!',
-    exit: 'Exit', tapTranslate: 'Tap to translate', timeRemaining: 'Time remaining',
-  },
+const T: Record<string, Record<string, string>> = {
+  no: { checkAnswer: 'Sjekk svar', next: 'Neste', finish: 'Fullfør', correct: 'Riktig!', incorrect: 'Feil!', tapTranslate: 'Trykk for Thai' },
+  th: { checkAnswer: 'ตรวจคำตอบ', next: 'ถัดไป', finish: 'เสร็จสิ้น', correct: 'ถูกต้อง!', incorrect: 'ผิด!', tapTranslate: 'แตะเพื่อแปล' },
+  en: { checkAnswer: 'Check Answer', next: 'Next', finish: 'Finish', correct: 'Correct!', incorrect: 'Incorrect!', tapTranslate: 'Tap for Thai' },
 };
 
 export default function QuizScreen() {
   const router = useRouter();
   const { mode, category } = useLocalSearchParams<{ mode: string; category: string }>();
-  const { language, deviceId, addBookmark, removeBookmark, isBookmarked, setProgress } = useAppStore();
-  const t = TRANSLATIONS[language] || TRANSLATIONS.no;
+  const { language, deviceId, addBookmark, removeBookmark, isBookmarked, setProgress, colors, soundEnabled } = useAppStore();
+  const t = T[language] || T.no;
+  const c = colors;
 
   const [questions, setQuestions] = useState<Question[]>([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
-  const [isAnswered, setIsAnswered] = useState(false);
+  const [idx, setIdx] = useState(0);
+  const [selected, setSelected] = useState<string | null>(null);
+  const [answered, setAnswered] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [quizStartTime] = useState(new Date());
-  const [answeredQuestions, setAnsweredQuestions] = useState<any[]>([]);
-  const [showTranslation, setShowTranslation] = useState(false);
-  const [isSpeaking, setIsSpeaking] = useState(false);
-  const [timeRemaining, setTimeRemaining] = useState(EXAM_TIME_SECONDS);
+  const [startTime] = useState(new Date());
+  const [history, setHistory] = useState<any[]>([]);
+  const [showThai, setShowThai] = useState(false);
+  const [speaking, setSpeaking] = useState(false);
+  const [timer, setTimer] = useState(EXAM_TIME_SECONDS);
 
-  const fadeAnim = useRef(new Animated.Value(1)).current;
+  const fade = useRef(new Animated.Value(1)).current;
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
   const isExam = mode === 'exam';
 
   useEffect(() => {
     loadQuestions();
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-      Speech.stop();
-    };
+    return () => { if (timerRef.current) clearInterval(timerRef.current); Speech.stop(); cleanupSounds(); };
   }, []);
 
   useEffect(() => {
     if (isExam && !loading && questions.length > 0) {
       timerRef.current = setInterval(() => {
-        setTimeRemaining((prev) => {
-          if (prev <= 1) {
-            if (timerRef.current) clearInterval(timerRef.current);
-            handleTimeUp();
-            return 0;
-          }
-          return prev - 1;
-        });
+        setTimer((p) => { if (p <= 1) { if (timerRef.current) clearInterval(timerRef.current); handleTimeUp(); return 0; } return p - 1; });
       }, 1000);
     }
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
+    return () => { if (timerRef.current) clearInterval(timerRef.current); };
   }, [loading, questions.length]);
 
   const loadQuestions = async () => {
     try {
-      const count = isExam ? 45 : 10;
-      const cat = category === 'all' ? undefined : category;
-      const qs = await api.getRandomQuestions(count, cat);
+      const qs = await api.getRandomQuestions(isExam ? 45 : 10, category === 'all' ? undefined : category);
       setQuestions(qs);
-    } catch (error) {
-      console.error('Error loading questions:', error);
-    } finally {
-      setLoading(false);
-    }
+    } catch (e) { console.error(e); }
+    finally { setLoading(false); }
   };
 
   const handleTimeUp = useCallback(() => {
-    const correctCount = answeredQuestions.filter((a) => a.correct).length;
-    const totalAnswered = answeredQuestions.length;
-    const scorePercentage = totalAnswered > 0 ? (correctCount / questions.length) * 100 : 0;
-    navigateToResults(correctCount, scorePercentage);
-  }, [answeredQuestions, questions.length]);
+    const correct = history.filter((a) => a.correct).length;
+    goResults(correct, questions.length > 0 ? (correct / questions.length) * 100 : 0);
+  }, [history, questions.length]);
 
-  const currentQuestion = questions[currentIndex];
+  const q = questions[idx];
 
-  const getQuestionText = (q: Question, lang?: string) => {
-    const l = lang || language;
-    const key = `question_text_${l}` as keyof Question;
-    return (q[key] as string) || q.question_text_no;
-  };
+  const qText = (qu: Question, l?: string) => (qu as any)[`question_text_${l || language}`] || qu.question_text_no;
+  const aText = (qu: Question, letter: string, l?: string) => (qu as any)[`answer_${letter.toLowerCase()}_${l || language}`] || (qu as any)[`answer_${letter.toLowerCase()}_no`];
+  const eText = (qu: Question, l?: string) => (qu as any)[`explanation_${l || language}`] || qu.explanation_no;
 
-  const getAnswerText = (q: Question, letter: string, lang?: string) => {
-    const l = lang || language;
-    const key = `answer_${letter.toLowerCase()}_${l}` as keyof Question;
-    return (q[key] as string) || (q as any)[`answer_${letter.toLowerCase()}_no`];
-  };
+  const handleCheck = async () => {
+    if (!selected || !q) return;
+    setAnswered(true);
+    const correct = selected === q.correct_answer;
 
-  const getExplanation = (q: Question, lang?: string) => {
-    const l = lang || language;
-    const key = `explanation_${l}` as keyof Question;
-    return (q[key] as string) || q.explanation_no;
-  };
-
-  const handleSelectAnswer = (letter: string) => {
-    if (isAnswered) return;
-    setSelectedAnswer(letter);
-  };
-
-  const handleCheckAnswer = async () => {
-    if (!selectedAnswer || !currentQuestion) return;
-    setIsAnswered(true);
-    const isCorrect = selectedAnswer === currentQuestion.correct_answer;
-
-    setAnsweredQuestions((prev) => [
-      ...prev,
-      { question_id: currentQuestion.id, selected_answer: selectedAnswer, correct: isCorrect },
-    ]);
-
-    try {
-      await api.updateProgress(deviceId, isCorrect, currentQuestion.category);
-      const updatedProgress = await api.getProgress(deviceId);
-      setProgress(updatedProgress);
-    } catch (error) {
-      console.error('Error updating progress:', error);
+    // Play sound
+    if (soundEnabled) {
+      if (correct) playCorrectSound(); else playIncorrectSound();
     }
+
+    setHistory((p) => [...p, { question_id: q.id, selected_answer: selected, correct }]);
+    try {
+      await api.updateProgress(deviceId, correct, q.category);
+      setProgress(await api.getProgress(deviceId));
+    } catch (e) {}
   };
 
   const handleNext = () => {
-    if (currentIndex >= questions.length - 1) {
-      finishQuiz();
-      return;
-    }
-
+    if (idx >= questions.length - 1) { finishQuiz(); return; }
     Animated.sequence([
-      Animated.timing(fadeAnim, { toValue: 0, duration: 120, useNativeDriver: true }),
-      Animated.timing(fadeAnim, { toValue: 1, duration: 120, useNativeDriver: true }),
+      Animated.timing(fade, { toValue: 0, duration: 100, useNativeDriver: true }),
+      Animated.timing(fade, { toValue: 1, duration: 100, useNativeDriver: true }),
     ]).start();
-
-    setTimeout(() => {
-      setCurrentIndex((prev) => prev + 1);
-      setSelectedAnswer(null);
-      setIsAnswered(false);
-      setShowTranslation(false);
-    }, 120);
+    setTimeout(() => { setIdx((p) => p + 1); setSelected(null); setAnswered(false); setShowThai(false); }, 100);
   };
 
   const finishQuiz = async () => {
     if (timerRef.current) clearInterval(timerRef.current);
-    const correctCount = answeredQuestions.filter((a) => a.correct).length;
-    const scorePercentage = (correctCount / questions.length) * 100;
-
+    const correct = history.filter((a) => a.correct).length;
+    const pct = (correct / questions.length) * 100;
     try {
-      const passed = isExam ? scorePercentage >= EXAM_PASS_THRESHOLD : undefined;
       await api.saveQuizAttempt({
-        device_id: deviceId,
-        mode: mode || 'practice',
-        category: category === 'all' ? undefined : category,
-        total_questions: questions.length,
-        correct_answers: correctCount,
-        score_percentage: scorePercentage,
-        passed,
-        questions_answered: answeredQuestions,
-        started_at: quizStartTime.toISOString(),
+        device_id: deviceId, mode: mode || 'practice', category: category === 'all' ? undefined : category,
+        total_questions: questions.length, correct_answers: correct, score_percentage: pct,
+        passed: isExam ? pct >= EXAM_PASS_THRESHOLD : undefined, questions_answered: history, started_at: startTime.toISOString(),
       });
-    } catch (error) {
-      console.error('Error saving quiz attempt:', error);
-    }
-
-    navigateToResults(correctCount, scorePercentage);
+    } catch (e) {}
+    goResults(correct, pct);
   };
 
-  const navigateToResults = (correctCount: number, scorePercentage: number) => {
-    router.replace({
-      pathname: '/results',
-      params: {
-        total: questions.length.toString(),
-        correct: correctCount.toString(),
-        mode: mode || 'practice',
-        passed: isExam ? (scorePercentage >= EXAM_PASS_THRESHOLD ? 'true' : 'false') : '',
-      },
-    });
+  const goResults = (correct: number, pct: number) => {
+    router.replace({ pathname: '/results', params: { total: questions.length.toString(), correct: correct.toString(), mode: mode || 'practice', passed: isExam ? (pct >= EXAM_PASS_THRESHOLD ? 'true' : 'false') : '' } });
   };
 
-  const handleBookmark = async () => {
-    if (!currentQuestion) return;
-    if (isBookmarked(currentQuestion.id)) {
-      await removeBookmark(currentQuestion.id);
-    } else {
-      await addBookmark(currentQuestion.id);
-    }
-  };
+  const handleBookmark = async () => { if (!q) return; isBookmarked(q.id) ? await removeBookmark(q.id) : await addBookmark(q.id); };
 
   const speakThai = () => {
-    if (!currentQuestion) return;
-    if (isSpeaking) {
-      Speech.stop();
-      setIsSpeaking(false);
-      return;
-    }
-    setIsSpeaking(true);
-    Speech.speak(getQuestionText(currentQuestion, 'th'), {
-      language: 'th-TH',
-      rate: 0.85,
-      onDone: () => setIsSpeaking(false),
-      onError: () => setIsSpeaking(false),
-    });
+    if (!q) return;
+    if (speaking) { Speech.stop(); setSpeaking(false); return; }
+    setSpeaking(true);
+    Speech.speak(qText(q, 'th'), { language: 'th-TH', rate: 0.85, onDone: () => setSpeaking(false), onError: () => setSpeaking(false) });
   };
 
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-  };
+  const fmtTime = (s: number) => `${Math.floor(s / 60)}:${(s % 60).toString().padStart(2, '0')}`;
 
-  if (loading) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator testID="quiz-loading" size="large" color="#F59E0B" />
-        </View>
-      </SafeAreaView>
-    );
-  }
+  if (loading || !q) return (
+    <SafeAreaView style={[s.container, { backgroundColor: c.bg }]}>
+      <View style={s.center}>{loading ? <ActivityIndicator testID="quiz-loading" size="large" color={c.accent} /> : <Text style={{ color: c.incorrect }}>No questions</Text>}</View>
+    </SafeAreaView>
+  );
 
-  if (!currentQuestion) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.loadingContainer}>
-          <Text style={styles.errorText}>No questions available</Text>
-        </View>
-      </SafeAreaView>
-    );
-  }
-
-  const questionBookmarked = isBookmarked(currentQuestion.id);
-  const timerWarning = isExam && timeRemaining < 300;
+  const bookmarked = isBookmarked(q.id);
+  const timerWarn = isExam && timer < 300;
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[s.container, { backgroundColor: c.bg }]}>
       {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity testID="quiz-exit-btn" style={styles.exitButton} onPress={() => router.back()}>
-          <Ionicons name="close" size={22} color="#F8FAFC" />
+      <View style={[s.header]}>
+        <TouchableOpacity testID="quiz-exit-btn" style={[s.iconBtn, { backgroundColor: c.card }]} onPress={() => router.back()}>
+          <Ionicons name="close" size={20} color={c.text} />
         </TouchableOpacity>
-
-        <View style={styles.progressContainer}>
-          <Text style={styles.progressText}>
-            {currentIndex + 1} / {questions.length}
-          </Text>
-          <View style={styles.progressBar}>
-            <View style={[styles.progressFill, { width: `${((currentIndex + 1) / questions.length) * 100}%` }]} />
+        <View style={s.progWrap}>
+          <Text style={[s.progText, { color: c.textSecondary }]}>{idx + 1} / {questions.length}</Text>
+          <View style={[s.progBar, { backgroundColor: c.progressBg }]}>
+            <View style={[s.progFill, { width: `${((idx + 1) / questions.length) * 100}%`, backgroundColor: c.accent }]} />
           </View>
         </View>
-
-        <TouchableOpacity testID="quiz-bookmark-btn" style={styles.bookmarkButton} onPress={handleBookmark}>
-          <Ionicons
-            name={questionBookmarked ? 'bookmark' : 'bookmark-outline'}
-            size={22}
-            color={questionBookmarked ? '#F59E0B' : '#F8FAFC'}
-          />
+        <TouchableOpacity testID="quiz-bookmark-btn" style={[s.iconBtn, { backgroundColor: c.card }]} onPress={handleBookmark}>
+          <Ionicons name={bookmarked ? 'bookmark' : 'bookmark-outline'} size={20} color={bookmarked ? c.accent : c.text} />
         </TouchableOpacity>
       </View>
 
-      {/* Timer for exam mode */}
+      {/* Timer */}
       {isExam && (
-        <View style={[styles.timerBar, timerWarning && styles.timerBarWarning]}>
-          <Ionicons name="timer-outline" size={16} color={timerWarning ? '#EF4444' : '#F59E0B'} />
-          <Text style={[styles.timerText, timerWarning && styles.timerTextWarning]}>
-            {formatTime(timeRemaining)}
-          </Text>
+        <View style={[s.timerBar, { backgroundColor: timerWarn ? c.incorrectBg : c.accentBg }]}>
+          <Ionicons name="timer-outline" size={15} color={timerWarn ? c.incorrect : c.accent} />
+          <Text style={[s.timerText, { color: timerWarn ? c.incorrect : c.accent }]}>{fmtTime(timer)}</Text>
         </View>
       )}
 
-      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-        <Animated.View style={{ opacity: fadeAnim }}>
+      <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
+        <Animated.View style={{ opacity: fade }}>
           {/* Question */}
-          <TouchableOpacity
-            testID="question-card"
-            style={styles.questionCard}
-            onPress={() => setShowTranslation(!showTranslation)}
-            activeOpacity={0.9}
-          >
-            <Text style={styles.questionText}>{getQuestionText(currentQuestion)}</Text>
-
-            {/* Translate hint */}
-            {!showTranslation && language !== 'th' && (
-              <View style={styles.translateHint}>
-                <Ionicons name="language-outline" size={14} color="#F59E0B" />
-                <Text style={styles.translateHintText}>{t.tapTranslate}</Text>
-              </View>
+          <TouchableOpacity testID="question-card" style={[s.qCard, { backgroundColor: c.card, borderColor: c.cardBorder }]} onPress={() => setShowThai(!showThai)} activeOpacity={0.9}>
+            <Text style={[s.qText, { color: c.text }]}>{qText(q)}</Text>
+            {!showThai && language !== 'th' && (
+              <View style={s.hintRow}><Ionicons name="language-outline" size={13} color={c.accent} /><Text style={[s.hintText, { color: c.accent }]}>{t.tapTranslate}</Text></View>
             )}
-
-            {/* Thai Translation */}
-            {showTranslation && language !== 'th' && (
-              <View style={styles.translationContainer}>
-                <View style={styles.translationDivider} />
-                <Text style={styles.translationText}>
-                  {getQuestionText(currentQuestion, 'th')}
-                </Text>
-                <TouchableOpacity testID="tts-btn" style={styles.ttsButton} onPress={speakThai}>
-                  <Ionicons
-                    name={isSpeaking ? 'volume-high' : 'volume-medium-outline'}
-                    size={18}
-                    color="#F59E0B"
-                  />
-                  <Text style={styles.ttsButtonText}>🇹🇭</Text>
+            {showThai && language !== 'th' && (
+              <View style={s.thaiWrap}>
+                <View style={[s.thaiLine, { backgroundColor: `${c.accent}30` }]} />
+                <Text style={[s.thaiText, { color: c.accent }]}>{qText(q, 'th')}</Text>
+                <TouchableOpacity testID="tts-btn" style={[s.ttsBtn, { backgroundColor: c.accentBg }]} onPress={speakThai}>
+                  <Ionicons name={speaking ? 'volume-high' : 'volume-medium-outline'} size={16} color={c.accent} />
+                  <Text style={{ fontSize: 13 }}>🇹🇭</Text>
                 </TouchableOpacity>
               </View>
             )}
           </TouchableOpacity>
 
           {/* Answers */}
-          <View style={styles.answersContainer}>
-            {ANSWER_LETTERS.map((letter) => {
-              const answerText = getAnswerText(currentQuestion, letter);
-              const isSelected = selectedAnswer === letter;
-              const isCorrect = currentQuestion.correct_answer === letter;
+          <View style={s.ansWrap}>
+            {ANSWER_LETTERS.map((L) => {
+              const isSel = selected === L;
+              const isCor = q.correct_answer === L;
+              let bg = c.answerBg, border = c.answerBorder, txtCol = c.text, letBg = c.letterBg, dim = false;
 
-              let cardStyle = [styles.answerButton];
-              let letterBgStyle = [styles.answerLetterBg];
-              let textColor = '#E2E8F0';
-
-              if (isAnswered) {
-                if (isCorrect) {
-                  cardStyle.push(styles.correctAnswer);
-                  letterBgStyle.push(styles.correctLetterBg);
-                  textColor = '#10B981';
-                } else if (isSelected && !isCorrect) {
-                  cardStyle.push(styles.incorrectAnswer);
-                  letterBgStyle.push(styles.incorrectLetterBg);
-                  textColor = '#EF4444';
-                } else {
-                  cardStyle.push(styles.dimmedAnswer);
-                }
-              } else if (isSelected) {
-                cardStyle.push(styles.selectedAnswer);
-                letterBgStyle.push(styles.selectedLetterBg);
-              }
+              if (answered) {
+                if (isCor) { bg = c.correctBg; border = c.correct; txtCol = c.correct; letBg = c.correct; }
+                else if (isSel) { bg = c.incorrectBg; border = c.incorrect; txtCol = c.incorrect; letBg = c.incorrect; }
+                else { dim = true; }
+              } else if (isSel) { bg = c.accentBg; border = c.accent; letBg = c.accent; }
 
               return (
-                <TouchableOpacity
-                  key={letter}
-                  testID={`answer-btn-${letter}`}
-                  style={cardStyle}
-                  onPress={() => handleSelectAnswer(letter)}
-                  disabled={isAnswered}
-                  activeOpacity={0.7}
-                >
-                  <View style={letterBgStyle}>
-                    <Text style={styles.letterText}>{letter}</Text>
-                  </View>
-                  <Text style={[styles.answerText, { color: textColor }]}>{answerText}</Text>
-                  {isAnswered && isCorrect && (
-                    <Ionicons name="checkmark-circle" size={22} color="#10B981" />
-                  )}
-                  {isAnswered && isSelected && !isCorrect && (
-                    <Ionicons name="close-circle" size={22} color="#EF4444" />
-                  )}
+                <TouchableOpacity key={L} testID={`answer-btn-${L}`} style={[s.ansBtn, { backgroundColor: bg, borderColor: border }, dim && s.dim]} onPress={() => !answered && setSelected(L)} disabled={answered} activeOpacity={0.7}>
+                  <View style={[s.letCircle, { backgroundColor: letBg }]}><Text style={s.letText}>{L}</Text></View>
+                  <Text style={[s.ansText, { color: txtCol }]}>{aText(q, L)}</Text>
+                  {answered && isCor && <Ionicons name="checkmark-circle" size={20} color={c.correct} />}
+                  {answered && isSel && !isCor && <Ionicons name="close-circle" size={20} color={c.incorrect} />}
                 </TouchableOpacity>
               );
             })}
           </View>
 
-          {/* Inline Feedback */}
-          {isAnswered && (
-            <View style={styles.feedbackInline}>
-              <View style={styles.feedbackRow}>
-                <Ionicons
-                  name={selectedAnswer === currentQuestion.correct_answer ? 'checkmark-circle' : 'close-circle'}
-                  size={18}
-                  color={selectedAnswer === currentQuestion.correct_answer ? '#10B981' : '#EF4444'}
-                />
-                <Text style={[styles.feedbackStatus, {
-                  color: selectedAnswer === currentQuestion.correct_answer ? '#10B981' : '#EF4444',
-                }]}>
-                  {selectedAnswer === currentQuestion.correct_answer ? t.correct : t.incorrect}
+          {/* Inline feedback — no card, no box */}
+          {answered && (
+            <View style={s.feedback}>
+              <View style={s.fbRow}>
+                <Ionicons name={selected === q.correct_answer ? 'checkmark-circle' : 'close-circle'} size={16} color={selected === q.correct_answer ? c.correct : c.incorrect} />
+                <Text style={[s.fbStatus, { color: selected === q.correct_answer ? c.correct : c.incorrect }]}>
+                  {selected === q.correct_answer ? t.correct : t.incorrect}
                 </Text>
               </View>
-              <Text style={styles.feedbackExplanation}>{getExplanation(currentQuestion)}</Text>
-              {language !== 'th' && (
-                <Text style={styles.feedbackExplanationThai}>{getExplanation(currentQuestion, 'th')}</Text>
-              )}
+              <Text style={[s.fbExpl, { color: c.textSecondary }]}>{eText(q)}</Text>
+              {language !== 'th' && <Text style={[s.fbThai, { color: `${c.accent}B0` }]}>{eText(q, 'th')}</Text>}
             </View>
           )}
         </Animated.View>
       </ScrollView>
 
-      {/* Action Button */}
-      <View style={styles.actionContainer}>
-        {!isAnswered ? (
-          <TouchableOpacity
-            testID="check-answer-btn"
-            style={[styles.actionButton, !selectedAnswer && styles.actionButtonDisabled]}
-            onPress={handleCheckAnswer}
-            disabled={!selectedAnswer}
-          >
-            <Text style={styles.actionButtonText}>{t.checkAnswer}</Text>
+      {/* Action */}
+      <View style={s.actWrap}>
+        {!answered ? (
+          <TouchableOpacity testID="check-answer-btn" style={[s.actBtn, { backgroundColor: selected ? c.accent : c.letterBg }]} onPress={handleCheck} disabled={!selected}>
+            <Text style={[s.actText, { color: selected ? '#0F172A' : c.textMuted }]}>{t.checkAnswer}</Text>
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity testID="next-btn" style={styles.actionButton} onPress={handleNext}>
-            <Text style={styles.actionButtonText}>
-              {currentIndex >= questions.length - 1 ? t.finish : t.nextQuestion}
-            </Text>
-            <Ionicons name="arrow-forward" size={20} color="#0F172A" />
+          <TouchableOpacity testID="next-btn" style={[s.actBtn, { backgroundColor: c.accent }]} onPress={handleNext}>
+            <Text style={[s.actText, { color: '#0F172A' }]}>{idx >= questions.length - 1 ? t.finish : t.next}</Text>
+            <Ionicons name="arrow-forward" size={18} color="#0F172A" />
           </TouchableOpacity>
         )}
       </View>
@@ -434,50 +240,38 @@ export default function QuizScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#0F172A' },
-  loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  errorText: { color: '#EF4444', fontSize: 16 },
-  header: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12, gap: 12 },
-  exitButton: { width: 40, height: 40, borderRadius: 12, backgroundColor: '#1E293B', justifyContent: 'center', alignItems: 'center' },
-  progressContainer: { flex: 1 },
-  progressText: { fontSize: 13, color: '#94A3B8', marginBottom: 6, textAlign: 'center', fontWeight: '600' },
-  progressBar: { height: 6, backgroundColor: '#1E293B', borderRadius: 3 },
-  progressFill: { height: '100%', backgroundColor: '#F59E0B', borderRadius: 3 },
-  bookmarkButton: { width: 40, height: 40, borderRadius: 12, backgroundColor: '#1E293B', justifyContent: 'center', alignItems: 'center' },
-  timerBar: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingVertical: 8, gap: 6, backgroundColor: 'rgba(245, 158, 11, 0.08)', borderBottomWidth: 1, borderBottomColor: 'rgba(245, 158, 11, 0.15)' },
-  timerBarWarning: { backgroundColor: 'rgba(239, 68, 68, 0.08)', borderBottomColor: 'rgba(239, 68, 68, 0.15)' },
-  timerText: { fontSize: 16, fontWeight: '700', color: '#F59E0B', fontVariant: ['tabular-nums'] },
-  timerTextWarning: { color: '#EF4444' },
-  scrollContent: { padding: 16, paddingBottom: 16 },
-  questionCard: { backgroundColor: '#1E293B', borderRadius: 16, padding: 20, marginBottom: 16, borderWidth: 1, borderColor: 'rgba(51, 65, 85, 0.4)' },
-  questionText: { fontSize: 19, fontWeight: '700', color: '#F8FAFC', lineHeight: 27 },
-  translateHint: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 12, opacity: 0.7 },
-  translateHintText: { fontSize: 12, color: '#F59E0B' },
-  translationContainer: { marginTop: 12 },
-  translationDivider: { height: 1, backgroundColor: 'rgba(245, 158, 11, 0.2)', marginBottom: 12 },
-  translationText: { fontSize: 16, color: '#F59E0B', lineHeight: 24 },
-  ttsButton: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 10, alignSelf: 'flex-start', backgroundColor: 'rgba(245, 158, 11, 0.1)', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20 },
-  ttsButtonText: { fontSize: 14 },
-  answersContainer: { gap: 12 },
-  answerButton: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#1E293B', borderRadius: 14, padding: 14, borderWidth: 1.5, borderColor: 'rgba(51, 65, 85, 0.4)' },
-  selectedAnswer: { borderColor: '#F59E0B', backgroundColor: 'rgba(245, 158, 11, 0.06)' },
-  correctAnswer: { borderColor: '#10B981', backgroundColor: 'rgba(16, 185, 129, 0.06)' },
-  incorrectAnswer: { borderColor: '#EF4444', backgroundColor: 'rgba(239, 68, 68, 0.06)' },
-  dimmedAnswer: { opacity: 0.4 },
-  answerLetterBg: { width: 34, height: 34, borderRadius: 10, backgroundColor: '#334155', justifyContent: 'center', alignItems: 'center', marginRight: 12 },
-  selectedLetterBg: { backgroundColor: '#F59E0B' },
-  correctLetterBg: { backgroundColor: '#10B981' },
-  incorrectLetterBg: { backgroundColor: '#EF4444' },
-  letterText: { fontSize: 15, fontWeight: '700', color: '#F8FAFC' },
-  answerText: { flex: 1, fontSize: 15, color: '#E2E8F0', lineHeight: 21 },
-  feedbackInline: { marginTop: 16, paddingHorizontal: 2 },
-  feedbackRow: { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 6 },
-  feedbackStatus: { fontSize: 14, fontWeight: '700' },
-  feedbackExplanation: { fontSize: 13, color: '#94A3B8', lineHeight: 20 },
-  feedbackExplanationThai: { fontSize: 13, color: 'rgba(245, 158, 11, 0.7)', lineHeight: 20, marginTop: 4 },
-  actionContainer: { paddingHorizontal: 16, paddingTop: 12, paddingBottom: 16 },
-  actionButton: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: '#F59E0B', borderRadius: 16, paddingVertical: 16, gap: 8 },
-  actionButtonDisabled: { backgroundColor: '#334155' },
-  actionButtonText: { fontSize: 16, fontWeight: '700', color: '#0F172A' },
+const s = StyleSheet.create({
+  container: { flex: 1 },
+  center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  header: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 14, paddingVertical: 10, gap: 10 },
+  iconBtn: { width: 38, height: 38, borderRadius: 12, justifyContent: 'center', alignItems: 'center' },
+  progWrap: { flex: 1 },
+  progText: { fontSize: 12, fontWeight: '600', textAlign: 'center', marginBottom: 5 },
+  progBar: { height: 5, borderRadius: 3 },
+  progFill: { height: '100%', borderRadius: 3 },
+  timerBar: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingVertical: 6, gap: 5 },
+  timerText: { fontSize: 15, fontWeight: '700', fontVariant: ['tabular-nums'] },
+  scroll: { paddingHorizontal: 14, paddingTop: 6, paddingBottom: 10 },
+  qCard: { borderRadius: 14, padding: 18, marginBottom: 14, borderWidth: 1 },
+  qText: { fontSize: 18, fontWeight: '700', lineHeight: 26 },
+  hintRow: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 10, opacity: 0.6 },
+  hintText: { fontSize: 11 },
+  thaiWrap: { marginTop: 10 },
+  thaiLine: { height: 1, marginBottom: 10 },
+  thaiText: { fontSize: 15, lineHeight: 22 },
+  ttsBtn: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 8, alignSelf: 'flex-start', paddingHorizontal: 10, paddingVertical: 5, borderRadius: 16 },
+  ansWrap: { gap: 12 },
+  ansBtn: { flexDirection: 'row', alignItems: 'center', borderRadius: 12, paddingVertical: 13, paddingHorizontal: 14, borderWidth: 1.5 },
+  dim: { opacity: 0.35 },
+  letCircle: { width: 32, height: 32, borderRadius: 10, justifyContent: 'center', alignItems: 'center', marginRight: 12 },
+  letText: { fontSize: 14, fontWeight: '700', color: '#F8FAFC' },
+  ansText: { flex: 1, fontSize: 15, lineHeight: 21 },
+  feedback: { marginTop: 16, paddingHorizontal: 2 },
+  fbRow: { flexDirection: 'row', alignItems: 'center', gap: 5, marginBottom: 4 },
+  fbStatus: { fontSize: 13, fontWeight: '700' },
+  fbExpl: { fontSize: 13, lineHeight: 19, opacity: 0.8 },
+  fbThai: { fontSize: 12, lineHeight: 18, marginTop: 3 },
+  actWrap: { paddingHorizontal: 14, paddingTop: 10, paddingBottom: 14 },
+  actBtn: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', borderRadius: 14, paddingVertical: 14, gap: 6 },
+  actText: { fontSize: 15, fontWeight: '700' },
 });

@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Appearance } from 'react-native';
 import { api } from '../services/api';
+import { ThemeMode, ThemeColors, darkTheme, lightTheme } from '../theme';
 
 interface UserProgress {
   id: string;
@@ -13,39 +15,48 @@ interface UserProgress {
 }
 
 interface AppState {
-  // Language
   language: string;
   setLanguage: (lang: string) => void;
-
-  // Device ID (for anonymous tracking)
   deviceId: string;
   initDeviceId: () => Promise<void>;
-
-  // User Progress
   progress: UserProgress;
   setProgress: (progress: UserProgress) => void;
-
-  // Bookmarks
   bookmarks: string[];
   loadBookmarks: () => Promise<void>;
   addBookmark: (questionId: string) => Promise<void>;
   removeBookmark: (questionId: string) => Promise<void>;
   isBookmarked: (questionId: string) => boolean;
+  // Theme
+  themeMode: ThemeMode;
+  setThemeMode: (mode: ThemeMode) => void;
+  colors: ThemeColors;
+  isDark: boolean;
+  // Sound
+  soundEnabled: boolean;
+  setSoundEnabled: (enabled: boolean) => void;
 }
 
 const generateDeviceId = () => {
   return 'device_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 };
 
+function resolveTheme(mode: ThemeMode): { colors: ThemeColors; isDark: boolean } {
+  if (mode === 'system') {
+    const scheme = Appearance.getColorScheme();
+    const isDark = scheme !== 'light';
+    return { colors: isDark ? darkTheme : lightTheme, isDark };
+  }
+  const isDark = mode === 'dark';
+  return { colors: isDark ? darkTheme : lightTheme, isDark };
+}
+
 export const useAppStore = create<AppState>((set, get) => ({
-  // Language
   language: 'no',
   setLanguage: async (lang) => {
     set({ language: lang });
     await AsyncStorage.setItem('language', lang);
   },
 
-  // Device ID
   deviceId: '',
   initDeviceId: async () => {
     let deviceId = await AsyncStorage.getItem('deviceId');
@@ -55,34 +66,34 @@ export const useAppStore = create<AppState>((set, get) => ({
     }
     set({ deviceId });
 
-    // Also load saved language
     const savedLang = await AsyncStorage.getItem('language');
-    if (savedLang) {
-      set({ language: savedLang });
+    if (savedLang) set({ language: savedLang });
+
+    // Load theme preference
+    const savedTheme = await AsyncStorage.getItem('themeMode');
+    if (savedTheme) {
+      const mode = savedTheme as ThemeMode;
+      const { colors, isDark } = resolveTheme(mode);
+      set({ themeMode: mode, colors, isDark });
     }
 
-    // Load bookmarks
+    // Load sound preference
+    const savedSound = await AsyncStorage.getItem('soundEnabled');
+    if (savedSound !== null) set({ soundEnabled: savedSound === 'true' });
+
     await get().loadBookmarks();
   },
 
-  // Progress
   progress: {
-    id: '',
-    device_id: '',
-    total_questions_answered: 0,
-    correct_answers: 0,
-    questions_by_category: {},
-    last_activity: '',
-    created_at: '',
+    id: '', device_id: '', total_questions_answered: 0, correct_answers: 0,
+    questions_by_category: {}, last_activity: '', created_at: '',
   },
   setProgress: (progress) => set({ progress }),
 
-  // Bookmarks
   bookmarks: [],
   loadBookmarks: async () => {
     const { deviceId } = get();
     if (!deviceId) return;
-
     try {
       const bookmarks = await api.getBookmarks(deviceId);
       set({ bookmarks: bookmarks.map((b) => b.question_id) });
@@ -93,7 +104,6 @@ export const useAppStore = create<AppState>((set, get) => ({
   addBookmark: async (questionId) => {
     const { deviceId, bookmarks } = get();
     if (!deviceId) return;
-
     try {
       await api.addBookmark(deviceId, questionId);
       set({ bookmarks: [...bookmarks, questionId] });
@@ -104,7 +114,6 @@ export const useAppStore = create<AppState>((set, get) => ({
   removeBookmark: async (questionId) => {
     const { deviceId, bookmarks } = get();
     if (!deviceId) return;
-
     try {
       await api.removeBookmark(deviceId, questionId);
       set({ bookmarks: bookmarks.filter((id) => id !== questionId) });
@@ -112,9 +121,21 @@ export const useAppStore = create<AppState>((set, get) => ({
       console.error('Error removing bookmark:', error);
     }
   },
-  isBookmarked: (questionId) => {
-    return get().bookmarks.includes(questionId);
+  isBookmarked: (questionId) => get().bookmarks.includes(questionId),
+
+  // Theme
+  themeMode: 'dark',
+  ...resolveTheme('dark'),
+  setThemeMode: async (mode) => {
+    const { colors, isDark } = resolveTheme(mode);
+    set({ themeMode: mode, colors, isDark });
+    await AsyncStorage.setItem('themeMode', mode);
+  },
+
+  // Sound
+  soundEnabled: true,
+  setSoundEnabled: async (enabled) => {
+    set({ soundEnabled: enabled });
+    await AsyncStorage.setItem('soundEnabled', enabled.toString());
   },
 }));
-
-// Don't auto-initialize - this will be called from _layout.tsx

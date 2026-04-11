@@ -33,6 +33,7 @@ export default function ResultsScreen() {
   }>();
   const { language } = useAppStore();
   const t = TRANSLATIONS[language] || TRANSLATIONS.no;
+  const c = useAppStore((s) => s.colors);
 
   const totalNum = parseInt(total || '0', 10);
   const correctNum = parseInt(correct || '0', 10);
@@ -64,48 +65,41 @@ export default function ResultsScreen() {
   const color = getColor();
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: c.bg }]}>
       <View style={styles.content}>
         <View style={[styles.iconContainer, { backgroundColor: `${color}15` }]}>
           <Ionicons name={getIcon()} size={56} color={color} />
         </View>
 
         <Text testID="result-message" style={[styles.message, { color }]}>{getMessage()}</Text>
-        <Text style={styles.subtitle}>{t.quizComplete}</Text>
+        <Text style={[styles.subtitle, { color: c.textSecondary }]}>{t.quizComplete}</Text>
 
-        <View style={styles.scoreCard}>
-          <Text style={styles.scoreLabel}>{t.yourScore}</Text>
+        <View style={[styles.scoreCard, { backgroundColor: c.card, borderColor: c.cardBorder }]}>
+          <Text style={[styles.scoreLabel, { color: c.textMuted }]}>{t.yourScore}</Text>
           <Text testID="result-percentage" style={[styles.scorePercentage, { color }]}>{percentage}%</Text>
-          <Text style={styles.scoreDetail}>
+          <Text style={[styles.scoreDetail, { color: c.textMuted }]}>
             {correctNum} {t.correct} {t.outOf} {totalNum}
           </Text>
-          <View style={styles.progressRing}>
+          <View style={[styles.progressRing, { backgroundColor: c.progressBg }]}>
             <View style={[styles.progressFill, { width: `${percentage}%`, backgroundColor: color }]} />
           </View>
           {isExam && (
-            <Text style={styles.passThreshold}>{t.passThreshold}</Text>
+            <Text style={[styles.passThreshold, { color: c.textMuted }]}>{t.passThreshold}</Text>
           )}
         </View>
 
-        <View style={styles.modeBadge}>
-          <Ionicons
-            name={mode === 'practice' ? 'book-outline' : 'school-outline'}
-            size={16} color="#94A3B8"
-          />
-          <Text style={styles.modeText}>
-            {mode === 'practice' ? t.practice : t.exam}
-          </Text>
+        <View style={[styles.modeBadge, { backgroundColor: c.card }]}>
+          <Ionicons name={mode === 'practice' ? 'book-outline' : 'school-outline'} size={16} color={c.textSecondary} />
+          <Text style={[styles.modeText, { color: c.textSecondary }]}>{mode === 'practice' ? t.practice : t.exam}</Text>
         </View>
       </View>
 
       <View style={styles.actions}>
-        <TouchableOpacity testID="result-home-btn" style={styles.secondaryButton} onPress={() => router.replace('/')}>
-          <Ionicons name="home-outline" size={20} color="#94A3B8" />
-          <Text style={styles.secondaryButtonText}>{t.backHome}</Text>
+        <TouchableOpacity testID="result-home-btn" style={[styles.secondaryButton, { backgroundColor: c.card, borderColor: c.cardBorder }]} onPress={() => router.replace('/')}>
+          <Ionicons name="home-outline" size={20} color={c.textSecondary} />
+          <Text style={[styles.secondaryButtonText, { color: c.textSecondary }]}>{t.backHome}</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          testID="result-retry-btn"
-          style={styles.primaryButton}
+        <TouchableOpacity testID="result-retry-btn" style={[styles.primaryButton, { backgroundColor: c.accent }]}
           onPress={() => {
             if (isExam) {
               router.replace({ pathname: '/quiz', params: { mode: 'exam', category: 'all' } });
@@ -123,23 +117,23 @@ export default function ResultsScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#0F172A' },
+  container: { flex: 1 },
   content: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 },
   iconContainer: { width: 112, height: 112, borderRadius: 56, justifyContent: 'center', alignItems: 'center', marginBottom: 20 },
   message: { fontSize: 30, fontWeight: '800', marginBottom: 4 },
-  subtitle: { fontSize: 16, color: '#94A3B8', marginBottom: 32 },
-  scoreCard: { backgroundColor: '#1E293B', borderRadius: 24, padding: 32, alignItems: 'center', width: '100%', marginBottom: 20, borderWidth: 1, borderColor: 'rgba(51, 65, 85, 0.5)' },
-  scoreLabel: { fontSize: 13, color: '#64748B', textTransform: 'uppercase', letterSpacing: 1.5, fontWeight: '700', marginBottom: 8 },
+  subtitle: { fontSize: 16, marginBottom: 32 },
+  scoreCard: { borderRadius: 24, padding: 32, alignItems: 'center', width: '100%', marginBottom: 20, borderWidth: 1 },
+  scoreLabel: { fontSize: 13, textTransform: 'uppercase', letterSpacing: 1.5, fontWeight: '700', marginBottom: 8 },
   scorePercentage: { fontSize: 72, fontWeight: '800' },
-  scoreDetail: { fontSize: 16, color: '#64748B', marginTop: 4, marginBottom: 20 },
-  progressRing: { width: '100%', height: 8, backgroundColor: '#334155', borderRadius: 4, overflow: 'hidden' },
+  scoreDetail: { fontSize: 16, marginTop: 4, marginBottom: 20 },
+  progressRing: { width: '100%', height: 8, borderRadius: 4, overflow: 'hidden' },
   progressFill: { height: '100%', borderRadius: 4 },
-  passThreshold: { fontSize: 13, color: '#64748B', marginTop: 12 },
-  modeBadge: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#1E293B', paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20, gap: 6 },
-  modeText: { fontSize: 14, color: '#94A3B8', fontWeight: '600' },
+  passThreshold: { fontSize: 13, marginTop: 12 },
+  modeBadge: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20, gap: 6 },
+  modeText: { fontSize: 14, fontWeight: '600' },
   actions: { flexDirection: 'row', padding: 20, gap: 12 },
-  secondaryButton: { flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: '#1E293B', borderRadius: 16, paddingVertical: 16, gap: 8, borderWidth: 1, borderColor: 'rgba(51, 65, 85, 0.5)' },
-  secondaryButtonText: { fontSize: 16, fontWeight: '600', color: '#94A3B8' },
-  primaryButton: { flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: '#F59E0B', borderRadius: 16, paddingVertical: 16, gap: 8 },
-  primaryButtonText: { fontSize: 16, fontWeight: '700', color: '#0F172A' },
+  secondaryButton: { flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', borderRadius: 16, paddingVertical: 14, gap: 8, borderWidth: 1 },
+  secondaryButtonText: { fontSize: 15, fontWeight: '600' },
+  primaryButton: { flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', borderRadius: 16, paddingVertical: 14, gap: 8 },
+  primaryButtonText: { fontSize: 15, fontWeight: '700', color: '#0F172A' },
 });

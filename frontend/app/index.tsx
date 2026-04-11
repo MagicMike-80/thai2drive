@@ -6,15 +6,12 @@ import {
   TouchableOpacity,
   ScrollView,
   ActivityIndicator,
-  Dimensions,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAppStore } from '../src/store/appStore';
 import { api } from '../src/services/api';
-
-const { width } = Dimensions.get('window');
 
 const LANGUAGES = [
   { code: 'no', label: 'NO', flag: '🇳🇴' },
@@ -72,10 +69,11 @@ const TRANSLATIONS: Record<string, Record<string, string>> = {
 
 export default function HomeScreen() {
   const router = useRouter();
-  const { language, setLanguage, deviceId, setProgress, progress } = useAppStore();
+  const { language, setLanguage, deviceId, setProgress, progress, colors } = useAppStore();
   const [loading, setLoading] = useState(true);
   const [totalQuestions, setTotalQuestions] = useState(0);
   const t = TRANSLATIONS[language] || TRANSLATIONS.no;
+  const c = colors;
 
   useEffect(() => {
     loadData();
@@ -109,57 +107,69 @@ export default function HomeScreen() {
 
   if (loading) {
     return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={[styles.container, { backgroundColor: c.bg }]}>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator testID="home-loading" size="large" color="#F59E0B" />
+          <ActivityIndicator testID="home-loading" size="large" color={c.accent} />
         </View>
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: c.bg }]}>
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View style={styles.header}>
           <View>
-            <Text style={styles.title} testID="home-title">{t.title}</Text>
-            <Text style={styles.subtitle}>{t.subtitle}</Text>
+            <Text style={[styles.title, { color: c.text }]} testID="home-title">{t.title}</Text>
+            <Text style={[styles.subtitle, { color: c.textSecondary }]}>{t.subtitle}</Text>
           </View>
-          <View style={styles.languageSelector}>
-            {LANGUAGES.map((lang) => (
-              <TouchableOpacity
-                key={lang.code}
-                testID={`lang-btn-${lang.code}`}
-                style={[styles.langButton, language === lang.code && styles.langButtonActive]}
-                onPress={() => setLanguage(lang.code)}
-                activeOpacity={0.7}
-              >
-                <Text style={styles.langFlag}>{lang.flag}</Text>
-              </TouchableOpacity>
-            ))}
+          <View style={styles.headerRight}>
+            <TouchableOpacity
+              testID="settings-btn"
+              style={[styles.settingsBtn, { backgroundColor: c.card }]}
+              onPress={() => router.push('/settings')}
+              activeOpacity={0.7}
+            >
+              <Ionicons name="settings-outline" size={20} color={c.textSecondary} />
+            </TouchableOpacity>
           </View>
         </View>
 
+        {/* Language selector */}
+        <View style={styles.languageSelector}>
+          {LANGUAGES.map((lang) => (
+            <TouchableOpacity
+              key={lang.code}
+              testID={`lang-btn-${lang.code}`}
+              style={[styles.langButton, { backgroundColor: c.card, borderColor: language === lang.code ? c.accent : 'transparent' }]}
+              onPress={() => setLanguage(lang.code)}
+              activeOpacity={0.7}
+            >
+              <Text style={styles.langFlag}>{lang.flag}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+
         {/* Stats Card */}
-        <View style={styles.statsCard}>
-          <Text style={styles.statsTitle}>{t.stats}</Text>
+        <View style={[styles.statsCard, { backgroundColor: c.card, borderColor: c.cardBorder }]}>
+          <Text style={[styles.statsTitle, { color: c.textMuted }]}>{t.stats}</Text>
           <View style={styles.statsRow}>
             <View style={styles.statItem}>
-              <Text style={styles.statValue}>{progress.total_questions_answered}</Text>
-              <Text style={styles.statLabel}>{t.answered}</Text>
+              <Text style={[styles.statValue, { color: c.text }]}>{progress.total_questions_answered}</Text>
+              <Text style={[styles.statLabel, { color: c.textSecondary }]}>{t.answered}</Text>
             </View>
-            <View style={styles.statDivider} />
+            <View style={[styles.statDivider, { backgroundColor: c.divider }]} />
             <View style={styles.statItem}>
-              <Text style={styles.statValue}>{progress.correct_answers}</Text>
-              <Text style={styles.statLabel}>{t.correct}</Text>
+              <Text style={[styles.statValue, { color: c.text }]}>{progress.correct_answers}</Text>
+              <Text style={[styles.statLabel, { color: c.textSecondary }]}>{t.correct}</Text>
             </View>
-            <View style={styles.statDivider} />
+            <View style={[styles.statDivider, { backgroundColor: c.divider }]} />
             <View style={styles.statItem}>
-              <Text style={[styles.statValue, { color: accuracy >= 70 ? '#10B981' : accuracy > 0 ? '#EF4444' : '#F8FAFC' }]}>
+              <Text style={[styles.statValue, { color: accuracy >= 70 ? c.correct : accuracy > 0 ? c.incorrect : c.text }]}>
                 {accuracy}%
               </Text>
-              <Text style={styles.statLabel}>{t.accuracy}</Text>
+              <Text style={[styles.statLabel, { color: c.textSecondary }]}>{t.accuracy}</Text>
             </View>
           </View>
         </View>
@@ -167,62 +177,51 @@ export default function HomeScreen() {
         {/* Mode Cards */}
         <TouchableOpacity
           testID="practice-mode-btn"
-          style={styles.practiceCard}
+          style={[styles.practiceCard, { backgroundColor: c.card, borderColor: `${c.correct}40` }]}
           onPress={() => navigateToQuiz('practice')}
           activeOpacity={0.8}
         >
           <View style={styles.modeHeader}>
-            <View style={[styles.modeIconBg, { backgroundColor: 'rgba(16, 185, 129, 0.15)' }]}>
-              <Ionicons name="book-outline" size={28} color="#10B981" />
+            <View style={[styles.modeIconBg, { backgroundColor: `${c.correct}18` }]}>
+              <Ionicons name="book-outline" size={28} color={c.correct} />
             </View>
-            <Ionicons name="chevron-forward" size={22} color="#64748B" />
+            <Ionicons name="chevron-forward" size={22} color={c.textMuted} />
           </View>
-          <Text style={styles.modeTitle}>{t.practice}</Text>
-          <Text style={styles.modeDesc}>{t.practiceDesc}</Text>
+          <Text style={[styles.modeTitle, { color: c.text }]}>{t.practice}</Text>
+          <Text style={[styles.modeDesc, { color: c.textSecondary }]}>{t.practiceDesc}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           testID="exam-mode-btn"
-          style={styles.examCard}
+          style={[styles.examCard, { backgroundColor: c.card, borderColor: `${c.accent}40` }]}
           onPress={() => navigateToQuiz('exam')}
           activeOpacity={0.8}
         >
           <View style={styles.modeHeader}>
-            <View style={[styles.modeIconBg, { backgroundColor: 'rgba(245, 158, 11, 0.15)' }]}>
-              <Ionicons name="school-outline" size={28} color="#F59E0B" />
+            <View style={[styles.modeIconBg, { backgroundColor: c.accentBg }]}>
+              <Ionicons name="school-outline" size={28} color={c.accent} />
             </View>
-            <Ionicons name="chevron-forward" size={22} color="#64748B" />
+            <Ionicons name="chevron-forward" size={22} color={c.textMuted} />
           </View>
-          <Text style={styles.modeTitle}>{t.exam}</Text>
-          <Text style={styles.modeDesc}>{t.examDesc}</Text>
+          <Text style={[styles.modeTitle, { color: c.text }]}>{t.exam}</Text>
+          <Text style={[styles.modeDesc, { color: c.textSecondary }]}>{t.examDesc}</Text>
         </TouchableOpacity>
 
         {/* Quick Actions */}
         <View style={styles.quickActions}>
-          <TouchableOpacity
-            testID="history-btn"
-            style={styles.actionButton}
-            onPress={() => router.push('/history')}
-            activeOpacity={0.7}
-          >
-            <Ionicons name="time-outline" size={22} color="#94A3B8" />
-            <Text style={styles.actionText}>{t.history}</Text>
+          <TouchableOpacity testID="history-btn" style={[styles.actionButton, { backgroundColor: c.card, borderColor: c.cardBorder }]} onPress={() => router.push('/history')} activeOpacity={0.7}>
+            <Ionicons name="time-outline" size={22} color={c.textSecondary} />
+            <Text style={[styles.actionText, { color: c.textSecondary }]}>{t.history}</Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            testID="bookmarks-btn"
-            style={styles.actionButton}
-            onPress={() => router.push('/bookmarks')}
-            activeOpacity={0.7}
-          >
-            <Ionicons name="bookmark-outline" size={22} color="#94A3B8" />
-            <Text style={styles.actionText}>{t.bookmarks}</Text>
+          <TouchableOpacity testID="bookmarks-btn" style={[styles.actionButton, { backgroundColor: c.card, borderColor: c.cardBorder }]} onPress={() => router.push('/bookmarks')} activeOpacity={0.7}>
+            <Ionicons name="bookmark-outline" size={22} color={c.textSecondary} />
+            <Text style={[styles.actionText, { color: c.textSecondary }]}>{t.bookmarks}</Text>
           </TouchableOpacity>
         </View>
 
-        {/* Questions count */}
         <View style={styles.footerInfo}>
-          <Ionicons name="library-outline" size={16} color="#64748B" />
-          <Text style={styles.footerText}>{totalQuestions} {t.questionsAvailable}</Text>
+          <Ionicons name="library-outline" size={16} color={c.textMuted} />
+          <Text style={[styles.footerText, { color: c.textMuted }]}>{totalQuestions} {t.questionsAvailable}</Text>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -230,32 +229,33 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#0F172A' },
+  container: { flex: 1 },
   loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   scrollContent: { padding: 20, paddingBottom: 40 },
-  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 28 },
-  title: { fontSize: 34, fontWeight: '800', color: '#F8FAFC', letterSpacing: -1 },
-  subtitle: { fontSize: 14, color: '#94A3B8', marginTop: 4 },
-  languageSelector: { flexDirection: 'row', gap: 8 },
-  langButton: { width: 42, height: 42, borderRadius: 21, backgroundColor: '#1E293B', justifyContent: 'center', alignItems: 'center', borderWidth: 2, borderColor: 'transparent' },
-  langButtonActive: { borderColor: '#F59E0B', backgroundColor: 'rgba(245, 158, 11, 0.1)' },
+  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 },
+  title: { fontSize: 34, fontWeight: '800', letterSpacing: -1 },
+  subtitle: { fontSize: 14, marginTop: 4 },
+  headerRight: { flexDirection: 'row', gap: 8 },
+  settingsBtn: { width: 42, height: 42, borderRadius: 21, justifyContent: 'center', alignItems: 'center' },
+  languageSelector: { flexDirection: 'row', gap: 8, marginBottom: 20 },
+  langButton: { width: 42, height: 42, borderRadius: 21, justifyContent: 'center', alignItems: 'center', borderWidth: 2 },
   langFlag: { fontSize: 20 },
-  statsCard: { backgroundColor: '#1E293B', borderRadius: 20, padding: 20, marginBottom: 20, borderWidth: 1, borderColor: 'rgba(51, 65, 85, 0.5)' },
-  statsTitle: { fontSize: 13, color: '#64748B', textTransform: 'uppercase', letterSpacing: 1.5, fontWeight: '700', marginBottom: 16 },
+  statsCard: { borderRadius: 20, padding: 20, marginBottom: 20, borderWidth: 1 },
+  statsTitle: { fontSize: 13, textTransform: 'uppercase', letterSpacing: 1.5, fontWeight: '700', marginBottom: 16 },
   statsRow: { flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' },
   statItem: { alignItems: 'center', flex: 1 },
-  statValue: { fontSize: 30, fontWeight: '800', color: '#F8FAFC' },
-  statLabel: { fontSize: 12, color: '#94A3B8', marginTop: 4 },
-  statDivider: { width: 1, height: 44, backgroundColor: 'rgba(51, 65, 85, 0.5)' },
-  practiceCard: { backgroundColor: '#1E293B', borderRadius: 20, padding: 20, marginBottom: 12, borderWidth: 1, borderColor: 'rgba(16, 185, 129, 0.25)' },
-  examCard: { backgroundColor: '#1E293B', borderRadius: 20, padding: 20, marginBottom: 20, borderWidth: 1, borderColor: 'rgba(245, 158, 11, 0.25)' },
+  statValue: { fontSize: 30, fontWeight: '800' },
+  statLabel: { fontSize: 12, marginTop: 4 },
+  statDivider: { width: 1, height: 44 },
+  practiceCard: { borderRadius: 20, padding: 20, marginBottom: 12, borderWidth: 1 },
+  examCard: { borderRadius: 20, padding: 20, marginBottom: 20, borderWidth: 1 },
   modeHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 },
   modeIconBg: { width: 52, height: 52, borderRadius: 16, justifyContent: 'center', alignItems: 'center' },
-  modeTitle: { fontSize: 20, fontWeight: '700', color: '#F8FAFC', marginBottom: 4 },
-  modeDesc: { fontSize: 14, color: '#94A3B8', lineHeight: 20 },
+  modeTitle: { fontSize: 20, fontWeight: '700', marginBottom: 4 },
+  modeDesc: { fontSize: 14, lineHeight: 20 },
   quickActions: { flexDirection: 'row', gap: 12 },
-  actionButton: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: '#1E293B', borderRadius: 16, paddingVertical: 16, gap: 8, borderWidth: 1, borderColor: 'rgba(51, 65, 85, 0.5)' },
-  actionText: { fontSize: 14, fontWeight: '600', color: '#94A3B8' },
+  actionButton: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 16, paddingVertical: 16, gap: 8, borderWidth: 1 },
+  actionText: { fontSize: 14, fontWeight: '600' },
   footerInfo: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 24, gap: 6 },
-  footerText: { fontSize: 13, color: '#64748B' },
+  footerText: { fontSize: 13 },
 });
