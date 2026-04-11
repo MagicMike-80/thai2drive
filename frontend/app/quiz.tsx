@@ -36,6 +36,7 @@ export default function QuizScreen() {
   const [speaking, setSpeaking] = useState(false);
   const [timer, setTimer] = useState(EXAM_TIME);
   const [showLimit, setShowLimit] = useState(false);
+  const [ttsPlaying, setTtsPlaying] = useState<'question' | 'explanation' | null>(null);
 
   const fade = useRef(new Animated.Value(1)).current;
   const glowAnim = useRef(new Animated.Value(0)).current;
@@ -44,6 +45,9 @@ export default function QuizScreen() {
   const isExam = mode === 'exam';
 
   useEffect(() => { loadQ(); return () => { if (timerRef.current) clearInterval(timerRef.current); Speech.stop(); cleanupSounds(); }; }, []);
+
+  // Stop TTS when question changes
+  useEffect(() => { stopTts(); }, [idx]);
 
   useEffect(() => {
     if (isExam && !loading && questions.length > 0) {
@@ -117,11 +121,61 @@ export default function QuizScreen() {
     router.replace({ pathname: '/results', params: { total: questions.length.toString(), correct: cor.toString(), mode: mode || 'practice', passed: isExam ? (pct >= PASS ? 'true' : 'false') : '' } });
   };
 
-  const speakTh = () => {
-    if (!q) return;
-    if (speaking) { Speech.stop(); setSpeaking(false); return; }
+  const stopTts = () => { Speech.stop(); setTtsPlaying(null); setSpeaking(false); };
+
+  const langCode = (l: string) => l === 'th' ? 'th-TH' : l === 'no' ? 'nb-NO' : 'en-US';
+
+  const speakSequence = async (segments: { text: string; lang: string }[]) => {
+    for (let i = 0; i < segments.length; i++) {
+      const s = segments[i];
+      await new Promise<void>((resolve) => {
+        Speech.speak(s.text, {
+          language: langCode(s.lang),
+          rate: s.lang === 'th' ? 0.85 : 0.9,
+          onDone: resolve,
+          onError: resolve,
+          onStopped: resolve,
+        });
+      });
+    }
+  };
+
+  const speakQuestion = async () => {
+    if (!q || !soundEnabled) return;
+    if (ttsPlaying === 'question') { stopTts(); return; }
+    stopTts();
+    setTtsPlaying('question');
     setSpeaking(true);
-    Speech.speak(qT(q, 'th'), { language: 'th-TH', rate: 0.85, onDone: () => setSpeaking(false), onError: () => setSpeaking(false) });
+
+    const segments: { text: string; lang: string }[] = [];
+    // Question text
+    segments.push({ text: qT(q), lang: language });
+    // If Thai translation is visible, also read Thai
+    if (showTh && language !== 'th') segments.push({ text: qT(q, 'th'), lang: 'th' });
+    // Answer options
+    for (const L of LETTERS) {
+      segments.push({ text: `${L}. ${aT(q, L)}`, lang: language });
+    }
+
+    await speakSequence(segments);
+    setTtsPlaying(null);
+    setSpeaking(false);
+  };
+
+  const speakExplanation = async () => {
+    if (!q || !soundEnabled) return;
+    if (ttsPlaying === 'explanation') { stopTts(); return; }
+    stopTts();
+    setTtsPlaying('explanation');
+    setSpeaking(true);
+
+    const segments: { text: string; lang: string }[] = [];
+    segments.push({ text: eT(q), lang: language });
+    if (language !== 'th') segments.push({ text: eT(q, 'th'), lang: 'th' });
+
+    await speakSequence(segments);
+    setTtsPlaying(null);
+    setSpeaking(false);
   };
 
   const fmtT = (s: number) => `${Math.floor(s / 60)}:${(s % 60).toString().padStart(2, '0')}`;
@@ -166,20 +220,29 @@ export default function QuizScreen() {
       <ScrollView contentContainerStyle={st.scr} showsVerticalScrollIndicator={false}>
         <Animated.View style={{ opacity: fade, transform: [{ scale: scaleAnim }] }}>
           {/* Question */}
-          <TouchableOpacity testID="question-card" style={[st.qCard, { backgroundColor: c.card, borderColor: c.cardBorder }]} onPress={() => setShowTh(!showTh)} activeOpacity={0.9}>
-            <Text style={[st.qTxt, { color: c.text }]}>{qT(q)}</Text>
-            {!showTh && language !== 'th' && <View style={st.hintR}><Ionicons name="language-outline" size={13} color={c.accent} /><Text style={[st.hintT, { color: c.accent }]}>{t.hint}</Text></View>}
+          <View style={[st.qCard, { backgroundColor: c.card, borderColor: c.cardBorder }]}>
+            <TouchableOpacity testID="question-card" onPress={() => setShowTh(!showTh)} activeOpacity={0.9}>
+              <Text style={[st.qTxt, { color: c.text }]}>{qT(q)}</Text>
+            </TouchableOpacity>
+            {/* TTS + translate row */}
+            <View style={st.qActions}>
+              <TouchableOpacity testID="tts-question-btn" onPress={speakQuestion} style={[st.ttsChip, { backgroundColor: c.accentBg, borderColor: c.accent }]}>
+                <Text style={[st.ttsLabel, { color: c.accent }]}>{ttsPlaying === 'question' ? '🔊 ...' : '🔊 TTS'}</Text>
+              </TouchableOpacity>
+              {language !== 'th' && (
+                <TouchableOpacity onPress={() => setShowTh(!showTh)} style={st.translateChip}>
+                  <Ionicons name="language-outline" size={13} color={c.accent} />
+                  <Text style={[st.hintT, { color: c.accent }]}>{t.hint}</Text>
+                </TouchableOpacity>
+              )}
+            </View>
             {showTh && language !== 'th' && (
               <View style={st.thW}>
                 <View style={[st.thL, { backgroundColor: `${c.accent}30` }]} />
                 <Text style={[st.thTxt, { color: c.accent }]}>{qT(q, 'th')}</Text>
-                <TouchableOpacity testID="tts-btn" style={[st.tts, { backgroundColor: c.accentBg }]} onPress={speakTh}>
-                  <Ionicons name={speaking ? 'volume-high' : 'volume-medium-outline'} size={16} color={c.accent} />
-                  <Text style={{ fontSize: 13 }}>🇹🇭</Text>
-                </TouchableOpacity>
               </View>
             )}
-          </TouchableOpacity>
+          </View>
 
           {/* Answers with glow */}
           <View style={st.aW}>
@@ -215,6 +278,9 @@ export default function QuizScreen() {
               <View style={st.fbR}>
                 <Ionicons name={sel === q.correct_answer ? 'checkmark-circle' : 'close-circle'} size={16} color={sel === q.correct_answer ? c.correct : c.incorrect} />
                 <Text style={[st.fbS, { color: sel === q.correct_answer ? c.correct : c.incorrect }]}>{sel === q.correct_answer ? t.correct : t.incorrect}</Text>
+                <TouchableOpacity testID="tts-explanation-btn" style={[st.ttsSmall, { backgroundColor: ttsPlaying === 'explanation' ? c.accentBg : 'transparent' }]} onPress={speakExplanation} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
+                  <Ionicons name={ttsPlaying === 'explanation' ? 'volume-high' : 'volume-medium-outline'} size={15} color={ttsPlaying === 'explanation' ? c.accent : c.textMuted} />
+                </TouchableOpacity>
               </View>
               <Text style={[st.fbE, { color: c.textSecondary }]}>{eT(q)}</Text>
               {language !== 'th' && <Text style={[st.fbTh, { color: `${c.accent}B0` }]}>{eT(q, 'th')}</Text>}
@@ -267,12 +333,14 @@ const st = StyleSheet.create({
   scr: { paddingHorizontal: 14, paddingTop: 6, paddingBottom: 10 },
   qCard: { borderRadius: 14, padding: 18, marginBottom: 14, borderWidth: 1 },
   qTxt: { fontSize: 18, fontWeight: '700', lineHeight: 26 },
-  hintR: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 10, opacity: 0.6 },
+  qActions: { flexDirection: 'row', alignItems: 'center', marginTop: 10, gap: 10 },
+  ttsChip: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 14, gap: 5, borderWidth: 1.5 },
+  ttsLabel: { fontSize: 12, fontWeight: '700' },
+  translateChip: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   hintT: { fontSize: 11 },
   thW: { marginTop: 10 },
   thL: { height: 1, marginBottom: 10 },
   thTxt: { fontSize: 15, lineHeight: 22 },
-  tts: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 8, alignSelf: 'flex-start', paddingHorizontal: 10, paddingVertical: 5, borderRadius: 16 },
   aW: { gap: 12 },
   aBtn: { flexDirection: 'row', alignItems: 'center', borderRadius: 12, paddingVertical: 13, paddingHorizontal: 14, borderWidth: 1.5 },
   dim: { opacity: 0.35 },
@@ -282,7 +350,8 @@ const st = StyleSheet.create({
   aTxt: { flex: 1, fontSize: 15, lineHeight: 21 },
   fb: { marginTop: 16, paddingHorizontal: 2 },
   fbR: { flexDirection: 'row', alignItems: 'center', gap: 5, marginBottom: 4 },
-  fbS: { fontSize: 13, fontWeight: '700' },
+  fbS: { fontSize: 13, fontWeight: '700', flex: 1 },
+  ttsSmall: { width: 28, height: 28, borderRadius: 14, justifyContent: 'center', alignItems: 'center' },
   fbE: { fontSize: 13, lineHeight: 19, opacity: 0.8 },
   fbTh: { fontSize: 12, lineHeight: 18, marginTop: 3 },
   limitCard: { marginTop: 20, borderRadius: 16, padding: 20, borderWidth: 1.5, borderStyle: 'dashed', alignItems: 'center' },
