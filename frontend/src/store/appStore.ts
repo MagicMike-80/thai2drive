@@ -26,151 +26,142 @@ interface AppState {
   addBookmark: (questionId: string) => Promise<void>;
   removeBookmark: (questionId: string) => Promise<void>;
   isBookmarked: (questionId: string) => boolean;
-  // Theme
   themeMode: ThemeMode;
   setThemeMode: (mode: ThemeMode) => void;
   colors: ThemeColors;
   isDark: boolean;
-  // Sound
   soundEnabled: boolean;
   setSoundEnabled: (enabled: boolean) => void;
-  // Premium
   isPremium: boolean;
   freeQuestionsUsed: number;
   setPremium: (val: boolean) => void;
   incrementFreeQuestions: () => void;
   canAnswerFree: () => boolean;
   freeRemaining: () => number;
+  // Streak
+  streak: number;
+  lastActiveDate: string;
+  updateStreak: () => Promise<void>;
 }
 
-const generateDeviceId = () => {
-  return 'device_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-};
+const generateDeviceId = () =>
+  'device_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 
 function resolveTheme(mode: ThemeMode): { colors: ThemeColors; isDark: boolean } {
   if (mode === 'system') {
-    const scheme = Appearance.getColorScheme();
-    const isDark = scheme !== 'light';
+    const isDark = Appearance.getColorScheme() !== 'light';
     return { colors: isDark ? darkTheme : lightTheme, isDark };
   }
   const isDark = mode === 'dark';
   return { colors: isDark ? darkTheme : lightTheme, isDark };
 }
 
+function getDateKey() {
+  return new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+}
+
+function daysBetween(a: string, b: string) {
+  const da = new Date(a + 'T00:00:00Z');
+  const db = new Date(b + 'T00:00:00Z');
+  return Math.round((db.getTime() - da.getTime()) / 86400000);
+}
+
 export const useAppStore = create<AppState>((set, get) => ({
   language: 'no',
-  setLanguage: async (lang) => {
-    set({ language: lang });
-    await AsyncStorage.setItem('language', lang);
-  },
+  setLanguage: async (lang) => { set({ language: lang }); await AsyncStorage.setItem('language', lang); },
 
   deviceId: '',
   initDeviceId: async () => {
     let deviceId = await AsyncStorage.getItem('deviceId');
-    if (!deviceId) {
-      deviceId = generateDeviceId();
-      await AsyncStorage.setItem('deviceId', deviceId);
-    }
+    if (!deviceId) { deviceId = generateDeviceId(); await AsyncStorage.setItem('deviceId', deviceId); }
     set({ deviceId });
 
     const savedLang = await AsyncStorage.getItem('language');
     if (savedLang) set({ language: savedLang });
 
-    // Load theme preference
     const savedTheme = await AsyncStorage.getItem('themeMode');
-    if (savedTheme) {
-      const mode = savedTheme as ThemeMode;
-      const { colors, isDark } = resolveTheme(mode);
-      set({ themeMode: mode, colors, isDark });
-    }
+    if (savedTheme) { const m = savedTheme as ThemeMode; const { colors, isDark } = resolveTheme(m); set({ themeMode: m, colors, isDark }); }
 
-    // Load sound preference
     const savedSound = await AsyncStorage.getItem('soundEnabled');
     if (savedSound !== null) set({ soundEnabled: savedSound === 'true' });
 
-    // Load premium state
     const savedPremium = await AsyncStorage.getItem('isPremium');
     if (savedPremium === 'true') set({ isPremium: true });
     const savedFreeUsed = await AsyncStorage.getItem('freeQuestionsUsed');
     if (savedFreeUsed) set({ freeQuestionsUsed: parseInt(savedFreeUsed, 10) || 0 });
 
+    // Load streak
+    const savedStreak = await AsyncStorage.getItem('streak');
+    const savedLastDate = await AsyncStorage.getItem('lastActiveDate');
+    if (savedStreak && savedLastDate) {
+      const today = getDateKey();
+      const diff = daysBetween(savedLastDate, today);
+      if (diff <= 1) {
+        set({ streak: parseInt(savedStreak, 10) || 0, lastActiveDate: savedLastDate });
+      } else {
+        // Streak broken
+        set({ streak: 0, lastActiveDate: '' });
+        await AsyncStorage.setItem('streak', '0');
+      }
+    }
+
     await get().loadBookmarks();
   },
 
-  progress: {
-    id: '', device_id: '', total_questions_answered: 0, correct_answers: 0,
-    questions_by_category: {}, last_activity: '', created_at: '',
-  },
+  progress: { id: '', device_id: '', total_questions_answered: 0, correct_answers: 0, questions_by_category: {}, last_activity: '', created_at: '' },
   setProgress: (progress) => set({ progress }),
 
   bookmarks: [],
   loadBookmarks: async () => {
     const { deviceId } = get();
     if (!deviceId) return;
-    try {
-      const bookmarks = await api.getBookmarks(deviceId);
-      set({ bookmarks: bookmarks.map((b) => b.question_id) });
-    } catch (error) {
-      console.error('Error loading bookmarks:', error);
-    }
+    try { const b = await api.getBookmarks(deviceId); set({ bookmarks: b.map((x) => x.question_id) }); } catch (e) {}
   },
   addBookmark: async (questionId) => {
     const { deviceId, bookmarks } = get();
     if (!deviceId) return;
-    try {
-      await api.addBookmark(deviceId, questionId);
-      set({ bookmarks: [...bookmarks, questionId] });
-    } catch (error) {
-      console.error('Error adding bookmark:', error);
-    }
+    try { await api.addBookmark(deviceId, questionId); set({ bookmarks: [...bookmarks, questionId] }); } catch (e) {}
   },
   removeBookmark: async (questionId) => {
     const { deviceId, bookmarks } = get();
     if (!deviceId) return;
-    try {
-      await api.removeBookmark(deviceId, questionId);
-      set({ bookmarks: bookmarks.filter((id) => id !== questionId) });
-    } catch (error) {
-      console.error('Error removing bookmark:', error);
-    }
+    try { await api.removeBookmark(deviceId, questionId); set({ bookmarks: bookmarks.filter((id) => id !== questionId) }); } catch (e) {}
   },
   isBookmarked: (questionId) => get().bookmarks.includes(questionId),
 
-  // Theme
   themeMode: 'dark',
   ...resolveTheme('dark'),
-  setThemeMode: async (mode) => {
-    const { colors, isDark } = resolveTheme(mode);
-    set({ themeMode: mode, colors, isDark });
-    await AsyncStorage.setItem('themeMode', mode);
-  },
+  setThemeMode: async (mode) => { const r = resolveTheme(mode); set({ themeMode: mode, ...r }); await AsyncStorage.setItem('themeMode', mode); },
 
-  // Sound
   soundEnabled: true,
-  setSoundEnabled: async (enabled) => {
-    set({ soundEnabled: enabled });
-    await AsyncStorage.setItem('soundEnabled', enabled.toString());
-  },
+  setSoundEnabled: async (enabled) => { set({ soundEnabled: enabled }); await AsyncStorage.setItem('soundEnabled', enabled.toString()); },
 
-  // Premium
   isPremium: false,
   freeQuestionsUsed: 0,
-  setPremium: async (val) => {
-    set({ isPremium: val });
-    await AsyncStorage.setItem('isPremium', val.toString());
-  },
-  incrementFreeQuestions: async () => {
-    const next = get().freeQuestionsUsed + 1;
-    set({ freeQuestionsUsed: next });
-    await AsyncStorage.setItem('freeQuestionsUsed', next.toString());
-  },
-  canAnswerFree: () => {
-    const { isPremium, freeQuestionsUsed } = get();
-    return isPremium || freeQuestionsUsed < 5;
-  },
-  freeRemaining: () => {
-    const { isPremium, freeQuestionsUsed } = get();
-    if (isPremium) return Infinity;
-    return Math.max(0, 5 - freeQuestionsUsed);
+  setPremium: async (val) => { set({ isPremium: val }); await AsyncStorage.setItem('isPremium', val.toString()); },
+  incrementFreeQuestions: async () => { const n = get().freeQuestionsUsed + 1; set({ freeQuestionsUsed: n }); await AsyncStorage.setItem('freeQuestionsUsed', n.toString()); },
+  canAnswerFree: () => { const { isPremium, freeQuestionsUsed } = get(); return isPremium || freeQuestionsUsed < 5; },
+  freeRemaining: () => { const { isPremium, freeQuestionsUsed } = get(); return isPremium ? Infinity : Math.max(0, 5 - freeQuestionsUsed); },
+
+  // Streak
+  streak: 0,
+  lastActiveDate: '',
+  updateStreak: async () => {
+    const today = getDateKey();
+    const { lastActiveDate, streak } = get();
+    if (lastActiveDate === today) return; // Already updated today
+
+    let newStreak: number;
+    if (lastActiveDate && daysBetween(lastActiveDate, today) === 1) {
+      newStreak = streak + 1; // Consecutive day
+    } else if (lastActiveDate === today) {
+      return;
+    } else {
+      newStreak = 1; // First day or streak broken
+    }
+
+    set({ streak: newStreak, lastActiveDate: today });
+    await AsyncStorage.setItem('streak', newStreak.toString());
+    await AsyncStorage.setItem('lastActiveDate', today);
   },
 }));

@@ -5,135 +5,141 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAppStore } from '../src/store/appStore';
 
-const TRANSLATIONS: Record<string, Record<string, string>> = {
+const TR: Record<string, Record<string, string>> = {
   no: {
-    quizComplete: 'Quiz fullført!', yourScore: 'Din poengsum', correct: 'Riktige', outOf: 'av',
-    excellent: 'Utmerket!', good: 'Bra jobbet!', keepPracticing: 'Fortsett å øve!',
-    tryAgain: 'Prøv igjen', backHome: 'Hjem', practice: 'Øving', exam: 'Eksamen',
-    passed: 'BESTÅTT', failed: 'IKKE BESTÅTT', passThreshold: '85% kreves for å bestå',
+    done: 'Quiz fullført!', score: 'Din poengsum', correct: 'Riktige', of: 'av',
+    ready: 'Du er klar for prøven!', good: 'Bra jobbet!', keep: 'Fortsett å øve – du blir bedre!',
+    retry: 'Prøv igjen', home: 'Hjem', practice: 'Øving', exam: 'Eksamen',
+    passed: 'BESTÅTT', failed: 'IKKE BESTÅTT', threshold: '85% kreves',
+    upgrade: 'Oppgrader til Premium', unlockAll: 'Lås opp alle spørsmål',
   },
   th: {
-    quizComplete: 'ทำแบบทดสอบเสร็จสิ้น!', yourScore: 'คะแนนของคุณ', correct: 'ถูกต้อง', outOf: 'จาก',
-    excellent: 'ยอดเยี่ยม!', good: 'ทำได้ดี!', keepPracticing: 'ฝึกซ้อมต่อไป!',
-    tryAgain: 'ลองอีกครั้ง', backHome: 'หน้าหลัก', practice: 'ฝึกซ้อม', exam: 'สอบ',
-    passed: 'ผ่าน', failed: 'ไม่ผ่าน', passThreshold: 'ต้องได้ 85% ขึ้นไปจึงจะผ่าน',
+    done: 'ทำแบบทดสอบเสร็จ!', score: 'คะแนน', correct: 'ถูก', of: 'จาก',
+    ready: 'คุณพร้อมสอบแล้ว!', good: 'ทำได้ดี!', keep: 'ฝึกซ้อมต่อ – คุณเก่งขึ้นเรื่อยๆ!',
+    retry: 'ลองอีกครั้ง', home: 'หน้าหลัก', practice: 'ฝึกซ้อม', exam: 'สอบ',
+    passed: 'ผ่าน', failed: 'ไม่ผ่าน', threshold: 'ต้องได้ 85%',
+    upgrade: 'อัพเกรดเป็น Premium', unlockAll: 'ปลดล็อคคำถามทั้งหมด',
   },
   en: {
-    quizComplete: 'Quiz Complete!', yourScore: 'Your Score', correct: 'Correct', outOf: 'out of',
-    excellent: 'Excellent!', good: 'Good job!', keepPracticing: 'Keep practicing!',
-    tryAgain: 'Try Again', backHome: 'Home', practice: 'Practice', exam: 'Exam',
-    passed: 'PASSED', failed: 'FAILED', passThreshold: '85% required to pass',
+    done: 'Quiz Complete!', score: 'Your Score', correct: 'Correct', of: 'out of',
+    ready: "You're ready for the test!", good: 'Good job!', keep: "Keep practicing – you're improving!",
+    retry: 'Try Again', home: 'Home', practice: 'Practice', exam: 'Exam',
+    passed: 'PASSED', failed: 'FAILED', threshold: '85% required',
+    upgrade: 'Upgrade to Premium', unlockAll: 'Unlock all questions',
   },
 };
 
 export default function ResultsScreen() {
   const router = useRouter();
-  const { total, correct, mode, passed } = useLocalSearchParams<{
-    total: string; correct: string; mode: string; passed: string;
-  }>();
-  const { language } = useAppStore();
-  const t = TRANSLATIONS[language] || TRANSLATIONS.no;
+  const { total, correct, mode, passed } = useLocalSearchParams<{ total: string; correct: string; mode: string; passed: string }>();
+  const { language, isPremium } = useAppStore();
+  const t = TR[language] || TR.en;
   const c = useAppStore((s) => s.colors);
 
-  const totalNum = parseInt(total || '0', 10);
-  const correctNum = parseInt(correct || '0', 10);
-  const percentage = totalNum > 0 ? Math.round((correctNum / totalNum) * 100) : 0;
+  const tot = parseInt(total || '0', 10);
+  const cor = parseInt(correct || '0', 10);
+  const pct = tot > 0 ? Math.round((cor / tot) * 100) : 0;
   const isExam = mode === 'exam';
-  const examPassed = passed === 'true';
+  const examPass = passed === 'true';
 
-  const getMessage = () => {
-    if (isExam) return examPassed ? t.passed : t.failed;
-    if (percentage >= 80) return t.excellent;
-    if (percentage >= 60) return t.good;
-    return t.keepPracticing;
+  const msg = () => {
+    if (isExam) return examPass ? t.passed : t.failed;
+    if (pct >= 80) return t.ready;
+    if (pct >= 50) return t.good;
+    return t.keep;
   };
 
-  const getColor = () => {
-    if (isExam) return examPassed ? '#10B981' : '#EF4444';
-    if (percentage >= 80) return '#10B981';
-    if (percentage >= 60) return '#F59E0B';
-    return '#EF4444';
+  const emoji = () => {
+    if (isExam) return examPass ? '🏆' : '💪';
+    if (pct >= 80) return '🔥';
+    if (pct >= 50) return '👍';
+    return '📚';
   };
 
-  const getIcon = (): keyof typeof Ionicons.glyphMap => {
-    if (isExam) return examPassed ? 'trophy' : 'refresh';
-    if (percentage >= 80) return 'trophy';
-    if (percentage >= 60) return 'thumbs-up';
-    return 'refresh';
+  const col = () => {
+    if (isExam) return examPass ? c.correct : c.incorrect;
+    if (pct >= 80) return c.correct;
+    if (pct >= 50) return c.accent;
+    return c.incorrect;
   };
 
-  const color = getColor();
+  const color = col();
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: c.bg }]}>
-      <View style={styles.content}>
-        <View style={[styles.iconContainer, { backgroundColor: `${color}15` }]}>
-          <Ionicons name={getIcon()} size={56} color={color} />
-        </View>
+    <SafeAreaView style={[st.container, { backgroundColor: c.bg }]}>
+      <View style={st.content}>
+        {/* Emoji */}
+        <Text style={st.emoji}>{emoji()}</Text>
 
-        <Text testID="result-message" style={[styles.message, { color }]}>{getMessage()}</Text>
-        <Text style={[styles.subtitle, { color: c.textSecondary }]}>{t.quizComplete}</Text>
+        {/* Dynamic message */}
+        <Text testID="result-message" style={[st.msg, { color }]}>{msg()}</Text>
+        <Text style={[st.sub, { color: c.textSecondary }]}>{t.done}</Text>
 
-        <View style={[styles.scoreCard, { backgroundColor: c.card, borderColor: c.cardBorder }]}>
-          <Text style={[styles.scoreLabel, { color: c.textMuted }]}>{t.yourScore}</Text>
-          <Text testID="result-percentage" style={[styles.scorePercentage, { color }]}>{percentage}%</Text>
-          <Text style={[styles.scoreDetail, { color: c.textMuted }]}>
-            {correctNum} {t.correct} {t.outOf} {totalNum}
-          </Text>
-          <View style={[styles.progressRing, { backgroundColor: c.progressBg }]}>
-            <View style={[styles.progressFill, { width: `${percentage}%`, backgroundColor: color }]} />
+        {/* Score card */}
+        <View style={[st.card, { backgroundColor: c.card, borderColor: c.cardBorder }]}>
+          <Text style={[st.lbl, { color: c.textMuted }]}>{t.score}</Text>
+          <Text testID="result-percentage" style={[st.pct, { color }]}>{pct}%</Text>
+          <Text style={[st.det, { color: c.textMuted }]}>{cor} {t.correct} {t.of} {tot}</Text>
+          <View style={[st.bar, { backgroundColor: c.progressBg }]}>
+            <View style={[st.fill, { width: `${pct}%`, backgroundColor: color }]} />
           </View>
-          {isExam && (
-            <Text style={[styles.passThreshold, { color: c.textMuted }]}>{t.passThreshold}</Text>
-          )}
+          {isExam && <Text style={[st.thr, { color: c.textMuted }]}>{t.threshold}</Text>}
         </View>
 
-        <View style={[styles.modeBadge, { backgroundColor: c.card }]}>
+        {/* Mode badge */}
+        <View style={[st.badge, { backgroundColor: c.card }]}>
           <Ionicons name={mode === 'practice' ? 'book-outline' : 'school-outline'} size={16} color={c.textSecondary} />
-          <Text style={[styles.modeText, { color: c.textSecondary }]}>{mode === 'practice' ? t.practice : t.exam}</Text>
+          <Text style={[st.badgeT, { color: c.textSecondary }]}>{mode === 'practice' ? t.practice : t.exam}</Text>
         </View>
       </View>
 
-      <View style={styles.actions}>
-        <TouchableOpacity testID="result-home-btn" style={[styles.secondaryButton, { backgroundColor: c.card, borderColor: c.cardBorder }]} onPress={() => router.replace('/')}>
-          <Ionicons name="home-outline" size={20} color={c.textSecondary} />
-          <Text style={[styles.secondaryButtonText, { color: c.textSecondary }]}>{t.backHome}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity testID="result-retry-btn" style={[styles.primaryButton, { backgroundColor: c.accent }]}
-          onPress={() => {
-            if (isExam) {
-              router.replace({ pathname: '/quiz', params: { mode: 'exam', category: 'all' } });
-            } else {
-              router.replace({ pathname: '/categories', params: { mode } });
-            }
-          }}
-        >
-          <Ionicons name="refresh" size={20} color="#0F172A" />
-          <Text style={styles.primaryButtonText}>{t.tryAgain}</Text>
-        </TouchableOpacity>
+      {/* Actions */}
+      <View style={st.actions}>
+        {/* Premium upsell for non-premium users */}
+        {!isPremium && (
+          <TouchableOpacity testID="result-upgrade-btn" style={[st.upgradeBtn, { borderColor: c.accent }]} onPress={() => router.push('/paywall')} activeOpacity={0.8}>
+            <Ionicons name="diamond" size={16} color={c.accent} />
+            <Text style={[st.upgradeT, { color: c.accent }]}>{t.upgrade}</Text>
+          </TouchableOpacity>
+        )}
+
+        <View style={st.btnRow}>
+          <TouchableOpacity testID="result-home-btn" style={[st.secBtn, { backgroundColor: c.card, borderColor: c.cardBorder }]} onPress={() => router.replace('/')}>
+            <Ionicons name="home-outline" size={18} color={c.textSecondary} />
+            <Text style={[st.secT, { color: c.textSecondary }]}>{t.home}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity testID="result-retry-btn" style={[st.priBtn, { backgroundColor: c.accent }]}
+            onPress={() => { isExam ? router.replace({ pathname: '/quiz', params: { mode: 'exam', category: 'all' } }) : router.replace({ pathname: '/categories', params: { mode } }); }}>
+            <Ionicons name="refresh" size={18} color="#0F172A" />
+            <Text style={st.priT}>{t.retry}</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
+const st = StyleSheet.create({
   container: { flex: 1 },
   content: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 },
-  iconContainer: { width: 112, height: 112, borderRadius: 56, justifyContent: 'center', alignItems: 'center', marginBottom: 20 },
-  message: { fontSize: 30, fontWeight: '800', marginBottom: 4 },
-  subtitle: { fontSize: 16, marginBottom: 32 },
-  scoreCard: { borderRadius: 24, padding: 32, alignItems: 'center', width: '100%', marginBottom: 20, borderWidth: 1 },
-  scoreLabel: { fontSize: 13, textTransform: 'uppercase', letterSpacing: 1.5, fontWeight: '700', marginBottom: 8 },
-  scorePercentage: { fontSize: 72, fontWeight: '800' },
-  scoreDetail: { fontSize: 16, marginTop: 4, marginBottom: 20 },
-  progressRing: { width: '100%', height: 8, borderRadius: 4, overflow: 'hidden' },
-  progressFill: { height: '100%', borderRadius: 4 },
-  passThreshold: { fontSize: 13, marginTop: 12 },
-  modeBadge: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20, gap: 6 },
-  modeText: { fontSize: 14, fontWeight: '600' },
-  actions: { flexDirection: 'row', padding: 20, gap: 12 },
-  secondaryButton: { flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', borderRadius: 16, paddingVertical: 14, gap: 8, borderWidth: 1 },
-  secondaryButtonText: { fontSize: 15, fontWeight: '600' },
-  primaryButton: { flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', borderRadius: 16, paddingVertical: 14, gap: 8 },
-  primaryButtonText: { fontSize: 15, fontWeight: '700', color: '#0F172A' },
+  emoji: { fontSize: 56, marginBottom: 12 },
+  msg: { fontSize: 26, fontWeight: '800', textAlign: 'center', marginBottom: 4 },
+  sub: { fontSize: 15, marginBottom: 28 },
+  card: { borderRadius: 20, padding: 28, alignItems: 'center', width: '100%', marginBottom: 16, borderWidth: 1 },
+  lbl: { fontSize: 12, textTransform: 'uppercase', letterSpacing: 1.5, fontWeight: '700', marginBottom: 6 },
+  pct: { fontSize: 64, fontWeight: '800' },
+  det: { fontSize: 15, marginTop: 4, marginBottom: 18 },
+  bar: { width: '100%', height: 7, borderRadius: 4, overflow: 'hidden' },
+  fill: { height: '100%', borderRadius: 4 },
+  thr: { fontSize: 12, marginTop: 10 },
+  badge: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 14, paddingVertical: 7, borderRadius: 16, gap: 6 },
+  badgeT: { fontSize: 13, fontWeight: '600' },
+  actions: { padding: 20 },
+  upgradeBtn: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', borderRadius: 14, paddingVertical: 13, gap: 8, borderWidth: 1.5, marginBottom: 10 },
+  upgradeT: { fontSize: 15, fontWeight: '700' },
+  btnRow: { flexDirection: 'row', gap: 10 },
+  secBtn: { flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', borderRadius: 14, paddingVertical: 14, gap: 6, borderWidth: 1 },
+  secT: { fontSize: 14, fontWeight: '600' },
+  priBtn: { flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', borderRadius: 14, paddingVertical: 14, gap: 6 },
+  priT: { fontSize: 14, fontWeight: '700', color: '#0F172A' },
 });

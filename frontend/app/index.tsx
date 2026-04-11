@@ -1,294 +1,207 @@
 import React, { useEffect, useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
-  ActivityIndicator,
-} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAppStore } from '../src/store/appStore';
 import { api } from '../src/services/api';
 
-const LANGUAGES = [
-  { code: 'no', label: 'NO', flag: '🇳🇴' },
-  { code: 'th', label: 'TH', flag: '🇹🇭' },
-  { code: 'en', label: 'EN', flag: '🇬🇧' },
+const LANGS = [
+  { code: 'th', flag: '🇹🇭' },
+  { code: 'no', flag: '🇳🇴' },
+  { code: 'en', flag: '🇬🇧' },
 ];
 
-const TRANSLATIONS: Record<string, Record<string, string>> = {
-  no: {
-    title: 'Thai2Drive',
-    subtitle: 'Norsk førerprøve quiz',
-    practice: 'Øvingsmodus',
-    exam: 'Eksamensmodus',
-    practiceDesc: 'Øv deg uten press, velg kategori',
-    examDesc: '45 spørsmål · 90 min · 85% for å bestå',
-    history: 'Historikk',
-    bookmarks: 'Bokmerker',
-    stats: 'Din statistikk',
-    answered: 'Besvart',
-    correct: 'Riktige',
-    accuracy: 'Nøyaktighet',
-    questionsAvailable: 'spørsmål tilgjengelig',
-  },
-  th: {
-    title: 'Thai2Drive',
-    subtitle: 'แบบทดสอบใบขับขี่นอร์เวย์',
-    practice: 'โหมดฝึกซ้อม',
-    exam: 'โหมดสอบ',
-    practiceDesc: 'ฝึกซ้อมไม่มีเวลา เลือกหมวดหมู่',
-    examDesc: '45 ข้อ · 90 นาที · 85% ผ่าน',
-    history: 'ประวัติ',
-    bookmarks: 'บุ๊คมาร์ค',
-    stats: 'สถิติของคุณ',
-    answered: 'ตอบแล้ว',
-    correct: 'ถูกต้อง',
-    accuracy: 'ความแม่นยำ',
-    questionsAvailable: 'คำถามพร้อมใช้',
-  },
-  en: {
-    title: 'Thai2Drive',
-    subtitle: 'Norwegian Driving Theory Quiz',
-    practice: 'Practice Mode',
-    exam: 'Exam Mode',
-    practiceDesc: 'Practice without pressure, pick category',
-    examDesc: '45 questions · 90 min · 85% to pass',
-    history: 'History',
-    bookmarks: 'Bookmarks',
-    stats: 'Your Statistics',
-    answered: 'Answered',
-    correct: 'Correct',
-    accuracy: 'Accuracy',
-    questionsAvailable: 'questions available',
-  },
+const TR: Record<string, Record<string, string>> = {
+  no: { subtitle: 'Norsk førerprøve', startQuiz: 'Start Quiz', practice: 'Øving', exam: 'Eksamen', stats: 'Din fremgang', answered: 'Besvart', correct: 'Riktige', accuracy: 'Nøyaktighet', history: 'Historikk', bookmarks: 'Bokmerker', premiumCta: 'Lås opp full tilgang – over 5000 spørsmål', premiumOffer: 'Begrenset tilbud for de første 50', premiumPrice: '199 kr / mnd', getPremium: 'Få Premium', premiumActive: 'Premium Aktiv', streak: 'dagers rekke', freeLeft: 'gratis igjen' },
+  th: { subtitle: 'สอบใบขับขี่นอร์เวย์', startQuiz: 'เริ่มทำแบบทดสอบ', practice: 'ฝึกซ้อม', exam: 'สอบ', stats: 'ความก้าวหน้า', answered: 'ตอบแล้ว', correct: 'ถูกต้อง', accuracy: 'ความแม่นยำ', history: 'ประวัติ', bookmarks: 'บุ๊คมาร์ค', premiumCta: 'ปลดล็อคเข้าถึงทั้งหมด – กว่า 5000 ข้อ', premiumOffer: 'ข้อเสนอพิเศษสำหรับ 50 คนแรก', premiumPrice: '199 kr / เดือน', getPremium: 'รับ Premium', premiumActive: 'Premium ใช้งานอยู่', streak: 'วันติดต่อกัน', freeLeft: 'ฟรีที่เหลือ' },
+  en: { subtitle: 'Norwegian driving test', startQuiz: 'Start Quiz', practice: 'Practice', exam: 'Exam', stats: 'Your Progress', answered: 'Answered', correct: 'Correct', accuracy: 'Accuracy', history: 'History', bookmarks: 'Bookmarks', premiumCta: 'Unlock full access – over 5,000 questions', premiumOffer: 'Limited offer for first 50 users', premiumPrice: '199 kr / month', getPremium: 'Get Premium', premiumActive: 'Premium Active', streak: 'day streak', freeLeft: 'free left' },
 };
 
 export default function HomeScreen() {
   const router = useRouter();
-  const { language, setLanguage, deviceId, setProgress, progress, colors, isPremium, freeRemaining } = useAppStore();
+  const { language, setLanguage, deviceId, setProgress, progress, colors, isPremium, freeRemaining, streak, updateStreak } = useAppStore();
   const [loading, setLoading] = useState(true);
-  const [totalQuestions, setTotalQuestions] = useState(0);
-  const t = TRANSLATIONS[language] || TRANSLATIONS.no;
+  const t = TR[language] || TR.no;
   const c = colors;
   const remaining = freeRemaining();
 
-  useEffect(() => {
-    loadData();
-  }, []);
+  useEffect(() => { loadData(); }, []);
 
   const loadData = async () => {
     try {
       await api.seedDatabase();
-      const userProgress = await api.getProgress(deviceId);
-      setProgress(userProgress);
-      const cats = await api.getCategories();
-      setTotalQuestions(cats.reduce((s: number, c: { count: number }) => s + c.count, 0));
-    } catch (error) {
-      console.error('Error loading data:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const navigateToQuiz = (mode: 'practice' | 'exam') => {
-    if (mode === 'exam') {
-      router.push({ pathname: '/quiz', params: { mode: 'exam', category: 'all' } });
-    } else {
-      router.push({ pathname: '/categories', params: { mode } });
-    }
+      const p = await api.getProgress(deviceId);
+      setProgress(p);
+      await updateStreak();
+    } catch (e) { console.error(e); }
+    finally { setLoading(false); }
   };
 
   const accuracy = progress.total_questions_answered > 0
-    ? Math.round((progress.correct_answers / progress.total_questions_answered) * 100)
-    : 0;
+    ? Math.round((progress.correct_answers / progress.total_questions_answered) * 100) : 0;
 
-  if (loading) {
-    return (
-      <SafeAreaView style={[styles.container, { backgroundColor: c.bg }]}>
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator testID="home-loading" size="large" color={c.accent} />
-        </View>
-      </SafeAreaView>
-    );
-  }
+  if (loading) return (
+    <SafeAreaView style={[st.container, { backgroundColor: c.bg }]}>
+      <View style={st.center}><ActivityIndicator testID="home-loading" size="large" color={c.accent} /></View>
+    </SafeAreaView>
+  );
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: c.bg }]}>
-      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-        {/* Header */}
-        <View style={styles.header}>
-          <View>
-            <Text style={[styles.title, { color: c.text }]} testID="home-title">{t.title}</Text>
-            <Text style={[styles.subtitle, { color: c.textSecondary }]}>{t.subtitle}</Text>
+    <SafeAreaView style={[st.container, { backgroundColor: c.bg }]}>
+      <ScrollView contentContainerStyle={st.scroll} showsVerticalScrollIndicator={false}>
+        {/* Top bar: flag + lang selector + settings */}
+        <View style={st.topBar}>
+          <Text style={st.thaiFlag}>🇹🇭</Text>
+          <View style={st.langRow}>
+            {LANGS.map((l) => (
+              <TouchableOpacity key={l.code} testID={`lang-btn-${l.code}`}
+                style={[st.langBtn, { backgroundColor: language === l.code ? c.accentBg : c.card, borderColor: language === l.code ? c.accent : 'transparent' }]}
+                onPress={() => setLanguage(l.code)}>
+                <Text style={st.langFlag}>{l.flag}</Text>
+              </TouchableOpacity>
+            ))}
           </View>
-          <View style={styles.headerRight}>
-            <TouchableOpacity
-              testID="settings-btn"
-              style={[styles.settingsBtn, { backgroundColor: c.card }]}
-              onPress={() => router.push('/settings')}
-              activeOpacity={0.7}
-            >
-              <Ionicons name="settings-outline" size={20} color={c.textSecondary} />
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        {/* Language selector */}
-        <View style={styles.languageSelector}>
-          {LANGUAGES.map((lang) => (
-            <TouchableOpacity
-              key={lang.code}
-              testID={`lang-btn-${lang.code}`}
-              style={[styles.langButton, { backgroundColor: c.card, borderColor: language === lang.code ? c.accent : 'transparent' }]}
-              onPress={() => setLanguage(lang.code)}
-              activeOpacity={0.7}
-            >
-              <Text style={styles.langFlag}>{lang.flag}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-
-        {/* Stats Card */}
-        <View style={[styles.statsCard, { backgroundColor: c.card, borderColor: c.cardBorder }]}>
-          <Text style={[styles.statsTitle, { color: c.textMuted }]}>{t.stats}</Text>
-          <View style={styles.statsRow}>
-            <View style={styles.statItem}>
-              <Text style={[styles.statValue, { color: c.text }]}>{progress.total_questions_answered}</Text>
-              <Text style={[styles.statLabel, { color: c.textSecondary }]}>{t.answered}</Text>
-            </View>
-            <View style={[styles.statDivider, { backgroundColor: c.divider }]} />
-            <View style={styles.statItem}>
-              <Text style={[styles.statValue, { color: c.text }]}>{progress.correct_answers}</Text>
-              <Text style={[styles.statLabel, { color: c.textSecondary }]}>{t.correct}</Text>
-            </View>
-            <View style={[styles.statDivider, { backgroundColor: c.divider }]} />
-            <View style={styles.statItem}>
-              <Text style={[styles.statValue, { color: accuracy >= 70 ? c.correct : accuracy > 0 ? c.incorrect : c.text }]}>
-                {accuracy}%
-              </Text>
-              <Text style={[styles.statLabel, { color: c.textSecondary }]}>{t.accuracy}</Text>
-            </View>
-          </View>
-        </View>
-
-        {/* Mode Cards */}
-        <TouchableOpacity
-          testID="practice-mode-btn"
-          style={[styles.practiceCard, { backgroundColor: c.card, borderColor: `${c.correct}40` }]}
-          onPress={() => navigateToQuiz('practice')}
-          activeOpacity={0.8}
-        >
-          <View style={styles.modeHeader}>
-            <View style={[styles.modeIconBg, { backgroundColor: `${c.correct}18` }]}>
-              <Ionicons name="book-outline" size={28} color={c.correct} />
-            </View>
-            <Ionicons name="chevron-forward" size={22} color={c.textMuted} />
-          </View>
-          <Text style={[styles.modeTitle, { color: c.text }]}>{t.practice}</Text>
-          <Text style={[styles.modeDesc, { color: c.textSecondary }]}>{t.practiceDesc}</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          testID="exam-mode-btn"
-          style={[styles.examCard, { backgroundColor: c.card, borderColor: `${c.accent}40` }]}
-          onPress={() => navigateToQuiz('exam')}
-          activeOpacity={0.8}
-        >
-          <View style={styles.modeHeader}>
-            <View style={[styles.modeIconBg, { backgroundColor: c.accentBg }]}>
-              <Ionicons name="school-outline" size={28} color={c.accent} />
-            </View>
-            <Ionicons name="chevron-forward" size={22} color={c.textMuted} />
-          </View>
-          <Text style={[styles.modeTitle, { color: c.text }]}>{t.exam}</Text>
-          <Text style={[styles.modeDesc, { color: c.textSecondary }]}>{t.examDesc}</Text>
-        </TouchableOpacity>
-
-        {/* Quick Actions */}
-        <View style={styles.quickActions}>
-          <TouchableOpacity testID="history-btn" style={[styles.actionButton, { backgroundColor: c.card, borderColor: c.cardBorder }]} onPress={() => router.push('/history')} activeOpacity={0.7}>
-            <Ionicons name="time-outline" size={22} color={c.textSecondary} />
-            <Text style={[styles.actionText, { color: c.textSecondary }]}>{t.history}</Text>
+          <TouchableOpacity testID="settings-btn" style={[st.settingsBtn, { backgroundColor: c.card }]} onPress={() => router.push('/settings')}>
+            <Ionicons name="settings-outline" size={18} color={c.textSecondary} />
           </TouchableOpacity>
-          <TouchableOpacity testID="bookmarks-btn" style={[styles.actionButton, { backgroundColor: c.card, borderColor: c.cardBorder }]} onPress={() => router.push('/bookmarks')} activeOpacity={0.7}>
-            <Ionicons name="bookmark-outline" size={22} color={c.textSecondary} />
-            <Text style={[styles.actionText, { color: c.textSecondary }]}>{t.bookmarks}</Text>
+        </View>
+
+        {/* Title */}
+        <Text style={[st.title, { color: c.text }]} testID="home-title">Thai2Drive</Text>
+        <Text style={[st.subtitle, { color: c.textSecondary }]}>{t.subtitle}</Text>
+
+        {/* Streak */}
+        {streak > 0 && (
+          <View style={[st.streakRow, { backgroundColor: c.card, borderColor: c.cardBorder }]}>
+            <Text style={st.streakFire}>🔥</Text>
+            <Text style={[st.streakText, { color: c.accent }]}>{streak} {t.streak}</Text>
+          </View>
+        )}
+
+        {/* Big Start Quiz Button */}
+        <TouchableOpacity testID="start-quiz-btn" style={[st.startBtn, { backgroundColor: c.accent }]}
+          onPress={() => router.push({ pathname: '/categories', params: { mode: 'practice' } })} activeOpacity={0.85}>
+          <Ionicons name="play" size={22} color="#0F172A" />
+          <Text style={st.startText}>{t.startQuiz}</Text>
+        </TouchableOpacity>
+
+        {/* Free remaining for non-premium */}
+        {!isPremium && (
+          <Text style={[st.freeHint, { color: c.textMuted }]}>{remaining} {t.freeLeft}</Text>
+        )}
+
+        {/* Mode shortcuts */}
+        <View style={st.modesRow}>
+          <TouchableOpacity testID="practice-mode-btn" style={[st.modeChip, { backgroundColor: c.card, borderColor: c.cardBorder }]}
+            onPress={() => router.push({ pathname: '/categories', params: { mode: 'practice' } })}>
+            <Ionicons name="book-outline" size={18} color={c.correct} />
+            <Text style={[st.modeText, { color: c.text }]}>{t.practice}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity testID="exam-mode-btn" style={[st.modeChip, { backgroundColor: c.card, borderColor: c.cardBorder }]}
+            onPress={() => router.push({ pathname: '/quiz', params: { mode: 'exam', category: 'all' } })}>
+            <Ionicons name="school-outline" size={18} color={c.accent} />
+            <Text style={[st.modeText, { color: c.text }]}>{t.exam}</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Progress */}
+        <View style={[st.progressCard, { backgroundColor: c.card, borderColor: c.cardBorder }]}>
+          <Text style={[st.sectionTitle, { color: c.textMuted }]}>{t.stats}</Text>
+          <View style={st.statsRow}>
+            <View style={st.statCol}>
+              <Text style={[st.statVal, { color: c.text }]}>{progress.total_questions_answered}</Text>
+              <Text style={[st.statLbl, { color: c.textSecondary }]}>{t.answered}</Text>
+            </View>
+            <View style={[st.divider, { backgroundColor: c.divider }]} />
+            <View style={st.statCol}>
+              <Text style={[st.statVal, { color: c.text }]}>{progress.correct_answers}</Text>
+              <Text style={[st.statLbl, { color: c.textSecondary }]}>{t.correct}</Text>
+            </View>
+            <View style={[st.divider, { backgroundColor: c.divider }]} />
+            <View style={st.statCol}>
+              <Text style={[st.statVal, { color: accuracy >= 70 ? c.correct : accuracy > 0 ? c.incorrect : c.text }]}>{accuracy}%</Text>
+              <Text style={[st.statLbl, { color: c.textSecondary }]}>{t.accuracy}</Text>
+            </View>
+          </View>
+        </View>
+
+        {/* Quick actions */}
+        <View style={st.quickRow}>
+          <TouchableOpacity testID="history-btn" style={[st.quickBtn, { backgroundColor: c.card, borderColor: c.cardBorder }]} onPress={() => router.push('/history')}>
+            <Ionicons name="time-outline" size={20} color={c.textSecondary} />
+            <Text style={[st.quickText, { color: c.textSecondary }]}>{t.history}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity testID="bookmarks-btn" style={[st.quickBtn, { backgroundColor: c.card, borderColor: c.cardBorder }]} onPress={() => router.push('/bookmarks')}>
+            <Ionicons name="bookmark-outline" size={20} color={c.textSecondary} />
+            <Text style={[st.quickText, { color: c.textSecondary }]}>{t.bookmarks}</Text>
           </TouchableOpacity>
         </View>
 
         {/* Premium Banner */}
         {!isPremium ? (
-          <TouchableOpacity
-            testID="home-premium-btn"
-            style={[styles.premiumBanner, { backgroundColor: c.card, borderColor: `${c.accent}40` }]}
-            onPress={() => router.push('/paywall')}
-            activeOpacity={0.8}
-          >
-            <View style={[styles.premiumIconBg, { backgroundColor: c.accentBg }]}>
-              <Ionicons name="diamond" size={20} color={c.accent} />
+          <TouchableOpacity testID="home-premium-btn" style={[st.premBanner, { borderColor: c.accent }]} onPress={() => router.push('/paywall')} activeOpacity={0.85}>
+            <Text style={st.premRocket}>🚀</Text>
+            <Text style={[st.premCta, { color: c.text }]}>{t.premiumCta}</Text>
+            <Text style={[st.premOffer, { color: c.textSecondary }]}>{t.premiumOffer}</Text>
+            <View style={st.premPriceRow}>
+              <Text style={[st.premPrice, { color: c.accent }]}>{t.premiumPrice}</Text>
             </View>
-            <View style={{ flex: 1 }}>
-              <Text style={[styles.premiumTitle, { color: c.text }]}>Unlock Premium</Text>
-              <Text style={[styles.premiumSub, { color: c.textSecondary }]}>
-                {remaining > 0 ? `${remaining} free questions left` : 'Free limit reached'}
-              </Text>
+            <View style={[st.premBtn, { backgroundColor: c.accent }]}>
+              <Ionicons name="diamond" size={16} color="#0F172A" />
+              <Text style={st.premBtnText}>{t.getPremium}</Text>
             </View>
-            <Ionicons name="chevron-forward" size={20} color={c.accent} />
           </TouchableOpacity>
         ) : (
-          <View style={[styles.premiumBadge, { backgroundColor: `${c.correct}12`, borderColor: `${c.correct}30` }]}>
-            <Ionicons name="diamond" size={16} color={c.correct} />
-            <Text style={[styles.premiumBadgeText, { color: c.correct }]}>Premium Active</Text>
+          <View style={[st.premActive, { backgroundColor: `${c.correct}10`, borderColor: `${c.correct}30` }]}>
+            <Ionicons name="diamond" size={18} color={c.correct} />
+            <Text style={[st.premActiveText, { color: c.correct }]}>{t.premiumActive}</Text>
           </View>
         )}
-
-        <View style={styles.footerInfo}>
-          <Ionicons name="library-outline" size={16} color={c.textMuted} />
-          <Text style={[styles.footerText, { color: c.textMuted }]}>{totalQuestions} {t.questionsAvailable}</Text>
-        </View>
       </ScrollView>
     </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
+const st = StyleSheet.create({
   container: { flex: 1 },
-  loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  scrollContent: { padding: 20, paddingBottom: 40 },
-  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 },
-  title: { fontSize: 34, fontWeight: '800', letterSpacing: -1 },
-  subtitle: { fontSize: 14, marginTop: 4 },
-  headerRight: { flexDirection: 'row', gap: 8 },
-  settingsBtn: { width: 42, height: 42, borderRadius: 21, justifyContent: 'center', alignItems: 'center' },
-  languageSelector: { flexDirection: 'row', gap: 8, marginBottom: 20 },
-  langButton: { width: 42, height: 42, borderRadius: 21, justifyContent: 'center', alignItems: 'center', borderWidth: 2 },
-  langFlag: { fontSize: 20 },
-  statsCard: { borderRadius: 20, padding: 20, marginBottom: 20, borderWidth: 1 },
-  statsTitle: { fontSize: 13, textTransform: 'uppercase', letterSpacing: 1.5, fontWeight: '700', marginBottom: 16 },
+  center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  scroll: { padding: 20, paddingBottom: 40 },
+  topBar: { flexDirection: 'row', alignItems: 'center', marginBottom: 20 },
+  thaiFlag: { fontSize: 28, marginRight: 12 },
+  langRow: { flex: 1, flexDirection: 'row', gap: 6 },
+  langBtn: { width: 38, height: 38, borderRadius: 19, justifyContent: 'center', alignItems: 'center', borderWidth: 2 },
+  langFlag: { fontSize: 18 },
+  settingsBtn: { width: 38, height: 38, borderRadius: 19, justifyContent: 'center', alignItems: 'center' },
+  title: { fontSize: 36, fontWeight: '800', letterSpacing: -1 },
+  subtitle: { fontSize: 15, marginTop: 2, marginBottom: 16 },
+  streakRow: { flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-start', paddingHorizontal: 14, paddingVertical: 8, borderRadius: 20, gap: 6, borderWidth: 1, marginBottom: 16 },
+  streakFire: { fontSize: 18 },
+  streakText: { fontSize: 14, fontWeight: '700' },
+  startBtn: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', borderRadius: 16, paddingVertical: 18, gap: 10, marginBottom: 8 },
+  startText: { fontSize: 18, fontWeight: '800', color: '#0F172A' },
+  freeHint: { fontSize: 12, textAlign: 'center', marginBottom: 16 },
+  modesRow: { flexDirection: 'row', gap: 10, marginBottom: 16 },
+  modeChip: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 12, paddingVertical: 12, gap: 6, borderWidth: 1 },
+  modeText: { fontSize: 14, fontWeight: '600' },
+  progressCard: { borderRadius: 16, padding: 16, marginBottom: 12, borderWidth: 1 },
+  sectionTitle: { fontSize: 11, textTransform: 'uppercase', letterSpacing: 1.5, fontWeight: '700', marginBottom: 12 },
   statsRow: { flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' },
-  statItem: { alignItems: 'center', flex: 1 },
-  statValue: { fontSize: 30, fontWeight: '800' },
-  statLabel: { fontSize: 12, marginTop: 4 },
-  statDivider: { width: 1, height: 44 },
-  practiceCard: { borderRadius: 20, padding: 20, marginBottom: 12, borderWidth: 1 },
-  examCard: { borderRadius: 20, padding: 20, marginBottom: 20, borderWidth: 1 },
-  modeHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 },
-  modeIconBg: { width: 52, height: 52, borderRadius: 16, justifyContent: 'center', alignItems: 'center' },
-  modeTitle: { fontSize: 20, fontWeight: '700', marginBottom: 4 },
-  modeDesc: { fontSize: 14, lineHeight: 20 },
-  quickActions: { flexDirection: 'row', gap: 12 },
-  actionButton: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 16, paddingVertical: 16, gap: 8, borderWidth: 1 },
-  actionText: { fontSize: 14, fontWeight: '600' },
-  footerInfo: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 24, gap: 6 },
-  footerText: { fontSize: 13 },
-  premiumBanner: { flexDirection: 'row', alignItems: 'center', borderRadius: 16, padding: 14, marginTop: 16, borderWidth: 1, gap: 12 },
-  premiumIconBg: { width: 40, height: 40, borderRadius: 12, justifyContent: 'center', alignItems: 'center' },
-  premiumTitle: { fontSize: 15, fontWeight: '700' },
-  premiumSub: { fontSize: 12, marginTop: 2 },
-  premiumBadge: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 12, paddingVertical: 10, marginTop: 16, gap: 6, borderWidth: 1 },
-  premiumBadgeText: { fontSize: 13, fontWeight: '700' },
+  statCol: { alignItems: 'center', flex: 1 },
+  statVal: { fontSize: 26, fontWeight: '800' },
+  statLbl: { fontSize: 11, marginTop: 2 },
+  divider: { width: 1, height: 36 },
+  quickRow: { flexDirection: 'row', gap: 10, marginBottom: 20 },
+  quickBtn: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 12, paddingVertical: 14, gap: 6, borderWidth: 1 },
+  quickText: { fontSize: 13, fontWeight: '600' },
+  premBanner: { borderRadius: 20, padding: 20, borderWidth: 1.5, alignItems: 'center', marginBottom: 12, borderStyle: 'dashed' },
+  premRocket: { fontSize: 32, marginBottom: 8 },
+  premCta: { fontSize: 16, fontWeight: '700', textAlign: 'center', lineHeight: 22, marginBottom: 4 },
+  premOffer: { fontSize: 13, textAlign: 'center', marginBottom: 10 },
+  premPriceRow: { marginBottom: 14 },
+  premPrice: { fontSize: 22, fontWeight: '800' },
+  premBtn: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 12, paddingVertical: 12, paddingHorizontal: 32, gap: 6 },
+  premBtnText: { fontSize: 15, fontWeight: '700', color: '#0F172A' },
+  premActive: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 12, paddingVertical: 12, gap: 6, borderWidth: 1, marginBottom: 12 },
+  premActiveText: { fontSize: 14, fontWeight: '700' },
 });
