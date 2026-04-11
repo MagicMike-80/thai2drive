@@ -51,6 +51,7 @@ export interface QuizAttempt {
   total_questions: number;
   correct_answers: number;
   score_percentage: number;
+  passed?: boolean;
   questions_answered: any[];
   started_at: string;
   completed_at: string;
@@ -63,109 +64,79 @@ export interface Bookmark {
   created_at: string;
 }
 
+const fetchJSON = async (url: string, options?: RequestInit) => {
+  const response = await fetch(url, options);
+  if (!response.ok) {
+    const text = await response.text().catch(() => '');
+    throw new Error(`API ${response.status}: ${text}`);
+  }
+  return response.json();
+};
+
 export const api = {
-  // Questions
   async getQuestions(category?: string, difficulty?: string, limit = 50): Promise<Question[]> {
     const params = new URLSearchParams();
     if (category) params.append('category', category);
     if (difficulty) params.append('difficulty', difficulty);
     params.append('limit', limit.toString());
-
-    const response = await fetch(`${API_BASE}/questions?${params}`);
-    if (!response.ok) throw new Error('Failed to fetch questions');
-    return response.json();
+    return fetchJSON(`${API_BASE}/questions?${params}`);
   },
 
   async getRandomQuestions(count = 10, category?: string): Promise<Question[]> {
     const params = new URLSearchParams();
     params.append('count', count.toString());
     if (category) params.append('category', category);
-
-    const response = await fetch(`${API_BASE}/questions/random?${params}`);
-    if (!response.ok) throw new Error('Failed to fetch random questions');
-    return response.json();
+    return fetchJSON(`${API_BASE}/questions/random?${params}`);
   },
 
-  async getQuestion(id: string): Promise<Question> {
-    const response = await fetch(`${API_BASE}/questions/${id}`);
-    if (!response.ok) throw new Error('Failed to fetch question');
-    return response.json();
-  },
-
-  // Categories
   async getCategories(): Promise<Category[]> {
-    const response = await fetch(`${API_BASE}/categories`);
-    if (!response.ok) throw new Error('Failed to fetch categories');
-    return response.json();
+    return fetchJSON(`${API_BASE}/categories`);
   },
 
-  // User Progress
   async getProgress(deviceId: string): Promise<UserProgress> {
-    const response = await fetch(`${API_BASE}/progress/${deviceId}`);
-    if (!response.ok) throw new Error('Failed to fetch progress');
-    return response.json();
+    return fetchJSON(`${API_BASE}/progress/${deviceId}`);
   },
 
   async updateProgress(deviceId: string, answeredCorrect: boolean, category: string): Promise<any> {
-    const response = await fetch(
+    return fetchJSON(
       `${API_BASE}/progress/${deviceId}?answered_correct=${answeredCorrect}&category=${encodeURIComponent(category)}`,
       { method: 'PUT' }
     );
-    if (!response.ok) throw new Error('Failed to update progress');
-    return response.json();
   },
 
-  // Quiz Attempts
-  async saveQuizAttempt(data: Omit<QuizAttempt, 'id' | 'completed_at'>): Promise<QuizAttempt> {
-    const response = await fetch(`${API_BASE}/quiz-attempts`, {
+  async saveQuizAttempt(data: any): Promise<QuizAttempt> {
+    return fetchJSON(`${API_BASE}/quiz-attempts`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
-    if (!response.ok) throw new Error('Failed to save quiz attempt');
-    return response.json();
   },
 
   async getQuizAttempts(deviceId: string, limit = 20): Promise<QuizAttempt[]> {
-    const response = await fetch(`${API_BASE}/quiz-attempts/${deviceId}?limit=${limit}`);
-    if (!response.ok) throw new Error('Failed to fetch quiz attempts');
-    return response.json();
+    return fetchJSON(`${API_BASE}/quiz-attempts/${deviceId}?limit=${limit}`);
   },
 
-  // Bookmarks
   async addBookmark(deviceId: string, questionId: string): Promise<Bookmark> {
-    const response = await fetch(`${API_BASE}/bookmarks`, {
+    return fetchJSON(`${API_BASE}/bookmarks`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ device_id: deviceId, question_id: questionId }),
     });
-    if (!response.ok) throw new Error('Failed to add bookmark');
-    return response.json();
   },
 
   async removeBookmark(deviceId: string, questionId: string): Promise<void> {
-    const response = await fetch(`${API_BASE}/bookmarks/${deviceId}/${questionId}`, {
-      method: 'DELETE',
-    });
-    if (!response.ok) throw new Error('Failed to remove bookmark');
+    await fetch(`${API_BASE}/bookmarks/${deviceId}/${questionId}`, { method: 'DELETE' });
   },
 
   async getBookmarks(deviceId: string): Promise<Bookmark[]> {
-    const response = await fetch(`${API_BASE}/bookmarks/${deviceId}`);
-    if (!response.ok) throw new Error('Failed to fetch bookmarks');
-    return response.json();
+    return fetchJSON(`${API_BASE}/bookmarks/${deviceId}`);
   },
 
   async getBookmarkedQuestions(deviceId: string): Promise<Question[]> {
-    const response = await fetch(`${API_BASE}/bookmarked-questions/${deviceId}`);
-    if (!response.ok) throw new Error('Failed to fetch bookmarked questions');
-    return response.json();
+    return fetchJSON(`${API_BASE}/bookmarked-questions/${deviceId}`);
   },
 
-  // Seed Database
   async seedDatabase(): Promise<{ message: string; seeded: boolean }> {
-    const response = await fetch(`${API_BASE}/seed`, { method: 'POST' });
-    if (!response.ok) throw new Error('Failed to seed database');
-    return response.json();
+    return fetchJSON(`${API_BASE}/seed`, { method: 'POST' });
   },
 };

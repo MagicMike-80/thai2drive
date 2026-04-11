@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import {
   View,
   Text,
@@ -7,54 +7,34 @@ import {
   ScrollView,
   ActivityIndicator,
   Animated,
+  Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import * as Speech from 'expo-speech';
 import { useAppStore } from '../src/store/appStore';
 import { api, Question } from '../src/services/api';
 
 const ANSWER_LETTERS = ['A', 'B', 'C', 'D'];
+const EXAM_TIME_SECONDS = 90 * 60; // 90 minutes
+const EXAM_PASS_THRESHOLD = 85;
 
-const TRANSLATIONS = {
+const TRANSLATIONS: Record<string, Record<string, string>> = {
   no: {
-    question: 'Spørsmål',
-    of: 'av',
-    checkAnswer: 'Sjekk svar',
-    nextQuestion: 'Neste spørsmål',
-    finish: 'Fullfør',
-    explanation: 'Forklaring',
-    correct: 'Riktig!',
-    incorrect: 'Feil!',
-    exit: 'Avslutt',
-    bookmark: 'Bokmerk',
-    bookmarked: 'Bokmerket',
+    question: 'Spørsmål', of: 'av', checkAnswer: 'Sjekk svar', nextQuestion: 'Neste',
+    finish: 'Fullfør', explanation: 'Forklaring', correct: 'Riktig!', incorrect: 'Feil!',
+    exit: 'Avslutt', tapTranslate: 'Trykk for oversettelse', timeRemaining: 'Tid igjen',
   },
   th: {
-    question: 'คำถาม',
-    of: 'จาก',
-    checkAnswer: 'ตรวจคำตอบ',
-    nextQuestion: 'คำถามถัดไป',
-    finish: 'เสร็จสิ้น',
-    explanation: 'คำอธิบาย',
-    correct: 'ถูกต้อง!',
-    incorrect: 'ผิด!',
-    exit: 'ออก',
-    bookmark: 'บุ๊คมาร์ค',
-    bookmarked: 'บันทึกแล้ว',
+    question: 'คำถาม', of: 'จาก', checkAnswer: 'ตรวจคำตอบ', nextQuestion: 'ถัดไป',
+    finish: 'เสร็จสิ้น', explanation: 'คำอธิบาย', correct: 'ถูกต้อง!', incorrect: 'ผิด!',
+    exit: 'ออก', tapTranslate: 'แตะเพื่อแปล', timeRemaining: 'เวลาที่เหลือ',
   },
   en: {
-    question: 'Question',
-    of: 'of',
-    checkAnswer: 'Check Answer',
-    nextQuestion: 'Next Question',
-    finish: 'Finish',
-    explanation: 'Explanation',
-    correct: 'Correct!',
-    incorrect: 'Incorrect!',
-    exit: 'Exit',
-    bookmark: 'Bookmark',
-    bookmarked: 'Bookmarked',
+    question: 'Question', of: 'of', checkAnswer: 'Check Answer', nextQuestion: 'Next',
+    finish: 'Finish', explanation: 'Explanation', correct: 'Correct!', incorrect: 'Incorrect!',
+    exit: 'Exit', tapTranslate: 'Tap to translate', timeRemaining: 'Time remaining',
   },
 };
 
@@ -62,7 +42,7 @@ export default function QuizScreen() {
   const router = useRouter();
   const { mode, category } = useLocalSearchParams<{ mode: string; category: string }>();
   const { language, deviceId, addBookmark, removeBookmark, isBookmarked, setProgress } = useAppStore();
-  const t = TRANSLATIONS[language as keyof typeof TRANSLATIONS];
+  const t = TRANSLATIONS[language] || TRANSLATIONS.no;
 
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -71,16 +51,44 @@ export default function QuizScreen() {
   const [loading, setLoading] = useState(true);
   const [quizStartTime] = useState(new Date());
   const [answeredQuestions, setAnsweredQuestions] = useState<any[]>([]);
+  const [showTranslation, setShowTranslation] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [timeRemaining, setTimeRemaining] = useState(EXAM_TIME_SECONDS);
 
   const fadeAnim = useRef(new Animated.Value(1)).current;
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const isExam = mode === 'exam';
 
   useEffect(() => {
     loadQuestions();
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+      Speech.stop();
+    };
   }, []);
+
+  useEffect(() => {
+    if (isExam && !loading && questions.length > 0) {
+      timerRef.current = setInterval(() => {
+        setTimeRemaining((prev) => {
+          if (prev <= 1) {
+            if (timerRef.current) clearInterval(timerRef.current);
+            handleTimeUp();
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [loading, questions.length]);
 
   const loadQuestions = async () => {
     try {
-      const count = mode === 'exam' ? 20 : 10;
+      const count = isExam ? 45 : 10;
       const cat = category === 'all' ? undefined : category;
       const qs = await api.getRandomQuestions(count, cat);
       setQuestions(qs);
@@ -91,21 +99,31 @@ export default function QuizScreen() {
     }
   };
 
+  const handleTimeUp = useCallback(() => {
+    const correctCount = answeredQuestions.filter((a) => a.correct).length;
+    const totalAnswered = answeredQuestions.length;
+    const scorePercentage = totalAnswered > 0 ? (correctCount / questions.length) * 100 : 0;
+    navigateToResults(correctCount, scorePercentage);
+  }, [answeredQuestions, questions.length]);
+
   const currentQuestion = questions[currentIndex];
 
-  const getQuestionText = (q: Question) => {
-    const key = `question_text_${language}` as keyof Question;
-    return q[key] as string || q.question_text_no;
+  const getQuestionText = (q: Question, lang?: string) => {
+    const l = lang || language;
+    const key = `question_text_${l}` as keyof Question;
+    return (q[key] as string) || q.question_text_no;
   };
 
-  const getAnswerText = (q: Question, letter: string) => {
-    const key = `answer_${letter.toLowerCase()}_${language}` as keyof Question;
-    return q[key] as string || (q as any)[`answer_${letter.toLowerCase()}_no`];
+  const getAnswerText = (q: Question, letter: string, lang?: string) => {
+    const l = lang || language;
+    const key = `answer_${letter.toLowerCase()}_${l}` as keyof Question;
+    return (q[key] as string) || (q as any)[`answer_${letter.toLowerCase()}_no`];
   };
 
-  const getExplanation = (q: Question) => {
-    const key = `explanation_${language}` as keyof Question;
-    return q[key] as string || q.explanation_no;
+  const getExplanation = (q: Question, lang?: string) => {
+    const l = lang || language;
+    const key = `explanation_${l}` as keyof Question;
+    return (q[key] as string) || q.explanation_no;
   };
 
   const handleSelectAnswer = (letter: string) => {
@@ -115,21 +133,14 @@ export default function QuizScreen() {
 
   const handleCheckAnswer = async () => {
     if (!selectedAnswer || !currentQuestion) return;
-
     setIsAnswered(true);
     const isCorrect = selectedAnswer === currentQuestion.correct_answer;
 
-    // Save answer record
     setAnsweredQuestions((prev) => [
       ...prev,
-      {
-        question_id: currentQuestion.id,
-        selected_answer: selectedAnswer,
-        correct: isCorrect,
-      },
+      { question_id: currentQuestion.id, selected_answer: selectedAnswer, correct: isCorrect },
     ]);
 
-    // Update progress
     try {
       await api.updateProgress(deviceId, isCorrect, currentQuestion.category);
       const updatedProgress = await api.getProgress(deviceId);
@@ -141,37 +152,30 @@ export default function QuizScreen() {
 
   const handleNext = () => {
     if (currentIndex >= questions.length - 1) {
-      // Quiz complete
       finishQuiz();
       return;
     }
 
-    // Animate transition
     Animated.sequence([
-      Animated.timing(fadeAnim, {
-        toValue: 0,
-        duration: 150,
-        useNativeDriver: true,
-      }),
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 150,
-        useNativeDriver: true,
-      }),
+      Animated.timing(fadeAnim, { toValue: 0, duration: 120, useNativeDriver: true }),
+      Animated.timing(fadeAnim, { toValue: 1, duration: 120, useNativeDriver: true }),
     ]).start();
 
     setTimeout(() => {
       setCurrentIndex((prev) => prev + 1);
       setSelectedAnswer(null);
       setIsAnswered(false);
-    }, 150);
+      setShowTranslation(false);
+    }, 120);
   };
 
   const finishQuiz = async () => {
+    if (timerRef.current) clearInterval(timerRef.current);
     const correctCount = answeredQuestions.filter((a) => a.correct).length;
     const scorePercentage = (correctCount / questions.length) * 100;
 
     try {
+      const passed = isExam ? scorePercentage >= EXAM_PASS_THRESHOLD : undefined;
       await api.saveQuizAttempt({
         device_id: deviceId,
         mode: mode || 'practice',
@@ -179,6 +183,7 @@ export default function QuizScreen() {
         total_questions: questions.length,
         correct_answers: correctCount,
         score_percentage: scorePercentage,
+        passed,
         questions_answered: answeredQuestions,
         started_at: quizStartTime.toISOString(),
       });
@@ -186,19 +191,23 @@ export default function QuizScreen() {
       console.error('Error saving quiz attempt:', error);
     }
 
+    navigateToResults(correctCount, scorePercentage);
+  };
+
+  const navigateToResults = (correctCount: number, scorePercentage: number) => {
     router.replace({
       pathname: '/results',
       params: {
         total: questions.length.toString(),
         correct: correctCount.toString(),
         mode: mode || 'practice',
+        passed: isExam ? (scorePercentage >= EXAM_PASS_THRESHOLD ? 'true' : 'false') : '',
       },
     });
   };
 
   const handleBookmark = async () => {
     if (!currentQuestion) return;
-
     if (isBookmarked(currentQuestion.id)) {
       await removeBookmark(currentQuestion.id);
     } else {
@@ -206,11 +215,33 @@ export default function QuizScreen() {
     }
   };
 
+  const speakThai = () => {
+    if (!currentQuestion) return;
+    if (isSpeaking) {
+      Speech.stop();
+      setIsSpeaking(false);
+      return;
+    }
+    setIsSpeaking(true);
+    Speech.speak(getQuestionText(currentQuestion, 'th'), {
+      language: 'th-TH',
+      rate: 0.85,
+      onDone: () => setIsSpeaking(false),
+      onError: () => setIsSpeaking(false),
+    });
+  };
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
   if (loading) {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#3B82F6" />
+          <ActivityIndicator testID="quiz-loading" size="large" color="#F59E0B" />
         </View>
       </SafeAreaView>
     );
@@ -227,52 +258,81 @@ export default function QuizScreen() {
   }
 
   const questionBookmarked = isBookmarked(currentQuestion.id);
+  const timerWarning = isExam && timeRemaining < 300;
 
   return (
     <SafeAreaView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.exitButton}
-          onPress={() => router.back()}
-        >
-          <Ionicons name="close" size={24} color="#FFFFFF" />
+        <TouchableOpacity testID="quiz-exit-btn" style={styles.exitButton} onPress={() => router.back()}>
+          <Ionicons name="close" size={22} color="#F8FAFC" />
         </TouchableOpacity>
 
         <View style={styles.progressContainer}>
           <Text style={styles.progressText}>
-            {t.question} {currentIndex + 1} {t.of} {questions.length}
+            {currentIndex + 1} / {questions.length}
           </Text>
           <View style={styles.progressBar}>
-            <View
-              style={[
-                styles.progressFill,
-                { width: `${((currentIndex + 1) / questions.length) * 100}%` },
-              ]}
-            />
+            <View style={[styles.progressFill, { width: `${((currentIndex + 1) / questions.length) * 100}%` }]} />
           </View>
         </View>
 
-        <TouchableOpacity
-          style={styles.bookmarkButton}
-          onPress={handleBookmark}
-        >
+        <TouchableOpacity testID="quiz-bookmark-btn" style={styles.bookmarkButton} onPress={handleBookmark}>
           <Ionicons
             name={questionBookmarked ? 'bookmark' : 'bookmark-outline'}
-            size={24}
-            color={questionBookmarked ? '#F59E0B' : '#FFFFFF'}
+            size={22}
+            color={questionBookmarked ? '#F59E0B' : '#F8FAFC'}
           />
         </TouchableOpacity>
       </View>
 
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+      {/* Timer for exam mode */}
+      {isExam && (
+        <View style={[styles.timerBar, timerWarning && styles.timerBarWarning]}>
+          <Ionicons name="timer-outline" size={16} color={timerWarning ? '#EF4444' : '#F59E0B'} />
+          <Text style={[styles.timerText, timerWarning && styles.timerTextWarning]}>
+            {formatTime(timeRemaining)}
+          </Text>
+        </View>
+      )}
+
+      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <Animated.View style={{ opacity: fadeAnim }}>
           {/* Question */}
-          <View style={styles.questionCard}>
-            <Text style={styles.questionText}>
-              {getQuestionText(currentQuestion)}
-            </Text>
-          </View>
+          <TouchableOpacity
+            testID="question-card"
+            style={styles.questionCard}
+            onPress={() => setShowTranslation(!showTranslation)}
+            activeOpacity={0.9}
+          >
+            <Text style={styles.questionText}>{getQuestionText(currentQuestion)}</Text>
+
+            {/* Translate hint */}
+            {!showTranslation && language !== 'th' && (
+              <View style={styles.translateHint}>
+                <Ionicons name="language-outline" size={14} color="#F59E0B" />
+                <Text style={styles.translateHintText}>{t.tapTranslate}</Text>
+              </View>
+            )}
+
+            {/* Thai Translation */}
+            {showTranslation && language !== 'th' && (
+              <View style={styles.translationContainer}>
+                <View style={styles.translationDivider} />
+                <Text style={styles.translationText}>
+                  {getQuestionText(currentQuestion, 'th')}
+                </Text>
+                <TouchableOpacity testID="tts-btn" style={styles.ttsButton} onPress={speakThai}>
+                  <Ionicons
+                    name={isSpeaking ? 'volume-high' : 'volume-medium-outline'}
+                    size={18}
+                    color="#F59E0B"
+                  />
+                  <Text style={styles.ttsButtonText}>🇹🇭</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          </TouchableOpacity>
 
           {/* Answers */}
           <View style={styles.answersContainer}>
@@ -281,79 +341,71 @@ export default function QuizScreen() {
               const isSelected = selectedAnswer === letter;
               const isCorrect = currentQuestion.correct_answer === letter;
 
-              let buttonStyle = styles.answerButton;
-              let textStyle = styles.answerText;
-              let letterStyle = styles.answerLetter;
+              let cardStyle = [styles.answerButton];
+              let letterBgStyle = [styles.answerLetterBg];
+              let textColor = '#E2E8F0';
 
               if (isAnswered) {
                 if (isCorrect) {
-                  buttonStyle = { ...buttonStyle, ...styles.correctAnswer };
-                  textStyle = { ...textStyle, color: '#22C55E' };
-                  letterStyle = { ...letterStyle, ...styles.correctLetter };
+                  cardStyle.push(styles.correctAnswer);
+                  letterBgStyle.push(styles.correctLetterBg);
+                  textColor = '#10B981';
                 } else if (isSelected && !isCorrect) {
-                  buttonStyle = { ...buttonStyle, ...styles.incorrectAnswer };
-                  textStyle = { ...textStyle, color: '#EF4444' };
-                  letterStyle = { ...letterStyle, ...styles.incorrectLetter };
+                  cardStyle.push(styles.incorrectAnswer);
+                  letterBgStyle.push(styles.incorrectLetterBg);
+                  textColor = '#EF4444';
+                } else {
+                  cardStyle.push(styles.dimmedAnswer);
                 }
               } else if (isSelected) {
-                buttonStyle = { ...buttonStyle, ...styles.selectedAnswer };
-                letterStyle = { ...letterStyle, ...styles.selectedLetter };
+                cardStyle.push(styles.selectedAnswer);
+                letterBgStyle.push(styles.selectedLetterBg);
               }
 
               return (
                 <TouchableOpacity
                   key={letter}
-                  style={buttonStyle}
+                  testID={`answer-btn-${letter}`}
+                  style={cardStyle}
                   onPress={() => handleSelectAnswer(letter)}
                   disabled={isAnswered}
                   activeOpacity={0.7}
                 >
-                  <View style={letterStyle}>
+                  <View style={letterBgStyle}>
                     <Text style={styles.letterText}>{letter}</Text>
                   </View>
-                  <Text style={textStyle}>{answerText}</Text>
+                  <Text style={[styles.answerText, { color: textColor }]}>{answerText}</Text>
+                  {isAnswered && isCorrect && (
+                    <Ionicons name="checkmark-circle" size={22} color="#10B981" />
+                  )}
+                  {isAnswered && isSelected && !isCorrect && (
+                    <Ionicons name="close-circle" size={22} color="#EF4444" />
+                  )}
                 </TouchableOpacity>
               );
             })}
           </View>
 
-          {/* Explanation (shown after answering) */}
+          {/* Explanation */}
           {isAnswered && (
             <View style={styles.explanationCard}>
               <View style={styles.explanationHeader}>
                 <Ionicons
-                  name={
-                    selectedAnswer === currentQuestion.correct_answer
-                      ? 'checkmark-circle'
-                      : 'close-circle'
-                  }
-                  size={24}
-                  color={
-                    selectedAnswer === currentQuestion.correct_answer
-                      ? '#22C55E'
-                      : '#EF4444'
-                  }
+                  name={selectedAnswer === currentQuestion.correct_answer ? 'checkmark-circle' : 'close-circle'}
+                  size={22}
+                  color={selectedAnswer === currentQuestion.correct_answer ? '#10B981' : '#EF4444'}
                 />
-                <Text
-                  style={[
-                    styles.explanationStatus,
-                    {
-                      color:
-                        selectedAnswer === currentQuestion.correct_answer
-                          ? '#22C55E'
-                          : '#EF4444',
-                    },
-                  ]}
-                >
-                  {selectedAnswer === currentQuestion.correct_answer
-                    ? t.correct
-                    : t.incorrect}
+                <Text style={[styles.explanationStatus, {
+                  color: selectedAnswer === currentQuestion.correct_answer ? '#10B981' : '#EF4444',
+                }]}>
+                  {selectedAnswer === currentQuestion.correct_answer ? t.correct : t.incorrect}
                 </Text>
               </View>
               <Text style={styles.explanationLabel}>{t.explanation}:</Text>
-              <Text style={styles.explanationText}>
-                {getExplanation(currentQuestion)}
-              </Text>
+              <Text style={styles.explanationText}>{getExplanation(currentQuestion)}</Text>
+              {language !== 'th' && (
+                <Text style={styles.explanationThai}>{getExplanation(currentQuestion, 'th')}</Text>
+              )}
             </View>
           )}
         </Animated.View>
@@ -363,21 +415,19 @@ export default function QuizScreen() {
       <View style={styles.actionContainer}>
         {!isAnswered ? (
           <TouchableOpacity
-            style={[
-              styles.actionButton,
-              !selectedAnswer && styles.actionButtonDisabled,
-            ]}
+            testID="check-answer-btn"
+            style={[styles.actionButton, !selectedAnswer && styles.actionButtonDisabled]}
             onPress={handleCheckAnswer}
             disabled={!selectedAnswer}
           >
             <Text style={styles.actionButtonText}>{t.checkAnswer}</Text>
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity style={styles.actionButton} onPress={handleNext}>
+          <TouchableOpacity testID="next-btn" style={styles.actionButton} onPress={handleNext}>
             <Text style={styles.actionButtonText}>
               {currentIndex >= questions.length - 1 ? t.finish : t.nextQuestion}
             </Text>
-            <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
+            <Ionicons name="arrow-forward" size={20} color="#0F172A" />
           </TouchableOpacity>
         )}
       </View>
@@ -386,177 +436,50 @@ export default function QuizScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#0F172A',
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  errorText: {
-    color: '#EF4444',
-    fontSize: 16,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#1E293B',
-  },
-  exitButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: '#1E293B',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  progressContainer: {
-    flex: 1,
-    marginHorizontal: 16,
-  },
-  progressText: {
-    fontSize: 12,
-    color: '#94A3B8',
-    marginBottom: 8,
-    textAlign: 'center',
-  },
-  progressBar: {
-    height: 4,
-    backgroundColor: '#1E293B',
-    borderRadius: 2,
-  },
-  progressFill: {
-    height: '100%',
-    backgroundColor: '#3B82F6',
-    borderRadius: 2,
-  },
-  bookmarkButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: '#1E293B',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  scrollContent: {
-    padding: 20,
-  },
-  questionCard: {
-    backgroundColor: '#1E293B',
-    borderRadius: 16,
-    padding: 24,
-    marginBottom: 24,
-  },
-  questionText: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: '#FFFFFF',
-    lineHeight: 28,
-  },
-  answersContainer: {
-    gap: 12,
-  },
-  answerButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#1E293B',
-    borderRadius: 12,
-    padding: 16,
-    borderWidth: 2,
-    borderColor: 'transparent',
-  },
-  selectedAnswer: {
-    borderColor: '#3B82F6',
-    backgroundColor: 'rgba(59, 130, 246, 0.1)',
-  },
-  correctAnswer: {
-    borderColor: '#22C55E',
-    backgroundColor: 'rgba(34, 197, 94, 0.1)',
-  },
-  incorrectAnswer: {
-    borderColor: '#EF4444',
-    backgroundColor: 'rgba(239, 68, 68, 0.1)',
-  },
-  answerLetter: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: '#334155',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 12,
-  },
-  selectedLetter: {
-    backgroundColor: '#3B82F6',
-  },
-  correctLetter: {
-    backgroundColor: '#22C55E',
-  },
-  incorrectLetter: {
-    backgroundColor: '#EF4444',
-  },
-  letterText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#FFFFFF',
-  },
-  answerText: {
-    flex: 1,
-    fontSize: 16,
-    color: '#E2E8F0',
-    lineHeight: 22,
-  },
-  explanationCard: {
-    backgroundColor: '#1E293B',
-    borderRadius: 16,
-    padding: 20,
-    marginTop: 24,
-  },
-  explanationHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  explanationStatus: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginLeft: 8,
-  },
-  explanationLabel: {
-    fontSize: 14,
-    color: '#94A3B8',
-    marginBottom: 8,
-  },
-  explanationText: {
-    fontSize: 15,
-    color: '#E2E8F0',
-    lineHeight: 22,
-  },
-  actionContainer: {
-    padding: 20,
-    borderTopWidth: 1,
-    borderTopColor: '#1E293B',
-  },
-  actionButton: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#3B82F6',
-    borderRadius: 12,
-    paddingVertical: 16,
-    gap: 8,
-  },
-  actionButtonDisabled: {
-    backgroundColor: '#334155',
-  },
-  actionButtonText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#FFFFFF',
-  },
+  container: { flex: 1, backgroundColor: '#0F172A' },
+  loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  errorText: { color: '#EF4444', fontSize: 16 },
+  header: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12, gap: 12 },
+  exitButton: { width: 40, height: 40, borderRadius: 12, backgroundColor: '#1E293B', justifyContent: 'center', alignItems: 'center' },
+  progressContainer: { flex: 1 },
+  progressText: { fontSize: 13, color: '#94A3B8', marginBottom: 6, textAlign: 'center', fontWeight: '600' },
+  progressBar: { height: 6, backgroundColor: '#1E293B', borderRadius: 3 },
+  progressFill: { height: '100%', backgroundColor: '#F59E0B', borderRadius: 3 },
+  bookmarkButton: { width: 40, height: 40, borderRadius: 12, backgroundColor: '#1E293B', justifyContent: 'center', alignItems: 'center' },
+  timerBar: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingVertical: 8, gap: 6, backgroundColor: 'rgba(245, 158, 11, 0.08)', borderBottomWidth: 1, borderBottomColor: 'rgba(245, 158, 11, 0.15)' },
+  timerBarWarning: { backgroundColor: 'rgba(239, 68, 68, 0.08)', borderBottomColor: 'rgba(239, 68, 68, 0.15)' },
+  timerText: { fontSize: 16, fontWeight: '700', color: '#F59E0B', fontVariant: ['tabular-nums'] },
+  timerTextWarning: { color: '#EF4444' },
+  scrollContent: { padding: 16, paddingBottom: 24 },
+  questionCard: { backgroundColor: '#1E293B', borderRadius: 20, padding: 24, marginBottom: 20, borderWidth: 1, borderColor: 'rgba(51, 65, 85, 0.5)' },
+  questionText: { fontSize: 20, fontWeight: '700', color: '#F8FAFC', lineHeight: 28 },
+  translateHint: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 12, opacity: 0.7 },
+  translateHintText: { fontSize: 12, color: '#F59E0B' },
+  translationContainer: { marginTop: 12 },
+  translationDivider: { height: 1, backgroundColor: 'rgba(245, 158, 11, 0.2)', marginBottom: 12 },
+  translationText: { fontSize: 16, color: '#F59E0B', lineHeight: 24 },
+  ttsButton: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 10, alignSelf: 'flex-start', backgroundColor: 'rgba(245, 158, 11, 0.1)', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20 },
+  ttsButtonText: { fontSize: 14 },
+  answersContainer: { gap: 10 },
+  answerButton: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#1E293B', borderRadius: 16, padding: 16, borderWidth: 2, borderColor: 'rgba(51, 65, 85, 0.5)' },
+  selectedAnswer: { borderColor: '#F59E0B', backgroundColor: 'rgba(245, 158, 11, 0.08)' },
+  correctAnswer: { borderColor: '#10B981', backgroundColor: 'rgba(16, 185, 129, 0.08)' },
+  incorrectAnswer: { borderColor: '#EF4444', backgroundColor: 'rgba(239, 68, 68, 0.08)' },
+  dimmedAnswer: { opacity: 0.5 },
+  answerLetterBg: { width: 36, height: 36, borderRadius: 12, backgroundColor: '#334155', justifyContent: 'center', alignItems: 'center', marginRight: 12 },
+  selectedLetterBg: { backgroundColor: '#F59E0B' },
+  correctLetterBg: { backgroundColor: '#10B981' },
+  incorrectLetterBg: { backgroundColor: '#EF4444' },
+  letterText: { fontSize: 15, fontWeight: '700', color: '#F8FAFC' },
+  answerText: { flex: 1, fontSize: 16, color: '#E2E8F0', lineHeight: 22 },
+  explanationCard: { backgroundColor: '#1E293B', borderRadius: 20, padding: 20, marginTop: 20, borderWidth: 1, borderColor: 'rgba(51, 65, 85, 0.5)' },
+  explanationHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 12, gap: 8 },
+  explanationStatus: { fontSize: 18, fontWeight: '700' },
+  explanationLabel: { fontSize: 13, color: '#64748B', textTransform: 'uppercase', letterSpacing: 1, fontWeight: '600', marginBottom: 8 },
+  explanationText: { fontSize: 15, color: '#E2E8F0', lineHeight: 22 },
+  explanationThai: { fontSize: 14, color: '#F59E0B', lineHeight: 22, marginTop: 8, opacity: 0.85 },
+  actionContainer: { padding: 16, borderTopWidth: 1, borderTopColor: 'rgba(51, 65, 85, 0.5)' },
+  actionButton: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: '#F59E0B', borderRadius: 16, paddingVertical: 16, gap: 8 },
+  actionButtonDisabled: { backgroundColor: '#334155' },
+  actionButtonText: { fontSize: 16, fontWeight: '700', color: '#0F172A' },
 });

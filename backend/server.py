@@ -8,64 +8,48 @@ from pathlib import Path
 from pydantic import BaseModel, Field
 from typing import List, Optional, Dict, Any
 import uuid
-from datetime import datetime
-import random
+from datetime import datetime, timezone
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
-# MongoDB connection
 mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
-# Create the main app without a prefix
 app = FastAPI()
-
-# Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 # ==================== MODELS ====================
 
 class Question(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    # Question text in multiple languages
     question_text_no: str
     question_text_th: str
     question_text_en: str
-    # Answer options in Norwegian
     answer_a_no: str
     answer_b_no: str
     answer_c_no: str
     answer_d_no: str
-    # Answer options in Thai
     answer_a_th: str
     answer_b_th: str
     answer_c_th: str
     answer_d_th: str
-    # Answer options in English
     answer_a_en: str
     answer_b_en: str
     answer_c_en: str
     answer_d_en: str
-    # Correct answer (A, B, C, or D)
     correct_answer: str
-    # Explanations in multiple languages
     explanation_no: str
     explanation_th: str
     explanation_en: str
-    # Metadata
     category: str
-    difficulty: str = "medium"  # easy, medium, hard
+    difficulty: str = "medium"
     image_url: Optional[str] = None
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
 class QuestionCreate(BaseModel):
     question_text_no: str
@@ -96,21 +80,22 @@ class UserProgress(BaseModel):
     device_id: str
     total_questions_answered: int = 0
     correct_answers: int = 0
-    questions_by_category: Dict[str, Dict[str, int]] = {}  # {category: {answered: X, correct: Y}}
-    last_activity: datetime = Field(default_factory=datetime.utcnow)
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    questions_by_category: Dict[str, Dict[str, int]] = {}
+    last_activity: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
 class QuizAttempt(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     device_id: str
-    mode: str  # "practice" or "exam"
+    mode: str
     category: Optional[str] = None
     total_questions: int
     correct_answers: int
     score_percentage: float
-    questions_answered: List[Dict[str, Any]]  # [{question_id, selected_answer, correct, time_taken}]
-    started_at: datetime
-    completed_at: datetime = Field(default_factory=datetime.utcnow)
+    passed: Optional[bool] = None
+    questions_answered: List[Dict[str, Any]]
+    started_at: str
+    completed_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
 class QuizAttemptCreate(BaseModel):
     device_id: str
@@ -119,14 +104,15 @@ class QuizAttemptCreate(BaseModel):
     total_questions: int
     correct_answers: int
     score_percentage: float
+    passed: Optional[bool] = None
     questions_answered: List[Dict[str, Any]]
-    started_at: datetime
+    started_at: str
 
 class Bookmark(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     device_id: str
     question_id: str
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
 class BookmarkCreate(BaseModel):
     device_id: str
@@ -138,56 +124,42 @@ class BookmarkCreate(BaseModel):
 async def root():
     return {"message": "Thai2Drive API - Norway Driving Theory Quiz"}
 
-# ----- QUESTIONS -----
-
 @api_router.get("/questions", response_model=List[Question])
-async def get_questions(
-    category: Optional[str] = None,
-    difficulty: Optional[str] = None,
-    limit: int = Query(default=50, le=100)
-):
-    """Get questions with optional filters"""
+async def get_questions(category: Optional[str] = None, difficulty: Optional[str] = None, limit: int = Query(default=50, le=200)):
     query = {}
     if category:
         query["category"] = category
     if difficulty:
         query["difficulty"] = difficulty
-    
-    questions = await db.questions.find(query).limit(limit).to_list(limit)
-    return [Question(**q) for q in questions]
+    questions = await db.questions.find(query, {"_id": 0}).limit(limit).to_list(limit)
+    return questions
 
 @api_router.get("/questions/random", response_model=List[Question])
-async def get_random_questions(
-    category: Optional[str] = None,
-    count: int = Query(default=10, le=50)
-):
-    """Get random questions for quiz"""
+async def get_random_questions(category: Optional[str] = None, count: int = Query(default=10, le=50)):
     pipeline = []
     if category:
         pipeline.append({"$match": {"category": category}})
     pipeline.append({"$sample": {"size": count}})
-    
+    pipeline.append({"$project": {"_id": 0}})
     questions = await db.questions.aggregate(pipeline).to_list(count)
-    return [Question(**q) for q in questions]
+    return questions
 
 @api_router.get("/questions/{question_id}", response_model=Question)
 async def get_question(question_id: str):
-    """Get a specific question by ID"""
-    question = await db.questions.find_one({"id": question_id})
+    question = await db.questions.find_one({"id": question_id}, {"_id": 0})
     if not question:
         raise HTTPException(status_code=404, detail="Question not found")
-    return Question(**question)
+    return question
 
 @api_router.post("/questions", response_model=Question)
 async def create_question(question_data: QuestionCreate):
-    """Create a new question"""
     question = Question(**question_data.dict())
-    await db.questions.insert_one(question.dict())
+    doc = question.dict()
+    await db.questions.insert_one(doc)
     return question
 
 @api_router.get("/categories")
 async def get_categories():
-    """Get all available categories with question counts"""
     pipeline = [
         {"$group": {"_id": "$category", "count": {"$sum": 1}}},
         {"$sort": {"_id": 1}}
@@ -195,128 +167,104 @@ async def get_categories():
     categories = await db.questions.aggregate(pipeline).to_list(100)
     return [{"name": c["_id"], "count": c["count"]} for c in categories]
 
-# ----- USER PROGRESS -----
-
-@api_router.get("/progress/{device_id}", response_model=UserProgress)
+@api_router.get("/progress/{device_id}")
 async def get_user_progress(device_id: str):
-    """Get or create user progress"""
-    progress = await db.user_progress.find_one({"device_id": device_id})
+    progress = await db.user_progress.find_one({"device_id": device_id}, {"_id": 0})
     if not progress:
-        # Create new progress record
-        new_progress = UserProgress(device_id=device_id)
-        await db.user_progress.insert_one(new_progress.dict())
+        new_progress = UserProgress(device_id=device_id).dict()
+        await db.user_progress.insert_one(new_progress)
+        new_progress.pop("_id", None)
         return new_progress
-    return UserProgress(**progress)
+    return progress
 
 @api_router.put("/progress/{device_id}")
 async def update_user_progress(device_id: str, answered_correct: bool, category: str):
-    """Update user progress after answering a question"""
     progress = await db.user_progress.find_one({"device_id": device_id})
-    
     if not progress:
         progress = UserProgress(device_id=device_id).dict()
-    
-    # Update totals
+
     progress["total_questions_answered"] = progress.get("total_questions_answered", 0) + 1
     if answered_correct:
         progress["correct_answers"] = progress.get("correct_answers", 0) + 1
-    
-    # Update category stats
+
     if "questions_by_category" not in progress:
         progress["questions_by_category"] = {}
-    
     if category not in progress["questions_by_category"]:
         progress["questions_by_category"][category] = {"answered": 0, "correct": 0}
-    
     progress["questions_by_category"][category]["answered"] += 1
     if answered_correct:
         progress["questions_by_category"][category]["correct"] += 1
-    
-    progress["last_activity"] = datetime.utcnow()
-    
+
+    progress["last_activity"] = datetime.now(timezone.utc).isoformat()
+
     await db.user_progress.update_one(
         {"device_id": device_id},
         {"$set": progress},
         upsert=True
     )
-    
+    progress.pop("_id", None)
     return {"success": True, "progress": progress}
 
-# ----- QUIZ ATTEMPTS -----
-
-@api_router.post("/quiz-attempts", response_model=QuizAttempt)
+@api_router.post("/quiz-attempts")
 async def save_quiz_attempt(attempt_data: QuizAttemptCreate):
-    """Save a completed quiz attempt"""
     attempt = QuizAttempt(**attempt_data.dict())
-    await db.quiz_attempts.insert_one(attempt.dict())
-    return attempt
+    doc = attempt.dict()
+    await db.quiz_attempts.insert_one(doc)
+    doc.pop("_id", None)
+    return doc
 
-@api_router.get("/quiz-attempts/{device_id}", response_model=List[QuizAttempt])
+@api_router.get("/quiz-attempts/{device_id}")
 async def get_quiz_attempts(device_id: str, limit: int = Query(default=20, le=50)):
-    """Get quiz history for a device"""
     attempts = await db.quiz_attempts.find(
-        {"device_id": device_id}
+        {"device_id": device_id}, {"_id": 0}
     ).sort("completed_at", -1).limit(limit).to_list(limit)
-    return [QuizAttempt(**a) for a in attempts]
+    return attempts
 
-# ----- BOOKMARKS -----
-
-@api_router.post("/bookmarks", response_model=Bookmark)
+@api_router.post("/bookmarks")
 async def add_bookmark(bookmark_data: BookmarkCreate):
-    """Add a question to bookmarks"""
-    # Check if already bookmarked
     existing = await db.bookmarks.find_one({
         "device_id": bookmark_data.device_id,
         "question_id": bookmark_data.question_id
-    })
+    }, {"_id": 0})
     if existing:
-        return Bookmark(**existing)
-    
+        return existing
     bookmark = Bookmark(**bookmark_data.dict())
-    await db.bookmarks.insert_one(bookmark.dict())
-    return bookmark
+    doc = bookmark.dict()
+    await db.bookmarks.insert_one(doc)
+    doc.pop("_id", None)
+    return doc
 
 @api_router.delete("/bookmarks/{device_id}/{question_id}")
 async def remove_bookmark(device_id: str, question_id: str):
-    """Remove a bookmark"""
-    result = await db.bookmarks.delete_one({
-        "device_id": device_id,
-        "question_id": question_id
-    })
+    result = await db.bookmarks.delete_one({"device_id": device_id, "question_id": question_id})
     if result.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Bookmark not found")
     return {"success": True}
 
-@api_router.get("/bookmarks/{device_id}", response_model=List[Bookmark])
+@api_router.get("/bookmarks/{device_id}")
 async def get_bookmarks(device_id: str):
-    """Get all bookmarks for a device"""
-    bookmarks = await db.bookmarks.find({"device_id": device_id}).to_list(500)
-    return [Bookmark(**b) for b in bookmarks]
+    bookmarks = await db.bookmarks.find({"device_id": device_id}, {"_id": 0}).to_list(500)
+    return bookmarks
 
-@api_router.get("/bookmarked-questions/{device_id}", response_model=List[Question])
+@api_router.get("/bookmarked-questions/{device_id}")
 async def get_bookmarked_questions(device_id: str):
-    """Get all bookmarked questions with full details"""
-    bookmarks = await db.bookmarks.find({"device_id": device_id}).to_list(500)
+    bookmarks = await db.bookmarks.find({"device_id": device_id}, {"_id": 0}).to_list(500)
     question_ids = [b["question_id"] for b in bookmarks]
-    questions = await db.questions.find({"id": {"$in": question_ids}}).to_list(500)
-    return [Question(**q) for q in questions]
-
-# ----- SEED DATA -----
+    questions = await db.questions.find({"id": {"$in": question_ids}}, {"_id": 0}).to_list(500)
+    return questions
 
 @api_router.post("/seed")
 async def seed_database():
-    """Seed the database with sample questions"""
-    # Check if already seeded
     count = await db.questions.count_documents({})
     if count > 0:
         return {"message": f"Database already has {count} questions", "seeded": False}
-    
+
     sample_questions = [
-        # Traffic Signs
+        # ===== TRAFFIC SIGNS (9 questions) =====
         {
-            "question_text_no": "Hva betyr dette skiltet?",
-            "question_text_th": "ป้ายนี้หมายความว่าอะไร?",
-            "question_text_en": "What does this sign mean?",
+            "question_text_no": "Hva betyr et rødt åttekantet skilt?",
+            "question_text_th": "ป้ายแปดเหลี่ยมสีแดงหมายความว่าอะไร?",
+            "question_text_en": "What does a red octagonal sign mean?",
             "answer_a_no": "Stopp og gi vikeplikt",
             "answer_b_no": "Fartsgrense 50 km/t",
             "answer_c_no": "Innkjøring forbudt",
@@ -359,7 +307,168 @@ async def seed_database():
             "category": "Traffic Signs",
             "difficulty": "easy"
         },
-        # Road Rules
+        {
+            "question_text_no": "Hva betyr et trekantet skilt med rød kant?",
+            "question_text_th": "ป้ายสามเหลี่ยมขอบแดงหมายความว่าอะไร?",
+            "question_text_en": "What does a triangular sign with red border mean?",
+            "answer_a_no": "Forbudsskilt",
+            "answer_b_no": "Påbudsskilt",
+            "answer_c_no": "Varselskilt",
+            "answer_d_no": "Opplysningsskilt",
+            "answer_a_th": "ป้ายห้าม",
+            "answer_b_th": "ป้ายบังคับ",
+            "answer_c_th": "ป้ายเตือน",
+            "answer_d_th": "ป้ายให้ข้อมูล",
+            "answer_a_en": "Prohibition sign",
+            "answer_b_en": "Mandatory sign",
+            "answer_c_en": "Warning sign",
+            "answer_d_en": "Information sign",
+            "correct_answer": "C",
+            "explanation_no": "Trekantede skilt med rød kant er varselskilt som advarer om fare forut.",
+            "explanation_th": "ป้ายสามเหลี่ยมขอบแดงเป็นป้ายเตือนที่เตือนถึงอันตรายข้างหน้า",
+            "explanation_en": "Triangular signs with red border are warning signs that alert about danger ahead.",
+            "category": "Traffic Signs",
+            "difficulty": "easy"
+        },
+        {
+            "question_text_no": "Hva betyr et rundt skilt med rød kant og hvit bakgrunn med et tall?",
+            "question_text_th": "ป้ายวงกลมขอบแดงพื้นขาวที่มีตัวเลขหมายความว่าอะไร?",
+            "question_text_en": "What does a round sign with red border and white background with a number mean?",
+            "answer_a_no": "Anbefalt hastighet",
+            "answer_b_no": "Avstand til neste by",
+            "answer_c_no": "Fartsgrense",
+            "answer_d_no": "Antall felt",
+            "answer_a_th": "ความเร็วแนะนำ",
+            "answer_b_th": "ระยะทางถึงเมืองถัดไป",
+            "answer_c_th": "ขีดจำกัดความเร็ว",
+            "answer_d_th": "จำนวนช่องจราจร",
+            "answer_a_en": "Recommended speed",
+            "answer_b_en": "Distance to next city",
+            "answer_c_en": "Speed limit",
+            "answer_d_en": "Number of lanes",
+            "correct_answer": "C",
+            "explanation_no": "Runde skilt med rød kant og hvit bakgrunn med et tall angir fartsgrensen i km/t.",
+            "explanation_th": "ป้ายวงกลมขอบแดงพื้นขาวที่มีตัวเลขแสดงขีดจำกัดความเร็วเป็น กม./ชม.",
+            "explanation_en": "Round signs with red border and white background with a number indicate the speed limit in km/h.",
+            "category": "Traffic Signs",
+            "difficulty": "easy"
+        },
+        {
+            "question_text_no": "Hva betyr et skilt med hvit pil på blå bakgrunn?",
+            "question_text_th": "ป้ายลูกศรสีขาวบนพื้นสีน้ำเงินหมายความว่าอะไร?",
+            "question_text_en": "What does a white arrow on blue background sign mean?",
+            "answer_a_no": "Påbudt kjøreretning",
+            "answer_b_no": "Enveistrafikk",
+            "answer_c_no": "Motorvei",
+            "answer_d_no": "Blindvei",
+            "answer_a_th": "ทิศทางบังคับ",
+            "answer_b_th": "ทางเดินรถทางเดียว",
+            "answer_c_th": "ทางด่วน",
+            "answer_d_th": "ถนนตัน",
+            "answer_a_en": "Mandatory direction",
+            "answer_b_en": "One-way traffic",
+            "answer_c_en": "Highway",
+            "answer_d_en": "Dead end",
+            "correct_answer": "A",
+            "explanation_no": "Hvit pil på blå bakgrunn er et påbudsskilt som viser obligatorisk kjøreretning.",
+            "explanation_th": "ลูกศรสีขาวบนพื้นสีน้ำเงินเป็นป้ายบังคับที่แสดงทิศทางขับขี่ที่ต้องปฏิบัติตาม",
+            "explanation_en": "White arrow on blue background is a mandatory sign showing the required driving direction.",
+            "category": "Traffic Signs",
+            "difficulty": "medium"
+        },
+        {
+            "question_text_no": "Hva betyr skiltet med to piler som peker mot hverandre?",
+            "question_text_th": "ป้ายที่มีลูกศรสองอันชี้เข้าหากันหมายความว่าอะไร?",
+            "question_text_en": "What does the sign with two arrows pointing at each other mean?",
+            "answer_a_no": "Vei med møtende trafikk",
+            "answer_b_no": "Veien smalner",
+            "answer_c_no": "Forbikjøring forbudt",
+            "answer_d_no": "Toveis trafikk",
+            "answer_a_th": "ถนนมีรถสวนทาง",
+            "answer_b_th": "ถนนแคบลง",
+            "answer_c_th": "ห้ามแซง",
+            "answer_d_th": "การจราจรสองทาง",
+            "answer_a_en": "Road with oncoming traffic",
+            "answer_b_en": "Road narrows",
+            "answer_c_en": "No overtaking",
+            "answer_d_en": "Two-way traffic",
+            "correct_answer": "D",
+            "explanation_no": "Skiltet med to piler som peker mot hverandre varsler om toveis trafikk.",
+            "explanation_th": "ป้ายที่มีลูกศรสองอันชี้เข้าหากันเตือนว่ามีการจราจรสองทาง",
+            "explanation_en": "The sign with two arrows pointing at each other warns about two-way traffic.",
+            "category": "Traffic Signs",
+            "difficulty": "medium"
+        },
+        {
+            "question_text_no": "Hva betyr et rundt skilt med rød diagonal stripe over en figur?",
+            "question_text_th": "ป้ายวงกลมที่มีเส้นแดงขีดทแยงผ่านสัญลักษณ์หมายความว่าอะไร?",
+            "question_text_en": "What does a round sign with red diagonal stripe over a figure mean?",
+            "answer_a_no": "Anbefaling",
+            "answer_b_no": "Forbudt",
+            "answer_c_no": "Advarsel",
+            "answer_d_no": "Tillatt med forsiktighet",
+            "answer_a_th": "คำแนะนำ",
+            "answer_b_th": "ห้าม",
+            "answer_c_th": "เตือน",
+            "answer_d_th": "อนุญาตด้วยความระมัดระวัง",
+            "answer_a_en": "Recommendation",
+            "answer_b_en": "Prohibited",
+            "answer_c_en": "Warning",
+            "answer_d_en": "Allowed with caution",
+            "correct_answer": "B",
+            "explanation_no": "En rød diagonal stripe over en figur på et rundt skilt betyr at handlingen er forbudt.",
+            "explanation_th": "เส้นแดงขีดทแยงผ่านสัญลักษณ์บนป้ายวงกลมหมายความว่าการกระทำนั้นห้าม",
+            "explanation_en": "A red diagonal stripe over a figure on a round sign means the action is prohibited.",
+            "category": "Traffic Signs",
+            "difficulty": "easy"
+        },
+        {
+            "question_text_no": "Hva betyr et vikeplikt-skilt (nedovervendt trekant)?",
+            "question_text_th": "ป้ายให้ทาง (สามเหลี่ยมคว่ำ) หมายความว่าอะไร?",
+            "question_text_en": "What does a yield sign (inverted triangle) mean?",
+            "answer_a_no": "Du har forkjørsrett",
+            "answer_b_no": "Du må stoppe helt",
+            "answer_c_no": "Du må gi vikeplikt for kryssende trafikk",
+            "answer_d_no": "Farlig sving",
+            "answer_a_th": "คุณมีสิทธิ์ไปก่อน",
+            "answer_b_th": "คุณต้องหยุดสนิท",
+            "answer_c_th": "คุณต้องให้ทางแก่รถที่ตัดผ่าน",
+            "answer_d_th": "โค้งอันตราย",
+            "answer_a_en": "You have right of way",
+            "answer_b_en": "You must stop completely",
+            "answer_c_en": "You must yield to crossing traffic",
+            "answer_d_en": "Dangerous curve",
+            "correct_answer": "C",
+            "explanation_no": "Vikeplikt-skiltet (nedovervendt trekant) betyr at du må gi vikeplikt for trafikk på veien du krysser.",
+            "explanation_th": "ป้ายให้ทาง (สามเหลี่ยมคว่ำ) หมายความว่าคุณต้องให้ทางแก่รถบนถนนที่คุณจะข้าม",
+            "explanation_en": "The yield sign (inverted triangle) means you must give way to traffic on the road you are crossing.",
+            "category": "Traffic Signs",
+            "difficulty": "easy"
+        },
+        {
+            "question_text_no": "Hva betyr et grønt rektangulært skilt med motorveisymbol?",
+            "question_text_th": "ป้ายสี่เหลี่ยมสีเขียวที่มีสัญลักษณ์ทางด่วนหมายความว่าอะไร?",
+            "question_text_en": "What does a green rectangular sign with highway symbol mean?",
+            "answer_a_no": "Landbruksvei",
+            "answer_b_no": "Motorvei begynner",
+            "answer_c_no": "Parkering",
+            "answer_d_no": "Rasteplass",
+            "answer_a_th": "ถนนเกษตร",
+            "answer_b_th": "เริ่มทางด่วน",
+            "answer_c_th": "ที่จอดรถ",
+            "answer_d_th": "จุดพักผ่อน",
+            "answer_a_en": "Agricultural road",
+            "answer_b_en": "Highway begins",
+            "answer_c_en": "Parking",
+            "answer_d_en": "Rest area",
+            "correct_answer": "B",
+            "explanation_no": "Grønt rektangulært skilt med motorveisymbol indikerer at motorveien begynner.",
+            "explanation_th": "ป้ายสี่เหลี่ยมสีเขียวที่มีสัญลักษณ์ทางด่วนบ่งบอกว่าทางด่วนเริ่มต้น",
+            "explanation_en": "Green rectangular sign with highway symbol indicates the highway begins.",
+            "category": "Traffic Signs",
+            "difficulty": "medium"
+        },
+        # ===== ROAD RULES (9 questions) =====
         {
             "question_text_no": "Hva er den generelle fartsgrensen i boligområder i Norge?",
             "question_text_th": "ขีดจำกัดความเร็วทั่วไปในเขตที่อยู่อาศัยในนอร์เวย์คือเท่าไหร่?",
@@ -406,34 +515,195 @@ async def seed_database():
             "category": "Road Rules",
             "difficulty": "medium"
         },
-        # Right of Way
+        {
+            "question_text_no": "Er det lov å bruke mobiltelefon mens du kjører?",
+            "question_text_th": "อนุญาตให้ใช้โทรศัพท์มือถือขณะขับรถหรือไม่?",
+            "question_text_en": "Is it allowed to use a mobile phone while driving?",
+            "answer_a_no": "Ja, alltid",
+            "answer_b_no": "Ja, bare med én hånd på rattet",
+            "answer_c_no": "Nei, bare med handsfree",
+            "answer_d_no": "Ja, kun i lave hastigheter",
+            "answer_a_th": "ได้ ตลอดเวลา",
+            "answer_b_th": "ได้ ถ้าจับพวงมาลัยด้วยมือข้างหนึ่ง",
+            "answer_c_th": "ไม่ได้ ยกเว้นใช้แฮนด์ฟรี",
+            "answer_d_th": "ได้ เฉพาะที่ความเร็วต่ำ",
+            "answer_a_en": "Yes, always",
+            "answer_b_en": "Yes, with one hand on the wheel",
+            "answer_c_en": "No, only with hands-free",
+            "answer_d_en": "Yes, only at low speeds",
+            "correct_answer": "C",
+            "explanation_no": "Det er forbudt å bruke håndholdt mobiltelefon mens du kjører. Bare handsfree er tillatt.",
+            "explanation_th": "ห้ามใช้โทรศัพท์มือถือแบบถือด้วยมือขณะขับรถ อนุญาตเฉพาะแฮนด์ฟรีเท่านั้น",
+            "explanation_en": "It is forbidden to use a handheld mobile phone while driving. Only hands-free is allowed.",
+            "category": "Road Rules",
+            "difficulty": "easy"
+        },
+        {
+            "question_text_no": "Hva er minstealderen for å få vanlig førerkort (klasse B) i Norge?",
+            "question_text_th": "อายุขั้นต่ำในการได้ใบขับขี่ปกติ (คลาส B) ในนอร์เวย์คือเท่าไหร่?",
+            "question_text_en": "What is the minimum age to get a regular driving license (class B) in Norway?",
+            "answer_a_no": "16 år",
+            "answer_b_no": "17 år",
+            "answer_c_no": "18 år",
+            "answer_d_no": "21 år",
+            "answer_a_th": "16 ปี",
+            "answer_b_th": "17 ปี",
+            "answer_c_th": "18 ปี",
+            "answer_d_th": "21 ปี",
+            "answer_a_en": "16 years",
+            "answer_b_en": "17 years",
+            "answer_c_en": "18 years",
+            "answer_d_en": "21 years",
+            "correct_answer": "C",
+            "explanation_no": "Du må være minst 18 år for å få vanlig førerkort klasse B i Norge.",
+            "explanation_th": "คุณต้องมีอายุอย่างน้อย 18 ปีเพื่อรับใบขับขี่คลาส B ปกติในนอร์เวย์",
+            "explanation_en": "You must be at least 18 years old to get a regular class B driving license in Norway.",
+            "category": "Road Rules",
+            "difficulty": "easy"
+        },
+        {
+            "question_text_no": "Når er det påbudt å bruke piggdekk eller vinterdekk i Norge?",
+            "question_text_th": "เมื่อไหร่ที่บังคับให้ใช้ยางตะปูหรือยางฤดูหนาวในนอร์เวย์?",
+            "question_text_en": "When is it mandatory to use studded or winter tires in Norway?",
+            "answer_a_no": "Hele året",
+            "answer_b_no": "Fra 1. november til første mandag etter 2. påskedag",
+            "answer_c_no": "Bare i desember",
+            "answer_d_no": "Det er aldri påbudt",
+            "answer_a_th": "ตลอดทั้งปี",
+            "answer_b_th": "ตั้งแต่ 1 พ.ย. ถึงวันจันทร์แรกหลังวันอีสเตอร์",
+            "answer_c_th": "เฉพาะเดือนธันวาคม",
+            "answer_d_th": "ไม่บังคับเลย",
+            "answer_a_en": "All year round",
+            "answer_b_en": "From Nov 1 to first Monday after Easter",
+            "answer_c_en": "Only in December",
+            "answer_d_en": "It is never mandatory",
+            "correct_answer": "B",
+            "explanation_no": "Vinterdekk er påbudt fra 1. november til første mandag etter 2. påskedag når forholdene tilsier det.",
+            "explanation_th": "ยางฤดูหนาวบังคับใช้ตั้งแต่ 1 พฤศจิกายน ถึงวันจันทร์แรกหลังวันอีสเตอร์เมื่อสภาพอากาศต้องการ",
+            "explanation_en": "Winter tires are mandatory from November 1 to the first Monday after Easter when conditions require it.",
+            "category": "Road Rules",
+            "difficulty": "medium"
+        },
+        {
+            "question_text_no": "Hva skal du gjøre når du nærmer deg et gangfelt?",
+            "question_text_th": "คุณควรทำอะไรเมื่อเข้าใกล้ทางม้าลาย?",
+            "question_text_en": "What should you do when approaching a pedestrian crossing?",
+            "answer_a_no": "Øke farten for å passere raskt",
+            "answer_b_no": "Bremse ned og være klar til å stoppe",
+            "answer_c_no": "Tute for å varsle fotgjengere",
+            "answer_d_no": "Bytte fil",
+            "answer_a_th": "เร่งความเร็วเพื่อผ่านไปเร็วๆ",
+            "answer_b_th": "ชะลอและเตรียมหยุด",
+            "answer_c_th": "บีบแตรเพื่อเตือนคนเดินเท้า",
+            "answer_d_th": "เปลี่ยนเลน",
+            "answer_a_en": "Speed up to pass quickly",
+            "answer_b_en": "Slow down and be ready to stop",
+            "answer_c_en": "Honk to warn pedestrians",
+            "answer_d_en": "Change lanes",
+            "correct_answer": "B",
+            "explanation_no": "Du må alltid bremse ned og være klar til å stoppe ved gangfelt. Fotgjengere har alltid forkjørsrett.",
+            "explanation_th": "คุณต้องชะลอและเตรียมหยุดที่ทางม้าลายเสมอ คนเดินเท้ามีสิทธิ์ไปก่อนเสมอ",
+            "explanation_en": "You must always slow down and be ready to stop at a pedestrian crossing. Pedestrians always have the right of way.",
+            "category": "Road Rules",
+            "difficulty": "easy"
+        },
+        {
+            "question_text_no": "Hva er reglene for parkering i mørke?",
+            "question_text_th": "กฎการจอดรถในที่มืดคืออะไร?",
+            "question_text_en": "What are the rules for parking in the dark?",
+            "answer_a_no": "Du trenger ikke lys",
+            "answer_b_no": "Du må ha parkeringslys på",
+            "answer_c_no": "Du må alltid ha fjernlys på",
+            "answer_d_no": "Du må bruke varselblinklys",
+            "answer_a_th": "ไม่ต้องเปิดไฟ",
+            "answer_b_th": "ต้องเปิดไฟจอดรถ",
+            "answer_c_th": "ต้องเปิดไฟสูงเสมอ",
+            "answer_d_th": "ต้องใช้ไฟกะพริบฉุกเฉิน",
+            "answer_a_en": "You don't need lights",
+            "answer_b_en": "You must have parking lights on",
+            "answer_c_en": "You must always have high beams on",
+            "answer_d_en": "You must use hazard lights",
+            "correct_answer": "B",
+            "explanation_no": "Når du parkerer i mørke utenfor opplyste områder, må du ha parkeringslys på.",
+            "explanation_th": "เมื่อจอดรถในที่มืดนอกพื้นที่ที่มีไฟส่องสว่าง คุณต้องเปิดไฟจอดรถ",
+            "explanation_en": "When parking in the dark outside lit areas, you must have parking lights on.",
+            "category": "Road Rules",
+            "difficulty": "medium"
+        },
+        {
+            "question_text_no": "Hva er regelen for bruk av blinklys?",
+            "question_text_th": "กฎการใช้ไฟเลี้ยวคืออะไร?",
+            "question_text_en": "What is the rule for using turn signals?",
+            "answer_a_no": "Bare i kryss",
+            "answer_b_no": "Bare ved filskifte",
+            "answer_c_no": "Ved alle retningsendringer",
+            "answer_d_no": "Bare på motorvei",
+            "answer_a_th": "เฉพาะที่ทางแยก",
+            "answer_b_th": "เฉพาะเมื่อเปลี่ยนเลน",
+            "answer_c_th": "เมื่อเปลี่ยนทิศทางทุกครั้ง",
+            "answer_d_th": "เฉพาะบนทางด่วน",
+            "answer_a_en": "Only at intersections",
+            "answer_b_en": "Only when changing lanes",
+            "answer_c_en": "At all direction changes",
+            "answer_d_en": "Only on highways",
+            "correct_answer": "C",
+            "explanation_no": "Du må alltid bruke blinklys ved alle retningsendringer, inkludert svinging, filskifte og parkering.",
+            "explanation_th": "คุณต้องใช้ไฟเลี้ยวเมื่อเปลี่ยนทิศทางทุกครั้ง รวมถึงการเลี้ยว เปลี่ยนเลน และจอดรถ",
+            "explanation_en": "You must always use turn signals at all direction changes, including turning, lane changes, and parking.",
+            "category": "Road Rules",
+            "difficulty": "easy"
+        },
+        {
+            "question_text_no": "Hva er reglene for kjøring i rundkjøring?",
+            "question_text_th": "กฎการขับขี่ในวงเวียนคืออะไร?",
+            "question_text_en": "What are the rules for driving in a roundabout?",
+            "answer_a_no": "Gi vikeplikt for trafikk inne i rundkjøringen",
+            "answer_b_no": "Trafikk inne i rundkjøringen gir vikeplikt for deg",
+            "answer_c_no": "Første bil inn har forkjørsrett",
+            "answer_d_no": "Det finnes ingen regler",
+            "answer_a_th": "ให้ทางแก่รถในวงเวียน",
+            "answer_b_th": "รถในวงเวียนต้องให้ทางคุณ",
+            "answer_c_th": "รถที่เข้าก่อนมีสิทธิ์ไปก่อน",
+            "answer_d_th": "ไม่มีกฎ",
+            "answer_a_en": "Yield to traffic inside the roundabout",
+            "answer_b_en": "Traffic inside yields to you",
+            "answer_c_en": "First car in has right of way",
+            "answer_d_en": "There are no rules",
+            "correct_answer": "A",
+            "explanation_no": "Du må alltid gi vikeplikt for trafikk som allerede er inne i rundkjøringen.",
+            "explanation_th": "คุณต้องให้ทางแก่รถที่อยู่ในวงเวียนแล้วเสมอ",
+            "explanation_en": "You must always yield to traffic already inside the roundabout.",
+            "category": "Road Rules",
+            "difficulty": "easy"
+        },
+        # ===== RIGHT OF WAY (9 questions) =====
         {
             "question_text_no": "Hvem har vikeplikt i et kryss uten skilt?",
             "question_text_th": "ใครต้องให้ทางในทางแยกที่ไม่มีป้าย?",
             "question_text_en": "Who must give way at an intersection without signs?",
-            "answer_a_no": "Trafikk fra venstre",
-            "answer_b_no": "Trafikk fra høyre",
+            "answer_a_no": "Trafikk fra venstre gir vikeplikt",
+            "answer_b_no": "Trafikk fra høyre gir vikeplikt",
             "answer_c_no": "Den som kommer først",
             "answer_d_no": "Alle må stoppe",
-            "answer_a_th": "รถจากทางซ้าย",
-            "answer_b_th": "รถจากทางขวา",
+            "answer_a_th": "รถจากทางซ้ายต้องให้ทาง",
+            "answer_b_th": "รถจากทางขวาต้องให้ทาง",
             "answer_c_th": "คันที่มาถึงก่อน",
             "answer_d_th": "ทุกคันต้องหยุด",
-            "answer_a_en": "Traffic from the left",
-            "answer_b_en": "Traffic from the right",
+            "answer_a_en": "Traffic from left gives way",
+            "answer_b_en": "Traffic from right gives way",
             "answer_c_en": "Whoever arrives first",
             "answer_d_en": "Everyone must stop",
             "correct_answer": "A",
-            "explanation_no": "Høyreregelen gjelder: Du må gi vikeplikt for trafikk fra høyre, så trafikk fra venstre må vike for deg.",
-            "explanation_th": "กฎทางขวามีผล: คุณต้องให้ทางแก่รถจากทางขวา ดังนั้นรถจากทางซ้ายต้องให้ทางคุณ",
-            "explanation_en": "The right-hand rule applies: You must give way to traffic from the right, so traffic from the left must yield to you.",
+            "explanation_no": "Høyreregelen gjelder: Du gir vikeplikt for trafikk fra høyre. Trafikk fra venstre gir vikeplikt for deg.",
+            "explanation_th": "กฎทางขวามีผล: คุณให้ทางแก่รถจากทางขวา รถจากทางซ้ายต้องให้ทางคุณ",
+            "explanation_en": "The right-hand rule applies: You yield to traffic from the right. Traffic from the left yields to you.",
             "category": "Right of Way",
             "difficulty": "medium"
         },
         {
             "question_text_no": "Hvem har vikeplikt når du kjører ut av en parkeringsplass?",
             "question_text_th": "ใครต้องให้ทางเมื่อคุณขับออกจากที่จอดรถ?",
-            "question_text_en": "Who has the right of way when you are exiting a parking lot?",
+            "question_text_en": "Who has right of way when you exit a parking lot?",
             "answer_a_no": "Du har forkjørsrett",
             "answer_b_no": "Trafikk på veien har forkjørsrett",
             "answer_c_no": "Det avhenger av tid på dagen",
@@ -442,18 +712,179 @@ async def seed_database():
             "answer_b_th": "รถบนถนนมีสิทธิ์ไปก่อน",
             "answer_c_th": "ขึ้นอยู่กับช่วงเวลาของวัน",
             "answer_d_th": "คนเดินเท้าเท่านั้น",
-            "answer_a_en": "You have the right of way",
-            "answer_b_en": "Traffic on the road has the right of way",
+            "answer_a_en": "You have right of way",
+            "answer_b_en": "Traffic on the road has right of way",
             "answer_c_en": "It depends on time of day",
             "answer_d_en": "Pedestrians only",
             "correct_answer": "B",
-            "explanation_no": "Når du kjører ut av parkeringsplass, gårdsrom eller lignende, må du alltid gi vikeplikt for all trafikk på veien.",
-            "explanation_th": "เมื่อคุณขับออกจากที่จอดรถ ลานบ้าน หรือที่คล้ายกัน คุณต้องให้ทางแก่ยานพาหนะทั้งหมดบนถนนเสมอ",
-            "explanation_en": "When exiting a parking lot, driveway, or similar, you must always give way to all traffic on the road.",
+            "explanation_no": "Når du kjører ut av parkeringsplass, må du alltid gi vikeplikt for all trafikk på veien.",
+            "explanation_th": "เมื่อขับออกจากที่จอดรถ คุณต้องให้ทางแก่รถบนถนนเสมอ",
+            "explanation_en": "When exiting a parking lot, you must always yield to all traffic on the road.",
             "category": "Right of Way",
             "difficulty": "easy"
         },
-        # Speed Limits
+        {
+            "question_text_no": "Hva betyr forkjørsrett?",
+            "question_text_th": "สิทธิ์ในการไปก่อนหมายความว่าอะไร?",
+            "question_text_en": "What does right of way mean?",
+            "answer_a_no": "Du kan kjøre uten å bremse",
+            "answer_b_no": "Andre kjøretøy må gi vikeplikt for deg",
+            "answer_c_no": "Du kan ignorere trafikklys",
+            "answer_d_no": "Du kan kjøre på fortauet",
+            "answer_a_th": "คุณสามารถขับโดยไม่ต้องเบรก",
+            "answer_b_th": "ยานพาหนะอื่นต้องให้ทางคุณ",
+            "answer_c_th": "คุณสามารถเพิกเฉยต่อสัญญาณไฟจราจร",
+            "answer_d_th": "คุณสามารถขับบนทางเท้า",
+            "answer_a_en": "You can drive without braking",
+            "answer_b_en": "Other vehicles must yield to you",
+            "answer_c_en": "You can ignore traffic lights",
+            "answer_d_en": "You can drive on the sidewalk",
+            "correct_answer": "B",
+            "explanation_no": "Forkjørsrett betyr at andre kjøretøy må gi vikeplikt for deg, men du må fortsatt kjøre forsiktig.",
+            "explanation_th": "สิทธิ์ในการไปก่อนหมายความว่ายานพาหนะอื่นต้องให้ทางคุณ แต่คุณยังต้องขับอย่างระมัดระวัง",
+            "explanation_en": "Right of way means other vehicles must yield to you, but you must still drive carefully.",
+            "category": "Right of Way",
+            "difficulty": "easy"
+        },
+        {
+            "question_text_no": "Hvem har vikeplikt når to biler møtes på en smal vei?",
+            "question_text_th": "ใครต้องให้ทางเมื่อรถสองคันพบกันบนถนนแคบ?",
+            "question_text_en": "Who has right of way when two cars meet on a narrow road?",
+            "answer_a_no": "Den som kjører oppover",
+            "answer_b_no": "Den som kjører nedover",
+            "answer_c_no": "Den med størst bil",
+            "answer_d_no": "Den som blinker først",
+            "answer_a_th": "คันที่ขับขึ้นเขา",
+            "answer_b_th": "คันที่ขับลงเขา",
+            "answer_c_th": "คันที่ใหญ่กว่า",
+            "answer_d_th": "คันที่กะพริบไฟก่อน",
+            "answer_a_en": "The one driving uphill",
+            "answer_b_en": "The one driving downhill",
+            "answer_c_en": "The one with the bigger car",
+            "answer_d_en": "The one who flashes lights first",
+            "correct_answer": "B",
+            "explanation_no": "På smale veier har den som kjører nedover normalt vikeplikt fordi det er lettere å stoppe oppover.",
+            "explanation_th": "บนถนนแคบ คันที่ขับลงเขาปกติต้องให้ทางเพราะการหยุดเมื่อขับขึ้นเขาง่ายกว่า",
+            "explanation_en": "On narrow roads, the one driving downhill normally must yield because it's easier to stop when going uphill.",
+            "category": "Right of Way",
+            "difficulty": "medium"
+        },
+        {
+            "question_text_no": "Har utrykningskjøretøy med blålys alltid forkjørsrett?",
+            "question_text_th": "รถฉุกเฉินที่เปิดไฟน้ำเงินมีสิทธิ์ไปก่อนเสมอหรือไม่?",
+            "question_text_en": "Do emergency vehicles with blue lights always have right of way?",
+            "answer_a_no": "Nei, aldri",
+            "answer_b_no": "Ja, alltid",
+            "answer_c_no": "Bare på motorvei",
+            "answer_d_no": "Bare i byområder",
+            "answer_a_th": "ไม่ ไม่เคย",
+            "answer_b_th": "ใช่ เสมอ",
+            "answer_c_th": "เฉพาะบนทางด่วน",
+            "answer_d_th": "เฉพาะในเขตเมือง",
+            "answer_a_en": "No, never",
+            "answer_b_en": "Yes, always",
+            "answer_c_en": "Only on highways",
+            "answer_d_en": "Only in urban areas",
+            "correct_answer": "B",
+            "explanation_no": "Utrykningskjøretøy med blålys og sirene har alltid forkjørsrett. Du må kjøre til side og stoppe.",
+            "explanation_th": "รถฉุกเฉินที่เปิดไฟน้ำเงินและไซเรนมีสิทธิ์ไปก่อนเสมอ คุณต้องหลบไปข้างทางและหยุด",
+            "explanation_en": "Emergency vehicles with blue lights and sirens always have right of way. You must pull over and stop.",
+            "category": "Right of Way",
+            "difficulty": "easy"
+        },
+        {
+            "question_text_no": "Hvem har vikeplikt ved T-kryss uten skilt?",
+            "question_text_th": "ใครต้องให้ทางที่ทางแยก T ที่ไม่มีป้าย?",
+            "question_text_en": "Who has right of way at a T-intersection without signs?",
+            "answer_a_no": "Den på gjennomgående vei",
+            "answer_b_no": "Den som kommer fra sideveien",
+            "answer_c_no": "Høyreregelen gjelder",
+            "answer_d_no": "Den som har størst bil",
+            "answer_a_th": "รถบนถนนหลัก",
+            "answer_b_th": "รถจากถนนแยก",
+            "answer_c_th": "ใช้กฎทางขวา",
+            "answer_d_th": "รถที่ใหญ่กว่า",
+            "answer_a_en": "The one on the main road",
+            "answer_b_en": "The one from the side road",
+            "answer_c_en": "The right-hand rule applies",
+            "answer_d_en": "The one with the bigger car",
+            "correct_answer": "C",
+            "explanation_no": "Ved T-kryss uten skilt gjelder høyreregelen. Trafikk fra høyre har forkjørsrett.",
+            "explanation_th": "ที่ทางแยก T ที่ไม่มีป้าย ใช้กฎทางขวา รถจากทางขวามีสิทธิ์ไปก่อน",
+            "explanation_en": "At a T-intersection without signs, the right-hand rule applies. Traffic from the right has right of way.",
+            "category": "Right of Way",
+            "difficulty": "medium"
+        },
+        {
+            "question_text_no": "Hvem har vikeplikt ved avkjøring fra hovedvei?",
+            "question_text_th": "ใครต้องให้ทางเมื่อออกจากถนนหลัก?",
+            "question_text_en": "Who has right of way when exiting a main road?",
+            "answer_a_no": "Du har forkjørsrett når du svinger av",
+            "answer_b_no": "Trafikk bak deg har vikeplikt",
+            "answer_c_no": "Du gir vikeplikt for gående og syklende",
+            "answer_d_no": "Ingen har vikeplikt",
+            "answer_a_th": "คุณมีสิทธิ์ไปก่อนเมื่อเลี้ยวออก",
+            "answer_b_th": "รถด้านหลังคุณต้องให้ทาง",
+            "answer_c_th": "คุณต้องให้ทางแก่คนเดินเท้าและจักรยาน",
+            "answer_d_th": "ไม่มีใครต้องให้ทาง",
+            "answer_a_en": "You have right of way when turning off",
+            "answer_b_en": "Traffic behind you must yield",
+            "answer_c_en": "You yield to pedestrians and cyclists",
+            "answer_d_en": "Nobody has right of way",
+            "correct_answer": "C",
+            "explanation_no": "Når du svinger av hovedveien, må du gi vikeplikt for fotgjengere og syklister som krysser.",
+            "explanation_th": "เมื่อคุณเลี้ยวออกจากถนนหลัก คุณต้องให้ทางแก่คนเดินเท้าและนักปั่นจักรยานที่ข้ามทาง",
+            "explanation_en": "When turning off the main road, you must yield to pedestrians and cyclists crossing.",
+            "category": "Right of Way",
+            "difficulty": "medium"
+        },
+        {
+            "question_text_no": "Hva gjør du når trafikklyset er gult?",
+            "question_text_th": "คุณทำอะไรเมื่อสัญญาณไฟจราจรเป็นสีเหลือง?",
+            "question_text_en": "What do you do when the traffic light is yellow?",
+            "answer_a_no": "Øke farten for å rekke grønt",
+            "answer_b_no": "Stoppe hvis du kan gjøre det trygt",
+            "answer_c_no": "Ignorere det",
+            "answer_d_no": "Blinke med lysene",
+            "answer_a_th": "เร่งความเร็วเพื่อให้ทันไฟเขียว",
+            "answer_b_th": "หยุดถ้าสามารถหยุดได้อย่างปลอดภัย",
+            "answer_c_th": "เพิกเฉย",
+            "answer_d_th": "กะพริบไฟ",
+            "answer_a_en": "Speed up to catch the green",
+            "answer_b_en": "Stop if you can do so safely",
+            "answer_c_en": "Ignore it",
+            "answer_d_en": "Flash your lights",
+            "correct_answer": "B",
+            "explanation_no": "Gult lys betyr at du skal stoppe hvis du kan gjøre det trygt. Hvis du allerede er i krysset, fullfør passeringen.",
+            "explanation_th": "ไฟเหลืองหมายความว่าคุณควรหยุดถ้าสามารถหยุดได้อย่างปลอดภัย ถ้าอยู่ในทางแยกแล้ว ให้ขับผ่านต่อไป",
+            "explanation_en": "Yellow light means you should stop if you can do so safely. If already in the intersection, complete the crossing.",
+            "category": "Right of Way",
+            "difficulty": "easy"
+        },
+        {
+            "question_text_no": "Hvem har vikeplikt i en rundkjøring?",
+            "question_text_th": "ใครต้องให้ทางในวงเวียน?",
+            "question_text_en": "Who has right of way in a roundabout?",
+            "answer_a_no": "Den som kjører inn i rundkjøringen",
+            "answer_b_no": "Den som allerede er inne i rundkjøringen",
+            "answer_c_no": "Den største bilen",
+            "answer_d_no": "Den som blinker",
+            "answer_a_th": "คันที่เข้าวงเวียน",
+            "answer_b_th": "คันที่อยู่ในวงเวียนแล้ว",
+            "answer_c_th": "รถที่ใหญ่ที่สุด",
+            "answer_d_th": "คันที่เปิดไฟเลี้ยว",
+            "answer_a_en": "The one entering the roundabout",
+            "answer_b_en": "The one already in the roundabout",
+            "answer_c_en": "The biggest car",
+            "answer_d_en": "The one signaling",
+            "correct_answer": "B",
+            "explanation_no": "Trafikk som allerede er inne i rundkjøringen har forkjørsrett. Du som kjører inn må gi vikeplikt.",
+            "explanation_th": "รถที่อยู่ในวงเวียนแล้วมีสิทธิ์ไปก่อน คุณที่จะเข้าวงเวียนต้องให้ทาง",
+            "explanation_en": "Traffic already in the roundabout has right of way. You entering must yield.",
+            "category": "Right of Way",
+            "difficulty": "easy"
+        },
+        # ===== SPEED LIMITS (9 questions) =====
         {
             "question_text_no": "Hva er fartsgrensen på motorvei i Norge?",
             "question_text_th": "ขีดจำกัดความเร็วบนทางด่วนในนอร์เวย์คือเท่าไหร่?",
@@ -472,7 +903,7 @@ async def seed_database():
             "answer_d_en": "90 km/h",
             "correct_answer": "B",
             "explanation_no": "Standard fartsgrense på motorvei i Norge er 110 km/t, men kan variere basert på skilting.",
-            "explanation_th": "ขีดจำกัดความเร็วมาตรฐานบนทางด่วนในนอร์เวย์คือ 110 กม./ชม. แต่อาจแตกต่างกันตามป้ายจราจร",
+            "explanation_th": "ขีดจำกัดความเร็วมาตรฐานบนทางด่วนในนอร์เวย์คือ 110 กม./ชม. แต่อาจแตกต่างกันตามป้าย",
             "explanation_en": "Standard speed limit on highways in Norway is 110 km/h, but may vary based on signage.",
             "category": "Speed Limits",
             "difficulty": "easy"
@@ -494,13 +925,174 @@ async def seed_database():
             "answer_c_en": "20 km/h",
             "answer_d_en": "50 km/h",
             "correct_answer": "B",
-            "explanation_no": "I en 30-sone er fartsgrensen 30 km/t. Disse sonene er vanlige nær skoler og boligområder.",
-            "explanation_th": "ในโซน 30 ขีดจำกัดความเร็วคือ 30 กม./ชม. โซนเหล่านี้พบได้ทั่วไปใกล้โรงเรียนและเขตที่อยู่อาศัย",
-            "explanation_en": "In a 30-zone, the speed limit is 30 km/h. These zones are common near schools and residential areas.",
+            "explanation_no": "I en 30-sone er fartsgrensen 30 km/t. Disse sonene er vanlige nær skoler.",
+            "explanation_th": "ในโซน 30 ขีดจำกัดความเร็วคือ 30 กม./ชม. โซนเหล่านี้พบได้ทั่วไปใกล้โรงเรียน",
+            "explanation_en": "In a 30-zone, the speed limit is 30 km/h. These zones are common near schools.",
             "category": "Speed Limits",
             "difficulty": "easy"
         },
-        # Safety
+        {
+            "question_text_no": "Hva er fartsgrensen på vanlige landeveier utenfor tettbygd strøk?",
+            "question_text_th": "ขีดจำกัดความเร็วบนถนนชนบททั่วไปนอกเขตเมืองคือเท่าไหร่?",
+            "question_text_en": "What is the speed limit on regular country roads outside urban areas?",
+            "answer_a_no": "60 km/t",
+            "answer_b_no": "70 km/t",
+            "answer_c_no": "80 km/t",
+            "answer_d_no": "90 km/t",
+            "answer_a_th": "60 กม./ชม.",
+            "answer_b_th": "70 กม./ชม.",
+            "answer_c_th": "80 กม./ชม.",
+            "answer_d_th": "90 กม./ชม.",
+            "answer_a_en": "60 km/h",
+            "answer_b_en": "70 km/h",
+            "answer_c_en": "80 km/h",
+            "answer_d_en": "90 km/h",
+            "correct_answer": "C",
+            "explanation_no": "Fartsgrensen på vanlige landeveier utenfor tettbygd strøk er 80 km/t.",
+            "explanation_th": "ขีดจำกัดความเร็วบนถนนชนบททั่วไปนอกเขตเมืองคือ 80 กม./ชม.",
+            "explanation_en": "The speed limit on regular country roads outside urban areas is 80 km/h.",
+            "category": "Speed Limits",
+            "difficulty": "easy"
+        },
+        {
+            "question_text_no": "Hva skjer hvis du kjører 20 km/t over fartsgrensen?",
+            "question_text_th": "จะเกิดอะไรขึ้นถ้าคุณขับเร็วเกิน 20 กม./ชม.?",
+            "question_text_en": "What happens if you drive 20 km/h over the speed limit?",
+            "answer_a_no": "Ingen konsekvens",
+            "answer_b_no": "Bare en advarsel",
+            "answer_c_no": "Bot og prikkbelastning",
+            "answer_d_no": "Fengsel",
+            "answer_a_th": "ไม่มีผลอะไร",
+            "answer_b_th": "แค่คำเตือน",
+            "answer_c_th": "ค่าปรับและหักคะแนน",
+            "answer_d_th": "จำคุก",
+            "answer_a_en": "No consequence",
+            "answer_b_en": "Just a warning",
+            "answer_c_en": "Fine and penalty points",
+            "answer_d_en": "Prison",
+            "correct_answer": "C",
+            "explanation_no": "Å kjøre 20 km/t over fartsgrensen resulterer i bot og prikkbelastning på førerkortet.",
+            "explanation_th": "การขับเร็วเกิน 20 กม./ชม. จะถูกปรับและหักคะแนนจากใบขับขี่",
+            "explanation_en": "Driving 20 km/h over the speed limit results in a fine and penalty points on your license.",
+            "category": "Speed Limits",
+            "difficulty": "medium"
+        },
+        {
+            "question_text_no": "Hva er fartsgrensen forbi en skole i skoletiden?",
+            "question_text_th": "ขีดจำกัดความเร็วผ่านโรงเรียนในช่วงเวลาเรียนคือเท่าไหร่?",
+            "question_text_en": "What is the speed limit past a school during school hours?",
+            "answer_a_no": "20 km/t",
+            "answer_b_no": "30 km/t",
+            "answer_c_no": "40 km/t",
+            "answer_d_no": "50 km/t",
+            "answer_a_th": "20 กม./ชม.",
+            "answer_b_th": "30 กม./ชม.",
+            "answer_c_th": "40 กม./ชม.",
+            "answer_d_th": "50 กม./ชม.",
+            "answer_a_en": "20 km/h",
+            "answer_b_en": "30 km/h",
+            "answer_c_en": "40 km/h",
+            "answer_d_en": "50 km/h",
+            "correct_answer": "B",
+            "explanation_no": "Ved skoler er det vanligvis 30-sone for å beskytte barn.",
+            "explanation_th": "บริเวณโรงเรียนโดยปกติจะเป็นโซน 30 เพื่อความปลอดภัยของเด็ก",
+            "explanation_en": "Near schools there is usually a 30-zone to protect children.",
+            "category": "Speed Limits",
+            "difficulty": "easy"
+        },
+        {
+            "question_text_no": "Kan du miste førerkortet for fartsovertredelse?",
+            "question_text_th": "คุณสามารถถูกยึดใบขับขี่จากการขับเร็วเกินได้หรือไม่?",
+            "question_text_en": "Can you lose your license for speeding?",
+            "answer_a_no": "Nei, aldri",
+            "answer_b_no": "Ja, ved grove overtredelser",
+            "answer_c_no": "Bare ved gjentatte overtredelser",
+            "answer_d_no": "Bare i 30-soner",
+            "answer_a_th": "ไม่ ไม่เคย",
+            "answer_b_th": "ใช่ เมื่อทำผิดร้ายแรง",
+            "answer_c_th": "เฉพาะเมื่อทำผิดซ้ำ",
+            "answer_d_th": "เฉพาะในโซน 30",
+            "answer_a_en": "No, never",
+            "answer_b_en": "Yes, for serious violations",
+            "answer_c_en": "Only for repeated violations",
+            "answer_d_en": "Only in 30-zones",
+            "correct_answer": "B",
+            "explanation_no": "Ja, du kan miste førerkortet ved grove fartsovertredelser, for eksempel å kjøre over 30 km/t over grensen.",
+            "explanation_th": "ใช่ คุณสามารถถูกยึดใบขับขี่เมื่อทำผิดร้ายแรง เช่น ขับเร็วเกินกว่า 30 กม./ชม.",
+            "explanation_en": "Yes, you can lose your license for serious speeding violations, such as driving over 30 km/h above the limit.",
+            "category": "Speed Limits",
+            "difficulty": "medium"
+        },
+        {
+            "question_text_no": "Hva er fartsgrensen i gatetun?",
+            "question_text_th": "ขีดจำกัดความเร็วในซอยที่อยู่อาศัยคือเท่าไหร่?",
+            "question_text_en": "What is the speed limit in residential streets (gatetun)?",
+            "answer_a_no": "Gangfart (ca. 5-7 km/t)",
+            "answer_b_no": "20 km/t",
+            "answer_c_no": "30 km/t",
+            "answer_d_no": "50 km/t",
+            "answer_a_th": "ความเร็วเดินเท้า (ประมาณ 5-7 กม./ชม.)",
+            "answer_b_th": "20 กม./ชม.",
+            "answer_c_th": "30 กม./ชม.",
+            "answer_d_th": "50 กม./ชม.",
+            "answer_a_en": "Walking speed (approx. 5-7 km/h)",
+            "answer_b_en": "20 km/h",
+            "answer_c_en": "30 km/h",
+            "answer_d_en": "50 km/h",
+            "correct_answer": "A",
+            "explanation_no": "I gatetun er fartsgrensen gangfart, som er ca. 5-7 km/t. Fotgjengere har forkjørsrett.",
+            "explanation_th": "ในซอยที่อยู่อาศัย ขีดจำกัดความเร็วคือความเร็วเดินเท้า ประมาณ 5-7 กม./ชม. คนเดินเท้ามีสิทธิ์ไปก่อน",
+            "explanation_en": "In residential streets (gatetun), the speed limit is walking speed, about 5-7 km/h. Pedestrians have right of way.",
+            "category": "Speed Limits",
+            "difficulty": "medium"
+        },
+        {
+            "question_text_no": "Hva er fartsgrensen i tunneler uten skilting?",
+            "question_text_th": "ขีดจำกัดความเร็วในอุโมงค์ที่ไม่มีป้ายคือเท่าไหร่?",
+            "question_text_en": "What is the speed limit in tunnels without signs?",
+            "answer_a_no": "60 km/t",
+            "answer_b_no": "70 km/t",
+            "answer_c_no": "80 km/t",
+            "answer_d_no": "Samme som veien utenfor",
+            "answer_a_th": "60 กม./ชม.",
+            "answer_b_th": "70 กม./ชม.",
+            "answer_c_th": "80 กม./ชม.",
+            "answer_d_th": "เท่ากับถนนด้านนอก",
+            "answer_a_en": "60 km/h",
+            "answer_b_en": "70 km/h",
+            "answer_c_en": "80 km/h",
+            "answer_d_en": "Same as the road outside",
+            "correct_answer": "D",
+            "explanation_no": "Hvis det ikke er egne skilt i tunnelen, gjelder den generelle fartsgrensen for veien.",
+            "explanation_th": "ถ้าไม่มีป้ายเฉพาะในอุโมงค์ จะใช้ขีดจำกัดความเร็วทั่วไปของถนน",
+            "explanation_en": "If there are no specific signs in the tunnel, the general speed limit for the road applies.",
+            "category": "Speed Limits",
+            "difficulty": "medium"
+        },
+        {
+            "question_text_no": "Hva er anbefalt hastighet i fotgjengersoner?",
+            "question_text_th": "ความเร็วที่แนะนำในเขตคนเดินเท้าคือเท่าไหร่?",
+            "question_text_en": "What is the recommended speed in pedestrian zones?",
+            "answer_a_no": "Gangfart",
+            "answer_b_no": "15 km/t",
+            "answer_c_no": "30 km/t",
+            "answer_d_no": "Kjøring er forbudt",
+            "answer_a_th": "ความเร็วเดินเท้า",
+            "answer_b_th": "15 กม./ชม.",
+            "answer_c_th": "30 กม./ชม.",
+            "answer_d_th": "ห้ามขับรถ",
+            "answer_a_en": "Walking speed",
+            "answer_b_en": "15 km/h",
+            "answer_c_en": "30 km/h",
+            "answer_d_en": "Driving is forbidden",
+            "correct_answer": "A",
+            "explanation_no": "I fotgjengersoner bør du kjøre i gangfart og gi forkjørsrett til alle fotgjengere.",
+            "explanation_th": "ในเขตคนเดินเท้า คุณควรขับด้วยความเร็วเดินเท้าและให้สิทธิ์ไปก่อนแก่คนเดินเท้าทุกคน",
+            "explanation_en": "In pedestrian zones, you should drive at walking speed and give right of way to all pedestrians.",
+            "category": "Speed Limits",
+            "difficulty": "easy"
+        },
+        # ===== SAFETY (9 questions) =====
         {
             "question_text_no": "Hva er den lovlige promillegrensen for førere i Norge?",
             "question_text_th": "ขีดจำกัดแอลกอฮอล์ในเลือดที่ถูกกฎหมายสำหรับคนขับในนอร์เวย์คือเท่าไหร่?",
@@ -509,10 +1101,10 @@ async def seed_database():
             "answer_b_no": "0.2 promille",
             "answer_c_no": "0.0 promille",
             "answer_d_no": "0.8 promille",
-            "answer_a_th": "0.5 ‰",
-            "answer_b_th": "0.2 ‰",
-            "answer_c_th": "0.0 ‰",
-            "answer_d_th": "0.8 ‰",
+            "answer_a_th": "0.5‰",
+            "answer_b_th": "0.2‰",
+            "answer_c_th": "0.0‰",
+            "answer_d_th": "0.8‰",
             "answer_a_en": "0.5‰",
             "answer_b_en": "0.2‰",
             "answer_c_en": "0.0‰",
@@ -546,21 +1138,179 @@ async def seed_database():
             "explanation_en": "In Norway, everyone in the car must wear a seatbelt, regardless of where they sit.",
             "category": "Safety",
             "difficulty": "easy"
-        }
+        },
+        {
+            "question_text_no": "Hva bør du gjøre hvis du er involvert i en ulykke?",
+            "question_text_th": "คุณควรทำอะไรถ้าเกิดอุบัติเหตุ?",
+            "question_text_en": "What should you do if you are involved in an accident?",
+            "answer_a_no": "Kjøre videre",
+            "answer_b_no": "Stoppe, sikre stedet og gi førstehjelp",
+            "answer_c_no": "Ringe bare forsikringsselskapet",
+            "answer_d_no": "Vente i bilen",
+            "answer_a_th": "ขับต่อไป",
+            "answer_b_th": "หยุด รักษาความปลอดภัยบริเวณ และให้การปฐมพยาบาล",
+            "answer_c_th": "โทรบริษัทประกันเท่านั้น",
+            "answer_d_th": "รอในรถ",
+            "answer_a_en": "Drive away",
+            "answer_b_en": "Stop, secure the area and provide first aid",
+            "answer_c_en": "Only call the insurance company",
+            "answer_d_en": "Wait in the car",
+            "correct_answer": "B",
+            "explanation_no": "Ved ulykker skal du stoppe, sikre ulykkesstedet, gi førstehjelp og ringe 113 ved behov.",
+            "explanation_th": "เมื่อเกิดอุบัติเหตุ คุณต้องหยุด รักษาความปลอดภัยบริเวณ ให้การปฐมพยาบาล และโทร 113 ถ้าจำเป็น",
+            "explanation_en": "In case of accidents, you must stop, secure the scene, provide first aid and call 113 if needed.",
+            "category": "Safety",
+            "difficulty": "easy"
+        },
+        {
+            "question_text_no": "Hva er sikkerhetssavstanden ved 80 km/t?",
+            "question_text_th": "ระยะห่างที่ปลอดภัยที่ 80 กม./ชม. คือเท่าไหร่?",
+            "question_text_en": "What is the safe following distance at 80 km/h?",
+            "answer_a_no": "Ca. 1 sekund",
+            "answer_b_no": "Ca. 2 sekunder",
+            "answer_c_no": "Ca. 3 sekunder",
+            "answer_d_no": "Ca. 5 sekunder",
+            "answer_a_th": "ประมาณ 1 วินาที",
+            "answer_b_th": "ประมาณ 2 วินาที",
+            "answer_c_th": "ประมาณ 3 วินาที",
+            "answer_d_th": "ประมาณ 5 วินาที",
+            "answer_a_en": "About 1 second",
+            "answer_b_en": "About 2 seconds",
+            "answer_c_en": "About 3 seconds",
+            "answer_d_en": "About 5 seconds",
+            "correct_answer": "C",
+            "explanation_no": "Ved 80 km/t bør du ha minst 3 sekunders avstand til bilen foran. Det tilsvarer ca. 65 meter.",
+            "explanation_th": "ที่ 80 กม./ชม. คุณควรมีระยะห่างอย่างน้อย 3 วินาทีจากรถคันหน้า เท่ากับประมาณ 65 เมตร",
+            "explanation_en": "At 80 km/h you should have at least 3 seconds distance to the car in front. That's about 65 meters.",
+            "category": "Safety",
+            "difficulty": "medium"
+        },
+        {
+            "question_text_no": "Hva bør du gjøre ved aquaplaning?",
+            "question_text_th": "คุณควรทำอะไรเมื่อรถลื่นไถลบนน้ำ?",
+            "question_text_en": "What should you do during aquaplaning?",
+            "answer_a_no": "Bremse hardt",
+            "answer_b_no": "Svinge brått",
+            "answer_c_no": "Slippe gasspedalen og holde rattet rett",
+            "answer_d_no": "Øke farten",
+            "answer_a_th": "เบรกอย่างแรง",
+            "answer_b_th": "หักพวงมาลัยทันที",
+            "answer_c_th": "ปล่อมคันเร่งและจับพวงมาลัยตรง",
+            "answer_d_th": "เร่งความเร็ว",
+            "answer_a_en": "Brake hard",
+            "answer_b_en": "Swerve sharply",
+            "answer_c_en": "Release the gas and keep the wheel straight",
+            "answer_d_en": "Increase speed",
+            "correct_answer": "C",
+            "explanation_no": "Ved aquaplaning skal du slippe gasspedalen forsiktig og holde rattet rett til du får kontroll igjen.",
+            "explanation_th": "เมื่อรถลื่นไถลบนน้ำ ให้ปล่อยคันเร่งอย่างนุ่มนวลและจับพวงมาลัยตรงจนกว่าจะควบคุมรถได้",
+            "explanation_en": "During aquaplaning, gently release the gas and keep the wheel straight until you regain control.",
+            "category": "Safety",
+            "difficulty": "hard"
+        },
+        {
+            "question_text_no": "Hva er viktig ved kjøring i mørke?",
+            "question_text_th": "สิ่งที่สำคัญเมื่อขับรถในที่มืดคืออะไร?",
+            "question_text_en": "What is important when driving in the dark?",
+            "answer_a_no": "Kjøre raskere for å komme hjem fortere",
+            "answer_b_no": "Redusere farten og øke oppmerksomheten",
+            "answer_c_no": "Bruke bare parkeringslys",
+            "answer_d_no": "Følge bilen foran tett",
+            "answer_a_th": "ขับเร็วขึ้นเพื่อกลับบ้านเร็วขึ้น",
+            "answer_b_th": "ลดความเร็วและเพิ่มความระมัดระวัง",
+            "answer_c_th": "ใช้แค่ไฟจอดรถ",
+            "answer_d_th": "ขับตามรถคันหน้าอย่างใกล้ชิด",
+            "answer_a_en": "Drive faster to get home sooner",
+            "answer_b_en": "Reduce speed and increase attention",
+            "answer_c_en": "Use only parking lights",
+            "answer_d_en": "Follow the car ahead closely",
+            "correct_answer": "B",
+            "explanation_no": "I mørke er det viktig å redusere farten, øke oppmerksomheten og bruke riktige lys.",
+            "explanation_th": "ในที่มืด สิ่งสำคัญคือลดความเร็ว เพิ่มความระมัดระวัง และใช้ไฟที่ถูกต้อง",
+            "explanation_en": "In the dark, it's important to reduce speed, increase attention and use the correct lights.",
+            "category": "Safety",
+            "difficulty": "easy"
+        },
+        {
+            "question_text_no": "Hva er reglene for barnesikring i bil?",
+            "question_text_th": "กฎการใช้ที่นั่งเด็กในรถยนต์คืออะไร?",
+            "question_text_en": "What are the rules for child safety seats in cars?",
+            "answer_a_no": "Barn under 135 cm må bruke godkjent barnesete",
+            "answer_b_no": "Bare barn under 3 år trenger barnesete",
+            "answer_c_no": "Barnesete er valgfritt",
+            "answer_d_no": "Bare i forsetet",
+            "answer_a_th": "เด็กที่สูงต่ำกว่า 135 ซม. ต้องใช้ที่นั่งเด็กที่ได้รับอนุมัติ",
+            "answer_b_th": "เฉพาะเด็กอายุต่ำกว่า 3 ปีเท่านั้น",
+            "answer_c_th": "ที่นั่งเด็กเป็นทางเลือก",
+            "answer_d_th": "เฉพาะเบาะหน้า",
+            "answer_a_en": "Children under 135 cm must use approved child seat",
+            "answer_b_en": "Only children under 3 need a child seat",
+            "answer_c_en": "Child seats are optional",
+            "answer_d_en": "Only in the front seat",
+            "correct_answer": "A",
+            "explanation_no": "Barn under 135 cm høyde må bruke godkjent barnesete tilpasset barnets størrelse og vekt.",
+            "explanation_th": "เด็กที่สูงต่ำกว่า 135 ซม. ต้องใช้ที่นั่งเด็กที่ได้รับอนุมัติตามขนาดและน้ำหนักของเด็ก",
+            "explanation_en": "Children under 135 cm height must use an approved child seat appropriate for their size and weight.",
+            "category": "Safety",
+            "difficulty": "medium"
+        },
+        {
+            "question_text_no": "Hva er nødnummeret i Norge?",
+            "question_text_th": "หมายเลขฉุกเฉินในนอร์เวย์คืออะไร?",
+            "question_text_en": "What is the emergency number in Norway?",
+            "answer_a_no": "110 - Brann, 112 - Politi, 113 - Ambulanse",
+            "answer_b_no": "911",
+            "answer_c_no": "999",
+            "answer_d_no": "112 for alt",
+            "answer_a_th": "110 - ดับเพลิง, 112 - ตำรวจ, 113 - รถพยาบาล",
+            "answer_b_th": "911",
+            "answer_c_th": "999",
+            "answer_d_th": "112 สำหรับทุกอย่าง",
+            "answer_a_en": "110 - Fire, 112 - Police, 113 - Ambulance",
+            "answer_b_en": "911",
+            "answer_c_en": "999",
+            "answer_d_en": "112 for everything",
+            "correct_answer": "A",
+            "explanation_no": "I Norge er nødnumrene 110 for brann, 112 for politi og 113 for ambulanse.",
+            "explanation_th": "ในนอร์เวย์ หมายเลขฉุกเฉินคือ 110 สำหรับดับเพลิง 112 สำหรับตำรวจ และ 113 สำหรับรถพยาบาล",
+            "explanation_en": "In Norway, the emergency numbers are 110 for fire, 112 for police and 113 for ambulance.",
+            "category": "Safety",
+            "difficulty": "easy"
+        },
+        {
+            "question_text_no": "Hva er den viktigste regelen ved kjøring i glatte veier?",
+            "question_text_th": "กฎที่สำคัญที่สุดเมื่อขับรถบนถนนลื่นคืออะไร?",
+            "question_text_en": "What is the most important rule when driving on slippery roads?",
+            "answer_a_no": "Bruk piggdekk og kjør normalt",
+            "answer_b_no": "Reduser farten og øk avstanden",
+            "answer_c_no": "Brems hardt i svinger",
+            "answer_d_no": "Kjør i midten av veien",
+            "answer_a_th": "ใช้ยางตะปูและขับตามปกติ",
+            "answer_b_th": "ลดความเร็วและเพิ่มระยะห่าง",
+            "answer_c_th": "เบรกแรงในทางโค้ง",
+            "answer_d_th": "ขับตรงกลางถนน",
+            "answer_a_en": "Use studded tires and drive normally",
+            "answer_b_en": "Reduce speed and increase distance",
+            "answer_c_en": "Brake hard in curves",
+            "answer_d_en": "Drive in the middle of the road",
+            "correct_answer": "B",
+            "explanation_no": "På glatte veier er det viktigst å redusere farten og øke avstanden til bilen foran.",
+            "explanation_th": "บนถนนลื่น สิ่งที่สำคัญที่สุดคือลดความเร็วและเพิ่มระยะห่างจากรถคันหน้า",
+            "explanation_en": "On slippery roads, the most important thing is to reduce speed and increase distance to the car ahead.",
+            "category": "Safety",
+            "difficulty": "easy"
+        },
     ]
-    
-    # Add IDs and timestamps
+
     for q in sample_questions:
         q["id"] = str(uuid.uuid4())
-        q["created_at"] = datetime.utcnow()
+        q["created_at"] = datetime.now(timezone.utc).isoformat()
         if "image_url" not in q:
             q["image_url"] = None
-    
+
     await db.questions.insert_many(sample_questions)
-    
     return {"message": f"Seeded {len(sample_questions)} questions", "seeded": True}
 
-# Include the router in the main app
 app.include_router(api_router)
 
 app.add_middleware(
