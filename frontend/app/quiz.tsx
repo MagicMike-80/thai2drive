@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator, Animated } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator, Animated, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -221,6 +221,14 @@ export default function QuizScreen() {
         <Animated.View style={{ opacity: fade, transform: [{ scale: scaleAnim }] }}>
           {/* Question */}
           <View style={[st.qCard, { backgroundColor: c.card, borderColor: c.cardBorder }]}>
+            {q.image_url ? (
+              <Image
+                testID="question-image"
+                source={{ uri: q.image_url }}
+                style={[st.qImg, { borderColor: c.cardBorder }]}
+                resizeMode="contain"
+              />
+            ) : null}
             <TouchableOpacity testID="question-card" onPress={() => setShowTh(!showTh)} activeOpacity={0.9}>
               <Text style={[st.qTxt, { color: c.text }]}>{qT(q)}</Text>
             </TouchableOpacity>
@@ -339,6 +347,7 @@ const st = StyleSheet.create({
   tmrTxt: { fontSize: 15, fontWeight: '700', fontVariant: ['tabular-nums'] },
   scr: { paddingHorizontal: 14, paddingTop: 6, paddingBottom: 10 },
   qCard: { borderRadius: 14, padding: 18, marginBottom: 10, borderWidth: 1 },
+  qImg: { width: '100%', height: 180, borderRadius: 10, marginBottom: 14, borderWidth: 1 },
   qTxt: { fontSize: 18, fontWeight: '700', lineHeight: 26 },
   translateRow: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 10, opacity: 0.6 },
   hintT: { fontSize: 11 },

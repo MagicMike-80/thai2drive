@@ -282,7 +282,8 @@ async def seed_database():
             "explanation_th": "ป้ายแปดเหลี่ยมสีแดงหมายถึงหยุด คุณต้องหยุดสนิทและให้ทางแก่ยานพาหนะอื่น",
             "explanation_en": "The red octagonal sign means stop. You must come to a complete stop and give way to other traffic.",
             "category": "Traffic Signs",
-            "difficulty": "easy"
+            "difficulty": "easy",
+            "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Norwegian-road-sign-204.0.svg/240px-Norwegian-road-sign-204.0.svg.png"
         },
         {
             "question_text_no": "Hva indikerer et blått skilt med hvit P?",
