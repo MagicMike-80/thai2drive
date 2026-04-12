@@ -7,6 +7,7 @@ import * as Speech from 'expo-speech';
 import { useAppStore } from '../src/store/appStore';
 import { api, Question } from '../src/services/api';
 import { playCorrectSound, playIncorrectSound, cleanupSounds } from '../src/sounds';
+import { useScreenProtection } from '../src/hooks/useScreenProtection';
 
 const LETTERS = ['A', 'B', 'C', 'D'];
 const EXAM_TIME = 90 * 60;
@@ -24,6 +25,9 @@ export default function QuizScreen() {
   const store = useAppStore();
   const { language, deviceId, addBookmark, removeBookmark, isBookmarked, setProgress, colors: c, soundEnabled, isPremium, incrementFreeQuestions, canAnswerFree, updateStreak } = store;
   const t = T[language] || T.no;
+
+  // Screen capture protection
+  useScreenProtection(language);
 
   const [questions, setQuestions] = useState<Question[]>([]);
   const [idx, setIdx] = useState(0);

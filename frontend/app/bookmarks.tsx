@@ -12,6 +12,7 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAppStore } from '../src/store/appStore';
 import { api, Question } from '../src/services/api';
+import { useScreenProtection } from '../src/hooks/useScreenProtection';
 
 const TRANSLATIONS = {
   no: {
@@ -47,6 +48,9 @@ export default function BookmarksScreen() {
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const t = TRANSLATIONS[language as keyof typeof TRANSLATIONS];
+
+  // Screen capture protection
+  useScreenProtection(language);
 
   useEffect(() => {
     loadBookmarks();
