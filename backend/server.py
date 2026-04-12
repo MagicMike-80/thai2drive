@@ -306,7 +306,8 @@ async def seed_database():
             "explanation_th": "ป้ายสีน้ำเงินที่มีตัว P สีขาวหมายความว่าอนุญาตให้จอดรถในบริเวณนี้",
             "explanation_en": "The blue sign with white P means parking is allowed in this area.",
             "category": "Traffic Signs",
-            "difficulty": "easy"
+            "difficulty": "easy",
+            "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/NO_road_sign_552.svg/250px-NO_road_sign_552.svg.png"
         },
         {
             "question_text_no": "Hva betyr et trekantet skilt med rød kant?",
@@ -329,7 +330,8 @@ async def seed_database():
             "explanation_th": "ป้ายสามเหลี่ยมขอบแดงเป็นป้ายเตือนที่เตือนถึงอันตรายข้างหน้า",
             "explanation_en": "Triangular signs with red border are warning signs that alert about danger ahead.",
             "category": "Traffic Signs",
-            "difficulty": "easy"
+            "difficulty": "easy",
+            "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/NO_road_sign_152.svg/250px-NO_road_sign_152.svg.png"
         },
         {
             "question_text_no": "Hva betyr et rundt skilt med rød kant og hvit bakgrunn med et tall?",
@@ -352,7 +354,8 @@ async def seed_database():
             "explanation_th": "ป้ายวงกลมขอบแดงพื้นขาวที่มีตัวเลขแสดงขีดจำกัดความเร็วเป็น กม./ชม.",
             "explanation_en": "Round signs with red border and white background with a number indicate the speed limit in km/h.",
             "category": "Traffic Signs",
-            "difficulty": "easy"
+            "difficulty": "easy",
+            "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/NO_road_sign_362.50.svg/250px-NO_road_sign_362.50.svg.png"
         },
         {
             "question_text_no": "Hva betyr et skilt med hvit pil på blå bakgrunn?",
@@ -375,7 +378,8 @@ async def seed_database():
             "explanation_th": "ลูกศรสีขาวบนพื้นสีน้ำเงินเป็นป้ายบังคับที่แสดงทิศทางขับขี่ที่ต้องปฏิบัติตาม",
             "explanation_en": "White arrow on blue background is a mandatory sign showing the required driving direction.",
             "category": "Traffic Signs",
-            "difficulty": "medium"
+            "difficulty": "medium",
+            "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/NO_road_sign_402.1.svg/250px-NO_road_sign_402.1.svg.png"
         },
         {
             "question_text_no": "Hva betyr skiltet med to piler som peker mot hverandre?",
@@ -398,7 +402,8 @@ async def seed_database():
             "explanation_th": "ป้ายที่มีลูกศรสองอันชี้เข้าหากันเตือนว่ามีการจราจรสองทาง",
             "explanation_en": "The sign with two arrows pointing at each other warns about two-way traffic.",
             "category": "Traffic Signs",
-            "difficulty": "medium"
+            "difficulty": "medium",
+            "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/NO_road_sign_148.svg/250px-NO_road_sign_148.svg.png"
         },
         {
             "question_text_no": "Hva betyr et rundt skilt med rød diagonal stripe over en figur?",
@@ -421,7 +426,8 @@ async def seed_database():
             "explanation_th": "เส้นแดงขีดทแยงผ่านสัญลักษณ์บนป้ายวงกลมหมายความว่าการกระทำนั้นห้าม",
             "explanation_en": "A red diagonal stripe over a figure on a round sign means the action is prohibited.",
             "category": "Traffic Signs",
-            "difficulty": "easy"
+            "difficulty": "easy",
+            "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/NO_road_sign_306.0.svg/250px-NO_road_sign_306.0.svg.png"
         },
         {
             "question_text_no": "Hva betyr et vikeplikt-skilt (nedovervendt trekant)?",
@@ -444,7 +450,8 @@ async def seed_database():
             "explanation_th": "ป้ายให้ทาง (สามเหลี่ยมคว่ำ) หมายความว่าคุณต้องให้ทางแก่รถบนถนนที่คุณจะข้าม",
             "explanation_en": "The yield sign (inverted triangle) means you must give way to traffic on the road you are crossing.",
             "category": "Traffic Signs",
-            "difficulty": "easy"
+            "difficulty": "easy",
+            "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/NO_road_sign_202.svg/250px-NO_road_sign_202.svg.png"
         },
         {
             "question_text_no": "Hva betyr et grønt rektangulært skilt med motorveisymbol?",
@@ -467,7 +474,8 @@ async def seed_database():
             "explanation_th": "ป้ายสี่เหลี่ยมสีเขียวที่มีสัญลักษณ์ทางด่วนบ่งบอกว่าทางด่วนเริ่มต้น",
             "explanation_en": "Green rectangular sign with highway symbol indicates the highway begins.",
             "category": "Traffic Signs",
-            "difficulty": "medium"
+            "difficulty": "medium",
+            "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/NO_road_sign_502.svg/250px-NO_road_sign_502.svg.png"
         },
         # ===== ROAD RULES (9 questions) =====
         {
