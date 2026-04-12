@@ -1,14 +1,18 @@
-from fastapi import FastAPI, APIRouter, HTTPException, Query
+from fastapi import FastAPI, APIRouter, HTTPException, Query, Depends
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import logging
 from pathlib import Path
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, validator
 from typing import List, Optional, Dict, Any
 import uuid
-from datetime import datetime, timezone
+import re
+import jwt
+from datetime import datetime, timezone, timedelta
+from passlib.context import CryptContext
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -16,6 +20,13 @@ load_dotenv(ROOT_DIR / '.env')
 mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
+
+JWT_SECRET = os.environ.get('JWT_SECRET', 'fallback-secret-change-me')
+JWT_ALGORITHM = "HS256"
+JWT_EXPIRE_HOURS = 168  # 7 days
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+security = HTTPBearer(auto_error=False)
 
 app = FastAPI()
 api_router = APIRouter(prefix="/api")
@@ -117,6 +128,94 @@ class Bookmark(BaseModel):
 class BookmarkCreate(BaseModel):
     device_id: str
     question_id: str
+
+class AdminUser(BaseModel):
+    email: str
+    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+
+class AdminCheckRequest(BaseModel):
+    email: str
+
+# ==================== AUTH MODELS ====================
+
+class AuthSignup(BaseModel):
+    email: str
+    password: str
+
+    @validator('email')
+    def validate_email(cls, v):
+        v = v.strip().lower()
+        if not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', v):
+            raise ValueError('Invalid email format')
+        return v
+
+    @validator('password')
+    def validate_password(cls, v):
+        if len(v) < 6:
+            raise ValueError('Password must be at least 6 characters')
+        return v
+
+class AuthLogin(BaseModel):
+    email: str
+    password: str
+
+    @validator('email')
+    def validate_email(cls, v):
+        return v.strip().lower()
+
+class ForgotPasswordRequest(BaseModel):
+    email: str
+
+    @validator('email')
+    def validate_email(cls, v):
+        return v.strip().lower()
+
+class ResetPasswordRequest(BaseModel):
+    email: str
+    code: str
+    new_password: str
+
+    @validator('email')
+    def validate_email(cls, v):
+        return v.strip().lower()
+
+    @validator('new_password')
+    def validate_password(cls, v):
+        if len(v) < 6:
+            raise ValueError('Password must be at least 6 characters')
+        return v
+
+# ==================== AUTH HELPERS ====================
+
+def create_token(user_id: str, email: str) -> str:
+    payload = {
+        "sub": user_id,
+        "email": email,
+        "exp": datetime.now(timezone.utc) + timedelta(hours=JWT_EXPIRE_HOURS),
+        "iat": datetime.now(timezone.utc),
+    }
+    return jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
+
+def verify_token(token: str) -> Optional[dict]:
+    try:
+        payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        return payload
+    except jwt.ExpiredSignatureError:
+        return None
+    except jwt.InvalidTokenError:
+        return None
+
+async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    if not credentials:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    payload = verify_token(credentials.credentials)
+    if not payload:
+        raise HTTPException(status_code=401, detail="Invalid or expired token")
+    return payload
+
+def generate_reset_code() -> str:
+    import random
+    return str(random.randint(100000, 999999))
 
 # ==================== ROUTES ====================
 
@@ -252,6 +351,155 @@ async def get_bookmarked_questions(device_id: str):
     question_ids = [b["question_id"] for b in bookmarks]
     questions = await db.questions.find({"id": {"$in": question_ids}}, {"_id": 0}).to_list(500)
     return questions
+
+# ==================== AUTH ROUTES ====================
+
+@api_router.post("/auth/signup")
+async def signup(data: AuthSignup):
+    existing = await db.users.find_one({"email": data.email})
+    if existing:
+        raise HTTPException(status_code=409, detail="Email already registered")
+
+    password_hash = pwd_context.hash(data.password)
+    user_id = str(uuid.uuid4())
+
+    # Check admin whitelist
+    admin_entry = await db.admin_users.find_one({"email": data.email})
+    is_admin = admin_entry is not None
+    is_premium = is_admin  # Admins get auto premium
+
+    user_doc = {
+        "id": user_id,
+        "email": data.email,
+        "password_hash": password_hash,
+        "is_admin": is_admin,
+        "is_premium": is_premium,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+    await db.users.insert_one(user_doc)
+
+    token = create_token(user_id, data.email)
+    return {
+        "token": token,
+        "user": {
+            "id": user_id,
+            "email": data.email,
+            "is_admin": is_admin,
+            "is_premium": is_premium,
+        }
+    }
+
+@api_router.post("/auth/login")
+async def login(data: AuthLogin):
+    user = await db.users.find_one({"email": data.email})
+    if not user:
+        raise HTTPException(status_code=401, detail="Invalid email or password")
+
+    if not pwd_context.verify(data.password, user["password_hash"]):
+        raise HTTPException(status_code=401, detail="Invalid email or password")
+
+    # Re-check admin status on each login
+    admin_entry = await db.admin_users.find_one({"email": data.email})
+    is_admin = admin_entry is not None
+    if is_admin and not user.get("is_premium"):
+        await db.users.update_one({"email": data.email}, {"$set": {"is_admin": True, "is_premium": True}})
+        user["is_admin"] = True
+        user["is_premium"] = True
+
+    token = create_token(user["id"], user["email"])
+    return {
+        "token": token,
+        "user": {
+            "id": user["id"],
+            "email": user["email"],
+            "is_admin": user.get("is_admin", False),
+            "is_premium": user.get("is_premium", False),
+        }
+    }
+
+@api_router.get("/auth/me")
+async def get_me(current_user: dict = Depends(get_current_user)):
+    user = await db.users.find_one({"id": current_user["sub"]}, {"_id": 0, "password_hash": 0})
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return {
+        "id": user["id"],
+        "email": user["email"],
+        "is_admin": user.get("is_admin", False),
+        "is_premium": user.get("is_premium", False),
+    }
+
+@api_router.post("/auth/forgot-password")
+async def forgot_password(data: ForgotPasswordRequest):
+    user = await db.users.find_one({"email": data.email})
+    if not user:
+        # Don't reveal if email exists or not for security
+        return {"message": "If the email exists, a reset code has been sent"}
+
+    code = generate_reset_code()
+    expires = datetime.now(timezone.utc) + timedelta(minutes=15)
+
+    await db.password_resets.update_one(
+        {"email": data.email},
+        {"$set": {
+            "email": data.email,
+            "code": code,
+            "expires_at": expires.isoformat(),
+            "used": False,
+        }},
+        upsert=True
+    )
+
+    # MOCKED: In production, send email via SendGrid/SES
+    logger.info(f"[MOCKED EMAIL] Password reset code for {data.email}: {code}")
+
+    return {"message": "If the email exists, a reset code has been sent"}
+
+@api_router.post("/auth/reset-password")
+async def reset_password(data: ResetPasswordRequest):
+    reset_entry = await db.password_resets.find_one({
+        "email": data.email,
+        "code": data.code,
+        "used": False,
+    })
+
+    if not reset_entry:
+        raise HTTPException(status_code=400, detail="Invalid or expired reset code")
+
+    expires_at = datetime.fromisoformat(reset_entry["expires_at"])
+    if datetime.now(timezone.utc) > expires_at:
+        raise HTTPException(status_code=400, detail="Reset code has expired")
+
+    password_hash = pwd_context.hash(data.new_password)
+    await db.users.update_one(
+        {"email": data.email},
+        {"$set": {"password_hash": password_hash}}
+    )
+    await db.password_resets.update_one(
+        {"email": data.email, "code": data.code},
+        {"$set": {"used": True}}
+    )
+
+    return {"message": "Password reset successfully"}
+
+# ==================== ADMIN ROUTES ====================
+
+@api_router.post("/admin/check")
+async def check_admin(data: AdminCheckRequest):
+    admin = await db.admin_users.find_one({"email": data.email.strip().lower()})
+    return {"is_admin": admin is not None}
+
+@api_router.post("/admin/add")
+async def add_admin(data: AdminCheckRequest):
+    email = data.email.strip().lower()
+    existing = await db.admin_users.find_one({"email": email})
+    if existing:
+        return {"message": "Already admin", "email": email}
+    admin = AdminUser(email=email)
+    await db.admin_users.insert_one(admin.dict())
+    # Also update user if exists
+    await db.users.update_one({"email": email}, {"$set": {"is_admin": True, "is_premium": True}})
+    return {"message": "Admin added", "email": email}
 
 @api_router.post("/seed")
 async def seed_database():

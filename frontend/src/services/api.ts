@@ -64,16 +64,86 @@ export interface Bookmark {
   created_at: string;
 }
 
+export interface AuthUser {
+  id: string;
+  email: string;
+  is_admin: boolean;
+  is_premium: boolean;
+}
+
+export interface AuthResponse {
+  token: string;
+  user: AuthUser;
+}
+
 const fetchJSON = async (url: string, options?: RequestInit) => {
   const response = await fetch(url, options);
   if (!response.ok) {
     const text = await response.text().catch(() => '');
-    throw new Error(`API ${response.status}: ${text}`);
+    let detail = text;
+    try {
+      const parsed = JSON.parse(text);
+      detail = parsed.detail || text;
+    } catch {}
+    throw new Error(detail || `API ${response.status}`);
   }
   return response.json();
 };
 
+const authHeaders = (token: string) => ({
+  'Content-Type': 'application/json',
+  'Authorization': `Bearer ${token}`,
+});
+
 export const api = {
+  // ==================== AUTH ====================
+  async signup(email: string, password: string): Promise<AuthResponse> {
+    return fetchJSON(`${API_BASE}/auth/signup`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    });
+  },
+
+  async login(email: string, password: string): Promise<AuthResponse> {
+    return fetchJSON(`${API_BASE}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    });
+  },
+
+  async getMe(token: string): Promise<AuthUser> {
+    return fetchJSON(`${API_BASE}/auth/me`, {
+      headers: authHeaders(token),
+    });
+  },
+
+  async forgotPassword(email: string): Promise<{ message: string }> {
+    return fetchJSON(`${API_BASE}/auth/forgot-password`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    });
+  },
+
+  async resetPassword(email: string, code: string, new_password: string): Promise<{ message: string }> {
+    return fetchJSON(`${API_BASE}/auth/reset-password`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, code, new_password }),
+    });
+  },
+
+  async checkAdmin(email: string): Promise<{ is_admin: boolean }> {
+    return fetchJSON(`${API_BASE}/admin/check`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    });
+  },
+
+  // ==================== QUESTIONS ====================
   async getQuestions(category?: string, difficulty?: string, limit = 50): Promise<Question[]> {
     const params = new URLSearchParams();
     if (category) params.append('category', category);

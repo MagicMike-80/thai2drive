@@ -1,7 +1,8 @@
+import React from 'react';
 import { create } from 'zustand';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Appearance } from 'react-native';
-import { api } from '../services/api';
+import { api, AuthUser } from '../services/api';
 import { ThemeMode, ThemeColors, darkTheme, lightTheme } from '../theme';
 
 interface UserProgress {
@@ -15,6 +16,16 @@ interface UserProgress {
 }
 
 interface AppState {
+  // Auth
+  authToken: string | null;
+  user: AuthUser | null;
+  isAuthenticated: boolean;
+  authLoading: boolean;
+  login: (email: string, password: string) => Promise<void>;
+  signup: (email: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
+  restoreSession: () => Promise<void>;
+
   language: string;
   setLanguage: (lang: string) => void;
   deviceId: string;
@@ -67,6 +78,78 @@ function daysBetween(a: string, b: string) {
 }
 
 export const useAppStore = create<AppState>((set, get) => ({
+  // ==================== AUTH ====================
+  authToken: null,
+  user: null,
+  isAuthenticated: false,
+  authLoading: true,
+
+  login: async (email, password) => {
+    const res = await api.login(email, password);
+    await AsyncStorage.setItem('authToken', res.token);
+    await AsyncStorage.setItem('authUser', JSON.stringify(res.user));
+    set({
+      authToken: res.token,
+      user: res.user,
+      isAuthenticated: true,
+      isPremium: res.user.is_premium || res.user.is_admin,
+    });
+    if (res.user.is_premium || res.user.is_admin) {
+      await AsyncStorage.setItem('isPremium', 'true');
+    }
+  },
+
+  signup: async (email, password) => {
+    const res = await api.signup(email, password);
+    await AsyncStorage.setItem('authToken', res.token);
+    await AsyncStorage.setItem('authUser', JSON.stringify(res.user));
+    set({
+      authToken: res.token,
+      user: res.user,
+      isAuthenticated: true,
+      isPremium: res.user.is_premium || res.user.is_admin,
+    });
+    if (res.user.is_premium || res.user.is_admin) {
+      await AsyncStorage.setItem('isPremium', 'true');
+    }
+  },
+
+  logout: async () => {
+    await AsyncStorage.multiRemove(['authToken', 'authUser']);
+    set({ authToken: null, user: null, isAuthenticated: false, isPremium: false });
+    await AsyncStorage.setItem('isPremium', 'false');
+  },
+
+  restoreSession: async () => {
+    try {
+      const token = await AsyncStorage.getItem('authToken');
+      const userStr = await AsyncStorage.getItem('authUser');
+      if (token && userStr) {
+        const user: AuthUser = JSON.parse(userStr);
+        // Verify token is still valid
+        try {
+          const freshUser = await api.getMe(token);
+          set({
+            authToken: token,
+            user: freshUser,
+            isAuthenticated: true,
+            isPremium: freshUser.is_premium || freshUser.is_admin,
+            authLoading: false,
+          });
+        } catch {
+          // Token expired
+          await AsyncStorage.multiRemove(['authToken', 'authUser']);
+          set({ authToken: null, user: null, isAuthenticated: false, authLoading: false });
+        }
+      } else {
+        set({ authLoading: false });
+      }
+    } catch {
+      set({ authLoading: false });
+    }
+  },
+
+  // ==================== EXISTING STATE ====================
   language: 'no',
   setLanguage: async (lang) => { set({ language: lang }); await AsyncStorage.setItem('language', lang); },
 
@@ -106,6 +189,9 @@ export const useAppStore = create<AppState>((set, get) => ({
     }
 
     await get().loadBookmarks();
+
+    // Restore auth session
+    await get().restoreSession();
   },
 
   progress: { id: '', device_id: '', total_questions_answered: 0, correct_answers: 0, questions_by_category: {}, last_activity: '', created_at: '' },

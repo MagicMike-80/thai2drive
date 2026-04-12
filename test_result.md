@@ -61,6 +61,33 @@ backend:
     priority: "medium"
     needs_retesting: true
 
+  - task: "Auth API - signup, login, forgot-password, reset-password, me"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: unknown
+        agent: "main"
+        comment: "Email/password auth with JWT tokens, bcrypt hashing. Endpoints: POST /api/auth/signup, POST /api/auth/login, GET /api/auth/me, POST /api/auth/forgot-password, POST /api/auth/reset-password. Admin whitelist check at POST /api/admin/check."
+      - working: true
+        agent: "testing"
+        comment: "All auth endpoints tested successfully. POST /api/auth/signup: validates email/password, rejects duplicates and invalid formats. POST /api/auth/login: authenticates correctly, returns JWT token. GET /api/auth/me: requires valid Bearer token, returns user info. POST /api/auth/forgot-password: generates reset codes (MOCKED email). POST /api/auth/reset-password: successfully resets password with valid code. All validation and error handling working correctly."
+
+  - task: "Admin whitelist check and add"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "Admin functionality tested successfully. POST /api/admin/check: correctly identifies admin/non-admin status. POST /api/admin/add: successfully adds emails to admin whitelist. Admin users get is_admin=true and is_premium=true flags automatically."
+
 frontend:
   - task: "Home screen with language switcher and stats"
     implemented: true
@@ -149,3 +176,5 @@ test_plan:
 agent_communication:
   - agent: "main"
     message: "All features implemented. Backend has 45 questions, 5 categories. Frontend has full quiz flow with practice/exam modes, language switcher, tap-to-translate, TTS, bookmarks, history. Please test all flows."
+  - agent: "testing"
+    message: "✅ AUTH API TESTING COMPLETE: All auth endpoints working correctly. Tested signup (with validation), login, JWT authentication, password reset flow (MOCKED email), and admin functionality. All existing endpoints (questions, seed, categories) still working. No critical issues found. Email service is MOCKED but functional for testing. Ready for production deployment."
