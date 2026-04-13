@@ -145,20 +145,26 @@ export default function QuizScreen() {
   };
 
   const speakQuestion = async () => {
-    if (!q || !soundEnabled) return;
+    if (!q) return;
     if (ttsPlaying === 'question') { stopTts(); return; }
     stopTts();
     setTtsPlaying('question');
     setSpeaking(true);
 
     const segments: { text: string; lang: string }[] = [];
-    // Question text
+    // Always read question in current language first
     segments.push({ text: qT(q), lang: language });
-    // If Thai translation is visible, also read Thai
-    if (showTh && language !== 'th') segments.push({ text: qT(q, 'th'), lang: 'th' });
-    // Answer options
+    // Always read Thai translation (core feature for Thai users)
+    if (language !== 'th') segments.push({ text: qT(q, 'th'), lang: 'th' });
+    // Answer options in current language
     for (const L of LETTERS) {
       segments.push({ text: `${L}. ${aT(q, L)}`, lang: language });
+    }
+    // Answer options in Thai
+    if (language !== 'th') {
+      for (const L of LETTERS) {
+        segments.push({ text: `${L}. ${aT(q, L, 'th')}`, lang: 'th' });
+      }
     }
 
     await speakSequence(segments);
@@ -167,14 +173,16 @@ export default function QuizScreen() {
   };
 
   const speakExplanation = async () => {
-    if (!q || !soundEnabled) return;
+    if (!q) return;
     if (ttsPlaying === 'explanation') { stopTts(); return; }
     stopTts();
     setTtsPlaying('explanation');
     setSpeaking(true);
 
     const segments: { text: string; lang: string }[] = [];
+    // Read explanation in current language
     segments.push({ text: eT(q), lang: language });
+    // Always read Thai explanation
     if (language !== 'th') segments.push({ text: eT(q, 'th'), lang: 'th' });
 
     await speakSequence(segments);
