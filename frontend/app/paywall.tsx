@@ -5,96 +5,68 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAppStore } from '../src/store/appStore';
 
-const FREE_LIMIT = 5;
+type Plan = 'weekly' | 'fourweek';
 
 const TR: Record<string, Record<string, string>> = {
   no: {
-    title: 'Lås opp Thai2Drive',
-    subtitle: 'Få ubegrenset tilgang til alle spørsmål',
-    freeUsed: 'Du har brukt dine gratis spørsmål',
-    freeOf: 'av',
-    freeQuestions: 'gratis spørsmål brukt',
+    title: 'Best\u00e5 teoripr\u00f8ven raskere',
+    subtitle: 'L\u00e6r norsk teori p\u00e5 Thai, Norsk og Engelsk',
     weekly: 'Ukentlig',
-    monthly: 'Månedlig',
-    special: 'Spesial',
-    perWeek: '/ uke',
-    perMonth: '/ mnd',
-    first50: 'Første 50 brukere',
-    popular: 'Populær',
-    bestDeal: 'Beste tilbud',
-    unlock: 'Lås opp Premium',
-    startFree: 'Fortsett gratis',
-    freeLeft: 'gratis spørsmål igjen',
-    features: 'Premium inkluderer',
-    feat1: 'Ubegrenset antall spørsmål',
-    feat2: 'Full eksamenssimulering',
-    feat3: 'Alle kategorier',
-    feat4: 'Bokmerker og historikk',
-    feat5: 'Ingen reklame',
-    restore: 'Gjenopprett kjøp',
+    weeklyPrice: '99 kr / uke',
+    fourweek: '4 uker',
+    fourweekSub: 'Best verdi',
+    fourweekPrice: '199 kr',
+    popular: 'Popul\u00e6r',
+    earlyAccess: 'Early Access \u2013 Kun for de f\u00f8rste 50 brukerne',
+    feat1: 'Ubegrenset sp\u00f8rsm\u00e5l',
+    feat2: 'Norsk + Thai + Engelsk',
+    feat3: 'Forklaringer p\u00e5 alle sp\u00f8rsm\u00e5l',
+    cta: 'Start n\u00e5',
+    cancel: 'Avslutt n\u00e5r som helst',
+    close: 'Lukk',
   },
   th: {
-    title: 'ปลดล็อค Thai2Drive',
-    subtitle: 'เข้าถึงคำถามทั้งหมดอย่างไม่จำกัด',
-    freeUsed: 'คุณใช้คำถามฟรีหมดแล้ว',
-    freeOf: 'จาก',
-    freeQuestions: 'คำถามฟรีที่ใช้แล้ว',
-    weekly: 'รายสัปดาห์',
-    monthly: 'รายเดือน',
-    special: 'พิเศษ',
-    perWeek: '/ สัปดาห์',
-    perMonth: '/ เดือน',
-    first50: '50 คนแรก',
-    popular: 'ยอดนิยม',
-    bestDeal: 'คุ้มที่สุด',
-    unlock: 'ปลดล็อค Premium',
-    startFree: 'ใช้ฟรีต่อ',
-    freeLeft: 'คำถามฟรีที่เหลือ',
-    features: 'Premium รวม',
-    feat1: 'คำถามไม่จำกัด',
-    feat2: 'จำลองสอบเต็มรูปแบบ',
-    feat3: 'ทุกหมวดหมู่',
-    feat4: 'บุ๊คมาร์คและประวัติ',
-    feat5: 'ไม่มีโฆษณา',
-    restore: 'กู้คืนการซื้อ',
+    title: '\u0e2a\u0e2d\u0e1a\u0e1c\u0e48\u0e32\u0e19\u0e17\u0e24\u0e29\u0e0e\u0e35\u0e40\u0e23\u0e47\u0e27\u0e02\u0e36\u0e49\u0e19',
+    subtitle: '\u0e40\u0e23\u0e35\u0e22\u0e19\u0e17\u0e24\u0e29\u0e0e\u0e35\u0e19\u0e2d\u0e23\u0e4c\u0e40\u0e27\u0e22\u0e4c\u0e40\u0e1b\u0e47\u0e19\u0e20\u0e32\u0e29\u0e32\u0e44\u0e17\u0e22 \u0e19\u0e2d\u0e23\u0e4c\u0e40\u0e27\u0e22\u0e4c \u0e41\u0e25\u0e30\u0e2d\u0e31\u0e07\u0e01\u0e24\u0e29',
+    weekly: '\u0e23\u0e32\u0e22\u0e2a\u0e31\u0e1b\u0e14\u0e32\u0e2b\u0e4c',
+    weeklyPrice: '99 kr / \u0e2a\u0e31\u0e1b\u0e14\u0e32\u0e2b\u0e4c',
+    fourweek: '4 \u0e2a\u0e31\u0e1b\u0e14\u0e32\u0e2b\u0e4c',
+    fourweekSub: '\u0e04\u0e38\u0e49\u0e21\u0e04\u0e48\u0e32\u0e17\u0e35\u0e48\u0e2a\u0e38\u0e14',
+    fourweekPrice: '199 kr',
+    popular: '\u0e22\u0e2d\u0e14\u0e19\u0e34\u0e22\u0e21',
+    earlyAccess: 'Early Access \u2013 \u0e2a\u0e33\u0e2b\u0e23\u0e31\u0e1a 50 \u0e04\u0e19\u0e41\u0e23\u0e01',
+    feat1: '\u0e04\u0e33\u0e16\u0e32\u0e21\u0e44\u0e21\u0e48\u0e08\u0e33\u0e01\u0e31\u0e14',
+    feat2: '\u0e19\u0e2d\u0e23\u0e4c\u0e40\u0e27\u0e22\u0e4c + \u0e44\u0e17\u0e22 + \u0e2d\u0e31\u0e07\u0e01\u0e24\u0e29',
+    feat3: '\u0e04\u0e33\u0e2d\u0e18\u0e34\u0e1a\u0e32\u0e22\u0e17\u0e38\u0e01\u0e02\u0e49\u0e2d',
+    cta: '\u0e40\u0e23\u0e34\u0e48\u0e21\u0e40\u0e25\u0e22',
+    cancel: '\u0e22\u0e01\u0e40\u0e25\u0e34\u0e01\u0e44\u0e14\u0e49\u0e17\u0e38\u0e01\u0e40\u0e21\u0e37\u0e48\u0e2d',
+    close: '\u0e1b\u0e34\u0e14',
   },
   en: {
-    title: 'Unlock Thai2Drive',
-    subtitle: 'Get unlimited access to all questions',
-    freeUsed: 'You\'ve used your free questions',
-    freeOf: 'of',
-    freeQuestions: 'free questions used',
+    title: 'Pass the theory test faster',
+    subtitle: 'Learn Norwegian theory in Thai, Norwegian and English',
     weekly: 'Weekly',
-    monthly: 'Monthly',
-    special: 'Special',
-    perWeek: '/ week',
-    perMonth: '/ month',
-    first50: 'First 50 users',
+    weeklyPrice: '99 kr / week',
+    fourweek: '4 weeks',
+    fourweekSub: 'Best value',
+    fourweekPrice: '199 kr',
     popular: 'Popular',
-    bestDeal: 'Best deal',
-    unlock: 'Unlock Premium',
-    startFree: 'Continue Free',
-    freeLeft: 'free questions left',
-    features: 'Premium includes',
+    earlyAccess: 'Early Access \u2013 Only for the first 50 users',
     feat1: 'Unlimited questions',
-    feat2: 'Full exam simulation',
-    feat3: 'All categories',
-    feat4: 'Bookmarks & history',
-    feat5: 'No ads',
-    restore: 'Restore purchase',
+    feat2: 'Norwegian + Thai + English',
+    feat3: 'Explanations on all questions',
+    cta: 'Start now',
+    cancel: 'Cancel anytime',
+    close: 'Close',
   },
 };
 
-type Plan = 'weekly' | 'monthly' | 'special';
-
 export default function PaywallScreen() {
   const router = useRouter();
-  const { language, colors, freeQuestionsUsed, freeRemaining, setPremium, canAnswerFree } = useAppStore();
-  const t = TR[language] || TR.en;
+  const { language, colors, setPremium } = useAppStore();
+  const t = TR[language] || TR.no;
   const c = colors;
-  const [selectedPlan, setSelectedPlan] = useState<Plan>('special');
-  const remaining = freeRemaining();
-  const canContinueFree = canAnswerFree();
+  const [selectedPlan, setSelectedPlan] = useState<Plan>('fourweek');
 
   const handleUnlock = async () => {
     // MOCKED — in production, integrate with App Store / Google Play
@@ -102,156 +74,187 @@ export default function PaywallScreen() {
     router.back();
   };
 
-  const FEATURES = [t.feat1, t.feat2, t.feat3, t.feat4, t.feat5];
+  const isWeekly = selectedPlan === 'weekly';
+  const isFour = selectedPlan === 'fourweek';
 
   return (
-    <SafeAreaView style={[st.container, { backgroundColor: c.bg }]}>
-      <ScrollView contentContainerStyle={st.scroll} showsVerticalScrollIndicator={false}>
-        {/* Close */}
-        <TouchableOpacity testID="paywall-close-btn" style={[st.closeBtn, { backgroundColor: c.card }]} onPress={() => router.back()}>
-          <Ionicons name="close" size={20} color={c.text} />
+    <SafeAreaView style={[s.container, { backgroundColor: c.bg }]}>
+      <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
+        {/* Close button */}
+        <TouchableOpacity
+          testID="paywall-close-btn"
+          style={[s.closeBtn, { backgroundColor: c.card }]}
+          onPress={() => router.back()}
+          activeOpacity={0.7}
+        >
+          <Ionicons name="close" size={20} color={c.textSecondary} />
         </TouchableOpacity>
 
         {/* Header */}
-        <View style={st.headerSection}>
-          <View style={[st.crownBg, { backgroundColor: c.accentBg }]}>
-            <Ionicons name="diamond" size={40} color={c.accent} />
-          </View>
-          <Text style={[st.title, { color: c.text }]}>{t.title}</Text>
-          <Text style={[st.subtitle, { color: c.textSecondary }]}>{t.subtitle}</Text>
+        <View style={s.header}>
+          <Text style={s.flag}>{"🇹🇭"}</Text>
+          <Text style={[s.title, { color: c.text }]}>{t.title}</Text>
+          <Text style={[s.subtitle, { color: c.textSecondary }]}>{t.subtitle}</Text>
         </View>
 
-        {/* Free usage indicator */}
-        <View style={[st.freeBar, { backgroundColor: c.card, borderColor: c.cardBorder }]}>
-          <View style={st.freeRow}>
-            <Text style={[st.freeLabel, { color: c.textSecondary }]}>
-              {freeQuestionsUsed} {t.freeOf} {FREE_LIMIT} {t.freeQuestions}
-            </Text>
-          </View>
-          <View style={[st.freeTrack, { backgroundColor: c.progressBg }]}>
-            <View style={[st.freeFill, { width: `${Math.min(100, (freeQuestionsUsed / FREE_LIMIT) * 100)}%`, backgroundColor: freeQuestionsUsed >= FREE_LIMIT ? c.incorrect : c.accent }]} />
-          </View>
-        </View>
-
-        {/* Plans */}
-        <View style={st.plans}>
+        {/* Pricing cards */}
+        <View style={s.plans}>
           {/* Weekly */}
           <TouchableOpacity
             testID="plan-weekly"
-            style={[st.planCard, { backgroundColor: c.card, borderColor: selectedPlan === 'weekly' ? c.accent : c.cardBorder }]}
+            style={[
+              s.planCard,
+              {
+                backgroundColor: isWeekly ? c.accentBg : c.card,
+                borderColor: isWeekly ? c.accent : c.cardBorder,
+              },
+            ]}
             onPress={() => setSelectedPlan('weekly')}
             activeOpacity={0.8}
           >
-            <Text style={[st.planName, { color: c.text }]}>{t.weekly}</Text>
-            <View style={st.priceRow}>
-              <Text style={[st.price, { color: c.text }]}>99 kr</Text>
-              <Text style={[st.pricePer, { color: c.textMuted }]}>{t.perWeek}</Text>
+            <View style={s.planRadioRow}>
+              <View style={[s.radio, { borderColor: isWeekly ? c.accent : c.textMuted }]}>
+                {isWeekly && <View style={[s.radioFill, { backgroundColor: c.accent }]} />}
+              </View>
+              <View style={s.planInfo}>
+                <Text style={[s.planName, { color: c.text }]}>{t.weekly}</Text>
+                <Text style={[s.planPrice, { color: isWeekly ? c.accent : c.textSecondary }]}>{t.weeklyPrice}</Text>
+              </View>
             </View>
           </TouchableOpacity>
 
-          {/* Monthly */}
+          {/* 4 Weeks — highlighted */}
           <TouchableOpacity
-            testID="plan-monthly"
-            style={[st.planCard, { backgroundColor: c.card, borderColor: selectedPlan === 'monthly' ? c.accent : c.cardBorder }]}
-            onPress={() => setSelectedPlan('monthly')}
+            testID="plan-fourweek"
+            style={[
+              s.planCard,
+              s.planHighlight,
+              {
+                backgroundColor: isFour ? c.accentBg : c.card,
+                borderColor: isFour ? c.accent : c.cardBorder,
+              },
+            ]}
+            onPress={() => setSelectedPlan('fourweek')}
             activeOpacity={0.8}
           >
-            <View style={[st.badge, { backgroundColor: c.accentBg }]}>
-              <Text style={[st.badgeText, { color: c.accent }]}>{t.popular}</Text>
+            {/* Popular badge */}
+            <View style={[s.badge, { backgroundColor: c.accent }]}>
+              <Text style={s.badgeText}>{t.popular}</Text>
             </View>
-            <Text style={[st.planName, { color: c.text }]}>{t.monthly}</Text>
-            <View style={st.priceRow}>
-              <Text style={[st.price, { color: c.text }]}>199 kr</Text>
-              <Text style={[st.pricePer, { color: c.textMuted }]}>{t.perMonth}</Text>
+            <View style={s.planRadioRow}>
+              <View style={[s.radio, { borderColor: isFour ? c.accent : c.textMuted }]}>
+                {isFour && <View style={[s.radioFill, { backgroundColor: c.accent }]} />}
+              </View>
+              <View style={s.planInfo}>
+                <Text style={[s.planName, { color: c.text }]}>
+                  {t.fourweek}
+                  <Text style={[s.planSub, { color: c.textSecondary }]}>  ({t.fourweekSub})</Text>
+                </Text>
+                <Text style={[s.planPrice, s.planPriceHighlight, { color: isFour ? c.accent : c.textSecondary }]}>{t.fourweekPrice}</Text>
+              </View>
             </View>
-          </TouchableOpacity>
-
-          {/* Special */}
-          <TouchableOpacity
-            testID="plan-special"
-            style={[st.planCard, st.planSpecial, { backgroundColor: c.card, borderColor: selectedPlan === 'special' ? c.accent : c.cardBorder }]}
-            onPress={() => setSelectedPlan('special')}
-            activeOpacity={0.8}
-          >
-            <View style={[st.badge, { backgroundColor: `${c.correct}18` }]}>
-              <Text style={[st.badgeText, { color: c.correct }]}>{t.bestDeal}</Text>
-            </View>
-            <Text style={[st.planName, { color: c.text }]}>{t.special}</Text>
-            <View style={st.priceRow}>
-              <Text style={[st.price, { color: c.accent }]}>99 kr</Text>
-              <Text style={[st.pricePer, { color: c.textMuted }]}>{t.perMonth}</Text>
-            </View>
-            <Text style={[st.specialNote, { color: c.textMuted }]}>{t.first50}</Text>
           </TouchableOpacity>
         </View>
 
+        {/* Early access */}
+        <View style={s.earlyRow}>
+          <Text style={[s.earlyText, { color: c.accent }]}>
+            {"🔥"} {t.earlyAccess}
+          </Text>
+        </View>
+
         {/* Features */}
-        <View style={st.featSection}>
-          <Text style={[st.featTitle, { color: c.textMuted }]}>{t.features}</Text>
-          {FEATURES.map((f, i) => (
-            <View key={i} style={st.featRow}>
-              <Ionicons name="checkmark-circle" size={18} color={c.correct} />
-              <Text style={[st.featText, { color: c.text }]}>{f}</Text>
+        <View style={s.features}>
+          {[t.feat1, t.feat2, t.feat3].map((feat, i) => (
+            <View key={i} style={s.featRow}>
+              <Ionicons name="checkmark-circle" size={20} color={c.correct} />
+              <Text style={[s.featText, { color: c.text }]}>{feat}</Text>
             </View>
           ))}
         </View>
       </ScrollView>
 
-      {/* Actions */}
-      <View style={[st.actionWrap, { borderTopColor: c.divider }]}>
-        <TouchableOpacity testID="paywall-unlock-btn" style={[st.unlockBtn, { backgroundColor: c.accent }]} onPress={handleUnlock} activeOpacity={0.8}>
-          <Ionicons name="diamond" size={18} color="#0F172A" />
-          <Text style={st.unlockText}>{t.unlock}</Text>
+      {/* Bottom CTA */}
+      <View style={[s.bottomWrap, { borderTopColor: c.divider }]}>
+        <TouchableOpacity
+          testID="paywall-cta-btn"
+          style={[s.ctaBtn, { backgroundColor: c.accent }]}
+          onPress={handleUnlock}
+          activeOpacity={0.85}
+        >
+          <Ionicons name="flash" size={20} color="#0F172A" />
+          <Text style={s.ctaText}>{t.cta}</Text>
         </TouchableOpacity>
-
-        {canContinueFree && (
-          <TouchableOpacity testID="paywall-free-btn" style={st.freeBtn} onPress={() => router.back()} activeOpacity={0.7}>
-            <Text style={[st.freeText, { color: c.textSecondary }]}>
-              {t.startFree} ({remaining} {t.freeLeft})
-            </Text>
-          </TouchableOpacity>
-        )}
-
-        <TouchableOpacity style={st.restoreBtn} onPress={handleUnlock} activeOpacity={0.7}>
-          <Text style={[st.restoreText, { color: c.textMuted }]}>{t.restore}</Text>
-        </TouchableOpacity>
+        <Text style={[s.cancelText, { color: c.textMuted }]}>{t.cancel}</Text>
       </View>
     </SafeAreaView>
   );
 }
 
-const st = StyleSheet.create({
+const s = StyleSheet.create({
   container: { flex: 1 },
-  scroll: { paddingHorizontal: 20, paddingTop: 16, paddingBottom: 20 },
-  closeBtn: { width: 36, height: 36, borderRadius: 18, justifyContent: 'center', alignItems: 'center', alignSelf: 'flex-end' },
-  headerSection: { alignItems: 'center', marginTop: 8, marginBottom: 24 },
-  crownBg: { width: 80, height: 80, borderRadius: 40, justifyContent: 'center', alignItems: 'center', marginBottom: 16 },
-  title: { fontSize: 26, fontWeight: '800', marginBottom: 6 },
+  scroll: { paddingHorizontal: 24, paddingTop: 16, paddingBottom: 24 },
+
+  // Close
+  closeBtn: {
+    width: 36, height: 36, borderRadius: 18,
+    justifyContent: 'center', alignItems: 'center',
+    alignSelf: 'flex-end',
+  },
+
+  // Header
+  header: { alignItems: 'center', marginTop: 8, marginBottom: 32 },
+  flag: { fontSize: 40, marginBottom: 16 },
+  title: { fontSize: 24, fontWeight: '800', textAlign: 'center', lineHeight: 30, marginBottom: 8 },
   subtitle: { fontSize: 15, textAlign: 'center', lineHeight: 21 },
-  freeBar: { borderRadius: 14, padding: 14, marginBottom: 24, borderWidth: 1 },
-  freeRow: { marginBottom: 8 },
-  freeLabel: { fontSize: 13, fontWeight: '600' },
-  freeTrack: { height: 6, borderRadius: 3 },
-  freeFill: { height: '100%', borderRadius: 3 },
-  plans: { gap: 10, marginBottom: 24 },
-  planCard: { borderRadius: 14, padding: 16, borderWidth: 1.5 },
-  planSpecial: {},
-  badge: { alignSelf: 'flex-start', paddingHorizontal: 10, paddingVertical: 3, borderRadius: 10, marginBottom: 8 },
-  badgeText: { fontSize: 11, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 0.5 },
-  planName: { fontSize: 15, fontWeight: '700', marginBottom: 4 },
-  priceRow: { flexDirection: 'row', alignItems: 'baseline', gap: 4 },
-  price: { fontSize: 24, fontWeight: '800' },
-  pricePer: { fontSize: 13 },
-  specialNote: { fontSize: 12, marginTop: 4 },
-  featSection: { marginBottom: 20 },
-  featTitle: { fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 12 },
-  featRow: { flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 10 },
-  featText: { fontSize: 14 },
-  actionWrap: { paddingHorizontal: 20, paddingTop: 12, paddingBottom: 16, borderTopWidth: 1 },
-  unlockBtn: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', borderRadius: 14, paddingVertical: 15, gap: 8, marginBottom: 10 },
-  unlockText: { fontSize: 16, fontWeight: '700', color: '#0F172A' },
-  freeBtn: { alignItems: 'center', paddingVertical: 10, marginBottom: 4 },
-  freeText: { fontSize: 14, fontWeight: '600' },
-  restoreBtn: { alignItems: 'center', paddingVertical: 6 },
-  restoreText: { fontSize: 12 },
+
+  // Plans
+  plans: { gap: 12, marginBottom: 20 },
+  planCard: {
+    borderRadius: 16, borderWidth: 1.5,
+    paddingHorizontal: 18, paddingVertical: 18,
+    position: 'relative',
+  },
+  planHighlight: {},
+  planRadioRow: { flexDirection: 'row', alignItems: 'center', gap: 14 },
+  radio: {
+    width: 22, height: 22, borderRadius: 11,
+    borderWidth: 2, justifyContent: 'center', alignItems: 'center',
+  },
+  radioFill: { width: 12, height: 12, borderRadius: 6 },
+  planInfo: { flex: 1 },
+  planName: { fontSize: 16, fontWeight: '700', marginBottom: 2 },
+  planSub: { fontSize: 13, fontWeight: '500' },
+  planPrice: { fontSize: 15, fontWeight: '600' },
+  planPriceHighlight: { fontSize: 18, fontWeight: '800' },
+
+  // Badge
+  badge: {
+    position: 'absolute', top: -10, right: 16,
+    paddingHorizontal: 12, paddingVertical: 4,
+    borderRadius: 10,
+  },
+  badgeText: { fontSize: 11, fontWeight: '800', color: '#0F172A', textTransform: 'uppercase', letterSpacing: 0.5 },
+
+  // Early access
+  earlyRow: { alignItems: 'center', marginBottom: 24 },
+  earlyText: { fontSize: 13, fontWeight: '600', textAlign: 'center' },
+
+  // Features
+  features: { gap: 14, marginBottom: 20 },
+  featRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+  featText: { fontSize: 15, fontWeight: '500' },
+
+  // Bottom CTA
+  bottomWrap: {
+    paddingHorizontal: 24, paddingTop: 14, paddingBottom: 20,
+    borderTopWidth: 1,
+  },
+  ctaBtn: {
+    flexDirection: 'row', justifyContent: 'center', alignItems: 'center',
+    borderRadius: 16, paddingVertical: 17, gap: 8,
+    marginBottom: 10,
+  },
+  ctaText: { fontSize: 17, fontWeight: '800', color: '#0F172A' },
+  cancelText: { fontSize: 12, textAlign: 'center' },
 });
