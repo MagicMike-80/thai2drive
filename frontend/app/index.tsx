@@ -82,7 +82,7 @@ export default function HomeScreen() {
         {/* Big Start Quiz Button */}
         <TouchableOpacity testID="start-quiz-btn" style={[st.startBtn, { backgroundColor: c.accent }]}
           onPress={() => router.push({ pathname: '/categories', params: { mode: 'practice' } })} activeOpacity={0.85}>
-          <Ionicons name="play" size={22} color="#0F172A" />
+          <Ionicons name="play" size={24} color="#0F172A" />
           <Text style={st.startText}>{t.startQuiz}</Text>
         </TouchableOpacity>
 
@@ -91,6 +91,13 @@ export default function HomeScreen() {
           <Text style={[st.freeHint, { color: c.textMuted }]}>{remaining} {t.freeLeft}</Text>
         )}
 
+        {/* Exam button */}
+        <TouchableOpacity testID="exam-mode-btn" style={[st.examBtn, { backgroundColor: c.card, borderColor: c.accent }]}
+          onPress={() => router.push({ pathname: '/quiz', params: { mode: 'exam', category: 'all' } })} activeOpacity={0.85}>
+          <Ionicons name="school" size={20} color={c.accent} />
+          <Text style={[st.examText, { color: c.accent }]}>{t.exam}</Text>
+        </TouchableOpacity>
+
         {/* Mode shortcuts */}
         <View style={st.modesRow}>
           <TouchableOpacity testID="practice-mode-btn" style={[st.modeChip, { backgroundColor: c.card, borderColor: c.cardBorder }]}
@@ -98,10 +105,15 @@ export default function HomeScreen() {
             <Ionicons name="book-outline" size={18} color={c.correct} />
             <Text style={[st.modeText, { color: c.text }]}>{t.practice}</Text>
           </TouchableOpacity>
-          <TouchableOpacity testID="exam-mode-btn" style={[st.modeChip, { backgroundColor: c.card, borderColor: c.cardBorder }]}
-            onPress={() => router.push({ pathname: '/quiz', params: { mode: 'exam', category: 'all' } })}>
-            <Ionicons name="school-outline" size={18} color={c.accent} />
-            <Text style={[st.modeText, { color: c.text }]}>{t.exam}</Text>
+          <TouchableOpacity testID="history-btn" style={[st.modeChip, { backgroundColor: c.card, borderColor: c.cardBorder }]}
+            onPress={() => router.push('/history')}>
+            <Ionicons name="time-outline" size={18} color={c.textSecondary} />
+            <Text style={[st.modeText, { color: c.text }]}>{t.history}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity testID="bookmarks-btn" style={[st.modeChip, { backgroundColor: c.card, borderColor: c.cardBorder }]}
+            onPress={() => router.push('/bookmarks')}>
+            <Ionicons name="bookmark-outline" size={18} color={c.textSecondary} />
+            <Text style={[st.modeText, { color: c.text }]}>{t.bookmarks}</Text>
           </TouchableOpacity>
         </View>
 
@@ -124,18 +136,6 @@ export default function HomeScreen() {
               <Text style={[st.statLbl, { color: c.textSecondary }]}>{t.accuracy}</Text>
             </View>
           </View>
-        </View>
-
-        {/* Quick actions */}
-        <View style={st.quickRow}>
-          <TouchableOpacity testID="history-btn" style={[st.quickBtn, { backgroundColor: c.card, borderColor: c.cardBorder }]} onPress={() => router.push('/history')}>
-            <Ionicons name="time-outline" size={20} color={c.textSecondary} />
-            <Text style={[st.quickText, { color: c.textSecondary }]}>{t.history}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity testID="bookmarks-btn" style={[st.quickBtn, { backgroundColor: c.card, borderColor: c.cardBorder }]} onPress={() => router.push('/bookmarks')}>
-            <Ionicons name="bookmark-outline" size={20} color={c.textSecondary} />
-            <Text style={[st.quickText, { color: c.textSecondary }]}>{t.bookmarks}</Text>
-          </TouchableOpacity>
         </View>
 
         {/* Premium Banner */}
@@ -174,27 +174,26 @@ const st = StyleSheet.create({
   langFlag: { fontSize: 18 },
   settingsBtn: { width: 38, height: 38, borderRadius: 19, justifyContent: 'center', alignItems: 'center' },
   title: { fontSize: 36, fontWeight: '800', letterSpacing: -1 },
-  subtitle: { fontSize: 15, marginTop: 2, marginBottom: 16 },
-  streakRow: { flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-start', paddingHorizontal: 14, paddingVertical: 8, borderRadius: 20, gap: 6, borderWidth: 1, marginBottom: 16 },
+  subtitle: { fontSize: 15, marginTop: 2, marginBottom: 18 },
+  streakRow: { flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-start', paddingHorizontal: 14, paddingVertical: 8, borderRadius: 20, gap: 6, borderWidth: 1, marginBottom: 18 },
   streakFire: { fontSize: 18 },
   streakText: { fontSize: 14, fontWeight: '700' },
-  startBtn: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', borderRadius: 16, paddingVertical: 18, gap: 10, marginBottom: 8 },
-  startText: { fontSize: 18, fontWeight: '800', color: '#0F172A' },
-  freeHint: { fontSize: 12, textAlign: 'center', marginBottom: 16 },
-  modesRow: { flexDirection: 'row', gap: 10, marginBottom: 16 },
-  modeChip: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 12, paddingVertical: 12, gap: 6, borderWidth: 1 },
-  modeText: { fontSize: 14, fontWeight: '600' },
-  progressCard: { borderRadius: 16, padding: 16, marginBottom: 12, borderWidth: 1 },
+  startBtn: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', borderRadius: 18, paddingVertical: 20, gap: 10, marginBottom: 8 },
+  startText: { fontSize: 20, fontWeight: '800', color: '#0F172A' },
+  freeHint: { fontSize: 12, textAlign: 'center', marginBottom: 12 },
+  examBtn: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', borderRadius: 14, paddingVertical: 14, gap: 8, marginBottom: 14, borderWidth: 1.5 },
+  examText: { fontSize: 16, fontWeight: '700' },
+  modesRow: { flexDirection: 'row', gap: 8, marginBottom: 16 },
+  modeChip: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 12, paddingVertical: 11, gap: 5, borderWidth: 1 },
+  modeText: { fontSize: 13, fontWeight: '600' },
+  progressCard: { borderRadius: 16, padding: 16, marginBottom: 16, borderWidth: 1 },
   sectionTitle: { fontSize: 11, textTransform: 'uppercase', letterSpacing: 1.5, fontWeight: '700', marginBottom: 12 },
   statsRow: { flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' },
   statCol: { alignItems: 'center', flex: 1 },
   statVal: { fontSize: 26, fontWeight: '800' },
   statLbl: { fontSize: 11, marginTop: 2 },
   divider: { width: 1, height: 36 },
-  quickRow: { flexDirection: 'row', gap: 10, marginBottom: 20 },
-  quickBtn: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 12, paddingVertical: 14, gap: 6, borderWidth: 1 },
-  quickText: { fontSize: 13, fontWeight: '600' },
-  premBanner: { borderRadius: 20, padding: 20, borderWidth: 1.5, alignItems: 'center', marginBottom: 12, borderStyle: 'dashed' },
+  premBanner: { borderRadius: 20, padding: 20, borderWidth: 1.5, alignItems: 'center', marginBottom: 12 },
   premRocket: { fontSize: 32, marginBottom: 8 },
   premCta: { fontSize: 16, fontWeight: '700', textAlign: 'center', lineHeight: 22, marginBottom: 4 },
   premOffer: { fontSize: 13, textAlign: 'center', marginBottom: 10 },
