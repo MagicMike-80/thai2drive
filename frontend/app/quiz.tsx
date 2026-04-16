@@ -14,9 +14,9 @@ const EXAM_TIME = 90 * 60;
 const PASS = 85;
 
 const T: Record<string, Record<string, string>> = {
-  no: { check: 'Sjekk svar', next: 'Neste', finish: 'Fullfør', correct: 'Riktig!', incorrect: 'Feil!', hint: 'Trykk for Thai', limitMsg: 'Gratis grense nådd. Lås opp for å fortsette', unlock: 'Lås opp Premium', listen: 'Lytt', listening: 'Spiller...', listenExpl: 'Lytt' },
-  th: { check: 'ตรวจคำตอบ', next: 'ถัดไป', finish: 'เสร็จสิ้น', correct: 'ถูกต้อง!', incorrect: 'ผิด!', hint: 'แตะเพื่อแปล', limitMsg: 'ถึงขีดจำกัดฟรี ปลดล็อคเพื่อเล่นต่อ', unlock: 'ปลดล็อค Premium', listen: 'ฟัง', listening: 'กำลังเล่น...', listenExpl: 'ฟัง' },
-  en: { check: 'Check Answer', next: 'Next', finish: 'Finish', correct: 'Correct!', incorrect: 'Incorrect!', hint: 'Tap for Thai', limitMsg: 'Free limit reached. Unlock full access to continue', unlock: 'Unlock Premium', listen: 'Listen', listening: 'Playing...', listenExpl: 'Listen' },
+  no: { check: 'Sjekk svar', next: 'Neste', finish: 'Fullfør', correct: 'Riktig!', incorrect: 'Feil!', hint: 'Trykk for Thai', limitMsg: 'Gratis grense nådd', unlock: 'Lås opp Premium', listen: 'Lytt', listening: 'Spiller...', listenExpl: 'Lytt' },
+  th: { check: 'ตรวจคำตอบ', next: 'ถัดไป', finish: 'เสร็จสิ้น', correct: 'ถูกต้อง!', incorrect: 'ผิด!', hint: 'แตะเพื่อแปล', limitMsg: 'ถึงขีดจำกัดฟรี', unlock: 'ปลดล็อค Premium', listen: 'ฟัง', listening: 'กำลังเล่น...', listenExpl: 'ฟัง' },
+  en: { check: 'Check Answer', next: 'Next', finish: 'Finish', correct: 'Correct!', incorrect: 'Incorrect!', hint: 'Tap for Thai', limitMsg: 'Free limit reached', unlock: 'Unlock Premium', listen: 'Listen', listening: 'Playing...', listenExpl: 'Listen' },
 };
 
 export default function QuizScreen() {
@@ -82,11 +82,11 @@ export default function QuizScreen() {
     setDone(true);
     const cor = sel === q.correct_answer;
 
-    // Animate: scale pop on correct, glow pulse
+    // Animate: subtle scale press on correct
     if (cor) {
       Animated.sequence([
-        Animated.spring(scaleAnim, { toValue: 1.04, useNativeDriver: true, friction: 3 }),
-        Animated.spring(scaleAnim, { toValue: 1, useNativeDriver: true, friction: 5 }),
+        Animated.timing(scaleAnim, { toValue: 0.98, duration: 75, useNativeDriver: true }),
+        Animated.timing(scaleAnim, { toValue: 1.0, duration: 150, useNativeDriver: true }),
       ]).start();
     }
     // Glow pulse
@@ -258,15 +258,15 @@ export default function QuizScreen() {
             )}
           </View>
 
-          {/* Big TTS Listen Button */}
+          {/* TTS Listen Button — subtle, highlights on tap */}
           <TouchableOpacity
             testID="tts-question-btn"
             onPress={speakQuestion}
-            activeOpacity={0.8}
-            style={[st.listenBtn, { backgroundColor: ttsPlaying === 'question' ? c.accent : c.card, borderColor: c.accent }]}
+            activeOpacity={1}
+            style={[st.listenBtn, { backgroundColor: ttsPlaying === 'question' ? c.accentBg : c.card, borderColor: ttsPlaying === 'question' ? c.accent : c.cardBorder, opacity: ttsPlaying === 'question' ? 1 : 0.55 }]}
           >
             <Text style={st.listenIcon}>{ttsPlaying === 'question' ? '🔊' : '🔈'}</Text>
-            <Text style={[st.listenText, { color: ttsPlaying === 'question' ? '#0F172A' : c.accent }]}>
+            <Text style={[st.listenText, { color: ttsPlaying === 'question' ? c.accent : c.textSecondary }]}>
               {ttsPlaying === 'question' ? t.listening : t.listen}
             </Text>
           </TouchableOpacity>
@@ -303,10 +303,10 @@ export default function QuizScreen() {
           {done && (
             <View style={st.fb}>
               <View style={st.fbR}>
-                <Ionicons name={sel === q.correct_answer ? 'checkmark-circle' : 'close-circle'} size={16} color={sel === q.correct_answer ? c.correct : c.incorrect} />
-                <Text style={[st.fbS, { color: sel === q.correct_answer ? c.correct : c.incorrect }]}>{sel === q.correct_answer ? t.correct : t.incorrect}</Text>
-                <TouchableOpacity testID="tts-explanation-btn" style={[st.ttsSmall, { backgroundColor: ttsPlaying === 'explanation' ? c.accentBg : 'transparent' }]} onPress={speakExplanation} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-                  <Ionicons name={ttsPlaying === 'explanation' ? 'volume-high' : 'volume-medium-outline'} size={15} color={ttsPlaying === 'explanation' ? c.accent : c.textMuted} />
+                <Ionicons name={sel === q.correct_answer ? 'checkmark-circle' : 'close-circle'} size={15} color={sel === q.correct_answer ? '#6EE7A8' : c.incorrect} />
+                <Text style={[st.fbS, { color: sel === q.correct_answer ? '#6EE7A8' : c.incorrect }]}>{sel === q.correct_answer ? t.correct : t.incorrect}</Text>
+                <TouchableOpacity testID="tts-explanation-btn" style={[st.ttsSmall, { opacity: ttsPlaying === 'explanation' ? 1 : 0.4 }]} onPress={speakExplanation} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
+                  <Ionicons name={ttsPlaying === 'explanation' ? 'volume-high' : 'volume-medium-outline'} size={15} color={ttsPlaying === 'explanation' ? c.accent : c.textSecondary} />
                 </TouchableOpacity>
               </View>
               <Text style={[st.fbE, { color: c.textSecondary }]}>{eT(q)}</Text>
@@ -316,8 +316,8 @@ export default function QuizScreen() {
 
           {/* Free limit message */}
           {showLimit && (
-            <View style={[st.limitCard, { borderColor: c.accent }]}>
-              <Text style={[st.limitMsg, { color: c.text }]}>{t.limitMsg}</Text>
+            <View style={[st.limitCard, { backgroundColor: `${c.accent}12` }]}>
+              <Text style={[st.limitMsg, { color: c.textSecondary }]}>{t.limitMsg}</Text>
               <TouchableOpacity testID="quiz-unlock-btn" style={[st.limitBtn, { backgroundColor: c.accent }]} onPress={() => router.push('/paywall')}>
                 <Ionicons name="diamond" size={16} color="#0F172A" />
                 <Text style={st.limitBtnTxt}>{t.unlock}</Text>
@@ -366,9 +366,9 @@ const st = StyleSheet.create({
   thW: { marginTop: 10 },
   thL: { height: 1, marginBottom: 10 },
   thTxt: { fontSize: 15, lineHeight: 22 },
-  listenBtn: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 14, paddingVertical: 14, marginBottom: 14, gap: 8, borderWidth: 1.5 },
-  listenIcon: { fontSize: 20 },
-  listenText: { fontSize: 16, fontWeight: '700' },
+  listenBtn: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 14, paddingVertical: 14, marginBottom: 14, gap: 8, borderWidth: 1, opacity: 0.6 },
+  listenIcon: { fontSize: 18 },
+  listenText: { fontSize: 15, fontWeight: '600' },
   aW: { gap: 12 },
   aBtn: { flexDirection: 'row', alignItems: 'center', borderRadius: 12, paddingVertical: 13, paddingHorizontal: 14, borderWidth: 1.5 },
   dim: { opacity: 0.35 },
@@ -378,12 +378,12 @@ const st = StyleSheet.create({
   aTxt: { flex: 1, fontSize: 15, lineHeight: 21 },
   fb: { marginTop: 16, paddingHorizontal: 2 },
   fbR: { flexDirection: 'row', alignItems: 'center', gap: 5, marginBottom: 4 },
-  fbS: { fontSize: 13, fontWeight: '700', flex: 1 },
+  fbS: { fontSize: 13, fontWeight: '500', flex: 1 },
   ttsSmall: { width: 28, height: 28, borderRadius: 14, justifyContent: 'center', alignItems: 'center' },
-  fbE: { fontSize: 13, lineHeight: 19, opacity: 0.8 },
+  fbE: { fontSize: 13, lineHeight: 19, opacity: 0.75 },
   fbTh: { fontSize: 12, lineHeight: 18, marginTop: 3 },
-  limitCard: { marginTop: 20, borderRadius: 16, padding: 20, borderWidth: 1.5, borderStyle: 'dashed', alignItems: 'center' },
-  limitMsg: { fontSize: 14, fontWeight: '600', textAlign: 'center', marginBottom: 14, lineHeight: 20 },
+  limitCard: { marginTop: 16, borderRadius: 16, paddingVertical: 16, paddingHorizontal: 20, alignItems: 'center' },
+  limitMsg: { fontSize: 13, fontWeight: '500', textAlign: 'center', marginBottom: 14 },
   limitBtn: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 12, paddingVertical: 12, paddingHorizontal: 24, gap: 6 },
   limitBtnTxt: { fontSize: 14, fontWeight: '700', color: '#0F172A' },
   actW: { paddingHorizontal: 14, paddingTop: 10, paddingBottom: 14 },
