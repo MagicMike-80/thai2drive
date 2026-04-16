@@ -20,12 +20,12 @@ const THEME_OPTIONS: { mode: ThemeMode; icon: keyof typeof Ionicons.glyphMap }[]
 
 export default function SettingsScreen() {
   const router = useRouter();
-  const { language, colors, themeMode, setThemeMode, soundEnabled, setSoundEnabled, user, isPremium, logout } = useAppStore();
+  const { language, colors, themeMode, setThemeMode, soundEnabled, setSoundEnabled, user, isPremium, logout, isAuthenticated } = useAppStore();
   const t = TRANSLATIONS[language] || TRANSLATIONS.en;
 
   const handleLogout = async () => {
     await logout();
-    router.replace('/login');
+    router.replace('/');
   };
 
   return (
@@ -46,7 +46,7 @@ export default function SettingsScreen() {
             <Ionicons name="person-circle-outline" size={20} color={colors.accent} />
             <Text style={[styles.sectionTitle, { color: colors.text }]}>{t.account}</Text>
           </View>
-          {user && (
+          {user ? (
             <View style={styles.accountInfo}>
               <View style={[styles.emailRow, { backgroundColor: colors.bg }]}>
                 <Ionicons name="mail-outline" size={16} color={colors.textMuted} />
@@ -67,6 +67,16 @@ export default function SettingsScreen() {
                 )}
               </View>
             </View>
+          ) : (
+            <TouchableOpacity
+              testID="settings-login-btn"
+              style={[styles.loginBtn, { backgroundColor: colors.accentBg, borderColor: colors.accent }]}
+              onPress={() => router.push('/login')}
+              activeOpacity={0.8}
+            >
+              <Ionicons name="log-in-outline" size={18} color={colors.accent} />
+              <Text style={[styles.loginBtnText, { color: colors.accent }]}>{t.logout === 'Log Out' ? 'Log In' : t.logout === 'Logg ut' ? 'Logg inn' : '\u0e40\u0e02\u0e49\u0e32\u0e2a\u0e39\u0e48\u0e23\u0e30\u0e1a\u0e1a'}</Text>
+            </TouchableOpacity>
           )}
         </View>
 
@@ -121,11 +131,13 @@ export default function SettingsScreen() {
           </View>
         </View>
 
-        {/* Logout */}
-        <TouchableOpacity testID="logout-btn" style={[styles.logoutBtn, { borderColor: colors.incorrect }]} onPress={handleLogout} activeOpacity={0.7}>
-          <Ionicons name="log-out-outline" size={20} color={colors.incorrect} />
-          <Text style={[styles.logoutText, { color: colors.incorrect }]}>{t.logout}</Text>
-        </TouchableOpacity>
+        {/* Logout - only shown when logged in */}
+        {isAuthenticated && (
+          <TouchableOpacity testID="logout-btn" style={[styles.logoutBtn, { borderColor: colors.incorrect }]} onPress={handleLogout} activeOpacity={0.7}>
+            <Ionicons name="log-out-outline" size={20} color={colors.incorrect} />
+            <Text style={[styles.logoutText, { color: colors.incorrect }]}>{t.logout}</Text>
+          </TouchableOpacity>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -153,4 +165,6 @@ const styles = StyleSheet.create({
   badgeText: { fontSize: 12, fontWeight: '700' },
   logoutBtn: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 8, borderRadius: 14, borderWidth: 1.5, paddingVertical: 14, marginTop: 8 },
   logoutText: { fontSize: 15, fontWeight: '700' },
+  loginBtn: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 8, borderRadius: 12, borderWidth: 1.5, paddingVertical: 12 },
+  loginBtnText: { fontSize: 14, fontWeight: '700' },
 });

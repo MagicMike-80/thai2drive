@@ -63,12 +63,17 @@ const TR: Record<string, Record<string, string>> = {
 
 export default function PaywallScreen() {
   const router = useRouter();
-  const { language, colors, setPremium } = useAppStore();
+  const { language, colors, setPremium, isAuthenticated } = useAppStore();
   const t = TR[language] || TR.no;
   const c = colors;
   const [selectedPlan, setSelectedPlan] = useState<Plan>('fourweek');
 
   const handleUnlock = async () => {
+    if (!isAuthenticated) {
+      // Not logged in → send to login, then back to paywall
+      router.push({ pathname: '/login', params: { redirect: 'paywall' } });
+      return;
+    }
     // MOCKED — in production, integrate with App Store / Google Play
     await setPremium(true);
     router.back();

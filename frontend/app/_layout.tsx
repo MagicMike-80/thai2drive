@@ -7,25 +7,23 @@ import { useAppStore } from '../src/store/appStore';
 
 const AUTH_SCREENS = ['login', 'signup', 'forgot-password'];
 
-function useProtectedRoute() {
+function useAuthRedirect() {
   const segments = useSegments();
   const router = useRouter();
   const isAuthenticated = useAppStore((s) => s.isAuthenticated);
   const authLoading = useAppStore((s) => s.authLoading);
 
   useEffect(() => {
-    if (authLoading) return; // Wait until we know auth state
+    if (authLoading) return;
 
     const currentScreen = segments[0] || '';
     const onAuthScreen = AUTH_SCREENS.includes(currentScreen);
 
-    if (!isAuthenticated && !onAuthScreen) {
-      // Not logged in → go to login
-      router.replace('/login');
-    } else if (isAuthenticated && onAuthScreen) {
-      // Already logged in → go to home
+    // Only redirect: if already logged in and stuck on auth screen → go home
+    if (isAuthenticated && onAuthScreen) {
       router.replace('/');
     }
+    // No forced login redirect — app is freely accessible
   }, [isAuthenticated, authLoading, segments]);
 }
 
@@ -42,7 +40,7 @@ export default function RootLayout() {
     })();
   }, []);
 
-  useProtectedRoute();
+  useAuthRedirect();
 
   if (!isReady) {
     return (

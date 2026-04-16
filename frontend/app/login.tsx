@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAppStore } from '../src/store/appStore';
 
@@ -46,6 +46,7 @@ const TR: Record<string, Record<string, string>> = {
 
 export default function LoginScreen() {
   const router = useRouter();
+  const { redirect } = useLocalSearchParams<{ redirect?: string }>();
   const { language, colors, login: doLogin } = useAppStore();
   const t = TR[language] || TR.en;
   const c = colors;
@@ -67,7 +68,12 @@ export default function LoginScreen() {
     setLoading(true);
     try {
       await doLogin(trimmedEmail, password);
-      router.replace('/');
+      // Redirect to paywall if that's where user came from, otherwise home
+      if (redirect === 'paywall') {
+        router.replace('/paywall');
+      } else {
+        router.replace('/');
+      }
     } catch (e: any) {
       setError(e.message || 'Login failed');
     } finally {
@@ -149,7 +155,7 @@ export default function LoginScreen() {
             {/* Sign up link */}
             <View style={st.bottomRow}>
               <Text style={[st.bottomText, { color: c.textSecondary }]}>{t.noAccount} </Text>
-              <TouchableOpacity testID="goto-signup" onPress={() => router.push('/signup')}>
+              <TouchableOpacity testID="goto-signup" onPress={() => router.push({ pathname: '/signup', params: redirect ? { redirect } : {} })}>
                 <Text style={[st.bottomLink, { color: c.accent }]}>{t.signUp}</Text>
               </TouchableOpacity>
             </View>

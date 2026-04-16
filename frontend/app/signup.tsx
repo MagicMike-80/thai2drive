@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAppStore } from '../src/store/appStore';
 
@@ -49,6 +49,7 @@ const TR: Record<string, Record<string, string>> = {
 
 export default function SignupScreen() {
   const router = useRouter();
+  const { redirect } = useLocalSearchParams<{ redirect?: string }>();
   const { language, colors, signup: doSignup } = useAppStore();
   const t = TR[language] || TR.en;
   const c = colors;
@@ -72,7 +73,11 @@ export default function SignupScreen() {
     setLoading(true);
     try {
       await doSignup(trimmedEmail, password);
-      router.replace('/');
+      if (redirect === 'paywall') {
+        router.replace('/paywall');
+      } else {
+        router.replace('/');
+      }
     } catch (e: any) {
       setError(e.message || 'Signup failed');
     } finally {
