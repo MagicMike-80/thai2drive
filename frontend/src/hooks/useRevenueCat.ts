@@ -1,10 +1,10 @@
 import { useEffect, useState, useCallback } from 'react';
 import { Platform } from 'react-native';
 
-// RevenueCat product identifiers
+// RevenueCat product identifiers (must match RevenueCat dashboard)
 export const PRODUCT_IDS = {
   WEEKLY: 'weekly_99',
-  MONTHLY: 'monthly_199',
+  MONTHLY: 'monthly',
 };
 
 export const ENTITLEMENT_ID = 'pro';
