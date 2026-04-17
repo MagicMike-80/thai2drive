@@ -1,30 +1,29 @@
 const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL || '';
 const API_BASE = `${BACKEND_URL}/api`;
 
+// ==================== V2 SCHEMA TYPES ====================
+
+export interface LocalizedText {
+  no: string;
+  th: string;
+  en: string;
+}
+
+export interface QuestionOption {
+  id: string; // "A" | "B" | "C" | "D"
+  text: LocalizedText;
+}
+
 export interface Question {
   id: string;
-  question_text_no: string;
-  question_text_th: string;
-  question_text_en: string;
-  answer_a_no: string;
-  answer_b_no: string;
-  answer_c_no: string;
-  answer_d_no: string;
-  answer_a_th: string;
-  answer_b_th: string;
-  answer_c_th: string;
-  answer_d_th: string;
-  answer_a_en: string;
-  answer_b_en: string;
-  answer_c_en: string;
-  answer_d_en: string;
-  correct_answer: string;
-  explanation_no: string;
-  explanation_th: string;
-  explanation_en: string;
+  question: LocalizedText;
+  options: QuestionOption[];
+  correctOptionId: string;
+  explanation: LocalizedText;
+  bildeUrl?: string | null;
   category: string;
   difficulty: string;
-  image_url?: string;
+  active: boolean;
   created_at: string;
 }
 

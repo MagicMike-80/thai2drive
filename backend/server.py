@@ -30,35 +30,8 @@ security = HTTPBearer(auto_error=False)
 
 
 def normalize_question(q: dict) -> dict:
-    """Normalize v2 nested schema questions into flat v1 format for API response."""
-    if q.get("schema_version") == 2 and "question" in q and "options" in q:
-        opts = {o["id"]: o["text"] for o in q["options"]}
-        return {
-            "id": q.get("id", ""),
-            "question_text_no": q["question"].get("no", ""),
-            "question_text_th": q["question"].get("th", ""),
-            "question_text_en": q["question"].get("en", ""),
-            "answer_a_no": opts.get("A", {}).get("no", ""),
-            "answer_a_th": opts.get("A", {}).get("th", ""),
-            "answer_a_en": opts.get("A", {}).get("en", ""),
-            "answer_b_no": opts.get("B", {}).get("no", ""),
-            "answer_b_th": opts.get("B", {}).get("th", ""),
-            "answer_b_en": opts.get("B", {}).get("en", ""),
-            "answer_c_no": opts.get("C", {}).get("no", ""),
-            "answer_c_th": opts.get("C", {}).get("th", ""),
-            "answer_c_en": opts.get("C", {}).get("en", ""),
-            "answer_d_no": opts.get("D", {}).get("no", ""),
-            "answer_d_th": opts.get("D", {}).get("th", ""),
-            "answer_d_en": opts.get("D", {}).get("en", ""),
-            "correct_answer": q.get("correctOptionId", ""),
-            "explanation_no": q.get("explanation", {}).get("no", ""),
-            "explanation_th": q.get("explanation", {}).get("th", ""),
-            "explanation_en": q.get("explanation", {}).get("en", ""),
-            "category": q.get("category", ""),
-            "difficulty": q.get("difficulty", "easy"),
-            "image_url": q.get("bildeUrl"),
-            "created_at": q.get("created_at", ""),
-        }
+    """No-op: all questions are now v2 schema. Remove _id for JSON serialization."""
+    q.pop("_id", None)
     return q
 
 app = FastAPI()
@@ -276,7 +249,7 @@ async def get_random_questions(category: Optional[str] = None, count: int = Quer
     questions = await db.questions.aggregate(pipeline).to_list(count)
     return [normalize_question(q) for q in questions]
 
-@api_router.get("/questions/{question_id}", response_model=Question)
+@api_router.get("/questions/{question_id}")
 async def get_question(question_id: str):
     question = await db.questions.find_one({"id": question_id}, {"_id": 0})
     if not question:

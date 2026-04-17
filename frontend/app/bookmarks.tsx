@@ -73,18 +73,16 @@ export default function BookmarksScreen() {
   };
 
   const getQuestionText = (q: Question) => {
-    const key = `question_text_${language}` as keyof Question;
-    return q[key] as string || q.question_text_no;
+    return q.question?.[language] || q.question?.no || '';
   };
 
-  const getAnswerText = (q: Question, letter: string) => {
-    const key = `answer_${letter.toLowerCase()}_${language}` as keyof Question;
-    return q[key] as string || (q as any)[`answer_${letter.toLowerCase()}_no`];
+  const getAnswerText = (q: Question, optId: string) => {
+    const opt = q.options?.find(o => o.id === optId);
+    return opt?.text?.[language] || opt?.text?.no || '';
   };
 
   const getExplanation = (q: Question) => {
-    const key = `explanation_${language}` as keyof Question;
-    return q[key] as string || q.explanation_no;
+    return q.explanation?.[language] || q.explanation?.no || '';
   };
 
   if (loading) {
@@ -147,9 +145,9 @@ export default function BookmarksScreen() {
                     <View style={styles.answerSection}>
                       <Text style={styles.answerLabel}>{t.answer}:</Text>
                       <View style={styles.correctAnswer}>
-                        <Text style={styles.correctLetter}>{question.correct_answer}</Text>
+                        <Text style={styles.correctLetter}>{question.correctOptionId}</Text>
                         <Text style={styles.correctText}>
-                          {getAnswerText(question, question.correct_answer)}
+                          {getAnswerText(question, question.correctOptionId)}
                         </Text>
                       </View>
                     </View>

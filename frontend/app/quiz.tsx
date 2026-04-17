@@ -73,14 +73,19 @@ export default function QuizScreen() {
   }, [hist, questions.length]);
 
   const q = questions[idx];
-  const qT = (qu: Question, l?: string) => (qu as any)[`question_text_${l || language}`] || qu.question_text_no;
-  const aT = (qu: Question, L: string, l?: string) => (qu as any)[`answer_${L.toLowerCase()}_${l || language}`] || (qu as any)[`answer_${L.toLowerCase()}_no`];
-  const eT = (qu: Question, l?: string) => (qu as any)[`explanation_${l || language}`] || qu.explanation_no;
+
+  // V2 helpers: access localized text from nested schema
+  const qT = (qu: Question, l?: string) => qu.question?.[l || language] || qu.question?.no || '';
+  const optText = (qu: Question, optId: string, l?: string) => {
+    const opt = qu.options?.find(o => o.id === optId);
+    return opt?.text?.[l || language] || opt?.text?.no || '';
+  };
+  const eT = (qu: Question, l?: string) => qu.explanation?.[l || language] || qu.explanation?.no || '';
 
   const handleCheck = async () => {
     if (!sel || !q) return;
     setDone(true);
-    const cor = sel === q.correct_answer;
+    const cor = sel === q.correctOptionId;
 
     // Animate: subtle scale press on correct
     if (cor) {
@@ -158,12 +163,12 @@ export default function QuizScreen() {
     if (language !== 'th') segments.push({ text: qT(q, 'th'), lang: 'th' });
     // Answer options in current language
     for (const L of LETTERS) {
-      segments.push({ text: `${L}. ${aT(q, L)}`, lang: language });
+      segments.push({ text: `${L}. ${optText(q, L)}`, lang: language });
     }
     // Answer options in Thai
     if (language !== 'th') {
       for (const L of LETTERS) {
-        segments.push({ text: `${L}. ${aT(q, L, 'th')}`, lang: 'th' });
+        segments.push({ text: `${L}. ${optText(q, L, 'th')}`, lang: 'th' });
       }
     }
 
@@ -233,10 +238,10 @@ export default function QuizScreen() {
         <Animated.View style={{ opacity: fade, transform: [{ scale: scaleAnim }] }}>
           {/* Question */}
           <View style={[st.qCard, { backgroundColor: c.card, borderColor: c.cardBorder }]}>
-            {q.image_url ? (
+            {q.bildeUrl ? (
               <Image
                 testID="question-image"
-                source={{ uri: q.image_url }}
+                source={{ uri: q.bildeUrl }}
                 style={[st.qImg, { borderColor: c.cardBorder }]}
                 resizeMode="contain"
               />
@@ -274,7 +279,7 @@ export default function QuizScreen() {
           {/* Answers with glow */}
           <View style={st.aW}>
             {LETTERS.map((L) => {
-              const isSel = sel === L, isCor = q.correct_answer === L;
+              const isSel = sel === L, isCor = q.correctOptionId === L;
               let bg = c.answerBg, border = c.answerBorder, txt = c.text, letBg = c.letterBg, dim = false;
               if (done) {
                 if (isCor) { bg = c.correctBg; border = c.correct; txt = c.correct; letBg = c.correct; }
@@ -290,7 +295,7 @@ export default function QuizScreen() {
                   )}
                   <TouchableOpacity testID={`answer-btn-${L}`} style={[st.aBtn, { backgroundColor: bg, borderColor: border }, dim && st.dim]} onPress={() => !done && setSel(L)} disabled={done} activeOpacity={0.7}>
                     <View style={[st.lC, { backgroundColor: letBg }]}><Text style={st.lT}>{L}</Text></View>
-                    <Text style={[st.aTxt, { color: txt }]}>{aT(q, L)}</Text>
+                    <Text style={[st.aTxt, { color: txt }]}>{optText(q, L)}</Text>
                     {done && isCor && <Ionicons name="checkmark-circle" size={20} color={c.correct} />}
                     {done && isSel && !isCor && <Ionicons name="close-circle" size={20} color={c.incorrect} />}
                   </TouchableOpacity>
@@ -303,8 +308,8 @@ export default function QuizScreen() {
           {done && (
             <View style={st.fb}>
               <View style={st.fbR}>
-                <Ionicons name={sel === q.correct_answer ? 'checkmark-circle' : 'close-circle'} size={15} color={sel === q.correct_answer ? '#6EE7A8' : c.incorrect} />
-                <Text style={[st.fbS, { color: sel === q.correct_answer ? '#6EE7A8' : c.incorrect }]}>{sel === q.correct_answer ? t.correct : t.incorrect}</Text>
+                <Ionicons name={sel === q.correctOptionId ? 'checkmark-circle' : 'close-circle'} size={15} color={sel === q.correctOptionId ? '#6EE7A8' : c.incorrect} />
+                <Text style={[st.fbS, { color: sel === q.correctOptionId ? '#6EE7A8' : c.incorrect }]}>{sel === q.correctOptionId ? t.correct : t.incorrect}</Text>
                 <TouchableOpacity testID="tts-explanation-btn" style={[st.ttsSmall, { opacity: ttsPlaying === 'explanation' ? 1 : 0.4 }]} onPress={speakExplanation} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
                   <Ionicons name={ttsPlaying === 'explanation' ? 'volume-high' : 'volume-medium-outline'} size={15} color={ttsPlaying === 'explanation' ? c.accent : c.textSecondary} />
                 </TouchableOpacity>
