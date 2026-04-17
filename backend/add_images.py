@@ -1,4 +1,4 @@
-"""Add images to existing questions in MongoDB."""
+"""Add 5 more images to existing questions in MongoDB."""
 import asyncio
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
@@ -11,29 +11,29 @@ DB_NAME = os.environ["DB_NAME"]
 
 UPDATES = [
     {
-        "match": {"question.no": "Hva betyr dette skiltet?", "explanation.no": {"$regex": "sporvogn"}},
-        "bildeUrl": "https://customer-assets.emergentagent.com/job_norge-quiz-app/artifacts/ong4hk41_Screenshot_20260418_001748.jpg",
-        "label": "Holdeplass for sporvogn (foto)"
+        "match": {"explanation.no": {"$regex": "farlig gods"}},
+        "bildeUrl": "https://customer-assets.emergentagent.com/job_norge-quiz-app/artifacts/4bd47d04_Screenshot_20260418_001534.jpg",
+        "label": "Farlig last (tankbil)"
     },
     {
-        "match": {"question.no": "Hva er riktig om dette skiltet?", "explanation.no": {"$regex": "sporvogn"}},
-        "bildeUrl": "https://customer-assets.emergentagent.com/job_norge-quiz-app/artifacts/onq6ww58_Screenshot_20260418_001754.jpg",
-        "label": "Sporvogn-skilt (ikon)"
+        "match": {"question.no": {"$regex": "privat.*velseskj.*ring"}},
+        "bildeUrl": "https://customer-assets.emergentagent.com/job_norge-quiz-app/artifacts/9zoe6e32_Screenshot_20260418_001625.jpg",
+        "label": "Privat øvelseskjøring (L-merke)"
     },
     {
-        "match": {"question.no": "Oppgaven handler om biler som bruker fossilt drivstoff. Hva er riktig?"},
-        "bildeUrl": "https://customer-assets.emergentagent.com/job_norge-quiz-app/artifacts/69oye0n4_Screenshot_20260418_001842.jpg",
-        "label": "Fossilt drivstoff (vinter-gate)"
+        "match": {"question.no": {"$regex": "riktig.*anta.*skiltet"}, "explanation.no": {"$regex": "forkj.*rsvei"}},
+        "bildeUrl": "https://customer-assets.emergentagent.com/job_norge-quiz-app/artifacts/p3vlt7di_Screenshot_20260418_001603.jpg",
+        "label": "Forkjørsvei-skilt (diamant)"
     },
     {
-        "match": {"question.no": "Hva viser dette skiltet?", "explanation.no": {"$regex": "tjenester"}},
-        "bildeUrl": "https://customer-assets.emergentagent.com/job_norge-quiz-app/artifacts/x3p79wdk_Screenshot_20260418_001859.jpg",
-        "label": "Epleby service-skilt"
+        "match": {"question.no": {"$regex": "kantlinjen.*stiplet"}},
+        "bildeUrl": "https://customer-assets.emergentagent.com/job_norge-quiz-app/artifacts/5wpcoc9b_Screenshot_20260418_001743.jpg",
+        "label": "Stiplet kantlinje (vei)"
     },
     {
-        "match": {"explanation.no": {"$regex": "parkering ikke er tillatt"}},
-        "bildeUrl": "https://customer-assets.emergentagent.com/job_norge-quiz-app/artifacts/n6tx0uqf_Screenshot_20260418_001827.jpg",
-        "label": "Parkering forbudt (P-skilt)"
+        "match": {"question.no": {"$regex": "Hvor langt er 3 sekunders"}},
+        "bildeUrl": "https://customer-assets.emergentagent.com/job_norge-quiz-app/artifacts/u3yvajv6_Screenshot_20260418_001638.jpg",
+        "label": "3 sekunders avstand (motorvei)"
     },
 ]
 
