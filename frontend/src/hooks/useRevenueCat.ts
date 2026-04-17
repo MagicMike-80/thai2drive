@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { Platform } from 'react-native';
 
-// RevenueCat product identifiers (must match RevenueCat dashboard)
+// RevenueCat product identifiers — must match RevenueCat dashboard
 export const PRODUCT_IDS = {
   WEEKLY: 'weekly_99',
   MONTHLY: 'monthly_199',
@@ -9,20 +9,22 @@ export const PRODUCT_IDS = {
 
 export const ENTITLEMENT_ID = 'pro';
 
-interface RCPackage {
-  identifier: string;
-  productId: string;
+export interface RCPackage {
+  identifier: string;       // e.g. "$rc_weekly", "$rc_monthly"
+  productId: string;        // e.g. "weekly_99", "monthly_199"
   priceString: string;
   title: string;
+  _raw: any;                // raw package for purchasePackage()
 }
 
 interface UseRevenueCatReturn {
-  isReady: boolean;
+  isAvailable: boolean;     // true on native after init
   packages: RCPackage[];
   isPremium: boolean;
   purchasing: boolean;
   error: string | null;
-  purchase: (packageId: string) => Promise<boolean>;
+  clearError: () => void;
+  purchase: (productId: string) => Promise<boolean>;
   restore: () => Promise<boolean>;
   checkEntitlement: () => Promise<boolean>;
 }
@@ -30,7 +32,6 @@ interface UseRevenueCatReturn {
 let Purchases: any = null;
 let rcInitialized = false;
 
-// Lazy load RevenueCat — only available on native platforms
 async function initRC(): Promise<boolean> {
   if (rcInitialized) return true;
   if (Platform.OS === 'web') return false;
@@ -41,71 +42,79 @@ async function initRC(): Promise<boolean> {
 
     const apiKey = process.env.EXPO_PUBLIC_RC_API_KEY;
     if (!apiKey) {
-      console.warn('[RevenueCat] No API key found');
+      console.warn('[RC] No API key');
       return false;
     }
 
     Purchases.setLogLevel(mod.LOG_LEVEL.VERBOSE);
     Purchases.configure({ apiKey });
     rcInitialized = true;
-    console.log('[RevenueCat] Initialized successfully');
+    console.log('[RC] Initialized');
     return true;
   } catch (e) {
-    console.warn('[RevenueCat] Not available on this platform:', e);
+    console.warn('[RC] Not available:', e);
     return false;
   }
 }
 
 export function useRevenueCat(): UseRevenueCatReturn {
-  const [isReady, setIsReady] = useState(false);
+  const [isAvailable, setIsAvailable] = useState(false);
   const [packages, setPackages] = useState<RCPackage[]>([]);
   const [isPremium, setIsPremium] = useState(false);
   const [purchasing, setPurchasing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    let mounted = true;
+    let alive = true;
 
-    const setup = async () => {
+    (async () => {
       const ok = await initRC();
-      if (!ok || !mounted) {
-        if (mounted) setIsReady(false);
-        return;
-      }
+      if (!ok || !alive) return;
 
       try {
-        // Fetch offerings
+        // Load offerings → packages
         const offerings = await Purchases.getOfferings();
-        if (offerings?.current?.availablePackages && mounted) {
-          const pkgs: RCPackage[] = offerings.current.availablePackages.map((p: any) => ({
-            identifier: p.identifier,
-            productId: p.product?.identifier || p.identifier,
-            priceString: p.product?.priceString || '',
-            title: p.product?.title || p.identifier,
-          }));
-          setPackages(pkgs);
+        if (offerings?.current?.availablePackages && alive) {
+          setPackages(
+            offerings.current.availablePackages.map((p: any) => ({
+              identifier: p.identifier,
+              productId: p.product?.identifier || p.identifier,
+              priceString: p.product?.priceString || '',
+              title: p.product?.title || p.identifier,
+              _raw: p,
+            }))
+          );
         }
 
-        // Check entitlement
-        const customerInfo = await Purchases.getCustomerInfo();
-        if (mounted) {
-          const active = customerInfo?.entitlements?.active?.[ENTITLEMENT_ID];
-          setIsPremium(!!active?.isActive);
-          setIsReady(true);
+        // Check current entitlement
+        const info = await Purchases.getCustomerInfo();
+        if (alive) {
+          setIsPremium(!!info?.entitlements?.active?.[ENTITLEMENT_ID]?.isActive);
+          setIsAvailable(true);
         }
       } catch (e: any) {
-        console.warn('[RevenueCat] Setup error:', e.message);
-        if (mounted) setIsReady(true); // Still mark ready so UI doesn't hang
+        console.warn('[RC] Setup:', e.message);
+        if (alive) setIsAvailable(true);
       }
-    };
+    })();
 
-    setup();
-    return () => { mounted = false; };
+    // Listen for subscription changes
+    let unsub: any;
+    if (Purchases && rcInitialized) {
+      unsub = Purchases.addCustomerInfoUpdateListener((info: any) => {
+        setIsPremium(!!info?.entitlements?.active?.[ENTITLEMENT_ID]?.isActive);
+      });
+    }
+
+    return () => { alive = false; unsub?.remove?.(); };
   }, []);
 
-  const purchase = useCallback(async (packageId: string): Promise<boolean> => {
+  const clearError = useCallback(() => setError(null), []);
+
+  // Purchase a package by product ID (e.g. "weekly_99")
+  const purchase = useCallback(async (productId: string): Promise<boolean> => {
     if (!Purchases || !rcInitialized) {
-      setError('Betaling er ikke tilgjengelig i nettleseren. Bruk appen på mobilen.');
+      setError('Betaling krever mobilappen. Ikke tilgjengelig i nettleseren.');
       return false;
     }
 
@@ -113,44 +122,43 @@ export function useRevenueCat(): UseRevenueCatReturn {
     setError(null);
 
     try {
+      // Find matching package from loaded offerings
       const offerings = await Purchases.getOfferings();
-      const pkg = offerings?.current?.availablePackages?.find(
-        (p: any) => p.identifier === packageId || p.product?.identifier === packageId
+      const allPkgs = offerings?.current?.availablePackages || [];
+
+      const pkg = allPkgs.find(
+        (p: any) => p.product?.identifier === productId || p.identifier === productId
       );
 
       if (!pkg) {
-        setError('Produktet ble ikke funnet. Prøv igjen.');
+        setError('Produktet ble ikke funnet. Sjekk RevenueCat-oppsettet.');
         setPurchasing(false);
         return false;
       }
 
       const { customerInfo } = await Purchases.purchasePackage(pkg);
-      const active = customerInfo?.entitlements?.active?.[ENTITLEMENT_ID];
+      const active = !!customerInfo?.entitlements?.active?.[ENTITLEMENT_ID]?.isActive;
 
-      if (active?.isActive) {
+      if (active) {
         setIsPremium(true);
         setPurchasing(false);
         return true;
-      } else {
-        setError('Kjøpet gikk gjennom, men tilgangen ble ikke aktivert. Prøv "Gjenopprett kjøp".');
-        setPurchasing(false);
-        return false;
       }
-    } catch (e: any) {
-      if (e.userCancelled) {
-        // User cancelled — not an error
-        setPurchasing(false);
-        return false;
-      }
-      setError(e.message || 'Noe gikk galt med betalingen');
+
+      setError('Kjøpet fullførte, men tilgang ble ikke aktivert. Prøv "Gjenopprett kjøp".');
       setPurchasing(false);
+      return false;
+    } catch (e: any) {
+      setPurchasing(false);
+      if (e.userCancelled) return false;
+      setError(e.message || 'Betalingsfeil');
       return false;
     }
   }, []);
 
   const restore = useCallback(async (): Promise<boolean> => {
     if (!Purchases || !rcInitialized) {
-      setError('Gjenoppretting er ikke tilgjengelig i nettleseren.');
+      setError('Gjenoppretting krever mobilappen.');
       return false;
     }
 
@@ -158,18 +166,13 @@ export function useRevenueCat(): UseRevenueCatReturn {
     setError(null);
 
     try {
-      const customerInfo = await Purchases.restorePurchases();
-      const active = customerInfo?.entitlements?.active?.[ENTITLEMENT_ID];
+      const info = await Purchases.restorePurchases();
+      const active = !!info?.entitlements?.active?.[ENTITLEMENT_ID]?.isActive;
+      setIsPremium(active);
+      setPurchasing(false);
 
-      if (active?.isActive) {
-        setIsPremium(true);
-        setPurchasing(false);
-        return true;
-      } else {
-        setError('Ingen tidligere kjøp funnet.');
-        setPurchasing(false);
-        return false;
-      }
+      if (!active) setError('Ingen tidligere kjøp funnet.');
+      return active;
     } catch (e: any) {
       setError(e.message || 'Gjenoppretting feilet');
       setPurchasing(false);
@@ -179,17 +182,13 @@ export function useRevenueCat(): UseRevenueCatReturn {
 
   const checkEntitlement = useCallback(async (): Promise<boolean> => {
     if (!Purchases || !rcInitialized) return false;
-
     try {
-      const customerInfo = await Purchases.getCustomerInfo();
-      const active = customerInfo?.entitlements?.active?.[ENTITLEMENT_ID];
-      const hasPremium = !!active?.isActive;
-      setIsPremium(hasPremium);
-      return hasPremium;
-    } catch {
-      return false;
-    }
+      const info = await Purchases.getCustomerInfo();
+      const active = !!info?.entitlements?.active?.[ENTITLEMENT_ID]?.isActive;
+      setIsPremium(active);
+      return active;
+    } catch { return false; }
   }, []);
 
-  return { isReady, packages, isPremium, purchasing, error, purchase, restore, checkEntitlement };
+  return { isAvailable, packages, isPremium, purchasing, error, clearError, purchase, restore, checkEntitlement };
 }
