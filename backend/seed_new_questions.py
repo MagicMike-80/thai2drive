@@ -1,4 +1,4 @@
-"""Seed 10 new questions with full NO/TH/EN translations (v2 schema)."""
+"""Seed 5 new questions with images, mapped from user format to v2 schema."""
 import asyncio
 from motor.motor_asyncio import AsyncIOMotorClient
 from datetime import datetime, timezone
@@ -10,17 +10,74 @@ load_dotenv()
 MONGO_URL = os.environ["MONGO_URL"]
 DB_NAME = os.environ["DB_NAME"]
 
-RAW = [
-{"sporsmal_NO":"Hva betyr rødt lys i trafikklys?","sporsmal_TH":"ไฟแดงหมายถึงอะไร?","sporsmal_EN":"What does a red traffic light mean?","alternativA":"Kjør","alternativB":"Stopp","alternativC":"Vent","alternativD":"Ignorer","riktigSvar":"B","forklaring_NO":"Rødt lys betyr full stopp.","forklaring_TH":"ไฟแดงหมายถึงต้องหยุด","forklaring_EN":"Red light means full stop","kategori":"Road Rules","difficulty":"easy"},
-{"sporsmal_NO":"Hvem har vikeplikt i et kryss uten skilt?","sporsmal_TH":"ใครต้องให้ทางในทางแยกที่ไม่มีป้าย?","sporsmal_EN":"Who must yield at an unmarked intersection?","alternativA":"Den til høyre","alternativB":"Den til venstre","alternativC":"Ingen","alternativD":"Begge","riktigSvar":"A","forklaring_NO":"Høyre-regelen gjelder.","forklaring_TH":"ใช้กฎให้ทางขวา","forklaring_EN":"Right-hand rule applies","kategori":"Right of Way","difficulty":"easy"},
-{"sporsmal_NO":"Hva er maksimal fartsgrense i tettbygd strøk?","sporsmal_TH":"ความเร็วสูงสุดในเขตเมืองคือเท่าไหร่?","sporsmal_EN":"What is the speed limit in urban areas?","alternativA":"40","alternativB":"50","alternativC":"60","alternativD":"70","riktigSvar":"B","forklaring_NO":"Standard er 50 km/t.","forklaring_TH":"มาตรฐานคือ 50 กม./ชม.","forklaring_EN":"Standard is 50 km/h","kategori":"Speed Limits","difficulty":"easy"},
-{"sporsmal_NO":"Hva betyr blått skilt?","sporsmal_TH":"ป้ายสีน้ำเงินหมายถึงอะไร?","sporsmal_EN":"What does a blue sign mean?","alternativA":"Forbud","alternativB":"Påbud","alternativC":"Fare","alternativD":"Stopp","riktigSvar":"B","forklaring_NO":"Blått skilt betyr påbud.","forklaring_TH":"ป้ายสีน้ำเงินคือคำสั่ง","forklaring_EN":"Blue sign means mandatory instruction","kategori":"Traffic Signs","difficulty":"easy"},
-{"sporsmal_NO":"Hva må du gjøre ved glatt føre?","sporsmal_TH":"ควรทำอย่างไรเมื่อถนนลื่น?","sporsmal_EN":"What should you do on slippery roads?","alternativA":"Øke fart","alternativB":"Holde samme fart","alternativC":"Redusere fart","alternativD":"Ignorere","riktigSvar":"C","forklaring_NO":"Du må redusere fart.","forklaring_TH":"ต้องลดความเร็ว","forklaring_EN":"You must reduce speed","kategori":"Safety","difficulty":"easy"},
-{"sporsmal_NO":"Hva er reaksjonslengde?","sporsmal_TH":"ระยะตอบสนองคืออะไร?","sporsmal_EN":"What is reaction distance?","alternativA":"Bremselengde","alternativB":"Før du reagerer","alternativC":"Total stopp","alternativD":"Fart","riktigSvar":"B","forklaring_NO":"Strekning før du begynner å bremse.","forklaring_TH":"ระยะก่อนเริ่มเบรก","forklaring_EN":"Distance before braking starts","kategori":"Safety","difficulty":"easy"},
-{"sporsmal_NO":"Hva betyr gult lys?","sporsmal_TH":"ไฟเหลืองหมายถึงอะไร?","sporsmal_EN":"What does a yellow light mean?","alternativA":"Kjør","alternativB":"Stopp hvis mulig","alternativC":"Øk fart","alternativD":"Ignorer","riktigSvar":"B","forklaring_NO":"Du skal stoppe hvis mulig.","forklaring_TH":"ควรหยุดถ้าทำได้","forklaring_EN":"Stop if you can","kategori":"Road Rules","difficulty":"easy"},
-{"sporsmal_NO":"Når skal du bruke refleksvest?","sporsmal_TH":"ควรใส่เสื้อสะท้อนแสงเมื่อไหร่?","sporsmal_EN":"When should you wear a reflective vest?","alternativA":"Alltid","alternativB":"Ved nødstopp","alternativC":"Kun natt","alternativD":"Aldri","riktigSvar":"B","forklaring_NO":"Ved nødstopp på vei.","forklaring_TH":"เมื่อหยุดฉุกเฉิน","forklaring_EN":"During emergency stops","kategori":"Safety","difficulty":"easy"},
-{"sporsmal_NO":"Hvem har høyest autoritet i trafikken?","sporsmal_TH":"ใครมีอำนาจสูงสุดในจราจร?","sporsmal_EN":"Who has the highest authority in traffic?","alternativA":"Trafikklys","alternativB":"Skilt","alternativC":"Politi","alternativD":"Sjåfør","riktigSvar":"C","forklaring_NO":"Politi gjelder over alt.","forklaring_TH":"ตำรวจมีอำนาจสูงสุด","forklaring_EN":"Police override all","kategori":"Road Rules","difficulty":"easy"},
-{"sporsmal_NO":"Hva er riktig avstand bak bil?","sporsmal_TH":"ควรเว้นระยะห่างเท่าไหร่?","sporsmal_EN":"What is the correct following distance?","alternativA":"1 sek","alternativB":"2 sek","alternativC":"3 sek","alternativD":"5 sek","riktigSvar":"C","forklaring_NO":"3-sekundersregelen.","forklaring_TH":"กฎ 3 วินาที","forklaring_EN":"3-second rule","kategori":"Safety","difficulty":"easy"},
+LETTERS = ["A", "B", "C", "D"]
+
+QUESTIONS = [
+    {
+        "q": {"no": "Du ligger i feltet lengst til høyre og ser dette skiltet. Hvem får vikeplikt?", "th": "คุณอยู่เลนขวาสุดและเห็นป้ายนี้ ใครต้องให้ทาง?", "en": "You are in the far right lane and see this sign. Who must yield?"},
+        "opts": [
+            {"no": "Du må gi vikeplikt", "th": "คุณต้องให้ทาง", "en": "You must yield"},
+            {"no": "De i venstre felt må gi vikeplikt", "th": "รถเลนซ้ายต้องให้ทาง", "en": "Vehicles in the left lane must yield"},
+            {"no": "Ingen har vikeplikt", "th": "ไม่มีใครต้องให้ทาง", "en": "No one must yield"},
+            {"no": "Alle må stoppe", "th": "ทุกคนต้องหยุด", "en": "Everyone must stop"},
+        ],
+        "correct": "A",
+        "expl": {"no": "Feltet ditt opphører, du må vike for trafikk i de andre feltene.", "th": "เลนของคุณสิ้นสุด คุณต้องให้ทาง", "en": "Your lane ends, you must yield to other traffic"},
+        "img": "https://customer-assets.emergentagent.com/job_norge-quiz-app/artifacts/bj1n262b_Screenshot_20260418_001120.jpg",
+        "cat": "Right of Way", "diff": "medium",
+    },
+    {
+        "q": {"no": "Kan du kjøre inn her?", "th": "คุณสามารถขับเข้าไปได้ไหม?", "en": "Can you drive in here?"},
+        "opts": [
+            {"no": "Ja", "th": "ได้", "en": "Yes"},
+            {"no": "Nei", "th": "ไม่ได้", "en": "No"},
+            {"no": "Kun hvis det er kort stopp", "th": "ได้ถ้าหยุดสั้นๆ", "en": "Only for a short stop"},
+            {"no": "Kun for beboere", "th": "เฉพาะผู้อยู่อาศัย", "en": "Only for residents"},
+        ],
+        "correct": "B",
+        "expl": {"no": "Skiltet 'Innkjøring forbudt' gjelder alle kjøretøy.", "th": "ป้ายห้ามเข้าใช้กับรถทุกคัน", "en": "No entry sign applies to all vehicles"},
+        "img": "https://customer-assets.emergentagent.com/job_norge-quiz-app/artifacts/t5ff66u0_Screenshot_20260418_001132.jpg",
+        "cat": "Traffic Signs", "diff": "easy",
+    },
+    {
+        "q": {"no": "Kan du stanse i busslomme?", "th": "คุณสามารถหยุดในป้ายรถเมล์ได้ไหม?", "en": "Can you stop in a bus stop bay?"},
+        "opts": [
+            {"no": "Ja, alltid", "th": "ได้เสมอ", "en": "Yes, always"},
+            {"no": "Nei", "th": "ไม่ได้", "en": "No"},
+            {"no": "Kun for av- og påstigning", "th": "ได้เฉพาะรับส่ง", "en": "Only for pick up/drop off"},
+            {"no": "Kun om natten", "th": "ได้เฉพาะกลางคืน", "en": "Only at night"},
+        ],
+        "correct": "B",
+        "expl": {"no": "Busslommer er reservert for buss.", "th": "ป้ายรถเมล์ใช้สำหรับรถบัสเท่านั้น", "en": "Bus bays are reserved for buses"},
+        "img": "https://customer-assets.emergentagent.com/job_norge-quiz-app/artifacts/mlebzttq_Screenshot_20260418_001143.jpg",
+        "cat": "Road Rules", "diff": "easy",
+    },
+    {
+        "q": {"no": "Utenfor tettbygd strøk er fareskilt vanligvis plassert hvor langt før faren?", "th": "นอกเขตเมือง ป้ายเตือนมักอยู่ห่างจากอันตรายเท่าไหร่?", "en": "Outside urban areas, how far before danger are warning signs usually placed?"},
+        "opts": [
+            {"no": "50 meter", "th": "50 เมตร", "en": "50 meters"},
+            {"no": "100 meter", "th": "100 เมตร", "en": "100 meters"},
+            {"no": "150–250 meter", "th": "150–250 เมตร", "en": "150–250 meters"},
+            {"no": "500 meter", "th": "500 เมตร", "en": "500 meters"},
+        ],
+        "correct": "C",
+        "expl": {"no": "Vanlig plassering er 150–250 meter før faren.", "th": "โดยปกติอยู่ห่าง 150–250 เมตร", "en": "Usually placed 150–250 meters before danger"},
+        "img": "https://customer-assets.emergentagent.com/job_norge-quiz-app/artifacts/xooyv9pt_Screenshot_20260418_001152.jpg",
+        "cat": "Traffic Signs", "diff": "medium",
+    },
+    {
+        "q": {"no": "Hva er minimumskravet til mønsterdybde for sommerdekk?", "th": "ความลึกดอกยางขั้นต่ำของยางฤดูร้อนคือเท่าไหร่?", "en": "What is the minimum tread depth for summer tires?"},
+        "opts": [
+            {"no": "1,0 mm", "th": "1.0 มม.", "en": "1.0 mm"},
+            {"no": "1,6 mm", "th": "1.6 มม.", "en": "1.6 mm"},
+            {"no": "3,0 mm", "th": "3.0 มม.", "en": "3.0 mm"},
+            {"no": "5,0 mm", "th": "5.0 มม.", "en": "5.0 mm"},
+        ],
+        "correct": "B",
+        "expl": {"no": "Minimum er 1,6 mm for sommerdekk.", "th": "ขั้นต่ำคือ 1.6 มม.", "en": "Minimum is 1.6 mm"},
+        "img": "https://customer-assets.emergentagent.com/job_norge-quiz-app/artifacts/jvy3e6d4_Screenshot_20260418_001209.jpg",
+        "cat": "Safety", "diff": "easy",
+    },
 ]
 
 async def seed():
@@ -29,35 +86,32 @@ async def seed():
     inserted = 0
     skipped = 0
 
-    for q in RAW:
+    for q in QUESTIONS:
+        existing = await db.questions.find_one({"question.no": q["q"]["no"]})
+        if existing:
+            skipped += 1
+            continue
+
         doc = {
             "id": str(uuid.uuid4()),
-            "question": {"no": q["sporsmal_NO"], "th": q["sporsmal_TH"], "en": q["sporsmal_EN"]},
-            "options": [
-                {"id": "A", "text": {"no": q["alternativA"], "th": q["alternativA"], "en": q["alternativA"]}},
-                {"id": "B", "text": {"no": q["alternativB"], "th": q["alternativB"], "en": q["alternativB"]}},
-                {"id": "C", "text": {"no": q["alternativC"], "th": q["alternativC"], "en": q["alternativC"]}},
-                {"id": "D", "text": {"no": q["alternativD"], "th": q["alternativD"], "en": q["alternativD"]}},
-            ],
-            "correctOptionId": q["riktigSvar"],
-            "explanation": {"no": q["forklaring_NO"], "th": q["forklaring_TH"], "en": q["forklaring_EN"]},
-            "bildeUrl": None,
-            "category": q["kategori"],
-            "difficulty": q["difficulty"],
+            "question": q["q"],
+            "options": [{"id": LETTERS[i], "text": q["opts"][i]} for i in range(4)],
+            "correctOptionId": q["correct"],
+            "explanation": q["expl"],
+            "bildeUrl": q["img"],
+            "category": q["cat"],
+            "difficulty": q["diff"],
             "active": True,
             "schema_version": 2,
             "created_at": datetime.now(timezone.utc).isoformat(),
         }
-        existing = await db.questions.find_one({"question.no": q["sporsmal_NO"], "question.th": q["sporsmal_TH"]})
-        if existing:
-            skipped += 1
-            continue
         await db.questions.insert_one(doc)
         inserted += 1
 
     print(f"Done! Inserted: {inserted}, Skipped: {skipped}")
+    with_images = await db.questions.count_documents({"bildeUrl": {"$ne": None, "$ne": ""}})
     total = await db.questions.count_documents({})
-    print(f"Total questions: {total}")
+    print(f"Questions with images: {with_images}/{total}")
     client.close()
 
 asyncio.run(seed())
