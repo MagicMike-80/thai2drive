@@ -1,4 +1,4 @@
-"""Seed 5 new questions with images, mapped from user format to v2 schema."""
+"""Seed 4 new questions with images, mapped to v2 schema."""
 import asyncio
 from motor.motor_asyncio import AsyncIOMotorClient
 from datetime import datetime, timezone
@@ -14,68 +14,55 @@ LETTERS = ["A", "B", "C", "D"]
 
 QUESTIONS = [
     {
-        "q": {"no": "Du ligger i feltet lengst til høyre og ser dette skiltet. Hvem får vikeplikt?", "th": "คุณอยู่เลนขวาสุดและเห็นป้ายนี้ ใครต้องให้ทาง?", "en": "You are in the far right lane and see this sign. Who must yield?"},
+        "q": {"no": "Hva slags skilt er dette?", "th": "ป้ายนี้คือป้ายประเภทใด?", "en": "What type of sign is this?"},
         "opts": [
-            {"no": "Du må gi vikeplikt", "th": "คุณต้องให้ทาง", "en": "You must yield"},
-            {"no": "De i venstre felt må gi vikeplikt", "th": "รถเลนซ้ายต้องให้ทาง", "en": "Vehicles in the left lane must yield"},
-            {"no": "Ingen har vikeplikt", "th": "ไม่มีใครต้องให้ทาง", "en": "No one must yield"},
-            {"no": "Alle må stoppe", "th": "ทุกคนต้องหยุด", "en": "Everyone must stop"},
+            {"no": "Påbudsskilt", "th": "ป้ายบังคับ", "en": "Mandatory sign"},
+            {"no": "Forbudsskilt", "th": "ป้ายห้าม", "en": "Prohibition sign"},
+            {"no": "Fareskilt", "th": "ป้ายเตือน", "en": "Warning sign"},
+            {"no": "Opplysningsskilt", "th": "ป้ายข้อมูล", "en": "Information sign"},
         ],
         "correct": "A",
-        "expl": {"no": "Feltet ditt opphører, du må vike for trafikk i de andre feltene.", "th": "เลนของคุณสิ้นสุด คุณต้องให้ทาง", "en": "Your lane ends, you must yield to other traffic"},
-        "img": "https://customer-assets.emergentagent.com/job_norge-quiz-app/artifacts/bj1n262b_Screenshot_20260418_001120.jpg",
-        "cat": "Right of Way", "diff": "medium",
-    },
-    {
-        "q": {"no": "Kan du kjøre inn her?", "th": "คุณสามารถขับเข้าไปได้ไหม?", "en": "Can you drive in here?"},
-        "opts": [
-            {"no": "Ja", "th": "ได้", "en": "Yes"},
-            {"no": "Nei", "th": "ไม่ได้", "en": "No"},
-            {"no": "Kun hvis det er kort stopp", "th": "ได้ถ้าหยุดสั้นๆ", "en": "Only for a short stop"},
-            {"no": "Kun for beboere", "th": "เฉพาะผู้อยู่อาศัย", "en": "Only for residents"},
-        ],
-        "correct": "B",
-        "expl": {"no": "Skiltet 'Innkjøring forbudt' gjelder alle kjøretøy.", "th": "ป้ายห้ามเข้าใช้กับรถทุกคัน", "en": "No entry sign applies to all vehicles"},
-        "img": "https://customer-assets.emergentagent.com/job_norge-quiz-app/artifacts/t5ff66u0_Screenshot_20260418_001132.jpg",
+        "expl": {"no": "Blå rund skilt viser påbud – her rundkjøring.", "th": "ป้ายวงกลมสีน้ำเงินคือป้ายบังคับ", "en": "Blue circular signs indicate mandatory instructions"},
+        "img": "https://customer-assets.emergentagent.com/job_norge-quiz-app/artifacts/2mh1jzh5_Screenshot_20260418_001033.jpg",
         "cat": "Traffic Signs", "diff": "easy",
     },
     {
-        "q": {"no": "Kan du stanse i busslomme?", "th": "คุณสามารถหยุดในป้ายรถเมล์ได้ไหม?", "en": "Can you stop in a bus stop bay?"},
+        "q": {"no": "Du kjører på motorvei med flere kjørefelt i samme retning. Hvordan bør du kjøre?", "th": "คุณขับบนมอเตอร์เวย์หลายเลน ควรขับอย่างไร?", "en": "You are driving on a motorway with multiple lanes. How should you drive?"},
         "opts": [
-            {"no": "Ja, alltid", "th": "ได้เสมอ", "en": "Yes, always"},
-            {"no": "Nei", "th": "ไม่ได้", "en": "No"},
-            {"no": "Kun for av- og påstigning", "th": "ได้เฉพาะรับส่ง", "en": "Only for pick up/drop off"},
-            {"no": "Kun om natten", "th": "ได้เฉพาะกลางคืน", "en": "Only at night"},
+            {"no": "Alltid i venstre felt", "th": "อยู่เลนซ้ายเสมอ", "en": "Always in left lane"},
+            {"no": "I høyre felt når det er mulig", "th": "ใช้เลนขวาเมื่อทำได้", "en": "Keep right when possible"},
+            {"no": "Midt i veien", "th": "ขับกลางถนน", "en": "Drive in the middle"},
+            {"no": "Velg tilfeldig felt", "th": "เลือกเลนตามใจ", "en": "Choose any lane randomly"},
         ],
         "correct": "B",
-        "expl": {"no": "Busslommer er reservert for buss.", "th": "ป้ายรถเมล์ใช้สำหรับรถบัสเท่านั้น", "en": "Bus bays are reserved for buses"},
-        "img": "https://customer-assets.emergentagent.com/job_norge-quiz-app/artifacts/mlebzttq_Screenshot_20260418_001143.jpg",
+        "expl": {"no": "Du skal holde til høyre og bruke venstre felt til forbikjøring.", "th": "ควรอยู่เลนขวา ใช้ซ้ายแซง", "en": "Keep right, use left lane for overtaking"},
+        "img": "https://customer-assets.emergentagent.com/job_norge-quiz-app/artifacts/qhmkgg8s_Screenshot_20260418_001044.jpg",
         "cat": "Road Rules", "diff": "easy",
     },
     {
-        "q": {"no": "Utenfor tettbygd strøk er fareskilt vanligvis plassert hvor langt før faren?", "th": "นอกเขตเมือง ป้ายเตือนมักอยู่ห่างจากอันตรายเท่าไหร่?", "en": "Outside urban areas, how far before danger are warning signs usually placed?"},
+        "q": {"no": "Hva varsler dette fareskiltet?", "th": "ป้ายเตือนนี้หมายถึงอะไร?", "en": "What does this warning sign indicate?"},
         "opts": [
-            {"no": "50 meter", "th": "50 เมตร", "en": "50 meters"},
-            {"no": "100 meter", "th": "100 เมตร", "en": "100 meters"},
-            {"no": "150–250 meter", "th": "150–250 เมตร", "en": "150–250 meters"},
-            {"no": "500 meter", "th": "500 เมตร", "en": "500 meters"},
+            {"no": "Kryssende vei fra høyre", "th": "มีทางแยกจากขวา", "en": "Side road from right"},
+            {"no": "Farlig sving", "th": "โค้งอันตราย", "en": "Dangerous bend"},
+            {"no": "Innsnevring", "th": "ถนนแคบ", "en": "Road narrows"},
+            {"no": "Rundkjøring", "th": "วงเวียน", "en": "Roundabout"},
         ],
-        "correct": "C",
-        "expl": {"no": "Vanlig plassering er 150–250 meter før faren.", "th": "โดยปกติอยู่ห่าง 150–250 เมตร", "en": "Usually placed 150–250 meters before danger"},
-        "img": "https://customer-assets.emergentagent.com/job_norge-quiz-app/artifacts/xooyv9pt_Screenshot_20260418_001152.jpg",
-        "cat": "Traffic Signs", "diff": "medium",
+        "correct": "A",
+        "expl": {"no": "Skiltet varsler vei som kommer inn fra høyre.", "th": "เตือนว่ามีถนนมาจากด้านขวา", "en": "Warns of a road joining from the right"},
+        "img": "https://customer-assets.emergentagent.com/job_norge-quiz-app/artifacts/zv04s9ru_Screenshot_20260418_001053.jpg",
+        "cat": "Traffic Signs", "diff": "easy",
     },
     {
-        "q": {"no": "Hva er minimumskravet til mønsterdybde for sommerdekk?", "th": "ความลึกดอกยางขั้นต่ำของยางฤดูร้อนคือเท่าไหร่?", "en": "What is the minimum tread depth for summer tires?"},
+        "q": {"no": "Hva må du være særlig oppmerksom på når du kjører i andre nordiske land?", "th": "เมื่อขับในประเทศนอร์ดิกอื่นต้องระวังอะไร?", "en": "What should you be especially aware of when driving in other Nordic countries?"},
         "opts": [
-            {"no": "1,0 mm", "th": "1.0 มม.", "en": "1.0 mm"},
-            {"no": "1,6 mm", "th": "1.6 มม.", "en": "1.6 mm"},
-            {"no": "3,0 mm", "th": "3.0 มม.", "en": "3.0 mm"},
-            {"no": "5,0 mm", "th": "5.0 มม.", "en": "5.0 mm"},
+            {"no": "At fartsgrensen alltid er høyere", "th": "ความเร็วสูงกว่าเสมอ", "en": "Speed limits are always higher"},
+            {"no": "At trafikkregler kan variere noe", "th": "กฎจราจรอาจต่างกัน", "en": "Traffic rules may vary slightly"},
+            {"no": "At det ikke finnes dyr i veien", "th": "ไม่มีสัตว์บนถนน", "en": "No animals on the road"},
+            {"no": "At lys ikke er nødvendig", "th": "ไม่ต้องเปิดไฟ", "en": "Lights are not required"},
         ],
         "correct": "B",
-        "expl": {"no": "Minimum er 1,6 mm for sommerdekk.", "th": "ขั้นต่ำคือ 1.6 มม.", "en": "Minimum is 1.6 mm"},
-        "img": "https://customer-assets.emergentagent.com/job_norge-quiz-app/artifacts/jvy3e6d4_Screenshot_20260418_001209.jpg",
+        "expl": {"no": "Regler og skilt kan variere noe mellom land.", "th": "กฎและป้ายอาจต่างกันเล็กน้อย", "en": "Rules and signs may vary between countries"},
+        "img": "https://customer-assets.emergentagent.com/job_norge-quiz-app/artifacts/a1vtqvo0_Screenshot_20260418_001102.jpg",
         "cat": "Safety", "diff": "easy",
     },
 ]
@@ -91,7 +78,6 @@ async def seed():
         if existing:
             skipped += 1
             continue
-
         doc = {
             "id": str(uuid.uuid4()),
             "question": q["q"],
