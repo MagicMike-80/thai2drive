@@ -62,8 +62,8 @@ export default function HomeScreen() {
               </TouchableOpacity>
             ))}
           </View>
-          <TouchableOpacity testID="settings-btn" style={[st.settingsBtn, { backgroundColor: c.card }]} onPress={() => router.push('/settings')}>
-            <Ionicons name="settings-outline" size={18} color={c.textSecondary} />
+          <TouchableOpacity testID="settings-btn" style={[st.settingsBtn, { backgroundColor: c.card, borderColor: c.cardBorder }]} onPress={() => router.push('/settings')}>
+            <Ionicons name="settings-outline" size={22} color={c.text} />
           </TouchableOpacity>
         </View>
 
@@ -172,7 +172,7 @@ const st = StyleSheet.create({
   langRow: { flex: 1, flexDirection: 'row', gap: 6 },
   langBtn: { width: 38, height: 38, borderRadius: 19, justifyContent: 'center', alignItems: 'center', borderWidth: 2 },
   langFlag: { fontSize: 18 },
-  settingsBtn: { width: 38, height: 38, borderRadius: 19, justifyContent: 'center', alignItems: 'center' },
+  settingsBtn: { width: 44, height: 44, borderRadius: 22, justifyContent: 'center', alignItems: 'center', borderWidth: 1 },
   title: { fontSize: 36, fontWeight: '800', letterSpacing: -1 },
   subtitle: { fontSize: 15, marginTop: 2, marginBottom: 18 },
   streakRow: { flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-start', paddingHorizontal: 14, paddingVertical: 8, borderRadius: 20, gap: 6, borderWidth: 1, marginBottom: 18 },
