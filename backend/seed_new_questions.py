@@ -1,4 +1,4 @@
-"""Seed 9 new questions into MongoDB (v2 schema)."""
+"""Seed 5 new questions WITH images + update glatt kjørebane image."""
 import asyncio
 from motor.motor_asyncio import AsyncIOMotorClient
 from datetime import datetime, timezone
@@ -14,199 +14,116 @@ NEW_QUESTIONS = [
     {
         "id": str(uuid.uuid4()),
         "question": {
-            "no": "Hva betyr dette skiltet?",
-            "th": "ป้ายนี้หมายถึงอะไร?",
-            "en": "What does this sign mean?",
+            "no": "Du skal rett frem i krysset. Hva vil du gjøre?",
+            "th": "คุณจะขับตรงไปที่สี่แยก คุณจะทำอย่างไร?",
+            "en": "You are going straight through the intersection. What will you do?",
         },
         "options": [
-            {"id": "A", "text": {"no": "Busstopp", "th": "ป้ายรถเมล์", "en": "Bus stop"}},
-            {"id": "B", "text": {"no": "Holdeplass for sporvogn", "th": "ป้ายหยุดรถราง", "en": "Tram stop"}},
-            {"id": "C", "text": {"no": "Togstasjon", "th": "สถานีรถไฟ", "en": "Train station"}},
-            {"id": "D", "text": {"no": "Taxi holdeplass", "th": "จุดจอดแท็กซี่", "en": "Taxi stand"}},
+            {"id": "A", "text": {"no": "Stoppe før stopplinje", "th": "หยุดก่อนเส้นหยุด", "en": "Stop before stop line"}},
+            {"id": "B", "text": {"no": "Kjøre på gult lys hvis det er trygt", "th": "ขับต่อถ้าปลอดภัยเมื่อไฟเหลือง", "en": "Drive on yellow if safe"}},
+            {"id": "C", "text": {"no": "Øke farten", "th": "เพิ่มความเร็ว", "en": "Increase speed"}},
+            {"id": "D", "text": {"no": "Ignorere lyset", "th": "ไม่สนใจไฟ", "en": "Ignore the light"}},
         ],
         "correctOptionId": "B",
         "explanation": {
-            "no": "Skiltet viser holdeplass for sporvogn (trikk).",
-            "th": "ป้ายนี้คือป้ายหยุดรถราง",
-            "en": "The sign indicates a tram stop.",
+            "no": "Gult lys betyr stopp hvis du kan, men hvis det er for sent å stoppe trygt kan du kjøre.",
+            "th": "ไฟเหลืองหมายถึงหยุดถ้าทำได้ แต่ถ้าหยุดไม่ทันอย่างปลอดภัยสามารถขับต่อได้",
+            "en": "Yellow means stop if you can, but if too late to stop safely you may proceed.",
         },
-        "bildeUrl": None, "category": "Traffic Signs", "difficulty": "easy", "active": True, "schema_version": 2,
+        "bildeUrl": "https://customer-assets.emergentagent.com/job_norge-quiz-app/artifacts/zjsb0tr1_Screenshot_20260418_001456.jpg",
+        "category": "Road Rules", "difficulty": "medium", "active": True, "schema_version": 2,
         "created_at": datetime.now(timezone.utc).isoformat(),
     },
     {
         "id": str(uuid.uuid4()),
         "question": {
-            "no": "Hva er riktig om dette skiltet?",
-            "th": "ข้อใดถูกต้องเกี่ยวกับป้ายนี้?",
-            "en": "What is correct about this sign?",
+            "no": "Hva er riktig om havarilommer?",
+            "th": "ข้อใดถูกต้องเกี่ยวกับช่องจอดฉุกเฉิน?",
+            "en": "What is correct about emergency lay-bys?",
         },
         "options": [
-            {"id": "A", "text": {"no": "Du kan parkere her", "th": "จอดรถได้ที่นี่", "en": "You can park here"}},
-            {"id": "B", "text": {"no": "Du må stoppe for trikk", "th": "ต้องหยุดให้รถราง", "en": "You must stop for tram"}},
-            {"id": "C", "text": {"no": "Dette er holdeplass for sporvogn", "th": "นี่คือจุดจอดรถราง", "en": "This is a tram stop"}},
-            {"id": "D", "text": {"no": "Kun busser kan stoppe her", "th": "เฉพาะรถเมล์เท่านั้น", "en": "Only buses can stop here"}},
-        ],
-        "correctOptionId": "C",
-        "explanation": {
-            "no": "Skiltet markerer en holdeplass for sporvogn.",
-            "th": "ป้ายนี้แสดงจุดจอดรถราง",
-            "en": "The sign marks a tram stop.",
-        },
-        "bildeUrl": None, "category": "Traffic Signs", "difficulty": "easy", "active": True, "schema_version": 2,
-        "created_at": datetime.now(timezone.utc).isoformat(),
-    },
-    {
-        "id": str(uuid.uuid4()),
-        "question": {
-            "no": "Oppgaven handler om biler som bruker fossilt drivstoff. Hva er riktig?",
-            "th": "คำถามนี้เกี่ยวกับรถที่ใช้เชื้อเพลิงฟอสซิล ข้อใดถูกต้อง?",
-            "en": "The question is about cars using fossil fuel. What is correct?",
-        },
-        "options": [
-            {"id": "A", "text": {"no": "Fossile biler forurenser ikke", "th": "รถน้ำมันไม่ก่อมลพิษ", "en": "Fossil cars don't pollute"}},
-            {"id": "B", "text": {"no": "Fossile biler slipper ut CO₂", "th": "รถน้ำมันปล่อย CO₂", "en": "Fossil cars emit CO₂"}},
-            {"id": "C", "text": {"no": "Elbiler slipper ut mest CO₂", "th": "รถไฟฟ้าปล่อย CO₂ มากที่สุด", "en": "Electric cars emit the most CO₂"}},
-            {"id": "D", "text": {"no": "Alle biler er like miljøvennlige", "th": "รถทุกคันเป็นมิตรกับสิ่งแวดล้อมเท่ากัน", "en": "All cars are equally eco-friendly"}},
+            {"id": "A", "text": {"no": "Kun for parkering", "th": "สำหรับจอดรถเท่านั้น", "en": "Only for parking"}},
+            {"id": "B", "text": {"no": "For nødstopp ved problemer", "th": "สำหรับจอดฉุกเฉินเมื่อมีปัญหา", "en": "For emergency stops when having problems"}},
+            {"id": "C", "text": {"no": "For forbikjøring", "th": "สำหรับแซง", "en": "For overtaking"}},
+            {"id": "D", "text": {"no": "Kun for lastebiler", "th": "สำหรับรถบรรทุกเท่านั้น", "en": "Only for trucks"}},
         ],
         "correctOptionId": "B",
         "explanation": {
-            "no": "Biler med fossilt drivstoff slipper ut CO₂ og bidrar til forurensning.",
-            "th": "รถที่ใช้น้ำมันปล่อยก๊าซ CO2 และก่อมลพิษ",
-            "en": "Cars with fossil fuel emit CO₂ and contribute to pollution.",
+            "no": "Havarilommer brukes ved nødstopp i tunnel eller vei.",
+            "th": "ช่องจอดฉุกเฉินใช้สำหรับจอดฉุกเฉินในอุโมงค์หรือบนถนน",
+            "en": "Emergency lay-bys are used for emergency stops in tunnels or roads.",
         },
-        "bildeUrl": None, "category": "Safety", "difficulty": "easy", "active": True, "schema_version": 2,
+        "bildeUrl": "https://customer-assets.emergentagent.com/job_norge-quiz-app/artifacts/t8ays952_Screenshot_20260418_001433.jpg",
+        "category": "Safety", "difficulty": "easy", "active": True, "schema_version": 2,
         "created_at": datetime.now(timezone.utc).isoformat(),
     },
     {
         "id": str(uuid.uuid4()),
         "question": {
-            "no": "Hva viser dette skiltet?",
-            "th": "ป้ายนี้แสดงอะไร?",
-            "en": "What does this sign show?",
+            "no": "Kan du straffes for å kjøre forbi et ulykkessted uten å stoppe?",
+            "th": "คุณจะถูกลงโทษหรือไม่ถ้าขับผ่านที่เกิดเหตุโดยไม่หยุด?",
+            "en": "Can you be punished for driving past an accident site without stopping?",
         },
         "options": [
-            {"id": "A", "text": {"no": "Avkjøring", "th": "ทางออก", "en": "Exit"}},
-            {"id": "B", "text": {"no": "Serviceområde", "th": "พื้นที่บริการ", "en": "Service area"}},
-            {"id": "C", "text": {"no": "Informasjon om sted med tjenester", "th": "ข้อมูลสถานที่ที่มีบริการ", "en": "Information about a place with services"}},
-            {"id": "D", "text": {"no": "Parkering", "th": "ที่จอดรถ", "en": "Parking"}},
+            {"id": "A", "text": {"no": "Nei", "th": "ไม่", "en": "No"}},
+            {"id": "B", "text": {"no": "Ja, alltid", "th": "ใช่ เสมอ", "en": "Yes, always"}},
+            {"id": "C", "text": {"no": "Kun hvis ingen andre er der", "th": "เฉพาะเมื่อไม่มีคนอื่น", "en": "Only if no one else is there"}},
+            {"id": "D", "text": {"no": "Kun om du er skyldig", "th": "เฉพาะถ้าคุณเป็นผู้ผิด", "en": "Only if you are at fault"}},
         ],
         "correctOptionId": "C",
         "explanation": {
-            "no": "Skiltet viser at det finnes tjenester (mat, drivstoff, info) i området.",
-            "th": "ป้ายนี้แสดงว่ามีบริการต่าง ๆ ในพื้นที่",
-            "en": "The sign shows that services (food, fuel, info) are available in the area.",
+            "no": "Du har plikt til å hjelpe hvis det ikke allerede er tilstrekkelig hjelp på stedet.",
+            "th": "คุณมีหน้าที่ต้องช่วยเหลือถ้ายังไม่มีคนช่วยเพียงพอ",
+            "en": "You have a duty to help if there is not already sufficient help at the scene.",
         },
-        "bildeUrl": None, "category": "Traffic Signs", "difficulty": "easy", "active": True, "schema_version": 2,
+        "bildeUrl": "https://customer-assets.emergentagent.com/job_norge-quiz-app/artifacts/il66ngjx_Screenshot_20260418_001355.jpg",
+        "category": "Safety", "difficulty": "medium", "active": True, "schema_version": 2,
         "created_at": datetime.now(timezone.utc).isoformat(),
     },
     {
         "id": str(uuid.uuid4()),
         "question": {
-            "no": "Hva betyr dette merket på kjøretøyet?",
-            "th": "เครื่องหมายนี้บนรถหมายถึงอะไร?",
-            "en": "What does this marking on the vehicle mean?",
+            "no": "Hva betyr dette skiltet? (vikeplikt)",
+            "th": "ป้ายนี้หมายถึงอะไร? (ให้ทาง)",
+            "en": "What does this sign mean? (yield)",
         },
         "options": [
-            {"id": "A", "text": {"no": "Ny bil", "th": "รถใหม่", "en": "New car"}},
-            {"id": "B", "text": {"no": "Lastebil", "th": "รถบรรทุก", "en": "Truck"}},
-            {"id": "C", "text": {"no": "Farlig last", "th": "บรรทุกวัตถุอันตราย", "en": "Dangerous cargo"}},
-            {"id": "D", "text": {"no": "Elektrisk bil", "th": "รถไฟฟ้า", "en": "Electric car"}},
+            {"id": "A", "text": {"no": "Stopp", "th": "หยุด", "en": "Stop"}},
+            {"id": "B", "text": {"no": "Forkjørsvei", "th": "ทางหลัก", "en": "Priority road"}},
+            {"id": "C", "text": {"no": "Vikeplikt", "th": "ให้ทาง", "en": "Yield"}},
+            {"id": "D", "text": {"no": "Innkjøring forbudt", "th": "ห้ามเข้า", "en": "No entry"}},
         ],
         "correctOptionId": "C",
         "explanation": {
-            "no": "Oransje skilt viser at kjøretøyet frakter farlig gods.",
-            "th": "ป้ายสีส้มหมายถึงรถขนส่งวัตถุอันตราย",
-            "en": "Orange sign indicates the vehicle is carrying dangerous goods.",
+            "no": "Du må vike for trafikk på kryssende vei.",
+            "th": "คุณต้องให้ทางรถบนถนนที่ตัดผ่าน",
+            "en": "You must yield to traffic on the crossing road.",
         },
-        "bildeUrl": None, "category": "Safety", "difficulty": "medium", "active": True, "schema_version": 2,
+        "bildeUrl": "https://customer-assets.emergentagent.com/job_norge-quiz-app/artifacts/t47gkt06_Screenshot_20260418_001338.jpg",
+        "category": "Traffic Signs", "difficulty": "easy", "active": True, "schema_version": 2,
         "created_at": datetime.now(timezone.utc).isoformat(),
     },
     {
         "id": str(uuid.uuid4()),
         "question": {
-            "no": "Hva er riktig om privat øvelseskjøring?",
-            "th": "ข้อใดถูกต้องเกี่ยวกับการฝึกขับรถส่วนตัว?",
-            "en": "What is correct about private practice driving?",
+            "no": "Du skal til venstre i dette krysset. Hvordan bør du plassere deg?",
+            "th": "คุณจะเลี้ยวซ้ายที่สี่แยกนี้ ควรจัดตำแหน่งอย่างไร?",
+            "en": "You are turning left at this intersection. How should you position yourself?",
         },
         "options": [
-            {"id": "A", "text": {"no": "Du kan kjøre alene", "th": "ขับคนเดียวได้", "en": "You can drive alone"}},
-            {"id": "B", "text": {"no": "Du må ha ledsager over 25 år", "th": "ต้องมีผู้ควบคุมอายุเกิน 25 ปี", "en": "You must have a supervisor over 25"}},
-            {"id": "C", "text": {"no": "Ledsager må ha hatt førerkort i minst 5 år", "th": "ผู้ควบคุมต้องมีใบขับขี่อย่างน้อย 5 ปี", "en": "Supervisor must have held a license for at least 5 years"}},
-            {"id": "D", "text": {"no": "Du trenger ikke L-merke", "th": "ไม่ต้องติดป้าย L", "en": "You don't need an L-sign"}},
+            {"id": "A", "text": {"no": "Helt til høyre", "th": "ชิดขวาสุด", "en": "Far right"}},
+            {"id": "B", "text": {"no": "Midt i veien", "th": "กลางถนน", "en": "Middle of road"}},
+            {"id": "C", "text": {"no": "Til venstre i ditt kjørefelt", "th": "ชิดซ้ายในเลนของคุณ", "en": "Left side of your lane"}},
+            {"id": "D", "text": {"no": "På fortauet", "th": "บนทางเท้า", "en": "On the sidewalk"}},
         ],
         "correctOptionId": "C",
         "explanation": {
-            "no": "Ledsager må være over 25 år og hatt førerkort i minst 5 år.",
-            "th": "ผู้ควบคุมต้องอายุเกิน 25 ปี และมีใบขับขี่อย่างน้อย 5 ปี",
-            "en": "The supervisor must be over 25 and have held a license for at least 5 years.",
+            "no": "Du skal plassere deg til venstre i kjørefeltet før venstresving.",
+            "th": "ต้องจัดตำแหน่งชิดซ้ายในเลนก่อนเลี้ยวซ้าย",
+            "en": "You should position yourself to the left in your lane before turning left.",
         },
-        "bildeUrl": None, "category": "Road Rules", "difficulty": "medium", "active": True, "schema_version": 2,
-        "created_at": datetime.now(timezone.utc).isoformat(),
-    },
-    {
-        "id": str(uuid.uuid4()),
-        "question": {
-            "no": "Hva er riktig å anta etter dette skiltet?",
-            "th": "ข้อใดถูกต้องหลังจากเห็นป้ายนี้?",
-            "en": "What is correct to assume after this sign?",
-        },
-        "options": [
-            {"id": "A", "text": {"no": "Du har vikeplikt", "th": "คุณต้องให้ทาง", "en": "You must yield"}},
-            {"id": "B", "text": {"no": "Du kjører på forkjørsvei", "th": "คุณขับบนถนนหลัก", "en": "You are on a priority road"}},
-            {"id": "C", "text": {"no": "Veien slutter", "th": "ถนนสิ้นสุด", "en": "Road ends"}},
-            {"id": "D", "text": {"no": "Du må stoppe", "th": "ต้องหยุด", "en": "You must stop"}},
-        ],
-        "correctOptionId": "B",
-        "explanation": {
-            "no": "Skiltet viser forkjørsvei.",
-            "th": "ป้ายนี้หมายถึงถนนที่มีสิทธิ์ไปก่อน",
-            "en": "The sign indicates a priority road.",
-        },
-        "bildeUrl": None, "category": "Right of Way", "difficulty": "easy", "active": True, "schema_version": 2,
-        "created_at": datetime.now(timezone.utc).isoformat(),
-    },
-    {
-        "id": str(uuid.uuid4()),
-        "question": {
-            "no": "Hva betyr det når kantlinjen er stiplet?",
-            "th": "เส้นประข้างทางหมายถึงอะไร?",
-            "en": "What does a dashed edge line mean?",
-        },
-        "options": [
-            {"id": "A", "text": {"no": "Du må ikke krysse linjen", "th": "ห้ามข้ามเส้น", "en": "You must not cross the line"}},
-            {"id": "B", "text": {"no": "Du kan stoppe der", "th": "จอดได้ตรงนั้น", "en": "You can stop there"}},
-            {"id": "C", "text": {"no": "Du kan krysse linjen ved behov", "th": "ข้ามเส้นได้เมื่อจำเป็น", "en": "You can cross the line when needed"}},
-            {"id": "D", "text": {"no": "Det er enveiskjøring", "th": "เป็นทางเดินรถทางเดียว", "en": "It's a one-way road"}},
-        ],
-        "correctOptionId": "C",
-        "explanation": {
-            "no": "Stiplet kantlinje kan krysses ved behov (f.eks. stopp/parkering).",
-            "th": "เส้นประข้างทางสามารถข้ามได้เมื่อจำเป็น",
-            "en": "A dashed edge line can be crossed when necessary (e.g. stopping/parking).",
-        },
-        "bildeUrl": None, "category": "Road Rules", "difficulty": "easy", "active": True, "schema_version": 2,
-        "created_at": datetime.now(timezone.utc).isoformat(),
-    },
-    {
-        "id": str(uuid.uuid4()),
-        "question": {
-            "no": "Hva varsler dette skiltet?",
-            "th": "ป้ายนี้เตือนอะไร?",
-            "en": "What does this sign warn about?",
-        },
-        "options": [
-            {"id": "A", "text": {"no": "Glatt vei", "th": "ถนนลื่น", "en": "Slippery road"}},
-            {"id": "B", "text": {"no": "Svingete vei", "th": "ถนนคดเคี้ยว", "en": "Winding road"}},
-            {"id": "C", "text": {"no": "Glatt kjørebane", "th": "ผิวถนนลื่น", "en": "Slippery road surface"}},
-            {"id": "D", "text": {"no": "Farlig sving", "th": "โค้งอันตราย", "en": "Dangerous curve"}},
-        ],
-        "correctOptionId": "C",
-        "explanation": {
-            "no": "Skiltet varsler glatt kjørebane.",
-            "th": "ป้ายเตือนถนนลื่น",
-            "en": "The sign warns about a slippery road surface.",
-        },
-        "bildeUrl": None, "category": "Safety", "difficulty": "easy", "active": True, "schema_version": 2,
+        "bildeUrl": None,
+        "category": "Road Rules", "difficulty": "medium", "active": True, "schema_version": 2,
         "created_at": datetime.now(timezone.utc).isoformat(),
     },
 ]
@@ -223,9 +140,19 @@ async def seed():
             continue
         await db.questions.insert_one(q)
         inserted += 1
+
+    # Also update the glatt kjørebane question with the new slippery road sign image
+    glatt = await db.questions.update_one(
+        {"question.no": "Hva varsler dette skiltet?", "explanation.no": {"$regex": "glatt"}},
+        {"$set": {"bildeUrl": "https://customer-assets.emergentagent.com/job_norge-quiz-app/artifacts/0eg6t55f_Screenshot_20260418_001515.jpg"}}
+    )
+    if glatt.modified_count > 0:
+        print("  OK Updated glatt kjørebane with new sign image")
+
     print(f"Done! Inserted: {inserted}, Skipped (duplicates): {skipped}")
+    with_images = await db.questions.count_documents({"bildeUrl": {"$ne": None}})
     total = await db.questions.count_documents({})
-    print(f"Total questions in database: {total}")
+    print(f"Questions with images: {with_images}/{total}")
     client.close()
 
 asyncio.run(seed())
