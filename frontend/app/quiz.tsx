@@ -41,6 +41,8 @@ export default function QuizScreen() {
   const [timer, setTimer] = useState(EXAM_TIME);
   const [showLimit, setShowLimit] = useState(false);
   const [ttsPlaying, setTtsPlaying] = useState<'question' | 'explanation' | null>(null);
+  const [ttsSpeed, setTtsSpeed] = useState(1.0); // 0.5 = slow, 1.0 = normal, 1.5 = fast
+  const ttsCancelled = useRef(false);
 
   const fade = useRef(new Animated.Value(1)).current;
   const glowAnim = useRef(new Animated.Value(0)).current;
@@ -109,6 +111,7 @@ export default function QuizScreen() {
   };
 
   const handleNext = () => {
+    stopTts(); // Stop any playing TTS immediately
     if (idx >= questions.length - 1) { finishQ(); return; }
     if (!canAnswerFree()) { setShowLimit(true); return; }
     // Smooth slide transition
@@ -130,17 +133,28 @@ export default function QuizScreen() {
     router.replace({ pathname: '/results', params: { total: questions.length.toString(), correct: cor.toString(), mode: mode || 'practice', passed: isExam ? (pct >= PASS ? 'true' : 'false') : '' } });
   };
 
-  const stopTts = () => { Speech.stop(); setTtsPlaying(null); setSpeaking(false); };
+  const stopTts = () => { ttsCancelled.current = true; Speech.stop(); setTtsPlaying(null); setSpeaking(false); };
 
   const langCode = (l: string) => l === 'th' ? 'th-TH' : l === 'no' ? 'nb-NO' : 'en-US';
 
+  const SPEED_OPTIONS = [
+    { label: '0.5x', value: 0.5 },
+    { label: '0.75x', value: 0.75 },
+    { label: '1x', value: 1.0 },
+    { label: '1.25x', value: 1.25 },
+    { label: '1.5x', value: 1.5 },
+  ];
+
   const speakSequence = async (segments: { text: string; lang: string }[]) => {
+    ttsCancelled.current = false;
     for (let i = 0; i < segments.length; i++) {
+      if (ttsCancelled.current) break;
       const s = segments[i];
+      const baseRate = s.lang === 'th' ? 0.85 : 0.9;
       await new Promise<void>((resolve) => {
         Speech.speak(s.text, {
           language: langCode(s.lang),
-          rate: s.lang === 'th' ? 0.85 : 0.9,
+          rate: baseRate * ttsSpeed,
           onDone: resolve,
           onError: resolve,
           onStopped: resolve,
@@ -276,6 +290,20 @@ export default function QuizScreen() {
             </Text>
           </TouchableOpacity>
 
+          {/* TTS Speed Control */}
+          <View style={st.speedRow}>
+            {SPEED_OPTIONS.map((opt) => (
+              <TouchableOpacity
+                key={opt.value}
+                style={[st.speedChip, { backgroundColor: ttsSpeed === opt.value ? c.accentBg : 'transparent', borderColor: ttsSpeed === opt.value ? c.accent : c.cardBorder }]}
+                onPress={() => setTtsSpeed(opt.value)}
+                activeOpacity={0.7}
+              >
+                <Text style={[st.speedText, { color: ttsSpeed === opt.value ? c.accent : c.textMuted }]}>{opt.label}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+
           {/* Answers with glow */}
           <View style={st.aW}>
             {LETTERS.map((L) => {
@@ -371,9 +399,12 @@ const st = StyleSheet.create({
   thW: { marginTop: 10 },
   thL: { height: 1, marginBottom: 10 },
   thTxt: { fontSize: 15, lineHeight: 22 },
-  listenBtn: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 14, paddingVertical: 14, marginBottom: 14, gap: 8, borderWidth: 1, opacity: 0.6 },
+  listenBtn: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 14, paddingVertical: 14, marginBottom: 8, gap: 8, borderWidth: 1, opacity: 0.6 },
   listenIcon: { fontSize: 18 },
   listenText: { fontSize: 15, fontWeight: '600' },
+  speedRow: { flexDirection: 'row', justifyContent: 'center', gap: 6, marginBottom: 14 },
+  speedChip: { paddingHorizontal: 10, paddingVertical: 5, borderRadius: 8, borderWidth: 1 },
+  speedText: { fontSize: 11, fontWeight: '700' },
   aW: { gap: 12 },
   aBtn: { flexDirection: 'row', alignItems: 'center', borderRadius: 12, paddingVertical: 13, paddingHorizontal: 14, borderWidth: 1.5 },
   dim: { opacity: 0.35 },
