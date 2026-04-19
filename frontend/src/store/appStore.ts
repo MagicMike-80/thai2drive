@@ -53,6 +53,16 @@ interface AppState {
   streak: number;
   lastActiveDate: string;
   updateStreak: () => Promise<void>;
+
+  // Last quiz attempt (for review on results screen)
+  lastAttempt: {
+    questions: any[];
+    answers: { questionId: string; selected: string | null; correct: boolean }[];
+    mode: string;
+    category?: string;
+    startedAt: string;
+  } | null;
+  setLastAttempt: (attempt: AppState['lastAttempt']) => void;
 }
 
 const generateDeviceId = () =>
@@ -250,4 +260,8 @@ export const useAppStore = create<AppState>((set, get) => ({
     await AsyncStorage.setItem('streak', newStreak.toString());
     await AsyncStorage.setItem('lastActiveDate', today);
   },
+
+  // Last quiz attempt (in-memory, for review on results screen)
+  lastAttempt: null,
+  setLastAttempt: (attempt) => set({ lastAttempt: attempt }),
 }));

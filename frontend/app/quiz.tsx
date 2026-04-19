@@ -23,7 +23,7 @@ export default function QuizScreen() {
   const router = useRouter();
   const { mode, category } = useLocalSearchParams<{ mode: string; category: string }>();
   const store = useAppStore();
-  const { language, deviceId, addBookmark, removeBookmark, isBookmarked, setProgress, colors: c, soundEnabled, isPremium, incrementFreeQuestions, canAnswerFree, updateStreak } = store;
+  const { language, deviceId, addBookmark, removeBookmark, isBookmarked, setProgress, colors: c, soundEnabled, isPremium, incrementFreeQuestions, canAnswerFree, updateStreak, setLastAttempt } = store;
   const t = T[language] || T.no;
 
   // Screen capture protection
@@ -71,8 +71,16 @@ export default function QuizScreen() {
 
   const timeUp = useCallback(() => {
     const cor = hist.filter((a) => a.correct).length;
+    // Save attempt even on time-up
+    setLastAttempt({
+      questions,
+      answers: hist.map((h) => ({ questionId: h.question_id, selected: h.selected_answer, correct: h.correct })),
+      mode: mode || 'practice',
+      category: category === 'all' ? undefined : (category as string | undefined),
+      startedAt: startTime.toISOString(),
+    });
     goRes(cor, questions.length > 0 ? (cor / questions.length) * 100 : 0);
-  }, [hist, questions.length]);
+  }, [hist, questions, mode, category, startTime, setLastAttempt]);
 
   const q = questions[idx];
 
@@ -125,6 +133,14 @@ export default function QuizScreen() {
     if (timerRef.current) clearInterval(timerRef.current);
     const cor = hist.filter((a) => a.correct).length;
     const pct = (cor / questions.length) * 100;
+    // Save full attempt to store for review on results screen
+    setLastAttempt({
+      questions,
+      answers: hist.map((h) => ({ questionId: h.question_id, selected: h.selected_answer, correct: h.correct })),
+      mode: mode || 'practice',
+      category: category === 'all' ? undefined : category,
+      startedAt: startTime.toISOString(),
+    });
     try { await api.saveQuizAttempt({ device_id: deviceId, mode: mode || 'practice', category: category === 'all' ? undefined : category, total_questions: questions.length, correct_answers: cor, score_percentage: pct, passed: isExam ? pct >= PASS : undefined, questions_answered: hist, started_at: startTime.toISOString() }); } catch (e) {}
     goRes(cor, pct);
   };
