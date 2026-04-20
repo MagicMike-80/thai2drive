@@ -1,0 +1,272 @@
+[
+  {
+    "slot": "#4",
+    "path": "/tmp/batch2/img4_engine.jpg",
+    "proposal": {
+      "image_identification": "Motorrom med symbol som peker på ekspansjonstanken for kjølevæske.",
+      "question": {
+        "no": "Hva skal kontrolleres i beholderen som symbolet peker på?",
+        "en": "What should be checked in the container pointed to by the symbol?",
+        "th": "ควรตรวจสอบอะไรในภาชนะที่สัญลักษณ์ชี้ไป?"
+      },
+      "options": [
+        {
+          "id": "A",
+          "text": {
+            "no": "Kjølevæskenivået",
+            "en": "The coolant level",
+            "th": "ระดับน้ำยาหล่อเย็น"
+          }
+        },
+        {
+          "id": "B",
+          "text": {
+            "no": "Spylervæskenivået",
+            "en": "The windshield washer fluid level",
+            "th": "ระดับน้ำฉีดกระจก"
+          }
+        },
+        {
+          "id": "C",
+          "text": {
+            "no": "Oljenivået på motoren",
+            "en": "The engine oil level",
+            "th": "ระดับน้ำมันเครื่อง"
+          }
+        },
+        {
+          "id": "D",
+          "text": {
+            "no": "Bremsevæskenivået",
+            "en": "The brake fluid level",
+            "th": "ระดับน้ำมันเบรก"
+          }
+        }
+      ],
+      "correctOptionId": "A",
+      "explanation": {
+        "no": "Symbolet (et termometer i væske) indikerer motorens kjølesystem. Beholderen er ekspansjonstanken for kjølevæske. Her skal du kontrollere at nivået på kjølevæsken er mellom minimum- og maksimumsmerkene.",
+        "en": "The symbol (a thermometer in liquid) indicates the engine's cooling system. The container is the coolant expansion tank. Here you should check that the coolant level is between the minimum and maximum marks.",
+        "th": "สัญลักษณ์ (เทอร์โมมิเตอร์ในของเหลว) หมายถึงระบบหล่อเย็นของเครื่องยนต์ ภาชนะนี้คือถังพักน้ำยาหล่อเย็น คุณควรตรวจสอบว่าระดับน้ำยาหล่อเย็นอยู่ระหว่างขีดต่ำสุดและสูงสุด"
+      },
+      "category": "Safety",
+      "difficulty": "easy"
+    }
+  },
+  {
+    "slot": "#5",
+    "path": "/tmp/batch2/img5_bus.jpg",
+    "proposal": {
+      "image_identification": "Grønn buss ved en bussholdeplass i et byområde.",
+      "question": {
+        "no": "Du kjører bak denne bussen på en vei hvor fartsgrensen er 50 km/t. Bussen signaliserer med venstre blinklys at den skal kjøre ut fra holdeplassen. Hva gjør du?",
+        "en": "You are driving behind this bus on a road with a 50 km/h speed limit. The bus indicates with its left turn signal that it is about to pull out from the bus stop. What do you do?",
+        "th": "คุณกำลังขับรถตามหลังรถบัสคันนี้บนถนนที่จำกัดความเร็ว 50 กม./ชม. รถบัสเปิดไฟเลี้ยวซ้ายเพื่อส่งสัญญาณว่าจะออกจากป้ายรถเมล์ คุณควรทำอย่างไร?"
+      },
+      "options": [
+        {
+          "id": "A",
+          "text": {
+            "no": "Jeg senker farten, og stopper om nødvendig, for å slippe bussen frem.",
+            "en": "I slow down, and stop if necessary, to let the bus pull out.",
+            "th": "ฉันจะชะลอความเร็ว และหยุดหากจำเป็น เพื่อให้รถบัสออกไปก่อน"
+          }
+        },
+        {
+          "id": "B",
+          "text": {
+            "no": "Jeg kan kjøre forbi, ettersom bussen har vikeplikt når den kjører inn på veien.",
+            "en": "I can drive past, as the bus has a duty to yield when it enters the road.",
+            "th": "ฉันสามารถขับแซงไปได้ เพราะรถบัสมีหน้าที่ต้องให้ทางเมื่อเข้าสู่ถนน"
+          }
+        },
+        {
+          "id": "C",
+          "text": {
+            "no": "Jeg må bare vike hvis det er passasjerer som krysser veien foran bussen.",
+            "en": "I only have to yield if there are passengers crossing the road in front of the bus.",
+            "th": "ฉันต้องให้ทางก็ต่อเมื่อมีผู้โดยสารข้ามถนนหน้ารถบัสเท่านั้น"
+          }
+        },
+        {
+          "id": "D",
+          "text": {
+            "no": "Jeg fortsetter med uendret fart, men er klar til å bremse.",
+            "en": "I continue at the same speed, but I am ready to brake.",
+            "th": "ฉันขับต่อไปด้วยความเร็วเท่าเดิม แต่พร้อมที่จะเบรก"
+          }
+        }
+      ],
+      "correctOptionId": "A",
+      "explanation": {
+        "no": "På veier med fartsgrense 60 km/t eller lavere, har du vikeplikt for buss som gir tegn om å forlate en holdeplass. Du må redusere farten og om nødvendig stanse helt for å la bussen kjøre ut.",
+        "en": "On roads with a speed limit of 60 km/h or lower, you have a duty to yield to a bus that signals its intention to leave a bus stop. You must reduce your speed and, if necessary, stop completely to let the bus pull out.",
+        "th": "บนถนนที่จำกัดความเร็ว 60 กม./ชม. หรือต่ำกว่า คุณมีหน้าที่ต้องให้ทางแก่รถประจำทางที่ให้สัญญาณว่าจะออกจากป้ายจอดรถ คุณต้องลดความเร็วและหยุดรถหากจำเป็น เพื่อให้รถประจำทางออกตัวไปได้"
+      },
+      "category": "Right of Way",
+      "difficulty": "medium"
+    }
+  },
+  {
+    "slot": "#6",
+    "path": "/tmp/batch2/img6_priority.jpg",
+    "proposal": {
+      "image_identification": "Skilt for forkjørsvei (206) med underskilt (804) som viser at forkjørsveien svinger til høyre.",
+      "question": {
+        "no": "Du nærmer deg et kryss med disse skiltene. Hva er korrekt?",
+        "en": "You are approaching an intersection with these signs. What is correct?",
+        "th": "คุณกำลังเข้าใกล้ทางแยกที่มีป้ายเหล่านี้ ข้อใดถูกต้อง"
+      },
+      "options": [
+        {
+          "id": "A",
+          "text": {
+            "no": "Forkjørsveien svinger til høyre i dette krysset.",
+            "en": "The priority road turns to the right at this intersection.",
+            "th": "ที่ทางแยกนี้ ถนนเอกจะเลี้ยวไปทางขวา"
+          }
+        },
+        {
+          "id": "B",
+          "text": {
+            "no": "Du har vikeplikt for trafikk fra høyre i dette krysset.",
+            "en": "You must yield to traffic from the right at this intersection.",
+            "th": "ที่ทางแยกนี้ คุณต้องให้ทางแก่รถที่มาจากทางขวา"
+          }
+        },
+        {
+          "id": "C",
+          "text": {
+            "no": "Forkjørsveien fortsetter rett fram, og en vei tar av til høyre.",
+            "en": "The priority road continues straight ahead, and a road branches off to the right.",
+            "th": "ถนนเอกยังคงตรงไป และมีถนนแยกออกไปทางขวา"
+          }
+        },
+        {
+          "id": "D",
+          "text": {
+            "no": "Alle veier i krysset er likeverdige.",
+            "en": "All roads at the intersection are of equal status.",
+            "th": "ถนนทุกสายในทางแยกมีสถานะเท่าเทียมกัน"
+          }
+        }
+      ],
+      "correctOptionId": "A",
+      "explanation": {
+        "no": "Hovedskiltet (206) viser at du er på en forkjørsvei. Underskiltet (804) viser kryssets utforming. Den tykke streken markerer forkjørsveien, som her svinger til høyre. Trafikk fra de andre veiene (markert med tynne streker) har vikeplikt for deg så lenge du følger forkjørsveien.",
+        "en": "The main sign (206) indicates you are on a priority road. The supplementary sign (804) shows the layout of the intersection. The thick line marks the priority road, which in this case turns to the right. Traffic from the other roads (marked with thin lines) must yield to you as long as you follow the priority road.",
+        "th": "ป้ายหลัก (206) บ่งบอกว่าคุณอยู่บนถนนเอก ป้ายเสริม (804) แสดงแผนผังของทางแยก เส้นหนาคือเครื่องหมายของถนนเอก ซึ่งในกรณีนี้เลี้ยวไปทางขวา การจราจรจากถนนอื่น (ที่ทำเครื่องหมายด้วยเส้นบาง) จะต้องให้ทางแก่คุณตราบใดที่คุณขับไปตามถนนเอก"
+      },
+      "category": "Traffic Signs",
+      "difficulty": "medium"
+    }
+  },
+  {
+    "slot": "#7",
+    "path": "/tmp/batch2/img7_intersection.jpg",
+    "proposal": {
+      "image_identification": "Kryss med påbudt kjøreretning til høyre, vikepliktsskilt og fotgjengerovergang.",
+      "question": {
+        "no": "Du følger den hvite linjen og skal svinge til høyre. Hva er korrekt?",
+        "en": "You are following the white line and are about to turn right. What is correct?",
+        "th": "คุณกำลังขับตามเส้นสีขาวและกำลังจะเลี้ยวขวา ข้อใดถูกต้อง"
+      },
+      "options": [
+        {
+          "id": "A",
+          "text": {
+            "no": "Jeg må vike for fotgjengere på gangfeltet og for trafikk fra venstre på veien jeg skal inn på.",
+            "en": "I must yield to pedestrians on the crosswalk and to traffic from the left on the road I am entering.",
+            "th": "ฉันต้องให้ทางแก่คนเดินเท้าบนทางม้าลายและรถที่มาจากทางซ้ายบนถนนที่ฉันกำลังจะเลี้ยวเข้าไป"
+          }
+        },
+        {
+          "id": "B",
+          "text": {
+            "no": "Jeg trenger bare å vike for trafikk som kommer fra venstre.",
+            "en": "I only need to yield to traffic coming from the left.",
+            "th": "ฉันจำเป็นต้องให้ทางแก่รถที่มาจากทางซ้ายเท่านั้น"
+          }
+        },
+        {
+          "id": "C",
+          "text": {
+            "no": "Trafikklysene regulerer krysset, så jeg kan kjøre når det er grønt uten å ta spesielle hensyn.",
+            "en": "The traffic lights regulate the intersection, so I can proceed on green without any special considerations.",
+            "th": "สัญญาณไฟจราจรควบคุมสี่แยกนี้ ดังนั้นฉันสามารถขับต่อไปได้เมื่อไฟเขียวโดยไม่ต้องคำนึงถึงสิ่งอื่นเป็นพิเศษ"
+          }
+        },
+        {
+          "id": "D",
+          "text": {
+            "no": "Høyreregelen gjelder, så jeg har vikeplikt for eventuell trafikk fra høyre.",
+            "en": "The right-hand rule applies, so I must yield to any traffic from the right.",
+            "th": "กฎขวามือมีผลบังคับใช้ ดังนั้นฉันต้องให้ทางแก่รถที่อาจมาจากทางขวา"
+          }
+        }
+      ],
+      "correctOptionId": "A",
+      "explanation": {
+        "no": "Du har vikepliktsskilt (skilt 202), som betyr at du må vike for all trafikk på veien du skal inn på. I denne situasjonen er det trafikk fra venstre. I tillegg har du alltid vikeplikt for fotgjengere i et gangfelt når du svinger inn i en vei. Derfor må du være forberedt på å stoppe for både kryssende trafikk og fotgjengere.",
+        "en": "You have a yield sign (sign 202), which means you must give way to all traffic on the road you are entering. In this situation, that is traffic from the left. Additionally, you always have a duty to yield to pedestrians on a crosswalk when you are turning onto a road. Therefore, you must be prepared to stop for both crossing traffic and pedestrians.",
+        "th": "คุณเห็นป้ายให้ทาง (ป้าย 202) ซึ่งหมายความว่าคุณต้องให้ทางแก่รถทุกคันบนถนนที่คุณกำลังจะเข้าไป ในสถานการณ์นี้คือรถที่มาจากทางซ้าย นอกจากนี้ คุณมีหน้าที่ต้องให้ทางแก่คนเดินเท้าบนทางม้าลายเสมอเมื่อคุณเลี้ยวเข้าถนน ดังนั้น คุณต้องเตรียมพร้อมที่จะหยุดให้ทั้งรถที่ขวางหน้าและคนเดินเท้า"
+      },
+      "category": "Right of Way",
+      "difficulty": "medium"
+    }
+  },
+  {
+    "slot": "#8",
+    "path": "/tmp/batch2/img8_exhaust.jpg",
+    "proposal": {
+      "image_identification": "Eksosrøyk fra et eksosrør på en bil.",
+      "question": {
+        "no": "Hvilken kjørestil bidrar mest til å redusere utslippene som vises på bildet?",
+        "en": "Which driving style contributes the most to reducing the emissions shown in the picture?",
+        "th": "รูปแบบการขับขี่แบบใดที่ช่วยลดการปล่อยมลพิษดังที่เห็นในภาพได้มากที่สุด?"
+      },
+      "options": [
+        {
+          "id": "A",
+          "text": {
+            "no": "Kjøre jevnt, unngå brå akselerasjon og nedbremsing, og bruke høyest mulig gir.",
+            "en": "Driving smoothly, avoiding sudden acceleration and braking, and using the highest possible gear.",
+            "th": "ขับขี่อย่างราบรื่น หลีกเลี่ยงการเร่งความเร็วและการเบรกอย่างกะทันหัน และใช้เกียร์สูงสุดเท่าที่เป็นไปได้"
+          }
+        },
+        {
+          "id": "B",
+          "text": {
+            "no": "Kjøre aggressivt for å komme raskt frem til destinasjonen og dermed redusere total kjøretid.",
+            "en": "Driving aggressively to reach the destination quickly, thereby reducing total driving time.",
+            "th": "ขับขี่อย่างก้าวร้าวเพื่อไปถึงจุดหมายอย่างรวดเร็ว ซึ่งจะช่วยลดระยะเวลาในการขับขี่โดยรวม"
+          }
+        },
+        {
+          "id": "C",
+          "text": {
+            "no": "La motoren gå på tomgang i lengre perioder for å holde den varm, spesielt om vinteren.",
+            "en": "Letting the engine idle for long periods to keep it warm, especially in winter.",
+            "th": "ปล่อยให้เครื่องยนต์ทำงานรอบเดินเบาเป็นเวลานานเพื่อให้เครื่องอุ่น โดยเฉพาะในฤดูหนาว"
+          }
+        },
+        {
+          "id": "D",
+          "text": {
+            "no": "Holde et lavt gir for å ha mer motorkraft tilgjengelig til enhver tid.",
+            "en": "Keeping a low gear to have more engine power available at all times.",
+            "th": "ใช้เกียร์ต่ำเพื่อให้มีกำลังเครื่องยนต์พร้อมใช้งานตลอดเวลา"
+          }
+        }
+      ],
+      "correctOptionId": "A",
+      "explanation": {
+        "no": "Økonomisk og miljøvennlig kjøring (økokjøring) innebærer å planlegge kjøringen, holde jevn fart, akselerere og bremse mykt, og bruke høyest mulig gir. Dette reduserer drivstofforbruket og CO2-utslippene betydelig. Aggressiv kjøring, tomgangskjøring og unødvendig høyt turtall øker forbruket og forurensningen.",
+        "en": "Economical and eco-friendly driving (eco-driving) involves planning your drive, maintaining a steady speed, accelerating and braking gently, and using the highest possible gear. This significantly reduces fuel consumption and CO2 emissions. Aggressive driving, idling, and unnecessarily high RPMs increase consumption and pollution.",
+        "th": "การขับขี่แบบประหยัดและเป็นมิตรต่อสิ่งแวดล้อม (eco-driving) เกี่ยวข้องกับการวางแผนการขับขี่ รักษาความเร็วให้คงที่ เร่งความเร็วและเบรกอย่างนุ่มนวล และใช้เกียร์สูงสุดเท่าที่เป็นไปได้ ซึ่งจะช่วยลดการสิ้นเปลืองเชื้อเพลิงและการปล่อยก๊าซคาร์บอนไดออกไซด์ได้อย่างมาก การขับขี่ที่ก้าวร้าว การจอดรถติดเครื่องยนต์ และการใช้รอบเครื่องยนต์สูงโดยไม่จำเป็นจะเพิ่มการสิ้นเปลืองและการก่อมลพิษ"
+      },
+      "category": "Safety",
+      "difficulty": "medium"
+    }
+  }
+]
