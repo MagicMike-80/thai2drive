@@ -1,0 +1,218 @@
+[
+  {
+    "slot": "#2",
+    "label": "Tunnel SOS nødstasjon",
+    "proposal": {
+      "image_identification": "Opplysningsskilt 560 Nødstasjon i tunnel",
+      "question": {
+        "no": "Hvilket utstyr kan du forvente å finne ved dette skiltet i tunnelen?",
+        "en": "What equipment can you expect to find at this sign in the tunnel?",
+        "th": "คุณคาดว่าจะพบอุปกรณ์อะไรบ้าง ณ ตำแหน่งของป้ายนี้ในอุโมงค์?"
+      },
+      "options": [
+        {
+          "id": "A",
+          "text": {
+            "no": "Kun nødtelefon.",
+            "en": "Only an emergency telephone.",
+            "th": "โทรศัพท์ฉุกเฉินเท่านั้น"
+          }
+        },
+        {
+          "id": "B",
+          "text": {
+            "no": "Nødtelefon og brannslukningsapparat.",
+            "en": "Emergency telephone and fire extinguisher.",
+            "th": "โทรศัพท์ฉุกเฉินและถังดับเพลิง"
+          }
+        },
+        {
+          "id": "C",
+          "text": {
+            "no": "Førstehjelpsutstyr og varseltrekant.",
+            "en": "First aid kit and warning triangle.",
+            "th": "ชุดปฐมพยาบาลและสามเหลี่ยมเตือนภัย"
+          }
+        },
+        {
+          "id": "D",
+          "text": {
+            "no": "En nødutgang for fotgjengere.",
+            "en": "An emergency exit for pedestrians.",
+            "th": "ทางออกฉุกเฉินสำหรับคนเดินเท้า"
+          }
+        }
+      ],
+      "correctOptionId": "B",
+      "explanation": {
+        "no": "Skiltet (560 Nødstasjon) viser vei til en nødstasjon i tunnelen. Symbolene nederst på skiltet indikerer hvilket utstyr som er tilgjengelig, i dette tilfellet en nødtelefon og et brannslukningsapparat.",
+        "en": "The sign (560 Emergency Station) indicates the way to an emergency station in the tunnel. The symbols at the bottom of the sign show what equipment is available, in this case, an emergency telephone and a fire extinguisher.",
+        "th": "ป้ายนี้ (560 สถานีฉุกเฉิน) บ่งชี้ทางไปยังสถานีฉุกเฉินในอุโมงค์ สัญลักษณ์ด้านล่างของป้ายแสดงถึงอุปกรณ์ที่มีให้ ซึ่งในกรณีนี้คือโทรศัพท์ฉุกเฉินและถังดับเพลิง"
+      },
+      "category": "Traffic Signs",
+      "difficulty": "easy"
+    }
+  },
+  {
+    "slot": "#3",
+    "label": "Rødt+gult trafikklys (ALTERNATIV)",
+    "proposal": {
+      "image_identification": "Trafikklys som viser rødt og gult lys samtidig i et bykryss.",
+      "question": {
+        "no": "Hva betyr dette lyssignalet?",
+        "en": "What does this light signal mean?",
+        "th": "สัญญาณไฟนี้หมายความว่าอย่างไร?"
+      },
+      "options": [
+        {
+          "id": "A",
+          "text": {
+            "no": "At lyset snart skifter til grønt, og du skal gjøre deg klar til å kjøre.",
+            "en": "That the light is about to change to green, and you should get ready to drive.",
+            "th": "ไฟกำลังจะเปลี่ยนเป็นสีเขียว และคุณควรเตรียมพร้อมที่จะขับรถ"
+          }
+        },
+        {
+          "id": "B",
+          "text": {
+            "no": "At lyset snart skifter til rødt, og du må stoppe hvis det er trygt.",
+            "en": "That the light is about to change to red, and you must stop if it is safe.",
+            "th": "ไฟกำลังจะเปลี่ยนเป็นสีแดง และคุณต้องหยุดหากทำได้อย่างปลอดภัย"
+          }
+        },
+        {
+          "id": "C",
+          "text": {
+            "no": "At lyssignalet er ute av drift, og du må kjøre med spesiell forsiktighet.",
+            "en": "That the traffic light is malfunctioning, and you must drive with special caution.",
+            "th": "สัญญาณไฟจราจรขัดข้อง และคุณต้องขับรถด้วยความระมัดระวังเป็นพิเศษ"
+          }
+        },
+        {
+          "id": "D",
+          "text": {
+            "no": "At du kan svinge til høyre, men må vente for å kjøre rett frem.",
+            "en": "That you can turn right, but must wait to drive straight ahead.",
+            "th": "คุณสามารถเลี้ยวขวาได้ แต่ต้องรอเพื่อขับตรงไป"
+          }
+        }
+      ],
+      "correctOptionId": "A",
+      "explanation": {
+        "no": "Rødt og gult lys samtidig betyr 'klar til å kjøre'. Det signaliserer at lyset umiddelbart vil skifte til grønt. Du skal ikke begynne å kjøre før det blir grønt, men gjøre deg klar. Gult lys alene betyr at lyset snart skifter til rødt.",
+        "en": "Red and yellow light at the same time means 'get ready to drive'. It signals that the light is about to change to green. You should not start driving until it turns green, but you should prepare. A yellow light alone means the light is about to change to red.",
+        "th": "สัญญาณไฟสีแดงและสีเหลืองพร้อมกันหมายถึง 'เตรียมพร้อมที่จะขับรถ' เป็นสัญญาณว่าไฟกำลังจะเปลี่ยนเป็นสีเขียว คุณไม่ควรเริ่มขับรถจนกว่าไฟจะเปลี่ยนเป็นสีเขียว แต่ควรเตรียมตัวให้พร้อม สัญญาณไฟสีเหลืองเพียงอย่างเดียวหมายความว่าไฟกำลังจะเปลี่ยนเป็นสีแดง"
+      },
+      "category": "Traffic Signs",
+      "difficulty": "easy"
+    }
+  },
+  {
+    "slot": "#4",
+    "label": "Fareskilt Glatt kjørebane (114)",
+    "proposal": {
+      "image_identification": "Fareskilt 114 Glatt kjørebane",
+      "question": {
+        "no": "Hva varsler dette trafikkskiltet om?",
+        "en": "What does this traffic sign warn about?",
+        "th": "ป้ายจราจรนี้เตือนเกี่ยวกับอะไร?"
+      },
+      "options": [
+        {
+          "id": "A",
+          "text": {
+            "no": "Kjørebanen kan være glatt.",
+            "en": "The road may be slippery.",
+            "th": "ถนนอาจจะลื่น"
+          }
+        },
+        {
+          "id": "B",
+          "text": {
+            "no": "Svingete vei.",
+            "en": "Winding road.",
+            "th": "ทางคดเคี้ยว"
+          }
+        },
+        {
+          "id": "C",
+          "text": {
+            "no": "Fare for steinsprut.",
+            "en": "Danger of loose gravel.",
+            "th": "อันตรายจากถนนมีกรวดร่วน"
+          }
+        },
+        {
+          "id": "D",
+          "text": {
+            "no": "Påbudt kjøreretning til høyre.",
+            "en": "Mandatory direction to the right.",
+            "th": "บังคับให้เลี้ยวขวา"
+          }
+        }
+      ],
+      "correctOptionId": "A",
+      "explanation": {
+        "no": "Skilt 114, 'Glatt kjørebane', varsler om at veibanen kan være glatt av andre årsaker enn snø og is. Du må redusere farten og tilpasse kjøringen etter forholdene.",
+        "en": "Sign 114, 'Slippery road', warns that the road surface may be slippery for reasons other than snow and ice. You must reduce your speed and adapt your driving to the conditions.",
+        "th": "ป้าย 114 'ถนนลื่น' เตือนว่าผิวถนนอาจลื่นด้วยสาเหตุอื่นที่ไม่ใช่หิมะและน้ำแข็ง คุณต้องลดความเร็วและปรับการขับขี่ให้เข้ากับสภาพถนน"
+      },
+      "category": "Traffic Signs",
+      "difficulty": "easy"
+    }
+  },
+  {
+    "slot": "#5",
+    "label": "Smal landevei med trær",
+    "proposal": {
+      "image_identification": "Landevei med uoversiktlig bakketopp og stiplet midtlinje.",
+      "question": {
+        "no": "Du kjører på denne veien og vurderer en forbikjøring før bakketoppen. Hva er korrekt?",
+        "en": "You are driving on this road and considering overtaking before the hill crest. What is correct?",
+        "th": "คุณกำลังขับรถบนถนนเส้นนี้และพิจารณาที่จะแซงก่อนถึงยอดเนิน ข้อใดถูกต้อง"
+      },
+      "options": [
+        {
+          "id": "A",
+          "text": {
+            "no": "Det er tillatt, siden midtlinjen er stiplet.",
+            "en": "It is permitted, since the centerline is dashed.",
+            "th": "สามารถทำได้ เนื่องจากเส้นกลางถนนเป็นเส้นประ"
+          }
+        },
+        {
+          "id": "B",
+          "text": {
+            "no": "Det er forbudt, fordi veien er for smal.",
+            "en": "It is forbidden, because the road is too narrow.",
+            "th": "ห้ามทำ เนื่องจากถนนแคบเกินไป"
+          }
+        },
+        {
+          "id": "C",
+          "text": {
+            "no": "Det er forbudt, fordi sikten fremover er utilstrekkelig.",
+            "en": "It is forbidden, because the forward visibility is insufficient.",
+            "th": "ห้ามทำ เนื่องจากทัศนวิสัยด้านหน้าไม่เพียงพอ"
+          }
+        },
+        {
+          "id": "D",
+          "text": {
+            "no": "Det er tillatt, men du må kjøre over fartsgrensen for å fullføre raskt.",
+            "en": "It is permitted, but you must drive over the speed limit to complete it quickly.",
+            "th": "สามารถทำได้ แต่คุณต้องขับเร็วกว่าความเร็วที่กำหนดเพื่อแซงให้เสร็จเร็วขึ้น"
+          }
+        }
+      ],
+      "correctOptionId": "C",
+      "explanation": {
+        "no": "I henhold til trafikkreglene § 12 er forbikjøring forbudt der sikten er hindret ved bakketopp. Selv om en stiplet midtlinje (varsellinje) generelt tillater forbikjøring, overstyrer førerens ansvar for å sikre tilstrekkelig sikt. Å kjøre forbi her er ulovlig og ekstremt farlig på grunn av faren for møtende trafikk du ikke kan se.",
+        "en": "According to the Traffic Regulations § 12, overtaking is prohibited where visibility is obstructed by a hill crest. Although a dashed centerline (warning line) generally permits overtaking, the driver's responsibility to ensure sufficient visibility overrides this. Overtaking here is illegal and extremely dangerous due to the risk of unseen oncoming traffic.",
+        "th": "ตามกฎจราจรมาตรา 12 ห้ามแซงในบริเวณที่ทัศนวิสัยถูกบดบังโดยยอดเนิน ถึงแม้ว่าเส้นประกลางถนน (เส้นเตือน) โดยทั่วไปจะอนุญาตให้แซงได้ แต่ความรับผิดชอบของผู้ขับขี่ในการประเมินว่ามีทัศนวิสัยเพียงพอหรือไม่นั้นสำคัญกว่า การแซงในบริเวณนี้จึงผิดกฎหมายและอันตรายอย่างยิ่ง เนื่องจากมีความเสี่ยงที่จะมีรถสวนมาซึ่งมองไม่เห็น"
+      },
+      "category": "Traffic Rules",
+      "difficulty": "medium"
+    }
+  }
+]
