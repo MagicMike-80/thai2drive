@@ -1,0 +1,680 @@
+[
+  {
+    "question_id": "617843b9-cb2c-41a1-9469-2326aea63f69",
+    "category": "Traffic Signs",
+    "current_question_no": "Hva indikerer et blått skilt med hvit P?",
+    "current_correct_option": "B",
+    "current_correct_text_no": "Parkering tillatt",
+    "image_identification": "Parkering (552)",
+    "verdict": "MATCH",
+    "issues": [],
+    "correct_option_should_be": null,
+    "suggested_fix": {
+      "question_no": null,
+      "question_th": null,
+      "question_en": null,
+      "explanation_no": null,
+      "explanation_th": null,
+      "explanation_en": null
+    }
+  },
+  {
+    "question_id": "8c6a3bc2-45f2-45e1-b8bc-e6390cae73a8",
+    "category": "Traffic Signs",
+    "current_question_no": "Hva betyr et trekantet skilt med rød kant?",
+    "current_correct_option": "C",
+    "current_correct_text_no": "Varselskilt",
+    "image_identification": "Sidevind (150)",
+    "verdict": "MATCH",
+    "issues": [],
+    "correct_option_should_be": null,
+    "suggested_fix": {
+      "question_no": null,
+      "question_th": null,
+      "question_en": null,
+      "explanation_no": null,
+      "explanation_th": null,
+      "explanation_en": null
+    }
+  },
+  {
+    "question_id": "8e3b1708-d280-4ec3-a936-a0b102fdcd4a",
+    "category": "Traffic Signs",
+    "current_question_no": "Hva betyr et rundt skilt med rød kant og hvit bakgrunn med et tall?",
+    "current_correct_option": "C",
+    "current_correct_text_no": "Fartsgrense",
+    "image_identification": "Fartsgrense 50 km/t (362)",
+    "verdict": "MATCH",
+    "issues": [],
+    "correct_option_should_be": null,
+    "suggested_fix": {
+      "question_no": null,
+      "question_th": null,
+      "question_en": null,
+      "explanation_no": null,
+      "explanation_th": null,
+      "explanation_en": null
+    }
+  },
+  {
+    "question_id": "34a2f600-b72c-4ef6-b953-eff99ddde5cc",
+    "category": "Traffic Signs",
+    "current_question_no": "Hva betyr et skilt med hvit pil på blå bakgrunn?",
+    "current_correct_option": "A",
+    "current_correct_text_no": "Påbudt kjøreretning",
+    "image_identification": "Påbudt kjøreretning - til høyre (402.4)",
+    "verdict": "MATCH",
+    "issues": [],
+    "correct_option_should_be": null,
+    "suggested_fix": {
+      "question_no": null,
+      "question_th": null,
+      "question_en": null,
+      "explanation_no": null,
+      "explanation_th": null,
+      "explanation_en": null
+    }
+  },
+  {
+    "question_id": "d236ac46-93a7-4654-ab87-d5ddc6809775",
+    "category": "Traffic Signs",
+    "current_question_no": "Hva betyr skiltet med to piler som peker mot hverandre?",
+    "current_correct_option": "D",
+    "current_correct_text_no": "Toveis trafikk",
+    "image_identification": "Tovegstrafikk (100)",
+    "verdict": "MATCH",
+    "issues": [
+      "Spørsmålets beskrivelse av skiltet ('piler som peker mot hverandre') er litt upresis, da pilene er parallelle og peker i motsatt retning.",
+      "Forklaringen er teknisk korrekt, men svært kortfattet og gir lite tilleggsinformasjon."
+    ],
+    "correct_option_should_be": null,
+    "suggested_fix": {
+      "question_no": "Hva varsler dette skiltet om?",
+      "question_th": "ป้ายนี้เตือนเกี่ยวกับอะไร",
+      "question_en": "What does this sign warn about?",
+      "explanation_no": "Skilt 100 'Tovegstrafikk' varsler om at en envegskjørt vei eller kjørebane opphører. Du kjører nå inn på en vei med trafikk i begge retninger og må være spesielt oppmerksom på møtende trafikk.",
+      "explanation_th": "ป้ายหมายเลข 100 'การจราจรสองทิศทาง' เตือนว่าถนนหรือช่องทางเดินรถทางเดียวกำลังจะสิ้นสุดลง ขณะนี้คุณกำลังเข้าสู่ถนนที่มีการจราจรสวนทางกัน และต้องระมัดระวังเป็นพิเศษกับรถที่สวนมา",
+      "explanation_en": "Sign 100 'Two-way traffic' warns that a one-way road or lane is ending. You are now entering a road with traffic in both directions and must be especially aware of oncoming traffic."
+    }
+  },
+  {
+    "question_id": "50f1adbe-b636-4553-a4c7-689ce74d5478",
+    "category": "Traffic Signs",
+    "current_question_no": "Hva betyr et rundt skilt med rød diagonal stripe over en figur?",
+    "current_correct_option": "B",
+    "current_correct_text_no": "Forbudt",
+    "image_identification": "Forbudt for alle kjøretøy (330)",
+    "verdict": "MISMATCH",
+    "issues": [
+      "Bildet viser skilt 330 'Forbudt for alle kjøretøy', som er en hvit sirkel med rød kant.",
+      "Spørsmålet handler spesifikt om et skilt med en 'rød diagonal stripe', noe skiltet på bildet ikke har.",
+      "Bildet og spørsmålsteksten er inkonsistente. Spørsmålet bør enten endres for å passe til bildet, eller gjøres mer generelt om forbudsskilt."
+    ],
+    "correct_option_should_be": null,
+    "suggested_fix": {
+      "question_no": "Hva betyr generelt et rundt skilt med rød kant?",
+      "question_th": "โดยทั่วไปแล้วป้ายทรงกลมขอบสีแดงหมายความว่าอะไร",
+      "question_en": "What does a round sign with a red border generally mean?",
+      "explanation_no": "Runde skilt med rød kant er forbudsskilt. De angir et forbud eller en begrensning. Skiltet på bildet er et eksempel på et slikt skilt.",
+      "explanation_th": "ป้ายทรงกลมขอบสีแดงคือป้ายห้าม ซึ่งบ่งบอกถึงข้อห้ามหรือข้อจำกัด ป้ายในภาพเป็นตัวอย่างของป้ายประเภทนี้",
+      "explanation_en": "Round signs with a red border are prohibition signs. They indicate a prohibition or a restriction. The sign in the image is an example of such a sign."
+    }
+  },
+  {
+    "question_id": "9f160ed6-2315-406f-b58f-9dcab32411cd",
+    "category": "Traffic Signs",
+    "current_question_no": "Hva betyr et vikeplikt-skilt (nedovervendt trekant)?",
+    "current_correct_option": "C",
+    "current_correct_text_no": "Du må gi vikeplikt for kryssende trafikk",
+    "image_identification": "Vikeplikt (202)",
+    "verdict": "MATCH",
+    "issues": [],
+    "correct_option_should_be": null,
+    "suggested_fix": {
+      "question_no": null,
+      "question_th": null,
+      "question_en": null,
+      "explanation_no": null,
+      "explanation_th": null,
+      "explanation_en": null
+    }
+  },
+  {
+    "question_id": "64bebcea-c0a6-4b33-b8c8-ff27e3547ed5",
+    "category": "Traffic Signs",
+    "current_question_no": "Hva betyr et grønt rektangulært skilt med motorveisymbol?",
+    "current_correct_option": "B",
+    "current_correct_text_no": "Motorvei begynner",
+    "image_identification": "Motorvei (502)",
+    "verdict": "MISMATCH",
+    "issues": [
+      "Spørsmålet og forklaringen beskriver skiltet som grønt, men det offisielle skiltet 502 'Motorvei' er blått, slik bildet viser."
+    ],
+    "correct_option_should_be": null,
+    "suggested_fix": {
+      "question_no": "Hva betyr et blått rektangulært skilt med motorveisymbol?",
+      "question_th": "ป้ายสี่เหลี่ยมผืนผ้าสีน้ำเงินพร้อมสัญลักษณ์มอเตอร์เวย์หมายความว่าอย่างไร",
+      "question_en": "What does a blue rectangular sign with a motorway symbol mean?",
+      "explanation_no": "Et blått rektangulært skilt med motorveisymbol indikerer at motorveien begynner.",
+      "explanation_th": "ป้ายสี่เหลี่ยมสีน้ำเงินพร้อมสัญลักษณ์มอเตอร์เวย์บ่งบอกว่ามอเตอร์เวย์เริ่มต้นขึ้น",
+      "explanation_en": "A blue rectangular sign with a motorway symbol indicates that the motorway begins."
+    }
+  },
+  {
+    "question_id": "1b672fcf-8d33-4fcf-a947-17a9ec26c19d",
+    "category": "Speed Limits",
+    "current_question_no": "Hvor langt er 3 sekunders avstand i 80 km/t?",
+    "current_correct_option": "B",
+    "current_correct_text_no": "66 meter",
+    "image_identification": "Kjøring på flerfeltsvei eller motorvei, sett fra førerplass bak en varebil.",
+    "verdict": "MATCH",
+    "issues": [],
+    "correct_option_should_be": null,
+    "suggested_fix": {
+      "question_no": null,
+      "question_th": null,
+      "question_en": null,
+      "explanation_no": null,
+      "explanation_th": null,
+      "explanation_en": null
+    }
+  },
+  {
+    "question_id": "c1aae440-c131-4509-aae8-86ae66c0d298",
+    "category": "Traffic Signs",
+    "current_question_no": "Hva betyr dette skiltet?",
+    "current_correct_option": "A",
+    "current_correct_text_no": "Parkering tillatt",
+    "image_identification": "Parkering (552)",
+    "verdict": "MATCH",
+    "issues": [],
+    "correct_option_should_be": null,
+    "suggested_fix": {
+      "question_no": null,
+      "question_th": null,
+      "question_en": null,
+      "explanation_no": null,
+      "explanation_th": null,
+      "explanation_en": null
+    }
+  },
+  {
+    "question_id": "51a6f4d9-b7d5-4df0-9485-c97e124fdacc",
+    "category": "Traffic Signs",
+    "current_question_no": "Hva betyr dette skiltet?",
+    "current_correct_option": "B",
+    "current_correct_text_no": "Holdeplass for sporvogn",
+    "image_identification": "Serviceskilt (636 Serviceanlegg)",
+    "verdict": "MISMATCH",
+    "issues": [
+      "Bildet viser et serviceskilt (636 Serviceanlegg) som informerer om turistinformasjon, overnatting, servering og drivstoff.",
+      "Spørsmålet, svaralternativene, den markerte korrekte svaret og forklaringen handler om et helt annet skilt, nemlig 'Holdeplass for sporvogn' (512).",
+      "Ingen av svaralternativene er korrekte for skiltet som vises på bildet."
+    ],
+    "correct_option_should_be": null,
+    "suggested_fix": {
+      "question_no": "Hva informerer dette skiltet om?",
+      "question_th": "ป้ายนี้ให้ข้อมูลเกี่ยวกับอะไร",
+      "question_en": "What does this sign provide information about?",
+      "explanation_no": "Bildet viser skilt 636 'Serviceanlegg'. Det informerer om at det finnes et serviceanlegg med turistinformasjon, overnatting, spisested og bensinstasjon 1 km fremover. Spørsmålet og svaralternativene passer ikke til bildet.",
+      "explanation_th": "ภาพนี้แสดงป้าย 636 'สถานีบริการ' ซึ่งให้ข้อมูลว่าในอีก 1 กิโลเมตรข้างหน้าจะมีสถานีบริการพร้อมข้อมูลการท่องเที่ยว ที่พัก ร้านอาหาร และปั๊มน้ำมัน คำถามและตัวเลือกคำตอบไม่ตรงกับรูปภาพ",
+      "explanation_en": "The image shows sign 636 'Service facility'. It informs that there is a service area with tourist information, accommodation, a restaurant, and a gas station 1 km ahead. The question and answer options do not match the image."
+    }
+  },
+  {
+    "question_id": "c0ef82cc-fc23-417d-881b-a75cdd511a00",
+    "category": "Traffic Signs",
+    "current_question_no": "Hva er riktig om dette skiltet?",
+    "current_correct_option": "C",
+    "current_correct_text_no": "Dette er holdeplass for sporvogn",
+    "image_identification": "Gatebilde med biler i snøvær. Trafikkskiltene 'Stans forbudt (372)' og 'Påbudt kjøreretning (402.6)' er synlige.",
+    "verdict": "MISMATCH",
+    "issues": [
+      "Spørsmålet, svarene og forklaringen omhandler skilt 510 'Holdeplass for sporvogn', men dette skiltet er ikke synlig i bildet.",
+      "Bildet viser i stedet andre skilt, primært 'Stans forbudt' (372).",
+      "Bildet har en irrelevant tekst-overlay nederst ('Oppgaven handler om biler som bruker fossilt drivstoff...').",
+      "Det er en fundamental uoverensstemmelse mellom bilde og tekstlig innhold."
+    ],
+    "correct_option_should_be": null,
+    "suggested_fix": {
+      "question_no": null,
+      "question_th": null,
+      "question_en": null,
+      "explanation_no": "FEIL: Bildet stemmer ikke med spørsmålet. Spørsmålet gjelder 'Holdeplass for sporvogn', men bildet viser blant annet skiltet 'Stans forbudt'. Bildet må byttes ut med et som viser en holdeplass for sporvogn for at oppgaven skal være korrekt.",
+      "explanation_th": "ผิด: รูปภาพไม่ตรงกับคำถาม คำถามเกี่ยวกับ 'ป้ายหยุดรถราง' แต่ในรูปแสดงป้าย 'ห้ามหยุดรถ' ต้องเปลี่ยนรูปภาพเป็นป้ายที่แสดงป้ายหยุดรถรางเพื่อให้คำถามนี้ถูกต้อง",
+      "explanation_en": "INCORRECT: The image does not match the question. The question is about 'Tram stop', but the image shows a 'No stopping' sign, among others. The image must be replaced with one showing a tram stop for this quiz item to be correct."
+    }
+  },
+  {
+    "question_id": "d4a72208-39d3-44b7-9ec7-d696ba84da37",
+    "category": "Road Rules",
+    "current_question_no": "Oppgaven handler om biler som bruker fossilt drivstoff. Hva er riktig?",
+    "current_correct_option": "B",
+    "current_correct_text_no": "Fossile biler slipper ut CO₂",
+    "image_identification": "Trikk (512)",
+    "verdict": "MISMATCH",
+    "issues": [
+      "Bildet viser trafikkskilt 512 'Trikk', men spørsmålet, svaralternativene og forklaringen handler om biler som bruker fossilt drivstoff og CO₂-utslipp. Det er ingen sammenheng mellom bildet og teksten.",
+      "Teksten som er lagt oppå bildet nederst ('Hva er riktig om dette skiltet?') motsier det innsendte spørsmålet."
+    ],
+    "correct_option_should_be": null,
+    "suggested_fix": {
+      "question_no": "Hva informerer dette skiltet om?",
+      "question_th": "ป้ายนี้ให้ข้อมูลเกี่ยวกับอะไร?",
+      "question_en": "What does this sign inform about?",
+      "explanation_no": "Skilt 512 'Trikk' er et opplysningsskilt som informerer om at veien har felles trasé med, eller krysses av, trikk. Vær spesielt oppmerksom på trikken, som har lang bremselengde og ikke kan svinge unna.",
+      "explanation_th": "ป้าย 512 'รถราง' เป็นป้ายให้ข้อมูลที่แจ้งว่าถนนมีเส้นทางร่วมกันหรือมีรางรถรางตัดผ่าน โปรดให้ความสนใจเป็นพิเศษกับรถราง เนื่องจากมีระยะเบรกยาวและไม่สามารถหักหลบได้",
+      "explanation_en": "Sign 512 'Tram' is an information sign indicating that the road shares a route with, or is crossed by, a tram. Pay special attention to the tram, which has a long braking distance and cannot swerve."
+    }
+  },
+  {
+    "question_id": "34634cb2-7e5c-44df-82c4-b3197d4bad6e",
+    "category": "Traffic Signs",
+    "current_question_no": "Hva viser dette skiltet?",
+    "current_correct_option": "C",
+    "current_correct_text_no": "Informasjon om sted med tjenester",
+    "image_identification": "Holdeplass for sporvogn (510)",
+    "verdict": "MISMATCH",
+    "issues": [
+      "Bildet viser skilt 510 'Holdeplass for sporvogn'.",
+      "Spørsmålet, svaralternativene, det markerte korrekte svaret (C) og forklaringen handler om et helt annet skilt, sannsynligvis et serviceskilt (f.eks. 631 Serviceanlegg).",
+      "Ingen av de gitte svaralternativene er korrekte for skiltet som vises i bildet."
+    ],
+    "correct_option_should_be": null,
+    "suggested_fix": {
+      "question_no": "Hva betyr skiltet på bildet?",
+      "question_th": "ป้ายในรูปหมายความว่าอย่างไร?",
+      "question_en": "What does the sign in the picture mean?",
+      "explanation_no": "Bildet viser skilt 510 'Holdeplass for sporvogn'. Skiltet angir en holdeplass for sporvogn. De gitte svaralternativene og den originale forklaringen er feil, da de beskriver et annet skilt. For en holdeplass er det forbudt å parkere på en strekning 20 meter før og 20 meter etter skiltet.",
+      "explanation_th": "ภาพนี้แสดงป้าย 510 'ป้ายจอดรถราง' ป้ายนี้บ่งบอกถึงจุดจอดสำหรับรถราง ตัวเลือกคำตอบและคำอธิบายเดิมไม่ถูกต้อง เนื่องจากอธิบายป้ายอื่น สำหรับป้ายจอดรถราง ห้ามจอดรถในระยะ 20 เมตรก่อนและ 20 เมตรหลังป้าย",
+      "explanation_en": "The image shows sign 510 'Tram stop'. The sign indicates a stop for trams. The given answer options and the original explanation are incorrect as they describe a different sign. For a tram stop, it is forbidden to park for a distance of 20 meters before and 20 meters after the sign."
+    }
+  },
+  {
+    "question_id": "65e3522d-f5ed-4cbf-9a7b-019c42ce6087",
+    "category": "Traffic Signs",
+    "current_question_no": "Hva betyr dette merket på kjøretøyet?",
+    "current_correct_option": "C",
+    "current_correct_text_no": "Farlig last",
+    "image_identification": "Vei med stiplet kantlinje (vegoppmerking 1004).",
+    "verdict": "MISMATCH",
+    "issues": [
+      "Bildet stemmer ikke overens med spørsmålet. Bildet viser en vei med stiplet kantlinje, mens spørsmålet, svaralternativene og forklaringen handler om et oransje skilt for 'farlig last' på et kjøretøy. Spørsmålet er korrekt for temaet farlig last, men bildet er helt irrelevant og viser en helt annen trafikksituasjon."
+    ],
+    "correct_option_should_be": null,
+    "suggested_fix": {
+      "question_no": null,
+      "question_th": null,
+      "question_en": null,
+      "explanation_no": null,
+      "explanation_th": null,
+      "explanation_en": null
+    }
+  },
+  {
+    "question_id": "ed5e1d1a-70e1-4f17-b6ee-00282d2e4da7",
+    "category": "Safety",
+    "current_question_no": "Hva er riktig om privat øvelseskjøring?",
+    "current_correct_option": "C",
+    "current_correct_text_no": "Ledsager må ha hatt førerkort i minst 5 år",
+    "image_identification": "Bil med L-skilt for øvelseskjøring.",
+    "verdict": "MISMATCH",
+    "issues": [
+      "Spørsmålet har to korrekte svaralternativer. Både alternativ B ('Du må ha ledsager over 25 år') og C ('Ledsager må ha hatt førerkort i minst 5 år') er korrekte krav til en ledsager. Den gitte forklaringen bekrefter også begge disse kravene, noe som gjør det forvirrende at kun ett alternativ er markert som riktig."
+    ],
+    "correct_option_should_be": null,
+    "suggested_fix": {
+      "question_no": null,
+      "question_th": null,
+      "question_en": null,
+      "explanation_no": "For å være ledsager ved privat øvelseskjøring må vedkommende ha fylt 25 år OG ha hatt førerkort for den aktuelle klassen sammenhengende de siste 5 årene. Begge kravene må være oppfylt.",
+      "explanation_th": "ผู้ที่จะเป็นผู้ดูแลสำหรับการฝึกขับรถส่วนตัวจะต้องมีอายุครบ 25 ปี และต้องมีใบขับขี่สำหรับประเภทรถนั้นๆ อย่างต่อเนื่องตลอด 5 ปีที่ผ่านมา ซึ่งต้องเป็นไปตามข้อกำหนดทั้งสองข้อ",
+      "explanation_en": "To be a supervisor for private practice driving, the person must be at least 25 years old AND have held a driver's license for the relevant class continuously for the last 5 years. Both requirements must be met."
+    }
+  },
+  {
+    "question_id": "43164ed7-f19f-4db9-b6e0-7a7ed8031e02",
+    "category": "Traffic Signs",
+    "current_question_no": "Hva er riktig å anta etter dette skiltet?",
+    "current_correct_option": "B",
+    "current_correct_text_no": "Du kjører på forkjørsvei",
+    "image_identification": "Forkjørsvei (206)",
+    "verdict": "MATCH",
+    "issues": [],
+    "correct_option_should_be": null,
+    "suggested_fix": {
+      "question_no": null,
+      "question_th": null,
+      "question_en": null,
+      "explanation_no": null,
+      "explanation_th": null,
+      "explanation_en": null
+    }
+  },
+  {
+    "question_id": "65744f78-bee4-4911-aa15-d9dc767bfdcd",
+    "category": "Road Rules",
+    "current_question_no": "Hva betyr det når kantlinjen er stiplet?",
+    "current_correct_option": "C",
+    "current_correct_text_no": "Du kan krysse linjen ved behov",
+    "image_identification": "Tankbil på en bro. Veien har en heltrukket kantlinje (1002). Den grønne sirkelen markerer et oransje ADR-skilt (33/1203 Bensin) for transport av farlig gods.",
+    "verdict": "MISMATCH",
+    "issues": [
+      "Bildet viser en heltrukket kantlinje, men spørsmålet handler om en stiplet kantlinje.",
+      "Den grønne sirkelen i bildet markerer et ADR-skilt for farlig gods, som er helt irrelevant for spørsmålet om kantlinjer."
+    ],
+    "correct_option_should_be": null,
+    "suggested_fix": {
+      "question_no": null,
+      "question_th": null,
+      "question_en": null,
+      "explanation_no": null,
+      "explanation_th": null,
+      "explanation_en": null
+    }
+  },
+  {
+    "question_id": "118e4f36-40db-497d-ad82-673918845940",
+    "category": "Traffic Signs",
+    "current_question_no": "Hva varsler dette skiltet?",
+    "current_correct_option": "C",
+    "current_correct_text_no": "Glatt kjørebane",
+    "image_identification": "Glatt kjørebane (108.1)",
+    "verdict": "MATCH",
+    "issues": [],
+    "correct_option_should_be": null,
+    "suggested_fix": {
+      "question_no": null,
+      "question_th": null,
+      "question_en": null,
+      "explanation_no": null,
+      "explanation_th": null,
+      "explanation_en": null
+    }
+  },
+  {
+    "question_id": "447e1862-e3cb-446f-9718-0e8e429894a5",
+    "category": "Driving Conditions",
+    "current_question_no": "Du skal rett frem i krysset. Hva vil du gjøre?",
+    "current_correct_option": "B",
+    "current_correct_text_no": "Kjøre på gult lys hvis det er trygt",
+    "image_identification": "Kryss med trafikklys som viser rødt og gult lys samtidig (1086).",
+    "verdict": "MISMATCH",
+    "issues": [
+      "Bildet viser et trafikklys med både rødt og gult lys tent samtidig. Dette signalet betyr at det snart blir grønt, og man skal gjøre seg klar til å kjøre, men forbli stoppet til det grønne lyset tennes.",
+      "Spørsmålets korrekte svar (B) og forklaringen beskriver regelen for *kun* gult lys (som er et varsel om at det blir rødt), noe som er feil for situasjonen i bildet.",
+      "Den korrekte handlingen ved rødt+gult lys er å vente. Alternativ A, 'Stoppe før stopplinje', er det eneste riktige svaret, da man ikke har lov til å kjøre på dette signalet."
+    ],
+    "correct_option_should_be": "A",
+    "suggested_fix": {
+      "question_no": null,
+      "question_th": null,
+      "question_en": null,
+      "explanation_no": "Rødt og gult lys samtidig betyr at signalet er i ferd med å skifte til grønt. Du skal gjøre deg klar til å kjøre, men må vente bak stopplinjen til det lyser grønt.",
+      "explanation_th": "สัญญาณไฟสีแดงพร้อมกับสีเหลืองหมายความว่าสัญญาณกำลังจะเปลี่ยนเป็นสีเขียว คุณควรเตรียมพร้อมที่จะขับรถ แต่ต้องรอหลังเส้นหยุดจนกว่าไฟจะเปลี่ยนเป็นสีเขียว",
+      "explanation_en": "Red and yellow light at the same time means the signal is about to change to green. You should prepare to drive, but you must wait behind the stop line until the light turns green."
+    }
+  },
+  {
+    "question_id": "1ec30003-30f3-461e-b2b6-f7020d21a900",
+    "category": "Driving Conditions",
+    "current_question_no": "Hva er riktig om havarilommer?",
+    "current_correct_option": "B",
+    "current_correct_text_no": "For nødstopp ved problemer",
+    "image_identification": "Havarilomme (555) i en tunnel, med underskilt for Nødtelefon (828) og Brannslokningsapparat (826).",
+    "verdict": "MATCH",
+    "issues": [],
+    "correct_option_should_be": null,
+    "suggested_fix": {
+      "question_no": null,
+      "question_th": null,
+      "question_en": null,
+      "explanation_no": "En havarilomme er et spesielt felt på siden av veien, ofte i tunneler, som er ment for kjøretøy som må stoppe på grunn av en nødsituasjon, for eksempel motorstopp eller andre tekniske problemer. Det er ikke tillatt å bruke den til vanlig parkering, hvile eller for å slippe forbi annen trafikk.",
+      "explanation_th": null,
+      "explanation_en": null
+    }
+  },
+  {
+    "question_id": "bd5b4ad8-5663-410d-aa5a-614df8f2dd41",
+    "category": "Driving Conditions",
+    "current_question_no": "Kan du straffes for å kjøre forbi et ulykkessted uten å stoppe?",
+    "current_correct_option": "C",
+    "current_correct_text_no": "Kun hvis ingen andre er der",
+    "image_identification": "Ulykkessted på en vei, med en krasjet bil og andre personer/biler til stede.",
+    "verdict": "MISMATCH",
+    "issues": [
+      "Det korrekte svaralternativet (C) er en unøyaktig forenkling av loven. Hjelpeplikten gjelder hvis det ikke er 'tilstrekkelig hjelp' på stedet, ikke bare hvis 'ingen andre er der'.",
+      "Forklaringen er korrekt når den sier at plikten gjelder hvis det ikke er 'tilstrekkelig hjelp', men dette motsier betingelsen i svaralternativ C ('ingen andre er der'), som den er ment å begrunne."
+    ],
+    "correct_option_should_be": null,
+    "suggested_fix": {
+      "question_no": null,
+      "question_th": null,
+      "question_en": null,
+      "explanation_no": "Du har en generell plikt til å hjelpe ved trafikkuhell. Denne plikten gjelder med mindre det er åpenbart at det allerede er tilstrekkelig hjelp på stedet. Å kjøre forbi uten å forsikre deg om at tilstrekkelig hjelp er til stede, kan være straffbart. Plikten er mest absolutt når ingen andre er der, men den gjelder også hvis hjelpen fra andre er utilstrekkelig.",
+      "explanation_th": "คุณมีหน้าที่ทั่วไปในการให้ความช่วยเหลือเมื่อเกิดอุบัติเหตุจราจร หน้าที่นี้จะยังคงมีผลบังคับใช้ เว้นแต่จะเห็นได้ชัดว่ามีความช่วยเหลือที่เพียงพอในที่เกิดเหตุแล้ว การขับรถผ่านไปโดยไม่ตรวจสอบให้แน่ใจว่ามีความช่วยเหลือเพียงพอแล้ว อาจมีโทษได้ หน้าที่นี้จะชัดเจนที่สุดเมื่อไม่มีใครอื่นอยู่ ณ ที่เกิดเหตุ แต่ก็ยังคงมีผลบังคับใช้หากความช่วยเหลือจากผู้อื่นนั้นไม่เพียงพอ",
+      "explanation_en": "You have a general duty to assist at a traffic accident. This duty applies unless it is obvious that sufficient help is already on site. Driving past without making sure there is sufficient help can be punishable. The duty is most absolute when no one else is there, but it also applies if the assistance provided by others is insufficient."
+    }
+  },
+  {
+    "question_id": "f4077254-3c1f-4b67-9960-f49e53f801ac",
+    "category": "Traffic Signs",
+    "current_question_no": "Hva betyr dette skiltet? (vikeplikt)",
+    "current_correct_option": "C",
+    "current_correct_text_no": "Vikeplikt",
+    "image_identification": "Vikepliktskilt (202)",
+    "verdict": "MATCH",
+    "issues": [
+      "Spørsmålsteksten inneholder '(vikeplikt)', som avslører det riktige svaret. Dette bør fjernes for å lage et reelt spørsmål."
+    ],
+    "correct_option_should_be": null,
+    "suggested_fix": {
+      "question_no": "Hva betyr dette skiltet?",
+      "question_th": "ป้ายนี้หมายความว่าอย่างไร",
+      "question_en": "What does this sign mean?",
+      "explanation_no": null,
+      "explanation_th": null,
+      "explanation_en": null
+    }
+  },
+  {
+    "question_id": "37c24aeb-9f4b-45c8-9029-4ae407ab948d",
+    "category": "Traffic Signs",
+    "current_question_no": "Du ligger i feltet lengst til høyre og ser dette skiltet. Hvem får vikeplikt?",
+    "current_correct_option": "A",
+    "current_correct_text_no": "Du må gi vikeplikt",
+    "image_identification": "Måling av mønsterdybde på et dekk med en dybdemåler.",
+    "verdict": "MISMATCH",
+    "issues": [
+      "Bildet viser måling av mønsterdybde, mens spørsmålet handler om vikeplikt ved feltopphør.",
+      "Spørsmålet, svaralternativene, og forklaringen er fullstendig irrelevant for bildet.",
+      "Spørsmålet refererer til 'dette skiltet', men det er ikke noe trafikkskilt i bildet."
+    ],
+    "correct_option_should_be": null,
+    "suggested_fix": {
+      "question_no": "Hva er minimumskravet til mønsterdybde for sommerdekk?",
+      "question_th": "ข้อกำหนดความลึกของดอกยางขั้นต่ำสำหรับยางฤดูร้อนคือเท่าใด?",
+      "question_en": "What is the minimum tread depth requirement for summer tires?",
+      "explanation_no": "Minimumskravet til mønsterdybde på sommerdekk er 1,6 mm. For vinterdekk er kravet 3 mm. Det anbefales å bytte dekk før de når minimumskravet for å opprettholde gode kjøreegenskaper, spesielt på våt vei.",
+      "explanation_th": "ข้อกำหนดความลึกของดอกยางขั้นต่ำสำหรับยางฤดูร้อนคือ 1.6 มม. สำหรับยางฤดูหนาวคือ 3 มม. ขอแนะนำให้เปลี่ยนยางก่อนที่จะถึงข้อกำหนดขั้นต่ำเพื่อรักษาคุณสมบัติการขับขี่ที่ดี โดยเฉพาะอย่างยิ่งบนถนนที่เปียก",
+      "explanation_en": "The minimum tread depth requirement for summer tires is 1.6 mm. For winter tires, the requirement is 3 mm. It is recommended to replace tires before they reach the minimum requirement to maintain good driving characteristics, especially on wet roads."
+    }
+  },
+  {
+    "question_id": "518dccd7-324b-46c9-bfcd-9e402ad69c77",
+    "category": "Traffic Signs",
+    "current_question_no": "Kan du kjøre inn her?",
+    "current_correct_option": "B",
+    "current_correct_text_no": "Nei",
+    "image_identification": "Bussholdeplass (512) i en busslomme.",
+    "verdict": "MISMATCH",
+    "issues": [
+      "Forklaringen omhandler skiltet 'Innkjøring forbudt' (302), men bildet viser skiltet 'Bussholdeplass' (512).",
+      "Spørsmålet 'Kan du kjøre inn her?' er upresist og samsvarer ikke med forklaringen.",
+      "Den oppgitte forklaringen er helt irrelevant for situasjonen som vises på bildet."
+    ],
+    "correct_option_should_be": null,
+    "suggested_fix": {
+      "question_no": "Er det generelt tillatt å stanse i en slik busslomme?",
+      "question_th": "โดยทั่วไปแล้วอนุญาตให้หยุดรถในช่องจอดรถบัสแบบนี้ได้หรือไม่?",
+      "question_en": "Is it generally permitted to stop in a bus bay like this one?",
+      "explanation_no": "Det er forbudt å stanse på en bussholdeplass. Forbudet gjelder 20 meter før og etter skiltet. Kort stopp for av- eller påstigning er kun tillatt dersom man ikke hindrer bussen.",
+      "explanation_th": "ห้ามหยุดรถที่ป้ายรถประจำทาง ข้อห้ามนี้มีผลบังคับใช้ในระยะ 20 เมตรก่อนและหลังป้าย อนุญาตให้หยุดรถชั่วคราวเพื่อรับหรือส่งผู้โดยสารได้ก็ต่อเมื่อไม่กีดขวางรถประจำทางเท่านั้น",
+      "explanation_en": "It is forbidden to stop at a bus stop. The prohibition applies for 20 meters before and after the sign. A brief stop for picking up or dropping off passengers is only permitted if it does not obstruct the bus."
+    }
+  },
+  {
+    "question_id": "8c825aa1-3f45-4135-8b87-14926abc39fc",
+    "category": "Road Rules",
+    "current_question_no": "Kan du stanse i busslomme?",
+    "current_correct_option": "B",
+    "current_correct_text_no": "Nei",
+    "image_identification": "Fareskilt 'Farlig venstresving' (106.2)",
+    "verdict": "MISMATCH",
+    "issues": [
+      "Bildet viser et fareskilt for en farlig venstresving, men spørsmålet handler om stans i en busslomme. Bildet har ingen relevans til spørsmålet.",
+      "Det merkede korrekte svaret (B) er feil. I henhold til trafikkreglene § 17, punkt c, er det tillatt å stanse på en bussholdeplass for av- eller påstigning, så lenge man ikke er til hinder. Alternativ C er derfor det korrekte svaret."
+    ],
+    "correct_option_should_be": "C",
+    "suggested_fix": {
+      "question_no": null,
+      "question_th": null,
+      "question_en": null,
+      "explanation_no": "Det er forbudt å parkere i en busslomme eller på en bussholdeplass. En kort stans for av- eller påstigning er tillatt, men bare hvis du ikke er til hinder for bussen.",
+      "explanation_th": "ห้ามจอดรถในช่องจอดรถประจำทางหรือที่ป้ายรถประจำทาง อนุญาตให้หยุดรถชั่วครู่เพื่อรับส่งผู้โดยสารได้ แต่ต้องไม่กีดขวางรถประจำทางเท่านั้น",
+      "explanation_en": "It is forbidden to park in a bus lay-by or at a bus stop. A short stop for picking up or dropping off passengers is permitted, but only if you do not obstruct the bus."
+    }
+  },
+  {
+    "question_id": "c5542d2a-1962-4e3b-99c0-77c1cf6a227a",
+    "category": "Traffic Signs",
+    "current_question_no": "Utenfor tettbygd strøk er fareskilt vanligvis plassert hvor langt før faren?",
+    "current_correct_option": "C",
+    "current_correct_text_no": "150–250 meter",
+    "image_identification": "Innkjøring forbudt (302)",
+    "verdict": "MISMATCH",
+    "issues": [
+      "Bildet viser et forbudsskilt (302 'Innkjøring forbudt'), mens spørsmålet, svaralternativene og forklaringen handler om plassering av fareskilt. Bildet er fullstendig irrelevant for spørsmålet.",
+      "Den originale bildefilen inneholder en tekst 'Kan du kjøre inn her?', som indikerer at bildet var ment for et helt annet spørsmål."
+    ],
+    "correct_option_should_be": null,
+    "suggested_fix": {
+      "question_no": "Bildet viser skiltet 'Innkjøring forbudt'. Hva er den korrekte betydningen av dette skiltet?",
+      "question_th": "ในภาพคือป้าย 'ห้ามเข้า' ความหมายที่ถูกต้องของป้ายนี้คืออะไร?",
+      "question_en": "The image shows the 'No Entry' sign. What is the correct meaning of this sign?",
+      "explanation_no": "Skilt 302 'Innkjøring forbudt' betyr at det er forbudt for enhver fører av kjøretøy å kjøre forbi skiltet. Hele spørsmålet, inkludert svaralternativer, må endres for å passe til bildet.",
+      "explanation_th": "ป้าย 302 'ห้ามเข้า' หมายความว่าห้ามผู้ขับขี่ยานพาหนะทุกชนิดขับผ่านป้ายนี้ไป ต้องมีการแก้ไขคำถามทั้งหมดรวมถึงตัวเลือกคำตอบเพื่อให้สอดคล้องกับภาพ",
+      "explanation_en": "Sign 302 'No Entry' means it is forbidden for any driver of a vehicle to drive past the sign. The entire question, including answer options, must be changed to match the image."
+    }
+  },
+  {
+    "question_id": "95969874-0520-41a7-8b8d-b5ccbc545cb3",
+    "category": "Safety",
+    "current_question_no": "Hva er minimumskravet til mønsterdybde for sommerdekk?",
+    "current_correct_option": "B",
+    "current_correct_text_no": "1,6 mm",
+    "image_identification": "Opplysningsskilt for kjørefelt (variant av skilt 531). Viser at høyre felt svinger av, mens de to andre fortsetter rett fram. Bildet inneholder også en egen spørsmålstekst om vikeplikt.",
+    "verdict": "MISMATCH",
+    "issues": [
+      "Bildet viser et veiskilt om kjørefelt og stiller et spørsmål om vikeplikt ved feltskifte. Quiz-spørsmålet, svaralternativene og forklaringen handler derimot om mønsterdybde på sommerdekk. Bilde og spørsmål er fullstendig urelaterte."
+    ],
+    "correct_option_should_be": null,
+    "suggested_fix": {
+      "question_no": "Du kjører i feltet lengst til høyre og ser dette skiltet. Du skal fortsette rett fram. Hva er riktig påstand om vikeplikt?",
+      "question_th": "คุณกำลังขับรถอยู่ในเลนขวาสุดและเห็นป้ายนี้ คุณต้องการขับตรงไป ข้อความใดถูกต้องเกี่ยวกับหน้าที่ในการให้ทาง?",
+      "question_en": "You are driving in the rightmost lane and see this sign. You want to continue straight ahead. Which statement about the duty to yield is correct?",
+      "explanation_no": "Ved feltskifte har du vikeplikt for kjørende i det feltet du skal kjøre inn i. Siden ditt felt svinger av veien, må du bytte felt for å fortsette rett fram, og du må da vike for trafikken i feltet til venstre.",
+      "explanation_th": "เมื่อเปลี่ยนเลน คุณมีหน้าที่ต้องให้ทางแก่รถในเลนที่คุณกำลังจะเข้าไป เนื่องจากเลนของคุณกำลังจะแยกออกจากถนน คุณจึงต้องเปลี่ยนเลนเพื่อขับตรงไป และคุณต้องให้ทางแก่รถในเลนด้านซ้าย",
+      "explanation_en": "When changing lanes, you have a duty to yield to traffic in the lane you are about to enter. Since your lane is turning off the road, you must change lanes to continue straight, and therefore you must yield to traffic in the lane to your left."
+    }
+  },
+  {
+    "question_id": "1f332cc6-f1c3-4573-8d9e-fb741d8dbbc3",
+    "category": "Traffic Signs",
+    "current_question_no": "Hva slags skilt er dette?",
+    "current_correct_option": "A",
+    "current_correct_text_no": "Påbudsskilt",
+    "image_identification": "Rein eller elg på veien.",
+    "verdict": "MISMATCH",
+    "issues": [
+      "Bildet viser dyr i veibanen, ikke et trafikkskilt.",
+      "Spørsmålet 'Hva slags skilt er dette?' passer ikke til bildet, da det ikke er noe skilt avbildet.",
+      "Det valgte svaret (Påbudsskilt) og forklaringen (om rundkjøring) har ingen sammenheng med bildet."
+    ],
+    "correct_option_should_be": "C",
+    "suggested_fix": {
+      "question_no": "Hvilken skiltgruppe brukes for å varsle om en slik fare som vist på bildet?",
+      "question_th": "ป้ายจราจรกลุ่มใดที่ใช้เพื่อเตือนถึงอันตรายดังที่แสดงในภาพ?",
+      "question_en": "Which sign group is used to warn of a hazard like the one shown in the picture?",
+      "explanation_no": "Bildet viser fare for vilt på veien. Dette varsles med et fareskilt (trekantet med rød kant) for å gjøre føreren oppmerksom på en potensiell fare. Skilt 146.4 'Fare for elg' eller 146.5 'Fare for rein' ville vært aktuelt her.",
+      "explanation_th": "ภาพนี้แสดงถึงอันตรายจากสัตว์ป่าบนท้องถนน ซึ่งจะมีการแจ้งเตือนด้วยป้ายเตือน (รูปสามเหลี่ยมขอบสีแดง) เพื่อให้ผู้ขับขี่ตระหนักถึงอันตรายที่อาจเกิดขึ้น ในที่นี้ ป้าย 146.4 'ระวังกวางมูส' หรือ 146.5 'ระวังกวางเรนเดียร์' จะมีความเหมาะสม",
+      "explanation_en": "The picture shows the danger of wild animals on the road. This is announced with a warning sign (triangular with a red border) to make the driver aware of a potential hazard. Sign 146.4 'Moose hazard' or 146.5 'Reindeer hazard' would be relevant here."
+    }
+  },
+  {
+    "question_id": "fdbcd95b-be01-4307-9132-62e308bf08e8",
+    "category": "Road Rules",
+    "current_question_no": "Du kjører på motorvei med flere kjørefelt i samme retning. Hvordan bør du kjøre?",
+    "current_correct_option": "B",
+    "current_correct_text_no": "I høyre felt når det er mulig",
+    "image_identification": "En tofelts landevei med ett kjørefelt i hver retning, og skilt 122 'Sidevei med vikeplikt' synlig på høyre side.",
+    "verdict": "MISMATCH",
+    "issues": [
+      "Bildet viser en tofelts landevei, mens spørsmålet handler om kjøring på en motorvei med flere felt i samme retning. Bildet og spørsmålet er ikke relatert."
+    ],
+    "correct_option_should_be": null,
+    "suggested_fix": {
+      "question_no": null,
+      "question_th": null,
+      "question_en": null,
+      "explanation_no": null,
+      "explanation_th": null,
+      "explanation_en": null
+    }
+  },
+  {
+    "question_id": "c25f81a5-4cdc-4555-8dca-5d5ba8429963",
+    "category": "Traffic Signs",
+    "current_question_no": "Hva varsler dette fareskiltet?",
+    "current_correct_option": "A",
+    "current_correct_text_no": "Kryssende vei fra høyre",
+    "image_identification": "Kjøring på motorvei med flere felt. Skilt for motorvei (502) og fartsgrense 100 km/t (362) er synlige.",
+    "verdict": "MISMATCH",
+    "issues": [
+      "Bildet viser en kjøresituasjon på en motorvei, men spørsmålet handler om et spesifikt fareskilt.",
+      "Svaralternativene og forklaringen beskriver fareskiltet 'Sidevei' (110.1), som ikke finnes i bildet.",
+      "Bildet ser ut til å tilhøre et annet spørsmål, som er skrevet nederst i selve bildet: 'Du kjører på motorvei med flere kjørefelt i samme retning. Hvordan bør du kjøre?'"
+    ],
+    "correct_option_should_be": null,
+    "suggested_fix": {
+      "question_no": null,
+      "question_th": null,
+      "question_en": null,
+      "explanation_no": null,
+      "explanation_th": null,
+      "explanation_en": null
+    }
+  },
+  {
+    "question_id": "c56988fa-4ab4-4b0d-aa1e-33571850d92b",
+    "category": "Traffic Signs",
+    "current_question_no": "Hva må du være særlig oppmerksom på når du kjører i andre nordiske land?",
+    "current_correct_option": "B",
+    "current_correct_text_no": "At trafikkregler kan variere noe",
+    "image_identification": "Påbudt rundkjøring (402). Bildet har også teksten 'Hva slags skilt er dette?' lagt over seg.",
+    "verdict": "MISMATCH",
+    "issues": [
+      "Bildet viser et skilt for rundkjøring og ser ut til å være hentet fra et annet spørsmål ('Hva slags skilt er dette?').",
+      "Spørsmålet som er stilt handler om generelle regler ved kjøring i nordiske land, og har ingen direkte sammenheng med bildet av rundkjøringsskiltet."
+    ],
+    "correct_option_should_be": null,
+    "suggested_fix": {
+      "question_no": null,
+      "question_th": null,
+      "question_en": null,
+      "explanation_no": null,
+      "explanation_th": null,
+      "explanation_en": null
+    }
+  }
+]
