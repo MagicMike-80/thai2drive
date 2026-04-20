@@ -53,7 +53,7 @@ const TR: Record<string, Record<string, string>> = {
 export default function PaywallScreen() {
   const router = useRouter();
   const { language, colors, setPremium, isAuthenticated } = useAppStore();
-  const t = TR[language] || TR.no;
+  const t = TR[language] || TR.en;
   const c = colors;
   const [plan, setPlan] = useState<Plan>('fourweek');
   const [success, setSuccess] = useState(false);

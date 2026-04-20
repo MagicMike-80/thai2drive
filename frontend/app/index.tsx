@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -13,20 +14,27 @@ const LANGS = [
 ];
 
 const TR: Record<string, Record<string, string>> = {
-  no: { subtitle: 'Norsk førerprøve', startQuiz: 'Start Quiz', practice: 'Øving', exam: 'Eksamen', stats: 'Din fremgang', answered: 'Besvart', correct: 'Riktige', accuracy: 'Nøyaktighet', history: 'Historikk', bookmarks: 'Bokmerker', premiumCta: 'Lås opp full tilgang – over 5000 spørsmål', premiumOffer: 'Begrenset tilbud for de første 50', premiumPrice: '199 kr / mnd', getPremium: 'Få Premium', premiumActive: 'Premium Aktiv', streak: 'dagers rekke', freeLeft: 'gratis igjen' },
-  th: { subtitle: 'สอบใบขับขี่นอร์เวย์', startQuiz: 'เริ่มทำแบบทดสอบ', practice: 'ฝึกซ้อม', exam: 'สอบ', stats: 'ความก้าวหน้า', answered: 'ตอบแล้ว', correct: 'ถูกต้อง', accuracy: 'ความแม่นยำ', history: 'ประวัติ', bookmarks: 'บุ๊คมาร์ค', premiumCta: 'ปลดล็อคเข้าถึงทั้งหมด – กว่า 5000 ข้อ', premiumOffer: 'ข้อเสนอพิเศษสำหรับ 50 คนแรก', premiumPrice: '199 kr / เดือน', getPremium: 'รับ Premium', premiumActive: 'Premium ใช้งานอยู่', streak: 'วันติดต่อกัน', freeLeft: 'ฟรีที่เหลือ' },
-  en: { subtitle: 'Norwegian driving test', startQuiz: 'Start Quiz', practice: 'Practice', exam: 'Exam', stats: 'Your Progress', answered: 'Answered', correct: 'Correct', accuracy: 'Accuracy', history: 'History', bookmarks: 'Bookmarks', premiumCta: 'Unlock full access – over 5,000 questions', premiumOffer: 'Limited offer for first 50 users', premiumPrice: '199 kr / month', getPremium: 'Get Premium', premiumActive: 'Premium Active', streak: 'day streak', freeLeft: 'free left' },
+  no: { subtitle: 'Norsk førerprøve', startQuiz: 'Start Quiz', practice: 'Øving', exam: 'Eksamen', stats: 'Din fremgang', answered: 'Besvart', correct: 'Riktige', accuracy: 'Nøyaktighet', history: 'Historikk', bookmarks: 'Bokmerker', premiumCta: 'Lås opp full tilgang – over 5000 spørsmål', premiumOffer: 'Begrenset tilbud for de første 50', premiumPrice: '199 kr / mnd', getPremium: 'Få Premium', premiumActive: 'Premium Aktiv', streak: 'dagers rekke', freeLeft: 'gratis igjen', dailyTest: 'Dagens test', dailyDesc: '5 spørsmål – samme hele dagen', dailyDone: 'Fullført i dag' },
+  th: { subtitle: 'สอบใบขับขี่นอร์เวย์', startQuiz: 'เริ่มทำแบบทดสอบ', practice: 'ฝึกซ้อม', exam: 'สอบ', stats: 'ความก้าวหน้า', answered: 'ตอบแล้ว', correct: 'ถูกต้อง', accuracy: 'ความแม่นยำ', history: 'ประวัติ', bookmarks: 'บุ๊คมาร์ค', premiumCta: 'ปลดล็อคเข้าถึงทั้งหมด – กว่า 5000 ข้อ', premiumOffer: 'ข้อเสนอพิเศษสำหรับ 50 คนแรก', premiumPrice: '199 kr / เดือน', getPremium: 'รับ Premium', premiumActive: 'Premium ใช้งานอยู่', streak: 'วันติดต่อกัน', freeLeft: 'ฟรีที่เหลือ', dailyTest: 'แบบทดสอบประจำวัน', dailyDesc: '5 ข้อ – เหมือนกันทั้งวัน', dailyDone: 'ทำเสร็จแล้ววันนี้' },
+  en: { subtitle: 'Norwegian driving test', startQuiz: 'Start Quiz', practice: 'Practice', exam: 'Exam', stats: 'Your Progress', answered: 'Answered', correct: 'Correct', accuracy: 'Accuracy', history: 'History', bookmarks: 'Bookmarks', premiumCta: 'Unlock full access – over 5,000 questions', premiumOffer: 'Limited offer for first 50 users', premiumPrice: '199 kr / month', getPremium: 'Get Premium', premiumActive: 'Premium Active', streak: 'day streak', freeLeft: 'free left', dailyTest: 'Daily Test', dailyDesc: '5 questions – same all day', dailyDone: 'Done today' },
 };
 
 export default function HomeScreen() {
   const router = useRouter();
   const { language, setLanguage, deviceId, setProgress, progress, colors, isPremium, freeRemaining, streak, updateStreak } = useAppStore();
   const [loading, setLoading] = useState(true);
-  const t = TR[language] || TR.no;
+  const [dailyDone, setDailyDone] = useState(false);
+  const t = TR[language] || TR.en;
   const c = colors;
   const remaining = freeRemaining();
 
   useEffect(() => { loadData(); }, []);
+
+  const checkDaily = async () => {
+    const today = new Date().toISOString().slice(0, 10);
+    const result = await AsyncStorage.getItem(`dailyTest_result_${today}`);
+    setDailyDone(!!result);
+  };
 
   const loadData = async () => {
     try {
@@ -34,6 +42,7 @@ export default function HomeScreen() {
       const p = await api.getProgress(deviceId);
       setProgress(p);
       await updateStreak();
+      await checkDaily();
     } catch (e) { console.error(e); }
     finally { setLoading(false); }
   };
@@ -96,6 +105,25 @@ export default function HomeScreen() {
           onPress={() => router.push({ pathname: '/quiz', params: { mode: 'exam', category: 'all' } })} activeOpacity={0.85}>
           <Ionicons name="school" size={20} color={c.accent} />
           <Text style={[st.examText, { color: c.accent }]}>{t.exam}</Text>
+        </TouchableOpacity>
+
+        {/* Daily Test card */}
+        <TouchableOpacity
+          testID="daily-test-btn"
+          style={[st.dailyCard, { backgroundColor: c.card, borderColor: dailyDone ? c.correct : '#EC4899' }]}
+          onPress={() => router.push({ pathname: '/quiz', params: { mode: 'daily', category: 'all' } })}
+          activeOpacity={0.85}
+        >
+          <View style={[st.dailyIconWrap, { backgroundColor: dailyDone ? `${c.correct}20` : '#EC489920' }]}>
+            <Ionicons name={dailyDone ? 'checkmark-circle' : 'today-outline'} size={24} color={dailyDone ? c.correct : '#EC4899'} />
+          </View>
+          <View style={st.dailyTextWrap}>
+            <Text style={[st.dailyTitle, { color: c.text }]}>{t.dailyTest}</Text>
+            <Text style={[st.dailyDesc, { color: c.textMuted }]}>
+              {dailyDone ? t.dailyDone : t.dailyDesc}
+            </Text>
+          </View>
+          <Ionicons name="chevron-forward" size={20} color={c.textMuted} />
         </TouchableOpacity>
 
         {/* Mode shortcuts */}
@@ -183,6 +211,11 @@ const st = StyleSheet.create({
   freeHint: { fontSize: 12, textAlign: 'center', marginBottom: 12 },
   examBtn: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', borderRadius: 14, paddingVertical: 14, gap: 8, marginBottom: 14, borderWidth: 1.5 },
   examText: { fontSize: 16, fontWeight: '700' },
+  dailyCard: { flexDirection: 'row', alignItems: 'center', borderRadius: 14, paddingVertical: 12, paddingHorizontal: 14, gap: 12, marginBottom: 14, borderWidth: 1.5 },
+  dailyIconWrap: { width: 44, height: 44, borderRadius: 22, justifyContent: 'center', alignItems: 'center' },
+  dailyTextWrap: { flex: 1 },
+  dailyTitle: { fontSize: 15, fontWeight: '700' },
+  dailyDesc: { fontSize: 12, marginTop: 2 },
   modesRow: { flexDirection: 'row', gap: 8, marginBottom: 16 },
   modeChip: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 12, paddingVertical: 11, gap: 5, borderWidth: 1 },
   modeText: { fontSize: 13, fontWeight: '600' },

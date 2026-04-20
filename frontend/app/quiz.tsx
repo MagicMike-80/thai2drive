@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator, Animated, Image } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -24,7 +25,7 @@ export default function QuizScreen() {
   const { mode, category } = useLocalSearchParams<{ mode: string; category: string }>();
   const store = useAppStore();
   const { language, deviceId, addBookmark, removeBookmark, isBookmarked, setProgress, colors: c, soundEnabled, isPremium, incrementFreeQuestions, canAnswerFree, updateStreak, setLastAttempt } = store;
-  const t = T[language] || T.no;
+  const t = T[language] || T.en;
 
   // Screen capture protection
   useScreenProtection(language);
@@ -50,6 +51,7 @@ export default function QuizScreen() {
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const isExam = mode === 'exam';
   const isReviewWrong = mode === 'review-wrong';
+  const isDaily = mode === 'daily';
 
   useEffect(() => { loadQ(); return () => { if (timerRef.current) clearInterval(timerRef.current); Speech.stop(); cleanupSounds(); }; }, []);
 
@@ -68,11 +70,30 @@ export default function QuizScreen() {
   const loadQ = async () => {
     try {
       if (isReviewWrong) {
-        // Load only wrong questions from last attempt (no API call)
         const last = useAppStore.getState().lastAttempt;
         if (last && last.questions.length > 0) {
           const wrong = last.questions.filter((q, i) => !last.answers[i]?.correct);
           setQuestions(wrong);
+        }
+      } else if (isDaily) {
+        // Daily test — cached per calendar day
+        const today = new Date().toISOString().slice(0, 10);
+        const cacheKey = `dailyTest_${today}`;
+        try {
+          const cached = await AsyncStorage.getItem(cacheKey);
+          if (cached) {
+            setQuestions(JSON.parse(cached));
+          } else {
+            const q = await api.getRandomQuestions(5);
+            await AsyncStorage.setItem(cacheKey, JSON.stringify(q));
+            // Cleanup old daily caches (> 1 day old)
+            const allKeys = await AsyncStorage.getAllKeys();
+            const oldDailyKeys = allKeys.filter((k) => k.startsWith('dailyTest_') && k !== cacheKey && k !== `dailyTest_result_${today}`);
+            if (oldDailyKeys.length > 0) await AsyncStorage.multiRemove(oldDailyKeys);
+            setQuestions(q);
+          }
+        } catch (e) {
+          setQuestions(await api.getRandomQuestions(5));
         }
       } else {
         setQuestions(await api.getRandomQuestions(isExam ? 45 : 10, category === 'all' ? undefined : category));
@@ -153,6 +174,11 @@ export default function QuizScreen() {
       category: category === 'all' ? undefined : category,
       startedAt: startTime.toISOString(),
     });
+    // Mark daily test as done
+    if (isDaily) {
+      const today = new Date().toISOString().slice(0, 10);
+      await AsyncStorage.setItem(`dailyTest_result_${today}`, JSON.stringify({ correct: cor, total: questions.length, pct, at: new Date().toISOString() }));
+    }
     try { await api.saveQuizAttempt({ device_id: deviceId, mode: mode || 'practice', category: category === 'all' ? undefined : category, total_questions: questions.length, correct_answers: cor, score_percentage: pct, passed: isExam ? pct >= PASS : undefined, questions_answered: hist, started_at: startTime.toISOString() }); } catch (e) {}
     goRes(cor, pct);
   };

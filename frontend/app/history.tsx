@@ -51,7 +51,7 @@ export default function HistoryScreen() {
   const { language, deviceId } = useAppStore();
   const [attempts, setAttempts] = useState<QuizAttempt[]>([]);
   const [loading, setLoading] = useState(true);
-  const t = TRANSLATIONS[language as keyof typeof TRANSLATIONS];
+  const t = TRANSLATIONS[language as keyof typeof TRANSLATIONS] || TRANSLATIONS.en;
 
   useEffect(() => {
     loadHistory();

@@ -32,7 +32,7 @@ export default function CategoriesScreen() {
   const { language, colors } = useAppStore();
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
-  const t = TR[language] || TR.no;
+  const t = TR[language] || TR.en;
   const c = colors;
 
   useEffect(() => { api.getCategories().then(setCategories).catch(console.error).finally(() => setLoading(false)); }, []);
