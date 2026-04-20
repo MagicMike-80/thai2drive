@@ -17,3 +17,8 @@ Tracks progress of pairing Norwegian driving theory questions with verified imag
 | 2026-04-20 20:24 UTC | 516 | 28 | **5.4%** | Batch 5/5: animals crossing awareness (reindeer image) |
 | 2026-04-20 20:24 UTC | 517 | 29 | **5.6%** | Batch 5/5: sign 124 Farlig vegkryss (side road from right) |
 | 2026-04-20 20:24 UTC | 518 | 30 | **5.8%** | Batch 5/5 COMPLETE: Nordic wildlife awareness |
+| 2026-04-20 21:35 UTC | 519 | 31 | **6.0%** | Batch 2 #4: Motorrom med symbol som peker på ekspansjonstanken for kjøle |
+| 2026-04-20 21:35 UTC | 520 | 32 | **6.2%** | Batch 2 #5: Grønn buss ved en bussholdeplass i et byområde. |
+| 2026-04-20 21:35 UTC | 521 | 33 | **6.3%** | Batch 2 #6: Skilt for forkjørsvei (206) med underskilt (804) som viser a |
+| 2026-04-20 21:35 UTC | 522 | 34 | **6.5%** | Batch 2 #7: Kryss med påbudt kjøreretning til høyre, vikepliktsskilt og  |
+| 2026-04-20 21:35 UTC | 523 | 35 | **6.7%** | Batch 2 #8: Eksosrøyk fra et eksosrør på en bil. |
