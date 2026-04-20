@@ -96,7 +96,18 @@ export default function QuizScreen() {
           setQuestions(await api.getRandomQuestions(5));
         }
       } else {
-        setQuestions(await api.getRandomQuestions(isExam ? 45 : 10, category === 'all' ? undefined : category));
+        const qs = await api.getRandomQuestions(isExam ? 45 : 10, category === 'all' ? undefined : category);
+        // Debug: log full question objects so we can verify live text matches DB
+        if (qs?.[0]) {
+          console.log('[Quiz DEBUG] First question loaded:', JSON.stringify({
+            id: qs[0].id,
+            'question.en': qs[0].question?.en,
+            'options.en': qs[0].options?.map((o: any) => o.text?.en),
+            correct: qs[0].correctOptionId,
+            'explanation.en': qs[0].explanation?.en,
+          }, null, 2));
+        }
+        setQuestions(qs);
       }
     } catch (e) {}
     finally { setLoading(false); }
