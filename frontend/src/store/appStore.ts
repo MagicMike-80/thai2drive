@@ -170,7 +170,12 @@ export const useAppStore = create<AppState>((set, get) => ({
     set({ deviceId });
 
     const savedLang = await AsyncStorage.getItem('language');
-    if (savedLang) set({ language: savedLang });
+    // Only accept valid languages, fallback to 'no' if invalid or missing
+    if (savedLang && ['no', 'th', 'en'].includes(savedLang)) {
+      set({ language: savedLang });
+    } else {
+      set({ language: 'no' });
+    }
 
     const savedTheme = await AsyncStorage.getItem('themeMode');
     if (savedTheme) { const m = savedTheme as ThemeMode; const { colors, isDark } = resolveTheme(m); set({ themeMode: m, colors, isDark }); }
