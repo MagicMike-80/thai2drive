@@ -10,18 +10,20 @@ const CATEGORY_ICONS: Record<string, keyof typeof Ionicons.glyphMap> = {
   'Traffic Signs': 'warning-outline', 'Road Rules': 'document-text-outline',
   'Right of Way': 'git-branch-outline', 'Speed Limits': 'speedometer-outline', 'Safety': 'shield-checkmark-outline',
   'Driving Conditions': 'rainy-outline',
+  'Situations': 'bulb-outline',
 };
 const CATEGORY_COLORS: Record<string, string> = {
   'Traffic Signs': '#F59E0B', 'Road Rules': '#3B82F6', 'Right of Way': '#8B5CF6', 'Speed Limits': '#EF4444', 'Safety': '#22C55E',
   'Driving Conditions': '#06B6D4',
+  'Situations': '#EC4899',
 };
 const TR: Record<string, Record<string, any>> = {
   no: { selectCategory: 'Velg kategori', allCategories: 'Alle kategorier', questions: 'spørsmål', practice: 'Øvingsmodus', exam: 'Eksamensmodus',
-    categories: { 'Traffic Signs': 'Trafikkskilt', 'Road Rules': 'Trafikkregler', 'Right of Way': 'Vikeplikt', 'Speed Limits': 'Fartsgrenser', 'Safety': 'Sikkerhet', 'Driving Conditions': 'Kjøreforhold' } },
+    categories: { 'Traffic Signs': 'Trafikkskilt', 'Road Rules': 'Trafikkregler', 'Right of Way': 'Vikeplikt', 'Speed Limits': 'Fartsgrenser', 'Safety': 'Sikkerhet', 'Driving Conditions': 'Kjøreforhold', 'Situations': 'Situasjoner' } },
   th: { selectCategory: 'เลือกหมวดหมู่', allCategories: 'ทุกหมวดหมู่', questions: 'คำถาม', practice: 'โหมดฝึกซ้อม', exam: 'โหมดสอบ',
-    categories: { 'Traffic Signs': 'ป้ายจราจร', 'Road Rules': 'กฎจราจร', 'Right of Way': 'การให้ทาง', 'Speed Limits': 'ขีดจำกัดความเร็ว', 'Safety': 'ความปลอดภัย', 'Driving Conditions': 'สภาพการขับขี่' } },
+    categories: { 'Traffic Signs': 'ป้ายจราจร', 'Road Rules': 'กฎจราจร', 'Right of Way': 'การให้ทาง', 'Speed Limits': 'ขีดจำกัดความเร็ว', 'Safety': 'ความปลอดภัย', 'Driving Conditions': 'สภาพการขับขี่', 'Situations': 'สถานการณ์จริง' } },
   en: { selectCategory: 'Select Category', allCategories: 'All Categories', questions: 'questions', practice: 'Practice Mode', exam: 'Exam Mode',
-    categories: { 'Traffic Signs': 'Traffic Signs', 'Road Rules': 'Road Rules', 'Right of Way': 'Right of Way', 'Speed Limits': 'Speed Limits', 'Safety': 'Safety', 'Driving Conditions': 'Driving Conditions' } },
+    categories: { 'Traffic Signs': 'Traffic Signs', 'Road Rules': 'Road Rules', 'Right of Way': 'Right of Way', 'Speed Limits': 'Speed Limits', 'Safety': 'Safety', 'Driving Conditions': 'Driving Conditions', 'Situations': 'Situations' } },
 };
 
 export default function CategoriesScreen() {
