@@ -18,6 +18,7 @@ const TR: Record<string, Record<string, string>> = {
     reviewTitle: 'Gjennomgang', noMistakes: 'Ingen feil – perfekt!',
     yourAnswer: 'Ditt svar', correctAnswer: 'Riktig svar', explanation: 'Forklaring',
     notAnswered: 'Ikke besvart',
+    practiceWrong: 'Øv på feil spørsmål',
   },
   th: {
     done: 'ทำแบบทดสอบเสร็จ!', score: 'คะแนน', correct: 'ถูก', of: 'จาก',
@@ -29,6 +30,7 @@ const TR: Record<string, Record<string, string>> = {
     reviewTitle: 'ทบทวน', noMistakes: 'ไม่มีข้อผิด – ยอดเยี่ยม!',
     yourAnswer: 'คำตอบของคุณ', correctAnswer: 'คำตอบที่ถูก', explanation: 'คำอธิบาย',
     notAnswered: 'ยังไม่ได้ตอบ',
+    practiceWrong: 'ฝึกข้อที่ผิด',
   },
   en: {
     done: 'Quiz Complete!', score: 'Your Score', correct: 'Correct', of: 'out of',
@@ -40,6 +42,7 @@ const TR: Record<string, Record<string, string>> = {
     reviewTitle: 'Review', noMistakes: 'No mistakes – perfect!',
     yourAnswer: 'Your answer', correctAnswer: 'Correct answer', explanation: 'Explanation',
     notAnswered: 'Not answered',
+    practiceWrong: 'Practice wrong questions',
   },
 };
 
@@ -250,6 +253,19 @@ export default function ResultsScreen() {
               <Ionicons name="chevron-forward" size={18} color={c.textMuted} />
             </TouchableOpacity>
           )}
+
+          {/* Practice wrong answers button — only if has wrong */}
+          {hasAttempt && wrongCount > 0 && (
+            <TouchableOpacity
+              testID="result-practice-wrong-btn"
+              style={[st.practiceWrongBtn, { backgroundColor: c.accent }]}
+              onPress={() => router.replace({ pathname: '/quiz', params: { mode: 'review-wrong', category: 'all' } })}
+              activeOpacity={0.85}
+            >
+              <Ionicons name="refresh-circle" size={22} color="#0F172A" />
+              <Text style={st.practiceWrongText}>{t.practiceWrong} ({wrongCount})</Text>
+            </TouchableOpacity>
+          )}
         </View>
       </ScrollView>
 
@@ -301,6 +317,12 @@ const st = StyleSheet.create({
     borderWidth: 1.5, width: '100%',
   },
   reviewBtnText: { fontSize: 15, fontWeight: '700', flex: 1, textAlign: 'center' },
+  practiceWrongBtn: {
+    flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
+    borderRadius: 14, paddingVertical: 14, paddingHorizontal: 16, gap: 8,
+    width: '100%', marginTop: 10,
+  },
+  practiceWrongText: { fontSize: 15, fontWeight: '800', color: '#0F172A' },
   actions: { padding: 20 },
   upgradeBtn: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', borderRadius: 14, paddingVertical: 13, gap: 8, borderWidth: 1.5, marginBottom: 10 },
   upgradeT: { fontSize: 15, fontWeight: '700' },

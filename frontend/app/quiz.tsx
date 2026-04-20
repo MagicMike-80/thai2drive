@@ -49,6 +49,7 @@ export default function QuizScreen() {
   const scaleAnim = useRef(new Animated.Value(1)).current;
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const isExam = mode === 'exam';
+  const isReviewWrong = mode === 'review-wrong';
 
   useEffect(() => { loadQ(); return () => { if (timerRef.current) clearInterval(timerRef.current); Speech.stop(); cleanupSounds(); }; }, []);
 
@@ -65,7 +66,18 @@ export default function QuizScreen() {
   }, [loading, questions.length]);
 
   const loadQ = async () => {
-    try { setQuestions(await api.getRandomQuestions(isExam ? 45 : 10, category === 'all' ? undefined : category)); } catch (e) {}
+    try {
+      if (isReviewWrong) {
+        // Load only wrong questions from last attempt (no API call)
+        const last = useAppStore.getState().lastAttempt;
+        if (last && last.questions.length > 0) {
+          const wrong = last.questions.filter((q, i) => !last.answers[i]?.correct);
+          setQuestions(wrong);
+        }
+      } else {
+        setQuestions(await api.getRandomQuestions(isExam ? 45 : 10, category === 'all' ? undefined : category));
+      }
+    } catch (e) {}
     finally { setLoading(false); }
   };
 
