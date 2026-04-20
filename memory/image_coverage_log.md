@@ -12,3 +12,8 @@ Tracks progress of pairing Norwegian driving theory questions with verified imag
 | 2026-04-20 19:03 UTC | 511 | 23 | **4.5%** | Added sign 302 'Innkjøring forbudt' (No entry) |
 | 2026-04-20 19:06 UTC | 512 | 24 | **4.7%** | Added warning-sign placement distance question (image: 106.2 Farlig sving venstre) |
 | 2026-04-20 19:20 UTC | 513 | 25 | **4.9%** | Added summer tyre minimum tread depth (image: tread depth gauge) |
+| 2026-04-20 20:24 UTC | 514 | 26 | **5.1%** | Batch 5/5: sign 406 Påbudt rundkjøring |
+| 2026-04-20 20:24 UTC | 515 | 27 | **5.2%** | Batch 5/5: motorway keep right |
+| 2026-04-20 20:24 UTC | 516 | 28 | **5.4%** | Batch 5/5: animals crossing awareness (reindeer image) |
+| 2026-04-20 20:24 UTC | 517 | 29 | **5.6%** | Batch 5/5: sign 124 Farlig vegkryss (side road from right) |
+| 2026-04-20 20:24 UTC | 518 | 30 | **5.8%** | Batch 5/5 COMPLETE: Nordic wildlife awareness |
