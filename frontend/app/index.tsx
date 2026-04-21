@@ -6,12 +6,8 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAppStore } from '../src/store/appStore';
 import { api } from '../src/services/api';
-
-const LANGS = [
-  { code: 'th', flag: '🇹🇭' },
-  { code: 'no', flag: '🇳🇴' },
-  { code: 'en', flag: '🇬🇧' },
-];
+import { Flag } from '../src/components/Flag';
+import { LanguageSwitcher } from '../src/components/LanguageSwitcher';
 
 const TR: Record<string, Record<string, string>> = {
   no: { subtitle: 'Norsk førerprøve', startQuiz: 'Start Quiz', practice: 'Øving', exam: 'Eksamen', stats: 'Din fremgang', answered: 'Besvart', correct: 'Riktige', accuracy: 'Nøyaktighet', history: 'Historikk', bookmarks: 'Bokmerker', premiumCta: 'Lås opp full tilgang – over 5000 spørsmål', premiumOffer: 'Begrenset tilbud for de første 50', premiumPrice: '199 kr / mnd', getPremium: 'Få Premium', premiumActive: 'Premium Aktiv', streak: 'dagers rekke', freeLeft: 'gratis igjen', dailyTest: 'Dagens test', dailyDesc: '5 spørsmål – samme hele dagen', dailyDone: 'Fullført i dag' },
@@ -22,6 +18,8 @@ const TR: Record<string, Record<string, string>> = {
 export default function HomeScreen() {
   const router = useRouter();
   const { language, setLanguage, deviceId, setProgress, progress, colors, isPremium, freeRemaining, streak, updateStreak } = useAppStore();
+  // setLanguage unused — now handled by <LanguageSwitcher>
+  void setLanguage;
   const [loading, setLoading] = useState(true);
   const [dailyDone, setDailyDone] = useState(false);
   const t = TR[language] || TR.en;
@@ -61,15 +59,9 @@ export default function HomeScreen() {
       <ScrollView contentContainerStyle={st.scroll} showsVerticalScrollIndicator={false}>
         {/* Top bar: flag + lang selector + settings */}
         <View style={st.topBar}>
-          <Text style={st.thaiFlag}>🇹🇭</Text>
-          <View style={st.langRow}>
-            {LANGS.map((l) => (
-              <TouchableOpacity key={l.code} testID={`lang-btn-${l.code}`}
-                style={[st.langBtn, { backgroundColor: language === l.code ? c.accentBg : c.card, borderColor: language === l.code ? c.accent : 'transparent' }]}
-                onPress={() => setLanguage(l.code)}>
-                <Text style={st.langFlag}>{l.flag}</Text>
-              </TouchableOpacity>
-            ))}
+          <View style={st.brandFlag}><Flag code="th" size={22} /></View>
+          <View style={{ flex: 1 }}>
+            <LanguageSwitcher size="md" />
           </View>
           <TouchableOpacity testID="settings-btn" style={[st.settingsBtn, { backgroundColor: c.card, borderColor: c.cardBorder }]} onPress={() => router.push('/settings')}>
             <Ionicons name="settings-outline" size={22} color={c.text} />
@@ -195,11 +187,8 @@ const st = StyleSheet.create({
   container: { flex: 1 },
   center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   scroll: { padding: 20, paddingBottom: 40 },
-  topBar: { flexDirection: 'row', alignItems: 'center', marginBottom: 20 },
-  thaiFlag: { fontSize: 28, marginRight: 12 },
-  langRow: { flex: 1, flexDirection: 'row', gap: 6 },
-  langBtn: { width: 38, height: 38, borderRadius: 19, justifyContent: 'center', alignItems: 'center', borderWidth: 2 },
-  langFlag: { fontSize: 18 },
+  topBar: { flexDirection: 'row', alignItems: 'center', marginBottom: 20, gap: 12 },
+  brandFlag: { },
   settingsBtn: { width: 44, height: 44, borderRadius: 22, justifyContent: 'center', alignItems: 'center', borderWidth: 1 },
   title: { fontSize: 36, fontWeight: '800', letterSpacing: -1 },
   subtitle: { fontSize: 15, marginTop: 2, marginBottom: 18 },

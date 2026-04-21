@@ -57,7 +57,7 @@ export default function CategoriesScreen() {
       <ScrollView contentContainerStyle={st.scroll}>
         <TouchableOpacity testID="all-categories-btn" style={[st.allCard, { backgroundColor: c.card, borderColor: c.cardBorder }]} onPress={() => startQuiz()} activeOpacity={0.8}>
           <View style={[st.allIcon, { backgroundColor: c.accentBg }]}><Ionicons name="grid-outline" size={24} color={c.accent} /></View>
-          <View style={{ flex: 1 }}><Text style={[st.allTitle, { color: c.text }]}>{t.allCategories}</Text><Text style={[st.allCount, { color: c.textSecondary }]}>{total} {t.questions}</Text></View>
+          <View style={{ flex: 1 }}><Text style={[st.allTitle, { color: c.text }]}>{t.allCategories}</Text></View>
           <Ionicons name="chevron-forward" size={22} color={c.textMuted} />
         </TouchableOpacity>
 
@@ -70,7 +70,6 @@ export default function CategoriesScreen() {
               <TouchableOpacity key={cat.name} testID={`category-${cat.name}`} style={[st.catCard, { backgroundColor: c.card, borderColor: `${color}30` }]} onPress={() => startQuiz(cat.name)} activeOpacity={0.8}>
                 <View style={[st.catIcon, { backgroundColor: `${color}18` }]}><Ionicons name={icon} size={24} color={color} /></View>
                 <Text style={[st.catName, { color: c.text }]}>{name}</Text>
-                <Text style={[st.catCount, { color: c.textSecondary }]}>{cat.count} {t.questions}</Text>
               </TouchableOpacity>
             );
           })}

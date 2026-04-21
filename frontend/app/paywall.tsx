@@ -5,6 +5,7 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAppStore } from '../src/store/appStore';
 import { useRevenueCat, PRODUCT_IDS } from '../src/hooks/useRevenueCat';
+import { Flag } from '../src/components/Flag';
 
 type Plan = 'weekly' | 'fourweek';
 
@@ -134,7 +135,7 @@ export default function PaywallScreen() {
 
         {/* Header */}
         <View style={s.header}>
-          <Text style={s.flag}>{"🇹🇭"}</Text>
+          <View style={s.flagWrap}><Flag code="th" size={40} /></View>
           <Text style={[s.title, { color: c.text }]}>{t.title}</Text>
           <Text style={[s.subtitle, { color: c.textSecondary }]}>{t.subtitle}</Text>
         </View>
@@ -240,6 +241,7 @@ const s = StyleSheet.create({
   closeBtn: { width: 36, height: 36, borderRadius: 18, justifyContent: 'center', alignItems: 'center', alignSelf: 'flex-end' },
   header: { alignItems: 'center', marginTop: 8, marginBottom: 32 },
   flag: { fontSize: 40, marginBottom: 16 },
+  flagWrap: { marginBottom: 16 },
   title: { fontSize: 24, fontWeight: '800', textAlign: 'center', lineHeight: 30, marginBottom: 8 },
   subtitle: { fontSize: 15, textAlign: 'center', lineHeight: 21 },
   plans: { gap: 12, marginBottom: 20 },

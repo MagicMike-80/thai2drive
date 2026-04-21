@@ -4,6 +4,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAppStore } from '../src/store/appStore';
+import { Flag } from '../src/components/Flag';
+import { LanguageSwitcher } from '../src/components/LanguageSwitcher';
 
 const TR: Record<string, Record<string, string>> = {
   no: {
@@ -85,9 +87,14 @@ export default function LoginScreen() {
     <SafeAreaView style={[st.container, { backgroundColor: c.bg }]}>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
         <ScrollView contentContainerStyle={st.scroll} keyboardShouldPersistTaps="handled">
+          {/* Language switcher header */}
+          <View style={st.langHeader}>
+            <LanguageSwitcher size="sm" align="center" />
+          </View>
+
           {/* Logo */}
           <View style={st.logoSection}>
-            <Text style={st.flag}>{"🇹🇭"}</Text>
+            <View style={st.brandFlag}><Flag code="th" size={44} /></View>
             <Text style={[st.welcome, { color: c.textSecondary }]}>{t.welcome}</Text>
             <Text style={[st.appName, { color: c.text }]}>Thai2Drive</Text>
             <Text style={[st.subtitle, { color: c.textMuted }]}>{t.subtitle}</Text>
@@ -170,6 +177,8 @@ const st = StyleSheet.create({
   container: { flex: 1 },
   scroll: { flexGrow: 1, justifyContent: 'center', padding: 24 },
   logoSection: { alignItems: 'center', marginBottom: 40 },
+  langHeader: { alignItems: 'center', marginBottom: 16 },
+  brandFlag: { marginBottom: 12 },
   flag: { fontSize: 48, marginBottom: 12 },
   welcome: { fontSize: 15, marginBottom: 4 },
   appName: { fontSize: 34, fontWeight: '800', letterSpacing: -1 },
