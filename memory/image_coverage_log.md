@@ -22,3 +22,7 @@ Tracks progress of pairing Norwegian driving theory questions with verified imag
 | 2026-04-20 21:35 UTC | 521 | 33 | **6.3%** | Batch 2 #6: Skilt for forkjørsvei (206) med underskilt (804) som viser a |
 | 2026-04-20 21:35 UTC | 522 | 34 | **6.5%** | Batch 2 #7: Kryss med påbudt kjøreretning til høyre, vikepliktsskilt og  |
 | 2026-04-20 21:35 UTC | 523 | 35 | **6.7%** | Batch 2 #8: Eksosrøyk fra et eksosrør på en bil. |
+| 2026-04-21 00:11 UTC | 524 | 36 | **6.9%** | Batch 3 #1: Vikepliktsskilt 202, en rød trekant som peker nedover med hv |
+| 2026-04-21 00:11 UTC | 525 | 37 | **7.0%** | Batch 3 #2: Landevei med skilt for slutt på 60-sone. |
+| 2026-04-21 00:11 UTC | 526 | 38 | **7.2%** | Batch 3 #3: Kryss med grønt trafikklys og en trafikkbetjent som dirigere |
+| 2026-04-21 00:11 UTC | 527 | 39 | **7.4%** | Batch 3 #4: Et T-kryss med en rød bil (A) som skal til høyre, en blå bil |
