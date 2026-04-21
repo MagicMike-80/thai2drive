@@ -1,0 +1,218 @@
+[
+  {
+    "slot": "#1",
+    "path": "/tmp/batch3/img1_yield.jpg",
+    "proposal": {
+      "image_identification": "Vikepliktsskilt 202, en rød trekant som peker nedover med hvit bakgrunn.",
+      "question": {
+        "no": "Du nærmer deg et kryss med dette skiltet. Hva er din plikt?",
+        "en": "You are approaching an intersection with this sign. What is your duty?",
+        "th": "คุณกำลังเข้าใกล้ทางแยกที่มีป้ายนี้ คุณมีหน้าที่อะไร?"
+      },
+      "options": [
+        {
+          "id": "A",
+          "text": {
+            "no": "Vike for all trafikk på den kryssende veien.",
+            "en": "Yield to all traffic on the intersecting road.",
+            "th": "ให้ทางแก่รถทุกคันบนถนนที่ตัดผ่าน"
+          }
+        },
+        {
+          "id": "B",
+          "text": {
+            "no": "Stoppe helt før krysset, uansett om det er trafikk eller ikke.",
+            "en": "Stop completely before the intersection, regardless of traffic.",
+            "th": "หยุดรถให้สนิทก่อนถึงทางแยก ไม่ว่าจะมีรถหรือไม่ก็ตาม"
+          }
+        },
+        {
+          "id": "C",
+          "text": {
+            "no": "Fortsette med samme fart, da du er på en forkjørsvei.",
+            "en": "Continue at the same speed, as you are on a priority road.",
+            "th": "ขับต่อไปด้วยความเร็วเท่าเดิม เนื่องจากคุณอยู่บนถนนเอก"
+          }
+        },
+        {
+          "id": "D",
+          "text": {
+            "no": "Vike kun for kjøretøy som kommer fra høyre.",
+            "en": "Yield only to vehicles coming from the right.",
+            "th": "ให้ทางเฉพาะรถที่มาจากทางขวาเท่านั้น"
+          }
+        }
+      ],
+      "correctOptionId": "A",
+      "explanation": {
+        "no": "Dette er skilt 202 \"Vikeplikt\". Det betyr at du har plikt til å vike for all kjørende trafikk på veien du skal kjøre inn på eller krysse. Du trenger ikke stoppe hvis det er klart, men du må redusere farten i god tid og være forberedt på å stoppe.",
+        "en": "This is sign 202 \"Give Way\". It means you have a duty to yield to all moving traffic on the road you are entering or crossing. You do not need to stop if the way is clear, but you must slow down in good time and be prepared to stop.",
+        "th": "นี่คือป้าย 202 \"ให้ทาง\" ซึ่งหมายความว่าคุณมีหน้าที่ต้องให้ทางแก่รถทุกคันที่สัญจรบนถนนที่คุณกำลังจะเข้าไปหรือข้ามไป คุณไม่จำเป็นต้องหยุดหากทางสะดวก แต่คุณต้องชะลอความเร็วล่วงหน้าและเตรียมพร้อมที่จะหยุด"
+      },
+      "category": "Right of Way",
+      "difficulty": "easy"
+    }
+  },
+  {
+    "slot": "#2",
+    "path": "/tmp/batch3/img2_end60.jpg",
+    "proposal": {
+      "image_identification": "Landevei med skilt for slutt på 60-sone.",
+      "question": {
+        "no": "Du kjører på denne veien og ser dette skiltet. Hva er den nye fartsgrensen etter at du har passert skiltet?",
+        "en": "You are driving on this road and see this sign. What is the new speed limit after passing the sign?",
+        "th": "คุณกำลังขับรถอยู่บนถนนเส้นนี้และเห็นป้ายนี้ อะไรคือการจำกัดความเร็วใหม่หลังจากที่คุณขับผ่านป้ายไปแล้ว?"
+      },
+      "options": [
+        {
+          "id": "A",
+          "text": {
+            "no": "60 km/t",
+            "en": "60 km/h",
+            "th": "60 กม./ชม."
+          }
+        },
+        {
+          "id": "B",
+          "text": {
+            "no": "80 km/t",
+            "en": "80 km/h",
+            "th": "80 กม./ชม."
+          }
+        },
+        {
+          "id": "C",
+          "text": {
+            "no": "70 km/t",
+            "en": "70 km/h",
+            "th": "70 กม./ชม."
+          }
+        },
+        {
+          "id": "D",
+          "text": {
+            "no": "90 km/t",
+            "en": "90 km/h",
+            "th": "90 กม./ชม."
+          }
+        }
+      ],
+      "correctOptionId": "B",
+      "explanation": {
+        "no": "Skiltet betyr 'Slutt på fartsgrense 60 km/t'. Når en særskilt fartsgrense oppheves utenfor tettbygd strøk, gjelder den generelle fartsgrensen. For denne typen vei er den generelle fartsgrensen 80 km/t.",
+        "en": "The sign means 'End of 60 km/h speed limit'. When a special speed limit is cancelled outside of a built-up area, the general speed limit applies. For this type of road, the general speed limit is 80 km/h.",
+        "th": "ป้ายนี้หมายถึง 'สิ้นสุดการจำกัดความเร็ว 60 กม./ชม.' เมื่อการจำกัดความเร็วพิเศษถูกยกเลิกนอกเขตชุมชน ให้ใช้การจำกัดความเร็วทั่วไป สำหรับถนนประเภทนี้ การจำกัดความเร็วทั่วไปคือ 80 กม./ชม."
+      },
+      "category": "Traffic Signs",
+      "difficulty": "medium"
+    }
+  },
+  {
+    "slot": "#3",
+    "path": "/tmp/batch3/img3_police.jpg",
+    "proposal": {
+      "image_identification": "Kryss med grønt trafikklys og en trafikkbetjent som dirigerer trafikken.",
+      "question": {
+        "no": "Du kjører den røde bilen og har grønt lys. Hva er korrekt i denne situasjonen?",
+        "en": "You are driving the red car and have a green light. What is correct in this situation?",
+        "th": "คุณกำลังขับรถสีแดงและมีสัญญาณไฟเขียว อะไรคือสิ่งที่ถูกต้องในสถานการณ์นี้?"
+      },
+      "options": [
+        {
+          "id": "A",
+          "text": {
+            "no": "Jeg kan kjøre fordi trafikklyset viser grønt.",
+            "en": "I can drive because the traffic light is green.",
+            "th": "ฉันสามารถขับต่อไปได้เพราะสัญญาณไฟเป็นสีเขียว"
+          }
+        },
+        {
+          "id": "B",
+          "text": {
+            "no": "Jeg må stoppe fordi signal fra trafikkbetjenten gjelder foran trafikklyset.",
+            "en": "I must stop because the signal from the traffic warden takes precedence over the traffic light.",
+            "th": "ฉันต้องหยุดเพราะสัญญาณจากเจ้าหน้าที่จราจรมีความสำคัญเหนือกว่าสัญญาณไฟจราจร"
+          }
+        },
+        {
+          "id": "C",
+          "text": {
+            "no": "Jeg kan kjøre forsiktig gjennom krysset, siden jeg har grønt lys.",
+            "en": "I can drive carefully through the intersection, since I have a green light.",
+            "th": "ฉันสามารถขับผ่านสี่แยกได้อย่างระมัดระวัง เนื่องจากฉันมีไฟเขียว"
+          }
+        },
+        {
+          "id": "D",
+          "text": {
+            "no": "Jeg skal kun følge trafikkbetjentens tegn dersom trafikklyset er rødt.",
+            "en": "I should only follow the traffic warden's signal if the traffic light is red.",
+            "th": "ฉันควรปฏิบัติตามสัญญาณของเจ้าหน้าที่จราจรก็ต่อเมื่อสัญญาณไฟเป็นสีแดงเท่านั้น"
+          }
+        }
+      ],
+      "correctOptionId": "B",
+      "explanation": {
+        "no": "Signaler fra politi eller trafikkbetjent rangerer høyest og gjelder foran alle andre trafikksignaler, skilt og regler. Selv om trafikklyset er grønt, betyr tegnet fra trafikkbetjenten (utstrakte armer til siden) stopp for trafikk forfra og bakfra. Du må derfor stoppe.",
+        "en": "Signals from the police or a traffic warden have the highest priority and override all other traffic signals, signs, and rules. Even though the traffic light is green, the signal from the traffic warden (arms extended to the sides) means stop for traffic from the front and rear. Therefore, you must stop.",
+        "th": "สัญญาณจากตำรวจหรือเจ้าหน้าที่จราจรมีความสำคัญสูงสุดและอยู่เหนือสัญญาณจราจร ป้าย และกฎจราจรอื่นๆ ทั้งหมด ถึงแม้ว่าสัญญาณไฟจะเป็นสีเขียว แต่สัญญาณจากเจ้าหน้าที่จราจร (กางแขนออกไปด้านข้าง) หมายถึงให้หยุดสำหรับรถที่มาจากด้านหน้าและด้านหลัง ดังนั้นคุณต้องหยุดรถ"
+      },
+      "category": "Traffic Rules",
+      "difficulty": "medium"
+    }
+  },
+  {
+    "slot": "#4",
+    "path": "/tmp/batch3/img4_abc.jpg",
+    "proposal": {
+      "image_identification": "Et T-kryss med en rød bil (A) som skal til høyre, en blå bil (B) som skal til venstre, og en motorsykkel (C) som kjører rett fram.",
+      "question": {
+        "no": "Hvilken rekkefølge skal kjøretøyene kjøre i?",
+        "en": "In what order should the vehicles proceed?",
+        "th": "ยานพาหนะควรขับไปในลำดับใด?"
+      },
+      "options": [
+        {
+          "id": "A",
+          "text": {
+            "no": "A, B, C",
+            "en": "A, B, C",
+            "th": "A, B, C"
+          }
+        },
+        {
+          "id": "B",
+          "text": {
+            "no": "B, C, A",
+            "en": "B, C, A",
+            "th": "B, C, A"
+          }
+        },
+        {
+          "id": "C",
+          "text": {
+            "no": "C, A, B",
+            "en": "C, A, B",
+            "th": "C, A, B"
+          }
+        },
+        {
+          "id": "D",
+          "text": {
+            "no": "A og C kan kjøre samtidig, deretter B",
+            "en": "A and C can drive at the same time, then B",
+            "th": "A และ C สามารถขับได้พร้อมกัน จากนั้น B"
+          }
+        }
+      ],
+      "correctOptionId": "C",
+      "explanation": {
+        "no": "Dette er et uskiltet kryss, så høyreregelen gjelder. Bil B har vikeplikt for bil A. Bil A har vikeplikt for motorsykkel C. Derfor må C kjøre først, deretter A, og til slutt B.",
+        "en": "This is an unsigned intersection, so the right-hand rule applies. Car B must yield to car A. Car A must yield to motorcycle C. Therefore, C must go first, then A, and finally B.",
+        "th": "นี่คือทางแยกที่ไม่มีป้ายจราจร ดังนั้นจึงต้องใช้กฎให้ทางแก่รถทางขวา รถ B ต้องให้ทางแก่รถ A รถ A ต้องให้ทางแก่รถจักรยานยนต์ C ดังนั้น C ต้องไปก่อน ตามด้วย A และสุดท้ายคือ B"
+      },
+      "category": "Right of Way",
+      "difficulty": "medium"
+    }
+  }
+]
