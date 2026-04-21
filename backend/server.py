@@ -1924,6 +1924,39 @@ async def admin_page_alias_cms():
     return HTMLResponse("<h1>Admin panel not installed</h1>", status_code=500)
 
 
+# Catch-all for admin-panel with garbage suffixes (e.g. markdown copy-paste)
+@app.get("/api/admin-panel/{rest:path}", response_class=HTMLResponse)
+async def admin_page_catchall(rest: str):
+    """Catch URL variations like /api/admin-panel](https://...) from markdown copy-paste."""
+    if _ADMIN_HTML_PATH.exists():
+        return HTMLResponse(_ADMIN_HTML_PATH.read_text(encoding="utf-8"))
+    return HTMLResponse("<h1>Admin panel not installed</h1>", status_code=500)
+
+
+# Middleware: redirect dirty /api/admin-panel URLs (with trailing quotes, markdown syntax, etc.)
+from starlette.middleware.base import BaseHTTPMiddleware  # noqa: E402
+from starlette.responses import RedirectResponse  # noqa: E402
+
+
+class AdminUrlCleanupMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request, call_next):
+        path = request.url.path
+        # If path starts with /api/admin-panel but isn't exactly that (has garbage after), clean it
+        if path.startswith("/api/admin-panel") and path not in ("/api/admin-panel", "/api/admin-panel/"):
+            # e.g. /api/admin-panel%22 or /api/admin-panel](https...)
+            # Redirect to the clean URL
+            return RedirectResponse(url="/api/admin-panel", status_code=302)
+        # Same cleanup for /api/admin and /api/cms
+        for clean in ["/api/admin", "/api/cms"]:
+            if path.startswith(clean) and path not in (clean, clean + "/") and not path.startswith(clean + "/"):
+                # Only redirect if the extra characters aren't legit sub-paths (like /api/admin/questions)
+                pass  # no-op, the main routes handle /api/admin/stats etc
+        return await call_next(request)
+
+
+app.add_middleware(AdminUrlCleanupMiddleware)
+
+
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
