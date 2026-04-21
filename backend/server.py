@@ -1595,6 +1595,7 @@ async def admin_list_questions(
     category: Optional[str] = None,
     difficulty: Optional[str] = None,
     has_image: Optional[bool] = None,
+    active: Optional[bool] = None,
     search: Optional[str] = None,
     verdict: Optional[str] = None,  # MATCH / MISMATCH
     skip: int = 0,
@@ -1607,6 +1608,11 @@ async def admin_list_questions(
         query["category"] = category
     if difficulty:
         query["difficulty"] = difficulty
+    if active is True:
+        # Include both active=true and missing/undefined (legacy = active)
+        query["$and"] = [{"$or": [{"active": True}, {"active": {"$exists": False}}]}]
+    elif active is False:
+        query["active"] = False
     if has_image is True:
         query["bildeUrl"] = {"$regex": "^data:"}
     elif has_image is False:
@@ -1614,7 +1620,6 @@ async def admin_list_questions(
     if verdict:
         query["audit_verdict"] = verdict
     if search:
-        # case-insensitive search across NO question & explanation
         rx = {"$regex": search, "$options": "i"}
         query["$or"] = (query.get("$or") or []) + [
             {"question.no": rx},
@@ -1626,7 +1631,7 @@ async def admin_list_questions(
     cursor = db.questions.find(query, {"_id": 0}).sort("created_at", -1).skip(skip).limit(limit)
     items = await cursor.to_list(limit)
     for q in items:
-        q.pop("bildeUrl_original_backup", None)  # keep payload smaller
+        q.pop("bildeUrl_original_backup", None)
     return {"total": total, "skip": skip, "limit": limit, "items": items}
 
 

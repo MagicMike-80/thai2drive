@@ -130,6 +130,11 @@
       <option value="MATCH">✅ MATCH</option>
       <option value="MISMATCH">❌ MISMATCH</option>
     </select>
+    <select id="active">
+      <option value="">Aktiv + Inaktiv</option>
+      <option value="true">✅ Kun aktive</option>
+      <option value="false">🚫 Kun inaktive</option>
+    </select>
     <button onclick="resetFilters()" style="background:var(--card);color:var(--text);border:0;padding:8px 12px;border-radius:6px;cursor:pointer">Nullstill</button>
   </div>
 
@@ -257,11 +262,13 @@ async function loadQuestions() {
   const diff = document.getElementById('difficulty').value;
   const hasImg = document.getElementById('has_image').value;
   const verdict = document.getElementById('verdict').value;
+  const active = document.getElementById('active').value;
   if (search) params.set('search', search);
   if (cat) params.set('category', cat);
   if (diff) params.set('difficulty', diff);
   if (hasImg) params.set('has_image', hasImg);
   if (verdict) params.set('verdict', verdict);
+  if (active) params.set('active', active);
   params.set('skip', currentPage * PAGE_SIZE);
   params.set('limit', PAGE_SIZE);
 
@@ -309,7 +316,7 @@ async function loadQuestions() {
 
 function changePage(d) { currentPage = Math.max(0, currentPage + d); loadQuestions(); window.scrollTo(0, 0); }
 function resetFilters() {
-  ['search','category','difficulty','has_image','verdict'].forEach(id => document.getElementById(id).value = '');
+  ['search','category','difficulty','has_image','verdict','active'].forEach(id => document.getElementById(id).value = '');
   currentPage = 0; loadQuestions();
 }
 
@@ -418,7 +425,9 @@ function renderDetail(q, editing) {
       <button onclick="window._formMode='edit';renderDetail(window._currentQ, true)" style="background:var(--accent);color:#fff;border:0;padding:10px 16px;border-radius:6px;cursor:pointer;font-weight:600">✏️ Rediger</button>
       <button onclick="duplicateQuestion()" style="background:#8b5cf6;color:#fff;border:0;padding:10px 16px;border-radius:6px;cursor:pointer">📋 Dupliser</button>
       ${hasImg ? `<button onclick="reaudit('${q.id}')" style="background:#06b6d4;color:#fff;border:0;padding:10px 16px;border-radius:6px;cursor:pointer">🔄 AI-audit</button>` : ''}
-      <button onclick="deleteQuestion('${q.id}')" style="background:var(--bad);color:#fff;border:0;padding:10px 16px;border-radius:6px;cursor:pointer;margin-left:auto">🗑️ Deaktiver</button>
+      ${q.active === false
+        ? `<button onclick="setActive('${q.id}', true)" style="background:var(--good);color:#fff;border:0;padding:10px 16px;border-radius:6px;cursor:pointer;margin-left:auto">🔓 Reaktiver</button>`
+        : `<button onclick="deleteQuestion('${q.id}')" style="background:var(--bad);color:#fff;border:0;padding:10px 16px;border-radius:6px;cursor:pointer;margin-left:auto">🗑️ Deaktiver</button>`}
     </div>
   `;
 }
@@ -697,6 +706,21 @@ async function deleteQuestion(id) {
   } catch (e) { toast('Feil: ' + e.message, false); }
 }
 
+async function setActive(id, active) {
+  try {
+    const updated = await api('/admin/questions/' + id, {
+      method: 'PATCH', body: JSON.stringify({active})
+    });
+    toast(active ? '🔓 Reaktivert' : '🚫 Deaktivert');
+    const idx = window._questions.findIndex(x => x.id === id);
+    if (idx >= 0) window._questions[idx] = updated;
+    window._currentQ = updated;
+    renderDetail(updated, false);
+    await loadStats();
+    await loadQuestions();
+  } catch (e) { toast('Feil: ' + e.message, false); }
+}
+
 function escapeHtml(s) {
   return String(s || '').replace(/[&<>"']/g, c => ({
     '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
@@ -704,7 +728,7 @@ function escapeHtml(s) {
 }
 
 // filter change listeners
-['search','category','difficulty','has_image','verdict'].forEach(id => {
+['search','category','difficulty','has_image','verdict','active'].forEach(id => {
   const el = document.getElementById(id);
   const ev = (id === 'search') ? 'input' : 'change';
   let t;
