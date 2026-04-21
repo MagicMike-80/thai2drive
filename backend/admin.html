@@ -177,7 +177,11 @@ async function api(path, opts = {}) {
     localStorage.removeItem('admin_token'); token = ''; showLogin();
     throw new Error('Auth failed');
   }
-  if (!r.ok) throw new Error('HTTP ' + r.status);
+  if (!r.ok) {
+    let detail = '';
+    try { const j = await r.json(); detail = j.detail ? ' — ' + JSON.stringify(j.detail) : ''; } catch (_) {}
+    throw new Error('HTTP ' + r.status + ' on ' + (opts.method || 'GET') + ' ' + path + detail);
+  }
   return r.json();
 }
 
