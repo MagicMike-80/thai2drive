@@ -1909,6 +1909,21 @@ async def admin_page_short():
     return HTMLResponse("<h1>Admin panel not installed</h1>", status_code=500)
 
 
+# Shorter aliases
+@app.get("/api/admin", response_class=HTMLResponse)
+async def admin_page_alias_admin():
+    if _ADMIN_HTML_PATH.exists():
+        return HTMLResponse(_ADMIN_HTML_PATH.read_text(encoding="utf-8"))
+    return HTMLResponse("<h1>Admin panel not installed</h1>", status_code=500)
+
+
+@app.get("/api/cms", response_class=HTMLResponse)
+async def admin_page_alias_cms():
+    if _ADMIN_HTML_PATH.exists():
+        return HTMLResponse(_ADMIN_HTML_PATH.read_text(encoding="utf-8"))
+    return HTMLResponse("<h1>Admin panel not installed</h1>", status_code=500)
+
+
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
