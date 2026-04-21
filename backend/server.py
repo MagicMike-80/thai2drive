@@ -1700,8 +1700,16 @@ from pathlib import Path as _Path  # noqa: E402
 _ADMIN_HTML_PATH = _Path(__file__).resolve().parent / "admin.html"
 
 
-@app.get("/admin", response_class=HTMLResponse)
+@api_router.get("/admin/page", response_class=HTMLResponse)
 async def admin_page():
+    if _ADMIN_HTML_PATH.exists():
+        return HTMLResponse(_ADMIN_HTML_PATH.read_text(encoding="utf-8"))
+    return HTMLResponse("<h1>Admin panel not installed</h1>", status_code=500)
+
+
+# Also serve at /api/admin (without /page) for short URL
+@app.get("/api/admin-panel", response_class=HTMLResponse)
+async def admin_page_short():
     if _ADMIN_HTML_PATH.exists():
         return HTMLResponse(_ADMIN_HTML_PATH.read_text(encoding="utf-8"))
     return HTMLResponse("<h1>Admin panel not installed</h1>", status_code=500)
