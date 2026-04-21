@@ -1672,6 +1672,38 @@ async def admin_delete_question(question_id: str, _: dict = Depends(require_admi
     return {"ok": True, "id": question_id}
 
 
+@api_router.post("/admin/questions")
+async def admin_create_question(data: dict, _: dict = Depends(require_admin)):
+    """Admin: create a new question from scratch. Returns the full created document."""
+    # Validate required fields
+    required = ["question", "options", "correctOptionId", "explanation", "category"]
+    for k in required:
+        if k not in data or data[k] in (None, ""):
+            raise HTTPException(status_code=400, detail=f"Missing field: {k}")
+    if not isinstance(data.get("options"), list) or len(data["options"]) != 4:
+        raise HTTPException(status_code=400, detail="Exactly 4 options required")
+    if data["correctOptionId"] not in ["A", "B", "C", "D"]:
+        raise HTTPException(status_code=400, detail="correctOptionId must be A/B/C/D")
+
+    now = datetime.now(timezone.utc)
+    doc = {
+        "id": str(uuid.uuid4()),
+        "question": data["question"],
+        "options": data["options"],
+        "correctOptionId": data["correctOptionId"],
+        "explanation": data["explanation"],
+        "category": data["category"],
+        "difficulty": data.get("difficulty", "medium"),
+        "bildeUrl": data.get("bildeUrl", ""),
+        "active": data.get("active", True),
+        "schema_version": 2,
+        "created_at": now,
+    }
+    await db.questions.insert_one(doc)
+    result = await db.questions.find_one({"id": doc["id"]}, {"_id": 0, "bildeUrl_original_backup": 0})
+    return result
+
+
 @api_router.patch("/admin/questions/{question_id}")
 async def admin_update_question(
     question_id: str,
