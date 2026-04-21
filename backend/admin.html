@@ -309,44 +309,238 @@ function resetFilters() {
 
 function showDetail(i) {
   const q = window._questions[i];
+  renderDetail(q, false);
+  document.getElementById('modal').classList.add('show');
+}
+
+function renderDetail(q, editing) {
   const hasImg = (q.bildeUrl || '').startsWith('data:');
   const body = document.getElementById('modal-body');
+  window._currentQ = q;
+  window._editing = editing;
+
+  // View mode
+  if (!editing) {
+    body.innerHTML = `
+      <button class="close" onclick="closeModal()">×</button>
+      <h2>${escapeHtml(q.category || 'Spørsmål')} <span style="font-size:12px;color:var(--muted);font-weight:normal">${q.id}</span></h2>
+
+      <div style="margin-bottom:12px">
+        ${hasImg ? `<img src="${q.bildeUrl}" />` : '<div style="background:var(--card);padding:40px;text-align:center;border-radius:8px;color:var(--muted);margin-bottom:12px">📝 Ingen bilde</div>'}
+      </div>
+
+      <!-- Image upload zone -->
+      <div id="upload-zone" style="border:2px dashed var(--card);border-radius:8px;padding:16px;text-align:center;margin-bottom:16px;cursor:pointer"
+           onclick="document.getElementById('img-input').click()"
+           ondrop="handleDrop(event)" ondragover="event.preventDefault();this.style.borderColor='var(--accent)'"
+           ondragleave="this.style.borderColor='var(--card)'">
+        📤 <strong>Dra et bilde hit</strong> eller klikk for å velge
+        <div style="color:var(--muted);font-size:12px;margin-top:4px">JPG/PNG/WebP — maks 10 MB, skaleres til 600px</div>
+        <input type="file" id="img-input" accept="image/*" style="display:none" onchange="uploadImage(event)" />
+      </div>
+
+      ${q.audit_image_identification ? `<div style="color:var(--muted);font-size:13px;margin-bottom:12px">🔎 AI så: <em>${escapeHtml(q.audit_image_identification)}</em></div>` : ''}
+
+      <div class="lang-row"><div class="lbl">🇳🇴 Spørsmål (NO)</div>${escapeHtml(q.question?.no || '')}</div>
+      <div class="lang-row"><div class="lbl">🇬🇧 Question (EN)</div>${escapeHtml(q.question?.en || '')}</div>
+      <div class="lang-row"><div class="lbl">🇹🇭 คำถาม (TH)</div>${escapeHtml(q.question?.th || '')}</div>
+
+      <h3 style="margin-bottom:8px">Alternativer</h3>
+      ${(q.options || []).map(o => `
+        <div class="opt ${o.id === q.correctOptionId ? 'correct' : ''}">
+          <strong>${o.id === q.correctOptionId ? '✓ ' : ''}${o.id}.</strong> ${escapeHtml(o.text?.no || '')}
+          <div style="color:var(--muted);font-size:12px;margin-top:2px">EN: ${escapeHtml(o.text?.en || '')}</div>
+          <div style="color:var(--muted);font-size:12px">TH: ${escapeHtml(o.text?.th || '')}</div>
+        </div>
+      `).join('')}
+
+      <h3 style="margin-top:16px;margin-bottom:8px">Forklaring</h3>
+      <div class="lang-row"><div class="lbl">🇳🇴 NO</div>${escapeHtml(q.explanation?.no || '')}</div>
+      <div class="lang-row"><div class="lbl">🇬🇧 EN</div>${escapeHtml(q.explanation?.en || '')}</div>
+      <div class="lang-row"><div class="lbl">🇹🇭 TH</div>${escapeHtml(q.explanation?.th || '')}</div>
+
+      <div style="margin-top:16px;display:flex;gap:6px;flex-wrap:wrap">
+        <span class="tag">📂 ${q.category || '—'}</span>
+        <span class="tag">🎯 ${q.difficulty || '—'}</span>
+        ${q.audit_verdict ? `<span class="tag ${q.audit_verdict === 'MATCH' ? 'good' : 'bad'}">AI: ${q.audit_verdict}</span>` : ''}
+        ${q.active === false ? '<span class="tag bad">Inaktiv</span>' : '<span class="tag good">Aktiv</span>'}
+      </div>
+
+      <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--card);display:flex;gap:8px;flex-wrap:wrap">
+        <button onclick="renderDetail(window._currentQ, true)" style="background:var(--accent);color:#fff;border:0;padding:10px 16px;border-radius:6px;cursor:pointer">✏️ Rediger</button>
+        ${hasImg ? `<button onclick="reaudit('${q.id}')" style="background:#8b5cf6;color:#fff;border:0;padding:10px 16px;border-radius:6px;cursor:pointer">🔄 Kjør AI-audit</button>` : ''}
+        ${hasImg ? `<button onclick="removeImage('${q.id}')" style="background:var(--warn);color:#000;border:0;padding:10px 16px;border-radius:6px;cursor:pointer">🖼️ Fjern bilde</button>` : ''}
+        <button onclick="deleteQuestion('${q.id}')" style="background:var(--bad);color:#fff;border:0;padding:10px 16px;border-radius:6px;cursor:pointer;margin-left:auto">🗑️ Deaktiver</button>
+      </div>
+    `;
+    return;
+  }
+
+  // Edit mode
+  const e = {
+    qno: q.question?.no || '', qen: q.question?.en || '', qth: q.question?.th || '',
+    expno: q.explanation?.no || '', expen: q.explanation?.en || '', expth: q.explanation?.th || '',
+  };
   body.innerHTML = `
     <button class="close" onclick="closeModal()">×</button>
-    <h2>${escapeHtml(q.category || 'Spørsmål')} <span style="font-size:12px;color:var(--muted);font-weight:normal">${q.id}</span></h2>
-    ${hasImg ? `<img src="${q.bildeUrl}" />` : ''}
-    ${q.audit_image_identification ? `<div style="color:var(--muted);font-size:13px;margin-bottom:12px">🔎 Bildet viser: <em>${escapeHtml(q.audit_image_identification)}</em></div>` : ''}
+    <h2>✏️ Redigerer <span style="font-size:12px;color:var(--muted);font-weight:normal">${q.id}</span></h2>
 
-    <div class="lang-row"><div class="lbl">🇳🇴 Spørsmål (NO)</div>${escapeHtml(q.question?.no || '')}</div>
-    <div class="lang-row"><div class="lbl">🇬🇧 Question (EN)</div>${escapeHtml(q.question?.en || '')}</div>
-    <div class="lang-row"><div class="lbl">🇹🇭 คำถาม (TH)</div>${escapeHtml(q.question?.th || '')}</div>
+    ${hasImg ? `<img src="${q.bildeUrl}" style="max-height:200px" />` : ''}
 
-    <h3 style="margin-bottom:8px">Alternativer</h3>
+    <h3 style="margin-bottom:8px">Spørsmål</h3>
+    <div class="lang-row"><div class="lbl">🇳🇴 NO</div><textarea id="e_qno" style="${inputStyle()}">${escapeHtml(e.qno)}</textarea></div>
+    <div class="lang-row"><div class="lbl">🇬🇧 EN</div><textarea id="e_qen" style="${inputStyle()}">${escapeHtml(e.qen)}</textarea></div>
+    <div class="lang-row"><div class="lbl">🇹🇭 TH</div><textarea id="e_qth" style="${inputStyle()}">${escapeHtml(e.qth)}</textarea></div>
+
+    <h3 style="margin-bottom:8px">Alternativer (velg riktig svar)</h3>
     ${(q.options || []).map(o => `
-      <div class="opt ${o.id === q.correctOptionId ? 'correct' : ''}">
-        <strong>${o.id === q.correctOptionId ? '✓ ' : ''}${o.id}.</strong> ${escapeHtml(o.text?.no || '')}
-        <div style="color:var(--muted);font-size:12px;margin-top:2px">EN: ${escapeHtml(o.text?.en || '')}</div>
-        <div style="color:var(--muted);font-size:12px">TH: ${escapeHtml(o.text?.th || '')}</div>
+      <div class="opt" style="background:var(--card)">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+          <input type="radio" name="correct" value="${o.id}" ${o.id === q.correctOptionId ? 'checked' : ''} style="width:20px;height:20px" />
+          <strong>${o.id}.</strong>
+        </div>
+        <input id="e_opt_${o.id}_no" placeholder="NO" value="${escapeAttr(o.text?.no || '')}" style="${inputStyle('single')}" />
+        <input id="e_opt_${o.id}_en" placeholder="EN" value="${escapeAttr(o.text?.en || '')}" style="${inputStyle('single')}" />
+        <input id="e_opt_${o.id}_th" placeholder="TH" value="${escapeAttr(o.text?.th || '')}" style="${inputStyle('single')}" />
       </div>
     `).join('')}
 
     <h3 style="margin-top:16px;margin-bottom:8px">Forklaring</h3>
-    <div class="lang-row"><div class="lbl">🇳🇴 NO</div>${escapeHtml(q.explanation?.no || '')}</div>
-    <div class="lang-row"><div class="lbl">🇬🇧 EN</div>${escapeHtml(q.explanation?.en || '')}</div>
-    <div class="lang-row"><div class="lbl">🇹🇭 TH</div>${escapeHtml(q.explanation?.th || '')}</div>
+    <div class="lang-row"><div class="lbl">🇳🇴 NO</div><textarea id="e_expno" style="${inputStyle()}">${escapeHtml(e.expno)}</textarea></div>
+    <div class="lang-row"><div class="lbl">🇬🇧 EN</div><textarea id="e_expen" style="${inputStyle()}">${escapeHtml(e.expen)}</textarea></div>
+    <div class="lang-row"><div class="lbl">🇹🇭 TH</div><textarea id="e_expth" style="${inputStyle()}">${escapeHtml(e.expth)}</textarea></div>
 
-    <div style="margin-top:20px;display:flex;gap:8px;flex-wrap:wrap">
-      <span class="tag">📂 ${q.category || '—'}</span>
-      <span class="tag">🎯 ${q.difficulty || '—'}</span>
-      ${q.audit_verdict ? `<span class="tag ${q.audit_verdict === 'MATCH' ? 'good' : 'bad'}">AI Audit: ${q.audit_verdict}</span>` : ''}
-      ${q.active === false ? '<span class="tag bad">Inaktiv</span>' : '<span class="tag good">Aktiv</span>'}
+    <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+      <label style="flex:1;min-width:140px"><div class="lbl" style="color:var(--muted);font-size:11px;text-transform:uppercase">Kategori</div>
+        <select id="e_cat" style="${inputStyle('single')}">
+          ${['Traffic Signs','Traffic Rules','Right of Way','Safety','Parking','Road Conditions']
+            .map(c => `<option value="${c}" ${q.category===c?'selected':''}>${c}</option>`).join('')}
+        </select></label>
+      <label style="flex:1;min-width:120px"><div class="lbl" style="color:var(--muted);font-size:11px;text-transform:uppercase">Nivå</div>
+        <select id="e_diff" style="${inputStyle('single')}">
+          ${['easy','medium','hard'].map(d => `<option value="${d}" ${q.difficulty===d?'selected':''}>${d}</option>`).join('')}
+        </select></label>
     </div>
 
-    <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--card)">
-      <button onclick="deleteQuestion('${q.id}')" style="background:var(--bad);color:#fff;border:0;padding:10px 16px;border-radius:6px;cursor:pointer">🗑️ Deaktiver spørsmål</button>
+    <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--card);display:flex;gap:8px">
+      <button onclick="saveEdit('${q.id}')" style="background:var(--good);color:#fff;border:0;padding:10px 20px;border-radius:6px;cursor:pointer;font-weight:600">💾 Lagre</button>
+      <button onclick="renderDetail(window._currentQ, false)" style="background:var(--card);color:var(--text);border:0;padding:10px 20px;border-radius:6px;cursor:pointer">Avbryt</button>
     </div>
   `;
-  document.getElementById('modal').classList.add('show');
+}
+
+function inputStyle(type) {
+  const base = 'width:100%;background:#0f172a;color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:14px;font-family:inherit';
+  return type === 'single' ? base + ';margin-top:4px' : base + ';min-height:60px;resize:vertical';
+}
+function escapeAttr(s) { return String(s || '').replace(/"/g, '&quot;').replace(/</g, '&lt;'); }
+
+async function saveEdit(id) {
+  const correctEl = document.querySelector('input[name="correct"]:checked');
+  if (!correctEl) { toast('Velg riktig svar', false); return; }
+  const patch = {
+    question: {
+      no: document.getElementById('e_qno').value,
+      en: document.getElementById('e_qen').value,
+      th: document.getElementById('e_qth').value,
+    },
+    explanation: {
+      no: document.getElementById('e_expno').value,
+      en: document.getElementById('e_expen').value,
+      th: document.getElementById('e_expth').value,
+    },
+    options: ['A','B','C','D'].map(id => ({
+      id,
+      text: {
+        no: (document.getElementById(`e_opt_${id}_no`) || {}).value || '',
+        en: (document.getElementById(`e_opt_${id}_en`) || {}).value || '',
+        th: (document.getElementById(`e_opt_${id}_th`) || {}).value || '',
+      },
+    })),
+    correctOptionId: correctEl.value,
+    category: document.getElementById('e_cat').value,
+    difficulty: document.getElementById('e_diff').value,
+  };
+  try {
+    const updated = await api('/admin/questions/' + id, {
+      method: 'PATCH', body: JSON.stringify(patch),
+    });
+    toast('Lagret ✓');
+    // Update in local list
+    const idx = window._questions.findIndex(x => x.id === id);
+    if (idx >= 0) window._questions[idx] = updated;
+    renderDetail(updated, false);
+    await loadStats();
+  } catch (e) { toast('Feil: ' + e.message, false); }
+}
+
+async function uploadImage(ev) {
+  const file = ev.target.files[0];
+  if (!file) return;
+  if (!window._currentQ) return;
+  const fd = new FormData();
+  fd.append('file', file);
+  toast('Laster opp…');
+  try {
+    const r = await fetch(API + '/admin/questions/' + window._currentQ.id + '/image', {
+      method: 'POST', headers: {Authorization: 'Bearer ' + token}, body: fd,
+    });
+    if (!r.ok) { const err = await r.json().catch(() => ({})); throw new Error(err.detail || 'HTTP ' + r.status); }
+    const d = await r.json();
+    toast(`Bilde lastet opp (${d.size_kb} KB)`);
+    window._currentQ.bildeUrl = d.bildeUrl;
+    const idx = window._questions.findIndex(x => x.id === window._currentQ.id);
+    if (idx >= 0) window._questions[idx].bildeUrl = d.bildeUrl;
+    renderDetail(window._currentQ, window._editing);
+    await loadStats();
+    await loadQuestions();
+  } catch (e) { toast('Feil: ' + e.message, false); }
+}
+
+function handleDrop(ev) {
+  ev.preventDefault();
+  ev.target.style.borderColor = 'var(--card)';
+  const file = ev.dataTransfer.files[0];
+  if (file) {
+    const input = document.getElementById('img-input');
+    const dt = new DataTransfer();
+    dt.items.add(file);
+    input.files = dt.files;
+    uploadImage({target: input});
+  }
+}
+
+async function removeImage(id) {
+  if (!confirm('Fjern bildet fra dette spørsmålet?')) return;
+  try {
+    await api('/admin/questions/' + id + '/image', {method: 'DELETE'});
+    toast('Bilde fjernet');
+    window._currentQ.bildeUrl = '';
+    const idx = window._questions.findIndex(x => x.id === id);
+    if (idx >= 0) window._questions[idx].bildeUrl = '';
+    renderDetail(window._currentQ, false);
+    await loadStats();
+    await loadQuestions();
+  } catch (e) { toast('Feil: ' + e.message, false); }
+}
+
+async function reaudit(id) {
+  toast('Kjører AI-audit…');
+  try {
+    const r = await api('/admin/questions/' + id + '/audit', {method: 'POST'});
+    const v = r.verdict;
+    const badge = v === 'MATCH' ? '✅' : v === 'MISMATCH' ? '❌' : '⚠️';
+    toast(`${badge} ${v}: ${r.image_identification?.slice(0, 60) || ''}`, v === 'MATCH');
+    // Refresh question
+    window._currentQ.audit_verdict = v;
+    window._currentQ.audit_image_identification = r.image_identification;
+    const idx = window._questions.findIndex(x => x.id === id);
+    if (idx >= 0) {
+      window._questions[idx].audit_verdict = v;
+      window._questions[idx].audit_image_identification = r.image_identification;
+    }
+    renderDetail(window._currentQ, false);
+  } catch (e) { toast('Audit feilet: ' + e.message, false); }
 }
 
 function closeModal() { document.getElementById('modal').classList.remove('show'); }

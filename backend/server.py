@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter, HTTPException, Query, Depends
+from fastapi import FastAPI, APIRouter, HTTPException, Query, Depends, UploadFile, File
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
@@ -1688,6 +1688,163 @@ async def admin_update_question(
         raise HTTPException(status_code=404, detail="Question not found")
     q = await db.questions.find_one({"id": question_id}, {"_id": 0, "bildeUrl_original_backup": 0})
     return q
+
+
+@api_router.post("/admin/questions/{question_id}/image")
+async def admin_upload_image(
+    question_id: str,
+    file: UploadFile = File(...),
+    _: dict = Depends(require_admin),
+):
+    """Admin: upload a new image for a question (stored as Base64 data URI in bildeUrl).
+    Resizes to max 600px, JPEG quality 82, to keep DB payload small."""
+    import base64
+    import io
+    try:
+        from PIL import Image
+    except ImportError:
+        raise HTTPException(status_code=500, detail="Pillow not installed on server")
+
+    # Size check (max 10 MB raw)
+    raw = await file.read()
+    if len(raw) > 10 * 1024 * 1024:
+        raise HTTPException(status_code=413, detail="Image too large (max 10 MB)")
+    if len(raw) == 0:
+        raise HTTPException(status_code=400, detail="Empty file")
+
+    try:
+        img = Image.open(io.BytesIO(raw))
+        img.load()
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Could not decode image: {e}")
+
+    if max(img.size) > 600:
+        ratio = 600 / max(img.size)
+        img = img.resize((int(img.size[0] * ratio), int(img.size[1] * ratio)), Image.LANCZOS)
+    if img.mode != "RGB":
+        img = img.convert("RGB")
+    buf = io.BytesIO()
+    img.save(buf, format="JPEG", quality=82, optimize=True)
+    b64 = base64.b64encode(buf.getvalue()).decode()
+    data_uri = "data:image/jpeg;base64," + b64
+
+    q = await db.questions.find_one({"id": question_id})
+    if not q:
+        raise HTTPException(status_code=404, detail="Question not found")
+    prev = q.get("bildeUrl", "")
+    await db.questions.update_one(
+        {"id": question_id},
+        {"$set": {
+            "bildeUrl": data_uri,
+            "bildeUrl_original_backup": prev if prev else q.get("bildeUrl_original_backup"),
+        }},
+    )
+    return {
+        "ok": True,
+        "id": question_id,
+        "bildeUrl": data_uri,
+        "size_kb": round(len(buf.getvalue()) / 1024, 1),
+        "dimensions": list(img.size),
+    }
+
+
+@api_router.delete("/admin/questions/{question_id}/image")
+async def admin_remove_image(question_id: str, _: dict = Depends(require_admin)):
+    """Admin: remove the image (set bildeUrl to empty string)."""
+    q = await db.questions.find_one({"id": question_id})
+    if not q:
+        raise HTTPException(status_code=404, detail="Question not found")
+    prev = q.get("bildeUrl", "")
+    await db.questions.update_one(
+        {"id": question_id},
+        {"$set": {"bildeUrl": "", "bildeUrl_original_backup": prev}},
+    )
+    return {"ok": True, "id": question_id}
+
+
+@api_router.post("/admin/questions/{question_id}/audit")
+async def admin_audit_question(question_id: str, _: dict = Depends(require_admin)):
+    """Admin: re-run AI Vision audit on the question's current image+text.
+    Updates audit_verdict and audit_image_identification in DB."""
+    q = await db.questions.find_one({"id": question_id}, {"_id": 0, "bildeUrl_original_backup": 0})
+    if not q:
+        raise HTTPException(status_code=404, detail="Question not found")
+    bilde = q.get("bildeUrl", "")
+    if not bilde.startswith("data:"):
+        raise HTTPException(status_code=400, detail="Question has no image to audit")
+
+    emergent_key = os.getenv("EMERGENT_LLM_KEY")
+    if not emergent_key:
+        raise HTTPException(status_code=500, detail="EMERGENT_LLM_KEY not configured")
+
+    try:
+        from emergentintegrations.llm.chat import LlmChat, UserMessage, ImageContent
+    except ImportError:
+        raise HTTPException(status_code=500, detail="emergentintegrations not installed")
+
+    import json as _json
+    system_prompt = """You are a Norwegian driving theory expert auditing quiz content.
+
+Given an IMAGE and the current QUESTION+OPTIONS+CORRECT answer+EXPLANATION, verify they match.
+
+Return ONLY strict JSON:
+{
+  "image_identification": "short Norwegian description (with sign number if any)",
+  "verdict": "MATCH" | "MISMATCH" | "UNCERTAIN",
+  "issues": ["list of problems if not MATCH, empty list otherwise"]
+}"""
+
+    opts_text = "\n".join([f"  {o['id']}. {o.get('text', {}).get('no', '')}" for o in q.get("options", [])])
+    prompt = (
+        f"QUESTION (NO): {q.get('question', {}).get('no', '')}\n"
+        f"OPTIONS:\n{opts_text}\n"
+        f"MARKED CORRECT: {q.get('correctOptionId')}\n"
+        f"EXPLANATION (NO): {q.get('explanation', {}).get('no', '')}"
+    )
+
+    # Strip data URI prefix
+    b64 = bilde
+    if b64.startswith("data:"):
+        comma = b64.find(",")
+        if comma >= 0:
+            b64 = b64[comma + 1:]
+
+    chat = LlmChat(
+        api_key=emergent_key,
+        session_id=f"audit-{question_id}",
+        system_message=system_prompt,
+    ).with_model("gemini", "gemini-2.5-pro")
+
+    try:
+        raw = await chat.send_message(UserMessage(
+            text=prompt,
+            file_contents=[ImageContent(image_base64=b64)],
+        ))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"AI audit failed: {e}")
+
+    text = str(raw).strip()
+    if text.startswith("```"):
+        text = text.split("```", 2)[1]
+        if text.startswith("json"):
+            text = text[4:]
+        text = text.rsplit("```", 1)[0]
+    s, e = text.find("{"), text.rfind("}")
+    try:
+        parsed = _json.loads(text[s:e + 1])
+    except Exception:
+        parsed = {"verdict": "UNCERTAIN", "image_identification": text[:200], "issues": ["Could not parse AI response"]}
+
+    await db.questions.update_one(
+        {"id": question_id},
+        {"$set": {
+            "audit_verdict": parsed.get("verdict"),
+            "audit_image_identification": parsed.get("image_identification"),
+            "audit_issues": parsed.get("issues", []),
+            "audit_ran_at": datetime.now(timezone.utc).isoformat(),
+        }},
+    )
+    return parsed
 
 
 app.include_router(api_router)
