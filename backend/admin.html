@@ -225,6 +225,8 @@ async function showApp(email) {
 async function loadStats() {
   const s = await api('/admin/stats');
   const pct = s.coverage_pct;
+  // Cache all existing categories for dropdowns
+  window._allCategories = (s.by_category || []).map(c => c._id).filter(Boolean);
   document.getElementById('stats').innerHTML = `
     <div class="stat">
       <div class="v">${s.total}</div>
@@ -491,8 +493,12 @@ function renderForm(q) {
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-top:12px">
       <label><div class="lbl" style="color:var(--muted);font-size:11px">Kategori</div>
         <select id="e_cat" style="${inputStyle('single')}">
-          ${['Traffic Signs','Traffic Rules','Right of Way','Safety','Parking','Road Conditions']
-            .map(c => `<option value="${c}" ${q.category===c?'selected':''}>${c}</option>`).join('')}
+          ${(window._allCategories && window._allCategories.length
+              ? window._allCategories
+              : ['Traffic Signs','Traffic Rules','Right of Way','Safety','Parking','Road Conditions'])
+            .map(c => `<option value="${escapeAttr(c)}" ${q.category===c?'selected':''}>${escapeHtml(c)}</option>`).join('')}
+          ${q.category && !(window._allCategories||[]).includes(q.category) ? `<option value="${escapeAttr(q.category)}" selected>${escapeHtml(q.category)}</option>` : ''}
+          <option value="__new__">➕ Ny kategori…</option>
         </select></label>
       <label><div class="lbl" style="color:var(--muted);font-size:11px">Nivå</div>
         <select id="e_diff" style="${inputStyle('single')}">
@@ -526,6 +532,14 @@ function collectForm() {
   if (!correctEl) throw new Error('Velg riktig svar');
   const qno = document.getElementById('e_qno').value.trim();
   if (!qno) throw new Error('Spørsmål (NO) er påkrevd');
+
+  let category = document.getElementById('e_cat').value;
+  if (category === '__new__') {
+    const newCat = prompt('Skriv inn ny kategori-navn:');
+    if (!newCat || !newCat.trim()) throw new Error('Ny kategori ble ikke angitt');
+    category = newCat.trim();
+  }
+
   return {
     question: {
       no: qno,
