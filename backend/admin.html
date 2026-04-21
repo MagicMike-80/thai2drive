@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="no">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Thai2Drive — Admin</title>
+<style>
+  :root {
+    --bg:#0f172a; --panel:#1e293b; --card:#334155; --accent:#3b82f6;
+    --good:#10b981; --warn:#f59e0b; --bad:#ef4444; --text:#e2e8f0; --muted:#94a3b8;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+       background:var(--bg);color:var(--text);min-height:100vh}
+  header{background:var(--panel);padding:14px 20px;display:flex;justify-content:space-between;
+         align-items:center;border-bottom:1px solid #334155;position:sticky;top:0;z-index:10}
+  header h1{margin:0;font-size:18px}
+  header .right{font-size:13px;color:var(--muted)}
+  header button{background:var(--card);color:var(--text);border:0;padding:6px 12px;border-radius:6px;
+                cursor:pointer;margin-left:8px}
+
+  #login{max-width:360px;margin:80px auto;padding:32px;background:var(--panel);
+         border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,.4)}
+  #login h2{margin-top:0;text-align:center}
+  #login input{width:100%;padding:12px;margin:8px 0;background:var(--card);color:var(--text);
+               border:1px solid #475569;border-radius:8px;font-size:15px}
+  #login button{width:100%;padding:12px;background:var(--accent);color:#fff;border:0;
+                border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;margin-top:12px}
+  #login .err{color:var(--bad);font-size:13px;margin-top:8px;min-height:18px}
+  #login .hint{color:var(--muted);font-size:12px;text-align:center;margin-top:16px}
+
+  #app{display:none;padding:16px;max-width:1400px;margin:0 auto}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+         gap:12px;margin-bottom:16px}
+  .stat{background:var(--panel);padding:14px;border-radius:10px}
+  .stat .v{font-size:24px;font-weight:700}
+  .stat .l{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+  .progress-bar{height:8px;background:var(--card);border-radius:4px;overflow:hidden;margin-top:8px}
+  .progress-bar>div{height:100%;background:var(--good);transition:width .3s}
+
+  .filters{background:var(--panel);padding:12px;border-radius:10px;margin-bottom:12px;
+           display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .filters input,.filters select{background:var(--card);color:var(--text);
+           border:1px solid #475569;border-radius:6px;padding:8px 10px;font-size:14px}
+  .filters input[type=text]{min-width:200px;flex:1}
+  .filters label{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:4px}
+
+  #results-meta{font-size:13px;color:var(--muted);margin:8px 0}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px}
+  .q{background:var(--panel);border-radius:10px;padding:12px;border:1px solid #334155;
+     cursor:pointer;transition:transform .15s}
+  .q:hover{transform:translateY(-2px);border-color:var(--accent)}
+  .q .img-wrap{height:140px;background:var(--card);border-radius:6px;overflow:hidden;
+               margin-bottom:10px;display:flex;align-items:center;justify-content:center}
+  .q .img-wrap img{width:100%;height:100%;object-fit:contain}
+  .q .no-img{color:var(--muted);font-size:12px}
+  .q .q-text{font-size:14px;line-height:1.4;margin-bottom:8px;
+             display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .q .meta{display:flex;flex-wrap:wrap;gap:4px;font-size:11px}
+  .q .tag{background:var(--card);padding:2px 6px;border-radius:4px;color:var(--muted)}
+  .q .tag.good{background:var(--good);color:#0b2b1f}
+  .q .tag.bad{background:var(--bad);color:#2b0b0b}
+  .q .tag.correct{background:var(--accent);color:#fff}
+
+  /* Detail modal */
+  .modal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;
+         align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto;z-index:100}
+  .modal.show{display:flex}
+  .modal-content{background:var(--panel);border-radius:12px;max-width:800px;width:100%;
+                 padding:24px;max-height:90vh;overflow-y:auto}
+  .modal-content img{max-width:100%;border-radius:8px;margin-bottom:16px}
+  .modal-content .close{float:right;cursor:pointer;font-size:24px;color:var(--muted);
+                        background:none;border:0}
+  .modal h2{margin-top:0}
+  .lang-row{margin:8px 0;padding:8px;background:var(--card);border-radius:6px}
+  .lang-row .lbl{font-size:11px;color:var(--muted);text-transform:uppercase;
+                 letter-spacing:.5px;margin-bottom:4px}
+  .opt{padding:8px;margin:4px 0;background:var(--card);border-radius:6px}
+  .opt.correct{background:#065f46;border-left:3px solid var(--good)}
+
+  .pagination{display:flex;gap:8px;justify-content:center;margin:16px 0}
+  .pagination button{background:var(--card);color:var(--text);border:0;padding:8px 14px;
+                     border-radius:6px;cursor:pointer}
+  .pagination button:disabled{opacity:.4;cursor:not-allowed}
+
+  .toast{position:fixed;bottom:20px;right:20px;background:var(--panel);padding:12px 18px;
+         border-radius:8px;border-left:4px solid var(--good);z-index:200;display:none}
+  .toast.show{display:block}
+</style>
+</head>
+<body>
+
+<div id="login">
+  <h2>🚗 Thai2Drive Admin</h2>
+  <input id="email" type="email" placeholder="admin@thai2drive.com" autocomplete="username" />
+  <input id="password" type="password" placeholder="passord" autocomplete="current-password" />
+  <button onclick="login()">Logg inn</button>
+  <div id="login-err" class="err"></div>
+  <div class="hint">Bruk admin-kontoen som er registrert i databasen.</div>
+</div>
+
+<header id="app-header" style="display:none">
+  <h1>🚗 Thai2Drive Admin</h1>
+  <div class="right">
+    <span id="user-email"></span>
+    <button onclick="logout()">Logg ut</button>
+  </div>
+</header>
+
+<main id="app">
+  <div class="stats" id="stats"></div>
+
+  <div class="filters">
+    <input id="search" type="text" placeholder="Søk i spørsmål…" />
+    <select id="category"><option value="">Alle kategorier</option></select>
+    <select id="difficulty">
+      <option value="">Alle nivå</option>
+      <option value="easy">Easy</option>
+      <option value="medium">Medium</option>
+      <option value="hard">Hard</option>
+    </select>
+    <select id="has_image">
+      <option value="">Alle</option>
+      <option value="true">🖼️ Med bilde</option>
+      <option value="false">📝 Uten bilde</option>
+    </select>
+    <select id="verdict">
+      <option value="">Alle audit</option>
+      <option value="MATCH">✅ MATCH</option>
+      <option value="MISMATCH">❌ MISMATCH</option>
+    </select>
+    <button onclick="resetFilters()" style="background:var(--card);color:var(--text);border:0;padding:8px 12px;border-radius:6px;cursor:pointer">Nullstill</button>
+  </div>
+
+  <div id="results-meta"></div>
+  <div id="grid" class="grid"></div>
+  <div id="pagination" class="pagination"></div>
+</main>
+
+<div class="modal" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-content" id="modal-body"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API = '/api';
+let token = localStorage.getItem('admin_token') || '';
+let currentPage = 0;
+const PAGE_SIZE = 24;
+
+function toast(msg, good = true) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.borderLeftColor = good ? 'var(--good)' : 'var(--bad)';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+async function api(path, opts = {}) {
+  const headers = {'Content-Type': 'application/json', ...(opts.headers || {})};
+  if (token) headers.Authorization = 'Bearer ' + token;
+  const r = await fetch(API + path, {...opts, headers});
+  if (r.status === 401 || r.status === 403) {
+    localStorage.removeItem('admin_token'); token = ''; showLogin();
+    throw new Error('Auth failed');
+  }
+  if (!r.ok) throw new Error('HTTP ' + r.status);
+  return r.json();
+}
+
+async function login() {
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  const err = document.getElementById('login-err');
+  err.textContent = '';
+  try {
+    const r = await fetch(API + '/auth/login', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({email, password}),
+    });
+    const data = await r.json();
+    if (!r.ok) { err.textContent = data.detail || 'Feil innlogging'; return; }
+    if (!data.user.is_admin) { err.textContent = 'Ikke admin-tilgang'; return; }
+    token = data.token; localStorage.setItem('admin_token', token);
+    localStorage.setItem('admin_email', data.user.email);
+    showApp(data.user.email);
+  } catch (e) { err.textContent = 'Nettverksfeil: ' + e.message; }
+}
+
+function logout() {
+  localStorage.removeItem('admin_token');
+  localStorage.removeItem('admin_email');
+  token = '';
+  showLogin();
+}
+
+function showLogin() {
+  document.getElementById('login').style.display = 'block';
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('app-header').style.display = 'none';
+}
+
+async function showApp(email) {
+  document.getElementById('login').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  document.getElementById('app-header').style.display = 'flex';
+  document.getElementById('user-email').textContent = email;
+  await loadStats();
+  await loadQuestions();
+}
+
+async function loadStats() {
+  const s = await api('/admin/stats');
+  const pct = s.coverage_pct;
+  document.getElementById('stats').innerHTML = `
+    <div class="stat">
+      <div class="v">${s.total}</div>
+      <div class="l">Spørsmål</div>
+    </div>
+    <div class="stat">
+      <div class="v">${s.with_image}</div>
+      <div class="l">Med bilde</div>
+    </div>
+    <div class="stat">
+      <div class="v">${pct}%</div>
+      <div class="l">Coverage</div>
+      <div class="progress-bar"><div style="width:${pct}%"></div></div>
+    </div>
+    ${s.by_category.map(c => `
+      <div class="stat">
+        <div class="v" style="font-size:16px">${c.with_image}/${c.count}</div>
+        <div class="l">${c._id || '—'}</div>
+      </div>
+    `).join('')}
+  `;
+  const catSel = document.getElementById('category');
+  if (catSel.options.length <= 1) {
+    s.by_category.forEach(c => {
+      if (c._id) catSel.insertAdjacentHTML('beforeend',
+        `<option value="${c._id}">${c._id} (${c.count})</option>`);
+    });
+  }
+}
+
+async function loadQuestions() {
+  const params = new URLSearchParams();
+  const search = document.getElementById('search').value.trim();
+  const cat = document.getElementById('category').value;
+  const diff = document.getElementById('difficulty').value;
+  const hasImg = document.getElementById('has_image').value;
+  const verdict = document.getElementById('verdict').value;
+  if (search) params.set('search', search);
+  if (cat) params.set('category', cat);
+  if (diff) params.set('difficulty', diff);
+  if (hasImg) params.set('has_image', hasImg);
+  if (verdict) params.set('verdict', verdict);
+  params.set('skip', currentPage * PAGE_SIZE);
+  params.set('limit', PAGE_SIZE);
+
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted)">Laster…</div>';
+
+  const data = await api('/admin/questions?' + params);
+  window._questions = data.items;
+
+  document.getElementById('results-meta').textContent =
+    `Viser ${data.items.length} av ${data.total} treff (side ${currentPage + 1} av ${Math.max(1, Math.ceil(data.total / PAGE_SIZE))})`;
+
+  grid.innerHTML = data.items.map((q, i) => {
+    const hasImg = (q.bildeUrl || '').startsWith('data:');
+    const correctOpt = (q.options || []).find(o => o.id === q.correctOptionId);
+    const correctText = correctOpt ? correctOpt.text?.no || '' : '';
+    const verdictTag = q.audit_verdict
+      ? `<span class="tag ${q.audit_verdict === 'MATCH' ? 'good' : 'bad'}">${q.audit_verdict === 'MATCH' ? '✓' : '✗'}</span>`
+      : '';
+    return `
+      <div class="q" onclick="showDetail(${i})">
+        <div class="img-wrap">
+          ${hasImg ? `<img src="${q.bildeUrl}" />` : '<span class="no-img">📝 Tekst-spørsmål</span>'}
+        </div>
+        <div class="q-text">${escapeHtml(q.question?.no || '')}</div>
+        <div class="meta">
+          <span class="tag correct">${q.correctOptionId} · ${escapeHtml(correctText.slice(0, 32))}${correctText.length > 32 ? '…' : ''}</span>
+        </div>
+        <div class="meta" style="margin-top:6px">
+          <span class="tag">${q.category || '—'}</span>
+          <span class="tag">${q.difficulty || '—'}</span>
+          ${verdictTag}
+        </div>
+      </div>`;
+  }).join('') || '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted)">Ingen treff</div>';
+
+  const total = data.total;
+  const maxPage = Math.max(0, Math.ceil(total / PAGE_SIZE) - 1);
+  document.getElementById('pagination').innerHTML = `
+    <button ${currentPage === 0 ? 'disabled' : ''} onclick="changePage(-1)">← Forrige</button>
+    <span style="display:flex;align-items:center;padding:0 12px;color:var(--muted)">Side ${currentPage + 1} / ${maxPage + 1}</span>
+    <button ${currentPage >= maxPage ? 'disabled' : ''} onclick="changePage(1)">Neste →</button>
+  `;
+}
+
+function changePage(d) { currentPage = Math.max(0, currentPage + d); loadQuestions(); window.scrollTo(0, 0); }
+function resetFilters() {
+  ['search','category','difficulty','has_image','verdict'].forEach(id => document.getElementById(id).value = '');
+  currentPage = 0; loadQuestions();
+}
+
+function showDetail(i) {
+  const q = window._questions[i];
+  const hasImg = (q.bildeUrl || '').startsWith('data:');
+  const body = document.getElementById('modal-body');
+  body.innerHTML = `
+    <button class="close" onclick="closeModal()">×</button>
+    <h2>${escapeHtml(q.category || 'Spørsmål')} <span style="font-size:12px;color:var(--muted);font-weight:normal">${q.id}</span></h2>
+    ${hasImg ? `<img src="${q.bildeUrl}" />` : ''}
+    ${q.audit_image_identification ? `<div style="color:var(--muted);font-size:13px;margin-bottom:12px">🔎 Bildet viser: <em>${escapeHtml(q.audit_image_identification)}</em></div>` : ''}
+
+    <div class="lang-row"><div class="lbl">🇳🇴 Spørsmål (NO)</div>${escapeHtml(q.question?.no || '')}</div>
+    <div class="lang-row"><div class="lbl">🇬🇧 Question (EN)</div>${escapeHtml(q.question?.en || '')}</div>
+    <div class="lang-row"><div class="lbl">🇹🇭 คำถาม (TH)</div>${escapeHtml(q.question?.th || '')}</div>
+
+    <h3 style="margin-bottom:8px">Alternativer</h3>
+    ${(q.options || []).map(o => `
+      <div class="opt ${o.id === q.correctOptionId ? 'correct' : ''}">
+        <strong>${o.id === q.correctOptionId ? '✓ ' : ''}${o.id}.</strong> ${escapeHtml(o.text?.no || '')}
+        <div style="color:var(--muted);font-size:12px;margin-top:2px">EN: ${escapeHtml(o.text?.en || '')}</div>
+        <div style="color:var(--muted);font-size:12px">TH: ${escapeHtml(o.text?.th || '')}</div>
+      </div>
+    `).join('')}
+
+    <h3 style="margin-top:16px;margin-bottom:8px">Forklaring</h3>
+    <div class="lang-row"><div class="lbl">🇳🇴 NO</div>${escapeHtml(q.explanation?.no || '')}</div>
+    <div class="lang-row"><div class="lbl">🇬🇧 EN</div>${escapeHtml(q.explanation?.en || '')}</div>
+    <div class="lang-row"><div class="lbl">🇹🇭 TH</div>${escapeHtml(q.explanation?.th || '')}</div>
+
+    <div style="margin-top:20px;display:flex;gap:8px;flex-wrap:wrap">
+      <span class="tag">📂 ${q.category || '—'}</span>
+      <span class="tag">🎯 ${q.difficulty || '—'}</span>
+      ${q.audit_verdict ? `<span class="tag ${q.audit_verdict === 'MATCH' ? 'good' : 'bad'}">AI Audit: ${q.audit_verdict}</span>` : ''}
+      ${q.active === false ? '<span class="tag bad">Inaktiv</span>' : '<span class="tag good">Aktiv</span>'}
+    </div>
+
+    <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--card)">
+      <button onclick="deleteQuestion('${q.id}')" style="background:var(--bad);color:#fff;border:0;padding:10px 16px;border-radius:6px;cursor:pointer">🗑️ Deaktiver spørsmål</button>
+    </div>
+  `;
+  document.getElementById('modal').classList.add('show');
+}
+
+function closeModal() { document.getElementById('modal').classList.remove('show'); }
+
+async function deleteQuestion(id) {
+  if (!confirm('Er du sikker på at du vil deaktivere dette spørsmålet?')) return;
+  try {
+    await api('/admin/questions/' + id, {method: 'DELETE'});
+    toast('Spørsmål deaktivert');
+    closeModal();
+    await loadStats();
+    await loadQuestions();
+  } catch (e) { toast('Feil: ' + e.message, false); }
+}
+
+function escapeHtml(s) {
+  return String(s || '').replace(/[&<>"']/g, c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[c]));
+}
+
+// filter change listeners
+['search','category','difficulty','has_image','verdict'].forEach(id => {
+  const el = document.getElementById(id);
+  const ev = (id === 'search') ? 'input' : 'change';
+  let t;
+  el.addEventListener(ev, () => {
+    clearTimeout(t);
+    t = setTimeout(() => { currentPage = 0; loadQuestions(); }, id === 'search' ? 400 : 0);
+  });
+});
+
+document.getElementById('password').addEventListener('keydown', e => {
+  if (e.key === 'Enter') login();
+});
+
+// Auto-login if token exists
+(async function init() {
+  if (token) {
+    try {
+      const r = await fetch(API + '/auth/me', {headers: {Authorization: 'Bearer ' + token}});
+      if (r.ok) {
+        const u = await r.json();
+        if (u.is_admin) { showApp(u.email); return; }
+      }
+    } catch (_) {}
+  }
+  showLogin();
+})();
+</script>
+</body>
+</html>

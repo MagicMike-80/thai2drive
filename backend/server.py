@@ -1574,7 +1574,138 @@ async def seed_database():
     await db.questions.insert_many(sample_questions)
     return {"message": f"Seeded {len(sample_questions)} questions", "seeded": True}
 
+# ==================== ADMIN PANEL ENDPOINTS ====================
+
+async def require_admin(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    """Auth dependency that requires the JWT user to have is_admin=true in DB."""
+    if not credentials:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    payload = verify_token(credentials.credentials)
+    if not payload:
+        raise HTTPException(status_code=401, detail="Invalid or expired token")
+    email = payload.get("email")
+    admin_entry = await db.admin_users.find_one({"email": email})
+    if not admin_entry:
+        raise HTTPException(status_code=403, detail="Admin access required")
+    return payload
+
+
+@api_router.get("/admin/questions")
+async def admin_list_questions(
+    category: Optional[str] = None,
+    difficulty: Optional[str] = None,
+    has_image: Optional[bool] = None,
+    search: Optional[str] = None,
+    verdict: Optional[str] = None,  # MATCH / MISMATCH
+    skip: int = 0,
+    limit: int = Query(default=50, le=200),
+    _: dict = Depends(require_admin),
+):
+    """Admin: list all questions with filters. Returns full content including bildeUrl."""
+    query: dict = {}
+    if category:
+        query["category"] = category
+    if difficulty:
+        query["difficulty"] = difficulty
+    if has_image is True:
+        query["bildeUrl"] = {"$regex": "^data:"}
+    elif has_image is False:
+        query["$or"] = [{"bildeUrl": {"$exists": False}}, {"bildeUrl": ""}, {"bildeUrl": None}]
+    if verdict:
+        query["audit_verdict"] = verdict
+    if search:
+        # case-insensitive search across NO question & explanation
+        rx = {"$regex": search, "$options": "i"}
+        query["$or"] = (query.get("$or") or []) + [
+            {"question.no": rx},
+            {"explanation.no": rx},
+            {"id": rx},
+        ]
+
+    total = await db.questions.count_documents(query)
+    cursor = db.questions.find(query, {"_id": 0}).sort("created_at", -1).skip(skip).limit(limit)
+    items = await cursor.to_list(limit)
+    for q in items:
+        q.pop("bildeUrl_original_backup", None)  # keep payload smaller
+    return {"total": total, "skip": skip, "limit": limit, "items": items}
+
+
+@api_router.get("/admin/stats")
+async def admin_stats(_: dict = Depends(require_admin)):
+    """Admin: database overview statistics."""
+    total = await db.questions.count_documents({"active": True})
+    with_img = await db.questions.count_documents(
+        {"active": True, "bildeUrl": {"$regex": "^data:"}}
+    )
+    by_cat_cursor = db.questions.aggregate([
+        {"$match": {"active": True}},
+        {"$group": {
+            "_id": "$category",
+            "count": {"$sum": 1},
+            "with_image": {"$sum": {"$cond": [{"$regexMatch": {"input": {"$ifNull": ["$bildeUrl", ""]}, "regex": "^data:"}}, 1, 0]}}
+        }},
+        {"$sort": {"count": -1}},
+    ])
+    by_cat = [c async for c in by_cat_cursor]
+    by_diff_cursor = db.questions.aggregate([
+        {"$match": {"active": True}},
+        {"$group": {"_id": "$difficulty", "count": {"$sum": 1}}},
+        {"$sort": {"count": -1}},
+    ])
+    by_diff = [d async for d in by_diff_cursor]
+    coverage_pct = round(with_img / total * 100, 1) if total else 0
+    return {
+        "total": total,
+        "with_image": with_img,
+        "coverage_pct": coverage_pct,
+        "by_category": by_cat,
+        "by_difficulty": by_diff,
+    }
+
+
+@api_router.delete("/admin/questions/{question_id}")
+async def admin_delete_question(question_id: str, _: dict = Depends(require_admin)):
+    """Admin: soft-delete a question (set active=false)."""
+    r = await db.questions.update_one({"id": question_id}, {"$set": {"active": False}})
+    if r.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Question not found")
+    return {"ok": True, "id": question_id}
+
+
+@api_router.patch("/admin/questions/{question_id}")
+async def admin_update_question(
+    question_id: str,
+    patch: dict,
+    _: dict = Depends(require_admin),
+):
+    """Admin: partial update of question fields."""
+    patch.pop("_id", None)
+    patch.pop("id", None)
+    if not patch:
+        raise HTTPException(status_code=400, detail="Empty patch")
+    r = await db.questions.update_one({"id": question_id}, {"$set": patch})
+    if r.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Question not found")
+    q = await db.questions.find_one({"id": question_id}, {"_id": 0, "bildeUrl_original_backup": 0})
+    return q
+
+
 app.include_router(api_router)
+
+
+# ==================== ADMIN HTML PAGE ====================
+from fastapi.responses import HTMLResponse, FileResponse  # noqa: E402
+from pathlib import Path as _Path  # noqa: E402
+
+_ADMIN_HTML_PATH = _Path(__file__).resolve().parent / "admin.html"
+
+
+@app.get("/admin", response_class=HTMLResponse)
+async def admin_page():
+    if _ADMIN_HTML_PATH.exists():
+        return HTMLResponse(_ADMIN_HTML_PATH.read_text(encoding="utf-8"))
+    return HTMLResponse("<h1>Admin panel not installed</h1>", status_code=500)
+
 
 app.add_middleware(
     CORSMiddleware,
