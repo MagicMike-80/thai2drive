@@ -160,7 +160,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   },
 
   // ==================== EXISTING STATE ====================
-  language: 'no',
+  language: 'th',
   setLanguage: async (lang) => { set({ language: lang }); await AsyncStorage.setItem('language', lang); },
 
   deviceId: '',
@@ -170,11 +170,11 @@ export const useAppStore = create<AppState>((set, get) => ({
     set({ deviceId });
 
     const savedLang = await AsyncStorage.getItem('language');
-    // Only accept valid languages, fallback to 'no' if invalid or missing
+    // Only accept valid languages, fallback to 'th' (primary) if invalid or missing
     if (savedLang && ['no', 'th', 'en'].includes(savedLang)) {
       set({ language: savedLang });
     } else {
-      set({ language: 'no' });
+      set({ language: 'th' });
     }
 
     const savedTheme = await AsyncStorage.getItem('themeMode');

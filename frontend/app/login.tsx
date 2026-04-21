@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAppStore } from '../src/store/appStore';
-import { Flag } from '../src/components/Flag';
 import { LanguageSwitcher } from '../src/components/LanguageSwitcher';
+
+const T2D_ICON = require('../assets/images/t2d-icon.png');
 
 const TR: Record<string, Record<string, string>> = {
   no: {
@@ -94,7 +95,7 @@ export default function LoginScreen() {
 
           {/* Logo */}
           <View style={st.logoSection}>
-            <View style={st.brandFlag}><Flag code="th" size={44} /></View>
+            <Image source={T2D_ICON} style={st.brandIcon} />
             <Text style={[st.welcome, { color: c.textSecondary }]}>{t.welcome}</Text>
             <Text style={[st.appName, { color: c.text }]}>Thai2Drive</Text>
             <Text style={[st.subtitle, { color: c.textMuted }]}>{t.subtitle}</Text>
@@ -178,6 +179,7 @@ const st = StyleSheet.create({
   scroll: { flexGrow: 1, justifyContent: 'center', padding: 24 },
   logoSection: { alignItems: 'center', marginBottom: 40 },
   langHeader: { alignItems: 'center', marginBottom: 16 },
+  brandIcon: { width: 72, height: 72, borderRadius: 16, marginBottom: 14 },
   brandFlag: { marginBottom: 12 },
   flag: { fontSize: 48, marginBottom: 12 },
   welcome: { fontSize: 15, marginBottom: 4 },

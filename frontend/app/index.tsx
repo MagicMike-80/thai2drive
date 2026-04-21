@@ -6,7 +6,6 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAppStore } from '../src/store/appStore';
 import { api } from '../src/services/api';
-import { Flag } from '../src/components/Flag';
 import { LanguageSwitcher } from '../src/components/LanguageSwitcher';
 
 const TR: Record<string, Record<string, string>> = {
@@ -57,9 +56,8 @@ export default function HomeScreen() {
   return (
     <SafeAreaView style={[st.container, { backgroundColor: c.bg }]}>
       <ScrollView contentContainerStyle={st.scroll} showsVerticalScrollIndicator={false}>
-        {/* Top bar: flag + lang selector + settings */}
+        {/* Top bar: language selector + settings */}
         <View style={st.topBar}>
-          <View style={st.brandFlag}><Flag code="th" size={22} /></View>
           <View style={{ flex: 1 }}>
             <LanguageSwitcher size="md" />
           </View>
