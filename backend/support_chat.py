@@ -272,15 +272,38 @@ async def support_chat(req: ChatRequest) -> ChatResponse:
         },
     ])
 
-    # 5) Escalation → email + DB log
+    # 5) Escalation → DB log always; EMAIL only for HIGH priority with 10-min cooldown
     if escalated:
         conversation_for_email = conversation + [
             {'role': 'user', 'content': user_msg},
             {'role': 'assistant', 'content': reply_text},
         ]
-        email_sent, email_info = _send_escalation_email(
-            session_id, user_msg, reply_text, category, priority, conversation_for_email
-        )
+
+        email_sent = False
+        email_info = 'medium/low → db only'
+
+        if priority == 'high':
+            # Cooldown: max 1 email per user_email OR session_id per 10 minutes
+            from datetime import timedelta
+            cutoff = now - timedelta(minutes=10)
+            cooldown_filter = {
+                'email_sent': True,
+                'ts': {'$gte': cutoff},
+                '$or': [
+                    {'user_email': req.user_email} if req.user_email else {'_none': True},
+                    {'session_id': session_id},
+                ],
+            }
+            recent_email = await _escal_col.find_one(cooldown_filter)
+
+            if recent_email:
+                email_info = 'cooldown: user already notified in last 10 min'
+                logger.info('Skipping email (cooldown) for session=%s', session_id)
+            else:
+                email_sent, email_info = _send_escalation_email(
+                    session_id, user_msg, reply_text, category, priority, conversation_for_email
+                )
+
         await _escal_col.insert_one({
             'session_id': session_id,
             'user_message': user_msg,
