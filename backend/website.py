@@ -344,7 +344,14 @@ _CHAT_JS = r"""
     badge.style.display = 'none';
     if(!greeted){
       greeted = true;
-      addMsg('bot', 'Hei! 👋 Jeg er Thai2Drive-supporten. Stille gjerne et spørsmål, eller trykk et av forslagene under.');
+      // Pick greeting based on page language (landing / app / support)
+      const lang = document.documentElement.getAttribute('data-current-lang') || document.documentElement.lang || 'no';
+      const greetings = {
+        th: 'ต้องการความช่วยเหลือไหม? ถามได้เลยเกี่ยวกับ Thai2Drive 👋',
+        no: 'Trenger du hjelp med teoriprøven? Spør meg om Thai2Drive 👋',
+        en: 'Need help passing the theory test? Ask me anything about Thai2Drive 👋',
+      };
+      addMsg('bot', greetings[lang] || greetings.no);
     }
     setTimeout(()=>input.focus(), 200);
   }

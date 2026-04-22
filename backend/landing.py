@@ -159,6 +159,11 @@ section{padding:72px 0;position:relative}
 .try-opt.correct .letter,.try-opt.correct-marker .letter{background:#10B981;color:#fff}
 .try-opt.wrong .letter{background:#EF4444;color:#fff}
 .try-explain{margin-top:16px;padding:14px;background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.25);border-radius:10px;font-size:14px;color:#CBD5E1;line-height:1.5}
+.try-hint{margin-top:14px;padding:14px 16px;border-radius:10px;font-size:14px;line-height:1.45;text-align:center;animation:pop .25s ease-out}
+.try-hint.ok{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.3);color:#10B981}
+.try-hint.bad{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);color:#FCA5A5}
+.try-hint strong{color:inherit}
+@keyframes pop{from{transform:translateY(6px);opacity:0}to{transform:translateY(0);opacity:1}}
 .try-foot{padding:16px 24px;border-top:1px solid rgba(255,255,255,.08);text-align:right}
 .try-next{padding:10px 24px;border-radius:10px;background:#FF9933;color:#0F172A;font-weight:800;border:none;cursor:pointer;font-size:14px}
 .try-next:disabled{opacity:.4;cursor:not-allowed}
@@ -175,6 +180,22 @@ section{padding:72px 0;position:relative}
 .plan-mini h4{font-size:13px;color:#94A3B8;font-weight:600;margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em}
 .plan-mini .p{font-size:22px;color:#fff;font-weight:800}
 .plan-mini .p small{font-size:11px;color:#94A3B8;font-weight:500}
+
+/* Why Thai2Drive */
+.why-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.why-item{
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
+  padding:22px;border-radius:14px;display:flex;align-items:center;gap:16px;
+  transition:border-color .2s,background .2s,transform .2s;
+}
+.why-item:hover{border-color:rgba(255,153,51,.3);background:rgba(255,153,51,.04);transform:translateY(-2px)}
+.why-num{
+  flex-shrink:0;width:42px;height:42px;border-radius:50%;
+  background:rgba(255,153,51,.15);color:#FF9933;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:900;font-size:18px;
+}
+.why-item h3{color:#fff;font-size:15px;font-weight:700;line-height:1.3}
 
 /* FEATURES */
 .features{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px}
@@ -311,16 +332,28 @@ def _hero_html() -> str:
     <div class="qr-box" id="download">
       <img src="{QR_URL}" alt="QR code"/>
       <div class="qr-text">
-        <span data-lang="th" class="block">สแกนเพื่อดาวน์โหลด<small>หรือเปิดลิงก์บนมือถือ</small></span>
-        <span data-lang="no" class="block">Scan for å laste ned<small>eller åpne lenken på mobil</small></span>
-        <span data-lang="en" class="block">Scan to download<small>or open the link on mobile</small></span>
+        <span data-lang="th" class="block">สแกนเพื่อดาวน์โหลดแอปทันที<small>เปิดลิงก์บนมือถือก็ได้</small></span>
+        <span data-lang="no" class="block">Scan for å laste ned appen direkte<small>eller åpne lenken på mobil</small></span>
+        <span data-lang="en" class="block">Scan to download the app instantly<small>or open the link on mobile</small></span>
       </div>
     </div>
 
     <div class="hero-badges">
-      <span class="badge-chip"><span class="ok"></span> 500+ <span data-lang="th">ข้อ</span><span data-lang="no">spørsmål</span><span data-lang="en">questions</span></span>
-      <span class="badge-chip">🌐 3 <span data-lang="th">ภาษา</span><span data-lang="no">språk</span><span data-lang="en">languages</span></span>
-      <span class="badge-chip">🎯 <span data-lang="th">โหมดสอบจริง</span><span data-lang="no">Ekte eksamen</span><span data-lang="en">Real exam mode</span></span>
+      <span class="badge-chip"><span class="ok"></span>
+        <span data-lang="th">มากกว่า 500 ข้อ</span>
+        <span data-lang="no">500+ spørsmål</span>
+        <span data-lang="en">500+ questions</span>
+      </span>
+      <span class="badge-chip">🇹🇭🇳🇴
+        <span data-lang="th">ใช้โดยคนไทยในนอร์เวย์</span>
+        <span data-lang="no">Brukt av thai i Norge</span>
+        <span data-lang="en">Used by Thai in Norway</span>
+      </span>
+      <span class="badge-chip">📜
+        <span data-lang="th">อัปเดตตามกฎล่าสุด</span>
+        <span data-lang="no">Oppdatert etter regler</span>
+        <span data-lang="en">Updated to latest rules</span>
+      </span>
     </div>
   </div>
 </section>
@@ -366,6 +399,53 @@ def _try_html() -> str:
           <span data-lang="no">Neste →</span>
           <span data-lang="en">Next →</span>
         </button>
+      </div>
+    </div>
+  </div>
+</section>
+"""
+
+
+def _why_html() -> str:
+    return """
+<section>
+  <div class="container">
+    <div class="sec-head">
+      <span class="eyebrow">
+        <span data-lang="th">ทำไม Thai2Drive</span>
+        <span data-lang="no">Hvorfor Thai2Drive</span>
+        <span data-lang="en">Why Thai2Drive</span>
+      </span>
+      <h2>
+        <span data-lang="th" class="block">แอปนี้ต่างจากที่อื่นอย่างไร</span>
+        <span data-lang="no" class="block">Hva gjør oss annerledes</span>
+        <span data-lang="en" class="block">What makes us different</span>
+      </h2>
+    </div>
+    <div class="why-grid">
+      <div class="why-item">
+        <div class="why-num">1</div>
+        <h3>
+          <span data-lang="th">ออกแบบสำหรับคนไทยในนอร์เวย์</span>
+          <span data-lang="no">Laget for thai i Norge</span>
+          <span data-lang="en">Made for Thai in Norway</span>
+        </h3>
+      </div>
+      <div class="why-item">
+        <div class="why-num">2</div>
+        <h3>
+          <span data-lang="th">มีคำอธิบายทุกข้อ</span>
+          <span data-lang="no">Forklaring på alle svar</span>
+          <span data-lang="en">Explanation for every answer</span>
+        </h3>
+      </div>
+      <div class="why-item">
+        <div class="why-num">3</div>
+        <h3>
+          <span data-lang="th">จำลองข้อสอบจริง</span>
+          <span data-lang="no">Som ekte eksamen</span>
+          <span data-lang="en">Real exam simulation</span>
+        </h3>
       </div>
     </div>
   </div>
@@ -531,9 +611,9 @@ def _bottom_cta_html() -> str:
     <div class="qr-box" style="margin-top:20px">
       <img src="{QR_URL}" alt="QR code"/>
       <div class="qr-text">
-        <span data-lang="th" class="block">สแกนเพื่อดาวน์โหลด<small>บน iOS และ Android</small></span>
-        <span data-lang="no" class="block">Scan for å laste ned<small>på iOS og Android</small></span>
-        <span data-lang="en" class="block">Scan to download<small>on iOS and Android</small></span>
+        <span data-lang="th" class="block">สแกนเพื่อดาวน์โหลดแอปทันที<small>บน iOS และ Android</small></span>
+        <span data-lang="no" class="block">Scan for å laste ned appen direkte<small>på iOS og Android</small></span>
+        <span data-lang="en" class="block">Scan to download the app instantly<small>on iOS and Android</small></span>
       </div>
     </div>
   </div>
@@ -560,7 +640,7 @@ LANDING_JS = r"""
   });
 })();
 
-// ─── Try-in-browser quiz ───
+// ─── Try-in-browser quiz (1–2 questions then paywall) ───
 (function(){
   const body = document.getElementById('tqBody');
   const nextBtn = document.getElementById('tqNext');
@@ -570,7 +650,7 @@ LANDING_JS = r"""
   const scoreEl = document.getElementById('tqScore');
   if(!body) return;
 
-  const TOTAL = 10;
+  const TOTAL = 2;   // Only 2 taster → paywall (conversion-optimised)
   let questions = [];
   let idx = 0;
   let score = 0;
@@ -582,17 +662,18 @@ LANDING_JS = r"""
 
   async function load(){
     try{
-      const res = await fetch('/api/questions/random?count=10&has_image=true');
-      questions = await res.json();
-      if(!questions || questions.length === 0){
-        // fallback: any questions
-        const r2 = await fetch('/api/questions/random?count=10');
-        questions = await r2.json();
+      // Image questions ONLY — filter out any without a valid base64/url image
+      const res = await fetch('/api/questions/random?count=20&has_image=true');
+      const raw = await res.json();
+      questions = (raw || []).filter(q => q.bildeUrl && (typeof q.bildeUrl === 'string' || Object.keys(q.bildeUrl).length)).slice(0, TOTAL + 2);
+      if(questions.length === 0){
+        body.innerHTML = '<p style="text-align:center;color:#94A3B8;padding:30px">No image questions available right now.</p>';
+        return;
       }
-      totalEl.textContent = Math.min(TOTAL, questions.length);
+      totalEl.textContent = TOTAL;
       render();
     }catch(e){
-      body.innerHTML = '<p style="text-align:center;color:#94A3B8;padding:30px">Kunne ikke laste spørsmål. Prøv igjen senere.</p>';
+      body.innerHTML = '<p style="text-align:center;color:#94A3B8;padding:30px">Could not load questions.</p>';
     }
   }
 
@@ -627,6 +708,7 @@ LANDING_JS = r"""
       `<div class="try-options" id="tqOpts">` +
       opts.map(o => `<button class="try-opt" data-id="${o.id}"><span class="letter">${o.id}</span><span>${escapeHtml(o.text)}</span></button>`).join('') +
       `</div>` +
+      `<div class="try-hint" id="tqHint" style="display:none"></div>` +
       `<div class="try-explain" id="tqExpl" style="display:none"></div>`;
 
     document.querySelectorAll('#tqOpts .try-opt').forEach(btn=>{
@@ -638,6 +720,7 @@ LANDING_JS = r"""
   function selectAnswer(btn, q, expl){
     if(answered) return;
     answered = true;
+    const lang = currentLang();
     const picked = btn.dataset.id;
     const correct = q.correctOptionId;
     document.querySelectorAll('#tqOpts .try-opt').forEach(b=>{
@@ -650,6 +733,21 @@ LANDING_JS = r"""
     });
     if(picked === correct) score++;
     scoreEl.innerHTML = score + ' ✓';
+
+    // Feedback hint message per the spec
+    const isCorrect = picked === correct;
+    const hintOK = { th: '🎉 ถูกต้อง!', no: '🎉 Riktig!', en: '🎉 Correct!' }[lang];
+    const hintBad = { th: '❌ ไม่ถูกต้อง', no: '❌ Feil svar', en: '❌ Incorrect' }[lang];
+    const continueMsg = {
+      th: '✨ ใช้แอปต่อเพื่อปลดล็อกเต็มรูปแบบ',
+      no: '✨ Fortsett i appen for å låse opp full tilgang',
+      en: '✨ Continue in app to unlock full access',
+    }[lang];
+    const hint = document.getElementById('tqHint');
+    hint.innerHTML = `<strong>${isCorrect ? hintOK : hintBad}</strong> · ${continueMsg}`;
+    hint.className = 'try-hint ' + (isCorrect ? 'ok' : 'bad');
+    hint.style.display = 'block';
+
     if(expl){
       const e = document.getElementById('tqExpl');
       e.textContent = expl;
@@ -664,32 +762,40 @@ LANDING_JS = r"""
     barEl.style.width = '100%';
     nowEl.textContent = TOTAL;
     const titles = {
-      th: 'ฝึกครบแล้ว – เปิดต่อในแอป',
-      no: 'Du har prøvd det hele – fortsett i appen',
-      en: 'You\'ve tried it all — continue in the app',
+      th: 'เริ่มใช้งานเต็มรูปแบบในแอป',
+      no: 'Fortsett øvingen i appen',
+      en: 'Continue practicing in the app',
     };
     const subs = {
-      th: 'คุณใช้ 10 ข้อฟรีของวันนี้ครบแล้ว ดาวน์โหลดแอปเพื่อทำต่อไม่จำกัด',
-      no: 'Du har brukt dagens 10 gratis spørsmål. Last ned appen for ubegrenset øving.',
-      en: 'You have used today\'s 10 free questions. Download the app for unlimited practice.',
+      th: 'ดาวน์โหลดแอปเพื่อเข้าถึงคำถามทั้งหมด 500+ ข้อ พร้อมคำอธิบายและโหมดสอบจริง',
+      no: 'Last ned appen for tilgang til alle 500+ spørsmål, forklaringer og ekte eksamensmodus.',
+      en: 'Download the app for access to all 500+ questions, explanations, and real exam mode.',
     };
     const ctas = {
       th: 'ดาวน์โหลดแอปฟรี',
       no: 'Last ned app – gratis',
       en: 'Download app – free',
     };
+    const scoreLbl = { th: 'คะแนนของคุณ', no: 'Din score', en: 'Your score' }[lang];
+    const lockTxt = { th: 'ล็อกแล้ว', no: 'Låst', en: 'Locked' }[lang];
+    const monthLbl = { th: 'รายเดือน', no: 'Månedlig', en: 'Monthly' }[lang];
+    const threeLbl = { th: '3 เดือน', no: '3 måneder', en: '3 months' }[lang];
+    const lifeLbl = { th: 'ตลอดชีพ', no: 'Livstid', en: 'Lifetime' }[lang];
+    const perMo = { th: 'เดือน', no: 'mnd', en: 'mo' }[lang];
+    const once = { th: 'ครั้งเดียว', no: 'éngangs', en: 'once' }[lang];
+
     body.innerHTML = `
       <div class="try-paywall">
-        <span class="lock-badge">🔒 ${{th:'ล็อกแล้ว',no:'Låst',en:'Locked'}[lang]}</span>
+        <span class="lock-badge">🔒 ${lockTxt}</span>
         <h3>${titles[lang]}</h3>
         <p>${subs[lang]}</p>
         <div class="plans-row">
-          <div class="plan-mini"><h4>${{th:'รายเดือน',no:'Månedlig',en:'Monthly'}[lang]}</h4><div class="p">199 kr<small> / ${{th:'เดือน',no:'mnd',en:'mo'}[lang]}</small></div></div>
-          <div class="plan-mini best"><h4>${{th:'3 เดือน',no:'3 måneder',en:'3 months'}[lang]}</h4><div class="p">399 kr<small> / 3 ${{th:'เดือน',no:'mnd',en:'mo'}[lang]}</small></div></div>
-          <div class="plan-mini"><h4>${{th:'ตลอดชีพ',no:'Livstid',en:'Lifetime'}[lang]}</h4><div class="p">699 kr<small> / ${{th:'ครั้งเดียว',no:'éngangs',en:'once'}[lang]}</small></div></div>
+          <div class="plan-mini"><h4>${monthLbl}</h4><div class="p">199 kr<small> / ${perMo}</small></div></div>
+          <div class="plan-mini best"><h4>${threeLbl}</h4><div class="p">399 kr<small> / 3 ${perMo}</small></div></div>
+          <div class="plan-mini"><h4>${lifeLbl}</h4><div class="p">699 kr<small> / ${once}</small></div></div>
         </div>
         <a href="#download" class="cta-btn cta-primary" style="margin-top:8px">${ctas[lang]} →</a>
-        <p style="margin-top:14px;font-size:13px;color:#94A3B8">${{th:'คะแนนของคุณ',no:'Din score',en:'Your score'}[lang]}: <strong style="color:#FF9933">${score} / ${TOTAL}</strong></p>
+        <p style="margin-top:14px;font-size:13px;color:#94A3B8">${scoreLbl}: <strong style="color:#FF9933">${score} / ${TOTAL}</strong></p>
       </div>`;
     nextBtn.disabled = true;
   }
@@ -704,6 +810,7 @@ LANDING_JS = r"""
   document.querySelectorAll('.lang-btn').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       if(questions.length && idx < TOTAL && !answered) render();
+      else if(idx >= TOTAL) renderPaywall();
     });
   });
 })();
@@ -731,6 +838,7 @@ def build_landing_page(chat_css: str, chat_widget_html: str, chat_js: str) -> st
 {_nav_html()}
 {_hero_html()}
 {_try_html()}
+{_why_html()}
 {_features_html()}
 {_trust_html()}
 {_screenshots_html()}
