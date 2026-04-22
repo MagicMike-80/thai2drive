@@ -1933,6 +1933,38 @@ async def admin_page_catchall(rest: str):
     return HTMLResponse("<h1>Admin panel not installed</h1>", status_code=500)
 
 
+# ─── Static public assets (icons, screenshots etc. for Play Store / press use) ───
+_PUBLIC_ASSETS_DIR = Path(__file__).parent / "public_assets"
+
+
+@app.get("/api/assets/{filename:path}")
+async def public_asset(filename: str):
+    """Serve static files from backend/public_assets/ (e.g. developer icon for Play Console)."""
+    # Prevent path traversal
+    safe_name = filename.replace("..", "").lstrip("/")
+    file_path = (_PUBLIC_ASSETS_DIR / safe_name).resolve()
+    try:
+        file_path.relative_to(_PUBLIC_ASSETS_DIR.resolve())
+    except ValueError:
+        return HTMLResponse("Not found", status_code=404)
+    if not file_path.exists() or not file_path.is_file():
+        return HTMLResponse("Not found", status_code=404)
+
+    # Simple content-type sniffing
+    ext = file_path.suffix.lower()
+    media_type = {
+        ".png": "image/png",
+        ".jpg": "image/jpeg",
+        ".jpeg": "image/jpeg",
+        ".webp": "image/webp",
+        ".svg": "image/svg+xml",
+        ".ico": "image/x-icon",
+        ".pdf": "application/pdf",
+    }.get(ext, "application/octet-stream")
+
+    return FileResponse(str(file_path), media_type=media_type)
+
+
 # Middleware: redirect dirty /api/admin-panel URLs (with trailing quotes, markdown syntax, etc.)
 from starlette.middleware.base import BaseHTTPMiddleware  # noqa: E402
 from starlette.responses import RedirectResponse  # noqa: E402
