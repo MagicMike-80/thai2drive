@@ -36,6 +36,10 @@ backend:
     stuck_count: 0
     priority: "high"
     needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Applied app-wide IMAGE_ONLY_FILTER to both /api/questions and /api/questions/random. All quiz modes (Practice, Exam, Daily Test) now only receive questions where bildeUrl is present and non-empty. The has_image query param on /questions/random is now ignored (always image-only). Manually verified with 5 test cases (daily=5, practice=10, exam=45, has_image=false, category=Road Conditions w/ only 2 images). All returned 100% image-bearing questions."
 
   - task: "Progress tracking API"
     implemented: true

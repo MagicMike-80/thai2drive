@@ -229,9 +229,13 @@ def generate_reset_code() -> str:
 async def root():
     return {"message": "Thai2Drive API - Norway Driving Theory Quiz"}
 
+# App-wide image-only filter: ALL quiz modes (Practice, Exam, Daily Test)
+# must ONLY return questions that have an image (bildeUrl present and non-empty).
+IMAGE_ONLY_FILTER = {"bildeUrl": {"$exists": True, "$nin": [None, ""]}}
+
 @api_router.get("/questions", response_model=List[Question])
 async def get_questions(category: Optional[str] = None, difficulty: Optional[str] = None, limit: int = Query(default=50, le=200)):
-    query = {}
+    query = dict(IMAGE_ONLY_FILTER)
     if category:
         query["category"] = category
     if difficulty:
@@ -241,16 +245,12 @@ async def get_questions(category: Optional[str] = None, difficulty: Optional[str
 
 @api_router.get("/questions/random")
 async def get_random_questions(category: Optional[str] = None, count: int = Query(default=10, le=50), has_image: Optional[bool] = None):
+    # has_image param is ignored — app is image-only by design.
     pipeline = []
-    match_stage = {}
+    match_stage = dict(IMAGE_ONLY_FILTER)
     if category:
         match_stage["category"] = category
-    if has_image is True:
-        match_stage["bildeUrl"] = {"$exists": True, "$ne": None, "$nin": ["", None]}
-    elif has_image is False:
-        match_stage["$or"] = [{"bildeUrl": {"$exists": False}}, {"bildeUrl": None}, {"bildeUrl": ""}]
-    if match_stage:
-        pipeline.append({"$match": match_stage})
+    pipeline.append({"$match": match_stage})
     pipeline.append({"$sample": {"size": count}})
     pipeline.append({"$project": {"_id": 0}})
     questions = await db.questions.aggregate(pipeline).to_list(count)
