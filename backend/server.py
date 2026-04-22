@@ -1890,6 +1890,10 @@ app.include_router(api_router)
 from website import website_router  # noqa: E402
 app.include_router(website_router, prefix="/api")
 
+# ==================== AI SUPPORT CHAT ====================
+from support_chat import support_chat_router  # noqa: E402
+app.include_router(support_chat_router, prefix="/api")
+
 
 # ==================== ADMIN HTML PAGE ====================
 from fastapi.responses import HTMLResponse, FileResponse  # noqa: E402

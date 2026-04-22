@@ -178,6 +178,239 @@ footer p{color:#64748B;font-size:13px}
 """
 
 
+# ─── AI Chat widget (bubble bottom-right) ────────────────────────────────
+_CHAT_CSS = """
+/* Chat widget */
+.t2d-chat-fab{
+  position:fixed;bottom:20px;right:20px;z-index:9999;
+  width:58px;height:58px;border-radius:29px;
+  background:linear-gradient(135deg,#FF9933,#FF6B1A);
+  border:none;cursor:pointer;color:#0F172A;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 12px 32px rgba(255,153,51,.45),0 4px 12px rgba(0,0,0,.3);
+  transition:transform .2s;
+}
+.t2d-chat-fab:hover{transform:scale(1.08)}
+.t2d-chat-fab svg{width:26px;height:26px}
+.t2d-chat-badge{
+  position:absolute;top:-4px;right:-4px;background:#EF4444;color:#fff;
+  width:22px;height:22px;border-radius:11px;font-size:11px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;border:2px solid #0B1226;
+}
+.t2d-chat-panel{
+  position:fixed;bottom:88px;right:20px;z-index:9998;
+  width:360px;max-width:calc(100vw - 32px);height:540px;max-height:calc(100vh - 120px);
+  background:#0F172A;border:1px solid rgba(255,255,255,.1);border-radius:18px;
+  box-shadow:0 30px 80px rgba(0,0,0,.5);
+  display:none;flex-direction:column;overflow:hidden;
+}
+.t2d-chat-panel.open{display:flex;animation:slideUp .2s ease-out}
+@keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+.t2d-chat-head{
+  padding:14px 16px;background:linear-gradient(135deg,rgba(255,153,51,.1),rgba(255,153,51,.02));
+  border-bottom:1px solid rgba(255,255,255,.08);
+  display:flex;align-items:center;gap:12px;
+}
+.t2d-chat-head img{width:36px;height:36px;border-radius:9px}
+.t2d-chat-head-info{flex:1}
+.t2d-chat-head-info strong{display:block;color:#fff;font-size:14px;font-weight:700}
+.t2d-chat-head-info span{font-size:11px;color:#10B981;display:flex;align-items:center;gap:5px}
+.t2d-chat-head-info span::before{content:'';width:6px;height:6px;background:#10B981;border-radius:50%}
+.t2d-chat-close{
+  background:rgba(255,255,255,.06);border:none;color:#CBD5E1;
+  width:30px;height:30px;border-radius:8px;cursor:pointer;font-size:16px;
+  display:flex;align-items:center;justify-content:center;
+}
+.t2d-chat-close:hover{background:rgba(255,255,255,.12)}
+.t2d-chat-body{
+  flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;
+  background:#0B1226;
+}
+.t2d-msg{max-width:85%;padding:10px 14px;border-radius:14px;font-size:14px;line-height:1.4;word-wrap:break-word;white-space:pre-wrap}
+.t2d-msg.bot{align-self:flex-start;background:rgba(255,255,255,.06);color:#E2E8F0;border-bottom-left-radius:4px}
+.t2d-msg.user{align-self:flex-end;background:#FF9933;color:#0F172A;border-bottom-right-radius:4px;font-weight:500}
+.t2d-msg.system{align-self:center;background:rgba(16,185,129,.12);color:#10B981;font-size:12px;padding:6px 12px;border-radius:12px;text-align:center;max-width:90%}
+.t2d-typing{align-self:flex-start;background:rgba(255,255,255,.06);padding:10px 14px;border-radius:14px;display:flex;gap:4px}
+.t2d-typing span{width:6px;height:6px;background:#94A3B8;border-radius:50%;animation:bounce 1.4s infinite ease-in-out}
+.t2d-typing span:nth-child(2){animation-delay:.2s}
+.t2d-typing span:nth-child(3){animation-delay:.4s}
+@keyframes bounce{0%,80%,100%{transform:scale(.6);opacity:.5}40%{transform:scale(1);opacity:1}}
+.t2d-chat-foot{
+  padding:12px;border-top:1px solid rgba(255,255,255,.08);background:#0F172A;
+  display:flex;gap:8px;
+}
+.t2d-chat-input{
+  flex:1;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);
+  color:#fff;padding:10px 14px;border-radius:10px;font-size:14px;outline:none;font-family:inherit;
+}
+.t2d-chat-input:focus{border-color:#FF9933}
+.t2d-chat-input::placeholder{color:#64748B}
+.t2d-chat-send{
+  background:#FF9933;border:none;color:#0F172A;padding:0 16px;border-radius:10px;
+  font-weight:800;font-size:14px;cursor:pointer;display:flex;align-items:center;gap:4px;
+}
+.t2d-chat-send:disabled{opacity:.5;cursor:not-allowed}
+.t2d-chat-disclaimer{font-size:10px;color:#64748B;text-align:center;padding:4px 12px 8px;background:#0F172A;border-top:1px solid rgba(255,255,255,.04)}
+.t2d-quick-chips{display:flex;flex-wrap:wrap;gap:6px;padding:8px 14px 0}
+.t2d-quick-chips button{
+  background:rgba(255,153,51,.08);border:1px solid rgba(255,153,51,.25);color:#FF9933;
+  padding:5px 10px;border-radius:14px;font-size:11px;cursor:pointer;font-family:inherit;
+}
+.t2d-quick-chips button:hover{background:rgba(255,153,51,.18)}
+
+@media (max-width:480px){
+  .t2d-chat-fab{width:54px;height:54px;bottom:16px;right:16px}
+  .t2d-chat-panel{right:12px;bottom:80px;width:calc(100vw - 24px);height:calc(100vh - 110px)}
+}
+"""
+
+_CHAT_WIDGET_HTML = """
+<!-- Support Chat Bubble -->
+<button class="t2d-chat-fab" id="t2dChatFab" aria-label="Support chat" title="Spør support">
+  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.48 3 2 6.58 2 11c0 2.03.94 3.87 2.47 5.27L3 21l4.93-1.61c1.24.38 2.62.61 4.07.61 5.52 0 10-3.58 10-8S17.52 3 12 3z"/></svg>
+  <span class="t2d-chat-badge" id="t2dChatBadge" style="display:none">1</span>
+</button>
+
+<div class="t2d-chat-panel" id="t2dChatPanel" role="dialog" aria-label="Support chat">
+  <div class="t2d-chat-head">
+    <img src="/api/assets/developer-icon-512.png" alt=""/>
+    <div class="t2d-chat-head-info">
+      <strong>Thai2Drive Support</strong>
+      <span>AI-assistent · svarer direkte</span>
+    </div>
+    <button class="t2d-chat-close" id="t2dChatClose" aria-label="Lukk">✕</button>
+  </div>
+
+  <div class="t2d-chat-body" id="t2dChatBody"></div>
+
+  <div class="t2d-quick-chips" id="t2dQuickChips">
+    <button data-q="Hvordan kansellerer jeg abonnementet?">🛑 Avslutt abonnement</button>
+    <button data-q="Premium ble ikke aktivert etter kjøp">⚠️ Premium virker ikke</button>
+    <button data-q="Hvordan tilbakestiller jeg passordet?">🔑 Glemt passord</button>
+    <button data-q="Hvordan sletter jeg kontoen min?">🗑 Slett konto</button>
+  </div>
+
+  <form class="t2d-chat-foot" id="t2dChatForm">
+    <input class="t2d-chat-input" id="t2dChatInput" placeholder="Spør om Thai2Drive..." autocomplete="off" maxlength="500"/>
+    <button type="submit" class="t2d-chat-send" id="t2dChatSend">Send</button>
+  </form>
+
+  <div class="t2d-chat-disclaimer">
+    AI-svar. Viktige saker videresendes automatisk til support.
+  </div>
+</div>
+"""
+
+_CHAT_JS = r"""
+(function(){
+  const fab = document.getElementById('t2dChatFab');
+  const panel = document.getElementById('t2dChatPanel');
+  const closeBtn = document.getElementById('t2dChatClose');
+  const body = document.getElementById('t2dChatBody');
+  const form = document.getElementById('t2dChatForm');
+  const input = document.getElementById('t2dChatInput');
+  const send = document.getElementById('t2dChatSend');
+  const chips = document.getElementById('t2dQuickChips');
+  const badge = document.getElementById('t2dChatBadge');
+  if(!fab||!panel) return;
+
+  let sessionId = localStorage.getItem('t2d_chat_session') || '';
+  let typingEl = null;
+  let greeted = false;
+
+  function scrollBottom(){ body.scrollTop = body.scrollHeight; }
+
+  function addMsg(role, text){
+    const d = document.createElement('div');
+    d.className = 't2d-msg ' + role;
+    d.textContent = text;
+    body.appendChild(d);
+    scrollBottom();
+    return d;
+  }
+
+  function showTyping(){
+    if(typingEl) return;
+    typingEl = document.createElement('div');
+    typingEl.className = 't2d-typing';
+    typingEl.innerHTML = '<span></span><span></span><span></span>';
+    body.appendChild(typingEl);
+    scrollBottom();
+  }
+  function hideTyping(){ if(typingEl){ typingEl.remove(); typingEl = null; } }
+
+  function openChat(){
+    panel.classList.add('open');
+    badge.style.display = 'none';
+    if(!greeted){
+      greeted = true;
+      addMsg('bot', 'Hei! 👋 Jeg er Thai2Drive-supporten. Stille gjerne et spørsmål, eller trykk et av forslagene under.');
+    }
+    setTimeout(()=>input.focus(), 200);
+  }
+  function closeChat(){ panel.classList.remove('open'); }
+
+  fab.addEventListener('click', ()=> panel.classList.contains('open') ? closeChat() : openChat());
+  closeBtn.addEventListener('click', closeChat);
+
+  chips.addEventListener('click', (e)=>{
+    if(e.target.tagName === 'BUTTON' && e.target.dataset.q){
+      input.value = e.target.dataset.q;
+      form.dispatchEvent(new Event('submit'));
+    }
+  });
+
+  async function sendMessage(text){
+    addMsg('user', text);
+    showTyping();
+    send.disabled = true;
+
+    try{
+      const lang = document.documentElement.lang || 'no';
+      const res = await fetch('/api/support/chat', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ session_id: sessionId || null, message: text, language: lang })
+      });
+      const data = await res.json();
+      hideTyping();
+
+      if(data.session_id){
+        sessionId = data.session_id;
+        localStorage.setItem('t2d_chat_session', sessionId);
+      }
+      addMsg('bot', data.reply || 'Beklager, ingen svar akkurat nå. Prøv igjen om litt.');
+
+      if(data.escalated){
+        addMsg('system', '✓ Meldingen din er videresendt til supportteamet');
+      }
+    }catch(err){
+      hideTyping();
+      addMsg('bot', 'Beklager, nettverksfeil. Send e-post til lexuz.zxc@gmail.com hvis det haster.');
+    }finally{
+      send.disabled = false;
+    }
+  }
+
+  form.addEventListener('submit', (e)=>{
+    e.preventDefault();
+    const t = input.value.trim();
+    if(!t) return;
+    input.value = '';
+    sendMessage(t);
+  });
+
+  // Auto-open on /support after 1.5s as a friendly nudge (first visit only)
+  if(location.pathname.includes('/support') && !localStorage.getItem('t2d_chat_seen')){
+    setTimeout(()=>{
+      badge.style.display = 'flex';
+      localStorage.setItem('t2d_chat_seen','1');
+    }, 1500);
+  }
+})();
+"""
+
+
 def _nav(lang_links=True):
     return f"""
 <nav class="nav">
@@ -229,12 +462,14 @@ def _page(title: str, body: str, description: str = ""):
 <meta property="og:type" content="website"/>
 <link rel="icon" type="image/png" href="{ICON_URL}"/>
 <link rel="apple-touch-icon" href="{ICON_URL}"/>
-<style>{_BASE_CSS}</style>
+<style>{_BASE_CSS}{_CHAT_CSS}</style>
 </head>
 <body>
 {_nav()}
 {body}
 {_footer()}
+{_CHAT_WIDGET_HTML}
+<script>{_CHAT_JS}</script>
 </body>
 </html>"""
 
