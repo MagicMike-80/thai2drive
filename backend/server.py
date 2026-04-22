@@ -240,10 +240,17 @@ async def get_questions(category: Optional[str] = None, difficulty: Optional[str
     return questions
 
 @api_router.get("/questions/random")
-async def get_random_questions(category: Optional[str] = None, count: int = Query(default=10, le=50)):
+async def get_random_questions(category: Optional[str] = None, count: int = Query(default=10, le=50), has_image: Optional[bool] = None):
     pipeline = []
+    match_stage = {}
     if category:
-        pipeline.append({"$match": {"category": category}})
+        match_stage["category"] = category
+    if has_image is True:
+        match_stage["bildeUrl"] = {"$exists": True, "$ne": None, "$nin": ["", None]}
+    elif has_image is False:
+        match_stage["$or"] = [{"bildeUrl": {"$exists": False}}, {"bildeUrl": None}, {"bildeUrl": ""}]
+    if match_stage:
+        pipeline.append({"$match": match_stage})
     pipeline.append({"$sample": {"size": count}})
     pipeline.append({"$project": {"_id": 0}})
     questions = await db.questions.aggregate(pipeline).to_list(count)

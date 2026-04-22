@@ -478,6 +478,14 @@ def _page(title: str, body: str, description: str = ""):
 @website_router.get("/website", response_class=HTMLResponse)
 @website_router.get("/", response_class=HTMLResponse)  # fallback inside /api
 def landing():
+    # Delegate to the new high-conversion landing page module.
+    from landing import build_landing_page  # local import to keep server import-time cheap
+    html = build_landing_page(
+        chat_css=_CHAT_CSS,
+        chat_widget_html=_CHAT_WIDGET_HTML,
+        chat_js=_CHAT_JS,
+    )
+    return HTMLResponse(html)
     body = f"""
 <!-- HERO -->
 <section class="hero container">
