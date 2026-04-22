@@ -14,7 +14,7 @@ HEADER_URL = "/api/assets/developer-header-4096x2304.jpg"
 FEATURE_URL = "/api/assets/feature-graphic-1024x500.jpg"
 
 BRAND = "Thai2Drive"
-CONTACT_EMAIL = "support@thai2drive.com"
+CONTACT_EMAIL = "lexuz.zxc@gmail.com"
 LAST_UPDATED = "2. juni 2025"
 
 

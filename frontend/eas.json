@@ -1,7 +1,7 @@
 {
   "cli": {
     "version": ">= 5.0.0",
-    "appVersionSource": "local"
+    "appVersionSource": "remote"
   },
   "build": {
     "development": {
@@ -19,8 +19,10 @@
     "preview": {
       "distribution": "internal",
       "android": {
-        "buildType": "apk"
+        "buildType": "apk",
+        "resourceClass": "medium"
       },
+      "autoIncrement": true,
       "env": {
         "EXPO_PUBLIC_BACKEND_URL": "https://norge-quiz-app.preview.emergentagent.com",
         "EXPO_PUBLIC_RC_API_KEY": "test_MciTZyYeSIinvNBocwBillyssXD"
@@ -28,11 +30,14 @@
     },
     "production": {
       "android": {
-        "buildType": "app-bundle"
+        "buildType": "app-bundle",
+        "resourceClass": "medium"
       },
+      "autoIncrement": true,
+      "channel": "production",
       "env": {
         "EXPO_PUBLIC_BACKEND_URL": "https://norge-quiz-app.preview.emergentagent.com",
-        "EXPO_PUBLIC_RC_API_KEY": "YOUR_PRODUCTION_RC_KEY"
+        "EXPO_PUBLIC_RC_API_KEY": "test_MciTZyYeSIinvNBocwBillyssXD"
       }
     }
   },
@@ -40,7 +45,8 @@
     "production": {
       "android": {
         "serviceAccountKeyPath": "./google-services.json",
-        "track": "internal"
+        "track": "internal",
+        "releaseStatus": "draft"
       }
     }
   }
