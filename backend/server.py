@@ -1886,6 +1886,10 @@ Return ONLY strict JSON:
 
 app.include_router(api_router)
 
+# ==================== PUBLIC WEBSITE (landing + legal) ====================
+from website import website_router  # noqa: E402
+app.include_router(website_router, prefix="/api")
+
 
 # ==================== ADMIN HTML PAGE ====================
 from fastapi.responses import HTMLResponse, FileResponse  # noqa: E402
