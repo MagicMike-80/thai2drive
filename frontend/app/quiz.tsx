@@ -216,11 +216,9 @@ export default function QuizScreen() {
   const langCode = (l: string) => l === 'th' ? 'th-TH' : l === 'no' ? 'nb-NO' : 'en-US';
 
   const SPEED_OPTIONS = [
-    { label: '0.5x', value: 0.5 },
-    { label: '0.75x', value: 0.75 },
     { label: '1x', value: 1.0 },
-    { label: '1.25x', value: 1.25 },
     { label: '1.5x', value: 1.5 },
+    { label: '2x', value: 2.0 },
   ];
 
   const speakSequence = async (segments: { text: string; lang: string }[]) => {
@@ -305,7 +303,7 @@ export default function QuizScreen() {
     <SafeAreaView style={[st.container, { backgroundColor: c.bg }]}>
       {/* Header */}
       <View style={st.hdr}>
-        <TouchableOpacity testID="quiz-exit-btn" style={[st.iBtn, { backgroundColor: c.card }]} onPress={() => router.back()}>
+        <TouchableOpacity testID="quiz-exit-btn" style={[st.iBtn, { backgroundColor: c.card }]} onPress={() => { stopTts(); router.back(); }}>
           <Ionicons name="close" size={20} color={c.text} />
         </TouchableOpacity>
         <View style={st.pWrap}>

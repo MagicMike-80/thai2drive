@@ -31,7 +31,7 @@ const TR: Record<string, Record<string, string>> = {
     purchasing: 'Behandler...',
     success: 'Premium aktivert!',
     webNote: 'Betaling krever mobilappen',
-    limitTitle: 'Du har brukt dagens 10 gratis spørsmål',
+    limitTitle: 'Du har brukt dagens gratis spørsmål',
     limitSubtitle: 'Lås opp Premium for ubegrenset tilgang',
   },
   th: {
@@ -53,7 +53,7 @@ const TR: Record<string, Record<string, string>> = {
     purchasing: 'กำลังดำเนินการ...',
     success: 'เปิดใช้งาน Premium แล้ว!',
     webNote: 'การชำระเงินต้องใช้แอปมือถือ',
-    limitTitle: 'คุณใช้ 10 ข้อฟรีของวันนี้ครบแล้ว',
+    limitTitle: 'คุณใช้ข้อฟรีของวันนี้ครบแล้ว',
     limitSubtitle: 'ปลดล็อค Premium เพื่อใช้งานไม่จำกัด',
   },
   en: {
@@ -75,7 +75,7 @@ const TR: Record<string, Record<string, string>> = {
     purchasing: 'Processing...',
     success: 'Premium activated!',
     webNote: 'Payment requires the mobile app',
-    limitTitle: 'You have used today\'s 10 free questions',
+    limitTitle: 'You have used today\'s free questions',
     limitSubtitle: 'Unlock Premium for unlimited access',
   },
 };
