@@ -5,6 +5,7 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAppStore } from '../src/store/appStore';
 import { useRevenueCat, PRODUCT_IDS } from '../src/hooks/useRevenueCat';
+import { LanguageSwitcher } from '../src/components/LanguageSwitcher';
 
 const T2D_ICON = require('../assets/images/t2d-icon.png');
 
@@ -196,10 +197,13 @@ export default function PaywallScreen() {
   return (
     <SafeAreaView style={[s.container, { backgroundColor: c.bg }]}>
       <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
-        {/* Close */}
-        <TouchableOpacity testID="paywall-close-btn" style={[s.closeBtn, { backgroundColor: c.card }]} onPress={() => router.back()} activeOpacity={0.7}>
-          <Ionicons name="close" size={20} color={c.textSecondary} />
-        </TouchableOpacity>
+        {/* Close + language switcher */}
+        <View style={s.topRow}>
+          <LanguageSwitcher size="sm" />
+          <TouchableOpacity testID="paywall-close-btn" style={[s.closeBtn, { backgroundColor: c.card }]} onPress={() => router.back()} activeOpacity={0.7}>
+            <Ionicons name="close" size={20} color={c.textSecondary} />
+          </TouchableOpacity>
+        </View>
 
         {/* Header */}
         <View style={s.header}>
@@ -288,7 +292,8 @@ export default function PaywallScreen() {
 const s = StyleSheet.create({
   container: { flex: 1 },
   scroll: { paddingHorizontal: 20, paddingTop: 12, paddingBottom: 24 },
-  closeBtn: { width: 36, height: 36, borderRadius: 18, justifyContent: 'center', alignItems: 'center', alignSelf: 'flex-end' },
+  closeBtn: { width: 36, height: 36, borderRadius: 18, justifyContent: 'center', alignItems: 'center' },
+  topRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 },
   header: { alignItems: 'center', marginTop: 4, marginBottom: 24 },
   brandIcon: { width: 64, height: 64, borderRadius: 14, marginBottom: 14 },
   limitBadge: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20, marginBottom: 10 },

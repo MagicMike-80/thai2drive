@@ -5,11 +5,12 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAppStore } from '../src/store/appStore';
 import { ThemeMode } from '../src/theme';
+import { LanguageSwitcher } from '../src/components/LanguageSwitcher';
 
 const TRANSLATIONS: Record<string, Record<string, string>> = {
-  no: { title: 'Innstillinger', sound: 'Lyd', theme: 'Tema', light: 'Lys', dark: 'Mork', system: 'System', back: 'Tilbake', soundOn: 'Lydeffekter pa', soundOff: 'Lydeffekter av', account: 'Konto', logout: 'Logg ut', premium: 'Premium', admin: 'Admin' },
-  th: { title: 'ตั้งค่า', sound: 'เสียง', theme: 'ธีม', light: 'สว่าง', dark: 'มืด', system: 'ระบบ', back: 'กลับ', soundOn: 'เปิดเสียง', soundOff: 'ปิดเสียง', account: 'บัญชี', logout: 'ออกจากระบบ', premium: 'พรีเมียม', admin: 'แอดมิน' },
-  en: { title: 'Settings', sound: 'Sound', theme: 'Theme', light: 'Light', dark: 'Dark', system: 'System', back: 'Back', soundOn: 'Sound effects on', soundOff: 'Sound effects off', account: 'Account', logout: 'Log Out', premium: 'Premium', admin: 'Admin' },
+  no: { title: 'Innstillinger', sound: 'Lyd', theme: 'Tema', language: 'Språk', light: 'Lys', dark: 'Mørk', system: 'System', back: 'Tilbake', soundOn: 'Lydeffekter på', soundOff: 'Lydeffekter av', account: 'Konto', logout: 'Logg ut', login: 'Logg inn', premium: 'Premium', admin: 'Admin' },
+  th: { title: 'ตั้งค่า', sound: 'เสียง', theme: 'ธีม', language: 'ภาษา', light: 'สว่าง', dark: 'มืด', system: 'ระบบ', back: 'กลับ', soundOn: 'เปิดเสียง', soundOff: 'ปิดเสียง', account: 'บัญชี', logout: 'ออกจากระบบ', login: 'เข้าสู่ระบบ', premium: 'พรีเมียม', admin: 'แอดมิน' },
+  en: { title: 'Settings', sound: 'Sound', theme: 'Theme', language: 'Language', light: 'Light', dark: 'Dark', system: 'System', back: 'Back', soundOn: 'Sound effects on', soundOff: 'Sound effects off', account: 'Account', logout: 'Log Out', login: 'Log In', premium: 'Premium', admin: 'Admin' },
 };
 
 const THEME_OPTIONS: { mode: ThemeMode; icon: keyof typeof Ionicons.glyphMap }[] = [
@@ -75,9 +76,20 @@ export default function SettingsScreen() {
               activeOpacity={0.8}
             >
               <Ionicons name="log-in-outline" size={18} color={colors.accent} />
-              <Text style={[styles.loginBtnText, { color: colors.accent }]}>{t.logout === 'Log Out' ? 'Log In' : t.logout === 'Logg ut' ? 'Logg inn' : '\u0e40\u0e02\u0e49\u0e32\u0e2a\u0e39\u0e48\u0e23\u0e30\u0e1a\u0e1a'}</Text>
+              <Text style={[styles.loginBtnText, { color: colors.accent }]}>{t.login}</Text>
             </TouchableOpacity>
           )}
+        </View>
+
+        {/* Language Selection */}
+        <View style={[styles.section, { backgroundColor: colors.card, borderColor: colors.cardBorder }]}>
+          <View style={styles.sectionHeader}>
+            <Ionicons name="language-outline" size={20} color={colors.accent} />
+            <Text style={[styles.sectionTitle, { color: colors.text }]}>{t.language}</Text>
+          </View>
+          <View style={styles.languageRow}>
+            <LanguageSwitcher size="md" align="flex-start" />
+          </View>
         </View>
 
         {/* Sound Toggle */}
@@ -167,4 +179,5 @@ const styles = StyleSheet.create({
   logoutText: { fontSize: 15, fontWeight: '700' },
   loginBtn: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 8, borderRadius: 12, borderWidth: 1.5, paddingVertical: 12 },
   loginBtnText: { fontSize: 14, fontWeight: '700' },
+  languageRow: { alignItems: 'flex-start' },
 });

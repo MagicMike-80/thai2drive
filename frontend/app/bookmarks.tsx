@@ -106,9 +106,7 @@ export default function BookmarksScreen() {
           <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
         </TouchableOpacity>
         <Text style={styles.title}>{t.title}</Text>
-        <View style={styles.countBadge}>
-          <Text style={styles.countText}>{questions.length}</Text>
-        </View>
+        <View style={{ width: 40 }} />
       </View>
 
       {questions.length === 0 ? (

@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAppStore } from '../src/store/appStore';
+import { LanguageSwitcher } from '../src/components/LanguageSwitcher';
 
 const TR: Record<string, Record<string, string>> = {
   no: {
@@ -93,6 +94,11 @@ export default function SignupScreen() {
           <TouchableOpacity testID="signup-back-btn" style={[st.backBtn, { backgroundColor: c.card }]} onPress={() => router.back()}>
             <Ionicons name="arrow-back" size={22} color={c.text} />
           </TouchableOpacity>
+
+          {/* Language Switcher */}
+          <View style={st.langHeader}>
+            <LanguageSwitcher size="sm" align="center" />
+          </View>
 
           {/* Header */}
           <View style={st.headerSection}>
@@ -190,6 +196,7 @@ const st = StyleSheet.create({
   container: { flex: 1 },
   scroll: { flexGrow: 1, padding: 24, paddingTop: 16 },
   backBtn: { width: 40, height: 40, borderRadius: 12, justifyContent: 'center', alignItems: 'center', alignSelf: 'flex-start', marginBottom: 12 },
+  langHeader: { alignItems: 'center', marginBottom: 16 },
   headerSection: { alignItems: 'center', marginBottom: 32 },
   iconBg: { width: 72, height: 72, borderRadius: 36, justifyContent: 'center', alignItems: 'center', marginBottom: 14 },
   title: { fontSize: 26, fontWeight: '800', marginBottom: 6 },
