@@ -6,6 +6,8 @@ export const PRODUCT_IDS = {
   MONTHLY: 'monthly_199',
   THREE_MONTH: 'threemonth_399',
   LIFETIME: 'lifetime_699',
+  // Legacy (kept for backwards compat)
+  WEEKLY: 'weekly_99',
 };
 
 export const ENTITLEMENT_ID = 'pro';

@@ -9,9 +9,9 @@ import { api } from '../src/services/api';
 import { LanguageSwitcher } from '../src/components/LanguageSwitcher';
 
 const TR: Record<string, Record<string, string>> = {
-  no: { subtitle: 'Norsk førerprøve', startQuiz: 'Start Quiz', practice: 'Øving', exam: 'Eksamen', stats: 'Din fremgang', answered: 'Besvart', correct: 'Riktige', accuracy: 'Nøyaktighet', history: 'Historikk', bookmarks: 'Bokmerker', premiumCta: 'Lås opp full tilgang – over 5000 spørsmål', premiumOffer: 'Begrenset tilbud for de første 50', premiumPrice: '199 kr / mnd', getPremium: 'Få Premium', premiumActive: 'Premium Aktiv', streak: 'dagers rekke', freeLeft: 'gratis igjen', dailyTest: 'Dagens test', dailyDesc: '5 spørsmål – samme hele dagen', dailyDone: 'Fullført i dag' },
-  th: { subtitle: 'สอบใบขับขี่นอร์เวย์', startQuiz: 'เริ่มทำแบบทดสอบ', practice: 'ฝึกซ้อม', exam: 'สอบ', stats: 'ความก้าวหน้า', answered: 'ตอบแล้ว', correct: 'ถูกต้อง', accuracy: 'ความแม่นยำ', history: 'ประวัติ', bookmarks: 'บุ๊คมาร์ค', premiumCta: 'ปลดล็อคเข้าถึงทั้งหมด – กว่า 5000 ข้อ', premiumOffer: 'ข้อเสนอพิเศษสำหรับ 50 คนแรก', premiumPrice: '199 kr / เดือน', getPremium: 'รับ Premium', premiumActive: 'Premium ใช้งานอยู่', streak: 'วันติดต่อกัน', freeLeft: 'ฟรีที่เหลือ', dailyTest: 'แบบทดสอบประจำวัน', dailyDesc: '5 ข้อ – เหมือนกันทั้งวัน', dailyDone: 'ทำเสร็จแล้ววันนี้' },
-  en: { subtitle: 'Norwegian driving test', startQuiz: 'Start Quiz', practice: 'Practice', exam: 'Exam', stats: 'Your Progress', answered: 'Answered', correct: 'Correct', accuracy: 'Accuracy', history: 'History', bookmarks: 'Bookmarks', premiumCta: 'Unlock full access – over 5,000 questions', premiumOffer: 'Limited offer for first 50 users', premiumPrice: '199 kr / month', getPremium: 'Get Premium', premiumActive: 'Premium Active', streak: 'day streak', freeLeft: 'free left', dailyTest: 'Daily Test', dailyDesc: '5 questions – same all day', dailyDone: 'Done today' },
+  no: { subtitle: 'Norsk førerprøve', startQuiz: 'Start Quiz', practice: 'Øving', exam: 'Eksamen', stats: 'Din fremgang', answered: 'Besvart', correct: 'Riktige', accuracy: 'Nøyaktighet', history: 'Historikk', bookmarks: 'Bokmerker', premiumCta: 'Lås opp full tilgang – over 5000 spørsmål', premiumOffer: 'Begrenset tilbud for de første 50', premiumPrice: '199 kr / mnd', getPremium: 'Få Premium', premiumActive: 'Premium Aktiv', streak: 'dagers rekke', freeLeft: 'gratis igjen', dailyTest: 'Dagens test', dailyDesc: '5 spørsmål – samme hele dagen', dailyDone: 'Fullført i dag', dailyLimitReached: 'Dagens 10 gratis spørsmål er brukt – trykk for å låse opp' },
+  th: { subtitle: 'สอบใบขับขี่นอร์เวย์', startQuiz: 'เริ่มทำแบบทดสอบ', practice: 'ฝึกซ้อม', exam: 'สอบ', stats: 'ความก้าวหน้า', answered: 'ตอบแล้ว', correct: 'ถูกต้อง', accuracy: 'ความแม่นยำ', history: 'ประวัติ', bookmarks: 'บุ๊คมาร์ค', premiumCta: 'ปลดล็อคเข้าถึงทั้งหมด – กว่า 5000 ข้อ', premiumOffer: 'ข้อเสนอพิเศษสำหรับ 50 คนแรก', premiumPrice: '199 kr / เดือน', getPremium: 'รับ Premium', premiumActive: 'Premium ใช้งานอยู่', streak: 'วันติดต่อกัน', freeLeft: 'ฟรีที่เหลือ', dailyTest: 'แบบทดสอบประจำวัน', dailyDesc: '5 ข้อ – เหมือนกันทั้งวัน', dailyDone: 'ทำเสร็จแล้ววันนี้', dailyLimitReached: 'ใช้ 10 ข้อฟรีของวันนี้ครบแล้ว – แตะเพื่อปลดล็อค' },
+  en: { subtitle: 'Norwegian driving test', startQuiz: 'Start Quiz', practice: 'Practice', exam: 'Exam', stats: 'Your Progress', answered: 'Answered', correct: 'Correct', accuracy: 'Accuracy', history: 'History', bookmarks: 'Bookmarks', premiumCta: 'Unlock full access – over 5,000 questions', premiumOffer: 'Limited offer for first 50 users', premiumPrice: '199 kr / month', getPremium: 'Get Premium', premiumActive: 'Premium Active', streak: 'day streak', freeLeft: 'free left', dailyTest: 'Daily Test', dailyDesc: '5 questions – same all day', dailyDone: 'Done today', dailyLimitReached: 'Today\'s 10 free questions used – tap to unlock' },
 };
 
 export default function HomeScreen() {
@@ -78,21 +78,35 @@ export default function HomeScreen() {
           </View>
         )}
 
-        {/* Big Start Quiz Button */}
+        {/* Big Start Quiz Button — redirects to paywall when no free left */}
         <TouchableOpacity testID="start-quiz-btn" style={[st.startBtn, { backgroundColor: c.accent }]}
-          onPress={() => router.push({ pathname: '/categories', params: { mode: 'practice' } })} activeOpacity={0.85}>
-          <Ionicons name="play" size={24} color="#0F172A" />
+          onPress={() => {
+            if (!isPremium && remaining <= 0) {
+              router.push('/paywall');
+            } else {
+              router.push({ pathname: '/categories', params: { mode: 'practice' } });
+            }
+          }} activeOpacity={0.85}>
+          <Ionicons name={!isPremium && remaining <= 0 ? 'lock-closed' : 'play'} size={24} color="#0F172A" />
           <Text style={st.startText}>{t.startQuiz}</Text>
         </TouchableOpacity>
 
         {/* Free remaining for non-premium */}
         {!isPremium && (
-          <Text style={[st.freeHint, { color: c.textMuted }]}>{remaining} {t.freeLeft}</Text>
+          <Text style={[st.freeHint, { color: remaining <= 0 ? c.incorrect : c.textMuted }]}>
+            {remaining <= 0 ? `${t.dailyLimitReached}` : `${remaining} ${t.freeLeft}`}
+          </Text>
         )}
 
-        {/* Exam button */}
+        {/* Exam button — also gated by paywall for free users with 0 left */}
         <TouchableOpacity testID="exam-mode-btn" style={[st.examBtn, { backgroundColor: c.card, borderColor: c.accent }]}
-          onPress={() => router.push({ pathname: '/quiz', params: { mode: 'exam', category: 'all' } })} activeOpacity={0.85}>
+          onPress={() => {
+            if (!isPremium && remaining <= 0) {
+              router.push('/paywall');
+            } else {
+              router.push({ pathname: '/quiz', params: { mode: 'exam', category: 'all' } });
+            }
+          }} activeOpacity={0.85}>
           <Ionicons name="school" size={20} color={c.accent} />
           <Text style={[st.examText, { color: c.accent }]}>{t.exam}</Text>
         </TouchableOpacity>

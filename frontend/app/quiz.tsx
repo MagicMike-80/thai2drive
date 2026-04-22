@@ -24,11 +24,23 @@ export default function QuizScreen() {
   const router = useRouter();
   const { mode, category } = useLocalSearchParams<{ mode: string; category: string }>();
   const store = useAppStore();
-  const { language, deviceId, addBookmark, removeBookmark, isBookmarked, setProgress, colors: c, soundEnabled, isPremium, incrementFreeQuestions, canAnswerFree, updateStreak, setLastAttempt } = store;
+  const { language, deviceId, addBookmark, removeBookmark, isBookmarked, setProgress, colors: c, soundEnabled, isPremium, incrementFreeQuestions, canAnswerFree, freeRemaining, resetFreeIfNewDay, updateStreak, setLastAttempt } = store;
   const t = T[language] || T.en;
 
   // Screen capture protection
   useScreenProtection(language);
+
+  // Gate: if free user has no quota left, redirect to paywall immediately
+  useEffect(() => {
+    (async () => {
+      if (isPremium) return;
+      await resetFreeIfNewDay();
+      if (freeRemaining() <= 0) {
+        router.replace('/paywall');
+      }
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const [questions, setQuestions] = useState<Question[]>([]);
   const [idx, setIdx] = useState(0);
@@ -165,7 +177,8 @@ export default function QuizScreen() {
   const handleNext = () => {
     stopTts(); // Stop any playing TTS immediately
     if (idx >= questions.length - 1) { finishQ(); return; }
-    if (!canAnswerFree()) { setShowLimit(true); return; }
+    // Non-premium user hit the daily cap → push paywall instead of inline message
+    if (!canAnswerFree()) { router.push('/paywall'); return; }
     // Smooth slide transition
     Animated.timing(fade, { toValue: 0, duration: 120, useNativeDriver: true }).start(() => {
       setIdx((p) => p + 1); setSel(null); setDone(false); setShowTh(false); setShowLimit(false);

@@ -45,10 +45,12 @@ interface AppState {
   setSoundEnabled: (enabled: boolean) => void;
   isPremium: boolean;
   freeQuestionsUsed: number;
+  freeResetDate: string; // YYYY-MM-DD – day on which the counter was last reset
   setPremium: (val: boolean) => void;
   incrementFreeQuestions: () => void;
   canAnswerFree: () => boolean;
   freeRemaining: () => number;
+  resetFreeIfNewDay: () => Promise<void>;
   // Streak
   streak: number;
   lastActiveDate: string;
@@ -185,8 +187,22 @@ export const useAppStore = create<AppState>((set, get) => ({
 
     const savedPremium = await AsyncStorage.getItem('isPremium');
     if (savedPremium === 'true') set({ isPremium: true });
-    const savedFreeUsed = await AsyncStorage.getItem('freeQuestionsUsed');
-    if (savedFreeUsed) set({ freeQuestionsUsed: parseInt(savedFreeUsed, 10) || 0 });
+
+    // Load daily free-question counter — auto-reset if it's a new day
+    const savedResetDate = await AsyncStorage.getItem('freeResetDate');
+    const todayKey = getDateKey();
+    if (savedResetDate === todayKey) {
+      const savedFreeUsed = await AsyncStorage.getItem('freeQuestionsUsed');
+      set({
+        freeQuestionsUsed: savedFreeUsed ? parseInt(savedFreeUsed, 10) || 0 : 0,
+        freeResetDate: savedResetDate,
+      });
+    } else {
+      // New day (or first launch) → reset counter
+      set({ freeQuestionsUsed: 0, freeResetDate: todayKey });
+      await AsyncStorage.setItem('freeQuestionsUsed', '0');
+      await AsyncStorage.setItem('freeResetDate', todayKey);
+    }
 
     // Load streak
     const savedStreak = await AsyncStorage.getItem('streak');
@@ -239,10 +255,33 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   isPremium: false,
   freeQuestionsUsed: 0,
+  freeResetDate: '',
   setPremium: async (val) => { set({ isPremium: val }); await AsyncStorage.setItem('isPremium', val.toString()); },
-  incrementFreeQuestions: async () => { const n = get().freeQuestionsUsed + 1; set({ freeQuestionsUsed: n }); await AsyncStorage.setItem('freeQuestionsUsed', n.toString()); },
-  canAnswerFree: () => { const { isPremium, freeQuestionsUsed } = get(); return isPremium || freeQuestionsUsed < 5; },
-  freeRemaining: () => { const { isPremium, freeQuestionsUsed } = get(); return isPremium ? Infinity : Math.max(0, 5 - freeQuestionsUsed); },
+  incrementFreeQuestions: async () => {
+    // Always ensure we are on today's counter before incrementing
+    await get().resetFreeIfNewDay();
+    const n = get().freeQuestionsUsed + 1;
+    set({ freeQuestionsUsed: n });
+    await AsyncStorage.setItem('freeQuestionsUsed', n.toString());
+  },
+  canAnswerFree: () => {
+    const { isPremium, freeQuestionsUsed } = get();
+    return isPremium || freeQuestionsUsed < 10;
+  },
+  freeRemaining: () => {
+    const { isPremium, freeQuestionsUsed } = get();
+    return isPremium ? Infinity : Math.max(0, 10 - freeQuestionsUsed);
+  },
+  resetFreeIfNewDay: async () => {
+    const today = getDateKey();
+    const { freeResetDate } = get();
+    if (freeResetDate !== today) {
+      // New day — reset daily counter
+      set({ freeQuestionsUsed: 0, freeResetDate: today });
+      await AsyncStorage.setItem('freeQuestionsUsed', '0');
+      await AsyncStorage.setItem('freeResetDate', today);
+    }
+  },
 
   // Streak
   streak: 0,
