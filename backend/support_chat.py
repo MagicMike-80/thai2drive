@@ -179,15 +179,25 @@ def _send_escalation_email(session_id: str, user_message: str,
     msg['From'] = _SMTP_USER
     msg['To'] = SUPPORT_EMAIL_TO
 
-    try:
-        with smtplib.SMTP(_SMTP_HOST, _SMTP_PORT, timeout=8) as s:
-            s.starttls()
-            s.login(_SMTP_USER, _SMTP_PASS)
-            s.sendmail(_SMTP_USER, [SUPPORT_EMAIL_TO], msg.as_string())
-        return True, 'sent'
-    except Exception as e:
-        logger.exception('Email send failed')
-        return False, f'SMTP error: {e}'
+    # Try up to 3 times — Yahoo / some SMTP servers drop connections sporadically
+    import time
+    last_err = None
+    for attempt in range(1, 4):
+        try:
+            with smtplib.SMTP(_SMTP_HOST, _SMTP_PORT, timeout=12) as s:
+                s.ehlo()
+                s.starttls()
+                s.ehlo()
+                s.login(_SMTP_USER, _SMTP_PASS)
+                s.sendmail(_SMTP_USER, [SUPPORT_EMAIL_TO], msg.as_string())
+            return True, f'sent (attempt {attempt})'
+        except Exception as e:
+            last_err = e
+            logger.warning('Email send attempt %d failed: %s', attempt, e)
+            if attempt < 3:
+                time.sleep(1.5 * attempt)
+
+    return False, f'SMTP error after 3 attempts: {last_err}'
 
 
 # ─── API ────────────────────────────────────────────────────────────────
