@@ -3,8 +3,10 @@ Public marketing website + legal pages for Thai2Drive.
 All pages are styled in a unified dark theme matching the mobile app.
 Mounted under /api/* so the k8s ingress routes them to the backend.
 """
-from fastapi import APIRouter
-from fastapi.responses import HTMLResponse
+from fastapi import APIRouter, Request
+from fastapi.responses import HTMLResponse, PlainTextResponse, Response
+
+from site_config import public_site_url, site_url, canonical_url
 
 website_router = APIRouter()
 
@@ -455,18 +457,29 @@ def _footer():
 """
 
 
-def _page(title: str, body: str, description: str = ""):
+def _page(title: str, body: str, description: str = "", path: str = "/"):
+    desc = description or 'Thai2Drive – Norsk teoriprøve på thai, norsk og engelsk. Laget for thai-folk i Norge.'
+    canon = canonical_url(path)
+    og_image = public_site_url() + HEADER_URL  # absolute URL for social previews
     return f"""<!doctype html>
 <html lang="no">
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>{title}</title>
-<meta name="description" content="{description or 'Thai2Drive – Norsk teoriprøve på thai, norsk og engelsk. Laget for thai-folk i Norge.'}"/>
+<meta name="description" content="{desc}"/>
+<link rel="canonical" href="{canon}"/>
 <meta property="og:title" content="{title}"/>
-<meta property="og:description" content="{description}"/>
-<meta property="og:image" content="{HEADER_URL}"/>
+<meta property="og:description" content="{desc}"/>
+<meta property="og:image" content="{og_image}"/>
+<meta property="og:url" content="{canon}"/>
 <meta property="og:type" content="website"/>
+<meta property="og:site_name" content="{BRAND}"/>
+<meta property="og:locale" content="nb_NO"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="{title}"/>
+<meta name="twitter:description" content="{desc}"/>
+<meta name="twitter:image" content="{og_image}"/>
 <link rel="icon" type="image/png" href="{ICON_URL}"/>
 <link rel="apple-touch-icon" href="{ICON_URL}"/>
 <style>{_BASE_CSS}{_CHAT_CSS}</style>
@@ -709,6 +722,7 @@ def privacy():
     return HTMLResponse(_page(
         f"Personvern – {BRAND}", body,
         description="Personvernregler for Thai2Drive. Vi samler inn minst mulig data og selger aldri til tredjeparter.",
+        path="/privacy",
     ))
 
 
@@ -779,6 +793,7 @@ def terms():
     return HTMLResponse(_page(
         f"Brukervilkår – {BRAND}", body,
         description="Brukervilkår for Thai2Drive.",
+        path="/terms",
     ))
 
 
@@ -825,11 +840,59 @@ def support():
   <p>
     {BRAND}<br/>
     E-post: <a href="mailto:{CONTACT_EMAIL}">{CONTACT_EMAIL}</a><br/>
-    Nettsted: <a href="/api/website">thai2drive.com</a>
+    Nettsted: <a href="/api/website">{public_site_url().replace('https://', '').replace('http://', '')}</a>
   </p>
 </div>
 """
     return HTMLResponse(_page(
         f"Support – {BRAND}", body,
         description="Trenger du hjelp? Kontakt Thai2Drive-supporten.",
+        path="/support",
     ))
+
+
+# ─────────────────────────── SEO: sitemap + robots ───────────────────────────
+@website_router.get("/sitemap.xml")
+def sitemap_xml():
+    """XML sitemap using the current public site URL (env-configurable)."""
+    # Build the routable paths the same way the HTML pages do
+    pages = [
+        ("/",            "1.0", "weekly"),
+        ("/privacy",     "0.5", "yearly"),
+        ("/terms",       "0.5", "yearly"),
+        ("/support",     "0.6", "monthly"),
+    ]
+    urls = ""
+    for path, prio, freq in pages:
+        # When served under /api/ prefix on the preview we expose canonical
+        # without the prefix so search engines see clean URLs once a custom
+        # domain is configured. canonical_url() handles this via SITE_ROUTING_MODE.
+        loc = canonical_url(path)
+        urls += (
+            "  <url>\n"
+            f"    <loc>{loc}</loc>\n"
+            f"    <changefreq>{freq}</changefreq>\n"
+            f"    <priority>{prio}</priority>\n"
+            "  </url>\n"
+        )
+    xml = (
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        f"{urls}"
+        "</urlset>\n"
+    )
+    return Response(content=xml, media_type="application/xml")
+
+
+@website_router.get("/robots.txt")
+def robots_txt():
+    """robots.txt pointing at the configured sitemap URL."""
+    sitemap = canonical_url("/sitemap.xml")
+    body = (
+        "User-agent: *\n"
+        "Allow: /\n"
+        "Disallow: /api/admin\n"
+        "Disallow: /api/admin-panel\n"
+        f"Sitemap: {sitemap}\n"
+    )
+    return PlainTextResponse(body)

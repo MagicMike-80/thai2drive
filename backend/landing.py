@@ -819,17 +819,32 @@ LANDING_JS = r"""
 
 def build_landing_page(chat_css: str, chat_widget_html: str, chat_js: str) -> str:
     """Build the full landing HTML including the existing chat bubble."""
+    # Local import to avoid circular + keep module import cheap.
+    from site_config import public_site_url, canonical_url
+    canon = canonical_url("/")
+    og_image = public_site_url() + HEADER_URL  # absolute URL for social previews
+    desc = "Bestå den norske teoriprøven – 500+ spørsmål på thai, norsk og engelsk. Laget for thai-folk i Norge."
     return f"""<!doctype html>
 <html lang="th" data-current-lang="th">
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Thai2Drive – สอบใบขับขี่นอร์เวย์ · Teoriprøve · Norwegian theory test</title>
-<meta name="description" content="Bestå den norske teoriprøven – 500+ spørsmål på thai, norsk og engelsk. Laget for thai-folk i Norge."/>
+<meta name="description" content="{desc}"/>
+<link rel="canonical" href="{canon}"/>
 <meta property="og:title" content="Thai2Drive"/>
 <meta property="og:description" content="Norsk teoriprøve på thai, norsk og engelsk"/>
-<meta property="og:image" content="{HEADER_URL}"/>
+<meta property="og:image" content="{og_image}"/>
+<meta property="og:url" content="{canon}"/>
 <meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Thai2Drive"/>
+<meta property="og:locale" content="nb_NO"/>
+<meta property="og:locale:alternate" content="th_TH"/>
+<meta property="og:locale:alternate" content="en_US"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Thai2Drive – Norsk teoriprøve"/>
+<meta name="twitter:description" content="{desc}"/>
+<meta name="twitter:image" content="{og_image}"/>
 <link rel="icon" type="image/png" href="{ICON_URL}"/>
 <link rel="apple-touch-icon" href="{ICON_URL}"/>
 <style>{LANDING_CSS}{chat_css}</style>
