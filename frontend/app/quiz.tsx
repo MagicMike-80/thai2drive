@@ -57,6 +57,8 @@ export default function QuizScreen() {
   const [ttsSpeed, setTtsSpeed] = useState(1.0); // 1x, 1.5x, 2x
   const ttsSpeedRef = useRef(1.0); // Live ref so speakSequence always reads the current speed
   const ttsCancelled = useRef(false);
+  const ttsGen = useRef(0); // Monotonic counter — invalidates any in-flight speakSequence
+  const voiceMapRef = useRef<Record<string, string | undefined>>({}); // lang → preferred voice identifier
 
   const fade = useRef(new Animated.Value(1)).current;
   const glowAnim = useRef(new Animated.Value(0)).current;
@@ -215,9 +217,61 @@ export default function QuizScreen() {
     router.replace({ pathname: '/results', params: { total: questions.length.toString(), correct: cor.toString(), mode: mode || 'practice', passed: isExam ? (pct >= PASS ? 'true' : 'false') : '' } });
   };
 
-  const stopTts = () => { ttsCancelled.current = true; Speech.stop(); setTtsPlaying(null); setSpeaking(false); };
+  // Bulletproof stop: invalidate any in-flight sequence + hammer Speech.stop() twice
+  // (Android TTS engines sometimes keep the current utterance going after a single stop)
+  const stopTts = () => {
+    ttsGen.current += 1;
+    ttsCancelled.current = true;
+    setTtsPlaying(null);
+    setSpeaking(false);
+    try { Speech.stop(); } catch {}
+    setTimeout(() => { try { Speech.stop(); } catch {} }, 30);
+    setTimeout(() => { try { Speech.stop(); } catch {} }, 250);
+  };
 
   const langCode = (l: string) => l === 'th' ? 'th-TH' : l === 'no' ? 'nb-NO' : 'en-US';
+
+  // Prefer male voices for speech. Expo Speech doesn't expose "gender" directly,
+  // so we heuristically match voice identifiers/names against known male markers.
+  // Google TTS uses x-ttm (Thai male), x-stm/wavenet-D (male English), etc.
+  // We pick per-language once on mount and cache the identifier.
+  const MALE_PATTERNS: Record<string, RegExp[]> = {
+    'th-TH': [/-ttm\b|-stm\b|\bmale\b|-a\b|\bm01\b/i],
+    'nb-NO': [/-ttm\b|-wavenet-b\b|-wavenet-c\b|\bmale\b|\bm01\b/i],
+    'en-US': [/-wavenet-[abd]\b|-neural2-[abd]\b|-ttm\b|\bmale\b|\bm01\b/i],
+  };
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const voices = await Speech.getAvailableVoicesAsync();
+        const pickFor = (lang: string): string | undefined => {
+          const candidates = voices.filter((v: any) =>
+            typeof v.language === 'string' && v.language.toLowerCase().startsWith(lang.toLowerCase())
+          );
+          if (!candidates.length) return undefined;
+          const patterns = MALE_PATTERNS[lang] || [];
+          // 1) Match against known male patterns on identifier + name
+          for (const p of patterns) {
+            const hit = candidates.find((v: any) => p.test(v.identifier || '') || p.test(v.name || ''));
+            if (hit) return hit.identifier;
+          }
+          // 2) Fall back to the first "enhanced/local" voice if available (better quality)
+          const enhanced = candidates.find((v: any) => String(v.quality || '').toLowerCase() === 'enhanced');
+          return (enhanced || candidates[0]).identifier;
+        };
+        voiceMapRef.current = {
+          'th-TH': pickFor('th-TH'),
+          'nb-NO': pickFor('nb-NO'),
+          'en-US': pickFor('en-US'),
+        };
+        // One-time log so user can see what was picked
+        console.log('[Speech] Picked voices:', voiceMapRef.current);
+      } catch (e) {
+        console.warn('[Speech] voice enumeration failed', e);
+      }
+    })();
+  }, []);
 
   const SPEED_OPTIONS = [
     { label: '1x', value: 1.0 },
@@ -237,27 +291,33 @@ export default function QuizScreen() {
       setTimeout(() => {
         if (wasPlaying === 'question') speakQuestion();
         else if (wasPlaying === 'explanation') speakExplanation();
-      }, 120);
+      }, 160);
     }
   };
 
   const speakSequence = async (segments: { text: string; lang: string }[]) => {
     ttsCancelled.current = false;
+    const myGen = ++ttsGen.current; // claim this generation; any newer stopTts will invalidate us
+
     for (let i = 0; i < segments.length; i++) {
-      if (ttsCancelled.current) break;
+      if (ttsCancelled.current || ttsGen.current !== myGen) break;
       const s = segments[i];
+      const code = langCode(s.lang);
       const baseRate = s.lang === 'th' ? 0.85 : 0.9;
-      // Read speed from ref so it's always live, not stale closure
       const rate = Math.min(2.0, Math.max(0.1, baseRate * ttsSpeedRef.current));
+      const voice = voiceMapRef.current[code];
       await new Promise<void>((resolve) => {
         Speech.speak(s.text, {
-          language: langCode(s.lang),
+          language: code,
           rate,
+          voice,
           onDone: () => resolve(),
           onError: () => resolve(),
           onStopped: () => resolve(),
         });
       });
+      // Extra guard: if we were cancelled while a segment was running, bail now
+      if (ttsCancelled.current || ttsGen.current !== myGen) break;
     }
   };
 

@@ -35,21 +35,33 @@ interface UseRevenueCatReturn {
 let Purchases: any = null;
 let rcInitialized = false;
 
+// A REAL RevenueCat public key starts with one of these prefixes.
+// Anything else (empty, "test_...", etc.) is invalid and we skip init
+// silently to avoid the "Wrong API Key" red banner on startup.
+function looksLikeValidRCKey(key: string | undefined): boolean {
+  if (!key) return false;
+  if (key.startsWith('goog_')) return true; // Android
+  if (key.startsWith('appl_')) return true; // iOS
+  return false;
+}
+
 async function initRC(): Promise<boolean> {
   if (rcInitialized) return true;
   if (Platform.OS === 'web') return false;
+
+  const apiKey = process.env.EXPO_PUBLIC_RC_API_KEY;
+  if (!looksLikeValidRCKey(apiKey)) {
+    // No valid production key configured — run the app in "no-paywall" mode.
+    // Paywall screen will handle this gracefully (disabled buttons / hint).
+    console.warn('[RC] Skipping init — missing or test API key. Paywall disabled.');
+    return false;
+  }
 
   try {
     const mod = await import('react-native-purchases');
     Purchases = mod.default;
 
-    const apiKey = process.env.EXPO_PUBLIC_RC_API_KEY;
-    if (!apiKey) {
-      console.warn('[RC] No API key');
-      return false;
-    }
-
-    Purchases.setLogLevel(mod.LOG_LEVEL.VERBOSE);
+    Purchases.setLogLevel(mod.LOG_LEVEL.WARN);
     Purchases.configure({ apiKey });
     rcInitialized = true;
     console.log('[RC] Initialized');

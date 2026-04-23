@@ -78,17 +78,39 @@ frontend:
       - working: true
         agent: "main"
         comment: "FROZEN per user. Premium game-level redesign shipped: per-category hues, gradient overlays, glow blobs, difficulty stars, progress bars, featured All-Categories card, spring press animation. Expo-linear-gradient pinned to ~15.0.8 (matches SDK 54)."
-  - task: "Android adaptive icon"
+  - task: "RevenueCat — handle invalid/test keys gracefully"
     implemented: true
     working: true
-    file: "/app/frontend/assets/images/adaptive-icon.png"
+    file: "/app/frontend/src/hooks/useRevenueCat.ts, /app/frontend/.env, /app/frontend/app/paywall.tsx"
     stuck_count: 0
     priority: "high"
     needs_retesting: false
     status_history:
       - working: true
         agent: "main"
-        comment: "Regenerated via PIL: adaptive-icon.png (1024x1024 transparent foreground, T2D wordmark inside Android safe zone with soft amber glow), icon.png (1024x1024 solid navy + T2D + THAI·DRIVE subtitle), splash-icon.png, favicon.png (192), t2d-icon.png (512 in-app brand). app.json already sets adaptiveIcon.backgroundColor = #0F172A which pairs with the transparent foreground."
+        comment: "Added looksLikeValidRCKey() gate: only keys that begin with goog_ (Android) or appl_ (iOS) pass. Test placeholders (test_...), empty strings, and any non-RC string cause initRC() to return false silently — no 'Wrong API Key' banner. Paywall screen now shows the same 'Payment requires the mobile app' notice when rc.isAvailable is false. User can paste a real RevenueCat public key into EXPO_PUBLIC_RC_API_KEY in .env and the app automatically enables purchases on the next build."
+  - task: "TTS — bulletproof stop on question change + male voice preference"
+    implemented: true
+    working: true
+    file: "/app/frontend/app/quiz.tsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Added monotonic ttsGen counter — every stopTts() and every speakSequence() increments/claims a generation. If a newer stopTts invalidates a running sequence, the next segment-loop iteration bails before calling Speech.speak again. stopTts() also calls Speech.stop() three times (immediate + 30ms + 250ms) because some Android TTS engines don't honor a single stop mid-utterance. Added male-voice picker: Speech.getAvailableVoicesAsync() is called on mount, voices for th-TH / nb-NO / en-US are scored with known Google male-voice regexes (-ttm, -wavenet-B/C/D, -stm, -m01, 'male'), and the best match is cached in voiceMapRef. speakSequence passes the picked voice identifier via Speech.speak({ voice }). Fallback: if no male pattern matches, pick the 'enhanced' voice (better quality) or default."
+  - task: "Android adaptive icon — safe zone compliance"
+    implemented: true
+    working: true
+    file: "/app/frontend/assets/images/adaptive-icon.png, icon.png, splash-icon.png, t2d-icon.png"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Regenerated all icons with stricter safe-zone compliance. Previous foreground extended toward edges → Samsung One UI cropped it to a 'yellow blob'. New generator keeps ALL visible content inside a central 35%-radius circle (well inside Android's 66% safe-zone requirement). 'T2D' wordmark centered, subtle amber glow behind, no text bleed. Confirmed visually: icon.png shows bold centered T2D on navy with amber glow; adaptive-icon.png has transparent bg with the same foreground for Android to composite over the #0F172A bg set in app.json. Also removed the 'THAI · DRIVE' subtitle that was making the design cluttered."
   - task: "Home screen simplification"
     implemented: true
     working: true

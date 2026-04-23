@@ -257,8 +257,8 @@ export default function PaywallScreen() {
           </View>
         ) : null}
 
-        {/* Web notice */}
-        {isWeb && (
+        {/* Web / RC-disabled notice */}
+        {(isWeb || !rc.isAvailable) && (
           <View style={[s.webNote, { backgroundColor: c.accentBg }]}>
             <Ionicons name="phone-portrait-outline" size={16} color={c.accent} />
             <Text style={[s.webNoteText, { color: c.accent }]}>{t.webNote}</Text>
