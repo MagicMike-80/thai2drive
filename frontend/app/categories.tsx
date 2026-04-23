@@ -14,13 +14,6 @@ const CATEGORY_ICONS: Record<string, keyof typeof Ionicons.glyphMap> = {
   'Traffic Rules': 'book-outline',
   'Road Conditions': 'cloudy-outline',
 };
-const CATEGORY_COLORS: Record<string, string> = {
-  'Traffic Signs': '#F59E0B', 'Road Rules': '#3B82F6', 'Right of Way': '#8B5CF6', 'Speed Limits': '#EF4444', 'Safety': '#22C55E',
-  'Driving Conditions': '#06B6D4',
-  'Situations': '#EC4899',
-  'Traffic Rules': '#14B8A6',
-  'Road Conditions': '#F97316',
-};
 const TR: Record<string, Record<string, any>> = {
   no: { selectCategory: 'Velg kategori', allCategories: 'Alle kategorier', questions: 'spørsmål', practice: 'Øvingsmodus', exam: 'Eksamensmodus',
     categories: { 'Traffic Signs': 'Trafikkskilt', 'Road Rules': 'Trafikkregler', 'Right of Way': 'Vikeplikt', 'Speed Limits': 'Fartsgrenser', 'Safety': 'Sikkerhet', 'Driving Conditions': 'Kjøreforhold', 'Situations': 'Situasjoner', 'Traffic Rules': 'Trafikkregler (grunnleggende)', 'Road Conditions': 'Veiforhold' } },
@@ -69,10 +62,9 @@ export default function CategoriesScreen() {
           {categories.map((cat) => {
             const name = (t.categories as any)[cat.name] || cat.name;
             const icon = CATEGORY_ICONS[cat.name] || 'help-circle-outline';
-            const color = CATEGORY_COLORS[cat.name] || c.textMuted;
             return (
-              <TouchableOpacity key={cat.name} testID={`category-${cat.name}`} style={[st.catCard, { backgroundColor: c.card, borderColor: `${color}30` }]} onPress={() => startQuiz(cat.name)} activeOpacity={0.8}>
-                <View style={[st.catIcon, { backgroundColor: `${color}18` }]}><Ionicons name={icon} size={24} color={color} /></View>
+              <TouchableOpacity key={cat.name} testID={`category-${cat.name}`} style={[st.catCard, { backgroundColor: c.card, borderColor: c.cardBorder }]} onPress={() => startQuiz(cat.name)} activeOpacity={0.75}>
+                <View style={[st.catIcon, { backgroundColor: c.accentBg }]}><Ionicons name={icon} size={22} color={c.accent} /></View>
                 <Text style={[st.catName, { color: c.text }]}>{name}</Text>
               </TouchableOpacity>
             );

@@ -155,8 +155,8 @@ export default function PaywallScreen() {
   }
 
   const PlanCard = ({
-    id, name, subLabel, price, per, ribbon,
-  }: { id: Plan; name: string; subLabel?: string; price: string; per: string; ribbon?: string }) => {
+    id, name, subLabel, price, per, ribbon, highlight,
+  }: { id: Plan; name: string; subLabel?: string; price: string; per: string; ribbon?: string; highlight?: boolean }) => {
     const active = plan === id;
     return (
       <TouchableOpacity
@@ -166,7 +166,12 @@ export default function PaywallScreen() {
         onPress={() => setPlan(id)}
         style={[
           s.planCard,
-          { backgroundColor: active ? c.accentBg : c.card, borderColor: active ? c.accent : c.cardBorder },
+          highlight && s.planCardHighlight,
+          {
+            backgroundColor: active ? c.accentBg : c.card,
+            borderColor: active ? c.accent : (highlight ? `${c.accent}55` : c.cardBorder),
+            borderWidth: highlight ? 2 : 1.5,
+          },
         ]}
       >
         {ribbon && (
@@ -179,13 +184,13 @@ export default function PaywallScreen() {
             {active && <View style={[s.radioFill, { backgroundColor: c.accent }]} />}
           </View>
           <View style={s.planInfo}>
-            <Text style={[s.planName, { color: c.text }]}>{name}</Text>
+            <Text style={[s.planName, { color: c.text, fontSize: highlight ? 17 : 15 }]}>{name}</Text>
             {subLabel ? (
               <Text style={[s.planSub, { color: active ? c.accent : c.textSecondary }]}>{subLabel}</Text>
             ) : null}
           </View>
           <View style={s.priceWrap}>
-            <Text style={[s.planPrice, { color: active ? c.accent : c.text }]}>{price}</Text>
+            <Text style={[s.planPrice, { color: active ? c.accent : c.text, fontSize: highlight ? 22 : 19 }]}>{price}</Text>
             <Text style={[s.planPer, { color: c.textMuted }]}>{per}</Text>
           </View>
         </View>
@@ -228,7 +233,7 @@ export default function PaywallScreen() {
         {/* ─── Plans ─── */}
         <View style={s.plans}>
           <PlanCard id="monthly" name={t.monthly} price={monthlyPrice} per={t.monthlyPer} />
-          <PlanCard id="threemonth" name={t.threemonth} subLabel={t.threemonthSub} price={threePrice} per={t.threemonthPer} ribbon={t.bestValue} />
+          <PlanCard id="threemonth" name={t.threemonth} subLabel={t.threemonthSub} price={threePrice} per={t.threemonthPer} ribbon={t.bestValue} highlight />
           <PlanCard id="lifetime" name={t.lifetime} subLabel={t.lifetimeSub} price={lifePrice} per={t.lifetimePer} ribbon={t.popular} />
         </View>
 
@@ -291,18 +296,19 @@ export default function PaywallScreen() {
 
 const s = StyleSheet.create({
   container: { flex: 1 },
-  scroll: { paddingHorizontal: 20, paddingTop: 12, paddingBottom: 24 },
+  scroll: { paddingHorizontal: 22, paddingTop: 12, paddingBottom: 28 },
   closeBtn: { width: 36, height: 36, borderRadius: 18, justifyContent: 'center', alignItems: 'center' },
   topRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 },
-  header: { alignItems: 'center', marginTop: 4, marginBottom: 24 },
-  brandIcon: { width: 64, height: 64, borderRadius: 14, marginBottom: 14 },
-  limitBadge: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20, marginBottom: 10 },
+  header: { alignItems: 'center', marginTop: 8, marginBottom: 32 },
+  brandIcon: { width: 68, height: 68, borderRadius: 16, marginBottom: 16 },
+  limitBadge: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20, marginBottom: 12 },
   limitBadgeText: { fontSize: 12, fontWeight: '700' },
-  title: { fontSize: 24, fontWeight: '800', textAlign: 'center', lineHeight: 30, marginBottom: 6 },
-  subtitle: { fontSize: 14, textAlign: 'center', lineHeight: 20, paddingHorizontal: 12 },
+  title: { fontSize: 26, fontWeight: '800', textAlign: 'center', lineHeight: 32, marginBottom: 8, letterSpacing: -0.4 },
+  subtitle: { fontSize: 14, textAlign: 'center', lineHeight: 21, paddingHorizontal: 12 },
 
-  plans: { gap: 10, marginBottom: 22 },
-  planCard: { borderRadius: 14, borderWidth: 1.5, paddingHorizontal: 16, paddingVertical: 14, position: 'relative' },
+  plans: { gap: 14, marginBottom: 30 },
+  planCard: { borderRadius: 16, paddingHorizontal: 18, paddingVertical: 16, position: 'relative' },
+  planCardHighlight: { paddingVertical: 20, paddingHorizontal: 20, marginVertical: 2 },
   planRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   radio: { width: 20, height: 20, borderRadius: 10, borderWidth: 2, justifyContent: 'center', alignItems: 'center' },
   radioFill: { width: 10, height: 10, borderRadius: 5 },
@@ -310,12 +316,12 @@ const s = StyleSheet.create({
   planName: { fontSize: 16, fontWeight: '700' },
   planSub: { fontSize: 12, fontWeight: '600', marginTop: 2 },
   priceWrap: { alignItems: 'flex-end' },
-  planPrice: { fontSize: 17, fontWeight: '800' },
+  planPrice: { fontSize: 19, fontWeight: '800' },
   planPer: { fontSize: 11, marginTop: 1 },
-  ribbon: { position: 'absolute', top: -9, right: 14, paddingHorizontal: 10, paddingVertical: 3, borderRadius: 8 },
+  ribbon: { position: 'absolute', top: -10, right: 16, paddingHorizontal: 10, paddingVertical: 3, borderRadius: 8 },
   ribbonText: { fontSize: 10, fontWeight: '800', color: '#0F172A', textTransform: 'uppercase', letterSpacing: 0.5 },
 
-  features: { gap: 12, marginBottom: 18 },
+  features: { gap: 14, marginBottom: 24 },
   featRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   featIconWrap: { width: 22, height: 22, borderRadius: 11, justifyContent: 'center', alignItems: 'center' },
   featText: { fontSize: 14, fontWeight: '500', flex: 1 },
@@ -325,9 +331,9 @@ const s = StyleSheet.create({
   webNote: { flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 14, paddingVertical: 10, borderRadius: 10, marginTop: 4 },
   webNoteText: { fontSize: 12, fontWeight: '600' },
 
-  bottomWrap: { paddingHorizontal: 20, paddingTop: 12, paddingBottom: 18, borderTopWidth: 1 },
-  ctaBtn: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', borderRadius: 14, paddingVertical: 16, gap: 8, marginBottom: 8 },
-  ctaText: { fontSize: 16, fontWeight: '800', color: '#0F172A' },
+  bottomWrap: { paddingHorizontal: 22, paddingTop: 14, paddingBottom: 20, borderTopWidth: 1 },
+  ctaBtn: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', borderRadius: 16, paddingVertical: 19, gap: 8, marginBottom: 10 },
+  ctaText: { fontSize: 17, fontWeight: '800', color: '#0F172A', letterSpacing: 0.2 },
   restoreBtn: { alignItems: 'center', paddingVertical: 6, marginBottom: 2 },
   restoreText: { fontSize: 13, fontWeight: '600' },
   cancelText: { fontSize: 11, textAlign: 'center' },

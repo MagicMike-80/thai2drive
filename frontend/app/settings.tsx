@@ -8,9 +8,9 @@ import { ThemeMode } from '../src/theme';
 import { LanguageSwitcher } from '../src/components/LanguageSwitcher';
 
 const TRANSLATIONS: Record<string, Record<string, string>> = {
-  no: { title: 'Innstillinger', sound: 'Lyd', theme: 'Tema', language: 'Språk', light: 'Lys', dark: 'Mørk', system: 'System', back: 'Tilbake', soundOn: 'Lydeffekter på', soundOff: 'Lydeffekter av', account: 'Konto', logout: 'Logg ut', login: 'Logg inn', premium: 'Premium', admin: 'Admin' },
-  th: { title: 'ตั้งค่า', sound: 'เสียง', theme: 'ธีม', language: 'ภาษา', light: 'สว่าง', dark: 'มืด', system: 'ระบบ', back: 'กลับ', soundOn: 'เปิดเสียง', soundOff: 'ปิดเสียง', account: 'บัญชี', logout: 'ออกจากระบบ', login: 'เข้าสู่ระบบ', premium: 'พรีเมียม', admin: 'แอดมิน' },
-  en: { title: 'Settings', sound: 'Sound', theme: 'Theme', language: 'Language', light: 'Light', dark: 'Dark', system: 'System', back: 'Back', soundOn: 'Sound effects on', soundOff: 'Sound effects off', account: 'Account', logout: 'Log Out', login: 'Log In', premium: 'Premium', admin: 'Admin' },
+  no: { title: 'Innstillinger', sound: 'Lyd', theme: 'Tema', language: 'Språk', light: 'Lys', dark: 'Mørk', system: 'System', back: 'Tilbake', soundOn: 'Lydeffekter på', soundOff: 'Lydeffekter av', account: 'Konto', logout: 'Logg ut', login: 'Logg inn', premium: 'Premium', admin: 'Admin', library: 'Bibliotek', history: 'Historikk', bookmarks: 'Bokmerker' },
+  th: { title: 'ตั้งค่า', sound: 'เสียง', theme: 'ธีม', language: 'ภาษา', light: 'สว่าง', dark: 'มืด', system: 'ระบบ', back: 'กลับ', soundOn: 'เปิดเสียง', soundOff: 'ปิดเสียง', account: 'บัญชี', logout: 'ออกจากระบบ', login: 'เข้าสู่ระบบ', premium: 'พรีเมียม', admin: 'แอดมิน', library: 'คลัง', history: 'ประวัติ', bookmarks: 'บุ๊คมาร์ค' },
+  en: { title: 'Settings', sound: 'Sound', theme: 'Theme', language: 'Language', light: 'Light', dark: 'Dark', system: 'System', back: 'Back', soundOn: 'Sound effects on', soundOff: 'Sound effects off', account: 'Account', logout: 'Log Out', login: 'Log In', premium: 'Premium', admin: 'Admin', library: 'Library', history: 'History', bookmarks: 'Bookmarks' },
 };
 
 const THEME_OPTIONS: { mode: ThemeMode; icon: keyof typeof Ionicons.glyphMap }[] = [
@@ -79,6 +79,25 @@ export default function SettingsScreen() {
               <Text style={[styles.loginBtnText, { color: colors.accent }]}>{t.login}</Text>
             </TouchableOpacity>
           )}
+        </View>
+
+        {/* Library (History + Bookmarks) */}
+        <View style={[styles.section, { backgroundColor: colors.card, borderColor: colors.cardBorder }]}>
+          <View style={styles.sectionHeader}>
+            <Ionicons name="library-outline" size={20} color={colors.accent} />
+            <Text style={[styles.sectionTitle, { color: colors.text }]}>{t.library}</Text>
+          </View>
+          <TouchableOpacity testID="settings-history-btn" style={styles.linkRow} onPress={() => router.push('/history')} activeOpacity={0.7}>
+            <Ionicons name="time-outline" size={18} color={colors.textSecondary} />
+            <Text style={[styles.linkLabel, { color: colors.text }]}>{t.history}</Text>
+            <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
+          </TouchableOpacity>
+          <View style={[styles.innerDivider, { backgroundColor: colors.divider }]} />
+          <TouchableOpacity testID="settings-bookmarks-btn" style={styles.linkRow} onPress={() => router.push('/bookmarks')} activeOpacity={0.7}>
+            <Ionicons name="bookmark-outline" size={18} color={colors.textSecondary} />
+            <Text style={[styles.linkLabel, { color: colors.text }]}>{t.bookmarks}</Text>
+            <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
+          </TouchableOpacity>
         </View>
 
         {/* Language Selection */}
@@ -180,4 +199,7 @@ const styles = StyleSheet.create({
   loginBtn: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 8, borderRadius: 12, borderWidth: 1.5, paddingVertical: 12 },
   loginBtnText: { fontSize: 14, fontWeight: '700' },
   languageRow: { alignItems: 'flex-start' },
+  linkRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 10, gap: 12 },
+  linkLabel: { flex: 1, fontSize: 15, fontWeight: '500' },
+  innerDivider: { height: 1, opacity: 0.35 },
 });

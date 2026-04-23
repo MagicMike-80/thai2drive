@@ -35,11 +35,82 @@ backend:
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Applied app-wide IMAGE_ONLY_FILTER to both /api/questions and /api/questions/random. All quiz modes (Practice, Exam, Daily Test) now only receive questions where bildeUrl is present and non-empty. The has_image query param on /questions/random is now ignored (always image-only). Manually verified with 5 test cases (daily=5, practice=10, exam=45, has_image=false, category=Road Conditions w/ only 2 images). All returned 100% image-bearing questions."
+      - working: true
+        agent: "main"
+        comment: "2026-04-23: Confirmed still working after UI polish pass. Backend untouched; all quiz modes still pull image-only questions."
+
+frontend:
+  - task: "Audio speed live switching + inline UI"
+    implemented: true
+    working: true
+    file: "/app/frontend/app/quiz.tsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Fixed stale-closure bug: added ttsSpeedRef (live ref) so speakSequence reads current speed per segment. Added changeSpeed(v) helper that updates state+ref and, if audio is currently playing, stops and restarts playback at the new speed. Also redesigned audio UI from dual boxes (listen button + speed row) to a single inline row: [▶] 1x 1.5x 2x with the active speed highlighted. Audio still stops on idx change and component unmount."
+  - task: "Android adaptive icon"
+    implemented: true
+    working: true
+    file: "/app/frontend/assets/images/adaptive-icon.png"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Regenerated via PIL: adaptive-icon.png (1024x1024 transparent foreground, T2D wordmark inside Android safe zone with soft amber glow), icon.png (1024x1024 solid navy + T2D + THAI·DRIVE subtitle), splash-icon.png, favicon.png (192), t2d-icon.png (512 in-app brand). app.json already sets adaptiveIcon.backgroundColor = #0F172A which pairs with the transparent foreground."
+  - task: "Home screen simplification"
+    implemented: true
+    working: true
+    file: "/app/frontend/app/index.tsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Rebuilt home to minimal layout: top bar (language + settings icon), brand block, optional streak pill, one big amber Start Quiz CTA with spring press animation, free-left hint, slim secondary row (Exam + Daily Test, no card-in-card), 3-column stats (no cards), premium banner. History/Bookmarks moved to Settings > Library section."
+  - task: "Categories screen de-rainbow"
+    implemented: true
+    working: true
+    file: "/app/frontend/app/categories.tsx"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Removed the per-category rainbow palette. All category cards now share the same navy card background with a uniform amber icon-tile and standard cardBorder. Premium, consistent, minimal color usage."
+  - task: "Paywall polish"
+    implemented: true
+    working: true
+    file: "/app/frontend/app/paywall.tsx"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Middle plan (3 months) now visually prominent: 2px border, amber outline when idle, larger padding (20px vs 16px), bigger plan name (17 vs 15) and price (22 vs 19). CTA enlarged to 19px vertical padding + 17px bold text with letter-spacing. Increased spacing overall (plans gap 14, header mb 32, features gap 14)."
+  - task: "Quiz typography + reduce nesting"
+    implemented: true
+    working: true
+    file: "/app/frontend/app/quiz.tsx"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Question text bumped 18px→21px, line-height 26→30, letter-spacing -0.3. Answer text 15→16, letter circle 32→34. Question image border removed (it was redundant inside the card). Card padding 18→20."
 
   - task: "Progress tracking API"
     implemented: true

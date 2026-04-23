@@ -54,7 +54,8 @@ export default function QuizScreen() {
   const [timer, setTimer] = useState(EXAM_TIME);
   const [showLimit, setShowLimit] = useState(false);
   const [ttsPlaying, setTtsPlaying] = useState<'question' | 'explanation' | null>(null);
-  const [ttsSpeed, setTtsSpeed] = useState(1.0); // 0.5 = slow, 1.0 = normal, 1.5 = fast
+  const [ttsSpeed, setTtsSpeed] = useState(1.0); // 1x, 1.5x, 2x
+  const ttsSpeedRef = useRef(1.0); // Live ref so speakSequence always reads the current speed
   const ttsCancelled = useRef(false);
 
   const fade = useRef(new Animated.Value(1)).current;
@@ -221,19 +222,37 @@ export default function QuizScreen() {
     { label: '2x', value: 2.0 },
   ];
 
+  // Change speed: update state + ref live; if currently speaking, restart current playback
+  const changeSpeed = (v: number) => {
+    if (v === ttsSpeed) return;
+    ttsSpeedRef.current = v;
+    setTtsSpeed(v);
+    // If audio is playing, stop and restart with new speed
+    const wasPlaying = ttsPlaying;
+    if (wasPlaying) {
+      stopTts();
+      setTimeout(() => {
+        if (wasPlaying === 'question') speakQuestion();
+        else if (wasPlaying === 'explanation') speakExplanation();
+      }, 120);
+    }
+  };
+
   const speakSequence = async (segments: { text: string; lang: string }[]) => {
     ttsCancelled.current = false;
     for (let i = 0; i < segments.length; i++) {
       if (ttsCancelled.current) break;
       const s = segments[i];
       const baseRate = s.lang === 'th' ? 0.85 : 0.9;
+      // Read speed from ref so it's always live, not stale closure
+      const rate = Math.min(2.0, Math.max(0.1, baseRate * ttsSpeedRef.current));
       await new Promise<void>((resolve) => {
         Speech.speak(s.text, {
           language: langCode(s.lang),
-          rate: baseRate * ttsSpeed,
-          onDone: resolve,
-          onError: resolve,
-          onStopped: resolve,
+          rate,
+          onDone: () => resolve(),
+          onError: () => resolve(),
+          onStopped: () => resolve(),
         });
       });
     }
@@ -332,7 +351,7 @@ export default function QuizScreen() {
               <Image
                 testID="question-image"
                 source={{ uri: q.bildeUrl }}
-                style={[st.qImg, { borderColor: c.cardBorder }]}
+                style={st.qImg}
                 resizeMode="contain"
               />
             ) : null}
@@ -353,31 +372,35 @@ export default function QuizScreen() {
             )}
           </View>
 
-          {/* TTS Listen Button — subtle, highlights on tap */}
-          <TouchableOpacity
-            testID="tts-question-btn"
-            onPress={speakQuestion}
-            activeOpacity={1}
-            style={[st.listenBtn, { backgroundColor: ttsPlaying === 'question' ? c.accentBg : c.card, borderColor: ttsPlaying === 'question' ? c.accent : c.cardBorder, opacity: ttsPlaying === 'question' ? 1 : 0.55 }]}
-          >
-            <Text style={st.listenIcon}>{ttsPlaying === 'question' ? '🔊' : '🔈'}</Text>
-            <Text style={[st.listenText, { color: ttsPlaying === 'question' ? c.accent : c.textSecondary }]}>
-              {ttsPlaying === 'question' ? t.listening : t.listen}
-            </Text>
-          </TouchableOpacity>
-
-          {/* TTS Speed Control */}
-          <View style={st.speedRow}>
-            {SPEED_OPTIONS.map((opt) => (
-              <TouchableOpacity
-                key={opt.value}
-                style={[st.speedChip, { backgroundColor: ttsSpeed === opt.value ? c.accentBg : 'transparent', borderColor: ttsSpeed === opt.value ? c.accent : c.cardBorder }]}
-                onPress={() => setTtsSpeed(opt.value)}
-                activeOpacity={0.7}
-              >
-                <Text style={[st.speedText, { color: ttsSpeed === opt.value ? c.accent : c.textMuted }]}>{opt.label}</Text>
-              </TouchableOpacity>
-            ))}
+          {/* Inline audio control:  [▶] 1x 1.5x 2x */}
+          <View style={st.audioRow}>
+            <TouchableOpacity
+              testID="tts-question-btn"
+              onPress={speakQuestion}
+              activeOpacity={0.7}
+              style={[st.playBtn, { backgroundColor: ttsPlaying === 'question' ? c.accent : c.card, borderColor: ttsPlaying === 'question' ? c.accent : c.cardBorder }]}
+            >
+              <Ionicons
+                name={ttsPlaying === 'question' ? 'pause' : 'play'}
+                size={16}
+                color={ttsPlaying === 'question' ? '#0F172A' : c.textSecondary}
+              />
+            </TouchableOpacity>
+            {SPEED_OPTIONS.map((opt) => {
+              const active = ttsSpeed === opt.value;
+              return (
+                <TouchableOpacity
+                  key={opt.value}
+                  testID={`tts-speed-${opt.label}`}
+                  style={[st.speedChip, active && { backgroundColor: c.accentBg }]}
+                  onPress={() => changeSpeed(opt.value)}
+                  activeOpacity={0.7}
+                  hitSlop={{ top: 8, bottom: 8, left: 4, right: 4 }}
+                >
+                  <Text style={[st.speedText, { color: active ? c.accent : c.textMuted, fontWeight: active ? '800' : '600' }]}>{opt.label}</Text>
+                </TouchableOpacity>
+              );
+            })}
           </View>
 
           {/* Answers with glow */}
@@ -467,27 +490,25 @@ const st = StyleSheet.create({
   tmr: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingVertical: 6, gap: 5 },
   tmrTxt: { fontSize: 15, fontWeight: '700', fontVariant: ['tabular-nums'] },
   scr: { paddingHorizontal: 14, paddingTop: 6, paddingBottom: 10 },
-  qCard: { borderRadius: 14, padding: 18, marginBottom: 10, borderWidth: 1 },
-  qImg: { width: '100%', height: 180, borderRadius: 10, marginBottom: 14, borderWidth: 1 },
-  qTxt: { fontSize: 18, fontWeight: '700', lineHeight: 26 },
-  translateRow: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 10, opacity: 0.6 },
-  hintT: { fontSize: 11 },
-  thW: { marginTop: 10 },
+  qCard: { borderRadius: 16, padding: 20, marginBottom: 14, borderWidth: 1 },
+  qImg: { width: '100%', height: 200, borderRadius: 12, marginBottom: 18, backgroundColor: 'transparent' },
+  qTxt: { fontSize: 21, fontWeight: '700', lineHeight: 30, letterSpacing: -0.3 },
+  translateRow: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 12, opacity: 0.65 },
+  hintT: { fontSize: 12 },
+  thW: { marginTop: 12 },
   thL: { height: 1, marginBottom: 10 },
-  thTxt: { fontSize: 15, lineHeight: 22 },
-  listenBtn: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 14, paddingVertical: 14, marginBottom: 8, gap: 8, borderWidth: 1, opacity: 0.6 },
-  listenIcon: { fontSize: 18 },
-  listenText: { fontSize: 15, fontWeight: '600' },
-  speedRow: { flexDirection: 'row', justifyContent: 'center', gap: 6, marginBottom: 14 },
-  speedChip: { paddingHorizontal: 10, paddingVertical: 5, borderRadius: 8, borderWidth: 1 },
-  speedText: { fontSize: 11, fontWeight: '700' },
+  thTxt: { fontSize: 16, lineHeight: 24 },
+  audioRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 10, marginBottom: 18, paddingHorizontal: 4 },
+  playBtn: { width: 40, height: 40, borderRadius: 20, justifyContent: 'center', alignItems: 'center', borderWidth: 1.5 },
+  speedChip: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 14 },
+  speedText: { fontSize: 13, letterSpacing: 0.2 },
   aW: { gap: 12 },
-  aBtn: { flexDirection: 'row', alignItems: 'center', borderRadius: 12, paddingVertical: 13, paddingHorizontal: 14, borderWidth: 1.5 },
-  dim: { opacity: 0.35 },
+  aBtn: { flexDirection: 'row', alignItems: 'center', borderRadius: 14, paddingVertical: 15, paddingHorizontal: 16, borderWidth: 1.5 },
+  dim: { opacity: 0.45 },
   glow: { position: 'absolute', top: -2, left: -2, right: -2, bottom: -2 },
-  lC: { width: 32, height: 32, borderRadius: 10, justifyContent: 'center', alignItems: 'center', marginRight: 12 },
-  lT: { fontSize: 14, fontWeight: '700', color: '#F8FAFC' },
-  aTxt: { flex: 1, fontSize: 15, lineHeight: 21 },
+  lC: { width: 34, height: 34, borderRadius: 11, justifyContent: 'center', alignItems: 'center', marginRight: 14 },
+  lT: { fontSize: 15, fontWeight: '700', color: '#F8FAFC' },
+  aTxt: { flex: 1, fontSize: 16, lineHeight: 23 },
   fb: { marginTop: 16, paddingHorizontal: 2 },
   fbR: { flexDirection: 'row', alignItems: 'center', gap: 5, marginBottom: 4 },
   fbS: { fontSize: 13, fontWeight: '500', flex: 1 },
