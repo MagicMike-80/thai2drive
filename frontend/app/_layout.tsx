@@ -38,6 +38,14 @@ export default function RootLayout() {
       try { await initDeviceId(); } catch (e) { console.error(e); }
       finally { setIsReady(true); }
     })();
+    // Pre-warm answer-feedback sounds so the first tap has no hitch
+    (async () => {
+      try {
+        const mod = await import('../src/sounds');
+        const style = useAppStore.getState().soundStyle;
+        await mod.prewarmSounds(style);
+      } catch {}
+    })();
   }, []);
 
   useAuthRedirect();

@@ -43,6 +43,10 @@ interface AppState {
   isDark: boolean;
   soundEnabled: boolean;
   setSoundEnabled: (enabled: boolean) => void;
+  soundStyle: 'default' | 'strong';
+  setSoundStyle: (style: 'default' | 'strong') => void;
+  hapticsEnabled: boolean;
+  setHapticsEnabled: (enabled: boolean) => void;
   isPremium: boolean;
   freeQuestionsUsed: number;
   freeResetDate: string; // YYYY-MM-DD – day on which the counter was last reset
@@ -185,6 +189,14 @@ export const useAppStore = create<AppState>((set, get) => ({
     const savedSound = await AsyncStorage.getItem('soundEnabled');
     if (savedSound !== null) set({ soundEnabled: savedSound === 'true' });
 
+    const savedSoundStyle = await AsyncStorage.getItem('soundStyle');
+    if (savedSoundStyle === 'default' || savedSoundStyle === 'strong') {
+      set({ soundStyle: savedSoundStyle });
+    }
+
+    const savedHaptics = await AsyncStorage.getItem('hapticsEnabled');
+    if (savedHaptics !== null) set({ hapticsEnabled: savedHaptics === 'true' });
+
     const savedPremium = await AsyncStorage.getItem('isPremium');
     if (savedPremium === 'true') set({ isPremium: true });
 
@@ -252,6 +264,12 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   soundEnabled: true,
   setSoundEnabled: async (enabled) => { set({ soundEnabled: enabled }); await AsyncStorage.setItem('soundEnabled', enabled.toString()); },
+
+  soundStyle: 'default',
+  setSoundStyle: async (style) => { set({ soundStyle: style }); await AsyncStorage.setItem('soundStyle', style); },
+
+  hapticsEnabled: true,
+  setHapticsEnabled: async (enabled) => { set({ hapticsEnabled: enabled }); await AsyncStorage.setItem('hapticsEnabled', enabled.toString()); },
 
   isPremium: false,
   freeQuestionsUsed: 0,

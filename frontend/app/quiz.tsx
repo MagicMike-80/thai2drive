@@ -24,7 +24,7 @@ export default function QuizScreen() {
   const router = useRouter();
   const { mode, category } = useLocalSearchParams<{ mode: string; category: string }>();
   const store = useAppStore();
-  const { language, deviceId, addBookmark, removeBookmark, isBookmarked, setProgress, colors: c, soundEnabled, isPremium, incrementFreeQuestions, canAnswerFree, freeRemaining, resetFreeIfNewDay, updateStreak, setLastAttempt } = store;
+  const { language, deviceId, addBookmark, removeBookmark, isBookmarked, setProgress, colors: c, soundEnabled, soundStyle, hapticsEnabled, isPremium, incrementFreeQuestions, canAnswerFree, freeRemaining, resetFreeIfNewDay, updateStreak, setLastAttempt } = store;
   const t = T[language] || T.en;
 
   // Screen capture protection
@@ -167,7 +167,10 @@ export default function QuizScreen() {
       Animated.timing(glowAnim, { toValue: 0, duration: 600, useNativeDriver: false }),
     ]).start();
 
-    if (soundEnabled) { cor ? playCorrectSound() : playIncorrectSound(); }
+    if (soundEnabled || hapticsEnabled) {
+      const opts = { soundEnabled, hapticsEnabled, style: soundStyle };
+      cor ? playCorrectSound(opts) : playIncorrectSound(opts);
+    }
 
     setHist((p) => [...p, { question_id: q.id, selected_answer: sel, correct: cor }]);
     if (!isPremium) incrementFreeQuestions();

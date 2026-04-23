@@ -56,6 +56,28 @@ frontend:
       - working: true
         agent: "main"
         comment: "Fixed stale-closure bug: added ttsSpeedRef (live ref) so speakSequence reads current speed per segment. Added changeSpeed(v) helper that updates state+ref and, if audio is currently playing, stops and restarts playback at the new speed. Also redesigned audio UI from dual boxes (listen button + speed row) to a single inline row: [▶] 1x 1.5x 2x with the active speed highlighted. Audio still stops on idx change and component unmount."
+  - task: "Answer feedback — sound + haptics with style modes"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/sounds.ts, /app/frontend/app/settings.tsx, /app/frontend/app/quiz.tsx, /app/frontend/src/store/appStore.ts"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Rebuilt sound utility to be fully cross-platform using expo-av (data-URI WAVs generated in-code) + expo-haptics. Two feedback styles: (1) default — short C5→E5 chime (correct) / F4→D4 (wrong), ~0.22s each; (2) strong — longer bell-like 'kliiing' with 3 harmonics, G5→B5→E6 arpeggio ~0.6s (correct) or G3→E3 low buzz (wrong). Pre-warmed players cached per (kind, style) for zero-hitch playback. Anti-stacking guard drops plays within 120 ms of the previous one, and each play rewinds the existing player with setPositionAsync(0) rather than spawning new Sound objects. Added three persisted settings to appStore: soundEnabled, soundStyle ('default'|'strong'), hapticsEnabled — all saved to AsyncStorage. Settings screen now has a 'Sound & Haptics' section with master toggle, two big 'Soft' / 'Strong' style chips (with descriptive hints and live preview on tap), and a haptic-vibration master switch. Haptics: correct→impactLight/successNotification, wrong→impactMedium/errorNotification depending on style. Pre-warm runs once at app launch in _layout.tsx to eliminate first-answer lag."
+  - task: "Categories screen — game-level premium"
+    implemented: true
+    working: true
+    file: "/app/frontend/app/categories.tsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "FROZEN per user. Premium game-level redesign shipped: per-category hues, gradient overlays, glow blobs, difficulty stars, progress bars, featured All-Categories card, spring press animation. Expo-linear-gradient pinned to ~15.0.8 (matches SDK 54)."
   - task: "Android adaptive icon"
     implemented: true
     working: true

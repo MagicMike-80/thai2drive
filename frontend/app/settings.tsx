@@ -8,9 +8,9 @@ import { ThemeMode } from '../src/theme';
 import { LanguageSwitcher } from '../src/components/LanguageSwitcher';
 
 const TRANSLATIONS: Record<string, Record<string, string>> = {
-  no: { title: 'Innstillinger', sound: 'Lyd', theme: 'Tema', language: 'Språk', light: 'Lys', dark: 'Mørk', system: 'System', back: 'Tilbake', soundOn: 'Lydeffekter på', soundOff: 'Lydeffekter av', account: 'Konto', logout: 'Logg ut', login: 'Logg inn', premium: 'Premium', admin: 'Admin', library: 'Bibliotek', history: 'Historikk', bookmarks: 'Bokmerker' },
-  th: { title: 'ตั้งค่า', sound: 'เสียง', theme: 'ธีม', language: 'ภาษา', light: 'สว่าง', dark: 'มืด', system: 'ระบบ', back: 'กลับ', soundOn: 'เปิดเสียง', soundOff: 'ปิดเสียง', account: 'บัญชี', logout: 'ออกจากระบบ', login: 'เข้าสู่ระบบ', premium: 'พรีเมียม', admin: 'แอดมิน', library: 'คลัง', history: 'ประวัติ', bookmarks: 'บุ๊คมาร์ค' },
-  en: { title: 'Settings', sound: 'Sound', theme: 'Theme', language: 'Language', light: 'Light', dark: 'Dark', system: 'System', back: 'Back', soundOn: 'Sound effects on', soundOff: 'Sound effects off', account: 'Account', logout: 'Log Out', login: 'Log In', premium: 'Premium', admin: 'Admin', library: 'Library', history: 'History', bookmarks: 'Bookmarks' },
+  no: { title: 'Innstillinger', sound: 'Lyd og vibrasjon', theme: 'Tema', language: 'Språk', light: 'Lys', dark: 'Mørk', system: 'System', back: 'Tilbake', soundOn: 'Lydeffekter', soundOff: 'Lydeffekter', account: 'Konto', logout: 'Logg ut', login: 'Logg inn', premium: 'Premium', admin: 'Admin', library: 'Bibliotek', history: 'Historikk', bookmarks: 'Bokmerker', feedbackStyle: 'Tilbakemeldingsstil', styleSoft: 'Myk', styleSoftHint: 'Rask og diskret', styleStrong: 'Sterk', styleStrongHint: 'Klar "kliiing"-effekt', haptics: 'Vibrasjon', hapticsOn: 'På' },
+  th: { title: 'ตั้งค่า', sound: 'เสียงและการสั่น', theme: 'ธีม', language: 'ภาษา', light: 'สว่าง', dark: 'มืด', system: 'ระบบ', back: 'กลับ', soundOn: 'เสียงเอฟเฟกต์', soundOff: 'เสียงเอฟเฟกต์', account: 'บัญชี', logout: 'ออกจากระบบ', login: 'เข้าสู่ระบบ', premium: 'พรีเมียม', admin: 'แอดมิน', library: 'คลัง', history: 'ประวัติ', bookmarks: 'บุ๊คมาร์ค', feedbackStyle: 'สไตล์เสียงตอบรับ', styleSoft: 'เบา', styleSoftHint: 'สั้น ไม่รบกวน', styleStrong: 'เข้ม', styleStrongHint: 'เสียงกริ๊งชัด', haptics: 'การสั่น', hapticsOn: 'เปิด' },
+  en: { title: 'Settings', sound: 'Sound & Haptics', theme: 'Theme', language: 'Language', light: 'Light', dark: 'Dark', system: 'System', back: 'Back', soundOn: 'Sound effects', soundOff: 'Sound effects', account: 'Account', logout: 'Log Out', login: 'Log In', premium: 'Premium', admin: 'Admin', library: 'Library', history: 'History', bookmarks: 'Bookmarks', feedbackStyle: 'Feedback style', styleSoft: 'Soft', styleSoftHint: 'Quick & subtle', styleStrong: 'Strong', styleStrongHint: 'Bright "kliiing"', haptics: 'Haptic vibration', hapticsOn: 'On' },
 };
 
 const THEME_OPTIONS: { mode: ThemeMode; icon: keyof typeof Ionicons.glyphMap }[] = [
@@ -21,8 +21,16 @@ const THEME_OPTIONS: { mode: ThemeMode; icon: keyof typeof Ionicons.glyphMap }[]
 
 export default function SettingsScreen() {
   const router = useRouter();
-  const { language, colors, themeMode, setThemeMode, soundEnabled, setSoundEnabled, user, isPremium, logout, isAuthenticated } = useAppStore();
+  const { language, colors, themeMode, setThemeMode, soundEnabled, setSoundEnabled, soundStyle, setSoundStyle, hapticsEnabled, setHapticsEnabled, user, isPremium, logout, isAuthenticated } = useAppStore();
   const t = TRANSLATIONS[language] || TRANSLATIONS.en;
+
+  // Preview the selected sound style when user taps a chip
+  const previewSound = async (style: 'default' | 'strong') => {
+    try {
+      const mod = await import('../src/sounds');
+      mod.playCorrectSound({ soundEnabled: true, hapticsEnabled, style });
+    } catch {}
+  };
 
   const handleLogout = async () => {
     await logout();
@@ -111,20 +119,70 @@ export default function SettingsScreen() {
           </View>
         </View>
 
-        {/* Sound Toggle */}
+        {/* Sound + Haptics */}
         <View style={[styles.section, { backgroundColor: colors.card, borderColor: colors.cardBorder }]}>
           <View style={styles.sectionHeader}>
             <Ionicons name="volume-medium-outline" size={20} color={colors.accent} />
             <Text style={[styles.sectionTitle, { color: colors.text }]}>{t.sound}</Text>
           </View>
+
+          {/* Sound master toggle */}
           <View style={styles.row}>
             <Text style={[styles.rowLabel, { color: colors.textSecondary }]}>
-              {soundEnabled ? t.soundOn : t.soundOff}
+              {t.soundOn}
             </Text>
             <Switch
               testID="sound-toggle"
               value={soundEnabled}
               onValueChange={setSoundEnabled}
+              trackColor={{ false: colors.letterBg, true: colors.accent }}
+              thumbColor="#FFFFFF"
+            />
+          </View>
+
+          {/* Style selector — only matters if sound is on */}
+          <View style={[styles.innerDivider, { backgroundColor: colors.divider }]} />
+          <Text style={[styles.groupLabel, { color: colors.textMuted }]}>{t.feedbackStyle}</Text>
+          <View style={styles.styleRow}>
+            {(['default', 'strong'] as const).map((style) => {
+              const active = soundStyle === style;
+              const label = style === 'default' ? t.styleSoft : t.styleStrong;
+              const hint  = style === 'default' ? t.styleSoftHint : t.styleStrongHint;
+              const icon  = style === 'default' ? 'musical-note-outline' : 'flash-outline';
+              return (
+                <TouchableOpacity
+                  key={style}
+                  testID={`sound-style-${style}`}
+                  activeOpacity={0.75}
+                  disabled={!soundEnabled && !hapticsEnabled}
+                  style={[
+                    styles.styleChip,
+                    {
+                      borderColor: active ? colors.accent : colors.cardBorder,
+                      backgroundColor: active ? colors.accentBg : 'transparent',
+                      opacity: (soundEnabled || hapticsEnabled) ? 1 : 0.4,
+                    },
+                  ]}
+                  onPress={() => { setSoundStyle(style); if (soundEnabled) previewSound(style); }}
+                >
+                  <Ionicons name={icon as any} size={18} color={active ? colors.accent : colors.textMuted} />
+                  <Text style={[styles.styleLabel, { color: active ? colors.accent : colors.text }]}>{label}</Text>
+                  <Text style={[styles.styleHint, { color: colors.textMuted }]}>{hint}</Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+
+          {/* Haptics toggle */}
+          <View style={[styles.innerDivider, { backgroundColor: colors.divider }]} />
+          <View style={styles.row}>
+            <View style={{ flex: 1 }}>
+              <Text style={[styles.rowLabel, { color: colors.textSecondary }]}>{t.haptics}</Text>
+            </View>
+            <Switch
+              testID="haptics-toggle"
+              value={hapticsEnabled}
+              onValueChange={setHapticsEnabled}
               trackColor={{ false: colors.letterBg, true: colors.accent }}
               thumbColor="#FFFFFF"
             />
@@ -201,5 +259,10 @@ const styles = StyleSheet.create({
   languageRow: { alignItems: 'flex-start' },
   linkRow: { flexDirection: 'row', alignItems: 'center', paddingVertical: 10, gap: 12 },
   linkLabel: { flex: 1, fontSize: 15, fontWeight: '500' },
-  innerDivider: { height: 1, opacity: 0.35 },
+  innerDivider: { height: 1, opacity: 0.35, marginVertical: 10 },
+  groupLabel: { fontSize: 11, fontWeight: '700', letterSpacing: 1, textTransform: 'uppercase', marginBottom: 10, marginTop: 2 },
+  styleRow: { flexDirection: 'row', gap: 10 },
+  styleChip: { flex: 1, paddingVertical: 12, paddingHorizontal: 12, borderWidth: 1.5, borderRadius: 12, alignItems: 'flex-start', gap: 2 },
+  styleLabel: { fontSize: 14, fontWeight: '700', marginTop: 4 },
+  styleHint: { fontSize: 11, marginTop: 1 },
 });
