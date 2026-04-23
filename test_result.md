@@ -89,6 +89,9 @@ frontend:
       - working: true
         agent: "main"
         comment: "Removed the per-category rainbow palette. All category cards now share the same navy card background with a uniform amber icon-tile and standard cardBorder. Premium, consistent, minimal color usage."
+      - working: true
+        agent: "main"
+        comment: "2026-04-23 PREMIUM POLISH: Rebuilt as a game-like level-selection screen. Added expo-linear-gradient. Each card now has: (1) subtle per-category hue (blue/green/purple/orange/pink/teal/amber/cyan/red) used as a diagonal gradient overlay + top-right glow blob + icon tile + border tint — dark navy remains the base, no rainbow feel; (2) difficulty stars ⭐/⭐⭐/⭐⭐⭐ + semantic text label (Easy/Medium/Hard) colored green/amber/red; (3) thin progress bar at bottom of each card driven by store.progress.questions_by_category[cat]; (4) press animation via custom PressableCard: spring scale 0.97 + white-overlay glow. The 'All Categories' card is now a featured primary entry with accent-colored gradient, sparkles icon, circular play pill, and overall progress bar. SafeAreaView background uses a subtle vertical dark gradient (0B1222→0F172A→0B1222). Navigation logic unchanged."
   - task: "Paywall polish"
     implemented: true
     working: true
