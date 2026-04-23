@@ -896,3 +896,21 @@ def robots_txt():
         f"Sitemap: {sitemap}\n"
     )
     return PlainTextResponse(body)
+
+
+# ─────────────────────── Domain diagnostic endpoint ───────────────────────
+# Use this to verify a custom domain is correctly pointed at the backend.
+#   curl https://thai2drive.no/api/_whoami
+#   curl https://www.thai2drive.no/api/_whoami
+# Each should echo back the Host header it received.
+@website_router.get("/_whoami")
+def whoami(request: Request):
+    return {
+        "ok": True,
+        "host": request.headers.get("host"),
+        "x-forwarded-host": request.headers.get("x-forwarded-host"),
+        "x-forwarded-proto": request.headers.get("x-forwarded-proto"),
+        "scheme": request.url.scheme,
+        "base_url": str(request.base_url),
+        "public_site_url_env": public_site_url(),
+    }
