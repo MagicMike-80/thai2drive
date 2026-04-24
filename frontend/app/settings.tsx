@@ -89,6 +89,33 @@ export default function SettingsScreen() {
           )}
         </View>
 
+        {/* BUILD INFO — shows which backend URL the APK is hitting. Helps diagnose stale builds. */}
+        <TouchableOpacity
+          activeOpacity={0.9}
+          onLongPress={async () => {
+            const url = process.env.EXPO_PUBLIC_BACKEND_URL || '(not set)';
+            try {
+              const r = await fetch(url + '/api/_whoami', { method: 'GET' });
+              const txt = await r.text();
+              alert(`Backend URL baked in:\n${url}\n\n/api/_whoami → HTTP ${r.status}\n${txt.slice(0, 300)}`);
+            } catch (e: any) {
+              alert(`Backend URL baked in:\n${url}\n\nCannot reach: ${e.message || e}`);
+            }
+          }}
+          style={[styles.section, { backgroundColor: colors.card, borderColor: colors.cardBorder }]}
+        >
+          <View style={styles.sectionHeader}>
+            <Ionicons name="server-outline" size={18} color={colors.textMuted} />
+            <Text style={[styles.sectionTitle, { color: colors.textMuted, fontSize: 12 }]}>BUILD INFO</Text>
+          </View>
+          <Text style={{ color: colors.text, fontSize: 11, fontFamily: 'monospace', marginTop: 4 }} selectable>
+            API: {process.env.EXPO_PUBLIC_BACKEND_URL || '(not set)'}
+          </Text>
+          <Text style={{ color: colors.textMuted, fontSize: 10, marginTop: 6 }}>
+            Long-press to test connectivity
+          </Text>
+        </TouchableOpacity>
+
         {/* Library (History + Bookmarks) */}
         <View style={[styles.section, { backgroundColor: colors.card, borderColor: colors.cardBorder }]}>
           <View style={styles.sectionHeader}>
