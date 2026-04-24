@@ -6,7 +6,7 @@
 // Prevents rapid stacking when the user taps fast.
 import { Audio } from 'expo-av';
 import * as Haptics from 'expo-haptics';
-import { Platform } from 'react-native';
+import { Platform, Vibration } from 'react-native';
 
 export type SoundStyle = 'default' | 'strong';
 
@@ -82,13 +82,16 @@ function makeTone(
 }
 
 // ─── Pre-generated sounds ───
-// "default" style — quick, gentle
-const sndCorrectDefault   = makeTone([523.25, 659.25],        [0.10, 0.12], { volume: 0.28, releaseRatio: 0.45 });          // C5 → E5
-const sndIncorrectDefault = makeTone([349.23, 293.66],        [0.10, 0.12], { volume: 0.22, releaseRatio: 0.45 });          // F4 → D4
+// "default" style — rewarding but not intrusive.
+// Correct: C5 → E5 → A5 ascending arpeggio with 2 harmonics + long release tail
+// (that "kliiing" feel) at moderate volume. ~0.44s total.
+const sndCorrectDefault   = makeTone([523.25, 659.25, 880.00], [0.08, 0.10, 0.26], { harmonics: 2, volume: 0.42, releaseRatio: 0.75 });
+// Wrong: short F4 → D4 fall. Kept subtle so users don't feel punished.
+const sndIncorrectDefault = makeTone([349.23, 293.66],          [0.10, 0.14],      { volume: 0.30, releaseRatio: 0.50 });
 
-// "strong" style — bright kliiiing (bell-like with harmonics + long tail)
-const sndCorrectStrong    = makeTone([783.99, 987.77, 1318.5],[0.10, 0.12, 0.38], { harmonics: 3, volume: 0.34, releaseRatio: 0.85 }); // G5 B5 E6 arpeggio
-const sndIncorrectStrong  = makeTone([196.00, 164.81],        [0.12, 0.50],      { harmonics: 2, volume: 0.30, releaseRatio: 0.85 }); // G3 E3 low buzz
+// "strong" style — bright kliiiing (bell-like with more harmonics + longer tail)
+const sndCorrectStrong    = makeTone([783.99, 987.77, 1318.5], [0.10, 0.12, 0.44], { harmonics: 3, volume: 0.48, releaseRatio: 0.90 }); // G5 B5 E6
+const sndIncorrectStrong  = makeTone([196.00, 164.81],          [0.12, 0.52],      { harmonics: 2, volume: 0.34, releaseRatio: 0.85 }); // G3 E3
 
 // ─── Player cache ───
 // We keep a single Sound instance per (kind, style) so we don't re-decode.

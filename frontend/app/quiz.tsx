@@ -305,12 +305,16 @@ export default function QuizScreen() {
       const code = langCode(s.lang);
       const baseRate = s.lang === 'th' ? 0.85 : 0.9;
       const rate = Math.min(2.0, Math.max(0.1, baseRate * ttsSpeedRef.current));
-      const voice = voiceMapRef.current[code];
+      // NOTE: intentionally NOT passing `voice`. On Android, picking a voice
+      // identifier via getAvailableVoicesAsync() is unreliable — if the exact
+      // voice isn't installed/downloaded, Speech.speak silently drops the first
+      // 1–2 utterances before falling back to default. This caused question +
+      // option A to be skipped. Using only `language` lets Android pick the
+      // default installed voice for that locale, which always works.
       await new Promise<void>((resolve) => {
         Speech.speak(s.text, {
           language: code,
           rate,
-          voice,
           onDone: () => resolve(),
           onError: () => resolve(),
           onStopped: () => resolve(),
@@ -324,9 +328,14 @@ export default function QuizScreen() {
   const speakQuestion = async () => {
     if (!q) return;
     if (ttsPlaying === 'question') { stopTts(); return; }
+    const wasPlayingOther = ttsPlaying !== null;
     stopTts();
     setTtsPlaying('question');
     setSpeaking(true);
+    // Android TTS engines need ~120ms to finish processing Speech.stop() before
+    // accepting new utterances. Without this delay, the first 1–2 speak calls
+    // can be silently dropped (the "starts from B" bug).
+    if (wasPlayingOther) await new Promise(r => setTimeout(r, 120));
 
     const segments: { text: string; lang: string }[] = [];
     // Always read question in current language first
