@@ -9,6 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useAppStore } from '../src/store/appStore';
 import { api, Category } from '../src/services/api';
+import { AppBrand } from '../src/components/AppBrand';
 
 const { width: SCREEN_W } = Dimensions.get('window');
 
@@ -148,6 +149,9 @@ export default function CategoriesScreen() {
         >
           <Ionicons name="arrow-back" size={20} color={c.text} />
         </Pressable>
+        <View style={{ marginRight: 12 }}>
+          <AppBrand size="md" />
+        </View>
         <View style={{ flex: 1 }}>
           <Text style={[st.modeLabel, { color: c.accent }]}>{mode === 'practice' ? t.practice : t.exam}</Text>
           <Text style={[st.title, { color: c.text }]}>{t.selectCategory}</Text>

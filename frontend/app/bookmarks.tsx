@@ -13,6 +13,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useAppStore } from '../src/store/appStore';
 import { api, Question } from '../src/services/api';
 import { useScreenProtection } from '../src/hooks/useScreenProtection';
+import { AppBrand } from '../src/components/AppBrand';
 
 const TRANSLATIONS = {
   no: {
@@ -105,6 +106,9 @@ export default function BookmarksScreen() {
         >
           <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
         </TouchableOpacity>
+        <View style={styles.brandWrap}>
+          <AppBrand size="md" />
+        </View>
         <Text style={styles.title}>{t.title}</Text>
         <View style={{ width: 40 }} />
       </View>
@@ -199,6 +203,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#1E293B',
   },
+  brandWrap: { marginRight: 12 },
   backButton: {
     width: 40,
     height: 40,

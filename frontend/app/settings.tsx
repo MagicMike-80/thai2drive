@@ -6,6 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useAppStore } from '../src/store/appStore';
 import { ThemeMode } from '../src/theme';
 import { LanguageSwitcher } from '../src/components/LanguageSwitcher';
+import { AppBrand } from '../src/components/AppBrand';
 
 const TRANSLATIONS: Record<string, Record<string, string>> = {
   no: { title: 'Innstillinger', sound: 'Lyd og vibrasjon', theme: 'Tema', language: 'Språk', light: 'Lys', dark: 'Mørk', system: 'System', back: 'Tilbake', soundOn: 'Lydeffekter', soundOff: 'Lydeffekter', account: 'Konto', logout: 'Logg ut', login: 'Logg inn', premium: 'Premium', admin: 'Admin', library: 'Bibliotek', history: 'Historikk', bookmarks: 'Bokmerker', feedbackStyle: 'Tilbakemeldingsstil', styleSoft: 'Myk', styleSoftHint: 'Rask og diskret', styleStrong: 'Sterk', styleStrongHint: 'Klar "kliiing"-effekt', haptics: 'Vibrasjon', hapticsOn: 'På' },
@@ -41,9 +42,12 @@ export default function SettingsScreen() {
     <SafeAreaView style={[styles.container, { backgroundColor: colors.bg }]}>
       {/* Header */}
       <View style={[styles.header, { borderBottomColor: colors.divider }]}>
-        <TouchableOpacity testID="settings-back-btn" style={[styles.backBtn, { backgroundColor: colors.card }]} onPress={() => router.back()}>
-          <Ionicons name="arrow-back" size={22} color={colors.text} />
-        </TouchableOpacity>
+        <View style={styles.headerLeft}>
+          <TouchableOpacity testID="settings-back-btn" style={[styles.backBtn, { backgroundColor: colors.card }]} onPress={() => router.back()}>
+            <Ionicons name="arrow-back" size={22} color={colors.text} />
+          </TouchableOpacity>
+          <AppBrand size="md" />
+        </View>
         <Text style={[styles.title, { color: colors.text }]}>{t.title}</Text>
         <View style={{ width: 40 }} />
       </View>
@@ -262,6 +266,7 @@ export default function SettingsScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 14, borderBottomWidth: 1 },
+  headerLeft: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   backBtn: { width: 40, height: 40, borderRadius: 12, justifyContent: 'center', alignItems: 'center' },
   title: { fontSize: 18, fontWeight: '700' },
   content: { padding: 16, gap: 12 },

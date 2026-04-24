@@ -12,6 +12,7 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAppStore } from '../src/store/appStore';
 import { api, QuizAttempt } from '../src/services/api';
+import { AppBrand } from '../src/components/AppBrand';
 
 const TRANSLATIONS = {
   no: {
@@ -98,12 +99,15 @@ export default function HistoryScreen() {
     <SafeAreaView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => router.back()}
-        >
-          <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
-        </TouchableOpacity>
+        <View style={styles.headerLeft}>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => router.back()}
+          >
+            <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
+          </TouchableOpacity>
+          <AppBrand size="md" />
+        </View>
         <Text style={styles.title}>{t.title}</Text>
         <View style={styles.placeholder} />
       </View>
@@ -192,6 +196,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#1E293B',
   },
+  headerLeft: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   backButton: {
     width: 40,
     height: 40,

@@ -5,6 +5,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import * as Speech from 'expo-speech';
+import * as Haptics from 'expo-haptics';
+import { Platform, Vibration } from 'react-native';
 import { useAppStore } from '../src/store/appStore';
 import { api, Question } from '../src/services/api';
 import { playCorrectSound, playIncorrectSound, cleanupSounds } from '../src/sounds';
@@ -181,6 +183,7 @@ export default function QuizScreen() {
   };
 
   const handleNext = () => {
+    tickHaptic();
     stopTts(); // Stop any playing TTS immediately
     if (idx >= questions.length - 1) { finishQ(); return; }
     // Non-premium user hit the daily cap → push paywall instead of inline message
@@ -230,6 +233,19 @@ export default function QuizScreen() {
   };
 
   const langCode = (l: string) => l === 'th' ? 'th-TH' : l === 'no' ? 'nb-NO' : 'en-US';
+
+  // Light tactile tick. Used for answer-letter selection and the next button.
+  // Always falls back to Vibration on Android in case Haptics isn't available
+  // (some OEM ROMs disable it for non-system apps).
+  const tickHaptic = () => {
+    if (!hapticsEnabled || Platform.OS === 'web') return;
+    try {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
+    } catch {}
+    if (Platform.OS === 'android') {
+      try { Vibration.vibrate(10); } catch {}
+    }
+  };
 
   // Prefer male voices for speech. Expo Speech doesn't expose "gender" directly,
   // so we heuristically match voice identifiers/names against known male markers.
@@ -299,6 +315,14 @@ export default function QuizScreen() {
     ttsCancelled.current = false;
     const myGen = ++ttsGen.current; // claim this generation; any newer stopTts will invalidate us
 
+    // ── Android TTS warm-up ──
+    // Speech.stop() (called by stopTts before us) doesn't fully drain on Android
+    // for ~150-250ms. Any Speech.speak() fired during that window is silently
+    // dropped — that was the "starts from B" bug. We unconditionally wait here
+    // so the first segment (the question itself) ALWAYS plays.
+    await new Promise(r => setTimeout(r, 220));
+    if (ttsCancelled.current || ttsGen.current !== myGen) return;
+
     for (let i = 0; i < segments.length; i++) {
       if (ttsCancelled.current || ttsGen.current !== myGen) break;
       const s = segments[i];
@@ -308,9 +332,8 @@ export default function QuizScreen() {
       // NOTE: intentionally NOT passing `voice`. On Android, picking a voice
       // identifier via getAvailableVoicesAsync() is unreliable — if the exact
       // voice isn't installed/downloaded, Speech.speak silently drops the first
-      // 1–2 utterances before falling back to default. This caused question +
-      // option A to be skipped. Using only `language` lets Android pick the
-      // default installed voice for that locale, which always works.
+      // 1–2 utterances before falling back to default. Using only `language`
+      // lets Android pick the default installed voice for that locale.
       await new Promise<void>((resolve) => {
         Speech.speak(s.text, {
           language: code,
@@ -328,14 +351,9 @@ export default function QuizScreen() {
   const speakQuestion = async () => {
     if (!q) return;
     if (ttsPlaying === 'question') { stopTts(); return; }
-    const wasPlayingOther = ttsPlaying !== null;
     stopTts();
     setTtsPlaying('question');
     setSpeaking(true);
-    // Android TTS engines need ~120ms to finish processing Speech.stop() before
-    // accepting new utterances. Without this delay, the first 1–2 speak calls
-    // can be silently dropped (the "starts from B" bug).
-    if (wasPlayingOther) await new Promise(r => setTimeout(r, 120));
 
     const segments: { text: string; lang: string }[] = [];
     // Always read question in current language first
@@ -492,7 +510,7 @@ export default function QuizScreen() {
                   {done && (isCor || (isSel && !isCor)) && (
                     <Animated.View style={[st.glow, { backgroundColor: isCor ? c.correct : c.incorrect, opacity: glowOpacity, borderRadius: 12 }]} />
                   )}
-                  <TouchableOpacity testID={`answer-btn-${L}`} style={[st.aBtn, { backgroundColor: bg, borderColor: border }, dim && st.dim]} onPress={() => !done && setSel(L)} disabled={done} activeOpacity={0.7}>
+                  <TouchableOpacity testID={`answer-btn-${L}`} style={[st.aBtn, { backgroundColor: bg, borderColor: border }, dim && st.dim]} onPress={() => { if (!done) { tickHaptic(); setSel(L); } }} disabled={done} activeOpacity={0.7}>
                     <View style={[st.lC, { backgroundColor: letBg }]}><Text style={[st.lT, { color: done && (isCor || isSel) ? '#F8FAFC' : c.letterText }]}>{L}</Text></View>
                     <Text style={[st.aTxt, { color: txt }]}>{optText(q, L)}</Text>
                     {done && isCor && <Ionicons name="checkmark-circle" size={20} color={c.correct} />}

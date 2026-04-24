@@ -89,8 +89,11 @@ const sndCorrectDefault   = makeTone([523.25, 659.25, 880.00], [0.08, 0.10, 0.26
 // Wrong: short F4 → D4 fall. Kept subtle so users don't feel punished.
 const sndIncorrectDefault = makeTone([349.23, 293.66],          [0.10, 0.14],      { volume: 0.30, releaseRatio: 0.50 });
 
-// "strong" style — bright kliiiing (bell-like with more harmonics + longer tail)
-const sndCorrectStrong    = makeTone([783.99, 987.77, 1318.5], [0.10, 0.12, 0.44], { harmonics: 3, volume: 0.48, releaseRatio: 0.90 }); // G5 B5 E6
+// "strong" style — louder, brighter, longer KLIIIING (bell-like, 3 harmonics)
+// Bright G5 → C6 → G6 octave climb with a long exponential tail. Total ~0.95s.
+// Volume bumped from 0.48 → 0.72 (well below clip threshold thanks to harmonic
+// averaging in makeTone). Tail release ratio 0.95 for that lingering "iiing".
+const sndCorrectStrong    = makeTone([783.99, 1046.50, 1567.98], [0.09, 0.13, 0.72], { harmonics: 3, volume: 0.72, releaseRatio: 0.95 }); // G5 C6 G6
 const sndIncorrectStrong  = makeTone([196.00, 164.81],          [0.12, 0.52],      { harmonics: 2, volume: 0.34, releaseRatio: 0.85 }); // G3 E3
 
 // ─── Player cache ───
@@ -128,7 +131,7 @@ async function getPlayer(kind: Kind, style: SoundStyle): Promise<Audio.Sound | n
     await ensureAudioMode();
     const { sound } = await Audio.Sound.createAsync(
       { uri: uriFor(kind, style) },
-      { volume: 0.9, shouldPlay: false }
+      { volume: 1.0, shouldPlay: false }
     );
     players[key] = sound;
     return sound;

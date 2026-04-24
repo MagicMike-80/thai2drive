@@ -7,6 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useAppStore } from '../src/store/appStore';
 import { api } from '../src/services/api';
 import { LanguageSwitcher } from '../src/components/LanguageSwitcher';
+import { AppBrand } from '../src/components/AppBrand';
 
 const T2D_ICON = require('../assets/images/t2d-icon.png');
 
@@ -67,12 +68,15 @@ export default function HomeScreen() {
   return (
     <SafeAreaView style={[st.container, { backgroundColor: c.bg }]}>
       <ScrollView contentContainerStyle={st.scroll} showsVerticalScrollIndicator={false}>
-        {/* Top bar: language + settings */}
+        {/* Top bar: brand + language + settings */}
         <View style={st.topBar}>
-          <LanguageSwitcher size="md" />
-          <TouchableOpacity testID="settings-btn" style={[st.iconBtn, { backgroundColor: c.card, borderColor: c.cardBorder }]} onPress={() => router.push('/settings')}>
-            <Ionicons name="settings-outline" size={20} color={c.text} />
-          </TouchableOpacity>
+          <AppBrand size="md" />
+          <View style={st.topRight}>
+            <LanguageSwitcher size="sm" />
+            <TouchableOpacity testID="settings-btn" style={[st.iconBtn, { backgroundColor: c.card, borderColor: c.cardBorder }]} onPress={() => router.push('/settings')}>
+              <Ionicons name="settings-outline" size={20} color={c.text} />
+            </TouchableOpacity>
+          </View>
         </View>
 
         {/* Brand */}
@@ -180,6 +184,7 @@ const st = StyleSheet.create({
   center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   scroll: { padding: 24, paddingBottom: 40 },
   topBar: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 28 },
+  topRight: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   iconBtn: { width: 40, height: 40, borderRadius: 20, justifyContent: 'center', alignItems: 'center', borderWidth: 1 },
   brand: { alignItems: 'center', marginBottom: 20 },
   brandIcon: { width: 64, height: 64, borderRadius: 16, marginBottom: 14 },

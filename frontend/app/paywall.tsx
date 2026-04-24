@@ -6,6 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useAppStore } from '../src/store/appStore';
 import { useRevenueCat, PRODUCT_IDS } from '../src/hooks/useRevenueCat';
 import { LanguageSwitcher } from '../src/components/LanguageSwitcher';
+import { AppBrand } from '../src/components/AppBrand';
 
 const T2D_ICON = require('../assets/images/t2d-icon.png');
 
@@ -202,12 +203,15 @@ export default function PaywallScreen() {
   return (
     <SafeAreaView style={[s.container, { backgroundColor: c.bg }]}>
       <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
-        {/* Close + language switcher */}
+        {/* Brand + language switcher + close */}
         <View style={s.topRow}>
-          <LanguageSwitcher size="sm" />
-          <TouchableOpacity testID="paywall-close-btn" style={[s.closeBtn, { backgroundColor: c.card }]} onPress={() => router.back()} activeOpacity={0.7}>
-            <Ionicons name="close" size={20} color={c.textSecondary} />
-          </TouchableOpacity>
+          <AppBrand size="md" />
+          <View style={s.topRowRight}>
+            <LanguageSwitcher size="sm" />
+            <TouchableOpacity testID="paywall-close-btn" style={[s.closeBtn, { backgroundColor: c.card }]} onPress={() => router.back()} activeOpacity={0.7}>
+              <Ionicons name="close" size={20} color={c.textSecondary} />
+            </TouchableOpacity>
+          </View>
         </View>
 
         {/* Header */}
@@ -299,6 +303,7 @@ const s = StyleSheet.create({
   scroll: { paddingHorizontal: 22, paddingTop: 12, paddingBottom: 28 },
   closeBtn: { width: 36, height: 36, borderRadius: 18, justifyContent: 'center', alignItems: 'center' },
   topRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 },
+  topRowRight: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   header: { alignItems: 'center', marginTop: 8, marginBottom: 32 },
   brandIcon: { width: 68, height: 68, borderRadius: 16, marginBottom: 16 },
   limitBadge: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20, marginBottom: 12 },
