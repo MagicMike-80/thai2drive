@@ -18,6 +18,7 @@ export interface ThemeColors {
   answerBg: string;
   answerBorder: string;
   letterBg: string;
+  letterText: string;
   divider: string;
   statusBar: 'light' | 'dark';
 }
@@ -39,6 +40,7 @@ export const darkTheme: ThemeColors = {
   answerBg: '#1E293B',
   answerBorder: 'rgba(51, 65, 85, 0.4)',
   letterBg: '#334155',
+  letterText: '#F8FAFC',
   divider: 'rgba(51, 65, 85, 0.5)',
   statusBar: 'light',
 };
@@ -60,6 +62,7 @@ export const lightTheme: ThemeColors = {
   answerBg: '#FFFFFF',
   answerBorder: '#E2E8F0',
   letterBg: '#F1F5F9',
+  letterText: '#0F172A',
   divider: '#E2E8F0',
   statusBar: 'dark',
 };

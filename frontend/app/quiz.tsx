@@ -217,16 +217,16 @@ export default function QuizScreen() {
     router.replace({ pathname: '/results', params: { total: questions.length.toString(), correct: cor.toString(), mode: mode || 'practice', passed: isExam ? (pct >= PASS ? 'true' : 'false') : '' } });
   };
 
-  // Bulletproof stop: invalidate any in-flight sequence + hammer Speech.stop() twice
-  // (Android TTS engines sometimes keep the current utterance going after a single stop)
+  // Stop any in-flight TTS *cleanly*. The generation counter is enough to make
+  // speakSequence bail between segments — so we only need a SINGLE Speech.stop().
+  // Earlier versions scheduled delayed stops at 30ms/250ms which killed the first
+  // 1–2 segments of the NEXT playback when the user rapidly tapped play again.
   const stopTts = () => {
-    ttsGen.current += 1;
+    ttsGen.current += 1; // invalidates any in-flight speakSequence
     ttsCancelled.current = true;
     setTtsPlaying(null);
     setSpeaking(false);
     try { Speech.stop(); } catch {}
-    setTimeout(() => { try { Speech.stop(); } catch {} }, 30);
-    setTimeout(() => { try { Speech.stop(); } catch {} }, 250);
   };
 
   const langCode = (l: string) => l === 'th' ? 'th-TH' : l === 'no' ? 'nb-NO' : 'en-US';
@@ -484,7 +484,7 @@ export default function QuizScreen() {
                     <Animated.View style={[st.glow, { backgroundColor: isCor ? c.correct : c.incorrect, opacity: glowOpacity, borderRadius: 12 }]} />
                   )}
                   <TouchableOpacity testID={`answer-btn-${L}`} style={[st.aBtn, { backgroundColor: bg, borderColor: border }, dim && st.dim]} onPress={() => !done && setSel(L)} disabled={done} activeOpacity={0.7}>
-                    <View style={[st.lC, { backgroundColor: letBg }]}><Text style={st.lT}>{L}</Text></View>
+                    <View style={[st.lC, { backgroundColor: letBg }]}><Text style={[st.lT, { color: done && (isCor || isSel) ? '#F8FAFC' : c.letterText }]}>{L}</Text></View>
                     <Text style={[st.aTxt, { color: txt }]}>{optText(q, L)}</Text>
                     {done && isCor && <Ionicons name="checkmark-circle" size={20} color={c.correct} />}
                     {done && isSel && !isCor && <Ionicons name="close-circle" size={20} color={c.incorrect} />}
@@ -570,7 +570,7 @@ const st = StyleSheet.create({
   dim: { opacity: 0.45 },
   glow: { position: 'absolute', top: -2, left: -2, right: -2, bottom: -2 },
   lC: { width: 34, height: 34, borderRadius: 11, justifyContent: 'center', alignItems: 'center', marginRight: 14 },
-  lT: { fontSize: 15, fontWeight: '700', color: '#F8FAFC' },
+  lT: { fontSize: 15, fontWeight: '700' },
   aTxt: { flex: 1, fontSize: 16, lineHeight: 23 },
   fb: { marginTop: 16, paddingHorizontal: 2 },
   fbR: { flexDirection: 'row', alignItems: 'center', gap: 5, marginBottom: 4 },
