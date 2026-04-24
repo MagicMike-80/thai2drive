@@ -315,7 +315,7 @@ export default function QuizScreen() {
     ttsCancelled.current = false;
     const myGen = ++ttsGen.current; // claim this generation; any newer stopTts will invalidate us
 
-    // ── Android TTS warm-up ──
+    // ── Android TTS warm-up (initial) ──
     // Speech.stop() (called by stopTts before us) doesn't fully drain on Android
     // for ~150-250ms. Any Speech.speak() fired during that window is silently
     // dropped — that was the "starts from B" bug. We unconditionally wait here
@@ -329,18 +329,49 @@ export default function QuizScreen() {
       const code = langCode(s.lang);
       const baseRate = s.lang === 'th' ? 0.85 : 0.9;
       const rate = Math.min(2.0, Math.max(0.1, baseRate * ttsSpeedRef.current));
+
+      // ── Inter-segment safety on Android ──
+      // After onDone fires for the previous segment, the Android TTS engine
+      // is still finalizing for ~50-200ms. Calling Speech.speak() during
+      // that window silently drops the utterance — that was the
+      // "skips option A" bug. We poll Speech.isSpeakingAsync() until the
+      // engine reports idle, then add a small fixed gap. iOS doesn't have
+      // this bug, so we use a much shorter delay there.
+      if (i > 0) {
+        if (Platform.OS === 'android') {
+          // Poll up to ~1.5s (usually idle within 50-100ms)
+          for (let tries = 0; tries < 30; tries++) {
+            if (ttsCancelled.current || ttsGen.current !== myGen) break;
+            try {
+              const speaking = await Speech.isSpeakingAsync();
+              if (!speaking) break;
+            } catch {}
+            await new Promise(r => setTimeout(r, 50));
+          }
+          // Fixed gap so the next utterance is reliably accepted
+          if (!ttsCancelled.current && ttsGen.current === myGen) {
+            await new Promise(r => setTimeout(r, 180));
+          }
+        } else {
+          await new Promise(r => setTimeout(r, 80));
+        }
+        if (ttsCancelled.current || ttsGen.current !== myGen) break;
+      }
+
       // NOTE: intentionally NOT passing `voice`. On Android, picking a voice
       // identifier via getAvailableVoicesAsync() is unreliable — if the exact
       // voice isn't installed/downloaded, Speech.speak silently drops the first
       // 1–2 utterances before falling back to default. Using only `language`
       // lets Android pick the default installed voice for that locale.
       await new Promise<void>((resolve) => {
+        let resolved = false;
+        const finish = () => { if (!resolved) { resolved = true; resolve(); } };
         Speech.speak(s.text, {
           language: code,
           rate,
-          onDone: () => resolve(),
-          onError: () => resolve(),
-          onStopped: () => resolve(),
+          onDone: finish,
+          onError: finish,
+          onStopped: finish,
         });
       });
       // Extra guard: if we were cancelled while a segment was running, bail now
@@ -498,11 +529,17 @@ export default function QuizScreen() {
             {LETTERS.map((L) => {
               const isSel = sel === L, isCor = q.correctOptionId === L;
               let bg = c.answerBg, border = c.answerBorder, txt = c.text, letBg = c.letterBg, dim = false;
+              // letterOnColored = true whenever the letter circle is a saturated
+              // brand color (orange/green/red). In that case we need WHITE text
+              // for guaranteed contrast on BOTH dark and light themes — the
+              // theme's letterText is dark navy in light mode and would
+              // disappear on the orange/green/red circle.
+              let letterOnColored = false;
               if (done) {
-                if (isCor) { bg = c.correctBg; border = c.correct; txt = c.correct; letBg = c.correct; }
-                else if (isSel) { bg = c.incorrectBg; border = c.incorrect; txt = c.incorrect; letBg = c.incorrect; }
+                if (isCor) { bg = c.correctBg; border = c.correct; txt = c.correct; letBg = c.correct; letterOnColored = true; }
+                else if (isSel) { bg = c.incorrectBg; border = c.incorrect; txt = c.incorrect; letBg = c.incorrect; letterOnColored = true; }
                 else dim = true;
-              } else if (isSel) { bg = c.accentBg; border = c.accent; letBg = c.accent; }
+              } else if (isSel) { bg = c.accentBg; border = c.accent; letBg = c.accent; letterOnColored = true; }
 
               return (
                 <View key={L} style={{ position: 'relative' }}>
@@ -511,7 +548,7 @@ export default function QuizScreen() {
                     <Animated.View style={[st.glow, { backgroundColor: isCor ? c.correct : c.incorrect, opacity: glowOpacity, borderRadius: 12 }]} />
                   )}
                   <TouchableOpacity testID={`answer-btn-${L}`} style={[st.aBtn, { backgroundColor: bg, borderColor: border }, dim && st.dim]} onPress={() => { if (!done) { tickHaptic(); setSel(L); } }} disabled={done} activeOpacity={0.7}>
-                    <View style={[st.lC, { backgroundColor: letBg }]}><Text style={[st.lT, { color: done && (isCor || isSel) ? '#F8FAFC' : c.letterText }]}>{L}</Text></View>
+                    <View style={[st.lC, { backgroundColor: letBg }]}><Text style={[st.lT, { color: letterOnColored ? '#FFFFFF' : c.letterText }]}>{L}</Text></View>
                     <Text style={[st.aTxt, { color: txt }]}>{optText(q, L)}</Text>
                     {done && isCor && <Ionicons name="checkmark-circle" size={20} color={c.correct} />}
                     {done && isSel && !isCor && <Ionicons name="close-circle" size={20} color={c.incorrect} />}
