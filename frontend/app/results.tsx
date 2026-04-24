@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAppStore } from '../src/store/appStore';
+import { AppBrand } from '../src/components/AppBrand';
 
 const LETTERS = ['A', 'B', 'C', 'D'];
 
@@ -108,9 +109,12 @@ export default function ResultsScreen() {
       <SafeAreaView style={[st.container, { backgroundColor: c.bg }]}>
         {/* Review Header */}
         <View style={[st.revHeader, { borderBottomColor: c.divider }]}>
-          <TouchableOpacity style={[st.backBtn, { backgroundColor: c.card }]} onPress={() => setShowReview(false)}>
-            <Ionicons name="arrow-back" size={22} color={c.text} />
-          </TouchableOpacity>
+          <View style={st.revHeaderLeft}>
+            <TouchableOpacity style={[st.backBtn, { backgroundColor: c.card }]} onPress={() => setShowReview(false)}>
+              <Ionicons name="arrow-back" size={22} color={c.text} />
+            </TouchableOpacity>
+            <AppBrand size="md" />
+          </View>
           <Text style={[st.revTitle, { color: c.text }]}>{t.reviewTitle}</Text>
           <View style={{ width: 40 }} />
         </View>
@@ -208,6 +212,10 @@ export default function ResultsScreen() {
 
   return (
     <SafeAreaView style={[st.container, { backgroundColor: c.bg }]}>
+      {/* Top brand strip — keeps T2D identity even after finishing a quiz */}
+      <View style={st.topBrand}>
+        <AppBrand size="md" />
+      </View>
       <ScrollView contentContainerStyle={st.scrollContent} showsVerticalScrollIndicator={false}>
         <View style={st.content}>
           {/* Emoji */}
@@ -334,6 +342,8 @@ const st = StyleSheet.create({
 
   // Review screen
   revHeader: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 14, borderBottomWidth: 1 },
+  revHeaderLeft: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  topBrand: { paddingHorizontal: 20, paddingTop: 14, paddingBottom: 4 },
   backBtn: { width: 40, height: 40, borderRadius: 12, justifyContent: 'center', alignItems: 'center' },
   revTitle: { flex: 1, fontSize: 18, fontWeight: '800', textAlign: 'center' },
   filterRow: { flexDirection: 'row', padding: 14, gap: 8 },
