@@ -1,0 +1,9 @@
+# Cloudflare Pages clean URLs — Google Play review uses these exact paths
+/privacy   /privacy.html  200
+/terms     /terms.html    200
+/support   /support.html  200
+
+# Trailing slash variants
+/privacy/  /privacy.html  200
+/terms/    /terms.html    200
+/support/  /support.html  200

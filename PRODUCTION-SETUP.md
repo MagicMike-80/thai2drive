@@ -47,9 +47,15 @@ On the left sidebar → **Dashboard**, complete each of these green-checked task
 | Store listing | App description + 2 screenshots minimum + 512×512 icon + 1024×500 feature graphic |
 | App category | `Education` |
 | Tags | `educational`, `quiz`, `driving` |
-| Privacy policy | **Required** — must be a public URL. Use your existing `thai2drive.no/privacy` static page |
+| Privacy policy | **Required** — paste `https://thai2drive.no/privacy` (page exists in `/app/website/privacy.html`, deploy to Cloudflare Pages first) |
 
 > ⚠️ **You cannot create in-app products until "Set up your app" shows 100% complete.** This is the most common stuck point.
+
+> 📄 Your 3 legal pages are already built in `/app/website/`:
+>   - `/app/website/privacy.html` → https://thai2drive.no/privacy
+>   - `/app/website/terms.html`   → https://thai2drive.no/terms
+>   - `/app/website/support.html` → https://thai2drive.no/support
+> Deploy the `/app/website/` folder to Cloudflare Pages before filling the Privacy policy URL in Play Console.
 
 ### 1.4 Pick the package name (CANNOT be changed later)
 On **first APK upload** (later), Google locks the package name forever. Decide now:

@@ -10,14 +10,14 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.thai2drive.app",
+      "bundleIdentifier": "no.thai2drive.app",
       "infoPlist": {
         "NSCameraUsageDescription": "Scan traffic signs for practice",
         "NSSpeechRecognitionUsageDescription": "Listen to questions in Thai"
       }
     },
     "android": {
-      "package": "com.thai2drive.app",
+      "package": "no.thai2drive.app",
       "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",

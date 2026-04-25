@@ -120,6 +120,7 @@ section h2 .hl { color: var(--accent); }
 .legal p, .legal li { color: var(--text-2); font-size: 15px; line-height: 1.65; }
 .legal ul { padding-left: 20px; margin: 8px 0 12px; }
 .legal a { color: var(--accent); }
+.legal a.btn-primary, .legal a.btn { color: #0F172A; }
 
 /* ── FOOTER ── */
 footer {
