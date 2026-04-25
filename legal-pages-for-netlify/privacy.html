@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Personvern — Thai2Drive</title>
+<meta name="description" content="Personvernregler for Thai2Drive. Vi samler minimalt med data og selger aldri til tredjeparter." />
+<link rel="canonical" href="https://www.thai2drive.no/privacy" />
+<style>
+  :root {
+    --bg: #070f22;
+    --card: #111b31;
+    --border: rgba(255,255,255,.09);
+    --text: #ffffff;
+    --muted: #9fb0cc;
+    --orange: #ff982f;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: radial-gradient(circle at top center, rgba(255,139,34,.13), transparent 26%), var(--bg);
+    color: var(--text);
+    line-height: 1.65;
+  }
+  a { color: var(--orange); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .container { width: min(820px, calc(100% - 32px)); margin: 0 auto; }
+  header {
+    position: sticky; top: 0; z-index: 20;
+    background: rgba(7,15,34,.82);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav { height: 74px; display: flex; align-items: center; justify-content: space-between; }
+  .brand { display: flex; align-items: center; gap: 12px; font-weight: 900; font-size: 22px; }
+  .brand b { color: var(--orange); }
+  .logo {
+    width: 42px; height: 42px; border-radius: 12px;
+    background: linear-gradient(145deg, #19233d, #050a16);
+    border: 1px solid rgba(255,255,255,.2);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900; color: var(--orange); font-size: 16px;
+    line-height: 1;
+  }
+  .lang-switch { display: flex; gap: 6px; }
+  .lang-btn {
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.18);
+    color: var(--text); font-weight: 700; font-size: 13px;
+    padding: 8px 14px; border-radius: 999px; cursor: pointer;
+    transition: .2s;
+  }
+  .lang-btn.active { background: var(--orange); color: #070f22; border-color: var(--orange); }
+  main { padding: 56px 0 80px; }
+  .back-link { display: inline-block; color: var(--muted); margin-bottom: 24px; font-size: 14px; }
+  .back-link:hover { color: var(--orange); }
+  h1 { font-size: clamp(28px, 4vw, 36px); margin: 0 0 8px; letter-spacing: -.5px; }
+  .updated { color: var(--muted); font-size: 13.5px; margin-bottom: 32px; }
+  h2 { font-size: 18px; margin: 32px 0 12px; color: var(--text); }
+  p, li { color: rgba(255,255,255,.86); font-size: 15.5px; }
+  ul { padding-left: 22px; }
+  li { margin-bottom: 6px; }
+  .lang-block { display: none; }
+  .lang-block.active { display: block; }
+  footer { border-top: 1px solid var(--border); padding: 24px 0; color: var(--muted); font-size: 13px; text-align: center; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container nav">
+    <a href="/" class="brand">
+      <span class="logo">T<b>2</b>D</span>
+      <span>Thai<b>2</b>Drive</span>
+    </a>
+    <div class="lang-switch">
+      <button class="lang-btn active" data-lang="no">NO</button>
+      <button class="lang-btn" data-lang="th">TH</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <a href="/" class="back-link">← <span data-tr="back">Tilbake</span></a>
+
+  <!-- ────── NORSK ────── -->
+  <div class="lang-block active" data-block="no">
+    <h1>Personvernregler</h1>
+    <p class="updated">Sist oppdatert: 25. april 2026</p>
+    <p>Thai2Drive ("appen") drives av en uavhengig utvikler. Vi tar personvernet ditt på alvor og dette dokumentet forklarer hvilke data vi samler inn, hvorfor og hvordan vi bruker dem.</p>
+
+    <h2>1. Hvilke data samler vi inn?</h2>
+    <ul>
+      <li><strong>Anonym enhets-ID:</strong> En tilfeldig generert streng som lagres lokalt på telefonen din for å huske fremgang og bokmerker. Den er ikke knyttet til deg personlig.</li>
+      <li><strong>E-post og navn:</strong> Kun hvis du oppretter en konto. Brukes til innlogging og gjenoppretting av passord.</li>
+      <li><strong>Bruksstatistikk:</strong> Hvilke spørsmål du har svart på, riktige/gale svar, kategorier — for å vise fremgang i appen.</li>
+      <li><strong>Betaling:</strong> Kjøp håndteres av Google Play. Vi mottar kun bekreftelse på at du er premium-bruker, aldri kortinformasjon.</li>
+    </ul>
+
+    <h2>2. Hvorfor samler vi disse dataene?</h2>
+    <ul>
+      <li>For å levere læringsfunksjoner (fremgang, bokmerker, statistikk).</li>
+      <li>For å logge deg inn og gjenopprette glemt passord.</li>
+      <li>For å validere premium-abonnement.</li>
+    </ul>
+
+    <h2>3. Deler vi data med tredjeparter?</h2>
+    <p>Nei. Vi <strong>selger ikke</strong>, <strong>leier ikke ut</strong> og <strong>deler ikke</strong> dataene dine for markedsføring. Underleverandørene vi bruker er begrenset til:</p>
+    <ul>
+      <li><strong>Google Play</strong> — distribusjon og betalinger</li>
+      <li><strong>RevenueCat</strong> — validering av abonnement</li>
+      <li><strong>MongoDB Atlas (EU)</strong> — kryptert lagring av kontoer og fremgang</li>
+    </ul>
+
+    <h2>4. Informasjonskapsler (cookies)</h2>
+    <p>Mobilappen bruker ikke informasjonskapsler. Denne nettsiden bruker kun localStorage for å huske språkvalget ditt.</p>
+
+    <h2>5. Dine rettigheter (GDPR)</h2>
+    <ul>
+      <li>Du kan be om innsyn i dine data</li>
+      <li>Du kan be om sletting av kontoen din og alle tilknyttede data</li>
+      <li>Du kan eksportere dine data</li>
+    </ul>
+    <p>Send forespørsel til <a href="mailto:support@thai2drive.no">support@thai2drive.no</a>. Vi svarer innen 14 dager.</p>
+
+    <h2>6. Barn under 13 år</h2>
+    <p>Appen er ikke rettet mot barn under 13 år, og vi samler ikke bevisst inn personopplysninger fra mindreårige.</p>
+
+    <h2>7. Endringer i personvernreglene</h2>
+    <p>Hvis vi oppdaterer disse reglene, vil vi varsle i appen og oppdatere datoen øverst på siden.</p>
+
+    <h2>8. Kontakt</h2>
+    <p>Spørsmål om personvern? Skriv til <a href="mailto:support@thai2drive.no">support@thai2drive.no</a>.</p>
+  </div>
+
+  <!-- ────── THAI ────── -->
+  <div class="lang-block" data-block="th">
+    <h1>นโยบายความเป็นส่วนตัว</h1>
+    <p class="updated">อัปเดตล่าสุด: 25 เมษายน 2026</p>
+    <p>Thai2Drive ("แอป") ดำเนินการโดยนักพัฒนาอิสระ เราให้ความสำคัญกับความเป็นส่วนตัวของคุณ เอกสารนี้อธิบายว่าเราเก็บข้อมูลอะไร ทำไม และใช้อย่างไร</p>
+
+    <h2>1. ข้อมูลที่เราเก็บ</h2>
+    <ul>
+      <li><strong>Device ID (แบบไม่ระบุตัวบุคคล):</strong> รหัสสุ่มที่เก็บไว้ในเครื่องของคุณเพื่อจดจำความก้าวหน้าและบุ๊กมาร์ก ไม่เชื่อมโยงกับตัวคุณ</li>
+      <li><strong>อีเมลและชื่อ:</strong> เฉพาะเมื่อคุณสร้างบัญชี ใช้สำหรับเข้าสู่ระบบและกู้รหัสผ่าน</li>
+      <li><strong>สถิติการใช้งาน:</strong> คำถามที่ตอบ ถูก/ผิด หมวดหมู่ที่ใช้ — เพื่อแสดงความก้าวหน้าในแอป</li>
+      <li><strong>การชำระเงิน:</strong> Google Play จัดการ เราได้รับเพียงการยืนยันว่าคุณเป็นพรีเมียม ไม่เห็นข้อมูลบัตร</li>
+    </ul>
+
+    <h2>2. ทำไมเราเก็บข้อมูลเหล่านี้</h2>
+    <ul>
+      <li>เพื่อให้ฟีเจอร์การเรียนรู้ (ความก้าวหน้า บุ๊กมาร์ก สถิติ)</li>
+      <li>เพื่อเข้าสู่ระบบและกู้รหัสผ่าน</li>
+      <li>เพื่อยืนยันการสมัครพรีเมียม</li>
+    </ul>
+
+    <h2>3. แชร์ข้อมูลกับบุคคลที่สามหรือไม่</h2>
+    <p>ไม่ เรา <strong>ไม่ขาย ไม่ให้เช่า ไม่แชร์</strong> ข้อมูลของคุณเพื่อการตลาด ผู้ให้บริการที่เราใช้:</p>
+    <ul>
+      <li><strong>Google Play</strong> — แจกจ่ายแอปและการชำระเงิน</li>
+      <li><strong>RevenueCat</strong> — ตรวจสอบการสมัครสมาชิก</li>
+      <li><strong>MongoDB Atlas (EU)</strong> — เก็บบัญชีและข้อมูลแบบเข้ารหัส</li>
+    </ul>
+
+    <h2>4. คุกกี้</h2>
+    <p>แอปมือถือไม่ใช้คุกกี้ เว็บไซต์นี้ใช้เฉพาะ localStorage เพื่อจดจำภาษาที่เลือก</p>
+
+    <h2>5. สิทธิของคุณ (GDPR)</h2>
+    <ul>
+      <li>ขอดูข้อมูลของคุณได้</li>
+      <li>ขอลบบัญชีและข้อมูลทั้งหมดได้</li>
+      <li>ส่งออกข้อมูลของคุณได้</li>
+    </ul>
+    <p>ส่งอีเมลมาที่ <a href="mailto:support@thai2drive.no">support@thai2drive.no</a> เราตอบภายใน 14 วัน</p>
+
+    <h2>6. เด็กอายุต่ำกว่า 13 ปี</h2>
+    <p>แอปไม่ได้มุ่งเป้าเด็กต่ำกว่า 13 ปี เราจะไม่เก็บข้อมูลจากผู้เยาว์โดยเจตนา</p>
+
+    <h2>7. การเปลี่ยนแปลง</h2>
+    <p>หากเราอัปเดตนโยบายนี้ เราจะแจ้งในแอปและอัปเดตวันที่ด้านบน</p>
+
+    <h2>8. ติดต่อ</h2>
+    <p>คำถามเกี่ยวกับความเป็นส่วนตัว? <a href="mailto:support@thai2drive.no">support@thai2drive.no</a></p>
+  </div>
+
+  <!-- ────── ENGLISH ────── -->
+  <div class="lang-block" data-block="en">
+    <h1>Privacy Policy</h1>
+    <p class="updated">Last updated: April 25, 2026</p>
+    <p>Thai2Drive ("the app") is operated by an independent developer. We are committed to protecting your privacy. This document explains what data we collect, why, and how we use it.</p>
+
+    <h2>1. What data do we collect?</h2>
+    <ul>
+      <li><strong>Anonymous device ID:</strong> A randomly generated string stored locally on your phone to remember progress and bookmarks. Not tied to your identity.</li>
+      <li><strong>Email and name:</strong> Only if you create an account. Used for login and password recovery.</li>
+      <li><strong>Usage data:</strong> Which questions you answered, correct/incorrect, categories used — to show in-app progress.</li>
+      <li><strong>Payment:</strong> Handled by Google Play. We only receive premium confirmation, never card details.</li>
+    </ul>
+
+    <h2>2. Why do we collect this?</h2>
+    <ul>
+      <li>To deliver learning features (progress, bookmarks, stats).</li>
+      <li>To log you in and recover forgotten passwords.</li>
+      <li>To validate premium subscriptions.</li>
+    </ul>
+
+    <h2>3. Do we share data with third parties?</h2>
+    <p>No. We <strong>do not sell, rent, or share</strong> your data with third parties for marketing. The only processors we use are:</p>
+    <ul>
+      <li><strong>Google Play</strong> — for app distribution and payments</li>
+      <li><strong>RevenueCat</strong> — for subscription validation</li>
+      <li><strong>MongoDB Atlas (EU)</strong> — encrypted storage of accounts and progress</li>
+    </ul>
+
+    <h2>4. Cookies</h2>
+    <p>The mobile app does not use cookies. This website only uses localStorage to remember your language preference.</p>
+
+    <h2>5. Your rights (GDPR)</h2>
+    <ul>
+      <li>Request access to your data</li>
+      <li>Request deletion of your account and all associated data</li>
+      <li>Export your data</li>
+    </ul>
+    <p>Email <a href="mailto:support@thai2drive.no">support@thai2drive.no</a> with your request. We respond within 14 days.</p>
+
+    <h2>6. Children under 13</h2>
+    <p>The app is not directed at children under 13, and we do not knowingly collect personal data from minors.</p>
+
+    <h2>7. Changes to this policy</h2>
+    <p>If we update this policy, we will notify you in the app and update the date at the top of this page.</p>
+
+    <h2>8. Contact</h2>
+    <p>Questions about privacy? Email <a href="mailto:support@thai2drive.no">support@thai2drive.no</a>.</p>
+  </div>
+</main>
+
+<footer>
+  <div class="container">© 2026 Thai2Drive · <a href="/terms">Terms</a> · <a href="/support">Support</a></div>
+</footer>
+
+<script>
+  (function(){
+    var saved = localStorage.getItem('t2d_lang') || 'no';
+    var btns = document.querySelectorAll('.lang-btn');
+    var blocks = document.querySelectorAll('.lang-block');
+    function setLang(l){
+      btns.forEach(function(b){ b.classList.toggle('active', b.dataset.lang === l); });
+      blocks.forEach(function(blk){ blk.classList.toggle('active', blk.dataset.block === l); });
+      document.documentElement.lang = l;
+      localStorage.setItem('t2d_lang', l);
+      var backTr = { no: 'Tilbake', th: 'ย้อนกลับ', en: 'Back' };
+      document.querySelectorAll('[data-tr=back]').forEach(function(el){ el.textContent = backTr[l]; });
+    }
+    btns.forEach(function(b){ b.addEventListener('click', function(){ setLang(b.dataset.lang); }); });
+    setLang(saved);
+  })();
+</script>
+</body>
+</html>
