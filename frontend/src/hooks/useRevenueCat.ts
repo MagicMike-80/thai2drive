@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { Platform } from 'react-native';
+import { IS_PREVIEW_BUILD } from '../buildFlags';
 
 // RevenueCat product identifiers — must match RevenueCat dashboard
 export const PRODUCT_IDS = {
@@ -46,6 +47,12 @@ function looksLikeValidRCKey(key: string | undefined): boolean {
 }
 
 async function initRC(): Promise<boolean> {
+  // ── HARD KILL-SWITCH for preview/test builds ──
+  // When IS_PREVIEW_BUILD is true (eas.json preview profile sets
+  // EXPO_PUBLIC_PREVIEW_BUILD="true"), we never import the SDK, never
+  // configure it, never read the API key. The whole RC subsystem is dead.
+  if (IS_PREVIEW_BUILD) return false;
+
   if (rcInitialized) return true;
   if (Platform.OS === 'web') return false;
 
@@ -73,6 +80,24 @@ async function initRC(): Promise<boolean> {
 }
 
 export function useRevenueCat(): UseRevenueCatReturn {
+  // ── Preview-build short-circuit ──
+  // Return a permanent stub. Even calling this hook from any component
+  // never touches react-native-purchases, never reads process.env.EXPO_PUBLIC_RC_API_KEY.
+  if (IS_PREVIEW_BUILD) {
+    const noop = async () => false;
+    return {
+      isAvailable: false,
+      packages: [],
+      isPremium: false,
+      purchasing: false,
+      error: null,
+      clearError: () => {},
+      purchase: noop,
+      restore: noop,
+      checkEntitlement: noop,
+    };
+  }
+
   const [isAvailable, setIsAvailable] = useState(false);
   const [packages, setPackages] = useState<RCPackage[]>([]);
   const [isPremium, setIsPremium] = useState(false);

@@ -25,7 +25,8 @@
       "autoIncrement": true,
       "env": {
         "EXPO_PUBLIC_BACKEND_URL": "https://norge-quiz-app.preview.emergentagent.com",
-        "EXPO_PUBLIC_RC_API_KEY": "test_MciTZyYeSIinvNBocwBillyssXD"
+        "EXPO_PUBLIC_RC_API_KEY": "",
+        "EXPO_PUBLIC_PREVIEW_BUILD": "true"
       }
     },
     "production": {
@@ -37,7 +38,8 @@
       "channel": "production",
       "env": {
         "EXPO_PUBLIC_BACKEND_URL": "https://norge-quiz-app.preview.emergentagent.com",
-        "EXPO_PUBLIC_RC_API_KEY": "test_MciTZyYeSIinvNBocwBillyssXD"
+        "EXPO_PUBLIC_RC_API_KEY": "",
+        "EXPO_PUBLIC_PREVIEW_BUILD": "false"
       }
     }
   },

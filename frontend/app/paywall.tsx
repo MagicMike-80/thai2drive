@@ -5,6 +5,7 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAppStore } from '../src/store/appStore';
 import { useRevenueCat, PRODUCT_IDS } from '../src/hooks/useRevenueCat';
+import { IS_PREVIEW_BUILD } from '../src/buildFlags';
 import { LanguageSwitcher } from '../src/components/LanguageSwitcher';
 import { AppBrand } from '../src/components/AppBrand';
 
@@ -113,12 +114,19 @@ export default function PaywallScreen() {
 
   // ── Hard guard: payments only enabled when RevenueCat is fully initialized
   // AND we have at least one product loaded from the dashboard. Anything else
-  // (web preview, missing/invalid API key, no offerings configured, init
-  // crashed) means the store cannot verify a real purchase, and we MUST NOT
+  // (preview build, web preview, missing/invalid API key, no offerings configured,
+  // init crashed) means the store cannot verify a real purchase, and we MUST NOT
   // unlock premium without a confirmed payment.
-  const paymentsEnabled = rc.isAvailable && rc.packages.length > 0 && Platform.OS !== 'web';
+  const paymentsEnabled =
+    !IS_PREVIEW_BUILD &&
+    rc.isAvailable &&
+    rc.packages.length > 0 &&
+    Platform.OS !== 'web';
 
   const onPurchase = async () => {
+    // Preview build → buttons are dead. No SDK call, no setPremium, no router push.
+    if (IS_PREVIEW_BUILD) return;
+
     if (!isAuthenticated) {
       router.push({ pathname: '/login', params: { redirect: 'paywall' } });
       return;
@@ -152,6 +160,8 @@ export default function PaywallScreen() {
   };
 
   const onRestore = async () => {
+    // Preview build → restore is dead. No SDK call.
+    if (IS_PREVIEW_BUILD) return;
     // Restore is also gated — it must verify with the store. The rc hook
     // already returns false unless an active entitlement comes back from
     // Purchases.restorePurchases(), so this branch is safe.

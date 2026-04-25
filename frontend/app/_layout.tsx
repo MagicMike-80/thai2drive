@@ -4,11 +4,33 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import React, { useEffect, useState } from 'react';
 import { View, ActivityIndicator, StyleSheet, Platform } from 'react-native';
 import { useAppStore } from '../src/store/appStore';
+import { IS_PREVIEW_BUILD } from '../src/buildFlags';
 
 const AUTH_SCREENS = ['login', 'signup', 'forgot-password'];
 
 /**
- * Premium revalidation guard.
+ * Preview build: force premium=true once on launch so testers can use the
+ * full app without paywall gating, AND skip every RC SDK call. This is the
+ * only place isPremium is allowed to flip to true outside of a verified RC
+ * purchase (and only because the build flag is explicitly set in eas.json
+ * preview profile — never in production).
+ */
+function usePreviewPremiumOverride() {
+  const isPremium = useAppStore((s) => s.isPremium);
+  const setPremium = useAppStore((s) => s.setPremium);
+  const authLoading = useAppStore((s) => s.authLoading);
+
+  useEffect(() => {
+    if (!IS_PREVIEW_BUILD) return;
+    if (authLoading) return;
+    if (isPremium) return;
+    console.log('[PreviewBuild] Forcing isPremium=true (RC disabled)');
+    setPremium(true);
+  }, [authLoading, isPremium]);
+}
+
+/**
+ * Premium revalidation guard (PRODUCTION builds only).
  *
  * On every app launch we cross-check the locally cached `isPremium` flag
  * against the source of truth:
@@ -17,11 +39,11 @@ const AUTH_SCREENS = ['login', 'signup', 'forgot-password'];
  *
  * If the local flag is `true` but neither source confirms it, we revoke it.
  * This closes a class of bugs where premium got persisted through a code
- * path that should have required a confirmed payment (e.g. the previous
- * "RC unavailable → auto-unlock" bug). After this guard, premium can ONLY
- * become true via:
- *   - successful RC purchase / restore (validated entitlement), or
- *   - login with a server-side premium/admin account.
+ * path that should have required a confirmed payment.
+ *
+ * NOTE: when IS_PREVIEW_BUILD is true, this hook returns immediately —
+ * the SDK is never imported, never configured. Use `usePreviewPremiumOverride`
+ * for preview/test builds.
  */
 function usePremiumRevalidation() {
   const isPremium = useAppStore((s) => s.isPremium);
@@ -30,6 +52,7 @@ function usePremiumRevalidation() {
   const authLoading = useAppStore((s) => s.authLoading);
 
   useEffect(() => {
+    if (IS_PREVIEW_BUILD) return; // hard kill-switch
     if (authLoading) return;
     if (!isPremium) return; // nothing to revalidate
     if (Platform.OS === 'web') return; // RC not available on web preview, leave flag alone here — paywall already gates purchases
@@ -112,6 +135,7 @@ export default function RootLayout() {
 
   useAuthRedirect();
   usePremiumRevalidation();
+  usePreviewPremiumOverride();
 
   if (!isReady) {
     return (
