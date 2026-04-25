@@ -327,3 +327,23 @@ agent_communication:
       (d) Existing /login and /signup screens already honored the redirect=paywall query param — after auth they replace() to /paywall.
       No quiz logic, exam mode, TTS, haptics, or results flow was touched. Verified visually: locked home screen shows red 'Opprett konto for å fortsette' under the disabled 🔒 Start Quiz button in NO and TH locales."
 
+
+  - agent: "main"
+    message: "2026-04-25 CRITICAL payment bypass — fixed:
+      Bug reported: After hitting free limit → signup → paywall → tap any package → app unlocked premium for free with NO real payment.
+      Root cause: /app/frontend/app/paywall.tsx onPurchase had an `else` branch that ran when rc.isAvailable was false (which happened because EXPO_PUBLIC_RC_API_KEY is currently the placeholder 'test_MciTZyYeSIinvNBocwBillyssXD' that doesn't pass the looksLikeValidRCKey() check). That else branch unconditionally called setPremium(true) — a complete bypass.
+      Fixes (defense in depth, fail-closed):
+      (1) /app/frontend/app/paywall.tsx — introduced paymentsEnabled = rc.isAvailable && rc.packages.length > 0 && Platform.OS !== 'web'. onPurchase now early-returns when !paymentsEnabled (no setPremium call possible). Removed the dangerous else branch entirely. onRestore similarly gated. Only path to setPremium(true) is rc.purchase() / rc.restore() returning true, which only happens when RevenueCat reports an active 'pro' entitlement in customerInfo.
+      (2) Added a hard-locked UI: red warning banner 'Betaling er ikke aktivert ennå' (Norwegian) / 'ระบบชำระเงินยังไม่เปิดใช้งาน' (Thai) / 'Payments are not enabled yet' (English) above the CTA. The bottom CTA button is disabled with a 🔒 icon and shows the same text instead of 'Start nå'. Restore button is also disabled. Plans can still be selected (just visual radio) but tapping the CTA is a no-op.
+      (3) /app/frontend/app/_layout.tsx — added usePremiumRevalidation() hook that runs on every app launch:
+          - If user has server-side premium (is_premium or is_admin from backend) → keeps premium ON
+          - Else if RC API key is invalid/missing → revokes cached isPremium=false (closes the bypass for users who already got bogus premium from the bug)
+          - Else if RC SDK reports the 'pro' entitlement is NOT active → revokes
+          - On any RC SDK error → revokes (fail-closed)
+        This runs on Android/iOS only (web preview leaves the flag alone since the paywall already gates purchases on web).
+      Verified visually on web preview at /paywall: red banner present, CTA shows 🔒 'Betaling er ikke aktivert ennå', tapping it does NOT change isPremium in storage.
+      How premium can become true after this fix:
+        ✓ rc.purchase(productId) returns true (RC confirmed entitlement active in customerInfo)
+        ✓ rc.restore() returns true (RC confirmed prior purchase still active)
+        ✓ Backend login response says is_premium=true or is_admin=true
+        ✗ NO other path"

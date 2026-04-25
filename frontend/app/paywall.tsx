@@ -32,7 +32,9 @@ const TR: Record<string, Record<string, string>> = {
     purchasing: 'Behandler...',
     success: 'Premium aktivert!',
     webNote: 'Betaling krever mobilappen',
-    limitTitle: 'Du har brukt dagens gratis spørsmål',
+    paymentNotEnabled: 'Betaling er ikke aktivert ennå',
+    paymentNotEnabledBody: 'Pakker kan vises, men kan ikke kjøpes ennå. Premium kan ikke aktiveres uten en bekreftet betaling.',
+    limitTitle: 'Du har brukt gratisprøven',
     limitSubtitle: 'Lås opp Premium for ubegrenset tilgang',
   },
   th: {
@@ -54,7 +56,9 @@ const TR: Record<string, Record<string, string>> = {
     purchasing: 'กำลังดำเนินการ...',
     success: 'เปิดใช้งาน Premium แล้ว!',
     webNote: 'การชำระเงินต้องใช้แอปมือถือ',
-    limitTitle: 'คุณใช้ข้อฟรีของวันนี้ครบแล้ว',
+    paymentNotEnabled: 'ระบบชำระเงินยังไม่เปิดใช้งาน',
+    paymentNotEnabledBody: 'ดูแพ็กเกจได้ แต่ยังซื้อไม่ได้ ไม่สามารถเปิดใช้งาน Premium ได้หากไม่มีการชำระเงินที่ยืนยันแล้ว',
+    limitTitle: 'คุณใช้คำถามฟรีหมดแล้ว',
     limitSubtitle: 'ปลดล็อค Premium เพื่อใช้งานไม่จำกัด',
   },
   en: {
@@ -76,7 +80,9 @@ const TR: Record<string, Record<string, string>> = {
     purchasing: 'Processing...',
     success: 'Premium activated!',
     webNote: 'Payment requires the mobile app',
-    limitTitle: 'You have used today\'s free questions',
+    paymentNotEnabled: 'Payments are not enabled yet',
+    paymentNotEnabledBody: 'Packages can be shown but cannot be purchased yet. Premium cannot be activated without a confirmed payment.',
+    limitTitle: 'You have used your free trial',
     limitSubtitle: 'Unlock Premium for unlimited access',
   },
 };
@@ -105,9 +111,25 @@ export default function PaywallScreen() {
 
   useEffect(() => { rc.clearError(); }, [plan]);
 
+  // ── Hard guard: payments only enabled when RevenueCat is fully initialized
+  // AND we have at least one product loaded from the dashboard. Anything else
+  // (web preview, missing/invalid API key, no offerings configured, init
+  // crashed) means the store cannot verify a real purchase, and we MUST NOT
+  // unlock premium without a confirmed payment.
+  const paymentsEnabled = rc.isAvailable && rc.packages.length > 0 && Platform.OS !== 'web';
+
   const onPurchase = async () => {
     if (!isAuthenticated) {
       router.push({ pathname: '/login', params: { redirect: 'paywall' } });
+      return;
+    }
+
+    // Hard fail-closed: do not even attempt purchase if payments aren't ready.
+    // This is the security gate that prevents the "auto-unlock without paying"
+    // bug we hit when the RC API key was a test/placeholder.
+    if (!paymentsEnabled) {
+      // The UI already shows the "Betaling er ikke aktivert ennå" banner,
+      // so we just ignore the tap silently rather than route anywhere.
       return;
     }
 
@@ -116,23 +138,24 @@ export default function PaywallScreen() {
       plan === 'threemonth' ? PRODUCT_IDS.THREE_MONTH :
       PRODUCT_IDS.LIFETIME;
 
-    if (rc.isAvailable) {
-      const ok = await rc.purchase(productId);
-      if (ok) {
-        await setPremium(true);
-        setSuccess(true);
-        setTimeout(() => router.replace('/'), 1200);
-      }
-    } else {
-      // Web preview fallback (MOCKED for now — real RC runs in native build)
+    const ok = await rc.purchase(productId);
+    // rc.purchase ONLY returns true when RevenueCat reports the entitlement
+    // is active in customerInfo — i.e. the platform store confirmed the sale.
+    // No other code path may set premium=true.
+    if (ok) {
       await setPremium(true);
       setSuccess(true);
       setTimeout(() => router.replace('/'), 1200);
     }
+    // If !ok the rc hook already populated rc.error with the reason
+    // (cancelled / network / not active) and we stay on the paywall.
   };
 
   const onRestore = async () => {
-    if (!rc.isAvailable) return;
+    // Restore is also gated — it must verify with the store. The rc hook
+    // already returns false unless an active entitlement comes back from
+    // Purchases.restorePurchases(), so this branch is safe.
+    if (!paymentsEnabled) return;
     const ok = await rc.restore();
     if (ok) {
       await setPremium(true);
@@ -261,11 +284,17 @@ export default function PaywallScreen() {
           </View>
         ) : null}
 
-        {/* Web / RC-disabled notice */}
-        {(isWeb || !rc.isAvailable) && (
-          <View style={[s.webNote, { backgroundColor: c.accentBg }]}>
-            <Ionicons name="phone-portrait-outline" size={16} color={c.accent} />
-            <Text style={[s.webNoteText, { color: c.accent }]}>{t.webNote}</Text>
+        {/* Payment-not-enabled banner — shown whenever payments are gated.
+            This is the visible counterpart of the security guard in
+            onPurchase: the user CANNOT activate premium without a confirmed
+            payment, so we say so up-front to avoid confusion. */}
+        {!paymentsEnabled && (
+          <View style={[s.warnBox, { backgroundColor: c.incorrectBg, borderColor: c.incorrect }]}>
+            <Ionicons name="lock-closed" size={16} color={c.incorrect} />
+            <View style={{ flex: 1 }}>
+              <Text style={[s.warnTitle, { color: c.incorrect }]}>{t.paymentNotEnabled}</Text>
+              <Text style={[s.warnBody, { color: c.textSecondary }]}>{t.paymentNotEnabledBody}</Text>
+            </View>
           </View>
         )}
       </ScrollView>
@@ -274,21 +303,23 @@ export default function PaywallScreen() {
       <View style={[s.bottomWrap, { borderTopColor: c.divider, backgroundColor: c.bg }]}>
         <TouchableOpacity
           testID="paywall-cta-btn"
-          disabled={rc.purchasing}
-          style={[s.ctaBtn, { backgroundColor: rc.purchasing ? c.letterBg : c.accent }]}
+          disabled={rc.purchasing || !paymentsEnabled}
+          style={[s.ctaBtn, { backgroundColor: (rc.purchasing || !paymentsEnabled) ? c.letterBg : c.accent }]}
           onPress={onPurchase}
           activeOpacity={0.85}
         >
           {rc.purchasing ? (
             <><ActivityIndicator size="small" color="#0F172A" /><Text style={s.ctaText}>{t.purchasing}</Text></>
+          ) : !paymentsEnabled ? (
+            <><Ionicons name="lock-closed" size={18} color={c.textMuted} /><Text style={[s.ctaText, { color: c.textMuted }]}>{t.paymentNotEnabled}</Text></>
           ) : (
             <><Ionicons name="flash" size={20} color="#0F172A" /><Text style={s.ctaText}>{t.cta}</Text></>
           )}
         </TouchableOpacity>
 
         {!isWeb && (
-          <TouchableOpacity testID="restore-btn" style={s.restoreBtn} onPress={onRestore} disabled={rc.purchasing} activeOpacity={0.7}>
-            <Text style={[s.restoreText, { color: c.textMuted }]}>{t.restore}</Text>
+          <TouchableOpacity testID="restore-btn" style={s.restoreBtn} onPress={onRestore} disabled={rc.purchasing || !paymentsEnabled} activeOpacity={0.7}>
+            <Text style={[s.restoreText, { color: paymentsEnabled ? c.textMuted : c.letterBg }]}>{t.restore}</Text>
           </TouchableOpacity>
         )}
 
@@ -333,8 +364,9 @@ const s = StyleSheet.create({
 
   errorBox: { flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 14, paddingVertical: 10, borderRadius: 10, marginBottom: 8 },
   errorText: { fontSize: 13, flex: 1 },
-  webNote: { flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 14, paddingVertical: 10, borderRadius: 10, marginTop: 4 },
-  webNoteText: { fontSize: 12, fontWeight: '600' },
+  warnBox: { flexDirection: 'row', alignItems: 'flex-start', gap: 10, paddingHorizontal: 14, paddingVertical: 12, borderRadius: 12, marginTop: 4, borderWidth: 1.5 },
+  warnTitle: { fontSize: 14, fontWeight: '800', marginBottom: 3 },
+  warnBody: { fontSize: 12, fontWeight: '500', lineHeight: 17 },
 
   bottomWrap: { paddingHorizontal: 22, paddingTop: 14, paddingBottom: 20, borderTopWidth: 1 },
   ctaBtn: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', borderRadius: 16, paddingVertical: 19, gap: 8, marginBottom: 10 },
