@@ -22,6 +22,9 @@ expo-env.d.ts
 .metro-health-check*
 .metro-cache/
 .metro-cache
+.cache/
+**/.cache/
+**/.metro-cache/
 
 # debug
 npm-debug.*

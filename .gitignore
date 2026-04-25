@@ -75,6 +75,7 @@ agenthub/agents/youtube/db
 
 # Build caches
 .cache/
+**/.cache/
 .metro-cache/
 **/.metro-cache/
 
