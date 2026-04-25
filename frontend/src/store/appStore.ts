@@ -48,13 +48,13 @@ interface AppState {
   hapticsEnabled: boolean;
   setHapticsEnabled: (enabled: boolean) => void;
   isPremium: boolean;
-  freeQuestionsUsed: number;
-  freeResetDate: string; // YYYY-MM-DD – day on which the counter was last reset
+  freeQuestionsUsed: number; // LIFETIME count of answered questions for free/guest users
   setPremium: (val: boolean) => void;
   incrementFreeQuestions: () => void;
   canAnswerFree: () => boolean;
   freeRemaining: () => number;
-  resetFreeIfNewDay: () => Promise<void>;
+  // Lifetime free limit before account+paywall gate kicks in (10 answered questions)
+  needsAccountGate: () => boolean; // true when guest has hit limit and must sign up
   // Streak
   streak: number;
   lastActiveDate: string;
@@ -200,21 +200,10 @@ export const useAppStore = create<AppState>((set, get) => ({
     const savedPremium = await AsyncStorage.getItem('isPremium');
     if (savedPremium === 'true') set({ isPremium: true });
 
-    // Load daily free-question counter — auto-reset if it's a new day
-    const savedResetDate = await AsyncStorage.getItem('freeResetDate');
-    const todayKey = getDateKey();
-    if (savedResetDate === todayKey) {
-      const savedFreeUsed = await AsyncStorage.getItem('freeQuestionsUsed');
-      set({
-        freeQuestionsUsed: savedFreeUsed ? parseInt(savedFreeUsed, 10) || 0 : 0,
-        freeResetDate: savedResetDate,
-      });
-    } else {
-      // New day (or first launch) → reset counter
-      set({ freeQuestionsUsed: 0, freeResetDate: todayKey });
-      await AsyncStorage.setItem('freeQuestionsUsed', '0');
-      await AsyncStorage.setItem('freeResetDate', todayKey);
-    }
+    // Load LIFETIME free-question counter (no daily reset — user gets 10 total
+    // before account+paywall gate kicks in)
+    const savedFreeUsed = await AsyncStorage.getItem('freeQuestionsUsed');
+    set({ freeQuestionsUsed: savedFreeUsed ? parseInt(savedFreeUsed, 10) || 0 : 0 });
 
     // Load streak
     const savedStreak = await AsyncStorage.getItem('streak');
@@ -273,11 +262,10 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   isPremium: false,
   freeQuestionsUsed: 0,
-  freeResetDate: '',
   setPremium: async (val) => { set({ isPremium: val }); await AsyncStorage.setItem('isPremium', val.toString()); },
   incrementFreeQuestions: async () => {
-    // Always ensure we are on today's counter before incrementing
-    await get().resetFreeIfNewDay();
+    // Lifetime counter — never auto-resets. Premium users skip incrementing
+    // (caller already guards with !isPremium).
     const n = get().freeQuestionsUsed + 1;
     set({ freeQuestionsUsed: n });
     await AsyncStorage.setItem('freeQuestionsUsed', n.toString());
@@ -290,15 +278,11 @@ export const useAppStore = create<AppState>((set, get) => ({
     const { isPremium, freeQuestionsUsed } = get();
     return isPremium ? Infinity : Math.max(0, 10 - freeQuestionsUsed);
   },
-  resetFreeIfNewDay: async () => {
-    const today = getDateKey();
-    const { freeResetDate } = get();
-    if (freeResetDate !== today) {
-      // New day — reset daily counter
-      set({ freeQuestionsUsed: 0, freeResetDate: today });
-      await AsyncStorage.setItem('freeQuestionsUsed', '0');
-      await AsyncStorage.setItem('freeResetDate', today);
-    }
+  needsAccountGate: () => {
+    // Guests who hit the lifetime free limit must sign up before continuing
+    const { isPremium, freeQuestionsUsed, isAuthenticated } = get();
+    if (isPremium) return false;
+    return !isAuthenticated && freeQuestionsUsed >= 10;
   },
 
   // Streak

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator, Animated, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator, Animated, Image, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
@@ -17,30 +17,53 @@ const EXAM_TIME = 90 * 60;
 const PASS = 85;
 
 const T: Record<string, Record<string, string>> = {
-  no: { check: 'Sjekk svar', next: 'Neste', finish: 'Fullfør', correct: 'Riktig!', incorrect: 'Feil!', hint: 'Trykk for Thai', limitMsg: 'Gratis grense nådd', unlock: 'Lås opp Premium', listen: 'Lytt', listening: 'Spiller...', listenExpl: 'Lytt' },
-  th: { check: 'ตรวจคำตอบ', next: 'ถัดไป', finish: 'เสร็จสิ้น', correct: 'ถูกต้อง!', incorrect: 'ผิด!', hint: 'แตะเพื่อแปล', limitMsg: 'ถึงขีดจำกัดฟรี', unlock: 'ปลดล็อค Premium', listen: 'ฟัง', listening: 'กำลังเล่น...', listenExpl: 'ฟัง' },
-  en: { check: 'Check Answer', next: 'Next', finish: 'Finish', correct: 'Correct!', incorrect: 'Incorrect!', hint: 'Tap for Thai', limitMsg: 'Free limit reached', unlock: 'Unlock Premium', listen: 'Listen', listening: 'Playing...', listenExpl: 'Listen' },
+  no: { check: 'Sjekk svar', next: 'Neste', finish: 'Fullfør', correct: 'Riktig!', incorrect: 'Feil!', hint: 'Trykk for Thai', limitMsg: 'Gratis grense nådd', unlock: 'Lås opp Premium', listen: 'Lytt', listening: 'Spiller...', listenExpl: 'Lytt', accountTitle: 'Opprett konto for å fortsette', accountBody: 'Du har brukt opp 10 gratis spørsmål. Opprett en konto for å fortsette og få tilgang til pakketilbud.', accountSignup: 'Opprett konto', accountLogin: 'Logg inn', accountCancel: 'Avbryt' },
+  th: { check: 'ตรวจคำตอบ', next: 'ถัดไป', finish: 'เสร็จสิ้น', correct: 'ถูกต้อง!', incorrect: 'ผิด!', hint: 'แตะเพื่อแปล', limitMsg: 'ถึงขีดจำกัดฟรี', unlock: 'ปลดล็อค Premium', listen: 'ฟัง', listening: 'กำลังเล่น...', listenExpl: 'ฟัง', accountTitle: 'สร้างบัญชีเพื่อดำเนินการต่อ', accountBody: 'คุณใช้คำถามฟรี 10 ข้อหมดแล้ว สร้างบัญชีเพื่อดำเนินการต่อและรับข้อเสนอแพ็กเกจ', accountSignup: 'สร้างบัญชี', accountLogin: 'เข้าสู่ระบบ', accountCancel: 'ยกเลิก' },
+  en: { check: 'Check Answer', next: 'Next', finish: 'Finish', correct: 'Correct!', incorrect: 'Incorrect!', hint: 'Tap for Thai', limitMsg: 'Free limit reached', unlock: 'Unlock Premium', listen: 'Listen', listening: 'Playing...', listenExpl: 'Listen', accountTitle: 'Create an account to continue', accountBody: 'You have used your 10 free questions. Create an account to continue and see package offers.', accountSignup: 'Create account', accountLogin: 'Log in', accountCancel: 'Cancel' },
 };
 
 export default function QuizScreen() {
   const router = useRouter();
   const { mode, category } = useLocalSearchParams<{ mode: string; category: string }>();
   const store = useAppStore();
-  const { language, deviceId, addBookmark, removeBookmark, isBookmarked, setProgress, colors: c, soundEnabled, soundStyle, hapticsEnabled, isPremium, incrementFreeQuestions, canAnswerFree, freeRemaining, resetFreeIfNewDay, updateStreak, setLastAttempt } = store;
+  const { language, deviceId, addBookmark, removeBookmark, isBookmarked, setProgress, colors: c, soundEnabled, soundStyle, hapticsEnabled, isPremium, isAuthenticated, incrementFreeQuestions, canAnswerFree, freeRemaining, needsAccountGate, updateStreak, setLastAttempt } = store;
   const t = T[language] || T.en;
 
   // Screen capture protection
   useScreenProtection(language);
 
-  // Gate: if free user has no quota left, redirect to paywall immediately
+  // ── Auth + paywall gate ──
+  // Shows the right destination when a free user tries to continue past their
+  // 10-question limit:
+  //   • Guest (not logged in)  → Alert → /signup or /login (with redirect=paywall)
+  //   • Logged-in free user    → /paywall directly
+  const showAccountOrPaywall = useCallback(() => {
+    if (isPremium) return false; // premium has unlimited
+    if (canAnswerFree()) return false; // still has free quota
+    if (!isAuthenticated) {
+      // Guest hit the lifetime limit — must sign up or log in first
+      Alert.alert(
+        t.accountTitle,
+        t.accountBody,
+        [
+          { text: t.accountCancel, style: 'cancel', onPress: () => router.back() },
+          { text: t.accountLogin, onPress: () => router.replace({ pathname: '/login', params: { redirect: 'paywall' } }) },
+          { text: t.accountSignup, onPress: () => router.replace({ pathname: '/signup', params: { redirect: 'paywall' } }) },
+        ],
+        { cancelable: false },
+      );
+    } else {
+      // Already authenticated — go straight to paywall
+      router.replace('/paywall');
+    }
+    return true;
+  }, [isPremium, isAuthenticated, t]);
+
+  // Gate: if free user has no quota left when entering quiz, redirect appropriately
   useEffect(() => {
-    (async () => {
-      if (isPremium) return;
-      await resetFreeIfNewDay();
-      if (freeRemaining() <= 0) {
-        router.replace('/paywall');
-      }
-    })();
+    if (!isPremium && !canAnswerFree()) {
+      showAccountOrPaywall();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -186,8 +209,8 @@ export default function QuizScreen() {
     tickHaptic();
     stopTts(); // Stop any playing TTS immediately
     if (idx >= questions.length - 1) { finishQ(); return; }
-    // Non-premium user hit the daily cap → push paywall instead of inline message
-    if (!canAnswerFree()) { router.push('/paywall'); return; }
+    // Free user hit the lifetime cap → route to account gate or paywall
+    if (showAccountOrPaywall()) return;
     // Smooth slide transition
     Animated.timing(fade, { toValue: 0, duration: 120, useNativeDriver: true }).start(() => {
       setIdx((p) => p + 1); setSel(null); setDone(false); setShowTh(false); setShowLimit(false);
@@ -577,7 +600,7 @@ export default function QuizScreen() {
           {showLimit && (
             <View style={[st.limitCard, { backgroundColor: `${c.accent}12` }]}>
               <Text style={[st.limitMsg, { color: c.textSecondary }]}>{t.limitMsg}</Text>
-              <TouchableOpacity testID="quiz-unlock-btn" style={[st.limitBtn, { backgroundColor: c.accent }]} onPress={() => router.push('/paywall')}>
+              <TouchableOpacity testID="quiz-unlock-btn" style={[st.limitBtn, { backgroundColor: c.accent }]} onPress={showAccountOrPaywall}>
                 <Ionicons name="diamond" size={16} color="#0F172A" />
                 <Text style={st.limitBtnTxt}>{t.unlock}</Text>
               </TouchableOpacity>

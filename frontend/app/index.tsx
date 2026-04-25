@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator, Animated, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator, Animated, Image, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
@@ -12,14 +12,14 @@ import { AppBrand } from '../src/components/AppBrand';
 const T2D_ICON = require('../assets/images/t2d-icon.png');
 
 const TR: Record<string, Record<string, string>> = {
-  no: { subtitle: 'Norsk førerprøve', startQuiz: 'Start quiz', exam: 'Eksamen', accuracy: 'Nøyaktighet', answered: 'Besvart', correct: 'Riktige', premiumCta: 'Premium',  premiumOffer: 'Ubegrenset tilgang · fra 199 kr', premiumActive: 'Premium aktiv', streak: 'dagers rekke', freeLeft: 'gratis igjen i dag', dailyLimitReached: 'Dagens gratis er brukt – lås opp Premium', dailyTest: 'Dagens test', moreOptions: 'Flere' },
-  th: { subtitle: 'สอบใบขับขี่นอร์เวย์', startQuiz: 'เริ่มทำแบบทดสอบ', exam: 'สอบ', accuracy: 'ความแม่นยำ', answered: 'ตอบแล้ว', correct: 'ถูกต้อง', premiumCta: 'พรีเมียม', premiumOffer: 'ใช้งานไม่จำกัด · เริ่มต้น 199 kr', premiumActive: 'Premium ใช้งานอยู่', streak: 'วันติดต่อกัน', freeLeft: 'ฟรีที่เหลือวันนี้', dailyLimitReached: 'ใช้ฟรีประจำวันหมดแล้ว – ปลดล็อค Premium', dailyTest: 'แบบทดสอบประจำวัน', moreOptions: 'เพิ่มเติม' },
-  en: { subtitle: 'Norwegian driving test', startQuiz: 'Start quiz', exam: 'Exam', accuracy: 'Accuracy', answered: 'Answered', correct: 'Correct', premiumCta: 'Premium', premiumOffer: 'Unlimited access · from 199 NOK', premiumActive: 'Premium active', streak: 'day streak', freeLeft: 'free left today', dailyLimitReached: 'Daily free used – unlock Premium', dailyTest: 'Daily test', moreOptions: 'More' },
+  no: { subtitle: 'Norsk førerprøve', startQuiz: 'Start quiz', exam: 'Eksamen', accuracy: 'Nøyaktighet', answered: 'Besvart', correct: 'Riktige', premiumCta: 'Premium',  premiumOffer: 'Ubegrenset tilgang · fra 199 kr', premiumActive: 'Premium aktiv', streak: 'dagers rekke', freeLeft: 'gratis igjen', dailyLimitReached: 'Opprett konto for å fortsette', dailyTest: 'Dagens test', moreOptions: 'Flere', accountTitle: 'Opprett konto for å fortsette', accountBody: 'Du har brukt opp 10 gratis spørsmål. Opprett en konto for å fortsette.', accountSignup: 'Opprett konto', accountLogin: 'Logg inn', accountCancel: 'Avbryt' },
+  th: { subtitle: 'สอบใบขับขี่นอร์เวย์', startQuiz: 'เริ่มทำแบบทดสอบ', exam: 'สอบ', accuracy: 'ความแม่นยำ', answered: 'ตอบแล้ว', correct: 'ถูกต้อง', premiumCta: 'พรีเมียม', premiumOffer: 'ใช้งานไม่จำกัด · เริ่มต้น 199 kr', premiumActive: 'Premium ใช้งานอยู่', streak: 'วันติดต่อกัน', freeLeft: 'ฟรีเหลือ', dailyLimitReached: 'สร้างบัญชีเพื่อดำเนินการต่อ', dailyTest: 'แบบทดสอบประจำวัน', moreOptions: 'เพิ่มเติม', accountTitle: 'สร้างบัญชีเพื่อดำเนินการต่อ', accountBody: 'คุณใช้คำถามฟรี 10 ข้อหมดแล้ว สร้างบัญชีเพื่อดำเนินการต่อ', accountSignup: 'สร้างบัญชี', accountLogin: 'เข้าสู่ระบบ', accountCancel: 'ยกเลิก' },
+  en: { subtitle: 'Norwegian driving test', startQuiz: 'Start quiz', exam: 'Exam', accuracy: 'Accuracy', answered: 'Answered', correct: 'Correct', premiumCta: 'Premium', premiumOffer: 'Unlimited access · from 199 NOK', premiumActive: 'Premium active', streak: 'day streak', freeLeft: 'free left', dailyLimitReached: 'Create account to continue', dailyTest: 'Daily test', moreOptions: 'More', accountTitle: 'Create an account to continue', accountBody: 'You have used your 10 free questions. Create an account to continue.', accountSignup: 'Create account', accountLogin: 'Log in', accountCancel: 'Cancel' },
 };
 
 export default function HomeScreen() {
   const router = useRouter();
-  const { language, deviceId, setProgress, progress, colors, isPremium, freeRemaining, streak, updateStreak } = useAppStore();
+  const { language, deviceId, setProgress, progress, colors, isPremium, isAuthenticated, freeRemaining, streak, updateStreak } = useAppStore();
   const [loading, setLoading] = useState(true);
   const [dailyDone, setDailyDone] = useState(false);
   const t = TR[language] || TR.en;
@@ -54,8 +54,27 @@ export default function HomeScreen() {
   const accuracy = progress.total_questions_answered > 0
     ? Math.round((progress.correct_answers / progress.total_questions_answered) * 100) : 0;
 
+  // Show the auth/paywall gate when a free user is locked. Guests must
+  // sign up or log in first; logged-in free users go straight to paywall.
+  const handleLockedNav = () => {
+    if (!isAuthenticated) {
+      Alert.alert(
+        t.accountTitle,
+        t.accountBody,
+        [
+          { text: t.accountCancel, style: 'cancel' },
+          { text: t.accountLogin, onPress: () => router.push({ pathname: '/login', params: { redirect: 'paywall' } }) },
+          { text: t.accountSignup, onPress: () => router.push({ pathname: '/signup', params: { redirect: 'paywall' } }) },
+        ],
+        { cancelable: true },
+      );
+    } else {
+      router.push('/paywall');
+    }
+  };
+
   const startPractice = () => {
-    if (locked) { router.push('/paywall'); return; }
+    if (locked) { handleLockedNav(); return; }
     router.push({ pathname: '/categories', params: { mode: 'practice' } });
   };
 
@@ -121,7 +140,7 @@ export default function HomeScreen() {
           <TouchableOpacity
             testID="exam-mode-btn"
             style={[st.secBtn, { borderColor: c.cardBorder }]}
-            onPress={() => { if (locked) router.push('/paywall'); else router.push({ pathname: '/quiz', params: { mode: 'exam', category: 'all' } }); }}
+            onPress={() => { if (locked) handleLockedNav(); else router.push({ pathname: '/quiz', params: { mode: 'exam', category: 'all' } }); }}
             activeOpacity={0.7}
           >
             <Ionicons name="school-outline" size={18} color={c.text} />

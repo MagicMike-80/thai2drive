@@ -313,3 +313,17 @@ agent_communication:
         – Light mode unselected: dark navy A/B/C/D on light-gray circle ✓
         – Light mode selected: WHITE 'A' on orange circle ✓
         – Dark mode unchanged."
+  - agent: "main"
+    message: "2026-04-25 Free-user gate rework — proper account+paywall flow:
+      Old behavior: 10 free questions PER DAY, then redirect to /paywall directly (anyone could keep using app without logging in by waiting til midnight).
+      New behavior: 10 free questions LIFETIME, then must create account → then paywall.
+      Changes:
+      (a) /app/frontend/src/store/appStore.ts: removed daily reset of freeQuestionsUsed (kept the same AsyncStorage key for back-compat — existing users' counter just stops resetting at midnight). Removed `freeResetDate` field and `resetFreeIfNewDay` action. Added `needsAccountGate()` helper: true when guest hit limit and must sign up.
+      (b) /app/frontend/app/quiz.tsx: introduced showAccountOrPaywall() centralised gate. When a free user tries to advance past their 10-question lifetime quota:
+          • Guest (not isAuthenticated) → Alert with title 'Opprett konto for å fortsette' + body explaining 10-question limit + 3 buttons (Avbryt / Logg inn → /login?redirect=paywall / Opprett konto → /signup?redirect=paywall). Translated to NO/TH/EN.
+          • Logged-in free user → router.replace('/paywall') directly.
+        Wired to: handleNext, the quiz-mount useEffect (when entering with already-exhausted quota), and the inline 'Unlock' button.
+      (c) /app/frontend/app/index.tsx: same gate via handleLockedNav() applied to Start Quiz CTA and Exam button. The 'dailyLimitReached' string is now 'Opprett konto for å fortsette' (NO) / 'สร้างบัญชีเพื่อดำเนินการต่อ' (TH) / 'Create account to continue' (EN). The 'freeLeft' label dropped 'today' suffix — now just 'gratis igjen' / 'ฟรีเหลือ' / 'free left'.
+      (d) Existing /login and /signup screens already honored the redirect=paywall query param — after auth they replace() to /paywall.
+      No quiz logic, exam mode, TTS, haptics, or results flow was touched. Verified visually: locked home screen shows red 'Opprett konto for å fortsette' under the disabled 🔒 Start Quiz button in NO and TH locales."
+
