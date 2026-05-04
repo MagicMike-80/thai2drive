@@ -1,0 +1,9 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="300" fill="#1a2744"/>
+  <rect x="60" y="120" width="100" height="60" rx="6" fill="#e53e3e" transform="rotate(-15 110 150)"/>
+  <rect x="240" y="130" width="100" height="60" rx="6" fill="#3182ce" transform="rotate(10 290 160)"/>
+  <polygon points="200,50 230,110 170,110" fill="#ffd700"/>
+  <text x="200" y="100" fill="#1a202c" font-size="20" font-weight="bold" text-anchor="middle" font-family="sans-serif">!</text>
+  <text x="200" y="220" fill="#48bb78" font-size="13" font-weight="bold" text-anchor="middle" font-family="sans-serif">Stopp — Sikre — Ring 112/113</text>
+  <text x="200" y="270" fill="#a0aec0" font-size="12" text-anchor="middle" font-family="sans-serif">Du har plikt til å hjelpe</text>
+</svg>

@@ -1,0 +1,12 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="300" fill="#1a2744"/>
+  <rect x="20" y="80" width="360" height="20" rx="4" fill="#2d3748"/>
+  <rect x="20" y="80" width="80" height="20" rx="4" fill="#48bb78"/>
+  <text x="60" y="75" fill="#48bb78" font-size="11" text-anchor="middle" font-family="sans-serif">Tørr asfalt</text>
+  <rect x="20" y="120" width="360" height="20" rx="4" fill="#2d3748"/>
+  <rect x="20" y="120" width="340" height="20" rx="4" fill="#3182ce"/>
+  <text x="180" y="115" fill="#3182ce" font-size="11" text-anchor="middle" font-family="sans-serif">Is — 3-5x lenger!</text>
+  <text x="200" y="190" fill="#ffd700" font-size="16" font-weight="bold" text-anchor="middle" font-family="sans-serif">3-5x lenger bremselengde</text>
+  <text x="200" y="230" fill="#a0aec0" font-size="13" text-anchor="middle" font-family="sans-serif">Hold stor avstand om vinteren!</text>
+  <text x="200" y="275" fill="#3182ce" font-size="32" text-anchor="middle" font-family="sans-serif">&#10052;</text>
+</svg>

@@ -1,0 +1,7 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="300" fill="#1a2744"/>
+  <circle cx="200" cy="140" r="100" fill="#e53e3e" stroke="#fff" stroke-width="8"/>
+  <circle cx="200" cy="140" r="82" fill="white"/>
+  <text x="200" y="160" fill="#1a202c" font-size="72" font-weight="bold" text-anchor="middle" font-family="sans-serif">50</text>
+  <text x="200" y="270" fill="#a0aec0" font-size="14" text-anchor="middle" font-family="sans-serif">Tettbygd strøk</text>
+</svg>

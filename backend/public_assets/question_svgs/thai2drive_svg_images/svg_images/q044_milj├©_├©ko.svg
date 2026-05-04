@@ -1,0 +1,8 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="300" fill="#1a2744"/>
+  <path d="M100 220 Q100 100 200 80 Q300 100 300 220" fill="#14532d" opacity="0.6"/>
+  <circle cx="200" cy="120" r="50" fill="#22c55e" opacity="0.8"/>
+  <text x="200" y="128" fill="white" font-size="32" font-weight="bold" text-anchor="middle" font-family="sans-serif">ECO</text>
+  <text x="200" y="210" fill="#48bb78" font-size="13" font-weight="bold" text-anchor="middle" font-family="sans-serif">Jevn fart — høyt gir — lav turtall</text>
+  <text x="200" y="270" fill="#a0aec0" font-size="12" text-anchor="middle" font-family="sans-serif">Planlegg fremover — unngå unødvendig bremsing</text>
+</svg>

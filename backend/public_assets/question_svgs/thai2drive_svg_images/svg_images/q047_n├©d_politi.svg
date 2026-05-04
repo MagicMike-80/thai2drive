@@ -1,0 +1,7 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="300" fill="#1a2744"/>
+  <circle cx="200" cy="130" r="95" fill="#2d3748" stroke="#3182ce" stroke-width="6"/>
+  <text x="200" y="110" fill="#3182ce" font-size="16" font-weight="bold" text-anchor="middle" font-family="sans-serif">POLITI</text>
+  <text x="200" y="170" fill="white" font-size="60" font-weight="bold" text-anchor="middle" font-family="sans-serif">112</text>
+  <text x="200" y="265" fill="#a0aec0" font-size="13" text-anchor="middle" font-family="sans-serif">Brann: 110  |  Politi: 112  |  Ambulanse: 113</text>
+</svg>

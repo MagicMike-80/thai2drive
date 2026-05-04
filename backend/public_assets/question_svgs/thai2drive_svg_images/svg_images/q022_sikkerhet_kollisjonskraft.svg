@@ -1,0 +1,11 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="300" fill="#1a2744"/>
+  <rect x="40" y="100" width="80" height="50" rx="6" fill="#4a5568"/>
+  <text x="80" y="130" fill="white" font-size="13" font-weight="bold" text-anchor="middle" font-family="sans-serif">10 kg</text>
+  <path d="M140 125 L210 125" stroke="#e53e3e" stroke-width="4" marker-end="url(#ca)"/>
+  <defs><marker id="ca" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M2 1L8 5L2 9" fill="none" stroke="#e53e3e" stroke-width="1.5"/></marker></defs>
+  <rect x="220" y="70" width="130" height="110" rx="6" fill="#e53e3e"/>
+  <text x="285" y="130" fill="white" font-size="20" font-weight="bold" text-anchor="middle" font-family="sans-serif">300 kg</text>
+  <text x="200" y="230" fill="#ffd700" font-size="15" font-weight="bold" text-anchor="middle" font-family="sans-serif">50 km/t kollisjon!</text>
+  <text x="200" y="270" fill="#a0aec0" font-size="12" text-anchor="middle" font-family="sans-serif">Sikre alle gjenstander i bilen</text>
+</svg>

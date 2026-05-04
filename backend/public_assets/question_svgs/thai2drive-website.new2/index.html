@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#070f22" />
+<title>Thai2Drive – ฝึกใบขับขี่นอร์เวย์ในแอปเดียว</title>
+<meta name="description" content="แอปฝึกข้อสอบใบขับขี่นอร์เวย์ ภาษาไทย นอร์เวย์ และอังกฤษในแอปเดียว 530+ คำถามจริง พร้อมคำอธิบายทุกข้อ" />
+<meta name="keywords" content="thai2drive, teoriprøve, førerkort, ใบขับขี่ นอร์เวย์, teori app, norwegian driving test thai, körkort norge thai" />
+<link rel="canonical" href="https://www.thai2drive.no/" />
+<meta property="og:title" content="Thai2Drive – ฝึกใบขับขี่นอร์เวย์" />
+<meta property="og:description" content="530+ คำถามจริง 3 ภาษา พร้อมคำอธิบาย เริ่มฟรี 10 ข้อ" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://www.thai2drive.no/" />
+<meta property="og:locale" content="th_TH" />
+<meta property="og:locale:alternate" content="no_NO" />
+<meta property="og:locale:alternate" content="en_US" />
+
+<style>
+  :root {
+    /* Mobile-app design tokens (matched from frontend/theme.ts dark theme) */
+    --bg:        #070f22;
+    --bg-2:      #0d162b;
+    --card:      #111b31;
+    --card-2:    #1a253e;
+    --border:    rgba(255,255,255,.10);
+    --border-2:  rgba(255,255,255,.18);
+    --text:      #ffffff;
+    --text-2:    #cbd5e1;
+    --muted:     #9fb0cc;
+    --orange:    #ff982f;
+    --orange-2:  #ffae5a;
+    --orange-bg: rgba(255,152,47,.12);
+    --green:     #34d399;
+    --red:       #f87171;
+    --radius-sm: 12px;
+    --radius:    18px;
+    --radius-lg: 24px;
+    --shadow:    0 12px 40px rgba(0,0,0,.45);
+    --max-w:     1120px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, "Noto Sans Thai", sans-serif;
+    background:
+      radial-gradient(circle at 50% -10%, rgba(255,152,47,.18), transparent 38%),
+      radial-gradient(circle at 90% 30%, rgba(99,102,241,.10), transparent 35%),
+      var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--orange); text-decoration: none; transition: opacity .15s; }
+  a:hover { opacity: .8; }
+  img { display: block; max-width: 100%; }
+
+  .container { width: min(var(--max-w), calc(100% - 32px)); margin: 0 auto; }
+
+  /* ─────────  HEADER  ───────── */
+  header {
+    position: sticky; top: 0; z-index: 30;
+    background: rgba(7,15,34,.78);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav {
+    height: 72px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px;
+  }
+  .brand {
+    display: flex; align-items: center; gap: 12px;
+    font-weight: 900; font-size: 20px; letter-spacing: -0.3px;
+  }
+  .brand-logo {
+    width: 42px; height: 42px; border-radius: 11px;
+    background: linear-gradient(145deg, #1a2342 0%, #050a16 100%);
+    border: 1px solid rgba(255,255,255,.18);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-weight: 900; color: var(--orange); font-size: 14px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+    line-height: 1; font-family: inherit;
+  }
+  .brand-logo b { color: var(--text); font-weight: 900; }
+  .brand-name b { color: var(--orange); }
+
+  .lang-switch { display: flex; gap: 4px; align-items: center; }
+  .lang-btn {
+    background: transparent;
+    border: 1px solid var(--border-2);
+    color: var(--muted);
+    font-weight: 700; font-size: 12px;
+    padding: 7px 13px; border-radius: 999px;
+    cursor: pointer; transition: all .15s;
+    font-family: inherit;
+  }
+  .lang-btn:hover { color: var(--text); border-color: rgba(255,255,255,.30); }
+  .lang-btn.active {
+    background: var(--orange); color: #070f22; border-color: var(--orange);
+    box-shadow: 0 4px 14px rgba(255,152,47,.30);
+  }
+
+  /* ─────────  HERO  ───────── */
+  .hero {
+    padding: 56px 0 72px;
+    text-align: center;
+    position: relative;
+  }
+  .hero-icon {
+    width: 84px; height: 84px; border-radius: 22px;
+    background: linear-gradient(145deg, #1a2342 0%, #050a16 100%);
+    border: 1px solid rgba(255,255,255,.20);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-weight: 900; color: var(--orange); font-size: 28px;
+    margin-bottom: 24px;
+    box-shadow: 0 16px 48px rgba(255,152,47,.18), inset 0 1px 0 rgba(255,255,255,.10);
+    line-height: 1; letter-spacing: -1px;
+  }
+  .hero-icon b { color: var(--text); }
+  .hero h1 {
+    font-size: clamp(38px, 6.5vw, 64px);
+    font-weight: 900;
+    letter-spacing: -1.5px;
+    line-height: 1.05;
+    margin-bottom: 18px;
+    background: linear-gradient(180deg, #fff 0%, #cbd5e1 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .hero h1 .accent {
+    background: linear-gradient(135deg, var(--orange) 0%, var(--orange-2) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .hero-sub {
+    font-size: clamp(16px, 2vw, 19px);
+    color: var(--text-2);
+    max-width: 640px;
+    margin: 0 auto 36px;
+  }
+  .hero-cta-row {
+    display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+    margin-bottom: 28px;
+  }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+    font-weight: 800; font-size: 16px;
+    padding: 16px 28px;
+    border-radius: var(--radius);
+    border: none; cursor: pointer;
+    text-decoration: none;
+    transition: transform .15s ease, box-shadow .15s ease;
+    font-family: inherit;
+    line-height: 1;
+  }
+  .btn-primary {
+    background: var(--orange);
+    color: #070f22 !important;
+    box-shadow: 0 12px 32px rgba(255,152,47,.32);
+  }
+  .btn-primary:hover { transform: translateY(-2px); opacity: 1; }
+  .btn-ghost {
+    background: rgba(255,255,255,.06);
+    color: var(--text) !important;
+    border: 1px solid var(--border-2);
+  }
+  .btn-ghost:hover { background: rgba(255,255,255,.10); }
+
+  .hero-meta {
+    display: inline-flex; gap: 22px; align-items: center;
+    color: var(--muted); font-size: 13px; font-weight: 600;
+    flex-wrap: wrap; justify-content: center;
+  }
+  .hero-meta span { display: inline-flex; align-items: center; gap: 6px; }
+  .dot { width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,.25); }
+
+  /* ─────────  STATS STRIP  ───────── */
+  .stats {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 28px 24px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 80px;
+    box-shadow: var(--shadow);
+  }
+  .stat { text-align: center; }
+  .stat-val {
+    display: block; font-size: clamp(28px, 4vw, 38px); font-weight: 900;
+    color: var(--orange); letter-spacing: -1px; line-height: 1.05;
+    margin-bottom: 4px;
+  }
+  .stat-label { font-size: 13px; color: var(--muted); font-weight: 600; }
+  .stat + .stat { border-left: 1px solid var(--border); }
+  @media (max-width: 560px) {
+    .stat + .stat { border-left: none; border-top: 1px solid var(--border); padding-top: 12px; margin-top: 12px; }
+    .stats { grid-template-columns: 1fr; }
+  }
+
+  /* ─────────  FEATURES GRID  ───────── */
+  .section-title {
+    font-size: clamp(26px, 3.5vw, 34px);
+    font-weight: 900; letter-spacing: -0.8px;
+    text-align: center; margin-bottom: 12px;
+  }
+  .section-sub {
+    text-align: center; color: var(--muted);
+    font-size: 16px; max-width: 580px;
+    margin: 0 auto 44px;
+  }
+  .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 18px;
+    margin-bottom: 88px;
+  }
+  .feature {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    transition: transform .2s ease, border-color .2s ease;
+  }
+  .feature:hover { transform: translateY(-4px); border-color: var(--border-2); }
+  .feature-icon {
+    width: 48px; height: 48px; border-radius: 14px;
+    background: var(--orange-bg);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 24px; margin-bottom: 16px;
+  }
+  .feature h3 { font-size: 17px; font-weight: 800; margin-bottom: 6px; letter-spacing: -0.2px; }
+  .feature p { color: var(--text-2); font-size: 14.5px; line-height: 1.6; }
+
+  /* ─────────  PRICING  ───────── */
+  .pricing {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 18px;
+    margin-bottom: 88px;
+  }
+  .plan {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px 26px;
+    text-align: center;
+    position: relative;
+    transition: transform .2s ease;
+  }
+  .plan:hover { transform: translateY(-4px); }
+  .plan.featured {
+    border-color: var(--orange);
+    background: linear-gradient(180deg, rgba(255,152,47,.08) 0%, var(--card) 70%);
+    box-shadow: 0 16px 48px rgba(255,152,47,.16);
+  }
+  .plan.featured::before {
+    content: 'คุ้มที่สุด';
+    position: absolute; top: -11px; left: 50%; transform: translateX(-50%);
+    background: var(--orange); color: #070f22;
+    font-size: 11px; font-weight: 900; letter-spacing: 0.5px;
+    padding: 4px 12px; border-radius: 999px;
+    text-transform: uppercase;
+  }
+  html[lang="no"] .plan.featured::before { content: 'Beste verdi'; }
+  html[lang="en"] .plan.featured::before { content: 'Best Value'; }
+
+  .plan-name { font-size: 13px; color: var(--muted); font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 12px; }
+  .plan-price { font-size: 44px; font-weight: 900; color: var(--text); letter-spacing: -1.5px; line-height: 1; }
+  .plan-price small { font-size: 14px; font-weight: 600; color: var(--muted); display: block; margin-top: 8px; }
+  .plan-list { list-style: none; margin: 24px 0 0; text-align: left; }
+  .plan-list li {
+    color: var(--text-2); font-size: 14px;
+    padding: 7px 0 7px 24px;
+    position: relative;
+  }
+  .plan-list li::before {
+    content: '✓'; position: absolute; left: 0; top: 7px;
+    color: var(--green); font-weight: 900;
+  }
+
+  /* ─────────  FAQ / CTA BLOCK  ───────── */
+  .cta-block {
+    background:
+      radial-gradient(circle at 30% 0%, rgba(255,152,47,.20), transparent 45%),
+      var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: clamp(40px, 6vw, 64px);
+    text-align: center;
+    margin-bottom: 80px;
+    box-shadow: var(--shadow);
+  }
+  .cta-block h2 { font-size: clamp(24px, 3.5vw, 32px); font-weight: 900; letter-spacing: -0.5px; margin-bottom: 12px; }
+  .cta-block p { color: var(--text-2); font-size: 16px; max-width: 540px; margin: 0 auto 28px; }
+
+  /* ─────────  FOOTER  ───────── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 36px 0 48px;
+    background: rgba(0,0,0,.20);
+  }
+  .footer-row {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; flex-wrap: wrap;
+  }
+  .footer-links { display: flex; gap: 22px; flex-wrap: wrap; }
+  .footer-links a { color: var(--muted); font-size: 14px; }
+  .footer-links a:hover { color: var(--text); }
+  .copy { color: var(--muted); font-size: 13px; }
+
+  /* ─────────  LANGUAGE-SCOPED VISIBILITY  ───────── */
+  /* Default state: show only Thai content */
+  [data-lang]:not([data-lang="th"]) { display: none; }
+  html[lang="no"] [data-lang="th"] { display: none; }
+  html[lang="no"] [data-lang="no"] { display: inline; }
+  html[lang="no"] li[data-lang="no"], html[lang="no"] p[data-lang="no"], html[lang="no"] h1[data-lang="no"], html[lang="no"] h2[data-lang="no"], html[lang="no"] h3[data-lang="no"], html[lang="no"] div[data-lang="no"], html[lang="no"] span[data-lang="no"] { display: revert; }
+  html[lang="en"] [data-lang="th"] { display: none; }
+  html[lang="en"] [data-lang="en"] { display: inline; }
+  html[lang="en"] li[data-lang="en"], html[lang="en"] p[data-lang="en"], html[lang="en"] h1[data-lang="en"], html[lang="en"] h2[data-lang="en"], html[lang="en"] h3[data-lang="en"], html[lang="en"] div[data-lang="en"], html[lang="en"] span[data-lang="en"] { display: revert; }
+</style>
+</head>
+<body>
+
+<!-- ═══════ HEADER ═══════ -->
+<header>
+  <div class="container nav">
+    <a href="/" class="brand">
+      <span class="brand-logo">T<b>2</b>D</span>
+      <span class="brand-name">Thai<b>2</b>Drive</span>
+    </a>
+    <div class="lang-switch" role="group" aria-label="Language">
+      <button class="lang-btn active" data-set-lang="th" aria-label="ไทย">TH</button>
+      <button class="lang-btn" data-set-lang="no" aria-label="Norsk">NO</button>
+      <button class="lang-btn" data-set-lang="en" aria-label="English">EN</button>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════ HERO ═══════ -->
+<main>
+<section class="hero">
+  <div class="container">
+    <div class="hero-icon">T<b>2</b>D</div>
+
+    <h1>
+      <span data-lang="th">ฝึกใบขับขี่<br/><span class="accent">นอร์เวย์</span> ภาษาไทย</span>
+      <span data-lang="no">Norsk teoriprøve.<br/><span class="accent">Forstå hvert spørsmål.</span></span>
+      <span data-lang="en">Norwegian theory test.<br/><span class="accent">Understand every question.</span></span>
+    </h1>
+
+    <p class="hero-sub">
+      <span data-lang="th">530+ คำถามจริงพร้อมคำอธิบายภาษาไทย ผ่านสอบใบขับขี่ Førerkort ครั้งแรกอย่างมั่นใจ</span>
+      <span data-lang="no">530+ ekte spørsmål med forklaringer på thai, norsk og engelsk. Bestå teoriprøven på første forsøk.</span>
+      <span data-lang="en">530+ real questions with explanations in Thai, Norwegian, and English. Pass the theory test on your first try.</span>
+    </p>
+
+    <div class="hero-cta-row">
+      <a href="https://norge-quiz-app.preview.emergentagent.com" target="_blank" rel="noopener" class="btn btn-primary" aria-label="Test app now">
+        ▶
+        <span data-lang="th">ทดลองแอปเลย</span>
+        <span data-lang="no">Test appen nå</span>
+        <span data-lang="en">Test app now</span>
+      </a>
+      <a href="#features" class="btn btn-ghost">
+        <span data-lang="th">ดูฟีเจอร์</span>
+        <span data-lang="no">Se funksjoner</span>
+        <span data-lang="en">See features</span>
+      </a>
+    </div>
+
+    <div class="hero-meta">
+      <span>🇹🇭 ภาษาไทย</span><span class="dot"></span>
+      <span>🇳🇴 Norsk</span><span class="dot"></span>
+      <span>🇬🇧 English</span><span class="dot"></span>
+      <span>📱 Android</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ STATS ═══════ -->
+<section class="container">
+  <div class="stats" aria-label="Quick stats">
+    <div class="stat">
+      <span class="stat-val">530+</span>
+      <span class="stat-label" data-lang="th">คำถามจริง</span>
+      <span class="stat-label" data-lang="no">Ekte spørsmål</span>
+      <span class="stat-label" data-lang="en">Real questions</span>
+    </div>
+    <div class="stat">
+      <span class="stat-val">3</span>
+      <span class="stat-label" data-lang="th">ภาษา</span>
+      <span class="stat-label" data-lang="no">Språk</span>
+      <span class="stat-label" data-lang="en">Languages</span>
+    </div>
+    <div class="stat">
+      <span class="stat-val">10</span>
+      <span class="stat-label" data-lang="th">ข้อแรก ฟรี</span>
+      <span class="stat-label" data-lang="no">Gratis spørsmål</span>
+      <span class="stat-label" data-lang="en">Free questions</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ FEATURES ═══════ -->
+<section class="container" id="features">
+  <h2 class="section-title">
+    <span data-lang="th">ทำไมต้อง Thai2Drive</span>
+    <span data-lang="no">Hvorfor Thai2Drive</span>
+    <span data-lang="en">Why Thai2Drive</span>
+  </h2>
+  <p class="section-sub">
+    <span data-lang="th">ออกแบบเพื่อคนไทยที่อยู่ในนอร์เวย์ ฝึกข้อสอบเหมือนของจริง พร้อมคำอธิบายแบบเข้าใจง่าย</span>
+    <span data-lang="no">Laget for folk som lærer norsk teori i et nytt språk. Ekte øvelser og enkle forklaringer.</span>
+    <span data-lang="en">Built for people learning Norwegian driving theory in a second language. Real practice with simple explanations.</span>
+  </p>
+
+  <div class="features">
+    <div class="feature">
+      <div class="feature-icon">📚</div>
+      <h3 data-lang="th">คำอธิบายภาษาไทย</h3>
+      <h3 data-lang="no">Forklaringer på thai</h3>
+      <h3 data-lang="en">Explanations in Thai</h3>
+      <p data-lang="th">ทุกคำถามมีคำอธิบายภาษาไทยและนอร์เวย์ เข้าใจกฎจราจรจริงๆ ไม่ใช่แค่จำคำตอบ</p>
+      <p data-lang="no">Hvert spørsmål har forklaring på thai og norsk. Du forstår reglene, ikke bare pugger svar.</p>
+      <p data-lang="en">Every question has Thai and Norwegian explanations. Understand the rules, don't just memorize.</p>
+    </div>
+
+    <div class="feature">
+      <div class="feature-icon">🎯</div>
+      <h3 data-lang="th">โหมดสอบจำลอง</h3>
+      <h3 data-lang="no">Eksamensmodus</h3>
+      <h3 data-lang="en">Exam mode</h3>
+      <p data-lang="th">45 ข้อ 90 นาที เหมือนสอบจริงที่ Statens vegvesen ฝึกความเร็วและความแม่นยำ</p>
+      <p data-lang="no">45 spørsmål, 90 minutter — samme oppsett som hos Statens vegvesen.</p>
+      <p data-lang="en">45 questions, 90 minutes — same format as the real Statens vegvesen test.</p>
+    </div>
+
+    <div class="feature">
+      <div class="feature-icon">🔊</div>
+      <h3 data-lang="th">ฟังเสียงอ่าน</h3>
+      <h3 data-lang="no">Lyttemodus</h3>
+      <h3 data-lang="en">Listen mode</h3>
+      <p data-lang="th">อ่านคำถามและตัวเลือกให้ฟัง ทั้งภาษาไทยและนอร์เวย์ ฝึกได้ทุกที่ทุกเวลา</p>
+      <p data-lang="no">Spørsmål og svar leses opp på thai og norsk. Øv på farten.</p>
+      <p data-lang="en">Questions and answers read aloud in Thai and Norwegian. Practice anywhere.</p>
+    </div>
+
+    <div class="feature">
+      <div class="feature-icon">📊</div>
+      <h3 data-lang="th">ติดตามความก้าวหน้า</h3>
+      <h3 data-lang="no">Følg fremgangen</h3>
+      <h3 data-lang="en">Track your progress</h3>
+      <p data-lang="th">เห็นชัดว่าคุณตอบถูกกี่ข้อ ตรงไหนต้องฝึกเพิ่ม สถิติรายวันและรายหมวด</p>
+      <p data-lang="no">Se hvor mange riktige svar, hva du må øve mer på, og daglig statistikk.</p>
+      <p data-lang="en">See how many correct answers, where to practice more, and daily stats.</p>
+    </div>
+
+    <div class="feature">
+      <div class="feature-icon">🔖</div>
+      <h3 data-lang="th">บันทึกข้อยาก</h3>
+      <h3 data-lang="no">Lagre vanskelige</h3>
+      <h3 data-lang="en">Bookmark hard ones</h3>
+      <p data-lang="th">บุ๊กมาร์กข้อที่อยากกลับมาฝึก กลับมาทบทวนได้ตลอด</p>
+      <p data-lang="no">Lag bokmerker av spørsmål du vil komme tilbake til.</p>
+      <p data-lang="en">Bookmark the questions you want to revisit anytime.</p>
+    </div>
+
+    <div class="feature">
+      <div class="feature-icon">🚫</div>
+      <h3 data-lang="th">ไม่มีโฆษณา</h3>
+      <h3 data-lang="no">Ingen reklame</h3>
+      <h3 data-lang="en">No ads</h3>
+      <p data-lang="th">ฟรีไม่มีโฆษณา หรืออัปเกรดเป็น Premium ใช้ไม่จำกัดเริ่มต้น 199 kr</p>
+      <p data-lang="no">Gratis uten reklame, eller oppgrader til Premium — ubegrenset fra 199 kr.</p>
+      <p data-lang="en">Free with no ads, or upgrade to Premium — unlimited from 199 NOK.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ PRICING ═══════ -->
+<section class="container" id="pricing">
+  <h2 class="section-title">
+    <span data-lang="th">เริ่มฟรี อัปเกรดเมื่อพร้อม</span>
+    <span data-lang="no">Start gratis. Oppgrader når du er klar.</span>
+    <span data-lang="en">Start free. Upgrade when ready.</span>
+  </h2>
+  <p class="section-sub">
+    <span data-lang="th">ลอง 10 ข้อแรกฟรีไม่ต้องสมัคร แล้วเลือกแผนที่ใช่</span>
+    <span data-lang="no">Prøv 10 spørsmål uten konto. Velg deretter den planen som passer.</span>
+    <span data-lang="en">Try the first 10 questions without an account. Then pick the plan that fits.</span>
+  </p>
+
+  <div class="pricing">
+    <div class="plan">
+      <div class="plan-name" data-lang="th">รายเดือน</div>
+      <div class="plan-name" data-lang="no">Månedlig</div>
+      <div class="plan-name" data-lang="en">Monthly</div>
+      <div class="plan-price">
+        199<small>kr / <span data-lang="th">เดือน</span><span data-lang="no">måned</span><span data-lang="en">month</span></small>
+      </div>
+      <ul class="plan-list">
+        <li data-lang="th">คำถามไม่จำกัด</li>
+        <li data-lang="no">Ubegrenset spørsmål</li>
+        <li data-lang="en">Unlimited questions</li>
+        <li data-lang="th">โหมดสอบจำลองเต็มรูปแบบ</li>
+        <li data-lang="no">Full eksamensmodus</li>
+        <li data-lang="en">Full exam mode</li>
+        <li data-lang="th">ยกเลิกได้ทุกเมื่อ</li>
+        <li data-lang="no">Avbryt når som helst</li>
+        <li data-lang="en">Cancel anytime</li>
+      </ul>
+    </div>
+
+    <div class="plan featured">
+      <div class="plan-name" data-lang="th">3 เดือน</div>
+      <div class="plan-name" data-lang="no">3 måneder</div>
+      <div class="plan-name" data-lang="en">3 months</div>
+      <div class="plan-price">
+        399<small>kr / <span data-lang="th">3 เดือน</span><span data-lang="no">3 mnd</span><span data-lang="en">3 months</span></small>
+      </div>
+      <ul class="plan-list">
+        <li data-lang="th">ทุกอย่างในแผนรายเดือน</li>
+        <li data-lang="no">Alt i månedlig</li>
+        <li data-lang="en">Everything in monthly</li>
+        <li data-lang="th">ประหยัด 34% ต่อเดือน</li>
+        <li data-lang="no">Spar 34% per måned</li>
+        <li data-lang="en">Save 34% per month</li>
+        <li data-lang="th">เหมาะกับการเตรียมสอบ</li>
+        <li data-lang="no">Perfekt til eksamensforberedelse</li>
+        <li data-lang="en">Perfect for exam prep</li>
+      </ul>
+    </div>
+
+    <div class="plan">
+      <div class="plan-name" data-lang="th">ตลอดชีพ</div>
+      <div class="plan-name" data-lang="no">Livstid</div>
+      <div class="plan-name" data-lang="en">Lifetime</div>
+      <div class="plan-price">
+        699<small>kr · <span data-lang="th">จ่ายครั้งเดียว</span><span data-lang="no">engang</span><span data-lang="en">one-time</span></small>
+      </div>
+      <ul class="plan-list">
+        <li data-lang="th">เข้าถึงได้ตลอดไป</li>
+        <li data-lang="no">Tilgang for alltid</li>
+        <li data-lang="en">Lifetime access</li>
+        <li data-lang="th">ไม่มีการเรียกเก็บซ้ำ</li>
+        <li data-lang="no">Ingen gjentatte gebyrer</li>
+        <li data-lang="en">No recurring charges</li>
+        <li data-lang="th">อัปเดตคำถามฟรี</li>
+        <li data-lang="no">Gratis oppdateringer</li>
+        <li data-lang="en">Free question updates</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ CTA BLOCK ═══════ -->
+<section class="container">
+  <div class="cta-block">
+    <h2>
+      <span data-lang="th">พร้อมจะผ่านสอบ?</span>
+      <span data-lang="no">Klar for å bestå?</span>
+      <span data-lang="en">Ready to pass?</span>
+    </h2>
+    <p>
+      <span data-lang="th">เริ่มฟรี ไม่ต้องใส่บัตรเครดิต ดาวน์โหลดเร็วๆ นี้บน Google Play</span>
+      <span data-lang="no">Start gratis. Ingen kortinfo nødvendig. Snart på Google Play.</span>
+      <span data-lang="en">Start free. No credit card required. Coming soon to Google Play.</span>
+    </p>
+    <a href="https://norge-quiz-app.preview.emergentagent.com" target="_blank" rel="noopener" class="btn btn-primary">
+      ▶
+      <span data-lang="th">ทดลองแอปเลย</span>
+      <span data-lang="no">Test appen nå</span>
+      <span data-lang="en">Test app now</span>
+    </a>
+  </div>
+</section>
+</main>
+
+<!-- ═══════ FOOTER ═══════ -->
+<footer>
+  <div class="container footer-row">
+    <div class="copy">© 2026 Thai2Drive · <a href="mailto:support@thai2drive.no">support@thai2drive.no</a></div>
+    <nav class="footer-links" aria-label="Legal">
+      <a href="/privacy" data-lang="th">นโยบายความเป็นส่วนตัว</a>
+      <a href="/privacy" data-lang="no">Personvern</a>
+      <a href="/privacy" data-lang="en">Privacy</a>
+      <a href="/terms" data-lang="th">ข้อกำหนด</a>
+      <a href="/terms" data-lang="no">Vilkår</a>
+      <a href="/terms" data-lang="en">Terms</a>
+      <a href="/support" data-lang="th">ช่วยเหลือ</a>
+      <a href="/support" data-lang="no">Support</a>
+      <a href="/support" data-lang="en">Support</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var KEY = 't2d_lang';
+    var saved = localStorage.getItem(KEY);
+    var initial = (saved === 'no' || saved === 'en' || saved === 'th') ? saved : 'th';
+    setLang(initial);
+
+    document.querySelectorAll('[data-set-lang]').forEach(function (btn) {
+      btn.addEventListener('click', function () { setLang(btn.dataset.setLang); });
+    });
+
+    function setLang(l) {
+      document.documentElement.lang = l;
+      try { localStorage.setItem(KEY, l); } catch (e) {}
+      document.querySelectorAll('[data-set-lang]').forEach(function (btn) {
+        btn.classList.toggle('active', btn.dataset.setLang === l);
+      });
+    }
+  })();
+</script>
+
+<script type="text/javascript">
+window.$crisp=[];
+window.CRISP_WEBSITE_ID="faf4a6be-6f47-4827-9c03-799b4de22f86";
+(function(){var d=document;var s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();
+</script>
+</body>
+</html>

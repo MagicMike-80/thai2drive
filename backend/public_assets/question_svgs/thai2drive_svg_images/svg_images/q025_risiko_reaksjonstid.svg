@@ -1,0 +1,12 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="300" fill="#1a2744"/>
+  <rect x="30" y="80" width="340" height="20" rx="4" fill="#2d3748"/>
+  <rect x="30" y="80" width="170" height="20" rx="4" fill="#e53e3e"/>
+  <text x="115" y="75" fill="#e53e3e" font-size="12" text-anchor="middle" font-family="sans-serif">22 m reaksjon (80 km/t)</text>
+  <rect x="30" y="120" width="340" height="20" rx="4" fill="#2d3748"/>
+  <rect x="30" y="120" width="340" height="20" rx="4" fill="#ffd700"/>
+  <text x="200" y="115" fill="#ffd700" font-size="12" text-anchor="middle" font-family="sans-serif">Total stoppelengde ~60 m</text>
+  <circle cx="200" cy="200" r="50" fill="none" stroke="#48bb78" stroke-width="6"/>
+  <text x="200" y="207" fill="#48bb78" font-size="28" font-weight="bold" text-anchor="middle" font-family="sans-serif">1 sek</text>
+  <text x="200" y="275" fill="#a0aec0" font-size="13" text-anchor="middle" font-family="sans-serif">Normal reaksjonstid</text>
+</svg>

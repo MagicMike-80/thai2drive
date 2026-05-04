@@ -1,0 +1,14 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="300" fill="#1a2744"/>
+  <rect x="160" y="0" width="80" height="300" fill="#2d3748"/>
+  <rect x="0" y="110" width="400" height="80" fill="#2d3748"/>
+  <line x1="200" y1="0" x2="200" y2="110" stroke="#ffd700" stroke-width="2" stroke-dasharray="12,10"/>
+  <line x1="200" y1="190" x2="200" y2="300" stroke="#ffd700" stroke-width="2" stroke-dasharray="12,10"/>
+  <line x1="0" y1="150" x2="160" y2="150" stroke="#ffd700" stroke-width="2" stroke-dasharray="12,10"/>
+  <line x1="240" y1="150" x2="400" y2="150" stroke="#ffd700" stroke-width="2" stroke-dasharray="12,10"/>
+  <rect x="270" y="118" width="50" height="24" rx="4" fill="#e53e3e"/>
+  <path d="M270 130 L220 130" stroke="#48bb78" stroke-width="3" marker-end="url(#a)"/>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M2 1L8 5L2 9" fill="none" stroke="#48bb78" stroke-width="1.5"/></marker></defs>
+  <text x="295" y="148" fill="white" font-size="10" text-anchor="middle" font-family="sans-serif">→</text>
+  <text x="200" y="270" fill="#48bb78" font-size="13" text-anchor="middle" font-family="sans-serif">Høyreregelen: vikeplikt fra høyre</text>
+</svg>

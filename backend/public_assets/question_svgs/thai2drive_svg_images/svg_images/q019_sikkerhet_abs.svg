@@ -1,0 +1,14 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="300" fill="#1a2744"/>
+  <circle cx="130" cy="160" r="60" fill="none" stroke="#4a5568" stroke-width="20"/>
+  <circle cx="270" cy="160" r="60" fill="none" stroke="#4a5568" stroke-width="20"/>
+  <circle cx="130" cy="160" r="20" fill="#2d3748"/>
+  <circle cx="270" cy="160" r="20" fill="#2d3748"/>
+  <rect x="80" y="100" width="100" height="30" rx="4" fill="#48bb78"/>
+  <text x="130" y="120" fill="white" font-size="14" font-weight="bold" text-anchor="middle" font-family="sans-serif">ABS</text>
+  <text x="130" y="230" fill="#48bb78" font-size="12" text-anchor="middle" font-family="sans-serif">Låser ikke!</text>
+  <rect x="220" y="100" width="100" height="30" rx="4" fill="#e53e3e"/>
+  <text x="270" y="120" fill="white" font-size="12" font-weight="bold" text-anchor="middle" font-family="sans-serif">Uten ABS</text>
+  <text x="270" y="230" fill="#e53e3e" font-size="12" text-anchor="middle" font-family="sans-serif">Låser!</text>
+  <text x="200" y="275" fill="#a0aec0" font-size="13" text-anchor="middle" font-family="sans-serif">ABS hindrer hjullås under bremsing</text>
+</svg>

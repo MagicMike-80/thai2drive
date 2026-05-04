@@ -1,0 +1,7 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="300" fill="#1a2744"/>
+  <polygon points="200,40 310,220 90,220" fill="#e53e3e" stroke="white" stroke-width="8"/>
+  <polygon points="200,70 290,210 110,210" fill="white"/>
+  <text x="200" y="185" fill="#1a202c" font-size="80" font-weight="bold" text-anchor="middle" font-family="sans-serif">!</text>
+  <text x="200" y="270" fill="#a0aec0" font-size="14" text-anchor="middle" font-family="sans-serif">Fareskilt — rød trekant</text>
+</svg>

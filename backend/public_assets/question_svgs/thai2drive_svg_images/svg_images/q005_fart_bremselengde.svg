@@ -1,0 +1,11 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="300" fill="#1a2744"/>
+  <rect x="20" y="100" width="360" height="16" rx="4" fill="#2d3748"/>
+  <rect x="20" y="100" width="90" height="16" rx="4" fill="#48bb78"/>
+  <text x="65" y="95" fill="#48bb78" font-size="12" text-anchor="middle" font-family="sans-serif">50 km/t</text>
+  <rect x="20" y="140" width="360" height="16" rx="4" fill="#2d3748"/>
+  <rect x="20" y="140" width="360" height="16" rx="4" fill="#e53e3e"/>
+  <text x="200" y="135" fill="#e53e3e" font-size="12" text-anchor="middle" font-family="sans-serif">100 km/t — 4x lengre!</text>
+  <text x="200" y="200" fill="#ffd700" font-size="18" font-weight="bold" text-anchor="middle" font-family="sans-serif">Dobbel fart = 4x bremselengde</text>
+  <text x="200" y="270" fill="#a0aec0" font-size="13" text-anchor="middle" font-family="sans-serif">Bremselengde øker med kvadratet av farten</text>
+</svg>

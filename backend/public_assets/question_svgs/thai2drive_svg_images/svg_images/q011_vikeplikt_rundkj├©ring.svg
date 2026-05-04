@@ -1,0 +1,10 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="300" fill="#1a2744"/>
+  <circle cx="200" cy="140" r="80" fill="none" stroke="#4a5568" stroke-width="40"/>
+  <circle cx="200" cy="140" r="40" fill="#2d3748"/>
+  <path d="M200 70 A70 70 0 1 1 130 210" fill="none" stroke="#48bb78" stroke-width="4" marker-end="url(#ra)"/>
+  <defs><marker id="ra" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M2 1L8 5L2 9" fill="none" stroke="#48bb78" stroke-width="1.5"/></marker></defs>
+  <rect x="60" y="118" width="40" height="24" rx="4" fill="#e53e3e"/>
+  <path d="M100 130 L160 130" stroke="#ffd700" stroke-width="2" stroke-dasharray="6,4"/>
+  <text x="200" y="270" fill="#a0aec0" font-size="13" text-anchor="middle" font-family="sans-serif">Mot klokken — vikeplikt for trafikk inne</text>
+</svg>

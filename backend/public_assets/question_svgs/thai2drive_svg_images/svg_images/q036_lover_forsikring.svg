@@ -1,0 +1,14 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="300" fill="#1a2744"/>
+  <rect x="40" y="80" width="150" height="130" rx="8" fill="#2d3748" stroke="#4a5568" stroke-width="1"/>
+  <text x="115" y="110" fill="#48bb78" font-size="12" font-weight="bold" text-anchor="middle" font-family="sans-serif">TRAFIKK-</text>
+  <text x="115" y="128" fill="#48bb78" font-size="12" font-weight="bold" text-anchor="middle" font-family="sans-serif">FORSIKRING</text>
+  <text x="115" y="155" fill="#a0aec0" font-size="11" text-anchor="middle" font-family="sans-serif">Dekker andre</text>
+  <text x="115" y="172" fill="#a0aec0" font-size="11" text-anchor="middle" font-family="sans-serif">Obligatorisk</text>
+  <rect x="210" y="80" width="150" height="130" rx="8" fill="#2d3748" stroke="#4a5568" stroke-width="1"/>
+  <text x="285" y="110" fill="#3182ce" font-size="12" font-weight="bold" text-anchor="middle" font-family="sans-serif">KASKO-</text>
+  <text x="285" y="128" fill="#3182ce" font-size="12" font-weight="bold" text-anchor="middle" font-family="sans-serif">FORSIKRING</text>
+  <text x="285" y="155" fill="#a0aec0" font-size="11" text-anchor="middle" font-family="sans-serif">Dekker egen bil</text>
+  <text x="285" y="172" fill="#a0aec0" font-size="11" text-anchor="middle" font-family="sans-serif">Valgfri</text>
+  <text x="200" y="270" fill="#a0aec0" font-size="13" text-anchor="middle" font-family="sans-serif">To typer bilforsikring</text>
+</svg>
