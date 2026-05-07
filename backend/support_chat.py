@@ -45,11 +45,12 @@ _SMTP_PORT = int(os.environ.get('SUPPORT_SMTP_PORT', '587'))
 _SMTP_USER = os.environ.get('SUPPORT_SMTP_USER')
 _SMTP_PASS = os.environ.get('SUPPORT_SMTP_PASS')
 
-# ─── LLM (Emergent key) ─────────────────────────────────────────────────
-from emergentintegrations.llm.chat import LlmChat, UserMessage  # noqa: E402
+# ─── LLM (OpenAI) ───────────────────────────────────────────────────────
+from openai import AsyncOpenAI  # noqa: E402
 
-LLM_KEY = os.environ['EMERGENT_LLM_KEY']
+LLM_KEY = os.environ.get('OPENAI_API_KEY') or os.environ.get('EMERGENT_LLM_KEY', '')
 LLM_MODEL = 'gpt-4o-mini'  # fast, cheap, multilingual — perfect for support
+_openai_client: AsyncOpenAI | None = AsyncOpenAI(api_key=LLM_KEY) if LLM_KEY else None
 
 SYSTEM_PROMPT = """You are the official support assistant for **Thai2Drive**,
 a mobile app that helps Thai people in Norway pass the Norwegian driving
@@ -235,15 +236,15 @@ async def support_chat(req: ChatRequest) -> ChatResponse:
 
     # 3) Ask LLM
     try:
-        chat = LlmChat(
-            api_key=LLM_KEY,
-            session_id=session_id,
-            system_message=SYSTEM_PROMPT,
-        ).with_model('openai', LLM_MODEL).with_params(max_tokens=320)
-
-        # Replay previous conversation so the model has context (emergentintegrations persists via session_id,
-        # but we feed the latest user message explicitly).
-        reply_text = await chat.send_message(UserMessage(text=user_msg))
+        if not _openai_client:
+            raise RuntimeError('OPENAI_API_KEY not configured')
+        messages = [{"role": "system", "content": SYSTEM_PROMPT}]
+        messages.extend(conversation)
+        messages.append({"role": "user", "content": user_msg})
+        resp = await _openai_client.chat.completions.create(
+            model=LLM_MODEL, messages=messages, max_tokens=320
+        )
+        reply_text = (resp.choices[0].message.content or '').strip()
         if not reply_text:
             reply_text = _fallback_reply(req.language or 'no')
     except Exception as e:
