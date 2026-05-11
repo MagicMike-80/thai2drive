@@ -276,22 +276,22 @@ async def debug_questions():
 
 @api_router.get("/questions")
 async def get_questions(category: Optional[str] = None, difficulty: Optional[str] = None, limit: int = Query(default=50, le=200)):
-    query = dict(IMAGE_ONLY_FILTER)
+    query: dict = {}
     if category:
         query["category"] = category
     if difficulty:
         query["difficulty"] = difficulty
     questions = await db.questions.find(query, {"_id": 0}).limit(limit).to_list(limit)
-    return questions
+    return [normalize_question(q) for q in questions]
 
 @api_router.get("/questions/random")
 async def get_random_questions(category: Optional[str] = None, count: int = Query(default=10, le=50), has_image: Optional[bool] = None):
-    # has_image param is ignored — app is image-only by design.
     pipeline = []
-    match_stage = dict(IMAGE_ONLY_FILTER)
+    match_stage: dict = {}
     if category:
         match_stage["category"] = category
-    pipeline.append({"$match": match_stage})
+    if match_stage:
+        pipeline.append({"$match": match_stage})
     pipeline.append({"$sample": {"size": count}})
     pipeline.append({"$project": {"_id": 0}})
     questions = await db.questions.aggregate(pipeline).to_list(count)
@@ -313,19 +313,12 @@ async def create_question(question_data: QuestionCreate):
 
 @api_router.get("/categories")
 async def get_categories():
-    # Group by exact category name, deduplicate case-insensitively by keeping first occurrence
     pipeline = [
         {"$group": {"_id": "$category", "count": {"$sum": 1}}},
         {"$sort": {"_id": 1}}
     ]
-    raw = await db.questions.aggregate(pipeline).to_list(100)
-    # Deduplicate case-insensitively (keep the version with most questions)
-    seen = {}
-    for c in raw:
-        key = c["_id"].lower()
-        if key not in seen or c["count"] > seen[key]["count"]:
-            seen[key] = {"name": c["_id"], "count": c["count"]}
-    return list(seen.values())
+    cats = await db.questions.aggregate(pipeline).to_list(100)
+    return [{"name": c["_id"], "count": c["count"]} for c in cats]
 
 @api_router.get("/progress/{device_id}")
 async def get_user_progress(device_id: str):
