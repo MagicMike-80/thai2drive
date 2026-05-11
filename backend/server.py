@@ -286,11 +286,11 @@ async def create_question(question_data: QuestionCreate):
 @api_router.get("/categories")
 async def get_categories():
     pipeline = [
-        {"$group": {"_id": "$category", "count": {"$sum": 1}}},
+        {"$group": {"_id": {"$toLower": "$category"}, "count": {"$sum": 1}}},
         {"$sort": {"_id": 1}}
     ]
     categories = await db.questions.aggregate(pipeline).to_list(100)
-    return [{"name": c["_id"], "count": c["count"]} for c in categories]
+    return [{"name": c["_id"].capitalize(), "count": c["count"]} for c in categories]
 
 @api_router.get("/progress/{device_id}")
 async def get_user_progress(device_id: str):
