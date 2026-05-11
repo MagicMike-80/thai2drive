@@ -32,9 +32,37 @@ security = HTTPBearer(auto_error=False)
 
 
 def normalize_question(q: dict) -> dict:
-    """No-op: all questions are now v2 schema. Remove _id for JSON serialization."""
+    """Convert v1 flat schema to v2 nested schema expected by the frontend."""
     q.pop("_id", None)
-    return q
+    # Already v2 if 'question' key exists as dict
+    if isinstance(q.get("question"), dict):
+        return q
+    # Convert v1 → v2
+    return {
+        "id": q.get("id", ""),
+        "question": {
+            "no": q.get("question_text_no", ""),
+            "th": q.get("question_text_th", ""),
+            "en": q.get("question_text_en", ""),
+        },
+        "options": [
+            {"id": "A", "text": {"no": q.get("answer_a_no", ""), "th": q.get("answer_a_th", ""), "en": q.get("answer_a_en", "")}},
+            {"id": "B", "text": {"no": q.get("answer_b_no", ""), "th": q.get("answer_b_th", ""), "en": q.get("answer_b_en", "")}},
+            {"id": "C", "text": {"no": q.get("answer_c_no", ""), "th": q.get("answer_c_th", ""), "en": q.get("answer_c_en", "")}},
+            {"id": "D", "text": {"no": q.get("answer_d_no", ""), "th": q.get("answer_d_th", ""), "en": q.get("answer_d_en", "")}},
+        ],
+        "correctOptionId": q.get("correct_answer", "A"),
+        "explanation": {
+            "no": q.get("explanation_no", ""),
+            "th": q.get("explanation_th", ""),
+            "en": q.get("explanation_en", ""),
+        },
+        "bildeUrl": q.get("bildeUrl") or q.get("image_url") or None,
+        "category": q.get("category", ""),
+        "difficulty": q.get("difficulty", "medium"),
+        "active": q.get("active", True),
+        "created_at": q.get("created_at", ""),
+    }
 
 app = FastAPI()
 api_router = APIRouter(prefix="/api")
@@ -246,7 +274,7 @@ async def debug_questions():
     except Exception as e:
         return {"error": str(e)}
 
-@api_router.get("/questions", response_model=List[Question])
+@api_router.get("/questions")
 async def get_questions(category: Optional[str] = None, difficulty: Optional[str] = None, limit: int = Query(default=50, le=200)):
     query = dict(IMAGE_ONLY_FILTER)
     if category:
