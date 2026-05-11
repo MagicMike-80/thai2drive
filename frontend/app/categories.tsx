@@ -20,15 +20,19 @@ type CatMeta = {
   difficulty: 1 | 2 | 3;
 };
 const CAT_META: Record<string, CatMeta> = {
-  'Traffic Signs':       { icon: 'warning',              hue: '#F59E0B', difficulty: 1 },
-  'Road Rules':          { icon: 'document-text',        hue: '#3B82F6', difficulty: 2 },
-  'Right of Way':        { icon: 'git-branch',           hue: '#A855F7', difficulty: 3 },
-  'Speed Limits':        { icon: 'speedometer',          hue: '#F43F5E', difficulty: 1 },
-  'Safety':              { icon: 'shield-checkmark',     hue: '#22C55E', difficulty: 2 },
-  'Driving Conditions':  { icon: 'rainy',                hue: '#06B6D4', difficulty: 2 },
-  'Situations':          { icon: 'bulb',                 hue: '#EC4899', difficulty: 3 },
-  'Traffic Rules':       { icon: 'book',                 hue: '#14B8A6', difficulty: 2 },
-  'Road Conditions':     { icon: 'cloudy',               hue: '#F97316', difficulty: 2 },
+  'Skilt':              { icon: 'warning',              hue: '#F59E0B', difficulty: 1 },
+  'Trafikkregler':      { icon: 'document-text',        hue: '#3B82F6', difficulty: 2 },
+  'Vikeplikt':          { icon: 'git-branch',           hue: '#A855F7', difficulty: 3 },
+  'Fartsgrenser':       { icon: 'speedometer',          hue: '#F43F5E', difficulty: 1 },
+  'Fart':               { icon: 'speedometer',          hue: '#F43F5E', difficulty: 1 },
+  'Sikkerhet':          { icon: 'shield-checkmark',     hue: '#22C55E', difficulty: 2 },
+  'Risikoforståelse':   { icon: 'alert-circle',         hue: '#06B6D4', difficulty: 2 },
+  'Plassering':         { icon: 'map',                  hue: '#F97316', difficulty: 2 },
+  'Nødsituasjon':       { icon: 'flash',                hue: '#EC4899', difficulty: 3 },
+  'Parkering':          { icon: 'car',                  hue: '#14B8A6', difficulty: 1 },
+  'Kjøreteknikk':       { icon: 'settings',             hue: '#8B5CF6', difficulty: 2 },
+  'Lover og regler':    { icon: 'book',                 hue: '#0EA5E9', difficulty: 2 },
+  'Miljø':              { icon: 'leaf',                 hue: '#10B981', difficulty: 1 },
 };
 
 const TR: Record<string, Record<string, any>> = {
@@ -38,7 +42,13 @@ const TR: Record<string, Record<string, any>> = {
     allCategoriesSub: 'Alt samlet · beste for full repetisjon',
     completed: 'fullført',
     easy: 'Lett', medium: 'Middels', hard: 'Vanskelig',
-    categories: { 'Traffic Signs': 'Trafikkskilt', 'Road Rules': 'Trafikkregler', 'Right of Way': 'Vikeplikt', 'Speed Limits': 'Fartsgrenser', 'Safety': 'Sikkerhet', 'Driving Conditions': 'Kjøreforhold', 'Situations': 'Situasjoner', 'Traffic Rules': 'Grunnregler', 'Road Conditions': 'Veiforhold' },
+    categories: {
+      'Skilt': 'Trafikkskilt', 'Trafikkregler': 'Trafikkregler', 'Vikeplikt': 'Vikeplikt',
+      'Fartsgrenser': 'Fartsgrenser', 'Fart': 'Fart', 'Sikkerhet': 'Sikkerhet',
+      'Risikoforståelse': 'Risikoforståelse', 'Plassering': 'Plassering',
+      'Nødsituasjon': 'Nødsituasjon', 'Parkering': 'Parkering',
+      'Kjøreteknikk': 'Kjøreteknikk', 'Lover og regler': 'Lover og regler', 'Miljø': 'Miljø',
+    },
   },
   th: {
     selectCategory: 'เลือกหมวดหมู่', allCategories: 'ทุกหมวดหมู่',
@@ -46,7 +56,13 @@ const TR: Record<string, Record<string, any>> = {
     allCategoriesSub: 'รวมทุกหมวด · เหมาะสำหรับทบทวน',
     completed: 'สำเร็จ',
     easy: 'ง่าย', medium: 'ปานกลาง', hard: 'ยาก',
-    categories: { 'Traffic Signs': 'ป้ายจราจร', 'Road Rules': 'กฎจราจร', 'Right of Way': 'การให้ทาง', 'Speed Limits': 'ขีดจำกัดความเร็ว', 'Safety': 'ความปลอดภัย', 'Driving Conditions': 'สภาพการขับขี่', 'Situations': 'สถานการณ์', 'Traffic Rules': 'กฎพื้นฐาน', 'Road Conditions': 'สภาพถนน' },
+    categories: {
+      'Skilt': 'ป้ายจราจร', 'Trafikkregler': 'กฎจราจร', 'Vikeplikt': 'การให้ทาง',
+      'Fartsgrenser': 'ขีดจำกัดความเร็ว', 'Fart': 'ความเร็ว', 'Sikkerhet': 'ความปลอดภัย',
+      'Risikoforståelse': 'การรับรู้ความเสี่ยง', 'Plassering': 'การวางตำแหน่ง',
+      'Nødsituasjon': 'เหตุฉุกเฉิน', 'Parkering': 'การจอดรถ',
+      'Kjøreteknikk': 'เทคนิคการขับขี่', 'Lover og regler': 'กฎหมายและระเบียบ', 'Miljø': 'สิ่งแวดล้อม',
+    },
   },
   en: {
     selectCategory: 'Select Category', allCategories: 'All Categories',
@@ -54,7 +70,13 @@ const TR: Record<string, Record<string, any>> = {
     allCategoriesSub: 'Everything mixed · best for full review',
     completed: 'completed',
     easy: 'Easy', medium: 'Medium', hard: 'Hard',
-    categories: { 'Traffic Signs': 'Traffic Signs', 'Road Rules': 'Road Rules', 'Right of Way': 'Right of Way', 'Speed Limits': 'Speed Limits', 'Safety': 'Safety', 'Driving Conditions': 'Driving Conditions', 'Situations': 'Situations', 'Traffic Rules': 'Traffic Rules', 'Road Conditions': 'Road Conditions' },
+    categories: {
+      'Skilt': 'Traffic Signs', 'Trafikkregler': 'Road Rules', 'Vikeplikt': 'Right of Way',
+      'Fartsgrenser': 'Speed Limits', 'Fart': 'Speed', 'Sikkerhet': 'Safety',
+      'Risikoforståelse': 'Risk Awareness', 'Plassering': 'Positioning',
+      'Nødsituasjon': 'Emergency', 'Parkering': 'Parking',
+      'Kjøreteknikk': 'Driving Technique', 'Lover og regler': 'Laws & Rules', 'Miljø': 'Environment',
+    },
   },
 };
 
