@@ -136,7 +136,9 @@ export default function QuizScreen() {
           setQuestions(await api.getRandomQuestions(5));
         }
       } else {
-        const qs = await api.getRandomQuestions(isExam ? 45 : 10, category === 'all' ? undefined : category);
+        const maxQ = isExam ? 45 : 10;
+        const count = Math.min(maxQ, freeRemaining());
+        const qs = await api.getRandomQuestions(Math.max(1, count), category === 'all' ? undefined : category);
         // Debug: log full question objects so we can verify live text matches DB
         if (qs?.[0]) {
           console.log('[Quiz DEBUG] First question loaded:', JSON.stringify({
@@ -237,6 +239,11 @@ export default function QuizScreen() {
     }
     try { await api.saveQuizAttempt({ device_id: deviceId, mode: mode || 'practice', category: category === 'all' ? undefined : category, total_questions: questions.length, correct_answers: cor, score_percentage: pct, passed: isExam ? pct >= PASS : undefined, questions_answered: hist, started_at: startTime.toISOString() }); } catch (e) {}
     goRes(cor, pct);
+    // After results navigation, gate fires automatically on next quiz mount via useEffect.
+    // But also show here in case store hydration was delayed on the previous mount.
+    if (!isPremium && !canAnswerFree()) {
+      showAccountOrPaywall();
+    }
   };
 
   const goRes = (cor: number, pct: number) => {
