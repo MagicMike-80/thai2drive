@@ -535,7 +535,7 @@ def landing():
 
   <div class="hero-btns">
     <a href="/quiz-app/" class="hero-cta">▶ Test appen nå</a>
-    <a href="https://play.google.com/store/apps/details?id=com.thai2drive.app" class="hero-cta-secondary" target="_blank">📱 Last ned på Google Play</a>
+    <span class="hero-cta-secondary" style="cursor:default;opacity:.7">📱 Google Play — kommer snart</span>
   </div>
 </section>
 
@@ -640,7 +640,7 @@ def landing():
     <p>Last ned {BRAND} og kom i gang på under ett minutt.</p>
     <div class="hero-btns" style="justify-content:flex-start">
       <a href="/quiz-app/" class="hero-cta">▶ Test i nettleseren</a>
-      <a href="https://play.google.com/store/apps/details?id=com.thai2drive.app" class="hero-cta-secondary" target="_blank">📱 Google Play</a>
+      <span class="hero-cta-secondary" style="cursor:default;opacity:.7">📱 Google Play — kommer snart</span>
     </div>
   </div>
 </section>
