@@ -235,6 +235,17 @@ async def root():
 # must ONLY return questions that have an image (bildeUrl present and non-empty).
 IMAGE_ONLY_FILTER = {"bildeUrl": {"$exists": True, "$nin": [None, ""]}}
 
+@api_router.get("/questions/debug")
+async def debug_questions():
+    try:
+        count = await db.questions.count_documents({})
+        count_with_image = await db.questions.count_documents(IMAGE_ONLY_FILTER)
+        sample = await db.questions.find({}, {"_id": 0}).limit(1).to_list(1)
+        keys = list(sample[0].keys()) if sample else []
+        return {"total": count, "with_image": count_with_image, "sample_keys": keys}
+    except Exception as e:
+        return {"error": str(e)}
+
 @api_router.get("/questions", response_model=List[Question])
 async def get_questions(category: Optional[str] = None, difficulty: Optional[str] = None, limit: int = Query(default=50, le=200)):
     query = dict(IMAGE_ONLY_FILTER)
