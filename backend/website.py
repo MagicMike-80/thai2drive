@@ -74,6 +74,14 @@ a:hover{opacity:.8}
   box-shadow:0 20px 50px rgba(255,153,51,.25);
 }
 .hero-cta:hover{transform:translateY(-2px);transition:transform .15s}
+.hero-cta-secondary{
+  display:inline-flex;align-items:center;gap:10px;
+  background:rgba(255,255,255,.08);color:#F1F5F9;padding:16px 32px;border-radius:12px;
+  font-weight:700;font-size:16px;margin-top:36px;margin-left:12px;
+  border:1px solid rgba(255,255,255,.15);
+}
+.hero-cta-secondary:hover{transform:translateY(-2px);transition:transform .15s;background:rgba(255,255,255,.14)}
+.hero-btns{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:8px}
 
 /* Flag chips */
 .flags{display:inline-flex;gap:10px;margin-top:24px}
@@ -525,7 +533,10 @@ def landing():
     <span class="badge">🎯 Ekte eksamensformat</span>
   </div>
 
-  <div><a href="#pricing" class="hero-cta">Kom i gang gratis →</a></div>
+  <div class="hero-btns">
+    <a href="/quiz-app/" class="hero-cta">▶ Test appen nå</a>
+    <a href="https://play.google.com/store/apps/details?id=com.thai2drive.app" class="hero-cta-secondary" target="_blank">📱 Last ned på Google Play</a>
+  </div>
 </section>
 
 <!-- FEATURES -->
@@ -627,7 +638,10 @@ def landing():
   <div class="container">
     <h2>Klar til å bestå?</h2>
     <p>Last ned {BRAND} og kom i gang på under ett minutt.</p>
-    <a href="#" class="hero-cta">📱 Kommer snart på Google Play</a>
+    <div class="hero-btns" style="justify-content:flex-start">
+      <a href="/quiz-app/" class="hero-cta">▶ Test i nettleseren</a>
+      <a href="https://play.google.com/store/apps/details?id=com.thai2drive.app" class="hero-cta-secondary" target="_blank">📱 Google Play</a>
+    </div>
   </div>
 </section>
 """
