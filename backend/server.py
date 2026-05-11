@@ -1936,7 +1936,7 @@ app.include_router(api_router)
 
 # ==================== PUBLIC WEBSITE (landing + legal) ====================
 from website import website_router  # noqa: E402
-app.include_router(website_router, prefix="/api")
+app.include_router(website_router, prefix="")
 
 # ==================== AI SUPPORT CHAT ====================
 from support_chat import support_chat_router  # noqa: E402
