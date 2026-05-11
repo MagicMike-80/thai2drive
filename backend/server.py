@@ -1,5 +1,7 @@
 from fastapi import FastAPI, APIRouter, HTTPException, Query, Depends, UploadFile, File
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse as FastAPIFileResponse
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -2015,3 +2017,17 @@ app.add_middleware(
 @app.on_event("shutdown")
 async def shutdown_db_client():
     client.close()
+
+
+# ─── Serve Expo web app at /quiz-app ────────────────────────────────────────
+_WEBAPP_DIR = Path(__file__).parent / "webapp"
+if _WEBAPP_DIR.exists():
+    app.mount("/quiz-app", StaticFiles(directory=str(_WEBAPP_DIR), html=True), name="webapp")
+
+    @app.get("/quiz-app/{full_path:path}")
+    async def serve_webapp(full_path: str):
+        """Fallback: serve index.html for all SPA routes."""
+        index = _WEBAPP_DIR / "index.html"
+        if index.exists():
+            return FastAPIFileResponse(str(index))
+        raise HTTPException(status_code=404)
