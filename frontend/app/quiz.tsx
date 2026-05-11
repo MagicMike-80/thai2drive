@@ -410,19 +410,10 @@ export default function QuizScreen() {
     setSpeaking(true);
 
     const segments: { text: string; lang: string }[] = [];
-    // Always read question in current language first
-    segments.push({ text: qT(q), lang: language });
-    // Always read Thai translation (core feature for Thai users)
-    if (language !== 'th') segments.push({ text: qT(q, 'th'), lang: 'th' });
-    // Answer options in current language
+    // Always read in Thai only
+    segments.push({ text: qT(q, 'th'), lang: 'th' });
     for (const L of LETTERS) {
-      segments.push({ text: `${L}. ${optText(q, L)}`, lang: language });
-    }
-    // Answer options in Thai
-    if (language !== 'th') {
-      for (const L of LETTERS) {
-        segments.push({ text: `${L}. ${optText(q, L, 'th')}`, lang: 'th' });
-      }
+      segments.push({ text: `${L}. ${optText(q, L, 'th')}`, lang: 'th' });
     }
 
     await speakSequence(segments);
@@ -438,10 +429,8 @@ export default function QuizScreen() {
     setSpeaking(true);
 
     const segments: { text: string; lang: string }[] = [];
-    // Read explanation in current language
-    segments.push({ text: eT(q), lang: language });
-    // Always read Thai explanation
-    if (language !== 'th') segments.push({ text: eT(q, 'th'), lang: 'th' });
+    // Always read explanation in Thai only
+    segments.push({ text: eT(q, 'th'), lang: 'th' });
 
     await speakSequence(segments);
     setTtsPlaying(null);
