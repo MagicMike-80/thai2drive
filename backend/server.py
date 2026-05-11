@@ -313,12 +313,19 @@ async def create_question(question_data: QuestionCreate):
 
 @api_router.get("/categories")
 async def get_categories():
+    # Group by exact category name, deduplicate case-insensitively by keeping first occurrence
     pipeline = [
-        {"$group": {"_id": {"$toLower": "$category"}, "count": {"$sum": 1}}},
+        {"$group": {"_id": "$category", "count": {"$sum": 1}}},
         {"$sort": {"_id": 1}}
     ]
-    categories = await db.questions.aggregate(pipeline).to_list(100)
-    return [{"name": c["_id"].capitalize(), "count": c["count"]} for c in categories]
+    raw = await db.questions.aggregate(pipeline).to_list(100)
+    # Deduplicate case-insensitively (keep the version with most questions)
+    seen = {}
+    for c in raw:
+        key = c["_id"].lower()
+        if key not in seen or c["count"] > seen[key]["count"]:
+            seen[key] = {"name": c["_id"], "count": c["count"]}
+    return list(seen.values())
 
 @api_router.get("/progress/{device_id}")
 async def get_user_progress(device_id: str):
