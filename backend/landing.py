@@ -141,8 +141,8 @@ section{padding:72px 0;position:relative}
 .try-progress .accent{color:#FF9933}
 .try-bar{flex:1;height:5px;background:rgba(255,255,255,.08);border-radius:3px;margin:0 16px;overflow:hidden}
 .try-bar>div{height:100%;background:#FF9933;transition:width .3s;width:0%}
-.try-body{padding:24px}
-.try-image{width:100%;max-height:260px;object-fit:cover;border-radius:12px;margin-bottom:18px;background:#0B1226}
+.try-body{padding:16px 20px}
+.try-image{width:100%;max-height:180px;object-fit:contain;border-radius:10px;margin-bottom:12px;background:#0B1226}
 .try-question{font-size:17px;font-weight:700;color:#fff;margin-bottom:16px;line-height:1.4}
 .try-options{display:grid;gap:10px}
 .try-opt{
