@@ -53,14 +53,15 @@ html[data-current-lang="en"] [data-lang="en"].block{display:block}
 .brand .t2d{color:#FF9933}
 .lang-row{display:flex;gap:6px}
 .lang-btn{
-  width:38px;height:38px;border-radius:50%;border:2px solid transparent;
-  background:rgba(255,255,255,.04);cursor:pointer;
+  width:48px;height:48px;border-radius:50%;border:2.5px solid transparent;
+  background:rgba(255,255,255,.06);cursor:pointer;
   display:flex;align-items:center;justify-content:center;padding:0;overflow:hidden;
-  transition:border-color .15s,transform .15s;
+  transition:border-color .15s,transform .15s,box-shadow .15s;
+  box-shadow:0 2px 8px rgba(0,0,0,.3);
 }
-.lang-btn:hover{transform:scale(1.05)}
-.lang-btn.active{border-color:#FF9933;background:rgba(255,153,51,.15)}
-.flag{width:24px;height:16px;border-radius:2px;overflow:hidden;display:flex;flex-direction:column}
+.lang-btn:hover{transform:scale(1.1);box-shadow:0 4px 16px rgba(0,0,0,.4)}
+.lang-btn.active{border-color:#FF9933;background:rgba(255,153,51,.18);box-shadow:0 0 0 3px rgba(255,153,51,.25)}
+.flag{width:30px;height:20px;border-radius:3px;overflow:hidden;display:flex;flex-direction:column}
 .flag-th>div:nth-child(1){background:#A51931;flex:1}
 .flag-th>div:nth-child(2){background:#F4F5F8;flex:1}
 .flag-th>div:nth-child(3){background:#2D2A4A;flex:2}
@@ -316,7 +317,7 @@ def _hero_html() -> str:
     </p>
 
     <div class="cta-group">
-      <a href="#try" class="cta-btn cta-primary">
+      <a href="/categories" class="cta-btn cta-primary">
         <span data-lang="th">🚀 เริ่มฝึกฟรี</span>
         <span data-lang="no">🚀 Prøv gratis</span>
         <span data-lang="en">🚀 Try free</span>
@@ -599,7 +600,7 @@ def _bottom_cta_html() -> str:
       <span data-lang="en">Start free now – no credit card needed</span>
     </p>
     <div class="cta-group">
-      <a href="#try" class="cta-btn cta-primary">
+      <a href="/categories" class="cta-btn cta-primary">
         <span data-lang="th">🚀 เริ่มฝึกฟรี</span>
         <span data-lang="no">🚀 Prøv gratis</span>
         <span data-lang="en">🚀 Try free</span>
@@ -650,7 +651,7 @@ LANDING_JS = r"""
   const scoreEl = document.getElementById('tqScore');
   if(!body) return;
 
-  const TOTAL = 2;   // Only 2 taster → paywall (conversion-optimised)
+  const TOTAL = 10;  // 10 free questions before paywall
   let questions = [];
   let idx = 0;
   let score = 0;
@@ -663,7 +664,7 @@ LANDING_JS = r"""
   async function load(){
     try{
       // Image questions ONLY — filter out any without a valid base64/url image
-      const res = await fetch('/api/questions/random?count=20&has_image=true');
+      const res = await fetch('/api/questions/random?count=15&has_image=true');
       const raw = await res.json();
       questions = (raw || []).filter(q => q.bildeUrl && (typeof q.bildeUrl === 'string' || Object.keys(q.bildeUrl).length)).slice(0, TOTAL + 2);
       if(questions.length === 0){
