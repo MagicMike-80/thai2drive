@@ -58,6 +58,7 @@ html[data-current-lang="en"] [data-lang="en"].block{display:block}
   display:flex;align-items:center;justify-content:center;padding:0;overflow:hidden;
   transition:border-color .15s,transform .15s,box-shadow .15s;
   box-shadow:0 2px 8px rgba(0,0,0,.3);
+  font-size:24px;line-height:1;
 }
 .lang-btn:hover{transform:scale(1.1);box-shadow:0 4px 16px rgba(0,0,0,.4)}
 .lang-btn.active{border-color:#FF9933;background:rgba(255,153,51,.18);box-shadow:0 0 0 3px rgba(255,153,51,.25)}
@@ -271,9 +272,9 @@ def _nav_html() -> str:
       <span>Thai<span class="t2d">2</span>Drive</span>
     </a>
     <div class="lang-row" role="group" aria-label="Language">
-      <button class="lang-btn active" data-set-lang="th" aria-label="ไทย"><span class="flag flag-th"><div></div><div></div><div></div><div></div><div></div></span></button>
-      <button class="lang-btn" data-set-lang="no" aria-label="Norsk"><span class="flag flag-no"><span class="b1"></span><span class="b2"></span></span></button>
-      <button class="lang-btn" data-set-lang="en" aria-label="English"><span class="flag flag-gb"><span class="r1"></span><span class="r2"></span></span></button>
+      <button class="lang-btn active" data-set-lang="th" aria-label="ไทย">🇹🇭</button>
+      <button class="lang-btn" data-set-lang="no" aria-label="Norsk">🇳🇴</button>
+      <button class="lang-btn" data-set-lang="en" aria-label="English">🇬🇧</button>
     </div>
   </div>
 </nav>
