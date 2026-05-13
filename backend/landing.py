@@ -68,16 +68,16 @@ html[data-current-lang="en"] [data-lang="en"].block{display:block}
 .mini-flag.flag-th span:nth-child(3){background:#2D2A4A;flex:2}
 .mini-flag.flag-th span:nth-child(4){background:#F4F5F8;flex:1}
 .mini-flag.flag-th span:nth-child(5){background:#A51931;flex:1}
-.mini-flag.flag-no{background:#BA0C2F;position:relative}
+.mini-flag.flag-no{background:#BA0C2F;position:relative;display:block}
 .mini-flag.flag-no .b{position:absolute;left:0;right:0;top:40%;height:20%;background:#fff}
 .mini-flag.flag-no .bv{position:absolute;left:25%;top:0;bottom:0;width:20%;background:#fff}
 .mini-flag.flag-no::before{content:'';position:absolute;left:0;right:0;top:45%;height:10%;background:#00205B}
 .mini-flag.flag-no::after{content:'';position:absolute;left:29%;top:0;bottom:0;width:10%;background:#00205B}
-.mini-flag.flag-gb{background:#012169;position:relative}
-.mini-flag.flag-gb .r1{position:absolute;left:0;right:0;top:43%;height:14%;background:#C8102E}
-.mini-flag.flag-gb .r2{position:absolute;left:43%;top:0;bottom:0;width:14%;background:#C8102E}
-.mini-flag.flag-gb::before{content:'';position:absolute;left:0;right:0;top:38%;height:24%;background:#fff}
-.mini-flag.flag-gb::after{content:'';position:absolute;left:38%;top:0;bottom:0;width:24%;background:#fff}
+.mini-flag.flag-gb{background:#012169;position:relative;display:block}
+.mini-flag.flag-gb .r1{position:absolute;left:0;right:0;top:42%;height:16%;background:#C8102E}
+.mini-flag.flag-gb .r2{position:absolute;left:42%;top:0;bottom:0;width:16%;background:#C8102E}
+.mini-flag.flag-gb::before{content:'';position:absolute;left:0;right:0;top:36%;height:28%;background:#fff}
+.mini-flag.flag-gb::after{content:'';position:absolute;left:36%;top:0;bottom:0;width:28%;background:#fff}
 .flag{width:30px;height:20px;border-radius:3px;overflow:hidden;display:flex;flex-direction:column}
 .flag-th>div:nth-child(1){background:#A51931;flex:1}
 .flag-th>div:nth-child(2){background:#F4F5F8;flex:1}
