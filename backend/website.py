@@ -654,6 +654,13 @@ def landing():
     ))
 
 
+# ─────────────────────────── GUIDE PAGE ───────────────────────────
+@website_router.get("/guide", response_class=HTMLResponse)
+def guide_page():
+    from guide import build_guide_page
+    return HTMLResponse(build_guide_page())
+
+
 # ─────────────────────────── PRIVACY POLICY ───────────────────────────
 @website_router.get("/privacy", response_class=HTMLResponse)
 def privacy():
