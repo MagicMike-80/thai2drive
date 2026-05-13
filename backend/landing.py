@@ -62,6 +62,22 @@ html[data-current-lang="en"] [data-lang="en"].block{display:block}
 }
 .lang-btn:hover{transform:scale(1.1);box-shadow:0 4px 16px rgba(0,0,0,.4)}
 .lang-btn.active{border-color:#FF9933;background:rgba(255,153,51,.18);box-shadow:0 0 0 3px rgba(255,153,51,.25)}
+.mini-flag{display:flex;flex-direction:column;width:30px;height:20px;border-radius:3px;overflow:hidden;flex-shrink:0}
+.mini-flag.flag-th span:nth-child(1){background:#A51931;flex:1}
+.mini-flag.flag-th span:nth-child(2){background:#F4F5F8;flex:1}
+.mini-flag.flag-th span:nth-child(3){background:#2D2A4A;flex:2}
+.mini-flag.flag-th span:nth-child(4){background:#F4F5F8;flex:1}
+.mini-flag.flag-th span:nth-child(5){background:#A51931;flex:1}
+.mini-flag.flag-no{background:#BA0C2F;position:relative}
+.mini-flag.flag-no .b{position:absolute;left:0;right:0;top:40%;height:20%;background:#fff}
+.mini-flag.flag-no .bv{position:absolute;left:25%;top:0;bottom:0;width:20%;background:#fff}
+.mini-flag.flag-no::before{content:'';position:absolute;left:0;right:0;top:45%;height:10%;background:#00205B}
+.mini-flag.flag-no::after{content:'';position:absolute;left:29%;top:0;bottom:0;width:10%;background:#00205B}
+.mini-flag.flag-gb{background:#012169;position:relative}
+.mini-flag.flag-gb .r1{position:absolute;left:0;right:0;top:43%;height:14%;background:#C8102E}
+.mini-flag.flag-gb .r2{position:absolute;left:43%;top:0;bottom:0;width:14%;background:#C8102E}
+.mini-flag.flag-gb::before{content:'';position:absolute;left:0;right:0;top:38%;height:24%;background:#fff}
+.mini-flag.flag-gb::after{content:'';position:absolute;left:38%;top:0;bottom:0;width:24%;background:#fff}
 .flag{width:30px;height:20px;border-radius:3px;overflow:hidden;display:flex;flex-direction:column}
 .flag-th>div:nth-child(1){background:#A51931;flex:1}
 .flag-th>div:nth-child(2){background:#F4F5F8;flex:1}
@@ -272,9 +288,9 @@ def _nav_html() -> str:
       <span>Thai<span class="t2d">2</span>Drive</span>
     </a>
     <div class="lang-row" role="group" aria-label="Language">
-      <button class="lang-btn active" data-set-lang="th" aria-label="ไทย">🇹🇭</button>
-      <button class="lang-btn" data-set-lang="no" aria-label="Norsk">🇳🇴</button>
-      <button class="lang-btn" data-set-lang="en" aria-label="English">🇬🇧</button>
+      <button class="lang-btn active" data-set-lang="th" aria-label="ไทย"><span class="mini-flag flag-th"><span></span><span></span><span></span><span></span><span></span></span></button>
+      <button class="lang-btn" data-set-lang="no" aria-label="Norsk"><span class="mini-flag flag-no"><span class="b"></span><span class="bv"></span></span></button>
+      <button class="lang-btn" data-set-lang="en" aria-label="English"><span class="mini-flag flag-gb"><span class="r1"></span><span class="r2"></span></span></button>
     </div>
   </div>
 </nav>
@@ -318,7 +334,7 @@ def _hero_html() -> str:
     </p>
 
     <div class="cta-group">
-      <a href="/categories" class="cta-btn cta-primary">
+      <a href="#try" class="cta-btn cta-primary">
         <span data-lang="th">🚀 เริ่มฝึกฟรี</span>
         <span data-lang="no">🚀 Prøv gratis</span>
         <span data-lang="en">🚀 Try free</span>
@@ -601,7 +617,7 @@ def _bottom_cta_html() -> str:
       <span data-lang="en">Start free now – no credit card needed</span>
     </p>
     <div class="cta-group">
-      <a href="/categories" class="cta-btn cta-primary">
+      <a href="#try" class="cta-btn cta-primary">
         <span data-lang="th">🚀 เริ่มฝึกฟรี</span>
         <span data-lang="no">🚀 Prøv gratis</span>
         <span data-lang="en">🚀 Try free</span>
