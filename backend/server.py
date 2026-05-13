@@ -1827,6 +1827,15 @@ async def admin_delete_question(question_id: str, _: dict = Depends(require_admi
     r = await db.questions.update_one({"id": question_id}, {"$set": {"active": False}})
     if r.matched_count == 0:
         raise HTTPException(status_code=404, detail="Question not found")
+    return {"ok": True}
+
+
+@api_router.delete("/admin/questions/{question_id}/permanent")
+async def admin_permanently_delete_question(question_id: str, _: dict = Depends(require_admin)):
+    """Admin: permanently delete a question from the database."""
+    r = await db.questions.delete_one({"id": question_id})
+    if r.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Question not found")
     return {"ok": True, "id": question_id}
 
 

@@ -489,9 +489,12 @@ function renderDetail(q, editing) {
       <button onclick="window._formMode='edit';renderDetail(window._currentQ, true)" style="background:var(--accent);color:#fff;border:0;padding:10px 16px;border-radius:6px;cursor:pointer;font-weight:600">✏️ Rediger</button>
       <button onclick="duplicateQuestion()" style="background:#8b5cf6;color:#fff;border:0;padding:10px 16px;border-radius:6px;cursor:pointer">📋 Dupliser</button>
       ${hasImg ? `<button onclick="reaudit('${q.id}')" style="background:#06b6d4;color:#fff;border:0;padding:10px 16px;border-radius:6px;cursor:pointer">🔄 AI-audit</button>` : ''}
-      ${q.active === false
-        ? `<button onclick="setActive('${q.id}', true)" style="background:var(--good);color:#fff;border:0;padding:10px 16px;border-radius:6px;cursor:pointer;margin-left:auto">🔓 Reaktiver</button>`
-        : `<button onclick="deleteQuestion('${q.id}')" style="background:var(--bad);color:#fff;border:0;padding:10px 16px;border-radius:6px;cursor:pointer;margin-left:auto">🗑️ Deaktiver</button>`}
+      <div style="display:flex;gap:8px;margin-left:auto">
+        ${q.active === false
+          ? `<button onclick="setActive('${q.id}', true)" style="background:var(--good);color:#fff;border:0;padding:10px 16px;border-radius:6px;cursor:pointer">🔓 Reaktiver</button>`
+          : `<button onclick="deleteQuestion('${q.id}')" style="background:#F59E0B;color:#0F172A;border:0;padding:10px 16px;border-radius:6px;cursor:pointer;font-weight:600">🚫 Deaktiver</button>`}
+        <button onclick="permanentDeleteQuestion('${q.id}')" style="background:var(--bad);color:#fff;border:0;padding:10px 16px;border-radius:6px;cursor:pointer;font-weight:600">🗑️ Slett permanent</button>
+      </div>
     </div>
   `;
 }
@@ -776,6 +779,17 @@ async function deleteQuestion(id) {
   try {
     await api('/admin/questions/' + id, {method: 'DELETE'});
     toast('Spørsmål deaktivert');
+    closeModal();
+    await loadStats();
+    await loadQuestions();
+  } catch (e) { toast('Feil: ' + e.message, false); }
+}
+
+async function permanentDeleteQuestion(id) {
+  if (!confirm('⚠️ ADVARSEL: Dette sletter spørsmålet permanent fra databasen!\n\nDette kan IKKE angres. Er du helt sikker?')) return;
+  try {
+    await api('/admin/questions/' + id + '/permanent', {method: 'DELETE'});
+    toast('🗑️ Spørsmål slettet permanent');
     closeModal();
     await loadStats();
     await loadQuestions();
