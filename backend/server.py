@@ -1688,14 +1688,19 @@ async def admin_stats(_: dict = Depends(require_admin)):
     """Admin: database overview statistics."""
     total = await db.questions.count_documents({"active": True})
     with_img = await db.questions.count_documents(
-        {"active": True, "bildeUrl": {"$regex": "^data:"}}
+        {"active": True, "bildeUrl": {"$exists": True, "$nin": [None, ""]}}
     )
     by_cat_cursor = db.questions.aggregate([
         {"$match": {"active": True}},
         {"$group": {
             "_id": "$category",
             "count": {"$sum": 1},
-            "with_image": {"$sum": {"$cond": [{"$regexMatch": {"input": {"$ifNull": ["$bildeUrl", ""]}, "regex": "^data:"}}, 1, 0]}}
+            "with_image": {"$sum": {"$cond": [
+                {"$and": [
+                    {"$ne": [{"$ifNull": ["$bildeUrl", ""]}, ""]},
+                    {"$ne": ["$bildeUrl", None]}
+                ]}, 1, 0
+            ]}}
         }},
         {"$sort": {"count": -1}},
     ])
