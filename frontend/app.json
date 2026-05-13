@@ -2,7 +2,7 @@
   "expo": {
     "name": "Thai2Drive",
     "slug": "thai2drive",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "thai2drive",
@@ -17,8 +17,8 @@
       }
     },
     "android": {
-      "package": "no.thai2drive.app",
-      "versionCode": 1,
+      "package": "com.michael.thai2drive",
+      "versionCode": 2,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#0F172A"
@@ -26,7 +26,9 @@
       "edgeToEdgeEnabled": true,
       "permissions": [
         "INTERNET",
-        "com.android.vending.BILLING"
+        "com.android.vending.BILLING",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS"
       ]
     },
     "web": {
@@ -51,7 +53,11 @@
       "typedRoutes": true
     },
     "extra": {
-      "eas": {}
-    }
+      "eas": {
+        "projectId": "21f9e2ff-e000-41a4-8ec7-d6e9a3e35693"
+      },
+      "router": {}
+    },
+    "owner": "michael80"
   }
 }
