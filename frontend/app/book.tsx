@@ -1,8 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
 import {
   View, Text, StyleSheet, TouchableOpacity, ScrollView,
-  ActivityIndicator, Animated
+  ActivityIndicator, Animated, Image, Dimensions
 } from 'react-native';
+
+const SCREEN_W = Dimensions.get('window').width;
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -245,6 +247,15 @@ export default function BookScreen() {
             <Text style={[st.sectionTitle, { color: c.accent }]}>
               {currentSection.section_title[lang] || currentSection.section_title.no}
             </Text>
+            {currentSection.image ? (
+              <View style={st.imageWrapper}>
+                <Image
+                  source={{ uri: currentSection.image }}
+                  style={st.sectionImage}
+                  resizeMode="contain"
+                />
+              </View>
+            ) : null}
             <Text style={[st.bodyText, { color: c.text }]}>
               {currentSection.content[lang] || currentSection.content.no}
             </Text>
@@ -296,6 +307,8 @@ const st = StyleSheet.create({
   counter: { fontSize: 12, textAlign: 'center', marginTop: 10, marginBottom: 4 },
   content: { padding: 24, paddingBottom: 40 },
   sectionTitle: { fontSize: 20, fontWeight: '800', marginBottom: 16, lineHeight: 26 },
+  imageWrapper: { borderRadius: 12, overflow: 'hidden', marginBottom: 20, backgroundColor: '#fff' },
+  sectionImage: { width: SCREEN_W - 48, height: (SCREEN_W - 48) * 0.6 },
   bodyText: { fontSize: 16, lineHeight: 26, letterSpacing: 0.1 },
   emptyText: { fontSize: 15, marginTop: 12, textAlign: 'center' },
   navRow: { flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 24, paddingVertical: 16, borderTopWidth: 1 },

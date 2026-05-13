@@ -15,6 +15,7 @@ export interface BookSection {
   section_num: number;
   section_title: { no: string; th: string; en: string };
   content: { no: string; th: string; en: string };
+  image?: string | null;
   pages: number[];
 }
 
