@@ -311,6 +311,61 @@ async def create_question(question_data: QuestionCreate):
     await db.questions.insert_one(doc)
     return question
 
+# ==================== STATISTIKK ====================
+
+@api_router.get("/stats/me")
+async def get_my_stats(device_id: str):
+    """Per-category accuracy for a device, based on quiz_attempts."""
+    # Aggregate by category across all attempts
+    pipeline = [
+        {"$match": {"device_id": device_id, "total_questions": {"$gt": 0}}},
+        {"$group": {
+            "_id": "$category",
+            "attempts":      {"$sum": 1},
+            "total_q":       {"$sum": "$total_questions"},
+            "total_correct": {"$sum": "$correct_answers"},
+        }},
+        {"$project": {
+            "_id": 0,
+            "category":      "$_id",
+            "attempts":      1,
+            "total_q":       1,
+            "total_correct": 1,
+            "pct": {"$cond": [
+                {"$gt": ["$total_q", 0]},
+                {"$multiply": [{"$divide": ["$total_correct", "$total_q"]}, 100]},
+                0
+            ]},
+        }},
+        {"$sort": {"pct": 1}},
+    ]
+    rows = await db.quiz_attempts.aggregate(pipeline).to_list(100)
+
+    # Overall totals
+    totals = await db.quiz_attempts.aggregate([
+        {"$match": {"device_id": device_id}},
+        {"$group": {
+            "_id": None,
+            "total_q":       {"$sum": "$total_questions"},
+            "total_correct": {"$sum": "$correct_answers"},
+            "attempts":      {"$sum": 1},
+        }},
+    ]).to_list(1)
+    overall = totals[0] if totals else {"total_q": 0, "total_correct": 0, "attempts": 0}
+    overall.pop("_id", None)
+    overall["pct"] = round(overall["total_correct"] / overall["total_q"] * 100, 1) if overall["total_q"] else 0
+
+    return {"overall": overall, "by_category": rows}
+
+
+# ==================== TRAFIKKSKILT ====================
+
+@api_router.get("/signs")
+async def get_signs():
+    from signs_data import get_signs_grouped
+    return get_signs_grouped()
+
+
 # ==================== BOK / CHAPTERS ====================
 
 @api_router.get("/chapters")
