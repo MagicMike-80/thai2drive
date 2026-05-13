@@ -7,6 +7,7 @@ from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import logging
+import subprocess
 from pathlib import Path
 from pydantic import BaseModel, Field, validator
 from typing import List, Optional, Dict, Any
@@ -29,6 +30,35 @@ JWT_EXPIRE_HOURS = 168  # 7 days
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 security = HTTPBearer(auto_error=False)
+
+
+def _resolve_git_commit_sha() -> str:
+    """Resolve the current git commit SHA at startup.
+
+    Tries `git rev-parse HEAD` first (works locally and anywhere the .git
+    directory is present), then falls back to common deploy-platform env
+    vars (Railway sets RAILWAY_GIT_COMMIT_SHA automatically), then to
+    "unknown".
+    """
+    try:
+        sha = subprocess.check_output(
+            ["git", "rev-parse", "HEAD"],
+            cwd=str(ROOT_DIR.parent),
+            stderr=subprocess.DEVNULL,
+            timeout=2,
+        ).decode("utf-8").strip()
+        if sha:
+            return sha
+    except Exception:
+        pass
+    for env_var in ("RAILWAY_GIT_COMMIT_SHA", "GIT_COMMIT_SHA", "SOURCE_COMMIT"):
+        sha = os.environ.get(env_var)
+        if sha:
+            return sha.strip()
+    return "unknown"
+
+
+GIT_COMMIT_SHA = _resolve_git_commit_sha()
 
 
 def normalize_question(q: dict) -> dict:
@@ -258,6 +288,15 @@ def generate_reset_code() -> str:
 @api_router.get("/")
 async def root():
     return {"message": "Thai2Drive API - Norway Driving Theory Quiz"}
+
+
+@api_router.get("/version")
+async def version():
+    """Return the git commit SHA resolved at process startup."""
+    return {
+        "commit": GIT_COMMIT_SHA,
+        "short_commit": GIT_COMMIT_SHA[:7] if GIT_COMMIT_SHA != "unknown" else "unknown",
+    }
 
 # App-wide image-only filter: ALL quiz modes (Practice, Exam, Daily Test)
 # must ONLY return questions that have an image (bildeUrl present and non-empty).
