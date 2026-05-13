@@ -439,6 +439,7 @@ def _nav(lang_links=True):
     <ul>
       <li><a href="/api/website#features">Funksjoner</a></li>
       <li><a href="/api/website#pricing">Priser</a></li>
+      <li><a href="/api/bok">📖 Læringsbok</a></li>
       <li><a href="/api/support">Support</a></li>
       <li><a href="/api/privacy">Personvern</a></li>
     </ul>
@@ -455,6 +456,7 @@ def _footer():
       <p>© 2025 {BRAND}. Alle rettigheter reservert.</p>
       <div class="footer-links">
         <a href="/api/website">Hjem</a>
+        <a href="/api/bok">Læringsbok</a>
         <a href="/api/privacy">Personvernregler</a>
         <a href="/api/terms">Vilkår</a>
         <a href="/api/support">Kontakt</a>
@@ -862,6 +864,302 @@ def support():
         f"Support – {BRAND}", body,
         description="Trenger du hjelp? Kontakt Thai2Drive-supporten.",
         path="/support",
+    ))
+
+
+# ─────────────────────────── LÆRINGSBOK (members only) ───────────────────────────
+@website_router.get("/bok", response_class=HTMLResponse)
+def laeringsbok():
+    body = """
+<div id="bok-app">
+  <!-- LOGIN SCREEN -->
+  <div id="bok-login" style="display:none;min-height:80vh;align-items:center;justify-content:center;padding:24px">
+    <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:40px;width:100%;max-width:420px;text-align:center">
+      <div style="font-size:48px;margin-bottom:16px">📖</div>
+      <h1 style="color:#fff;font-size:26px;font-weight:800;margin-bottom:8px">Læringsbok</h1>
+      <p style="color:#94A3B8;margin-bottom:28px;font-size:15px">Logg inn med Thai2Drive-kontoen din for å lese pensum</p>
+      <div id="bok-login-err" style="display:none;background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.3);color:#FCA5A5;padding:10px 14px;border-radius:10px;margin-bottom:16px;font-size:14px"></div>
+      <input id="bok-email" type="email" placeholder="E-postadresse" autocomplete="email"
+        style="width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:#fff;padding:12px 16px;border-radius:10px;font-size:15px;margin-bottom:12px;outline:none;font-family:inherit"/>
+      <input id="bok-pass" type="password" placeholder="Passord" autocomplete="current-password"
+        style="width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:#fff;padding:12px 16px;border-radius:10px;font-size:15px;margin-bottom:20px;outline:none;font-family:inherit"/>
+      <button id="bok-login-btn"
+        style="width:100%;background:#FF9933;color:#0F172A;border:none;padding:14px;border-radius:10px;font-weight:800;font-size:16px;cursor:pointer">
+        Logg inn
+      </button>
+      <p style="color:#64748B;font-size:13px;margin-top:20px">Trenger du tilgang? Last ned Thai2Drive-appen og opprett konto.</p>
+    </div>
+  </div>
+
+  <!-- NOT PREMIUM -->
+  <div id="bok-nopremium" style="display:none;min-height:80vh;align-items:center;justify-content:center;padding:24px">
+    <div style="text-align:center;max-width:440px">
+      <div style="font-size:48px;margin-bottom:16px">🔒</div>
+      <h2 style="color:#fff;font-size:24px;font-weight:800;margin-bottom:12px">Kun for Premium-brukere</h2>
+      <p style="color:#94A3B8;margin-bottom:24px">Læringsbok er inkludert i alle Premium-planer. Oppgrader i appen for å få tilgang.</p>
+      <a href="/api/website#pricing" style="background:#FF9933;color:#0F172A;padding:14px 28px;border-radius:10px;font-weight:800;font-size:15px">Se priser</a>
+      <br/><br/>
+      <button id="bok-logout-np" style="background:none;border:none;color:#64748B;font-size:13px;cursor:pointer;text-decoration:underline">Logg ut</button>
+    </div>
+  </div>
+
+  <!-- LOADING -->
+  <div id="bok-loading" style="display:none;min-height:80vh;align-items:center;justify-content:center">
+    <div style="text-align:center;color:#94A3B8">
+      <div style="font-size:36px;margin-bottom:12px">⏳</div>
+      <p>Laster læringsbok...</p>
+    </div>
+  </div>
+
+  <!-- CHAPTER LIST -->
+  <div id="bok-chapters" style="display:none;padding:48px 0 80px">
+    <div class="container">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;flex-wrap:wrap;gap:12px">
+        <div>
+          <span style="color:#FF9933;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em">Læringsbok</span>
+          <h1 style="color:#fff;font-size:clamp(24px,4vw,36px);font-weight:800;margin-top:4px">Norsk trafikklære</h1>
+          <p style="color:#94A3B8;font-size:14px;margin-top:6px">Offisielt pensum på norsk, thai og engelsk</p>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center">
+          <div id="bok-lang-btns" style="display:flex;gap:6px">
+            <button class="bok-lang" data-lang="no" style="background:rgba(255,153,51,.15);border:1px solid #FF9933;color:#FF9933;padding:6px 12px;border-radius:8px;font-size:13px;cursor:pointer;font-weight:700">🇳🇴 NO</button>
+            <button class="bok-lang" data-lang="th" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#94A3B8;padding:6px 12px;border-radius:8px;font-size:13px;cursor:pointer">🇹🇭 TH</button>
+            <button class="bok-lang" data-lang="en" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#94A3B8;padding:6px 12px;border-radius:8px;font-size:13px;cursor:pointer">🇬🇧 EN</button>
+          </div>
+          <button id="bok-logout-ch" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:#94A3B8;padding:6px 14px;border-radius:8px;font-size:13px;cursor:pointer">Logg ut</button>
+        </div>
+      </div>
+      <div id="bok-chapter-list" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px"></div>
+    </div>
+  </div>
+
+  <!-- READING VIEW -->
+  <div id="bok-reader" style="display:none;padding:32px 0 80px">
+    <div class="container" style="max-width:820px">
+      <!-- Top bar -->
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:28px;flex-wrap:wrap">
+        <button id="bok-back" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:#CBD5E1;padding:8px 16px;border-radius:8px;font-size:14px;cursor:pointer">← Tilbake</button>
+        <div id="bok-chapter-label" style="color:#FF9933;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.06em"></div>
+        <div style="margin-left:auto;display:flex;gap:6px">
+          <button class="bok-lang2" data-lang="no" style="background:rgba(255,153,51,.15);border:1px solid #FF9933;color:#FF9933;padding:5px 10px;border-radius:7px;font-size:12px;cursor:pointer;font-weight:700">🇳🇴</button>
+          <button class="bok-lang2" data-lang="th" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#94A3B8;padding:5px 10px;border-radius:7px;font-size:12px;cursor:pointer">🇹🇭</button>
+          <button class="bok-lang2" data-lang="en" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#94A3B8;padding:5px 10px;border-radius:7px;font-size:12px;cursor:pointer">🇬🇧</button>
+        </div>
+      </div>
+
+      <!-- Progress -->
+      <div style="background:rgba(255,255,255,.06);border-radius:999px;height:4px;margin-bottom:24px">
+        <div id="bok-progress-bar" style="background:#FF9933;height:4px;border-radius:999px;transition:width .3s;width:0%"></div>
+      </div>
+
+      <!-- Section counter -->
+      <div id="bok-section-counter" style="color:#64748B;font-size:13px;margin-bottom:16px"></div>
+
+      <!-- Content card -->
+      <div id="bok-content-card" style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:18px;padding:32px;min-height:300px">
+        <h2 id="bok-section-title" style="color:#fff;font-size:22px;font-weight:800;margin-bottom:16px;line-height:1.3"></h2>
+        <p id="bok-section-content" style="color:#CBD5E1;font-size:16px;line-height:1.8;white-space:pre-wrap"></p>
+      </div>
+
+      <!-- TTS + Navigation -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:20px;flex-wrap:wrap;gap:12px">
+        <button id="bok-prev" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:#CBD5E1;padding:10px 22px;border-radius:10px;font-size:14px;cursor:pointer;font-weight:600">← Forrige</button>
+        <button id="bok-tts" title="Les opp"
+          style="background:rgba(255,153,51,.12);border:1px solid rgba(255,153,51,.3);color:#FF9933;padding:10px 20px;border-radius:10px;font-size:14px;cursor:pointer;display:flex;align-items:center;gap:8px">
+          <span id="bok-tts-icon">🔊</span> <span id="bok-tts-label">Les opp</span>
+        </button>
+        <button id="bok-next" style="background:#FF9933;border:none;color:#0F172A;padding:10px 22px;border-radius:10px;font-size:14px;cursor:pointer;font-weight:700">Neste →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const API = '/api';
+  let token = localStorage.getItem('authToken');
+  let curLang = localStorage.getItem('bok_lang') || 'no';
+  let sections = [];
+  let curIdx = 0;
+  let speaking = false;
+
+  const $ = id => document.getElementById(id);
+
+  function show(id){
+    ['bok-login','bok-nopremium','bok-loading','bok-chapters','bok-reader'].forEach(s=>{
+      const el = $(s);
+      if(!el) return;
+      if(s !== id){ el.style.display='none'; return; }
+      el.style.display = (s==='bok-login'||s==='bok-nopremium'||s==='bok-loading') ? 'flex' : 'block';
+    });
+  }
+
+  // ── Lang buttons ──────────────────────────────────────────────────
+  function setLang(lang){
+    curLang = lang;
+    localStorage.setItem('bok_lang', lang);
+    const map = {no:'🇳🇴 NO', th:'🇹🇭 TH', en:'🇬🇧 EN'};
+    document.querySelectorAll('.bok-lang,.bok-lang2').forEach(btn => {
+      const active = btn.dataset.lang === lang;
+      btn.style.background = active ? 'rgba(255,153,51,.15)' : 'rgba(255,255,255,.06)';
+      btn.style.borderColor = active ? '#FF9933' : 'rgba(255,255,255,.12)';
+      btn.style.color = active ? '#FF9933' : '#94A3B8';
+      btn.style.fontWeight = active ? '700' : '400';
+    });
+    if(sections.length) renderSection();
+  }
+  document.addEventListener('click', e => {
+    if(e.target.classList.contains('bok-lang') || e.target.classList.contains('bok-lang2')){
+      setLang(e.target.dataset.lang);
+    }
+  });
+
+  // ── Auth ──────────────────────────────────────────────────────────
+  async function checkAuth(){
+    if(!token){ show('bok-login'); return; }
+    show('bok-loading');
+    try{
+      const res = await fetch(API+'/auth/me', {headers:{'Authorization':'Bearer '+token}});
+      if(!res.ok){ token=null; localStorage.removeItem('authToken'); show('bok-login'); return; }
+      const me = await res.json();
+      if(!me.is_premium && !me.is_admin){ show('bok-nopremium'); return; }
+      loadChapters();
+    }catch(e){ show('bok-login'); }
+  }
+
+  // ── Login ─────────────────────────────────────────────────────────
+  $('bok-login-btn').addEventListener('click', async () => {
+    const email = $('bok-email').value.trim();
+    const pass  = $('bok-pass').value;
+    const errEl = $('bok-login-err');
+    errEl.style.display = 'none';
+    if(!email||!pass){ errEl.textContent='Fyll inn e-post og passord'; errEl.style.display='block'; return; }
+    $('bok-login-btn').textContent = 'Logger inn...';
+    $('bok-login-btn').disabled = true;
+    try{
+      const res = await fetch(API+'/auth/login',{
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({email, password: pass})
+      });
+      const data = await res.json();
+      if(!res.ok){ errEl.textContent = data.detail || 'Feil e-post eller passord'; errEl.style.display='block'; return; }
+      token = data.token;
+      localStorage.setItem('authToken', token);
+      checkAuth();
+    }catch(e){ errEl.textContent='Nettverksfeil. Prøv igjen.'; errEl.style.display='block'; }
+    finally{ $('bok-login-btn').textContent='Logg inn'; $('bok-login-btn').disabled=false; }
+  });
+  $('bok-pass').addEventListener('keydown', e => { if(e.key==='Enter') $('bok-login-btn').click(); });
+
+  // ── Logout ────────────────────────────────────────────────────────
+  function logout(){ token=null; localStorage.removeItem('authToken'); sections=[]; show('bok-login'); }
+  $('bok-logout-np').addEventListener('click', logout);
+  $('bok-logout-ch').addEventListener('click', logout);
+
+  // ── Chapter list ──────────────────────────────────────────────────
+  async function loadChapters(){
+    show('bok-loading');
+    try{
+      const res = await fetch(API+'/chapters', {headers:{'Authorization':'Bearer '+token}});
+      const chapters = await res.json();
+      const list = $('bok-chapter-list');
+      list.innerHTML = '';
+      const icons = ['📗','👤','🚦','🚗'];
+      const colors = ['#10B981','#3B82F6','#FF9933','#6366F1'];
+      chapters.forEach((ch, i) => {
+        const card = document.createElement('div');
+        card.style.cssText = 'background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:24px;cursor:pointer;transition:all .2s';
+        card.innerHTML = \`
+          <div style="font-size:32px;margin-bottom:12px">\${icons[i]||'📘'}</div>
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:\${colors[i]||'#FF9933'};margin-bottom:6px">Kapittel \${ch.chapter_num}</div>
+          <h3 style="color:#fff;font-size:16px;font-weight:700;margin-bottom:6px">\${ch.title[curLang]||ch.title.no}</h3>
+          <p style="color:#64748B;font-size:13px">\${ch.section_count} seksjoner</p>
+        \`;
+        card.addEventListener('mouseenter', () => { card.style.borderColor='rgba(255,153,51,.4)'; card.style.background='rgba(255,153,51,.04)'; card.style.transform='translateY(-2px)'; });
+        card.addEventListener('mouseleave', () => { card.style.borderColor='rgba(255,255,255,.07)'; card.style.background='rgba(255,255,255,.03)'; card.style.transform=''; });
+        card.addEventListener('click', () => loadReader(ch.chapter_num, ch.title));
+        list.appendChild(card);
+      });
+      show('bok-chapters');
+      setLang(curLang);
+    }catch(e){ alert('Kunne ikke laste kapitler. Prøv igjen.'); show('bok-chapters'); }
+  }
+
+  // ── Reader ────────────────────────────────────────────────────────
+  async function loadReader(chapterNum, chapterTitle){
+    show('bok-loading');
+    stopTTS();
+    try{
+      const res = await fetch(API+'/chapters/'+chapterNum, {headers:{'Authorization':'Bearer '+token}});
+      sections = await res.json();
+      curIdx = 0;
+      $('bok-chapter-label').textContent = 'Kapittel '+chapterNum+' · '+(chapterTitle[curLang]||chapterTitle.no);
+      show('bok-reader');
+      setLang(curLang);
+      renderSection();
+    }catch(e){ alert('Kunne ikke laste seksjoner.'); show('bok-chapters'); }
+  }
+
+  function renderSection(){
+    if(!sections.length) return;
+    const sec = sections[curIdx];
+    const title = (sec.section_title && sec.section_title[curLang]) || sec.section_title?.no || '';
+    const content = (sec.content && sec.content[curLang]) || sec.content?.no || '';
+    $('bok-section-title').textContent = title;
+    $('bok-section-content').textContent = content;
+    $('bok-section-counter').textContent = 'Del '+(curIdx+1)+' av '+sections.length;
+    const pct = sections.length > 1 ? Math.round((curIdx/(sections.length-1))*100) : 100;
+    $('bok-progress-bar').style.width = pct+'%';
+    $('bok-prev').disabled = curIdx === 0;
+    $('bok-prev').style.opacity = curIdx === 0 ? '.4' : '1';
+    $('bok-next').textContent = curIdx === sections.length-1 ? '✓ Ferdig' : 'Neste →';
+    // scroll top of reader
+    $('bok-reader').scrollIntoView({behavior:'smooth', block:'start'});
+    stopTTS();
+  }
+
+  $('bok-back').addEventListener('click', () => { stopTTS(); show('bok-chapters'); });
+  $('bok-prev').addEventListener('click', () => { if(curIdx>0){curIdx--;renderSection();} });
+  $('bok-next').addEventListener('click', () => {
+    if(curIdx < sections.length-1){ curIdx++; renderSection(); }
+    else{ stopTTS(); show('bok-chapters'); }
+  });
+
+  // ── TTS ───────────────────────────────────────────────────────────
+  const langVoice = {no:'nb-NO', th:'th-TH', en:'en-US'};
+  function stopTTS(){
+    speechSynthesis.cancel();
+    speaking = false;
+    $('bok-tts-icon').textContent = '🔊';
+    $('bok-tts-label').textContent = {no:'Les opp',th:'อ่านออกเสียง',en:'Read aloud'}[curLang]||'Les opp';
+  }
+  $('bok-tts').addEventListener('click', () => {
+    if(speaking){ stopTTS(); return; }
+    const sec = sections[curIdx];
+    const title = (sec.section_title && sec.section_title[curLang]) || '';
+    const content = (sec.content && sec.content[curLang]) || '';
+    const text = title + '. ' + content;
+    const utt = new SpeechSynthesisUtterance(text);
+    utt.lang = langVoice[curLang] || 'nb-NO';
+    utt.rate = 0.88;
+    utt.onend = () => stopTTS();
+    utt.onerror = () => stopTTS();
+    speechSynthesis.speak(utt);
+    speaking = true;
+    $('bok-tts-icon').textContent = '⏸';
+    $('bok-tts-label').textContent = {no:'Stopp',th:'หยุด',en:'Stop'}[curLang]||'Stopp';
+  });
+
+  // ── Start ─────────────────────────────────────────────────────────
+  checkAuth();
+})();
+</script>
+"""
+    return HTMLResponse(_page(
+        "Læringsbok – Thai2Drive",
+        body,
+        description="Les norsk trafikklære på thai, norsk og engelsk. Kun for Thai2Drive Premium-brukere.",
+        path="/bok",
     ))
 
 
