@@ -958,6 +958,9 @@ def laeringsbok():
       <!-- Content card -->
       <div id="bok-content-card" style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:18px;padding:32px;min-height:300px">
         <h2 id="bok-section-title" style="color:#fff;font-size:22px;font-weight:800;margin-bottom:16px;line-height:1.3"></h2>
+        <div id="bok-image-wrap" style="display:none;margin-bottom:20px;border-radius:12px;overflow:hidden;background:#fff;text-align:center">
+          <img id="bok-section-img" src="" alt="" style="max-width:100%;max-height:420px;object-fit:contain;display:block;margin:0 auto"/>
+        </div>
         <p id="bok-section-content" style="color:#CBD5E1;font-size:16px;line-height:1.8;white-space:pre-wrap"></p>
       </div>
 
@@ -1107,6 +1110,10 @@ def laeringsbok():
     const content = (sec.content && sec.content[curLang]) || sec.content?.no || '';
     $('bok-section-title').textContent = title;
     $('bok-section-content').textContent = content;
+    const imgWrap = $('bok-image-wrap');
+    const imgEl = $('bok-section-img');
+    if(sec.image){ imgEl.src = sec.image; imgWrap.style.display='block'; }
+    else { imgWrap.style.display='none'; imgEl.src=''; }
     $('bok-section-counter').textContent = 'Del '+(curIdx+1)+' av '+sections.length;
     const pct = sections.length > 1 ? Math.round((curIdx/(sections.length-1))*100) : 100;
     $('bok-progress-bar').style.width = pct+'%';
