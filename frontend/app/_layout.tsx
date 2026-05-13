@@ -171,6 +171,8 @@ export default function RootLayout() {
         <Stack.Screen name="settings" />
         <Stack.Screen name="paywall" options={{ presentation: 'modal', animation: 'slide_from_bottom' }} />
         <Stack.Screen name="book" />
+        <Stack.Screen name="stats" />
+        <Stack.Screen name="signs" />
       </Stack>
     </SafeAreaProvider>
   );

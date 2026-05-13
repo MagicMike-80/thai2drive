@@ -1,6 +1,31 @@
 const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL || '';
 const API_BASE = `${BACKEND_URL}/api`;
 
+// ==================== STATS TYPES ====================
+export interface CategoryStat {
+  category: string;
+  attempts: number;
+  total_q: number;
+  total_correct: number;
+  pct: number;
+}
+export interface MyStats {
+  overall: { total_q: number; total_correct: number; attempts: number; pct: number };
+  by_category: CategoryStat[];
+}
+
+// ==================== SIGNS TYPES ====================
+export interface Sign {
+  num: string;
+  type: string;
+  name: { no: string; th: string; en: string };
+  desc: { no: string; th: string; en: string };
+}
+export interface SignGroup {
+  meta: { no: string; th: string; en: string; color: string; shape: string };
+  signs: Sign[];
+}
+
 // ==================== BOK TYPES ====================
 export interface BookChapter {
   chapter_num: number;
@@ -233,5 +258,15 @@ export const api = {
   },
   async getChapterSections(chapterNum: number): Promise<BookSection[]> {
     return fetchJSON(`${API_BASE}/chapters/${chapterNum}`);
+  },
+
+  // ==================== STATISTIKK ====================
+  async getMyStats(deviceId: string): Promise<MyStats> {
+    return fetchJSON(`${API_BASE}/stats/me?device_id=${deviceId}`);
+  },
+
+  // ==================== SKILT ====================
+  async getSigns(): Promise<Record<string, SignGroup>> {
+    return fetchJSON(`${API_BASE}/signs`);
   },
 };
