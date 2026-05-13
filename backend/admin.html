@@ -87,6 +87,43 @@
   .toast{position:fixed;bottom:20px;right:20px;background:var(--panel);padding:12px 18px;
          border-radius:8px;border-left:4px solid var(--good);z-index:200;display:none}
   .toast.show{display:block}
+
+  /* Tabs */
+  .tabs{display:flex;gap:4px;margin-bottom:16px;background:var(--panel);
+        padding:6px;border-radius:10px;width:fit-content}
+  .tab{padding:8px 20px;border-radius:7px;border:0;background:none;color:var(--muted);
+       font-size:14px;font-weight:600;cursor:pointer;transition:all .15s}
+  .tab.active{background:var(--accent);color:#fff}
+  .tab:hover:not(.active){background:var(--card);color:var(--text)}
+
+  /* Book panel */
+  #book-view{display:none}
+  .book-ch{background:var(--panel);border-radius:10px;margin-bottom:10px;overflow:hidden}
+  .book-ch-head{padding:14px 18px;display:flex;align-items:center;justify-content:space-between;
+                cursor:pointer;user-select:none}
+  .book-ch-head:hover{background:var(--card)}
+  .book-ch-head h3{margin:0;font-size:15px}
+  .book-ch-head .meta{font-size:12px;color:var(--muted)}
+  .book-ch-body{display:none;padding:0 12px 12px}
+  .book-ch-body.open{display:block}
+  .book-sec{background:var(--card);border-radius:8px;margin:6px 0;padding:12px 14px;
+            display:flex;align-items:flex-start;gap:12px}
+  .book-sec-thumb{width:64px;height:48px;background:var(--bg);border-radius:6px;
+                  flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center}
+  .book-sec-thumb img{width:100%;height:100%;object-fit:contain}
+  .book-sec-thumb .no-img{font-size:20px}
+  .book-sec-info{flex:1;min-width:0}
+  .book-sec-info .num{font-size:11px;color:var(--muted);margin-bottom:2px}
+  .book-sec-info .title{font-size:14px;font-weight:700;white-space:nowrap;
+                        overflow:hidden;text-overflow:ellipsis}
+  .book-sec-info .preview{font-size:12px;color:var(--muted);margin-top:3px;
+                          display:-webkit-box;-webkit-line-clamp:2;
+                          -webkit-box-orient:vertical;overflow:hidden}
+  .book-sec-actions{display:flex;gap:6px;flex-shrink:0}
+  .book-sec-actions button{padding:5px 10px;border:0;border-radius:6px;font-size:12px;
+                           cursor:pointer;font-weight:600}
+  .btn-edit{background:var(--accent);color:#fff}
+  .btn-del{background:var(--bad);color:#fff}
 </style>
 </head>
 <body>
@@ -111,6 +148,14 @@
 <main id="app">
   <div class="stats" id="stats"></div>
 
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab active" id="tab-questions" onclick="switchTab('questions')">📝 Spørsmål</button>
+    <button class="tab" id="tab-book" onclick="switchTab('book')">📖 Læringsbok</button>
+  </div>
+
+  <!-- ── QUESTIONS VIEW ─────────────────────────────────── -->
+  <div id="questions-view">
   <div class="filters">
     <input id="search" type="text" placeholder="Søk i spørsmål…" />
     <select id="category"><option value="">Alle kategorier</option></select>
@@ -147,6 +192,19 @@
   </div>
   <div id="grid" class="grid"></div>
   <div id="pagination" class="pagination"></div>
+  </div><!-- end #questions-view -->
+
+  <!-- ── BOOK VIEW ─────────────────────────────────────── -->
+  <div id="book-view">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px">
+      <div style="font-size:13px;color:var(--muted)" id="book-meta"></div>
+      <button onclick="openNewSectionModal()" style="background:var(--good);color:#fff;border:0;
+        padding:10px 18px;border-radius:8px;cursor:pointer;font-weight:600;font-size:14px">
+        ➕ Ny seksjon
+      </button>
+    </div>
+    <div id="book-chapters"></div>
+  </div>
 </main>
 
 <div class="modal" id="modal" onclick="if(event.target===this)closeModal()">
@@ -773,6 +831,283 @@ document.getElementById('password').addEventListener('keydown', e => {
   }
   showLogin();
 })();
+
+// ══════════════════════════════════════════════════════════
+//  TAB SWITCHING
+// ══════════════════════════════════════════════════════════
+function switchTab(tab) {
+  document.getElementById('questions-view').style.display = tab === 'questions' ? '' : 'none';
+  document.getElementById('book-view').style.display     = tab === 'book'      ? '' : 'none';
+  document.getElementById('tab-questions').classList.toggle('active', tab === 'questions');
+  document.getElementById('tab-book').classList.toggle('active', tab === 'book');
+  if (tab === 'book') loadBook();
+}
+
+// ══════════════════════════════════════════════════════════
+//  BOOK ADMIN
+// ══════════════════════════════════════════════════════════
+let _bookSections = [];
+
+async function loadBook() {
+  const r = await fetch(API + '/admin/book/sections', {headers:{Authorization:'Bearer '+token}});
+  _bookSections = await r.json();
+
+  // Group by chapter
+  const byChapter = {};
+  _bookSections.forEach(s => {
+    if (!byChapter[s.chapter_num]) byChapter[s.chapter_num] = [];
+    byChapter[s.chapter_num].push(s);
+  });
+
+  document.getElementById('book-meta').textContent =
+    `${_bookSections.length} seksjoner fordelt på ${Object.keys(byChapter).length} kapitler`;
+
+  const container = document.getElementById('book-chapters');
+  container.innerHTML = '';
+  const chTitles = { 1:'Grunnleggende trafikklære', 2:'Mennesket i trafikken',
+                     3:'Trafikksystemet og regler', 4:'Kjøretøy og vegtrafikkloven' };
+  const chIcons  = { 1:'📗', 2:'👤', 3:'🚦', 4:'🚗' };
+
+  Object.keys(byChapter).sort((a,b)=>+a-+b).forEach(ch => {
+    const secs = byChapter[ch];
+    const div = document.createElement('div');
+    div.className = 'book-ch';
+    div.innerHTML = `
+      <div class="book-ch-head" onclick="toggleChapter(this)">
+        <h3>${chIcons[ch]||'📘'} Kapittel ${ch} — ${chTitles[ch]||''}</h3>
+        <span class="meta">${secs.length} seksjoner ▾</span>
+      </div>
+      <div class="book-ch-body">
+        ${secs.map(s => renderSecRow(s)).join('')}
+      </div>`;
+    container.appendChild(div);
+  });
+}
+
+function renderSecRow(s) {
+  const title   = (s.section_title && s.section_title.no) || '—';
+  const preview = (s.content && s.content.no) || '';
+  const hasImg  = !!s.has_image; // we exclude image blob from list, use flag
+  // Check if section came with image indicator
+  const imgHtml = `<div class="no-img">📄</div>`;
+  return `<div class="book-sec" id="bsec-${s.id}">
+    <div class="book-sec-thumb">${imgHtml}</div>
+    <div class="book-sec-info">
+      <div class="num">Seksjon ${s.section_num}</div>
+      <div class="title">${escapeHtml(title)}</div>
+      <div class="preview">${escapeHtml(preview)}</div>
+    </div>
+    <div class="book-sec-actions">
+      <button class="btn-edit" onclick="openEditSection('${s.id}')">✏️ Rediger</button>
+      <button class="btn-del"  onclick="deleteSection('${s.id}')">🗑</button>
+    </div>
+  </div>`;
+}
+
+function toggleChapter(head) {
+  const body = head.nextElementSibling;
+  body.classList.toggle('open');
+  head.querySelector('.meta').textContent =
+    head.querySelector('.meta').textContent.replace(/[▾▴]/, body.classList.contains('open') ? '▴' : '▾');
+}
+
+// ── Edit section modal ─────────────────────────────────────
+function openEditSection(id) {
+  const s = _bookSections.find(x => x.id === id);
+  if (!s) return;
+  const t = s.section_title || {};
+  const c = s.content || {};
+
+  document.getElementById('modal-body').innerHTML = `
+    <button class="close" onclick="closeModal()">✕</button>
+    <h2>✏️ Rediger seksjon ${s.chapter_num}.${s.section_num}</h2>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px">
+      <div>
+        <div class="lang-row"><div class="lbl">🇳🇴 Tittel norsk</div>
+          <textarea id="t-no" rows="2" style="width:100%;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:14px">${escapeHtml(t.no||'')}</textarea>
+        </div>
+      </div>
+      <div>
+        <div class="lang-row"><div class="lbl">🇹🇭 Tittel thai</div>
+          <textarea id="t-th" rows="2" style="width:100%;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:14px">${escapeHtml(t.th||'')}</textarea>
+        </div>
+      </div>
+      <div>
+        <div class="lang-row"><div class="lbl">🇬🇧 Tittel engelsk</div>
+          <textarea id="t-en" rows="2" style="width:100%;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:14px">${escapeHtml(t.en||'')}</textarea>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:20px">
+      <div>
+        <div class="lang-row"><div class="lbl">🇳🇴 Innhold norsk</div>
+          <textarea id="c-no" rows="6" style="width:100%;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:14px">${escapeHtml(c.no||'')}</textarea>
+        </div>
+      </div>
+      <div>
+        <div class="lang-row"><div class="lbl">🇹🇭 Innhold thai</div>
+          <textarea id="c-th" rows="6" style="width:100%;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:14px">${escapeHtml(c.th||'')}</textarea>
+        </div>
+      </div>
+      <div>
+        <div class="lang-row"><div class="lbl">🇬🇧 Innhold engelsk</div>
+          <textarea id="c-en" rows="6" style="width:100%;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:14px">${escapeHtml(c.en||'')}</textarea>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-bottom:20px">
+      <div class="lbl" style="margin-bottom:8px;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">🖼️ Bilde</div>
+      <div id="cur-img-wrap" style="margin-bottom:10px"></div>
+      <input type="file" id="img-file" accept="image/*" style="color:var(--text)"/>
+      <button onclick="uploadSectionImage('${s.id}')" style="background:var(--accent);color:#fff;border:0;padding:8px 14px;border-radius:6px;cursor:pointer;margin-left:8px">Last opp bilde</button>
+      <button onclick="removeSectionImage('${s.id}')" style="background:var(--bad);color:#fff;border:0;padding:8px 14px;border-radius:6px;cursor:pointer;margin-left:6px">Fjern bilde</button>
+    </div>
+
+    <div style="display:flex;gap:10px;justify-content:flex-end">
+      <button onclick="closeModal()" style="background:var(--card);color:var(--text);border:0;padding:10px 20px;border-radius:8px;cursor:pointer">Avbryt</button>
+      <button onclick="saveSection('${s.id}')" style="background:var(--good);color:#fff;border:0;padding:10px 22px;border-radius:8px;cursor:pointer;font-weight:700">💾 Lagre</button>
+    </div>
+  `;
+
+  // Load current image
+  loadSectionImage(s.id);
+  document.getElementById('modal').classList.add('show');
+}
+
+async function loadSectionImage(id) {
+  const wrap = document.getElementById('cur-img-wrap');
+  if (!wrap) return;
+  const r = await fetch(API + '/chapters/' + _bookSections.find(x=>x.id===id)?.chapter_num);
+  if (!r.ok) return;
+  const secs = await r.json();
+  const s = secs.find(x => x.id === id);
+  if (s && s.image) {
+    wrap.innerHTML = `<img src="${s.image}" style="max-height:200px;border-radius:8px;border:1px solid var(--card)"/>
+      <div style="font-size:12px;color:var(--muted);margin-top:4px">Nåværende bilde</div>`;
+  } else {
+    wrap.innerHTML = `<div style="color:var(--muted);font-size:13px">Ingen bilde ennå</div>`;
+  }
+}
+
+async function saveSection(id) {
+  const body = {
+    section_title: { no: document.getElementById('t-no').value.trim(),
+                     th: document.getElementById('t-th').value.trim(),
+                     en: document.getElementById('t-en').value.trim() },
+    content:       { no: document.getElementById('c-no').value.trim(),
+                     th: document.getElementById('c-th').value.trim(),
+                     en: document.getElementById('c-en').value.trim() },
+  };
+  const r = await fetch(API + '/admin/book/sections/' + id, {
+    method: 'PATCH', headers: {'Content-Type':'application/json', Authorization:'Bearer '+token},
+    body: JSON.stringify(body),
+  });
+  if (r.ok) { toast('✅ Lagret!'); closeModal(); loadBook(); }
+  else toast('Feil ved lagring', false);
+}
+
+async function uploadSectionImage(id) {
+  const file = document.getElementById('img-file').files[0];
+  if (!file) { toast('Velg et bilde først', false); return; }
+  const fd = new FormData(); fd.append('file', file);
+  const r = await fetch(API + '/admin/book/sections/' + id + '/image', {
+    method: 'POST', headers: {Authorization: 'Bearer ' + token}, body: fd,
+  });
+  const data = await r.json();
+  if (r.ok) { toast(`✅ Bilde lastet opp (${data.size_kb} KB)`); loadSectionImage(id); }
+  else toast('Feil: ' + (data.detail || 'ukjent'), false);
+}
+
+async function removeSectionImage(id) {
+  if (!confirm('Fjerne bildet?')) return;
+  const r = await fetch(API + '/admin/book/sections/' + id + '/image', {
+    method: 'DELETE', headers: {Authorization: 'Bearer ' + token},
+  });
+  if (r.ok) { toast('🗑 Bilde fjernet'); loadSectionImage(id); }
+  else toast('Feil', false);
+}
+
+async function deleteSection(id) {
+  const s = _bookSections.find(x => x.id === id);
+  const title = s?.section_title?.no || id;
+  if (!confirm(`Slette seksjon "${title}"? Dette kan ikke angres.`)) return;
+  const r = await fetch(API + '/admin/book/sections/' + id, {
+    method: 'DELETE', headers: {Authorization: 'Bearer ' + token},
+  });
+  if (r.ok) { toast('🗑 Seksjon slettet'); loadBook(); }
+  else toast('Feil ved sletting', false);
+}
+
+// ── New section modal ──────────────────────────────────────
+function openNewSectionModal() {
+  document.getElementById('modal-body').innerHTML = `
+    <button class="close" onclick="closeModal()">✕</button>
+    <h2>➕ Ny seksjon</h2>
+
+    <div style="margin-bottom:16px">
+      <div class="lbl" style="font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Kapittel</div>
+      <select id="new-ch" style="background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px 12px;font-size:14px;width:100%">
+        <option value="1">1 — Grunnleggende trafikklære</option>
+        <option value="2">2 — Mennesket i trafikken</option>
+        <option value="3">3 — Trafikksystemet og regler</option>
+        <option value="4">4 — Kjøretøy og vegtrafikkloven</option>
+      </select>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px">
+      <div class="lang-row"><div class="lbl">🇳🇴 Tittel norsk</div>
+        <input id="nt-no" style="width:100%;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:14px" placeholder="Tittel på norsk"/>
+      </div>
+      <div class="lang-row"><div class="lbl">🇹🇭 Tittel thai</div>
+        <input id="nt-th" style="width:100%;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:14px" placeholder="ชื่อเรื่อง"/>
+      </div>
+      <div class="lang-row"><div class="lbl">🇬🇧 Tittel engelsk</div>
+        <input id="nt-en" style="width:100%;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:14px" placeholder="Title in English"/>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:20px">
+      <div class="lang-row"><div class="lbl">🇳🇴 Innhold norsk</div>
+        <textarea id="nc-no" rows="6" style="width:100%;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:14px" placeholder="Skriv innhold på norsk..."></textarea>
+      </div>
+      <div class="lang-row"><div class="lbl">🇹🇭 Innhold thai</div>
+        <textarea id="nc-th" rows="6" style="width:100%;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:14px" placeholder="เนื้อหาภาษาไทย..."></textarea>
+      </div>
+      <div class="lang-row"><div class="lbl">🇬🇧 Innhold engelsk</div>
+        <textarea id="nc-en" rows="6" style="width:100%;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:14px" placeholder="Content in English..."></textarea>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:10px;justify-content:flex-end">
+      <button onclick="closeModal()" style="background:var(--card);color:var(--text);border:0;padding:10px 20px;border-radius:8px;cursor:pointer">Avbryt</button>
+      <button onclick="createSection()" style="background:var(--good);color:#fff;border:0;padding:10px 22px;border-radius:8px;cursor:pointer;font-weight:700">➕ Opprett</button>
+    </div>
+  `;
+  document.getElementById('modal').classList.add('show');
+}
+
+async function createSection() {
+  const body = {
+    chapter_num: +document.getElementById('new-ch').value,
+    section_title: { no: document.getElementById('nt-no').value.trim(),
+                     th: document.getElementById('nt-th').value.trim(),
+                     en: document.getElementById('nt-en').value.trim() },
+    content:       { no: document.getElementById('nc-no').value.trim(),
+                     th: document.getElementById('nc-th').value.trim(),
+                     en: document.getElementById('nc-en').value.trim() },
+  };
+  if (!body.section_title.no) { toast('Tittel (norsk) er påkrevd', false); return; }
+  const r = await fetch(API + '/admin/book/sections', {
+    method: 'POST', headers: {'Content-Type':'application/json', Authorization:'Bearer '+token},
+    body: JSON.stringify(body),
+  });
+  const data = await r.json();
+  if (r.ok) { toast(`✅ Seksjon ${data.section_num} opprettet!`); closeModal(); loadBook(); }
+  else toast('Feil: ' + (data.detail || 'ukjent'), false);
+}
 </script>
 </body>
 </html>

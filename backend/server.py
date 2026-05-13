@@ -1982,6 +1982,123 @@ Return ONLY strict JSON:
     return parsed
 
 
+# ═══════════════════════════════════════════════════════════
+#  BOOK ADMIN ENDPOINTS
+# ═══════════════════════════════════════════════════════════
+
+@api_router.get("/admin/book/sections")
+async def admin_book_list(_: dict = Depends(require_admin)):
+    """All sections sorted by chapter + section number."""
+    sections = await db.chapters.find(
+        {}, {"_id": 0, "image": 0}  # exclude heavy image blob from list
+    ).sort([("chapter_num", 1), ("section_num", 1)]).to_list(400)
+    return sections
+
+
+@api_router.patch("/admin/book/sections/{section_id}")
+async def admin_book_update(section_id: str, data: dict, _: dict = Depends(require_admin)):
+    """Update title and/or content of a section."""
+    allowed = {"section_title", "content"}
+    update = {k: v for k, v in data.items() if k in allowed}
+    if not update:
+        raise HTTPException(status_code=400, detail="Nothing to update")
+    await db.chapters.update_one({"id": section_id}, {"$set": update})
+    return {"ok": True}
+
+
+@api_router.post("/admin/book/sections/{section_id}/image")
+async def admin_book_upload_image(
+    section_id: str,
+    file: UploadFile = File(...),
+    _: dict = Depends(require_admin),
+):
+    """Upload / replace image for a book section."""
+    import base64, io as _io
+    try:
+        from PIL import Image as _Img
+    except ImportError:
+        raise HTTPException(status_code=500, detail="Pillow not installed")
+
+    raw = await file.read()
+    if not raw:
+        raise HTTPException(status_code=400, detail="Empty file")
+    if len(raw) > 15 * 1024 * 1024:
+        raise HTTPException(status_code=413, detail="Max 15 MB")
+
+    img = _Img.open(_io.BytesIO(raw))
+    img.load()
+    if img.mode in ("RGBA", "P", "LA"):
+        bg = _Img.new("RGB", img.size, (255, 255, 255))
+        bg.paste(img, mask=img.split()[-1] if img.mode in ("RGBA", "LA") else None)
+        img = bg
+    elif img.mode != "RGB":
+        img = img.convert("RGB")
+    if img.width > 900:
+        r = 900 / img.width
+        img = img.resize((900, int(img.height * r)), _Img.LANCZOS)
+
+    buf = _io.BytesIO()
+    img.save(buf, format="JPEG", quality=82, optimize=True)
+    data_uri = "data:image/jpeg;base64," + base64.b64encode(buf.getvalue()).decode()
+
+    sec = await db.chapters.find_one({"id": section_id})
+    if not sec:
+        raise HTTPException(status_code=404, detail="Section not found")
+    await db.chapters.update_one({"id": section_id}, {"$set": {"image": data_uri}})
+    return {"ok": True, "size_kb": round(len(buf.getvalue()) / 1024, 1)}
+
+
+@api_router.delete("/admin/book/sections/{section_id}/image")
+async def admin_book_remove_image(section_id: str, _: dict = Depends(require_admin)):
+    await db.chapters.update_one({"id": section_id}, {"$unset": {"image": ""}})
+    return {"ok": True}
+
+
+@api_router.delete("/admin/book/sections/{section_id}")
+async def admin_book_delete_section(section_id: str, _: dict = Depends(require_admin)):
+    r = await db.chapters.delete_one({"id": section_id})
+    if r.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Section not found")
+    return {"ok": True}
+
+
+class BookSectionCreate(BaseModel):
+    chapter_num: int
+    section_title: dict   # {no, th, en}
+    content: dict         # {no, th, en}
+
+
+@api_router.post("/admin/book/sections")
+async def admin_book_create_section(data: BookSectionCreate, _: dict = Depends(require_admin)):
+    """Add a new section to a chapter."""
+    import uuid as _uuid
+    chapter = await db.chapters.find_one({"chapter_num": data.chapter_num})
+    if not chapter:
+        raise HTTPException(status_code=404, detail="Chapter not found")
+
+    # Get chapter title from existing section
+    ch_title = chapter.get("chapter_title", {"no": "", "th": "", "en": ""})
+
+    # Next section number
+    last = await db.chapters.find_one(
+        {"chapter_num": data.chapter_num}, sort=[("section_num", -1)]
+    )
+    next_num = (last["section_num"] + 1) if last else 1
+
+    doc = {
+        "id": str(_uuid.uuid4()),
+        "chapter_num": data.chapter_num,
+        "chapter_title": ch_title,
+        "section_num": next_num,
+        "section_title": data.section_title,
+        "content": data.content,
+        "slides": [],
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+    await db.chapters.insert_one(doc)
+    return {"ok": True, "id": doc["id"], "section_num": next_num}
+
+
 app.include_router(api_router)
 
 # ==================== PUBLIC WEBSITE (landing + legal) ====================
