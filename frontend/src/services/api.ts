@@ -1,6 +1,23 @@
 const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL || '';
 const API_BASE = `${BACKEND_URL}/api`;
 
+// ==================== BOK TYPES ====================
+export interface BookChapter {
+  chapter_num: number;
+  title: { no: string; th: string; en: string };
+  section_count: number;
+}
+
+export interface BookSection {
+  id: string;
+  chapter_num: number;
+  chapter_title: { no: string; th: string; en: string };
+  section_num: number;
+  section_title: { no: string; th: string; en: string };
+  content: { no: string; th: string; en: string };
+  pages: number[];
+}
+
 // ==================== V2 SCHEMA TYPES ====================
 
 export interface LocalizedText {
@@ -207,5 +224,13 @@ export const api = {
 
   async seedDatabase(): Promise<{ message: string; seeded: boolean }> {
     return fetchJSON(`${API_BASE}/seed`, { method: 'POST' });
+  },
+
+  // ==================== BOK / CHAPTERS ====================
+  async getChapters(): Promise<BookChapter[]> {
+    return fetchJSON(`${API_BASE}/chapters`);
+  },
+  async getChapterSections(chapterNum: number): Promise<BookSection[]> {
+    return fetchJSON(`${API_BASE}/chapters/${chapterNum}`);
   },
 };

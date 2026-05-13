@@ -12,9 +12,9 @@ import { AppBrand } from '../src/components/AppBrand';
 const T2D_ICON = require('../assets/images/t2d-icon.png');
 
 const TR: Record<string, Record<string, string>> = {
-  no: { subtitle: 'Norsk førerprøve', startQuiz: 'Start quiz', exam: 'Eksamen', accuracy: 'Nøyaktighet', answered: 'Besvart', correct: 'Riktige', premiumCta: 'Premium',  premiumOffer: 'Ubegrenset tilgang · fra 199 kr', premiumActive: 'Premium aktiv', streak: 'dagers rekke', freeLeft: 'gratis igjen', dailyLimitReached: 'Opprett konto for å fortsette', dailyTest: 'Dagens test', moreOptions: 'Flere', accountTitle: 'Opprett konto for å fortsette', accountBody: 'Du har brukt opp 10 gratis spørsmål. Opprett en konto for å fortsette.', accountSignup: 'Opprett konto', accountLogin: 'Logg inn', accountCancel: 'Avbryt' },
-  th: { subtitle: 'สอบใบขับขี่นอร์เวย์', startQuiz: 'เริ่มทำแบบทดสอบ', exam: 'สอบ', accuracy: 'ความแม่นยำ', answered: 'ตอบแล้ว', correct: 'ถูกต้อง', premiumCta: 'พรีเมียม', premiumOffer: 'ใช้งานไม่จำกัด · เริ่มต้น 199 kr', premiumActive: 'Premium ใช้งานอยู่', streak: 'วันติดต่อกัน', freeLeft: 'ฟรีเหลือ', dailyLimitReached: 'สร้างบัญชีเพื่อดำเนินการต่อ', dailyTest: 'แบบทดสอบประจำวัน', moreOptions: 'เพิ่มเติม', accountTitle: 'สร้างบัญชีเพื่อดำเนินการต่อ', accountBody: 'คุณใช้คำถามฟรี 10 ข้อหมดแล้ว สร้างบัญชีเพื่อดำเนินการต่อ', accountSignup: 'สร้างบัญชี', accountLogin: 'เข้าสู่ระบบ', accountCancel: 'ยกเลิก' },
-  en: { subtitle: 'Norwegian driving test', startQuiz: 'Start quiz', exam: 'Exam', accuracy: 'Accuracy', answered: 'Answered', correct: 'Correct', premiumCta: 'Premium', premiumOffer: 'Unlimited access · from 199 NOK', premiumActive: 'Premium active', streak: 'day streak', freeLeft: 'free left', dailyLimitReached: 'Create account to continue', dailyTest: 'Daily test', moreOptions: 'More', accountTitle: 'Create an account to continue', accountBody: 'You have used your 10 free questions. Create an account to continue.', accountSignup: 'Create account', accountLogin: 'Log in', accountCancel: 'Cancel' },
+  no: { subtitle: 'Norsk førerprøve', startQuiz: 'Start quiz', exam: 'Eksamen', accuracy: 'Nøyaktighet', answered: 'Besvart', correct: 'Riktige', premiumCta: 'Premium',  premiumOffer: 'Ubegrenset tilgang · fra 199 kr', premiumActive: 'Premium aktiv', streak: 'dagers rekke', freeLeft: 'gratis igjen', dailyLimitReached: 'Opprett konto for å fortsette', dailyTest: 'Dagens test', moreOptions: 'Flere', accountTitle: 'Opprett konto for å fortsette', accountBody: 'Du har brukt opp 10 gratis spørsmål. Opprett en konto for å fortsette.', accountSignup: 'Opprett konto', accountLogin: 'Logg inn', accountCancel: 'Avbryt', studyBook: 'Læringsbok' },
+  th: { subtitle: 'สอบใบขับขี่นอร์เวย์', startQuiz: 'เริ่มทำแบบทดสอบ', exam: 'สอบ', accuracy: 'ความแม่นยำ', answered: 'ตอบแล้ว', correct: 'ถูกต้อง', premiumCta: 'พรีเมียม', premiumOffer: 'ใช้งานไม่จำกัด · เริ่มต้น 199 kr', premiumActive: 'Premium ใช้งานอยู่', streak: 'วันติดต่อกัน', freeLeft: 'ฟรีเหลือ', dailyLimitReached: 'สร้างบัญชีเพื่อดำเนินการต่อ', dailyTest: 'แบบทดสอบประจำวัน', moreOptions: 'เพิ่มเติม', accountTitle: 'สร้างบัญชีเพื่อดำเนินการต่อ', accountBody: 'คุณใช้คำถามฟรี 10 ข้อหมดแล้ว สร้างบัญชีเพื่อดำเนินการต่อ', accountSignup: 'สร้างบัญชี', accountLogin: 'เข้าสู่ระบบ', accountCancel: 'ยกเลิก', studyBook: 'หนังสือเรียน' },
+  en: { subtitle: 'Norwegian driving test', startQuiz: 'Start quiz', exam: 'Exam', accuracy: 'Accuracy', answered: 'Answered', correct: 'Correct', premiumCta: 'Premium', premiumOffer: 'Unlimited access · from 199 NOK', premiumActive: 'Premium active', streak: 'day streak', freeLeft: 'free left', dailyLimitReached: 'Create account to continue', dailyTest: 'Daily test', moreOptions: 'More', accountTitle: 'Create an account to continue', accountBody: 'You have used your 10 free questions. Create an account to continue.', accountSignup: 'Create account', accountLogin: 'Log in', accountCancel: 'Cancel', studyBook: 'Study Book' },
 };
 
 export default function HomeScreen() {
@@ -157,6 +157,17 @@ export default function HomeScreen() {
           </TouchableOpacity>
         </View>
 
+        {/* Study Book button */}
+        <TouchableOpacity
+          style={[st.bookBtn, { backgroundColor: c.card, borderColor: c.cardBorder }]}
+          onPress={() => router.push('/book')}
+          activeOpacity={0.75}
+        >
+          <Ionicons name="book-outline" size={20} color={c.accent} />
+          <Text style={[st.bookText, { color: c.text }]}>{t.studyBook}</Text>
+          <Ionicons name="chevron-forward" size={18} color={c.textMuted} />
+        </TouchableOpacity>
+
         {/* Progress — single clean row, no card nesting */}
         {progress.total_questions_answered > 0 && (
           <View style={st.statsBlock}>
@@ -228,4 +239,6 @@ const st = StyleSheet.create({
   premSub: { fontSize: 12, marginTop: 2 },
   premActive: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 12, paddingVertical: 10, gap: 6, borderWidth: 1 },
   premActiveText: { fontSize: 13, fontWeight: '700' },
+  bookBtn: { flexDirection: 'row', alignItems: 'center', gap: 10, borderRadius: 14, borderWidth: 1, paddingHorizontal: 16, paddingVertical: 14, marginBottom: 28 },
+  bookText: { flex: 1, fontSize: 15, fontWeight: '600' },
 });

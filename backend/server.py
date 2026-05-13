@@ -311,6 +311,51 @@ async def create_question(question_data: QuestionCreate):
     await db.questions.insert_one(doc)
     return question
 
+# ==================== BOK / CHAPTERS ====================
+
+@api_router.get("/chapters")
+async def get_chapters():
+    """Hent alle kapitler (unik liste med titler)"""
+    pipeline = [
+        {"$group": {
+            "_id": "$chapter_num",
+            "chapter_title": {"$first": "$chapter_title"},
+            "section_count": {"$sum": 1}
+        }},
+        {"$sort": {"_id": 1}}
+    ]
+    chapters = await db.chapters.aggregate(pipeline).to_list(20)
+    return [
+        {
+            "chapter_num": c["_id"],
+            "title": c["chapter_title"],
+            "section_count": c["section_count"]
+        }
+        for c in chapters
+    ]
+
+@api_router.get("/chapters/{chapter_num}")
+async def get_chapter_sections(chapter_num: int):
+    """Hent alle seksjoner i et kapittel"""
+    sections = await db.chapters.find(
+        {"chapter_num": chapter_num},
+        {"_id": 0}
+    ).sort("section_num", 1).to_list(200)
+    return sections
+
+@api_router.get("/chapters/{chapter_num}/{section_num}")
+async def get_section(chapter_num: int, section_num: int):
+    """Hent én seksjon"""
+    section = await db.chapters.find_one(
+        {"chapter_num": chapter_num, "section_num": section_num},
+        {"_id": 0}
+    )
+    if not section:
+        raise HTTPException(status_code=404, detail="Seksjon ikke funnet")
+    return section
+
+# ==================== END BOK ====================
+
 @api_router.get("/categories")
 async def get_categories():
     pipeline = [
@@ -1662,7 +1707,7 @@ async def admin_list_questions(
     elif active is False:
         query["active"] = False
     if has_image is True:
-        query["bildeUrl"] = {"$regex": "^data:"}
+        query["bildeUrl"] = {"$exists": True, "$nin": [None, ""]}
     elif has_image is False:
         query["$or"] = [{"bildeUrl": {"$exists": False}}, {"bildeUrl": ""}, {"bildeUrl": None}]
     if verdict:
