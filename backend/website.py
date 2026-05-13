@@ -1069,12 +1069,12 @@ def laeringsbok():
       chapters.forEach((ch, i) => {
         const card = document.createElement('div');
         card.style.cssText = 'background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:24px;cursor:pointer;transition:all .2s';
-        card.innerHTML = \`
-          <div style="font-size:32px;margin-bottom:12px">\${icons[i]||'📘'}</div>
-          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:\${colors[i]||'#FF9933'};margin-bottom:6px">Kapittel \${ch.chapter_num}</div>
-          <h3 style="color:#fff;font-size:16px;font-weight:700;margin-bottom:6px">\${ch.title[curLang]||ch.title.no}</h3>
-          <p style="color:#64748B;font-size:13px">\${ch.section_count} seksjoner</p>
-        \`;
+        card.innerHTML = `
+          <div style="font-size:32px;margin-bottom:12px">${icons[i]||'📘'}</div>
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:${colors[i]||'#FF9933'};margin-bottom:6px">Kapittel ${ch.chapter_num}</div>
+          <h3 style="color:#fff;font-size:16px;font-weight:700;margin-bottom:6px">${ch.title[curLang]||ch.title.no}</h3>
+          <p style="color:#64748B;font-size:13px">${ch.section_count} seksjoner</p>
+        `;
         card.addEventListener('mouseenter', () => { card.style.borderColor='rgba(255,153,51,.4)'; card.style.background='rgba(255,153,51,.04)'; card.style.transform='translateY(-2px)'; });
         card.addEventListener('mouseleave', () => { card.style.borderColor='rgba(255,255,255,.07)'; card.style.background='rgba(255,255,255,.03)'; card.style.transform=''; });
         card.addEventListener('click', () => loadReader(ch.chapter_num, ch.title));
