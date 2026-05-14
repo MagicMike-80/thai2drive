@@ -112,11 +112,11 @@ footer a{color:#64748B}
 _JS = r"""
 (function(){
   const langs = ['th','no','en'];
-  const saved = localStorage.getItem('t2d_lang') || 'no';
+  const saved = localStorage.getItem('t2d_guide_lang') || 'no';
   function setLang(code){
     langs.forEach(l => document.body.classList.remove('lang-'+l));
     document.body.classList.add('lang-'+code);
-    localStorage.setItem('t2d_lang', code);
+    localStorage.setItem('t2d_guide_lang', code);
     document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active', b.dataset.lang===code));
   }
   document.querySelectorAll('.lang-btn').forEach(btn=>{
@@ -129,7 +129,7 @@ _JS = r"""
 
 def build_guide_page() -> str:
     return f"""<!DOCTYPE html>
-<html lang="th" data-lang="th">
+<html lang="no">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
@@ -138,7 +138,7 @@ def build_guide_page() -> str:
 <link rel="icon" href="{ICON_URL}"/>
 <style>{_CSS}</style>
 </head>
-<body>
+<body class="lang-no">
 
 <!-- NAV -->
 <nav class="nav">
