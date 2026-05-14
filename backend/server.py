@@ -1963,13 +1963,10 @@ async def admin_remove_image(question_id: str, _: dict = Depends(require_admin))
 
 @api_router.post("/admin/questions/{question_id}/unsplash-suggestions")
 async def unsplash_suggestions(question_id: str, _: dict = Depends(require_admin)):
-    """Admin: use Claude to generate 3 search queries, fetch 1 image per query from Unsplash.
-    Returns 3 image options with preview URLs (not base64 yet — user picks one)."""
+    """Admin: generate 3 search queries from question content, fetch 1 image per query from Unsplash."""
     import httpx
-    import anthropic as _anthropic
 
     unsplash_key = os.environ.get("UNSPLASH_ACCESS_KEY")
-    anthropic_key = os.environ.get("ANTHROPIC_API_KEY")
     if not unsplash_key:
         raise HTTPException(status_code=500, detail="UNSPLASH_ACCESS_KEY not configured")
 
@@ -1977,34 +1974,31 @@ async def unsplash_suggestions(question_id: str, _: dict = Depends(require_admin
     if not q:
         raise HTTPException(status_code=404, detail="Question not found")
 
-    question_no = q.get("question", {}).get("no", "")
-    question_en = q.get("question", {}).get("en", "") or question_no
+    question_en = q.get("question", {}).get("en", "") or q.get("question", {}).get("no", "")
     category = q.get("category", "")
 
-    # Use Claude to generate 3 targeted Unsplash search queries
-    ai = _anthropic.Anthropic(api_key=anthropic_key)
-    prompt = f"""You are helping find relevant photos for a Norwegian driving theory quiz question.
+    # Category-based base queries
+    category_map = {
+        "Traffic Signs": ["traffic sign norway", "road sign warning", "highway sign"],
+        "Road Rules": ["road rules driving norway", "traffic highway norway", "car driving road"],
+        "Right of Way": ["intersection traffic norway", "crossroads cars", "roundabout norway"],
+        "Speed Limits": ["speed limit road", "highway speed norway", "road speed sign"],
+        "Safety": ["road safety driving", "car safety seatbelt", "traffic accident prevention"],
+        "Driving Conditions": ["driving snow norway", "winter road icy", "wet road driving"],
+        "Situations": ["traffic situation road", "car driving situation", "road junction cars"],
+        "Pedestrians and Cyclists": ["pedestrian crossing road", "cyclist bike road", "crosswalk pedestrian"],
+        "Vehicle Knowledge": ["car engine vehicle", "car maintenance check", "automobile vehicle parts"],
+        "Environment and Economy": ["eco driving fuel", "electric car norway", "fuel efficient driving"],
+    }
+    base_queries = category_map.get(category, ["traffic road norway", "driving highway", "car road"])
 
-Question: {question_en}
-Category: {category}
-
-Generate exactly 3 short Unsplash search queries (2-4 words each) that would find visually relevant photos for this question.
-The queries should be different angles/aspects of the topic.
-Return ONLY a JSON array of 3 strings, nothing else.
-Example: ["parking ticket car", "traffic fine norway", "car parked street"]"""
-
-    resp = ai.messages.create(
-        model="claude-haiku-4-5",
-        max_tokens=100,
-        messages=[{"role": "user", "content": prompt}]
-    )
-    import json as _json
-    try:
-        queries = _json.loads(resp.content[0].text.strip())
-        if not isinstance(queries, list):
-            queries = ["traffic road norway", "driving highway", "car road"]
-    except Exception:
-        queries = ["traffic road norway", "driving highway", "car road"]
+    # Add a question-specific query from first meaningful words
+    words = [w for w in question_en.split() if len(w) > 3][:3]
+    if words:
+        specific = " ".join(words) + " road"
+        queries = [specific] + base_queries[:2]
+    else:
+        queries = base_queries[:3]
 
     # Fetch 1 image per query from Unsplash
     suggestions = []
