@@ -379,9 +379,181 @@ def build_guide_page() -> str:
     </div>
   </div>
 
-  <!-- SECTION 4: COSTS -->
+  <!-- SECTION 4: WHAT YOU LEARN PER TRINN -->
   <div class="section">
     <div class="section-num">4</div>
+    <h2><span class="tl tl-th">สิ่งที่คุณต้องเรียนรู้ในแต่ละขั้น</span><span class="tl tl-no">Hva du lærer i hvert trinn</span><span class="tl tl-en">What you learn in each step</span></h2>
+    <p class="lead">
+      <span class="tl tl-th">เนื้อหาหลักสูตรอย่างเป็นทางการตาม Trafikkopplæringsforskriften</span>
+      <span class="tl tl-no">Offisiell læreplan iht. Trafikkopplæringsforskriften (§ 11)</span>
+      <span class="tl tl-en">Official curriculum according to Trafikkopplæringsforskriften (§ 11)</span>
+    </p>
+
+    <!-- TRINN 1 -->
+    <div class="card" style="margin-bottom:14px;border-left:3px solid #FF9933">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div class="step-num" style="width:32px;height:32px;border-radius:50%;background:#FF9933;color:#0F172A;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0">1</div>
+        <h3 style="font-size:16px"><span class="tl tl-th">Trafikalt grunnkurs (TGK)</span><span class="tl tl-no">Trafikalt grunnkurs (TGK)</span><span class="tl tl-en">Basic Traffic Course (TGK)</span></h3>
+      </div>
+      <p style="font-size:13px;color:#FF9933;font-weight:700;margin-bottom:8px">
+        <span class="tl tl-th">🎯 เป้าหมาย: เข้าใจความรับผิดชอบของผู้ขับขี่และความปลอดภัยบนถนน</span>
+        <span class="tl tl-no">🎯 Mål: Forstå ansvar som fører og trygg ferdsel i trafikken</span>
+        <span class="tl tl-en">🎯 Goal: Understand driver responsibility and safe road behaviour</span>
+      </p>
+      <div style="display:grid;gap:6px">
+        <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:10px 12px;font-size:13px;color:#CBD5E1">
+          📖 <strong><span class="tl tl-th">กฎจราจรพื้นฐาน</span><span class="tl tl-no">Grunnleggende trafikkregler</span><span class="tl tl-en">Basic traffic rules</span></strong>
+          <span class="tl tl-th"> — ลำดับสิทธิ์ ความเร็ว การวางตัวรถ สัญญาณไฟ ป้ายจราจร</span>
+          <span class="tl tl-no"> — vikeplikt, fart, plassering, skilt, vegoppmerking</span>
+          <span class="tl tl-en"> — right of way, speed, positioning, signs, road markings</span>
+        </div>
+        <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:10px 12px;font-size:13px;color:#CBD5E1">
+          🧠 <strong><span class="tl tl-th">มนุษย์กับการจราจร</span><span class="tl tl-no">Mennesket i trafikken</span><span class="tl tl-en">Human factors in traffic</span></strong>
+          <span class="tl tl-th"> — ความรับผิดชอบ การตัดสินใจ อารมณ์ และการสื่อสารบนถนน</span>
+          <span class="tl tl-no"> — ansvar, motivasjon, følelser og kommunikasjon i trafikken</span>
+          <span class="tl tl-en"> — responsibility, motivation, emotions and communication in traffic</span>
+        </div>
+        <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:10px 12px;font-size:13px;color:#CBD5E1">
+          🚑 <strong><span class="tl tl-th">การปฐมพยาบาล (ภาคปฏิบัติ)</span><span class="tl tl-no">Førstehjelp (praktisk øvelse)</span><span class="tl tl-en">First aid (practical exercise)</span></strong>
+          <span class="tl tl-th"> — ฝึกจริงในสถานการณ์อุบัติเหตุจำลอง: HLKR, การโทรแจ้งเหตุ, การช่วยเหลือเบื้องต้น</span>
+          <span class="tl tl-no"> — øver på arrangert ulykke: varsling, sikring av skadested, HLR</span>
+          <span class="tl tl-en"> — practice on staged accident: calling for help, securing scene, CPR</span>
+        </div>
+        <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:10px 12px;font-size:13px;color:#CBD5E1">
+          🌙 <strong><span class="tl tl-th">การขับในความมืด (MørkeDemo)</span><span class="tl tl-no">Kjøring i mørket (MørkeDemo)</span><span class="tl tl-en">Night driving (MørkeDemo)</span></strong>
+          <span class="tl tl-th"> — สาธิตสด ≥1 ชม. กลางแจ้ง + ≥1 ชม. บนถนนจริง เพื่อเข้าใจอันตรายในยามค่ำคืน</span>
+          <span class="tl tl-no"> — min. 1 t utendørs demo + min. 1 t på veg i mørket — forstå risiko og riktig lysbruk</span>
+          <span class="tl tl-en"> — min. 1 hr outdoor demo + min. 1 hr on real road — understand risk and correct light use</span>
+        </div>
+      </div>
+      <div style="margin-top:10px;background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);border-radius:8px;padding:8px 12px;font-size:12px;color:#10B981;font-weight:600">
+        ⚠️ <span class="tl tl-th">อายุ 25+ ปี: ทำแค่ Førstehjelp + MørkeDemo เท่านั้น — ไม่ต้องเรียนครบทั้งหมด!</span>
+        <span class="tl tl-no">Over 25 år: Kun Førstehjelp + MørkeDemo — slipper resten av TGK!</span>
+        <span class="tl tl-en">Over 25: Only First aid + Night demo required — skip the rest of TGK!</span>
+      </div>
+    </div>
+
+    <!-- TRINN 2 -->
+    <div class="card" style="margin-bottom:14px;border-left:3px solid #3B82F6">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div class="step-num" style="width:32px;height:32px;border-radius:50%;background:#3B82F6;color:#fff;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0">2</div>
+        <h3 style="font-size:16px"><span class="tl tl-th">Trinn 2 — ทักษะพื้นฐานการขับขี่ (Veiledningstime 45 min)</span><span class="tl tl-no">Trinn 2 — Grunnleggende kjøreteknikk (Veiledningstime 45 min)</span><span class="tl tl-en">Step 2 — Basic driving skills (Guidance 45 min)</span></h3>
+      </div>
+      <p style="font-size:13px;color:#3B82F6;font-weight:700;margin-bottom:8px">
+        <span class="tl tl-th">🎯 เป้าหมาย: ควบคุมรถได้ดีพอที่จะเริ่มฝึกในสภาพจราจรจริง</span>
+        <span class="tl tl-no">🎯 Mål: God nok kontroll over bilen til å begynne trafikal opplæring i trinn 3</span>
+        <span class="tl tl-en">🎯 Goal: Good enough vehicle control to start traffic training in step 3</span>
+      </p>
+      <div style="display:grid;gap:6px">
+        <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:10px 12px;font-size:13px;color:#CBD5E1">
+          🚗 <strong><span class="tl tl-th">โครงสร้างรถและความปลอดภัย</span><span class="tl tl-no">Bilens oppbygning og sikkerhet</span><span class="tl tl-en">Vehicle structure and safety</span></strong>
+          <span class="tl tl-th"> — ระบบความปลอดภัยแอคทีฟ/แพสซีฟ เข็มขัดนิรภัย ไฟ ยาง การตรวจเช็ครถก่อนออกเดินทาง</span>
+          <span class="tl tl-no"> — aktiv/passiv sikkerhet, belter, lys, dekk, sikkerhetskontroll før kjøring</span>
+          <span class="tl tl-en"> — active/passive safety, belts, lights, tyres, pre-drive safety check</span>
+        </div>
+        <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:10px 12px;font-size:13px;color:#CBD5E1">
+          🎮 <strong><span class="tl tl-th">การควบคุมรถขั้นพื้นฐาน</span><span class="tl tl-no">Grunnleggende kjøretøybehandling</span><span class="tl tl-en">Basic vehicle handling</span></strong>
+          <span class="tl tl-th"> — ท่านั่ง การออกตัว การเบรก การเปลี่ยนเกียร์ การถอยหลัง การจอด ในพื้นที่จราจรน้อย</span>
+          <span class="tl tl-no"> — sittestilling, igangsetting, bremsing, giring, rygging, parkering i lite trafikk</span>
+          <span class="tl tl-en"> — seating position, starting, braking, gearing, reversing, parking in low traffic</span>
+        </div>
+        <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:10px 12px;font-size:13px;color:#CBD5E1">
+          ⚡ <strong><span class="tl tl-th">การเบรกฉุกเฉิน</span><span class="tl tl-no">Nødbremsing</span><span class="tl tl-en">Emergency braking</span></strong>
+          <span class="tl tl-th"> — ฝึกเร่งความเร็วปกติถึง 60 กม./ชม. และเบรกหนักเพื่อหยุดก่อนสิ่งกีดขวาง</span>
+          <span class="tl tl-no"> — øver på normalakselerasjon til 60 km/t og hard bremsing foran hindring</span>
+          <span class="tl tl-en"> — practise normal acceleration to 60 km/h and hard braking before obstacle</span>
+        </div>
+        <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:10px 12px;font-size:13px;color:#CBD5E1">
+          📋 <strong><span class="tl tl-th">Trinnvurdering (45 นาที — บังคับ)</span><span class="tl tl-no">Trinnvurdering (45 min — obligatorisk)</span><span class="tl tl-en">Step assessment (45 min — mandatory)</span></strong>
+          <span class="tl tl-th"> — ครูและนักเรียนประเมินร่วมกันว่าผ่านเกณฑ์พร้อมเรียน Trinn 3 หรือยัง</span>
+          <span class="tl tl-no"> — elev og lærer vurderer sammen om grunnlaget for trinn 3 er tilstrekkelig</span>
+          <span class="tl tl-en"> — student and instructor jointly assess readiness for step 3</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- TRINN 3 -->
+    <div class="card" style="margin-bottom:14px;border-left:3px solid #8B5CF6">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div class="step-num" style="width:32px;height:32px;border-radius:50%;background:#8B5CF6;color:#fff;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0">3</div>
+        <h3 style="font-size:16px"><span class="tl tl-th">Trinn 3 — การฝึกในสภาพจราจร (Veiledningstime 60 min + Bane 5 timer)</span><span class="tl tl-no">Trinn 3 — Trafikal opplæring (Veiledningstime 60 min + Bane 5 timer)</span><span class="tl tl-en">Step 3 — Traffic training (Guidance 60 min + Track 5 hours)</span></h3>
+      </div>
+      <p style="font-size:13px;color:#8B5CF6;font-weight:700;margin-bottom:8px">
+        <span class="tl tl-th">🎯 เป้าหมาย: ขับอย่างชัดเจน ปลอดภัย และอิสระในสภาพจราจรหลากหลาย</span>
+        <span class="tl tl-no">🎯 Mål: Kjøre tydelig, sikkert og selvstendig i variert trafikk</span>
+        <span class="tl tl-en">🎯 Goal: Drive clearly, safely and independently in varied traffic</span>
+      </p>
+      <div style="display:grid;gap:6px">
+        <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:10px 12px;font-size:13px;color:#CBD5E1">
+          🏙️ <strong><span class="tl tl-th">ขับในเมือง ชุมชน และทางหลวง</span><span class="tl tl-no">Kjøring i by, tettsted og landevei</span><span class="tl tl-en">Driving in city, town and country road</span></strong>
+          <span class="tl tl-th"> — การวางตัว ความเร็ว การแซง การขับในอุโมงค์ และในความมืด</span>
+          <span class="tl tl-no"> — plassering, fart, forbikjøring, tunnel og mørkekjøring</span>
+          <span class="tl tl-en"> — positioning, speed, overtaking, tunnels and night driving</span>
+        </div>
+        <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:10px 12px;font-size:13px;color:#CBD5E1">
+          👁️ <strong><span class="tl tl-th">การมองถนนอย่างเป็นระบบ</span><span class="tl tl-no">Systematisk informasjonsinnhenting</span><span class="tl tl-en">Systematic visual scanning</span></strong>
+          <span class="tl tl-th"> — มองไกล ขยับสายตาสม่ำเสมอ มองหาทางออก เห็นและถูกเห็น</span>
+          <span class="tl tl-no"> — se langt frem, beveg blikket, finn utvei, se og bli sett</span>
+          <span class="tl tl-en"> — look far ahead, scan constantly, find escape route, see and be seen</span>
+        </div>
+        <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:10px 12px;font-size:13px;color:#CBD5E1">
+          🤝 <strong><span class="tl tl-th">การร่วมใช้ถนนกับผู้อื่น</span><span class="tl tl-no">Samhandling med alle trafikanter</span><span class="tl tl-en">Interaction with all road users</span></strong>
+          <span class="tl tl-th"> — คนเดินเท้า นักปั่นจักรยาน รถบรรทุก รถจักรยานยนต์ — สื่อสารและร่วมมือ</span>
+          <span class="tl tl-no"> — fotgjengere, syklister, lastebiler, motorsykler — kommunikasjon og samhandling</span>
+          <span class="tl tl-en"> — pedestrians, cyclists, trucks, motorcycles — communication and co-operation</span>
+        </div>
+        <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:10px 12px;font-size:13px;color:#CBD5E1">
+          📋 <strong><span class="tl tl-th">Trinnvurdering (45 นาที — บังคับ)</span><span class="tl tl-no">Trinnvurdering (45 min — obligatorisk)</span><span class="tl tl-en">Step assessment (45 min — mandatory)</span></strong>
+          <span class="tl tl-th"> — ครูและนักเรียนประเมินร่วมกันว่าพร้อมสำหรับ Trinn 4 หรือยัง</span>
+          <span class="tl tl-no"> — elev og lærer vurderer sammen om eleven er klar for trinn 4</span>
+          <span class="tl tl-en"> — student and instructor assess readiness for step 4</span>
+        </div>
+        <div style="background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.3);border-radius:8px;padding:10px 12px;font-size:13px;color:#C4B5FD">
+          🏎️ <strong><span class="tl tl-th">Sikkerhetskurs på bane — SKB (5 ชั่วโมง บังคับ)</span><span class="tl tl-no">Sikkerhetskurs på bane — SKB (5 timer, obligatorisk)</span><span class="tl tl-en">Track safety course — SKB (5 hours, mandatory)</span></strong><br/>
+          <span class="tl tl-th" style="display:block;margin-top:4px">ฝึกบนสนามพิเศษ: ทดสอบการเบรก, ขับบนถนนลื่น (glattkjøring), ทดสอบระบบ ABS, ฝึกควบคุมรถในสถานการณ์ฉุกเฉิน</span>
+          <span class="tl tl-no" style="display:block;margin-top:4px">Øver på bane: nødbremsing, kjøring på glatt underlag, ABS-test, kontroll ved krisesituasjoner</span>
+          <span class="tl tl-en" style="display:block;margin-top:4px">On-track practice: emergency braking, driving on slippery surface, ABS test, vehicle control in crisis situations</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- TRINN 4 -->
+    <div class="card" style="margin-bottom:14px;border-left:3px solid #10B981">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div class="step-num" style="width:32px;height:32px;border-radius:50%;background:#10B981;color:#fff;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0">4</div>
+        <h3 style="font-size:16px"><span class="tl tl-th">Trinn 4 — Sikkerhetskurs på vei (5+4 ชั่วโมง)</span><span class="tl tl-no">Trinn 4 — Sikkerhetskurs på vei (5+4 timer)</span><span class="tl tl-en">Step 4 — Road safety course (5+4 hours)</span></h3>
+      </div>
+      <p style="font-size:13px;color:#10B981;font-weight:700;margin-bottom:8px">
+        <span class="tl tl-th">🎯 เป้าหมาย: ขับอิสระ 100% ระบุความเสี่ยง และเลือกวิธีขับที่ปลอดภัยที่สุด</span>
+        <span class="tl tl-no">🎯 Mål: Kjøre 100% selvstendig, identifisere risiko og velge trygg kjøremåte</span>
+        <span class="tl tl-en">🎯 Goal: Drive 100% independently, identify risk and choose safe driving behaviour</span>
+      </p>
+      <div style="display:grid;gap:6px">
+        <div style="background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);border-radius:8px;padding:10px 12px;font-size:13px;color:#CBD5E1">
+          🚗 <strong><span class="tl tl-th">5 ชั่วโมงแรก — ขับทางไกลกับครู</span><span class="tl tl-no">Første 5 timer — langkjøring med lærer</span><span class="tl tl-en">First 5 hours — long drive with instructor</span></strong>
+          <span class="tl tl-th"><br/>ขับบนถนนนอกเมืองที่มีมาตรฐานต่างกัน ระบุและอธิบายความเสี่ยง เรียนรู้การขับเข้า/ออกถนนใหญ่</span>
+          <span class="tl tl-no"><br/>Kjøring på landeveg med varierende standard, identifiser risiko, øv på inn-/avkjøring fra større veg</span>
+          <span class="tl tl-en"><br/>Drive on varied country roads, identify risk factors, practise entering/exiting main roads</span>
+        </div>
+        <div style="background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);border-radius:8px;padding:10px 12px;font-size:13px;color:#CBD5E1">
+          🎓 <strong><span class="tl tl-th">4 ชั่วโมงสุดท้าย — ขับอิสระ 100%</span><span class="tl tl-no">Siste 4 timer — 100% selvstendig kjøring</span><span class="tl tl-en">Last 4 hours — 100% independent driving</span></strong>
+          <span class="tl tl-th"><br/>ขับคนเดียวในสภาพแวดล้อมหลากหลาย (ทางหลวง เมือง) ครูไม่ช่วยเหลือ เขียนบันทึก (logg)</span>
+          <span class="tl tl-no"><br/>Kjøring alene i skiftende miljø (landeveg + by), lærer griper ikke inn, skriv logg</span>
+          <span class="tl tl-en"><br/>Drive alone in varying environment (highway + city), no instructor help, write driving log</span>
+        </div>
+        <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:10px 12px;font-size:13px;color:#CBD5E1">
+          📝 <strong><span class="tl tl-th">การสะท้อนผลและสรุป</span><span class="tl tl-no">Refleksjon og oppsummering</span><span class="tl tl-en">Reflection and summary</span></strong>
+          <span class="tl tl-th"> — อภิปรายกับเพื่อน/ครู ประเมินจุดแข็งและจุดที่ต้องพัฒนาของตัวเอง</span>
+          <span class="tl tl-no"> — diskusjon med medelever og lærer, vurder egne sterke og svake sider</span>
+          <span class="tl tl-en"> — discuss with classmates and instructor, evaluate own strengths and weaknesses</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: COSTS -->
+  <div class="section">
+    <div class="section-num">5</div>
     <h2><span class="tl tl-th">ค่าใช้จ่ายโดยรวม</span><span class="tl tl-no">Totale kostnader</span><span class="tl tl-en">Total costs</span></h2>
     <p class="lead">
       <span class="tl tl-th">ประมาณการค่าใช้จ่ายในการเรียนขับรถในนอร์เวย์</span>
