@@ -9,6 +9,11 @@ ICON_URL = "/api/assets/developer-icon-512.png"
 HEADER_URL = "/api/assets/developer-header-4096x2304.jpg"
 QR_URL = "/api/assets/qr-download.png"
 
+# ── YouTube video ─────────────────────────────────────────────
+# Paste your YouTube video ID here (the part after ?v= in the URL)
+# Leave empty to hide the video section
+YOUTUBE_VIDEO_ID = ""  # e.g. "dQw4w9WgXcQ"
+
 # Phone screenshot paths (produced earlier)
 SCREENSHOTS = [
     "/api/assets/screenshots/01-home-thai.jpg",
@@ -105,20 +110,20 @@ html[data-current-lang="en"] [data-lang="en"].block{display:block}
 .t2d-lang-badge{width:28px;height:28px;border-radius:50%;overflow:hidden}
 
 /* HERO */
-.hero{padding:64px 0 56px;text-align:center;position:relative}
+.hero{padding:80px 0 64px;text-align:center;position:relative}
 .hero::before{
   content:'';position:absolute;top:-20%;left:50%;transform:translateX(-50%);
-  width:900px;height:600px;background:radial-gradient(closest-side,rgba(255,153,51,.12),transparent 70%);
+  width:1200px;height:800px;background:radial-gradient(closest-side,rgba(255,153,51,.15),transparent 70%);
   pointer-events:none;z-index:-1;
 }
-.hero-icon{width:110px;height:110px;border-radius:26px;box-shadow:0 30px 80px rgba(255,153,51,.25);margin-bottom:24px}
+.hero-icon{width:130px;height:130px;border-radius:32px;box-shadow:0 40px 100px rgba(255,153,51,.3);margin-bottom:28px}
 .hero h1{
-  font-size:clamp(34px,5.5vw,60px);font-weight:900;letter-spacing:-.02em;
-  line-height:1.08;color:#fff;margin-bottom:18px;
-  max-width:820px;margin-left:auto;margin-right:auto;
+  font-size:clamp(48px,8vw,88px);font-weight:900;letter-spacing:-.03em;
+  line-height:1.05;color:#fff;margin-bottom:22px;
+  max-width:960px;margin-left:auto;margin-right:auto;
 }
 .hero h1 em{font-style:normal;color:#FF9933}
-.hero .sub{font-size:clamp(16px,2.2vw,20px);color:#94A3B8;max-width:620px;margin:0 auto 28px}
+.hero .sub{font-size:clamp(20px,3vw,30px);color:#94A3B8;max-width:740px;margin:0 auto 32px;line-height:1.5}
 .cta-group{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:12px}
 .cta-btn{
   display:inline-flex;align-items:center;gap:8px;padding:16px 28px;border-radius:12px;
@@ -139,16 +144,45 @@ html[data-current-lang="en"] [data-lang="en"].block{display:block}
 .qr-text small{display:block;color:#64748B;font-weight:500;margin-top:3px;font-size:11px}
 
 /* badges */
-.hero-badges{display:flex;justify-content:center;gap:10px;margin-top:30px;flex-wrap:wrap}
-.badge-chip{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:999px;font-size:13px;color:#CBD5E1}
-.badge-chip .ok{width:6px;height:6px;background:#10B981;border-radius:50%}
+.hero-badges{display:flex;justify-content:center;gap:12px;margin-top:36px;flex-wrap:wrap}
+.badge-chip{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:999px;font-size:16px;color:#CBD5E1;font-weight:500}
+.badge-chip .ok{width:8px;height:8px;background:#10B981;border-radius:50%}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:24px;margin:56px 0}
+.stat{text-align:center;padding:28px 16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:18px}
+.stat-num{font-size:clamp(40px,6vw,72px);font-weight:900;color:#FF9933;letter-spacing:-.02em;line-height:1}
+.stat-label{font-size:16px;color:#94A3B8;margin-top:8px;font-weight:500}
+
+/* VIDEO */
+.video-wrap{position:relative;max-width:860px;margin:0 auto;border-radius:20px;overflow:hidden;box-shadow:0 40px 100px rgba(0,0,0,.5);cursor:pointer}
+.video-wrap iframe{width:100%;aspect-ratio:16/9;display:block;border:0}
+.video-poster{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden}
+.video-poster img{width:100%;height:100%;object-fit:cover;display:block}
+.video-poster .play-btn{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:80px;height:80px;border-radius:50%;
+  background:rgba(255,153,51,.9);display:flex;align-items:center;justify-content:center;
+  font-size:32px;color:#fff;box-shadow:0 8px 32px rgba(0,0,0,.4);
+  transition:transform .2s,background .2s;
+}
+.video-poster:hover .play-btn{transform:translate(-50%,-50%) scale(1.1);background:#FF9933}
+.video-coming{
+  width:100%;aspect-ratio:16/9;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:12px;
+  background:linear-gradient(135deg,rgba(255,153,51,.08),rgba(11,18,38,1));
+  border:2px dashed rgba(255,153,51,.25);border-radius:20px;
+  color:#64748B;font-size:18px;text-align:center;padding:40px;
+}
+.video-coming .vc-icon{font-size:56px;margin-bottom:8px}
+.video-coming strong{color:#94A3B8;font-size:22px}
 
 /* SECTIONS */
-section{padding:72px 0;position:relative}
-.sec-head{text-align:center;max-width:720px;margin:0 auto 44px}
-.eyebrow{display:inline-block;color:#FF9933;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.12em;margin-bottom:12px}
-.sec-head h2{font-size:clamp(26px,4vw,38px);font-weight:800;color:#fff;margin-bottom:10px;letter-spacing:-.01em}
-.sec-head p{color:#94A3B8;font-size:16px}
+section{padding:80px 0;position:relative}
+.sec-head{text-align:center;max-width:800px;margin:0 auto 52px}
+.eyebrow{display:inline-block;color:#FF9933;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:.12em;margin-bottom:14px}
+.sec-head h2{font-size:clamp(36px,5.5vw,56px);font-weight:800;color:#fff;margin-bottom:14px;letter-spacing:-.02em}
+.sec-head p{color:#94A3B8;font-size:20px;line-height:1.6}
 
 /* TRY-IN-BROWSER */
 .try-panel{
@@ -204,41 +238,41 @@ section{padding:72px 0;position:relative}
 .plan-mini .p small{font-size:11px;color:#94A3B8;font-weight:500}
 
 /* Why Thai2Drive */
-.why-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.why-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
 .why-item{
   background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
-  padding:22px;border-radius:14px;display:flex;align-items:center;gap:16px;
+  padding:28px 26px;border-radius:18px;display:flex;align-items:center;gap:20px;
   transition:border-color .2s,background .2s,transform .2s;
 }
-.why-item:hover{border-color:rgba(255,153,51,.3);background:rgba(255,153,51,.04);transform:translateY(-2px)}
+.why-item:hover{border-color:rgba(255,153,51,.3);background:rgba(255,153,51,.04);transform:translateY(-3px)}
 .why-num{
-  flex-shrink:0;width:42px;height:42px;border-radius:50%;
+  flex-shrink:0;width:52px;height:52px;border-radius:50%;
   background:rgba(255,153,51,.15);color:#FF9933;
   display:flex;align-items:center;justify-content:center;
-  font-weight:900;font-size:18px;
+  font-weight:900;font-size:22px;
 }
-.why-item h3{color:#fff;font-size:15px;font-weight:700;line-height:1.3}
+.why-item h3{color:#fff;font-size:20px;font-weight:700;line-height:1.3}
 
 /* FEATURES */
-.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px}
+.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px}
 .feat{
   background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
-  padding:26px;border-radius:16px;transition:all .2s;
+  padding:32px;border-radius:20px;transition:all .2s;
 }
-.feat:hover{border-color:rgba(255,153,51,.3);background:rgba(255,153,51,.03);transform:translateY(-2px)}
-.feat-icon{width:44px;height:44px;border-radius:10px;background:rgba(255,153,51,.15);color:#FF9933;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px}
-.feat h3{font-size:16px;color:#fff;font-weight:700;margin-bottom:6px}
-.feat p{color:#94A3B8;font-size:14px;line-height:1.5}
+.feat:hover{border-color:rgba(255,153,51,.3);background:rgba(255,153,51,.03);transform:translateY(-3px)}
+.feat-icon{width:56px;height:56px;border-radius:14px;background:rgba(255,153,51,.15);color:#FF9933;display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:18px}
+.feat h3{font-size:22px;color:#fff;font-weight:700;margin-bottom:10px}
+.feat p{color:#94A3B8;font-size:17px;line-height:1.6}
 
 /* TRUST */
-.trust{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.trust{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
 .trust-card{
-  text-align:center;padding:22px;background:rgba(255,255,255,.03);
-  border:1px solid rgba(255,255,255,.06);border-radius:14px;
+  text-align:center;padding:32px 24px;background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.06);border-radius:18px;
 }
-.trust-icon{font-size:32px;margin-bottom:10px}
-.trust-card h4{color:#fff;font-size:15px;font-weight:700;margin-bottom:4px}
-.trust-card p{color:#94A3B8;font-size:13px}
+.trust-icon{font-size:44px;margin-bottom:14px}
+.trust-card h4{color:#fff;font-size:20px;font-weight:700;margin-bottom:8px}
+.trust-card p{color:#94A3B8;font-size:17px;line-height:1.5}
 
 /* SCREENSHOTS */
 .shots{display:flex;gap:16px;overflow-x:auto;padding:10px 0 20px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
@@ -253,12 +287,12 @@ section{padding:72px 0;position:relative}
 
 /* CTA BAND */
 .cta-band{
-  background:linear-gradient(135deg,rgba(255,153,51,.1),rgba(255,153,51,.02));
-  border-top:1px solid rgba(255,153,51,.2);border-bottom:1px solid rgba(255,153,51,.2);
-  text-align:center;padding:64px 24px;
+  background:linear-gradient(135deg,rgba(255,153,51,.12),rgba(255,153,51,.02));
+  border-top:1px solid rgba(255,153,51,.25);border-bottom:1px solid rgba(255,153,51,.25);
+  text-align:center;padding:80px 24px;
 }
-.cta-band h2{font-size:clamp(24px,3.5vw,34px);color:#fff;font-weight:800;margin-bottom:10px}
-.cta-band p{color:#94A3B8;max-width:480px;margin:0 auto 24px}
+.cta-band h2{font-size:clamp(32px,5vw,52px);color:#fff;font-weight:800;margin-bottom:14px;letter-spacing:-.02em}
+.cta-band p{color:#94A3B8;max-width:560px;margin:0 auto 28px;font-size:20px}
 
 /* FOOTER */
 footer{padding:40px 0 32px;border-top:1px solid rgba(255,255,255,.06);margin-top:40px}
@@ -387,9 +421,9 @@ def _hero_html() -> str:
 
     <div class="hero-badges">
       <span class="badge-chip"><span class="ok"></span>
-        <span data-lang="th">มากกว่า 500 ข้อ</span>
-        <span data-lang="no">500+ spørsmål</span>
-        <span data-lang="en">500+ questions</span>
+        <span data-lang="th">มากกว่า 700 ข้อ</span>
+        <span data-lang="no">700+ spørsmål</span>
+        <span data-lang="en">700+ questions</span>
       </span>
       <span class="badge-chip">🇹🇭🇳🇴
         <span data-lang="th">ใช้โดยคนไทยในนอร์เวย์</span>
@@ -401,6 +435,11 @@ def _hero_html() -> str:
         <span data-lang="no">Oppdatert etter regler</span>
         <span data-lang="en">Updated to latest rules</span>
       </span>
+    </div>
+
+    <!-- Feature header image -->
+    <div style="margin-top:48px;border-radius:20px;overflow:hidden;box-shadow:0 40px 100px rgba(0,0,0,.5);max-width:900px;margin-left:auto;margin-right:auto">
+      <img src="{HEADER_URL}" alt="Thai2Drive app" style="width:100%;display:block;object-fit:cover;max-height:420px"/>
     </div>
   </div>
 </section>
@@ -448,6 +487,98 @@ def _try_html() -> str:
         </button>
       </div>
     </div>
+  </div>
+</section>
+"""
+
+
+def _stats_html() -> str:
+    return """
+<section style="padding:0 0 40px">
+  <div class="container">
+    <div class="stats-row">
+      <div class="stat">
+        <div class="stat-num">700+</div>
+        <div class="stat-label">
+          <span data-lang="th">คำถาม</span>
+          <span data-lang="no">spørsmål</span>
+          <span data-lang="en">questions</span>
+        </div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">3</div>
+        <div class="stat-label">
+          <span data-lang="th">ภาษา</span>
+          <span data-lang="no">språk</span>
+          <span data-lang="en">languages</span>
+        </div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">45</div>
+        <div class="stat-label">
+          <span data-lang="th">ข้อสอบจริง</span>
+          <span data-lang="no">eksamens­spørsmål</span>
+          <span data-lang="en">exam questions</span>
+        </div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">90%</div>
+        <div class="stat-label">
+          <span data-lang="th">ผ่านครั้งแรก</span>
+          <span data-lang="no">består på første</span>
+          <span data-lang="en">pass first try</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+"""
+
+
+def _video_html() -> str:
+    if YOUTUBE_VIDEO_ID:
+        embed_url = f"https://www.youtube-nocookie.com/embed/{YOUTUBE_VIDEO_ID}?rel=0&modestbranding=1"
+        video_block = f"""
+    <div class="video-wrap">
+      <iframe src="{embed_url}" allowfullscreen title="Thai2Drive video"></iframe>
+    </div>"""
+    else:
+        video_block = f"""
+    <div class="video-coming">
+      <div class="vc-icon">🎬</div>
+      <strong>
+        <span data-lang="th">วิดีโออธิบายบนไทย — เร็วๆ นี้!</span>
+        <span data-lang="no">Forklaringsvideo på thai — kommer snart!</span>
+        <span data-lang="en">Thai-language explainer video — coming soon!</span>
+      </strong>
+      <span>
+        <span data-lang="th">«สอบทฤษฎีในนอร์เวย์ยังไง» · ทุกขั้นตอน ภาษาไทย</span>
+        <span data-lang="no">«Slik tar du teoriprøven i Norge» · alt forklart på thai</span>
+        <span data-lang="en">«How to pass the Norwegian theory test» · all explained in Thai</span>
+      </span>
+    </div>"""
+
+    return f"""
+<section>
+  <div class="container">
+    <div class="sec-head">
+      <span class="eyebrow">
+        <span data-lang="th">วิดีโอ</span>
+        <span data-lang="no">Video</span>
+        <span data-lang="en">Video</span>
+      </span>
+      <h2>
+        <span data-lang="th" class="block">เรียนรู้ก่อนสอบ</span>
+        <span data-lang="no" class="block">Lær av videoene</span>
+        <span data-lang="en" class="block">Learn from the videos</span>
+      </h2>
+      <p>
+        <span data-lang="th">คำอธิบายเป็นภาษาไทย — เข้าใจง่าย ไม่ต้องเดา</span>
+        <span data-lang="no">Forklaringer på thai — lett å forstå, ingen gjetning</span>
+        <span data-lang="en">Explanations in Thai — easy to understand, no guessing</span>
+      </p>
+    </div>
+    {video_block}
   </div>
 </section>
 """
@@ -904,11 +1035,13 @@ def build_landing_page(chat_css: str, chat_widget_html: str, chat_js: str) -> st
 <body>
 {_nav_html()}
 {_hero_html()}
+{_stats_html()}
 {_try_html()}
+{_video_html()}
 {_why_html()}
 {_features_html()}
-{_trust_html()}
 {_screenshots_html()}
+{_trust_html()}
 {_bottom_cta_html()}
 {_footer_html()}
 {chat_widget_html}
