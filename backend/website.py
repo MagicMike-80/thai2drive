@@ -657,11 +657,7 @@ def landing():
 # ─────────────────────────── GUIDE PAGE ───────────────────────────
 @website_router.get("/guide", response_class=HTMLResponse)
 def guide_page():
-    try:
-        from guide import build_guide_page
-        return HTMLResponse(build_guide_page())
-    except Exception as e:
-        return HTMLResponse(f"<html><body style='background:#0B1226;color:#fff;font-family:sans-serif;padding:40px'><h1>Guide feil: {e}</h1></body></html>")
+    return HTMLResponse("<html><body style='background:red;color:white;padding:40px;font-size:30px'>GUIDE TEST OK</body></html>")
 
 
 # ─────────────────────────── PRIVACY POLICY ───────────────────────────
