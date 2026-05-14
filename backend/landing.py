@@ -53,7 +53,7 @@ html[data-current-lang="en"] [data-lang="en"].block{display:block}
 .brand .t2d{color:#FF9933}
 .lang-row{display:flex;gap:6px}
 .lang-btn{
-  width:48px;height:48px;border-radius:50%;border:2.5px solid transparent;
+  width:60px;height:60px;border-radius:50%;border:2.5px solid transparent;
   background:rgba(255,255,255,.06);cursor:pointer;
   display:flex;align-items:center;justify-content:center;padding:0;overflow:hidden;
   transition:border-color .15s,transform .15s,box-shadow .15s;
@@ -62,7 +62,7 @@ html[data-current-lang="en"] [data-lang="en"].block{display:block}
 }
 .lang-btn:hover{transform:scale(1.1);box-shadow:0 4px 16px rgba(0,0,0,.4)}
 .lang-btn.active{border-color:#FF9933;background:rgba(255,153,51,.18);box-shadow:0 0 0 3px rgba(255,153,51,.25)}
-.mini-flag{display:flex;flex-direction:column;width:30px;height:20px;border-radius:3px;overflow:hidden;flex-shrink:0}
+.mini-flag{display:flex;flex-direction:column;width:38px;height:26px;border-radius:3px;overflow:hidden;flex-shrink:0}
 .mini-flag.flag-th span:nth-child(1){background:#A51931;flex:1}
 .mini-flag.flag-th span:nth-child(2){background:#F4F5F8;flex:1}
 .mini-flag.flag-th span:nth-child(3){background:#2D2A4A;flex:2}
@@ -857,6 +857,8 @@ def build_landing_page(chat_css: str, chat_widget_html: str, chat_js: str) -> st
 <meta property="og:type" content="website"/>
 <meta property="og:site_name" content="Thai2Drive"/>
 <meta property="og:locale" content="nb_NO"/>
+<meta name="google" content="notranslate"/>
+<meta http-equiv="Content-Language" content="th,no,en"/>
 <meta property="og:locale:alternate" content="th_TH"/>
 <meta property="og:locale:alternate" content="en_US"/>
 <meta name="twitter:card" content="summary_large_image"/>
