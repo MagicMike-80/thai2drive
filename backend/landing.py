@@ -51,7 +51,11 @@ html[data-current-lang="en"] [data-lang="en"].block{display:block}
 .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px;color:#fff;flex-shrink:0}
 .brand img{width:36px;height:36px;border-radius:8px}
 .brand .t2d{color:#FF9933}
-.lang-row{display:flex;gap:6px}
+.lang-row{display:flex;gap:10px;align-items:flex-end}
+.lang-wrap{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer}
+.lang-wrap .lang-label{font-size:11px;font-weight:700;color:#94A3B8;letter-spacing:.5px;transition:color .15s}
+.lang-wrap:hover .lang-label{color:#FF9933}
+.lang-wrap.active .lang-label{color:#FF9933}
 .lang-btn{
   width:60px;height:60px;border-radius:50%;border:2.5px solid transparent;
   background:rgba(255,255,255,.06);cursor:pointer;
@@ -288,9 +292,18 @@ def _nav_html() -> str:
       <span>Thai<span class="t2d">2</span>Drive</span>
     </a>
     <div class="lang-row" role="group" aria-label="Language">
-      <button class="lang-btn active" data-set-lang="th" aria-label="ไทย"><span class="mini-flag flag-th"><span></span><span></span><span></span><span></span><span></span></span></button>
-      <button class="lang-btn" data-set-lang="no" aria-label="Norsk"><span class="mini-flag flag-no"><span class="b"></span><span class="bv"></span></span></button>
-      <button class="lang-btn" data-set-lang="en" aria-label="English"><span class="mini-flag flag-gb"><span class="r1"></span><span class="r2"></span></span></button>
+      <div class="lang-wrap active" data-wrap-lang="th">
+        <button class="lang-btn active" data-set-lang="th" aria-label="ไทย"><span class="mini-flag flag-th"><span></span><span></span><span></span><span></span><span></span></span></button>
+        <span class="lang-label">ไทย</span>
+      </div>
+      <div class="lang-wrap" data-wrap-lang="no">
+        <button class="lang-btn" data-set-lang="no" aria-label="Norsk"><span class="mini-flag flag-no"><span class="b"></span><span class="bv"></span></span></button>
+        <span class="lang-label">Norsk</span>
+      </div>
+      <div class="lang-wrap" data-wrap-lang="en">
+        <button class="lang-btn" data-set-lang="en" aria-label="English"><span class="mini-flag flag-gb"><span class="r1"></span><span class="r2"></span></span></button>
+        <span class="lang-label">English</span>
+      </div>
     </div>
   </div>
 </nav>
@@ -647,14 +660,17 @@ LANDING_JS = r"""
   const initial = supported.includes(saved) ? saved : 'th';
   document.documentElement.setAttribute('data-current-lang', initial);
 
+  function applyLang(code){
+    document.documentElement.setAttribute('data-current-lang', code);
+    localStorage.setItem('t2d_landing_lang', code);
+    document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active', b.dataset.setLang===code));
+    document.querySelectorAll('.lang-wrap').forEach(w=>w.classList.toggle('active', w.dataset.wrapLang===code));
+  }
+
+  applyLang(initial);
+
   document.querySelectorAll('.lang-btn').forEach(btn=>{
-    const code = btn.dataset.setLang;
-    if(code === initial) btn.classList.add('active'); else btn.classList.remove('active');
-    btn.addEventListener('click', ()=>{
-      document.documentElement.setAttribute('data-current-lang', code);
-      localStorage.setItem('t2d_landing_lang', code);
-      document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active', b === btn));
-    });
+    btn.addEventListener('click', ()=> applyLang(btn.dataset.setLang));
   });
 })();
 
