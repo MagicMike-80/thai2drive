@@ -351,7 +351,7 @@ def build_guide_page() -> str:
         <div class="step-num">5</div>
         <div class="step-body">
           <h4><span class="tl tl-th">Trinn 4 — Sikkerhetskurs på vei (5+4 timer)</span><span class="tl tl-no">Trinn 4 — Sikkerhetskurs på vei (5+4 timer)</span><span class="tl tl-en">Step 4 — Road safety course (5+4 hours)</span></h4>
-          <p><span class="tl tl-th">หลักสูตรความปลอดภัยบนถนนจริง 5+4 ชั่วโมง — ขับในสภาพการจราจรจริง รวมถึงถนนต่างจังหวัดและทางด่วน</span><span class="tl tl-no">Sikkerhetskurs på vei på 5+4 timer — kjøring i reell trafikk inkl. landevei og motorvei.</span><span class="tl tl-en">5+4 hour road safety course — real traffic driving including country roads and motorway.</span></p>
+          <p><span class="tl tl-th">🚗 <strong>5 ชั่วโมงแรก:</strong> ขับทางไกลบนถนนนอกเมืองพร้อมครูผู้สอนช่วยเหลือ<br/>🎓 <strong>4 ชั่วโมงสุดท้าย:</strong> ผู้เรียนต้องขับอย่างอิสระ 100% — ครูไม่ช่วย ต้องผ่านด้วยตัวเอง</span><span class="tl tl-no">🚗 <strong>Første 5 timer:</strong> Langkjøring på landevei med hjelp fra trafikklærer<br/>🎓 <strong>Siste 4 timer:</strong> Eleven kjører 100% selvstendig — må klare seg helt på egen hånd</span><span class="tl tl-en">🚗 <strong>First 5 hours:</strong> Long-distance driving on country roads with instructor assistance<br/>🎓 <strong>Last 4 hours:</strong> Student drives completely independently — must manage entirely on their own</span></p>
           <span class="note"><span class="tl tl-th">สุดท้ายก่อนสอบ — ที่โรงเรียนสอนขับ</span><span class="tl tl-no">Siste obligatoriske hos trafikklærer</span><span class="tl tl-en">Last mandatory step at driving school</span></span>
         </div>
       </div>
