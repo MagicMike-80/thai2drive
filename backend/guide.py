@@ -342,16 +342,16 @@ def build_guide_page() -> str:
       <div class="step-item">
         <div class="step-num">4</div>
         <div class="step-body">
-          <h4><span class="tl tl-th">Trinn 3 — Veiledningstime (60 min) + Sikkerhetskurs på bane</span><span class="tl tl-no">Trinn 3 — Veiledningstime (60 min) + Sikkerhetskurs på bane</span><span class="tl tl-en">Step 3 — Guidance (60 min) + Track safety course</span></h4>
-          <p><span class="tl tl-th">ฝึกขับ 60 นาทีกับครู + หลักสูตรความปลอดภัยบนสนาม (Glattkjøring — ขับบนถนนลื่น/น้ำแข็ง)</span><span class="tl tl-no">Veiledningstime på 60 minutter + Sikkerhetskurs på bane (Glattkjøring — kjøring på glatt underlag).</span><span class="tl tl-en">60-min guidance session + track safety course (Glattkjøring — driving on slippery/icy surface).</span></p>
+          <h4><span class="tl tl-th">Trinn 3 — Veiledningstime (60 min) + Sikkerhetskurs på bane (5 timer)</span><span class="tl tl-no">Trinn 3 — Veiledningstime (60 min) + Sikkerhetskurs på bane (5 timer)</span><span class="tl tl-en">Step 3 — Guidance (60 min) + Track safety course (5 hours)</span></h4>
+          <p><span class="tl tl-th">ฝึกขับ 60 นาทีกับครู + หลักสูตรความปลอดภัยบนสนาม 5 ชั่วโมง (Glattkjøring — ขับบนถนนลื่น/น้ำแข็ง)</span><span class="tl tl-no">Veiledningstime på 60 minutter + Sikkerhetskurs på bane på 5 timer (Glattkjøring — kjøring på glatt underlag).</span><span class="tl tl-en">60-min guidance session + 5-hour track safety course (Glattkjøring — driving on slippery/icy surface).</span></p>
           <span class="warn"><span class="tl tl-th">ต้องผ่าน Trinn 2 ก่อน!</span><span class="tl tl-no">Må ha fullført Trinn 2 først!</span><span class="tl tl-en">Must complete Step 2 first!</span></span>
         </div>
       </div>
       <div class="step-item">
         <div class="step-num">5</div>
         <div class="step-body">
-          <h4><span class="tl tl-th">Trinn 4 — Sikkerhetskurs på vei (6 timer)</span><span class="tl tl-no">Trinn 4 — Sikkerhetskurs på vei (6 timer)</span><span class="tl tl-en">Step 4 — Road safety course (6 hours)</span></h4>
-          <p><span class="tl tl-th">หลักสูตรความปลอดภัยบนถนนจริง 6 ชั่วโมง — ขับในสภาพการจราจรจริง รวมถึงถนนต่างจังหวัดและทางด่วน</span><span class="tl tl-no">6 timers sikkerhetskurs på vei — kjøring i reell trafikk inkl. landevei og motorvei.</span><span class="tl tl-en">6-hour road safety course — real traffic driving including country roads and motorway.</span></p>
+          <h4><span class="tl tl-th">Trinn 4 — Sikkerhetskurs på vei (5+4 timer)</span><span class="tl tl-no">Trinn 4 — Sikkerhetskurs på vei (5+4 timer)</span><span class="tl tl-en">Step 4 — Road safety course (5+4 hours)</span></h4>
+          <p><span class="tl tl-th">หลักสูตรความปลอดภัยบนถนนจริง 5+4 ชั่วโมง — ขับในสภาพการจราจรจริง รวมถึงถนนต่างจังหวัดและทางด่วน</span><span class="tl tl-no">Sikkerhetskurs på vei på 5+4 timer — kjøring i reell trafikk inkl. landevei og motorvei.</span><span class="tl tl-en">5+4 hour road safety course — real traffic driving including country roads and motorway.</span></p>
           <span class="note"><span class="tl tl-th">สุดท้ายก่อนสอบ — ที่โรงเรียนสอนขับ</span><span class="tl tl-no">Siste obligatoriske hos trafikklærer</span><span class="tl tl-en">Last mandatory step at driving school</span></span>
         </div>
       </div>
@@ -373,7 +373,7 @@ def build_guide_page() -> str:
         <div class="step-num">7</div>
         <div class="step-body">
           <h4><span class="tl tl-th">Førerprøve — สอบขับ</span><span class="tl tl-no">Førerprøven (kjøreprøven)</span><span class="tl tl-en">Driving test</span></h4>
-          <p><span class="tl tl-th">ขับรถกับผู้ตรวจสอบจาก Statens Vegvesen ประมาณ 45-60 นาที ค่าสอบ ~1 000 kr<br/>ต้องผ่านทุกขั้นตอนก่อนนี้แล้ว!</span><span class="tl tl-no">Kjøring med sensor fra Statens Vegvesen. Ca. 45–60 min. ~1 000 kr.<br/>Alle obligatoriske trinn MÅ være fullført!</span><span class="tl tl-en">Drive with an examiner from Statens Vegvesen. ~45–60 min. ~1 000 kr.<br/>All mandatory steps must be completed first!</span></p>
+          <p><span class="tl tl-th">ขับรถกับผู้ตรวจสอบจาก Statens Vegvesen 60 นาที ค่าสอบ ~1 000 kr<br/>ต้องผ่านทุกขั้นตอนก่อนนี้แล้ว!</span><span class="tl tl-no">Kjøring med sensor fra Statens Vegvesen. 60 min. ~1 000 kr.<br/>Alle obligatoriske trinn MÅ være fullført!</span><span class="tl tl-en">Drive with an examiner from Statens Vegvesen. 60 min. ~1 000 kr.<br/>All mandatory steps must be completed first!</span></p>
         </div>
       </div>
     </div>
