@@ -176,22 +176,25 @@ def build_guide_page() -> str:
 <div class="container">
   <div class="steps-row">
     <div class="step-chip"><span class="num">1</span>
-      <span class="tl tl-th">เอกสาร</span><span class="tl tl-no">Dokumenter</span><span class="tl tl-en">Documents</span>
+      <span class="tl tl-th">ลงทะเบียน</span><span class="tl tl-no">Registrer</span><span class="tl tl-en">Register</span>
     </div>
     <div class="step-chip"><span class="num">2</span>
-      <span class="tl tl-th">โรงเรียนสอนขับ</span><span class="tl tl-no">Trafikkskole</span><span class="tl tl-en">Driving school</span>
+      <span class="tl tl-th">Trinn 1 (TGK)</span><span class="tl tl-no">Trinn 1 (TGK)</span><span class="tl tl-en">Trinn 1 (TGK)</span>
     </div>
     <div class="step-chip"><span class="num">3</span>
-      <span class="tl tl-th">ทฤษฎี</span><span class="tl tl-no">Teoriprøve</span><span class="tl tl-en">Theory test</span>
+      <span class="tl tl-th">Trinn 2 (45 min)</span><span class="tl tl-no">Trinn 2 (45 min)</span><span class="tl tl-en">Trinn 2 (45 min)</span>
     </div>
     <div class="step-chip"><span class="num">4</span>
-      <span class="tl tl-th">คอร์สบังคับ</span><span class="tl tl-no">Obligatoriske kurs</span><span class="tl tl-en">Mandatory courses</span>
+      <span class="tl tl-th">Trinn 3 + bane</span><span class="tl tl-no">Trinn 3 + bane</span><span class="tl tl-en">Trinn 3 + track</span>
     </div>
     <div class="step-chip"><span class="num">5</span>
-      <span class="tl tl-th">ทดสอบทฤษฎี</span><span class="tl tl-no">Teoriprøve</span><span class="tl tl-en">Theory test</span>
+      <span class="tl tl-th">Trinn 4 (vei 6t)</span><span class="tl tl-no">Trinn 4 (vei 6t)</span><span class="tl tl-en">Trinn 4 (road 6h)</span>
     </div>
     <div class="step-chip"><span class="num">6</span>
-      <span class="tl tl-th">ทดสอบขับ</span><span class="tl tl-no">Kjøreprøve</span><span class="tl tl-en">Driving test</span>
+      <span class="tl tl-th">ทฤษฎี</span><span class="tl tl-no">Teoriprøve</span><span class="tl tl-en">Theory test</span>
+    </div>
+    <div class="step-chip"><span class="num">7</span>
+      <span class="tl tl-th">ขับจริง</span><span class="tl tl-no">Kjøreprøve</span><span class="tl tl-en">Driving test</span>
     </div>
   </div>
 
@@ -291,18 +294,22 @@ def build_guide_page() -> str:
   <!-- SECTION 3: STEP BY STEP -->
   <div class="section">
     <div class="section-num">3</div>
-    <h2><span class="tl tl-th">ขั้นตอนทั้งหมด ทีละขั้น</span><span class="tl tl-no">Trinn for trinn — full opplæring</span><span class="tl tl-en">Step by step — full training</span></h2>
+    <h2><span class="tl tl-th">ขั้นตอนบังคับ — ตามลำดับ</span><span class="tl tl-no">Obligatorisk rekkefølge</span><span class="tl tl-en">Mandatory steps — in order</span></h2>
     <p class="lead">
-      <span class="tl tl-th">ต้องทำทั้งหมด 5 ขั้นตอน ตามลำดับ</span>
-      <span class="tl tl-no">Du må fullføre alle 5 trinn i rekkefølge</span>
-      <span class="tl tl-en">You must complete all 5 steps in order</span>
+      <span class="tl tl-th">6 ขั้นตอนแรกที่โรงเรียนสอนขับ + 2 ขั้นสุดท้ายที่ Statens Vegvesen</span>
+      <span class="tl tl-no">6 første hos trafikklærer + 2 siste hos Statens Vegvesen — i denne rekkefølgen</span>
+      <span class="tl tl-en">First 6 steps at driving school + last 2 at Statens Vegvesen — in this exact order</span>
+    </p>
+
+    <p style="font-size:13px;font-weight:700;color:#FF9933;margin-bottom:12px;margin-top:4px">
+      🏫 <span class="tl tl-th">ที่โรงเรียนสอนขับ (Trafikklærer)</span><span class="tl tl-no">Hos trafikklærer</span><span class="tl tl-en">At driving school</span>
     </p>
     <div class="steps-list">
       <div class="step-item">
         <div class="step-num">1</div>
         <div class="step-body">
-          <h4><span class="tl tl-th">ลงทะเบียนกับโรงเรียนสอนขับ (Trafikkskole)</span><span class="tl tl-no">Meld deg på trafikkskole</span><span class="tl tl-en">Register at a driving school</span></h4>
-          <p><span class="tl tl-th">เลือกโรงเรียนสอนขับในเมืองของคุณ ค่าใช้จ่ายและระยะเวลาจะแตกต่างกัน</span><span class="tl tl-no">Velg en trafikkskole i din by. Pris og tid varierer.</span><span class="tl tl-en">Choose a driving school in your city. Price and time vary.</span></p>
+          <h4><span class="tl tl-th">ลงทะเบียนกับโรงเรียนสอนขับ</span><span class="tl tl-no">Meld deg på trafikkskole</span><span class="tl tl-en">Register at a driving school</span></h4>
+          <p><span class="tl tl-th">เลือกโรงเรียนสอนขับในเมืองของคุณ ราคาและระยะเวลาจะแตกต่างกันไปในแต่ละที่</span><span class="tl tl-no">Velg en trafikkskole i din by. Pris og tid varierer fra skole til skole.</span><span class="tl tl-en">Choose a driving school in your city. Prices and duration vary.</span></p>
         </div>
       </div>
       <div class="step-item">
@@ -328,35 +335,45 @@ def build_guide_page() -> str:
       <div class="step-item">
         <div class="step-num">3</div>
         <div class="step-body">
-          <h4><span class="tl tl-th">ฝึกขับรถกับครูสอน</span><span class="tl tl-no">Kjøretimer med lærer</span><span class="tl tl-en">Driving lessons with instructor</span></h4>
-          <p><span class="tl tl-th">จำนวนชั่วโมงขึ้นอยู่กับระดับของคุณ โดยเฉลี่ย 20-40 ชั่วโมง ค่าชั่วโมงละ ~600-800 kr</span><span class="tl tl-no">Antall timer avhenger av nivået ditt. Gjennomsnittlig 20–40 timer. Ca. 600–800 kr/time.</span><span class="tl tl-en">Number of hours depends on your level. Average 20–40 hours. Approx. 600–800 kr/hour.</span></p>
+          <h4><span class="tl tl-th">Trinn 2 — Veiledningstime (45 min)</span><span class="tl tl-no">Trinn 2 — Veiledningstime (45 min)</span><span class="tl tl-en">Step 2 — Guidance session (45 min)</span></h4>
+          <p><span class="tl tl-th">ฝึกขับรถกับครูสอน เซสชัน 45 นาที เพื่อพัฒนาทักษะพื้นฐานบนถนน</span><span class="tl tl-no">Kjøring med trafikklærer. Veiledningstime på 45 minutter for grunnleggende kjøreferdigheter.</span><span class="tl tl-en">Driving with instructor. 45-minute guidance session for basic driving skills.</span></p>
         </div>
       </div>
       <div class="step-item">
         <div class="step-num">4</div>
         <div class="step-body">
-          <h4><span class="tl tl-th">หลักสูตรบังคับ 3 วิชา</span><span class="tl tl-no">3 obligatoriske kurs</span><span class="tl tl-en">3 mandatory courses</span></h4>
-          <p>
-            <span class="tl tl-th">🌑 <strong>Mørkekjøring</strong> — ขับรถในที่มืด (3 ชม.)<br/>🧊 <strong>Glattkjøring</strong> — ขับรถบนถนนลื่น/น้ำแข็ง (4 ชม.)<br/>🛣️ <strong>Sikkerhetskurs</strong> — ขับบนถนนจริง (13 ชม.)</span>
-            <span class="tl tl-no">🌑 <strong>Mørkekjøring</strong> — kjøring i mørket (3 t.)<br/>🧊 <strong>Glattkjøring</strong> — kjøring på glatt underlag (4 t.)<br/>🛣️ <strong>Sikkerhetskurs på veg</strong> — øving i trafikk (13 t.)</span>
-            <span class="tl tl-en">🌑 <strong>Mørkekjøring</strong> — night driving (3 hrs)<br/>🧊 <strong>Glattkjøring</strong> — slippery road driving (4 hrs)<br/>🛣️ <strong>Sikkerhetskurs</strong> — on-road safety course (13 hrs)</span>
-          </p>
-          <span class="warn"><span class="tl tl-th">ต้องทำให้ครบก่อนสอบขับ!</span><span class="tl tl-no">Må fullføres før kjøreprøven!</span><span class="tl tl-en">Must be completed before driving test!</span></span>
+          <h4><span class="tl tl-th">Trinn 3 — Veiledningstime (60 min) + Sikkerhetskurs på bane</span><span class="tl tl-no">Trinn 3 — Veiledningstime (60 min) + Sikkerhetskurs på bane</span><span class="tl tl-en">Step 3 — Guidance (60 min) + Track safety course</span></h4>
+          <p><span class="tl tl-th">ฝึกขับ 60 นาทีกับครู + หลักสูตรความปลอดภัยบนสนาม (Glattkjøring — ขับบนถนนลื่น/น้ำแข็ง)</span><span class="tl tl-no">Veiledningstime på 60 minutter + Sikkerhetskurs på bane (Glattkjøring — kjøring på glatt underlag).</span><span class="tl tl-en">60-min guidance session + track safety course (Glattkjøring — driving on slippery/icy surface).</span></p>
+          <span class="warn"><span class="tl tl-th">ต้องผ่าน Trinn 2 ก่อน!</span><span class="tl tl-no">Må ha fullført Trinn 2 først!</span><span class="tl tl-en">Must complete Step 2 first!</span></span>
         </div>
       </div>
       <div class="step-item">
         <div class="step-num">5</div>
         <div class="step-body">
-          <h4><span class="tl tl-th">สอบทฤษฎี (Teoriprøve)</span><span class="tl tl-no">Teoriprøven</span><span class="tl tl-en">Theory test</span></h4>
-          <p><span class="tl tl-th">45 ข้อ — ต้องได้อย่างน้อย 85% (ผิดได้ไม่เกิน 7 ข้อ) เวลา 90 นาที ค่าสอบ ~300 kr สอบได้ตั้งแต่อายุ 16 ปี</span><span class="tl tl-no">45 spørsmål — må ha minst 85% riktig (maks 7 feil). 90 minutter. ~300 kr. Kan tas fra 16 år.</span><span class="tl tl-en">45 questions — must score at least 85% (max 7 wrong). 90 minutes. ~300 kr. Can be taken from age 16.</span></p>
+          <h4><span class="tl tl-th">Trinn 4 — Sikkerhetskurs på vei (6 timer)</span><span class="tl tl-no">Trinn 4 — Sikkerhetskurs på vei (6 timer)</span><span class="tl tl-en">Step 4 — Road safety course (6 hours)</span></h4>
+          <p><span class="tl tl-th">หลักสูตรความปลอดภัยบนถนนจริง 6 ชั่วโมง — ขับในสภาพการจราจรจริง รวมถึงถนนต่างจังหวัดและทางด่วน</span><span class="tl tl-no">6 timers sikkerhetskurs på vei — kjøring i reell trafikk inkl. landevei og motorvei.</span><span class="tl tl-en">6-hour road safety course — real traffic driving including country roads and motorway.</span></p>
+          <span class="note"><span class="tl tl-th">สุดท้ายก่อนสอบ — ที่โรงเรียนสอนขับ</span><span class="tl tl-no">Siste obligatoriske hos trafikklærer</span><span class="tl tl-en">Last mandatory step at driving school</span></span>
+        </div>
+      </div>
+    </div>
+
+    <p style="font-size:13px;font-weight:700;color:#10B981;margin-top:24px;margin-bottom:12px">
+      🏛️ <span class="tl tl-th">ที่ Statens Vegvesen (2 ขั้นสุดท้าย)</span><span class="tl tl-no">Hos Statens Vegvesen (2 siste)</span><span class="tl tl-en">At Statens Vegvesen (last 2 steps)</span>
+    </p>
+    <div class="steps-list">
+      <div class="step-item">
+        <div class="step-num">6</div>
+        <div class="step-body">
+          <h4><span class="tl tl-th">Teoriprøve — สอบทฤษฎี</span><span class="tl tl-no">Teoriprøven</span><span class="tl tl-en">Theory test</span></h4>
+          <p><span class="tl tl-th">45 ข้อ — ต้องได้ 85% (ผิดได้ไม่เกิน 7 ข้อ) เวลา 90 นาที ค่าสอบ ~300 kr<br/>⏰ สอบได้ตั้งแต่อายุ <strong>16 ปีครึ่ง</strong> — ผลสอบใช้ได้ <strong>3 ปี</strong></span><span class="tl tl-no">45 spørsmål — minst 85% riktig (maks 7 feil). 90 min. ~300 kr.<br/>⏰ Kan tas fra <strong>16,5 år</strong> — gyldig i <strong>3 år</strong></span><span class="tl tl-en">45 questions — at least 85% correct (max 7 wrong). 90 min. ~300 kr.<br/>⏰ Can be taken from <strong>16.5 years</strong> — valid for <strong>3 years</strong></span></p>
           <span class="note"><span class="tl tl-th">ฝึกกับ Thai2Drive! 📱</span><span class="tl tl-no">Øv med Thai2Drive! 📱</span><span class="tl tl-en">Practice with Thai2Drive! 📱</span></span>
         </div>
       </div>
       <div class="step-item">
-        <div class="step-num">6</div>
+        <div class="step-num">7</div>
         <div class="step-body">
-          <h4><span class="tl tl-th">สอบขับ (Kjøreprøve)</span><span class="tl tl-no">Kjøreprøven</span><span class="tl tl-en">Driving test</span></h4>
-          <p><span class="tl tl-th">ระยะเวลาประมาณ 45-60 นาที กับผู้ตรวจสอบจาก Statens vegvesen ค่าสอบ ~1000 kr</span><span class="tl tl-no">Ca. 45–60 min med sensor fra Statens vegvesen. ~1 000 kr.</span><span class="tl tl-en">Approx. 45–60 min with an examiner from Statens vegvesen. ~1 000 kr.</span></p>
+          <h4><span class="tl tl-th">Førerprøve — สอบขับ</span><span class="tl tl-no">Førerprøven (kjøreprøven)</span><span class="tl tl-en">Driving test</span></h4>
+          <p><span class="tl tl-th">ขับรถกับผู้ตรวจสอบจาก Statens Vegvesen ประมาณ 45-60 นาที ค่าสอบ ~1 000 kr<br/>ต้องผ่านทุกขั้นตอนก่อนนี้แล้ว!</span><span class="tl tl-no">Kjøring med sensor fra Statens Vegvesen. Ca. 45–60 min. ~1 000 kr.<br/>Alle obligatoriske trinn MÅ være fullført!</span><span class="tl tl-en">Drive with an examiner from Statens Vegvesen. ~45–60 min. ~1 000 kr.<br/>All mandatory steps must be completed first!</span></p>
         </div>
       </div>
     </div>
