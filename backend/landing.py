@@ -48,24 +48,24 @@ html[data-current-lang="en"] [data-lang="en"].block{display:block}
   border-bottom:1px solid rgba(255,255,255,.08);
 }
 .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:12px 24px;max-width:1200px;margin:0 auto;gap:16px}
+.nav-links{list-style:none;display:flex;gap:20px;align-items:center;margin:0 auto}
+.nav-links a{color:#CBD5E1;font-size:14px;font-weight:500;transition:color .15s}
+.nav-links a:hover{color:#FF9933}
+@media(max-width:600px){.nav-links{display:none}}
 .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px;color:#fff;flex-shrink:0}
 .brand img{width:36px;height:36px;border-radius:8px}
 .brand .t2d{color:#FF9933}
-.lang-row{display:flex;gap:10px;align-items:flex-end}
-.lang-wrap{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer}
-.lang-wrap .lang-label{font-size:11px;font-weight:700;color:#94A3B8;letter-spacing:.5px;transition:color .15s}
-.lang-wrap:hover .lang-label{color:#FF9933}
-.lang-wrap.active .lang-label{color:#FF9933}
+.lang-row{display:flex;gap:6px;align-items:center}
 .lang-btn{
-  width:60px;height:60px;border-radius:50%;border:2.5px solid transparent;
-  background:rgba(255,255,255,.06);cursor:pointer;
-  display:flex;align-items:center;justify-content:center;padding:0;overflow:hidden;
-  transition:border-color .15s,transform .15s,box-shadow .15s;
-  box-shadow:0 2px 8px rgba(0,0,0,.3);
-  font-size:24px;line-height:1;
+  display:inline-flex;align-items:center;gap:5px;
+  padding:5px 12px;border-radius:999px;
+  border:1.5px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.05);
+  cursor:pointer;font-size:13px;font-weight:600;color:#94A3B8;
+  transition:all .15s;line-height:1.4;
 }
-.lang-btn:hover{transform:scale(1.1);box-shadow:0 4px 16px rgba(0,0,0,.4)}
-.lang-btn.active{border-color:#FF9933;background:rgba(255,153,51,.18);box-shadow:0 0 0 3px rgba(255,153,51,.25)}
+.lang-btn:hover:not(.active){border-color:rgba(255,255,255,.25);color:#E2E8F0}
+.lang-btn.active{border-color:#FF9933;background:rgba(255,153,51,.12);color:#FF9933;font-weight:700}
 .mini-flag{display:flex;flex-direction:column;width:38px;height:26px;border-radius:3px;overflow:hidden;flex-shrink:0}
 .mini-flag.flag-th span:nth-child(1){background:#A51931;flex:1}
 .mini-flag.flag-th span:nth-child(2){background:#F4F5F8;flex:1}
@@ -272,7 +272,7 @@ footer p{color:#64748B;font-size:13px}
   .nav-inner{padding:10px 14px;gap:8px}
   .brand{font-size:16px}
   .brand img{width:32px;height:32px}
-  .lang-btn{width:34px;height:34px}
+  .lang-btn{font-size:12px;padding:4px 10px}
   .hero{padding:48px 0 40px}
   section{padding:52px 0}
   .cta-band{padding:48px 20px}
@@ -291,19 +291,23 @@ def _nav_html() -> str:
       <img src="{ICON_URL}" alt="T2D"/>
       <span>Thai<span class="t2d">2</span>Drive</span>
     </a>
+    <ul class="nav-links">
+      <li><a href="#features">
+        <span data-lang="th">ฟีเจอร์</span>
+        <span data-lang="no">Funksjoner</span>
+        <span data-lang="en">Features</span>
+      </a></li>
+      <li><a href="#pricing">
+        <span data-lang="th">ราคา</span>
+        <span data-lang="no">Priser</span>
+        <span data-lang="en">Pricing</span>
+      </a></li>
+      <li><a href="/api/guide">📖 Guide</a></li>
+    </ul>
     <div class="lang-row" role="group" aria-label="Language">
-      <div class="lang-wrap active" data-wrap-lang="th">
-        <button class="lang-btn active" data-set-lang="th" aria-label="ไทย"><span class="mini-flag flag-th"><span></span><span></span><span></span><span></span><span></span></span></button>
-        <span class="lang-label">ไทย</span>
-      </div>
-      <div class="lang-wrap" data-wrap-lang="no">
-        <button class="lang-btn" data-set-lang="no" aria-label="Norsk"><span class="mini-flag flag-no"><span class="b"></span><span class="bv"></span></span></button>
-        <span class="lang-label">Norsk</span>
-      </div>
-      <div class="lang-wrap" data-wrap-lang="en">
-        <button class="lang-btn" data-set-lang="en" aria-label="English"><span class="mini-flag flag-gb"><span class="r1"></span><span class="r2"></span></span></button>
-        <span class="lang-label">English</span>
-      </div>
+      <button class="lang-btn active" data-set-lang="th">🇹🇭 TH</button>
+      <button class="lang-btn" data-set-lang="no">🇳🇴 NO</button>
+      <button class="lang-btn" data-set-lang="en">🇬🇧 EN</button>
     </div>
   </div>
 </nav>
@@ -316,20 +320,10 @@ def _footer_html() -> str:
   <div class="container">
     <div class="footer-inner">
       <p>© 2025 Thai2Drive</p>
-      <!-- Language switcher in footer too -->
       <div class="lang-row" role="group" aria-label="Language" style="justify-content:center;margin:12px 0">
-        <div class="lang-wrap" data-wrap-lang="th">
-          <button class="lang-btn" data-set-lang="th" aria-label="ไทย"><span class="mini-flag flag-th"><span></span><span></span><span></span><span></span><span></span></span></button>
-          <span class="lang-label">ไทย</span>
-        </div>
-        <div class="lang-wrap" data-wrap-lang="no">
-          <button class="lang-btn" data-set-lang="no" aria-label="Norsk"><span class="mini-flag flag-no"><span class="b"></span><span class="bv"></span></span></button>
-          <span class="lang-label">Norsk</span>
-        </div>
-        <div class="lang-wrap" data-wrap-lang="en">
-          <button class="lang-btn" data-set-lang="en" aria-label="English"><span class="mini-flag flag-gb"><span class="r1"></span><span class="r2"></span></span></button>
-          <span class="lang-label">English</span>
-        </div>
+        <button class="lang-btn" data-set-lang="th">🇹🇭 TH</button>
+        <button class="lang-btn" data-set-lang="no">🇳🇴 NO</button>
+        <button class="lang-btn" data-set-lang="en">🇬🇧 EN</button>
       </div>
       <div class="footer-links">
         <a href="/api/website"><span data-lang="th">หน้าแรก</span><span data-lang="no">Hjem</span><span data-lang="en">Home</span></a>
@@ -350,19 +344,10 @@ def _hero_html() -> str:
     <img src="{ICON_URL}" alt="Thai2Drive" class="hero-icon"/>
 
     <!-- Language switcher — also in hero so it's instantly visible -->
-    <div class="lang-row hero-lang" role="group" aria-label="Language" style="justify-content:center;margin-bottom:20px">
-      <div class="lang-wrap active" data-wrap-lang="th">
-        <button class="lang-btn active" data-set-lang="th" aria-label="ไทย"><span class="mini-flag flag-th"><span></span><span></span><span></span><span></span><span></span></span></button>
-        <span class="lang-label">ไทย</span>
-      </div>
-      <div class="lang-wrap" data-wrap-lang="no">
-        <button class="lang-btn" data-set-lang="no" aria-label="Norsk"><span class="mini-flag flag-no"><span class="b"></span><span class="bv"></span></span></button>
-        <span class="lang-label">Norsk</span>
-      </div>
-      <div class="lang-wrap" data-wrap-lang="en">
-        <button class="lang-btn" data-set-lang="en" aria-label="English"><span class="mini-flag flag-gb"><span class="r1"></span><span class="r2"></span></span></button>
-        <span class="lang-label">English</span>
-      </div>
+    <div class="lang-row" role="group" aria-label="Language" style="justify-content:center;margin-bottom:20px">
+      <button class="lang-btn active" data-set-lang="th">🇹🇭 TH</button>
+      <button class="lang-btn" data-set-lang="no">🇳🇴 NO</button>
+      <button class="lang-btn" data-set-lang="en">🇬🇧 EN</button>
     </div>
 
     <h1>
