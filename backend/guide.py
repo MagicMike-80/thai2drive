@@ -188,6 +188,9 @@ def build_guide_page() -> str:
       <span class="tl tl-th">คอร์สบังคับ</span><span class="tl tl-no">Obligatoriske kurs</span><span class="tl tl-en">Mandatory courses</span>
     </div>
     <div class="step-chip"><span class="num">5</span>
+      <span class="tl tl-th">ทดสอบทฤษฎี</span><span class="tl tl-no">Teoriprøve</span><span class="tl tl-en">Theory test</span>
+    </div>
+    <div class="step-chip"><span class="num">6</span>
       <span class="tl tl-th">ทดสอบขับ</span><span class="tl tl-no">Kjøreprøve</span><span class="tl tl-en">Driving test</span>
     </div>
   </div>
