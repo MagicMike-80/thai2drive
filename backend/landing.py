@@ -316,6 +316,21 @@ def _footer_html() -> str:
   <div class="container">
     <div class="footer-inner">
       <p>© 2025 Thai2Drive</p>
+      <!-- Language switcher in footer too -->
+      <div class="lang-row" role="group" aria-label="Language" style="justify-content:center;margin:12px 0">
+        <div class="lang-wrap" data-wrap-lang="th">
+          <button class="lang-btn" data-set-lang="th" aria-label="ไทย"><span class="mini-flag flag-th"><span></span><span></span><span></span><span></span><span></span></span></button>
+          <span class="lang-label">ไทย</span>
+        </div>
+        <div class="lang-wrap" data-wrap-lang="no">
+          <button class="lang-btn" data-set-lang="no" aria-label="Norsk"><span class="mini-flag flag-no"><span class="b"></span><span class="bv"></span></span></button>
+          <span class="lang-label">Norsk</span>
+        </div>
+        <div class="lang-wrap" data-wrap-lang="en">
+          <button class="lang-btn" data-set-lang="en" aria-label="English"><span class="mini-flag flag-gb"><span class="r1"></span><span class="r2"></span></span></button>
+          <span class="lang-label">English</span>
+        </div>
+      </div>
       <div class="footer-links">
         <a href="/api/website"><span data-lang="th">หน้าแรก</span><span data-lang="no">Hjem</span><span data-lang="en">Home</span></a>
         <a href="/api/privacy"><span data-lang="th">ความเป็นส่วนตัว</span><span data-lang="no">Personvern</span><span data-lang="en">Privacy</span></a>
@@ -333,6 +348,22 @@ def _hero_html() -> str:
 <section class="hero">
   <div class="container">
     <img src="{ICON_URL}" alt="Thai2Drive" class="hero-icon"/>
+
+    <!-- Language switcher — also in hero so it's instantly visible -->
+    <div class="lang-row hero-lang" role="group" aria-label="Language" style="justify-content:center;margin-bottom:20px">
+      <div class="lang-wrap active" data-wrap-lang="th">
+        <button class="lang-btn active" data-set-lang="th" aria-label="ไทย"><span class="mini-flag flag-th"><span></span><span></span><span></span><span></span><span></span></span></button>
+        <span class="lang-label">ไทย</span>
+      </div>
+      <div class="lang-wrap" data-wrap-lang="no">
+        <button class="lang-btn" data-set-lang="no" aria-label="Norsk"><span class="mini-flag flag-no"><span class="b"></span><span class="bv"></span></span></button>
+        <span class="lang-label">Norsk</span>
+      </div>
+      <div class="lang-wrap" data-wrap-lang="en">
+        <button class="lang-btn" data-set-lang="en" aria-label="English"><span class="mini-flag flag-gb"><span class="r1"></span><span class="r2"></span></span></button>
+        <span class="lang-label">English</span>
+      </div>
+    </div>
 
     <h1>
       <span data-lang="th" class="block">สอบใบขับขี่นอร์เวย์ให้ <em>ผ่านครั้งแรก</em></span>
