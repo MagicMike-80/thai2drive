@@ -309,8 +309,20 @@ def build_guide_page() -> str:
         <div class="step-num">2</div>
         <div class="step-body">
           <h4><span class="tl tl-th">Trafikalt grunnkurs (TG)</span><span class="tl tl-no">Trafikalt grunnkurs (TG)</span><span class="tl tl-en">Basic traffic course (TG)</span></h4>
-          <p><span class="tl tl-th">หลักสูตรพื้นฐาน 17 ชั่วโมง — ต้องทำก่อนอื่น ครอบคลุมทฤษฎีพื้นฐาน การปฐมพยาบาล และการขับขี่อย่างปลอดภัย</span><span class="tl tl-no">17-timers grunnkurs — må tas først. Dekker grunnleggende teori, førstehjelp og trygg kjøring.</span><span class="tl tl-en">17-hour basic course — must be taken first. Covers basic theory, first aid and safe driving.</span></p>
-          <span class="note"><span class="tl tl-th">บังคับ — ทำก่อนอย่างอื่น</span><span class="tl tl-no">Obligatorisk — må gjøres først</span><span class="tl tl-en">Mandatory — must be done first</span></span>
+          <p><span class="tl tl-th">หลักสูตรพื้นฐาน 17 ชั่วโมง ครอบคลุมทฤษฎีพื้นฐาน การปฐมพยาบาล และการขับขี่อย่างปลอดภัย</span><span class="tl tl-no">17-timers grunnkurs. Dekker grunnleggende teori, førstehjelp og trygg kjøring.</span><span class="tl tl-en">17-hour basic course. Covers basic theory, first aid and safe driving.</span></p>
+          <div style="margin-top:10px;background:rgba(255,153,51,.08);border:1px solid rgba(255,153,51,.2);border-radius:10px;padding:12px 14px">
+            <p style="font-size:13px;font-weight:700;color:#FF9933;margin-bottom:6px">
+              <span class="tl tl-th">⚠️ อายุเกิน 25 ปี — ไม่ต้องเรียนครบ 17 ชั่วโมง!</span>
+              <span class="tl tl-no">⚠️ Over 25 år — du trenger IKKE hele TGK!</span>
+              <span class="tl tl-en">⚠️ Over 25 years — you do NOT need the full TGK!</span>
+            </p>
+            <p style="font-size:13px;color:#CBD5E1">
+              <span class="tl tl-th">ถ้าอายุเกิน 25 ปี คุณต้องแค่:<br/>✅ <strong>Førstehjelp</strong> — หลักสูตรปฐมพยาบาล<br/>✅ <strong>MørkeDemo</strong> — ทดสอบขับในที่มืด<br/>ไม่ต้องเรียน TGK ทั้งหมด 17 ชั่วโมง</span>
+              <span class="tl tl-no">Hvis du er over 25 år trenger du kun:<br/>✅ <strong>Førstehjelp</strong> — førstehjelpskurs<br/>✅ <strong>MørkeDemo</strong> — demonstrasjon i mørkekjøring<br/>Du slipper hele 17-timers TGK-kurset!</span>
+              <span class="tl tl-en">If you are over 25 years old you only need:<br/>✅ <strong>First aid course</strong><br/>✅ <strong>Dark driving demo (MørkeDemo)</strong><br/>You skip the full 17-hour TGK course!</span>
+            </p>
+          </div>
+          <span class="note" style="margin-top:10px"><span class="tl tl-th">ต้องทำก่อนเริ่มฝึกขับ</span><span class="tl tl-no">Må gjøres før kjøretimer</span><span class="tl tl-en">Must be done before driving lessons</span></span>
         </div>
       </div>
       <div class="step-item">
