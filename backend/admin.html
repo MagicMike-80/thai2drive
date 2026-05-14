@@ -755,10 +755,63 @@ async function removeFormImage() {
 }
 
 async function fetchUnsplash(id) {
-  toast('🔍 Søker på Unsplash…');
+  toast('🤖 Claude velger søkeord…');
+  const btn = document.querySelector('[onclick="fetchUnsplash(\'' + id + '\')"]');
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ Henter…'; }
+
   try {
-    const d = await api('/admin/questions/' + id + '/fetch-unsplash', {method: 'POST'});
-    toast(`✅ Bilde hentet (${d.size_kb} KB) — Foto: ${d.photographer}`);
+    const d = await api('/admin/questions/' + id + '/unsplash-suggestions', {method: 'POST'});
+    showUnsplashPicker(id, d.suggestions);
+  } catch (e) {
+    toast('Feil: ' + e.message, false);
+    if (btn) { btn.disabled = false; btn.textContent = '🖼️ Hent Unsplash-bilde'; }
+  }
+}
+
+function showUnsplashPicker(id, suggestions) {
+  // Remove existing picker if any
+  const existing = document.getElementById('unsplash-picker');
+  if (existing) existing.remove();
+
+  const picker = document.createElement('div');
+  picker.id = 'unsplash-picker';
+  picker.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px';
+
+  picker.innerHTML = `
+    <div style="background:#1e293b;border-radius:12px;padding:24px;max-width:700px;width:100%">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+        <h3 style="color:#fff;margin:0">🖼️ Velg et bilde</h3>
+        <button onclick="document.getElementById('unsplash-picker').remove()" style="background:none;border:none;color:#94a3b8;font-size:20px;cursor:pointer">✕</button>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+        ${suggestions.map((s, i) => `
+          <div onclick="selectUnsplash('${id}', '${s.regular}', '${s.photographer.replace(/'/g, '')}')"
+               style="cursor:pointer;border-radius:8px;overflow:hidden;border:2px solid transparent;transition:border 0.2s"
+               onmouseover="this.style.borderColor='#3b82f6'" onmouseout="this.style.borderColor='transparent'">
+            <img src="${s.thumb}" style="width:100%;height:140px;object-fit:cover;display:block" />
+            <div style="padding:8px;background:#0f172a">
+              <div style="color:#94a3b8;font-size:11px">🔍 ${s.query}</div>
+              <div style="color:#64748b;font-size:10px;margin-top:2px">📷 ${s.photographer}</div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+      <div style="margin-top:12px;color:#64748b;font-size:11px;text-align:center">Klikk på bildet du vil bruke</div>
+    </div>
+  `;
+  document.body.appendChild(picker);
+}
+
+async function selectUnsplash(id, url, photographer) {
+  document.getElementById('unsplash-picker').remove();
+  toast('⬇️ Laster ned bilde…');
+  try {
+    const d = await api('/admin/questions/' + id + '/fetch-unsplash', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({url, photographer})
+    });
+    toast(`✅ Bilde lagret (${d.size_kb} KB) — Foto: ${d.photographer}`);
     const q = window._currentQ;
     q.bildeUrl = d.bildeUrl;
     const idx = window._questions.findIndex(x => x.id === id);
