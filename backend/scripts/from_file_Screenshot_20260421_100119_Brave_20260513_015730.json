@@ -1,0 +1,47 @@
+[
+  {
+    "sporsmal": {
+      "no": "Du ser et skjermbilde fra Thai2Drive-appen med teoriprøvespørsmål. Det første spørsmålet viser et T-kryss med tre kjøretøy (A rød bil, B blå bil, C motorsykkel). Hvilken regel avgjør hvem som skal kjøre først i et slikt kryss uten skilt?",
+      "th": "คุณเห็นภาพหน้าจอจากแอป Thai2Drive ที่มีคำถามทฤษฎี คำถามแรกแสดงทางแยกรูปตัว T ที่มียานพาหนะสามคัน (A รถสีแดง, B รถสีน้ำเงิน, C มอเตอร์ไซค์) กฎใดเป็นตัวกำหนดว่าใครจะไปก่อนในทางแยกแบบนี้ที่ไม่มีป้ายจราจร?",
+      "en": "You see a screenshot from the Thai2Drive app with theory test questions. The first question shows a T-junction with three vehicles (A red car, B blue car, C motorcycle). Which rule determines who goes first at such a junction without signs?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "Høyreregelen - vikeplikt for trafikk fra høyre",
+          "th": "กฎขวา - ต้องให้ทางแก่รถที่มาจากทางขวา",
+          "en": "The right-hand rule - yield to traffic from the right"
+        }
+      },
+      {
+        "text": {
+          "no": "Den største bilen kjører alltid først",
+          "th": "รถคันที่ใหญ่ที่สุดไปก่อนเสมอ",
+          "en": "The largest vehicle always goes first"
+        }
+      },
+      {
+        "text": {
+          "no": "Motorsykler har alltid forkjørsrett",
+          "th": "มอเตอร์ไซค์มีสิทธิ์ไปก่อนเสมอ",
+          "en": "Motorcycles always have right of way"
+        }
+      },
+      {
+        "text": {
+          "no": "Den som kommer først til krysset kjører først",
+          "th": "คนที่มาถึงทางแยกก่อนไปก่อน",
+          "en": "Whoever arrives at the junction first goes first"
+        }
+      }
+    ],
+    "riktigSvar": "A",
+    "vanskelighetsgrad": "medium",
+    "kategori": "Right of Way",
+    "forklaring": {
+      "no": "I Norge gjelder høyreregelen i kryss uten skilting eller lysregulering. Du har vikeplikt for kjøretøy som kommer fra høyre side. Dette er en grunnleggende regel i norsk trafikk.",
+      "th": "ในนอร์เวย์ใช้กฎขวาที่ทางแยกที่ไม่มีป้ายหรือสัญญาณไฟ คุณต้องให้ทางแก่ยานพาหนะที่มาจากทางขวา นี่เป็นกฎพื้นฐานในการจราจรของนอร์เวย์",
+      "en": "In Norway, the right-hand rule applies at junctions without signs or traffic lights. You must yield to vehicles coming from the right. This is a fundamental rule in Norwegian traffic."
+    }
+  }
+]

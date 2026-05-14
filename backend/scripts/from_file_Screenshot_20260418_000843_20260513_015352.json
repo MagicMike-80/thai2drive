@@ -1,0 +1,47 @@
+[
+  {
+    "sporsmal": {
+      "no": "Hva betyr skiltet du ser til høyre for veien?",
+      "th": "ป้ายที่คุณเห็นทางขวาของถนนหมายความว่าอย่างไร?",
+      "en": "What does the sign on the right side of the road mean?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "Slutt på fartsgrense 60 km/t – generell fartsgrense gjelder",
+          "th": "สิ้นสุดเขตจำกัดความเร็ว 60 กม./ชม. – ใช้ความเร็วทั่วไป",
+          "en": "End of 60 km/h speed limit – general speed limit applies"
+        }
+      },
+      {
+        "text": {
+          "no": "Anbefalt fartsgrense 60 km/t",
+          "th": "ความเร็วที่แนะนำ 60 กม./ชม.",
+          "en": "Recommended speed 60 km/h"
+        }
+      },
+      {
+        "text": {
+          "no": "Start på fartsgrensesone 60 km/t",
+          "th": "เริ่มต้นเขตจำกัดความเร็ว 60 กม./ชม.",
+          "en": "Start of 60 km/h speed limit zone"
+        }
+      },
+      {
+        "text": {
+          "no": "Minste tillatte fart er 60 km/t",
+          "th": "ความเร็วต่ำสุดที่อนุญาตคือ 60 กม./ชม.",
+          "en": "Minimum allowed speed is 60 km/h"
+        }
+      }
+    ],
+    "riktigSvar": "A",
+    "vanskelighetsgrad": "medium",
+    "kategori": "Traffic Signs",
+    "forklaring": {
+      "no": "Skiltet med diagonale streker over tallet 60 betyr slutt på særskilt fartsgrense. Etter dette skiltet gjelder den generelle fartsgrensen, som er 80 km/t utenfor tettbygd strøk og 50 km/t i tettbygd strøk, dersom ikke annet skilt settes opp.",
+      "th": "ป้ายที่มีเส้นทแยงมุมพาดทับเลข 60 หมายถึงสิ้นสุดเขตจำกัดความเร็วพิเศษ หลังจากป้ายนี้จะใช้ความเร็วทั่วไป ซึ่งคือ 80 กม./ชม. นอกเขตชุมชน และ 50 กม./ชม. ในเขตชุมชน หากไม่มีป้ายอื่นกำหนด",
+      "en": "The sign with diagonal lines through the number 60 means end of special speed limit. After this sign, the general speed limit applies, which is 80 km/h outside built-up areas and 50 km/h within built-up areas, unless another sign is posted."
+    }
+  }
+]

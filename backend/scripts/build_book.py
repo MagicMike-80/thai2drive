@@ -1,7 +1,7 @@
 """
-Thai2Drive - Bygg læringsbok fra PDF
-Skriver om tekst med egne ord, oversetter til thai+engelsk, lagrer i DB.
-Bruk: python build_book.py [start_side] [slutt_side]
+Thai2Drive - Bygg laeringsbok fra PowerPoint
+Leser PPTX, skriver om tekst med egne ord, oversetter til thai+engelsk, lagrer i DB.
+Bruk: python build_book.py
 """
 
 import asyncio
@@ -31,93 +31,134 @@ if not api_key:
 
 client = anthropic.Anthropic(api_key=api_key)
 
-PDF_PATH = r"C:\Users\Stein Hoang\Desktop\My Agents\PDF.4t.pdf"
-NAV_WORDS = {'meny', 'tilbake', 'bytt bilde', 'neste', 'oppgaver', 'skjul', 'vis'}
+PPTX_PATH = r"C:\Users\Stein Hoang\Desktop\My Agents\4tTrafikkalt.pptx"
+NAV = {'trinn', 'meny', 'tilbake', 'bytt bilde', 'neste', 'oppgaver', 'x',
+       'skjul', 'vis', 'tilbake', 'tema'}
 
-# Kapittelstruktur basert på PDF-innhold
+# Kapittelstruktur basert pa slide-numre
 CHAPTERS = [
-    {"num": 1, "title": "Grunnleggende trafikklære",     "pages": (1, 115)},
-    {"num": 2, "title": "Mennesket i trafikken",          "pages": (116, 220)},
-    {"num": 3, "title": "Trafikksystemet og regler",      "pages": (221, 340)},
-    {"num": 4, "title": "Kjøretøy og teknisk kunnskap",  "pages": (341, 437)},
+    {"num": 1, "title": "Grunnleggende trafikklare",    "no": "Grunnleggende trafikklære",     "slides": (1, 120)},
+    {"num": 2, "title": "Mennesket i trafikken",         "no": "Mennesket i trafikken",          "slides": (121, 230)},
+    {"num": 3, "title": "Trafikksystemet og regler",     "no": "Trafikksystemet og regler",      "slides": (231, 340)},
+    {"num": 4, "title": "Kjoretoy og vegtrafikkloven",   "no": "Kjøretøy og vegtrafikkloven",    "slides": (341, 437)},
 ]
 
 
-def extract_pages(pdf_path: str, start: int, end: int) -> list[tuple[int, str]]:
+def get_slide_content(slide) -> tuple[str, str]:
+    """Hent tittel og body fra en slide"""
+    title = ''
+    body_parts = []
     try:
-        import fitz
-    except ImportError:
-        os.system(f"{sys.executable} -m pip install pymupdf -q")
-        import fitz
+        for shape in slide.shapes:
+            if not hasattr(shape, 'text'):
+                continue
+            t = shape.text.strip()
+            if not t or len(t) < 4:
+                continue
+            lines = [l.strip() for l in t.splitlines()
+                     if l.strip() and l.strip().lower() not in NAV
+                     and not l.strip().isdigit() and len(l.strip()) > 3]
+            if not lines:
+                continue
+            if not title and len(lines[0]) < 100:
+                title = lines[0]
+                body_parts.extend(lines[1:])
+            else:
+                body_parts.extend(lines)
+    except Exception:
+        pass
+    return title, '\n'.join(body_parts)
 
-    doc = fitz.open(pdf_path)
+
+def extract_chapter_slides(pptx_path: str, start: int, end: int) -> list[tuple[int, str, str]]:
+    """Hent alle slides i et kapittel med innhold"""
+    try:
+        from pptx import Presentation
+    except ImportError:
+        os.system(f"{sys.executable} -m pip install python-pptx -q")
+        from pptx import Presentation
+
+    prs = Presentation(pptx_path)
     result = []
-    for i in range(start - 1, min(end, len(doc))):
-        text = doc[i].get_text().strip()
-        lines = [l.strip() for l in text.splitlines()
-                 if l.strip() and l.strip().lower() not in NAV_WORDS
-                 and not l.strip().isdigit()]
-        clean = ' '.join(lines)
-        if len(clean.split()) >= 20:
-            result.append((i + 1, clean))
-    doc.close()
+
+    for i, slide in enumerate(prs.slides):
+        slide_num = i + 1
+        if slide_num < start or slide_num > end:
+            continue
+        try:
+            title, body = get_slide_content(slide)
+            full = (title + ' ' + body).strip()
+            words = [w for w in full.lower().split()
+                     if w not in NAV and len(w) > 3]
+            if len(words) >= 15:
+                result.append((slide_num, title, body))
+        except Exception:
+            pass
+
     return result
 
 
-def make_sections(pages: list[tuple[int, str]], max_chars: int = 2500) -> list[tuple[list[int], str]]:
-    """Grupper sider i seksjoner av passelig størrelse"""
+def make_sections(slides: list[tuple[int, str, str]], max_chars: int = 2500) -> list[tuple[list[int], str, str]]:
+    """Grupper slides i seksjoner"""
     sections = []
-    cur_pages = []
-    cur_text = ""
+    cur_slides = []
+    cur_title = ''
+    cur_body = ''
 
-    for page_num, text in pages:
-        if len(cur_text) + len(text) > max_chars and cur_text:
-            sections.append((cur_pages, cur_text.strip()))
-            cur_pages = [page_num]
-            cur_text = text
+    for slide_num, title, body in slides:
+        combined = title + '\n' + body
+        if len(cur_body) + len(combined) > max_chars and cur_body:
+            sections.append((cur_slides, cur_title, cur_body.strip()))
+            cur_slides = [slide_num]
+            cur_title = title
+            cur_body = body
         else:
-            cur_pages.append(page_num)
-            cur_text += "\n" + text
+            cur_slides.append(slide_num)
+            if not cur_title and title:
+                cur_title = title
+            cur_body += '\n' + combined
 
-    if cur_text.strip():
-        sections.append((cur_pages, cur_text.strip()))
+    if cur_body.strip():
+        sections.append((cur_slides, cur_title, cur_body.strip()))
 
     return sections
 
 
-def rewrite_and_translate(raw_text: str, chapter_title: str) -> dict | None:
-    """Skriv om tekst med egne ord og oversett"""
+def rewrite_and_translate(raw_text: str, section_title: str, chapter_title: str) -> dict | None:
+    """Skriv om med egne ord og oversett til thai + engelsk"""
 
-    prompt = f"""Du jobber med en læringsbok om norsk trafikklære for kapitlet: "{chapter_title}".
+    prompt = f"""Du jobber med en laeringsbok om norsk trafikklare for kapitlet: "{chapter_title}".
 
-Her er råtekst fra pensumet:
+Her er ratatekst fra et avsnitt (overskrift: "{section_title}"):
 ---
 {raw_text[:2500]}
 ---
 
-Gjør følgende:
-1. Skriv innholdet om med dine EGNE ORD på naturlig, enkel norsk. Behold alle fakta korrekte, men lag nye setninger. IKKE kopier setninger fra originalen.
-2. Lag en kort tittel for dette avsnittet (maks 6 ord, norsk)
+Gjor folgende:
+1. Skriv innholdet om med DINE EGNE ORD pa naturlig, enkel norsk. Behold alle fakta korrekte. LAG NYE SETNINGER - ikke kopier fra originalen.
+2. Lag en kort, beskrivende tittel for avsnittet (maks 6 ord)
 3. Oversett tittelen og innholdet til thai og engelsk
+
+Svaret skal vaere flytende tekst (ikke punktlister). 3-6 setninger per spraakvariasjon.
 
 Svar KUN med JSON:
 {{
   "tittel": {{
-    "no": "Kort tittel på norsk",
+    "no": "Norsk tittel",
     "th": "หัวข้อภาษาไทย",
-    "en": "Short English title"
+    "en": "English title"
   }},
   "innhold": {{
-    "no": "Omskrevet tekst på norsk. Skriv i avsnitt, 3-6 setninger. Enkelt og klart språk.",
+    "no": "Omskrevet tekst pa norsk.",
     "th": "เนื้อหาภาษาไทย",
-    "en": "English content"
+    "en": "English content."
   }}
 }}"""
 
     try:
         response = client.messages.create(
             model="claude-opus-4-7",
-            max_tokens=2000,
+            max_tokens=1500,
             messages=[{"role": "user", "content": prompt}]
         )
         text = response.content[0].text.strip()
@@ -128,24 +169,24 @@ Svar KUN med JSON:
             text = text.rsplit("```", 1)[0]
         return json.loads(text.strip())
     except Exception as e:
-        print(f"    Feil: {e}")
+        print(f"Feil: {e}")
         return None
 
 
-async def save_section(db, chapter_num: int, chapter_title: str,
-                       section_num: int, pages: list[int], data: dict) -> bool:
+async def save_section(db, chapter: dict, section_num: int,
+                       slide_nums: list[int], data: dict) -> bool:
     doc = {
         "id": str(uuid.uuid4()),
-        "chapter_num": chapter_num,
+        "chapter_num": chapter["num"],
         "chapter_title": {
-            "no": chapter_title,
-            "th": chapter_title,
-            "en": chapter_title
+            "no": chapter["no"],
+            "th": chapter["no"],
+            "en": chapter["title"]
         },
         "section_num": section_num,
         "section_title": data["tittel"],
         "content": data["innhold"],
-        "pages": pages,
+        "slides": slide_nums,
         "created_at": datetime.now(timezone.utc).isoformat()
     }
     await db.chapters.insert_one(doc)
@@ -153,7 +194,6 @@ async def save_section(db, chapter_num: int, chapter_title: str,
 
 
 async def main():
-    # Args: optional start/stop chapter
     start_ch = int(sys.argv[1]) if len(sys.argv) > 1 else 1
     end_ch = int(sys.argv[2]) if len(sys.argv) > 2 else 4
 
@@ -170,40 +210,45 @@ async def main():
 
     mongo_client = AsyncIOMotorClient(mongo_url)
     db = mongo_client[db_name]
-
-    # Create index for fast lookup
     await db.chapters.create_index([("chapter_num", 1), ("section_num", 1)])
 
     print(f"\n{'='*60}")
-    print(f"  Thai2Drive - Bygger laeringsbok")
+    print(f"  Thai2Drive - Bygger laeringsbok (PPTX)")
     print(f"{'='*60}")
+    print(f"  Fil: {Path(PPTX_PATH).name}")
 
-    total_sections = 0
+    total_new = 0
 
     for ch in CHAPTERS:
         if not (start_ch <= ch["num"] <= end_ch):
             continue
 
-        print(f"\n  Kapittel {ch['num']}: {ch['title']}")
-        print(f"  Side {ch['pages'][0]}-{ch['pages'][1]}")
+        print(f"\n  Kapittel {ch['num']}: {ch['no']}")
+        print(f"  Slide {ch['slides'][0]}-{ch['slides'][1]}")
 
-        # Check if already done
         existing = await db.chapters.count_documents({"chapter_num": ch["num"]})
         if existing > 0:
-            print(f"  Allerede ferdig ({existing} seksjoner) - hopper over")
+            print(f"  Allerede ferdig ({existing} seksjoner)")
             continue
 
-        pages = extract_pages(PDF_PATH, ch["pages"][0], ch["pages"][1])
-        sections = make_sections(pages)
-        print(f"  {len(sections)} seksjoner funnet")
+        slides = extract_chapter_slides(PPTX_PATH, ch["slides"][0], ch["slides"][1])
+        print(f"  {len(slides)} slides med innhold")
 
-        for s_num, (page_nums, raw_text) in enumerate(sections, 1):
-            print(f"  [{s_num}/{len(sections)}] side {page_nums[0]}...", end=" ", flush=True)
-            result = rewrite_and_translate(raw_text, ch["title"])
+        if not slides:
+            print("  Ingen innhold funnet")
+            continue
+
+        sections = make_sections(slides)
+        print(f"  Delt i {len(sections)} seksjoner")
+
+        for s_num, (slide_nums, sec_title, raw_text) in enumerate(sections, 1):
+            preview = sec_title[:45] if sec_title else raw_text[:45]
+            print(f"  [{s_num}/{len(sections)}] {preview}...", end=" ", flush=True)
+            result = rewrite_and_translate(raw_text, sec_title, ch["no"])
             if result:
-                await save_section(db, ch["num"], ch["title"], s_num, page_nums, result)
-                print(f"OK: {result['tittel']['no'][:45]}")
-                total_sections += 1
+                await save_section(db, ch, s_num, slide_nums, result)
+                print(f"OK: {result['tittel']['no'][:40]}")
+                total_new += 1
             else:
                 print("Hoppet over")
 
@@ -211,7 +256,7 @@ async def main():
     mongo_client.close()
 
     print(f"\n{'='*60}")
-    print(f"  FERDIG! {total_sections} nye seksjoner lagret")
+    print(f"  FERDIG! {total_new} nye seksjoner")
     print(f"  Totalt i DB: {total} seksjoner")
     print(f"{'='*60}\n")
 

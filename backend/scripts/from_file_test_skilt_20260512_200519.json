@@ -1,0 +1,137 @@
+[
+  {
+    "sporsmal": {
+      "no": "Du ser et rundt skilt med helt rød farge uten symboler. Hva betyr dette skiltet sannsynligvis?",
+      "th": "คุณเห็นป้ายกลมสีแดงล้วนไม่มีสัญลักษณ์ ป้ายนี้น่าจะหมายถึงอะไร?",
+      "en": "You see a round sign that is completely red with no symbols. What does this sign most likely mean?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "Innkjøring forbudt",
+          "th": "ห้ามเข้า",
+          "en": "No entry"
+        }
+      },
+      {
+        "text": {
+          "no": "Parkering tillatt",
+          "th": "อนุญาตให้จอด",
+          "en": "Parking allowed"
+        }
+      },
+      {
+        "text": {
+          "no": "Forkjørsrett",
+          "th": "สิทธิ์ทางผ่าน",
+          "en": "Priority road"
+        }
+      },
+      {
+        "text": {
+          "no": "Møteplass",
+          "th": "จุดพบ",
+          "en": "Meeting place"
+        }
+      }
+    ],
+    "riktigSvar": "A",
+    "vanskelighetsgrad": "easy",
+    "kategori": "Traffic Signs",
+    "forklaring": {
+      "no": "Et rundt rødt skilt uten symboler ligner mest på 'Innkjøring forbudt'-skiltet, men det opprinnelige skiltet har en hvit vannrett strek. Et helt rødt rundt skilt brukes som forbudsskilt-grunnform.",
+      "th": "ป้ายกลมสีแดงไม่มีสัญลักษณ์มีลักษณะคล้ายกับป้าย 'ห้ามเข้า' มากที่สุด",
+      "en": "A round red sign without symbols most closely resembles a 'No entry' sign, which is a prohibitory sign."
+    }
+  },
+  {
+    "sporsmal": {
+      "no": "Hvilken form og farge brukes vanligvis for forbudsskilt i Norge?",
+      "th": "รูปทรงและสีใดที่ใช้สำหรับป้ายห้ามในนอร์เวย์?",
+      "en": "What shape and color are typically used for prohibition signs in Norway?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "Rund med rød kant",
+          "th": "กลมขอบแดง",
+          "en": "Round with red border"
+        }
+      },
+      {
+        "text": {
+          "no": "Trekantet med gul bakgrunn",
+          "th": "สามเหลี่ยมพื้นเหลือง",
+          "en": "Triangular with yellow background"
+        }
+      },
+      {
+        "text": {
+          "no": "Firkantet med blå bakgrunn",
+          "th": "สี่เหลี่ยมพื้นน้ำเงิน",
+          "en": "Square with blue background"
+        }
+      },
+      {
+        "text": {
+          "no": "Åttekantet med grønn farge",
+          "th": "แปดเหลี่ยมสีเขียว",
+          "en": "Octagonal in green"
+        }
+      }
+    ],
+    "riktigSvar": "A",
+    "vanskelighetsgrad": "easy",
+    "kategori": "Traffic Signs",
+    "forklaring": {
+      "no": "Forbudsskilt i Norge er runde med rød kant eller helt røde (som innkjøring forbudt).",
+      "th": "ป้ายห้ามในนอร์เวย์เป็นรูปกลมมีขอบแดงหรือสีแดงทั้งหมด",
+      "en": "Prohibition signs in Norway are round with a red border or entirely red."
+    }
+  },
+  {
+    "sporsmal": {
+      "no": "Hva skal du gjøre hvis du møter et 'Innkjøring forbudt'-skilt?",
+      "th": "คุณควรทำอย่างไรหากพบป้าย 'ห้ามเข้า'?",
+      "en": "What should you do when you encounter a 'No entry' sign?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "Ikke kjøre inn i den retningen skiltet er plassert",
+          "th": "ห้ามขับเข้าไปในทิศทางที่มีป้าย",
+          "en": "Do not drive into the direction where the sign is placed"
+        }
+      },
+      {
+        "text": {
+          "no": "Kjøre inn forsiktig hvis det ikke er trafikk",
+          "th": "ขับเข้าไปอย่างระมัดระวังหากไม่มีรถ",
+          "en": "Drive in carefully if there is no traffic"
+        }
+      },
+      {
+        "text": {
+          "no": "Stoppe og vente på grønt lys",
+          "th": "หยุดและรอไฟเขียว",
+          "en": "Stop and wait for green light"
+        }
+      },
+      {
+        "text": {
+          "no": "Bare syklister må stoppe",
+          "th": "เฉพาะผู้ขี่จักรยานต้องหยุด",
+          "en": "Only cyclists must stop"
+        }
+      }
+    ],
+    "riktigSvar": "A",
+    "vanskelighetsgrad": "medium",
+    "kategori": "Traffic Rules",
+    "forklaring": {
+      "no": "Et 'Innkjøring forbudt'-skilt betyr at all kjøretøytrafikk er forbudt i den retningen skiltet er plassert.",
+      "th": "ป้าย 'ห้ามเข้า' หมายความว่ายานพาหนะทุกชนิดห้ามเข้าในทิศทางนั้น",
+      "en": "A 'No entry' sign means all vehicle traffic is prohibited in the direction the sign is placed."
+    }
+  }
+]

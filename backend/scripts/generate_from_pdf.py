@@ -13,6 +13,12 @@ import json
 import os
 import sys
 import uuid
+
+# Fix Windows console encoding
+if sys.stdout.encoding != 'utf-8':
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+if sys.stderr.encoding != 'utf-8':
+    sys.stderr.reconfigure(encoding='utf-8', errors='replace')
 from pathlib import Path
 from datetime import datetime, timezone
 from io import BytesIO
@@ -20,12 +26,14 @@ from io import BytesIO
 import anthropic
 import fitz  # PyMuPDF
 from motor.motor_asyncio import AsyncIOMotorClient
-from dotenv import load_dotenv
+from dotenv import load_dotenv, dotenv_values
 from PIL import Image
 
 # ── Setup ──────────────────────────────────────────────────────────────
 ROOT = Path(__file__).parent.parent
 load_dotenv(ROOT / '.env')
+_env = dotenv_values(ROOT / '.env')
+os.environ.update({k: v for k, v in _env.items() if v})
 
 PDF_FILES = [
     (r"C:\Users\Stein Hoang\CrossDevice\Michael sin Z Flip5\storage\Oslo team\Trafikalt Grunnkurs 2015.pdf", "Safety"),

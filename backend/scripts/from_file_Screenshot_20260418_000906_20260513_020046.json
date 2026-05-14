@@ -1,0 +1,227 @@
+[
+  {
+    "sporsmal": {
+      "no": "Bilen skal svinge til høyre i krysset slik pilen viser. Hva er viktigst å være oppmerksom på?",
+      "th": "รถจะเลี้ยวขวาที่ทางแยกตามที่ลูกศรแสดง สิ่งที่สำคัญที่สุดที่ต้องระวังคืออะไร?",
+      "en": "The car will turn right at the intersection as the arrow shows. What is most important to pay attention to?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "Fotgjengere i gangfeltet og syklister",
+          "th": "คนเดินเท้าบนทางม้าลายและผู้ขี่จักรยาน",
+          "en": "Pedestrians on the crosswalk and cyclists"
+        }
+      },
+      {
+        "text": {
+          "no": "Hastigheten på motorveien",
+          "th": "ความเร็วบนทางด่วน",
+          "en": "The speed on the highway"
+        }
+      },
+      {
+        "text": {
+          "no": "Bygningene på høyre side",
+          "th": "อาคารทางด้านขวา",
+          "en": "The buildings on the right side"
+        }
+      },
+      {
+        "text": {
+          "no": "Trærne langs veien",
+          "th": "ต้นไม้ริมถนน",
+          "en": "The trees along the road"
+        }
+      }
+    ],
+    "riktigSvar": "A",
+    "vanskelighetsgrad": "easy",
+    "kategori": "Traffic Situations",
+    "forklaring": {
+      "no": "Ved høyresving må du være spesielt oppmerksom på fotgjengere i gangfeltet og syklister som krysser veien, da disse er myke trafikanter med høy risiko.",
+      "th": "เมื่อเลี้ยวขวา คุณต้องระวังคนเดินเท้าบนทางม้าลายและผู้ขี่จักรยานเป็นพิเศษ เนื่องจากเป็นผู้ใช้ถนนที่เปราะบาง",
+      "en": "When turning right, you must pay special attention to pedestrians on the crosswalk and cyclists crossing the road, as they are vulnerable road users."
+    }
+  },
+  {
+    "sporsmal": {
+      "no": "Hva betyr det trekantede skiltet med spissen ned som vises i krysset?",
+      "th": "ป้ายสามเหลี่ยมที่มีปลายชี้ลงที่ทางแยกหมายถึงอะไร?",
+      "en": "What does the triangular sign with the point down shown at the intersection mean?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "Vikeplikt",
+          "th": "ต้องให้ทาง",
+          "en": "Yield / Give way"
+        }
+      },
+      {
+        "text": {
+          "no": "Stopp",
+          "th": "หยุด",
+          "en": "Stop"
+        }
+      },
+      {
+        "text": {
+          "no": "Forkjørsrett",
+          "th": "สิทธิ์ผ่านก่อน",
+          "en": "Priority road"
+        }
+      },
+      {
+        "text": {
+          "no": "Innkjøring forbudt",
+          "th": "ห้ามเข้า",
+          "en": "No entry"
+        }
+      }
+    ],
+    "riktigSvar": "A",
+    "vanskelighetsgrad": "easy",
+    "kategori": "Traffic Signs",
+    "forklaring": {
+      "no": "Skiltet med rød trekant og spissen ned betyr 'Vikeplikt'. Du skal vike for kjørende trafikk i den kryssende vegen.",
+      "th": "ป้ายสามเหลี่ยมสีแดงที่มีปลายชี้ลงหมายถึง 'ต้องให้ทาง' คุณต้องให้ทางแก่ยานพาหนะบนถนนที่ตัดผ่าน",
+      "en": "The sign with a red triangle pointing down means 'Yield'. You must give way to traffic on the crossing road."
+    }
+  },
+  {
+    "sporsmal": {
+      "no": "Hva betyr det runde blå skiltet med hvit pil som peker oppover ved krysset?",
+      "th": "ป้ายวงกลมสีน้ำเงินที่มีลูกศรสีขาวชี้ขึ้นที่ทางแยกหมายถึงอะไร?",
+      "en": "What does the round blue sign with a white arrow pointing up at the intersection mean?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "Påbudt kjøreretning rett frem",
+          "th": "บังคับให้ขับตรงไป",
+          "en": "Mandatory direction straight ahead"
+        }
+      },
+      {
+        "text": {
+          "no": "Enveiskjøring",
+          "th": "ทางเดินรถทางเดียว",
+          "en": "One-way street"
+        }
+      },
+      {
+        "text": {
+          "no": "Forkjørsvei",
+          "th": "ทางหลวงสายหลัก",
+          "en": "Priority road"
+        }
+      },
+      {
+        "text": {
+          "no": "Parkering tillatt",
+          "th": "อนุญาตให้จอด",
+          "en": "Parking allowed"
+        }
+      }
+    ],
+    "riktigSvar": "A",
+    "vanskelighetsgrad": "medium",
+    "kategori": "Traffic Signs",
+    "forklaring": {
+      "no": "Det blå runde skiltet med pil oppover er et påbudsskilt som angir påbudt kjøreretning rett frem.",
+      "th": "ป้ายวงกลมสีน้ำเงินที่มีลูกศรชี้ขึ้นเป็นป้ายบังคับที่ระบุทิศทางการขับขี่บังคับตรงไป",
+      "en": "The blue round sign with an upward arrow is a mandatory sign indicating mandatory direction straight ahead."
+    }
+  },
+  {
+    "sporsmal": {
+      "no": "Hva betyr det runde røde skiltet med to biler ved siden av hverandre som henger ved krysset?",
+      "th": "ป้ายวงกลมสีแดงที่มีรถสองคันอยู่ข้างกันที่ทางแยกหมายถึงอะไร?",
+      "en": "What does the round red sign with two cars next to each other hanging at the intersection mean?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "Forbikjøring forbudt",
+          "th": "ห้ามแซง",
+          "en": "No overtaking"
+        }
+      },
+      {
+        "text": {
+          "no": "Møteplass",
+          "th": "จุดพักรถ",
+          "en": "Meeting place"
+        }
+      },
+      {
+        "text": {
+          "no": "To kjørefelt",
+          "th": "สองช่องจราจร",
+          "en": "Two lanes"
+        }
+      },
+      {
+        "text": {
+          "no": "Parkering for to biler",
+          "th": "ที่จอดรถสำหรับสองคัน",
+          "en": "Parking for two cars"
+        }
+      }
+    ],
+    "riktigSvar": "A",
+    "vanskelighetsgrad": "medium",
+    "kategori": "Traffic Signs",
+    "forklaring": {
+      "no": "Skiltet med to biler i rød sirkel betyr 'Forbikjøring forbudt'. Det er ikke tillatt å kjøre forbi andre motorvogner.",
+      "th": "ป้ายที่มีรถสองคันในวงกลมสีแดงหมายถึง 'ห้ามแซง' ไม่อนุญาตให้แซงยานพาหนะอื่น",
+      "en": "The sign with two cars in a red circle means 'No overtaking'. It is not allowed to overtake other motor vehicles."
+    }
+  },
+  {
+    "sporsmal": {
+      "no": "Bilen kjører i et boligområde og skal svinge til høyre. Hvilken fartsgrense gjelder normalt i tettbygd strøk hvis ikke annet er skiltet?",
+      "th": "รถกำลังขับในเขตที่อยู่อาศัยและจะเลี้ยวขวา ขีดจำกัดความเร็วปกติในเขตชุมชนคือเท่าใดหากไม่มีการระบุไว้เป็นอย่างอื่น?",
+      "en": "The car is driving in a residential area and will turn right. What speed limit normally applies in built-up areas if not otherwise signposted?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "50 km/t",
+          "th": "50 กม./ชม.",
+          "en": "50 km/h"
+        }
+      },
+      {
+        "text": {
+          "no": "30 km/t",
+          "th": "30 กม./ชม.",
+          "en": "30 km/h"
+        }
+      },
+      {
+        "text": {
+          "no": "60 km/t",
+          "th": "60 กม./ชม.",
+          "en": "60 km/h"
+        }
+      },
+      {
+        "text": {
+          "no": "80 km/t",
+          "th": "80 กม./ชม.",
+          "en": "80 km/h"
+        }
+      }
+    ],
+    "riktigSvar": "A",
+    "vanskelighetsgrad": "easy",
+    "kategori": "Traffic Rules",
+    "forklaring": {
+      "no": "I tettbygd strøk er fartsgrensen 50 km/t hvis ikke annet er skiltet. Utenfor tettbygd strøk er den 80 km/t.",
+      "th": "ในเขตชุมชนขีดจำกัดความเร็วคือ 50 กม./ชม. หากไม่มีการระบุไว้เป็นอย่างอื่น นอกเขตชุมชนคือ 80 กม./ชม.",
+      "en": "In built-up areas the speed limit is 50 km/h unless otherwise signposted. Outside built-up areas it is 80 km/h."
+    }
+  }
+]

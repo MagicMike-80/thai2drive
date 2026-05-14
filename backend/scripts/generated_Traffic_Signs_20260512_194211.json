@@ -1,0 +1,267 @@
+[
+  {
+    "id": "869337a2-57b5-4f82-8c42-6c55a1d2084f",
+    "question": {
+      "no": "Du nærmer deg et trekantet skilt med rød kant som viser to barn som går. Hva betyr dette skiltet?",
+      "th": "คุณกำลังเข้าใกล้ป้ายสามเหลี่ยมขอบแดงที่แสดงเด็กสองคนกำลังเดิน ป้ายนี้หมายถึงอะไร?",
+      "en": "You are approaching a triangular sign with a red border showing two children walking. What does this sign mean?"
+    },
+    "options": [
+      {
+        "id": "A",
+        "text": {
+          "no": "Skolevei - barn må krysse her",
+          "th": "ทางไปโรงเรียน - เด็กต้องข้ามที่นี่",
+          "en": "School route - children must cross here"
+        }
+      },
+      {
+        "id": "B",
+        "text": {
+          "no": "Barn - vær spesielt oppmerksom på lekende eller kryssende barn",
+          "th": "เด็ก - ระวังเด็กที่เล่นหรือข้ามถนนเป็นพิเศษ",
+          "en": "Children - be especially aware of playing or crossing children"
+        }
+      },
+      {
+        "id": "C",
+        "text": {
+          "no": "Lekeområde - kjøring forbudt",
+          "th": "พื้นที่เล่น - ห้ามขับรถ",
+          "en": "Play area - driving prohibited"
+        }
+      },
+      {
+        "id": "D",
+        "text": {
+          "no": "Gangfelt foran - stopp for fotgjengere",
+          "th": "ทางม้าลายข้างหน้า - หยุดให้คนเดินถนน",
+          "en": "Pedestrian crossing ahead - stop for pedestrians"
+        }
+      }
+    ],
+    "correctOptionId": "B",
+    "explanation": {
+      "no": "Fareskilt 156 'Barn' varsler om områder der barn ofte oppholder seg, som skoler og lekeplasser. Du må senke farten og være forberedt på uventet adferd.",
+      "th": "ป้ายเตือน 156 'เด็ก' เตือนเกี่ยวกับพื้นที่ที่เด็กมักอยู่ เช่น โรงเรียนและสนามเด็กเล่น คุณต้องลดความเร็วและเตรียมพร้อมสำหรับพฤติกรรมที่ไม่คาดคิด",
+      "en": "Warning sign 156 'Children' warns about areas where children often are, like schools and playgrounds. You must reduce speed and be prepared for unexpected behavior."
+    },
+    "bildeUrl": null,
+    "category": "Traffic Signs",
+    "difficulty": "easy",
+    "active": true,
+    "schema_version": 2
+  },
+  {
+    "id": "5e65b42e-4c40-4d2b-9530-8e309380aa35",
+    "question": {
+      "no": "Hvilken betydning har en gul, ubrutt linje langs venstre vegkant?",
+      "th": "เส้นสีเหลืองทึบตามขอบถนนด้านซ้ายมีความหมายอย่างไร?",
+      "en": "What does a solid yellow line along the left road edge mean?"
+    },
+    "options": [
+      {
+        "id": "A",
+        "text": {
+          "no": "Det er forbudt å stanse på venstre side",
+          "th": "ห้ามหยุดทางด้านซ้าย",
+          "en": "Stopping on the left side is prohibited"
+        }
+      },
+      {
+        "id": "B",
+        "text": {
+          "no": "Den markerer midten av kjørebanen på toveis veg",
+          "th": "เป็นการทำเครื่องหมายกึ่งกลางถนนบนถนนสองทาง",
+          "en": "It marks the center of the road on a two-way road"
+        }
+      },
+      {
+        "id": "C",
+        "text": {
+          "no": "Den markerer venstre kant av kjørebanen",
+          "th": "เป็นการทำเครื่องหมายขอบซ้ายของถนน",
+          "en": "It marks the left edge of the carriageway"
+        }
+      },
+      {
+        "id": "D",
+        "text": {
+          "no": "Den angir sykkelfelt",
+          "th": "ระบุช่องทางจักรยาน",
+          "en": "It indicates a bicycle lane"
+        }
+      }
+    ],
+    "correctOptionId": "C",
+    "explanation": {
+      "no": "Gul ubrutt kantlinje markerer venstre kant av kjørebanen, som regel på enveiskjørte veger eller motorveg. Hvit linje brukes på høyre kant.",
+      "th": "เส้นขอบสีเหลืองทึบทำเครื่องหมายขอบซ้ายของถนน โดยปกติบนถนนทางเดียวหรือทางหลวง เส้นสีขาวใช้ทำเครื่องหมายขอบขวา",
+      "en": "A solid yellow edge line marks the left edge of the carriageway, typically on one-way roads or motorways. White lines are used for the right edge."
+    },
+    "bildeUrl": null,
+    "category": "Traffic Signs",
+    "difficulty": "medium",
+    "active": true,
+    "schema_version": 2
+  },
+  {
+    "id": "512676a9-c6b1-4b73-980f-4e63ce8283fe",
+    "question": {
+      "no": "Et rundt blått skilt med en hvit pil som peker rett frem - hva betyr det?",
+      "th": "ป้ายกลมสีน้ำเงินที่มีลูกศรสีขาวชี้ตรงไปข้างหน้า - หมายถึงอะไร?",
+      "en": "A round blue sign with a white arrow pointing straight ahead - what does it mean?"
+    },
+    "options": [
+      {
+        "id": "A",
+        "text": {
+          "no": "Anbefalt kjøreretning",
+          "th": "ทิศทางการขับขี่ที่แนะนำ",
+          "en": "Recommended driving direction"
+        }
+      },
+      {
+        "id": "B",
+        "text": {
+          "no": "Enveiskjøring fremover",
+          "th": "เดินรถทางเดียวข้างหน้า",
+          "en": "One-way traffic ahead"
+        }
+      },
+      {
+        "id": "C",
+        "text": {
+          "no": "Påbudt kjøreretning - du må kjøre rett frem",
+          "th": "ทิศทางการขับขี่บังคับ - คุณต้องขับตรงไป",
+          "en": "Mandatory driving direction - you must drive straight ahead"
+        }
+      },
+      {
+        "id": "D",
+        "text": {
+          "no": "Forkjørsveg fremover",
+          "th": "ถนนที่มีสิทธิ์ก่อนข้างหน้า",
+          "en": "Priority road ahead"
+        }
+      }
+    ],
+    "correctOptionId": "C",
+    "explanation": {
+      "no": "Runde blå skilt med hvite symboler er påbudsskilt. En pil rett frem betyr at du er pålagt å kjøre i pilens retning, altså rett frem.",
+      "th": "ป้ายกลมสีน้ำเงินที่มีสัญลักษณ์สีขาวเป็นป้ายบังคับ ลูกศรชี้ตรงไปหมายความว่าคุณต้องขับไปในทิศทางของลูกศร นั่นคือตรงไป",
+      "en": "Round blue signs with white symbols are mandatory signs. An arrow pointing straight means you are required to drive in the arrow's direction, i.e., straight ahead."
+    },
+    "bildeUrl": null,
+    "category": "Traffic Signs",
+    "difficulty": "medium",
+    "active": true,
+    "schema_version": 2
+  },
+  {
+    "id": "7351076d-933f-4355-a188-38b05efa7f86",
+    "question": {
+      "no": "Du ser et rundt skilt med rød kant og et sort tall '50' i midten på hvit bakgrunn. Når slutter denne reguleringen å gjelde?",
+      "th": "คุณเห็นป้ายกลมขอบแดงและตัวเลข '50' สีดำตรงกลางบนพื้นหลังสีขาว กฎข้อบังคับนี้จะสิ้นสุดเมื่อใด?",
+      "en": "You see a round sign with a red border and a black number '50' in the middle on a white background. When does this regulation stop applying?"
+    },
+    "options": [
+      {
+        "id": "A",
+        "text": {
+          "no": "Etter 500 meter automatisk",
+          "th": "หลังจาก 500 เมตรโดยอัตโนมัติ",
+          "en": "After 500 meters automatically"
+        }
+      },
+      {
+        "id": "B",
+        "text": {
+          "no": "Ved neste kryss",
+          "th": "ที่ทางแยกถัดไป",
+          "en": "At the next intersection"
+        }
+      },
+      {
+        "id": "C",
+        "text": {
+          "no": "Når du passerer et nytt fartsgrenseskilt eller skilt som opphever det",
+          "th": "เมื่อคุณผ่านป้ายจำกัดความเร็วใหม่หรือป้ายที่ยกเลิก",
+          "en": "When you pass a new speed limit sign or a sign that cancels it"
+        }
+      },
+      {
+        "id": "D",
+        "text": {
+          "no": "Når du kjører ut av tettbygd strøk",
+          "th": "เมื่อคุณขับออกจากเขตชุมชน",
+          "en": "When you drive out of a built-up area"
+        }
+      }
+    ],
+    "correctOptionId": "C",
+    "explanation": {
+      "no": "Fartsgrenseskilt 362 gjelder inntil et nytt fartsgrenseskilt settes opp, eller til skilt 364 'Slutt på særskilt fartsgrense' oppheves. Det gjelder også til en ny generell fartsgrense overtar.",
+      "th": "ป้ายจำกัดความเร็ว 362 มีผลใช้บังคับจนกว่าจะมีป้ายจำกัดความเร็วใหม่ หรือจนกว่าป้าย 364 'สิ้นสุดการจำกัดความเร็วพิเศษ' จะถูกยกเลิก นอกจากนี้ยังใช้จนกว่าขีดจำกัดความเร็วทั่วไปใหม่จะเข้ามาแทนที่",
+      "en": "Speed limit sign 362 applies until a new speed limit sign is posted, or sign 364 'End of special speed limit' cancels it. It also applies until a new general speed limit takes over."
+    },
+    "bildeUrl": null,
+    "category": "Traffic Signs",
+    "difficulty": "hard",
+    "active": true,
+    "schema_version": 2
+  },
+  {
+    "id": "f707aba2-1ca1-4012-8f79-dfa062022562",
+    "question": {
+      "no": "På en motorveg ser du et blått, rektangulært skilt med hvitt 'M' og en bil. Hva betyr dette?",
+      "th": "บนทางหลวงคุณเห็นป้ายสี่เหลี่ยมสีน้ำเงินที่มี 'M' สีขาวและรถยนต์ หมายถึงอะไร?",
+      "en": "On a motorway you see a blue rectangular sign with a white 'M' and a car. What does this mean?"
+    },
+    "options": [
+      {
+        "id": "A",
+        "text": {
+          "no": "Møteplass for langtransport",
+          "th": "จุดพักสำหรับการขนส่งทางไกล",
+          "en": "Meeting point for long-distance transport"
+        }
+      },
+      {
+        "id": "B",
+        "text": {
+          "no": "Motorveg begynner",
+          "th": "ทางหลวงเริ่มต้น",
+          "en": "Motorway begins"
+        }
+      },
+      {
+        "id": "C",
+        "text": {
+          "no": "Motell og bensinstasjon",
+          "th": "โรงแรมและปั๊มน้ำมัน",
+          "en": "Motel and gas station"
+        }
+      },
+      {
+        "id": "D",
+        "text": {
+          "no": "Minimumshastighet på vegen",
+          "th": "ความเร็วขั้นต่ำบนถนน",
+          "en": "Minimum speed on the road"
+        }
+      }
+    ],
+    "correctOptionId": "B",
+    "explanation": {
+      "no": "Opplysningsskilt 502 'Motorveg' viser hvor motorveg begynner. På motorveg gjelder spesielle regler, blant annet forbud mot gående, syklende og kjøretøy som ikke kan kjøre over 40 km/t.",
+      "th": "ป้ายข้อมูล 502 'ทางหลวง' แสดงว่าทางหลวงเริ่มต้นที่ใด บนทางหลวงมีกฎพิเศษ รวมถึงห้ามคนเดินเท้า จักรยาน และยานพาหนะที่ไม่สามารถวิ่งเกิน 40 กม./ชม.",
+      "en": "Information sign 502 'Motorway' indicates where the motorway begins. Special rules apply on motorways, including bans on pedestrians, cyclists, and vehicles that cannot exceed 40 km/h."
+    },
+    "bildeUrl": null,
+    "category": "Traffic Signs",
+    "difficulty": "easy",
+    "active": true,
+    "schema_version": 2
+  }
+]

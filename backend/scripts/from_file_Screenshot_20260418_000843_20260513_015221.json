@@ -1,0 +1,92 @@
+[
+  {
+    "sporsmal": {
+      "no": "Hva betyr skiltet du ser ved veikanten?",
+      "th": "ป้ายที่คุณเห็นข้างถนนหมายความว่าอย่างไร?",
+      "en": "What does the sign you see by the roadside mean?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "Anbefalt fartsgrense er 60 km/t",
+          "th": "ความเร็วที่แนะนำคือ 60 กม./ชม.",
+          "en": "Recommended speed limit is 60 km/h"
+        }
+      },
+      {
+        "text": {
+          "no": "Slutt på fartsgrense 60 km/t",
+          "th": "สิ้นสุดเขตจำกัดความเร็ว 60 กม./ชม.",
+          "en": "End of 60 km/h speed limit"
+        }
+      },
+      {
+        "text": {
+          "no": "Start på fartsgrense 60 km/t",
+          "th": "เริ่มต้นเขตจำกัดความเร็ว 60 กม./ชม.",
+          "en": "Start of 60 km/h speed limit"
+        }
+      },
+      {
+        "text": {
+          "no": "Minste tillatte fart er 60 km/t",
+          "th": "ความเร็วต่ำสุดที่อนุญาตคือ 60 กม./ชม.",
+          "en": "Minimum allowed speed is 60 km/h"
+        }
+      }
+    ],
+    "riktigSvar": "B",
+    "vanskelighetsgrad": "easy",
+    "kategori": "Traffic Signs",
+    "forklaring": {
+      "no": "Skiltet med svarte streker over tallet 60 betyr 'Slutt på særskilt fartsgrense'. Etter dette skiltet gjelder den generelle fartsgrensen, som er 80 km/t utenfor tettbygd strøk.",
+      "th": "ป้ายที่มีเส้นทแยงสีดำพาดผ่านตัวเลข 60 หมายถึง 'สิ้นสุดเขตจำกัดความเร็วพิเศษ' หลังจากป้ายนี้จะใช้ขีดจำกัดความเร็วทั่วไปคือ 80 กม./ชม. นอกเขตชุมชน",
+      "en": "The sign with black lines across the number 60 means 'End of special speed limit'. After this sign, the general speed limit applies, which is 80 km/h outside built-up areas."
+    }
+  },
+  {
+    "sporsmal": {
+      "no": "Hvilken fartsgrense gjelder etter at du har passert dette skiltet på en vanlig landevei utenfor tettbygd strøk?",
+      "th": "ขีดจำกัดความเร็วใดที่ใช้หลังจากที่คุณผ่านป้ายนี้บนถนนชนบททั่วไปนอกเขตชุมชน?",
+      "en": "Which speed limit applies after you pass this sign on an ordinary rural road outside a built-up area?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "50 km/t",
+          "th": "50 กม./ชม.",
+          "en": "50 km/h"
+        }
+      },
+      {
+        "text": {
+          "no": "60 km/t",
+          "th": "60 กม./ชม.",
+          "en": "60 km/h"
+        }
+      },
+      {
+        "text": {
+          "no": "80 km/t",
+          "th": "80 กม./ชม.",
+          "en": "80 km/h"
+        }
+      },
+      {
+        "text": {
+          "no": "90 km/t",
+          "th": "90 กม./ชม.",
+          "en": "90 km/h"
+        }
+      }
+    ],
+    "riktigSvar": "C",
+    "vanskelighetsgrad": "medium",
+    "kategori": "Traffic Rules",
+    "forklaring": {
+      "no": "Når skiltet 'Slutt på særskilt fartsgrense' passeres, gjelder den generelle fartsgrensen. Utenfor tettbygd strøk er denne 80 km/t, mens den i tettbygd strøk er 50 km/t. Bildet viser typisk landevei utenfor tettbygd strøk.",
+      "th": "เมื่อผ่านป้าย 'สิ้นสุดเขตจำกัดความเร็วพิเศษ' จะใช้ขีดจำกัดความเร็วทั่วไป นอกเขตชุมชนคือ 80 กม./ชม. ส่วนในเขตชุมชนคือ 50 กม./ชม. ภาพแสดงถนนชนบทนอกเขตชุมชน",
+      "en": "When passing the 'End of special speed limit' sign, the general speed limit applies. Outside built-up areas this is 80 km/h, while inside built-up areas it is 50 km/h. The image shows a typical rural road outside built-up areas."
+    }
+  }
+]

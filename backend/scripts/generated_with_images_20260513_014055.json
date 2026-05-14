@@ -1,0 +1,2352 @@
+[
+  {
+    "sporsmal": {
+      "no": "Hva betyr et trekantet skilt med rød kant som viser et barn som løper?",
+      "th": "ป้ายสามเหลี่ยมขอบแดงที่แสดงภาพเด็กวิ่งหมายความว่าอย่างไร?",
+      "en": "What does a triangular sign with red border showing a running child mean?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "Skolevei – forbudt å kjøre",
+          "th": "ทางไปโรงเรียน - ห้ามขับรถ",
+          "en": "School road - driving forbidden"
+        }
+      },
+      {
+        "text": {
+          "no": "Fare for barn – vær ekstra oppmerksom",
+          "th": "ระวังเด็ก - ต้องระมัดระวังเป็นพิเศษ",
+          "en": "Children warning - be extra attentive"
+        }
+      },
+      {
+        "text": {
+          "no": "Lekeplass – stopp påbudt",
+          "th": "สนามเด็กเล่น - ต้องหยุด",
+          "en": "Playground - mandatory stop"
+        }
+      },
+      {
+        "text": {
+          "no": "Barnehage – kun for foreldre",
+          "th": "โรงเรียนอนุบาล - เฉพาะผู้ปกครอง",
+          "en": "Kindergarten - parents only"
+        }
+      }
+    ],
+    "riktigSvar": "B",
+    "vanskelighetsgrad": "lett",
+    "kategori": "Traffic Signs",
+    "bildeType": "skilt: fareskilt barn",
+    "forklaring": {
+      "no": "Fareskiltet varsler om område hvor barn ofte ferdes, som ved skoler og lekeplasser. Senk farten og vær ekstra oppmerksom.",
+      "th": "ป้ายเตือนนี้เตือนถึงพื้นที่ที่เด็กมักเดินผ่าน เช่น โรงเรียนและสนามเด็กเล่น ลดความเร็วและระมัดระวังเป็นพิเศษ",
+      "en": "The warning sign alerts about areas where children often are, such as schools and playgrounds. Reduce speed and be extra attentive."
+    },
+    "bildeUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Norwegian-road-sign-142.svg/240px-Norwegian-road-sign-142.svg.png"
+  },
+  {
+    "sporsmal": {
+      "no": "Hva er fartsgrensen i tettbygd strøk hvis ikke annet er skiltet?",
+      "th": "ความเร็วจำกัดในเขตชุมชนเป็นเท่าใดหากไม่มีป้ายระบุเป็นอย่างอื่น?",
+      "en": "What is the speed limit in built-up areas if not otherwise signed?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "30 km/t",
+          "th": "30 กม./ชม.",
+          "en": "30 km/h"
+        }
+      },
+      {
+        "text": {
+          "no": "40 km/t",
+          "th": "40 กม./ชม.",
+          "en": "40 km/h"
+        }
+      },
+      {
+        "text": {
+          "no": "50 km/t",
+          "th": "50 กม./ชม.",
+          "en": "50 km/h"
+        }
+      },
+      {
+        "text": {
+          "no": "60 km/t",
+          "th": "60 กม./ชม.",
+          "en": "60 km/h"
+        }
+      }
+    ],
+    "riktigSvar": "C",
+    "vanskelighetsgrad": "lett",
+    "kategori": "Speed Limits",
+    "bildeType": "situasjon: urban street with houses and parked cars",
+    "forklaring": {
+      "no": "I tettbygd strøk er fartsgrensen 50 km/t hvis ikke annet er skiltet. Utenfor tettbygd strøk er den 80 km/t.",
+      "th": "ในเขตชุมชน ความเร็วจำกัดคือ 50 กม./ชม. หากไม่มีป้ายระบุเป็นอย่างอื่น นอกเขตชุมชนคือ 80 กม./ชม.",
+      "en": "In built-up areas the speed limit is 50 km/h unless otherwise signed. Outside built-up areas it is 80 km/h."
+    },
+    "bildeUrl": "https://image.pollinations.ai/prompt/anime%20style%2C%20cute%20illustration%2C%20Norwegian%20traffic%20scene%3A%20urban%20street%20with%20houses%20and%20parked%20cars%2C%20simple%20clean%20design%2C%20bright%20colors%2C%20manga%20art%20style?width=512&height=384&model=flux&seed=1800&nologo=true"
+  },
+  {
+    "sporsmal": {
+      "no": "Hvem har vikeplikt i en rundkjøring?",
+      "th": "ใครต้องให้ทางในวงเวียน?",
+      "en": "Who has the duty to give way at a roundabout?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "De som allerede er inne i rundkjøringen",
+          "th": "ผู้ที่อยู่ในวงเวียนแล้ว",
+          "en": "Those already in the roundabout"
+        }
+      },
+      {
+        "text": {
+          "no": "De som skal kjøre inn i rundkjøringen",
+          "th": "ผู้ที่กำลังจะเข้าวงเวียน",
+          "en": "Those entering the roundabout"
+        }
+      },
+      {
+        "text": {
+          "no": "Tunge kjøretøy alltid",
+          "th": "รถบรรทุกหนักเสมอ",
+          "en": "Heavy vehicles always"
+        }
+      },
+      {
+        "text": {
+          "no": "Alle har lik rett",
+          "th": "ทุกคนมีสิทธิ์เท่ากัน",
+          "en": "Everyone has equal right"
+        }
+      }
+    ],
+    "riktigSvar": "B",
+    "vanskelighetsgrad": "medium",
+    "kategori": "Intersections and Roundabouts",
+    "bildeType": "situasjon: car approaching roundabout with traffic inside",
+    "forklaring": {
+      "no": "Den som skal inn i en rundkjøring har vikeplikt for trafikk som allerede er i rundkjøringen. Husk å bruke blinklys ved utkjøring.",
+      "th": "ผู้ที่จะเข้าวงเวียนต้องให้ทางแก่รถที่อยู่ในวงเวียนแล้ว อย่าลืมเปิดไฟเลี้ยวเมื่อออกจากวงเวียน",
+      "en": "Those entering a roundabout must yield to traffic already in the roundabout. Remember to use indicator when exiting."
+    },
+    "bildeUrl": "https://image.pollinations.ai/prompt/anime%20style%2C%20cute%20illustration%2C%20Norwegian%20traffic%20scene%3A%20car%20approaching%20roundabout%20with%20traffic%20inside%2C%20simple%20clean%20design%2C%20bright%20colors%2C%20manga%20art%20style?width=512&height=384&model=flux&seed=4823&nologo=true"
+  },
+  {
+    "sporsmal": {
+      "no": "Hva er promillegrensen for å kjøre bil i Norge?",
+      "th": "ระดับแอลกอฮอล์ในเลือดสูงสุดที่อนุญาตให้ขับรถในนอร์เวย์คือเท่าใด?",
+      "en": "What is the blood alcohol limit for driving in Norway?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "0,5 promille",
+          "th": "0.5 ต่อพัน",
+          "en": "0.5 per mille"
+        }
+      },
+      {
+        "text": {
+          "no": "0,2 promille",
+          "th": "0.2 ต่อพัน",
+          "en": "0.2 per mille"
+        }
+      },
+      {
+        "text": {
+          "no": "0,8 promille",
+          "th": "0.8 ต่อพัน",
+          "en": "0.8 per mille"
+        }
+      },
+      {
+        "text": {
+          "no": "0,0 promille",
+          "th": "0.0 ต่อพัน",
+          "en": "0.0 per mille"
+        }
+      }
+    ],
+    "riktigSvar": "B",
+    "vanskelighetsgrad": "lett",
+    "kategori": "Traffic Safety",
+    "bildeType": "situasjon: police breathalyzer test on driver",
+    "forklaring": {
+      "no": "Promillegrensen i Norge er 0,2 ‰. Selv små mengder alkohol påvirker reaksjonsevne og dømmekraft.",
+      "th": "ขีดจำกัดแอลกอฮอล์ในนอร์เวย์คือ 0.2 ‰ แม้แอลกอฮอล์เพียงเล็กน้อยก็ส่งผลต่อปฏิกิริยาและการตัดสินใจ",
+      "en": "The alcohol limit in Norway is 0.2 ‰. Even small amounts of alcohol affect reaction time and judgment."
+    },
+    "bildeUrl": "https://image.pollinations.ai/prompt/anime%20style%2C%20cute%20illustration%2C%20Norwegian%20traffic%20scene%3A%20police%20breathalyzer%20test%20on%20driver%2C%20simple%20clean%20design%2C%20bright%20colors%2C%20manga%20art%20style?width=512&height=384&model=flux&seed=6491&nologo=true"
+  },
+  {
+    "sporsmal": {
+      "no": "Når må du stoppe helt for fotgjenger ved gangfelt?",
+      "th": "เมื่อใดที่คุณต้องหยุดสนิทให้คนเดินถนนที่ทางม้าลาย?",
+      "en": "When must you stop completely for pedestrians at a crosswalk?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "Kun når fotgjengeren er midt i gangfeltet",
+          "th": "เฉพาะเมื่อคนเดินถนนอยู่กลางทางม้าลาย",
+          "en": "Only when the pedestrian is in the middle of the crosswalk"
+        }
+      },
+      {
+        "text": {
+          "no": "Når fotgjenger er i eller på vei ut i gangfeltet",
+          "th": "เมื่อคนเดินถนนอยู่ในหรือกำลังจะเข้าสู่ทางม้าลาย",
+          "en": "When pedestrian is in or about to enter the crosswalk"
+        }
+      },
+      {
+        "text": {
+          "no": "Aldri, fotgjenger må vente",
+          "th": "ไม่เคย คนเดินถนนต้องรอ",
+          "en": "Never, pedestrians must wait"
+        }
+      },
+      {
+        "text": {
+          "no": "Bare hvis det er rødt lys",
+          "th": "เฉพาะเมื่อไฟแดง",
+          "en": "Only when there is a red light"
+        }
+      }
+    ],
+    "riktigSvar": "B",
+    "vanskelighetsgrad": "medium",
+    "kategori": "Pedestrians and Cyclists",
+    "bildeType": "situasjon: pedestrian waiting at zebra crossing",
+    "forklaring": {
+      "no": "Du har vikeplikt for fotgjengere som er i gangfeltet eller på vei ut i det. Tilpass farten i god tid før gangfeltet.",
+      "th": "คุณต้องให้ทางแก่คนเดินถนนที่อยู่ในทางม้าลายหรือกำลังจะเข้าสู่ทางม้าลาย ปรับความเร็วล่วงหน้าก่อนถึงทางม้าลาย",
+      "en": "You must yield to pedestrians in or entering the crosswalk. Adjust speed well before the crossing."
+    },
+    "bildeUrl": "https://image.pollinations.ai/prompt/anime%20style%2C%20cute%20illustration%2C%20Norwegian%20traffic%20scene%3A%20pedestrian%20waiting%20at%20zebra%20crossing%2C%20simple%20clean%20design%2C%20bright%20colors%2C%20manga%20art%20style?width=512&height=384&model=flux&seed=336&nologo=true"
+  },
+  {
+    "sporsmal": {
+      "no": "Hva betyr et rundt skilt med rød kant og hvit bakgrunn med svart bil og motorsykkel?",
+      "th": "ป้ายกลมขอบแดงพื้นขาวที่มีรูปรถยนต์และรถจักรยานยนต์สีดำหมายความว่าอย่างไร?",
+      "en": "What does a round sign with red border, white background and black car and motorcycle mean?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "Parkering forbudt",
+          "th": "ห้ามจอด",
+          "en": "Parking forbidden"
+        }
+      },
+      {
+        "text": {
+          "no": "Forbikjøring forbudt",
+          "th": "ห้ามแซง",
+          "en": "Overtaking forbidden"
+        }
+      },
+      {
+        "text": {
+          "no": "Innkjøring forbudt",
+          "th": "ห้ามเข้า",
+          "en": "No entry"
+        }
+      },
+      {
+        "text": {
+          "no": "Møteplikt",
+          "th": "ต้องให้ทางรถสวน",
+          "en": "Give way to oncoming traffic"
+        }
+      }
+    ],
+    "riktigSvar": "B",
+    "vanskelighetsgrad": "medium",
+    "kategori": "Traffic Signs",
+    "bildeType": "skilt: forbikjøring forbudt",
+    "forklaring": {
+      "no": "Skiltet betyr at forbikjøring er forbudt. Det gjelder til skiltet oppheves eller til neste kryss.",
+      "th": "ป้ายนี้หมายถึงห้ามแซง มีผลจนกว่าจะมีป้ายยกเลิกหรือถึงทางแยกถัดไป",
+      "en": "The sign means overtaking is prohibited. It applies until cancelled or until the next intersection."
+    },
+    "bildeUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Norwegian-road-sign-206.svg/240px-Norwegian-road-sign-206.svg.png"
+  },
+  {
+    "sporsmal": {
+      "no": "Hvilken kjørestil er mest miljøvennlig og økonomisk?",
+      "th": "รูปแบบการขับขี่แบบใดเป็นมิตรกับสิ่งแวดล้อมและประหยัดที่สุด?",
+      "en": "Which driving style is most environmentally friendly and economical?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "Rask akselerasjon og hard bremsing",
+          "th": "เร่งเร็วและเบรกแรง",
+          "en": "Quick acceleration and hard braking"
+        }
+      },
+      {
+        "text": {
+          "no": "Jevn fart og forutseende kjøring",
+          "th": "ความเร็วคงที่และขับขี่แบบคาดการณ์ล่วงหน้า",
+          "en": "Steady speed and anticipatory driving"
+        }
+      },
+      {
+        "text": {
+          "no": "Høy fart for å komme raskt frem",
+          "th": "ความเร็วสูงเพื่อไปถึงเร็ว",
+          "en": "High speed to arrive quickly"
+        }
+      },
+      {
+        "text": {
+          "no": "Kjøring i lavt gir hele tiden",
+          "th": "ขับในเกียร์ต่ำตลอดเวลา",
+          "en": "Driving in low gear all the time"
+        }
+      }
+    ],
+    "riktigSvar": "B",
+    "vanskelighetsgrad": "lett",
+    "kategori": "Environment and Economy",
+    "bildeType": "situasjon: car driving smoothly on highway",
+    "forklaring": {
+      "no": "Jevn fart, forutseende kjøring og bruk av høyt gir reduserer drivstofforbruk og utslipp betydelig.",
+      "th": "ความเร็วคงที่ การขับขี่แบบคาดการณ์ล่วงหน้า และการใช้เกียร์สูงช่วยลดการใช้น้ำมันและการปล่อยมลพิษอย่างมาก",
+      "en": "Steady speed, anticipatory driving and using high gear significantly reduce fuel consumption and emissions."
+    },
+    "bildeUrl": "https://image.pollinations.ai/prompt/anime%20style%2C%20cute%20illustration%2C%20Norwegian%20traffic%20scene%3A%20car%20driving%20smoothly%20on%20highway%2C%20simple%20clean%20design%2C%20bright%20colors%2C%20manga%20art%20style?width=512&height=384&model=flux&seed=1150&nologo=true"
+  },
+  {
+    "sporsmal": {
+      "no": "Hva bør du gjøre hvis du blir trøtt under kjøring?",
+      "th": "คุณควรทำอย่างไรหากรู้สึกง่วงขณะขับรถ?",
+      "en": "What should you do if you become tired while driving?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "Åpne vinduet og fortsette",
+          "th": "เปิดหน้าต่างและขับต่อไป",
+          "en": "Open the window and continue"
+        }
+      },
+      {
+        "text": {
+          "no": "Drikke kaffe og kjøre raskere",
+          "th": "ดื่มกาแฟและขับเร็วขึ้น",
+          "en": "Drink coffee and drive faster"
+        }
+      },
+      {
+        "text": {
+          "no": "Stoppe og hvile, eventuelt sove",
+          "th": "หยุดและพักผ่อน หรืออาจจะนอน",
+          "en": "Stop and rest, possibly sleep"
+        }
+      },
+      {
+        "text": {
+          "no": "Skru opp musikken",
+          "th": "เปิดเพลงดังขึ้น",
+          "en": "Turn up the music"
+        }
+      }
+    ],
+    "riktigSvar": "C",
+    "vanskelighetsgrad": "lett",
+    "kategori": "Traffic Safety",
+    "bildeType": "situasjon: tired driver yawning behind wheel",
+    "forklaring": {
+      "no": "Trøtthet er en av de største ulykkesårsakene. Det eneste som hjelper er hvile eller søvn. Stopp på en trygg plass.",
+      "th": "ความเหนื่อยล้าเป็นสาเหตุหลักของอุบัติเหตุ สิ่งเดียวที่ช่วยได้คือการพักผ่อนหรือนอน หยุดที่ปลอดภัย",
+      "en": "Fatigue is a major cause of accidents. The only thing that helps is rest or sleep. Stop at a safe place."
+    },
+    "bildeUrl": "https://image.pollinations.ai/prompt/anime%20style%2C%20cute%20illustration%2C%20Norwegian%20traffic%20scene%3A%20tired%20driver%20yawning%20behind%20wheel%2C%20simple%20clean%20design%2C%20bright%20colors%2C%20manga%20art%20style?width=512&height=384&model=flux&seed=3049&nologo=true"
+  },
+  {
+    "sporsmal": {
+      "no": "Hvor ofte bør du kontrollere dekktrykket på bilen?",
+      "th": "คุณควรตรวจสอบแรงดันลมยางบ่อยแค่ไหน?",
+      "en": "How often should you check your car's tire pressure?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "Én gang i året",
+          "th": "ปีละครั้ง",
+          "en": "Once a year"
+        }
+      },
+      {
+        "text": {
+          "no": "Minst én gang i måneden",
+          "th": "อย่างน้อยเดือนละครั้ง",
+          "en": "At least once a month"
+        }
+      },
+      {
+        "text": {
+          "no": "Kun ved EU-kontroll",
+          "th": "เฉพาะเมื่อตรวจสภาพรถ",
+          "en": "Only at vehicle inspection"
+        }
+      },
+      {
+        "text": {
+          "no": "Hver gang du fyller bensin",
+          "th": "ทุกครั้งที่เติมน้ำมัน",
+          "en": "Every time you refuel"
+        }
+      }
+    ],
+    "riktigSvar": "B",
+    "vanskelighetsgrad": "medium",
+    "kategori": "Vehicle Knowledge",
+    "bildeType": "situasjon: person checking tire pressure with gauge",
+    "forklaring": {
+      "no": "Dekktrykk bør sjekkes minst månedlig. Riktig trykk gir bedre veigrep, lavere drivstofforbruk og lengre levetid på dekkene.",
+      "th": "ควรตรวจแรงดันยางอย่างน้อยเดือนละครั้ง แรงดันที่ถูกต้องให้การยึดเกาะถนนที่ดีกว่า ประหยัดน้ำมัน และยางใช้งานได้นานขึ้น",
+      "en": "Tire pressure should be checked at least monthly. Correct pressure provides better grip, lower fuel consumption and longer tire life."
+    },
+    "bildeUrl": "https://image.pollinations.ai/prompt/anime%20style%2C%20cute%20illustration%2C%20Norwegian%20traffic%20scene%3A%20person%20checking%20tire%20pressure%20with%20gauge%2C%20simple%20clean%20design%2C%20bright%20colors%2C%20manga%20art%20style?width=512&height=384&model=flux&seed=7473&nologo=true"
+  },
+  {
+    "sporsmal": {
+      "no": "Når er det tillatt å kjøre forbi til høyre?",
+      "th": "เมื่อใดที่อนุญาตให้แซงทางขวา?",
+      "en": "When is it permitted to overtake on the right?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "Alltid på motorvei",
+          "th": "บนทางด่วนเสมอ",
+          "en": "Always on motorways"
+        }
+      },
+      {
+        "text": {
+          "no": "Når forankjørende svinger til venstre",
+          "th": "เมื่อรถข้างหน้าเลี้ยวซ้าย",
+          "en": "When the vehicle in front turns left"
+        }
+      },
+      {
+        "text": {
+          "no": "Aldri",
+          "th": "ไม่เคย",
+          "en": "Never"
+        }
+      },
+      {
+        "text": {
+          "no": "Når du har det travelt",
+          "th": "เมื่อคุณรีบ",
+          "en": "When you are in a hurry"
+        }
+      }
+    ],
+    "riktigSvar": "B",
+    "vanskelighetsgrad": "vanskelig",
+    "kategori": "Traffic Rules",
+    "bildeType": "situasjon: car turning left while another passes on right",
+    "forklaring": {
+      "no": "Forbikjøring til høyre er tillatt når forankjørende svinger til venstre, i kø med flere kjørefelt, eller når trafikken i venstre felt går saktere.",
+      "th": "อนุญาตให้แซงทางขวาเมื่อรถข้างหน้าเลี้ยวซ้าย ในการจราจรที่มีหลายช่อง หรือเมื่อช่องซ้ายเคลื่อนที่ช้ากว่า",
+      "en": "Overtaking on the right is permitted when the vehicle ahead turns left, in multi-lane queues, or when traffic in the left lane moves slower."
+    },
+    "bildeUrl": "https://image.pollinations.ai/prompt/anime%20style%2C%20cute%20illustration%2C%20Norwegian%20traffic%20scene%3A%20car%20turning%20left%20while%20another%20passes%20on%20right%2C%20simple%20clean%20design%2C%20bright%20colors%2C%20manga%20art%20style?width=512&height=384&model=flux&seed=8262&nologo=true"
+  },
+  {
+    "sporsmal": {
+      "no": "Hva betyr dette skiltet?",
+      "th": "ป้ายนี้หมายถึงอะไร?",
+      "en": "What does this sign mean?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "Påbudt kjøreretning",
+          "th": "ทิศทางบังคับ",
+          "en": "Mandatory direction"
+        }
+      },
+      {
+        "text": {
+          "no": "Farlig sving til høyre",
+          "th": "ทางโค้งอันตรายไปทางขวา",
+          "en": "Dangerous curve to the right"
+        }
+      },
+      {
+        "text": {
+          "no": "Forbudt å svinge til høyre",
+          "th": "ห้ามเลี้ยวขวา",
+          "en": "No right turn"
+        }
+      },
+      {
+        "text": {
+          "no": "Vikeplikt for kryssende trafikk",
+          "th": "ต้องให้ทางแก่รถที่ตัดผ่าน",
+          "en": "Yield to crossing traffic"
+        }
+      }
+    ],
+    "riktigSvar": "B",
+    "vanskelighetsgrad": "lett",
+    "kategori": "Traffic Signs",
+    "bildeType": "skilt: fareskilt farlig sving høyre",
+    "forklaring": {
+      "no": "Fareskilt med svart pil som svinger til høyre varsler om farlig sving til høyre.",
+      "th": "ป้ายเตือนที่มีลูกศรสีดำโค้งไปทางขวาแจ้งเตือนทางโค้งอันตรายทางขวา",
+      "en": "A warning sign with a black arrow curving right warns of a dangerous right curve."
+    },
+    "bildeUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Norwegian-road-sign-142.svg/240px-Norwegian-road-sign-142.svg.png"
+  },
+  {
+    "sporsmal": {
+      "no": "Hva er generell fartsgrense i tettbygd strøk hvis ikke annet er skiltet?",
+      "th": "ความเร็วสูงสุดทั่วไปในเขตชุมชนคือเท่าใดถ้าไม่มีป้ายกำหนด?",
+      "en": "What is the general speed limit in built-up areas if not otherwise signed?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "30 km/t",
+          "th": "30 กม./ชม.",
+          "en": "30 km/h"
+        }
+      },
+      {
+        "text": {
+          "no": "50 km/t",
+          "th": "50 กม./ชม.",
+          "en": "50 km/h"
+        }
+      },
+      {
+        "text": {
+          "no": "60 km/t",
+          "th": "60 กม./ชม.",
+          "en": "60 km/h"
+        }
+      },
+      {
+        "text": {
+          "no": "80 km/t",
+          "th": "80 กม./ชม.",
+          "en": "80 km/h"
+        }
+      }
+    ],
+    "riktigSvar": "B",
+    "vanskelighetsgrad": "lett",
+    "kategori": "Speed Limits",
+    "bildeType": "situasjon: urban street in Norwegian town with houses",
+    "forklaring": {
+      "no": "I tettbygd strøk er generell fartsgrense 50 km/t hvis ikke annet er skiltet.",
+      "th": "ในเขตชุมชน ความเร็วสูงสุดทั่วไปคือ 50 กม./ชม. ถ้าไม่มีป้ายกำหนดอื่น",
+      "en": "In built-up areas the general speed limit is 50 km/h unless otherwise signed."
+    },
+    "bildeUrl": "https://image.pollinations.ai/prompt/anime%20style%2C%20cute%20illustration%2C%20Norwegian%20traffic%20scene%3A%20urban%20street%20in%20Norwegian%20town%20with%20houses%2C%20simple%20clean%20design%2C%20bright%20colors%2C%20manga%20art%20style?width=512&height=384&model=flux&seed=9746&nologo=true"
+  },
+  {
+    "sporsmal": {
+      "no": "Du nærmer deg en rundkjøring. Hvem har vikeplikt?",
+      "th": "คุณกำลังเข้าใกล้วงเวียน ใครต้องให้ทาง?",
+      "en": "You are approaching a roundabout. Who has the duty to yield?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "De som allerede er i rundkjøringen",
+          "th": "ผู้ที่อยู่ในวงเวียนแล้ว",
+          "en": "Those already in the roundabout"
+        }
+      },
+      {
+        "text": {
+          "no": "Den som kjører inn i rundkjøringen",
+          "th": "ผู้ที่กำลังขับเข้าวงเวียน",
+          "en": "The one entering the roundabout"
+        }
+      },
+      {
+        "text": {
+          "no": "Den som kjører fortest",
+          "th": "ผู้ที่ขับเร็วที่สุด",
+          "en": "The one driving fastest"
+        }
+      },
+      {
+        "text": {
+          "no": "Ingen har vikeplikt",
+          "th": "ไม่มีใครต้องให้ทาง",
+          "en": "No one has to yield"
+        }
+      }
+    ],
+    "riktigSvar": "B",
+    "vanskelighetsgrad": "lett",
+    "kategori": "Intersections and Roundabouts",
+    "bildeType": "situasjon: car approaching a roundabout with traffic inside",
+    "forklaring": {
+      "no": "Den som kjører inn i en rundkjøring har vikeplikt for trafikken som allerede er i rundkjøringen.",
+      "th": "ผู้ที่ขับเข้าวงเวียนต้องให้ทางแก่ผู้ที่อยู่ในวงเวียนแล้ว",
+      "en": "The driver entering a roundabout must yield to traffic already inside it."
+    },
+    "bildeUrl": "https://image.pollinations.ai/prompt/anime%20style%2C%20cute%20illustration%2C%20Norwegian%20traffic%20scene%3A%20car%20approaching%20a%20roundabout%20with%20traffic%20inside%2C%20simple%20clean%20design%2C%20bright%20colors%2C%20manga%20art%20style?width=512&height=384&model=flux&seed=8419&nologo=true"
+  },
+  {
+    "sporsmal": {
+      "no": "Hva er promillegrensen for å kjøre bil i Norge?",
+      "th": "ระดับแอลกอฮอล์ในเลือดสูงสุดที่อนุญาตให้ขับรถในนอร์เวย์คือเท่าใด?",
+      "en": "What is the legal blood alcohol limit for driving in Norway?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "0,0 promille",
+          "th": "0.0 ‰",
+          "en": "0.0 ‰"
+        }
+      },
+      {
+        "text": {
+          "no": "0,2 promille",
+          "th": "0.2 ‰",
+          "en": "0.2 ‰"
+        }
+      },
+      {
+        "text": {
+          "no": "0,5 promille",
+          "th": "0.5 ‰",
+          "en": "0.5 ‰"
+        }
+      },
+      {
+        "text": {
+          "no": "0,8 promille",
+          "th": "0.8 ‰",
+          "en": "0.8 ‰"
+        }
+      }
+    ],
+    "riktigSvar": "B",
+    "vanskelighetsgrad": "medium",
+    "kategori": "Traffic Safety",
+    "bildeType": "situasjon: alcohol breath test by police officer",
+    "forklaring": {
+      "no": "Promillegrensen i Norge er 0,2 promille. Over dette regnes det som promillekjøring.",
+      "th": "ระดับแอลกอฮอล์ในเลือดสูงสุดในนอร์เวย์คือ 0.2 ‰ หากเกินกว่านี้ถือว่าเมาแล้วขับ",
+      "en": "The blood alcohol limit in Norway is 0.2 ‰. Above this is considered drunk driving."
+    },
+    "bildeUrl": "https://image.pollinations.ai/prompt/anime%20style%2C%20cute%20illustration%2C%20Norwegian%20traffic%20scene%3A%20alcohol%20breath%20test%20by%20police%20officer%2C%20simple%20clean%20design%2C%20bright%20colors%2C%20manga%20art%20style?width=512&height=384&model=flux&seed=5943&nologo=true"
+  },
+  {
+    "sporsmal": {
+      "no": "Hva må du gjøre når du nærmer deg et gangfelt der fotgjengere venter?",
+      "th": "คุณต้องทำอย่างไรเมื่อเข้าใกล้ทางม้าลายที่มีคนเดินเท้ารออยู่?",
+      "en": "What must you do when approaching a pedestrian crossing where pedestrians are waiting?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "Tute for å advare dem",
+          "th": "บีบแตรเพื่อเตือนพวกเขา",
+          "en": "Honk to warn them"
+        }
+      },
+      {
+        "text": {
+          "no": "Senke farten og slippe dem over",
+          "th": "ลดความเร็วและให้พวกเขาข้าม",
+          "en": "Slow down and let them cross"
+        }
+      },
+      {
+        "text": {
+          "no": "Kjøre fort forbi",
+          "th": "ขับผ่านอย่างรวดเร็ว",
+          "en": "Drive past quickly"
+        }
+      },
+      {
+        "text": {
+          "no": "Bare stoppe hvis det er barn",
+          "th": "หยุดเฉพาะเมื่อเป็นเด็กเท่านั้น",
+          "en": "Only stop if they are children"
+        }
+      }
+    ],
+    "riktigSvar": "B",
+    "vanskelighetsgrad": "lett",
+    "kategori": "Pedestrians and Cyclists",
+    "bildeType": "situasjon: pedestrians waiting at zebra crossing",
+    "forklaring": {
+      "no": "Ved gangfelt har du vikeplikt for fotgjengere som vil krysse veien. Senk farten og slipp dem over.",
+      "th": "ที่ทางม้าลาย คุณต้องให้ทางแก่คนเดินเท้าที่ต้องการข้ามถนน ลดความเร็วและให้พวกเขาข้าม",
+      "en": "At a pedestrian crossing you must yield to pedestrians wishing to cross. Slow down and let them pass."
+    },
+    "bildeUrl": "https://image.pollinations.ai/prompt/anime%20style%2C%20cute%20illustration%2C%20Norwegian%20traffic%20scene%3A%20pedestrians%20waiting%20at%20zebra%20crossing%2C%20simple%20clean%20design%2C%20bright%20colors%2C%20manga%20art%20style?width=512&height=384&model=flux&seed=5084&nologo=true"
+  },
+  {
+    "sporsmal": {
+      "no": "Når bør du bruke vinterdekk på bilen?",
+      "th": "คุณควรใช้ยางฤดูหนาวเมื่อใด?",
+      "en": "When should you use winter tyres on the car?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "Bare når det snør",
+          "th": "เฉพาะเมื่อหิมะตก",
+          "en": "Only when it snows"
+        }
+      },
+      {
+        "text": {
+          "no": "Når føreforholdene krever det",
+          "th": "เมื่อสภาพถนนจำเป็น",
+          "en": "When road conditions require it"
+        }
+      },
+      {
+        "text": {
+          "no": "Bare i desember",
+          "th": "เฉพาะในเดือนธันวาคม",
+          "en": "Only in December"
+        }
+      },
+      {
+        "text": {
+          "no": "Aldri nødvendig",
+          "th": "ไม่จำเป็นเลย",
+          "en": "Never necessary"
+        }
+      }
+    ],
+    "riktigSvar": "B",
+    "vanskelighetsgrad": "medium",
+    "kategori": "Vehicle Knowledge",
+    "bildeType": "situasjon: winter tyre on snowy road",
+    "forklaring": {
+      "no": "Du skal bruke vinterdekk når føreforholdene krever det. Mønsterdybden må være minst 3 mm om vinteren.",
+      "th": "คุณต้องใช้ยางฤดูหนาวเมื่อสภาพถนนจำเป็น ดอกยางต้องลึกอย่างน้อย 3 มม. ในฤดูหนาว",
+      "en": "You must use winter tyres when road conditions require it. Tread depth must be at least 3 mm in winter."
+    },
+    "bildeUrl": "https://image.pollinations.ai/prompt/anime%20style%2C%20cute%20illustration%2C%20Norwegian%20traffic%20scene%3A%20winter%20tyre%20on%20snowy%20road%2C%20simple%20clean%20design%2C%20bright%20colors%2C%20manga%20art%20style?width=512&height=384&model=flux&seed=6204&nologo=true"
+  },
+  {
+    "sporsmal": {
+      "no": "Hva er den mest miljøvennlige kjørestilen?",
+      "th": "รูปแบบการขับขี่ที่เป็นมิตรกับสิ่งแวดล้อมที่สุดคืออะไร?",
+      "en": "What is the most environmentally friendly driving style?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "Rask akselerasjon og hard bremsing",
+          "th": "เร่งเร็วและเบรกแรง",
+          "en": "Quick acceleration and hard braking"
+        }
+      },
+      {
+        "text": {
+          "no": "Jevn fart og forutseende kjøring",
+          "th": "ความเร็วสม่ำเสมอและขับขี่อย่างคาดการณ์ล่วงหน้า",
+          "en": "Steady speed and anticipatory driving"
+        }
+      },
+      {
+        "text": {
+          "no": "Kjøre på høyest mulig gir hele tiden",
+          "th": "ขับด้วยเกียร์สูงสุดตลอดเวลา",
+          "en": "Drive in the highest gear all the time"
+        }
+      },
+      {
+        "text": {
+          "no": "La motoren gå på tomgang ofte",
+          "th": "ปล่อยให้เครื่องยนต์เดินเบาบ่อยๆ",
+          "en": "Let the engine idle often"
+        }
+      }
+    ],
+    "riktigSvar": "B",
+    "vanskelighetsgrad": "medium",
+    "kategori": "Environment and Economy",
+    "bildeType": "situasjon: eco-driving car with green leaves icon",
+    "forklaring": {
+      "no": "Jevn fart, forutseende kjøring og myke akselerasjoner reduserer drivstofforbruk og utslipp.",
+      "th": "ความเร็วสม่ำเสมอ การขับขี่อย่างคาดการณ์ล่วงหน้า และการเร่งอย่างนุ่มนวลช่วยลดการใช้เชื้อเพลิงและการปล่อยมลพิษ",
+      "en": "Steady speed, anticipatory driving and smooth acceleration reduce fuel consumption and emissions."
+    },
+    "bildeUrl": "https://image.pollinations.ai/prompt/anime%20style%2C%20cute%20illustration%2C%20Norwegian%20traffic%20scene%3A%20eco-driving%20car%20with%20green%20leaves%20icon%2C%20simple%20clean%20design%2C%20bright%20colors%2C%20manga%20art%20style?width=512&height=384&model=flux&seed=8675&nologo=true"
+  },
+  {
+    "sporsmal": {
+      "no": "Hva betyr dette skiltet?",
+      "th": "ป้ายนี้หมายถึงอะไร?",
+      "en": "What does this sign mean?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "Anbefalt minstefart 40 km/t",
+          "th": "ความเร็วต่ำสุดที่แนะนำ 40 กม./ชม.",
+          "en": "Recommended minimum speed 40 km/h"
+        }
+      },
+      {
+        "text": {
+          "no": "Slutt på 40-sone",
+          "th": "สิ้นสุดเขต 40",
+          "en": "End of 40 zone"
+        }
+      },
+      {
+        "text": {
+          "no": "Fartsgrense 40 km/t",
+          "th": "จำกัดความเร็ว 40 กม./ชม.",
+          "en": "Speed limit 40 km/h"
+        }
+      },
+      {
+        "text": {
+          "no": "Avstand 40 meter",
+          "th": "ระยะทาง 40 เมตร",
+          "en": "Distance 40 metres"
+        }
+      }
+    ],
+    "riktigSvar": "C",
+    "vanskelighetsgrad": "lett",
+    "kategori": "Traffic Signs",
+    "bildeType": "skilt: forbudsskilt fartsgrense 40",
+    "forklaring": {
+      "no": "Rundt skilt med rød ring og tallet 40 angir fartsgrense på 40 km/t.",
+      "th": "ป้ายกลมขอบแดงพร้อมตัวเลข 40 หมายถึงจำกัดความเร็ว 40 กม./ชม.",
+      "en": "A round sign with red border and the number 40 indicates a speed limit of 40 km/h."
+    },
+    "bildeUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Norwegian-road-sign-202.svg/240px-Norwegian-road-sign-202.svg.png"
+  },
+  {
+    "sporsmal": {
+      "no": "Når er det forbudt å foreta forbikjøring?",
+      "th": "เมื่อใดที่ห้ามแซง?",
+      "en": "When is overtaking prohibited?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "Når sikten er god og veien er bred",
+          "th": "เมื่อทัศนวิสัยดีและถนนกว้าง",
+          "en": "When visibility is good and the road is wide"
+        }
+      },
+      {
+        "text": {
+          "no": "Rett før og i uoversiktlige kurver eller bakketopper",
+          "th": "ก่อนและในทางโค้งหรือยอดเนินที่มองไม่เห็น",
+          "en": "Just before and in blind curves or hilltops"
+        }
+      },
+      {
+        "text": {
+          "no": "På rette strekninger med stiplet linje",
+          "th": "บนทางตรงที่มีเส้นประ",
+          "en": "On straight stretches with dashed lines"
+        }
+      },
+      {
+        "text": {
+          "no": "Når du har det travelt",
+          "th": "เมื่อคุณรีบ",
+          "en": "When you are in a hurry"
+        }
+      }
+    ],
+    "riktigSvar": "B",
+    "vanskelighetsgrad": "medium",
+    "kategori": "Traffic Rules",
+    "bildeType": "situasjon: car attempting overtake on hilltop with poor visibility",
+    "forklaring": {
+      "no": "Forbikjøring er forbudt der sikten er begrenset, som i uoversiktlige kurver, bakketopper og før gangfelt.",
+      "th": "ห้ามแซงในที่ที่ทัศนวิสัยจำกัด เช่น ทางโค้งที่มองไม่เห็น ยอดเนิน และก่อนทางม้าลาย",
+      "en": "Overtaking is prohibited where visibility is limited, such as blind curves, hilltops and before pedestrian crossings."
+    },
+    "bildeUrl": "https://image.pollinations.ai/prompt/anime%20style%2C%20cute%20illustration%2C%20Norwegian%20traffic%20scene%3A%20car%20attempting%20overtake%20on%20hilltop%20with%20poor%20visibility%2C%20simple%20clean%20design%2C%20bright%20colors%2C%20manga%20art%20style?width=512&height=384&model=flux&seed=2385&nologo=true"
+  },
+  {
+    "sporsmal": {
+      "no": "Hvorfor er det viktig å ta pauser på lange kjøreturer?",
+      "th": "ทำไมการพักจึงสำคัญในการเดินทางไกล?",
+      "en": "Why is it important to take breaks on long drives?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "For å spare drivstoff",
+          "th": "เพื่อประหยัดเชื้อเพลิง",
+          "en": "To save fuel"
+        }
+      },
+      {
+        "text": {
+          "no": "For å unngå trøtthet og opprettholde konsentrasjon",
+          "th": "เพื่อหลีกเลี่ยงความเหนื่อยล้าและรักษาสมาธิ",
+          "en": "To avoid fatigue and maintain concentration"
+        }
+      },
+      {
+        "text": {
+          "no": "For å sjekke dekktrykket",
+          "th": "เพื่อตรวจสอบลมยาง",
+          "en": "To check tyre pressure"
+        }
+      },
+      {
+        "text": {
+          "no": "Det er ikke nødvendig",
+          "th": "ไม่จำเป็น",
+          "en": "It is not necessary"
+        }
+      }
+    ],
+    "riktigSvar": "B",
+    "vanskelighetsgrad": "lett",
+    "kategori": "Traffic Safety",
+    "bildeType": "situasjon: tired driver yawning behind the wheel",
+    "forklaring": {
+      "no": "Trøtthet reduserer reaksjonsevnen og er en av de største årsakene til ulykker. Ta pause hver andre time.",
+      "th": "ความเหนื่อยล้าลดความสามารถในการตอบสนองและเป็นสาเหตุหลักของอุบัติเหตุ ควรพักทุก 2 ชั่วโมง",
+      "en": "Fatigue reduces reaction time and is a major cause of accidents. Take a break every two hours."
+    },
+    "bildeUrl": "https://image.pollinations.ai/prompt/anime%20style%2C%20cute%20illustration%2C%20Norwegian%20traffic%20scene%3A%20tired%20driver%20yawning%20behind%20the%20wheel%2C%20simple%20clean%20design%2C%20bright%20colors%2C%20manga%20art%20style?width=512&height=384&model=flux&seed=9305&nologo=true"
+  },
+  {
+    "sporsmal": {
+      "no": "Hva betyr et trekantet skilt med rød kant og en sykkel i midten?",
+      "th": "ป้ายสามเหลี่ยมขอบแดงมีรูปจักรยานตรงกลางหมายถึงอะไร?",
+      "en": "What does a triangular sign with a red border and a bicycle in the middle mean?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "Sykling forbudt",
+          "th": "ห้ามขี่จักรยาน",
+          "en": "Cycling prohibited"
+        }
+      },
+      {
+        "text": {
+          "no": "Sykkelvei",
+          "th": "ทางจักรยาน",
+          "en": "Bicycle path"
+        }
+      },
+      {
+        "text": {
+          "no": "Advarsel om syklister i veibanen",
+          "th": "เตือนมีนักปั่นจักรยานบนถนน",
+          "en": "Warning of cyclists on the road"
+        }
+      },
+      {
+        "text": {
+          "no": "Parkering for sykler",
+          "th": "ที่จอดจักรยาน",
+          "en": "Bicycle parking"
+        }
+      }
+    ],
+    "riktigSvar": "C",
+    "vanskelighetsgrad": "easy",
+    "kategori": "Traffic Signs",
+    "bildeType": "skilt: fareskilt syklist",
+    "forklaring": {
+      "no": "Trekantet skilt med rød kant er et fareskilt. Symbolet med sykkel varsler om at det kan være syklister i veibanen.",
+      "th": "ป้ายสามเหลี่ยมขอบแดงเป็นป้ายเตือน สัญลักษณ์จักรยานเตือนว่าอาจมีนักปั่นบนถนน",
+      "en": "A triangular sign with a red border is a warning sign. The bicycle symbol warns of cyclists on the road."
+    },
+    "bildeUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Norwegian-road-sign-142.svg/240px-Norwegian-road-sign-142.svg.png"
+  },
+  {
+    "sporsmal": {
+      "no": "Hva er generell fartsgrense i tettbygd strøk hvis ikke annet er skiltet?",
+      "th": "ความเร็วทั่วไปในเขตชุมชนหากไม่มีป้ายระบุคือเท่าใด?",
+      "en": "What is the general speed limit in built-up areas if not otherwise signed?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "30 km/t",
+          "th": "30 กม./ชม.",
+          "en": "30 km/h"
+        }
+      },
+      {
+        "text": {
+          "no": "50 km/t",
+          "th": "50 กม./ชม.",
+          "en": "50 km/h"
+        }
+      },
+      {
+        "text": {
+          "no": "60 km/t",
+          "th": "60 กม./ชม.",
+          "en": "60 km/h"
+        }
+      },
+      {
+        "text": {
+          "no": "80 km/t",
+          "th": "80 กม./ชม.",
+          "en": "80 km/h"
+        }
+      }
+    ],
+    "riktigSvar": "B",
+    "vanskelighetsgrad": "easy",
+    "kategori": "Speed Limits",
+    "bildeType": "situasjon: urban street in Norwegian town with houses",
+    "forklaring": {
+      "no": "I tettbygd strøk er generell fartsgrense 50 km/t. Utenfor tettbygd strøk er den 80 km/t.",
+      "th": "ในเขตชุมชนความเร็วทั่วไปคือ 50 กม./ชม. นอกเขตชุมชนคือ 80 กม./ชม.",
+      "en": "In built-up areas the general speed limit is 50 km/h. Outside built-up areas it is 80 km/h."
+    },
+    "bildeUrl": "https://image.pollinations.ai/prompt/anime%20style%2C%20cute%20illustration%2C%20Norwegian%20traffic%20scene%3A%20urban%20street%20in%20Norwegian%20town%20with%20houses%2C%20simple%20clean%20design%2C%20bright%20colors%2C%20manga%20art%20style?width=512&height=384&model=flux&seed=9746&nologo=true"
+  },
+  {
+    "sporsmal": {
+      "no": "Du nærmer deg en rundkjøring. Hvem har vikeplikt?",
+      "th": "คุณกำลังเข้าใกล้วงเวียน ใครต้องให้ทาง?",
+      "en": "You are approaching a roundabout. Who has the duty to give way?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "De som allerede er i rundkjøringen",
+          "th": "ผู้ที่อยู่ในวงเวียนแล้ว",
+          "en": "Those already in the roundabout"
+        }
+      },
+      {
+        "text": {
+          "no": "Du som skal kjøre inn i rundkjøringen",
+          "th": "คุณที่กำลังจะเข้าวงเวียน",
+          "en": "You who are about to enter the roundabout"
+        }
+      },
+      {
+        "text": {
+          "no": "Den som kjører raskest",
+          "th": "ผู้ที่ขับเร็วที่สุด",
+          "en": "The one driving fastest"
+        }
+      },
+      {
+        "text": {
+          "no": "Den som kommer fra høyre",
+          "th": "ผู้ที่มาจากทางขวา",
+          "en": "The one coming from the right"
+        }
+      }
+    ],
+    "riktigSvar": "B",
+    "vanskelighetsgrad": "easy",
+    "kategori": "Intersections and Roundabouts",
+    "bildeType": "skilt: vikepliktskilt ved rundkjøring",
+    "forklaring": {
+      "no": "Den som skal inn i en rundkjøring har vikeplikt for trafikken som allerede er i rundkjøringen.",
+      "th": "ผู้ที่จะเข้าวงเวียนต้องให้ทางแก่รถที่อยู่ในวงเวียนแล้ว",
+      "en": "Those entering a roundabout must give way to traffic already in the roundabout."
+    },
+    "bildeUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Norwegian-road-sign-202.svg/240px-Norwegian-road-sign-202.svg.png"
+  },
+  {
+    "sporsmal": {
+      "no": "Hva er promillegrensen for å kjøre bil i Norge?",
+      "th": "ขีดจำกัดแอลกอฮอล์ในเลือดสำหรับการขับรถในนอร์เวย์คือเท่าใด?",
+      "en": "What is the blood alcohol limit for driving in Norway?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "0,5 promille",
+          "th": "0.5 ต่อพัน",
+          "en": "0.5 per mille"
+        }
+      },
+      {
+        "text": {
+          "no": "0,2 promille",
+          "th": "0.2 ต่อพัน",
+          "en": "0.2 per mille"
+        }
+      },
+      {
+        "text": {
+          "no": "0,8 promille",
+          "th": "0.8 ต่อพัน",
+          "en": "0.8 per mille"
+        }
+      },
+      {
+        "text": {
+          "no": "0,0 promille",
+          "th": "0.0 ต่อพัน",
+          "en": "0.0 per mille"
+        }
+      }
+    ],
+    "riktigSvar": "B",
+    "vanskelighetsgrad": "easy",
+    "kategori": "Traffic Safety",
+    "bildeType": "situasjon: car keys next to alcohol glass",
+    "forklaring": {
+      "no": "Promillegrensen i Norge er 0,2. Selv små mengder alkohol reduserer kjøreevnen betydelig.",
+      "th": "ขีดจำกัดแอลกอฮอล์ในนอร์เวย์คือ 0.2 แม้แอลกอฮอล์เล็กน้อยก็ลดความสามารถในการขับขี่อย่างมาก",
+      "en": "The alcohol limit in Norway is 0.2. Even small amounts of alcohol significantly reduce driving ability."
+    },
+    "bildeUrl": "https://image.pollinations.ai/prompt/anime%20style%2C%20cute%20illustration%2C%20Norwegian%20traffic%20scene%3A%20car%20keys%20next%20to%20alcohol%20glass%2C%20simple%20clean%20design%2C%20bright%20colors%2C%20manga%20art%20style?width=512&height=384&model=flux&seed=2500&nologo=true"
+  },
+  {
+    "sporsmal": {
+      "no": "Hva betyr et rundt skilt med blå bunn og hvit pil rett frem?",
+      "th": "ป้ายกลมพื้นน้ำเงินมีลูกศรขาวชี้ตรงหมายถึงอะไร?",
+      "en": "What does a round sign with blue background and white arrow pointing straight ahead mean?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "Anbefalt kjøreretning",
+          "th": "ทิศทางที่แนะนำ",
+          "en": "Recommended direction"
+        }
+      },
+      {
+        "text": {
+          "no": "Påbudt kjøreretning - rett frem",
+          "th": "บังคับขับตรงไป",
+          "en": "Mandatory direction - straight ahead"
+        }
+      },
+      {
+        "text": {
+          "no": "Enveiskjøring",
+          "th": "ทางเดินรถทางเดียว",
+          "en": "One-way street"
+        }
+      },
+      {
+        "text": {
+          "no": "Forbudt å kjøre rett frem",
+          "th": "ห้ามขับตรงไป",
+          "en": "No driving straight ahead"
+        }
+      }
+    ],
+    "riktigSvar": "B",
+    "vanskelighetsgrad": "medium",
+    "kategori": "Traffic Signs",
+    "bildeType": "skilt: påbudsskilt kjøreretning rett frem",
+    "forklaring": {
+      "no": "Runde, blå skilt er påbudsskilt. Pil rett frem betyr at du må kjøre rett frem.",
+      "th": "ป้ายกลมสีน้ำเงินเป็นป้ายบังคับ ลูกศรชี้ตรงหมายความว่าต้องขับตรงไป",
+      "en": "Round blue signs are mandatory signs. Arrow straight ahead means you must drive straight ahead."
+    },
+    "bildeUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Norwegian-road-sign-202.svg/240px-Norwegian-road-sign-202.svg.png"
+  },
+  {
+    "sporsmal": {
+      "no": "Når må du senke farten ved et fotgjengerfelt?",
+      "th": "เมื่อใดที่คุณต้องชะลอความเร็วที่ทางม้าลาย?",
+      "en": "When must you slow down at a pedestrian crossing?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "Bare når det er rødt lys",
+          "th": "เฉพาะเมื่อไฟแดง",
+          "en": "Only when there is a red light"
+        }
+      },
+      {
+        "text": {
+          "no": "Aldri, fotgjengere må vente",
+          "th": "ไม่เคย คนเดินเท้าต้องรอ",
+          "en": "Never, pedestrians must wait"
+        }
+      },
+      {
+        "text": {
+          "no": "Når fotgjengere er på eller på vei ut i fotgjengerfeltet",
+          "th": "เมื่อคนเดินเท้าอยู่บนหรือกำลังก้าวลงทางม้าลาย",
+          "en": "When pedestrians are on or about to enter the crossing"
+        }
+      },
+      {
+        "text": {
+          "no": "Bare i tettbygd strøk",
+          "th": "เฉพาะในเขตชุมชน",
+          "en": "Only in built-up areas"
+        }
+      }
+    ],
+    "riktigSvar": "C",
+    "vanskelighetsgrad": "easy",
+    "kategori": "Pedestrians and Cyclists",
+    "bildeType": "situasjon: pedestrian about to cross at zebra crossing",
+    "forklaring": {
+      "no": "Du har vikeplikt for fotgjengere som er på eller er på vei ut i fotgjengerfeltet, og må senke farten i god tid.",
+      "th": "คุณต้องให้ทางคนเดินเท้าที่อยู่บนหรือกำลังก้าวลงทางม้าลาย และต้องชะลอความเร็วล่วงหน้า",
+      "en": "You must give way to pedestrians on or about to enter the crossing, and slow down in good time."
+    },
+    "bildeUrl": "https://image.pollinations.ai/prompt/anime%20style%2C%20cute%20illustration%2C%20Norwegian%20traffic%20scene%3A%20pedestrian%20about%20to%20cross%20at%20zebra%20crossing%2C%20simple%20clean%20design%2C%20bright%20colors%2C%20manga%20art%20style?width=512&height=384&model=flux&seed=1596&nologo=true"
+  },
+  {
+    "sporsmal": {
+      "no": "Hvorfor er det viktig å sjekke dekktrykket regelmessig?",
+      "th": "ทำไมการตรวจสอบแรงดันลมยางอย่างสม่ำเสมอจึงสำคัญ?",
+      "en": "Why is it important to check tire pressure regularly?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "Bare for å forlenge dekkenes levetid",
+          "th": "เพียงเพื่อยืดอายุการใช้งานยาง",
+          "en": "Only to extend tire lifespan"
+        }
+      },
+      {
+        "text": {
+          "no": "Bare for å spare drivstoff",
+          "th": "เพียงเพื่อประหยัดน้ำมัน",
+          "en": "Only to save fuel"
+        }
+      },
+      {
+        "text": {
+          "no": "For sikkerhet, drivstofføkonomi og dekklevetid",
+          "th": "เพื่อความปลอดภัย ประหยัดน้ำมัน และอายุยาง",
+          "en": "For safety, fuel economy and tire lifespan"
+        }
+      },
+      {
+        "text": {
+          "no": "Det er ikke viktig hvis dekkene ser fine ut",
+          "th": "ไม่สำคัญถ้ายางดูดี",
+          "en": "It is not important if tires look fine"
+        }
+      }
+    ],
+    "riktigSvar": "C",
+    "vanskelighetsgrad": "medium",
+    "kategori": "Vehicle Knowledge",
+    "bildeType": "situasjon: hand checking tire pressure with gauge",
+    "forklaring": {
+      "no": "Riktig dekktrykk gir bedre veigrep og sikkerhet, lavere drivstofforbruk og lengre levetid på dekkene.",
+      "th": "แรงดันลมยางที่ถูกต้องให้การยึดเกาะถนนและความปลอดภัยที่ดีขึ้น ประหยัดน้ำมัน และยืดอายุยาง",
+      "en": "Correct tire pressure provides better grip and safety, lower fuel consumption and longer tire life."
+    },
+    "bildeUrl": "https://image.pollinations.ai/prompt/anime%20style%2C%20cute%20illustration%2C%20Norwegian%20traffic%20scene%3A%20hand%20checking%20tire%20pressure%20with%20gauge%2C%20simple%20clean%20design%2C%20bright%20colors%2C%20manga%20art%20style?width=512&height=384&model=flux&seed=8276&nologo=true"
+  },
+  {
+    "sporsmal": {
+      "no": "Hva er den mest miljøvennlige kjørestilen?",
+      "th": "รูปแบบการขับขี่ที่เป็นมิตรกับสิ่งแวดล้อมที่สุดคืออะไร?",
+      "en": "What is the most environmentally friendly driving style?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "Rask akselerasjon og hard bremsing",
+          "th": "เร่งเร็วและเบรกแรง",
+          "en": "Rapid acceleration and hard braking"
+        }
+      },
+      {
+        "text": {
+          "no": "Jevn fart, myk akselerasjon og forutseende kjøring",
+          "th": "ความเร็วสม่ำเสมอ เร่งนุ่มนวล และการขับขี่แบบคาดการณ์",
+          "en": "Steady speed, smooth acceleration and anticipatory driving"
+        }
+      },
+      {
+        "text": {
+          "no": "Høyt turtall og lave gir",
+          "th": "รอบเครื่องสูงและเกียร์ต่ำ",
+          "en": "High RPM and low gears"
+        }
+      },
+      {
+        "text": {
+          "no": "Kjøring med åpne vinduer i høy fart",
+          "th": "ขับด้วยความเร็วสูงโดยเปิดหน้าต่าง",
+          "en": "Driving at high speed with open windows"
+        }
+      }
+    ],
+    "riktigSvar": "B",
+    "vanskelighetsgrad": "medium",
+    "kategori": "Environment and Economy",
+    "bildeType": "situasjon: car driving smoothly on highway with eco indicator",
+    "forklaring": {
+      "no": "Jevn kjøring med myk akselerasjon, riktig girbruk og god planlegging reduserer drivstofforbruket og utslippene betydelig.",
+      "th": "การขับขี่สม่ำเสมอด้วยการเร่งนุ่มนวล ใช้เกียร์ถูกต้อง และวางแผนดี ช่วยลดการใช้น้ำมันและการปล่อยมลพิษอย่างมาก",
+      "en": "Steady driving with smooth acceleration, correct gear use and good planning significantly reduces fuel consumption and emissions."
+    },
+    "bildeUrl": "https://image.pollinations.ai/prompt/anime%20style%2C%20cute%20illustration%2C%20Norwegian%20traffic%20scene%3A%20car%20driving%20smoothly%20on%20highway%20with%20eco%20indicator%2C%20simple%20clean%20design%2C%20bright%20colors%2C%20manga%20art%20style?width=512&height=384&model=flux&seed=1020&nologo=true"
+  },
+  {
+    "sporsmal": {
+      "no": "Når er det forbudt å foreta forbikjøring?",
+      "th": "เมื่อใดที่ห้ามแซง?",
+      "en": "When is overtaking prohibited?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "Når sikten er kort, f.eks. før bakketopp eller uoversiktlig sving",
+          "th": "เมื่อทัศนวิสัยสั้น เช่น ก่อนยอดเนินหรือทางโค้งที่มองไม่เห็น",
+          "en": "When visibility is short, e.g. before a hilltop or blind curve"
+        }
+      },
+      {
+        "text": {
+          "no": "Bare når det er mørkt",
+          "th": "เฉพาะเมื่อมืด",
+          "en": "Only when it is dark"
+        }
+      },
+      {
+        "text": {
+          "no": "Bare på motorvei",
+          "th": "เฉพาะบนทางหลวง",
+          "en": "Only on motorways"
+        }
+      },
+      {
+        "text": {
+          "no": "Aldri, forbikjøring er alltid tillatt",
+          "th": "ไม่เคย แซงได้เสมอ",
+          "en": "Never, overtaking is always allowed"
+        }
+      }
+    ],
+    "riktigSvar": "A",
+    "vanskelighetsgrad": "medium",
+    "kategori": "Traffic Rules",
+    "bildeType": "situasjon: car attempting overtaking near hilltop with limited visibility",
+    "forklaring": {
+      "no": "Forbikjøring er forbudt når sikten er for kort til å fullføre forbikjøringen trygt, som før bakketopper, i uoversiktlige svinger eller ved fotgjengerfelt.",
+      "th": "ห้ามแซงเมื่อทัศนวิสัยสั้นเกินไปที่จะแซงได้อย่างปลอดภัย เช่น ก่อนยอดเนิน ในทางโค้งที่มองไม่เห็น หรือที่ทางม้าลาย",
+      "en": "Overtaking is prohibited when visibility is too short to complete the overtaking safely, such as before hilltops, in blind curves or at pedestrian crossings."
+    },
+    "bildeUrl": "https://image.pollinations.ai/prompt/anime%20style%2C%20cute%20illustration%2C%20Norwegian%20traffic%20scene%3A%20car%20attempting%20overtaking%20near%20hilltop%20with%20limited%20visibility%2C%20simple%20clean%20design%2C%20bright%20colors%2C%20manga%20art%20style?width=512&height=384&model=flux&seed=8024&nologo=true"
+  },
+  {
+    "sporsmal": {
+      "no": "Hva er de viktigste tegnene på at du er for trøtt til å kjøre?",
+      "th": "อะไรคือสัญญาณสำคัญว่าคุณง่วงเกินกว่าจะขับรถ?",
+      "en": "What are the main signs that you are too tired to drive?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "Du føler deg bare litt sulten",
+          "th": "คุณรู้สึกหิวเล็กน้อย",
+          "en": "You feel only slightly hungry"
+        }
+      },
+      {
+        "text": {
+          "no": "Gjesping, tunge øyelokk, manglende konsentrasjon og at du svinger ut av kjørefeltet",
+          "th": "หาว เปลือกตาหนัก ขาดสมาธิ และรถออกนอกเลน",
+          "en": "Yawning, heavy eyelids, lack of concentration and drifting out of lane"
+        }
+      },
+      {
+        "text": {
+          "no": "Du hører på musikk",
+          "th": "คุณฟังเพลง",
+          "en": "You listen to music"
+        }
+      },
+      {
+        "text": {
+          "no": "Du kjører i mørket",
+          "th": "คุณขับในความมืด",
+          "en": "You drive in the dark"
+        }
+      }
+    ],
+    "riktigSvar": "B",
+    "vanskelighetsgrad": "easy",
+    "kategori": "Traffic Safety",
+    "bildeType": "situasjon: tired driver yawning behind wheel",
+    "forklaring": {
+      "no": "Trøtthet er en av de vanligste årsakene til alvorlige trafikkulykker. Stopp og hvil hvis du kjenner tegn på trøtthet.",
+      "th": "ความง่วงเป็นหนึ่งในสาเหตุที่พบบ่อยที่สุดของอุบัติเหตุร้ายแรง หยุดและพักผ่อนหากคุณรู้สึกง่วง",
+      "en": "Fatigue is one of the most common causes of serious traffic accidents. Stop and rest if you notice signs of tiredness."
+    },
+    "bildeUrl": "https://image.pollinations.ai/prompt/anime%20style%2C%20cute%20illustration%2C%20Norwegian%20traffic%20scene%3A%20tired%20driver%20yawning%20behind%20wheel%2C%20simple%20clean%20design%2C%20bright%20colors%2C%20manga%20art%20style?width=512&height=384&model=flux&seed=3049&nologo=true"
+  },
+  {
+    "sporsmal": {
+      "no": "Hva betyr et trekantet skilt med rød kant og et utropstegn?",
+      "th": "ป้ายสามเหลี่ยมขอบแดงที่มีเครื่องหมายอัศเจรีย์หมายถึงอะไร?",
+      "en": "What does a triangular sign with a red border and an exclamation mark mean?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "Forbudt å kjøre inn",
+          "th": "ห้ามเข้า",
+          "en": "No entry"
+        }
+      },
+      {
+        "text": {
+          "no": "Annen fare",
+          "th": "อันตรายอื่นๆ",
+          "en": "Other danger"
+        }
+      },
+      {
+        "text": {
+          "no": "Påbudt kjøreretning",
+          "th": "บังคับทิศทาง",
+          "en": "Mandatory direction"
+        }
+      },
+      {
+        "text": {
+          "no": "Slutt på all forbud",
+          "th": "สิ้นสุดข้อห้ามทั้งหมด",
+          "en": "End of all restrictions"
+        }
+      }
+    ],
+    "riktigSvar": "B",
+    "vanskelighetsgrad": "lett",
+    "kategori": "Traffic Signs",
+    "bildeType": "skilt: fareskilt annen fare",
+    "forklaring": {
+      "no": "Skiltet 156 'Annen fare' varsler om en fare som ikke dekkes av andre fareskilt. Underskilt forklarer ofte faren.",
+      "th": "ป้าย 156 'อันตรายอื่นๆ' เตือนถึงอันตรายที่ไม่ได้ระบุในป้ายอื่น มักมีป้ายเสริมอธิบาย",
+      "en": "Sign 156 'Other danger' warns of a hazard not covered by other warning signs. A sub-sign often explains the danger."
+    },
+    "bildeUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Norwegian-road-sign-142.svg/240px-Norwegian-road-sign-142.svg.png"
+  },
+  {
+    "sporsmal": {
+      "no": "Hvem har vikeplikt når du kjører ut fra en parkeringsplass?",
+      "th": "ใครต้องให้ทางเมื่อคุณขับออกจากที่จอดรถ?",
+      "en": "Who must yield when driving out of a parking lot?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "Trafikken på veien har vikeplikt for deg",
+          "th": "การจราจรบนถนนต้องให้ทางคุณ",
+          "en": "Traffic on the road must yield to you"
+        }
+      },
+      {
+        "text": {
+          "no": "Du har vikeplikt for all annen trafikk",
+          "th": "คุณต้องให้ทางแก่การจราจรอื่นทั้งหมด",
+          "en": "You must yield to all other traffic"
+        }
+      },
+      {
+        "text": {
+          "no": "Bare for biler, ikke for syklister",
+          "th": "เฉพาะรถยนต์ ไม่ใช่จักรยาน",
+          "en": "Only for cars, not cyclists"
+        }
+      },
+      {
+        "text": {
+          "no": "Høyreregelen gjelder",
+          "th": "ใช้กฎขวา",
+          "en": "The right-hand rule applies"
+        }
+      }
+    ],
+    "riktigSvar": "B",
+    "vanskelighetsgrad": "medium",
+    "kategori": "Traffic Rules",
+    "bildeType": "situasjon: car exiting parking lot onto main road",
+    "forklaring": {
+      "no": "Når du kjører ut fra parkeringsplass, gårdsplass eller lignende område, har du vikeplikt for all annen trafikk, inkludert fotgjengere og syklister.",
+      "th": "เมื่อขับออกจากที่จอดรถ ลานบ้าน หรือพื้นที่คล้ายกัน คุณต้องให้ทางแก่การจราจรอื่นทั้งหมด รวมถึงคนเดินเท้าและจักรยาน",
+      "en": "When exiting a parking lot, courtyard, or similar area, you must yield to all other traffic, including pedestrians and cyclists."
+    },
+    "bildeUrl": "https://image.pollinations.ai/prompt/anime%20style%2C%20cute%20illustration%2C%20Norwegian%20traffic%20scene%3A%20car%20exiting%20parking%20lot%20onto%20main%20road%2C%20simple%20clean%20design%2C%20bright%20colors%2C%20manga%20art%20style?width=512&height=384&model=flux&seed=247&nologo=true"
+  },
+  {
+    "sporsmal": {
+      "no": "Hva er fartsgrensen i tettbygd strøk hvis ikke annet er skiltet?",
+      "th": "จำกัดความเร็วในเขตชุมชนคือเท่าใดหากไม่มีป้ายระบุ?",
+      "en": "What is the speed limit in built-up areas if not otherwise signed?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "30 km/t",
+          "th": "30 กม./ชม.",
+          "en": "30 km/h"
+        }
+      },
+      {
+        "text": {
+          "no": "40 km/t",
+          "th": "40 กม./ชม.",
+          "en": "40 km/h"
+        }
+      },
+      {
+        "text": {
+          "no": "50 km/t",
+          "th": "50 กม./ชม.",
+          "en": "50 km/h"
+        }
+      },
+      {
+        "text": {
+          "no": "60 km/t",
+          "th": "60 กม./ชม.",
+          "en": "60 km/h"
+        }
+      }
+    ],
+    "riktigSvar": "C",
+    "vanskelighetsgrad": "lett",
+    "kategori": "Speed Limits",
+    "bildeType": "skilt: tettbygd strøk",
+    "forklaring": {
+      "no": "Den generelle fartsgrensen i tettbygd strøk er 50 km/t i Norge, med mindre annet er skiltet.",
+      "th": "จำกัดความเร็วทั่วไปในเขตชุมชนในนอร์เวย์คือ 50 กม./ชม. เว้นแต่จะมีป้ายระบุไว้เป็นอย่างอื่น",
+      "en": "The general speed limit in built-up areas in Norway is 50 km/h, unless otherwise signed."
+    },
+    "bildeUrl": "https://image.pollinations.ai/prompt/anime%20style%2C%20cute%20illustration%2C%20Norwegian%20traffic%20scene%3A%20Norwegian%20traffic%20sign%3A%20tettbygd%20str%C3%B8k%2C%20simple%20clean%20design%2C%20bright%20colors%2C%20manga%20art%20style?width=512&height=384&model=flux&seed=781&nologo=true"
+  },
+  {
+    "sporsmal": {
+      "no": "Hva skal du gjøre når du nærmer deg en rundkjøring?",
+      "th": "คุณควรทำอย่างไรเมื่อเข้าใกล้วงเวียน?",
+      "en": "What should you do when approaching a roundabout?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "Akselerere for å komme raskt inn",
+          "th": "เร่งความเร็วเพื่อเข้าอย่างรวดเร็ว",
+          "en": "Accelerate to enter quickly"
+        }
+      },
+      {
+        "text": {
+          "no": "Stoppe helt før innkjøring",
+          "th": "หยุดสนิทก่อนเข้า",
+          "en": "Stop completely before entering"
+        }
+      },
+      {
+        "text": {
+          "no": "Senke farten og vike for trafikk i rundkjøringen",
+          "th": "ลดความเร็วและให้ทางแก่รถในวงเวียน",
+          "en": "Reduce speed and yield to traffic in the roundabout"
+        }
+      },
+      {
+        "text": {
+          "no": "Tute for å varsle din ankomst",
+          "th": "บีบแตรเพื่อเตือนการมาถึง",
+          "en": "Honk to signal your arrival"
+        }
+      }
+    ],
+    "riktigSvar": "C",
+    "vanskelighetsgrad": "lett",
+    "kategori": "Intersections and Roundabouts",
+    "bildeType": "situasjon: car approaching a roundabout",
+    "forklaring": {
+      "no": "Ved rundkjøring har du vikeplikt for trafikk som allerede er i rundkjøringen. Senk farten og vurder situasjonen.",
+      "th": "ที่วงเวียน คุณต้องให้ทางแก่รถที่อยู่ในวงเวียนแล้ว ลดความเร็วและประเมินสถานการณ์",
+      "en": "At a roundabout, you must yield to traffic already in the roundabout. Reduce speed and assess the situation."
+    },
+    "bildeUrl": "https://image.pollinations.ai/prompt/anime%20style%2C%20cute%20illustration%2C%20Norwegian%20traffic%20scene%3A%20car%20approaching%20a%20roundabout%2C%20simple%20clean%20design%2C%20bright%20colors%2C%20manga%20art%20style?width=512&height=384&model=flux&seed=9801&nologo=true"
+  },
+  {
+    "sporsmal": {
+      "no": "Hva er promillegrensen for å kjøre bil i Norge?",
+      "th": "ขีดจำกัดแอลกอฮอล์ในเลือดสำหรับการขับรถในนอร์เวย์คือเท่าใด?",
+      "en": "What is the blood alcohol limit for driving in Norway?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "0,5 promille",
+          "th": "0.5 ต่อพัน",
+          "en": "0.5 per mille"
+        }
+      },
+      {
+        "text": {
+          "no": "0,2 promille",
+          "th": "0.2 ต่อพัน",
+          "en": "0.2 per mille"
+        }
+      },
+      {
+        "text": {
+          "no": "0,8 promille",
+          "th": "0.8 ต่อพัน",
+          "en": "0.8 per mille"
+        }
+      },
+      {
+        "text": {
+          "no": "0,0 promille",
+          "th": "0.0 ต่อพัน",
+          "en": "0.0 per mille"
+        }
+      }
+    ],
+    "riktigSvar": "B",
+    "vanskelighetsgrad": "lett",
+    "kategori": "Traffic Safety",
+    "bildeType": "situasjon: police breathalyzer test on driver",
+    "forklaring": {
+      "no": "Promillegrensen i Norge er 0,2. Kjører du med høyere promille, mister du førerkortet og kan få bot eller fengsel.",
+      "th": "ขีดจำกัดแอลกอฮอล์ในนอร์เวย์คือ 0.2 ต่อพัน หากเกินคุณจะเสียใบขับขี่และอาจถูกปรับหรือจำคุก",
+      "en": "The alcohol limit in Norway is 0.2 per mille. Driving with higher levels results in license loss, fines or imprisonment."
+    },
+    "bildeUrl": "https://image.pollinations.ai/prompt/anime%20style%2C%20cute%20illustration%2C%20Norwegian%20traffic%20scene%3A%20police%20breathalyzer%20test%20on%20driver%2C%20simple%20clean%20design%2C%20bright%20colors%2C%20manga%20art%20style?width=512&height=384&model=flux&seed=6491&nologo=true"
+  },
+  {
+    "sporsmal": {
+      "no": "Hvor skal en syklist normalt sykle på veien?",
+      "th": "ปกติแล้วผู้ขับขี่จักรยานควรขี่ที่ใดบนถนน?",
+      "en": "Where should a cyclist normally ride on the road?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "I midten av kjørefeltet",
+          "th": "ตรงกลางช่องทางเดินรถ",
+          "en": "In the middle of the lane"
+        }
+      },
+      {
+        "text": {
+          "no": "Så langt til høyre som mulig",
+          "th": "ชิดขวาให้มากที่สุด",
+          "en": "As far to the right as possible"
+        }
+      },
+      {
+        "text": {
+          "no": "På venstre side mot trafikken",
+          "th": "ด้านซ้ายสวนทางการจราจร",
+          "en": "On the left side against traffic"
+        }
+      },
+      {
+        "text": {
+          "no": "Alltid på fortauet",
+          "th": "บนทางเท้าเสมอ",
+          "en": "Always on the sidewalk"
+        }
+      }
+    ],
+    "riktigSvar": "B",
+    "vanskelighetsgrad": "medium",
+    "kategori": "Pedestrians and Cyclists",
+    "bildeType": "situasjon: cyclist riding on the right side of the road",
+    "forklaring": {
+      "no": "Syklister skal normalt sykle så langt til høyre som mulig på veien. Sykling på fortau er kun tillatt når det ikke er til hinder for fotgjengere.",
+      "th": "ปกติผู้ขี่จักรยานควรขี่ชิดขวาให้มากที่สุดบนถนน การขี่บนทางเท้าทำได้เฉพาะเมื่อไม่กีดขวางคนเดินเท้า",
+      "en": "Cyclists should normally ride as far to the right as possible on the road. Cycling on sidewalks is only allowed when it doesn't hinder pedestrians."
+    },
+    "bildeUrl": "https://image.pollinations.ai/prompt/anime%20style%2C%20cute%20illustration%2C%20Norwegian%20traffic%20scene%3A%20cyclist%20riding%20on%20the%20right%20side%20of%20the%20road%2C%20simple%20clean%20design%2C%20bright%20colors%2C%20manga%20art%20style?width=512&height=384&model=flux&seed=9234&nologo=true"
+  },
+  {
+    "sporsmal": {
+      "no": "Hvor ofte bør du sjekke dekktrykket på bilen?",
+      "th": "คุณควรตรวจสอบแรงดันลมยางบ่อยแค่ไหน?",
+      "en": "How often should you check the tire pressure on your car?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "Én gang i året",
+          "th": "ปีละครั้ง",
+          "en": "Once a year"
+        }
+      },
+      {
+        "text": {
+          "no": "Bare når dekket ser flatt ut",
+          "th": "เฉพาะเมื่อยางดูแบน",
+          "en": "Only when the tire looks flat"
+        }
+      },
+      {
+        "text": {
+          "no": "Minst én gang i måneden",
+          "th": "อย่างน้อยเดือนละครั้ง",
+          "en": "At least once a month"
+        }
+      },
+      {
+        "text": {
+          "no": "Kun ved bilsjekk",
+          "th": "เฉพาะตอนตรวจสภาพรถ",
+          "en": "Only at vehicle inspection"
+        }
+      }
+    ],
+    "riktigSvar": "C",
+    "vanskelighetsgrad": "medium",
+    "kategori": "Vehicle Knowledge",
+    "bildeType": "situasjon: person checking tire pressure with gauge",
+    "forklaring": {
+      "no": "Dekktrykk bør sjekkes minst én gang i måneden. Riktig dekktrykk gir bedre veigrep, lavere drivstofforbruk og lengre levetid på dekkene.",
+      "th": "ควรตรวจสอบแรงดันลมยางอย่างน้อยเดือนละครั้ง แรงดันที่ถูกต้องช่วยให้ยึดเกาะถนนดีขึ้น ประหยัดน้ำมัน และยืดอายุยาง",
+      "en": "Tire pressure should be checked at least once a month. Correct pressure provides better grip, lower fuel consumption, and longer tire life."
+    },
+    "bildeUrl": "https://image.pollinations.ai/prompt/anime%20style%2C%20cute%20illustration%2C%20Norwegian%20traffic%20scene%3A%20person%20checking%20tire%20pressure%20with%20gauge%2C%20simple%20clean%20design%2C%20bright%20colors%2C%20manga%20art%20style?width=512&height=384&model=flux&seed=7473&nologo=true"
+  },
+  {
+    "sporsmal": {
+      "no": "Hvilken kjørestil er mest miljøvennlig og økonomisk?",
+      "th": "รูปแบบการขับขี่ใดเป็นมิตรต่อสิ่งแวดล้อมและประหยัดที่สุด?",
+      "en": "Which driving style is most environmentally friendly and economical?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "Rask akselerasjon og hard bremsing",
+          "th": "เร่งความเร็วและเบรกแรง",
+          "en": "Fast acceleration and hard braking"
+        }
+      },
+      {
+        "text": {
+          "no": "Jevn fart, myk akselerasjon og forutseende kjøring",
+          "th": "ความเร็วคงที่ เร่งนุ่มนวล และขับขี่อย่างคาดการณ์",
+          "en": "Steady speed, smooth acceleration and anticipatory driving"
+        }
+      },
+      {
+        "text": {
+          "no": "Kjøre i lavt gir hele tiden",
+          "th": "ขับเกียร์ต่ำตลอดเวลา",
+          "en": "Drive in low gear all the time"
+        }
+      },
+      {
+        "text": {
+          "no": "Holde høy turtall på motoren",
+          "th": "รักษารอบเครื่องยนต์สูง",
+          "en": "Keep engine RPM high"
+        }
+      }
+    ],
+    "riktigSvar": "B",
+    "vanskelighetsgrad": "lett",
+    "kategori": "Environment and Economy",
+    "bildeType": "situasjon: eco-friendly driving with smooth flow on highway",
+    "forklaring": {
+      "no": "Jevn fart, myk akselerasjon og forutseende kjøring reduserer drivstofforbruk og utslipp, samtidig som det øker trafikksikkerheten.",
+      "th": "ความเร็วคงที่ การเร่งนุ่มนวล และการขับขี่อย่างคาดการณ์ช่วยลดการใช้น้ำมันและการปล่อยมลพิษ พร้อมเพิ่มความปลอดภัย",
+      "en": "Steady speed, smooth acceleration and anticipatory driving reduces fuel consumption and emissions while increasing traffic safety."
+    },
+    "bildeUrl": "https://image.pollinations.ai/prompt/anime%20style%2C%20cute%20illustration%2C%20Norwegian%20traffic%20scene%3A%20eco-friendly%20driving%20with%20smooth%20flow%20on%20highway%2C%20simple%20clean%20design%2C%20bright%20colors%2C%20manga%20art%20style?width=512&height=384&model=flux&seed=2910&nologo=true"
+  },
+  {
+    "sporsmal": {
+      "no": "Når er det forbudt å foreta forbikjøring?",
+      "th": "เมื่อใดที่ห้ามแซง?",
+      "en": "When is overtaking prohibited?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "Når sikten er god og veien er rett",
+          "th": "เมื่อทัศนวิสัยดีและถนนตรง",
+          "en": "When visibility is good and road is straight"
+        }
+      },
+      {
+        "text": {
+          "no": "Like før og i uoversiktlig bakketopp eller sving",
+          "th": "ใกล้และในยอดเนินหรือทางโค้งที่มองไม่เห็น",
+          "en": "Just before and on blind hilltops or curves"
+        }
+      },
+      {
+        "text": {
+          "no": "På motorvei med tre felt",
+          "th": "บนทางหลวงที่มีสามช่อง",
+          "en": "On three-lane motorways"
+        }
+      },
+      {
+        "text": {
+          "no": "Når den foran kjører sakte",
+          "th": "เมื่อรถข้างหน้าขับช้า",
+          "en": "When the car ahead drives slowly"
+        }
+      }
+    ],
+    "riktigSvar": "B",
+    "vanskelighetsgrad": "medium",
+    "kategori": "Traffic Rules",
+    "bildeType": "situasjon: car attempting to overtake on a blind curve",
+    "forklaring": {
+      "no": "Forbikjøring er forbudt på uoversiktlige steder som bakketopper og svinger, ved fotgjengerfelt, og der det er sperrelinje eller forbudsskilt.",
+      "th": "ห้ามแซงในที่มองไม่เห็น เช่น ยอดเนินและทางโค้ง บริเวณทางม้าลาย และที่มีเส้นทึบหรือป้ายห้าม",
+      "en": "Overtaking is prohibited in blind spots like hilltops and curves, at pedestrian crossings, and where there are solid lines or prohibition signs."
+    },
+    "bildeUrl": "https://image.pollinations.ai/prompt/anime%20style%2C%20cute%20illustration%2C%20Norwegian%20traffic%20scene%3A%20car%20attempting%20to%20overtake%20on%20a%20blind%20curve%2C%20simple%20clean%20design%2C%20bright%20colors%2C%20manga%20art%20style?width=512&height=384&model=flux&seed=7745&nologo=true"
+  },
+  {
+    "sporsmal": {
+      "no": "Hva betyr et rundt skilt med blå bakgrunn og hvit pil som peker rett frem?",
+      "th": "ป้ายกลมพื้นสีฟ้ามีลูกศรขาวชี้ตรงไปหมายถึงอะไร?",
+      "en": "What does a round blue sign with a white arrow pointing straight ahead mean?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "Anbefalt kjøreretning",
+          "th": "ทิศทางที่แนะนำ",
+          "en": "Recommended direction"
+        }
+      },
+      {
+        "text": {
+          "no": "Påbudt kjøreretning rett frem",
+          "th": "บังคับทิศทางตรงไป",
+          "en": "Mandatory direction straight ahead"
+        }
+      },
+      {
+        "text": {
+          "no": "Forbudt å kjøre rett frem",
+          "th": "ห้ามขับตรงไป",
+          "en": "Prohibited to drive straight ahead"
+        }
+      },
+      {
+        "text": {
+          "no": "Enveiskjøring",
+          "th": "เดินรถทางเดียว",
+          "en": "One-way street"
+        }
+      }
+    ],
+    "riktigSvar": "B",
+    "vanskelighetsgrad": "medium",
+    "kategori": "Traffic Signs",
+    "bildeType": "skilt: påbudsskilt kjøreretning rett frem",
+    "forklaring": {
+      "no": "Blå runde skilt er påbudsskilt. En pil som peker rett frem betyr at du må kjøre rett frem - andre retninger er ikke tillatt.",
+      "th": "ป้ายกลมสีฟ้าเป็นป้ายบังคับ ลูกศรชี้ตรงหมายความว่าคุณต้องขับตรงไป ห้ามไปทิศอื่น",
+      "en": "Blue round signs are mandatory signs. An arrow pointing straight ahead means you must drive straight - other directions are not allowed."
+    },
+    "bildeUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Norwegian-road-sign-202.svg/240px-Norwegian-road-sign-202.svg.png"
+  },
+  {
+    "sporsmal": {
+      "no": "Hva betyr et trekantet fareskilt med et utropstegn?",
+      "th": "ป้ายเตือนสามเหลี่ยมที่มีเครื่องหมายอัศเจรีย์หมายความว่าอย่างไร?",
+      "en": "What does a triangular warning sign with an exclamation mark mean?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "Stopp umiddelbart",
+          "th": "หยุดทันที",
+          "en": "Stop immediately"
+        }
+      },
+      {
+        "text": {
+          "no": "Annen fare som ikke er dekket av andre skilt",
+          "th": "อันตรายอื่นที่ไม่ได้ระบุในป้ายอื่น",
+          "en": "Other danger not covered by other signs"
+        }
+      },
+      {
+        "text": {
+          "no": "Forbudt å kjøre videre",
+          "th": "ห้ามขับต่อไป",
+          "en": "Forbidden to drive further"
+        }
+      },
+      {
+        "text": {
+          "no": "Påbudt kjøreretning",
+          "th": "ทิศทางบังคับ",
+          "en": "Mandatory direction"
+        }
+      }
+    ],
+    "riktigSvar": "B",
+    "vanskelighetsgrad": "lett",
+    "kategori": "Traffic Signs",
+    "bildeType": "skilt: fareskilt annen fare (utropstegn)",
+    "forklaring": {
+      "no": "Skiltet 156 'Annen fare' varsler om farer som ikke dekkes av andre fareskilt. Underskilt forklarer ofte hva faren er.",
+      "th": "ป้าย 156 'อันตรายอื่น' เตือนถึงอันตรายที่ไม่ได้ครอบคลุมโดยป้ายเตือนอื่น มักมีป้ายเสริมอธิบาย",
+      "en": "Sign 156 'Other danger' warns of hazards not covered by other warning signs. A sub-sign often explains the danger."
+    },
+    "bildeUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Norwegian-road-sign-142.svg/240px-Norwegian-road-sign-142.svg.png"
+  },
+  {
+    "sporsmal": {
+      "no": "Hva er fartsgrensen i tettbygd strøk når ingenting annet er skiltet?",
+      "th": "ขีดจำกัดความเร็วในเขตชุมชนเมื่อไม่มีป้ายระบุคืออะไร?",
+      "en": "What is the speed limit in built-up areas when nothing else is signed?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "30 km/t",
+          "th": "30 กม./ชม.",
+          "en": "30 km/h"
+        }
+      },
+      {
+        "text": {
+          "no": "40 km/t",
+          "th": "40 กม./ชม.",
+          "en": "40 km/h"
+        }
+      },
+      {
+        "text": {
+          "no": "50 km/t",
+          "th": "50 กม./ชม.",
+          "en": "50 km/h"
+        }
+      },
+      {
+        "text": {
+          "no": "60 km/t",
+          "th": "60 กม./ชม.",
+          "en": "60 km/h"
+        }
+      }
+    ],
+    "riktigSvar": "C",
+    "vanskelighetsgrad": "lett",
+    "kategori": "Speed Limits",
+    "bildeType": "situasjon: urban street in Norway with houses and parked cars",
+    "forklaring": {
+      "no": "I tettbygd strøk er fartsgrensen 50 km/t når ikke annet er skiltet. Utenfor tettbygd strøk er den 80 km/t.",
+      "th": "ในเขตชุมชน ความเร็วจำกัดคือ 50 กม./ชม. หากไม่มีป้ายระบุ นอกเขตชุมชนคือ 80 กม./ชม.",
+      "en": "In built-up areas, the speed limit is 50 km/h unless otherwise signed. Outside built-up areas it is 80 km/h."
+    },
+    "bildeUrl": "https://image.pollinations.ai/prompt/anime%20style%2C%20cute%20illustration%2C%20Norwegian%20traffic%20scene%3A%20urban%20street%20in%20Norway%20with%20houses%20and%20parked%20cars%2C%20simple%20clean%20design%2C%20bright%20colors%2C%20manga%20art%20style?width=512&height=384&model=flux&seed=8080&nologo=true"
+  },
+  {
+    "sporsmal": {
+      "no": "Hvem har vikeplikt i en rundkjøring?",
+      "th": "ใครต้องให้ทางในวงเวียน?",
+      "en": "Who must yield in a roundabout?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "De som allerede kjører i rundkjøringen",
+          "th": "ผู้ที่อยู่ในวงเวียนแล้ว",
+          "en": "Those already driving in the roundabout"
+        }
+      },
+      {
+        "text": {
+          "no": "De som kommer fra høyre",
+          "th": "ผู้ที่มาจากทางขวา",
+          "en": "Those coming from the right"
+        }
+      },
+      {
+        "text": {
+          "no": "De som skal inn i rundkjøringen",
+          "th": "ผู้ที่กำลังจะเข้าวงเวียน",
+          "en": "Those entering the roundabout"
+        }
+      },
+      {
+        "text": {
+          "no": "Alle har lik prioritet",
+          "th": "ทุกคนมีสิทธิ์เท่ากัน",
+          "en": "Everyone has equal priority"
+        }
+      }
+    ],
+    "riktigSvar": "C",
+    "vanskelighetsgrad": "lett",
+    "kategori": "Intersections",
+    "bildeType": "situasjon: roundabout with cars entering and circulating",
+    "forklaring": {
+      "no": "Trafikanter som skal inn i rundkjøringen har vikeplikt for kjøretøy som allerede er i rundkjøringen. Vikepliktskilt står ved alle innkjøringer.",
+      "th": "ผู้ที่จะเข้าวงเวียนต้องให้ทางแก่รถที่อยู่ในวงเวียนแล้ว มีป้ายให้ทางที่ทางเข้าทุกจุด",
+      "en": "Drivers entering the roundabout must yield to vehicles already in it. Yield signs are placed at all entrances."
+    },
+    "bildeUrl": "https://image.pollinations.ai/prompt/anime%20style%2C%20cute%20illustration%2C%20Norwegian%20traffic%20scene%3A%20roundabout%20with%20cars%20entering%20and%20circulating%2C%20simple%20clean%20design%2C%20bright%20colors%2C%20manga%20art%20style?width=512&height=384&model=flux&seed=118&nologo=true"
+  },
+  {
+    "sporsmal": {
+      "no": "Når er det tillatt å kjøre forbi på høyre side?",
+      "th": "เมื่อใดที่อนุญาตให้แซงทางขวา?",
+      "en": "When is it permitted to overtake on the right?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "Aldri, det er alltid forbudt",
+          "th": "ไม่เคย ห้ามตลอดเวลา",
+          "en": "Never, it is always forbidden"
+        }
+      },
+      {
+        "text": {
+          "no": "Når forankjørende svinger til venstre",
+          "th": "เมื่อรถข้างหน้าเลี้ยวซ้าย",
+          "en": "When the vehicle ahead is turning left"
+        }
+      },
+      {
+        "text": {
+          "no": "Når du har det travelt",
+          "th": "เมื่อคุณรีบ",
+          "en": "When you are in a hurry"
+        }
+      },
+      {
+        "text": {
+          "no": "På alle motorveier",
+          "th": "บนทางหลวงทุกสาย",
+          "en": "On all motorways"
+        }
+      }
+    ],
+    "riktigSvar": "B",
+    "vanskelighetsgrad": "medium",
+    "kategori": "Traffic Rules",
+    "bildeType": "situasjon: car turning left while another passes on the right",
+    "forklaring": {
+      "no": "Forbikjøring på høyre side er tillatt når forankjørende svinger til venstre, i kø med flere kjørefelt, eller i kjørefelt for saktegående.",
+      "th": "การแซงทางขวาได้รับอนุญาตเมื่อรถข้างหน้าเลี้ยวซ้าย ในการจราจรหลายช่องทาง หรือในช่องสำหรับรถช้า",
+      "en": "Overtaking on the right is allowed when the vehicle ahead is turning left, in multi-lane traffic, or in lanes for slow vehicles."
+    },
+    "bildeUrl": "https://image.pollinations.ai/prompt/anime%20style%2C%20cute%20illustration%2C%20Norwegian%20traffic%20scene%3A%20car%20turning%20left%20while%20another%20passes%20on%20the%20right%2C%20simple%20clean%20design%2C%20bright%20colors%2C%20manga%20art%20style?width=512&height=384&model=flux&seed=9892&nologo=true"
+  },
+  {
+    "sporsmal": {
+      "no": "Hva er promillegrensen for å kjøre bil i Norge?",
+      "th": "ขีดจำกัดแอลกอฮอล์ในเลือดสำหรับการขับขี่ในนอร์เวย์คือเท่าใด?",
+      "en": "What is the blood alcohol limit for driving in Norway?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "0,0 promille",
+          "th": "0.0 ต่อพัน",
+          "en": "0.0 per mille"
+        }
+      },
+      {
+        "text": {
+          "no": "0,2 promille",
+          "th": "0.2 ต่อพัน",
+          "en": "0.2 per mille"
+        }
+      },
+      {
+        "text": {
+          "no": "0,5 promille",
+          "th": "0.5 ต่อพัน",
+          "en": "0.5 per mille"
+        }
+      },
+      {
+        "text": {
+          "no": "0,8 promille",
+          "th": "0.8 ต่อพัน",
+          "en": "0.8 per mille"
+        }
+      }
+    ],
+    "riktigSvar": "B",
+    "vanskelighetsgrad": "lett",
+    "kategori": "Traffic Safety",
+    "bildeType": "situasjon: police breathalyzer test on driver",
+    "forklaring": {
+      "no": "Promillegrensen i Norge er 0,2. Selv små mengder alkohol kan gi førerkortbeslag og bot.",
+      "th": "ขีดจำกัดในนอร์เวย์คือ 0.2 ต่อพัน แม้แอลกอฮอล์เพียงเล็กน้อยอาจทำให้ถูกยึดใบขับขี่และปรับ",
+      "en": "The limit in Norway is 0.2 per mille. Even small amounts of alcohol can result in license suspension and fines."
+    },
+    "bildeUrl": "https://image.pollinations.ai/prompt/anime%20style%2C%20cute%20illustration%2C%20Norwegian%20traffic%20scene%3A%20police%20breathalyzer%20test%20on%20driver%2C%20simple%20clean%20design%2C%20bright%20colors%2C%20manga%20art%20style?width=512&height=384&model=flux&seed=6491&nologo=true"
+  },
+  {
+    "sporsmal": {
+      "no": "Hva må du gjøre når du nærmer deg et fotgjengerfelt?",
+      "th": "คุณต้องทำอย่างไรเมื่อเข้าใกล้ทางม้าลาย?",
+      "en": "What must you do when approaching a pedestrian crossing?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "Øke farten for å komme raskt forbi",
+          "th": "เพิ่มความเร็วเพื่อผ่านไปเร็ว",
+          "en": "Increase speed to pass quickly"
+        }
+      },
+      {
+        "text": {
+          "no": "Tilpasse farten og være klar til å stoppe for fotgjengere",
+          "th": "ปรับความเร็วและพร้อมหยุดให้คนเดินเท้า",
+          "en": "Adjust speed and be ready to stop for pedestrians"
+        }
+      },
+      {
+        "text": {
+          "no": "Tute for å varsle fotgjengere",
+          "th": "บีบแตรเตือนคนเดินเท้า",
+          "en": "Honk to warn pedestrians"
+        }
+      },
+      {
+        "text": {
+          "no": "Ignorere fotgjengere som ikke er i feltet",
+          "th": "เพิกเฉยต่อคนเดินเท้าที่ไม่อยู่บนทางม้าลาย",
+          "en": "Ignore pedestrians not on the crossing"
+        }
+      }
+    ],
+    "riktigSvar": "B",
+    "vanskelighetsgrad": "lett",
+    "kategori": "Pedestrians and Cyclists",
+    "bildeType": "situasjon: car slowing down at zebra crossing with pedestrian waiting",
+    "forklaring": {
+      "no": "Du har vikeplikt for fotgjengere som er i eller på vei ut i fotgjengerfeltet. Tilpass farten slik at du kan stoppe trygt.",
+      "th": "คุณต้องให้ทางแก่คนเดินเท้าที่อยู่บนหรือกำลังจะข้ามทางม้าลาย ปรับความเร็วให้หยุดได้อย่างปลอดภัย",
+      "en": "You must yield to pedestrians on or about to enter the crossing. Adjust speed so you can stop safely."
+    },
+    "bildeUrl": "https://image.pollinations.ai/prompt/anime%20style%2C%20cute%20illustration%2C%20Norwegian%20traffic%20scene%3A%20car%20slowing%20down%20at%20zebra%20crossing%20with%20pedestrian%20waiting%2C%20simple%20clean%20design%2C%20bright%20colors%2C%20manga%20art%20style?width=512&height=384&model=flux&seed=1822&nologo=true"
+  },
+  {
+    "sporsmal": {
+      "no": "Hvor ofte bør du kontrollere dekktrykket på bilen?",
+      "th": "ควรตรวจสอบแรงดันลมยางบ่อยแค่ไหน?",
+      "en": "How often should you check the tire pressure on your car?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "En gang i året",
+          "th": "ปีละครั้ง",
+          "en": "Once a year"
+        }
+      },
+      {
+        "text": {
+          "no": "Kun ved EU-kontroll",
+          "th": "เฉพาะตอนตรวจสภาพ",
+          "en": "Only during vehicle inspection"
+        }
+      },
+      {
+        "text": {
+          "no": "Minst en gang i måneden",
+          "th": "อย่างน้อยเดือนละครั้ง",
+          "en": "At least once a month"
+        }
+      },
+      {
+        "text": {
+          "no": "Aldri, det justerer seg selv",
+          "th": "ไม่ต้องเลย มันปรับเอง",
+          "en": "Never, it self-adjusts"
+        }
+      }
+    ],
+    "riktigSvar": "C",
+    "vanskelighetsgrad": "medium",
+    "kategori": "Vehicle Knowledge",
+    "bildeType": "situasjon: person checking tire pressure with gauge",
+    "forklaring": {
+      "no": "Dekktrykk bør kontrolleres minst månedlig. Riktig trykk gir bedre veigrep, lavere drivstofforbruk og lengre levetid på dekkene.",
+      "th": "ควรตรวจแรงดันลมยางอย่างน้อยเดือนละครั้ง แรงดันที่ถูกต้องช่วยให้การยึดเกาะดี ประหยัดน้ำมัน และยางอายุยืน",
+      "en": "Tire pressure should be checked at least monthly. Correct pressure provides better grip, lower fuel consumption and longer tire life."
+    },
+    "bildeUrl": "https://image.pollinations.ai/prompt/anime%20style%2C%20cute%20illustration%2C%20Norwegian%20traffic%20scene%3A%20person%20checking%20tire%20pressure%20with%20gauge%2C%20simple%20clean%20design%2C%20bright%20colors%2C%20manga%20art%20style?width=512&height=384&model=flux&seed=7473&nologo=true"
+  },
+  {
+    "sporsmal": {
+      "no": "Hvilken kjøremåte gir lavest drivstofforbruk og minst utslipp?",
+      "th": "การขับขี่แบบใดประหยัดน้ำมันและปล่อยมลพิษน้อยที่สุด?",
+      "en": "Which driving style gives the lowest fuel consumption and emissions?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "Rask akselerasjon og hard bremsing",
+          "th": "เร่งเร็วและเบรกแรง",
+          "en": "Rapid acceleration and hard braking"
+        }
+      },
+      {
+        "text": {
+          "no": "Jevn fart, tidlig giring og forutseende kjøring",
+          "th": "ความเร็วสม่ำเสมอ เปลี่ยนเกียร์เร็ว และคาดการณ์การจราจร",
+          "en": "Steady speed, early gear shifts and anticipatory driving"
+        }
+      },
+      {
+        "text": {
+          "no": "Kjøre i lavt gir hele tiden",
+          "th": "ขับเกียร์ต่ำตลอดเวลา",
+          "en": "Drive in low gear at all times"
+        }
+      },
+      {
+        "text": {
+          "no": "Holde motoren på tomgang ofte",
+          "th": "ติดเครื่องเดินเบาบ่อยๆ",
+          "en": "Keep the engine idling often"
+        }
+      }
+    ],
+    "riktigSvar": "B",
+    "vanskelighetsgrad": "medium",
+    "kategori": "Environment and Economy",
+    "bildeType": "situasjon: eco-driving dashboard with green indicator",
+    "forklaring": {
+      "no": "Økonomisk kjøring innebærer jevn fart, tidlig oppgiring, forutseende kjøring og å unngå unødvendig bremsing. Dette reduserer både drivstofforbruk og utslipp.",
+      "th": "การขับขี่ประหยัดคือความเร็วสม่ำเสมอ เปลี่ยนเกียร์เร็ว คาดการณ์ และหลีกเลี่ยงการเบรกที่ไม่จำเป็น ลดทั้งน้ำมันและมลพิษ",
+      "en": "Economic driving involves steady speed, early upshifting, anticipation, and avoiding unnecessary braking. This reduces both fuel consumption and emissions."
+    },
+    "bildeUrl": "https://image.pollinations.ai/prompt/anime%20style%2C%20cute%20illustration%2C%20Norwegian%20traffic%20scene%3A%20eco-driving%20dashboard%20with%20green%20indicator%2C%20simple%20clean%20design%2C%20bright%20colors%2C%20manga%20art%20style?width=512&height=384&model=flux&seed=6137&nologo=true"
+  },
+  {
+    "sporsmal": {
+      "no": "Hva betyr et rundt skilt med rød kant og et tall inni?",
+      "th": "ป้ายกลมขอบแดงมีตัวเลขข้างในหมายถึงอะไร?",
+      "en": "What does a round sign with a red border and a number inside mean?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "Anbefalt fart",
+          "th": "ความเร็วแนะนำ",
+          "en": "Recommended speed"
+        }
+      },
+      {
+        "text": {
+          "no": "Minste tillatte fart",
+          "th": "ความเร็วต่ำสุดที่อนุญาต",
+          "en": "Minimum permitted speed"
+        }
+      },
+      {
+        "text": {
+          "no": "Høyeste tillatte fart",
+          "th": "ความเร็วสูงสุดที่อนุญาต",
+          "en": "Maximum permitted speed"
+        }
+      },
+      {
+        "text": {
+          "no": "Avstand til neste by",
+          "th": "ระยะทางถึงเมืองถัดไป",
+          "en": "Distance to next city"
+        }
+      }
+    ],
+    "riktigSvar": "C",
+    "vanskelighetsgrad": "lett",
+    "kategori": "Traffic Signs",
+    "bildeType": "skilt: forbudsskilt fartsgrense 80",
+    "forklaring": {
+      "no": "Et rundt skilt med rød kant og et tall (f.eks. 80) angir høyeste tillatte fart i km/t. Det er et forbudsskilt.",
+      "th": "ป้ายกลมขอบแดงพร้อมตัวเลข (เช่น 80) ระบุความเร็วสูงสุดที่อนุญาตเป็น กม./ชม. เป็นป้ายห้าม",
+      "en": "A round sign with red border and a number (e.g. 80) indicates the maximum permitted speed in km/h. It is a prohibition sign."
+    },
+    "bildeUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Norwegian-road-sign-202.svg/240px-Norwegian-road-sign-202.svg.png"
+  },
+  {
+    "sporsmal": {
+      "no": "Hvorfor er trøtthet farlig bak rattet?",
+      "th": "ทำไมความเหนื่อยล้าจึงอันตรายขณะขับขี่?",
+      "en": "Why is fatigue dangerous behind the wheel?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "Det påvirker ikke kjøringen",
+          "th": "ไม่มีผลต่อการขับขี่",
+          "en": "It does not affect driving"
+        }
+      },
+      {
+        "text": {
+          "no": "Reaksjonstiden økes og oppmerksomheten reduseres",
+          "th": "เวลาตอบสนองช้าลงและสมาธิลดลง",
+          "en": "Reaction time increases and attention decreases"
+        }
+      },
+      {
+        "text": {
+          "no": "Bilen bruker mer drivstoff",
+          "th": "รถใช้น้ำมันมากขึ้น",
+          "en": "The car uses more fuel"
+        }
+      },
+      {
+        "text": {
+          "no": "Det er kun farlig om natten",
+          "th": "อันตรายเฉพาะเวลากลางคืน",
+          "en": "It is only dangerous at night"
+        }
+      }
+    ],
+    "riktigSvar": "B",
+    "vanskelighetsgrad": "lett",
+    "kategori": "Traffic Safety",
+    "bildeType": "situasjon: tired driver yawning behind the wheel",
+    "forklaring": {
+      "no": "Trøtthet reduserer reaksjonsevnen og oppmerksomheten kraftig, sammenlignbart med alkoholpåvirkning. Ta pause hver andre time på lange turer.",
+      "th": "ความเหนื่อยล้าลดการตอบสนองและสมาธิอย่างมาก เทียบได้กับฤทธิ์แอลกอฮอล์ ควรพักทุก 2 ชั่วโมงในการเดินทางไกล",
+      "en": "Fatigue significantly reduces reaction time and attention, comparable to alcohol impairment. Take a break every two hours on long trips."
+    },
+    "bildeUrl": "https://image.pollinations.ai/prompt/anime%20style%2C%20cute%20illustration%2C%20Norwegian%20traffic%20scene%3A%20tired%20driver%20yawning%20behind%20the%20wheel%2C%20simple%20clean%20design%2C%20bright%20colors%2C%20manga%20art%20style?width=512&height=384&model=flux&seed=9305&nologo=true"
+  }
+]

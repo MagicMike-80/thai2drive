@@ -1,0 +1,92 @@
+[
+  {
+    "sporsmal": {
+      "no": "Bildet viser en person som sitter på et kontor med solbriller. Når er det påbudt å bruke solbriller under kjøring?",
+      "th": "ภาพแสดงบุคคลนั่งอยู่ในสำนักงานพร้อมแว่นกันแดด เมื่อใดที่จำเป็นต้องใส่แว่นกันแดดขณะขับรถ?",
+      "en": "The image shows a person sitting in an office wearing sunglasses. When is it required to use sunglasses while driving?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "Det er aldri påbudt, men anbefales ved sterkt sollys for å unngå blending",
+          "th": "ไม่เคยบังคับ แต่แนะนำเมื่อมีแสงแดดจ้าเพื่อหลีกเลี่ยงแสงสะท้อน",
+          "en": "It is never required, but recommended in strong sunlight to avoid glare"
+        }
+      },
+      {
+        "text": {
+          "no": "Det er alltid påbudt på dagtid",
+          "th": "บังคับเสมอในเวลากลางวัน",
+          "en": "It is always required during daytime"
+        }
+      },
+      {
+        "text": {
+          "no": "Det er påbudt å bruke solbriller i tunneler",
+          "th": "บังคับให้ใส่แว่นกันแดดในอุโมงค์",
+          "en": "It is required to wear sunglasses in tunnels"
+        }
+      },
+      {
+        "text": {
+          "no": "Det er påbudt å bruke solbriller om natten",
+          "th": "บังคับให้ใส่แว่นกันแดดในเวลากลางคืน",
+          "en": "It is required to wear sunglasses at night"
+        }
+      }
+    ],
+    "riktigSvar": "A",
+    "vanskelighetsgrad": "easy",
+    "kategori": "Driver Behavior",
+    "forklaring": {
+      "no": "Solbriller er ikke påbudt, men er anbefalt ved sterkt sollys for å unngå blending. Husk å ta dem av i tunneler og når lyset blir dårlig, da de kan redusere sikten betraktelig.",
+      "th": "แว่นกันแดดไม่ใช่สิ่งบังคับ แต่แนะนำเมื่อมีแสงแดดจ้าเพื่อหลีกเลี่ยงแสงสะท้อน อย่าลืมถอดออกในอุโมงค์และเมื่อแสงน้อย เพราะอาจลดทัศนวิสัยอย่างมาก",
+      "en": "Sunglasses are not required, but recommended in strong sunlight to avoid glare. Remember to remove them in tunnels and in low light, as they can significantly reduce visibility."
+    }
+  },
+  {
+    "sporsmal": {
+      "no": "Personen på bildet bruker armbånd og klokke. Hvordan kan smykker og klokker påvirke kjøringen?",
+      "th": "บุคคลในภาพสวมสร้อยข้อมือและนาฬิกา เครื่องประดับและนาฬิกาสามารถส่งผลต่อการขับขี่ได้อย่างไร?",
+      "en": "The person in the image wears bracelets and a watch. How can jewelry and watches affect driving?"
+    },
+    "alternativer": [
+      {
+        "text": {
+          "no": "De har ingen påvirkning på kjøringen",
+          "th": "ไม่มีผลกระทบต่อการขับขี่",
+          "en": "They have no impact on driving"
+        }
+      },
+      {
+        "text": {
+          "no": "De kan reflektere sollys og forårsake blending eller distrahere føreren",
+          "th": "อาจสะท้อนแสงแดดและทำให้เกิดแสงจ้าหรือรบกวนสมาธิของผู้ขับ",
+          "en": "They can reflect sunlight and cause glare or distract the driver"
+        }
+      },
+      {
+        "text": {
+          "no": "De forbedrer reaksjonstiden",
+          "th": "ช่วยปรับปรุงเวลาตอบสนอง",
+          "en": "They improve reaction time"
+        }
+      },
+      {
+        "text": {
+          "no": "De er påbudt under kjøring",
+          "th": "บังคับให้สวมขณะขับรถ",
+          "en": "They are required while driving"
+        }
+      }
+    ],
+    "riktigSvar": "B",
+    "vanskelighetsgrad": "medium",
+    "kategori": "Driver Behavior",
+    "forklaring": {
+      "no": "Smykker og klokker kan reflektere sollys og forårsake blending, eller distrahere føreren. Som fører bør du sørge for at ingenting forstyrrer konsentrasjonen eller sikten under kjøring.",
+      "th": "เครื่องประดับและนาฬิกาอาจสะท้อนแสงแดดและทำให้เกิดแสงจ้า หรือรบกวนสมาธิของผู้ขับ ในฐานะผู้ขับ คุณควรตรวจสอบให้แน่ใจว่าไม่มีสิ่งใดมารบกวนสมาธิหรือทัศนวิสัยขณะขับรถ",
+      "en": "Jewelry and watches can reflect sunlight and cause glare, or distract the driver. As a driver, you should ensure that nothing disturbs your concentration or visibility while driving."
+    }
+  }
+]
