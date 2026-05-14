@@ -439,7 +439,8 @@ def _nav(lang_links=True):
     <ul>
       <li><a href="/api/website#features">Funksjoner</a></li>
       <li><a href="/api/website#pricing">Priser</a></li>
-      <li><a href="/api/bok">📖 Læringsbok</a></li>
+      <li><a href="/api/guide">📖 Guide</a></li>
+      <li><a href="/api/bok">📚 Læringsbok</a></li>
       <li><a href="/api/support">Support</a></li>
       <li><a href="/api/privacy">Personvern</a></li>
     </ul>
@@ -537,6 +538,7 @@ def landing():
 
   <div class="hero-btns">
     <a href="/quiz-app/" class="hero-cta">▶ Test appen nå</a>
+    <a href="/api/guide" class="hero-cta-secondary">📖 Guide: Fra Thailand til norsk førerkort</a>
     <span class="hero-cta-secondary" style="cursor:default;opacity:.7">📱 Google Play — kommer snart</span>
   </div>
 </section>

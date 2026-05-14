@@ -58,16 +58,16 @@ body.lang-en span.tl-en{display:inline}
 
 /* Cards */
 .cards{display:grid;gap:14px}
-.card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:18px 20px}
-.card-icon{font-size:24px;margin-bottom:8px}
-.card h3{font-size:15px;font-weight:700;color:#fff;margin-bottom:6px}
-.card p{font-size:14px;color:#94A3B8;line-height:1.55}
+.card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:20px 22px}
+.card-icon{font-size:26px;margin-bottom:10px}
+.card h3{font-size:17px;font-weight:700;color:#fff;margin-bottom:8px}
+.card p{font-size:16px;color:#94A3B8;line-height:1.65}
 .card .highlight{color:#FF9933;font-weight:700}
 
 /* Comparison table */
-.cmp-table{width:100%;border-collapse:collapse;margin-top:16px;font-size:14px}
-.cmp-table th{background:rgba(255,153,51,.12);color:#FF9933;padding:10px 14px;text-align:left;font-weight:700;border-bottom:1px solid rgba(255,255,255,.1)}
-.cmp-table td{padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.06);color:#CBD5E1;vertical-align:top}
+.cmp-table{width:100%;border-collapse:collapse;margin-top:16px;font-size:15px}
+.cmp-table th{background:rgba(255,153,51,.12);color:#FF9933;padding:12px 14px;text-align:left;font-weight:700;border-bottom:1px solid rgba(255,255,255,.1)}
+.cmp-table td{padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.06);color:#CBD5E1;vertical-align:top}
 .cmp-table tr:last-child td{border-bottom:0}
 .cmp-table td:first-child{color:#94A3B8;font-weight:600;width:38%}
 .tag-yes{color:#10B981;font-weight:700}
@@ -75,37 +75,56 @@ body.lang-en span.tl-en{display:inline}
 .tag-warn{color:#F59E0B;font-weight:700}
 
 /* Cost table */
-.cost-table{width:100%;border-collapse:collapse;font-size:14px;margin-top:16px}
+.cost-table{width:100%;border-collapse:collapse;font-size:15px;margin-top:16px}
 .cost-table tr{border-bottom:1px solid rgba(255,255,255,.07)}
 .cost-table tr:last-child{border-bottom:2px solid rgba(255,153,51,.4)}
-.cost-table td{padding:10px 14px;color:#CBD5E1}
+.cost-table td{padding:12px 14px;color:#CBD5E1}
 .cost-table td:last-child{text-align:right;font-weight:700;color:#fff}
-.cost-table tr:last-child td{color:#FF9933;font-weight:800;font-size:15px}
+.cost-table tr:last-child td{color:#FF9933;font-weight:800;font-size:16px}
 
 /* Steps list */
-.steps-list{display:grid;gap:14px;margin-top:16px}
+.steps-list{display:grid;gap:16px;margin-top:16px}
 .step-item{display:flex;gap:14px;align-items:flex-start}
-.step-num{width:32px;height:32px;border-radius:50%;background:rgba(255,153,51,.15);border:2px solid #FF9933;color:#FF9933;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
-.step-body h4{font-size:14px;font-weight:700;color:#fff;margin-bottom:4px}
-.step-body p{font-size:13px;color:#94A3B8;line-height:1.5}
-.step-body .note{display:inline-block;margin-top:6px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);color:#10B981;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:600}
-.step-body .warn{display:inline-block;margin-top:6px;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);color:#F59E0B;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:600}
+.step-num{width:34px;height:34px;border-radius:50%;background:rgba(255,153,51,.15);border:2px solid #FF9933;color:#FF9933;font-weight:800;font-size:15px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.step-body h4{font-size:16px;font-weight:700;color:#fff;margin-bottom:6px}
+.step-body p{font-size:15px;color:#94A3B8;line-height:1.6}
+.step-body .note{display:inline-block;margin-top:6px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);color:#10B981;padding:4px 12px;border-radius:999px;font-size:13px;font-weight:600}
+.step-body .warn{display:inline-block;margin-top:6px;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);color:#F59E0B;padding:4px 12px;border-radius:999px;font-size:13px;font-weight:600}
+
+/* PDF download banner */
+.pdf-banner{display:none;background:linear-gradient(135deg,rgba(16,185,129,.12),rgba(16,185,129,.04));border:1px solid rgba(16,185,129,.3);border-radius:14px;padding:18px 22px;margin:28px 0;align-items:center;gap:16px;flex-wrap:wrap}
+.pdf-banner.show{display:flex}
+.pdf-banner p{flex:1;color:#CBD5E1;font-size:15px;margin:0}
+.pdf-btn{display:inline-flex;align-items:center;gap:8px;background:#10B981;color:#fff;padding:12px 22px;border-radius:10px;font-weight:800;font-size:15px;border:0;cursor:pointer;white-space:nowrap}
+.pdf-btn:hover{opacity:.9}
 
 /* CTA */
 .cta-box{background:linear-gradient(135deg,rgba(255,153,51,.12),rgba(255,153,51,.04));border:1px solid rgba(255,153,51,.25);border-radius:18px;padding:36px 28px;text-align:center;margin:48px 0}
-.cta-box h2{font-size:24px;font-weight:800;color:#fff;margin-bottom:8px}
-.cta-box p{color:#94A3B8;margin-bottom:24px;font-size:15px}
-.cta-btn{display:inline-flex;align-items:center;gap:10px;background:#FF9933;color:#0F172A;padding:14px 28px;border-radius:12px;font-weight:800;font-size:15px}
+.cta-box h2{font-size:26px;font-weight:800;color:#fff;margin-bottom:8px}
+.cta-box p{color:#94A3B8;margin-bottom:24px;font-size:16px}
+.cta-btn{display:inline-flex;align-items:center;gap:10px;background:#FF9933;color:#0F172A;padding:14px 28px;border-radius:12px;font-weight:800;font-size:16px}
 .cta-btn:hover{opacity:.9}
 
 /* Footer */
-footer{padding:32px 0;border-top:1px solid rgba(255,255,255,.07);text-align:center;color:#475569;font-size:13px}
+footer{padding:32px 0;border-top:1px solid rgba(255,255,255,.07);text-align:center;color:#475569;font-size:14px}
 footer a{color:#64748B}
+
+/* Print / PDF */
+@media print{
+  body{background:#fff!important;color:#000!important}
+  .nav,.cta-box,.pdf-banner,footer{display:none!important}
+  .hero{background:none!important}
+  .hero h1,.section h2,.card h3,.step-body h4{color:#000!important}
+  .card,.step-item{break-inside:avoid}
+  .card p,.step-body p,.lang-row td{color:#333!important}
+  body.lang-th .tl-th,body.lang-no .tl-no,body.lang-en .tl-en{display:block!important}
+}
 
 @media(max-width:600px){
   .nav-inner{padding:10px 14px}
   .hero{padding:40px 0 28px}
-  .cmp-table,.cost-table{font-size:13px}
+  .cmp-table,.cost-table{font-size:14px}
+  .card p,.step-body p{font-size:15px}
 }
 """
 
@@ -123,6 +142,18 @@ _JS = r"""
     btn.addEventListener('click',()=>setLang(btn.dataset.lang));
   });
   setLang(saved);
+
+  // Show PDF banner only for logged-in members
+  const token = localStorage.getItem('t2d_token');
+  if(token){
+    const banner = document.getElementById('pdf-banner');
+    if(banner) banner.classList.add('show');
+  }
+
+  // PDF download: print page in current language
+  window.downloadPDF = function(){
+    window.print();
+  };
 })();
 """
 
@@ -586,6 +617,16 @@ def build_guide_page() -> str:
         <td>~28 000 – 40 000 kr</td>
       </tr>
     </table>
+  </div>
+
+  <!-- PDF BANNER (members only, shown by JS) -->
+  <div id="pdf-banner" class="pdf-banner">
+    <p>
+      <span class="tl tl-th">📄 คุณเป็นสมาชิก Thai2Drive — ดาวน์โหลดคู่มือนี้เป็น PDF ได้เลย!</span>
+      <span class="tl tl-no">📄 Du er Thai2Drive-medlem — last ned denne guiden som PDF!</span>
+      <span class="tl tl-en">📄 You're a Thai2Drive member — download this guide as a PDF!</span>
+    </p>
+    <button class="pdf-btn" onclick="downloadPDF()">⬇️ <span class="tl tl-th">ดาวน์โหลด PDF</span><span class="tl tl-no">Last ned PDF</span><span class="tl tl-en">Download PDF</span></button>
   </div>
 
   <!-- CTA -->
