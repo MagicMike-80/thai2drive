@@ -1961,6 +1961,87 @@ async def admin_remove_image(question_id: str, _: dict = Depends(require_admin))
     return {"ok": True, "id": question_id}
 
 
+@api_router.post("/admin/questions/{question_id}/fetch-unsplash")
+async def fetch_unsplash_image(question_id: str, _: dict = Depends(require_admin)):
+    """Admin: fetch a relevant image from Unsplash based on the question text and save as base64."""
+    import httpx, base64 as _b64
+    unsplash_key = os.environ.get("UNSPLASH_ACCESS_KEY")
+    if not unsplash_key:
+        raise HTTPException(status_code=500, detail="UNSPLASH_ACCESS_KEY not configured")
+
+    q = await db.questions.find_one({"id": question_id})
+    if not q:
+        raise HTTPException(status_code=404, detail="Question not found")
+
+    # Build search query from English question text (better for Unsplash search)
+    question_en = q.get("question", {}).get("en", "") or q.get("question", {}).get("no", "")
+    category = q.get("category", "")
+
+    # Map category to good search terms
+    category_keywords = {
+        "Traffic Signs": "road traffic sign norway",
+        "Road Rules": "road driving norway highway",
+        "Right of Way": "intersection road traffic norway",
+        "Speed Limits": "speed limit road highway",
+        "Safety": "road safety driving car",
+        "Driving Conditions": "driving road weather norway",
+        "Situations": "traffic road situation car",
+        "Pedestrians and Cyclists": "pedestrian cyclist road crosswalk",
+        "Vehicle Knowledge": "car vehicle road driving",
+        "Environment and Economy": "eco driving road fuel"
+    }
+    base_query = category_keywords.get(category, "traffic road norway driving")
+
+    # Extract key words from question (first 4 meaningful words)
+    words = [w for w in question_en.split() if len(w) > 3][:4]
+    query = " ".join(words) + " " + base_query if words else base_query
+
+    async with httpx.AsyncClient(timeout=15) as client:
+        r = await client.get(
+            "https://api.unsplash.com/search/photos",
+            params={"query": query, "per_page": 5, "orientation": "landscape", "content_filter": "high"},
+            headers={"Authorization": f"Client-ID {unsplash_key}"}
+        )
+        if r.status_code != 200:
+            raise HTTPException(status_code=502, detail=f"Unsplash API error: {r.status_code}")
+        data = r.json()
+
+    results = data.get("results", [])
+    if not results:
+        # Fallback: search with just base query
+        async with httpx.AsyncClient(timeout=15) as client:
+            r2 = await client.get(
+                "https://api.unsplash.com/search/photos",
+                params={"query": base_query, "per_page": 3, "orientation": "landscape"},
+                headers={"Authorization": f"Client-ID {unsplash_key}"}
+            )
+            data2 = r2.json()
+            results = data2.get("results", [])
+
+    if not results:
+        raise HTTPException(status_code=404, detail="No images found on Unsplash")
+
+    img_url = results[0]["urls"]["regular"]
+    photographer = results[0].get("user", {}).get("name", "Unknown")
+
+    # Download image and convert to base64
+    async with httpx.AsyncClient(timeout=30) as client:
+        img_r = await client.get(img_url)
+
+    if img_r.status_code != 200:
+        raise HTTPException(status_code=502, detail="Failed to download image")
+
+    img_b64 = _b64.b64encode(img_r.content).decode()
+    bilde_url = f"data:image/jpeg;base64,{img_b64}"
+    size_kb = len(img_r.content) // 1024
+
+    await db.questions.update_one(
+        {"id": question_id},
+        {"$set": {"bildeUrl": bilde_url, "unsplash_photographer": photographer}}
+    )
+    return {"bildeUrl": bilde_url, "size_kb": size_kb, "photographer": photographer, "query": query}
+
+
 @api_router.post("/admin/questions/{question_id}/audit")
 async def admin_audit_question(question_id: str, _: dict = Depends(require_admin)):
     """Admin: re-run AI Vision audit on the question's current image+text.

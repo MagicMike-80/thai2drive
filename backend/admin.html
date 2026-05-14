@@ -489,6 +489,7 @@ function renderDetail(q, editing) {
       <button onclick="window._formMode='edit';renderDetail(window._currentQ, true)" style="background:var(--accent);color:#fff;border:0;padding:10px 16px;border-radius:6px;cursor:pointer;font-weight:600">✏️ Rediger</button>
       <button onclick="duplicateQuestion()" style="background:#8b5cf6;color:#fff;border:0;padding:10px 16px;border-radius:6px;cursor:pointer">📋 Dupliser</button>
       ${hasImg ? `<button onclick="reaudit('${q.id}')" style="background:#06b6d4;color:#fff;border:0;padding:10px 16px;border-radius:6px;cursor:pointer">🔄 AI-audit</button>` : ''}
+      <button onclick="fetchUnsplash('${q.id}')" style="background:#111827;color:#fff;border:1px solid #374151;padding:10px 16px;border-radius:6px;cursor:pointer">🖼️ Hent Unsplash-bilde</button>
       <div style="display:flex;gap:8px;margin-left:auto">
         ${q.active === false
           ? `<button onclick="setActive('${q.id}', true)" style="background:var(--good);color:#fff;border:0;padding:10px 16px;border-radius:6px;cursor:pointer">🔓 Reaktiver</button>`
@@ -751,6 +752,21 @@ async function removeFormImage() {
       toast('Bilde fjernet');
     } catch (e) { toast('Feil: ' + e.message, false); }
   }
+}
+
+async function fetchUnsplash(id) {
+  toast('🔍 Søker på Unsplash…');
+  try {
+    const d = await api('/admin/questions/' + id + '/fetch-unsplash', {method: 'POST'});
+    toast(`✅ Bilde hentet (${d.size_kb} KB) — Foto: ${d.photographer}`);
+    const q = window._currentQ;
+    q.bildeUrl = d.bildeUrl;
+    const idx = window._questions.findIndex(x => x.id === id);
+    if (idx >= 0) window._questions[idx].bildeUrl = d.bildeUrl;
+    renderDetail(q);
+    await loadStats();
+    await loadQuestions();
+  } catch (e) { toast('Feil: ' + e.message, false); }
 }
 
 async function reaudit(id) {
