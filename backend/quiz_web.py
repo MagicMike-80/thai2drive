@@ -538,10 +538,14 @@ QUIZ_HTML = """<!DOCTYPE html>
     document.getElementById('progress-fill').style.width = pct + '%';
     document.getElementById('score-val').textContent = score;
 
-    // Image
+    // Image — only show proper traffic sign images (not app screenshots)
+    // Images that are base64 data URIs starting with a known small size are likely real signs.
+    // For now, only show http(s) URLs (not base64 screenshots from old data).
     const img = document.getElementById('q-img');
-    if (q.image_url) {
-      img.src = q.image_url;
+    const url = q.image_url || '';
+    const isRealImage = url.startsWith('http') && url.length < 500;
+    if (isRealImage) {
+      img.src = url;
       img.style.display = 'block';
       img.onerror = () => { img.style.display = 'none'; };
     } else {
