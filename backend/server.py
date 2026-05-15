@@ -1961,6 +1961,33 @@ async def admin_upload_image(
     }
 
 
+@api_router.get("/admin/questions/{question_id}/thumbnail")
+async def admin_question_thumbnail(question_id: str, _: dict = Depends(require_admin)):
+    """Admin: return a tiny 120x80 JPEG thumbnail of the question image."""
+    import base64, io
+    from PIL import Image as PilImage
+    from fastapi.responses import Response as FastResponse
+    q = await db.questions.find_one({"id": question_id}, {"_id": 0, "bildeUrl": 1})
+    if not q:
+        raise HTTPException(status_code=404, detail="Not found")
+    bilde = q.get("bildeUrl", "")
+    if not bilde or len(bilde) < 10:
+        raise HTTPException(status_code=404, detail="No image")
+    # Strip data URI prefix
+    if "," in bilde:
+        bilde = bilde.split(",", 1)[1]
+    try:
+        img_bytes = base64.b64decode(bilde)
+        img = PilImage.open(io.BytesIO(img_bytes)).convert("RGB")
+        img.thumbnail((160, 120), PilImage.LANCZOS)
+        buf = io.BytesIO()
+        img.save(buf, format="JPEG", quality=70)
+        return FastResponse(content=buf.getvalue(), media_type="image/jpeg",
+                            headers={"Cache-Control": "public, max-age=3600"})
+    except Exception:
+        raise HTTPException(status_code=500, detail="Image error")
+
+
 @api_router.delete("/admin/questions/{question_id}/image")
 async def admin_remove_image(question_id: str, _: dict = Depends(require_admin)):
     """Admin: remove the image (set bildeUrl to empty string)."""
