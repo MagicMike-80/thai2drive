@@ -498,7 +498,34 @@ QUIZ_HTML = """<!DOCTYPE html>
   }
 
   function getField(q, base) {
+    // New API: q.question = {no,th,en}, q.options = [{id,text:{no,th,en}}], q.explanation = {no,th,en}
+    // Old API fallback: q.question_text_no, q.answer_a_no, etc.
+    if (base === 'question_text') {
+      if (q.question && typeof q.question === 'object') return q.question[lang] || q.question.no || '';
+      return q['question_text_' + lang] || q.question_text_no || '';
+    }
+    if (base === 'explanation') {
+      if (q.explanation && typeof q.explanation === 'object') return q.explanation[lang] || q.explanation.no || '';
+      return q['explanation_' + lang] || q.explanation_no || '';
+    }
     return q[base + '_' + lang] || q[base + '_no'] || q[base + '_en'] || '';
+  }
+
+  function getAnswerText(q, letter) {
+    // New API: q.options = [{id: "A", text: {no, th, en}}, ...]
+    if (q.options && Array.isArray(q.options)) {
+      const opt = q.options.find(o => o.id.toUpperCase() === letter.toUpperCase());
+      if (opt && opt.text) return opt.text[lang] || opt.text.no || '';
+    }
+    // Old API fallback
+    return getField(q, 'answer_' + letter.toLowerCase());
+  }
+
+  function getCorrectAnswer(q) {
+    // New API: q.correctOptionId = "A"/"B"/"C"/"D"
+    if (q.correctOptionId) return q.correctOptionId.toLowerCase();
+    // Old API: q.correct_answer = "a"/"b"/"c"/"d"
+    return (q.correct_answer || '').toLowerCase();
   }
 
   async function startQuiz() {
@@ -560,7 +587,7 @@ QUIZ_HTML = """<!DOCTYPE html>
     const answersEl = document.getElementById('answers');
     answersEl.innerHTML = '';
     ['a', 'b', 'c', 'd'].forEach(letter => {
-      const text = getField(q, 'answer_' + letter);
+      const text = getAnswerText(q, letter);
       if (!text) return;
       const btn = document.createElement('button');
       btn.className = 'answer-btn';
@@ -587,7 +614,7 @@ QUIZ_HTML = """<!DOCTYPE html>
     answered = true;
 
     const q = questions[current];
-    const correct = q.correct_answer;
+    const correct = getCorrectAnswer(q);
     const btns = document.querySelectorAll('.answer-btn');
 
     btns.forEach(btn => {
