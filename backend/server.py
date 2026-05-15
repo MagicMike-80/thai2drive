@@ -1776,23 +1776,8 @@ async def admin_list_questions(
         ]
 
     total = await db.questions.count_documents(query)
-    # Exclude heavy bildeUrl from list to avoid browser slowdown (loaded per-question in detail view)
-    cursor = db.questions.find(query, {"_id": 0, "bildeUrl": 0, "bildeUrl_original_backup": 0}).sort("created_at", -1).skip(skip).limit(limit)
+    cursor = db.questions.find(query, {"_id": 0, "bildeUrl_original_backup": 0}).sort("created_at", -1).skip(skip).limit(limit)
     items = await cursor.to_list(limit)
-    # Add a lightweight has_image flag so the grid can show the image indicator
-    for q in items:
-        q["has_image"] = bool(q.get("bildeUrl_flag"))  # will be False since bildeUrl excluded
-    # Re-check has_image via a separate count is expensive; instead do a quick flag query
-    # Actually: fetch just the bildeUrl field for these IDs to set has_image flag
-    ids = [q["id"] for q in items if "id" in q]
-    if ids:
-        img_cursor = db.questions.find(
-            {"id": {"$in": ids}, "bildeUrl": {"$exists": True, "$nin": [None, ""]}},
-            {"_id": 0, "id": 1}
-        )
-        has_img_ids = {r["id"] async for r in img_cursor}
-        for q in items:
-            q["has_image"] = q.get("id") in has_img_ids
     return {"total": total, "skip": skip, "limit": limit, "items": items}
 
 
