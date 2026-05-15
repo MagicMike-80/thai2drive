@@ -1776,8 +1776,24 @@ async def admin_list_questions(
         ]
 
     total = await db.questions.count_documents(query)
-    cursor = db.questions.find(query, {"_id": 0, "bildeUrl_original_backup": 0}).sort("created_at", -1).skip(skip).limit(limit)
+    # Exclude bildeUrl from list — too large for pagination performance.
+    # The detail view loads bildeUrl via GET /admin/questions/{id}
+    cursor = db.questions.find(
+        query,
+        {"_id": 0, "bildeUrl": 0, "bildeUrl_original_backup": 0}
+    ).sort("created_at", -1).skip(skip).limit(limit)
     items = await cursor.to_list(limit)
+    # Add lightweight has_image flag using a parallel count query
+    ids = [q["id"] for q in items if "id" in q]
+    img_ids = set()
+    if ids:
+        async for r in db.questions.find(
+            {"id": {"$in": ids}, "bildeUrl": {"$exists": True, "$nin": [None, ""]}},
+            {"_id": 0, "id": 1}
+        ):
+            img_ids.add(r["id"])
+    for q in items:
+        q["has_image"] = q.get("id") in img_ids
     return {"total": total, "skip": skip, "limit": limit, "items": items}
 
 
