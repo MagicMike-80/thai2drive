@@ -1962,11 +1962,14 @@ async def admin_upload_image(
 
 
 @api_router.get("/admin/questions/{question_id}/thumbnail")
-async def admin_question_thumbnail(question_id: str, _: dict = Depends(require_admin)):
-    """Admin: return a tiny 120x80 JPEG thumbnail of the question image."""
+async def admin_question_thumbnail(question_id: str, token: Optional[str] = None):
+    """Admin: return a tiny JPEG thumbnail of the question image. Auth via ?token= query param."""
     import base64, io
     from PIL import Image as PilImage
     from fastapi.responses import Response as FastResponse
+    # Verify token
+    if not token or not verify_token(token):
+        raise HTTPException(status_code=401, detail="Unauthorized")
     q = await db.questions.find_one({"id": question_id}, {"_id": 0, "bildeUrl": 1})
     if not q:
         raise HTTPException(status_code=404, detail="Not found")

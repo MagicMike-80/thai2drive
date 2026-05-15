@@ -356,7 +356,7 @@ async function loadQuestions() {
     return `
       <div class="q" onclick="showDetail(${i})">
         <div class="img-wrap">
-          ${hasImg ? `<img src="/api/admin/questions/${q.id}/thumbnail" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:8px" onerror="this.style.display='none'" />` : '<span class="no-img">📝 Tekst-spørsmål</span>'}
+          ${hasImg ? `<img src="/api/admin/questions/${q.id}/thumbnail?token=${token}" loading="lazy" style="width:100%;height:100%;object-fit:cover;border-radius:8px" onerror="this.style.display='none'" />` : '<span class="no-img">📝 Tekst-spørsmål</span>'}
         </div>
         <div class="q-text">${escapeHtml(q.question?.no || '')}</div>
         <div class="meta">
