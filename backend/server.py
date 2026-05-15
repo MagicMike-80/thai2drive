@@ -2368,6 +2368,22 @@ async def admin_page_catchall(rest: str):
 _PUBLIC_ASSETS_DIR = Path(__file__).parent / "public_assets"
 
 
+@app.get("/.well-known/assetlinks.json")
+async def assetlinks():
+    """Android App Links verification file."""
+    from fastapi.responses import JSONResponse
+    return JSONResponse(content=[{
+        "relation": ["delegate_permission/common.handle_all_urls"],
+        "target": {
+            "namespace": "android_app",
+            "package_name": "com.michael.thai2drive",
+            "sha256_cert_fingerprints": [
+                "DA:8B:0F:97:4D:5C:5A:BF:FF:D7:0C:71:6F:8B:82:A6:95:9F:48:8E:D9:CE:A5:32:F6:E9:24:ED:EA:53:9C:43"
+            ]
+        }
+    }])
+
+
 @app.get("/api/assets/{filename:path}")
 async def public_asset(filename: str):
     """Serve static files from backend/public_assets/ (e.g. developer icon for Play Console)."""
