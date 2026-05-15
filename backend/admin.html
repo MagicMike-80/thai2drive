@@ -346,7 +346,7 @@ async function loadQuestions() {
     `Viser ${data.items.length} av ${data.total} treff (side ${currentPage + 1} av ${Math.max(1, Math.ceil(data.total / PAGE_SIZE))})`;
 
   grid.innerHTML = data.items.map((q, i) => {
-    const hasImg = (q.bildeUrl || '').startsWith('data:');
+    const hasImg = q.has_image || (q.bildeUrl || '').startsWith('data:');
     const correctOpt = (q.options || []).find(o => o.id === q.correctOptionId);
     const correctText = correctOpt ? correctOpt.text?.no || '' : '';
     const verdictTag = q.audit_verdict
@@ -355,7 +355,7 @@ async function loadQuestions() {
     return `
       <div class="q" onclick="showDetail(${i})">
         <div class="img-wrap">
-          ${hasImg ? `<img src="${q.bildeUrl}" />` : '<span class="no-img">📝 Tekst-spørsmål</span>'}
+          ${hasImg ? `<span class="no-img" style="color:#10B981">🖼️ Har bilde</span>` : '<span class="no-img">📝 Tekst-spørsmål</span>'}
         </div>
         <div class="q-text">${escapeHtml(q.question?.no || '')}</div>
         <div class="meta">
