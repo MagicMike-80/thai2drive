@@ -41,20 +41,20 @@ body.lang-en span.tl-en{display:inline}
 /* Hero */
 .hero{padding:56px 0 40px;text-align:center;background:linear-gradient(180deg,rgba(255,153,51,.06) 0%,transparent 100%)}
 .hero-badge{display:inline-block;background:rgba(255,153,51,.15);border:1px solid rgba(255,153,51,.3);color:#FF9933;padding:6px 16px;border-radius:999px;font-size:13px;font-weight:700;margin-bottom:16px}
-.hero h1{font-size:clamp(36px,6vw,64px);font-weight:900;color:#fff;line-height:1.15;margin-bottom:12px}
+.hero h1{font-size:clamp(48px,8vw,88px);font-weight:900;color:#fff;line-height:1.1;margin-bottom:16px}
 .hero h1 span{color:#FF9933}
-.hero-sub{font-size:20px;color:#94A3B8;max-width:680px;margin:0 auto}
+.hero-sub{font-size:24px;color:#94A3B8;max-width:760px;margin:0 auto}
 
 /* Steps overview */
 .steps-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:32px 0 48px}
-.step-chip{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:999px;padding:8px 16px;font-size:13px;font-weight:600;color:#CBD5E1}
+.step-chip{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:999px;padding:10px 20px;font-size:16px;font-weight:600;color:#CBD5E1}
 .step-chip .num{width:22px;height:22px;border-radius:50%;background:#FF9933;color:#0F172A;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0}
 
 /* Sections */
 .section{padding:48px 0;border-top:1px solid rgba(255,255,255,.07)}
 .section-num{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:10px;background:#FF9933;color:#0F172A;font-weight:800;font-size:16px;margin-bottom:12px}
-.section h2{font-size:clamp(26px,4vw,40px);font-weight:800;color:#fff;margin-bottom:8px}
-.section .lead{font-size:18px;color:#94A3B8;margin-bottom:24px}
+.section h2{font-size:clamp(32px,5vw,52px);font-weight:800;color:#fff;margin-bottom:10px}
+.section .lead{font-size:20px;color:#94A3B8;margin-bottom:28px}
 
 /* Cards */
 .cards{display:grid;gap:14px}
