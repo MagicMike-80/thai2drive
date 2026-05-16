@@ -301,6 +301,15 @@ footer p{color:#64748B;font-size:13px}
 .footer-links{display:flex;gap:18px;flex-wrap:wrap}
 .footer-links a{color:#94A3B8;font-size:13px}
 
+/* ROAD PHOTOS */
+.road-section{padding:72px 0 56px}
+.road-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:40px;border-radius:24px;overflow:hidden}
+.road-img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;transition:transform .4s ease}
+.road-img:hover{transform:scale(1.03)}
+.road-frame{overflow:hidden;border-radius:16px;position:relative}
+.road-frame::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(11,18,38,.35),transparent 50%);pointer-events:none}
+@media(max-width:600px){.road-grid{grid-template-columns:1fr;gap:12px}}
+
 /* RESPONSIVE */
 @media (max-width:720px){
   .nav-inner{padding:10px 14px;gap:8px}
@@ -762,6 +771,36 @@ def _screenshots_html() -> str:
 """
 
 
+def _road_photos_html() -> str:
+    return """
+<section class="road-section">
+  <div class="container">
+    <div class="sec-head">
+      <span class="eyebrow">🇳🇴 Norske veier</span>
+      <h2>
+        <span data-lang="th" class="block">เรียนรู้เส้นทางจริงในนอร์เวย์</span>
+        <span data-lang="no" class="block">Lær deg norske veier og rundkjøringer</span>
+        <span data-lang="en" class="block">Learn real Norwegian roads & roundabouts</span>
+      </h2>
+      <p>
+        <span data-lang="th">คำถามในแอปใช้ภาพจริงจากถนนในนอร์เวย์</span>
+        <span data-lang="no">Spørsmålene i appen bruker ekte bilder fra norske veier</span>
+        <span data-lang="en">Questions in the app use real images from Norwegian roads</span>
+      </p>
+    </div>
+    <div class="road-grid">
+      <div class="road-frame">
+        <img src="/api/assets/rundkjoring1.jpg" alt="Rundkjøring Norge" class="road-img" loading="lazy"/>
+      </div>
+      <div class="road-frame">
+        <img src="/api/assets/rundkjoring2.jpg" alt="Rundkjøring Norge" class="road-img" loading="lazy"/>
+      </div>
+    </div>
+  </div>
+</section>
+"""
+
+
 def _bottom_cta_html() -> str:
     return f"""
 <section class="cta-band">
@@ -1041,6 +1080,7 @@ def build_landing_page(chat_css: str, chat_widget_html: str, chat_js: str) -> st
 {_why_html()}
 {_features_html()}
 {_screenshots_html()}
+{_road_photos_html()}
 {_trust_html()}
 {_bottom_cta_html()}
 {_footer_html()}
