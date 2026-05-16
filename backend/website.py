@@ -193,11 +193,11 @@ _CHAT_CSS = """
 /* Chat widget */
 .t2d-chat-fab{
   position:fixed;bottom:20px;right:20px;z-index:9999;
-  width:58px;height:58px;border-radius:29px;
-  background:linear-gradient(135deg,#FF9933,#FF6B1A);
-  border:none;cursor:pointer;color:#0F172A;
+  width:68px;height:68px;border-radius:34px;
+  background:linear-gradient(135deg,#10B981,#059669);
+  border:none;cursor:pointer;color:#fff;
   display:flex;align-items:center;justify-content:center;
-  box-shadow:0 12px 32px rgba(255,153,51,.45),0 4px 12px rgba(0,0,0,.3);
+  box-shadow:0 12px 32px rgba(16,185,129,.5),0 4px 12px rgba(0,0,0,.3);
   transition:transform .2s;
 }
 .t2d-chat-fab:hover{transform:scale(1.08)}
