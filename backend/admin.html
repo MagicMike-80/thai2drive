@@ -181,6 +181,7 @@
       <option value="false">🚫 Kun inaktive</option>
     </select>
     <button onclick="resetFilters()" style="background:var(--card);color:var(--text);border:0;padding:8px 12px;border-radius:6px;cursor:pointer">Nullstill</button>
+    <button onclick="showNewest()" style="background:rgba(255,153,51,.15);color:#FF9933;border:1px solid rgba(255,153,51,.3);padding:8px 14px;border-radius:6px;cursor:pointer;font-weight:700">🆕 Nyeste</button>
   </div>
 
   <div id="results-meta"></div>
@@ -385,6 +386,12 @@ function changePage(d) { currentPage = Math.max(0, currentPage + d); loadQuestio
 function resetFilters() {
   ['search','category','difficulty','has_image','verdict','active'].forEach(id => document.getElementById(id).value = '');
   currentPage = 0; loadQuestions();
+}
+function showNewest() {
+  ['search','category','difficulty','has_image','verdict','active'].forEach(id => document.getElementById(id).value = '');
+  currentPage = 0;
+  loadQuestions();
+  window.scrollTo(0, 0);
 }
 
 function cancelForm() {
