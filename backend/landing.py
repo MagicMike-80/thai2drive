@@ -75,9 +75,22 @@ html[data-current-lang="en"] [data-lang="en"].block{display:block}
 /* SVG flags fill the button circle */
 .cflag{width:100%;height:100%;display:block;position:absolute;inset:0}
 .cflag svg{width:100%;height:100%;display:block}
-/* Guide blink */
-.guide-blink{color:#FF2020!important;animation:guideBlink .5s ease-in-out infinite alternate;font-weight:800!important}
-@keyframes guideBlink{from{color:#FF0000;text-shadow:0 0 8px #FF0000}to{color:#FF6666;text-shadow:0 0 16px #FF2020}}
+/* Heartbeat animation — bump-bump ... pause */
+@keyframes heartbeat{
+  0%   {opacity:1}
+  8%   {opacity:.15}
+  16%  {opacity:1}
+  26%  {opacity:.15}
+  34%  {opacity:1}
+  100% {opacity:1}
+}
+/* Guide — oransje hjertetakt */
+.guide-blink{
+  color:#FF9933!important;
+  font-weight:800!important;
+  animation:heartbeat 1.2s ease-in-out infinite;
+  text-shadow:0 0 10px rgba(255,153,51,.7);
+}
 /* Velg språk hint */
 .velg-hint{
   position:fixed;top:10px;right:140px;z-index:300;
@@ -85,13 +98,12 @@ html[data-current-lang="en"] [data-lang="en"].block{display:block}
   pointer-events:none;
 }
 .velg-hint-text{
-  color:#fff;font-weight:800;font-size:15px;
-  animation:velgBlink .4s ease-in-out infinite alternate;
-  text-shadow:0 0 8px rgba(255,255,255,.6);
+  color:#FF9933;font-weight:800;font-size:15px;
+  animation:heartbeat 1.2s ease-in-out infinite;
+  text-shadow:0 0 10px rgba(255,153,51,.7);
   white-space:nowrap;
 }
-.velg-arrow{font-size:22px;color:#fff;animation:velgBlink .4s ease-in-out infinite alternate}
-@keyframes velgBlink{from{opacity:1}to{opacity:.2}}
+.velg-arrow{font-size:20px;color:#FF9933;animation:heartbeat 1.2s ease-in-out infinite}
 .velg-hint.gone{display:none}
 @media(max-width:600px){.velg-hint{top:8px;right:80px;font-size:12px}}
 .mini-flag{display:flex;flex-direction:column;width:38px;height:26px;border-radius:3px;overflow:hidden;flex-shrink:0}
