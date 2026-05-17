@@ -93,19 +93,19 @@ html[data-current-lang="en"] [data-lang="en"].block{display:block}
 }
 /* Velg språk hint */
 .velg-hint{
-  position:fixed;top:10px;right:140px;z-index:300;
-  display:flex;align-items:center;gap:6px;
+  position:fixed;top:8px;right:210px;z-index:300;
+  display:flex;align-items:center;gap:8px;
   pointer-events:none;
 }
 .velg-hint-text{
-  color:#FF9933;font-weight:800;font-size:15px;
-  animation:heartbeat 1.2s ease-in-out infinite;
-  text-shadow:0 0 10px rgba(255,153,51,.7);
-  white-space:nowrap;
+  color:#FF9933;font-weight:900;font-size:19px;
+  animation:heartbeat 2s ease-in-out infinite;
+  text-shadow:0 0 12px rgba(255,153,51,.8);
+  white-space:nowrap;letter-spacing:.3px;
 }
-.velg-arrow{font-size:20px;color:#FF9933;animation:heartbeat 1.2s ease-in-out infinite}
+.velg-arrow{font-size:22px;color:#FF9933;animation:heartbeat 2s ease-in-out infinite;margin-right:4px}
 .velg-hint.gone{display:none}
-@media(max-width:600px){.velg-hint{top:8px;right:80px;font-size:12px}}
+@media(max-width:600px){.velg-hint{top:8px;right:120px;font-size:14px}}
 .mini-flag{display:flex;flex-direction:column;width:38px;height:26px;border-radius:3px;overflow:hidden;flex-shrink:0}
 .mini-flag.flag-th span:nth-child(1){background:#A51931;flex:1}
 .mini-flag.flag-th span:nth-child(2){background:#F4F5F8;flex:1}
@@ -916,11 +916,7 @@ def _bottom_cta_html() -> str:
 LANDING_JS = r"""
 // ─── Language hints (always show velg-hint for 5s, lang-hint first visit) ───
 (function(){
-  // "velg språk" blinker alltid i 5 sek
-  var velg = document.getElementById('velgHint');
-  if(velg){
-    setTimeout(function(){ velg.classList.add('gone'); }, 5000);
-  }
+  // "velg språk" blinker alltid
   // gammel hint — første besøk kun
   if(!localStorage.getItem('t2d_lang_hint_shown')){
     var hint = document.getElementById('langHint');
