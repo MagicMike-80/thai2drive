@@ -301,6 +301,28 @@ footer p{color:#64748B;font-size:13px}
 .footer-links{display:flex;gap:18px;flex-wrap:wrap}
 .footer-links a{color:#94A3B8;font-size:13px}
 
+/* LANGUAGE HINT */
+.lang-hint{
+  position:fixed;top:62px;right:24px;z-index:200;
+  display:flex;flex-direction:column;align-items:center;
+  pointer-events:none;
+  transition:opacity .4s ease;
+}
+.lang-hint.hidden{opacity:0}
+.lang-hint-bubble{
+  background:#FF9933;color:#0F172A;
+  font-weight:800;font-size:14px;
+  padding:10px 18px;border-radius:12px;
+  box-shadow:0 8px 24px rgba(255,153,51,.45);
+  white-space:nowrap;text-align:center;line-height:1.5;
+}
+.lang-hint-arrow{
+  font-size:24px;color:#FF9933;margin-top:2px;
+  animation:bounceUp .6s ease-in-out infinite alternate;
+}
+@keyframes bounceUp{from{transform:translateY(0)}to{transform:translateY(-6px)}}
+@media(max-width:600px){.lang-hint{right:12px;top:58px}}
+
 /* ROAD PHOTOS */
 .road-section{padding:72px 0 56px}
 .road-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:40px;border-radius:24px;overflow:hidden}
@@ -839,6 +861,22 @@ def _bottom_cta_html() -> str:
 
 
 LANDING_JS = r"""
+// ─── Language hint (first visit only) ───
+(function(){
+  if(!localStorage.getItem('t2d_lang_hint_shown')){
+    var hint = document.getElementById('langHint');
+    if(hint){
+      setTimeout(function(){
+        hint.classList.add('hidden');
+        localStorage.setItem('t2d_lang_hint_shown','1');
+      }, 4000);
+    }
+  } else {
+    var h = document.getElementById('langHint');
+    if(h) h.style.display='none';
+  }
+})();
+
 // ─── Language switcher ───
 (function(){
   const supported = ['th','no','en'];
@@ -1073,6 +1111,10 @@ def build_landing_page(chat_css: str, chat_widget_html: str, chat_js: str) -> st
 </head>
 <body>
 {_nav_html()}
+<div class="lang-hint" id="langHint">
+  <div class="lang-hint-bubble">🌏 เลือกภาษา · Velg språk · Choose language</div>
+  <div class="lang-hint-arrow">↑</div>
+</div>
 {_hero_html()}
 {_stats_html()}
 {_try_html()}

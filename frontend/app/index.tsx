@@ -32,6 +32,35 @@ export default function HomeScreen() {
   const pressIn = () => Animated.spring(ctaScale, { toValue: 0.97, useNativeDriver: true, speed: 40, bounciness: 0 }).start();
   const pressOut = () => Animated.spring(ctaScale, { toValue: 1, useNativeDriver: true, speed: 30, bounciness: 6 }).start();
 
+  // Language hint — shows once on first launch
+  const [showLangHint, setShowLangHint] = useState(false);
+  const hintOpacity = useRef(new Animated.Value(0)).current;
+  const hintBounce = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    AsyncStorage.getItem('t2d_lang_hint_shown').then(val => {
+      if (!val) {
+        setShowLangHint(true);
+        // Fade in
+        Animated.timing(hintOpacity, { toValue: 1, duration: 400, useNativeDriver: true }).start();
+        // Bounce arrow loop
+        Animated.loop(
+          Animated.sequence([
+            Animated.timing(hintBounce, { toValue: -8, duration: 400, useNativeDriver: true }),
+            Animated.timing(hintBounce, { toValue: 0, duration: 400, useNativeDriver: true }),
+          ])
+        ).start();
+        // Auto-dismiss after 4 seconds
+        setTimeout(() => dismissLangHint(), 4000);
+      }
+    });
+  }, []);
+
+  const dismissLangHint = () => {
+    Animated.timing(hintOpacity, { toValue: 0, duration: 300, useNativeDriver: true }).start(() => setShowLangHint(false));
+    AsyncStorage.setItem('t2d_lang_hint_shown', '1');
+  };
+
   useEffect(() => { loadData(); }, []);
 
   const checkDaily = async () => {
@@ -86,6 +115,20 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView style={[st.container, { backgroundColor: c.bg }]}>
+      {/* Language hint overlay — first launch only */}
+      {showLangHint && (
+        <Animated.View style={[st.langHintWrap, { opacity: hintOpacity }]} pointerEvents="box-none">
+          <TouchableOpacity style={st.langHintDismiss} onPress={dismissLangHint} activeOpacity={1}>
+            <View style={st.langHintBubble}>
+              <Text style={st.langHintText}>🌏  เลือกภาษา · Velg språk · Choose language</Text>
+            </View>
+            <Animated.Text style={[st.langHintArrow, { transform: [{ translateY: hintBounce }] }]}>
+              ↑
+            </Animated.Text>
+          </TouchableOpacity>
+        </Animated.View>
+      )}
+
       <ScrollView contentContainerStyle={st.scroll} showsVerticalScrollIndicator={false}>
         {/* Top bar: brand + language + settings */}
         <View style={st.topBar}>
@@ -253,4 +296,10 @@ const st = StyleSheet.create({
   quickRow:  { flexDirection: 'row', gap: 10, marginBottom: 28 },
   quickBtn:  { flex: 1, alignItems: 'center', gap: 8, borderRadius: 14, borderWidth: 1, paddingVertical: 16 },
   quickLabel:{ fontSize: 12, fontWeight: '600', textAlign: 'center' },
+  // Language hint
+  langHintWrap: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 99, alignItems: 'flex-end', justifyContent: 'flex-start', paddingTop: 70, paddingRight: 16 },
+  langHintDismiss: { alignItems: 'center' },
+  langHintBubble: { backgroundColor: '#FF9933', borderRadius: 14, paddingHorizontal: 16, paddingVertical: 10, maxWidth: 260, shadowColor: '#FF9933', shadowOpacity: 0.4, shadowRadius: 12, shadowOffset: { width: 0, height: 4 }, elevation: 8 },
+  langHintText: { color: '#0F172A', fontWeight: '800', fontSize: 13, textAlign: 'center', lineHeight: 20 },
+  langHintArrow: { fontSize: 28, color: '#FF9933', marginTop: 2, fontWeight: '900' },
 });
