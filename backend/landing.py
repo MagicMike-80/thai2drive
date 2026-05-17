@@ -72,20 +72,9 @@ html[data-current-lang="en"] [data-lang="en"].block{display:block}
 }
 .lang-btn:hover:not(.active){border-color:rgba(255,255,255,.4);transform:scale(1.08)}
 .lang-btn.active{border-color:#FF9933;box-shadow:0 0 0 3px rgba(255,153,51,.3);transform:scale(1.1)}
-/* CSS circle flags inside buttons */
+/* SVG flags fill the button circle */
 .cflag{width:100%;height:100%;display:block;position:absolute;inset:0}
-.cflag-th{background:linear-gradient(to bottom,#A51931 20%,#fff 20%,#fff 35%,#2D2A4A 35%,#2D2A4A 65%,#fff 65%,#fff 80%,#A51931 80%)}
-.cflag-no{background:#BA0C2F;position:relative}
-.cflag-no::before{content:'';position:absolute;left:0;right:0;top:38%;height:24%;background:#fff}
-.cflag-no::after{content:'';position:absolute;left:24%;top:0;bottom:0;width:24%;background:#fff}
-.cflag-no .nb{position:absolute;background:#00205B}
-.cflag-no .nb1{left:0;right:0;top:44%;height:12%}
-.cflag-no .nb2{left:30%;top:0;bottom:0;width:12%}
-.cflag-gb{background:#012169;position:relative}
-.cflag-gb::before{content:'';position:absolute;left:0;right:0;top:38%;height:24%;background:#fff}
-.cflag-gb::after{content:'';position:absolute;left:38%;top:0;bottom:0;width:24%;background:#fff}
-.cflag-gb .gb1{position:absolute;left:0;right:0;top:44%;height:12%;background:#C8102E}
-.cflag-gb .gb2{position:absolute;left:44%;top:0;bottom:0;width:12%;background:#C8102E}
+.cflag svg{width:100%;height:100%;display:block}
 /* Guide blink */
 .guide-blink{color:#FF2020!important;animation:guideBlink .5s ease-in-out infinite alternate;font-weight:800!important}
 @keyframes guideBlink{from{color:#FF0000;text-shadow:0 0 8px #FF0000}to{color:#FF6666;text-shadow:0 0 16px #FF2020}}
@@ -405,13 +394,13 @@ def _nav_html() -> str:
     </ul>
     <div class="lang-row" role="group" aria-label="Language">
       <button class="lang-btn active" data-set-lang="th" title="ภาษาไทย">
-        <span class="cflag cflag-th"></span>
+        <span class="cflag"><svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg"><rect width="900" height="600" fill="#A51931"/><rect width="900" height="480" y="60" fill="#F4F5F8"/><rect width="900" height="320" y="140" fill="#241D4F"/></svg></span>
       </button>
       <button class="lang-btn" data-set-lang="no" title="Norsk">
-        <span class="cflag cflag-no"><span class="nb nb1"></span><span class="nb nb2"></span></span>
+        <span class="cflag"><svg viewBox="0 0 22 16" xmlns="http://www.w3.org/2000/svg"><rect width="22" height="16" fill="#EF2B2D"/><rect x="6" width="4" height="16" fill="#fff"/><rect y="6" width="22" height="4" fill="#fff"/><rect x="7" width="2" height="16" fill="#002868"/><rect y="7" width="22" height="2" fill="#002868"/></svg></span>
       </button>
       <button class="lang-btn" data-set-lang="en" title="English">
-        <span class="cflag cflag-gb"><span class="gb1"></span><span class="gb2"></span></span>
+        <span class="cflag"><svg viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg"><rect width="60" height="30" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#C8102E" stroke-width="4"/><rect y="11" width="60" height="8" fill="#fff"/><rect x="26" width="8" height="30" fill="#fff"/><rect y="12" width="60" height="6" fill="#C8102E"/><rect x="27" width="6" height="30" fill="#C8102E"/></svg></span>
       </button>
     </div>
   </div>
@@ -457,13 +446,13 @@ def _hero_html() -> str:
     <!-- Language switcher — also in hero so it's instantly visible -->
     <div class="lang-row" role="group" aria-label="Language" style="justify-content:center;margin-bottom:20px">
       <button class="lang-btn active" data-set-lang="th" title="ภาษาไทย">
-        <span class="cflag cflag-th"></span>
+        <span class="cflag"><svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg"><rect width="900" height="600" fill="#A51931"/><rect width="900" height="480" y="60" fill="#F4F5F8"/><rect width="900" height="320" y="140" fill="#241D4F"/></svg></span>
       </button>
       <button class="lang-btn" data-set-lang="no" title="Norsk">
-        <span class="cflag cflag-no"><span class="nb nb1"></span><span class="nb nb2"></span></span>
+        <span class="cflag"><svg viewBox="0 0 22 16" xmlns="http://www.w3.org/2000/svg"><rect width="22" height="16" fill="#EF2B2D"/><rect x="6" width="4" height="16" fill="#fff"/><rect y="6" width="22" height="4" fill="#fff"/><rect x="7" width="2" height="16" fill="#002868"/><rect y="7" width="22" height="2" fill="#002868"/></svg></span>
       </button>
       <button class="lang-btn" data-set-lang="en" title="English">
-        <span class="cflag cflag-gb"><span class="gb1"></span><span class="gb2"></span></span>
+        <span class="cflag"><svg viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg"><rect width="60" height="30" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#C8102E" stroke-width="4"/><rect y="11" width="60" height="8" fill="#fff"/><rect x="26" width="8" height="30" fill="#fff"/><rect y="12" width="60" height="6" fill="#C8102E"/><rect x="27" width="6" height="30" fill="#C8102E"/></svg></span>
       </button>
     </div>
 
