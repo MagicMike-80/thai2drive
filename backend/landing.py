@@ -62,16 +62,49 @@ html[data-current-lang="en"] [data-lang="en"].block{display:block}
 .brand .t2d{color:#FF9933}
 .lang-row{display:flex;gap:8px;align-items:center}
 .lang-btn{
-  width:42px;height:42px;border-radius:50%;
+  width:44px;height:44px;border-radius:50%;
   border:2.5px solid rgba(255,255,255,.15);
   background:rgba(255,255,255,.06);
   cursor:pointer;padding:0;overflow:hidden;
   transition:border-color .15s,transform .15s,box-shadow .15s;
   display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;
+  flex-shrink:0;position:relative;
 }
 .lang-btn:hover:not(.active){border-color:rgba(255,255,255,.4);transform:scale(1.08)}
 .lang-btn.active{border-color:#FF9933;box-shadow:0 0 0 3px rgba(255,153,51,.3);transform:scale(1.1)}
+/* CSS circle flags inside buttons */
+.cflag{width:100%;height:100%;display:block;position:absolute;inset:0}
+.cflag-th{background:linear-gradient(to bottom,#A51931 20%,#fff 20%,#fff 35%,#2D2A4A 35%,#2D2A4A 65%,#fff 65%,#fff 80%,#A51931 80%)}
+.cflag-no{background:#BA0C2F;position:relative}
+.cflag-no::before{content:'';position:absolute;left:0;right:0;top:38%;height:24%;background:#fff}
+.cflag-no::after{content:'';position:absolute;left:24%;top:0;bottom:0;width:24%;background:#fff}
+.cflag-no .nb{position:absolute;background:#00205B}
+.cflag-no .nb1{left:0;right:0;top:44%;height:12%}
+.cflag-no .nb2{left:30%;top:0;bottom:0;width:12%}
+.cflag-gb{background:#012169;position:relative}
+.cflag-gb::before{content:'';position:absolute;left:0;right:0;top:38%;height:24%;background:#fff}
+.cflag-gb::after{content:'';position:absolute;left:38%;top:0;bottom:0;width:24%;background:#fff}
+.cflag-gb .gb1{position:absolute;left:0;right:0;top:44%;height:12%;background:#C8102E}
+.cflag-gb .gb2{position:absolute;left:44%;top:0;bottom:0;width:12%;background:#C8102E}
+/* Guide blink */
+.guide-blink{color:#FF2020!important;animation:guideBlink .5s ease-in-out infinite alternate;font-weight:800!important}
+@keyframes guideBlink{from{color:#FF0000;text-shadow:0 0 8px #FF0000}to{color:#FF6666;text-shadow:0 0 16px #FF2020}}
+/* Velg språk hint */
+.velg-hint{
+  position:fixed;top:10px;right:140px;z-index:300;
+  display:flex;align-items:center;gap:6px;
+  pointer-events:none;
+}
+.velg-hint-text{
+  color:#fff;font-weight:800;font-size:15px;
+  animation:velgBlink .4s ease-in-out infinite alternate;
+  text-shadow:0 0 8px rgba(255,255,255,.6);
+  white-space:nowrap;
+}
+.velg-arrow{font-size:22px;color:#fff;animation:velgBlink .4s ease-in-out infinite alternate}
+@keyframes velgBlink{from{opacity:1}to{opacity:.2}}
+.velg-hint.gone{display:none}
+@media(max-width:600px){.velg-hint{top:8px;right:80px;font-size:12px}}
 .mini-flag{display:flex;flex-direction:column;width:38px;height:26px;border-radius:3px;overflow:hidden;flex-shrink:0}
 .mini-flag.flag-th span:nth-child(1){background:#A51931;flex:1}
 .mini-flag.flag-th span:nth-child(2){background:#F4F5F8;flex:1}
@@ -368,12 +401,18 @@ def _nav_html() -> str:
         <span data-lang="no">Priser</span>
         <span data-lang="en">Pricing</span>
       </a></li>
-      <li><a href="/api/guide">📖 Guide</a></li>
+      <li><a href="/api/guide" class="guide-blink">📖 Guide</a></li>
     </ul>
     <div class="lang-row" role="group" aria-label="Language">
-      <button class="lang-btn active" data-set-lang="th" title="ภาษาไทย" style="font-size:26px">🇹🇭</button>
-      <button class="lang-btn" data-set-lang="no" title="Norsk" style="font-size:26px">🇳🇴</button>
-      <button class="lang-btn" data-set-lang="en" title="English" style="font-size:26px">🇬🇧</button>
+      <button class="lang-btn active" data-set-lang="th" title="ภาษาไทย">
+        <span class="cflag cflag-th"></span>
+      </button>
+      <button class="lang-btn" data-set-lang="no" title="Norsk">
+        <span class="cflag cflag-no"><span class="nb nb1"></span><span class="nb nb2"></span></span>
+      </button>
+      <button class="lang-btn" data-set-lang="en" title="English">
+        <span class="cflag cflag-gb"><span class="gb1"></span><span class="gb2"></span></span>
+      </button>
     </div>
   </div>
 </nav>
@@ -387,9 +426,15 @@ def _footer_html() -> str:
     <div class="footer-inner">
       <p>© 2025 Thai2Drive</p>
       <div class="lang-row" role="group" aria-label="Language" style="justify-content:center;margin:12px 0">
-        <button class="lang-btn" data-set-lang="th" title="ภาษาไทย" style="font-size:26px">🇹🇭</button>
-        <button class="lang-btn" data-set-lang="no" title="Norsk" style="font-size:26px">🇳🇴</button>
-        <button class="lang-btn" data-set-lang="en" title="English" style="font-size:26px">🇬🇧</button>
+        <button class="lang-btn" data-set-lang="th" title="ภาษาไทย">
+          <span class="cflag cflag-th"></span>
+        </button>
+        <button class="lang-btn" data-set-lang="no" title="Norsk">
+          <span class="cflag cflag-no"><span class="nb nb1"></span><span class="nb nb2"></span></span>
+        </button>
+        <button class="lang-btn" data-set-lang="en" title="English">
+          <span class="cflag cflag-gb"><span class="gb1"></span><span class="gb2"></span></span>
+        </button>
       </div>
       <div class="footer-links">
         <a href="/api/website"><span data-lang="th">หน้าแรก</span><span data-lang="no">Hjem</span><span data-lang="en">Home</span></a>
@@ -411,9 +456,15 @@ def _hero_html() -> str:
 
     <!-- Language switcher — also in hero so it's instantly visible -->
     <div class="lang-row" role="group" aria-label="Language" style="justify-content:center;margin-bottom:20px">
-      <button class="lang-btn active" data-set-lang="th" title="ภาษาไทย" style="font-size:26px">🇹🇭</button>
-      <button class="lang-btn" data-set-lang="no" title="Norsk" style="font-size:26px">🇳🇴</button>
-      <button class="lang-btn" data-set-lang="en" title="English" style="font-size:26px">🇬🇧</button>
+      <button class="lang-btn active" data-set-lang="th" title="ภาษาไทย">
+        <span class="cflag cflag-th"></span>
+      </button>
+      <button class="lang-btn" data-set-lang="no" title="Norsk">
+        <span class="cflag cflag-no"><span class="nb nb1"></span><span class="nb nb2"></span></span>
+      </button>
+      <button class="lang-btn" data-set-lang="en" title="English">
+        <span class="cflag cflag-gb"><span class="gb1"></span><span class="gb2"></span></span>
+      </button>
     </div>
 
     <h1>
@@ -862,15 +913,21 @@ def _bottom_cta_html() -> str:
 
 
 LANDING_JS = r"""
-// ─── Language hint (first visit only) ───
+// ─── Language hints (always show velg-hint for 5s, lang-hint first visit) ───
 (function(){
+  // "velg språk" blinker alltid i 5 sek
+  var velg = document.getElementById('velgHint');
+  if(velg){
+    setTimeout(function(){ velg.classList.add('gone'); }, 5000);
+  }
+  // gammel hint — første besøk kun
   if(!localStorage.getItem('t2d_lang_hint_shown')){
     var hint = document.getElementById('langHint');
     if(hint){
       setTimeout(function(){
         hint.classList.add('hidden');
         localStorage.setItem('t2d_lang_hint_shown','1');
-      }, 4000);
+      }, 5000);
     }
   } else {
     var h = document.getElementById('langHint');
@@ -1112,6 +1169,10 @@ def build_landing_page(chat_css: str, chat_widget_html: str, chat_js: str) -> st
 </head>
 <body>
 {_nav_html()}
+<div class="velg-hint" id="velgHint">
+  <span class="velg-hint-text">velg språk</span>
+  <span class="velg-arrow">→</span>
+</div>
 <div class="lang-hint" id="langHint">
   <div class="lang-hint-bubble">🌏 เลือกภาษา · Velg språk · Choose language</div>
   <div class="lang-hint-arrow">↑</div>
