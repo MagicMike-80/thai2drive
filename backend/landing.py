@@ -60,17 +60,18 @@ html[data-current-lang="en"] [data-lang="en"].block{display:block}
 .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px;color:#fff;flex-shrink:0}
 .brand img{width:36px;height:36px;border-radius:8px}
 .brand .t2d{color:#FF9933}
-.lang-row{display:flex;gap:6px;align-items:center}
+.lang-row{display:flex;gap:8px;align-items:center}
 .lang-btn{
-  display:inline-flex;align-items:center;gap:5px;
-  padding:5px 12px;border-radius:999px;
-  border:1.5px solid rgba(255,255,255,.12);
-  background:rgba(255,255,255,.05);
-  cursor:pointer;font-size:13px;font-weight:600;color:#94A3B8;
-  transition:all .15s;line-height:1.4;
+  width:42px;height:42px;border-radius:50%;
+  border:2.5px solid rgba(255,255,255,.15);
+  background:rgba(255,255,255,.06);
+  cursor:pointer;padding:0;overflow:hidden;
+  transition:border-color .15s,transform .15s,box-shadow .15s;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
 }
-.lang-btn:hover:not(.active){border-color:rgba(255,255,255,.25);color:#E2E8F0}
-.lang-btn.active{border-color:#FF9933;background:rgba(255,153,51,.12);color:#FF9933;font-weight:700}
+.lang-btn:hover:not(.active){border-color:rgba(255,255,255,.4);transform:scale(1.08)}
+.lang-btn.active{border-color:#FF9933;box-shadow:0 0 0 3px rgba(255,153,51,.3);transform:scale(1.1)}
 .mini-flag{display:flex;flex-direction:column;width:38px;height:26px;border-radius:3px;overflow:hidden;flex-shrink:0}
 .mini-flag.flag-th span:nth-child(1){background:#A51931;flex:1}
 .mini-flag.flag-th span:nth-child(2){background:#F4F5F8;flex:1}
@@ -337,7 +338,7 @@ footer p{color:#64748B;font-size:13px}
   .nav-inner{padding:10px 14px;gap:8px}
   .brand{font-size:16px}
   .brand img{width:32px;height:32px}
-  .lang-btn{font-size:12px;padding:4px 10px}
+  .lang-btn{width:36px;height:36px}
   .hero{padding:48px 0 40px}
   section{padding:52px 0}
   .cta-band{padding:48px 20px}
@@ -370,9 +371,9 @@ def _nav_html() -> str:
       <li><a href="/api/guide">📖 Guide</a></li>
     </ul>
     <div class="lang-row" role="group" aria-label="Language">
-      <button class="lang-btn active" data-set-lang="th">🇹🇭 TH</button>
-      <button class="lang-btn" data-set-lang="no">🇳🇴 NO</button>
-      <button class="lang-btn" data-set-lang="en">🇬🇧 EN</button>
+      <button class="lang-btn active" data-set-lang="th" title="ภาษาไทย" style="font-size:26px">🇹🇭</button>
+      <button class="lang-btn" data-set-lang="no" title="Norsk" style="font-size:26px">🇳🇴</button>
+      <button class="lang-btn" data-set-lang="en" title="English" style="font-size:26px">🇬🇧</button>
     </div>
   </div>
 </nav>
@@ -386,9 +387,9 @@ def _footer_html() -> str:
     <div class="footer-inner">
       <p>© 2025 Thai2Drive</p>
       <div class="lang-row" role="group" aria-label="Language" style="justify-content:center;margin:12px 0">
-        <button class="lang-btn" data-set-lang="th">🇹🇭 TH</button>
-        <button class="lang-btn" data-set-lang="no">🇳🇴 NO</button>
-        <button class="lang-btn" data-set-lang="en">🇬🇧 EN</button>
+        <button class="lang-btn" data-set-lang="th" title="ภาษาไทย" style="font-size:26px">🇹🇭</button>
+        <button class="lang-btn" data-set-lang="no" title="Norsk" style="font-size:26px">🇳🇴</button>
+        <button class="lang-btn" data-set-lang="en" title="English" style="font-size:26px">🇬🇧</button>
       </div>
       <div class="footer-links">
         <a href="/api/website"><span data-lang="th">หน้าแรก</span><span data-lang="no">Hjem</span><span data-lang="en">Home</span></a>
@@ -410,9 +411,9 @@ def _hero_html() -> str:
 
     <!-- Language switcher — also in hero so it's instantly visible -->
     <div class="lang-row" role="group" aria-label="Language" style="justify-content:center;margin-bottom:20px">
-      <button class="lang-btn active" data-set-lang="th">🇹🇭 TH</button>
-      <button class="lang-btn" data-set-lang="no">🇳🇴 NO</button>
-      <button class="lang-btn" data-set-lang="en">🇬🇧 EN</button>
+      <button class="lang-btn active" data-set-lang="th" title="ภาษาไทย" style="font-size:26px">🇹🇭</button>
+      <button class="lang-btn" data-set-lang="no" title="Norsk" style="font-size:26px">🇳🇴</button>
+      <button class="lang-btn" data-set-lang="en" title="English" style="font-size:26px">🇬🇧</button>
     </div>
 
     <h1>
