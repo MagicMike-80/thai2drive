@@ -130,15 +130,15 @@ export default function HomeScreen() {
       )}
 
       <ScrollView contentContainerStyle={st.scroll} showsVerticalScrollIndicator={false}>
-        {/* Top bar: brand + language + settings */}
+        {/* Top bar: language + settings | brand */}
         <View style={st.topBar}>
-          <AppBrand size="md" />
           <View style={st.topRight}>
             <LanguageSwitcher size="sm" />
             <TouchableOpacity testID="settings-btn" style={[st.iconBtn, { backgroundColor: c.card, borderColor: c.cardBorder }]} onPress={() => router.push('/settings')}>
               <Ionicons name="settings-outline" size={20} color={c.text} />
             </TouchableOpacity>
           </View>
+          <AppBrand size="md" />
         </View>
 
         {/* Brand */}
@@ -297,7 +297,7 @@ const st = StyleSheet.create({
   quickBtn:  { flex: 1, alignItems: 'center', gap: 8, borderRadius: 14, borderWidth: 1, paddingVertical: 16 },
   quickLabel:{ fontSize: 12, fontWeight: '600', textAlign: 'center' },
   // Language hint
-  langHintWrap: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 99, alignItems: 'flex-end', justifyContent: 'flex-start', paddingTop: 70, paddingRight: 16 },
+  langHintWrap: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 99, alignItems: 'flex-start', justifyContent: 'flex-start', paddingTop: 70, paddingLeft: 16 },
   langHintDismiss: { alignItems: 'center' },
   langHintBubble: { backgroundColor: '#FF9933', borderRadius: 14, paddingHorizontal: 16, paddingVertical: 10, maxWidth: 260, shadowColor: '#FF9933', shadowOpacity: 0.4, shadowRadius: 12, shadowOffset: { width: 0, height: 4 }, elevation: 8 },
   langHintText: { color: '#0F172A', fontWeight: '800', fontSize: 13, textAlign: 'center', lineHeight: 20 },
