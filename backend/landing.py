@@ -230,10 +230,13 @@ section{padding:80px 0;position:relative}
 .try-progress .accent{color:#FF9933}
 .try-bar{flex:1;height:5px;background:rgba(255,255,255,.08);border-radius:3px;margin:0 16px;overflow:hidden}
 .try-bar>div{height:100%;background:#FF9933;transition:width .3s;width:0%}
-.try-body{padding:16px 20px}
-.try-image{width:100%;max-height:180px;object-fit:contain;border-radius:10px;margin-bottom:12px;background:#0B1226}
-.try-question{font-size:17px;font-weight:700;color:#fff;margin-bottom:16px;line-height:1.4}
+.try-body{padding:16px 20px;display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+.try-left{display:flex;flex-direction:column;gap:12px}
+.try-right{display:flex;flex-direction:column;gap:10px}
+.try-image{width:100%;max-height:200px;object-fit:contain;border-radius:10px;background:#0B1226}
+.try-question{font-size:16px;font-weight:700;color:#fff;line-height:1.4}
 .try-options{display:grid;gap:10px}
+@media(max-width:640px){.try-body{grid-template-columns:1fr}}
 .try-opt{
   background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.08);
   padding:14px 18px;border-radius:12px;cursor:pointer;font-size:14px;text-align:left;color:#E2E8F0;
@@ -1016,13 +1019,17 @@ LANDING_JS = r"""
     const expl = pick(q.explanation, lang);
 
     body.innerHTML =
+      `<div class="try-left">` +
       (img ? `<img class="try-image" src="${img}" alt="" onerror="this.style.display='none'"/>` : '') +
       `<div class="try-question">${escapeHtml(questionText)}</div>` +
+      `</div>` +
+      `<div class="try-right">` +
       `<div class="try-options" id="tqOpts">` +
       opts.map(o => `<button class="try-opt" data-id="${o.id}"><span class="letter">${o.id}</span><span>${escapeHtml(o.text)}</span></button>`).join('') +
       `</div>` +
       `<div class="try-hint" id="tqHint" style="display:none"></div>` +
-      `<div class="try-explain" id="tqExpl" style="display:none"></div>`;
+      `<div class="try-explain" id="tqExpl" style="display:none"></div>` +
+      `</div>`;
 
     document.querySelectorAll('#tqOpts .try-opt').forEach(btn=>{
       btn.addEventListener('click', ()=>selectAnswer(btn, q, expl));
