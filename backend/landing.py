@@ -221,7 +221,7 @@ section{padding:80px 0;position:relative}
 
 /* TRY-IN-BROWSER */
 .try-panel{
-  max-width:720px;margin:0 auto;border-radius:24px;
+  max-width:1000px;width:90%;margin:0 auto;border-radius:24px;
   background:linear-gradient(180deg,rgba(255,153,51,.06),rgba(255,255,255,.02));
   border:1px solid rgba(255,153,51,.2);overflow:hidden;
 }
