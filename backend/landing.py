@@ -258,10 +258,19 @@ section{padding:80px 0;position:relative}
 .try-hint.bad{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);color:#FCA5A5}
 .try-hint strong{color:inherit}
 @keyframes pop{from{transform:translateY(6px);opacity:0}to{transform:translateY(0);opacity:1}}
-.try-foot{padding:16px 24px;border-top:1px solid rgba(255,255,255,.08);text-align:right}
+.try-foot{padding:12px 20px;border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .try-next{padding:10px 24px;border-radius:10px;background:#FF9933;color:#0F172A;font-weight:800;border:none;cursor:pointer;font-size:14px}
 .try-next:disabled{opacity:.4;cursor:not-allowed}
 .try-loading{text-align:center;padding:60px 20px;color:#94A3B8}
+.tts-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.tts-play{width:36px;height:36px;border-radius:50%;border:1.5px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);color:#E2E8F0;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;transition:all .2s;flex-shrink:0}
+.tts-play:hover{border-color:#FF9933;color:#FF9933}
+.tts-play.playing{background:rgba(255,153,51,.2);border-color:#FF9933;color:#FF9933}
+.tts-speed{padding:4px 10px;border-radius:20px;border:1px solid rgba(255,255,255,.1);background:transparent;color:#94A3B8;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s}
+.tts-speed:hover{border-color:#FF9933;color:#E2E8F0}
+.tts-speed.active{background:rgba(255,153,51,.15);border-color:#FF9933;color:#FF9933}
+.sound-toggle{padding:5px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:#94A3B8;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s}
+.sound-toggle.on{border-color:#FF9933;color:#FF9933;background:rgba(255,153,51,.1)}
 
 /* Paywall shown inline after 10 */
 .try-paywall{text-align:center;padding:40px 24px}
@@ -567,6 +576,15 @@ def _try_html() -> str:
         </div>
       </div>
       <div class="try-foot">
+        <div class="tts-row">
+          <button class="tts-play" id="tqTtsBtn" title="Les høyt">▶</button>
+          <button class="tts-speed" data-rate="0.5">0.5x</button>
+          <button class="tts-speed" data-rate="0.75">0.75x</button>
+          <button class="tts-speed active" data-rate="1">1x</button>
+          <button class="tts-speed" data-rate="1.5">1.5x</button>
+          <button class="tts-speed" data-rate="2">2x</button>
+          <button class="sound-toggle on" id="tqSoundToggle">🔊</button>
+        </div>
         <button class="try-next" id="tqNext" disabled>
           <span data-lang="th">ถัดไป →</span>
           <span data-lang="no">Neste →</span>
@@ -966,11 +984,92 @@ LANDING_JS = r"""
   const scoreEl = document.getElementById('tqScore');
   if(!body) return;
 
-  const TOTAL = 10;  // 10 free questions before paywall
+  const TOTAL = 10;
   let questions = [];
   let idx = 0;
   let score = 0;
   let answered = false;
+  let ttsRate = 1;
+  let soundOn = true;
+  let ttsPlaying = false;
+
+  // ── Sound effects via Web Audio API ──
+  function playSound(type) {
+    if (!soundOn) return;
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      if (type === 'correct') {
+        // Long high pling
+        [523.25, 659.25, 783.99].forEach((freq, i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.connect(gain); gain.connect(ctx.destination);
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, ctx.currentTime + i * 0.12);
+          gain.gain.setValueAtTime(0.35, ctx.currentTime + i * 0.12);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.12 + 1.1);
+          osc.start(ctx.currentTime + i * 0.12);
+          osc.stop(ctx.currentTime + i * 0.12 + 1.1);
+        });
+      } else {
+        // Wrong — low buzz
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(180, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(80, ctx.currentTime + 0.35);
+        gain.gain.setValueAtTime(0.3, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.4);
+      }
+    } catch(e) {}
+  }
+
+  // ── TTS ──
+  function speakText(text) {
+    if (!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    if (ttsPlaying) { ttsPlaying = false; updateTtsBtn(); return; }
+    const utt = new SpeechSynthesisUtterance(text);
+    utt.lang = 'th-TH';
+    utt.rate = ttsRate;
+    utt.onstart = () => { ttsPlaying = true; updateTtsBtn(); };
+    utt.onend = utt.onerror = () => { ttsPlaying = false; updateTtsBtn(); };
+    window.speechSynthesis.speak(utt);
+  }
+
+  function updateTtsBtn() {
+    const btn = document.getElementById('tqTtsBtn');
+    if (btn) { btn.textContent = ttsPlaying ? '⏸' : '▶'; btn.classList.toggle('playing', ttsPlaying); }
+  }
+
+  // ── Sound toggle ──
+  const soundToggle = document.getElementById('tqSoundToggle');
+  if (soundToggle) soundToggle.addEventListener('click', () => {
+    soundOn = !soundOn;
+    soundToggle.textContent = soundOn ? '🔊' : '🔇';
+    soundToggle.classList.toggle('on', soundOn);
+  });
+
+  // ── Speed chips ──
+  document.querySelectorAll('.tts-speed').forEach(btn => {
+    btn.addEventListener('click', () => {
+      ttsRate = parseFloat(btn.dataset.rate);
+      document.querySelectorAll('.tts-speed').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+
+  // ── TTS play button ──
+  const ttsBtn = document.getElementById('tqTtsBtn');
+  if (ttsBtn) ttsBtn.addEventListener('click', () => {
+    const q = questions[idx];
+    if (!q) return;
+    const text = pick(q.question, 'th');
+    speakText(text);
+  });
 
   function currentLang(){
     return document.documentElement.getAttribute('data-current-lang') || 'th';
@@ -1051,7 +1150,7 @@ LANDING_JS = r"""
         b.classList.add('wrong');
       }
     });
-    if(picked === correct) score++;
+    if(picked === correct){ score++; playSound('correct'); } else { playSound('wrong'); }
     scoreEl.innerHTML = score + ' ✓';
 
     // Feedback hint message per the spec
