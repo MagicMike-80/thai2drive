@@ -230,13 +230,17 @@ section{padding:80px 0;position:relative}
 .try-progress .accent{color:#FF9933}
 .try-bar{flex:1;height:5px;background:rgba(255,255,255,.08);border-radius:3px;margin:0 16px;overflow:hidden}
 .try-bar>div{height:100%;background:#FF9933;transition:width .3s;width:0%}
-.try-body{padding:16px 20px;display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+.try-body{padding:16px 20px;display:grid;grid-template-columns:1fr 1fr auto;gap:20px;align-items:start}
 .try-left{display:flex;flex-direction:column;gap:12px}
 .try-right{display:flex;flex-direction:column;gap:10px}
+.try-next-col{display:flex;align-items:center;justify-content:center}
+.try-next-big{writing-mode:vertical-rl;text-orientation:mixed;padding:20px 14px;background:#FF9933;color:#0F172A;font-weight:800;font-size:15px;border:none;border-radius:14px;cursor:pointer;transition:background .2s,transform .1s;letter-spacing:0.05em;min-height:120px;width:48px;display:flex;align-items:center;justify-content:center}
+.try-next-big:disabled{opacity:.35;cursor:not-allowed}
+.try-next-big:not(:disabled):hover{background:#e6891f;transform:scale(1.04)}
 .try-image{width:100%;max-height:200px;object-fit:contain;border-radius:10px;background:#0B1226}
 .try-question{font-size:16px;font-weight:700;color:#fff;line-height:1.4}
 .try-options{display:grid;gap:10px}
-@media(max-width:640px){.try-body{grid-template-columns:1fr}}
+@media(max-width:700px){.try-body{grid-template-columns:1fr}.try-next-col{display:none}}
 .try-opt{
   background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.08);
   padding:14px 18px;border-radius:12px;cursor:pointer;font-size:14px;text-align:left;color:#E2E8F0;
@@ -1132,12 +1136,15 @@ LANDING_JS = r"""
       `</div>` +
       `<div class="try-hint" id="tqHint" style="display:none"></div>` +
       `<div class="try-explain" id="tqExpl" style="display:none"></div>` +
-      `</div>`;
+      `</div>` +
+      `<div class="try-next-col"><button class="try-next-big" id="tqNextBig" disabled>Neste →</button></div>`;
 
     document.querySelectorAll('#tqOpts .try-opt').forEach(btn=>{
       btn.addEventListener('click', ()=>selectAnswer(btn, q, expl));
     });
     nextBtn.disabled = true;
+    const bigNext = document.getElementById('tqNextBig');
+    if(bigNext){ bigNext.disabled = true; bigNext.onclick = ()=>{ idx++; render(); }; }
   }
 
   function selectAnswer(btn, q, expl){
@@ -1178,6 +1185,8 @@ LANDING_JS = r"""
     }
     nextBtn.disabled = false;
     nextBtn.onclick = ()=>{ idx++; render(); };
+    const bigNext2 = document.getElementById('tqNextBig');
+    if(bigNext2){ bigNext2.disabled = false; }
   }
 
   function renderPaywall(){
