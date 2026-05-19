@@ -1223,29 +1223,38 @@ var CAT_ICONS = {
   'Accidents':'🚨','Highway':'🛣️'
 };
 
-// Norsk oversettelse av engelske kategorinavn
-var CAT_NO = {
-  'Road Rules':'Trafikkregler',
-  'Traffic Rules':'Trafikkregler',
-  'Traffic Signs':'Trafikkskilt',
-  'Right of Way':'Vikeplikt',
-  'Driving Conditions':'Kjøreforhold',
-  'Road Conditions':'Veiforhold',
-  'Speed Limits':'Fartsgrenser',
-  'Safety':'Sikkerhet',
-  'Situations':'Situasjoner',
-  'Parking':'Parkering',
-  'Lights':'Lys',
-  'Tires':'Dekk',
-  'Overtaking':'Forbikjøring',
-  'Intersections':'Kryss',
-  'Pedestrians':'Gangfelt',
-  'Alcohol':'Alkohol',
-  'Environment':'Miljø',
-  'Vehicle':'Kjøretøy',
-  'Accidents':'Ulykker',
-  'Highway':'Motorvei'
+// Kategori navn per språk
+var CAT_NAMES = {
+  'Road Rules':       {no:'Trafikkregler',   th:'กฎจราจร',          en:'Road Rules'},
+  'Traffic Rules':    {no:'Trafikkregler',   th:'กฎจราจร',          en:'Traffic Rules'},
+  'Traffic Signs':    {no:'Trafikkskilt',    th:'ป้ายจราจร',         en:'Traffic Signs'},
+  'Right of Way':     {no:'Vikeplikt',       th:'การให้ทาง',         en:'Right of Way'},
+  'Driving Conditions':{no:'Kjøreforhold',  th:'สภาพการขับขี่',      en:'Driving Conditions'},
+  'Road Conditions':  {no:'Veiforhold',      th:'สภาพถนน',           en:'Road Conditions'},
+  'Speed Limits':     {no:'Fartsgrenser',    th:'ขีดจำกัดความเร็ว',   en:'Speed Limits'},
+  'Safety':           {no:'Sikkerhet',       th:'ความปลอดภัย',        en:'Safety'},
+  'Situations':       {no:'Situasjoner',     th:'สถานการณ์',          en:'Situations'},
+  'Parking':          {no:'Parkering',       th:'การจอดรถ',           en:'Parking'},
+  'Lights':           {no:'Lys',             th:'ไฟรถ',              en:'Lights'},
+  'Tires':            {no:'Dekk',            th:'ยางรถ',              en:'Tires'},
+  'Overtaking':       {no:'Forbikjøring',    th:'การแซง',             en:'Overtaking'},
+  'Intersections':    {no:'Kryss',           th:'ทางแยก',             en:'Intersections'},
+  'Pedestrians':      {no:'Gangfelt',        th:'คนเดินเท้า',          en:'Pedestrians'},
+  'Alcohol':          {no:'Alkohol',         th:'แอลกอฮอล์',          en:'Alcohol'},
+  'Environment':      {no:'Miljø',           th:'สิ่งแวดล้อม',         en:'Environment'},
+  'Vehicle':          {no:'Kjøretøy',        th:'ยานพาหนะ',           en:'Vehicle'},
+  'Accidents':        {no:'Ulykker',         th:'อุบัติเหตุ',           en:'Accidents'},
+  'Highway':          {no:'Motorvei',        th:'ทางด่วน',             en:'Highway'}
 };
+// legacy
+var CAT_NO = {};
+Object.keys(CAT_NAMES).forEach(function(k){ CAT_NO[k] = CAT_NAMES[k].no; });
+
+function catName(raw) {
+  var entry = CAT_NAMES[raw];
+  if (!entry) return raw;
+  return entry[appLang] || entry['no'] || raw;
+}
 
 // ════════════════════════════════════════════
 //  INIT
@@ -1479,11 +1488,12 @@ async function loadCategories() {
       var icon  = CAT_ICONS[c.name] || '📖';
       var count = c.question_count || c.count || '';
       var id    = escH(String(c.id || c.name));
-      var name  = escH(CAT_NO[c.name] || c.name);
-      return '<div class="cat-card" onclick="startQuiz(\'' + id + '\',\'' + name + '\')">'
+      var name  = catName(c.name);
+      var qWord = {th:'คำถาม', no:'spørsmål', en:'questions'}[appLang] || 'spørsmål';
+      return '<div class="cat-card" onclick="startQuiz(\'' + escH(String(c.id||c.name)) + '\',\'' + escH(c.name) + '\')">'
         + '<div class="cat-icon">' + icon + '</div>'
-        + '<div class="cat-name">' + name + '</div>'
-        + '<div class="cat-count">' + (count ? count + ' spørsmål' : '') + '</div>'
+        + '<div class="cat-name">' + escH(name) + '</div>'
+        + '<div class="cat-count">' + (count ? count + ' ' + qWord : '') + '</div>'
         + '<div class="cat-bar-wrap"><div class="cat-bar" style="width:0%"></div></div>'
         + '</div>';
     }).join('');
@@ -1551,8 +1561,8 @@ function updateTimerLabel(lbl, secs) {
   if (lbl) lbl.textContent = m + ':' + (s < 10 ? '0' : '') + s;
 }
 
-async function startQuiz(catId, catName) {
-  currentCat = { id: catId, name: catName };
+async function startQuiz(catId, catRawName) {
+  currentCat = { id: catId, name: catRawName };
   isExamMode = false;
   await loadQuiz('/api/questions/random?count=30&has_image=true&category=' + encodeURIComponent(catId));
 }
@@ -1938,6 +1948,8 @@ function setLang(lang) {
     if (topBtn) topBtn.classList.toggle('active', lang === l.toLowerCase());
   });
   applyUILang();
+  // Re-render categories if loaded
+  if (catsLoaded) loadCats();
   // Re-render quiz if active so question+answers switch language immediately
   var quizScreen = document.getElementById('screenQuiz');
   if (quizScreen && quizScreen.classList.contains('active') && questions.length) {
