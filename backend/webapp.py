@@ -58,6 +58,7 @@ a { color: inherit; text-decoration: none; }
   width: 100%; height: 100%;
   display: flex; flex-direction: column;
   position: relative; overflow: hidden;
+  background: transparent;
 }
 
 /* Scrollable content area */
@@ -138,25 +139,30 @@ a { color: inherit; text-decoration: none; }
    THAI FLAG BACKGROUND
 ══════════════════════════════════════════ */
 .flag-bg {
-  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background: var(--bg);
+}
+.flag-bg::before {
+  content: ''; position: absolute; inset: 0;
   background:
     linear-gradient(180deg,
-      rgba(165,25,49,.12) 0%,
-      rgba(165,25,49,.12) 14.28%,
-      rgba(255,255,255,.03) 14.28%,
-      rgba(255,255,255,.03) 28.57%,
-      rgba(36,29,79,.22) 28.57%,
-      rgba(36,29,79,.22) 71.42%,
-      rgba(255,255,255,.03) 71.42%,
-      rgba(255,255,255,.03) 85.71%,
-      rgba(165,25,49,.12) 85.71%,
-      rgba(165,25,49,.12) 100%
+      rgba(165,25,49,.18) 0%,
+      rgba(165,25,49,.18) 14.28%,
+      rgba(255,255,255,.05) 14.28%,
+      rgba(255,255,255,.05) 28.57%,
+      rgba(36,29,79,.28) 28.57%,
+      rgba(36,29,79,.28) 71.42%,
+      rgba(255,255,255,.05) 71.42%,
+      rgba(255,255,255,.05) 85.71%,
+      rgba(165,25,49,.18) 85.71%,
+      rgba(165,25,49,.18) 100%
     );
 }
 .flag-bg::after {
   content: ''; position: absolute; inset: 0;
-  background: radial-gradient(ellipse at 50% 0%, rgba(255,153,51,.07) 0%, transparent 65%);
+  background: radial-gradient(ellipse at 50% 20%, rgba(255,153,51,.08) 0%, transparent 60%);
 }
+#app { z-index: 1; }
 
 /* ══════════════════════════════════════════
    AUTH SCREEN
@@ -762,7 +768,11 @@ a { color: inherit; text-decoration: none; }
         <div class="auth-header">
           <div class="auth-big-icon">🚗</div>
           <h1>Thai<span>2Drive</span></h1>
-          <p>Teoriprøven på thai &nbsp;🇹🇭&nbsp;🇳🇴</p>
+          <p>Teoriprøven på thai</p>
+          <div style="display:flex;gap:8px;justify-content:center;margin-top:8px">
+            <span style="width:28px;height:28px;border-radius:50%;overflow:hidden;display:inline-block;flex-shrink:0"><svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><rect width="900" height="600" fill="#A51931"/><rect width="900" height="480" y="60" fill="#F4F5F8"/><rect width="900" height="320" y="140" fill="#241D4F"/></svg></span>
+            <span style="width:28px;height:28px;border-radius:50%;overflow:hidden;display:inline-block;flex-shrink:0"><svg viewBox="0 0 22 16" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><rect width="22" height="16" fill="#EF2B2D"/><rect x="6" width="4" height="16" fill="#fff"/><rect y="6" width="22" height="4" fill="#fff"/><rect x="7" width="2" height="16" fill="#002868"/><rect y="7" width="22" height="2" fill="#002868"/></svg></span>
+          </div>
         </div>
 
         <div class="auth-tabs">
@@ -1288,6 +1298,14 @@ const CAT_ICONS = {
   'Motorvei': '🛣️', 'Kryss': '✛', 'Gangfelt': '🚶',
   'Sving': '↩️', 'Forbikjøring': '🏎️', 'Lastsikring': '📦',
   'Sikkerhet': '🦺', 'Fellesskjøring': '🤝',
+  // English names from API
+  'Road Rules': '🚦', 'Traffic Rules': '🚦', 'Traffic Signs': '🪧',
+  'Right of Way': '⚠️', 'Driving Conditions': '🌧️', 'Road Conditions': '🛣️',
+  'Speed Limits': '⏱️', 'Safety': '🦺', 'Situations': '🔄',
+  'Parking': '🅿️', 'Lights': '💡', 'Tires': '🔄',
+  'Overtaking': '🏎️', 'Intersections': '✛', 'Pedestrians': '🚶',
+  'Alcohol': '🍺', 'Environment': '🌿', 'Vehicle': '🚗',
+  'Accidents': '🚨', 'Highway': '🛣️',
 };
 
 let catsLoaded = false;
