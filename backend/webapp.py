@@ -1807,7 +1807,7 @@ function setLang(lang) {
   });
   // Re-render quiz if active so question+answers switch language immediately
   var quizScreen = document.getElementById('screenQuiz');
-  if (quizScreen && quizScreen.classList.contains('active') && questions.length && !qAnswered) {
+  if (quizScreen && quizScreen.classList.contains('active') && questions.length) {
     renderQuestion();
   }
   // Re-render bookmarks if active
