@@ -2312,6 +2312,44 @@ async def admin_book_create_section(data: BookSectionCreate, _: dict = Depends(r
     return {"ok": True, "id": doc["id"], "section_num": next_num}
 
 
+# ═══════════════════════════════════════════════════════════
+#  STUDIEBOK ENDPOINTS
+# ═══════════════════════════════════════════════════════════
+
+class StudiebokUpdate(BaseModel):
+    title_no: Optional[str] = None
+    content_no: Optional[str] = None
+
+
+@api_router.get("/studiebok")
+async def get_studiebok():
+    """Return all Studiebok chapters sorted by order."""
+    chapters = await db.studiebok_chapters.find(
+        {}, {"_id": 0}
+    ).sort("order", 1).to_list(100)
+    return chapters
+
+
+@api_router.put("/studiebok/{order}")
+async def update_studiebok_chapter(
+    order: int,
+    data: StudiebokUpdate,
+    _: dict = Depends(require_admin),
+):
+    """Update title_no and/or content_no for a chapter (admin only)."""
+    update = {}
+    if data.title_no is not None:
+        update["title_no"] = data.title_no
+    if data.content_no is not None:
+        update["content_no"] = data.content_no
+    if not update:
+        raise HTTPException(status_code=400, detail="Nothing to update")
+    result = await db.studiebok_chapters.update_one({"order": order}, {"$set": update})
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Chapter not found")
+    return {"ok": True}
+
+
 app.include_router(api_router)
 
 # ==================== PUBLIC WEBSITE (landing + legal) ====================
