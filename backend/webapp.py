@@ -1146,6 +1146,7 @@ var questions = [];
 var qIdx = 0;
 var qScore = 0;
 var qAnswered = false;
+var quizStartedAt = null;
 var ttsRate = 1;
 var ttsPlaying = false;
 var currentCat = null;
@@ -1638,6 +1639,7 @@ async function loadQuiz(url) {
       return;
     }
     qIdx = 0; qScore = 0; qAnswered = false;
+    quizStartedAt = new Date().toISOString();
     stopExamTimer();
     if (isExamMode) startExamTimer();
     renderQuestion();
@@ -1885,6 +1887,25 @@ function showEnd() {
             : 'Øv mer og prøv igjen. Du klarer det!';
   document.getElementById('endEmoji').textContent = emoji;
   document.getElementById('endMsg').textContent   = msg;
+
+  // Lagre quiz-forsøk til databasen for statistikk
+  if (deviceId && total > 0) {
+    var mode = isExamMode ? 'exam' : (currentCat ? 'category' : 'daily');
+    var attemptData = {
+      device_id: deviceId,
+      mode: mode,
+      category: currentCat ? currentCat.name : null,
+      total_questions: total,
+      correct_answers: qScore,
+      score_percentage: pct,
+      passed: isExamMode ? pct >= 85 : null,
+      questions_answered: questions.map(function(q, i) {
+        return { question_id: String(q._id || q.id || ''), index: i };
+      }),
+      started_at: quizStartedAt || new Date().toISOString()
+    };
+    api('POST', '/api/quiz-attempts', attemptData).catch(function() {});
+  }
 }
 
 function retryQuiz() {
