@@ -78,9 +78,9 @@ html[data-current-lang="en"] [data-lang="en"].block{display:block}
 /* Heartbeat animation — bump-bump ... pause */
 @keyframes heartbeat{
   0%   {opacity:1}
-  8%   {opacity:.15}
+  8%   {opacity:.2}
   16%  {opacity:1}
-  26%  {opacity:.15}
+  26%  {opacity:.2}
   34%  {opacity:1}
   100% {opacity:1}
 }
@@ -99,11 +99,15 @@ html[data-current-lang="en"] [data-lang="en"].block{display:block}
 }
 .velg-hint-text{
   color:#FF9933;font-weight:900;font-size:19px;
-  animation:heartbeat 2s ease-in-out infinite;
-  text-shadow:0 0 12px rgba(255,153,51,.8);
+  animation:slowblink 2.5s ease-in-out infinite;
+  text-shadow:0 0 14px rgba(255,153,51,.9);
   white-space:nowrap;letter-spacing:.3px;
 }
-.velg-arrow{font-size:22px;color:#FF9933;animation:heartbeat 2s ease-in-out infinite;margin-right:4px}
+.velg-arrow{font-size:22px;color:#FF9933;animation:slowblink 2.5s ease-in-out infinite;margin-right:4px}
+@keyframes slowblink{
+  0%,100%{opacity:1}
+  50%{opacity:.08}
+}
 .velg-hint.gone{display:none}
 @media(max-width:600px){.velg-hint{top:8px;right:120px;font-size:14px}}
 .mini-flag{display:flex;flex-direction:column;width:38px;height:26px;border-radius:3px;overflow:hidden;flex-shrink:0}

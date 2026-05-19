@@ -1149,6 +1149,63 @@ var soundOn = localStorage.getItem('t2d_sound') !== 'off';
 var feedbackStyle = localStorage.getItem('t2d_feedback') || 'soft';
 var appLang = localStorage.getItem('t2d_lang') || 'th';
 var activeTab = 'home';
+
+// ── UI string translations ──────────────────────────────────
+var UI = {
+  back:        {th:'← กลับ',          no:'← Tilbake',      en:'← Back'},
+  question:    {th:'คำถามที่',          no:'Spørsmål',        en:'Question'},
+  of:          {th:'จาก',              no:'av',              en:'of'},
+  next:        {th:'ถัดไป →',          no:'Neste →',         en:'Next →'},
+  home:        {th:'หน้าแรก',          no:'Hjem',            en:'Home'},
+  cats:        {th:'หมวดหมู่',          no:'Kategorier',      en:'Categories'},
+  bookmarks:   {th:'ที่คั่นหน้า',       no:'Bokmerker',       en:'Bookmarks'},
+  settings:    {th:'การตั้งค่า',        no:'Innstillinger',   en:'Settings'},
+  correct:     {th:'🎉 ถูกต้อง!',       no:'🎉 Riktig!',       en:'🎉 Correct!'},
+  wrong:       {th:'❌ ผิด',            no:'❌ Feil svar',     en:'❌ Wrong'},
+  retry:       {th:'🔄 ลองใหม่',        no:'🔄 Prøv igjen',   en:'🔄 Try again'},
+  backhome:    {th:'🏠 กลับหน้าแรก',    no:'🏠 Tilbake til hjem', en:'🏠 Back to home'},
+  pickcat:     {th:'📚 เลือกหมวดหมู่',  no:'📚 Velg kategori', en:'📚 Pick category'},
+  startquiz:   {th:'▶  เริ่มควิซ',      no:'▶  Start quiz',   en:'▶  Start quiz'},
+  exam:        {th:'📋 สอบ',            no:'📋 Eksamen',       en:'📋 Exam'},
+  daily:       {th:'📅 ทดสอบรายวัน',    no:'📅 Daglig test',   en:'📅 Daily test'},
+  loading:     {th:'กำลังโหลด…',        no:'Laster spørsmål…', en:'Loading…'},
+};
+
+function t(key) { return (UI[key] && (UI[key][appLang] || UI[key]['no'])) || key; }
+
+function applyUILang() {
+  // back buttons
+  document.querySelectorAll('.back-btn').forEach(function(b){ b.textContent = t('back'); });
+  // bottom nav
+  var nb = document.getElementById('bnHome');      if(nb) nb.innerHTML = '<span class="bn-icon">🏠</span>' + t('home');
+  var nc = document.getElementById('bnCats');      if(nc) nc.innerHTML = '<span class="bn-icon">📚</span>' + t('cats');
+  var nbm= document.getElementById('bnBookmarks'); if(nbm) nbm.innerHTML = '<span class="bn-icon">🔖</span>' + t('bookmarks');
+  var ns = document.getElementById('bnSettings');  if(ns) ns.innerHTML = '<span class="bn-icon">⚙️</span>' + t('settings');
+  // cats header
+  var ch = document.getElementById('catCount');
+  if(ch) ch.closest('.screen-title') && (ch.closest('.screen-title').childNodes[0].textContent = '📚 ' + t('cats') + ' ');
+  // home buttons
+  document.querySelectorAll('.home-cta').forEach(function(b){ b.innerHTML = '▶&nbsp;&nbsp;' + t('startquiz').replace('▶  ',''); });
+  document.querySelectorAll('.home-sec-btn').forEach(function(b,i){
+    b.textContent = i===0 ? t('exam') : t('daily');
+  });
+  // end screen buttons
+  var er = document.querySelector('.end-btn-pri'); if(er) er.innerHTML = t('retry');
+  var eh = document.querySelector('.end-btn-sec:nth-child(2)'); if(eh) eh.innerHTML = t('backhome');
+  var ep = document.querySelector('.end-btn-sec:last-child'); if(ep) ep.innerHTML = t('pickcat');
+  // next buttons
+  document.querySelectorAll('#qNextBig,#qNextMobile').forEach(function(b){ b.textContent = t('next'); });
+  // progress label
+  var pl = document.getElementById('qProgLbl');
+  if(pl && pl.textContent) {
+    var m = pl.textContent.match(/(\d+)[^\d]+(\d+)/);
+    if(m) pl.textContent = t('question') + ' ' + m[1] + ' ' + t('of') + ' ' + m[2];
+  }
+  // feedback
+  var fb = document.getElementById('qFeedback');
+  if(fb && fb.classList.contains('ok'))  fb.textContent = t('correct');
+  if(fb && fb.classList.contains('bad')) fb.textContent = t('wrong');
+}
 var catsLoaded = false;
 var bookmarkedIds = {};
 
@@ -1195,6 +1252,7 @@ var CAT_NO = {
 // ════════════════════════════════════════════
 (async function init() {
   applyThemeFromStorage();
+  applyUILang();
   // Init top bar language buttons
   ['TH','NO','EN'].forEach(function(l) {
     var topBtn = document.getElementById('topLang' + l);
@@ -1549,7 +1607,7 @@ function renderQuestion() {
   var total = questions.length;
   var pct   = (qIdx / total * 100).toFixed(0);
 
-  document.getElementById('qProgLbl').textContent  = 'Spørsmål ' + (qIdx + 1) + ' av ' + total;
+  document.getElementById('qProgLbl').textContent  = t('question') + ' ' + (qIdx + 1) + ' ' + t('of') + ' ' + total;
   document.getElementById('qProgFill').style.width = pct + '%';
   document.getElementById('qScoreNum').textContent = qScore;
 
@@ -1602,10 +1660,10 @@ function renderQuestion() {
       + '<div class="q-answers" id="qAnswers">' + ansHtml + '</div>'
       + '<div class="q-feedback" id="qFeedback"></div>'
       + '<div class="q-explain" id="qExplain"></div>'
-      + '<button class="q-next-mobile" id="qNextMobile" disabled onclick="nextQ()">Neste →</button>'
+      + '<button class="q-next-mobile" id="qNextMobile" disabled onclick="nextQ()">' + t('next') + '</button>'
     + '</div>'
     + '<div class="q-next-col">'
-      + '<button class="q-next-big" id="qNextBig" disabled onclick="nextQ()">Neste →</button>'
+      + '<button class="q-next-big" id="qNextBig" disabled onclick="nextQ()">' + t('next') + '</button>'
       + '<button class="q-bookmark-btn' + (isBm ? ' bookmarked' : '') + '" id="qBmBtn" onclick="toggleBookmark(\'' + escH(qId) + '\')" title="Bokmerke">'
         + (isBm ? '🔖' : '🔖')
       + '</button>'
@@ -1631,7 +1689,7 @@ function selectAns(btn, picked) {
   });
 
   var fb = document.getElementById('qFeedback');
-  fb.textContent = isOk ? '🎉 Riktig!' : '❌ Feil svar';
+  fb.textContent = isOk ? t('correct') : t('wrong');
   fb.className = 'q-feedback ' + (isOk ? 'ok' : 'bad');
 
   if (currentExpl) {
@@ -1879,6 +1937,7 @@ function setLang(lang) {
     var topBtn = document.getElementById('topLang' + l);
     if (topBtn) topBtn.classList.toggle('active', lang === l.toLowerCase());
   });
+  applyUILang();
   // Re-render quiz if active so question+answers switch language immediately
   var quizScreen = document.getElementById('screenQuiz');
   if (quizScreen && quizScreen.classList.contains('active') && questions.length) {
