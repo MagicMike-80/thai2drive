@@ -2450,15 +2450,16 @@ async function loadSigns() {
     }
     scroll.innerHTML = '';
     qs.forEach(function(q) {
-      var imgUrl = q.image_url || q.image || '';
+      var imgUrl = q.bildeUrl || q.image_url || q.image || '';
       var answer = '';
-      if (q.correct_answer !== undefined && q.answers) {
+      if (q.options && q.correctOptionId) {
+        var opt = q.options.find(function(o){ return o.id === q.correctOptionId; });
+        if (opt) answer = (opt.text && (opt.text[appLang] || opt.text.no || opt.text.en)) || '';
+      } else if (q.correct_answer !== undefined && q.answers) {
         var idx = q.correct_answer;
         answer = Array.isArray(q.answers) ? (q.answers[idx] || '') : '';
       } else if (q.correct_answer_text) {
         answer = q.correct_answer_text;
-      } else if (q.answer) {
-        answer = q.answer;
       }
       if (!imgUrl) return;
       var card = document.createElement('div');
