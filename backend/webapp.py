@@ -1049,7 +1049,10 @@ a { color:inherit; text-decoration:none; }
             </div>
             <div class="settings-row">
               <div class="sr-icon">📳</div>
-              <div class="sr-label"><div class="sr-title" data-key="style">Stil</div></div>
+              <div class="sr-label">
+                <div class="sr-title" data-key="style">Stil</div>
+                <div class="sr-sub" data-key="style_sub">Tilbakemelding når du svarer</div>
+              </div>
               <div class="seg-ctrl">
                 <button class="seg-btn active" data-key="soft" onclick="setFeedback('soft',this)">Myk</button>
                 <button class="seg-btn" data-key="strong" onclick="setFeedback('strong',this)">Sterk</button>
@@ -1184,6 +1187,7 @@ var UI = {
   sfx:         {th:'เอฟเฟกต์เสียง',     no:'Lydeffekter',      en:'Sound effects'},
   sfx_sub:     {th:'เสียงเมื่อถูก/ผิด',  no:'Pling ved riktig, buzz ved feil', en:'Pling correct, buzz wrong'},
   style:       {th:'สไตล์',             no:'Stil',             en:'Style'},
+  style_sub:   {th:'การแสดงผลเมื่อตอบ', no:'Tilbakemelding når du svarer', en:'Feedback when answering'},
   soft:        {th:'นุ่มนวล',            no:'Myk',              en:'Soft'},
   strong:      {th:'เข้มข้น',            no:'Sterk',            en:'Strong'},
   appearance:  {th:'รูปลักษณ์',          no:'UTSEENDE',         en:'APPEARANCE'},

@@ -107,8 +107,9 @@ html[data-current-lang="en"] [data-lang="en"].block{display:block}
 }
 .velg-arrow{font-size:26px;color:#FF9933;line-height:1;}
 @keyframes slowblink{
-  0%,100%{opacity:1}
-  50%{opacity:.05}
+  0%,60%{opacity:1}
+  80%{opacity:.15}
+  100%{opacity:1}
 }
 .velg-hint.gone{display:none}
 @media(max-width:600px){.velg-hint{top:55px;right:12px;} .velg-hint-text{font-size:15px;padding:4px 12px;}}
