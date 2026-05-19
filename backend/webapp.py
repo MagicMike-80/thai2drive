@@ -790,6 +790,17 @@ a { color:inherit; text-decoration:none; }
     </div>
     <div class="top-spacer"></div>
     <div id="topStreak">🔥 <span id="topStreakNum">0</span> dag streak</div>
+    <div style="display:flex;gap:8px;align-items:center;margin-left:12px">
+      <button class="lang-btn active" id="topLangTH" onclick="setLang('th')" title="ภาษาไทย" style="width:36px;height:36px">
+        <span class="cflag"><svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg"><rect width="900" height="600" fill="#A51931"/><rect width="900" height="480" y="60" fill="#F4F5F8"/><rect width="900" height="320" y="140" fill="#241D4F"/></svg></span>
+      </button>
+      <button class="lang-btn" id="topLangNO" onclick="setLang('no')" title="Norsk" style="width:36px;height:36px">
+        <span class="cflag"><svg viewBox="0 0 22 16" xmlns="http://www.w3.org/2000/svg"><rect width="22" height="16" fill="#EF2B2D"/><rect x="6" width="4" height="16" fill="#fff"/><rect y="6" width="22" height="4" fill="#fff"/><rect x="7" width="2" height="16" fill="#002868"/><rect y="7" width="22" height="2" fill="#002868"/></svg></span>
+      </button>
+      <button class="lang-btn" id="topLangEN" onclick="setLang('en')" title="English" style="width:36px;height:36px">
+        <span class="cflag"><svg viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg"><rect width="60" height="30" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#C8102E" stroke-width="4"/><rect y="11" width="60" height="8" fill="#fff"/><rect x="26" width="8" height="30" fill="#fff"/><rect y="12" width="60" height="6" fill="#C8102E"/><rect x="27" width="6" height="30" fill="#C8102E"/></svg></span>
+      </button>
+    </div>
   </div>
 
   <!-- CONTENT -->
@@ -1170,6 +1181,11 @@ var CAT_NO = {
 // ════════════════════════════════════════════
 (async function init() {
   applyThemeFromStorage();
+  // Init top bar language buttons
+  ['TH','NO','EN'].forEach(function(l) {
+    var topBtn = document.getElementById('topLang' + l);
+    if (topBtn) topBtn.classList.toggle('active', appLang === l.toLowerCase());
+  });
   if (token) {
     try {
       user = await api('GET', '/api/auth/me');
@@ -1782,6 +1798,8 @@ function setLang(lang) {
   ['TH','NO','EN'].forEach(function(l) {
     var btn = document.getElementById('lang' + l);
     if (btn) btn.classList.toggle('active', lang === l.toLowerCase());
+    var topBtn = document.getElementById('topLang' + l);
+    if (topBtn) topBtn.classList.toggle('active', lang === l.toLowerCase());
   });
   toast('Språk oppdatert');
 }
