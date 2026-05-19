@@ -91,28 +91,16 @@ html[data-current-lang="en"] [data-lang="en"].block{display:block}
   animation:heartbeat 1.2s ease-in-out infinite;
   text-shadow:0 0 10px rgba(255,153,51,.7);
 }
-/* Velg språk hint */
-.velg-hint{
-  position:fixed;top:60px;right:24px;z-index:300;
-  display:flex;flex-direction:column;align-items:center;gap:4px;
-  pointer-events:none;
-  animation:slowblink 2.5s ease-in-out infinite;
+/* Sequential flag pulse — TH then NO then EN in loop */
+@keyframes flagpulse{
+  0%,15%{transform:scale(1.35);box-shadow:0 0 0 5px rgba(255,153,51,.7),0 0 18px rgba(255,153,51,.5);border-color:#FF9933;}
+  25%,100%{transform:scale(1);box-shadow:none;border-color:rgba(255,255,255,.15);}
 }
-.velg-hint-text{
-  color:#FF9933;font-weight:900;font-size:20px;
-  text-shadow:0 0 14px rgba(255,153,51,.9);
-  white-space:nowrap;letter-spacing:.5px;
-  background:rgba(255,153,51,.15);border:2px solid rgba(255,153,51,.6);
-  border-radius:30px;padding:6px 18px;
-}
-.velg-arrow{font-size:26px;color:#FF9933;line-height:1;}
-@keyframes slowblink{
-  0%,60%{opacity:1}
-  80%{opacity:.15}
-  100%{opacity:1}
-}
-.velg-hint.gone{display:none}
-@media(max-width:600px){.velg-hint{top:55px;right:12px;} .velg-hint-text{font-size:15px;padding:4px 12px;}}
+.lang-row .lang-btn:nth-child(1){ animation:flagpulse 6s ease-in-out infinite; animation-delay:0s; }
+.lang-row .lang-btn:nth-child(2){ animation:flagpulse 6s ease-in-out infinite; animation-delay:2s; }
+.lang-row .lang-btn:nth-child(3){ animation:flagpulse 6s ease-in-out infinite; animation-delay:4s; }
+.lang-row .lang-btn.active{ animation:none!important; transform:scale(1.1); border-color:#FF9933; box-shadow:0 0 0 3px rgba(255,153,51,.3); }
+.velg-hint{display:none}
 .mini-flag{display:flex;flex-direction:column;width:38px;height:26px;border-radius:3px;overflow:hidden;flex-shrink:0}
 .mini-flag.flag-th span:nth-child(1){background:#A51931;flex:1}
 .mini-flag.flag-th span:nth-child(2){background:#F4F5F8;flex:1}

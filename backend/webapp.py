@@ -41,7 +41,7 @@ WEBAPP_HTML = r"""<!DOCTYPE html>
   --muted: #64748B;
 }
 *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
-html { font-size: 20px; }
+html { font-size: 22px; }
 html, body {
   height:100%; overflow:hidden;
   background:var(--bg); color:var(--text);
@@ -395,8 +395,8 @@ a { color:inherit; text-decoration:none; }
 }
 .cat-card:active { transform:translateY(0); }
 .cat-icon { font-size:1.8rem; line-height:1; }
-.cat-name { font-weight:800; font-size:1rem; line-height:1.3; }
-.cat-count { font-size:.85rem; color:var(--muted); font-weight:500; }
+.cat-name { font-weight:800; font-size:1.1rem; line-height:1.3; }
+.cat-count { font-size:.9rem; color:var(--muted); font-weight:500; }
 .cat-bar-wrap {
   height:3px; background:rgba(255,255,255,.07);
   border-radius:2px; overflow:hidden; margin-top:2px;
@@ -474,7 +474,7 @@ a { color:inherit; text-decoration:none; }
 .q-img { width:100%; height:100%; max-height:220px; object-fit:contain; display:block; }
 
 .q-text {
-  font-size:1.15rem; font-weight:700; line-height:1.55; flex-shrink:0;
+  font-size:1.25rem; font-weight:700; line-height:1.6; flex-shrink:0;
 }
 .q-tts {
   display:flex; align-items:center; gap:7px; flex-wrap:wrap; flex-shrink:0;
