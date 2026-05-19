@@ -969,6 +969,7 @@ a { color:inherit; text-decoration:none; }
   border-top:1px solid var(--border);
 }
 .study-chapter.open .study-chapter-body { display:block; }
+.study-img { max-width:100%; border-radius:8px; margin-bottom:12px; }
 .study-chapter-body p {
   font-size:.83rem; line-height:1.75; color:var(--text);
   margin-top:12px;
@@ -1443,6 +1444,10 @@ a { color:inherit; text-decoration:none; }
         <input id="sbEditTitle" style="padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.95rem;width:100%;box-sizing:border-box;" />
         <label style="font-size:.85rem;color:var(--muted);">Innhold (HTML)</label>
         <textarea id="sbEditContent" rows="10" style="padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.85rem;width:100%;box-sizing:border-box;resize:vertical;font-family:monospace;"></textarea>
+        <label style="font-size:.85rem;color:var(--muted);">🖼️ Bilde URL</label>
+        <input id="sbEditImageUrl" type="text" style="padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.95rem;width:100%;box-sizing:border-box;" placeholder="https://..." />
+        <label style="font-size:.85rem;color:var(--muted);">🎥 Video URL (fremtidig)</label>
+        <input id="sbEditVideoUrl" type="text" style="padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.95rem;width:100%;box-sizing:border-box;" placeholder="https://..." />
         <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:4px;">
           <button onclick="closeStudiebokModal()" style="padding:8px 18px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text);cursor:pointer;">Avbryt</button>
           <button onclick="saveStudiebokChapter()" style="padding:8px 18px;border-radius:8px;border:none;background:var(--accent);color:#fff;font-weight:600;cursor:pointer;">Lagre</button>
@@ -1799,14 +1804,17 @@ async function loadStudiebok() {
       var editBtn = (user && user.is_admin)
         ? '<button class="sb-edit-btn" onclick="openStudiebokModal(' + ch.order + ',event)" title="Rediger">✏️</button>'
         : '';
-      html += '<div class="study-chapter" id="' + schId + '">'
+      var imgHtml = (ch.image_url) ? '<img src="' + ch.image_url + '" class="study-img" alt="">' : '';
+      var imageUrlAttr = ch.image_url ? ' data-image-url="' + ch.image_url.replace(/"/g, '&quot;') + '"' : '';
+      var videoUrlAttr = ch.video_url ? ' data-video-url="' + ch.video_url.replace(/"/g, '&quot;') + '"' : '';
+      html += '<div class="study-chapter" id="' + schId + '"' + imageUrlAttr + videoUrlAttr + '>'
             + '<div class="study-chapter-header" onclick="toggleChapter(\'' + schId + '\')">'
             + '<div class="study-ch-icon">' + ch.icon + '</div>'
             + '<div class="study-ch-title">' + ch.title_no + '</div>'
             + editBtn
             + '<span class="study-ch-arrow">›</span>'
             + '</div>'
-            + '<div class="study-chapter-body">' + ch.content_no + '</div>'
+            + '<div class="study-chapter-body">' + imgHtml + ch.content_no + '</div>'
             + '</div>';
     });
     scroll.innerHTML = html;
@@ -1824,6 +1832,9 @@ function openStudiebokModal(order, e) {
   _sbEditOrder = order;
   document.getElementById('sbEditTitle').value   = ch.querySelector('.study-ch-title').textContent;
   document.getElementById('sbEditContent').value = ch.querySelector('.study-chapter-body').innerHTML;
+  // Populate image_url and video_url from data attributes if available
+  document.getElementById('sbEditImageUrl').value = ch.dataset.imageUrl || '';
+  document.getElementById('sbEditVideoUrl').value = ch.dataset.videoUrl || '';
   var modal = document.getElementById('studiebokEditModal');
   modal.style.display = 'flex';
 }
@@ -1837,9 +1848,11 @@ async function saveStudiebokChapter() {
   if (!_sbEditOrder) return;
   var title_no   = document.getElementById('sbEditTitle').value.trim();
   var content_no = document.getElementById('sbEditContent').value.trim();
+  var image_url  = document.getElementById('sbEditImageUrl').value.trim();
+  var video_url  = document.getElementById('sbEditVideoUrl').value.trim();
   if (!title_no || !content_no) { toast('Tittel og innhold kan ikke være tomme'); return; }
   try {
-    await api('PUT', '/api/studiebok/' + _sbEditOrder, { title_no: title_no, content_no: content_no });
+    await api('PUT', '/api/studiebok/' + _sbEditOrder, { title_no: title_no, content_no: content_no, image_url: image_url, video_url: video_url });
     closeStudiebokModal();
     _studiebokLoaded = false;
     await loadStudiebok();
