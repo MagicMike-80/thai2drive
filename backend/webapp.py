@@ -1469,6 +1469,11 @@ function pickLang(obj) {
   return obj[appLang] || obj['no'] || obj['th'] || obj['en'] || Object.values(obj)[0] || '';
 }
 
+// Pick language-suffixed field from a question object (e.g. question_text_th, answer_a_no)
+function pickField(q, base) {
+  return q[base + '_' + appLang] || q[base + '_no'] || q[base + '_th'] || q[base + '_en'] || q[base] || '';
+}
+
 function renderQuestion() {
   if (qIdx >= questions.length) { showEnd(); return; }
   var q     = questions[qIdx];
@@ -1481,9 +1486,9 @@ function renderQuestion() {
   document.getElementById('qScoreNum').textContent = qScore;
 
   var imgUrl  = q.bildeUrl || q.image_url || '';
-  var qText   = pickLang(q.question) || q.question_text_no || q.question_text || '';
+  var qText   = pickLang(q.question) || pickField(q, 'question_text') || '';
   var correct = (q.correctOptionId || q.correct_answer || '').toUpperCase();
-  var expl    = pickLang(q.explanation) || q.explanation_no || '';
+  var expl    = pickLang(q.explanation) || pickField(q, 'explanation') || '';
   var qId     = q._id || q.id || q.question_id || '';
   var isBm    = bookmarkedIds[qId] ? true : false;
 
@@ -1494,8 +1499,8 @@ function renderQuestion() {
     });
   } else {
     ['A','B','C','D'].forEach(function(l) {
-      var key = 'answer_' + l.toLowerCase() + '_no';
-      var val = q[key] || q['answer_' + l.toLowerCase()];
+      var base = 'answer_' + l.toLowerCase();
+      var val = pickField(q, base);
       if (val) opts.push({ id: l, text: val });
     });
   }
@@ -1635,7 +1640,7 @@ async function loadBookmarks() {
     scroll.innerHTML = bms.map(function(q) {
       var qId   = escH(String(q._id || q.id || q.question_id || ''));
       var imgUrl = q.bildeUrl || q.image_url || '';
-      var qText  = pickLang(q.question) || q.question_text_no || q.question_text || '';
+      var qText  = pickLang(q.question) || pickField(q, 'question_text') || '';
       var correct = (q.correctOptionId || q.correct_answer || '').toUpperCase();
       var ansText = '';
       if (q.options && Array.isArray(q.options)) {
@@ -1643,8 +1648,7 @@ async function loadBookmarks() {
         if (correctOpt) ansText = pickLang(correctOpt.text) || pickLang(correctOpt) || '';
       }
       if (!ansText) {
-        var key = 'answer_' + correct.toLowerCase() + '_no';
-        ansText = q[key] || q['answer_' + correct.toLowerCase()] || '';
+        ansText = pickField(q, 'answer_' + correct.toLowerCase()) || '';
       }
       var imgHtml = imgUrl ? '<div class="bm-card-img-wrap"><img class="bm-card-img" src="' + escH(imgUrl) + '" alt="" onerror="this.parentElement.style.display=\'none\'"></div>' : '';
       var ansHtml = ansText ? '<div class="bm-card-ans">✓ ' + escH(ansText) + '</div>' : '';
@@ -1801,6 +1805,16 @@ function setLang(lang) {
     var topBtn = document.getElementById('topLang' + l);
     if (topBtn) topBtn.classList.toggle('active', lang === l.toLowerCase());
   });
+  // Re-render quiz if active so question+answers switch language immediately
+  var quizScreen = document.getElementById('screenQuiz');
+  if (quizScreen && quizScreen.classList.contains('active') && questions.length && !qAnswered) {
+    renderQuestion();
+  }
+  // Re-render bookmarks if active
+  var bmScreen = document.getElementById('screenBookmarks');
+  if (bmScreen && bmScreen.classList.contains('active')) {
+    loadBookmarks();
+  }
   toast('Språk oppdatert');
 }
 
