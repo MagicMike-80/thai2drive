@@ -41,6 +41,7 @@ WEBAPP_HTML = r"""<!DOCTYPE html>
   --muted: #64748B;
 }
 *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { font-size: 20px; }
 html, body {
   height:100%; overflow:hidden;
   background:var(--bg); color:var(--text);
@@ -105,10 +106,10 @@ a { color:inherit; text-decoration:none; }
   flex:1; display:flex; flex-direction:column;
   align-items:center; justify-content:center; gap:3px;
   border:none; background:transparent; color:var(--muted);
-  cursor:pointer; font-size:.65rem; font-weight:700;
+  cursor:pointer; font-size:.8rem; font-weight:700;
   transition:color .2s; padding:8px 4px; letter-spacing:.2px;
 }
-.bn-icon { font-size:20px; line-height:1; transition:transform .2s; }
+.bn-icon { font-size:26px; line-height:1; transition:transform .2s; }
 .bn-tab.active { color:var(--orange); }
 .bn-tab.active .bn-icon { transform:scale(1.18); }
 .bn-tab:active .bn-icon { transform:scale(.9); }
@@ -361,7 +362,7 @@ a { color:inherit; text-decoration:none; }
   background:transparent;
 }
 .screen-title {
-  font-size:1.3rem; font-weight:900; letter-spacing:-.3px;
+  font-size:1.6rem; font-weight:900; letter-spacing:-.3px;
 }
 .screen-title span { color:var(--muted); font-size:.95rem; font-weight:600; margin-left:6px; }
 .cats-scroll {
@@ -394,8 +395,8 @@ a { color:inherit; text-decoration:none; }
 }
 .cat-card:active { transform:translateY(0); }
 .cat-icon { font-size:1.8rem; line-height:1; }
-.cat-name { font-weight:800; font-size:.85rem; line-height:1.3; }
-.cat-count { font-size:.72rem; color:var(--muted); font-weight:500; }
+.cat-name { font-weight:800; font-size:1rem; line-height:1.3; }
+.cat-count { font-size:.85rem; color:var(--muted); font-weight:500; }
 .cat-bar-wrap {
   height:3px; background:rgba(255,255,255,.07);
   border-radius:2px; overflow:hidden; margin-top:2px;
@@ -473,7 +474,7 @@ a { color:inherit; text-decoration:none; }
 .q-img { width:100%; height:100%; max-height:220px; object-fit:contain; display:block; }
 
 .q-text {
-  font-size:.92rem; font-weight:700; line-height:1.55; flex-shrink:0;
+  font-size:1.15rem; font-weight:700; line-height:1.55; flex-shrink:0;
 }
 .q-tts {
   display:flex; align-items:center; gap:7px; flex-wrap:wrap; flex-shrink:0;
