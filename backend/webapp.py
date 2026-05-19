@@ -992,6 +992,107 @@ a { color:inherit; text-decoration:none; }
 }
 [data-theme="light"] .toast { background:#fff; }
 .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* ══════════════════════════════════════════
+   PAYWALL SCREEN
+══════════════════════════════════════════ */
+#screenPaywall {
+  align-items:center; justify-content:center;
+  padding:20px 16px; overflow-y:auto;
+  background:linear-gradient(180deg, rgba(255,153,51,.07) 0%, transparent 50%);
+}
+.paywall-card {
+  background:rgba(15,23,42,.9);
+  border:1px solid rgba(255,153,51,.25); border-radius:24px;
+  padding:28px 24px 24px;
+  width:100%; max-width:400px;
+  backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px);
+  box-shadow:0 32px 64px rgba(0,0,0,.5), 0 0 0 1px rgba(255,153,51,.1);
+  flex-shrink:0;
+}
+[data-theme="light"] .paywall-card {
+  background:rgba(255,255,255,.95);
+  box-shadow:0 16px 48px rgba(0,0,0,.12), 0 0 0 1px rgba(255,153,51,.15);
+}
+.paywall-gem {
+  width:72px; height:72px; border-radius:22px;
+  background:linear-gradient(135deg,#FF9933,#e6891f);
+  display:flex; align-items:center; justify-content:center;
+  font-size:36px; margin:0 auto 16px;
+  box-shadow:0 10px 30px rgba(255,153,51,.45);
+}
+.paywall-title {
+  text-align:center; font-size:1.35rem; font-weight:900;
+  letter-spacing:-.4px; margin-bottom:4px;
+}
+.paywall-title span { color:var(--orange); }
+.paywall-sub {
+  text-align:center; font-size:.82rem; color:var(--muted);
+  margin-bottom:20px; line-height:1.5;
+}
+.paywall-features {
+  list-style:none; margin-bottom:20px;
+  display:flex; flex-direction:column; gap:9px;
+}
+.paywall-features li {
+  display:flex; align-items:center; gap:10px;
+  font-size:.87rem; font-weight:600;
+}
+.paywall-features li .pf-check {
+  width:26px; height:26px; border-radius:8px;
+  background:rgba(16,185,129,.15); border:1px solid rgba(16,185,129,.3);
+  display:flex; align-items:center; justify-content:center;
+  color:#10B981; font-size:13px; flex-shrink:0;
+}
+.paywall-price-row {
+  display:grid; grid-template-columns:1fr 1fr; gap:8px;
+  margin-bottom:18px;
+}
+.paywall-price-card {
+  background:rgba(255,255,255,.05); border:1.5px solid var(--border);
+  border-radius:14px; padding:12px 10px; text-align:center;
+  cursor:pointer; transition:all .2s; position:relative;
+}
+[data-theme="light"] .paywall-price-card { background:rgba(0,0,0,.03); }
+.paywall-price-card.selected {
+  border-color:var(--orange); background:rgba(255,153,51,.08);
+}
+.paywall-price-card .ppc-badge {
+  position:absolute; top:-10px; left:50%; transform:translateX(-50%);
+  background:var(--orange); color:#0F172A;
+  font-size:.6rem; font-weight:900; padding:2px 8px;
+  border-radius:20px; white-space:nowrap;
+}
+.paywall-price-card .ppc-period {
+  font-size:.72rem; color:var(--muted); font-weight:700;
+  margin-bottom:4px; text-transform:uppercase; letter-spacing:.4px;
+}
+.paywall-price-card .ppc-price {
+  font-size:1.4rem; font-weight:900; color:var(--text);
+}
+.paywall-price-card .ppc-per {
+  font-size:.68rem; color:var(--muted); margin-top:2px;
+}
+.paywall-buy-btn {
+  width:100%; padding:15px;
+  background:linear-gradient(135deg,#FF9933,#e6891f);
+  color:#0F172A; font-weight:900; font-size:1rem;
+  border:none; border-radius:14px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  box-shadow:0 6px 24px rgba(255,153,51,.45);
+  transition:transform .15s, box-shadow .15s;
+  margin-bottom:10px;
+}
+.paywall-buy-btn:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(255,153,51,.55); }
+.paywall-buy-btn:active { transform:translateY(0); }
+.paywall-skip {
+  width:100%; padding:11px;
+  background:transparent; border:1.5px solid var(--border);
+  color:var(--muted); font-size:.85rem; font-weight:600;
+  border-radius:12px; cursor:pointer;
+  transition:border-color .2s, color .2s;
+}
+.paywall-skip:hover { border-color:rgba(255,255,255,.25); color:var(--text); }
 </style>
 </head>
 <body>
@@ -1456,6 +1557,37 @@ a { color:inherit; text-decoration:none; }
       </div>
     </div>
 
+    <!-- ═══ PAYWALL SCREEN ═══ -->
+    <div class="screen" id="screenPaywall">
+      <div class="paywall-card">
+        <div class="paywall-gem">💎</div>
+        <div class="paywall-title" data-key="pw_title">Lås opp <span>Thai2Drive Premium</span></div>
+        <div class="paywall-sub" data-key="pw_sub">Du har brukt 5 gratis spørsmål. Oppgrader for ubegrenset tilgang!</div>
+        <ul class="paywall-features">
+          <li><span class="pf-check">✓</span><span data-key="pw_f1">Ubegrenset spørsmål og kategorier</span></li>
+          <li><span class="pf-check">✓</span><span data-key="pw_f2">Fullstendig eksamensmode (45 spørsmål)</span></li>
+          <li><span class="pf-check">✓</span><span data-key="pw_f3">Daglig test og øvingsmodus</span></li>
+          <li><span class="pf-check">✓</span><span data-key="pw_f4">Historikk og fremgangsstatistikk</span></li>
+          <li><span class="pf-check">✓</span><span data-key="pw_f5">Trafikkskilt-galleri</span></li>
+        </ul>
+        <div class="paywall-price-row">
+          <div class="paywall-price-card selected" onclick="selectPlan('month',this)">
+            <div class="ppc-period" data-key="pw_month">Månedlig</div>
+            <div class="ppc-price">99 kr</div>
+            <div class="ppc-per" data-key="pw_per_month">per måned</div>
+          </div>
+          <div class="paywall-price-card" onclick="selectPlan('year',this)" style="position:relative">
+            <div class="ppc-badge" data-key="pw_save">Spar 50%</div>
+            <div class="ppc-period" data-key="pw_year">Årlig</div>
+            <div class="ppc-price">599 kr</div>
+            <div class="ppc-per" data-key="pw_per_year">per år</div>
+          </div>
+        </div>
+        <button class="paywall-buy-btn" onclick="buyPremium()">⭐ <span data-key="pw_buy">Kjøp Premium</span></button>
+        <button class="paywall-skip" onclick="paywallSkip()" data-key="pw_skip">Fortsett gratis</button>
+      </div>
+    </div>
+
   </div><!-- /content -->
 
   <!-- BOTTOM NAV — 5 tabs -->
@@ -1549,6 +1681,21 @@ var UI = {
   history:     {th:'ประวัติ',            no:'Historikk',        en:'History'},
   signs:       {th:'ป้ายจราจร',          no:'Trafikkskilt',     en:'Traffic Signs'},
   signs_empty: {th:'ไม่พบป้าย',           no:'Ingen skilt funnet', en:'No signs found'},
+  // Paywall
+  pw_title:    {th:'ปลดล็อก Thai2Drive Premium', no:'Lås opp Thai2Drive Premium', en:'Unlock Thai2Drive Premium'},
+  pw_sub:      {th:'คุณใช้ 5 คำถามฟรีแล้ว อัปเกรดเพื่อใช้งานไม่จำกัด!', no:'Du har brukt 5 gratis spørsmål. Oppgrader for ubegrenset tilgang!', en:'You have used 5 free questions. Upgrade for unlimited access!'},
+  pw_f1:       {th:'คำถามและหมวดหมู่ไม่จำกัด', no:'Ubegrenset spørsmål og kategorier', en:'Unlimited questions and categories'},
+  pw_f2:       {th:'โหมดสอบเต็มรูปแบบ (45 ข้อ)', no:'Fullstendig eksamensmode (45 spørsmål)', en:'Full exam mode (45 questions)'},
+  pw_f3:       {th:'ทดสอบรายวันและโหมดฝึกซ้อม', no:'Daglig test og øvingsmodus', en:'Daily test and practice mode'},
+  pw_f4:       {th:'ประวัติและสถิติความก้าวหน้า', no:'Historikk og fremgangsstatistikk', en:'History and progress statistics'},
+  pw_f5:       {th:'แกลเลอรีป้ายจราจร', no:'Trafikkskilt-galleri', en:'Traffic signs gallery'},
+  pw_month:    {th:'รายเดือน', no:'Månedlig', en:'Monthly'},
+  pw_year:     {th:'รายปี', no:'Årlig', en:'Yearly'},
+  pw_per_month:{th:'ต่อเดือน', no:'per måned', en:'per month'},
+  pw_per_year: {th:'ต่อปี', no:'per år', en:'per year'},
+  pw_save:     {th:'ประหยัด 50%', no:'Spar 50%', en:'Save 50%'},
+  pw_buy:      {th:'ซื้อ Premium', no:'Kjøp Premium', en:'Buy Premium'},
+  pw_skip:     {th:'ใช้ต่อแบบฟรี', no:'Fortsett gratis', en:'Continue free'},
 };
 
 function t(key) { return (UI[key] && (UI[key][appLang] || UI[key]['no'])) || key; }
@@ -1703,6 +1850,12 @@ function showTab(tab) {
     settings:'screenSettings', studybook:'screenStudybook'
   };
   if (screenMap[tab]) {
+    // Premium-only tabs
+    var premiumTabs = ['history', 'signs', 'bookmarks'];
+    if (premiumTabs.indexOf(tab) !== -1 && !isPremium()) {
+      showPaywall();
+      return;
+    }
     showScreen(screenMap[tab]);
     if (tab === 'home')      loadHome();
     if (tab === 'cats')      loadCategories();
@@ -1919,6 +2072,7 @@ async function startRandomQuiz() {
 }
 
 async function startDailyTest() {
+  if (!isPremium()) { showPaywall(); return; }
   currentCat = null;
   isExamMode = false;
   await loadQuiz('/api/questions/random?count=10&has_image=true');
@@ -1928,7 +2082,63 @@ var isExamMode = false;
 var examTimerInterval = null;
 var examSecondsLeft = 0;
 
+// ════════════════════════════════════════════
+//  PREMIUM / PAYWALL
+// ════════════════════════════════════════════
+var FREE_LIMIT = 5;
+var selectedPlan = 'month';
+
+function isPremium() {
+  return user && user.is_premium === true;
+}
+
+function checkPaywall() {
+  // Returns true if user can continue, false = paywall shown
+  if (isPremium()) return true;
+  if (qIdx >= FREE_LIMIT) {
+    showPaywall();
+    return false;
+  }
+  return true;
+}
+
+function showPaywall() {
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+  stopExamTimer();
+  applyUILang();
+  showScreen('screenPaywall');
+  // Hide top/bottom nav while paywall is shown
+  document.getElementById('topBar').style.display = 'none';
+  document.getElementById('bottomNav').style.display = 'none';
+}
+
+function hidePaywall() {
+  document.getElementById('topBar').style.display = 'flex';
+  document.getElementById('bottomNav').style.display = 'flex';
+}
+
+function selectPlan(plan, el) {
+  selectedPlan = plan;
+  document.querySelectorAll('.paywall-price-card').forEach(function(c){ c.classList.remove('selected'); });
+  if (el) el.classList.add('selected');
+}
+
+function buyPremium() {
+  var msg = {
+    th:'ติดต่อเราที่ thai2drive@gmail.com เพื่อซื้อ Premium',
+    no:'Kontakt oss på thai2drive@gmail.com for å kjøpe premium',
+    en:'Contact us at thai2drive@gmail.com to buy premium'
+  };
+  toast((msg[appLang] || msg['no']), 5000);
+}
+
+function paywallSkip() {
+  hidePaywall();
+  showTab('home');
+}
+
 async function startExam() {
+  if (!isPremium()) { showPaywall(); return; }
   currentCat = null;
   isExamMode = true;
   await loadQuiz('/api/questions/random?count=45&has_image=true');
@@ -2022,10 +2232,11 @@ function renderQuestion() {
   if (qIdx >= questions.length) { showEnd(); return; }
   var q     = questions[qIdx];
   qAnswered = false;
+  var displayTotal = isPremium() ? questions.length : Math.min(FREE_LIMIT, questions.length);
   var total = questions.length;
-  var pct   = (qIdx / total * 100).toFixed(0);
+  var pct   = (qIdx / displayTotal * 100).toFixed(0);
 
-  document.getElementById('qProgLbl').textContent  = t('question') + ' ' + (qIdx + 1) + ' ' + t('of') + ' ' + total;
+  document.getElementById('qProgLbl').textContent  = t('question') + ' ' + (qIdx + 1) + ' ' + t('of') + ' ' + displayTotal;
   document.getElementById('qProgFill').style.width = pct + '%';
   document.getElementById('qScoreNum').textContent = qScore;
 
@@ -2063,6 +2274,16 @@ function renderQuestion() {
     return '<button class="spd-btn' + (ttsRate === r ? ' active' : '') + '" data-rate="' + r + '" onclick="setRate(' + r + ',this)">' + r + 'x</button>';
   }).join('');
 
+  // Free limit banner for non-premium
+  var freeBanner = '';
+  if (!isPremium() && qIdx < FREE_LIMIT) {
+    var remaining = FREE_LIMIT - qIdx;
+    var freeMsg = {th:'เหลือ ' + remaining + ' คำถามฟรี', no:remaining + ' gratis spørsmål igjen', en:remaining + ' free questions left'}[appLang] || remaining + ' gratis spørsmål igjen';
+    freeBanner = '<div style="text-align:center;font-size:.72rem;color:var(--orange);font-weight:700;margin-top:6px;flex-shrink:0;">'
+      + '⚡ ' + freeMsg + ' — <span style="text-decoration:underline;cursor:pointer" onclick="showPaywall()">Oppgrader</span>'
+      + '</div>';
+  }
+
   qCard.innerHTML =
     '<div class="q-left">'
       + '<div class="q-img-wrap">'
@@ -2085,7 +2306,8 @@ function renderQuestion() {
       + '<button class="q-bookmark-btn' + (isBm ? ' bookmarked' : '') + '" id="qBmBtn" onclick="toggleBookmark(\'' + escH(qId) + '\')" title="Bokmerke">'
         + (isBm ? '🔖' : '🔖')
       + '</button>'
-    + '</div>';
+    + '</div>'
+    + (freeBanner ? '<div style="grid-column:1/-1">' + freeBanner + '</div>' : '');
 }
 
 var currentCorrect = '';
@@ -2130,8 +2352,10 @@ function selectAns(btn, picked) {
 function nextQ() {
   if (!qAnswered) return;
   qIdx++;
-  if (qIdx >= questions.length) showEnd();
-  else renderQuestion();
+  if (qIdx >= questions.length) { showEnd(); return; }
+  // Paywall check: non-premium users get FREE_LIMIT questions
+  if (!isPremium() && qIdx >= FREE_LIMIT) { showPaywall(); return; }
+  renderQuestion();
 }
 
 function goBack() {
