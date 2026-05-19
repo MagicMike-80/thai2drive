@@ -505,32 +505,37 @@ a { color:inherit; text-decoration:none; }
   display:flex; flex-direction:column; gap:8px; flex-shrink:0;
 }
 .ans-btn {
-  display:flex; align-items:center; gap:10px;
-  padding:11px 12px;
-  background:rgba(255,255,255,.04);
-  border:1.5px solid var(--border); border-radius:12px;
+  display:flex; align-items:center; gap:12px;
+  padding:14px 16px;
+  background:rgba(255,255,255,.05);
+  border:2px solid var(--border); border-radius:16px;
   cursor:pointer; text-align:left; color:var(--text);
-  font-size:.83rem; transition:border-color .2s, background .2s, transform .1s;
+  font-size:.88rem; font-weight:600;
+  transition:border-color .2s, background .2s, transform .12s, box-shadow .2s;
   width:100%;
+  box-shadow:0 2px 8px rgba(0,0,0,.15);
 }
 .ans-btn:hover:not(:disabled) {
-  border-color:var(--orange); background:rgba(255,153,51,.07); transform:translateX(2px);
+  border-color:var(--orange); background:rgba(255,153,51,.09);
+  transform:translateX(3px); box-shadow:0 4px 14px rgba(255,153,51,.15);
 }
+.ans-btn:active:not(:disabled) { transform:scale(.98); }
 .ans-btn:disabled { cursor:default; }
-.ans-btn.correct { border-color:var(--green); background:rgba(16,185,129,.12); }
-.ans-btn.wrong   { border-color:var(--red);   background:rgba(239,68,68,.10); }
-.ans-btn.reveal  { border-color:var(--green); background:rgba(16,185,129,.06); }
+.ans-btn.correct { border-color:var(--green); background:rgba(16,185,129,.13); box-shadow:0 4px 14px rgba(16,185,129,.15); }
+.ans-btn.wrong   { border-color:var(--red);   background:rgba(239,68,68,.11);  box-shadow:0 4px 14px rgba(239,68,68,.12); }
+.ans-btn.reveal  { border-color:var(--green); background:rgba(16,185,129,.07); }
 .ans-letter {
-  width:30px; height:30px; border-radius:50%;
-  background:rgba(255,153,51,.12); color:var(--orange);
-  font-size:.74rem; font-weight:800;
+  width:34px; height:34px; border-radius:50%;
+  background:rgba(255,153,51,.14); color:var(--orange);
+  font-size:.78rem; font-weight:900;
   display:flex; align-items:center; justify-content:center;
   flex-shrink:0; transition:all .2s;
+  border:1.5px solid rgba(255,153,51,.25);
 }
-.ans-btn.correct .ans-letter { background:var(--green); color:#fff; }
-.ans-btn.wrong   .ans-letter { background:var(--red);   color:#fff; }
-.ans-btn.reveal  .ans-letter { background:var(--green); color:#fff; }
-.ans-text { flex:1; line-height:1.4; }
+.ans-btn.correct .ans-letter { background:var(--green); color:#fff; border-color:var(--green); }
+.ans-btn.wrong   .ans-letter { background:var(--red);   color:#fff; border-color:var(--red); }
+.ans-btn.reveal  .ans-letter { background:var(--green); color:#fff; border-color:var(--green); }
+.ans-text { flex:1; line-height:1.5; font-size:.87rem; }
 
 .q-feedback {
   padding:10px 12px; border-radius:10px;
@@ -681,35 +686,83 @@ a { color:inherit; text-decoration:none; }
 .bm-card-remove:hover { background:rgba(239,68,68,.3); }
 
 /* ══════════════════════════════════════════
-   SETTINGS SCREEN — compact, no scroll
+   SETTINGS SCREEN — mobile-app style
 ══════════════════════════════════════════ */
 #screenSettings {
-  padding:12px 16px;
-  overflow:hidden; gap:0;
+  padding:0;
+  overflow-y:auto; overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
 }
+#screenSettings::-webkit-scrollbar { width:4px; }
+#screenSettings::-webkit-scrollbar-track { background:transparent; }
+#screenSettings::-webkit-scrollbar-thumb { background:rgba(255,255,255,.1); border-radius:2px; }
+
 .settings-inner {
-  display:flex; flex-direction:column; gap:10px; height:100%;
+  display:flex; flex-direction:column; gap:0; padding-bottom:24px;
 }
-.settings-section { flex-shrink:0; }
+
+/* Profile hero at top */
+.settings-profile-hero {
+  padding:28px 20px 20px;
+  display:flex; flex-direction:column; align-items:center; gap:10px;
+  background:linear-gradient(180deg, rgba(255,153,51,.08) 0%, transparent 100%);
+  border-bottom:1px solid var(--border);
+  margin-bottom:8px;
+}
+.settings-avatar {
+  width:72px; height:72px; border-radius:50%;
+  background:linear-gradient(135deg,#FF9933,#e6891f);
+  display:flex; align-items:center; justify-content:center;
+  font-size:2rem; font-weight:900; color:#0F172A;
+  box-shadow:0 8px 24px rgba(255,153,51,.35);
+  border:3px solid rgba(255,153,51,.4);
+  flex-shrink:0;
+}
+.settings-profile-name {
+  font-size:1.05rem; font-weight:800; text-align:center; line-height:1.2;
+}
+.settings-profile-email {
+  font-size:.78rem; color:var(--muted); text-align:center;
+}
+.settings-profile-badges { display:flex; gap:6px; justify-content:center; flex-wrap:wrap; }
+
+.settings-section { flex-shrink:0; padding:0 16px; margin-bottom:6px; }
 .settings-label {
-  font-size:.66rem; font-weight:800; color:var(--muted);
-  letter-spacing:.8px; text-transform:uppercase;
-  margin-bottom:6px; padding:0 3px;
+  font-size:.65rem; font-weight:800; color:var(--muted);
+  letter-spacing:.9px; text-transform:uppercase;
+  margin-bottom:7px; margin-top:14px; padding:0 4px;
 }
 .settings-card {
   background:var(--card); border:1px solid var(--border);
-  border-radius:13px; overflow:hidden;
+  border-radius:16px; overflow:hidden;
+  box-shadow:0 2px 12px rgba(0,0,0,.08);
 }
 .settings-row {
-  display:flex; align-items:center; gap:12px;
-  padding:12px 14px;
+  display:flex; align-items:center; gap:14px;
+  padding:14px 16px;
   border-bottom:1px solid var(--border);
+  transition:background .15s;
 }
 .settings-row:last-child { border-bottom:none; }
-.sr-icon { font-size:1.1rem; width:26px; text-align:center; flex-shrink:0; }
+.settings-row:active { background:rgba(255,255,255,.03); }
+
+/* Icon circle — like mobile app */
+.sr-icon {
+  width:38px; height:38px; border-radius:11px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.15rem; flex-shrink:0;
+  background:rgba(255,153,51,.13); border:1px solid rgba(255,153,51,.2);
+}
+.sr-icon.blue   { background:rgba(59,130,246,.12); border-color:rgba(59,130,246,.2); }
+.sr-icon.green  { background:rgba(16,185,129,.12); border-color:rgba(16,185,129,.2); }
+.sr-icon.purple { background:rgba(139,92,246,.12); border-color:rgba(139,92,246,.2); }
+.sr-icon.gray   { background:rgba(148,163,184,.1); border-color:rgba(148,163,184,.18); }
+
 .sr-label { flex:1; min-width:0; }
-.sr-label .sr-title { font-size:.87rem; font-weight:700; }
-.sr-label .sr-sub  { font-size:.72rem; color:var(--muted); margin-top:1px; }
+.sr-label .sr-title { font-size:.9rem; font-weight:700; }
+.sr-label .sr-sub  { font-size:.73rem; color:var(--muted); margin-top:2px; line-height:1.4; }
+.account-info { display:flex; flex-direction:column; gap:3px; }
+.account-email { font-size:.9rem; font-weight:700; }
 
 .toggle { position:relative; width:44px; height:24px; flex-shrink:0; }
 .toggle input { opacity:0; width:0; height:0; position:absolute; }
@@ -758,13 +811,16 @@ a { color:inherit; text-decoration:none; }
 .account-badges { display:flex; gap:5px; margin-top:3px; flex-wrap:wrap; }
 
 .logout-btn {
-  width:100%; padding:13px;
+  width:calc(100% - 32px); margin:8px 16px 0;
+  padding:14px;
   background:rgba(239,68,68,.1); border:1.5px solid rgba(239,68,68,.22);
-  color:#EF4444; font-weight:800; font-size:.9rem;
-  border-radius:12px; cursor:pointer;
+  color:#EF4444; font-weight:800; font-size:.92rem;
+  border-radius:14px; cursor:pointer;
   transition:all .2s; flex-shrink:0;
+  box-shadow:0 2px 10px rgba(239,68,68,.08);
 }
 .logout-btn:hover { background:rgba(239,68,68,.18); border-color:rgba(239,68,68,.4); }
+.logout-btn:active { transform:scale(.98); }
 
 /* ══════════════════════════════════════════
    HISTORY SCREEN
@@ -859,6 +915,69 @@ a { color:inherit; text-decoration:none; }
 #topLangNO:not(.active){ animation:topflagpulse 6s ease-in-out infinite 2s; }
 #topLangEN:not(.active){ animation:topflagpulse 6s ease-in-out infinite 4s; }
 .lang-btn.active{ animation:none!important; }
+
+/* ══════════════════════════════════════════
+   STUDIEBOK SCREEN
+══════════════════════════════════════════ */
+#screenStudybook { padding:0; }
+.study-header {
+  padding:14px 16px 10px; flex-shrink:0;
+  display:flex; align-items:center; gap:10px;
+}
+.study-scroll {
+  flex:1; overflow-y:auto; overflow-x:hidden;
+  padding:0 16px 20px;
+  -webkit-overflow-scrolling:touch;
+  display:flex; flex-direction:column; gap:10px;
+}
+.study-scroll::-webkit-scrollbar { width:4px; }
+.study-scroll::-webkit-scrollbar-track { background:transparent; }
+.study-scroll::-webkit-scrollbar-thumb { background:rgba(255,255,255,.1); border-radius:2px; }
+
+.study-chapter {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:16px; overflow:hidden;
+  transition:border-color .2s;
+}
+.study-chapter-header {
+  display:flex; align-items:center; gap:12px;
+  padding:14px 16px; cursor:pointer;
+  user-select:none;
+}
+.study-chapter-header:hover { background:rgba(255,255,255,.03); }
+.study-ch-icon {
+  width:40px; height:40px; border-radius:11px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.25rem; flex-shrink:0;
+  background:rgba(255,153,51,.13); border:1px solid rgba(255,153,51,.2);
+}
+.study-ch-title { flex:1; font-size:.92rem; font-weight:800; line-height:1.3; }
+.study-ch-arrow {
+  color:var(--muted); font-size:.85rem;
+  transition:transform .25s;
+}
+.study-chapter.open .study-ch-arrow { transform:rotate(90deg); }
+.study-chapter-body {
+  display:none; padding:0 16px 16px;
+  border-top:1px solid var(--border);
+}
+.study-chapter.open .study-chapter-body { display:block; }
+.study-chapter-body p {
+  font-size:.83rem; line-height:1.75; color:var(--text);
+  margin-top:12px;
+}
+.study-chapter-body strong { color:var(--orange); font-weight:800; }
+.study-chapter-body ul {
+  margin:8px 0 0 0; padding-left:18px;
+  font-size:.82rem; line-height:1.75; color:var(--text);
+}
+.study-chapter-body li { margin-bottom:4px; }
+.study-tip {
+  margin-top:12px; padding:10px 13px;
+  background:rgba(255,153,51,.08); border:1px solid rgba(255,153,51,.2);
+  border-radius:10px; font-size:.78rem; color:var(--muted); line-height:1.6;
+}
+.study-tip strong { color:var(--orange); }
 
 /* Toast */
 .toast {
@@ -997,6 +1116,7 @@ a { color:inherit; text-decoration:none; }
       <div class="home-sec-btns">
         <button class="home-sec-btn" onclick="startExam()">📋 Eksamen</button>
         <button class="home-sec-btn" onclick="startDailyTest()">📅 Daglig test</button>
+        <button class="home-sec-btn" onclick="showTab('studybook')" style="grid-column:1/-1">📖 Studiebok — Norsk trafikk</button>
       </div>
 
       <div class="home-stats">
@@ -1088,20 +1208,12 @@ a { color:inherit; text-decoration:none; }
     <div class="screen" id="screenSettings">
       <div class="settings-inner">
 
-        <!-- Konto -->
-        <div class="settings-section">
-          <div class="settings-label">Konto</div>
-          <div class="settings-card">
-            <div class="settings-row">
-              <div class="sr-icon">👤</div>
-              <div class="sr-label">
-                <div class="account-info">
-                  <div class="account-email" id="settEmail">–</div>
-                  <div class="account-badges" id="settBadges"></div>
-                </div>
-              </div>
-            </div>
-          </div>
+        <!-- Profile hero -->
+        <div class="settings-profile-hero">
+          <div class="settings-avatar" id="settAvatar">👤</div>
+          <div class="settings-profile-name" id="settName">–</div>
+          <div class="settings-profile-email" id="settEmail">–</div>
+          <div class="settings-profile-badges account-badges" id="settBadges"></div>
         </div>
 
         <!-- Språk -->
@@ -1109,7 +1221,7 @@ a { color:inherit; text-decoration:none; }
           <div class="settings-label" data-key="language">Språk</div>
           <div class="settings-card">
             <div class="settings-row">
-              <div class="sr-icon">🌐</div>
+              <div class="sr-icon blue">🌐</div>
               <div class="sr-label">
                 <div class="sr-title" data-key="q_lang">Spørsmålsspråk</div>
                 <div class="sr-sub" data-key="q_lang_sub">Velg språk for spørsmål og svar</div>
@@ -1134,7 +1246,7 @@ a { color:inherit; text-decoration:none; }
           <div class="settings-label" data-key="sound">Lyd</div>
           <div class="settings-card">
             <div class="settings-row">
-              <div class="sr-icon">🔊</div>
+              <div class="sr-icon green">🔊</div>
               <div class="sr-label">
                 <div class="sr-title" data-key="sfx">Lydeffekter</div>
                 <div class="sr-sub" data-key="sfx_sub">Pling ved riktig, buzz ved feil</div>
@@ -1145,7 +1257,7 @@ a { color:inherit; text-decoration:none; }
               </label>
             </div>
             <div class="settings-row">
-              <div class="sr-icon">📳</div>
+              <div class="sr-icon green">📳</div>
               <div class="sr-label">
                 <div class="sr-title" data-key="style">Stil</div>
                 <div class="sr-sub" data-key="style_sub">Tilbakemelding når du svarer</div>
@@ -1163,7 +1275,7 @@ a { color:inherit; text-decoration:none; }
           <div class="settings-label" data-key="appearance">Utseende</div>
           <div class="settings-card">
             <div class="settings-row">
-              <div class="sr-icon">🎨</div>
+              <div class="sr-icon purple">🎨</div>
               <div class="sr-label"><div class="sr-title" data-key="theme">Tema</div></div>
               <div class="seg-ctrl">
                 <button class="seg-btn" id="themeBtnLight" data-key="light" onclick="setTheme('light',this)">Lys</button>
@@ -1179,17 +1291,16 @@ a { color:inherit; text-decoration:none; }
           <div class="settings-label">Om appen</div>
           <div class="settings-card">
             <div class="settings-row">
-              <div class="sr-icon">📱</div>
+              <div class="sr-icon gray">📱</div>
               <div class="sr-label">
                 <div class="sr-title">Thai2Drive Web</div>
                 <div class="sr-sub">Teoriprøven på thai for Norge</div>
               </div>
-              <div style="color:var(--muted);font-size:.78rem;font-weight:600">v2.0</div>
+              <div style="color:var(--muted);font-size:.78rem;font-weight:700;background:rgba(255,255,255,.07);padding:3px 9px;border-radius:20px;">v2.0</div>
             </div>
           </div>
         </div>
 
-        <div style="flex:1"></div>
         <button class="logout-btn" onclick="logout()">🚪 &nbsp;Logg ut</button>
 
       </div>
@@ -1204,6 +1315,129 @@ a { color:inherit; text-decoration:none; }
         <div class="loading-wrap">
           <div class="spinner"></div>
         </div>
+      </div>
+    </div>
+
+    <!-- ═══ STUDIEBOK SCREEN ═══ -->
+    <div class="screen" id="screenStudybook">
+      <div class="study-header">
+        <button class="back-btn" onclick="showTab('home')">← Tilbake</button>
+        <div class="screen-title">📖 Studiebok</div>
+      </div>
+      <div class="study-scroll">
+
+        <div class="study-chapter" id="sch1">
+          <div class="study-chapter-header" onclick="toggleChapter('sch1')">
+            <div class="study-ch-icon">🚦</div>
+            <div class="study-ch-title">Kapittel 1 — Trafikkregler</div>
+            <span class="study-ch-arrow">›</span>
+          </div>
+          <div class="study-chapter-body">
+            <p>I Norge gjelder <strong>høyrekjøring</strong> — du holder til høyre på veien og møter trafikk fra venstre side.</p>
+            <p><strong>Vikeplikt:</strong> Som hovedregel har du vikeplikt for trafikk fra høyre, med mindre skilt eller oppmerking sier noe annet.</p>
+            <ul>
+              <li>Stopp alltid for rødt lys</li>
+              <li>Gult lys = forbered deg på stopp</li>
+              <li>Grønt lys = kjør, men pass på fotgjengere</li>
+              <li>Blinkende gult = sakte, vær forsiktig</li>
+            </ul>
+            <div class="study-tip"><strong>Tips:</strong> I rundkjøring har trafikk inne i rundkjøringen forkjørsrett. Du må gi vikeplikt når du kjører inn.</div>
+          </div>
+        </div>
+
+        <div class="study-chapter" id="sch2">
+          <div class="study-chapter-header" onclick="toggleChapter('sch2')">
+            <div class="study-ch-icon">⏱️</div>
+            <div class="study-ch-title">Kapittel 2 — Fartsgrenser</div>
+            <span class="study-ch-arrow">›</span>
+          </div>
+          <div class="study-chapter-body">
+            <p>Norges standard fartsgrenser:</p>
+            <ul>
+              <li><strong>50 km/t</strong> — tettbygd strøk (by og bygd)</li>
+              <li><strong>80 km/t</strong> — landevei utenfor tettbygd strøk</li>
+              <li><strong>110 km/t</strong> — motorvei med midtdeler</li>
+              <li><strong>30 km/t</strong> — skolevei, lekeplasser, boliggater</li>
+            </ul>
+            <p>Fartsgrensen kan senkes eller heves av skilt. Husk at fartsgrensen er en <strong>maksimumsgrense</strong> — du skal alltid kjøre etter forholdene.</p>
+            <div class="study-tip"><strong>Tips:</strong> Ved dårlig vær, mørke eller glatt vei skal du redusere farten selv om du holder lovlig hastighet.</div>
+          </div>
+        </div>
+
+        <div class="study-chapter" id="sch3">
+          <div class="study-chapter-header" onclick="toggleChapter('sch3')">
+            <div class="study-ch-icon">🪧</div>
+            <div class="study-ch-title">Kapittel 3 — Trafikkskilt</div>
+            <span class="study-ch-arrow">›</span>
+          </div>
+          <div class="study-chapter-body">
+            <p>Norske trafikkskilt er delt i fire grupper:</p>
+            <ul>
+              <li><strong>Forbudsskilt</strong> — røde, runde. Forbyr noe (f.eks. parkering, innkjøring)</li>
+              <li><strong>Påbudsskilt</strong> — blå, runde. Påbyr noe (f.eks. kjøreretning)</li>
+              <li><strong>Opplysningsskilt</strong> — blå, firkantede. Gir informasjon</li>
+              <li><strong>Advarselsskilt</strong> — gule/hvite, trekantede. Varsler om fare</li>
+            </ul>
+            <div class="study-tip"><strong>Tips:</strong> En rød trekant med utropstegn betyr generell advarsel om fare. Vær ekstra forsiktig.</div>
+          </div>
+        </div>
+
+        <div class="study-chapter" id="sch4">
+          <div class="study-chapter-header" onclick="toggleChapter('sch4')">
+            <div class="study-ch-icon">🍺</div>
+            <div class="study-ch-title">Kapittel 4 — Alkohol og rus</div>
+            <span class="study-ch-arrow">›</span>
+          </div>
+          <div class="study-chapter-body">
+            <p>Norge har <strong>strenge regler</strong> mot kjøring i ruspåvirket tilstand:</p>
+            <ul>
+              <li>Promillegrense: <strong>0,2 promille</strong></li>
+              <li>Under 0,5 promille: bot og kjøreforbud</li>
+              <li>Over 0,5 promille: bot + betinget fengsel</li>
+              <li>Over 1,2 promille: ubetinget fengsel</li>
+            </ul>
+            <p>Politiet kan stoppe enhver bilist og ta alkotest uten grunn.</p>
+            <div class="study-tip"><strong>Tips:</strong> Alkohol er ikke det eneste som gir promillestraff — narkotika og visse medisiner teller også.</div>
+          </div>
+        </div>
+
+        <div class="study-chapter" id="sch5">
+          <div class="study-chapter-header" onclick="toggleChapter('sch5')">
+            <div class="study-ch-icon">🦺</div>
+            <div class="study-ch-title">Kapittel 5 — Sikkerhet og verneutstyr</div>
+            <span class="study-ch-arrow">›</span>
+          </div>
+          <div class="study-chapter-body">
+            <p><strong>Setebelte</strong> er påbudt for alle i kjøretøyet, både foran og bak. Sjåfør er ansvarlig for at passasjerer under 15 år bruker setebelte eller godkjent sikringsutstyr.</p>
+            <ul>
+              <li>Barn under 4 år: godkjent barnestol</li>
+              <li>Barn 4–135 cm: barnesete eller bilstol</li>
+              <li>Mobiltelefon uten håndfri er forbudt under kjøring</li>
+              <li>Refleks og varseltrekant i bilen er krav ved uhell</li>
+            </ul>
+            <div class="study-tip"><strong>Tips:</strong> Sett alltid på varselblink og sett ut varseltrekant 50–150 m bak bilen ved stopp på vei.</div>
+          </div>
+        </div>
+
+        <div class="study-chapter" id="sch6">
+          <div class="study-chapter-header" onclick="toggleChapter('sch6')">
+            <div class="study-ch-icon">🅿️</div>
+            <div class="study-ch-title">Kapittel 6 — Parkering</div>
+            <span class="study-ch-arrow">›</span>
+          </div>
+          <div class="study-chapter-body">
+            <p>Generelle parkeringsregler i Norge:</p>
+            <ul>
+              <li>Ikke parker nærmere enn <strong>5 m</strong> fra kryss eller avkjørsel</li>
+              <li>Ikke parker foran inn- og utkjøring</li>
+              <li>Ikke parker på gangvei, sykkelvei, eller fortau (med mindre tillatt)</li>
+              <li>Stoppforbud-skilt = ingen stopp i det hele tatt</li>
+              <li>Parkeringsforbud-skilt = kortstopp for av/påstigning er OK</li>
+            </ul>
+            <div class="study-tip"><strong>Tips:</strong> Gul stripe langs kantstein betyr parkeringsforbud. Hvit stripe betyr parkeringsregulering.</div>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -1353,17 +1587,14 @@ function applyUILang() {
   var fb = document.getElementById('qFeedback');
   if(fb && fb.classList.contains('ok'))  fb.textContent = t('correct');
   if(fb && fb.classList.contains('bad')) fb.textContent = t('wrong');
-  // Home labels
-  var stk = document.getElementById('topStreakNum');
-  var stkP = stk && stk.parentElement;
-  if(stkP) { var fire = stkP.querySelector('.streak-fire') || stkP.querySelector('span:first-child'); stkP.innerHTML = (fire ? fire.outerHTML : '🔥 ') + '<span id="homeStreakNum">' + (document.getElementById('homeStreakNum') ? document.getElementById('homeStreakNum').textContent : '0') + '</span> ' + t('streak'); document.getElementById('topStreakNum') && (document.getElementById('topStreakNum').textContent = document.getElementById('homeStreakNum') ? document.getElementById('homeStreakNum').textContent : '0'); }
+  // Home stat labels
   document.querySelectorAll('.home-stat-lbl').forEach(function(el,i){
     el.textContent = [t('answered'), t('correct_stat'), t('accuracy')][i] || el.textContent;
   });
   // Premium banner
-  var pb = document.getElementById('premiumBanner');
+  var pb = document.getElementById('homePremiumBanner');
   if(pb) { var ptitle = pb.querySelector('.pb-title'); var psub = pb.querySelector('.pb-sub'); if(ptitle) ptitle.textContent = t('premium_on'); if(psub) psub.textContent = t('premium_sub'); }
-  // Translate ALL elements with data-key — reliable, no text matching needed
+  // Translate ALL elements with data-key — reliable fallback
   document.querySelectorAll('[data-key]').forEach(function(el) {
     var key = el.getAttribute('data-key');
     var val = t(key);
@@ -1468,7 +1699,8 @@ function showTab(tab) {
   if (tabMap[tab]) document.getElementById(tabMap[tab]).classList.add('active');
   var screenMap = {
     home:'screenHome', cats:'screenCats',
-    history:'screenHistory', signs:'screenSigns', bookmarks:'screenBookmarks', settings:'screenSettings'
+    history:'screenHistory', signs:'screenSigns', bookmarks:'screenBookmarks',
+    settings:'screenSettings', studybook:'screenStudybook'
   };
   if (screenMap[tab]) {
     showScreen(screenMap[tab]);
@@ -1479,6 +1711,11 @@ function showTab(tab) {
     if (tab === 'bookmarks') loadBookmarks();
     if (tab === 'settings')  loadSettings();
   }
+}
+
+function toggleChapter(id) {
+  var ch = document.getElementById(id);
+  if (ch) ch.classList.toggle('open');
 }
 
 // ════════════════════════════════════════════
@@ -2195,7 +2432,15 @@ function playSound(type) {
 //  SETTINGS
 // ════════════════════════════════════════════
 function loadSettings() {
-  document.getElementById('settEmail').textContent = (user && user.email) ? user.email : '–';
+  // Profile hero
+  var email = (user && user.email) ? user.email : '–';
+  var name  = (user && user.name)  ? user.name  : (user && user.email ? user.email.split('@')[0] : '–');
+  var initials = name !== '–' ? name.charAt(0).toUpperCase() : '👤';
+  var avatarEl = document.getElementById('settAvatar');
+  if (avatarEl) avatarEl.textContent = initials;
+  var nameEl = document.getElementById('settName');
+  if (nameEl) nameEl.textContent = name;
+  document.getElementById('settEmail').textContent = email;
   var badges = document.getElementById('settBadges');
   badges.innerHTML = '';
   if (user && user.is_premium) badges.innerHTML += '<span class="premium-badge">⭐ Premium</span>';
@@ -2228,8 +2473,8 @@ function setLang(lang) {
   applyUILang();
   // Reset signs cache so it reloads in new language
   signsLoaded = false;
-  // Re-render categories if loaded
-  if (catsLoaded) loadCats();
+  // Re-render categories in new language (force re-render by resetting cache)
+  if (catsLoaded) { catsLoaded = false; loadCategories(); }
   // Re-render quiz if active so question+answers switch language immediately
   var quizScreen = document.getElementById('screenQuiz');
   if (quizScreen && quizScreen.classList.contains('active') && questions.length) {
