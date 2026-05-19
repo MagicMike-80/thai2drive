@@ -811,6 +811,17 @@ a { color:inherit; text-decoration:none; }
 .empty-state .es-icon { font-size:2.2rem; margin-bottom:9px; }
 .empty-state p { font-size:.85rem; line-height:1.6; }
 
+/* Sequential flag pulse in top bar — TH then NO then EN */
+@keyframes topflagpulse {
+  0%,100% { transform:scale(1);   box-shadow:none; border-color:var(--border); }
+  15%,50% { transform:scale(1.45);box-shadow:0 0 0 5px rgba(255,153,51,.75),0 0 18px rgba(255,153,51,.55); border-color:var(--orange); }
+  80%     { transform:scale(1);   box-shadow:none; border-color:var(--border); }
+}
+#topLangTH:not(.active){ animation:topflagpulse 6s ease-in-out infinite 0s; }
+#topLangNO:not(.active){ animation:topflagpulse 6s ease-in-out infinite 2s; }
+#topLangEN:not(.active){ animation:topflagpulse 6s ease-in-out infinite 4s; }
+.lang-btn.active{ animation:none!important; }
+
 /* Toast */
 .toast {
   position:fixed; bottom:80px; left:50%; transform:translateX(-50%) translateY(10px);
@@ -968,8 +979,8 @@ a { color:inherit; text-decoration:none; }
       <div class="premium-banner" id="homePremiumBanner" style="display:none">
         <span class="pb-icon">💎</span>
         <div class="pb-text">
-          <h4>Premium aktiv</h4>
-          <p>Du har tilgang til alle funksjoner</p>
+          <h4 class="pb-title" data-key="premium_on">⭐ Premium</h4>
+          <p class="pb-sub" data-key="premium_sub">Du har tilgang til alle funksjoner</p>
         </div>
       </div>
     </div>
