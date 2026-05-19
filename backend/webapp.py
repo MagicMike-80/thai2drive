@@ -729,6 +729,42 @@ a { color:inherit; text-decoration:none; }
 .logout-btn:hover { background:rgba(239,68,68,.18); border-color:rgba(239,68,68,.4); }
 
 /* ══════════════════════════════════════════
+   HISTORY SCREEN
+══════════════════════════════════════════ */
+#screenHistory { padding:0; }
+.hist-header { padding:14px 16px 10px; flex-shrink:0; }
+.hist-scroll {
+  flex:1; overflow-y:auto; overflow-x:hidden;
+  padding:0 16px 16px;
+  -webkit-overflow-scrolling:touch;
+  display:flex; flex-direction:column; gap:10px;
+}
+.hist-scroll::-webkit-scrollbar { width:4px; }
+.hist-scroll::-webkit-scrollbar-track { background:transparent; }
+.hist-scroll::-webkit-scrollbar-thumb { background:rgba(255,255,255,.1); border-radius:2px; }
+
+.hist-card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:14px; padding:14px 16px;
+  display:flex; align-items:center; gap:14px;
+  flex-shrink:0;
+}
+.hist-score-ring {
+  width:54px; height:54px; border-radius:50%;
+  border:3px solid var(--border);
+  display:flex; align-items:center; justify-content:center;
+  font-size:.95rem; font-weight:900; flex-shrink:0;
+}
+.hist-score-ring.good  { border-color:var(--green);  color:var(--green);  background:rgba(16,185,129,.08); }
+.hist-score-ring.ok    { border-color:var(--orange);  color:var(--orange); background:rgba(255,153,51,.08); }
+.hist-score-ring.bad   { border-color:var(--red);     color:var(--red);    background:rgba(239,68,68,.08); }
+.hist-info { flex:1; min-width:0; }
+.hist-mode { font-size:.88rem; font-weight:800; line-height:1.2; }
+.hist-cat  { font-size:.73rem; color:var(--muted); margin-top:2px; }
+.hist-detail { font-size:.75rem; color:var(--muted); margin-top:4px; }
+.hist-date { font-size:.7rem; color:var(--muted); flex-shrink:0; text-align:right; }
+
+/* ══════════════════════════════════════════
    END SCREEN
 ══════════════════════════════════════════ */
 #screenEnd {
@@ -1098,6 +1134,18 @@ a { color:inherit; text-decoration:none; }
       </div>
     </div>
 
+    <!-- ═══ HISTORY SCREEN ═══ -->
+    <div class="screen" id="screenHistory">
+      <div class="hist-header">
+        <div class="screen-title">📊 Historikk <span id="histCount"></span></div>
+      </div>
+      <div class="hist-scroll" id="histScroll">
+        <div class="loading-wrap">
+          <div class="spinner"></div>
+        </div>
+      </div>
+    </div>
+
     <!-- ═══ END SCREEN ═══ -->
     <div class="screen" id="screenEnd">
       <div class="end-wrap">
@@ -1115,13 +1163,16 @@ a { color:inherit; text-decoration:none; }
 
   </div><!-- /content -->
 
-  <!-- BOTTOM NAV — 4 tabs -->
+  <!-- BOTTOM NAV — 5 tabs -->
   <div id="bottomNav">
     <button class="bn-tab active" id="bnHome" onclick="showTab('home')">
       <span class="bn-icon">🏠</span>Hjem
     </button>
     <button class="bn-tab" id="bnCats" onclick="showTab('cats')">
       <span class="bn-icon">📚</span>Kategorier
+    </button>
+    <button class="bn-tab" id="bnHistory" onclick="showTab('history')">
+      <span class="bn-icon">📊</span>Historikk
     </button>
     <button class="bn-tab" id="bnBookmarks" onclick="showTab('bookmarks')">
       <span class="bn-icon">🔖</span>Bokmerker
@@ -1197,6 +1248,7 @@ var UI = {
   dark:        {th:'มืด',               no:'Mørk',             en:'Dark'},
   auto:        {th:'อัตโนมัติ',           no:'Auto',             en:'Auto'},
   logout:      {th:'ออกจากระบบ',         no:'Logg ut',          en:'Log out'},
+  history:     {th:'ประวัติ',            no:'Historikk',        en:'History'},
 };
 
 function t(key) { return (UI[key] && (UI[key][appLang] || UI[key]['no'])) || key; }
@@ -1207,6 +1259,7 @@ function applyUILang() {
   // bottom nav
   var nb = document.getElementById('bnHome');      if(nb) nb.innerHTML = '<span class="bn-icon">🏠</span>' + t('home');
   var nc = document.getElementById('bnCats');      if(nc) nc.innerHTML = '<span class="bn-icon">📚</span>' + t('cats');
+  var nh = document.getElementById('bnHistory');   if(nh) nh.innerHTML = '<span class="bn-icon">📊</span>' + t('history');
   var nbm= document.getElementById('bnBookmarks'); if(nbm) nbm.innerHTML = '<span class="bn-icon">🔖</span>' + t('bookmarks');
   var ns = document.getElementById('bnSettings');  if(ns) ns.innerHTML = '<span class="bn-icon">⚙️</span>' + t('settings');
   // cats header
@@ -1344,16 +1397,17 @@ function enterApp() {
 function showTab(tab) {
   activeTab = tab;
   document.querySelectorAll('.bn-tab').forEach(function(b) { b.classList.remove('active'); });
-  var tabMap = { home:'bnHome', cats:'bnCats', bookmarks:'bnBookmarks', settings:'bnSettings' };
+  var tabMap = { home:'bnHome', cats:'bnCats', history:'bnHistory', bookmarks:'bnBookmarks', settings:'bnSettings' };
   if (tabMap[tab]) document.getElementById(tabMap[tab]).classList.add('active');
   var screenMap = {
     home:'screenHome', cats:'screenCats',
-    bookmarks:'screenBookmarks', settings:'screenSettings'
+    history:'screenHistory', bookmarks:'screenBookmarks', settings:'screenSettings'
   };
   if (screenMap[tab]) {
     showScreen(screenMap[tab]);
     if (tab === 'home')      loadHome();
     if (tab === 'cats')      loadCategories();
+    if (tab === 'history')   loadHistory();
     if (tab === 'bookmarks') loadBookmarks();
     if (tab === 'settings')  loadSettings();
   }
@@ -1851,6 +1905,50 @@ async function loadBookmarks() {
     }).join('');
   } catch(e) {
     scroll.innerHTML = '<div class="empty-state"><div class="es-icon">⚠️</div><p>Kunne ikke laste bokmerker.<br>' + escH(e.message) + '</p></div>';
+  }
+}
+
+// ════════════════════════════════════════════
+//  HISTORY
+// ════════════════════════════════════════════
+async function loadHistory() {
+  if (!deviceId) {
+    document.getElementById('histScroll').innerHTML = '<div class="empty-state"><div class="es-icon">🔒</div><p>Logg inn for å se historikk</p></div>';
+    return;
+  }
+  var scroll = document.getElementById('histScroll');
+  scroll.innerHTML = '<div class="loading-wrap"><div class="spinner"></div></div>';
+  try {
+    var data = await api('GET', '/api/quiz-attempts/' + encodeURIComponent(deviceId) + '?limit=50');
+    var attempts = Array.isArray(data) ? data : (data.attempts || data.results || []);
+    document.getElementById('histCount').textContent = '(' + attempts.length + ')';
+    if (!attempts.length) {
+      scroll.innerHTML = '<div class="empty-state"><div class="es-icon">📊</div><p>Ingen quiz-historikk ennå.<br>Fullfør en quiz for å se resultatene her.</p></div>';
+      return;
+    }
+    scroll.innerHTML = attempts.map(function(a) {
+      var pct = Math.round(a.score_percentage || 0);
+      var ringCls = pct >= 85 ? 'good' : pct >= 60 ? 'ok' : 'bad';
+      var modeLabel = {exam:'Eksamen', category:'Kategori', daily:'Daglig test', random:'Tilfeldig quiz'}[a.mode] || a.mode || 'Quiz';
+      var catLabel = a.category ? (' — ' + catName(a.category)) : '';
+      var detail = (a.correct_answers || 0) + ' av ' + (a.total_questions || 0) + ' riktige';
+      var passed = a.passed != null ? (a.passed ? ' ✓ Bestått' : ' ✗ Ikke bestått') : '';
+      var dateStr = '';
+      if (a.started_at || a.created_at) {
+        var d = new Date(a.started_at || a.created_at);
+        dateStr = d.toLocaleDateString('no-NO', {day:'2-digit', month:'2-digit'}) + '<br>' + d.toLocaleTimeString('no-NO', {hour:'2-digit', minute:'2-digit'});
+      }
+      return '<div class="hist-card">'
+        + '<div class="hist-score-ring ' + ringCls + '">' + pct + '%</div>'
+        + '<div class="hist-info">'
+          + '<div class="hist-mode">' + escH(modeLabel) + escH(catLabel) + '</div>'
+          + '<div class="hist-detail">' + escH(detail) + escH(passed) + '</div>'
+        + '</div>'
+        + '<div class="hist-date">' + dateStr + '</div>'
+        + '</div>';
+    }).join('');
+  } catch(e) {
+    scroll.innerHTML = '<div class="empty-state"><div class="es-icon">⚠️</div><p>Kunne ikke laste historikk.<br>' + escH(e.message) + '</p></div>';
   }
 }
 
