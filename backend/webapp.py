@@ -1170,6 +1170,28 @@ var UI = {
   exam:        {th:'📋 สอบ',            no:'📋 Eksamen',       en:'📋 Exam'},
   daily:       {th:'📅 ทดสอบรายวัน',    no:'📅 Daglig test',   en:'📅 Daily test'},
   loading:     {th:'กำลังโหลด…',        no:'Laster spørsmål…', en:'Loading…'},
+  streak:      {th:'วันติดต่อกัน',     no:'dag streak',      en:'day streak'},
+  answered:    {th:'ตอบแล้ว',          no:'BESVART',          en:'ANSWERED'},
+  correct_stat:{th:'ถูกต้อง',           no:'RIKTIGE',          en:'CORRECT'},
+  accuracy:    {th:'ความแม่นยำ',        no:'NØYAKTIGHET',      en:'ACCURACY'},
+  premium_on:  {th:'⭐ พรีเมียม',       no:'⭐ Premium',        en:'⭐ Premium'},
+  premium_sub: {th:'คุณมีสิทธิ์ทุกฟีเจอร์', no:'Du har tilgang til alle funksjoner', en:'You have access to all features'},
+  acct:        {th:'บัญชี',             no:'KONTO',            en:'ACCOUNT'},
+  language:    {th:'ภาษา',              no:'SPRÅK',            en:'LANGUAGE'},
+  q_lang:      {th:'ภาษาคำถาม',         no:'Spørsmålsspråk',   en:'Question language'},
+  q_lang_sub:  {th:'เลือกภาษาสำหรับคำถามและคำตอบ', no:'Velg språk for spørsmål og svar', en:'Choose language for questions and answers'},
+  sound:       {th:'เสียง',             no:'LYD',              en:'SOUND'},
+  sfx:         {th:'เอฟเฟกต์เสียง',     no:'Lydeffekter',      en:'Sound effects'},
+  sfx_sub:     {th:'เสียงเมื่อถูก/ผิด',  no:'Pling ved riktig, buzz ved feil', en:'Pling correct, buzz wrong'},
+  style:       {th:'สไตล์',             no:'Stil',             en:'Style'},
+  soft:        {th:'นุ่มนวล',            no:'Myk',              en:'Soft'},
+  strong:      {th:'เข้มข้น',            no:'Sterk',            en:'Strong'},
+  appearance:  {th:'รูปลักษณ์',          no:'UTSEENDE',         en:'APPEARANCE'},
+  theme:       {th:'ธีม',               no:'Tema',             en:'Theme'},
+  light:       {th:'สว่าง',              no:'Lys',              en:'Light'},
+  dark:        {th:'มืด',               no:'Mørk',             en:'Dark'},
+  auto:        {th:'อัตโนมัติ',           no:'Auto',             en:'Auto'},
+  logout:      {th:'ออกจากระบบ',         no:'Logg ut',          en:'Log out'},
 };
 
 function t(key) { return (UI[key] && (UI[key][appLang] || UI[key]['no'])) || key; }
@@ -1206,6 +1228,48 @@ function applyUILang() {
   var fb = document.getElementById('qFeedback');
   if(fb && fb.classList.contains('ok'))  fb.textContent = t('correct');
   if(fb && fb.classList.contains('bad')) fb.textContent = t('wrong');
+  // Home labels
+  var stk = document.getElementById('topStreakNum');
+  var stkP = stk && stk.parentElement;
+  if(stkP) { var fire = stkP.querySelector('.streak-fire') || stkP.querySelector('span:first-child'); stkP.innerHTML = (fire ? fire.outerHTML : '🔥 ') + '<span id="homeStreakNum">' + (document.getElementById('homeStreakNum') ? document.getElementById('homeStreakNum').textContent : '0') + '</span> ' + t('streak'); document.getElementById('topStreakNum') && (document.getElementById('topStreakNum').textContent = document.getElementById('homeStreakNum') ? document.getElementById('homeStreakNum').textContent : '0'); }
+  document.querySelectorAll('.home-stat-lbl').forEach(function(el,i){
+    el.textContent = [t('answered'), t('correct_stat'), t('accuracy')][i] || el.textContent;
+  });
+  // Premium banner
+  var pb = document.getElementById('premiumBanner');
+  if(pb) { var ptitle = pb.querySelector('.pb-title'); var psub = pb.querySelector('.pb-sub'); if(ptitle) ptitle.textContent = t('premium_on'); if(psub) psub.textContent = t('premium_sub'); }
+  // Settings labels - section headers
+  document.querySelectorAll('.sr-section').forEach(function(el) {
+    var txt = el.textContent.trim();
+    if(txt==='KONTO'||txt==='บัญชี'||txt==='ACCOUNT') el.textContent = t('acct');
+    else if(txt==='SPRÅK'||txt==='ภาษา'||txt==='LANGUAGE') el.textContent = t('language');
+    else if(txt==='LYD'||txt==='เสียง'||txt==='SOUND') el.textContent = t('sound');
+    else if(txt==='UTSEENDE'||txt==='รูปลักษณ์'||txt==='APPEARANCE') el.textContent = t('appearance');
+  });
+  // Settings row titles/subs
+  document.querySelectorAll('.sr-title').forEach(function(el) {
+    var txt = el.textContent.trim();
+    if(txt==='Spørsmålsspråk'||txt==='ภาษาคำถาม'||txt==='Question language') el.textContent = t('q_lang');
+    else if(txt==='Lydeffekter'||txt==='เอฟเฟกต์เสียง'||txt==='Sound effects') el.textContent = t('sfx');
+    else if(txt==='Stil'||txt==='สไตล์'||txt==='Style') el.textContent = t('style');
+    else if(txt==='Tema'||txt==='ธีม'||txt==='Theme') el.textContent = t('theme');
+  });
+  document.querySelectorAll('.sr-sub').forEach(function(el) {
+    var txt = el.textContent.trim();
+    if(txt.indexOf('Velg språk')===0||txt.indexOf('เลือกภาษา')===0||txt.indexOf('Choose language')===0) el.textContent = t('q_lang_sub');
+    else if(txt.indexOf('Pling')===0||txt.indexOf('เสียงเมื่อ')===0||txt.indexOf('Pling correct')===0) el.textContent = t('sfx_sub');
+  });
+  // Seg buttons
+  document.querySelectorAll('.seg-btn').forEach(function(el) {
+    var txt = el.textContent.trim();
+    if(txt==='Myk'||txt==='นุ่มนวล'||txt==='Soft') el.textContent = t('soft');
+    else if(txt==='Sterk'||txt==='เข้มข้น'||txt==='Strong') el.textContent = t('strong');
+    else if(txt==='Lys'||txt==='สว่าง'||txt==='Light') el.textContent = t('light');
+    else if(txt==='Mørk'||txt==='มืด'||txt==='Dark') el.textContent = t('dark');
+    else if(txt==='Auto'||txt==='อัตโนมัติ') el.textContent = t('auto');
+  });
+  // Logout button
+  document.querySelectorAll('.logout-btn, [onclick*="logout"], [onclick*="Logg"]').forEach(function(el){ if(el.textContent.trim().length < 20) el.textContent = t('logout'); });
 }
 var catsLoaded = false;
 var bookmarkedIds = {};
@@ -1460,10 +1524,14 @@ async function loadHome() {
     try {
       var stats = await api('GET', '/api/stats/me?device_id=' + encodeURIComponent(deviceId));
       var ov = stats.overall || {};
-      document.getElementById('homeStatAnswered').textContent = ov.total_q || '–';
-      document.getElementById('homeStatCorrect').textContent  = ov.total_correct || '–';
-      document.getElementById('homeStatAcc').textContent      = ov.pct != null ? Math.round(ov.pct) + '%' : '–';
-    } catch(e) {}
+      document.getElementById('homeStatAnswered').textContent = ov.total_q != null ? ov.total_q : '0';
+      document.getElementById('homeStatCorrect').textContent  = ov.total_correct != null ? ov.total_correct : '0';
+      document.getElementById('homeStatAcc').textContent      = ov.pct != null ? Math.round(ov.pct) + '%' : '0%';
+    } catch(e) {
+      document.getElementById('homeStatAnswered').textContent = '0';
+      document.getElementById('homeStatCorrect').textContent  = '0';
+      document.getElementById('homeStatAcc').textContent      = '0%';
+    }
   }
 
   // Premium badge
