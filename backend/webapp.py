@@ -344,7 +344,15 @@ a { color:inherit; text-decoration:none; }
 /* ══════════════════════════════════════════
    CATEGORIES SCREEN — header fixed, grid scrolls
 ══════════════════════════════════════════ */
-#screenCats { padding:0; }
+#screenCats {
+  padding:0;
+  background:linear-gradient(180deg,
+    rgba(165,25,49,.45) 0%,   rgba(165,25,49,.45) 13%,
+    rgba(255,255,255,.12) 13%, rgba(255,255,255,.12) 27%,
+    rgba(36,29,79,.60) 27%,   rgba(36,29,79,.60) 73%,
+    rgba(255,255,255,.12) 73%, rgba(255,255,255,.12) 87%,
+    rgba(165,25,49,.45) 87%,  rgba(165,25,49,.45) 100%);
+}
 .cats-header {
   padding:14px 16px 10px; flex-shrink:0;
 }
@@ -370,7 +378,8 @@ a { color:inherit; text-decoration:none; }
 @media (min-width:700px) { .cat-grid { grid-template-columns:repeat(4,1fr); } }
 
 .cat-card {
-  background:var(--card); border:1.5px solid var(--border);
+  background:rgba(255,255,255,.07); border:1.5px solid rgba(255,255,255,.14);
+  backdrop-filter:blur(6px);
   border-radius:14px; padding:14px 12px;
   cursor:pointer; transition:border-color .2s, transform .15s, box-shadow .2s;
   display:flex; flex-direction:column; gap:6px;
@@ -1542,8 +1551,8 @@ function renderQuestion() {
 
   var imgUrl  = q.bildeUrl || q.image_url || '';
   var qText   = pickLang(q.question) || pickField(q, 'question_text') || '';
-  var correct = (q.correctOptionId || q.correct_answer || '').toUpperCase();
-  var expl    = pickLang(q.explanation) || pickField(q, 'explanation') || '';
+  currentCorrect = (q.correctOptionId || q.correct_answer || '').toUpperCase();
+  currentExpl    = pickLang(q.explanation) || pickField(q, 'explanation') || '';
   var qId     = q._id || q.id || q.question_id || '';
   var isBm    = bookmarkedIds[qId] ? true : false;
 
@@ -1564,7 +1573,7 @@ function renderQuestion() {
   var qCard = document.getElementById('qCard');
   var ansHtml = opts.map(function(o) {
     var txt = typeof o.text === 'object' ? pickLang(o.text) : o.text;
-    return '<button class="ans-btn" data-id="' + escH(o.id) + '" onclick="selectAns(this,\'' + escH(o.id) + '\',\'' + escH(correct) + '\',\'' + escH(expl).replace(/'/g,"&#39;") + '\')">'
+    return '<button class="ans-btn" data-id="' + escH(o.id) + '" onclick="selectAns(this,\'' + escH(o.id) + '\')">'
       + '<span class="ans-letter">' + escH(o.id) + '</span>'
       + '<span class="ans-text">' + escH(txt) + '</span>'
       + '</button>';
@@ -1599,9 +1608,13 @@ function renderQuestion() {
     + '</div>';
 }
 
-function selectAns(btn, picked, correct, expl) {
+var currentCorrect = '';
+var currentExpl = '';
+
+function selectAns(btn, picked) {
   if (qAnswered) return;
   qAnswered = true;
+  var correct = currentCorrect;
   var isOk = picked.toUpperCase() === correct.toUpperCase();
   if (isOk) qScore++;
 
@@ -1617,10 +1630,9 @@ function selectAns(btn, picked, correct, expl) {
   fb.textContent = isOk ? '🎉 Riktig!' : '❌ Feil svar';
   fb.className = 'q-feedback ' + (isOk ? 'ok' : 'bad');
 
-  var cleanExpl = expl.replace(/&#39;/g, "'");
-  if (cleanExpl) {
+  if (currentExpl) {
     var ex = document.getElementById('qExplain');
-    ex.textContent = cleanExpl;
+    ex.textContent = currentExpl;
     ex.classList.add('show');
   }
   document.getElementById('qScoreNum').textContent = qScore;
