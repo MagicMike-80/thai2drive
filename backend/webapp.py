@@ -347,9 +347,18 @@ a { color:inherit; text-decoration:none; }
 /* ══════════════════════════════════════════
    CATEGORIES SCREEN — header fixed, grid scrolls
 ══════════════════════════════════════════ */
-#screenCats { padding:0; }
+#screenCats {
+  padding:0;
+  background:linear-gradient(180deg,
+    #A51931 0%,    #A51931 16.66%,
+    #E8E8E8 16.66%, #E8E8E8 33.33%,
+    #1A1464 33.33%, #1A1464 66.66%,
+    #E8E8E8 66.66%, #E8E8E8 83.33%,
+    #A51931 83.33%, #A51931 100%);
+}
 .cats-header {
   padding:14px 16px 10px; flex-shrink:0;
+  background:transparent;
 }
 .screen-title {
   font-size:1.3rem; font-weight:900; letter-spacing:-.3px;
@@ -373,8 +382,8 @@ a { color:inherit; text-decoration:none; }
 @media (min-width:700px) { .cat-grid { grid-template-columns:repeat(4,1fr); } }
 
 .cat-card {
-  background:rgba(255,255,255,.07); border:1.5px solid rgba(255,255,255,.14);
-  backdrop-filter:blur(6px);
+  background:rgba(0,0,0,.35); border:1.5px solid rgba(255,255,255,.18);
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
   border-radius:14px; padding:14px 12px;
   cursor:pointer; transition:border-color .2s, transform .15s, box-shadow .2s;
   display:flex; flex-direction:column; gap:6px;
