@@ -942,8 +942,17 @@ function switchTab(tab) {
 let _bookSections = [];
 
 async function loadBook() {
-  const r = await fetch(API + '/admin/book/sections', {headers:{Authorization:'Bearer '+token}});
-  _bookSections = await r.json();
+  const container = document.getElementById('book-chapters');
+  container.innerHTML = '<p style="color:var(--muted);padding:20px">Laster...</p>';
+  try {
+    const r = await fetch(API + '/admin/book/sections', {headers:{Authorization:'Bearer '+token}});
+    const data = await r.json();
+    if (!r.ok) { container.innerHTML = '<p style="color:#f87171">Feil: ' + (data.detail||r.status) + '</p>'; return; }
+    _bookSections = Array.isArray(data) ? data : [];
+  } catch(e) {
+    container.innerHTML = '<p style="color:#f87171">Nettverksfeil: ' + e.message + '</p>';
+    return;
+  }
 
   // Group by chapter
   const byChapter = {};
