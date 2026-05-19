@@ -591,6 +591,44 @@ a { color:inherit; text-decoration:none; }
 .q-bookmark-btn.bookmarked { border-color:var(--orange); color:var(--orange); background:rgba(255,153,51,.12); }
 
 /* ══════════════════════════════════════════
+   SIGNS SCREEN
+══════════════════════════════════════════ */
+#screenSigns { padding:0; }
+.signs-header { padding:14px 16px 10px; flex-shrink:0; }
+.signs-scroll {
+  flex:1; overflow-x:auto; overflow-y:hidden;
+  display:flex; gap:12px;
+  padding:0 16px 16px;
+  -webkit-overflow-scrolling:touch;
+  align-items:flex-start;
+}
+.signs-scroll::-webkit-scrollbar { height:4px; }
+.signs-scroll::-webkit-scrollbar-track { background:transparent; }
+.signs-scroll::-webkit-scrollbar-thumb { background:rgba(255,255,255,.12); border-radius:2px; }
+.sign-card {
+  width:160px; flex-shrink:0;
+  background:var(--card); border:1.5px solid var(--border);
+  border-radius:14px; padding:12px 10px;
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+  height:calc(100% - 16px);
+}
+.sign-img-wrap {
+  width:120px; height:120px; flex-shrink:0;
+  border-radius:10px; overflow:hidden;
+  background:rgba(255,255,255,.06); border:1px solid var(--border);
+  display:flex; align-items:center; justify-content:center;
+}
+.sign-img { width:100%; height:100%; object-fit:contain; display:block; }
+.sign-ans {
+  width:100%; padding:6px 8px; border-radius:8px;
+  background:rgba(16,185,129,.1); border:1px solid rgba(16,185,129,.25);
+  font-size:.65rem; color:#6EE7B7; font-weight:700;
+  text-align:center; line-height:1.35;
+  display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical;
+  overflow:hidden; flex:1;
+}
+
+/* ══════════════════════════════════════════
    BOOKMARKS SCREEN
 ══════════════════════════════════════════ */
 #screenBookmarks { padding:0; }
@@ -1034,6 +1072,18 @@ a { color:inherit; text-decoration:none; }
       </div>
     </div>
 
+    <!-- ═══ SIGNS SCREEN ═══ -->
+    <div class="screen" id="screenSigns">
+      <div class="signs-header">
+        <div class="screen-title">🚦 <span data-key="signs">Trafikkskilt</span></div>
+      </div>
+      <div class="signs-scroll" id="signsScroll">
+        <div class="loading-wrap">
+          <div class="spinner"></div>
+        </div>
+      </div>
+    </div>
+
     <!-- ═══ SETTINGS SCREEN ═══ -->
     <div class="screen" id="screenSettings">
       <div class="settings-inner">
@@ -1185,6 +1235,9 @@ a { color:inherit; text-decoration:none; }
     <button class="bn-tab" id="bnHistory" onclick="showTab('history')">
       <span class="bn-icon">📊</span>Historikk
     </button>
+    <button class="bn-tab" id="bnSigns" onclick="showTab('signs')">
+      <span class="bn-icon">🚦</span>Skilt
+    </button>
     <button class="bn-tab" id="bnBookmarks" onclick="showTab('bookmarks')">
       <span class="bn-icon">🔖</span>Bokmerker
     </button>
@@ -1260,6 +1313,8 @@ var UI = {
   auto:        {th:'อัตโนมัติ',           no:'Auto',             en:'Auto'},
   logout:      {th:'ออกจากระบบ',         no:'Logg ut',          en:'Log out'},
   history:     {th:'ประวัติ',            no:'Historikk',        en:'History'},
+  signs:       {th:'ป้ายจราจร',          no:'Trafikkskilt',     en:'Traffic Signs'},
+  signs_empty: {th:'ไม่พบป้าย',           no:'Ingen skilt funnet', en:'No signs found'},
 };
 
 function t(key) { return (UI[key] && (UI[key][appLang] || UI[key]['no'])) || key; }
@@ -1271,6 +1326,7 @@ function applyUILang() {
   var nb = document.getElementById('bnHome');      if(nb) nb.innerHTML = '<span class="bn-icon">🏠</span>' + t('home');
   var nc = document.getElementById('bnCats');      if(nc) nc.innerHTML = '<span class="bn-icon">📚</span>' + t('cats');
   var nh = document.getElementById('bnHistory');   if(nh) nh.innerHTML = '<span class="bn-icon">📊</span>' + t('history');
+  var nsg= document.getElementById('bnSigns');     if(nsg) nsg.innerHTML = '<span class="bn-icon">🚦</span>' + t('signs');
   var nbm= document.getElementById('bnBookmarks'); if(nbm) nbm.innerHTML = '<span class="bn-icon">🔖</span>' + t('bookmarks');
   var ns = document.getElementById('bnSettings');  if(ns) ns.innerHTML = '<span class="bn-icon">⚙️</span>' + t('settings');
   // cats header
@@ -1408,17 +1464,18 @@ function enterApp() {
 function showTab(tab) {
   activeTab = tab;
   document.querySelectorAll('.bn-tab').forEach(function(b) { b.classList.remove('active'); });
-  var tabMap = { home:'bnHome', cats:'bnCats', history:'bnHistory', bookmarks:'bnBookmarks', settings:'bnSettings' };
+  var tabMap = { home:'bnHome', cats:'bnCats', history:'bnHistory', signs:'bnSigns', bookmarks:'bnBookmarks', settings:'bnSettings' };
   if (tabMap[tab]) document.getElementById(tabMap[tab]).classList.add('active');
   var screenMap = {
     home:'screenHome', cats:'screenCats',
-    history:'screenHistory', bookmarks:'screenBookmarks', settings:'screenSettings'
+    history:'screenHistory', signs:'screenSigns', bookmarks:'screenBookmarks', settings:'screenSettings'
   };
   if (screenMap[tab]) {
     showScreen(screenMap[tab]);
     if (tab === 'home')      loadHome();
     if (tab === 'cats')      loadCategories();
     if (tab === 'history')   loadHistory();
+    if (tab === 'signs')     loadSigns();
     if (tab === 'bookmarks') loadBookmarks();
     if (tab === 'settings')  loadSettings();
   }
@@ -1920,6 +1977,50 @@ async function loadBookmarks() {
 }
 
 // ════════════════════════════════════════════
+//  SIGNS GALLERY
+// ════════════════════════════════════════════
+var signsLoaded = false;
+async function loadSigns() {
+  var scroll = document.getElementById('signsScroll');
+  if (signsLoaded && scroll.children.length > 1) return;
+  scroll.innerHTML = '<div class="loading-wrap"><div class="spinner"></div></div>';
+  try {
+    var lang = appLang === 'th' ? 'th' : (appLang === 'no' ? 'no' : 'en');
+    var data = await api('GET', '/api/questions/random?count=80&has_image=true&category=Traffic+Signs&lang=' + lang);
+    var qs = Array.isArray(data) ? data : (data.questions || []);
+    if (!qs.length) {
+      scroll.innerHTML = '<div class="empty-state"><div class="es-icon">🚦</div><p>' + t('signs_empty') + '</p></div>';
+      return;
+    }
+    scroll.innerHTML = '';
+    qs.forEach(function(q) {
+      var imgUrl = q.image_url || q.image || '';
+      var answer = '';
+      if (q.correct_answer !== undefined && q.answers) {
+        var idx = q.correct_answer;
+        answer = Array.isArray(q.answers) ? (q.answers[idx] || '') : '';
+      } else if (q.correct_answer_text) {
+        answer = q.correct_answer_text;
+      } else if (q.answer) {
+        answer = q.answer;
+      }
+      if (!imgUrl) return;
+      var card = document.createElement('div');
+      card.className = 'sign-card';
+      card.innerHTML =
+        '<div class="sign-img-wrap">' +
+          '<img class="sign-img" src="' + imgUrl + '" alt="" loading="lazy" onerror="this.parentElement.style.display=\'none\'">' +
+        '</div>' +
+        '<div class="sign-ans">' + (answer || '–') + '</div>';
+      scroll.appendChild(card);
+    });
+    signsLoaded = true;
+  } catch(e) {
+    scroll.innerHTML = '<div class="empty-state"><div class="es-icon">⚠️</div><p>' + (e.message || 'Feil') + '</p></div>';
+  }
+}
+
+// ════════════════════════════════════════════
 //  HISTORY
 // ════════════════════════════════════════════
 async function loadHistory() {
@@ -2125,6 +2226,8 @@ function setLang(lang) {
     if (topBtn) topBtn.classList.toggle('active', lang === l.toLowerCase());
   });
   applyUILang();
+  // Reset signs cache so it reloads in new language
+  signsLoaded = false;
   // Re-render categories if loaded
   if (catsLoaded) loadCats();
   // Re-render quiz if active so question+answers switch language immediately
