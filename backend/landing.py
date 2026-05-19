@@ -93,23 +93,25 @@ html[data-current-lang="en"] [data-lang="en"].block{display:block}
 }
 /* Velg språk hint */
 .velg-hint{
-  position:fixed;top:8px;right:210px;z-index:300;
-  display:flex;align-items:center;gap:8px;
+  position:fixed;bottom:24px;right:24px;z-index:300;
+  display:flex;align-items:center;gap:10px;
+  background:rgba(255,153,51,.15);border:2px solid rgba(255,153,51,.6);
+  border-radius:40px;padding:10px 20px;
   pointer-events:none;
+  animation:slowblink 2.5s ease-in-out infinite;
 }
 .velg-hint-text{
-  color:#FF9933;font-weight:900;font-size:19px;
-  animation:slowblink 2.5s ease-in-out infinite;
+  color:#FF9933;font-weight:900;font-size:22px;
   text-shadow:0 0 14px rgba(255,153,51,.9);
-  white-space:nowrap;letter-spacing:.3px;
+  white-space:nowrap;letter-spacing:.5px;
 }
-.velg-arrow{font-size:22px;color:#FF9933;animation:slowblink 2.5s ease-in-out infinite;margin-right:4px}
+.velg-arrow{font-size:24px;color:#FF9933;}
 @keyframes slowblink{
   0%,100%{opacity:1}
-  50%{opacity:.08}
+  50%{opacity:.05}
 }
 .velg-hint.gone{display:none}
-@media(max-width:600px){.velg-hint{top:8px;right:120px;font-size:14px}}
+@media(max-width:600px){.velg-hint{bottom:16px;right:16px;} .velg-hint-text{font-size:16px;}}
 .mini-flag{display:flex;flex-direction:column;width:38px;height:26px;border-radius:3px;overflow:hidden;flex-shrink:0}
 .mini-flag.flag-th span:nth-child(1){background:#A51931;flex:1}
 .mini-flag.flag-th span:nth-child(2){background:#F4F5F8;flex:1}
@@ -1290,8 +1292,8 @@ def build_landing_page(chat_css: str, chat_widget_html: str, chat_js: str) -> st
 <body>
 {_nav_html()}
 <div class="velg-hint" id="velgHint">
-  <span class="velg-hint-text">velg språk</span>
-  <span class="velg-arrow">→</span>
+  <span class="velg-hint-text">🌏 velg språk</span>
+  <span class="velg-arrow">↑</span>
 </div>
 <div class="lang-hint" id="langHint">
   <div class="lang-hint-bubble">🌏 เลือกภาษา · Velg språk · Choose language</div>

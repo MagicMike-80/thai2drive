@@ -803,7 +803,7 @@ a { color:inherit; text-decoration:none; }
       <span>Thai<span class="logo-t">2</span>Drive</span>
     </div>
     <div class="top-spacer"></div>
-    <div id="topStreak">🔥 <span id="topStreakNum">0</span> dag streak</div>
+    <div id="topStreak">🔥 <span id="topStreakNum">0</span> <span data-key="streak">dag streak</span></div>
     <div style="display:flex;gap:8px;align-items:center;margin-left:12px">
       <button class="lang-btn active" id="topLangTH" onclick="setLang('th')" title="ภาษาไทย" style="width:36px;height:36px">
         <span class="cflag"><svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg"><rect width="900" height="600" fill="#A51931"/><rect width="900" height="480" y="60" fill="#F4F5F8"/><rect width="900" height="320" y="140" fill="#241D4F"/></svg></span>
@@ -901,7 +901,7 @@ a { color:inherit; text-decoration:none; }
         <div class="streak-badge">
           <span class="streak-fire">🔥</span>
           <span class="streak-num" id="homeStreakNum">0</span>
-          <span class="streak-lbl">dag streak</span>
+          <span class="streak-lbl" data-key="streak">dag streak</span>
         </div>
       </div>
 
@@ -917,15 +917,15 @@ a { color:inherit; text-decoration:none; }
       <div class="home-stats">
         <div class="home-stat">
           <div class="home-stat-num" id="homeStatAnswered">–</div>
-          <div class="home-stat-lbl">Besvart</div>
+          <div class="home-stat-lbl" data-key="answered">Besvart</div>
         </div>
         <div class="home-stat">
           <div class="home-stat-num" id="homeStatCorrect">–</div>
-          <div class="home-stat-lbl">Riktige</div>
+          <div class="home-stat-lbl" data-key="correct_stat">Riktige</div>
         </div>
         <div class="home-stat">
           <div class="home-stat-num" id="homeStatAcc">–</div>
-          <div class="home-stat-lbl">Nøyaktighet</div>
+          <div class="home-stat-lbl" data-key="accuracy">Nøyaktighet</div>
         </div>
       </div>
 
@@ -1009,13 +1009,13 @@ a { color:inherit; text-decoration:none; }
 
         <!-- Språk -->
         <div class="settings-section">
-          <div class="settings-label">Språk</div>
+          <div class="settings-label" data-key="language">Språk</div>
           <div class="settings-card">
             <div class="settings-row">
               <div class="sr-icon">🌐</div>
               <div class="sr-label">
-                <div class="sr-title">Spørsmålsspråk</div>
-                <div class="sr-sub">Velg språk for spørsmål og svar</div>
+                <div class="sr-title" data-key="q_lang">Spørsmålsspråk</div>
+                <div class="sr-sub" data-key="q_lang_sub">Velg språk for spørsmål og svar</div>
               </div>
               <div class="lang-btns">
                 <button class="lang-btn active" id="langTH" onclick="setLang('th')" title="ภาษาไทย">
@@ -1034,13 +1034,13 @@ a { color:inherit; text-decoration:none; }
 
         <!-- Lyd -->
         <div class="settings-section">
-          <div class="settings-label">Lyd</div>
+          <div class="settings-label" data-key="sound">Lyd</div>
           <div class="settings-card">
             <div class="settings-row">
               <div class="sr-icon">🔊</div>
               <div class="sr-label">
-                <div class="sr-title">Lydeffekter</div>
-                <div class="sr-sub">Pling ved riktig, buzz ved feil</div>
+                <div class="sr-title" data-key="sfx">Lydeffekter</div>
+                <div class="sr-sub" data-key="sfx_sub">Pling ved riktig, buzz ved feil</div>
               </div>
               <label class="toggle">
                 <input type="checkbox" id="soundToggle" checked onchange="toggleSound(this)">
@@ -1049,10 +1049,10 @@ a { color:inherit; text-decoration:none; }
             </div>
             <div class="settings-row">
               <div class="sr-icon">📳</div>
-              <div class="sr-label"><div class="sr-title">Stil</div></div>
+              <div class="sr-label"><div class="sr-title" data-key="style">Stil</div></div>
               <div class="seg-ctrl">
-                <button class="seg-btn active" onclick="setFeedback('soft',this)">Myk</button>
-                <button class="seg-btn" onclick="setFeedback('strong',this)">Sterk</button>
+                <button class="seg-btn active" data-key="soft" onclick="setFeedback('soft',this)">Myk</button>
+                <button class="seg-btn" data-key="strong" onclick="setFeedback('strong',this)">Sterk</button>
               </div>
             </div>
           </div>
@@ -1060,15 +1060,15 @@ a { color:inherit; text-decoration:none; }
 
         <!-- Tema -->
         <div class="settings-section">
-          <div class="settings-label">Utseende</div>
+          <div class="settings-label" data-key="appearance">Utseende</div>
           <div class="settings-card">
             <div class="settings-row">
               <div class="sr-icon">🎨</div>
-              <div class="sr-label"><div class="sr-title">Tema</div></div>
+              <div class="sr-label"><div class="sr-title" data-key="theme">Tema</div></div>
               <div class="seg-ctrl">
-                <button class="seg-btn" id="themeBtnLight" onclick="setTheme('light',this)">Lys</button>
-                <button class="seg-btn active" id="themeBtnDark" onclick="setTheme('dark',this)">Mørk</button>
-                <button class="seg-btn" id="themeBtnSystem" onclick="setTheme('system',this)">Auto</button>
+                <button class="seg-btn" id="themeBtnLight" data-key="light" onclick="setTheme('light',this)">Lys</button>
+                <button class="seg-btn active" id="themeBtnDark" data-key="dark" onclick="setTheme('dark',this)">Mørk</button>
+                <button class="seg-btn" id="themeBtnSystem" data-key="auto" onclick="setTheme('system',this)">Auto</button>
               </div>
             </div>
           </div>
@@ -1238,38 +1238,12 @@ function applyUILang() {
   // Premium banner
   var pb = document.getElementById('premiumBanner');
   if(pb) { var ptitle = pb.querySelector('.pb-title'); var psub = pb.querySelector('.pb-sub'); if(ptitle) ptitle.textContent = t('premium_on'); if(psub) psub.textContent = t('premium_sub'); }
-  // Settings labels - section headers
-  document.querySelectorAll('.sr-section').forEach(function(el) {
-    var txt = el.textContent.trim();
-    if(txt==='KONTO'||txt==='บัญชี'||txt==='ACCOUNT') el.textContent = t('acct');
-    else if(txt==='SPRÅK'||txt==='ภาษา'||txt==='LANGUAGE') el.textContent = t('language');
-    else if(txt==='LYD'||txt==='เสียง'||txt==='SOUND') el.textContent = t('sound');
-    else if(txt==='UTSEENDE'||txt==='รูปลักษณ์'||txt==='APPEARANCE') el.textContent = t('appearance');
+  // Translate ALL elements with data-key — reliable, no text matching needed
+  document.querySelectorAll('[data-key]').forEach(function(el) {
+    var key = el.getAttribute('data-key');
+    var val = t(key);
+    if (val) el.textContent = val;
   });
-  // Settings row titles/subs
-  document.querySelectorAll('.sr-title').forEach(function(el) {
-    var txt = el.textContent.trim();
-    if(txt==='Spørsmålsspråk'||txt==='ภาษาคำถาม'||txt==='Question language') el.textContent = t('q_lang');
-    else if(txt==='Lydeffekter'||txt==='เอฟเฟกต์เสียง'||txt==='Sound effects') el.textContent = t('sfx');
-    else if(txt==='Stil'||txt==='สไตล์'||txt==='Style') el.textContent = t('style');
-    else if(txt==='Tema'||txt==='ธีม'||txt==='Theme') el.textContent = t('theme');
-  });
-  document.querySelectorAll('.sr-sub').forEach(function(el) {
-    var txt = el.textContent.trim();
-    if(txt.indexOf('Velg språk')===0||txt.indexOf('เลือกภาษา')===0||txt.indexOf('Choose language')===0) el.textContent = t('q_lang_sub');
-    else if(txt.indexOf('Pling')===0||txt.indexOf('เสียงเมื่อ')===0||txt.indexOf('Pling correct')===0) el.textContent = t('sfx_sub');
-  });
-  // Seg buttons
-  document.querySelectorAll('.seg-btn').forEach(function(el) {
-    var txt = el.textContent.trim();
-    if(txt==='Myk'||txt==='นุ่มนวล'||txt==='Soft') el.textContent = t('soft');
-    else if(txt==='Sterk'||txt==='เข้มข้น'||txt==='Strong') el.textContent = t('strong');
-    else if(txt==='Lys'||txt==='สว่าง'||txt==='Light') el.textContent = t('light');
-    else if(txt==='Mørk'||txt==='มืด'||txt==='Dark') el.textContent = t('dark');
-    else if(txt==='Auto'||txt==='อัตโนมัติ') el.textContent = t('auto');
-  });
-  // Logout button
-  document.querySelectorAll('.logout-btn, [onclick*="logout"], [onclick*="Logg"]').forEach(function(el){ if(el.textContent.trim().length < 20) el.textContent = t('logout'); });
 }
 var catsLoaded = false;
 var bookmarkedIds = {};
