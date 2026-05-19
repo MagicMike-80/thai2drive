@@ -1757,7 +1757,7 @@ var CAT_ICONS = {
   'Bremser':'🛑','Parkering':'🅿️','Lys':'💡','Dekk':'🔄',
   'Motorvei':'🛣️','Kryss':'✛','Gangfelt':'🚶','Sving':'↩️',
   'Forbikjøring':'🏎️','Lastsikring':'📦','Sikkerhet':'🦺','Fellesskjøring':'🤝',
-  'Road Rules':'🚦','Traffic Rules':'🚦','Traffic Signs':'🪧',
+  'Road Rules':'🚦','Traffic Rules':'📋','Traffic Signs':'🪧',
   'Right of Way':'⚠️','Driving Conditions':'🌧️','Road Conditions':'🛣️',
   'Speed Limits':'⏱️','Safety':'🦺','Situations':'🔄','Parking':'🅿️',
   'Lights':'💡','Tires':'🔄','Overtaking':'🏎️','Intersections':'✛',
@@ -1768,7 +1768,7 @@ var CAT_ICONS = {
 // Kategori navn per språk
 var CAT_NAMES = {
   'Road Rules':       {no:'Trafikkregler',   th:'กฎจราจร',          en:'Road Rules'},
-  'Traffic Rules':    {no:'Trafikkregler',   th:'กฎจราจร',          en:'Traffic Rules'},
+  'Traffic Rules':    {no:'Trafikklovgiving', th:'กฎหมายจราจร',      en:'Traffic Rules'},
   'Traffic Signs':    {no:'Trafikkskilt',    th:'ป้ายจราจร',         en:'Traffic Signs'},
   'Right of Way':     {no:'Vikeplikt',       th:'การให้ทาง',         en:'Right of Way'},
   'Driving Conditions':{no:'Kjøreforhold',  th:'สภาพการขับขี่',      en:'Driving Conditions'},
