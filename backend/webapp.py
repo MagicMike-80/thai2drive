@@ -1141,6 +1141,30 @@ var CAT_ICONS = {
   'Accidents':'🚨','Highway':'🛣️'
 };
 
+// Norsk oversettelse av engelske kategorinavn
+var CAT_NO = {
+  'Road Rules':'Trafikkregler',
+  'Traffic Rules':'Trafikkregler',
+  'Traffic Signs':'Trafikkskilt',
+  'Right of Way':'Vikeplikt',
+  'Driving Conditions':'Kjøreforhold',
+  'Road Conditions':'Veiforhold',
+  'Speed Limits':'Fartsgrenser',
+  'Safety':'Sikkerhet',
+  'Situations':'Situasjoner',
+  'Parking':'Parkering',
+  'Lights':'Lys',
+  'Tires':'Dekk',
+  'Overtaking':'Forbikjøring',
+  'Intersections':'Kryss',
+  'Pedestrians':'Gangfelt',
+  'Alcohol':'Alkohol',
+  'Environment':'Miljø',
+  'Vehicle':'Kjøretøy',
+  'Accidents':'Ulykker',
+  'Highway':'Motorvei'
+};
+
 // ════════════════════════════════════════════
 //  INIT
 // ════════════════════════════════════════════
@@ -1367,7 +1391,7 @@ async function loadCategories() {
       var icon  = CAT_ICONS[c.name] || '📖';
       var count = c.question_count || c.count || '';
       var id    = escH(String(c.id || c.name));
-      var name  = escH(c.name);
+      var name  = escH(CAT_NO[c.name] || c.name);
       return '<div class="cat-card" onclick="startQuiz(\'' + id + '\',\'' + name + '\')">'
         + '<div class="cat-icon">' + icon + '</div>'
         + '<div class="cat-name">' + name + '</div>'

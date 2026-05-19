@@ -290,11 +290,21 @@ async def get_random_questions(category: Optional[str] = None, count: int = Quer
     match_stage: dict = {}
     if category:
         match_stage["category"] = category
+    if has_image is True:
+        match_stage["bildeUrl"] = {"$exists": True, "$nin": [None, ""]}
     if match_stage:
         pipeline.append({"$match": match_stage})
     pipeline.append({"$sample": {"size": count}})
     pipeline.append({"$project": {"_id": 0}})
     questions = await db.questions.aggregate(pipeline).to_list(count)
+    # If category filter with has_image returns nothing, fall back without category
+    if not questions and category and has_image:
+        pipeline2 = [
+            {"$match": {"bildeUrl": {"$exists": True, "$nin": [None, ""]}}},
+            {"$sample": {"size": count}},
+            {"$project": {"_id": 0}}
+        ]
+        questions = await db.questions.aggregate(pipeline2).to_list(count)
     return [normalize_question(q) for q in questions]
 
 @api_router.get("/questions/{question_id}")
