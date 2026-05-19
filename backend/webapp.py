@@ -950,7 +950,7 @@ a { color:inherit; text-decoration:none; }
           </div>
         </div>
         <div class="quiz-score-badge">✓ <span id="qScoreNum">0</span></div>
-        <div id="examTimerBadge" style="display:none;background:rgba(239,68,68,.18);border:1px solid rgba(239,68,68,.4);color:#EF4444;border-radius:20px;padding:4px 12px;font-size:.85rem;font-weight:700;margin-left:8px;">⏱ <span id="examTimerLbl">45:00</span></div>
+        <div id="examTimerBadge" style="display:none;background:rgba(239,68,68,.18);border:1px solid rgba(239,68,68,.4);color:#EF4444;border-radius:20px;padding:4px 12px;font-size:.85rem;font-weight:700;margin-left:8px;">⏱ <span id="examTimerLbl">90:00</span></div>
       </div>
       <div class="quiz-body">
         <div class="quiz-card" id="qCard">
@@ -1448,7 +1448,7 @@ async function startExam() {
 
 function startExamTimer() {
   if (examTimerInterval) clearInterval(examTimerInterval);
-  examSecondsLeft = 45 * 60; // 45 minutes
+  examSecondsLeft = 90 * 60; // 90 minutes
   var badge = document.getElementById('examTimerBadge');
   var lbl   = document.getElementById('examTimerLbl');
   if (badge) badge.style.display = 'flex';
