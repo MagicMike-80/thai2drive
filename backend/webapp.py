@@ -224,8 +224,9 @@ WEBAPP_HTML = """<!DOCTYPE html>
 
   .q-left { display: flex; flex-direction: column; gap: 12px; }
   .q-img {
-    width: 100%; max-height: 220px; object-fit: contain;
-    border-radius: 10px; background: rgba(255,255,255,.03);
+    width: 100%; max-height: 260px; object-fit: contain;
+    border-radius: 12px; background: rgba(255,255,255,.03);
+    display: block;
   }
   .q-text { font-size: 1.05rem; font-weight: 700; line-height: 1.5; }
 
@@ -687,21 +688,27 @@ async function startQuiz(catId, catName) {
   container.innerHTML = '<div class="loading"><div class="spinner"></div></div>';
 
   try {
-    const res = await api('GET', `/api/questions?category=${encodeURIComponent(catId)}&limit=20`);
-    questions = Array.isArray(res) ? res : (res.questions || []);
-    if (!questions.length) throw new Error('Ingen spørsmål');
+    const res = await api('GET', `/api/questions/random?count=30&has_image=true&category=${encodeURIComponent(catId)}`);
+    let raw = Array.isArray(res) ? res : (res.questions || []);
+    // Only keep questions that have a real image URL
+    questions = raw.filter(q => {
+      const url = q.bildeUrl || q.image_url || '';
+      return url && typeof url === 'string' && url.startsWith('http') && url.length < 1000;
+    });
+    if (!questions.length) {
+      // fallback without category filter
+      const res2 = await api('GET', '/api/questions/random?count=30&has_image=true');
+      let raw2 = Array.isArray(res2) ? res2 : [];
+      questions = raw2.filter(q => {
+        const url = q.bildeUrl || q.image_url || '';
+        return url && typeof url === 'string' && url.startsWith('http') && url.length < 1000;
+      });
+    }
+    if (!questions.length) throw new Error('Ingen spørsmål med bilde');
     qIdx = 0; qScore = 0; qAnswered = false;
     renderQuestion();
   } catch(e) {
-    // fallback: random questions
-    try {
-      const res = await api('GET', '/api/questions/random?limit=20');
-      questions = Array.isArray(res) ? res : [];
-      qIdx = 0; qScore = 0; qAnswered = false;
-      renderQuestion();
-    } catch(e2) {
-      container.innerHTML = '<p style="color:var(--muted);padding:20px">Kunne ikke laste spørsmål.</p>';
-    }
+    container.innerHTML = '<p style="color:var(--muted);padding:20px">Kunne ikke laste spørsmål.</p>';
   }
 }
 
@@ -737,7 +744,7 @@ function renderQuestion() {
   container.innerHTML = `
     <div class="quiz-card">
       <div class="q-left">
-        ${img ? `<img class="q-img" src="${img}" alt="" onerror="this.style.display='none'">` : ''}
+        ${img ? `<img class="q-img" src="${img}" alt="" onerror="this.style.display='none'" onload="this.style.display='block'">` : ''}
         <div class="q-text">${escH(qText)}</div>
         <div class="q-tts">
           <button class="tts-btn" id="qTtsBtn" title="Les høyt" onclick="speakQ()">▶</button>
