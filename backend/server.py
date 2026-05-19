@@ -2317,6 +2317,10 @@ app.include_router(support_chat_router, prefix="/api")
 from quiz_web import quiz_web_router  # noqa: E402
 app.include_router(quiz_web_router, prefix="/api")
 
+# ==================== WEB APP ====================
+from webapp import webapp_router  # noqa: E402
+app.include_router(webapp_router, prefix="/api")
+
 
 # ==================== ADMIN HTML PAGE ====================
 from fastapi.responses import HTMLResponse, FileResponse  # noqa: E402
