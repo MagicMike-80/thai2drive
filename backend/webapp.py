@@ -133,11 +133,11 @@ a { color:inherit; text-decoration:none; }
 .flag-bg::before {
   content:''; position:absolute; inset:0;
   background:linear-gradient(180deg,
-    rgba(165,25,49,.18) 0%, rgba(165,25,49,.18) 14.28%,
-    rgba(255,255,255,.05) 14.28%, rgba(255,255,255,.05) 28.57%,
-    rgba(36,29,79,.28) 28.57%, rgba(36,29,79,.28) 71.42%,
-    rgba(255,255,255,.05) 71.42%, rgba(255,255,255,.05) 85.71%,
-    rgba(165,25,49,.18) 85.71%, rgba(165,25,49,.18) 100%);
+    rgba(165,25,49,.55) 0%, rgba(165,25,49,.55) 14.28%,
+    rgba(255,255,255,.14) 14.28%, rgba(255,255,255,.14) 28.57%,
+    rgba(36,29,79,.65) 28.57%, rgba(36,29,79,.65) 71.42%,
+    rgba(255,255,255,.14) 71.42%, rgba(255,255,255,.14) 85.71%,
+    rgba(165,25,49,.55) 85.71%, rgba(165,25,49,.55) 100%);
 }
 .flag-bg::after {
   content:''; position:absolute; inset:0;
@@ -896,8 +896,8 @@ a { color:inherit; text-decoration:none; }
       </button>
 
       <div class="home-sec-btns">
-        <button class="home-sec-btn" onclick="startRandomQuiz()">📋 Eksamen</button>
-        <button class="home-sec-btn" onclick="startRandomQuiz()">📅 Daglig test</button>
+        <button class="home-sec-btn" onclick="startExam()">📋 Eksamen</button>
+        <button class="home-sec-btn" onclick="startDailyTest()">📅 Daglig test</button>
       </div>
 
       <div class="home-stats">
@@ -950,6 +950,7 @@ a { color:inherit; text-decoration:none; }
           </div>
         </div>
         <div class="quiz-score-badge">✓ <span id="qScoreNum">0</span></div>
+        <div id="examTimerBadge" style="display:none;background:rgba(239,68,68,.18);border:1px solid rgba(239,68,68,.4);color:#EF4444;border-radius:20px;padding:4px 12px;font-size:.85rem;font-weight:700;margin-left:8px;">⏱ <span id="examTimerLbl">45:00</span></div>
       </div>
       <div class="quiz-body">
         <div class="quiz-card" id="qCard">
@@ -1425,11 +1426,63 @@ async function loadCategories() {
 // ════════════════════════════════════════════
 async function startRandomQuiz() {
   currentCat = null;
+  isExamMode = false;
   await loadQuiz('/api/questions/random?count=30&has_image=true');
+}
+
+async function startDailyTest() {
+  currentCat = null;
+  isExamMode = false;
+  await loadQuiz('/api/questions/random?count=10&has_image=true');
+}
+
+var isExamMode = false;
+var examTimerInterval = null;
+var examSecondsLeft = 0;
+
+async function startExam() {
+  currentCat = null;
+  isExamMode = true;
+  await loadQuiz('/api/questions/random?count=45&has_image=true');
+}
+
+function startExamTimer() {
+  if (examTimerInterval) clearInterval(examTimerInterval);
+  examSecondsLeft = 45 * 60; // 45 minutes
+  var badge = document.getElementById('examTimerBadge');
+  var lbl   = document.getElementById('examTimerLbl');
+  if (badge) badge.style.display = 'flex';
+  updateTimerLabel(lbl, examSecondsLeft);
+  examTimerInterval = setInterval(function() {
+    examSecondsLeft--;
+    updateTimerLabel(lbl, examSecondsLeft);
+    if (examSecondsLeft <= 60) {
+      badge.style.background = 'rgba(239,68,68,.35)';
+      badge.style.borderColor = '#EF4444';
+    }
+    if (examSecondsLeft <= 0) {
+      clearInterval(examTimerInterval);
+      toast('Tid er ute! ⏰');
+      showEnd();
+    }
+  }, 1000);
+}
+
+function stopExamTimer() {
+  if (examTimerInterval) { clearInterval(examTimerInterval); examTimerInterval = null; }
+  var badge = document.getElementById('examTimerBadge');
+  if (badge) badge.style.display = 'none';
+}
+
+function updateTimerLabel(lbl, secs) {
+  var m = Math.floor(secs / 60);
+  var s = secs % 60;
+  if (lbl) lbl.textContent = m + ':' + (s < 10 ? '0' : '') + s;
 }
 
 async function startQuiz(catId, catName) {
   currentCat = { id: catId, name: catName };
+  isExamMode = false;
   await loadQuiz('/api/questions/random?count=30&has_image=true&category=' + encodeURIComponent(catId));
 }
 
@@ -1457,6 +1510,8 @@ async function loadQuiz(url) {
       return;
     }
     qIdx = 0; qScore = 0; qAnswered = false;
+    stopExamTimer();
+    if (isExamMode) startExamTimer();
     renderQuestion();
   } catch(e) {
     qCard.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="es-icon">⚠️</div><p>Kunne ikke laste spørsmål.<br>' + escH(e.message) + '</p></div>';
@@ -1590,6 +1645,8 @@ function nextQ() {
 function goBack() {
   if (window.speechSynthesis) window.speechSynthesis.cancel();
   ttsPlaying = false;
+  stopExamTimer();
+  isExamMode = false;
   showTab(activeTab && activeTab !== 'quiz' ? activeTab : 'home');
 }
 
@@ -1684,6 +1741,7 @@ async function removeBookmark(qId, cardEl) {
 // ════════════════════════════════════════════
 function showEnd() {
   if (window.speechSynthesis) window.speechSynthesis.cancel();
+  stopExamTimer();
   showScreen('screenEnd');
   var total = questions.length;
   var pct   = total > 0 ? Math.round(qScore / total * 100) : 0;
