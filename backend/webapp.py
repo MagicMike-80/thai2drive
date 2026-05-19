@@ -799,7 +799,7 @@ a { color:inherit; text-decoration:none; }
   <!-- TOP BAR -->
   <div id="topBar">
     <div class="top-logo">
-      <div class="logo-icon">T</div>
+      <img src="/api/assets/developer-icon-512.png" style="width:32px;height:32px;border-radius:9px;object-fit:cover;">
       <span>Thai<span class="logo-t">2</span>Drive</span>
     </div>
     <div class="top-spacer"></div>
@@ -824,7 +824,7 @@ a { color:inherit; text-decoration:none; }
     <div class="screen active" id="screenAuth">
       <div class="auth-card">
         <div class="auth-header">
-          <div class="auth-big-icon">🚗</div>
+          <div class="auth-big-icon"><img src="/api/assets/developer-icon-512.png" style="width:56px;height:56px;border-radius:14px;object-fit:cover;"></div>
           <h1>Thai<span>2Drive</span></h1>
           <p>Teoriprøven på thai</p>
           <div class="auth-flags">
@@ -894,7 +894,7 @@ a { color:inherit; text-decoration:none; }
     <div class="screen" id="screenHome">
       <div class="home-top">
         <div class="home-logo-row">
-          <div class="home-logo-box">T</div>
+          <img src="/api/assets/developer-icon-512.png" style="width:44px;height:44px;border-radius:13px;object-fit:cover;">
           <div class="home-title">Thai<span>2</span>Drive</div>
         </div>
 

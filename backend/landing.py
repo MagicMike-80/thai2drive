@@ -93,13 +93,14 @@ html[data-current-lang="en"] [data-lang="en"].block{display:block}
 }
 /* Sequential flag pulse — TH then NO then EN in loop */
 @keyframes flagpulse{
-  0%,15%{transform:scale(1.35);box-shadow:0 0 0 5px rgba(255,153,51,.7),0 0 18px rgba(255,153,51,.5);border-color:#FF9933;}
-  25%,100%{transform:scale(1);box-shadow:none;border-color:rgba(255,255,255,.15);}
+  0%,100%   {transform:scale(1);   box-shadow:none; border-color:rgba(255,255,255,.2);}
+  10%,40%   {transform:scale(1.4); box-shadow:0 0 0 6px rgba(255,153,51,.8),0 0 22px rgba(255,153,51,.6); border-color:#FF9933;}
+  70%       {transform:scale(1);   box-shadow:none; border-color:rgba(255,255,255,.2);}
 }
-.lang-row .lang-btn:nth-child(1){ animation:flagpulse 6s ease-in-out infinite; animation-delay:0s; }
-.lang-row .lang-btn:nth-child(2){ animation:flagpulse 6s ease-in-out infinite; animation-delay:2s; }
-.lang-row .lang-btn:nth-child(3){ animation:flagpulse 6s ease-in-out infinite; animation-delay:4s; }
-.lang-row .lang-btn.active{ animation:none!important; transform:scale(1.1); border-color:#FF9933; box-shadow:0 0 0 3px rgba(255,153,51,.3); }
+.lang-row .lang-btn:nth-child(1){ animation:flagpulse 6s ease-in-out infinite 0s; }
+.lang-row .lang-btn:nth-child(2){ animation:flagpulse 6s ease-in-out infinite 2s; }
+.lang-row .lang-btn:nth-child(3){ animation:flagpulse 6s ease-in-out infinite 4s; }
+.lang-row .lang-btn.active{ animation:none!important; transform:scale(1.15)!important; border-color:#FF9933!important; box-shadow:0 0 0 3px rgba(255,153,51,.4)!important; }
 .velg-hint{display:none}
 .mini-flag{display:flex;flex-direction:column;width:38px;height:26px;border-radius:3px;overflow:hidden;flex-shrink:0}
 .mini-flag.flag-th span:nth-child(1){background:#A51931;flex:1}
