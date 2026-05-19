@@ -1426,14 +1426,14 @@ async function loadQuiz(url) {
     if (!Array.isArray(raw)) raw = raw.questions || [];
     questions = raw.filter(function(q) {
       var u = q.bildeUrl || q.image_url || '';
-      return u && typeof u === 'string' && u.startsWith('http') && u.length < 1000;
+      return u && typeof u === 'string' && (u.startsWith('http') || u.startsWith('data:image'));
     });
     if (!questions.length && currentCat) {
       var r2 = await api('GET', '/api/questions/random?count=30&has_image=true');
       if (!Array.isArray(r2)) r2 = r2.questions || [];
       questions = r2.filter(function(q) {
         var u = q.bildeUrl || q.image_url || '';
-        return u && typeof u === 'string' && u.startsWith('http') && u.length < 1000;
+        return u && typeof u === 'string' && (u.startsWith('http') || u.startsWith('data:image'));
       });
     }
     if (!questions.length) {
