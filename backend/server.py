@@ -285,7 +285,7 @@ async def get_questions(category: Optional[str] = None, difficulty: Optional[str
     return [normalize_question(q) for q in questions]
 
 @api_router.get("/questions/random")
-async def get_random_questions(category: Optional[str] = None, count: int = Query(default=10, le=50), has_image: Optional[bool] = None):
+async def get_random_questions(category: Optional[str] = None, count: int = Query(default=10, le=200), has_image: Optional[bool] = None):
     pipeline = []
     match_stage: dict = {}
     if category:

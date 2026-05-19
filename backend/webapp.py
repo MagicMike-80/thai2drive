@@ -1880,7 +1880,11 @@ async function api(method, url, body) {
   if (body) opts.body = JSON.stringify(body);
   var r = await fetch(url, opts);
   var data = await r.json().catch(function() { return {}; });
-  if (!r.ok) throw new Error(data.detail || 'Noe gikk galt');
+  if (!r.ok) {
+    var det = data.detail;
+    var msg = typeof det === 'string' ? det : (Array.isArray(det) ? det.map(function(d){return d.msg||d;}).join(', ') : JSON.stringify(det) || 'Noe gikk galt');
+    throw new Error(msg);
+  }
   return data;
 }
 
