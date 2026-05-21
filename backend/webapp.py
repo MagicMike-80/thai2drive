@@ -600,27 +600,39 @@ a { color:inherit; text-decoration:none; }
    SIGNS SCREEN
 ══════════════════════════════════════════ */
 #screenSigns { padding:0; }
-.signs-header { padding:14px 16px 10px; flex-shrink:0; }
-.signs-scroll {
-  flex:1; overflow-x:auto; overflow-y:hidden;
-  display:flex; gap:12px;
-  padding:0 16px 16px;
-  -webkit-overflow-scrolling:touch;
-  align-items:flex-start;
+.signs-header {
+  padding:14px 16px 10px; flex-shrink:0;
+  display:flex; align-items:center; gap:10px;
 }
-.signs-scroll::-webkit-scrollbar { height:4px; }
+.signs-count {
+  font-size:.78rem; color:var(--muted); font-weight:600;
+}
+.signs-scroll {
+  flex:1; overflow-y:auto; overflow-x:hidden;
+  padding:0 12px 16px;
+  -webkit-overflow-scrolling:touch;
+}
+.signs-scroll::-webkit-scrollbar { width:4px; }
 .signs-scroll::-webkit-scrollbar-track { background:transparent; }
 .signs-scroll::-webkit-scrollbar-thumb { background:rgba(255,255,255,.12); border-radius:2px; }
-.sign-card {
-  width:160px; flex-shrink:0;
-  background:var(--card); border:1.5px solid var(--border);
-  border-radius:14px; padding:12px 10px;
-  display:flex; flex-direction:column; align-items:center; gap:8px;
-  height:calc(100% - 16px);
+.signs-grid {
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
 }
+@media (min-width:480px) { .signs-grid { grid-template-columns:repeat(3,1fr); } }
+@media (min-width:700px) { .signs-grid { grid-template-columns:repeat(4,1fr); } }
+@media (min-width:1000px) { .signs-grid { grid-template-columns:repeat(5,1fr); } }
+.sign-card {
+  background:var(--card); border:1.5px solid var(--border);
+  border-radius:14px; padding:10px 8px;
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+  cursor:pointer; transition:border-color .2s, transform .15s;
+}
+.sign-card:hover { border-color:var(--orange); transform:translateY(-2px); }
 .sign-img-wrap {
-  width:120px; height:120px; flex-shrink:0;
-  border-radius:10px; overflow:hidden;
+  width:100%; aspect-ratio:1/1; flex-shrink:0;
+  border-radius:8px; overflow:hidden;
   background:rgba(255,255,255,.06); border:1px solid var(--border);
   display:flex; align-items:center; justify-content:center;
 }
@@ -628,10 +640,10 @@ a { color:inherit; text-decoration:none; }
 .sign-ans {
   width:100%; padding:6px 8px; border-radius:8px;
   background:rgba(16,185,129,.1); border:1px solid rgba(16,185,129,.25);
-  font-size:.65rem; color:#6EE7B7; font-weight:700;
+  font-size:.62rem; color:#6EE7B7; font-weight:700;
   text-align:center; line-height:1.35;
   display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical;
-  overflow:hidden; flex:1;
+  overflow:hidden;
 }
 
 /* ══════════════════════════════════════════
@@ -1306,6 +1318,7 @@ a { color:inherit; text-decoration:none; }
     <div class="screen" id="screenSigns">
       <div class="signs-header">
         <div class="screen-title">🚦 <span data-key="signs">Trafikkskilt</span></div>
+        <span class="signs-count" id="signsCount"></span>
       </div>
       <div class="signs-scroll" id="signsScroll">
         <div class="loading-wrap">
@@ -2448,16 +2461,29 @@ async function loadSigns() {
   if (signsLoaded && scroll.children.length > 1) return;
   scroll.innerHTML = '<div class="loading-wrap"><div class="spinner"></div></div>';
   try {
-    var lang = appLang === 'th' ? 'th' : (appLang === 'no' ? 'no' : 'en');
-    var data = await api('GET', '/api/questions/random?count=80&has_image=true&category=Traffic+Signs&lang=' + lang);
-    var qs = Array.isArray(data) ? data : (data.questions || []);
+    // Fetch all questions with images — try all categories
+    var data = await api('GET', '/api/questions?limit=200&has_image=true');
+    var qs = Array.isArray(data) ? data : (data.questions || data.items || []);
+    // Filter only questions that have an image
+    qs = qs.filter(function(q){ return !!(q.bildeUrl || q.image_url || q.image); });
     if (!qs.length) {
       scroll.innerHTML = '<div class="empty-state"><div class="es-icon">🚦</div><p>' + t('signs_empty') + '</p></div>';
       return;
     }
-    scroll.innerHTML = '';
+    // Update count in header
+    var countEl = document.getElementById('signsCount');
+    if (countEl) countEl.textContent = qs.length + ' skilt';
+    // Build grid
+    var grid = document.createElement('div');
+    grid.className = 'signs-grid';
     qs.forEach(function(q) {
       var imgUrl = q.bildeUrl || q.image_url || q.image || '';
+      // Get question text in current language
+      var qText = '';
+      if (appLang === 'th' && q.question_th) qText = q.question_th;
+      else if (appLang === 'en' && q.question_en) qText = q.question_en;
+      else qText = q.question || q.question_no || '';
+      // Get correct answer text in current language
       var answer = '';
       if (q.options && q.correctOptionId) {
         var opt = q.options.find(function(o){ return o.id === q.correctOptionId; });
@@ -2468,16 +2494,17 @@ async function loadSigns() {
       } else if (q.correct_answer_text) {
         answer = q.correct_answer_text;
       }
-      if (!imgUrl) return;
       var card = document.createElement('div');
       card.className = 'sign-card';
       card.innerHTML =
         '<div class="sign-img-wrap">' +
-          '<img class="sign-img" src="' + imgUrl + '" alt="" loading="lazy" onerror="this.parentElement.style.display=\'none\'">' +
+          '<img class="sign-img" src="' + imgUrl + '" alt="" loading="lazy" onerror="this.parentElement.parentElement.style.display=\'none\'">' +
         '</div>' +
-        '<div class="sign-ans">' + (answer || '–') + '</div>';
-      scroll.appendChild(card);
+        '<div class="sign-ans">' + escH(answer || qText || '–') + '</div>';
+      grid.appendChild(card);
     });
+    scroll.innerHTML = '';
+    scroll.appendChild(grid);
     signsLoaded = true;
   } catch(e) {
     scroll.innerHTML = '<div class="empty-state"><div class="es-icon">⚠️</div><p>' + (e.message || 'Feil') + '</p></div>';
