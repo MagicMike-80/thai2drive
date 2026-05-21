@@ -341,7 +341,7 @@ def _fallback_reply(lang: str) -> str:
                 'ทีมงานได้รับข้อความของคุณแล้ว และจะติดต่อกลับทางอีเมลที่ลงทะเบียนไว้ค่ะ')
     if lang == 'en':
         return ('Sorry, I cannot answer right now. Your message has been forwarded '
-                'to our team — please email support@thai2drive.com if urgent.')
+                'to our team — please email lexuz.zxc@gmail.com if urgent.')
     return ('Beklager, jeg får ikke svart akkurat nå. Meldingen din er videresendt '
             'til supportteamet. Du kan også sende e-post til lexuz.zxc@gmail.com.')
 
