@@ -50,7 +50,7 @@ import litellm  # noqa: E402
 
 litellm.suppress_debug_info = True  # keep Railway logs clean
 LLM_KEY = os.environ.get('ANTHROPIC_API_KEY', '').strip()
-LLM_MODEL = 'anthropic/claude-3-5-haiku-20241022'  # fast, cheap, multilingual
+LLM_MODEL = os.environ.get('SUPPORT_LLM_MODEL', 'claude-3-haiku-20240307')  # override via Railway env var if needed
 
 # ─── Startup diagnostic ──────────────────────────────────────────────────
 _key_source = 'ANTHROPIC_API_KEY' if LLM_KEY else None
