@@ -452,7 +452,7 @@ a { color:inherit; text-decoration:none; }
 .quiz-card {
   height:100%;
   display:grid;
-  grid-template-columns:1fr 1fr auto;
+  grid-template-columns:1.25fr 1fr auto;
   gap:16px; align-items:start;
 }
 @media (max-width:700px) {
@@ -471,17 +471,23 @@ a { color:inherit; text-decoration:none; }
 .q-img-wrap {
   width:100%; border-radius:12px; overflow:hidden;
   background:rgba(255,255,255,.04); border:1px solid var(--border);
-  max-height:220px; display:flex; align-items:center; justify-content:center;
+  max-height:300px; display:flex; align-items:center; justify-content:center;
   flex-shrink:0;
 }
-.q-img { width:100%; height:100%; max-height:220px; object-fit:contain; display:block; }
+.q-img { width:100%; height:100%; max-height:300px; object-fit:contain; display:block; }
 
 .q-text {
   font-size:1.25rem; font-weight:700; line-height:1.6; flex-shrink:0;
 }
-.q-tts {
-  display:flex; align-items:center; gap:7px; flex-wrap:wrap; flex-shrink:0;
+.q-settings {
+  display:flex; align-items:center; gap:10px; flex-shrink:0;
+  background:rgba(255,255,255,.04); border:1px solid var(--border);
+  border-radius:12px; padding:8px 12px;
 }
+.q-settings-rows { display:flex; flex-direction:column; gap:5px; }
+.q-settings-row  { display:flex; align-items:center; gap:5px; flex-wrap:wrap; }
+.q-settings-lbl  { font-size:.6rem; color:var(--muted); font-weight:800;
+                    width:34px; flex-shrink:0; text-transform:uppercase; letter-spacing:.04em; }
 .tts-play {
   width:34px; height:34px; border-radius:50%;
   border:1.5px solid var(--border); background:rgba(255,255,255,.05);
@@ -2327,11 +2333,12 @@ function renderQuestion() {
         + '<img class="q-img" src="' + escH(imgUrl) + '" alt="" onerror="this.parentElement.style.display=\'none\'" loading="lazy">'
       + '</div>'
       + '<div class="q-text">' + escH(qText) + '</div>'
-      + '<div class="q-tts">'
+      + '<div class="q-settings">'
         + '<button class="tts-play" id="qTtsBtn" title="Les høyt" onclick="speakQ()">▶</button>'
-        + spdHtml
-        + '<span style="margin:0 4px;color:var(--border)">|</span>'
-        + volHtml
+        + '<div class="q-settings-rows">'
+          + '<div class="q-settings-row"><span class="q-settings-lbl">Tempo</span>' + spdHtml + '</div>'
+          + '<div class="q-settings-row"><span class="q-settings-lbl">Lyd</span>' + volHtml + '</div>'
+        + '</div>'
       + '</div>'
     + '</div>'
     + '<div class="q-mid">'
