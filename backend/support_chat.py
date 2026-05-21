@@ -45,25 +45,21 @@ _SMTP_PORT = int(os.environ.get('SUPPORT_SMTP_PORT', '587'))
 _SMTP_USER = os.environ.get('SUPPORT_SMTP_USER')
 _SMTP_PASS = os.environ.get('SUPPORT_SMTP_PASS')
 
-# ─── LLM (OpenAI) ───────────────────────────────────────────────────────
-from openai import AsyncOpenAI  # noqa: E402
+# ─── LLM (LiteLLM → Anthropic) ──────────────────────────────────────────
+import litellm  # noqa: E402
 
-LLM_KEY = os.environ.get('OPENAI_API_KEY') or os.environ.get('EMERGENT_LLM_KEY', '')
-LLM_MODEL = 'gpt-4o-mini'  # fast, cheap, multilingual — perfect for support
-_openai_client: AsyncOpenAI | None = AsyncOpenAI(api_key=LLM_KEY) if LLM_KEY else None
+litellm.suppress_debug_info = True  # keep Railway logs clean
+LLM_KEY = os.environ.get('ANTHROPIC_API_KEY', '')
+LLM_MODEL = 'anthropic/claude-3-5-haiku-20241022'  # fast, cheap, multilingual
 
 # ─── Startup diagnostic ──────────────────────────────────────────────────
-_key_source = (
-    'OPENAI_API_KEY' if os.environ.get('OPENAI_API_KEY')
-    else 'EMERGENT_LLM_KEY' if os.environ.get('EMERGENT_LLM_KEY')
-    else None
-)
-if _openai_client and _key_source:
-    logger.info('Support chat LLM client ready — key_source=%s model=%s', _key_source, LLM_MODEL)
+_key_source = 'ANTHROPIC_API_KEY' if LLM_KEY else None
+if LLM_KEY:
+    logger.info('Support chat LLM ready — provider=litellm key_source=%s model=%s', _key_source, LLM_MODEL)
 else:
     logger.error(
-        'Support chat LLM client NOT configured — '
-        'OPENAI_API_KEY and EMERGENT_LLM_KEY both absent. All requests will use fallback.'
+        'Support chat LLM NOT configured — '
+        'ANTHROPIC_API_KEY absent. All requests will use fallback.'
     )
 
 SYSTEM_PROMPT = """You are the official support assistant for **Thai2Drive**,
@@ -250,8 +246,8 @@ async def support_chat(req: ChatRequest) -> ChatResponse:
 
     # 3) Ask LLM
     try:
-        if not _openai_client:
-            raise RuntimeError('OPENAI_API_KEY not configured')
+        if not LLM_KEY:
+            raise RuntimeError('ANTHROPIC_API_KEY not configured')
         lang_map = {'no': 'Norwegian', 'th': 'Thai', 'en': 'English'}
         ui_lang = lang_map.get(req.language or 'no', 'Norwegian')
         lang_instruction = (
@@ -263,8 +259,11 @@ async def support_chat(req: ChatRequest) -> ChatResponse:
         messages = [{"role": "system", "content": system_with_lang}]
         messages.extend(conversation)
         messages.append({"role": "user", "content": user_msg})
-        resp = await _openai_client.chat.completions.create(
-            model=LLM_MODEL, messages=messages, max_tokens=320
+        resp = await litellm.acompletion(
+            model=LLM_MODEL,
+            messages=messages,
+            max_tokens=320,
+            api_key=LLM_KEY,
         )
         reply_text = (resp.choices[0].message.content or '').strip()
         if not reply_text:
@@ -366,9 +365,10 @@ async def support_status():
     """Diagnostic: verify LLM client configuration in production.
     Does not expose key values — only reports presence and source."""
     return {
-        'llm_client_configured': _openai_client is not None,
+        'llm_client_configured': bool(LLM_KEY),
         'llm_key_present': bool(LLM_KEY),
         'llm_key_source': _key_source,
+        'provider': 'litellm/anthropic',
         'model': LLM_MODEL,
     }
 
