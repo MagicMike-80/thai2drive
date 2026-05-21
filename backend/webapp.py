@@ -457,9 +457,11 @@ a { color:inherit; text-decoration:none; }
 }
 @media (max-width:700px) {
   .quiz-body { overflow-y:auto; -webkit-overflow-scrolling:touch; }
-  .quiz-card { grid-template-columns:1fr; overflow-y:visible; }
+  .quiz-card { grid-template-columns:1fr; overflow-y:visible; height:auto; }
   .q-next-col { display:none !important; }
   .q-next-mobile { display:block !important; }
+  .q-left { height:auto; overflow:visible; }
+  .q-mid  { height:auto; overflow:visible; }
 }
 
 .q-left {
@@ -1464,7 +1466,7 @@ a { color:inherit; text-decoration:none; }
         <input id="sbEditVideoUrl" type="text" style="padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.95rem;width:100%;box-sizing:border-box;" placeholder="https://..." />
         <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:4px;">
           <button onclick="closeStudiebokModal()" style="padding:8px 18px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text);cursor:pointer;">Avbryt</button>
-          <button onclick="saveStudiebokChapter()" style="padding:8px 18px;border-radius:8px;border:none;background:var(--accent);color:#fff;font-weight:600;cursor:pointer;">Lagre</button>
+          <button onclick="saveStudiebokChapter()" style="padding:8px 18px;border-radius:8px;border:none;background:var(--orange);color:#0F172A;font-weight:600;cursor:pointer;">Lagre</button>
         </div>
       </div>
     </div>
@@ -1643,18 +1645,25 @@ function applyUILang() {
   var nsg= document.getElementById('bnSigns');     if(nsg) nsg.innerHTML = '<span class="bn-icon">🚦</span>' + t('signs');
   var nbm= document.getElementById('bnBookmarks'); if(nbm) nbm.innerHTML = '<span class="bn-icon">🔖</span>' + t('bookmarks');
   var ns = document.getElementById('bnSettings');  if(ns) ns.innerHTML = '<span class="bn-icon">⚙️</span>' + t('settings');
-  // cats header
-  var ch = document.getElementById('catCount');
-  if(ch) ch.closest('.screen-title') && (ch.closest('.screen-title').childNodes[0].textContent = '📚 ' + t('cats') + ' ');
+  // cats header — update title text without disturbing the count span
+  var catsTitleEl = document.querySelector('#screenCats .screen-title');
+  if (catsTitleEl) {
+    var catsCountEl = document.getElementById('catCount');
+    var catsCountText = catsCountEl ? catsCountEl.textContent : '';
+    catsTitleEl.innerHTML = '📚 ' + t('cats') + ' <span id="catCount">' + catsCountText + '</span>';
+  }
   // home buttons
-  document.querySelectorAll('.home-cta').forEach(function(b){ b.innerHTML = '▶&nbsp;&nbsp;' + t('startquiz').replace('▶  ',''); });
+  document.querySelectorAll('.home-cta').forEach(function(b){ b.innerHTML = t('startquiz').replace(/^▶\s*/,'▶&nbsp;&nbsp;'); });
   document.querySelectorAll('.home-sec-btn').forEach(function(b,i){
-    b.textContent = i===0 ? t('exam') : t('daily');
+    if (i===0) b.textContent = t('exam');
+    else if (i===1) b.textContent = t('daily');
+    // i===2 is the Studiebok button — leave it as-is (static text)
   });
   // end screen buttons
   var er = document.querySelector('.end-btn-pri'); if(er) er.innerHTML = t('retry');
-  var eh = document.querySelector('.end-btn-sec:nth-child(2)'); if(eh) eh.innerHTML = t('backhome');
-  var ep = document.querySelector('.end-btn-sec:last-child'); if(ep) ep.innerHTML = t('pickcat');
+  var endSecBtns = document.querySelectorAll('.end-btn-sec');
+  if (endSecBtns[0]) endSecBtns[0].innerHTML = t('backhome');
+  if (endSecBtns[1]) endSecBtns[1].innerHTML = t('pickcat');
   // next buttons
   document.querySelectorAll('#qNextBig,#qNextMobile').forEach(function(b){ b.textContent = t('next'); });
   // progress label
@@ -2458,7 +2467,7 @@ async function loadBookmarks() {
 var signsLoaded = false;
 async function loadSigns() {
   var scroll = document.getElementById('signsScroll');
-  if (signsLoaded && scroll.children.length > 1) return;
+  if (signsLoaded && scroll.children.length > 0) return;
   scroll.innerHTML = '<div class="loading-wrap"><div class="spinner"></div></div>';
   try {
     // Fetch all questions with images — try all categories
@@ -2721,6 +2730,12 @@ function loadSettings() {
   });
 
   document.getElementById('soundToggle').checked = soundOn;
+
+  // Sync feedback style buttons
+  document.querySelectorAll('.seg-btn[onclick*="setFeedback"]').forEach(function(b) {
+    var styleVal = b.getAttribute('onclick').match(/setFeedback\('(\w+)'/);
+    if (styleVal) b.classList.toggle('active', styleVal[1] === feedbackStyle);
+  });
 
   var savedTheme = _ls.get('t2d_theme') || 'dark';
   ['light','dark','system'].forEach(function(t) {
