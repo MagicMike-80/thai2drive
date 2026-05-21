@@ -1406,6 +1406,22 @@ a { color:inherit; text-decoration:none; }
                 <button class="seg-btn" data-key="strong" onclick="setFeedback('strong',this)">Sterk</button>
               </div>
             </div>
+            <div class="settings-row" style="flex-wrap:wrap; gap:8px;">
+              <div class="sr-icon green">🎙️</div>
+              <div class="sr-label" style="flex:1; min-width:80px;">
+                <div class="sr-title">Opplesing — Tempo</div>
+                <div class="sr-sub">Hastighet på talesyntese</div>
+              </div>
+              <div id="settSpdBtns" style="display:flex;gap:5px;flex-wrap:wrap;"></div>
+            </div>
+            <div class="settings-row" style="flex-wrap:wrap; gap:8px;">
+              <div class="sr-icon green">🔈</div>
+              <div class="sr-label" style="flex:1; min-width:80px;">
+                <div class="sr-title">Opplesing — Volum</div>
+                <div class="sr-sub">Lydstyrke på talesyntese</div>
+              </div>
+              <div id="settVolBtns" style="display:flex;gap:5px;flex-wrap:wrap;"></div>
+            </div>
           </div>
         </div>
 
@@ -2334,6 +2350,7 @@ function renderQuestion() {
         + '<img class="q-img" src="' + escH(imgUrl) + '" alt="" onerror="this.parentElement.style.display=\'none\'" loading="lazy">'
       + '</div>'
       + '<div class="q-text">' + escH(qText) + '</div>'
+      + '<div style="flex-shrink:0;"><button class="tts-play" id="qTtsBtn" title="Les høyt" onclick="speakQ()">▶</button></div>'
     + '</div>'
     + '<div class="q-mid">'
       + '<div class="q-answers" id="qAnswers">' + ansHtml + '</div>'
@@ -2346,13 +2363,6 @@ function renderQuestion() {
       + '<button class="q-bookmark-btn' + (isBm ? ' bookmarked' : '') + '" id="qBmBtn" onclick="toggleBookmark(\'' + escH(qId) + '\')" title="Bokmerke">'
         + (isBm ? '🔖' : '🔖')
       + '</button>'
-    + '</div>'
-    + '<div class="q-settings-bar">'
-      + '<button class="tts-play" id="qTtsBtn" title="Les høyt" onclick="speakQ()">▶</button>'
-      + '<div class="q-settings-rows">'
-        + '<div class="q-settings-row"><span class="q-settings-lbl">Tempo</span>' + spdHtml + '</div>'
-        + '<div class="q-settings-row"><span class="q-settings-lbl">Lyd</span>' + volHtml + '</div>'
-      + '</div>'
     + '</div>'
     + (freeBanner ? '<div style="grid-column:1/-1">' + freeBanner + '</div>' : '');
 }
@@ -2761,6 +2771,23 @@ function loadSettings() {
   });
 
   document.getElementById('soundToggle').checked = soundOn;
+
+  // TTS tempo buttons in settings
+  var spdEl = document.getElementById('settSpdBtns');
+  if (spdEl) {
+    spdEl.innerHTML = [0.5, 0.75, 1, 1.5, 2].map(function(r) {
+      return '<button class="spd-btn' + (ttsRate === r ? ' active' : '') + '" data-rate="' + r + '" onclick="setRate(' + r + ',this)">' + r + 'x</button>';
+    }).join('');
+  }
+
+  // TTS volume buttons in settings
+  var volEl = document.getElementById('settVolBtns');
+  if (volEl) {
+    volEl.innerHTML = [[0.3,'🔈'],[0.6,'🔉'],[1.0,'🔊']].map(function(item) {
+      var v = item[0], icon = item[1];
+      return '<button class="vol-btn' + (ttsVolume === v ? ' active' : '') + '" data-vol="' + v + '" onclick="setVolume(' + v + ')">' + icon + '</button>';
+    }).join('');
+  }
 
   // Sync feedback style buttons
   document.querySelectorAll('.seg-btn[onclick*="setFeedback"]').forEach(function(b) {
