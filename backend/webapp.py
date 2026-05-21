@@ -416,6 +416,22 @@ a { color:inherit; text-decoration:none; }
   display:flex; align-items:center; gap:12px;
 }
 [data-theme="light"] .quiz-top { background:var(--bg2); }
+
+/* Light theme: make flag overlay light so text is readable */
+[data-theme="light"] .flag-bg::before { background:rgba(230,236,244,.88); }
+[data-theme="light"] .flag-bg::after  { background:none; }
+[data-theme="light"] .ans-btn {
+  background:rgba(255,255,255,.75); border-color:rgba(0,0,0,.12);
+}
+[data-theme="light"] .ans-btn:hover:not(:disabled) {
+  background:rgba(255,153,51,.12); border-color:var(--orange);
+}
+[data-theme="light"] .q-text { color:#0F172A; }
+[data-theme="light"] .q-img-wrap { background:rgba(255,255,255,.7); }
+[data-theme="light"] .q-feedback { background:rgba(255,255,255,.75); }
+[data-theme="light"] .q-explain  { background:#fff; color:#1a1a1a; }
+[data-theme="light"] .q-settings-bar,
+[data-theme="light"] .q-settings  { background:rgba(255,255,255,.6); }
 .back-btn {
   padding:7px 12px; border-radius:9px;
   border:1.5px solid var(--border); background:transparent;
