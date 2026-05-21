@@ -520,12 +520,13 @@ a { color:inherit; text-decoration:none; }
 }
 .tts-play:hover { border-color:var(--orange); color:var(--orange); background:rgba(255,153,51,.1); }
 .tts-play.playing {
-  border-color:var(--orange); color:var(--orange);
-  animation: tts-pulse 0.9s ease-in-out infinite;
+  border-color:var(--orange) !important;
+  color:var(--orange) !important;
+  animation: tts-pulse 0.7s ease-in-out infinite !important;
 }
 @keyframes tts-pulse {
-  0%,100% { background:rgba(255,153,51,.08); box-shadow:0 0 0 0 rgba(255,153,51,.5); }
-  50%      { background:rgba(255,153,51,.25); box-shadow:0 0 0 7px rgba(255,153,51,0); }
+  0%,100% { background:rgba(255,153,51,.1);  box-shadow:0 0 0 0   rgba(255,153,51,.8); }
+  50%      { background:rgba(255,153,51,.5);  box-shadow:0 0 0 10px rgba(255,153,51,0); }
 }
 .spd-btn {
   padding:3px 9px; border-radius:20px;
