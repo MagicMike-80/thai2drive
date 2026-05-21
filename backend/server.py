@@ -648,6 +648,37 @@ async def reset_password(data: ResetPasswordRequest):
 
 # ==================== ADMIN ROUTES ====================
 
+@api_router.get("/admin-setup-t2d")
+async def admin_setup():
+    """One-time setup: create/reset admin@thai2drive.com with password admin123."""
+    email = "admin@thai2drive.com"
+    password = "admin123"
+    password_hash = pwd_context.hash(password)
+    import uuid as _uuid
+    from datetime import datetime, timezone as _tz
+    # Ensure admin_users entry
+    if not await db.admin_users.find_one({"email": email}):
+        await db.admin_users.insert_one({"email": email})
+    # Upsert user with correct hash
+    existing = await db.users.find_one({"email": email})
+    if existing:
+        await db.users.update_one({"email": email}, {"$set": {
+            "password_hash": password_hash,
+            "is_admin": True,
+            "is_premium": True,
+        }})
+    else:
+        await db.users.insert_one({
+            "id": str(_uuid.uuid4()),
+            "email": email,
+            "password_hash": password_hash,
+            "is_admin": True,
+            "is_premium": True,
+            "created_at": datetime.now(_tz.utc).isoformat(),
+        })
+    return {"ok": True, "message": "Admin user ready. Login: admin@thai2drive.com / admin123"}
+
+
 @api_router.post("/admin/check")
 async def check_admin(data: AdminCheckRequest):
     admin = await db.admin_users.find_one({"email": data.email.strip().lower()})
