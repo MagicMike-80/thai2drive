@@ -549,8 +549,8 @@ a { color:inherit; text-decoration:none; }
 .q-feedback.bad { background:rgba(239,68,68,.08);  border:1px solid rgba(239,68,68,.25);  color:#FCA5A5; display:flex; }
 .q-explain {
   padding:12px 14px;
-  background:rgba(255,153,51,.07); border:1px solid rgba(255,153,51,.2);
-  border-radius:10px; font-size:.88rem; color:var(--text);
+  background:#FFFFFF; border:2px solid var(--orange);
+  border-radius:10px; font-size:.88rem; color:#1a1a1a;
   line-height:1.7; display:none; flex-shrink:0;
 }
 .q-explain.show { display:block; }
