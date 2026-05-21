@@ -302,8 +302,9 @@ a { color:inherit; text-decoration:none; }
 }
 .home-sec-btn {
   padding:11px 8px;
-  background:var(--card); border:1px solid var(--border);
-  border-radius:12px; color:var(--text); font-weight:700;
+  background:rgba(0,0,0,.45); border:1.5px solid rgba(255,255,255,.18);
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  border-radius:12px; color:#F1F5F9; font-weight:700;
   font-size:.82rem; cursor:pointer;
   display:flex; align-items:center; justify-content:center; gap:6px;
   transition:border-color .2s, background .2s;
@@ -315,7 +316,8 @@ a { color:inherit; text-decoration:none; }
   gap:8px; margin-bottom:10px;
 }
 .home-stat {
-  background:var(--card); border:1px solid var(--border);
+  background:rgba(0,0,0,.45); border:1.5px solid rgba(255,255,255,.18);
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
   border-radius:12px; padding:12px 8px; text-align:center;
 }
 .home-stat-num { font-size:1.4rem; font-weight:900; color:var(--orange); line-height:1; }
