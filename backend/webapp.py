@@ -499,6 +499,13 @@ a { color:inherit; text-decoration:none; }
   transition:all .2s;
 }
 .spd-btn.active { background:rgba(255,153,51,.15); border-color:var(--orange); color:var(--orange); }
+.vol-btn {
+  padding:3px 9px; border-radius:20px;
+  border:1.5px solid var(--border); background:transparent;
+  color:var(--muted); font-size:.8rem; cursor:pointer;
+  transition:all .2s;
+}
+.vol-btn.active { background:rgba(255,153,51,.15); border-color:var(--orange); color:var(--orange); }
 
 .q-mid {
   display:flex; flex-direction:column; gap:8px;
@@ -1564,6 +1571,7 @@ var qScore = 0;
 var qAnswered = false;
 var quizStartedAt = null;
 var ttsRate = 1;
+var ttsVolume = parseFloat(_ls.get('t2d_vol') || '1');
 var ttsPlaying = false;
 var currentCat = null;
 var soundOn = _ls.get('t2d_sound') !== 'off';
@@ -2298,6 +2306,11 @@ function renderQuestion() {
     return '<button class="spd-btn' + (ttsRate === r ? ' active' : '') + '" data-rate="' + r + '" onclick="setRate(' + r + ',this)">' + r + 'x</button>';
   }).join('');
 
+  var volHtml = [[0.3,'🔈'],[0.6,'🔉'],[1.0,'🔊']].map(function(item) {
+    var v = item[0], icon = item[1];
+    return '<button class="vol-btn' + (ttsVolume === v ? ' active' : '') + '" data-vol="' + v + '" onclick="setVolume(' + v + ')">' + icon + '</button>';
+  }).join('');
+
   // Free limit banner for non-premium
   var freeBanner = '';
   if (!isPremium() && qIdx < FREE_LIMIT) {
@@ -2317,6 +2330,8 @@ function renderQuestion() {
       + '<div class="q-tts">'
         + '<button class="tts-play" id="qTtsBtn" title="Les høyt" onclick="speakQ()">▶</button>'
         + spdHtml
+        + '<span style="margin:0 4px;color:var(--border)">|</span>'
+        + volHtml
       + '</div>'
     + '</div>'
     + '<div class="q-mid">'
@@ -2638,6 +2653,7 @@ function speakQ() {
   var utt = new SpeechSynthesisUtterance(text);
   utt.lang = appLang === 'th' ? 'th-TH' : appLang === 'no' ? 'nb-NO' : 'en-US';
   utt.rate = ttsRate;
+  utt.volume = ttsVolume;
   utt.onstart = function() { ttsPlaying = true;  updateTtsBtn(true);  };
   utt.onend   = function() { ttsPlaying = false; updateTtsBtn(false); };
   utt.onerror = function() { ttsPlaying = false; updateTtsBtn(false); };
@@ -2653,6 +2669,13 @@ function setRate(r, el) {
   ttsRate = r;
   document.querySelectorAll('.spd-btn').forEach(function(b) {
     b.classList.toggle('active', parseFloat(b.dataset.rate) === r);
+  });
+}
+function setVolume(v) {
+  ttsVolume = v;
+  _ls.set('t2d_vol', String(v));
+  document.querySelectorAll('.vol-btn').forEach(function(b) {
+    b.classList.toggle('active', parseFloat(b.dataset.vol) === v);
   });
 }
 
