@@ -52,6 +52,20 @@ LLM_KEY = os.environ.get('OPENAI_API_KEY') or os.environ.get('EMERGENT_LLM_KEY',
 LLM_MODEL = 'gpt-4o-mini'  # fast, cheap, multilingual — perfect for support
 _openai_client: AsyncOpenAI | None = AsyncOpenAI(api_key=LLM_KEY) if LLM_KEY else None
 
+# ─── Startup diagnostic ──────────────────────────────────────────────────
+_key_source = (
+    'OPENAI_API_KEY' if os.environ.get('OPENAI_API_KEY')
+    else 'EMERGENT_LLM_KEY' if os.environ.get('EMERGENT_LLM_KEY')
+    else None
+)
+if _openai_client and _key_source:
+    logger.info('Support chat LLM client ready — key_source=%s model=%s', _key_source, LLM_MODEL)
+else:
+    logger.error(
+        'Support chat LLM client NOT configured — '
+        'OPENAI_API_KEY and EMERGENT_LLM_KEY both absent. All requests will use fallback.'
+    )
+
 SYSTEM_PROMPT = """You are the official support assistant for **Thai2Drive**,
 a mobile app that helps Thai people in Norway pass the Norwegian driving
 theory test. The app has:
@@ -256,7 +270,7 @@ async def support_chat(req: ChatRequest) -> ChatResponse:
         if not reply_text:
             reply_text = _fallback_reply(req.language or 'no')
     except Exception as e:
-        logger.exception('LLM failed')
+        logger.error('LLM call failed [%s]: %s', type(e).__name__, e)
         reply_text = _fallback_reply(req.language or 'no')
 
     # 4) Persist both messages
@@ -344,6 +358,19 @@ def _fallback_reply(lang: str) -> str:
                 'to our team — please email lexuz.zxc@gmail.com if urgent.')
     return ('Beklager, jeg får ikke svart akkurat nå. Meldingen din er videresendt '
             'til supportteamet. Du kan også sende e-post til lexuz.zxc@gmail.com.')
+
+
+# ─── Diagnostic ─────────────────────────────────────────────────────────
+@support_chat_router.get('/support/status')
+async def support_status():
+    """Diagnostic: verify LLM client configuration in production.
+    Does not expose key values — only reports presence and source."""
+    return {
+        'llm_client_configured': _openai_client is not None,
+        'llm_key_present': bool(LLM_KEY),
+        'llm_key_source': _key_source,
+        'model': LLM_MODEL,
+    }
 
 
 # ─── Admin helpers ──────────────────────────────────────────────────────
