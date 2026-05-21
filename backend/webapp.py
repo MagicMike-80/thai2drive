@@ -104,12 +104,12 @@ a { color:inherit; text-decoration:none; }
 [data-theme="light"] #bottomNav { background:rgba(241,245,249,.98); }
 .bn-tab {
   flex:1; display:flex; flex-direction:column;
-  align-items:center; justify-content:center; gap:3px;
+  align-items:center; justify-content:center; gap:2px;
   border:none; background:transparent; color:var(--muted);
-  cursor:pointer; font-size:.8rem; font-weight:700;
-  transition:color .2s; padding:8px 4px; letter-spacing:.2px;
+  cursor:pointer; font-size:.65rem; font-weight:700;
+  transition:color .2s; padding:6px 2px; letter-spacing:.1px;
 }
-.bn-icon { font-size:26px; line-height:1; transition:transform .2s; }
+.bn-icon { font-size:22px; line-height:1; transition:transform .2s; }
 .bn-tab.active { color:var(--orange); }
 .bn-tab.active .bn-icon { transform:scale(1.18); }
 .bn-tab:active .bn-icon { transform:scale(.9); }
@@ -1590,6 +1590,9 @@ a { color:inherit; text-decoration:none; }
     <button class="bn-tab" id="bnSigns" onclick="showTab('signs')">
       <span class="bn-icon">🚦</span>Skilt
     </button>
+    <button class="bn-tab" id="bnStudybook" onclick="showTab('studybook')">
+      <span class="bn-icon">📖</span>Studiebok
+    </button>
     <button class="bn-tab" id="bnBookmarks" onclick="showTab('bookmarks')">
       <span class="bn-icon">🔖</span>Bokmerker
     </button>
@@ -1842,7 +1845,7 @@ function enterApp() {
 function showTab(tab) {
   activeTab = tab;
   document.querySelectorAll('.bn-tab').forEach(function(b) { b.classList.remove('active'); });
-  var tabMap = { home:'bnHome', cats:'bnCats', history:'bnHistory', signs:'bnSigns', bookmarks:'bnBookmarks', settings:'bnSettings' };
+  var tabMap = { home:'bnHome', cats:'bnCats', history:'bnHistory', signs:'bnSigns', studybook:'bnStudybook', bookmarks:'bnBookmarks', settings:'bnSettings' };
   if (tabMap[tab]) document.getElementById(tabMap[tab]).classList.add('active');
   var screenMap = {
     home:'screenHome', cats:'screenCats',
