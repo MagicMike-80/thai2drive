@@ -383,12 +383,16 @@ a { color:inherit; text-decoration:none; }
 @media (min-width:700px) { .cat-grid { grid-template-columns:repeat(4,1fr); } }
 
 .cat-card {
-  background:rgba(0,0,0,.35); border:1.5px solid rgba(255,255,255,.18);
-  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  background:#0F172A; border:1.5px solid rgba(255,255,255,.1);
   border-radius:14px; padding:14px 12px;
   cursor:pointer; transition:border-color .2s, transform .15s, box-shadow .2s;
   display:flex; flex-direction:column; gap:6px;
+  color:#F1F5F9;
 }
+[data-theme="light"] .cat-card {
+  background:#fff; border-color:rgba(0,0,0,.1); color:#0F172A;
+}
+[data-theme="light"] .cat-count { color:#64748B; }
 .cat-card:hover {
   border-color:var(--orange); transform:translateY(-2px);
   box-shadow:0 8px 20px rgba(255,153,51,.12);
@@ -407,7 +411,8 @@ a { color:inherit; text-decoration:none; }
 /* ══════════════════════════════════════════
    QUIZ SCREEN — fully height-based, NO scroll
 ══════════════════════════════════════════ */
-#screenQuiz { padding:0; }
+#screenQuiz { padding:0; background:#0B1226; }
+[data-theme="light"] #screenQuiz { background:#E8EEF6; }
 
 .quiz-top {
   padding:10px 16px 8px; flex-shrink:0;
