@@ -660,18 +660,13 @@ def _video_html() -> str:
     </div>"""
     else:
         video_block = f"""
-    <div class="video-coming">
-      <div class="vc-icon">🎬</div>
-      <strong>
-        <span data-lang="th">วิดีโออธิบายบนไทย — เร็วๆ นี้!</span>
-        <span data-lang="no">Forklaringsvideo på thai — kommer snart!</span>
-        <span data-lang="en">Thai-language explainer video — coming soon!</span>
-      </strong>
-      <span>
-        <span data-lang="th">«สอบทฤษฎีในนอร์เวย์ยังไง» · ทุกขั้นตอน ภาษาไทย</span>
-        <span data-lang="no">«Slik tar du teoriprøven i Norge» · alt forklart på thai</span>
-        <span data-lang="en">«How to pass the Norwegian theory test» · all explained in Thai</span>
-      </span>
+    <div class="video-wrap">
+      <iframe
+        src="https://www.youtube.com/embed/EzAcXro21xI"
+        title="9 กลุ่มป้ายจราจรในนอร์เวย์ | Thai2Drive"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen>
+      </iframe>
     </div>"""
 
     return f"""
