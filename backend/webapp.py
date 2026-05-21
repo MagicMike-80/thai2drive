@@ -100,14 +100,18 @@ a { color:inherit; text-decoration:none; }
   backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
   border-top:1px solid var(--border);
   display:none; align-items:stretch; z-index:50;
+  overflow-x:auto; overflow-y:hidden;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
 }
+#bottomNav::-webkit-scrollbar { display:none; }
 [data-theme="light"] #bottomNav { background:rgba(241,245,249,.98); }
 .bn-tab {
-  flex:1; display:flex; flex-direction:column;
+  flex:0 0 auto; min-width:64px; display:flex; flex-direction:column;
   align-items:center; justify-content:center; gap:2px;
   border:none; background:transparent; color:var(--muted);
-  cursor:pointer; font-size:.65rem; font-weight:700;
-  transition:color .2s; padding:6px 2px; letter-spacing:.1px;
+  cursor:pointer; font-size:.62rem; font-weight:700;
+  transition:color .2s; padding:6px 8px; letter-spacing:.1px;
 }
 .bn-icon { font-size:22px; line-height:1; transition:transform .2s; }
 .bn-tab.active { color:var(--orange); }
