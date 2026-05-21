@@ -238,7 +238,15 @@ async def support_chat(req: ChatRequest) -> ChatResponse:
     try:
         if not _openai_client:
             raise RuntimeError('OPENAI_API_KEY not configured')
-        messages = [{"role": "system", "content": SYSTEM_PROMPT}]
+        lang_map = {'no': 'Norwegian', 'th': 'Thai', 'en': 'English'}
+        ui_lang = lang_map.get(req.language or 'no', 'Norwegian')
+        lang_instruction = (
+            f"The user's current UI language is {ui_lang}. "
+            f"Respond in {ui_lang} unless the user's message is clearly written "
+            f"in a different language, in which case mirror their message language."
+        )
+        system_with_lang = SYSTEM_PROMPT.rstrip() + f"\n\nLanguage instruction: {lang_instruction}"
+        messages = [{"role": "system", "content": system_with_lang}]
         messages.extend(conversation)
         messages.append({"role": "user", "content": user_msg})
         resp = await _openai_client.chat.completions.create(

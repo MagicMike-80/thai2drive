@@ -328,6 +328,19 @@ _CHAT_JS = r"""
   let typingEl = null;
   let greeted = false;
 
+  function getLang(){
+    return document.documentElement.getAttribute('data-current-lang') || document.documentElement.lang || 'no';
+  }
+
+  // Reset session if user changed language since last visit
+  (function(){
+    const storedLang = localStorage.getItem('t2d_chat_lang') || '';
+    if(sessionId && storedLang && storedLang !== getLang()){
+      sessionId = '';
+      localStorage.removeItem('t2d_chat_session');
+    }
+  })();
+
   function scrollBottom(){ body.scrollTop = body.scrollHeight; }
 
   function addMsg(role, text){
@@ -355,7 +368,7 @@ _CHAT_JS = r"""
     if(!greeted){
       greeted = true;
       // Pick greeting based on page language (landing / app / support)
-      const lang = document.documentElement.getAttribute('data-current-lang') || document.documentElement.lang || 'no';
+      const lang = getLang();
       const greetings = {
         th: 'ต้องการความช่วยเหลือไหม? ถามได้เลยเกี่ยวกับ Thai2Drive 👋',
         no: 'Trenger du hjelp med teoriprøven? Spør meg om Thai2Drive 👋',
@@ -383,7 +396,13 @@ _CHAT_JS = r"""
     send.disabled = true;
 
     try{
-      const lang = document.documentElement.lang || 'no';
+      const lang = getLang();
+      // Reset session if language changed while panel was open
+      const storedLang = localStorage.getItem('t2d_chat_lang') || '';
+      if(sessionId && storedLang && storedLang !== lang){
+        sessionId = '';
+        localStorage.removeItem('t2d_chat_session');
+      }
       const res = await fetch('/api/support/chat', {
         method:'POST',
         headers:{'Content-Type':'application/json'},
@@ -395,6 +414,7 @@ _CHAT_JS = r"""
       if(data.session_id){
         sessionId = data.session_id;
         localStorage.setItem('t2d_chat_session', sessionId);
+        localStorage.setItem('t2d_chat_lang', lang);
       }
       addMsg('bot', data.reply || 'Beklager, ingen svar akkurat nå. Prøv igjen om litt.');
 
