@@ -479,10 +479,11 @@ a { color:inherit; text-decoration:none; }
 .q-text {
   font-size:1.25rem; font-weight:700; line-height:1.6; flex-shrink:0;
 }
-.q-settings {
-  display:flex; align-items:center; gap:10px; flex-shrink:0;
+.q-settings-bar {
+  grid-column: 1 / -1;
+  display:flex; align-items:center; gap:12px;
   background:rgba(255,255,255,.04); border:1px solid var(--border);
-  border-radius:12px; padding:8px 12px;
+  border-radius:12px; padding:10px 14px;
 }
 .q-settings-rows { display:flex; flex-direction:column; gap:5px; }
 .q-settings-row  { display:flex; align-items:center; gap:5px; flex-wrap:wrap; }
@@ -2333,13 +2334,6 @@ function renderQuestion() {
         + '<img class="q-img" src="' + escH(imgUrl) + '" alt="" onerror="this.parentElement.style.display=\'none\'" loading="lazy">'
       + '</div>'
       + '<div class="q-text">' + escH(qText) + '</div>'
-      + '<div class="q-settings">'
-        + '<button class="tts-play" id="qTtsBtn" title="Les høyt" onclick="speakQ()">▶</button>'
-        + '<div class="q-settings-rows">'
-          + '<div class="q-settings-row"><span class="q-settings-lbl">Tempo</span>' + spdHtml + '</div>'
-          + '<div class="q-settings-row"><span class="q-settings-lbl">Lyd</span>' + volHtml + '</div>'
-        + '</div>'
-      + '</div>'
     + '</div>'
     + '<div class="q-mid">'
       + '<div class="q-answers" id="qAnswers">' + ansHtml + '</div>'
@@ -2352,6 +2346,13 @@ function renderQuestion() {
       + '<button class="q-bookmark-btn' + (isBm ? ' bookmarked' : '') + '" id="qBmBtn" onclick="toggleBookmark(\'' + escH(qId) + '\')" title="Bokmerke">'
         + (isBm ? '🔖' : '🔖')
       + '</button>'
+    + '</div>'
+    + '<div class="q-settings-bar">'
+      + '<button class="tts-play" id="qTtsBtn" title="Les høyt" onclick="speakQ()">▶</button>'
+      + '<div class="q-settings-rows">'
+        + '<div class="q-settings-row"><span class="q-settings-lbl">Tempo</span>' + spdHtml + '</div>'
+        + '<div class="q-settings-row"><span class="q-settings-lbl">Lyd</span>' + volHtml + '</div>'
+      + '</div>'
     + '</div>'
     + (freeBanner ? '<div style="grid-column:1/-1">' + freeBanner + '</div>' : '');
 }
