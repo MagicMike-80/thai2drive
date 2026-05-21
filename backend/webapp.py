@@ -981,72 +981,126 @@ a { color:inherit; text-decoration:none; }
    STUDIEBOK SCREEN
 ══════════════════════════════════════════ */
 #screenStudybook { padding:0; }
-.study-header {
-  padding:14px 16px 10px; flex-shrink:0;
+/* ══ STUDIEBOK — BOK-STIL ══ */
+.sb-topbar {
+  flex-shrink:0; padding:10px 14px 8px;
   display:flex; align-items:center; gap:10px;
+  background:rgba(11,18,38,.6); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border);
 }
-.study-scroll {
-  flex:1; overflow-y:auto; overflow-x:hidden;
-  padding:0 16px 20px;
-  -webkit-overflow-scrolling:touch;
-  display:flex; flex-direction:column; gap:10px;
-}
-.study-scroll::-webkit-scrollbar { width:4px; }
-.study-scroll::-webkit-scrollbar-track { background:transparent; }
-.study-scroll::-webkit-scrollbar-thumb { background:rgba(255,255,255,.1); border-radius:2px; }
-
-.study-chapter {
-  background:var(--card); border:1px solid var(--border);
-  border-radius:16px; overflow:hidden;
+[data-theme="light"] .sb-topbar { background:rgba(241,245,249,.9); }
+.sb-search-wrap { flex:1; position:relative; }
+.sb-search-wrap input {
+  width:100%; padding:8px 14px 8px 36px;
+  border-radius:20px; border:1px solid var(--border);
+  background:rgba(255,255,255,.07); color:var(--text);
+  font-size:.82rem; outline:none;
   transition:border-color .2s;
 }
-.study-chapter-header {
-  display:flex; align-items:center; gap:12px;
-  padding:14px 16px; cursor:pointer;
-  user-select:none;
+[data-theme="light"] .sb-search-wrap input { background:rgba(0,0,0,.06); }
+.sb-search-wrap input:focus { border-color:var(--orange); }
+.sb-search-wrap::before {
+  content:'🔍'; position:absolute; left:11px; top:50%;
+  transform:translateY(-50%); font-size:.75rem; pointer-events:none;
 }
-.study-chapter-header:hover { background:rgba(255,255,255,.03); }
-.study-ch-icon {
-  width:40px; height:40px; border-radius:11px;
+.sb-search-results {
+  position:absolute; top:100%; left:0; right:0; z-index:200;
+  background:var(--bg2); border:1px solid var(--border);
+  border-radius:14px; overflow:hidden;
+  box-shadow:0 8px 32px rgba(0,0,0,.4);
+  max-height:260px; overflow-y:auto;
+  margin:4px 14px 0;
+}
+.sb-result-item {
+  padding:10px 14px; cursor:pointer; display:flex; align-items:center; gap:10px;
+  border-bottom:1px solid var(--border); font-size:.82rem;
+  transition:background .15s;
+}
+.sb-result-item:last-child { border-bottom:none; }
+.sb-result-item:hover { background:rgba(255,153,51,.1); }
+.sb-result-icon { font-size:1.1rem; flex-shrink:0; }
+.sb-result-title { color:var(--text); font-weight:600; }
+.sb-result-preview { color:var(--muted); font-size:.74rem; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:240px; }
+
+/* Book reader */
+.sb-reader {
+  flex:1; overflow-y:auto; overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  padding:16px 16px 8px;
+}
+.sb-reader::-webkit-scrollbar { width:3px; }
+.sb-reader::-webkit-scrollbar-thumb { background:rgba(255,255,255,.1); border-radius:2px; }
+.sb-page {
+  background:rgba(0,0,0,.05); border:1px solid rgba(255,255,255,.12);
+  backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
+  border-radius:20px; padding:20px 18px 22px; min-height:100px;
+}
+[data-theme="light"] .sb-page { background:rgba(255,255,255,.75); border-color:rgba(0,0,0,.1); }
+.sb-page-icon {
+  width:52px; height:52px; border-radius:14px; margin:0 auto 12px;
   display:flex; align-items:center; justify-content:center;
-  font-size:1.25rem; flex-shrink:0;
-  background:rgba(255,153,51,.13); border:1px solid rgba(255,153,51,.2);
+  font-size:1.6rem;
+  background:rgba(255,153,51,.13); border:1.5px solid rgba(255,153,51,.25);
 }
-.study-ch-title { flex:1; font-size:.92rem; font-weight:800; line-height:1.3; }
-.study-ch-arrow {
-  color:var(--muted); font-size:.85rem;
-  transition:transform .25s;
+.sb-page-title {
+  text-align:center; font-size:1rem; font-weight:900;
+  color:var(--orange); margin-bottom:16px; line-height:1.3;
 }
-.study-chapter.open .study-ch-arrow { transform:rotate(90deg); }
-.sb-edit-btn {
-  background:none; border:none; cursor:pointer;
-  font-size:.85rem; padding:2px 6px; border-radius:6px;
-  color:var(--muted); transition:background .15s;
-  flex-shrink:0;
+.sb-page-body { font-size:.82rem; line-height:1.8; color:var(--text); }
+.sb-page-body p { margin-top:10px; }
+.sb-page-body strong { color:var(--orange); font-weight:800; }
+.sb-page-body ul, .sb-page-body ol {
+  margin:8px 0 0 0; padding-left:18px; line-height:1.8;
 }
-.sb-edit-btn:hover { background:rgba(255,255,255,.1); }
-.study-chapter-body {
-  display:none; padding:0 16px 16px;
+.sb-page-body li { margin-bottom:3px; }
+.sb-page-body .study-tip {
+  margin-top:14px; padding:10px 14px;
+  background:rgba(255,153,51,.08); border:1px solid rgba(255,153,51,.2);
+  border-radius:10px; font-size:.77rem; color:var(--muted); line-height:1.65;
+}
+.sb-page-body .study-tip strong { color:var(--orange); }
+.study-img { max-width:100%; border-radius:8px; margin-bottom:12px; }
+
+/* Nav bar */
+.sb-nav {
+  flex-shrink:0; display:flex; align-items:center; justify-content:space-between;
+  padding:10px 14px 12px; gap:10px;
   border-top:1px solid var(--border);
 }
-.study-chapter.open .study-chapter-body { display:block; }
-.study-img { max-width:100%; border-radius:8px; margin-bottom:12px; }
-.study-chapter-body p {
-  font-size:.83rem; line-height:1.75; color:var(--text);
-  margin-top:12px;
+.sb-nav-btn {
+  padding:9px 18px; border-radius:22px;
+  border:1.5px solid var(--orange); background:transparent;
+  color:var(--orange); font-size:.82rem; font-weight:700;
+  cursor:pointer; transition:background .15s, opacity .15s;
+  flex-shrink:0;
 }
-.study-chapter-body strong { color:var(--orange); font-weight:800; }
-.study-chapter-body ul {
-  margin:8px 0 0 0; padding-left:18px;
-  font-size:.82rem; line-height:1.75; color:var(--text);
+.sb-nav-btn:hover { background:rgba(255,153,51,.12); }
+.sb-nav-btn:disabled { opacity:.3; cursor:default; }
+.sb-nav-info {
+  flex:1; text-align:center; font-size:.78rem;
+  color:var(--muted); font-weight:600; letter-spacing:.3px;
 }
-.study-chapter-body li { margin-bottom:4px; }
-.study-tip {
-  margin-top:12px; padding:10px 13px;
-  background:rgba(255,153,51,.08); border:1px solid rgba(255,153,51,.2);
-  border-radius:10px; font-size:.78rem; color:var(--muted); line-height:1.6;
+.sb-progress {
+  display:flex; gap:3px; justify-content:center; flex-wrap:wrap;
+  padding:0 14px 6px;
 }
-.study-tip strong { color:var(--orange); }
+.sb-dot {
+  width:6px; height:6px; border-radius:50%;
+  background:rgba(255,255,255,.15); cursor:pointer;
+  transition:background .2s, transform .2s;
+  flex-shrink:0;
+}
+[data-theme="light"] .sb-dot { background:rgba(0,0,0,.15); }
+.sb-dot.active { background:var(--orange); transform:scale(1.4); }
+.sb-dot.visited { background:rgba(255,153,51,.4); }
+
+/* Edit btn in book mode */
+.sb-edit-btn {
+  background:none; border:none; cursor:pointer;
+  font-size:.82rem; padding:4px 8px; border-radius:8px;
+  color:var(--muted); transition:background .15s; float:right;
+}
+.sb-edit-btn:hover { background:rgba(255,255,255,.1); }
 
 /* Toast */
 .toast {
@@ -1507,11 +1561,25 @@ a { color:inherit; text-decoration:none; }
 
     <!-- ═══ STUDIEBOK SCREEN ═══ -->
     <div class="screen" id="screenStudybook">
-      <div class="study-header">
+      <!-- Top bar: back + search -->
+      <div class="sb-topbar">
         <button class="back-btn" onclick="showTab('home')">← Tilbake</button>
-        <div class="screen-title">📖 Studiebok</div>
+        <div class="sb-search-wrap">
+          <input id="sbSearchInput" type="text" placeholder="Søk eller § nummer..." oninput="sbSearch(this.value)" autocomplete="off" />
+        </div>
       </div>
-      <div class="study-scroll" id="studyScroll"><div class="loading-wrap"><div class="spinner"></div></div></div>
+      <!-- Search results dropdown -->
+      <div id="sbSearchResults" class="sb-search-results" style="display:none;"></div>
+      <!-- Progress dots -->
+      <div class="sb-progress" id="sbProgress"></div>
+      <!-- Book reader — one chapter at a time -->
+      <div class="sb-reader" id="sbReader"><div class="loading-wrap"><div class="spinner"></div></div></div>
+      <!-- Prev / page info / Next -->
+      <div class="sb-nav">
+        <button class="sb-nav-btn" id="sbPrevBtn" onclick="sbGoTo(_sbCurrent - 1)">‹ Forrige</button>
+        <div class="sb-nav-info" id="sbNavInfo">Laster...</div>
+        <button class="sb-nav-btn" id="sbNextBtn" onclick="sbGoTo(_sbCurrent + 1)">Neste ›</button>
+      </div>
     </div>
 
     <!-- ═══ STUDIEBOK ADMIN EDIT MODAL ═══ -->
@@ -1881,57 +1949,167 @@ function toggleChapter(id) {
 }
 
 // ════════════════════════════════════════════
-//  STUDIEBOK
+//  STUDIEBOK — BOK-MODUS
 // ════════════════════════════════════════════
-var _studiebokLoaded = false;
-var _sbEditOrder = null;
+var _sbChapters   = [];
+var _sbCurrent    = 0;   // index (0-based)
+var _sbLoaded     = false;
+var _sbEditOrder  = null;
+var _sbVisited    = {};
 
 async function loadStudiebok() {
-  var scroll = document.getElementById('studyScroll');
-  if (!scroll) return;
-  scroll.innerHTML = '<div class="loading-wrap"><div class="spinner"></div></div>';
-  _studiebokLoaded = false;
+  var reader = document.getElementById('sbReader');
+  if (!reader) return;
+  if (_sbLoaded && _sbChapters.length) { sbRender(); return; }
+  reader.innerHTML = '<div class="loading-wrap"><div class="spinner"></div></div>';
   try {
-    var chapters = await api('GET', '/api/studiebok');
-    var html = '';
-    chapters.forEach(function(ch) {
-      var schId = 'sch' + ch.order;
-      var editBtn = (user && user.is_admin)
-        ? '<button class="sb-edit-btn" onclick="openStudiebokModal(' + ch.order + ',event)" title="Rediger">✏️</button>'
-        : '';
-      var imgHtml = (ch.image_url) ? '<img src="' + ch.image_url + '" class="study-img" alt="">' : '';
-      var imageUrlAttr = ch.image_url ? ' data-image-url="' + ch.image_url.replace(/"/g, '&quot;') + '"' : '';
-      var videoUrlAttr = ch.video_url ? ' data-video-url="' + ch.video_url.replace(/"/g, '&quot;') + '"' : '';
-      html += '<div class="study-chapter" id="' + schId + '"' + imageUrlAttr + videoUrlAttr + '>'
-            + '<div class="study-chapter-header" onclick="toggleChapter(\'' + schId + '\')">'
-            + '<div class="study-ch-icon">' + ch.icon + '</div>'
-            + '<div class="study-ch-title">' + ch.title_no + '</div>'
-            + editBtn
-            + '<span class="study-ch-arrow">›</span>'
-            + '</div>'
-            + '<div class="study-chapter-body">' + imgHtml + ch.content_no + '</div>'
-            + '</div>';
-    });
-    scroll.innerHTML = html;
-    _studiebokLoaded = true;
+    _sbChapters = await api('GET', '/api/studiebok');
+    _sbLoaded = true;
+    sbBuildDots();
+    sbGoTo(0);
   } catch(e) {
-    scroll.innerHTML = '<div style="padding:24px;text-align:center;color:var(--muted);">Kunne ikke laste studiebok. Prøv igjen.</div>';
+    reader.innerHTML = '<div style="padding:24px;text-align:center;color:var(--muted);">Kunne ikke laste studiebok.</div>';
   }
 }
 
-function openStudiebokModal(order, e) {
-  if (e) { e.stopPropagation(); }
-  var schId = 'sch' + order;
-  var ch = document.getElementById(schId);
+function sbBuildDots() {
+  var wrap = document.getElementById('sbProgress');
+  if (!wrap) return;
+  wrap.innerHTML = '';
+  _sbChapters.forEach(function(ch, i) {
+    var d = document.createElement('div');
+    d.className = 'sb-dot' + (i === _sbCurrent ? ' active' : '');
+    d.title = ch.title_no;
+    d.onclick = function() { sbGoTo(i); };
+    wrap.appendChild(d);
+  });
+}
+
+function sbGoTo(idx) {
+  if (idx < 0 || idx >= _sbChapters.length) return;
+  _sbCurrent = idx;
+  _sbVisited[idx] = true;
+  sbRender();
+  sbCloseSuggest();
+  // scroll reader to top
+  var r = document.getElementById('sbReader');
+  if (r) r.scrollTop = 0;
+  // clear search
+  var inp = document.getElementById('sbSearchInput');
+  if (inp) inp.value = '';
+}
+
+function sbRender() {
+  var ch = _sbChapters[_sbCurrent];
+  if (!ch) return;
+  var total = _sbChapters.length;
+
+  // Nav info
+  var info = document.getElementById('sbNavInfo');
+  if (info) info.textContent = ch.title_no.split('—')[0].trim() + '  ·  ' + (_sbCurrent + 1) + ' / ' + total;
+
+  // Prev / Next buttons
+  var prev = document.getElementById('sbPrevBtn');
+  var next = document.getElementById('sbNextBtn');
+  if (prev) prev.disabled = (_sbCurrent === 0);
+  if (next) next.disabled = (_sbCurrent === total - 1);
+
+  // Dots
+  var dots = document.querySelectorAll('.sb-dot');
+  dots.forEach(function(d, i) {
+    d.className = 'sb-dot' + (i === _sbCurrent ? ' active' : (_sbVisited[i] ? ' visited' : ''));
+  });
+
+  // Edit button (admin only)
+  var editBtn = (user && user.is_admin)
+    ? '<button class="sb-edit-btn" onclick="openStudiebokModal(' + ch.order + ')" title="Rediger">✏️</button>'
+    : '';
+
+  var imgHtml = ch.image_url ? '<img src="' + ch.image_url + '" class="study-img" alt="">' : '';
+
+  var reader = document.getElementById('sbReader');
+  reader.innerHTML =
+    '<div class="sb-page">' +
+      editBtn +
+      '<div class="sb-page-icon">' + ch.icon + '</div>' +
+      '<div class="sb-page-title">' + ch.title_no + '</div>' +
+      '<div class="sb-page-body">' + imgHtml + ch.content_no + '</div>' +
+    '</div>';
+}
+
+// Search
+function sbSearch(q) {
+  var box = document.getElementById('sbSearchResults');
+  q = q.trim();
+  if (!q || !_sbChapters.length) { box.style.display = 'none'; return; }
+
+  // Try §-number first: "3", "§3", "§ 3"
+  var num = parseInt(q.replace(/[§\s]/g, ''));
+  var matches = [];
+
+  if (!isNaN(num)) {
+    matches = _sbChapters.filter(function(ch) { return ch.order === num; });
+  }
+  if (!matches.length) {
+    var lq = q.toLowerCase();
+    matches = _sbChapters.filter(function(ch) {
+      return ch.title_no.toLowerCase().includes(lq) ||
+             ch.content_no.toLowerCase().replace(/<[^>]+>/g,'').includes(lq);
+    });
+  }
+
+  if (!matches.length) {
+    box.innerHTML = '<div class="sb-result-item" style="color:var(--muted)">Ingen treff</div>';
+    box.style.display = 'block'; return;
+  }
+
+  box.innerHTML = matches.slice(0, 6).map(function(ch) {
+    var plain = ch.content_no.replace(/<[^>]+>/g,'').substring(0, 80) + '…';
+    return '<div class="sb-result-item" onclick="sbGoTo(' + (_sbChapters.indexOf(ch)) + ')">' +
+           '<span class="sb-result-icon">' + ch.icon + '</span>' +
+           '<div><div class="sb-result-title">' + ch.title_no + '</div>' +
+           '<div class="sb-result-preview">' + plain + '</div></div>' +
+           '</div>';
+  }).join('');
+  box.style.display = 'block';
+}
+
+function sbCloseSuggest() {
+  var box = document.getElementById('sbSearchResults');
+  if (box) box.style.display = 'none';
+}
+
+// Close search on outside click
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.sb-search-wrap') && !e.target.closest('.sb-search-results')) {
+    sbCloseSuggest();
+  }
+});
+
+// Swipe left/right on reader
+(function() {
+  var sx = 0;
+  document.addEventListener('touchstart', function(e) {
+    var r = document.getElementById('sbReader');
+    if (r && r.contains(e.target)) sx = e.touches[0].clientX;
+  }, {passive:true});
+  document.addEventListener('touchend', function(e) {
+    var r = document.getElementById('sbReader');
+    if (!r || !r.contains(e.target)) return;
+    var dx = e.changedTouches[0].clientX - sx;
+    if (Math.abs(dx) > 50) { if (dx < 0) sbGoTo(_sbCurrent + 1); else sbGoTo(_sbCurrent - 1); }
+  }, {passive:true});
+})();
+
+function openStudiebokModal(order) {
+  var ch = _sbChapters.find(function(c) { return c.order === order; });
   if (!ch) return;
   _sbEditOrder = order;
-  document.getElementById('sbEditTitle').value   = ch.querySelector('.study-ch-title').textContent;
-  document.getElementById('sbEditContent').value = ch.querySelector('.study-chapter-body').innerHTML;
-  // Populate image_url and video_url from data attributes if available
-  document.getElementById('sbEditImageUrl').value = ch.dataset.imageUrl || '';
-  document.getElementById('sbEditVideoUrl').value = ch.dataset.videoUrl || '';
-  var modal = document.getElementById('studiebokEditModal');
-  modal.style.display = 'flex';
+  document.getElementById('sbEditTitle').value    = ch.title_no;
+  document.getElementById('sbEditContent').value  = ch.content_no;
+  document.getElementById('sbEditImageUrl').value = ch.image_url || '';
+  document.getElementById('sbEditVideoUrl').value = ch.video_url || '';
+  document.getElementById('studiebokEditModal').style.display = 'flex';
 }
 
 function closeStudiebokModal() {
@@ -1947,10 +2125,12 @@ async function saveStudiebokChapter() {
   var video_url  = document.getElementById('sbEditVideoUrl').value.trim();
   if (!title_no || !content_no) { toast('Tittel og innhold kan ikke være tomme'); return; }
   try {
-    await api('PUT', '/api/studiebok/' + _sbEditOrder, { title_no: title_no, content_no: content_no, image_url: image_url, video_url: video_url });
+    await api('PUT', '/api/studiebok/' + _sbEditOrder, { title_no, content_no, image_url, video_url });
+    // Update local cache
+    var idx = _sbChapters.findIndex(function(c) { return c.order === _sbEditOrder; });
+    if (idx >= 0) { _sbChapters[idx].title_no = title_no; _sbChapters[idx].content_no = content_no; _sbChapters[idx].image_url = image_url; _sbChapters[idx].video_url = video_url; }
     closeStudiebokModal();
-    _studiebokLoaded = false;
-    await loadStudiebok();
+    sbRender();
     toast('Kapittel lagret');
   } catch(e) {
     toast('Feil: ' + e.message);
