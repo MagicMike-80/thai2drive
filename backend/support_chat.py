@@ -373,6 +373,40 @@ async def support_status():
     }
 
 
+# ─── LLM smoke-test (temporary — remove after debugging) ────────────────
+@support_chat_router.get('/support/test-llm')
+async def test_llm():
+    """Makes a minimal real LLM call and returns the result OR the full
+    exception. Use this to surface the exact runtime failure without
+    needing Railway log access. Remove once the root cause is fixed."""
+    import traceback
+
+    if not LLM_KEY:
+        return {'status': 'error', 'detail': 'ANTHROPIC_API_KEY not set'}
+
+    try:
+        resp = await litellm.acompletion(
+            model=LLM_MODEL,
+            messages=[{"role": "user", "content": "Reply with the single word: OK"}],
+            max_tokens=10,
+            api_key=LLM_KEY,
+        )
+        reply = (resp.choices[0].message.content or '').strip()
+        return {
+            'status': 'ok',
+            'reply': reply,
+            'model': LLM_MODEL,
+            'resp_type': type(resp).__name__,
+        }
+    except Exception as e:
+        return {
+            'status': 'error',
+            'exception_type': type(e).__name__,
+            'exception_detail': str(e),
+            'traceback': traceback.format_exc(),
+        }
+
+
 # ─── Admin helpers ──────────────────────────────────────────────────────
 @support_chat_router.get('/support/chat/admin/escalations')
 async def list_escalations(limit: int = 50):
