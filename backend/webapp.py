@@ -43,7 +43,7 @@ WEBAPP_HTML = r"""<!DOCTYPE html>
 *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
 html { font-size: 22px; }
 html, body {
-  height:100%; overflow:hidden;
+  height:100%; min-height:-webkit-fill-available; overflow:hidden;
   background:var(--bg); color:var(--text);
   font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
   -webkit-font-smoothing:antialiased;
@@ -55,7 +55,7 @@ a { color:inherit; text-decoration:none; }
    APP SHELL — NO SCROLL ANYWHERE
 ══════════════════════════════════════════ */
 #app {
-  width:100%; height:100vh;
+  width:100%; height:100vh; height:-webkit-fill-available;
   display:flex; flex-direction:column;
   overflow:hidden; position:relative; z-index:1;
 }
@@ -1533,7 +1533,13 @@ a { color:inherit; text-decoration:none; }
 // ════════════════════════════════════════════
 //  STATE
 // ════════════════════════════════════════════
-var token = localStorage.getItem('t2d_token');
+// Safari Private Browsing safe localStorage wrapper
+var _ls = {
+  get: function(k) { try { return localStorage.getItem(k); } catch(e) { return null; } },
+  set: function(k,v) { try { localStorage.setItem(k,v); } catch(e) {} },
+  remove: function(k) { try { localStorage.removeItem(k); } catch(e) {} }
+};
+var token = _ls.get('t2d_token');
 var user = null;
 var deviceId = null;
 var questions = [];
@@ -1544,9 +1550,9 @@ var quizStartedAt = null;
 var ttsRate = 1;
 var ttsPlaying = false;
 var currentCat = null;
-var soundOn = localStorage.getItem('t2d_sound') !== 'off';
-var feedbackStyle = localStorage.getItem('t2d_feedback') || 'soft';
-var appLang = localStorage.getItem('t2d_lang') || 'th';
+var soundOn = _ls.get('t2d_sound') !== 'off';
+var feedbackStyle = _ls.get('t2d_feedback') || 'soft';
+var appLang = _ls.get('t2d_lang') || 'th';
 var activeTab = 'home';
 
 // ── UI string translations ──────────────────────────────────
@@ -1728,7 +1734,7 @@ function catName(raw) {
       deviceId = user._id || user.id || null;
       enterApp();
     } catch(e) {
-      localStorage.removeItem('t2d_token');
+      _ls.remove('t2d_token');
       token = null;
       showScreen('screenAuth');
     }
@@ -1936,7 +1942,7 @@ async function doLogin() {
     var r = await api('POST', '/api/auth/login', { email: email, password: pass });
     token = r.token; user = r.user;
     deviceId = user._id || user.id || null;
-    localStorage.setItem('t2d_token', token);
+    _ls.set('t2d_token', token);
     enterApp();
   } catch(e) {
     showAuthError(e.message);
@@ -1957,7 +1963,7 @@ async function doRegister() {
     var r = await api('POST', '/api/auth/signup', { name: name, email: email, password: pass });
     token = r.token; user = r.user;
     deviceId = user._id || user.id || null;
-    localStorage.setItem('t2d_token', token);
+    _ls.set('t2d_token', token);
     enterApp();
   } catch(e) {
     showAuthError(e.message);
@@ -1983,7 +1989,7 @@ async function doForgot() {
 
 function logout() {
   if (!confirm('Er du sikker på at du vil logge ut?')) return;
-  localStorage.removeItem('t2d_token');
+  _ls.remove('t2d_token');
   token = null; user = null; deviceId = null;
   document.getElementById('topBar').style.display = 'none';
   document.getElementById('bottomNav').style.display = 'none';
@@ -2616,10 +2622,25 @@ function setRate(r, el) {
 // ════════════════════════════════════════════
 //  SOUND
 // ════════════════════════════════════════════
+var _audioCtx = null;
+function _getAudioCtx() {
+  if (!_audioCtx) {
+    try { _audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) {}
+  }
+  if (_audioCtx && _audioCtx.state === 'suspended') {
+    _audioCtx.resume().catch(function(){});
+  }
+  return _audioCtx;
+}
+// Unlock AudioContext on first user interaction (required by iOS Safari)
+document.addEventListener('touchstart', function() { _getAudioCtx(); }, { once: true, passive: true });
+document.addEventListener('click', function() { _getAudioCtx(); }, { once: true });
+
 function playSound(type) {
   if (!soundOn) return;
   try {
-    var ctx = new (window.AudioContext || window.webkitAudioContext)();
+    var ctx = _getAudioCtx();
+    if (!ctx) return;
     if (type === 'correct') {
       var freqs = feedbackStyle === 'strong' ? [523.25, 659.25, 783.99, 1046.5] : [523.25, 659.25, 783.99];
       freqs.forEach(function(freq, i) {
@@ -2673,7 +2694,7 @@ function loadSettings() {
 
   document.getElementById('soundToggle').checked = soundOn;
 
-  var savedTheme = localStorage.getItem('t2d_theme') || 'dark';
+  var savedTheme = _ls.get('t2d_theme') || 'dark';
   ['light','dark','system'].forEach(function(t) {
     var id = 'themeBtn' + t.charAt(0).toUpperCase() + t.slice(1);
     var btn = document.getElementById(id);
@@ -2683,7 +2704,7 @@ function loadSettings() {
 
 function setLang(lang) {
   appLang = lang;
-  localStorage.setItem('t2d_lang', lang);
+  _ls.set('t2d_lang', lang);
   ['TH','NO','EN'].forEach(function(l) {
     var btn = document.getElementById('lang' + l);
     if (btn) btn.classList.toggle('active', lang === l.toLowerCase());
@@ -2710,12 +2731,12 @@ function setLang(lang) {
 
 function toggleSound(el) {
   soundOn = el.checked;
-  localStorage.setItem('t2d_sound', soundOn ? 'on' : 'off');
+  _ls.set('t2d_sound', soundOn ? 'on' : 'off');
 }
 
 function setFeedback(style, btn) {
   feedbackStyle = style;
-  localStorage.setItem('t2d_feedback', style);
+  _ls.set('t2d_feedback', style);
   btn.closest('.seg-ctrl').querySelectorAll('.seg-btn').forEach(function(b) { b.classList.remove('active'); });
   btn.classList.add('active');
 }
@@ -2725,11 +2746,11 @@ function setTheme(theme, btn) {
     btn.closest('.seg-ctrl').querySelectorAll('.seg-btn').forEach(function(b) { b.classList.remove('active'); });
     btn.classList.add('active');
   }
-  localStorage.setItem('t2d_theme', theme);
+  _ls.set('t2d_theme', theme);
   applyTheme(theme);
 }
 
-function applyThemeFromStorage() { applyTheme(localStorage.getItem('t2d_theme') || 'dark'); }
+function applyThemeFromStorage() { applyTheme(_ls.get('t2d_theme') || 'dark'); }
 
 function applyTheme(theme) {
   if (theme === 'system') {
@@ -2788,7 +2809,7 @@ document.addEventListener('keydown', function(e) {
 });
 
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function() {
-  if (localStorage.getItem('t2d_theme') === 'system') applyTheme('system');
+  if (_ls.get('t2d_theme') === 'system') applyTheme('system');
 });
 </script>
 </body>
