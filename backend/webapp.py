@@ -502,7 +502,7 @@ a { color:inherit; text-decoration:none; }
 
 .q-mid {
   display:flex; flex-direction:column; gap:8px;
-  height:100%; overflow:hidden;
+  height:100%; overflow-y:auto; -webkit-overflow-scrolling:touch;
 }
 .q-answers {
   display:flex; flex-direction:column; gap:8px; flex-shrink:0;
@@ -538,20 +538,20 @@ a { color:inherit; text-decoration:none; }
 .ans-btn.correct .ans-letter { background:var(--green); color:#fff; border-color:var(--green); }
 .ans-btn.wrong   .ans-letter { background:var(--red);   color:#fff; border-color:var(--red); }
 .ans-btn.reveal  .ans-letter { background:var(--green); color:#fff; border-color:var(--green); }
-.ans-text { flex:1; line-height:1.5; font-size:.87rem; }
+.ans-text { flex:1; line-height:1.6; font-size:.95rem; }
 
 .q-feedback {
   padding:10px 12px; border-radius:10px;
-  font-size:.83rem; font-weight:700;
+  font-size:.92rem; font-weight:700;
   display:none; align-items:center; gap:7px; flex-shrink:0;
 }
 .q-feedback.ok  { background:rgba(16,185,129,.1); border:1px solid rgba(16,185,129,.3); color:#6EE7B7; display:flex; }
 .q-feedback.bad { background:rgba(239,68,68,.08);  border:1px solid rgba(239,68,68,.25);  color:#FCA5A5; display:flex; }
 .q-explain {
-  padding:10px 12px;
-  background:rgba(255,153,51,.07); border:1px solid rgba(255,153,51,.15);
-  border-radius:10px; font-size:.78rem; color:var(--muted);
-  line-height:1.6; display:none; flex-shrink:0;
+  padding:12px 14px;
+  background:rgba(255,153,51,.07); border:1px solid rgba(255,153,51,.2);
+  border-radius:10px; font-size:.88rem; color:var(--text);
+  line-height:1.7; display:none; flex-shrink:0;
 }
 .q-explain.show { display:block; }
 
