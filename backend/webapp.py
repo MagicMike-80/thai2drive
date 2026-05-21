@@ -1320,12 +1320,12 @@ a { color:inherit; text-decoration:none; }
     <div class="screen" id="screenSigns">
       <div class="signs-header">
         <div class="screen-title">🚦 <span data-key="signs">Trafikkskilt</span></div>
-        <span class="signs-count" id="signsCount"></span>
       </div>
-      <div class="signs-scroll" id="signsScroll">
-        <div class="loading-wrap">
-          <div class="spinner"></div>
-        </div>
+      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:60vh;gap:18px;text-align:center;padding:32px">
+        <div style="font-size:64px">🚧</div>
+        <div style="font-size:22px;font-weight:700;color:#f59e0b">กำลังปรับปรุง</div>
+        <div style="font-size:18px;font-weight:600;color:var(--text,#e2e8f0)">Under bygging — kommer snart!</div>
+        <div style="font-size:15px;color:var(--muted,#94a3b8)">Coming soon!</div>
       </div>
     </div>
 

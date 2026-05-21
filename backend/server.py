@@ -2356,6 +2356,125 @@ async def update_studiebok_chapter(
     return {"ok": True}
 
 
+# ═══════════════════════════════════════════════════════════
+#  TRAFFIC SIGNS ENDPOINTS
+# ═══════════════════════════════════════════════════════════
+
+SIGN_GROUPS = {
+    1: {"no": "Vikepliktskilt",   "th": "ป้ายให้ทาง",         "en": "Yield signs"},
+    2: {"no": "Fareskilt",        "th": "ป้ายเตือน",           "en": "Warning signs"},
+    3: {"no": "Forbudtskilt",     "th": "ป้ายห้าม",            "en": "Prohibition signs"},
+    4: {"no": "Påbudsskilt",      "th": "ป้ายบังคับ",          "en": "Mandatory signs"},
+    5: {"no": "Opplysningsskilt", "th": "ป้ายแจ้ง",            "en": "Information signs"},
+    6: {"no": "Serviceskilt",     "th": "ป้ายบริการ",          "en": "Service signs"},
+    7: {"no": "Veivisningsskilt", "th": "ป้ายนำทาง",           "en": "Direction signs"},
+    8: {"no": "Underskilt",       "th": "ป้ายเสริม",           "en": "Supplementary signs"},
+    9: {"no": "Markeringsskilt",  "th": "ป้ายเครื่องหมาย",     "en": "Road marking signs"},
+}
+
+
+class TrafficSignCreate(BaseModel):
+    group: int
+    name: Dict[str, str]           # {no, th, en}
+    image_url: Optional[str] = ""
+    group_desc: Optional[Dict[str, str]] = None
+    order: Optional[int] = 1
+
+
+class TrafficSignUpdate(BaseModel):
+    group: Optional[int] = None
+    name: Optional[Dict[str, str]] = None
+    image_url: Optional[str] = None
+    group_desc: Optional[Dict[str, str]] = None
+    order: Optional[int] = None
+
+
+@api_router.get("/traffic-signs")
+async def get_traffic_signs():
+    """Return all traffic signs grouped by group number."""
+    signs = await db.traffic_signs.find({}, {"_id": 0}).sort([("group", 1), ("order", 1)]).to_list(1000)
+    grouped: Dict[int, Any] = {}
+    for g_num, g_info in SIGN_GROUPS.items():
+        grouped[g_num] = {
+            "group": g_num,
+            "group_name": g_info,
+            "signs": [],
+        }
+    for sign in signs:
+        g = sign.get("group", 0)
+        if g in grouped:
+            grouped[g]["signs"].append(sign)
+    return list(grouped.values())
+
+
+@api_router.get("/traffic-signs/{group}")
+async def get_traffic_signs_by_group(group: int):
+    """Return signs for a specific group (1-9)."""
+    if group not in SIGN_GROUPS:
+        raise HTTPException(status_code=404, detail="Group not found")
+    signs = await db.traffic_signs.find(
+        {"group": group}, {"_id": 0}
+    ).sort("order", 1).to_list(500)
+    return {
+        "group": group,
+        "group_name": SIGN_GROUPS[group],
+        "signs": signs,
+    }
+
+
+@api_router.post("/traffic-signs")
+async def create_traffic_sign(data: TrafficSignCreate, _: dict = Depends(require_admin)):
+    """Admin: add a traffic sign."""
+    if data.group not in SIGN_GROUPS:
+        raise HTTPException(status_code=400, detail="Invalid group (1-9)")
+    doc = {
+        "id": str(uuid.uuid4()),
+        "group": data.group,
+        "group_name": SIGN_GROUPS[data.group],
+        "group_desc": data.group_desc or {},
+        "name": data.name,
+        "image_url": data.image_url or "",
+        "order": data.order or 1,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+    await db.traffic_signs.insert_one(doc)
+    return {"ok": True, "id": doc["id"]}
+
+
+@api_router.put("/traffic-signs/{sign_id}")
+async def update_traffic_sign(sign_id: str, data: TrafficSignUpdate, _: dict = Depends(require_admin)):
+    """Admin: update a traffic sign."""
+    update: dict = {}
+    if data.group is not None:
+        if data.group not in SIGN_GROUPS:
+            raise HTTPException(status_code=400, detail="Invalid group (1-9)")
+        update["group"] = data.group
+        update["group_name"] = SIGN_GROUPS[data.group]
+    if data.name is not None:
+        update["name"] = data.name
+    if data.image_url is not None:
+        update["image_url"] = data.image_url
+    if data.group_desc is not None:
+        update["group_desc"] = data.group_desc
+    if data.order is not None:
+        update["order"] = data.order
+    if not update:
+        raise HTTPException(status_code=400, detail="Nothing to update")
+    result = await db.traffic_signs.update_one({"id": sign_id}, {"$set": update})
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Sign not found")
+    return {"ok": True}
+
+
+@api_router.delete("/traffic-signs/{sign_id}")
+async def delete_traffic_sign(sign_id: str, _: dict = Depends(require_admin)):
+    """Admin: delete a traffic sign."""
+    result = await db.traffic_signs.delete_one({"id": sign_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Sign not found")
+    return {"ok": True}
+
+
 app.include_router(api_router)
 
 # ==================== PUBLIC WEBSITE (landing + legal) ====================

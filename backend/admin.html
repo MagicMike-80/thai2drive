@@ -124,6 +124,26 @@
                            cursor:pointer;font-weight:600}
   .btn-edit{background:var(--accent);color:#fff}
   .btn-del{background:var(--bad);color:#fff}
+
+  /* Signs panel */
+  .sign-group{background:var(--panel);border-radius:10px;margin-bottom:10px;overflow:hidden}
+  .sign-group-head{padding:14px 18px;display:flex;align-items:center;justify-content:space-between;
+                   cursor:pointer;user-select:none}
+  .sign-group-head:hover{background:var(--card)}
+  .sign-group-head h3{margin:0;font-size:15px}
+  .sign-group-head .meta{font-size:12px;color:var(--muted)}
+  .sign-group-body{display:none;padding:0 12px 12px}
+  .sign-group-body.open{display:block}
+  .sign-row{background:var(--card);border-radius:8px;margin:6px 0;padding:12px 14px;
+            display:flex;align-items:center;gap:12px}
+  .sign-thumb{width:64px;height:48px;background:var(--bg);border-radius:6px;flex-shrink:0;
+              overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:20px}
+  .sign-thumb img{width:100%;height:100%;object-fit:contain}
+  .sign-info{flex:1;min-width:0}
+  .sign-info .sign-name{font-size:14px;font-weight:700}
+  .sign-info .sign-sub{font-size:12px;color:var(--muted);margin-top:2px}
+  .sign-actions{display:flex;gap:6px;flex-shrink:0}
+  .sign-actions button{padding:5px 10px;border:0;border-radius:6px;font-size:12px;cursor:pointer;font-weight:600}
 </style>
 </head>
 <body>
@@ -152,6 +172,7 @@
   <div class="tabs">
     <button class="tab active" id="tab-questions" onclick="switchTab('questions')">📝 Spørsmål</button>
     <button class="tab" id="tab-book" onclick="switchTab('book')">📖 Læringsbok</button>
+    <button class="tab" id="tab-signs" onclick="switchTab('signs')">🚦 Trafikkskilt</button>
   </div>
 
   <!-- ── QUESTIONS VIEW ─────────────────────────────────── -->
@@ -206,6 +227,14 @@
       </button>
     </div>
     <div id="book-chapters"></div>
+  </div>
+
+  <!-- ── SIGNS VIEW ─────────────────────────────────────── -->
+  <div id="signs-view" style="display:none">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px">
+      <div style="font-size:13px;color:var(--muted)" id="signs-meta"></div>
+    </div>
+    <div id="signs-groups"></div>
   </div>
 </main>
 
@@ -931,9 +960,12 @@ document.getElementById('password').addEventListener('keydown', e => {
 function switchTab(tab) {
   document.getElementById('questions-view').style.display = tab === 'questions' ? '' : 'none';
   document.getElementById('book-view').style.display     = tab === 'book'      ? '' : 'none';
+  document.getElementById('signs-view').style.display    = tab === 'signs'     ? '' : 'none';
   document.getElementById('tab-questions').classList.toggle('active', tab === 'questions');
   document.getElementById('tab-book').classList.toggle('active', tab === 'book');
+  document.getElementById('tab-signs').classList.toggle('active', tab === 'signs');
   if (tab === 'book') loadBook();
+  if (tab === 'signs') loadSigns();
 }
 
 // ══════════════════════════════════════════════════════════
@@ -1208,6 +1240,196 @@ async function createSection() {
   });
   const data = await r.json();
   if (r.ok) { toast(`✅ Seksjon ${data.section_num} opprettet!`); closeModal(); loadBook(); }
+  else toast('Feil: ' + (data.detail || 'ukjent'), false);
+}
+
+// ══════════════════════════════════════════════════════════
+//  TRAFFIC SIGNS ADMIN
+// ══════════════════════════════════════════════════════════
+let _signsData = [];
+
+const SIGN_GROUP_NAMES = {
+  1: {no:'Vikepliktskilt',   th:'ป้ายให้ทาง',       en:'Yield signs'},
+  2: {no:'Fareskilt',        th:'ป้ายเตือน',         en:'Warning signs'},
+  3: {no:'Forbudtskilt',     th:'ป้ายห้าม',          en:'Prohibition signs'},
+  4: {no:'Påbudsskilt',      th:'ป้ายบังคับ',        en:'Mandatory signs'},
+  5: {no:'Opplysningsskilt', th:'ป้ายแจ้ง',          en:'Information signs'},
+  6: {no:'Serviceskilt',     th:'ป้ายบริการ',        en:'Service signs'},
+  7: {no:'Veivisningsskilt', th:'ป้ายนำทาง',         en:'Direction signs'},
+  8: {no:'Underskilt',       th:'ป้ายเสริม',         en:'Supplementary signs'},
+  9: {no:'Markeringsskilt',  th:'ป้ายเครื่องหมาย',   en:'Road marking signs'},
+};
+
+async function loadSigns() {
+  const container = document.getElementById('signs-groups');
+  container.innerHTML = '<p style="color:var(--muted);padding:20px">Laster...</p>';
+  try {
+    const data = await api('/traffic-signs');
+    _signsData = data;
+    const total = data.reduce((s, g) => s + g.signs.length, 0);
+    document.getElementById('signs-meta').textContent = `${total} skilt fordelt på ${data.length} grupper`;
+    container.innerHTML = data.map(g => `
+      <div class="sign-group" id="sg-${g.group}">
+        <div class="sign-group-head" onclick="toggleSignGroup(${g.group})">
+          <h3>${g.group}. ${g.group_name.no} <span style="font-size:13px;color:var(--muted);font-weight:400">— ${g.group_name.th} / ${g.group_name.en}</span></h3>
+          <div style="display:flex;align-items:center;gap:12px">
+            <span class="meta">${g.signs.length} skilt</span>
+            <button onclick="event.stopPropagation();openSignModal(null,${g.group})"
+              style="background:var(--good);color:#fff;border:0;padding:5px 12px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600">
+              ➕ Legg til skilt
+            </button>
+            <span style="color:var(--muted)">▼</span>
+          </div>
+        </div>
+        <div class="sign-group-body" id="sgb-${g.group}">
+          ${g.signs.length === 0
+            ? '<div style="color:var(--muted);font-size:13px;padding:8px 4px">Ingen skilt ennå.</div>'
+            : g.signs.map(s => renderSignRow(s)).join('')}
+        </div>
+      </div>
+    `).join('');
+  } catch(e) {
+    container.innerHTML = '<p style="color:var(--bad);padding:20px">Feil: ' + e.message + '</p>';
+  }
+}
+
+function renderSignRow(s) {
+  const thumb = s.image_url
+    ? `<img src="${escapeHtml(s.image_url)}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><span style="display:none">🚦</span>`
+    : `<span>🚦</span>`;
+  return `
+    <div class="sign-row" id="sr-${s.id}">
+      <div class="sign-thumb">${thumb}</div>
+      <div class="sign-info">
+        <div class="sign-name">${escapeHtml(s.name?.no || '')} / ${escapeHtml(s.name?.th || '')}</div>
+        <div class="sign-sub">${escapeHtml(s.name?.en || '')}${s.order ? ' · #' + s.order : ''}</div>
+      </div>
+      <div class="sign-actions">
+        <button class="btn-edit" onclick="openSignModal('${s.id}',${s.group})">✏️ Rediger</button>
+        <button class="btn-del"  onclick="deleteSign('${s.id}')">🗑</button>
+      </div>
+    </div>`;
+}
+
+function toggleSignGroup(g) {
+  const body = document.getElementById('sgb-' + g);
+  body.classList.toggle('open');
+}
+
+async function deleteSign(id) {
+  if (!confirm('Slette dette skiltet? Dette kan ikke angres.')) return;
+  const r = await fetch(API + '/traffic-signs/' + id, {
+    method: 'DELETE', headers: {Authorization: 'Bearer ' + token},
+  });
+  if (r.ok) { toast('🗑 Skilt slettet'); loadSigns(); }
+  else toast('Feil ved sletting', false);
+}
+
+function openSignModal(id, defaultGroup) {
+  // Find existing sign data if editing
+  let sign = null;
+  if (id) {
+    for (const g of _signsData) {
+      sign = g.signs.find(s => s.id === id);
+      if (sign) break;
+    }
+  }
+
+  const groupOptions = Object.entries(SIGN_GROUP_NAMES).map(([num, names]) =>
+    `<option value="${num}" ${(sign?.group||defaultGroup)==+num?'selected':''}>${num} — ${names.no}</option>`
+  ).join('');
+
+  document.getElementById('modal-body').innerHTML = `
+    <button class="close" onclick="closeModal()">✕</button>
+    <h2>${id ? '✏️ Rediger skilt' : '➕ Legg til skilt'}</h2>
+
+    <div style="margin-bottom:14px">
+      <div class="lbl" style="font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Gruppe</div>
+      <select id="s-group" style="background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px 12px;font-size:14px;width:100%">
+        ${groupOptions}
+      </select>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px">
+      <div class="lang-row"><div class="lbl">🇳🇴 Navn norsk</div>
+        <input id="s-no" style="width:100%;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:14px" placeholder="Navn på norsk" value="${escapeHtml(sign?.name?.no||'')}"/>
+      </div>
+      <div class="lang-row"><div class="lbl">🇹🇭 Navn thai</div>
+        <input id="s-th" style="width:100%;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:14px" placeholder="ชื่อป้าย" value="${escapeHtml(sign?.name?.th||'')}"/>
+      </div>
+      <div class="lang-row"><div class="lbl">🇬🇧 Navn engelsk</div>
+        <input id="s-en" style="width:100%;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:14px" placeholder="Sign name in English" value="${escapeHtml(sign?.name?.en||'')}"/>
+      </div>
+    </div>
+
+    <div style="margin-bottom:14px">
+      <div class="lbl" style="font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">🖼️ Bilde-URL</div>
+      <input id="s-img" style="width:100%;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:14px" placeholder="https://..." value="${escapeHtml(sign?.image_url||'')}"/>
+      <div id="s-img-preview" style="margin-top:8px"></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px">
+      <div class="lang-row"><div class="lbl">🇳🇴 Beskrivelse norsk (valgfri)</div>
+        <textarea id="s-dno" rows="3" style="width:100%;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:14px" placeholder="Kort beskrivelse...">${escapeHtml(sign?.group_desc?.no||'')}</textarea>
+      </div>
+      <div class="lang-row"><div class="lbl">🇹🇭 Beskrivelse thai (valgfri)</div>
+        <textarea id="s-dth" rows="3" style="width:100%;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:14px" placeholder="คำอธิบาย...">${escapeHtml(sign?.group_desc?.th||'')}</textarea>
+      </div>
+      <div class="lang-row"><div class="lbl">🇬🇧 Beskrivelse engelsk (valgfri)</div>
+        <textarea id="s-den" rows="3" style="width:100%;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:14px" placeholder="Short description...">${escapeHtml(sign?.group_desc?.en||'')}</textarea>
+      </div>
+    </div>
+
+    <div style="margin-bottom:20px">
+      <div class="lbl" style="font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">Rekkefølge (order)</div>
+      <input id="s-order" type="number" min="1" style="background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:14px;width:100px" value="${sign?.order||1}"/>
+    </div>
+
+    <div style="display:flex;gap:10px;justify-content:flex-end">
+      <button onclick="closeModal()" style="background:var(--card);color:var(--text);border:0;padding:10px 20px;border-radius:8px;cursor:pointer">Avbryt</button>
+      <button onclick="saveSign('${id||''}')" style="background:var(--good);color:#fff;border:0;padding:10px 22px;border-radius:8px;cursor:pointer;font-weight:700">💾 Lagre</button>
+    </div>
+  `;
+
+  // Image preview on URL change
+  const imgInput = document.getElementById('s-img');
+  const preview = document.getElementById('s-img-preview');
+  function updatePreview() {
+    const url = imgInput.value.trim();
+    preview.innerHTML = url ? `<img src="${escapeHtml(url)}" style="max-height:120px;border-radius:8px;border:1px solid var(--card)" onerror="this.style.display='none'"/>` : '';
+  }
+  imgInput.addEventListener('input', updatePreview);
+  updatePreview();
+
+  document.getElementById('modal').classList.add('show');
+}
+
+async function saveSign(id) {
+  const body = {
+    group: +document.getElementById('s-group').value,
+    name: {
+      no: document.getElementById('s-no').value.trim(),
+      th: document.getElementById('s-th').value.trim(),
+      en: document.getElementById('s-en').value.trim(),
+    },
+    image_url: document.getElementById('s-img').value.trim(),
+    group_desc: {
+      no: document.getElementById('s-dno').value.trim(),
+      th: document.getElementById('s-dth').value.trim(),
+      en: document.getElementById('s-den').value.trim(),
+    },
+    order: +document.getElementById('s-order').value || 1,
+  };
+  if (!body.name.no) { toast('Navn (norsk) er påkrevd', false); return; }
+
+  const method = id ? 'PUT' : 'POST';
+  const path = id ? '/traffic-signs/' + id : '/traffic-signs';
+  const r = await fetch(API + path, {
+    method, headers: {'Content-Type':'application/json', Authorization:'Bearer '+token},
+    body: JSON.stringify(body),
+  });
+  const data = await r.json();
+  if (r.ok) { toast(id ? '✅ Skilt oppdatert!' : '✅ Skilt lagt til!'); closeModal(); loadSigns(); }
   else toast('Feil: ' + (data.detail || 'ukjent'), false);
 }
 </script>
