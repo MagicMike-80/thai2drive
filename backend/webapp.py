@@ -2703,7 +2703,7 @@ function speakQ() {
   utt.lang = appLang === 'th' ? 'th-TH' : appLang === 'no' ? 'nb-NO' : 'en-US';
   utt.rate = ttsRate;
   utt.volume = ttsVolume;
-  utt.onstart = function() { ttsPlaying = true;  updateTtsBtn(true);  };
+  ttsPlaying = true; updateTtsBtn(true);
   utt.onend   = function() { ttsPlaying = false; updateTtsBtn(false); };
   utt.onerror = function() { ttsPlaying = false; updateTtsBtn(false); };
   window.speechSynthesis.speak(utt);
