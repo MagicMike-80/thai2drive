@@ -2742,6 +2742,8 @@ function setLang(lang) {
   applyUILang();
   // Reset signs cache so it reloads in new language
   signsLoaded = false;
+  var signsScreen = document.getElementById('screenSigns');
+  if (signsScreen && signsScreen.classList.contains('active')) loadSigns();
   // Re-render categories in new language (force re-render by resetting cache)
   if (catsLoaded) { catsLoaded = false; loadCategories(); }
   // Re-render quiz if active so question+answers switch language immediately
