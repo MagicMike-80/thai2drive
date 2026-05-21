@@ -466,7 +466,7 @@ a { color:inherit; text-decoration:none; }
 
 .q-left {
   display:flex; flex-direction:column; gap:10px;
-  height:100%; overflow:hidden;
+  height:100%; overflow-y:auto; -webkit-overflow-scrolling:touch;
 }
 .q-img-wrap {
   width:100%; border-radius:12px; overflow:hidden;
