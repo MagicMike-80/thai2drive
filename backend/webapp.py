@@ -144,13 +144,9 @@ a { color:inherit; text-decoration:none; }
 /* Dark overlay so text stays readable */
 .flag-bg::before {
   content:''; position:absolute; inset:0;
-  background:rgba(10,14,30,.50);
+  background:rgba(10,14,30,.42);
 }
-/* Subtle vignette */
-.flag-bg::after {
-  content:''; position:absolute; inset:0;
-  background:radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(0,0,0,.2) 100%);
-}
+.flag-bg::after { display:none; }
 
 /* ══════════════════════════════════════════
    AUTH SCREEN
@@ -427,9 +423,8 @@ a { color:inherit; text-decoration:none; }
 }
 [data-theme="light"] .quiz-top { background:var(--bg2); }
 
-/* Light theme: make flag overlay light so text is readable */
-[data-theme="light"] .flag-bg::before { background:rgba(230,236,244,.88); }
-[data-theme="light"] .flag-bg::after  { background:none; }
+/* Light theme: slightly lighter overlay */
+[data-theme="light"] .flag-bg::before { background:rgba(230,236,244,.70); }
 [data-theme="light"] .ans-btn {
   background:rgba(255,255,255,.75); border-color:rgba(0,0,0,.12);
 }
