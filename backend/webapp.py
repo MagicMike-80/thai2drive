@@ -456,7 +456,8 @@ a { color:inherit; text-decoration:none; }
   gap:16px; align-items:start;
 }
 @media (max-width:700px) {
-  .quiz-card { grid-template-columns:1fr; overflow-y:auto; }
+  .quiz-body { overflow-y:auto; -webkit-overflow-scrolling:touch; }
+  .quiz-card { grid-template-columns:1fr; overflow-y:visible; }
   .q-next-col { display:none !important; }
   .q-next-mobile { display:block !important; }
 }
