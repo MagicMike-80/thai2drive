@@ -412,8 +412,7 @@ a { color:inherit; text-decoration:none; }
 /* ══════════════════════════════════════════
    QUIZ SCREEN — fully height-based, NO scroll
 ══════════════════════════════════════════ */
-#screenQuiz { padding:0; background:#0B1226; }
-[data-theme="light"] #screenQuiz { background:#E8EEF6; }
+#screenQuiz { padding:0; }
 
 .quiz-top {
   padding:10px 16px 8px; flex-shrink:0;
@@ -518,8 +517,14 @@ a { color:inherit; text-decoration:none; }
   display:flex; align-items:center; justify-content:center;
   transition:all .2s; flex-shrink:0;
 }
-.tts-play:hover, .tts-play.playing {
-  border-color:var(--orange); color:var(--orange); background:rgba(255,153,51,.1);
+.tts-play:hover { border-color:var(--orange); color:var(--orange); background:rgba(255,153,51,.1); }
+.tts-play.playing {
+  border-color:var(--orange); color:var(--orange);
+  animation: tts-pulse 0.9s ease-in-out infinite;
+}
+@keyframes tts-pulse {
+  0%,100% { background:rgba(255,153,51,.08); box-shadow:0 0 0 0 rgba(255,153,51,.5); }
+  50%      { background:rgba(255,153,51,.25); box-shadow:0 0 0 7px rgba(255,153,51,0); }
 }
 .spd-btn {
   padding:3px 9px; border-radius:20px;
@@ -2351,7 +2356,7 @@ function renderQuestion() {
     return '<button class="spd-btn' + (ttsRate === r ? ' active' : '') + '" data-rate="' + r + '" onclick="setRate(' + r + ',this)">' + r + 'x</button>';
   }).join('');
 
-  var volHtml = [[0.3,'🔈'],[0.6,'🔉'],[1.0,'🔊']].map(function(item) {
+  var volHtml = [[0.5,'🔈'],[0.75,'🔉'],[1.0,'🔊']].map(function(item) {
     var v = item[0], icon = item[1];
     return '<button class="vol-btn' + (ttsVolume === v ? ' active' : '') + '" data-vol="' + v + '" onclick="setVolume(' + v + ')">' + icon + '</button>';
   }).join('');
@@ -2805,7 +2810,7 @@ function loadSettings() {
   // TTS volume buttons in settings
   var volEl = document.getElementById('settVolBtns');
   if (volEl) {
-    volEl.innerHTML = [[0.3,'🔈'],[0.6,'🔉'],[1.0,'🔊']].map(function(item) {
+    volEl.innerHTML = [[0.5,'🔈'],[0.75,'🔉'],[1.0,'🔊']].map(function(item) {
       var v = item[0], icon = item[1];
       return '<button class="vol-btn' + (ttsVolume === v ? ' active' : '') + '" data-vol="' + v + '" onclick="setVolume(' + v + ')">' + icon + '</button>';
     }).join('');
