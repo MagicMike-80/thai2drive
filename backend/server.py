@@ -2321,6 +2321,16 @@ class StudiebokUpdate(BaseModel):
     content_no: Optional[str] = None
     image_url: Optional[str] = None
     video_url: Optional[str] = None
+    icon: Optional[str] = None
+
+
+class StudiebokCreate(BaseModel):
+    order: int
+    icon: str = "📄"
+    title_no: str
+    content_no: str
+    image_url: Optional[str] = ""
+    video_url: Optional[str] = ""
 
 
 @api_router.get("/studiebok")
@@ -2328,8 +2338,31 @@ async def get_studiebok():
     """Return all Studiebok chapters sorted by order."""
     chapters = await db.studiebok_chapters.find(
         {}, {"_id": 0}
-    ).sort("order", 1).to_list(100)
+    ).sort("order", 1).to_list(200)
     return chapters
+
+
+@api_router.post("/studiebok")
+async def create_studiebok_chapter(
+    data: StudiebokCreate,
+    _: dict = Depends(require_admin),
+):
+    """Create a new Studiebok chapter (admin only)."""
+    existing = await db.studiebok_chapters.find_one({"order": data.order})
+    if existing:
+        raise HTTPException(status_code=400, detail=f"Chapter with order {data.order} already exists")
+    from datetime import datetime, timezone
+    doc = {
+        "order": data.order,
+        "icon": data.icon,
+        "title_no": data.title_no,
+        "content_no": data.content_no,
+        "image_url": data.image_url or "",
+        "video_url": data.video_url or "",
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+    await db.studiebok_chapters.insert_one(doc)
+    return {"ok": True}
 
 
 @api_router.put("/studiebok/{order}")
@@ -2338,7 +2371,7 @@ async def update_studiebok_chapter(
     data: StudiebokUpdate,
     _: dict = Depends(require_admin),
 ):
-    """Update title_no, content_no, image_url and/or video_url for a chapter (admin only)."""
+    """Update a chapter (admin only)."""
     update = {}
     if data.title_no is not None:
         update["title_no"] = data.title_no
@@ -2348,10 +2381,24 @@ async def update_studiebok_chapter(
         update["image_url"] = data.image_url
     if data.video_url is not None:
         update["video_url"] = data.video_url
+    if data.icon is not None:
+        update["icon"] = data.icon
     if not update:
         raise HTTPException(status_code=400, detail="Nothing to update")
     result = await db.studiebok_chapters.update_one({"order": order}, {"$set": update})
     if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Chapter not found")
+    return {"ok": True}
+
+
+@api_router.delete("/studiebok/{order}")
+async def delete_studiebok_chapter(
+    order: int,
+    _: dict = Depends(require_admin),
+):
+    """Delete a Studiebok chapter (admin only)."""
+    result = await db.studiebok_chapters.delete_one({"order": order})
+    if result.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Chapter not found")
     return {"ok": True}
 
