@@ -22,7 +22,7 @@ from pydantic import BaseModel, Field
 from motor.motor_asyncio import AsyncIOMotorClient
 from dotenv import load_dotenv
 
-load_dotenv('/app/backend/.env')
+load_dotenv()
 
 logger = logging.getLogger('support_chat')
 

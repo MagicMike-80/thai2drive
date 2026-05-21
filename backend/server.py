@@ -259,6 +259,14 @@ def generate_reset_code() -> str:
 async def root():
     return {"message": "Thai2Drive API - Norway Driving Theory Quiz"}
 
+@api_router.get("/health")
+async def health():
+    try:
+        await db.command("ping")
+        return {"status": "ok", "db": "connected"}
+    except Exception as e:
+        return {"status": "degraded", "db": "unreachable", "detail": str(e)}
+
 # App-wide image-only filter: ALL quiz modes (Practice, Exam, Daily Test)
 # must ONLY return questions that have an image (bildeUrl present and non-empty).
 IMAGE_ONLY_FILTER = {"bildeUrl": {"$exists": True, "$nin": [None, ""]}}

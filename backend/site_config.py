@@ -19,7 +19,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # ─── Defaults (current preview) ───
-_DEFAULT_PUBLIC_URL = "https://norge-quiz-app.preview.emergentagent.com"
+_DEFAULT_PUBLIC_URL = "https://thai2drive.no"
 
 # Alternate domains the site may also answer on (used for redirects/canonical).
 # If you buy more than one domain, list them here.
