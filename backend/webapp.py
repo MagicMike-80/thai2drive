@@ -765,8 +765,8 @@ a { color:inherit; text-decoration:none; }
 .settings-profile-hero {
   padding:28px 20px 20px;
   display:flex; flex-direction:column; align-items:center; gap:10px;
-  background:linear-gradient(180deg, rgba(255,153,51,.08) 0%, transparent 100%);
-  border-bottom:1px solid var(--border);
+  background:rgba(0,0,0,.35);
+  border-bottom:1px solid rgba(255,255,255,.1);
   margin-bottom:8px;
 }
 .settings-avatar {
@@ -793,9 +793,9 @@ a { color:inherit; text-decoration:none; }
   margin-bottom:7px; margin-top:14px; padding:0 4px;
 }
 .settings-card {
-  background:var(--card); border:1px solid var(--border);
+  background:rgba(0,0,0,.45); border:1px solid rgba(255,255,255,.12);
+  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
   border-radius:16px; overflow:hidden;
-  box-shadow:0 2px 12px rgba(0,0,0,.08);
 }
 .settings-row {
   display:flex; align-items:center; gap:14px;
