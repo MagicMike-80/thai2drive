@@ -49,7 +49,7 @@ _SMTP_PASS = os.environ.get('SUPPORT_SMTP_PASS')
 import litellm  # noqa: E402
 
 litellm.suppress_debug_info = True  # keep Railway logs clean
-LLM_KEY = os.environ.get('ANTHROPIC_API_KEY', '')
+LLM_KEY = os.environ.get('ANTHROPIC_API_KEY', '').strip()
 LLM_MODEL = 'anthropic/claude-3-5-haiku-20241022'  # fast, cheap, multilingual
 
 # ─── Startup diagnostic ──────────────────────────────────────────────────
