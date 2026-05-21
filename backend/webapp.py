@@ -144,7 +144,7 @@ a { color:inherit; text-decoration:none; }
 /* Dark overlay so text stays readable */
 .flag-bg::before {
   content:''; position:absolute; inset:0;
-  background:rgba(10,14,30,.42);
+  background:rgba(10,14,30,.30);
 }
 .flag-bg::after { display:none; }
 
