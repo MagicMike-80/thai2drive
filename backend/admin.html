@@ -291,19 +291,35 @@ async function login() {
   const email = document.getElementById('email').value.trim();
   const password = document.getElementById('password').value;
   const err = document.getElementById('login-err');
+  const btn = document.querySelector('#login button');
   err.textContent = '';
+  err.style.fontSize = '15px';
+  err.style.padding = '10px';
+  err.style.marginTop = '10px';
+  if (btn) { btn.textContent = 'Logger inn...'; btn.disabled = true; }
   try {
     const r = await fetch(API + '/auth/login', {
       method: 'POST', headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({email, password}),
     });
     const data = await r.json();
-    if (!r.ok) { err.textContent = data.detail || 'Feil innlogging'; return; }
-    if (!data.user.is_admin) { err.textContent = 'Ikke admin-tilgang'; return; }
+    if (!r.ok) {
+      err.textContent = 'Feil: ' + (data.detail || 'Ugyldig e-post eller passord');
+      if (btn) { btn.textContent = 'Logg inn'; btn.disabled = false; }
+      return;
+    }
+    if (!data.user.is_admin) {
+      err.textContent = 'Denne brukeren har ikke admin-tilgang.';
+      if (btn) { btn.textContent = 'Logg inn'; btn.disabled = false; }
+      return;
+    }
     token = data.token; localStorage.setItem('admin_token', token);
     localStorage.setItem('admin_email', data.user.email);
     showApp(data.user.email);
-  } catch (e) { err.textContent = 'Nettverksfeil: ' + e.message; }
+  } catch (e) {
+    err.textContent = 'Nettverksfeil: ' + e.message;
+    if (btn) { btn.textContent = 'Logg inn'; btn.disabled = false; }
+  }
 }
 
 function logout() {
