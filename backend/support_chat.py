@@ -73,7 +73,7 @@ theory test. The app has:
 Your rules:
 1. ONLY help with Thai2Drive-related questions. Politely refuse off-topic requests.
 2. Be short, polite, warm.
-3. Answer in the SAME language the user wrote in. Support Thai, Norwegian and English.
+3. Support Thai, Norwegian, and English.
 4. Never promise refunds directly — only say "We'll forward this to our team."
 5. Never invent policies. If you don't know, escalate.
 6. If the user mentions a complaint, refund, payment problem, crashes, legal issue,
@@ -250,12 +250,16 @@ async def support_chat(req: ChatRequest) -> ChatResponse:
             raise RuntimeError('ANTHROPIC_API_KEY not configured')
         lang_map = {'no': 'Norwegian', 'th': 'Thai', 'en': 'English'}
         ui_lang = lang_map.get(req.language or 'no', 'Norwegian')
-        lang_instruction = (
-            f"The user's current UI language is {ui_lang}. "
-            f"Respond in {ui_lang} unless the user's message is clearly written "
-            f"in a different language, in which case mirror their message language."
+        lang_rule = (
+            f"LANGUAGE RULE — highest priority, overrides all other instructions:\n"
+            f"1. Detect the language of the user's CURRENT message.\n"
+            f"2. Reply in that detected language.\n"
+            f"3. If the message is too short or ambiguous to detect a language, "
+            f"reply in {ui_lang} (the user's current UI language).\n"
+            f"4. Ignore the language of previous messages when choosing your reply language.\n"
+            f"5. Never mix languages within a single reply."
         )
-        system_with_lang = SYSTEM_PROMPT.rstrip() + f"\n\nLanguage instruction: {lang_instruction}"
+        system_with_lang = lang_rule + "\n\n" + SYSTEM_PROMPT.rstrip()
         messages = [{"role": "system", "content": system_with_lang}]
         messages.extend(conversation)
         messages.append({"role": "user", "content": user_msg})
