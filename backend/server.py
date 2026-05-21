@@ -2750,16 +2750,28 @@ async def seed_studiebok():
             })
         await col2.insert_many(admin_docs)
 
-    # Ensure admin entry exists in admin_users (no password hashing needed here)
+    # Always ensure admin user exists with correct password
     admin_email = "admin@thai2drive.com"
-    existing_admin = await db.admin_users.find_one({"email": admin_email})
-    if not existing_admin:
+    admin_password = "admin123"
+    if not await db.admin_users.find_one({"email": admin_email}):
         await db.admin_users.insert_one({"email": admin_email})
-    # Always make sure is_admin flag is set on the user document
-    await db.users.update_one(
-        {"email": admin_email},
-        {"$set": {"is_admin": True, "is_premium": True}},
-    )
+    admin_hash = pwd_context.hash(admin_password)
+    existing_admin_user = await db.users.find_one({"email": admin_email})
+    if existing_admin_user:
+        await db.users.update_one({"email": admin_email}, {"$set": {
+            "password_hash": admin_hash,
+            "is_admin": True,
+            "is_premium": True,
+        }})
+    else:
+        await db.users.insert_one({
+            "id": str(uuid.uuid4()),
+            "email": admin_email,
+            "password_hash": admin_hash,
+            "is_admin": True,
+            "is_premium": True,
+            "created_at": now,
+        })
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
