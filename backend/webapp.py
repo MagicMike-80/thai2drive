@@ -140,12 +140,12 @@ a { color:inherit; text-decoration:none; }
 /* Dark overlay so text stays readable */
 .flag-bg::before {
   content:''; position:absolute; inset:0;
-  background:rgba(10,14,30,.72);
+  background:rgba(10,14,30,.50);
 }
 /* Subtle vignette */
 .flag-bg::after {
   content:''; position:absolute; inset:0;
-  background:radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(0,0,0,.3) 100%);
+  background:radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(0,0,0,.2) 100%);
 }
 
 /* ══════════════════════════════════════════
@@ -412,7 +412,8 @@ a { color:inherit; text-decoration:none; }
 /* ══════════════════════════════════════════
    QUIZ SCREEN — fully height-based, NO scroll
 ══════════════════════════════════════════ */
-#screenQuiz { padding:0; }
+#screenQuiz { padding:0; background:#0B1226; }
+[data-theme="light"] #screenQuiz { background:#E8EEF6; }
 
 .quiz-top {
   padding:10px 16px 8px; flex-shrink:0;
