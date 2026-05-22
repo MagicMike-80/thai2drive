@@ -2835,6 +2835,25 @@ async def ensure_indexes():
         )
 
 
+@app.get("/api/health")
+async def health_check():
+    """
+    Lightweight liveness + readiness probe.
+    Returns 200 with db=connected when MongoDB is reachable,
+    200 with db=disconnected when the ping times out or fails.
+    Railway / uptime monitors can poll this endpoint.
+    """
+    try:
+        await db.command("ping")
+        db_ok = True
+    except Exception:
+        db_ok = False
+    return {
+        "status": "ok" if db_ok else "degraded",
+        "db": "connected" if db_ok else "disconnected",
+    }
+
+
 @app.on_event("shutdown")
 async def shutdown_db_client():
     client.close()

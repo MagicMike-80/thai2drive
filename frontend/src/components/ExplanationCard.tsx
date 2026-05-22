@@ -13,20 +13,20 @@
  * The user taps "Get AI Explanation" → we fetch, show structured blocks.
  * Falls back gracefully when AI is unavailable.
  */
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import {
   View, Text, TouchableOpacity, StyleSheet,
-  ActivityIndicator, LayoutAnimation, Platform, UIManager,
+  ActivityIndicator,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { aiLearningApi, AIExplanation } from '../services/aiLearning';
 import type { ThemeColors } from '../theme';
 import type { QuestionOption } from '../services/api';
 
-// Enable LayoutAnimation on Android
-if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
-  UIManager.setLayoutAnimationEnabledExperimental(true);
-}
+// NOTE: LayoutAnimation is intentionally NOT used here.
+// UIManager.setLayoutAnimationEnabledExperimental modifies global Android state —
+// enabling it here would affect the entire app. Instant transitions are used
+// instead (mobile readability > visual complexity).
 
 // ─── Translations ─────────────────────────────────────────────────────────────
 const TR: Record<string, Record<string, string>> = {
@@ -116,25 +116,40 @@ export function ExplanationCard({
   const [data, setData] = useState<AIExplanation | null>(null);
   const [expandedBlocks, setExpandedBlocks] = useState<Set<string>>(new Set(['whyCorrect']));
 
+  // Prevent setState on unmounted component (e.g. user navigates away mid-load)
+  const mountedRef = useRef(true);
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => { mountedRef.current = false; };
+  }, []);
+
+  // Reset to idle when the question changes (next question in quiz)
+  useEffect(() => {
+    setState('idle');
+    setData(null);
+    setExpandedBlocks(new Set(['whyCorrect']));
+  }, [questionId]);
+
   const load = useCallback(async () => {
     if (state === 'loading' || state === 'loaded') return;
     setState('loading');
     try {
       const resp = await aiLearningApi.getExplanation(questionId, lang);
+      if (!mountedRef.current) return;
       if (resp && !resp.is_fallback) {
-        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
         setData(resp.explanation);
         setState('loaded');
       } else {
         setState('error');
       }
     } catch {
+      if (!mountedRef.current) return;
       setState('error');
     }
   }, [questionId, lang, state]);
 
+  // Instant toggle — no LayoutAnimation (avoids global Android state mutation)
   const toggleBlock = (key: string) => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setExpandedBlocks((prev) => {
       const next = new Set(prev);
       if (next.has(key)) next.delete(key);

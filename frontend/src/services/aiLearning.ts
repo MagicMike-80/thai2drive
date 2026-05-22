@@ -74,12 +74,25 @@ export interface CoachingResponse {
 
 // ─── Helper ───────────────────────────────────────────────────────────────────
 
-async function safeFetch<T>(url: string, options?: RequestInit): Promise<T | null> {
+/**
+ * Fetch with automatic timeout via AbortController.
+ * Returns null on any error, timeout, or non-2xx response.
+ * Never throws — callers treat null as "unavailable".
+ */
+async function safeFetch<T>(
+  url: string,
+  options?: RequestInit,
+  timeoutMs = 8_000,
+): Promise<T | null> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
-    const r = await fetch(url, options);
+    const r = await fetch(url, { ...options, signal: controller.signal });
+    clearTimeout(timer);
     if (!r.ok) return null;
-    return r.json();
+    return (await r.json()) as T;
   } catch {
+    clearTimeout(timer);
     return null;
   }
 }
@@ -113,12 +126,16 @@ export const aiLearningApi = {
   ): Promise<AIDashboard | null> {
     return safeFetch<AIDashboard>(
       `${AI_BASE}/dashboard/${encodeURIComponent(deviceId)}?lang=${lang}&streak=${streak}`,
+      undefined,
+      8_000,
     );
   },
 
   /**
    * Get (or generate) an AI explanation for a question.
    * Returns null on any error — UI shows fallback.
+   * Generous timeout: LLM generation can be slow on first request (15 s).
+   * Subsequent requests hit the MongoDB cache and return in < 200 ms.
    */
   async getExplanation(
     questionId: string,
@@ -126,6 +143,8 @@ export const aiLearningApi = {
   ): Promise<AIExplanationResponse | null> {
     return safeFetch<AIExplanationResponse>(
       `${AI_BASE}/explanation/${encodeURIComponent(questionId)}?lang=${lang}`,
+      undefined,
+      15_000,
     );
   },
 
@@ -138,6 +157,8 @@ export const aiLearningApi = {
   ): Promise<SmartPracticeResponse | null> {
     return safeFetch<SmartPracticeResponse>(
       `${AI_BASE}/smart-practice/${encodeURIComponent(deviceId)}?count=${count}`,
+      undefined,
+      8_000,
     );
   },
 
@@ -151,6 +172,8 @@ export const aiLearningApi = {
   ): Promise<CoachingResponse | null> {
     return safeFetch<CoachingResponse>(
       `${AI_BASE}/coaching/${encodeURIComponent(deviceId)}?lang=${lang}&streak=${streak}`,
+      undefined,
+      6_000,
     );
   },
 };

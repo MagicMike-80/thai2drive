@@ -27,11 +27,22 @@ interface _CacheEntry { messages: string[]; srs_due_count: number; fetchedAt: nu
 const _coachCache  = new Map<string, _CacheEntry>();
 const _CACHE_TTL   = 5 * 60 * 1000; // 5 minutes
 
+const _CACHE_MAX   = 20;   // max entries — prevents unbounded growth across device IDs
+
 function _getCached(key: string): _CacheEntry | null {
   const entry = _coachCache.get(key);
   if (!entry) return null;
   if (Date.now() - entry.fetchedAt > _CACHE_TTL) { _coachCache.delete(key); return null; }
   return entry;
+}
+
+function _setCached(key: string, value: Omit<_CacheEntry, 'fetchedAt'>): void {
+  if (_coachCache.size >= _CACHE_MAX) {
+    // Evict oldest entry (Map preserves insertion order)
+    const firstKey = _coachCache.keys().next().value;
+    if (firstKey !== undefined) _coachCache.delete(firstKey);
+  }
+  _coachCache.set(key, { ...value, fetchedAt: Date.now() });
 }
 // ─────────────────────────────────────────────────────────────────────────────
 

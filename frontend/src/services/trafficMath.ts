@@ -104,12 +104,20 @@ export interface ConditionsResult {
 
 // ─── Fetch helper ─────────────────────────────────────────────────────────────
 
-async function safeFetch<T>(url: string): Promise<T | null> {
+/**
+ * Fetch with automatic timeout. Returns null on error, timeout, or non-2xx.
+ * Traffic math calculations are pure Python — 5 s is generous; typical < 50 ms.
+ */
+async function safeFetch<T>(url: string, timeoutMs = 5_000): Promise<T | null> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
-    const res = await fetch(url);
+    const res = await fetch(url, { signal: controller.signal });
+    clearTimeout(timer);
     if (!res.ok) return null;
     return (await res.json()) as T;
   } catch {
+    clearTimeout(timer);
     return null;
   }
 }
