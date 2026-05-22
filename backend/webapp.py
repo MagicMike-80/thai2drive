@@ -1074,18 +1074,22 @@ a { color:inherit; text-decoration:none; }
 #screenBookmarks { padding:0; }
 .bm-header { padding:14px 16px 10px; flex-shrink:0; }
 .bm-scroll {
-  flex:1; overflow-x:auto; overflow-y:hidden;
+  flex:1; min-height:0;                   /* lets flex child shrink in column parent */
+  overflow-x:auto; overflow-y:hidden;
   display:flex; gap:14px;
   padding:0 16px 16px;
   -webkit-overflow-scrolling:touch;
+  scroll-snap-type:x proximity;          /* snap to card edges */
+  touch-action:pan-x;                    /* native horizontal swipe on touch */
   align-items:flex-start;
+  scrollbar-width:none;                  /* Firefox — hide scrollbar */
 }
-.bm-scroll::-webkit-scrollbar { height:4px; }
-.bm-scroll::-webkit-scrollbar-track { background:transparent; }
-.bm-scroll::-webkit-scrollbar-thumb { background:rgba(255,255,255,.12); border-radius:2px; }
+.bm-scroll::-webkit-scrollbar { display:none; }   /* Chrome/Safari — hide scrollbar */
 
 .bm-card {
-  width:290px; flex-shrink:0;
+  flex:0 0 calc(100% - 48px);            /* responsive 82%-ish width; no flex-shrink */
+  max-width:320px;
+  scroll-snap-align:start;              /* snap each card into view */
   background:var(--card); border:1.5px solid var(--border);
   border-radius:16px; padding:14px;
   display:flex; flex-direction:column; gap:10px;
@@ -1265,7 +1269,8 @@ a { color:inherit; text-decoration:none; }
 #screenHistory { padding:0; }
 .hist-header { padding:14px 16px 10px; flex-shrink:0; }
 .hist-scroll {
-  flex:1; overflow-y:auto; overflow-x:hidden;
+  flex:1; min-height:0;                   /* min-height:0 → lets flex child shrink and scroll */
+  overflow-y:auto; overflow-x:hidden;
   padding:0 16px 16px;
   -webkit-overflow-scrolling:touch;
   display:flex; flex-direction:column; gap:10px;
