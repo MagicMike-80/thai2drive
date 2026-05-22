@@ -106,11 +106,13 @@ export function useTrafficMath(
     // Cache hit — instant, zero loading state
     const cached = _cache.get(key);
     if (cached) {
+      if (__DEV__) console.log(`[TrafficMath] cache HIT  ${key}`);
       setState({ result: cached, loading: false, error: false, isStale: false });
       return;
     }
 
     // Cache miss — keep stale result visible while loading
+    if (__DEV__) console.log(`[TrafficMath] cache MISS ${key} — fetching`);
     setState(prev => ({
       ...prev,
       loading: true,

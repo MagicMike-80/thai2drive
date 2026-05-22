@@ -85,6 +85,7 @@ export function CoachBanner({ deviceId, lang, streak, colors: c }: CoachBannerPr
     // Cache hit — instant, no API call
     const cached = _getCached(key);
     if (cached && cached.messages.length > 0) {
+      if (__DEV__) console.log(`[CoachBanner] cache HIT  key=${key}`);
       setMessage(cached.messages[0]);
       setSrsCount(cached.srs_due_count);
       Animated.timing(fadeAnim, { toValue: 1, duration: 350, useNativeDriver: true }).start();
@@ -93,13 +94,15 @@ export function CoachBanner({ deviceId, lang, streak, colors: c }: CoachBannerPr
 
     // Cache miss — fetch and store
     (async () => {
+      if (__DEV__) console.log(`[CoachBanner] cache MISS key=${key} — fetching`);
+      const t0 = __DEV__ ? performance.now() : 0;
       const data = await aiLearningApi.getCoaching(deviceId, lang, streak);
+      if (__DEV__) console.log(`[CoachBanner] fetch done → ${(performance.now() - t0).toFixed(0)}ms${data ? '' : ' (null)'}`);
       if (!mounted) return;
       if (data && data.messages.length > 0) {
-        _coachCache.set(key, {
+        _setCached(key, {
           messages:      data.messages,
           srs_due_count: data.srs_due_count,
-          fetchedAt:     Date.now(),
         });
         setMessage(data.messages[0]);
         setSrsCount(data.srs_due_count);

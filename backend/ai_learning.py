@@ -17,6 +17,7 @@ Collections used:
 """
 from __future__ import annotations
 
+import asyncio
 import logging
 from datetime import datetime, timezone, timedelta
 from math import ceil
@@ -457,15 +458,25 @@ async def get_dashboard(db, device_id: str, lang: str = "no", streak: int = 0) -
     """
     Compile all AI learning data for the dashboard endpoint.
     """
-    # Fetch all categories from questions collection for coverage calculation
-    cat_docs = await db.questions.distinct("category")
+    # All six reads are independent — run concurrently.
+    # Sequential baseline: ~6 × 20 ms = ~120 ms.
+    # Parallel: ~20 ms (slowest single query).
+    (
+        cat_docs,
+        total_attempts,
+        recent_accuracy,
+        category_stats,
+        srs_due,
+        trend,
+    ) = await asyncio.gather(
+        db.questions.distinct("category"),
+        get_total_attempts(db, device_id),
+        get_recent_accuracy(db, device_id),
+        get_category_stats(db, device_id),
+        get_srs_due_count(db, device_id),
+        get_improvement_trend(db, device_id),
+    )
     all_categories = [c for c in cat_docs if c]
-
-    total_attempts    = await get_total_attempts(db, device_id)
-    recent_accuracy   = await get_recent_accuracy(db, device_id)
-    category_stats    = await get_category_stats(db, device_id)
-    srs_due           = await get_srs_due_count(db, device_id)
-    trend             = await get_improvement_trend(db, device_id)
     exam_readiness    = compute_exam_readiness(
         recent_accuracy, total_attempts, category_stats, all_categories
     )

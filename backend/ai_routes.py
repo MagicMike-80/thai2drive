@@ -12,6 +12,7 @@ Endpoints:
 """
 from __future__ import annotations
 
+import asyncio
 import logging
 import os
 from typing import Optional
@@ -186,11 +187,16 @@ async def get_coaching(
     Used by the home screen CoachBanner without the full dashboard load.
     """
     try:
-        total   = await ai_learning.get_total_attempts(_db, device_id)
-        acc     = await ai_learning.get_recent_accuracy(_db, device_id)
-        cats    = await ai_learning.get_category_stats(_db, device_id)
-        srs_due = await ai_learning.get_srs_due_count(_db, device_id)
-        trend   = await ai_learning.get_improvement_trend(_db, device_id)
+        # All five queries are independent — run concurrently.
+        # Sequential baseline: ~5 × 20 ms = ~100 ms.
+        # Parallel: ~20 ms (slowest single query).
+        total, acc, cats, srs_due, trend = await asyncio.gather(
+            ai_learning.get_total_attempts(_db, device_id),
+            ai_learning.get_recent_accuracy(_db, device_id),
+            ai_learning.get_category_stats(_db, device_id),
+            ai_learning.get_srs_due_count(_db, device_id),
+            ai_learning.get_improvement_trend(_db, device_id),
+        )
 
         msgs = ai_learning.build_coaching_messages(lang, total, acc, cats, srs_due, trend, streak)
         return {

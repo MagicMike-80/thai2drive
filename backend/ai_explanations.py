@@ -188,7 +188,7 @@ async def get_explanation(
         {"_id": 0},
     )
     if cached:
-        logger.debug("ai_explanations: cache hit qid=%s lang=%s", question_id, lang)
+        logger.info("ai_explanations: cache HIT  qid=%s lang=%s", question_id, lang)
         return cached.get("explanation", _FALLBACK_EXPLANATION)
 
     # Generate
