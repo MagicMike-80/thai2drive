@@ -409,11 +409,12 @@ a { color:inherit; text-decoration:none; }
 
 .cat-grid {
   display:grid;
-  grid-template-columns:repeat(2,1fr);
+  /* auto-fit responds to the container width, not the viewport —
+     minmax(140px,1fr) gives 2 cols in the 390 px shell, more on a
+     real wide screen. No viewport media queries needed. */
+  grid-template-columns:repeat(auto-fit, minmax(140px,1fr));
   gap:10px;
 }
-@media (min-width:480px) { .cat-grid { grid-template-columns:repeat(3,1fr); } }
-@media (min-width:700px) { .cat-grid { grid-template-columns:repeat(4,1fr); } }
 
 .cat-card {
   background:rgba(0,0,0,.05); border:1.5px solid rgba(255,255,255,.25);
@@ -683,12 +684,12 @@ a { color:inherit; text-decoration:none; }
 .signs-scroll::-webkit-scrollbar-thumb { background:rgba(255,255,255,.12); border-radius:2px; }
 .signs-grid {
   display:grid;
-  grid-template-columns:repeat(2,1fr);
+  /* auto-fit responds to the container width, not the viewport —
+     minmax(100px,1fr) gives 3 cols in the 390 px shell.
+     No viewport media queries needed. */
+  grid-template-columns:repeat(auto-fit, minmax(100px,1fr));
   gap:10px;
 }
-@media (min-width:480px) { .signs-grid { grid-template-columns:repeat(3,1fr); } }
-@media (min-width:700px) { .signs-grid { grid-template-columns:repeat(4,1fr); } }
-@media (min-width:1000px) { .signs-grid { grid-template-columns:repeat(5,1fr); } }
 .sign-card {
   background:var(--card); border:1.5px solid var(--border);
   border-radius:14px; padding:10px 8px;
