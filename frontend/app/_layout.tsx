@@ -6,6 +6,64 @@ import { View, ActivityIndicator, StyleSheet, Platform } from 'react-native';
 import { useAppStore } from '../src/store/appStore';
 import { IS_PREVIEW_BUILD } from '../src/buildFlags';
 
+/**
+ * WebAppShell — desktop web only.
+ *
+ * Wraps the entire app in a centered 430 px phone frame so every screen
+ * inherits the mobile layout on wide viewports. On native (iOS / Android)
+ * this component is a transparent passthrough — zero runtime cost.
+ *
+ * Visual layers (outermost → innermost):
+ *   1. Ambient background  — very dark slate with a soft radial glow in the
+ *      centre so the frame sits in "depth" rather than floating on nothing.
+ *   2. Phone frame         — max-width 430 px, full height, clipped overflow.
+ *      A 1 px rgba border gives the glass-edge highlight phones have.
+ *      A layered box-shadow provides near + far depth.
+ *
+ * Breakpoints handled automatically:
+ *   ≤ 430 px viewport  → frame fills 100 % width, no side gap (phone browser)
+ *   430 px – any width → frame is centred with dark ambient on both sides
+ */
+function WebAppShell({ children }: { children: React.ReactNode }) {
+  if (Platform.OS !== 'web') return <>{children}</>;
+  return (
+    <View style={_webOuter as any}>
+      <View style={_webFrame as any}>
+        {children}
+      </View>
+    </View>
+  );
+}
+
+// Plain JS objects — CSS properties not present in React Native's ViewStyle.
+// Rendered ONLY on web (Platform.OS check above), so no native impact.
+const _webOuter = {
+  flex: 1,
+  backgroundColor: '#020817',
+  // Subtle radial glow keeps the centre slightly lighter so the frame
+  // reads as "lit" rather than floating on a flat black surface.
+  backgroundImage:
+    'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(15,23,42,0.95) 0%, #020817 70%)',
+  alignItems: 'center',
+  justifyContent: 'flex-start',
+};
+
+const _webFrame = {
+  flex: 1,
+  width: '100%',
+  maxWidth: 430,
+  position: 'relative',
+  overflow: 'hidden',
+  // Layer 1: 1 px hairline — the "glass edge" that gives the frame its boundary
+  // Layer 2: tight near-shadow for crispness
+  // Layer 3: wide far-shadow for depth against the ambient background
+  boxShadow: [
+    '0 0 0 1px rgba(255,255,255,0.07)',
+    '0 4px 24px rgba(0,0,0,0.55)',
+    '0 24px 100px rgba(0,0,0,0.85)',
+  ].join(', '),
+};
+
 const AUTH_SCREENS = ['login', 'signup', 'forgot-password'];
 
 /**
@@ -140,9 +198,11 @@ export default function RootLayout() {
   if (!isReady) {
     return (
       <SafeAreaProvider>
-        <View style={[styles.loading, { backgroundColor: colors.bg }]}>
-          <ActivityIndicator size="large" color={colors.accent} />
-        </View>
+        <WebAppShell>
+          <View style={[styles.loading, { backgroundColor: colors.bg }]}>
+            <ActivityIndicator size="large" color={colors.accent} />
+          </View>
+        </WebAppShell>
       </SafeAreaProvider>
     );
   }
@@ -150,31 +210,33 @@ export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <StatusBar style={isDark ? 'light' : 'dark'} />
-      <Stack
-        screenOptions={{
-          headerShown: false,
-          contentStyle: { backgroundColor: colors.bg },
-          animation: 'slide_from_right',
-        }}
-      >
-        {/* Auth screens */}
-        <Stack.Screen name="login" options={{ animation: 'fade' }} />
-        <Stack.Screen name="signup" />
-        <Stack.Screen name="forgot-password" />
-        {/* App screens */}
-        <Stack.Screen name="index" options={{ animation: 'fade' }} />
-        <Stack.Screen name="categories" />
-        <Stack.Screen name="quiz" />
-        <Stack.Screen name="results" />
-        <Stack.Screen name="history" />
-        <Stack.Screen name="bookmarks" />
-        <Stack.Screen name="settings" />
-        <Stack.Screen name="paywall" options={{ presentation: 'modal', animation: 'slide_from_bottom' }} />
-        <Stack.Screen name="book" />
-        <Stack.Screen name="stats" />
-        <Stack.Screen name="signs" />
-        <Stack.Screen name="traffic-math" />
-      </Stack>
+      <WebAppShell>
+        <Stack
+          screenOptions={{
+            headerShown: false,
+            contentStyle: { backgroundColor: colors.bg },
+            animation: 'slide_from_right',
+          }}
+        >
+          {/* Auth screens */}
+          <Stack.Screen name="login" options={{ animation: 'fade' }} />
+          <Stack.Screen name="signup" />
+          <Stack.Screen name="forgot-password" />
+          {/* App screens */}
+          <Stack.Screen name="index" options={{ animation: 'fade' }} />
+          <Stack.Screen name="categories" />
+          <Stack.Screen name="quiz" />
+          <Stack.Screen name="results" />
+          <Stack.Screen name="history" />
+          <Stack.Screen name="bookmarks" />
+          <Stack.Screen name="settings" />
+          <Stack.Screen name="paywall" options={{ presentation: 'modal', animation: 'slide_from_bottom' }} />
+          <Stack.Screen name="book" />
+          <Stack.Screen name="stats" />
+          <Stack.Screen name="signs" />
+          <Stack.Screen name="traffic-math" />
+        </Stack>
+      </WebAppShell>
     </SafeAreaProvider>
   );
 }
