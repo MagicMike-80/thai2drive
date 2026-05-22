@@ -3056,6 +3056,41 @@ function _wrongSupportText(streak) {
   return 'Ikke riktig. Se forklaringen under.';
 }
 
+// ── Session confidence level ─────────────────────────────────────────────────
+// Derived quietly from streak + session wrong rate.
+// Used to calibrate: expand behavior, tip directness, fallback phrasing.
+// Never shown to the student — purely internal scaffolding.
+function _confidenceLevel() {
+  if (_sessionAnswered < 4) return 'early';          // too little data to judge
+  var rate = _sessionWrongTotal / _sessionAnswered;
+  if (_wrongStreak >= 3 || rate > 0.50) return 'low';     // actively struggling
+  if (_wrongStreak === 0 && _correctStreak >= 4 && rate < 0.25) return 'high'; // fluent
+  return 'medium';
+}
+
+// ── Topic-aware danger card label ────────────────────────────────────────────
+// Returns a precise topic label instead of the generic "Forstå situasjonen".
+// Makes wrong-answer cards feel targeted, not formulaic.
+function _dangerLabel(expl) {
+  if (!expl) return 'Forstå situasjonen';
+  var t = expl;
+  if (/forbikjør/i.test(t))                            return 'Forbikjøring';
+  if (/avstand|følgeavstand|3[- ]sek/i.test(t))        return 'Avstand og tid';
+  if (/vikeplikt|forkjørsrett/i.test(t))               return 'Vikeplikt';
+  if (/gangfelt|fotgjenger|syklist/i.test(t))          return 'Myke trafikanter';
+  if (/glatt|is\b|snø|vinter|slipperisk/i.test(t))    return 'Vinterforhold';
+  if (/uoversiktlig|begrenset sikt|kurve|blind/i.test(t)) return 'Sikt og fart';
+  if (/tretthet|trøtt\b|søvn/i.test(t))               return 'Tretthet';
+  if (/rundkjøring/i.test(t))                          return 'Rundkjøring';
+  if (/promille|alkohol/i.test(t))                     return 'Alkohol';
+  if (/reaksjon\w*\s*tid/i.test(t))                    return 'Reaksjonstid';
+  if (/lys\b|belysning|nærlys|langt\s*lys/i.test(t))  return 'Lysbruk';
+  if (/fartsgrense|hastighet|km\/t/i.test(t))          return 'Fartsgrense';
+  if (/nødbrems|abs\b|bremsebane/i.test(t))            return 'Bremsing';
+  if (/møtende|tunnel\b/i.test(t))                     return 'Møtende trafikk';
+  return 'Forstå situasjonen';
+}
+
 function selectAns(btn, picked) {
   if (qAnswered) return;
   qAnswered = true;
@@ -3098,17 +3133,18 @@ function selectAns(btn, picked) {
 
 // ── Split explanation into short (first sentence) and rest ──────────────────
 // Powers the multi-level "Vis mer" pattern for layered learning.
+// The 40-char minimum prevents false splits on abbreviations like "m.m." or "f.eks."
 function splitExpl(expl) {
   if (!expl) return {short: '', rest: ''};
-  // Try to find a natural sentence break
-  var m = expl.match(/^(.*?[.!?])\s+([\s\S]+)$/);
-  if (m && m[2].trim().length > 28) {
+  // Sentence break — require at least 40 chars before split point
+  var m = expl.match(/^(.{40,}?[.!?])(?:\s+|$)([\s\S]*)$/);
+  if (m && m[2].trim().length > 32) {
     return {short: m[1].trim(), rest: m[2].trim()};
   }
-  // Fallback: word-break at ~105 chars if text is long enough
-  if (expl.length > 130) {
-    var cut = expl.lastIndexOf(' ', 108);
-    if (cut > 55) return {short: expl.slice(0, cut) + '…', rest: expl.slice(cut + 1).trim()};
+  // Fallback: word-break at ~115 chars if text is long enough
+  if (expl.length > 140) {
+    var cut = expl.lastIndexOf(' ', 115);
+    if (cut > 65) return {short: expl.slice(0, cut) + '…', rest: expl.slice(cut + 1).trim()};
   }
   return {short: expl, rest: ''};
 }
@@ -3194,37 +3230,38 @@ function buildInstructorTip(isOk, alerts) {
     return 'Du er i god progresjon på dette temaet.';
   // correctStreak 1-9: fall through to topic-aware tip
 
-  // ─ Topic-aware coaching ─
+  // ─ Topic-aware coaching — checks BOTH alerts, not just the first ─
   if (alerts.length > 0) {
-    var lbl  = alerts[0].label.toLowerCase();
-    var type = alerts[0].type;
+    // Combine both alert labels so either alert can trigger the right tip
+    var topics = alerts.map(function(a) { return a.label.toLowerCase(); }).join(' ');
+    var type   = alerts[0].type;
 
-    if (type === 'weather')
+    if (type === 'weather' || topics.indexOf('vinter') >= 0)
       return isOk
         ? 'Husketips: grep og bremselengde varierer kraftig med vær og føre — kjør deretter.'
-        : 'Lær å lese veibanen. Kjøreforholdene endrer seg — farten må alltid tilpasses.';
+        : 'Lær å lese veibanen. Kjøreforholdene endrer seg — farten og avstanden må alltid tilpasses.';
 
-    if (lbl.indexOf('sikt') >= 0 || lbl.indexOf('fart') >= 0)
+    if (topics.indexOf('sikt') >= 0 || topics.indexOf('fart') >= 0)
       return isOk
         ? 'God observasjonsteknikk skiller trygge sjåfører fra farlige. Tren blikket fremover.'
         : 'I all trafikk: se langt fremover og bygg inn sikkerhetsmarginer — spesielt i kurver.';
 
-    if (lbl.indexOf('sekund') >= 0 || lbl.indexOf('avstand') >= 0)
+    if (topics.indexOf('sekund') >= 0 || topics.indexOf('avstand') >= 0)
       return isOk
         ? '3-sekunders-regelen er din enkleste forsikring mot oppkjøring — bruk den alltid.'
         : 'Øv deg: tell "én-tusen-ett, én-tusen-to, én-tusen-tre" mellom deg og bilen foran.';
 
-    if (lbl.indexOf('vikeplikt') >= 0)
+    if (topics.indexOf('vikeplikt') >= 0)
       return isOk
         ? 'God vikepliktforståelse er grunnlaget for trygg ferdsel i alle kryss.'
         : 'Gå gjennom vikepliktreglene en gang til — de er avgjørende i kryssituasjoner.';
 
-    if (lbl.indexOf('myk') >= 0 || lbl.indexOf('fotgjenger') >= 0)
+    if (topics.indexOf('myk') >= 0 || topics.indexOf('fotgjenger') >= 0 || topics.indexOf('trafikant') >= 0)
       return isOk
         ? 'Fotgjengere og syklister er de mest sårbare i trafikken — vær alltid ekstra oppmerksom.'
         : 'Gangfelt gir fotgjengere rett til å krysse trygt — bremse alltid ned i tide.';
 
-    if (lbl.indexOf('forbi') >= 0 || lbl.indexOf('feil') >= 0)
+    if (topics.indexOf('forbi') >= 0)
       return isOk
         ? 'Forbikjøring krever tålmodighet. Ikke press det — vent til det er trygt og klart.'
         : 'Tvilsomme forbikjøringer er blant de farligste valgene du kan ta — vent heller.';
@@ -3234,33 +3271,48 @@ function buildInstructorTip(isOk, alerts) {
         ? 'Du er godt forberedt på dette temaet — ett av de hyppigste på teoriprøven.'
         : 'Dette er et av de vanligste temaene på teoriprøven. Les det i studieboken.';
 
-    if (lbl.indexOf('rundkjøring') >= 0)
+    if (topics.indexOf('rundkjøring') >= 0)
       return isOk
         ? 'Rundkjøringer er effektive men krever presisjon. Gi alltid vikeplikt ved innkjøring.'
         : 'Husk: trafikk allerede inne i rundkjøringen har forkjørsrett — vent til det er fritt.';
 
-    if (lbl.indexOf('brems') >= 0)
+    if (topics.indexOf('brems') >= 0)
       return isOk
         ? 'God avstand er din viktigste buffer. Kortere bremselengde betyr mer tid til andre valg.'
         : 'Øv deg mentalt på nødbremsing — reaksjonen din avgjør om du rekker å stanse i tide.';
 
-    if (lbl.indexOf('møtende') >= 0 || lbl.indexOf('tunnel') >= 0)
+    if (topics.indexOf('møtende') >= 0 || topics.indexOf('tunnel') >= 0)
       return isOk
         ? 'Forutsigbar kjøring gjør deg lettere å se for møtende trafikk — hold linjen og farten.'
         : 'I tunnel og mørke: hold til høyre, bruk nærlys og senk farten — siktelengden er kortere.';
 
-    if (lbl.indexOf('tretthet') >= 0)
+    if (topics.indexOf('tretthet') >= 0)
       return isOk
         ? 'Planlegg kjøreturer med pauser. Tretthet bygger seg opp gradvis og er vanskelig å oppdage.'
         : 'Tretthet angriper uten varsel. Tidlig stopp er alltid riktig — det finnes ingen snarvei.';
 
-    if (lbl.indexOf('grenseverdi') >= 0 || lbl.indexOf('promille') >= 0)
+    if (topics.indexOf('grenseverdi') >= 0 || topics.indexOf('alkohol') >= 0)
       return isOk
         ? 'Null-toleranse er det sikreste valget — lovens grense er en juridisk terskel, ikke en anbefaling.'
         : 'Lovens 0,2-grense beskytter mot straff, ikke mot ulykker. Alkohol og kjøring hører ikke sammen.';
+
+    if (topics.indexOf('reaksjonstid') >= 0)
+      return isOk
+        ? 'Rask reaksjon er trening — men god avstand er forsikringen som alltid er der.'
+        : 'Reaksjonstid kan ikke trenes bort på sekundet. Avstand og oppmerksomhet er svaret.';
+
+    if (topics.indexOf('lys') >= 0)
+      return isOk
+        ? 'Riktig lys gjør deg synlig og gir deg sikt — to ting som redder liv.'
+        : 'Lys er kommunikasjon i trafikken. Sjekk alltid at lysbruken er tilpasset situasjonen.';
   }
 
-  // Generic fallback — contextual but not topic-specific
+  // ─ Confidence-calibrated generic fallback ─
+  var confidence = _confidenceLevel();
+  if (confidence === 'low')
+    return isOk
+      ? 'Les forklaringen nøye — forståelse tar tid å bygge, men sitter godt når den sitter.'
+      : 'Ta deg tid med forklaringen. Legg merke til hva som skilte riktig og galt svar.';
   return isOk
     ? 'Fest situasjonen visuelt i minnet — gjenkjennelse i trafikken er en livsviktig ferdighet.'
     : 'Forstå situasjonen, ikke bare svaret. Det er slik kunnskap sitter i en virkelig situasjon.';
@@ -3295,11 +3347,11 @@ function buildAiHtml(isOk, expl) {
     + '</div>';
 
   if (!isOk && expl) {
-    // 2a ── Wrong: key insight first (the rule that was missed)
+    // 2a ── Wrong: topic-targeted label + key insight
     html += '<div class="quiz-ai-danger ai-block" style="--i:' + (i++) + '">'
       + '<div class="quiz-ai-danger-icon">📌</div>'
       + '<div style="min-width:0">'
-      + '<div class="quiz-ai-danger-label">Forstå situasjonen</div>'
+      + '<div class="quiz-ai-danger-label">' + escH(_dangerLabel(expl)) + '</div>'
       + '<div class="quiz-ai-danger-text">' + escH(parts.short) + '</div>'
       + '</div></div>';
 
@@ -3312,27 +3364,30 @@ function buildAiHtml(isOk, expl) {
     }
 
   } else if (isOk && expl) {
-    // 3 ── Correct: depth-adaptive explanation
-    //      Beginners see the full text immediately — no friction.
-    //      Standard/advanced see first sentence + expandable rest.
+    // 3 ── Correct: depth + confidence adaptive explanation
+    //   'beginner' depth   → full text immediately (no friction)
+    //   'standard' + low confidence → auto-expand (struggling student needs context)
+    //   'standard' + medium/high    → short + expandable (student self-selects)
     var depth = _explDepth();
+    var confidence = _confidenceLevel();
     html += '<div class="quiz-ai-explain ai-block" style="--i:' + (i++) + '">'
       + '<div class="quiz-ai-card-label">📖 Forklaring</div>'
       + '<div class="quiz-ai-card-text">' + escH(parts.short) + '</div>';
     if (parts.rest) {
       if (depth === 'beginner') {
-        // Show full text without expand button — early learners benefit from context
+        // Beginners: show everything — reduce friction, maximise context
         html += '<div class="quiz-ai-card-text" style="margin-top:11px;padding-top:11px;'
           + 'border-top:1px solid rgba(255,255,255,.07)">' + escH(parts.rest) + '</div>';
       } else {
-        // Layered expand — student self-selects depth
-        html += '<button class="ai-expand-btn" onclick="'
+        // Standard: expand starts open for low-confidence students, closed for others
+        var autoOpen = (confidence === 'low');
+        html += '<button class="ai-expand-btn' + (autoOpen ? ' expanded' : '') + '" onclick="'
           + 'var c=this.nextElementSibling;'
           + 'c.classList.toggle(\'open\');'
           + 'this.classList.toggle(\'expanded\');'
           + 'this.textContent=c.classList.contains(\'open\')?\'Vis mindre\':\'Vis mer\''
-          + '">Vis mer</button>'
-          + '<div class="ai-expand-content">' + escH(parts.rest) + '</div>';
+          + '">' + (autoOpen ? 'Vis mindre' : 'Vis mer') + '</button>'
+          + '<div class="ai-expand-content' + (autoOpen ? ' open' : '') + '">' + escH(parts.rest) + '</div>';
       }
     }
     html += '</div>';
