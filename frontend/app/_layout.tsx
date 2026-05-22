@@ -173,6 +173,7 @@ export default function RootLayout() {
         <Stack.Screen name="book" />
         <Stack.Screen name="stats" />
         <Stack.Screen name="signs" />
+        <Stack.Screen name="traffic-math" />
       </Stack>
     </SafeAreaProvider>
   );
