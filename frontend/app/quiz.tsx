@@ -11,6 +11,8 @@ import { useAppStore } from '../src/store/appStore';
 import { api, Question } from '../src/services/api';
 import { playCorrectSound, playIncorrectSound, cleanupSounds } from '../src/sounds';
 import { useScreenProtection } from '../src/hooks/useScreenProtection';
+import { aiLearningApi } from '../src/services/aiLearning';
+import { ExplanationCard } from '../src/components/ExplanationCard';
 
 const LETTERS = ['A', 'B', 'C', 'D'];
 const EXAM_TIME = 90 * 60;
@@ -89,9 +91,11 @@ export default function QuizScreen() {
   const glowAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(1)).current;
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const questionStartedAt = useRef<number>(Date.now());
   const isExam = mode === 'exam';
   const isReviewWrong = mode === 'review-wrong';
   const isDaily = mode === 'daily';
+  const isSmart = mode === 'smart';
 
   useEffect(() => { loadQ(); return () => { if (timerRef.current) clearInterval(timerRef.current); Speech.stop(); cleanupSounds(); }; }, []);
 
@@ -114,6 +118,19 @@ export default function QuizScreen() {
         if (last && last.questions.length > 0) {
           const wrong = last.questions.filter((q, i) => !last.answers[i]?.correct);
           setQuestions(wrong);
+        }
+      } else if (isSmart) {
+        // Smart practice — adaptive queue from AI engine
+        try {
+          const data = await aiLearningApi.getSmartPractice(deviceId, 10);
+          if (data && data.questions.length > 0) {
+            setQuestions(data.questions);
+          } else {
+            // fallback: random
+            setQuestions(await api.getRandomQuestions(10));
+          }
+        } catch {
+          setQuestions(await api.getRandomQuestions(10));
         }
       } else if (isDaily) {
         // Daily test — cached per calendar day
@@ -205,6 +222,17 @@ export default function QuizScreen() {
     if (!isPremium) incrementFreeQuestions();
     await updateStreak();
     try { await api.updateProgress(deviceId, cor, q.category); setProgress(await api.getProgress(deviceId)); } catch (e) {}
+
+    // AI learning: record attempt (fire-and-forget, never blocks quiz)
+    aiLearningApi.recordAttempt({
+      device_id:     deviceId,
+      question_id:   q.id,
+      is_correct:    cor,
+      time_taken_ms: Date.now() - questionStartedAt.current,
+      category:      q.category || '',
+      mode:          mode || 'practice',
+      difficulty:    q.difficulty || 'medium',
+    });
   };
 
   const handleNext = () => {
@@ -215,6 +243,7 @@ export default function QuizScreen() {
     if (showAccountOrPaywall()) return;
     // Smooth slide transition
     Animated.timing(fade, { toValue: 0, duration: 120, useNativeDriver: true }).start(() => {
+      questionStartedAt.current = Date.now();
       setIdx((p) => p + 1); setSel(null); setDone(false); setShowTh(false); setShowLimit(false);
       Animated.timing(fade, { toValue: 1, duration: 120, useNativeDriver: true }).start();
     });
@@ -485,65 +514,64 @@ export default function QuizScreen() {
 
       <ScrollView contentContainerStyle={st.scr} showsVerticalScrollIndicator={false}>
         <Animated.View style={{ opacity: fade, transform: [{ scale: scaleAnim }] }}>
-          {/* Question */}
+
           <View style={[st.qCard, { backgroundColor: c.card, borderColor: c.cardBorder }]}>
-            {q.bildeUrl ? (
-              <Image
-                testID="question-image"
-                source={{ uri: q.bildeUrl }}
-                style={st.qImg}
-                resizeMode="contain"
-              />
-            ) : null}
-            <TouchableOpacity testID="question-card" onPress={() => setShowTh(!showTh)} activeOpacity={0.9}>
-              <Text style={[st.qTxt, { color: c.text }]}>{qT(q)}</Text>
-            </TouchableOpacity>
-            {language !== 'th' && (
-              <TouchableOpacity onPress={() => setShowTh(!showTh)} style={st.translateRow}>
-                <Ionicons name="language-outline" size={13} color={c.accent} />
-                <Text style={[st.hintT, { color: c.accent }]}>{t.hint}</Text>
-              </TouchableOpacity>
-            )}
-            {showTh && language !== 'th' && (
-              <View style={st.thW}>
-                <View style={[st.thL, { backgroundColor: `${c.accent}30` }]} />
-                <Text style={[st.thTxt, { color: c.accent }]}>{qT(q, 'th')}</Text>
-              </View>
-            )}
-          </View>
-
-          {/* Inline audio control:  [▶] 1x 1.5x 2x */}
-          <View style={st.audioRow}>
-            <TouchableOpacity
-              testID="tts-question-btn"
-              onPress={speakQuestion}
-              activeOpacity={0.7}
-              style={[st.playBtn, { backgroundColor: ttsPlaying === 'question' ? c.accent : c.card, borderColor: ttsPlaying === 'question' ? c.accent : c.cardBorder }]}
-            >
-              <Ionicons
-                name={ttsPlaying === 'question' ? 'pause' : 'play'}
-                size={16}
-                color={ttsPlaying === 'question' ? '#0F172A' : c.textSecondary}
-              />
-            </TouchableOpacity>
-            {SPEED_OPTIONS.map((opt) => {
-              const active = ttsSpeed === opt.value;
-              return (
-                <TouchableOpacity
-                  key={opt.value}
-                  testID={`tts-speed-${opt.label}`}
-                  style={[st.speedChip, active && { backgroundColor: c.accentBg }]}
-                  onPress={() => changeSpeed(opt.value)}
-                  activeOpacity={0.7}
-                  hitSlop={{ top: 8, bottom: 8, left: 4, right: 4 }}
-                >
-                  <Text style={[st.speedText, { color: active ? c.accent : c.textMuted, fontWeight: active ? '800' : '600' }]}>{opt.label}</Text>
+                {q.bildeUrl && q.has_real_image ? (
+                  <Image
+                    testID="question-image"
+                    source={{ uri: q.bildeUrl }}
+                    style={st.qImg}
+                    resizeMode="contain"
+                  />
+                ) : null}
+                <TouchableOpacity testID="question-card" onPress={() => setShowTh(!showTh)} activeOpacity={0.9}>
+                  <Text style={[st.qTxt, { color: c.text }]}>{qT(q)}</Text>
                 </TouchableOpacity>
-              );
-            })}
-          </View>
+                {language !== 'th' && (
+                  <TouchableOpacity onPress={() => setShowTh(!showTh)} style={st.translateRow}>
+                    <Ionicons name="language-outline" size={13} color={c.accent} />
+                    <Text style={[st.hintT, { color: c.accent }]}>{t.hint}</Text>
+                  </TouchableOpacity>
+                )}
+                {showTh && language !== 'th' && (
+                  <View style={st.thW}>
+                    <View style={[st.thL, { backgroundColor: `${c.accent}30` }]} />
+                    <Text style={[st.thTxt, { color: c.accent }]}>{qT(q, 'th')}</Text>
+                  </View>
+                )}
+              </View>
 
-          {/* Answers with glow */}
+              {/* Audio controls */}
+              <View style={st.audioRow}>
+                <TouchableOpacity
+                  testID="tts-question-btn"
+                  onPress={speakQuestion}
+                  activeOpacity={0.7}
+                  style={[st.playBtn, { backgroundColor: ttsPlaying === 'question' ? c.accent : c.card, borderColor: ttsPlaying === 'question' ? c.accent : c.cardBorder }]}
+                >
+                  <Ionicons
+                    name={ttsPlaying === 'question' ? 'pause' : 'play'}
+                    size={16}
+                    color={ttsPlaying === 'question' ? '#0F172A' : c.textSecondary}
+                  />
+                </TouchableOpacity>
+                {SPEED_OPTIONS.map((opt) => {
+                  const active = ttsSpeed === opt.value;
+                  return (
+                    <TouchableOpacity
+                      key={opt.value}
+                      testID={`tts-speed-${opt.label}`}
+                      style={[st.speedChip, active && { backgroundColor: c.accentBg }]}
+                      onPress={() => changeSpeed(opt.value)}
+                      activeOpacity={0.7}
+                      hitSlop={{ top: 8, bottom: 8, left: 4, right: 4 }}
+                    >
+                      <Text style={[st.speedText, { color: active ? c.accent : c.textMuted, fontWeight: active ? '800' : '600' }]}>{opt.label}</Text>
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
+
           <View style={st.aW}>
             {LETTERS.map((L) => {
               const isSel = sel === L, isCor = q.correctOptionId === L;
@@ -589,6 +617,15 @@ export default function QuizScreen() {
               </View>
               <Text style={[st.fbE, { color: c.textSecondary }]}>{eT(q)}</Text>
               {language !== 'th' && <Text style={[st.fbTh, { color: `${c.accent}B0` }]}>{eT(q, 'th')}</Text>}
+
+              {/* AI deep explanation — on-demand */}
+              <ExplanationCard
+                questionId={q.id}
+                correctOptionId={q.correctOptionId}
+                options={q.options || []}
+                lang={language}
+                colors={c}
+              />
             </View>
           )}
 

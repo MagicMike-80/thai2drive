@@ -2572,6 +2572,10 @@ app.include_router(website_router, prefix="/api")  # also serve under /api/* for
 from support_chat import support_chat_router  # noqa: E402
 app.include_router(support_chat_router, prefix="/api")
 
+# ==================== AI LEARNING ENGINE ====================
+from ai_routes import ai_router  # noqa: E402
+app.include_router(ai_router, prefix="/api")
+
 # ==================== QUIZ PAGE ====================
 from quiz_web import quiz_web_router  # noqa: E402
 app.include_router(quiz_web_router, prefix="/api")

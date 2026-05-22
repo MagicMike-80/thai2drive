@@ -9,13 +9,14 @@ import { useAppStore } from '../src/store/appStore';
 import { api } from '../src/services/api';
 import { LanguageSwitcher } from '../src/components/LanguageSwitcher';
 import { AppBrand } from '../src/components/AppBrand';
+import { CoachBanner } from '../src/components/CoachBanner';
 
 const T2D_ICON = require('../assets/images/t2d-icon.png');
 
 const TR: Record<string, Record<string, string>> = {
-  no: { subtitle: 'Norsk førerprøve', startQuiz: 'Start quiz', exam: 'Eksamen', accuracy: 'Nøyaktighet', answered: 'Besvart', correct: 'Riktige', premiumCta: 'Premium',  premiumOffer: 'Ubegrenset tilgang · fra 199 kr', premiumActive: 'Premium aktiv', streak: 'dagers rekke', freeLeft: 'gratis igjen', dailyLimitReached: 'Opprett konto for å fortsette', dailyTest: 'Dagens test', moreOptions: 'Flere', accountTitle: 'Opprett konto for å fortsette', accountBody: 'Du har brukt opp 10 gratis spørsmål. Opprett en konto for å fortsette.', accountSignup: 'Opprett konto', accountLogin: 'Logg inn', accountCancel: 'Avbryt', studyBook: 'Læringsbok', signGallery: 'Trafikkskilt', myStats: 'Min statistikk' },
-  th: { subtitle: 'สอบใบขับขี่นอร์เวย์', startQuiz: 'เริ่มทำแบบทดสอบ', exam: 'สอบ', accuracy: 'ความแม่นยำ', answered: 'ตอบแล้ว', correct: 'ถูกต้อง', premiumCta: 'พรีเมียม', premiumOffer: 'ใช้งานไม่จำกัด · เริ่มต้น 199 kr', premiumActive: 'Premium ใช้งานอยู่', streak: 'วันติดต่อกัน', freeLeft: 'ฟรีเหลือ', dailyLimitReached: 'สร้างบัญชีเพื่อดำเนินการต่อ', dailyTest: 'แบบทดสอบประจำวัน', moreOptions: 'เพิ่มเติม', accountTitle: 'สร้างบัญชีเพื่อดำเนินการต่อ', accountBody: 'คุณใช้คำถามฟรี 10 ข้อหมดแล้ว สร้างบัญชีเพื่อดำเนินการต่อ', accountSignup: 'สร้างบัญชี', accountLogin: 'เข้าสู่ระบบ', accountCancel: 'ยกเลิก', studyBook: 'หนังสือเรียน', signGallery: 'ป้ายจราจร', myStats: 'สถิติของฉัน' },
-  en: { subtitle: 'Norwegian driving test', startQuiz: 'Start quiz', exam: 'Exam', accuracy: 'Accuracy', answered: 'Answered', correct: 'Correct', premiumCta: 'Premium', premiumOffer: 'Unlimited access · from 199 NOK', premiumActive: 'Premium active', streak: 'day streak', freeLeft: 'free left', dailyLimitReached: 'Create account to continue', dailyTest: 'Daily test', moreOptions: 'More', accountTitle: 'Create an account to continue', accountBody: 'You have used your 10 free questions. Create an account to continue.', accountSignup: 'Create account', accountLogin: 'Log in', accountCancel: 'Cancel', studyBook: 'Study Book', signGallery: 'Traffic Signs', myStats: 'My Statistics' },
+  no: { subtitle: 'Norsk førerprøve', startQuiz: 'Start quiz', exam: 'Eksamen', accuracy: 'Nøyaktighet', answered: 'Besvart', correct: 'Riktige', premiumCta: 'Premium',  premiumOffer: 'Ubegrenset tilgang · fra 199 kr', premiumActive: 'Premium aktiv', streak: 'dagers rekke', freeLeft: 'gratis igjen', dailyLimitReached: 'Opprett konto for å fortsette', dailyTest: 'Dagens test', moreOptions: 'Flere', accountTitle: 'Opprett konto for å fortsette', accountBody: 'Du har brukt opp 10 gratis spørsmål. Opprett en konto for å fortsette.', accountSignup: 'Opprett konto', accountLogin: 'Logg inn', accountCancel: 'Avbryt', studyBook: 'Læringsbok', signGallery: 'Trafikkskilt', myStats: 'Min statistikk', smartPractice: 'Smart øving', aiInsights: 'AI Analyse' },
+  th: { subtitle: 'สอบใบขับขี่นอร์เวย์', startQuiz: 'เริ่มทำแบบทดสอบ', exam: 'สอบ', accuracy: 'ความแม่นยำ', answered: 'ตอบแล้ว', correct: 'ถูกต้อง', premiumCta: 'พรีเมียม', premiumOffer: 'ใช้งานไม่จำกัด · เริ่มต้น 199 kr', premiumActive: 'Premium ใช้งานอยู่', streak: 'วันติดต่อกัน', freeLeft: 'ฟรีเหลือ', dailyLimitReached: 'สร้างบัญชีเพื่อดำเนินการต่อ', dailyTest: 'แบบทดสอบประจำวัน', moreOptions: 'เพิ่มเติม', accountTitle: 'สร้างบัญชีเพื่อดำเนินการต่อ', accountBody: 'คุณใช้คำถามฟรี 10 ข้อหมดแล้ว สร้างบัญชีเพื่อดำเนินการต่อ', accountSignup: 'สร้างบัญชี', accountLogin: 'เข้าสู่ระบบ', accountCancel: 'ยกเลิก', studyBook: 'หนังสือเรียน', signGallery: 'ป้ายจราจร', myStats: 'สถิติของฉัน', smartPractice: 'ฝึกอัจฉริยะ', aiInsights: 'AI วิเคราะห์' },
+  en: { subtitle: 'Norwegian driving test', startQuiz: 'Start quiz', exam: 'Exam', accuracy: 'Accuracy', answered: 'Answered', correct: 'Correct', premiumCta: 'Premium', premiumOffer: 'Unlimited access · from 199 NOK', premiumActive: 'Premium active', streak: 'day streak', freeLeft: 'free left', dailyLimitReached: 'Create account to continue', dailyTest: 'Daily test', moreOptions: 'More', accountTitle: 'Create an account to continue', accountBody: 'You have used your 10 free questions. Create an account to continue.', accountSignup: 'Create account', accountLogin: 'Log in', accountCancel: 'Cancel', studyBook: 'Study Book', signGallery: 'Traffic Signs', myStats: 'My Statistics', smartPractice: 'Smart Practice', aiInsights: 'AI Insights' },
 };
 
 export default function HomeScreen() {
@@ -164,6 +165,14 @@ export default function HomeScreen() {
           </View>
         )}
 
+        {/* AI Coach Banner */}
+        <CoachBanner
+          deviceId={deviceId}
+          lang={language}
+          streak={streak}
+          colors={c}
+        />
+
         {/* PRIMARY CTA: Start Quiz */}
         <Animated.View style={{ transform: [{ scale: ctaScale }] }}>
           <TouchableOpacity
@@ -186,7 +195,7 @@ export default function HomeScreen() {
           </Text>
         )}
 
-        {/* Secondary row: Exam + Daily Test  (subtle, not cards-in-cards) */}
+        {/* Secondary row: Exam + Daily Test + Smart Practice */}
         <View style={st.secondaryRow}>
           <TouchableOpacity
             testID="exam-mode-btn"
@@ -206,9 +215,18 @@ export default function HomeScreen() {
             <Ionicons name={dailyDone ? 'checkmark-circle' : 'today-outline'} size={18} color={dailyDone ? c.correct : c.text} />
             <Text style={[st.secText, { color: dailyDone ? c.correct : c.text }]}>{t.dailyTest}</Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            testID="smart-practice-btn"
+            style={[st.secBtn, { borderColor: `${c.accent}50`, backgroundColor: c.accentBg }]}
+            onPress={() => { if (locked) handleLockedNav(); else router.push({ pathname: '/quiz', params: { mode: 'smart', category: 'all' } }); }}
+            activeOpacity={0.7}
+          >
+            <Ionicons name="flash-outline" size={18} color={c.accent} />
+            <Text style={[st.secText, { color: c.accent }]}>{t.smartPractice}</Text>
+          </TouchableOpacity>
         </View>
 
-        {/* Quick-access row: Book · Signs · Stats */}
+        {/* Quick-access row: Book · Signs · Stats · AI */}
         <View style={st.quickRow}>
           <TouchableOpacity
             style={[st.quickBtn, { backgroundColor: c.card, borderColor: c.cardBorder }]}
@@ -227,6 +245,13 @@ export default function HomeScreen() {
             onPress={() => router.push('/stats')} activeOpacity={0.75}>
             <Ionicons name="bar-chart-outline" size={22} color="#10B981" />
             <Text style={[st.quickLabel, { color: c.text }]}>{t.myStats}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            testID="ai-dashboard-btn"
+            style={[st.quickBtn, { backgroundColor: c.accentBg, borderColor: `${c.accent}50` }]}
+            onPress={() => router.push('/ai-dashboard')} activeOpacity={0.75}>
+            <Ionicons name="sparkles" size={22} color={c.accent} />
+            <Text style={[st.quickLabel, { color: c.accent }]}>{t.aiInsights}</Text>
           </TouchableOpacity>
         </View>
 

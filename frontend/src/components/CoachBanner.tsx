@@ -1,0 +1,151 @@
+/**
+ * CoachBanner — personalized AI coaching message for the home screen.
+ *
+ * Shows a rotating coaching message + SRS badge.
+ * Tapping the banner navigates to the AI Dashboard.
+ * Dismissed by pressing ×, re-shows next session.
+ */
+import React, { useEffect, useState, useRef } from 'react';
+import {
+  View, Text, TouchableOpacity, StyleSheet, Animated,
+} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import { aiLearningApi } from '../services/aiLearning';
+import type { ThemeColors } from '../theme';
+
+interface CoachBannerProps {
+  deviceId: string;
+  lang:     string;
+  streak:   number;
+  colors:   ThemeColors;
+}
+
+const TR: Record<string, { title: string; srs: string; go: string }> = {
+  no: { title: 'AI Lærer',  srs: 'til repetisjon', go: 'Se analyse →' },
+  th: { title: 'AI ครู',    srs: 'รอทบทวน',       go: 'ดูการวิเคราะห์ →' },
+  en: { title: 'AI Coach',  srs: 'due for review', go: 'View insights →' },
+};
+
+export function CoachBanner({ deviceId, lang, streak, colors: c }: CoachBannerProps) {
+  const router = useRouter();
+  const t = TR[lang] || TR.en;
+
+  const [message, setMessage]   = useState<string | null>(null);
+  const [srsCount, setSrsCount] = useState(0);
+  const [dismissed, setDismissed] = useState(false);
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      const data = await aiLearningApi.getCoaching(deviceId, lang, streak);
+      if (!mounted) return;
+      if (data && data.messages.length > 0) {
+        setMessage(data.messages[0]);
+        setSrsCount(data.srs_due_count);
+        Animated.timing(fadeAnim, { toValue: 1, duration: 350, useNativeDriver: true }).start();
+      }
+    })();
+    return () => { mounted = false; };
+  }, [deviceId, lang, streak]);
+
+  if (dismissed || !message) return null;
+
+  return (
+    <Animated.View style={{ opacity: fadeAnim }}>
+      <TouchableOpacity
+        style={[styles.card, { backgroundColor: c.card, borderColor: c.cardBorder }]}
+        onPress={() => router.push('/ai-dashboard')}
+        activeOpacity={0.85}
+      >
+        {/* Left accent stripe */}
+        <View style={[styles.stripe, { backgroundColor: c.accent }]} />
+
+        {/* Body */}
+        <View style={styles.body}>
+          <View style={styles.titleRow}>
+            <Ionicons name="sparkles" size={14} color={c.accent} />
+            <Text style={[styles.title, { color: c.accent }]}>{t.title}</Text>
+            {srsCount > 0 && (
+              <View style={[styles.srsBadge, { backgroundColor: `${c.accent}20` }]}>
+                <Text style={[styles.srsTxt, { color: c.accent }]}>
+                  {srsCount} {t.srs}
+                </Text>
+              </View>
+            )}
+          </View>
+          <Text style={[styles.msg, { color: c.textSecondary }]} numberOfLines={2}>
+            {message}
+          </Text>
+          <Text style={[styles.goLink, { color: `${c.accent}CC` }]}>{t.go}</Text>
+        </View>
+
+        {/* Dismiss */}
+        <TouchableOpacity
+          style={styles.dismiss}
+          onPress={() => setDismissed(true)}
+          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+        >
+          <Ionicons name="close" size={16} color={c.textMuted} />
+        </TouchableOpacity>
+      </TouchableOpacity>
+    </Animated.View>
+  );
+}
+
+const styles = StyleSheet.create({
+  card: {
+    flexDirection:  'row',
+    alignItems:     'stretch',
+    borderRadius:   14,
+    borderWidth:    1,
+    overflow:       'hidden',
+    marginBottom:   0,
+  },
+  stripe: {
+    width:          4,
+    flexShrink:     0,
+  },
+  body: {
+    flex:           1,
+    paddingVertical: 12,
+    paddingLeft:    12,
+    paddingRight:   4,
+    gap:            4,
+  },
+  titleRow: {
+    flexDirection:  'row',
+    alignItems:     'center',
+    gap:            5,
+    flexWrap:       'wrap',
+  },
+  title: {
+    fontSize:       12,
+    fontWeight:     '800',
+    letterSpacing:  0.5,
+    textTransform:  'uppercase',
+  },
+  srsBadge: {
+    borderRadius:   8,
+    paddingHorizontal: 7,
+    paddingVertical: 2,
+  },
+  srsTxt: {
+    fontSize:   11,
+    fontWeight: '700',
+  },
+  msg: {
+    fontSize:   13,
+    lineHeight: 19,
+  },
+  goLink: {
+    fontSize:   12,
+    fontWeight: '700',
+    marginTop:  2,
+  },
+  dismiss: {
+    paddingHorizontal: 10,
+    justifyContent:    'center',
+  },
+});
