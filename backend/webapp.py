@@ -3239,7 +3239,7 @@ function buildInstructorTip(isOk, alerts) {
     if (type === 'weather' || topics.indexOf('vinter') >= 0)
       return isOk
         ? 'Husketips: grep og bremselengde varierer kraftig med vær og føre — kjør deretter.'
-        : 'Lær å lese veibanen. Kjøreforholdene endrer seg — farten og avstanden må alltid tilpasses.';
+        : 'På glatt vei kan bremselengden øke kraftig. Les veibanen aktivt — tilpass alltid fart og følgeavstand.';
 
     if (topics.indexOf('sikt') >= 0 || topics.indexOf('fart') >= 0)
       return isOk
@@ -3254,7 +3254,7 @@ function buildInstructorTip(isOk, alerts) {
     if (topics.indexOf('vikeplikt') >= 0)
       return isOk
         ? 'God vikepliktforståelse er grunnlaget for trygg ferdsel i alle kryss.'
-        : 'Gå gjennom vikepliktreglene en gang til — de er avgjørende i kryssituasjoner.';
+        : 'Vikeplikt i kryss er årsaken til mange sidekollisjon — gjenkjenn situasjonene, ikke bare husk reglene.';
 
     if (topics.indexOf('myk') >= 0 || topics.indexOf('fotgjenger') >= 0 || topics.indexOf('trafikant') >= 0)
       return isOk
@@ -3263,8 +3263,8 @@ function buildInstructorTip(isOk, alerts) {
 
     if (topics.indexOf('forbi') >= 0)
       return isOk
-        ? 'Forbikjøring krever tålmodighet. Ikke press det — vent til det er trygt og klart.'
-        : 'Tvilsomme forbikjøringer er blant de farligste valgene du kan ta — vent heller.';
+        ? 'Forbikjøring krever tålmodighet. Ikke press det — vent til det er klart sikkert.'
+        : 'Feil vurdering ved forbikjøring er en vanlig årsak til frontalkollisjon — vent alltid til det er klart sikkert.';
 
     if (type === 'exam')
       return isOk
@@ -3299,7 +3299,7 @@ function buildInstructorTip(isOk, alerts) {
     if (topics.indexOf('reaksjonstid') >= 0)
       return isOk
         ? 'Rask reaksjon er trening — men god avstand er forsikringen som alltid er der.'
-        : 'Reaksjonstid kan ikke trenes bort på sekundet. Avstand og oppmerksomhet er svaret.';
+        : 'Ved 80 km/t tilbakelegger du 22 meter per sekund — avstand og årvåkenhet er den eneste reelle bufferen.';
 
     if (topics.indexOf('lys') >= 0)
       return isOk
@@ -3316,6 +3316,21 @@ function buildInstructorTip(isOk, alerts) {
   return isOk
     ? 'Fest situasjonen visuelt i minnet — gjenkjennelse i trafikken er en livsviktig ferdighet.'
     : 'Forstå situasjonen, ikke bare svaret. Det er slik kunnskap sitter i en virkelig situasjon.';
+}
+
+// ── Selective number emphasis for safety-critical text ───────────────────────
+// Boldens key numerical safety values (3 sekunder, km/t, promille, distance).
+// Called AFTER escH() — patterns only target known ASCII strings, no XSS risk.
+// Applied ONLY to primary card text, not expanded/secondary content.
+// Sparse by design: one or two bolded numbers per explanation at most.
+function emphExpl(text) {
+  if (!text) return '';
+  var s = escH(text);
+  s = s.replace(/\b(3 sekunder?|3-sekunders-regelen)\b/gi, '<strong>$1</strong>');
+  s = s.replace(/\b(\d{2,3}\s*km\/t)\b/gi,                '<strong>$1</strong>');
+  s = s.replace(/\b(0[,.]2 promille)\b/gi,                '<strong>$1</strong>');
+  s = s.replace(/\b(22\s*meter)\b/gi,                     '<strong>$1</strong>');
+  return s;
 }
 
 // ── Session-inferred explanation depth ──────────────────────────────────────
@@ -3335,9 +3350,10 @@ function _explDepth() {
 // Pedagogical order: verdict → key insight → detail → context alerts → tip.
 // Tone is constructive throughout — learning, not judging.
 function buildAiHtml(isOk, expl) {
-  var i = 0;
-  var parts  = splitExpl(expl);
-  var alerts = classifyAlerts(expl);
+  var i          = 0;
+  var parts      = splitExpl(expl);
+  var alerts     = classifyAlerts(expl);
+  var confidence = _confidenceLevel(); // computed once — drives depth, alerts, tip visibility
 
   // 1 ── Verdict — calm and clear, never a scorecard
   var verdictText = isOk ? _nextCorrectPhrase() : _wrongSupportText(_wrongStreak);
@@ -3347,12 +3363,12 @@ function buildAiHtml(isOk, expl) {
     + '</div>';
 
   if (!isOk && expl) {
-    // 2a ── Wrong: topic-targeted label + key insight
+    // 2a ── Wrong: topic-targeted label + key insight (safety numbers bolded)
     html += '<div class="quiz-ai-danger ai-block" style="--i:' + (i++) + '">'
       + '<div class="quiz-ai-danger-icon">📌</div>'
       + '<div style="min-width:0">'
       + '<div class="quiz-ai-danger-label">' + escH(_dangerLabel(expl)) + '</div>'
-      + '<div class="quiz-ai-danger-text">' + escH(parts.short) + '</div>'
+      + '<div class="quiz-ai-danger-text">' + emphExpl(parts.short) + '</div>'
       + '</div></div>';
 
     // 2b ── Full detail if explanation has more depth
@@ -3365,21 +3381,20 @@ function buildAiHtml(isOk, expl) {
 
   } else if (isOk && expl) {
     // 3 ── Correct: depth + confidence adaptive explanation
-    //   'beginner' depth   → full text immediately (no friction)
-    //   'standard' + low confidence → auto-expand (struggling student needs context)
-    //   'standard' + medium/high    → short + expandable (student self-selects)
+    //   'beginner' depth        → full text immediately (no friction)
+    //   'standard' low-conf     → auto-expand (struggling student needs full context)
+    //   'standard' medium/high  → short + expandable (student self-selects depth)
     var depth = _explDepth();
-    var confidence = _confidenceLevel();
     html += '<div class="quiz-ai-explain ai-block" style="--i:' + (i++) + '">'
       + '<div class="quiz-ai-card-label">📖 Forklaring</div>'
-      + '<div class="quiz-ai-card-text">' + escH(parts.short) + '</div>';
+      + '<div class="quiz-ai-card-text">' + emphExpl(parts.short) + '</div>';
     if (parts.rest) {
       if (depth === 'beginner') {
-        // Beginners: show everything — reduce friction, maximise context
+        // Beginners: full text — reduce friction, maximise available context
         html += '<div class="quiz-ai-card-text" style="margin-top:11px;padding-top:11px;'
           + 'border-top:1px solid rgba(255,255,255,.07)">' + escH(parts.rest) + '</div>';
       } else {
-        // Standard: expand starts open for low-confidence students, closed for others
+        // Standard: auto-open for low-confidence students, closed otherwise
         var autoOpen = (confidence === 'low');
         html += '<button class="ai-expand-btn' + (autoOpen ? ' expanded' : '') + '" onclick="'
           + 'var c=this.nextElementSibling;'
@@ -3393,8 +3408,11 @@ function buildAiHtml(isOk, expl) {
     html += '</div>';
   }
 
-  // 4 ── Smart context alerts (max 2 — calm, not overwhelming)
-  alerts.forEach(function(a) {
+  // 4 ── Smart context alerts
+  // High-confidence correct answers get at most 1 alert — quieter panel.
+  // All other states get up to 2 — struggling students benefit from full context.
+  var maxAlerts = (confidence === 'high' && isOk) ? 1 : 2;
+  alerts.slice(0, maxAlerts).forEach(function(a) {
     html += '<div class="ai-alert ai-alert-' + a.type + ' ai-block" style="--i:' + (i++) + '">'
       + '<span class="ai-alert-icon">' + a.icon + '</span>'
       + '<div style="min-width:0">'
@@ -3403,13 +3421,18 @@ function buildAiHtml(isOk, expl) {
       + '</div></div>';
   });
 
-  // 5 ── Instructor tip — context-aware, warm tone
-  html += '<div class="quiz-ai-tip ai-block" style="--i:' + (i++) + '">'
-    + '<div class="quiz-ai-tip-icon">💡</div>'
-    + '<div style="min-width:0">'
-    + '<div class="quiz-ai-tip-label">Kjørelærer</div>'
-    + '<div class="quiz-ai-tip-text">' + escH(buildInstructorTip(isOk, alerts)) + '</div>'
-    + '</div></div>';
+  // 5 ── Instructor tip
+  // Suppressed for high-confidence correct answers — fluent students don't
+  // need coaching after every right answer. Visible for all wrong answers and
+  // any correct answer where the student is still building confidence.
+  if (!(isOk && confidence === 'high')) {
+    html += '<div class="quiz-ai-tip ai-block" style="--i:' + (i++) + '">'
+      + '<div class="quiz-ai-tip-icon">💡</div>'
+      + '<div style="min-width:0">'
+      + '<div class="quiz-ai-tip-label">Kjørelærer</div>'
+      + '<div class="quiz-ai-tip-text">' + escH(buildInstructorTip(isOk, alerts)) + '</div>'
+      + '</div></div>';
+  }
 
   // ── Future architecture hooks (wired, hidden until features land) ─────────
   // To activate a feature: set display:block on its slot and inject content.
