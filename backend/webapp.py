@@ -3024,15 +3024,15 @@ var currentExpl = '';
 var _wrongStreak   = 0;  // consecutive wrong answers → more support
 var _correctStreak = 0;  // consecutive correct answers → celebrate progress
 
-// Variety pool — correct acknowledgment phrases rotate so they never feel robotic
+// Calm acknowledgment pool — rotates to avoid repetition, never effusive
 var _correctPhraseIdx = 0;
 var _correctPhrases = [
-  'Riktig! Bra observert.',
-  'Akkurat — du tenkte dette riktig.',
-  'Riktig! Du har forstått dette godt.',
-  'Bra vurdering — det er nettopp slik det fungerer.',
-  'Riktig! Du er godt i gang med dette.',
-  'Flott — du ser hva som er viktig her.',
+  'Riktig.',
+  'Det stemmer.',
+  'Riktig observert.',
+  'Korrekt — det er nettopp slik det fungerer.',
+  'Det er riktig.',
+  'Riktig vurdering.',
 ];
 function _nextCorrectPhrase() {
   var p = _correctPhrases[_correctPhraseIdx % _correctPhrases.length];
@@ -3040,11 +3040,11 @@ function _nextCorrectPhrase() {
   return p;
 }
 
-// Streak-adaptive wrong-answer support — escalates gently with struggle
+// Streak-adaptive wrong-answer support — calm, professional, never patronising
 function _wrongSupportText(streak) {
-  if (streak >= 5) return 'Alle sliter med noen temaer — det er helt normalt. Du er på rett spor.';
-  if (streak >= 3) return 'Ikke riktig ennå — ta det rolig. Les forklaringen, så sitter det bedre.';
-  return 'Ikke riktig — men det er nettopp slik du lærer.';
+  if (streak >= 5) return 'Ikke riktig. Les forklaringen nøye — forståelse tar tid.';
+  if (streak >= 3) return 'Ikke riktig denne gangen. Gå gjennom forklaringen under.';
+  return 'Ikke riktig. Se forklaringen under.';
 }
 
 function selectAns(btn, picked) {
@@ -3154,15 +3154,14 @@ function classifyAlerts(expl) {
 // Priority: streak state → topic context → generic fallback.
 // The AI instructor responds first to how the student is FEELING, then to the topic.
 function buildInstructorTip(isOk, alerts) {
-  // ─ Streak-aware coaching (highest priority) ─
+  // ─ Streak-aware coaching — professional, calm, no gamification ─
   if (!isOk && _wrongStreak >= 5)
-    return 'Ta en pust — du er på rett spor. Alle temaer tar tid å sette seg. Fortsett rolig.';
+    return 'Dette er et krevende tema. Les forklaringen grundig — forståelse bygges over tid.';
   if (!isOk && _wrongStreak >= 3)
-    return 'Det er helt normalt å trøtte på noen spørsmål. Les forklaringen sakte — det hjelper.';
+    return 'Gå gjennom forklaringen nøye. Det lønner seg å lese den mer enn én gang.';
   if (isOk && _correctStreak >= 10)
-    return 'Imponerende! ' + _correctStreak + ' riktige på rad. Trafikkforståelsen din er solid.';
-  if (isOk && _correctStreak >= 5)
-    return 'Flott fremgang — ' + _correctStreak + ' riktige på rad. Du begynner å se mønstrene.';
+    return 'Du er i god progresjon på dette temaet.';
+  // correctStreak 1-9: fall through to topic-aware tip
 
   // ─ Topic-aware coaching ─
   if (alerts.length > 0) {
@@ -3220,12 +3219,8 @@ function buildAiHtml(isOk, expl) {
   var parts  = splitExpl(expl);
   var alerts = classifyAlerts(expl);
 
-  // 1 ── Verdict — streak-aware, constructive, never punishing
-  var verdictText = isOk
-    ? (_correctStreak >= 5
-        ? 'Riktig! ' + _correctStreak + ' på rad — du er i flyt.'
-        : _nextCorrectPhrase())
-    : _wrongSupportText(_wrongStreak);
+  // 1 ── Verdict — calm and clear, never a scorecard
+  var verdictText = isOk ? _nextCorrectPhrase() : _wrongSupportText(_wrongStreak);
   var html = '<div class="quiz-ai-verdict ' + (isOk ? 'ok' : 'bad') + '">'
     + '<span class="quiz-ai-verdict-icon">' + (isOk ? '✅' : '↩') + '</span>'
     + '<span>' + verdictText + '</span>'
