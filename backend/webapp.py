@@ -411,7 +411,7 @@ a { color:inherit; text-decoration:none; }
 }
 .cats-header {
   padding:14px 16px 10px; flex-shrink:0;
-  background:transparent;
+  background:rgba(10,14,30,.52); /* dark veil — keeps title readable on any flag stripe */
 }
 .screen-title {
   font-size:1.6rem; font-weight:900; letter-spacing:-.3px;
@@ -436,15 +436,14 @@ a { color:inherit; text-decoration:none; }
 }
 
 .cat-card {
-  background:rgba(0,0,0,.05); border:1.5px solid rgba(255,255,255,.25);
-  backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
+  background:rgba(10,14,30,.84); border:1.5px solid rgba(255,255,255,.12);
   border-radius:14px; padding:14px 12px;
   cursor:pointer; transition:border-color .2s, transform .15s, box-shadow .2s;
   display:flex; flex-direction:column; gap:6px;
-  color:#F1F5F9;
+  color:var(--text);
 }
 [data-theme="light"] .cat-card {
-  background:rgba(255,255,255,.82); border-color:rgba(0,0,0,.1); color:#0F172A;
+  background:rgba(255,255,255,.82); border-color:rgba(0,0,0,.1); /* color inherited from var(--text) */
 }
 .cat-count { display:none; }
 .cat-card:hover {
@@ -761,16 +760,6 @@ a { color:inherit; text-decoration:none; }
   from { opacity:0; transform:translateY(12px); }
   to   { opacity:1; transform:translateY(0); }
 }
-@keyframes imgFlashOk {
-  0%   { filter:brightness(1)   saturate(1); }
-  35%  { filter:brightness(1.2) saturate(1.5); }
-  100% { filter:brightness(1)   saturate(1); }
-}
-@keyframes imgFlashBad {
-  0%   { filter:brightness(1)   saturate(1); }
-  35%  { filter:brightness(.80) saturate(.5); }
-  100% { filter:brightness(1)   saturate(1); }
-}
 @keyframes statusPulse {
   0%,100% { opacity:1; }
   50%      { opacity:.50; }
@@ -789,32 +778,23 @@ a { color:inherit; text-decoration:none; }
   overflow:hidden; background:#03060E;
   transition:box-shadow .45s ease;
 }
-.quiz-ai-imgbox.glow-ok  { box-shadow:0 0 0 2px rgba(16,185,129,.40), 0 4px 32px rgba(16,185,129,.18); }
-.quiz-ai-imgbox.glow-bad { box-shadow:0 0 0 2px rgba(239,68,68,.44),  0 4px 32px rgba(239,68,68,.20); }
+.quiz-ai-imgbox.glow-ok  { box-shadow:inset 0 0 0 1px rgba(16,185,129,.22); }
+.quiz-ai-imgbox.glow-bad { box-shadow:inset 0 0 0 1px rgba(251,146,60,.22); }
 
 .quiz-ai-img {
   width:100%; display:block;
-  aspect-ratio:16/9; object-fit:cover; max-height:310px;
+  height:252px; object-fit:contain; object-position:center;
 }
-.quiz-ai-img.flash-ok  { animation:imgFlashOk  .65s ease forwards; }
-.quiz-ai-img.flash-bad { animation:imgFlashBad .65s ease forwards; }
+.quiz-ai-img.flash-ok, .quiz-ai-img.flash-bad { /* image stays neutral — feedback lives in UI, not the road scene */ }
 
 /* Gradient fade bottom + colour tint overlay */
 .quiz-ai-img-overlay {
   position:absolute; inset:0; pointer-events:none;
-  background:linear-gradient(to bottom, transparent 30%, #080F1E 100%);
+  background:linear-gradient(to bottom, transparent 55%, #080F1E 100%);
   transition:background .45s ease;
 }
-.quiz-ai-img-overlay.result-ok {
-  background:
-    radial-gradient(ellipse 90% 55% at 50% 0%, rgba(16,185,129,.20) 0%, transparent 68%),
-    linear-gradient(to bottom, rgba(16,185,129,.08) 0%, transparent 38%, #080F1E 100%);
-}
-.quiz-ai-img-overlay.result-bad {
-  background:
-    radial-gradient(ellipse 90% 55% at 50% 0%, rgba(239,68,68,.26) 0%, transparent 68%),
-    linear-gradient(to bottom, rgba(239,68,68,.12) 0%, transparent 38%, #080F1E 100%);
-}
+.quiz-ai-img-overlay.result-ok  { background:linear-gradient(to bottom, transparent 55%, #080F1E 100%); }
+.quiz-ai-img-overlay.result-bad { background:linear-gradient(to bottom, transparent 55%, #080F1E 100%); }
 
 .quiz-ai-img-badge {
   position:absolute; bottom:10px; left:12px;
@@ -1072,7 +1052,7 @@ a { color:inherit; text-decoration:none; }
 /* ══════════════════════════════════════════
    BOOKMARKS SCREEN
 ══════════════════════════════════════════ */
-#screenBookmarks { padding:0; }
+#screenBookmarks { padding:0; background:#0B1226; }
 .bm-header { padding:14px 16px 10px; flex-shrink:0; }
 .bm-scroll {
   flex:1; min-height:0;                   /* lets flex child shrink in column parent */
@@ -1091,7 +1071,7 @@ a { color:inherit; text-decoration:none; }
   flex:0 0 calc(100% - 48px);            /* responsive 82%-ish width; no flex-shrink */
   max-width:320px;
   scroll-snap-align:start;              /* snap each card into view */
-  background:var(--card); border:1.5px solid var(--border);
+  background:#131B2E; border:1.5px solid rgba(255,255,255,.10);
   border-radius:16px; padding:14px;
   display:flex; flex-direction:column; gap:10px;
   height:calc(100% - 16px);
@@ -1267,7 +1247,7 @@ a { color:inherit; text-decoration:none; }
 /* ══════════════════════════════════════════
    HISTORY SCREEN
 ══════════════════════════════════════════ */
-#screenHistory { padding:0; }
+#screenHistory { padding:0; background:#0B1226; }
 .hist-header { padding:14px 16px 10px; flex-shrink:0; }
 .hist-scroll {
   flex:1; min-height:0;                   /* min-height:0 → lets flex child shrink and scroll */
@@ -1281,7 +1261,7 @@ a { color:inherit; text-decoration:none; }
 .hist-scroll::-webkit-scrollbar-thumb { background:rgba(255,255,255,.1); border-radius:2px; }
 
 .hist-card {
-  background:var(--card); border:1px solid var(--border);
+  background:#131B2E; border:1px solid rgba(255,255,255,.10);
   border-radius:14px; padding:14px 16px;
   display:flex; align-items:center; gap:14px;
   flex-shrink:0;
@@ -3227,8 +3207,6 @@ function buildInstructorTip(isOk, alerts) {
   // ─ Streak-aware coaching — professional, calm, no gamification ─
   if (!isOk && _wrongStreak >= 5)
     return 'Dette er et krevende tema. Les forklaringen grundig — forståelse bygges over tid.';
-  if (!isOk && _wrongStreak >= 3)
-    return 'Gå gjennom forklaringen nøye. Det lønner seg å lese den mer enn én gang.';
   if (isOk && _correctStreak >= 10)
     return 'Du er i god progresjon på dette temaet.';
   // correctStreak 1-9: fall through to topic-aware tip
@@ -3300,8 +3278,8 @@ function buildInstructorTip(isOk, alerts) {
 
     if (type === 'exam')
       return isOk
-        ? 'Du er godt forberedt på dette temaet — ett av de hyppigste på teoriprøven.'
-        : 'Dette er et av de vanligste temaene på teoriprøven. Les det i studieboken.';
+        ? 'Dette er et mønster mange overser i praksis — du gjenkjenner situasjonen, og det er det som teller.'
+        : 'Dette handler om å forstå situasjonen tidlig. Gjenkjennelse i trafikken — ikke bare riktig svar — er målet.';
 
     if (topics.indexOf('rundkjøring') >= 0)
       return isOk
@@ -3339,8 +3317,8 @@ function buildInstructorTip(isOk, alerts) {
         : 'Lys er kommunikasjon i trafikken. Sjekk alltid at lysbruken er tilpasset situasjonen.';
 
     // ── Repeated topic — fresh angle when student keeps missing the same thing ─
-    // _recentTopics[0] is current; index > 0 means it appeared in a previous answer.
-    if (!isOk && _recentTopics.length > 1 && _recentTopics.indexOf(alerts[0].label) > 0) {
+    // _recentTopics[0] is current (just pushed); slice(1) looks at prior answers only.
+    if (!isOk && _recentTopics.length > 1 && _recentTopics.slice(1).indexOf(alerts[0].label) >= 0) {
       var rLabel = alerts[0].label.toLowerCase();
       if (rLabel.indexOf('vikeplikt') >= 0)
         return 'Du har møtt vikeplikt tidligere. Prøv dette: finn bilen til høyre — den har som regel forkjørsrett.';
@@ -3356,6 +3334,11 @@ function buildInstructorTip(isOk, alerts) {
         return 'Myke trafikanter er et tilbakevendende tema. Se aktivt etter fotgjengere — ikke vent på at de synes.';
       return 'Du har møtt dette temaet tidligere. Les forklaringen med ny vinkel — fokuser på hva som skilte riktig fra galt svar.';
     }
+
+    // ── Moderate wrong streak catch-all — only when no topic branch matched ───
+    // Placed here so specific topic tips always take priority over generic support.
+    if (!isOk && _wrongStreak >= 3)
+      return 'Gå gjennom forklaringen nøye. Det lønner seg å lese den mer enn én gang.';
   }
 
   // ─ Confidence-calibrated generic fallback ─
