@@ -4,6 +4,10 @@
  * Shows a rotating coaching message + SRS badge.
  * Tapping the banner navigates to the AI Dashboard.
  * Dismissed by pressing ×, re-shows next session.
+ *
+ * Session cache: coaching data is cached for 5 minutes per deviceId+lang.
+ * Navigating home → quiz → home reuses the cached message instead of
+ * firing a new API call on every mount.
  */
 import React, { useEffect, useState, useRef } from 'react';
 import {
@@ -13,6 +17,23 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { aiLearningApi } from '../services/aiLearning';
 import type { ThemeColors } from '../theme';
+
+// ─── Session-scoped coaching cache ───────────────────────────────────────────
+// Lives outside the component — persists across mounts within the same app session.
+// Key: `${deviceId}:${lang}` — intentionally excludes `streak` to avoid
+// invalidating the cache on every small change.
+
+interface _CacheEntry { messages: string[]; srs_due_count: number; fetchedAt: number }
+const _coachCache  = new Map<string, _CacheEntry>();
+const _CACHE_TTL   = 5 * 60 * 1000; // 5 minutes
+
+function _getCached(key: string): _CacheEntry | null {
+  const entry = _coachCache.get(key);
+  if (!entry) return null;
+  if (Date.now() - entry.fetchedAt > _CACHE_TTL) { _coachCache.delete(key); return null; }
+  return entry;
+}
+// ─────────────────────────────────────────────────────────────────────────────
 
 interface CoachBannerProps {
   deviceId: string;
@@ -38,17 +59,34 @@ export function CoachBanner({ deviceId, lang, streak, colors: c }: CoachBannerPr
 
   useEffect(() => {
     let mounted = true;
+    const key = `${deviceId}:${lang}`;
+
+    // Cache hit — instant, no API call
+    const cached = _getCached(key);
+    if (cached && cached.messages.length > 0) {
+      setMessage(cached.messages[0]);
+      setSrsCount(cached.srs_due_count);
+      Animated.timing(fadeAnim, { toValue: 1, duration: 350, useNativeDriver: true }).start();
+      return;
+    }
+
+    // Cache miss — fetch and store
     (async () => {
       const data = await aiLearningApi.getCoaching(deviceId, lang, streak);
       if (!mounted) return;
       if (data && data.messages.length > 0) {
+        _coachCache.set(key, {
+          messages:      data.messages,
+          srs_due_count: data.srs_due_count,
+          fetchedAt:     Date.now(),
+        });
         setMessage(data.messages[0]);
         setSrsCount(data.srs_due_count);
         Animated.timing(fadeAnim, { toValue: 1, duration: 350, useNativeDriver: true }).start();
       }
     })();
     return () => { mounted = false; };
-  }, [deviceId, lang, streak]);
+  }, [deviceId, lang]); // streak intentionally omitted — not worth invalidating cache on every change
 
   if (dismissed || !message) return null;
 

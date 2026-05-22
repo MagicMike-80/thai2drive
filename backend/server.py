@@ -2707,6 +2707,33 @@ class AdminUrlCleanupMiddleware(BaseHTTPMiddleware):
 app.add_middleware(AdminUrlCleanupMiddleware)
 
 
+import time as _time  # noqa: E402
+
+
+class TimingMiddleware(BaseHTTPMiddleware):
+    """
+    Adds X-Response-Time-Ms header to every response.
+    Logs a WARNING on Railway for any /api/* request that takes > 500 ms.
+    Zero overhead on fast requests — perf_counter is nanosecond resolution.
+    """
+    _slow_logger = logging.getLogger("timing")
+
+    async def dispatch(self, request, call_next):
+        t0 = _time.perf_counter()
+        response = await call_next(request)
+        ms = (_time.perf_counter() - t0) * 1000
+        response.headers["X-Response-Time-Ms"] = f"{ms:.0f}"
+        if request.url.path.startswith("/api") and ms > 500:
+            self._slow_logger.warning(
+                "SLOW %s %s → %dms [status=%d]",
+                request.method, request.url.path, ms, response.status_code,
+            )
+        return response
+
+
+app.add_middleware(TimingMiddleware)
+
+
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
@@ -2788,6 +2815,25 @@ async def seed_studiebok():
             "is_premium": True,
             "created_at": now,
         })
+
+@app.on_event("startup")
+async def ensure_indexes():
+    """
+    Create / verify all MongoDB indexes on every deploy.
+    Idempotent — create_index is a no-op if the index already exists.
+    Runs in the background (background=True) so existing queries are not blocked.
+    """
+    try:
+        from create_indexes import create_all_indexes  # noqa: E402
+        created = await create_all_indexes(db)
+        idx_logger = logging.getLogger("indexes")
+        for coll, names in created.items():
+            idx_logger.info("indexes OK  %-20s %s", coll, names)
+    except Exception as exc:
+        logging.getLogger("indexes").warning(
+            "Index creation skipped: %s", exc
+        )
+
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
