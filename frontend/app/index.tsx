@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useAppStore } from '../src/store/appStore';
 import { api } from '../src/services/api';
 import { LanguageSwitcher } from '../src/components/LanguageSwitcher';
@@ -24,6 +25,7 @@ export default function HomeScreen() {
   const [dailyDone, setDailyDone] = useState(false);
   const t = TR[language] || TR.en;
   const c = colors;
+  const isDark = c.bg === '#0F172A' || c.bg === '#0B1222';
   const remaining = freeRemaining();
   const locked = !isPremium && remaining <= 0;
 
@@ -115,6 +117,12 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView style={[st.container, { backgroundColor: c.bg }]}>
+      {/* Subtle gradient background — matches categories screen */}
+      <LinearGradient
+        colors={isDark ? ['#0B1222', '#0F172A', '#0B1222'] : ['#F4F8FD', '#FFFFFF', '#EEF5FB']}
+        locations={[0, 0.5, 1]}
+        style={StyleSheet.absoluteFill}
+      />
       {/* Language hint overlay — first launch only */}
       {showLangHint && (
         <Animated.View style={[st.langHintWrap, { opacity: hintOpacity }]} pointerEvents="box-none">

@@ -25,11 +25,11 @@ export function Flag({ code, size = 22, rounded = true }: { code: FlagCode; size
     const u = height / 6; // stripes 1-1-2-1-1
     return (
       <View style={baseStyle}>
-        <View style={{ height: u, backgroundColor: '#A51931' }} />
-        <View style={{ height: u, backgroundColor: '#F4F5F8' }} />
-        <View style={{ height: u * 2, backgroundColor: '#2D2A4A' }} />
-        <View style={{ height: u, backgroundColor: '#F4F5F8' }} />
-        <View style={{ height: u, backgroundColor: '#A51931' }} />
+        <View style={{ height: u, backgroundColor: '#C1192C' }} />
+        <View style={{ height: u, backgroundColor: '#F8F9FA' }} />
+        <View style={{ height: u * 2, backgroundColor: '#1B1C6E' }} />
+        <View style={{ height: u, backgroundColor: '#F8F9FA' }} />
+        <View style={{ height: u, backgroundColor: '#C1192C' }} />
       </View>
     );
   }

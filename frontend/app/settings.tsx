@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Switch, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAppStore } from '../src/store/appStore';
@@ -24,6 +25,7 @@ export default function SettingsScreen() {
   const router = useRouter();
   const { language, colors, themeMode, setThemeMode, soundEnabled, setSoundEnabled, soundStyle, setSoundStyle, hapticsEnabled, setHapticsEnabled, user, isPremium, logout, isAuthenticated } = useAppStore();
   const t = TRANSLATIONS[language] || TRANSLATIONS.en;
+  const isDark = colors.bg === '#0F172A' || colors.bg === '#0B1222';
 
   // Preview the selected sound style when user taps a chip
   const previewSound = async (style: 'default' | 'strong') => {
@@ -40,6 +42,12 @@ export default function SettingsScreen() {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.bg }]}>
+      {/* Subtle gradient background — matches categories screen */}
+      <LinearGradient
+        colors={isDark ? ['#0B1222', '#0F172A', '#0B1222'] : ['#F4F8FD', '#FFFFFF', '#EEF5FB']}
+        locations={[0, 0.5, 1]}
+        style={StyleSheet.absoluteFill}
+      />
       {/* Header */}
       <View style={[styles.header, { borderBottomColor: colors.divider }]}>
         <View style={styles.headerLeft}>
