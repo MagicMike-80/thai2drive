@@ -39,28 +39,49 @@ function WebAppShell({ children }: { children: React.ReactNode }) {
 // Rendered ONLY on web (Platform.OS check above), so no native impact.
 const _webOuter = {
   flex: 1,
-  backgroundColor: '#020817',
-  // Subtle radial glow keeps the centre slightly lighter so the frame
-  // reads as "lit" rather than floating on a flat black surface.
-  backgroundImage:
-    'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(15,23,42,0.95) 0%, #020817 70%)',
+  backgroundColor: '#010B18',
+  // Backlit glow centred behind the frame — gives the dark background depth
+  // so the frame reads as floating, not pasted onto a flat surface.
+  // Colour: deep indigo/navy at the core, fading to near-black at the edges.
+  backgroundImage: [
+    'radial-gradient(ellipse 110% 70% at 50% 42%,',
+    '  rgba(22,40,95,0.55) 0%,',
+    '  rgba(12,22,58,0.30) 40%,',
+    '  #010B18 72%)',
+  ].join(' '),
   alignItems: 'center',
   justifyContent: 'flex-start',
+  // Vertical breathing room reveals the top + bottom rounded corners of the
+  // frame, completing the "phone in space" silhouette on desktop viewports.
+  paddingTop: 32,
+  paddingBottom: 48,
 };
 
 const _webFrame = {
   flex: 1,
   width: '100%',
-  maxWidth: 430,
-  position: 'relative',
+  // 390 px = iPhone 14/15 logical width. Narrower than the previous 430 px,
+  // which left too much app visible and not enough surrounding dark space.
+  maxWidth: 390,
+  // Rounded corners mimic a physical phone body.
+  borderTopLeftRadius: 40,
+  borderTopRightRadius: 40,
+  borderBottomLeftRadius: 44,
+  borderBottomRightRadius: 44,
   overflow: 'hidden',
-  // Layer 1: 1 px hairline — the "glass edge" that gives the frame its boundary
-  // Layer 2: tight near-shadow for crispness
-  // Layer 3: wide far-shadow for depth against the ambient background
+  position: 'relative',
+  // Five shadow layers (innermost → outermost):
+  //   1. Hairline glass-edge highlight  — physical screen boundary
+  //   2. Contact shadow                 — 2-4 px, razor-crisp
+  //   3. Near shadow                    — 8-24 px, readable depth
+  //   4. Mid shadow                     — 40-80 px, spatial presence
+  //   5. Ambient scatter                — 100-200 px, environmental depth
   boxShadow: [
-    '0 0 0 1px rgba(255,255,255,0.07)',
-    '0 4px 24px rgba(0,0,0,0.55)',
-    '0 24px 100px rgba(0,0,0,0.85)',
+    '0 0 0 1px rgba(255,255,255,0.09)',
+    '0 2px 6px rgba(0,0,0,0.50)',
+    '0 10px 28px rgba(0,0,0,0.65)',
+    '0 40px 90px rgba(0,0,0,0.80)',
+    '0 90px 200px rgba(0,0,0,0.55)',
   ].join(', '),
 };
 
