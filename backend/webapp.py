@@ -41,7 +41,7 @@ WEBAPP_HTML = r"""<!DOCTYPE html>
   --muted: #64748B;
 }
 *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
-html { font-size: 22px; }
+html { font-size: 16px; }
 html, body {
   height:100%; min-height:-webkit-fill-available; overflow:hidden;
   background:var(--bg); color:var(--text);
@@ -140,7 +140,7 @@ a { color:inherit; text-decoration:none; }
   flex:0 0 auto; min-width:64px; display:flex; flex-direction:column;
   align-items:center; justify-content:center; gap:2px;
   border:none; background:transparent; color:var(--muted);
-  cursor:pointer; font-size:.62rem; font-weight:700;
+  cursor:pointer; font-size:.68rem; font-weight:700;
   transition:color .2s; padding:6px 8px; letter-spacing:.1px;
 }
 .bn-icon { font-size:22px; line-height:1; transition:transform .2s; }
@@ -286,85 +286,98 @@ a { color:inherit; text-decoration:none; }
    HOME SCREEN — flex column, no scroll
 ══════════════════════════════════════════ */
 #screenHome {
-  padding:16px 16px 12px;
-  justify-content:space-between;
-  overflow:hidden;
+  padding:24px 16px 20px;
+  justify-content:flex-start;
+  overflow-y:auto; overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  gap:14px;
 }
-.home-top { text-align:center; }
+.home-top {
+  display:flex; flex-direction:column; align-items:center;
+  text-align:center; gap:12px;
+}
 .home-logo-row {
-  display:flex; align-items:center; justify-content:center; gap:10px;
-  margin-bottom:10px;
+  display:flex; flex-direction:column; align-items:center;
+  gap:5px; margin-bottom:0;
 }
 .home-logo-box {
-  width:44px; height:44px; border-radius:13px;
+  width:60px; height:60px; border-radius:16px;
   background:linear-gradient(135deg,#FF9933,#e6891f);
   display:flex; align-items:center; justify-content:center;
-  font-size:22px; font-weight:900; color:#0F172A;
-  box-shadow:0 4px 16px rgba(255,153,51,.35);
+  font-size:28px; font-weight:900; color:#0F172A;
+  box-shadow:0 8px 24px rgba(255,153,51,.40);
 }
-.home-title { font-size:1.5rem; font-weight:900; letter-spacing:-.5px; }
+.home-title { font-size:1.85rem; font-weight:900; letter-spacing:-.5px; margin-top:2px; }
 .home-title span { color:var(--orange); }
+.home-sub { font-size:.78rem; color:var(--muted); font-weight:500; letter-spacing:.2px; }
 
 .streak-badge {
   display:inline-flex; align-items:center; gap:7px;
-  background:rgba(255,153,51,.11); border:1.5px solid rgba(255,153,51,.28);
-  border-radius:50px; padding:6px 16px; margin-bottom:12px;
+  background:rgba(255,153,51,.11); border:1px solid rgba(255,153,51,.25);
+  border-radius:50px; padding:5px 14px;
 }
-.streak-fire { font-size:1.2rem; }
-.streak-num { font-size:1.3rem; font-weight:900; color:var(--orange); }
-.streak-lbl { font-size:.75rem; color:var(--muted); font-weight:600; }
+.streak-fire { font-size:1rem; }
+.streak-num { font-size:1.1rem; font-weight:900; color:var(--orange); }
+.streak-lbl { font-size:.78rem; color:var(--muted); font-weight:600; }
 
 .home-cta {
-  width:100%; padding:15px;
+  width:100%; padding:16px;
   background:linear-gradient(135deg,#FF9933,#e6891f);
   color:#0F172A; font-weight:900; font-size:1rem;
   border:none; border-radius:14px; cursor:pointer;
   display:flex; align-items:center; justify-content:center; gap:10px;
   box-shadow:0 6px 24px rgba(255,153,51,.4);
   transition:transform .15s, box-shadow .15s;
-  margin-bottom:10px;
 }
 .home-cta:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(255,153,51,.5); }
 .home-cta:active { transform:translateY(0); }
 
 .home-sec-btns {
   display:grid; grid-template-columns:1fr 1fr;
-  gap:9px; margin-bottom:12px;
+  gap:9px;
 }
 .home-sec-btn {
-  padding:11px 8px;
-  background:rgba(0,0,0,.05); border:1.5px solid rgba(255,255,255,.25);
+  padding:13px 10px;
+  background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.12);
   backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
-  border-radius:12px; color:#F1F5F9; font-weight:700;
-  font-size:.82rem; cursor:pointer;
+  border-radius:14px; color:var(--text); font-weight:700;
+  font-size:.85rem; cursor:pointer;
   display:flex; align-items:center; justify-content:center; gap:6px;
   transition:border-color .2s, background .2s;
 }
-.home-sec-btn:hover { border-color:var(--orange); background:var(--orange-glow); }
+.home-sec-btn:hover { border-color:rgba(255,255,255,.3); background:rgba(255,255,255,.08); }
 
+/* Stats — one unified card, three columns with vertical dividers */
 .home-stats {
   display:grid; grid-template-columns:repeat(3,1fr);
-  gap:8px; margin-bottom:10px;
+  gap:0;
+  background:rgba(255,255,255,.05);
+  border:1px solid var(--border);
+  border-radius:16px; overflow:hidden;
 }
 .home-stat {
-  background:rgba(0,0,0,.05); border:1.5px solid rgba(255,255,255,.25);
-  backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
-  border-radius:12px; padding:12px 8px; text-align:center;
+  background:transparent; border:none;
+  border-right:1px solid var(--border);
+  border-radius:0; padding:14px 8px; text-align:center;
 }
-.home-stat-num { font-size:1.4rem; font-weight:900; color:var(--orange); line-height:1; }
+.home-stat:last-child { border-right:none; }
+.home-stat-num { font-size:1.55rem; font-weight:900; color:var(--orange); line-height:1; }
 .home-stat-lbl {
-  font-size:.6rem; color:var(--muted); font-weight:700;
-  margin-top:4px; letter-spacing:.4px; text-transform:uppercase;
+  font-size:.62rem; color:var(--muted); font-weight:700;
+  margin-top:5px; letter-spacing:.4px; text-transform:uppercase;
 }
 
+/* Premium badge — green pill matching mobile */
 .premium-banner {
-  background:linear-gradient(135deg,rgba(255,153,51,.14),rgba(230,137,31,.07));
-  border:1px solid rgba(255,153,51,.28); border-radius:12px;
-  padding:11px 14px; display:flex; align-items:center; gap:10px;
+  background:rgba(16,185,129,.1);
+  border:1px solid rgba(16,185,129,.25);
+  border-radius:50px; padding:10px 20px;
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  align-self:center;
 }
-.premium-banner .pb-icon { font-size:1.3rem; }
-.premium-banner .pb-text h4 { font-size:.85rem; font-weight:800; color:var(--orange); }
-.premium-banner .pb-text p { font-size:.72rem; color:var(--muted); margin-top:1px; }
+.premium-banner .pb-icon { font-size:1rem; }
+.premium-banner .pb-text h4 { font-size:.85rem; font-weight:800; color:var(--green); }
+.premium-banner .pb-text p { display:none; }
 .premium-badge {
   display:inline-flex; align-items:center; gap:4px;
   background:rgba(255,153,51,.2); border:1px solid rgba(255,153,51,.4);
@@ -433,8 +446,8 @@ a { color:inherit; text-decoration:none; }
   box-shadow:0 8px 20px rgba(255,153,51,.12);
 }
 .cat-card:active { transform:translateY(0); }
-.cat-icon { font-size:1.8rem; line-height:1; }
-.cat-name { font-weight:800; font-size:1.1rem; line-height:1.3; }
+.cat-icon { font-size:2rem; line-height:1; }
+.cat-name { font-weight:800; font-size:1.05rem; line-height:1.3; }
 .cat-count { font-size:.9rem; color:var(--muted); font-weight:500; }
 .cat-bar-wrap {
   height:3px; background:rgba(255,255,255,.07);
@@ -1264,6 +1277,7 @@ a { color:inherit; text-decoration:none; }
       <button class="lang-btn" id="topLangEN" onclick="setLang('en')" title="English" style="width:36px;height:36px">
         <span class="cflag"><svg viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg"><rect width="60" height="30" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#C8102E" stroke-width="4"/><rect y="11" width="60" height="8" fill="#fff"/><rect x="26" width="8" height="30" fill="#fff"/><rect y="12" width="60" height="6" fill="#C8102E"/><rect x="27" width="6" height="30" fill="#C8102E"/></svg></span>
       </button>
+      <button onclick="showTab('settings')" title="Innstillinger" style="width:34px;height:34px;border-radius:50%;border:none;background:rgba(255,255,255,.06);color:var(--muted);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,color .2s;flex-shrink:0;" onmouseover="this.style.background='rgba(255,255,255,.12)';this.style.color='var(--text)'" onmouseout="this.style.background='rgba(255,255,255,.06)';this.style.color='var(--muted)'">⚙️</button>
     </div>
   </div>
 
@@ -1344,8 +1358,9 @@ a { color:inherit; text-decoration:none; }
     <div class="screen" id="screenHome">
       <div class="home-top">
         <div class="home-logo-row">
-          <img src="/api/assets/developer-icon-512.png" style="width:44px;height:44px;border-radius:13px;object-fit:cover;">
+          <img src="/api/assets/developer-icon-512.png" style="width:64px;height:64px;border-radius:18px;object-fit:cover;box-shadow:0 8px 24px rgba(255,153,51,.35);">
           <div class="home-title">Thai<span>2</span>Drive</div>
+          <div class="home-sub" data-key="app_sub">สอบใบขับขี่นอร์เวย์</div>
         </div>
 
         <div class="streak-badge">
