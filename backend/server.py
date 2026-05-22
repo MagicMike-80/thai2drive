@@ -2576,6 +2576,10 @@ app.include_router(support_chat_router, prefix="/api")
 from ai_routes import ai_router  # noqa: E402
 app.include_router(ai_router, prefix="/api")
 
+# ==================== TRAFFIC MATH ENGINE ====================
+from traffic_math_routes import math_router  # noqa: E402
+app.include_router(math_router, prefix="/api")
+
 # ==================== QUIZ PAGE ====================
 from quiz_web import quiz_web_router  # noqa: E402
 app.include_router(quiz_web_router, prefix="/api")
