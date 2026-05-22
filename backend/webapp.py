@@ -1797,7 +1797,7 @@ a { color:inherit; text-decoration:none; }
           <img id="quizAiImg" class="quiz-ai-img" src="" alt="">
           <div class="quiz-ai-img-overlay" id="quizAiOverlay"></div>
           <!-- Image label overlay -->
-          <div class="quiz-ai-img-badge">📸 Trafikksituasjon</div>
+          <div class="quiz-ai-img-badge" id="quizAiImgBadge">📸 Trafikksituasjon</div>
         </div>
         <!-- AI instructor panel -->
         <div class="quiz-ai-panel">
@@ -2899,7 +2899,7 @@ async function loadQuiz(url) {
     }
     qIdx = 0; qScore = 0; qAnswered = false;
     _wrongStreak = 0; _correctStreak = 0; _correctPhraseIdx = 0;
-    _sessionAnswered = 0; _sessionWrongTotal = 0;
+    _sessionAnswered = 0; _sessionWrongTotal = 0; _recentTopics = [];
     quizStartedAt = new Date().toISOString();
     stopExamTimer();
     if (isExamMode) startExamTimer();
@@ -3013,6 +3013,8 @@ function renderQuestion() {
   if (aiOverlay) aiOverlay.className = 'quiz-ai-img-overlay';
   var aiStatus = document.getElementById('quizAiStatus');
   if (aiStatus) { aiStatus.textContent = 'Venter på svar…'; aiStatus.className = 'quiz-ai-status idle'; }
+  var aiImgBadge = document.getElementById('quizAiImgBadge');
+  if (aiImgBadge) aiImgBadge.textContent = '📸 Trafikksituasjon';
   var aiBody = document.getElementById('quizAiBody');
   if (aiBody) {
     aiBody.innerHTML = '<div class="quiz-ai-idle">'
@@ -3032,6 +3034,7 @@ var _wrongStreak      = 0;  // consecutive wrong answers → more support
 var _correctStreak    = 0;  // consecutive correct answers → quieter coaching
 var _sessionAnswered  = 0;  // total answers this session — infers experience stage
 var _sessionWrongTotal = 0; // running wrong count — infers struggle rate
+var _recentTopics = [];     // last 4 alert labels — detects repeated topic struggles
 
 // Calm acknowledgment pool — rotates to avoid repetition, never effusive
 var _correctPhraseIdx = 0;
@@ -3236,6 +3239,35 @@ function buildInstructorTip(isOk, alerts) {
     var topics = alerts.map(function(a) { return a.label.toLowerCase(); }).join(' ');
     var type   = alerts[0].type;
 
+    // ── Compound situations — two topics active simultaneously ──────────────
+    // Traffic situations are rarely isolated. When two alerts match, address
+    // the combination — this is closer to real driving instruction.
+    if (alerts.length >= 2) {
+      var isWeather = (type === 'weather' || alerts[1].type === 'weather'
+                    || topics.indexOf('vinter') >= 0);
+      var hasAvstand = (topics.indexOf('avstand') >= 0 || topics.indexOf('sekund') >= 0);
+      var hasSikt    = (topics.indexOf('sikt') >= 0 || topics.indexOf('fart') >= 0);
+      var hasForbi   = topics.indexOf('forbi') >= 0;
+      var hasVikeplikt = topics.indexOf('vikeplikt') >= 0;
+      var hasMyk     = (topics.indexOf('myk') >= 0 || topics.indexOf('fotgjenger') >= 0
+                     || topics.indexOf('trafikant') >= 0);
+
+      if (isWeather && hasAvstand)
+        return isOk
+          ? 'Glatt vei og avstand henger tett: 3-sekunders-regelen er et minimum — gi mer i dårlig vær.'
+          : 'Glatt vei og kort avstand er svært farlig. I dårlig vær: dobbel avstand, halv fart.';
+
+      if (hasSikt && hasForbi)
+        return isOk
+          ? 'Sikt og forbikjøring er uløselig knyttet — start aldri forbikjøring der du ikke ser klart frem.'
+          : 'Der sikten er begrenset, er forbikjøring alltid uforsvarlig — vent, det er aldri verdt risikoen.';
+
+      if (hasVikeplikt && hasMyk)
+        return isOk
+          ? 'Vikeplikt og myke trafikanter: gangfelt og kryss er steder der du alltid må forvente noen.'
+          : 'Fotgjengere ved vikeplikt-punkt krever dobbel oppmerksomhet — se alltid før du kjører inn.';
+    }
+
     if (type === 'weather' || topics.indexOf('vinter') >= 0)
       return isOk
         ? 'Husketips: grep og bremselengde varierer kraftig med vær og føre — kjør deretter.'
@@ -3305,6 +3337,25 @@ function buildInstructorTip(isOk, alerts) {
       return isOk
         ? 'Riktig lys gjør deg synlig og gir deg sikt — to ting som redder liv.'
         : 'Lys er kommunikasjon i trafikken. Sjekk alltid at lysbruken er tilpasset situasjonen.';
+
+    // ── Repeated topic — fresh angle when student keeps missing the same thing ─
+    // _recentTopics[0] is current; index > 0 means it appeared in a previous answer.
+    if (!isOk && _recentTopics.length > 1 && _recentTopics.indexOf(alerts[0].label) > 0) {
+      var rLabel = alerts[0].label.toLowerCase();
+      if (rLabel.indexOf('vikeplikt') >= 0)
+        return 'Du har møtt vikeplikt tidligere. Prøv dette: finn bilen til høyre — den har som regel forkjørsrett.';
+      if (rLabel.indexOf('avstand') >= 0 || rLabel.indexOf('sekund') >= 0)
+        return 'Avstand dukker opp igjen. I praksis: velg et fast punkt, count til 3 etter bilen foran passerer det.';
+      if (rLabel.indexOf('forbi') >= 0)
+        return 'Forbikjøring er krevende. Huskeregel: i tvil — ikke kjør forbi. Det er alltid det riktige valget.';
+      if (rLabel.indexOf('sikt') >= 0 || rLabel.indexOf('fart') >= 0)
+        return 'Sikt og fart dukker opp igjen. Grunnregel: der du ser kort, kjør sakte. Alltid.';
+      if (rLabel.indexOf('vinter') >= 0)
+        return 'Kjøreforhold dukker opp igjen. Les veibanen — friksjon avgjør alt i dårlig vær.';
+      if (rLabel.indexOf('gangfelt') >= 0 || rLabel.indexOf('myk') >= 0)
+        return 'Myke trafikanter er et tilbakevendende tema. Se aktivt etter fotgjengere — ikke vent på at de synes.';
+      return 'Du har møtt dette temaet tidligere. Les forklaringen med ny vinkel — fokuser på hva som skilte riktig fra galt svar.';
+    }
   }
 
   // ─ Confidence-calibrated generic fallback ─
@@ -3354,6 +3405,12 @@ function buildAiHtml(isOk, expl) {
   var parts      = splitExpl(expl);
   var alerts     = classifyAlerts(expl);
   var confidence = _confidenceLevel(); // computed once — drives depth, alerts, tip visibility
+
+  // Topic memory — push BEFORE buildInstructorTip so repeated-topic detection works
+  if (alerts.length > 0) {
+    _recentTopics.unshift(alerts[0].label);
+    if (_recentTopics.length > 4) _recentTopics.pop();
+  }
 
   // 1 ── Verdict — calm and clear, never a scorecard
   var verdictText = isOk ? _nextCorrectPhrase() : _wrongSupportText(_wrongStreak);
@@ -3473,6 +3530,14 @@ function updateAiPanel(isOk, expl) {
   if (status) {
     status.textContent = isOk ? '✅ Riktig svar' : '↩ Se forklaring';
     status.className = 'quiz-ai-status ' + okBad;
+  }
+
+  // Image badge — show detected topic to link image ↔ explanation
+  var badge = document.getElementById('quizAiImgBadge');
+  if (badge) {
+    var topicLabel = expl ? _dangerLabel(expl) : '';
+    badge.textContent = (topicLabel && topicLabel !== 'Forstå situasjonen')
+      ? '📍 ' + topicLabel : '📸 Trafikksituasjon';
   }
 
   // Inject content and scroll back to top
