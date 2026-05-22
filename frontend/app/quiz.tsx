@@ -105,6 +105,12 @@ export default function QuizScreen() {
   const questionStartedAt = useRef<number>(Date.now());
   // Guard: prevents double-tap on "Next" advancing idx twice during the 120ms fade
   const isAdvancingRef = useRef(false);
+  // Always-current ref to timeUp — initialized to a no-op; synced to the real
+  // timeUp in an effect placed after timeUp is defined (below).
+  // This prevents the exam timer's setInterval from capturing a stale closure
+  // where hist always reads as [] when time runs out.
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  const timeUpRef = useRef<() => void>(() => {});
   const isExam = mode === 'exam';
   const isReviewWrong = mode === 'review-wrong';
   const isDaily = mode === 'daily';
@@ -118,7 +124,7 @@ export default function QuizScreen() {
   useEffect(() => {
     if (isExam && !loading && questions.length > 0) {
       timerRef.current = setInterval(() => {
-        setTimer((p) => { if (p <= 1) { if (timerRef.current) clearInterval(timerRef.current); timeUp(); return 0; } return p - 1; });
+        setTimer((p) => { if (p <= 1) { if (timerRef.current) clearInterval(timerRef.current); timeUpRef.current(); return 0; } return p - 1; });
       }, 1000);
     }
     return () => { if (timerRef.current) clearInterval(timerRef.current); };
@@ -197,6 +203,12 @@ export default function QuizScreen() {
     });
     goRes(cor, questions.length > 0 ? (cor / questions.length) * 100 : 0);
   }, [hist, questions, mode, category, startTime, setLastAttempt]);
+
+  // Sync timeUpRef after every render so the exam timer's setInterval always
+  // calls the latest timeUp (which closes over the latest hist).
+  // No deps array → runs every render, which is intentional and very cheap.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => { timeUpRef.current = timeUp; });
 
   const q = questions[idx];
 

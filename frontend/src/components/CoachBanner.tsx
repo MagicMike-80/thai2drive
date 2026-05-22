@@ -63,6 +63,16 @@ export function CoachBanner({ deviceId, lang, streak, colors: c }: CoachBannerPr
   const router = useRouter();
   const t = TR[lang] || TR.en;
 
+  // Dev-only render counter. More than ~5 renders on a stable home screen
+  // indicates a rerender loop. Stripped in production builds (__DEV__ === false).
+  const _renderCount = useRef(0);
+  if (__DEV__) {
+    _renderCount.current += 1;
+    if (_renderCount.current > 6) {
+      console.warn(`[CoachBanner] render #${_renderCount.current} — possible loop`);
+    }
+  }
+
   const [message, setMessage]   = useState<string | null>(null);
   const [srsCount, setSrsCount] = useState(0);
   const [dismissed, setDismissed] = useState(false);
