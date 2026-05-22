@@ -947,6 +947,55 @@ a { color:inherit; text-decoration:none; }
 .quiz-ai-video-slot,
 .quiz-ai-hint-slot  { display:none; }
 
+/* ─ Multi-level explanation: Vis mer expand ─ */
+.ai-expand-btn {
+  display:inline-flex; align-items:center; gap:5px;
+  margin-top:10px; padding:0;
+  font-size:.74rem; font-weight:800; color:var(--orange);
+  background:none; border:none; cursor:pointer; opacity:.75;
+  letter-spacing:.1px; transition:opacity .15s;
+}
+.ai-expand-btn::after {
+  content:'›'; font-size:1rem; line-height:1;
+  display:inline-block; transition:transform .22s ease;
+}
+.ai-expand-btn.expanded::after { transform:rotate(90deg); }
+.ai-expand-btn:hover { opacity:1; }
+.ai-expand-content {
+  max-height:0; overflow:hidden;
+  font-size:.83rem; line-height:1.75; color:var(--text);
+  transition:max-height .32s ease, opacity .25s ease, padding .25s ease;
+  opacity:0; padding-top:0;
+}
+.ai-expand-content.open {
+  max-height:600px; opacity:1;
+  padding-top:11px;
+  border-top:1px solid rgba(255,255,255,.07);
+  margin-top:10px;
+}
+
+/* ─ Smart learning alert cards ─ */
+/* Four types: danger (red), rule (blue), weather (cyan), exam (purple) */
+.ai-alert {
+  display:flex; gap:12px; align-items:flex-start;
+  padding:12px 18px 12px 16px;
+  border-radius:0 12px 12px 0;
+}
+.ai-alert-danger  { background:rgba(239,68,68,.05);   border-left:3px solid rgba(239,68,68,.50); }
+.ai-alert-rule    { background:rgba(59,130,246,.05);  border-left:3px solid rgba(59,130,246,.50); }
+.ai-alert-weather { background:rgba(125,211,252,.05); border-left:3px solid rgba(125,211,252,.50); }
+.ai-alert-exam    { background:rgba(168,85,247,.05);  border-left:3px solid rgba(168,85,247,.50); }
+.ai-alert-icon { font-size:1.1rem; flex-shrink:0; line-height:1.3; }
+.ai-alert-label {
+  font-size:.57rem; font-weight:900; text-transform:uppercase;
+  letter-spacing:.9px; margin-bottom:4px;
+}
+.ai-alert-danger  .ai-alert-label { color:#FCA5A5; }
+.ai-alert-rule    .ai-alert-label { color:#93C5FD; }
+.ai-alert-weather .ai-alert-label { color:#7DD3FC; }
+.ai-alert-exam    .ai-alert-label { color:#C4B5FD; }
+.ai-alert-text { font-size:.81rem; line-height:1.68; color:var(--text); }
+
 /* ─ Mobile AI section — lightweight inline expand ─ */
 .quiz-ai-mobile {
   display:flex; flex-direction:column; gap:10px;
@@ -961,10 +1010,12 @@ a { color:inherit; text-decoration:none; }
 .quiz-ai-mobile .quiz-ai-verdict { padding:11px 14px; font-size:.88rem; }
 .quiz-ai-mobile .quiz-ai-explain,
 .quiz-ai-mobile .quiz-ai-danger,
-.quiz-ai-mobile .quiz-ai-tip     { padding:12px 14px; }
+.quiz-ai-mobile .quiz-ai-tip,
+.quiz-ai-mobile .ai-alert        { padding:12px 14px; }
 .quiz-ai-mobile .quiz-ai-card-text,
 .quiz-ai-mobile .quiz-ai-danger-text,
-.quiz-ai-mobile .quiz-ai-tip-text { font-size:.81rem; line-height:1.7; }
+.quiz-ai-mobile .quiz-ai-tip-text,
+.quiz-ai-mobile .ai-alert-text   { font-size:.81rem; line-height:1.7; }
 
 /* ══════════════════════════════════════════
    SIGNS SCREEN
@@ -2999,38 +3050,132 @@ function selectAns(btn, picked) {
   updateAiPanel(isOk, currentExpl);
 }
 
+// ── Split explanation into short (first sentence) and rest ──────────────────
+// Powers the multi-level "Vis mer" pattern for layered learning.
+function splitExpl(expl) {
+  if (!expl) return {short: '', rest: ''};
+  // Try to find a natural sentence break
+  var m = expl.match(/^(.*?[.!?])\s+([\s\S]+)$/);
+  if (m && m[2].trim().length > 28) {
+    return {short: m[1].trim(), rest: m[2].trim()};
+  }
+  // Fallback: word-break at ~105 chars if text is long enough
+  if (expl.length > 130) {
+    var cut = expl.lastIndexOf(' ', 108);
+    if (cut > 55) return {short: expl.slice(0, cut) + '…', rest: expl.slice(cut + 1).trim()};
+  }
+  return {short: expl, rest: ''};
+}
+
+// ── Contextual learning alert classifier ────────────────────────────────────
+// Scans explanation text for Norwegian traffic keywords and returns
+// 0–2 smart alert cards that add context without overwhelming the learner.
+// Types: danger (red) · rule (blue) · weather (cyan) · exam (purple)
+function classifyAlerts(expl) {
+  var alerts = [];
+  if (!expl) return alerts;
+  var t = expl.toLowerCase();
+
+  if (/forbikjør|forbi\s|overtakings/i.test(t))
+    alerts.push({icon:'🚗', type:'danger', label:'Vanlig feil',
+      text:'Forbikjøring krever full sikt og trygg avstand til møtende trafikk. Tving aldri forbi.'});
+
+  if (/glatt|is\b|snø|vinter|slipperisk|vått\s|regn/i.test(t))
+    alerts.push({icon:'❄️', type:'weather', label:'Glatt vei',
+      text:'Bremselengden kan dobles på is og snø — tilpass alltid farten til veien og forholdene.'});
+
+  if (/avstand|3 sek|følgeavstand|bremse\w*\s*lengde/i.test(t))
+    alerts.push({icon:'📏', type:'rule', label:'3-sekunders-regelen',
+      text:'Minst 3 sekunder bak bilen foran — mer ved dårlig vær, mørke eller høy fart.'});
+
+  if (/uoversiktlig|begrenset sikt|kurve|kryss\w*\s*sikt|blind/i.test(t))
+    alerts.push({icon:'⚠️', type:'danger', label:'Begrenset sikt',
+      text:'Reduser fart der fremover sikt er begrenset — det du ikke ser kan drepe.'});
+
+  if (/vikeplikt|forkjørsrett/i.test(t))
+    alerts.push({icon:'⚠️', type:'danger', label:'Vikeplikt',
+      text:'Feil vikeplikt er blant de vanligste ulykkesårsakene i norske kryss.'});
+
+  if (/gangfelt|fotgjenger/i.test(t))
+    alerts.push({icon:'🚶', type:'danger', label:'Fotgjengervern',
+      text:'Fotgjengere i og ved gangfelt har sterk beskyttelse i norsk trafiklov — stans alltid.'});
+
+  if (/fartsgrense|hastighets|km\/t|80\s*km|60\s*km|50\s*km|30\s*km/i.test(t))
+    alerts.push({icon:'🧠', type:'exam', label:'Eksamensfavoritt',
+      text:'Fartsregler er blant de hyppigst stilte spørsmålene på teoriprøven — lær dem grundig.'});
+
+  if (/belysning|lys\b|fyrlys|mørk|langt\s*lys|nærlys/i.test(t))
+    alerts.push({icon:'💡', type:'rule', label:'Lysregler',
+      text:'Riktig lys er lovpålagt og avgjørende for å bli sett — sjekk alltid lysbetingelsene.'});
+
+  if (/reaksjon\w*\s*tid|reaksjonstid/i.test(t))
+    alerts.push({icon:'⏱️', type:'rule', label:'Reaksjonstid',
+      text:'Ved 80 km/t beveger bilen seg 22 m per sekund — en sekunds distraksjons kan koste liv.'});
+
+  return alerts.slice(0, 2); // max 2 per answer — calm, not overwhelming
+}
+
 // ── Shared AI learning content builder ──────────────────────────────────────
 // Feeds BOTH desktop right panel and mobile inline section.
-// Each card gets --i:N so CSS staggers the animate-in by 80 ms per block.
-// Future hooks (voice/video/hint) are wired as empty divs, ready to activate.
+// Layered pedagogy: short → expand, contextual alerts, instructor tip.
+// Future hooks (voice/video/hint) remain wired but hidden.
 function buildAiHtml(isOk, expl) {
-  var i = 0; // stagger index
+  var i = 0;
+  var parts = splitExpl(expl);
+  var alerts = classifyAlerts(expl);
 
-  // 1 ── Verdict banner (spring pop, no delay)
+  // 1 ── Verdict banner
   var html = '<div class="quiz-ai-verdict ' + (isOk ? 'ok' : 'bad') + '">'
     + '<span class="quiz-ai-verdict-icon">' + (isOk ? '✅' : '❌') + '</span>'
     + '<span>' + (isOk ? 'Riktig! Godt jobbet.' : 'Feil svar — les forklaringen nøye.') + '</span>'
     + '</div>';
 
-  // 2 ── Danger card (wrong only — highest priority info)
   if (!isOk && expl) {
+    // 2a ── Wrong: danger card shows the KEY message (short)
     html += '<div class="quiz-ai-danger ai-block" style="--i:' + (i++) + '">'
       + '<div class="quiz-ai-danger-icon">⚠️</div>'
       + '<div style="min-width:0">'
       + '<div class="quiz-ai-danger-label">Trafikkfare</div>'
-      + '<div class="quiz-ai-danger-text">' + escH(expl) + '</div>'
+      + '<div class="quiz-ai-danger-text">' + escH(parts.short) + '</div>'
       + '</div></div>';
-  }
 
-  // 3 ── Explanation (always shown when available)
-  if (expl) {
+    // 2b ── If there's more, show expanded detail in explanation card
+    if (parts.rest) {
+      html += '<div class="quiz-ai-explain ai-block" style="--i:' + (i++) + '">'
+        + '<div class="quiz-ai-card-label">📖 Full forklaring</div>'
+        + '<div class="quiz-ai-card-text">' + escH(parts.rest) + '</div>'
+        + '</div>';
+    }
+
+  } else if (isOk && expl) {
+    // 3 ── Correct: show short explanation, "Vis mer" expands the full text
     html += '<div class="quiz-ai-explain ai-block" style="--i:' + (i++) + '">'
       + '<div class="quiz-ai-card-label">📖 Forklaring</div>'
-      + '<div class="quiz-ai-card-text">' + escH(expl) + '</div>'
-      + '</div>';
+      + '<div class="quiz-ai-card-text">' + escH(parts.short) + '</div>';
+    if (parts.rest) {
+      html += '<button class="ai-expand-btn" onclick="'
+        + 'var c=this.nextElementSibling;'
+        + 'c.classList.toggle(\'open\');'
+        + 'this.classList.toggle(\'expanded\');'
+        + 'this.textContent=c.classList.contains(\'open\')?\'Vis mindre\':\'Vis mer\';'
+        + 'this.classList.contains(\'expanded\')||this.classList.add(\'expanded\')'
+        + '">Vis mer</button>'
+        + '<div class="ai-expand-content">' + escH(parts.rest) + '</div>';
+    }
+    html += '</div>';
   }
 
-  // 4 ── Instructor tip
+  // 4 ── Smart learning alerts (0–2, contextual to this question)
+  alerts.forEach(function(a) {
+    html += '<div class="ai-alert ai-alert-' + a.type + ' ai-block" style="--i:' + (i++) + '">'
+      + '<span class="ai-alert-icon">' + a.icon + '</span>'
+      + '<div style="min-width:0">'
+      + '<div class="ai-alert-label">' + escH(a.label) + '</div>'
+      + '<div class="ai-alert-text">' + escH(a.text) + '</div>'
+      + '</div></div>';
+  });
+
+  // 5 ── Instructor tip
   html += '<div class="quiz-ai-tip ai-block" style="--i:' + (i++) + '">'
     + '<div class="quiz-ai-tip-icon">💡</div>'
     + '<div style="min-width:0">'
@@ -3042,11 +3187,9 @@ function buildAiHtml(isOk, expl) {
     + '</div></div></div>';
 
   // ── Future architecture hooks ─────────────────────────────────────────────
-  // These divs are hidden today. Each has a data-ai-hook attribute so future
-  // features (voice, video, interactive danger) can target them by selector.
-  html += '<div class="quiz-ai-voice-slot" data-ai-hook="voice"></div>'   // AI voice teacher
-        + '<div class="quiz-ai-video-slot" data-ai-hook="video"></div>'   // animated traffic clip
-        + '<div class="quiz-ai-hint-slot"  data-ai-hook="hint"></div>';   // AI-generated memory hint
+  html += '<div class="quiz-ai-voice-slot" data-ai-hook="voice"></div>'
+        + '<div class="quiz-ai-video-slot" data-ai-hook="video"></div>'
+        + '<div class="quiz-ai-hint-slot"  data-ai-hook="hint"></div>';
 
   return html;
 }
