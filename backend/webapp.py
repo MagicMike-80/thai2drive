@@ -754,9 +754,8 @@ a { color:inherit; text-decoration:none; }
   to   { opacity:1; transform:translateY(0); }
 }
 @keyframes aiVerdictPop {
-  0%   { opacity:0; transform:scale(.90) translateY(10px); }
-  62%  { transform:scale(1.03) translateY(-2px); }
-  100% { opacity:1; transform:scale(1)   translateY(0); }
+  from { opacity:0; transform:translateY(8px); }
+  to   { opacity:1; transform:translateY(0); }
 }
 @keyframes aiMobileIn {
   from { opacity:0; transform:translateY(12px); }
@@ -860,8 +859,8 @@ a { color:inherit; text-decoration:none; }
 
 /* Padded body — content zone */
 .quiz-ai-body {
-  padding:20px 22px 40px;
-  display:flex; flex-direction:column; gap:14px;
+  padding:22px 24px 52px;
+  display:flex; flex-direction:column; gap:16px;
 }
 
 /* Idle placeholder */
@@ -874,7 +873,7 @@ a { color:inherit; text-decoration:none; }
 
 /* ─ Verdict banner — snappy pop ─ */
 .quiz-ai-verdict {
-  animation: aiVerdictPop .44s cubic-bezier(.34,1.56,.64,1) both;
+  animation: aiVerdictPop .38s ease-out both;
   display:flex; align-items:center; gap:11px;
   padding:14px 16px; border-radius:13px;
   font-size:.92rem; font-weight:800;
@@ -907,10 +906,10 @@ a { color:inherit; text-decoration:none; }
   border-radius:8px;
 }
 .quiz-ai-danger-label {
-  font-size:.58rem; font-weight:900; text-transform:uppercase;
-  letter-spacing:.9px; color:#FCA5A5; margin-bottom:6px;
+  font-size:.60rem; font-weight:900; text-transform:uppercase;
+  letter-spacing:1px; color:#FCA5A5; margin-bottom:7px;
 }
-.quiz-ai-danger-text { font-size:.83rem; line-height:1.72; color:var(--text); }
+.quiz-ai-danger-text { font-size:.85rem; line-height:1.78; color:var(--text); }
 
 /* ─ Explanation card — no border, slight background lift ─ */
 .quiz-ai-explain {
@@ -918,11 +917,11 @@ a { color:inherit; text-decoration:none; }
   border-radius:12px; padding:16px 18px;
 }
 .quiz-ai-card-label {
-  font-size:.58rem; font-weight:900; text-transform:uppercase;
-  letter-spacing:.9px; color:var(--muted); margin-bottom:9px;
+  font-size:.60rem; font-weight:900; text-transform:uppercase;
+  letter-spacing:1px; color:var(--muted); margin-bottom:10px;
   display:flex; align-items:center; gap:5px;
 }
-.quiz-ai-card-text { font-size:.84rem; line-height:1.78; color:var(--text); }
+.quiz-ai-card-text { font-size:.86rem; line-height:1.82; color:var(--text); }
 
 /* ─ Instructor tip card — orange left stripe, no full border ─ */
 .quiz-ai-tip {
@@ -938,15 +937,17 @@ a { color:inherit; text-decoration:none; }
   border-radius:8px;
 }
 .quiz-ai-tip-label {
-  font-size:.58rem; font-weight:900; text-transform:uppercase;
-  letter-spacing:.9px; color:var(--orange); margin-bottom:6px;
+  font-size:.60rem; font-weight:900; text-transform:uppercase;
+  letter-spacing:1px; color:var(--orange); margin-bottom:7px;
 }
-.quiz-ai-tip-text { font-size:.83rem; line-height:1.72; color:var(--text); }
+.quiz-ai-tip-text { font-size:.85rem; line-height:1.78; color:var(--text); }
 
-/* ─ Future architecture slots (hidden — wired up when features land) ─ */
-.quiz-ai-voice-slot,
-.quiz-ai-video-slot,
-.quiz-ai-hint-slot  { display:none; }
+/* ─ Future architecture slots (hidden — wired up when features land) ─
+   Each slot is a named hook point for: ai-voice-teacher · visual-danger-zones
+   · animated-traffic-overlay · ai-hint-generator.
+   Activate by removing display:none and injecting content via data-hook. ─ */
+.quiz-ai-future-hooks,
+.quiz-ai-slot { display:none; }
 
 /* ─ Multi-level explanation: Vis mer expand ─ */
 .ai-expand-btn {
@@ -964,7 +965,7 @@ a { color:inherit; text-decoration:none; }
 .ai-expand-btn:hover { opacity:1; }
 .ai-expand-content {
   max-height:0; overflow:hidden;
-  font-size:.83rem; line-height:1.75; color:var(--text);
+  font-size:.85rem; line-height:1.80; color:var(--text);
   transition:max-height .32s ease, opacity .25s ease, padding .25s ease;
   opacity:0; padding-top:0;
 }
@@ -988,18 +989,18 @@ a { color:inherit; text-decoration:none; }
 .ai-alert-exam    { background:rgba(168,85,247,.05);  border-left:3px solid rgba(168,85,247,.50); }
 .ai-alert-icon { font-size:1.1rem; flex-shrink:0; line-height:1.3; }
 .ai-alert-label {
-  font-size:.57rem; font-weight:900; text-transform:uppercase;
-  letter-spacing:.9px; margin-bottom:4px;
+  font-size:.60rem; font-weight:900; text-transform:uppercase;
+  letter-spacing:1px; margin-bottom:6px;
 }
 .ai-alert-danger  .ai-alert-label { color:#FCA5A5; }
 .ai-alert-rule    .ai-alert-label { color:#93C5FD; }
 .ai-alert-weather .ai-alert-label { color:#7DD3FC; }
 .ai-alert-exam    .ai-alert-label { color:#C4B5FD; }
-.ai-alert-text { font-size:.81rem; line-height:1.68; color:var(--text); }
+.ai-alert-text { font-size:.83rem; line-height:1.72; color:var(--text); }
 
 /* ─ Mobile AI section — lightweight inline expand ─ */
 .quiz-ai-mobile {
-  display:flex; flex-direction:column; gap:10px;
+  display:flex; flex-direction:column; gap:12px;
 }
 .quiz-ai-mobile:empty { display:none; }
 .quiz-ai-mobile:not(:empty) {
@@ -1016,7 +1017,7 @@ a { color:inherit; text-decoration:none; }
 .quiz-ai-mobile .quiz-ai-card-text,
 .quiz-ai-mobile .quiz-ai-danger-text,
 .quiz-ai-mobile .quiz-ai-tip-text,
-.quiz-ai-mobile .ai-alert-text   { font-size:.81rem; line-height:1.7; }
+.quiz-ai-mobile .ai-alert-text   { font-size:.83rem; line-height:1.74; }
 
 /* ══════════════════════════════════════════
    SIGNS SCREEN
@@ -2898,6 +2899,7 @@ async function loadQuiz(url) {
     }
     qIdx = 0; qScore = 0; qAnswered = false;
     _wrongStreak = 0; _correctStreak = 0; _correctPhraseIdx = 0;
+    _sessionAnswered = 0; _sessionWrongTotal = 0;
     quizStartedAt = new Date().toISOString();
     stopExamTimer();
     if (isExamMode) startExamTimer();
@@ -3023,11 +3025,13 @@ function renderQuestion() {
 var currentCorrect = '';
 var currentExpl = '';
 
-// ── Learning state — streak tracking ─────────────────────────────────────────
-// Both streaks reset when the session changes category or restarts.
-// They inform the coaching tone — the AI adapts to how the student is doing.
-var _wrongStreak   = 0;  // consecutive wrong answers → more support
-var _correctStreak = 0;  // consecutive correct answers → celebrate progress
+// ── Learning state — streak + session depth tracking ─────────────────────────
+// Streaks reset when the quiz restarts; session totals track across the run.
+// Together they let the AI adapt tone AND explanation depth to the student.
+var _wrongStreak      = 0;  // consecutive wrong answers → more support
+var _correctStreak    = 0;  // consecutive correct answers → quieter coaching
+var _sessionAnswered  = 0;  // total answers this session — infers experience stage
+var _sessionWrongTotal = 0; // running wrong count — infers struggle rate
 
 // Calm acknowledgment pool — rotates to avoid repetition, never effusive
 var _correctPhraseIdx = 0;
@@ -3059,9 +3063,11 @@ function selectAns(btn, picked) {
   var isOk = picked.toUpperCase() === correct.toUpperCase();
   if (isOk) qScore++;
 
-  // Update streaks before building the AI panel
+  // Update streaks and session counters before building the AI panel
   if (isOk) { _correctStreak++; _wrongStreak = 0; }
   else       { _wrongStreak++;  _correctStreak = 0; }
+  _sessionAnswered++;
+  if (!isOk) _sessionWrongTotal++;
 
   document.querySelectorAll('.ans-btn').forEach(function(b) {
     b.disabled = true;
@@ -3152,6 +3158,26 @@ function classifyAlerts(expl) {
     alerts.push({icon:'⏱️', type:'rule', label:'Reaksjonstid',
       text:'Ved 80 km/t tilbakelegger du 22 m per sekund — bygg alltid inn nok sikkerhetsmargin.'});
 
+  if (/rundkjøring|sving\s*inn|kjøring\s*inn\s*i\s*rund/i.test(t))
+    alerts.push({icon:'🔄', type:'rule', label:'Rundkjøring',
+      text:'Trafikk inne i rundkjøringen har forkjørsrett. Gi vikeplikt ved innkjøring — kjør rolig og forutsigbart.'});
+
+  if (/nødbrems|abs\b|bremse\w*\s*avstand|bremsebane|bremse\w*\s*vei/i.test(t))
+    alerts.push({icon:'🛑', type:'danger', label:'Bremsing',
+      text:'ABS hindrer hjullås men forkorter ikke alltid bremseavstanden. Trykk jevnt og hardt — slipp ikke opp.'});
+
+  if (/møtende|motgående|svingslys|tunnel\b/i.test(t))
+    alerts.push({icon:'💡', type:'danger', label:'Møtende trafikk',
+      text:'Blend ned i god tid for møtende trafikk. Hold til høyre og bruk nærlys i tunnel.'});
+
+  if (/tretthet|trøtt\b|døs|søvn|kjøretretthet/i.test(t))
+    alerts.push({icon:'😴', type:'danger', label:'Tretthet',
+      text:'Tretthet er like farlig som alkohol. Planlegg pauser — stopp og sov heller enn å presse seg.'});
+
+  if (/promille|alkohol|ruspåvirket|0[,.]2\s*promille/i.test(t))
+    alerts.push({icon:'⚖️', type:'rule', label:'Grenseverdi',
+      text:'0,2 promille er grensen i Norge. Selv små mengder alkohol svekker reaksjonstid og situasjonsforståelse.'});
+
   return alerts.slice(0, 2); // max 2 per answer — calm, not overwhelming
 }
 
@@ -3207,12 +3233,49 @@ function buildInstructorTip(isOk, alerts) {
       return isOk
         ? 'Du er godt forberedt på dette temaet — ett av de hyppigste på teoriprøven.'
         : 'Dette er et av de vanligste temaene på teoriprøven. Les det i studieboken.';
+
+    if (lbl.indexOf('rundkjøring') >= 0)
+      return isOk
+        ? 'Rundkjøringer er effektive men krever presisjon. Gi alltid vikeplikt ved innkjøring.'
+        : 'Husk: trafikk allerede inne i rundkjøringen har forkjørsrett — vent til det er fritt.';
+
+    if (lbl.indexOf('brems') >= 0)
+      return isOk
+        ? 'God avstand er din viktigste buffer. Kortere bremselengde betyr mer tid til andre valg.'
+        : 'Øv deg mentalt på nødbremsing — reaksjonen din avgjør om du rekker å stanse i tide.';
+
+    if (lbl.indexOf('møtende') >= 0 || lbl.indexOf('tunnel') >= 0)
+      return isOk
+        ? 'Forutsigbar kjøring gjør deg lettere å se for møtende trafikk — hold linjen og farten.'
+        : 'I tunnel og mørke: hold til høyre, bruk nærlys og senk farten — siktelengden er kortere.';
+
+    if (lbl.indexOf('tretthet') >= 0)
+      return isOk
+        ? 'Planlegg kjøreturer med pauser. Tretthet bygger seg opp gradvis og er vanskelig å oppdage.'
+        : 'Tretthet angriper uten varsel. Tidlig stopp er alltid riktig — det finnes ingen snarvei.';
+
+    if (lbl.indexOf('grenseverdi') >= 0 || lbl.indexOf('promille') >= 0)
+      return isOk
+        ? 'Null-toleranse er det sikreste valget — lovens grense er en juridisk terskel, ikke en anbefaling.'
+        : 'Lovens 0,2-grense beskytter mot straff, ikke mot ulykker. Alkohol og kjøring hører ikke sammen.';
   }
 
   // Generic fallback — contextual but not topic-specific
   return isOk
     ? 'Fest situasjonen visuelt i minnet — gjenkjennelse i trafikken er en livsviktig ferdighet.'
     : 'Forstå situasjonen, ikke bare svaret. Det er slik kunnskap sitter i en virkelig situasjon.';
+}
+
+// ── Session-inferred explanation depth ──────────────────────────────────────
+// 'beginner'  → early session or high wrong rate → show full text immediately
+// 'standard'  → mid-session, moderate rate       → short + expandable
+// 'advanced'  → many answered, low wrong rate    → short + expandable (same)
+// The distinction is transparent to the student — it simply feels natural.
+function _explDepth() {
+  if (_sessionAnswered <= 5) return 'beginner';
+  var rate = _sessionAnswered > 0 ? _sessionWrongTotal / _sessionAnswered : 0;
+  if (rate > 0.45) return 'beginner';
+  return 'standard'; // advanced currently same UX as standard; reserved for future depth features
 }
 
 // ── Shared AI learning content builder ──────────────────────────────────────
@@ -3249,18 +3312,28 @@ function buildAiHtml(isOk, expl) {
     }
 
   } else if (isOk && expl) {
-    // 3 ── Correct: short first, depth on demand
+    // 3 ── Correct: depth-adaptive explanation
+    //      Beginners see the full text immediately — no friction.
+    //      Standard/advanced see first sentence + expandable rest.
+    var depth = _explDepth();
     html += '<div class="quiz-ai-explain ai-block" style="--i:' + (i++) + '">'
       + '<div class="quiz-ai-card-label">📖 Forklaring</div>'
       + '<div class="quiz-ai-card-text">' + escH(parts.short) + '</div>';
     if (parts.rest) {
-      html += '<button class="ai-expand-btn" onclick="'
-        + 'var c=this.nextElementSibling;'
-        + 'c.classList.toggle(\'open\');'
-        + 'this.classList.toggle(\'expanded\');'
-        + 'this.textContent=c.classList.contains(\'open\')?\'Vis mindre\':\'Vis mer\''
-        + '">Vis mer</button>'
-        + '<div class="ai-expand-content">' + escH(parts.rest) + '</div>';
+      if (depth === 'beginner') {
+        // Show full text without expand button — early learners benefit from context
+        html += '<div class="quiz-ai-card-text" style="margin-top:11px;padding-top:11px;'
+          + 'border-top:1px solid rgba(255,255,255,.07)">' + escH(parts.rest) + '</div>';
+      } else {
+        // Layered expand — student self-selects depth
+        html += '<button class="ai-expand-btn" onclick="'
+          + 'var c=this.nextElementSibling;'
+          + 'c.classList.toggle(\'open\');'
+          + 'this.classList.toggle(\'expanded\');'
+          + 'this.textContent=c.classList.contains(\'open\')?\'Vis mindre\':\'Vis mer\''
+          + '">Vis mer</button>'
+          + '<div class="ai-expand-content">' + escH(parts.rest) + '</div>';
+      }
     }
     html += '</div>';
   }
@@ -3284,9 +3357,13 @@ function buildAiHtml(isOk, expl) {
     + '</div></div>';
 
   // ── Future architecture hooks (wired, hidden until features land) ─────────
-  html += '<div class="quiz-ai-voice-slot" data-ai-hook="voice"></div>'
-        + '<div class="quiz-ai-video-slot" data-ai-hook="video"></div>'
-        + '<div class="quiz-ai-hint-slot"  data-ai-hook="hint"></div>';
+  // To activate a feature: set display:block on its slot and inject content.
+  html += '<div class="quiz-ai-future-hooks" aria-hidden="true">'
+        + '<div class="quiz-ai-slot" data-hook="voice"           data-feature="ai-voice-teacher"></div>'
+        + '<div class="quiz-ai-slot" data-hook="danger-overlay"  data-feature="visual-danger-zones"></div>'
+        + '<div class="quiz-ai-slot" data-hook="traffic-overlay" data-feature="animated-traffic-scene"></div>'
+        + '<div class="quiz-ai-slot" data-hook="hint"            data-feature="ai-hint-generator"></div>'
+        + '</div>';
 
   return html;
 }
@@ -3316,7 +3393,7 @@ function updateAiPanel(isOk, expl) {
   // Status chip
   var status = document.getElementById('quizAiStatus');
   if (status) {
-    status.textContent = isOk ? '✅ Riktig svar' : '❌ Feil svar';
+    status.textContent = isOk ? '✅ Riktig svar' : '↩ Se forklaring';
     status.className = 'quiz-ai-status ' + okBad;
   }
 
