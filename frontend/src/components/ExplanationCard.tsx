@@ -133,8 +133,15 @@ export function ExplanationCard({
   const load = useCallback(async () => {
     if (state === 'loading' || state === 'loaded') return;
     setState('loading');
+    // Dev-mode timing — shows explanation fetch latency in Metro logs.
+    // __DEV__ is stripped by the production bundler; zero runtime cost in prod.
+    const t0 = __DEV__ ? performance.now() : 0;
     try {
       const resp = await aiLearningApi.getExplanation(questionId, lang);
+      if (__DEV__) {
+        const ms = (performance.now() - t0).toFixed(0);
+        console.log(`[ExplanationCard] ${questionId} → ${ms}ms${resp?.is_fallback ? ' (fallback)' : resp ? '' : ' (null)'}`);
+      }
       if (!mountedRef.current) return;
       if (resp && !resp.is_fallback) {
         setData(resp.explanation);
@@ -143,6 +150,7 @@ export function ExplanationCard({
         setState('error');
       }
     } catch {
+      if (__DEV__) console.log(`[ExplanationCard] ${questionId} → error after ${(performance.now() - t0).toFixed(0)}ms`);
       if (!mountedRef.current) return;
       setState('error');
     }

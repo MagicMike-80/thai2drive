@@ -103,6 +103,8 @@ export default function QuizScreen() {
   const scaleAnim = useRef(new Animated.Value(1)).current;
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const questionStartedAt = useRef<number>(Date.now());
+  // Guard: prevents double-tap on "Next" advancing idx twice during the 120ms fade
+  const isAdvancingRef = useRef(false);
   const isExam = mode === 'exam';
   const isReviewWrong = mode === 'review-wrong';
   const isDaily = mode === 'daily';
@@ -247,15 +249,19 @@ export default function QuizScreen() {
   };
 
   const handleNext = () => {
+    // Double-tap guard — second tap arrives before the 120ms fade callback fires
+    if (isAdvancingRef.current) return;
     tickHaptic();
     stopTts(); // Stop any playing TTS immediately
     if (idx >= questions.length - 1) { finishQ(); return; }
     // Free user hit the lifetime cap → route to account gate or paywall
     if (showAccountOrPaywall()) return;
     // Smooth slide transition
+    isAdvancingRef.current = true;
     Animated.timing(fade, { toValue: 0, duration: 120, useNativeDriver: true }).start(() => {
       questionStartedAt.current = Date.now();
       setIdx((p) => p + 1); setSel(null); setDone(false); setShowTh(false); setShowLimit(false);
+      isAdvancingRef.current = false;
       Animated.timing(fade, { toValue: 1, duration: 120, useNativeDriver: true }).start();
     });
   };
@@ -629,8 +635,10 @@ export default function QuizScreen() {
               <Text style={[st.fbE, { color: c.textSecondary }]}>{eT(q)}</Text>
               {language !== 'th' && <Text style={[st.fbTh, { color: `${c.accent}B0` }]}>{eT(q, 'th')}</Text>}
 
-              {/* AI deep explanation — isolated so a crash never reaches quiz */}
-              <SafeExplanation>
+              {/* AI deep explanation — isolated so a crash never reaches quiz.
+                  key=q.id remounts the boundary on each question so a crash
+                  on question N doesn't silently suppress all subsequent ones. */}
+              <SafeExplanation key={q.id}>
                 <ExplanationCard
                   questionId={q.id}
                   correctOptionId={q.correctOptionId}
