@@ -402,16 +402,11 @@ a { color:inherit; text-decoration:none; }
 ══════════════════════════════════════════ */
 #screenCats {
   padding:0;
-  background:linear-gradient(180deg,
-    #A51931 0%,    #A51931 16.66%,
-    #E8E8E8 16.66%, #E8E8E8 33.33%,
-    #1A1464 33.33%, #1A1464 66.66%,
-    #E8E8E8 66.66%, #E8E8E8 83.33%,
-    #A51931 83.33%, #A51931 100%);
+  background:#0B1226;
 }
 .cats-header {
   padding:14px 16px 10px; flex-shrink:0;
-  background:rgba(10,14,30,.52); /* dark veil — keeps title readable on any flag stripe */
+  background:transparent;
 }
 .screen-title {
   font-size:1.6rem; font-weight:900; letter-spacing:-.3px;
@@ -436,7 +431,7 @@ a { color:inherit; text-decoration:none; }
 }
 
 .cat-card {
-  background:rgba(10,14,30,.84); border:1.5px solid rgba(255,255,255,.12);
+  background:#131B2E; border:1.5px solid rgba(255,255,255,.10);
   border-radius:14px; padding:14px 12px;
   cursor:pointer; transition:border-color .2s, transform .15s, box-shadow .2s;
   display:flex; flex-direction:column; gap:6px;
@@ -1002,7 +997,7 @@ a { color:inherit; text-decoration:none; }
 /* ══════════════════════════════════════════
    SIGNS SCREEN
 ══════════════════════════════════════════ */
-#screenSigns { padding:0; }
+#screenSigns { padding:0; background:#0B1226; }
 .signs-header {
   padding:14px 16px 10px; flex-shrink:0;
   display:flex; align-items:center; gap:10px;
@@ -1112,8 +1107,7 @@ a { color:inherit; text-decoration:none; }
   padding:0;
   overflow-y:auto; overflow-x:hidden;
   -webkit-overflow-scrolling:touch;
-  /* Solid background hides the flag behind this screen */
-  background:var(--bg);
+  background:#0B1226;
 }
 #screenSettings::-webkit-scrollbar { width:4px; }
 #screenSettings::-webkit-scrollbar-track { background:transparent; }
@@ -1155,8 +1149,7 @@ a { color:inherit; text-decoration:none; }
   margin-bottom:7px; margin-top:14px; padding:0 4px;
 }
 .settings-card {
-  background:rgba(0,0,0,.45); border:1px solid rgba(255,255,255,.12);
-  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  background:#131B2E; border:1px solid rgba(255,255,255,.10);
   border-radius:16px; overflow:hidden;
 }
 .settings-row {
@@ -1342,7 +1335,7 @@ a { color:inherit; text-decoration:none; }
 /* ══════════════════════════════════════════
    STUDIEBOK SCREEN
 ══════════════════════════════════════════ */
-#screenStudybook { padding:0; }
+#screenStudybook { padding:0; background:#0B1226; }
 /* ══ STUDIEBOK — BOK-STIL ══ */
 .sb-topbar {
   flex-shrink:0; padding:10px 14px 8px;
