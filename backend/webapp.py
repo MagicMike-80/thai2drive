@@ -76,7 +76,8 @@ a { color:inherit; text-decoration:none; }
     /* No padding — app must fill top to bottom */
   }
   #app {
-    width:100%; max-width:390px;
+    width:390px; /* fixed phone width — quiz-mode overrides to 1080 */
+    flex-shrink:0;
     /* Full viewport height, no gaps */
     height:100vh; height:-webkit-fill-available;
     /* No top/bottom radius — edge-to-edge vertically */
@@ -702,15 +703,18 @@ a { color:inherit; text-decoration:none; }
   /* Mobile AI section is replaced by the right panel — hide it */
   .quiz-ai-mobile { display:none !important; }
 
-  /* App frame expands only when quiz is active */
+  /* App frame expands to AI dashboard when quiz is active */
   #app.quiz-mode {
-    max-width: min(1080px, 96vw);
-    border-radius: 14px;
+    width: min(1080px, 96vw);
+    max-width: none;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 16px;
     box-shadow:
       0 0 0 1px rgba(255,255,255,.07),
       0 20px 60px rgba(0,0,0,.70),
       0 60px 160px rgba(0,0,0,.55);
-    transition: max-width .25s ease, border-radius .25s ease;
+    transition: width .30s cubic-bezier(.4,0,.2,1), border-radius .30s ease;
   }
 
   /* Quiz screen becomes a horizontal flex */
@@ -734,130 +738,227 @@ a { color:inherit; text-decoration:none; }
   }
 }
 
-/* ── AI panel — image section ── */
+/* ══════════════════════════════════════════
+   AI LEARNING PANEL — ANIMATIONS & POLISH
+   Architecture hooks: voice · video · danger · hints
+══════════════════════════════════════════ */
+
+/* ─ Keyframes ─ */
+@keyframes aiBlockIn {
+  from { opacity:0; transform:translateY(14px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+@keyframes aiVerdictPop {
+  0%   { opacity:0; transform:scale(.90) translateY(10px); }
+  62%  { transform:scale(1.03) translateY(-2px); }
+  100% { opacity:1; transform:scale(1)   translateY(0); }
+}
+@keyframes aiMobileIn {
+  from { opacity:0; transform:translateY(12px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+@keyframes imgFlashOk {
+  0%   { filter:brightness(1)   saturate(1); }
+  35%  { filter:brightness(1.2) saturate(1.5); }
+  100% { filter:brightness(1)   saturate(1); }
+}
+@keyframes imgFlashBad {
+  0%   { filter:brightness(1)   saturate(1); }
+  35%  { filter:brightness(.80) saturate(.5); }
+  100% { filter:brightness(1)   saturate(1); }
+}
+@keyframes statusPulse {
+  0%,100% { opacity:1; }
+  50%      { opacity:.50; }
+}
+
+/* Staggered animation class — set --i:N on each block */
+.ai-block {
+  animation: aiBlockIn .38s cubic-bezier(.25,.46,.45,.94) both;
+  animation-delay: calc(var(--i,0) * 80ms + 30ms);
+}
+
+/* ─ Image box ─ */
 .quiz-ai-imgbox {
   flex:0 0 auto; position:relative;
   overflow:hidden; background:#03060E;
+  transition:box-shadow .45s ease;
 }
+.quiz-ai-imgbox.glow-ok  { box-shadow:0 0 0 2px rgba(16,185,129,.40), 0 4px 32px rgba(16,185,129,.18); }
+.quiz-ai-imgbox.glow-bad { box-shadow:0 0 0 2px rgba(239,68,68,.44),  0 4px 32px rgba(239,68,68,.20); }
+
 .quiz-ai-img {
   width:100%; display:block;
-  aspect-ratio:16/9; object-fit:cover;
-  max-height:300px;
-  transition:filter .4s ease;
+  aspect-ratio:16/9; object-fit:cover; max-height:280px;
 }
+.quiz-ai-img.flash-ok  { animation:imgFlashOk  .65s ease forwards; }
+.quiz-ai-img.flash-bad { animation:imgFlashBad .65s ease forwards; }
+
+/* Gradient fade bottom + colour tint overlay */
 .quiz-ai-img-overlay {
   position:absolute; inset:0; pointer-events:none;
-  background:linear-gradient(to bottom, transparent 40%, #080F1E 100%);
-  transition:background .35s ease;
+  background:linear-gradient(to bottom, transparent 30%, #080F1E 100%);
+  transition:background .45s ease;
 }
 .quiz-ai-img-overlay.result-ok {
-  background:linear-gradient(to bottom,
-    rgba(16,185,129,.14) 0%, rgba(16,185,129,.04) 35%, #080F1E 100%);
+  background:
+    radial-gradient(ellipse 90% 55% at 50% 0%, rgba(16,185,129,.20) 0%, transparent 68%),
+    linear-gradient(to bottom, rgba(16,185,129,.08) 0%, transparent 38%, #080F1E 100%);
 }
 .quiz-ai-img-overlay.result-bad {
-  background:linear-gradient(to bottom,
-    rgba(239,68,68,.20) 0%, rgba(239,68,68,.06) 35%, #080F1E 100%);
+  background:
+    radial-gradient(ellipse 90% 55% at 50% 0%, rgba(239,68,68,.26) 0%, transparent 68%),
+    linear-gradient(to bottom, rgba(239,68,68,.12) 0%, transparent 38%, #080F1E 100%);
 }
+
 .quiz-ai-img-badge {
   position:absolute; bottom:10px; left:12px;
-  font-size:.65rem; font-weight:800; letter-spacing:.6px; text-transform:uppercase;
-  color:rgba(255,255,255,.55); pointer-events:none;
+  font-size:.60rem; font-weight:800; letter-spacing:.7px; text-transform:uppercase;
+  color:rgba(255,255,255,.40); pointer-events:none;
+  display:flex; align-items:center; gap:5px;
 }
 
-/* ── AI panel — instructor section ── */
+/* ─ AI scrollable panel ─ */
 .quiz-ai-panel {
   flex:1; overflow-y:auto; overflow-x:hidden;
-  padding:18px 20px 24px;
-  display:flex; flex-direction:column; gap:14px;
+  display:flex; flex-direction:column;
   -webkit-overflow-scrolling:touch;
 }
-.quiz-ai-panel::-webkit-scrollbar { width:3px; }
-.quiz-ai-panel::-webkit-scrollbar-thumb { background:rgba(255,255,255,.1); border-radius:2px; }
+.quiz-ai-panel::-webkit-scrollbar { width:2px; }
+.quiz-ai-panel::-webkit-scrollbar-thumb { background:rgba(255,255,255,.08); border-radius:2px; }
 
+/* Sticky instructor header — stays visible while body scrolls */
 .quiz-ai-panel-header {
-  display:flex; flex-direction:column; gap:10px;
-  padding-bottom:14px;
+  position:sticky; top:0; z-index:5;
+  background:rgba(8,15,30,.96);
+  backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
   border-bottom:1px solid var(--border);
+  padding:13px 18px 11px;
+  display:flex; flex-direction:column; gap:9px;
+  flex-shrink:0;
 }
-.quiz-ai-panel-title {
-  display:flex; align-items:center; gap:10px;
-}
-.quiz-ai-robot { font-size:1.4rem; flex-shrink:0; }
-.quiz-ai-panel-name {
-  font-size:.92rem; font-weight:900; color:var(--text); letter-spacing:-.1px;
-}
-.quiz-ai-panel-sub {
-  font-size:.7rem; color:var(--muted); margin-top:2px;
-}
+.quiz-ai-panel-title { display:flex; align-items:center; gap:10px; }
+.quiz-ai-robot { font-size:1.3rem; flex-shrink:0; line-height:1; }
+.quiz-ai-panel-name { font-size:.88rem; font-weight:900; color:var(--text); letter-spacing:-.1px; }
+.quiz-ai-panel-sub  { font-size:.67rem; color:var(--muted); margin-top:1px; }
+
 .quiz-ai-status {
-  font-size:.72rem; font-weight:700; color:var(--muted);
-  padding:4px 10px; border-radius:20px;
-  background:rgba(255,255,255,.05); border:1px solid var(--border);
-  align-self:flex-start;
+  font-size:.68rem; font-weight:700;
+  padding:3px 10px; border-radius:20px; align-self:flex-start;
+  background:rgba(255,255,255,.05); border:1px solid var(--border); color:var(--muted);
+  transition:background .3s, border-color .3s, color .3s;
 }
-.quiz-ai-status.ok  { color:var(--green);  background:rgba(16,185,129,.1);  border-color:rgba(16,185,129,.25); }
-.quiz-ai-status.bad { color:#FCA5A5;        background:rgba(239,68,68,.08);  border-color:rgba(239,68,68,.2); }
+.quiz-ai-status.idle { animation:statusPulse 2.2s ease infinite; }
+.quiz-ai-status.ok   { color:var(--green); background:rgba(16,185,129,.10); border-color:rgba(16,185,129,.30); }
+.quiz-ai-status.bad  { color:#FCA5A5;      background:rgba(239,68,68,.08);  border-color:rgba(239,68,68,.24); }
+
+/* Padded body — content zone */
+.quiz-ai-body {
+  padding:16px 18px 30px;
+  display:flex; flex-direction:column; gap:12px;
+}
 
 /* Idle placeholder */
 .quiz-ai-idle {
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  text-align:center; gap:12px; padding:40px 16px; flex:1;
+  display:flex; flex-direction:column; align-items:center;
+  text-align:center; gap:14px; padding:48px 20px;
 }
-.quiz-ai-idle-icon { font-size:2.4rem; opacity:.3; }
-.quiz-ai-idle-text {
-  font-size:.82rem; color:var(--muted); line-height:1.65; max-width:220px;
-}
+.quiz-ai-idle-icon { font-size:1.9rem; opacity:.20; }
+.quiz-ai-idle-text { font-size:.80rem; color:var(--muted); line-height:1.7; max-width:210px; }
 
-/* Verdict banner */
+/* ─ Verdict banner — snappy pop ─ */
 .quiz-ai-verdict {
-  display:flex; align-items:center; gap:10px;
-  padding:13px 16px; border-radius:12px;
-  font-size:.92rem; font-weight:800; flex-shrink:0;
+  animation: aiVerdictPop .44s cubic-bezier(.34,1.56,.64,1) both;
+  display:flex; align-items:center; gap:11px;
+  padding:14px 16px; border-radius:13px;
+  font-size:.92rem; font-weight:800;
+  position:relative; overflow:hidden;
 }
-.quiz-ai-verdict.ok  { background:rgba(16,185,129,.1);  border:1px solid rgba(16,185,129,.28); color:var(--green); }
-.quiz-ai-verdict.bad { background:rgba(239,68,68,.08);  border:1px solid rgba(239,68,68,.22);  color:#FCA5A5; }
+/* Left accent stripe */
+.quiz-ai-verdict::before {
+  content:''; position:absolute; left:0; top:0; bottom:0;
+  width:3.5px; border-radius:3px 0 0 3px;
+}
+.quiz-ai-verdict.ok  { background:rgba(16,185,129,.09); border:1px solid rgba(16,185,129,.32); color:var(--green); }
+.quiz-ai-verdict.ok::before  { background:var(--green); }
+.quiz-ai-verdict.bad { background:rgba(239,68,68,.08);  border:1px solid rgba(239,68,68,.26);  color:#FCA5A5; }
+.quiz-ai-verdict.bad::before { background:#EF4444; }
+.quiz-ai-verdict-icon { font-size:1.15rem; flex-shrink:0; }
 
-/* Explanation card */
+/* ─ Danger card — red left stripe ─ */
+.quiz-ai-danger {
+  background:rgba(239,68,68,.055);
+  border:1px solid rgba(239,68,68,.20);
+  border-left:3.5px solid rgba(239,68,68,.55);
+  border-radius:13px; padding:14px 16px;
+  display:flex; gap:12px; align-items:flex-start;
+}
+.quiz-ai-danger-icon {
+  font-size:1.2rem; flex-shrink:0; line-height:1.2;
+  background:rgba(239,68,68,.14); padding:7px;
+  border-radius:8px;
+}
+.quiz-ai-danger-label {
+  font-size:.58rem; font-weight:900; text-transform:uppercase;
+  letter-spacing:.9px; color:#FCA5A5; margin-bottom:6px;
+}
+.quiz-ai-danger-text { font-size:.83rem; line-height:1.72; color:var(--text); }
+
+/* ─ Explanation card ─ */
 .quiz-ai-explain {
-  background:rgba(255,255,255,.04); border:1px solid var(--border);
-  border-radius:14px; padding:15px 16px; flex-shrink:0;
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:13px; padding:15px 16px;
 }
 .quiz-ai-card-label {
-  font-size:.6rem; font-weight:800; text-transform:uppercase;
-  letter-spacing:.8px; color:var(--muted); margin-bottom:8px;
+  font-size:.58rem; font-weight:900; text-transform:uppercase;
+  letter-spacing:.9px; color:var(--muted); margin-bottom:9px;
+  display:flex; align-items:center; gap:5px;
 }
-.quiz-ai-card-text {
-  font-size:.85rem; line-height:1.75; color:var(--text);
-}
+.quiz-ai-card-text { font-size:.84rem; line-height:1.78; color:var(--text); }
 
-/* Danger card (wrong answer) */
-.quiz-ai-danger {
-  background:rgba(239,68,68,.05); border:1px solid rgba(239,68,68,.18);
-  border-radius:14px; padding:14px 16px;
-  display:flex; gap:12px; align-items:flex-start; flex-shrink:0;
-}
-.quiz-ai-danger-icon { font-size:1.2rem; flex-shrink:0; line-height:1.3; }
-.quiz-ai-danger-label {
-  font-size:.6rem; font-weight:800; text-transform:uppercase;
-  letter-spacing:.7px; color:#FCA5A5; margin-bottom:6px;
-}
-.quiz-ai-danger-text {
-  font-size:.83rem; line-height:1.65; color:var(--text);
-}
-
-/* Instructor tip card */
+/* ─ Instructor tip card — orange left stripe ─ */
 .quiz-ai-tip {
-  background:rgba(255,153,51,.05); border:1px solid rgba(255,153,51,.14);
-  border-radius:14px; padding:14px 16px;
-  display:flex; gap:12px; align-items:flex-start; flex-shrink:0;
+  background:rgba(255,153,51,.04);
+  border:1px solid rgba(255,153,51,.16);
+  border-left:3.5px solid rgba(255,153,51,.45);
+  border-radius:13px; padding:14px 16px;
+  display:flex; gap:12px; align-items:flex-start;
+}
+.quiz-ai-tip-icon {
+  font-size:1.1rem; flex-shrink:0; line-height:1.2;
+  background:rgba(255,153,51,.14); padding:7px;
+  border-radius:8px;
 }
 .quiz-ai-tip-label {
-  font-size:.6rem; font-weight:800; text-transform:uppercase;
-  letter-spacing:.7px; color:var(--orange); margin-bottom:6px;
+  font-size:.58rem; font-weight:900; text-transform:uppercase;
+  letter-spacing:.9px; color:var(--orange); margin-bottom:6px;
 }
-.quiz-ai-tip-text {
-  font-size:.83rem; line-height:1.65; color:var(--text);
+.quiz-ai-tip-text { font-size:.83rem; line-height:1.72; color:var(--text); }
+
+/* ─ Future architecture slots (hidden — wired up when features land) ─ */
+.quiz-ai-voice-slot,
+.quiz-ai-video-slot,
+.quiz-ai-hint-slot  { display:none; }
+
+/* ─ Mobile AI section — lightweight inline expand ─ */
+.quiz-ai-mobile {
+  display:flex; flex-direction:column; gap:10px;
 }
+.quiz-ai-mobile:empty { display:none; }
+.quiz-ai-mobile:not(:empty) {
+  margin-top:4px; padding-top:16px;
+  border-top:1px solid rgba(255,255,255,.07);
+  animation:aiMobileIn .40s ease both;
+}
+/* Mobile: slightly more compact */
+.quiz-ai-mobile .quiz-ai-verdict { padding:11px 14px; font-size:.88rem; }
+.quiz-ai-mobile .quiz-ai-explain,
+.quiz-ai-mobile .quiz-ai-danger,
+.quiz-ai-mobile .quiz-ai-tip     { padding:12px 14px; }
+.quiz-ai-mobile .quiz-ai-card-text,
+.quiz-ai-mobile .quiz-ai-danger-text,
+.quiz-ai-mobile .quiz-ai-tip-text { font-size:.81rem; line-height:1.7; }
 
 /* ══════════════════════════════════════════
    SIGNS SCREEN
@@ -2837,18 +2938,20 @@ function renderQuestion() {
     + '</div>'
     + (freeBanner ? freeBanner : '');
 
-  // ── Update AI right panel ─────────────────────────
+  // ── Reset AI right panel for new question ─────────────────────────
+  var aiImgbox = document.querySelector('.quiz-ai-imgbox');
+  if (aiImgbox) aiImgbox.className = 'quiz-ai-imgbox'; // clear glow
   var aiImg = document.getElementById('quizAiImg');
-  if (aiImg) { aiImg.src = imgUrl; }
+  if (aiImg) { aiImg.src = imgUrl; aiImg.className = 'quiz-ai-img'; } // clear flash
   var aiOverlay = document.getElementById('quizAiOverlay');
-  if (aiOverlay) aiOverlay.className = 'quiz-ai-img-overlay'; // reset tint
+  if (aiOverlay) aiOverlay.className = 'quiz-ai-img-overlay';
   var aiStatus = document.getElementById('quizAiStatus');
-  if (aiStatus) { aiStatus.textContent = 'Venter på svar…'; aiStatus.className = 'quiz-ai-status'; }
+  if (aiStatus) { aiStatus.textContent = 'Venter på svar…'; aiStatus.className = 'quiz-ai-status idle'; }
   var aiBody = document.getElementById('quizAiBody');
   if (aiBody) {
     aiBody.innerHTML = '<div class="quiz-ai-idle">'
       + '<div class="quiz-ai-idle-icon">👆</div>'
-      + '<div class="quiz-ai-idle-text">Velg et svar til venstre for å se AI-forklaring og trafikkanalyse</div>'
+      + '<div class="quiz-ai-idle-text">Velg et svar for å se AI-analyse og trafikkforklaring</div>'
       + '</div>';
   }
 }
@@ -2891,75 +2994,100 @@ function selectAns(btn, picked) {
 }
 
 // ── Shared AI learning content builder ──────────────────────────────────────
-// Same HTML is injected into the desktop right panel AND the mobile inline
-// section — one engine, two layouts.
+// Feeds BOTH desktop right panel and mobile inline section.
+// Each card gets --i:N so CSS staggers the animate-in by 80 ms per block.
+// Future hooks (voice/video/hint) are wired as empty divs, ready to activate.
 function buildAiHtml(isOk, expl) {
+  var i = 0; // stagger index
+
+  // 1 ── Verdict banner (spring pop, no delay)
   var html = '<div class="quiz-ai-verdict ' + (isOk ? 'ok' : 'bad') + '">'
-    + (isOk ? '✅ Riktig! Godt jobbet.' : '❌ Feil svar — les forklaringen nøye.')
+    + '<span class="quiz-ai-verdict-icon">' + (isOk ? '✅' : '❌') + '</span>'
+    + '<span>' + (isOk ? 'Riktig! Godt jobbet.' : 'Feil svar — les forklaringen nøye.') + '</span>'
     + '</div>';
 
-  // Wrong: show danger card first (most important)
+  // 2 ── Danger card (wrong only — highest priority info)
   if (!isOk && expl) {
-    html += '<div class="quiz-ai-danger">'
+    html += '<div class="quiz-ai-danger ai-block" style="--i:' + (i++) + '">'
       + '<div class="quiz-ai-danger-icon">⚠️</div>'
-      + '<div>'
+      + '<div style="min-width:0">'
       + '<div class="quiz-ai-danger-label">Trafikkfare</div>'
       + '<div class="quiz-ai-danger-text">' + escH(expl) + '</div>'
       + '</div></div>';
   }
 
-  // Explanation (both correct and wrong)
+  // 3 ── Explanation (always shown when available)
   if (expl) {
-    html += '<div class="quiz-ai-explain">'
+    html += '<div class="quiz-ai-explain ai-block" style="--i:' + (i++) + '">'
       + '<div class="quiz-ai-card-label">📖 Forklaring</div>'
       + '<div class="quiz-ai-card-text">' + escH(expl) + '</div>'
       + '</div>';
   }
 
-  // Instructor tip
-  html += '<div class="quiz-ai-tip">'
-    + '<div style="font-size:1.1rem;flex-shrink:0;line-height:1.3">💡</div>'
-    + '<div>'
-    + '<div class="quiz-ai-tip-label">Kjørelærer tips</div>'
+  // 4 ── Instructor tip
+  html += '<div class="quiz-ai-tip ai-block" style="--i:' + (i++) + '">'
+    + '<div class="quiz-ai-tip-icon">💡</div>'
+    + '<div style="min-width:0">'
+    + '<div class="quiz-ai-tip-label">Kjørelærer</div>'
     + '<div class="quiz-ai-tip-text">'
     + (isOk
-        ? 'Bra! Studer bildet og fest situasjonen i minnet — gjenkjennelse i trafikken redder liv.'
-        : 'Se nøye på bildet. Hva er det farlige elementet? Forstå situasjonen visuelt, ikke bare teorien.')
+        ? 'Bra! Fest situasjonen i minnet — visuell gjenkjennelse i trafikken redder liv.'
+        : 'Se nøye på bildet. Finn det farlige elementet. Forstå situasjonen — ikke bare teorien.')
     + '</div></div></div>';
+
+  // ── Future architecture hooks ─────────────────────────────────────────────
+  // These divs are hidden today. Each has a data-ai-hook attribute so future
+  // features (voice, video, interactive danger) can target them by selector.
+  html += '<div class="quiz-ai-voice-slot" data-ai-hook="voice"></div>'   // AI voice teacher
+        + '<div class="quiz-ai-video-slot" data-ai-hook="video"></div>'   // animated traffic clip
+        + '<div class="quiz-ai-hint-slot"  data-ai-hook="hint"></div>';   // AI-generated memory hint
 
   return html;
 }
 
 function updateAiPanel(isOk, expl) {
   var html = buildAiHtml(isOk, expl);
+  var okBad = isOk ? 'ok' : 'bad';
 
   // ── Desktop: right panel ──────────────────────────────────────────────────
-  // Image overlay tint
+
+  // Image box border glow
+  var imgbox = document.querySelector('.quiz-ai-imgbox');
+  if (imgbox) imgbox.className = 'quiz-ai-imgbox glow-' + okBad;
+
+  // Image brightness flash — remove class first to restart animation
+  var aiImg = document.getElementById('quizAiImg');
+  if (aiImg) {
+    aiImg.classList.remove('flash-ok', 'flash-bad');
+    void aiImg.offsetWidth; // reflow trigger
+    aiImg.classList.add('flash-' + okBad);
+  }
+
+  // Colour tint overlay
   var overlay = document.getElementById('quizAiOverlay');
-  if (overlay) overlay.className = 'quiz-ai-img-overlay ' + (isOk ? 'result-ok' : 'result-bad');
+  if (overlay) overlay.className = 'quiz-ai-img-overlay result-' + okBad;
+
   // Status chip
   var status = document.getElementById('quizAiStatus');
   if (status) {
     status.textContent = isOk ? '✅ Riktig svar' : '❌ Feil svar';
-    status.className = 'quiz-ai-status ' + (isOk ? 'ok' : 'bad');
+    status.className = 'quiz-ai-status ' + okBad;
   }
-  // Body content
+
+  // Inject content and scroll back to top
   var body = document.getElementById('quizAiBody');
-  if (body) body.innerHTML = html;
+  if (body) { body.innerHTML = html; body.scrollTop = 0; }
 
   // ── Mobile: inline section below answers ─────────────────────────────────
-  // :empty CSS hides it when blank; content makes it visible automatically
   var mobile = document.getElementById('quizAiMobile');
   if (mobile) mobile.innerHTML = html;
-  // Tint the question image (green/red outline = instant visual feedback)
+
+  // Mobile question image tint
   var imgWrap = document.getElementById('qImgWrap');
   if (imgWrap) {
-    imgWrap.style.outline = isOk
-      ? '2.5px solid rgba(16,185,129,.55)'
-      : '2.5px solid rgba(239,68,68,.50)';
-    imgWrap.style.boxShadow = isOk
-      ? 'inset 0 0 0 4px rgba(16,185,129,.10), 0 0 12px rgba(16,185,129,.18)'
-      : 'inset 0 0 0 4px rgba(239,68,68,.08), 0 0 12px rgba(239,68,68,.15)';
+    imgWrap.style.outline   = isOk ? '2.5px solid rgba(16,185,129,.55)' : '2.5px solid rgba(239,68,68,.50)';
+    imgWrap.style.boxShadow = isOk ? '0 0 18px rgba(16,185,129,.22)'    : '0 0 18px rgba(239,68,68,.20)';
+    imgWrap.style.transition = 'outline .3s ease, box-shadow .3s ease';
   }
 }
 

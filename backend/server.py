@@ -2561,6 +2561,58 @@ async def delete_traffic_sign(sign_id: str, _: dict = Depends(require_admin)):
     return {"ok": True}
 
 
+@api_router.post("/traffic-signs/{sign_id}/image")
+async def upload_sign_image(
+    sign_id: str,
+    file: UploadFile = File(...),
+    _: dict = Depends(require_admin),
+):
+    """Admin: upload an image for a traffic sign (stored as Base64 data URI in image_url)."""
+    import base64
+    import io
+    try:
+        from PIL import Image
+    except ImportError:
+        raise HTTPException(status_code=500, detail="Pillow not installed on server")
+
+    raw = await file.read()
+    if len(raw) > 10 * 1024 * 1024:
+        raise HTTPException(status_code=413, detail="Image too large (max 10 MB)")
+    if len(raw) == 0:
+        raise HTTPException(status_code=400, detail="Empty file")
+
+    try:
+        img = Image.open(io.BytesIO(raw))
+        img.load()
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Could not decode image: {e}")
+
+    if max(img.size) > 600:
+        ratio = 600 / max(img.size)
+        img = img.resize((int(img.size[0] * ratio), int(img.size[1] * ratio)), Image.LANCZOS)
+    if img.mode != "RGB":
+        img = img.convert("RGB")
+    buf = io.BytesIO()
+    img.save(buf, format="JPEG", quality=82, optimize=True)
+    b64 = base64.b64encode(buf.getvalue()).decode()
+    data_uri = "data:image/jpeg;base64," + b64
+
+    sign = await db.traffic_signs.find_one({"id": sign_id})
+    if not sign:
+        raise HTTPException(status_code=404, detail="Sign not found")
+    await db.traffic_signs.update_one(
+        {"id": sign_id},
+        {"$set": {"image_url": data_uri}},
+    )
+    return {
+        "ok": True,
+        "id": sign_id,
+        "image_url": data_uri,
+        "size_kb": round(len(buf.getvalue()) / 1024, 1),
+        "dimensions": list(img.size),
+    }
+
+
 app.include_router(api_router)
 
 # ==================== PUBLIC WEBSITE (landing + legal) ====================

@@ -801,6 +801,81 @@ function handleDropForm(ev) {
   }
 }
 
+function handleSignDrop(ev) {
+  ev.preventDefault();
+  document.getElementById('s-upload-zone').style.borderColor = '#475569';
+  const file = ev.dataTransfer.files[0];
+  if (file) {
+    const input = document.getElementById('s-img-input');
+    const dt = new DataTransfer();
+    dt.items.add(file);
+    input.files = dt.files;
+    handleSignImageUpload({target: input});
+  }
+}
+
+async function handleSignImageUpload(ev) {
+  const file = ev.target.files[0];
+  if (!file) return;
+  const zone = document.getElementById('s-upload-zone');
+  const preview = document.getElementById('s-img-preview');
+  const urlInput = document.getElementById('s-img');
+  const signId = window._currentSignId;
+
+  if (!signId) {
+    // New sign: convert to base64 in browser (same resize logic as questions)
+    try {
+      const reader = new FileReader();
+      reader.onload = e => {
+        const img = new Image();
+        img.onload = () => {
+          const maxDim = 600;
+          let w = img.width, h = img.height;
+          if (Math.max(w, h) > maxDim) {
+            const r = maxDim / Math.max(w, h);
+            w = Math.round(w * r); h = Math.round(h * r);
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = w; canvas.height = h;
+          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+          const dataUri = canvas.toDataURL('image/jpeg', 0.82);
+          window._signImageDataUri = dataUri;
+          urlInput.value = '';
+          urlInput.placeholder = '✅ Bilde lastet opp (' + Math.round(dataUri.length / 1024) + ' KB)';
+          preview.innerHTML = `<img src="${dataUri}" style="max-height:120px;border-radius:8px;border:1px solid var(--card)"/>`;
+          if (zone) zone.querySelector('strong').textContent = 'Bytt bilde';
+          toast(`Bilde klar (${Math.round(dataUri.length / 1024)} KB)`);
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    } catch (e) { toast('Feil: ' + e.message, false); }
+  } else {
+    // Existing sign: upload to server
+    const fd = new FormData();
+    fd.append('file', file);
+    toast('Laster opp…');
+    try {
+      const r = await fetch(API + '/traffic-signs/' + signId + '/image', {
+        method: 'POST',
+        headers: {Authorization: 'Bearer ' + token},
+        body: fd,
+      });
+      if (!r.ok) { const err = await r.json().catch(() => ({})); throw new Error(err.detail || 'HTTP ' + r.status); }
+      const d = await r.json();
+      toast(`✅ Bilde opplastet (${d.size_kb} KB)`);
+      urlInput.value = d.image_url;
+      preview.innerHTML = `<img src="${d.image_url}" style="max-height:120px;border-radius:8px;border:1px solid var(--card)"/>`;
+      if (zone) zone.querySelector('strong').textContent = 'Bytt bilde';
+      // Update local cache
+      for (const g of _signsData) {
+        const s = g.signs.find(x => x.id === signId);
+        if (s) { s.image_url = d.image_url; break; }
+      }
+    } catch (e) { toast('Feil: ' + e.message, false); }
+  }
+}
+
 async function removeFormImage() {
   if (!confirm('Fjern bildet?')) return;
   const q = window._currentQ;
@@ -1394,9 +1469,18 @@ function openSignModal(id, defaultGroup) {
     </div>
 
     <div style="margin-bottom:14px">
-      <div class="lbl" style="font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">🖼️ Bilde-URL</div>
-      <input id="s-img" style="width:100%;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:14px" placeholder="https://..." value="${escapeHtml(sign?.image_url||'')}"/>
-      <div id="s-img-preview" style="margin-top:8px"></div>
+      <div class="lbl" style="font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">🖼️ Bilde</div>
+      <div id="s-upload-zone" style="border:2px dashed #475569;border-radius:8px;padding:14px;text-align:center;cursor:pointer;background:var(--card);margin-bottom:8px;transition:border-color .15s"
+           onclick="document.getElementById('s-img-input').click()"
+           ondrop="handleSignDrop(event)"
+           ondragover="event.preventDefault();this.style.borderColor='var(--accent)'"
+           ondragleave="this.style.borderColor='#475569'">
+        📤 <strong>${sign?.image_url ? 'Bytt bilde' : 'Dra bilde hit eller klikk'}</strong>
+        <div style="color:var(--muted);font-size:11px;margin-top:3px">JPG/PNG/WebP — skaleres auto</div>
+        <input type="file" id="s-img-input" accept="image/*" style="display:none" onchange="handleSignImageUpload(event)" />
+      </div>
+      <div id="s-img-preview" style="margin-bottom:8px">${sign?.image_url ? `<img src="${escapeHtml(sign.image_url)}" style="max-height:120px;border-radius:8px;border:1px solid var(--card)"/>` : ''}</div>
+      <input id="s-img" style="width:100%;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:13px;color:var(--muted)" placeholder="…eller lim inn bilde-URL her" value="${escapeHtml(sign?.image_url||'')}"/>
     </div>
 
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px">
@@ -1422,20 +1506,26 @@ function openSignModal(id, defaultGroup) {
     </div>
   `;
 
-  // Image preview on URL change
+  // Store current sign id for upload handler
+  window._currentSignId = id || null;
+  window._signImageDataUri = null;
+
+  // URL field → live preview
   const imgInput = document.getElementById('s-img');
   const preview = document.getElementById('s-img-preview');
   function updatePreview() {
     const url = imgInput.value.trim();
-    preview.innerHTML = url ? `<img src="${escapeHtml(url)}" style="max-height:120px;border-radius:8px;border:1px solid var(--card)" onerror="this.style.display='none'"/>` : '';
+    if (!url) { preview.innerHTML = ''; return; }
+    preview.innerHTML = `<img src="${escapeHtml(url)}" style="max-height:120px;border-radius:8px;border:1px solid var(--card)" onerror="this.style.display='none'"/>`;
   }
-  imgInput.addEventListener('input', updatePreview);
-  updatePreview();
+  imgInput.addEventListener('input', () => { window._signImageDataUri = null; updatePreview(); });
 
   document.getElementById('modal').classList.add('show');
 }
 
 async function saveSign(id) {
+  // Use uploaded image data URI if available, otherwise fall back to URL field
+  const imageUrl = window._signImageDataUri || document.getElementById('s-img').value.trim();
   const body = {
     group: +document.getElementById('s-group').value,
     name: {
@@ -1443,7 +1533,7 @@ async function saveSign(id) {
       th: document.getElementById('s-th').value.trim(),
       en: document.getElementById('s-en').value.trim(),
     },
-    image_url: document.getElementById('s-img').value.trim(),
+    image_url: imageUrl,
     group_desc: {
       no: document.getElementById('s-dno').value.trim(),
       th: document.getElementById('s-dth').value.trim(),
