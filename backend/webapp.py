@@ -1808,7 +1808,7 @@ a { color:inherit; text-decoration:none; }
           <div class="quiz-ai-body" id="quizAiBody">
             <div class="quiz-ai-idle">
               <div class="quiz-ai-idle-icon">👆</div>
-              <div class="quiz-ai-idle-text">Velg et svar til venstre for å se AI-forklaring og trafikkanalyse</div>
+              <div class="quiz-ai-idle-text">Ta deg tid — hva tror du er riktig? Velg et svar, så forklarer jeg.</div>
             </div>
           </div>
         </div>
@@ -2892,6 +2892,7 @@ async function loadQuiz(url) {
       return;
     }
     qIdx = 0; qScore = 0; qAnswered = false;
+    _wrongStreak = 0; _correctStreak = 0; _correctPhraseIdx = 0;
     quizStartedAt = new Date().toISOString();
     stopExamTimer();
     if (isExamMode) startExamTimer();
@@ -3009,7 +3010,7 @@ function renderQuestion() {
   if (aiBody) {
     aiBody.innerHTML = '<div class="quiz-ai-idle">'
       + '<div class="quiz-ai-idle-icon">👆</div>'
-      + '<div class="quiz-ai-idle-text">Velg et svar for å se AI-analyse og trafikkforklaring</div>'
+      + '<div class="quiz-ai-idle-text">Ta deg tid — hva tror du er riktig? Velg et svar, så forklarer jeg.</div>'
       + '</div>';
   }
 }
@@ -3017,12 +3018,45 @@ function renderQuestion() {
 var currentCorrect = '';
 var currentExpl = '';
 
+// ── Learning state — streak tracking ─────────────────────────────────────────
+// Both streaks reset when the session changes category or restarts.
+// They inform the coaching tone — the AI adapts to how the student is doing.
+var _wrongStreak   = 0;  // consecutive wrong answers → more support
+var _correctStreak = 0;  // consecutive correct answers → celebrate progress
+
+// Variety pool — correct acknowledgment phrases rotate so they never feel robotic
+var _correctPhraseIdx = 0;
+var _correctPhrases = [
+  'Riktig! Bra observert.',
+  'Akkurat — du tenkte dette riktig.',
+  'Riktig! Du har forstått dette godt.',
+  'Bra vurdering — det er nettopp slik det fungerer.',
+  'Riktig! Du er godt i gang med dette.',
+  'Flott — du ser hva som er viktig her.',
+];
+function _nextCorrectPhrase() {
+  var p = _correctPhrases[_correctPhraseIdx % _correctPhrases.length];
+  _correctPhraseIdx++;
+  return p;
+}
+
+// Streak-adaptive wrong-answer support — escalates gently with struggle
+function _wrongSupportText(streak) {
+  if (streak >= 5) return 'Alle sliter med noen temaer — det er helt normalt. Du er på rett spor.';
+  if (streak >= 3) return 'Ikke riktig ennå — ta det rolig. Les forklaringen, så sitter det bedre.';
+  return 'Ikke riktig — men det er nettopp slik du lærer.';
+}
+
 function selectAns(btn, picked) {
   if (qAnswered) return;
   qAnswered = true;
   var correct = currentCorrect;
   var isOk = picked.toUpperCase() === correct.toUpperCase();
   if (isOk) qScore++;
+
+  // Update streaks before building the AI panel
+  if (isOk) { _correctStreak++; _wrongStreak = 0; }
+  else       { _wrongStreak++;  _correctStreak = 0; }
 
   document.querySelectorAll('.ans-btn').forEach(function(b) {
     b.disabled = true;
@@ -3117,9 +3151,20 @@ function classifyAlerts(expl) {
 }
 
 // ── Context-aware instructor tip ─────────────────────────────────────────────
-// Reads what alert types were detected and returns a tip tuned to that topic.
-// Feels like a real teacher who noticed what area needs attention.
+// Priority: streak state → topic context → generic fallback.
+// The AI instructor responds first to how the student is FEELING, then to the topic.
 function buildInstructorTip(isOk, alerts) {
+  // ─ Streak-aware coaching (highest priority) ─
+  if (!isOk && _wrongStreak >= 5)
+    return 'Ta en pust — du er på rett spor. Alle temaer tar tid å sette seg. Fortsett rolig.';
+  if (!isOk && _wrongStreak >= 3)
+    return 'Det er helt normalt å trøtte på noen spørsmål. Les forklaringen sakte — det hjelper.';
+  if (isOk && _correctStreak >= 10)
+    return 'Imponerende! ' + _correctStreak + ' riktige på rad. Trafikkforståelsen din er solid.';
+  if (isOk && _correctStreak >= 5)
+    return 'Flott fremgang — ' + _correctStreak + ' riktige på rad. Du begynner å se mønstrene.';
+
+  // ─ Topic-aware coaching ─
   if (alerts.length > 0) {
     var lbl  = alerts[0].label.toLowerCase();
     var type = alerts[0].type;
@@ -3175,10 +3220,12 @@ function buildAiHtml(isOk, expl) {
   var parts  = splitExpl(expl);
   var alerts = classifyAlerts(expl);
 
-  // 1 ── Verdict — clear but constructive
+  // 1 ── Verdict — streak-aware, constructive, never punishing
   var verdictText = isOk
-    ? 'Riktig! Bra observert.'
-    : 'Ikke riktig — men det er slik du lærer.';
+    ? (_correctStreak >= 5
+        ? 'Riktig! ' + _correctStreak + ' på rad — du er i flyt.'
+        : _nextCorrectPhrase())
+    : _wrongSupportText(_wrongStreak);
   var html = '<div class="quiz-ai-verdict ' + (isOk ? 'ok' : 'bad') + '">'
     + '<span class="quiz-ai-verdict-icon">' + (isOk ? '✅' : '↩') + '</span>'
     + '<span>' + verdictText + '</span>'
