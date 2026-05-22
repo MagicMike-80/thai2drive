@@ -677,6 +677,189 @@ a { color:inherit; text-decoration:none; }
 .q-bookmark-btn.bookmarked { border-color:var(--orange); color:var(--orange); background:rgba(255,153,51,.12); }
 
 /* ══════════════════════════════════════════
+   QUIZ — LEFT/RIGHT COLUMN SHELL
+   Mobile:  left-col fills everything, right-col hidden.
+   Desktop: left-col fixed 400 px, right-col flex:1 AI panel.
+            #app expands beyond the phone-frame max-width.
+══════════════════════════════════════════ */
+
+/* Mobile default — single-column, unchanged */
+.quiz-left-col {
+  display:flex; flex-direction:column; flex:1; overflow:hidden; min-width:0;
+}
+.quiz-right-col { display:none; }
+
+/* Mobile AI section — inline, expands below answers after answering.
+   :empty hides it when blank so it takes zero space before answering. */
+.quiz-ai-mobile {
+  display:flex; flex-direction:column; gap:10px;
+  /* no top margin — gap in q-mid handles spacing */
+}
+.quiz-ai-mobile:empty { display:none; }
+
+/* ── Desktop AI learning layout ── */
+@media (min-width:700px) {
+  /* Mobile AI section is replaced by the right panel — hide it */
+  .quiz-ai-mobile { display:none !important; }
+
+  /* App frame expands only when quiz is active */
+  #app.quiz-mode {
+    max-width: min(1080px, 96vw);
+    border-radius: 14px;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,.07),
+      0 20px 60px rgba(0,0,0,.70),
+      0 60px 160px rgba(0,0,0,.55);
+    transition: max-width .25s ease, border-radius .25s ease;
+  }
+
+  /* Quiz screen becomes a horizontal flex */
+  #screenQuiz { flex-direction:row; }
+
+  /* Left col: fixed width, scrollable quiz */
+  .quiz-left-col {
+    flex: 0 0 420px;
+    border-right: 1px solid var(--border);
+  }
+
+  /* On desktop, image lives in the right panel — hide it in the left */
+  .quiz-left-col .q-img-wrap { display:none; }
+
+  /* Right col: flex, takes remaining space */
+  .quiz-right-col {
+    display:flex; flex-direction:column;
+    flex:1; min-width:320px;
+    background:#080F1E;
+    overflow:hidden;
+  }
+}
+
+/* ── AI panel — image section ── */
+.quiz-ai-imgbox {
+  flex:0 0 auto; position:relative;
+  overflow:hidden; background:#03060E;
+}
+.quiz-ai-img {
+  width:100%; display:block;
+  aspect-ratio:16/9; object-fit:cover;
+  max-height:300px;
+  transition:filter .4s ease;
+}
+.quiz-ai-img-overlay {
+  position:absolute; inset:0; pointer-events:none;
+  background:linear-gradient(to bottom, transparent 40%, #080F1E 100%);
+  transition:background .35s ease;
+}
+.quiz-ai-img-overlay.result-ok {
+  background:linear-gradient(to bottom,
+    rgba(16,185,129,.14) 0%, rgba(16,185,129,.04) 35%, #080F1E 100%);
+}
+.quiz-ai-img-overlay.result-bad {
+  background:linear-gradient(to bottom,
+    rgba(239,68,68,.20) 0%, rgba(239,68,68,.06) 35%, #080F1E 100%);
+}
+.quiz-ai-img-badge {
+  position:absolute; bottom:10px; left:12px;
+  font-size:.65rem; font-weight:800; letter-spacing:.6px; text-transform:uppercase;
+  color:rgba(255,255,255,.55); pointer-events:none;
+}
+
+/* ── AI panel — instructor section ── */
+.quiz-ai-panel {
+  flex:1; overflow-y:auto; overflow-x:hidden;
+  padding:18px 20px 24px;
+  display:flex; flex-direction:column; gap:14px;
+  -webkit-overflow-scrolling:touch;
+}
+.quiz-ai-panel::-webkit-scrollbar { width:3px; }
+.quiz-ai-panel::-webkit-scrollbar-thumb { background:rgba(255,255,255,.1); border-radius:2px; }
+
+.quiz-ai-panel-header {
+  display:flex; flex-direction:column; gap:10px;
+  padding-bottom:14px;
+  border-bottom:1px solid var(--border);
+}
+.quiz-ai-panel-title {
+  display:flex; align-items:center; gap:10px;
+}
+.quiz-ai-robot { font-size:1.4rem; flex-shrink:0; }
+.quiz-ai-panel-name {
+  font-size:.92rem; font-weight:900; color:var(--text); letter-spacing:-.1px;
+}
+.quiz-ai-panel-sub {
+  font-size:.7rem; color:var(--muted); margin-top:2px;
+}
+.quiz-ai-status {
+  font-size:.72rem; font-weight:700; color:var(--muted);
+  padding:4px 10px; border-radius:20px;
+  background:rgba(255,255,255,.05); border:1px solid var(--border);
+  align-self:flex-start;
+}
+.quiz-ai-status.ok  { color:var(--green);  background:rgba(16,185,129,.1);  border-color:rgba(16,185,129,.25); }
+.quiz-ai-status.bad { color:#FCA5A5;        background:rgba(239,68,68,.08);  border-color:rgba(239,68,68,.2); }
+
+/* Idle placeholder */
+.quiz-ai-idle {
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center; gap:12px; padding:40px 16px; flex:1;
+}
+.quiz-ai-idle-icon { font-size:2.4rem; opacity:.3; }
+.quiz-ai-idle-text {
+  font-size:.82rem; color:var(--muted); line-height:1.65; max-width:220px;
+}
+
+/* Verdict banner */
+.quiz-ai-verdict {
+  display:flex; align-items:center; gap:10px;
+  padding:13px 16px; border-radius:12px;
+  font-size:.92rem; font-weight:800; flex-shrink:0;
+}
+.quiz-ai-verdict.ok  { background:rgba(16,185,129,.1);  border:1px solid rgba(16,185,129,.28); color:var(--green); }
+.quiz-ai-verdict.bad { background:rgba(239,68,68,.08);  border:1px solid rgba(239,68,68,.22);  color:#FCA5A5; }
+
+/* Explanation card */
+.quiz-ai-explain {
+  background:rgba(255,255,255,.04); border:1px solid var(--border);
+  border-radius:14px; padding:15px 16px; flex-shrink:0;
+}
+.quiz-ai-card-label {
+  font-size:.6rem; font-weight:800; text-transform:uppercase;
+  letter-spacing:.8px; color:var(--muted); margin-bottom:8px;
+}
+.quiz-ai-card-text {
+  font-size:.85rem; line-height:1.75; color:var(--text);
+}
+
+/* Danger card (wrong answer) */
+.quiz-ai-danger {
+  background:rgba(239,68,68,.05); border:1px solid rgba(239,68,68,.18);
+  border-radius:14px; padding:14px 16px;
+  display:flex; gap:12px; align-items:flex-start; flex-shrink:0;
+}
+.quiz-ai-danger-icon { font-size:1.2rem; flex-shrink:0; line-height:1.3; }
+.quiz-ai-danger-label {
+  font-size:.6rem; font-weight:800; text-transform:uppercase;
+  letter-spacing:.7px; color:#FCA5A5; margin-bottom:6px;
+}
+.quiz-ai-danger-text {
+  font-size:.83rem; line-height:1.65; color:var(--text);
+}
+
+/* Instructor tip card */
+.quiz-ai-tip {
+  background:rgba(255,153,51,.05); border:1px solid rgba(255,153,51,.14);
+  border-radius:14px; padding:14px 16px;
+  display:flex; gap:12px; align-items:flex-start; flex-shrink:0;
+}
+.quiz-ai-tip-label {
+  font-size:.6rem; font-weight:800; text-transform:uppercase;
+  letter-spacing:.7px; color:var(--orange); margin-bottom:6px;
+}
+.quiz-ai-tip-text {
+  font-size:.83rem; line-height:1.65; color:var(--text);
+}
+
+/* ══════════════════════════════════════════
    SIGNS SCREEN
 ══════════════════════════════════════════ */
 #screenSigns { padding:0; }
@@ -1421,24 +1604,57 @@ a { color:inherit; text-decoration:none; }
 
     <!-- ═══ QUIZ SCREEN ═══ -->
     <div class="screen" id="screenQuiz">
-      <div class="quiz-top">
-        <button class="back-btn" onclick="goBack()">← Tilbake</button>
-        <div class="quiz-prog-wrap">
-          <div class="quiz-prog-lbl" id="qProgLbl">Spørsmål 1 av 30</div>
-          <div class="quiz-prog-bar">
-            <div class="quiz-prog-fill" id="qProgFill" style="width:0%"></div>
+
+      <!-- LEFT COLUMN — question, answers, controls (full-width on mobile) -->
+      <div class="quiz-left-col">
+        <div class="quiz-top">
+          <button class="back-btn" onclick="goBack()">← Tilbake</button>
+          <div class="quiz-prog-wrap">
+            <div class="quiz-prog-lbl" id="qProgLbl">Spørsmål 1 av 30</div>
+            <div class="quiz-prog-bar">
+              <div class="quiz-prog-fill" id="qProgFill" style="width:0%"></div>
+            </div>
+          </div>
+          <div class="quiz-score-badge">✓ <span id="qScoreNum">0</span></div>
+          <div id="examTimerBadge" style="display:none;background:rgba(239,68,68,.18);border:1px solid rgba(239,68,68,.4);color:#EF4444;border-radius:20px;padding:4px 12px;font-size:.85rem;font-weight:700;margin-left:8px;">⏱ <span id="examTimerLbl">90:00</span></div>
+        </div>
+        <div class="quiz-body">
+          <div class="quiz-card" id="qCard">
+            <div class="loading-wrap"><div class="spinner"></div></div>
           </div>
         </div>
-        <div class="quiz-score-badge">✓ <span id="qScoreNum">0</span></div>
-        <div id="examTimerBadge" style="display:none;background:rgba(239,68,68,.18);border:1px solid rgba(239,68,68,.4);color:#EF4444;border-radius:20px;padding:4px 12px;font-size:.85rem;font-weight:700;margin-left:8px;">⏱ <span id="examTimerLbl">90:00</span></div>
       </div>
-      <div class="quiz-body">
-        <div class="quiz-card" id="qCard">
-          <div class="loading-wrap" style="grid-column:1/-1">
-            <div class="spinner"></div>
+
+      <!-- RIGHT COLUMN — sticky AI instructor panel (desktop only) -->
+      <div class="quiz-right-col" id="quizRightPanel">
+        <!-- Large traffic image -->
+        <div class="quiz-ai-imgbox">
+          <img id="quizAiImg" class="quiz-ai-img" src="" alt="">
+          <div class="quiz-ai-img-overlay" id="quizAiOverlay"></div>
+          <!-- Image label overlay -->
+          <div class="quiz-ai-img-badge">📸 Trafikksituasjon</div>
+        </div>
+        <!-- AI instructor panel -->
+        <div class="quiz-ai-panel">
+          <div class="quiz-ai-panel-header">
+            <div class="quiz-ai-panel-title">
+              <span class="quiz-ai-robot">🤖</span>
+              <div>
+                <div class="quiz-ai-panel-name">AI Kjørelærer</div>
+                <div class="quiz-ai-panel-sub">Interaktiv trafikkopplæring</div>
+              </div>
+            </div>
+            <div class="quiz-ai-status" id="quizAiStatus">Venter på svar…</div>
+          </div>
+          <div class="quiz-ai-body" id="quizAiBody">
+            <div class="quiz-ai-idle">
+              <div class="quiz-ai-idle-icon">👆</div>
+              <div class="quiz-ai-idle-text">Velg et svar til venstre for å se AI-forklaring og trafikkanalyse</div>
+            </div>
           </div>
         </div>
       </div>
+
     </div>
 
     <!-- ═══ BOOKMARKS SCREEN ═══ -->
@@ -1944,6 +2160,8 @@ function showScreen(id) {
   document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
   var el = document.getElementById(id);
   if (el) el.classList.add('active');
+  // Toggle quiz-mode on #app: expands the phone frame to AI dashboard width on desktop
+  document.getElementById('app').classList.toggle('quiz-mode', id === 'screenQuiz');
 }
 
 function enterApp() {
@@ -2598,7 +2816,7 @@ function renderQuestion() {
 
   qCard.innerHTML =
     '<div class="q-left">'
-      + '<div class="q-img-wrap">'
+      + '<div class="q-img-wrap" id="qImgWrap">'
         + '<img class="q-img" src="' + escH(imgUrl) + '" alt="" onerror="this.parentElement.style.display=\'none\'" loading="lazy">'
       + '</div>'
       + '<div class="q-text">' + escH(qText) + '</div>'
@@ -2607,7 +2825,8 @@ function renderQuestion() {
     + '<div class="q-mid">'
       + '<div class="q-answers" id="qAnswers">' + ansHtml + '</div>'
       + '<div class="q-feedback" id="qFeedback"></div>'
-      + '<div class="q-explain" id="qExplain"></div>'
+      // Mobile AI section — empty until answered (:empty hides it), then expands in-flow
+      + '<div class="quiz-ai-mobile" id="quizAiMobile"></div>'
       + '<button class="q-next-mobile" id="qNextMobile" disabled onclick="nextQ()">' + t('next') + '</button>'
     + '</div>'
     + '<div class="q-next-col">'
@@ -2617,6 +2836,21 @@ function renderQuestion() {
       + '</button>'
     + '</div>'
     + (freeBanner ? freeBanner : '');
+
+  // ── Update AI right panel ─────────────────────────
+  var aiImg = document.getElementById('quizAiImg');
+  if (aiImg) { aiImg.src = imgUrl; }
+  var aiOverlay = document.getElementById('quizAiOverlay');
+  if (aiOverlay) aiOverlay.className = 'quiz-ai-img-overlay'; // reset tint
+  var aiStatus = document.getElementById('quizAiStatus');
+  if (aiStatus) { aiStatus.textContent = 'Venter på svar…'; aiStatus.className = 'quiz-ai-status'; }
+  var aiBody = document.getElementById('quizAiBody');
+  if (aiBody) {
+    aiBody.innerHTML = '<div class="quiz-ai-idle">'
+      + '<div class="quiz-ai-idle-icon">👆</div>'
+      + '<div class="quiz-ai-idle-text">Velg et svar til venstre for å se AI-forklaring og trafikkanalyse</div>'
+      + '</div>';
+  }
 }
 
 var currentCorrect = '';
@@ -2641,11 +2875,6 @@ function selectAns(btn, picked) {
   fb.textContent = isOk ? t('correct') : t('wrong');
   fb.className = 'q-feedback ' + (isOk ? 'ok' : 'bad');
 
-  if (currentExpl) {
-    var ex = document.getElementById('qExplain');
-    ex.textContent = currentExpl;
-    ex.classList.add('show');
-  }
   document.getElementById('qScoreNum').textContent = qScore;
 
   var nb = document.getElementById('qNextBig');
@@ -2656,6 +2885,82 @@ function selectAns(btn, picked) {
   playSound(isOk ? 'correct' : 'wrong');
   if (window.speechSynthesis) window.speechSynthesis.cancel();
   ttsPlaying = false;
+
+  // Update AI right panel
+  updateAiPanel(isOk, currentExpl);
+}
+
+// ── Shared AI learning content builder ──────────────────────────────────────
+// Same HTML is injected into the desktop right panel AND the mobile inline
+// section — one engine, two layouts.
+function buildAiHtml(isOk, expl) {
+  var html = '<div class="quiz-ai-verdict ' + (isOk ? 'ok' : 'bad') + '">'
+    + (isOk ? '✅ Riktig! Godt jobbet.' : '❌ Feil svar — les forklaringen nøye.')
+    + '</div>';
+
+  // Wrong: show danger card first (most important)
+  if (!isOk && expl) {
+    html += '<div class="quiz-ai-danger">'
+      + '<div class="quiz-ai-danger-icon">⚠️</div>'
+      + '<div>'
+      + '<div class="quiz-ai-danger-label">Trafikkfare</div>'
+      + '<div class="quiz-ai-danger-text">' + escH(expl) + '</div>'
+      + '</div></div>';
+  }
+
+  // Explanation (both correct and wrong)
+  if (expl) {
+    html += '<div class="quiz-ai-explain">'
+      + '<div class="quiz-ai-card-label">📖 Forklaring</div>'
+      + '<div class="quiz-ai-card-text">' + escH(expl) + '</div>'
+      + '</div>';
+  }
+
+  // Instructor tip
+  html += '<div class="quiz-ai-tip">'
+    + '<div style="font-size:1.1rem;flex-shrink:0;line-height:1.3">💡</div>'
+    + '<div>'
+    + '<div class="quiz-ai-tip-label">Kjørelærer tips</div>'
+    + '<div class="quiz-ai-tip-text">'
+    + (isOk
+        ? 'Bra! Studer bildet og fest situasjonen i minnet — gjenkjennelse i trafikken redder liv.'
+        : 'Se nøye på bildet. Hva er det farlige elementet? Forstå situasjonen visuelt, ikke bare teorien.')
+    + '</div></div></div>';
+
+  return html;
+}
+
+function updateAiPanel(isOk, expl) {
+  var html = buildAiHtml(isOk, expl);
+
+  // ── Desktop: right panel ──────────────────────────────────────────────────
+  // Image overlay tint
+  var overlay = document.getElementById('quizAiOverlay');
+  if (overlay) overlay.className = 'quiz-ai-img-overlay ' + (isOk ? 'result-ok' : 'result-bad');
+  // Status chip
+  var status = document.getElementById('quizAiStatus');
+  if (status) {
+    status.textContent = isOk ? '✅ Riktig svar' : '❌ Feil svar';
+    status.className = 'quiz-ai-status ' + (isOk ? 'ok' : 'bad');
+  }
+  // Body content
+  var body = document.getElementById('quizAiBody');
+  if (body) body.innerHTML = html;
+
+  // ── Mobile: inline section below answers ─────────────────────────────────
+  // :empty CSS hides it when blank; content makes it visible automatically
+  var mobile = document.getElementById('quizAiMobile');
+  if (mobile) mobile.innerHTML = html;
+  // Tint the question image (green/red outline = instant visual feedback)
+  var imgWrap = document.getElementById('qImgWrap');
+  if (imgWrap) {
+    imgWrap.style.outline = isOk
+      ? '2.5px solid rgba(16,185,129,.55)'
+      : '2.5px solid rgba(239,68,68,.50)';
+    imgWrap.style.boxShadow = isOk
+      ? 'inset 0 0 0 4px rgba(16,185,129,.10), 0 0 12px rgba(16,185,129,.18)'
+      : 'inset 0 0 0 4px rgba(239,68,68,.08), 0 0 12px rgba(239,68,68,.15)';
+  }
 }
 
 function nextQ() {
