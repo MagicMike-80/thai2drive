@@ -1028,7 +1028,6 @@ async function loadBook() {
   document.getElementById('book-meta').textContent =
     `${_bookSections.length} seksjoner fordelt på ${Object.keys(byChapter).length} kapitler`;
 
-  const container = document.getElementById('book-chapters');
   container.innerHTML = '';
   const chTitles = { 1:'Grunnleggende trafikklære', 2:'Mennesket i trafikken',
                      3:'Trafikksystemet og regler', 4:'Kjøretøy og vegtrafikkloven' };
