@@ -1022,8 +1022,13 @@ a { color:inherit; text-decoration:none; }
   grid-template-columns:repeat(auto-fit, minmax(100px,1fr));
   gap:10px;
 }
+.signs-group-label {
+  font-size:.65rem; font-weight:800; color:var(--muted);
+  letter-spacing:.9px; text-transform:uppercase;
+  padding:14px 4px 7px;
+}
 .sign-card {
-  background:var(--card); border:1.5px solid var(--border);
+  background:#131B2E; border:1.5px solid rgba(255,255,255,.10);
   border-radius:14px; padding:10px 8px;
   display:flex; flex-direction:column; align-items:center; gap:8px;
   cursor:pointer; transition:border-color .2s, transform .15s;
@@ -1811,12 +1816,10 @@ a { color:inherit; text-decoration:none; }
     <div class="screen" id="screenSigns">
       <div class="signs-header">
         <div class="screen-title">🚦 <span data-key="signs">Trafikkskilt</span></div>
+        <div class="signs-count" id="signsCount"></div>
       </div>
-      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:60vh;gap:18px;text-align:center;padding:32px">
-        <div style="font-size:64px">🚧</div>
-        <div style="font-size:22px;font-weight:700;color:#f59e0b">กำลังปรับปรุง</div>
-        <div style="font-size:18px;font-weight:600;color:var(--text,#e2e8f0)">Under bygging — kommer snart!</div>
-        <div style="font-size:15px;color:var(--muted,#94a3b8)">Coming soon!</div>
+      <div class="signs-scroll" id="signsScroll">
+        <div class="loading-wrap"><div class="spinner"></div></div>
       </div>
     </div>
 
@@ -3627,56 +3630,61 @@ async function loadBookmarks() {
 var signsLoaded = false;
 async function loadSigns() {
   var scroll = document.getElementById('signsScroll');
-  if (signsLoaded && scroll.children.length > 0) return;
+  if (!scroll) return;
+  if (signsLoaded && scroll.querySelector('.signs-group-label')) return;
   scroll.innerHTML = '<div class="loading-wrap"><div class="spinner"></div></div>';
   try {
-    // Fetch all questions with images — try all categories
-    var data = await api('GET', '/api/questions?limit=200&has_image=true');
-    var qs = Array.isArray(data) ? data : (data.questions || data.items || []);
-    // Filter only questions that have an image
-    qs = qs.filter(function(q){ return !!(q.bildeUrl || q.image_url || q.image); });
-    if (!qs.length) {
+    var groups = await api('GET', '/api/traffic-signs');
+    if (!Array.isArray(groups)) throw new Error('Ugyldig respons');
+
+    // Count total signs
+    var total = groups.reduce(function(n, g) { return n + (g.signs ? g.signs.length : 0); }, 0);
+    var countEl = document.getElementById('signsCount');
+    if (countEl) countEl.textContent = total ? total + ' skilt' : '';
+
+    if (!total) {
       scroll.innerHTML = '<div class="empty-state"><div class="es-icon">🚦</div><p>' + t('signs_empty') + '</p></div>';
       return;
     }
-    // Update count in header
-    var countEl = document.getElementById('signsCount');
-    if (countEl) countEl.textContent = qs.length + ' skilt';
-    // Build grid
-    var grid = document.createElement('div');
-    grid.className = 'signs-grid';
-    qs.forEach(function(q) {
-      var imgUrl = q.bildeUrl || q.image_url || q.image || '';
-      // Get question text in current language
-      var qText = '';
-      if (appLang === 'th' && q.question_th) qText = q.question_th;
-      else if (appLang === 'en' && q.question_en) qText = q.question_en;
-      else qText = q.question || q.question_no || '';
-      // Get correct answer text in current language
-      var answer = '';
-      if (q.options && q.correctOptionId) {
-        var opt = q.options.find(function(o){ return o.id === q.correctOptionId; });
-        if (opt) answer = (opt.text && (opt.text[appLang] || opt.text.no || opt.text.en)) || '';
-      } else if (q.correct_answer !== undefined && q.answers) {
-        var idx = q.correct_answer;
-        answer = Array.isArray(q.answers) ? (q.answers[idx] || '') : '';
-      } else if (q.correct_answer_text) {
-        answer = q.correct_answer_text;
-      }
-      var card = document.createElement('div');
-      card.className = 'sign-card';
-      card.innerHTML =
-        '<div class="sign-img-wrap">' +
-          '<img class="sign-img" src="' + imgUrl + '" alt="" loading="lazy" onerror="this.parentElement.parentElement.style.display=\'none\'">' +
-        '</div>' +
-        '<div class="sign-ans">' + escH(answer || qText || '–') + '</div>';
-      grid.appendChild(card);
-    });
+
     scroll.innerHTML = '';
-    scroll.appendChild(grid);
+    groups.forEach(function(group) {
+      if (!group.signs || !group.signs.length) return;
+
+      // Group label
+      var gName = group.group_name;
+      var gLabel = typeof gName === 'object'
+        ? (gName[appLang] || gName.no || gName.en || '')
+        : (gName || '');
+      var labelEl = document.createElement('div');
+      labelEl.className = 'signs-group-label';
+      labelEl.textContent = gLabel;
+      scroll.appendChild(labelEl);
+
+      // Grid
+      var grid = document.createElement('div');
+      grid.className = 'signs-grid';
+      group.signs.forEach(function(sign) {
+        var sName = sign.name;
+        var nameText = typeof sName === 'object'
+          ? (sName[appLang] || sName.no || sName.en || '')
+          : (sName || '');
+        var imgUrl = sign.image_url || '';
+        var card = document.createElement('div');
+        card.className = 'sign-card';
+        card.innerHTML =
+          (imgUrl
+            ? '<div class="sign-img-wrap"><img class="sign-img" src="' + escH(imgUrl) + '" alt="" loading="lazy"></div>'
+            : '') +
+          '<div class="sign-ans">' + escH(nameText || '–') + '</div>';
+        grid.appendChild(card);
+      });
+      scroll.appendChild(grid);
+    });
+
     signsLoaded = true;
   } catch(e) {
-    scroll.innerHTML = '<div class="empty-state"><div class="es-icon">⚠️</div><p>' + (e.message || 'Feil') + '</p></div>';
+    scroll.innerHTML = '<div class="empty-state"><div class="es-icon">⚠️</div><p>' + escH(e.message || 'Feil ved lasting') + '</p></div>';
   }
 }
 
