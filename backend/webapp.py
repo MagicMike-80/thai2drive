@@ -161,6 +161,7 @@ a { color:inherit; text-decoration:none; }
   display:none; height:100%; width:100%;
   position:absolute; top:0; left:0;
   flex-direction:column; overflow:hidden;
+  z-index:1; /* always above flag-bg (z-index:0) */
 }
 .screen.active { display:flex; }
 
@@ -1386,8 +1387,7 @@ a { color:inherit; text-decoration:none; }
 .sb-reader::-webkit-scrollbar { width:3px; }
 .sb-reader::-webkit-scrollbar-thumb { background:rgba(255,255,255,.1); border-radius:2px; }
 .sb-page {
-  background:rgba(0,0,0,.05); border:1px solid rgba(255,255,255,.12);
-  backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
+  background:#131B2E; border:1px solid rgba(255,255,255,.10);
   border-radius:20px; padding:20px 18px 22px; min-height:100px;
 }
 [data-theme="light"] .sb-page { background:rgba(255,255,255,.75); border-color:rgba(0,0,0,.1); }
