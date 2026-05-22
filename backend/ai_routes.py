@@ -162,7 +162,7 @@ async def get_smart_practice(
 
         srs_count = await _db.ai_srs_cards.count_documents({
             "device_id":   device_id,
-            "next_review": {"$lte": __import__("ai_learning")._now().isoformat()},
+            "next_review": {"$lte": ai_learning._now().isoformat()},
         })
 
         return {

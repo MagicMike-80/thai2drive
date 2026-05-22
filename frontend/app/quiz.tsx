@@ -14,6 +14,17 @@ import { useScreenProtection } from '../src/hooks/useScreenProtection';
 import { aiLearningApi } from '../src/services/aiLearning';
 import { ExplanationCard } from '../src/components/ExplanationCard';
 
+// Minimal error boundary — prevents ExplanationCard crashes from reaching the quiz screen.
+class SafeExplanation extends React.Component<
+  { children: React.ReactNode },
+  { crashed: boolean }
+> {
+  state = { crashed: false };
+  static getDerivedStateFromError() { return { crashed: true }; }
+  componentDidCatch(e: Error) { console.warn('[ExplanationCard] render error:', e.message); }
+  render() { return this.state.crashed ? null : this.props.children; }
+}
+
 const LETTERS = ['A', 'B', 'C', 'D'];
 const EXAM_TIME = 90 * 60;
 const PASS = 85;
@@ -618,14 +629,16 @@ export default function QuizScreen() {
               <Text style={[st.fbE, { color: c.textSecondary }]}>{eT(q)}</Text>
               {language !== 'th' && <Text style={[st.fbTh, { color: `${c.accent}B0` }]}>{eT(q, 'th')}</Text>}
 
-              {/* AI deep explanation — on-demand */}
-              <ExplanationCard
-                questionId={q.id}
-                correctOptionId={q.correctOptionId}
-                options={q.options || []}
-                lang={language}
-                colors={c}
-              />
+              {/* AI deep explanation — isolated so a crash never reaches quiz */}
+              <SafeExplanation>
+                <ExplanationCard
+                  questionId={q.id}
+                  correctOptionId={q.correctOptionId}
+                  options={q.options || []}
+                  lang={language}
+                  colors={c}
+                />
+              </SafeExplanation>
             </View>
           )}
 
