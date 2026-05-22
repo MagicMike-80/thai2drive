@@ -777,10 +777,10 @@ a { color:inherit; text-decoration:none; }
 }
 
 /* Staggered animation class — set --i:N on each block.
-   100ms between each block feels like a teacher making deliberate points. */
+   80ms between blocks: deliberate but fluid, not slow. */
 .ai-block {
-  animation: aiBlockIn .40s cubic-bezier(.25,.46,.45,.94) both;
-  animation-delay: calc(var(--i,0) * 100ms + 40ms);
+  animation: aiBlockIn .38s cubic-bezier(.25,.46,.45,.94) both;
+  animation-delay: calc(var(--i,0) * 80ms + 30ms);
 }
 
 /* ─ Image box ─ */
@@ -1806,7 +1806,7 @@ a { color:inherit; text-decoration:none; }
               <span class="quiz-ai-robot">🤖</span>
               <div>
                 <div class="quiz-ai-panel-name">AI Kjørelærer</div>
-                <div class="quiz-ai-panel-sub">Interaktiv trafikkopplæring</div>
+                <div class="quiz-ai-panel-sub">Trafikkforståelse</div>
               </div>
             </div>
             <div class="quiz-ai-status" id="quizAiStatus">Venter på svar…</div>
@@ -3179,15 +3179,15 @@ function classifyAlerts(expl) {
 
   if (/vikeplikt|forkjørsrett/i.test(t))
     alerts.push({icon:'⚠️', type:'danger', label:'Vikeplikt',
-      text:'Vikeplikt i kryss er et av de viktigste og hyppigst testede temaene i teoriprøven.'});
+      text:'Brudd på vikeplikt er årsaken til mange krysskollisjon — spør alltid: hvem har forkjørsrett her?'});
 
   if (/gangfelt|fotgjenger/i.test(t))
     alerts.push({icon:'🚶', type:'danger', label:'Myke trafikanter',
       text:'Fotgjengere og syklister er mest sårbare — gi alltid god plass og stans i tide.'});
 
   if (/fartsgrense|hastighets|km\/t|80\s*km|60\s*km|50\s*km|30\s*km/i.test(t))
-    alerts.push({icon:'🧠', type:'exam', label:'Eksamensfavoritt',
-      text:'Fartsregler og fartsgrenser er blant de vanligste spørsmålene på teoriprøven.'});
+    alerts.push({icon:'🧠', type:'exam', label:'Fartsgrense',
+      text:'Fartsgrenser er satt ut fra vei, sikt og trafikktetthet. Forstå logikken — ikke bare husk tallet.'});
 
   if (/belysning|lys\b|fyrlys|mørk|langt\s*lys|nærlys/i.test(t))
     alerts.push({icon:'💡', type:'rule', label:'Lysbruk',
@@ -3195,7 +3195,7 @@ function classifyAlerts(expl) {
 
   if (/reaksjon\w*\s*tid|reaksjonstid/i.test(t))
     alerts.push({icon:'⏱️', type:'rule', label:'Reaksjonstid',
-      text:'Ved 80 km/t tilbakelegger du 22 m per sekund — bygg alltid inn nok sikkerhetsmargin.'});
+      text:'Ved 80 km/t tilbakelegger du 22 meter per sekund — bygg alltid inn nok sikkerhetsmargin.'});
 
   if (/rundkjøring|sving\s*inn|kjøring\s*inn\s*i\s*rund/i.test(t))
     alerts.push({icon:'🔄', type:'rule', label:'Rundkjøring',
