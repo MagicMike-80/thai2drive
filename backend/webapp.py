@@ -59,6 +59,37 @@ a { color:inherit; text-decoration:none; }
   display:flex; flex-direction:column;
   overflow:hidden; position:relative; z-index:1;
 }
+
+/* ══════════════════════════════════════════
+   DESKTOP PHONE FRAME
+   On viewports wider than 500 px the app
+   is centred as a 390 px iPhone silhouette.
+   On narrow screens (real phones) it fills
+   the whole viewport as before.
+══════════════════════════════════════════ */
+@media (min-width:500px) {
+  html, body {
+    background:#010B18;
+    background-image:radial-gradient(ellipse 110% 70% at 50% 42%,rgba(22,40,95,.55) 0%,rgba(12,22,58,.30) 40%,#010B18 72%);
+    display:flex; align-items:flex-start; justify-content:center;
+    padding-top:32px; padding-bottom:48px;
+    overflow:hidden;
+  }
+  #app {
+    width:100%; max-width:390px;
+    height:calc(100vh - 80px); height:calc(-webkit-fill-available - 80px);
+    border-top-left-radius:40px; border-top-right-radius:40px;
+    border-bottom-left-radius:44px; border-bottom-right-radius:44px;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,.09),
+      0 2px 6px rgba(0,0,0,.50),
+      0 10px 28px rgba(0,0,0,.65),
+      0 40px 90px rgba(0,0,0,.80),
+      0 90px 200px rgba(0,0,0,.55);
+  }
+  /* Flag on desktop: contained inside the frame, not fixed to viewport */
+  .flag-bg { position:absolute; }
+}
 #topBar {
   height:var(--topbar-h); flex-shrink:0;
   background:rgba(11,18,38,.92);
@@ -132,7 +163,8 @@ a { color:inherit; text-decoration:none; }
    THAI FLAG BACKGROUND
 ══════════════════════════════════════════ */
 .flag-bg {
-  position:fixed; inset:0; z-index:0; pointer-events:none;
+  /* absolute — so it's contained within #app and clipped by the phone frame on desktop */
+  position:absolute; inset:0; z-index:0; pointer-events:none;
   /* Thai flag: red / white / navy / white / red — exact proportions 1:1:2:1:1 */
   background:linear-gradient(180deg,
     #A51931 0%,    #A51931 16.66%,
@@ -753,6 +785,8 @@ a { color:inherit; text-decoration:none; }
   padding:0;
   overflow-y:auto; overflow-x:hidden;
   -webkit-overflow-scrolling:touch;
+  /* Solid background hides the flag behind this screen */
+  background:var(--bg);
 }
 #screenSettings::-webkit-scrollbar { width:4px; }
 #screenSettings::-webkit-scrollbar-track { background:transparent; }
@@ -762,12 +796,12 @@ a { color:inherit; text-decoration:none; }
   display:flex; flex-direction:column; gap:0; padding-bottom:24px;
 }
 
-/* Profile hero at top */
+/* Profile hero at top — solid so the flag background doesn't bleed through */
 .settings-profile-hero {
-  padding:28px 20px 20px;
-  display:flex; flex-direction:column; align-items:center; gap:10px;
-  background:rgba(0,0,0,.35);
-  border-bottom:1px solid rgba(255,255,255,.1);
+  padding:24px 20px 18px;
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+  background:var(--bg2);
+  border-bottom:1px solid rgba(255,255,255,.08);
   margin-bottom:8px;
 }
 .settings-avatar {
@@ -1220,9 +1254,10 @@ a { color:inherit; text-decoration:none; }
 </head>
 <body>
 
-<div class="flag-bg"></div>
-
 <div id="app">
+
+  <!-- Flag background — absolute so it's clipped by the phone frame on desktop -->
+  <div class="flag-bg"></div>
 
   <!-- TOP BAR -->
   <div id="topBar">
