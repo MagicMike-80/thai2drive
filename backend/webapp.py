@@ -643,8 +643,8 @@ a { color:inherit; text-decoration:none; }
   font-size:.92rem; font-weight:700;
   display:none; align-items:center; gap:7px; flex-shrink:0;
 }
-.q-feedback.ok  { background:rgba(16,185,129,.1); border:1px solid rgba(16,185,129,.3); color:#6EE7B7; display:flex; }
-.q-feedback.bad { background:rgba(239,68,68,.08);  border:1px solid rgba(239,68,68,.25);  color:#FCA5A5; display:flex; }
+.q-feedback.ok  { background:rgba(16,185,129,.08); border:1px solid rgba(16,185,129,.22); color:#6EE7B7; display:flex; }
+.q-feedback.bad { background:rgba(255,153,51,.06); border:1px solid rgba(255,153,51,.20); color:#FCD4A0; display:flex; }
 .q-explain {
   padding:12px 14px;
   background:#FFFFFF; border:2px solid var(--orange);
@@ -777,10 +777,11 @@ a { color:inherit; text-decoration:none; }
   50%      { opacity:.50; }
 }
 
-/* Staggered animation class — set --i:N on each block */
+/* Staggered animation class — set --i:N on each block.
+   100ms between each block feels like a teacher making deliberate points. */
 .ai-block {
-  animation: aiBlockIn .38s cubic-bezier(.25,.46,.45,.94) both;
-  animation-delay: calc(var(--i,0) * 80ms + 30ms);
+  animation: aiBlockIn .40s cubic-bezier(.25,.46,.45,.94) both;
+  animation-delay: calc(var(--i,0) * 100ms + 40ms);
 }
 
 /* ─ Image box ─ */
@@ -2126,8 +2127,8 @@ var UI = {
   cats:        {th:'หมวดหมู่',          no:'Kategorier',      en:'Categories'},
   bookmarks:   {th:'ที่คั่นหน้า',       no:'Bokmerker',       en:'Bookmarks'},
   settings:    {th:'การตั้งค่า',        no:'Innstillinger',   en:'Settings'},
-  correct:     {th:'🎉 ถูกต้อง!',       no:'🎉 Riktig!',       en:'🎉 Correct!'},
-  wrong:       {th:'❌ ผิด',            no:'❌ Feil svar',     en:'❌ Wrong'},
+  correct:     {th:'🎉 ถูกต้อง!',       no:'✓ Riktig!',        en:'✓ Correct!'},
+  wrong:       {th:'↩ ลองใหม่',        no:'↩ Ikke riktig',   en:'↩ Not quite'},
   retry:       {th:'🔄 ลองใหม่',        no:'🔄 Prøv igjen',   en:'🔄 Try again'},
   backhome:    {th:'🏠 กลับหน้าแรก',    no:'🏠 Tilbake til hjem', en:'🏠 Back to home'},
   pickcat:     {th:'📚 เลือกหมวดหมู่',  no:'📚 Velg kategori', en:'📚 Pick category'},
@@ -3077,78 +3078,131 @@ function classifyAlerts(expl) {
   var t = expl.toLowerCase();
 
   if (/forbikjør|forbi\s|overtakings/i.test(t))
-    alerts.push({icon:'🚗', type:'danger', label:'Vanlig feil',
-      text:'Forbikjøring krever full sikt og trygg avstand til møtende trafikk. Tving aldri forbi.'});
+    alerts.push({icon:'🚗', type:'danger', label:'Forbikjøring',
+      text:'Full sikt og god avstand er nødvendig. Vent alltid til det er klart trygt.'});
 
   if (/glatt|is\b|snø|vinter|slipperisk|vått\s|regn/i.test(t))
-    alerts.push({icon:'❄️', type:'weather', label:'Glatt vei',
-      text:'Bremselengden kan dobles på is og snø — tilpass alltid farten til veien og forholdene.'});
+    alerts.push({icon:'❄️', type:'weather', label:'Kjøreforhold',
+      text:'Bremselengden øker kraftig i dårlig vær — tilpass alltid fart og avstand til forholdene.'});
 
   if (/avstand|3 sek|følgeavstand|bremse\w*\s*lengde/i.test(t))
     alerts.push({icon:'📏', type:'rule', label:'3-sekunders-regelen',
-      text:'Minst 3 sekunder bak bilen foran — mer ved dårlig vær, mørke eller høy fart.'});
+      text:'Hold minst 3 sekunder bak bilen foran. Mer avstand ved regn, mørke eller høy fart.'});
 
   if (/uoversiktlig|begrenset sikt|kurve|kryss\w*\s*sikt|blind/i.test(t))
-    alerts.push({icon:'⚠️', type:'danger', label:'Begrenset sikt',
-      text:'Reduser fart der fremover sikt er begrenset — det du ikke ser kan drepe.'});
+    alerts.push({icon:'👁️', type:'danger', label:'Sikt og fart',
+      text:'Der du ikke ser langt nok, må farten ned. God sikt er grunnlaget for trygg kjøring.'});
 
   if (/vikeplikt|forkjørsrett/i.test(t))
     alerts.push({icon:'⚠️', type:'danger', label:'Vikeplikt',
-      text:'Feil vikeplikt er blant de vanligste ulykkesårsakene i norske kryss.'});
+      text:'Vikeplikt i kryss er et av de viktigste og hyppigst testede temaene i teoriprøven.'});
 
   if (/gangfelt|fotgjenger/i.test(t))
-    alerts.push({icon:'🚶', type:'danger', label:'Fotgjengervern',
-      text:'Fotgjengere i og ved gangfelt har sterk beskyttelse i norsk trafiklov — stans alltid.'});
+    alerts.push({icon:'🚶', type:'danger', label:'Myke trafikanter',
+      text:'Fotgjengere og syklister er mest sårbare — gi alltid god plass og stans i tide.'});
 
   if (/fartsgrense|hastighets|km\/t|80\s*km|60\s*km|50\s*km|30\s*km/i.test(t))
     alerts.push({icon:'🧠', type:'exam', label:'Eksamensfavoritt',
-      text:'Fartsregler er blant de hyppigst stilte spørsmålene på teoriprøven — lær dem grundig.'});
+      text:'Fartsregler og fartsgrenser er blant de vanligste spørsmålene på teoriprøven.'});
 
   if (/belysning|lys\b|fyrlys|mørk|langt\s*lys|nærlys/i.test(t))
-    alerts.push({icon:'💡', type:'rule', label:'Lysregler',
-      text:'Riktig lys er lovpålagt og avgjørende for å bli sett — sjekk alltid lysbetingelsene.'});
+    alerts.push({icon:'💡', type:'rule', label:'Lysbruk',
+      text:'Riktig lys gjør deg synlig og beskyttet. Sjekk alltid at lyset er tilpasset forholdene.'});
 
   if (/reaksjon\w*\s*tid|reaksjonstid/i.test(t))
     alerts.push({icon:'⏱️', type:'rule', label:'Reaksjonstid',
-      text:'Ved 80 km/t beveger bilen seg 22 m per sekund — en sekunds distraksjons kan koste liv.'});
+      text:'Ved 80 km/t tilbakelegger du 22 m per sekund — bygg alltid inn nok sikkerhetsmargin.'});
 
   return alerts.slice(0, 2); // max 2 per answer — calm, not overwhelming
 }
 
+// ── Context-aware instructor tip ─────────────────────────────────────────────
+// Reads what alert types were detected and returns a tip tuned to that topic.
+// Feels like a real teacher who noticed what area needs attention.
+function buildInstructorTip(isOk, alerts) {
+  if (alerts.length > 0) {
+    var lbl  = alerts[0].label.toLowerCase();
+    var type = alerts[0].type;
+
+    if (type === 'weather')
+      return isOk
+        ? 'Husketips: grep og bremselengde varierer kraftig med vær og føre — kjør deretter.'
+        : 'Lær å lese veibanen. Kjøreforholdene endrer seg — farten må alltid tilpasses.';
+
+    if (lbl.indexOf('sikt') >= 0 || lbl.indexOf('fart') >= 0)
+      return isOk
+        ? 'God observasjonsteknikk skiller trygge sjåfører fra farlige. Tren blikket fremover.'
+        : 'I all trafikk: se langt fremover og bygg inn sikkerhetsmarginer — spesielt i kurver.';
+
+    if (lbl.indexOf('sekund') >= 0 || lbl.indexOf('avstand') >= 0)
+      return isOk
+        ? '3-sekunders-regelen er din enkleste forsikring mot oppkjøring — bruk den alltid.'
+        : 'Øv deg: tell "én-tusen-ett, én-tusen-to, én-tusen-tre" mellom deg og bilen foran.';
+
+    if (lbl.indexOf('vikeplikt') >= 0)
+      return isOk
+        ? 'God vikepliktforståelse er grunnlaget for trygg ferdsel i alle kryss.'
+        : 'Gå gjennom vikepliktreglene en gang til — de er avgjørende i kryssituasjoner.';
+
+    if (lbl.indexOf('myk') >= 0 || lbl.indexOf('fotgjenger') >= 0)
+      return isOk
+        ? 'Fotgjengere og syklister er de mest sårbare i trafikken — vær alltid ekstra oppmerksom.'
+        : 'Gangfelt gir fotgjengere rett til å krysse trygt — bremse alltid ned i tide.';
+
+    if (lbl.indexOf('forbi') >= 0 || lbl.indexOf('feil') >= 0)
+      return isOk
+        ? 'Forbikjøring krever tålmodighet. Ikke press det — vent til det er trygt og klart.'
+        : 'Tvilsomme forbikjøringer er blant de farligste valgene du kan ta — vent heller.';
+
+    if (type === 'exam')
+      return isOk
+        ? 'Du er godt forberedt på dette temaet — ett av de hyppigste på teoriprøven.'
+        : 'Dette er et av de vanligste temaene på teoriprøven. Les det i studieboken.';
+  }
+
+  // Generic fallback — contextual but not topic-specific
+  return isOk
+    ? 'Fest situasjonen visuelt i minnet — gjenkjennelse i trafikken er en livsviktig ferdighet.'
+    : 'Forstå situasjonen, ikke bare svaret. Det er slik kunnskap sitter i en virkelig situasjon.';
+}
+
 // ── Shared AI learning content builder ──────────────────────────────────────
 // Feeds BOTH desktop right panel and mobile inline section.
-// Layered pedagogy: short → expand, contextual alerts, instructor tip.
-// Future hooks (voice/video/hint) remain wired but hidden.
+// Pedagogical order: verdict → key insight → detail → context alerts → tip.
+// Tone is constructive throughout — learning, not judging.
 function buildAiHtml(isOk, expl) {
   var i = 0;
-  var parts = splitExpl(expl);
+  var parts  = splitExpl(expl);
   var alerts = classifyAlerts(expl);
 
-  // 1 ── Verdict banner
+  // 1 ── Verdict — clear but constructive
+  var verdictText = isOk
+    ? 'Riktig! Bra observert.'
+    : 'Ikke riktig — men det er slik du lærer.';
   var html = '<div class="quiz-ai-verdict ' + (isOk ? 'ok' : 'bad') + '">'
-    + '<span class="quiz-ai-verdict-icon">' + (isOk ? '✅' : '❌') + '</span>'
-    + '<span>' + (isOk ? 'Riktig! Godt jobbet.' : 'Feil svar — les forklaringen nøye.') + '</span>'
+    + '<span class="quiz-ai-verdict-icon">' + (isOk ? '✅' : '↩') + '</span>'
+    + '<span>' + verdictText + '</span>'
     + '</div>';
 
   if (!isOk && expl) {
-    // 2a ── Wrong: danger card shows the KEY message (short)
+    // 2a ── Wrong: key insight first (the rule that was missed)
     html += '<div class="quiz-ai-danger ai-block" style="--i:' + (i++) + '">'
-      + '<div class="quiz-ai-danger-icon">⚠️</div>'
+      + '<div class="quiz-ai-danger-icon">📌</div>'
       + '<div style="min-width:0">'
-      + '<div class="quiz-ai-danger-label">Trafikkfare</div>'
+      + '<div class="quiz-ai-danger-label">Forstå situasjonen</div>'
       + '<div class="quiz-ai-danger-text">' + escH(parts.short) + '</div>'
       + '</div></div>';
 
-    // 2b ── If there's more, show expanded detail in explanation card
+    // 2b ── Full detail if explanation has more depth
     if (parts.rest) {
       html += '<div class="quiz-ai-explain ai-block" style="--i:' + (i++) + '">'
-        + '<div class="quiz-ai-card-label">📖 Full forklaring</div>'
+        + '<div class="quiz-ai-card-label">📖 Mer detaljer</div>'
         + '<div class="quiz-ai-card-text">' + escH(parts.rest) + '</div>'
         + '</div>';
     }
 
   } else if (isOk && expl) {
-    // 3 ── Correct: show short explanation, "Vis mer" expands the full text
+    // 3 ── Correct: short first, depth on demand
     html += '<div class="quiz-ai-explain ai-block" style="--i:' + (i++) + '">'
       + '<div class="quiz-ai-card-label">📖 Forklaring</div>'
       + '<div class="quiz-ai-card-text">' + escH(parts.short) + '</div>';
@@ -3157,15 +3211,14 @@ function buildAiHtml(isOk, expl) {
         + 'var c=this.nextElementSibling;'
         + 'c.classList.toggle(\'open\');'
         + 'this.classList.toggle(\'expanded\');'
-        + 'this.textContent=c.classList.contains(\'open\')?\'Vis mindre\':\'Vis mer\';'
-        + 'this.classList.contains(\'expanded\')||this.classList.add(\'expanded\')'
+        + 'this.textContent=c.classList.contains(\'open\')?\'Vis mindre\':\'Vis mer\''
         + '">Vis mer</button>'
         + '<div class="ai-expand-content">' + escH(parts.rest) + '</div>';
     }
     html += '</div>';
   }
 
-  // 4 ── Smart learning alerts (0–2, contextual to this question)
+  // 4 ── Smart context alerts (max 2 — calm, not overwhelming)
   alerts.forEach(function(a) {
     html += '<div class="ai-alert ai-alert-' + a.type + ' ai-block" style="--i:' + (i++) + '">'
       + '<span class="ai-alert-icon">' + a.icon + '</span>'
@@ -3175,18 +3228,15 @@ function buildAiHtml(isOk, expl) {
       + '</div></div>';
   });
 
-  // 5 ── Instructor tip
+  // 5 ── Instructor tip — context-aware, warm tone
   html += '<div class="quiz-ai-tip ai-block" style="--i:' + (i++) + '">'
     + '<div class="quiz-ai-tip-icon">💡</div>'
     + '<div style="min-width:0">'
     + '<div class="quiz-ai-tip-label">Kjørelærer</div>'
-    + '<div class="quiz-ai-tip-text">'
-    + (isOk
-        ? 'Bra! Fest situasjonen i minnet — visuell gjenkjennelse i trafikken redder liv.'
-        : 'Se nøye på bildet. Finn det farlige elementet. Forstå situasjonen — ikke bare teorien.')
-    + '</div></div></div>';
+    + '<div class="quiz-ai-tip-text">' + escH(buildInstructorTip(isOk, alerts)) + '</div>'
+    + '</div></div>';
 
-  // ── Future architecture hooks ─────────────────────────────────────────────
+  // ── Future architecture hooks (wired, hidden until features land) ─────────
   html += '<div class="quiz-ai-voice-slot" data-ai-hook="voice"></div>'
         + '<div class="quiz-ai-video-slot" data-ai-hook="video"></div>'
         + '<div class="quiz-ai-hint-slot"  data-ai-hook="hint"></div>';
