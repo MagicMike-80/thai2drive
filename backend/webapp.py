@@ -70,24 +70,23 @@ a { color:inherit; text-decoration:none; }
 @media (min-width:500px) {
   html, body {
     background:#010B18;
-    background-image:radial-gradient(ellipse 110% 70% at 50% 42%,rgba(22,40,95,.55) 0%,rgba(12,22,58,.30) 40%,#010B18 72%);
+    background-image:radial-gradient(ellipse 60% 100% at 50% 50%,rgba(22,40,95,.50) 0%,rgba(12,22,58,.25) 45%,#010B18 75%);
     display:flex; align-items:flex-start; justify-content:center;
-    padding-top:32px; padding-bottom:48px;
     overflow:hidden;
+    /* No padding — app must fill top to bottom */
   }
   #app {
     width:100%; max-width:390px;
-    height:calc(100vh - 80px); height:calc(-webkit-fill-available - 80px);
-    border-top-left-radius:40px; border-top-right-radius:40px;
-    border-bottom-left-radius:44px; border-bottom-right-radius:44px;
+    /* Full viewport height, no gaps */
+    height:100vh; height:-webkit-fill-available;
+    /* No top/bottom radius — edge-to-edge vertically */
+    border-radius:0;
     box-shadow:
-      0 0 0 1px rgba(255,255,255,.09),
-      0 2px 6px rgba(0,0,0,.50),
-      0 10px 28px rgba(0,0,0,.65),
-      0 40px 90px rgba(0,0,0,.80),
-      0 90px 200px rgba(0,0,0,.55);
+      -8px 0 40px rgba(0,0,0,.60),
+       8px 0 40px rgba(0,0,0,.60),
+       0 0 80px rgba(0,0,0,.40);
   }
-  /* Flag on desktop: contained inside the frame, not fixed to viewport */
+  /* Flag on desktop: contained inside the frame */
   .flag-bg { position:absolute; }
 }
 #topBar {
@@ -503,20 +502,32 @@ a { color:inherit; text-decoration:none; }
   padding:12px 16px 12px;
 }
 
-/* 3-col grid on desktop */
+/* Default: single-column (mobile + 390 px phone frame on desktop).
+   3-column only on very wide viewports (≥900 px) where no phone frame exists. */
 .quiz-card {
-  height:100%;
+  height:auto;
   display:grid;
-  grid-template-columns:1.25fr 1fr auto;
-  gap:16px; align-items:start;
+  grid-template-columns:1fr;
+  gap:12px; align-items:start;
+  overflow-y:visible;
 }
-@media (max-width:700px) {
-  .quiz-body { overflow-y:auto; -webkit-overflow-scrolling:touch; }
-  .quiz-card { grid-template-columns:1fr; overflow-y:visible; height:auto; }
-  .q-next-col { display:none !important; }
-  .q-next-mobile { display:block !important; }
-  .q-left { height:auto; overflow:visible; }
-  .q-mid  { height:auto; overflow:visible; }
+.quiz-body { overflow-y:auto; -webkit-overflow-scrolling:touch; }
+.q-left  { height:auto; overflow:visible; }
+.q-mid   { height:auto; overflow:visible; }
+.q-next-col    { display:none !important; }
+.q-next-mobile { display:block !important; }
+
+/* Wide desktop without phone frame — restore 3-column layout */
+@media (min-width:900px) {
+  .quiz-body { overflow:hidden; }
+  .quiz-card {
+    height:100%; grid-template-columns:1.25fr 1fr auto;
+    gap:16px; overflow-y:visible;
+  }
+  .q-left { height:100%; overflow-y:auto; }
+  .q-mid  { height:100%; overflow-y:auto; }
+  .q-next-col    { display:flex !important; }
+  .q-next-mobile { display:none  !important; }
 }
 
 .q-left {
