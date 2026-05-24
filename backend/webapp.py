@@ -1051,6 +1051,135 @@ a { color:inherit; text-decoration:none; }
 }
 
 /* ══════════════════════════════════════════
+   SIGN DETAIL PANEL
+   Bottom sheet on mobile · Right panel on desktop
+   Calm instructional library, not gamified.
+══════════════════════════════════════════ */
+.sign-panel-backdrop {
+  position:fixed; inset:0; z-index:400;
+  background:rgba(0,0,0,.62);
+  backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px);
+  opacity:0; pointer-events:none;
+  transition:opacity .3s ease;
+}
+.sign-panel-backdrop.open { opacity:1; pointer-events:all; }
+
+.sign-panel {
+  position:fixed; left:0; right:0; bottom:0; z-index:401;
+  background:#0F1929; border-radius:22px 22px 0 0;
+  max-height:90vh;
+  display:flex; flex-direction:column;
+  transform:translateY(102%);
+  transition:transform .36s cubic-bezier(.4,0,.2,1);
+  overflow:hidden;
+}
+.sign-panel.open { transform:translateY(0); }
+
+@media (min-width:700px) {
+  .sign-panel {
+    left:auto; top:0; bottom:0; width:380px;
+    border-radius:0; max-height:100vh;
+    transform:translateX(102%);
+  }
+  .sign-panel.open { transform:translateX(0); }
+}
+
+.sp-handle {
+  width:40px; height:4px; border-radius:2px;
+  background:rgba(255,255,255,.16);
+  margin:10px auto 0; flex-shrink:0;
+}
+@media (min-width:700px) { .sp-handle { display:none; } }
+
+/* Header */
+.sp-header {
+  flex-shrink:0; position:relative;
+  display:flex; flex-direction:column; align-items:center;
+  background:#0B1226; padding:16px 48px 14px;
+  border-bottom:1px solid rgba(255,255,255,.07);
+}
+.sp-close {
+  position:absolute; top:12px; right:12px;
+  width:32px; height:32px; border-radius:50%;
+  border:none; background:rgba(255,255,255,.08);
+  color:var(--muted); font-size:13px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  transition:background .2s;
+}
+.sp-close:hover { background:rgba(255,255,255,.16); color:var(--text); }
+.sp-img-wrap {
+  width:114px; height:114px; border-radius:16px;
+  background:#131B2E; border:1px solid rgba(255,255,255,.10);
+  display:flex; align-items:center; justify-content:center;
+  margin-bottom:11px; flex-shrink:0;
+}
+.sp-img { max-width:88px; max-height:88px; object-fit:contain; display:block; }
+.sp-name {
+  font-size:.98rem; font-weight:900; text-align:center;
+  color:var(--text); letter-spacing:-.2px; line-height:1.3;
+}
+.sp-group-label {
+  font-size:.66rem; color:var(--muted); margin-top:4px;
+  font-weight:600; text-align:center;
+}
+
+/* Language tabs */
+.sp-lang-tabs {
+  display:flex; flex-shrink:0;
+  border-bottom:1px solid rgba(255,255,255,.07);
+  background:#0B1226;
+}
+.sp-lang-tab {
+  flex:1; padding:10px 4px;
+  font-size:.76rem; font-weight:700; color:var(--muted);
+  background:none; border:none; border-bottom:2px solid transparent;
+  cursor:pointer; transition:color .2s, border-color .2s;
+}
+.sp-lang-tab.active { color:var(--orange); border-bottom-color:var(--orange); }
+
+/* Scrollable content */
+.sp-body {
+  flex:1; overflow-y:auto; overflow-x:hidden;
+  padding:14px 14px 8px;
+  display:flex; flex-direction:column; gap:10px;
+  -webkit-overflow-scrolling:touch;
+}
+.sp-body::-webkit-scrollbar { width:2px; }
+.sp-body::-webkit-scrollbar-thumb { background:rgba(255,255,255,.10); border-radius:2px; }
+
+.sp-card {
+  background:#131B2E; border:1px solid rgba(255,255,255,.08);
+  border-radius:13px; padding:12px 14px;
+}
+.sp-card-label {
+  font-size:.58rem; font-weight:900; text-transform:uppercase;
+  letter-spacing:1px; color:var(--muted); margin-bottom:7px;
+}
+.sp-card-text { font-size:.84rem; line-height:1.78; color:var(--text); }
+
+/* Action buttons */
+.sp-actions {
+  flex-shrink:0;
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:8px; padding:10px 14px 20px;
+  border-top:1px solid rgba(255,255,255,.07);
+  background:#0B1226;
+}
+.sp-btn {
+  border-radius:11px; padding:10px 8px;
+  font-size:.76rem; font-weight:700;
+  border:none; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  gap:5px; transition:opacity .15s, transform .15s;
+}
+.sp-btn:active { opacity:.7; transform:scale(.97); }
+.sp-btn-audio    { background:rgba(255,153,51,.13); color:var(--orange); border:1px solid rgba(255,153,51,.28); }
+.sp-btn-practice { background:var(--orange); color:#0F172A; }
+.sp-btn-ai       { background:rgba(139,92,246,.13); color:#A78BFA; border:1px solid rgba(139,92,246,.28); }
+.sp-btn-bm       { background:rgba(255,255,255,.06); color:var(--muted); border:1px solid rgba(255,255,255,.10); }
+.sp-btn-bm.saved { color:var(--orange); border-color:rgba(255,153,51,.35); }
+
+/* ══════════════════════════════════════════
    BOOKMARKS SCREEN
 ══════════════════════════════════════════ */
 #screenBookmarks { padding:0; background:#0B1226; }
@@ -2069,6 +2198,30 @@ a { color:inherit; text-decoration:none; }
   </div>
 
 </div><!-- /app -->
+
+<!-- ═══ SIGN DETAIL PANEL ═══ -->
+<div class="sign-panel-backdrop" id="signPanelBackdrop" onclick="closeSignDetail()"></div>
+<div class="sign-panel" id="signPanel">
+  <div class="sp-handle"></div>
+  <div class="sp-header">
+    <button class="sp-close" onclick="closeSignDetail()">✕</button>
+    <div class="sp-img-wrap"><img class="sp-img" id="spImg" src="" alt=""></div>
+    <div class="sp-name" id="spName">–</div>
+    <div class="sp-group-label" id="spGroupLabel"></div>
+  </div>
+  <div class="sp-lang-tabs">
+    <button class="sp-lang-tab active" data-lang="no" onclick="setSignPanelLang('no')">Norsk</button>
+    <button class="sp-lang-tab" data-lang="th" onclick="setSignPanelLang('th')">ภาษาไทย</button>
+    <button class="sp-lang-tab" data-lang="en" onclick="setSignPanelLang('en')">English</button>
+  </div>
+  <div class="sp-body" id="spBody"></div>
+  <div class="sp-actions">
+    <button class="sp-btn sp-btn-audio" onclick="speakSign()">🔊 Les høyt</button>
+    <button class="sp-btn sp-btn-practice" onclick="practiceThisSign()">📚 Øv på dette</button>
+    <button class="sp-btn sp-btn-ai" onclick="askAiAboutSign()">🤖 Spør AI</button>
+    <button class="sp-btn sp-btn-bm" id="spBmBtn" onclick="toggleSignFavorite()">🔖 Lagre</button>
+  </div>
+</div>
 
 <div class="toast" id="toast"></div>
 
@@ -3677,6 +3830,9 @@ async function loadSigns() {
             ? '<div class="sign-img-wrap"><img class="sign-img" src="' + escH(imgUrl) + '" alt="" loading="lazy"></div>'
             : '') +
           '<div class="sign-ans">' + escH(nameText || '–') + '</div>';
+        // Store group_name on sign for detail panel
+        sign._groupName = group.group_name;
+        (function(s){ card.onclick = function(){ openSignDetail(s); }; })(sign);
         grid.appendChild(card);
       });
       scroll.appendChild(grid);
@@ -4049,6 +4205,144 @@ document.addEventListener('keydown', function(e) {
 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function() {
   if (_ls.get('t2d_theme') === 'system') applyTheme('system');
 });
+
+// ════════════════════════════════════════════
+//  SIGN DETAIL PANEL
+// ════════════════════════════════════════════
+var _signPanelData = null;
+var _signPanelLang = 'no';
+var _signFavorites = [];
+try { _signFavorites = JSON.parse(localStorage.getItem('t2d_signFavs') || '[]'); } catch(e) {}
+
+function openSignDetail(sign) {
+  _signPanelData = sign;
+  _signPanelLang = appLang === 'th' ? 'th' : appLang === 'en' ? 'en' : 'no';
+  _renderSignPanel();
+  document.getElementById('signPanelBackdrop').classList.add('open');
+  document.getElementById('signPanel').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeSignDetail() {
+  document.getElementById('signPanelBackdrop').classList.remove('open');
+  document.getElementById('signPanel').classList.remove('open');
+  document.body.style.overflow = '';
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+}
+
+function setSignPanelLang(lang) {
+  _signPanelLang = lang;
+  _renderSignPanel();
+}
+
+function _getProp(obj, lang) {
+  if (!obj) return '';
+  if (typeof obj === 'string') return obj;
+  return obj[lang] || obj.no || obj.en || obj.th || '';
+}
+
+function _renderSignPanel() {
+  var sign = _signPanelData;
+  if (!sign) return;
+  var lang = _signPanelLang;
+
+  // Image
+  var imgEl = document.getElementById('spImg');
+  if (imgEl) { imgEl.src = sign.image_url || ''; }
+
+  // Name
+  var nameEl = document.getElementById('spName');
+  if (nameEl) nameEl.textContent = _getProp(sign.name, lang) || '–';
+
+  // Group label
+  var groupEl = document.getElementById('spGroupLabel');
+  if (groupEl) groupEl.textContent = _getProp(sign._groupName || sign.group_name, lang) || '';
+
+  // Lang tabs
+  document.querySelectorAll('.sp-lang-tab').forEach(function(tab) {
+    tab.classList.toggle('active', tab.dataset.lang === lang);
+  });
+
+  // Labels per language
+  var L = {
+    no: { expl:'Forklaring', danger:'Hvorfor viktig', mistake:'Vanlig feil',
+          scenario:'I trafikken', examTip:'Eksamentips', memRule:'Huskeregel' },
+    th: { expl:'คำอธิบาย', danger:'เหตุใดจึงสำคัญ', mistake:'ข้อผิดพลาดที่พบบ่อย',
+          scenario:'ในสถานการณ์จริง', examTip:'เคล็ดลับสอบ', memRule:'วิธีจำ' },
+    en: { expl:'Explanation', danger:'Why it matters', mistake:'Common mistake',
+          scenario:'In traffic', examTip:'Exam tip', memRule:'Memory rule' }
+  }[lang] || {};
+
+  function card(label, text) {
+    if (!text) return '';
+    return '<div class="sp-card">'
+      + '<div class="sp-card-label">' + escH(label) + '</div>'
+      + '<div class="sp-card-text">' + escH(text) + '</div>'
+      + '</div>';
+  }
+
+  var html = '';
+  html += card(L.expl,     _getProp(sign.explanation,  lang));
+  html += card(L.danger,   _getProp(sign.whyDangerous || sign.why_dangerous, lang));
+  html += card(L.mistake,  _getProp(sign.typicalMistake || sign.typical_mistake, lang));
+  html += card(L.scenario, _getProp(sign.realScenario || sign.real_scenario, lang));
+  html += card(L.examTip,  _getProp(sign.examTip || sign.exam_tip, lang));
+  html += card(L.memRule,  _getProp(sign.memoryRule || sign.memory_rule, lang));
+
+  if (!html) {
+    var soon = lang === 'th' ? 'เนื้อหาเพิ่มเติมจะมาเร็วๆ นี้'
+             : lang === 'en' ? 'More content coming soon.'
+             : 'Mer innhold legges til snart.';
+    html = '<div class="sp-card"><div class="sp-card-text" style="color:var(--muted);font-style:italic">'
+         + escH(soon) + '</div></div>';
+  }
+
+  var body = document.getElementById('spBody');
+  if (body) body.innerHTML = html;
+
+  // Bookmark button state
+  var bmBtn = document.getElementById('spBmBtn');
+  if (bmBtn) {
+    var isFav = _signFavorites.indexOf(sign.id) >= 0;
+    bmBtn.textContent = isFav ? '🔖 Lagret' : '🔖 Lagre';
+    bmBtn.className = 'sp-btn sp-btn-bm' + (isFav ? ' saved' : '');
+  }
+}
+
+function speakSign() {
+  if (!window.speechSynthesis) return;
+  var sign = _signPanelData;
+  if (!sign) return;
+  var lang = _signPanelLang;
+  var text = _getProp(sign.name, lang);
+  var expl = _getProp(sign.explanation, lang);
+  if (expl) text += '. ' + expl;
+  var u = new SpeechSynthesisUtterance(text.trim());
+  u.lang = lang === 'th' ? 'th-TH' : lang === 'en' ? 'en-US' : 'nb-NO';
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(u);
+}
+
+function toggleSignFavorite() {
+  var sign = _signPanelData;
+  if (!sign || !sign.id) return;
+  var idx = _signFavorites.indexOf(sign.id);
+  if (idx >= 0) _signFavorites.splice(idx, 1);
+  else _signFavorites.push(sign.id);
+  try { localStorage.setItem('t2d_signFavs', JSON.stringify(_signFavorites)); } catch(e) {}
+  _renderSignPanel();
+}
+
+function practiceThisSign() {
+  closeSignDetail();
+  showTab('cats');
+}
+
+function askAiAboutSign() {
+  closeSignDetail();
+  showTab('home');
+}
+
 </script>
 </body>
 </html>"""
