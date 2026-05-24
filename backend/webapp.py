@@ -1043,153 +1043,205 @@ a { color:inherit; text-decoration:none; }
   background:#131B2E; border:1.5px solid rgba(255,255,255,.10);
   border-radius:14px; padding:10px 8px;
   display:flex; flex-direction:column; align-items:center; gap:8px;
-  cursor:pointer; transition:border-color .2s, transform .15s;
+  cursor:pointer; transition:border-color .18s;
 }
-.sign-card:hover { border-color:var(--orange); transform:translateY(-2px); }
+.sign-card:hover  { border-color:rgba(255,153,51,.50); }
+.sign-card:active { opacity:.80; }
 .sign-img-wrap {
   width:100%; aspect-ratio:1/1; flex-shrink:0;
   border-radius:8px; overflow:hidden;
-  background:rgba(255,255,255,.06); border:1px solid var(--border);
+  background:rgba(255,255,255,.04); border:1px solid var(--border);
   display:flex; align-items:center; justify-content:center;
 }
-.sign-img { width:100%; height:100%; object-fit:contain; display:block; }
+.sign-img { width:86%; height:86%; object-fit:contain; display:block; }
 .sign-ans {
-  width:100%; padding:6px 8px; border-radius:8px;
-  background:rgba(16,185,129,.1); border:1px solid rgba(16,185,129,.25);
-  font-size:.62rem; color:#6EE7B7; font-weight:700;
-  text-align:center; line-height:1.35;
-  display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical;
+  width:100%; padding:4px 6px;
+  font-size:.60rem; color:var(--muted); font-weight:600;
+  text-align:center; line-height:1.4;
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;
   overflow:hidden;
 }
 
 /* ══════════════════════════════════════════
-   SIGN DETAIL PANEL
-   Bottom sheet on mobile · Right panel on desktop
-   Calm instructional library, not gamified.
+   SIGN DETAIL PANEL — AI traffic sign school
+   Bottom sheet mobile · Right panel desktop
 ══════════════════════════════════════════ */
 .sign-panel-backdrop {
   position:fixed; inset:0; z-index:400;
-  background:rgba(0,0,0,.62);
-  backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px);
-  opacity:0; pointer-events:none;
-  transition:opacity .3s ease;
+  background:rgba(0,0,0,.68);
+  backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
+  opacity:0; pointer-events:none; transition:opacity .28s ease;
 }
 .sign-panel-backdrop.open { opacity:1; pointer-events:all; }
 
 .sign-panel {
   position:fixed; left:0; right:0; bottom:0; z-index:401;
-  background:#0F1929; border-radius:22px 22px 0 0;
-  max-height:90vh;
+  background:#0B1120; border-radius:24px 24px 0 0;
+  max-height:92vh;
   display:flex; flex-direction:column;
   transform:translateY(102%);
-  transition:transform .36s cubic-bezier(.4,0,.2,1);
+  transition:transform .34s cubic-bezier(.32,0,.18,1);
   overflow:hidden;
+  box-shadow:0 -8px 40px rgba(0,0,0,.55);
 }
 .sign-panel.open { transform:translateY(0); }
 
 @media (min-width:700px) {
   .sign-panel {
-    left:auto; top:0; bottom:0; width:380px;
+    left:auto; top:0; bottom:0; width:400px;
     border-radius:0; max-height:100vh;
     transform:translateX(102%);
+    box-shadow:-8px 0 40px rgba(0,0,0,.45);
   }
   .sign-panel.open { transform:translateX(0); }
 }
 
+/* Drag handle — mobile only */
 .sp-handle {
-  width:40px; height:4px; border-radius:2px;
-  background:rgba(255,255,255,.16);
+  width:36px; height:4px; border-radius:2px;
+  background:rgba(255,255,255,.14);
   margin:10px auto 0; flex-shrink:0;
 }
 @media (min-width:700px) { .sp-handle { display:none; } }
 
-/* Header */
+/* ── Header ── */
 .sp-header {
   flex-shrink:0; position:relative;
   display:flex; flex-direction:column; align-items:center;
-  background:#0B1226; padding:16px 48px 14px;
+  background:#080F1E; padding:10px 52px 18px;
   border-bottom:1px solid rgba(255,255,255,.07);
 }
 .sp-close {
-  position:absolute; top:12px; right:12px;
-  width:32px; height:32px; border-radius:50%;
+  position:absolute; top:14px; right:14px;
+  width:30px; height:30px; border-radius:50%;
   border:none; background:rgba(255,255,255,.08);
-  color:var(--muted); font-size:13px; cursor:pointer;
+  color:var(--muted); font-size:12px; cursor:pointer;
   display:flex; align-items:center; justify-content:center;
-  transition:background .2s;
 }
-.sp-close:hover { background:rgba(255,255,255,.16); color:var(--text); }
+.sp-close:hover { background:rgba(255,255,255,.14); color:var(--text); }
+
 .sp-img-wrap {
-  width:114px; height:114px; border-radius:16px;
-  background:#131B2E; border:1px solid rgba(255,255,255,.10);
+  width:128px; height:128px; border-radius:20px;
+  background:#131B2E;
+  border:1.5px solid rgba(255,255,255,.10);
+  box-shadow:0 8px 28px rgba(0,0,0,.45);
   display:flex; align-items:center; justify-content:center;
-  margin-bottom:11px; flex-shrink:0;
+  margin:18px 0 14px; flex-shrink:0;
 }
-.sp-img { max-width:88px; max-height:88px; object-fit:contain; display:block; }
+.sp-img { max-width:96px; max-height:96px; object-fit:contain; display:block; }
+
 .sp-name {
-  font-size:.98rem; font-weight:900; text-align:center;
-  color:var(--text); letter-spacing:-.2px; line-height:1.3;
+  font-size:1.05rem; font-weight:900; text-align:center;
+  color:var(--text); letter-spacing:-.25px; line-height:1.28;
 }
 .sp-group-label {
-  font-size:.66rem; color:var(--muted); margin-top:4px;
-  font-weight:600; text-align:center;
+  font-size:.60rem; color:var(--orange); margin-top:6px;
+  font-weight:800; text-align:center;
+  text-transform:uppercase; letter-spacing:.9px;
 }
 
-/* Language tabs */
+/* ── Language tabs ── */
 .sp-lang-tabs {
   display:flex; flex-shrink:0;
   border-bottom:1px solid rgba(255,255,255,.07);
-  background:#0B1226;
+  background:#080F1E;
 }
 .sp-lang-tab {
-  flex:1; padding:10px 4px;
-  font-size:.76rem; font-weight:700; color:var(--muted);
+  flex:1; padding:11px 4px;
+  font-size:.75rem; font-weight:700; color:var(--muted);
   background:none; border:none; border-bottom:2px solid transparent;
-  cursor:pointer; transition:color .2s, border-color .2s;
+  cursor:pointer; transition:color .18s, border-color .18s;
 }
 .sp-lang-tab.active { color:var(--orange); border-bottom-color:var(--orange); }
 
-/* Scrollable content */
+/* ── Scrollable body ── */
 .sp-body {
   flex:1; overflow-y:auto; overflow-x:hidden;
-  padding:14px 14px 8px;
-  display:flex; flex-direction:column; gap:10px;
+  padding:14px 14px 10px;
+  display:flex; flex-direction:column; gap:9px;
   -webkit-overflow-scrolling:touch;
 }
 .sp-body::-webkit-scrollbar { width:2px; }
-.sp-body::-webkit-scrollbar-thumb { background:rgba(255,255,255,.10); border-radius:2px; }
+.sp-body::-webkit-scrollbar-thumb { background:rgba(255,255,255,.08); border-radius:2px; }
 
+/* ── Content cards — each type has its own identity ── */
 .sp-card {
-  background:#131B2E; border:1px solid rgba(255,255,255,.08);
-  border-radius:13px; padding:12px 14px;
+  border-radius:0 13px 13px 0;
+  padding:12px 14px 12px 13px;
+  display:flex; gap:11px; align-items:flex-start;
 }
+.sp-card-icon {
+  font-size:1.05rem; flex-shrink:0;
+  line-height:1.2; margin-top:1px;
+}
+.sp-card-inner { flex:1; min-width:0; }
 .sp-card-label {
   font-size:.58rem; font-weight:900; text-transform:uppercase;
-  letter-spacing:1px; color:var(--muted); margin-bottom:7px;
+  letter-spacing:1px; margin-bottom:6px;
 }
-.sp-card-text { font-size:.84rem; line-height:1.78; color:var(--text); }
+.sp-card-text { font-size:.84rem; line-height:1.80; color:var(--text); }
 
-/* Action buttons */
+/* Explanation — blue */
+.sp-card-explanation { background:rgba(59,130,246,.05); border-left:3px solid rgba(59,130,246,.45); }
+.sp-card-explanation .sp-card-label { color:#93C5FD; }
+
+/* Why dangerous — red */
+.sp-card-danger { background:rgba(239,68,68,.05); border-left:3px solid rgba(239,68,68,.45); }
+.sp-card-danger .sp-card-label { color:#FCA5A5; }
+
+/* Common mistake — amber */
+.sp-card-mistake { background:rgba(251,146,60,.05); border-left:3px solid rgba(251,146,60,.45); }
+.sp-card-mistake .sp-card-label { color:#FCD4A0; }
+
+/* In traffic — teal */
+.sp-card-scenario { background:rgba(16,185,129,.05); border-left:3px solid rgba(16,185,129,.45); }
+.sp-card-scenario .sp-card-label { color:#6EE7B7; }
+
+/* Exam tip — purple */
+.sp-card-exam { background:rgba(168,85,247,.05); border-left:3px solid rgba(168,85,247,.45); }
+.sp-card-exam .sp-card-label { color:#C4B5FD; }
+
+/* Memory rule — orange */
+.sp-card-memory { background:rgba(255,153,51,.05); border-left:3px solid rgba(255,153,51,.45); }
+.sp-card-memory .sp-card-label { color:var(--orange); }
+
+/* Empty state */
+.sp-empty {
+  padding:28px 16px; text-align:center;
+  color:var(--muted); font-size:.82rem; line-height:1.7; font-style:italic;
+}
+
+/* ── Action buttons ── */
 .sp-actions {
   flex-shrink:0;
-  display:grid; grid-template-columns:1fr 1fr;
-  gap:8px; padding:10px 14px 20px;
+  padding:12px 14px 22px;
   border-top:1px solid rgba(255,255,255,.07);
-  background:#0B1226;
+  background:#080F1E;
+  display:flex; flex-direction:column; gap:8px;
 }
-.sp-btn {
-  border-radius:11px; padding:10px 8px;
-  font-size:.76rem; font-weight:700;
+/* Primary — full width, orange */
+.sp-btn-primary {
+  width:100%; padding:13px 16px; border-radius:13px;
+  background:var(--orange); color:#0F172A;
+  font-size:.90rem; font-weight:800;
   border:none; cursor:pointer;
-  display:flex; align-items:center; justify-content:center;
-  gap:5px; transition:opacity .15s, transform .15s;
+  display:flex; align-items:center; justify-content:center; gap:7px;
 }
-.sp-btn:active { opacity:.7; transform:scale(.97); }
-.sp-btn-audio    { background:rgba(255,153,51,.13); color:var(--orange); border:1px solid rgba(255,153,51,.28); }
-.sp-btn-practice { background:var(--orange); color:#0F172A; }
-.sp-btn-ai       { background:rgba(139,92,246,.13); color:#A78BFA; border:1px solid rgba(139,92,246,.28); }
-.sp-btn-bm       { background:rgba(255,255,255,.06); color:var(--muted); border:1px solid rgba(255,255,255,.10); }
-.sp-btn-bm.saved { color:var(--orange); border-color:rgba(255,153,51,.35); }
+.sp-btn-primary:active { opacity:.84; }
+/* Secondary row — 3 equal */
+.sp-actions-row { display:flex; gap:8px; }
+.sp-btn-sm {
+  flex:1; padding:10px 6px; border-radius:12px;
+  font-size:.70rem; font-weight:700;
+  border:none; cursor:pointer;
+  display:flex; flex-direction:column; align-items:center; gap:4px;
+}
+.sp-btn-sm span { font-size:.64rem; }
+.sp-btn-sm:active { opacity:.72; }
+.sp-btn-sm-audio { background:rgba(255,153,51,.10); color:var(--orange); border:1px solid rgba(255,153,51,.24); }
+.sp-btn-sm-ai    { background:rgba(139,92,246,.10); color:#A78BFA;      border:1px solid rgba(139,92,246,.24); }
+.sp-btn-sm-bm    { background:rgba(255,255,255,.05); color:var(--muted); border:1px solid rgba(255,255,255,.10); }
+.sp-btn-sm-bm.saved { color:var(--orange); border-color:rgba(255,153,51,.35); background:rgba(255,153,51,.07); }
 
 /* ══════════════════════════════════════════
    BOOKMARKS SCREEN
@@ -2245,21 +2297,25 @@ a { color:inherit; text-decoration:none; }
   <div class="sp-handle"></div>
   <div class="sp-header">
     <button class="sp-close" onclick="closeSignDetail()">✕</button>
-    <div class="sp-img-wrap"><img class="sp-img" id="spImg" src="" alt=""></div>
+    <div class="sp-img-wrap">
+      <img class="sp-img" id="spImg" src="" alt="">
+    </div>
     <div class="sp-name" id="spName">–</div>
     <div class="sp-group-label" id="spGroupLabel"></div>
   </div>
   <div class="sp-lang-tabs">
-    <button class="sp-lang-tab active" data-lang="no" onclick="setSignPanelLang('no')">Norsk</button>
-    <button class="sp-lang-tab" data-lang="th" onclick="setSignPanelLang('th')">ภาษาไทย</button>
-    <button class="sp-lang-tab" data-lang="en" onclick="setSignPanelLang('en')">English</button>
+    <button class="sp-lang-tab active" data-lang="no" onclick="setSignPanelLang('no')">🇳🇴 Norsk</button>
+    <button class="sp-lang-tab" data-lang="th" onclick="setSignPanelLang('th')">🇹🇭 Thai</button>
+    <button class="sp-lang-tab" data-lang="en" onclick="setSignPanelLang('en')">🇬🇧 English</button>
   </div>
   <div class="sp-body" id="spBody"></div>
   <div class="sp-actions">
-    <button class="sp-btn sp-btn-audio" onclick="speakSign()">🔊 Les høyt</button>
-    <button class="sp-btn sp-btn-practice" onclick="practiceThisSign()">📚 Øv på dette</button>
-    <button class="sp-btn sp-btn-ai" onclick="askAiAboutSign()">🤖 Spør AI</button>
-    <button class="sp-btn sp-btn-bm" id="spBmBtn" onclick="toggleSignFavorite()">🔖 Lagre</button>
+    <button class="sp-btn-primary" onclick="practiceThisSign()">📚 Øv på dette skiltet</button>
+    <div class="sp-actions-row">
+      <button class="sp-btn-sm sp-btn-sm-audio" onclick="speakSign()">🔊<span>Les høyt</span></button>
+      <button class="sp-btn-sm sp-btn-sm-ai" onclick="askAiAboutSign()">🤖<span>Spør AI</span></button>
+      <button class="sp-btn-sm sp-btn-sm-bm" id="spBmBtn" onclick="toggleSignFavorite()">🔖<span>Lagre</span></button>
+    </div>
   </div>
 </div>
 
@@ -4404,28 +4460,34 @@ function _renderSignPanel() {
           scenario:'In traffic', examTip:'Exam tip', memRule:'Memory rule' }
   }[lang] || {};
 
-  function card(label, text) {
+  // Typed card builder — each section has its own colour identity and icon
+  var _cardIdx = 0;
+  function card(type, icon, label, text) {
     if (!text) return '';
-    return '<div class="sp-card">'
-      + '<div class="sp-card-label">' + escH(label) + '</div>'
-      + '<div class="sp-card-text">' + escH(text) + '</div>'
+    var delay = _cardIdx * 45;
+    _cardIdx++;
+    return '<div class="sp-card sp-card-' + type + '" style="animation:aiBlockIn .22s ease both;animation-delay:' + delay + 'ms">'
+      + '<div class="sp-card-icon">' + icon + '</div>'
+      + '<div class="sp-card-inner">'
+        + '<div class="sp-card-label">' + escH(label) + '</div>'
+        + '<div class="sp-card-text">' + escH(text) + '</div>'
+      + '</div>'
       + '</div>';
   }
 
   var html = '';
-  html += card(L.expl,     _getProp(sign.explanation,  lang));
-  html += card(L.danger,   _getProp(sign.whyDangerous || sign.why_dangerous, lang));
-  html += card(L.mistake,  _getProp(sign.typicalMistake || sign.typical_mistake, lang));
-  html += card(L.scenario, _getProp(sign.realScenario || sign.real_scenario, lang));
-  html += card(L.examTip,  _getProp(sign.examTip || sign.exam_tip, lang));
-  html += card(L.memRule,  _getProp(sign.memoryRule || sign.memory_rule, lang));
+  html += card('explanation', '📖', L.expl,     _getProp(sign.explanation,  lang));
+  html += card('danger',      '⚠️', L.danger,   _getProp(sign.whyDangerous || sign.why_dangerous, lang));
+  html += card('mistake',     '🔴', L.mistake,  _getProp(sign.typicalMistake || sign.typical_mistake, lang));
+  html += card('scenario',    '🚗', L.scenario, _getProp(sign.realScenario || sign.real_scenario, lang));
+  html += card('exam',        '📝', L.examTip,  _getProp(sign.examTip || sign.exam_tip, lang));
+  html += card('memory',      '💡', L.memRule,  _getProp(sign.memoryRule || sign.memory_rule, lang));
 
   if (!html) {
     var soon = lang === 'th' ? 'เนื้อหาเพิ่มเติมจะมาเร็วๆ นี้'
              : lang === 'en' ? 'More content coming soon.'
              : 'Mer innhold legges til snart.';
-    html = '<div class="sp-card"><div class="sp-card-text" style="color:var(--muted);font-style:italic">'
-         + escH(soon) + '</div></div>';
+    html = '<div class="sp-empty">' + escH(soon) + '</div>';
   }
 
   var body = document.getElementById('spBody');
@@ -4435,8 +4497,8 @@ function _renderSignPanel() {
   var bmBtn = document.getElementById('spBmBtn');
   if (bmBtn) {
     var isFav = _signFavorites.indexOf(sign.id) >= 0;
-    bmBtn.textContent = isFav ? '🔖 Lagret' : '🔖 Lagre';
-    bmBtn.className = 'sp-btn sp-btn-bm' + (isFav ? ' saved' : '');
+    bmBtn.innerHTML = isFav ? '🔖<span>Lagret</span>' : '🔖<span>Lagre</span>';
+    bmBtn.className = 'sp-btn-sm sp-btn-sm-bm' + (isFav ? ' saved' : '');
   }
 }
 
