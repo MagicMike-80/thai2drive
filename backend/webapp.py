@@ -526,13 +526,13 @@ a { color:inherit; text-decoration:none; }
 
 /* Quiz card: straight vertical flex — no grid, no columns */
 .quiz-card {
-  display:flex; flex-direction:column; gap:14px;
+  display:flex; flex-direction:column; gap:12px;
   width:100%;
 }
 
 /* Left section: image → question text → TTS — full width, auto height */
 .q-left {
-  display:flex; flex-direction:column; gap:12px;
+  display:flex; flex-direction:column; gap:10px;
   width:100%; height:auto; overflow:visible;
 }
 
@@ -562,14 +562,10 @@ a { color:inherit; text-decoration:none; }
 .tts-play {
   width:38px; height:38px; border-radius:50%;
   border:2px solid var(--orange);
+  background:rgba(255,153,51,.08);
   color:var(--orange); cursor:pointer; font-size:14px;
   display:flex; align-items:center; justify-content:center;
   flex-shrink:0;
-  animation: tts-idle 2.5s ease-in-out infinite;
-}
-@keyframes tts-idle {
-  0%,100% { background:rgba(255,153,51,.08); box-shadow:0 0 0 0 rgba(255,153,51,.4); }
-  50%      { background:rgba(255,153,51,.22); box-shadow:0 0 0 8px rgba(255,153,51,0); }
 }
 .tts-play.playing {
   animation: tts-pulse 0.6s ease-in-out infinite;
@@ -648,19 +644,19 @@ a { color:inherit; text-decoration:none; }
 }
 .q-explain.show { display:block; }
 
-/* Next button — full width, always visible below answers */
+/* Next button — sticky at bottom of scroll area so it never scrolls away */
 .q-next-mobile {
   display:block !important;       /* always on, never hidden */
+  position:sticky; bottom:12px;
   width:100%; padding:14px;
   background:linear-gradient(135deg,#FF9933,#e6891f);
   color:#0F172A; font-weight:900; font-size:.9rem;
   border:none; border-radius:12px; cursor:pointer;
   margin-top:6px;
-  box-shadow:0 4px 14px rgba(255,153,51,.35);
-  transition:transform .15s;
+  box-shadow:0 -10px 18px #0B1226, 0 4px 12px rgba(255,153,51,.20);
 }
-.q-next-mobile:disabled { opacity:.35; cursor:not-allowed; box-shadow:none; }
-.q-next-mobile:not(:disabled):hover { transform:translateY(-1px); }
+.q-next-mobile:disabled { opacity:.30; cursor:not-allowed; }
+.q-next-mobile:not(:disabled):active { opacity:.85; }
 
 /* Desktop side column — permanently hidden (we use q-next-mobile everywhere) */
 .q-next-col { display:none !important; }
@@ -743,29 +739,25 @@ a { color:inherit; text-decoration:none; }
    Architecture hooks: voice · video · danger · hints
 ══════════════════════════════════════════ */
 
-/* ─ Keyframes ─ */
+/* ─ Keyframes — opacity only, no positional movement ─ */
 @keyframes aiBlockIn {
-  from { opacity:0; transform:translateY(14px); }
-  to   { opacity:1; transform:translateY(0); }
+  from { opacity:0; }
+  to   { opacity:1; }
 }
 @keyframes aiVerdictPop {
-  from { opacity:0; transform:translateY(8px); }
-  to   { opacity:1; transform:translateY(0); }
+  from { opacity:0; }
+  to   { opacity:1; }
 }
 @keyframes aiMobileIn {
-  from { opacity:0; transform:translateY(12px); }
-  to   { opacity:1; transform:translateY(0); }
-}
-@keyframes statusPulse {
-  0%,100% { opacity:1; }
-  50%      { opacity:.50; }
+  from { opacity:0; }
+  to   { opacity:1; }
 }
 
 /* Staggered animation class — set --i:N on each block.
-   80ms between blocks: deliberate but fluid, not slow. */
+   Fast fade-in, no movement. */
 .ai-block {
-  animation: aiBlockIn .38s cubic-bezier(.25,.46,.45,.94) both;
-  animation-delay: calc(var(--i,0) * 80ms + 30ms);
+  animation: aiBlockIn .20s ease both;
+  animation-delay: calc(var(--i,0) * 30ms);
 }
 
 /* ─ Image box ─ */
@@ -829,14 +821,14 @@ a { color:inherit; text-decoration:none; }
   background:rgba(255,255,255,.05); border:1px solid var(--border); color:var(--muted);
   transition:background .3s, border-color .3s, color .3s;
 }
-.quiz-ai-status.idle { animation:statusPulse 2.2s ease infinite; }
+.quiz-ai-status.idle { /* no pulse — static is calmer */ }
 .quiz-ai-status.ok   { color:var(--green); background:rgba(16,185,129,.10); border-color:rgba(16,185,129,.30); }
 .quiz-ai-status.bad  { color:#FCA5A5;      background:rgba(239,68,68,.08);  border-color:rgba(239,68,68,.24); }
 
 /* Padded body — content zone */
 .quiz-ai-body {
-  padding:18px 20px 24px;
-  display:flex; flex-direction:column; gap:16px;
+  padding:16px 20px 20px;
+  display:flex; flex-direction:column; gap:12px;
 }
 
 /* Idle placeholder */
@@ -960,7 +952,7 @@ a { color:inherit; text-decoration:none; }
 .ai-expand-content {
   max-height:0; overflow:hidden;
   font-size:.85rem; line-height:1.80; color:var(--text);
-  transition:max-height .32s ease, opacity .25s ease, padding .25s ease;
+  transition:max-height .20s ease, opacity .18s ease, padding .18s ease;
   opacity:0; padding-top:0;
 }
 .ai-expand-content.open {
@@ -994,13 +986,13 @@ a { color:inherit; text-decoration:none; }
 
 /* ─ Mobile AI section — lightweight inline expand ─ */
 .quiz-ai-mobile {
-  display:flex; flex-direction:column; gap:12px;
+  display:flex; flex-direction:column; gap:8px;
 }
 .quiz-ai-mobile:empty { display:none; }
 .quiz-ai-mobile:not(:empty) {
-  margin-top:4px; padding-top:16px;
+  margin-top:2px; padding-top:10px;
   border-top:1px solid rgba(255,255,255,.07);
-  animation:aiMobileIn .40s ease both;
+  animation:aiMobileIn .20s ease both;
 }
 /* Mobile: slightly more compact */
 .quiz-ai-mobile .quiz-ai-verdict { padding:11px 14px; font-size:.88rem; }
