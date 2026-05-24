@@ -8,6 +8,8 @@ WEBAPP_HTML = r"""<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
 <title>Thai2Drive</title>
 <style>
 /* ══════════════════════════════════════════
@@ -4017,22 +4019,25 @@ function showEnd() {
   showScreen('screenEnd');
   var total  = questions.length;
   var pct    = total > 0 ? Math.round(qScore / total * 100) : 0;
-  var debrief = _buildDebrief(pct, total);
 
-  document.getElementById('endScoreQuiet').textContent = qScore + ' av ' + total + ' riktige';
-  document.getElementById('endHeading').textContent    = debrief.heading;
-  document.getElementById('endBody').textContent       = debrief.body;
+  // ── Display (wrapped in try so a DOM error never blocks the save) ──
+  try {
+    var debrief = _buildDebrief(pct, total);
+    var el;
+    el = document.getElementById('endScoreQuiet'); if (el) el.textContent = qScore + ' av ' + total + ' riktige';
+    el = document.getElementById('endHeading');    if (el) el.textContent = debrief.heading;
+    el = document.getElementById('endBody');       if (el) el.textContent = debrief.body;
+    var focusEl = document.getElementById('endFocus');
+    var focusTopicEl = document.getElementById('endFocusTopic');
+    if (debrief.topTopic && focusEl && focusTopicEl) {
+      focusTopicEl.textContent = debrief.topTopic;
+      focusEl.style.display = '';
+    } else if (focusEl) {
+      focusEl.style.display = 'none';
+    }
+  } catch(displayErr) { console.warn('showEnd display error:', displayErr); }
 
-  var focusEl = document.getElementById('endFocus');
-  var focusTopicEl = document.getElementById('endFocusTopic');
-  if (debrief.topTopic && focusEl && focusTopicEl) {
-    focusTopicEl.textContent = debrief.topTopic;
-    focusEl.style.display = '';
-  } else if (focusEl) {
-    focusEl.style.display = 'none';
-  }
-
-  // Lagre quiz-forsøk til databasen for statistikk
+  // ── Save attempt — always runs, even if display above failed ──
   if (deviceId && total > 0) {
     var mode = isExamMode ? 'exam' : (currentCat ? 'category' : 'daily');
     var attemptData = {
@@ -4044,7 +4049,7 @@ function showEnd() {
       score_percentage: pct,
       passed: isExamMode ? pct >= 85 : null,
       questions_answered: questions.map(function(q, i) {
-        return { question_id: String(q._id || q.id || ''), index: i };
+        return { question_id: String(q._id || q.id || q.question_id || ''), index: i };
       }),
       started_at: quizStartedAt || new Date().toISOString()
     };
@@ -4060,7 +4065,11 @@ function showEnd() {
       completed_at: new Date().toISOString()
     };
     api('POST', '/api/quiz-attempts', attemptData)
-      .catch(function(e) { console.warn('Quiz attempt save failed:', e.message); });
+      .then(function() { toast('Resultat lagret ✓', 2000); })
+      .catch(function(e) {
+        console.warn('Quiz attempt save failed:', e.message);
+        toast('Lagring feilet: ' + e.message, 4000);
+      });
   }
 }
 
