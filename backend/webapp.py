@@ -835,15 +835,33 @@ a { color:inherit; text-decoration:none; }
 
 /* Padded body — content zone */
 .quiz-ai-body {
-  padding:22px 24px 52px;
+  padding:18px 20px 24px;
   display:flex; flex-direction:column; gap:16px;
 }
 
 /* Idle placeholder */
 .quiz-ai-idle {
   display:flex; flex-direction:column; align-items:center;
-  text-align:center; gap:14px; padding:48px 20px;
+  text-align:center; gap:14px; padding:24px 20px;
 }
+
+/* Sticky Neste button — right col, desktop only, shown after answering */
+.quiz-right-neste {
+  display:none;
+  flex-shrink:0;
+  padding:14px 20px 20px;
+  background:rgba(8,15,30,.97);
+  border-top:1px solid rgba(255,255,255,.06);
+}
+.quiz-right-neste.visible { display:block; }
+.quiz-right-neste-btn {
+  width:100%; padding:13px 0; border-radius:12px;
+  background:var(--orange); color:#0F172A;
+  font-size:.93rem; font-weight:800; letter-spacing:.2px;
+  border:none; cursor:pointer;
+  transition:opacity .15s;
+}
+.quiz-right-neste-btn:hover { opacity:.88; }
 .quiz-ai-idle-icon { font-size:1.9rem; opacity:.20; }
 .quiz-ai-idle-text { font-size:.80rem; color:var(--muted); line-height:1.7; max-width:210px; }
 
@@ -1924,6 +1942,10 @@ a { color:inherit; text-decoration:none; }
               <div class="quiz-ai-idle-text">Ta deg tid — hva tror du er riktig? Velg et svar, så forklarer jeg.</div>
             </div>
           </div>
+        </div>
+        <!-- Sticky Neste — shown after answering, desktop right col only -->
+        <div class="quiz-right-neste" id="quizRightNeste">
+          <button class="quiz-right-neste-btn" onclick="nextQ()">Neste →</button>
         </div>
       </div>
 
@@ -3151,6 +3173,8 @@ function renderQuestion() {
       + '<div class="quiz-ai-idle-text">Ta deg tid — hva tror du er riktig? Velg et svar, så forklarer jeg.</div>'
       + '</div>';
   }
+  var rn = document.getElementById('quizRightNeste');
+  if (rn) rn.classList.remove('visible');
 }
 
 var currentCorrect = '';
@@ -3254,6 +3278,8 @@ function selectAns(btn, picked) {
   var nm = document.getElementById('qNextMobile');
   if (nb) nb.disabled = false;
   if (nm) nm.disabled = false;
+  var rn = document.getElementById('quizRightNeste');
+  if (rn) rn.classList.add('visible');
 
   playSound(isOk ? 'correct' : 'wrong');
   if (window.speechSynthesis) window.speechSynthesis.cancel();
