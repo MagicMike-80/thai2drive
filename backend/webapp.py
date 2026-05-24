@@ -1163,10 +1163,36 @@ a { color:inherit; text-decoration:none; }
   grid-template-columns:repeat(auto-fit, minmax(100px,1fr));
   gap:10px;
 }
-.signs-group-label {
-  font-size:.65rem; font-weight:800; color:var(--muted);
-  letter-spacing:.9px; text-transform:uppercase;
-  padding:14px 4px 7px;
+/* old plain label replaced by rich group header */
+.sg-header {
+  display:flex; align-items:center; gap:10px;
+  padding:20px 4px 8px;
+}
+.sg-header:first-child { padding-top:8px; }
+.sg-dot {
+  width:10px; height:10px; border-radius:50%; flex-shrink:0;
+  box-shadow:0 0 10px var(--sg-color,rgba(255,153,51,.5));
+  background:var(--sg-color,var(--orange));
+}
+.sg-info { flex:1; min-width:0; }
+.sg-name {
+  font-size:.80rem; font-weight:800; color:var(--text); line-height:1.25;
+}
+.sg-desc {
+  font-size:.63rem; color:var(--muted); margin-top:2px; line-height:1.4;
+}
+.sg-count {
+  font-size:.58rem; font-weight:800; text-transform:uppercase;
+  letter-spacing:.6px; padding:3px 8px; border-radius:20px;
+  background:rgba(255,255,255,.05); color:var(--muted);
+  flex-shrink:0; border:1px solid rgba(255,255,255,.07);
+}
+/* Intro bar at top of signs scroll */
+.signs-intro {
+  margin:8px 0 4px; padding:11px 14px;
+  background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.06);
+  border-radius:12px;
+  font-size:.74rem; color:var(--muted); line-height:1.6;
 }
 .sign-card {
   background:#131B2E; border:1.5px solid rgba(255,255,255,.10);
@@ -4197,6 +4223,8 @@ async function fetchVideoForSign(signId, signGroup) {
 }
 
 // Inject a video card into a container element.
+// Placed BEFORE the instructor tip (last .quiz-ai-tip child) so it appears
+// in the natural reading flow, not buried at the very bottom.
 // slotId prevents double-injection on the same container.
 function _injectVideo(containerId, slotId, v) {
   var container = typeof containerId === 'string'
@@ -4206,9 +4234,12 @@ function _injectVideo(containerId, slotId, v) {
   var wrap = document.createElement('div');
   wrap.id = slotId;
   wrap.className = 'vid-section ai-block';
-  wrap.style.cssText = '--i:14; animation:aiBlockIn .22s ease both;';
-  wrap.innerHTML = '<div class="vid-sec-lbl">Læringsressurs</div>' + buildVideoCard(v);
-  container.appendChild(wrap);
+  wrap.style.cssText = '--i:8; animation:aiBlockIn .22s ease .05s both;';
+  wrap.innerHTML = '<div class="vid-sec-lbl">📹 Se kort forklaring</div>' + buildVideoCard(v);
+  // Insert before the instructor tip so video reads as part of the explanation flow
+  var tip = container.querySelector('.quiz-ai-tip');
+  if (tip) container.insertBefore(wrap, tip);
+  else container.appendChild(wrap);
 }
 
 // ── Selective number emphasis for safety-critical text ───────────────────────
@@ -4505,10 +4536,42 @@ async function loadBookmarks() {
 //  SIGNS GALLERY
 // ════════════════════════════════════════════
 var signsLoaded = false;
+// Visual identity for each of the 9 Norwegian sign groups (keyed by group number).
+// Color drives the dot + glow; desc is shown under the name as a one-line learning hint.
+var SIGN_GROUP_META = {
+  1: { color:'#EF4444',
+       desc:{ no:'Viser hvem som har forkjørsrett i krysset',
+              th:'แสดงว่าใครมีสิทธิ์ขับก่อน', en:'Who has priority at junctions' } },
+  2: { color:'#F59E0B',
+       desc:{ no:'Varsler om fare fremover — vær forberedt',
+              th:'เตือนอันตรายข้างหน้า ระวังให้พร้อม', en:'Danger ahead — be prepared' } },
+  3: { color:'#DC2626',
+       desc:{ no:'Forbyr en handling — du plikter å overholde det',
+              th:'ห้ามกระทำการ — ต้องปฏิบัติตามทุกครั้ง', en:'Forbidden — must be obeyed' } },
+  4: { color:'#3B82F6',
+       desc:{ no:'Påbyr en bestemt atferd — obligatorisk',
+              th:'บังคับให้กระทำ — ต้องปฏิบัติตาม', en:'Action required — mandatory' } },
+  5: { color:'#10B981',
+       desc:{ no:'Gir informasjon om vegen, tilbud og regler',
+              th:'ให้ข้อมูลเกี่ยวกับถนนและกฎจราจร', en:'Information about road and rules' } },
+  6: { color:'#8B5CF6',
+       desc:{ no:'Viser nærliggende servicetilbud og fasiliteter',
+              th:'แสดงบริการและสิ่งอำนวยความสะดวกใกล้เคียง', en:'Nearby services and facilities' } },
+  7: { color:'#06B6D4',
+       desc:{ no:'Angir retning, avstand og reisemål',
+              th:'แสดงทิศทาง ระยะทาง และจุดหมาย', en:'Direction, distance and destination' } },
+  8: { color:'#94A3B8',
+       desc:{ no:'Presiserer eller begrenser meningen til andre skilt',
+              th:'เพิ่มรายละเอียดหรือจำกัดความหมายของป้ายอื่น', en:'Supplements or restricts other signs' } },
+  9: { color:'#F97316',
+       desc:{ no:'Markerer vegkanter, farer og hindringer',
+              th:'ทำเครื่องหมายขอบถนน อันตราย และสิ่งกีดขวาง', en:'Marks road edges, hazards and obstacles' } },
+};
+
 async function loadSigns() {
   var scroll = document.getElementById('signsScroll');
   if (!scroll) return;
-  if (signsLoaded && scroll.querySelector('.signs-group-label')) return;
+  if (signsLoaded && scroll.querySelector('.sg-header')) return;
   scroll.innerHTML = '<div class="loading-wrap"><div class="spinner"></div></div>';
   try {
     var groups = await api('GET', '/api/traffic-signs');
@@ -4524,19 +4587,38 @@ async function loadSigns() {
       return;
     }
 
-    scroll.innerHTML = '';
+    // Calm intro line — tells the learner what the section is for
+    var introText = appLang === 'th'
+      ? 'แตะที่ป้ายใดก็ได้เพื่อดูความหมาย เหตุที่ต้องรู้ และเคล็ดลับจำง่าย'
+      : appLang === 'en'
+      ? 'Tap any sign to see its meaning, why it matters, and how to remember it.'
+      : 'Trykk på et skilt for å se betydning, viktighet og husketriks.';
+
+    scroll.innerHTML = '<div class="signs-intro">' + escH(introText) + '</div>';
+
     groups.forEach(function(group) {
       if (!group.signs || !group.signs.length) return;
 
-      // Group label
+      // Rich group header — color identity + description + count
+      var gNum  = group.group || 0;
+      var gMeta = SIGN_GROUP_META[gNum] || { color:'var(--orange)', desc:{} };
       var gName = group.group_name;
       var gLabel = typeof gName === 'object'
         ? (gName[appLang] || gName.no || gName.en || '')
         : (gName || '');
-      var labelEl = document.createElement('div');
-      labelEl.className = 'signs-group-label';
-      labelEl.textContent = gLabel;
-      scroll.appendChild(labelEl);
+      var gDesc = (gMeta.desc[appLang] || gMeta.desc.no || '');
+      var gCount = group.signs.length;
+
+      var headerEl = document.createElement('div');
+      headerEl.className = 'sg-header';
+      headerEl.innerHTML =
+        '<div class="sg-dot" style="--sg-color:' + gMeta.color + '"></div>'
+        + '<div class="sg-info">'
+          + '<div class="sg-name">' + escH(gLabel) + '</div>'
+          + (gDesc ? '<div class="sg-desc">' + escH(gDesc) + '</div>' : '')
+        + '</div>'
+        + '<div class="sg-count">' + gCount + ' skilt</div>';
+      scroll.appendChild(headerEl);
 
       // Grid
       var grid = document.createElement('div');
