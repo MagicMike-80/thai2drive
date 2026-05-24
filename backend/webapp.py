@@ -2281,6 +2281,7 @@ var qIdx = 0;
 var qScore = 0;
 var qAnswered = false;
 var quizStartedAt = null;
+var _lastSavedAttempt = null; // local mirror of the most recent saved attempt
 var ttsRate = 1;
 var ttsVolume = parseFloat(_ls.get('t2d_vol') || '1');
 var ttsPlaying = false;
@@ -2728,7 +2729,7 @@ async function saveStudiebokChapter() {
 //  API HELPER
 // ════════════════════════════════════════════
 async function api(method, url, body) {
-  var opts = { method: method, headers: { 'Content-Type': 'application/json' } };
+  var opts = { method: method, headers: { 'Content-Type': 'application/json' }, cache: 'no-store' };
   if (token) opts.headers['Authorization'] = 'Bearer ' + token;
   if (body) opts.body = JSON.stringify(body);
   var r = await fetch(url, opts);
@@ -3905,8 +3906,15 @@ async function loadHistory() {
   var scroll = document.getElementById('histScroll');
   scroll.innerHTML = '<div class="loading-wrap"><div class="spinner"></div></div>';
   try {
-    var data = await api('GET', '/api/quiz-attempts/' + encodeURIComponent(deviceId) + '?limit=50');
+    var data = await api('GET', '/api/quiz-attempts/' + encodeURIComponent(deviceId) + '?limit=50&_=' + Date.now());
     var attempts = Array.isArray(data) ? data : (data.attempts || data.results || []);
+    // Merge local mirror if DB hasn't caught up yet (race condition guard)
+    if (_lastSavedAttempt) {
+      var alreadyIn = attempts.some(function(a) {
+        return a.started_at === _lastSavedAttempt.started_at;
+      });
+      if (!alreadyIn) attempts.unshift(_lastSavedAttempt);
+    }
     document.getElementById('histCount').textContent = '(' + attempts.length + ')';
     if (!attempts.length) {
       scroll.innerHTML = '<div class="empty-state"><div class="es-icon">📊</div><p>Ingen quiz-historikk ennå.<br>Fullfør en quiz for å se resultatene her.</p></div>';
@@ -4040,7 +4048,19 @@ function showEnd() {
       }),
       started_at: quizStartedAt || new Date().toISOString()
     };
-    api('POST', '/api/quiz-attempts', attemptData).catch(function() {});
+    // Build a local mirror immediately so History shows it even before the DB catches up
+    _lastSavedAttempt = {
+      mode: attemptData.mode,
+      category: attemptData.category,
+      total_questions: attemptData.total_questions,
+      correct_answers: attemptData.correct_answers,
+      score_percentage: attemptData.score_percentage,
+      passed: attemptData.passed,
+      started_at: attemptData.started_at,
+      completed_at: new Date().toISOString()
+    };
+    api('POST', '/api/quiz-attempts', attemptData)
+      .catch(function(e) { console.warn('Quiz attempt save failed:', e.message); });
   }
 }
 
