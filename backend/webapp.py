@@ -1424,29 +1424,48 @@ a { color:inherit; text-decoration:none; }
 ══════════════════════════════════════════ */
 #screenEnd {
   align-items:center; justify-content:center;
-  padding:32px 20px;
+  padding:40px 24px; background:#0B1226;
 }
-.end-wrap { text-align:center; max-width:360px; width:100%; }
-.end-emoji { font-size:4.5rem; margin-bottom:12px; display:block; }
-.end-pct   { font-size:3.2rem; font-weight:900; color:var(--orange); line-height:1; }
-.end-score-lbl { font-size:1rem; color:var(--muted); font-weight:600; margin:7px 0 5px; }
-.end-msg   { color:var(--muted); font-size:.85rem; margin-bottom:28px; line-height:1.5; }
+.end-wrap { text-align:left; max-width:340px; width:100%; }
+.end-score-quiet {
+  font-size:.78rem; color:var(--muted); font-weight:600;
+  margin-bottom:22px; letter-spacing:.15px;
+}
+.end-heading {
+  font-size:1.55rem; font-weight:900; color:var(--text);
+  line-height:1.25; margin-bottom:14px; letter-spacing:-.3px;
+}
+.end-body {
+  font-size:.88rem; color:var(--muted); line-height:1.78;
+  margin-bottom:24px;
+}
+.end-focus {
+  padding:12px 16px 12px 14px;
+  background:rgba(255,153,51,.05);
+  border-left:3px solid rgba(255,153,51,.40);
+  border-radius:0 10px 10px 0;
+  margin-bottom:24px;
+}
+.end-focus-label {
+  font-size:.60rem; font-weight:900; text-transform:uppercase;
+  letter-spacing:1px; color:var(--orange); margin-bottom:5px;
+}
+.end-focus-topic { font-size:.86rem; color:var(--text); font-weight:700; }
 .end-btns  { display:flex; flex-direction:column; gap:9px; }
 .end-btn-pri {
   padding:13px;
-  background:linear-gradient(135deg,#FF9933,#e6891f);
+  background:var(--orange);
   color:#0F172A; font-weight:800; font-size:.92rem;
   border:none; border-radius:12px; cursor:pointer;
-  box-shadow:0 4px 14px rgba(255,153,51,.35); transition:transform .15s;
 }
-.end-btn-pri:hover { transform:translateY(-1px); }
+.end-btn-pri:active { opacity:.85; }
 .end-btn-sec {
   padding:12px;
-  background:var(--card); border:1.5px solid var(--border);
-  color:var(--text); font-weight:700; font-size:.87rem;
-  border-radius:12px; cursor:pointer; transition:border-color .2s;
+  background:transparent; border:1.5px solid rgba(255,255,255,.10);
+  color:var(--muted); font-weight:600; font-size:.87rem;
+  border-radius:12px; cursor:pointer;
 }
-.end-btn-sec:hover { border-color:var(--orange); }
+.end-btn-sec:hover { border-color:rgba(255,255,255,.22); color:var(--text); }
 
 /* ══════════════════════════════════════════
    LOADING & UTILS
@@ -2141,14 +2160,19 @@ a { color:inherit; text-decoration:none; }
     <!-- ═══ END SCREEN ═══ -->
     <div class="screen" id="screenEnd">
       <div class="end-wrap">
-        <span class="end-emoji" id="endEmoji">🏆</span>
-        <div class="end-pct" id="endPct">0%</div>
-        <div class="end-score-lbl" id="endScoreLbl">0 av 0 riktige</div>
-        <p class="end-msg" id="endMsg">Bra jobbet!</p>
+        <div class="end-score-quiet" id="endScoreQuiet">0 av 0 riktige</div>
+        <div class="end-heading" id="endHeading">Øvelsen er ferdig.</div>
+        <p class="end-body" id="endBody"></p>
+        <div class="end-focus" id="endFocus" style="display:none">
+          <div>
+            <div class="end-focus-label">Anbefalt øvelse</div>
+            <div class="end-focus-topic" id="endFocusTopic"></div>
+          </div>
+        </div>
         <div class="end-btns">
-          <button class="end-btn-pri" onclick="retryQuiz()">🔄 &nbsp;Prøv igjen</button>
-          <button class="end-btn-sec" onclick="showTab('home')">🏠 &nbsp;Tilbake til hjem</button>
-          <button class="end-btn-sec" onclick="showTab('cats')">📚 &nbsp;Velg kategori</button>
+          <button class="end-btn-pri" onclick="retryQuiz()">Øv igjen</button>
+          <button class="end-btn-sec" onclick="showTab('home')">Tilbake til hjem</button>
+          <button class="end-btn-sec" onclick="showTab('cats')">Velg kategori</button>
         </div>
       </div>
     </div>
@@ -3042,7 +3066,7 @@ async function loadQuiz(url) {
     }
     qIdx = 0; qScore = 0; qAnswered = false;
     _wrongStreak = 0; _correctStreak = 0; _correctPhraseIdx = 0;
-    _sessionAnswered = 0; _sessionWrongTotal = 0; _recentTopics = [];
+    _sessionAnswered = 0; _sessionWrongTotal = 0; _recentTopics = []; _topicErrors = {};
     quizStartedAt = new Date().toISOString();
     stopExamTimer();
     if (isExamMode) startExamTimer();
@@ -3180,6 +3204,7 @@ var _correctStreak    = 0;  // consecutive correct answers → quieter coaching
 var _sessionAnswered  = 0;  // total answers this session — infers experience stage
 var _sessionWrongTotal = 0; // running wrong count — infers struggle rate
 var _recentTopics = [];     // last 4 alert labels — detects repeated topic struggles
+var _topicErrors  = {};     // label → errorCount — feeds debrief translation layer (never shown raw)
 
 // Calm acknowledgment pool — rotates to avoid repetition, never effusive
 var _correctPhraseIdx = 0;
@@ -3250,7 +3275,14 @@ function selectAns(btn, picked) {
   if (isOk) { _correctStreak++; _wrongStreak = 0; }
   else       { _wrongStreak++;  _correctStreak = 0; }
   _sessionAnswered++;
-  if (!isOk) _sessionWrongTotal++;
+  if (!isOk) {
+    _sessionWrongTotal++;
+    // Track per-topic errors for end debrief — raw data stays internal
+    var _tLabel = _dangerLabel(currentExpl);
+    if (_tLabel && _tLabel !== 'Forstå situasjonen') {
+      _topicErrors[_tLabel] = (_topicErrors[_tLabel] || 0) + 1;
+    }
+  }
 
   document.querySelectorAll('.ans-btn').forEach(function(b) {
     b.disabled = true;
@@ -3924,21 +3956,73 @@ async function removeBookmark(qId, cardEl) {
 // ════════════════════════════════════════════
 //  END SCREEN
 // ════════════════════════════════════════════
+// ── Debrief translation layer ─────────────────────────────────────────────────
+// Converts internal performance data into instructor-voiced guidance.
+// NEVER exposes raw failure counts to the learner — only forward-facing language.
+// This is the architectural separation between the truth model and the communication model.
+function _buildDebrief(pct, total) {
+  // Find the most-missed topic (only meaningful if 2+ errors on same label)
+  var topTopic = null, topCount = 0;
+  Object.keys(_topicErrors).forEach(function(label) {
+    if (_topicErrors[label] > topCount) { topCount = _topicErrors[label]; topTopic = label; }
+  });
+  if (topCount < 2) topTopic = null;
+
+  var heading, body;
+
+  if (isExamMode) {
+    if (pct >= 85) {
+      heading = 'Bestått.';
+      body = 'Du er klar for teoriprøven. Gjennomfør gjerne enda en runde for å bygge selvtillit.';
+    } else {
+      heading = 'Ikke bestått denne gangen.';
+      body = topTopic
+        ? 'Det er verdt å bruke litt mer tid på ' + topTopic.toLowerCase() + '. Øv på det og prøv igjen.'
+        : 'Du er på vei. Prøv igjen — forståelse bygges gradvis.';
+    }
+  } else if (pct >= 85) {
+    heading = 'Solid gjennomkjøring.';
+    body = total >= 15
+      ? 'Du gjenkjenner trafikksituasjonene godt og vurderer riktig. Det er det som teller i praksis.'
+      : 'Du traff godt. Prøv et lengre sett for å bekrefte forståelsen.';
+  } else if (pct >= 65) {
+    heading = 'Du er på rett vei.';
+    body = topTopic
+      ? 'Forståelsen er god på det meste. La oss bruke litt mer tid på ' + topTopic.toLowerCase() + '.'
+      : 'Noen situasjoner har ikke satt seg helt ennå — det er normalt. Fortsett å øve.';
+  } else if (pct >= 40) {
+    heading = 'La oss øve litt mer.';
+    body = topTopic
+      ? 'Det er verdt å gå litt nærmere inn på ' + topTopic.toLowerCase() + '. Les forklaringene grundig.'
+      : 'Trafikkreglene sitter ikke alltid med én runde. Prøv igjen — det tar tid å bygge forståelse.';
+  } else {
+    heading = 'Her er det mer å lære.';
+    body = 'Ikke bekymre deg — forståelse bygges gradvis. Bruk forklaringene aktivt og ta det steg for steg.';
+  }
+
+  return { heading: heading, body: body, topTopic: topTopic };
+}
+
 function showEnd() {
   if (window.speechSynthesis) window.speechSynthesis.cancel();
   stopExamTimer();
   showScreen('screenEnd');
-  var total = questions.length;
-  var pct   = total > 0 ? Math.round(qScore / total * 100) : 0;
-  document.getElementById('endPct').textContent      = pct + '%';
-  document.getElementById('endScoreLbl').textContent = qScore + ' av ' + total + ' riktige';
-  var emoji = pct >= 85 ? '🏆' : pct >= 65 ? '👍' : pct >= 40 ? '💪' : '📚';
-  var msg   = pct >= 85 ? 'Fantastisk! Du er klar for teoriprøven!'
-            : pct >= 65 ? 'Bra jobbet! Fortsett å øve!'
-            : pct >= 40 ? 'Ikke gi opp! Du blir bedre for hver gang.'
-            : 'Øv mer og prøv igjen. Du klarer det!';
-  document.getElementById('endEmoji').textContent = emoji;
-  document.getElementById('endMsg').textContent   = msg;
+  var total  = questions.length;
+  var pct    = total > 0 ? Math.round(qScore / total * 100) : 0;
+  var debrief = _buildDebrief(pct, total);
+
+  document.getElementById('endScoreQuiet').textContent = qScore + ' av ' + total + ' riktige';
+  document.getElementById('endHeading').textContent    = debrief.heading;
+  document.getElementById('endBody').textContent       = debrief.body;
+
+  var focusEl = document.getElementById('endFocus');
+  var focusTopicEl = document.getElementById('endFocusTopic');
+  if (debrief.topTopic && focusEl && focusTopicEl) {
+    focusTopicEl.textContent = debrief.topTopic;
+    focusEl.style.display = '';
+  } else if (focusEl) {
+    focusEl.style.display = 'none';
+  }
 
   // Lagre quiz-forsøk til databasen for statistikk
   if (deviceId && total > 0) {
