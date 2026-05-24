@@ -1032,6 +1032,13 @@ a { color:inherit; text-decoration:none; }
   border:1px solid rgba(255,153,51,.10);
   display:flex; flex-direction:column; gap:5px;
   animation:aiBlockIn .22s ease both;
+  /* collapse support */
+  max-height:200px; overflow:hidden;
+  transition: opacity .18s ease, max-height .22s ease, padding .22s ease, margin .22s ease;
+}
+/* Fold the lens the moment an answer is selected — feedback takes over */
+.q-observe.answered {
+  opacity:0; max-height:0; padding:0; margin:0; pointer-events:none;
 }
 .q-observe-row {
   display:flex; align-items:baseline; gap:7px;
@@ -2614,6 +2621,7 @@ var _lastSavedAttempt = null; // local mirror of the most recent saved attempt
 var _sessionAnswers   = []; // per-question answer log — powers history detail panel
 var _histAttempts     = []; // loaded attempts array — keyed by index for detail panel
 var _reviewMode       = false; // true while in "Øv på feil" review flow
+var _aiPanelTimer     = null; // delayed AI panel — cleared on nextQ to prevent cross-question bleed
 var _reviewQuestions  = []; // wrong questions to review
 var _reviewIdx        = 0;  // current review position
 var ttsRate = 1;
@@ -3455,6 +3463,7 @@ function pickField(q, base) {
 
 function renderQuestion() {
   if (qIdx >= questions.length) { showEnd(); return; }
+  if (_aiPanelTimer) { clearTimeout(_aiPanelTimer); _aiPanelTimer = null; } // cancel delayed panel from prev Q
   var q     = questions[qIdx];
   qAnswered = false;
   var displayTotal = isPremium() ? questions.length : Math.min(FREE_LIMIT, questions.length);
@@ -3687,8 +3696,16 @@ function selectAns(btn, picked) {
   if (window.speechSynthesis) window.speechSynthesis.cancel();
   ttsPlaying = false;
 
-  // Update AI right panel
-  updateAiPanel(isOk, currentExpl);
+  // Collapse Se→Forstå→Velg lens — feedback takes over, no need for both
+  var _lens = document.querySelector('.q-observe');
+  if (_lens) _lens.classList.add('answered');
+
+  // AI panel: brief pause before instructor speaks — feels more deliberate
+  if (_aiPanelTimer) { clearTimeout(_aiPanelTimer); _aiPanelTimer = null; }
+  _aiPanelTimer = setTimeout(function() {
+    _aiPanelTimer = null;
+    updateAiPanel(isOk, currentExpl);
+  }, 210);
 }
 
 // ── Split explanation into short (first sentence) and rest ──────────────────
@@ -4393,6 +4410,7 @@ function updateAiPanel(isOk, expl) {
 }
 
 function nextQ() {
+  if (_aiPanelTimer) { clearTimeout(_aiPanelTimer); _aiPanelTimer = null; } // never let a delayed panel land on the next question
   // Review mode uses its own card renderer — skip normal quiz flow
   if (_reviewMode) { reviewNext(); return; }
   if (!qAnswered) return;

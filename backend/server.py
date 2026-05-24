@@ -2501,10 +2501,22 @@ class LearningVideoCreate(BaseModel):
     • In mistake-review mode    — matched via topic_tags from wrong answers
     • In Daily Mini Lesson      — curated selection
 
-    Topic tags must match the labels returned by the frontend _dangerLabel() function:
-    'Bremsing', 'Vikeplikt', 'Avstand og sikkerhetssone', 'Forbikjøring',
-    'Myke trafikanter', 'Trafikkskilt', 'Vær og veiforhold', 'Kjøretøyteknikk',
-    'Tretthet', 'Grenseverdi', 'Fart', 'Møtende trafikk', 'Forstå situasjonen'
+    Topic tags MUST exactly match the labels returned by the frontend _dangerLabel() function:
+    'Bremsing'        — nødbrems / abs / bremsebane
+    'Reaksjonstid'    — reaksjonstid / reaksjonsavstand
+    'Avstand og tid'  — avstand / følgeavstand / 3-sekunder
+    'Vikeplikt'       — vikeplikt / forkjørsrett
+    'Myke trafikanter'— gangfelt / fotgjenger / syklist
+    'Vinterforhold'   — glatt / is / snø / slipperisk
+    'Sikt og fart'    — uoversiktlig / begrenset sikt / kurve / blind
+    'Tretthet'        — tretthet / trøtt / søvn
+    'Rundkjøring'     — rundkjøring
+    'Alkohol'         — promille / alkohol
+    'Lysbruk'         — lys / belysning / nærlys / langt lys
+    'Fartsgrense'     — fartsgrense / hastighet / km/t
+    'Forbikjøring'    — forbikjøring
+    'Møtende trafikk' — møtende / tunnel
+    (no match → 'Forstå situasjonen' — no video shown)
     """
     title_no: str = ""
     title_th: str = ""
