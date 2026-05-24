@@ -1090,6 +1090,46 @@ a { color:inherit; text-decoration:none; }
 .hr-pct   { font-size:1.40rem; font-weight:900; letter-spacing:-.5px; flex-shrink:0; }
 
 /* ══════════════════════════════════════════
+   VIDEO SUGGESTION CARD
+   Contextual instructor video — one card max per surface.
+   Surfaces: wrong-answer AI panel, sign detail panel, review mode.
+   Feels like a quiet footnote from the instructor, not a media feed.
+══════════════════════════════════════════ */
+.vid-card {
+  display:flex; align-items:center; gap:10px;
+  padding:10px 11px; border-radius:11px;
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.08);
+  text-decoration:none; color:inherit;
+  transition:border-color .18s; flex-shrink:0;
+}
+.vid-card:hover  { border-color:rgba(255,153,51,.30); }
+.vid-card:active { opacity:.80; }
+.vid-thumb-wrap  {
+  flex-shrink:0; width:64px; height:40px; border-radius:7px;
+  overflow:hidden; background:rgba(255,255,255,.06);
+  display:flex; align-items:center; justify-content:center;
+}
+.vid-thumb    { width:100%; height:100%; object-fit:cover; display:block; }
+.vid-info     { flex:1; min-width:0; }
+.vid-lbl      {
+  font-size:.55rem; font-weight:900; text-transform:uppercase;
+  letter-spacing:.7px; color:var(--orange); margin-bottom:3px;
+}
+.vid-title    {
+  font-size:.78rem; font-weight:700; color:var(--text); line-height:1.38;
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+}
+.vid-dur      { font-size:.63rem; color:var(--muted); margin-top:2px; }
+.vid-arrow    { font-size:.90rem; color:var(--orange); flex-shrink:0; opacity:.65; }
+/* Wrapper — adds section label above the card */
+.vid-section  { display:flex; flex-direction:column; gap:6px; }
+.vid-sec-lbl  {
+  font-size:.57rem; font-weight:900; text-transform:uppercase;
+  letter-spacing:.8px; color:var(--muted);
+}
+
+/* ══════════════════════════════════════════
    SIGNS SCREEN
 ══════════════════════════════════════════ */
 #screenSigns { padding:0; background:#0B1226; }
@@ -4024,6 +4064,7 @@ function renderReviewCard() {
   var isLast = (_reviewIdx + 1 >= _reviewQuestions.length);
   var nextLabel = isLast ? 'Fullfør gjennomgang' : 'Neste →';
 
+  var rvSlotId = 'vidSlot_rv_' + _reviewIdx;
   qCard.innerHTML = '<div class="q-mid"><div class="rv-wrap">'
     + '<div class="rv-header">Gjennomgang ' + (_reviewIdx + 1) + ' av ' + _reviewQuestions.length + '</div>'
     + (q.question_text ? '<div class="rv-question">' + escH(q.question_text) + '</div>' : '')
@@ -4032,8 +4073,16 @@ function renderReviewCard() {
     + (q.explanation
         ? '<div class="rv-expl"><div class="rv-expl-lbl">Forklaring</div><div class="rv-expl-txt">' + escH(q.explanation) + '</div></div>'
         : '')
+    + '<div id="' + rvSlotId + '"></div>'
     + '<button class="rv-next" onclick="reviewNext()">' + nextLabel + '</button>'
     + '</div></div>';
+
+  // Async video suggestion — fills the slot above the Neste button
+  if (q.explanation) {
+    fetchVideoForTopic(_dangerLabel(q.explanation)).then(function(v) {
+      _injectVideo(rvSlotId, rvSlotId + '_vid', v);
+    });
+  }
 }
 
 function reviewNext() {
@@ -4045,6 +4094,104 @@ function endReview() {
   _reviewMode     = false;
   _reviewQuestions = [];
   _reviewIdx      = 0;
+}
+
+// ════════════════════════════════════════════
+//  CONTEXTUAL VIDEO SUGGESTION SYSTEM
+//
+//  Architecture — three surface points:
+//  1. Wrong answer AI panel  → fetchVideoForTopic(_dangerLabel(expl))
+//  2. Sign detail panel      → fetchVideoForSign(sign.id, sign.group_name)
+//  3. Mistake review cards   → fetchVideoForTopic(topicFromQuestion)
+//
+//  All fetches are async + non-blocking. A session-level cache prevents
+//  duplicate API calls for the same topic/sign within one session.
+//  Graceful empty state: if no videos in DB, nothing renders.
+//
+//  Topic tags must match the _dangerLabel() output strings:
+//  'Bremsing', 'Vikeplikt', 'Avstand og sikkerhetssone', 'Forbikjøring',
+//  'Myke trafikanter', 'Trafikkskilt', 'Vær og veiforhold', 'Kjøretøyteknikk',
+//  'Tretthet', 'Grenseverdi', 'Fart', 'Møtende trafikk'
+// ════════════════════════════════════════════
+var _videoCache = {}; // session cache: 'topic:X' or 'sign:X' → video object | null
+
+function _ytId(url) {
+  if (!url) return '';
+  var m = url.match(/youtu\.be\/([a-zA-Z0-9_-]{11})|youtube\.com\/(?:watch\?v=|embed\/|shorts\/)([a-zA-Z0-9_-]{11})/);
+  return m ? (m[1] || m[2] || '') : '';
+}
+
+function _ytThumb(url) {
+  var id = _ytId(url);
+  return id ? 'https://img.youtube.com/vi/' + id + '/mqdefault.jpg' : '';
+}
+
+function _fmtDur(secs) {
+  if (!secs) return '';
+  var m = Math.floor(secs / 60), s = secs % 60;
+  return m + ':' + (s < 10 ? '0' : '') + s;
+}
+
+function buildVideoCard(v) {
+  if (!v) return '';
+  var title = escH(v.title_no || v.title_en || v.title || '');
+  if (!title) return '';
+  var url   = escH(v.youtube_url || '');
+  if (!url) return '';
+  var thumb = v.thumbnail_url || _ytThumb(v.youtube_url);
+  var dur   = _fmtDur(v.duration_seconds);
+  return '<a class="vid-card" href="' + url + '" target="_blank" rel="noopener">'
+    + '<div class="vid-thumb-wrap">'
+      + (thumb ? '<img class="vid-thumb" src="' + escH(thumb) + '" loading="lazy" alt="">' : '▶')
+    + '</div>'
+    + '<div class="vid-info">'
+      + '<div class="vid-lbl">📹 Kort forklaring</div>'
+      + '<div class="vid-title">' + title + '</div>'
+      + (dur ? '<div class="vid-dur">' + dur + '</div>' : '')
+    + '</div>'
+    + '<div class="vid-arrow">→</div>'
+    + '</a>';
+}
+
+async function fetchVideoForTopic(tag) {
+  if (!tag || tag === 'Forstå situasjonen') return null;
+  var key = 'topic:' + tag;
+  if (Object.prototype.hasOwnProperty.call(_videoCache, key)) return _videoCache[key];
+  try {
+    var data = await api('GET', '/api/videos/for-topic?tags=' + encodeURIComponent(tag) + '&limit=1');
+    var v = Array.isArray(data) && data.length ? data[0] : null;
+    _videoCache[key] = v;
+    return v;
+  } catch(e) { _videoCache[key] = null; return null; }
+}
+
+async function fetchVideoForSign(signId, signGroup) {
+  if (!signId) return null;
+  var key = 'sign:' + signId;
+  if (Object.prototype.hasOwnProperty.call(_videoCache, key)) return _videoCache[key];
+  try {
+    var url = '/api/videos/for-sign/' + encodeURIComponent(signId);
+    if (signGroup) url += '?group=' + encodeURIComponent(signGroup);
+    var data = await api('GET', url);
+    var v = Array.isArray(data) && data.length ? data[0] : null;
+    _videoCache[key] = v;
+    return v;
+  } catch(e) { _videoCache[key] = null; return null; }
+}
+
+// Inject a video card into a container element.
+// slotId prevents double-injection on the same container.
+function _injectVideo(containerId, slotId, v) {
+  var container = typeof containerId === 'string'
+    ? document.getElementById(containerId) : containerId;
+  if (!v || !container) return;
+  if (document.getElementById(slotId)) return; // already shown
+  var wrap = document.createElement('div');
+  wrap.id = slotId;
+  wrap.className = 'vid-section ai-block';
+  wrap.style.cssText = '--i:14; animation:aiBlockIn .22s ease both;';
+  wrap.innerHTML = '<div class="vid-sec-lbl">Læringsressurs</div>' + buildVideoCard(v);
+  container.appendChild(wrap);
 }
 
 // ── Selective number emphasis for safety-critical text ───────────────────────
@@ -4225,6 +4372,16 @@ function updateAiPanel(isOk, expl) {
   // ── Mobile: inline section below answers ─────────────────────────────────
   var mobile = document.getElementById('quizAiMobile');
   if (mobile) mobile.innerHTML = html;
+
+  // ── Contextual video suggestion (wrong answers only — one card, async) ────
+  // Fires after panel renders so it never blocks the primary feedback.
+  if (!isOk && expl) {
+    var _vidTag = _dangerLabel(expl);
+    fetchVideoForTopic(_vidTag).then(function(v) {
+      _injectVideo('quizAiBody',   'vidSlot_aiDesktop', v);
+      _injectVideo('quizAiMobile', 'vidSlot_aiMobile',  v);
+    });
+  }
 
   // Mobile question image tint
   var imgWrap = document.getElementById('qImgWrap');
@@ -5072,6 +5229,16 @@ function _renderSignPanel() {
 
   var body = document.getElementById('spBody');
   if (body) body.innerHTML = html;
+
+  // ── Contextual video suggestion for this sign (async) ─────────────────────
+  // Uses sign.id for a direct match; passes sign group as fallback.
+  var _spSignId  = sign.id || '';
+  var _spGroup   = _getProp(sign._groupName || sign.group_name, 'no') || '';
+  if (_spSignId && body) {
+    fetchVideoForSign(_spSignId, _spGroup).then(function(v) {
+      _injectVideo(body, 'vidSlot_sign_' + _spSignId, v);
+    });
+  }
 
   // Bookmark button state
   var bmBtn = document.getElementById('spBmBtn');

@@ -2473,6 +2473,169 @@ SIGN_GROUPS = {
 }
 
 
+# ==================== LEARNING VIDEOS ====================
+
+def _extract_youtube_id(url: str) -> str:
+    """Extract 11-char video ID from any youtube.com / youtu.be URL."""
+    import re as _re
+    for pat in [
+        r'youtu\.be/([a-zA-Z0-9_-]{11})',
+        r'youtube\.com/watch\?v=([a-zA-Z0-9_-]{11})',
+        r'youtube\.com/embed/([a-zA-Z0-9_-]{11})',
+        r'youtube\.com/shorts/([a-zA-Z0-9_-]{11})',
+    ]:
+        m = _re.search(pat, url)
+        if m:
+            return m.group(1)
+    return ''
+
+
+class LearningVideoCreate(BaseModel):
+    """A short contextual learning video linked to topics, signs, or curriculum sections.
+
+    Surface points
+    ──────────────
+    • After a wrong quiz answer — matched via topic_tags (→ _dangerLabel())
+    • In the sign detail panel  — matched via sign_ids or sign_groups
+    • In Studybook chapters     — matched via studybook_section_ids
+    • In mistake-review mode    — matched via topic_tags from wrong answers
+    • In Daily Mini Lesson      — curated selection
+
+    Topic tags must match the labels returned by the frontend _dangerLabel() function:
+    'Bremsing', 'Vikeplikt', 'Avstand og sikkerhetssone', 'Forbikjøring',
+    'Myke trafikanter', 'Trafikkskilt', 'Vær og veiforhold', 'Kjøretøyteknikk',
+    'Tretthet', 'Grenseverdi', 'Fart', 'Møtende trafikk', 'Forstå situasjonen'
+    """
+    title_no: str = ""
+    title_th: str = ""
+    title_en: str = ""
+    youtube_url: str
+    thumbnail_url: str = ""          # auto-derived from youtube_url if empty
+    duration_seconds: int = 0
+    language: str = "no"             # primary language: no, th, en
+
+    # ── Matching ───────────────────────────────────────────────────────────────
+    topic_tags: List[str] = []       # danger-label strings from _dangerLabel()
+    sign_ids: List[str] = []         # specific traffic sign IDs
+    sign_groups: List[str] = []      # sign group names: "Fareskilt", "Forbudsskilt" etc.
+    studybook_section_ids: List[str] = []  # curriculum refs e.g. "1.2.b"
+
+    # ── Se → Forstå → Velg context ────────────────────────────────────────────
+    see_context: str = ""
+    understand_context: str = ""
+    choose_context: str = ""
+
+    # ── Instructor summary (shown under the card) ──────────────────────────────
+    instructor_summary_no: str = ""
+    instructor_summary_th: str = ""
+    instructor_summary_en: str = ""
+
+    active: bool = True
+
+
+def _serialize_video(v: dict) -> dict:
+    """Normalize a MongoDB video document for the API response."""
+    v = {k: val for k, val in v.items() if k != '_id'}
+    if not v.get('thumbnail_url') and v.get('youtube_url'):
+        yt_id = _extract_youtube_id(v['youtube_url'])
+        if yt_id:
+            v['thumbnail_url'] = f"https://img.youtube.com/vi/{yt_id}/mqdefault.jpg"
+    return v
+
+
+# ── Public read endpoints ──────────────────────────────────────────────────────
+
+@api_router.get("/videos/for-topic")
+async def videos_for_topic(tags: str = "", limit: int = Query(default=1, le=3)):
+    """Suggest learning videos by topic tag(s).
+    tags: comma-separated labels from the _dangerLabel() frontend function.
+    Returns up to `limit` videos ranked by first matching tag.
+    """
+    if not tags.strip():
+        return []
+    tag_list = [t.strip() for t in tags.split(',') if t.strip()]
+    results = await db.learning_videos.find(
+        {"active": True, "topic_tags": {"$in": tag_list}}
+    ).limit(limit).to_list(limit)
+    return [_serialize_video(r) for r in results]
+
+
+@api_router.get("/videos/for-sign/{sign_id}")
+async def videos_for_sign(sign_id: str, group: str = "", limit: int = Query(default=1, le=2)):
+    """Suggest learning videos for a specific traffic sign.
+    Falls back to matching by sign_groups if no direct sign_id match.
+    """
+    query: Dict[str, Any] = {"active": True}
+    # Try exact sign_id first
+    results = await db.learning_videos.find(
+        {**query, "sign_ids": sign_id}
+    ).limit(limit).to_list(limit)
+    # Fall back to sign_groups
+    if not results and group:
+        results = await db.learning_videos.find(
+            {**query, "sign_groups": group}
+        ).limit(limit).to_list(limit)
+    return [_serialize_video(r) for r in results]
+
+
+# ── Admin CRUD ─────────────────────────────────────────────────────────────────
+
+@api_router.get("/admin/videos")
+async def admin_list_videos(_: dict = Depends(require_admin)):
+    """List all learning videos (active and inactive)."""
+    results = await db.learning_videos.find({}).sort("created_at", -1).to_list(500)
+    return [_serialize_video(r) for r in results]
+
+
+@api_router.post("/admin/videos")
+async def admin_create_video(data: dict, _: dict = Depends(require_admin)):
+    """Create a new learning video. thumbnail_url is auto-derived if omitted."""
+    video = {
+        "id": str(uuid.uuid4()),
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "active": True,
+        # defaults
+        "title_no": "", "title_th": "", "title_en": "",
+        "youtube_url": "", "thumbnail_url": "", "duration_seconds": 0,
+        "language": "no",
+        "topic_tags": [], "sign_ids": [], "sign_groups": [], "studybook_section_ids": [],
+        "see_context": "", "understand_context": "", "choose_context": "",
+        "instructor_summary_no": "", "instructor_summary_th": "", "instructor_summary_en": "",
+        **data,
+    }
+    if not video.get('thumbnail_url') and video.get('youtube_url'):
+        yt_id = _extract_youtube_id(video['youtube_url'])
+        if yt_id:
+            video['thumbnail_url'] = f"https://img.youtube.com/vi/{yt_id}/mqdefault.jpg"
+    await db.learning_videos.insert_one(video)
+    return _serialize_video(video)
+
+
+@api_router.patch("/admin/videos/{video_id}")
+async def admin_update_video(video_id: str, data: dict, _: dict = Depends(require_admin)):
+    """Update fields on a learning video."""
+    if not data:
+        raise HTTPException(status_code=400, detail="No fields to update")
+    # Auto-update thumbnail if youtube_url changed and thumbnail not provided
+    if 'youtube_url' in data and not data.get('thumbnail_url'):
+        yt_id = _extract_youtube_id(data['youtube_url'])
+        if yt_id:
+            data['thumbnail_url'] = f"https://img.youtube.com/vi/{yt_id}/mqdefault.jpg"
+    result = await db.learning_videos.update_one({"id": video_id}, {"$set": data})
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Video not found")
+    return {"message": "Updated", "id": video_id}
+
+
+@api_router.delete("/admin/videos/{video_id}")
+async def admin_delete_video(video_id: str, _: dict = Depends(require_admin)):
+    """Permanently delete a learning video."""
+    result = await db.learning_videos.delete_one({"id": video_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Video not found")
+    return {"message": "Deleted", "id": video_id}
+
+
 class TrafficSignCreate(BaseModel):
     group: int
     name: Dict[str, str]           # {no, th, en}
