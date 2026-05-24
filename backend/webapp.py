@@ -1442,36 +1442,155 @@ a { color:inherit; text-decoration:none; }
 #screenHistory { padding:0; background:#0B1226; }
 .hist-header { padding:14px 16px 10px; flex-shrink:0; }
 .hist-scroll {
-  flex:1; min-height:0;                   /* min-height:0 → lets flex child shrink and scroll */
+  flex:1; min-height:0;
   overflow-y:auto; overflow-x:hidden;
-  padding:0 16px 16px;
+  padding:0 14px 16px;
   -webkit-overflow-scrolling:touch;
   display:flex; flex-direction:column; gap:10px;
 }
 .hist-scroll::-webkit-scrollbar { width:4px; }
-.hist-scroll::-webkit-scrollbar-track { background:transparent; }
-.hist-scroll::-webkit-scrollbar-thumb { background:rgba(255,255,255,.1); border-radius:2px; }
+.hist-scroll::-webkit-scrollbar-thumb { background:rgba(255,255,255,.10); border-radius:2px; }
 
+/* ── History card ── */
 .hist-card {
-  background:#131B2E; border:1px solid rgba(255,255,255,.10);
-  border-radius:14px; padding:14px 16px;
-  display:flex; align-items:center; gap:14px;
-  flex-shrink:0;
+  background:#131B2E; border:1px solid rgba(255,255,255,.09);
+  border-radius:16px; padding:14px 14px 12px;
+  display:flex; flex-direction:column; gap:10px;
+  cursor:pointer; transition:border-color .18s; flex-shrink:0;
 }
-.hist-score-ring {
-  width:54px; height:54px; border-radius:50%;
-  border:3px solid var(--border);
+.hist-card:hover  { border-color:rgba(255,153,51,.30); }
+.hist-card:active { opacity:.88; }
+
+.hist-card-top {
+  display:flex; align-items:flex-start; justify-content:space-between; gap:8px;
+}
+.hist-mode { font-size:.86rem; font-weight:800; color:var(--text); line-height:1.3; }
+.hist-mode-sub { font-size:.72rem; color:var(--muted); margin-top:2px; font-weight:600; }
+
+/* Status badge */
+.hist-badge {
+  font-size:.58rem; font-weight:900; text-transform:uppercase;
+  letter-spacing:.6px; padding:3px 9px; border-radius:20px; flex-shrink:0; margin-top:2px;
+}
+.hist-badge-good { background:rgba(16,185,129,.12); color:var(--green);  border:1px solid rgba(16,185,129,.26); }
+.hist-badge-ok   { background:rgba(255,153,51,.10);  color:var(--orange); border:1px solid rgba(255,153,51,.26); }
+.hist-badge-bad  { background:rgba(239,68,68,.08);   color:#FCA5A5;       border:1px solid rgba(239,68,68,.22); }
+
+/* Score + progress bar */
+.hist-score-row { display:flex; align-items:center; gap:12px; }
+.hist-pct { font-size:1.70rem; font-weight:900; color:var(--text); letter-spacing:-.5px; line-height:1; flex-shrink:0; min-width:52px; }
+.hist-bar-wrap { flex:1; height:5px; background:rgba(255,255,255,.08); border-radius:3px; overflow:hidden; }
+.hist-bar-fill  { height:100%; border-radius:3px; }
+
+/* Stats row */
+.hist-stats-row { display:flex; align-items:center; gap:6px; flex-wrap:wrap; font-size:.74rem; }
+.hist-stat-good { color:var(--green);  font-weight:700; }
+.hist-stat-bad  { color:#FCA5A5;       font-weight:700; }
+.hist-stat-tot  { color:var(--muted); }
+.hist-stat-sep  { color:rgba(255,255,255,.16); }
+
+/* Footer: date + actions */
+.hist-card-footer { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+.hist-date-new    { font-size:.70rem; color:var(--muted); }
+.hist-card-actions { display:flex; gap:6px; }
+.hist-btn {
+  padding:6px 11px; border-radius:8px; font-size:.72rem; font-weight:700;
+  border:none; cursor:pointer;
+}
+.hist-btn:active { opacity:.75; }
+.hist-btn-sec { background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.10); color:var(--text); }
+.hist-btn-pri { background:rgba(255,153,51,.12);  border:1px solid rgba(255,153,51,.25);  color:var(--orange); }
+
+/* ══════════════════════════════════════════
+   HISTORY DETAIL PANEL
+   Bottom sheet mobile · Right panel desktop
+══════════════════════════════════════════ */
+.hist-panel-backdrop {
+  position:fixed; inset:0; z-index:410;
+  background:rgba(0,0,0,.70); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
+  opacity:0; pointer-events:none; transition:opacity .28s ease;
+}
+.hist-panel-backdrop.open { opacity:1; pointer-events:all; }
+
+.hist-panel {
+  position:fixed; left:0; right:0; bottom:0; z-index:411;
+  background:#0B1120; border-radius:24px 24px 0 0; max-height:92vh;
+  display:flex; flex-direction:column;
+  transform:translateY(102%); transition:transform .34s cubic-bezier(.32,0,.18,1);
+  overflow:hidden; box-shadow:0 -8px 40px rgba(0,0,0,.55);
+}
+.hist-panel.open { transform:translateY(0); }
+@media (min-width:700px) {
+  .hist-panel { left:auto; top:0; bottom:0; width:420px; border-radius:0; max-height:100vh; transform:translateX(102%); box-shadow:-8px 0 40px rgba(0,0,0,.45); }
+  .hist-panel.open { transform:translateX(0); }
+}
+.hist-panel-handle {
+  width:36px; height:4px; border-radius:2px;
+  background:rgba(255,255,255,.14); margin:10px auto 0; flex-shrink:0;
+}
+@media (min-width:700px) { .hist-panel-handle { display:none; } }
+
+/* Panel header */
+.hp-header {
+  flex-shrink:0; position:relative;
+  padding:14px 52px 16px 18px;
+  background:#080F1E; border-bottom:1px solid rgba(255,255,255,.07);
+}
+.hp-close {
+  position:absolute; top:14px; right:14px;
+  width:30px; height:30px; border-radius:50%;
+  border:none; background:rgba(255,255,255,.08); color:var(--muted); font-size:12px; cursor:pointer;
   display:flex; align-items:center; justify-content:center;
-  font-size:.95rem; font-weight:900; flex-shrink:0;
 }
-.hist-score-ring.good  { border-color:var(--green);  color:var(--green);  background:rgba(16,185,129,.08); }
-.hist-score-ring.ok    { border-color:var(--orange);  color:var(--orange); background:rgba(255,153,51,.08); }
-.hist-score-ring.bad   { border-color:var(--red);     color:var(--red);    background:rgba(239,68,68,.08); }
-.hist-info { flex:1; min-width:0; }
-.hist-mode { font-size:.88rem; font-weight:800; line-height:1.2; }
-.hist-cat  { font-size:.73rem; color:var(--muted); margin-top:2px; }
-.hist-detail { font-size:.75rem; color:var(--muted); margin-top:4px; }
-.hist-date { font-size:.7rem; color:var(--muted); flex-shrink:0; text-align:right; }
+.hp-close:hover { background:rgba(255,255,255,.14); color:var(--text); }
+.hp-mode-lbl { font-size:.64rem; font-weight:900; text-transform:uppercase; letter-spacing:.7px; color:var(--muted); margin-bottom:8px; }
+.hp-score-big { font-size:2.6rem; font-weight:900; color:var(--text); letter-spacing:-.6px; line-height:1; }
+.hp-score-sub { font-size:.80rem; color:var(--muted); margin-top:5px; }
+.hp-badge {
+  display:inline-flex; align-items:center; gap:5px; margin-top:10px;
+  padding:4px 12px; border-radius:20px; font-size:.68rem; font-weight:800;
+}
+.hp-badge-good { background:rgba(16,185,129,.12); color:var(--green);  border:1px solid rgba(16,185,129,.28); }
+.hp-badge-ok   { background:rgba(255,153,51,.10);  color:var(--orange); border:1px solid rgba(255,153,51,.28); }
+.hp-badge-bad  { background:rgba(239,68,68,.08);   color:#FCA5A5;       border:1px solid rgba(239,68,68,.25); }
+
+/* Stats grid */
+.hp-stats {
+  display:flex; margin-top:14px;
+  border:1px solid rgba(255,255,255,.07); border-radius:12px; overflow:hidden;
+}
+.hp-stat { flex:1; padding:10px 6px; text-align:center; border-right:1px solid rgba(255,255,255,.07); }
+.hp-stat:last-child { border-right:none; }
+.hp-stat-num { font-size:1.2rem; font-weight:900; color:var(--text); }
+.hp-stat-num.good { color:var(--green); }
+.hp-stat-num.bad  { color:#FCA5A5; }
+.hp-stat-lbl { font-size:.55rem; color:var(--muted); font-weight:700; text-transform:uppercase; letter-spacing:.5px; margin-top:2px; }
+
+/* Scrollable body */
+.hp-body { flex:1; overflow-y:auto; padding:14px 14px 8px; display:flex; flex-direction:column; gap:10px; -webkit-overflow-scrolling:touch; }
+.hp-body::-webkit-scrollbar { width:2px; }
+.hp-body::-webkit-scrollbar-thumb { background:rgba(255,255,255,.08); border-radius:2px; }
+
+.hp-section-label { font-size:.60rem; font-weight:900; text-transform:uppercase; letter-spacing:.9px; color:var(--muted); padding:4px 0 2px; }
+
+/* Wrong question card */
+.hp-q-card { border-radius:0 13px 13px 0; padding:12px 14px 12px 13px; background:rgba(239,68,68,.04); border-left:3px solid rgba(239,68,68,.38); display:flex; flex-direction:column; gap:7px; }
+.hp-q-num  { font-size:.58rem; font-weight:900; text-transform:uppercase; letter-spacing:.8px; color:#FCA5A5; }
+.hp-q-text { font-size:.84rem; color:var(--text); font-weight:600; line-height:1.55; }
+.hp-q-ans { font-size:.78rem; padding:5px 10px; border-radius:8px; line-height:1.4; }
+.hp-q-ans-wrong { background:rgba(239,68,68,.08); color:#FCA5A5; border:1px solid rgba(239,68,68,.18); }
+.hp-q-ans-right { background:rgba(16,185,129,.08); color:#6EE7B7; border:1px solid rgba(16,185,129,.20); }
+.hp-q-expl-label { font-size:.56rem; font-weight:900; text-transform:uppercase; letter-spacing:.8px; color:var(--muted); margin-bottom:3px; }
+.hp-q-expl { font-size:.78rem; color:var(--muted); line-height:1.68; }
+
+.hp-no-data { padding:28px 16px; text-align:center; color:var(--muted); font-size:.84rem; line-height:1.75; }
+
+/* Panel actions */
+.hp-actions { flex-shrink:0; padding:12px 14px 22px; border-top:1px solid rgba(255,255,255,.07); background:#080F1E; display:flex; flex-direction:column; gap:8px; }
+.hp-btn-pri { width:100%; padding:13px 16px; border-radius:13px; background:var(--orange); color:#0F172A; font-size:.90rem; font-weight:800; border:none; cursor:pointer; }
+.hp-btn-pri:active { opacity:.84; }
+.hp-btn-sec { width:100%; padding:12px 16px; border-radius:13px; background:rgba(255,255,255,.05); color:var(--muted); font-size:.86rem; font-weight:700; border:1.5px solid rgba(255,255,255,.10); cursor:pointer; }
+.hp-btn-sec:hover { border-color:rgba(255,255,255,.22); color:var(--text); }
 
 /* ══════════════════════════════════════════
    END SCREEN
@@ -2319,6 +2438,25 @@ a { color:inherit; text-decoration:none; }
   </div>
 </div>
 
+<!-- ═══ HISTORY DETAIL PANEL ═══ -->
+<div class="hist-panel-backdrop" id="histPanelBackdrop" onclick="closeHistDetail()"></div>
+<div class="hist-panel" id="histPanel">
+  <div class="hist-panel-handle"></div>
+  <div class="hp-header">
+    <button class="hp-close" onclick="closeHistDetail()">✕</button>
+    <div class="hp-mode-lbl" id="hpModeLbl"></div>
+    <div class="hp-score-big" id="hpScoreBig"></div>
+    <div class="hp-score-sub" id="hpScoreSub"></div>
+    <div class="hp-badge" id="hpBadge"></div>
+    <div class="hp-stats" id="hpStats"></div>
+  </div>
+  <div class="hp-body" id="hpBody"></div>
+  <div class="hp-actions">
+    <button class="hp-btn-pri" id="hpRetryBtn">Prøv igjen</button>
+    <button class="hp-btn-sec" onclick="closeHistDetail()">Lukk</button>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -2340,6 +2478,8 @@ var qScore = 0;
 var qAnswered = false;
 var quizStartedAt = null;
 var _lastSavedAttempt = null; // local mirror of the most recent saved attempt
+var _sessionAnswers   = []; // per-question answer log — powers history detail panel
+var _histAttempts     = []; // loaded attempts array — keyed by index for detail panel
 var ttsRate = 1;
 var ttsVolume = parseFloat(_ls.get('t2d_vol') || '1');
 var ttsPlaying = false;
@@ -3125,7 +3265,7 @@ async function loadQuiz(url) {
     }
     qIdx = 0; qScore = 0; qAnswered = false;
     _wrongStreak = 0; _correctStreak = 0; _correctPhraseIdx = 0;
-    _sessionAnswered = 0; _sessionWrongTotal = 0; _recentTopics = []; _topicErrors = {};
+    _sessionAnswered = 0; _sessionWrongTotal = 0; _recentTopics = []; _topicErrors = {}; _sessionAnswers = [];
     quizStartedAt = new Date().toISOString();
     stopExamTimer();
     if (isExamMode) startExamTimer();
@@ -3342,6 +3482,17 @@ function selectAns(btn, picked) {
       _topicErrors[_tLabel] = (_topicErrors[_tLabel] || 0) + 1;
     }
   }
+
+  // Record this answer for the history detail panel
+  var _curQ = questions[qIdx];
+  _sessionAnswers.push({
+    question_id:   String(_curQ._id || _curQ.id || _curQ.question_id || ''),
+    question_text: (pickLang(_curQ.question) || pickField(_curQ, 'question_text') || '').slice(0, 200),
+    user_answer:   picked.toUpperCase(),
+    correct_answer: correct,
+    is_correct:    isOk,
+    explanation:   (currentExpl || '').slice(0, 400)
+  });
 
   document.querySelectorAll('.ans-btn').forEach(function(b) {
     b.disabled = true;
@@ -3973,34 +4124,155 @@ async function loadHistory() {
       });
       if (!alreadyIn) attempts.unshift(_lastSavedAttempt);
     }
+    _histAttempts = attempts; // store for detail panel access
     document.getElementById('histCount').textContent = '(' + attempts.length + ')';
     if (!attempts.length) {
       scroll.innerHTML = '<div class="empty-state"><div class="es-icon">📊</div><p>Ingen quiz-historikk ennå.<br>Fullfør en quiz for å se resultatene her.</p></div>';
       return;
     }
-    scroll.innerHTML = attempts.map(function(a) {
-      var pct = Math.round(a.score_percentage || 0);
-      var ringCls = pct >= 85 ? 'good' : pct >= 60 ? 'ok' : 'bad';
-      var modeLabel = {exam:'Eksamen', category:'Kategori', daily:'Daglig test', random:'Tilfeldig quiz'}[a.mode] || a.mode || 'Quiz';
-      var catLabel = a.category ? (' — ' + catName(a.category)) : '';
-      var detail = (a.correct_answers || 0) + ' av ' + (a.total_questions || 0) + ' riktige';
-      var passed = a.passed != null ? (a.passed ? ' ✓ Bestått' : ' ✗ Ikke bestått') : '';
+    scroll.innerHTML = attempts.map(function(a, idx) {
+      var pct     = Math.round(a.score_percentage || 0);
+      var correct = a.correct_answers || 0;
+      var total   = a.total_questions || 0;
+      var wrong   = total - correct;
+      var barColor = pct >= 80 ? 'var(--green)' : pct >= 60 ? 'var(--orange)' : '#EF4444';
+
+      var badgeCls, badgeTxt;
+      if (pct >= 80)      { badgeCls = 'hist-badge-good'; badgeTxt = 'Klar for prøven'; }
+      else if (pct >= 60) { badgeCls = 'hist-badge-ok';   badgeTxt = 'Nesten klar'; }
+      else                { badgeCls = 'hist-badge-bad';  badgeTxt = 'Øv mer'; }
+
+      var modeLabels = {exam:'Eksamen', category:'Kategori', daily:'Daglig test', random:'Tilfeldig quiz'};
+      var modeLabel  = modeLabels[a.mode] || a.mode || 'Quiz';
+      var modeSub    = a.category ? catName(a.category) : '';
+
       var dateStr = '';
-      if (a.started_at || a.created_at) {
-        var d = new Date(a.started_at || a.created_at);
-        dateStr = d.toLocaleDateString('no-NO', {day:'2-digit', month:'2-digit'}) + '<br>' + d.toLocaleTimeString('no-NO', {hour:'2-digit', minute:'2-digit'});
+      if (a.completed_at || a.started_at) {
+        var d = new Date(a.completed_at || a.started_at);
+        dateStr = d.toLocaleDateString('no-NO', {day:'2-digit', month:'short'}) + ', ' + d.toLocaleTimeString('no-NO', {hour:'2-digit', minute:'2-digit'});
       }
-      return '<div class="hist-card">'
-        + '<div class="hist-score-ring ' + ringCls + '">' + pct + '%</div>'
-        + '<div class="hist-info">'
-          + '<div class="hist-mode">' + escH(modeLabel) + escH(catLabel) + '</div>'
-          + '<div class="hist-detail">' + escH(detail) + escH(passed) + '</div>'
+
+      var passedBit = '';
+      if (a.passed === true)       passedBit = '<span class="hist-stat-sep">·</span><span class="hist-stat-good">Bestått</span>';
+      else if (a.passed === false) passedBit = '<span class="hist-stat-sep">·</span><span class="hist-stat-bad">Ikke bestått</span>';
+
+      return '<div class="hist-card" onclick="openHistDetail(' + idx + ')" style="animation:aiBlockIn .22s ease both;animation-delay:' + (idx * 35) + 'ms">'
+        + '<div class="hist-card-top">'
+          + '<div>'
+            + '<div class="hist-mode">' + escH(modeLabel) + '</div>'
+            + (modeSub ? '<div class="hist-mode-sub">' + escH(modeSub) + '</div>' : '')
+          + '</div>'
+          + '<div class="hist-badge ' + badgeCls + '">' + badgeTxt + '</div>'
         + '</div>'
-        + '<div class="hist-date">' + dateStr + '</div>'
+        + '<div class="hist-score-row">'
+          + '<div class="hist-pct">' + pct + '%</div>'
+          + '<div class="hist-bar-wrap"><div class="hist-bar-fill" style="width:' + pct + '%;background:' + barColor + '"></div></div>'
+        + '</div>'
+        + '<div class="hist-stats-row">'
+          + '<span class="hist-stat-good">✓ ' + correct + ' riktige</span>'
+          + '<span class="hist-stat-sep">·</span>'
+          + '<span class="hist-stat-bad">✗ ' + wrong + ' gale</span>'
+          + '<span class="hist-stat-sep">·</span>'
+          + '<span class="hist-stat-tot">av ' + total + '</span>'
+          + passedBit
+        + '</div>'
+        + '<div class="hist-card-footer">'
+          + '<div class="hist-date-new">' + escH(dateStr) + '</div>'
+          + '<div class="hist-card-actions">'
+            + '<button class="hist-btn hist-btn-sec" onclick="event.stopPropagation();openHistDetail(' + idx + ')">Se detaljer</button>'
+            + '<button class="hist-btn hist-btn-pri" onclick="event.stopPropagation();retryAttempt(' + idx + ')">Prøv igjen</button>'
+          + '</div>'
+        + '</div>'
         + '</div>';
     }).join('');
   } catch(e) {
     scroll.innerHTML = '<div class="empty-state"><div class="es-icon">⚠️</div><p>Kunne ikke laste historikk.<br>' + escH(e.message) + '</p></div>';
+  }
+}
+
+function openHistDetail(idx) {
+  var a = _histAttempts[idx];
+  if (!a) return;
+  var pct     = Math.round(a.score_percentage || 0);
+  var correct = a.correct_answers || 0;
+  var total   = a.total_questions || 0;
+  var wrong   = total - correct;
+
+  // Mode label
+  var modeLabels = {exam:'Eksamen', category:'Kategori', daily:'Daglig test', random:'Tilfeldig quiz'};
+  var modeStr = modeLabels[a.mode] || a.mode || 'Quiz';
+  if (a.category) modeStr += ' — ' + catName(a.category);
+  document.getElementById('hpModeLbl').textContent = modeStr;
+
+  // Score headline
+  document.getElementById('hpScoreBig').textContent = pct + '%';
+  document.getElementById('hpScoreSub').textContent = correct + ' av ' + total + ' riktige';
+
+  // Badge
+  var badgeCls, badgeTxt;
+  if (pct >= 80)      { badgeCls = 'hp-badge-good'; badgeTxt = '✓ Klar for prøven'; }
+  else if (pct >= 60) { badgeCls = 'hp-badge-ok';   badgeTxt = '▲ Nesten klar'; }
+  else                { badgeCls = 'hp-badge-bad';  badgeTxt = '↺ Øv mer'; }
+  var badge = document.getElementById('hpBadge');
+  badge.className = 'hp-badge ' + badgeCls;
+  badge.textContent = badgeTxt;
+
+  // Stats grid
+  document.getElementById('hpStats').innerHTML =
+      '<div class="hp-stat"><div class="hp-stat-num good">' + correct + '</div><div class="hp-stat-lbl">Riktige</div></div>'
+    + '<div class="hp-stat"><div class="hp-stat-num bad">' + wrong + '</div><div class="hp-stat-lbl">Gale</div></div>'
+    + '<div class="hp-stat"><div class="hp-stat-num">' + total + '</div><div class="hp-stat-lbl">Totalt</div></div>';
+
+  // Wrong questions body
+  var qs = Array.isArray(a.questions_answered) ? a.questions_answered : [];
+  var wrongQs = qs.filter(function(q) { return q.is_correct === false; });
+  var bodyHtml = '';
+  if (wrongQs.length) {
+    bodyHtml += '<div class="hp-section-label">Feil svar (' + wrongQs.length + ')</div>';
+    bodyHtml += wrongQs.map(function(q, i) {
+      var delay    = i * 40;
+      var userTxt  = q.user_answer    ? 'Ditt svar: '  + q.user_answer    : '';
+      var rightTxt = q.correct_answer ? 'Riktig svar: ' + q.correct_answer : '';
+      return '<div class="hp-q-card" style="animation:aiBlockIn .22s ease both;animation-delay:' + delay + 'ms">'
+        + '<div class="hp-q-num">Spørsmål ' + (i + 1) + '</div>'
+        + (q.question_text ? '<div class="hp-q-text">' + escH(q.question_text) + '</div>' : '')
+        + (userTxt  ? '<div class="hp-q-ans hp-q-ans-wrong">' + escH(userTxt)  + '</div>' : '')
+        + (rightTxt ? '<div class="hp-q-ans hp-q-ans-right">' + escH(rightTxt) + '</div>' : '')
+        + (q.explanation
+            ? '<div class="hp-q-expl-label">Forklaring</div><div class="hp-q-expl">' + escH(q.explanation) + '</div>'
+            : '')
+        + '</div>';
+    }).join('');
+  } else if (qs.length) {
+    bodyHtml = '<div class="hp-no-data">Ingen feil i denne quizen! 🎉<br>Veldig bra gjort.</div>';
+  } else {
+    bodyHtml = '<div class="hp-no-data">Detaljert spørsmålsoversikt er ikke tilgjengelig for eldre quizer.<br>Ta en ny quiz for å se hva du svarte.</div>';
+  }
+  document.getElementById('hpBody').innerHTML = bodyHtml;
+
+  // Wire retry button
+  document.getElementById('hpRetryBtn').onclick = function() { retryAttempt(idx); };
+
+  // Open
+  document.getElementById('histPanelBackdrop').classList.add('open');
+  document.getElementById('histPanel').classList.add('open');
+}
+
+function closeHistDetail() {
+  document.getElementById('histPanelBackdrop').classList.remove('open');
+  document.getElementById('histPanel').classList.remove('open');
+}
+
+function retryAttempt(idx) {
+  var a = _histAttempts[idx];
+  if (!a) return;
+  closeHistDetail();
+  if (a.mode === 'exam') {
+    startExam();
+  } else if (a.mode === 'category' && a.category) {
+    startQuiz(a.category, a.category);
+  } else {
+    startRandomQuiz();
   }
 }
 
@@ -4104,7 +4376,7 @@ function showEnd() {
       correct_answers: qScore,
       score_percentage: pct,
       passed: isExamMode ? pct >= 85 : null,
-      questions_answered: questions.map(function(q, i) {
+      questions_answered: _sessionAnswers.length ? _sessionAnswers : questions.map(function(q, i) {
         return { question_id: String(q._id || q.id || q.question_id || ''), index: i };
       }),
       started_at: quizStartedAt || new Date().toISOString()
@@ -4118,7 +4390,8 @@ function showEnd() {
       score_percentage: attemptData.score_percentage,
       passed: attemptData.passed,
       started_at: attemptData.started_at,
-      completed_at: new Date().toISOString()
+      completed_at: new Date().toISOString(),
+      questions_answered: _sessionAnswers.slice()
     };
     api('POST', '/api/quiz-attempts', attemptData)
       .then(function() { toast('Resultat lagret ✓', 2000); })
