@@ -1,7 +1,20 @@
 from fastapi import APIRouter
 from fastapi.responses import HTMLResponse
+import os as _os
+import datetime as _dt
 
 webapp_router = APIRouter()
+
+def _deploy_version() -> str:
+    """Returns a stable version string for the current deployment.
+    Prefers Railway's injected RAILWAY_GIT_COMMIT_SHA; falls back to startup timestamp.
+    Used to verify which build is actually live in production.
+    """
+    commit = (_os.environ.get('RAILWAY_GIT_COMMIT_SHA') or '')[:8]
+    date   = _dt.datetime.utcnow().strftime('%Y-%m-%d')
+    return f"{date}-{commit}" if commit else date
+
+DEPLOY_VERSION = _deploy_version()
 
 WEBAPP_HTML = r"""<!DOCTYPE html>
 <html lang="th" data-theme="dark">
@@ -10,6 +23,7 @@ WEBAPP_HTML = r"""<!DOCTYPE html>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
+<meta name="deploy-version" content="__DEPLOY_VERSION__">
 <title>Thai2Drive</title>
 <style>
 /* ══════════════════════════════════════════
@@ -5109,4 +5123,10 @@ function askAiAboutSign() {
 
 @webapp_router.get("/web", response_class=HTMLResponse)
 async def web_app():
-    return HTMLResponse(content=WEBAPP_HTML)
+    html = WEBAPP_HTML.replace('__DEPLOY_VERSION__', DEPLOY_VERSION)
+    return HTMLResponse(content=html)
+
+@webapp_router.get("/web/version")
+async def web_version():
+    """Returns the current deploy version. Use this to confirm what build is live."""
+    return {"version": DEPLOY_VERSION, "endpoint": "/api/web"}

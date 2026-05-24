@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter, HTTPException, Query, Depends, UploadFile, File
+from fastapi import FastAPI, APIRouter, HTTPException, Query, Depends, UploadFile, File, Header
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse as FastAPIFileResponse
@@ -26,6 +26,11 @@ db = client[os.environ['DB_NAME']]
 JWT_SECRET = os.environ.get('JWT_SECRET', 'fallback-secret-change-me')
 JWT_ALGORITHM = "HS256"
 JWT_EXPIRE_HOURS = 168  # 7 days
+
+# ── Admin bootstrap secret ─────────────────────────────────────────────────────
+# Required header: X-Admin-Secret: <value>
+# If not set in env → /admin/add is permanently blocked (safe default).
+ADMIN_BOOTSTRAP_SECRET = os.environ.get('ADMIN_BOOTSTRAP_SECRET', '')
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 security = HTTPBearer(auto_error=False)
@@ -693,7 +698,16 @@ async def check_admin(data: AdminCheckRequest):
     return {"is_admin": admin is not None}
 
 @api_router.post("/admin/add")
-async def add_admin(data: AdminCheckRequest):
+async def add_admin(
+    data: AdminCheckRequest,
+    x_admin_secret: str = Header(default=''),
+):
+    """Bootstrap endpoint for adding the first admin.
+    Requires X-Admin-Secret header matching ADMIN_BOOTSTRAP_SECRET env var.
+    If env var is not set the endpoint always returns 403.
+    """
+    if not ADMIN_BOOTSTRAP_SECRET or x_admin_secret != ADMIN_BOOTSTRAP_SECRET:
+        raise HTTPException(status_code=403, detail="Admin bootstrap secret required")
     email = data.email.strip().lower()
     existing = await db.admin_users.find_one({"email": email})
     if existing:
