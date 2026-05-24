@@ -1008,6 +1008,74 @@ a { color:inherit; text-decoration:none; }
 .quiz-ai-mobile .ai-alert-text   { font-size:.83rem; line-height:1.74; }
 
 /* ══════════════════════════════════════════
+   SE → FORSTÅ → VELG — SITUATION LENS
+   Quiet instructor guide shown before answering.
+   Derived from question keywords — never reveals the answer.
+══════════════════════════════════════════ */
+.q-observe {
+  padding:8px 11px; border-radius:10px; flex-shrink:0;
+  background:rgba(255,153,51,.04);
+  border:1px solid rgba(255,153,51,.10);
+  display:flex; flex-direction:column; gap:5px;
+  animation:aiBlockIn .22s ease both;
+}
+.q-observe-row {
+  display:flex; align-items:baseline; gap:7px;
+  font-size:.73rem; line-height:1.55; color:var(--muted);
+}
+.q-observe-tag {
+  font-size:.54rem; font-weight:900; text-transform:uppercase;
+  letter-spacing:.7px; color:rgba(255,153,51,.60);
+  flex-shrink:0; min-width:52px;
+}
+
+/* ══════════════════════════════════════════
+   REVIEW MODE — Øv på feil
+   Shows wrong questions one by one after a quiz.
+   No answer options — observation and reflection only.
+══════════════════════════════════════════ */
+.rv-wrap   { display:flex; flex-direction:column; gap:13px; padding:2px 0; }
+.rv-header { font-size:.60rem; font-weight:900; text-transform:uppercase; letter-spacing:.8px; color:var(--orange); }
+.rv-question { font-size:.94rem; font-weight:700; color:var(--text); line-height:1.62; }
+.rv-answer { padding:8px 12px; border-radius:9px; font-size:.82rem; font-weight:600; line-height:1.5; }
+.rv-wrong  { background:rgba(239,68,68,.07); border:1px solid rgba(239,68,68,.18); color:#FCA5A5; }
+.rv-right  { background:rgba(16,185,129,.07); border:1px solid rgba(16,185,129,.20); color:#6EE7B7; }
+.rv-expl   { padding:10px 12px 10px 13px; border-radius:0 10px 10px 0; border-left:3px solid rgba(59,130,246,.38); background:rgba(59,130,246,.04); }
+.rv-expl-lbl { font-size:.57rem; font-weight:900; text-transform:uppercase; letter-spacing:.8px; color:#93C5FD; margin-bottom:4px; }
+.rv-expl-txt { font-size:.80rem; color:var(--muted); line-height:1.72; }
+.rv-next   { margin-top:4px; width:100%; padding:12px 16px; border-radius:12px; background:var(--orange); color:#0F172A; font-weight:800; font-size:.88rem; border:none; cursor:pointer; }
+.rv-next:active { opacity:.84; }
+.rv-done   { display:flex; flex-direction:column; gap:12px; padding:4px 0; }
+.rv-done-icon { font-size:1.8rem; opacity:.45; }
+.rv-done-head { font-size:1.25rem; font-weight:900; color:var(--text); line-height:1.3; letter-spacing:-.2px; }
+.rv-done-body { font-size:.86rem; color:var(--muted); line-height:1.78; }
+.rv-done-btn  { align-self:flex-start; padding:11px 18px; background:rgba(255,255,255,.06); border:1.5px solid rgba(255,255,255,.12); color:var(--text); font-weight:700; font-size:.84rem; border-radius:12px; cursor:pointer; }
+.rv-done-btn:hover { border-color:rgba(255,255,255,.22); }
+
+/* ══════════════════════════════════════════
+   HOME — READINESS CARD
+   Shows last quiz result as a calm readiness signal.
+══════════════════════════════════════════ */
+.home-readiness {
+  padding:13px 14px; border-radius:14px;
+  background:#131B2E; border:1px solid rgba(255,255,255,.08);
+  display:flex; align-items:center; gap:12px;
+  cursor:pointer; transition:border-color .18s;
+}
+.home-readiness:hover { border-color:rgba(255,153,51,.22); }
+.hr-dot {
+  width:9px; height:9px; border-radius:50%; flex-shrink:0;
+}
+.hr-dot-good { background:var(--green);  box-shadow:0 0 8px rgba(16,185,129,.60); }
+.hr-dot-ok   { background:var(--orange); box-shadow:0 0 8px rgba(255,153,51,.55); }
+.hr-dot-bad  { background:#EF4444;       box-shadow:0 0 8px rgba(239,68,68,.50); }
+.hr-main { flex:1; min-width:0; }
+.hr-label { font-size:.62rem; font-weight:900; text-transform:uppercase; letter-spacing:.7px; color:var(--muted); margin-bottom:3px; }
+.hr-status { font-size:.88rem; font-weight:800; color:var(--text); }
+.hr-sub   { font-size:.72rem; color:var(--muted); margin-top:2px; }
+.hr-pct   { font-size:1.40rem; font-weight:900; letter-spacing:-.5px; flex-shrink:0; }
+
+/* ══════════════════════════════════════════
    SIGNS SCREEN
 ══════════════════════════════════════════ */
 #screenSigns { padding:0; background:#0B1226; }
@@ -2052,6 +2120,17 @@ a { color:inherit; text-decoration:none; }
         </div>
       </div>
 
+      <!-- Readiness card — populated by loadHome() from last quiz attempt -->
+      <div class="home-readiness" id="homeReadiness" style="display:none" onclick="showTab('history')">
+        <div class="hr-dot" id="hrDot"></div>
+        <div class="hr-main">
+          <div class="hr-label">Siste økt</div>
+          <div class="hr-status" id="hrStatus"></div>
+          <div class="hr-sub" id="hrSub"></div>
+        </div>
+        <div class="hr-pct" id="hrPct"></div>
+      </div>
+
       <div class="premium-banner" id="homePremiumBanner" style="display:none">
         <span class="pb-icon">💎</span>
         <div class="pb-text">
@@ -2480,6 +2559,9 @@ var quizStartedAt = null;
 var _lastSavedAttempt = null; // local mirror of the most recent saved attempt
 var _sessionAnswers   = []; // per-question answer log — powers history detail panel
 var _histAttempts     = []; // loaded attempts array — keyed by index for detail panel
+var _reviewMode       = false; // true while in "Øv på feil" review flow
+var _reviewQuestions  = []; // wrong questions to review
+var _reviewIdx        = 0;  // current review position
 var ttsRate = 1;
 var ttsVolume = parseFloat(_ls.get('t2d_vol') || '1');
 var ttsPlaying = false;
@@ -3081,6 +3163,37 @@ async function loadHome() {
     }
   }
 
+  // Readiness card — last quiz attempt
+  if (deviceId) {
+    try {
+      var rdata = await api('GET', '/api/quiz-attempts/' + encodeURIComponent(deviceId) + '?limit=1&_=' + Date.now());
+      var rattempts = Array.isArray(rdata) ? rdata : (rdata.attempts || rdata.results || []);
+      // Use local mirror if available and more recent
+      if (_lastSavedAttempt) {
+        if (!rattempts.length || new Date(_lastSavedAttempt.started_at) >= new Date(rattempts[0].started_at)) {
+          rattempts = [_lastSavedAttempt];
+        }
+      }
+      if (rattempts.length) {
+        var la = rattempts[0];
+        var lpct = Math.round(la.score_percentage || 0);
+        var dotCls, statusTxt, colorTxt;
+        if (lpct >= 80)      { dotCls = 'hr-dot-good'; statusTxt = 'Klar for prøven'; colorTxt = 'var(--green)'; }
+        else if (lpct >= 60) { dotCls = 'hr-dot-ok';   statusTxt = 'Nesten klar';     colorTxt = 'var(--orange)'; }
+        else                 { dotCls = 'hr-dot-bad';  statusTxt = 'Øv litt mer';     colorTxt = '#EF4444'; }
+        var modeLabels = {exam:'Eksamen', category:'Kategori', daily:'Daglig test', random:'Tilfeldig quiz'};
+        var lmode = modeLabels[la.mode] || la.mode || 'Quiz';
+        if (la.category) lmode += ' — ' + catName(la.category);
+        document.getElementById('hrDot').className = 'hr-dot ' + dotCls;
+        document.getElementById('hrStatus').textContent = statusTxt;
+        document.getElementById('hrSub').textContent = lmode;
+        document.getElementById('hrPct').textContent = lpct + '%';
+        document.getElementById('hrPct').style.color = colorTxt;
+        document.getElementById('homeReadiness').style.display = 'flex';
+      }
+    } catch(e) {}
+  }
+
   // Premium badge
   document.getElementById('homePremiumBanner').style.display = (user && user.is_premium) ? 'flex' : 'none';
 }
@@ -3356,6 +3469,7 @@ function renderQuestion() {
       + '<div style="flex-shrink:0;"><button class="tts-play" id="qTtsBtn" title="Les høyt" onclick="speakQ()">▶</button></div>'
     + '</div>'
     + '<div class="q-mid">'
+      + buildSituationLensHtml(qText, currentExpl)
       + '<div class="q-answers" id="qAnswers">' + ansHtml + '</div>'
       + '<div class="q-feedback" id="qFeedback"></div>'
       // Mobile AI section — empty until answered (:empty hides it), then expands in-flow
@@ -3761,6 +3875,164 @@ function buildInstructorTip(isOk, alerts) {
     : 'Forstå situasjonen, ikke bare svaret. Det er slik kunnskap sitter i en virkelig situasjon.';
 }
 
+// ════════════════════════════════════════════
+//  SE → FORSTÅ → VELG — SITUATION LENS
+//  Norwegian curriculum-validated observation model (Trinn 1, §1.3).
+//  Generates 3 quiet instructor prompts from question keywords.
+//  Never reveals the answer — only observation cues.
+// ════════════════════════════════════════════
+function buildSituationLens(qText, expl) {
+  var t = ((qText || '') + ' ' + (expl || '')).toLowerCase();
+
+  // Each branch returns {see, understand, choose} in Norwegian
+  if (/gangfelt|fotgjenger|gående|sykkel(?!veg)|syklistene?/i.test(t)) return {
+    see:       'Legg merke til gang- og sykkeltrafikk nær veibanen',
+    understand: 'Myke trafikanter er sårbare — ikke forvent at de ser deg',
+    choose:    'Klar deg til å stanse, selv om du har forkjørsrett'
+  };
+  if (/vikeplikt|forkjørs|kryss|svinge\b/i.test(t)) return {
+    see:       'Se etter skilt og vegmerking som angir vikeplikt',
+    understand: 'Hvem har rett til å kjøre — og hvem venter?',
+    choose:    'Avklar vikeplikt før du setter bilen i bevegelse'
+  };
+  if (/avstand|3.sekund|sikker\w*sone|bak\w*bil/i.test(t)) return {
+    see:       'Observer avstanden til kjøretøyet foran',
+    understand: 'Avstand er reaksjonstid omgjort til meter',
+    choose:    'Hold 3 sekunders avstand — mer i dårlig vær'
+  };
+  if (/fart\b|fartsgrens|bremsing|bremselengd/i.test(t)) return {
+    see:       'Les fartsgrenseskilt og vurder kjøreforholdene',
+    understand: 'Riktig fart er ikke alltid det skiltene tillater',
+    choose:    'Tilpass farten til situasjonen, ikke bare til skiltet'
+  };
+  if (/forbikj[øo]r|møtende|felt\w*skift/i.test(t)) return {
+    see:       'Sjekk om det er klart foran og bak',
+    understand: 'En forbikobling tar lenger tid enn du tror',
+    choose:    'Forbikjøring kun når det er klart, lovlig og nødvendig'
+  };
+  if (/tunnel\b|bro\b|smal/i.test(t)) return {
+    see:       'Legg merke til vegbredde og siktelengde',
+    understand: 'Begrenset plass gir lite rom for feil',
+    choose:    'Senk farten og plasser bilen presist'
+  };
+  if (/lys\b|nærlys|fjernlys|blende|mørk/i.test(t)) return {
+    see:       'Observer lysene til møtende og framfor deg',
+    understand: 'Feil lys kan blende andre eller gi deg dårlig sikt',
+    choose:    'Bruk lys som er tilpasset forholdene og andre trafikanter'
+  };
+  if (/barn\b|skole\b|lekeplass|barn og unge/i.test(t)) return {
+    see:       'Hold utkikk etter barn nær og ved siden av veien',
+    understand: 'Barn opptrer uforutsigbart — de ser ikke faren',
+    choose:    'Senk farten og vær klar til å stanse umiddelbart'
+  };
+  if (/glatt|is\b|snø|regn\b|vinter|veigrep|friksjon/i.test(t)) return {
+    see:       'Vurder veigrep og siktforhold',
+    understand: 'Glatt vei gir betydelig lengre bremselengde',
+    choose:    'Øk avstand og senk farten — la veien bestemme farten'
+  };
+  if (/rundkjøring/i.test(t)) return {
+    see:       'Se etter trafikk som allerede er inne i rundkjøringen',
+    understand: 'Trafikk inni rundkjøringen har alltid forkjørsrett',
+    choose:    'Vent til det er klart, og sving inn uten å skynde deg'
+  };
+  if (/parkering|stanse|stoppe/i.test(t)) return {
+    see:       'Observer skilt, vegmerking og trafikken rundt deg',
+    understand: 'Feil parkering hindrer andre og kan skape farlige situasjoner',
+    choose:    'Parker der det er tillatt og trygt'
+  };
+  if (/promille|alkohol|ruspåvirk/i.test(t)) return {
+    see:       'Les situasjonen nøye — hva er det spørsmålet egentlig handler om?',
+    understand: '0,2 promille er lovens grense — men ingen «trygg» grense',
+    choose:    'Nulltoleranse er det eneste sikre valget'
+  };
+  // Generic — always gives something useful
+  return {
+    see:       'Ta deg tid til å lese hele situasjonen',
+    understand: 'Hva er den viktigste faktoren her?',
+    choose:    'Velg det alternativet som er tryggest for alle i trafikken'
+  };
+}
+
+function buildSituationLensHtml(qText, expl) {
+  var lens = buildSituationLens(qText, expl);
+  return '<div class="q-observe">'
+    + '<div class="q-observe-row"><span class="q-observe-tag">👀 Se</span>' + escH(lens.see) + '</div>'
+    + '<div class="q-observe-row"><span class="q-observe-tag">🧠 Forstå</span>' + escH(lens.understand) + '</div>'
+    + '<div class="q-observe-row"><span class="q-observe-tag">🚗 Velg</span>' + escH(lens.choose) + '</div>'
+    + '</div>';
+}
+
+// ════════════════════════════════════════════
+//  REVIEW MODE — Øv på feil
+//  Shows wrong questions from history one by one.
+//  Read-only reflection — no answer options.
+// ════════════════════════════════════════════
+function startReview(wrongQs) {
+  if (!wrongQs || !wrongQs.length) return;
+  _reviewMode      = true;
+  _reviewQuestions = wrongQs;
+  _reviewIdx       = 0;
+  closeHistDetail();
+  showScreen('screenQuiz');
+  // Update quiz header for review context
+  var progLbl = document.getElementById('qProgLbl');
+  if (progLbl) progLbl.textContent = 'Gjennomgang av feil';
+  var progFill = document.getElementById('qProgFill');
+  if (progFill) progFill.style.width = '0%';
+  var scoreEl = document.getElementById('qScoreNum');
+  if (scoreEl) scoreEl.textContent = '0';
+  // Clear right panel
+  var aiBody = document.getElementById('quizAiBody');
+  if (aiBody) aiBody.innerHTML = '<div class="quiz-ai-idle"><div class="quiz-ai-idle-icon">📖</div><div class="quiz-ai-idle-text">Les gjennom spørsmål og forklaringer i ditt eget tempo.</div></div>';
+  renderReviewCard();
+}
+
+function renderReviewCard() {
+  var qCard = document.getElementById('qCard');
+  if (!qCard) return;
+
+  var progFill = document.getElementById('qProgFill');
+  if (progFill) progFill.style.width = Math.round(_reviewIdx / _reviewQuestions.length * 100) + '%';
+
+  if (_reviewIdx >= _reviewQuestions.length) {
+    // Review complete
+    qCard.innerHTML = '<div class="q-mid"><div class="rv-done">'
+      + '<div class="rv-done-icon">✓</div>'
+      + '<div class="rv-done-head">Gjennomgang fullført.</div>'
+      + '<div class="rv-done-body">Du har gått gjennom ' + _reviewQuestions.length + ' spørsmål.'
+        + ' Les gjerne forklaringene én gang til før du tar ny quiz.</div>'
+      + '<button class="rv-done-btn" onclick="showTab(\'home\')">Tilbake til hjem</button>'
+      + '</div></div>';
+    return;
+  }
+
+  var q = _reviewQuestions[_reviewIdx];
+  var isLast = (_reviewIdx + 1 >= _reviewQuestions.length);
+  var nextLabel = isLast ? 'Fullfør gjennomgang' : 'Neste →';
+
+  qCard.innerHTML = '<div class="q-mid"><div class="rv-wrap">'
+    + '<div class="rv-header">Gjennomgang ' + (_reviewIdx + 1) + ' av ' + _reviewQuestions.length + '</div>'
+    + (q.question_text ? '<div class="rv-question">' + escH(q.question_text) + '</div>' : '')
+    + (q.user_answer    ? '<div class="rv-answer rv-wrong">❌&nbsp; Du svarte: <strong>' + escH(q.user_answer) + '</strong></div>' : '')
+    + (q.correct_answer ? '<div class="rv-answer rv-right">✓&nbsp; Riktig svar: <strong>' + escH(q.correct_answer) + '</strong></div>' : '')
+    + (q.explanation
+        ? '<div class="rv-expl"><div class="rv-expl-lbl">Forklaring</div><div class="rv-expl-txt">' + escH(q.explanation) + '</div></div>'
+        : '')
+    + '<button class="rv-next" onclick="reviewNext()">' + nextLabel + '</button>'
+    + '</div></div>';
+}
+
+function reviewNext() {
+  _reviewIdx++;
+  renderReviewCard();
+}
+
+function endReview() {
+  _reviewMode     = false;
+  _reviewQuestions = [];
+  _reviewIdx      = 0;
+}
+
 // ── Selective number emphasis for safety-critical text ───────────────────────
 // Boldens key numerical safety values (3 sekunder, km/t, promille, distance).
 // Called AFTER escH() — patterns only target known ASCII strings, no XSS risk.
@@ -3950,6 +4222,8 @@ function updateAiPanel(isOk, expl) {
 }
 
 function nextQ() {
+  // Review mode uses its own card renderer — skip normal quiz flow
+  if (_reviewMode) { reviewNext(); return; }
   if (!qAnswered) return;
   qIdx++;
   if (qIdx >= questions.length) { showEnd(); return; }
@@ -3963,6 +4237,7 @@ function goBack() {
   ttsPlaying = false;
   stopExamTimer();
   isExamMode = false;
+  if (_reviewMode) endReview();
   showTab(activeTab && activeTab !== 'quiz' ? activeTab : 'home');
 }
 
@@ -4252,6 +4527,24 @@ function openHistDetail(idx) {
 
   // Wire retry button
   document.getElementById('hpRetryBtn').onclick = function() { retryAttempt(idx); };
+
+  // Wire / show "Gå gjennom feil" review button
+  var hpActions = document.getElementById('hpActions');
+  if (hpActions) {
+    // Remove any previously added review btn
+    var oldRv = document.getElementById('hpReviewBtn');
+    if (oldRv) oldRv.remove();
+    if (wrongQs.length) {
+      var rvBtn = document.createElement('button');
+      rvBtn.id = 'hpReviewBtn';
+      rvBtn.className = 'hp-btn-sec';
+      rvBtn.textContent = 'Gå gjennom ' + wrongQs.length + ' feil svar';
+      rvBtn.onclick = function() { startReview(wrongQs); };
+      // Insert before "Lukk" (last button)
+      var lukk = hpActions.lastElementChild;
+      hpActions.insertBefore(rvBtn, lukk);
+    }
+  }
 
   // Open
   document.getElementById('histPanelBackdrop').classList.add('open');
