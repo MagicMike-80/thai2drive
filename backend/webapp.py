@@ -1242,13 +1242,17 @@ a { color:inherit; text-decoration:none; }
 .sign-panel.open { transform:translateY(0); }
 
 @media (min-width:700px) {
+  /* Desktop: centered modal, 2-column layout */
   .sign-panel {
-    left:auto; top:0; bottom:0; width:400px;
-    border-radius:0; max-height:100vh;
-    transform:translateX(102%);
-    box-shadow:-8px 0 40px rgba(0,0,0,.45);
+    left:50%; top:50%; bottom:auto; right:auto;
+    width:min(860px, calc(100vw - 40px));
+    max-height:calc(100vh - 48px);
+    border-radius:20px;
+    flex-direction:row;
+    transform:translate(-50%, calc(-50% + 24px));
+    box-shadow:0 24px 80px rgba(0,0,0,.65);
   }
-  .sign-panel.open { transform:translateX(0); }
+  .sign-panel.open { transform:translate(-50%,-50%); }
 }
 
 /* Drag handle — mobile only */
@@ -1258,6 +1262,74 @@ a { color:inherit; text-decoration:none; }
   margin:10px auto 0; flex-shrink:0;
 }
 @media (min-width:700px) { .sp-handle { display:none; } }
+
+/* ── Left column: related signs (desktop only) ── */
+.sp-related-col { display:none; }
+@media (min-width:700px) {
+  .sp-related-col {
+    display:flex; flex-direction:column;
+    width:210px; flex-shrink:0;
+    background:#060D1A;
+    border-right:1px solid rgba(255,255,255,.07);
+    border-radius:20px 0 0 20px;
+    overflow:hidden;
+  }
+  .sp-related-col-hdr {
+    padding:16px 12px 8px;
+    font-size:.56rem; font-weight:900; text-transform:uppercase;
+    letter-spacing:1px; color:var(--muted); flex-shrink:0;
+  }
+  .sp-related-col-body {
+    flex:1; overflow-y:auto;
+    display:flex; flex-wrap:wrap;
+    gap:7px; padding:4px 10px 12px;
+    align-content:flex-start;
+    scrollbar-width:thin;
+  }
+  .sp-related-col-body .sp-rel-thumb { width:calc(50% - 4px); }
+}
+
+/* ── Main detail column ── */
+.sp-detail {
+  flex:1; min-width:0;
+  display:flex; flex-direction:column; overflow:hidden;
+}
+@media (min-width:700px) {
+  .sp-detail { border-radius:0 20px 20px 0; }
+}
+
+/* ── Related sign thumbnails (shared: col + row) ── */
+.sp-rel-thumb {
+  flex-shrink:0; cursor:pointer;
+  display:flex; flex-direction:column; align-items:center; gap:4px;
+  padding:7px 5px; width:68px;
+  background:rgba(255,255,255,.04); border-radius:11px;
+  border:1.5px solid rgba(255,255,255,.07);
+  transition:border-color .14s, background .14s;
+}
+.sp-rel-thumb:hover { border-color:rgba(255,255,255,.22); }
+.sp-rel-thumb.sp-rel-active { border-color:var(--orange); background:rgba(255,153,51,.08); }
+.sp-rel-thumb img { width:42px; height:42px; object-fit:contain; }
+.sp-rel-thumb .sp-rel-name {
+  font-size:.51rem; color:var(--muted); text-align:center;
+  line-height:1.2; max-width:60px;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+
+/* ── Mobile related row: horizontal carousel ── */
+.sp-related-row {
+  flex-shrink:0; display:flex; align-items:center; gap:7px;
+  overflow-x:auto; padding:8px 14px 4px;
+  scrollbar-width:none;
+}
+.sp-related-row::-webkit-scrollbar { display:none; }
+.sp-related-row:empty { display:none; padding:0; }
+.sp-related-row-lbl {
+  flex-shrink:0; font-size:.55rem; font-weight:900;
+  text-transform:uppercase; letter-spacing:1px; color:var(--muted);
+  writing-mode:initial;
+}
+@media (min-width:700px) { .sp-related-row { display:none; } }
 
 /* ── Header ── */
 .sp-header {
@@ -2580,26 +2652,36 @@ a { color:inherit; text-decoration:none; }
 <div class="sign-panel-backdrop" id="signPanelBackdrop" onclick="closeSignDetail()"></div>
 <div class="sign-panel" id="signPanel">
   <div class="sp-handle"></div>
-  <div class="sp-header">
-    <button class="sp-close" onclick="closeSignDetail()">✕</button>
-    <div class="sp-img-wrap">
-      <img class="sp-img" id="spImg" src="" alt="">
+  <!-- Desktop left column: related signs from same group -->
+  <div class="sp-related-col" id="spRelatedCol">
+    <div class="sp-related-col-hdr" id="spRelatedHdr"></div>
+    <div class="sp-related-col-body" id="spRelatedColBody"></div>
+  </div>
+  <!-- Main column (full width mobile, right side desktop) -->
+  <div class="sp-detail">
+    <div class="sp-header">
+      <button class="sp-close" onclick="closeSignDetail()">✕</button>
+      <div class="sp-img-wrap">
+        <img class="sp-img" id="spImg" src="" alt="">
+      </div>
+      <div class="sp-name" id="spName">–</div>
+      <div class="sp-group-label" id="spGroupLabel"></div>
     </div>
-    <div class="sp-name" id="spName">–</div>
-    <div class="sp-group-label" id="spGroupLabel"></div>
-  </div>
-  <div class="sp-lang-tabs">
-    <button class="sp-lang-tab active" data-lang="no" onclick="setSignPanelLang('no')">🇳🇴 Norsk</button>
-    <button class="sp-lang-tab" data-lang="th" onclick="setSignPanelLang('th')">🇹🇭 Thai</button>
-    <button class="sp-lang-tab" data-lang="en" onclick="setSignPanelLang('en')">🇬🇧 English</button>
-  </div>
-  <div class="sp-body" id="spBody"></div>
-  <div class="sp-actions">
-    <button class="sp-btn-primary" onclick="practiceThisSign()">📚 Øv på dette skiltet</button>
-    <div class="sp-actions-row">
-      <button class="sp-btn-sm sp-btn-sm-audio" onclick="speakSign()">🔊<span>Les høyt</span></button>
-      <button class="sp-btn-sm sp-btn-sm-ai" onclick="askAiAboutSign()">🤖<span>Spør AI</span></button>
-      <button class="sp-btn-sm sp-btn-sm-bm" id="spBmBtn" onclick="toggleSignFavorite()">🔖<span>Lagre</span></button>
+    <div class="sp-lang-tabs">
+      <button class="sp-lang-tab active" data-lang="no" onclick="setSignPanelLang('no')">🇳🇴 Norsk</button>
+      <button class="sp-lang-tab" data-lang="th" onclick="setSignPanelLang('th')">🇹🇭 Thai</button>
+      <button class="sp-lang-tab" data-lang="en" onclick="setSignPanelLang('en')">🇬🇧 English</button>
+    </div>
+    <!-- Mobile: related signs horizontal carousel (hidden desktop) -->
+    <div class="sp-related-row" id="spRelatedRow"></div>
+    <div class="sp-body" id="spBody"></div>
+    <div class="sp-actions">
+      <button class="sp-btn-primary" id="spPracticeBtn" onclick="practiceThisSign()">📚 Øv med quiz</button>
+      <div class="sp-actions-row">
+        <button class="sp-btn-sm sp-btn-sm-audio" id="spAudioBtn" onclick="speakSign()">🔊<span>Les høyt</span></button>
+        <button class="sp-btn-sm sp-btn-sm-ai" id="spAskAiBtn" onclick="askAiAboutSign()">🤖<span>Spør AI</span></button>
+        <button class="sp-btn-sm sp-btn-sm-bm" id="spBmBtn" onclick="toggleSignFavorite()">🔖<span>Lagre</span></button>
+      </div>
     </div>
   </div>
 </div>
@@ -2619,7 +2701,7 @@ a { color:inherit; text-decoration:none; }
   <div class="hp-body" id="hpBody"></div>
   <div class="hp-actions">
     <button class="hp-btn-pri" id="hpRetryBtn">Prøv igjen</button>
-    <button class="hp-btn-sec" onclick="closeHistDetail()">Lukk</button>
+    <button class="hp-btn-sec" id="hpCloseBtn" onclick="closeHistDetail()">Lukk</button>
   </div>
 </div>
 
@@ -2763,6 +2845,25 @@ var UI = {
   len_se:        {th:'ดู',                    no:'Se',                     en:'Observe'},
   len_forsta:    {th:'เข้าใจ',               no:'Forstå',                 en:'Understand'},
   len_velg:      {th:'เลือก',                no:'Velg',                   en:'Decide'},
+  // ── Sign panel actions ─────────────────────────────────────────────────────
+  sp_practice:   {th:'📚 ฝึกทำโจทย์',         no:'📚 Øv med quiz',           en:'📚 Practice quiz'},
+  sp_audio:      {th:'🔊 ฟังเสียง',            no:'🔊 Les høyt',              en:'🔊 Read aloud'},
+  sp_ask_ai:     {th:'🤖 ถามAI',              no:'🤖 Spør AI',               en:'🤖 Ask AI'},
+  sp_save:       {th:'🔖 บันทึก',             no:'🔖 Lagre',                 en:'🔖 Save'},
+  sp_saved:      {th:'🔖 บันทึกแล้ว',          no:'🔖 Lagret',                en:'🔖 Saved'},
+  sp_related:    {th:'ป้ายอื่นในกลุ่มนี้',       no:'Fra samme gruppe',         en:'More from this group'},
+  sp_recognize:  {th:'วิธีสังเกต',              no:'Slik kjenner du det igjen', en:'How to recognize it'},
+  sp_in_traffic: {th:'ในสถานการณ์จริง',          no:'I trafikken',              en:'In traffic'},
+  sp_recognize_text_no: {th:'',no:'Legg merke til form og farge. Les symbolet — det forteller deg hva du skal gjøre. Bruk quiz-knappen for å teste deg selv.',en:''},
+  sp_recognize_text_th: {th:'สังเกตรูปร่างและสีของป้าย อ่านสัญลักษณ์ — มันบอกว่าคุณต้องทำอะไร กดปุ่มฝึกทำโจทย์เพื่อทดสอบตัวเอง',no:'',en:''},
+  sp_recognize_text_en: {th:'',no:'',en:'Note the shape and color. Read the symbol — it tells you what to do. Use the quiz button to test yourself.'},
+  // ── History panel ─────────────────────────────────────────────────────────
+  hist_retry:    {th:'ลองอีกครั้ง',             no:'Prøv igjen',               en:'Try again'},
+  hist_close:    {th:'ปิด',                    no:'Lukk',                     en:'Close'},
+  hist_login:    {th:'เข้าสู่ระบบเพื่อดูประวัติ', no:'Logg inn for å se historikk', en:'Log in to see history'},
+  // ── General ────────────────────────────────────────────────────────────────
+  signs_count:   {th:'ป้าย',                   no:'skilt',                    en:'signs'},
+  err_load:      {th:'เกิดข้อผิดพลาด',          no:'Feil ved lasting',          en:'Error loading'},
 };
 
 function t(key) { return (UI[key] && (UI[key][appLang] || UI[key]['no'])) || key; }
@@ -2815,6 +2916,24 @@ function applyUILang() {
   // Premium banner
   var pb = document.getElementById('homePremiumBanner');
   if(pb) { var ptitle = pb.querySelector('.pb-title'); var psub = pb.querySelector('.pb-sub'); if(ptitle) ptitle.textContent = t('premium_on'); if(psub) psub.textContent = t('premium_sub'); }
+  // History panel buttons
+  var hpRetry = document.getElementById('hpRetryBtn');
+  if (hpRetry) hpRetry.textContent = t('hist_retry');
+  var hpClose = document.getElementById('hpCloseBtn');
+  if (hpClose) hpClose.textContent = t('hist_close');
+
+  // Sign panel action buttons (re-render only when panel is open)
+  if (document.getElementById('signPanel').classList.contains('open')) {
+    var spPract = document.getElementById('spPracticeBtn');
+    if (spPract) spPract.textContent = t('sp_practice');
+    var spAudio = document.getElementById('spAudioBtn');
+    if (spAudio) spAudio.innerHTML = t('sp_audio');
+    var spAi = document.getElementById('spAskAiBtn');
+    if (spAi) spAi.innerHTML = t('sp_ask_ai');
+    // Re-render the full panel to update content cards and related signs labels
+    if (_signPanelData) { _signPanelLang = appLang; _renderSignPanel(); }
+  }
+
   // Translate ALL elements with data-key — reliable fallback
   document.querySelectorAll('[data-key]').forEach(function(el) {
     var key = el.getAttribute('data-key');
@@ -4637,6 +4756,7 @@ async function loadBookmarks() {
 //  SIGNS GALLERY
 // ════════════════════════════════════════════
 var signsLoaded = false;
+var _signGroupsCache = null;   // loaded groups — used by sign detail panel for related signs
 // Visual identity for each of the 9 Norwegian sign groups (keyed by group number).
 // Color drives the dot + glow; desc is shown under the name as a one-line learning hint.
 var SIGN_GROUP_META = {
@@ -4678,10 +4798,12 @@ async function loadSigns() {
     var groups = await api('GET', '/api/traffic-signs');
     if (!Array.isArray(groups)) throw new Error('Ugyldig respons');
 
+    _signGroupsCache = groups;  // cache for sign detail panel related-signs lookup
+
     // Count total signs
     var total = groups.reduce(function(n, g) { return n + (g.signs ? g.signs.length : 0); }, 0);
     var countEl = document.getElementById('signsCount');
-    if (countEl) countEl.textContent = total ? total + ' skilt' : '';
+    if (countEl) countEl.textContent = total ? total + ' ' + t('signs_count') : '';
 
     if (!total) {
       scroll.innerHTML = '<div class="empty-state"><div class="es-icon">🚦</div><p>' + t('signs_empty') + '</p></div>';
@@ -4737,8 +4859,10 @@ async function loadSigns() {
             ? '<div class="sign-img-wrap"><img class="sign-img" src="' + escH(imgUrl) + '" alt="" loading="lazy"></div>'
             : '') +
           '<div class="sign-ans">' + escH(nameText || '–') + '</div>';
-        // Store group_name on sign for detail panel
+        // Store group info on sign for detail panel (related signs, video routing)
         sign._groupName = group.group_name;
+        sign._groupNum  = gNum;
+        sign._groupMeta = gMeta;
         (function(s){ card.onclick = function(){ openSignDetail(s); }; })(sign);
         grid.appendChild(card);
       });
@@ -4756,7 +4880,7 @@ async function loadSigns() {
 // ════════════════════════════════════════════
 async function loadHistory() {
   if (!deviceId) {
-    document.getElementById('histScroll').innerHTML = '<div class="empty-state"><div class="es-icon">🔒</div><p>Logg inn for å se historikk</p></div>';
+    document.getElementById('histScroll').innerHTML = '<div class="empty-state"><div class="es-icon">🔒</div><p>' + t('hist_login') + '</p></div>';
     return;
   }
   var scroll = document.getElementById('histScroll');
@@ -5414,6 +5538,7 @@ function _renderSignPanel() {
       + '</div>';
   }
 
+  // ── Content cards ────────────────────────────────────────────────────────
   var html = '';
   html += card('explanation', '📖', L.expl,     _getProp(sign.explanation,  lang));
   html += card('danger',      '⚠️', L.danger,   _getProp(sign.whyDangerous || sign.why_dangerous, lang));
@@ -5422,32 +5547,104 @@ function _renderSignPanel() {
   html += card('exam',        '📝', L.examTip,  _getProp(sign.examTip || sign.exam_tip, lang));
   html += card('memory',      '💡', L.memRule,  _getProp(sign.memoryRule || sign.memory_rule, lang));
 
+  // Smart empty state: no "coming soon" — show recognition guidance instead
   if (!html) {
-    var soon = lang === 'th' ? 'เนื้อหาเพิ่มเติมจะมาเร็วๆ นี้'
-             : lang === 'en' ? 'More content coming soon.'
-             : 'Mer innhold legges til snart.';
-    html = '<div class="sp-empty">' + escH(soon) + '</div>';
+    var gMeta  = sign._groupMeta || SIGN_GROUP_META[sign._groupNum || sign.group] || {};
+    var gDesc  = gMeta.desc ? (gMeta.desc[lang] || gMeta.desc.no || '') : '';
+    var recLabel = lang === 'th' ? 'วิธีสังเกต' : lang === 'en' ? 'How to recognize it' : 'Slik kjenner du det igjen';
+    var recText  = lang === 'th'
+      ? 'ป้ายนี้อยู่ในกลุ่ม: ' + gDesc + '. สังเกตรูปร่าง สี และสัญลักษณ์ แล้วกดปุ่มฝึกทำโจทย์ด้านล่างเพื่อทดสอบตัวเอง'
+      : lang === 'en'
+      ? 'This sign belongs to: ' + gDesc + '. Note its shape, color and symbol, then use the quiz button to test yourself.'
+      : (gDesc ? gDesc + '. ' : '') + 'Legg merke til form, farge og symbol. Bruk quiz-knappen nedenfor for å øve.';
+    html = card('explanation', '👁️', recLabel, recText);
   }
 
   var body = document.getElementById('spBody');
   if (body) body.innerHTML = html;
 
-  // ── Contextual video suggestion for this sign (async) ─────────────────────
-  // Uses sign.id for a direct match; passes sign group as fallback.
-  var _spSignId  = sign.id || '';
-  var _spGroup   = _getProp(sign._groupName || sign.group_name, 'no') || '';
+  // ── Action buttons — translated ──────────────────────────────────────────
+  var practBtn = document.getElementById('spPracticeBtn');
+  if (practBtn) practBtn.textContent = t('sp_practice');
+
+  var audioBtn = document.getElementById('spAudioBtn');
+  if (audioBtn) audioBtn.innerHTML = t('sp_audio');
+
+  var aiBtn = document.getElementById('spAskAiBtn');
+  if (aiBtn) aiBtn.innerHTML = t('sp_ask_ai');
+
+  var isFav = _signFavorites.indexOf(sign.id) >= 0;
+  var bmBtn = document.getElementById('spBmBtn');
+  if (bmBtn) {
+    bmBtn.textContent = isFav ? t('sp_saved') : t('sp_save');
+    bmBtn.className   = 'sp-btn-sm sp-btn-sm-bm' + (isFav ? ' saved' : '');
+  }
+
+  // ── Related signs ─────────────────────────────────────────────────────────
+  var currentSignId = sign.id || '';
+  var groupNum = sign._groupNum || sign.group || 0;
+
+  // Collect related signs from the cached groups data
+  var relatedSigns = [];
+  if (_signGroupsCache) {
+    _signGroupsCache.forEach(function(g) {
+      if ((g.group || 0) === groupNum) relatedSigns = g.signs || [];
+    });
+  }
+  var others = relatedSigns.filter(function(s) { return s.id !== currentSignId; });
+
+  // Helper: build a thumb element and click handler
+  function makeThumb(s) {
+    var thumb = document.createElement('div');
+    thumb.className = 'sp-rel-thumb' + (s.id === currentSignId ? ' sp-rel-active' : '');
+    var sName = s.name;
+    var nameText = typeof sName === 'object' ? (sName[lang] || sName.no || '') : (sName || '');
+    var imgUrl = s.image_url || '';
+    thumb.innerHTML = (imgUrl
+      ? '<img src="' + escH(imgUrl) + '" loading="lazy" alt="">'
+      : '<div style="width:42px;height:42px;background:rgba(255,255,255,.06);border-radius:8px"></div>')
+      + '<span class="sp-rel-name">' + escH(nameText || s.id || '–') + '</span>';
+    (function(rel) {
+      thumb.onclick = function() {
+        // Carry group meta forward so detail panel works on next sign too
+        rel._groupName = sign._groupName;
+        rel._groupNum  = sign._groupNum;
+        rel._groupMeta = sign._groupMeta;
+        openSignDetail(rel);
+      };
+    })(s);
+    return thumb;
+  }
+
+  // Desktop left column
+  var relHdr = document.getElementById('spRelatedHdr');
+  var relColBody = document.getElementById('spRelatedColBody');
+  if (relHdr) relHdr.textContent = t('sp_related');
+  if (relColBody) {
+    relColBody.innerHTML = '';
+    others.slice(0, 24).forEach(function(s) { relColBody.appendChild(makeThumb(s)); });
+  }
+
+  // Mobile horizontal row
+  var relRow = document.getElementById('spRelatedRow');
+  if (relRow) {
+    relRow.innerHTML = '';
+    if (others.length) {
+      var lbl = document.createElement('span');
+      lbl.className = 'sp-related-row-lbl';
+      lbl.textContent = t('sp_related');
+      relRow.appendChild(lbl);
+      others.slice(0, 10).forEach(function(s) { relRow.appendChild(makeThumb(s)); });
+    }
+  }
+
+  // ── Contextual video — secondary (appended after content) ─────────────────
+  var _spSignId = sign.id || '';
+  var _spGroup  = _getProp(sign._groupName || sign.group_name, 'no') || '';
   if (_spSignId && body) {
     fetchVideoForSign(_spSignId, _spGroup).then(function(v) {
       _injectVideo(body, 'vidSlot_sign_' + _spSignId, v);
     });
-  }
-
-  // Bookmark button state
-  var bmBtn = document.getElementById('spBmBtn');
-  if (bmBtn) {
-    var isFav = _signFavorites.indexOf(sign.id) >= 0;
-    bmBtn.innerHTML = isFav ? '🔖<span>Lagret</span>' : '🔖<span>Lagre</span>';
-    bmBtn.className = 'sp-btn-sm sp-btn-sm-bm' + (isFav ? ' saved' : '');
   }
 }
 
