@@ -1242,17 +1242,13 @@ a { color:inherit; text-decoration:none; }
 .sign-panel.open { transform:translateY(0); }
 
 @media (min-width:700px) {
-  /* Desktop: centered modal, 2-column layout */
   .sign-panel {
-    left:50%; top:50%; bottom:auto; right:auto;
-    width:min(860px, calc(100vw - 40px));
-    max-height:calc(100vh - 48px);
-    border-radius:20px;
-    flex-direction:row;
-    transform:translate(-50%, calc(-50% + 24px));
-    box-shadow:0 24px 80px rgba(0,0,0,.65);
+    left:auto; top:0; bottom:0; width:min(900px, calc(100vw - 44px));
+    border-radius:0; max-height:100vh;
+    transform:translateX(102%);
+    box-shadow:-8px 0 40px rgba(0,0,0,.45);
   }
-  .sign-panel.open { transform:translate(-50%,-50%); }
+  .sign-panel.open { transform:translateX(0); }
 }
 
 /* Drag handle — mobile only */
@@ -1262,74 +1258,6 @@ a { color:inherit; text-decoration:none; }
   margin:10px auto 0; flex-shrink:0;
 }
 @media (min-width:700px) { .sp-handle { display:none; } }
-
-/* ── Left column: related signs (desktop only) ── */
-.sp-related-col { display:none; }
-@media (min-width:700px) {
-  .sp-related-col {
-    display:flex; flex-direction:column;
-    width:210px; flex-shrink:0;
-    background:#060D1A;
-    border-right:1px solid rgba(255,255,255,.07);
-    border-radius:20px 0 0 20px;
-    overflow:hidden;
-  }
-  .sp-related-col-hdr {
-    padding:16px 12px 8px;
-    font-size:.56rem; font-weight:900; text-transform:uppercase;
-    letter-spacing:1px; color:var(--muted); flex-shrink:0;
-  }
-  .sp-related-col-body {
-    flex:1; overflow-y:auto;
-    display:flex; flex-wrap:wrap;
-    gap:7px; padding:4px 10px 12px;
-    align-content:flex-start;
-    scrollbar-width:thin;
-  }
-  .sp-related-col-body .sp-rel-thumb { width:calc(50% - 4px); }
-}
-
-/* ── Main detail column ── */
-.sp-detail {
-  flex:1; min-width:0;
-  display:flex; flex-direction:column; overflow:hidden;
-}
-@media (min-width:700px) {
-  .sp-detail { border-radius:0 20px 20px 0; }
-}
-
-/* ── Related sign thumbnails (shared: col + row) ── */
-.sp-rel-thumb {
-  flex-shrink:0; cursor:pointer;
-  display:flex; flex-direction:column; align-items:center; gap:4px;
-  padding:7px 5px; width:68px;
-  background:rgba(255,255,255,.04); border-radius:11px;
-  border:1.5px solid rgba(255,255,255,.07);
-  transition:border-color .14s, background .14s;
-}
-.sp-rel-thumb:hover { border-color:rgba(255,255,255,.22); }
-.sp-rel-thumb.sp-rel-active { border-color:var(--orange); background:rgba(255,153,51,.08); }
-.sp-rel-thumb img { width:42px; height:42px; object-fit:contain; }
-.sp-rel-thumb .sp-rel-name {
-  font-size:.51rem; color:var(--muted); text-align:center;
-  line-height:1.2; max-width:60px;
-  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
-}
-
-/* ── Mobile related row: horizontal carousel ── */
-.sp-related-row {
-  flex-shrink:0; display:flex; align-items:center; gap:7px;
-  overflow-x:auto; padding:8px 14px 4px;
-  scrollbar-width:none;
-}
-.sp-related-row::-webkit-scrollbar { display:none; }
-.sp-related-row:empty { display:none; padding:0; }
-.sp-related-row-lbl {
-  flex-shrink:0; font-size:.55rem; font-weight:900;
-  text-transform:uppercase; letter-spacing:1px; color:var(--muted);
-  writing-mode:initial;
-}
-@media (min-width:700px) { .sp-related-row { display:none; } }
 
 /* ── Header ── */
 .sp-header {
@@ -1390,6 +1318,73 @@ a { color:inherit; text-decoration:none; }
 }
 .sp-body::-webkit-scrollbar { width:2px; }
 .sp-body::-webkit-scrollbar-thumb { background:rgba(255,255,255,.08); border-radius:2px; }
+
+.sp-learning-layout { display:flex; flex-direction:column; gap:12px; }
+.sp-related-surface,
+.sp-main-surface {
+  min-width:0;
+  display:flex; flex-direction:column; gap:10px;
+}
+@media (min-width:700px) {
+  .sp-learning-layout {
+    display:grid;
+    grid-template-columns:minmax(230px,.82fr) minmax(340px,1.18fr);
+    gap:14px;
+    align-items:start;
+  }
+  .sp-related-surface {
+    position:sticky; top:0;
+    max-height:calc(100vh - 212px);
+    overflow-y:auto;
+    padding-right:2px;
+  }
+  .sp-related-surface::-webkit-scrollbar { width:2px; }
+  .sp-related-surface::-webkit-scrollbar-thumb { background:rgba(255,255,255,.08); border-radius:2px; }
+}
+.sp-side-section {
+  background:rgba(255,255,255,.035);
+  border:1px solid rgba(255,255,255,.075);
+  border-radius:14px;
+  padding:12px;
+}
+.sp-side-title {
+  font-size:.62rem; font-weight:900; text-transform:uppercase;
+  letter-spacing:.8px; color:var(--muted); margin-bottom:9px;
+}
+.sp-related-grid {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px;
+}
+@media (max-width:699px) {
+  .sp-related-grid {
+    display:flex; overflow-x:auto; gap:8px; padding-bottom:2px;
+    -webkit-overflow-scrolling:touch;
+  }
+  .sp-related-card { flex:0 0 118px; }
+}
+.sp-related-card {
+  border:none;
+  background:rgba(255,255,255,.045);
+  border:1px solid rgba(255,255,255,.08);
+  color:var(--text);
+  border-radius:12px;
+  padding:8px;
+  cursor:pointer;
+  display:flex; flex-direction:column; gap:6px;
+  text-align:left;
+}
+.sp-related-card:hover { border-color:rgba(255,153,51,.30); background:rgba(255,153,51,.055); }
+.sp-related-img {
+  height:54px;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(0,0,0,.16);
+  border-radius:9px;
+}
+.sp-related-img img { max-width:100%; max-height:50px; object-fit:contain; display:block; }
+.sp-related-code { font-size:.62rem; color:var(--orange); font-weight:900; }
+.sp-related-name { font-size:.70rem; line-height:1.25; font-weight:800; color:var(--text); }
+.sp-related-empty { font-size:.76rem; color:var(--muted); line-height:1.55; }
 
 /* ── Content cards — each type has its own identity ── */
 .sp-card {
@@ -2283,7 +2278,7 @@ a { color:inherit; text-decoration:none; }
       <div class="home-readiness" id="homeReadiness" style="display:none" onclick="showTab('history')">
         <div class="hr-dot" id="hrDot"></div>
         <div class="hr-main">
-          <div class="hr-label" id="hrLabel">Siste økt</div>
+          <div class="hr-label">Siste økt</div>
           <div class="hr-status" id="hrStatus"></div>
           <div class="hr-sub" id="hrSub"></div>
         </div>
@@ -2353,7 +2348,7 @@ a { color:inherit; text-decoration:none; }
               <span class="quiz-ai-robot">🤖</span>
               <div>
                 <div class="quiz-ai-panel-name" data-key="ai_teacher">AI Kjørelærer</div>
-                <div class="quiz-ai-panel-sub" data-key="ai_teacher_sub">Trafikkforståelse</div>
+                <div class="quiz-ai-panel-sub" data-key="traffic_understanding">Trafikkforståelse</div>
               </div>
             </div>
             <div class="quiz-ai-status" id="quizAiStatus">Venter på svar…</div>
@@ -2361,13 +2356,13 @@ a { color:inherit; text-decoration:none; }
           <div class="quiz-ai-body" id="quizAiBody">
             <div class="quiz-ai-idle">
               <div class="quiz-ai-idle-icon">👆</div>
-              <div class="quiz-ai-idle-text">Ta deg tid — hva tror du er riktig? Velg et svar, så forklarer jeg.</div>
+              <div class="quiz-ai-idle-text" data-key="ai_idle">Ta deg tid — hva tror du er riktig? Velg et svar, så forklarer jeg.</div>
             </div>
           </div>
         </div>
         <!-- Sticky Neste — shown after answering, desktop right col only -->
         <div class="quiz-right-neste" id="quizRightNeste">
-          <button class="quiz-right-neste-btn" onclick="nextQ()">Neste →</button>
+          <button class="quiz-right-neste-btn" onclick="nextQ()" data-key="next">Neste →</button>
         </div>
       </div>
 
@@ -2376,7 +2371,7 @@ a { color:inherit; text-decoration:none; }
     <!-- ═══ BOOKMARKS SCREEN ═══ -->
     <div class="screen" id="screenBookmarks">
       <div class="bm-header">
-        <div class="screen-title">🔖 Bokmerker <span id="bmCount"></span></div>
+        <div class="screen-title">🔖 <span data-key="bookmarks">Bokmerker</span> <span id="bmCount"></span></div>
       </div>
       <div class="bm-scroll" id="bmScroll">
         <div class="loading-wrap">
@@ -2652,36 +2647,26 @@ a { color:inherit; text-decoration:none; }
 <div class="sign-panel-backdrop" id="signPanelBackdrop" onclick="closeSignDetail()"></div>
 <div class="sign-panel" id="signPanel">
   <div class="sp-handle"></div>
-  <!-- Desktop left column: related signs from same group -->
-  <div class="sp-related-col" id="spRelatedCol">
-    <div class="sp-related-col-hdr" id="spRelatedHdr"></div>
-    <div class="sp-related-col-body" id="spRelatedColBody"></div>
+  <div class="sp-header">
+    <button class="sp-close" onclick="closeSignDetail()">✕</button>
+    <div class="sp-img-wrap">
+      <img class="sp-img" id="spImg" src="" alt="">
+    </div>
+    <div class="sp-name" id="spName">–</div>
+    <div class="sp-group-label" id="spGroupLabel"></div>
   </div>
-  <!-- Main column (full width mobile, right side desktop) -->
-  <div class="sp-detail">
-    <div class="sp-header">
-      <button class="sp-close" onclick="closeSignDetail()">✕</button>
-      <div class="sp-img-wrap">
-        <img class="sp-img" id="spImg" src="" alt="">
-      </div>
-      <div class="sp-name" id="spName">–</div>
-      <div class="sp-group-label" id="spGroupLabel"></div>
-    </div>
-    <div class="sp-lang-tabs">
-      <button class="sp-lang-tab active" data-lang="no" onclick="setSignPanelLang('no')">🇳🇴 Norsk</button>
-      <button class="sp-lang-tab" data-lang="th" onclick="setSignPanelLang('th')">🇹🇭 Thai</button>
-      <button class="sp-lang-tab" data-lang="en" onclick="setSignPanelLang('en')">🇬🇧 English</button>
-    </div>
-    <!-- Mobile: related signs horizontal carousel (hidden desktop) -->
-    <div class="sp-related-row" id="spRelatedRow"></div>
-    <div class="sp-body" id="spBody"></div>
-    <div class="sp-actions">
-      <button class="sp-btn-primary" id="spPracticeBtn" onclick="practiceThisSign()">📚 Øv med quiz</button>
-      <div class="sp-actions-row">
-        <button class="sp-btn-sm sp-btn-sm-audio" id="spAudioBtn" onclick="speakSign()">🔊<span>Les høyt</span></button>
-        <button class="sp-btn-sm sp-btn-sm-ai" id="spAskAiBtn" onclick="askAiAboutSign()">🤖<span>Spør AI</span></button>
-        <button class="sp-btn-sm sp-btn-sm-bm" id="spBmBtn" onclick="toggleSignFavorite()">🔖<span>Lagre</span></button>
-      </div>
+  <div class="sp-lang-tabs">
+    <button class="sp-lang-tab active" data-lang="no" onclick="setSignPanelLang('no')">🇳🇴 Norsk</button>
+    <button class="sp-lang-tab" data-lang="th" onclick="setSignPanelLang('th')">🇹🇭 Thai</button>
+    <button class="sp-lang-tab" data-lang="en" onclick="setSignPanelLang('en')">🇬🇧 English</button>
+  </div>
+  <div class="sp-body" id="spBody"></div>
+  <div class="sp-actions">
+    <button class="sp-btn-primary" type="button" onclick="practiceThisSign()" data-key="practice_this_sign">📚 Øv på dette skiltet</button>
+    <div class="sp-actions-row">
+      <button class="sp-btn-sm sp-btn-sm-audio" type="button" onclick="speakSign()">🔊<span data-key="read_aloud">Les høyt</span></button>
+      <button class="sp-btn-sm sp-btn-sm-ai" type="button" onclick="askAiAboutSign()">🤖<span data-key="ask_ai">Spør AI</span></button>
+      <button class="sp-btn-sm sp-btn-sm-bm" id="spBmBtn" type="button" onclick="toggleSignFavorite()">🔖<span data-key="save">Lagre</span></button>
     </div>
   </div>
 </div>
@@ -2699,9 +2684,9 @@ a { color:inherit; text-decoration:none; }
     <div class="hp-stats" id="hpStats"></div>
   </div>
   <div class="hp-body" id="hpBody"></div>
-  <div class="hp-actions">
-    <button class="hp-btn-pri" id="hpRetryBtn">Prøv igjen</button>
-    <button class="hp-btn-sec" id="hpCloseBtn" onclick="closeHistDetail()">Lukk</button>
+  <div class="hp-actions" id="hpActions">
+    <button class="hp-btn-pri" id="hpRetryBtn" data-key="retry">Prøv igjen</button>
+    <button class="hp-btn-sec" onclick="closeHistDetail()" data-key="close">Lukk</button>
   </div>
 </div>
 
@@ -2728,6 +2713,7 @@ var quizStartedAt = null;
 var _lastSavedAttempt = null; // local mirror of the most recent saved attempt
 var _sessionAnswers   = []; // per-question answer log — powers history detail panel
 var _histAttempts     = []; // loaded attempts array — keyed by index for detail panel
+var _histOpenIdx      = null;
 var _reviewMode       = false; // true while in "Øv på feil" review flow
 var _aiPanelTimer     = null; // delayed AI panel — cleared on nextQ to prevent cross-question bleed
 var _reviewQuestions  = []; // wrong questions to review
@@ -2740,6 +2726,55 @@ var soundOn = _ls.get('t2d_sound') !== 'off';
 var feedbackStyle = _ls.get('t2d_feedback') || 'soft';
 var appLang = _ls.get('t2d_lang') || 'th';
 var activeTab = 'home';
+
+function _histKey() { return 't2d_quiz_attempts_' + (deviceId || 'guest'); }
+function _histLatestKey() { return 't2d_latest_attempt_' + (deviceId || 'guest'); }
+function _attemptKey(a) { return (a && (a.client_attempt_id || a.id || (a.started_at + '|' + a.completed_at))) || ''; }
+function _attemptTime(a) {
+  var t = Date.parse((a && (a.completed_at || a.started_at)) || '');
+  return isNaN(t) ? 0 : t;
+}
+function _normalizeAttempt(a) {
+  if (!a) return null;
+  var total = Number(a.total_questions || 0);
+  var correct = Number(a.correct_answers || 0);
+  var copy = Object.assign({}, a);
+  copy.total_questions = total;
+  copy.correct_answers = correct;
+  copy.score_percentage = total > 0 ? Math.round((correct / total) * 100) : Math.round(Number(a.score_percentage || 0));
+  copy.completed_at = copy.completed_at || copy.started_at || new Date().toISOString();
+  return copy;
+}
+function _readLocalAttempts() {
+  try {
+    var items = JSON.parse(localStorage.getItem(_histKey()) || '[]');
+    var latest = JSON.parse(localStorage.getItem(_histLatestKey()) || 'null');
+    return (Array.isArray(items) ? items : []).concat(latest ? [latest] : []);
+  } catch(e) { return []; }
+}
+function _writeLocalAttempt(attempt) {
+  try {
+    var normalized = _normalizeAttempt(attempt);
+    if (!normalized) return;
+    var items = _readLocalAttempts().filter(function(a) { return _attemptKey(a) !== _attemptKey(normalized); });
+    items.unshift(normalized);
+    items.sort(function(a, b) { return _attemptTime(b) - _attemptTime(a); });
+    localStorage.setItem(_histKey(), JSON.stringify(items.slice(0, 50)));
+    localStorage.setItem(_histLatestKey(), JSON.stringify(normalized));
+    localStorage.setItem('t2d_history_updated_at', normalized.completed_at);
+    _lastSavedAttempt = normalized;
+  } catch(e) { console.warn('Local history write failed:', e); }
+}
+function _mergeAttempts(remote, local) {
+  var map = {};
+  (remote || []).concat(local || []).forEach(function(raw) {
+    var a = _normalizeAttempt(raw);
+    var key = _attemptKey(a);
+    if (!a || !key) return;
+    if (!map[key] || _attemptTime(a) >= _attemptTime(map[key])) map[key] = a;
+  });
+  return Object.keys(map).map(function(k) { return map[k]; }).sort(function(a, b) { return _attemptTime(b) - _attemptTime(a); });
+}
 
 // ── UI string translations ──────────────────────────────────
 var UI = {
@@ -2786,6 +2821,109 @@ var UI = {
   history:     {th:'ประวัติ',            no:'Historikk',        en:'History'},
   signs:       {th:'ป้ายจราจร',          no:'Trafikkskilt',     en:'Traffic Signs'},
   signs_empty: {th:'ไม่พบป้าย',           no:'Ingen skilt funnet', en:'No signs found'},
+  login:       {th:'เข้าสู่ระบบ',          no:'Logg inn',         en:'Log in'},
+  no_results:  {th:'ไม่พบผลลัพธ์',          no:'Ingen treff',      en:'No results'},
+  generic_error:{th:'มีบางอย่างผิดพลาด',    no:'Noe gikk galt',    en:'Something went wrong'},
+  saved_chapter:{th:'บันทึกบทเรียนแล้ว',    no:'Kapittel lagret',  en:'Chapter saved'},
+  ready_test:  {th:'พร้อมสอบ',             no:'Klar for prøven',  en:'Ready for test'},
+  almost_ready:{th:'เกือบพร้อม',            no:'Nesten klar',      en:'Almost ready'},
+  practice_more:{th:'ฝึกอีกนิด',            no:'Øv litt mer',      en:'Practice a bit more'},
+  practice_more_short:{th:'ฝึกเพิ่ม',       no:'Øv mer',           en:'Practice more'},
+  mode_exam:   {th:'สอบ',                  no:'Eksamen',          en:'Exam'},
+  mode_category:{th:'หมวดหมู่',             no:'Kategori',         en:'Category'},
+  mode_daily:  {th:'ทดสอบรายวัน',          no:'Daglig test',      en:'Daily test'},
+  mode_random: {th:'ควิซสุ่ม',              no:'Tilfeldig quiz',   en:'Random quiz'},
+  questions_word:{th:'คำถาม',              no:'spørsmål',         en:'questions'},
+  signs_word:  {th:'ป้าย',                 no:'skilt',            en:'signs'},
+  categories_empty:{th:'ไม่พบหมวดหมู่',     no:'Ingen kategorier funnet', en:'No categories found'},
+  categories_load_error:{th:'โหลดหมวดหมู่ไม่ได้<br>ตรวจสอบการเชื่อมต่ออินเทอร์เน็ต', no:'Kunne ikke laste kategorier.<br>Sjekk internettforbindelsen.', en:'Could not load categories.<br>Check your internet connection.'},
+  questions_loading:{th:'กำลังโหลดคำถาม…', no:'Laster spørsmål…', en:'Loading questions…'},
+  questions_empty:{th:'ไม่พบคำถามที่มีรูปภาพ<br>ลองหมวดหมู่อื่น', no:'Ingen spørsmål med bilde funnet.<br>Prøv en annen kategori.', en:'No image questions found.<br>Try another category.'},
+  time_is_up:  {th:'หมดเวลาแล้ว! ⏰',      no:'Tid er ute! ⏰',    en:'Time is up! ⏰'},
+  ai_waiting:  {th:'รอคำตอบ…',             no:'Venter på svar…',  en:'Waiting for answer…'},
+  traffic_situation:{th:'📸 สถานการณ์จราจร', no:'📸 Trafikksituasjon', en:'📸 Traffic situation'},
+  ai_teacher:  {th:'ครูสอนขับรถ AI',        no:'AI Kjørelærer',    en:'AI Driving Teacher'},
+  traffic_understanding:{th:'ความเข้าใจจราจร', no:'Trafikkforståelse', en:'Traffic understanding'},
+  ai_idle:     {th:'ค่อย ๆ ดูสถานการณ์ คุณคิดว่าข้อไหนถูก? เลือกคำตอบ แล้วครูจะอธิบาย', no:'Ta deg tid — hva tror du er riktig? Velg et svar, så forklarer jeg.', en:'Take your time. What do you think is right? Choose an answer, and I will explain.'},
+  wrong_support_5:{th:'ยังไม่ถูก อ่านคำอธิบายอย่างใจเย็น ความเข้าใจต้องใช้เวลา', no:'Ikke riktig. Les forklaringen nøye — forståelse tar tid.', en:'Not quite. Read the explanation calmly. Understanding takes time.'},
+  wrong_support_3:{th:'ครั้งนี้ยังไม่ถูก ลองดูคำอธิบายด้านล่าง', no:'Ikke riktig denne gangen. Gå gjennom forklaringen under.', en:'Not quite this time. Go through the explanation below.'},
+  wrong_support_1:{th:'ยังไม่ถูก ดูคำอธิบายด้านล่าง', no:'Ikke riktig. Se forklaringen under.', en:'Not quite. See the explanation below.'},
+  see_tag:     {th:'👀 ดู',                no:'👀 Se',            en:'👀 See'},
+  understand_tag:{th:'🧠 เข้าใจ',          no:'🧠 Forstå',        en:'🧠 Understand'},
+  choose_tag:  {th:'🚗 เลือก',             no:'🚗 Velg',          en:'🚗 Choose'},
+  lens_generic_see:{th:'ใช้เวลาอ่านสถานการณ์ทั้งหมด', no:'Ta deg tid til å lese hele situasjonen', en:'Take time to read the whole situation'},
+  lens_generic_understand:{th:'ปัจจัยที่สำคัญที่สุดตรงนี้คืออะไร?', no:'Hva er den viktigste faktoren her?', en:'What is the most important factor here?'},
+  lens_generic_choose:{th:'เลือกทางเลือกที่ปลอดภัยที่สุดสำหรับทุกคน', no:'Velg det alternativet som er tryggest for alle i trafikken', en:'Choose the option that is safest for everyone in traffic'},
+  review_title:{th:'ทบทวนข้อผิด',          no:'Gjennomgang av feil', en:'Mistake review'},
+  review_idle:{th:'อ่านคำถามและคำอธิบายตามจังหวะของคุณเอง', no:'Les gjennom spørsmål og forklaringer i ditt eget tempo.', en:'Read through the questions and explanations at your own pace.'},
+  review_done:{th:'ทบทวนเสร็จแล้ว',        no:'Gjennomgang fullført.', en:'Review complete.'},
+  review_done_body:{th:'คุณได้ทบทวน {count} คำถามแล้ว อ่านคำอธิบายอีกครั้งก่อนทำควิซใหม่ได้', no:'Du har gått gjennom {count} spørsmål. Les gjerne forklaringene én gang til før du tar ny quiz.', en:'You have reviewed {count} questions. Read the explanations once more before taking a new quiz.'},
+  review_progress:{th:'ทบทวน',             no:'Gjennomgang',      en:'Review'},
+  review_finish:{th:'จบทบทวน',             no:'Fullfør gjennomgang', en:'Finish review'},
+  you_answered:{th:'คุณตอบ',               no:'Du svarte',        en:'You answered'},
+  correct_answer:{th:'คำตอบที่ถูก',        no:'Riktig svar',      en:'Correct answer'},
+  explanation:{th:'คำอธิบาย',              no:'Forklaring',       en:'Explanation'},
+  more_details:{th:'รายละเอียดเพิ่ม',       no:'Mer detaljer',     en:'More details'},
+  show_more:   {th:'ดูเพิ่ม',              no:'Vis mer',          en:'Show more'},
+  show_less:   {th:'ย่อน้อยลง',             no:'Vis mindre',       en:'Show less'},
+  driving_teacher:{th:'ครูสอนขับรถ',        no:'Kjørelærer',       en:'Driving teacher'},
+  video_short:{th:'📹 คำอธิบายสั้น',       no:'📹 Kort forklaring', en:'📹 Short explanation'},
+  video_watch:{th:'📹 ดูคำอธิบายสั้น',      no:'📹 Se kort forklaring', en:'📹 Watch short explanation'},
+  details:     {th:'ดูรายละเอียด',          no:'Se detaljer',      en:'View details'},
+  passed:      {th:'ผ่าน',                 no:'Bestått',          en:'Passed'},
+  not_passed:  {th:'ยังไม่ผ่าน',            no:'Ikke bestått',     en:'Not passed'},
+  correct_count:{th:'ถูก',                 no:'riktige',          en:'correct'},
+  wrong_count: {th:'ผิด',                  no:'gale',             en:'wrong'},
+  total_count: {th:'ทั้งหมด',               no:'Totalt',           en:'Total'},
+  wrong_answers:{th:'คำตอบที่ผิด',          no:'Feil svar',        en:'Wrong answers'},
+  no_wrong_answers:{th:'ไม่มีข้อผิดในควิซนี้<br>ทำได้ดีมาก', no:'Ingen feil i denne quizen!<br>Veldig bra gjort.', en:'No mistakes in this quiz.<br>Very well done.'},
+  old_quiz_details:{th:'รายละเอียดคำถามไม่มีสำหรับควิซเก่า<br>ทำควิซใหม่เพื่อดูคำตอบของคุณ', no:'Detaljert spørsmålsoversikt er ikke tilgjengelig for eldre quizer.<br>Ta en ny quiz for å se hva du svarte.', en:'Detailed question review is not available for older quizzes.<br>Take a new quiz to see your answers.'},
+  review_wrong_count:{th:'ทบทวน {count} ข้อผิด', no:'Gå gjennom {count} feil svar', en:'Review {count} wrong answers'},
+  bookmarks_login:{th:'เข้าสู่ระบบเพื่อดูที่คั่นหน้า', no:'Logg inn for å se bokmerker', en:'Log in to see bookmarks'},
+  bookmarks_empty:{th:'ยังไม่มีที่คั่นหน้า<br>กด 🔖 ใต้คำถามเพื่อบันทึก', no:'Ingen bokmerker ennå.<br>Trykk 🔖 under et spørsmål for å lagre det.', en:'No bookmarks yet.<br>Tap 🔖 under a question to save it.'},
+  bookmark_login:{th:'เข้าสู่ระบบเพื่อใช้ที่คั่นหน้า', no:'Logg inn for å bruke bokmerker', en:'Log in to use bookmarks'},
+  bookmark:    {th:'ที่คั่นหน้า',           no:'Bokmerke',         en:'Bookmark'},
+  bookmark_removed:{th:'ลบที่คั่นหน้าแล้ว', no:'Bokmerke fjernet', en:'Bookmark removed'},
+  bookmark_remove_failed:{th:'ลบที่คั่นหน้าไม่ได้', no:'Kunne ikke fjerne bokmerke', en:'Could not remove bookmark'},
+  bookmark_added:{th:'บันทึกที่คั่นหน้าแล้ว 🔖', no:'Bokmerke lagt til 🔖', en:'Bookmark added 🔖'},
+  bookmark_add_failed:{th:'เพิ่มที่คั่นหน้าไม่ได้', no:'Kunne ikke legge til bokmerke', en:'Could not add bookmark'},
+  history_login:{th:'เข้าสู่ระบบเพื่อดูประวัติ', no:'Logg inn for å se historikk', en:'Log in to see history'},
+  history_empty:{th:'ยังไม่มีประวัติควิซ<br>ทำควิซให้เสร็จ แล้วผลลัพธ์จะแสดงที่นี่', no:'Ingen quiz-historikk ennå.<br>Fullfør en quiz for å se resultatene her.', en:'No quiz history yet.<br>Finish a quiz to see results here.'},
+  history_load_error:{th:'โหลดประวัติไม่ได้', no:'Kunne ikke laste historikk.', en:'Could not load history.'},
+  result_saved:{th:'บันทึกผลแล้ว ✓',        no:'Resultat lagret ✓', en:'Result saved ✓'},
+  result_save_failed:{th:'บันทึกผลไม่สำเร็จ: ', no:'Lagring feilet: ', en:'Save failed: '},
+  result_score:{th:'{correct} จาก {total} ถูก', no:'{correct} av {total} riktige', en:'{correct} of {total} correct'},
+  result_focus:{th:'หัวข้อแนะนำให้ฝึก',      no:'Anbefalt øvelse',  en:'Recommended practice'},
+  result_done:{th:'ทำแบบฝึกเสร็จแล้ว',       no:'Øvelsen er ferdig.', en:'Practice finished.'},
+  result_exam_pass_head:{th:'ผ่าน',          no:'Bestått.',         en:'Passed.'},
+  result_exam_pass_body:{th:'คุณพร้อมสำหรับการสอบทฤษฎีแล้ว ลองทำอีกหนึ่งรอบเพื่อเพิ่มความมั่นใจ', no:'Du er klar for teoriprøven. Gjennomfør gjerne enda en runde for å bygge selvtillit.', en:'You are ready for the theory test. Do one more round to build confidence.'},
+  result_exam_fail_head:{th:'ครั้งนี้ยังไม่ผ่าน', no:'Ikke bestått denne gangen.', en:'Not passed this time.'},
+  result_solid_head:{th:'ทำได้มั่นคง',       no:'Solid gjennomkjøring.', en:'Solid run-through.'},
+  result_solid_body:{th:'คุณเริ่มจำสถานการณ์จราจรและตัดสินใจได้ถูกต้อง นี่คือสิ่งสำคัญในการขับจริง', no:'Du gjenkjenner trafikksituasjonene godt og vurderer riktig. Det er det som teller i praksis.', en:'You recognize traffic situations well and make sound decisions. That is what matters in real driving.'},
+  result_right_way_head:{th:'คุณมาถูกทางแล้ว', no:'Du er på rett vei.', en:'You are on the right track.'},
+  result_more_head:{th:'มาฝึกเพิ่มอีกนิด',   no:'La oss øve litt mer.', en:'Let us practice a bit more.'},
+  result_more_body:{th:'กฎจราจรไม่ได้ติดตัวในรอบเดียว ฝึกต่ออย่างใจเย็น ความเข้าใจจะค่อย ๆ ชัดขึ้น', no:'Trafikkreglene sitter ikke alltid med én runde. Prøv igjen — det tar tid å bygge forståelse.', en:'Traffic rules do not always settle after one round. Keep practicing calmly; understanding grows with time.'},
+  result_learn_head:{th:'ยังมีเรื่องให้เรียนรู้เพิ่ม', no:'Her er det mer å lære.', en:'There is more to learn here.'},
+  result_learn_body:{th:'ไม่ต้องกังวล ความเข้าใจสร้างได้ทีละขั้น ใช้คำอธิบายอย่างใจเย็น', no:'Ikke bekymre deg — forståelse bygges gradvis. Bruk forklaringene aktivt og ta det steg for steg.', en:'Do not worry. Understanding builds gradually. Use the explanations calmly, step by step.'},
+  lang_updated:{th:'อัปเดตภาษาแล้ว',        no:'Språk oppdatert',  en:'Language updated'},
+  practice_this_sign:{th:'📚 ฝึกป้ายนี้',     no:'📚 Øv på dette skiltet', en:'📚 Practice this sign'},
+  save:        {th:'บันทึก',                no:'Lagre',            en:'Save'},
+  saved:       {th:'บันทึกแล้ว',             no:'Lagret',           en:'Saved'},
+  read_aloud:  {th:'อ่านออกเสียง',           no:'Les høyt',         en:'Read aloud'},
+  ask_ai:      {th:'ถามครู AI',              no:'Spør AI',          en:'Ask AI'},
+  ai_teacher_hint:{th:'ครู AI',              no:'AI-kjørelærer',    en:'AI teacher'},
+  sign_ai_lesson:{th:'ดูป้ายนี้ร่วมกับสถานการณ์บนถนนจริง: {name}. ให้สังเกตรูปทรง สี สัญลักษณ์ และสิ่งที่ผู้ขับขี่ต้องทำทันที ใช้ป้ายนี้เพื่อปรับความเร็ว ตำแหน่งรถ และความระวังอย่างสงบ', no:'Se dette skiltet sammen med trafikksituasjonen: {name}. Legg merke til form, farge, symbol og hva føreren må gjøre nå. Bruk skiltet til å tilpasse fart, plassering og oppmerksomhet rolig.', en:'Read this sign together with the road situation: {name}. Notice the shape, colour, symbol, and what the driver must do now. Use the sign to adapt speed, position, and attention calmly.'},
+  close:       {th:'ปิด',                   no:'Lukk',             en:'Close'},
+  upgrade:     {th:'อัปเกรด',               no:'Oppgrader',        en:'Upgrade'},
+  related_signs:{th:'ป้ายที่เกี่ยวข้อง',      no:'Relaterte skilt',  en:'Related signs'},
+  often_confused:{th:'มักสับสนกับ',          no:'Ofte forvekslet med', en:'Often confused with'},
+  no_related_signs:{th:'ไม่มีป้ายใกล้เคียงในกลุ่มนี้', no:'Ingen nærliggende skilt i denne gruppen.', en:'No nearby signs in this group.'},
+  signs_intro: {th:'แตะที่ป้ายใดก็ได้เพื่อดูความหมาย เหตุที่ต้องรู้ และเคล็ดลับจำง่าย', no:'Trykk på et skilt for å se betydning, viktighet og husketriks.', en:'Tap any sign to see its meaning, why it matters, and how to remember it.'},
+  sign_fallback_meaning:{th:'ดูรูปทรง สี และสัญลักษณ์ของป้าย แล้วเชื่อมกับสถานการณ์บนถนนจริง', no:'Les form, farge og symbol, og koble skiltet til situasjonen på veien.', en:'Read the shape, colour, and symbol, and connect the sign to the road situation.'},
+  sign_fallback_driver:{th:'ผู้ขับขี่ต้องปรับความเร็ว ตำแหน่ง และความสนใจตามสิ่งที่ป้ายบอก', no:'Føreren må tilpasse fart, plassering og oppmerksomhet etter det skiltet forteller.', en:'The driver must adapt speed, position, and attention to what the sign tells you.'},
+  sign_fallback_mistake:{th:'ข้อผิดพลาดที่พบบ่อยคือดูป้ายแยกจากถนน ไม่ดูป้ายเสริมหรือบริบท', no:'Vanlig feil er å lese skiltet isolert, uten underskilt og trafikksituasjonen rundt.', en:'A common mistake is reading the sign in isolation, without supplementary signs and context.'},
+  sign_fallback_exam:{th:'ในข้อสอบ ให้ถามว่า: ป้ายนี้เปลี่ยนการกระทำของฉันตรงนี้อย่างไร?', no:'På prøven: spør hva skiltet endrer for handlingen din akkurat her.', en:'In the exam, ask what this sign changes about your action right here.'},
+  sign_fallback_memory:{th:'จำเป็นลำดับ: รูปทรง → สี → สัญลักษณ์ → สิ่งที่ต้องทำ', no:'Husk rekkefølgen: form → farge → symbol → handling.', en:'Remember the order: shape → colour → symbol → action.'},
   // Paywall
   pw_title:    {th:'ปลดล็อก Thai2Drive Premium', no:'Lås opp Thai2Drive Premium', en:'Unlock Thai2Drive Premium'},
   pw_sub:      {th:'คุณใช้ 5 คำถามฟรีแล้ว อัปเกรดเพื่อใช้งานไม่จำกัด!', no:'Du har brukt 5 gratis spørsmål. Oppgrader for ubegrenset tilgang!', en:'You have used 5 free questions. Upgrade for unlimited access!'},
@@ -2801,72 +2939,28 @@ var UI = {
   pw_save:     {th:'ประหยัด 50%', no:'Spar 50%', en:'Save 50%'},
   pw_buy:      {th:'ซื้อ Premium', no:'Kjøp Premium', en:'Buy Premium'},
   pw_skip:     {th:'ใช้ต่อแบบฟรี', no:'Fortsett gratis', en:'Continue free'},
-  // ── AI teacher panel ──────────────────────────────────────────────────────
-  ai_teacher:    {th:'AI ผู้สอนขับรถ',        no:'AI Kjørelærer',         en:'AI Instructor'},
-  ai_teacher_sub:{th:'ความเข้าใจกฎจราจร',     no:'Trafikkforståelse',      en:'Traffic understanding'},
-  explanation:   {th:'คำอธิบาย',              no:'Forklaring',            en:'Explanation'},
-  more_detail:   {th:'รายละเอียดเพิ่มเติม',   no:'Mer detaljer',           en:'More detail'},
-  show_more:     {th:'ดูเพิ่มเติม',            no:'Vis mer',               en:'Show more'},
-  show_less:     {th:'ดูน้อยลง',              no:'Vis mindre',             en:'Show less'},
-  instructor:    {th:'ผู้สอน',               no:'Kjørelærer',             en:'Instructor'},
-  vid_explain:   {th:'📹 ดูคำอธิบายสั้น',      no:'📹 Se kort forklaring',  en:'📹 Short explanation'},
-  // ── Readiness / history badges ───────────────────────────────────────────
-  last_session:  {th:'ช่วงล่าสุด',             no:'Siste økt',              en:'Last session'},
-  ready:         {th:'พร้อมสอบแล้ว',           no:'Klar for prøven',        en:'Ready to test'},
-  almost_ready:  {th:'เกือบพร้อมแล้ว',         no:'Nesten klar',            en:'Almost ready'},
-  practice_more: {th:'ฝึกเพิ่มอีกนิด',         no:'Øv litt mer',            en:'Practice more'},
-  // ── History screen ────────────────────────────────────────────────────────
-  see_details:   {th:'ดูรายละเอียด',            no:'Se detaljer',            en:'See details'},
-  try_again:     {th:'ลองอีกครั้ง',             no:'Prøv igjen',             en:'Try again'},
-  correct_lbl:   {th:'ถูก',                   no:'Riktige',                en:'Correct'},
-  wrong_lbl:     {th:'ผิด',                   no:'Gale',                   en:'Wrong'},
-  total_lbl:     {th:'ทั้งหมด',                no:'Totalt',                 en:'Total'},
-  wrong_count:   {th:'ตอบผิด',                no:'Feil svar',              en:'Wrong answers'},
-  q_num:         {th:'ข้อที่',                 no:'Spørsmål',               en:'Question'},
-  your_ans:      {th:'คุณตอบ: ',              no:'Ditt svar: ',            en:'Your answer: '},
-  correct_ans:   {th:'คำตอบที่ถูก: ',          no:'Riktig svar: ',          en:'Correct answer: '},
-  no_wrongs:     {th:'ไม่มีข้อผิดพลาดในควิซนี้! 🎉', no:'Ingen feil i denne quizen! 🎉', en:'No mistakes! 🎉'},
-  review_btn:    {th:'ทบทวน',                 no:'Gå gjennom',             en:'Review'},
-  passed:        {th:'ผ่าน',                  no:'Bestått',                en:'Passed'},
-  not_passed:    {th:'ไม่ผ่าน',               no:'Ikke bestått',           en:'Not passed'},
-  // ── Mode labels ───────────────────────────────────────────────────────────
-  mode_exam:     {th:'สอบ',                   no:'Eksamen',                en:'Exam'},
-  mode_cat:      {th:'หมวดหมู่',              no:'Kategori',               en:'Category'},
-  mode_daily:    {th:'ทดสอบรายวัน',           no:'Daglig test',             en:'Daily test'},
-  mode_random:   {th:'สุ่มคำถาม',             no:'Tilfeldig quiz',          en:'Random quiz'},
-  // ── Review mode ───────────────────────────────────────────────────────────
-  review_lbl:    {th:'ทบทวนข้อผิดพลาด',       no:'Gjennomgang av feil',     en:'Review mistakes'},
-  review_done:   {th:'ทบทวนเสร็จแล้ว',        no:'Gjennomgang fullført.',   en:'Review complete.'},
-  review_of:     {th:'ทบทวน',                 no:'Gjennomgang',             en:'Review'},
-  review_done_body: {th:'คุณได้ทบทวน __N__ ข้อแล้ว อ่านคำอธิบายอีกครั้งก่อนทำควิซใหม่',
-                     no:'Du har gått gjennom __N__ spørsmål. Les gjerne forklaringene én gang til.',
-                     en:'You reviewed __N__ questions. Read the explanations once more before retrying.'},
-  // ── Se → Forstå → Velg labels ─────────────────────────────────────────────
-  len_se:        {th:'ดู',                    no:'Se',                     en:'Observe'},
-  len_forsta:    {th:'เข้าใจ',               no:'Forstå',                 en:'Understand'},
-  len_velg:      {th:'เลือก',                no:'Velg',                   en:'Decide'},
-  // ── Sign panel actions ─────────────────────────────────────────────────────
-  sp_practice:   {th:'📚 ฝึกทำโจทย์',         no:'📚 Øv med quiz',           en:'📚 Practice quiz'},
-  sp_audio:      {th:'🔊 ฟังเสียง',            no:'🔊 Les høyt',              en:'🔊 Read aloud'},
-  sp_ask_ai:     {th:'🤖 ถามAI',              no:'🤖 Spør AI',               en:'🤖 Ask AI'},
-  sp_save:       {th:'🔖 บันทึก',             no:'🔖 Lagre',                 en:'🔖 Save'},
-  sp_saved:      {th:'🔖 บันทึกแล้ว',          no:'🔖 Lagret',                en:'🔖 Saved'},
-  sp_related:    {th:'ป้ายอื่นในกลุ่มนี้',       no:'Fra samme gruppe',         en:'More from this group'},
-  sp_recognize:  {th:'วิธีสังเกต',              no:'Slik kjenner du det igjen', en:'How to recognize it'},
-  sp_in_traffic: {th:'ในสถานการณ์จริง',          no:'I trafikken',              en:'In traffic'},
-  sp_recognize_text_no: {th:'',no:'Legg merke til form og farge. Les symbolet — det forteller deg hva du skal gjøre. Bruk quiz-knappen for å teste deg selv.',en:''},
-  sp_recognize_text_th: {th:'สังเกตรูปร่างและสีของป้าย อ่านสัญลักษณ์ — มันบอกว่าคุณต้องทำอะไร กดปุ่มฝึกทำโจทย์เพื่อทดสอบตัวเอง',no:'',en:''},
-  sp_recognize_text_en: {th:'',no:'',en:'Note the shape and color. Read the symbol — it tells you what to do. Use the quiz button to test yourself.'},
-  // ── History panel ─────────────────────────────────────────────────────────
-  hist_retry:    {th:'ลองอีกครั้ง',             no:'Prøv igjen',               en:'Try again'},
-  hist_close:    {th:'ปิด',                    no:'Lukk',                     en:'Close'},
-  hist_login:    {th:'เข้าสู่ระบบเพื่อดูประวัติ', no:'Logg inn for å se historikk', en:'Log in to see history'},
-  // ── General ────────────────────────────────────────────────────────────────
-  signs_count:   {th:'ป้าย',                   no:'skilt',                    en:'signs'},
-  err_load:      {th:'เกิดข้อผิดพลาด',          no:'Feil ved lasting',          en:'Error loading'},
 };
 
-function t(key) { return (UI[key] && (UI[key][appLang] || UI[key]['no'])) || key; }
+function t(key) { return (UI[key] && (UI[key][appLang] || UI[key]['th'] || UI[key]['en'] || UI[key]['no'])) || key; }
+function tf(key, vars) {
+  var s = t(key);
+  Object.keys(vars || {}).forEach(function(k) {
+    s = s.replace(new RegExp('\\{' + k + '\\}', 'g'), vars[k]);
+  });
+  return s;
+}
+function modeLabel(mode) {
+  var labels = {exam:t('mode_exam'), category:t('mode_category'), daily:t('mode_daily'), random:t('mode_random')};
+  return labels[mode] || mode || 'Quiz';
+}
+function readinessForPct(pct, compact) {
+  if (pct >= 80) return {cls:'good', text:(compact ? '✓ ' : '') + t('ready_test'), color:'var(--green)'};
+  if (pct >= 60) return {cls:'ok', text:(compact ? '▲ ' : '') + t('almost_ready'), color:'var(--orange)'};
+  return {cls:'bad', text:(compact ? '↺ ' : '') + t('practice_more'), color:'#EF4444'};
+}
+function localeForLang() {
+  return appLang === 'th' ? 'th-TH' : appLang === 'en' ? 'en-US' : 'nb-NO';
+}
 
 function applyUILang() {
   // back buttons
@@ -2899,6 +2993,17 @@ function applyUILang() {
   if (endSecBtns[1]) endSecBtns[1].innerHTML = t('pickcat');
   // next buttons
   document.querySelectorAll('#qNextBig,#qNextMobile').forEach(function(b){ b.textContent = t('next'); });
+  var spPractice = document.querySelector('.sp-btn-primary');
+  if (spPractice) spPractice.textContent = t('practice_this_sign');
+  var spAudio = document.querySelector('.sp-btn-sm-audio span');
+  if (spAudio) spAudio.textContent = t('read_aloud');
+  var spAi = document.querySelector('.sp-btn-sm-ai span');
+  if (spAi) spAi.textContent = t('ask_ai');
+  var spBm = document.querySelector('.sp-btn-sm-bm span');
+  var hpRetry = document.getElementById('hpRetryBtn');
+  if (hpRetry) hpRetry.textContent = t('retry');
+  var hpClose = document.querySelector('.hp-actions .hp-btn-sec');
+  if (hpClose) hpClose.textContent = t('close');
   // progress label
   var pl = document.getElementById('qProgLbl');
   if(pl && pl.textContent) {
@@ -2916,30 +3021,17 @@ function applyUILang() {
   // Premium banner
   var pb = document.getElementById('homePremiumBanner');
   if(pb) { var ptitle = pb.querySelector('.pb-title'); var psub = pb.querySelector('.pb-sub'); if(ptitle) ptitle.textContent = t('premium_on'); if(psub) psub.textContent = t('premium_sub'); }
-  // History panel buttons
-  var hpRetry = document.getElementById('hpRetryBtn');
-  if (hpRetry) hpRetry.textContent = t('hist_retry');
-  var hpClose = document.getElementById('hpCloseBtn');
-  if (hpClose) hpClose.textContent = t('hist_close');
-
-  // Sign panel action buttons (re-render only when panel is open)
-  if (document.getElementById('signPanel').classList.contains('open')) {
-    var spPract = document.getElementById('spPracticeBtn');
-    if (spPract) spPract.textContent = t('sp_practice');
-    var spAudio = document.getElementById('spAudioBtn');
-    if (spAudio) spAudio.innerHTML = t('sp_audio');
-    var spAi = document.getElementById('spAskAiBtn');
-    if (spAi) spAi.innerHTML = t('sp_ask_ai');
-    // Re-render the full panel to update content cards and related signs labels
-    if (_signPanelData) { _signPanelLang = appLang; _renderSignPanel(); }
-  }
-
   // Translate ALL elements with data-key — reliable fallback
   document.querySelectorAll('[data-key]').forEach(function(el) {
     var key = el.getAttribute('data-key');
     var val = t(key);
     if (val) el.textContent = val;
   });
+  if (spBm && _signPanelData) spBm.textContent = _signFavorites.indexOf(_signPanelData.id) >= 0 ? t('saved') : t('save');
+  var aiStatus = document.getElementById('quizAiStatus');
+  if (aiStatus && aiStatus.classList.contains('idle')) aiStatus.textContent = t('ai_waiting');
+  var aiBadge = document.getElementById('quizAiImgBadge');
+  if (aiBadge && !qAnswered) aiBadge.textContent = t('traffic_situation');
 }
 var catsLoaded = false;
 var bookmarkedIds = {};
@@ -3419,28 +3511,18 @@ async function loadHome() {
     try {
       var rdata = await api('GET', '/api/quiz-attempts/' + encodeURIComponent(deviceId) + '?limit=1&_=' + Date.now());
       var rattempts = Array.isArray(rdata) ? rdata : (rdata.attempts || rdata.results || []);
-      // Use local mirror if available and more recent
-      if (_lastSavedAttempt) {
-        if (!rattempts.length || new Date(_lastSavedAttempt.started_at) >= new Date(rattempts[0].started_at)) {
-          rattempts = [_lastSavedAttempt];
-        }
-      }
+      rattempts = _mergeAttempts(rattempts, _readLocalAttempts().concat(_lastSavedAttempt ? [_lastSavedAttempt] : []));
       if (rattempts.length) {
         var la = rattempts[0];
         var lpct = Math.round(la.score_percentage || 0);
-        var dotCls, statusTxt, colorTxt;
-        if (lpct >= 80)      { dotCls = 'hr-dot-good'; statusTxt = t('ready');         colorTxt = 'var(--green)'; }
-        else if (lpct >= 60) { dotCls = 'hr-dot-ok';   statusTxt = t('almost_ready'); colorTxt = 'var(--orange)'; }
-        else                 { dotCls = 'hr-dot-bad';  statusTxt = t('practice_more');colorTxt = '#EF4444'; }
-        var modeLabels = {exam:t('mode_exam'), category:t('mode_cat'), daily:t('mode_daily'), random:t('mode_random')};
-        var lmode = modeLabels[la.mode] || la.mode || 'Quiz';
+        var ready = readinessForPct(lpct, false);
+        var lmode = modeLabel(la.mode);
         if (la.category) lmode += ' — ' + catName(la.category);
-        document.getElementById('hrDot').className = 'hr-dot ' + dotCls;
-        document.getElementById('hrLabel').textContent = t('last_session');
-        document.getElementById('hrStatus').textContent = statusTxt;
+        document.getElementById('hrDot').className = 'hr-dot hr-dot-' + ready.cls;
+        document.getElementById('hrStatus').textContent = ready.text;
         document.getElementById('hrSub').textContent = lmode;
         document.getElementById('hrPct').textContent = lpct + '%';
-        document.getElementById('hrPct').style.color = colorTxt;
+        document.getElementById('hrPct').style.color = ready.color;
         document.getElementById('homeReadiness').style.display = 'flex';
       }
     } catch(e) {}
@@ -3462,7 +3544,7 @@ async function loadCategories() {
     catsLoaded = true;
     document.getElementById('catCount').textContent = '(' + cats.length + ')';
     if (!cats.length) {
-      grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="es-icon">📭</div><p>Ingen kategorier funnet</p></div>';
+      grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="es-icon">📭</div><p>' + t('categories_empty') + '</p></div>';
       return;
     }
     grid.innerHTML = cats.map(function(c) {
@@ -3470,7 +3552,7 @@ async function loadCategories() {
       var count = c.question_count || c.count || '';
       var id    = escH(String(c.id || c.name));
       var name  = catName(c.name);
-      var qWord = {th:'คำถาม', no:'spørsmål', en:'questions'}[appLang] || 'spørsmål';
+      var qWord = t('questions_word');
       return '<div class="cat-card" onclick="startQuiz(\'' + escH(String(c.id||c.name)) + '\',\'' + escH(c.name) + '\')">'
         + '<div class="cat-icon">' + icon + '</div>'
         + '<div class="cat-name">' + escH(name) + '</div>'
@@ -3479,7 +3561,7 @@ async function loadCategories() {
         + '</div>';
     }).join('');
   } catch(e) {
-    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="es-icon">⚠️</div><p>Kunne ikke laste kategorier.<br>Sjekk internettforbindelsen.</p></div>';
+    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="es-icon">⚠️</div><p>' + t('categories_load_error') + '</p></div>';
   }
 }
 
@@ -3581,7 +3663,7 @@ function startExamTimer() {
     }
     if (examSecondsLeft <= 0) {
       clearInterval(examTimerInterval);
-      toast('Tid er ute! ⏰');
+      toast(t('time_is_up'));
       showEnd();
     }
   }, 1000);
@@ -3608,7 +3690,7 @@ async function startQuiz(catId, catRawName) {
 async function loadQuiz(url) {
   showScreen('screenQuiz');
   var qCard = document.getElementById('qCard');
-  qCard.innerHTML = '<div class="loading-wrap" style="grid-column:1/-1"><div class="spinner"></div><span style="color:var(--muted);font-size:.82rem">Laster spørsmål…</span></div>';
+  qCard.innerHTML = '<div class="loading-wrap" style="grid-column:1/-1"><div class="spinner"></div><span style="color:var(--muted);font-size:.82rem">' + t('questions_loading') + '</span></div>';
   try {
     var raw = await api('GET', url);
     if (!Array.isArray(raw)) raw = raw.questions || [];
@@ -3625,7 +3707,7 @@ async function loadQuiz(url) {
       });
     }
     if (!questions.length) {
-      qCard.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="es-icon">📭</div><p>Ingen spørsmål med bilde funnet.<br>Prøv en annen kategori.</p></div>';
+      qCard.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="es-icon">📭</div><p>' + t('questions_empty') + '</p></div>';
       return;
     }
     qIdx = 0; qScore = 0; qAnswered = false;
@@ -3636,19 +3718,19 @@ async function loadQuiz(url) {
     if (isExamMode) startExamTimer();
     renderQuestion();
   } catch(e) {
-    qCard.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="es-icon">⚠️</div><p>Kunne ikke laste spørsmål.<br>' + escH(e.message) + '</p></div>';
+    qCard.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="es-icon">⚠️</div><p>' + t('generic_error') + '<br>' + escH(e.message) + '</p></div>';
   }
 }
 
 function pickLang(obj) {
   if (!obj) return '';
   if (typeof obj === 'string') return obj;
-  return obj[appLang] || obj['no'] || obj['th'] || obj['en'] || Object.values(obj)[0] || '';
+  return obj[appLang] || obj['th'] || obj['en'] || obj['no'] || Object.values(obj)[0] || '';
 }
 
 // Pick language-suffixed field from a question object (e.g. question_text_th, answer_a_no)
 function pickField(q, base) {
-  return q[base + '_' + appLang] || q[base + '_no'] || q[base + '_th'] || q[base + '_en'] || q[base] || '';
+  return q[base + '_' + appLang] || q[base + '_th'] || q[base + '_en'] || q[base + '_no'] || q[base] || '';
 }
 
 function renderQuestion() {
@@ -3709,7 +3791,7 @@ function renderQuestion() {
     var remaining = FREE_LIMIT - qIdx;
     var freeMsg = {th:'เหลือ ' + remaining + ' คำถามฟรี', no:remaining + ' gratis spørsmål igjen', en:remaining + ' free questions left'}[appLang] || remaining + ' gratis spørsmål igjen';
     freeBanner = '<div style="text-align:center;font-size:.72rem;color:var(--orange);font-weight:700;margin-top:6px;flex-shrink:0;">'
-      + '⚡ ' + freeMsg + ' — <span style="text-decoration:underline;cursor:pointer" onclick="showPaywall()">Oppgrader</span>'
+      + '⚡ ' + freeMsg + ' — <span style="text-decoration:underline;cursor:pointer" onclick="showPaywall()">' + escH(t('upgrade')) + '</span>'
       + '</div>';
   }
 
@@ -3719,7 +3801,7 @@ function renderQuestion() {
         + '<img class="q-img" src="' + escH(imgUrl) + '" alt="" onerror="this.parentElement.style.display=\'none\'" loading="lazy">'
       + '</div>'
       + '<div class="q-text">' + escH(qText) + '</div>'
-      + '<div style="flex-shrink:0;"><button class="tts-play" id="qTtsBtn" title="Les høyt" onclick="speakQ()">▶</button></div>'
+      + '<div style="flex-shrink:0;"><button class="tts-play" id="qTtsBtn" title="' + escH(t('read_aloud')) + '" onclick="speakQ()">▶</button></div>'
     + '</div>'
     + '<div class="q-mid">'
       + buildSituationLensHtml(qText, currentExpl)
@@ -3731,7 +3813,7 @@ function renderQuestion() {
     + '</div>'
     + '<div class="q-next-col">'
       + '<button class="q-next-big" id="qNextBig" disabled onclick="nextQ()">' + t('next') + '</button>'
-      + '<button class="q-bookmark-btn' + (isBm ? ' bookmarked' : '') + '" id="qBmBtn" onclick="toggleBookmark(\'' + escH(qId) + '\')" title="Bokmerke">'
+      + '<button class="q-bookmark-btn' + (isBm ? ' bookmarked' : '') + '" id="qBmBtn" onclick="toggleBookmark(\'' + escH(qId) + '\')" title="' + escH(t('bookmark')) + '">'
         + (isBm ? '🔖' : '🔖')
       + '</button>'
     + '</div>'
@@ -3745,14 +3827,14 @@ function renderQuestion() {
   var aiOverlay = document.getElementById('quizAiOverlay');
   if (aiOverlay) aiOverlay.className = 'quiz-ai-img-overlay';
   var aiStatus = document.getElementById('quizAiStatus');
-  if (aiStatus) { aiStatus.textContent = 'Venter på svar…'; aiStatus.className = 'quiz-ai-status idle'; }
+  if (aiStatus) { aiStatus.textContent = t('ai_waiting'); aiStatus.className = 'quiz-ai-status idle'; }
   var aiImgBadge = document.getElementById('quizAiImgBadge');
-  if (aiImgBadge) aiImgBadge.textContent = '📸 Trafikksituasjon';
+  if (aiImgBadge) aiImgBadge.textContent = t('traffic_situation');
   var aiBody = document.getElementById('quizAiBody');
   if (aiBody) {
     aiBody.innerHTML = '<div class="quiz-ai-idle">'
       + '<div class="quiz-ai-idle-icon">👆</div>'
-      + '<div class="quiz-ai-idle-text">Ta deg tid — hva tror du er riktig? Velg et svar, så forklarer jeg.</div>'
+      + '<div class="quiz-ai-idle-text">' + escH(t('ai_idle')) + '</div>'
       + '</div>';
   }
   var rn = document.getElementById('quizRightNeste');
@@ -3774,33 +3856,29 @@ var _topicErrors  = {};     // label → errorCount — feeds debrief translatio
 
 // Calm acknowledgment pool — rotates to avoid repetition, never effusive
 var _correctPhraseIdx = 0;
-var _correctPhrases = {
-  no: ['Riktig.','Det stemmer.','Riktig observert.','Korrekt — det er nettopp slik.','Det er riktig.','Riktig vurdering.'],
-  th: ['ถูกต้อง','ใช่แล้ว','สังเกตได้ถูกต้อง','ถูกเลย','ใช่','ประเมินได้ถูกต้อง'],
-  en: ['Correct.','That\'s right.','Well observed.','Correct — exactly right.','Correct.','Right call.'],
-};
+function _correctPhrases() {
+  return {
+    th:['ถูกต้อง','ใช่แล้ว','สังเกตได้ถูกต้อง','ถูกต้อง นั่นคือหลักการสำคัญ','ตัดสินใจได้ถูกต้อง'],
+    no:['Riktig.','Det stemmer.','Riktig observert.','Korrekt — det er nettopp slik det fungerer.','Det er riktig.','Riktig vurdering.'],
+    en:['Correct.','That is right.','Good observation.','Correct — that is exactly how it works.','That is correct.','Sound judgement.']
+  }[appLang] || {
+    th:['ถูกต้อง'],
+    no:['Riktig.'],
+    en:['Correct.']
+  }.no;
+}
 function _nextCorrectPhrase() {
-  var phrases = _correctPhrases[appLang] || _correctPhrases.no;
-  var p = phrases[_correctPhraseIdx % phrases.length];
+  var pool = _correctPhrases();
+  var p = pool[_correctPhraseIdx % pool.length];
   _correctPhraseIdx++;
   return p;
 }
 
 // Streak-adaptive wrong-answer support — calm, professional, never patronising
 function _wrongSupportText(streak) {
-  if (appLang === 'th') {
-    if (streak >= 5) return 'ไม่ถูกต้อง อ่านคำอธิบายอย่างละเอียด ความเข้าใจต้องใช้เวลา';
-    if (streak >= 3) return 'ไม่ถูกครั้งนี้ ดูคำอธิบายด้านล่าง';
-    return 'ไม่ถูกต้อง ดูคำอธิบายด้านล่าง';
-  }
-  if (appLang === 'en') {
-    if (streak >= 5) return 'Not correct. Read carefully — understanding takes time.';
-    if (streak >= 3) return 'Not correct this time. Review the explanation below.';
-    return 'Not correct. See the explanation below.';
-  }
-  if (streak >= 5) return 'Ikke riktig. Les forklaringen nøye — forståelse tar tid.';
-  if (streak >= 3) return 'Ikke riktig denne gangen. Gå gjennom forklaringen under.';
-  return 'Ikke riktig. Se forklaringen under.';
+  if (streak >= 5) return t('wrong_support_5');
+  if (streak >= 3) return t('wrong_support_3');
+  return t('wrong_support_1');
 }
 
 // ── Session confidence level ─────────────────────────────────────────────────
@@ -3836,6 +3914,31 @@ function _dangerLabel(expl) {
   if (/nødbrems|abs\b|bremsebane/i.test(t))            return 'Bremsing';
   if (/møtende|tunnel\b/i.test(t))                     return 'Møtende trafikk';
   return 'Forstå situasjonen';
+}
+
+function topicLabel(label) {
+  var map = {
+    'Forstå situasjonen': {th:'เข้าใจสถานการณ์', no:'Forstå situasjonen', en:'Understand the situation'},
+    'Forbikjøring': {th:'การแซง', no:'Forbikjøring', en:'Overtaking'},
+    'Avstand og tid': {th:'ระยะห่างและเวลา', no:'Avstand og tid', en:'Distance and time'},
+    'Vikeplikt': {th:'การให้ทาง', no:'Vikeplikt', en:'Yielding'},
+    'Myke trafikanter': {th:'ผู้ใช้ถนนที่เปราะบาง', no:'Myke trafikanter', en:'Vulnerable road users'},
+    'Vinterforhold': {th:'สภาพถนนฤดูหนาว', no:'Vinterforhold', en:'Winter conditions'},
+    'Kjøreforhold': {th:'สภาพการขับขี่', no:'Kjøreforhold', en:'Driving conditions'},
+    'Sikt og fart': {th:'ทัศนวิสัยและความเร็ว', no:'Sikt og fart', en:'Visibility and speed'},
+    'Tretthet': {th:'ความเหนื่อยล้า', no:'Tretthet', en:'Fatigue'},
+    'Rundkjøring': {th:'วงเวียน', no:'Rundkjøring', en:'Roundabout'},
+    'Alkohol': {th:'แอลกอฮอล์', no:'Alkohol', en:'Alcohol'},
+    'Reaksjonstid': {th:'เวลาตอบสนอง', no:'Reaksjonstid', en:'Reaction time'},
+    'Lysbruk': {th:'การใช้ไฟ', no:'Lysbruk', en:'Use of lights'},
+    'Fartsgrense': {th:'จำกัดความเร็ว', no:'Fartsgrense', en:'Speed limit'},
+    'Bremsing': {th:'การเบรก', no:'Bremsing', en:'Braking'},
+    'Møtende trafikk': {th:'รถสวนทาง', no:'Møtende trafikk', en:'Oncoming traffic'},
+    '3-sekunders-regelen': {th:'กฎ 3 วินาที', no:'3-sekunders-regelen', en:'3-second rule'},
+    'Grenseverdi': {th:'ค่าจำกัดตามกฎหมาย', no:'Grenseverdi', en:'Legal limit'}
+  };
+  var item = map[label] || null;
+  return item ? (item[appLang] || item.th || item.en || item.no) : label;
 }
 
 function selectAns(btn, picked) {
@@ -3932,62 +4035,93 @@ function classifyAlerts(expl) {
   var alerts = [];
   if (!expl) return alerts;
   var t = expl.toLowerCase();
+  function A(icon, type, label, th, no, en) {
+    alerts.push({icon:icon, type:type, label:label, text:({th:th, no:no, en:en}[appLang] || th || en || no)});
+  }
 
   if (/forbikjør|forbi\s|overtakings/i.test(t))
-    alerts.push({icon:'🚗', type:'danger', label:'Forbikjøring',
-      text:'Full sikt og god avstand er nødvendig. Vent alltid til det er klart trygt.'});
+    A('🚗', 'danger', 'Forbikjøring',
+      'ต้องเห็นชัดและมีระยะพอ รอจนปลอดภัยจริงก่อนแซง',
+      'Full sikt og god avstand er nødvendig. Vent alltid til det er klart trygt.',
+      'Full visibility and enough distance are needed. Wait until it is clearly safe.');
 
   if (/glatt|is\b|snø|vinter|slipperisk|vått\s|regn/i.test(t))
-    alerts.push({icon:'❄️', type:'weather', label:'Kjøreforhold',
-      text:'Bremselengden øker kraftig i dårlig vær — tilpass alltid fart og avstand til forholdene.'});
+    A('❄️', 'weather', 'Kjøreforhold',
+      'ระยะเบรกยาวขึ้นมากเมื่อถนนลื่น ปรับความเร็วและระยะห่างให้เหมาะกับสภาพถนน',
+      'Bremselengden øker kraftig i dårlig vær — tilpass alltid fart og avstand til forholdene.',
+      'Braking distance increases a lot in poor conditions. Adjust speed and distance.');
 
   if (/avstand|3 sek|følgeavstand|bremse\w*\s*lengde/i.test(t))
-    alerts.push({icon:'📏', type:'rule', label:'3-sekunders-regelen',
-      text:'Hold minst 3 sekunder bak bilen foran. Mer avstand ved regn, mørke eller høy fart.'});
+    A('📏', 'rule', '3-sekunders-regelen',
+      'เว้นอย่างน้อย 3 วินาทีจากคันหน้า เพิ่มระยะเมื่อฝนตก มืด หรือขับเร็ว',
+      'Hold minst 3 sekunder bak bilen foran. Mer avstand ved regn, mørke eller høy fart.',
+      'Keep at least 3 seconds behind the car in front. Add more in rain, darkness, or high speed.');
 
   if (/uoversiktlig|begrenset sikt|kurve|kryss\w*\s*sikt|blind/i.test(t))
-    alerts.push({icon:'👁️', type:'danger', label:'Sikt og fart',
-      text:'Der du ikke ser langt nok, må farten ned. God sikt er grunnlaget for trygg kjøring.'});
+    A('👁️', 'danger', 'Sikt og fart',
+      'ถ้ามองเห็นไม่ไกลพอ ต้องลดความเร็ว ทัศนวิสัยคือพื้นฐานของการขับอย่างปลอดภัย',
+      'Der du ikke ser langt nok, må farten ned. God sikt er grunnlaget for trygg kjøring.',
+      'When you cannot see far enough, slow down. Visibility is the basis of safe driving.');
 
   if (/vikeplikt|forkjørsrett/i.test(t))
-    alerts.push({icon:'⚠️', type:'danger', label:'Vikeplikt',
-      text:'Brudd på vikeplikt er årsaken til mange krysskollisjon — spør alltid: hvem har forkjørsrett her?'});
+    A('⚠️', 'danger', 'Vikeplikt',
+      'อุบัติเหตุในทางแยกมักเกิดจากไม่ให้ทาง ถามเสมอว่าใครมีสิทธิ์ไปก่อน',
+      'Brudd på vikeplikt er årsaken til mange krysskollisjon — spør alltid: hvem har forkjørsrett her?',
+      'Many junction crashes come from yield mistakes. Always ask who has priority here.');
 
   if (/gangfelt|fotgjenger/i.test(t))
-    alerts.push({icon:'🚶', type:'danger', label:'Myke trafikanter',
-      text:'Fotgjengere og syklister er mest sårbare — gi alltid god plass og stans i tide.'});
+    A('🚶', 'danger', 'Myke trafikanter',
+      'คนเดินเท้าและจักรยานบาดเจ็บง่ายที่สุด ให้พื้นที่และพร้อมหยุดทันเวลา',
+      'Fotgjengere og syklister er mest sårbare — gi alltid god plass og stans i tide.',
+      'Pedestrians and cyclists are most vulnerable. Give space and stop in time.');
 
   if (/fartsgrense|hastighets|km\/t|80\s*km|60\s*km|50\s*km|30\s*km/i.test(t))
-    alerts.push({icon:'🧠', type:'exam', label:'Fartsgrense',
-      text:'Fartsgrenser er satt ut fra vei, sikt og trafikktetthet. Forstå logikken — ikke bare husk tallet.'});
+    A('🧠', 'exam', 'Fartsgrense',
+      'จำกัดความเร็วขึ้นกับถนน ทัศนวิสัย และการจราจร เข้าใจเหตุผล ไม่ใช่จำตัวเลขอย่างเดียว',
+      'Fartsgrenser er satt ut fra vei, sikt og trafikktetthet. Forstå logikken — ikke bare husk tallet.',
+      'Speed limits reflect road, visibility, and traffic. Understand the logic, not just the number.');
 
   if (/belysning|lys\b|fyrlys|mørk|langt\s*lys|nærlys/i.test(t))
-    alerts.push({icon:'💡', type:'rule', label:'Lysbruk',
-      text:'Riktig lys gjør deg synlig og beskyttet. Sjekk alltid at lyset er tilpasset forholdene.'});
+    A('💡', 'rule', 'Lysbruk',
+      'ไฟที่ถูกต้องทำให้คุณเห็นและถูกมองเห็น ปรับไฟให้เข้ากับสถานการณ์เสมอ',
+      'Riktig lys gjør deg synlig og beskyttet. Sjekk alltid at lyset er tilpasset forholdene.',
+      'Correct lights help you see and be seen. Match the lights to the situation.');
 
   if (/reaksjon\w*\s*tid|reaksjonstid/i.test(t))
-    alerts.push({icon:'⏱️', type:'rule', label:'Reaksjonstid',
-      text:'Ved 80 km/t tilbakelegger du 22 meter per sekund — bygg alltid inn nok sikkerhetsmargin.'});
+    A('⏱️', 'rule', 'Reaksjonstid',
+      'ที่ 80 กม./ชม. รถวิ่งประมาณ 22 เมตรต่อวินาที จึงต้องเผื่อระยะปลอดภัยเสมอ',
+      'Ved 80 km/t tilbakelegger du 22 meter per sekund — bygg alltid inn nok sikkerhetsmargin.',
+      'At 80 km/h you travel about 22 meters per second. Always build in a safety margin.');
 
   if (/rundkjøring|sving\s*inn|kjøring\s*inn\s*i\s*rund/i.test(t))
-    alerts.push({icon:'🔄', type:'rule', label:'Rundkjøring',
-      text:'Trafikk inne i rundkjøringen har forkjørsrett. Gi vikeplikt ved innkjøring — kjør rolig og forutsigbart.'});
+    A('🔄', 'rule', 'Rundkjøring',
+      'รถที่อยู่ในวงเวียนมีสิทธิ์ไปก่อน ให้ทางก่อนเข้า และขับอย่างนิ่งคาดเดาได้',
+      'Trafikk inne i rundkjøringen har forkjørsrett. Gi vikeplikt ved innkjøring — kjør rolig og forutsigbart.',
+      'Traffic already in the roundabout has priority. Yield before entering and drive predictably.');
 
   if (/nødbrems|abs\b|bremse\w*\s*avstand|bremsebane|bremse\w*\s*vei/i.test(t))
-    alerts.push({icon:'🛑', type:'danger', label:'Bremsing',
-      text:'ABS hindrer hjullås men forkorter ikke alltid bremseavstanden. Trykk jevnt og hardt — slipp ikke opp.'});
+    A('🛑', 'danger', 'Bremsing',
+      'ABS ช่วยไม่ให้ล้อล็อก แต่ไม่ได้ทำให้ระยะเบรกสั้นเสมอ กดเบรกมั่นคงและต่อเนื่อง',
+      'ABS hindrer hjullås men forkorter ikke alltid bremseavstanden. Trykk jevnt og hardt — slipp ikke opp.',
+      'ABS prevents wheel lock but does not always shorten braking distance. Brake firmly and steadily.');
 
   if (/møtende|motgående|svingslys|tunnel\b/i.test(t))
-    alerts.push({icon:'💡', type:'danger', label:'Møtende trafikk',
-      text:'Blend ned i god tid for møtende trafikk. Hold til høyre og bruk nærlys i tunnel.'});
+    A('💡', 'danger', 'Møtende trafikk',
+      'ลดไฟสูงให้ทันเมื่อมีรถสวนทาง รักษาตำแหน่งขวาและใช้ไฟต่ำในอุโมงค์',
+      'Blend ned i god tid for møtende trafikk. Hold til høyre og bruk nærlys i tunnel.',
+      'Dip high beams in time for oncoming traffic. Keep right and use low beams in tunnels.');
 
   if (/tretthet|trøtt\b|døs|søvn|kjøretretthet/i.test(t))
-    alerts.push({icon:'😴', type:'danger', label:'Tretthet',
-      text:'Tretthet er like farlig som alkohol. Planlegg pauser — stopp og sov heller enn å presse seg.'});
+    A('😴', 'danger', 'Tretthet',
+      'ความเหนื่อยล้าอันตรายเหมือนแอลกอฮอล์ วางแผนพัก และหยุดนอนเมื่อจำเป็น',
+      'Tretthet er like farlig som alkohol. Planlegg pauser — stopp og sov heller enn å presse seg.',
+      'Fatigue can be as dangerous as alcohol. Plan breaks and stop to sleep rather than pushing on.');
 
   if (/promille|alkohol|ruspåvirket|0[,.]2\s*promille/i.test(t))
-    alerts.push({icon:'⚖️', type:'rule', label:'Grenseverdi',
-      text:'0,2 promille er grensen i Norge. Selv små mengder alkohol svekker reaksjonstid og situasjonsforståelse.'});
+    A('⚖️', 'rule', 'Grenseverdi',
+      'ในนอร์เวย์ขีดจำกัดคือ 0.2 โปรมิลล์ แอลกอฮอล์แม้เพียงเล็กน้อยก็ลดเวลาตอบสนอง',
+      '0,2 promille er grensen i Norge. Selv små mengder alkohol svekker reaksjonstid og situasjonsforståelse.',
+      'The limit in Norway is 0.2 per mille. Even small amounts weaken reaction and understanding.');
 
   return alerts.slice(0, 2); // max 2 per answer — calm, not overwhelming
 }
@@ -3998,10 +4132,37 @@ function classifyAlerts(expl) {
 function buildInstructorTip(isOk, alerts) {
   // ─ Streak-aware coaching — professional, calm, no gamification ─
   if (!isOk && _wrongStreak >= 5)
-    return 'Dette er et krevende tema. Les forklaringen grundig — forståelse bygges over tid.';
+    return appLang === 'th' ? 'หัวข้อนี้ต้องใช้เวลา อ่านคำอธิบายอย่างใจเย็น ความเข้าใจจะค่อย ๆ ชัดขึ้น'
+      : appLang === 'en' ? 'This is a demanding topic. Read the explanation calmly; understanding builds over time.'
+      : 'Dette er et krevende tema. Les forklaringen grundig — forståelse bygges over tid.';
   if (isOk && _correctStreak >= 10)
-    return 'Du er i god progresjon på dette temaet.';
+    return appLang === 'th' ? 'คุณกำลังก้าวหน้าได้ดีในหัวข้อนี้'
+      : appLang === 'en' ? 'You are making good progress on this topic.'
+      : 'Du er i god progresjon på dette temaet.';
   // correctStreak 1-9: fall through to topic-aware tip
+
+  if (appLang !== 'no') {
+    var firstLabel = alerts.length ? alerts[0].label : '';
+    if (firstLabel === 'Vikeplikt')
+      return isOk
+        ? (appLang === 'th' ? 'คุณเห็นเรื่องการให้ทางได้ถูกต้อง นี่สำคัญมากในทางแยก' : 'You read the yielding situation correctly. This matters in every junction.')
+        : (appLang === 'th' ? 'มองอีกครั้งว่าใครต้องให้ทางก่อนตัดสินใจขับต่อ' : 'Look again at who must yield before deciding to move.');
+    if (firstLabel === 'Forbikjøring')
+      return isOk
+        ? (appLang === 'th' ? 'การแซงต้องใช้ความอดทนและทัศนวิสัยชัดเจน' : 'Overtaking requires patience and clear visibility.')
+        : (appLang === 'th' ? 'ถ้ายังไม่แน่ใจ อย่าแซง รอจนเห็นว่าปลอดภัยจริง' : 'If you are unsure, do not overtake. Wait until it is clearly safe.');
+    if (firstLabel === 'Kjøreforhold' || firstLabel === 'Vinterforhold' || firstLabel === 'Bremsing')
+      return isOk
+        ? (appLang === 'th' ? 'คุณเชื่อมโยงสภาพถนนกับระยะเบรกได้ดี' : 'You connected road conditions and braking distance well.')
+        : (appLang === 'th' ? 'ดูพื้นถนนและระยะห่างก่อนเลือกความเร็วเสมอ' : 'Always read the road surface and distance before choosing speed.');
+    if (firstLabel === 'Myke trafikanter')
+      return isOk
+        ? (appLang === 'th' ? 'ดีมากที่ให้ความสำคัญกับผู้ใช้ถนนที่เปราะบาง' : 'Good that you gave vulnerable road users priority in your thinking.')
+        : (appLang === 'th' ? 'มองหาคนเดินเท้าและจักรยานก่อนตัดสินใจเสมอ' : 'Always look for pedestrians and cyclists before deciding.');
+    return isOk
+      ? (appLang === 'th' ? 'จำภาพสถานการณ์นี้ไว้ การจำสถานการณ์จริงช่วยในการขับจริง' : 'Hold this situation visually in memory. Real recognition helps real driving.')
+      : (appLang === 'th' ? 'ค่อย ๆ เข้าใจสถานการณ์ ไม่ใช่แค่จำคำตอบ' : 'Understand the situation, not only the answer.');
+  }
 
   // ─ Topic-aware coaching — checks BOTH alerts, not just the first ─
   if (alerts.length > 0) {
@@ -4222,12 +4383,37 @@ function buildSituationLens(qText, expl) {
   };
 }
 
+function lensText(text) {
+  var map = {
+    'Legg merke til gang- og sykkeltrafikk nær veibanen': {th:'สังเกตคนเดินเท้าและจักรยานใกล้ทางรถ', en:'Notice pedestrians and cyclists near the roadway'},
+    'Myke trafikanter er sårbare — ikke forvent at de ser deg': {th:'ผู้ใช้ถนนที่เปราะบางอาจไม่เห็นคุณ อย่าคาดหวังว่าเขาจะเห็น', en:'Vulnerable road users may not see you. Do not assume they have noticed you'},
+    'Klar deg til å stanse, selv om du har forkjørsrett': {th:'เตรียมพร้อมหยุด แม้คุณมีสิทธิ์ไปก่อน', en:'Be ready to stop, even if you have priority'},
+    'Se etter skilt og vegmerking som angir vikeplikt': {th:'มองหาป้ายและเส้นบนถนนที่บอกเรื่องการให้ทาง', en:'Look for signs and road markings that show yielding rules'},
+    'Hvem har rett til å kjøre — og hvem venter?': {th:'ใครมีสิทธิ์ไปก่อน และใครต้องรอ?', en:'Who has the right to go, and who must wait?'},
+    'Avklar vikeplikt før du setter bilen i bevegelse': {th:'เข้าใจการให้ทางก่อนเริ่มขับต่อ', en:'Clarify yielding before moving the car'},
+    'Observer avstanden til kjøretøyet foran': {th:'สังเกตระยะห่างจากรถคันหน้า', en:'Observe the distance to the vehicle ahead'},
+    'Avstand er reaksjonstid omgjort til meter': {th:'ระยะห่างคือเวลาตอบสนองที่กลายเป็นเมตร', en:'Distance is reaction time converted into meters'},
+    'Hold 3 sekunders avstand — mer i dårlig vær': {th:'เว้น 3 วินาที และเพิ่มระยะเมื่อสภาพไม่ดี', en:'Keep 3 seconds distance, more in poor conditions'},
+    'Les fartsgrenseskilt og vurder kjøreforholdene': {th:'อ่านป้ายจำกัดความเร็วและประเมินสภาพการขับขี่', en:'Read speed signs and assess driving conditions'},
+    'Riktig fart er ikke alltid det skiltene tillater': {th:'ความเร็วที่ถูกต้องไม่ใช่แค่ตัวเลขบนป้าย', en:'The right speed is not always the posted maximum'},
+    'Tilpass farten til situasjonen, ikke bare til skiltet': {th:'ปรับความเร็วตามสถานการณ์ ไม่ใช่ตามป้ายอย่างเดียว', en:'Adapt speed to the situation, not only to the sign'},
+    'Sjekk om det er klart foran og bak': {th:'ตรวจว่าด้านหน้าและด้านหลังปลอดภัย', en:'Check whether it is clear ahead and behind'},
+    'En forbikobling tar lenger tid enn du tror': {th:'การแซงใช้เวลานานกว่าที่คิด', en:'An overtake takes longer than you think'},
+    'Forbikjøring kun når det er klart, lovlig og nødvendig': {th:'แซงเฉพาะเมื่อชัดเจน ถูกกฎหมาย และจำเป็น', en:'Overtake only when it is clear, legal, and necessary'},
+    'Ta deg tid til å lese hele situasjonen': {th:t('lens_generic_see'), en:t('lens_generic_see')},
+    'Hva er den viktigste faktoren her?': {th:t('lens_generic_understand'), en:t('lens_generic_understand')},
+    'Velg det alternativet som er tryggest for alle i trafikken': {th:t('lens_generic_choose'), en:t('lens_generic_choose')}
+  };
+  var item = map[text];
+  return item ? (item[appLang] || text) : text;
+}
+
 function buildSituationLensHtml(qText, expl) {
   var lens = buildSituationLens(qText, expl);
   return '<div class="q-observe">'
-    + '<div class="q-observe-row"><span class="q-observe-tag">👀 ' + t('len_se') + '</span>' + escH(lens.see) + '</div>'
-    + '<div class="q-observe-row"><span class="q-observe-tag">🧠 ' + t('len_forsta') + '</span>' + escH(lens.understand) + '</div>'
-    + '<div class="q-observe-row"><span class="q-observe-tag">🚗 ' + t('len_velg') + '</span>' + escH(lens.choose) + '</div>'
+    + '<div class="q-observe-row"><span class="q-observe-tag">' + escH(t('see_tag')) + '</span>' + escH(lensText(lens.see)) + '</div>'
+    + '<div class="q-observe-row"><span class="q-observe-tag">' + escH(t('understand_tag')) + '</span>' + escH(lensText(lens.understand)) + '</div>'
+    + '<div class="q-observe-row"><span class="q-observe-tag">' + escH(t('choose_tag')) + '</span>' + escH(lensText(lens.choose)) + '</div>'
     + '</div>';
 }
 
@@ -4245,17 +4431,14 @@ function startReview(wrongQs) {
   showScreen('screenQuiz');
   // Update quiz header for review context
   var progLbl = document.getElementById('qProgLbl');
-  if (progLbl) progLbl.textContent = t('review_lbl');
+  if (progLbl) progLbl.textContent = t('review_title');
   var progFill = document.getElementById('qProgFill');
   if (progFill) progFill.style.width = '0%';
   var scoreEl = document.getElementById('qScoreNum');
   if (scoreEl) scoreEl.textContent = '0';
   // Clear right panel
   var aiBody = document.getElementById('quizAiBody');
-  var idleBody = appLang === 'th' ? 'อ่านคำถามและคำอธิบายในจังหวะของตัวเอง'
-               : appLang === 'en' ? 'Review questions and explanations at your own pace.'
-               : 'Les gjennom spørsmål og forklaringer i ditt eget tempo.';
-  if (aiBody) aiBody.innerHTML = '<div class="quiz-ai-idle"><div class="quiz-ai-idle-icon">📖</div><div class="quiz-ai-idle-text">' + escH(idleBody) + '</div></div>';
+  if (aiBody) aiBody.innerHTML = '<div class="quiz-ai-idle"><div class="quiz-ai-idle-icon">📖</div><div class="quiz-ai-idle-text">' + escH(t('review_idle')) + '</div></div>';
   renderReviewCard();
 }
 
@@ -4268,45 +4451,34 @@ function renderReviewCard() {
 
   if (_reviewIdx >= _reviewQuestions.length) {
     // Review complete
-    var rvDoneBody = (t('review_done_body') || '').replace('__N__', _reviewQuestions.length);
     qCard.innerHTML = '<div class="q-mid"><div class="rv-done">'
       + '<div class="rv-done-icon">✓</div>'
-      + '<div class="rv-done-head">' + t('review_done') + '</div>'
-      + '<div class="rv-done-body">' + escH(rvDoneBody) + '</div>'
-      + '<button class="rv-done-btn" onclick="showTab(\'home\')">' + t('backhome') + '</button>'
+      + '<div class="rv-done-head">' + escH(t('review_done')) + '</div>'
+      + '<div class="rv-done-body">' + escH(tf('review_done_body', {count:_reviewQuestions.length})) + '</div>'
+      + '<button class="rv-done-btn" onclick="showTab(\'home\')">' + escH(t('backhome')) + '</button>'
       + '</div></div>';
     return;
   }
 
   var q = _reviewQuestions[_reviewIdx];
   var isLast = (_reviewIdx + 1 >= _reviewQuestions.length);
-  var nextLabel = isLast
-    ? (appLang==='th'?'เสร็จสิ้นการทบทวน':appLang==='en'?'Finish review':'Fullfør gjennomgang')
-    : t('next');
+  var nextLabel = isLast ? t('review_finish') : t('next');
 
   var rvSlotId = 'vidSlot_rv_' + _reviewIdx;
   qCard.innerHTML = '<div class="q-mid"><div class="rv-wrap">'
-    + '<div class="rv-header">' + t('review_of') + ' ' + (_reviewIdx + 1) + ' / ' + _reviewQuestions.length + '</div>'
+    + '<div class="rv-header">' + escH(t('review_progress')) + ' ' + (_reviewIdx + 1) + ' ' + escH(t('of')) + ' ' + _reviewQuestions.length + '</div>'
     + (q.question_text ? '<div class="rv-question">' + escH(q.question_text) + '</div>' : '')
-    + (q.user_answer    ? '<div class="rv-answer rv-wrong">❌&nbsp; ' + t('your_ans') + '<strong>' + escH(q.user_answer) + '</strong></div>' : '')
-    + (q.correct_answer ? '<div class="rv-answer rv-right">✓&nbsp; ' + t('correct_ans') + '<strong>' + escH(q.correct_answer) + '</strong></div>' : '')
+    + (q.user_answer    ? '<div class="rv-answer rv-wrong">❌&nbsp; ' + escH(t('you_answered')) + ': <strong>' + escH(q.user_answer) + '</strong></div>' : '')
+    + (q.correct_answer ? '<div class="rv-answer rv-right">✓&nbsp; ' + escH(t('correct_answer')) + ': <strong>' + escH(q.correct_answer) + '</strong></div>' : '')
     + (q.explanation
-        ? '<div class="rv-expl"><div class="rv-expl-lbl">' + t('explanation') + '</div><div class="rv-expl-txt">' + escH(q.explanation) + '</div></div>'
+        ? '<div class="rv-expl"><div class="rv-expl-lbl">' + escH(t('explanation')) + '</div><div class="rv-expl-txt">' + escH(q.explanation) + '</div></div>'
         : '')
     + '<div id="' + rvSlotId + '"></div>'
     + '<button class="rv-next" onclick="reviewNext()">' + nextLabel + '</button>'
     + '</div></div>';
 
-  // Async video suggestion — fills the slot above the Neste button.
-  // Same routing as quiz AI panel: sign questions → sign video, rules → topic video.
-  var _rvBUrl    = q.bildeUrl || q.image_url || '';
-  var _rvSignId  = _signIdFromBildeUrl(_rvBUrl);
-  if (_rvSignId) {
-    var _rvGrp = _groupNameFromSignId(_rvSignId);
-    fetchVideoForSign(_rvSignId, _rvGrp).then(function(v) {
-      _injectVideo(rvSlotId, rvSlotId + '_vid', v);
-    });
-  } else if (q.explanation) {
+  // Async video suggestion — fills the slot above the Neste button
+  if (q.explanation) {
     fetchVideoForTopic(_dangerLabel(q.explanation)).then(function(v) {
       _injectVideo(rvSlotId, rvSlotId + '_vid', v);
     });
@@ -4362,7 +4534,11 @@ function _fmtDur(secs) {
 
 function buildVideoCard(v) {
   if (!v) return '';
-  var title = escH(v.title_no || v.title_en || v.title || '');
+  var title = escH(
+    appLang === 'th' ? (v.title_th || v.title_no || v.title_en || v.title || '') :
+    appLang === 'en' ? (v.title_en || v.title_no || v.title_th || v.title || '') :
+    (v.title_no || v.title_en || v.title_th || v.title || '')
+  );
   if (!title) return '';
   var url   = escH(v.youtube_url || '');
   if (!url) return '';
@@ -4373,7 +4549,7 @@ function buildVideoCard(v) {
       + (thumb ? '<img class="vid-thumb" src="' + escH(thumb) + '" loading="lazy" alt="">' : '▶')
     + '</div>'
     + '<div class="vid-info">'
-      + '<div class="vid-lbl">📹 Kort forklaring</div>'
+      + '<div class="vid-lbl">' + escH(t('video_short')) + '</div>'
       + '<div class="vid-title">' + title + '</div>'
       + (dur ? '<div class="vid-dur">' + dur + '</div>' : '')
     + '</div>'
@@ -4407,32 +4583,6 @@ async function fetchVideoForSign(signId, signGroup) {
   } catch(e) { _videoCache[key] = null; return null; }
 }
 
-// ── Sign-context helpers for video routing ────────────────────────────────────
-// Extract sign_id from a /api/sign-images/ URL.
-// e.g. ".../100_1_Skarp_sving_til_hoyre.jpg"  →  "100_1"
-//      ".../362_50.jpg"                         →  "362_50"
-function _signIdFromBildeUrl(url) {
-  if (!url || !url.includes('/api/sign-images/')) return '';
-  var filename = url.split('/').pop();               // "362_50.jpg"
-  var stem     = filename.replace(/\.[^.]+$/, '');   // "362_50"
-  var m = stem.match(/^(\d+(?:[_\.]\d+)?)/);         // "362_50"
-  return m ? m[1] : '';
-}
-
-// Derive Norwegian group name (matches SIGN_GROUPS in server.py) from sign number.
-function _groupNameFromSignId(signId) {
-  var num = parseInt(signId, 10);
-  if (num >= 100 && num <= 199) return 'Fareskilt';
-  if (num >= 200 && num <= 299) return 'Vikepliktskilt';
-  if (num >= 300 && num <= 399) return 'Forbudtskilt';
-  if (num >= 400 && num <= 499) return 'Påbudsskilt';    // Påbudsskilt
-  if (num >= 500 && num <= 599) return 'Opplysningsskilt';
-  if (num >= 700 && num <= 799) return 'Veivisningsskilt';
-  if (num >= 800 && num <= 899) return 'Underskilt';
-  if (num >= 900 && num <= 999) return 'Markeringsskilt';
-  return '';
-}
-
 // Inject a video card into a container element.
 // Placed BEFORE the instructor tip (last .quiz-ai-tip child) so it appears
 // in the natural reading flow, not buried at the very bottom.
@@ -4446,7 +4596,7 @@ function _injectVideo(containerId, slotId, v) {
   wrap.id = slotId;
   wrap.className = 'vid-section ai-block';
   wrap.style.cssText = '--i:8; animation:aiBlockIn .22s ease .05s both;';
-  wrap.innerHTML = '<div class="vid-sec-lbl">' + t('vid_explain') + '</div>' + buildVideoCard(v);
+  wrap.innerHTML = '<div class="vid-sec-lbl">' + escH(t('video_watch')) + '</div>' + buildVideoCard(v);
   // Insert before the instructor tip so video reads as part of the explanation flow
   var tip = container.querySelector('.quiz-ai-tip');
   if (tip) container.insertBefore(wrap, tip);
@@ -4508,36 +4658,41 @@ function buildAiHtml(isOk, expl) {
     html += '<div class="quiz-ai-danger ai-block" style="--i:' + (i++) + '">'
       + '<div class="quiz-ai-danger-icon">📌</div>'
       + '<div style="min-width:0">'
-      + '<div class="quiz-ai-danger-label">' + escH(_dangerLabel(expl)) + '</div>'
+      + '<div class="quiz-ai-danger-label">' + escH(topicLabel(_dangerLabel(expl))) + '</div>'
       + '<div class="quiz-ai-danger-text">' + emphExpl(parts.short) + '</div>'
       + '</div></div>';
 
     // 2b ── Full detail if explanation has more depth
     if (parts.rest) {
       html += '<div class="quiz-ai-explain ai-block" style="--i:' + (i++) + '">'
-        + '<div class="quiz-ai-card-label">📖 ' + t('more_detail') + '</div>'
+        + '<div class="quiz-ai-card-label">📖 ' + escH(t('more_details')) + '</div>'
         + '<div class="quiz-ai-card-text">' + escH(parts.rest) + '</div>'
         + '</div>';
     }
 
   } else if (isOk && expl) {
     // 3 ── Correct: depth + confidence adaptive explanation
+    //   'beginner' depth        → full text immediately (no friction)
+    //   'standard' low-conf     → auto-expand (struggling student needs full context)
+    //   'standard' medium/high  → short + expandable (student self-selects depth)
     var depth = _explDepth();
     html += '<div class="quiz-ai-explain ai-block" style="--i:' + (i++) + '">'
-      + '<div class="quiz-ai-card-label">📖 ' + t('explanation') + '</div>'
+      + '<div class="quiz-ai-card-label">📖 ' + escH(t('explanation')) + '</div>'
       + '<div class="quiz-ai-card-text">' + emphExpl(parts.short) + '</div>';
     if (parts.rest) {
       if (depth === 'beginner') {
+        // Beginners: full text — reduce friction, maximise available context
         html += '<div class="quiz-ai-card-text" style="margin-top:11px;padding-top:11px;'
           + 'border-top:1px solid rgba(255,255,255,.07)">' + escH(parts.rest) + '</div>';
       } else {
+        // Standard: auto-open for low-confidence students, closed otherwise
         var autoOpen = (confidence === 'low');
         html += '<button class="ai-expand-btn' + (autoOpen ? ' expanded' : '') + '" onclick="'
           + 'var c=this.nextElementSibling;'
           + 'c.classList.toggle(\'open\');'
           + 'this.classList.toggle(\'expanded\');'
-          + 'this.textContent=c.classList.contains(\'open\')?t(\'show_less\'):t(\'show_more\')'
-          + '">' + (autoOpen ? t('show_less') : t('show_more')) + '</button>'
+          + 'this.textContent=c.classList.contains(\'open\')?\'' + escH(t('show_less')) + '\':\'' + escH(t('show_more')) + '\''
+          + '">' + (autoOpen ? escH(t('show_less')) : escH(t('show_more'))) + '</button>'
           + '<div class="ai-expand-content' + (autoOpen ? ' open' : '') + '">' + escH(parts.rest) + '</div>';
       }
     }
@@ -4552,7 +4707,7 @@ function buildAiHtml(isOk, expl) {
     html += '<div class="ai-alert ai-alert-' + a.type + ' ai-block" style="--i:' + (i++) + '">'
       + '<span class="ai-alert-icon">' + a.icon + '</span>'
       + '<div style="min-width:0">'
-      + '<div class="ai-alert-label">' + escH(a.label) + '</div>'
+      + '<div class="ai-alert-label">' + escH(topicLabel(a.label)) + '</div>'
       + '<div class="ai-alert-text">' + escH(a.text) + '</div>'
       + '</div></div>';
   });
@@ -4565,7 +4720,7 @@ function buildAiHtml(isOk, expl) {
     html += '<div class="quiz-ai-tip ai-block" style="--i:' + (i++) + '">'
       + '<div class="quiz-ai-tip-icon">💡</div>'
       + '<div style="min-width:0">'
-      + '<div class="quiz-ai-tip-label">' + t('instructor') + '</div>'
+      + '<div class="quiz-ai-tip-label">' + escH(t('driving_teacher')) + '</div>'
       + '<div class="quiz-ai-tip-text">' + escH(buildInstructorTip(isOk, alerts)) + '</div>'
       + '</div></div>';
   }
@@ -4607,16 +4762,16 @@ function updateAiPanel(isOk, expl) {
   // Status chip
   var status = document.getElementById('quizAiStatus');
   if (status) {
-    status.textContent = isOk ? '✅ Riktig svar' : '↩ Se forklaring';
+    status.textContent = isOk ? ('✅ ' + t('correct_answer')) : ('↩ ' + t('explanation'));
     status.className = 'quiz-ai-status ' + okBad;
   }
 
   // Image badge — show detected topic to link image ↔ explanation
   var badge = document.getElementById('quizAiImgBadge');
   if (badge) {
-    var topicLabel = expl ? _dangerLabel(expl) : '';
-    badge.textContent = (topicLabel && topicLabel !== 'Forstå situasjonen')
-      ? '📍 ' + topicLabel : '📸 Trafikksituasjon';
+    var topicRaw = expl ? _dangerLabel(expl) : '';
+    badge.textContent = (topicRaw && topicRaw !== 'Forstå situasjonen')
+      ? '📍 ' + topicLabel(topicRaw) : t('traffic_situation');
   }
 
   // Inject content and scroll back to top
@@ -4628,27 +4783,13 @@ function updateAiPanel(isOk, expl) {
   if (mobile) mobile.innerHTML = html;
 
   // ── Contextual video suggestion (wrong answers only — one card, async) ────
-  // Routing: sign-recognition questions → sign/group video (never braking).
-  //          behavior/rule questions    → topic-based video via _dangerLabel().
+  // Fires after panel renders so it never blocks the primary feedback.
   if (!isOk && expl) {
-    var _curQ     = questions[qIdx] || {};
-    var _bUrl     = _curQ.bildeUrl || _curQ.image_url || '';
-    var _vidSignId = _signIdFromBildeUrl(_bUrl);
-    if (_vidSignId) {
-      // Sign image question — route to sign-group video, not topic
-      var _vidGrp = _groupNameFromSignId(_vidSignId);
-      fetchVideoForSign(_vidSignId, _vidGrp).then(function(v) {
-        _injectVideo('quizAiBody',   'vidSlot_aiDesktop', v);
-        _injectVideo('quizAiMobile', 'vidSlot_aiMobile',  v);
-      });
-    } else {
-      // Behavior/rule question — topic-based match (Bremsing, Vikeplikt, etc.)
-      var _vidTag = _dangerLabel(expl);
-      fetchVideoForTopic(_vidTag).then(function(v) {
-        _injectVideo('quizAiBody',   'vidSlot_aiDesktop', v);
-        _injectVideo('quizAiMobile', 'vidSlot_aiMobile',  v);
-      });
-    }
+    var _vidTag = _dangerLabel(expl);
+    fetchVideoForTopic(_vidTag).then(function(v) {
+      _injectVideo('quizAiBody',   'vidSlot_aiDesktop', v);
+      _injectVideo('quizAiMobile', 'vidSlot_aiMobile',  v);
+    });
   }
 
   // Mobile question image tint
@@ -4685,28 +4826,28 @@ function goBack() {
 //  BOOKMARKS
 // ════════════════════════════════════════════
 async function toggleBookmark(qId) {
-  if (!deviceId || !qId) { toast('Logg inn for å bruke bokmerker'); return; }
+  if (!deviceId || !qId) { toast(t('bookmark_login')); return; }
   var btn = document.getElementById('qBmBtn');
   if (bookmarkedIds[qId]) {
     try {
       await api('DELETE', '/api/bookmarks/' + encodeURIComponent(deviceId) + '/' + encodeURIComponent(qId));
       delete bookmarkedIds[qId];
       if (btn) { btn.classList.remove('bookmarked'); }
-      toast('Bokmerke fjernet');
-    } catch(e) { toast('Kunne ikke fjerne bokmerke'); }
+      toast(t('bookmark_removed'));
+    } catch(e) { toast(t('bookmark_remove_failed')); }
   } else {
     try {
       await api('POST', '/api/bookmarks', { device_id: deviceId, question_id: qId });
       bookmarkedIds[qId] = true;
       if (btn) { btn.classList.add('bookmarked'); }
-      toast('Bokmerke lagt til 🔖');
-    } catch(e) { toast('Kunne ikke legge til bokmerke'); }
+      toast(t('bookmark_added'));
+    } catch(e) { toast(t('bookmark_add_failed')); }
   }
 }
 
 async function loadBookmarks() {
   if (!deviceId) {
-    document.getElementById('bmScroll').innerHTML = '<div class="empty-state"><div class="es-icon">🔒</div><p>Logg inn for å se bokmerker</p></div>';
+    document.getElementById('bmScroll').innerHTML = '<div class="empty-state"><div class="es-icon">🔒</div><p>' + t('bookmarks_login') + '</p></div>';
     return;
   }
   var scroll = document.getElementById('bmScroll');
@@ -4722,7 +4863,7 @@ async function loadBookmarks() {
     });
     document.getElementById('bmCount').textContent = '(' + bms.length + ')';
     if (!bms.length) {
-      scroll.innerHTML = '<div class="empty-state"><div class="es-icon">🔖</div><p>Ingen bokmerker ennå.<br>Trykk 🔖 under et spørsmål for å lagre det.</p></div>';
+      scroll.innerHTML = '<div class="empty-state"><div class="es-icon">🔖</div><p>' + t('bookmarks_empty') + '</p></div>';
       return;
     }
     scroll.innerHTML = bms.map(function(q) {
@@ -4748,7 +4889,7 @@ async function loadBookmarks() {
         + '</div>';
     }).join('');
   } catch(e) {
-    scroll.innerHTML = '<div class="empty-state"><div class="es-icon">⚠️</div><p>Kunne ikke laste bokmerker.<br>' + escH(e.message) + '</p></div>';
+    scroll.innerHTML = '<div class="empty-state"><div class="es-icon">⚠️</div><p>' + t('generic_error') + '<br>' + escH(e.message) + '</p></div>';
   }
 }
 
@@ -4756,7 +4897,8 @@ async function loadBookmarks() {
 //  SIGNS GALLERY
 // ════════════════════════════════════════════
 var signsLoaded = false;
-var _signGroupsCache = null;   // loaded groups — used by sign detail panel for related signs
+var _signGroups = [];
+var _allSigns = [];
 // Visual identity for each of the 9 Norwegian sign groups (keyed by group number).
 // Color drives the dot + glow; desc is shown under the name as a one-line learning hint.
 var SIGN_GROUP_META = {
@@ -4788,6 +4930,17 @@ var SIGN_GROUP_META = {
        desc:{ no:'Markerer vegkanter, farer og hindringer',
               th:'ทำเครื่องหมายขอบถนน อันตราย และสิ่งกีดขวาง', en:'Marks road edges, hazards and obstacles' } },
 };
+var SIGN_GROUP_ORDER = {
+  'Vikepliktskilt': 1,
+  'Fareskilt': 2,
+  'Forbudsskilt': 3,
+  'Påbudsskilt': 4,
+  'Opplysningsskilt': 5,
+  'Serviceskilt': 6,
+  'Vegvisningsskilt': 7,
+  'Underskilt': 8,
+  'Markeringsskilt': 9
+};
 
 async function loadSigns() {
   var scroll = document.getElementById('signsScroll');
@@ -4797,13 +4950,13 @@ async function loadSigns() {
   try {
     var groups = await api('GET', '/api/traffic-signs');
     if (!Array.isArray(groups)) throw new Error('Ugyldig respons');
-
-    _signGroupsCache = groups;  // cache for sign detail panel related-signs lookup
+    _signGroups = groups;
+    _allSigns = [];
 
     // Count total signs
     var total = groups.reduce(function(n, g) { return n + (g.signs ? g.signs.length : 0); }, 0);
     var countEl = document.getElementById('signsCount');
-    if (countEl) countEl.textContent = total ? total + ' ' + t('signs_count') : '';
+    if (countEl) countEl.textContent = total ? total + ' ' + t('signs_word') : '';
 
     if (!total) {
       scroll.innerHTML = '<div class="empty-state"><div class="es-icon">🚦</div><p>' + t('signs_empty') + '</p></div>';
@@ -4811,19 +4964,13 @@ async function loadSigns() {
     }
 
     // Calm intro line — tells the learner what the section is for
-    var introText = appLang === 'th'
-      ? 'แตะที่ป้ายใดก็ได้เพื่อดูความหมาย เหตุที่ต้องรู้ และเคล็ดลับจำง่าย'
-      : appLang === 'en'
-      ? 'Tap any sign to see its meaning, why it matters, and how to remember it.'
-      : 'Trykk på et skilt for å se betydning, viktighet og husketriks.';
-
-    scroll.innerHTML = '<div class="signs-intro">' + escH(introText) + '</div>';
+    scroll.innerHTML = '<div class="signs-intro">' + escH(t('signs_intro')) + '</div>';
 
     groups.forEach(function(group) {
       if (!group.signs || !group.signs.length) return;
 
       // Rich group header — color identity + description + count
-      var gNum  = group.group || 0;
+      var gNum  = group.group || SIGN_GROUP_ORDER[group.group_key] || 0;
       var gMeta = SIGN_GROUP_META[gNum] || { color:'var(--orange)', desc:{} };
       var gName = group.group_name;
       var gLabel = typeof gName === 'object'
@@ -4840,13 +4987,17 @@ async function loadSigns() {
           + '<div class="sg-name">' + escH(gLabel) + '</div>'
           + (gDesc ? '<div class="sg-desc">' + escH(gDesc) + '</div>' : '')
         + '</div>'
-        + '<div class="sg-count">' + gCount + ' skilt</div>';
+        + '<div class="sg-count">' + gCount + ' ' + escH(t('signs_word')) + '</div>';
       scroll.appendChild(headerEl);
 
       // Grid
       var grid = document.createElement('div');
       grid.className = 'signs-grid';
       group.signs.forEach(function(sign) {
+        sign._groupName = group.group_name;
+        sign._groupKey = JSON.stringify(group.group_name || {});
+        sign._groupIndex = groups.indexOf(group);
+        _allSigns.push(sign);
         var sName = sign.name;
         var nameText = typeof sName === 'object'
           ? (sName[appLang] || sName.no || sName.en || '')
@@ -4859,10 +5010,6 @@ async function loadSigns() {
             ? '<div class="sign-img-wrap"><img class="sign-img" src="' + escH(imgUrl) + '" alt="" loading="lazy"></div>'
             : '') +
           '<div class="sign-ans">' + escH(nameText || '–') + '</div>';
-        // Store group info on sign for detail panel (related signs, video routing)
-        sign._groupName = group.group_name;
-        sign._groupNum  = gNum;
-        sign._groupMeta = gMeta;
         (function(s){ card.onclick = function(){ openSignDetail(s); }; })(sign);
         grid.appendChild(card);
       });
@@ -4880,7 +5027,7 @@ async function loadSigns() {
 // ════════════════════════════════════════════
 async function loadHistory() {
   if (!deviceId) {
-    document.getElementById('histScroll').innerHTML = '<div class="empty-state"><div class="es-icon">🔒</div><p>' + t('hist_login') + '</p></div>';
+    document.getElementById('histScroll').innerHTML = '<div class="empty-state"><div class="es-icon">🔒</div><p>' + t('history_login') + '</p></div>';
     return;
   }
   var scroll = document.getElementById('histScroll');
@@ -4888,17 +5035,11 @@ async function loadHistory() {
   try {
     var data = await api('GET', '/api/quiz-attempts/' + encodeURIComponent(deviceId) + '?limit=50&_=' + Date.now());
     var attempts = Array.isArray(data) ? data : (data.attempts || data.results || []);
-    // Merge local mirror if DB hasn't caught up yet (race condition guard)
-    if (_lastSavedAttempt) {
-      var alreadyIn = attempts.some(function(a) {
-        return a.started_at === _lastSavedAttempt.started_at;
-      });
-      if (!alreadyIn) attempts.unshift(_lastSavedAttempt);
-    }
+    attempts = _mergeAttempts(attempts, _readLocalAttempts().concat(_lastSavedAttempt ? [_lastSavedAttempt] : []));
     _histAttempts = attempts; // store for detail panel access
     document.getElementById('histCount').textContent = '(' + attempts.length + ')';
     if (!attempts.length) {
-      scroll.innerHTML = '<div class="empty-state"><div class="es-icon">📊</div><p>Ingen quiz-historikk ennå.<br>Fullfør en quiz for å se resultatene her.</p></div>';
+      scroll.innerHTML = '<div class="empty-state"><div class="es-icon">📊</div><p>' + t('history_empty') + '</p></div>';
       return;
     }
     scroll.innerHTML = attempts.map(function(a, idx) {
@@ -4908,19 +5049,17 @@ async function loadHistory() {
       var wrong   = total - correct;
       var barColor = pct >= 80 ? 'var(--green)' : pct >= 60 ? 'var(--orange)' : '#EF4444';
 
-      var badgeCls, badgeTxt;
-      if (pct >= 80)      { badgeCls = 'hist-badge-good'; badgeTxt = t('ready'); }
-      else if (pct >= 60) { badgeCls = 'hist-badge-ok';   badgeTxt = t('almost_ready'); }
-      else                { badgeCls = 'hist-badge-bad';  badgeTxt = t('practice_more'); }
+      var ready = readinessForPct(pct, false);
+      var badgeCls = 'hist-badge-' + ready.cls;
+      var badgeTxt = ready.text;
 
-      var modeLabels = {exam:t('mode_exam'), category:t('mode_cat'), daily:t('mode_daily'), random:t('mode_random')};
-      var modeLabel  = modeLabels[a.mode] || a.mode || 'Quiz';
+      var modeText  = modeLabel(a.mode);
       var modeSub    = a.category ? catName(a.category) : '';
 
       var dateStr = '';
       if (a.completed_at || a.started_at) {
         var d = new Date(a.completed_at || a.started_at);
-        dateStr = d.toLocaleDateString('no-NO', {day:'2-digit', month:'short'}) + ', ' + d.toLocaleTimeString('no-NO', {hour:'2-digit', minute:'2-digit'});
+        dateStr = d.toLocaleDateString(localeForLang(), {day:'2-digit', month:'short'}) + ', ' + d.toLocaleTimeString(localeForLang(), {hour:'2-digit', minute:'2-digit'});
       }
 
       var passedBit = '';
@@ -4930,7 +5069,7 @@ async function loadHistory() {
       return '<div class="hist-card" onclick="openHistDetail(' + idx + ')" style="animation:aiBlockIn .22s ease both;animation-delay:' + (idx * 35) + 'ms">'
         + '<div class="hist-card-top">'
           + '<div>'
-            + '<div class="hist-mode">' + escH(modeLabel) + '</div>'
+            + '<div class="hist-mode">' + escH(modeText) + '</div>'
             + (modeSub ? '<div class="hist-mode-sub">' + escH(modeSub) + '</div>' : '')
           + '</div>'
           + '<div class="hist-badge ' + badgeCls + '">' + badgeTxt + '</div>'
@@ -4940,28 +5079,29 @@ async function loadHistory() {
           + '<div class="hist-bar-wrap"><div class="hist-bar-fill" style="width:' + pct + '%;background:' + barColor + '"></div></div>'
         + '</div>'
         + '<div class="hist-stats-row">'
-          + '<span class="hist-stat-good">✓ ' + correct + ' ' + t('correct_lbl') + '</span>'
+          + '<span class="hist-stat-good">✓ ' + correct + ' ' + t('correct_count') + '</span>'
           + '<span class="hist-stat-sep">·</span>'
-          + '<span class="hist-stat-bad">✗ ' + wrong + ' ' + t('wrong_lbl') + '</span>'
+          + '<span class="hist-stat-bad">✗ ' + wrong + ' ' + t('wrong_count') + '</span>'
           + '<span class="hist-stat-sep">·</span>'
-          + '<span class="hist-stat-tot">/ ' + total + '</span>'
+          + '<span class="hist-stat-tot">' + t('of') + ' ' + total + '</span>'
           + passedBit
         + '</div>'
         + '<div class="hist-card-footer">'
           + '<div class="hist-date-new">' + escH(dateStr) + '</div>'
           + '<div class="hist-card-actions">'
-            + '<button class="hist-btn hist-btn-sec" onclick="event.stopPropagation();openHistDetail(' + idx + ')">' + t('see_details') + '</button>'
-            + '<button class="hist-btn hist-btn-pri" onclick="event.stopPropagation();retryAttempt(' + idx + ')">' + t('try_again') + '</button>'
+            + '<button class="hist-btn hist-btn-sec" onclick="event.stopPropagation();openHistDetail(' + idx + ')">' + t('details') + '</button>'
+            + '<button class="hist-btn hist-btn-pri" onclick="event.stopPropagation();retryAttempt(' + idx + ')">' + t('retry') + '</button>'
           + '</div>'
         + '</div>'
         + '</div>';
     }).join('');
   } catch(e) {
-    scroll.innerHTML = '<div class="empty-state"><div class="es-icon">⚠️</div><p>Kunne ikke laste historikk.<br>' + escH(e.message) + '</p></div>';
+    scroll.innerHTML = '<div class="empty-state"><div class="es-icon">⚠️</div><p>' + t('history_load_error') + '<br>' + escH(e.message) + '</p></div>';
   }
 }
 
 function openHistDetail(idx) {
+  _histOpenIdx = idx;
   var a = _histAttempts[idx];
   if (!a) return;
   var pct     = Math.round(a.score_percentage || 0);
@@ -4970,60 +5110,57 @@ function openHistDetail(idx) {
   var wrong   = total - correct;
 
   // Mode label
-  var modeLabels = {exam:t('mode_exam'), category:t('mode_cat'), daily:t('mode_daily'), random:t('mode_random')};
-  var modeStr = modeLabels[a.mode] || a.mode || 'Quiz';
+  var modeStr = modeLabel(a.mode);
   if (a.category) modeStr += ' — ' + catName(a.category);
   document.getElementById('hpModeLbl').textContent = modeStr;
 
   // Score headline
   document.getElementById('hpScoreBig').textContent = pct + '%';
-  document.getElementById('hpScoreSub').textContent = correct + ' / ' + total;
+  document.getElementById('hpScoreSub').textContent = tf('result_score', {correct:correct, total:total});
 
   // Badge
-  var badgeCls, badgeTxt;
-  if (pct >= 80)      { badgeCls = 'hp-badge-good'; badgeTxt = '✓ ' + t('ready'); }
-  else if (pct >= 60) { badgeCls = 'hp-badge-ok';   badgeTxt = '▲ ' + t('almost_ready'); }
-  else                { badgeCls = 'hp-badge-bad';  badgeTxt = '↺ ' + t('practice_more'); }
+  var ready = readinessForPct(pct, true);
+  var badgeCls = 'hp-badge-' + ready.cls;
+  var badgeTxt = ready.text;
   var badge = document.getElementById('hpBadge');
   badge.className = 'hp-badge ' + badgeCls;
   badge.textContent = badgeTxt;
 
   // Stats grid
   document.getElementById('hpStats').innerHTML =
-      '<div class="hp-stat"><div class="hp-stat-num good">' + correct + '</div><div class="hp-stat-lbl">' + t('correct_lbl') + '</div></div>'
-    + '<div class="hp-stat"><div class="hp-stat-num bad">' + wrong + '</div><div class="hp-stat-lbl">' + t('wrong_lbl') + '</div></div>'
-    + '<div class="hp-stat"><div class="hp-stat-num">' + total + '</div><div class="hp-stat-lbl">' + t('total_lbl') + '</div></div>';
+      '<div class="hp-stat"><div class="hp-stat-num good">' + correct + '</div><div class="hp-stat-lbl">' + escH(t('correct_count')) + '</div></div>'
+    + '<div class="hp-stat"><div class="hp-stat-num bad">' + wrong + '</div><div class="hp-stat-lbl">' + escH(t('wrong_count')) + '</div></div>'
+    + '<div class="hp-stat"><div class="hp-stat-num">' + total + '</div><div class="hp-stat-lbl">' + escH(t('total_count')) + '</div></div>';
 
   // Wrong questions body
   var qs = Array.isArray(a.questions_answered) ? a.questions_answered : [];
   var wrongQs = qs.filter(function(q) { return q.is_correct === false; });
   var bodyHtml = '';
   if (wrongQs.length) {
-    bodyHtml += '<div class="hp-section-label">' + t('wrong_count') + ' (' + wrongQs.length + ')</div>';
+    bodyHtml += '<div class="hp-section-label">' + escH(t('wrong_answers')) + ' (' + wrongQs.length + ')</div>';
     bodyHtml += wrongQs.map(function(q, i) {
       var delay    = i * 40;
-      var userTxt  = q.user_answer    ? t('your_ans')    + q.user_answer    : '';
-      var rightTxt = q.correct_answer ? t('correct_ans') + q.correct_answer : '';
+      var userTxt  = q.user_answer    ? t('you_answered') + ': '  + q.user_answer    : '';
+      var rightTxt = q.correct_answer ? t('correct_answer') + ': ' + q.correct_answer : '';
       return '<div class="hp-q-card" style="animation:aiBlockIn .22s ease both;animation-delay:' + delay + 'ms">'
-        + '<div class="hp-q-num">' + t('q_num') + ' ' + (i + 1) + '</div>'
+        + '<div class="hp-q-num">' + escH(t('question')) + ' ' + (i + 1) + '</div>'
         + (q.question_text ? '<div class="hp-q-text">' + escH(q.question_text) + '</div>' : '')
         + (userTxt  ? '<div class="hp-q-ans hp-q-ans-wrong">' + escH(userTxt)  + '</div>' : '')
         + (rightTxt ? '<div class="hp-q-ans hp-q-ans-right">' + escH(rightTxt) + '</div>' : '')
         + (q.explanation
-            ? '<div class="hp-q-expl-label">' + t('explanation') + '</div><div class="hp-q-expl">' + escH(q.explanation) + '</div>'
+            ? '<div class="hp-q-expl-label">' + escH(t('explanation')) + '</div><div class="hp-q-expl">' + escH(q.explanation) + '</div>'
             : '')
         + '</div>';
     }).join('');
   } else if (qs.length) {
-    bodyHtml = '<div class="hp-no-data">' + t('no_wrongs') + '<br>' + (appLang==='th'?'เก่งมากเลย!':appLang==='en'?'Well done!':'Veldig bra gjort.') + '</div>';
+    bodyHtml = '<div class="hp-no-data">' + t('no_wrong_answers') + '</div>';
   } else {
-    bodyHtml = '<div class="hp-no-data">Detaljert spørsmålsoversikt er ikke tilgjengelig for eldre quizer.<br>Ta en ny quiz for å se hva du svarte.</div>';
+    bodyHtml = '<div class="hp-no-data">' + t('old_quiz_details') + '</div>';
   }
   document.getElementById('hpBody').innerHTML = bodyHtml;
 
-  // Wire retry button and localise static labels
-  var hpRetry = document.getElementById('hpRetryBtn');
-  if (hpRetry) { hpRetry.textContent = t('try_again'); hpRetry.onclick = function() { retryAttempt(idx); }; }
+  // Wire retry button
+  document.getElementById('hpRetryBtn').onclick = function() { retryAttempt(idx); };
 
   // Wire / show "Gå gjennom feil" review button
   var hpActions = document.getElementById('hpActions');
@@ -5035,7 +5172,7 @@ function openHistDetail(idx) {
       var rvBtn = document.createElement('button');
       rvBtn.id = 'hpReviewBtn';
       rvBtn.className = 'hp-btn-sec';
-      rvBtn.textContent = t('review_btn') + ' ' + wrongQs.length + ' ' + t('wrong_count').toLowerCase();
+      rvBtn.textContent = tf('review_wrong_count', {count: wrongQs.length});
       rvBtn.onclick = function() { startReview(wrongQs); };
       // Insert before "Lukk" (last button)
       var lukk = hpActions.lastElementChild;
@@ -5049,6 +5186,7 @@ function openHistDetail(idx) {
 }
 
 function closeHistDetail() {
+  _histOpenIdx = null;
   document.getElementById('histPanelBackdrop').classList.remove('open');
   document.getElementById('histPanel').classList.remove('open');
 }
@@ -5075,10 +5213,10 @@ async function removeBookmark(qId, cardEl) {
     var remaining = document.querySelectorAll('.bm-card').length;
     document.getElementById('bmCount').textContent = '(' + remaining + ')';
     if (!remaining) {
-      document.getElementById('bmScroll').innerHTML = '<div class="empty-state"><div class="es-icon">🔖</div><p>Ingen bokmerker ennå.<br>Trykk 🔖 under et spørsmål for å lagre det.</p></div>';
+      document.getElementById('bmScroll').innerHTML = '<div class="empty-state"><div class="es-icon">🔖</div><p>' + t('bookmarks_empty') + '</p></div>';
     }
-    toast('Bokmerke fjernet');
-  } catch(e) { toast('Kunne ikke fjerne bokmerke'); }
+    toast(t('bookmark_removed'));
+  } catch(e) { toast(t('bookmark_remove_failed')); }
 }
 
 // ════════════════════════════════════════════
@@ -5100,32 +5238,42 @@ function _buildDebrief(pct, total) {
 
   if (isExamMode) {
     if (pct >= 85) {
-      heading = 'Bestått.';
-      body = 'Du er klar for teoriprøven. Gjennomfør gjerne enda en runde for å bygge selvtillit.';
+      heading = t('result_exam_pass_head');
+      body = t('result_exam_pass_body');
     } else {
-      heading = 'Ikke bestått denne gangen.';
+      heading = t('result_exam_fail_head');
       body = topTopic
-        ? 'Det er verdt å bruke litt mer tid på ' + topTopic.toLowerCase() + '. Øv på det og prøv igjen.'
-        : 'Du er på vei. Prøv igjen — forståelse bygges gradvis.';
+        ? (appLang === 'th' ? 'ควรใช้เวลาเพิ่มกับเรื่อง ' + topicLabel(topTopic) + ' ฝึกต่อแล้วลองอีกครั้ง'
+          : appLang === 'en' ? 'It is worth spending more time on ' + topicLabel(topTopic).toLowerCase() + '. Practice it and try again.'
+          : 'Det er verdt å bruke litt mer tid på ' + topTopic.toLowerCase() + '. Øv på det og prøv igjen.')
+        : t('result_more_body');
     }
   } else if (pct >= 85) {
-    heading = 'Solid gjennomkjøring.';
+    heading = t('result_solid_head');
     body = total >= 15
-      ? 'Du gjenkjenner trafikksituasjonene godt og vurderer riktig. Det er det som teller i praksis.'
-      : 'Du traff godt. Prøv et lengre sett for å bekrefte forståelsen.';
+      ? t('result_solid_body')
+      : (appLang === 'th' ? 'คุณทำได้ดี ลองชุดที่ยาวขึ้นเพื่อยืนยันความเข้าใจ'
+        : appLang === 'en' ? 'You did well. Try a longer set to confirm the understanding.'
+        : 'Du traff godt. Prøv et lengre sett for å bekrefte forståelsen.');
   } else if (pct >= 65) {
-    heading = 'Du er på rett vei.';
+    heading = t('result_right_way_head');
     body = topTopic
-      ? 'Forståelsen er god på det meste. La oss bruke litt mer tid på ' + topTopic.toLowerCase() + '.'
-      : 'Noen situasjoner har ikke satt seg helt ennå — det er normalt. Fortsett å øve.';
+      ? (appLang === 'th' ? 'ส่วนใหญ่เข้าใจดีแล้ว มาฝึกเพิ่มอีกนิดกับ ' + topicLabel(topTopic)
+        : appLang === 'en' ? 'Most of the understanding is good. Let us spend a bit more time on ' + topicLabel(topTopic).toLowerCase() + '.'
+        : 'Forståelsen er god på det meste. La oss bruke litt mer tid på ' + topTopic.toLowerCase() + '.')
+      : (appLang === 'th' ? 'บางสถานการณ์ยังไม่ติดแน่น ซึ่งเป็นเรื่องปกติ ฝึกต่ออย่างใจเย็น'
+        : appLang === 'en' ? 'Some situations have not fully settled yet. That is normal. Keep practicing.'
+        : 'Noen situasjoner har ikke satt seg helt ennå — det er normalt. Fortsett å øve.');
   } else if (pct >= 40) {
-    heading = 'La oss øve litt mer.';
+    heading = t('result_more_head');
     body = topTopic
-      ? 'Det er verdt å gå litt nærmere inn på ' + topTopic.toLowerCase() + '. Les forklaringene grundig.'
-      : 'Trafikkreglene sitter ikke alltid med én runde. Prøv igjen — det tar tid å bygge forståelse.';
+      ? (appLang === 'th' ? 'ควรดูเรื่อง ' + topicLabel(topTopic) + ' ให้ละเอียดขึ้น อ่านคำอธิบายอย่างใจเย็น'
+        : appLang === 'en' ? 'It is worth looking more closely at ' + topicLabel(topTopic).toLowerCase() + '. Read the explanations carefully.'
+        : 'Det er verdt å gå litt nærmere inn på ' + topTopic.toLowerCase() + '. Les forklaringene grundig.')
+      : t('result_more_body');
   } else {
-    heading = 'Her er det mer å lære.';
-    body = 'Ikke bekymre deg — forståelse bygges gradvis. Bruk forklaringene aktivt og ta det steg for steg.';
+    heading = t('result_learn_head');
+    body = t('result_learn_body');
   }
 
   return { heading: heading, body: body, topTopic: topTopic };
@@ -5142,13 +5290,13 @@ function showEnd() {
   try {
     var debrief = _buildDebrief(pct, total);
     var el;
-    el = document.getElementById('endScoreQuiet'); if (el) el.textContent = qScore + ' / ' + total + ' ' + t('correct_lbl').toLowerCase();
+    el = document.getElementById('endScoreQuiet'); if (el) el.textContent = tf('result_score', {correct:qScore, total:total});
     el = document.getElementById('endHeading');    if (el) el.textContent = debrief.heading;
     el = document.getElementById('endBody');       if (el) el.textContent = debrief.body;
     var focusEl = document.getElementById('endFocus');
     var focusTopicEl = document.getElementById('endFocusTopic');
     if (debrief.topTopic && focusEl && focusTopicEl) {
-      focusTopicEl.textContent = debrief.topTopic;
+      focusTopicEl.textContent = topicLabel(debrief.topTopic);
       focusEl.style.display = '';
     } else if (focusEl) {
       focusEl.style.display = 'none';
@@ -5158,7 +5306,10 @@ function showEnd() {
   // ── Save attempt — always runs, even if display above failed ──
   if (deviceId && total > 0) {
     var mode = isExamMode ? 'exam' : (currentCat ? 'category' : 'daily');
+    var completedAt = new Date().toISOString();
+    var clientAttemptId = 'web_' + completedAt + '_' + Math.random().toString(36).slice(2, 8);
     var attemptData = {
+      client_attempt_id: clientAttemptId,
       device_id: deviceId,
       mode: mode,
       category: currentCat ? currentCat.name : null,
@@ -5169,10 +5320,14 @@ function showEnd() {
       questions_answered: _sessionAnswers.length ? _sessionAnswers : questions.map(function(q, i) {
         return { question_id: String(q._id || q.id || q.question_id || ''), index: i };
       }),
-      started_at: quizStartedAt || new Date().toISOString()
+      started_at: quizStartedAt || completedAt,
+      completed_at: completedAt
     };
     // Build a local mirror immediately so History shows it even before the DB catches up
     _lastSavedAttempt = {
+      id: clientAttemptId,
+      client_attempt_id: clientAttemptId,
+      device_id: attemptData.device_id,
       mode: attemptData.mode,
       category: attemptData.category,
       total_questions: attemptData.total_questions,
@@ -5180,14 +5335,18 @@ function showEnd() {
       score_percentage: attemptData.score_percentage,
       passed: attemptData.passed,
       started_at: attemptData.started_at,
-      completed_at: new Date().toISOString(),
+      completed_at: completedAt,
       questions_answered: _sessionAnswers.slice()
     };
+    _writeLocalAttempt(_lastSavedAttempt);
     api('POST', '/api/quiz-attempts', attemptData)
-      .then(function() { toast('Resultat lagret ✓', 2000); })
+      .then(function(saved) {
+        _writeLocalAttempt(saved || _lastSavedAttempt);
+        toast(t('result_saved'), 2000);
+      })
       .catch(function(e) {
         console.warn('Quiz attempt save failed:', e.message);
-        toast('Lagring feilet: ' + e.message, 4000);
+        toast(t('result_save_failed') + e.message, 4000);
       });
   }
 }
@@ -5370,7 +5529,18 @@ function setLang(lang) {
   if (bmScreen && bmScreen.classList.contains('active')) {
     loadBookmarks();
   }
-  toast('Språk oppdatert');
+  var histScreen = document.getElementById('screenHistory');
+  if (histScreen && histScreen.classList.contains('active')) {
+    loadHistory();
+  }
+  if (_signPanelData) {
+    _signPanelLang = lang === 'th' ? 'th' : lang === 'en' ? 'en' : 'no';
+    _renderSignPanel();
+  }
+  if (document.getElementById('histPanel') && document.getElementById('histPanel').classList.contains('open')) {
+    if (_histOpenIdx !== null) openHistDetail(_histOpenIdx);
+  }
+  toast(t('lang_updated'));
 }
 
 function toggleSound(el) {
@@ -5491,6 +5661,47 @@ function _getProp(obj, lang) {
   return obj[lang] || obj.no || obj.en || obj.th || '';
 }
 
+function _signCode(sign) {
+  return String((sign && (sign.code || sign.variant || sign.id)) || '').match(/\d{3}(?:\.\d+)?/)?.[0] || '';
+}
+
+function _signOrder(sign) {
+  var code = _signCode(sign);
+  var n = parseFloat(code || sign.order || '9999');
+  return isNaN(n) ? 9999 : n;
+}
+
+function _sameSignGroup(a, b) {
+  if (!a || !b) return false;
+  if (a._groupKey && b._groupKey) return a._groupKey === b._groupKey;
+  return _getProp(a._groupName || a.group_name, 'no') === _getProp(b._groupName || b.group_name, 'no');
+}
+
+function _relatedSignsFor(sign, count) {
+  return _allSigns
+    .filter(function(item) { return item && item.id !== sign.id && _sameSignGroup(item, sign); })
+    .sort(function(a, b) {
+      return Math.abs(_signOrder(a) - _signOrder(sign)) - Math.abs(_signOrder(b) - _signOrder(sign));
+    })
+    .slice(0, count || 6);
+}
+
+function _renderRelatedSignCard(sign, lang) {
+  var name = _getProp(sign.name, lang) || _getProp(sign.name, 'no') || '–';
+  var code = sign.code || _signCode(sign);
+  var clickId = JSON.stringify(sign.id || '').replace(/"/g, '&quot;');
+  return '<button class="sp-related-card" type="button" onclick="openSignDetailById(' + clickId + ')">'
+    + '<div class="sp-related-img">' + (sign.image_url ? '<img src="' + escH(sign.image_url) + '" alt="" loading="lazy">' : '') + '</div>'
+    + '<div class="sp-related-code">' + escH(code || '') + '</div>'
+    + '<div class="sp-related-name">' + escH(name) + '</div>'
+    + '</button>';
+}
+
+function openSignDetailById(id) {
+  var next = _allSigns.find(function(sign) { return sign.id === id; });
+  if (next) openSignDetail(next);
+}
+
 function _renderSignPanel() {
   var sign = _signPanelData;
   if (!sign) return;
@@ -5538,7 +5749,6 @@ function _renderSignPanel() {
       + '</div>';
   }
 
-  // ── Content cards ────────────────────────────────────────────────────────
   var html = '';
   html += card('explanation', '📖', L.expl,     _getProp(sign.explanation,  lang));
   html += card('danger',      '⚠️', L.danger,   _getProp(sign.whyDangerous || sign.why_dangerous, lang));
@@ -5547,105 +5757,60 @@ function _renderSignPanel() {
   html += card('exam',        '📝', L.examTip,  _getProp(sign.examTip || sign.exam_tip, lang));
   html += card('memory',      '💡', L.memRule,  _getProp(sign.memoryRule || sign.memory_rule, lang));
 
-  // Smart empty state: no "coming soon" — show recognition guidance instead
   if (!html) {
-    var gMeta  = sign._groupMeta || SIGN_GROUP_META[sign._groupNum || sign.group] || {};
-    var gDesc  = gMeta.desc ? (gMeta.desc[lang] || gMeta.desc.no || '') : '';
-    var recLabel = lang === 'th' ? 'วิธีสังเกต' : lang === 'en' ? 'How to recognize it' : 'Slik kjenner du det igjen';
-    var recText  = lang === 'th'
-      ? 'ป้ายนี้อยู่ในกลุ่ม: ' + gDesc + '. สังเกตรูปร่าง สี และสัญลักษณ์ แล้วกดปุ่มฝึกทำโจทย์ด้านล่างเพื่อทดสอบตัวเอง'
-      : lang === 'en'
-      ? 'This sign belongs to: ' + gDesc + '. Note its shape, color and symbol, then use the quiz button to test yourself.'
-      : (gDesc ? gDesc + '. ' : '') + 'Legg merke til form, farge og symbol. Bruk quiz-knappen nedenfor for å øve.';
-    html = card('explanation', '👁️', recLabel, recText);
+    html += card('explanation', '📖', L.expl, t('sign_fallback_meaning'));
+    html += card('danger',      '⚠️', L.danger, t('sign_fallback_driver'));
+    html += card('mistake',     '🔴', L.mistake, t('sign_fallback_mistake'));
+    html += card('exam',        '📝', L.examTip, t('sign_fallback_exam'));
+    html += card('memory',      '💡', L.memRule, t('sign_fallback_memory'));
   }
+
+  var related = _relatedSignsFor(sign, 6);
+  var confused = related.slice(0, 4);
+  var sideHtml = '<div class="sp-side-section">'
+    + '<div class="sp-side-title">' + escH(t('often_confused')) + '</div>'
+    + (confused.length
+      ? '<div class="sp-related-grid">' + confused.map(function(s) { return _renderRelatedSignCard(s, lang); }).join('') + '</div>'
+      : '<div class="sp-related-empty">' + escH(t('no_related_signs')) + '</div>')
+    + '</div>'
+    + '<div class="sp-side-section">'
+    + '<div class="sp-side-title">' + escH(t('related_signs')) + '</div>'
+    + (related.length
+      ? '<div class="sp-related-grid">' + related.map(function(s) { return _renderRelatedSignCard(s, lang); }).join('') + '</div>'
+      : '<div class="sp-related-empty">' + escH(t('no_related_signs')) + '</div>')
+    + '</div>';
 
   var body = document.getElementById('spBody');
-  if (body) body.innerHTML = html;
+  if (body) body.innerHTML = '<div class="sp-learning-layout">'
+    + '<div class="sp-related-surface">' + sideHtml + '</div>'
+    + '<div class="sp-main-surface" id="spMainSurface">' + html + '</div>'
+    + '</div>';
 
-  // ── Action buttons — translated ──────────────────────────────────────────
-  var practBtn = document.getElementById('spPracticeBtn');
-  if (practBtn) practBtn.textContent = t('sp_practice');
+  // ── Contextual video suggestion for this sign (async) ─────────────────────
+  // Uses sign.id for a direct match; passes sign group as fallback.
+  var _spSignId  = sign.id || '';
+  var _spGroup   = _getProp(sign._groupName || sign.group_name, 'no') || '';
+  var mainSurface = document.getElementById('spMainSurface');
+  if (_spSignId && mainSurface) {
+    fetchVideoForSign(_spSignId, _spGroup).then(function(v) {
+      _injectVideo(mainSurface, 'vidSlot_sign_' + _spSignId, v);
+    });
+  }
 
-  var audioBtn = document.getElementById('spAudioBtn');
-  if (audioBtn) audioBtn.innerHTML = t('sp_audio');
-
-  var aiBtn = document.getElementById('spAskAiBtn');
-  if (aiBtn) aiBtn.innerHTML = t('sp_ask_ai');
-
-  var isFav = _signFavorites.indexOf(sign.id) >= 0;
+  // Bookmark button state
   var bmBtn = document.getElementById('spBmBtn');
   if (bmBtn) {
-    bmBtn.textContent = isFav ? t('sp_saved') : t('sp_save');
-    bmBtn.className   = 'sp-btn-sm sp-btn-sm-bm' + (isFav ? ' saved' : '');
+    var isFav = _signFavorites.indexOf(sign.id) >= 0;
+    bmBtn.innerHTML = isFav ? '🔖<span>' + escH(t('saved')) + '</span>' : '🔖<span>' + escH(t('save')) + '</span>';
+    bmBtn.className = 'sp-btn-sm sp-btn-sm-bm' + (isFav ? ' saved' : '');
   }
 
-  // ── Related signs ─────────────────────────────────────────────────────────
-  var currentSignId = sign.id || '';
-  var groupNum = sign._groupNum || sign.group || 0;
-
-  // Collect related signs from the cached groups data
-  var relatedSigns = [];
-  if (_signGroupsCache) {
-    _signGroupsCache.forEach(function(g) {
-      if ((g.group || 0) === groupNum) relatedSigns = g.signs || [];
-    });
-  }
-  var others = relatedSigns.filter(function(s) { return s.id !== currentSignId; });
-
-  // Helper: build a thumb element and click handler
-  function makeThumb(s) {
-    var thumb = document.createElement('div');
-    thumb.className = 'sp-rel-thumb' + (s.id === currentSignId ? ' sp-rel-active' : '');
-    var sName = s.name;
-    var nameText = typeof sName === 'object' ? (sName[lang] || sName.no || '') : (sName || '');
-    var imgUrl = s.image_url || '';
-    thumb.innerHTML = (imgUrl
-      ? '<img src="' + escH(imgUrl) + '" loading="lazy" alt="">'
-      : '<div style="width:42px;height:42px;background:rgba(255,255,255,.06);border-radius:8px"></div>')
-      + '<span class="sp-rel-name">' + escH(nameText || s.id || '–') + '</span>';
-    (function(rel) {
-      thumb.onclick = function() {
-        // Carry group meta forward so detail panel works on next sign too
-        rel._groupName = sign._groupName;
-        rel._groupNum  = sign._groupNum;
-        rel._groupMeta = sign._groupMeta;
-        openSignDetail(rel);
-      };
-    })(s);
-    return thumb;
-  }
-
-  // Desktop left column
-  var relHdr = document.getElementById('spRelatedHdr');
-  var relColBody = document.getElementById('spRelatedColBody');
-  if (relHdr) relHdr.textContent = t('sp_related');
-  if (relColBody) {
-    relColBody.innerHTML = '';
-    others.slice(0, 24).forEach(function(s) { relColBody.appendChild(makeThumb(s)); });
-  }
-
-  // Mobile horizontal row
-  var relRow = document.getElementById('spRelatedRow');
-  if (relRow) {
-    relRow.innerHTML = '';
-    if (others.length) {
-      var lbl = document.createElement('span');
-      lbl.className = 'sp-related-row-lbl';
-      lbl.textContent = t('sp_related');
-      relRow.appendChild(lbl);
-      others.slice(0, 10).forEach(function(s) { relRow.appendChild(makeThumb(s)); });
-    }
-  }
-
-  // ── Contextual video — secondary (appended after content) ─────────────────
-  var _spSignId = sign.id || '';
-  var _spGroup  = _getProp(sign._groupName || sign.group_name, 'no') || '';
-  if (_spSignId && body) {
-    fetchVideoForSign(_spSignId, _spGroup).then(function(v) {
-      _injectVideo(body, 'vidSlot_sign_' + _spSignId, v);
-    });
-  }
+  var practiceBtn = document.querySelector('.sp-btn-primary');
+  if (practiceBtn) practiceBtn.textContent = t('practice_this_sign');
+  var audioLbl = document.querySelector('.sp-btn-sm-audio span');
+  if (audioLbl) audioLbl.textContent = t('read_aloud');
+  var aiLbl = document.querySelector('.sp-btn-sm-ai span');
+  if (aiLbl) aiLbl.textContent = t('ask_ai');
 }
 
 function speakSign() {
@@ -5678,13 +5843,37 @@ function practiceThisSign() {
 }
 
 function askAiAboutSign() {
-  closeSignDetail();
-  showTab('home');
+  var sign = _signPanelData;
+  if (!sign) return;
+  var lang = _signPanelLang;
+  var main = document.getElementById('spMainSurface') || document.getElementById('spBody');
+  if (!main) return;
+  var old = document.getElementById('spAiInline');
+  if (old) old.remove();
+
+  var name = _getProp(sign.name, lang) || _getProp(sign.name, 'no') || '';
+  var expl = _getProp(sign.explanation, lang);
+  var driver = _getProp(sign.whyDangerous || sign.why_dangerous, lang) || t('sign_fallback_driver');
+  var mistake = _getProp(sign.typicalMistake || sign.typical_mistake, lang) || t('sign_fallback_mistake');
+  var lesson = tf('sign_ai_lesson', { name: name || t('signs') });
+  var text = [lesson, expl, driver, mistake].filter(Boolean).join(' ');
+
+  var ai = document.createElement('div');
+  ai.id = 'spAiInline';
+  ai.className = 'sp-card sp-card-explanation';
+  ai.innerHTML = '<div class="sp-card-icon">🤖</div>'
+    + '<div class="sp-card-inner">'
+    + '<div class="sp-card-label">' + escH(t('ai_teacher_hint')) + '</div>'
+    + '<div class="sp-card-text">' + escH(text) + '</div>'
+    + '</div>';
+  main.appendChild(ai);
+  ai.scrollIntoView({ behavior:'smooth', block:'nearest' });
 }
 
 </script>
 </body>
-</html>"""
+</html>
+"""
 
 
 @webapp_router.get("/web", response_class=HTMLResponse)
