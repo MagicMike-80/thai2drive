@@ -39,7 +39,7 @@ const CAT_LABELS: Record<string, { no: string; th: string; en: string }> = {
   'Environment and Economy':  { no: 'Miljø/Økonomi',   th: 'สิ่งแวดล้อม',    en: 'Environment & Economy' },
 };
 
-function catLabel(category: string, lang: string) {
+function catLabel(category: string, lang: 'no' | 'th' | 'en') {
   return CAT_LABELS[category]?.[lang] ?? category;
 }
 
@@ -155,7 +155,7 @@ export default function StatsScreen() {
   );
 }
 
-function CategoryRow({ s, lang, c }: { s: CategoryStat; lang: string; c: any }) {
+function CategoryRow({ s, lang, c }: { s: CategoryStat; lang: 'no' | 'th' | 'en'; c: any }) {
   const pct = Math.round(s.pct);
   const color = pctColor(pct);
   return (

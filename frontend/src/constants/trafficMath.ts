@@ -10,6 +10,7 @@
 
 export type Lang = 'no' | 'th' | 'en';
 export type ConditionKey = 'dry' | 'wet' | 'snow' | 'ice';
+export const DEFAULT_CONDITION: ConditionKey = 'dry';
 
 // ─── Timing / performance ─────────────────────────────────────────────────────
 

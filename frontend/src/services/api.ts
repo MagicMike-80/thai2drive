@@ -89,6 +89,7 @@ export interface LocalizedText {
   no: string;
   th: string;
   en: string;
+  [key: string]: string;
 }
 
 export interface QuestionOption {
@@ -103,6 +104,7 @@ export interface Question {
   correctOptionId: string;
   explanation: LocalizedText;
   bildeUrl?: string | null;
+  has_real_image?: boolean;
   category: string;
   difficulty: string;
   active: boolean;
