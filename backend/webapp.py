@@ -4178,8 +4178,16 @@ function renderReviewCard() {
     + '<button class="rv-next" onclick="reviewNext()">' + nextLabel + '</button>'
     + '</div></div>';
 
-  // Async video suggestion — fills the slot above the Neste button
-  if (q.explanation) {
+  // Async video suggestion — fills the slot above the Neste button.
+  // Same routing as quiz AI panel: sign questions → sign video, rules → topic video.
+  var _rvBUrl    = q.bildeUrl || q.image_url || '';
+  var _rvSignId  = _signIdFromBildeUrl(_rvBUrl);
+  if (_rvSignId) {
+    var _rvGrp = _groupNameFromSignId(_rvSignId);
+    fetchVideoForSign(_rvSignId, _rvGrp).then(function(v) {
+      _injectVideo(rvSlotId, rvSlotId + '_vid', v);
+    });
+  } else if (q.explanation) {
     fetchVideoForTopic(_dangerLabel(q.explanation)).then(function(v) {
       _injectVideo(rvSlotId, rvSlotId + '_vid', v);
     });
@@ -4278,6 +4286,32 @@ async function fetchVideoForSign(signId, signGroup) {
     _videoCache[key] = v;
     return v;
   } catch(e) { _videoCache[key] = null; return null; }
+}
+
+// ── Sign-context helpers for video routing ────────────────────────────────────
+// Extract sign_id from a /api/sign-images/ URL.
+// e.g. ".../100_1_Skarp_sving_til_hoyre.jpg"  →  "100_1"
+//      ".../362_50.jpg"                         →  "362_50"
+function _signIdFromBildeUrl(url) {
+  if (!url || !url.includes('/api/sign-images/')) return '';
+  var filename = url.split('/').pop();               // "362_50.jpg"
+  var stem     = filename.replace(/\.[^.]+$/, '');   // "362_50"
+  var m = stem.match(/^(\d+(?:[_\.]\d+)?)/);         // "362_50"
+  return m ? m[1] : '';
+}
+
+// Derive Norwegian group name (matches SIGN_GROUPS in server.py) from sign number.
+function _groupNameFromSignId(signId) {
+  var num = parseInt(signId, 10);
+  if (num >= 100 && num <= 199) return 'Fareskilt';
+  if (num >= 200 && num <= 299) return 'Vikepliktskilt';
+  if (num >= 300 && num <= 399) return 'Forbudtskilt';
+  if (num >= 400 && num <= 499) return 'Påbudsskilt';    // Påbudsskilt
+  if (num >= 500 && num <= 599) return 'Opplysningsskilt';
+  if (num >= 700 && num <= 799) return 'Veivisningsskilt';
+  if (num >= 800 && num <= 899) return 'Underskilt';
+  if (num >= 900 && num <= 999) return 'Markeringsskilt';
+  return '';
 }
 
 // Inject a video card into a container element.
@@ -4475,13 +4509,27 @@ function updateAiPanel(isOk, expl) {
   if (mobile) mobile.innerHTML = html;
 
   // ── Contextual video suggestion (wrong answers only — one card, async) ────
-  // Fires after panel renders so it never blocks the primary feedback.
+  // Routing: sign-recognition questions → sign/group video (never braking).
+  //          behavior/rule questions    → topic-based video via _dangerLabel().
   if (!isOk && expl) {
-    var _vidTag = _dangerLabel(expl);
-    fetchVideoForTopic(_vidTag).then(function(v) {
-      _injectVideo('quizAiBody',   'vidSlot_aiDesktop', v);
-      _injectVideo('quizAiMobile', 'vidSlot_aiMobile',  v);
-    });
+    var _curQ     = questions[qIdx] || {};
+    var _bUrl     = _curQ.bildeUrl || _curQ.image_url || '';
+    var _vidSignId = _signIdFromBildeUrl(_bUrl);
+    if (_vidSignId) {
+      // Sign image question — route to sign-group video, not topic
+      var _vidGrp = _groupNameFromSignId(_vidSignId);
+      fetchVideoForSign(_vidSignId, _vidGrp).then(function(v) {
+        _injectVideo('quizAiBody',   'vidSlot_aiDesktop', v);
+        _injectVideo('quizAiMobile', 'vidSlot_aiMobile',  v);
+      });
+    } else {
+      // Behavior/rule question — topic-based match (Bremsing, Vikeplikt, etc.)
+      var _vidTag = _dangerLabel(expl);
+      fetchVideoForTopic(_vidTag).then(function(v) {
+        _injectVideo('quizAiBody',   'vidSlot_aiDesktop', v);
+        _injectVideo('quizAiMobile', 'vidSlot_aiMobile',  v);
+      });
+    }
   }
 
   // Mobile question image tint
