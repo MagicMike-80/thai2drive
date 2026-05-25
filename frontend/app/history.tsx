@@ -1,89 +1,129 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
   ActivityIndicator,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
+import { useFocusEffect, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAppStore } from '../src/store/appStore';
 import { api, QuizAttempt } from '../src/services/api';
+import { AppBrand } from '../src/components/AppBrand';
 
-const TRANSLATIONS = {
+type Lang = 'no' | 'th' | 'en';
+
+const TR: Record<Lang, Record<string, string>> = {
   no: {
-    title: 'Quiz Historikk',
-    noHistory: 'Ingen quiz historikk ennå',
-    startQuiz: 'Start din første quiz!',
+    title: 'Historikk',
+    noHistory: 'Ingen quizhistorikk ennå',
+    startQuiz: 'Fullfør en quiz, så vises resultatet her.',
     back: 'Tilbake',
     practice: 'Øving',
     exam: 'Eksamen',
-    daily: 'Dagstest',
-    smart: 'Smart øving',
+    daily: 'Daglig test',
+    category: 'Kategori',
     questions: 'spørsmål',
     correct: 'riktige',
-    passed: 'Bestått',
-    failed: 'Ikke bestått',
+    wrong: 'gale',
+    ready: 'Klar for prøven',
+    almost: 'Nesten klar',
+    more: 'Øv litt mer',
+    details: 'Se detaljer',
+    retry: 'Prøv igjen',
+    latest: 'Nyeste økt',
+    loading: 'Laster historikk',
   },
   th: {
-    title: 'ประวัติแบบทดสอบ',
+    title: 'ประวัติ',
     noHistory: 'ยังไม่มีประวัติแบบทดสอบ',
-    startQuiz: 'เริ่มแบบทดสอบแรกของคุณ!',
+    startQuiz: 'ทำควิซให้เสร็จ แล้วผลลัพธ์จะแสดงที่นี่',
     back: 'กลับ',
     practice: 'ฝึกซ้อม',
     exam: 'สอบ',
-    daily: 'ทดสอบประจำวัน',
-    smart: 'ฝึกอัจฉริยะ',
-    questions: 'คำถาม',
-    correct: 'ถูกต้อง',
-    passed: 'ผ่าน',
-    failed: 'ไม่ผ่าน',
+    daily: 'ทดสอบรายวัน',
+    category: 'หมวดหมู่',
+    questions: 'ข้อ',
+    correct: 'ถูก',
+    wrong: 'ผิด',
+    ready: 'พร้อมสอบ',
+    almost: 'เกือบพร้อม',
+    more: 'ฝึกอีกนิด',
+    details: 'ดูรายละเอียด',
+    retry: 'ลองอีกครั้ง',
+    latest: 'รอบล่าสุด',
+    loading: 'กำลังโหลดประวัติ',
   },
   en: {
-    title: 'Quiz History',
+    title: 'History',
     noHistory: 'No quiz history yet',
-    startQuiz: 'Start your first quiz!',
+    startQuiz: 'Finish a quiz and the result will appear here.',
     back: 'Back',
     practice: 'Practice',
     exam: 'Exam',
     daily: 'Daily test',
-    smart: 'Smart practice',
+    category: 'Category',
     questions: 'questions',
     correct: 'correct',
-    passed: 'Passed',
-    failed: 'Failed',
+    wrong: 'wrong',
+    ready: 'Ready for test',
+    almost: 'Almost ready',
+    more: 'Practice a bit more',
+    details: 'View details',
+    retry: 'Try again',
+    latest: 'Latest session',
+    loading: 'Loading history',
   },
 };
+
+function modeLabel(mode: string, t: Record<string, string>) {
+  if (mode === 'exam') return t.exam;
+  if (mode === 'daily') return t.daily;
+  if (mode === 'category') return t.category;
+  return t.practice;
+}
+
+function statusFor(score: number, t: Record<string, string>) {
+  if (score >= 80) return { text: t.ready, color: '#22C55E' };
+  if (score >= 60) return { text: t.almost, color: '#F59E0B' };
+  return { text: t.more, color: '#EF4444' };
+}
 
 export default function HistoryScreen() {
   const router = useRouter();
   const { language, deviceId, colors } = useAppStore();
-  const c = colors;
+  const lang = (['no', 'th', 'en'].includes(language) ? language : 'th') as Lang;
+  const t = TR[lang];
   const [attempts, setAttempts] = useState<QuizAttempt[]>([]);
   const [loading, setLoading] = useState(true);
-  const t = TRANSLATIONS[language as keyof typeof TRANSLATIONS] || TRANSLATIONS.en;
+  const [refreshing, setRefreshing] = useState(false);
 
-  useEffect(() => {
-    loadHistory();
-  }, []);
-
-  const loadHistory = async () => {
+  const loadHistory = useCallback(async (isRefresh = false) => {
+    if (isRefresh) setRefreshing(true);
+    else setLoading(true);
     try {
-      const data = await api.getQuizAttempts(deviceId);
-      setAttempts(data);
+      const data = await api.getQuizAttempts(deviceId, 50);
+      const sorted = [...data].sort((a, b) => new Date(b.completed_at || b.started_at).getTime() - new Date(a.completed_at || a.started_at).getTime());
+      setAttempts(sorted);
     } catch (error) {
       console.error('Error loading history:', error);
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
-  };
+  }, [deviceId]);
+
+  useFocusEffect(useCallback(() => {
+    loadHistory(false);
+  }, [loadHistory]));
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString(language === 'th' ? 'th-TH' : language === 'no' ? 'nb-NO' : 'en-US', {
+    return date.toLocaleDateString(lang === 'th' ? 'th-TH' : lang === 'no' ? 'nb-NO' : 'en-US', {
       month: 'short',
       day: 'numeric',
       hour: '2-digit',
@@ -91,106 +131,74 @@ export default function HistoryScreen() {
     });
   };
 
-  const getScoreColor = (percentage: number) => {
-    if (percentage >= 80) return '#22C55E';
-    if (percentage >= 60) return '#F59E0B';
-    return '#EF4444';
-  };
-
-  const modeLabel = (mode: string) => {
-    if (mode === 'exam') return t.exam;
-    if (mode === 'daily') return t.daily;
-    if (mode === 'smart') return t.smart;
-    return t.practice;
-  };
-
-  const modeIcon = (mode: string) => {
-    if (mode === 'exam') return 'school-outline';
-    if (mode === 'daily') return 'calendar-outline';
-    if (mode === 'smart') return 'bulb-outline';
-    return 'book-outline';
-  };
-
   if (loading) {
     return (
-      <SafeAreaView style={[styles.container, { backgroundColor: c.bg }]}>
+      <SafeAreaView style={[styles.container, { backgroundColor: colors.bg }]}>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={c.accent} />
+          <ActivityIndicator size="large" color={colors.accent} />
+          <Text style={[styles.loadingText, { color: colors.textMuted }]}>{t.loading}</Text>
         </View>
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: c.bg }]}>
-      {/* Header */}
-      <View style={[styles.header, { borderBottomColor: c.divider }]}>
-        <TouchableOpacity
-          style={[styles.backButton, { backgroundColor: c.card }]}
-          onPress={() => router.back()}
-        >
-          <Ionicons name="arrow-back" size={22} color={c.text} />
-        </TouchableOpacity>
-        <Text style={[styles.title, { color: c.text }]}>{t.title}</Text>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.bg }]}>
+      <View style={[styles.header, { borderBottomColor: colors.divider }]}>
+        <View style={styles.headerLeft}>
+          <TouchableOpacity style={[styles.backButton, { backgroundColor: colors.card }]} onPress={() => router.back()}>
+            <Ionicons name="arrow-back" size={22} color={colors.text} />
+          </TouchableOpacity>
+          <AppBrand size="md" />
+        </View>
+        <Text style={[styles.title, { color: colors.text }]}>{t.title}</Text>
         <View style={styles.placeholder} />
       </View>
 
       {attempts.length === 0 ? (
         <View style={styles.emptyContainer}>
-          <Ionicons name="time-outline" size={64} color={c.textMuted} />
-          <Text style={[styles.emptyText, { color: c.textSecondary }]}>{t.noHistory}</Text>
-          <Text style={[styles.emptySubtext, { color: c.textMuted }]}>{t.startQuiz}</Text>
+          <Ionicons name="time-outline" size={64} color={colors.textMuted} />
+          <Text style={[styles.emptyText, { color: colors.text }]}>{t.noHistory}</Text>
+          <Text style={[styles.emptySubtext, { color: colors.textMuted }]}>{t.startQuiz}</Text>
         </View>
       ) : (
-        <ScrollView contentContainerStyle={styles.scrollContent}>
-          {attempts.map((attempt) => (
-            <View key={attempt.id} style={[styles.attemptCard, { backgroundColor: c.card, borderColor: c.cardBorder }]}>
-              <View style={styles.attemptHeader}>
-                <View style={[styles.modeBadge, { backgroundColor: c.bg }]}>
-                  <Ionicons
-                    name={modeIcon(attempt.mode) as any}
-                    size={14}
-                    color={c.textSecondary}
-                  />
-                  <Text style={[styles.modeText, { color: c.textSecondary }]}>
-                    {modeLabel(attempt.mode)}
-                  </Text>
-                </View>
-                <Text style={[styles.dateText, { color: c.textMuted }]}>{formatDate(attempt.completed_at)}</Text>
-              </View>
-
-              <View style={styles.attemptBody}>
-                <View style={styles.scoreContainer}>
-                  <Text style={[styles.scoreText, { color: getScoreColor(attempt.score_percentage) }]}>
-                    {Math.round(attempt.score_percentage)}%
-                  </Text>
-                  {attempt.passed !== undefined && (
-                    <Text style={{ fontSize: 10, color: attempt.passed ? '#22C55E' : '#EF4444', fontWeight: '700', textAlign: 'center' }}>
-                      {attempt.passed ? t.passed : t.failed}
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => loadHistory(true)} tintColor={colors.accent} />}
+        >
+          {attempts.map((attempt, index) => {
+            const score = Math.round(Number(attempt.score_percentage || 0));
+            const wrong = Math.max(0, Number(attempt.total_questions || 0) - Number(attempt.correct_answers || 0));
+            const status = statusFor(score, t);
+            return (
+              <View key={attempt.id} style={[styles.attemptCard, { backgroundColor: colors.card, borderColor: colors.cardBorder }]}>
+                <View style={styles.attemptHeader}>
+                  <View style={[styles.modeBadge, { backgroundColor: index === 0 ? `${status.color}22` : 'rgba(255,255,255,.06)' }]}>
+                    <Ionicons name={attempt.mode === 'exam' ? 'school-outline' : 'book-outline'} size={14} color={index === 0 ? status.color : colors.textMuted} />
+                    <Text style={[styles.modeText, { color: index === 0 ? status.color : colors.textMuted }]}>
+                      {index === 0 ? t.latest : modeLabel(attempt.mode, t)}
                     </Text>
-                  )}
+                  </View>
+                  <Text style={[styles.dateText, { color: colors.textMuted }]}>{formatDate(attempt.completed_at || attempt.started_at)}</Text>
                 </View>
 
-                <View style={styles.detailsContainer}>
-                  <Text style={[styles.detailText, { color: c.textSecondary }]}>
-                    {attempt.correct_answers} {t.correct} / {attempt.total_questions} {t.questions}
-                  </Text>
-                  {attempt.category && (
-                    <Text style={[styles.categoryText, { color: c.textMuted }]}>{attempt.category}</Text>
-                  )}
+                <View style={styles.attemptBody}>
+                  <Text style={[styles.scoreText, { color: status.color }]}>{score}%</Text>
+                  <View style={styles.detailsContainer}>
+                    <Text style={[styles.statusText, { color: status.color }]}>{status.text}</Text>
+                    <Text style={[styles.detailText, { color: colors.textMuted }]}>
+                      ✓ {attempt.correct_answers} {t.correct} · ✕ {wrong} {t.wrong} · {attempt.total_questions} {t.questions}
+                    </Text>
+                    {!!attempt.category && <Text style={[styles.categoryText, { color: colors.textMuted }]}>{attempt.category}</Text>}
+                  </View>
+                </View>
+
+                <View style={[styles.progressBar, { backgroundColor: 'rgba(255,255,255,.08)' }]}>
+                  <View style={[styles.progressFill, { width: `${Math.min(100, Math.max(0, score))}%`, backgroundColor: status.color }]} />
                 </View>
               </View>
-
-              <View style={[styles.progressBar, { backgroundColor: c.progressBg || c.divider }]}>
-                <View
-                  style={[
-                    styles.progressFill,
-                    { width: `${Math.min(100, attempt.score_percentage)}%`, backgroundColor: getScoreColor(attempt.score_percentage) },
-                  ]}
-                />
-              </View>
-            </View>
-          ))}
+            );
+          })}
         </ScrollView>
       )}
     </SafeAreaView>
@@ -198,27 +206,29 @@ export default function HistoryScreen() {
 }
 
 const styles = StyleSheet.create({
-  container:        { flex: 1 },
-  loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  header:           { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 14, borderBottomWidth: 1 },
-  backButton:       { width: 38, height: 38, borderRadius: 12, justifyContent: 'center', alignItems: 'center' },
-  title:            { fontSize: 18, fontWeight: '700' },
-  placeholder:      { width: 38 },
-  emptyContainer:   { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 },
-  emptyText:        { fontSize: 17, marginTop: 16 },
-  emptySubtext:     { fontSize: 14, marginTop: 8 },
-  scrollContent:    { padding: 16, paddingBottom: 32 },
-  attemptCard:      { borderRadius: 16, padding: 16, marginBottom: 10, borderWidth: 1 },
-  attemptHeader:    { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
-  modeBadge:        { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12, gap: 4 },
-  modeText:         { fontSize: 12, fontWeight: '600' },
-  dateText:         { fontSize: 12 },
-  attemptBody:      { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
-  scoreContainer:   { marginRight: 16, alignItems: 'center' },
-  scoreText:        { fontSize: 32, fontWeight: '800' },
+  container: { flex: 1 },
+  loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', gap: 10 },
+  loadingText: { fontSize: 13, fontWeight: '700' },
+  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 14, borderBottomWidth: 1 },
+  headerLeft: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  backButton: { width: 38, height: 38, borderRadius: 19, justifyContent: 'center', alignItems: 'center' },
+  title: { fontSize: 19, fontWeight: '900' },
+  placeholder: { width: 40 },
+  emptyContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 24 },
+  emptyText: { fontSize: 18, fontWeight: '800', marginTop: 16, textAlign: 'center' },
+  emptySubtext: { fontSize: 14, marginTop: 8, textAlign: 'center', lineHeight: 20 },
+  scrollContent: { padding: 16, paddingBottom: 30 },
+  attemptCard: { borderRadius: 16, borderWidth: 1, padding: 16, marginBottom: 12 },
+  attemptHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
+  modeBadge: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, paddingVertical: 5, borderRadius: 999, gap: 5 },
+  modeText: { fontSize: 12, fontWeight: '900' },
+  dateText: { fontSize: 12, fontWeight: '700' },
+  attemptBody: { flexDirection: 'row', alignItems: 'center', marginBottom: 12, gap: 16 },
+  scoreText: { fontSize: 34, fontWeight: '900', minWidth: 78 },
   detailsContainer: { flex: 1 },
-  detailText:       { fontSize: 14 },
-  categoryText:     { fontSize: 12, marginTop: 4 },
-  progressBar:      { height: 4, borderRadius: 2 },
-  progressFill:     { height: '100%', borderRadius: 2 },
+  statusText: { fontSize: 15, fontWeight: '900', marginBottom: 4 },
+  detailText: { fontSize: 13, fontWeight: '700', lineHeight: 19 },
+  categoryText: { fontSize: 12, marginTop: 4, fontWeight: '700' },
+  progressBar: { height: 5, borderRadius: 999, overflow: 'hidden' },
+  progressFill: { height: '100%', borderRadius: 999 },
 });

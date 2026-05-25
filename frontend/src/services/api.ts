@@ -14,7 +14,7 @@ export interface MyStats {
   by_category: CategoryStat[];
 }
 
-// ==================== SIGNS TYPES (legacy) ====================
+// ==================== SIGNS TYPES ====================
 export interface Sign {
   num: string;
   type: string;
@@ -26,33 +26,43 @@ export interface SignGroup {
   signs: Sign[];
 }
 
-// ==================== TRAFFIC SIGNS (image-based) ====================
 export interface TrafficSign {
   id: string;
   group: number;
-  order: number;
-  name: { no: string; th: string; en: string };
-  image_url: string;
-  explanation: { no: string; th: string; en: string };
+  order?: number;
+  name: Partial<LocalizedText>;
+  image_url?: string;
+  explanation?: Partial<LocalizedText>;
+  whyDangerous?: Partial<LocalizedText>;
+  why_dangerous?: Partial<LocalizedText>;
+  typicalMistake?: Partial<LocalizedText>;
+  typical_mistake?: Partial<LocalizedText>;
+  examTip?: Partial<LocalizedText>;
+  exam_tip?: Partial<LocalizedText>;
+  memoryRule?: Partial<LocalizedText>;
+  memory_rule?: Partial<LocalizedText>;
+  realScenario?: Partial<LocalizedText>;
+  real_scenario?: Partial<LocalizedText>;
 }
 
 export interface TrafficSignGroup {
   group: number;
-  group_name: { no: string; th: string; en: string };
+  group_name: Partial<LocalizedText>;
   signs: TrafficSign[];
 }
 
-// ==================== LEARNING VIDEOS ====================
 export interface LearningVideo {
   id: string;
-  title_no: string;
-  title_th: string;
-  title_en: string;
   youtube_url: string;
-  thumbnail_url: string;
-  duration_seconds: number;
-  topic_tags: string[];
-  sign_groups: string[];
+  thumbnail_url?: string;
+  duration_seconds?: number;
+  language?: string;
+  title_no?: string;
+  title_th?: string;
+  title_en?: string;
+  instructor_summary_no?: string;
+  instructor_summary_th?: string;
+  instructor_summary_en?: string;
 }
 
 // ==================== BOK TYPES ====================
@@ -93,7 +103,6 @@ export interface Question {
   correctOptionId: string;
   explanation: LocalizedText;
   bildeUrl?: string | null;
-  has_real_image?: boolean;
   category: string;
   difficulty: string;
   active: boolean;
@@ -117,6 +126,7 @@ export interface UserProgress {
 
 export interface QuizAttempt {
   id: string;
+  client_attempt_id?: string;
   device_id: string;
   mode: string;
   category?: string;
@@ -300,34 +310,26 @@ export const api = {
     return fetchJSON(`${API_BASE}/signs`);
   },
 
-  // ==================== TRAFFIC SIGNS (new image-based API) ====================
   async getTrafficSigns(): Promise<TrafficSignGroup[]> {
     return fetchJSON(`${API_BASE}/traffic-signs`);
   },
 
-  // ==================== LEARNING VIDEOS ====================
-  async getVideoForSign(signId: string, group: string): Promise<LearningVideo | null> {
-    const params = new URLSearchParams({ limit: '1' });
-    if (group) params.append('group', group);
-    try {
-      const results: LearningVideo[] = await fetchJSON(
-        `${API_BASE}/videos/for-sign/${encodeURIComponent(signId)}?${params}`
-      );
-      return Array.isArray(results) && results.length ? results[0] : null;
-    } catch {
-      return null;
-    }
+  async getVideosForSign(signId: string, groupName?: string, limit = 1): Promise<LearningVideo[]> {
+    const params = new URLSearchParams();
+    if (groupName) params.append('group', groupName);
+    params.append('limit', limit.toString());
+    return fetchJSON(`${API_BASE}/videos/for-sign/${encodeURIComponent(signId)}?${params}`);
   },
 
-  async getVideoForTopic(tag: string): Promise<LearningVideo | null> {
-    if (!tag || tag === 'Forstå situasjonen') return null;
-    try {
-      const results: LearningVideo[] = await fetchJSON(
-        `${API_BASE}/videos/for-topic?tags=${encodeURIComponent(tag)}&limit=1`
-      );
-      return Array.isArray(results) && results.length ? results[0] : null;
-    } catch {
-      return null;
-    }
+  async getVideoForSign(signId: string, groupName?: string): Promise<LearningVideo | null> {
+    const videos = await this.getVideosForSign(signId, groupName, 1);
+    return videos[0] || null;
+  },
+
+  async getVideosForTopic(tags: string, limit = 1): Promise<LearningVideo[]> {
+    const params = new URLSearchParams();
+    params.append('tags', tags);
+    params.append('limit', limit.toString());
+    return fetchJSON(`${API_BASE}/videos/for-topic?${params}`);
   },
 };
