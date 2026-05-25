@@ -4142,26 +4142,187 @@ function buildInstructorTip(isOk, alerts) {
   // correctStreak 1-9: fall through to topic-aware tip
 
   if (appLang !== 'no') {
-    var firstLabel = alerts.length ? alerts[0].label : '';
-    if (firstLabel === 'Vikeplikt')
+    // Full-depth multilingual coaching — matches the Norwegian path topic-for-topic
+    function _tip(th, en) { return appLang === 'th' ? th : en; }
+
+    if (alerts.length > 0) {
+      var _topics = alerts.map(function(a) { return a.label.toLowerCase(); }).join(' ');
+      var _type   = alerts[0].type;
+
+      // ── Compound situations ──────────────────────────────────────────────────
+      if (alerts.length >= 2) {
+        var _isWeather  = (_type === 'weather' || alerts[1].type === 'weather' || _topics.indexOf('vinter') >= 0);
+        var _hasAvstand = (_topics.indexOf('avstand') >= 0 || _topics.indexOf('sekund') >= 0);
+        var _hasSikt    = (_topics.indexOf('sikt') >= 0 || _topics.indexOf('fart') >= 0);
+        var _hasForbi   = _topics.indexOf('forbi') >= 0;
+        var _hasVike    = _topics.indexOf('vikeplikt') >= 0;
+        var _hasMyk     = (_topics.indexOf('myk') >= 0 || _topics.indexOf('fotgjenger') >= 0 || _topics.indexOf('trafikant') >= 0);
+
+        if (_isWeather && _hasAvstand)
+          return isOk
+            ? _tip('ถนนลื่นและระยะห่างสัมพันธ์กันมาก — กฎ 3 วินาทีเป็นขั้นต่ำ ให้มากกว่านั้นในสภาพอากาศไม่ดี',
+                   'Slippery road and following distance are closely linked — the 3-second rule is a minimum; give more in bad weather.')
+            : _tip('ถนนลื่นและระยะห่างน้อยอันตรายมาก ในสภาพอากาศไม่ดี ให้ระยะห่างสองเท่าและลดความเร็วครึ่งหนึ่ง',
+                   'Slippery road and short following distance are very dangerous. In bad weather: double distance, half speed.');
+
+        if (_hasSikt && _hasForbi)
+          return isOk
+            ? _tip('ทัศนวิสัยและการแซงเชื่อมโยงกันเสมอ — อย่าเริ่มแซงหากมองข้างหน้าไม่ชัดเจน',
+                   'Visibility and overtaking are always linked — never start to overtake where you cannot see clearly ahead.')
+            : _tip('เมื่อทัศนวิสัยไม่ดี การแซงเป็นเรื่องที่ไม่ควรทำเลย — รอเสมอ ไม่คุ้มกับความเสี่ยง',
+                   'When visibility is limited, overtaking is always irresponsible — wait. It is never worth the risk.');
+
+        if (_hasVike && _hasMyk)
+          return isOk
+            ? _tip('การให้ทางและผู้ใช้ถนนที่เปราะบาง: ทางข้ามและสี่แยกคือที่ที่ต้องระวังคนเดินเท้าเสมอ',
+                   'Yielding and vulnerable road users: crossings and junctions are places where you must always expect pedestrians.')
+            : _tip('คนเดินเท้าที่จุดให้ทางต้องการความสนใจสองเท่า — มองก่อนเสมอก่อนขับออกไป',
+                   'Pedestrians at yield points need double attention — always look before driving into the junction.');
+      }
+
+      // ── Single-topic branches ────────────────────────────────────────────────
+      if (_type === 'weather' || _topics.indexOf('vinter') >= 0)
+        return isOk
+          ? _tip('จำไว้ว่าแรงยึดเกาะและระยะเบรกเปลี่ยนแปลงมากตามสภาพอากาศ — ขับตามสภาพถนนเสมอ',
+                 'Remember: grip and braking distance vary greatly with conditions — always drive accordingly.')
+          : _tip('บนถนนลื่น ระยะเบรกเพิ่มขึ้นมาก อ่านพื้นถนนและปรับความเร็วและระยะห่างเสมอ',
+                 'On slippery roads, braking distance increases greatly. Read the road surface and always adjust speed and following distance.');
+
+      if (_topics.indexOf('sikt') >= 0 || _topics.indexOf('fart') >= 0)
+        return isOk
+          ? _tip('การสังเกตที่ดีคือสิ่งที่แยกผู้ขับที่ปลอดภัยออกจากผู้ขับที่อันตราย ฝึกมองข้างหน้าไกลๆ',
+                 'Good observation is what separates safe drivers from dangerous ones. Train your eyes to look far ahead.')
+          : _tip('ในทุกสภาพการขับขี่: มองข้างหน้าไกลๆ และสร้างระยะปลอดภัย โดยเฉพาะในโค้ง',
+                 'In all driving: look far ahead and build in safety margins — especially in curves.');
+
+      if (_topics.indexOf('sekund') >= 0 || _topics.indexOf('avstand') >= 0)
+        return isOk
+          ? _tip('กฎ 3 วินาทีคือสิ่งที่ง่ายที่สุดในการป้องกันการชนท้าย — ใช้มันทุกครั้ง',
+                 'The 3-second rule is your simplest insurance against rear-end collisions — use it every time.')
+          : _tip('ฝึกนับ "หนึ่งพัน-หนึ่ง, หนึ่งพัน-สอง, หนึ่งพัน-สาม" ระหว่างคุณและรถคันหน้า',
+                 'Practice counting "one-thousand-one, one-thousand-two, one-thousand-three" between you and the car ahead.');
+
+      if (_topics.indexOf('vikeplikt') >= 0)
+        return isOk
+          ? _tip('การเข้าใจการให้ทางอย่างดีเป็นพื้นฐานของการขับขี่ปลอดภัยในทุกสี่แยก',
+                 'Good understanding of yielding is the foundation of safe driving at every junction.')
+          : _tip('การให้ทางในสี่แยกเป็นสาเหตุของการชนด้านข้างมาก เข้าใจสถานการณ์ อย่าแค่จำกฎ',
+                 'Yielding at junctions causes many side collisions — understand the situation, not just memorise the rule.');
+
+      if (_topics.indexOf('myk') >= 0 || _topics.indexOf('fotgjenger') >= 0 || _topics.indexOf('trafikant') >= 0)
+        return isOk
+          ? _tip('คนเดินเท้าและนักปั่นจักรยานคือผู้ใช้ถนนที่เปราะบางที่สุด — ระวังพวกเขาเสมอ',
+                 'Pedestrians and cyclists are the most vulnerable road users — always be extra alert for them.')
+          : _tip('ทางข้ามให้สิทธิ์คนเดินเท้าในการข้ามถนน — ชะลอความเร็วล่วงหน้าเสมอ',
+                 'Crossings give pedestrians the right to cross safely — always slow down in time.');
+
+      if (_topics.indexOf('forbi') >= 0)
+        return isOk
+          ? _tip('การแซงต้องอาศัยความอดทน อย่าเร่ง — รอจนแน่ใจว่าปลอดภัย',
+                 'Overtaking requires patience. Do not rush — wait until you are certain it is safe.')
+          : _tip('การตัดสินใจผิดในการแซงเป็นสาเหตุหลักของการชนหัวชน — รอจนเห็นว่าปลอดภัยจริงๆ เสมอ',
+                 'Wrong judgement when overtaking is a main cause of head-on collisions — always wait until it is clearly safe.');
+
+      if (_type === 'exam')
+        return isOk
+          ? _tip('นี่คือสถานการณ์ที่หลายคนมองข้าม — ที่คุณรู้จักมันแสดงว่าคุณเข้าใจจริงๆ',
+                 'This is a pattern many people miss — the fact that you recognised it shows real understanding.')
+          : _tip('สิ่งสำคัญคือการเข้าใจสถานการณ์ตั้งแต่เนิ่นๆ การจำสถานการณ์ได้จริง ไม่ใช่แค่จำคำตอบ คือเป้าหมาย',
+                 'The key is understanding the situation early. Real recognition in traffic — not just a correct answer — is the goal.');
+
+      if (_topics.indexOf('rundkjøring') >= 0)
+        return isOk
+          ? _tip('วงเวียนมีประสิทธิภาพแต่ต้องใช้ความแม่นยำ — ให้ทางรถที่อยู่ในวงเวียนก่อนเสมอ',
+                 'Roundabouts are efficient but need precision. Always give way to traffic already inside.')
+          : _tip('จำไว้: รถที่อยู่ในวงเวียนมีสิทธิ์ก่อน — รอจนถนนโล่งก่อนเข้า',
+                 'Remember: traffic already in the roundabout has priority — wait until the way is clear before entering.');
+
+      if (_topics.indexOf('brems') >= 0)
+        return isOk
+          ? _tip('ระยะห่างที่ดีคือหลักประกันที่สำคัญที่สุด ยิ่งระยะเบรกสั้น ยิ่งมีเวลาสำหรับการตัดสินใจอื่น',
+                 'Good following distance is your most important buffer. Shorter braking distance means more time for other decisions.')
+          : _tip('ฝึกคิดเรื่องการเบรกฉุกเฉินในใจ — การตอบสนองของคุณเป็นสิ่งที่กำหนดว่าจะหยุดทันหรือไม่',
+                 'Mentally practise emergency braking — your reaction determines whether you stop in time.');
+
+      if (_topics.indexOf('møtende') >= 0 || _topics.indexOf('tunnel') >= 0)
+        return isOk
+          ? _tip('การขับที่คาดเดาได้ทำให้รถสวนทางมองเห็นคุณได้ง่ายขึ้น — รักษาเส้นทางและความเร็ว',
+                 'Predictable driving makes you easier for oncoming traffic to see — hold your line and speed.')
+          : _tip('ในอุโมงค์และที่มืด: ชิดขวา ใช้ไฟต่ำ และลดความเร็ว — ระยะมองเห็นสั้นลง',
+                 'In tunnels and darkness: keep right, use low beam, and slow down — visibility is shorter.');
+
+      if (_topics.indexOf('tretthet') >= 0)
+        return isOk
+          ? _tip('วางแผนการเดินทางโดยมีช่วงพัก ความเมื่อยล้าสะสมช้าๆ และยากที่จะรู้ตัว',
+                 'Plan journeys with breaks. Fatigue builds gradually and is hard to detect in yourself.')
+          : _tip('ความเมื่อยล้าแสดงตัวโดยไม่เตือน การหยุดพักก่อนเวลาเป็นการตัดสินใจที่ถูกต้องเสมอ',
+                 'Fatigue strikes without warning. Stopping early is always the right decision — there are no shortcuts.');
+
+      if (_topics.indexOf('grenseverdi') >= 0 || _topics.indexOf('alkohol') >= 0)
+        return isOk
+          ? _tip('การไม่ดื่มเลยคือทางเลือกที่ปลอดภัยที่สุด — ขีดจำกัดของกฎหมายคือเส้นทางกฎหมาย ไม่ใช่คำแนะนำ',
+                 'Zero alcohol is the safest choice — the legal limit is a legal boundary, not a recommendation.')
+          : _tip('ขีดจำกัด 0.2 คุ้มครองจากโทษทางกฎหมาย ไม่ได้คุ้มครองจากอุบัติเหตุ แอลกอฮอล์และการขับรถไม่เข้ากัน',
+                 'The 0.2 limit protects against punishment, not accidents. Alcohol and driving do not belong together.');
+
+      if (_topics.indexOf('reaksjonstid') >= 0)
+        return isOk
+          ? _tip('การตอบสนองที่รวดเร็วต้องการการฝึก แต่ระยะห่างที่ดีคือสิ่งที่ให้เวลาคุณเสมอ',
+                 'Fast reaction takes practice — but good following distance is the buffer that is always there.')
+          : _tip('ที่ 80 กม./ชม. คุณเดินทาง 22 เมตรต่อวินาที — ระยะห่างและความตื่นตัวคือเกราะป้องกันที่แท้จริง',
+                 'At 80 km/h you travel 22 metres per second — distance and alertness are the only real protection.');
+
+      if (_topics.indexOf('lys') >= 0)
+        return isOk
+          ? _tip('ไฟรถทำให้คุณมองเห็นและถูกมองเห็น — ทั้งสองอย่างช่วยชีวิตได้',
+                 'Lights make you see and be seen — both save lives.')
+          : _tip('ไฟรถคือการสื่อสารในการจราจร ตรวจสอบเสมอว่าการใช้ไฟเหมาะสมกับสถานการณ์',
+                 'Lights are communication in traffic. Always check that your light use matches the situation.');
+
+      // ── Repeated topic detection ─────────────────────────────────────────────
+      if (!isOk && _recentTopics.length > 1 && _recentTopics.slice(1).indexOf(alerts[0].label) >= 0) {
+        var _rLabel = alerts[0].label.toLowerCase();
+        if (_rLabel.indexOf('vikeplikt') >= 0)
+          return _tip('คุณพบเรื่องการให้ทางอีกแล้ว ลองคิดแบบนี้: มองรถทางขวา — รถนั้นมักมีสิทธิ์ก่อน',
+                      'You have met yielding rules again. Try this: find the car on the right — it usually has priority.');
+        if (_rLabel.indexOf('avstand') >= 0 || _rLabel.indexOf('sekund') >= 0)
+          return _tip('ระยะห่างปรากฏอีกครั้ง ในทางปฏิบัติ: เลือกจุดคงที่ แล้วนับถึง 3 หลังจากรถคันหน้าผ่านจุดนั้น',
+                      'Following distance appears again. In practice: pick a fixed point, count to 3 after the car ahead passes it.');
+        if (_rLabel.indexOf('forbi') >= 0)
+          return _tip('การแซงเป็นเรื่องยาก กฎจำง่าย: ถ้ายังสงสัย อย่าแซง นั่นคือการตัดสินใจที่ถูกต้องเสมอ',
+                      'Overtaking is demanding. Simple rule: when in doubt, do not overtake. It is always the right choice.');
+        if (_rLabel.indexOf('sikt') >= 0 || _rLabel.indexOf('fart') >= 0)
+          return _tip('ทัศนวิสัยและความเร็วปรากฏอีกครั้ง กฎพื้นฐาน: ที่ไหนมองเห็นน้อย ขับช้าที่นั่น เสมอ',
+                      'Visibility and speed appear again. Basic rule: where you see less, drive slower. Always.');
+        if (_rLabel.indexOf('vinter') >= 0)
+          return _tip('สภาพถนนปรากฏอีกครั้ง อ่านพื้นผิวถนน — แรงยึดเกาะคือทุกอย่างในสภาพอากาศไม่ดี',
+                      'Road conditions appear again. Read the road surface — friction is everything in bad weather.');
+        if (_rLabel.indexOf('gangfelt') >= 0 || _rLabel.indexOf('myk') >= 0)
+          return _tip('ผู้ใช้ถนนที่เปราะบางปรากฏอีกครั้ง มองหาคนเดินเท้าอย่างตั้งใจ อย่ารอให้พวกเขาโผล่มาเอง',
+                      'Vulnerable road users appear again. Actively look for pedestrians — do not wait for them to appear.');
+        return _tip('คุณพบหัวข้อนี้มาแล้ว อ่านคำอธิบายด้วยมุมมองใหม่ — มุ่งที่ว่าอะไรแยกคำตอบที่ถูกออกจากผิด',
+                    'You have met this topic before. Read the explanation from a fresh angle — focus on what separated the right answer from the wrong one.');
+      }
+
+      // ── Moderate wrong streak ────────────────────────────────────────────────
+      if (!isOk && _wrongStreak >= 3)
+        return _tip('อ่านคำอธิบายอย่างละเอียด การอ่านมากกว่าหนึ่งรอบช่วยได้',
+                    'Read the explanation carefully. Reading it more than once is worthwhile.');
+    }
+
+    // ─ Confidence-calibrated fallback ─
+    var _conf = _confidenceLevel();
+    if (_conf === 'low')
       return isOk
-        ? (appLang === 'th' ? 'คุณเห็นเรื่องการให้ทางได้ถูกต้อง นี่สำคัญมากในทางแยก' : 'You read the yielding situation correctly. This matters in every junction.')
-        : (appLang === 'th' ? 'มองอีกครั้งว่าใครต้องให้ทางก่อนตัดสินใจขับต่อ' : 'Look again at who must yield before deciding to move.');
-    if (firstLabel === 'Forbikjøring')
-      return isOk
-        ? (appLang === 'th' ? 'การแซงต้องใช้ความอดทนและทัศนวิสัยชัดเจน' : 'Overtaking requires patience and clear visibility.')
-        : (appLang === 'th' ? 'ถ้ายังไม่แน่ใจ อย่าแซง รอจนเห็นว่าปลอดภัยจริง' : 'If you are unsure, do not overtake. Wait until it is clearly safe.');
-    if (firstLabel === 'Kjøreforhold' || firstLabel === 'Vinterforhold' || firstLabel === 'Bremsing')
-      return isOk
-        ? (appLang === 'th' ? 'คุณเชื่อมโยงสภาพถนนกับระยะเบรกได้ดี' : 'You connected road conditions and braking distance well.')
-        : (appLang === 'th' ? 'ดูพื้นถนนและระยะห่างก่อนเลือกความเร็วเสมอ' : 'Always read the road surface and distance before choosing speed.');
-    if (firstLabel === 'Myke trafikanter')
-      return isOk
-        ? (appLang === 'th' ? 'ดีมากที่ให้ความสำคัญกับผู้ใช้ถนนที่เปราะบาง' : 'Good that you gave vulnerable road users priority in your thinking.')
-        : (appLang === 'th' ? 'มองหาคนเดินเท้าและจักรยานก่อนตัดสินใจเสมอ' : 'Always look for pedestrians and cyclists before deciding.');
+        ? _tip('อ่านคำอธิบายอย่างใจเย็น ความเข้าใจใช้เวลาสร้าง แต่เมื่อเข้าใจแล้วจะอยู่กับคุณนาน',
+               'Read the explanation calmly. Understanding takes time to build, but once built it stays with you.')
+        : _tip('ใช้เวลากับคำอธิบาย สังเกตว่าอะไรที่แยกคำตอบที่ถูกออกจากผิด',
+               'Take time with the explanation. Notice what separated the right and wrong answers.');
     return isOk
-      ? (appLang === 'th' ? 'จำภาพสถานการณ์นี้ไว้ การจำสถานการณ์จริงช่วยในการขับจริง' : 'Hold this situation visually in memory. Real recognition helps real driving.')
-      : (appLang === 'th' ? 'ค่อย ๆ เข้าใจสถานการณ์ ไม่ใช่แค่จำคำตอบ' : 'Understand the situation, not only the answer.');
+      ? _tip('จำสถานการณ์นี้ไว้เป็นภาพ การจำสถานการณ์จริงช่วยให้ขับขี่ได้ปลอดภัย',
+             'Hold this situation visually in memory. Real recognition in traffic is a life-saving skill.')
+      : _tip('เข้าใจสถานการณ์ ไม่ใช่แค่คำตอบ นั่นคือวิธีที่ความรู้จะคงอยู่ในสถานการณ์จริง',
+             'Understand the situation, not just the answer. That is how knowledge stays with you in real driving.');
   }
 
   // ─ Topic-aware coaching — checks BOTH alerts, not just the first ─
