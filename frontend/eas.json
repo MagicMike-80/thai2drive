@@ -25,11 +25,25 @@
       "autoIncrement": true,
       "env": {
         "EXPO_PUBLIC_BACKEND_URL": "https://thai2drive-production.up.railway.app",
-        "EXPO_PUBLIC_RC_API_KEY": "",
+        "EXPO_PUBLIC_RC_API_KEY": "test_MciTZyYeSIinvNBocwBillyssXD",
         "EXPO_PUBLIC_PREVIEW_BUILD": "true"
       }
     },
+    "test": {
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk",
+        "resourceClass": "medium"
+      },
+      "autoIncrement": true,
+      "env": {
+        "EXPO_PUBLIC_BACKEND_URL": "https://thai2drive-production.up.railway.app",
+        "EXPO_PUBLIC_RC_API_KEY": "test_MciTZyYeSIinvNBocwBillyssXD",
+        "EXPO_PUBLIC_PREVIEW_BUILD": "false"
+      }
+    },
     "production": {
+      "credentialsSource": "local",
       "android": {
         "buildType": "app-bundle",
         "resourceClass": "medium"
@@ -38,7 +52,7 @@
       "channel": "production",
       "env": {
         "EXPO_PUBLIC_BACKEND_URL": "https://thai2drive-production.up.railway.app",
-        "EXPO_PUBLIC_RC_API_KEY": "",
+        "EXPO_PUBLIC_RC_API_KEY": "test_MciTZyYeSIinvNBocwBillyssXD",
         "EXPO_PUBLIC_PREVIEW_BUILD": "false"
       }
     }

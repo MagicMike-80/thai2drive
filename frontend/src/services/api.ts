@@ -14,7 +14,7 @@ export interface MyStats {
   by_category: CategoryStat[];
 }
 
-// ==================== SIGNS TYPES ====================
+// ==================== SIGNS TYPES (legacy) ====================
 export interface Sign {
   num: string;
   type: string;
@@ -24,6 +24,35 @@ export interface Sign {
 export interface SignGroup {
   meta: { no: string; th: string; en: string; color: string; shape: string };
   signs: Sign[];
+}
+
+// ==================== TRAFFIC SIGNS (image-based) ====================
+export interface TrafficSign {
+  id: string;
+  group: number;
+  order: number;
+  name: { no: string; th: string; en: string };
+  image_url: string;
+  explanation: { no: string; th: string; en: string };
+}
+
+export interface TrafficSignGroup {
+  group: number;
+  group_name: { no: string; th: string; en: string };
+  signs: TrafficSign[];
+}
+
+// ==================== LEARNING VIDEOS ====================
+export interface LearningVideo {
+  id: string;
+  title_no: string;
+  title_th: string;
+  title_en: string;
+  youtube_url: string;
+  thumbnail_url: string;
+  duration_seconds: number;
+  topic_tags: string[];
+  sign_groups: string[];
 }
 
 // ==================== BOK TYPES ====================
@@ -64,6 +93,7 @@ export interface Question {
   correctOptionId: string;
   explanation: LocalizedText;
   bildeUrl?: string | null;
+  has_real_image?: boolean;
   category: string;
   difficulty: string;
   active: boolean;
@@ -268,5 +298,36 @@ export const api = {
   // ==================== SKILT ====================
   async getSigns(): Promise<Record<string, SignGroup>> {
     return fetchJSON(`${API_BASE}/signs`);
+  },
+
+  // ==================== TRAFFIC SIGNS (new image-based API) ====================
+  async getTrafficSigns(): Promise<TrafficSignGroup[]> {
+    return fetchJSON(`${API_BASE}/traffic-signs`);
+  },
+
+  // ==================== LEARNING VIDEOS ====================
+  async getVideoForSign(signId: string, group: string): Promise<LearningVideo | null> {
+    const params = new URLSearchParams({ limit: '1' });
+    if (group) params.append('group', group);
+    try {
+      const results: LearningVideo[] = await fetchJSON(
+        `${API_BASE}/videos/for-sign/${encodeURIComponent(signId)}?${params}`
+      );
+      return Array.isArray(results) && results.length ? results[0] : null;
+    } catch {
+      return null;
+    }
+  },
+
+  async getVideoForTopic(tag: string): Promise<LearningVideo | null> {
+    if (!tag || tag === 'Forstå situasjonen') return null;
+    try {
+      const results: LearningVideo[] = await fetchJSON(
+        `${API_BASE}/videos/for-topic?tags=${encodeURIComponent(tag)}&limit=1`
+      );
+      return Array.isArray(results) && results.length ? results[0] : null;
+    } catch {
+      return null;
+    }
   },
 };

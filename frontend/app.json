@@ -2,7 +2,7 @@
   "expo": {
     "name": "Thai2Drive",
     "slug": "thai2drive",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "thai2drive",
@@ -18,7 +18,7 @@
     },
     "android": {
       "package": "com.michael.thai2drive",
-      "versionCode": 2,
+      "versionCode": 3,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#0F172A"
