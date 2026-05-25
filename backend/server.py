@@ -2924,6 +2924,26 @@ async def public_asset(filename: str):
     return FileResponse(str(file_path), media_type=media_type)
 
 
+# ── Sign images — served from backend/sign_images/ ────────────────────────────
+_SIGN_IMAGES_DIR = Path(__file__).parent / "sign_images"
+
+@app.get("/api/sign-images/{filename:path}")
+async def sign_image(filename: str):
+    """Serve traffic sign images from backend/sign_images/. Images are committed
+    to the repo after running scripts/import_sign_images.py locally."""
+    safe_name = filename.replace("..", "").lstrip("/")
+    file_path = (_SIGN_IMAGES_DIR / safe_name).resolve()
+    try:
+        file_path.relative_to(_SIGN_IMAGES_DIR.resolve())
+    except ValueError:
+        return HTMLResponse("Not found", status_code=404)
+    if not file_path.exists() or not file_path.is_file():
+        return HTMLResponse("Not found", status_code=404)
+    ext = file_path.suffix.lower()
+    media_type = {".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png"}.get(ext, "image/jpeg")
+    return FileResponse(str(file_path), media_type=media_type)
+
+
 # Middleware: redirect dirty /api/admin-panel URLs (with trailing quotes, markdown syntax, etc.)
 from starlette.middleware.base import BaseHTTPMiddleware  # noqa: E402
 from starlette.responses import RedirectResponse  # noqa: E402

@@ -2211,7 +2211,7 @@ a { color:inherit; text-decoration:none; }
       <div class="home-readiness" id="homeReadiness" style="display:none" onclick="showTab('history')">
         <div class="hr-dot" id="hrDot"></div>
         <div class="hr-main">
-          <div class="hr-label">Siste økt</div>
+          <div class="hr-label" id="hrLabel">Siste økt</div>
           <div class="hr-status" id="hrStatus"></div>
           <div class="hr-sub" id="hrSub"></div>
         </div>
@@ -2280,8 +2280,8 @@ a { color:inherit; text-decoration:none; }
             <div class="quiz-ai-panel-title">
               <span class="quiz-ai-robot">🤖</span>
               <div>
-                <div class="quiz-ai-panel-name">AI Kjørelærer</div>
-                <div class="quiz-ai-panel-sub">Trafikkforståelse</div>
+                <div class="quiz-ai-panel-name" data-key="ai_teacher">AI Kjørelærer</div>
+                <div class="quiz-ai-panel-sub" data-key="ai_teacher_sub">Trafikkforståelse</div>
               </div>
             </div>
             <div class="quiz-ai-status" id="quizAiStatus">Venter på svar…</div>
@@ -2719,6 +2719,50 @@ var UI = {
   pw_save:     {th:'ประหยัด 50%', no:'Spar 50%', en:'Save 50%'},
   pw_buy:      {th:'ซื้อ Premium', no:'Kjøp Premium', en:'Buy Premium'},
   pw_skip:     {th:'ใช้ต่อแบบฟรี', no:'Fortsett gratis', en:'Continue free'},
+  // ── AI teacher panel ──────────────────────────────────────────────────────
+  ai_teacher:    {th:'AI ผู้สอนขับรถ',        no:'AI Kjørelærer',         en:'AI Instructor'},
+  ai_teacher_sub:{th:'ความเข้าใจกฎจราจร',     no:'Trafikkforståelse',      en:'Traffic understanding'},
+  explanation:   {th:'คำอธิบาย',              no:'Forklaring',            en:'Explanation'},
+  more_detail:   {th:'รายละเอียดเพิ่มเติม',   no:'Mer detaljer',           en:'More detail'},
+  show_more:     {th:'ดูเพิ่มเติม',            no:'Vis mer',               en:'Show more'},
+  show_less:     {th:'ดูน้อยลง',              no:'Vis mindre',             en:'Show less'},
+  instructor:    {th:'ผู้สอน',               no:'Kjørelærer',             en:'Instructor'},
+  vid_explain:   {th:'📹 ดูคำอธิบายสั้น',      no:'📹 Se kort forklaring',  en:'📹 Short explanation'},
+  // ── Readiness / history badges ───────────────────────────────────────────
+  last_session:  {th:'ช่วงล่าสุด',             no:'Siste økt',              en:'Last session'},
+  ready:         {th:'พร้อมสอบแล้ว',           no:'Klar for prøven',        en:'Ready to test'},
+  almost_ready:  {th:'เกือบพร้อมแล้ว',         no:'Nesten klar',            en:'Almost ready'},
+  practice_more: {th:'ฝึกเพิ่มอีกนิด',         no:'Øv litt mer',            en:'Practice more'},
+  // ── History screen ────────────────────────────────────────────────────────
+  see_details:   {th:'ดูรายละเอียด',            no:'Se detaljer',            en:'See details'},
+  try_again:     {th:'ลองอีกครั้ง',             no:'Prøv igjen',             en:'Try again'},
+  correct_lbl:   {th:'ถูก',                   no:'Riktige',                en:'Correct'},
+  wrong_lbl:     {th:'ผิด',                   no:'Gale',                   en:'Wrong'},
+  total_lbl:     {th:'ทั้งหมด',                no:'Totalt',                 en:'Total'},
+  wrong_count:   {th:'ตอบผิด',                no:'Feil svar',              en:'Wrong answers'},
+  q_num:         {th:'ข้อที่',                 no:'Spørsmål',               en:'Question'},
+  your_ans:      {th:'คุณตอบ: ',              no:'Ditt svar: ',            en:'Your answer: '},
+  correct_ans:   {th:'คำตอบที่ถูก: ',          no:'Riktig svar: ',          en:'Correct answer: '},
+  no_wrongs:     {th:'ไม่มีข้อผิดพลาดในควิซนี้! 🎉', no:'Ingen feil i denne quizen! 🎉', en:'No mistakes! 🎉'},
+  review_btn:    {th:'ทบทวน',                 no:'Gå gjennom',             en:'Review'},
+  passed:        {th:'ผ่าน',                  no:'Bestått',                en:'Passed'},
+  not_passed:    {th:'ไม่ผ่าน',               no:'Ikke bestått',           en:'Not passed'},
+  // ── Mode labels ───────────────────────────────────────────────────────────
+  mode_exam:     {th:'สอบ',                   no:'Eksamen',                en:'Exam'},
+  mode_cat:      {th:'หมวดหมู่',              no:'Kategori',               en:'Category'},
+  mode_daily:    {th:'ทดสอบรายวัน',           no:'Daglig test',             en:'Daily test'},
+  mode_random:   {th:'สุ่มคำถาม',             no:'Tilfeldig quiz',          en:'Random quiz'},
+  // ── Review mode ───────────────────────────────────────────────────────────
+  review_lbl:    {th:'ทบทวนข้อผิดพลาด',       no:'Gjennomgang av feil',     en:'Review mistakes'},
+  review_done:   {th:'ทบทวนเสร็จแล้ว',        no:'Gjennomgang fullført.',   en:'Review complete.'},
+  review_of:     {th:'ทบทวน',                 no:'Gjennomgang',             en:'Review'},
+  review_done_body: {th:'คุณได้ทบทวน __N__ ข้อแล้ว อ่านคำอธิบายอีกครั้งก่อนทำควิซใหม่',
+                     no:'Du har gått gjennom __N__ spørsmål. Les gjerne forklaringene én gang til.',
+                     en:'You reviewed __N__ questions. Read the explanations once more before retrying.'},
+  // ── Se → Forstå → Velg labels ─────────────────────────────────────────────
+  len_se:        {th:'ดู',                    no:'Se',                     en:'Observe'},
+  len_forsta:    {th:'เข้าใจ',               no:'Forstå',                 en:'Understand'},
+  len_velg:      {th:'เลือก',                no:'Velg',                   en:'Decide'},
 };
 
 function t(key) { return (UI[key] && (UI[key][appLang] || UI[key]['no'])) || key; }
@@ -3266,13 +3310,14 @@ async function loadHome() {
         var la = rattempts[0];
         var lpct = Math.round(la.score_percentage || 0);
         var dotCls, statusTxt, colorTxt;
-        if (lpct >= 80)      { dotCls = 'hr-dot-good'; statusTxt = 'Klar for prøven'; colorTxt = 'var(--green)'; }
-        else if (lpct >= 60) { dotCls = 'hr-dot-ok';   statusTxt = 'Nesten klar';     colorTxt = 'var(--orange)'; }
-        else                 { dotCls = 'hr-dot-bad';  statusTxt = 'Øv litt mer';     colorTxt = '#EF4444'; }
-        var modeLabels = {exam:'Eksamen', category:'Kategori', daily:'Daglig test', random:'Tilfeldig quiz'};
+        if (lpct >= 80)      { dotCls = 'hr-dot-good'; statusTxt = t('ready');         colorTxt = 'var(--green)'; }
+        else if (lpct >= 60) { dotCls = 'hr-dot-ok';   statusTxt = t('almost_ready'); colorTxt = 'var(--orange)'; }
+        else                 { dotCls = 'hr-dot-bad';  statusTxt = t('practice_more');colorTxt = '#EF4444'; }
+        var modeLabels = {exam:t('mode_exam'), category:t('mode_cat'), daily:t('mode_daily'), random:t('mode_random')};
         var lmode = modeLabels[la.mode] || la.mode || 'Quiz';
         if (la.category) lmode += ' — ' + catName(la.category);
         document.getElementById('hrDot').className = 'hr-dot ' + dotCls;
+        document.getElementById('hrLabel').textContent = t('last_session');
         document.getElementById('hrStatus').textContent = statusTxt;
         document.getElementById('hrSub').textContent = lmode;
         document.getElementById('hrPct').textContent = lpct + '%';
@@ -3610,22 +3655,30 @@ var _topicErrors  = {};     // label → errorCount — feeds debrief translatio
 
 // Calm acknowledgment pool — rotates to avoid repetition, never effusive
 var _correctPhraseIdx = 0;
-var _correctPhrases = [
-  'Riktig.',
-  'Det stemmer.',
-  'Riktig observert.',
-  'Korrekt — det er nettopp slik det fungerer.',
-  'Det er riktig.',
-  'Riktig vurdering.',
-];
+var _correctPhrases = {
+  no: ['Riktig.','Det stemmer.','Riktig observert.','Korrekt — det er nettopp slik.','Det er riktig.','Riktig vurdering.'],
+  th: ['ถูกต้อง','ใช่แล้ว','สังเกตได้ถูกต้อง','ถูกเลย','ใช่','ประเมินได้ถูกต้อง'],
+  en: ['Correct.','That\'s right.','Well observed.','Correct — exactly right.','Correct.','Right call.'],
+};
 function _nextCorrectPhrase() {
-  var p = _correctPhrases[_correctPhraseIdx % _correctPhrases.length];
+  var phrases = _correctPhrases[appLang] || _correctPhrases.no;
+  var p = phrases[_correctPhraseIdx % phrases.length];
   _correctPhraseIdx++;
   return p;
 }
 
 // Streak-adaptive wrong-answer support — calm, professional, never patronising
 function _wrongSupportText(streak) {
+  if (appLang === 'th') {
+    if (streak >= 5) return 'ไม่ถูกต้อง อ่านคำอธิบายอย่างละเอียด ความเข้าใจต้องใช้เวลา';
+    if (streak >= 3) return 'ไม่ถูกครั้งนี้ ดูคำอธิบายด้านล่าง';
+    return 'ไม่ถูกต้อง ดูคำอธิบายด้านล่าง';
+  }
+  if (appLang === 'en') {
+    if (streak >= 5) return 'Not correct. Read carefully — understanding takes time.';
+    if (streak >= 3) return 'Not correct this time. Review the explanation below.';
+    return 'Not correct. See the explanation below.';
+  }
   if (streak >= 5) return 'Ikke riktig. Les forklaringen nøye — forståelse tar tid.';
   if (streak >= 3) return 'Ikke riktig denne gangen. Gå gjennom forklaringen under.';
   return 'Ikke riktig. Se forklaringen under.';
@@ -4053,9 +4106,9 @@ function buildSituationLens(qText, expl) {
 function buildSituationLensHtml(qText, expl) {
   var lens = buildSituationLens(qText, expl);
   return '<div class="q-observe">'
-    + '<div class="q-observe-row"><span class="q-observe-tag">👀 Se</span>' + escH(lens.see) + '</div>'
-    + '<div class="q-observe-row"><span class="q-observe-tag">🧠 Forstå</span>' + escH(lens.understand) + '</div>'
-    + '<div class="q-observe-row"><span class="q-observe-tag">🚗 Velg</span>' + escH(lens.choose) + '</div>'
+    + '<div class="q-observe-row"><span class="q-observe-tag">👀 ' + t('len_se') + '</span>' + escH(lens.see) + '</div>'
+    + '<div class="q-observe-row"><span class="q-observe-tag">🧠 ' + t('len_forsta') + '</span>' + escH(lens.understand) + '</div>'
+    + '<div class="q-observe-row"><span class="q-observe-tag">🚗 ' + t('len_velg') + '</span>' + escH(lens.choose) + '</div>'
     + '</div>';
 }
 
@@ -4073,14 +4126,17 @@ function startReview(wrongQs) {
   showScreen('screenQuiz');
   // Update quiz header for review context
   var progLbl = document.getElementById('qProgLbl');
-  if (progLbl) progLbl.textContent = 'Gjennomgang av feil';
+  if (progLbl) progLbl.textContent = t('review_lbl');
   var progFill = document.getElementById('qProgFill');
   if (progFill) progFill.style.width = '0%';
   var scoreEl = document.getElementById('qScoreNum');
   if (scoreEl) scoreEl.textContent = '0';
   // Clear right panel
   var aiBody = document.getElementById('quizAiBody');
-  if (aiBody) aiBody.innerHTML = '<div class="quiz-ai-idle"><div class="quiz-ai-idle-icon">📖</div><div class="quiz-ai-idle-text">Les gjennom spørsmål og forklaringer i ditt eget tempo.</div></div>';
+  var idleBody = appLang === 'th' ? 'อ่านคำถามและคำอธิบายในจังหวะของตัวเอง'
+               : appLang === 'en' ? 'Review questions and explanations at your own pace.'
+               : 'Les gjennom spørsmål og forklaringer i ditt eget tempo.';
+  if (aiBody) aiBody.innerHTML = '<div class="quiz-ai-idle"><div class="quiz-ai-idle-icon">📖</div><div class="quiz-ai-idle-text">' + escH(idleBody) + '</div></div>';
   renderReviewCard();
 }
 
@@ -4093,28 +4149,30 @@ function renderReviewCard() {
 
   if (_reviewIdx >= _reviewQuestions.length) {
     // Review complete
+    var rvDoneBody = (t('review_done_body') || '').replace('__N__', _reviewQuestions.length);
     qCard.innerHTML = '<div class="q-mid"><div class="rv-done">'
       + '<div class="rv-done-icon">✓</div>'
-      + '<div class="rv-done-head">Gjennomgang fullført.</div>'
-      + '<div class="rv-done-body">Du har gått gjennom ' + _reviewQuestions.length + ' spørsmål.'
-        + ' Les gjerne forklaringene én gang til før du tar ny quiz.</div>'
-      + '<button class="rv-done-btn" onclick="showTab(\'home\')">Tilbake til hjem</button>'
+      + '<div class="rv-done-head">' + t('review_done') + '</div>'
+      + '<div class="rv-done-body">' + escH(rvDoneBody) + '</div>'
+      + '<button class="rv-done-btn" onclick="showTab(\'home\')">' + t('backhome') + '</button>'
       + '</div></div>';
     return;
   }
 
   var q = _reviewQuestions[_reviewIdx];
   var isLast = (_reviewIdx + 1 >= _reviewQuestions.length);
-  var nextLabel = isLast ? 'Fullfør gjennomgang' : 'Neste →';
+  var nextLabel = isLast
+    ? (appLang==='th'?'เสร็จสิ้นการทบทวน':appLang==='en'?'Finish review':'Fullfør gjennomgang')
+    : t('next');
 
   var rvSlotId = 'vidSlot_rv_' + _reviewIdx;
   qCard.innerHTML = '<div class="q-mid"><div class="rv-wrap">'
-    + '<div class="rv-header">Gjennomgang ' + (_reviewIdx + 1) + ' av ' + _reviewQuestions.length + '</div>'
+    + '<div class="rv-header">' + t('review_of') + ' ' + (_reviewIdx + 1) + ' / ' + _reviewQuestions.length + '</div>'
     + (q.question_text ? '<div class="rv-question">' + escH(q.question_text) + '</div>' : '')
-    + (q.user_answer    ? '<div class="rv-answer rv-wrong">❌&nbsp; Du svarte: <strong>' + escH(q.user_answer) + '</strong></div>' : '')
-    + (q.correct_answer ? '<div class="rv-answer rv-right">✓&nbsp; Riktig svar: <strong>' + escH(q.correct_answer) + '</strong></div>' : '')
+    + (q.user_answer    ? '<div class="rv-answer rv-wrong">❌&nbsp; ' + t('your_ans') + '<strong>' + escH(q.user_answer) + '</strong></div>' : '')
+    + (q.correct_answer ? '<div class="rv-answer rv-right">✓&nbsp; ' + t('correct_ans') + '<strong>' + escH(q.correct_answer) + '</strong></div>' : '')
     + (q.explanation
-        ? '<div class="rv-expl"><div class="rv-expl-lbl">Forklaring</div><div class="rv-expl-txt">' + escH(q.explanation) + '</div></div>'
+        ? '<div class="rv-expl"><div class="rv-expl-lbl">' + t('explanation') + '</div><div class="rv-expl-txt">' + escH(q.explanation) + '</div></div>'
         : '')
     + '<div id="' + rvSlotId + '"></div>'
     + '<button class="rv-next" onclick="reviewNext()">' + nextLabel + '</button>'
@@ -4235,7 +4293,7 @@ function _injectVideo(containerId, slotId, v) {
   wrap.id = slotId;
   wrap.className = 'vid-section ai-block';
   wrap.style.cssText = '--i:8; animation:aiBlockIn .22s ease .05s both;';
-  wrap.innerHTML = '<div class="vid-sec-lbl">📹 Se kort forklaring</div>' + buildVideoCard(v);
+  wrap.innerHTML = '<div class="vid-sec-lbl">' + t('vid_explain') + '</div>' + buildVideoCard(v);
   // Insert before the instructor tip so video reads as part of the explanation flow
   var tip = container.querySelector('.quiz-ai-tip');
   if (tip) container.insertBefore(wrap, tip);
@@ -4304,34 +4362,29 @@ function buildAiHtml(isOk, expl) {
     // 2b ── Full detail if explanation has more depth
     if (parts.rest) {
       html += '<div class="quiz-ai-explain ai-block" style="--i:' + (i++) + '">'
-        + '<div class="quiz-ai-card-label">📖 Mer detaljer</div>'
+        + '<div class="quiz-ai-card-label">📖 ' + t('more_detail') + '</div>'
         + '<div class="quiz-ai-card-text">' + escH(parts.rest) + '</div>'
         + '</div>';
     }
 
   } else if (isOk && expl) {
     // 3 ── Correct: depth + confidence adaptive explanation
-    //   'beginner' depth        → full text immediately (no friction)
-    //   'standard' low-conf     → auto-expand (struggling student needs full context)
-    //   'standard' medium/high  → short + expandable (student self-selects depth)
     var depth = _explDepth();
     html += '<div class="quiz-ai-explain ai-block" style="--i:' + (i++) + '">'
-      + '<div class="quiz-ai-card-label">📖 Forklaring</div>'
+      + '<div class="quiz-ai-card-label">📖 ' + t('explanation') + '</div>'
       + '<div class="quiz-ai-card-text">' + emphExpl(parts.short) + '</div>';
     if (parts.rest) {
       if (depth === 'beginner') {
-        // Beginners: full text — reduce friction, maximise available context
         html += '<div class="quiz-ai-card-text" style="margin-top:11px;padding-top:11px;'
           + 'border-top:1px solid rgba(255,255,255,.07)">' + escH(parts.rest) + '</div>';
       } else {
-        // Standard: auto-open for low-confidence students, closed otherwise
         var autoOpen = (confidence === 'low');
         html += '<button class="ai-expand-btn' + (autoOpen ? ' expanded' : '') + '" onclick="'
           + 'var c=this.nextElementSibling;'
           + 'c.classList.toggle(\'open\');'
           + 'this.classList.toggle(\'expanded\');'
-          + 'this.textContent=c.classList.contains(\'open\')?\'Vis mindre\':\'Vis mer\''
-          + '">' + (autoOpen ? 'Vis mindre' : 'Vis mer') + '</button>'
+          + 'this.textContent=c.classList.contains(\'open\')?t(\'show_less\'):t(\'show_more\')'
+          + '">' + (autoOpen ? t('show_less') : t('show_more')) + '</button>'
           + '<div class="ai-expand-content' + (autoOpen ? ' open' : '') + '">' + escH(parts.rest) + '</div>';
       }
     }
@@ -4359,7 +4412,7 @@ function buildAiHtml(isOk, expl) {
     html += '<div class="quiz-ai-tip ai-block" style="--i:' + (i++) + '">'
       + '<div class="quiz-ai-tip-icon">💡</div>'
       + '<div style="min-width:0">'
-      + '<div class="quiz-ai-tip-label">Kjørelærer</div>'
+      + '<div class="quiz-ai-tip-label">' + t('instructor') + '</div>'
       + '<div class="quiz-ai-tip-text">' + escH(buildInstructorTip(isOk, alerts)) + '</div>'
       + '</div></div>';
   }
@@ -4684,11 +4737,11 @@ async function loadHistory() {
       var barColor = pct >= 80 ? 'var(--green)' : pct >= 60 ? 'var(--orange)' : '#EF4444';
 
       var badgeCls, badgeTxt;
-      if (pct >= 80)      { badgeCls = 'hist-badge-good'; badgeTxt = 'Klar for prøven'; }
-      else if (pct >= 60) { badgeCls = 'hist-badge-ok';   badgeTxt = 'Nesten klar'; }
-      else                { badgeCls = 'hist-badge-bad';  badgeTxt = 'Øv mer'; }
+      if (pct >= 80)      { badgeCls = 'hist-badge-good'; badgeTxt = t('ready'); }
+      else if (pct >= 60) { badgeCls = 'hist-badge-ok';   badgeTxt = t('almost_ready'); }
+      else                { badgeCls = 'hist-badge-bad';  badgeTxt = t('practice_more'); }
 
-      var modeLabels = {exam:'Eksamen', category:'Kategori', daily:'Daglig test', random:'Tilfeldig quiz'};
+      var modeLabels = {exam:t('mode_exam'), category:t('mode_cat'), daily:t('mode_daily'), random:t('mode_random')};
       var modeLabel  = modeLabels[a.mode] || a.mode || 'Quiz';
       var modeSub    = a.category ? catName(a.category) : '';
 
@@ -4699,8 +4752,8 @@ async function loadHistory() {
       }
 
       var passedBit = '';
-      if (a.passed === true)       passedBit = '<span class="hist-stat-sep">·</span><span class="hist-stat-good">Bestått</span>';
-      else if (a.passed === false) passedBit = '<span class="hist-stat-sep">·</span><span class="hist-stat-bad">Ikke bestått</span>';
+      if (a.passed === true)       passedBit = '<span class="hist-stat-sep">·</span><span class="hist-stat-good">' + t('passed') + '</span>';
+      else if (a.passed === false) passedBit = '<span class="hist-stat-sep">·</span><span class="hist-stat-bad">' + t('not_passed') + '</span>';
 
       return '<div class="hist-card" onclick="openHistDetail(' + idx + ')" style="animation:aiBlockIn .22s ease both;animation-delay:' + (idx * 35) + 'ms">'
         + '<div class="hist-card-top">'
@@ -4715,18 +4768,18 @@ async function loadHistory() {
           + '<div class="hist-bar-wrap"><div class="hist-bar-fill" style="width:' + pct + '%;background:' + barColor + '"></div></div>'
         + '</div>'
         + '<div class="hist-stats-row">'
-          + '<span class="hist-stat-good">✓ ' + correct + ' riktige</span>'
+          + '<span class="hist-stat-good">✓ ' + correct + ' ' + t('correct_lbl') + '</span>'
           + '<span class="hist-stat-sep">·</span>'
-          + '<span class="hist-stat-bad">✗ ' + wrong + ' gale</span>'
+          + '<span class="hist-stat-bad">✗ ' + wrong + ' ' + t('wrong_lbl') + '</span>'
           + '<span class="hist-stat-sep">·</span>'
-          + '<span class="hist-stat-tot">av ' + total + '</span>'
+          + '<span class="hist-stat-tot">/ ' + total + '</span>'
           + passedBit
         + '</div>'
         + '<div class="hist-card-footer">'
           + '<div class="hist-date-new">' + escH(dateStr) + '</div>'
           + '<div class="hist-card-actions">'
-            + '<button class="hist-btn hist-btn-sec" onclick="event.stopPropagation();openHistDetail(' + idx + ')">Se detaljer</button>'
-            + '<button class="hist-btn hist-btn-pri" onclick="event.stopPropagation();retryAttempt(' + idx + ')">Prøv igjen</button>'
+            + '<button class="hist-btn hist-btn-sec" onclick="event.stopPropagation();openHistDetail(' + idx + ')">' + t('see_details') + '</button>'
+            + '<button class="hist-btn hist-btn-pri" onclick="event.stopPropagation();retryAttempt(' + idx + ')">' + t('try_again') + '</button>'
           + '</div>'
         + '</div>'
         + '</div>';
@@ -4745,59 +4798,60 @@ function openHistDetail(idx) {
   var wrong   = total - correct;
 
   // Mode label
-  var modeLabels = {exam:'Eksamen', category:'Kategori', daily:'Daglig test', random:'Tilfeldig quiz'};
+  var modeLabels = {exam:t('mode_exam'), category:t('mode_cat'), daily:t('mode_daily'), random:t('mode_random')};
   var modeStr = modeLabels[a.mode] || a.mode || 'Quiz';
   if (a.category) modeStr += ' — ' + catName(a.category);
   document.getElementById('hpModeLbl').textContent = modeStr;
 
   // Score headline
   document.getElementById('hpScoreBig').textContent = pct + '%';
-  document.getElementById('hpScoreSub').textContent = correct + ' av ' + total + ' riktige';
+  document.getElementById('hpScoreSub').textContent = correct + ' / ' + total;
 
   // Badge
   var badgeCls, badgeTxt;
-  if (pct >= 80)      { badgeCls = 'hp-badge-good'; badgeTxt = '✓ Klar for prøven'; }
-  else if (pct >= 60) { badgeCls = 'hp-badge-ok';   badgeTxt = '▲ Nesten klar'; }
-  else                { badgeCls = 'hp-badge-bad';  badgeTxt = '↺ Øv mer'; }
+  if (pct >= 80)      { badgeCls = 'hp-badge-good'; badgeTxt = '✓ ' + t('ready'); }
+  else if (pct >= 60) { badgeCls = 'hp-badge-ok';   badgeTxt = '▲ ' + t('almost_ready'); }
+  else                { badgeCls = 'hp-badge-bad';  badgeTxt = '↺ ' + t('practice_more'); }
   var badge = document.getElementById('hpBadge');
   badge.className = 'hp-badge ' + badgeCls;
   badge.textContent = badgeTxt;
 
   // Stats grid
   document.getElementById('hpStats').innerHTML =
-      '<div class="hp-stat"><div class="hp-stat-num good">' + correct + '</div><div class="hp-stat-lbl">Riktige</div></div>'
-    + '<div class="hp-stat"><div class="hp-stat-num bad">' + wrong + '</div><div class="hp-stat-lbl">Gale</div></div>'
-    + '<div class="hp-stat"><div class="hp-stat-num">' + total + '</div><div class="hp-stat-lbl">Totalt</div></div>';
+      '<div class="hp-stat"><div class="hp-stat-num good">' + correct + '</div><div class="hp-stat-lbl">' + t('correct_lbl') + '</div></div>'
+    + '<div class="hp-stat"><div class="hp-stat-num bad">' + wrong + '</div><div class="hp-stat-lbl">' + t('wrong_lbl') + '</div></div>'
+    + '<div class="hp-stat"><div class="hp-stat-num">' + total + '</div><div class="hp-stat-lbl">' + t('total_lbl') + '</div></div>';
 
   // Wrong questions body
   var qs = Array.isArray(a.questions_answered) ? a.questions_answered : [];
   var wrongQs = qs.filter(function(q) { return q.is_correct === false; });
   var bodyHtml = '';
   if (wrongQs.length) {
-    bodyHtml += '<div class="hp-section-label">Feil svar (' + wrongQs.length + ')</div>';
+    bodyHtml += '<div class="hp-section-label">' + t('wrong_count') + ' (' + wrongQs.length + ')</div>';
     bodyHtml += wrongQs.map(function(q, i) {
       var delay    = i * 40;
-      var userTxt  = q.user_answer    ? 'Ditt svar: '  + q.user_answer    : '';
-      var rightTxt = q.correct_answer ? 'Riktig svar: ' + q.correct_answer : '';
+      var userTxt  = q.user_answer    ? t('your_ans')    + q.user_answer    : '';
+      var rightTxt = q.correct_answer ? t('correct_ans') + q.correct_answer : '';
       return '<div class="hp-q-card" style="animation:aiBlockIn .22s ease both;animation-delay:' + delay + 'ms">'
-        + '<div class="hp-q-num">Spørsmål ' + (i + 1) + '</div>'
+        + '<div class="hp-q-num">' + t('q_num') + ' ' + (i + 1) + '</div>'
         + (q.question_text ? '<div class="hp-q-text">' + escH(q.question_text) + '</div>' : '')
         + (userTxt  ? '<div class="hp-q-ans hp-q-ans-wrong">' + escH(userTxt)  + '</div>' : '')
         + (rightTxt ? '<div class="hp-q-ans hp-q-ans-right">' + escH(rightTxt) + '</div>' : '')
         + (q.explanation
-            ? '<div class="hp-q-expl-label">Forklaring</div><div class="hp-q-expl">' + escH(q.explanation) + '</div>'
+            ? '<div class="hp-q-expl-label">' + t('explanation') + '</div><div class="hp-q-expl">' + escH(q.explanation) + '</div>'
             : '')
         + '</div>';
     }).join('');
   } else if (qs.length) {
-    bodyHtml = '<div class="hp-no-data">Ingen feil i denne quizen! 🎉<br>Veldig bra gjort.</div>';
+    bodyHtml = '<div class="hp-no-data">' + t('no_wrongs') + '<br>' + (appLang==='th'?'เก่งมากเลย!':appLang==='en'?'Well done!':'Veldig bra gjort.') + '</div>';
   } else {
     bodyHtml = '<div class="hp-no-data">Detaljert spørsmålsoversikt er ikke tilgjengelig for eldre quizer.<br>Ta en ny quiz for å se hva du svarte.</div>';
   }
   document.getElementById('hpBody').innerHTML = bodyHtml;
 
-  // Wire retry button
-  document.getElementById('hpRetryBtn').onclick = function() { retryAttempt(idx); };
+  // Wire retry button and localise static labels
+  var hpRetry = document.getElementById('hpRetryBtn');
+  if (hpRetry) { hpRetry.textContent = t('try_again'); hpRetry.onclick = function() { retryAttempt(idx); }; }
 
   // Wire / show "Gå gjennom feil" review button
   var hpActions = document.getElementById('hpActions');
@@ -4809,7 +4863,7 @@ function openHistDetail(idx) {
       var rvBtn = document.createElement('button');
       rvBtn.id = 'hpReviewBtn';
       rvBtn.className = 'hp-btn-sec';
-      rvBtn.textContent = 'Gå gjennom ' + wrongQs.length + ' feil svar';
+      rvBtn.textContent = t('review_btn') + ' ' + wrongQs.length + ' ' + t('wrong_count').toLowerCase();
       rvBtn.onclick = function() { startReview(wrongQs); };
       // Insert before "Lukk" (last button)
       var lukk = hpActions.lastElementChild;
@@ -4916,7 +4970,7 @@ function showEnd() {
   try {
     var debrief = _buildDebrief(pct, total);
     var el;
-    el = document.getElementById('endScoreQuiet'); if (el) el.textContent = qScore + ' av ' + total + ' riktige';
+    el = document.getElementById('endScoreQuiet'); if (el) el.textContent = qScore + ' / ' + total + ' ' + t('correct_lbl').toLowerCase();
     el = document.getElementById('endHeading');    if (el) el.textContent = debrief.heading;
     el = document.getElementById('endBody');       if (el) el.textContent = debrief.body;
     var focusEl = document.getElementById('endFocus');
