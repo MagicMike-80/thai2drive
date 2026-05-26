@@ -23,6 +23,9 @@ for s in data:
             'explanation.no': s['explanation']['no'],
             'explanation.th': s['explanation']['th'],
             'explanation.en': s['explanation']['en'],
+            'driver_action.no': s['driver_action']['no'],
+            'driver_action.th': s['driver_action']['th'],
+            'driver_action.en': s['driver_action']['en'],
         }}
     )
     if result.modified_count:

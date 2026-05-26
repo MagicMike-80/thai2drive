@@ -33,6 +33,8 @@ export interface TrafficSign {
   name: Partial<LocalizedText>;
   image_url?: string;
   explanation?: Partial<LocalizedText>;
+  driverAction?: Partial<LocalizedText>;
+  driver_action?: Partial<LocalizedText>;
   whyDangerous?: Partial<LocalizedText>;
   why_dangerous?: Partial<LocalizedText>;
   typicalMistake?: Partial<LocalizedText>;

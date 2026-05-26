@@ -279,7 +279,7 @@ export default function SignsScreen() {
 
                 <ScrollView style={styles.sheetScroll} contentContainerStyle={styles.sheetContent}>
                   {renderLessonCard('📖', t.meaning, pick(selected.explanation, lessonLang) || t.fallbackMeaning)}
-                  {renderLessonCard('⚠️', t.driver, pick(selected.whyDangerous || selected.why_dangerous, lessonLang) || t.fallbackDriver)}
+                  {renderLessonCard('⚠️', t.driver, pick(selected.driverAction || selected.driver_action || selected.whyDangerous || selected.why_dangerous, lessonLang) || t.fallbackDriver)}
                   {renderLessonCard('🔴', t.mistake, pick(selected.typicalMistake || selected.typical_mistake, lessonLang) || t.fallbackMistake)}
                   {renderLessonCard('📝', t.exam, pick(selected.examTip || selected.exam_tip, lessonLang) || t.fallbackExam)}
                   {renderLessonCard('💡', t.memory, pick(selected.memoryRule || selected.memory_rule, lessonLang) || t.fallbackMemory)}
@@ -311,7 +311,7 @@ export default function SignsScreen() {
 
                   {aiOpen && renderLessonCard('🤖', t.aiTeacher, [
                     `${t.meaning} ${pick(selected.explanation, lessonLang) || t.fallbackMeaning}`,
-                    `${t.driver} ${pick(selected.whyDangerous || selected.why_dangerous, lessonLang) || t.fallbackDriver}`,
+                    `${t.driver} ${pick(selected.driverAction || selected.driver_action || selected.whyDangerous || selected.why_dangerous, lessonLang) || t.fallbackDriver}`,
                     `${t.memory} ${pick(selected.memoryRule || selected.memory_rule, lessonLang) || t.fallbackMemory}`,
                   ].join('\n\n'))}
                 </ScrollView>

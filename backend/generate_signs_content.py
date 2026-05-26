@@ -8,7 +8,7 @@ Run: python generate_signs_content.py
 
 import json
 
-# Format: sign_id -> {name: {no,th,en}, explanation: {no,th,en}}
+# Format: sign_id -> {name: {no,th,en}, explanation: {no,th,en}, driver_action: {no,th,en}}
 # Covers the most instructionally important signs precisely.
 # Less critical signs (dir/supplementary/marking) get group-level defaults.
 
@@ -680,22 +680,34 @@ SPECIFIC_OVERRIDES = {
 SIGN_DATA.update(SPECIFIC_OVERRIDES)
 
 
+def normalize_content(content: dict) -> dict:
+    """Ensure every sign has the minimum instructional lesson fields."""
+    c = dict(content)
+    if "driver_action" not in c:
+        c["driver_action"] = c.get("explanation", {
+            "no": "Tilpass farten og følg skiltet.",
+            "th": "ปรับความเร็วและปฏิบัติตามป้าย",
+            "en": "Adapt your speed and follow the sign.",
+        })
+    return c
+
+
 def get_content(sign_id: str, group: int) -> dict:
     """Return content for a sign, falling back to group defaults."""
     if sign_id in SIGN_DATA:
-        return SIGN_DATA[sign_id]
+        return normalize_content(SIGN_DATA[sign_id])
     # Group-level fallback
     d = GROUP_DEFAULTS.get(group)
     if d:
-        return {
+        return normalize_content({
             "name": {lang: f"{d['name_prefix'][lang]} {sign_id}" for lang in ('no','th','en')},
             "explanation": d["explanation"]
-        }
+        })
     # Last resort
-    return {
+    return normalize_content({
         "name": {"no": sign_id, "th": sign_id, "en": sign_id},
         "explanation": {"no": "Trafikkskilt.", "th": "ป้ายจราจร", "en": "Traffic sign."}
-    }
+    })
 
 
 def main():

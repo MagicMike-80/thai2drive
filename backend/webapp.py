@@ -5912,7 +5912,7 @@ function _renderSignPanel() {
 
   var html = '';
   html += card('explanation', '📖', L.expl,     _getProp(sign.explanation,  lang));
-  html += card('danger',      '⚠️', L.danger,   _getProp(sign.whyDangerous || sign.why_dangerous, lang));
+  html += card('danger',      '⚠️', L.danger,   _getProp(sign.driverAction || sign.driver_action || sign.whyDangerous || sign.why_dangerous, lang));
   html += card('mistake',     '🔴', L.mistake,  _getProp(sign.typicalMistake || sign.typical_mistake, lang));
   html += card('scenario',    '🚗', L.scenario, _getProp(sign.realScenario || sign.real_scenario, lang));
   html += card('exam',        '📝', L.examTip,  _getProp(sign.examTip || sign.exam_tip, lang));
@@ -6014,7 +6014,7 @@ function askAiAboutSign() {
 
   var name = _getProp(sign.name, lang) || _getProp(sign.name, 'no') || '';
   var expl = _getProp(sign.explanation, lang);
-  var driver = _getProp(sign.whyDangerous || sign.why_dangerous, lang) || t('sign_fallback_driver');
+  var driver = _getProp(sign.driverAction || sign.driver_action || sign.whyDangerous || sign.why_dangerous, lang) || t('sign_fallback_driver');
   var mistake = _getProp(sign.typicalMistake || sign.typical_mistake, lang) || t('sign_fallback_mistake');
   var lesson = tf('sign_ai_lesson', { name: name || t('signs') });
   var text = [lesson, expl, driver, mistake].filter(Boolean).join(' ');

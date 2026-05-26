@@ -11,6 +11,11 @@
       "no": "Du skal vike for trafikk i krysset.",
       "th": "คุณต้องหยุดรอและให้รถอื่นผ่านก่อน",
       "en": "You must yield to traffic at the intersection."
+    },
+    "driver_action": {
+      "no": "Du skal vike for trafikk i krysset.",
+      "th": "คุณต้องหยุดรอและให้รถอื่นผ่านก่อน",
+      "en": "You must yield to traffic at the intersection."
     }
   },
   {
@@ -22,6 +27,11 @@
       "en": "Stop"
     },
     "explanation": {
+      "no": "Stopp fullstendig og vike for all trafikk.",
+      "th": "หยุดรถสนิทก่อนเสมอ แล้วให้รถอื่นผ่านก่อนจึงออกไป",
+      "en": "Come to a complete stop and yield to all traffic."
+    },
+    "driver_action": {
       "no": "Stopp fullstendig og vike for all trafikk.",
       "th": "หยุดรถสนิทก่อนเสมอ แล้วให้รถอื่นผ่านก่อนจึงออกไป",
       "en": "Come to a complete stop and yield to all traffic."
@@ -39,6 +49,11 @@
       "no": "Stopp og se etter tog før du krysser sporet.",
       "th": "หยุดและมองหารถไฟก่อนข้ามทางรถไฟ ไม่มีไม้กั้น",
       "en": "Stop and look for trains before crossing the tracks."
+    },
+    "driver_action": {
+      "no": "Stopp og se etter tog før du krysser sporet.",
+      "th": "หยุดและมองหารถไฟก่อนข้ามทางรถไฟ ไม่มีไม้กั้น",
+      "en": "Stop and look for trains before crossing the tracks."
     }
   },
   {
@@ -50,6 +65,11 @@
       "en": "Priority Road"
     },
     "explanation": {
+      "no": "Du har forkjørsrett og kjøretøy fra sideveiene skal vike for deg.",
+      "th": "คุณมีสิทธิ์ขับผ่านก่อน รถจากถนนสายรองต้องหยุดให้คุณ",
+      "en": "You have priority and vehicles from side roads must yield to you."
+    },
+    "driver_action": {
       "no": "Du har forkjørsrett og kjøretøy fra sideveiene skal vike for deg.",
       "th": "คุณมีสิทธิ์ขับผ่านก่อน รถจากถนนสายรองต้องหยุดให้คุณ",
       "en": "You have priority and vehicles from side roads must yield to you."
@@ -67,6 +87,11 @@
       "no": "Møtende kjøretøy skal vike for deg på smal veg.",
       "th": "รถที่ขับมาสวนทางต้องหยุดรอและให้คุณผ่านก่อนบนถนนแคบ",
       "en": "Oncoming vehicles must yield to you on a narrow road."
+    },
+    "driver_action": {
+      "no": "Møtende kjøretøy skal vike for deg på smal veg.",
+      "th": "รถที่ขับมาสวนทางต้องหยุดรอและให้คุณผ่านก่อนบนถนนแคบ",
+      "en": "Oncoming vehicles must yield to you on a narrow road."
     }
   },
   {
@@ -78,6 +103,11 @@
       "en": "End of Oncoming Priority"
     },
     "explanation": {
+      "no": "Retten til forkjørsrett for møtende kjøretøy er avsluttet.",
+      "th": "สิทธิ์ที่ให้กับรถสวนทางสิ้นสุดแล้ว",
+      "en": "The rule giving you priority over oncoming vehicles ends here."
+    },
+    "driver_action": {
       "no": "Retten til forkjørsrett for møtende kjøretøy er avsluttet.",
       "th": "สิทธิ์ที่ให้กับรถสวนทางสิ้นสุดแล้ว",
       "en": "The rule giving you priority over oncoming vehicles ends here."
@@ -95,6 +125,11 @@
       "no": "Forkjørsretten opphører. Du må nå vike for trafikk i kryss.",
       "th": "ถนนสายหลักสิ้นสุดแล้ว คุณต้องหยุดรอรถอื่นในทุกสี่แยก",
       "en": "Priority road ends. You must now yield to traffic at intersections."
+    },
+    "driver_action": {
+      "no": "Forkjørsretten opphører. Du må nå vike for trafikk i kryss.",
+      "th": "ถนนสายหลักสิ้นสุดแล้ว คุณต้องหยุดรอรถอื่นในทุกสี่แยก",
+      "en": "Priority road ends. You must now yield to traffic at intersections."
     }
   },
   {
@@ -106,6 +141,11 @@
       "en": "Dangerous Left Bend"
     },
     "explanation": {
+      "no": "Skarp sving til venstre. Reduser fart.",
+      "th": "โค้งคมทางซ้ายอยู่ข้างหน้า ลดความเร็วลง",
+      "en": "Sharp left bend ahead. Reduce your speed."
+    },
+    "driver_action": {
       "no": "Skarp sving til venstre. Reduser fart.",
       "th": "โค้งคมทางซ้ายอยู่ข้างหน้า ลดความเร็วลง",
       "en": "Sharp left bend ahead. Reduce your speed."
@@ -123,6 +163,11 @@
       "no": "Skarp sving til høyre. Reduser fart.",
       "th": "โค้งคมทางขวาอยู่ข้างหน้า ลดความเร็วลง",
       "en": "Sharp right bend ahead. Reduce your speed."
+    },
+    "driver_action": {
+      "no": "Skarp sving til høyre. Reduser fart.",
+      "th": "โค้งคมทางขวาอยู่ข้างหน้า ลดความเร็วลง",
+      "en": "Sharp right bend ahead. Reduce your speed."
     }
   },
   {
@@ -134,6 +179,11 @@
       "en": "Series of Bends, Left First"
     },
     "explanation": {
+      "no": "Flere svinger fremover, første til venstre. Kjør forsiktig.",
+      "th": "มีโค้งหลายโค้งอยู่ข้างหน้า โค้งแรกหักซ้าย ขับช้าๆ",
+      "en": "Several bends ahead, first to the left. Drive carefully."
+    },
+    "driver_action": {
       "no": "Flere svinger fremover, første til venstre. Kjør forsiktig.",
       "th": "มีโค้งหลายโค้งอยู่ข้างหน้า โค้งแรกหักซ้าย ขับช้าๆ",
       "en": "Several bends ahead, first to the left. Drive carefully."
@@ -151,6 +201,11 @@
       "no": "Flere svinger fremover, første til høyre. Kjør forsiktig.",
       "th": "มีโค้งหลายโค้งอยู่ข้างหน้า โค้งแรกหักขวา ขับช้าๆ",
       "en": "Several bends ahead, first to the right. Drive carefully."
+    },
+    "driver_action": {
+      "no": "Flere svinger fremover, første til høyre. Kjør forsiktig.",
+      "th": "มีโค้งหลายโค้งอยู่ข้างหน้า โค้งแรกหักขวา ขับช้าๆ",
+      "en": "Several bends ahead, first to the right. Drive carefully."
     }
   },
   {
@@ -162,6 +217,11 @@
       "en": "Steep Uphill"
     },
     "explanation": {
+      "no": "Bratt oppoverbakke. Vær klar for lavere fart og høyere gir.",
+      "th": "ทางชันอยู่ข้างหน้า เตรียมพร้อมสำหรับการขับขึ้นเขา",
+      "en": "Steep uphill ahead. Be prepared for slower speeds."
+    },
+    "driver_action": {
       "no": "Bratt oppoverbakke. Vær klar for lavere fart og høyere gir.",
       "th": "ทางชันอยู่ข้างหน้า เตรียมพร้อมสำหรับการขับขึ้นเขา",
       "en": "Steep uphill ahead. Be prepared for slower speeds."
@@ -179,6 +239,11 @@
       "no": "Bratt nedoverbakke. Bruk lavere gir og reduser fart.",
       "th": "ทางลาดชันลงข้างหน้า ใช้เกียร์ต่ำและลดความเร็ว",
       "en": "Steep downhill ahead. Use a lower gear and reduce speed."
+    },
+    "driver_action": {
+      "no": "Bratt nedoverbakke. Bruk lavere gir og reduser fart.",
+      "th": "ทางลาดชันลงข้างหน้า ใช้เกียร์ต่ำและลดความเร็ว",
+      "en": "Steep downhill ahead. Use a lower gear and reduce speed."
     }
   },
   {
@@ -190,6 +255,11 @@
       "en": "Road Works"
     },
     "explanation": {
+      "no": "Vegarbeid pågår. Kjør sakte og vær oppmerksom på arbeidere.",
+      "th": "มีงานก่อสร้างถนน ขับช้าๆ และระวังคนงาน",
+      "en": "Road works ahead. Slow down and watch for workers."
+    },
+    "driver_action": {
       "no": "Vegarbeid pågår. Kjør sakte og vær oppmerksom på arbeidere.",
       "th": "มีงานก่อสร้างถนน ขับช้าๆ และระวังคนงาน",
       "en": "Road works ahead. Slow down and watch for workers."
@@ -207,6 +277,11 @@
       "no": "Vegarbeid pågår. Kjør sakte og følg anvisninger.",
       "th": "มีงานก่อสร้างถนน ขับช้าๆ และปฏิบัติตามสัญญาณ",
       "en": "Road works ahead. Slow down and follow instructions."
+    },
+    "driver_action": {
+      "no": "Vegarbeid pågår. Kjør sakte og følg anvisninger.",
+      "th": "มีงานก่อสร้างถนน ขับช้าๆ และปฏิบัติตามสัญญาณ",
+      "en": "Road works ahead. Slow down and follow instructions."
     }
   },
   {
@@ -218,6 +293,11 @@
       "en": "Road Works"
     },
     "explanation": {
+      "no": "Vegarbeid pågår. Reduser fart og vær forsiktig.",
+      "th": "มีงานก่อสร้างถนน ลดความเร็วและระมัดระวัง",
+      "en": "Road works ahead. Reduce speed and be cautious."
+    },
+    "driver_action": {
       "no": "Vegarbeid pågår. Reduser fart og vær forsiktig.",
       "th": "มีงานก่อสร้างถนน ลดความเร็วและระมัดระวัง",
       "en": "Road works ahead. Reduce speed and be cautious."
@@ -235,6 +315,11 @@
       "no": "Vegen kan være glatt. Reduser fart og hold avstand.",
       "th": "ถนนอาจลื่น ลดความเร็วและเพิ่มระยะห่างจากรถคันหน้า",
       "en": "Road may be slippery. Reduce speed and increase following distance."
+    },
+    "driver_action": {
+      "no": "Vegen kan være glatt. Reduser fart og hold avstand.",
+      "th": "ถนนอาจลื่น ลดความเร็วและเพิ่มระยะห่างจากรถคันหน้า",
+      "en": "Road may be slippery. Reduce speed and increase following distance."
     }
   },
   {
@@ -246,6 +331,11 @@
       "en": "Loose Gravel"
     },
     "explanation": {
+      "no": "Løs grus på vegen. Reduser fart for å unngå steinsprut.",
+      "th": "มีกรวดหลวมบนถนน ลดความเร็วเพื่อหลีกเลี่ยงหินกระเด็น",
+      "en": "Loose gravel on road. Slow down to avoid stone chipping."
+    },
+    "driver_action": {
       "no": "Løs grus på vegen. Reduser fart for å unngå steinsprut.",
       "th": "มีกรวดหลวมบนถนน ลดความเร็วเพื่อหลีกเลี่ยงหินกระเด็น",
       "en": "Loose gravel on road. Slow down to avoid stone chipping."
@@ -263,6 +353,11 @@
       "no": "Vegen er smal fremover. Kjør forsiktig og gi plass til møtende.",
       "th": "ถนนแคบอยู่ข้างหน้า ขับช้าๆ และเปิดทางให้รถสวนมา",
       "en": "Narrow road ahead. Drive carefully and give way to oncoming traffic."
+    },
+    "driver_action": {
+      "no": "Vegen er smal fremover. Kjør forsiktig og gi plass til møtende.",
+      "th": "ถนนแคบอยู่ข้างหน้า ขับช้าๆ และเปิดทางให้รถสวนมา",
+      "en": "Narrow road ahead. Drive carefully and give way to oncoming traffic."
     }
   },
   {
@@ -274,6 +369,11 @@
       "en": "Road Narrows"
     },
     "explanation": {
+      "no": "Vegen blir smalere. Reduser fart og hold til høyre.",
+      "th": "ถนนจะแคบลง ลดความเร็วและชิดขวา",
+      "en": "Road narrows ahead. Slow down and keep right."
+    },
+    "driver_action": {
       "no": "Vegen blir smalere. Reduser fart og hold til høyre.",
       "th": "ถนนจะแคบลง ลดความเร็วและชิดขวา",
       "en": "Road narrows ahead. Slow down and keep right."
@@ -291,6 +391,11 @@
       "no": "Vegkanten til høyre er ustabil. Unngå å kjøre ut på kanten.",
       "th": "ไหล่ทางด้านขวาไม่มั่นคง หลีกเลี่ยงการขับลงไหล่ทาง",
       "en": "The right road edge is unstable. Avoid driving onto the shoulder."
+    },
+    "driver_action": {
+      "no": "Vegkanten til høyre er ustabil. Unngå å kjøre ut på kanten.",
+      "th": "ไหล่ทางด้านขวาไม่มั่นคง หลีกเลี่ยงการขับลงไหล่ทาง",
+      "en": "The right road edge is unstable. Avoid driving onto the shoulder."
     }
   },
   {
@@ -302,6 +407,11 @@
       "en": "Unstable Left Road Edge"
     },
     "explanation": {
+      "no": "Vegkanten til venstre er ustabil. Unngå å kjøre ut på kanten.",
+      "th": "ไหล่ทางด้านซ้ายไม่มั่นคง หลีกเลี่ยงการขับลงไหล่ทาง",
+      "en": "The left road edge is unstable. Avoid driving onto the shoulder."
+    },
+    "driver_action": {
       "no": "Vegkanten til venstre er ustabil. Unngå å kjøre ut på kanten.",
       "th": "ไหล่ทางด้านซ้ายไม่มั่นคง หลีกเลี่ยงการขับลงไหล่ทาง",
       "en": "The left road edge is unstable. Avoid driving onto the shoulder."
@@ -319,6 +429,11 @@
       "no": "Fartshump fremover. Reduser farten betraktelig.",
       "th": "มีเนินชะลอความเร็วอยู่ข้างหน้า ลดความเร็วให้ช้าลงมาก",
       "en": "Speed bump ahead. Reduce speed significantly."
+    },
+    "driver_action": {
+      "no": "Fartshump fremover. Reduser farten betraktelig.",
+      "th": "มีเนินชะลอความเร็วอยู่ข้างหน้า ลดความเร็วให้ช้าลงมาก",
+      "en": "Speed bump ahead. Reduce speed significantly."
     }
   },
   {
@@ -330,6 +445,11 @@
       "en": "Uneven Road"
     },
     "explanation": {
+      "no": "Ujamn vegbane fremover. Kjør sakte og hold godt i rattet.",
+      "th": "ถนนขรุขระอยู่ข้างหน้า ขับช้าๆ และจับพวงมาลัยให้มั่น",
+      "en": "Uneven road surface ahead. Slow down and hold the wheel firmly."
+    },
+    "driver_action": {
       "no": "Ujamn vegbane fremover. Kjør sakte og hold godt i rattet.",
       "th": "ถนนขรุขระอยู่ข้างหน้า ขับช้าๆ และจับพวงมาลัยให้มั่น",
       "en": "Uneven road surface ahead. Slow down and hold the wheel firmly."
@@ -347,6 +467,11 @@
       "no": "Vegen slutter fremover. Snu eller finn alternativ rute.",
       "th": "ถนนสิ้นสุดอยู่ข้างหน้า เตรียมกลับรถหรือหาเส้นทางอื่น",
       "en": "Road ends ahead. Turn around or find an alternative route."
+    },
+    "driver_action": {
+      "no": "Vegen slutter fremover. Snu eller finn alternativ rute.",
+      "th": "ถนนสิ้นสุดอยู่ข้างหน้า เตรียมกลับรถหรือหาเส้นทางอื่น",
+      "en": "Road ends ahead. Turn around or find an alternative route."
     }
   },
   {
@@ -358,6 +483,11 @@
       "en": "Junction Ahead"
     },
     "explanation": {
+      "no": "Kryss fremover. Vær oppmerksom og reduser fart.",
+      "th": "มีทางแยกอยู่ข้างหน้า ระวังและลดความเร็ว",
+      "en": "Junction ahead. Be alert and reduce your speed."
+    },
+    "driver_action": {
       "no": "Kryss fremover. Vær oppmerksom og reduser fart.",
       "th": "มีทางแยกอยู่ข้างหน้า ระวังและลดความเร็ว",
       "en": "Junction ahead. Be alert and reduce your speed."
@@ -375,6 +505,11 @@
       "no": "Rundkjøring fremover. Gi vikeplikt for trafikk i rundkjøringen.",
       "th": "มีวงเวียนอยู่ข้างหน้า ให้สิทธิ์รถที่อยู่ในวงเวียนก่อน",
       "en": "Roundabout ahead. Give way to traffic already in the roundabout."
+    },
+    "driver_action": {
+      "no": "Rundkjøring fremover. Gi vikeplikt for trafikk i rundkjøringen.",
+      "th": "มีวงเวียนอยู่ข้างหน้า ให้สิทธิ์รถที่อยู่ในวงเวียนก่อน",
+      "en": "Roundabout ahead. Give way to traffic already in the roundabout."
     }
   },
   {
@@ -386,6 +521,11 @@
       "en": "Level Crossing With Barrier"
     },
     "explanation": {
+      "no": "Jernbanekryssing med automatisk bom fremover. Stopp når bommen er nede.",
+      "th": "ทางข้ามรถไฟที่มีไม้กั้นอัตโนมัติ หยุดเมื่อไม้กั้นลง",
+      "en": "Level crossing with automatic barrier ahead. Stop when the barrier is down."
+    },
+    "driver_action": {
       "no": "Jernbanekryssing med automatisk bom fremover. Stopp når bommen er nede.",
       "th": "ทางข้ามรถไฟที่มีไม้กั้นอัตโนมัติ หยุดเมื่อไม้กั้นลง",
       "en": "Level crossing with automatic barrier ahead. Stop when the barrier is down."
@@ -403,6 +543,11 @@
       "no": "Jernbanekryssing uten bom. Stopp og se etter tog i begge retninger.",
       "th": "ทางข้ามรถไฟที่ไม่มีไม้กั้น หยุดและมองดูรถไฟจากทั้งสองด้าน",
       "en": "Level crossing without barrier. Stop and look both ways for trains."
+    },
+    "driver_action": {
+      "no": "Jernbanekryssing uten bom. Stopp og se etter tog i begge retninger.",
+      "th": "ทางข้ามรถไฟที่ไม่มีไม้กั้น หยุดและมองดูรถไฟจากทั้งสองด้าน",
+      "en": "Level crossing without barrier. Stop and look both ways for trains."
     }
   },
   {
@@ -414,6 +559,11 @@
       "en": "Pedestrian Crossing"
     },
     "explanation": {
+      "no": "Gangfelt fremover. Gi fotgjengere vikeplikt.",
+      "th": "มีทางข้ามสำหรับคนเดินเท้าอยู่ข้างหน้า ให้คนเดินเท้าข้ามก่อน",
+      "en": "Pedestrian crossing ahead. Give way to pedestrians."
+    },
+    "driver_action": {
       "no": "Gangfelt fremover. Gi fotgjengere vikeplikt.",
       "th": "มีทางข้ามสำหรับคนเดินเท้าอยู่ข้างหน้า ให้คนเดินเท้าข้ามก่อน",
       "en": "Pedestrian crossing ahead. Give way to pedestrians."
@@ -431,6 +581,11 @@
       "no": "Barn kan komme ut i vegen. Reduser fart og vær svært forsiktig.",
       "th": "เด็กอาจวิ่งออกมาบนถนน ลดความเร็วและระมัดระวังมากเป็นพิเศษ",
       "en": "Children may run onto the road. Slow down and be extra cautious."
+    },
+    "driver_action": {
+      "no": "Barn kan komme ut i vegen. Reduser fart og vær svært forsiktig.",
+      "th": "เด็กอาจวิ่งออกมาบนถนน ลดความเร็วและระมัดระวังมากเป็นพิเศษ",
+      "en": "Children may run onto the road. Slow down and be extra cautious."
     }
   },
   {
@@ -442,6 +597,11 @@
       "en": "Cyclists"
     },
     "explanation": {
+      "no": "Syklister kan krysse eller kjøre på vegen. Vær forsiktig.",
+      "th": "นักปั่นจักรยานอาจตัดหน้าหรือขับบนถนนนี้ ขับด้วยความระมัดระวัง",
+      "en": "Cyclists may cross or use the road. Drive with extra care."
+    },
+    "driver_action": {
       "no": "Syklister kan krysse eller kjøre på vegen. Vær forsiktig.",
       "th": "นักปั่นจักรยานอาจตัดหน้าหรือขับบนถนนนี้ ขับด้วยความระมัดระวัง",
       "en": "Cyclists may cross or use the road. Drive with extra care."
@@ -459,6 +619,11 @@
       "no": "Elg kan krysse vegen. Reduser fart og vær beredt til å bremse.",
       "th": "กวางมูสอาจวิ่งข้ามถนน ลดความเร็วและเตรียมพร้อมเบรก",
       "en": "Moose may cross the road. Slow down and be ready to brake."
+    },
+    "driver_action": {
+      "no": "Elg kan krysse vegen. Reduser fart og vær beredt til å bremse.",
+      "th": "กวางมูสอาจวิ่งข้ามถนน ลดความเร็วและเตรียมพร้อมเบรก",
+      "en": "Moose may cross the road. Slow down and be ready to brake."
     }
   },
   {
@@ -470,6 +635,11 @@
       "en": "Deer"
     },
     "explanation": {
+      "no": "Hjort kan krysse vegen. Reduser fart og vær forsiktig.",
+      "th": "กวางอาจวิ่งข้ามถนน ลดความเร็วและระมัดระวัง",
+      "en": "Deer may cross the road. Slow down and drive carefully."
+    },
+    "driver_action": {
       "no": "Hjort kan krysse vegen. Reduser fart og vær forsiktig.",
       "th": "กวางอาจวิ่งข้ามถนน ลดความเร็วและระมัดระวัง",
       "en": "Deer may cross the road. Slow down and drive carefully."
@@ -487,6 +657,11 @@
       "no": "Husdyr kan befinne seg på vegen. Kjør sakte og varsamt.",
       "th": "สัตว์เลี้ยงอาจอยู่บนถนน ขับช้าๆ ด้วยความระมัดระวัง",
       "en": "Domestic animals may be on the road. Drive slowly and carefully."
+    },
+    "driver_action": {
+      "no": "Husdyr kan befinne seg på vegen. Kjør sakte og varsamt.",
+      "th": "สัตว์เลี้ยงอาจอยู่บนถนน ขับช้าๆ ด้วยความระมัดระวัง",
+      "en": "Domestic animals may be on the road. Drive slowly and carefully."
     }
   },
   {
@@ -498,6 +673,11 @@
       "en": "Falling Rocks from Right"
     },
     "explanation": {
+      "no": "Stein kan falle fra høyre side. Vær forsiktig og hold god avstand.",
+      "th": "หินอาจร่วงลงมาจากด้านขวา ขับระมัดระวังและรักษาระยะห่าง",
+      "en": "Rocks may fall from the right side. Be careful and keep your distance."
+    },
+    "driver_action": {
       "no": "Stein kan falle fra høyre side. Vær forsiktig og hold god avstand.",
       "th": "หินอาจร่วงลงมาจากด้านขวา ขับระมัดระวังและรักษาระยะห่าง",
       "en": "Rocks may fall from the right side. Be careful and keep your distance."
@@ -515,6 +695,11 @@
       "no": "Stein kan falle fra venstre side. Vær forsiktig og hold god avstand.",
       "th": "หินอาจร่วงลงมาจากด้านซ้าย ขับระมัดระวังและรักษาระยะห่าง",
       "en": "Rocks may fall from the left side. Be careful and keep your distance."
+    },
+    "driver_action": {
+      "no": "Stein kan falle fra venstre side. Vær forsiktig og hold god avstand.",
+      "th": "หินอาจร่วงลงมาจากด้านซ้าย ขับระมัดระวังและรักษาระยะห่าง",
+      "en": "Rocks may fall from the left side. Be careful and keep your distance."
     }
   },
   {
@@ -526,6 +711,11 @@
       "en": "Flooding"
     },
     "explanation": {
+      "no": "Fare for flom på vegen. Kjør sakte og vurder om vegen er trygg.",
+      "th": "อาจมีน้ำท่วมบนถนน ขับช้าๆ และประเมินความปลอดภัยก่อน",
+      "en": "Risk of flooding on the road. Drive slowly and assess if it's safe."
+    },
+    "driver_action": {
       "no": "Fare for flom på vegen. Kjør sakte og vurder om vegen er trygg.",
       "th": "อาจมีน้ำท่วมบนถนน ขับช้าๆ และประเมินความปลอดภัยก่อน",
       "en": "Risk of flooding on the road. Drive slowly and assess if it's safe."
@@ -543,6 +733,11 @@
       "no": "Fare for sterk sidevind. Hold godt i rattet og reduser fart.",
       "th": "อาจมีลมแรงพัดด้านข้าง จับพวงมาลัยให้มั่นและลดความเร็ว",
       "en": "Risk of strong crosswind. Hold the wheel firmly and reduce speed."
+    },
+    "driver_action": {
+      "no": "Fare for sterk sidevind. Hold godt i rattet og reduser fart.",
+      "th": "อาจมีลมแรงพัดด้านข้าง จับพวงมาลัยให้มั่นและลดความเร็ว",
+      "en": "Risk of strong crosswind. Hold the wheel firmly and reduce speed."
     }
   },
   {
@@ -554,6 +749,11 @@
       "en": "Low Clearance"
     },
     "explanation": {
+      "no": "Begrenset høyde fremover. Sjekk om kjøretøyet ditt er lavt nok.",
+      "th": "มีความสูงจำกัดอยู่ข้างหน้า ตรวจสอบว่ารถของคุณเตี้ยพอ",
+      "en": "Limited height ahead. Check that your vehicle is low enough to pass."
+    },
+    "driver_action": {
       "no": "Begrenset høyde fremover. Sjekk om kjøretøyet ditt er lavt nok.",
       "th": "มีความสูงจำกัดอยู่ข้างหน้า ตรวจสอบว่ารถของคุณเตี้ยพอ",
       "en": "Limited height ahead. Check that your vehicle is low enough to pass."
@@ -571,6 +771,11 @@
       "no": "Bevegelig bro fremover. Stopp om broen er åpen.",
       "th": "มีสะพานที่เปิด-ปิดได้อยู่ข้างหน้า หยุดหากสะพานเปิดอยู่",
       "en": "Movable bridge ahead. Stop if the bridge is open."
+    },
+    "driver_action": {
+      "no": "Bevegelig bro fremover. Stopp om broen er åpen.",
+      "th": "มีสะพานที่เปิด-ปิดได้อยู่ข้างหน้า หยุดหากสะพานเปิดอยู่",
+      "en": "Movable bridge ahead. Stop if the bridge is open."
     }
   },
   {
@@ -582,6 +787,11 @@
       "en": "Traffic Signals"
     },
     "explanation": {
+      "no": "Trafikklys fremover. Vær klar til å stoppe for rødt.",
+      "th": "มีสัญญาณไฟจราจรอยู่ข้างหน้า เตรียมพร้อมหยุดเมื่อไฟแดง",
+      "en": "Traffic signals ahead. Be ready to stop for a red light."
+    },
+    "driver_action": {
       "no": "Trafikklys fremover. Vær klar til å stoppe for rødt.",
       "th": "มีสัญญาณไฟจราจรอยู่ข้างหน้า เตรียมพร้อมหยุดเมื่อไฟแดง",
       "en": "Traffic signals ahead. Be ready to stop for a red light."
@@ -599,6 +809,11 @@
       "no": "Trafikklys fremover. Vær klar til å stoppe for rødt.",
       "th": "มีสัญญาณไฟจราจรอยู่ข้างหน้า เตรียมพร้อมหยุดเมื่อไฟแดง",
       "en": "Traffic signals ahead. Be ready to stop for a red light."
+    },
+    "driver_action": {
+      "no": "Trafikklys fremover. Vær klar til å stoppe for rødt.",
+      "th": "มีสัญญาณไฟจราจรอยู่ข้างหน้า เตรียมพร้อมหยุดเมื่อไฟแดง",
+      "en": "Traffic signals ahead. Be ready to stop for a red light."
     }
   },
   {
@@ -610,6 +825,11 @@
       "en": "Traffic Signals"
     },
     "explanation": {
+      "no": "Trafikklys fremover. Vær klar til å stoppe for rødt.",
+      "th": "มีสัญญาณไฟจราจรอยู่ข้างหน้า เตรียมพร้อมหยุดเมื่อไฟแดง",
+      "en": "Traffic signals ahead. Be ready to stop for a red light."
+    },
+    "driver_action": {
       "no": "Trafikklys fremover. Vær klar til å stoppe for rødt.",
       "th": "มีสัญญาณไฟจราจรอยู่ข้างหน้า เตรียมพร้อมหยุดเมื่อไฟแดง",
       "en": "Traffic signals ahead. Be ready to stop for a red light."
@@ -627,6 +847,11 @@
       "no": "Trafikklys fremover. Vær klar til å stoppe for rødt.",
       "th": "มีสัญญาณไฟจราจรอยู่ข้างหน้า เตรียมพร้อมหยุดเมื่อไฟแดง",
       "en": "Traffic signals ahead. Be ready to stop for a red light."
+    },
+    "driver_action": {
+      "no": "Trafikklys fremover. Vær klar til å stoppe for rødt.",
+      "th": "มีสัญญาณไฟจราจรอยู่ข้างหน้า เตรียมพร้อมหยุดเมื่อไฟแดง",
+      "en": "Traffic signals ahead. Be ready to stop for a red light."
     }
   },
   {
@@ -638,6 +863,11 @@
       "en": "Traffic Signals"
     },
     "explanation": {
+      "no": "Trafikklys fremover. Vær klar til å stoppe for rødt.",
+      "th": "มีสัญญาณไฟจราจรอยู่ข้างหน้า เตรียมพร้อมหยุดเมื่อไฟแดง",
+      "en": "Traffic signals ahead. Be ready to stop for a red light."
+    },
+    "driver_action": {
       "no": "Trafikklys fremover. Vær klar til å stoppe for rødt.",
       "th": "มีสัญญาณไฟจราจรอยู่ข้างหน้า เตรียมพร้อมหยุดเมื่อไฟแดง",
       "en": "Traffic signals ahead. Be ready to stop for a red light."
@@ -655,6 +885,11 @@
       "no": "Farlig sidegate. Vær oppmerksom på kjøretøy som kjører inn.",
       "th": "มีทางแยกอันตราย ระวังรถที่อาจออกมาจากด้านข้าง",
       "en": "Dangerous side road. Watch for vehicles entering from the side."
+    },
+    "driver_action": {
+      "no": "Farlig sidegate. Vær oppmerksom på kjøretøy som kjører inn.",
+      "th": "มีทางแยกอันตราย ระวังรถที่อาจออกมาจากด้านข้าง",
+      "en": "Dangerous side road. Watch for vehicles entering from the side."
     }
   },
   {
@@ -666,6 +901,11 @@
       "en": "School Zone"
     },
     "explanation": {
+      "no": "Skoleveg. Reduser fart og vær svært forsiktig.",
+      "th": "เขตโรงเรียน ลดความเร็วและระมัดระวังเป็นพิเศษ",
+      "en": "School zone. Reduce speed and be especially careful."
+    },
+    "driver_action": {
       "no": "Skoleveg. Reduser fart og vær svært forsiktig.",
       "th": "เขตโรงเรียน ลดความเร็วและระมัดระวังเป็นพิเศษ",
       "en": "School zone. Reduce speed and be especially careful."
@@ -683,6 +923,11 @@
       "no": "Lavtflygende fly i området. Ikke forveksle lys med trafikklys.",
       "th": "มีเครื่องบินบินต่ำในบริเวณนี้ อย่าสับสนแสงเครื่องบินกับสัญญาณจราจร",
       "en": "Low-flying aircraft in the area. Do not confuse aircraft lights with traffic signals."
+    },
+    "driver_action": {
+      "no": "Lavtflygende fly i området. Ikke forveksle lys med trafikklys.",
+      "th": "มีเครื่องบินบินต่ำในบริเวณนี้ อย่าสับสนแสงเครื่องบินกับสัญญาณจราจร",
+      "en": "Low-flying aircraft in the area. Do not confuse aircraft lights with traffic signals."
     }
   },
   {
@@ -694,6 +939,11 @@
       "en": "Gradient"
     },
     "explanation": {
+      "no": "Stigning i vegen fremover. Tilpass farten.",
+      "th": "มีทางลาดชันอยู่ข้างหน้า ปรับความเร็วให้เหมาะสม",
+      "en": "Gradient ahead. Adjust your speed accordingly."
+    },
+    "driver_action": {
       "no": "Stigning i vegen fremover. Tilpass farten.",
       "th": "มีทางลาดชันอยู่ข้างหน้า ปรับความเร็วให้เหมาะสม",
       "en": "Gradient ahead. Adjust your speed accordingly."
@@ -711,6 +961,11 @@
       "no": "Tunnel fremover. Slå på lyset og hold avstand til forankjørende.",
       "th": "มีอุโมงค์อยู่ข้างหน้า เปิดไฟและรักษาระยะห่างจากรถคันหน้า",
       "en": "Tunnel ahead. Turn on your lights and keep a safe following distance."
+    },
+    "driver_action": {
+      "no": "Tunnel fremover. Slå på lyset og hold avstand til forankjørende.",
+      "th": "มีอุโมงค์อยู่ข้างหน้า เปิดไฟและรักษาระยะห่างจากรถคันหน้า",
+      "en": "Tunnel ahead. Turn on your lights and keep a safe following distance."
     }
   },
   {
@@ -722,6 +977,11 @@
       "en": "Bridge"
     },
     "explanation": {
+      "no": "Bro fremover. Vær forsiktig, særlig i glatt vær.",
+      "th": "มีสะพานอยู่ข้างหน้า ระมัดระวัง โดยเฉพาะในสภาพอากาศที่ลื่น",
+      "en": "Bridge ahead. Take care, especially in icy or wet conditions."
+    },
+    "driver_action": {
       "no": "Bro fremover. Vær forsiktig, særlig i glatt vær.",
       "th": "มีสะพานอยู่ข้างหน้า ระมัดระวัง โดยเฉพาะในสภาพอากาศที่ลื่น",
       "en": "Bridge ahead. Take care, especially in icy or wet conditions."
@@ -739,6 +999,11 @@
       "no": "Vegen er nær en kai eller elvekant. Vær forsiktig.",
       "th": "ถนนอยู่ใกล้ท่าเรือหรือริมแม่น้ำ ขับระมัดระวัง",
       "en": "Road is near a quay or riverbank. Drive with care."
+    },
+    "driver_action": {
+      "no": "Vegen er nær en kai eller elvekant. Vær forsiktig.",
+      "th": "ถนนอยู่ใกล้ท่าเรือหรือริมแม่น้ำ ขับระมัดระวัง",
+      "en": "Road is near a quay or riverbank. Drive with care."
     }
   },
   {
@@ -750,6 +1015,11 @@
       "en": "No Entry"
     },
     "explanation": {
+      "no": "Du har ikke lov til å kjøre inn her.",
+      "th": "ห้ามขับรถเข้าไปในทิศทางนี้",
+      "en": "You are not allowed to drive in this direction."
+    },
+    "driver_action": {
       "no": "Du har ikke lov til å kjøre inn her.",
       "th": "ห้ามขับรถเข้าไปในทิศทางนี้",
       "en": "You are not allowed to drive in this direction."
@@ -767,6 +1037,11 @@
       "no": "Ingen kjøretøy har lov til å kjøre her.",
       "th": "ยานพาหนะทุกชนิดไม่สามารถขับผ่านได้",
       "en": "No vehicles are permitted to drive here."
+    },
+    "driver_action": {
+      "no": "Ingen kjøretøy har lov til å kjøre her.",
+      "th": "ยานพาหนะทุกชนิดไม่สามารถขับผ่านได้",
+      "en": "No vehicles are permitted to drive here."
     }
   },
   {
@@ -778,6 +1053,11 @@
       "en": "No Motor Vehicles"
     },
     "explanation": {
+      "no": "Motorkjøretøy har ikke adgang her.",
+      "th": "รถยนต์และรถจักรยานยนต์ไม่ได้รับอนุญาตให้ผ่าน",
+      "en": "Motor vehicles are not permitted here."
+    },
+    "driver_action": {
       "no": "Motorkjøretøy har ikke adgang her.",
       "th": "รถยนต์และรถจักรยานยนต์ไม่ได้รับอนุญาตให้ผ่าน",
       "en": "Motor vehicles are not permitted here."
@@ -795,6 +1075,11 @@
       "no": "Hest og vogn har ikke adgang her.",
       "th": "รถม้าและสัตว์ลากจูงไม่ได้รับอนุญาตให้ผ่าน",
       "en": "Horse-drawn vehicles are not permitted here."
+    },
+    "driver_action": {
+      "no": "Hest og vogn har ikke adgang her.",
+      "th": "รถม้าและสัตว์ลากจูงไม่ได้รับอนุญาตให้ผ่าน",
+      "en": "Horse-drawn vehicles are not permitted here."
     }
   },
   {
@@ -806,6 +1091,11 @@
       "en": "No Heavy Vehicles"
     },
     "explanation": {
+      "no": "Lastebiler og tunge kjøretøy har ikke adgang.",
+      "th": "รถบรรทุกและยานพาหนะหนักไม่ได้รับอนุญาต",
+      "en": "Trucks and heavy vehicles are not permitted here."
+    },
+    "driver_action": {
       "no": "Lastebiler og tunge kjøretøy har ikke adgang.",
       "th": "รถบรรทุกและยานพาหนะหนักไม่ได้รับอนุญาต",
       "en": "Trucks and heavy vehicles are not permitted here."
@@ -823,6 +1113,11 @@
       "no": "Busser har ikke adgang her.",
       "th": "รถบัสไม่ได้รับอนุญาตให้ผ่าน",
       "en": "Buses are not permitted here."
+    },
+    "driver_action": {
+      "no": "Busser har ikke adgang her.",
+      "th": "รถบัสไม่ได้รับอนุญาตให้ผ่าน",
+      "en": "Buses are not permitted here."
     }
   },
   {
@@ -834,6 +1129,11 @@
       "en": "No Motorcycles"
     },
     "explanation": {
+      "no": "Motorsykler har ikke adgang her.",
+      "th": "รถจักรยานยนต์ไม่ได้รับอนุญาตให้ผ่าน",
+      "en": "Motorcycles are not permitted here."
+    },
+    "driver_action": {
       "no": "Motorsykler har ikke adgang her.",
       "th": "รถจักรยานยนต์ไม่ได้รับอนุญาตให้ผ่าน",
       "en": "Motorcycles are not permitted here."
@@ -851,6 +1151,11 @@
       "no": "Mopeder har ikke adgang her.",
       "th": "มอเปดและรถจักรยานยนต์ขนาดเล็กไม่ได้รับอนุญาต",
       "en": "Mopeds are not permitted here."
+    },
+    "driver_action": {
+      "no": "Mopeder har ikke adgang her.",
+      "th": "มอเปดและรถจักรยานยนต์ขนาดเล็กไม่ได้รับอนุญาต",
+      "en": "Mopeds are not permitted here."
     }
   },
   {
@@ -862,6 +1167,11 @@
       "en": "No Bicycles"
     },
     "explanation": {
+      "no": "Sykler har ikke adgang her.",
+      "th": "จักรยานไม่ได้รับอนุญาตให้ผ่าน",
+      "en": "Bicycles are not permitted here."
+    },
+    "driver_action": {
       "no": "Sykler har ikke adgang her.",
       "th": "จักรยานไม่ได้รับอนุญาตให้ผ่าน",
       "en": "Bicycles are not permitted here."
@@ -879,6 +1189,11 @@
       "no": "Gående har ikke adgang her.",
       "th": "คนเดินเท้าไม่ได้รับอนุญาตให้ผ่าน",
       "en": "Pedestrians are not permitted here."
+    },
+    "driver_action": {
+      "no": "Gående har ikke adgang her.",
+      "th": "คนเดินเท้าไม่ได้รับอนุญาตให้ผ่าน",
+      "en": "Pedestrians are not permitted here."
     }
   },
   {
@@ -890,6 +1205,11 @@
       "en": "No Horse Riders"
     },
     "explanation": {
+      "no": "Ridning er forbudt her.",
+      "th": "ห้ามขี่ม้าในบริเวณนี้",
+      "en": "Horse riding is not permitted here."
+    },
+    "driver_action": {
       "no": "Ridning er forbudt her.",
       "th": "ห้ามขี่ม้าในบริเวณนี้",
       "en": "Horse riding is not permitted here."
@@ -907,6 +1227,11 @@
       "no": "Forbudt for kjøretøy lengre enn det som er angitt.",
       "th": "ห้ามรถที่มีความยาวเกินกว่าที่ระบุไว้ผ่าน",
       "en": "Vehicles exceeding the specified length are not permitted."
+    },
+    "driver_action": {
+      "no": "Forbudt for kjøretøy lengre enn det som er angitt.",
+      "th": "ห้ามรถที่มีความยาวเกินกว่าที่ระบุไว้ผ่าน",
+      "en": "Vehicles exceeding the specified length are not permitted."
     }
   },
   {
@@ -918,6 +1243,11 @@
       "en": "No Vehicles Exceeding Height"
     },
     "explanation": {
+      "no": "Forbudt for kjøretøy høyere enn det som er angitt.",
+      "th": "ห้ามรถที่มีความสูงเกินกว่าที่ระบุไว้ผ่าน",
+      "en": "Vehicles exceeding the specified height are not permitted."
+    },
+    "driver_action": {
       "no": "Forbudt for kjøretøy høyere enn det som er angitt.",
       "th": "ห้ามรถที่มีความสูงเกินกว่าที่ระบุไว้ผ่าน",
       "en": "Vehicles exceeding the specified height are not permitted."
@@ -935,6 +1265,11 @@
       "no": "Veien er stengt for gjennomkjøring.",
       "th": "ถนนปิดสำหรับการสัญจร",
       "en": "The road is closed to through traffic."
+    },
+    "driver_action": {
+      "no": "Veien er stengt for gjennomkjøring.",
+      "th": "ถนนปิดสำหรับการสัญจร",
+      "en": "The road is closed to through traffic."
     }
   },
   {
@@ -946,6 +1281,11 @@
       "en": "No Overtaking"
     },
     "explanation": {
+      "no": "Du har ikke lov til å kjøre forbi andre kjøretøy.",
+      "th": "ห้ามแซงรถคันอื่น",
+      "en": "You are not allowed to overtake other vehicles."
+    },
+    "driver_action": {
       "no": "Du har ikke lov til å kjøre forbi andre kjøretøy.",
       "th": "ห้ามแซงรถคันอื่น",
       "en": "You are not allowed to overtake other vehicles."
@@ -963,6 +1303,11 @@
       "no": "Lastebiler har ikke lov til å kjøre forbi andre kjøretøy.",
       "th": "ห้ามรถบรรทุกแซงยานพาหนะอื่น",
       "en": "Trucks are not allowed to overtake other vehicles."
+    },
+    "driver_action": {
+      "no": "Lastebiler har ikke lov til å kjøre forbi andre kjøretøy.",
+      "th": "ห้ามรถบรรทุกแซงยานพาหนะอื่น",
+      "en": "Trucks are not allowed to overtake other vehicles."
     }
   },
   {
@@ -974,6 +1319,11 @@
       "en": "No Stopping"
     },
     "explanation": {
+      "no": "Stopp er ikke tillatt her, verken for parkering eller av- og påstigning.",
+      "th": "ห้ามหยุดรถในบริเวณนี้ ไม่ว่าจะจอดหรือรับส่งผู้โดยสาร",
+      "en": "Stopping is not allowed here, not even briefly."
+    },
+    "driver_action": {
       "no": "Stopp er ikke tillatt her, verken for parkering eller av- og påstigning.",
       "th": "ห้ามหยุดรถในบริเวณนี้ ไม่ว่าจะจอดหรือรับส่งผู้โดยสาร",
       "en": "Stopping is not allowed here, not even briefly."
@@ -991,6 +1341,11 @@
       "no": "Stopp er ikke tillatt her.",
       "th": "ห้ามหยุดรถในบริเวณนี้",
       "en": "Stopping is not allowed here."
+    },
+    "driver_action": {
+      "no": "Stopp er ikke tillatt her.",
+      "th": "ห้ามหยุดรถในบริเวณนี้",
+      "en": "Stopping is not allowed here."
     }
   },
   {
@@ -1002,6 +1357,11 @@
       "en": "No Parking"
     },
     "explanation": {
+      "no": "Parkering er forbudt her. Du kan stoppe kort for av- og påstigning.",
+      "th": "ห้ามจอดรถในบริเวณนี้ สามารถหยุดสั้นๆ เพื่อรับส่งได้",
+      "en": "Parking is forbidden here. You may stop briefly to drop off or pick up."
+    },
+    "driver_action": {
       "no": "Parkering er forbudt her. Du kan stoppe kort for av- og påstigning.",
       "th": "ห้ามจอดรถในบริเวณนี้ สามารถหยุดสั้นๆ เพื่อรับส่งได้",
       "en": "Parking is forbidden here. You may stop briefly to drop off or pick up."
@@ -1019,6 +1379,11 @@
       "no": "Verken stopp eller parkering er tillatt her.",
       "th": "ห้ามหยุดหรือจอดรถในบริเวณนี้ทุกกรณี",
       "en": "Neither stopping nor parking is allowed here."
+    },
+    "driver_action": {
+      "no": "Verken stopp eller parkering er tillatt her.",
+      "th": "ห้ามหยุดหรือจอดรถในบริเวณนี้ทุกกรณี",
+      "en": "Neither stopping nor parking is allowed here."
     }
   },
   {
@@ -1030,6 +1395,11 @@
       "en": "No Parking on Odd Days"
     },
     "explanation": {
+      "no": "Parkering er forbudt på oddetallsdager i måneden.",
+      "th": "ห้ามจอดรถในวันที่เป็นเลขคี่ของเดือน",
+      "en": "Parking is forbidden on odd-numbered days of the month."
+    },
+    "driver_action": {
       "no": "Parkering er forbudt på oddetallsdager i måneden.",
       "th": "ห้ามจอดรถในวันที่เป็นเลขคี่ของเดือน",
       "en": "Parking is forbidden on odd-numbered days of the month."
@@ -1047,6 +1417,11 @@
       "no": "Parkering er forbudt på partallsdager i måneden.",
       "th": "ห้ามจอดรถในวันที่เป็นเลขคู่ของเดือน",
       "en": "Parking is forbidden on even-numbered days of the month."
+    },
+    "driver_action": {
+      "no": "Parkering er forbudt på partallsdager i måneden.",
+      "th": "ห้ามจอดรถในวันที่เป็นเลขคู่ของเดือน",
+      "en": "Parking is forbidden on even-numbered days of the month."
     }
   },
   {
@@ -1058,6 +1433,11 @@
       "en": "No Vehicles with Dangerous Goods"
     },
     "explanation": {
+      "no": "Kjøretøy med farlig gods har ikke adgang.",
+      "th": "รถบรรทุกสารอันตรายไม่ได้รับอนุญาตให้เข้า",
+      "en": "Vehicles carrying dangerous goods are not permitted."
+    },
+    "driver_action": {
       "no": "Kjøretøy med farlig gods har ikke adgang.",
       "th": "รถบรรทุกสารอันตรายไม่ได้รับอนุญาตให้เข้า",
       "en": "Vehicles carrying dangerous goods are not permitted."
@@ -1075,6 +1455,11 @@
       "no": "Den spesielle fartsgrensen opphører. Vanlig fartsgrense gjelder igjen.",
       "th": "ความเร็วพิเศษสิ้นสุดแล้ว ให้ใช้ความเร็วปกติตามกฎหมาย",
       "en": "The special speed limit ends. Normal speed limit applies again."
+    },
+    "driver_action": {
+      "no": "Den spesielle fartsgrensen opphører. Vanlig fartsgrense gjelder igjen.",
+      "th": "ความเร็วพิเศษสิ้นสุดแล้ว ให้ใช้ความเร็วปกติตามกฎหมาย",
+      "en": "The special speed limit ends. Normal speed limit applies again."
     }
   },
   {
@@ -1086,6 +1471,11 @@
       "en": "End of Special Speed Limit"
     },
     "explanation": {
+      "no": "Den spesielle fartsgrensen opphører.",
+      "th": "ความเร็วพิเศษสิ้นสุดแล้ว",
+      "en": "The special speed limit ends here."
+    },
+    "driver_action": {
       "no": "Den spesielle fartsgrensen opphører.",
       "th": "ความเร็วพิเศษสิ้นสุดแล้ว",
       "en": "The special speed limit ends here."
@@ -1103,6 +1493,11 @@
       "no": "Fartsgrensesonen opphører. Vanlig fartsgrense gjelder.",
       "th": "เขตจำกัดความเร็วสิ้นสุดแล้ว ความเร็วตามกฎหมายทั่วไปมีผล",
       "en": "Speed limit zone ends. Standard speed limit applies."
+    },
+    "driver_action": {
+      "no": "Fartsgrensesonen opphører. Vanlig fartsgrense gjelder.",
+      "th": "เขตจำกัดความเร็วสิ้นสุดแล้ว ความเร็วตามกฎหมายทั่วไปมีผล",
+      "en": "Speed limit zone ends. Standard speed limit applies."
     }
   },
   {
@@ -1114,6 +1509,11 @@
       "en": "End of No Overtaking"
     },
     "explanation": {
+      "no": "Forbudet mot forbikjøring er opphevet.",
+      "th": "การห้ามแซงสิ้นสุดแล้ว คุณสามารถแซงได้อีกครั้ง",
+      "en": "The no overtaking restriction ends here."
+    },
+    "driver_action": {
       "no": "Forbudet mot forbikjøring er opphevet.",
       "th": "การห้ามแซงสิ้นสุดแล้ว คุณสามารถแซงได้อีกครั้ง",
       "en": "The no overtaking restriction ends here."
@@ -1131,6 +1531,11 @@
       "no": "Alle forbud oppheves her.",
       "th": "ข้อห้ามทั้งหมดสิ้นสุดที่นี่",
       "en": "All previous prohibitions end here."
+    },
+    "driver_action": {
+      "no": "Alle forbud oppheves her.",
+      "th": "ข้อห้ามทั้งหมดสิ้นสุดที่นี่",
+      "en": "All previous prohibitions end here."
     }
   },
   {
@@ -1142,6 +1547,11 @@
       "en": "Time-Limited Parking"
     },
     "explanation": {
+      "no": "Parkering er tillatt men begrenset til den angitte tiden.",
+      "th": "สามารถจอดได้ แต่จำกัดเวลาตามที่ระบุ",
+      "en": "Parking is allowed but limited to the specified time."
+    },
+    "driver_action": {
       "no": "Parkering er tillatt men begrenset til den angitte tiden.",
       "th": "สามารถจอดได้ แต่จำกัดเวลาตามที่ระบุ",
       "en": "Parking is allowed but limited to the specified time."
@@ -1159,6 +1569,11 @@
       "no": "Angitt svingebevegelse er forbudt i krysset.",
       "th": "ห้ามเลี้ยวตามทิศทางที่แสดงในสี่แยกนี้",
       "en": "The indicated turn is prohibited at this junction."
+    },
+    "driver_action": {
+      "no": "Angitt svingebevegelse er forbudt i krysset.",
+      "th": "ห้ามเลี้ยวตามทิศทางที่แสดงในสี่แยกนี้",
+      "en": "The indicated turn is prohibited at this junction."
     }
   },
   {
@@ -1170,6 +1585,11 @@
       "en": "Speed Limit 100 km/h"
     },
     "explanation": {
+      "no": "Maksimal tillatt hastighet er 100 km/t.",
+      "th": "ห้ามขับเร็วเกิน 100 กิโลเมตรต่อชั่วโมง",
+      "en": "Maximum speed allowed is 100 km/h."
+    },
+    "driver_action": {
       "no": "Maksimal tillatt hastighet er 100 km/t.",
       "th": "ห้ามขับเร็วเกิน 100 กิโลเมตรต่อชั่วโมง",
       "en": "Maximum speed allowed is 100 km/h."
@@ -1187,6 +1607,11 @@
       "no": "Maksimal tillatt hastighet er 110 km/t.",
       "th": "ห้ามขับเร็วเกิน 110 กิโลเมตรต่อชั่วโมง",
       "en": "Maximum speed allowed is 110 km/h."
+    },
+    "driver_action": {
+      "no": "Maksimal tillatt hastighet er 110 km/t.",
+      "th": "ห้ามขับเร็วเกิน 110 กิโลเมตรต่อชั่วโมง",
+      "en": "Maximum speed allowed is 110 km/h."
     }
   },
   {
@@ -1198,6 +1623,11 @@
       "en": "Speed Limit 30 km/h"
     },
     "explanation": {
+      "no": "Maksimal tillatt hastighet er 30 km/t.",
+      "th": "ห้ามขับเร็วเกิน 30 กิโลเมตรต่อชั่วโมง",
+      "en": "Maximum speed allowed is 30 km/h."
+    },
+    "driver_action": {
       "no": "Maksimal tillatt hastighet er 30 km/t.",
       "th": "ห้ามขับเร็วเกิน 30 กิโลเมตรต่อชั่วโมง",
       "en": "Maximum speed allowed is 30 km/h."
@@ -1215,6 +1645,11 @@
       "no": "Maksimal tillatt hastighet er 40 km/t.",
       "th": "ห้ามขับเร็วเกิน 40 กิโลเมตรต่อชั่วโมง",
       "en": "Maximum speed allowed is 40 km/h."
+    },
+    "driver_action": {
+      "no": "Maksimal tillatt hastighet er 40 km/t.",
+      "th": "ห้ามขับเร็วเกิน 40 กิโลเมตรต่อชั่วโมง",
+      "en": "Maximum speed allowed is 40 km/h."
     }
   },
   {
@@ -1226,6 +1661,11 @@
       "en": "Speed Limit 50 km/h"
     },
     "explanation": {
+      "no": "Maksimal tillatt hastighet er 50 km/t.",
+      "th": "ห้ามขับเร็วเกิน 50 กิโลเมตรต่อชั่วโมง",
+      "en": "Maximum speed allowed is 50 km/h."
+    },
+    "driver_action": {
       "no": "Maksimal tillatt hastighet er 50 km/t.",
       "th": "ห้ามขับเร็วเกิน 50 กิโลเมตรต่อชั่วโมง",
       "en": "Maximum speed allowed is 50 km/h."
@@ -1243,6 +1683,11 @@
       "no": "Maksimal tillatt hastighet er 60 km/t.",
       "th": "ห้ามขับเร็วเกิน 60 กิโลเมตรต่อชั่วโมง",
       "en": "Maximum speed allowed is 60 km/h."
+    },
+    "driver_action": {
+      "no": "Maksimal tillatt hastighet er 60 km/t.",
+      "th": "ห้ามขับเร็วเกิน 60 กิโลเมตรต่อชั่วโมง",
+      "en": "Maximum speed allowed is 60 km/h."
     }
   },
   {
@@ -1254,6 +1699,11 @@
       "en": "Speed Limit 70 km/h"
     },
     "explanation": {
+      "no": "Maksimal tillatt hastighet er 70 km/t.",
+      "th": "ห้ามขับเร็วเกิน 70 กิโลเมตรต่อชั่วโมง",
+      "en": "Maximum speed allowed is 70 km/h."
+    },
+    "driver_action": {
       "no": "Maksimal tillatt hastighet er 70 km/t.",
       "th": "ห้ามขับเร็วเกิน 70 กิโลเมตรต่อชั่วโมง",
       "en": "Maximum speed allowed is 70 km/h."
@@ -1271,6 +1721,11 @@
       "no": "Maksimal tillatt hastighet er 80 km/t.",
       "th": "ห้ามขับเร็วเกิน 80 กิโลเมตรต่อชั่วโมง",
       "en": "Maximum speed allowed is 80 km/h."
+    },
+    "driver_action": {
+      "no": "Maksimal tillatt hastighet er 80 km/t.",
+      "th": "ห้ามขับเร็วเกิน 80 กิโลเมตรต่อชั่วโมง",
+      "en": "Maximum speed allowed is 80 km/h."
     }
   },
   {
@@ -1282,6 +1737,11 @@
       "en": "Speed Limit 90 km/h"
     },
     "explanation": {
+      "no": "Maksimal tillatt hastighet er 90 km/t.",
+      "th": "ห้ามขับเร็วเกิน 90 กิโลเมตรต่อชั่วโมง",
+      "en": "Maximum speed allowed is 90 km/h."
+    },
+    "driver_action": {
       "no": "Maksimal tillatt hastighet er 90 km/t.",
       "th": "ห้ามขับเร็วเกิน 90 กิโลเมตรต่อชั่วโมง",
       "en": "Maximum speed allowed is 90 km/h."
@@ -1299,6 +1759,11 @@
       "no": "Du må kjøre minst 30 km/t her.",
       "th": "คุณต้องขับด้วยความเร็วอย่างน้อย 30 กิโลเมตรต่อชั่วโมง",
       "en": "You must drive at least 30 km/h here."
+    },
+    "driver_action": {
+      "no": "Du må kjøre minst 30 km/t her.",
+      "th": "คุณต้องขับด้วยความเร็วอย่างน้อย 30 กิโลเมตรต่อชั่วโมง",
+      "en": "You must drive at least 30 km/h here."
     }
   },
   {
@@ -1310,6 +1775,11 @@
       "en": "Minimum Speed 40 km/h"
     },
     "explanation": {
+      "no": "Du må kjøre minst 40 km/t her.",
+      "th": "คุณต้องขับด้วยความเร็วอย่างน้อย 40 กิโลเมตรต่อชั่วโมง",
+      "en": "You must drive at least 40 km/h here."
+    },
+    "driver_action": {
       "no": "Du må kjøre minst 40 km/t her.",
       "th": "คุณต้องขับด้วยความเร็วอย่างน้อย 40 กิโลเมตรต่อชั่วโมง",
       "en": "You must drive at least 40 km/h here."
@@ -1327,6 +1797,11 @@
       "no": "Du må kjøre minst 50 km/t her.",
       "th": "คุณต้องขับด้วยความเร็วอย่างน้อย 50 กิโลเมตรต่อชั่วโมง",
       "en": "You must drive at least 50 km/h here."
+    },
+    "driver_action": {
+      "no": "Du må kjøre minst 50 km/t her.",
+      "th": "คุณต้องขับด้วยความเร็วอย่างน้อย 50 กิโลเมตรต่อชั่วโมง",
+      "en": "You must drive at least 50 km/h here."
     }
   },
   {
@@ -1338,6 +1813,11 @@
       "en": "Minimum Speed 60 km/h"
     },
     "explanation": {
+      "no": "Du må kjøre minst 60 km/t her.",
+      "th": "คุณต้องขับด้วยความเร็วอย่างน้อย 60 กิโลเมตรต่อชั่วโมง",
+      "en": "You must drive at least 60 km/h here."
+    },
+    "driver_action": {
       "no": "Du må kjøre minst 60 km/t her.",
       "th": "คุณต้องขับด้วยความเร็วอย่างน้อย 60 กิโลเมตรต่อชั่วโมง",
       "en": "You must drive at least 60 km/h here."
@@ -1355,6 +1835,11 @@
       "no": "Du må kjøre minst 70 km/t her.",
       "th": "คุณต้องขับด้วยความเร็วอย่างน้อย 70 กิโลเมตรต่อชั่วโมง",
       "en": "You must drive at least 70 km/h here."
+    },
+    "driver_action": {
+      "no": "Du må kjøre minst 70 km/t her.",
+      "th": "คุณต้องขับด้วยความเร็วอย่างน้อย 70 กิโลเมตรต่อชั่วโมง",
+      "en": "You must drive at least 70 km/h here."
     }
   },
   {
@@ -1366,6 +1851,11 @@
       "en": "End of Minimum Speed"
     },
     "explanation": {
+      "no": "Kravet om minstehastighet er opphevet.",
+      "th": "ข้อกำหนดความเร็วขั้นต่ำสิ้นสุดแล้ว",
+      "en": "The minimum speed requirement ends here."
+    },
+    "driver_action": {
       "no": "Kravet om minstehastighet er opphevet.",
       "th": "ข้อกำหนดความเร็วขั้นต่ำสิ้นสุดแล้ว",
       "en": "The minimum speed requirement ends here."
@@ -1383,6 +1873,11 @@
       "no": "Bruk av fjernlys er forbudt her.",
       "th": "ห้ามใช้ไฟสูงในบริเวณนี้",
       "en": "Use of high beam lights is prohibited here."
+    },
+    "driver_action": {
+      "no": "Bruk av fjernlys er forbudt her.",
+      "th": "ห้ามใช้ไฟสูงในบริเวณนี้",
+      "en": "Use of high beam lights is prohibited here."
     }
   },
   {
@@ -1394,6 +1889,11 @@
       "en": "No Meeting"
     },
     "explanation": {
+      "no": "Møtende trafikk er ikke tillatt. Vent til veien er klar.",
+      "th": "ห้ามรถสวนทางกันในบริเวณนี้ รอให้ถนนโล่งก่อน",
+      "en": "Oncoming traffic is not permitted here. Wait for the road to clear."
+    },
+    "driver_action": {
       "no": "Møtende trafikk er ikke tillatt. Vent til veien er klar.",
       "th": "ห้ามรถสวนทางกันในบริเวณนี้ รอให้ถนนโล่งก่อน",
       "en": "Oncoming traffic is not permitted here. Wait for the road to clear."
@@ -1411,6 +1911,11 @@
       "no": "Søppelkasting er forbudt i dette området.",
       "th": "ห้ามทิ้งขยะในบริเวณนี้",
       "en": "Littering is prohibited in this area."
+    },
+    "driver_action": {
+      "no": "Søppelkasting er forbudt i dette området.",
+      "th": "ห้ามทิ้งขยะในบริเวณนี้",
+      "en": "Littering is prohibited in this area."
     }
   },
   {
@@ -1422,6 +1927,11 @@
       "en": "No Parking with Trailer"
     },
     "explanation": {
+      "no": "Kjøretøy med tilhenger har ikke lov til å parkere her.",
+      "th": "ห้ามจอดรถที่มีพ่วงในบริเวณนี้",
+      "en": "Vehicles with trailers are not allowed to park here."
+    },
+    "driver_action": {
       "no": "Kjøretøy med tilhenger har ikke lov til å parkere her.",
       "th": "ห้ามจอดรถที่มีพ่วงในบริเวณนี้",
       "en": "Vehicles with trailers are not allowed to park here."
@@ -1439,6 +1949,11 @@
       "no": "Kjøretøy med tilhenger har ikke lov til å parkere her.",
       "th": "ห้ามจอดรถที่มีพ่วงในบริเวณนี้",
       "en": "Vehicles with trailers are not allowed to park here."
+    },
+    "driver_action": {
+      "no": "Kjøretøy med tilhenger har ikke lov til å parkere her.",
+      "th": "ห้ามจอดรถที่มีพ่วงในบริเวณนี้",
+      "en": "Vehicles with trailers are not allowed to park here."
     }
   },
   {
@@ -1450,6 +1965,11 @@
       "en": "No U-Turn"
     },
     "explanation": {
+      "no": "Det er forbudt å snu kjøretøyet her.",
+      "th": "ห้ามกลับรถในบริเวณนี้",
+      "en": "U-turns are not allowed here."
+    },
+    "driver_action": {
       "no": "Det er forbudt å snu kjøretøyet her.",
       "th": "ห้ามกลับรถในบริเวณนี้",
       "en": "U-turns are not allowed here."
@@ -1467,6 +1987,11 @@
       "no": "Angitt svingning er forbudt i dette krysset.",
       "th": "ห้ามเลี้ยวตามทิศทางที่กำหนดในสี่แยกนี้",
       "en": "The indicated turn is prohibited at this junction."
+    },
+    "driver_action": {
+      "no": "Angitt svingning er forbudt i dette krysset.",
+      "th": "ห้ามเลี้ยวตามทิศทางที่กำหนดในสี่แยกนี้",
+      "en": "The indicated turn is prohibited at this junction."
     }
   },
   {
@@ -1478,6 +2003,11 @@
       "en": "Direction sign 723_11"
     },
     "explanation": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
@@ -1495,6 +2025,11 @@
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
     }
   },
   {
@@ -1506,6 +2041,11 @@
       "en": "Direction sign 723_13"
     },
     "explanation": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
@@ -1523,6 +2063,11 @@
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
     }
   },
   {
@@ -1534,6 +2079,11 @@
       "en": "Direction sign 723_15"
     },
     "explanation": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
@@ -1551,6 +2101,11 @@
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
     }
   },
   {
@@ -1562,6 +2117,11 @@
       "en": "Direction sign 723_21"
     },
     "explanation": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
@@ -1579,6 +2139,11 @@
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
     }
   },
   {
@@ -1590,6 +2155,11 @@
       "en": "Direction sign 723_31"
     },
     "explanation": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
@@ -1607,6 +2177,11 @@
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
     }
   },
   {
@@ -1618,6 +2193,11 @@
       "en": "Direction sign 723_51"
     },
     "explanation": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
@@ -1635,6 +2215,11 @@
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
     }
   },
   {
@@ -1646,6 +2231,11 @@
       "en": "Direction sign 723_62"
     },
     "explanation": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
@@ -1663,6 +2253,11 @@
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
     }
   },
   {
@@ -1674,6 +2269,11 @@
       "en": "Direction sign 723_64"
     },
     "explanation": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
@@ -1691,6 +2291,11 @@
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
     }
   },
   {
@@ -1702,6 +2307,11 @@
       "en": "Direction sign 723_66"
     },
     "explanation": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
@@ -1719,6 +2329,11 @@
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
     }
   },
   {
@@ -1730,6 +2345,11 @@
       "en": "Direction sign 723_72"
     },
     "explanation": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
@@ -1747,6 +2367,11 @@
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
     }
   },
   {
@@ -1758,6 +2383,11 @@
       "en": "Direction sign 729_0"
     },
     "explanation": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
@@ -1775,6 +2405,11 @@
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
     }
   },
   {
@@ -1786,6 +2421,11 @@
       "en": "Direction sign 743_2"
     },
     "explanation": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
@@ -1803,6 +2443,11 @@
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
     }
   },
   {
@@ -1814,6 +2459,11 @@
       "en": "Direction sign 763_0"
     },
     "explanation": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
@@ -1831,6 +2481,11 @@
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
     }
   },
   {
@@ -1842,6 +2497,11 @@
       "en": "Direction sign 767_0"
     },
     "explanation": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
@@ -1859,6 +2519,11 @@
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
     }
   },
   {
@@ -1870,6 +2535,11 @@
       "en": "Direction sign 771_0"
     },
     "explanation": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
@@ -1887,6 +2557,11 @@
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
     }
   },
   {
@@ -1898,6 +2573,11 @@
       "en": "Direction sign 773_0"
     },
     "explanation": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
@@ -1915,6 +2595,11 @@
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
     }
   },
   {
@@ -1926,6 +2611,11 @@
       "en": "Direction sign 775_0"
     },
     "explanation": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
@@ -1943,6 +2633,11 @@
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
     }
   },
   {
@@ -1954,6 +2649,11 @@
       "en": "Direction sign 790_15"
     },
     "explanation": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
@@ -1971,6 +2671,11 @@
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
     }
   },
   {
@@ -1982,6 +2687,11 @@
       "en": "Direction sign 790_20"
     },
     "explanation": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
@@ -1999,6 +2709,11 @@
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
     }
   },
   {
@@ -2010,6 +2725,11 @@
       "en": "Direction sign 790_31"
     },
     "explanation": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
@@ -2027,6 +2747,11 @@
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
     }
   },
   {
@@ -2038,6 +2763,11 @@
       "en": "Direction sign 792_11"
     },
     "explanation": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
@@ -2055,6 +2785,11 @@
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
     }
   },
   {
@@ -2066,6 +2801,11 @@
       "en": "Direction sign 792_13"
     },
     "explanation": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
@@ -2083,6 +2823,11 @@
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
     }
   },
   {
@@ -2094,6 +2839,11 @@
       "en": "Direction sign 792_15"
     },
     "explanation": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
@@ -2111,6 +2861,11 @@
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
     }
   },
   {
@@ -2122,6 +2877,11 @@
       "en": "Direction sign 792_17"
     },
     "explanation": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
@@ -2139,6 +2899,11 @@
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
     }
   },
   {
@@ -2150,6 +2915,11 @@
       "en": "Distance plate"
     },
     "explanation": {
+      "no": "Viser avstand til skiltet foran.",
+      "th": "แสดงระยะทางถึงป้ายด้านหน้า",
+      "en": "Shows distance to the sign ahead."
+    },
+    "driver_action": {
       "no": "Viser avstand til skiltet foran.",
       "th": "แสดงระยะทางถึงป้ายด้านหน้า",
       "en": "Shows distance to the sign ahead."
@@ -2167,6 +2937,11 @@
       "no": "Angir tidsperiode da skiltet over gjelder.",
       "th": "ระบุช่วงเวลาที่ป้ายด้านบนมีผล",
       "en": "Indicates the time period when the sign above applies."
+    },
+    "driver_action": {
+      "no": "Angir tidsperiode da skiltet over gjelder.",
+      "th": "ระบุช่วงเวลาที่ป้ายด้านบนมีผล",
+      "en": "Indicates the time period when the sign above applies."
     }
   },
   {
@@ -2178,6 +2953,11 @@
       "en": "Supplementary sign 806_0"
     },
     "explanation": {
+      "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
+      "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
+      "en": "Provides additional information for the sign above."
+    },
+    "driver_action": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
       "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
       "en": "Provides additional information for the sign above."
@@ -2195,6 +2975,11 @@
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
       "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
       "en": "Provides additional information for the sign above."
+    },
+    "driver_action": {
+      "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
+      "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
+      "en": "Provides additional information for the sign above."
     }
   },
   {
@@ -2206,6 +2991,11 @@
       "en": "Supplementary sign 807_2"
     },
     "explanation": {
+      "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
+      "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
+      "en": "Provides additional information for the sign above."
+    },
+    "driver_action": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
       "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
       "en": "Provides additional information for the sign above."
@@ -2223,6 +3013,11 @@
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
       "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
       "en": "Provides additional information for the sign above."
+    },
+    "driver_action": {
+      "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
+      "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
+      "en": "Provides additional information for the sign above."
     }
   },
   {
@@ -2234,6 +3029,11 @@
       "en": "Supplementary sign 807_4"
     },
     "explanation": {
+      "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
+      "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
+      "en": "Provides additional information for the sign above."
+    },
+    "driver_action": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
       "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
       "en": "Provides additional information for the sign above."
@@ -2251,6 +3051,11 @@
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
       "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
       "en": "Provides additional information for the sign above."
+    },
+    "driver_action": {
+      "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
+      "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
+      "en": "Provides additional information for the sign above."
     }
   },
   {
@@ -2262,6 +3067,11 @@
       "en": "Supplementary sign 807_6"
     },
     "explanation": {
+      "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
+      "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
+      "en": "Provides additional information for the sign above."
+    },
+    "driver_action": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
       "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
       "en": "Provides additional information for the sign above."
@@ -2279,6 +3089,11 @@
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
       "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
       "en": "Provides additional information for the sign above."
+    },
+    "driver_action": {
+      "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
+      "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
+      "en": "Provides additional information for the sign above."
     }
   },
   {
@@ -2290,6 +3105,11 @@
       "en": "Supplementary sign 807_8"
     },
     "explanation": {
+      "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
+      "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
+      "en": "Provides additional information for the sign above."
+    },
+    "driver_action": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
       "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
       "en": "Provides additional information for the sign above."
@@ -2307,6 +3127,11 @@
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
       "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
       "en": "Provides additional information for the sign above."
+    },
+    "driver_action": {
+      "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
+      "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
+      "en": "Provides additional information for the sign above."
     }
   },
   {
@@ -2318,6 +3143,11 @@
       "en": "Supplementary sign 808_42"
     },
     "explanation": {
+      "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
+      "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
+      "en": "Provides additional information for the sign above."
+    },
+    "driver_action": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
       "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
       "en": "Provides additional information for the sign above."
@@ -2335,6 +3165,11 @@
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
       "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
       "en": "Provides additional information for the sign above."
+    },
+    "driver_action": {
+      "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
+      "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
+      "en": "Provides additional information for the sign above."
     }
   },
   {
@@ -2346,6 +3181,11 @@
       "en": "Supplementary sign 813_1"
     },
     "explanation": {
+      "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
+      "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
+      "en": "Provides additional information for the sign above."
+    },
+    "driver_action": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
       "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
       "en": "Provides additional information for the sign above."
@@ -2363,6 +3203,11 @@
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
       "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
       "en": "Provides additional information for the sign above."
+    },
+    "driver_action": {
+      "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
+      "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
+      "en": "Provides additional information for the sign above."
     }
   },
   {
@@ -2374,6 +3219,11 @@
       "en": "Supplementary sign 814_0"
     },
     "explanation": {
+      "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
+      "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
+      "en": "Provides additional information for the sign above."
+    },
+    "driver_action": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
       "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
       "en": "Provides additional information for the sign above."
@@ -2391,6 +3241,11 @@
       "no": "Angir distansen der skiltet gjelder.",
       "th": "ระบุระยะทางที่ป้ายมีผลบังคับใช้",
       "en": "Indicates the distance over which the sign applies."
+    },
+    "driver_action": {
+      "no": "Angir distansen der skiltet gjelder.",
+      "th": "ระบุระยะทางที่ป้ายมีผลบังคับใช้",
+      "en": "Indicates the distance over which the sign applies."
     }
   },
   {
@@ -2402,6 +3257,11 @@
       "en": "Supplementary sign 817_1"
     },
     "explanation": {
+      "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
+      "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
+      "en": "Provides additional information for the sign above."
+    },
+    "driver_action": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
       "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
       "en": "Provides additional information for the sign above."
@@ -2419,6 +3279,11 @@
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
       "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
       "en": "Provides additional information for the sign above."
+    },
+    "driver_action": {
+      "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
+      "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
+      "en": "Provides additional information for the sign above."
     }
   },
   {
@@ -2430,6 +3295,11 @@
       "en": "Supplementary sign 817_3"
     },
     "explanation": {
+      "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
+      "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
+      "en": "Provides additional information for the sign above."
+    },
+    "driver_action": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
       "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
       "en": "Provides additional information for the sign above."
@@ -2447,6 +3317,11 @@
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
       "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
       "en": "Provides additional information for the sign above."
+    },
+    "driver_action": {
+      "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
+      "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
+      "en": "Provides additional information for the sign above."
     }
   },
   {
@@ -2458,6 +3333,11 @@
       "en": "Supplementary sign 817_5"
     },
     "explanation": {
+      "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
+      "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
+      "en": "Provides additional information for the sign above."
+    },
+    "driver_action": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
       "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
       "en": "Provides additional information for the sign above."
@@ -2475,6 +3355,11 @@
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
       "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
       "en": "Provides additional information for the sign above."
+    },
+    "driver_action": {
+      "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
+      "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
+      "en": "Provides additional information for the sign above."
     }
   },
   {
@@ -2486,6 +3371,11 @@
       "en": "Supplementary sign 822_2"
     },
     "explanation": {
+      "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
+      "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
+      "en": "Provides additional information for the sign above."
+    },
+    "driver_action": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
       "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
       "en": "Provides additional information for the sign above."
@@ -2503,6 +3393,11 @@
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
       "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
       "en": "Provides additional information for the sign above."
+    },
+    "driver_action": {
+      "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
+      "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
+      "en": "Provides additional information for the sign above."
     }
   },
   {
@@ -2514,6 +3409,11 @@
       "en": "Supplementary sign 822_4"
     },
     "explanation": {
+      "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
+      "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
+      "en": "Provides additional information for the sign above."
+    },
+    "driver_action": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
       "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
       "en": "Provides additional information for the sign above."
@@ -2531,6 +3431,11 @@
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
       "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
       "en": "Provides additional information for the sign above."
+    },
+    "driver_action": {
+      "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
+      "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
+      "en": "Provides additional information for the sign above."
     }
   },
   {
@@ -2542,6 +3447,11 @@
       "en": "Supplementary sign 822_6"
     },
     "explanation": {
+      "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
+      "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
+      "en": "Provides additional information for the sign above."
+    },
+    "driver_action": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
       "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
       "en": "Provides additional information for the sign above."
@@ -2559,6 +3469,11 @@
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
       "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
       "en": "Provides additional information for the sign above."
+    },
+    "driver_action": {
+      "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
+      "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
+      "en": "Provides additional information for the sign above."
     }
   },
   {
@@ -2570,6 +3485,11 @@
       "en": "Arrow supplement"
     },
     "explanation": {
+      "no": "Viser retning for skiltet ovenfor.",
+      "th": "แสดงทิศทางของป้ายด้านบน",
+      "en": "Shows direction for the sign above."
+    },
+    "driver_action": {
       "no": "Viser retning for skiltet ovenfor.",
       "th": "แสดงทิศทางของป้ายด้านบน",
       "en": "Shows direction for the sign above."
@@ -2587,6 +3507,11 @@
       "no": "Skiltet ovenfor gjelder for begge sider av vegen.",
       "th": "ป้ายด้านบนใช้กับทั้งสองด้านของถนน",
       "en": "The sign above applies to both sides of the road."
+    },
+    "driver_action": {
+      "no": "Skiltet ovenfor gjelder for begge sider av vegen.",
+      "th": "ป้ายด้านบนใช้กับทั้งสองด้านของถนน",
+      "en": "The sign above applies to both sides of the road."
     }
   },
   {
@@ -2598,6 +3523,11 @@
       "en": "Supplementary sign 828_1"
     },
     "explanation": {
+      "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
+      "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
+      "en": "Provides additional information for the sign above."
+    },
+    "driver_action": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
       "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
       "en": "Provides additional information for the sign above."
@@ -2615,6 +3545,11 @@
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
       "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
       "en": "Provides additional information for the sign above."
+    },
+    "driver_action": {
+      "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
+      "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
+      "en": "Provides additional information for the sign above."
     }
   },
   {
@@ -2626,6 +3561,11 @@
       "en": "Supplementary sign 828_3"
     },
     "explanation": {
+      "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
+      "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
+      "en": "Provides additional information for the sign above."
+    },
+    "driver_action": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
       "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
       "en": "Provides additional information for the sign above."
@@ -2643,6 +3583,11 @@
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
       "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
       "en": "Provides additional information for the sign above."
+    },
+    "driver_action": {
+      "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
+      "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
+      "en": "Provides additional information for the sign above."
     }
   },
   {
@@ -2654,6 +3599,11 @@
       "en": "Residents parking"
     },
     "explanation": {
+      "no": "Parkering forbeholdt beboere med tillatt skilt.",
+      "th": "ที่จอดรถสำหรับผู้อยู่อาศัยที่มีสิทธิ์เท่านั้น",
+      "en": "Parking reserved for residents with a permit."
+    },
+    "driver_action": {
       "no": "Parkering forbeholdt beboere med tillatt skilt.",
       "th": "ที่จอดรถสำหรับผู้อยู่อาศัยที่มีสิทธิ์เท่านั้น",
       "en": "Parking reserved for residents with a permit."
@@ -2671,6 +3621,11 @@
       "no": "Parkering forbeholdt elektriske kjøretøy.",
       "th": "ที่จอดรถสำหรับยานพาหนะไฟฟ้าเท่านั้น",
       "en": "Parking reserved for electric vehicles."
+    },
+    "driver_action": {
+      "no": "Parkering forbeholdt elektriske kjøretøy.",
+      "th": "ที่จอดรถสำหรับยานพาหนะไฟฟ้าเท่านั้น",
+      "en": "Parking reserved for electric vehicles."
     }
   },
   {
@@ -2682,6 +3637,11 @@
       "en": "Road edge marker"
     },
     "explanation": {
+      "no": "Markerer vegkanten. Hvit = høyre side.",
+      "th": "ทำเครื่องหมายขอบถนน สีขาว = ด้านขวา",
+      "en": "Marks the road edge. White = right side."
+    },
+    "driver_action": {
       "no": "Markerer vegkanten. Hvit = høyre side.",
       "th": "ทำเครื่องหมายขอบถนน สีขาว = ด้านขวา",
       "en": "Marks the road edge. White = right side."
@@ -2699,6 +3659,11 @@
       "no": "Reflekterende vegkantmarkering.",
       "th": "เครื่องหมายขอบถนนที่สะท้อนแสง ช่วยในการมองเห็นตอนกลางคืน",
       "en": "Reflective road edge marker for night visibility."
+    },
+    "driver_action": {
+      "no": "Reflekterende vegkantmarkering.",
+      "th": "เครื่องหมายขอบถนนที่สะท้อนแสง ช่วยในการมองเห็นตอนกลางคืน",
+      "en": "Reflective road edge marker for night visibility."
     }
   },
   {
@@ -2710,6 +3675,11 @@
       "en": "Visibility enhancer"
     },
     "explanation": {
+      "no": "Øker sikten i kurver og farlige punkter.",
+      "th": "เพิ่มการมองเห็นในโค้งและจุดอันตราย",
+      "en": "Improves visibility at bends and hazardous points."
+    },
+    "driver_action": {
       "no": "Øker sikten i kurver og farlige punkter.",
       "th": "เพิ่มการมองเห็นในโค้งและจุดอันตราย",
       "en": "Improves visibility at bends and hazardous points."
@@ -2727,6 +3697,11 @@
       "no": "Markerer farlig hinder eller punkt.",
       "th": "ทำเครื่องหมายสิ่งกีดขวางหรือจุดอันตราย",
       "en": "Marks a dangerous obstacle or point."
+    },
+    "driver_action": {
+      "no": "Markerer farlig hinder eller punkt.",
+      "th": "ทำเครื่องหมายสิ่งกีดขวางหรือจุดอันตราย",
+      "en": "Marks a dangerous obstacle or point."
     }
   },
   {
@@ -2738,6 +3713,11 @@
       "en": "Central barrier marker"
     },
     "explanation": {
+      "no": "Markerer midtrekkverk.",
+      "th": "ทำเครื่องหมายราวกั้นกลางถนน",
+      "en": "Marks the central road barrier."
+    },
+    "driver_action": {
       "no": "Markerer midtrekkverk.",
       "th": "ทำเครื่องหมายราวกั้นกลางถนน",
       "en": "Marks the central road barrier."
@@ -2755,6 +3735,11 @@
       "no": "Markerer kantstein eller fortauskant.",
       "th": "ทำเครื่องหมายขอบทางเท้า",
       "en": "Marks the kerb or footpath edge."
+    },
+    "driver_action": {
+      "no": "Markerer kantstein eller fortauskant.",
+      "th": "ทำเครื่องหมายขอบทางเท้า",
+      "en": "Marks the kerb or footpath edge."
     }
   },
   {
@@ -2766,6 +3751,11 @@
       "en": "Other Hazard"
     },
     "explanation": {
+      "no": "Uventet fare fremover. Vær ekstra oppmerksom.",
+      "th": "มีอันตรายที่ไม่คาดคิดอยู่ข้างหน้า ขับด้วยความระมัดระวังเป็นพิเศษ",
+      "en": "Unexpected hazard ahead. Be extra alert."
+    },
+    "driver_action": {
       "no": "Uventet fare fremover. Vær ekstra oppmerksom.",
       "th": "มีอันตรายที่ไม่คาดคิดอยู่ข้างหน้า ขับด้วยความระมัดระวังเป็นพิเศษ",
       "en": "Unexpected hazard ahead. Be extra alert."
@@ -2783,6 +3773,11 @@
       "no": "Kø fremover. Reduser fart og hold avstand.",
       "th": "มีรถติดอยู่ข้างหน้า ลดความเร็วและรักษาระยะห่าง",
       "en": "Queue ahead. Reduce speed and keep your distance."
+    },
+    "driver_action": {
+      "no": "Kø fremover. Reduser fart og hold avstand.",
+      "th": "มีรถติดอยู่ข้างหน้า ลดความเร็วและรักษาระยะห่าง",
+      "en": "Queue ahead. Reduce speed and keep your distance."
     }
   },
   {
@@ -2794,6 +3789,11 @@
       "en": "No Horn"
     },
     "explanation": {
+      "no": "Det er forbudt å bruke horn her.",
+      "th": "ห้ามบีบแตรในบริเวณนี้",
+      "en": "Use of horn is prohibited here."
+    },
+    "driver_action": {
       "no": "Det er forbudt å bruke horn her.",
       "th": "ห้ามบีบแตรในบริเวณนี้",
       "en": "Use of horn is prohibited here."
@@ -2811,6 +3811,11 @@
       "no": "Transport av farlig gods er forbudt her.",
       "th": "การขนส่งสินค้าอันตรายถูกห้ามในบริเวณนี้",
       "en": "Transport of dangerous goods is prohibited here."
+    },
+    "driver_action": {
+      "no": "Transport av farlig gods er forbudt her.",
+      "th": "การขนส่งสินค้าอันตรายถูกห้ามในบริเวณนี้",
+      "en": "Transport of dangerous goods is prohibited here."
     }
   },
   {
@@ -2822,6 +3827,11 @@
       "en": "No Parking with Trailer"
     },
     "explanation": {
+      "no": "Parkering med tilhenger er forbudt.",
+      "th": "ห้ามจอดรถที่มีพ่วงในบริเวณนี้",
+      "en": "Parking with a trailer is forbidden here."
+    },
+    "driver_action": {
       "no": "Parkering med tilhenger er forbudt.",
       "th": "ห้ามจอดรถที่มีพ่วงในบริเวณนี้",
       "en": "Parking with a trailer is forbidden here."
@@ -2839,6 +3849,11 @@
       "no": "Kjøretøy med last er forbudt her.",
       "th": "ห้ามรถบรรทุกสินค้าในบริเวณนี้",
       "en": "Vehicles carrying loads are not permitted here."
+    },
+    "driver_action": {
+      "no": "Kjøretøy med last er forbudt her.",
+      "th": "ห้ามรถบรรทุกสินค้าในบริเวณนี้",
+      "en": "Vehicles carrying loads are not permitted here."
     }
   },
   {
@@ -2850,6 +3865,11 @@
       "en": "No Stopping at Signals"
     },
     "explanation": {
+      "no": "Du skal ikke stoppe for trafikklys her.",
+      "th": "ห้ามหยุดรอสัญญาณไฟในบริเวณนี้",
+      "en": "You should not stop at traffic lights in this area."
+    },
+    "driver_action": {
       "no": "Du skal ikke stoppe for trafikklys her.",
       "th": "ห้ามหยุดรอสัญญาณไฟในบริเวณนี้",
       "en": "You should not stop at traffic lights in this area."
@@ -2867,6 +3887,11 @@
       "no": "Kjøring er forbudt i denne sonen.",
       "th": "ห้ามขับรถในเขตนี้",
       "en": "Driving is prohibited in this zone."
+    },
+    "driver_action": {
+      "no": "Kjøring er forbudt i denne sonen.",
+      "th": "ห้ามขับรถในเขตนี้",
+      "en": "Driving is prohibited in this zone."
     }
   },
   {
@@ -2878,6 +3903,11 @@
       "en": "End of Forbidden Zone"
     },
     "explanation": {
+      "no": "Den forbudte sonen er over.",
+      "th": "เขตห้ามสิ้นสุดที่นี่",
+      "en": "The forbidden zone ends here."
+    },
+    "driver_action": {
       "no": "Den forbudte sonen er over.",
       "th": "เขตห้ามสิ้นสุดที่นี่",
       "en": "The forbidden zone ends here."
@@ -2895,6 +3925,11 @@
       "no": "Du må kjøre rett frem.",
       "th": "คุณต้องขับตรงไปเท่านั้น",
       "en": "You must drive straight ahead."
+    },
+    "driver_action": {
+      "no": "Du må kjøre rett frem.",
+      "th": "คุณต้องขับตรงไปเท่านั้น",
+      "en": "You must drive straight ahead."
     }
   },
   {
@@ -2906,6 +3941,11 @@
       "en": "Mandatory Right Turn"
     },
     "explanation": {
+      "no": "Du må svinge til høyre.",
+      "th": "คุณต้องเลี้ยวขวาเท่านั้น",
+      "en": "You must turn right."
+    },
+    "driver_action": {
       "no": "Du må svinge til høyre.",
       "th": "คุณต้องเลี้ยวขวาเท่านั้น",
       "en": "You must turn right."
@@ -2923,6 +3963,11 @@
       "no": "Du må svinge til venstre.",
       "th": "คุณต้องเลี้ยวซ้ายเท่านั้น",
       "en": "You must turn left."
+    },
+    "driver_action": {
+      "no": "Du må svinge til venstre.",
+      "th": "คุณต้องเลี้ยวซ้ายเท่านั้น",
+      "en": "You must turn left."
     }
   },
   {
@@ -2934,6 +3979,11 @@
       "en": "Mandatory Straight or Right"
     },
     "explanation": {
+      "no": "Du må kjøre rett frem eller svinge til høyre.",
+      "th": "คุณต้องขับตรงหรือเลี้ยวขวาเท่านั้น",
+      "en": "You must go straight or turn right."
+    },
+    "driver_action": {
       "no": "Du må kjøre rett frem eller svinge til høyre.",
       "th": "คุณต้องขับตรงหรือเลี้ยวขวาเท่านั้น",
       "en": "You must go straight or turn right."
@@ -2951,6 +4001,11 @@
       "no": "Du må kjøre rett frem eller svinge til venstre.",
       "th": "คุณต้องขับตรงหรือเลี้ยวซ้ายเท่านั้น",
       "en": "You must go straight or turn left."
+    },
+    "driver_action": {
+      "no": "Du må kjøre rett frem eller svinge til venstre.",
+      "th": "คุณต้องขับตรงหรือเลี้ยวซ้ายเท่านั้น",
+      "en": "You must go straight or turn left."
     }
   },
   {
@@ -2962,6 +4017,11 @@
       "en": "Mandatory Right or Left"
     },
     "explanation": {
+      "no": "Du må svinge enten til høyre eller til venstre.",
+      "th": "คุณต้องเลี้ยวขวาหรือซ้าย ไม่สามารถตรงไปได้",
+      "en": "You must turn right or left, not go straight."
+    },
+    "driver_action": {
       "no": "Du må svinge enten til høyre eller til venstre.",
       "th": "คุณต้องเลี้ยวขวาหรือซ้าย ไม่สามารถตรงไปได้",
       "en": "You must turn right or left, not go straight."
@@ -2979,6 +4039,11 @@
       "no": "Du skal holde til høyre for hinderet.",
       "th": "คุณต้องขับชิดขวาของสิ่งกีดขวาง",
       "en": "You must pass to the right of the obstacle."
+    },
+    "driver_action": {
+      "no": "Du skal holde til høyre for hinderet.",
+      "th": "คุณต้องขับชิดขวาของสิ่งกีดขวาง",
+      "en": "You must pass to the right of the obstacle."
     }
   },
   {
@@ -2990,6 +4055,11 @@
       "en": "Keep Left"
     },
     "explanation": {
+      "no": "Du skal holde til venstre for hinderet.",
+      "th": "คุณต้องขับชิดซ้ายของสิ่งกีดขวาง",
+      "en": "You must pass to the left of the obstacle."
+    },
+    "driver_action": {
       "no": "Du skal holde til venstre for hinderet.",
       "th": "คุณต้องขับชิดซ้ายของสิ่งกีดขวาง",
       "en": "You must pass to the left of the obstacle."
@@ -3007,6 +4077,11 @@
       "no": "Kjør i pilens retning i rundkjøringen.",
       "th": "ขับตามทิศทางลูกศรในวงเวียน",
       "en": "Drive in the direction shown in the roundabout."
+    },
+    "driver_action": {
+      "no": "Kjør i pilens retning i rundkjøringen.",
+      "th": "ขับตามทิศทางลูกศรในวงเวียน",
+      "en": "Drive in the direction shown in the roundabout."
     }
   },
   {
@@ -3018,6 +4093,11 @@
       "en": "Mandatory Roundabout Direction"
     },
     "explanation": {
+      "no": "Kjør i pilens retning i rundkjøringen.",
+      "th": "ขับตามทิศทางลูกศรในวงเวียน",
+      "en": "Drive in the direction shown in the roundabout."
+    },
+    "driver_action": {
       "no": "Kjør i pilens retning i rundkjøringen.",
       "th": "ขับตามทิศทางลูกศรในวงเวียน",
       "en": "Drive in the direction shown in the roundabout."
@@ -3035,6 +4115,11 @@
       "no": "Syklister skal bruke sykkelfelt.",
       "th": "นักปั่นจักรยานต้องใช้ช่องจักรยานนี้",
       "en": "Cyclists must use the marked cycle lane."
+    },
+    "driver_action": {
+      "no": "Syklister skal bruke sykkelfelt.",
+      "th": "นักปั่นจักรยานต้องใช้ช่องจักรยานนี้",
+      "en": "Cyclists must use the marked cycle lane."
     }
   },
   {
@@ -3046,6 +4131,11 @@
       "en": "Snow Chains Required"
     },
     "explanation": {
+      "no": "Det er påbudt å bruke kjetting på kjøretøyet her.",
+      "th": "บังคับให้ใส่โซ่ล้อรถในบริเวณนี้",
+      "en": "Snow chains must be fitted to your vehicle here."
+    },
+    "driver_action": {
       "no": "Det er påbudt å bruke kjetting på kjøretøyet her.",
       "th": "บังคับให้ใส่โซ่ล้อรถในบริเวณนี้",
       "en": "Snow chains must be fitted to your vehicle here."
@@ -3063,6 +4153,11 @@
       "no": "Her begynner motorvegen. Egne regler gjelder.",
       "th": "ทางมอเตอร์เวย์เริ่มต้นที่นี่ มีกฎพิเศษที่ต้องปฏิบัติตาม",
       "en": "Motorway begins here. Special rules apply."
+    },
+    "driver_action": {
+      "no": "Her begynner motorvegen. Egne regler gjelder.",
+      "th": "ทางมอเตอร์เวย์เริ่มต้นที่นี่ มีกฎพิเศษที่ต้องปฏิบัติตาม",
+      "en": "Motorway begins here. Special rules apply."
     }
   },
   {
@@ -3074,6 +4169,11 @@
       "en": "End of Motorway"
     },
     "explanation": {
+      "no": "Motorvegen slutter her. Vanlige regler gjelder igjen.",
+      "th": "มอเตอร์เวย์สิ้นสุดที่นี่ กฎปกติมีผลบังคับใช้อีกครั้ง",
+      "en": "Motorway ends here. Normal traffic rules apply again."
+    },
+    "driver_action": {
       "no": "Motorvegen slutter her. Vanlige regler gjelder igjen.",
       "th": "มอเตอร์เวย์สิ้นสุดที่นี่ กฎปกติมีผลบังคับใช้อีกครั้ง",
       "en": "Motorway ends here. Normal traffic rules apply again."
@@ -3091,6 +4191,11 @@
       "no": "Her begynner motortrafikkvegen. Kun motorkjøretøy tillatt.",
       "th": "ถนนสำหรับยานยนต์เริ่มต้นที่นี่ อนุญาตเฉพาะยานยนต์เท่านั้น",
       "en": "Expressway begins. Motor vehicles only are permitted."
+    },
+    "driver_action": {
+      "no": "Her begynner motortrafikkvegen. Kun motorkjøretøy tillatt.",
+      "th": "ถนนสำหรับยานยนต์เริ่มต้นที่นี่ อนุญาตเฉพาะยานยนต์เท่านั้น",
+      "en": "Expressway begins. Motor vehicles only are permitted."
     }
   },
   {
@@ -3102,6 +4207,11 @@
       "en": "End of Expressway"
     },
     "explanation": {
+      "no": "Motortrafikkvegen slutter her.",
+      "th": "ถนนสำหรับยานยนต์สิ้นสุดที่นี่",
+      "en": "Expressway ends here."
+    },
+    "driver_action": {
       "no": "Motortrafikkvegen slutter her.",
       "th": "ถนนสำหรับยานยนต์สิ้นสุดที่นี่",
       "en": "Expressway ends here."
@@ -3119,6 +4229,11 @@
       "no": "Du kjører inn i et tettsted. Fartsgrense 50 km/t gjelder om ikke annet er skiltet.",
       "th": "คุณกำลังเข้าสู่เขตชุมชน ความเร็วสูงสุด 50 กม./ชม. หากไม่มีป้ายอื่น",
       "en": "Entering a built-up area. Speed limit is 50 km/h unless otherwise signed."
+    },
+    "driver_action": {
+      "no": "Du kjører inn i et tettsted. Fartsgrense 50 km/t gjelder om ikke annet er skiltet.",
+      "th": "คุณกำลังเข้าสู่เขตชุมชน ความเร็วสูงสุด 50 กม./ชม. หากไม่มีป้ายอื่น",
+      "en": "Entering a built-up area. Speed limit is 50 km/h unless otherwise signed."
     }
   },
   {
@@ -3130,6 +4245,11 @@
       "en": "End of Built-Up Area"
     },
     "explanation": {
+      "no": "Tettstedet er over. Ny fartsgrense gjelder.",
+      "th": "สิ้นสุดเขตชุมชน ความเร็วที่กำหนดใหม่มีผล",
+      "en": "Built-up area ends. New speed limit applies."
+    },
+    "driver_action": {
       "no": "Tettstedet er over. Ny fartsgrense gjelder.",
       "th": "สิ้นสุดเขตชุมชน ความเร็วที่กำหนดใหม่มีผล",
       "en": "Built-up area ends. New speed limit applies."
@@ -3147,6 +4267,11 @@
       "no": "Tunnel fremover. Slå på lyset.",
       "th": "อุโมงค์อยู่ข้างหน้า เปิดไฟรถ",
       "en": "Tunnel ahead. Turn on your lights."
+    },
+    "driver_action": {
+      "no": "Tunnel fremover. Slå på lyset.",
+      "th": "อุโมงค์อยู่ข้างหน้า เปิดไฟรถ",
+      "en": "Tunnel ahead. Turn on your lights."
     }
   },
   {
@@ -3158,6 +4283,11 @@
       "en": "End of Tunnel"
     },
     "explanation": {
+      "no": "Tunnelen slutter. Du kjører ut i dagslys.",
+      "th": "อุโมงค์สิ้นสุดแล้ว คุณจะออกสู่แสงธรรมชาติ",
+      "en": "Tunnel ends. You are emerging into daylight."
+    },
+    "driver_action": {
       "no": "Tunnelen slutter. Du kjører ut i dagslys.",
       "th": "อุโมงค์สิ้นสุดแล้ว คุณจะออกสู่แสงธรรมชาติ",
       "en": "Tunnel ends. You are emerging into daylight."
@@ -3175,6 +4305,11 @@
       "no": "Kun for gående. Kjøretøy er ikke tillatt.",
       "th": "สำหรับคนเดินเท้าเท่านั้น ยานพาหนะไม่ได้รับอนุญาต",
       "en": "For pedestrians only. Vehicles are not permitted."
+    },
+    "driver_action": {
+      "no": "Kun for gående. Kjøretøy er ikke tillatt.",
+      "th": "สำหรับคนเดินเท้าเท่านั้น ยานพาหนะไม่ได้รับอนุญาต",
+      "en": "For pedestrians only. Vehicles are not permitted."
     }
   },
   {
@@ -3186,6 +4321,11 @@
       "en": "Cycle Path"
     },
     "explanation": {
+      "no": "Kun for syklister. Andre kjøretøy er ikke tillatt.",
+      "th": "สำหรับนักปั่นจักรยานเท่านั้น ยานพาหนะอื่นไม่ได้รับอนุญาต",
+      "en": "For cyclists only. Other vehicles are not permitted."
+    },
+    "driver_action": {
       "no": "Kun for syklister. Andre kjøretøy er ikke tillatt.",
       "th": "สำหรับนักปั่นจักรยานเท่านั้น ยานพาหนะอื่นไม่ได้รับอนุญาต",
       "en": "For cyclists only. Other vehicles are not permitted."
@@ -3203,6 +4343,11 @@
       "no": "Sykkelvegen slutter her.",
       "th": "ทางจักรยานสิ้นสุดที่นี่",
       "en": "The cycle path ends here."
+    },
+    "driver_action": {
+      "no": "Sykkelvegen slutter her.",
+      "th": "ทางจักรยานสิ้นสุดที่นี่",
+      "en": "The cycle path ends here."
     }
   },
   {
@@ -3214,6 +4359,11 @@
       "en": "Combined Pedestrian and Cycle Path"
     },
     "explanation": {
+      "no": "Delt veg for gående og syklister. Vis hensyn.",
+      "th": "ทางร่วมสำหรับคนเดินเท้าและจักรยาน ขับด้วยความระมัดระวัง",
+      "en": "Shared path for pedestrians and cyclists. Show consideration."
+    },
+    "driver_action": {
       "no": "Delt veg for gående og syklister. Vis hensyn.",
       "th": "ทางร่วมสำหรับคนเดินเท้าและจักรยาน ขับด้วยความระมัดระวัง",
       "en": "Shared path for pedestrians and cyclists. Show consideration."
@@ -3231,6 +4381,11 @@
       "no": "Parkering er tillatt her.",
       "th": "สามารถจอดรถได้ในบริเวณนี้",
       "en": "Parking is allowed here."
+    },
+    "driver_action": {
+      "no": "Parkering er tillatt her.",
+      "th": "สามารถจอดรถได้ในบริเวณนี้",
+      "en": "Parking is allowed here."
     }
   },
   {
@@ -3242,6 +4397,11 @@
       "en": "One-Way Road"
     },
     "explanation": {
+      "no": "Vegen er envegskjørt. Kjør kun i pilens retning.",
+      "th": "ถนนทางเดียว ขับตามทิศทางลูกศรเท่านั้น",
+      "en": "One-way road. Drive in the direction of the arrow only."
+    },
+    "driver_action": {
       "no": "Vegen er envegskjørt. Kjør kun i pilens retning.",
       "th": "ถนนทางเดียว ขับตามทิศทางลูกศรเท่านั้น",
       "en": "One-way road. Drive in the direction of the arrow only."
@@ -3259,6 +4419,11 @@
       "no": "Motorvegkryss fremover. Forbered deg på avkjøring.",
       "th": "ทางแยกมอเตอร์เวย์อยู่ข้างหน้า เตรียมพร้อมสำหรับการออก",
       "en": "Motorway junction ahead. Prepare for your exit."
+    },
+    "driver_action": {
+      "no": "Motorvegkryss fremover. Forbered deg på avkjøring.",
+      "th": "ทางแยกมอเตอร์เวย์อยู่ข้างหน้า เตรียมพร้อมสำหรับการออก",
+      "en": "Motorway junction ahead. Prepare for your exit."
     }
   },
   {
@@ -3270,6 +4435,11 @@
       "en": "Exit Right"
     },
     "explanation": {
+      "no": "Avkjøring til høyre fremover.",
+      "th": "ทางออกอยู่ด้านขวา",
+      "en": "Exit to the right ahead."
+    },
+    "driver_action": {
       "no": "Avkjøring til høyre fremover.",
       "th": "ทางออกอยู่ด้านขวา",
       "en": "Exit to the right ahead."
@@ -3287,6 +4457,11 @@
       "no": "Avkjøring til venstre fremover.",
       "th": "ทางออกอยู่ด้านซ้าย",
       "en": "Exit to the left ahead."
+    },
+    "driver_action": {
+      "no": "Avkjøring til venstre fremover.",
+      "th": "ทางออกอยู่ด้านซ้าย",
+      "en": "Exit to the left ahead."
     }
   },
   {
@@ -3298,6 +4473,11 @@
       "en": "Rest Area"
     },
     "explanation": {
+      "no": "Rasteplass tilgjengelig. Du kan stoppe og hvile her.",
+      "th": "มีที่พักริมทาง คุณสามารถหยุดพักได้ที่นี่",
+      "en": "Rest area available. You may stop and rest here."
+    },
+    "driver_action": {
       "no": "Rasteplass tilgjengelig. Du kan stoppe og hvile her.",
       "th": "มีที่พักริมทาง คุณสามารถหยุดพักได้ที่นี่",
       "en": "Rest area available. You may stop and rest here."
@@ -3315,6 +4495,11 @@
       "no": "Bensinstasjon tilgjengelig.",
       "th": "มีปั๊มน้ำมันอยู่ใกล้ๆ",
       "en": "Fuel station available nearby."
+    },
+    "driver_action": {
+      "no": "Bensinstasjon tilgjengelig.",
+      "th": "มีปั๊มน้ำมันอยู่ใกล้ๆ",
+      "en": "Fuel station available nearby."
     }
   },
   {
@@ -3326,6 +4511,11 @@
       "en": "First Aid"
     },
     "explanation": {
+      "no": "Førstehjelp er tilgjengelig her.",
+      "th": "มีบริการปฐมพยาบาลที่นี่",
+      "en": "First aid is available here."
+    },
+    "driver_action": {
       "no": "Førstehjelp er tilgjengelig her.",
       "th": "มีบริการปฐมพยาบาลที่นี่",
       "en": "First aid is available here."
@@ -3343,6 +4533,11 @@
       "no": "Sykehus i nærheten.",
       "th": "มีโรงพยาบาลอยู่ใกล้ๆ",
       "en": "Hospital nearby."
+    },
+    "driver_action": {
+      "no": "Sykehus i nærheten.",
+      "th": "มีโรงพยาบาลอยู่ใกล้ๆ",
+      "en": "Hospital nearby."
     }
   },
   {
@@ -3354,6 +4549,11 @@
       "en": "Ferry"
     },
     "explanation": {
+      "no": "Fergekai i nærheten.",
+      "th": "มีท่าเรือข้ามฟากอยู่ใกล้ๆ",
+      "en": "Ferry terminal nearby."
+    },
+    "driver_action": {
       "no": "Fergekai i nærheten.",
       "th": "มีท่าเรือข้ามฟากอยู่ใกล้ๆ",
       "en": "Ferry terminal nearby."
@@ -3371,6 +4571,11 @@
       "no": "Flyplass i nærheten.",
       "th": "มีสนามบินอยู่ใกล้ๆ",
       "en": "Airport nearby."
+    },
+    "driver_action": {
+      "no": "Flyplass i nærheten.",
+      "th": "มีสนามบินอยู่ใกล้ๆ",
+      "en": "Airport nearby."
     }
   },
   {
@@ -3382,6 +4587,11 @@
       "en": "Lane Indicator"
     },
     "explanation": {
+      "no": "Angir kjørefelt og kjøreretning.",
+      "th": "แสดงช่องทางและทิศทางการขับขี่",
+      "en": "Indicates lane and driving direction."
+    },
+    "driver_action": {
       "no": "Angir kjørefelt og kjøreretning.",
       "th": "แสดงช่องทางและทิศทางการขับขี่",
       "en": "Indicates lane and driving direction."
@@ -3399,6 +4609,11 @@
       "no": "Angir kjørefelt og kjøreretning.",
       "th": "แสดงช่องทางและทิศทางการขับขี่",
       "en": "Indicates lane and driving direction."
+    },
+    "driver_action": {
+      "no": "Angir kjørefelt og kjøreretning.",
+      "th": "แสดงช่องทางและทิศทางการขับขี่",
+      "en": "Indicates lane and driving direction."
     }
   },
   {
@@ -3410,6 +4625,11 @@
       "en": "Lane Arrow"
     },
     "explanation": {
+      "no": "Pilen viser tillatt kjøreretning i dette feltet.",
+      "th": "ลูกศรแสดงทิศทางที่อนุญาตในช่องทางนี้",
+      "en": "Arrow shows the permitted direction for this lane."
+    },
+    "driver_action": {
       "no": "Pilen viser tillatt kjøreretning i dette feltet.",
       "th": "ลูกศรแสดงทิศทางที่อนุญาตในช่องทางนี้",
       "en": "Arrow shows the permitted direction for this lane."
@@ -3427,6 +4647,11 @@
       "no": "Pilen viser tillatt kjøreretning i dette feltet.",
       "th": "ลูกศรแสดงทิศทางที่อนุญาตในช่องทางนี้",
       "en": "Arrow shows the permitted direction for this lane."
+    },
+    "driver_action": {
+      "no": "Pilen viser tillatt kjøreretning i dette feltet.",
+      "th": "ลูกศรแสดงทิศทางที่อนุญาตในช่องทางนี้",
+      "en": "Arrow shows the permitted direction for this lane."
     }
   },
   {
@@ -3438,6 +4663,11 @@
       "en": "Lane Arrow"
     },
     "explanation": {
+      "no": "Pilen viser tillatt kjøreretning i dette feltet.",
+      "th": "ลูกศรแสดงทิศทางที่อนุญาตในช่องทางนี้",
+      "en": "Arrow shows the permitted direction for this lane."
+    },
+    "driver_action": {
       "no": "Pilen viser tillatt kjøreretning i dette feltet.",
       "th": "ลูกศรแสดงทิศทางที่อนุญาตในช่องทางนี้",
       "en": "Arrow shows the permitted direction for this lane."
@@ -3455,6 +4685,11 @@
       "no": "Pilen viser tillatt kjøreretning i dette feltet.",
       "th": "ลูกศรแสดงทิศทางที่อนุญาตในช่องทางนี้",
       "en": "Arrow shows the permitted direction for this lane."
+    },
+    "driver_action": {
+      "no": "Pilen viser tillatt kjøreretning i dette feltet.",
+      "th": "ลูกศรแสดงทิศทางที่อนุญาตในช่องทางนี้",
+      "en": "Arrow shows the permitted direction for this lane."
     }
   },
   {
@@ -3466,6 +4701,11 @@
       "en": "Lane Ends"
     },
     "explanation": {
+      "no": "Kjørefeltet slutter. Flett deg inn i neste felt.",
+      "th": "ช่องทางสิ้นสุด รวมเข้าช่องทางถัดไปอย่างนุ่มนวล",
+      "en": "This lane ends. Merge smoothly into the next lane."
+    },
+    "driver_action": {
       "no": "Kjørefeltet slutter. Flett deg inn i neste felt.",
       "th": "ช่องทางสิ้นสุด รวมเข้าช่องทางถัดไปอย่างนุ่มนวล",
       "en": "This lane ends. Merge smoothly into the next lane."
@@ -3483,6 +4723,11 @@
       "no": "Viser avstand til destinasjon.",
       "th": "แสดงระยะทางไปยังจุดหมาย",
       "en": "Shows distance to destination."
+    },
+    "driver_action": {
+      "no": "Viser avstand til destinasjon.",
+      "th": "แสดงระยะทางไปยังจุดหมาย",
+      "en": "Shows distance to destination."
     }
   },
   {
@@ -3494,6 +4739,11 @@
       "en": "Distance Sign"
     },
     "explanation": {
+      "no": "Viser avstand til destinasjon.",
+      "th": "แสดงระยะทางไปยังจุดหมาย",
+      "en": "Shows distance to destination."
+    },
+    "driver_action": {
       "no": "Viser avstand til destinasjon.",
       "th": "แสดงระยะทางไปยังจุดหมาย",
       "en": "Shows distance to destination."
@@ -3511,6 +4761,11 @@
       "no": "Viser vei til angitt destinasjon.",
       "th": "บอกทิศทางไปยังจุดหมายที่ระบุ",
       "en": "Shows the way to the indicated destination."
+    },
+    "driver_action": {
+      "no": "Viser vei til angitt destinasjon.",
+      "th": "บอกทิศทางไปยังจุดหมายที่ระบุ",
+      "en": "Shows the way to the indicated destination."
     }
   },
   {
@@ -3522,6 +4777,11 @@
       "en": "Directional Sign"
     },
     "explanation": {
+      "no": "Viser vei til angitt destinasjon.",
+      "th": "บอกทิศทางไปยังจุดหมายที่ระบุ",
+      "en": "Shows the way to the indicated destination."
+    },
+    "driver_action": {
       "no": "Viser vei til angitt destinasjon.",
       "th": "บอกทิศทางไปยังจุดหมายที่ระบุ",
       "en": "Shows the way to the indicated destination."
@@ -3539,6 +4799,11 @@
       "no": "Angir avkjøring til høyre.",
       "th": "ระบุทางออกทางขวา",
       "en": "Indicates exit to the right."
+    },
+    "driver_action": {
+      "no": "Angir avkjøring til høyre.",
+      "th": "ระบุทางออกทางขวา",
+      "en": "Indicates exit to the right."
     }
   },
   {
@@ -3550,6 +4815,11 @@
       "en": "Exit Sign"
     },
     "explanation": {
+      "no": "Angir avkjøring fra motorvegen.",
+      "th": "ระบุทางออกจากมอเตอร์เวย์",
+      "en": "Indicates motorway exit."
+    },
+    "driver_action": {
       "no": "Angir avkjøring fra motorvegen.",
       "th": "ระบุทางออกจากมอเตอร์เวย์",
       "en": "Indicates motorway exit."
@@ -3567,6 +4837,11 @@
       "no": "Forhåndsvarsler om kryss eller avkjøring.",
       "th": "แจ้งล่วงหน้าเกี่ยวกับทางแยกหรือทางออก",
       "en": "Advance notice of junction or exit ahead."
+    },
+    "driver_action": {
+      "no": "Forhåndsvarsler om kryss eller avkjøring.",
+      "th": "แจ้งล่วงหน้าเกี่ยวกับทางแยกหรือทางออก",
+      "en": "Advance notice of junction or exit ahead."
     }
   },
   {
@@ -3578,6 +4853,11 @@
       "en": "Advance Sign"
     },
     "explanation": {
+      "no": "Forhåndsvarsler om kryss eller avkjøring.",
+      "th": "แจ้งล่วงหน้าเกี่ยวกับทางแยกหรือทางออก",
+      "en": "Advance notice of junction or exit ahead."
+    },
+    "driver_action": {
       "no": "Forhåndsvarsler om kryss eller avkjøring.",
       "th": "แจ้งล่วงหน้าเกี่ยวกับทางแยกหรือทางออก",
       "en": "Advance notice of junction or exit ahead."
@@ -3595,6 +4875,11 @@
       "no": "Viser destinasjoner og avstander.",
       "th": "แสดงจุดหมายปลายทางและระยะทาง",
       "en": "Shows destinations and distances."
+    },
+    "driver_action": {
+      "no": "Viser destinasjoner og avstander.",
+      "th": "แสดงจุดหมายปลายทางและระยะทาง",
+      "en": "Shows destinations and distances."
     }
   },
   {
@@ -3606,6 +4891,11 @@
       "en": "Route Sign"
     },
     "explanation": {
+      "no": "Viser vei til angitt sted.",
+      "th": "บอกทิศทางไปยังสถานที่ที่ระบุ",
+      "en": "Shows the way to the indicated place."
+    },
+    "driver_action": {
       "no": "Viser vei til angitt sted.",
       "th": "บอกทิศทางไปยังสถานที่ที่ระบุ",
       "en": "Shows the way to the indicated place."
@@ -3623,6 +4913,11 @@
       "no": "Følg omvei på grunn av stengt veg.",
       "th": "ใช้เส้นทางอ้อมเนื่องจากถนนปิด",
       "en": "Follow the detour route due to road closure."
+    },
+    "driver_action": {
+      "no": "Følg omvei på grunn av stengt veg.",
+      "th": "ใช้เส้นทางอ้อมเนื่องจากถนนปิด",
+      "en": "Follow the detour route due to road closure."
     }
   },
   {
@@ -3634,6 +4929,11 @@
       "en": "End of Detour"
     },
     "explanation": {
+      "no": "Omveien er ferdig. Du er tilbake på normal veg.",
+      "th": "ทางอ้อมสิ้นสุดแล้ว คุณกลับสู่ถนนปกติ",
+      "en": "Detour ends. You are back on the normal route."
+    },
+    "driver_action": {
       "no": "Omveien er ferdig. Du er tilbake på normal veg.",
       "th": "ทางอ้อมสิ้นสุดแล้ว คุณกลับสู่ถนนปกติ",
       "en": "Detour ends. You are back on the normal route."
@@ -3651,6 +4951,11 @@
       "no": "Du er på en samleveg som leder til motorveg.",
       "th": "คุณอยู่บนถนนรวมที่นำไปสู่มอเตอร์เวย์",
       "en": "You are on a collector road leading to the motorway."
+    },
+    "driver_action": {
+      "no": "Du er på en samleveg som leder til motorveg.",
+      "th": "คุณอยู่บนถนนรวมที่นำไปสู่มอเตอร์เวย์",
+      "en": "You are on a collector road leading to the motorway."
     }
   },
   {
@@ -3662,6 +4967,11 @@
       "en": "Emergency Bay"
     },
     "explanation": {
+      "no": "Nødstopplass for kjøretøy med problemer.",
+      "th": "ช่องจอดสำหรับยานพาหนะที่เกิดปัญหา",
+      "en": "Emergency stopping place for vehicles with problems."
+    },
+    "driver_action": {
       "no": "Nødstopplass for kjøretøy med problemer.",
       "th": "ช่องจอดสำหรับยานพาหนะที่เกิดปัญหา",
       "en": "Emergency stopping place for vehicles with problems."
@@ -3679,6 +4989,11 @@
       "no": "Angir navnet på tunnelen.",
       "th": "แสดงชื่ออุโมงค์",
       "en": "Indicates the name of the tunnel."
+    },
+    "driver_action": {
+      "no": "Angir navnet på tunnelen.",
+      "th": "แสดงชื่ออุโมงค์",
+      "en": "Indicates the name of the tunnel."
     }
   },
   {
@@ -3690,6 +5005,11 @@
       "en": "Road Barrier"
     },
     "explanation": {
+      "no": "Vegen er sperret. Kjør ikke videre.",
+      "th": "ถนนถูกปิดกั้น ไม่สามารถขับต่อไปได้",
+      "en": "Road is blocked. Do not proceed."
+    },
+    "driver_action": {
       "no": "Vegen er sperret. Kjør ikke videre.",
       "th": "ถนนถูกปิดกั้น ไม่สามารถขับต่อไปได้",
       "en": "Road is blocked. Do not proceed."
@@ -3707,6 +5027,11 @@
       "no": "Gir vegfarende nyttig informasjon.",
       "th": "ให้ข้อมูลที่เป็นประโยชน์แก่ผู้ขับขี่",
       "en": "Provides useful information to road users."
+    },
+    "driver_action": {
+      "no": "Gir vegfarende nyttig informasjon.",
+      "th": "ให้ข้อมูลที่เป็นประโยชน์แก่ผู้ขับขี่",
+      "en": "Provides useful information to road users."
     }
   },
   {
@@ -3718,6 +5043,11 @@
       "en": "Tourist Route"
     },
     "explanation": {
+      "no": "Nasjonal turistveg med naturopplevelser.",
+      "th": "เส้นทางท่องเที่ยวแห่งชาติที่มีทัศนียภาพสวยงาม",
+      "en": "National scenic tourist route."
+    },
+    "driver_action": {
       "no": "Nasjonal turistveg med naturopplevelser.",
       "th": "เส้นทางท่องเที่ยวแห่งชาติที่มีทัศนียภาพสวยงาม",
       "en": "National scenic tourist route."
@@ -3735,6 +5065,11 @@
       "no": "Miljøgate med lavere fart og hensyn til myke trafikanter.",
       "th": "ถนนสิ่งแวดล้อมที่ต้องลดความเร็วและระมัดระวังผู้ใช้ถนนที่อ่อนแอ",
       "en": "Environmental street with reduced speed and priority for vulnerable road users."
+    },
+    "driver_action": {
+      "no": "Miljøgate med lavere fart og hensyn til myke trafikanter.",
+      "th": "ถนนสิ่งแวดล้อมที่ต้องลดความเร็วและระมัดระวังผู้ใช้ถนนที่อ่อนแอ",
+      "en": "Environmental street with reduced speed and priority for vulnerable road users."
     }
   },
   {
@@ -3746,6 +5081,11 @@
       "en": "Level Crossing"
     },
     "explanation": {
+      "no": "Planovergang for jernbane fremover.",
+      "th": "ทางรถไฟตัดถนนอยู่ข้างหน้า",
+      "en": "Railway level crossing ahead."
+    },
+    "driver_action": {
       "no": "Planovergang for jernbane fremover.",
       "th": "ทางรถไฟตัดถนนอยู่ข้างหน้า",
       "en": "Railway level crossing ahead."
@@ -3763,6 +5103,11 @@
       "no": "Kjørefeltet flyttes mot høyre fremover.",
       "th": "ช่องทางจะย้ายไปทางขวาข้างหน้า",
       "en": "The lane shifts to the right ahead."
+    },
+    "driver_action": {
+      "no": "Kjørefeltet flyttes mot høyre fremover.",
+      "th": "ช่องทางจะย้ายไปทางขวาข้างหน้า",
+      "en": "The lane shifts to the right ahead."
     }
   },
   {
@@ -3774,6 +5119,11 @@
       "en": "Lane Change Left"
     },
     "explanation": {
+      "no": "Kjørefeltet flyttes mot venstre fremover.",
+      "th": "ช่องทางจะย้ายไปทางซ้ายข้างหน้า",
+      "en": "The lane shifts to the left ahead."
+    },
+    "driver_action": {
       "no": "Kjørefeltet flyttes mot venstre fremover.",
       "th": "ช่องทางจะย้ายไปทางซ้ายข้างหน้า",
       "en": "The lane shifts to the left ahead."
@@ -3791,6 +5141,11 @@
       "no": "Kjørefeltet flyttes mot høyre.",
       "th": "ช่องทางจะย้ายไปทางขวา",
       "en": "The lane shifts to the right."
+    },
+    "driver_action": {
+      "no": "Kjørefeltet flyttes mot høyre.",
+      "th": "ช่องทางจะย้ายไปทางขวา",
+      "en": "The lane shifts to the right."
     }
   },
   {
@@ -3802,6 +5157,11 @@
       "en": "Lane Change Left"
     },
     "explanation": {
+      "no": "Kjørefeltet flyttes mot venstre.",
+      "th": "ช่องทางจะย้ายไปทางซ้าย",
+      "en": "The lane shifts to the left."
+    },
+    "driver_action": {
       "no": "Kjørefeltet flyttes mot venstre.",
       "th": "ช่องทางจะย้ายไปทางซ้าย",
       "en": "The lane shifts to the left."
@@ -3819,6 +5179,11 @@
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
     }
   },
   {
@@ -3830,6 +5195,11 @@
       "en": "Direction sign 703"
     },
     "explanation": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
@@ -3847,6 +5217,11 @@
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
     }
   },
   {
@@ -3858,6 +5233,11 @@
       "en": "Direction sign 707"
     },
     "explanation": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
@@ -3875,6 +5255,11 @@
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
     }
   },
   {
@@ -3886,6 +5271,11 @@
       "en": "Direction sign 711"
     },
     "explanation": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
@@ -3903,6 +5293,11 @@
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
     }
   },
   {
@@ -3914,6 +5309,11 @@
       "en": "Direction sign 717"
     },
     "explanation": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
@@ -3931,6 +5331,11 @@
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
     }
   },
   {
@@ -3942,6 +5347,11 @@
       "en": "Direction sign 727"
     },
     "explanation": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
@@ -3959,6 +5369,11 @@
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
     }
   },
   {
@@ -3970,6 +5385,11 @@
       "en": "Direction sign 741"
     },
     "explanation": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
@@ -3987,6 +5407,11 @@
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
     }
   },
   {
@@ -3998,6 +5423,11 @@
       "en": "Direction sign 749"
     },
     "explanation": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
@@ -4015,6 +5445,11 @@
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
     }
   },
   {
@@ -4026,6 +5461,11 @@
       "en": "Direction sign 753"
     },
     "explanation": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
@@ -4043,6 +5483,11 @@
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
     }
   },
   {
@@ -4054,6 +5499,11 @@
       "en": "Direction sign 757"
     },
     "explanation": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
@@ -4071,6 +5521,11 @@
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
     }
   },
   {
@@ -4082,6 +5537,11 @@
       "en": "Direction sign 780"
     },
     "explanation": {
+      "no": "Viser vei til destinasjon eller interessepunkt.",
+      "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
+      "en": "Shows the way to a destination or point of interest."
+    },
+    "driver_action": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
       "th": "บอกทิศทางไปยังจุดหมายหรือสถานที่สำคัญ",
       "en": "Shows the way to a destination or point of interest."
@@ -4099,6 +5559,11 @@
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
       "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
       "en": "Provides additional information for the sign above."
+    },
+    "driver_action": {
+      "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
+      "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
+      "en": "Provides additional information for the sign above."
     }
   },
   {
@@ -4110,6 +5575,11 @@
       "en": "Supplementary sign 808_42b"
     },
     "explanation": {
+      "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
+      "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
+      "en": "Provides additional information for the sign above."
+    },
+    "driver_action": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
       "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
       "en": "Provides additional information for the sign above."
@@ -4127,6 +5597,11 @@
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
       "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
       "en": "Provides additional information for the sign above."
+    },
+    "driver_action": {
+      "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
+      "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
+      "en": "Provides additional information for the sign above."
     }
   },
   {
@@ -4138,6 +5613,11 @@
       "en": "Supplementary sign 810_H45"
     },
     "explanation": {
+      "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
+      "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
+      "en": "Provides additional information for the sign above."
+    },
+    "driver_action": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
       "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
       "en": "Provides additional information for the sign above."
@@ -4155,6 +5635,11 @@
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
       "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
       "en": "Provides additional information for the sign above."
+    },
+    "driver_action": {
+      "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
+      "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
+      "en": "Provides additional information for the sign above."
     }
   },
   {
@@ -4166,6 +5651,11 @@
       "en": "Supplementary sign 810_R"
     },
     "explanation": {
+      "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
+      "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
+      "en": "Provides additional information for the sign above."
+    },
+    "driver_action": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
       "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
       "en": "Provides additional information for the sign above."
@@ -4183,6 +5673,11 @@
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
       "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
       "en": "Provides additional information for the sign above."
+    },
+    "driver_action": {
+      "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
+      "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
+      "en": "Provides additional information for the sign above."
     }
   },
   {
@@ -4194,6 +5689,11 @@
       "en": "Supplementary sign 810_V45"
     },
     "explanation": {
+      "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
+      "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
+      "en": "Provides additional information for the sign above."
+    },
+    "driver_action": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
       "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
       "en": "Provides additional information for the sign above."
@@ -4211,6 +5711,11 @@
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
       "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
       "en": "Provides additional information for the sign above."
+    },
+    "driver_action": {
+      "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
+      "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
+      "en": "Provides additional information for the sign above."
     }
   },
   {
@@ -4222,6 +5727,11 @@
       "en": "Right edge marker"
     },
     "explanation": {
+      "no": "Markerer vegkanten på høyre side.",
+      "th": "ทำเครื่องหมายขอบถนนด้านขวา",
+      "en": "Marks the right side road edge."
+    },
+    "driver_action": {
       "no": "Markerer vegkanten på høyre side.",
       "th": "ทำเครื่องหมายขอบถนนด้านขวา",
       "en": "Marks the right side road edge."
@@ -4239,6 +5749,11 @@
       "no": "Markerer vegkanten på venstre side.",
       "th": "ทำเครื่องหมายขอบถนนด้านซ้าย",
       "en": "Marks the left side road edge."
+    },
+    "driver_action": {
+      "no": "Markerer vegkanten på venstre side.",
+      "th": "ทำเครื่องหมายขอบถนนด้านซ้าย",
+      "en": "Marks the left side road edge."
     }
   },
   {
@@ -4250,6 +5765,11 @@
       "en": "Right edge marker"
     },
     "explanation": {
+      "no": "Reflekterende markering på høyre side.",
+      "th": "เครื่องหมายสะท้อนแสงด้านขวา",
+      "en": "Reflective marker on the right side."
+    },
+    "driver_action": {
       "no": "Reflekterende markering på høyre side.",
       "th": "เครื่องหมายสะท้อนแสงด้านขวา",
       "en": "Reflective marker on the right side."
@@ -4267,6 +5787,11 @@
       "no": "Reflekterende markering på venstre side.",
       "th": "เครื่องหมายสะท้อนแสงด้านซ้าย",
       "en": "Reflective marker on the left side."
+    },
+    "driver_action": {
+      "no": "Reflekterende markering på venstre side.",
+      "th": "เครื่องหมายสะท้อนแสงด้านซ้าย",
+      "en": "Reflective marker on the left side."
     }
   },
   {
@@ -4278,6 +5803,11 @@
       "en": "Visibility enhancer right"
     },
     "explanation": {
+      "no": "Siktforsterker på høyre side.",
+      "th": "ป้ายเพิ่มทัศนวิสัยด้านขวา",
+      "en": "Visibility enhancer on the right."
+    },
+    "driver_action": {
       "no": "Siktforsterker på høyre side.",
       "th": "ป้ายเพิ่มทัศนวิสัยด้านขวา",
       "en": "Visibility enhancer on the right."
@@ -4295,6 +5825,11 @@
       "no": "Siktforsterker på venstre side.",
       "th": "ป้ายเพิ่มทัศนวิสัยด้านซ้าย",
       "en": "Visibility enhancer on the left."
+    },
+    "driver_action": {
+      "no": "Siktforsterker på venstre side.",
+      "th": "ป้ายเพิ่มทัศนวิสัยด้านซ้าย",
+      "en": "Visibility enhancer on the left."
     }
   },
   {
@@ -4306,6 +5841,11 @@
       "en": "Visibility enhancer both sides"
     },
     "explanation": {
+      "no": "Siktforsterker på begge sider.",
+      "th": "ป้ายเพิ่มทัศนวิสัยทั้งสองด้าน",
+      "en": "Visibility enhancer on both sides."
+    },
+    "driver_action": {
       "no": "Siktforsterker på begge sider.",
       "th": "ป้ายเพิ่มทัศนวิสัยทั้งสองด้าน",
       "en": "Visibility enhancer on both sides."
@@ -4323,6 +5863,11 @@
       "no": "Sperring til høyre.",
       "th": "เครื่องหมายกั้นด้านขวา",
       "en": "Barrier or obstacle to the right."
+    },
+    "driver_action": {
+      "no": "Sperring til høyre.",
+      "th": "เครื่องหมายกั้นด้านขวา",
+      "en": "Barrier or obstacle to the right."
     }
   },
   {
@@ -4334,6 +5879,11 @@
       "en": "Barrier marker left"
     },
     "explanation": {
+      "no": "Sperring til venstre.",
+      "th": "เครื่องหมายกั้นด้านซ้าย",
+      "en": "Barrier or obstacle to the left."
+    },
+    "driver_action": {
       "no": "Sperring til venstre.",
       "th": "เครื่องหมายกั้นด้านซ้าย",
       "en": "Barrier or obstacle to the left."
@@ -4351,6 +5901,11 @@
       "no": "Piler leder trafikk mot høyre.",
       "th": "ลูกศรนำทางการจราจรไปทางขวา",
       "en": "Arrows guide traffic to the right."
+    },
+    "driver_action": {
+      "no": "Piler leder trafikk mot høyre.",
+      "th": "ลูกศรนำทางการจราจรไปทางขวา",
+      "en": "Arrows guide traffic to the right."
     }
   },
   {
@@ -4362,6 +5917,11 @@
       "en": "Left arrow marker"
     },
     "explanation": {
+      "no": "Piler leder trafikk mot venstre.",
+      "th": "ลูกศรนำทางการจราจรไปทางซ้าย",
+      "en": "Arrows guide traffic to the left."
+    },
+    "driver_action": {
       "no": "Piler leder trafikk mot venstre.",
       "th": "ลูกศรนำทางการจราจรไปทางซ้าย",
       "en": "Arrows guide traffic to the left."
@@ -4379,6 +5939,11 @@
       "no": "Piler leder trafikk rett frem.",
       "th": "ลูกศรนำทางการจราจรตรงไป",
       "en": "Arrows guide traffic straight ahead."
+    },
+    "driver_action": {
+      "no": "Piler leder trafikk rett frem.",
+      "th": "ลูกศรนำทางการจราจรตรงไป",
+      "en": "Arrows guide traffic straight ahead."
     }
   },
   {
@@ -4390,6 +5955,11 @@
       "en": "Kilometre marker"
     },
     "explanation": {
+      "no": "Viser kilometerpunkt langs vegen.",
+      "th": "แสดงจุดกิโลเมตรตามแนวถนน",
+      "en": "Shows the kilometre point along the road."
+    },
+    "driver_action": {
       "no": "Viser kilometerpunkt langs vegen.",
       "th": "แสดงจุดกิโลเมตรตามแนวถนน",
       "en": "Shows the kilometre point along the road."
@@ -4407,6 +5977,11 @@
       "no": "Merking av vegbanen.",
       "th": "เครื่องหมายบนพื้นผิวถนน",
       "en": "Marking on the road surface."
+    },
+    "driver_action": {
+      "no": "Merking av vegbanen.",
+      "th": "เครื่องหมายบนพื้นผิวถนน",
+      "en": "Marking on the road surface."
     }
   },
   {
@@ -4418,6 +5993,11 @@
       "en": "Centre line marker"
     },
     "explanation": {
+      "no": "Markerer midtlinjen på vegen.",
+      "th": "ทำเครื่องหมายเส้นกลางถนน",
+      "en": "Marks the centre line of the road."
+    },
+    "driver_action": {
       "no": "Markerer midtlinjen på vegen.",
       "th": "ทำเครื่องหมายเส้นกลางถนน",
       "en": "Marks the centre line of the road."
