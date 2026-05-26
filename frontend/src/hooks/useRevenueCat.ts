@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { Platform } from 'react-native';
 import { IS_PREVIEW_BUILD } from '../buildFlags';
+import { useAppStore } from '../store/appStore';
 
 // RevenueCat product identifiers — must match RevenueCat dashboard
 export const PRODUCT_IDS = {
@@ -35,6 +36,38 @@ interface UseRevenueCatReturn {
 
 let Purchases: any = null;
 let rcInitialized = false;
+
+type Lang = 'no' | 'th' | 'en';
+
+const PAY_TEXT: Record<Lang, Record<string, string>> = {
+  no: {
+    mobileOnly: 'Betaling krever mobilappen. Ikke tilgjengelig i nettleseren.',
+    productMissing: 'Produktet ble ikke funnet. Sjekk RevenueCat-oppsettet.',
+    notActivated: 'Kjøpet fullførte, men tilgang ble ikke aktivert. Prøv "Gjenopprett kjøp".',
+    paymentError: 'Betalingsfeil',
+    restoreMobileOnly: 'Gjenoppretting krever mobilappen.',
+    noPurchase: 'Ingen tidligere kjøp funnet.',
+    restoreFailed: 'Gjenoppretting feilet',
+  },
+  th: {
+    mobileOnly: 'การชำระเงินต้องใช้แอปมือถือ ไม่สามารถใช้ในเบราว์เซอร์ได้',
+    productMissing: 'ไม่พบสินค้า โปรดตรวจสอบการตั้งค่า RevenueCat',
+    notActivated: 'ชำระเงินแล้ว แต่ยังไม่เปิดสิทธิ์ Premium ลองกู้คืนการซื้อ',
+    paymentError: 'เกิดข้อผิดพลาดในการชำระเงิน',
+    restoreMobileOnly: 'การกู้คืนการซื้อต้องใช้แอปมือถือ',
+    noPurchase: 'ไม่พบการซื้อก่อนหน้านี้',
+    restoreFailed: 'กู้คืนการซื้อไม่สำเร็จ',
+  },
+  en: {
+    mobileOnly: 'Payment requires the mobile app. It is not available in the browser.',
+    productMissing: 'Product was not found. Check the RevenueCat setup.',
+    notActivated: 'The purchase completed, but Premium was not activated. Try "Restore purchase".',
+    paymentError: 'Payment error',
+    restoreMobileOnly: 'Restoring purchases requires the mobile app.',
+    noPurchase: 'No previous purchase found.',
+    restoreFailed: 'Restore failed',
+  },
+};
 
 // A REAL RevenueCat public key starts with one of these prefixes.
 // Anything else (empty, "test_...", etc.) is invalid and we skip init
@@ -103,6 +136,8 @@ export function useRevenueCat(): UseRevenueCatReturn {
   const [isPremium, setIsPremium] = useState(false);
   const [purchasing, setPurchasing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const language = useAppStore((s) => s.language) as Lang;
+  const msg = PAY_TEXT[language] || PAY_TEXT.en;
 
   useEffect(() => {
     let alive = true;
@@ -154,7 +189,7 @@ export function useRevenueCat(): UseRevenueCatReturn {
   // Purchase a package by product ID (e.g. "weekly_99")
   const purchase = useCallback(async (productId: string): Promise<boolean> => {
     if (!Purchases || !rcInitialized) {
-      setError('Betaling krever mobilappen. Ikke tilgjengelig i nettleseren.');
+      setError(msg.mobileOnly);
       return false;
     }
 
@@ -171,7 +206,7 @@ export function useRevenueCat(): UseRevenueCatReturn {
       );
 
       if (!pkg) {
-        setError('Produktet ble ikke funnet. Sjekk RevenueCat-oppsettet.');
+        setError(msg.productMissing);
         setPurchasing(false);
         return false;
       }
@@ -185,20 +220,20 @@ export function useRevenueCat(): UseRevenueCatReturn {
         return true;
       }
 
-      setError('Kjøpet fullførte, men tilgang ble ikke aktivert. Prøv "Gjenopprett kjøp".');
+      setError(msg.notActivated);
       setPurchasing(false);
       return false;
     } catch (e: any) {
       setPurchasing(false);
       if (e.userCancelled) return false;
-      setError(e.message || 'Betalingsfeil');
+      setError(e.message || msg.paymentError);
       return false;
     }
-  }, []);
+  }, [msg]);
 
   const restore = useCallback(async (): Promise<boolean> => {
     if (!Purchases || !rcInitialized) {
-      setError('Gjenoppretting krever mobilappen.');
+      setError(msg.restoreMobileOnly);
       return false;
     }
 
@@ -211,14 +246,14 @@ export function useRevenueCat(): UseRevenueCatReturn {
       setIsPremium(active);
       setPurchasing(false);
 
-      if (!active) setError('Ingen tidligere kjøp funnet.');
+      if (!active) setError(msg.noPurchase);
       return active;
     } catch (e: any) {
-      setError(e.message || 'Gjenoppretting feilet');
+      setError(e.message || msg.restoreFailed);
       setPurchasing(false);
       return false;
     }
-  }, []);
+  }, [msg]);
 
   const checkEntitlement = useCallback(async (): Promise<boolean> => {
     if (!Purchases || !rcInitialized) return false;
