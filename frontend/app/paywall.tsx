@@ -5,6 +5,7 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAppStore } from '../src/store/appStore';
 import { useRevenueCat, PRODUCT_IDS } from '../src/hooks/useRevenueCat';
+import { api, PremiumPricingPlan } from '../src/services/api';
 import { IS_PREVIEW_BUILD } from '../src/buildFlags';
 import { LanguageSwitcher } from '../src/components/LanguageSwitcher';
 import { AppBrand } from '../src/components/AppBrand';
@@ -17,8 +18,8 @@ const TR: Record<string, Record<string, string>> = {
   no: {
     title: 'Lås opp full tilgang',
     subtitle: 'Øv ubegrenset og bestå teoriprøven raskere',
-    monthly: 'Månedlig', monthlyPrice: '199 kr', monthlyPer: '/ mnd',
-    threemonth: '3 måneder', threemonthPrice: '399 kr', threemonthPer: '/ 3 mnd', threemonthSub: 'Best verdi – spar 34%',
+    monthly: 'Månedlig', monthlyPrice: '99 kr', monthlyPer: '/ mnd',
+    threemonth: '3 måneder', threemonthPrice: '299 kr', threemonthPer: '/ 3 mnd', threemonthSub: 'Best verdi',
     lifetime: 'Livstid', lifetimePrice: '699 kr', lifetimePer: 'engangsbetaling', lifetimeSub: 'Betal én gang – bruk for alltid',
     popular: 'Populær',
     bestValue: 'Beste verdi',
@@ -41,8 +42,8 @@ const TR: Record<string, Record<string, string>> = {
   th: {
     title: 'ปลดล็อคการเข้าถึงทั้งหมด',
     subtitle: 'ฝึกไม่จำกัดและสอบใบขับขี่ผ่านเร็วขึ้น',
-    monthly: 'รายเดือน', monthlyPrice: '199 kr', monthlyPer: '/ เดือน',
-    threemonth: '3 เดือน', threemonthPrice: '399 kr', threemonthPer: '/ 3 เดือน', threemonthSub: 'คุ้มที่สุด – ประหยัด 34%',
+    monthly: 'รายเดือน', monthlyPrice: '99 kr', monthlyPer: '/ เดือน',
+    threemonth: '3 เดือน', threemonthPrice: '299 kr', threemonthPer: '/ 3 เดือน', threemonthSub: 'คุ้มที่สุด',
     lifetime: 'ตลอดชีพ', lifetimePrice: '699 kr', lifetimePer: 'จ่ายครั้งเดียว', lifetimeSub: 'จ่ายครั้งเดียว – ใช้ได้ตลอดไป',
     popular: 'ยอดนิยม',
     bestValue: 'คุ้มที่สุด',
@@ -65,8 +66,8 @@ const TR: Record<string, Record<string, string>> = {
   en: {
     title: 'Unlock full access',
     subtitle: 'Practice unlimited and pass the theory test faster',
-    monthly: 'Monthly', monthlyPrice: '199 NOK', monthlyPer: '/ month',
-    threemonth: '3 months', threemonthPrice: '399 NOK', threemonthPer: '/ 3 months', threemonthSub: 'Best value – save 34%',
+    monthly: 'Monthly', monthlyPrice: '99 NOK', monthlyPer: '/ month',
+    threemonth: '3 months', threemonthPrice: '299 NOK', threemonthPer: '/ 3 months', threemonthSub: 'Best value',
     lifetime: 'Lifetime', lifetimePrice: '699 NOK', lifetimePer: 'one-time payment', lifetimeSub: 'Pay once – use forever',
     popular: 'Popular',
     bestValue: 'Best Value',
@@ -96,19 +97,33 @@ export default function PaywallScreen() {
   // Default selection = Best Value (3 months)
   const [plan, setPlan] = useState<Plan>('threemonth');
   const [success, setSuccess] = useState(false);
+  const [publicPricing, setPublicPricing] = useState<Record<string, PremiumPricingPlan>>({});
   const isWeb = Platform.OS === 'web';
   const limitReached = freeRemaining() <= 0;
 
   const rc = useRevenueCat();
 
-  // Use real prices from RevenueCat when available; fallback to the hard-coded UI prices.
+  useEffect(() => {
+    let mounted = true;
+    api.getPricing()
+      .then((data) => {
+        if (!mounted) return;
+        const byId: Record<string, PremiumPricingPlan> = {};
+        for (const p of data.plans || []) byId[p.id] = p;
+        setPublicPricing(byId);
+      })
+      .catch(() => {});
+    return () => { mounted = false; };
+  }, []);
+
+  // Use real prices from RevenueCat when available; then the public backend/Stripe pricing; then static fallback.
   const monthlyPkg = rc.packages.find(p => p.productId === PRODUCT_IDS.MONTHLY);
   const threePkg = rc.packages.find(p => p.productId === PRODUCT_IDS.THREE_MONTH);
   const lifePkg = rc.packages.find(p => p.productId === PRODUCT_IDS.LIFETIME);
 
-  const monthlyPrice = monthlyPkg?.priceString || t.monthlyPrice;
-  const threePrice = threePkg?.priceString || t.threemonthPrice;
-  const lifePrice = lifePkg?.priceString || t.lifetimePrice;
+  const monthlyPrice = monthlyPkg?.priceString || publicPricing.monthly?.display || t.monthlyPrice;
+  const threePrice = threePkg?.priceString || publicPricing.three_months?.display || t.threemonthPrice;
+  const lifePrice = lifePkg?.priceString || publicPricing.lifetime?.display || t.lifetimePrice;
 
   useEffect(() => { rc.clearError(); }, [plan]);
 

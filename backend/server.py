@@ -13,6 +13,8 @@ from typing import List, Optional, Dict, Any
 import uuid
 import re
 import jwt
+import time
+import asyncio
 from datetime import datetime, timezone, timedelta
 from passlib.context import CryptContext
 
@@ -74,6 +76,37 @@ api_router = APIRouter(prefix="/api")
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
+
+PUBLIC_PRICING_FALLBACK = {
+    "monthly": {
+        "id": "monthly",
+        "stripe_product_name": "Thai2Drive Premium",
+        "label": {"no": "Månedlig", "th": "รายเดือน", "en": "Monthly"},
+        "amount": 99,
+        "currency": "NOK",
+        "display": "99 kr",
+        "period": {"no": "per måned", "th": "ต่อเดือน", "en": "per month"},
+    },
+    "three_months": {
+        "id": "three_months",
+        "stripe_product_name": "Thai2Drive 3 Months",
+        "label": {"no": "3 måneder", "th": "3 เดือน", "en": "3 months"},
+        "amount": 299,
+        "currency": "NOK",
+        "display": "299 kr",
+        "period": {"no": "per 3 måneder", "th": "ต่อ 3 เดือน", "en": "per 3 months"},
+    },
+    "lifetime": {
+        "id": "lifetime",
+        "stripe_product_name": "Thai2Drive Lifetime",
+        "label": {"no": "Livstid", "th": "ตลอดชีพ", "en": "Lifetime"},
+        "amount": 699,
+        "currency": "NOK",
+        "display": "699 kr",
+        "period": {"no": "engangsbetaling", "th": "จ่ายครั้งเดียว", "en": "one-time payment"},
+    },
+}
+_pricing_cache = {"ts": 0.0, "data": None}
 
 # ==================== MODELS ====================
 
@@ -335,6 +368,67 @@ async def create_question(question_data: QuestionCreate):
     return question
 
 # ==================== STATISTIKK ====================
+
+def _pricing_payload_from_fallback(source: str = "fallback") -> dict:
+    plans = [PUBLIC_PRICING_FALLBACK[k] for k in ("monthly", "three_months", "lifetime")]
+    return {"currency": "NOK", "source": source, "plans": plans}
+
+
+def _format_kr(amount_minor: int, currency: str) -> str:
+    if currency.lower() == "nok":
+        whole = int(round(amount_minor / 100))
+        return f"{whole} kr"
+    return f"{amount_minor / 100:.2f} {currency.upper()}"
+
+
+def _fetch_stripe_pricing_sync() -> Optional[dict]:
+    key = os.environ.get("STRIPE_SECRET_KEY", "")
+    if not key.startswith(("sk_live_", "sk_test_")):
+        return None
+    try:
+        import stripe
+        stripe.api_key = key
+        prices = stripe.Price.list(active=True, expand=["data.product"], limit=100)
+        by_name = {}
+        for price in prices.data:
+            product = getattr(price, "product", None)
+            name = getattr(product, "name", "") if product else ""
+            if name:
+                by_name[name.strip().lower()] = price
+
+        plans = []
+        for plan_id in ("monthly", "three_months", "lifetime"):
+            base = dict(PUBLIC_PRICING_FALLBACK[plan_id])
+            price = by_name.get(base["stripe_product_name"].lower())
+            if price:
+                amount = int(price.unit_amount or 0)
+                currency = (price.currency or "nok").upper()
+                base.update({
+                    "amount": int(round(amount / 100)),
+                    "amount_minor": amount,
+                    "currency": currency,
+                    "display": _format_kr(amount, currency),
+                    "stripe_price_id": price.id,
+                })
+            plans.append(base)
+        found = sum(1 for p in plans if p.get("stripe_price_id"))
+        return {"currency": "NOK", "source": "stripe" if found == 3 else "fallback", "plans": plans}
+    except Exception as e:
+        logger.warning("Stripe pricing lookup failed: %s", e)
+        return None
+
+
+@api_router.get("/pricing")
+async def get_public_pricing():
+    """Public premium pricing. Secret Stripe keys never leave the backend."""
+    now = time.time()
+    if _pricing_cache["data"] and now - _pricing_cache["ts"] < 300:
+        return _pricing_cache["data"]
+    data = await asyncio.to_thread(_fetch_stripe_pricing_sync)
+    if not data:
+        data = _pricing_payload_from_fallback()
+    _pricing_cache.update({"ts": now, "data": data})
+    return data
 
 @api_router.get("/stats/me")
 async def get_my_stats(device_id: str):

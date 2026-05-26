@@ -624,7 +624,7 @@ def landing():
     </div>
     <div class="plan">
       <h3>Månedlig</h3>
-      <div class="price">199 kr<small> / mnd</small></div>
+      <div class="price">99 kr<small> / mnd</small></div>
       <ul>
         <li>Ubegrenset spørsmål</li>
         <li>Full eksamensmodus</li>
@@ -635,10 +635,10 @@ def landing():
     <div class="plan popular">
       <span class="ribbon">Beste verdi</span>
       <h3>3 måneder</h3>
-      <div class="price">399 kr<small> / 3 mnd</small></div>
+      <div class="price">299 kr<small> / 3 mnd</small></div>
       <ul>
         <li>Alt i Månedlig</li>
-        <li>Spar 34% vs. månedlig</li>
+        <li>Rolig 3-måneders tilgang</li>
         <li>Perfekt frem til prøven</li>
         <li>Ingen annonser</li>
       </ul>

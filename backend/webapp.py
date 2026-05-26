@@ -2081,7 +2081,7 @@ a { color:inherit; text-decoration:none; }
   color:#10B981; font-size:13px; flex-shrink:0;
 }
 .paywall-price-row {
-  display:grid; grid-template-columns:1fr 1fr; gap:8px;
+  display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:8px;
   margin-bottom:18px;
 }
 .paywall-price-card {
@@ -2597,16 +2597,21 @@ a { color:inherit; text-decoration:none; }
           <li><span class="pf-check">✓</span><span data-key="pw_f5">Trafikkskilt-galleri</span></li>
         </ul>
         <div class="paywall-price-row">
-          <div class="paywall-price-card selected" onclick="selectPlan('month',this)">
+          <div class="paywall-price-card selected" onclick="selectPlan('monthly',this)" data-plan="monthly">
             <div class="ppc-period" data-key="pw_month">Månedlig</div>
-            <div class="ppc-price">99 kr</div>
+            <div class="ppc-price" data-price-plan="monthly">99 kr</div>
             <div class="ppc-per" data-key="pw_per_month">per måned</div>
           </div>
-          <div class="paywall-price-card" onclick="selectPlan('year',this)" style="position:relative">
-            <div class="ppc-badge" data-key="pw_save">Spar 50%</div>
-            <div class="ppc-period" data-key="pw_year">Årlig</div>
-            <div class="ppc-price">599 kr</div>
-            <div class="ppc-per" data-key="pw_per_year">per år</div>
+          <div class="paywall-price-card" onclick="selectPlan('three_months',this)" data-plan="three_months" style="position:relative">
+            <div class="ppc-badge" data-key="pw_best_value">Best verdi</div>
+            <div class="ppc-period" data-key="pw_three_months">3 måneder</div>
+            <div class="ppc-price" data-price-plan="three_months">299 kr</div>
+            <div class="ppc-per" data-key="pw_per_three_months">per 3 måneder</div>
+          </div>
+          <div class="paywall-price-card" onclick="selectPlan('lifetime',this)" data-plan="lifetime">
+            <div class="ppc-period" data-key="pw_lifetime">Livstid</div>
+            <div class="ppc-price" data-price-plan="lifetime">699 kr</div>
+            <div class="ppc-per" data-key="pw_per_lifetime">engangsbetaling</div>
           </div>
         </div>
         <button class="paywall-buy-btn" onclick="buyPremium()">⭐ <span data-key="pw_buy">Kjøp Premium</span></button>
@@ -2933,10 +2938,12 @@ var UI = {
   pw_f4:       {th:'ประวัติและสถิติความก้าวหน้า', no:'Historikk og fremgangsstatistikk', en:'History and progress statistics'},
   pw_f5:       {th:'แกลเลอรีป้ายจราจร', no:'Trafikkskilt-galleri', en:'Traffic signs gallery'},
   pw_month:    {th:'รายเดือน', no:'Månedlig', en:'Monthly'},
-  pw_year:     {th:'รายปี', no:'Årlig', en:'Yearly'},
+  pw_three_months:{th:'3 เดือน', no:'3 måneder', en:'3 months'},
+  pw_lifetime: {th:'ตลอดชีพ', no:'Livstid', en:'Lifetime'},
   pw_per_month:{th:'ต่อเดือน', no:'per måned', en:'per month'},
-  pw_per_year: {th:'ต่อปี', no:'per år', en:'per year'},
-  pw_save:     {th:'ประหยัด 50%', no:'Spar 50%', en:'Save 50%'},
+  pw_per_three_months:{th:'ต่อ 3 เดือน', no:'per 3 måneder', en:'per 3 months'},
+  pw_per_lifetime:{th:'จ่ายครั้งเดียว', no:'engangsbetaling', en:'one-time payment'},
+  pw_best_value:{th:'คุ้มที่สุด', no:'Best verdi', en:'Best value'},
   pw_buy:      {th:'ซื้อ Premium', no:'Kjøp Premium', en:'Buy Premium'},
   pw_skip:     {th:'ใช้ต่อแบบฟรี', no:'Fortsett gratis', en:'Continue free'},
 };
@@ -3032,6 +3039,7 @@ function applyUILang() {
   if (aiStatus && aiStatus.classList.contains('idle')) aiStatus.textContent = t('ai_waiting');
   var aiBadge = document.getElementById('quizAiImgBadge');
   if (aiBadge && !qAnswered) aiBadge.textContent = t('traffic_situation');
+  renderPremiumPricing();
 }
 var catsLoaded = false;
 var bookmarkedIds = {};
@@ -3083,12 +3091,19 @@ function catName(raw) {
   return entry[appLang] || entry['no'] || raw;
 }
 
+var PREMIUM_PRICING = {
+  monthly: { display:'99 kr', period:{no:'per måned', th:'ต่อเดือน', en:'per month'} },
+  three_months: { display:'299 kr', period:{no:'per 3 måneder', th:'ต่อ 3 เดือน', en:'per 3 months'} },
+  lifetime: { display:'699 kr', period:{no:'engangsbetaling', th:'จ่ายครั้งเดียว', en:'one-time payment'} }
+};
+
 // ════════════════════════════════════════════
 //  INIT
 // ════════════════════════════════════════════
 (async function init() {
   applyThemeFromStorage();
   applyUILang();
+  loadPremiumPricing();
   // Init top bar language buttons
   ['TH','NO','EN'].forEach(function(l) {
     var topBtn = document.getElementById('topLang' + l);
@@ -3365,6 +3380,31 @@ async function api(method, url, body) {
   return data;
 }
 
+async function loadPremiumPricing() {
+  try {
+    var data = await api('GET', '/api/pricing?_=' + Date.now());
+    (data.plans || []).forEach(function(plan) {
+      if (plan && plan.id) PREMIUM_PRICING[plan.id] = plan;
+    });
+  } catch(e) {
+    console.warn('[pricing] using local fallback', e && e.message ? e.message : e);
+  }
+  renderPremiumPricing();
+}
+
+function renderPremiumPricing() {
+  Object.keys(PREMIUM_PRICING || {}).forEach(function(planId) {
+    var plan = PREMIUM_PRICING[planId] || {};
+    var priceEl = document.querySelector('[data-price-plan="' + planId + '"]');
+    if (priceEl && plan.display) priceEl.textContent = plan.display;
+    var card = document.querySelector('[data-plan="' + planId + '"]');
+    var periodEl = card ? card.querySelector('.ppc-per') : null;
+    if (periodEl && plan.period) {
+      periodEl.textContent = plan.period[appLang] || plan.period.no || plan.period.en || periodEl.textContent;
+    }
+  });
+}
+
 // ════════════════════════════════════════════
 //  TOAST
 // ════════════════════════════════════════════
@@ -3589,7 +3629,7 @@ var examSecondsLeft = 0;
 //  PREMIUM / PAYWALL
 // ════════════════════════════════════════════
 var FREE_LIMIT = 5;
-var selectedPlan = 'month';
+var selectedPlan = 'monthly';
 
 function isPremium() {
   return user && user.is_premium === true;

@@ -1220,8 +1220,8 @@ LANDING_JS = r"""
         <h3>${titles[lang]}</h3>
         <p>${subs[lang]}</p>
         <div class="plans-row">
-          <div class="plan-mini"><h4>${monthLbl}</h4><div class="p">199 kr<small> / ${perMo}</small></div></div>
-          <div class="plan-mini best"><h4>${threeLbl}</h4><div class="p">399 kr<small> / 3 ${perMo}</small></div></div>
+          <div class="plan-mini"><h4>${monthLbl}</h4><div class="p">99 kr<small> / ${perMo}</small></div></div>
+          <div class="plan-mini best"><h4>${threeLbl}</h4><div class="p">299 kr<small> / 3 ${perMo}</small></div></div>
           <div class="plan-mini"><h4>${lifeLbl}</h4><div class="p">699 kr<small> / ${once}</small></div></div>
         </div>
         <a href="#download" class="cta-btn cta-primary" style="margin-top:8px">${ctas[lang]} →</a>

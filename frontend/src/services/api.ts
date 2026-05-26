@@ -14,6 +14,24 @@ export interface MyStats {
   by_category: CategoryStat[];
 }
 
+// ==================== PRICING TYPES ====================
+export interface PremiumPricingPlan {
+  id: 'monthly' | 'three_months' | 'lifetime' | string;
+  label?: Partial<LocalizedText>;
+  amount: number;
+  amount_minor?: number;
+  currency: string;
+  display: string;
+  period?: Partial<LocalizedText>;
+  stripe_price_id?: string;
+}
+
+export interface PremiumPricingResponse {
+  currency: string;
+  source: 'stripe' | 'fallback' | string;
+  plans: PremiumPricingPlan[];
+}
+
 // ==================== SIGNS TYPES ====================
 export interface Sign {
   num: string;
@@ -182,6 +200,11 @@ const authHeaders = (token: string) => ({
 });
 
 export const api = {
+  // ==================== PUBLIC PRICING ====================
+  async getPricing(): Promise<PremiumPricingResponse> {
+    return fetchJSON(`${API_BASE}/pricing`);
+  },
+
   // ==================== AUTH ====================
   async signup(email: string, password: string): Promise<AuthResponse> {
     return fetchJSON(`${API_BASE}/auth/signup`, {

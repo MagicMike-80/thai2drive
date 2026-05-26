@@ -67,7 +67,7 @@ a mobile app that helps Thai people in Norway pass the Norwegian driving
 theory test. The app has:
 - 500+ questions in Thai, Norwegian and English
 - A free tier with 10 questions per day (resets daily)
-- Premium plans: 199 NOK/month, 399 NOK/3 months, 699 NOK lifetime
+- Premium plans: 99 NOK/month, 299 NOK/3 months, 699 NOK lifetime
 - An exam mode (45 questions, 90 min)
 
 Your rules:

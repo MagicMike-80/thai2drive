@@ -3,20 +3,18 @@ import { Platform } from 'react-native';
 import { IS_PREVIEW_BUILD } from '../buildFlags';
 import { useAppStore } from '../store/appStore';
 
-// RevenueCat product identifiers — must match RevenueCat dashboard
+// RevenueCat product identifiers — stable dashboard IDs, not the display price source.
 export const PRODUCT_IDS = {
   MONTHLY: 'monthly_199',
   THREE_MONTH: 'threemonth_399',
   LIFETIME: 'lifetime_699',
-  // Legacy (kept for backwards compat)
-  WEEKLY: 'weekly_99',
 };
 
 export const ENTITLEMENT_ID = 'pro';
 
 export interface RCPackage {
   identifier: string;       // e.g. "$rc_weekly", "$rc_monthly"
-  productId: string;        // e.g. "weekly_99", "monthly_199"
+  productId: string;        // stable RevenueCat/Google Play product identifier
   priceString: string;
   title: string;
   _raw: any;                // raw package for purchasePackage()
@@ -186,7 +184,7 @@ export function useRevenueCat(): UseRevenueCatReturn {
 
   const clearError = useCallback(() => setError(null), []);
 
-  // Purchase a package by product ID (e.g. "weekly_99")
+  // Purchase a package by product ID from the RevenueCat dashboard.
   const purchase = useCallback(async (productId: string): Promise<boolean> => {
     if (!Purchases || !rcInitialized) {
       setError(msg.mobileOnly);
