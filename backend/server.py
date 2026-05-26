@@ -382,7 +382,14 @@ def _format_kr(amount_minor: int, currency: str) -> str:
 
 
 def _fetch_stripe_pricing_sync() -> Optional[dict]:
-    key = os.environ.get("STRIPE_SECRET_KEY", "")
+    key = next(
+        (
+            os.environ.get(name, "").strip()
+            for name in ("STRIPE_SECRET_KEY", "STRIPE_API_KEY", "STRIPE_LIVE_SECRET_KEY", "STRIPE_PRIVATE_KEY")
+            if os.environ.get(name, "").strip()
+        ),
+        "",
+    )
     if not key.startswith(("sk_live_", "sk_test_")):
         return None
     try:
