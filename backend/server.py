@@ -520,7 +520,10 @@ def _fetch_stripe_pricing_sync() -> Optional[dict]:
         ),
         "",
     )
-    if not key.startswith(("sk_live_", "sk_test_")):
+    # Production billing must never read Stripe test-mode data. If Railway is
+    # misconfigured with a test key, fail closed to the public fallback instead
+    # of showing test prices or test price IDs.
+    if not key.startswith("sk_live_"):
         return None
     try:
         import stripe
@@ -538,6 +541,9 @@ def _fetch_stripe_pricing_sync() -> Optional[dict]:
             base = dict(PUBLIC_PRICING_FALLBACK[plan_id])
             price = by_name.get(base["stripe_product_name"].lower())
             if price:
+                if getattr(price, "livemode", False) is not True:
+                    logger.warning("Ignoring non-live Stripe price for %s", base["stripe_product_name"])
+                    return None
                 amount = int(price.unit_amount or 0)
                 currency = (price.currency or "nok").upper()
                 base.update({
@@ -549,7 +555,7 @@ def _fetch_stripe_pricing_sync() -> Optional[dict]:
                 })
             plans.append(base)
         found = sum(1 for p in plans if p.get("stripe_price_id"))
-        return {"currency": "NOK", "source": "stripe" if found == 3 else "fallback", "plans": plans}
+        return {"currency": "NOK", "source": "stripe_live" if found == 3 else "fallback", "plans": plans}
     except Exception as e:
         logger.warning("Stripe pricing lookup failed: %s", e)
         return None
