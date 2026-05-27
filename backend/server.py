@@ -915,6 +915,7 @@ async def stripe_webhook(request: Request):
 
     event_type = event.get("type")
     obj = event.get("data", {}).get("object", {})
+    handled = True
     try:
         if event_type == "checkout.session.completed":
             await _activate_from_checkout_session(dict(obj))
@@ -951,21 +952,26 @@ async def stripe_webhook(request: Request):
                     )
                 else:
                     logger.info("Stripe invoice event %s has no user metadata; acknowledged without grant", event.get("id"))
-    except Exception as exc:
-        logger.warning("Stripe webhook handling failed for %s: %s", event_type, exc)
+                    handled = False
+
         await db.stripe_events.update_one(
             {"event_id": event.get("id")},
-            {"$set": {"event_id": event.get("id"), "type": event_type, "livemode": True, "processing_error": str(exc), "processed_at": datetime.now(timezone.utc).isoformat()}},
+            {"$set": {"event_id": event.get("id"), "type": event_type, "livemode": True, "handled": handled, "processed_at": datetime.now(timezone.utc).isoformat()}},
             upsert=True,
         )
+    except Exception as exc:
+        logger.warning("Stripe webhook handling failed for %s: %s", event_type, exc)
+        try:
+            await db.stripe_events.update_one(
+                {"event_id": event.get("id")},
+                {"$set": {"event_id": event.get("id"), "type": event_type, "livemode": True, "handled": False, "processing_error": str(exc), "processed_at": datetime.now(timezone.utc).isoformat()}},
+                upsert=True,
+            )
+        except Exception as log_exc:
+            logger.warning("Stripe webhook error logging failed for %s: %s", event.get("id"), log_exc)
         return {"received": True, "handled": False}
 
-    await db.stripe_events.update_one(
-        {"event_id": event.get("id")},
-        {"$set": {"event_id": event.get("id"), "type": event_type, "livemode": True, "processed_at": datetime.now(timezone.utc).isoformat()}},
-        upsert=True,
-    )
-    return {"received": True}
+    return {"received": True, "handled": handled}
 
 @api_router.get("/stats/me")
 async def get_my_stats(device_id: str):
