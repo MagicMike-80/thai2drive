@@ -755,8 +755,6 @@ async def _set_user_premium(
 
 
 async def _sync_subscription_deleted(subscription: dict) -> None:
-    if subscription.get("livemode") is not True:
-        return
     sub_id = subscription.get("id")
     user_id = (subscription.get("metadata") or {}).get("user_id")
     if not user_id and subscription.get("customer"):
@@ -935,6 +933,14 @@ async def stripe_webhook(request: Request):
     if not is_live:
         logger.warning("Processing test-mode Stripe event %s type=%s", event_id, event_type)
 
+    # Idempotency guard: skip events already successfully handled to protect against
+    # Stripe retries and duplicate deliveries without re-running side effects.
+    if event_id:
+        already = await db.stripe_events.find_one({"event_id": event_id, "handled": True})
+        if already:
+            logger.info("Stripe event %s already handled, skipping", event_id)
+            return {"received": True, "handled": True, "skipped": True}
+
     try:
         if event_id:
             existing_event = await db.stripe_events.find_one({"event_id": event_id}, {"_id": 0})
@@ -974,6 +980,15 @@ async def stripe_webhook(request: Request):
             metadata = data_obj.get("metadata") or subscription_details.get("metadata") or {}
             user_id = metadata.get("user_id")
             plan_id = metadata.get("plan_id", "monthly")
+            # Renewal fallback: Stripe does not re-populate user metadata on recurring invoices.
+            # Look up the user by stripe_customer_id stored at checkout time.
+            if not user_id:
+                customer_id = str(data_obj.get("customer") or "")
+                if customer_id:
+                    matched = await db.users.find_one({"stripe_customer_id": customer_id}, {"_id": 0, "id": 1})
+                    if matched:
+                        user_id = matched["id"]
+                        logger.info("Stripe invoice %s: resolved user %s via customer_id %s", event_id, user_id, customer_id)
             if user_id:
                 await _set_user_premium(
                     user_id,
@@ -984,7 +999,7 @@ async def stripe_webhook(request: Request):
                     current_period_end=data_obj.get("period_end"),
                 )
             else:
-                logger.info("Stripe invoice event %s has no user metadata; acknowledged without grant", event_id)
+                logger.info("Stripe invoice event %s: no user found via metadata or customer_id", event_id)
                 handled = False
 
         await db.stripe_events.update_one(
