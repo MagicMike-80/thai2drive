@@ -907,13 +907,14 @@ async def stripe_webhook(request: Request):
     except Exception:
         raise HTTPException(status_code=400, detail="Invalid Stripe webhook signature")
 
-    if event.get("livemode") is not True:
-        raise HTTPException(status_code=400, detail="Ignoring non-live Stripe event")
-
-    event_type = event.get("type")
-    obj = event.get("data", {}).get("object", {})
-    handled = True
     try:
+        if event.get("livemode") is not True:
+            raise HTTPException(status_code=400, detail="Ignoring non-live Stripe event")
+
+        event_type = event.get("type")
+        obj = event.get("data", {}).get("object", {})
+        handled = True
+
         if event_type == "checkout.session.completed":
             await _activate_from_checkout_session(dict(obj))
         elif event_type == "customer.subscription.created":
@@ -962,7 +963,10 @@ async def stripe_webhook(request: Request):
             {"$set": {"event_id": event.get("id"), "type": event_type, "livemode": True, "handled": handled, "processed_at": datetime.now(timezone.utc).isoformat()}},
             upsert=True,
         )
+    except HTTPException:
+        raise
     except Exception as exc:
+        event_type = event.get("type") if hasattr(event, "get") else "unknown"
         logger.warning("Stripe webhook handling failed for %s: %s", event_type, exc)
         try:
             await db.stripe_events.update_one(
