@@ -756,11 +756,21 @@ async def _set_user_premium(
 
 async def _sync_subscription_deleted(subscription: dict) -> None:
     sub_id = subscription.get("id")
+    if not sub_id:
+        logger.warning("Stripe subscription.deleted without subscription id")
+        return
     user_id = (subscription.get("metadata") or {}).get("user_id")
+    if not user_id:
+        mirrored = await db.subscriptions.find_one(
+            {"source": "stripe", "stripe_subscription_id": str(sub_id)},
+            {"_id": 0},
+        )
+        user_id = mirrored.get("user_id") if mirrored else None
     if not user_id and subscription.get("customer"):
         user = await db.users.find_one({"stripe_customer_id": str(subscription.get("customer"))}, {"_id": 0})
         user_id = user.get("id") if user else None
     if not user_id:
+        logger.warning("Stripe subscription.deleted could not resolve user for subscription %s", sub_id)
         return
     now = datetime.now(timezone.utc).isoformat()
     await db.subscriptions.update_one(
@@ -769,6 +779,9 @@ async def _sync_subscription_deleted(subscription: dict) -> None:
         upsert=True,
     )
     user = await db.users.find_one({"id": user_id}, {"_id": 0})
+    if user and user.get("stripe_subscription_id") and user.get("stripe_subscription_id") != str(sub_id):
+        logger.info("Ignoring cancellation for non-current Stripe subscription %s user=%s", sub_id, user_id)
+        return
     if user and not user.get("premium_lifetime"):
         await db.users.update_one(
             {"id": user_id},
