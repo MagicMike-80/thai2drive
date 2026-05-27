@@ -18,6 +18,7 @@ import asyncio
 from datetime import datetime, timezone, timedelta
 from zoneinfo import ZoneInfo
 from passlib.context import CryptContext
+import usage as usage_mod
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -218,10 +219,10 @@ class AdminCheckRequest(BaseModel):
 # ==================== AUTH MODELS ====================
 
 class AuthSignup(BaseModel):
-    name: Optional[str] = None
+    name: Optional[str] = None        # display name (optional)
     email: str
     password: str
-    device_id: Optional[str] = None
+    device_id: Optional[str] = None   # carry over guest history
 
     @validator('email')
     def validate_email(cls, v):
@@ -277,10 +278,11 @@ class AccessConsumeRequest(BaseModel):
 
 # ==================== AUTH HELPERS ====================
 
-def create_token(user_id: str, email: str) -> str:
+def create_token(user_id: str, email: str, is_premium: bool = False) -> str:
     payload = {
         "sub": user_id,
         "email": email,
+        "is_premium": is_premium,
         "exp": datetime.now(timezone.utc) + timedelta(hours=JWT_EXPIRE_HOURS),
         "iat": datetime.now(timezone.utc),
     }
@@ -304,6 +306,7 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
     return payload
 
 async def get_optional_user(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    """Returns full user dict from DB, or None. Used by legacy /access/* endpoints."""
     if not credentials:
         return None
     payload = verify_token(credentials.credentials)
@@ -311,6 +314,13 @@ async def get_optional_user(credentials: HTTPAuthorizationCredentials = Depends(
         return None
     user = await db.users.find_one({"id": payload["sub"]}, {"_id": 0, "password_hash": 0})
     return user
+
+
+async def optional_auth(credentials: HTTPAuthorizationCredentials = Depends(security)) -> Optional[dict]:
+    """Returns decoded JWT payload (with is_premium), or None for guests. Lightweight — no DB hit."""
+    if not credentials:
+        return None
+    return verify_token(credentials.credentials)  # None if expired/invalid
 
 def generate_reset_code() -> str:
     import random
@@ -436,7 +446,22 @@ async def get_questions(category: Optional[str] = None, difficulty: Optional[str
     return [normalize_question(q) for q in questions]
 
 @api_router.get("/questions/random")
-async def get_random_questions(category: Optional[str] = None, count: int = Query(default=10, le=200), has_image: Optional[bool] = None):
+async def get_random_questions(
+    category: Optional[str] = None,
+    count: int = Query(default=10, le=200),
+    has_image: Optional[bool] = None,
+    x_device_id: str = Header(default="", alias="X-Device-ID"),
+    user: Optional[dict] = Depends(optional_auth),
+):
+    # ── Usage gate ─────────────────────────────────────────────────────────
+    # Guests without a device_id bypass tracking for legacy client compat.
+    # Once clients send X-Device-ID, all tiers are enforced here.
+    track = x_device_id or user is not None
+    if track:
+        approved = await usage_mod.check_and_consume(db, x_device_id, user, count)
+    else:
+        approved = count  # legacy: no device_id and no auth → serve freely
+
     pipeline = []
     match_stage: dict = {}
     if category:
@@ -445,17 +470,17 @@ async def get_random_questions(category: Optional[str] = None, count: int = Quer
         match_stage["bildeUrl"] = {"$exists": True, "$nin": [None, ""]}
     if match_stage:
         pipeline.append({"$match": match_stage})
-    pipeline.append({"$sample": {"size": count}})
+    pipeline.append({"$sample": {"size": approved}})
     pipeline.append({"$project": {"_id": 0}})
-    questions = await db.questions.aggregate(pipeline).to_list(count)
+    questions = await db.questions.aggregate(pipeline).to_list(approved)
     # If category filter with has_image returns nothing, fall back without category
     if not questions and category and has_image:
         pipeline2 = [
             {"$match": {"bildeUrl": {"$exists": True, "$nin": [None, ""]}}},
-            {"$sample": {"size": count}},
+            {"$sample": {"size": approved}},
             {"$project": {"_id": 0}}
         ]
-        questions = await db.questions.aggregate(pipeline2).to_list(count)
+        questions = await db.questions.aggregate(pipeline2).to_list(approved)
     return [normalize_question(q) for q in questions]
 
 @api_router.get("/questions/{question_id}")
@@ -837,21 +862,31 @@ async def signup(data: AuthSignup):
         "id": user_id,
         "name": data.name or "",
         "email": data.email,
+        "name": (data.name or "").strip() or None,
         "password_hash": password_hash,
         "is_admin": is_admin,
         "is_premium": is_premium,
+        "device_id": data.device_id or None,
         "created_at": datetime.now(timezone.utc).isoformat(),
     }
     await db.users.insert_one(user_doc)
     await _migrate_guest_learning_to_user(data.device_id, user_id)
 
-    token = create_token(user_id, data.email)
+    # Mark guest_usage record as linked so it's not double-counted
+    if data.device_id:
+        await db.guest_usage.update_one(
+            {"device_id": data.device_id},
+            {"$set": {"linked_user_id": user_id}},
+        )
+
+    token = create_token(user_id, data.email, is_premium=is_premium)
     return {
         "token": token,
         "user": {
             "id": user_id,
             "name": data.name or "",
             "email": data.email,
+            "name": user_doc["name"],
             "is_admin": is_admin,
             "is_premium": is_premium,
         }
@@ -875,13 +910,14 @@ async def login(data: AuthLogin):
         user["is_premium"] = True
     await _migrate_guest_learning_to_user(data.device_id, user["id"])
 
-    token = create_token(user["id"], user["email"])
+    token = create_token(user["id"], user["email"], is_premium=user.get("is_premium", False))
     return {
         "token": token,
         "user": {
             "id": user["id"],
             "name": user.get("name", ""),
             "email": user["email"],
+            "name": user.get("name"),
             "is_admin": user.get("is_admin", False),
             "is_premium": user.get("is_premium", False),
         }
@@ -952,6 +988,50 @@ async def reset_password(data: ResetPasswordRequest):
     )
 
     return {"message": "Password reset successfully"}
+
+# ==================== USAGE / TIER ROUTES ====================
+
+@api_router.get("/usage/status")
+async def get_usage_status(
+    x_device_id: str = Header(default="", alias="X-Device-ID"),
+    user: Optional[dict] = Depends(optional_auth),
+):
+    """
+    Return the caller's current usage tier, remaining questions, streak, etc.
+    Used by the mobile app and web app to render usage indicators.
+    """
+    return await usage_mod.build_usage_status(db, x_device_id, user)
+
+
+@api_router.post("/auth/link-device")
+async def link_device(
+    x_device_id: str = Header(default="", alias="X-Device-ID"),
+    current_user: dict = Depends(get_current_user),
+):
+    """
+    Associate the caller's guest device_id with their registered account.
+    Call this right after login/signup when the client has an existing device_id.
+    The guest usage record is marked as linked so it is not double-counted.
+    """
+    if not x_device_id:
+        return {"ok": True, "linked": False, "reason": "no device_id provided"}
+
+    user_id = current_user["sub"]
+
+    # Store the device_id on the user document (idempotent)
+    await db.users.update_one(
+        {"id": user_id},
+        {"$set": {"device_id": x_device_id}},
+    )
+
+    # Mark the guest_usage record as linked
+    result = await db.guest_usage.update_one(
+        {"device_id": x_device_id},
+        {"$set": {"linked_user_id": user_id}},
+    )
+
+    return {"ok": True, "linked": result.modified_count > 0}
+
 
 # ==================== ADMIN ROUTES ====================
 
@@ -3388,6 +3468,12 @@ async def ensure_indexes():
         logging.getLogger("indexes").warning(
             "Index creation skipped: %s", exc
         )
+
+    # Usage-tier indexes (guest_usage + daily_usage collections)
+    try:
+        await usage_mod.ensure_indexes(db)
+    except Exception as exc:
+        logging.getLogger("indexes").warning("Usage index creation skipped: %s", exc)
 
 
 @app.get("/api/health")
