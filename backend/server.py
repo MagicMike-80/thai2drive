@@ -923,18 +923,16 @@ async def stripe_webhook(request: Request):
     except Exception:
         raise HTTPException(status_code=400, detail="Invalid Stripe webhook signature")
 
-    is_live = event.get("livemode") is True
-    if not is_live:
-        logger.warning("Processing test-mode Stripe event %s type=%s", event.get("id"), event.get("type"))
+    if event.get("livemode") is not True:
+        raise HTTPException(status_code=400, detail="Ignoring non-live Stripe event")
 
     event_type = event.get("type")
     obj = event.get("data", {}).get("object", {}) or {}
     try:
         if event_type == "checkout.session.completed":
             await _activate_from_checkout_session(obj)
-
         elif event_type == "customer.subscription.created":
-            if obj.get("status") in ("active", "trialing"):
+            if obj.get("livemode") is True and obj.get("status") in ("active", "trialing"):
                 metadata = obj.get("metadata") or {}
                 user_id = metadata.get("user_id")
                 plan_id = metadata.get("plan_id", "monthly")
@@ -947,19 +945,16 @@ async def stripe_webhook(request: Request):
                         status=obj.get("status") or "active",
                         current_period_end=obj.get("current_period_end"),
                     )
-
         elif event_type == "customer.subscription.deleted":
             await _sync_subscription_deleted(obj)
-
         elif event_type in ("invoice.paid", "invoice.payment_paid", "invoice_payment.paid"):
             subscription_id = obj.get("subscription") or obj.get("subscription_id")
-            if subscription_id:
-                # Subscription invoice — look up user_id from subscription metadata
+            if obj.get("livemode") is True and subscription_id:
                 subscription = _stripe_to_dict(stripe.Subscription.retrieve(str(subscription_id)))
                 metadata = subscription.get("metadata") or obj.get("metadata") or {}
                 user_id = metadata.get("user_id")
                 plan_id = metadata.get("plan_id", "monthly")
-                if user_id:
+                if user_id and subscription.get("livemode") is True:
                     await _set_user_premium(
                         user_id,
                         plan_id=plan_id,
@@ -968,40 +963,18 @@ async def stripe_webhook(request: Request):
                         status=subscription.get("status") or "active",
                         current_period_end=subscription.get("current_period_end"),
                     )
-            else:
-                # Direct / one-time invoice (no subscription) — find user by customer email
-                customer_email = obj.get("customer_email") or ""
-                customer_id = str(obj.get("customer") or "")
-                if not customer_email and customer_id:
-                    try:
-                        customer_obj = _stripe_to_dict(stripe.Customer.retrieve(customer_id))
-                        customer_email = customer_obj.get("email", "")
-                    except Exception as _ce:
-                        logger.warning("Could not fetch Stripe customer %s: %s", customer_id, _ce)
-                if customer_email:
-                    user = await db.users.find_one({"email": customer_email.strip().lower()}, {"_id": 0})
-                    if user:
-                        await _set_user_premium(
-                            user["id"],
-                            plan_id="monthly",
-                            stripe_customer_id=customer_id,
-                        )
-                        logger.info("Premium granted via direct invoice for %s", customer_email)
-                    else:
-                        logger.warning("Invoice paid but no user found for email %s", customer_email)
-
     except Exception as exc:
         logger.warning("Stripe webhook handling failed for %s: %s", event_type, exc)
         await db.stripe_events.update_one(
             {"event_id": event.get("id")},
-            {"$set": {"event_id": event.get("id"), "type": event_type, "livemode": is_live, "processing_error": str(exc), "processed_at": datetime.now(timezone.utc).isoformat()}},
+            {"$set": {"event_id": event.get("id"), "type": event_type, "livemode": True, "processing_error": str(exc), "processed_at": datetime.now(timezone.utc).isoformat()}},
             upsert=True,
         )
         return {"received": True, "handled": False}
 
     await db.stripe_events.update_one(
         {"event_id": event.get("id")},
-        {"$set": {"event_id": event.get("id"), "type": event_type, "livemode": is_live, "processed_at": datetime.now(timezone.utc).isoformat()}},
+        {"$set": {"event_id": event.get("id"), "type": event_type, "livemode": True, "processed_at": datetime.now(timezone.utc).isoformat()}},
         upsert=True,
     )
     return {"received": True}
