@@ -934,24 +934,31 @@ async def stripe_webhook(request: Request):
                     )
         elif event_type == "customer.subscription.deleted":
             await _sync_subscription_deleted(dict(obj))
-        elif event_type == "invoice.paid":
-            if obj.get("livemode") is True and obj.get("subscription"):
-                subscription = stripe.Subscription.retrieve(str(obj.get("subscription")))
-                metadata = getattr(subscription, "metadata", {}) or {}
+        elif event_type in ("invoice.paid", "invoice.payment_paid", "invoice_payment.paid"):
+            if obj.get("livemode") is True:
+                subscription_details = obj.get("subscription_details") or {}
+                metadata = obj.get("metadata") or subscription_details.get("metadata") or {}
                 user_id = metadata.get("user_id")
                 plan_id = metadata.get("plan_id", "monthly")
-                if user_id and getattr(subscription, "livemode", False) is True:
+                if user_id:
                     await _set_user_premium(
                         user_id,
                         plan_id=plan_id,
-                        stripe_customer_id=str(getattr(subscription, "customer", "") or ""),
-                        stripe_subscription_id=str(getattr(subscription, "id", "") or ""),
-                        status=getattr(subscription, "status", None) or "active",
-                        current_period_end=getattr(subscription, "current_period_end", None),
+                        stripe_customer_id=str(obj.get("customer") or ""),
+                        stripe_subscription_id=str(obj.get("subscription") or obj.get("subscription_id") or ""),
+                        status="active",
+                        current_period_end=obj.get("period_end"),
                     )
+                else:
+                    logger.info("Stripe invoice event %s has no user metadata; acknowledged without grant", event.get("id"))
     except Exception as exc:
         logger.warning("Stripe webhook handling failed for %s: %s", event_type, exc)
-        raise HTTPException(status_code=500, detail="Webhook handling failed")
+        await db.stripe_events.update_one(
+            {"event_id": event.get("id")},
+            {"$set": {"event_id": event.get("id"), "type": event_type, "livemode": True, "processing_error": str(exc), "processed_at": datetime.now(timezone.utc).isoformat()}},
+            upsert=True,
+        )
+        return {"received": True, "handled": False}
 
     await db.stripe_events.update_one(
         {"event_id": event.get("id")},
