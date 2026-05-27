@@ -904,79 +904,82 @@ async def stripe_webhook(request: Request):
     payload = await request.body()
     sig_header = request.headers.get("stripe-signature")
     try:
-        event = stripe.Webhook.construct_event(payload, sig_header, webhook_secret)
+        raw_event = stripe.Webhook.construct_event(payload, sig_header, webhook_secret)
     except Exception:
         raise HTTPException(status_code=400, detail="Invalid Stripe webhook signature")
 
-    try:
-        is_live = event.get("livemode") is True
-        if not is_live:
-            logger.warning("Processing test-mode Stripe event %s type=%s", event.get("id"), event.get("type"))
+    # Convert the Stripe SDK object to a plain dict so all access is consistent
+    # regardless of stripe-python version (v3/v4 dict-based vs v5 typed models).
+    event = _stripe_to_dict(raw_event)
+    event_id = event.get("id") or ""
+    event_type = event.get("type") or "unknown"
+    is_live = event.get("livemode") is True  # defined here so except block can always use it
+    if not is_live:
+        logger.warning("Processing test-mode Stripe event %s type=%s", event_id, event_type)
 
-        event_type = event.get("type")
-        obj = event.get("data", {}).get("object", {})
+    try:
+        data_obj = (event.get("data") or {}).get("object") or {}
         handled = True
 
         if event_type == "checkout.session.completed":
-            await _activate_from_checkout_session(dict(obj))
+            await _activate_from_checkout_session(data_obj)
         elif event_type == "customer.subscription.created":
-            if obj.get("status") in ("active", "trialing"):
-                metadata = obj.get("metadata") or {}
+            if data_obj.get("status") in ("active", "trialing"):
+                metadata = data_obj.get("metadata") or {}
                 user_id = metadata.get("user_id")
                 plan_id = metadata.get("plan_id", "monthly")
                 if user_id:
                     await _set_user_premium(
                         user_id,
                         plan_id=plan_id,
-                        stripe_customer_id=str(obj.get("customer") or ""),
-                        stripe_subscription_id=str(obj.get("id") or ""),
-                        status=obj.get("status") or "active",
-                        current_period_end=obj.get("current_period_end"),
+                        stripe_customer_id=str(data_obj.get("customer") or ""),
+                        stripe_subscription_id=str(data_obj.get("id") or ""),
+                        status=data_obj.get("status") or "active",
+                        current_period_end=data_obj.get("current_period_end"),
                     )
         elif event_type == "customer.subscription.deleted":
-            await _sync_subscription_deleted(dict(obj))
+            await _sync_subscription_deleted(data_obj)
         elif event_type == "invoice_payment.paid":
             # Newer Stripe API event for invoice-payment objects. Premium activation is
             # handled by checkout.session.completed / subscription events; acknowledge this
             # event so Stripe does not keep retrying an object shape we do not need.
-            logger.info("Stripe invoice_payment.paid event %s acknowledged without grant", event.get("id"))
+            logger.info("Stripe invoice_payment.paid event %s acknowledged without grant", event_id)
             handled = False
         elif event_type in ("invoice.paid", "invoice.payment_paid"):
-            subscription_details = obj.get("subscription_details") or {}
-            metadata = obj.get("metadata") or subscription_details.get("metadata") or {}
+            subscription_details = data_obj.get("subscription_details") or {}
+            metadata = data_obj.get("metadata") or subscription_details.get("metadata") or {}
             user_id = metadata.get("user_id")
             plan_id = metadata.get("plan_id", "monthly")
             if user_id:
                 await _set_user_premium(
                     user_id,
                     plan_id=plan_id,
-                    stripe_customer_id=str(obj.get("customer") or ""),
-                    stripe_subscription_id=str(obj.get("subscription") or obj.get("subscription_id") or ""),
+                    stripe_customer_id=str(data_obj.get("customer") or ""),
+                    stripe_subscription_id=str(data_obj.get("subscription") or data_obj.get("subscription_id") or ""),
                     status="active",
-                    current_period_end=obj.get("period_end"),
+                    current_period_end=data_obj.get("period_end"),
                 )
             else:
-                logger.info("Stripe invoice event %s has no user metadata; acknowledged without grant", event.get("id"))
+                logger.info("Stripe invoice event %s has no user metadata; acknowledged without grant", event_id)
                 handled = False
 
         await db.stripe_events.update_one(
-            {"event_id": event.get("id")},
-            {"$set": {"event_id": event.get("id"), "type": event_type, "livemode": is_live, "handled": handled, "processed_at": datetime.now(timezone.utc).isoformat()}},
+            {"event_id": event_id},
+            {"$set": {"event_id": event_id, "type": event_type, "livemode": is_live, "handled": handled, "processed_at": datetime.now(timezone.utc).isoformat()}},
             upsert=True,
         )
     except HTTPException:
         raise
     except Exception as exc:
-        event_type = event.get("type") if hasattr(event, "get") else "unknown"
         logger.warning("Stripe webhook handling failed for %s: %s", event_type, exc)
         try:
             await db.stripe_events.update_one(
-                {"event_id": event.get("id")},
-                {"$set": {"event_id": event.get("id"), "type": event_type, "livemode": is_live, "handled": False, "processing_error": str(exc), "processed_at": datetime.now(timezone.utc).isoformat()}},
+                {"event_id": event_id},
+                {"$set": {"event_id": event_id, "type": event_type, "livemode": is_live, "handled": False, "processing_error": str(exc), "processed_at": datetime.now(timezone.utc).isoformat()}},
                 upsert=True,
             )
         except Exception as log_exc:
-            logger.warning("Stripe webhook error logging failed for %s: %s", event.get("id"), log_exc)
+            logger.warning("Stripe webhook error logging failed for %s: %s", event_id, log_exc)
         return {"received": True, "handled": False}
 
     return {"received": True, "handled": handled}
