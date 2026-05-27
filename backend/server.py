@@ -1446,6 +1446,127 @@ async def link_device(
     return {"ok": True, "linked": result.modified_count > 0}
 
 
+# ==================== STRIPE WEBHOOK ====================
+
+STRIPE_WEBHOOK_SECRET = os.environ.get("STRIPE_WEBHOOK_SECRET", "")
+_stripe_logger = logging.getLogger("stripe_webhook")
+
+
+def _get_stripe_key() -> Optional[str]:
+    for name in ("STRIPE_SECRET_KEY", "STRIPE_API_KEY", "STRIPE_LIVE_SECRET_KEY", "STRIPE_PRIVATE_KEY"):
+        v = os.environ.get(name, "")
+        if v:
+            return v
+    return None
+
+
+async def _set_premium(email: str, stripe_customer_id: str, is_premium: bool) -> bool:
+    """Find user by email and update is_premium + stripe_customer_id. Returns True if found."""
+    now = datetime.now(timezone.utc).isoformat()
+    result = await db.users.update_one(
+        {"email": email.lower()},
+        {"$set": {
+            "is_premium": is_premium,
+            "stripe_customer_id": stripe_customer_id,
+            "premium_updated_at": now,
+        }},
+    )
+    if result.matched_count == 0:
+        # Fall back: look up by stripe_customer_id in case email changed
+        result = await db.users.update_one(
+            {"stripe_customer_id": stripe_customer_id},
+            {"$set": {"is_premium": is_premium, "premium_updated_at": now}},
+        )
+    return result.matched_count > 0
+
+
+@app.post("/api/stripe/webhook")
+async def stripe_webhook(request: Request):
+    """
+    Stripe sends signed POST events here.
+    Handles:
+      - invoice.payment_succeeded / invoice_payment.paid  → grant premium
+      - customer.subscription.deleted                      → revoke premium
+    Set STRIPE_WEBHOOK_SECRET in Railway env to enable signature verification.
+    URL to configure in Stripe dashboard: https://www.thai2drive.no/api/stripe/webhook
+    """
+    payload = await request.body()
+    sig_header = request.headers.get("stripe-signature", "")
+
+    # Signature verification (skip gracefully if secret not yet configured)
+    event = None
+    if STRIPE_WEBHOOK_SECRET:
+        try:
+            import stripe as _stripe
+            _stripe.api_key = _get_stripe_key() or ""
+            event = _stripe.Webhook.construct_event(payload, sig_header, STRIPE_WEBHOOK_SECRET)
+        except Exception as e:
+            _stripe_logger.warning("Stripe signature verification failed: %s", e)
+            raise HTTPException(status_code=400, detail=f"Webhook signature invalid: {e}")
+    else:
+        # No secret configured yet — parse the raw JSON without verification
+        import json
+        try:
+            event = json.loads(payload)
+            _stripe_logger.warning(
+                "STRIPE_WEBHOOK_SECRET not set — processing event %s without signature check",
+                event.get("type", "?"),
+            )
+        except Exception as e:
+            raise HTTPException(status_code=400, detail=f"Invalid JSON: {e}")
+
+    event_type = event.get("type", "") if isinstance(event, dict) else event.type
+    data_obj   = event.get("data", {}).get("object", {}) if isinstance(event, dict) else event.data.object
+
+    _stripe_logger.info("Received Stripe event: %s", event_type)
+
+    # ── Grant premium ────────────────────────────────────────────────────────
+    if event_type in ("invoice.payment_succeeded", "invoice_payment.paid", "invoice.paid"):
+        email       = data_obj.get("customer_email", "") or ""
+        customer_id = data_obj.get("customer", "") or ""
+
+        if not email and customer_id:
+            # Try to fetch email from Stripe
+            try:
+                import stripe as _stripe
+                _stripe.api_key = _get_stripe_key() or ""
+                customer = _stripe.Customer.retrieve(customer_id)
+                email = customer.get("email", "")
+            except Exception as e:
+                _stripe_logger.warning("Could not fetch customer email: %s", e)
+
+        if email:
+            found = await _set_premium(email, customer_id, is_premium=True)
+            _stripe_logger.info(
+                "Premium GRANTED for %s (customer %s) — user found: %s",
+                email, customer_id, found,
+            )
+        else:
+            _stripe_logger.warning("invoice event missing email — customer: %s", customer_id)
+
+    # ── Revoke premium ───────────────────────────────────────────────────────
+    elif event_type == "customer.subscription.deleted":
+        customer_id = data_obj.get("customer", "") or ""
+        email       = ""
+        if customer_id:
+            try:
+                import stripe as _stripe
+                _stripe.api_key = _get_stripe_key() or ""
+                customer = _stripe.Customer.retrieve(customer_id)
+                email = customer.get("email", "")
+            except Exception as e:
+                _stripe_logger.warning("Could not fetch customer for revoke: %s", e)
+
+        if email:
+            found = await _set_premium(email, customer_id, is_premium=False)
+            _stripe_logger.info(
+                "Premium REVOKED for %s (customer %s) — user found: %s",
+                email, customer_id, found,
+            )
+
+    return {"received": True, "type": event_type}
+
+
 # ==================== ADMIN ROUTES ====================
 
 @api_router.get("/admin-setup-t2d")
