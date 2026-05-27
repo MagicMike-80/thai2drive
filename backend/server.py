@@ -792,7 +792,7 @@ async def _activate_from_checkout_session(session: dict) -> bool:
     if subscription_id:
         stripe = _stripe_module()
         if stripe:
-            subscription = _stripe_to_dict(stripe.Subscription.retrieve(str(subscription_id)))
+            subscription = _stripe_to_dict(await asyncio.to_thread(stripe.Subscription.retrieve, str(subscription_id)))
             if subscription.get("livemode") is not True:
                 return False
             status = subscription.get("status") or "active"
@@ -893,7 +893,7 @@ async def checkout_status(session_id: str, current_user: dict = Depends(get_curr
     stripe = _stripe_module()
     if not stripe:
         raise HTTPException(status_code=503, detail="Live Stripe is not configured")
-    session = _stripe_to_dict(stripe.checkout.Session.retrieve(session_id))
+    session = _stripe_to_dict(await asyncio.to_thread(stripe.checkout.Session.retrieve, session_id))
     if session.get("livemode") is not True:
         raise HTTPException(status_code=400, detail="Only live Stripe sessions are allowed")
     metadata = session.get("metadata") or {}
@@ -955,7 +955,7 @@ async def stripe_webhook(request: Request):
             subscription_id = obj.get("subscription") or obj.get("subscription_id")
             if subscription_id:
                 # Subscription invoice — look up user_id from subscription metadata
-                subscription = _stripe_to_dict(stripe.Subscription.retrieve(str(subscription_id)))
+                subscription = _stripe_to_dict(await asyncio.to_thread(stripe.Subscription.retrieve, str(subscription_id)))
                 metadata = subscription.get("metadata") or obj.get("metadata") or {}
                 user_id = metadata.get("user_id")
                 plan_id = metadata.get("plan_id", "monthly")
@@ -974,7 +974,7 @@ async def stripe_webhook(request: Request):
                 customer_id = str(obj.get("customer") or "")
                 if not customer_email and customer_id:
                     try:
-                        customer_obj = _stripe_to_dict(stripe.Customer.retrieve(customer_id))
+                        customer_obj = _stripe_to_dict(await asyncio.to_thread(stripe.Customer.retrieve, customer_id))
                         customer_email = customer_obj.get("email", "")
                     except Exception as _ce:
                         logger.warning("Could not fetch Stripe customer %s: %s", customer_id, _ce)
