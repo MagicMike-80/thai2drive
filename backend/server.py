@@ -568,6 +568,17 @@ def _stripe_module():
     return stripe
 
 
+def _stripe_webhook_secret() -> str:
+    return next(
+        (
+            os.environ.get(name, "").strip()
+            for name in ("STRIPE_WEBHOOK_SECRET", "STRIPE_ENDPOINT_SECRET", "STRIPE_WEBHOOK_SIGNING_SECRET")
+            if os.environ.get(name, "").strip()
+        ),
+        "",
+    )
+
+
 def _get_live_stripe_plan_prices_sync() -> Optional[dict]:
     try:
         stripe = _stripe_module()
@@ -888,7 +899,7 @@ async def checkout_status(session_id: str, current_user: dict = Depends(get_curr
 @app.post("/api/stripe/webhook")
 async def stripe_webhook(request: Request):
     stripe = _stripe_module()
-    webhook_secret = os.environ.get("STRIPE_WEBHOOK_SECRET", "").strip()
+    webhook_secret = _stripe_webhook_secret()
     if not stripe or not webhook_secret:
         raise HTTPException(status_code=503, detail="Stripe webhook is not configured")
 
