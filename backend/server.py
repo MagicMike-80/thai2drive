@@ -936,6 +936,12 @@ async def stripe_webhook(request: Request):
         logger.warning("Processing test-mode Stripe event %s type=%s", event_id, event_type)
 
     try:
+        if event_id:
+            existing_event = await db.stripe_events.find_one({"event_id": event_id}, {"_id": 0})
+            if existing_event and existing_event.get("handled") is True:
+                logger.info("Stripe event %s already handled; acknowledging duplicate", event_id)
+                return {"received": True, "handled": True, "duplicate": True}
+
         data_obj = (event.get("data") or {}).get("object") or {}
         handled = True
 
