@@ -63,6 +63,7 @@ html, body {
   background:var(--bg); color:var(--text);
   font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
   -webkit-font-smoothing:antialiased;
+  font-weight:600;
 }
 button { font-family:inherit; }
 a { color:inherit; text-decoration:none; }
@@ -2621,10 +2622,13 @@ a { color:inherit; text-decoration:none; }
 
   </div><!-- /content -->
 
-  <!-- BOTTOM NAV — 5 tabs -->
+  <!-- BOTTOM NAV — 7 tabs: Hjem → Innstillinger → Kategorier → Historikk → Trafikkskilt → Studiebok → Bokmerker -->
   <div id="bottomNav">
     <button class="bn-tab active" id="bnHome" onclick="showTab('home')">
       <span class="bn-icon">🏠</span>Hjem
+    </button>
+    <button class="bn-tab" id="bnSettings" onclick="showTab('settings')">
+      <span class="bn-icon">⚙️</span>Innstillinger
     </button>
     <button class="bn-tab" id="bnCats" onclick="showTab('cats')">
       <span class="bn-icon">📚</span>Kategorier
@@ -2640,9 +2644,6 @@ a { color:inherit; text-decoration:none; }
     </button>
     <button class="bn-tab" id="bnBookmarks" onclick="showTab('bookmarks')">
       <span class="bn-icon">🔖</span>Bokmerker
-    </button>
-    <button class="bn-tab" id="bnSettings" onclick="showTab('settings')">
-      <span class="bn-icon">⚙️</span>Innstillinger
     </button>
   </div>
 
@@ -4929,12 +4930,15 @@ function buildAiHtml(isOk, expl) {
     if (_recentTopics.length > 4) _recentTopics.pop();
   }
 
-  // 1 ── Verdict — calm and clear, never a scorecard
-  var verdictText = isOk ? _nextCorrectPhrase() : _wrongSupportText(_wrongStreak);
-  var html = '<div class="quiz-ai-verdict ' + (isOk ? 'ok' : 'bad') + '">'
-    + '<span class="quiz-ai-verdict-icon">' + (isOk ? '✅' : '↩') + '</span>'
-    + '<span>' + verdictText + '</span>'
-    + '</div>';
+  // 1 ── Verdict — only shown for correct answers (wrong already has q-feedback bar)
+  var html = '';
+  if (isOk) {
+    var verdictText = _nextCorrectPhrase();
+    html = '<div class="quiz-ai-verdict ok">'
+      + '<span class="quiz-ai-verdict-icon">✅</span>'
+      + '<span>' + verdictText + '</span>'
+      + '</div>';
+  }
 
   if (!isOk && expl) {
     // 2a ── Wrong: topic-targeted label + key insight (safety numbers bolded)
