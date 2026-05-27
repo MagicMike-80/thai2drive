@@ -579,6 +579,23 @@ def _stripe_webhook_secret() -> str:
     )
 
 
+def _stripe_to_dict(obj: Any) -> dict:
+    if obj is None:
+        return {}
+    if isinstance(obj, dict):
+        return obj
+    to_dict_recursive = getattr(obj, "to_dict_recursive", None)
+    if callable(to_dict_recursive):
+        return to_dict_recursive()
+    to_dict = getattr(obj, "to_dict", None)
+    if callable(to_dict):
+        return to_dict()
+    try:
+        return dict(obj)
+    except Exception:
+        return {}
+
+
 def _get_live_stripe_plan_prices_sync() -> Optional[dict]:
     try:
         stripe = _stripe_module()
