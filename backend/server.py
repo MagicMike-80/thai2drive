@@ -935,7 +935,13 @@ async def stripe_webhook(request: Request):
                     )
         elif event_type == "customer.subscription.deleted":
             await _sync_subscription_deleted(dict(obj))
-        elif event_type in ("invoice.paid", "invoice.payment_paid", "invoice_payment.paid"):
+        elif event_type == "invoice_payment.paid":
+            # Newer Stripe API event for invoice-payment objects. Premium activation is
+            # handled by checkout.session.completed / subscription events; acknowledge this
+            # event so Stripe does not keep retrying an object shape we do not need.
+            logger.info("Stripe invoice_payment.paid event %s acknowledged without grant", event.get("id"))
+            handled = False
+        elif event_type in ("invoice.paid", "invoice.payment_paid"):
             if obj.get("livemode") is True:
                 subscription_details = obj.get("subscription_details") or {}
                 metadata = obj.get("metadata") or subscription_details.get("metadata") or {}
