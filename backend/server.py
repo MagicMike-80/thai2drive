@@ -921,16 +921,17 @@ async def stripe_webhook(request: Request):
     payload = await request.body()
     sig_header = request.headers.get("stripe-signature")
     try:
-        raw_event = stripe.Webhook.construct_event(payload, sig_header, webhook_secret)
+        stripe.Webhook.construct_event(payload, sig_header, webhook_secret)
     except Exception:
         raise HTTPException(status_code=400, detail="Invalid Stripe webhook signature")
 
-    # Convert the Stripe SDK object to a plain dict so all access is consistent
-    # regardless of stripe-python version (v3/v4 dict-based vs v5 typed models).
-    event = _stripe_to_dict(raw_event)
+    # Signature verified. Parse the raw payload as plain JSON — this is version-safe
+    # and avoids all stripe-python SDK object compatibility issues across v3/v4/v5/v15+.
+    import json as _json
+    event = _json.loads(payload)
     event_id = event.get("id") or ""
     event_type = event.get("type") or "unknown"
-    is_live = event.get("livemode") is True  # defined here so except block can always use it
+    is_live = event.get("livemode") is True
     if not is_live:
         logger.warning("Processing test-mode Stripe event %s type=%s", event_id, event_type)
 
