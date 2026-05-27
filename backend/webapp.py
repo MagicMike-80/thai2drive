@@ -3113,6 +3113,7 @@ var PREMIUM_PRICING = {
     try {
       user = await api('GET', '/api/auth/me');
       deviceId = user._id || user.id || null;
+      await handleCheckoutReturn();
       enterApp();
     } catch(e) {
       _ls.remove('t2d_token');
@@ -3391,6 +3392,30 @@ async function loadPremiumPricing() {
     console.warn('[pricing] using local fallback', e && e.message ? e.message : e);
   }
   renderPremiumPricing();
+}
+
+async function refreshCurrentUser() {
+  if (!token) return null;
+  user = await api('GET', '/api/auth/me');
+  await loadAccessStatus();
+  return user;
+}
+
+async function handleCheckoutReturn() {
+  var params = new URLSearchParams(window.location.search || '');
+  var sessionId = params.get('session_id');
+  if (params.get('checkout') !== 'success' || !sessionId || !token) return false;
+  try {
+    var status = await api('GET', '/api/checkout/status?session_id=' + encodeURIComponent(sessionId));
+    await refreshCurrentUser();
+    if (status && status.is_premium) {
+      toast({th:'เปิดใช้ Premium แล้ว', no:'Premium er aktivert', en:'Premium activated'}[appLang] || 'Premium activated', 4500);
+    }
+  } catch(e) {
+    toast(({th:'ยังยืนยันการชำระเงินไม่ได้', no:'Betalingen kunne ikke bekreftes ennå', en:'Payment could not be confirmed yet'}[appLang] || 'Payment could not be confirmed yet'), 5000);
+  }
+  window.history.replaceState({}, '', window.location.pathname);
+  return true;
 }
 
 function renderPremiumPricing() {
@@ -3698,13 +3723,31 @@ function selectPlan(plan, el) {
   if (el) el.classList.add('selected');
 }
 
-function buyPremium() {
-  var msg = {
-    th:'ติดต่อเราที่ thai2drive@gmail.com เพื่อซื้อ Premium',
-    no:'Kontakt oss på thai2drive@gmail.com for å kjøpe premium',
-    en:'Contact us at thai2drive@gmail.com to buy premium'
-  };
-  toast((msg[appLang] || msg['no']), 5000);
+async function buyPremium() {
+  if (!token) {
+    showScreen('screenAuth');
+    return;
+  }
+  try {
+    var base = window.location.origin + window.location.pathname;
+    var session = await api('POST', '/api/create-checkout-session', {
+      plan_id: selectedPlan,
+      device_id: deviceId || '',
+      success_url: base + '?checkout=success&session_id={CHECKOUT_SESSION_ID}',
+      cancel_url: base + '?checkout=cancel'
+    });
+    if (session && session.livemode && session.url) {
+      window.location.href = session.url;
+      return;
+    }
+    throw new Error('Checkout unavailable');
+  } catch(e) {
+    toast(({
+      th:'ไม่สามารถเปิดการชำระเงินได้ในตอนนี้',
+      no:'Betaling er ikke tilgjengelig akkurat nå',
+      en:'Payment is not available right now'
+    }[appLang] || 'Payment is not available right now'), 5000);
+  }
 }
 
 function paywallSkip() {

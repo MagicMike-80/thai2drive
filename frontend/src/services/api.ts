@@ -32,6 +32,19 @@ export interface PremiumPricingResponse {
   plans: PremiumPricingPlan[];
 }
 
+export interface CheckoutSessionResponse {
+  url: string;
+  session_id: string;
+  livemode: boolean;
+}
+
+export interface CheckoutStatusResponse {
+  is_premium: boolean;
+  activated: boolean;
+  payment_status?: string;
+  status?: string;
+}
+
 // ==================== ACCESS TYPES ====================
 export interface AccessStatus {
   tier: 'guest' | 'registered' | 'premium' | string;
@@ -229,6 +242,29 @@ export const api = {
   // ==================== PUBLIC PRICING ====================
   async getPricing(): Promise<PremiumPricingResponse> {
     return fetchJSON(`${API_BASE}/pricing`);
+  },
+
+  async createCheckoutSession(
+    planId: string,
+    token: string,
+    opts?: { successUrl?: string; cancelUrl?: string; deviceId?: string },
+  ): Promise<CheckoutSessionResponse> {
+    return fetchJSON(`${API_BASE}/create-checkout-session`, {
+      method: 'POST',
+      headers: authHeaders(token),
+      body: JSON.stringify({
+        plan_id: planId,
+        success_url: opts?.successUrl,
+        cancel_url: opts?.cancelUrl,
+        device_id: opts?.deviceId,
+      }),
+    });
+  },
+
+  async checkCheckoutStatus(sessionId: string, token: string): Promise<CheckoutStatusResponse> {
+    return fetchJSON(`${API_BASE}/checkout/status?session_id=${encodeURIComponent(sessionId)}`, {
+      headers: authHeaders(token),
+    });
   },
 
   // ==================== ACCESS POLICY ====================

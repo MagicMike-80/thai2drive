@@ -91,13 +91,15 @@ const TR: Record<string, Record<string, string>> = {
 
 export default function PaywallScreen() {
   const router = useRouter();
-  const { language, colors, setPremium, isAuthenticated, freeRemaining } = useAppStore();
+  const { language, colors, setPremium, isAuthenticated, freeRemaining, authToken, deviceId, refreshAccessStatus } = useAppStore();
   const t = TR[language] || TR.en;
   const c = colors;
   // Default selection = Best Value (3 months)
   const [plan, setPlan] = useState<Plan>('threemonth');
   const [success, setSuccess] = useState(false);
   const [publicPricing, setPublicPricing] = useState<Record<string, PremiumPricingPlan>>({});
+  const [stripePurchasing, setStripePurchasing] = useState(false);
+  const [stripeError, setStripeError] = useState<string | null>(null);
   const isWeb = Platform.OS === 'web';
   const limitReached = freeRemaining() <= 0;
 
@@ -127,16 +129,45 @@ export default function PaywallScreen() {
 
   useEffect(() => { rc.clearError(); }, [plan]);
 
+  useEffect(() => {
+    if (!isWeb || !authToken || typeof window === 'undefined') return;
+    const params = new URLSearchParams(window.location.search);
+    const sessionId = params.get('session_id');
+    if (params.get('checkout') !== 'success' || !sessionId) return;
+    let mounted = true;
+    setStripePurchasing(true);
+    api.checkCheckoutStatus(sessionId, authToken)
+      .then(async (res) => {
+        if (!mounted) return;
+        await refreshAccessStatus();
+        if (res.is_premium) {
+          await setPremium(true);
+          setSuccess(true);
+          window.history.replaceState({}, '', window.location.pathname);
+          setTimeout(() => router.replace('/'), 1200);
+        } else {
+          setStripeError(t.paymentNotEnabledBody);
+        }
+      })
+      .catch((e) => mounted && setStripeError(e.message || t.paymentNotEnabledBody))
+      .finally(() => mounted && setStripePurchasing(false));
+    return () => { mounted = false; };
+  }, [isWeb, authToken, refreshAccessStatus, router, setPremium, t.paymentNotEnabledBody]);
+
   // ── Hard guard: payments only enabled when RevenueCat is fully initialized
   // AND we have at least one product loaded from the dashboard. Anything else
   // (preview build, web preview, missing/invalid API key, no offerings configured,
   // init crashed) means the store cannot verify a real purchase, and we MUST NOT
   // unlock premium without a confirmed payment.
   const paymentsEnabled =
-    !IS_PREVIEW_BUILD &&
-    rc.isAvailable &&
-    rc.packages.length > 0 &&
-    Platform.OS !== 'web';
+    isWeb
+      ? !IS_PREVIEW_BUILD
+      : (!IS_PREVIEW_BUILD && rc.isAvailable && rc.packages.length > 0);
+
+  const stripePlanId =
+    plan === 'monthly' ? 'monthly' :
+    plan === 'threemonth' ? 'three_months' :
+    'lifetime';
 
   const onPurchase = async () => {
     // Preview build → buttons are dead. No SDK call, no setPremium, no router push.
@@ -153,6 +184,30 @@ export default function PaywallScreen() {
     if (!paymentsEnabled) {
       // The UI already shows the "Betaling er ikke aktivert ennå" banner,
       // so we just ignore the tap silently rather than route anywhere.
+      return;
+    }
+
+    if (isWeb) {
+      if (!authToken || typeof window === 'undefined') return;
+      setStripePurchasing(true);
+      setStripeError(null);
+      try {
+        const base = window.location.origin + window.location.pathname;
+        const session = await api.createCheckoutSession(stripePlanId, authToken, {
+          deviceId,
+          successUrl: `${base}?checkout=success&session_id={CHECKOUT_SESSION_ID}`,
+          cancelUrl: `${base}?checkout=cancel`,
+        });
+        if (session.livemode && session.url) {
+          window.location.href = session.url;
+        } else {
+          setStripeError(t.paymentNotEnabledBody);
+        }
+      } catch (e: any) {
+        setStripeError(e.message || t.paymentNotEnabledBody);
+      } finally {
+        setStripePurchasing(false);
+      }
       return;
     }
 
@@ -302,10 +357,10 @@ export default function PaywallScreen() {
         </View>
 
         {/* Error */}
-        {rc.error ? (
+        {(rc.error || stripeError) ? (
           <View style={[s.errorBox, { backgroundColor: c.incorrectBg }]}>
             <Ionicons name="alert-circle" size={16} color={c.incorrect} />
-            <Text style={[s.errorText, { color: c.incorrect }]}>{rc.error}</Text>
+            <Text style={[s.errorText, { color: c.incorrect }]}>{rc.error || stripeError}</Text>
           </View>
         ) : null}
 
@@ -328,12 +383,12 @@ export default function PaywallScreen() {
       <View style={[s.bottomWrap, { borderTopColor: c.divider, backgroundColor: c.bg }]}>
         <TouchableOpacity
           testID="paywall-cta-btn"
-          disabled={rc.purchasing || !paymentsEnabled}
-          style={[s.ctaBtn, { backgroundColor: (rc.purchasing || !paymentsEnabled) ? c.letterBg : c.accent }]}
+          disabled={rc.purchasing || stripePurchasing || !paymentsEnabled}
+          style={[s.ctaBtn, { backgroundColor: (rc.purchasing || stripePurchasing || !paymentsEnabled) ? c.letterBg : c.accent }]}
           onPress={onPurchase}
           activeOpacity={0.85}
         >
-          {rc.purchasing ? (
+          {rc.purchasing || stripePurchasing ? (
             <><ActivityIndicator size="small" color="#0F172A" /><Text style={s.ctaText}>{t.purchasing}</Text></>
           ) : !paymentsEnabled ? (
             <><Ionicons name="lock-closed" size={18} color={c.textMuted} /><Text style={[s.ctaText, { color: c.textMuted }]}>{t.paymentNotEnabled}</Text></>

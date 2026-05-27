@@ -123,6 +123,33 @@ async def create_all_indexes(db) -> dict[str, list[str]]:
     created["access_usage"] = ["scope_key_unique"]
     created["access_events"] = ["event_id_unique", "scope_key_time"]
 
+    # -- billing -----------------------------------------------------------
+    await db.checkout_sessions.create_index(
+        [("stripe_session_id", ASCENDING)],
+        unique=True,
+        background=True,
+        name="stripe_session_unique",
+    )
+    await db.subscriptions.create_index(
+        [("user_id", ASCENDING), ("source", ASCENDING)],
+        background=True,
+        name="user_source",
+    )
+    await db.subscriptions.create_index(
+        [("stripe_subscription_id", ASCENDING)],
+        background=True,
+        name="stripe_subscription",
+    )
+    await db.stripe_events.create_index(
+        [("event_id", ASCENDING)],
+        unique=True,
+        background=True,
+        name="stripe_event_unique",
+    )
+    created["checkout_sessions"] = ["stripe_session_unique"]
+    created["subscriptions"] = ["user_source", "stripe_subscription"]
+    created["stripe_events"] = ["stripe_event_unique"]
+
     return created
 
 

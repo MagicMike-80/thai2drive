@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter, HTTPException, Query, Depends, UploadFile, File, Header
+from fastapi import FastAPI, APIRouter, HTTPException, Query, Depends, UploadFile, File, Header, Request
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse as FastAPIFileResponse
@@ -276,6 +276,20 @@ class AccessConsumeRequest(BaseModel):
     category: Optional[str] = None
     event_id: Optional[str] = None
 
+
+class CheckoutSessionRequest(BaseModel):
+    plan_id: str
+    success_url: Optional[str] = None
+    cancel_url: Optional[str] = None
+    device_id: Optional[str] = None
+
+    @validator("plan_id")
+    def validate_plan_id(cls, v):
+        v = (v or "").strip()
+        if v not in ("monthly", "three_months", "lifetime"):
+            raise ValueError("Invalid plan")
+        return v
+
 # ==================== AUTH HELPERS ====================
 
 def create_token(user_id: str, email: str, is_premium: bool = False) -> str:
@@ -326,6 +340,25 @@ def generate_reset_code() -> str:
     import random
     return str(random.randint(100000, 999999))
 
+
+def _user_has_active_premium(user: Optional[dict]) -> bool:
+    if not user:
+        return False
+    if user.get("is_admin"):
+        return True
+    if not user.get("is_premium"):
+        return False
+    expires_at = user.get("premium_expires_at")
+    if expires_at:
+        try:
+            expires = datetime.fromisoformat(str(expires_at).replace("Z", "+00:00"))
+            if expires < datetime.now(timezone.utc):
+                return False
+        except Exception:
+            return False
+    return True
+
+
 def _oslo_day_key(dt: Optional[datetime] = None) -> str:
     dt = dt or datetime.now(timezone.utc)
     return dt.astimezone(ACCESS_OSLO_TZ).date().isoformat()
@@ -336,7 +369,7 @@ def _access_scope(user: Optional[dict], device_id: str) -> tuple[str, str]:
     return "guest", device_id
 
 def _access_policy_payload(user: Optional[dict], usage: Optional[dict]) -> dict:
-    is_premium = bool(user and (user.get("is_premium") or user.get("is_admin")))
+    is_premium = _user_has_active_premium(user)
     is_registered = bool(user)
     tier = "premium" if is_premium else ("registered" if is_registered else "guest")
     today = _oslo_day_key()
@@ -511,7 +544,7 @@ def _format_kr(amount_minor: int, currency: str) -> str:
     return f"{amount_minor / 100:.2f} {currency.upper()}"
 
 
-def _fetch_stripe_pricing_sync() -> Optional[dict]:
+def _get_live_stripe_secret_key() -> str:
     key = next(
         (
             os.environ.get(name, "").strip()
@@ -523,11 +556,23 @@ def _fetch_stripe_pricing_sync() -> Optional[dict]:
     # Production billing must never read Stripe test-mode data. If Railway is
     # misconfigured with a test key, fail closed to the public fallback instead
     # of showing test prices or test price IDs.
-    if not key.startswith("sk_live_"):
+    return key if key.startswith("sk_live_") else ""
+
+
+def _stripe_module():
+    key = _get_live_stripe_secret_key()
+    if not key:
         return None
+    import stripe
+    stripe.api_key = key
+    return stripe
+
+
+def _get_live_stripe_plan_prices_sync() -> Optional[dict]:
     try:
-        import stripe
-        stripe.api_key = key
+        stripe = _stripe_module()
+        if not stripe:
+            return None
         prices = stripe.Price.list(active=True, expand=["data.product"], limit=100)
         by_name = {}
         for price in prices.data:
@@ -544,6 +589,7 @@ def _fetch_stripe_pricing_sync() -> Optional[dict]:
                 if getattr(price, "livemode", False) is not True:
                     logger.warning("Ignoring non-live Stripe price for %s", base["stripe_product_name"])
                     return None
+                base["stripe_price"] = price
                 amount = int(price.unit_amount or 0)
                 currency = (price.currency or "nok").upper()
                 base.update({
@@ -561,6 +607,18 @@ def _fetch_stripe_pricing_sync() -> Optional[dict]:
         return None
 
 
+def _fetch_stripe_pricing_sync() -> Optional[dict]:
+    data = _get_live_stripe_plan_prices_sync()
+    if not data:
+        return None
+    public_plans = []
+    for plan in data.get("plans", []):
+        public_plan = dict(plan)
+        public_plan.pop("stripe_price", None)
+        public_plans.append(public_plan)
+    return {**data, "plans": public_plans}
+
+
 @api_router.get("/pricing")
 async def get_public_pricing():
     """Public premium pricing. Secret Stripe keys never leave the backend."""
@@ -572,6 +630,324 @@ async def get_public_pricing():
         data = _pricing_payload_from_fallback()
     _pricing_cache.update({"ts": now, "data": data})
     return data
+
+
+# ==================== STRIPE CHECKOUT ====================
+
+def _public_site_url() -> str:
+    raw = (
+        os.environ.get("PUBLIC_SITE_URL")
+        or os.environ.get("APP_URL")
+        or os.environ.get("FRONTEND_URL")
+        or "https://www.thai2drive.no"
+    ).strip().rstrip("/")
+    return raw or "https://www.thai2drive.no"
+
+
+def _safe_return_url(url: Optional[str], fallback_path: str) -> str:
+    from urllib.parse import urlparse
+
+    fallback = _public_site_url() + fallback_path
+    if not url:
+        return fallback
+    parsed = urlparse(url)
+    allowed_hosts = {
+        "thai2drive.no",
+        "www.thai2drive.no",
+        "localhost",
+        "127.0.0.1",
+    }
+    if parsed.scheme not in ("https", "http") or parsed.hostname not in allowed_hosts:
+        return fallback
+    if parsed.scheme != "https" and parsed.hostname not in ("localhost", "127.0.0.1"):
+        return fallback
+    return url
+
+
+def _checkout_mode_for_price(plan_id: str, price: Any) -> str:
+    recurring = getattr(price, "recurring", None)
+    if plan_id == "monthly":
+        if not recurring:
+            raise HTTPException(status_code=500, detail="Stripe subscription price is not recurring")
+        return "subscription"
+    if plan_id == "three_months":
+        return "subscription" if recurring else "payment"
+    if recurring:
+        raise HTTPException(status_code=500, detail="Stripe lifetime price must be one-time")
+    return "payment"
+
+
+async def _set_user_premium(
+    user_id: str,
+    *,
+    plan_id: str,
+    stripe_customer_id: Optional[str] = None,
+    stripe_subscription_id: Optional[str] = None,
+    stripe_session_id: Optional[str] = None,
+    status: str = "active",
+    current_period_end: Optional[int] = None,
+    lifetime: bool = False,
+    expires_at: Optional[datetime] = None,
+) -> None:
+    now = datetime.now(timezone.utc).isoformat()
+    update = {
+        "is_premium": True,
+        "premium_source": "stripe",
+        "premium_plan": plan_id,
+        "premium_status": status,
+        "premium_updated_at": now,
+    }
+    if stripe_customer_id:
+        update["stripe_customer_id"] = stripe_customer_id
+    if stripe_subscription_id:
+        update["stripe_subscription_id"] = stripe_subscription_id
+    if stripe_session_id:
+        update["stripe_checkout_session_id"] = stripe_session_id
+    if current_period_end:
+        update["premium_current_period_end"] = datetime.fromtimestamp(current_period_end, timezone.utc).isoformat()
+    if expires_at:
+        update["premium_expires_at"] = expires_at.astimezone(timezone.utc).isoformat()
+    if lifetime:
+        update["premium_lifetime"] = True
+        update.pop("premium_expires_at", None)
+
+    mongo_update: Dict[str, Any] = {"$set": update}
+    if lifetime:
+        mongo_update["$unset"] = {"premium_expires_at": ""}
+
+    await db.users.update_one({"id": user_id}, mongo_update)
+    await db.subscriptions.update_one(
+        {"user_id": user_id, "source": "stripe", "stripe_subscription_id": stripe_subscription_id or stripe_session_id or "lifetime"},
+        {"$set": {**update, "user_id": user_id, "source": "stripe"}, "$setOnInsert": {"created_at": now}},
+        upsert=True,
+    )
+
+
+async def _sync_subscription_deleted(subscription: dict) -> None:
+    if subscription.get("livemode") is not True:
+        return
+    sub_id = subscription.get("id")
+    user_id = (subscription.get("metadata") or {}).get("user_id")
+    if not user_id and subscription.get("customer"):
+        user = await db.users.find_one({"stripe_customer_id": str(subscription.get("customer"))}, {"_id": 0})
+        user_id = user.get("id") if user else None
+    if not user_id:
+        return
+    now = datetime.now(timezone.utc).isoformat()
+    await db.subscriptions.update_one(
+        {"user_id": user_id, "source": "stripe", "stripe_subscription_id": sub_id},
+        {"$set": {"premium_status": "canceled", "canceled_at": now}},
+        upsert=True,
+    )
+    user = await db.users.find_one({"id": user_id}, {"_id": 0})
+    if user and not user.get("premium_lifetime"):
+        await db.users.update_one(
+            {"id": user_id},
+            {"$set": {"is_premium": False, "premium_status": "canceled", "premium_updated_at": now}},
+        )
+
+
+async def _activate_from_checkout_session(session: dict) -> bool:
+    if session.get("livemode") is not True:
+        return False
+    metadata = session.get("metadata") or {}
+    user_id = metadata.get("user_id")
+    plan_id = metadata.get("plan_id")
+    if not user_id or plan_id not in ("monthly", "three_months", "lifetime"):
+        return False
+    mode = session.get("mode")
+    payment_status = session.get("payment_status")
+    if mode == "payment" and payment_status != "paid":
+        return False
+    if mode == "subscription" and payment_status not in ("paid", "no_payment_required"):
+        return False
+
+    current_period_end = None
+    status = "active"
+    subscription_id = session.get("subscription")
+    if subscription_id:
+        stripe = _stripe_module()
+        if stripe:
+            subscription = stripe.Subscription.retrieve(str(subscription_id))
+            if getattr(subscription, "livemode", False) is not True:
+                return False
+            status = getattr(subscription, "status", None) or "active"
+            current_period_end = getattr(subscription, "current_period_end", None)
+
+    expires_at = None
+    if mode == "payment" and plan_id == "three_months":
+        expires_at = datetime.now(timezone.utc) + timedelta(days=90)
+
+    await _set_user_premium(
+        user_id,
+        plan_id=plan_id,
+        stripe_customer_id=str(session.get("customer") or ""),
+        stripe_subscription_id=str(subscription_id or ""),
+        stripe_session_id=str(session.get("id") or ""),
+        status=status,
+        current_period_end=current_period_end,
+        lifetime=(plan_id == "lifetime"),
+        expires_at=expires_at,
+    )
+    return True
+
+
+@api_router.post("/create-checkout-session")
+async def create_checkout_session(data: CheckoutSessionRequest, current_user: dict = Depends(get_current_user)):
+    user = await db.users.find_one({"id": current_user["sub"]}, {"_id": 0, "password_hash": 0})
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    stripe = _stripe_module()
+    if not stripe:
+        raise HTTPException(status_code=503, detail="Live Stripe is not configured")
+
+    pricing = await asyncio.to_thread(_get_live_stripe_plan_prices_sync)
+    if not pricing or pricing.get("source") != "stripe_live":
+        raise HTTPException(status_code=503, detail="Live Stripe prices are not available")
+    plan = next((p for p in pricing["plans"] if p.get("id") == data.plan_id), None)
+    if not plan or not plan.get("stripe_price"):
+        raise HTTPException(status_code=400, detail="Plan is not available")
+    price = plan["stripe_price"]
+    if getattr(price, "livemode", False) is not True:
+        raise HTTPException(status_code=400, detail="Only live Stripe prices are allowed")
+
+    mode = _checkout_mode_for_price(data.plan_id, price)
+    success_url = _safe_return_url(
+        data.success_url,
+        "/api/web?checkout=success&session_id={CHECKOUT_SESSION_ID}",
+    )
+    cancel_url = _safe_return_url(data.cancel_url, "/api/web?checkout=cancel")
+    metadata = {
+        "user_id": user["id"],
+        "email": user.get("email", ""),
+        "plan_id": data.plan_id,
+        "device_id": data.device_id or user.get("device_id") or "",
+    }
+
+    session_kwargs = {
+        "mode": mode,
+        "line_items": [{"price": price.id, "quantity": 1}],
+        "success_url": success_url,
+        "cancel_url": cancel_url,
+        "client_reference_id": user["id"],
+        "metadata": metadata,
+        "allow_promotion_codes": False,
+    }
+    if user.get("stripe_customer_id"):
+        session_kwargs["customer"] = user.get("stripe_customer_id")
+    else:
+        session_kwargs["customer_email"] = user.get("email")
+    if mode == "subscription":
+        session_kwargs["subscription_data"] = {"metadata": metadata}
+    else:
+        session_kwargs["payment_intent_data"] = {"metadata": metadata}
+
+    session = stripe.checkout.Session.create(**session_kwargs)
+    if getattr(session, "livemode", False) is not True:
+        raise HTTPException(status_code=500, detail="Stripe returned a non-live checkout session")
+
+    now = datetime.now(timezone.utc).isoformat()
+    await db.checkout_sessions.update_one(
+        {"stripe_session_id": session.id},
+        {"$set": {
+            "stripe_session_id": session.id,
+            "user_id": user["id"],
+            "plan_id": data.plan_id,
+            "mode": mode,
+            "livemode": True,
+            "status": getattr(session, "status", None),
+            "created_at": now,
+        }},
+        upsert=True,
+    )
+    return {"url": session.url, "session_id": session.id, "livemode": True}
+
+
+@api_router.get("/checkout/status")
+async def checkout_status(session_id: str, current_user: dict = Depends(get_current_user)):
+    stripe = _stripe_module()
+    if not stripe:
+        raise HTTPException(status_code=503, detail="Live Stripe is not configured")
+    session = stripe.checkout.Session.retrieve(session_id)
+    if getattr(session, "livemode", False) is not True:
+        raise HTTPException(status_code=400, detail="Only live Stripe sessions are allowed")
+    metadata = getattr(session, "metadata", {}) or {}
+    if metadata.get("user_id") != current_user["sub"]:
+        raise HTTPException(status_code=403, detail="Checkout session does not belong to this user")
+    activated = await _activate_from_checkout_session(dict(session))
+    user = await db.users.find_one({"id": current_user["sub"]}, {"_id": 0, "password_hash": 0})
+    return {
+        "is_premium": bool(user and user.get("is_premium")),
+        "activated": activated,
+        "payment_status": getattr(session, "payment_status", None),
+        "status": getattr(session, "status", None),
+    }
+
+
+@app.post("/api/stripe/webhook")
+async def stripe_webhook(request: Request):
+    stripe = _stripe_module()
+    webhook_secret = os.environ.get("STRIPE_WEBHOOK_SECRET", "").strip()
+    if not stripe or not webhook_secret:
+        raise HTTPException(status_code=503, detail="Stripe webhook is not configured")
+
+    payload = await request.body()
+    sig_header = request.headers.get("stripe-signature")
+    try:
+        event = stripe.Webhook.construct_event(payload, sig_header, webhook_secret)
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid Stripe webhook signature")
+
+    if event.get("livemode") is not True:
+        raise HTTPException(status_code=400, detail="Ignoring non-live Stripe event")
+
+    event_type = event.get("type")
+    obj = event.get("data", {}).get("object", {})
+    try:
+        if event_type == "checkout.session.completed":
+            await _activate_from_checkout_session(dict(obj))
+        elif event_type == "customer.subscription.created":
+            if obj.get("livemode") is True and obj.get("status") in ("active", "trialing"):
+                metadata = obj.get("metadata") or {}
+                user_id = metadata.get("user_id")
+                plan_id = metadata.get("plan_id", "monthly")
+                if user_id:
+                    await _set_user_premium(
+                        user_id,
+                        plan_id=plan_id,
+                        stripe_customer_id=str(obj.get("customer") or ""),
+                        stripe_subscription_id=str(obj.get("id") or ""),
+                        status=obj.get("status") or "active",
+                        current_period_end=obj.get("current_period_end"),
+                    )
+        elif event_type == "customer.subscription.deleted":
+            await _sync_subscription_deleted(dict(obj))
+        elif event_type == "invoice.paid":
+            if obj.get("livemode") is True and obj.get("subscription"):
+                subscription = stripe.Subscription.retrieve(str(obj.get("subscription")))
+                metadata = getattr(subscription, "metadata", {}) or {}
+                user_id = metadata.get("user_id")
+                plan_id = metadata.get("plan_id", "monthly")
+                if user_id and getattr(subscription, "livemode", False) is True:
+                    await _set_user_premium(
+                        user_id,
+                        plan_id=plan_id,
+                        stripe_customer_id=str(getattr(subscription, "customer", "") or ""),
+                        stripe_subscription_id=str(getattr(subscription, "id", "") or ""),
+                        status=getattr(subscription, "status", None) or "active",
+                        current_period_end=getattr(subscription, "current_period_end", None),
+                    )
+    except Exception as exc:
+        logger.warning("Stripe webhook handling failed for %s: %s", event_type, exc)
+        raise HTTPException(status_code=500, detail="Webhook handling failed")
+
+    await db.stripe_events.update_one(
+        {"event_id": event.get("id")},
+        {"$set": {"event_id": event.get("id"), "type": event_type, "livemode": True, "processed_at": datetime.now(timezone.utc).isoformat()}},
+        upsert=True,
+    )
+    return {"received": True}
 
 @api_router.get("/stats/me")
 async def get_my_stats(device_id: str):
@@ -916,7 +1292,8 @@ async def login(data: AuthLogin):
         user["is_premium"] = True
     await _migrate_guest_learning_to_user(data.device_id, user["id"])
 
-    token = create_token(user["id"], user["email"], is_premium=user.get("is_premium", False))
+    is_premium_active = _user_has_active_premium(user)
+    token = create_token(user["id"], user["email"], is_premium=is_premium_active)
     return {
         "token": token,
         "user": {
@@ -925,7 +1302,7 @@ async def login(data: AuthLogin):
             "email": user["email"],
             "name": user.get("name"),
             "is_admin": user.get("is_admin", False),
-            "is_premium": user.get("is_premium", False),
+            "is_premium": is_premium_active,
         }
     }
 
@@ -939,7 +1316,7 @@ async def get_me(current_user: dict = Depends(get_current_user)):
         "name": user.get("name", ""),
         "email": user["email"],
         "is_admin": user.get("is_admin", False),
-        "is_premium": user.get("is_premium", False),
+        "is_premium": _user_has_active_premium(user),
     }
 
 @api_router.post("/auth/forgot-password")
