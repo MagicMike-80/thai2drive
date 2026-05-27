@@ -579,6 +579,19 @@ def _stripe_webhook_secret() -> str:
     )
 
 
+def _stripe_to_dict(obj: Any) -> dict:
+    if obj is None:
+        return {}
+    if isinstance(obj, dict):
+        return obj
+    if hasattr(obj, "to_dict_recursive"):
+        return obj.to_dict_recursive()
+    try:
+        return dict(obj)
+    except Exception:
+        return {}
+
+
 def _get_live_stripe_plan_prices_sync() -> Optional[dict]:
     try:
         stripe = _stripe_module()
@@ -779,11 +792,11 @@ async def _activate_from_checkout_session(session: dict) -> bool:
     if subscription_id:
         stripe = _stripe_module()
         if stripe:
-            subscription = stripe.Subscription.retrieve(str(subscription_id))
-            if getattr(subscription, "livemode", False) is not True:
+            subscription = _stripe_to_dict(stripe.Subscription.retrieve(str(subscription_id)))
+            if subscription.get("livemode") is not True:
                 return False
-            status = getattr(subscription, "status", None) or "active"
-            current_period_end = getattr(subscription, "current_period_end", None)
+            status = subscription.get("status") or "active"
+            current_period_end = subscription.get("current_period_end")
 
     expires_at = None
     if mode == "payment" and plan_id == "three_months":
@@ -880,10 +893,10 @@ async def checkout_status(session_id: str, current_user: dict = Depends(get_curr
     stripe = _stripe_module()
     if not stripe:
         raise HTTPException(status_code=503, detail="Live Stripe is not configured")
-    session = stripe.checkout.Session.retrieve(session_id)
-    if getattr(session, "livemode", False) is not True:
+    session = _stripe_to_dict(stripe.checkout.Session.retrieve(session_id))
+    if session.get("livemode") is not True:
         raise HTTPException(status_code=400, detail="Only live Stripe sessions are allowed")
-    metadata = getattr(session, "metadata", {}) or {}
+    metadata = session.get("metadata") or {}
     if metadata.get("user_id") != current_user["sub"]:
         raise HTTPException(status_code=403, detail="Checkout session does not belong to this user")
     activated = await _activate_from_checkout_session(dict(session))
@@ -891,8 +904,8 @@ async def checkout_status(session_id: str, current_user: dict = Depends(get_curr
     return {
         "is_premium": bool(user and user.get("is_premium")),
         "activated": activated,
-        "payment_status": getattr(session, "payment_status", None),
-        "status": getattr(session, "status", None),
+        "payment_status": session.get("payment_status"),
+        "status": session.get("status"),
     }
 
 
@@ -906,7 +919,7 @@ async def stripe_webhook(request: Request):
     payload = await request.body()
     sig_header = request.headers.get("stripe-signature")
     try:
-        event = stripe.Webhook.construct_event(payload, sig_header, webhook_secret)
+        event = _stripe_to_dict(stripe.Webhook.construct_event(payload, sig_header, webhook_secret))
     except Exception:
         raise HTTPException(status_code=400, detail="Invalid Stripe webhook signature")
 
@@ -914,10 +927,10 @@ async def stripe_webhook(request: Request):
         raise HTTPException(status_code=400, detail="Ignoring non-live Stripe event")
 
     event_type = event.get("type")
-    obj = event.get("data", {}).get("object", {})
+    obj = event.get("data", {}).get("object", {}) or {}
     try:
         if event_type == "checkout.session.completed":
-            await _activate_from_checkout_session(dict(obj))
+            await _activate_from_checkout_session(obj)
         elif event_type == "customer.subscription.created":
             if obj.get("livemode") is True and obj.get("status") in ("active", "trialing"):
                 metadata = obj.get("metadata") or {}
@@ -933,25 +946,31 @@ async def stripe_webhook(request: Request):
                         current_period_end=obj.get("current_period_end"),
                     )
         elif event_type == "customer.subscription.deleted":
-            await _sync_subscription_deleted(dict(obj))
-        elif event_type == "invoice.paid":
-            if obj.get("livemode") is True and obj.get("subscription"):
-                subscription = stripe.Subscription.retrieve(str(obj.get("subscription")))
-                metadata = getattr(subscription, "metadata", {}) or {}
+            await _sync_subscription_deleted(obj)
+        elif event_type in ("invoice.paid", "invoice.payment_paid", "invoice_payment.paid"):
+            subscription_id = obj.get("subscription") or obj.get("subscription_id")
+            if obj.get("livemode") is True and subscription_id:
+                subscription = _stripe_to_dict(stripe.Subscription.retrieve(str(subscription_id)))
+                metadata = subscription.get("metadata") or obj.get("metadata") or {}
                 user_id = metadata.get("user_id")
                 plan_id = metadata.get("plan_id", "monthly")
-                if user_id and getattr(subscription, "livemode", False) is True:
+                if user_id and subscription.get("livemode") is True:
                     await _set_user_premium(
                         user_id,
                         plan_id=plan_id,
-                        stripe_customer_id=str(getattr(subscription, "customer", "") or ""),
-                        stripe_subscription_id=str(getattr(subscription, "id", "") or ""),
-                        status=getattr(subscription, "status", None) or "active",
-                        current_period_end=getattr(subscription, "current_period_end", None),
+                        stripe_customer_id=str(subscription.get("customer") or obj.get("customer") or ""),
+                        stripe_subscription_id=str(subscription.get("id") or subscription_id or ""),
+                        status=subscription.get("status") or "active",
+                        current_period_end=subscription.get("current_period_end"),
                     )
     except Exception as exc:
         logger.warning("Stripe webhook handling failed for %s: %s", event_type, exc)
-        raise HTTPException(status_code=500, detail="Webhook handling failed")
+        await db.stripe_events.update_one(
+            {"event_id": event.get("id")},
+            {"$set": {"event_id": event.get("id"), "type": event_type, "livemode": True, "processing_error": str(exc), "processed_at": datetime.now(timezone.utc).isoformat()}},
+            upsert=True,
+        )
+        return {"received": True, "handled": False}
 
     await db.stripe_events.update_one(
         {"event_id": event.get("id")},
