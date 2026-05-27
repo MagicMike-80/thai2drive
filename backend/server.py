@@ -727,11 +727,14 @@ async def _set_user_premium(
         mongo_update["$unset"] = {"premium_expires_at": ""}
 
     await db.users.update_one({"id": user_id}, mongo_update)
-    await db.subscriptions.update_one(
-        {"user_id": user_id, "source": "stripe", "stripe_subscription_id": stripe_subscription_id or stripe_session_id or "lifetime"},
-        {"$set": {**update, "user_id": user_id, "source": "stripe"}, "$setOnInsert": {"created_at": now}},
-        upsert=True,
-    )
+    try:
+        await db.subscriptions.update_one(
+            {"user_id": user_id, "source": "stripe", "stripe_subscription_id": stripe_subscription_id or stripe_session_id or "lifetime"},
+            {"$set": {**update, "user_id": user_id, "source": "stripe"}, "$setOnInsert": {"created_at": now}},
+            upsert=True,
+        )
+    except Exception as exc:
+        logger.warning("Stripe subscription mirror update failed for user %s: %s", user_id, exc)
 
 
 async def _sync_subscription_deleted(subscription: dict) -> None:
