@@ -776,14 +776,11 @@ async def _activate_from_checkout_session(session: dict) -> bool:
     current_period_end = None
     status = "active"
     subscription_id = session.get("subscription")
-    if subscription_id:
-        stripe = _stripe_module()
-        if stripe:
-            subscription = stripe.Subscription.retrieve(str(subscription_id))
-            if getattr(subscription, "livemode", False) is not True:
-                return False
-            status = getattr(subscription, "status", None) or "active"
-            current_period_end = getattr(subscription, "current_period_end", None)
+    if mode == "subscription":
+        # Keep checkout.session.completed webhook handling deterministic. Do not
+        # call Stripe again from this path; subscription events can refine status
+        # and period data separately.
+        status = "active"
 
     expires_at = None
     if mode == "payment" and plan_id == "three_months":
