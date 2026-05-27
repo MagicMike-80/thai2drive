@@ -30,26 +30,25 @@ const EXAM_TIME = 90 * 60;
 const PASS = 85;
 
 const T: Record<string, Record<string, string>> = {
-  no: { check: 'Sjekk svar', next: 'Neste', finish: 'Fullfør', correct: 'Riktig!', incorrect: 'Feil!', hint: 'Trykk for Thai', limitMsg: 'Gratis grense nådd', unlock: 'Lås opp Premium', listen: 'Lytt', listening: 'Spiller...', listenExpl: 'Lytt', accountTitle: 'Opprett konto for å fortsette', accountBody: 'Du har brukt opp 10 gratis spørsmål. Opprett en konto for å fortsette og få tilgang til pakketilbud.', accountSignup: 'Opprett konto', accountLogin: 'Logg inn', accountCancel: 'Avbryt' },
-  th: { check: 'ตรวจคำตอบ', next: 'ถัดไป', finish: 'เสร็จสิ้น', correct: 'ถูกต้อง!', incorrect: 'ผิด!', hint: 'แตะเพื่อแปล', limitMsg: 'ถึงขีดจำกัดฟรี', unlock: 'ปลดล็อค Premium', listen: 'ฟัง', listening: 'กำลังเล่น...', listenExpl: 'ฟัง', accountTitle: 'สร้างบัญชีเพื่อดำเนินการต่อ', accountBody: 'คุณใช้คำถามฟรี 10 ข้อหมดแล้ว สร้างบัญชีเพื่อดำเนินการต่อและรับข้อเสนอแพ็กเกจ', accountSignup: 'สร้างบัญชี', accountLogin: 'เข้าสู่ระบบ', accountCancel: 'ยกเลิก' },
-  en: { check: 'Check Answer', next: 'Next', finish: 'Finish', correct: 'Correct!', incorrect: 'Incorrect!', hint: 'Tap for Thai', limitMsg: 'Free limit reached', unlock: 'Unlock Premium', listen: 'Listen', listening: 'Playing...', listenExpl: 'Listen', accountTitle: 'Create an account to continue', accountBody: 'You have used your 10 free questions. Create an account to continue and see package offers.', accountSignup: 'Create account', accountLogin: 'Log in', accountCancel: 'Cancel' },
+  no: { check: 'Sjekk svar', next: 'Neste', finish: 'Fullfør', correct: 'Riktig!', incorrect: 'Feil!', hint: 'Trykk for Thai', limitMsg: 'Gratis grense nådd', unlock: 'Lås opp Premium', listen: 'Lytt', listening: 'Spiller...', listenExpl: 'Lytt', accountTitle: 'Opprett gratis konto for å fortsette', accountBody: 'Du har brukt de 5 gjestespørsmålene. Opprett en gratis konto for 10 spørsmål per dag og behold progresjonen din.', accountSignup: 'Opprett konto', accountLogin: 'Logg inn', accountCancel: 'Avbryt' },
+  th: { check: 'ตรวจคำตอบ', next: 'ถัดไป', finish: 'เสร็จสิ้น', correct: 'ถูกต้อง!', incorrect: 'ผิด!', hint: 'แตะเพื่อแปล', limitMsg: 'ถึงขีดจำกัดฟรี', unlock: 'ปลดล็อค Premium', listen: 'ฟัง', listening: 'กำลังเล่น...', listenExpl: 'ฟัง', accountTitle: 'สร้างบัญชีฟรีเพื่อเรียนต่อ', accountBody: 'คุณใช้คำถามสำหรับผู้ใช้ทั่วไปครบ 5 ข้อแล้ว สร้างบัญชีฟรีเพื่อรับ 10 คำถามต่อวันและเก็บความก้าวหน้าของคุณไว้', accountSignup: 'สร้างบัญชี', accountLogin: 'เข้าสู่ระบบ', accountCancel: 'ยกเลิก' },
+  en: { check: 'Check Answer', next: 'Next', finish: 'Finish', correct: 'Correct!', incorrect: 'Incorrect!', hint: 'Tap for Thai', limitMsg: 'Free limit reached', unlock: 'Unlock Premium', listen: 'Listen', listening: 'Playing...', listenExpl: 'Listen', accountTitle: 'Create a free account to continue', accountBody: 'You have used the 5 guest questions. Create a free account for 10 questions per day and keep your progress.', accountSignup: 'Create account', accountLogin: 'Log in', accountCancel: 'Cancel' },
 };
 
 export default function QuizScreen() {
   const router = useRouter();
   const { mode, category } = useLocalSearchParams<{ mode: string; category: string }>();
   const store = useAppStore();
-  const { language, deviceId, addBookmark, removeBookmark, isBookmarked, setProgress, colors: c, soundEnabled, soundStyle, hapticsEnabled, isPremium, isAuthenticated, incrementFreeQuestions, canAnswerFree, freeRemaining, needsAccountGate, updateStreak, setLastAttempt } = store;
+  const { language, deviceId, addBookmark, removeBookmark, isBookmarked, setProgress, colors: c, soundEnabled, soundStyle, hapticsEnabled, isPremium, isAuthenticated, canAnswerFree, freeRemaining, consumeQuestionAccess, updateStreak, setLastAttempt } = store;
   const t = T[language] || T.en;
 
   // Screen capture protection
   useScreenProtection(language);
 
   // ── Auth + paywall gate ──
-  // Shows the right destination when a free user tries to continue past their
-  // 10-question limit:
-  //   • Guest (not logged in)  → Alert → /signup or /login (with redirect=paywall)
-  //   • Logged-in free user    → /paywall directly
+  // Shows the right destination when a learner runs out of backend-managed quota:
+  //   • Guest (5 total)          → free account prompt
+  //   • Logged-in free user      → calm premium path after daily practice
   const showAccountOrPaywall = useCallback(() => {
     if (isPremium) return false; // premium has unlimited
     if (canAnswerFree()) return false; // still has free quota
@@ -70,7 +69,7 @@ export default function QuizScreen() {
       router.replace('/paywall');
     }
     return true;
-  }, [isPremium, isAuthenticated, t]);
+  }, [isPremium, isAuthenticated, t, canAnswerFree]);
 
   // Gate: if free user has no quota left when entering quiz, redirect appropriately
   useEffect(() => {
@@ -222,6 +221,20 @@ export default function QuizScreen() {
 
   const handleCheck = async () => {
     if (!sel || !q) return;
+    if (!isPremium) {
+      try {
+        const eventId = `${deviceId}:${q.id}:${questionStartedAt.current}`;
+        await consumeQuestionAccess({
+          questionId: q.id,
+          mode: mode || 'practice',
+          category: q.category || '',
+          eventId,
+        });
+      } catch {
+        showAccountOrPaywall();
+        return;
+      }
+    }
     setDone(true);
     const cor = sel === q.correctOptionId;
 
@@ -244,7 +257,6 @@ export default function QuizScreen() {
     }
 
     setHist((p) => [...p, { question_id: q.id, selected_answer: sel, correct: cor }]);
-    if (!isPremium) incrementFreeQuestions();
     await updateStreak();
     try { await api.updateProgress(deviceId, cor, q.category); setProgress(await api.getProgress(deviceId)); } catch (e) {}
 

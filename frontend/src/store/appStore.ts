@@ -2,7 +2,7 @@ import React from 'react';
 import { create } from 'zustand';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Appearance } from 'react-native';
-import { api, AuthUser } from '../services/api';
+import { api, AccessStatus, AuthUser } from '../services/api';
 import { ThemeMode, ThemeColors, darkTheme, lightTheme } from '../theme';
 
 interface UserProgress {
@@ -48,12 +48,15 @@ interface AppState {
   hapticsEnabled: boolean;
   setHapticsEnabled: (enabled: boolean) => void;
   isPremium: boolean;
-  freeQuestionsUsed: number; // LIFETIME count of answered questions for free/guest users
+  freeQuestionsUsed: number; // legacy local fallback; backend access policy is source of truth
+  accessStatus: AccessStatus | null;
   setPremium: (val: boolean) => void;
   incrementFreeQuestions: () => void;
+  refreshAccessStatus: () => Promise<AccessStatus | null>;
+  consumeQuestionAccess: (payload: { questionId?: string; mode?: string; category?: string; eventId?: string }) => Promise<AccessStatus | null>;
   canAnswerFree: () => boolean;
   freeRemaining: () => number;
-  // Lifetime free limit before account+paywall gate kicks in (10 answered questions)
+  // Backend access policy decides quota: guest gets 5 total, registered gets 10/day.
   needsAccountGate: () => boolean; // true when guest has hit limit and must sign up
   // Streak
   streak: number;
@@ -101,7 +104,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   authLoading: true,
 
   login: async (email, password) => {
-    const res = await api.login(email, password);
+    const res = await api.login(email, password, get().deviceId);
     await AsyncStorage.setItem('authToken', res.token);
     await AsyncStorage.setItem('authUser', JSON.stringify(res.user));
     set({
@@ -113,10 +116,11 @@ export const useAppStore = create<AppState>((set, get) => ({
     if (res.user.is_premium || res.user.is_admin) {
       await AsyncStorage.setItem('isPremium', 'true');
     }
+    await get().refreshAccessStatus();
   },
 
   signup: async (email, password) => {
-    const res = await api.signup(email, password);
+    const res = await api.signup(email, password, get().deviceId);
     await AsyncStorage.setItem('authToken', res.token);
     await AsyncStorage.setItem('authUser', JSON.stringify(res.user));
     set({
@@ -128,12 +132,14 @@ export const useAppStore = create<AppState>((set, get) => ({
     if (res.user.is_premium || res.user.is_admin) {
       await AsyncStorage.setItem('isPremium', 'true');
     }
+    await get().refreshAccessStatus();
   },
 
   logout: async () => {
     await AsyncStorage.multiRemove(['authToken', 'authUser']);
-    set({ authToken: null, user: null, isAuthenticated: false, isPremium: false });
+    set({ authToken: null, user: null, isAuthenticated: false, isPremium: false, accessStatus: null });
     await AsyncStorage.setItem('isPremium', 'false');
+    await get().refreshAccessStatus();
   },
 
   restoreSession: async () => {
@@ -152,6 +158,7 @@ export const useAppStore = create<AppState>((set, get) => ({
             isPremium: freshUser.is_premium || freshUser.is_admin,
             authLoading: false,
           });
+          await get().refreshAccessStatus();
         } catch {
           // Token expired
           await AsyncStorage.multiRemove(['authToken', 'authUser']);
@@ -224,6 +231,7 @@ export const useAppStore = create<AppState>((set, get) => ({
 
     // Restore auth session
     await get().restoreSession();
+    await get().refreshAccessStatus();
   },
 
   progress: { id: '', device_id: '', total_questions_answered: 0, correct_answers: 0, questions_by_category: {}, last_activity: '', created_at: '' },
@@ -262,6 +270,7 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   isPremium: false,
   freeQuestionsUsed: 0,
+  accessStatus: null,
   setPremium: async (val) => { set({ isPremium: val }); await AsyncStorage.setItem('isPremium', val.toString()); },
   incrementFreeQuestions: async () => {
     // Lifetime counter — never auto-resets. Premium users skip incrementing
@@ -270,19 +279,50 @@ export const useAppStore = create<AppState>((set, get) => ({
     set({ freeQuestionsUsed: n });
     await AsyncStorage.setItem('freeQuestionsUsed', n.toString());
   },
+  refreshAccessStatus: async () => {
+    const { deviceId, authToken } = get();
+    if (!deviceId) return null;
+    try {
+      const status = await api.getAccessStatus(deviceId, authToken);
+      set({ accessStatus: status, isPremium: status.is_premium });
+      await AsyncStorage.setItem('isPremium', status.is_premium.toString());
+      return status;
+    } catch {
+      return get().accessStatus;
+    }
+  },
+  consumeQuestionAccess: async ({ questionId, mode, category, eventId }) => {
+    const { deviceId, authToken } = get();
+    if (!deviceId) return null;
+    const status = await api.consumeAccess({
+      device_id: deviceId,
+      question_id: questionId,
+      mode,
+      category,
+      event_id: eventId,
+    }, authToken);
+    set({ accessStatus: status, isPremium: status.is_premium });
+    await AsyncStorage.setItem('isPremium', status.is_premium.toString());
+    return status;
+  },
   canAnswerFree: () => {
-    const { isPremium, freeQuestionsUsed } = get();
-    return isPremium || freeQuestionsUsed < 10;
+    const { isPremium, freeQuestionsUsed, accessStatus } = get();
+    if (isPremium) return true;
+    if (accessStatus) return accessStatus.can_answer;
+    return freeQuestionsUsed < 5;
   },
   freeRemaining: () => {
-    const { isPremium, freeQuestionsUsed } = get();
-    return isPremium ? Infinity : Math.max(0, 10 - freeQuestionsUsed);
+    const { isPremium, freeQuestionsUsed, accessStatus } = get();
+    if (isPremium) return Infinity;
+    if (accessStatus && accessStatus.remaining !== null) return accessStatus.remaining;
+    return Math.max(0, 5 - freeQuestionsUsed);
   },
   needsAccountGate: () => {
     // Guests who hit the lifetime free limit must sign up before continuing
-    const { isPremium, freeQuestionsUsed, isAuthenticated } = get();
+    const { isPremium, freeQuestionsUsed, isAuthenticated, accessStatus } = get();
     if (isPremium) return false;
-    return !isAuthenticated && freeQuestionsUsed >= 10;
+    if (accessStatus) return accessStatus.tier === 'guest' && !accessStatus.can_answer;
+    return !isAuthenticated && freeQuestionsUsed >= 5;
   },
 
   // Streak

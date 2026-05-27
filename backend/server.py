@@ -16,6 +16,7 @@ import jwt
 import time
 import asyncio
 from datetime import datetime, timezone, timedelta
+from zoneinfo import ZoneInfo
 from passlib.context import CryptContext
 
 ROOT_DIR = Path(__file__).parent
@@ -107,6 +108,10 @@ PUBLIC_PRICING_FALLBACK = {
     },
 }
 _pricing_cache = {"ts": 0.0, "data": None}
+
+ACCESS_GUEST_TOTAL_LIMIT = 5
+ACCESS_REGISTERED_DAILY_LIMIT = 10
+ACCESS_OSLO_TZ = ZoneInfo("Europe/Oslo")
 
 # ==================== MODELS ====================
 
@@ -213,8 +218,10 @@ class AdminCheckRequest(BaseModel):
 # ==================== AUTH MODELS ====================
 
 class AuthSignup(BaseModel):
+    name: Optional[str] = None
     email: str
     password: str
+    device_id: Optional[str] = None
 
     @validator('email')
     def validate_email(cls, v):
@@ -232,6 +239,7 @@ class AuthSignup(BaseModel):
 class AuthLogin(BaseModel):
     email: str
     password: str
+    device_id: Optional[str] = None
 
     @validator('email')
     def validate_email(cls, v):
@@ -258,6 +266,14 @@ class ResetPasswordRequest(BaseModel):
         if len(v) < 6:
             raise ValueError('Password must be at least 6 characters')
         return v
+
+
+class AccessConsumeRequest(BaseModel):
+    device_id: str
+    question_id: Optional[str] = None
+    mode: Optional[str] = "practice"
+    category: Optional[str] = None
+    event_id: Optional[str] = None
 
 # ==================== AUTH HELPERS ====================
 
@@ -287,9 +303,98 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
         raise HTTPException(status_code=401, detail="Invalid or expired token")
     return payload
 
+async def get_optional_user(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    if not credentials:
+        return None
+    payload = verify_token(credentials.credentials)
+    if not payload:
+        return None
+    user = await db.users.find_one({"id": payload["sub"]}, {"_id": 0, "password_hash": 0})
+    return user
+
 def generate_reset_code() -> str:
     import random
     return str(random.randint(100000, 999999))
+
+def _oslo_day_key(dt: Optional[datetime] = None) -> str:
+    dt = dt or datetime.now(timezone.utc)
+    return dt.astimezone(ACCESS_OSLO_TZ).date().isoformat()
+
+def _access_scope(user: Optional[dict], device_id: str) -> tuple[str, str]:
+    if user:
+        return "user", user["id"]
+    return "guest", device_id
+
+def _access_policy_payload(user: Optional[dict], usage: Optional[dict]) -> dict:
+    is_premium = bool(user and (user.get("is_premium") or user.get("is_admin")))
+    is_registered = bool(user)
+    tier = "premium" if is_premium else ("registered" if is_registered else "guest")
+    today = _oslo_day_key()
+
+    if is_premium:
+        used = 0
+        limit = None
+        remaining = None
+        reset_at = None
+        can_answer = True
+    elif is_registered:
+        day = (usage or {}).get("day_key")
+        used = int((usage or {}).get("daily_used", 0)) if day == today else 0
+        limit = ACCESS_REGISTERED_DAILY_LIMIT
+        remaining = max(0, limit - used)
+        tomorrow = datetime.now(ACCESS_OSLO_TZ).replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(days=1)
+        reset_at = tomorrow.astimezone(timezone.utc).isoformat()
+        can_answer = remaining > 0
+    else:
+        used = int((usage or {}).get("total_used", 0))
+        limit = ACCESS_GUEST_TOTAL_LIMIT
+        remaining = max(0, limit - used)
+        reset_at = None
+        can_answer = remaining > 0
+
+    return {
+        "tier": tier,
+        "is_authenticated": is_registered,
+        "is_premium": is_premium,
+        "can_answer": can_answer,
+        "limit": limit,
+        "used": used,
+        "remaining": remaining,
+        "day_key": today if is_registered and not is_premium else None,
+        "reset_at": reset_at,
+        "features": {
+            "unlimited_questions": is_premium,
+            "exam_mode": is_premium,
+            "ai_explanations": is_premium,
+            "weak_topic_training": is_premium,
+            "advanced_history": is_premium,
+            "full_video_learning": is_premium,
+            "daily_free_questions": is_registered and not is_premium,
+            "guest_frictionless_start": not is_registered,
+        },
+        "message": {
+            "no": "Fortsett rolig med dagens økt." if can_answer else ("Opprett en gratis konto for 10 spørsmål per dag." if not is_registered else "Dagens gratisøkt er brukt. Fortsett gjerne i morgen, eller gå dypere med Premium."),
+            "th": "ฝึกต่ออย่างใจเย็นในวันนี้" if can_answer else ("สร้างบัญชีฟรีเพื่อรับ 10 คำถามต่อวัน" if not is_registered else "ใช้โควต้าฟรีของวันนี้แล้ว กลับมาฝึกต่อพรุ่งนี้ หรือเรียนลึกขึ้นด้วย Premium"),
+            "en": "Continue calmly with today's practice." if can_answer else ("Create a free account for 10 questions per day." if not is_registered else "Today's free practice is used. Continue tomorrow, or go deeper with Premium."),
+        },
+    }
+
+async def _get_access_usage(user: Optional[dict], device_id: str) -> Optional[dict]:
+    scope, key = _access_scope(user, device_id)
+    return await db.access_usage.find_one({"scope": scope, "key": key}, {"_id": 0})
+
+async def _migrate_guest_learning_to_user(device_id: Optional[str], user_id: str) -> None:
+    if not device_id:
+        return
+    now = datetime.now(timezone.utc).isoformat()
+    for collection in (db.quiz_attempts, db.user_progress, db.bookmarks, db.ai_attempts):
+        try:
+            await collection.update_many(
+                {"device_id": device_id, "user_id": {"$exists": False}},
+                {"$set": {"user_id": user_id, "migrated_at": now}},
+            )
+        except Exception:
+            pass
 
 # ==================== ROUTES ====================
 
@@ -544,6 +649,88 @@ async def get_categories():
     cats = await db.questions.aggregate(pipeline).to_list(100)
     return [{"name": c["_id"], "count": c["count"]} for c in cats]
 
+# ==================== ACCESS POLICY ====================
+
+@api_router.get("/access/status")
+async def access_status(device_id: str, user: Optional[dict] = Depends(get_optional_user)):
+    """Single access-policy contract for web and mobile.
+
+    Backend is the source of truth:
+    - guest: 5 total answered questions
+    - registered: 10 answered questions per Oslo calendar day
+    - premium/admin: unlimited
+    """
+    usage = await _get_access_usage(user, device_id)
+    return _access_policy_payload(user, usage)
+
+@api_router.post("/access/consume")
+async def access_consume(data: AccessConsumeRequest, user: Optional[dict] = Depends(get_optional_user)):
+    """Consume one question answer if the learner has access.
+
+    This endpoint is intentionally gentle but authoritative. The frontend may
+    display counters, but this endpoint owns the quota.
+    """
+    scope, key = _access_scope(user, data.device_id)
+    event_id = data.event_id or str(uuid.uuid4())
+    existing_event = await db.access_events.find_one({"event_id": event_id}, {"_id": 0})
+    if existing_event:
+        usage = await _get_access_usage(user, data.device_id)
+        return {**_access_policy_payload(user, usage), "consumed": False, "event_id": event_id}
+
+    usage = await db.access_usage.find_one({"scope": scope, "key": key}, {"_id": 0})
+    before = _access_policy_payload(user, usage)
+    if not before["can_answer"]:
+        raise HTTPException(status_code=402, detail=before)
+
+    is_premium = before["tier"] == "premium"
+    now = datetime.now(timezone.utc).isoformat()
+
+    await db.access_events.insert_one({
+        "event_id": event_id,
+        "scope": scope,
+        "key": key,
+        "device_id": data.device_id,
+        "user_id": user["id"] if user else None,
+        "question_id": data.question_id,
+        "mode": data.mode,
+        "category": data.category,
+        "created_at": now,
+    })
+
+    if not is_premium:
+        update: Dict[str, Any]
+        if scope == "user":
+            day_key = _oslo_day_key()
+            if not usage or usage.get("day_key") != day_key:
+                update = {
+                    "$set": {
+                        "scope": scope,
+                        "key": key,
+                        "user_id": user["id"] if user else None,
+                        "device_id": data.device_id,
+                        "day_key": day_key,
+                        "daily_used": 1,
+                        "updated_at": now,
+                    },
+                    "$setOnInsert": {"created_at": now},
+                }
+            else:
+                update = {
+                    "$set": {"updated_at": now, "device_id": data.device_id},
+                    "$inc": {"daily_used": 1},
+                    "$setOnInsert": {"created_at": now, "scope": scope, "key": key},
+                }
+        else:
+            update = {
+                "$set": {"scope": scope, "key": key, "device_id": data.device_id, "updated_at": now},
+                "$inc": {"total_used": 1},
+                "$setOnInsert": {"created_at": now},
+            }
+        await db.access_usage.update_one({"scope": scope, "key": key}, update, upsert=True)
+
+    usage = await _get_access_usage(user, data.device_id)
+    return {**_access_policy_payload(user, usage), "consumed": not is_premium, "event_id": event_id}
+
 @api_router.get("/progress/{device_id}")
 async def get_user_progress(device_id: str):
     progress = await db.user_progress.find_one({"device_id": device_id}, {"_id": 0})
@@ -648,6 +835,7 @@ async def signup(data: AuthSignup):
 
     user_doc = {
         "id": user_id,
+        "name": data.name or "",
         "email": data.email,
         "password_hash": password_hash,
         "is_admin": is_admin,
@@ -655,12 +843,14 @@ async def signup(data: AuthSignup):
         "created_at": datetime.now(timezone.utc).isoformat(),
     }
     await db.users.insert_one(user_doc)
+    await _migrate_guest_learning_to_user(data.device_id, user_id)
 
     token = create_token(user_id, data.email)
     return {
         "token": token,
         "user": {
             "id": user_id,
+            "name": data.name or "",
             "email": data.email,
             "is_admin": is_admin,
             "is_premium": is_premium,
@@ -683,12 +873,14 @@ async def login(data: AuthLogin):
         await db.users.update_one({"email": data.email}, {"$set": {"is_admin": True, "is_premium": True}})
         user["is_admin"] = True
         user["is_premium"] = True
+    await _migrate_guest_learning_to_user(data.device_id, user["id"])
 
     token = create_token(user["id"], user["email"])
     return {
         "token": token,
         "user": {
             "id": user["id"],
+            "name": user.get("name", ""),
             "email": user["email"],
             "is_admin": user.get("is_admin", False),
             "is_premium": user.get("is_premium", False),
@@ -702,6 +894,7 @@ async def get_me(current_user: dict = Depends(get_current_user)):
         raise HTTPException(status_code=404, detail="User not found")
     return {
         "id": user["id"],
+        "name": user.get("name", ""),
         "email": user["email"],
         "is_admin": user.get("is_admin", False),
         "is_premium": user.get("is_premium", False),

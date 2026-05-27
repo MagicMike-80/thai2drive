@@ -32,6 +32,31 @@ export interface PremiumPricingResponse {
   plans: PremiumPricingPlan[];
 }
 
+// ==================== ACCESS TYPES ====================
+export interface AccessStatus {
+  tier: 'guest' | 'registered' | 'premium' | string;
+  is_authenticated: boolean;
+  is_premium: boolean;
+  can_answer: boolean;
+  limit: number | null;
+  used: number;
+  remaining: number | null;
+  day_key?: string | null;
+  reset_at?: string | null;
+  features: Record<string, boolean>;
+  message?: Partial<LocalizedText>;
+  consumed?: boolean;
+  event_id?: string;
+}
+
+export interface AccessConsumePayload {
+  device_id: string;
+  question_id?: string;
+  mode?: string;
+  category?: string;
+  event_id?: string;
+}
+
 // ==================== SIGNS TYPES ====================
 export interface Sign {
   num: string;
@@ -170,6 +195,7 @@ export interface Bookmark {
 
 export interface AuthUser {
   id: string;
+  name?: string;
   email: string;
   is_admin: boolean;
   is_premium: boolean;
@@ -205,20 +231,34 @@ export const api = {
     return fetchJSON(`${API_BASE}/pricing`);
   },
 
-  // ==================== AUTH ====================
-  async signup(email: string, password: string): Promise<AuthResponse> {
-    return fetchJSON(`${API_BASE}/auth/signup`, {
+  // ==================== ACCESS POLICY ====================
+  async getAccessStatus(deviceId: string, token?: string | null): Promise<AccessStatus> {
+    const headers = token ? authHeaders(token) : undefined;
+    return fetchJSON(`${API_BASE}/access/status?device_id=${encodeURIComponent(deviceId)}`, { headers });
+  },
+
+  async consumeAccess(payload: AccessConsumePayload, token?: string | null): Promise<AccessStatus> {
+    return fetchJSON(`${API_BASE}/access/consume`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
+      headers: token ? authHeaders(token) : { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
     });
   },
 
-  async login(email: string, password: string): Promise<AuthResponse> {
+  // ==================== AUTH ====================
+  async signup(email: string, password: string, deviceId?: string, name?: string): Promise<AuthResponse> {
+    return fetchJSON(`${API_BASE}/auth/signup`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password, device_id: deviceId, name }),
+    });
+  },
+
+  async login(email: string, password: string, deviceId?: string): Promise<AuthResponse> {
     return fetchJSON(`${API_BASE}/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ email, password, device_id: deviceId }),
     });
   },
 

@@ -99,6 +99,30 @@ async def create_all_indexes(db) -> dict[str, list[str]]:
     )
     created["questions"] = ["question_id", "question_category"]
 
+    # -- access policy -----------------------------------------------------
+    # Queries:
+    #   /api/access/status  -> find_one({scope, key})
+    #   /api/access/consume -> find_one({event_id}) for idempotent answer usage
+    await db.access_usage.create_index(
+        [("scope", ASCENDING), ("key", ASCENDING)],
+        unique=True,
+        background=True,
+        name="scope_key_unique",
+    )
+    await db.access_events.create_index(
+        [("event_id", ASCENDING)],
+        unique=True,
+        background=True,
+        name="event_id_unique",
+    )
+    await db.access_events.create_index(
+        [("scope", ASCENDING), ("key", ASCENDING), ("created_at", DESCENDING)],
+        background=True,
+        name="scope_key_time",
+    )
+    created["access_usage"] = ["scope_key_unique"]
+    created["access_events"] = ["event_id_unique", "scope_key_time"]
+
     return created
 
 

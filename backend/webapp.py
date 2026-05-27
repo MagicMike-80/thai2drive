@@ -3138,6 +3138,7 @@ function showScreen(id) {
 function enterApp() {
   document.getElementById('topBar').style.display = 'flex';
   document.getElementById('bottomNav').style.display = 'flex';
+  loadAccessStatus();
   showTab('home');
 }
 
@@ -3630,15 +3631,46 @@ var examSecondsLeft = 0;
 // ════════════════════════════════════════════
 var FREE_LIMIT = 5;
 var selectedPlan = 'monthly';
+var accessState = null;
 
 function isPremium() {
   return user && user.is_premium === true;
 }
 
+async function loadAccessStatus() {
+  if (!deviceId) return null;
+  try {
+    accessState = await api('GET', '/api/access/status?device_id=' + encodeURIComponent(deviceId) + '&_=' + Date.now());
+  } catch(e) {}
+  return accessState;
+}
+
+async function consumeQuestionAccess(q) {
+  if (isPremium()) return true;
+  try {
+    accessState = await api('POST', '/api/access/consume', {
+      device_id: deviceId,
+      question_id: String((q && (q.id || q._id || q.question_id)) || ''),
+      mode: isExamMode ? 'exam' : 'practice',
+      category: (q && q.category) || currentCat || '',
+      event_id: deviceId + ':' + String((q && (q.id || q._id || q.question_id)) || qIdx) + ':' + qIdx + ':' + (quizStartedAt || '')
+    });
+    return true;
+  } catch(e) {
+    await loadAccessStatus();
+    showPaywall();
+    return false;
+  }
+}
+
 function checkPaywall() {
   // Returns true if user can continue, false = paywall shown
   if (isPremium()) return true;
-  if (qIdx >= FREE_LIMIT) {
+  if (accessState && accessState.can_answer === false) {
+    showPaywall();
+    return false;
+  }
+  if (!accessState && qIdx >= FREE_LIMIT) {
     showPaywall();
     return false;
   }
@@ -3729,6 +3761,7 @@ async function startQuiz(catId, catRawName) {
 
 async function loadQuiz(url) {
   showScreen('screenQuiz');
+  await loadAccessStatus();
   var qCard = document.getElementById('qCard');
   qCard.innerHTML = '<div class="loading-wrap" style="grid-column:1/-1"><div class="spinner"></div><span style="color:var(--muted);font-size:.82rem">' + t('questions_loading') + '</span></div>';
   try {
@@ -3778,7 +3811,8 @@ function renderQuestion() {
   if (_aiPanelTimer) { clearTimeout(_aiPanelTimer); _aiPanelTimer = null; } // cancel delayed panel from prev Q
   var q     = questions[qIdx];
   qAnswered = false;
-  var displayTotal = isPremium() ? questions.length : Math.min(FREE_LIMIT, questions.length);
+  var accessLimit = accessState && accessState.limit ? accessState.limit : FREE_LIMIT;
+  var displayTotal = isPremium() ? questions.length : Math.min(accessLimit, questions.length);
   var total = questions.length;
   var pct   = (qIdx / displayTotal * 100).toFixed(0);
 
@@ -3825,10 +3859,14 @@ function renderQuestion() {
     return '<button class="vol-btn' + (ttsVolume === v ? ' active' : '') + '" data-vol="' + v + '" onclick="setVolume(' + v + ')">' + icon + '</button>';
   }).join('');
 
-  // Free limit banner for non-premium
+  // Free limit banner for non-premium. Backend access policy is the source of truth;
+  // qIdx is only used as a fallback before the first status fetch returns.
   var freeBanner = '';
-  if (!isPremium() && qIdx < FREE_LIMIT) {
-    var remaining = FREE_LIMIT - qIdx;
+  var policyRemaining = accessState && accessState.remaining !== null && accessState.remaining !== undefined
+    ? Number(accessState.remaining)
+    : (FREE_LIMIT - qIdx);
+  if (!isPremium() && policyRemaining > 0) {
+    var remaining = Math.max(0, policyRemaining);
     var freeMsg = {th:'เหลือ ' + remaining + ' คำถามฟรี', no:remaining + ' gratis spørsmål igjen', en:remaining + ' free questions left'}[appLang] || remaining + ' gratis spørsmål igjen';
     freeBanner = '<div style="text-align:center;font-size:.72rem;color:var(--orange);font-weight:700;margin-top:6px;flex-shrink:0;">'
       + '⚡ ' + freeMsg + ' — <span style="text-decoration:underline;cursor:pointer" onclick="showPaywall()">' + escH(t('upgrade')) + '</span>'
@@ -3981,9 +4019,11 @@ function topicLabel(label) {
   return item ? (item[appLang] || item.th || item.en || item.no) : label;
 }
 
-function selectAns(btn, picked) {
+async function selectAns(btn, picked) {
   if (qAnswered) return;
+  var _curQ = questions[qIdx];
   qAnswered = true;
+  if (!(await consumeQuestionAccess(_curQ))) { qAnswered = false; return; }
   var correct = currentCorrect;
   var isOk = picked.toUpperCase() === correct.toUpperCase();
   if (isOk) qScore++;
@@ -4002,7 +4042,6 @@ function selectAns(btn, picked) {
   }
 
   // Record this answer for the history detail panel
-  var _curQ = questions[qIdx];
   _sessionAnswers.push({
     question_id:   String(_curQ._id || _curQ.id || _curQ.question_id || ''),
     question_text: (pickLang(_curQ.question) || pickField(_curQ, 'question_text') || '').slice(0, 200),
@@ -5009,8 +5048,7 @@ function nextQ() {
   if (!qAnswered) return;
   qIdx++;
   if (qIdx >= questions.length) { showEnd(); return; }
-  // Paywall check: non-premium users get FREE_LIMIT questions
-  if (!isPremium() && qIdx >= FREE_LIMIT) { showPaywall(); return; }
+  if (!checkPaywall()) return;
   renderQuestion();
 }
 
