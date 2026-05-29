@@ -3378,7 +3378,10 @@ async function api(method, url, body) {
   if (!r.ok) {
     var det = data.detail;
     var msg = typeof det === 'string' ? det : (Array.isArray(det) ? det.map(function(d){return d.msg||d;}).join(', ') : JSON.stringify(det) || 'Noe gikk galt');
-    throw new Error(msg);
+    var err = new Error(msg);
+    err.status = r.status;
+    err.data = data;
+    throw err;
   }
   return data;
 }
@@ -3683,9 +3686,10 @@ async function consumeQuestionAccess(q) {
     });
     return true;
   } catch(e) {
-    await loadAccessStatus();
-    showPaywall();
-    return false;
+    if (e.status === 402) { await loadAccessStatus(); showPaywall(); return false; }
+    // Non-402 errors (network, 500) — don't block the user
+    console.warn('[gate]', e && e.message ? e.message : e);
+    return true;
   }
 }
 
@@ -3835,6 +3839,7 @@ async function loadQuiz(url) {
     if (isExamMode) startExamTimer();
     renderQuestion();
   } catch(e) {
+    if (e.status === 402) { showPaywall(); return; }
     qCard.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="es-icon">⚠️</div><p>' + t('generic_error') + '<br>' + escH(e.message) + '</p></div>';
   }
 }

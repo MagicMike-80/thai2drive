@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator, Animated, Image, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator, Animated, Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
@@ -13,6 +13,7 @@ import { playCorrectSound, playIncorrectSound, cleanupSounds } from '../src/soun
 import { useScreenProtection } from '../src/hooks/useScreenProtection';
 import { aiLearningApi } from '../src/services/aiLearning';
 import { ExplanationCard } from '../src/components/ExplanationCard';
+import { GateModal } from '../src/components/GateModal';
 
 // Minimal error boundary — prevents ExplanationCard crashes from reaching the quiz screen.
 class SafeExplanation extends React.Component<
@@ -46,30 +47,14 @@ export default function QuizScreen() {
   useScreenProtection(language);
 
   // ── Auth + paywall gate ──
-  // Shows the right destination when a learner runs out of backend-managed quota:
-  //   • Guest (5 total)          → free account prompt
-  //   • Logged-in free user      → calm premium path after daily practice
+  // Shows the GateModal when a learner runs out of backend-managed quota.
+  // Calm, non-punishing — never a dead-end.
   const showAccountOrPaywall = useCallback(() => {
     if (isPremium) return false; // premium has unlimited
     if (canAnswerFree()) return false; // still has free quota
-    if (!isAuthenticated) {
-      // Guest hit the lifetime limit — must sign up or log in first
-      Alert.alert(
-        t.accountTitle,
-        t.accountBody,
-        [
-          { text: t.accountCancel, style: 'cancel', onPress: () => router.back() },
-          { text: t.accountLogin, onPress: () => router.replace({ pathname: '/login', params: { redirect: 'paywall' } }) },
-          { text: t.accountSignup, onPress: () => router.replace({ pathname: '/signup', params: { redirect: 'paywall' } }) },
-        ],
-        { cancelable: false },
-      );
-    } else {
-      // Already authenticated — go straight to paywall
-      router.replace('/paywall');
-    }
+    setGateVisible(true);
     return true;
-  }, [isPremium, isAuthenticated, t, canAnswerFree]);
+  }, [isPremium, canAnswerFree]);
 
   // Gate: if free user has no quota left when entering quiz, redirect appropriately
   useEffect(() => {
@@ -88,6 +73,7 @@ export default function QuizScreen() {
   const [hist, setHist] = useState<any[]>([]);
   const [showTh, setShowTh] = useState(false);
   const [speaking, setSpeaking] = useState(false);
+  const [gateVisible, setGateVisible] = useState(false);
   const [timer, setTimer] = useState(EXAM_TIME);
   const [showLimit, setShowLimit] = useState(false);
   const [ttsPlaying, setTtsPlaying] = useState<'question' | 'explanation' | null>(null);
@@ -702,6 +688,18 @@ export default function QuizScreen() {
           )}
         </View>
       )}
+
+      {/* Gate modal — shown when free quota is exhausted */}
+      <GateModal
+        visible={gateVisible}
+        isGuest={!isAuthenticated}
+        language={language}
+        colors={c}
+        onSignup={() => { setGateVisible(false); router.replace({ pathname: '/signup', params: { redirect: 'paywall' } }); }}
+        onLogin={() => { setGateVisible(false); router.replace({ pathname: '/login', params: { redirect: 'paywall' } }); }}
+        onPremium={() => { setGateVisible(false); router.replace('/paywall'); }}
+        onDismiss={() => { setGateVisible(false); router.back(); }}
+      />
     </SafeAreaView>
   );
 }
