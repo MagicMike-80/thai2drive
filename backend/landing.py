@@ -12,7 +12,7 @@ QR_URL = "/api/assets/qr-download.png"
 # ── YouTube video ─────────────────────────────────────────────
 # Paste your YouTube video ID here (the part after ?v= in the URL)
 # Leave empty to hide the video section
-YOUTUBE_VIDEO_ID = ""  # e.g. "dQw4w9WgXcQ"
+YOUTUBE_VIDEO_ID = "w0JQjoSes-M"  # Om Thai2Drive og Michael
 
 # Phone screenshot paths (produced earlier)
 SCREENSHOTS = [
