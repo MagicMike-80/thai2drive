@@ -3234,6 +3234,11 @@ var UI = {
   auth_password_short:{th:'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร', no:'Passord må være minst 6 tegn', en:'Password must be at least 6 characters'},
   auth_missing_email:{th:'กรอกอีเมลของคุณ', no:'Fyll inn e-postadressen din', en:'Enter your email address'},
   auth_reset_sent:{th:'ส่งอีเมลแล้ว ตรวจสอบกล่องจดหมายของคุณ 📧', no:'E-post sendt! Sjekk innboksen din 📧', en:'Email sent. Check your inbox 📧'},
+  email_already_registered:{th:'อีเมลนี้ลงทะเบียนแล้ว กรุณาเข้าสู่ระบบหรือรีเซ็ตรหัสผ่าน', no:'Denne e-posten er allerede registrert. Logg inn eller tilbakestill passordet.', en:'This email is already registered. Log in or reset password.'},
+  email_not_registered:{th:'ไม่พบบัญชีที่ใช้อีเมลนี้', no:'Fant ingen konto med denne e-posten.', en:'No account was found with this email.'},
+  reset_email_failed:{th:'ไม่สามารถส่งรหัสรีเซ็ตรหัสผ่านได้ กรุณาลองใหม่ภายหลังหรือติดต่อฝ่ายสนับสนุน', no:'Kunne ikke sende tilbakestillingskode. Prøv igjen senere eller kontakt support.', en:'Could not send reset code. Try again later or contact support.'},
+  invalid_or_expired_reset_code:{th:'รหัสรีเซ็ตรหัสผ่านไม่ถูกต้องหรือหมดอายุแล้ว', no:'Ugyldig eller utløpt tilbakestillingskode', en:'Invalid or expired reset code'},
+  account_unavailable:{th:'บัญชีนี้ไม่พร้อมใช้งาน กรุณาติดต่อฝ่ายสนับสนุน', no:'Denne kontoen er ikke tilgjengelig. Kontakt support.', en:'This account is not available. Contact support.'},
   logout_confirm:{th:'คุณแน่ใจหรือว่าต้องการออกจากระบบ?', no:'Er du sikker på at du vil logge ut?', en:'Are you sure you want to log out?'},
   studybook_home:{th:'📖 หนังสือเรียน — การจราจรนอร์เวย์', no:'📖 Studiebok — Norsk trafikk', en:'📖 Study book — Norwegian traffic'},
   studybook_search_placeholder:{th:'ค้นหาหรือเลข §...', no:'Søk eller § nummer...', en:'Search or § number...'},
@@ -3782,7 +3787,16 @@ async function api(method, url, body) {
   var data = await r.json().catch(function() { return {}; });
   if (!r.ok) {
     var det = data.detail;
-    var msg = typeof det === 'string' ? det : (Array.isArray(det) ? det.map(function(d){return d.msg||d;}).join(', ') : JSON.stringify(det) || 'Noe gikk galt');
+    var msg;
+    if (typeof det === 'string') {
+      msg = t(det) !== det ? t(det) : det;
+    } else if (det && typeof det === 'object' && !Array.isArray(det)) {
+      msg = (det[appLang] || (det.key ? t(det.key) : '') || det.no || det.en || det.th || JSON.stringify(det));
+    } else if (Array.isArray(det)) {
+      msg = det.map(function(d){return d.msg||d;}).join(', ');
+    } else {
+      msg = 'Noe gikk galt';
+    }
     var err = new Error(msg);
     err.status = r.status;
     err.data = data;
