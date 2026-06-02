@@ -2145,8 +2145,6 @@ a { color:inherit; text-decoration:none; }
 /* ══════════════════════════════════════════
    MICHAEL TRAFIKKLÆRER — CHAT UI
 ══════════════════════════════════════════ */
-#screenTeacher.active { flex-direction:column; overflow:hidden; }
-
 .teacher-header {
   display:flex; align-items:center; gap:12px;
   padding:14px 16px; border-bottom:1px solid var(--border);
@@ -2161,7 +2159,7 @@ a { color:inherit; text-decoration:none; }
 .teacher-status { font-size:.75rem; color:#10B981; margin-top:2px; }
 
 .teacher-messages {
-  flex:1; overflow-y:auto; padding:16px 14px 8px;
+  flex:1; min-height:0; overflow-y:auto; padding:16px 14px 8px;
   display:flex; flex-direction:column; gap:12px;
 }
 .teacher-messages::-webkit-scrollbar { width:0; }
@@ -2179,6 +2177,7 @@ a { color:inherit; text-decoration:none; }
   max-width:78%; min-width:0; padding:10px 14px; border-radius:16px;
   font-size:.875rem; line-height:1.5;
   word-break:break-word; overflow-wrap:break-word;
+  white-space:pre-wrap;
 }
 .tm-bubble.user {
   background:var(--orange); color:#fff;
@@ -6051,27 +6050,18 @@ var _teacherHasUserMsg   = false;   // true once user sends first message
 var _teacherTyping       = false;
 var _teacherWelcomeLang  = null;    // tracks which language the welcome was rendered in
 
-// ── Simple markdown → HTML renderer ─────────────────────────
-function _mdToHtml(text) {
-  // Escape HTML entities first
-  var s = text
-    .replace(/&/g,'&amp;')
-    .replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;');
-  // headings: ### ## # → bold line
-  s = s.replace(/^#{1,3}\s+(.+)$/gm, '<strong>$1</strong>');
-  // bold: **text** or __text__
-  s = s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-  s = s.replace(/__(.+?)__/g, '<strong>$1</strong>');
-  // italic: *text* or _text_
-  s = s.replace(/\*([^*\n]+?)\*/g, '<em>$1</em>');
-  // horizontal rule
-  s = s.replace(/^-{3,}$/gm, '<hr style="border:none;border-top:1px solid var(--border);margin:6px 0">');
-  // unordered list items: - item or * item
-  s = s.replace(/^[\-\*]\s+(.+)$/gm, '• $1');
-  // line breaks
-  s = s.replace(/\n/g, '<br>');
-  return s;
+// ── Strip markdown → plain text ──────────────────────────────
+function _stripMd(text) {
+  return text
+    .replace(/^#{1,6}\s+/gm, '')          // ### headings
+    .replace(/\*\*(.+?)\*\*/g, '$1')      // **bold**
+    .replace(/__(.+?)__/g, '$1')          // __bold__
+    .replace(/\*([^*\n]+?)\*/g, '$1')     // *italic*
+    .replace(/_([^_\n]+?)_/g, '$1')       // _italic_
+    .replace(/^[-*]{3,}$/gm, '──────')    // --- horizontal rule
+    .replace(/^[\-\*]\s+/gm, '• ')        // - list item
+    .replace(/`([^`]+)`/g, '$1')          // `code`
+    .trim();
 }
 
 function loadTeacher() {
@@ -6123,12 +6113,7 @@ function _teacherAppendBubble(role, text) {
   }
   var bubble = document.createElement('div');
   bubble.className = 'tm-bubble ' + role;
-  // User messages: plain text. Assistant messages: render markdown.
-  if (role === 'assistant') {
-    bubble.innerHTML = _mdToHtml(text);
-  } else {
-    bubble.textContent = text;
-  }
+  bubble.textContent = role === 'assistant' ? _stripMd(text) : text;
   row.appendChild(bubble);
   msgs.appendChild(row);
   msgs.scrollTop = msgs.scrollHeight;
