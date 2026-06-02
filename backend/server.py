@@ -3657,6 +3657,10 @@ app.include_router(website_router, prefix="/api")  # also serve under /api/* for
 from support_chat import support_chat_router  # noqa: E402
 app.include_router(support_chat_router, prefix="/api")
 
+# ==================== MICHAEL TRAFIKKLÆRER ====================
+from teacher_chat import teacher_router  # noqa: E402
+app.include_router(teacher_router, prefix="/api")
+
 # ==================== AI LEARNING ENGINE ====================
 from ai_routes import ai_router  # noqa: E402
 app.include_router(ai_router, prefix="/api")

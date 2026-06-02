@@ -256,6 +256,7 @@ export default function RootLayout() {
           <Stack.Screen name="stats" />
           <Stack.Screen name="signs" />
           <Stack.Screen name="traffic-math" />
+          <Stack.Screen name="teacher" />
         </Stack>
       </WebAppShell>
     </SafeAreaProvider>
