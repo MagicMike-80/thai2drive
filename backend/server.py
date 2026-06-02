@@ -395,8 +395,56 @@ def _smtp_config() -> dict:
     }
 
 
+def _send_via_sendgrid(to_email: str, code: str) -> tuple[bool, str]:
+    """Send reset email via SendGrid HTTP API (works on Railway — HTTPS port 443)."""
+    import urllib.request, json as _json
+    _el = logging.getLogger("reset_email")
+    api_key = os.environ.get("SENDGRID_API_KEY", "").strip()
+    if not api_key:
+        return False, "SENDGRID_API_KEY not set"
+
+    from_email = os.environ.get("SENDGRID_FROM_EMAIL", "noreply@thai2drive.no").strip()
+    from_name = os.environ.get("SENDGRID_FROM_NAME", "Thai2Drive").strip()
+    body_text = (
+        "Hei,\n\n"
+        f"Tilbakestillingskoden din for Thai2Drive er: {code}\n\n"
+        "Koden er gyldig i 15 minutter. Hvis du ikke ba om dette, kan du ignorere denne e-posten.\n\n"
+        "Thai2Drive\n\n"
+        "สวัสดีครับ/ค่ะ\n\n"
+        f"รหัสรีเซ็ตรหัสผ่าน Thai2Drive ของคุณคือ: {code}\n\n"
+        "รหัสนี้ใช้ได้ 15 นาที หากคุณไม่ได้ขอรีเซ็ตรหัสผ่าน กรุณาเพิกเฉยต่ออีเมลนี้\n"
+    )
+    payload = _json.dumps({
+        "personalizations": [{"to": [{"email": to_email}]}],
+        "from": {"email": from_email, "name": from_name},
+        "subject": "Thai2Drive password reset code",
+        "content": [{"type": "text/plain", "value": body_text}],
+    }).encode("utf-8")
+
+    req = urllib.request.Request(
+        "https://api.sendgrid.com/v3/mail/send",
+        data=payload,
+        headers={
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
+        },
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            _el.info("sendgrid_sent_ok to=%s status=%d", _masked_email(to_email), resp.status)
+            return True, "sent"
+    except urllib.error.HTTPError as exc:
+        body = exc.read().decode("utf-8", errors="replace")
+        _el.error("sendgrid_failed status=%d body=%s", exc.code, body[:300])
+        return False, f"SendGrid HTTP {exc.code}: {body[:200]}"
+    except Exception as exc:
+        _el.error("sendgrid_failed type=%s detail=%s", type(exc).__name__, exc)
+        return False, str(exc)
+
+
 def _send_via_resend(to_email: str, code: str) -> tuple[bool, str]:
-    """Send reset email using Resend HTTP API (works on Railway — no SMTP ports needed)."""
+    """Send reset email using Resend HTTP API."""
     import urllib.request, json as _json
     _el = logging.getLogger("reset_email")
     api_key = os.environ.get("RESEND_API_KEY", "").strip()
@@ -431,7 +479,6 @@ def _send_via_resend(to_email: str, code: str) -> tuple[bool, str]:
     )
     try:
         with urllib.request.urlopen(req, timeout=15) as resp:
-            resp_body = resp.read().decode("utf-8")
             _el.info("resend_sent_ok to=%s status=%d", _masked_email(to_email), resp.status)
             return True, "sent"
     except urllib.error.HTTPError as exc:
@@ -446,7 +493,13 @@ def _send_via_resend(to_email: str, code: str) -> tuple[bool, str]:
 def _send_password_reset_email_sync(to_email: str, code: str) -> tuple[bool, str]:
     _el = logging.getLogger("reset_email")
 
-    # Primary: Resend HTTP API (works on Railway — SMTP ports are blocked)
+    # Primary: SendGrid (confirmed working on Railway)
+    sendgrid_key = os.environ.get("SENDGRID_API_KEY", "").strip()
+    if sendgrid_key:
+        _el.info("email_send_attempt method=sendgrid to=%s", _masked_email(to_email))
+        return _send_via_sendgrid(to_email, code)
+
+    # Secondary: Resend (may be blocked by Cloudflare on some Railway IPs)
     resend_key = os.environ.get("RESEND_API_KEY", "").strip()
     if resend_key:
         _el.info("email_send_attempt method=resend to=%s", _masked_email(to_email))
@@ -4178,29 +4231,31 @@ async def seed_studiebok():
 async def log_smtp_config():
     """Log email config state at startup — never logs passwords or keys."""
     _sl = logging.getLogger("smtp_config")
+    sendgrid_key = bool(os.environ.get("SENDGRID_API_KEY", "").strip())
     resend_key = bool(os.environ.get("RESEND_API_KEY", "").strip())
     cfg = _smtp_config()
     smtp_configured = bool(cfg["host"] and cfg["user"] and cfg["password"])
-    method = "resend" if resend_key else ("smtp" if smtp_configured else "none")
+    method = "sendgrid" if sendgrid_key else ("resend" if resend_key else ("smtp" if smtp_configured else "none"))
     _sl.info(
-        "email_method=%s  resend_key_present=%s  "
-        "smtp_source=%s  smtp_host=%s  smtp_port=%d  smtp_configured=%s",
-        method,
-        resend_key,
-        cfg["source"],
-        cfg["host"] or "(not set)",
-        cfg["port"],
-        smtp_configured,
+        "email_method=%s  sendgrid_key=%s  resend_key=%s  "
+        "smtp_source=%s  smtp_host=%s  smtp_configured=%s",
+        method, sendgrid_key, resend_key,
+        cfg["source"], cfg["host"] or "(not set)", smtp_configured,
     )
     if method == "none":
         _sl.warning(
             "No email provider configured — password reset emails will FAIL. "
-            "Set RESEND_API_KEY in Railway (recommended) or SUPPORT_SMTP_* variables."
+            "Set SENDGRID_API_KEY in Railway (recommended)."
         )
     elif method == "smtp":
         _sl.warning(
-            "Using SMTP — NOTE: Railway blocks outbound SMTP (port 587). "
-            "Set RESEND_API_KEY for reliable email delivery."
+            "Using SMTP — Railway blocks outbound SMTP (port 587). "
+            "Set SENDGRID_API_KEY for reliable email delivery."
+        )
+    elif method == "resend":
+        _sl.warning(
+            "Using Resend — some Railway IPs are blocked by Cloudflare on api.resend.com. "
+            "Set SENDGRID_API_KEY if reset emails fail."
         )
 
 
