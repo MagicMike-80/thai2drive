@@ -2159,8 +2159,8 @@ a { color:inherit; text-decoration:none; }
 .teacher-status { font-size:.75rem; color:#10B981; margin-top:2px; }
 
 .teacher-messages {
-  flex:1; min-height:0; overflow-y:auto; padding:16px 14px 8px;
-  display:flex; flex-direction:column; gap:12px;
+  flex:1; min-height:0; overflow-y:auto; padding:16px 14px 12px;
+  display:flex; flex-direction:column; gap:14px;
 }
 .teacher-messages::-webkit-scrollbar { width:0; }
 
@@ -2174,18 +2174,23 @@ a { color:inherit; text-decoration:none; }
   justify-content:center; font-size:13px; flex-shrink:0;
 }
 .tm-bubble {
-  max-width:78%; min-width:0; padding:10px 14px; border-radius:16px;
-  font-size:.875rem; line-height:1.5;
+  max-width:82%; min-width:0; padding:13px 16px; border-radius:18px;
+  font-size:1rem; line-height:1.7;
   word-break:break-word; overflow-wrap:break-word;
-  white-space:pre-wrap;
+  white-space:pre-wrap; letter-spacing:.01em;
 }
 .tm-bubble.user {
   background:var(--orange); color:#fff;
-  border-bottom-right-radius:4px;
+  border-bottom-right-radius:5px;
 }
 .tm-bubble.assistant {
-  background:var(--card2); color:var(--text);
-  border:1px solid var(--border); border-bottom-left-radius:4px;
+  background:#1a2744; color:#E2E8F0;
+  border:1px solid rgba(59,130,246,.20);
+  border-bottom-left-radius:5px;
+}
+[data-theme="light"] .tm-bubble.assistant {
+  background:#fff; color:#0F172A;
+  border:1px solid rgba(0,0,0,.10);
 }
 .tm-typing { display:flex; gap:5px; padding:12px 16px; }
 .tm-typing span {
