@@ -730,6 +730,53 @@ a { color:inherit; text-decoration:none; }
     transition: width .30s cubic-bezier(.4,0,.2,1), border-radius .30s ease;
   }
 
+  /* Teacher frame — same width as quiz-mode */
+  #app.teacher-mode {
+    width: min(860px, 96vw);
+    max-width: none;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 16px;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,.07),
+      0 20px 60px rgba(0,0,0,.70),
+      0 60px 160px rgba(0,0,0,.55);
+    transition: width .30s cubic-bezier(.4,0,.2,1), border-radius .30s ease;
+  }
+
+  /* Teacher screen: two-column layout on desktop */
+  #screenTeacher.active {
+    flex-direction: row !important;
+  }
+  .teacher-chat-col {
+    flex: 1; min-width: 0;
+    display: flex; flex-direction: column;
+    border-right: 1px solid rgba(255,255,255,.07);
+  }
+  .teacher-side-panel {
+    width: 240px; flex-shrink: 0;
+    display: flex; flex-direction: column;
+    padding: 20px 16px; gap: 10px;
+    overflow-y: auto;
+    background: rgba(255,255,255,.02);
+  }
+  .tsp-title {
+    font-size: .72rem; font-weight: 700; letter-spacing: .08em;
+    text-transform: uppercase; color: var(--muted);
+    margin-bottom: 4px; padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .tsp-btn {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--card); border: 1px solid var(--border);
+    color: var(--text); border-radius: 10px;
+    padding: 10px 12px; font-size: .85rem; font-weight: 600;
+    cursor: pointer; text-align: left;
+    transition: background .15s, border-color .15s;
+    width: 100%;
+  }
+  .tsp-btn:hover { background: var(--card2); border-color: rgba(59,130,246,.4); color: #93C5FD; }
+
   /* Quiz screen becomes a horizontal flex */
   #screenQuiz { flex-direction:row; }
 
@@ -2762,35 +2809,51 @@ a { color:inherit; text-decoration:none; }
     <!-- ═══ MICHAEL TRAFIKKLÆRER SCREEN ═══ -->
     <div class="screen" id="screenTeacher">
 
-      <!-- Chat header -->
-      <div class="teacher-header">
-        <div class="teacher-avatar">🚗</div>
-        <div class="teacher-header-info">
-          <div class="teacher-name" id="teacherNameLbl">Michael Trafikklærer</div>
-          <div class="teacher-status">● Online</div>
+      <!-- LEFT: chat column (full width on mobile, flex:1 on desktop) -->
+      <div class="teacher-chat-col">
+
+        <!-- Chat header -->
+        <div class="teacher-header">
+          <div class="teacher-avatar">🚗</div>
+          <div class="teacher-header-info">
+            <div class="teacher-name" id="teacherNameLbl">Michael Trafikklærer</div>
+            <div class="teacher-status">● Online</div>
+          </div>
         </div>
-      </div>
 
-      <!-- Message list -->
-      <div class="teacher-messages" id="teacherMessages">
-        <!-- Welcome bubble injected by JS -->
-      </div>
+        <!-- Message list -->
+        <div class="teacher-messages" id="teacherMessages">
+          <!-- Welcome bubble injected by JS -->
+        </div>
 
-      <!-- Suggestion chips — shown only before first user message -->
-      <div class="teacher-suggestions" id="teacherSuggestions">
-        <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="🛑 Forklar et skilt" data-msg-th="🛑 อธิบายป้ายจราจร" data-msg-en="🛑 Explain a sign">🛑 <span class="chip-lbl"></span></button>
-        <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="🚗 Hjelp med vikeplikt" data-msg-th="🚗 ช่วยเรื่องการให้ทาง" data-msg-en="🚗 Help with right-of-way">🚗 <span class="chip-lbl"></span></button>
-        <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="📖 Forklar en trafikkregel" data-msg-th="📖 อธิบายกฎจราจร" data-msg-en="📖 Explain a traffic rule">📖 <span class="chip-lbl"></span></button>
-        <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="📝 Hjelp med teoriprøven" data-msg-th="📝 ช่วยเรื่องข้อสอบทฤษฎี" data-msg-en="📝 Help with the theory test">📝 <span class="chip-lbl"></span></button>
-        <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="📊 Hva bør jeg øve på?" data-msg-th="📊 ฉันควรฝึกเรื่องอะไร?" data-msg-en="📊 What should I practise?">📊 <span class="chip-lbl"></span></button>
-        <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="❓ Spør om Thai2Drive" data-msg-th="❓ ถามเกี่ยวกับ Thai2Drive" data-msg-en="❓ Ask about Thai2Drive">❓ <span class="chip-lbl"></span></button>
-      </div>
+        <!-- Suggestion chips — shown only before first user message -->
+        <div class="teacher-suggestions" id="teacherSuggestions">
+          <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="🛑 Forklar et skilt" data-msg-th="🛑 อธิบายป้ายจราจร" data-msg-en="🛑 Explain a sign">🛑 <span class="chip-lbl"></span></button>
+          <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="🚗 Hjelp med vikeplikt" data-msg-th="🚗 ช่วยเรื่องการให้ทาง" data-msg-en="🚗 Help with right-of-way">🚗 <span class="chip-lbl"></span></button>
+          <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="📖 Forklar en trafikkregel" data-msg-th="📖 อธิบายกฎจราจร" data-msg-en="📖 Explain a traffic rule">📖 <span class="chip-lbl"></span></button>
+          <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="📝 Hjelp med teoriprøven" data-msg-th="📝 ช่วยเรื่องข้อสอบทฤษฎี" data-msg-en="📝 Help with the theory test">📝 <span class="chip-lbl"></span></button>
+          <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="📊 Hva bør jeg øve på?" data-msg-th="📊 ฉันควรฝึกเรื่องอะไร?" data-msg-en="📊 What should I practise?">📊 <span class="chip-lbl"></span></button>
+          <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="❓ Spør om Thai2Drive" data-msg-th="❓ ถามเกี่ยวกับ Thai2Drive" data-msg-en="❓ Ask about Thai2Drive">❓ <span class="chip-lbl"></span></button>
+        </div>
 
-      <!-- Input bar -->
-      <div class="teacher-inputbar">
-        <textarea class="teacher-input" id="teacherInput" rows="1" placeholder="..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();teacherSend();}"></textarea>
-        <button class="teacher-send-btn" id="teacherSendBtn" onclick="teacherSend()">➤</button>
-      </div>
+        <!-- Input bar -->
+        <div class="teacher-inputbar">
+          <textarea class="teacher-input" id="teacherInput" rows="1" placeholder="..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();teacherSend();}"></textarea>
+          <button class="teacher-send-btn" id="teacherSendBtn" onclick="teacherSend()">➤</button>
+        </div>
+
+      </div><!-- /teacher-chat-col -->
+
+      <!-- RIGHT: helper panel — only visible on desktop via CSS -->
+      <div class="teacher-side-panel" id="teacherSidePanel">
+        <div class="tsp-title" id="tspTitle">Emner</div>
+        <button class="tsp-btn" onclick="teacherSend('🛑 Forklar et skilt')">🛑 <span data-tsp="sign"></span></button>
+        <button class="tsp-btn" onclick="teacherSend('🚗 Hjelp med vikeplikt')">🚗 <span data-tsp="vikeplikt"></span></button>
+        <button class="tsp-btn" onclick="teacherSend('📖 Forklar en trafikkregel')">📖 <span data-tsp="rule"></span></button>
+        <button class="tsp-btn" onclick="teacherSend('📊 Hva bør jeg øve på?')">📊 <span data-tsp="practice"></span></button>
+        <button class="tsp-btn" onclick="teacherSend('📝 Hjelp med teoriprøven')">📝 <span data-tsp="theory"></span></button>
+        <button class="tsp-btn" onclick="teacherSend('❓ Spør om Thai2Drive')">❓ <span data-tsp="app"></span></button>
+      </div><!-- /teacher-side-panel -->
 
     </div><!-- /screenTeacher -->
 
@@ -2991,6 +3054,13 @@ var UI = {
   teacher_sub: {th:'ถามคำถามเกี่ยวกับการจราจร', no:'Still et spørsmål om trafikk', en:'Ask a question about traffic'},
   teacher_placeholder: {th:'ถามคำถาม...', no:'Still et spørsmål...', en:'Ask a question...'},
   teacher_error: {th:'ขอโทษ เกิดข้อผิดพลาด ลองใหม่อีกครั้ง', no:'Beklager, noe gikk galt. Prøv igjen.', en:'Sorry, something went wrong. Please try again.'},
+  tsp_title:   {th:'หัวข้อ',           no:'Emner',               en:'Topics'},
+  tsp_sign:    {th:'อธิบายป้ายจราจร',  no:'Forklar et skilt',    en:'Explain a sign'},
+  tsp_vikeplikt:{th:'ช่วยเรื่องการให้ทาง', no:'Hjelp med vikeplikt', en:'Help with right-of-way'},
+  tsp_rule:    {th:'อธิบายกฎจราจร',   no:'Forklar en trafikkregel', en:'Explain a traffic rule'},
+  tsp_practice:{th:'ฉันควรฝึกอะไร?',  no:'Hva bør jeg øve på?', en:'What should I practise?'},
+  tsp_theory:  {th:'ช่วยเรื่องข้อสอบ', no:'Hjelp med teoriprøven', en:'Help with the theory test'},
+  tsp_app:     {th:'ถามเกี่ยวกับแอป', no:'Spør om Thai2Drive',   en:'Ask about Thai2Drive'},
   q_lang:      {th:'ภาษาคำถาม',         no:'Spørsmålsspråk',   en:'Question language'},
   q_lang_sub:  {th:'เลือกภาษาสำหรับคำถามและคำตอบ', no:'Velg språk for spørsmål og svar', en:'Choose language for questions and answers'},
   sound:       {th:'เสียง',             no:'LYD',              en:'SOUND'},
@@ -3170,6 +3240,14 @@ function applyUILang() {
   if (tInput) tInput.placeholder = t('teacher_placeholder');
   var tSub = document.getElementById('michaelCardSub');
   if (tSub) tSub.textContent = t('teacher_sub');
+  // Side panel labels
+  var tspTitle = document.getElementById('tspTitle');
+  if (tspTitle) tspTitle.textContent = t('tsp_title');
+  var tspMap = { sign:'tsp_sign', vikeplikt:'tsp_vikeplikt', rule:'tsp_rule', practice:'tsp_practice', theory:'tsp_theory', app:'tsp_app' };
+  document.querySelectorAll('[data-tsp]').forEach(function(el) {
+    var key = tspMap[el.getAttribute('data-tsp')];
+    if (key) el.textContent = t(key);
+  });
   // Update suggestion chip labels
   document.querySelectorAll('.teacher-chip').forEach(function(chip) {
     var lbl = chip.querySelector('.chip-lbl');
@@ -3335,6 +3413,7 @@ function showScreen(id) {
   if (el) el.classList.add('active');
   // Toggle quiz-mode on #app: expands the phone frame to AI dashboard width on desktop
   document.getElementById('app').classList.toggle('quiz-mode', id === 'screenQuiz');
+  document.getElementById('app').classList.toggle('teacher-mode', id === 'screenTeacher');
 }
 
 function enterApp() {
@@ -6110,6 +6189,15 @@ function loadTeacher() {
   if (tNameEl) tNameEl.textContent = t('teacher_name');
   var tInput = document.getElementById('teacherInput');
   if (tInput) tInput.placeholder = t('teacher_placeholder');
+  // Update side panel button labels + onclick in current language
+  var tspMap2 = { sign:'tsp_sign', vikeplikt:'tsp_vikeplikt', rule:'tsp_rule', practice:'tsp_practice', theory:'tsp_theory', app:'tsp_app' };
+  document.querySelectorAll('[data-tsp]').forEach(function(el) {
+    var key = tspMap2[el.getAttribute('data-tsp')];
+    if (!key) return;
+    el.textContent = t(key);
+    var btn = el.closest('.tsp-btn');
+    if (btn) { var label = t(key); btn.onclick = (function(lbl){ return function(){ teacherSend(lbl); }; })(label); }
+  });
 }
 
 function _teacherUpdateChips() {
