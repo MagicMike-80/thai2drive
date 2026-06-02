@@ -2221,24 +2221,50 @@ a { color:inherit; text-decoration:none; }
   justify-content:center; font-size:13px; flex-shrink:0;
 }
 .tm-bubble {
-  max-width:82%; min-width:0; padding:13px 16px; border-radius:18px;
-  font-size:1rem; line-height:1.7;
+  max-width:84%; min-width:0; padding:14px 16px; border-radius:18px;
+  font-size:1rem; line-height:1.75;
   word-break:break-word; overflow-wrap:break-word;
-  white-space:pre-wrap; letter-spacing:.01em;
+  letter-spacing:.01em;
 }
 .tm-bubble.user {
   background:var(--orange); color:#fff;
-  border-bottom-right-radius:5px;
+  border-bottom-right-radius:5px; white-space:pre-wrap;
 }
 .tm-bubble.assistant {
-  background:#1a2744; color:#E2E8F0;
-  border:1px solid rgba(59,130,246,.20);
+  background:#0d1b2e; color:#F1F5F9;
+  border:1px solid rgba(59,130,246,.18);
   border-bottom-left-radius:5px;
 }
 [data-theme="light"] .tm-bubble.assistant {
   background:#fff; color:#0F172A;
   border:1px solid rgba(0,0,0,.10);
 }
+
+/* Paragraph spacing inside assistant bubbles */
+.tm-para { display:block; margin-bottom:.85em; }
+.tm-para:last-child { margin-bottom:0; }
+
+/* Section header (Situasjon:, Forklaring:, Teori:) */
+.tm-section-hdr {
+  display:block; font-weight:800; font-size:.82rem;
+  letter-spacing:.06em; text-transform:uppercase;
+  color:#60A5FA; margin-bottom:.35em; margin-top:.1em;
+}
+
+/* Practical advice box */
+.tm-advice-box {
+  background:rgba(255,153,51,.10); border:1px solid rgba(255,153,51,.35);
+  border-left:3px solid var(--orange);
+  border-radius:10px; padding:10px 13px; margin:.4em 0;
+}
+.tm-advice-hdr {
+  font-weight:800; font-size:.85rem; color:var(--orange);
+  margin-bottom:.45em;
+}
+.tm-advice-line { display:block; color:#FCD9A0; font-size:.9rem; line-height:1.6; }
+[data-theme="light"] .tm-advice-box  { background:rgba(255,153,51,.08); border-color:rgba(255,153,51,.4); }
+[data-theme="light"] .tm-advice-line { color:#92400E; }
+[data-theme="light"] .tm-section-hdr { color:#1D4ED8; }
 .tm-typing { display:flex; gap:5px; padding:12px 16px; }
 .tm-typing span {
   width:7px; height:7px; border-radius:50%;
@@ -6155,15 +6181,66 @@ var _teacherWelcomeLang  = null;    // tracks which language the welcome was ren
 // ── Strip markdown → plain text ──────────────────────────────
 function _stripMd(text) {
   return text
-    .replace(/^#{1,6}\s+/gm, '')          // ### headings
-    .replace(/\*\*(.+?)\*\*/g, '$1')      // **bold**
-    .replace(/__(.+?)__/g, '$1')          // __bold__
-    .replace(/\*([^*\n]+?)\*/g, '$1')     // *italic*
-    .replace(/_([^_\n]+?)_/g, '$1')       // _italic_
-    .replace(/^[-*]{3,}$/gm, '──────')    // --- horizontal rule
-    .replace(/^[\-\*]\s+/gm, '• ')        // - list item
-    .replace(/`([^`]+)`/g, '$1')          // `code`
+    .replace(/^#{1,6}\s+/gm, '')
+    .replace(/\*\*(.+?)\*\*/g, '$1')
+    .replace(/__(.+?)__/g, '$1')
+    .replace(/\*([^*\n]+?)\*/g, '$1')
+    .replace(/_([^_\n]+?)_/g, '$1')
+    .replace(/^[-*]{3,}$/gm, '')
+    .replace(/^[\-\*]\s+/gm, '• ')
+    .replace(/`([^`]+)`/g, '$1')
     .trim();
+}
+
+// ── Build rich DOM content for assistant bubble ───────────────
+// Detects: advice boxes (🚗 Praktisk råd: / 🚗 คำแนะนำ: / 🚗 Practical tip:)
+//          section headers (short lines ending in :)
+//          regular paragraphs (blocks separated by blank lines)
+function _buildAssistantContent(text, container) {
+  var cleaned = _stripMd(text);
+  var blocks = cleaned.split(/\n{2,}/);  // split on blank lines
+
+  blocks.forEach(function(block) {
+    block = block.trim();
+    if (!block) return;
+
+    // Advice box: block starts with advice header
+    if (/^🚗\s*(Praktisk råd|คำแนะนำ|Practical tip)/i.test(block)) {
+      var box = document.createElement('div');
+      box.className = 'tm-advice-box';
+      var lines = block.split('\n');
+      var hdr = document.createElement('div');
+      hdr.className = 'tm-advice-hdr';
+      hdr.textContent = lines[0].trim();
+      box.appendChild(hdr);
+      lines.slice(1).forEach(function(l) {
+        l = l.trim();
+        if (!l) return;
+        var s = document.createElement('span');
+        s.className = 'tm-advice-line';
+        s.textContent = l;
+        box.appendChild(s);
+      });
+      container.appendChild(box);
+      return;
+    }
+
+    // Section header: single short line ending with ":"
+    var singleLine = block.indexOf('\n') === -1;
+    if (singleLine && block.endsWith(':') && block.length < 40) {
+      var hdrEl = document.createElement('span');
+      hdrEl.className = 'tm-section-hdr';
+      hdrEl.textContent = block;
+      container.appendChild(hdrEl);
+      return;
+    }
+
+    // Regular paragraph — preserve internal line breaks
+    var para = document.createElement('span');
+    para.className = 'tm-para';
+    para.textContent = block;
+    container.appendChild(para);
+  });
 }
 
 function loadTeacher() {
@@ -6224,7 +6301,11 @@ function _teacherAppendBubble(role, text) {
   }
   var bubble = document.createElement('div');
   bubble.className = 'tm-bubble ' + role;
-  bubble.textContent = role === 'assistant' ? _stripMd(text) : text;
+  if (role === 'assistant') {
+    _buildAssistantContent(text, bubble);
+  } else {
+    bubble.textContent = text;
+  }
   row.appendChild(bubble);
   msgs.appendChild(row);
   msgs.scrollTop = msgs.scrollHeight;
