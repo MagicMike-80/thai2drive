@@ -535,7 +535,7 @@ a { color:inherit; text-decoration:none; }
   flex:1;
   overflow-y:auto; overflow-x:hidden;
   -webkit-overflow-scrolling:touch;
-  padding:16px 16px 24px;
+  padding:16px 16px calc(104px + env(safe-area-inset-bottom, 0px));
 }
 .quiz-body::-webkit-scrollbar { width:3px; }
 .quiz-body::-webkit-scrollbar-track { background:transparent; }
@@ -661,18 +661,18 @@ a { color:inherit; text-decoration:none; }
 }
 .q-explain.show { display:block; }
 
-/* Next button — sticky at bottom of scroll area so it never scrolls away */
+/* Next button — in normal flow, shown only after an answer is selected. */
 .q-next-mobile {
-  display:block !important;       /* always on, never hidden */
-  position:sticky; bottom:12px;
+  display:block;
+  position:static;
   width:100%; padding:14px;
   background:linear-gradient(135deg,#FF9933,#e6891f);
   color:#0F172A; font-weight:900; font-size:.9rem;
   border:none; border-radius:12px; cursor:pointer;
-  margin-top:6px;
-  box-shadow:0 -10px 18px #0B1226, 0 4px 12px rgba(255,153,51,.20);
+  margin-top:2px;
+  box-shadow:0 4px 12px rgba(255,153,51,.20);
 }
-.q-next-mobile:disabled { opacity:.30; cursor:not-allowed; }
+.q-next-mobile:disabled { display:none; opacity:.30; cursor:not-allowed; }
 .q-next-mobile:not(:disabled):active { opacity:.85; }
 
 /* Desktop side column — permanently hidden (we use q-next-mobile everywhere) */
@@ -2405,8 +2405,8 @@ a { color:inherit; text-decoration:none; }
         </div>
 
         <div class="auth-tabs">
-          <button class="auth-tab active" onclick="switchTab('login')" data-key="auth_login_tab">Logg inn</button>
-          <button class="auth-tab" onclick="switchTab('register')" data-key="auth_reg_tab">Registrer</button>
+          <button class="auth-tab active" onclick="switchTab('login')" data-key="login">Logg inn</button>
+          <button class="auth-tab" onclick="switchTab('register')" data-key="register">Registrer</button>
         </div>
 
         <div class="auth-error" id="authError"></div>
@@ -2415,43 +2415,60 @@ a { color:inherit; text-decoration:none; }
         <!-- LOGIN -->
         <div id="formLogin">
           <div class="form-group">
-            <label data-key="auth_label_email">E-post</label>
-            <input type="email" id="loginEmail" placeholder="din@epost.com" autocomplete="email">
+            <label data-key="auth_email">E-post</label>
+            <input type="email" id="loginEmail" placeholder="din@epost.com" data-placeholder-key="auth_email_placeholder" autocomplete="email">
           </div>
           <div class="form-group">
-            <label data-key="auth_label_pass">Passord</label>
-            <input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password">
+            <label data-key="auth_password">Passord</label>
+            <input type="password" id="loginPass" placeholder="••••••••" data-placeholder-key="auth_password_placeholder" autocomplete="current-password">
           </div>
-          <div class="forgot-link"><a onclick="showForgot()" data-key="auth_forgot_link">Glemt passord?</a></div>
-          <button class="auth-btn" onclick="doLogin()" data-key="auth_login_btn">Logg inn</button>
+          <div class="forgot-link"><a onclick="showForgot()" data-key="forgot_password">Glemt passord?</a></div>
+          <button class="auth-btn" onclick="doLogin()" data-key="login">Logg inn</button>
         </div>
 
         <!-- REGISTER -->
         <div id="formRegister" style="display:none">
           <div class="form-group">
-            <label data-key="auth_label_name">Navn</label>
-            <input type="text" id="regName" placeholder="Ditt fulle navn">
+            <label data-key="auth_name">Navn</label>
+            <input type="text" id="regName" placeholder="Ditt fulle navn" data-placeholder-key="auth_name_placeholder">
           </div>
           <div class="form-group">
-            <label data-key="auth_label_email">E-post</label>
-            <input type="email" id="regEmail" placeholder="din@epost.com" autocomplete="email">
+            <label data-key="auth_email">E-post</label>
+            <input type="email" id="regEmail" placeholder="din@epost.com" data-placeholder-key="auth_email_placeholder" autocomplete="email">
           </div>
           <div class="form-group">
-            <label data-key="auth_label_pass">Passord</label>
-            <input type="password" id="regPass" placeholder="Minst 6 tegn" autocomplete="new-password">
+            <label data-key="auth_password">Passord</label>
+            <input type="password" id="regPass" placeholder="Minst 6 tegn" data-placeholder-key="auth_password_min_placeholder" autocomplete="new-password">
           </div>
-          <button class="auth-btn" onclick="doRegister()" data-key="auth_reg_btn">Opprett konto</button>
+          <button class="auth-btn" onclick="doRegister()" data-key="create_account">Opprett konto</button>
         </div>
 
         <!-- FORGOT -->
         <div id="formForgot" style="display:none">
           <div class="form-group">
-            <label data-key="auth_label_email">E-post</label>
-            <input type="email" id="forgotEmail" placeholder="din@epost.com">
+            <label data-key="auth_email">E-post</label>
+            <input type="email" id="forgotEmail" placeholder="din@epost.com" data-placeholder-key="auth_email_placeholder">
           </div>
-          <button class="auth-btn" id="forgotSubmitBtn" onclick="doForgot()" data-key="auth_forgot_btn">Send tilbakestillingslenke</button>
+          <button class="auth-btn" id="forgotSubmitBtn" onclick="doForgot()" data-key="send_reset">Send tilbakestillingslenke</button>
           <div style="text-align:center;margin-top:12px">
-            <a style="font-size:.78rem;color:var(--muted);cursor:pointer" onclick="switchTab('login')" data-key="auth_back">← Tilbake</a>
+            <a style="font-size:.78rem;color:var(--muted);cursor:pointer" onclick="switchTab('login')" data-key="back">← Tilbake</a>
+          </div>
+        </div>
+
+        <!-- RESET PASSWORD (enter code + new password) -->
+        <div id="formReset" style="display:none">
+          <p style="font-size:.85rem;color:var(--muted);margin-bottom:12px;line-height:1.5" id="resetInstructions">Sjekk e-posten din for koden</p>
+          <div class="form-group">
+            <label data-key="reset_code_label">Kode</label>
+            <input type="text" id="resetCode" placeholder="123456" inputmode="numeric" maxlength="6" autocomplete="one-time-code" style="letter-spacing:.2em;font-size:1.2rem">
+          </div>
+          <div class="form-group">
+            <label data-key="reset_new_pass_label">Nytt passord</label>
+            <input type="password" id="resetNewPass" placeholder="Minst 6 tegn" autocomplete="new-password">
+          </div>
+          <button class="auth-btn" id="resetSubmitBtn" onclick="doResetPassword()" data-key="reset_submit">Sett nytt passord</button>
+          <div style="text-align:center;margin-top:12px">
+            <a style="font-size:.78rem;color:var(--muted);cursor:pointer" onclick="switchTab('forgot')" data-key="back">← Tilbake</a>
           </div>
         </div>
       </div>
@@ -2480,7 +2497,7 @@ a { color:inherit; text-decoration:none; }
       <div class="home-sec-btns">
         <button class="home-sec-btn" onclick="startExam()">📋 Eksamen</button>
         <button class="home-sec-btn" onclick="startDailyTest()">📅 Daglig test</button>
-        <button class="home-sec-btn" onclick="showTab('studybook')" style="grid-column:1/-1">📖 Studiebok — Norsk trafikk</button>
+        <button class="home-sec-btn" onclick="showTab('studybook')" style="grid-column:1/-1" data-key="studybook_home">📖 Studiebok — Norsk trafikk</button>
       </div>
 
       <!-- Michael Trafikklærer card -->
@@ -2536,7 +2553,7 @@ a { color:inherit; text-decoration:none; }
     <!-- ═══ CATEGORIES SCREEN ═══ -->
     <div class="screen" id="screenCats">
       <div class="cats-header">
-        <div class="screen-title">📚 Kategorier <span id="catCount"></span></div>
+        <div class="screen-title">📚 <span data-key="cats">Kategorier</span> <span id="catCount"></span></div>
       </div>
       <div class="cats-scroll">
         <div class="cat-grid" id="catGrid">
@@ -2747,7 +2764,7 @@ a { color:inherit; text-decoration:none; }
     <!-- ═══ HISTORY SCREEN ═══ -->
     <div class="screen" id="screenHistory">
       <div class="hist-header">
-        <div class="screen-title">📊 Historikk <span id="histCount"></span></div>
+        <div class="screen-title">📊 <span data-key="history">Historikk</span> <span id="histCount"></span></div>
       </div>
       <div class="hist-scroll" id="histScroll">
         <div class="loading-wrap">
@@ -2762,7 +2779,7 @@ a { color:inherit; text-decoration:none; }
       <div class="sb-topbar">
         <button class="back-btn" onclick="showTab('home')">← Tilbake</button>
         <div class="sb-search-wrap">
-          <input id="sbSearchInput" type="text" placeholder="Søk eller § nummer..." oninput="sbSearch(this.value)" autocomplete="off" />
+          <input id="sbSearchInput" type="text" placeholder="Søk eller § nummer..." data-placeholder-key="studybook_search_placeholder" oninput="sbSearch(this.value)" autocomplete="off" />
         </div>
       </div>
       <!-- Search results dropdown -->
@@ -2773,27 +2790,27 @@ a { color:inherit; text-decoration:none; }
       <div class="sb-reader" id="sbReader"><div class="loading-wrap"><div class="spinner"></div></div></div>
       <!-- Prev / page info / Next -->
       <div class="sb-nav">
-        <button class="sb-nav-btn" id="sbPrevBtn" onclick="sbGoTo(_sbCurrent - 1)">‹ Forrige</button>
-        <div class="sb-nav-info" id="sbNavInfo">Laster...</div>
-        <button class="sb-nav-btn" id="sbNextBtn" onclick="sbGoTo(_sbCurrent + 1)">Neste ›</button>
+        <button class="sb-nav-btn" id="sbPrevBtn" onclick="sbGoTo(_sbCurrent - 1)" data-key="studybook_prev">‹ Forrige</button>
+        <div class="sb-nav-info" id="sbNavInfo" data-key="studybook_loading">Laster...</div>
+        <button class="sb-nav-btn" id="sbNextBtn" onclick="sbGoTo(_sbCurrent + 1)" data-key="studybook_next">Neste ›</button>
       </div>
     </div>
 
     <!-- ═══ STUDIEBOK ADMIN EDIT MODAL ═══ -->
     <div id="studiebokEditModal" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.6);align-items:center;justify-content:center;">
       <div style="background:var(--card);border-radius:16px;padding:24px;width:min(92vw,520px);max-height:80vh;overflow-y:auto;display:flex;flex-direction:column;gap:12px;">
-        <div style="font-weight:700;font-size:1.05rem;">✏️ Rediger kapittel</div>
-        <label style="font-size:.85rem;color:var(--muted);">Tittel</label>
+        <div style="font-weight:700;font-size:1.05rem;" data-key="studybook_edit_chapter">✏️ Rediger kapittel</div>
+        <label style="font-size:.85rem;color:var(--muted);" data-key="studybook_title">Tittel</label>
         <input id="sbEditTitle" style="padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.95rem;width:100%;box-sizing:border-box;" />
-        <label style="font-size:.85rem;color:var(--muted);">Innhold (HTML)</label>
+        <label style="font-size:.85rem;color:var(--muted);" data-key="studybook_content_html">Innhold (HTML)</label>
         <textarea id="sbEditContent" rows="10" style="padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.85rem;width:100%;box-sizing:border-box;resize:vertical;font-family:monospace;"></textarea>
-        <label style="font-size:.85rem;color:var(--muted);">🖼️ Bilde URL</label>
+        <label style="font-size:.85rem;color:var(--muted);" data-key="studybook_image_url">🖼️ Bilde URL</label>
         <input id="sbEditImageUrl" type="text" style="padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.95rem;width:100%;box-sizing:border-box;" placeholder="https://..." />
-        <label style="font-size:.85rem;color:var(--muted);">🎥 Video URL (fremtidig)</label>
+        <label style="font-size:.85rem;color:var(--muted);" data-key="studybook_video_url">🎥 Video URL (fremtidig)</label>
         <input id="sbEditVideoUrl" type="text" style="padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.95rem;width:100%;box-sizing:border-box;" placeholder="https://..." />
         <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:4px;">
-          <button onclick="closeStudiebokModal()" style="padding:8px 18px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text);cursor:pointer;" data-key="sb_cancel">Avbryt</button>
-          <button onclick="saveStudiebokChapter()" style="padding:8px 18px;border-radius:8px;border:none;background:var(--orange);color:#0F172A;font-weight:600;cursor:pointer;" data-key="sb_save">Lagre</button>
+          <button onclick="closeStudiebokModal()" data-key="cancel" style="padding:8px 18px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text);cursor:pointer;">Avbryt</button>
+          <button onclick="saveStudiebokChapter()" data-key="save" style="padding:8px 18px;border-radius:8px;border:none;background:var(--orange);color:#0F172A;font-weight:600;cursor:pointer;">Lagre</button>
         </div>
       </div>
     </div>
@@ -2802,18 +2819,18 @@ a { color:inherit; text-decoration:none; }
     <div class="screen" id="screenEnd">
       <div class="end-wrap">
         <div class="end-score-quiet" id="endScoreQuiet">0 av 0 riktige</div>
-        <div class="end-heading" id="endHeading">Øvelsen er ferdig.</div>
+        <div class="end-heading" id="endHeading" data-key="result_done">Øvelsen er ferdig.</div>
         <p class="end-body" id="endBody"></p>
         <div class="end-focus" id="endFocus" style="display:none">
           <div>
-            <div class="end-focus-label">Anbefalt øvelse</div>
+            <div class="end-focus-label" data-key="result_focus">Anbefalt øvelse</div>
             <div class="end-focus-topic" id="endFocusTopic"></div>
           </div>
         </div>
         <div class="end-btns">
           <button class="end-btn-pri" onclick="retryQuiz()">Øv igjen</button>
-          <button class="end-btn-sec" onclick="showTab('home')">Tilbake til hjem</button>
-          <button class="end-btn-sec" onclick="showTab('cats')">Velg kategori</button>
+          <button class="end-btn-sec" onclick="showTab('home')" data-key="backhome">Tilbake til hjem</button>
+          <button class="end-btn-sec" onclick="showTab('cats')" data-key="pickcat">Velg kategori</button>
         </div>
       </div>
     </div>
@@ -2865,7 +2882,7 @@ a { color:inherit; text-decoration:none; }
           <div class="teacher-avatar">🚗</div>
           <div class="teacher-header-info">
             <div class="teacher-name" id="teacherNameLbl">Michael Trafikklærer</div>
-            <div class="teacher-status">● Online</div>
+            <div class="teacher-status" data-key="teacher_online">● Online</div>
           </div>
         </div>
 
@@ -3102,6 +3119,7 @@ var UI = {
   teacher_sub: {th:'ถามคำถามเกี่ยวกับการจราจร', no:'Still et spørsmål om trafikk', en:'Ask a question about traffic'},
   teacher_placeholder: {th:'ถามคำถาม...', no:'Still et spørsmål...', en:'Ask a question...'},
   teacher_error: {th:'ขอโทษ เกิดข้อผิดพลาด ลองใหม่อีกครั้ง', no:'Beklager, noe gikk galt. Prøv igjen.', en:'Sorry, something went wrong. Please try again.'},
+  teacher_online:{th:'● ออนไลน์', no:'● Pålogget', en:'● Online'},
   tsp_title:   {th:'หัวข้อ',           no:'Emner',               en:'Topics'},
   tsp_sign:    {th:'อธิบายป้ายจราจร',  no:'Forklar et skilt',    en:'Explain a sign'},
   tsp_vikeplikt:{th:'ช่วยเรื่องการให้ทาง', no:'Hjelp med vikeplikt', en:'Help with right-of-way'},
@@ -3213,6 +3231,57 @@ var UI = {
   result_learn_head:{th:'ยังมีเรื่องให้เรียนรู้เพิ่ม', no:'Her er det mer å lære.', en:'There is more to learn here.'},
   result_learn_body:{th:'ไม่ต้องกังวล ความเข้าใจสร้างได้ทีละขั้น ใช้คำอธิบายอย่างใจเย็น', no:'Ikke bekymre deg — forståelse bygges gradvis. Bruk forklaringene aktivt og ta det steg for steg.', en:'Do not worry. Understanding builds gradually. Use the explanations calmly, step by step.'},
   lang_updated:{th:'อัปเดตภาษาแล้ว',        no:'Språk oppdatert',  en:'Language updated'},
+  app_sub:     {th:'สอบใบขับขี่นอร์เวย์', no:'Norsk teoriprøve for thai-elever', en:'Norwegian driving theory for Thai learners'},
+  register:    {th:'สมัครสมาชิก', no:'Registrer', en:'Register'},
+  create_account:{th:'สร้างบัญชี', no:'Opprett konto', en:'Create account'},
+  login_loading:{th:'กำลังเข้าสู่ระบบ…', no:'Logger inn…', en:'Logging in…'},
+  register_loading:{th:'กำลังสร้างบัญชี…', no:'Oppretter konto…', en:'Creating account…'},
+  send_reset:  {th:'ส่งลิงก์รีเซ็ตรหัสผ่าน', no:'Send tilbakestillingslenke', en:'Send reset link'},
+  reset_sending:{th:'กำลังส่ง…', no:'Sender…', en:'Sending…'},
+  forgot_password:{th:'ลืมรหัสผ่าน?', no:'Glemt passord?', en:'Forgot password?'},
+  auth_email:  {th:'อีเมล', no:'E-post', en:'Email'},
+  auth_password:{th:'รหัสผ่าน', no:'Passord', en:'Password'},
+  auth_name:   {th:'ชื่อ', no:'Navn', en:'Name'},
+  auth_email_placeholder:{th:'อีเมลของคุณ', no:'din@epost.com', en:'your@email.com'},
+  auth_password_placeholder:{th:'รหัสผ่าน', no:'Passord', en:'Password'},
+  auth_password_min_placeholder:{th:'อย่างน้อย 6 ตัวอักษร', no:'Minst 6 tegn', en:'At least 6 characters'},
+  auth_name_placeholder:{th:'ชื่อเต็มของคุณ', no:'Ditt fulle navn', en:'Your full name'},
+  auth_missing_login:{th:'กรอกอีเมลและรหัสผ่าน', no:'Fyll inn e-post og passord', en:'Enter email and password'},
+  auth_missing_all:{th:'กรอกข้อมูลทุกช่อง', no:'Fyll inn alle feltene', en:'Fill in all fields'},
+  auth_password_short:{th:'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร', no:'Passord må være minst 6 tegn', en:'Password must be at least 6 characters'},
+  auth_missing_email:{th:'กรอกอีเมลของคุณ', no:'Fyll inn e-postadressen din', en:'Enter your email address'},
+  auth_reset_sent:{th:'ส่งอีเมลแล้ว ตรวจสอบกล่องจดหมายของคุณ 📧', no:'E-post sendt! Sjekk innboksen din 📧', en:'Email sent. Check your inbox 📧'},
+  email_already_registered:{th:'อีเมลนี้ลงทะเบียนแล้ว กรุณาเข้าสู่ระบบหรือรีเซ็ตรหัสผ่าน', no:'Denne e-posten er allerede registrert. Logg inn eller tilbakestill passordet.', en:'This email is already registered. Log in or reset password.'},
+  email_not_registered:{th:'ไม่พบบัญชีที่ใช้อีเมลนี้', no:'Fant ingen konto med denne e-posten.', en:'No account was found with this email.'},
+  reset_email_failed:{th:'ไม่สามารถส่งรหัสรีเซ็ตรหัสผ่านได้ กรุณาลองใหม่ภายหลังหรือติดต่อฝ่ายสนับสนุน', no:'Kunne ikke sende tilbakestillingskode. Prøv igjen senere eller kontakt support.', en:'Could not send reset code. Try again later or contact support.'},
+  invalid_or_expired_reset_code:{th:'รหัสรีเซ็ตรหัสผ่านไม่ถูกต้องหรือหมดอายุแล้ว', no:'Ugyldig eller utløpt tilbakestillingskode', en:'Invalid or expired reset code'},
+  reset_code_label:{th:'รหัส', no:'Kode', en:'Code'},
+  reset_new_pass_label:{th:'รหัสผ่านใหม่', no:'Nytt passord', en:'New password'},
+  reset_submit:{th:'ตั้งรหัสผ่านใหม่', no:'Sett nytt passord', en:'Set new password'},
+  reset_submitting:{th:'กำลังบันทึก…', no:'Lagrer…', en:'Saving…'},
+  reset_success:{th:'รีเซ็ตรหัสผ่านสำเร็จแล้ว กำลังเข้าสู่ระบบ…', no:'Passordet er tilbakestilt. Logg inn igjen.', en:'Password reset. Log in again.'},
+  reset_instructions:{th:'ตรวจสอบอีเมลของคุณสำหรับรหัส', no:'Sjekk e-posten din for koden', en:'Check your email for the code'},
+  reset_fill:{th:'กรุณากรอกรหัสและรหัสผ่านใหม่', no:'Fyll inn kode og nytt passord', en:'Enter the code and new password'},
+  reset_pass_short:{th:'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร', no:'Nytt passord må være minst 6 tegn', en:'New password must be at least 6 characters'},
+  email_not_registered:{th:'ไม่พบบัญชีที่ใช้อีเมลนี้', no:'Fant ingen konto med denne e-posten.', en:'No account found with this email.'},
+  reset_email_failed:{th:'ไม่สามารถส่งรหัสรีเซ็ตได้ กรุณาลองใหม่ภายหลัง', no:'Kunne ikke sende tilbakestillingskode. Prøv igjen senere.', en:'Could not send reset code. Try again later.'},
+  email_already_registered:{th:'อีเมลนี้มีบัญชีอยู่แล้ว เข้าสู่ระบบหรือรีเซ็ตรหัสผ่าน', no:'Denne e-posten er allerede registrert. Logg inn eller tilbakestill passordet.', en:'This email is already registered. Log in or reset your password.'},
+  account_unavailable:{th:'บัญชีนี้ไม่พร้อมใช้งาน กรุณาติดต่อฝ่ายสนับสนุน', no:'Denne kontoen er ikke tilgjengelig. Kontakt support.', en:'This account is not available. Contact support.'},
+  logout_confirm:{th:'คุณแน่ใจหรือว่าต้องการออกจากระบบ?', no:'Er du sikker på at du vil logge ut?', en:'Are you sure you want to log out?'},
+  studybook_home:{th:'📖 หนังสือเรียน — การจราจรนอร์เวย์', no:'📖 Studiebok — Norsk trafikk', en:'📖 Study book — Norwegian traffic'},
+  studybook_search_placeholder:{th:'ค้นหาหรือเลข §...', no:'Søk eller § nummer...', en:'Search or § number...'},
+  studybook_prev:{th:'‹ ก่อนหน้า', no:'‹ Forrige', en:'‹ Previous'},
+  studybook_next:{th:'ถัดไป ›', no:'Neste ›', en:'Next ›'},
+  studybook_loading:{th:'กำลังโหลด...', no:'Laster...', en:'Loading...'},
+  studybook_load_error:{th:'โหลดหนังสือเรียนไม่ได้', no:'Kunne ikke laste studiebok.', en:'Could not load the study book.'},
+  studybook_no_results:{th:'ไม่พบผลลัพธ์', no:'Ingen treff', en:'No results'},
+  studybook_edit_chapter:{th:'✏️ แก้ไขบทเรียน', no:'✏️ Rediger kapittel', en:'✏️ Edit chapter'},
+  studybook_title:{th:'ชื่อเรื่อง', no:'Tittel', en:'Title'},
+  studybook_content_html:{th:'เนื้อหา (HTML)', no:'Innhold (HTML)', en:'Content (HTML)'},
+  studybook_image_url:{th:'🖼️ URL รูปภาพ', no:'🖼️ Bilde URL', en:'🖼️ Image URL'},
+  studybook_video_url:{th:'🎥 Video URL (อนาคต)', no:'🎥 Video URL (fremtidig)', en:'🎥 Video URL (future)'},
+  cancel:      {th:'ยกเลิก', no:'Avbryt', en:'Cancel'},
+  sb_empty_fields:{th:'ชื่อเรื่องและเนื้อหาห้ามว่าง', no:'Tittel og innhold kan ikke være tomme', en:'Title and content cannot be empty'},
   practice_this_sign:{th:'📚 ฝึกป้ายนี้',     no:'📚 Øv på dette skiltet', en:'📚 Practice this sign'},
   save:        {th:'บันทึก',                no:'Lagre',            en:'Save'},
   saved:       {th:'บันทึกแล้ว',             no:'Lagret',           en:'Saved'},
@@ -3264,15 +3333,6 @@ var UI = {
   auth_sending:    {th:'กำลังส่ง…',      no:'Sender…',       en:'Sending…'},
   auth_email_sent: {th:'ส่งอีเมลแล้ว! ตรวจสอบกล่องขาเข้า 📧', no:'E-post sendt! Sjekk innboksen din 📧', en:'Email sent! Check your inbox 📧'},
   auth_fill_email: {th:'กรุณากรอกอีเมล', no:'Fyll inn e-postadressen din', en:'Please enter your email address'},
-  auth_fill_all:   {th:'กรุณากรอกข้อมูลให้ครบ', no:'Fyll inn alle feltene', en:'Please fill in all fields'},
-  auth_pass_short: {th:'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร', no:'Passord må være minst 6 tegn', en:'Password must be at least 6 characters'},
-  auth_fill_login: {th:'กรุณากรอกอีเมลและรหัสผ่าน', no:'Fyll inn e-post og passord', en:'Please enter email and password'},
-  auth_logging_in: {th:'กำลังเข้าสู่ระบบ…', no:'Logger inn…', en:'Logging in…'},
-  auth_creating:   {th:'กำลังสร้างบัญชี…', no:'Oppretter konto…', en:'Creating account…'},
-  auth_email_exists:{th:'อีเมลนี้มีบัญชีอยู่แล้ว เข้าสู่ระบบหรือรีเซ็ตรหัสผ่าน', no:'Denne e-posten er allerede registrert. Logg inn eller tilbakestill passordet.', en:'This email is already registered. Log in or reset your password.'},
-  auth_send_failed:{th:'ไม่สามารถส่งอีเมลได้ โปรดลองอีกครั้งในภายหลัง', no:'Kunne ikke sende e-post. Prøv igjen senere.', en:'Could not send email. Please try again later.'},
-  auth_code_invalid:{th:'รหัสรีเซ็ตรหัสผ่านไม่ถูกต้องหรือหมดอายุแล้ว', no:'Ugyldig eller utløpt tilbakestillingskode', en:'Invalid or expired reset code'},
-  auth_code_expired:{th:'รหัสรีเซ็ตรหัสผ่านหมดอายุแล้ว ขอรหัสใหม่', no:'Tilbakestillingskoden har utløpt. Be om en ny kode.', en:'Reset code has expired. Please request a new one.'},
   auth_logout_confirm:{th:'แน่ใจหรือว่าต้องการออกจากระบบ?', no:'Er du sikker på at du vil logge ut?', en:'Are you sure you want to log out?'},
   // Studiebok
   sb_prev:         {th:'‹ ก่อนหน้า',    no:'‹ Forrige',     en:'‹ Previous'},
@@ -3306,6 +3366,17 @@ function localeForLang() {
 }
 
 function applyUILang() {
+  // Generic text and placeholders first, so every visible static label follows appLang.
+  document.querySelectorAll('[data-key]').forEach(function(el) {
+    var key = el.getAttribute('data-key');
+    var val = t(key);
+    if (val) el.textContent = val;
+  });
+  document.querySelectorAll('[data-placeholder-key]').forEach(function(el) {
+    var key = el.getAttribute('data-placeholder-key');
+    var val = t(key);
+    if (val) el.setAttribute('placeholder', val);
+  });
   // back buttons
   document.querySelectorAll('.back-btn').forEach(function(b){ b.textContent = t('back'); });
   // bottom nav
@@ -3347,15 +3418,24 @@ function applyUILang() {
   if (catsTitleEl) {
     var catsCountEl = document.getElementById('catCount');
     var catsCountText = catsCountEl ? catsCountEl.textContent : '';
-    catsTitleEl.innerHTML = '📚 ' + t('cats') + ' <span id="catCount">' + catsCountText + '</span>';
+    catsTitleEl.innerHTML = '📚 <span data-key="cats">' + t('cats') + '</span> <span id="catCount">' + catsCountText + '</span>';
   }
   // home buttons
   document.querySelectorAll('.home-cta').forEach(function(b){ b.innerHTML = t('startquiz').replace(/^▶\s*/,'▶&nbsp;&nbsp;'); });
   document.querySelectorAll('.home-sec-btn').forEach(function(b,i){
     if (i===0) b.textContent = t('exam');
     else if (i===1) b.textContent = t('daily');
-    else if (i===2) b.textContent = t('sb_home_btn');
+    else if (i===2) b.textContent = t('studybook_home');
   });
+  var sbSearch = document.getElementById('sbSearchInput');
+  if (sbSearch) sbSearch.placeholder = t('studybook_search_placeholder');
+  var sbPrev = document.getElementById('sbPrevBtn');
+  if (sbPrev) sbPrev.textContent = t('studybook_prev');
+  var sbNext = document.getElementById('sbNextBtn');
+  if (sbNext) sbNext.textContent = t('studybook_next');
+  var sbInfo = document.getElementById('sbNavInfo');
+  if (sbInfo && (!_sbLoaded || !_sbChapters.length)) sbInfo.textContent = t('studybook_loading');
+  if (sbInfo && _sbLoaded && _sbChapters.length) sbRender();
   // end screen buttons
   var er = document.querySelector('.end-btn-pri'); if(er) er.innerHTML = t('retry');
   var endSecBtns = document.querySelectorAll('.end-btn-sec');
@@ -3391,19 +3471,6 @@ function applyUILang() {
   // Premium banner
   var pb = document.getElementById('homePremiumBanner');
   if(pb) { var ptitle = pb.querySelector('.pb-title'); var psub = pb.querySelector('.pb-sub'); if(ptitle) ptitle.textContent = t('premium_on'); if(psub) psub.textContent = t('premium_sub'); }
-  // Translate ALL elements with data-key — reliable fallback
-  document.querySelectorAll('[data-key]').forEach(function(el) {
-    var key = el.getAttribute('data-key');
-    var val = t(key);
-    if (val) el.textContent = val;
-  });
-  // Studiebok nav buttons + search
-  var sbPrev = document.getElementById('sbPrevBtn'); if(sbPrev) sbPrev.textContent = t('sb_prev');
-  var sbNext = document.getElementById('sbNextBtn'); if(sbNext) sbNext.textContent = t('sb_next');
-  var sbSearch = document.getElementById('sbSearchInput'); if(sbSearch) sbSearch.placeholder = t('sb_search_ph');
-  // Auth placeholders (data-key handles labels/buttons via the [data-key] loop below)
-  var regName = document.getElementById('regName'); if(regName) regName.placeholder = t('auth_name_ph');
-  var regPass = document.getElementById('regPass'); if(regPass) regPass.placeholder = t('auth_pass_ph');
   if (spBm && _signPanelData) spBm.textContent = _signFavorites.indexOf(_signPanelData.id) >= 0 ? t('saved') : t('save');
   var aiStatus = document.getElementById('quizAiStatus');
   if (aiStatus && aiStatus.classList.contains('idle')) aiStatus.textContent = t('ai_waiting');
@@ -3568,7 +3635,7 @@ async function loadStudiebok() {
     sbBuildDots();
     sbGoTo(0);
   } catch(e) {
-    reader.innerHTML = '<div style="padding:24px;text-align:center;color:var(--muted);">Kunne ikke laste studiebok.</div>';
+    reader.innerHTML = '<div style="padding:24px;text-align:center;color:var(--muted);">' + t('studybook_load_error') + '</div>';
   }
 }
 
@@ -3659,7 +3726,7 @@ function sbSearch(q) {
   }
 
   if (!matches.length) {
-    box.innerHTML = '<div class="sb-result-item" style="color:var(--muted)">Ingen treff</div>';
+    box.innerHTML = '<div class="sb-result-item" style="color:var(--muted)">' + t('studybook_no_results') + '</div>';
     box.style.display = 'block'; return;
   }
 
@@ -3723,7 +3790,7 @@ async function saveStudiebokChapter() {
   var content_no = document.getElementById('sbEditContent').value.trim();
   var image_url  = document.getElementById('sbEditImageUrl').value.trim();
   var video_url  = document.getElementById('sbEditVideoUrl').value.trim();
-  if (!title_no || !content_no) { toast('Tittel og innhold kan ikke være tomme'); return; }
+  if (!title_no || !content_no) { toast(t('sb_empty_fields')); return; }
   try {
     await api('PUT', '/api/studiebok/' + _sbEditOrder, { title_no, content_no, image_url, video_url });
     // Update local cache
@@ -3748,7 +3815,16 @@ async function api(method, url, body) {
   var data = await r.json().catch(function() { return {}; });
   if (!r.ok) {
     var det = data.detail;
-    var msg = typeof det === 'string' ? det : (Array.isArray(det) ? det.map(function(d){return d.msg||d;}).join(', ') : JSON.stringify(det) || 'Noe gikk galt');
+    var msg;
+    if (typeof det === 'string') {
+      msg = t(det) !== det ? t(det) : det;
+    } else if (det && typeof det === 'object' && !Array.isArray(det)) {
+      msg = (det[appLang] || (det.key ? t(det.key) : '') || det.no || det.en || det.th || JSON.stringify(det));
+    } else if (Array.isArray(det)) {
+      msg = det.map(function(d){return d.msg||d;}).join(', ');
+    } else {
+      msg = 'Noe gikk galt';
+    }
     var err = new Error(msg);
     err.status = r.status;
     err.data = data;
@@ -3827,14 +3903,20 @@ function switchTab(tab) {
   document.querySelectorAll('.auth-tab').forEach(function(t, i) {
     t.classList.toggle('active', (i===0 && tab==='login') || (i===1 && tab==='register'));
   });
-  document.getElementById('formLogin').style.display   = tab === 'login'    ? 'block' : 'none';
+  document.getElementById('formLogin').style.display    = tab === 'login'    ? 'block' : 'none';
   document.getElementById('formRegister').style.display = tab === 'register' ? 'block' : 'none';
-  document.getElementById('formForgot').style.display   = 'none';
+  document.getElementById('formForgot').style.display   = tab === 'forgot'   ? 'block' : 'none';
+  document.getElementById('formReset').style.display    = tab === 'reset'    ? 'block' : 'none';
+  if (tab === 'reset') {
+    var instr = document.getElementById('resetInstructions');
+    if (instr) instr.textContent = t('reset_instructions');
+  }
 }
 function showForgot() {
   clearAuthMessages();
   document.getElementById('formLogin').style.display = 'none';
   document.getElementById('formForgot').style.display = 'block';
+  document.getElementById('formReset').style.display = 'none';
   document.querySelectorAll('.auth-tab').forEach(function(t) { t.classList.remove('active'); });
 }
 function showAuthError(msg) {
@@ -3852,29 +3934,13 @@ function clearAuthMessages() {
   document.getElementById('authSuccess').classList.remove('show');
 }
 
-// Translate API error codes returned from backend into user-friendly messages
-function _authErrMsg(err) {
-  var detail = (err && err.message) || '';
-  if (detail === 'EMAIL_EXISTS') return t('auth_email_exists');
-  if (detail === 'EMAIL_SEND_FAILED') return t('auth_send_failed');
-  if (detail === 'RESET_CODE_INVALID') return t('auth_code_invalid');
-  if (detail === 'RESET_CODE_EXPIRED') return t('auth_code_expired');
-  // Generic server errors
-  if (detail.indexOf('401') >= 0 || detail.indexOf('Invalid email') >= 0) {
-    return appLang === 'th' ? 'อีเมลหรือรหัสผ่านไม่ถูกต้อง' :
-           appLang === 'en' ? 'Incorrect email or password' :
-           'Feil e-post eller passord';
-  }
-  return detail || t('generic_error');
-}
-
 async function doLogin() {
   clearAuthMessages();
   var email = document.getElementById('loginEmail').value.trim();
   var pass  = document.getElementById('loginPass').value;
-  if (!email || !pass) return showAuthError(t('auth_fill_login'));
+  if (!email || !pass) return showAuthError(t('auth_missing_login'));
   var btn = document.querySelector('#formLogin .auth-btn');
-  btn.disabled = true; btn.textContent = t('auth_logging_in');
+  btn.disabled = true; btn.textContent = t('login_loading');
   try {
     var r = await api('POST', '/api/auth/login', { email: email, password: pass });
     token = r.token; user = r.user;
@@ -3882,8 +3948,8 @@ async function doLogin() {
     _ls.set('t2d_token', token);
     enterApp();
   } catch(e) {
-    showAuthError(_authErrMsg(e));
-    btn.disabled = false; btn.textContent = t('auth_login_btn');
+    showAuthError(e.message);
+    btn.disabled = false; btn.textContent = t('login');
   }
 }
 
@@ -3892,10 +3958,10 @@ async function doRegister() {
   var name  = document.getElementById('regName').value.trim();
   var email = document.getElementById('regEmail').value.trim();
   var pass  = document.getElementById('regPass').value;
-  if (!name || !email || !pass) return showAuthError(t('auth_fill_all'));
-  if (pass.length < 6) return showAuthError(t('auth_pass_short'));
+  if (!name || !email || !pass) return showAuthError(t('auth_missing_all'));
+  if (pass.length < 6) return showAuthError(t('auth_password_short'));
   var btn = document.querySelector('#formRegister .auth-btn');
-  btn.disabled = true; btn.textContent = t('auth_creating');
+  btn.disabled = true; btn.textContent = t('register_loading');
   try {
     var r = await api('POST', '/api/auth/signup', { name: name, email: email, password: pass });
     token = r.token; user = r.user;
@@ -3903,29 +3969,54 @@ async function doRegister() {
     _ls.set('t2d_token', token);
     enterApp();
   } catch(e) {
-    showAuthError(_authErrMsg(e));
-    btn.disabled = false; btn.textContent = t('auth_reg_btn');
+    showAuthError(e.message);
+    btn.disabled = false; btn.textContent = t('create_account');
   }
 }
 
 async function doForgot() {
   clearAuthMessages();
   var email = document.getElementById('forgotEmail').value.trim();
-  if (!email) return showAuthError(t('auth_fill_email'));
-  var btn = document.getElementById('forgotSubmitBtn');
-  btn.disabled = true; btn.textContent = t('auth_sending');
+  if (!email) return showAuthError(t('auth_missing_email'));
+  var btn = document.getElementById('forgotSubmitBtn') || document.querySelector('#formForgot .auth-btn');
+  btn.disabled = true; btn.textContent = t('reset_sending');
   try {
     await api('POST', '/api/auth/forgot-password', { email: email });
-    showAuthSuccess(t('auth_email_sent'));
-    setTimeout(function() { switchTab('login'); }, 2500);
+    // Store the email so doResetPassword() can use it
+    window._resetEmail = email;
+    // Show the code-entry form
+    switchTab('reset');
+    showAuthSuccess(t('auth_reset_sent'));
   } catch(e) {
-    showAuthError(_authErrMsg(e));
+    showAuthError(e.message);
+    btn.disabled = false; btn.textContent = t('send_reset');
   }
-  btn.disabled = false; btn.textContent = t('auth_forgot_btn');
+  btn.disabled = false; btn.textContent = t('send_reset');
+}
+
+async function doResetPassword() {
+  clearAuthMessages();
+  var code = (document.getElementById('resetCode').value || '').trim();
+  var newPass = document.getElementById('resetNewPass').value;
+  var email = window._resetEmail || '';
+  if (!code || !newPass) return showAuthError(t('reset_fill'));
+  if (newPass.length < 6) return showAuthError(t('reset_pass_short'));
+  if (!email) return showAuthError(t('auth_missing_email'));
+  var btn = document.getElementById('resetSubmitBtn');
+  btn.disabled = true; btn.textContent = t('reset_submitting');
+  try {
+    await api('POST', '/api/auth/reset-password', { email: email, code: code, new_password: newPass });
+    showAuthSuccess(t('reset_success'));
+    window._resetEmail = null;
+    setTimeout(function() { switchTab('login'); }, 2000);
+  } catch(e) {
+    showAuthError(e.message);
+    btn.disabled = false; btn.textContent = t('reset_submit');
+  }
 }
 
 function logout() {
-  if (!confirm(t('auth_logout_confirm'))) return;
+  if (!confirm(t('logout_confirm'))) return;
   _ls.remove('t2d_token');
   token = null; user = null; deviceId = null;
   document.getElementById('topBar').style.display = 'none';
@@ -6241,6 +6332,10 @@ function setLang(lang) {
   if (histScreen && histScreen.classList.contains('active')) {
     loadHistory();
   }
+  var teacherScreen = document.getElementById('screenTeacher');
+  if (teacherScreen && teacherScreen.classList.contains('active')) {
+    loadTeacher();
+  }
   if (_signPanelData) {
     _signPanelLang = lang === 'th' ? 'th' : lang === 'en' ? 'en' : 'no';
     _renderSignPanel();
@@ -6575,9 +6670,11 @@ document.addEventListener('keydown', function(e) {
     var lf = document.getElementById('formLogin');
     var rf = document.getElementById('formRegister');
     var ff = document.getElementById('formForgot');
-    if (lf.style.display !== 'none') doLogin();
-    else if (rf.style.display !== 'none') doRegister();
-    else if (ff.style.display !== 'none') doForgot();
+    var fr = document.getElementById('formReset');
+    if (lf && lf.style.display !== 'none') doLogin();
+    else if (rf && rf.style.display !== 'none') doRegister();
+    else if (ff && ff.style.display !== 'none') doForgot();
+    else if (fr && fr.style.display !== 'none') doResetPassword();
   }
 
   if (id === 'screenQuiz' && qAnswered) {

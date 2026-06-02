@@ -7,7 +7,10 @@ from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import logging
+import hashlib
+import smtplib
 from pathlib import Path
+from email.mime.text import MIMEText
 from pydantic import BaseModel, Field, validator
 from typing import List, Optional, Dict, Any
 import uuid
@@ -18,8 +21,6 @@ import asyncio
 from datetime import datetime, timezone, timedelta
 from zoneinfo import ZoneInfo
 from passlib.context import CryptContext
-import smtplib
-from email.mime.text import MIMEText
 import usage as usage_mod
 
 ROOT_DIR = Path(__file__).parent
@@ -338,92 +339,107 @@ async def optional_auth(credentials: HTTPAuthorizationCredentials = Depends(secu
         return None
     return verify_token(credentials.credentials)  # None if expired/invalid
 
-def generate_reset_code() -> str:
-    import random, secrets
-    return str(random.randint(100000, 999999))
 
-# ─── Email helper (password reset) ────────────────────────────────────────────
-_RESET_SMTP_HOST = os.environ.get('SUPPORT_SMTP_HOST', '')
-_RESET_SMTP_PORT = int(os.environ.get('SUPPORT_SMTP_PORT', '587'))
-_RESET_SMTP_USER = os.environ.get('SUPPORT_SMTP_USER', '')
-_RESET_SMTP_PASS = os.environ.get('SUPPORT_SMTP_PASS', '')
-_RESET_FROM      = os.environ.get('SUPPORT_SMTP_USER', 'noreply@thai2drive.no')
-
-def _send_reset_email(to_email: str, code: str) -> tuple[bool, str]:
-    """Send a password reset code via SMTP. Returns (success, info)."""
-    if not (_RESET_SMTP_HOST and _RESET_SMTP_USER and _RESET_SMTP_PASS):
-        logger.error("[RESET EMAIL] SMTP not configured — reset email NOT sent to %s", _mask_email(to_email))
-        return False, 'SMTP not configured'
-
-    subject = "Thai2Drive — Tilbakestillingskode / Reset Code"
-    body = (
-        f"Hei / Hello,\n\n"
-        f"Din tilbakestillingskode for Thai2Drive er:\n\n"
-        f"  {code}\n\n"
-        f"Koden er gyldig i 15 minutter.\n"
-        f"Hvis du ikke ba om dette, kan du ignorere denne e-posten.\n\n"
-        f"---\n"
-        f"Your Thai2Drive password reset code:\n\n"
-        f"  {code}\n\n"
-        f"Valid for 15 minutes. Ignore if you did not request this.\n\n"
-        f"— Thai2Drive\n"
+async def _find_user_by_email(email: str, projection: Optional[dict] = None) -> Optional[dict]:
+    normalized = (email or "").strip().lower()
+    user = await db.users.find_one({"email": normalized}, projection)
+    if user:
+        return user
+    # Legacy safety: some older records may have been saved before strict
+    # lowercasing. Auth must still find exactly the same email regardless of case.
+    return await db.users.find_one(
+        {"email": {"$regex": f"^{re.escape(normalized)}$", "$options": "i"}},
+        projection,
     )
 
-    msg = MIMEText(body, 'plain', 'utf-8')
-    msg['Subject'] = subject
-    msg['From']    = f"Thai2Drive <{_RESET_FROM}>"
-    msg['To']      = to_email
 
-    last_err = None
-    for attempt in range(1, 4):
-        try:
-            with smtplib.SMTP(_RESET_SMTP_HOST, _RESET_SMTP_PORT, timeout=15) as s:
-                s.ehlo()
-                s.starttls()
-                s.ehlo()
-                s.login(_RESET_SMTP_USER, _RESET_SMTP_PASS)
-                s.sendmail(_RESET_SMTP_USER, [to_email], msg.as_string())
-            logger.info("[RESET EMAIL] Sent to %s (attempt %d)", _mask_email(to_email), attempt)
-            return True, f"sent (attempt {attempt})"
-        except Exception as e:
-            last_err = e
-            logger.warning("[RESET EMAIL] Attempt %d failed: %s", attempt, e)
-            if attempt < 3:
-                time.sleep(1.5 * attempt)
+def generate_reset_code() -> str:
+    import random
+    return str(random.randint(100000, 999999))
 
-    logger.error("[RESET EMAIL] All 3 attempts failed for %s: %s", _mask_email(to_email), last_err)
-    return False, f"SMTP error after 3 attempts: {last_err}"
 
-def _mask_email(email: str) -> str:
-    """Return masked email for safe logging: ab***@domain.com"""
+def _email_hash(email: str) -> str:
+    return hashlib.sha256((email or "").strip().lower().encode("utf-8")).hexdigest()[:12]
+
+
+def _masked_email(email: str) -> str:
+    email = (email or "").strip().lower()
+    if "@" not in email:
+        return "***"
+    local, domain = email.split("@", 1)
+    if not local:
+        return "***@" + domain
+    return local[:1] + "***@" + domain
+
+
+def _auth_error_key(key: str, no: str, th: str, en: str, status_code: int = 400) -> HTTPException:
+    return HTTPException(
+        status_code=status_code,
+        detail={"key": key, "no": no, "th": th, "en": en},
+    )
+
+
+def _smtp_config() -> dict:
+    return {
+        "host": (os.environ.get("RESET_SMTP_HOST") or os.environ.get("SUPPORT_SMTP_HOST") or "").strip(),
+        "port": int(os.environ.get("RESET_SMTP_PORT") or os.environ.get("SUPPORT_SMTP_PORT") or "587"),
+        "user": (os.environ.get("RESET_SMTP_USER") or os.environ.get("SUPPORT_SMTP_USER") or "").strip(),
+        "password": (os.environ.get("RESET_SMTP_PASS") or os.environ.get("SUPPORT_SMTP_PASS") or "").strip(),
+        "from_email": (os.environ.get("RESET_EMAIL_FROM") or os.environ.get("SUPPORT_SMTP_USER") or "").strip(),
+        "from_name": os.environ.get("RESET_EMAIL_FROM_NAME", "Thai2Drive"),
+    }
+
+
+def _send_password_reset_email_sync(to_email: str, code: str) -> tuple[bool, str]:
+    cfg = _smtp_config()
+    if not (cfg["host"] and cfg["user"] and cfg["password"]):
+        return False, "SMTP not configured"
+
+    from_email = cfg["from_email"] or cfg["user"]
+    body = (
+        "Hei,\n\n"
+        f"Tilbakestillingskoden din for Thai2Drive er: {code}\n\n"
+        "Koden er gyldig i 15 minutter. Hvis du ikke ba om dette, kan du ignorere denne e-posten.\n\n"
+        "Thai2Drive\n\n"
+        "สวัสดีครับ/ค่ะ\n\n"
+        f"รหัสรีเซ็ตรหัสผ่าน Thai2Drive ของคุณคือ: {code}\n\n"
+        "รหัสนี้ใช้ได้ 15 นาที หากคุณไม่ได้ขอรีเซ็ตรหัสผ่าน กรุณาเพิกเฉยต่ออีเมลนี้\n"
+    )
+    msg = MIMEText(body, "plain", "utf-8")
+    msg["Subject"] = "Thai2Drive password reset code"
+    msg["From"] = f"{cfg['from_name']} <{from_email}>"
+    msg["To"] = to_email
+
     try:
-        local, domain = email.split('@', 1)
-        return local[:2] + '***@' + domain
-    except Exception:
-        return '***'
+        with smtplib.SMTP(cfg["host"], cfg["port"], timeout=12) as smtp:
+            smtp.ehlo()
+            smtp.starttls()
+            smtp.ehlo()
+            smtp.login(cfg["user"], cfg["password"])
+            smtp.sendmail(from_email, [to_email], msg.as_string())
+        return True, "sent"
+    except Exception as exc:
+        return False, str(exc)
+
+
+async def _send_password_reset_email(to_email: str, code: str) -> tuple[bool, str]:
+    return await asyncio.to_thread(_send_password_reset_email_sync, to_email, code)
 
 
 def _user_has_active_premium(user: Optional[dict]) -> bool:
-    """Returns True only if user has an active (non-expired) premium subscription.
-    Premium expiry NEVER blocks login — the caller always gets a valid token,
-    just with is_premium=False when expired."""
     if not user:
         return False
     if user.get("is_admin"):
         return True
     if not user.get("is_premium"):
         return False
-    expires_at = user.get("premium_expires_at") or user.get("premium_until")
+    expires_at = user.get("premium_expires_at")
     if expires_at:
         try:
-            s = str(expires_at).replace("Z", "+00:00")
-            expires = datetime.fromisoformat(s)
-            if expires.tzinfo is None:
-                expires = expires.replace(tzinfo=timezone.utc)
+            expires = datetime.fromisoformat(str(expires_at).replace("Z", "+00:00"))
             if expires < datetime.now(timezone.utc):
                 return False
-        except Exception as e:
-            logger.warning("[PREMIUM CHECK] Could not parse premium_expires_at %r: %s", expires_at, e)
+        except Exception:
             return False
     return True
 
@@ -1384,10 +1400,15 @@ async def get_bookmarked_questions(device_id: str):
 
 @api_router.post("/auth/signup")
 async def signup(data: AuthSignup):
-    data.email = data.email.strip().lower()
-    existing = await db.users.find_one({"email": data.email})
+    existing = await _find_user_by_email(data.email)
     if existing:
-        raise HTTPException(status_code=409, detail="EMAIL_EXISTS")
+        raise _auth_error_key(
+            "email_already_registered",
+            "Denne e-posten er allerede registrert. Logg inn eller tilbakestill passordet.",
+            "อีเมลนี้ลงทะเบียนแล้ว กรุณาเข้าสู่ระบบหรือรีเซ็ตรหัสผ่าน",
+            "This email is already registered. Log in or reset password.",
+            status_code=409,
+        )
 
     password_hash = pwd_context.hash(data.password)
     user_id = str(uuid.uuid4())
@@ -1399,7 +1420,6 @@ async def signup(data: AuthSignup):
 
     user_doc = {
         "id": user_id,
-        "name": data.name or "",
         "email": data.email,
         "name": (data.name or "").strip() or None,
         "password_hash": password_hash,
@@ -1433,18 +1453,12 @@ async def signup(data: AuthSignup):
 
 @api_router.post("/auth/login")
 async def login(data: AuthLogin):
-    data.email = data.email.strip().lower()
-    user = await db.users.find_one({"email": data.email})
-    if not user:
-        logger.info("[LOGIN] Not found: %s", _mask_email(data.email))
+    user = await _find_user_by_email(data.email)
+    if not user or user.get("deleted_at") or user.get("disabled"):
         raise HTTPException(status_code=401, detail="Invalid email or password")
 
-    if not user.get("password_hash"):
-        logger.error("[LOGIN] User %s has no password_hash", _mask_email(data.email))
-        raise HTTPException(status_code=401, detail="Invalid email or password")
-
-    if not pwd_context.verify(data.password, user["password_hash"]):
-        logger.info("[LOGIN] Wrong password: %s", _mask_email(data.email))
+    password_hash = user.get("password_hash")
+    if not password_hash or not pwd_context.verify(data.password, password_hash):
         raise HTTPException(status_code=401, detail="Invalid email or password")
 
     # Re-check admin status on each login
@@ -1485,83 +1499,122 @@ async def get_me(current_user: dict = Depends(get_current_user)):
 
 @api_router.post("/auth/forgot-password")
 async def forgot_password(data: ForgotPasswordRequest):
-    data.email = data.email.strip().lower()
-    logger.info("[FORGOT PWD] Requested for %s", _mask_email(data.email))
-
-    user = await db.users.find_one({"email": data.email})
+    email_id = _email_hash(data.email)
+    masked = _masked_email(data.email)
+    logger.info("auth.forgot_password.requested email_hash=%s masked=%s", email_id, masked)
+    user = await _find_user_by_email(data.email)
     if not user:
-        logger.info("[FORGOT PWD] Email not found: %s", _mask_email(data.email))
-        # Return generic message — don't reveal if email exists
-        return {"message": "If the email exists, a reset code has been sent"}
+        logger.info("auth.forgot_password.user_not_found email_hash=%s", email_id)
+        raise _auth_error_key(
+            "email_not_registered",
+            "Fant ingen konto med denne e-posten.",
+            "ไม่พบบัญชีที่ใช้อีเมลนี้",
+            "No account was found with this email.",
+            status_code=404,
+        )
+    if user.get("deleted_at") or user.get("disabled"):
+        logger.warning("auth.forgot_password.blocked_account email_hash=%s", email_id)
+        raise _auth_error_key(
+            "account_unavailable",
+            "Denne kontoen er ikke tilgjengelig. Kontakt support.",
+            "บัญชีนี้ไม่พร้อมใช้งาน กรุณาติดต่อฝ่ายสนับสนุน",
+            "This account is not available. Contact support.",
+            status_code=403,
+        )
 
     code = generate_reset_code()
     expires = datetime.now(timezone.utc) + timedelta(minutes=15)
-    logger.info("[FORGOT PWD] Code generated for %s, expires %s", _mask_email(data.email), expires.isoformat())
+    logger.info("auth.forgot_password.code_generated email_hash=%s", email_id)
 
-    await db.password_resets.update_one(
-        {"email": data.email},
+    await db.users.update_one(
+        {"id": user["id"]},
         {"$set": {
-            "email": data.email,
-            "code": code,
-            "expires_at": expires.isoformat(),
-            "used": False,
-            "created_at": datetime.now(timezone.utc).isoformat(),
+            "reset_code": code,
+            "reset_expires": expires.isoformat(),
+            "reset_requested_at": datetime.now(timezone.utc).isoformat(),
+            "reset_email_hash": email_id,
         }},
-        upsert=True
     )
 
-    ok, info = _send_reset_email(data.email, code)
-    if not ok:
-        logger.error("[FORGOT PWD] Email send FAILED for %s: %s", _mask_email(data.email), info)
-        raise HTTPException(
+    sent, info = await _send_password_reset_email(data.email, code)
+    if not sent:
+        logger.error("auth.forgot_password.email_failed email_hash=%s reason=%s", email_id, info)
+        await db.users.update_one(
+            {"id": user["id"]},
+            {"$unset": {"reset_code": "", "reset_expires": "", "reset_requested_at": "", "reset_email_hash": ""}},
+        )
+        raise _auth_error_key(
+            "reset_email_failed",
+            "Kunne ikke sende tilbakestillingskode. Prøv igjen senere eller kontakt support.",
+            "ไม่สามารถส่งรหัสรีเซ็ตรหัสผ่านได้ กรุณาลองใหม่ภายหลังหรือติดต่อฝ่ายสนับสนุน",
+            "Could not send reset code. Try again later or contact support.",
             status_code=503,
-            detail="EMAIL_SEND_FAILED"
         )
 
-    logger.info("[FORGOT PWD] Email sent OK for %s: %s", _mask_email(data.email), info)
-    return {"message": "If the email exists, a reset code has been sent"}
+    logger.info("auth.forgot_password.email_sent email_hash=%s", email_id)
+    return {"message": "Password reset code sent"}
 
 @api_router.post("/auth/reset-password")
 async def reset_password(data: ResetPasswordRequest):
-    data.email = data.email.strip().lower()
-    logger.info("[RESET PWD] Attempt for %s", _mask_email(data.email))
+    email_id = _email_hash(data.email)
+    user = await _find_user_by_email(data.email)
+    if not user or user.get("deleted_at") or user.get("disabled"):
+        logger.warning("auth.reset_password.validation_failed email_hash=%s reason=user_unavailable", email_id)
+        raise _auth_error_key(
+            "invalid_or_expired_reset_code",
+            "Ugyldig eller utløpt tilbakestillingskode",
+            "รหัสรีเซ็ตรหัสผ่านไม่ถูกต้องหรือหมดอายุแล้ว",
+            "Invalid or expired reset code",
+            status_code=400,
+        )
 
-    reset_entry = await db.password_resets.find_one({
-        "email": data.email,
-        "code": data.code,
-        "used": False,
-    })
+    reset_code = str(user.get("reset_code") or "")
+    reset_expires = user.get("reset_expires")
+    if not reset_code or reset_code != str(data.code).strip() or not reset_expires:
+        logger.warning("auth.reset_password.validation_failed email_hash=%s reason=code_mismatch_or_missing", email_id)
+        raise _auth_error_key(
+            "invalid_or_expired_reset_code",
+            "Ugyldig eller utløpt tilbakestillingskode",
+            "รหัสรีเซ็ตรหัสผ่านไม่ถูกต้องหรือหมดอายุแล้ว",
+            "Invalid or expired reset code",
+            status_code=400,
+        )
 
-    if not reset_entry:
-        logger.info("[RESET PWD] Code not found or already used for %s", _mask_email(data.email))
-        raise HTTPException(status_code=400, detail="RESET_CODE_INVALID")
-
-    # Timezone-safe expiry check
     try:
-        exp_str = str(reset_entry["expires_at"]).replace("Z", "+00:00")
-        expires_at = datetime.fromisoformat(exp_str)
+        expires_at = datetime.fromisoformat(str(reset_expires).replace("Z", "+00:00"))
         if expires_at.tzinfo is None:
             expires_at = expires_at.replace(tzinfo=timezone.utc)
-    except Exception as e:
-        logger.error("[RESET PWD] Could not parse expires_at %r: %s", reset_entry.get("expires_at"), e)
-        raise HTTPException(status_code=400, detail="RESET_CODE_INVALID")
-
+    except Exception:
+        logger.warning("auth.reset_password.validation_failed email_hash=%s reason=bad_expiry", email_id)
+        expires_at = datetime.min.replace(tzinfo=timezone.utc)
     if datetime.now(timezone.utc) > expires_at:
-        logger.info("[RESET PWD] Code expired for %s", _mask_email(data.email))
-        raise HTTPException(status_code=400, detail="RESET_CODE_EXPIRED")
+        logger.warning("auth.reset_password.validation_failed email_hash=%s reason=expired", email_id)
+        raise _auth_error_key(
+            "invalid_or_expired_reset_code",
+            "Ugyldig eller utløpt tilbakestillingskode",
+            "รหัสรีเซ็ตรหัสผ่านไม่ถูกต้องหรือหมดอายุแล้ว",
+            "Invalid or expired reset code",
+            status_code=400,
+        )
 
     password_hash = pwd_context.hash(data.new_password)
     await db.users.update_one(
-        {"email": data.email},
-        {"$set": {"password_hash": password_hash}}
-    )
-    # Mark code used AND delete old codes for this email (cleanup)
-    await db.password_resets.update_one(
-        {"email": data.email, "code": data.code},
-        {"$set": {"used": True, "used_at": datetime.now(timezone.utc).isoformat()}}
+        {"id": user["id"]},
+        {
+            "$set": {
+                "password_hash": password_hash,
+                "reset_used_at": datetime.now(timezone.utc).isoformat(),
+            },
+            "$unset": {
+                "reset_code": "",
+                "reset_expires": "",
+                "reset_requested_at": "",
+                "reset_email_hash": "",
+            },
+        },
     )
 
-    logger.info("[RESET PWD] Password reset successful for %s", _mask_email(data.email))
+    logger.info("auth.reset_password.success email_hash=%s", email_id)
     return {"message": "Password reset successfully"}
 
 # ==================== USAGE / TIER ROUTES ====================
