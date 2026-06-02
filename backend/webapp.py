@@ -5300,7 +5300,7 @@ async function loadSigns() {
         _allSigns.push(sign);
         var sName = sign.name;
         var nameText = typeof sName === 'object'
-          ? (sName[appLang] || sName.no || sName.en || '')
+          ? (sName[appLang] || (appLang !== 'no' ? sName.en : '') || sName.no || '')
           : (sName || '');
         var imgUrl = sign.image_url || '';
         var card = document.createElement('div');
@@ -5958,7 +5958,10 @@ function setSignPanelLang(lang) {
 function _getProp(obj, lang) {
   if (!obj) return '';
   if (typeof obj === 'string') return obj;
-  return obj[lang] || obj.no || obj.en || obj.th || '';
+  // Strict: return requested language only — no automatic cross-language fallback.
+  // When content is missing for a language the caller sees '' and handles it explicitly.
+  // This prevents Norwegian text from leaking into Thai/English views.
+  return obj[lang] || '';
 }
 
 function _signCode(sign) {
@@ -6013,7 +6016,7 @@ function _renderSignPanel() {
 
   // Name
   var nameEl = document.getElementById('spName');
-  if (nameEl) nameEl.textContent = _getProp(sign.name, lang) || '–';
+  if (nameEl) nameEl.textContent = _getProp(sign.name, lang) || (lang !== 'no' ? _getProp(sign.name, 'en') : '') || _getProp(sign.name, 'no') || '–';
 
   // Group label
   var groupEl = document.getElementById('spGroupLabel');
