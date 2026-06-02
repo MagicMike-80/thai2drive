@@ -756,26 +756,41 @@ a { color:inherit; text-decoration:none; }
   .teacher-side-panel {
     width: 240px; flex-shrink: 0;
     display: flex; flex-direction: column;
-    padding: 20px 16px; gap: 10px;
+    padding: 20px 16px; gap: 8px;
     overflow-y: auto;
-    background: rgba(255,255,255,.02);
+    background: rgba(0,0,0,.22);
+    border-left: 1px solid rgba(255,255,255,.07);
   }
   .tsp-title {
-    font-size: .72rem; font-weight: 700; letter-spacing: .08em;
-    text-transform: uppercase; color: var(--muted);
-    margin-bottom: 4px; padding-bottom: 8px;
-    border-bottom: 1px solid var(--border);
+    font-size: .68rem; font-weight: 800; letter-spacing: .10em;
+    text-transform: uppercase; color: var(--orange);
+    margin-bottom: 6px; padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255,153,51,.25);
   }
   .tsp-btn {
-    display: flex; align-items: center; gap: 10px;
-    background: var(--card); border: 1px solid var(--border);
-    color: var(--text); border-radius: 10px;
-    padding: 10px 12px; font-size: .85rem; font-weight: 600;
+    display: flex; align-items: center; gap: 11px;
+    background: rgba(255,255,255,.07);
+    border: 1px solid rgba(255,255,255,.11);
+    color: #E2E8F0; border-radius: 12px;
+    padding: 12px 14px; font-size: .88rem; font-weight: 700;
     cursor: pointer; text-align: left;
-    transition: background .15s, border-color .15s;
-    width: 100%;
+    transition: background .15s, border-color .15s, color .15s, transform .12s;
+    width: 100%; line-height: 1.3;
   }
-  .tsp-btn:hover { background: var(--card2); border-color: rgba(59,130,246,.4); color: #93C5FD; }
+  .tsp-btn:hover {
+    background: rgba(255,153,51,.18);
+    border-color: rgba(255,153,51,.55);
+    color: #fff;
+    transform: translateX(2px);
+  }
+  .tsp-btn:active { transform: scale(.97); }
+  [data-theme="light"] .tsp-btn {
+    background: #fff; border-color: rgba(0,0,0,.10); color: #0F172A;
+  }
+  [data-theme="light"] .tsp-btn:hover {
+    background: rgba(255,153,51,.12); border-color: rgba(255,153,51,.50); color: #92400E;
+  }
+  [data-theme="light"] .tsp-title { color: var(--orange); border-bottom-color: rgba(255,153,51,.3); }
 
   /* Quiz screen becomes a horizontal flex */
   #screenQuiz { flex-direction:row; }
