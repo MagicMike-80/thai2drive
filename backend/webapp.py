@@ -2405,8 +2405,8 @@ a { color:inherit; text-decoration:none; }
         </div>
 
         <div class="auth-tabs">
-          <button class="auth-tab active" onclick="switchTab('login')" data-key="auth_login_tab">Logg inn</button>
-          <button class="auth-tab" onclick="switchTab('register')" data-key="auth_reg_tab">Registrer</button>
+          <button class="auth-tab active" onclick="switchTab('login')" data-key="login">Logg inn</button>
+          <button class="auth-tab" onclick="switchTab('register')" data-key="register">Registrer</button>
         </div>
 
         <div class="auth-error" id="authError"></div>
@@ -2415,43 +2415,43 @@ a { color:inherit; text-decoration:none; }
         <!-- LOGIN -->
         <div id="formLogin">
           <div class="form-group">
-            <label data-key="auth_label_email">E-post</label>
-            <input type="email" id="loginEmail" placeholder="din@epost.com" autocomplete="email">
+            <label data-key="auth_email">E-post</label>
+            <input type="email" id="loginEmail" placeholder="din@epost.com" data-placeholder-key="auth_email_placeholder" autocomplete="email">
           </div>
           <div class="form-group">
-            <label data-key="auth_label_pass">Passord</label>
-            <input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password">
+            <label data-key="auth_password">Passord</label>
+            <input type="password" id="loginPass" placeholder="••••••••" data-placeholder-key="auth_password_placeholder" autocomplete="current-password">
           </div>
-          <div class="forgot-link"><a onclick="showForgot()" data-key="auth_forgot_link">Glemt passord?</a></div>
-          <button class="auth-btn" onclick="doLogin()" data-key="auth_login_btn">Logg inn</button>
+          <div class="forgot-link"><a onclick="showForgot()" data-key="forgot_password">Glemt passord?</a></div>
+          <button class="auth-btn" onclick="doLogin()" data-key="login">Logg inn</button>
         </div>
 
         <!-- REGISTER -->
         <div id="formRegister" style="display:none">
           <div class="form-group">
-            <label data-key="auth_label_name">Navn</label>
-            <input type="text" id="regName" placeholder="Ditt fulle navn">
+            <label data-key="auth_name">Navn</label>
+            <input type="text" id="regName" placeholder="Ditt fulle navn" data-placeholder-key="auth_name_placeholder">
           </div>
           <div class="form-group">
-            <label data-key="auth_label_email">E-post</label>
-            <input type="email" id="regEmail" placeholder="din@epost.com" autocomplete="email">
+            <label data-key="auth_email">E-post</label>
+            <input type="email" id="regEmail" placeholder="din@epost.com" data-placeholder-key="auth_email_placeholder" autocomplete="email">
           </div>
           <div class="form-group">
-            <label data-key="auth_label_pass">Passord</label>
-            <input type="password" id="regPass" placeholder="Minst 6 tegn" autocomplete="new-password">
+            <label data-key="auth_password">Passord</label>
+            <input type="password" id="regPass" placeholder="Minst 6 tegn" data-placeholder-key="auth_password_min_placeholder" autocomplete="new-password">
           </div>
-          <button class="auth-btn" onclick="doRegister()" data-key="auth_reg_btn">Opprett konto</button>
+          <button class="auth-btn" onclick="doRegister()" data-key="create_account">Opprett konto</button>
         </div>
 
         <!-- FORGOT -->
         <div id="formForgot" style="display:none">
           <div class="form-group">
-            <label data-key="auth_label_email">E-post</label>
-            <input type="email" id="forgotEmail" placeholder="din@epost.com">
+            <label data-key="auth_email">E-post</label>
+            <input type="email" id="forgotEmail" placeholder="din@epost.com" data-placeholder-key="auth_email_placeholder">
           </div>
-          <button class="auth-btn" id="forgotSubmitBtn" onclick="doForgot()" data-key="auth_forgot_btn">Send tilbakestillingslenke</button>
+          <button class="auth-btn" id="forgotSubmitBtn" onclick="doForgot()" data-key="send_reset">Send tilbakestillingslenke</button>
           <div style="text-align:center;margin-top:12px">
-            <a style="font-size:.78rem;color:var(--muted);cursor:pointer" onclick="switchTab('login')" data-key="auth_back">← Tilbake</a>
+            <a style="font-size:.78rem;color:var(--muted);cursor:pointer" onclick="switchTab('login')" data-key="back">← Tilbake</a>
           </div>
         </div>
       </div>
@@ -2480,7 +2480,7 @@ a { color:inherit; text-decoration:none; }
       <div class="home-sec-btns">
         <button class="home-sec-btn" onclick="startExam()">📋 Eksamen</button>
         <button class="home-sec-btn" onclick="startDailyTest()">📅 Daglig test</button>
-        <button class="home-sec-btn" onclick="showTab('studybook')" style="grid-column:1/-1">📖 Studiebok — Norsk trafikk</button>
+        <button class="home-sec-btn" onclick="showTab('studybook')" style="grid-column:1/-1" data-key="studybook_home">📖 Studiebok — Norsk trafikk</button>
       </div>
 
       <!-- Michael Trafikklærer card -->
@@ -2762,7 +2762,7 @@ a { color:inherit; text-decoration:none; }
       <div class="sb-topbar">
         <button class="back-btn" onclick="showTab('home')">← Tilbake</button>
         <div class="sb-search-wrap">
-          <input id="sbSearchInput" type="text" placeholder="Søk eller § nummer..." oninput="sbSearch(this.value)" autocomplete="off" />
+          <input id="sbSearchInput" type="text" placeholder="Søk eller § nummer..." data-placeholder-key="studybook_search_placeholder" oninput="sbSearch(this.value)" autocomplete="off" />
         </div>
       </div>
       <!-- Search results dropdown -->
@@ -2773,27 +2773,27 @@ a { color:inherit; text-decoration:none; }
       <div class="sb-reader" id="sbReader"><div class="loading-wrap"><div class="spinner"></div></div></div>
       <!-- Prev / page info / Next -->
       <div class="sb-nav">
-        <button class="sb-nav-btn" id="sbPrevBtn" onclick="sbGoTo(_sbCurrent - 1)">‹ Forrige</button>
-        <div class="sb-nav-info" id="sbNavInfo">Laster...</div>
-        <button class="sb-nav-btn" id="sbNextBtn" onclick="sbGoTo(_sbCurrent + 1)">Neste ›</button>
+        <button class="sb-nav-btn" id="sbPrevBtn" onclick="sbGoTo(_sbCurrent - 1)" data-key="studybook_prev">‹ Forrige</button>
+        <div class="sb-nav-info" id="sbNavInfo" data-key="studybook_loading">Laster...</div>
+        <button class="sb-nav-btn" id="sbNextBtn" onclick="sbGoTo(_sbCurrent + 1)" data-key="studybook_next">Neste ›</button>
       </div>
     </div>
 
     <!-- ═══ STUDIEBOK ADMIN EDIT MODAL ═══ -->
     <div id="studiebokEditModal" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.6);align-items:center;justify-content:center;">
       <div style="background:var(--card);border-radius:16px;padding:24px;width:min(92vw,520px);max-height:80vh;overflow-y:auto;display:flex;flex-direction:column;gap:12px;">
-        <div style="font-weight:700;font-size:1.05rem;">✏️ Rediger kapittel</div>
-        <label style="font-size:.85rem;color:var(--muted);">Tittel</label>
+        <div style="font-weight:700;font-size:1.05rem;" data-key="studybook_edit_chapter">✏️ Rediger kapittel</div>
+        <label style="font-size:.85rem;color:var(--muted);" data-key="studybook_title">Tittel</label>
         <input id="sbEditTitle" style="padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.95rem;width:100%;box-sizing:border-box;" />
-        <label style="font-size:.85rem;color:var(--muted);">Innhold (HTML)</label>
+        <label style="font-size:.85rem;color:var(--muted);" data-key="studybook_content_html">Innhold (HTML)</label>
         <textarea id="sbEditContent" rows="10" style="padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.85rem;width:100%;box-sizing:border-box;resize:vertical;font-family:monospace;"></textarea>
         <label style="font-size:.85rem;color:var(--muted);">🖼️ Bilde URL</label>
         <input id="sbEditImageUrl" type="text" style="padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.95rem;width:100%;box-sizing:border-box;" placeholder="https://..." />
         <label style="font-size:.85rem;color:var(--muted);">🎥 Video URL (fremtidig)</label>
         <input id="sbEditVideoUrl" type="text" style="padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.95rem;width:100%;box-sizing:border-box;" placeholder="https://..." />
         <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:4px;">
-          <button onclick="closeStudiebokModal()" style="padding:8px 18px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text);cursor:pointer;" data-key="sb_cancel">Avbryt</button>
-          <button onclick="saveStudiebokChapter()" style="padding:8px 18px;border-radius:8px;border:none;background:var(--orange);color:#0F172A;font-weight:600;cursor:pointer;" data-key="sb_save">Lagre</button>
+          <button onclick="closeStudiebokModal()" data-key="cancel" style="padding:8px 18px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text);cursor:pointer;">Avbryt</button>
+          <button onclick="saveStudiebokChapter()" data-key="save" style="padding:8px 18px;border-radius:8px;border:none;background:var(--orange);color:#0F172A;font-weight:600;cursor:pointer;">Lagre</button>
         </div>
       </div>
     </div>
@@ -3213,6 +3213,39 @@ var UI = {
   result_learn_head:{th:'ยังมีเรื่องให้เรียนรู้เพิ่ม', no:'Her er det mer å lære.', en:'There is more to learn here.'},
   result_learn_body:{th:'ไม่ต้องกังวล ความเข้าใจสร้างได้ทีละขั้น ใช้คำอธิบายอย่างใจเย็น', no:'Ikke bekymre deg — forståelse bygges gradvis. Bruk forklaringene aktivt og ta det steg for steg.', en:'Do not worry. Understanding builds gradually. Use the explanations calmly, step by step.'},
   lang_updated:{th:'อัปเดตภาษาแล้ว',        no:'Språk oppdatert',  en:'Language updated'},
+  app_sub:     {th:'สอบใบขับขี่นอร์เวย์', no:'Norsk teoriprøve for thai-elever', en:'Norwegian driving theory for Thai learners'},
+  register:    {th:'สมัครสมาชิก', no:'Registrer', en:'Register'},
+  create_account:{th:'สร้างบัญชี', no:'Opprett konto', en:'Create account'},
+  login_loading:{th:'กำลังเข้าสู่ระบบ…', no:'Logger inn…', en:'Logging in…'},
+  register_loading:{th:'กำลังสร้างบัญชี…', no:'Oppretter konto…', en:'Creating account…'},
+  send_reset:  {th:'ส่งลิงก์รีเซ็ตรหัสผ่าน', no:'Send tilbakestillingslenke', en:'Send reset link'},
+  reset_sending:{th:'กำลังส่ง…', no:'Sender…', en:'Sending…'},
+  forgot_password:{th:'ลืมรหัสผ่าน?', no:'Glemt passord?', en:'Forgot password?'},
+  auth_email:  {th:'อีเมล', no:'E-post', en:'Email'},
+  auth_password:{th:'รหัสผ่าน', no:'Passord', en:'Password'},
+  auth_name:   {th:'ชื่อ', no:'Navn', en:'Name'},
+  auth_email_placeholder:{th:'อีเมลของคุณ', no:'din@epost.com', en:'your@email.com'},
+  auth_password_placeholder:{th:'รหัสผ่าน', no:'Passord', en:'Password'},
+  auth_password_min_placeholder:{th:'อย่างน้อย 6 ตัวอักษร', no:'Minst 6 tegn', en:'At least 6 characters'},
+  auth_name_placeholder:{th:'ชื่อเต็มของคุณ', no:'Ditt fulle navn', en:'Your full name'},
+  auth_missing_login:{th:'กรอกอีเมลและรหัสผ่าน', no:'Fyll inn e-post og passord', en:'Enter email and password'},
+  auth_missing_all:{th:'กรอกข้อมูลทุกช่อง', no:'Fyll inn alle feltene', en:'Fill in all fields'},
+  auth_password_short:{th:'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร', no:'Passord må være minst 6 tegn', en:'Password must be at least 6 characters'},
+  auth_missing_email:{th:'กรอกอีเมลของคุณ', no:'Fyll inn e-postadressen din', en:'Enter your email address'},
+  auth_reset_sent:{th:'ส่งอีเมลแล้ว ตรวจสอบกล่องจดหมายของคุณ 📧', no:'E-post sendt! Sjekk innboksen din 📧', en:'Email sent. Check your inbox 📧'},
+  logout_confirm:{th:'คุณแน่ใจหรือว่าต้องการออกจากระบบ?', no:'Er du sikker på at du vil logge ut?', en:'Are you sure you want to log out?'},
+  studybook_home:{th:'📖 หนังสือเรียน — การจราจรนอร์เวย์', no:'📖 Studiebok — Norsk trafikk', en:'📖 Study book — Norwegian traffic'},
+  studybook_search_placeholder:{th:'ค้นหาหรือเลข §...', no:'Søk eller § nummer...', en:'Search or § number...'},
+  studybook_prev:{th:'‹ ก่อนหน้า', no:'‹ Forrige', en:'‹ Previous'},
+  studybook_next:{th:'ถัดไป ›', no:'Neste ›', en:'Next ›'},
+  studybook_loading:{th:'กำลังโหลด...', no:'Laster...', en:'Loading...'},
+  studybook_load_error:{th:'โหลดหนังสือเรียนไม่ได้', no:'Kunne ikke laste studiebok.', en:'Could not load the study book.'},
+  studybook_no_results:{th:'ไม่พบผลลัพธ์', no:'Ingen treff', en:'No results'},
+  studybook_edit_chapter:{th:'✏️ แก้ไขบทเรียน', no:'✏️ Rediger kapittel', en:'✏️ Edit chapter'},
+  studybook_title:{th:'ชื่อเรื่อง', no:'Tittel', en:'Title'},
+  studybook_content_html:{th:'เนื้อหา (HTML)', no:'Innhold (HTML)', en:'Content (HTML)'},
+  cancel:      {th:'ยกเลิก', no:'Avbryt', en:'Cancel'},
+  sb_empty_fields:{th:'ชื่อเรื่องและเนื้อหาห้ามว่าง', no:'Tittel og innhold kan ikke være tomme', en:'Title and content cannot be empty'},
   practice_this_sign:{th:'📚 ฝึกป้ายนี้',     no:'📚 Øv på dette skiltet', en:'📚 Practice this sign'},
   save:        {th:'บันทึก',                no:'Lagre',            en:'Save'},
   saved:       {th:'บันทึกแล้ว',             no:'Lagret',           en:'Saved'},
@@ -3297,6 +3330,17 @@ function localeForLang() {
 }
 
 function applyUILang() {
+  // Generic text and placeholders first, so every visible static label follows appLang.
+  document.querySelectorAll('[data-key]').forEach(function(el) {
+    var key = el.getAttribute('data-key');
+    var val = t(key);
+    if (val) el.textContent = val;
+  });
+  document.querySelectorAll('[data-placeholder-key]').forEach(function(el) {
+    var key = el.getAttribute('data-placeholder-key');
+    var val = t(key);
+    if (val) el.setAttribute('placeholder', val);
+  });
   // back buttons
   document.querySelectorAll('.back-btn').forEach(function(b){ b.textContent = t('back'); });
   // bottom nav
@@ -3345,8 +3389,17 @@ function applyUILang() {
   document.querySelectorAll('.home-sec-btn').forEach(function(b,i){
     if (i===0) b.textContent = t('exam');
     else if (i===1) b.textContent = t('daily');
-    else if (i===2) b.textContent = t('sb_home_btn');
+    else if (i===2) b.textContent = t('studybook_home');
   });
+  var sbSearch = document.getElementById('sbSearchInput');
+  if (sbSearch) sbSearch.placeholder = t('studybook_search_placeholder');
+  var sbPrev = document.getElementById('sbPrevBtn');
+  if (sbPrev) sbPrev.textContent = t('studybook_prev');
+  var sbNext = document.getElementById('sbNextBtn');
+  if (sbNext) sbNext.textContent = t('studybook_next');
+  var sbInfo = document.getElementById('sbNavInfo');
+  if (sbInfo && (!_sbLoaded || !_sbChapters.length)) sbInfo.textContent = t('studybook_loading');
+  if (sbInfo && _sbLoaded && _sbChapters.length) sbRender();
   // end screen buttons
   var er = document.querySelector('.end-btn-pri'); if(er) er.innerHTML = t('retry');
   var endSecBtns = document.querySelectorAll('.end-btn-sec');
@@ -3382,19 +3435,6 @@ function applyUILang() {
   // Premium banner
   var pb = document.getElementById('homePremiumBanner');
   if(pb) { var ptitle = pb.querySelector('.pb-title'); var psub = pb.querySelector('.pb-sub'); if(ptitle) ptitle.textContent = t('premium_on'); if(psub) psub.textContent = t('premium_sub'); }
-  // Translate ALL elements with data-key — reliable fallback
-  document.querySelectorAll('[data-key]').forEach(function(el) {
-    var key = el.getAttribute('data-key');
-    var val = t(key);
-    if (val) el.textContent = val;
-  });
-  // Studiebok nav buttons + search
-  var sbPrev = document.getElementById('sbPrevBtn'); if(sbPrev) sbPrev.textContent = t('sb_prev');
-  var sbNext = document.getElementById('sbNextBtn'); if(sbNext) sbNext.textContent = t('sb_next');
-  var sbSearch = document.getElementById('sbSearchInput'); if(sbSearch) sbSearch.placeholder = t('sb_search_ph');
-  // Auth placeholders (data-key handles labels/buttons via the [data-key] loop below)
-  var regName = document.getElementById('regName'); if(regName) regName.placeholder = t('auth_name_ph');
-  var regPass = document.getElementById('regPass'); if(regPass) regPass.placeholder = t('auth_pass_ph');
   if (spBm && _signPanelData) spBm.textContent = _signFavorites.indexOf(_signPanelData.id) >= 0 ? t('saved') : t('save');
   var aiStatus = document.getElementById('quizAiStatus');
   if (aiStatus && aiStatus.classList.contains('idle')) aiStatus.textContent = t('ai_waiting');
@@ -3559,7 +3599,7 @@ async function loadStudiebok() {
     sbBuildDots();
     sbGoTo(0);
   } catch(e) {
-    reader.innerHTML = '<div style="padding:24px;text-align:center;color:var(--muted);">Kunne ikke laste studiebok.</div>';
+    reader.innerHTML = '<div style="padding:24px;text-align:center;color:var(--muted);">' + t('studybook_load_error') + '</div>';
   }
 }
 
@@ -3650,7 +3690,7 @@ function sbSearch(q) {
   }
 
   if (!matches.length) {
-    box.innerHTML = '<div class="sb-result-item" style="color:var(--muted)">Ingen treff</div>';
+    box.innerHTML = '<div class="sb-result-item" style="color:var(--muted)">' + t('studybook_no_results') + '</div>';
     box.style.display = 'block'; return;
   }
 
@@ -3714,7 +3754,7 @@ async function saveStudiebokChapter() {
   var content_no = document.getElementById('sbEditContent').value.trim();
   var image_url  = document.getElementById('sbEditImageUrl').value.trim();
   var video_url  = document.getElementById('sbEditVideoUrl').value.trim();
-  if (!title_no || !content_no) { toast('Tittel og innhold kan ikke være tomme'); return; }
+  if (!title_no || !content_no) { toast(t('sb_empty_fields')); return; }
   try {
     await api('PUT', '/api/studiebok/' + _sbEditOrder, { title_no, content_no, image_url, video_url });
     // Update local cache
@@ -3847,9 +3887,9 @@ async function doLogin() {
   clearAuthMessages();
   var email = document.getElementById('loginEmail').value.trim();
   var pass  = document.getElementById('loginPass').value;
-  if (!email || !pass) return showAuthError('Fyll inn e-post og passord');
+  if (!email || !pass) return showAuthError(t('auth_missing_login'));
   var btn = document.querySelector('#formLogin .auth-btn');
-  btn.disabled = true; btn.textContent = 'Logger inn…';
+  btn.disabled = true; btn.textContent = t('login_loading');
   try {
     var r = await api('POST', '/api/auth/login', { email: email, password: pass });
     token = r.token; user = r.user;
@@ -3858,7 +3898,7 @@ async function doLogin() {
     enterApp();
   } catch(e) {
     showAuthError(e.message);
-    btn.disabled = false; btn.textContent = 'Logg inn';
+    btn.disabled = false; btn.textContent = t('login');
   }
 }
 
@@ -3867,10 +3907,10 @@ async function doRegister() {
   var name  = document.getElementById('regName').value.trim();
   var email = document.getElementById('regEmail').value.trim();
   var pass  = document.getElementById('regPass').value;
-  if (!name || !email || !pass) return showAuthError('Fyll inn alle feltene');
-  if (pass.length < 6) return showAuthError('Passord må være minst 6 tegn');
+  if (!name || !email || !pass) return showAuthError(t('auth_missing_all'));
+  if (pass.length < 6) return showAuthError(t('auth_password_short'));
   var btn = document.querySelector('#formRegister .auth-btn');
-  btn.disabled = true; btn.textContent = 'Oppretter konto…';
+  btn.disabled = true; btn.textContent = t('register_loading');
   try {
     var r = await api('POST', '/api/auth/signup', { name: name, email: email, password: pass });
     token = r.token; user = r.user;
@@ -3879,28 +3919,28 @@ async function doRegister() {
     enterApp();
   } catch(e) {
     showAuthError(e.message);
-    btn.disabled = false; btn.textContent = 'Opprett konto';
+    btn.disabled = false; btn.textContent = t('create_account');
   }
 }
 
 async function doForgot() {
   clearAuthMessages();
   var email = document.getElementById('forgotEmail').value.trim();
-  if (!email) return showAuthError(t('auth_fill_email'));
-  var btn = document.getElementById('forgotSubmitBtn');
-  btn.disabled = true; btn.textContent = t('auth_sending');
+  if (!email) return showAuthError(t('auth_missing_email'));
+  var btn = document.getElementById('forgotSubmitBtn') || document.querySelector('#formForgot .auth-btn');
+  btn.disabled = true; btn.textContent = t('reset_sending');
   try {
     await api('POST', '/api/auth/forgot-password', { email: email });
-    showAuthSuccess(t('auth_email_sent'));
+    showAuthSuccess(t('auth_reset_sent'));
     setTimeout(function() { switchTab('login'); }, 2500);
   } catch(e) {
     showAuthError(e.message);
   }
-  btn.disabled = false; btn.textContent = t('auth_forgot_btn');
+  btn.disabled = false; btn.textContent = t('send_reset');
 }
 
 function logout() {
-  if (!confirm(t('auth_logout_confirm'))) return;
+  if (!confirm(t('logout_confirm'))) return;
   _ls.remove('t2d_token');
   token = null; user = null; deviceId = null;
   document.getElementById('topBar').style.display = 'none';
@@ -6215,6 +6255,10 @@ function setLang(lang) {
   var histScreen = document.getElementById('screenHistory');
   if (histScreen && histScreen.classList.contains('active')) {
     loadHistory();
+  }
+  var teacherScreen = document.getElementById('screenTeacher');
+  if (teacherScreen && teacherScreen.classList.contains('active')) {
+    loadTeacher();
   }
   if (_signPanelData) {
     _signPanelLang = lang === 'th' ? 'th' : lang === 'en' ? 'en' : 'no';
