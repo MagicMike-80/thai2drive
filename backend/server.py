@@ -18,6 +18,8 @@ import asyncio
 from datetime import datetime, timezone, timedelta
 from zoneinfo import ZoneInfo
 from passlib.context import CryptContext
+import smtplib
+from email.mime.text import MIMEText
 import usage as usage_mod
 
 ROOT_DIR = Path(__file__).parent
@@ -337,24 +339,91 @@ async def optional_auth(credentials: HTTPAuthorizationCredentials = Depends(secu
     return verify_token(credentials.credentials)  # None if expired/invalid
 
 def generate_reset_code() -> str:
-    import random
+    import random, secrets
     return str(random.randint(100000, 999999))
+
+# ─── Email helper (password reset) ────────────────────────────────────────────
+_RESET_SMTP_HOST = os.environ.get('SUPPORT_SMTP_HOST', '')
+_RESET_SMTP_PORT = int(os.environ.get('SUPPORT_SMTP_PORT', '587'))
+_RESET_SMTP_USER = os.environ.get('SUPPORT_SMTP_USER', '')
+_RESET_SMTP_PASS = os.environ.get('SUPPORT_SMTP_PASS', '')
+_RESET_FROM      = os.environ.get('SUPPORT_SMTP_USER', 'noreply@thai2drive.no')
+
+def _send_reset_email(to_email: str, code: str) -> tuple[bool, str]:
+    """Send a password reset code via SMTP. Returns (success, info)."""
+    if not (_RESET_SMTP_HOST and _RESET_SMTP_USER and _RESET_SMTP_PASS):
+        logger.error("[RESET EMAIL] SMTP not configured — reset email NOT sent to %s", _mask_email(to_email))
+        return False, 'SMTP not configured'
+
+    subject = "Thai2Drive — Tilbakestillingskode / Reset Code"
+    body = (
+        f"Hei / Hello,\n\n"
+        f"Din tilbakestillingskode for Thai2Drive er:\n\n"
+        f"  {code}\n\n"
+        f"Koden er gyldig i 15 minutter.\n"
+        f"Hvis du ikke ba om dette, kan du ignorere denne e-posten.\n\n"
+        f"---\n"
+        f"Your Thai2Drive password reset code:\n\n"
+        f"  {code}\n\n"
+        f"Valid for 15 minutes. Ignore if you did not request this.\n\n"
+        f"— Thai2Drive\n"
+    )
+
+    msg = MIMEText(body, 'plain', 'utf-8')
+    msg['Subject'] = subject
+    msg['From']    = f"Thai2Drive <{_RESET_FROM}>"
+    msg['To']      = to_email
+
+    last_err = None
+    for attempt in range(1, 4):
+        try:
+            with smtplib.SMTP(_RESET_SMTP_HOST, _RESET_SMTP_PORT, timeout=15) as s:
+                s.ehlo()
+                s.starttls()
+                s.ehlo()
+                s.login(_RESET_SMTP_USER, _RESET_SMTP_PASS)
+                s.sendmail(_RESET_SMTP_USER, [to_email], msg.as_string())
+            logger.info("[RESET EMAIL] Sent to %s (attempt %d)", _mask_email(to_email), attempt)
+            return True, f"sent (attempt {attempt})"
+        except Exception as e:
+            last_err = e
+            logger.warning("[RESET EMAIL] Attempt %d failed: %s", attempt, e)
+            if attempt < 3:
+                time.sleep(1.5 * attempt)
+
+    logger.error("[RESET EMAIL] All 3 attempts failed for %s: %s", _mask_email(to_email), last_err)
+    return False, f"SMTP error after 3 attempts: {last_err}"
+
+def _mask_email(email: str) -> str:
+    """Return masked email for safe logging: ab***@domain.com"""
+    try:
+        local, domain = email.split('@', 1)
+        return local[:2] + '***@' + domain
+    except Exception:
+        return '***'
 
 
 def _user_has_active_premium(user: Optional[dict]) -> bool:
+    """Returns True only if user has an active (non-expired) premium subscription.
+    Premium expiry NEVER blocks login — the caller always gets a valid token,
+    just with is_premium=False when expired."""
     if not user:
         return False
     if user.get("is_admin"):
         return True
     if not user.get("is_premium"):
         return False
-    expires_at = user.get("premium_expires_at")
+    expires_at = user.get("premium_expires_at") or user.get("premium_until")
     if expires_at:
         try:
-            expires = datetime.fromisoformat(str(expires_at).replace("Z", "+00:00"))
+            s = str(expires_at).replace("Z", "+00:00")
+            expires = datetime.fromisoformat(s)
+            if expires.tzinfo is None:
+                expires = expires.replace(tzinfo=timezone.utc)
             if expires < datetime.now(timezone.utc):
                 return False
-        except Exception:
+        except Exception as e:
+            logger.warning("[PREMIUM CHECK] Could not parse premium_expires_at %r: %s", expires_at, e)
             return False
     return True
 
@@ -1315,9 +1384,10 @@ async def get_bookmarked_questions(device_id: str):
 
 @api_router.post("/auth/signup")
 async def signup(data: AuthSignup):
+    data.email = data.email.strip().lower()
     existing = await db.users.find_one({"email": data.email})
     if existing:
-        raise HTTPException(status_code=409, detail="Email already registered")
+        raise HTTPException(status_code=409, detail="EMAIL_EXISTS")
 
     password_hash = pwd_context.hash(data.password)
     user_id = str(uuid.uuid4())
@@ -1363,11 +1433,18 @@ async def signup(data: AuthSignup):
 
 @api_router.post("/auth/login")
 async def login(data: AuthLogin):
+    data.email = data.email.strip().lower()
     user = await db.users.find_one({"email": data.email})
     if not user:
+        logger.info("[LOGIN] Not found: %s", _mask_email(data.email))
+        raise HTTPException(status_code=401, detail="Invalid email or password")
+
+    if not user.get("password_hash"):
+        logger.error("[LOGIN] User %s has no password_hash", _mask_email(data.email))
         raise HTTPException(status_code=401, detail="Invalid email or password")
 
     if not pwd_context.verify(data.password, user["password_hash"]):
+        logger.info("[LOGIN] Wrong password: %s", _mask_email(data.email))
         raise HTTPException(status_code=401, detail="Invalid email or password")
 
     # Re-check admin status on each login
@@ -1408,13 +1485,18 @@ async def get_me(current_user: dict = Depends(get_current_user)):
 
 @api_router.post("/auth/forgot-password")
 async def forgot_password(data: ForgotPasswordRequest):
+    data.email = data.email.strip().lower()
+    logger.info("[FORGOT PWD] Requested for %s", _mask_email(data.email))
+
     user = await db.users.find_one({"email": data.email})
     if not user:
-        # Don't reveal if email exists or not for security
+        logger.info("[FORGOT PWD] Email not found: %s", _mask_email(data.email))
+        # Return generic message — don't reveal if email exists
         return {"message": "If the email exists, a reset code has been sent"}
 
     code = generate_reset_code()
     expires = datetime.now(timezone.utc) + timedelta(minutes=15)
+    logger.info("[FORGOT PWD] Code generated for %s, expires %s", _mask_email(data.email), expires.isoformat())
 
     await db.password_resets.update_one(
         {"email": data.email},
@@ -1423,17 +1505,27 @@ async def forgot_password(data: ForgotPasswordRequest):
             "code": code,
             "expires_at": expires.isoformat(),
             "used": False,
+            "created_at": datetime.now(timezone.utc).isoformat(),
         }},
         upsert=True
     )
 
-    # MOCKED: In production, send email via SendGrid/SES
-    logger.info(f"[MOCKED EMAIL] Password reset code for {data.email}: {code}")
+    ok, info = _send_reset_email(data.email, code)
+    if not ok:
+        logger.error("[FORGOT PWD] Email send FAILED for %s: %s", _mask_email(data.email), info)
+        raise HTTPException(
+            status_code=503,
+            detail="EMAIL_SEND_FAILED"
+        )
 
+    logger.info("[FORGOT PWD] Email sent OK for %s: %s", _mask_email(data.email), info)
     return {"message": "If the email exists, a reset code has been sent"}
 
 @api_router.post("/auth/reset-password")
 async def reset_password(data: ResetPasswordRequest):
+    data.email = data.email.strip().lower()
+    logger.info("[RESET PWD] Attempt for %s", _mask_email(data.email))
+
     reset_entry = await db.password_resets.find_one({
         "email": data.email,
         "code": data.code,
@@ -1441,22 +1533,35 @@ async def reset_password(data: ResetPasswordRequest):
     })
 
     if not reset_entry:
-        raise HTTPException(status_code=400, detail="Invalid or expired reset code")
+        logger.info("[RESET PWD] Code not found or already used for %s", _mask_email(data.email))
+        raise HTTPException(status_code=400, detail="RESET_CODE_INVALID")
 
-    expires_at = datetime.fromisoformat(reset_entry["expires_at"])
+    # Timezone-safe expiry check
+    try:
+        exp_str = str(reset_entry["expires_at"]).replace("Z", "+00:00")
+        expires_at = datetime.fromisoformat(exp_str)
+        if expires_at.tzinfo is None:
+            expires_at = expires_at.replace(tzinfo=timezone.utc)
+    except Exception as e:
+        logger.error("[RESET PWD] Could not parse expires_at %r: %s", reset_entry.get("expires_at"), e)
+        raise HTTPException(status_code=400, detail="RESET_CODE_INVALID")
+
     if datetime.now(timezone.utc) > expires_at:
-        raise HTTPException(status_code=400, detail="Reset code has expired")
+        logger.info("[RESET PWD] Code expired for %s", _mask_email(data.email))
+        raise HTTPException(status_code=400, detail="RESET_CODE_EXPIRED")
 
     password_hash = pwd_context.hash(data.new_password)
     await db.users.update_one(
         {"email": data.email},
         {"$set": {"password_hash": password_hash}}
     )
+    # Mark code used AND delete old codes for this email (cleanup)
     await db.password_resets.update_one(
         {"email": data.email, "code": data.code},
-        {"$set": {"used": True}}
+        {"$set": {"used": True, "used_at": datetime.now(timezone.utc).isoformat()}}
     )
 
+    logger.info("[RESET PWD] Password reset successful for %s", _mask_email(data.email))
     return {"message": "Password reset successfully"}
 
 # ==================== USAGE / TIER ROUTES ====================

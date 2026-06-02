@@ -3264,6 +3264,15 @@ var UI = {
   auth_sending:    {th:'กำลังส่ง…',      no:'Sender…',       en:'Sending…'},
   auth_email_sent: {th:'ส่งอีเมลแล้ว! ตรวจสอบกล่องขาเข้า 📧', no:'E-post sendt! Sjekk innboksen din 📧', en:'Email sent! Check your inbox 📧'},
   auth_fill_email: {th:'กรุณากรอกอีเมล', no:'Fyll inn e-postadressen din', en:'Please enter your email address'},
+  auth_fill_all:   {th:'กรุณากรอกข้อมูลให้ครบ', no:'Fyll inn alle feltene', en:'Please fill in all fields'},
+  auth_pass_short: {th:'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร', no:'Passord må være minst 6 tegn', en:'Password must be at least 6 characters'},
+  auth_fill_login: {th:'กรุณากรอกอีเมลและรหัสผ่าน', no:'Fyll inn e-post og passord', en:'Please enter email and password'},
+  auth_logging_in: {th:'กำลังเข้าสู่ระบบ…', no:'Logger inn…', en:'Logging in…'},
+  auth_creating:   {th:'กำลังสร้างบัญชี…', no:'Oppretter konto…', en:'Creating account…'},
+  auth_email_exists:{th:'อีเมลนี้มีบัญชีอยู่แล้ว เข้าสู่ระบบหรือรีเซ็ตรหัสผ่าน', no:'Denne e-posten er allerede registrert. Logg inn eller tilbakestill passordet.', en:'This email is already registered. Log in or reset your password.'},
+  auth_send_failed:{th:'ไม่สามารถส่งอีเมลได้ โปรดลองอีกครั้งในภายหลัง', no:'Kunne ikke sende e-post. Prøv igjen senere.', en:'Could not send email. Please try again later.'},
+  auth_code_invalid:{th:'รหัสรีเซ็ตรหัสผ่านไม่ถูกต้องหรือหมดอายุแล้ว', no:'Ugyldig eller utløpt tilbakestillingskode', en:'Invalid or expired reset code'},
+  auth_code_expired:{th:'รหัสรีเซ็ตรหัสผ่านหมดอายุแล้ว ขอรหัสใหม่', no:'Tilbakestillingskoden har utløpt. Be om en ny kode.', en:'Reset code has expired. Please request a new one.'},
   auth_logout_confirm:{th:'แน่ใจหรือว่าต้องการออกจากระบบ?', no:'Er du sikker på at du vil logge ut?', en:'Are you sure you want to log out?'},
   // Studiebok
   sb_prev:         {th:'‹ ก่อนหน้า',    no:'‹ Forrige',     en:'‹ Previous'},
@@ -3843,13 +3852,29 @@ function clearAuthMessages() {
   document.getElementById('authSuccess').classList.remove('show');
 }
 
+// Translate API error codes returned from backend into user-friendly messages
+function _authErrMsg(err) {
+  var detail = (err && err.message) || '';
+  if (detail === 'EMAIL_EXISTS') return t('auth_email_exists');
+  if (detail === 'EMAIL_SEND_FAILED') return t('auth_send_failed');
+  if (detail === 'RESET_CODE_INVALID') return t('auth_code_invalid');
+  if (detail === 'RESET_CODE_EXPIRED') return t('auth_code_expired');
+  // Generic server errors
+  if (detail.indexOf('401') >= 0 || detail.indexOf('Invalid email') >= 0) {
+    return appLang === 'th' ? 'อีเมลหรือรหัสผ่านไม่ถูกต้อง' :
+           appLang === 'en' ? 'Incorrect email or password' :
+           'Feil e-post eller passord';
+  }
+  return detail || t('generic_error');
+}
+
 async function doLogin() {
   clearAuthMessages();
   var email = document.getElementById('loginEmail').value.trim();
   var pass  = document.getElementById('loginPass').value;
-  if (!email || !pass) return showAuthError('Fyll inn e-post og passord');
+  if (!email || !pass) return showAuthError(t('auth_fill_login'));
   var btn = document.querySelector('#formLogin .auth-btn');
-  btn.disabled = true; btn.textContent = 'Logger inn…';
+  btn.disabled = true; btn.textContent = t('auth_logging_in');
   try {
     var r = await api('POST', '/api/auth/login', { email: email, password: pass });
     token = r.token; user = r.user;
@@ -3857,8 +3882,8 @@ async function doLogin() {
     _ls.set('t2d_token', token);
     enterApp();
   } catch(e) {
-    showAuthError(e.message);
-    btn.disabled = false; btn.textContent = 'Logg inn';
+    showAuthError(_authErrMsg(e));
+    btn.disabled = false; btn.textContent = t('auth_login_btn');
   }
 }
 
@@ -3867,10 +3892,10 @@ async function doRegister() {
   var name  = document.getElementById('regName').value.trim();
   var email = document.getElementById('regEmail').value.trim();
   var pass  = document.getElementById('regPass').value;
-  if (!name || !email || !pass) return showAuthError('Fyll inn alle feltene');
-  if (pass.length < 6) return showAuthError('Passord må være minst 6 tegn');
+  if (!name || !email || !pass) return showAuthError(t('auth_fill_all'));
+  if (pass.length < 6) return showAuthError(t('auth_pass_short'));
   var btn = document.querySelector('#formRegister .auth-btn');
-  btn.disabled = true; btn.textContent = 'Oppretter konto…';
+  btn.disabled = true; btn.textContent = t('auth_creating');
   try {
     var r = await api('POST', '/api/auth/signup', { name: name, email: email, password: pass });
     token = r.token; user = r.user;
@@ -3878,8 +3903,8 @@ async function doRegister() {
     _ls.set('t2d_token', token);
     enterApp();
   } catch(e) {
-    showAuthError(e.message);
-    btn.disabled = false; btn.textContent = 'Opprett konto';
+    showAuthError(_authErrMsg(e));
+    btn.disabled = false; btn.textContent = t('auth_reg_btn');
   }
 }
 
@@ -3894,7 +3919,7 @@ async function doForgot() {
     showAuthSuccess(t('auth_email_sent'));
     setTimeout(function() { switchTab('login'); }, 2500);
   } catch(e) {
-    showAuthError(e.message);
+    showAuthError(_authErrMsg(e));
   }
   btn.disabled = false; btn.textContent = t('auth_forgot_btn');
 }
