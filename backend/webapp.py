@@ -2113,6 +2113,101 @@ a { color:inherit; text-decoration:none; }
   transition:border-color .2s, color .2s;
 }
 .paywall-skip:hover { border-color:rgba(255,255,255,.25); color:var(--text); }
+
+/* ══════════════════════════════════════════
+   MICHAEL TRAFIKKLÆRER — CHAT UI
+══════════════════════════════════════════ */
+#screenTeacher { display:flex; flex-direction:column; height:100%; overflow:hidden; }
+
+.teacher-header {
+  display:flex; align-items:center; gap:12px;
+  padding:14px 16px; border-bottom:1px solid var(--border);
+  background:var(--bg2); flex-shrink:0;
+}
+.teacher-avatar {
+  width:40px; height:40px; border-radius:50%;
+  background:#1E3A5F; display:flex; align-items:center;
+  justify-content:center; font-size:20px; flex-shrink:0;
+}
+.teacher-name { font-size:.95rem; font-weight:700; color:var(--text); }
+.teacher-status { font-size:.75rem; color:#10B981; margin-top:2px; }
+
+.teacher-messages {
+  flex:1; overflow-y:auto; padding:16px 14px 8px;
+  display:flex; flex-direction:column; gap:12px;
+}
+.teacher-messages::-webkit-scrollbar { width:0; }
+
+.tm-row { display:flex; align-items:flex-end; gap:8px; }
+.tm-row.user  { justify-content:flex-end; }
+.tm-row.assistant { justify-content:flex-start; }
+
+.tm-av {
+  width:28px; height:28px; border-radius:50%;
+  background:#1E3A5F; display:flex; align-items:center;
+  justify-content:center; font-size:13px; flex-shrink:0;
+}
+.tm-bubble {
+  max-width:78%; padding:10px 14px; border-radius:16px;
+  font-size:.875rem; line-height:1.5; white-space:pre-wrap;
+  word-break:break-word;
+}
+.tm-bubble.user {
+  background:var(--orange); color:#fff;
+  border-bottom-right-radius:4px;
+}
+.tm-bubble.assistant {
+  background:var(--card2); color:var(--text);
+  border:1px solid var(--border); border-bottom-left-radius:4px;
+}
+.tm-typing { display:flex; gap:5px; padding:12px 16px; }
+.tm-typing span {
+  width:7px; height:7px; border-radius:50%;
+  background:var(--muted); animation:tmBounce 1.2s infinite;
+}
+.tm-typing span:nth-child(2) { animation-delay:.2s; }
+.tm-typing span:nth-child(3) { animation-delay:.4s; }
+@keyframes tmBounce {
+  0%,60%,100% { transform:translateY(0); }
+  30% { transform:translateY(-6px); }
+}
+
+.teacher-suggestions {
+  padding:8px 14px 6px; display:flex; flex-direction:column;
+  gap:6px; flex-shrink:0;
+}
+.teacher-chip {
+  display:flex; align-items:center; gap:8px;
+  background:var(--card); border:1px solid var(--border);
+  color:var(--text); border-radius:10px;
+  padding:10px 14px; font-size:.85rem; font-weight:600;
+  cursor:pointer; text-align:left; transition:background .15s;
+}
+.teacher-chip:hover { background:var(--card2); }
+
+.teacher-inputbar {
+  display:flex; align-items:flex-end; gap:8px;
+  padding:10px 14px; border-top:1px solid var(--border);
+  background:var(--bg2); flex-shrink:0;
+}
+.teacher-input {
+  flex:1; background:var(--bg); border:1px solid var(--border);
+  color:var(--text); border-radius:12px;
+  padding:10px 14px; font-size:.875rem; font-family:inherit;
+  resize:none; max-height:100px; line-height:1.4;
+  outline:none;
+}
+.teacher-input:focus { border-color:var(--orange); }
+.teacher-input::placeholder { color:var(--muted); }
+.teacher-send-btn {
+  width:42px; height:42px; border-radius:50%;
+  background:var(--orange); border:none; color:#fff;
+  font-size:1rem; cursor:pointer; flex-shrink:0;
+  transition:background .15s; display:flex;
+  align-items:center; justify-content:center;
+}
+.teacher-send-btn:hover { background:var(--orange-dk); }
+.teacher-send-btn:disabled { background:var(--border); cursor:default; }
 </style>
 </head>
 <body>
@@ -2241,6 +2336,7 @@ a { color:inherit; text-decoration:none; }
         <button class="home-sec-btn" onclick="startExam()">📋 Eksamen</button>
         <button class="home-sec-btn" onclick="startDailyTest()">📅 Daglig test</button>
         <button class="home-sec-btn" onclick="showTab('studybook')" style="grid-column:1/-1">📖 Studiebok — Norsk trafikk</button>
+        <button class="home-sec-btn" onclick="showTab('teacher')" style="grid-column:1/-1;background:rgba(30,58,95,.35);border-color:rgba(59,130,246,.4);color:#93C5FD;">🚗 Michael Trafikklærer — AI-hjelp</button>
       </div>
 
       <div class="home-stats">
@@ -2599,6 +2695,41 @@ a { color:inherit; text-decoration:none; }
       </div>
     </div>
 
+    <!-- ═══ MICHAEL TRAFIKKLÆRER SCREEN ═══ -->
+    <div class="screen" id="screenTeacher" style="display:none;flex-direction:column;height:100%;overflow:hidden;">
+
+      <!-- Chat header -->
+      <div class="teacher-header">
+        <div class="teacher-avatar">🚗</div>
+        <div class="teacher-header-info">
+          <div class="teacher-name" id="teacherNameLbl">Michael Trafikklærer</div>
+          <div class="teacher-status">● Online</div>
+        </div>
+      </div>
+
+      <!-- Message list -->
+      <div class="teacher-messages" id="teacherMessages">
+        <!-- Welcome bubble injected by JS -->
+      </div>
+
+      <!-- Suggestion chips — shown only before first user message -->
+      <div class="teacher-suggestions" id="teacherSuggestions">
+        <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="🛑 Forklar et skilt" data-msg-th="🛑 อธิบายป้ายจราจร" data-msg-en="🛑 Explain a sign">🛑 <span class="chip-lbl"></span></button>
+        <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="🚗 Hjelp med vikeplikt" data-msg-th="🚗 ช่วยเรื่องการให้ทาง" data-msg-en="🚗 Help with right-of-way">🚗 <span class="chip-lbl"></span></button>
+        <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="📖 Forklar en trafikkregel" data-msg-th="📖 อธิบายกฎจราจร" data-msg-en="📖 Explain a traffic rule">📖 <span class="chip-lbl"></span></button>
+        <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="📝 Hjelp med teoriprøven" data-msg-th="📝 ช่วยเรื่องข้อสอบทฤษฎี" data-msg-en="📝 Help with the theory test">📝 <span class="chip-lbl"></span></button>
+        <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="📊 Hva bør jeg øve på?" data-msg-th="📊 ฉันควรฝึกเรื่องอะไร?" data-msg-en="📊 What should I practise?">📊 <span class="chip-lbl"></span></button>
+        <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="❓ Spør om Thai2Drive" data-msg-th="❓ ถามเกี่ยวกับ Thai2Drive" data-msg-en="❓ Ask about Thai2Drive">❓ <span class="chip-lbl"></span></button>
+      </div>
+
+      <!-- Input bar -->
+      <div class="teacher-inputbar">
+        <textarea class="teacher-input" id="teacherInput" rows="1" placeholder="..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();teacherSend();}"></textarea>
+        <button class="teacher-send-btn" id="teacherSendBtn" onclick="teacherSend()">➤</button>
+      </div>
+
+    </div><!-- /screenTeacher -->
+
   </div><!-- /content -->
 
   <!-- BOTTOM NAV — 7 tabs: Hjem → Innstillinger → Kategorier → Historikk → Trafikkskilt → Studiebok → Bokmerker -->
@@ -2623,6 +2754,9 @@ a { color:inherit; text-decoration:none; }
     </button>
     <button class="bn-tab" id="bnBookmarks" onclick="showTab('bookmarks')">
       <span class="bn-icon">🔖</span>Bokmerker
+    </button>
+    <button class="bn-tab" id="bnTeacher" onclick="showTab('teacher')">
+      <span class="bn-icon">🚗</span>Michael
     </button>
   </div>
 
@@ -2788,6 +2922,10 @@ var UI = {
   premium_sub: {th:'คุณมีสิทธิ์ทุกฟีเจอร์', no:'Du har tilgang til alle funksjoner', en:'You have access to all features'},
   acct:        {th:'บัญชี',             no:'KONTO',            en:'ACCOUNT'},
   language:    {th:'ภาษา',              no:'SPRÅK',            en:'LANGUAGE'},
+  teacher:     {th:'ครูสอนขับ',         no:'Michael',          en:'Instructor'},
+  teacher_name:{th:'ไมเคิล ครูสอนขับรถ', no:'Michael Trafikklærer', en:'Michael — Driving Instructor'},
+  teacher_placeholder: {th:'ถามคำถาม...', no:'Still et spørsmål...', en:'Ask a question...'},
+  teacher_error: {th:'ขอโทษ เกิดข้อผิดพลาด ลองใหม่อีกครั้ง', no:'Beklager, noe gikk galt. Prøv igjen.', en:'Sorry, something went wrong. Please try again.'},
   q_lang:      {th:'ภาษาคำถาม',         no:'Spørsmålsspråk',   en:'Question language'},
   q_lang_sub:  {th:'เลือกภาษาสำหรับคำถามและคำตอบ', no:'Velg språk for spørsmål og svar', en:'Choose language for questions and answers'},
   sound:       {th:'เสียง',             no:'LYD',              en:'SOUND'},
@@ -2959,6 +3097,22 @@ function applyUILang() {
   var nsg= document.getElementById('bnSigns');     if(nsg) nsg.innerHTML = '<span class="bn-icon">🪧</span>' + t('signs');
   var nbm= document.getElementById('bnBookmarks'); if(nbm) nbm.innerHTML = '<span class="bn-icon">🔖</span>' + t('bookmarks');
   var ns = document.getElementById('bnSettings');  if(ns) ns.innerHTML = '<span class="bn-icon">⚙️</span>' + t('settings');
+  var nt = document.getElementById('bnTeacher');   if(nt) nt.innerHTML = '<span class="bn-icon">🚗</span>' + t('teacher');
+  // Update teacher UI if visible
+  var tNameEl = document.getElementById('teacherNameLbl');
+  if (tNameEl) tNameEl.textContent = t('teacher_name');
+  var tInput = document.getElementById('teacherInput');
+  if (tInput) tInput.placeholder = t('teacher_placeholder');
+  // Update suggestion chip labels
+  document.querySelectorAll('.teacher-chip').forEach(function(chip) {
+    var lbl = chip.querySelector('.chip-lbl');
+    if (!lbl) return;
+    var msgKey = 'data-msg-' + appLang;
+    var msg = chip.getAttribute(msgKey) || chip.getAttribute('data-msg-no') || '';
+    // Strip leading emoji + space for label display
+    lbl.textContent = msg.replace(/^[\u{1F000}-\u{1FFFF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\uD800-\uDFFF❓📊📝📖🚗🛑]+\s*/u, '');
+    chip.dataset.msg = msg;
+  });
   // cats header — update title text without disturbing the count span
   var catsTitleEl = document.querySelector('#screenCats .screen-title');
   if (catsTitleEl) {
@@ -3126,12 +3280,12 @@ function enterApp() {
 function showTab(tab) {
   activeTab = tab;
   document.querySelectorAll('.bn-tab').forEach(function(b) { b.classList.remove('active'); });
-  var tabMap = { home:'bnHome', cats:'bnCats', history:'bnHistory', signs:'bnSigns', studybook:'bnStudybook', bookmarks:'bnBookmarks', settings:'bnSettings' };
+  var tabMap = { home:'bnHome', cats:'bnCats', history:'bnHistory', signs:'bnSigns', studybook:'bnStudybook', bookmarks:'bnBookmarks', settings:'bnSettings', teacher:'bnTeacher' };
   if (tabMap[tab]) document.getElementById(tabMap[tab]).classList.add('active');
   var screenMap = {
     home:'screenHome', cats:'screenCats',
     history:'screenHistory', signs:'screenSigns', bookmarks:'screenBookmarks',
-    settings:'screenSettings', studybook:'screenStudybook'
+    settings:'screenSettings', studybook:'screenStudybook', teacher:'screenTeacher'
   };
   if (screenMap[tab]) {
     // Premium-only tabs
@@ -3148,6 +3302,7 @@ function showTab(tab) {
     if (tab === 'bookmarks') loadBookmarks();
     if (tab === 'settings')  loadSettings();
     if (tab === 'studybook') loadStudiebok();
+    if (tab === 'teacher')   loadTeacher();
   }
 }
 
@@ -5841,6 +5996,130 @@ function setLang(lang) {
     if (_histOpenIdx !== null) openHistDetail(_histOpenIdx);
   }
   toast(t('lang_updated'));
+}
+
+// ════════════════════════════════════════════
+//  MICHAEL TRAFIKKLÆRER — CHAT
+// ════════════════════════════════════════════
+var _teacherSessionId = null;
+var _teacherLoaded    = false;
+var _teacherTyping    = false;
+
+function loadTeacher() {
+  if (_teacherLoaded) { _teacherUpdateChips(); return; }
+  _teacherLoaded = true;
+
+  // Inject welcome message
+  var welcome = {
+    th: 'สวัสดีครับ 😊\n\nผมชื่อไมเคิล\n\nครูสอนขับรถที่มีประสบการณ์ 16 ปีในออสโล\n\nผมสามารถช่วยคุณเรื่องป้ายจราจร การให้ทาง กฎจราจร และการสอบทฤษฎีได้ครับ',
+    no: 'Sawatdee 😊\n\nJeg er Michael.\n\nTrafikklærer med 16 års erfaring i Oslo.\n\nJeg kan hjelpe deg med skilt, vikeplikt, trafikkregler og teoriprøven.',
+    en: 'Sawatdee 😊\n\nI\'m Michael.\n\nDriving instructor with 16 years of experience in Oslo.\n\nI can help you with signs, right-of-way, traffic rules and the theory test.'
+  };
+  var msgs = document.getElementById('teacherMessages');
+  if (msgs) {
+    msgs.innerHTML = '';
+    _teacherAppendBubble('assistant', welcome[appLang] || welcome.no);
+  }
+  _teacherUpdateChips();
+  // Update header name and placeholder
+  var tNameEl = document.getElementById('teacherNameLbl');
+  if (tNameEl) tNameEl.textContent = t('teacher_name');
+  var tInput = document.getElementById('teacherInput');
+  if (tInput) tInput.placeholder = t('teacher_placeholder');
+}
+
+function _teacherUpdateChips() {
+  document.querySelectorAll('.teacher-chip').forEach(function(chip) {
+    var lbl = chip.querySelector('.chip-lbl');
+    if (!lbl) return;
+    var msg = chip.getAttribute('data-msg-' + appLang) || chip.getAttribute('data-msg-no') || '';
+    lbl.textContent = msg.replace(/^[\S]{1,2}\s+/, ''); // strip leading emoji+space
+    chip.dataset.msg = msg;
+  });
+}
+
+function _teacherAppendBubble(role, text) {
+  var msgs = document.getElementById('teacherMessages');
+  if (!msgs) return;
+  var row = document.createElement('div');
+  row.className = 'tm-row ' + role;
+  if (role === 'assistant') {
+    var av = document.createElement('div');
+    av.className = 'tm-av';
+    av.textContent = '🚗';
+    row.appendChild(av);
+  }
+  var bubble = document.createElement('div');
+  bubble.className = 'tm-bubble ' + role;
+  bubble.textContent = text;
+  row.appendChild(bubble);
+  msgs.appendChild(row);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function _teacherShowTyping() {
+  var msgs = document.getElementById('teacherMessages');
+  if (!msgs) return;
+  var row = document.createElement('div');
+  row.className = 'tm-row assistant';
+  row.id = 'teacherTypingRow';
+  var av = document.createElement('div');
+  av.className = 'tm-av';
+  av.textContent = '🚗';
+  row.appendChild(av);
+  var bubble = document.createElement('div');
+  bubble.className = 'tm-bubble assistant tm-typing';
+  bubble.innerHTML = '<span></span><span></span><span></span>';
+  row.appendChild(bubble);
+  msgs.appendChild(row);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function _teacherHideTyping() {
+  var row = document.getElementById('teacherTypingRow');
+  if (row) row.remove();
+}
+
+function _teacherHideSuggestions() {
+  var s = document.getElementById('teacherSuggestions');
+  if (s) s.style.display = 'none';
+}
+
+async function teacherSend(overrideMsg) {
+  var input = document.getElementById('teacherInput');
+  var msg = (overrideMsg || (input && input.value) || '').trim();
+  if (!msg || _teacherTyping) return;
+
+  if (input && !overrideMsg) input.value = '';
+  _teacherTyping = true;
+  _teacherHideSuggestions();
+
+  // Disable send button
+  var sendBtn = document.getElementById('teacherSendBtn');
+  if (sendBtn) sendBtn.disabled = true;
+
+  _teacherAppendBubble('user', msg);
+  _teacherShowTyping();
+
+  try {
+    var res = await fetch('/api/teacher/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ session_id: _teacherSessionId, message: msg, language: appLang })
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    var data = await res.json();
+    if (data.session_id && !_teacherSessionId) _teacherSessionId = data.session_id;
+    _teacherHideTyping();
+    _teacherAppendBubble('assistant', data.reply || t('teacher_error'));
+  } catch(e) {
+    _teacherHideTyping();
+    _teacherAppendBubble('assistant', t('teacher_error'));
+  } finally {
+    _teacherTyping = false;
+    if (sendBtn) sendBtn.disabled = false;
+    if (input) input.focus();
+  }
 }
 
 function toggleSound(el) {
