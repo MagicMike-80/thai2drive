@@ -6258,38 +6258,71 @@ function _buildAssistantContent(text, container) {
   });
 }
 
-function loadTeacher() {
-  _teacherUpdateChips();
+async function loadTeacher() {
+  var tNameEl = document.getElementById('teacherNameLbl');
+  if (tNameEl) tNameEl.textContent = t('teacher_name');
+  var tInput = document.getElementById('teacherInput');
+  if (tInput) tInput.placeholder = t('teacher_placeholder');
 
-  var welcome = {
-    th: 'สวัสดีครับ 😊\n\nผมชื่อไมเคิล\n\nครูสอนขับรถที่มีประสบการณ์ 16 ปีในออสโล\n\nผมสามารถช่วยคุณเรื่องป้ายจราจร การให้ทาง กฎจราจร และการสอบทฤษฎีได้ครับ',
-    no: 'Sawatdee 😊\n\nJeg er Michael.\n\nTrafikklærer med 16 års erfaring i Oslo.\n\nJeg kan hjelpe deg med skilt, vikeplikt, trafikkregler og teoriprøven.',
-    en: 'Sawatdee 😊\n\nI\'m Michael.\n\nDriving instructor with 16 years of experience in Oslo.\n\nI can help you with signs, right-of-way, traffic rules and the theory test.'
-  };
-
-  // Re-inject welcome if: no user message yet AND language changed since last render
+  // Fetch welcome from backend (single source of truth)
   if (!_teacherHasUserMsg && _teacherWelcomeLang !== appLang) {
     _teacherWelcomeLang = appLang;
     var msgs = document.getElementById('teacherMessages');
     if (msgs) {
       msgs.innerHTML = '';
-      _teacherAppendBubble('assistant', welcome[appLang] || welcome.no);
+      try {
+        var wRes = await fetch('/api/teacher/welcome?lang=' + appLang);
+        var wData = await wRes.json();
+        _teacherAppendBubble('assistant', wData.welcome || '');
+      } catch(e) {
+        // Fallback if API unreachable
+        var fallback = {
+          no: 'Sawatdee 😊\n\nJeg er Michael.\n\nTrafikklærer med 16 års erfaring i Oslo.',
+          th: 'สวัสดีครับ 😊\n\nผมชื่อไมเคิล\n\nครูสอนขับรถที่มีประสบการณ์ 16 ปีในออสโล',
+          en: 'Sawatdee 😊\n\nI\'m Michael.\n\nDriving instructor with 16 years of experience in Oslo.'
+        };
+        _teacherAppendBubble('assistant', fallback[appLang] || fallback.no);
+      }
     }
   }
 
-  var tNameEl = document.getElementById('teacherNameLbl');
-  if (tNameEl) tNameEl.textContent = t('teacher_name');
-  var tInput = document.getElementById('teacherInput');
-  if (tInput) tInput.placeholder = t('teacher_placeholder');
-  // Update side panel button labels + onclick in current language
-  var tspMap2 = { sign:'tsp_sign', vikeplikt:'tsp_vikeplikt', rule:'tsp_rule', practice:'tsp_practice', theory:'tsp_theory', app:'tsp_app' };
-  document.querySelectorAll('[data-tsp]').forEach(function(el) {
-    var key = tspMap2[el.getAttribute('data-tsp')];
-    if (!key) return;
-    el.textContent = t(key);
-    var btn = el.closest('.tsp-btn');
-    if (btn) { var label = t(key); btn.onclick = (function(lbl){ return function(){ teacherSend(lbl); }; })(label); }
-  });
+  // Fetch topics from backend (single source of truth) and populate chips + side panel
+  try {
+    var tRes = await fetch('/api/teacher/topics?lang=' + appLang);
+    var tData = await tRes.json();
+    var topics = tData.topics || [];
+
+    // Update initial suggestion chips
+    var chipEls = document.querySelectorAll('#teacherSuggestions .teacher-chip');
+    topics.forEach(function(topic, i) {
+      var chip = chipEls[i];
+      if (!chip) return;
+      var label = chip.querySelector('.chip-lbl');
+      if (label) label.textContent = topic.text;
+      chip.dataset.msg = topic.icon + ' ' + topic.text;
+      chip.onclick = (function(msg){ return function(){ teacherSend(msg); }; })(topic.icon + ' ' + topic.text);
+    });
+
+    // Update side panel buttons
+    var tspBtns = document.querySelectorAll('.tsp-btn');
+    topics.forEach(function(topic, i) {
+      var btn = tspBtns[i];
+      if (!btn) return;
+      btn.innerHTML = topic.icon + ' <span>' + topic.text + '</span>';
+      btn.onclick = (function(msg){ return function(){ teacherSend(msg); }; })(topic.icon + ' ' + topic.text);
+    });
+  } catch(e) {
+    // Fallback: keep existing hardcoded chips
+    _teacherUpdateChips();
+    var tspMap2 = { sign:'tsp_sign', vikeplikt:'tsp_vikeplikt', rule:'tsp_rule', practice:'tsp_practice', theory:'tsp_theory', app:'tsp_app' };
+    document.querySelectorAll('[data-tsp]').forEach(function(el) {
+      var key = tspMap2[el.getAttribute('data-tsp')];
+      if (!key) return;
+      el.textContent = t(key);
+      var btn = el.closest('.tsp-btn');
+      if (btn) { var label = t(key); btn.onclick = (function(lbl){ return function(){ teacherSend(lbl); }; })(label); }
+    });
+  }
 }
 
 function _teacherUpdateChips() {

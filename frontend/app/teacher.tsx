@@ -18,40 +18,33 @@ import { useAppStore } from '../src/store/appStore';
 // ─── Translation strings ─────────────────────────────────────────────────────
 const TR: Record<string, Record<string, string>> = {
   no: {
-    title: 'Michael Trafikklærer',
+    title: '🚗 Michael Trafikklærer',       // Fix 5: consistent title
     inputPlaceholder: 'Still et spørsmål...',
     send: 'Send',
     errorMsg: 'Beklager, noe gikk galt. Prøv igjen.',
   },
   th: {
-    title: 'ไมเคิล ครูสอนขับรถ',
+    title: '🚗 Michael Trafikklærer',
     inputPlaceholder: 'ถามคำถาม...',
     send: 'ส่ง',
     errorMsg: 'ขอโทษค่ะ มีข้อผิดพลาด กรุณาลองใหม่อีกครั้ง',
   },
   en: {
-    title: 'Michael — Driving Instructor',
+    title: '🚗 Michael Trafikklærer',
     inputPlaceholder: 'Ask a question...',
     send: 'Send',
     errorMsg: 'Sorry, something went wrong. Please try again.',
   },
 };
 
-// ─── Suggested questions ─────────────────────────────────────────────────────
-const SUGGESTIONS = [
-  { icon: '🛑', no: 'Forklar et skilt',       th: 'อธิบายป้ายจราจร',             en: 'Explain a sign' },
-  { icon: '🚗', no: 'Hjelp med vikeplikt',     th: 'ช่วยเรื่องการให้ทาง',          en: 'Help with right-of-way' },
-  { icon: '📖', no: 'Forklar en trafikkregel', th: 'อธิบายกฎจราจร',               en: 'Explain a traffic rule' },
-  { icon: '📝', no: 'Hjelp med teoriprøven',   th: 'ช่วยเรื่องข้อสอบทฤษฎี',        en: 'Help with the theory test' },
-  { icon: '📊', no: 'Hva bør jeg øve på?',     th: 'ฉันควรฝึกเรื่องอะไร?',         en: 'What should I practise?' },
-  { icon: '❓', no: 'Spør om Thai2Drive',       th: 'ถามเกี่ยวกับ Thai2Drive',       en: 'Ask about Thai2Drive' },
-];
-
 // ─── Types ───────────────────────────────────────────────────────────────────
 interface Message {
   role: 'user' | 'assistant';
   content: string;
+  suggestions?: string[];          // Fix 2: carry reply chips
 }
+
+interface Topic { icon: string; text: string; }
 
 const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL || '';
 
@@ -64,24 +57,35 @@ export default function TeacherScreen() {
   const lang = language || 'no';
 
   const [messages, setMessages] = useState<Message[]>([]);
+  const [welcomeMsg, setWelcomeMsg] = useState<string>('');   // Fix 4: from backend
+  const [topics, setTopics] = useState<Topic[]>([]);           // Fix 3: from backend
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [showSuggestions, setShowSuggestions] = useState(true);
   const scrollRef = useRef<ScrollView>(null);
 
-  // Welcome message — treated as first assistant message (not stored in DB)
-  const WELCOME: Message = {
-    role: 'assistant',
-    content:
-      lang === 'th'
-        ? 'สวัสดีครับ 😊\n\nผมชื่อไมเคิล\n\nครูสอนขับรถที่มีประสบการณ์ 16 ปีในออสโล\n\nผมสามารถช่วยคุณเรื่องป้ายจราจร การให้ทาง กฎจราจร และการสอบทฤษฎีได้ครับ'
-        : lang === 'en'
-        ? 'Sawatdee 😊\n\nI\'m Michael.\n\nDriving instructor with 16 years of experience in Oslo.\n\nI can help you with signs, right-of-way, traffic rules and the theory test.'
-        : 'Sawatdee 😊\n\nJeg er Michael.\n\nTrafikklærer med 16 års erfaring i Oslo.\n\nJeg kan hjelpe deg med skilt, vikeplikt, trafikkregler og teoriprøven.',
-  };
+  // Fix 3 + 4: fetch welcome + topics from backend on mount / language change
+  React.useEffect(() => {
+    (async () => {
+      try {
+        const [wRes, tRes] = await Promise.all([
+          fetch(`${BACKEND_URL}/api/teacher/welcome?lang=${lang}`),
+          fetch(`${BACKEND_URL}/api/teacher/topics?lang=${lang}`),
+        ]);
+        const wData = await wRes.json();
+        const tData = await tRes.json();
+        setWelcomeMsg(wData.welcome || '');
+        setTopics(tData.topics || []);
+      } catch {
+        // Fallback: keep empty (component handles gracefully)
+      }
+    })();
+  }, [lang]);
 
-  const allMessages: Message[] = [WELCOME, ...messages];
+  const allMessages: Message[] = welcomeMsg
+    ? [{ role: 'assistant', content: welcomeMsg }, ...messages]
+    : messages;
 
   const sendMessage = useCallback(async (text: string) => {
     const msg = text.trim();
@@ -94,18 +98,13 @@ export default function TeacherScreen() {
     const userMsg: Message = { role: 'user', content: msg };
     setMessages((prev) => [...prev, userMsg]);
 
-    // Scroll to bottom
     setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 100);
 
     try {
       const res = await fetch(`${BACKEND_URL}/api/teacher/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          session_id: sessionId,
-          message: msg,
-          language: lang,
-        }),
+        body: JSON.stringify({ session_id: sessionId, message: msg, language: lang }),
       });
 
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -113,11 +112,15 @@ export default function TeacherScreen() {
 
       if (data.session_id && !sessionId) setSessionId(data.session_id);
 
-      const assistantMsg: Message = { role: 'assistant', content: data.reply };
+      // Fix 2: store suggestions with the message
+      const assistantMsg: Message = {
+        role: 'assistant',
+        content: data.reply,
+        suggestions: data.suggestions || [],
+      };
       setMessages((prev) => [...prev, assistantMsg]);
-    } catch (err) {
-      const errMsg: Message = { role: 'assistant', content: t.errorMsg };
-      setMessages((prev) => [...prev, errMsg]);
+    } catch {
+      setMessages((prev) => [...prev, { role: 'assistant', content: t.errorMsg }]);
     } finally {
       setLoading(false);
       setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 150);
@@ -157,36 +160,40 @@ export default function TeacherScreen() {
           onContentSizeChange={() => scrollRef.current?.scrollToEnd({ animated: false })}
         >
           {allMessages.map((msg, i) => (
-            <View
-              key={i}
-              style={[
-                s.bubbleRow,
-                msg.role === 'user' ? s.bubbleRowUser : s.bubbleRowAssistant,
-              ]}
-            >
-              {msg.role === 'assistant' && (
-                <View style={[s.avatarTiny, { backgroundColor: '#1E3A5F' }]}>
-                  <Text style={s.avatarTinyEmoji}>🚗</Text>
-                </View>
-              )}
-              <View
-                style={[
+            <React.Fragment key={i}>
+              <View style={[s.bubbleRow, msg.role === 'user' ? s.bubbleRowUser : s.bubbleRowAssistant]}>
+                {msg.role === 'assistant' && (
+                  <View style={[s.avatarTiny, { backgroundColor: '#1E3A5F' }]}>
+                    <Text style={s.avatarTinyEmoji}>🚗</Text>
+                  </View>
+                )}
+                <View style={[
                   s.bubble,
                   msg.role === 'user'
                     ? [s.bubbleUser, { backgroundColor: c.accent }]
                     : [s.bubbleAssistant, { backgroundColor: c.card, borderColor: c.cardBorder }],
-                ]}
-              >
-                <Text
-                  style={[
-                    s.bubbleText,
-                    { color: msg.role === 'user' ? '#fff' : c.text },
-                  ]}
-                >
-                  {msg.content}
-                </Text>
+                ]}>
+                  <Text style={[s.bubbleText, { color: msg.role === 'user' ? '#fff' : c.text }]}>
+                    {msg.content}
+                  </Text>
+                </View>
               </View>
-            </View>
+              {/* Fix 2: reply chips after last assistant message */}
+              {msg.role === 'assistant' && msg.suggestions && msg.suggestions.length > 0 && i === allMessages.length - 1 && (
+                <View style={s.replyChipsRow}>
+                  {msg.suggestions.map((chip, ci) => (
+                    <TouchableOpacity
+                      key={ci}
+                      style={[s.replyChip, { borderColor: 'rgba(59,130,246,.35)' }]}
+                      onPress={() => sendMessage(chip)}
+                      activeOpacity={0.75}
+                    >
+                      <Text style={s.replyChipText}>{chip}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              )}
+            </React.Fragment>
           ))}
 
           {loading && (
@@ -200,20 +207,18 @@ export default function TeacherScreen() {
             </View>
           )}
 
-          {/* Suggested question buttons — shown only at start */}
-          {showSuggestions && messages.length === 0 && (
+          {/* Fix 3: topics from backend API, shown only at start */}
+          {showSuggestions && messages.length === 0 && topics.length > 0 && (
             <View style={s.suggestionsWrap}>
-              {SUGGESTIONS.map((s2, i) => (
+              {topics.map((topic, i) => (
                 <TouchableOpacity
                   key={i}
                   style={[s.suggestBtn, { backgroundColor: c.card, borderColor: c.cardBorder }]}
-                  onPress={() => sendMessage(`${s2.icon} ${s2[lang as keyof typeof s2] || s2.no}`)}
+                  onPress={() => sendMessage(`${topic.icon} ${topic.text}`)}
                   activeOpacity={0.75}
                 >
-                  <Text style={s.suggestIcon}>{s2.icon}</Text>
-                  <Text style={[s.suggestText, { color: c.text }]}>
-                    {(s2[lang as keyof typeof s2] as string) || s2.no}
-                  </Text>
+                  <Text style={s.suggestIcon}>{topic.icon}</Text>
+                  <Text style={[s.suggestText, { color: c.text }]}>{topic.text}</Text>
                 </TouchableOpacity>
               ))}
             </View>
@@ -304,6 +309,11 @@ const s = StyleSheet.create({
   bubbleUser: { borderBottomRightRadius: 4 },
   bubbleAssistant: { borderWidth: 1, borderBottomLeftRadius: 4 },
   bubbleText: { fontSize: 14, lineHeight: 21 },
+
+  // Reply chips (after assistant message)
+  replyChipsRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 7, paddingLeft: 36, paddingTop: 4, paddingBottom: 2 },
+  replyChip: { borderWidth: 1, borderRadius: 20, paddingHorizontal: 12, paddingVertical: 6, backgroundColor: 'rgba(59,130,246,.10)' },
+  replyChipText: { fontSize: 12, fontWeight: '600', color: '#93C5FD' },
 
   // Suggestion buttons
   suggestionsWrap: { marginTop: 16, gap: 8 },

@@ -15,7 +15,7 @@ import logging
 from datetime import datetime, timezone
 from typing import Optional, List
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Query
 from pydantic import BaseModel, Field
 from motor.motor_asyncio import AsyncIOMotorClient
 from dotenv import load_dotenv
@@ -156,48 +156,107 @@ TOPICS:
 
 Never recommend unsafe driving. Never invent rules."""
 
-# ─── Contextual chip suggestions ─────────────────────────────────────────────
+# ─── Single source of truth: welcome + topics ────────────────────────────────
+MICHAEL_WELCOME = {
+    "no": "Sawatdee 😊\n\nJeg er Michael.\n\nTrafikklærer med 16 års erfaring i Oslo.\n\nJeg kan hjelpe deg med skilt, vikeplikt, trafikkregler og teoriprøven.",
+    "th": "สวัสดีครับ 😊\n\nผมชื่อไมเคิล\n\nครูสอนขับรถที่มีประสบการณ์ 16 ปีในออสโล\n\nผมสามารถช่วยคุณเรื่องป้ายจราจร การให้ทาง กฎจราจร และการสอบทฤษฎีได้ครับ",
+    "en": "Sawatdee 😊\n\nI'm Michael.\n\nDriving instructor with 16 years of experience in Oslo.\n\nI can help you with signs, right-of-way, traffic rules and the theory test.",
+}
+
+MICHAEL_TOPICS = {
+    "no": [
+        {"icon": "🛑", "text": "Forklar et skilt"},
+        {"icon": "🚗", "text": "Hjelp med vikeplikt"},
+        {"icon": "📖", "text": "Forklar en trafikkregel"},
+        {"icon": "📊", "text": "Hva bør jeg øve på?"},
+        {"icon": "📝", "text": "Hjelp med teoriprøven"},
+        {"icon": "❓", "text": "Spør om Thai2Drive"},
+    ],
+    "th": [
+        {"icon": "🛑", "text": "อธิบายป้ายจราจร"},
+        {"icon": "🚗", "text": "ช่วยเรื่องการให้ทาง"},
+        {"icon": "📖", "text": "อธิบายกฎจราจร"},
+        {"icon": "📊", "text": "ฉันควรฝึกเรื่องอะไร?"},
+        {"icon": "📝", "text": "ช่วยเรื่องข้อสอบทฤษฎี"},
+        {"icon": "❓", "text": "ถามเกี่ยวกับ Thai2Drive"},
+    ],
+    "en": [
+        {"icon": "🛑", "text": "Explain a sign"},
+        {"icon": "🚗", "text": "Help with right-of-way"},
+        {"icon": "📖", "text": "Explain a traffic rule"},
+        {"icon": "📊", "text": "What should I practise?"},
+        {"icon": "📝", "text": "Help with the theory test"},
+        {"icon": "❓", "text": "Ask about Thai2Drive"},
+    ],
+}
+
+# ─── Contextual chip suggestions (multilingual keyword detection) ─────────────
+_KW = {
+    "vikeplikt": {
+        "no": ["vikeplikt", "høyreregel", "forkjørsvei", "rundkjøring", "stoppskilt", "vikepliktskilt"],
+        "th": ["การให้ทาง", "วงเวียน", "ป้ายหยุด", "ทางหลัก", "ให้ทาง"],
+        "en": ["give way", "right-of-way", "roundabout", "stop sign", "priority road", "yield"],
+    },
+    "signs": {
+        "no": ["skilt", "trafikkskilt", "fareskilt", "forbudsskilt", "påbudsskilt"],
+        "th": ["ป้าย", "ป้ายจราจร", "ป้ายเตือน", "ป้ายบังคับ"],
+        "en": ["traffic sign", "road sign", "warning sign", "sign means"],
+    },
+    "theory": {
+        "no": ["teoriprøv", "teorieksamen", "prøven", "bestå"],
+        "th": ["สอบ", "ข้อสอบ", "ทฤษฎี", "ผ่านการสอบ"],
+        "en": ["theory test", "theory exam", "pass the test", "driving test"],
+    },
+    "speed": {
+        "no": ["fartsgrense", "hastighet", "kilometer", "km/t", "stoppelengde"],
+        "th": ["ความเร็ว", "กม/ชม", "ระยะหยุด"],
+        "en": ["speed limit", "speed", "stopping distance", "km/h"],
+    },
+}
+
+def _kw_match(reply_lower: str, category: str) -> bool:
+    for kws in _KW[category].values():
+        if any(w in reply_lower for w in kws):
+            return True
+    return False
+
 def _get_suggestions(reply: str, lang: str) -> list:
     r = reply.lower()
-    # Vikeplikt / right-of-way
-    if any(w in r for w in ["vikeplikt", "høyreregel", "forkjørs", "rundkjøring", "stoppskilt",
-                              "give way", "right-of-way", "roundabout", "การให้ทาง", "วงเวียน"]):
-        if lang == "th":
-            return ["🚗 กฎให้ทาง (ขวา)", "🛑 ป้ายให้ทาง", "⭕ วงเวียน", "🔴 ป้ายหยุด"]
-        if lang == "en":
-            return ["🚗 Right-of-way rule", "🛑 Give Way sign", "⭕ Roundabout", "🔴 Stop sign"]
+    if _kw_match(r, "vikeplikt"):
+        if lang == "th": return ["🚗 กฎให้ทาง (ขวา)", "🛑 ป้ายให้ทาง", "⭕ วงเวียน", "🔴 ป้ายหยุด"]
+        if lang == "en": return ["🚗 Right-of-way rule", "🛑 Give Way sign", "⭕ Roundabout", "🔴 Stop sign"]
         return ["🚗 Høyreregelen", "🛑 Vikepliktskilt", "⭕ Rundkjøring", "🔴 Stoppskilt"]
-    # Signs / skilt
-    if any(w in r for w in ["skilt", "sign", "ป้าย", "trafikkskilt"]):
-        if lang == "th":
-            return ["🛑 ฝึกกับป้ายนี้", "📖 อ่านเพิ่มเติม", "🚗 ป้ายคล้ายกัน", "❓ ถามต่อ"]
-        if lang == "en":
-            return ["🛑 Practise this sign", "📖 Read more", "🚗 Similar signs", "❓ Ask more"]
+    if _kw_match(r, "signs"):
+        if lang == "th": return ["🛑 ฝึกกับป้ายนี้", "📖 อ่านเพิ่มเติม", "🚗 ป้ายคล้ายกัน", "❓ ถามต่อ"]
+        if lang == "en": return ["🛑 Practise this sign", "📖 Read more", "🚗 Similar signs", "❓ Ask more"]
         return ["🛑 Øv på dette skiltet", "📖 Les mer", "🚗 Se lignende skilt", "❓ Spør videre"]
-    # Theory test
-    if any(w in r for w in ["teoriprøv", "prøv", "สอบ", "theory test", "test"]):
-        if lang == "th":
-            return ["📝 ข้อผิดพลาดที่พบบ่อย", "📊 ฉันควรฝึกอะไร?", "📖 เปิดหนังสือเรียน"]
-        if lang == "en":
-            return ["📝 Common mistakes", "📊 What should I practise?", "📖 Open study book"]
+    if _kw_match(r, "theory"):
+        if lang == "th": return ["📝 ข้อผิดพลาดที่พบบ่อย", "📊 ฉันควรฝึกอะไร?", "📖 เปิดหนังสือเรียน"]
+        if lang == "en": return ["📝 Common mistakes", "📊 What should I practise?", "📖 Open study book"]
         return ["📝 Vanligste feil", "📊 Hva bør jeg øve på?", "📖 Åpne studiebok"]
-    # Speed / fartsgrense
-    if any(w in r for w in ["fartsgrense", "hastighet", "speed", "ความเร็ว"]):
-        if lang == "th":
-            return ["🚗 ในเมือง 50 กม/ชม", "🛣️ นอกเมือง 80 กม/ชม", "❓ ถามต่อ"]
-        if lang == "en":
-            return ["🚗 In town 50 km/h", "🛣️ Outside town 80 km/h", "❓ Ask more"]
+    if _kw_match(r, "speed"):
+        if lang == "th": return ["🚗 ในเมือง 50 กม/ชม", "🛣️ นอกเมือง 80 กม/ชม", "❓ ถามต่อ"]
+        if lang == "en": return ["🚗 In town 50 km/h", "🛣️ Outside town 80 km/h", "❓ Ask more"]
         return ["🚗 I tettsted 50 km/t", "🛣️ Utenfor tettsted 80 km/t", "❓ Spør videre"]
     # Default
-    if lang == "th":
-        return ["❓ ถามต่อ", "📖 เปิดหนังสือเรียน", "📊 สถิติของฉัน"]
-    if lang == "en":
-        return ["❓ Ask more", "📖 Open study book", "📊 My statistics"]
+    if lang == "th": return ["❓ ถามต่อ", "📖 เปิดหนังสือเรียน", "📊 สถิติของฉัน"]
+    if lang == "en": return ["❓ Ask more", "📖 Open study book", "📊 My statistics"]
     return ["❓ Spør videre", "📖 Åpne studiebok", "📊 Min statistikk"]
 
 
 # ─── API ──────────────────────────────────────────────────────────────────────
 teacher_router = APIRouter()
+
+
+@teacher_router.get("/teacher/welcome")
+async def teacher_welcome(lang: str = Query(default="no")):
+    lang = lang if lang in MICHAEL_WELCOME else "no"
+    return {"lang": lang, "welcome": MICHAEL_WELCOME[lang]}
+
+@teacher_router.get("/teacher/topics")
+async def teacher_topics(lang: str = Query(default="no")):
+    lang = lang if lang in MICHAEL_TOPICS else "no"
+    return {"lang": lang, "topics": MICHAEL_TOPICS[lang]}
 
 
 class TeacherChatRequest(BaseModel):
