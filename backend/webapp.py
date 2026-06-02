@@ -2166,7 +2166,7 @@ a { color:inherit; text-decoration:none; }
 }
 .teacher-messages::-webkit-scrollbar { width:0; }
 
-.tm-row { display:flex; align-items:flex-end; gap:8px; }
+.tm-row { display:flex; align-items:flex-end; gap:8px; min-width:0; width:100%; }
 .tm-row.user  { justify-content:flex-end; }
 .tm-row.assistant { justify-content:flex-start; }
 
@@ -2176,9 +2176,9 @@ a { color:inherit; text-decoration:none; }
   justify-content:center; font-size:13px; flex-shrink:0;
 }
 .tm-bubble {
-  max-width:78%; padding:10px 14px; border-radius:16px;
-  font-size:.875rem; line-height:1.5; white-space:pre-wrap;
-  word-break:break-word;
+  max-width:78%; min-width:0; padding:10px 14px; border-radius:16px;
+  font-size:.875rem; line-height:1.5;
+  word-break:break-word; overflow-wrap:break-word;
 }
 .tm-bubble.user {
   background:var(--orange); color:#fff;
@@ -6046,27 +6046,53 @@ function setLang(lang) {
 // ════════════════════════════════════════════
 //  MICHAEL TRAFIKKLÆRER — CHAT
 // ════════════════════════════════════════════
-var _teacherSessionId = null;
-var _teacherLoaded    = false;
-var _teacherTyping    = false;
+var _teacherSessionId    = null;
+var _teacherHasUserMsg   = false;   // true once user sends first message
+var _teacherTyping       = false;
+var _teacherWelcomeLang  = null;    // tracks which language the welcome was rendered in
+
+// ── Simple markdown → HTML renderer ─────────────────────────
+function _mdToHtml(text) {
+  // Escape HTML entities first
+  var s = text
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;');
+  // headings: ### ## # → bold line
+  s = s.replace(/^#{1,3}\s+(.+)$/gm, '<strong>$1</strong>');
+  // bold: **text** or __text__
+  s = s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  s = s.replace(/__(.+?)__/g, '<strong>$1</strong>');
+  // italic: *text* or _text_
+  s = s.replace(/\*([^*\n]+?)\*/g, '<em>$1</em>');
+  // horizontal rule
+  s = s.replace(/^-{3,}$/gm, '<hr style="border:none;border-top:1px solid var(--border);margin:6px 0">');
+  // unordered list items: - item or * item
+  s = s.replace(/^[\-\*]\s+(.+)$/gm, '• $1');
+  // line breaks
+  s = s.replace(/\n/g, '<br>');
+  return s;
+}
 
 function loadTeacher() {
-  if (_teacherLoaded) { _teacherUpdateChips(); return; }
-  _teacherLoaded = true;
+  _teacherUpdateChips();
 
-  // Inject welcome message
   var welcome = {
     th: 'สวัสดีครับ 😊\n\nผมชื่อไมเคิล\n\nครูสอนขับรถที่มีประสบการณ์ 16 ปีในออสโล\n\nผมสามารถช่วยคุณเรื่องป้ายจราจร การให้ทาง กฎจราจร และการสอบทฤษฎีได้ครับ',
     no: 'Sawatdee 😊\n\nJeg er Michael.\n\nTrafikklærer med 16 års erfaring i Oslo.\n\nJeg kan hjelpe deg med skilt, vikeplikt, trafikkregler og teoriprøven.',
     en: 'Sawatdee 😊\n\nI\'m Michael.\n\nDriving instructor with 16 years of experience in Oslo.\n\nI can help you with signs, right-of-way, traffic rules and the theory test.'
   };
-  var msgs = document.getElementById('teacherMessages');
-  if (msgs) {
-    msgs.innerHTML = '';
-    _teacherAppendBubble('assistant', welcome[appLang] || welcome.no);
+
+  // Re-inject welcome if: no user message yet AND language changed since last render
+  if (!_teacherHasUserMsg && _teacherWelcomeLang !== appLang) {
+    _teacherWelcomeLang = appLang;
+    var msgs = document.getElementById('teacherMessages');
+    if (msgs) {
+      msgs.innerHTML = '';
+      _teacherAppendBubble('assistant', welcome[appLang] || welcome.no);
+    }
   }
-  _teacherUpdateChips();
-  // Update header name and placeholder
+
   var tNameEl = document.getElementById('teacherNameLbl');
   if (tNameEl) tNameEl.textContent = t('teacher_name');
   var tInput = document.getElementById('teacherInput');
@@ -6086,6 +6112,7 @@ function _teacherUpdateChips() {
 function _teacherAppendBubble(role, text) {
   var msgs = document.getElementById('teacherMessages');
   if (!msgs) return;
+  if (role === 'user') _teacherHasUserMsg = true;
   var row = document.createElement('div');
   row.className = 'tm-row ' + role;
   if (role === 'assistant') {
@@ -6096,7 +6123,12 @@ function _teacherAppendBubble(role, text) {
   }
   var bubble = document.createElement('div');
   bubble.className = 'tm-bubble ' + role;
-  bubble.textContent = text;
+  // User messages: plain text. Assistant messages: render markdown.
+  if (role === 'assistant') {
+    bubble.innerHTML = _mdToHtml(text);
+  } else {
+    bubble.textContent = text;
+  }
   row.appendChild(bubble);
   msgs.appendChild(row);
   msgs.scrollTop = msgs.scrollHeight;
