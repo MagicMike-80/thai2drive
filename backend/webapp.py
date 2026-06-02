@@ -2232,6 +2232,13 @@ a { color:inherit; text-decoration:none; }
 .teacher-name { font-size:.95rem; font-weight:700; color:var(--text); }
 .teacher-status { font-size:.75rem; color:#10B981; margin-top:2px; }
 
+/* Mobile baseline — chat col fills screen, side panel hidden */
+.teacher-chat-col {
+  display:flex; flex-direction:column;
+  flex:1; min-height:0;
+}
+.teacher-side-panel { display:none; }
+
 .teacher-messages {
   flex:1; min-height:0; overflow-y:auto; padding:16px 14px 12px;
   display:flex; flex-direction:column; gap:14px;
@@ -6641,7 +6648,9 @@ async function teacherSend(overrideMsg) {
   } finally {
     _teacherTyping = false;
     if (sendBtn) sendBtn.disabled = false;
-    if (input) input.focus();
+    // Only re-focus input when user typed manually — not after a chip tap.
+    // On mobile, focus() re-opens the keyboard mid-read which feels like a freeze.
+    if (input && !overrideMsg) input.focus();
   }
 }
 
