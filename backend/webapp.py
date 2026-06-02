@@ -2115,6 +2115,34 @@ a { color:inherit; text-decoration:none; }
 .paywall-skip:hover { border-color:rgba(255,255,255,.25); color:var(--text); }
 
 /* ══════════════════════════════════════════
+   MICHAEL TRAFIKKLÆRER — HOME CARD
+══════════════════════════════════════════ */
+.michael-card {
+  display:flex; align-items:center; justify-content:space-between;
+  width:100%; padding:14px 16px;
+  background:linear-gradient(135deg, rgba(30,58,95,.55) 0%, rgba(37,99,235,.20) 100%);
+  border:1.5px solid rgba(59,130,246,.45);
+  border-radius:16px; cursor:pointer;
+  transition:background .15s, border-color .15s;
+  margin-bottom:4px;
+}
+.michael-card:hover { background:linear-gradient(135deg,rgba(30,58,95,.7) 0%,rgba(37,99,235,.30) 100%); border-color:rgba(59,130,246,.7); }
+.michael-card-left  { display:flex; align-items:center; gap:12px; }
+.michael-card-avatar {
+  width:44px; height:44px; border-radius:50%;
+  background:#1E3A5F; border:1.5px solid rgba(59,130,246,.5);
+  display:flex; align-items:center; justify-content:center;
+  font-size:22px; flex-shrink:0;
+}
+.michael-card-name  { font-size:.95rem; font-weight:800; color:#93C5FD; }
+.michael-card-sub   { font-size:.8rem;  font-weight:500; color:#64748B; margin-top:2px; }
+.michael-card-arrow { font-size:1.5rem; color:#3B82F6; font-weight:300; }
+
+/* Highlighted Michael tab in bottom nav */
+.bn-tab-michael       { color:#60A5FA !important; }
+.bn-tab-michael.active { color:#3B82F6 !important; border-top-color:#3B82F6 !important; }
+
+/* ══════════════════════════════════════════
    MICHAEL TRAFIKKLÆRER — CHAT UI
 ══════════════════════════════════════════ */
 #screenTeacher { display:flex; flex-direction:column; height:100%; overflow:hidden; }
@@ -2336,7 +2364,21 @@ a { color:inherit; text-decoration:none; }
         <button class="home-sec-btn" onclick="startExam()">📋 Eksamen</button>
         <button class="home-sec-btn" onclick="startDailyTest()">📅 Daglig test</button>
         <button class="home-sec-btn" onclick="showTab('studybook')" style="grid-column:1/-1">📖 Studiebok — Norsk trafikk</button>
-        <button class="home-sec-btn" onclick="showTab('teacher')" style="grid-column:1/-1;background:rgba(30,58,95,.35);border-color:rgba(59,130,246,.4);color:#93C5FD;">🚗 Michael Trafikklærer — AI-hjelp</button>
+      </div>
+
+      <!-- Michael Trafikklærer card -->
+      <button class="michael-card" onclick="showTab('teacher')">
+        <div class="michael-card-left">
+          <div class="michael-card-avatar">🚗</div>
+          <div class="michael-card-text">
+            <div class="michael-card-name">Michael Trafikklærer</div>
+            <div class="michael-card-sub" id="michaelCardSub">Still et spørsmål om trafikk</div>
+          </div>
+        </div>
+        <div class="michael-card-arrow">›</div>
+      </button>
+
+      <div class="home-sec-btns" style="display:none"><!-- placeholder to keep JS index intact -->
       </div>
 
       <div class="home-stats">
@@ -2732,19 +2774,19 @@ a { color:inherit; text-decoration:none; }
 
   </div><!-- /content -->
 
-  <!-- BOTTOM NAV — 7 tabs: Hjem → Innstillinger → Kategorier → Historikk → Trafikkskilt → Studiebok → Bokmerker -->
+  <!-- BOTTOM NAV — 8 tabs: Hjem → Kategorier → Historikk → Michael → Skilt → Studiebok → Bokmerker → Innstillinger -->
   <div id="bottomNav">
     <button class="bn-tab active" id="bnHome" onclick="showTab('home')">
       <span class="bn-icon">🏠</span>Hjem
-    </button>
-    <button class="bn-tab" id="bnSettings" onclick="showTab('settings')">
-      <span class="bn-icon">⚙️</span>Innstillinger
     </button>
     <button class="bn-tab" id="bnCats" onclick="showTab('cats')">
       <span class="bn-icon">📚</span>Kategorier
     </button>
     <button class="bn-tab" id="bnHistory" onclick="showTab('history')">
       <span class="bn-icon">📊</span>Historikk
+    </button>
+    <button class="bn-tab bn-tab-michael" id="bnTeacher" onclick="showTab('teacher')">
+      <span class="bn-icon">🚗</span>Michael
     </button>
     <button class="bn-tab" id="bnSigns" onclick="showTab('signs')">
       <span class="bn-icon">🪧</span>Skilt
@@ -2755,8 +2797,8 @@ a { color:inherit; text-decoration:none; }
     <button class="bn-tab" id="bnBookmarks" onclick="showTab('bookmarks')">
       <span class="bn-icon">🔖</span>Bokmerker
     </button>
-    <button class="bn-tab" id="bnTeacher" onclick="showTab('teacher')">
-      <span class="bn-icon">🚗</span>Michael
+    <button class="bn-tab" id="bnSettings" onclick="showTab('settings')">
+      <span class="bn-icon">⚙️</span>Innstillinger
     </button>
   </div>
 
@@ -2922,8 +2964,9 @@ var UI = {
   premium_sub: {th:'คุณมีสิทธิ์ทุกฟีเจอร์', no:'Du har tilgang til alle funksjoner', en:'You have access to all features'},
   acct:        {th:'บัญชี',             no:'KONTO',            en:'ACCOUNT'},
   language:    {th:'ภาษา',              no:'SPRÅK',            en:'LANGUAGE'},
-  teacher:     {th:'ครูสอนขับ',         no:'Michael',          en:'Instructor'},
-  teacher_name:{th:'ไมเคิล ครูสอนขับรถ', no:'Michael Trafikklærer', en:'Michael — Driving Instructor'},
+  teacher:     {th:'Michael',            no:'Michael',          en:'Michael'},
+  teacher_name:{th:'Michael Trafikklærer', no:'Michael Trafikklærer', en:'Michael Trafikklærer'},
+  teacher_sub: {th:'ถามคำถามเกี่ยวกับการจราจร', no:'Still et spørsmål om trafikk', en:'Ask a question about traffic'},
   teacher_placeholder: {th:'ถามคำถาม...', no:'Still et spørsmål...', en:'Ask a question...'},
   teacher_error: {th:'ขอโทษ เกิดข้อผิดพลาด ลองใหม่อีกครั้ง', no:'Beklager, noe gikk galt. Prøv igjen.', en:'Sorry, something went wrong. Please try again.'},
   q_lang:      {th:'ภาษาคำถาม',         no:'Spørsmålsspråk',   en:'Question language'},
@@ -3103,6 +3146,8 @@ function applyUILang() {
   if (tNameEl) tNameEl.textContent = t('teacher_name');
   var tInput = document.getElementById('teacherInput');
   if (tInput) tInput.placeholder = t('teacher_placeholder');
+  var tSub = document.getElementById('michaelCardSub');
+  if (tSub) tSub.textContent = t('teacher_sub');
   // Update suggestion chip labels
   document.querySelectorAll('.teacher-chip').forEach(function(chip) {
     var lbl = chip.querySelector('.chip-lbl');
