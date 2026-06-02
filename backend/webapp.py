@@ -769,26 +769,26 @@ a { color:inherit; text-decoration:none; }
   }
   .tsp-btn {
     display: flex; align-items: center; gap: 11px;
-    background: rgba(255,255,255,.07);
-    border: 1px solid rgba(255,255,255,.11);
-    color: #E2E8F0; border-radius: 12px;
+    background: #1a2744;
+    border: 1px solid rgba(59,130,246,.22);
+    color: #F8FAFC; border-radius: 12px;
     padding: 12px 14px; font-size: .88rem; font-weight: 700;
     cursor: pointer; text-align: left;
-    transition: background .15s, border-color .15s, color .15s, transform .12s;
+    transition: background .15s, border-color .15s, transform .12s;
     width: 100%; line-height: 1.3;
   }
   .tsp-btn:hover {
-    background: rgba(255,153,51,.18);
-    border-color: rgba(255,153,51,.55);
+    background: #1e3a5f;
+    border-color: rgba(255,153,51,.70);
     color: #fff;
-    transform: translateX(2px);
+    transform: translateX(3px);
   }
   .tsp-btn:active { transform: scale(.97); }
   [data-theme="light"] .tsp-btn {
-    background: #fff; border-color: rgba(0,0,0,.10); color: #0F172A;
+    background: #1e3a5f; border-color: rgba(59,130,246,.35); color: #F8FAFC;
   }
   [data-theme="light"] .tsp-btn:hover {
-    background: rgba(255,153,51,.12); border-color: rgba(255,153,51,.50); color: #92400E;
+    background: #1a2744; border-color: rgba(255,153,51,.60);
   }
   [data-theme="light"] .tsp-title { color: var(--orange); border-bottom-color: rgba(255,153,51,.3); }
 
