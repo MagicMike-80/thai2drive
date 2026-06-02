@@ -391,8 +391,13 @@ def _smtp_config() -> dict:
 
 
 def _send_password_reset_email_sync(to_email: str, code: str) -> tuple[bool, str]:
+    _el = logging.getLogger("reset_email")
     cfg = _smtp_config()
     if not (cfg["host"] and cfg["user"] and cfg["password"]):
+        _el.error(
+            "send_failed reason=smtp_not_configured host=%s user=%s",
+            bool(cfg["host"]), bool(cfg["user"]),
+        )
         return False, "SMTP not configured"
 
     from_email = cfg["from_email"] or cfg["user"]
@@ -417,8 +422,10 @@ def _send_password_reset_email_sync(to_email: str, code: str) -> tuple[bool, str
             smtp.ehlo()
             smtp.login(cfg["user"], cfg["password"])
             smtp.sendmail(from_email, [to_email], msg.as_string())
+        _el.info("sent host=%s to=%s", cfg["host"], _masked_email(to_email))
         return True, "sent"
     except Exception as exc:
+        _el.error("send_failed host=%s reason=%s", cfg["host"], exc)
         return False, str(exc)
 
 
@@ -4089,6 +4096,26 @@ async def seed_studiebok():
             "is_premium": True,
             "created_at": now,
         })
+
+@app.on_event("startup")
+async def log_smtp_config():
+    """Log SMTP config state at startup — never logs the password."""
+    _sl = logging.getLogger("smtp_config")
+    cfg = _smtp_config()
+    _sl.info(
+        "reset_email_configured=%s smtp_host_present=%s smtp_user_present=%s smtp_host=%s",
+        bool(cfg["host"] and cfg["user"] and cfg["password"]),
+        bool(cfg["host"]),
+        bool(cfg["user"]),
+        cfg["host"] or "(not set)",
+    )
+    if not cfg["host"]:
+        _sl.warning(
+            "SMTP not configured — password reset emails will FAIL. "
+            "Set SUPPORT_SMTP_HOST, SUPPORT_SMTP_PORT, SUPPORT_SMTP_USER, SUPPORT_SMTP_PASS "
+            "in Railway environment variables."
+        )
+
 
 @app.on_event("startup")
 async def ensure_indexes():

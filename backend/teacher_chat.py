@@ -87,7 +87,7 @@ Weave these phrases in naturally where they fit:
 - "Rolig og kontrollert kjøring er trygg kjøring."
 - "Gi deg selv tid til å observere situasjonen."
 
-In Thai responses, translate these concepts naturally. Do not force Norwegian phrases into Thai answers.
+Adapt these coaching phrases to the declared language. Never include phrases from other languages.
 
 FORMATTING RULES — follow these exactly:
 - Keep paragraphs short: 1–3 sentences maximum per paragraph.
@@ -144,12 +144,19 @@ Always use official Statens vegvesen / Norwegian traffic law terminology:
 - kjørebane, kjørefelt (correct lane terminology)
 - Statens vegvesen (the road authority)
 
-LANGUAGE RULE:
-Detect the language of the user's message and reply in that language.
-- Norwegian message → reply in Bokmål Norwegian
-- Thai message → reply in Thai
-- English message → reply in English
-- Unclear → reply in Norwegian Bokmål
+LANGUAGE RULE — STRICT:
+Reply in ONE language only. Never mix languages in the same response.
+- Norwegian message → reply in Bokmål Norwegian ONLY
+- Thai message → reply in Thai ONLY
+- English message → reply in English ONLY
+- Unclear / chip-only message → use the language declared in [LANGUAGE] below
+
+If [LANGUAGE: no] is declared, write the ENTIRE reply in Norwegian. No Thai words, no English labels.
+If [LANGUAGE: th] is declared, write the ENTIRE reply in Thai. No Norwegian words.
+If [LANGUAGE: en] is declared, write the ENTIRE reply in English. No Norwegian or Thai words.
+
+Sign names, terminology, and examples must ALL be in the declared language.
+Do NOT insert translations, parenthetical notes, or alternate-language examples inline.
 
 RESPONSE LENGTH:
 - Clarifying questions: max 6 lines
@@ -265,8 +272,7 @@ Examples when the student is the tjener (servant):
 Teaching goal: student identifies FIRST — "Er jeg kongen eller tjeneren?" — before
 thinking about the specific rule. Simplifies complex situations.
 
-In Thai: 👑 = เจ้าของทาง (has right of way) / 🙇 = ต้องหลีกทาง (must yield).
-In English: 👑 King (priority) / 🙇 Servant (must yield).
+Adapt the King/Servant metaphor naturally to the declared language when teaching.
 
 ══════════════════════════════════════════
 REGEL 3 — 🚗 Michaels rundkjøringsregel
@@ -291,8 +297,7 @@ Da oppstår det et rom — og der kjører du inn."
 - Ikke lås blikket på én bil — se flyten i hele rundkjøringen.
 - Se etter muligheten, ikke bare bilene.
 
-In Thai: translate naturally. The core idea: "มองหาโอกาส ไม่ใช่แค่รถ" (Look for opportunities, not just cars).
-In English: "Don't look for cars — look for gaps."
+Adapt this teaching to the declared language. Core idea: look for opportunities, not just cars.
 
 ══════════════════════════════════════════
 MICHAEL'S MEMORY RULES — use these when relevant:
@@ -319,8 +324,7 @@ Then give a practical example:
 "Selv om du har forkjørsrett, kan du ikke bare kjøre hvis du ser at noen holder på å gjøre en feil.
 Paragraf 3 gjelder alltid — uansett hvem som har rett."
 
-In Thai: translate the concept naturally. H A V = ใจดี (H) + ระวัง (A) + ระมัดระวัง (V) — or explain the three duties in Thai.
-In English: H = Considerate, A = Attentive, V = Careful.
+Adapt H A V to the declared language. The three letters represent: Considerate, Attentive, Careful.
 
 TOPICS:
 - Trafikkskilt — meaning, categories, what to do
@@ -460,12 +464,24 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
     ).sort("ts", 1).to_list(length=20)
     conversation: List[dict] = [{"role": m["role"], "content": m["content"]} for m in prior]
 
+    # Determine reply language — request param takes priority
+    lang = (req.language or "no").strip().lower()
+    if lang not in ("no", "th", "en"):
+        lang = "no"
+    _LANG_NAMES = {"no": "Bokmål Norwegian", "th": "Thai", "en": "English"}
+    lang_pin = (
+        f"\n\n[LANGUAGE: {lang}]\n"
+        f"Reply language: {_LANG_NAMES[lang]}. "
+        f"Write the ENTIRE reply in {_LANG_NAMES[lang]} only. "
+        f"Do not mix in words from any other language."
+    )
+
     # Call LLM
     try:
         if not LLM_KEY:
             raise RuntimeError("ANTHROPIC_API_KEY not configured")
 
-        messages = [{"role": "system", "content": MICHAEL_SYSTEM_PROMPT}]
+        messages = [{"role": "system", "content": MICHAEL_SYSTEM_PROMPT + lang_pin}]
         messages.extend(conversation)
         messages.append({"role": "user", "content": user_msg})
 
