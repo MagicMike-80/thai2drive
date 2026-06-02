@@ -1453,13 +1453,20 @@ async def signup(data: AuthSignup):
 
 @api_router.post("/auth/login")
 async def login(data: AuthLogin):
+    _invalid = _auth_error_key(
+        "invalid_credentials",
+        "Ugyldig e-post eller passord",
+        "อีเมลหรือรหัสผ่านไม่ถูกต้อง",
+        "Invalid email or password",
+        status_code=401,
+    )
     user = await _find_user_by_email(data.email)
     if not user or user.get("deleted_at") or user.get("disabled"):
-        raise HTTPException(status_code=401, detail="Invalid email or password")
+        raise _invalid
 
     password_hash = user.get("password_hash")
     if not password_hash or not pwd_context.verify(data.password, password_hash):
-        raise HTTPException(status_code=401, detail="Invalid email or password")
+        raise _invalid
 
     # Re-check admin status on each login
     admin_entry = await db.admin_users.find_one({"email": data.email})

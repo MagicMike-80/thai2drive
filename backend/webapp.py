@@ -275,6 +275,18 @@ a { color:inherit; text-decoration:none; }
   box-shadow:0 0 0 3px rgba(255,153,51,.12);
 }
 .form-group input::placeholder { color:rgba(148,163,184,.5); }
+/* Password visibility toggle */
+.pw-wrap { position:relative; }
+.pw-wrap input { padding-right:42px; }
+.pw-eye {
+  position:absolute; right:0; top:0; bottom:0;
+  width:42px; display:flex; align-items:center; justify-content:center;
+  background:none; border:none; cursor:pointer; color:var(--muted);
+  font-size:1rem; padding:0; border-radius:0 11px 11px 0;
+  -webkit-tap-highlight-color:transparent;
+  transition:color .15s;
+}
+.pw-eye:hover, .pw-eye:focus { color:var(--orange); outline:none; }
 
 .auth-btn {
   width:100%; padding:13px;
@@ -2420,7 +2432,10 @@ a { color:inherit; text-decoration:none; }
           </div>
           <div class="form-group">
             <label data-key="auth_password">Passord</label>
-            <input type="password" id="loginPass" placeholder="••••••••" data-placeholder-key="auth_password_placeholder" autocomplete="current-password">
+            <div class="pw-wrap">
+              <input type="password" id="loginPass" placeholder="••••••••" data-placeholder-key="auth_password_placeholder" autocomplete="current-password">
+              <button type="button" class="pw-eye" onclick="togglePw(this)" tabindex="-1" title="Vis/skjul passord" aria-label="Vis/skjul passord">👁</button>
+            </div>
           </div>
           <div class="forgot-link"><a onclick="showForgot()" data-key="forgot_password">Glemt passord?</a></div>
           <button class="auth-btn" onclick="doLogin()" data-key="login">Logg inn</button>
@@ -2438,7 +2453,10 @@ a { color:inherit; text-decoration:none; }
           </div>
           <div class="form-group">
             <label data-key="auth_password">Passord</label>
-            <input type="password" id="regPass" placeholder="Minst 6 tegn" data-placeholder-key="auth_password_min_placeholder" autocomplete="new-password">
+            <div class="pw-wrap">
+              <input type="password" id="regPass" placeholder="Minst 6 tegn" data-placeholder-key="auth_password_min_placeholder" autocomplete="new-password">
+              <button type="button" class="pw-eye" onclick="togglePw(this)" tabindex="-1" title="Vis/skjul passord" aria-label="Vis/skjul passord">👁</button>
+            </div>
           </div>
           <button class="auth-btn" onclick="doRegister()" data-key="create_account">Opprett konto</button>
         </div>
@@ -2464,7 +2482,10 @@ a { color:inherit; text-decoration:none; }
           </div>
           <div class="form-group">
             <label data-key="reset_new_pass_label">Nytt passord</label>
-            <input type="password" id="resetNewPass" placeholder="Minst 6 tegn" autocomplete="new-password">
+            <div class="pw-wrap">
+              <input type="password" id="resetNewPass" placeholder="Minst 6 tegn" autocomplete="new-password">
+              <button type="button" class="pw-eye" onclick="togglePw(this)" tabindex="-1" title="Vis/skjul passord" aria-label="Vis/skjul passord">👁</button>
+            </div>
           </div>
           <button class="auth-btn" id="resetSubmitBtn" onclick="doResetPassword()" data-key="reset_submit">Sett nytt passord</button>
           <div style="text-align:center;margin-top:12px">
@@ -3919,6 +3940,17 @@ function showForgot() {
   document.getElementById('formReset').style.display = 'none';
   document.querySelectorAll('.auth-tab').forEach(function(t) { t.classList.remove('active'); });
 }
+function togglePw(btn) {
+  var inp = btn.previousElementSibling;
+  if (!inp) return;
+  var show = inp.type === 'password';
+  inp.type = show ? 'text' : 'password';
+  btn.textContent = show ? '🙈' : '👁';
+  var lbl = appLang === 'th' ? 'แสดง/ซ่อนรหัสผ่าน' : appLang === 'en' ? 'Show/hide password' : 'Vis/skjul passord';
+  btn.setAttribute('title', lbl);
+  btn.setAttribute('aria-label', lbl);
+}
+
 function showAuthError(msg) {
   var el = document.getElementById('authError');
   el.textContent = msg; el.classList.add('show');
