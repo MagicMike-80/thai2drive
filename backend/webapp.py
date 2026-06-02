@@ -2363,7 +2363,7 @@ a { color:inherit; text-decoration:none; }
     <!-- ═══ SIGNS SCREEN ═══ -->
     <div class="screen" id="screenSigns">
       <div class="signs-header">
-        <div class="screen-title">🚦 <span data-key="signs">Trafikkskilt</span></div>
+        <div class="screen-title">🪧 <span data-key="signs">Trafikkskilt</span></div>
         <div class="signs-count" id="signsCount"></div>
       </div>
       <div class="signs-scroll" id="signsScroll">
@@ -2616,7 +2616,7 @@ a { color:inherit; text-decoration:none; }
       <span class="bn-icon">📊</span>Historikk
     </button>
     <button class="bn-tab" id="bnSigns" onclick="showTab('signs')">
-      <span class="bn-icon">🚦</span>Skilt
+      <span class="bn-icon">🪧</span>Skilt
     </button>
     <button class="bn-tab" id="bnStudybook" onclick="showTab('studybook')">
       <span class="bn-icon">📖</span>Studiebok
@@ -2956,7 +2956,7 @@ function applyUILang() {
   var nb = document.getElementById('bnHome');      if(nb) nb.innerHTML = '<span class="bn-icon">🏠</span>' + t('home');
   var nc = document.getElementById('bnCats');      if(nc) nc.innerHTML = '<span class="bn-icon">📚</span>' + t('cats');
   var nh = document.getElementById('bnHistory');   if(nh) nh.innerHTML = '<span class="bn-icon">📊</span>' + t('history');
-  var nsg= document.getElementById('bnSigns');     if(nsg) nsg.innerHTML = '<span class="bn-icon">🚦</span>' + t('signs');
+  var nsg= document.getElementById('bnSigns');     if(nsg) nsg.innerHTML = '<span class="bn-icon">🪧</span>' + t('signs');
   var nbm= document.getElementById('bnBookmarks'); if(nbm) nbm.innerHTML = '<span class="bn-icon">🔖</span>' + t('bookmarks');
   var ns = document.getElementById('bnSettings');  if(ns) ns.innerHTML = '<span class="bn-icon">⚙️</span>' + t('settings');
   // cats header — update title text without disturbing the count span
