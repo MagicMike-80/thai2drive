@@ -4649,24 +4649,58 @@ function buildSituationLens(qText, expl) {
 
 function lensText(text) {
   var map = {
+    // ── Pedestrians & cyclists ──
     'Legg merke til gang- og sykkeltrafikk nær veibanen': {th:'สังเกตคนเดินเท้าและจักรยานใกล้ทางรถ', en:'Notice pedestrians and cyclists near the roadway'},
     'Myke trafikanter er sårbare — ikke forvent at de ser deg': {th:'ผู้ใช้ถนนที่เปราะบางอาจไม่เห็นคุณ อย่าคาดหวังว่าเขาจะเห็น', en:'Vulnerable road users may not see you. Do not assume they have noticed you'},
     'Klar deg til å stanse, selv om du har forkjørsrett': {th:'เตรียมพร้อมหยุด แม้คุณมีสิทธิ์ไปก่อน', en:'Be ready to stop, even if you have priority'},
+    // ── Yielding ──
     'Se etter skilt og vegmerking som angir vikeplikt': {th:'มองหาป้ายและเส้นบนถนนที่บอกเรื่องการให้ทาง', en:'Look for signs and road markings that show yielding rules'},
     'Hvem har rett til å kjøre — og hvem venter?': {th:'ใครมีสิทธิ์ไปก่อน และใครต้องรอ?', en:'Who has the right to go, and who must wait?'},
     'Avklar vikeplikt før du setter bilen i bevegelse': {th:'เข้าใจการให้ทางก่อนเริ่มขับต่อ', en:'Clarify yielding before moving the car'},
+    // ── Following distance ──
     'Observer avstanden til kjøretøyet foran': {th:'สังเกตระยะห่างจากรถคันหน้า', en:'Observe the distance to the vehicle ahead'},
     'Avstand er reaksjonstid omgjort til meter': {th:'ระยะห่างคือเวลาตอบสนองที่กลายเป็นเมตร', en:'Distance is reaction time converted into meters'},
     'Hold 3 sekunders avstand — mer i dårlig vær': {th:'เว้น 3 วินาที และเพิ่มระยะเมื่อสภาพไม่ดี', en:'Keep 3 seconds distance, more in poor conditions'},
+    // ── Speed ──
     'Les fartsgrenseskilt og vurder kjøreforholdene': {th:'อ่านป้ายจำกัดความเร็วและประเมินสภาพการขับขี่', en:'Read speed signs and assess driving conditions'},
     'Riktig fart er ikke alltid det skiltene tillater': {th:'ความเร็วที่ถูกต้องไม่ใช่แค่ตัวเลขบนป้าย', en:'The right speed is not always the posted maximum'},
     'Tilpass farten til situasjonen, ikke bare til skiltet': {th:'ปรับความเร็วตามสถานการณ์ ไม่ใช่ตามป้ายอย่างเดียว', en:'Adapt speed to the situation, not only to the sign'},
+    // ── Overtaking ──
     'Sjekk om det er klart foran og bak': {th:'ตรวจว่าด้านหน้าและด้านหลังปลอดภัย', en:'Check whether it is clear ahead and behind'},
     'En forbikobling tar lenger tid enn du tror': {th:'การแซงใช้เวลานานกว่าที่คิด', en:'An overtake takes longer than you think'},
     'Forbikjøring kun når det er klart, lovlig og nødvendig': {th:'แซงเฉพาะเมื่อชัดเจน ถูกกฎหมาย และจำเป็น', en:'Overtake only when it is clear, legal, and necessary'},
-    'Ta deg tid til å lese hele situasjonen': {th:t('lens_generic_see'), en:t('lens_generic_see')},
-    'Hva er den viktigste faktoren her?': {th:t('lens_generic_understand'), en:t('lens_generic_understand')},
-    'Velg det alternativet som er tryggest for alle i trafikken': {th:t('lens_generic_choose'), en:t('lens_generic_choose')}
+    // ── Tunnel / narrow road ──
+    'Legg merke til vegbredde og siktelengde': {th:'สังเกตความกว้างของถนนและระยะมองเห็น', en:'Notice the road width and sight distance'},
+    'Begrenset plass gir lite rom for feil': {th:'พื้นที่จำกัดไม่เปิดโอกาสให้ผิดพลาด', en:'Limited space leaves little room for error'},
+    'Senk farten og plasser bilen presist': {th:'ลดความเร็วและจัดตำแหน่งรถให้แม่นยำ', en:'Slow down and position the car precisely'},
+    // ── Lights ──
+    'Observer lysene til møtende og framfor deg': {th:'สังเกตไฟของรถที่สวนมาและรถข้างหน้า', en:'Observe the lights of oncoming traffic and vehicles ahead'},
+    'Feil lys kan blende andre eller gi deg dårlig sikt': {th:'การใช้ไฟผิดอาจทำให้คนอื่นตาบอดหรือทำให้คุณมองเห็นได้น้อยลง', en:'Wrong lights can blind others or reduce your own visibility'},
+    'Bruk lys som er tilpasset forholdene og andre trafikanter': {th:'ใช้ไฟที่เหมาะกับสภาพถนนและผู้ใช้ถนนคนอื่น', en:'Use lights suited to conditions and other road users'},
+    // ── Children / school zones ──
+    'Hold utkikk etter barn nær og ved siden av veien': {th:'ระวังเด็กที่อยู่ใกล้หรือข้างทาง', en:'Watch for children near and beside the road'},
+    'Barn opptrer uforutsigbart — de ser ikke faren': {th:'เด็กมีพฤติกรรมที่คาดเดาไม่ได้ และมักไม่รู้อันตราย', en:'Children behave unpredictably — they do not see the danger'},
+    'Senk farten og vær klar til å stanse umiddelbart': {th:'ลดความเร็วและพร้อมหยุดทันที', en:'Slow down and be ready to stop immediately'},
+    // ── Slippery / winter conditions ──
+    'Vurder veigrep og siktforhold': {th:'ประเมินแรงยึดเกาะถนนและทัศนวิสัย', en:'Assess road grip and visibility conditions'},
+    'Glatt vei gir betydelig lengre bremselengde': {th:'ถนนลื่นทำให้ระยะเบรกยาวขึ้นมาก', en:'Slippery road significantly increases braking distance'},
+    'Øk avstand og senk farten — la veien bestemme farten': {th:'เพิ่มระยะห่างและลดความเร็ว — ให้ถนนเป็นตัวกำหนดความเร็ว', en:'Increase distance and reduce speed — let the road set your pace'},
+    // ── Roundabout ──
+    'Se etter trafikk som allerede er inne i rundkjøringen': {th:'มองหารถที่อยู่ในวงเวียนแล้ว', en:'Look for traffic already inside the roundabout'},
+    'Trafikk inni rundkjøringen har alltid forkjørsrett': {th:'รถที่อยู่ในวงเวียนมีสิทธิ์ก่อนเสมอ', en:'Traffic already in the roundabout always has priority'},
+    'Vent til det er klart, og sving inn uten å skynde deg': {th:'รอจนโล่งแล้วค่อยเข้าโดยไม่รีบ', en:'Wait until it is clear, then enter without rushing'},
+    // ── Parking / stopping ──
+    'Observer skilt, vegmerking og trafikken rundt deg': {th:'สังเกตป้าย เส้นบนถนน และการจราจรรอบข้าง', en:'Observe signs, road markings, and surrounding traffic'},
+    'Feil parkering hindrer andre og kan skape farlige situasjoner': {th:'การจอดผิดที่กีดขวางผู้อื่นและอาจเกิดอันตราย', en:'Incorrect parking obstructs others and can create dangerous situations'},
+    'Parker der det er tillatt og trygt': {th:'จอดเฉพาะที่อนุญาตและปลอดภัย', en:'Park only where it is permitted and safe'},
+    // ── Alcohol ──
+    'Les situasjonen nøye — hva er det spørsmålet egentlig handler om?': {th:'อ่านสถานการณ์อย่างละเอียด — คำถามนี้ถามเรื่องอะไรกันแน่?', en:'Read the situation carefully — what is this question really about?'},
+    '0,2 promille er lovens grense — men ingen «trygg» grense': {th:'0.2 คือขีดจำกัดทางกฎหมาย ไม่ใช่ขีดจำกัดที่ปลอดภัย', en:'0.2 is the legal limit — not a safe limit'},
+    'Nulltoleranse er det eneste sikre valget': {th:'ไม่ดื่มเลยคือทางเลือกที่ปลอดภัยที่สุดเท่านั้น', en:'Zero tolerance is the only truly safe choice'},
+    // ── Generic fallback ──
+    'Ta deg tid til å lese hele situasjonen': {th:'ใช้เวลาอ่านสถานการณ์ทั้งหมด', en:'Take time to read the whole situation'},
+    'Hva er den viktigste faktoren her?': {th:'ปัจจัยที่สำคัญที่สุดในที่นี้คืออะไร?', en:'What is the most important factor here?'},
+    'Velg det alternativet som er tryggest for alle i trafikken': {th:'เลือกตัวเลือกที่ปลอดภัยที่สุดสำหรับทุกคนในการจราจร', en:'Choose the option that is safest for everyone in traffic'}
   };
   var item = map[text];
   return item ? (item[appLang] || text) : text;
