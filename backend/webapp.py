@@ -535,7 +535,7 @@ a { color:inherit; text-decoration:none; }
   flex:1;
   overflow-y:auto; overflow-x:hidden;
   -webkit-overflow-scrolling:touch;
-  padding:16px 16px 24px;
+  padding:16px 16px calc(104px + env(safe-area-inset-bottom, 0px));
 }
 .quiz-body::-webkit-scrollbar { width:3px; }
 .quiz-body::-webkit-scrollbar-track { background:transparent; }
@@ -661,18 +661,18 @@ a { color:inherit; text-decoration:none; }
 }
 .q-explain.show { display:block; }
 
-/* Next button — sticky at bottom of scroll area so it never scrolls away */
+/* Next button — in normal flow, shown only after an answer is selected. */
 .q-next-mobile {
-  display:block !important;       /* always on, never hidden */
-  position:sticky; bottom:12px;
+  display:block;
+  position:static;
   width:100%; padding:14px;
   background:linear-gradient(135deg,#FF9933,#e6891f);
   color:#0F172A; font-weight:900; font-size:.9rem;
   border:none; border-radius:12px; cursor:pointer;
-  margin-top:6px;
-  box-shadow:0 -10px 18px #0B1226, 0 4px 12px rgba(255,153,51,.20);
+  margin-top:2px;
+  box-shadow:0 4px 12px rgba(255,153,51,.20);
 }
-.q-next-mobile:disabled { opacity:.30; cursor:not-allowed; }
+.q-next-mobile:disabled { display:none; opacity:.30; cursor:not-allowed; }
 .q-next-mobile:not(:disabled):active { opacity:.85; }
 
 /* Desktop side column — permanently hidden (we use q-next-mobile everywhere) */
