@@ -2405,8 +2405,8 @@ a { color:inherit; text-decoration:none; }
         </div>
 
         <div class="auth-tabs">
-          <button class="auth-tab active" onclick="switchTab('login')">Logg inn</button>
-          <button class="auth-tab" onclick="switchTab('register')">Registrer</button>
+          <button class="auth-tab active" onclick="switchTab('login')" data-key="auth_login_tab">Logg inn</button>
+          <button class="auth-tab" onclick="switchTab('register')" data-key="auth_reg_tab">Registrer</button>
         </div>
 
         <div class="auth-error" id="authError"></div>
@@ -2415,43 +2415,43 @@ a { color:inherit; text-decoration:none; }
         <!-- LOGIN -->
         <div id="formLogin">
           <div class="form-group">
-            <label>E-post</label>
+            <label data-key="auth_label_email">E-post</label>
             <input type="email" id="loginEmail" placeholder="din@epost.com" autocomplete="email">
           </div>
           <div class="form-group">
-            <label>Passord</label>
+            <label data-key="auth_label_pass">Passord</label>
             <input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password">
           </div>
-          <div class="forgot-link"><a onclick="showForgot()">Glemt passord?</a></div>
-          <button class="auth-btn" onclick="doLogin()">Logg inn</button>
+          <div class="forgot-link"><a onclick="showForgot()" data-key="auth_forgot_link">Glemt passord?</a></div>
+          <button class="auth-btn" onclick="doLogin()" data-key="auth_login_btn">Logg inn</button>
         </div>
 
         <!-- REGISTER -->
         <div id="formRegister" style="display:none">
           <div class="form-group">
-            <label>Navn</label>
+            <label data-key="auth_label_name">Navn</label>
             <input type="text" id="regName" placeholder="Ditt fulle navn">
           </div>
           <div class="form-group">
-            <label>E-post</label>
+            <label data-key="auth_label_email">E-post</label>
             <input type="email" id="regEmail" placeholder="din@epost.com" autocomplete="email">
           </div>
           <div class="form-group">
-            <label>Passord</label>
+            <label data-key="auth_label_pass">Passord</label>
             <input type="password" id="regPass" placeholder="Minst 6 tegn" autocomplete="new-password">
           </div>
-          <button class="auth-btn" onclick="doRegister()">Opprett konto</button>
+          <button class="auth-btn" onclick="doRegister()" data-key="auth_reg_btn">Opprett konto</button>
         </div>
 
         <!-- FORGOT -->
         <div id="formForgot" style="display:none">
           <div class="form-group">
-            <label>E-post</label>
+            <label data-key="auth_label_email">E-post</label>
             <input type="email" id="forgotEmail" placeholder="din@epost.com">
           </div>
-          <button class="auth-btn" onclick="doForgot()">Send tilbakestillingslenke</button>
+          <button class="auth-btn" id="forgotSubmitBtn" onclick="doForgot()" data-key="auth_forgot_btn">Send tilbakestillingslenke</button>
           <div style="text-align:center;margin-top:12px">
-            <a style="font-size:.78rem;color:var(--muted);cursor:pointer" onclick="switchTab('login')">← Tilbake</a>
+            <a style="font-size:.78rem;color:var(--muted);cursor:pointer" onclick="switchTab('login')" data-key="auth_back">← Tilbake</a>
           </div>
         </div>
       </div>
@@ -2792,8 +2792,8 @@ a { color:inherit; text-decoration:none; }
         <label style="font-size:.85rem;color:var(--muted);">🎥 Video URL (fremtidig)</label>
         <input id="sbEditVideoUrl" type="text" style="padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.95rem;width:100%;box-sizing:border-box;" placeholder="https://..." />
         <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:4px;">
-          <button onclick="closeStudiebokModal()" style="padding:8px 18px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text);cursor:pointer;">Avbryt</button>
-          <button onclick="saveStudiebokChapter()" style="padding:8px 18px;border-radius:8px;border:none;background:var(--orange);color:#0F172A;font-weight:600;cursor:pointer;">Lagre</button>
+          <button onclick="closeStudiebokModal()" style="padding:8px 18px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text);cursor:pointer;" data-key="sb_cancel">Avbryt</button>
+          <button onclick="saveStudiebokChapter()" style="padding:8px 18px;border-radius:8px;border:none;background:var(--orange);color:#0F172A;font-weight:600;cursor:pointer;" data-key="sb_save">Lagre</button>
         </div>
       </div>
     </div>
@@ -3248,6 +3248,31 @@ var UI = {
   pw_best_value:{th:'คุ้มที่สุด', no:'Best verdi', en:'Best value'},
   pw_buy:      {th:'ซื้อ Premium', no:'Kjøp Premium', en:'Buy Premium'},
   pw_skip:     {th:'ใช้ต่อแบบฟรี', no:'Fortsett gratis', en:'Continue free'},
+  // Auth
+  auth_login_tab:  {th:'เข้าสู่ระบบ',    no:'Logg inn',      en:'Log in'},
+  auth_reg_tab:    {th:'ลงทะเบียน',      no:'Registrer',     en:'Register'},
+  auth_label_name: {th:'ชื่อ',           no:'Navn',          en:'Name'},
+  auth_label_email:{th:'อีเมล',          no:'E-post',        en:'Email'},
+  auth_label_pass: {th:'รหัสผ่าน',       no:'Passord',       en:'Password'},
+  auth_name_ph:    {th:'ชื่อเต็มของคุณ', no:'Ditt fulle navn', en:'Your full name'},
+  auth_pass_ph:    {th:'อย่างน้อย 6 ตัวอักษร', no:'Minst 6 tegn', en:'At least 6 characters'},
+  auth_forgot_btn: {th:'ส่งลิงก์รีเซ็ต', no:'Send tilbakestillingslenke', en:'Send reset link'},
+  auth_forgot_link:{th:'ลืมรหัสผ่าน?',  no:'Glemt passord?', en:'Forgot password?'},
+  auth_back:       {th:'← กลับ',        no:'← Tilbake',     en:'← Back'},
+  auth_login_btn:  {th:'เข้าสู่ระบบ',    no:'Logg inn',      en:'Log in'},
+  auth_reg_btn:    {th:'สร้างบัญชี',     no:'Opprett konto', en:'Create account'},
+  auth_sending:    {th:'กำลังส่ง…',      no:'Sender…',       en:'Sending…'},
+  auth_email_sent: {th:'ส่งอีเมลแล้ว! ตรวจสอบกล่องขาเข้า 📧', no:'E-post sendt! Sjekk innboksen din 📧', en:'Email sent! Check your inbox 📧'},
+  auth_fill_email: {th:'กรุณากรอกอีเมล', no:'Fyll inn e-postadressen din', en:'Please enter your email address'},
+  auth_logout_confirm:{th:'แน่ใจหรือว่าต้องการออกจากระบบ?', no:'Er du sikker på at du vil logge ut?', en:'Are you sure you want to log out?'},
+  // Studiebok
+  sb_prev:         {th:'‹ ก่อนหน้า',    no:'‹ Forrige',     en:'‹ Previous'},
+  sb_next:         {th:'ถัดไป ›',        no:'Neste ›',       en:'Next ›'},
+  sb_search_ph:    {th:'ค้นหาหรือหมายเลข §...', no:'Søk eller § nummer...', en:'Search or § number...'},
+  sb_nav:          {th:'Studiebok',      no:'Studiebok',     en:'Study Book'},
+  sb_home_btn:     {th:'📖 Studiebok — กฎจราจรนอร์เวย์', no:'📖 Studiebok — Norsk trafikk', en:'📖 Study Book — Norwegian traffic'},
+  sb_cancel:       {th:'ยกเลิก',         no:'Avbryt',        en:'Cancel'},
+  sb_save:         {th:'บันทึก',         no:'Lagre',         en:'Save'},
 };
 
 function t(key) { return (UI[key] && (UI[key][appLang] || UI[key]['th'] || UI[key]['en'] || UI[key]['no'])) || key; }
@@ -3282,6 +3307,7 @@ function applyUILang() {
   var nbm= document.getElementById('bnBookmarks'); if(nbm) nbm.innerHTML = '<span class="bn-icon">🔖</span>' + t('bookmarks');
   var ns = document.getElementById('bnSettings');  if(ns) ns.innerHTML = '<span class="bn-icon">⚙️</span>' + t('settings');
   var nt = document.getElementById('bnTeacher');   if(nt) nt.innerHTML = '<span class="bn-icon">🚗</span>' + t('teacher');
+  var nsb= document.getElementById('bnStudybook'); if(nsb) nsb.innerHTML = '<span class="bn-icon">📖</span>' + t('sb_nav');
   // Update teacher UI if visible
   var tNameEl = document.getElementById('teacherNameLbl');
   if (tNameEl) tNameEl.textContent = t('teacher_name');
@@ -3319,7 +3345,7 @@ function applyUILang() {
   document.querySelectorAll('.home-sec-btn').forEach(function(b,i){
     if (i===0) b.textContent = t('exam');
     else if (i===1) b.textContent = t('daily');
-    // i===2 is the Studiebok button — leave it as-is (static text)
+    else if (i===2) b.textContent = t('sb_home_btn');
   });
   // end screen buttons
   var er = document.querySelector('.end-btn-pri'); if(er) er.innerHTML = t('retry');
@@ -3362,6 +3388,13 @@ function applyUILang() {
     var val = t(key);
     if (val) el.textContent = val;
   });
+  // Studiebok nav buttons + search
+  var sbPrev = document.getElementById('sbPrevBtn'); if(sbPrev) sbPrev.textContent = t('sb_prev');
+  var sbNext = document.getElementById('sbNextBtn'); if(sbNext) sbNext.textContent = t('sb_next');
+  var sbSearch = document.getElementById('sbSearchInput'); if(sbSearch) sbSearch.placeholder = t('sb_search_ph');
+  // Auth placeholders (data-key handles labels/buttons via the [data-key] loop below)
+  var regName = document.getElementById('regName'); if(regName) regName.placeholder = t('auth_name_ph');
+  var regPass = document.getElementById('regPass'); if(regPass) regPass.placeholder = t('auth_pass_ph');
   if (spBm && _signPanelData) spBm.textContent = _signFavorites.indexOf(_signPanelData.id) >= 0 ? t('saved') : t('save');
   var aiStatus = document.getElementById('quizAiStatus');
   if (aiStatus && aiStatus.classList.contains('idle')) aiStatus.textContent = t('ai_waiting');
@@ -3853,21 +3886,21 @@ async function doRegister() {
 async function doForgot() {
   clearAuthMessages();
   var email = document.getElementById('forgotEmail').value.trim();
-  if (!email) return showAuthError('Fyll inn e-postadressen din');
-  var btn = document.querySelector('#formForgot .auth-btn');
-  btn.disabled = true; btn.textContent = 'Sender…';
+  if (!email) return showAuthError(t('auth_fill_email'));
+  var btn = document.getElementById('forgotSubmitBtn');
+  btn.disabled = true; btn.textContent = t('auth_sending');
   try {
     await api('POST', '/api/auth/forgot-password', { email: email });
-    showAuthSuccess('E-post sendt! Sjekk innboksen din 📧');
+    showAuthSuccess(t('auth_email_sent'));
     setTimeout(function() { switchTab('login'); }, 2500);
   } catch(e) {
     showAuthError(e.message);
   }
-  btn.disabled = false; btn.textContent = 'Send tilbakestillingslenke';
+  btn.disabled = false; btn.textContent = t('auth_forgot_btn');
 }
 
 function logout() {
-  if (!confirm('Er du sikker på at du vil logge ut?')) return;
+  if (!confirm(t('auth_logout_confirm'))) return;
   _ls.remove('t2d_token');
   token = null; user = null; deviceId = null;
   document.getElementById('topBar').style.display = 'none';
