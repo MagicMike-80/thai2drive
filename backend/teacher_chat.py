@@ -106,6 +106,46 @@ TOPICS:
 
 Never recommend unsafe driving. Never invent rules."""
 
+# ─── Contextual chip suggestions ─────────────────────────────────────────────
+def _get_suggestions(reply: str, lang: str) -> list:
+    r = reply.lower()
+    # Vikeplikt / right-of-way
+    if any(w in r for w in ["vikeplikt", "høyreregel", "forkjørs", "rundkjøring", "stoppskilt",
+                              "give way", "right-of-way", "roundabout", "การให้ทาง", "วงเวียน"]):
+        if lang == "th":
+            return ["🚗 กฎให้ทาง (ขวา)", "🛑 ป้ายให้ทาง", "⭕ วงเวียน", "🔴 ป้ายหยุด"]
+        if lang == "en":
+            return ["🚗 Right-of-way rule", "🛑 Give Way sign", "⭕ Roundabout", "🔴 Stop sign"]
+        return ["🚗 Høyreregelen", "🛑 Vikepliktskilt", "⭕ Rundkjøring", "🔴 Stoppskilt"]
+    # Signs / skilt
+    if any(w in r for w in ["skilt", "sign", "ป้าย", "trafikkskilt"]):
+        if lang == "th":
+            return ["🛑 ฝึกกับป้ายนี้", "📖 อ่านเพิ่มเติม", "🚗 ป้ายคล้ายกัน", "❓ ถามต่อ"]
+        if lang == "en":
+            return ["🛑 Practise this sign", "📖 Read more", "🚗 Similar signs", "❓ Ask more"]
+        return ["🛑 Øv på dette skiltet", "📖 Les mer", "🚗 Se lignende skilt", "❓ Spør videre"]
+    # Theory test
+    if any(w in r for w in ["teoriprøv", "prøv", "สอบ", "theory test", "test"]):
+        if lang == "th":
+            return ["📝 ข้อผิดพลาดที่พบบ่อย", "📊 ฉันควรฝึกอะไร?", "📖 เปิดหนังสือเรียน"]
+        if lang == "en":
+            return ["📝 Common mistakes", "📊 What should I practise?", "📖 Open study book"]
+        return ["📝 Vanligste feil", "📊 Hva bør jeg øve på?", "📖 Åpne studiebok"]
+    # Speed / fartsgrense
+    if any(w in r for w in ["fartsgrense", "hastighet", "speed", "ความเร็ว"]):
+        if lang == "th":
+            return ["🚗 ในเมือง 50 กม/ชม", "🛣️ นอกเมือง 80 กม/ชม", "❓ ถามต่อ"]
+        if lang == "en":
+            return ["🚗 In town 50 km/h", "🛣️ Outside town 80 km/h", "❓ Ask more"]
+        return ["🚗 I tettsted 50 km/t", "🛣️ Utenfor tettsted 80 km/t", "❓ Spør videre"]
+    # Default
+    if lang == "th":
+        return ["❓ ถามต่อ", "📖 เปิดหนังสือเรียน", "📊 สถิติของฉัน"]
+    if lang == "en":
+        return ["❓ Ask more", "📖 Open study book", "📊 My statistics"]
+    return ["❓ Spør videre", "📖 Åpne studiebok", "📊 Min statistikk"]
+
+
 # ─── API ──────────────────────────────────────────────────────────────────────
 teacher_router = APIRouter()
 
@@ -119,6 +159,7 @@ class TeacherChatRequest(BaseModel):
 class TeacherChatResponse(BaseModel):
     session_id: str
     reply: str
+    suggestions: list = []
 
 
 @teacher_router.post("/teacher/chat", response_model=TeacherChatResponse)
@@ -172,7 +213,8 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         },
     ])
 
-    return TeacherChatResponse(session_id=session_id, reply=reply_text)
+    suggestions = _get_suggestions(reply_text, req.language or "no")
+    return TeacherChatResponse(session_id=session_id, reply=reply_text, suggestions=suggestions)
 
 
 def _fallback_reply(lang: str) -> str:

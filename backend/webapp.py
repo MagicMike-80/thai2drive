@@ -2217,6 +2217,24 @@ a { color:inherit; text-decoration:none; }
 }
 .teacher-chip:hover { background:var(--card2); }
 
+/* Contextual reply chips — shown after assistant messages */
+.tm-chips {
+  display:flex; flex-wrap:wrap; gap:7px;
+  padding:4px 0 2px 36px; /* indent to align with bubble */
+}
+.tm-chip-btn {
+  background:rgba(59,130,246,.12); border:1px solid rgba(59,130,246,.30);
+  color:#93C5FD; border-radius:20px;
+  padding:6px 13px; font-size:.82rem; font-weight:600;
+  cursor:pointer; transition:background .15s, border-color .15s;
+  white-space:nowrap;
+}
+.tm-chip-btn:hover  { background:rgba(59,130,246,.22); border-color:rgba(59,130,246,.55); }
+.tm-chip-btn:active { transform:scale(.97); }
+[data-theme="light"] .tm-chip-btn {
+  background:rgba(59,130,246,.08); border-color:rgba(59,130,246,.25); color:#1D4ED8;
+}
+
 .teacher-inputbar {
   display:flex; align-items:flex-end; gap:8px;
   padding:10px 14px; border-top:1px solid var(--border);
@@ -6152,6 +6170,28 @@ function _teacherHideSuggestions() {
   if (s) s.style.display = 'none';
 }
 
+function _teacherRemoveChips() {
+  // Remove all existing reply chip rows before sending a new message
+  document.querySelectorAll('.tm-chips').forEach(function(el) { el.remove(); });
+}
+
+function _teacherAppendChips(chips) {
+  if (!chips || !chips.length) return;
+  var msgs = document.getElementById('teacherMessages');
+  if (!msgs) return;
+  var row = document.createElement('div');
+  row.className = 'tm-chips';
+  chips.forEach(function(label) {
+    var btn = document.createElement('button');
+    btn.className = 'tm-chip-btn';
+    btn.textContent = label;
+    btn.onclick = function() { teacherSend(label); };
+    row.appendChild(btn);
+  });
+  msgs.appendChild(row);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
 async function teacherSend(overrideMsg) {
   var input = document.getElementById('teacherInput');
   var msg = (overrideMsg || (input && input.value) || '').trim();
@@ -6160,8 +6200,8 @@ async function teacherSend(overrideMsg) {
   if (input && !overrideMsg) input.value = '';
   _teacherTyping = true;
   _teacherHideSuggestions();
+  _teacherRemoveChips();  // clear old reply chips
 
-  // Disable send button
   var sendBtn = document.getElementById('teacherSendBtn');
   if (sendBtn) sendBtn.disabled = true;
 
@@ -6179,6 +6219,7 @@ async function teacherSend(overrideMsg) {
     if (data.session_id && !_teacherSessionId) _teacherSessionId = data.session_id;
     _teacherHideTyping();
     _teacherAppendBubble('assistant', data.reply || t('teacher_error'));
+    _teacherAppendChips(data.suggestions || []);
   } catch(e) {
     _teacherHideTyping();
     _teacherAppendBubble('assistant', t('teacher_error'));
