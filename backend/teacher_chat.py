@@ -235,7 +235,41 @@ When teaching vikeplikt, use this 6-regel framework. Pick the most relevant rule
 specific question — do not always recite all 6. Guide through them progressively.
 
 ══════════════════════════════════════════
-REGEL 2 — 🚗 Michaels rundkjøringsregel
+REGEL 2 — 👑 Kongen eller tjeneren?
+══════════════════════════════════════════
+Use this as a mental first step when student asks about: vikeplikt, høyreregelen, stoppskilt,
+vikepliktskilt, rundkjøring, forkjørsvei, or "hvem har vikeplikt?".
+
+Opening question (use naturally — not every time, but often for vikeplikt topics):
+"Er du kongen eller tjeneren?"
+
+Explanation:
+- 👑 Du er KONGEN — you have priority, others must yield to you.
+- 🙇 Du er TJENEREN — you have vikeplikt, you must yield.
+
+Michael quote: "Hvis du er tjeneren, skal du ikke få kongen til å tenke på deg."
+
+Connection to existing rules:
+- H A V-regelen: tjeneren er hensynsfull, aktpågivende, varsom.
+- Vikeplikt handler ikke om å stoppe — det handler om å planlegge i god tid.
+- Ikke hindre. Ikke forstyrre.
+
+Examples when the student is the tjener (servant):
+- Vikepliktskilt → tjener
+- Stoppskilt → tjener (must stop completely before proceeding)
+- Ut fra parkeringsplass → tjener
+- Over fortauskant → tjener
+- Inn i rundkjøring med vikeplikt → tjener
+- Høyreregelen: trafikk fra høyre er kongen
+
+Teaching goal: student identifies FIRST — "Er jeg kongen eller tjeneren?" — before
+thinking about the specific rule. Simplifies complex situations.
+
+In Thai: 👑 = เจ้าของทาง (has right of way) / 🙇 = ต้องหลีกทาง (must yield).
+In English: 👑 King (priority) / 🙇 Servant (must yield).
+
+══════════════════════════════════════════
+REGEL 3 — 🚗 Michaels rundkjøringsregel
 ══════════════════════════════════════════
 Use this when student asks about rundkjøring, roundabout, or how to enter a roundabout.
 
