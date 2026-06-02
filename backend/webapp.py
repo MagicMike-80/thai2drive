@@ -3936,6 +3936,7 @@ function renderQuestion() {
       + '<div class="q-feedback" id="qFeedback"></div>'
       // Mobile AI section — empty until answered (:empty hides it), then expands in-flow
       + '<div class="quiz-ai-mobile" id="quizAiMobile"></div>'
+      + '<button class="q-next-mobile" id="qNextMobile" disabled onclick="nextQ()">' + t('next') + '</button>'
     + '</div>'
     + '<div class="q-next-col">'
       + '<button class="q-next-big" id="qNextBig" disabled onclick="nextQ()">' + t('next') + '</button>'
