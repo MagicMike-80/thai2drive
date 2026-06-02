@@ -2145,7 +2145,7 @@ a { color:inherit; text-decoration:none; }
 /* ══════════════════════════════════════════
    MICHAEL TRAFIKKLÆRER — CHAT UI
 ══════════════════════════════════════════ */
-#screenTeacher { display:flex; flex-direction:column; height:100%; overflow:hidden; }
+#screenTeacher.active { flex-direction:column; overflow:hidden; }
 
 .teacher-header {
   display:flex; align-items:center; gap:12px;
@@ -2738,7 +2738,7 @@ a { color:inherit; text-decoration:none; }
     </div>
 
     <!-- ═══ MICHAEL TRAFIKKLÆRER SCREEN ═══ -->
-    <div class="screen" id="screenTeacher" style="display:none;flex-direction:column;height:100%;overflow:hidden;">
+    <div class="screen" id="screenTeacher">
 
       <!-- Chat header -->
       <div class="teacher-header">
