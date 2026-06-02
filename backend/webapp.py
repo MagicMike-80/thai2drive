@@ -2536,7 +2536,7 @@ a { color:inherit; text-decoration:none; }
     <!-- ═══ CATEGORIES SCREEN ═══ -->
     <div class="screen" id="screenCats">
       <div class="cats-header">
-        <div class="screen-title">📚 Kategorier <span id="catCount"></span></div>
+        <div class="screen-title">📚 <span data-key="cats">Kategorier</span> <span id="catCount"></span></div>
       </div>
       <div class="cats-scroll">
         <div class="cat-grid" id="catGrid">
@@ -2747,7 +2747,7 @@ a { color:inherit; text-decoration:none; }
     <!-- ═══ HISTORY SCREEN ═══ -->
     <div class="screen" id="screenHistory">
       <div class="hist-header">
-        <div class="screen-title">📊 Historikk <span id="histCount"></span></div>
+        <div class="screen-title">📊 <span data-key="history">Historikk</span> <span id="histCount"></span></div>
       </div>
       <div class="hist-scroll" id="histScroll">
         <div class="loading-wrap">
@@ -2787,9 +2787,9 @@ a { color:inherit; text-decoration:none; }
         <input id="sbEditTitle" style="padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.95rem;width:100%;box-sizing:border-box;" />
         <label style="font-size:.85rem;color:var(--muted);" data-key="studybook_content_html">Innhold (HTML)</label>
         <textarea id="sbEditContent" rows="10" style="padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.85rem;width:100%;box-sizing:border-box;resize:vertical;font-family:monospace;"></textarea>
-        <label style="font-size:.85rem;color:var(--muted);">🖼️ Bilde URL</label>
+        <label style="font-size:.85rem;color:var(--muted);" data-key="studybook_image_url">🖼️ Bilde URL</label>
         <input id="sbEditImageUrl" type="text" style="padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.95rem;width:100%;box-sizing:border-box;" placeholder="https://..." />
-        <label style="font-size:.85rem;color:var(--muted);">🎥 Video URL (fremtidig)</label>
+        <label style="font-size:.85rem;color:var(--muted);" data-key="studybook_video_url">🎥 Video URL (fremtidig)</label>
         <input id="sbEditVideoUrl" type="text" style="padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.95rem;width:100%;box-sizing:border-box;" placeholder="https://..." />
         <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:4px;">
           <button onclick="closeStudiebokModal()" data-key="cancel" style="padding:8px 18px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text);cursor:pointer;">Avbryt</button>
@@ -2802,18 +2802,18 @@ a { color:inherit; text-decoration:none; }
     <div class="screen" id="screenEnd">
       <div class="end-wrap">
         <div class="end-score-quiet" id="endScoreQuiet">0 av 0 riktige</div>
-        <div class="end-heading" id="endHeading">Øvelsen er ferdig.</div>
+        <div class="end-heading" id="endHeading" data-key="result_done">Øvelsen er ferdig.</div>
         <p class="end-body" id="endBody"></p>
         <div class="end-focus" id="endFocus" style="display:none">
           <div>
-            <div class="end-focus-label">Anbefalt øvelse</div>
+            <div class="end-focus-label" data-key="result_focus">Anbefalt øvelse</div>
             <div class="end-focus-topic" id="endFocusTopic"></div>
           </div>
         </div>
         <div class="end-btns">
           <button class="end-btn-pri" onclick="retryQuiz()">Øv igjen</button>
-          <button class="end-btn-sec" onclick="showTab('home')">Tilbake til hjem</button>
-          <button class="end-btn-sec" onclick="showTab('cats')">Velg kategori</button>
+          <button class="end-btn-sec" onclick="showTab('home')" data-key="backhome">Tilbake til hjem</button>
+          <button class="end-btn-sec" onclick="showTab('cats')" data-key="pickcat">Velg kategori</button>
         </div>
       </div>
     </div>
@@ -2865,7 +2865,7 @@ a { color:inherit; text-decoration:none; }
           <div class="teacher-avatar">🚗</div>
           <div class="teacher-header-info">
             <div class="teacher-name" id="teacherNameLbl">Michael Trafikklærer</div>
-            <div class="teacher-status">● Online</div>
+            <div class="teacher-status" data-key="teacher_online">● Online</div>
           </div>
         </div>
 
@@ -3102,6 +3102,7 @@ var UI = {
   teacher_sub: {th:'ถามคำถามเกี่ยวกับการจราจร', no:'Still et spørsmål om trafikk', en:'Ask a question about traffic'},
   teacher_placeholder: {th:'ถามคำถาม...', no:'Still et spørsmål...', en:'Ask a question...'},
   teacher_error: {th:'ขอโทษ เกิดข้อผิดพลาด ลองใหม่อีกครั้ง', no:'Beklager, noe gikk galt. Prøv igjen.', en:'Sorry, something went wrong. Please try again.'},
+  teacher_online:{th:'● ออนไลน์', no:'● Pålogget', en:'● Online'},
   tsp_title:   {th:'หัวข้อ',           no:'Emner',               en:'Topics'},
   tsp_sign:    {th:'อธิบายป้ายจราจร',  no:'Forklar et skilt',    en:'Explain a sign'},
   tsp_vikeplikt:{th:'ช่วยเรื่องการให้ทาง', no:'Hjelp med vikeplikt', en:'Help with right-of-way'},
@@ -3244,6 +3245,8 @@ var UI = {
   studybook_edit_chapter:{th:'✏️ แก้ไขบทเรียน', no:'✏️ Rediger kapittel', en:'✏️ Edit chapter'},
   studybook_title:{th:'ชื่อเรื่อง', no:'Tittel', en:'Title'},
   studybook_content_html:{th:'เนื้อหา (HTML)', no:'Innhold (HTML)', en:'Content (HTML)'},
+  studybook_image_url:{th:'🖼️ URL รูปภาพ', no:'🖼️ Bilde URL', en:'🖼️ Image URL'},
+  studybook_video_url:{th:'🎥 Video URL (อนาคต)', no:'🎥 Video URL (fremtidig)', en:'🎥 Video URL (future)'},
   cancel:      {th:'ยกเลิก', no:'Avbryt', en:'Cancel'},
   sb_empty_fields:{th:'ชื่อเรื่องและเนื้อหาห้ามว่าง', no:'Tittel og innhold kan ikke være tomme', en:'Title and content cannot be empty'},
   practice_this_sign:{th:'📚 ฝึกป้ายนี้',     no:'📚 Øv på dette skiltet', en:'📚 Practice this sign'},
@@ -3382,7 +3385,7 @@ function applyUILang() {
   if (catsTitleEl) {
     var catsCountEl = document.getElementById('catCount');
     var catsCountText = catsCountEl ? catsCountEl.textContent : '';
-    catsTitleEl.innerHTML = '📚 ' + t('cats') + ' <span id="catCount">' + catsCountText + '</span>';
+    catsTitleEl.innerHTML = '📚 <span data-key="cats">' + t('cats') + '</span> <span id="catCount">' + catsCountText + '</span>';
   }
   // home buttons
   document.querySelectorAll('.home-cta').forEach(function(b){ b.innerHTML = t('startquiz').replace(/^▶\s*/,'▶&nbsp;&nbsp;'); });
