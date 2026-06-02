@@ -380,8 +380,13 @@ def _auth_error_key(key: str, no: str, th: str, en: str, status_code: int = 400)
 
 
 def _smtp_config() -> dict:
+    # Prefer RESET_SMTP_* vars; fall back to SUPPORT_SMTP_* vars.
+    reset_host = os.environ.get("RESET_SMTP_HOST", "").strip()
+    support_host = os.environ.get("SUPPORT_SMTP_HOST", "").strip()
+    source = "reset" if reset_host else ("support" if support_host else "none")
     return {
-        "host": (os.environ.get("RESET_SMTP_HOST") or os.environ.get("SUPPORT_SMTP_HOST") or "").strip(),
+        "source": source,
+        "host": (reset_host or support_host),
         "port": int(os.environ.get("RESET_SMTP_PORT") or os.environ.get("SUPPORT_SMTP_PORT") or "587"),
         "user": (os.environ.get("RESET_SMTP_USER") or os.environ.get("SUPPORT_SMTP_USER") or "").strip(),
         "password": (os.environ.get("RESET_SMTP_PASS") or os.environ.get("SUPPORT_SMTP_PASS") or "").strip(),
@@ -393,10 +398,22 @@ def _smtp_config() -> dict:
 def _send_password_reset_email_sync(to_email: str, code: str) -> tuple[bool, str]:
     _el = logging.getLogger("reset_email")
     cfg = _smtp_config()
+
+    _el.info(
+        "smtp_attempt source=%s host_present=%s user_present=%s pass_present=%s host=%s port=%d user=%s",
+        cfg["source"],
+        bool(cfg["host"]),
+        bool(cfg["user"]),
+        bool(cfg["password"]),
+        cfg["host"] or "(not set)",
+        cfg["port"],
+        _masked_email(cfg["user"]) if cfg["user"] else "(not set)",
+    )
+
     if not (cfg["host"] and cfg["user"] and cfg["password"]):
         _el.error(
-            "send_failed reason=smtp_not_configured host=%s user=%s",
-            bool(cfg["host"]), bool(cfg["user"]),
+            "send_failed reason=smtp_not_configured source=%s host=%s user=%s pass=%s",
+            cfg["source"], bool(cfg["host"]), bool(cfg["user"]), bool(cfg["password"]),
         )
         return False, "SMTP not configured"
 
@@ -416,16 +433,37 @@ def _send_password_reset_email_sync(to_email: str, code: str) -> tuple[bool, str
     msg["To"] = to_email
 
     try:
-        with smtplib.SMTP(cfg["host"], cfg["port"], timeout=12) as smtp:
+        _el.info("smtp_connect host=%s port=%d", cfg["host"], cfg["port"])
+        with smtplib.SMTP(cfg["host"], cfg["port"], timeout=30) as smtp:
             smtp.ehlo()
+            _el.info("smtp_starttls host=%s", cfg["host"])
             smtp.starttls()
             smtp.ehlo()
+            _el.info("smtp_login user=%s", _masked_email(cfg["user"]))
             smtp.login(cfg["user"], cfg["password"])
+            _el.info("smtp_sendmail from=%s to=%s", _masked_email(from_email), _masked_email(to_email))
             smtp.sendmail(from_email, [to_email], msg.as_string())
-        _el.info("sent host=%s to=%s", cfg["host"], _masked_email(to_email))
+        _el.info("smtp_sent_ok host=%s to=%s", cfg["host"], _masked_email(to_email))
         return True, "sent"
+    except smtplib.SMTPAuthenticationError as exc:
+        code_num = exc.smtp_code if hasattr(exc, "smtp_code") else "?"
+        _el.error(
+            "send_failed reason=auth_rejected smtp_code=%s host=%s user=%s "
+            "— likely wrong app-password or account needs Yahoo app-password",
+            code_num, cfg["host"], _masked_email(cfg["user"]),
+        )
+        return False, f"SMTP auth failed ({code_num})"
+    except smtplib.SMTPConnectError as exc:
+        _el.error("send_failed reason=connect_error host=%s port=%d detail=%s", cfg["host"], cfg["port"], exc)
+        return False, f"SMTP connect failed: {exc}"
+    except smtplib.SMTPException as exc:
+        _el.error("send_failed reason=smtp_error host=%s type=%s detail=%s", cfg["host"], type(exc).__name__, exc)
+        return False, f"SMTP error ({type(exc).__name__}): {exc}"
+    except OSError as exc:
+        _el.error("send_failed reason=network_error host=%s detail=%s", cfg["host"], exc)
+        return False, f"Network error: {exc}"
     except Exception as exc:
-        _el.error("send_failed host=%s reason=%s", cfg["host"], exc)
+        _el.error("send_failed reason=unexpected host=%s type=%s detail=%s", cfg["host"], type(exc).__name__, exc)
         return False, str(exc)
 
 
@@ -4102,14 +4140,24 @@ async def log_smtp_config():
     """Log SMTP config state at startup — never logs the password."""
     _sl = logging.getLogger("smtp_config")
     cfg = _smtp_config()
+    reset_host_present = bool(os.environ.get("RESET_SMTP_HOST", "").strip())
+    support_host_present = bool(os.environ.get("SUPPORT_SMTP_HOST", "").strip())
+    configured = bool(cfg["host"] and cfg["user"] and cfg["password"])
     _sl.info(
-        "reset_email_configured=%s smtp_host_present=%s smtp_user_present=%s smtp_host=%s",
-        bool(cfg["host"] and cfg["user"] and cfg["password"]),
+        "reset_email_configured=%s  source=%s  "
+        "reset_host_present=%s  support_host_present=%s  "
+        "selected_host=%s  selected_port=%d  "
+        "selected_host_present=%s  selected_user_present=%s",
+        configured,
+        cfg["source"],
+        reset_host_present,
+        support_host_present,
+        cfg["host"] or "(not set)",
+        cfg["port"],
         bool(cfg["host"]),
         bool(cfg["user"]),
-        cfg["host"] or "(not set)",
     )
-    if not cfg["host"]:
+    if not configured:
         _sl.warning(
             "SMTP not configured — password reset emails will FAIL. "
             "Set SUPPORT_SMTP_HOST, SUPPORT_SMTP_PORT, SUPPORT_SMTP_USER, SUPPORT_SMTP_PASS "
