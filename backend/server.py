@@ -395,16 +395,68 @@ def _smtp_config() -> dict:
     }
 
 
+def _send_via_resend(to_email: str, code: str) -> tuple[bool, str]:
+    """Send reset email using Resend HTTP API (works on Railway — no SMTP ports needed)."""
+    import urllib.request, json as _json
+    _el = logging.getLogger("reset_email")
+    api_key = os.environ.get("RESEND_API_KEY", "").strip()
+    if not api_key:
+        return False, "RESEND_API_KEY not set"
+
+    from_addr = os.environ.get("RESEND_FROM", "Thai2Drive <onboarding@resend.dev>").strip()
+    body_text = (
+        "Hei,\n\n"
+        f"Tilbakestillingskoden din for Thai2Drive er: {code}\n\n"
+        "Koden er gyldig i 15 minutter. Hvis du ikke ba om dette, kan du ignorere denne e-posten.\n\n"
+        "Thai2Drive\n\n"
+        "สวัสดีครับ/ค่ะ\n\n"
+        f"รหัสรีเซ็ตรหัสผ่าน Thai2Drive ของคุณคือ: {code}\n\n"
+        "รหัสนี้ใช้ได้ 15 นาที หากคุณไม่ได้ขอรีเซ็ตรหัสผ่าน กรุณาเพิกเฉยต่ออีเมลนี้\n"
+    )
+    payload = _json.dumps({
+        "from": from_addr,
+        "to": [to_email],
+        "subject": "Thai2Drive password reset code",
+        "text": body_text,
+    }).encode("utf-8")
+
+    req = urllib.request.Request(
+        "https://api.resend.com/emails",
+        data=payload,
+        headers={
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
+        },
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            resp_body = resp.read().decode("utf-8")
+            _el.info("resend_sent_ok to=%s status=%d", _masked_email(to_email), resp.status)
+            return True, "sent"
+    except urllib.error.HTTPError as exc:
+        body = exc.read().decode("utf-8", errors="replace")
+        _el.error("resend_failed status=%d body=%s", exc.code, body[:300])
+        return False, f"Resend HTTP {exc.code}: {body[:200]}"
+    except Exception as exc:
+        _el.error("resend_failed type=%s detail=%s", type(exc).__name__, exc)
+        return False, str(exc)
+
+
 def _send_password_reset_email_sync(to_email: str, code: str) -> tuple[bool, str]:
     _el = logging.getLogger("reset_email")
-    cfg = _smtp_config()
 
+    # Primary: Resend HTTP API (works on Railway — SMTP ports are blocked)
+    resend_key = os.environ.get("RESEND_API_KEY", "").strip()
+    if resend_key:
+        _el.info("email_send_attempt method=resend to=%s", _masked_email(to_email))
+        return _send_via_resend(to_email, code)
+
+    # Fallback: SMTP (only works if outbound port 587 is open — blocked on Railway)
+    cfg = _smtp_config()
     _el.info(
-        "smtp_attempt source=%s host_present=%s user_present=%s pass_present=%s host=%s port=%d user=%s",
+        "email_send_attempt method=smtp source=%s host=%s port=%d user=%s",
         cfg["source"],
-        bool(cfg["host"]),
-        bool(cfg["user"]),
-        bool(cfg["password"]),
         cfg["host"] or "(not set)",
         cfg["port"],
         _masked_email(cfg["user"]) if cfg["user"] else "(not set)",
@@ -436,34 +488,21 @@ def _send_password_reset_email_sync(to_email: str, code: str) -> tuple[bool, str
         _el.info("smtp_connect host=%s port=%d", cfg["host"], cfg["port"])
         with smtplib.SMTP(cfg["host"], cfg["port"], timeout=30) as smtp:
             smtp.ehlo()
-            _el.info("smtp_starttls host=%s", cfg["host"])
             smtp.starttls()
             smtp.ehlo()
-            _el.info("smtp_login user=%s", _masked_email(cfg["user"]))
             smtp.login(cfg["user"], cfg["password"])
-            _el.info("smtp_sendmail from=%s to=%s", _masked_email(from_email), _masked_email(to_email))
             smtp.sendmail(from_email, [to_email], msg.as_string())
         _el.info("smtp_sent_ok host=%s to=%s", cfg["host"], _masked_email(to_email))
         return True, "sent"
     except smtplib.SMTPAuthenticationError as exc:
         code_num = exc.smtp_code if hasattr(exc, "smtp_code") else "?"
-        _el.error(
-            "send_failed reason=auth_rejected smtp_code=%s host=%s user=%s "
-            "— likely wrong app-password or account needs Yahoo app-password",
-            code_num, cfg["host"], _masked_email(cfg["user"]),
-        )
+        _el.error("send_failed reason=auth_rejected smtp_code=%s host=%s", code_num, cfg["host"])
         return False, f"SMTP auth failed ({code_num})"
-    except smtplib.SMTPConnectError as exc:
-        _el.error("send_failed reason=connect_error host=%s port=%d detail=%s", cfg["host"], cfg["port"], exc)
-        return False, f"SMTP connect failed: {exc}"
-    except smtplib.SMTPException as exc:
-        _el.error("send_failed reason=smtp_error host=%s type=%s detail=%s", cfg["host"], type(exc).__name__, exc)
-        return False, f"SMTP error ({type(exc).__name__}): {exc}"
     except OSError as exc:
         _el.error("send_failed reason=network_error host=%s detail=%s", cfg["host"], exc)
         return False, f"Network error: {exc}"
     except Exception as exc:
-        _el.error("send_failed reason=unexpected host=%s type=%s detail=%s", cfg["host"], type(exc).__name__, exc)
+        _el.error("send_failed reason=unexpected type=%s detail=%s", type(exc).__name__, exc)
         return False, str(exc)
 
 
@@ -4137,31 +4176,31 @@ async def seed_studiebok():
 
 @app.on_event("startup")
 async def log_smtp_config():
-    """Log SMTP config state at startup — never logs the password."""
+    """Log email config state at startup — never logs passwords or keys."""
     _sl = logging.getLogger("smtp_config")
+    resend_key = bool(os.environ.get("RESEND_API_KEY", "").strip())
     cfg = _smtp_config()
-    reset_host_present = bool(os.environ.get("RESET_SMTP_HOST", "").strip())
-    support_host_present = bool(os.environ.get("SUPPORT_SMTP_HOST", "").strip())
-    configured = bool(cfg["host"] and cfg["user"] and cfg["password"])
+    smtp_configured = bool(cfg["host"] and cfg["user"] and cfg["password"])
+    method = "resend" if resend_key else ("smtp" if smtp_configured else "none")
     _sl.info(
-        "reset_email_configured=%s  source=%s  "
-        "reset_host_present=%s  support_host_present=%s  "
-        "selected_host=%s  selected_port=%d  "
-        "selected_host_present=%s  selected_user_present=%s",
-        configured,
+        "email_method=%s  resend_key_present=%s  "
+        "smtp_source=%s  smtp_host=%s  smtp_port=%d  smtp_configured=%s",
+        method,
+        resend_key,
         cfg["source"],
-        reset_host_present,
-        support_host_present,
         cfg["host"] or "(not set)",
         cfg["port"],
-        bool(cfg["host"]),
-        bool(cfg["user"]),
+        smtp_configured,
     )
-    if not configured:
+    if method == "none":
         _sl.warning(
-            "SMTP not configured — password reset emails will FAIL. "
-            "Set SUPPORT_SMTP_HOST, SUPPORT_SMTP_PORT, SUPPORT_SMTP_USER, SUPPORT_SMTP_PASS "
-            "in Railway environment variables."
+            "No email provider configured — password reset emails will FAIL. "
+            "Set RESEND_API_KEY in Railway (recommended) or SUPPORT_SMTP_* variables."
+        )
+    elif method == "smtp":
+        _sl.warning(
+            "Using SMTP — NOTE: Railway blocks outbound SMTP (port 587). "
+            "Set RESEND_API_KEY for reliable email delivery."
         )
 
 
