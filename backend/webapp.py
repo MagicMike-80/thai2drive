@@ -2307,21 +2307,28 @@ a { color:inherit; text-decoration:none; }
 
 /* Contextual reply chips — shown after assistant messages */
 .tm-chips {
-  display:flex; flex-wrap:wrap; gap:7px;
-  padding:4px 0 2px 36px; /* indent to align with bubble */
+  display:flex; flex-direction:column; gap:8px;
+  padding:14px 14px 6px 14px;
+  border-top:1px solid rgba(255,255,255,.06);
+  margin-top:4px;
+}
+.tm-chips-hdr {
+  font-size:.78rem; font-weight:800; letter-spacing:.06em;
+  color:var(--orange); text-transform:uppercase;
+  margin-bottom:2px;
 }
 .tm-chip-btn {
-  background:rgba(59,130,246,.12); border:1px solid rgba(59,130,246,.30);
-  color:#93C5FD; border-radius:20px;
-  padding:6px 13px; font-size:.82rem; font-weight:600;
-  cursor:pointer; transition:background .15s, border-color .15s;
-  white-space:nowrap;
+  display:flex; align-items:center; gap:10px;
+  background:#1a2744; border:1px solid rgba(59,130,246,.28);
+  color:#F8FAFC; border-radius:12px;
+  padding:12px 16px; font-size:.9rem; font-weight:700;
+  cursor:pointer; text-align:left; width:100%;
+  transition:background .15s, border-color .15s, transform .12s;
 }
-.tm-chip-btn:hover  { background:rgba(59,130,246,.22); border-color:rgba(59,130,246,.55); }
+.tm-chip-btn:hover  { background:#1e3a5f; border-color:rgba(255,153,51,.65); color:#fff; transform:translateX(3px); }
 .tm-chip-btn:active { transform:scale(.97); }
-[data-theme="light"] .tm-chip-btn {
-  background:rgba(59,130,246,.08); border-color:rgba(59,130,246,.25); color:#1D4ED8;
-}
+[data-theme="light"] .tm-chip-btn { background:#1e3a5f; border-color:rgba(59,130,246,.35); color:#F8FAFC; }
+[data-theme="light"] .tm-chip-btn:hover { background:#1a2744; border-color:rgba(255,153,51,.55); }
 
 .teacher-inputbar {
   display:flex; align-items:flex-end; gap:8px;
@@ -3102,6 +3109,7 @@ var UI = {
   tsp_practice:{th:'ฉันควรฝึกอะไร?',  no:'Hva bør jeg øve på?', en:'What should I practise?'},
   tsp_theory:  {th:'ช่วยเรื่องข้อสอบ', no:'Hjelp med teoriprøven', en:'Help with the theory test'},
   tsp_app:     {th:'ถามเกี่ยวกับแอป', no:'Spør om Thai2Drive',   en:'Ask about Thai2Drive'},
+  choose_topic:{th:'🚗 เลือกหัวข้อ:',  no:'🚗 Velg tema:',        en:'🚗 Choose topic:'},
   q_lang:      {th:'ภาษาคำถาม',         no:'Spørsmålsspråk',   en:'Question language'},
   q_lang_sub:  {th:'เลือกภาษาสำหรับคำถามและคำตอบ', no:'Velg språk for spørsmål og svar', en:'Choose language for questions and answers'},
   sound:       {th:'เสียง',             no:'LYD',              en:'SOUND'},
@@ -6398,6 +6406,11 @@ function _teacherAppendChips(chips) {
   if (!msgs) return;
   var row = document.createElement('div');
   row.className = 'tm-chips';
+  // Heading
+  var hdr = document.createElement('div');
+  hdr.className = 'tm-chips-hdr';
+  hdr.textContent = t('choose_topic');
+  row.appendChild(hdr);
   chips.forEach(function(label) {
     var btn = document.createElement('button');
     btn.className = 'tm-chip-btn';

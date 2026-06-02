@@ -180,15 +180,18 @@ export default function TeacherScreen() {
               </View>
               {/* Fix 2: reply chips after last assistant message */}
               {msg.role === 'assistant' && msg.suggestions && msg.suggestions.length > 0 && i === allMessages.length - 1 && (
-                <View style={s.replyChipsRow}>
+                <View style={s.replyChipsWrap}>
+                  <Text style={s.replyChipsHdr}>
+                    {lang === 'th' ? '🚗 เลือกหัวข้อ:' : lang === 'en' ? '🚗 Choose topic:' : '🚗 Velg tema:'}
+                  </Text>
                   {msg.suggestions.map((chip, ci) => (
                     <TouchableOpacity
                       key={ci}
-                      style={[s.replyChip, { borderColor: 'rgba(59,130,246,.35)' }]}
+                      style={s.replyChipBtn}
                       onPress={() => sendMessage(chip)}
                       activeOpacity={0.75}
                     >
-                      <Text style={s.replyChipText}>{chip}</Text>
+                      <Text style={s.replyChipBtnText}>{chip}</Text>
                     </TouchableOpacity>
                   ))}
                 </View>
@@ -311,9 +314,10 @@ const s = StyleSheet.create({
   bubbleText: { fontSize: 14, lineHeight: 21 },
 
   // Reply chips (after assistant message)
-  replyChipsRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 7, paddingLeft: 36, paddingTop: 4, paddingBottom: 2 },
-  replyChip: { borderWidth: 1, borderRadius: 20, paddingHorizontal: 12, paddingVertical: 6, backgroundColor: 'rgba(59,130,246,.10)' },
-  replyChipText: { fontSize: 12, fontWeight: '600', color: '#93C5FD' },
+  replyChipsWrap: { marginTop: 10, marginBottom: 4, gap: 8, borderTopWidth: 1, borderTopColor: 'rgba(255,255,255,.06)', paddingTop: 12 },
+  replyChipsHdr: { fontSize: 11, fontWeight: '800', letterSpacing: 1, color: '#FF9933', textTransform: 'uppercase', marginBottom: 4 },
+  replyChipBtn: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#1a2744', borderWidth: 1, borderColor: 'rgba(59,130,246,.30)', borderRadius: 12, paddingHorizontal: 16, paddingVertical: 12 },
+  replyChipBtnText: { fontSize: 14, fontWeight: '700', color: '#F8FAFC' },
 
   // Suggestion buttons
   suggestionsWrap: { marginTop: 16, gap: 8 },
