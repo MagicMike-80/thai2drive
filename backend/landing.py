@@ -185,28 +185,51 @@ html[data-current-lang="en"] [data-lang="en"].block{display:block}
 .stat-num{font-size:clamp(40px,6vw,72px);font-weight:900;color:#FF9933;letter-spacing:-.02em;line-height:1}
 .stat-label{font-size:16px;color:#94A3B8;margin-top:8px;font-weight:500}
 
-/* VIDEO */
+/* VIDEO GRID */
+.video-section-wrap{position:relative;overflow:hidden}
+.video-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:12px}
+@media(max-width:768px){.video-grid{grid-template-columns:1fr}}
+.vid-card{border-radius:16px;overflow:hidden;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);transition:transform .22s,box-shadow .22s;cursor:pointer}
+.vid-card:hover{transform:translateY(-4px);box-shadow:0 20px 48px rgba(0,0,0,.45)}
+.vid-thumb{position:relative;aspect-ratio:16/9;overflow:hidden}
+.vid-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s}
+.vid-card:hover .vid-thumb img{transform:scale(1.04)}
+.vid-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.25);transition:background .2s}
+.vid-card:hover .vid-play{background:rgba(0,0,0,.1)}
+.vid-play-btn{width:54px;height:54px;border-radius:50%;background:rgba(255,153,51,.92);display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 6px 24px rgba(0,0,0,.4);transition:transform .2s}
+.vid-card:hover .vid-play-btn{transform:scale(1.12)}
+.vid-badge{position:absolute;top:10px;left:10px;background:rgba(255,153,51,.9);color:#0F172A;font-size:.65rem;font-weight:800;padding:3px 8px;border-radius:6px;letter-spacing:.5px;text-transform:uppercase}
+.vid-info{padding:14px 16px 16px}
+.vid-title{font-size:.88rem;font-weight:700;color:#E2E8F0;line-height:1.4;margin-bottom:6px}
+.vid-meta{font-size:.72rem;color:#64748B;display:flex;align-items:center;gap:6px}
+.vid-meta span{display:flex;align-items:center;gap:3px}
+/* Lightbox */
+.vid-lightbox{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.88);align-items:center;justify-content:center;padding:20px}
+.vid-lightbox.open{display:flex}
+.vid-lightbox-inner{position:relative;width:100%;max-width:860px}
+.vid-lightbox-inner iframe{width:100%;aspect-ratio:16/9;border:0;border-radius:14px}
+.vid-lightbox-close{position:absolute;top:-44px;right:0;background:none;border:none;color:#fff;font-size:28px;cursor:pointer;opacity:.8;transition:opacity .2s}
+.vid-lightbox-close:hover{opacity:1}
+/* Premium teaser */
+.vid-premium-teaser{margin-top:48px;border-radius:20px;padding:36px;background:linear-gradient(135deg,rgba(255,153,51,.08),rgba(255,153,51,.03));border:1px solid rgba(255,153,51,.18);text-align:center}
+.vpt-icon{font-size:40px;margin-bottom:12px}
+.vpt-title{font-size:1.35rem;font-weight:800;color:#E2E8F0;margin-bottom:8px}
+.vpt-title span{color:#FF9933}
+.vpt-sub{font-size:.88rem;color:#94A3B8;margin-bottom:24px}
+.vpt-features{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;max-width:480px;margin:0 auto 28px;text-align:left}
+@media(max-width:480px){.vpt-features{grid-template-columns:1fr}}
+.vpt-feat{display:flex;align-items:center;gap:8px;font-size:.82rem;color:#CBD5E1;font-weight:600}
+.vpt-feat span:first-child{font-size:1rem}
+/* Floating icons */
+.vid-float{position:absolute;pointer-events:none;opacity:.10;font-size:2rem;animation:vidFloat 6s ease-in-out infinite}
+.vid-float:nth-child(1){top:8%;left:2%;animation-delay:0s;font-size:1.6rem}
+.vid-float:nth-child(2){top:15%;right:3%;animation-delay:1.5s;font-size:2.2rem}
+.vid-float:nth-child(3){bottom:20%;left:4%;animation-delay:3s;font-size:1.8rem}
+.vid-float:nth-child(4){bottom:30%;right:2%;animation-delay:4.5s;font-size:1.4rem}
+@keyframes vidFloat{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-14px) rotate(4deg)}}
+/* legacy — keep for fallback */
 .video-wrap{position:relative;max-width:860px;margin:0 auto;border-radius:20px;overflow:hidden;box-shadow:0 40px 100px rgba(0,0,0,.5);cursor:pointer}
 .video-wrap iframe{width:100%;aspect-ratio:16/9;display:block;border:0}
-.video-poster{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden}
-.video-poster img{width:100%;height:100%;object-fit:cover;display:block}
-.video-poster .play-btn{
-  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  width:80px;height:80px;border-radius:50%;
-  background:rgba(255,153,51,.9);display:flex;align-items:center;justify-content:center;
-  font-size:32px;color:#fff;box-shadow:0 8px 32px rgba(0,0,0,.4);
-  transition:transform .2s,background .2s;
-}
-.video-poster:hover .play-btn{transform:translate(-50%,-50%) scale(1.1);background:#FF9933}
-.video-coming{
-  width:100%;aspect-ratio:16/9;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:12px;
-  background:linear-gradient(135deg,rgba(22,40,95,.18),rgba(11,18,38,1));
-  border:2px dashed rgba(255,255,255,.10);border-radius:20px;
-  color:#64748B;font-size:18px;text-align:center;padding:40px;
-}
-.video-coming .vc-icon{font-size:56px;margin-bottom:8px}
-.video-coming strong{color:#94A3B8;font-size:22px}
 
 /* SECTIONS */
 section{padding:80px 0;position:relative}
@@ -652,22 +675,67 @@ def _stats_html() -> str:
 
 
 def _video_html() -> str:
-    if YOUTUBE_VIDEO_ID:
-        embed_url = f"https://www.youtube-nocookie.com/embed/{YOUTUBE_VIDEO_ID}?rel=0&modestbranding=1"
-        video_block = f"""
-    <div class="video-wrap">
-      <iframe src="{embed_url}" allowfullscreen title="Thai2Drive video"></iframe>
-    </div>"""
-    else:
-        video_block = f"""
-    <div class="video-wrap">
-      <iframe
-        src="https://www.youtube.com/embed/EzAcXro21xI"
-        title="9 กลุ่มป้ายจราจรในนอร์เวย์ | Thai2Drive"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen>
-      </iframe>
-    </div>"""
+    # 3 free public videos — build trust, show value
+    FREE_VIDEOS = [
+        {
+            "id":    "O5y_dN6-bTs",
+            "no":    "Høyreregelen og myndighetspyramiden",
+            "th":    "กฎทางขวาและลำดับชั้นสัญญาณจราจร",
+            "en":    "Right-Hand Rule & Authority Hierarchy",
+            "dur":   "1:43",
+        },
+        {
+            "id":    "EzAcXro21xI",
+            "no":    "9 viktige skiltgrupper i Norge",
+            "th":    "9 กลุ่มป้ายจราจรสำคัญในนอร์เวย์",
+            "en":    "9 Important Sign Groups in Norway",
+            "dur":   "",
+        },
+        {
+            "id":    "w0JQjoSes-M",
+            "no":    "Historien bak Thai2Drive",
+            "th":    "เรื่องราวเบื้องหลัง Thai2Drive",
+            "en":    "The Story Behind Thai2Drive",
+            "dur":   "",
+        },
+    ]
+
+    cards_html = ""
+    for v in FREE_VIDEOS:
+        thumb = f"https://img.youtube.com/vi/{v['id']}/hqdefault.jpg"
+        dur_html = f'<span>▶ {v["dur"]}</span>' if v["dur"] else ""
+        cards_html += f"""
+      <div class="vid-card" onclick="openVidLightbox('{v['id']}')">
+        <div class="vid-thumb">
+          <img src="{thumb}" alt="{v['no']}" loading="lazy">
+          <div class="vid-play"><div class="vid-play-btn">▶</div></div>
+          <div class="vid-badge">
+            <span data-lang="th">ฟรี</span>
+            <span data-lang="no">Gratis</span>
+            <span data-lang="en">Free</span>
+          </div>
+        </div>
+        <div class="vid-info">
+          <div class="vid-title">
+            <span data-lang="th">{v['th']}</span>
+            <span data-lang="no">{v['no']}</span>
+            <span data-lang="en">{v['en']}</span>
+          </div>
+          <div class="vid-meta">{dur_html}</div>
+        </div>
+      </div>"""
+
+    # Premium course list (locked — not public)
+    premium_courses = [
+        ("🛑", "no", "Bremselengde og reaksjonstid"),
+        ("🚦", "no", "Trafikklys og vikeplikt"),
+        ("↙️", "no", "Venstresving og rundkjøring"),
+        ("🚌", "no", "Buss fra holdeplass"),
+        ("🧠", "no", "AI-undervising"),
+    ]
+    feat_html = ""
+    for icon, _lang, text in premium_courses:
+        feat_html += f'<div class="vpt-feat"><span>{icon}</span><span>{text}</span></div>'
 
     return f"""
 <section>
@@ -689,9 +757,68 @@ def _video_html() -> str:
         <span data-lang="en">Explanations in Thai — easy to understand, no guessing</span>
       </p>
     </div>
-    {video_block}
+
+    <!-- Floating decorative icons -->
+    <div class="video-section-wrap">
+      <span class="vid-float">🚗</span>
+      <span class="vid-float">🛑</span>
+      <span class="vid-float">🚦</span>
+      <span class="vid-float">🧠</span>
+
+      <!-- 3-column video grid -->
+      <div class="video-grid">{cards_html}
+      </div>
+
+      <!-- Premium teaser -->
+      <div class="vid-premium-teaser">
+        <div class="vpt-icon">💎</div>
+        <div class="vpt-title">
+          <span data-lang="th">อยากเรียนรู้เพิ่มเติมไหม?</span>
+          <span data-lang="no">Vil du lære <span>mer</span>?</span>
+          <span data-lang="en">Want to learn <span>more</span>?</span>
+        </div>
+        <div class="vpt-sub">
+          <span data-lang="th">700+ คำถาม · AI ครู · ป้ายจราจร · ไทย นอร์เวย์ อังกฤษ · คอร์สวิดีโอ Premium</span>
+          <span data-lang="no">700+ spørsmål · AI-lærer · Trafikkskilt · Thai, norsk og engelsk · Premium videokurs</span>
+          <span data-lang="en">700+ questions · AI teacher · Traffic signs · Thai, Norwegian and English · Premium video courses</span>
+        </div>
+        <div class="vpt-features">{feat_html}</div>
+        <a href="#pricing" class="cta-btn" style="display:inline-flex;text-decoration:none">
+          <span data-lang="th">⭐ ดู Premium</span>
+          <span data-lang="no">⭐ Se Premium</span>
+          <span data-lang="en">⭐ See Premium</span>
+        </a>
+      </div>
+    </div>
+
   </div>
 </section>
+
+<!-- Video lightbox -->
+<div class="vid-lightbox" id="vidLightbox" onclick="if(event.target===this)closeVidLightbox()">
+  <div class="vid-lightbox-inner">
+    <button class="vid-lightbox-close" onclick="closeVidLightbox()">✕</button>
+    <iframe id="vidLightboxFrame" src="" allowfullscreen
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+    </iframe>
+  </div>
+</div>
+<script>
+function openVidLightbox(id) {{
+  document.getElementById('vidLightboxFrame').src =
+    'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0&modestbranding=1';
+  document.getElementById('vidLightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}}
+function closeVidLightbox() {{
+  document.getElementById('vidLightboxFrame').src = '';
+  document.getElementById('vidLightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}}
+document.addEventListener('keydown', function(e) {{
+  if (e.key === 'Escape') closeVidLightbox();
+}});
+</script>
 """
 
 
