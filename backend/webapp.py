@@ -2124,7 +2124,7 @@ a { color:inherit; text-decoration:none; }
 /* Left column: calculator */
 .fk-calc-col {
   display:flex; flex-direction:column;
-  flex:1; min-height:0;
+  flex:1; min-height:0; min-width:0;
   overflow-y:auto; overflow-x:hidden;
 }
 .fk-body {
@@ -2132,18 +2132,20 @@ a { color:inherit; text-decoration:none; }
   display:flex; flex-direction:column; gap:12px;
 }
 /* Mobile: bottom padding so content clears the nav bar */
-@media(max-width:699px) {
+@media(max-width:899px) {
   .fk-body       { padding-bottom:calc(72px + env(safe-area-inset-bottom, 0px)); }
   .fk-disclaimer { margin-bottom:calc(72px + env(safe-area-inset-bottom, 0px)); }
   .fk-img-mobile img { max-height:200px; border-radius:0; }
+  .fk-info-row   { grid-template-columns:1fr; }
 }
 /* Right column: hidden on mobile, shown on desktop */
 .fk-img-col { display:none; }
 
-@media(min-width:700px) {
+@media(min-width:900px) {
   .fk-img-mobile  { display:none !important; }
+  .fk-calc-col    { min-width:420px; }
   .fk-img-col {
-    display:flex; flex:0 0 46%;
+    display:flex; flex:0 0 38%;
     border-left:1px solid var(--border); overflow:hidden;
     align-items:stretch;
   }
@@ -2483,44 +2485,48 @@ a { color:inherit; text-decoration:none; }
 }
 
 .teacher-suggestions {
-  padding:8px 14px 6px; display:flex; flex-direction:column;
-  gap:6px; flex-shrink:0;
+  padding:8px 14px 6px; display:flex; flex-direction:row;
+  flex-wrap:wrap; gap:7px; flex-shrink:0;
+  align-content:flex-start;
 }
 .teacher-chip {
-  display:flex; align-items:center; gap:8px;
+  display:inline-flex; align-items:center; justify-content:center; gap:6px;
   background:var(--card); border:1px solid var(--border);
-  color:var(--text); border-radius:10px;
-  padding:10px 14px; font-size:.85rem; font-weight:600;
-  cursor:pointer; text-align:left; transition:background .15s;
+  color:var(--text); border-radius:999px;
+  padding:8px 12px; min-height:38px; font-size:.78rem; font-weight:700;
+  cursor:pointer; text-align:center; transition:background .15s, border-color .15s, transform .12s;
+  flex:0 1 auto; max-width:100%;
 }
-.teacher-chip:hover { background:var(--card2); }
+.teacher-chip:hover { background:var(--card2); border-color:rgba(255,153,51,.45); transform:translateY(-1px); }
 .teacher-chip-hdr {
-  font-size:.68rem; font-weight:900; letter-spacing:.07em;
+  flex:1 0 100%;
+  font-size:.64rem; font-weight:900; letter-spacing:.07em;
   text-transform:uppercase; color:var(--orange);
-  padding:10px 2px 2px; margin-top:4px;
+  padding:7px 2px 0; margin-top:1px;
 }
 
 /* Contextual reply chips — shown after assistant messages */
 .tm-chips {
-  display:flex; flex-direction:column; gap:8px;
-  padding:14px 14px 6px 14px;
+  display:flex; flex-direction:row; flex-wrap:wrap; gap:7px;
+  padding:10px 14px 4px 14px;
   border-top:1px solid rgba(255,255,255,.06);
   margin-top:4px;
 }
 .tm-chips-hdr {
-  font-size:.78rem; font-weight:800; letter-spacing:.06em;
+  flex:1 0 100%;
+  font-size:.68rem; font-weight:800; letter-spacing:.06em;
   color:var(--orange); text-transform:uppercase;
-  margin-bottom:2px;
+  margin-bottom:0;
 }
 .tm-chip-btn {
-  display:flex; align-items:center; gap:10px;
+  display:inline-flex; align-items:center; justify-content:center; gap:7px;
   background:#1a2744; border:1px solid rgba(59,130,246,.28);
-  color:#F8FAFC; border-radius:12px;
-  padding:12px 16px; font-size:.9rem; font-weight:700;
-  cursor:pointer; text-align:left; width:100%;
+  color:#F8FAFC; border-radius:999px;
+  padding:8px 12px; min-height:38px; font-size:.78rem; font-weight:800;
+  cursor:pointer; text-align:center; width:auto; max-width:100%;
   transition:background .15s, border-color .15s, transform .12s;
 }
-.tm-chip-btn:hover  { background:#1e3a5f; border-color:rgba(255,153,51,.65); color:#fff; transform:translateX(3px); }
+.tm-chip-btn:hover  { background:#1e3a5f; border-color:rgba(255,153,51,.65); color:#fff; transform:translateY(-1px); }
 .tm-chip-btn:active { transform:scale(.97); }
 [data-theme="light"] .tm-chip-btn { background:#1e3a5f; border-color:rgba(59,130,246,.35); color:#F8FAFC; }
 [data-theme="light"] .tm-chip-btn:hover { background:#1a2744; border-color:rgba(255,153,51,.55); }
