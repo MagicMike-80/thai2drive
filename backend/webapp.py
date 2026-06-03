@@ -2395,7 +2395,7 @@ a { color:inherit; text-decoration:none; }
 .teacher-side-panel { display:none; }
 
 .teacher-messages {
-  flex:1; min-height:0; overflow-y:auto; padding:16px 14px 12px;
+  flex:1; min-height:0; overflow-y:auto; padding:16px 14px 80px;
   display:flex; flex-direction:column; gap:14px;
 }
 .teacher-messages::-webkit-scrollbar { width:0; }
@@ -2511,7 +2511,8 @@ a { color:inherit; text-decoration:none; }
 
 .teacher-inputbar {
   display:flex; align-items:flex-end; gap:8px;
-  padding:10px 14px; border-top:1px solid var(--border);
+  padding:10px 14px calc(10px + env(safe-area-inset-bottom, 0px)) 14px;
+  border-top:1px solid var(--border);
   background:var(--bg2); flex-shrink:0;
 }
 .teacher-input {
