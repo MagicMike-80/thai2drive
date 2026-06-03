@@ -2041,6 +2041,14 @@ a { color:inherit; text-decoration:none; }
 }
 .sb-page-body .study-tip strong { color:var(--orange); }
 .study-img { max-width:100%; border-radius:8px; margin-bottom:12px; }
+.sb-video-btn {
+  display:inline-flex; align-items:center; gap:8px;
+  margin-top:14px; padding:10px 18px;
+  background:rgba(220,38,38,.10); border:1px solid rgba(220,38,38,.25);
+  border-radius:10px; color:#FCA5A5; font-weight:700; font-size:.875rem;
+  text-decoration:none; transition:background .15s;
+}
+.sb-video-btn:hover { background:rgba(220,38,38,.20); }
 
 /* Nav bar */
 .sb-nav {
@@ -3438,6 +3446,7 @@ var UI = {
   driving_teacher:{th:'ครูสอนขับรถ',        no:'Kjørelærer',       en:'Driving teacher'},
   video_short:{th:'📹 คำอธิบายสั้น',       no:'📹 Kort forklaring', en:'📹 Short explanation'},
   video_watch:{th:'📹 ดูคำอธิบายสั้น',      no:'📹 Se kort forklaring', en:'📹 Watch short explanation'},
+  sb_watch_video:{th:'▶ ดูวิดีโอ',         no:'▶ Se video',           en:'▶ Watch video'},
   details:     {th:'ดูรายละเอียด',          no:'Se detaljer',      en:'View details'},
   passed:      {th:'ผ่าน',                 no:'Bestått',          en:'Passed'},
   not_passed:  {th:'ยังไม่ผ่าน',            no:'Ikke bestått',     en:'Not passed'},
@@ -3973,6 +3982,9 @@ function sbRender() {
     : '';
 
   var imgHtml = ch.image_url ? '<img src="' + ch.image_url + '" class="study-img" alt="">' : '';
+  var vidHtml = ch.video_url
+    ? '<div><a class="sb-video-btn" href="' + escH(ch.video_url) + '" target="_blank" rel="noopener">🎬 ' + escH(t('sb_watch_video')) + '</a></div>'
+    : '';
 
   var reader = document.getElementById('sbReader');
   reader.innerHTML =
@@ -3981,6 +3993,7 @@ function sbRender() {
       '<div class="sb-page-icon">' + ch.icon + '</div>' +
       '<div class="sb-page-title">' + ch.title_no + '</div>' +
       '<div class="sb-page-body">' + imgHtml + ch.content_no + '</div>' +
+      vidHtml +
     '</div>';
 }
 
@@ -4836,6 +4849,7 @@ function _dangerLabel(expl) {
   if (/reaksjon\w*\s*tid/i.test(t))                    return 'Reaksjonstid';
   if (/lys\b|belysning|nærlys|langt\s*lys/i.test(t))  return 'Lysbruk';
   if (/fartsgrense|hastighet|km\/t/i.test(t))          return 'Fartsgrense';
+  if (/reaksjonslengde|bremselengde|stoppelengde/i.test(t)) return 'Bremsing';
   if (/nødbrems|abs\b|bremsebane/i.test(t))            return 'Bremsing';
   if (/møtende|tunnel\b/i.test(t))                     return 'Møtende trafikk';
   return 'Forstå situasjonen';
@@ -6935,6 +6949,24 @@ async function teacherSend(overrideMsg) {
     _teacherHideTyping();
     _teacherAppendBubble('assistant', data.reply || t('teacher_error'));
     _teacherAppendChips(data.suggestions || []);
+    // Video card — show for stoppelengde / bremselengde / reaksjonslengde topics
+    if (/reaksjonslengde|bremselengde|stoppelengde|reaksjonstid|alle formler/i.test(msg)) {
+      fetchVideoForTopic('Bremsing').then(function(v) {
+        if (!v) return;
+        var msgs = document.getElementById('teacherMessages');
+        if (!msgs) return;
+        var rows = msgs.querySelectorAll('.tm-row.assistant');
+        var lastRow = rows[rows.length - 1];
+        if (!lastRow) return;
+        var bubble = lastRow.querySelector('.tm-bubble');
+        if (!bubble || bubble.querySelector('.vid-card')) return;
+        var wrap = document.createElement('div');
+        wrap.style.cssText = 'margin-top:10px;';
+        wrap.innerHTML = buildVideoCard(v);
+        bubble.appendChild(wrap);
+        msgs.scrollTop = msgs.scrollHeight;
+      });
+    }
   } catch(e) {
     _teacherHideTyping();
     _teacherAppendBubble('assistant', t('teacher_error'));
