@@ -2710,7 +2710,7 @@ a { color:inherit; text-decoration:none; }
         <div class="michael-card-left">
           <div class="michael-card-avatar">🚗</div>
           <div class="michael-card-text">
-            <div class="michael-card-name">Michael Trafikklærer</div>
+            <div class="michael-card-name" data-key="teacher_name">Michael Trafikklærer</div>
             <div class="michael-card-sub" id="michaelCardSub">Still et spørsmål om trafikk</div>
           </div>
         </div>
@@ -3375,7 +3375,7 @@ var UI = {
   acct:        {th:'บัญชี',             no:'KONTO',            en:'ACCOUNT'},
   language:    {th:'ภาษา',              no:'SPRÅK',            en:'LANGUAGE'},
   teacher:     {th:'Michael',            no:'Michael',          en:'Michael'},
-  teacher_name:{th:'Michael Trafikklærer', no:'Michael Trafikklærer', en:'Michael Trafikklærer'},
+  teacher_name:{th:'ครูสอนขับรถ Michael', no:'Michael Trafikklærer', en:'Michael Driving Teacher'},
   teacher_sub: {th:'ถามคำถามเกี่ยวกับการจราจร', no:'Still et spørsmål om trafikk', en:'Ask a question about traffic'},
   teacher_placeholder: {th:'ถามคำถาม...', no:'Still et spørsmål...', en:'Ask a question...'},
   teacher_error: {th:'ขอโทษ เกิดข้อผิดพลาด ลองใหม่อีกครั้ง', no:'Beklager, noe gikk galt. Prøv igjen.', en:'Sorry, something went wrong. Please try again.'},
