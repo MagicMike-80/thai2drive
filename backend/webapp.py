@@ -2047,6 +2047,110 @@ a { color:inherit; text-decoration:none; }
 }
 .sb-nav-btn:hover { background:rgba(255,153,51,.12); }
 .sb-nav-btn:disabled { opacity:.3; cursor:default; }
+
+/* ── Studiebok tool strip ───────────────────────────── */
+.sb-tools {
+  display:flex; gap:8px; padding:8px 14px 4px;
+  flex-shrink:0; flex-wrap:wrap;
+}
+.sb-tool-btn {
+  display:flex; align-items:center; gap:6px;
+  background:var(--card); border:1px solid var(--border);
+  color:var(--text); border-radius:20px;
+  padding:7px 14px; font-size:.8rem; font-weight:700;
+  cursor:pointer; transition:background .15s;
+}
+.sb-tool-btn:hover { background:var(--card2); border-color:var(--orange); }
+
+/* ── Forbikjøring screen ────────────────────────────── */
+#screenForbikjoring { padding:0; background:var(--bg); }
+.fk-topbar {
+  display:flex; align-items:center; gap:10px;
+  padding:10px 14px 8px; flex-shrink:0;
+  border-bottom:1px solid var(--border);
+}
+.fk-title { font-size:1rem; font-weight:800; flex:1; }
+.fk-scenarios {
+  display:flex; gap:8px; padding:12px 14px 8px;
+  flex-shrink:0;
+}
+.fk-sc-btn {
+  flex:1; padding:9px 6px; border-radius:12px;
+  border:2px solid var(--border); background:var(--card);
+  color:var(--text); font-size:.82rem; font-weight:700;
+  cursor:pointer; transition:background .15s, border-color .15s;
+  text-align:center;
+}
+.fk-sc-btn.active { border-color:var(--orange); background:rgba(255,153,51,.12); }
+.fk-sc-btn:hover  { border-color:var(--orange); }
+.fk-body {
+  flex:1; overflow-y:auto; padding:12px 14px 20px;
+  display:flex; flex-direction:column; gap:12px;
+}
+.fk-info-row {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+.fk-info-cell {
+  background:var(--card); border-radius:10px;
+  padding:10px 12px; font-size:.82rem;
+}
+.fk-info-cell .fk-val {
+  font-size:1.35rem; font-weight:900; color:var(--orange);
+  display:block; margin-top:2px;
+}
+.fk-steps {
+  background:var(--card); border-radius:12px;
+  padding:12px 14px; font-size:.83rem; line-height:1.7;
+}
+.fk-steps-hdr {
+  font-size:.72rem; font-weight:900; letter-spacing:.06em;
+  text-transform:uppercase; color:var(--orange); margin-bottom:8px;
+}
+.fk-step { display:flex; justify-content:space-between; gap:8px; }
+.fk-step-lbl { color:var(--muted); }
+.fk-step-val { font-weight:800; text-align:right; }
+.fk-step-val.blue  { color:#60A5FA; }
+.fk-step-val.yel   { color:#F59E0B; }
+.fk-step-val.red   { color:#F87171; }
+.fk-step-val.grn   { color:#34D399; }
+.fk-bar-wrap {
+  background:var(--card); border-radius:12px; padding:12px 14px;
+}
+.fk-bar-hdr {
+  font-size:.72rem; font-weight:900; letter-spacing:.06em;
+  text-transform:uppercase; color:var(--muted); margin-bottom:8px;
+}
+.fk-bar {
+  display:flex; height:28px; border-radius:8px;
+  overflow:hidden; width:100%;
+}
+.fk-bar-seg {
+  display:flex; align-items:center; justify-content:center;
+  font-size:.65rem; font-weight:800; color:#fff;
+  min-width:0; overflow:hidden; white-space:nowrap;
+  transition:width .4s ease;
+}
+.fk-bar-seg.blue { background:#3B82F6; }
+.fk-bar-seg.yel  { background:#F59E0B; }
+.fk-bar-seg.red  { background:#EF4444; }
+.fk-bar-seg.grn  { background:#10B981; }
+.fk-bar-overflow { /* shown when unsafe — red danger stripe */
+  margin-top:4px; font-size:.72rem; color:#F87171; font-weight:700;
+  text-align:right;
+}
+.fk-result {
+  border-radius:12px; padding:14px 16px;
+  font-size:.9rem; font-weight:800; text-align:center;
+}
+.fk-result.safe   { background:rgba(16,185,129,.15); color:#34D399; border:1px solid #34D399; }
+.fk-result.warn   { background:rgba(245,158,11,.12); color:#F59E0B; border:1px solid #F59E0B; }
+.fk-result.danger { background:rgba(239,68,68,.13);  color:#F87171; border:1px solid #F87171; }
+.fk-disclaimer {
+  font-size:.73rem; color:var(--muted); line-height:1.5;
+  padding:10px 14px 4px; border-top:1px solid var(--border);
+  flex-shrink:0;
+}
 .sb-nav-info {
   flex:1; text-align:center; font-size:.78rem;
   color:var(--muted); font-weight:600; letter-spacing:.3px;
@@ -2815,6 +2919,10 @@ a { color:inherit; text-decoration:none; }
           <input id="sbSearchInput" type="text" placeholder="Søk eller § nummer..." data-placeholder-key="studybook_search_placeholder" oninput="sbSearch(this.value)" autocomplete="off" />
         </div>
       </div>
+      <!-- Tool strip — quick tools accessible from Studiebok -->
+      <div class="sb-tools">
+        <button class="sb-tool-btn" onclick="showForbikjoring()"><span id="sbToolFkLabel">🚗 Forbikjøring</span></button>
+      </div>
       <!-- Search results dropdown -->
       <div id="sbSearchResults" class="sb-search-results" style="display:none;"></div>
       <!-- Progress dots -->
@@ -2827,6 +2935,23 @@ a { color:inherit; text-decoration:none; }
         <div class="sb-nav-info" id="sbNavInfo" data-key="studybook_loading">Laster...</div>
         <button class="sb-nav-btn" id="sbNextBtn" onclick="sbGoTo(_sbCurrent + 1)" data-key="studybook_next">Neste ›</button>
       </div>
+    </div>
+
+    <!-- ═══ FORBIKJØRING SCREEN ═══ -->
+    <div class="screen" id="screenForbikjoring">
+      <div class="fk-topbar">
+        <button class="back-btn" onclick="showTab('studybook')">← Tilbake</button>
+        <div class="fk-title" id="fkTitle">🚗 Forbikjøring</div>
+      </div>
+      <div class="fk-scenarios">
+        <button class="fk-sc-btn active" id="fkBtnEasy"  onclick="fkSelect(0)"></button>
+        <button class="fk-sc-btn"        id="fkBtnMed"   onclick="fkSelect(1)"></button>
+        <button class="fk-sc-btn"        id="fkBtnHard"  onclick="fkSelect(2)"></button>
+      </div>
+      <div class="fk-body" id="fkBody">
+        <!-- filled by fkRender() -->
+      </div>
+      <div class="fk-disclaimer" id="fkDisclaimer"></div>
     </div>
 
     <!-- ═══ STUDIEBOK ADMIN EDIT MODAL ═══ -->
@@ -3322,6 +3447,27 @@ var UI = {
   account_unavailable:{th:'บัญชีนี้ไม่พร้อมใช้งาน กรุณาติดต่อฝ่ายสนับสนุน', no:'Denne kontoen er ikke tilgjengelig. Kontakt support.', en:'This account is not available. Contact support.'},
   logout_confirm:{th:'คุณแน่ใจหรือว่าต้องการออกจากระบบ?', no:'Er du sikker på at du vil logge ut?', en:'Are you sure you want to log out?'},
   studybook_home:{th:'📖 หนังสือเรียน — การจราจรนอร์เวย์', no:'📖 Studiebok — Norsk trafikk', en:'📖 Study book — Norwegian traffic'},
+  forbikjoring_label:{th:'🚗 แซง', no:'🚗 Forbikjøring', en:'🚗 Overtaking'},
+  fk_title:{th:'🚗 การแซง — คำนวณระยะ', no:'🚗 Forbikjøring — Avstandskalkulator', en:'🚗 Overtaking — Distance Calculator'},
+  fk_scenario_easy:{th:'🟢 ง่าย', no:'🟢 Lett', en:'🟢 Easy'},
+  fk_scenario_med:{th:'🟡 ปานกลาง', no:'🟡 Middels', en:'🟡 Medium'},
+  fk_scenario_hard:{th:'🔴 ยาก', no:'🔴 Vanskelig', en:'🔴 Hard'},
+  fk_your_speed:{th:'ความเร็วของคุณ', no:'Din fart', en:'Your speed'},
+  fk_ahead_speed:{th:'รถคันหน้า', no:'Bil foran', en:'Car ahead'},
+  fk_oncoming_dist:{th:'ระยะถึงรถสวนทาง', no:'Avstand til møtende', en:'Distance to oncoming'},
+  fk_weather:{th:'สภาพอากาศ', no:'Vær', en:'Weather'},
+  fk_steps_hdr:{th:'การคำนวณ', no:'Utregning', en:'Calculation'},
+  fk_step_time:{th:'เวลาในการแซง', no:'Tid å passere', en:'Time to overtake'},
+  fk_step_your:{th:'ระยะทางของคุณ (🟦)', no:'Din strekning (🟦)', en:'Your distance (🟦)'},
+  fk_step_onc:{th:'รถสวนทาง (🟥)', no:'Møtende kjører (🟥)', en:'Oncoming travels (🟥)'},
+  fk_step_margin:{th:'สิ่งกันชน (🟨)', no:'Sikkerhetsmargin (🟨)', en:'Safety margin (🟨)'},
+  fk_step_need:{th:'รวมที่ต้องการ', no:'Total trengs', en:'Total needed'},
+  fk_step_free:{th:'ถนนที่เหลือ (🟩)', no:'Fri vegstrekning (🟩)', en:'Free road (🟩)'},
+  fk_bar_hdr:{th:'แผนภาพระยะทาง', no:'Avstandsdiagram', en:'Distance diagram'},
+  fk_result_safe:{th:'✅ ปลอดภัย — ระยะเพียงพอ', no:'✅ TRYGT — Du har god margin', en:'✅ SAFE — You have good margin'},
+  fk_result_warn:{th:'⚠️ เฉียดฉิว — ระยะน้อยมาก', no:'⚠️ KNAPT — Meget liten margin', en:'⚠️ CLOSE — Very little margin'},
+  fk_result_danger:{th:'❌ อันตราย — ระยะไม่พอ', no:'❌ FOR FARLIG — Ikke nok plass', en:'❌ DANGEROUS — Not enough room'},
+  fk_disclaimer:{th:'นี่เป็นแบบฝึกหัดแบบง่าย ในการขับจริงต้องประเมินทัศนวิสัย ความเร็ว สภาพอากาศ ถนน และรถสวนทางเสมอ', no:'Dette er en forenklet øvingsmodell. I trafikken må du alltid vurdere sikt, fart, vær, vei og møtende trafikk.', en:'This is a simplified practice model. In real traffic, always assess visibility, speed, weather, road conditions and oncoming traffic.'},
   studybook_search_placeholder:{th:'ค้นหาหรือเลข §...', no:'Søk eller § nummer...', en:'Search or § number...'},
   studybook_prev:{th:'‹ ก่อนหน้า', no:'‹ Forrige', en:'‹ Previous'},
   studybook_next:{th:'ถัดไป ›', no:'Neste ›', en:'Next ›'},
@@ -3471,6 +3617,14 @@ function applyUILang() {
   // Update math section header label
   var mathHdr = document.getElementById('tcMathHdr');
   if (mathHdr) mathHdr.textContent = mathHdr.getAttribute('data-hdr-' + appLang) || mathHdr.getAttribute('data-hdr-no') || '';
+  // Update Studiebok tool strip labels
+  var sbToolFk = document.getElementById('sbToolFkLabel');
+  if (sbToolFk) sbToolFk.textContent = t('forbikjoring_label');
+  // Re-render Forbikjøring if it's the active screen
+  if (document.getElementById('screenForbikjoring') &&
+      document.getElementById('screenForbikjoring').classList.contains('active')) {
+    fkRender();
+  }
   // cats header — update title text without disturbing the count span
   var catsTitleEl = document.querySelector('#screenCats .screen-title');
   if (catsTitleEl) {
@@ -6717,6 +6871,163 @@ async function teacherSend(overrideMsg) {
 function toggleSound(el) {
   soundOn = el.checked;
   _ls.set('t2d_sound', soundOn ? 'on' : 'off');
+}
+
+// ════════════════════════════════════════════
+//  FORBIKJØRING — Overtaking distance tool
+// ════════════════════════════════════════════
+
+var _fkActive = 0; // currently selected scenario index
+
+// Preset scenarios: { vA, vB, vC, dist, carLen, weatherNo, weatherTh, weatherEn, vehicleNo, vehicleTh, vehicleEn }
+var FK_SCENARIOS = [
+  { // 0 — Lett / Easy
+    vA: 80, vB: 60, vC: 70, dist: 700,
+    carLen: 5, safeGap: 40,
+    weatherNo: '☀️ Sol og tørr vei', weatherTh: '☀️ แดดออก ถนนแห้ง', weatherEn: '☀️ Sunny, dry road',
+    vehicleNo: '🚗 Personbil', vehicleTh: '🚗 รถยนต์', vehicleEn: '🚗 Car'
+  },
+  { // 1 — Middels / Medium
+    vA: 90, vB: 70, vC: 80, dist: 500,
+    carLen: 5, safeGap: 40,
+    weatherNo: '🌥 Litt dårlig sikt', weatherTh: '🌥 ทัศนวิสัยไม่ดีนัก', weatherEn: '🌥 Reduced visibility',
+    vehicleNo: '🚗 Personbil', vehicleTh: '🚗 รถยนต์', vehicleEn: '🚗 Car'
+  },
+  { // 2 — Vanskelig / Hard
+    vA: 90, vB: 75, vC: 90, dist: 600,
+    carLen: 20, safeGap: 40,
+    weatherNo: '🌧 Regn', weatherTh: '🌧 ฝนตก', weatherEn: '🌧 Rain',
+    vehicleNo: '🚛 Lastebil', vehicleTh: '🚛 รถบรรทุก', vehicleEn: '🚛 Lorry'
+  }
+];
+
+function fkCalc(sc) {
+  var speedDiffMs = (sc.vA - sc.vB) / 3.6;
+  if (speedDiffMs <= 0) speedDiffMs = 0.1; // guard divide-by-zero
+  var passRelDist = sc.carLen + sc.safeGap;         // metres to clear relative to car ahead
+  var timeS       = passRelDist / speedDiffMs;       // seconds
+  var yourDist    = Math.round((sc.vA / 3.6) * timeS);
+  var oncomingDist= Math.round((sc.vC / 3.6) * timeS);
+  var margin      = 50;                              // fixed safety margin metres
+  var totalNeeded = yourDist + oncomingDist + margin;
+  var freeRoad    = sc.dist - totalNeeded;
+  return {
+    timeS:        Math.round(timeS * 10) / 10,
+    yourDist:     yourDist,
+    oncomingDist: oncomingDist,
+    margin:       margin,
+    totalNeeded:  totalNeeded,
+    freeRoad:     freeRoad,
+    isSafe:   freeRoad > 80,
+    isWarn:   freeRoad > 0 && freeRoad <= 80,
+    isDanger: freeRoad <= 0
+  };
+}
+
+function fkSelect(idx) {
+  _fkActive = idx;
+  ['fkBtnEasy','fkBtnMed','fkBtnHard'].forEach(function(id, i) {
+    var b = document.getElementById(id);
+    if (b) b.classList.toggle('active', i === idx);
+  });
+  fkRender();
+}
+
+function fkRender() {
+  var sc = FK_SCENARIOS[_fkActive];
+  var r  = fkCalc(sc);
+  var L  = appLang;
+
+  function w(no, th, en) { return L==='th' ? th : L==='en' ? en : no; }
+
+  // Weather and vehicle label
+  var weather = w(sc.weatherNo, sc.weatherTh, sc.weatherEn);
+  var vehicle = w(sc.vehicleNo, sc.vehicleTh, sc.vehicleEn);
+
+  // Info cells
+  var infoHtml =
+    '<div class="fk-info-row">'
+      + _fkCell(t('fk_your_speed'),    sc.vA + ' km/t')
+      + _fkCell(t('fk_ahead_speed'),   sc.vB + ' km/t &nbsp;' + vehicle)
+    + '</div>'
+    + '<div class="fk-info-row">'
+      + _fkCell(t('fk_oncoming_dist'), sc.dist + ' m')
+      + _fkCell(t('fk_weather'),       weather)
+    + '</div>';
+
+  // Calculation steps
+  var stepsHtml =
+    '<div class="fk-steps">'
+      + '<div class="fk-steps-hdr">' + t('fk_steps_hdr') + '</div>'
+      + _fkStep(t('fk_step_time'),   r.timeS + ' s',        '')
+      + _fkStep(t('fk_step_your'),   r.yourDist + ' m',     'blue')
+      + _fkStep(t('fk_step_onc'),    r.oncomingDist + ' m', 'red')
+      + _fkStep(t('fk_step_margin'), r.margin + ' m',       'yel')
+      + '<div style="height:1px;background:var(--border);margin:6px 0"></div>'
+      + _fkStep(t('fk_step_need'),   r.totalNeeded + ' m',  '')
+      + _fkStep(t('fk_step_free'),   (r.freeRoad > 0 ? '+' : '') + r.freeRoad + ' m', r.freeRoad > 0 ? 'grn' : 'red')
+    + '</div>';
+
+  // Distance bar
+  var total    = Math.max(sc.dist, r.totalNeeded);
+  var pct      = function(v) { return Math.max(1, Math.round(v / total * 100)); };
+  var pYour    = pct(r.yourDist);
+  var pMargin  = pct(r.margin);
+  var pOnc     = pct(r.oncomingDist);
+  var pFree    = r.freeRoad > 0 ? pct(r.freeRoad) : 0;
+  var overflowHtml = r.isDanger
+    ? '<div class="fk-bar-overflow">↑ ' + Math.abs(r.freeRoad) + ' m ' + w('for mye', 'มากเกินไป', 'too much') + '</div>'
+    : '';
+
+  var barHtml =
+    '<div class="fk-bar-wrap">'
+      + '<div class="fk-bar-hdr">' + t('fk_bar_hdr') + '</div>'
+      + '<div class="fk-bar">'
+        + '<div class="fk-bar-seg blue" style="width:' + pYour   + '%">' + (pYour   > 8 ? r.yourDist+'m'    : '') + '</div>'
+        + '<div class="fk-bar-seg yel"  style="width:' + pMargin + '%">' + (pMargin > 5 ? r.margin+'m'      : '') + '</div>'
+        + '<div class="fk-bar-seg red"  style="width:' + pOnc    + '%">' + (pOnc    > 8 ? r.oncomingDist+'m': '') + '</div>'
+        + (pFree > 0 ? '<div class="fk-bar-seg grn" style="width:' + pFree + '%">' + (pFree > 8 ? r.freeRoad+'m' : '') + '</div>' : '')
+      + '</div>'
+      + overflowHtml
+    + '</div>';
+
+  // Result badge
+  var resultKey  = r.isSafe ? 'fk_result_safe' : r.isWarn ? 'fk_result_warn' : 'fk_result_danger';
+  var resultCls  = r.isSafe ? 'safe'            : r.isWarn ? 'warn'           : 'danger';
+  var resultHtml = '<div class="fk-result ' + resultCls + '">' + t(resultKey) + '</div>';
+
+  document.getElementById('fkBody').innerHTML = infoHtml + stepsHtml + barHtml + resultHtml;
+
+  // Disclaimer
+  var d = document.getElementById('fkDisclaimer');
+  if (d) d.textContent = t('fk_disclaimer');
+}
+
+function _fkCell(lbl, val) {
+  return '<div class="fk-info-cell"><div style="font-size:.73rem;color:var(--muted)">' + lbl + '</div>'
+       + '<span class="fk-val">' + val + '</span></div>';
+}
+function _fkStep(lbl, val, cls) {
+  return '<div class="fk-step"><span class="fk-step-lbl">' + lbl + '</span>'
+       + '<span class="fk-step-val ' + cls + '">' + val + '</span></div>';
+}
+
+function showForbikjoring() {
+  // Update scenario button labels and title
+  var btnIds = ['fkBtnEasy','fkBtnMed','fkBtnHard'];
+  var keys   = ['fk_scenario_easy','fk_scenario_med','fk_scenario_hard'];
+  btnIds.forEach(function(id, i) {
+    var b = document.getElementById(id);
+    if (b) b.textContent = t(keys[i]);
+  });
+  var titleEl = document.getElementById('fkTitle');
+  if (titleEl) titleEl.textContent = t('fk_title');
+  // Show screen
+  document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
+  var scr = document.getElementById('screenForbikjoring');
+  if (scr) scr.classList.add('active');
+  // Render current scenario
+  fkRender();
 }
 
 function setFeedback(style, btn) {
