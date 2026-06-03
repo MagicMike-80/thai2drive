@@ -42,7 +42,96 @@ else:
     logger.error("Teacher chat LLM NOT configured — ANTHROPIC_API_KEY absent.")
 
 # ─── System prompt ────────────────────────────────────────────────────────────
-MICHAEL_SYSTEM_PROMPT = """You are Michael, a driving instructor with 16 years of experience in Oslo, Norway.
+
+# Critical language header — injected FIRST so Haiku reads it before any examples
+_LANG_CRITICAL = {
+    "no": "[LANGUAGE: no]\nCRITICAL: Reply in Bokmål Norwegian ONLY. Every single word must be Norwegian. No Thai, no English.\n\n",
+    "th": "[LANGUAGE: th]\nCRITICAL: ตอบเป็นภาษาไทยเท่านั้น ทุกคำต้องเป็นภาษาไทย ห้ามใช้ภาษานอร์เวย์หรืออังกฤษเลย\nWrite the ENTIRE reply in Thai only. Zero Norwegian words. Zero English words.\n\n",
+    "en": "[LANGUAGE: en]\nCRITICAL: Reply in English ONLY. Every single word must be English. No Norwegian, no Thai.\n\n",
+}
+
+# GOOD example — language-specific so Haiku patterns on the declared language's prose style
+_GOOD_EXAMPLE = {
+    "no": '''"Ok 😊
+
+Tenk deg at du kjører i 50 km/t.
+Plutselig løper et barn ut i veien.
+
+Stopper bilen med én gang?
+
+Nei.
+
+Først må du oppdage faren.
+Deretter bruker hjernen din litt tid på å reagere.
+Først etter det begynner bilen å bremse.
+
+Det er tre faser — og til sammen kalles det stoppelengde."''',
+    "th": '''"โอเครับ 😊
+
+ลองนึกภาพว่าคุณขับรถด้วยความเร็ว 50 กม./ชม.
+แล้วมีเด็กวิ่งตัดหน้ารถออกมา
+
+รถจะหยุดได้ทันทีเลยไหม?
+
+ไม่ใช่ครับ
+
+ก่อนอื่น คุณต้องสังเกตเห็นอันตราย
+จากนั้นสมองต้องใช้เวลาสักครู่เพื่อตอบสนอง
+หลังจากนั้นรถถึงจะเริ่มเบรก
+
+มีสามช่วง — รวมกันเรียกว่า ระยะหยุดรถ"''',
+    "en": '''"Ok 😊
+
+Imagine you are driving at 50 km/h.
+Suddenly a child runs out into the road.
+
+Does the car stop immediately?
+
+No.
+
+First you need to notice the danger.
+Then your brain takes a moment to react.
+Only after that does the car start braking.
+
+There are three phases — together this is called stopping distance."''',
+}
+
+# Coaching phrases — language-specific only, no mixed NO/TH/EN table visible to the model
+_COACHING = {
+    "no": """PRACTICAL COACHING LANGUAGE:
+Weave these phrases in naturally where they fit:
+- "Begynn å planlegge i god tid."
+- "Senk farten tidlig."
+- "Se langt fram — ikke bare rett foran deg."
+- "Gjør deg forstått for andre trafikanter."
+- "Rolig og kontrollert kjøring er trygg kjøring."
+- "Gi deg selv tid til å observere situasjonen."
+
+NEVER mix languages. Use ONLY Norwegian in your reply.""",
+    "th": """PRACTICAL COACHING LANGUAGE:
+ใช้วลีเหล่านี้ตามธรรมชาติในคำตอบ — เขียนเป็นภาษาไทยเท่านั้น:
+- "วางแผนล่วงหน้าตั้งแต่เนิ่นๆ"
+- "ลดความเร็วแต่เนิ่นๆ"
+- "มองไกลๆ ไม่ใช่แค่ข้างหน้า"
+- "สื่อสารให้ผู้ขับรายอื่นเข้าใจ"
+- "ขับรถสงบและควบคุมได้คือขับรถปลอดภัย"
+- "ให้เวลาตัวเองสังเกตสถานการณ์"
+
+ห้ามผสมภาษา ใช้ภาษาไทยทุกคำในคำตอบ""",
+    "en": """PRACTICAL COACHING LANGUAGE:
+Weave these phrases in naturally where they fit:
+- "Start planning well ahead."
+- "Slow down early."
+- "Look far ahead — not just directly in front."
+- "Make yourself understood to other drivers."
+- "Calm and controlled driving is safe driving."
+- "Give yourself time to observe the situation."
+
+NEVER mix languages. Use ONLY English in your reply.""",
+}
+
+# Core prompt template — <<GOOD_EXAMPLE>> and <<COACHING>> are replaced at build time
+_PROMPT_CORE = """You are Michael, a driving instructor with 16 years of experience in Oslo, Norway.
 
 Your teaching style:
 - Calm, patient, encouraging — like a trusted driving instructor sitting in the passenger seat.
@@ -63,31 +152,9 @@ BAD (textbook style — do not do this):
 "Stoppelengde er summen av reaksjonsstrekning og bremsestrekning."
 
 GOOD (instructor style — do this):
-"Ok 😊
+<<GOOD_EXAMPLE>>
 
-Tenk deg at du kjører i 50 km/t.
-Plutselig løper et barn ut i veien.
-
-Stopper bilen med én gang?
-
-Nei.
-
-Først må du oppdage faren.
-Deretter bruker hjernen din litt tid på å reagere.
-Først etter det begynner bilen å bremse.
-
-Det er tre faser — og til sammen kalles det stoppelengde."
-
-PRACTICAL COACHING LANGUAGE:
-Weave these phrases in naturally where they fit — always in the DECLARED language:
-- NO: "Begynn å planlegge i god tid."       TH: "วางแผนล่วงหน้าตั้งแต่เนิ่นๆ"             EN: "Start planning well ahead."
-- NO: "Senk farten tidlig."                 TH: "ลดความเร็วแต่เนิ่นๆ"                    EN: "Slow down early."
-- NO: "Se langt fram — ikke bare rett foran deg."  TH: "มองไกลๆ ไม่ใช่แค่ข้างหน้า"       EN: "Look far ahead — not just directly in front."
-- NO: "Gjør deg forstått for andre trafikanter."   TH: "สื่อสารให้ผู้ขับรายอื่นเข้าใจ"   EN: "Make yourself understood to other drivers."
-- NO: "Rolig og kontrollert kjøring er trygg kjøring."  TH: "ขับรถสงบและควบคุมได้คือขับรถปลอดภัย"  EN: "Calm and controlled driving is safe driving."
-- NO: "Gi deg selv tid til å observere situasjonen."    TH: "ให้เวลาตัวเองสังเกตสถานการณ์"         EN: "Give yourself time to observe the situation."
-
-NEVER mix languages. Use ONLY the declared language in your reply.
+<<COACHING>>
 
 FORMATTING RULES — follow these exactly:
 - Keep paragraphs short: 1–3 sentences maximum per paragraph.
@@ -372,6 +439,27 @@ TOPICS:
 
 Never recommend unsafe driving. Never invent rules."""
 
+
+def _build_system_prompt(lang: str) -> str:
+    """Assemble language-aware system prompt — critical language rule injected FIRST.
+
+    Putting the [LANGUAGE] header at the very top of the system prompt gives Haiku
+    the strongest possible signal before it reads any examples or coaching phrases.
+    The GOOD example and coaching phrases are then injected in the declared language
+    only, so Haiku has no Norwegian prose to pattern-match from when lang=th/en.
+    """
+    l = lang if lang in ("no", "th", "en") else "no"
+    return (
+        _LANG_CRITICAL[l]
+        + _PROMPT_CORE
+        .replace("<<GOOD_EXAMPLE>>", _GOOD_EXAMPLE[l])
+        .replace("<<COACHING>>", _COACHING[l])
+    )
+
+
+# Backwards-compat alias — kept in case any code imports MICHAEL_SYSTEM_PROMPT directly
+MICHAEL_SYSTEM_PROMPT = _build_system_prompt("no")
+
 # ─── Single source of truth: welcome + topics ────────────────────────────────
 MICHAEL_WELCOME = {
     "no": "Sawatdee 😊\n\nJeg er Michael.\n\nTrafikklærer med 16 års erfaring i Oslo.\n\nJeg kan hjelpe deg med skilt, vikeplikt, trafikkregler og teoriprøven.",
@@ -491,31 +579,24 @@ class TeacherChatResponse(BaseModel):
 async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
     session_id = req.session_id or f"ts_{uuid.uuid4().hex[:16]}"
     user_msg = req.message.strip()
+    lang = (req.language or "no").strip().lower()
+    if lang not in ("no", "th", "en"):
+        lang = "no"
 
     # Load prior conversation (last 20 messages in this session)
     prior = await _chat_col.find(
-        {"session_id": session_id}
+        {"session_id": session_id, "language": lang}
     ).sort("ts", 1).to_list(length=20)
     conversation: List[dict] = [{"role": m["role"], "content": m["content"]} for m in prior]
 
     # Determine reply language — request param takes priority
-    lang = (req.language or "no").strip().lower()
-    if lang not in ("no", "th", "en"):
-        lang = "no"
-    _LANG_NAMES = {"no": "Bokmål Norwegian", "th": "Thai", "en": "English"}
-    lang_pin = (
-        f"\n\n[LANGUAGE: {lang}]\n"
-        f"Reply language: {_LANG_NAMES[lang]}. "
-        f"Write the ENTIRE reply in {_LANG_NAMES[lang]} only. "
-        f"Do not mix in words from any other language."
-    )
-
     # Call LLM
     try:
         if not LLM_KEY:
             raise RuntimeError("ANTHROPIC_API_KEY not configured")
 
-        messages = [{"role": "system", "content": MICHAEL_SYSTEM_PROMPT + lang_pin}]
+        # _build_system_prompt injects [LANGUAGE] header FIRST, then language-specific examples
+        messages = [{"role": "system", "content": _build_system_prompt(lang)}]
         messages.extend(conversation)
         messages.append({"role": "user", "content": user_msg})
 
@@ -527,10 +608,10 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         )
         reply_text = (resp.choices[0].message.content or "").strip()
         if not reply_text:
-            reply_text = _fallback_reply(req.language or "no")
+            reply_text = _fallback_reply(lang)
     except Exception as e:
         logger.error("Teacher LLM call failed [%s]: %s", type(e).__name__, e)
-        reply_text = _fallback_reply(req.language or "no")
+        reply_text = _fallback_reply(lang)
 
     # Persist both messages
     now = datetime.now(timezone.utc)
@@ -539,18 +620,19 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             "session_id": session_id,
             "role": "user",
             "content": user_msg,
-            "language": req.language,
+            "language": lang,
             "ts": now,
         },
         {
             "session_id": session_id,
             "role": "assistant",
             "content": reply_text,
+            "language": lang,
             "ts": now,
         },
     ])
 
-    suggestions = _get_suggestions(reply_text, req.language or "no")
+    suggestions = _get_suggestions(reply_text, lang)
     return TeacherChatResponse(session_id=session_id, reply=reply_text, suggestions=suggestions)
 
 

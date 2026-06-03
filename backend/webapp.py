@@ -3171,13 +3171,13 @@ a { color:inherit; text-decoration:none; }
 
       <!-- RIGHT: helper panel — only visible on desktop via CSS -->
       <div class="teacher-side-panel" id="teacherSidePanel">
-        <div class="tsp-title" id="tspTitle">Emner</div>
-        <button class="tsp-btn" onclick="teacherSend('🛑 Forklar et skilt')">🛑 <span data-tsp="sign"></span></button>
-        <button class="tsp-btn" onclick="teacherSend('🚗 Hjelp med vikeplikt')">🚗 <span data-tsp="vikeplikt"></span></button>
-        <button class="tsp-btn" onclick="teacherSend('📖 Forklar en trafikkregel')">📖 <span data-tsp="rule"></span></button>
-        <button class="tsp-btn" onclick="teacherSend('📊 Hva bør jeg øve på?')">📊 <span data-tsp="practice"></span></button>
-        <button class="tsp-btn" onclick="teacherSend('📝 Hjelp med teoriprøven')">📝 <span data-tsp="theory"></span></button>
-        <button class="tsp-btn" onclick="teacherSend('❓ Spør om Thai2Drive')">❓ <span data-tsp="app"></span></button>
+        <div class="tsp-title" id="tspTitle" data-key="tsp_title">Emner</div>
+        <button class="tsp-btn" data-tsp-btn="sign">🛑 <span data-tsp="sign"></span></button>
+        <button class="tsp-btn" data-tsp-btn="vikeplikt">🚗 <span data-tsp="vikeplikt"></span></button>
+        <button class="tsp-btn" data-tsp-btn="rule">📖 <span data-tsp="rule"></span></button>
+        <button class="tsp-btn" data-tsp-btn="practice">📊 <span data-tsp="practice"></span></button>
+        <button class="tsp-btn" data-tsp-btn="theory">📝 <span data-tsp="theory"></span></button>
+        <button class="tsp-btn" data-tsp-btn="app">❓ <span data-tsp="app"></span></button>
       </div><!-- /teacher-side-panel -->
 
     </div><!-- /screenTeacher -->
@@ -3686,21 +3686,21 @@ function applyUILang() {
     var key = tspMap[el.getAttribute('data-tsp')];
     if (key) el.textContent = t(key);
   });
-  // Update suggestion chip labels
+  // Update suggestion chip labels — no Norwegian fallback
   document.querySelectorAll('.teacher-chip').forEach(function(chip) {
     var lbl = chip.querySelector('.chip-lbl');
     if (!lbl) return;
     var msgKey   = 'data-msg-'   + appLang;
     var labelKey = 'data-label-' + appLang;
-    var msg = chip.getAttribute(msgKey) || chip.getAttribute('data-msg-no') || '';
+    var msg = chip.getAttribute(msgKey) || '';
     // Use data-label-* for display if present (math chips); otherwise strip emoji from msg
-    var labelRaw = chip.getAttribute(labelKey) || chip.getAttribute('data-label-no') || msg;
+    var labelRaw = chip.getAttribute(labelKey) || msg;
     lbl.textContent = labelRaw.replace(/^[\u{1F000}-\u{1FFFF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\uD800-\uDFFF❓📊📝📖🚗🛑🧮📏⚡🌧️]+\s*/u, '');
     chip.dataset.msg = msg;
   });
-  // Update math section header label
+  // Update math section header label — no Norwegian fallback
   var mathHdr = document.getElementById('tcMathHdr');
-  if (mathHdr) mathHdr.textContent = mathHdr.getAttribute('data-hdr-' + appLang) || mathHdr.getAttribute('data-hdr-no') || '';
+  if (mathHdr) mathHdr.textContent = mathHdr.getAttribute('data-hdr-' + appLang) || '';
   // Update Studiebok tool strip labels
   var sbToolFk = document.getElementById('sbToolFkLabel');
   if (sbToolFk) sbToolFk.textContent = t('forbikjoring_label');
@@ -5681,10 +5681,11 @@ function _fmtDur(secs) {
 
 function buildVideoCard(v) {
   if (!v) return '';
+  // No cross-language title fallback — hide the card if the selected language is missing.
   var title = escH(
-    appLang === 'th' ? (v.title_th || v.title_no || v.title_en || v.title || '') :
-    appLang === 'en' ? (v.title_en || v.title_no || v.title_th || v.title || '') :
-    (v.title_no || v.title_en || v.title_th || v.title || '')
+    appLang === 'th' ? (v.title_th || '') :
+    appLang === 'en' ? (v.title_en || '') :
+    (v.title_no || '')
   );
   if (!title) return '';
   var url   = escH(v.youtube_url || '');
@@ -6657,6 +6658,7 @@ function loadSettings() {
 }
 
 function setLang(lang) {
+  var previousLang = appLang;
   appLang = lang;
   _ls.set('t2d_lang', lang);
   ['TH','NO','EN'].forEach(function(l) {
@@ -6686,6 +6688,7 @@ function setLang(lang) {
   if (histScreen && histScreen.classList.contains('active')) {
     loadHistory();
   }
+  if (previousLang && previousLang !== lang) resetTeacherForLanguage();
   var teacherScreen = document.getElementById('screenTeacher');
   if (teacherScreen && teacherScreen.classList.contains('active')) {
     loadTeacher();
@@ -6707,6 +6710,20 @@ var _teacherSessionId    = null;
 var _teacherHasUserMsg   = false;   // true once user sends first message
 var _teacherTyping       = false;
 var _teacherWelcomeLang  = null;    // tracks which language the welcome was rendered in
+
+function resetTeacherForLanguage() {
+  _teacherSessionId = null;
+  _teacherHasUserMsg = false;
+  _teacherWelcomeLang = null;
+  _teacherTyping = false;
+  var input = document.getElementById('teacherInput');
+  if (input) input.value = '';
+  var msgs = document.getElementById('teacherMessages');
+  if (msgs) msgs.innerHTML = '';
+  var suggestions = document.getElementById('teacherSuggestions');
+  if (suggestions) suggestions.style.display = '';
+  _teacherRemoveChips();
+}
 
 // ── Strip markdown → plain text ──────────────────────────────
 function _stripMd(text) {
@@ -6796,7 +6813,7 @@ async function loadTeacher() {
           th: 'สวัสดีครับ 😊\n\nผมชื่อไมเคิล\n\nครูสอนขับรถที่มีประสบการณ์ 16 ปีในออสโล',
           en: 'Sawatdee 😊\n\nI\'m Michael.\n\nDriving instructor with 16 years of experience in Oslo.'
         };
-        _teacherAppendBubble('assistant', fallback[appLang] || fallback.no);
+        _teacherAppendBubble('assistant', fallback[appLang] || '');
       }
     }
   }
@@ -6841,10 +6858,11 @@ async function loadTeacher() {
 }
 
 function _teacherUpdateChips() {
+  // No Norwegian fallback — chips show blank if the language attr is missing
   document.querySelectorAll('.teacher-chip').forEach(function(chip) {
     var lbl = chip.querySelector('.chip-lbl');
     if (!lbl) return;
-    var msg = chip.getAttribute('data-msg-' + appLang) || chip.getAttribute('data-msg-no') || '';
+    var msg = chip.getAttribute('data-msg-' + appLang) || '';
     lbl.textContent = msg.replace(/^[\S]{1,2}\s+/, ''); // strip leading emoji+space
     chip.dataset.msg = msg;
   });
@@ -6957,8 +6975,8 @@ async function teacherSend(overrideMsg) {
     _teacherHideTyping();
     _teacherAppendBubble('assistant', data.reply || t('teacher_error'));
     _teacherAppendChips(data.suggestions || []);
-    // Video card — show for stoppelengde / bremselengde / reaksjonslengde topics
-    if (/reaksjonslengde|bremselengde|stoppelengde|reaksjonstid|alle formler/i.test(msg)) {
+    // Video card — show for math/braking topics (all languages)
+    if (/reaksjonslengde|bremselengde|stoppelengde|reaksjonstid|alle formler|reaction distance|braking distance|stopping distance|ระยะตอบสนอง|ระยะปฏิกิริยา|ระยะเบรก|ระยะหยุดรถ|สูตรทั้งหมด/i.test(msg)) {
       fetchVideoForTopic('Bremsing').then(function(v) {
         if (!v) return;
         var msgs = document.getElementById('teacherMessages');
