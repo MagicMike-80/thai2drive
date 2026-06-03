@@ -2150,12 +2150,12 @@ a { color:inherit; text-decoration:none; }
   .fk-layout      { flex-direction:row; }
   .fk-calc-col    { min-width:420px; }
   .fk-img-col {
-    display:flex; flex:0 0 46%;
+    display:flex; flex-direction:column; flex:0 0 46%;
     border-left:1px solid var(--border); overflow:hidden;
-    align-items:stretch;
+    min-height:400px;
   }
   .fk-img-col img {
-    width:100%; height:100%;
+    width:100%; flex:1;
     object-fit:cover; object-position:center;
     display:block;
   }
