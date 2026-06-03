@@ -8,14 +8,33 @@
     "question_no": "Du kjører 50 km/t med normal reaksjonstid på 1 sekund. Hvor lang er reaksjonslengden?",
     "question_th": "คุณขับรถด้วยความเร็ว 50 กม./ชม. โดยมีเวลาตอบสนองปกติ 1 วินาที ระยะปฏิกิริยาคือเท่าใด?",
     "question_en": "You are driving at 50 km/h with a normal reaction time of 1 second. What is the reaction distance?",
-    "options_no": ["Ca. 8 meter", "Ca. 14 meter", "Ca. 20 meter", "Ca. 25 meter"],
-    "options_th": ["ประมาณ 8 เมตร", "ประมาณ 14 เมตร", "ประมาณ 20 เมตร", "ประมาณ 25 เมตร"],
-    "options_en": ["About 8 metres", "About 14 metres", "About 20 metres", "About 25 metres"],
+    "options_no": [
+      "Ca. 8 meter",
+      "Ca. 14 meter",
+      "Ca. 20 meter",
+      "Ca. 25 meter"
+    ],
+    "options_th": [
+      "ประมาณ 8 เมตร",
+      "ประมาณ 14 เมตร",
+      "ประมาณ 20 เมตร",
+      "ประมาณ 25 เมตร"
+    ],
+    "options_en": [
+      "About 8 metres",
+      "About 14 metres",
+      "About 20 metres",
+      "About 25 metres"
+    ],
     "correct_index": 1,
     "explanation_no": "Ved 50 km/t tilbakelegger bilen ca. 14 meter per sekund (50 ÷ 3,6 ≈ 13,9 m/s). Med 1 sekunds reaksjonstid blir reaksjonslengden derfor ca. 14 meter.",
     "explanation_th": "ที่ความเร็ว 50 กม./ชม. รถเคลื่อนที่ประมาณ 14 เมตรต่อวินาที (50 ÷ 3.6 ≈ 13.9 ม./วิ) ดังนั้นระยะปฏิกิริยาที่เวลา 1 วินาทีคือประมาณ 14 เมตร",
     "explanation_en": "At 50 km/h the car travels about 14 metres per second (50 ÷ 3.6 ≈ 13.9 m/s). With a 1-second reaction time the reaction distance is therefore about 14 metres.",
-    "tags": ["stoppelengde", "hard", "exam_boost"]
+    "tags": [
+      "stoppelengde",
+      "hard",
+      "exam_boost"
+    ]
   },
   {
     "id": "stop_002",
@@ -26,14 +45,33 @@
     "question_no": "Du kjører 80 km/t. Hva skjer med reaksjonslengden sammenlignet med 40 km/t?",
     "question_th": "คุณขับรถด้วยความเร็ว 80 กม./ชม. ระยะปฏิกิริยาเปลี่ยนแปลงอย่างไรเมื่อเทียบกับ 40 กม./ชม.?",
     "question_en": "You are driving at 80 km/h. How does the reaction distance change compared to 40 km/h?",
-    "options_no": ["Den er den samme", "Den dobles", "Den firedobles", "Den øker med 50 %"],
-    "options_th": ["เท่าเดิม", "เพิ่มเป็น 2 เท่า", "เพิ่มเป็น 4 เท่า", "เพิ่มขึ้น 50%"],
-    "options_en": ["It stays the same", "It doubles", "It quadruples", "It increases by 50%"],
+    "options_no": [
+      "Den er den samme",
+      "Den dobles",
+      "Den firedobles",
+      "Den øker med 50 %"
+    ],
+    "options_th": [
+      "เท่าเดิม",
+      "เพิ่มเป็น 2 เท่า",
+      "เพิ่มเป็น 4 เท่า",
+      "เพิ่มขึ้น 50%"
+    ],
+    "options_en": [
+      "It stays the same",
+      "It doubles",
+      "It quadruples",
+      "It increases by 50%"
+    ],
     "correct_index": 1,
     "explanation_no": "Reaksjonslengden er proporsjonal med farten: dobler du farten, dobler du også reaksjonslengden. Ved 40 km/t er den ca. 11 m, ved 80 km/t ca. 22 m.",
     "explanation_th": "ระยะปฏิกิริยาแปรผันตรงกับความเร็ว เมื่อความเร็วเพิ่มเป็น 2 เท่า ระยะปฏิกิริยาก็เพิ่มเป็น 2 เท่าเช่นกัน ที่ 40 กม./ชม. ≈ 11 ม. ที่ 80 กม./ชม. ≈ 22 ม.",
     "explanation_en": "Reaction distance is proportional to speed: double the speed and you double the reaction distance. At 40 km/h it is about 11 m; at 80 km/h about 22 m.",
-    "tags": ["stoppelengde", "hard", "exam_boost"]
+    "tags": [
+      "stoppelengde",
+      "hard",
+      "exam_boost"
+    ]
   },
   {
     "id": "stop_003",
@@ -44,14 +82,33 @@
     "question_no": "En trøtt sjåfør kan ha en reaksjonstid på 2–3 sekunder. Hvor lang er reaksjonslengden ved 90 km/t med 2 sekunders reaksjonstid?",
     "question_th": "คนขับรถที่เหนื่อยล้าอาจมีเวลาตอบสนอง 2–3 วินาที ระยะปฏิกิริยาที่ความเร็ว 90 กม./ชม. และเวลาตอบสนอง 2 วินาทีคือเท่าใด?",
     "question_en": "A tired driver may have a reaction time of 2–3 seconds. What is the reaction distance at 90 km/h with a 2-second reaction time?",
-    "options_no": ["Ca. 25 meter", "Ca. 37 meter", "Ca. 50 meter", "Ca. 72 meter"],
-    "options_th": ["ประมาณ 25 เมตร", "ประมาณ 37 เมตร", "ประมาณ 50 เมตร", "ประมาณ 72 เมตร"],
-    "options_en": ["About 25 metres", "About 37 metres", "About 50 metres", "About 72 metres"],
+    "options_no": [
+      "Ca. 25 meter",
+      "Ca. 37 meter",
+      "Ca. 50 meter",
+      "Ca. 72 meter"
+    ],
+    "options_th": [
+      "ประมาณ 25 เมตร",
+      "ประมาณ 37 เมตร",
+      "ประมาณ 50 เมตร",
+      "ประมาณ 72 เมตร"
+    ],
+    "options_en": [
+      "About 25 metres",
+      "About 37 metres",
+      "About 50 metres",
+      "About 72 metres"
+    ],
     "correct_index": 2,
     "explanation_no": "90 km/t ÷ 3,6 = 25 m/s. Med 2 sekunders reaksjonstid: 25 × 2 = 50 meter. Bilen kjører 50 meter uten noen bremsing i det hele tatt.",
     "explanation_th": "90 กม./ชม. ÷ 3.6 = 25 ม./วิ คูณด้วย 2 วินาที = 50 เมตร รถเคลื่อนที่ 50 เมตรโดยไม่มีการเบรกเลย",
     "explanation_en": "90 km/h ÷ 3.6 = 25 m/s. With a 2-second reaction time: 25 × 2 = 50 metres. The car travels 50 metres with no braking at all.",
-    "tags": ["stoppelengde", "hard", "exam_boost"]
+    "tags": [
+      "stoppelengde",
+      "hard",
+      "exam_boost"
+    ]
   },
   {
     "id": "stop_004",
@@ -62,14 +119,33 @@
     "question_no": "Hva er IKKE riktig om reaksjonslengde?",
     "question_th": "ข้อใดไม่ถูกต้องเกี่ยวกับระยะปฏิกิริยา?",
     "question_en": "Which statement about reaction distance is NOT correct?",
-    "options_no": ["Den øker jo høyere farten er", "Den er ikke avhengig av farten, bare av reaksjonstiden", "Trøtthet øker reaksjonslengden", "Mobilbruk kan øke reaksjonstiden betraktelig"],
-    "options_th": ["เพิ่มขึ้นตามความเร็ว", "ไม่ขึ้นอยู่กับความเร็ว แต่ขึ้นอยู่กับเวลาตอบสนองเท่านั้น", "ความเหนื่อยล้าเพิ่มระยะปฏิกิริยา", "การใช้โทรศัพท์มือถือเพิ่มเวลาตอบสนองอย่างมาก"],
-    "options_en": ["It increases with higher speed", "It does not depend on speed, only on reaction time", "Fatigue increases the reaction distance", "Mobile phone use can considerably increase reaction time"],
+    "options_no": [
+      "Den øker jo høyere farten er",
+      "Den er ikke avhengig av farten, bare av reaksjonstiden",
+      "Trøtthet øker reaksjonslengden",
+      "Mobilbruk kan øke reaksjonstiden betraktelig"
+    ],
+    "options_th": [
+      "เพิ่มขึ้นตามความเร็ว",
+      "ไม่ขึ้นอยู่กับความเร็ว แต่ขึ้นอยู่กับเวลาตอบสนองเท่านั้น",
+      "ความเหนื่อยล้าเพิ่มระยะปฏิกิริยา",
+      "การใช้โทรศัพท์มือถือเพิ่มเวลาตอบสนองอย่างมาก"
+    ],
+    "options_en": [
+      "It increases with higher speed",
+      "It does not depend on speed, only on reaction time",
+      "Fatigue increases the reaction distance",
+      "Mobile phone use can considerably increase reaction time"
+    ],
     "correct_index": 1,
     "explanation_no": "Reaksjonslengden avhenger av BEGGE deler: reaksjonstiden OG farten. Reaksjonslengde = fart (m/s) × reaksjonstid (sek). Påstanden om at den bare avhenger av reaksjonstiden er feil.",
     "explanation_th": "ระยะปฏิกิริยาขึ้นอยู่กับทั้งสองปัจจัย: เวลาตอบสนองและความเร็ว ระยะปฏิกิริยา = ความเร็ว (ม./วิ) × เวลาตอบสนอง (วิ) ข้อความที่ว่าขึ้นอยู่กับเวลาตอบสนองเท่านั้นจึงผิด",
     "explanation_en": "Reaction distance depends on BOTH: reaction time AND speed. Reaction distance = speed (m/s) × reaction time (s). The claim that it depends only on reaction time is incorrect.",
-    "tags": ["stoppelengde", "hard", "exam_boost"]
+    "tags": [
+      "stoppelengde",
+      "hard",
+      "exam_boost"
+    ]
   },
   {
     "id": "stop_005",
@@ -80,14 +156,33 @@
     "question_no": "Du dobler farten fra 50 km/t til 100 km/t. Hva skjer med bremselengden på tørr asfalt?",
     "question_th": "คุณเพิ่มความเร็วจาก 50 กม./ชม. เป็น 100 กม./ชม. บนยางแห้ง บระยะเบรกเปลี่ยนแปลงอย่างไร?",
     "question_en": "You double your speed from 50 km/h to 100 km/h. What happens to the braking distance on dry asphalt?",
-    "options_no": ["Den dobles", "Den tredobles", "Den firedobles", "Den øker med 50 %"],
-    "options_th": ["เพิ่มเป็น 2 เท่า", "เพิ่มเป็น 3 เท่า", "เพิ่มเป็น 4 เท่า", "เพิ่มขึ้น 50%"],
-    "options_en": ["It doubles", "It triples", "It quadruples", "It increases by 50%"],
+    "options_no": [
+      "Den dobles",
+      "Den tredobles",
+      "Den firedobles",
+      "Den øker med 50 %"
+    ],
+    "options_th": [
+      "เพิ่มเป็น 2 เท่า",
+      "เพิ่มเป็น 3 เท่า",
+      "เพิ่มเป็น 4 เท่า",
+      "เพิ่มขึ้น 50%"
+    ],
+    "options_en": [
+      "It doubles",
+      "It triples",
+      "It quadruples",
+      "It increases by 50%"
+    ],
     "correct_index": 2,
     "explanation_no": "Bremselengden øker med kvadratet av farten. Dobler du farten, firedobles bremselengden. Ved 50 km/t er bremselengden ca. 14 m; ved 100 km/t ca. 56 m — altså 4 ganger så lang.",
     "explanation_th": "ระยะเบรกเพิ่มขึ้นตามกำลังสองของความเร็ว เมื่อความเร็วเพิ่มเป็น 2 เท่า ระยะเบรกจะเพิ่มเป็น 4 เท่า ที่ 50 กม./ชม. ≈ 14 ม. ที่ 100 กม./ชม. ≈ 56 ม.",
     "explanation_en": "Braking distance increases with the square of speed. Double the speed and the braking distance quadruples. At 50 km/h it is about 14 m; at 100 km/h about 56 m — four times as long.",
-    "tags": ["stoppelengde", "hard", "exam_boost"]
+    "tags": [
+      "stoppelengde",
+      "hard",
+      "exam_boost"
+    ]
   },
   {
     "id": "stop_006",
@@ -98,14 +193,33 @@
     "question_no": "På våt vei øker bremselengden med omtrent hvor mye sammenlignet med tørr vei?",
     "question_th": "บนถนนเปียก ระยะเบรกเพิ่มขึ้นประมาณเท่าใดเมื่อเทียบกับถนนแห้ง?",
     "question_en": "On a wet road, by approximately how much does the braking distance increase compared to a dry road?",
-    "options_no": ["10–20 %", "30–50 %", "Dobles (100 %)", "Tredobles (200 %)"],
-    "options_th": ["10–20%", "30–50%", "เพิ่มเป็น 2 เท่า (100%)", "เพิ่มเป็น 3 เท่า (200%)"],
-    "options_en": ["10–20%", "30–50%", "Doubles (100%)", "Triples (200%)"],
+    "options_no": [
+      "10–20 %",
+      "30–50 %",
+      "Dobles (100 %)",
+      "Tredobles (200 %)"
+    ],
+    "options_th": [
+      "10–20%",
+      "30–50%",
+      "เพิ่มเป็น 2 เท่า (100%)",
+      "เพิ่มเป็น 3 เท่า (200%)"
+    ],
+    "options_en": [
+      "10–20%",
+      "30–50%",
+      "Doubles (100%)",
+      "Triples (200%)"
+    ],
     "correct_index": 1,
     "explanation_no": "På våt vei reduseres friksjonen mellom dekk og veidekke, og bremselengden øker typisk med 30–50 %. Dette understreker viktigheten av å redusere farten i regnvær.",
     "explanation_th": "บนถนนเปียก แรงเสียดทานระหว่างยางและพื้นถนนลดลง ทำให้ระยะเบรกเพิ่มขึ้นโดยทั่วไปประมาณ 30–50% ซึ่งเป็นเหตุผลสำคัญที่ต้องลดความเร็วเมื่อฝนตก",
     "explanation_en": "On a wet road, friction between the tyre and road surface is reduced, and braking distance typically increases by 30–50%. This underlines the importance of reducing speed in rain.",
-    "tags": ["stoppelengde", "hard", "exam_boost"]
+    "tags": [
+      "stoppelengde",
+      "hard",
+      "exam_boost"
+    ]
   },
   {
     "id": "stop_007",
@@ -116,14 +230,33 @@
     "question_no": "På isete vei kan bremselengden bli opptil hvor mange ganger lengre enn på tørr asfalt?",
     "question_th": "บนถนนที่เป็นน้ำแข็ง ระยะเบรกอาจยาวกว่าถนนแห้งได้มากถึงกี่เท่า?",
     "question_en": "On an icy road, braking distance can be up to how many times longer than on dry asphalt?",
-    "options_no": ["2 ganger", "3 ganger", "5 ganger", "Opptil 10 ganger"],
-    "options_th": ["2 เท่า", "3 เท่า", "5 เท่า", "มากถึง 10 เท่า"],
-    "options_en": ["2 times", "3 times", "5 times", "Up to 10 times"],
+    "options_no": [
+      "2 ganger",
+      "3 ganger",
+      "5 ganger",
+      "Opptil 10 ganger"
+    ],
+    "options_th": [
+      "2 เท่า",
+      "3 เท่า",
+      "5 เท่า",
+      "มากถึง 10 เท่า"
+    ],
+    "options_en": [
+      "2 times",
+      "3 times",
+      "5 times",
+      "Up to 10 times"
+    ],
     "correct_index": 3,
     "explanation_no": "På glatt is kan friksjonsverdien være svært lav. Bremselengden kan bli opptil 8–10 ganger lenger enn på tørr asfalt. Dette er grunnen til at man må holde svært lav fart og stor avstand på vinterføre.",
     "explanation_th": "บนน้ำแข็งลื่น ค่าแรงเสียดทานอาจต่ำมาก ระยะเบรกอาจยาวถึง 8–10 เท่าของถนนแห้ง นี่คือเหตุผลที่ต้องขับช้ามากและเว้นระยะห่างมากในสภาพถนนฤดูหนาว",
     "explanation_en": "On smooth ice the friction value can be very low. Braking distance can be up to 8–10 times longer than on dry asphalt. This is why you must drive very slowly and keep a large distance in winter road conditions.",
-    "tags": ["stoppelengde", "hard", "exam_boost"]
+    "tags": [
+      "stoppelengde",
+      "hard",
+      "exam_boost"
+    ]
   },
   {
     "id": "stop_008",
@@ -134,14 +267,33 @@
     "question_no": "Hva er den viktigste grunnen til at nye dekk gir kortere bremselengde enn slitte dekk?",
     "question_th": "เหตุใดยางใหม่จึงให้ระยะเบรกที่สั้นกว่ายางสึก?",
     "question_en": "What is the main reason why new tyres give a shorter braking distance than worn tyres?",
-    "options_no": ["Nye dekk er tyngre", "Mønsterdybden gir bedre vannavledning og grep", "Nye dekk har lavere lufttrykk", "Nye dekk er laget av mykere gummi som varmes raskere opp"],
-    "options_th": ["ยางใหม่หนักกว่า", "ความลึกของดอกยางให้การระบายน้ำและแรงยึดเกาะที่ดีกว่า", "ยางใหม่มีแรงดันลมต่ำกว่า", "ยางใหม่ทำจากยางที่อ่อนกว่าและร้อนเร็วกว่า"],
-    "options_en": ["New tyres are heavier", "Tread depth provides better water drainage and grip", "New tyres have lower tyre pressure", "New tyres are made of softer rubber that heats up faster"],
+    "options_no": [
+      "Nye dekk er tyngre",
+      "Mønsterdybden gir bedre vannavledning og grep",
+      "Nye dekk har lavere lufttrykk",
+      "Nye dekk er laget av mykere gummi som varmes raskere opp"
+    ],
+    "options_th": [
+      "ยางใหม่หนักกว่า",
+      "ความลึกของดอกยางให้การระบายน้ำและแรงยึดเกาะที่ดีกว่า",
+      "ยางใหม่มีแรงดันลมต่ำกว่า",
+      "ยางใหม่ทำจากยางที่อ่อนกว่าและร้อนเร็วกว่า"
+    ],
+    "options_en": [
+      "New tyres are heavier",
+      "Tread depth provides better water drainage and grip",
+      "New tyres have lower tyre pressure",
+      "New tyres are made of softer rubber that heats up faster"
+    ],
     "correct_index": 1,
     "explanation_no": "Mønsterdybden på nye dekk leder vann bort fra kontaktflaten mellom dekk og vei, og gir bedre grep. Slitte dekk med liten mønsterdybde kan ikke avlede vann effektivt og får dårligere friksjon, særlig på våt vei.",
     "explanation_th": "ความลึกของดอกยางบนยางใหม่ช่วยระบายน้ำออกจากพื้นผิวสัมผัสระหว่างยางกับถนน ทำให้ยึดเกาะได้ดีขึ้น ยางสึกที่มีดอกตื้นไม่สามารถระบายน้ำได้อย่างมีประสิทธิภาพ ส่งผลให้แรงเสียดทานลดลง โดยเฉพาะบนถนนเปียก",
     "explanation_en": "The tread depth on new tyres channels water away from the contact patch between tyre and road, providing better grip. Worn tyres with shallow tread cannot disperse water effectively and have reduced friction, especially on wet roads.",
-    "tags": ["stoppelengde", "hard", "exam_boost"]
+    "tags": [
+      "stoppelengde",
+      "hard",
+      "exam_boost"
+    ]
   },
   {
     "id": "stop_009",
@@ -152,14 +304,33 @@
     "question_no": "Hva er stoppelengden? Velg den mest presise definisjonen.",
     "question_th": "ระยะหยุดรถคืออะไร? เลือกคำนิยามที่ถูกต้องที่สุด",
     "question_en": "What is the stopping distance? Choose the most precise definition.",
-    "options_no": ["Strekningen bilen tilbakelegger under bremsingen alene", "Strekningen fra du oppdager faren til bilen står stille", "Strekningen fra du trykker på bremsen til bilen stopper", "Strekningen du kjører med konstant fart"],
-    "options_th": ["ระยะทางที่รถเคลื่อนที่ขณะเบรกเพียงอย่างเดียว", "ระยะทางตั้งแต่คุณพบอันตรายจนรถหยุด", "ระยะทางตั้งแต่คุณเหยียบเบรกจนรถหยุด", "ระยะทางที่ขับด้วยความเร็วคงที่"],
-    "options_en": ["The distance the car travels during braking alone", "The distance from when you notice the danger until the car stops", "The distance from when you apply the brake until the car stops", "The distance driven at constant speed"],
+    "options_no": [
+      "Strekningen bilen tilbakelegger under bremsingen alene",
+      "Strekningen fra du oppdager faren til bilen står stille",
+      "Strekningen fra du trykker på bremsen til bilen stopper",
+      "Strekningen du kjører med konstant fart"
+    ],
+    "options_th": [
+      "ระยะทางที่รถเคลื่อนที่ขณะเบรกเพียงอย่างเดียว",
+      "ระยะทางตั้งแต่คุณพบอันตรายจนรถหยุด",
+      "ระยะทางตั้งแต่คุณเหยียบเบรกจนรถหยุด",
+      "ระยะทางที่ขับด้วยความเร็วคงที่"
+    ],
+    "options_en": [
+      "The distance the car travels during braking alone",
+      "The distance from when you notice the danger until the car stops",
+      "The distance from when you apply the brake until the car stops",
+      "The distance driven at constant speed"
+    ],
     "correct_index": 1,
     "explanation_no": "Stoppelengden er den totale strekningen fra du oppdager faren til bilen stopper helt. Den består av to deler: reaksjonslengde (bilen beveger seg i reaksjonstiden) + bremselengde (bilen stopper under bremsingen).",
     "explanation_th": "ระยะหยุดรถคือระยะทางรวมทั้งหมดตั้งแต่คุณพบอันตรายจนรถหยุดสนิท ประกอบด้วยสองส่วน: ระยะปฏิกิริยา (รถยังเคลื่อนที่ในช่วงเวลาตอบสนอง) + ระยะเบรก (รถหยุดขณะเบรก)",
     "explanation_en": "The stopping distance is the total distance from when you notice the danger until the car stops completely. It consists of two parts: reaction distance (the car moves during reaction time) + braking distance (the car stops during braking).",
-    "tags": ["stoppelengde", "hard", "exam_boost"]
+    "tags": [
+      "stoppelengde",
+      "hard",
+      "exam_boost"
+    ]
   },
   {
     "id": "stop_010",
@@ -170,14 +341,33 @@
     "question_no": "Du kjører 80 km/t på tørr vei med god bremser. Reaksjonslengden er 22 m og bremselengden er 33 m. Hva er stoppelengden?",
     "question_th": "คุณขับรถด้วยความเร็ว 80 กม./ชม. บนถนนแห้งและมีเบรกที่ดี ระยะปฏิกิริยา 22 ม. ระยะเบรก 33 ม. ระยะหยุดรถคือเท่าใด?",
     "question_en": "You are driving at 80 km/h on a dry road with good brakes. Reaction distance is 22 m and braking distance is 33 m. What is the stopping distance?",
-    "options_no": ["22 meter", "33 meter", "55 meter", "66 meter"],
-    "options_th": ["22 เมตร", "33 เมตร", "55 เมตร", "66 เมตร"],
-    "options_en": ["22 metres", "33 metres", "55 metres", "66 metres"],
+    "options_no": [
+      "22 meter",
+      "33 meter",
+      "55 meter",
+      "66 meter"
+    ],
+    "options_th": [
+      "22 เมตร",
+      "33 เมตร",
+      "55 เมตร",
+      "66 เมตร"
+    ],
+    "options_en": [
+      "22 metres",
+      "33 metres",
+      "55 metres",
+      "66 metres"
+    ],
     "correct_index": 2,
     "explanation_no": "Stoppelengde = reaksjonslengde + bremselengde = 22 m + 33 m = 55 meter. Mange undervurderer dette — over halvannen fotballutsider fra der du oppdager faren!",
     "explanation_th": "ระยะหยุดรถ = ระยะปฏิกิริยา + ระยะเบรก = 22 ม. + 33 ม. = 55 เมตร หลายคนประเมินต่ำไป นั่นคือมากกว่าสนามฟุตบอลครึ่งสนาม!",
     "explanation_en": "Stopping distance = reaction distance + braking distance = 22 m + 33 m = 55 metres. Many people underestimate this — more than half a football pitch from where you spot the danger!",
-    "tags": ["stoppelengde", "hard", "exam_boost"]
+    "tags": [
+      "stoppelengde",
+      "hard",
+      "exam_boost"
+    ]
   },
   {
     "id": "stop_011",
@@ -188,14 +378,33 @@
     "question_no": "Hvilken påstand om stoppelengde er RIKTIG?",
     "question_th": "ข้อความใดเกี่ยวกับระยะหยุดรถที่ถูกต้อง?",
     "question_en": "Which statement about stopping distance is CORRECT?",
-    "options_no": ["Stoppelengden er den samme på alle føreforhold", "En økt fart på 10 km/t har liten effekt på stoppelengden", "Stoppelengden øker kraftig med høyere fart pga. den kvadratiske økningen i bremselengden", "God belysning reduserer stoppelengden"],
-    "options_th": ["ระยะหยุดรถเท่ากันในทุกสภาพถนน", "การเพิ่มความเร็ว 10 กม./ชม. มีผลต่อระยะหยุดรถน้อยมาก", "ระยะหยุดรถเพิ่มขึ้นอย่างมากตามความเร็วที่สูงขึ้น เนื่องจากระยะเบรกเพิ่มขึ้นเป็นกำลังสอง", "แสงสว่างที่ดีช่วยลดระยะหยุดรถ"],
-    "options_en": ["The stopping distance is the same in all road conditions", "A speed increase of 10 km/h has little effect on stopping distance", "Stopping distance increases sharply with higher speed due to the squared increase in braking distance", "Good lighting reduces the stopping distance"],
+    "options_no": [
+      "Stoppelengden er den samme på alle føreforhold",
+      "En økt fart på 10 km/t har liten effekt på stoppelengden",
+      "Stoppelengden øker kraftig med høyere fart pga. den kvadratiske økningen i bremselengden",
+      "God belysning reduserer stoppelengden"
+    ],
+    "options_th": [
+      "ระยะหยุดรถเท่ากันในทุกสภาพถนน",
+      "การเพิ่มความเร็ว 10 กม./ชม. มีผลต่อระยะหยุดรถน้อยมาก",
+      "ระยะหยุดรถเพิ่มขึ้นอย่างมากตามความเร็วที่สูงขึ้น เนื่องจากระยะเบรกเพิ่มขึ้นเป็นกำลังสอง",
+      "แสงสว่างที่ดีช่วยลดระยะหยุดรถ"
+    ],
+    "options_en": [
+      "The stopping distance is the same in all road conditions",
+      "A speed increase of 10 km/h has little effect on stopping distance",
+      "Stopping distance increases sharply with higher speed due to the squared increase in braking distance",
+      "Good lighting reduces the stopping distance"
+    ],
     "correct_index": 2,
     "explanation_no": "Stoppelengden øker kraftig med høyere fart fordi bremselengden øker med kvadratet av farten. Reaksjonslengden øker også lineært. Samlet gir dette en dramatisk økning i stoppelengde ved høy fart.",
     "explanation_th": "ระยะหยุดรถเพิ่มขึ้นอย่างมากตามความเร็ว เพราะระยะเบรกเพิ่มขึ้นเป็นกำลังสองของความเร็ว และระยะปฏิกิริยาก็เพิ่มขึ้นเชิงเส้นด้วย รวมกันทำให้ระยะหยุดรถเพิ่มขึ้นอย่างรวดเร็วที่ความเร็วสูง",
     "explanation_en": "Stopping distance increases sharply with higher speed because braking distance increases with the square of speed. Reaction distance also increases linearly. Together these cause a dramatic rise in stopping distance at high speeds.",
-    "tags": ["stoppelengde", "hard", "exam_boost"]
+    "tags": [
+      "stoppelengde",
+      "hard",
+      "exam_boost"
+    ]
   },
   {
     "id": "stop_012",
@@ -206,14 +415,33 @@
     "question_no": "Du kjører 100 km/t. Et barn løper ut i veien 60 meter foran deg. Reaksjonslengde er 28 m, bremselengde er 56 m. Klarer du å stoppe?",
     "question_th": "คุณขับรถด้วยความเร็ว 100 กม./ชม. เด็กวิ่งออกมาบนถนนห่างจากคุณ 60 เมตร ระยะปฏิกิริยา 28 ม. ระยะเบรก 56 ม. คุณหยุดรถทันหรือไม่?",
     "question_en": "You are driving at 100 km/h. A child runs into the road 60 metres ahead. Reaction distance is 28 m, braking distance is 56 m. Can you stop in time?",
-    "options_no": ["Ja, stoppelengden er akkurat 60 m", "Nei, du trenger 84 m for å stoppe — 24 m for langt", "Ja, med god nok bremsing klarer du det", "Nei, men du kan svinge unna"],
-    "options_th": ["ใช่ ระยะหยุดรถพอดี 60 ม.", "ไม่ คุณต้องการ 84 ม. เพื่อหยุด — ยาวกว่า 24 ม.", "ใช่ ถ้าเบรกแรงพอก็หยุดได้", "ไม่ แต่คุณสามารถบังคับเลี้ยวหลีกได้"],
-    "options_en": ["Yes, the stopping distance is exactly 60 m", "No, you need 84 m to stop — 24 m too far", "Yes, with hard enough braking you can manage", "No, but you can swerve out of the way"],
+    "options_no": [
+      "Ja, stoppelengden er akkurat 60 m",
+      "Nei, du trenger 84 m for å stoppe — 24 m for langt",
+      "Ja, med god nok bremsing klarer du det",
+      "Nei, men du kan svinge unna"
+    ],
+    "options_th": [
+      "ใช่ ระยะหยุดรถพอดี 60 ม.",
+      "ไม่ คุณต้องการ 84 ม. เพื่อหยุด — ยาวกว่า 24 ม.",
+      "ใช่ ถ้าเบรกแรงพอก็หยุดได้",
+      "ไม่ แต่คุณสามารถบังคับเลี้ยวหลีกได้"
+    ],
+    "options_en": [
+      "Yes, the stopping distance is exactly 60 m",
+      "No, you need 84 m to stop — 24 m too far",
+      "Yes, with hard enough braking you can manage",
+      "No, but you can swerve out of the way"
+    ],
     "correct_index": 1,
     "explanation_no": "Stoppelengde = 28 m + 56 m = 84 meter. Barnet er kun 60 m unna. Du trenger 24 meter mer enn du har til rådighet. Resultatet er en kollisjon. Dette viser hvorfor 100 km/t i boligområder er livsfarlig.",
     "explanation_th": "ระยะหยุดรถ = 28 ม. + 56 ม. = 84 เมตร แต่เด็กอยู่ห่างเพียง 60 เมตร คุณต้องการระยะเพิ่มอีก 24 เมตร ผลลัพธ์คือการชน สิ่งนี้แสดงให้เห็นว่าทำไมการขับ 100 กม./ชม. ในย่านที่อยู่อาศัยจึงอันตรายถึงชีวิต",
     "explanation_en": "Stopping distance = 28 m + 56 m = 84 metres. The child is only 60 m away. You need 24 metres more than available. The result is a collision. This shows why 100 km/h in residential areas is deadly.",
-    "tags": ["stoppelengde", "hard", "exam_boost"]
+    "tags": [
+      "stoppelengde",
+      "hard",
+      "exam_boost"
+    ]
   },
   {
     "id": "stop_013",
@@ -224,14 +452,33 @@
     "question_no": "Du tredobler farten fra 30 km/t til 90 km/t. Hva skjer med bremselengden på tørr vei?",
     "question_th": "คุณเพิ่มความเร็วเป็น 3 เท่าจาก 30 กม./ชม. เป็น 90 กม./ชม. บนถนนแห้ง ระยะเบรกเปลี่ยนแปลงอย่างไร?",
     "question_en": "You triple your speed from 30 km/h to 90 km/h. What happens to the braking distance on a dry road?",
-    "options_no": ["Den tredobles", "Den femdobles", "Den ninedobles", "Den seksdobles"],
-    "options_th": ["เพิ่มเป็น 3 เท่า", "เพิ่มเป็น 5 เท่า", "เพิ่มเป็น 9 เท่า", "เพิ่มเป็น 6 เท่า"],
-    "options_en": ["It triples", "It multiplies by 5", "It multiplies by 9", "It multiplies by 6"],
+    "options_no": [
+      "Den tredobles",
+      "Den femdobles",
+      "Den ninedobles",
+      "Den seksdobles"
+    ],
+    "options_th": [
+      "เพิ่มเป็น 3 เท่า",
+      "เพิ่มเป็น 5 เท่า",
+      "เพิ่มเป็น 9 เท่า",
+      "เพิ่มเป็น 6 เท่า"
+    ],
+    "options_en": [
+      "It triples",
+      "It multiplies by 5",
+      "It multiplies by 9",
+      "It multiplies by 6"
+    ],
     "correct_index": 2,
     "explanation_no": "Bremselengden øker med kvadratet av farten. Tredobler du farten, ninedobles bremselengden (3² = 9). Ved 30 km/t er bremselengden ca. 4 m; ved 90 km/t ca. 36 m — ni ganger lengre.",
     "explanation_th": "ระยะเบรกเพิ่มขึ้นตามกำลังสองของความเร็ว เมื่อความเร็วเพิ่มเป็น 3 เท่า ระยะเบรกจะเพิ่มเป็น 9 เท่า (3² = 9) ที่ 30 กม./ชม. ≈ 4 ม. ที่ 90 กม./ชม. ≈ 36 ม.",
     "explanation_en": "Braking distance increases with the square of speed. Triple the speed and the braking distance multiplies by 9 (3² = 9). At 30 km/h braking distance is about 4 m; at 90 km/h about 36 m — nine times longer.",
-    "tags": ["stoppelengde", "hard", "exam_boost"]
+    "tags": [
+      "stoppelengde",
+      "hard",
+      "exam_boost"
+    ]
   },
   {
     "id": "stop_014",
@@ -242,14 +489,33 @@
     "question_no": "Hvorfor er det mye farligere å kjøre 70 km/t enn 50 km/t i tettbygd strøk?",
     "question_th": "ทำไมการขับรถด้วยความเร็ว 70 กม./ชม. จึงอันตรายกว่า 50 กม./ชม. มากในเขตชุมชน?",
     "question_en": "Why is driving 70 km/h much more dangerous than 50 km/h in built-up areas?",
-    "options_no": ["Bilen bruker mer drivstoff", "Stoppelengden øker drastisk og sjansen for å overleve en kollisjon faller dramatisk", "Det er mer støy ved 70 km/t", "Fartsgrenseskiltene er vanskeligere å lese"],
-    "options_th": ["รถใช้เชื้อเพลิงมากขึ้น", "ระยะหยุดรถเพิ่มขึ้นอย่างมาก และโอกาสรอดชีวิตจากการชนลดลงอย่างมาก", "มีเสียงดังมากขึ้นที่ 70 กม./ชม.", "อ่านป้ายจำกัดความเร็วได้ยากกว่า"],
-    "options_en": ["The car uses more fuel", "Stopping distance increases drastically and the chance of surviving a collision falls dramatically", "There is more noise at 70 km/h", "Speed limit signs are harder to read"],
+    "options_no": [
+      "Bilen bruker mer drivstoff",
+      "Stoppelengden øker drastisk og sjansen for å overleve en kollisjon faller dramatisk",
+      "Det er mer støy ved 70 km/t",
+      "Fartsgrenseskiltene er vanskeligere å lese"
+    ],
+    "options_th": [
+      "รถใช้เชื้อเพลิงมากขึ้น",
+      "ระยะหยุดรถเพิ่มขึ้นอย่างมาก และโอกาสรอดชีวิตจากการชนลดลงอย่างมาก",
+      "มีเสียงดังมากขึ้นที่ 70 กม./ชม.",
+      "อ่านป้ายจำกัดความเร็วได้ยากกว่า"
+    ],
+    "options_en": [
+      "The car uses more fuel",
+      "Stopping distance increases drastically and the chance of surviving a collision falls dramatically",
+      "There is more noise at 70 km/h",
+      "Speed limit signs are harder to read"
+    ],
     "correct_index": 1,
     "explanation_no": "En fotgjenger som blir påkjørt ved 50 km/t har ca. 80 % sjanse for å overleve. Ved 70 km/t faller overlevelsessjansen til under 20 %. Stoppelengden ved 70 km/t er nesten dobbelt så lang som ved 50 km/t.",
     "explanation_th": "คนเดินเท้าที่ถูกชนที่ 50 กม./ชม. มีโอกาสรอดชีวิตประมาณ 80% แต่ที่ 70 กม./ชม. โอกาสรอดชีวิตลดลงต่ำกว่า 20% และระยะหยุดรถที่ 70 กม./ชม. ยาวเกือบสองเท่าของที่ 50 กม./ชม.",
     "explanation_en": "A pedestrian hit at 50 km/h has about an 80% chance of surviving. At 70 km/h the survival chance drops below 20%. The stopping distance at 70 km/h is nearly double that at 50 km/h.",
-    "tags": ["stoppelengde", "hard", "exam_boost"]
+    "tags": [
+      "stoppelengde",
+      "hard",
+      "exam_boost"
+    ]
   },
   {
     "id": "stop_015",
@@ -260,14 +526,33 @@
     "question_no": "Du kjører med 10 km/t over fartsgrensen på 80 km/t. Hva er konsekvensen for bremselengden?",
     "question_th": "คุณขับด้วยความเร็วเกินกำหนด 10 กม./ชม. เมื่อขีดจำกัดคือ 80 กม./ชม. ผลกระทบต่อระยะเบรกคืออะไร?",
     "question_en": "You drive 10 km/h over the 80 km/h speed limit. What is the consequence for braking distance?",
-    "options_no": ["Bremselengden øker med ca. 12 %", "Bremselengden øker med ca. 25–27 %", "Bremselengden øker med ca. 50 %", "Bremselengden er praktisk talt den samme"],
-    "options_th": ["ระยะเบรกเพิ่มขึ้นประมาณ 12%", "ระยะเบรกเพิ่มขึ้นประมาณ 25–27%", "ระยะเบรกเพิ่มขึ้นประมาณ 50%", "ระยะเบรกแทบไม่เปลี่ยนแปลง"],
-    "options_en": ["Braking distance increases by about 12%", "Braking distance increases by about 25–27%", "Braking distance increases by about 50%", "Braking distance is practically the same"],
+    "options_no": [
+      "Bremselengden øker med ca. 12 %",
+      "Bremselengden øker med ca. 25–27 %",
+      "Bremselengden øker med ca. 50 %",
+      "Bremselengden er praktisk talt den samme"
+    ],
+    "options_th": [
+      "ระยะเบรกเพิ่มขึ้นประมาณ 12%",
+      "ระยะเบรกเพิ่มขึ้นประมาณ 25–27%",
+      "ระยะเบรกเพิ่มขึ้นประมาณ 50%",
+      "ระยะเบรกแทบไม่เปลี่ยนแปลง"
+    ],
+    "options_en": [
+      "Braking distance increases by about 12%",
+      "Braking distance increases by about 25–27%",
+      "Braking distance increases by about 50%",
+      "Braking distance is practically the same"
+    ],
     "correct_index": 1,
     "explanation_no": "Bremselengde ∝ v². Fra 80 til 90 km/t: (90/80)² = 1,266 → økning på ca. 27 %. Det kan virke lite, men det tilsvarer mange ekstra meter og kan bety forskjellen mellom kollisjon og nesten-kollisjon.",
     "explanation_th": "ระยะเบรก ∝ v² จาก 80 เป็น 90 กม./ชม.: (90/80)² = 1.266 → เพิ่มขึ้นประมาณ 27% ดูเหมือนน้อย แต่นั่นคือเมตรเพิ่มเติมที่อาจเป็นความแตกต่างระหว่างการชนกับการเกือบชน",
     "explanation_en": "Braking distance ∝ v². From 80 to 90 km/h: (90/80)² = 1.266 → an increase of about 27%. It may seem small, but it represents many extra metres and can mean the difference between a collision and a near miss.",
-    "tags": ["stoppelengde", "hard", "exam_boost"]
+    "tags": [
+      "stoppelengde",
+      "hard",
+      "exam_boost"
+    ]
   },
   {
     "id": "stop_016",
@@ -278,14 +563,33 @@
     "question_no": "Du kjører på en gruslagt vei etter regn. Hvilken setning er RIKTIG?",
     "question_th": "คุณขับรถบนถนนลูกรังหลังฝนตก ข้อใดถูกต้อง?",
     "question_en": "You are driving on a gravel road after rain. Which statement is CORRECT?",
-    "options_no": ["Grus gir bedre grep enn tørr asfalt", "Våt grus kan gi svært dårlig friksjon og lang bremselengde", "Bremselengden er den samme som på tørr asfalt", "Du kan kompensere ved å pumpe bremsen raskt"],
-    "options_th": ["ถนนลูกรังให้แรงยึดเกาะดีกว่าแอสฟัลต์แห้ง", "ลูกรังที่เปียกอาจให้แรงเสียดทานต่ำมากและระยะเบรกยาว", "ระยะเบรกเท่ากับบนแอสฟัลต์แห้ง", "คุณสามารถชดเชยได้ด้วยการปั๊มเบรกอย่างรวดเร็ว"],
-    "options_en": ["Gravel gives better grip than dry asphalt", "Wet gravel can give very poor friction and a long braking distance", "The braking distance is the same as on dry asphalt", "You can compensate by pumping the brake rapidly"],
+    "options_no": [
+      "Grus gir bedre grep enn tørr asfalt",
+      "Våt grus kan gi svært dårlig friksjon og lang bremselengde",
+      "Bremselengden er den samme som på tørr asfalt",
+      "Du kan kompensere ved å pumpe bremsen raskt"
+    ],
+    "options_th": [
+      "ถนนลูกรังให้แรงยึดเกาะดีกว่าแอสฟัลต์แห้ง",
+      "ลูกรังที่เปียกอาจให้แรงเสียดทานต่ำมากและระยะเบรกยาว",
+      "ระยะเบรกเท่ากับบนแอสฟัลต์แห้ง",
+      "คุณสามารถชดเชยได้ด้วยการปั๊มเบรกอย่างรวดเร็ว"
+    ],
+    "options_en": [
+      "Gravel gives better grip than dry asphalt",
+      "Wet gravel can give very poor friction and a long braking distance",
+      "The braking distance is the same as on dry asphalt",
+      "You can compensate by pumping the brake rapidly"
+    ],
     "correct_index": 1,
     "explanation_no": "Våt grus gir dårlig friksjon fordi grusen kan rulle og bli som løse kuler under dekkene. Bremselengden kan bli betraktelig lengre. Du må redusere farten og øke avstanden til forankjørende.",
     "explanation_th": "ลูกรังเปียกให้แรงเสียดทานไม่ดี เพราะลูกรังสามารถกลิ้งได้เหมือนลูกกลิ้งใต้ยาง ระยะเบรกอาจยาวขึ้นอย่างมาก คุณต้องลดความเร็วและเพิ่มระยะห่างจากรถคันหน้า",
     "explanation_en": "Wet gravel provides poor friction because the gravel can roll like loose balls under the tyres. Braking distance can be considerably longer. You must reduce speed and increase the distance to the vehicle ahead.",
-    "tags": ["stoppelengde", "hard", "exam_boost"]
+    "tags": [
+      "stoppelengde",
+      "hard",
+      "exam_boost"
+    ]
   },
   {
     "id": "stop_017",
@@ -296,14 +600,33 @@
     "question_no": "Hva er «black ice» (sort is), og hvorfor er det spesielt farlig?",
     "question_th": "\"Black ice\" (น้ำแข็งดำ) คืออะไร และทำไมจึงอันตรายเป็นพิเศษ?",
     "question_en": "What is 'black ice' and why is it especially dangerous?",
-    "options_no": ["Asfalt som er svart av olje — farlig fordi det er vanskelig å vaske bort", "Et tynt, gjennomsiktig islag på asfalten som er nesten usynlig og gir ekstremt lav friksjon", "Is som dannes i mørke — farlig fordi lykter ikke avslører det", "En type islag som bare oppstår i tunneler"],
-    "options_th": ["แอสฟัลต์ที่ดำเพราะน้ำมัน อันตรายเพราะล้างออกยาก", "ชั้นน้ำแข็งบางโปร่งใสบนแอสฟัลต์ที่แทบมองไม่เห็นและมีแรงเสียดทานต่ำมาก", "น้ำแข็งที่เกิดในความมืด อันตรายเพราะไฟหน้าไม่สามารถส่องเห็น", "ชั้นน้ำแข็งที่เกิดเฉพาะในอุโมงค์"],
-    "options_en": ["Asphalt blackened by oil — dangerous because it is hard to wash off", "A thin, transparent layer of ice on the asphalt that is nearly invisible and gives extremely low friction", "Ice that forms in darkness — dangerous because headlights cannot reveal it", "A type of ice that only forms in tunnels"],
+    "options_no": [
+      "Asfalt som er svart av olje — farlig fordi det er vanskelig å vaske bort",
+      "Et tynt, gjennomsiktig islag på asfalten som er nesten usynlig og gir ekstremt lav friksjon",
+      "Is som dannes i mørke — farlig fordi lykter ikke avslører det",
+      "En type islag som bare oppstår i tunneler"
+    ],
+    "options_th": [
+      "แอสฟัลต์ที่ดำเพราะน้ำมัน อันตรายเพราะล้างออกยาก",
+      "ชั้นน้ำแข็งบางโปร่งใสบนแอสฟัลต์ที่แทบมองไม่เห็นและมีแรงเสียดทานต่ำมาก",
+      "น้ำแข็งที่เกิดในความมืด อันตรายเพราะไฟหน้าไม่สามารถส่องเห็น",
+      "ชั้นน้ำแข็งที่เกิดเฉพาะในอุโมงค์"
+    ],
+    "options_en": [
+      "Asphalt blackened by oil — dangerous because it is hard to wash off",
+      "A thin, transparent layer of ice on the asphalt that is nearly invisible and gives extremely low friction",
+      "Ice that forms in darkness — dangerous because headlights cannot reveal it",
+      "A type of ice that only forms in tunnels"
+    ],
     "correct_index": 1,
     "explanation_no": "Sort is er et tynt, nesten usynlig islag som kan se ut som vanlig fuktig asfalt. Det gir svært lav friksjon og fanger sjåfører på senget fordi det er umulig å oppdage visuelt. Det oppstår typisk ved temperaturer rundt 0 °C.",
     "explanation_th": "น้ำแข็งดำเป็นชั้นน้ำแข็งบางที่แทบมองไม่เห็น อาจดูเหมือนแอสฟัลต์เปียกธรรมดา ให้แรงเสียดทานต่ำมากและจับผู้ขับขี่ไม่ทัน เพราะไม่สามารถมองเห็นได้ด้วยตา มักเกิดขึ้นที่อุณหภูมิรอบๆ 0°C",
     "explanation_en": "Black ice is a thin, nearly invisible layer of ice that can look like ordinary wet asphalt. It gives extremely low friction and catches drivers off guard because it cannot be detected visually. It typically forms at temperatures around 0°C.",
-    "tags": ["stoppelengde", "hard", "exam_boost"]
+    "tags": [
+      "stoppelengde",
+      "hard",
+      "exam_boost"
+    ]
   },
   {
     "id": "stop_018",
@@ -314,14 +637,33 @@
     "question_no": "Det er isete vei og du kjører 60 km/t. Bremselengden er 8 ganger lengre enn på tørr asfalt. Tørr bremselengde ved 60 km/t er 23 m. Hva er bremselengden på is?",
     "question_th": "ถนนมีน้ำแข็งและคุณขับด้วยความเร็ว 60 กม./ชม. ระยะเบรกยาวกว่าถนนแห้ง 8 เท่า บนถนนแห้งที่ 60 กม./ชม. ระยะเบรกคือ 23 ม. บนน้ำแข็งระยะเบรกคือเท่าใด?",
     "question_en": "The road is icy and you are driving at 60 km/h. Braking distance is 8 times longer than on dry asphalt. Dry braking distance at 60 km/h is 23 m. What is the braking distance on ice?",
-    "options_no": ["Ca. 100 meter", "Ca. 140 meter", "Ca. 184 meter", "Ca. 230 meter"],
-    "options_th": ["ประมาณ 100 เมตร", "ประมาณ 140 เมตร", "ประมาณ 184 เมตร", "ประมาณ 230 เมตร"],
-    "options_en": ["About 100 metres", "About 140 metres", "About 184 metres", "About 230 metres"],
+    "options_no": [
+      "Ca. 100 meter",
+      "Ca. 140 meter",
+      "Ca. 184 meter",
+      "Ca. 230 meter"
+    ],
+    "options_th": [
+      "ประมาณ 100 เมตร",
+      "ประมาณ 140 เมตร",
+      "ประมาณ 184 เมตร",
+      "ประมาณ 230 เมตร"
+    ],
+    "options_en": [
+      "About 100 metres",
+      "About 140 metres",
+      "About 184 metres",
+      "About 230 metres"
+    ],
     "correct_index": 2,
     "explanation_no": "23 m × 8 = 184 meter. Legg til reaksjonslengden på 17 m, og stoppelengden på is er over 200 meter. Ved 60 km/t! Dette forklarer hvorfor vinterdekk og lav fart er livsviktig.",
     "explanation_th": "23 ม. × 8 = 184 เมตร บวกระยะปฏิกิริยา 17 ม. ระยะหยุดรถบนน้ำแข็งยาวกว่า 200 เมตร ที่ความเร็ว 60 กม./ชม.! นี่คือเหตุผลที่ยางฤดูหนาวและการขับช้าสำคัญมาก",
     "explanation_en": "23 m × 8 = 184 metres. Add the reaction distance of 17 m, and the stopping distance on ice exceeds 200 metres. At 60 km/h! This explains why winter tyres and low speed are vital.",
-    "tags": ["stoppelengde", "hard", "exam_boost"]
+    "tags": [
+      "stoppelengde",
+      "hard",
+      "exam_boost"
+    ]
   },
   {
     "id": "stop_019",
@@ -332,14 +674,33 @@
     "question_no": "Du kjører på snødekket vei. ABS-bremser aktiveres. Hva er RIKTIG om ABS på snø og is?",
     "question_th": "คุณขับรถบนถนนที่มีหิมะ เบรก ABS ทำงาน ข้อใดถูกต้องเกี่ยวกับ ABS บนหิมะและน้ำแข็ง?",
     "question_en": "You are driving on a snow-covered road. ABS brakes activate. What is CORRECT about ABS on snow and ice?",
-    "options_no": ["ABS eliminerer bremselengden på is", "ABS hindrer hjulene i å låse seg slik at du beholder styringen, men bremselengden kan bli lengre enn uten ABS", "ABS korter alltid bremselengden på alle underlag", "ABS deaktiveres automatisk på is"],
-    "options_th": ["ABS ขจัดระยะเบรกบนน้ำแข็ง", "ABS ป้องกันล้อล็อก ทำให้คุณยังบังคับเลี้ยวได้ แต่ระยะเบรกอาจยาวกว่าการไม่ใช้ ABS", "ABS ลดระยะเบรกบนทุกพื้นผิวเสมอ", "ABS ปิดทำงานอัตโนมัติบนน้ำแข็ง"],
-    "options_en": ["ABS eliminates braking distance on ice", "ABS prevents wheel lock-up so you keep steering control, but braking distance can be longer than without ABS", "ABS always shortens braking distance on all surfaces", "ABS disengages automatically on ice"],
+    "options_no": [
+      "ABS eliminerer bremselengden på is",
+      "ABS hindrer hjulene i å låse seg slik at du beholder styringen, men bremselengden kan bli lengre enn uten ABS",
+      "ABS korter alltid bremselengden på alle underlag",
+      "ABS deaktiveres automatisk på is"
+    ],
+    "options_th": [
+      "ABS ขจัดระยะเบรกบนน้ำแข็ง",
+      "ABS ป้องกันล้อล็อก ทำให้คุณยังบังคับเลี้ยวได้ แต่ระยะเบรกอาจยาวกว่าการไม่ใช้ ABS",
+      "ABS ลดระยะเบรกบนทุกพื้นผิวเสมอ",
+      "ABS ปิดทำงานอัตโนมัติบนน้ำแข็ง"
+    ],
+    "options_en": [
+      "ABS eliminates braking distance on ice",
+      "ABS prevents wheel lock-up so you keep steering control, but braking distance can be longer than without ABS",
+      "ABS always shortens braking distance on all surfaces",
+      "ABS disengages automatically on ice"
+    ],
     "correct_index": 1,
     "explanation_no": "ABS hindrer hjulene i å låse seg, noe som er viktig for å beholde styringen. På løs snø og is kan imidlertid ABS gi lengre bremselengde enn blokkerte hjul, fordi blokkerte hjul kan grave seg ned og skape en snøplog-effekt. Vinterdekk er viktigere enn ABS.",
     "explanation_th": "ABS ป้องกันล้อล็อก ซึ่งสำคัญมากสำหรับการบังคับเลี้ยว บนหิมะร่วนและน้ำแข็ง ABS อาจให้ระยะเบรกที่ยาวกว่าล้อล็อก เพราะล้อล็อกอาจขุดเข้าหิมะสร้างเอฟเฟกต์ลิ่ม ยางฤดูหนาวสำคัญกว่า ABS",
     "explanation_en": "ABS prevents wheel lock-up, which is important for maintaining steering. On loose snow and ice however, ABS can result in a longer stopping distance than locked wheels, because locked wheels can dig in and create a wedge effect. Winter tyres are more important than ABS.",
-    "tags": ["stoppelengde", "hard", "exam_boost"]
+    "tags": [
+      "stoppelengde",
+      "hard",
+      "exam_boost"
+    ]
   },
   {
     "id": "stop_020",
@@ -350,14 +711,33 @@
     "question_no": "Det er mørkt og du kjører med nærlys. Nærlyset rekker ca. 40 meter. Du kjører 80 km/t. Hva er problemet?",
     "question_th": "มืดและคุณขับโดยใช้ไฟต่ำ ไฟต่ำส่องได้ประมาณ 40 เมตร คุณขับด้วยความเร็ว 80 กม./ชม. ปัญหาคืออะไร?",
     "question_en": "It is dark and you are driving on dipped headlights. Dipped beams reach about 40 metres. You are driving at 80 km/h. What is the problem?",
-    "options_no": ["Ingen problem — nærlys er alltid nok", "Stoppelengden ved 80 km/t er ca. 55 m, men du kan bare se 40 m — du kjører 'blindt' inn i mørket", "Fjernlys er ulovlig på vei med trafikk", "Bremselengden er kortere i mørket"],
-    "options_th": ["ไม่มีปัญหา ไฟต่ำเพียงพอเสมอ", "ระยะหยุดรถที่ 80 กม./ชม. ≈ 55 ม. แต่มองเห็นได้แค่ 40 ม. คุณขับ 'ตาบอด' เข้าไปในความมืด", "ไฟสูงผิดกฎหมายบนถนนที่มีการจราจร", "ระยะเบรกสั้นกว่าในความมืด"],
-    "options_en": ["No problem — dipped headlights are always sufficient", "Stopping distance at 80 km/h is about 55 m, but you can only see 40 m — you are driving 'blind' into the darkness", "High beams are illegal on roads with traffic", "Braking distance is shorter in the dark"],
+    "options_no": [
+      "Ingen problem — nærlys er alltid nok",
+      "Stoppelengden ved 80 km/t er ca. 55 m, men du kan bare se 40 m — du kjører 'blindt' inn i mørket",
+      "Fjernlys er ulovlig på vei med trafikk",
+      "Bremselengden er kortere i mørket"
+    ],
+    "options_th": [
+      "ไม่มีปัญหา ไฟต่ำเพียงพอเสมอ",
+      "ระยะหยุดรถที่ 80 กม./ชม. ≈ 55 ม. แต่มองเห็นได้แค่ 40 ม. คุณขับ 'ตาบอด' เข้าไปในความมืด",
+      "ไฟสูงผิดกฎหมายบนถนนที่มีการจราจร",
+      "ระยะเบรกสั้นกว่าในความมืด"
+    ],
+    "options_en": [
+      "No problem — dipped headlights are always sufficient",
+      "Stopping distance at 80 km/h is about 55 m, but you can only see 40 m — you are driving 'blind' into the darkness",
+      "High beams are illegal on roads with traffic",
+      "Braking distance is shorter in the dark"
+    ],
     "correct_index": 1,
     "explanation_no": "Du kjører raskere enn lysene dine rekker. Stoppelengden (55 m) er lengre enn synlengden (40 m). Hvis noe er i veien utenfor lyskonens rekkevidde, er en kollisjon uunngåelig. Løsning: reduser farten til ca. 50 km/t, eller bruk fjernlys når det er mulig.",
     "explanation_th": "คุณขับเร็วกว่าที่ไฟส่องถึง ระยะหยุดรถ (55 ม.) ยาวกว่าระยะมองเห็น (40 ม.) หากมีสิ่งกีดขวางนอกระยะแสงไฟ การชนเป็นสิ่งหลีกเลี่ยงไม่ได้ วิธีแก้: ลดความเร็วเหลือประมาณ 50 กม./ชม. หรือใช้ไฟสูงเมื่อทำได้",
     "explanation_en": "You are driving faster than your lights reach. The stopping distance (55 m) is longer than the visibility range (40 m). If something is in the road beyond the headlight beam, a collision is unavoidable. Solution: reduce speed to about 50 km/h, or use high beams where possible.",
-    "tags": ["stoppelengde", "hard", "exam_boost"]
+    "tags": [
+      "stoppelengde",
+      "hard",
+      "exam_boost"
+    ]
   },
   {
     "id": "stop_021",
@@ -368,32 +748,70 @@
     "question_no": "Du nærmer deg en tunnel i mørket. Hva bør du gjøre med farten?",
     "question_th": "คุณกำลังเข้าใกล้อุโมงค์ในความมืด คุณควรปรับความเร็วอย่างไร?",
     "question_en": "You are approaching a tunnel in the dark. What should you do with your speed?",
-    "options_no": ["Øke farten — tuneller er godt opplyst", "Holde same fart — tunellene er sikre", "Redusere farten — øynene trenger tid til å tilpasse seg lysskiftet, og synlengden kan midlertidig reduseres", "Skru av lysene for å spare batteri"],
-    "options_th": ["เพิ่มความเร็ว อุโมงค์มีแสงสว่างดี", "คงความเร็วเดิม อุโมงค์ปลอดภัย", "ลดความเร็ว ดวงตาต้องใช้เวลาปรับตัวกับการเปลี่ยนแสง และระยะมองเห็นอาจลดลงชั่วคราว", "ปิดไฟเพื่อประหยัดแบตเตอรี่"],
-    "options_en": ["Increase speed — tunnels are well lit", "Keep the same speed — tunnels are safe", "Reduce speed — eyes need time to adapt to the light change, and visibility may be temporarily reduced", "Switch off lights to save the battery"],
+    "options_no": [
+      "Øke farten — tuneller er godt opplyst",
+      "Holde same fart — tunellene er sikre",
+      "Redusere farten — øynene trenger tid til å tilpasse seg lysskiftet, og synlengden kan midlertidig reduseres",
+      "Skru av lysene for å spare batteri"
+    ],
+    "options_th": [
+      "เพิ่มความเร็ว อุโมงค์มีแสงสว่างดี",
+      "คงความเร็วเดิม อุโมงค์ปลอดภัย",
+      "ลดความเร็ว ดวงตาต้องใช้เวลาปรับตัวกับการเปลี่ยนแสง และระยะมองเห็นอาจลดลงชั่วคราว",
+      "ปิดไฟเพื่อประหยัดแบตเตอรี่"
+    ],
+    "options_en": [
+      "Increase speed — tunnels are well lit",
+      "Keep the same speed — tunnels are safe",
+      "Reduce speed — eyes need time to adapt to the light change, and visibility may be temporarily reduced",
+      "Switch off lights to save the battery"
+    ],
     "correct_index": 2,
     "explanation_no": "Overgangen mellom mørket ute og lyset inne (eller omvendt) gjør at øynene trenger noen sekunder å tilpasse seg. I disse sekundene er synlengden redusert og stoppelengden kan overgå hva du kan se. Reduser farten ved tunnelinnkjøringen.",
     "explanation_th": "การเปลี่ยนจากความมืดภายนอกสู่แสงสว่างภายใน (หรือกลับกัน) ทำให้ดวงตาต้องใช้เวลาไม่กี่วินาทีปรับตัว ในช่วงเวลานี้ระยะมองเห็นลดลงและระยะหยุดรถอาจยาวกว่าที่มองเห็น ควรลดความเร็วเมื่อเข้าอุโมงค์",
     "explanation_en": "The transition between darkness outside and light inside (or vice versa) means eyes need a few seconds to adapt. During these seconds visibility is reduced and stopping distance may exceed what you can see. Reduce speed at tunnel entrances.",
-    "tags": ["stoppelengde", "hard", "exam_boost"]
+    "tags": [
+      "stoppelengde",
+      "hard",
+      "exam_boost"
+    ]
   },
   {
     "id": "stop_022",
     "topic": "uventede_hindringer",
     "category": "fart_og_bremsing",
     "difficulty": "hard",
-    "image": "q022.png",
+    "image": "",
     "question_no": "Du kjører 80 km/t på en landevei og et elgkalv løper ut fra skogen 55 meter foran deg. Hva er det viktigste du bør vite?",
     "question_th": "คุณขับรถด้วยความเร็ว 80 กม./ชม. บนทางชนบท และลูกกวางแคริบูวิ่งออกมาจากป่าห่างจากคุณ 55 เมตร สิ่งสำคัญที่สุดที่ควรรู้คืออะไร?",
     "question_en": "You are driving at 80 km/h on a country road and a moose calf runs out of the forest 55 metres ahead. What is the most important thing you should know?",
-    "options_no": ["Elgkalven vil alltid stoppe og se på bilen", "Der det er ett elgkalv, er det ofte en elgku i nærheten — det kan komme mer", "Du skal alltid svinge for å unngå elg", "Elgpåkjørsler skjer bare om natten"],
-    "options_th": ["ลูกกวางมักจะหยุดและมองรถ", "ที่มีลูกกวาง มักมีแม่กวางอยู่ใกล้ๆ อาจมีกวางตามมาอีก", "คุณควรบังคับเลี้ยวหลีกกวางเสมอ", "การชนกวางเกิดเฉพาะตอนกลางคืน"],
-    "options_en": ["The moose calf will always stop and look at the car", "Where there is a moose calf, a cow moose is often nearby — more may be coming", "You should always swerve to avoid moose", "Moose collisions only happen at night"],
+    "options_no": [
+      "Elgkalven vil alltid stoppe og se på bilen",
+      "Der det er ett elgkalv, er det ofte en elgku i nærheten — det kan komme mer",
+      "Du skal alltid svinge for å unngå elg",
+      "Elgpåkjørsler skjer bare om natten"
+    ],
+    "options_th": [
+      "ลูกกวางมักจะหยุดและมองรถ",
+      "ที่มีลูกกวาง มักมีแม่กวางอยู่ใกล้ๆ อาจมีกวางตามมาอีก",
+      "คุณควรบังคับเลี้ยวหลีกกวางเสมอ",
+      "การชนกวางเกิดเฉพาะตอนกลางคืน"
+    ],
+    "options_en": [
+      "The moose calf will always stop and look at the car",
+      "Where there is a moose calf, a cow moose is often nearby — more may be coming",
+      "You should always swerve to avoid moose",
+      "Moose collisions only happen at night"
+    ],
     "correct_index": 1,
     "explanation_no": "Et elgkalv betyr nesten alltid at mora er i nærheten og kan krysse veien. Brem kraftig, men hold oppmerksomheten på veien for mer elg. Å svinge brått kan føre til at du kjører av veien eller kolliderer med møtende trafikk.",
     "explanation_th": "ลูกกวางหมายถึงแม่กวางมักอยู่ใกล้ๆ และอาจข้ามถนน เบรกแรง แต่สังเกตถนนสำหรับกวางตัวอื่น การบังคับเลี้ยวกะทันหันอาจทำให้รถออกนอกถนนหรือชนรถที่สวนมา",
     "explanation_en": "A moose calf almost always means the cow moose is nearby and may cross the road. Brake hard, but keep watching the road for more moose. Sudden swerving can cause you to run off the road or collide with oncoming traffic.",
-    "tags": ["stoppelengde", "hard", "exam_boost"]
+    "tags": [
+      "stoppelengde",
+      "hard",
+      "exam_boost"
+    ]
   },
   {
     "id": "stop_023",
@@ -404,14 +822,33 @@
     "question_no": "Du kjører forbi en skole i 50-sone. Et barn løper ut mellom to parkerte biler 20 meter foran deg. Hva er problemet med stoppelengden?",
     "question_th": "คุณขับผ่านโรงเรียนในเขตจำกัดความเร็ว 50 กม./ชม. เด็กวิ่งออกมาระหว่างรถสองคันที่จอดอยู่ห่าง 20 เมตรจากคุณ ปัญหาของระยะหยุดรถคืออะไร?",
     "question_en": "You are driving past a school in a 50 km/h zone. A child runs out between two parked cars 20 metres ahead. What is the problem with your stopping distance?",
-    "options_no": ["Du stopper enkelt — 50 km/t er alltid trygt", "Stoppelengden ved 50 km/t er ca. 28 m — du kan ikke stoppe på 20 m", "Parkeringsbiler blokkerer synet, men stoppelengden er den samme", "Skolesoner gjelder bare i skoletiden"],
-    "options_th": ["หยุดได้ง่าย 50 กม./ชม. ปลอดภัยเสมอ", "ระยะหยุดรถที่ 50 กม./ชม. ≈ 28 ม. คุณไม่สามารถหยุดได้ใน 20 ม.", "รถจอดบังทัศนวิสัย แต่ระยะหยุดรถเท่าเดิม", "เขตโรงเรียนใช้เฉพาะช่วงเวลาเรียน"],
-    "options_en": ["You stop easily — 50 km/h is always safe", "Stopping distance at 50 km/h is about 28 m — you cannot stop in 20 m", "Parked cars block the view but stopping distance is the same", "School zones only apply during school hours"],
+    "options_no": [
+      "Du stopper enkelt — 50 km/t er alltid trygt",
+      "Stoppelengden ved 50 km/t er ca. 28 m — du kan ikke stoppe på 20 m",
+      "Parkeringsbiler blokkerer synet, men stoppelengden er den samme",
+      "Skolesoner gjelder bare i skoletiden"
+    ],
+    "options_th": [
+      "หยุดได้ง่าย 50 กม./ชม. ปลอดภัยเสมอ",
+      "ระยะหยุดรถที่ 50 กม./ชม. ≈ 28 ม. คุณไม่สามารถหยุดได้ใน 20 ม.",
+      "รถจอดบังทัศนวิสัย แต่ระยะหยุดรถเท่าเดิม",
+      "เขตโรงเรียนใช้เฉพาะช่วงเวลาเรียน"
+    ],
+    "options_en": [
+      "You stop easily — 50 km/h is always safe",
+      "Stopping distance at 50 km/h is about 28 m — you cannot stop in 20 m",
+      "Parked cars block the view but stopping distance is the same",
+      "School zones only apply during school hours"
+    ],
     "correct_index": 1,
     "explanation_no": "Ved 50 km/t er stoppelengden ca. 28 m (14 m reaksjon + 14 m bremsing). Barnet er bare 20 m unna. Du kan ikke stoppe i tide. I slike situasjoner bør du redusere farten til 30 km/t eller saktere, slik at stoppelengden er kortere enn 20 m.",
     "explanation_th": "ที่ 50 กม./ชม. ระยะหยุดรถ ≈ 28 ม. (14 ม. ปฏิกิริยา + 14 ม. เบรก) แต่เด็กอยู่แค่ 20 เมตร คุณหยุดไม่ทัน ในสถานการณ์เช่นนี้ควรลดความเร็วเหลือ 30 กม./ชม. หรือช้ากว่านั้น เพื่อให้ระยะหยุดรถสั้นกว่า 20 ม.",
     "explanation_en": "At 50 km/h the stopping distance is about 28 m (14 m reaction + 14 m braking). The child is only 20 m away. You cannot stop in time. In such situations you should reduce speed to 30 km/h or slower, so that stopping distance is less than 20 m.",
-    "tags": ["stoppelengde", "hard", "exam_boost"]
+    "tags": [
+      "stoppelengde",
+      "hard",
+      "exam_boost"
+    ]
   },
   {
     "id": "stop_024",
@@ -422,14 +859,33 @@
     "question_no": "Du kjører 60 km/t i et boligfelt. Hva bør du gjøre for å redusere faren for å treffe fotgjengere og barn?",
     "question_th": "คุณขับรถด้วยความเร็ว 60 กม./ชม. ในย่านที่อยู่อาศัย คุณควรทำอะไรเพื่อลดความเสี่ยงที่จะชนคนเดินเท้าและเด็ก?",
     "question_en": "You are driving 60 km/h in a residential area. What should you do to reduce the risk of hitting pedestrians and children?",
-    "options_no": ["Bruke horn for å advare folk", "Redusere farten til under 30 km/t og være klar for brå situasjoner", "Kun redusere farten ved skoler", "Kjøre midt i veien for å se bedre"],
-    "options_th": ["บีบแตรเตือนผู้คน", "ลดความเร็วต่ำกว่า 30 กม./ชม. และเตรียมพร้อมสำหรับสถานการณ์กะทันหัน", "ลดความเร็วเฉพาะที่โรงเรียนเท่านั้น", "ขับตรงกลางถนนเพื่อมองเห็นได้ดีขึ้น"],
-    "options_en": ["Use the horn to warn people", "Reduce speed to below 30 km/h and be ready for sudden situations", "Only reduce speed near schools", "Drive in the middle of the road to see better"],
+    "options_no": [
+      "Bruke horn for å advare folk",
+      "Redusere farten til under 30 km/t og være klar for brå situasjoner",
+      "Kun redusere farten ved skoler",
+      "Kjøre midt i veien for å se bedre"
+    ],
+    "options_th": [
+      "บีบแตรเตือนผู้คน",
+      "ลดความเร็วต่ำกว่า 30 กม./ชม. และเตรียมพร้อมสำหรับสถานการณ์กะทันหัน",
+      "ลดความเร็วเฉพาะที่โรงเรียนเท่านั้น",
+      "ขับตรงกลางถนนเพื่อมองเห็นได้ดีขึ้น"
+    ],
+    "options_en": [
+      "Use the horn to warn people",
+      "Reduce speed to below 30 km/h and be ready for sudden situations",
+      "Only reduce speed near schools",
+      "Drive in the middle of the road to see better"
+    ],
     "correct_index": 1,
     "explanation_no": "I boligfelt ferdes barn som kan opptre uforutsigbart. Under 30 km/t er stoppelengden ca. 12 m, noe som gir reell mulighet til å stoppe. 60 km/t er i mange slike områder ulovlig og livsfarlig.",
     "explanation_th": "ในย่านที่อยู่อาศัย เด็กๆ เดินเล่นและอาจทำพฤติกรรมที่คาดเดาไม่ได้ ที่ต่ำกว่า 30 กม./ชม. ระยะหยุดรถ ≈ 12 ม. ซึ่งพอมีโอกาสหยุดทัน 60 กม./ชม. ในพื้นที่เช่นนี้มักผิดกฎหมายและเป็นอันตรายถึงชีวิต",
     "explanation_en": "Children play in residential areas and may behave unpredictably. Below 30 km/h the stopping distance is about 12 m, giving a real chance to stop. 60 km/h is often illegal and deadly in such areas.",
-    "tags": ["stoppelengde", "hard", "exam_boost"]
+    "tags": [
+      "stoppelengde",
+      "hard",
+      "exam_boost"
+    ]
   },
   {
     "id": "stop_025",
@@ -440,14 +896,33 @@
     "question_no": "Du leser en tekstmelding mens du kjører 80 km/t. Det tar 4 sekunder å lese meldingen. Hvor langt har bilen kjørt i løpet av disse 4 sekundene?",
     "question_th": "คุณอ่านข้อความขณะขับรถด้วยความเร็ว 80 กม./ชม. การอ่านใช้เวลา 4 วินาที รถเคลื่อนที่ไปไกลเท่าใดใน 4 วินาทีนั้น?",
     "question_en": "You read a text message while driving at 80 km/h. It takes 4 seconds to read the message. How far has the car travelled during those 4 seconds?",
-    "options_no": ["Ca. 45 meter", "Ca. 55 meter", "Ca. 89 meter", "Ca. 120 meter"],
-    "options_th": ["ประมาณ 45 เมตร", "ประมาณ 55 เมตร", "ประมาณ 89 เมตร", "ประมาณ 120 เมตร"],
-    "options_en": ["About 45 metres", "About 55 metres", "About 89 metres", "About 120 metres"],
+    "options_no": [
+      "Ca. 45 meter",
+      "Ca. 55 meter",
+      "Ca. 89 meter",
+      "Ca. 120 meter"
+    ],
+    "options_th": [
+      "ประมาณ 45 เมตร",
+      "ประมาณ 55 เมตร",
+      "ประมาณ 89 เมตร",
+      "ประมาณ 120 เมตร"
+    ],
+    "options_en": [
+      "About 45 metres",
+      "About 55 metres",
+      "About 89 metres",
+      "About 120 metres"
+    ],
     "correct_index": 2,
     "explanation_no": "80 km/t ÷ 3,6 = 22,2 m/s. På 4 sekunder: 22,2 × 4 = ca. 89 meter. Bilen kjørte over halvannen fotballutsider uten at du så på veien. I løpet av den strekningen kan alt skje.",
     "explanation_th": "80 กม./ชม. ÷ 3.6 = 22.2 ม./วิ ใน 4 วินาที: 22.2 × 4 = ประมาณ 89 เมตร รถเคลื่อนที่กว่า 89 เมตรโดยที่คุณไม่ได้มองถนน ในระยะนั้นทุกอย่างอาจเกิดขึ้นได้",
     "explanation_en": "80 km/h ÷ 3.6 = 22.2 m/s. In 4 seconds: 22.2 × 4 = about 89 metres. The car covered nearly 90 metres without you looking at the road. In that distance anything can happen.",
-    "tags": ["stoppelengde", "hard", "exam_boost"]
+    "tags": [
+      "stoppelengde",
+      "hard",
+      "exam_boost"
+    ]
   },
   {
     "id": "stop_026",
@@ -458,14 +933,33 @@
     "question_no": "Forskning viser at mobilbruk bak rattet øker reaksjonstiden med opptil 50 %. Hva betyr det for reaksjonslengden ved 100 km/t?",
     "question_th": "งานวิจัยแสดงว่าการใช้โทรศัพท์มือถือขณะขับรถเพิ่มเวลาตอบสนองได้ถึง 50% ส่งผลต่อระยะปฏิกิริยาที่ 100 กม./ชม. อย่างไร?",
     "question_en": "Research shows that mobile phone use while driving increases reaction time by up to 50%. What does this mean for the reaction distance at 100 km/h?",
-    "options_no": ["Reaksjonslengden øker fra ca. 28 m til ca. 42 m", "Reaksjonslengden øker fra ca. 28 m til ca. 56 m", "Reaksjonslengden er upåvirket av mobilbruk", "Reaksjonslengden dobles alltid ved mobilbruk"],
-    "options_th": ["ระยะปฏิกิริยาเพิ่มจาก ≈28 ม. เป็น ≈42 ม.", "ระยะปฏิกิริยาเพิ่มจาก ≈28 ม. เป็น ≈56 ม.", "ระยะปฏิกิริยาไม่ได้รับผลกระทบจากการใช้โทรศัพท์", "ระยะปฏิกิริยาเพิ่มเป็น 2 เท่าเสมอเมื่อใช้โทรศัพท์"],
-    "options_en": ["Reaction distance increases from about 28 m to about 42 m", "Reaction distance increases from about 28 m to about 56 m", "Reaction distance is unaffected by mobile phone use", "Reaction distance always doubles with mobile phone use"],
+    "options_no": [
+      "Reaksjonslengden øker fra ca. 28 m til ca. 42 m",
+      "Reaksjonslengden øker fra ca. 28 m til ca. 56 m",
+      "Reaksjonslengden er upåvirket av mobilbruk",
+      "Reaksjonslengden dobles alltid ved mobilbruk"
+    ],
+    "options_th": [
+      "ระยะปฏิกิริยาเพิ่มจาก ≈28 ม. เป็น ≈42 ม.",
+      "ระยะปฏิกิริยาเพิ่มจาก ≈28 ม. เป็น ≈56 ม.",
+      "ระยะปฏิกิริยาไม่ได้รับผลกระทบจากการใช้โทรศัพท์",
+      "ระยะปฏิกิริยาเพิ่มเป็น 2 เท่าเสมอเมื่อใช้โทรศัพท์"
+    ],
+    "options_en": [
+      "Reaction distance increases from about 28 m to about 42 m",
+      "Reaction distance increases from about 28 m to about 56 m",
+      "Reaction distance is unaffected by mobile phone use",
+      "Reaction distance always doubles with mobile phone use"
+    ],
     "correct_index": 0,
     "explanation_no": "Normal reaksjonslengde ved 100 km/t: 28 m (1 sek). Med 50 % økt reaksjonstid: 1,5 sek → 28 × 1,5 = 42 m. Det er 14 ekstra meter der bilen kjører uten at du reagerer. Husk: håndfri er nesten like farlig som å holde telefonen.",
     "explanation_th": "ระยะปฏิกิริยาปกติที่ 100 กม./ชม.: 28 ม. (1 วิ) เมื่อเวลาตอบสนองเพิ่ม 50%: 1.5 วิ → 28 × 1.5 = 42 ม. นั่นคือ 14 เมตรเพิ่มเติมที่รถวิ่งโดยที่คุณยังไม่ตอบสนอง หมายเหตุ: แฮนด์ฟรีอันตรายเกือบเท่ากับถือโทรศัพท์",
     "explanation_en": "Normal reaction distance at 100 km/h: 28 m (1 sec). With 50% increased reaction time: 1.5 sec → 28 × 1.5 = 42 m. That is 14 extra metres where the car moves without you reacting. Note: hands-free is almost as dangerous as holding the phone.",
-    "tags": ["stoppelengde", "hard", "exam_boost"]
+    "tags": [
+      "stoppelengde",
+      "hard",
+      "exam_boost"
+    ]
   },
   {
     "id": "stop_027",
@@ -476,14 +970,33 @@
     "question_no": "Trøtthet påvirker kjøringen like mye som alkohol. Hva er riktig om trøtt kjøring?",
     "question_th": "ความเหนื่อยล้าส่งผลต่อการขับรถเทียบเท่ากับแอลกอฮอล์ ข้อใดถูกต้องเกี่ยวกับการขับรถขณะง่วง?",
     "question_en": "Fatigue affects driving as much as alcohol. What is correct about drowsy driving?",
-    "options_no": ["Trøtte sjåfører reagerer raskere fordi de er mer konsentrerte", "Reaksjonstiden kan bli 2–3 ganger lenger enn normalt, og mikrosøvn kan ramme uten varsel", "Trøtthet påvirker bare synet, ikke reaksjonstiden", "Kaffepauser løser alltid trøtthetsproblemet"],
-    "options_th": ["คนขับที่เหนื่อยตอบสนองเร็วกว่าเพราะมีสมาธิมากขึ้น", "เวลาตอบสนองอาจช้าลง 2–3 เท่าจากปกติ และการหลับไมโครอาจเกิดขึ้นโดยไม่มีสัญญาณเตือน", "ความเหนื่อยล้าส่งผลต่อการมองเห็นเท่านั้น ไม่ใช่เวลาตอบสนอง", "การหยุดดื่มกาแฟแก้ปัญหาความเหนื่อยล้าได้เสมอ"],
-    "options_en": ["Tired drivers react faster because they are more concentrated", "Reaction time can be 2–3 times longer than normal, and microsleep can strike without warning", "Fatigue only affects vision, not reaction time", "Coffee breaks always solve the fatigue problem"],
+    "options_no": [
+      "Trøtte sjåfører reagerer raskere fordi de er mer konsentrerte",
+      "Reaksjonstiden kan bli 2–3 ganger lenger enn normalt, og mikrosøvn kan ramme uten varsel",
+      "Trøtthet påvirker bare synet, ikke reaksjonstiden",
+      "Kaffepauser løser alltid trøtthetsproblemet"
+    ],
+    "options_th": [
+      "คนขับที่เหนื่อยตอบสนองเร็วกว่าเพราะมีสมาธิมากขึ้น",
+      "เวลาตอบสนองอาจช้าลง 2–3 เท่าจากปกติ และการหลับไมโครอาจเกิดขึ้นโดยไม่มีสัญญาณเตือน",
+      "ความเหนื่อยล้าส่งผลต่อการมองเห็นเท่านั้น ไม่ใช่เวลาตอบสนอง",
+      "การหยุดดื่มกาแฟแก้ปัญหาความเหนื่อยล้าได้เสมอ"
+    ],
+    "options_en": [
+      "Tired drivers react faster because they are more concentrated",
+      "Reaction time can be 2–3 times longer than normal, and microsleep can strike without warning",
+      "Fatigue only affects vision, not reaction time",
+      "Coffee breaks always solve the fatigue problem"
+    ],
     "correct_index": 1,
     "explanation_no": "Trøtthet kan gi mikrosøvn — korte søvnepisoder på 1–4 sekunder uten at sjåføren merker det. Ved 100 km/t kjører du 28–112 meter med lukkede øyne uten å vite om det. Eneste kur er å stoppe og hvile.",
     "explanation_th": "ความเหนื่อยล้าอาจทำให้เกิดการหลับไมโคร ระยะเวลา 1–4 วินาที โดยที่ผู้ขับไม่รู้ตัว ที่ 100 กม./ชม. คุณขับ 28–112 เมตรด้วยตาหลับโดยไม่รู้ วิธีแก้เดียวคือหยุดพักผ่อน",
     "explanation_en": "Fatigue can cause microsleep — short sleep episodes of 1–4 seconds without the driver noticing. At 100 km/h you travel 28–112 metres with eyes closed without knowing it. The only cure is to stop and rest.",
-    "tags": ["stoppelengde", "hard", "exam_boost"]
+    "tags": [
+      "stoppelengde",
+      "hard",
+      "exam_boost"
+    ]
   },
   {
     "id": "stop_028",
@@ -494,14 +1007,33 @@
     "question_no": "En sjåfør har 0,5 promille alkohol i blodet, noe som er under den norske fartsgrensen på 0,2 promille. Hva er RIKTIG?",
     "question_th": "คนขับรถมีแอลกอฮอล์ในเลือด 0.5 โพรมิลเล ซึ่งเกินกว่าขีดจำกัดของนอร์เวย์ที่ 0.2 โพรมิลเล ข้อใดถูกต้อง?",
     "question_en": "A driver has 0.5 per mille alcohol in the blood, which is above the Norwegian legal limit of 0.2 per mille. What is CORRECT?",
-    "options_no": ["Kjøringen påvirkes ikke merkbart ved 0,5 promille", "Reaksjonstiden øker, risikovurderingen svekkes og risikoen for ulykke øker dramatisk", "0,5 promille er bare ulovlig, men ikke farlig", "Bare farten øker risikoen — ikke promillen"],
-    "options_th": ["การขับรถไม่ได้รับผลกระทบอย่างเห็นได้ชัดที่ 0.5 โพรมิลเล", "เวลาตอบสนองเพิ่มขึ้น การประเมินความเสี่ยงลดลง และความเสี่ยงต่ออุบัติเหตุเพิ่มขึ้นอย่างมาก", "0.5 โพรมิลเลผิดกฎหมายเท่านั้น ไม่ได้อันตราย", "ความเร็วเท่านั้นที่เพิ่มความเสี่ยง ไม่ใช่แอลกอฮอล์"],
-    "options_en": ["Driving is not noticeably affected at 0.5 per mille", "Reaction time increases, risk assessment is impaired, and the risk of an accident increases dramatically", "0.5 per mille is only illegal, not dangerous", "Only speed increases risk — not alcohol"],
+    "options_no": [
+      "Kjøringen påvirkes ikke merkbart ved 0,5 promille",
+      "Reaksjonstiden øker, risikovurderingen svekkes og risikoen for ulykke øker dramatisk",
+      "0,5 promille er bare ulovlig, men ikke farlig",
+      "Bare farten øker risikoen — ikke promillen"
+    ],
+    "options_th": [
+      "การขับรถไม่ได้รับผลกระทบอย่างเห็นได้ชัดที่ 0.5 โพรมิลเล",
+      "เวลาตอบสนองเพิ่มขึ้น การประเมินความเสี่ยงลดลง และความเสี่ยงต่ออุบัติเหตุเพิ่มขึ้นอย่างมาก",
+      "0.5 โพรมิลเลผิดกฎหมายเท่านั้น ไม่ได้อันตราย",
+      "ความเร็วเท่านั้นที่เพิ่มความเสี่ยง ไม่ใช่แอลกอฮอล์"
+    ],
+    "options_en": [
+      "Driving is not noticeably affected at 0.5 per mille",
+      "Reaction time increases, risk assessment is impaired, and the risk of an accident increases dramatically",
+      "0.5 per mille is only illegal, not dangerous",
+      "Only speed increases risk — not alcohol"
+    ],
     "correct_index": 1,
     "explanation_no": "Ved 0,5 promille er reaksjonstiden økt, risikovurderingen svekket og koordinasjonen dårligere. Risikoen for å forårsake en ulykke er ca. 3–5 ganger høyere enn edru. Norsk lov setter grensen ved 0,2 promille nettopp fordi selv lavt alkoholinnhold påvirker kjøringen.",
     "explanation_th": "ที่ 0.5 โพรมิลเล เวลาตอบสนองเพิ่มขึ้น การประเมินความเสี่ยงลดลง และการประสานงานแย่ลง ความเสี่ยงในการก่อให้เกิดอุบัติเหตุสูงกว่าขณะไม่ดื่มประมาณ 3–5 เท่า กฎหมายนอร์เวย์กำหนดที่ 0.2 โพรมิลเล เพราะแม้แต่แอลกอฮอล์ปริมาณน้อยก็กระทบการขับ",
     "explanation_en": "At 0.5 per mille reaction time is increased, risk assessment is impaired, and coordination is worse. The risk of causing an accident is about 3–5 times higher than when sober. Norwegian law sets the limit at 0.2 per mille precisely because even a low alcohol level affects driving.",
-    "tags": ["stoppelengde", "hard", "exam_boost"]
+    "tags": [
+      "stoppelengde",
+      "hard",
+      "exam_boost"
+    ]
   },
   {
     "id": "stop_029",
@@ -512,14 +1044,33 @@
     "question_no": "Hva er «3-sekundersregelen» for avstand til forankjørende?",
     "question_th": "\"กฎ 3 วินาที\" สำหรับระยะห่างจากรถคันหน้าคืออะไร?",
     "question_en": "What is the '3-second rule' for following distance?",
-    "options_no": ["Du skal stoppe hvert 3. minutt", "Når bilen foran passerer et punkt, skal det gå minst 3 sekunder før du passerer samme punkt", "Du har 3 sekunder på å akselerere etter grønt lys", "Du skal bremse 3 sekunder før et kryss"],
-    "options_th": ["คุณต้องหยุดรถทุก 3 นาที", "เมื่อรถคันหน้าผ่านจุดหนึ่ง ต้องผ่านอย่างน้อย 3 วินาทีก่อนที่คุณจะผ่านจุดเดียวกัน", "คุณมี 3 วินาทีในการเร่งความเร็วหลังสัญญาณไฟเขียว", "คุณควรเบรก 3 วินาทีก่อนถึงทางแยก"],
-    "options_en": ["You must stop every 3 minutes", "When the car ahead passes a point, at least 3 seconds must pass before you pass the same point", "You have 3 seconds to accelerate after a green light", "You should brake 3 seconds before an intersection"],
+    "options_no": [
+      "Du skal stoppe hvert 3. minutt",
+      "Når bilen foran passerer et punkt, skal det gå minst 3 sekunder før du passerer samme punkt",
+      "Du har 3 sekunder på å akselerere etter grønt lys",
+      "Du skal bremse 3 sekunder før et kryss"
+    ],
+    "options_th": [
+      "คุณต้องหยุดรถทุก 3 นาที",
+      "เมื่อรถคันหน้าผ่านจุดหนึ่ง ต้องผ่านอย่างน้อย 3 วินาทีก่อนที่คุณจะผ่านจุดเดียวกัน",
+      "คุณมี 3 วินาทีในการเร่งความเร็วหลังสัญญาณไฟเขียว",
+      "คุณควรเบรก 3 วินาทีก่อนถึงทางแยก"
+    ],
+    "options_en": [
+      "You must stop every 3 minutes",
+      "When the car ahead passes a point, at least 3 seconds must pass before you pass the same point",
+      "You have 3 seconds to accelerate after a green light",
+      "You should brake 3 seconds before an intersection"
+    ],
     "correct_index": 1,
     "explanation_no": "3-sekundersregelen gir deg nok tid til å reagere og bremse hvis bilen foran stopper brått. Velg et fast punkt (skilt, lyktestolpe). Når forankjørende passerer det, tell til 3. Passerer du punktet før, er du for nær. På is eller glatt vei bør du bruke 6 sekunder.",
     "explanation_th": "กฎ 3 วินาทีให้เวลาเพียงพอในการตอบสนองและเบรกหากรถคันหน้าหยุดกะทันหัน เลือกจุดคงที่ (ป้าย เสาไฟ) เมื่อรถคันหน้าผ่าน นับ 1-2-3 ถ้าคุณผ่านก่อนครบ 3 วินาที แสดงว่าอยู่ใกล้เกินไป บนถนนน้ำแข็งหรือลื่น ควรใช้ 6 วินาที",
     "explanation_en": "The 3-second rule gives you enough time to react and brake if the car ahead stops suddenly. Choose a fixed point (sign, lamp post). When the car ahead passes it, count to 3. If you pass the point before 3 seconds, you are too close. On ice or slippery roads use 6 seconds.",
-    "tags": ["stoppelengde", "hard", "exam_boost"]
+    "tags": [
+      "stoppelengde",
+      "hard",
+      "exam_boost"
+    ]
   },
   {
     "id": "stop_030",
@@ -530,13 +1081,32 @@
     "question_no": "Du kjører 100 km/t på motorvei. Hvilken følgeavstand i meter tilsvarer 3-sekundersregelen?",
     "question_th": "คุณขับรถด้วยความเร็ว 100 กม./ชม. บนทางด่วน ระยะห่างที่เป็นเมตรตามกฎ 3 วินาทีคือเท่าใด?",
     "question_en": "You are driving at 100 km/h on a motorway. What following distance in metres corresponds to the 3-second rule?",
-    "options_no": ["Ca. 28 meter", "Ca. 56 meter", "Ca. 83 meter", "Ca. 100 meter"],
-    "options_th": ["ประมาณ 28 เมตร", "ประมาณ 56 เมตร", "ประมาณ 83 เมตร", "ประมาณ 100 เมตร"],
-    "options_en": ["About 28 metres", "About 56 metres", "About 83 metres", "About 100 metres"],
+    "options_no": [
+      "Ca. 28 meter",
+      "Ca. 56 meter",
+      "Ca. 83 meter",
+      "Ca. 100 meter"
+    ],
+    "options_th": [
+      "ประมาณ 28 เมตร",
+      "ประมาณ 56 เมตร",
+      "ประมาณ 83 เมตร",
+      "ประมาณ 100 เมตร"
+    ],
+    "options_en": [
+      "About 28 metres",
+      "About 56 metres",
+      "About 83 metres",
+      "About 100 metres"
+    ],
     "correct_index": 2,
     "explanation_no": "100 km/t ÷ 3,6 = 27,8 m/s. På 3 sekunder: 27,8 × 3 = ca. 83 meter. Det er over 80 meter til bilen foran — langt mer enn de fleste sjåfører holder. Mange tenker 'to bildengder' er nok, men det er alt for lite ved høy fart.",
     "explanation_th": "100 กม./ชม. ÷ 3.6 = 27.8 ม./วิ ใน 3 วินาที: 27.8 × 3 = ประมาณ 83 เมตร นั่นคือระยะห่างมากกว่า 80 เมตร ซึ่งมากกว่าที่ผู้ขับส่วนใหญ่รักษาไว้ หลายคนคิดว่า 'สองความยาวรถ' เพียงพอ แต่นั่นน้อยเกินไปมากที่ความเร็วสูง",
     "explanation_en": "100 km/h ÷ 3.6 = 27.8 m/s. In 3 seconds: 27.8 × 3 = about 83 metres. That is over 80 metres to the car ahead — far more than most drivers maintain. Many think 'two car lengths' is enough, but that is far too little at high speed.",
-    "tags": ["stoppelengde", "hard", "exam_boost"]
+    "tags": [
+      "stoppelengde",
+      "hard",
+      "exam_boost"
+    ]
   }
 ]
