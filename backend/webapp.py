@@ -4585,14 +4585,14 @@ async function loadQuiz(url) {
     if (!Array.isArray(raw)) raw = raw.questions || [];
     questions = raw.filter(function(q) {
       var u = q.bildeUrl || q.image_url || '';
-      return u && typeof u === 'string' && (u.startsWith('http') || u.startsWith('data:image'));
+      return u && typeof u === 'string' && u.length > 0;
     });
     if (!questions.length && currentCat) {
       var r2 = await api('GET', '/api/questions/random?count=30&has_image=true');
       if (!Array.isArray(r2)) r2 = r2.questions || [];
       questions = r2.filter(function(q) {
         var u = q.bildeUrl || q.image_url || '';
-        return u && typeof u === 'string' && (u.startsWith('http') || u.startsWith('data:image'));
+        return u && typeof u === 'string' && u.length > 0;
       });
     }
     if (!questions.length) {
@@ -4638,6 +4638,7 @@ function renderQuestion() {
   document.getElementById('qScoreNum').textContent = qScore;
 
   var imgUrl  = q.bildeUrl || q.image_url || '';
+  if (imgUrl && !imgUrl.match(/^(https?:\/\/|\/)/)) { imgUrl = '/api/assets/' + imgUrl; }
   var qText   = pickLang(q.question) || pickField(q, 'question_text') || '';
   currentCorrect = (q.correctOptionId || q.correct_answer || '').toUpperCase();
   currentExpl    = pickLang(q.explanation) || pickField(q, 'explanation') || '';
@@ -5988,6 +5989,7 @@ async function loadBookmarks() {
     scroll.innerHTML = bms.map(function(q) {
       var qId   = escH(String(q._id || q.id || q.question_id || ''));
       var imgUrl = q.bildeUrl || q.image_url || '';
+      if (imgUrl && !imgUrl.match(/^(https?:\/\/|\/)/)) { imgUrl = '/api/assets/' + imgUrl; }
       var qText  = pickLang(q.question) || pickField(q, 'question_text') || '';
       var correct = (q.correctOptionId || q.correct_answer || '').toUpperCase();
       var ansText = '';
