@@ -856,6 +856,8 @@ a { color:inherit; text-decoration:none; }
   flex:0 0 auto; position:relative;
   overflow:hidden; background:#03060E;
   transition:box-shadow .45s ease;
+  /* Clear separator so image bottom doesn't bleed into AI panel */
+  border-bottom:1px solid rgba(255,255,255,.10);
 }
 .quiz-ai-imgbox.glow-ok  { box-shadow:inset 0 0 0 1px rgba(16,185,129,.22); }
 .quiz-ai-imgbox.glow-bad { box-shadow:inset 0 0 0 1px rgba(251,146,60,.22); }
@@ -866,20 +868,21 @@ a { color:inherit; text-decoration:none; }
 }
 .quiz-ai-img.flash-ok, .quiz-ai-img.flash-bad { /* image stays neutral — feedback lives in UI, not the road scene */ }
 
-/* Gradient fade bottom + colour tint overlay */
+/* Overlay — transparent: no dark gradient that merges image with AI panel below */
 .quiz-ai-img-overlay {
   position:absolute; inset:0; pointer-events:none;
-  background:linear-gradient(to bottom, transparent 55%, #080F1E 100%);
+  background:transparent;
   transition:background .45s ease;
 }
-.quiz-ai-img-overlay.result-ok  { background:linear-gradient(to bottom, transparent 55%, #080F1E 100%); }
-.quiz-ai-img-overlay.result-bad { background:linear-gradient(to bottom, transparent 55%, #080F1E 100%); }
+.quiz-ai-img-overlay.result-ok  { background:transparent; }
+.quiz-ai-img-overlay.result-bad { background:transparent; }
 
 .quiz-ai-img-badge {
-  position:absolute; bottom:10px; left:12px;
+  position:absolute; top:10px; left:12px;
   font-size:.60rem; font-weight:800; letter-spacing:.7px; text-transform:uppercase;
-  color:rgba(255,255,255,.40); pointer-events:none;
+  color:rgba(255,255,255,.55); pointer-events:none;
   display:flex; align-items:center; gap:5px;
+  background:rgba(0,0,0,.38); padding:3px 8px; border-radius:20px;
 }
 
 /* ─ AI scrollable panel ─ */
