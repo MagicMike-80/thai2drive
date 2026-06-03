@@ -4638,7 +4638,7 @@ function renderQuestion() {
   document.getElementById('qScoreNum').textContent = qScore;
 
   var imgUrl  = q.bildeUrl || q.image_url || '';
-  if (imgUrl && !imgUrl.match(/^(https?:\/\/|\/)/)) { imgUrl = '/api/assets/' + imgUrl; }
+  if (imgUrl && !imgUrl.match(/^(https?:\/\/|\/|data:)/)) { imgUrl = '/api/assets/' + imgUrl; }
   var qText   = pickLang(q.question) || pickField(q, 'question_text') || '';
   currentCorrect = (q.correctOptionId || q.correct_answer || '').toUpperCase();
   currentExpl    = pickLang(q.explanation) || pickField(q, 'explanation') || '';
@@ -5989,7 +5989,7 @@ async function loadBookmarks() {
     scroll.innerHTML = bms.map(function(q) {
       var qId   = escH(String(q._id || q.id || q.question_id || ''));
       var imgUrl = q.bildeUrl || q.image_url || '';
-      if (imgUrl && !imgUrl.match(/^(https?:\/\/|\/)/)) { imgUrl = '/api/assets/' + imgUrl; }
+      if (imgUrl && !imgUrl.match(/^(https?:\/\/|\/|data:)/)) { imgUrl = '/api/assets/' + imgUrl; }
       var qText  = pickLang(q.question) || pickField(q, 'question_text') || '';
       var correct = (q.correctOptionId || q.correct_answer || '').toUpperCase();
       var ansText = '';
