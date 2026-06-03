@@ -2323,6 +2323,11 @@ a { color:inherit; text-decoration:none; }
   cursor:pointer; text-align:left; transition:background .15s;
 }
 .teacher-chip:hover { background:var(--card2); }
+.teacher-chip-hdr {
+  font-size:.68rem; font-weight:900; letter-spacing:.07em;
+  text-transform:uppercase; color:var(--orange);
+  padding:10px 2px 2px; margin-top:4px;
+}
 
 /* Contextual reply chips — shown after assistant messages */
 .tm-chips {
@@ -2927,6 +2932,26 @@ a { color:inherit; text-decoration:none; }
           <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="📝 Hjelp med teoriprøven" data-msg-th="📝 ช่วยเรื่องข้อสอบทฤษฎี" data-msg-en="📝 Help with the theory test">📝 <span class="chip-lbl"></span></button>
           <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="📊 Hva bør jeg øve på?" data-msg-th="📊 ฉันควรฝึกเรื่องอะไร?" data-msg-en="📊 What should I practise?">📊 <span class="chip-lbl"></span></button>
           <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="❓ Spør om Thai2Drive" data-msg-th="❓ ถามเกี่ยวกับ Thai2Drive" data-msg-en="❓ Ask about Thai2Drive">❓ <span class="chip-lbl"></span></button>
+          <!-- Math shortcuts section -->
+          <div class="teacher-chip-hdr" id="tcMathHdr" data-hdr-no="🧮 Regnestykker" data-hdr-th="🧮 โจทย์คำนวณ" data-hdr-en="🧮 Calculations"></div>
+          <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)"
+            data-label-no="🧮 Regnestykker" data-label-th="🧮 โจทย์คำนวณ" data-label-en="🧮 Calculations"
+            data-msg-no="🧮 Vis meg alle formler: reaksjonslengde, bremselengde og stoppelengde" data-msg-th="🧮 แสดงสูตรทั้งหมด: ระยะปฏิกิริยา ระยะเบรก และระยะหยุดรถ" data-msg-en="🧮 Show me all formulas: reaction distance, braking distance and stopping distance">🧮 <span class="chip-lbl"></span></button>
+          <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)"
+            data-label-no="🚗 Reaksjonslengde" data-label-th="🚗 ระยะตอบสนอง" data-label-en="🚗 Reaction distance"
+            data-msg-no="🚗 Reaksjonslengde — gi meg formelen og regn ut ved 50 km/t" data-msg-th="🚗 ระยะตอบสนอง — ให้สูตรและคำนวณที่ 50 กม./ชม." data-msg-en="🚗 Reaction distance — give me the formula and work out an example at 50 km/h">🚗 <span class="chip-lbl"></span></button>
+          <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)"
+            data-label-no="🛑 Bremselengde" data-label-th="🛑 ระยะเบรก" data-label-en="🛑 Braking distance"
+            data-msg-no="🛑 Bremselengde — gi meg formelen og regn ut ved 50 km/t" data-msg-th="🛑 ระยะเบรก — ให้สูตรและคำนวณที่ 50 กม./ชม." data-msg-en="🛑 Braking distance — give me the formula and work out an example at 50 km/h">🛑 <span class="chip-lbl"></span></button>
+          <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)"
+            data-label-no="📏 Stoppelengde" data-label-th="📏 ระยะหยุดรถ" data-label-en="📏 Stopping distance"
+            data-msg-no="📏 Stoppelengde — gi meg formelen og regn ut ved 50 km/t" data-msg-th="📏 ระยะหยุดรถ — ให้สูตรและคำนวณที่ 50 กม./ชม." data-msg-en="📏 Stopping distance — give me the formula and work out an example at 50 km/h">📏 <span class="chip-lbl"></span></button>
+          <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)"
+            data-label-no="⚡ Dobbel fart" data-label-th="⚡ ความเร็วเพิ่มเป็นสองเท่า" data-label-en="⚡ Double speed"
+            data-msg-no="⚡ Dobbel fart — hva skjer med bremselengden? Gi eksempel" data-msg-th="⚡ ความเร็วเพิ่มเป็นสองเท่า — เกิดอะไรขึ้นกับระยะเบรก? ให้ตัวอย่าง" data-msg-en="⚡ Double speed — what happens to braking distance? Give an example">⚡ <span class="chip-lbl"></span></button>
+          <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)"
+            data-label-no="🌧️ Våt/glatt vei" data-label-th="🌧️ ถนนเปียก/ลื่น" data-label-en="🌧️ Wet/slippery road"
+            data-msg-no="🌧️ Våt og glatt vei — hvordan påvirker det bremselengden?" data-msg-th="🌧️ ถนนเปียก/ลื่น — ส่งผลต่อระยะเบรกอย่างไร?" data-msg-en="🌧️ Wet/slippery road — how does it affect braking distance?">🌧️ <span class="chip-lbl"></span></button>
         </div>
 
         <!-- Input bar -->
@@ -3435,12 +3460,17 @@ function applyUILang() {
   document.querySelectorAll('.teacher-chip').forEach(function(chip) {
     var lbl = chip.querySelector('.chip-lbl');
     if (!lbl) return;
-    var msgKey = 'data-msg-' + appLang;
+    var msgKey   = 'data-msg-'   + appLang;
+    var labelKey = 'data-label-' + appLang;
     var msg = chip.getAttribute(msgKey) || chip.getAttribute('data-msg-no') || '';
-    // Strip leading emoji + space for label display
-    lbl.textContent = msg.replace(/^[\u{1F000}-\u{1FFFF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\uD800-\uDFFF❓📊📝📖🚗🛑]+\s*/u, '');
+    // Use data-label-* for display if present (math chips); otherwise strip emoji from msg
+    var labelRaw = chip.getAttribute(labelKey) || chip.getAttribute('data-label-no') || msg;
+    lbl.textContent = labelRaw.replace(/^[\u{1F000}-\u{1FFFF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\uD800-\uDFFF❓📊📝📖🚗🛑🧮📏⚡🌧️]+\s*/u, '');
     chip.dataset.msg = msg;
   });
+  // Update math section header label
+  var mathHdr = document.getElementById('tcMathHdr');
+  if (mathHdr) mathHdr.textContent = mathHdr.getAttribute('data-hdr-' + appLang) || mathHdr.getAttribute('data-hdr-no') || '';
   // cats header — update title text without disturbing the count span
   var catsTitleEl = document.querySelector('#screenCats .screen-title');
   if (catsTitleEl) {
