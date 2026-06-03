@@ -2084,7 +2084,10 @@ a { color:inherit; text-decoration:none; }
 .sb-tool-btn:hover { background:var(--card2); border-color:var(--orange); }
 
 /* ── Forbikjøring screen ────────────────────────────── */
-#screenForbikjoring { padding:0; background:var(--bg); }
+#screenForbikjoring {
+  padding:0; background:var(--bg);
+  container-type:inline-size;
+}
 .fk-topbar {
   display:flex; align-items:center; gap:10px;
   padding:10px 14px 8px; flex-shrink:0;
@@ -2119,7 +2122,8 @@ a { color:inherit; text-decoration:none; }
 
 /* Two-column layout container */
 .fk-layout {
-  display:flex; flex:1; min-height:0; overflow:hidden;
+  display:flex; flex-direction:column;
+  flex:1; min-height:0; overflow:hidden;
 }
 /* Left column: calculator */
 .fk-calc-col {
@@ -2131,8 +2135,8 @@ a { color:inherit; text-decoration:none; }
   padding:12px 14px 0;
   display:flex; flex-direction:column; gap:12px;
 }
-/* Mobile: bottom padding so content clears the nav bar */
-@media(max-width:899px) {
+/* Narrow/app-frame layout: keep image stacked and content readable */
+@container (max-width:959px) {
   .fk-body       { padding-bottom:calc(72px + env(safe-area-inset-bottom, 0px)); }
   .fk-disclaimer { margin-bottom:calc(72px + env(safe-area-inset-bottom, 0px)); }
   .fk-img-mobile img { max-height:280px; border-radius:0; }
@@ -2141,8 +2145,9 @@ a { color:inherit; text-decoration:none; }
 /* Right column: hidden on mobile, shown on desktop */
 .fk-img-col { display:none; }
 
-@media(min-width:900px) {
+@container (min-width:960px) {
   .fk-img-mobile  { display:none !important; }
+  .fk-layout      { flex-direction:row; }
   .fk-calc-col    { min-width:420px; }
   .fk-img-col {
     display:flex; flex:0 0 46%;
