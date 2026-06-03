@@ -864,7 +864,7 @@ a { color:inherit; text-decoration:none; }
 
 .quiz-ai-img {
   width:100%; display:block;
-  height:252px; object-fit:cover; object-position:center;
+  height:auto; max-height:320px; object-fit:contain; object-position:center;
 }
 .quiz-ai-img.flash-ok, .quiz-ai-img.flash-bad { /* image stays neutral — feedback lives in UI, not the road scene */ }
 
