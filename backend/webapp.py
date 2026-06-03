@@ -4281,7 +4281,7 @@ async function startExam() {
   if (!isPremium()) { showPaywall(); return; }
   currentCat = null;
   isExamMode = true;
-  await loadQuiz('/api/questions/random?count=45&has_image=true');
+  await loadQuiz('/api/questions/random?count=45&has_image=true&mode=exam');
 }
 
 function startExamTimer() {
@@ -4407,6 +4407,14 @@ function renderQuestion() {
   }
   opts = opts.filter(function(o) { return o.text; });
 
+  // Shuffle answer options so the correct answer isn't always in the same position.
+  // currentCorrect is updated to the new display letter of the correct option.
+  if (opts.length > 1) {
+    var shuffled = shuffleOpts(opts, currentCorrect);
+    opts = shuffled.opts;
+    currentCorrect = shuffled.correct;
+  }
+
   var qCard = document.getElementById('qCard');
   var ansHtml = opts.map(function(o) {
     var txt = typeof o.text === 'object' ? pickLang(o.text) : o.text;
@@ -4485,6 +4493,28 @@ function renderQuestion() {
 
 var currentCorrect = '';
 var currentExpl = '';
+
+/**
+ * Shuffle answer options and rebind display letters A/B/C/D.
+ * Returns { opts: shuffledArray, correct: newLetterOfCorrectAnswer }
+ * The caller must update currentCorrect with the returned value.
+ * The original question object is NOT mutated — only the local opts copy is.
+ */
+function shuffleOpts(opts, correctId) {
+  var arr = opts.slice();
+  // Fisher-Yates
+  for (var i = arr.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+  }
+  var letters = ['A', 'B', 'C', 'D'];
+  var newCorrect = correctId; // fallback if not found
+  arr.forEach(function(o, i) {
+    if (o.id === correctId) newCorrect = letters[i];
+    o.id = letters[i]; // rebind display letter to shuffled position
+  });
+  return { opts: arr, correct: newCorrect };
+}
 
 // ── Learning state — streak + session depth tracking ─────────────────────────
 // Streaks reset when the quiz restarts; session totals track across the run.

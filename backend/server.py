@@ -700,23 +700,131 @@ async def get_questions(category: Optional[str] = None, difficulty: Optional[str
     questions = await db.questions.find(query, {"_id": 0}).limit(limit).to_list(limit)
     return [normalize_question(q) for q in questions]
 
+async def _get_exam_questions(
+    approved: int,
+    x_device_id: str,
+    user: Optional[dict],
+) -> list:
+    """
+    Exam/Test mode question selection:
+    - 90% hard, 10% medium
+    - Prioritise questions the user answered wrong recently (last 10 attempts)
+    - All questions must have an image (existing site requirement)
+    - Falls back gracefully if there are not enough hard questions
+    """
+    image_filter = {"bildeUrl": {"$exists": True, "$nin": [None, ""]}}
+
+    # ── Step 1: collect recently-wrong question IDs ───────────────────────
+    wrong_ids: list = []
+    lookup_key = (user or {}).get("sub") or (user or {}).get("id") or x_device_id
+    if lookup_key:
+        try:
+            wrong_pipeline = [
+                {"$match": {"$or": [{"device_id": x_device_id}, {"user_id": lookup_key}]}},
+                {"$sort": {"completed_at": -1}},
+                {"$limit": 10},
+                {"$unwind": "$questions_answered"},
+                {"$match": {
+                    "questions_answered.user_answer": {"$exists": True},
+                    "$expr": {"$ne": [
+                        {"$toUpper": "$questions_answered.user_answer"},
+                        {"$toUpper": "$questions_answered.correct_answer"},
+                    ]},
+                }},
+                {"$group": {"_id": "$questions_answered.question_id"}},
+                {"$limit": int(approved * 0.4)},  # cap at 40 % of slots
+            ]
+            wrong_docs = await db.quiz_attempts.aggregate(wrong_pipeline).to_list(int(approved * 0.4))
+            wrong_ids = [d["_id"] for d in wrong_docs if d.get("_id")]
+        except Exception as exc:
+            logger.warning("exam: wrong-question lookup failed: %s", exc)
+
+    # ── Step 2: slot sizes ────────────────────────────────────────────────
+    wrong_slot  = min(len(wrong_ids), max(0, int(approved * 0.3)))  # up to 30 %
+    hard_slot   = max(0, round((approved - wrong_slot) * 0.90))
+    medium_slot = max(0, approved - wrong_slot - hard_slot)
+
+    exclude_ids = []  # track fetched IDs to avoid duplicates
+
+    # ── Step 3: wrong questions (any difficulty, prioritised) ─────────────
+    wrong_qs: list = []
+    if wrong_ids and wrong_slot > 0:
+        wrong_qs = await db.questions.aggregate([
+            {"$match": {**image_filter, "id": {"$in": wrong_ids}}},
+            {"$sample": {"size": wrong_slot}},
+            {"$project": {"_id": 0}},
+        ]).to_list(wrong_slot)
+        exclude_ids = [q.get("id") for q in wrong_qs if q.get("id")]
+
+    # ── Step 4: hard questions ────────────────────────────────────────────
+    hard_match: dict = {**image_filter, "difficulty": "hard"}
+    if exclude_ids:
+        hard_match["id"] = {"$nin": exclude_ids}
+    hard_qs = await db.questions.aggregate([
+        {"$match": hard_match},
+        {"$sample": {"size": hard_slot}},
+        {"$project": {"_id": 0}},
+    ]).to_list(hard_slot)
+    exclude_ids += [q.get("id") for q in hard_qs if q.get("id")]
+
+    # ── Step 5: medium questions ──────────────────────────────────────────
+    medium_match: dict = {**image_filter, "difficulty": "medium"}
+    if exclude_ids:
+        medium_match["id"] = {"$nin": exclude_ids}
+    medium_qs = await db.questions.aggregate([
+        {"$match": medium_match},
+        {"$sample": {"size": medium_slot}},
+        {"$project": {"_id": 0}},
+    ]).to_list(medium_slot)
+    exclude_ids += [q.get("id") for q in medium_qs if q.get("id")]
+
+    # ── Step 6: top up with any difficulty if slots unfilled ──────────────
+    total_so_far = len(wrong_qs) + len(hard_qs) + len(medium_qs)
+    if total_so_far < approved:
+        needed = approved - total_so_far
+        topup_match: dict = {**image_filter}
+        if exclude_ids:
+            topup_match["id"] = {"$nin": exclude_ids}
+        topup = await db.questions.aggregate([
+            {"$match": topup_match},
+            {"$sample": {"size": needed}},
+            {"$project": {"_id": 0}},
+        ]).to_list(needed)
+        medium_qs += topup
+
+    # ── Step 7: combine + shuffle ─────────────────────────────────────────
+    import random as _random
+    all_qs = wrong_qs + hard_qs + medium_qs
+    _random.shuffle(all_qs)
+    logger.info(
+        "exam_selection total=%d wrong=%d hard=%d medium=%d",
+        len(all_qs), len(wrong_qs), len(hard_qs), len(medium_qs),
+    )
+    return all_qs
+
+
 @api_router.get("/questions/random")
 async def get_random_questions(
     category: Optional[str] = None,
     count: int = Query(default=10, le=200),
     has_image: Optional[bool] = None,
+    mode: Optional[str] = Query(default=None),   # "exam" → hard-weighted selection
     x_device_id: str = Header(default="", alias="X-Device-ID"),
     user: Optional[dict] = Depends(optional_auth),
 ):
     # ── Usage gate ─────────────────────────────────────────────────────────
-    # Guests without a device_id bypass tracking for legacy client compat.
-    # Once clients send X-Device-ID, all tiers are enforced here.
     track = x_device_id or user is not None
     if track:
         approved = await usage_mod.check_and_consume(db, x_device_id, user, count)
     else:
         approved = count  # legacy: no device_id and no auth → serve freely
 
+    # ── Exam mode: hard-weighted, wrong-question-prioritised ───────────────
+    if mode == "exam" and not category:
+        questions = await _get_exam_questions(approved, x_device_id, user)
+        return [normalize_question(q) for q in questions]
+
+    # ── Normal / category practice: existing random behaviour ─────────────
     pipeline = []
     match_stage: dict = {}
     if category:
