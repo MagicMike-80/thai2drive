@@ -2083,10 +2083,51 @@ a { color:inherit; text-decoration:none; }
 }
 .fk-sc-btn.active { border-color:var(--orange); background:rgba(255,153,51,.12); }
 .fk-sc-btn:hover  { border-color:var(--orange); }
+
+/* Mobile image toggle */
+.fk-img-toggle {
+  margin:0 14px 8px; padding:8px 14px;
+  border-radius:20px; background:var(--card);
+  border:1px solid var(--border); color:var(--muted);
+  font-size:.78rem; font-weight:700;
+  cursor:pointer; text-align:center; flex-shrink:0;
+}
+/* Mobile image panel */
+.fk-img-mobile { display:none; flex-shrink:0; padding:0 14px 10px; }
+.fk-img-mobile.open { display:block; }
+.fk-img-mobile img { width:100%; border-radius:12px; object-fit:cover; max-height:220px; }
+
+/* Two-column layout container */
+.fk-layout {
+  display:flex; flex:1; min-height:0; overflow:hidden;
+}
+/* Left column: calculator */
+.fk-calc-col {
+  display:flex; flex-direction:column;
+  flex:1; min-height:0; overflow-y:auto;
+}
 .fk-body {
-  flex:1; overflow-y:auto; padding:12px 14px 20px;
+  padding:12px 14px 0;
   display:flex; flex-direction:column; gap:12px;
 }
+/* Right column: hidden on mobile, shown on desktop */
+.fk-img-col { display:none; }
+
+@media(min-width:700px) {
+  .fk-img-toggle  { display:none; }
+  .fk-img-mobile  { display:none !important; }
+  .fk-img-col {
+    display:flex; flex:0 0 46%;
+    border-left:1px solid var(--border); overflow:hidden;
+    align-items:stretch;
+  }
+  .fk-img-col img {
+    width:100%; height:100%;
+    object-fit:cover; object-position:center;
+    display:block;
+  }
+}
+
 .fk-info-row {
   display:grid; grid-template-columns:1fr 1fr;
   gap:8px;
@@ -2948,10 +2989,24 @@ a { color:inherit; text-decoration:none; }
         <button class="fk-sc-btn"        id="fkBtnMed"   onclick="fkSelect(1)"></button>
         <button class="fk-sc-btn"        id="fkBtnHard"  onclick="fkSelect(2)"></button>
       </div>
-      <div class="fk-body" id="fkBody">
-        <!-- filled by fkRender() -->
+      <!-- Mobile: toggle button + collapsible image panel -->
+      <button class="fk-img-toggle" id="fkImgToggle" onclick="fkToggleImg()">👁 Se illustrasjon</button>
+      <div class="fk-img-mobile" id="fkImgMobile">
+        <img src="/api/assets/forbikjoring.jpg" alt="Forbikjøring illustrasjon"
+             onerror="this.parentElement.style.display='none'">
       </div>
-      <div class="fk-disclaimer" id="fkDisclaimer"></div>
+      <!-- Two-column layout -->
+      <div class="fk-layout">
+        <div class="fk-calc-col">
+          <div class="fk-body" id="fkBody"><!-- filled by fkRender() --></div>
+          <div class="fk-disclaimer" id="fkDisclaimer"></div>
+        </div>
+        <!-- Desktop-only image column -->
+        <div class="fk-img-col">
+          <img src="/api/assets/forbikjoring.jpg" alt="Forbikjøring illustrasjon"
+               onerror="this.style.display='none'">
+        </div>
+      </div>
     </div>
 
     <!-- ═══ STUDIEBOK ADMIN EDIT MODAL ═══ -->
@@ -3467,6 +3522,7 @@ var UI = {
   fk_result_safe:{th:'✅ ปลอดภัย — ระยะเพียงพอ', no:'✅ TRYGT — Du har god margin', en:'✅ SAFE — You have good margin'},
   fk_result_warn:{th:'⚠️ เฉียดฉิว — ระยะน้อยมาก', no:'⚠️ KNAPT — Meget liten margin', en:'⚠️ CLOSE — Very little margin'},
   fk_result_danger:{th:'❌ อันตราย — ระยะไม่พอ', no:'❌ FOR FARLIG — Ikke nok plass', en:'❌ DANGEROUS — Not enough room'},
+  fk_img_toggle:{th:'👁 ดูภาพประกอบ', no:'👁 Se illustrasjon', en:'👁 View illustration'},
   fk_disclaimer:{th:'นี่เป็นแบบฝึกหัดแบบง่าย ในการขับจริงต้องประเมินทัศนวิสัย ความเร็ว สภาพอากาศ ถนน และรถสวนทางเสมอ', no:'Dette er en forenklet øvingsmodell. I trafikken må du alltid vurdere sikt, fart, vær, vei og møtende trafikk.', en:'This is a simplified practice model. In real traffic, always assess visibility, speed, weather, road conditions and oncoming traffic.'},
   studybook_search_placeholder:{th:'ค้นหาหรือเลข §...', no:'Søk eller § nummer...', en:'Search or § number...'},
   studybook_prev:{th:'‹ ก่อนหน้า', no:'‹ Forrige', en:'‹ Previous'},
@@ -3623,6 +3679,7 @@ function applyUILang() {
   // Re-render Forbikjøring if it's the active screen
   if (document.getElementById('screenForbikjoring') &&
       document.getElementById('screenForbikjoring').classList.contains('active')) {
+    _fkUpdateStaticLabels();
     fkRender();
   }
   // cats header — update title text without disturbing the count span
@@ -7012,8 +7069,15 @@ function _fkStep(lbl, val, cls) {
        + '<span class="fk-step-val ' + cls + '">' + val + '</span></div>';
 }
 
-function showForbikjoring() {
-  // Update scenario button labels and title
+function fkToggleImg() {
+  var panel  = document.getElementById('fkImgMobile');
+  var btn    = document.getElementById('fkImgToggle');
+  if (!panel) return;
+  var open = panel.classList.toggle('open');
+  if (btn) btn.textContent = (open ? '▲ ' : '👁 ') + t('fk_img_toggle').replace(/^👁\s*/, '');
+}
+
+function _fkUpdateStaticLabels() {
   var btnIds = ['fkBtnEasy','fkBtnMed','fkBtnHard'];
   var keys   = ['fk_scenario_easy','fk_scenario_med','fk_scenario_hard'];
   btnIds.forEach(function(id, i) {
@@ -7022,6 +7086,15 @@ function showForbikjoring() {
   });
   var titleEl = document.getElementById('fkTitle');
   if (titleEl) titleEl.textContent = t('fk_title');
+  var toggleBtn = document.getElementById('fkImgToggle');
+  if (toggleBtn) {
+    var open = document.getElementById('fkImgMobile') && document.getElementById('fkImgMobile').classList.contains('open');
+    toggleBtn.textContent = (open ? '▲ ' : '👁 ') + t('fk_img_toggle').replace(/^👁\s*/, '');
+  }
+}
+
+function showForbikjoring() {
+  _fkUpdateStaticLabels();
   // Show screen
   document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
   var scr = document.getElementById('screenForbikjoring');
