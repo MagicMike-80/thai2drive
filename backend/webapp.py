@@ -3627,7 +3627,14 @@ var UI = {
   sb_save:         {th:'บันทึก',         no:'Lagre',         en:'Save'},
 };
 
-function t(key) { return (UI[key] && (UI[key][appLang] || UI[key]['th'] || UI[key]['en'] || UI[key]['no'])) || key; }
+function t(key) {
+  var entry = UI[key];
+  if (entry && typeof entry[appLang] === 'string' && entry[appLang].trim() !== '') {
+    return entry[appLang];
+  }
+  if (window.console && console.warn) console.warn('[i18n] missing translation', key, appLang);
+  return key;
+}
 function tf(key, vars) {
   var s = t(key);
   Object.keys(vars || {}).forEach(function(k) {
