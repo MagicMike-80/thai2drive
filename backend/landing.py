@@ -101,6 +101,17 @@ html[data-current-lang="en"] [data-lang="en"].block{display:block}
 .lang-row .lang-btn:nth-child(2){ animation:flagpulse 6s ease-in-out infinite 2s; }
 .lang-row .lang-btn:nth-child(3){ animation:flagpulse 6s ease-in-out infinite 4s; }
 .lang-row .lang-btn.active{ animation:none!important; transform:scale(1.15)!important; border-color:#FF9933!important; box-shadow:0 0 0 3px rgba(255,153,51,.4)!important; }
+.landing-onboard-target{position:relative;border-radius:16px}
+.landing-onboard-label{display:none;position:absolute;z-index:20;align-items:center;gap:8px;padding:7px 11px;border-radius:999px;background:rgba(255,255,255,.95);border:1px solid rgba(255,153,51,.35);box-shadow:0 10px 28px rgba(0,0,0,.24),0 0 0 3px rgba(255,153,51,.12);color:#0F172A;font-size:12px;font-weight:900;line-height:1;white-space:nowrap;pointer-events:auto}
+.landing-onboard-label-lang{left:50%;top:-38px;transform:translateX(-50%)}
+.landing-onboard-label-web{left:50%;bottom:-40px;transform:translateX(-50%)}
+.landing-onboard-dismiss{width:18px;height:18px;border:0;border-radius:50%;background:rgba(15,23,42,.1);color:#0F172A;font-size:14px;font-weight:900;line-height:18px;cursor:pointer;padding:0}
+.landing-onboard-dismiss:hover{background:rgba(15,23,42,.18)}
+html.landing-onboard-active .landing-onboard-label{display:inline-flex}
+html.landing-onboard-active .landing-onboard-target{animation:landingOnboardPulse 2.8s ease-in-out infinite}
+@keyframes landingOnboardPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,153,51,.16)}50%{box-shadow:0 0 0 7px rgba(255,153,51,.10),0 0 24px rgba(255,153,51,.14)}}
+@media(max-width:560px){.landing-onboard-label{font-size:11px;padding:6px 9px}.landing-onboard-label-lang{top:-34px}.landing-onboard-label-web{bottom:-34px}}
+@media(prefers-reduced-motion:reduce){html.landing-onboard-active .landing-onboard-target{animation:none;box-shadow:0 0 0 4px rgba(255,153,51,.16)}}
 .velg-hint{display:none}
 .mini-flag{display:flex;flex-direction:column;width:38px;height:26px;border-radius:3px;overflow:hidden;flex-shrink:0}
 .mini-flag.flag-th span:nth-child(1){background:#A51931;flex:1}
@@ -496,7 +507,13 @@ def _hero_html() -> str:
     <img src="{ICON_URL}" alt="Thai2Drive" class="hero-icon"/>
 
     <!-- Language switcher — also in hero so it's instantly visible -->
-    <div class="lang-row" role="group" aria-label="Language" style="justify-content:center;margin-bottom:20px">
+    <div class="lang-row landing-onboard-target landing-onboard-lang" role="group" aria-label="Language" style="justify-content:center;margin-bottom:20px">
+      <span class="landing-onboard-label landing-onboard-label-lang">
+        <span data-lang="th">1. เลือกภาษา</span>
+        <span data-lang="no">1. Velg språk</span>
+        <span data-lang="en">1. Choose language</span>
+        <button class="landing-onboard-dismiss" type="button">×</button>
+      </span>
       <button class="lang-btn active" data-set-lang="th" title="ภาษาไทย">
         <span class="cflag"><svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg"><rect width="900" height="600" fill="#A51931"/><rect width="900" height="480" y="60" fill="#F4F5F8"/><rect width="900" height="320" y="140" fill="#241D4F"/></svg></span>
       </button>
@@ -526,7 +543,13 @@ def _hero_html() -> str:
         <span data-lang="no">🚀 Prøv gratis</span>
         <span data-lang="en">🚀 Try free</span>
       </a>
-      <a href="/api/web" class="cta-btn cta-primary" style="background:#fff;color:#0F172A;box-shadow:0 16px 40px rgba(255,255,255,.15)">
+      <a href="/api/web" class="cta-btn cta-primary landing-onboard-target landing-onboard-web" style="background:#fff;color:#0F172A;box-shadow:0 16px 40px rgba(255,255,255,.15)">
+        <span class="landing-onboard-label landing-onboard-label-web">
+          <span data-lang="th">2. เปิดเว็บแอป</span>
+          <span data-lang="no">2. Åpne web-appen</span>
+          <span data-lang="en">2. Open web app</span>
+          <button class="landing-onboard-dismiss" type="button">×</button>
+        </span>
         💻
         <span data-lang="th">เปิดเว็บแอป</span>
         <span data-lang="no">Åpne web-appen</span>
@@ -1068,22 +1091,32 @@ def _bottom_cta_html() -> str:
 
 
 LANDING_JS = r"""
-// ─── Language hints (always show velg-hint for 5s, lang-hint first visit) ───
+// ─── First-visit onboarding highlight ───
 (function(){
-  // "velg språk" blinker alltid
-  // gammel hint — første besøk kun
-  if(!localStorage.getItem('t2d_lang_hint_shown')){
-    var hint = document.getElementById('langHint');
-    if(hint){
-      setTimeout(function(){
-        hint.classList.add('hidden');
-        localStorage.setItem('t2d_lang_hint_shown','1');
-      }, 5000);
-    }
-  } else {
-    var h = document.getElementById('langHint');
-    if(h) h.style.display='none';
+  var KEY = 't2d_landing_onboarding_dismissed';
+  var root = document.documentElement;
+  var timer = null;
+
+  function hideOnboarding(){
+    root.classList.remove('landing-onboard-active');
+    try { sessionStorage.setItem(KEY, '1'); } catch(e) {}
+    if(timer) clearTimeout(timer);
   }
+
+  try {
+    if(sessionStorage.getItem(KEY) === '1') return;
+  } catch(e) {}
+
+  root.classList.add('landing-onboard-active');
+  timer = setTimeout(hideOnboarding, 10000);
+
+  document.querySelectorAll('.landing-onboard-dismiss').forEach(function(btn){
+    btn.addEventListener('click', function(ev){
+      ev.preventDefault();
+      ev.stopPropagation();
+      hideOnboarding();
+    });
+  });
 })();
 
 // ─── Language switcher ───
@@ -1410,14 +1443,6 @@ def build_landing_page(chat_css: str, chat_widget_html: str, chat_js: str) -> st
 </head>
 <body>
 {_nav_html()}
-<div class="velg-hint" id="velgHint">
-  <span class="velg-arrow">↑</span>
-  <span class="velg-hint-text">🌏 velg språk</span>
-</div>
-<div class="lang-hint" id="langHint">
-  <div class="lang-hint-bubble">🌏 เลือกภาษา · Velg språk · Choose language</div>
-  <div class="lang-hint-arrow">↑</div>
-</div>
 {_hero_html()}
 {_stats_html()}
 {_try_html()}
@@ -1434,3 +1459,4 @@ def build_landing_page(chat_css: str, chat_widget_html: str, chat_js: str) -> st
 <script>{chat_js}</script>
 </body>
 </html>"""
+
