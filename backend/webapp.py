@@ -1522,6 +1522,16 @@ a { color:inherit; text-decoration:none; }
 .sp-btn-sm-ai    { background:rgba(139,92,246,.10); color:#A78BFA;      border:1px solid rgba(139,92,246,.24); }
 .sp-btn-sm-bm    { background:rgba(255,255,255,.05); color:var(--muted); border:1px solid rgba(255,255,255,.10); }
 .sp-btn-sm-bm.saved { color:var(--orange); border-color:rgba(255,153,51,.35); background:rgba(255,153,51,.07); }
+/* TTS button inside the AI inline card */
+.sp-ai-tts-btn {
+  display:inline-flex; align-items:center; gap:5px;
+  margin-top:10px; padding:7px 14px; border-radius:20px;
+  background:rgba(255,153,51,.10); color:var(--orange);
+  border:1px solid rgba(255,153,51,.28);
+  font-size:.75rem; font-weight:700; cursor:pointer;
+  transition:background .15s;
+}
+.sp-ai-tts-btn:hover { background:rgba(255,153,51,.20); }
 
 /* ══════════════════════════════════════════
    BOOKMARKS SCREEN
@@ -7402,32 +7412,62 @@ function practiceThisSign() {
   showTab('cats');
 }
 
+// Lookup a UI key in a specific language (bypasses global appLang)
+function _tIn(key, lang) {
+  var e = UI[key];
+  return (e && (e[lang] || e['no'] || e['en'] || e['th'])) || key;
+}
+
 function askAiAboutSign() {
   var sign = _signPanelData;
   if (!sign) return;
-  var lang = _signPanelLang;
+  var lang = _signPanelLang; // use sign panel's own language for EVERYTHING
   var main = document.getElementById('spMainSurface') || document.getElementById('spBody');
   if (!main) return;
   var old = document.getElementById('spAiInline');
   if (old) old.remove();
 
-  var name = _getProp(sign.name, lang) || _getProp(sign.name, 'no') || '';
-  var expl = _getProp(sign.explanation, lang);
-  var driver = _getProp(sign.driverAction || sign.driver_action || sign.whyDangerous || sign.why_dangerous, lang) || t('sign_fallback_driver');
-  var mistake = _getProp(sign.typicalMistake || sign.typical_mistake, lang) || t('sign_fallback_mistake');
-  var lesson = tf('sign_ai_lesson', { name: name || t('signs') });
+  var name   = _getProp(sign.name, lang) || _getProp(sign.name, 'no') || '';
+  var expl   = _getProp(sign.explanation, lang);
+  var driver = _getProp(sign.driverAction || sign.driver_action || sign.whyDangerous || sign.why_dangerous, lang)
+               || _tIn('sign_fallback_driver', lang);
+  var mistake = _getProp(sign.typicalMistake || sign.typical_mistake, lang)
+               || _tIn('sign_fallback_mistake', lang);
+
+  // Build lesson template using panel language — prevents Norwegian template + Thai content mix
+  var lessonTmpl = _tIn('sign_ai_lesson', lang);
+  var lesson = lessonTmpl.replace(/\{name\}/g, name || _tIn('signs', lang));
+
   var text = [lesson, expl, driver, mistake].filter(Boolean).join(' ');
+
+  // Store for TTS button
+  window._spAiText = text;
+  window._spAiLang = lang;
+
+  var hintLabel   = _tIn('ai_teacher_hint', lang);
+  var aloudLabel  = _tIn('read_aloud', lang);
 
   var ai = document.createElement('div');
   ai.id = 'spAiInline';
   ai.className = 'sp-card sp-card-explanation';
   ai.innerHTML = '<div class="sp-card-icon">🤖</div>'
     + '<div class="sp-card-inner">'
-    + '<div class="sp-card-label">' + escH(t('ai_teacher_hint')) + '</div>'
+    + '<div class="sp-card-label">' + escH(hintLabel) + '</div>'
     + '<div class="sp-card-text">' + escH(text) + '</div>'
+    + '<button class="sp-ai-tts-btn" onclick="speakSignAiText()" title="' + escH(aloudLabel) + '">'
+    + '🔊 ' + escH(aloudLabel)
+    + '</button>'
     + '</div>';
   main.appendChild(ai);
   ai.scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+
+function speakSignAiText() {
+  if (!window.speechSynthesis || !window._spAiText) return;
+  var u = new SpeechSynthesisUtterance(window._spAiText.trim());
+  u.lang = window._spAiLang === 'th' ? 'th-TH' : window._spAiLang === 'en' ? 'en-US' : 'nb-NO';
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(u);
 }
 
 </script>
