@@ -569,10 +569,10 @@ a { color:inherit; text-decoration:none; }
 .q-img-wrap {
   width:100%; border-radius:12px; overflow:hidden;
   background:rgba(255,255,255,.03);
-  max-height:200px; display:flex; align-items:center; justify-content:center;
+  aspect-ratio:16/9;
   transition:outline .3s ease, box-shadow .3s ease;
 }
-.q-img { width:100%; max-height:200px; object-fit:contain; display:block; }
+.q-img { width:100%; height:100%; object-fit:cover; display:block; }
 
 /* Question text */
 .q-text {
@@ -862,7 +862,7 @@ a { color:inherit; text-decoration:none; }
 
 .quiz-ai-img {
   width:100%; display:block;
-  height:252px; object-fit:contain; object-position:center;
+  height:252px; object-fit:cover; object-position:center;
 }
 .quiz-ai-img.flash-ok, .quiz-ai-img.flash-bad { /* image stays neutral — feedback lives in UI, not the road scene */ }
 
@@ -4916,6 +4916,12 @@ async function selectAns(btn, picked) {
   if (nb) nb.disabled = false;
   if (nm) nm.disabled = false;
 
+  // Scroll Next button into view after a short delay (DOM paint + feedback render)
+  setTimeout(function() {
+    var btn = document.getElementById('qNextMobile');
+    if (btn) btn.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 180);
+
   playSound(isOk ? 'correct' : 'wrong');
   if (window.speechSynthesis) window.speechSynthesis.cancel();
   ttsPlaying = false;
@@ -5931,6 +5937,9 @@ function nextQ() {
   if (qIdx >= questions.length) { showEnd(); return; }
   if (!checkPaywall()) return;
   renderQuestion();
+  // Scroll back to top of quiz body so new question starts at the top
+  var qb = document.querySelector('.quiz-body');
+  if (qb) qb.scrollTop = 0;
 }
 
 function goBack() {
