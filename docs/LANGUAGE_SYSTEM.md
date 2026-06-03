@@ -1,54 +1,71 @@
 # Thai2Drive Language System
 
-Purpose: prevent Norwegian, Thai, and English from bleeding into each other in the learner experience.
+Purpose: prevent language bleed-through between Norwegian, Thai, and English.
 
-## Core Rules
+## Core Rule
 
-- Norwegian mode must show only Norwegian learner-facing text.
-- Thai mode must show only Thai learner-facing text.
-- English mode must show only English learner-facing text.
-- Do not use another language as a visible fallback.
-- If a translation is missing, hide the optional content or use a neutral same-language label.
-- Language switch must update visible UI immediately without page reload.
-- Michael must answer in the selected/user language only.
-- Old Michael chat context must not continue across language changes.
+Learner-facing text must always match the active language:
 
-## Implementation Rules
+- `no`: Norwegian only
+- `th`: Thai only
+- `en`: English only
 
-- Store content as explicit `no`, `th`, and `en` fields.
-- Sanitize language once at API entry points and use that value throughout the request.
-- Keep prompts, examples, shortcuts, fallback replies, chips, video titles, and side panels language-specific.
-- Do not put Norwegian examples inside shared Thai or English AI prompts.
-- Avoid hardcoded learner-facing strings in event handlers.
-- Avoid fallback chains like `thai || norwegian` for visible text.
+Do not use another language as visible fallback. If optional translated content is missing, hide it or use a neutral label in the active language.
 
-## Test Checklist
+## Developer Rules
+
+- Store learner text as explicit `no`, `th`, and `en` values.
+- Sanitize language once at API entry points and use the sanitized value everywhere.
+- Avoid fallback chains like `title_th || title_no` for visible text.
+- Avoid hardcoded learner-facing strings in click handlers, templates, and API fallbacks.
+- Language switching must update visible text immediately without page reload.
+- Old language-specific chat or UI state must be cleared when switching language.
+
+## Surface Rules
+
+- UI text: buttons, headings, placeholders, labels, empty states, errors, and dialogs must use the active language.
+- Video titles: never fall back to Norwegian in Thai or English mode. Hide the video card if the active-language title is missing.
+- Side panel/chips: chip labels and `data-msg` values must exist per language. Do not send Norwegian shortcut text in Thai or English mode.
+- Premium gate: paywall titles, benefits, buttons, restore text, and error messages must match the active language.
+- Settings: language labels, account text, logout/login, and subscription text must update instantly.
+- Quiz: question text, answer labels, helper text, feedback, next button, and image captions must match the active language.
+- Result screen: score labels, pass/fail text, explanations, review actions, and retry buttons must match the active language.
+- Michael Trafikklærer: welcome message, prompts, suggestions, fallback replies, examples, formulas, side panel, and video cards must stay in the selected/user language only.
+
+## AI Prompt Rules
+
+- Keep Michael prompts language-specific.
+- Do not put Norwegian examples inside Thai or English prompt paths.
+- Conversation context must be language-scoped or reset on language change.
+- Fallback replies must be language-specific.
+
+## Manual Test Checklist
 
 ### Norwegian
 
 - Switch to Norwegian.
-- Open Home, Quiz, Study Book, Traffic Signs, Michael, Settings, Login/Register, and Premium dialogs.
+- Check Home, Quiz, Results, Traffic Signs, Study Book, Michael, Settings, Login/Register, and Premium gate.
 - Confirm all visible text is Norwegian.
 - Ask Michael about signs, right-of-way, and formulas.
-- Confirm replies, chips, suggestions, and video titles stay Norwegian.
+- Confirm chips, side panel, suggestions, replies, and video cards stay Norwegian.
 
 ### Thai
 
 - Switch to Thai.
-- Open Home, Quiz, Study Book, Traffic Signs, Michael, Settings, Login/Register, and Premium dialogs.
+- Check Home, Quiz, Results, Traffic Signs, Study Book, Michael, Settings, Login/Register, and Premium gate.
 - Confirm no Norwegian or English learner-facing text is visible.
 - Ask Michael about signs, right-of-way, and formulas.
-- Confirm replies, chips, suggestions, fallback text, and video titles stay Thai.
-- Switch from Norwegian to Thai and confirm old Norwegian Michael messages are cleared.
+- Confirm chips, side panel, suggestions, replies, fallback text, and video cards stay Thai.
+- Switch from Norwegian to Thai and confirm old Norwegian Michael messages/context are cleared.
 
 ### English
 
 - Switch to English.
-- Open Home, Quiz, Study Book, Traffic Signs, Michael, Settings, Login/Register, and Premium dialogs.
+- Check Home, Quiz, Results, Traffic Signs, Study Book, Michael, Settings, Login/Register, and Premium gate.
 - Confirm all visible text is English.
 - Ask Michael about signs, right-of-way, and formulas.
-- Confirm replies, chips, suggestions, and video titles stay English.
+- Confirm chips, side panel, suggestions, replies, and video cards stay English.
 
 ## Release Rule
 
-Any new learner-facing feature must pass the NO, TH, and EN checklist before release.
+Any learner-facing feature must pass the NO, TH, and EN checklist before release.
