@@ -359,7 +359,7 @@ def main() -> None:
     )
     parser.add_argument("pack_name", help="Name of the pack folder under content_packs/")
     parser.add_argument(
-        "--dry-run", dest="dry_run", action="store_true",
+        "--dry-run", "--dryrun", dest="dry_run", action="store_true",
         help="Validate and preview only — do not write to DB (default if --commit absent)",
     )
     parser.add_argument(
