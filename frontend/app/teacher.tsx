@@ -18,19 +18,22 @@ import { useAppStore } from '../src/store/appStore';
 // ─── Translation strings ─────────────────────────────────────────────────────
 const TR: Record<string, Record<string, string>> = {
   no: {
-    title: '🚗 Michael Trafikklærer',       // Fix 5: consistent title
+    title: '🚗 Michael Trafikklærer',
+    online: '● Online',
     inputPlaceholder: 'Still et spørsmål...',
     send: 'Send',
     errorMsg: 'Beklager, noe gikk galt. Prøv igjen.',
   },
   th: {
-    title: '🚗 Michael Trafikklærer',
+    title: '🚗 ไมเคิล ครูสอนขับรถ',
+    online: '● ออนไลน์',
     inputPlaceholder: 'ถามคำถาม...',
     send: 'ส่ง',
-    errorMsg: 'ขอโทษค่ะ มีข้อผิดพลาด กรุณาลองใหม่อีกครั้ง',
+    errorMsg: 'ขอโทษครับ มีข้อผิดพลาด กรุณาลองใหม่อีกครั้ง',
   },
   en: {
-    title: '🚗 Michael Trafikklærer',
+    title: '🚗 Michael Driving Instructor',
+    online: '● Online',
     inputPlaceholder: 'Ask a question...',
     send: 'Send',
     errorMsg: 'Sorry, something went wrong. Please try again.',
@@ -140,7 +143,7 @@ export default function TeacherScreen() {
           </View>
           <View>
             <Text style={[s.headerTitle, { color: c.text }]}>{t.title}</Text>
-            <Text style={[s.headerSub, { color: '#10B981' }]}>● Online</Text>
+            <Text style={[s.headerSub, { color: '#10B981' }]}>{t.online}</Text>
           </View>
         </View>
         <View style={{ width: 40 }} />
