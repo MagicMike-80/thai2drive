@@ -11,6 +11,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Speech from 'expo-speech';
 import { useAppStore } from '../src/store/appStore';
 import { api, BookChapter, BookSection } from '../src/services/api';
+import { BookHtml } from '../src/components/BookHtml';
 
 const TR: Record<string, Record<string, string>> = {
   no: {
@@ -64,6 +65,7 @@ export default function BookScreen() {
   const c = colors;
   const t = TR[language] || TR.no;
   const lang = language as 'no' | 'th' | 'en';
+  const isDark = c.bg === '#0F172A';
 
   const [chapters, setChapters] = useState<BookChapter[]>([]);
   const [sections, setSections] = useState<BookSection[]>([]);
@@ -256,9 +258,12 @@ export default function BookScreen() {
                 />
               </View>
             ) : null}
-            <Text style={[st.bodyText, { color: c.text }]}>
-              {currentSection.content[lang] || currentSection.content.no}
-            </Text>
+            <BookHtml
+              html={currentSection.content[lang] || currentSection.content.no || ''}
+              textColor={c.text}
+              accentColor={c.accent}
+              isDark={isDark}
+            />
           </Animated.ScrollView>
 
           {/* Navigation */}
