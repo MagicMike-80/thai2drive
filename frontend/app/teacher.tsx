@@ -28,6 +28,7 @@ const TR: Record<string, Record<string, string | string[]>> = {
     thumbsNo: '👎 Nei',
     feedbackThanks: 'Takk for tilbakemeldingen 🙏',
     feedbackReasons: ['For langt', 'For vanskelig', 'Feil språk', 'Svarte ikke på spørsmålet'],
+    readAloud: 'Les høyt',
   },
   th: {
     title: '🚗 ไมเคิล ครูสอนขับรถ',
@@ -40,6 +41,7 @@ const TR: Record<string, Record<string, string | string[]>> = {
     thumbsNo: '👎 ไม่ช่วย',
     feedbackThanks: 'ขอบคุณสำหรับความคิดเห็น 🙏',
     feedbackReasons: ['ยาวเกินไป', 'ยากเกินไป', 'ผิดภาษา', 'ไม่ตอบคำถาม'],
+    readAloud: 'อ่านออกเสียง',
   },
   en: {
     title: '🚗 Michael Driving Instructor',
@@ -52,6 +54,7 @@ const TR: Record<string, Record<string, string | string[]>> = {
     thumbsNo: '👎 No',
     feedbackThanks: 'Thanks for the feedback 🙏',
     feedbackReasons: ['Too long', 'Too difficult', 'Wrong language', 'Did not answer'],
+    readAloud: 'Read aloud',
   },
 };
 
@@ -100,6 +103,37 @@ export default function TeacherScreen() {
 
   const updSess = useCallback((fn: (s: LangSession) => LangSession) => {
     setSessions(prev => ({ ...prev, [lang]: fn(prev[lang] ?? emptySession()) }));
+  }, [lang]);
+
+  const [speakingIndex, setSpeakingIndex] = useState<number | null>(null);
+
+  const handleSpeak = useCallback((text: string, msgIndex: number) => {
+    if (Platform.OS !== 'web') return;
+    const synth = (globalThis as any).speechSynthesis;
+    if (!synth) return;
+    if (speakingIndex === msgIndex) {
+      synth.cancel();
+      setSpeakingIndex(null);
+      return;
+    }
+    synth.cancel();
+    const utter = new (globalThis as any).SpeechSynthesisUtterance(text);
+    utter.lang = lang === 'th' ? 'th-TH' : lang === 'en' ? 'en-US' : 'nb-NO';
+    utter.onend = () => setSpeakingIndex(null);
+    utter.onerror = () => setSpeakingIndex(null);
+    setSpeakingIndex(msgIndex);
+    synth.speak(utter);
+  }, [speakingIndex, lang]);
+
+  // Cancel speech on language switch or screen unmount
+  React.useEffect(() => {
+    return () => {
+      if (Platform.OS === 'web') {
+        const synth = (globalThis as any).speechSynthesis;
+        if (synth) { synth.cancel(); }
+        setSpeakingIndex(null);
+      }
+    };
   }, [lang]);
 
   const sendFeedback = useCallback(async (
@@ -262,6 +296,20 @@ export default function TeacherScreen() {
                       {msg.content}
                     </Text>
                   </View>
+                  {msg.role === 'assistant' && Platform.OS === 'web' && (
+                    <TouchableOpacity
+                      style={s.speakBtn}
+                      onPress={() => handleSpeak(msg.content, i)}
+                      activeOpacity={0.7}
+                      accessibilityLabel={t.readAloud as string}
+                    >
+                      <Ionicons
+                        name={speakingIndex === i ? 'stop-circle' : 'volume-high'}
+                        size={16}
+                        color={speakingIndex === i ? '#EF4444' : '#6B7280'}
+                      />
+                    </TouchableOpacity>
+                  )}
                 </View>
 
                 {/* Feedback buttons — shown under every real assistant reply */}
@@ -459,6 +507,17 @@ const s = StyleSheet.create({
   },
   suggestIcon: { fontSize: 18 },
   suggestText: { fontSize: 14, fontWeight: '500', flex: 1 },
+
+  // Speak button
+  speakBtn: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'flex-end',
+    marginBottom: 2,
+  },
 
   // Feedback
   feedbackWrap: { marginLeft: 36, marginTop: 4, marginBottom: 2 },
