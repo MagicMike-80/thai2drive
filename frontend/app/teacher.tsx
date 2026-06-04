@@ -59,10 +59,20 @@ const TR: Record<string, Record<string, string | string[]>> = {
 interface Message {
   role: 'user' | 'assistant';
   content: string;
-  suggestions?: string[];          // Fix 2: carry reply chips
+  suggestions?: string[];
 }
 
 interface Topic { icon: string; text: string; }
+
+interface LangSession {
+  sessionId: string | null;
+  messages: Message[];
+  showSuggestions: boolean;
+  feedbackMap: Record<number, 'pending' | 'negative' | 'done'>;
+}
+const emptySession = (): LangSession => ({
+  sessionId: null, messages: [], showSuggestions: true, feedbackMap: {},
+});
 
 const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL || '';
 
@@ -74,16 +84,23 @@ export default function TeacherScreen() {
   const t = TR[language] || TR.no;
   const lang = language || 'no';
 
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [welcomeMsg, setWelcomeMsg] = useState<string>('');   // Fix 4: from backend
-  const [topics, setTopics] = useState<Topic[]>([]);           // Fix 3: from backend
+  // Per-language session state — each language keeps its own chat history
+  const [sessions, setSessions] = useState<Record<string, LangSession>>({
+    no: emptySession(), th: emptySession(), en: emptySession(),
+  });
+  const [welcomeMsg, setWelcomeMsg] = useState<string>('');
+  const [topics, setTopics] = useState<Topic[]>([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
-  const [sessionId, setSessionId] = useState<string | null>(null);
-  const [showSuggestions, setShowSuggestions] = useState(true);
-  // feedback: key = index in allMessages, value = 'pending' | 'negative' | 'done'
-  const [feedbackMap, setFeedbackMap] = useState<Record<number, 'pending' | 'negative' | 'done'>>({});
   const scrollRef = useRef<ScrollView>(null);
+
+  // Derive current language's session
+  const sess = sessions[lang] ?? emptySession();
+  const { messages, sessionId, showSuggestions, feedbackMap } = sess;
+
+  const updSess = useCallback((fn: (s: LangSession) => LangSession) => {
+    setSessions(prev => ({ ...prev, [lang]: fn(prev[lang] ?? emptySession()) }));
+  }, [lang]);
 
   const sendFeedback = useCallback(async (
     msgIndex: number,
@@ -91,7 +108,7 @@ export default function TeacherScreen() {
     helpful: boolean,
     reason?: string,
   ) => {
-    setFeedbackMap((prev) => ({ ...prev, [msgIndex]: 'done' }));
+    updSess(s => ({ ...s, feedbackMap: { ...s.feedbackMap, [msgIndex]: 'done' } }));
     const assistantMsg = allMsgs[msgIndex];
     const precedingMsg = msgIndex > 0 ? allMsgs[msgIndex - 1] : null;
     try {
@@ -108,10 +125,10 @@ export default function TeacherScreen() {
           source: 'web',
         }),
       });
-    } catch { /* fire-and-forget — don't break the chat on feedback error */ }
-  }, [sessionId, lang]);
+    } catch { /* fire-and-forget */ }
+  }, [updSess, sessionId, lang]);
 
-  // Fix 3 + 4: fetch welcome + topics from backend on mount / language change
+  // Fetch welcome + topics on language change
   React.useEffect(() => {
     (async () => {
       try {
@@ -123,9 +140,7 @@ export default function TeacherScreen() {
         const tData = await tRes.json();
         setWelcomeMsg(wData.welcome || '');
         setTopics(tData.topics || []);
-      } catch {
-        // Fallback: keep empty (component handles gracefully)
-      }
+      } catch {}
     })();
   }, [lang]);
 
@@ -138,11 +153,18 @@ export default function TeacherScreen() {
     if (!msg || loading) return;
 
     setInput('');
-    setShowSuggestions(false);
     setLoading(true);
 
-    const userMsg: Message = { role: 'user', content: msg };
-    setMessages((prev) => [...prev, userMsg]);
+    // Read sessionId and add user message atomically
+    let capturedSessionId: string | null = null;
+    setSessions(prev => {
+      const s = prev[lang] ?? emptySession();
+      capturedSessionId = s.sessionId;
+      return {
+        ...prev,
+        [lang]: { ...s, showSuggestions: false, messages: [...s.messages, { role: 'user', content: msg }] },
+      };
+    });
 
     setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 100);
 
@@ -150,28 +172,40 @@ export default function TeacherScreen() {
       const res = await fetch(`${BACKEND_URL}/api/teacher/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ session_id: sessionId, message: msg, language: lang }),
+        body: JSON.stringify({ session_id: capturedSessionId, message: msg, language: lang }),
       });
 
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
 
-      if (data.session_id && !sessionId) setSessionId(data.session_id);
-
-      // Fix 2: store suggestions with the message
-      const assistantMsg: Message = {
-        role: 'assistant',
-        content: data.reply,
-        suggestions: data.suggestions || [],
-      };
-      setMessages((prev) => [...prev, assistantMsg]);
+      setSessions(prev => {
+        const s = prev[lang] ?? emptySession();
+        return {
+          ...prev,
+          [lang]: {
+            ...s,
+            sessionId: s.sessionId || data.session_id || null,
+            messages: [...s.messages, {
+              role: 'assistant' as const,
+              content: data.reply,
+              suggestions: data.suggestions || [],
+            }],
+          },
+        };
+      });
     } catch {
-      setMessages((prev) => [...prev, { role: 'assistant', content: t.errorMsg }]);
+      setSessions(prev => {
+        const s = prev[lang] ?? emptySession();
+        return {
+          ...prev,
+          [lang]: { ...s, messages: [...s.messages, { role: 'assistant' as const, content: t.errorMsg as string }] },
+        };
+      });
     } finally {
       setLoading(false);
       setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 150);
     }
-  }, [loading, sessionId, lang, t]);
+  }, [loading, lang, t]);
 
   return (
     <SafeAreaView style={[s.safe, { backgroundColor: c.bg }]}>
@@ -260,7 +294,7 @@ export default function TeacherScreen() {
                         </TouchableOpacity>
                         <TouchableOpacity
                           style={[s.feedbackBtn, { borderColor: c.cardBorder }]}
-                          onPress={() => setFeedbackMap((prev) => ({ ...prev, [i]: 'negative' }))}
+                          onPress={() => updSess(s => ({ ...s, feedbackMap: { ...s.feedbackMap, [i]: 'negative' } }))}
                           activeOpacity={0.8}
                         >
                           <Text style={[s.feedbackBtnText, { color: c.text }]}>{t.thumbsNo as string}</Text>
