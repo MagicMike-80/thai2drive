@@ -838,3 +838,33 @@ def _fallback_reply(lang: str) -> str:
     if lang == "en":
         return "Sorry, I'm not available right now. Please try again in a moment."
     return "Beklager, jeg er ikke tilgjengelig akkurat nå. Prøv igjen om litt."
+
+
+# ─── Feedback ─────────────────────────────────────────────────────────────────
+
+_feedback_col = _db["teacher_feedback"]
+
+
+class FeedbackRequest(BaseModel):
+    session_id: Optional[str] = Field(default=None)
+    language: Optional[str] = Field(default="no")
+    user_message: Optional[str] = Field(default=None, max_length=2000)
+    assistant_answer: Optional[str] = Field(default=None, max_length=5000)
+    helpful: bool
+    reason: Optional[str] = Field(default=None, max_length=200)
+    source: Optional[str] = Field(default="web")
+
+
+@teacher_router.post("/teacher/feedback")
+async def teacher_feedback(req: FeedbackRequest):
+    await _feedback_col.insert_one({
+        "session_id": req.session_id,
+        "language": req.language or "no",
+        "user_message": req.user_message,
+        "assistant_answer": req.assistant_answer,
+        "helpful": req.helpful,
+        "reason": req.reason,
+        "source": req.source or "web",
+        "ts": datetime.now(timezone.utc),
+    })
+    return {"ok": True}

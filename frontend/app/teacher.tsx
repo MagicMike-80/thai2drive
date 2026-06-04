@@ -16,13 +16,18 @@ import { Ionicons } from '@expo/vector-icons';
 import { useAppStore } from '../src/store/appStore';
 
 // ─── Translation strings ─────────────────────────────────────────────────────
-const TR: Record<string, Record<string, string>> = {
+const TR: Record<string, Record<string, string | string[]>> = {
   no: {
     title: '🚗 Michael Trafikklærer',
     online: '● Online',
     inputPlaceholder: 'Still et spørsmål...',
     send: 'Send',
     errorMsg: 'Beklager, noe gikk galt. Prøv igjen.',
+    feedbackQ: 'Hjalp dette?',
+    thumbsYes: '👍 Ja',
+    thumbsNo: '👎 Nei',
+    feedbackThanks: 'Takk for tilbakemeldingen 🙏',
+    feedbackReasons: ['For langt', 'For vanskelig', 'Feil språk', 'Svarte ikke på spørsmålet'],
   },
   th: {
     title: '🚗 ไมเคิล ครูสอนขับรถ',
@@ -30,6 +35,11 @@ const TR: Record<string, Record<string, string>> = {
     inputPlaceholder: 'ถามคำถาม...',
     send: 'ส่ง',
     errorMsg: 'ขอโทษครับ มีข้อผิดพลาด กรุณาลองใหม่อีกครั้ง',
+    feedbackQ: 'คำตอบนี้ช่วยไหม?',
+    thumbsYes: '👍 ช่วย',
+    thumbsNo: '👎 ไม่ช่วย',
+    feedbackThanks: 'ขอบคุณสำหรับความคิดเห็น 🙏',
+    feedbackReasons: ['ยาวเกินไป', 'ยากเกินไป', 'ผิดภาษา', 'ไม่ตอบคำถาม'],
   },
   en: {
     title: '🚗 Michael Driving Instructor',
@@ -37,6 +47,11 @@ const TR: Record<string, Record<string, string>> = {
     inputPlaceholder: 'Ask a question...',
     send: 'Send',
     errorMsg: 'Sorry, something went wrong. Please try again.',
+    feedbackQ: 'Was this helpful?',
+    thumbsYes: '👍 Yes',
+    thumbsNo: '👎 No',
+    feedbackThanks: 'Thanks for the feedback 🙏',
+    feedbackReasons: ['Too long', 'Too difficult', 'Wrong language', 'Did not answer'],
   },
 };
 
@@ -66,7 +81,35 @@ export default function TeacherScreen() {
   const [loading, setLoading] = useState(false);
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [showSuggestions, setShowSuggestions] = useState(true);
+  // feedback: key = index in allMessages, value = 'pending' | 'negative' | 'done'
+  const [feedbackMap, setFeedbackMap] = useState<Record<number, 'pending' | 'negative' | 'done'>>({});
   const scrollRef = useRef<ScrollView>(null);
+
+  const sendFeedback = useCallback(async (
+    msgIndex: number,
+    allMsgs: Message[],
+    helpful: boolean,
+    reason?: string,
+  ) => {
+    setFeedbackMap((prev) => ({ ...prev, [msgIndex]: 'done' }));
+    const assistantMsg = allMsgs[msgIndex];
+    const precedingMsg = msgIndex > 0 ? allMsgs[msgIndex - 1] : null;
+    try {
+      await fetch(`${BACKEND_URL}/api/teacher/feedback`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          session_id: sessionId,
+          language: lang,
+          user_message: precedingMsg?.role === 'user' ? precedingMsg.content : null,
+          assistant_answer: assistantMsg?.content ?? null,
+          helpful,
+          reason: reason ?? null,
+          source: 'web',
+        }),
+      });
+    } catch { /* fire-and-forget — don't break the chat on feedback error */ }
+  }, [sessionId, lang]);
 
   // Fix 3 + 4: fetch welcome + topics from backend on mount / language change
   React.useEffect(() => {
@@ -162,45 +205,92 @@ export default function TeacherScreen() {
           keyboardShouldPersistTaps="handled"
           onContentSizeChange={() => scrollRef.current?.scrollToEnd({ animated: false })}
         >
-          {allMessages.map((msg, i) => (
-            <React.Fragment key={i}>
-              <View style={[s.bubbleRow, msg.role === 'user' ? s.bubbleRowUser : s.bubbleRowAssistant]}>
-                {msg.role === 'assistant' && (
-                  <View style={[s.avatarTiny, { backgroundColor: '#1E3A5F' }]}>
-                    <Text style={s.avatarTinyEmoji}>🚗</Text>
+          {allMessages.map((msg, i) => {
+            // Don't show feedback for welcome message (index 0 when welcomeMsg is set)
+            const isWelcome = welcomeMsg && i === 0;
+            const fb = feedbackMap[i];
+            const reasons = t.feedbackReasons as string[];
+            return (
+              <React.Fragment key={i}>
+                <View style={[s.bubbleRow, msg.role === 'user' ? s.bubbleRowUser : s.bubbleRowAssistant]}>
+                  {msg.role === 'assistant' && (
+                    <View style={[s.avatarTiny, { backgroundColor: '#1E3A5F' }]}>
+                      <Text style={s.avatarTinyEmoji}>🚗</Text>
+                    </View>
+                  )}
+                  <View style={[
+                    s.bubble,
+                    msg.role === 'user'
+                      ? [s.bubbleUser, { backgroundColor: c.accent }]
+                      : [s.bubbleAssistant, { backgroundColor: c.card, borderColor: c.cardBorder }],
+                  ]}>
+                    <Text style={[s.bubbleText, { color: msg.role === 'user' ? '#fff' : c.text }]}>
+                      {msg.content}
+                    </Text>
+                  </View>
+                </View>
+
+                {/* Feedback buttons — shown under every real assistant reply */}
+                {msg.role === 'assistant' && !isWelcome && !loading && (
+                  <View style={s.feedbackWrap}>
+                    {fb === 'done' ? (
+                      <Text style={s.feedbackThanks}>{t.feedbackThanks as string}</Text>
+                    ) : fb === 'negative' ? (
+                      <View style={s.feedbackReasons}>
+                        {reasons.map((r, ri) => (
+                          <TouchableOpacity
+                            key={ri}
+                            style={[s.feedbackReasonBtn, { borderColor: c.cardBorder }]}
+                            onPress={() => sendFeedback(i, allMessages, false, r)}
+                            activeOpacity={0.75}
+                          >
+                            <Text style={[s.feedbackReasonText, { color: c.text }]}>{r}</Text>
+                          </TouchableOpacity>
+                        ))}
+                      </View>
+                    ) : (
+                      <View style={s.feedbackBtns}>
+                        <Text style={[s.feedbackQ, { color: c.textMuted }]}>{t.feedbackQ as string}</Text>
+                        <TouchableOpacity
+                          style={[s.feedbackBtn, s.feedbackBtnYes]}
+                          onPress={() => sendFeedback(i, allMessages, true)}
+                          activeOpacity={0.8}
+                        >
+                          <Text style={s.feedbackBtnText}>{t.thumbsYes as string}</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          style={[s.feedbackBtn, { borderColor: c.cardBorder }]}
+                          onPress={() => setFeedbackMap((prev) => ({ ...prev, [i]: 'negative' }))}
+                          activeOpacity={0.8}
+                        >
+                          <Text style={[s.feedbackBtnText, { color: c.text }]}>{t.thumbsNo as string}</Text>
+                        </TouchableOpacity>
+                      </View>
+                    )}
                   </View>
                 )}
-                <View style={[
-                  s.bubble,
-                  msg.role === 'user'
-                    ? [s.bubbleUser, { backgroundColor: c.accent }]
-                    : [s.bubbleAssistant, { backgroundColor: c.card, borderColor: c.cardBorder }],
-                ]}>
-                  <Text style={[s.bubbleText, { color: msg.role === 'user' ? '#fff' : c.text }]}>
-                    {msg.content}
-                  </Text>
-                </View>
-              </View>
-              {/* Fix 2: reply chips after last assistant message */}
-              {msg.role === 'assistant' && msg.suggestions && msg.suggestions.length > 0 && i === allMessages.length - 1 && (
-                <View style={s.replyChipsWrap}>
-                  <Text style={s.replyChipsHdr}>
-                    {lang === 'th' ? '🚗 เลือกหัวข้อ:' : lang === 'en' ? '🚗 Choose topic:' : '🚗 Velg tema:'}
-                  </Text>
-                  {msg.suggestions.map((chip, ci) => (
-                    <TouchableOpacity
-                      key={ci}
-                      style={s.replyChipBtn}
-                      onPress={() => sendMessage(chip)}
-                      activeOpacity={0.75}
-                    >
-                      <Text style={s.replyChipBtnText}>{chip}</Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              )}
-            </React.Fragment>
-          ))}
+
+                {/* Reply chips after last assistant message */}
+                {msg.role === 'assistant' && msg.suggestions && msg.suggestions.length > 0 && i === allMessages.length - 1 && (
+                  <View style={s.replyChipsWrap}>
+                    <Text style={s.replyChipsHdr}>
+                      {lang === 'th' ? '🚗 เลือกหัวข้อ:' : lang === 'en' ? '🚗 Choose topic:' : '🚗 Velg tema:'}
+                    </Text>
+                    {msg.suggestions.map((chip, ci) => (
+                      <TouchableOpacity
+                        key={ci}
+                        style={s.replyChipBtn}
+                        onPress={() => sendMessage(chip)}
+                        activeOpacity={0.75}
+                      >
+                        <Text style={s.replyChipBtnText}>{chip}</Text>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                )}
+              </React.Fragment>
+            );
+          })}
 
           {loading && (
             <View style={[s.bubbleRow, s.bubbleRowAssistant]}>
@@ -335,6 +425,18 @@ const s = StyleSheet.create({
   },
   suggestIcon: { fontSize: 18 },
   suggestText: { fontSize: 14, fontWeight: '500', flex: 1 },
+
+  // Feedback
+  feedbackWrap: { marginLeft: 36, marginTop: 4, marginBottom: 2 },
+  feedbackBtns: { flexDirection: 'row', alignItems: 'center', gap: 8, flexWrap: 'wrap' },
+  feedbackQ: { fontSize: 11, marginRight: 4 },
+  feedbackBtn: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20, borderWidth: 1, borderColor: 'transparent' },
+  feedbackBtnYes: { backgroundColor: '#10B981' },
+  feedbackBtnText: { fontSize: 13, fontWeight: '600', color: '#fff' },
+  feedbackThanks: { fontSize: 11, color: '#10B981' },
+  feedbackReasons: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginTop: 2 },
+  feedbackReasonBtn: { paddingHorizontal: 10, paddingVertical: 6, borderRadius: 12, borderWidth: 1 },
+  feedbackReasonText: { fontSize: 12 },
 
   // Input bar
   inputBar: {
