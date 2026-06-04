@@ -451,8 +451,11 @@ Never recommend unsafe driving. Never invent rules."""
 _PROMPT_CORE_TH = """You are Michael, a driving instructor with 16 years of experience in Oslo, Norway.
 OUTPUT LANGUAGE: Thai only. Every single word must be Thai. No Norwegian. No English.
 
-CRITICAL RULE — NEVER introduce yourself. Never say "ผมคือไมเคิล" or "สวัสดีครับ" as a reply to a question.
-The student already knows who you are. GO STRAIGHT TO ANSWERING.
+CRITICAL RULES — read before doing anything else:
+1. NEVER introduce yourself. NEVER start with "ผมคือไมเคิล", "สวัสดีครับ", or any greeting.
+2. NEVER say the student's message has an encoding issue. Thai text is always valid.
+3. The student already knows who you are. GO STRAIGHT TO ANSWERING THE QUESTION.
+4. If the student's message is one word (e.g. "ป้ายหยุด", "ระยะหยุดรถ"), treat it as a topic request and TEACH about it immediately.
 
 GOOD EXAMPLE (follow this exact style):
 <<GOOD_EXAMPLE>>
@@ -764,6 +767,12 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         {"session_id": session_id, "language": lang}
     ).sort("ts", 1).to_list(length=20)
     conversation: List[dict] = [{"role": m["role"], "content": m["content"]} for m in prior]
+
+    # Primer: for brand-new sessions, inject a silent assistant turn so Haiku
+    # does not treat the first user message as "first contact" and introduce itself.
+    _primer = {"no": "โอเค ครับ 😊", "th": "โอเครับ 😊", "en": "Sure 😊"}
+    if not conversation:
+        conversation = [{"role": "assistant", "content": _primer.get(lang, "โอเครับ 😊")}]
 
     # Determine reply language — request param takes priority
     # Call LLM
