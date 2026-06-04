@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator, Animated, Image, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator, Animated, Image, Alert, Platform, useWindowDimensions } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
@@ -10,6 +10,7 @@ import { api } from '../src/services/api';
 import { LanguageSwitcher } from '../src/components/LanguageSwitcher';
 import { AppBrand } from '../src/components/AppBrand';
 import { CoachBanner } from '../src/components/CoachBanner';
+import { TrafficMathDesktopPanel } from '../src/components/traffic/TrafficMathDesktopPanel';
 
 const T2D_ICON = require('../assets/images/t2d-icon.png');
 
@@ -24,9 +25,13 @@ export default function HomeScreen() {
   const { language, deviceId, setProgress, progress, colors, isPremium, isAuthenticated, freeRemaining, streak, updateStreak } = useAppStore();
   const [loading, setLoading] = useState(true);
   const [dailyDone, setDailyDone] = useState(false);
+  const [showTrafficPanel, setShowTrafficPanel] = useState(false);
+  const { width: winWidth } = useWindowDimensions();
   const t = TR[language] || TR.en;
   const c = colors;
   const isDark = c.bg === '#0F172A' || c.bg === '#0B1222';
+  // Desktop web = wide viewport inside browser (breaks out of 390px phone frame)
+  const isDesktopWeb = Platform.OS === 'web' && winWidth > 700;
   const remaining = freeRemaining();
   const locked = !isPremium && remaining <= 0;
 
@@ -256,7 +261,11 @@ export default function HomeScreen() {
           <TouchableOpacity
             testID="traffic-math-btn"
             style={[st.quickBtn, { backgroundColor: 'rgba(249,115,22,0.10)', borderColor: 'rgba(249,115,22,0.35)' }]}
-            onPress={() => router.push('/traffic-math')} activeOpacity={0.75}>
+            onPress={() => {
+              if (isDesktopWeb) setShowTrafficPanel(true);
+              else router.push('/traffic-math');
+            }}
+            activeOpacity={0.75}>
             <Ionicons name="speedometer-outline" size={22} color="#F97316" />
             <Text style={[st.quickLabel, { color: '#F97316' }]}>{t.trafficMath}</Text>
           </TouchableOpacity>
@@ -306,6 +315,17 @@ export default function HomeScreen() {
           </View>
         )}
       </ScrollView>
+
+      {/* Desktop-only traffic math panel — renders outside 390 px frame via Modal */}
+      {isDesktopWeb && (
+        <TrafficMathDesktopPanel
+          visible={showTrafficPanel}
+          onClose={() => setShowTrafficPanel(false)}
+          language={language}
+          colors={c}
+          isDark={isDark}
+        />
+      )}
     </SafeAreaView>
   );
 }
