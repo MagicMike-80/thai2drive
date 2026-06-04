@@ -799,7 +799,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         resp = await litellm.acompletion(
             model=LLM_MODEL,
             messages=messages,
-            max_tokens=450,
+            max_tokens=600,
             api_key=LLM_KEY,
         )
         reply_text = (resp.choices[0].message.content or "").strip()
