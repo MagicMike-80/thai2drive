@@ -3470,6 +3470,7 @@ var UI = {
   correct_answer:{th:'คำตอบที่ถูก',        no:'Riktig svar',      en:'Correct answer'},
   explanation:{th:'คำอธิบาย',              no:'Forklaring',       en:'Explanation'},
   more_details:{th:'รายละเอียดเพิ่ม',       no:'Mer detaljer',     en:'More details'},
+  ask_michael: {th:'ถาม Michael เรื่องข้อนี้', no:'Spør Michael om dette', en:'Ask Michael about this'},
   show_more:   {th:'ดูเพิ่ม',              no:'Vis mer',          en:'Show more'},
   show_less:   {th:'ย่อน้อยลง',             no:'Vis mindre',       en:'Show less'},
   driving_teacher:{th:'ครูสอนขับรถ',        no:'Kjørelærer',       en:'Driving teacher'},
@@ -3908,7 +3909,7 @@ function enterApp() {
   showTab('home');
 }
 
-function showTab(tab) {
+function showTab(tab, forceType) {
   activeTab = tab;
   document.querySelectorAll('.bn-tab').forEach(function(b) { b.classList.remove('active'); });
   var tabMap = { home:'bnHome', cats:'bnCats', history:'bnHistory', signs:'bnSigns', studybook:'bnStudybook', bookmarks:'bnBookmarks', settings:'bnSettings', teacher:'bnTeacher' };
@@ -3933,7 +3934,14 @@ function showTab(tab) {
     if (tab === 'bookmarks') loadBookmarks();
     if (tab === 'settings')  loadSettings();
     if (tab === 'studybook') loadStudiebok();
-    if (tab === 'teacher')   loadTeacher();
+    if (tab === 'teacher') {
+      if (forceType) {
+        switchTeacherSession(forceType);
+      } else {
+        switchTeacherSession('normal');
+      }
+      loadTeacher();
+    }
   }
 }
 
@@ -5851,6 +5859,11 @@ function buildAiHtml(isOk, expl) {
         + '</div>';
     }
 
+    // 2c ── Ask Michael Button (Phase 3)
+    html += '<button class="ask-michael-btn ai-block" style="--i:' + (i++) + '; width:100%; display:flex; align-items:center; justify-content:center; gap:8px; padding:12px; border-radius:10px; border:none; background:rgba(255,107,0,.15); color:var(--orange); font-weight:700; cursor:pointer; font-size:.85rem; margin-top:10px; transition:background .2s;" onmouseover="this.style.background=\'rgba(255,107,0,.25)\'" onmouseout="this.style.background=\'rgba(255,107,0,.15)\'" onclick="askMichaelAboutThis()">'
+      + '<span>🚗</span> ' + escH(t('ask_michael'))
+      + '</button>';
+
   } else if (isOk && expl) {
     // 3 ── Correct: depth + confidence adaptive explanation
     //   'beginner' depth        → full text immediately (no friction)
@@ -6750,6 +6763,113 @@ var _teacherHasUserMsg   = false;   // true once user sends first message
 var _teacherTyping       = false;
 var _teacherWelcomeLang  = null;    // tracks which language the welcome was rendered in
 
+// Quiz-specific teacher session variables
+var _teacherActiveSessionType = 'normal';
+var _teacherQuizSessionId     = null;
+var _teacherNormalHtml        = '';
+var _teacherQuizHtml          = '';
+var _teacherNormalHasUserMsg  = false;
+var _teacherQuizHasUserMsg    = false;
+
+function switchTeacherSession(type) {
+  var msgs = document.getElementById('teacherMessages');
+  if (!msgs) return;
+
+  if (_teacherActiveSessionType === type) return;
+
+  if (_teacherActiveSessionType === 'normal') {
+    _teacherNormalHtml = msgs.innerHTML;
+    _teacherNormalHasUserMsg = _teacherHasUserMsg;
+  } else {
+    _teacherQuizHtml = msgs.innerHTML;
+    _teacherQuizHasUserMsg = _teacherHasUserMsg;
+  }
+
+  _teacherActiveSessionType = type;
+
+  if (type === 'normal') {
+    msgs.innerHTML = _teacherNormalHtml;
+    _teacherHasUserMsg = _teacherNormalHasUserMsg;
+    if (!msgs.innerHTML) {
+      _teacherWelcomeLang = null; // force reload welcome
+    }
+  } else {
+    msgs.innerHTML = _teacherQuizHtml;
+    _teacherHasUserMsg = _teacherQuizHasUserMsg;
+  }
+}
+
+function askMichaelAboutThis() {
+  var q = questions[qIdx];
+  if (!q) return;
+
+  var qText = pickLang(q.question) || pickField(q, 'question_text') || '';
+  
+  var userAnsId = '';
+  var lastAns = _sessionAnswers[_sessionAnswers.length - 1];
+  if (lastAns) {
+    userAnsId = lastAns.user_answer;
+  }
+  var correctAnsId = currentCorrect;
+
+  var opts = [];
+  if (q.options && Array.isArray(q.options) && q.options.length) {
+    opts = q.options.map(function(o) {
+      return { id: String(o.id || o.key || '').toUpperCase(), text: pickLang(o.text) || pickLang(o) || String(o.text || '') };
+    });
+  } else {
+    ['A','B','C','D'].forEach(function(l) {
+      var base = 'answer_' + l.toLowerCase();
+      var val = pickField(q, base);
+      if (val) opts.push({ id: l, text: val });
+    });
+  }
+
+  var userAnsText = '';
+  var correctAnsText = '';
+  opts.forEach(function(o) {
+    var txt = typeof o.text === 'object' ? pickLang(o.text) : o.text;
+    if (o.id === userAnsId) userAnsText = txt;
+    if (o.id === correctAnsId) correctAnsText = txt;
+  });
+
+  var explText = currentExpl || '';
+
+  // Switch to quiz teacher session
+  switchTeacherSession('quiz');
+
+  // Generate a fresh session ID for this question
+  _teacherQuizSessionId = 'qts_' + Math.random().toString(36).substring(2, 10);
+  _teacherHasUserMsg = false;
+  _teacherWelcomeLang = null;
+
+  var msgs = document.getElementById('teacherMessages');
+  if (msgs) msgs.innerHTML = '';
+
+  var userDisplayMsg = '';
+  if (appLang === 'th') {
+    userDisplayMsg = 'ช่วยอธิบายข้อนี้ให้ผมฟังหน่อยครับ';
+  } else if (appLang === 'en') {
+    userDisplayMsg = 'Can you explain this question to me?';
+  } else {
+    userDisplayMsg = 'Kan du forklare dette spørsmålet for meg?';
+  }
+
+  var hiddenPayload = userDisplayMsg + '\n\n'
+    + '<quiz_context>\n'
+    + 'Question: ' + qText + '\n'
+    + 'User Answer (' + userAnsId + '): ' + userAnsText + '\n'
+    + 'Correct Answer (' + correctAnsId + '): ' + correctAnsText + '\n'
+    + 'Explanation: ' + explText + '\n'
+    + '</quiz_context>';
+
+  // Navigate to teacher tab in 'quiz' mode
+  showTab('teacher', 'quiz');
+
+  // Trigger send using the hidden payload, but display the clean message in the bubble!
+  teacherSend(hiddenPayload, userDisplayMsg);
+}
+
 function resetTeacherForLanguage() {
   _teacherSessionId = null;
   _teacherHasUserMsg = false;
@@ -6990,7 +7110,7 @@ function _teacherAppendChips(chips) {
   msgs.scrollTop = msgs.scrollHeight;
 }
 
-async function teacherSend(overrideMsg) {
+async function teacherSend(overrideMsg, customDisplayMsg) {
   var input = document.getElementById('teacherInput');
   var msg = (overrideMsg || (input && input.value) || '').trim();
   if (!msg || _teacherTyping) return;
@@ -7016,18 +7136,25 @@ async function teacherSend(overrideMsg) {
   var sendBtn = document.getElementById('teacherSendBtn');
   if (sendBtn) sendBtn.disabled = true;
 
-  _teacherAppendBubble('user', msg);
+  _teacherAppendBubble('user', customDisplayMsg || msg);
   _teacherShowTyping();
 
   try {
+    var activeSessionId = _teacherActiveSessionType === 'quiz' ? _teacherQuizSessionId : _teacherSessionId;
     var res = await fetch('/api/teacher/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ session_id: _teacherSessionId, message: msg, language: appLang })
+      body: JSON.stringify({ session_id: activeSessionId, message: msg, language: appLang })
     });
     if (!res.ok) throw new Error('HTTP ' + res.status);
     var data = await res.json();
-    if (data.session_id && !_teacherSessionId) _teacherSessionId = data.session_id;
+    if (data.session_id) {
+      if (_teacherActiveSessionType === 'quiz') {
+        _teacherQuizSessionId = data.session_id;
+      } else {
+        _teacherSessionId = data.session_id;
+      }
+    }
     _teacherHideTyping();
     _teacherAppendBubble('assistant', data.reply || t('teacher_error'));
     _teacherAppendChips(data.suggestions || []);

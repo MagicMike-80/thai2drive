@@ -793,6 +793,19 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
     if lang not in ("no", "th", "en"):
         lang = "no"
 
+    # Extract quiz context if passed in the user message
+    quiz_context_str = ""
+    is_quiz_help = False
+    if "<quiz_context>" in user_msg and "</quiz_context>" in user_msg:
+        is_quiz_help = True
+        try:
+            parts = user_msg.split("<quiz_context>")
+            clean_user_msg = parts[0].strip()
+            quiz_context_str = parts[1].split("</quiz_context>")[0].strip()
+            user_msg = clean_user_msg
+        except Exception as e:
+            logger.error("Failed to parse quiz context payload: %s", e)
+
     # Load prior conversation (last 20 messages in this session)
     prior = await _chat_col.find(
         {"session_id": session_id}
@@ -826,6 +839,22 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
                 "\n\nCRITICAL: The user has responded to your clarifying question. "
                 "Do NOT ask another clarifying question or present options. "
                 "You MUST answer the question directly and start teaching now using the structured 5-step driving instructor flow (in the output language specified by [LANGUAGE])."
+            )
+
+        if is_quiz_help and quiz_context_str:
+            system_prompt += (
+                "\n\nCRITICAL: The user has asked for help with a quiz question they answered INCORRECTLY. "
+                "Below is the context of the quiz question:\n"
+                f"{quiz_context_str}\n\n"
+                "You MUST follow these rules when responding:\n"
+                "1. Address the mistake pedagogically. Do NOT just state the correct answer. Guide the student to understand WHY their chosen answer was incorrect and WHY the correct answer is right.\n"
+                "2. ALWAYS structure your answer using your standard 5-step driving instructor flow in the declared language:\n"
+                "   🚗 Situasjon (paint the situation from the question first)\n"
+                "   💡 Forklaring (explain the rule/concept simply and clearly)\n"
+                "   ⚠️ Vanlig feil (point out the common mistake related to this topic)\n"
+                "   📝 Teoriprøve-vinkel (what is tested on the exam)\n"
+                "   ❓ Oppfølgingsspørsmål (exactly one short relevant question to test their understanding)\n"
+                "3. Write your entire response in the active language specified by [LANGUAGE] header. Use the exact translated headers (Norwegian: Situasjon/Forklaring/Vanlig feil/Teoriprøve-vinkel; Thai: สถานการณ์/คำอธิบาย/ข้อผิดพลาดที่พบบ่อย/จุดเน้นข้อสอบทฤษฎี/คำถามชวนคิด; English: Situation/Explanation/Common mistake/Theory test focus/Follow-up question)."
             )
 
         messages = [{"role": "system", "content": system_prompt}]
