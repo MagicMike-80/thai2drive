@@ -72,6 +72,10 @@ interface AppState {
     startedAt: string;
   } | null;
   setLastAttempt: (attempt: AppState['lastAttempt']) => void;
+
+  // Desktop overlay panels (rendered outside 390 px WebAppShell)
+  showTrafficPanel: boolean;
+  setShowTrafficPanel: (v: boolean) => void;
 }
 
 const generateDeviceId = () =>
@@ -350,4 +354,8 @@ export const useAppStore = create<AppState>((set, get) => ({
   // Last quiz attempt (in-memory, for review on results screen)
   lastAttempt: null,
   setLastAttempt: (attempt) => set({ lastAttempt: attempt }),
+
+  // Desktop overlay panels
+  showTrafficPanel: false,
+  setShowTrafficPanel: (v) => set({ showTrafficPanel: v }),
 }));

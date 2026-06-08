@@ -316,7 +316,7 @@ export default function HomeScreen() {
         )}
       </ScrollView>
 
-      {/* Desktop-only traffic math panel — renders outside 390 px frame via Modal */}
+      {/* Desktop traffic math panel — position:fixed escapes the 390px WebAppShell */}
       {isDesktopWeb && (
         <TrafficMathDesktopPanel
           visible={showTrafficPanel}

@@ -6799,6 +6799,12 @@ function switchTeacherSession(type) {
   }
 }
 
+function _displayedAnswerText(answerId) {
+  var btn = document.querySelector('.ans-btn[data-id="' + String(answerId || '').toUpperCase() + '"]');
+  var txt = btn ? btn.querySelector('.ans-text') : null;
+  return txt ? txt.textContent.trim() : '';
+}
+
 function askMichaelAboutThis() {
   var q = questions[qIdx];
   if (!q) return;
@@ -6825,21 +6831,25 @@ function askMichaelAboutThis() {
     });
   }
 
-  var userAnsText = '';
-  var correctAnsText = '';
+  var userAnsText = _displayedAnswerText(userAnsId);
+  var correctAnsText = _displayedAnswerText(correctAnsId);
   opts.forEach(function(o) {
     var txt = typeof o.text === 'object' ? pickLang(o.text) : o.text;
-    if (o.id === userAnsId) userAnsText = txt;
-    if (o.id === correctAnsId) correctAnsText = txt;
+    if (!userAnsText && o.id === userAnsId) userAnsText = txt;
+    if (!correctAnsText && o.id === correctAnsId) correctAnsText = txt;
   });
 
   var explText = currentExpl || '';
+  var qId = String(q._id || q.id || q.question_id || 'question').replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 32);
 
   // Switch to quiz teacher session
+  _teacherQuizHtml = '';
+  _teacherQuizHasUserMsg = false;
   switchTeacherSession('quiz');
 
-  // Generate a fresh session ID for this question
-  _teacherQuizSessionId = 'qts_' + Math.random().toString(36).substring(2, 10);
+  // Generate a fresh language-scoped session ID for this question.
+  // Normal Michael chat history uses _teacherSessionId and is not touched.
+  _teacherQuizSessionId = 'quiz_help_' + appLang + '_' + qId + '_' + Date.now().toString(36);
   _teacherHasUserMsg = false;
   _teacherWelcomeLang = null;
 

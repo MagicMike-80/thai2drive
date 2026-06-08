@@ -1,9 +1,9 @@
 /**
  * TrafficMathDesktopPanel
  * ────────────────────────────────────────────────────────────────────────────
- * Wide two-column modal for desktop web only.
- * Rendered outside the 390 px WebAppShell frame thanks to React Native Modal
- * using position:fixed at the browser root.
+ * Wide two-column panel for desktop web only.
+ * Rendered as a SIBLING to WebAppShell in _layout.tsx, so it escapes the
+ * 390 px phone frame and covers the full browser viewport via position:absolute.
  *
  * Left column  — speed input, road conditions, step-by-step breakdown
  * Right column — stopping distance visualisation (diagram + numbers)
@@ -13,7 +13,6 @@
 
 import React, { useState, useEffect, memo } from 'react';
 import {
-  Modal,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -281,17 +280,13 @@ export function TrafficMathDesktopPanel({
     : null;
   const followCars = followDist ? Math.round(followDist / 4.5) : 0;
 
-  // ── Nothing to render on native ──────────────────────────────────────────
-  if (Platform.OS !== 'web') return null;
+  // ── Nothing to render on native or when hidden ───────────────────────────
+  if (Platform.OS !== 'web' || !visible) return null;
 
   return (
-    <Modal
-      visible={visible}
-      transparent
-      animationType="fade"
-      statusBarTranslucent
-      onRequestClose={onClose}
-    >
+    // Full-viewport overlay — lives outside WebAppShell so it's not clipped
+    // by the 390 px frame. Position:absolute fills the SafeAreaProvider root.
+    <View style={st.overlay}>
       {/* ── Backdrop ── */}
       <Pressable style={st.backdrop} onPress={onClose}>
         {/* Stop the close event bubbling from inside the panel */}
@@ -474,13 +469,25 @@ export function TrafficMathDesktopPanel({
           </View>
         </Pressable>
       </Pressable>
-    </Modal>
+    </View>
   );
 }
 
 // ─── Styles ───────────────────────────────────────────────────────────────────
 
 const st = StyleSheet.create({
+  // Full-viewport overlay — position:fixed escapes overflow:hidden on the
+  // 390 px WebAppShell frame and covers the entire browser viewport.
+  // Using 'as any' because RN types only know 'absolute'|'relative', but
+  // React Native Web passes this straight through to CSS where 'fixed' works.
+  overlay: {
+    position: 'fixed' as any,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 9999,
+  },
   backdrop: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.72)',

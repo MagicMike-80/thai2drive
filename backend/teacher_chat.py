@@ -843,18 +843,26 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
 
         if is_quiz_help and quiz_context_str:
             system_prompt += (
-                "\n\nCRITICAL: The user has asked for help with a quiz question they answered INCORRECTLY. "
-                "Below is the context of the quiz question:\n"
+                "\n\n━━━ QUIZ HELP MODE ━━━\n"
+                "The student just answered a quiz question INCORRECTLY and clicked 'Ask Michael'.\n"
+                "The hidden context block below is for YOUR eyes only — the student cannot see it:\n\n"
                 f"{quiz_context_str}\n\n"
-                "You MUST follow these rules when responding:\n"
-                "1. Address the mistake pedagogically. Do NOT just state the correct answer. Guide the student to understand WHY their chosen answer was incorrect and WHY the correct answer is right.\n"
-                "2. ALWAYS structure your answer using your standard 5-step driving instructor flow in the declared language:\n"
-                "   🚗 Situasjon (paint the situation from the question first)\n"
-                "   💡 Forklaring (explain the rule/concept simply and clearly)\n"
-                "   ⚠️ Vanlig feil (point out the common mistake related to this topic)\n"
-                "   📝 Teoriprøve-vinkel (what is tested on the exam)\n"
-                "   ❓ Oppfølgingsspørsmål (exactly one short relevant question to test their understanding)\n"
-                "3. Write your entire response in the active language specified by [LANGUAGE] header. Use the exact translated headers (Norwegian: Situasjon/Forklaring/Vanlig feil/Teoriprøve-vinkel; Thai: สถานการณ์/คำอธิบาย/ข้อผิดพลาดที่พบบ่อย/จุดเน้นข้อสอบทฤษฎี/คำถามชวนคิด; English: Situation/Explanation/Common mistake/Theory test focus/Follow-up question)."
+                "STRICT RULES — follow every one without exception:\n"
+                "1. NEVER quote, reveal, paraphrase, or reference the hidden block above. "
+                "The student does not know it exists. Do NOT say 'I see the question was…', "
+                "'According to the quiz…', 'You answered X', or anything that exposes the internal data. "
+                "Use the information silently to guide your teaching.\n"
+                "2. Go DIRECTLY into the 5-step teaching flow — NO greeting, NO self-introduction, "
+                "NO clarifying question first. The student is waiting to understand their mistake.\n"
+                "3. Guide the student to understand WHY their answer was wrong and WHY the correct one "
+                "is right — do NOT simply announce 'The correct answer is X'. Build the understanding "
+                "through the situation and explanation steps.\n"
+                "4. Use the exact 5-step headers in the declared language:\n"
+                "   NO: 🚗 Situasjon / 💡 Forklaring / ⚠️ Vanlig feil / 📝 Teoriprøve-vinkel / ❓ Oppfølgingsspørsmål\n"
+                "   TH: 🚗 สถานการณ์ / 💡 คำอธิบาย / ⚠️ ข้อผิดพลาดที่พบบ่อย / 📝 จุดเน้นข้อสอบทฤษฎี / ❓ คำถามชวนคิด\n"
+                "   EN: 🚗 Situation / 💡 Explanation / ⚠️ Common mistake / 📝 Theory test focus / ❓ Follow-up question\n"
+                "5. Write the ENTIRE response in the language declared by [LANGUAGE] header. Zero exceptions.\n"
+                "━━━━━━━━━━━━━━━━━━━━━━━"
             )
 
         messages = [{"role": "system", "content": system_prompt}]

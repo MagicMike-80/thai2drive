@@ -196,7 +196,6 @@ export default function RootLayout() {
   const initDeviceId = useAppStore((s) => s.initDeviceId);
   const colors = useAppStore((s) => s.colors);
   const isDark = useAppStore((s) => s.isDark);
-
   useEffect(() => {
     (async () => {
       try { await initDeviceId(); } catch (e) { console.error(e); }
