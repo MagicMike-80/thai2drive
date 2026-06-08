@@ -742,6 +742,16 @@ a { color:inherit; text-decoration:none; }
     transition: width .30s cubic-bezier(.4,0,.2,1), border-radius .30s ease;
   }
 
+  /* Forbikjøring frame — wide layout, calculator left + image right */
+  #app.fk-mode {
+    width: min(1080px, 96vw);
+    max-width: none;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 16px;
+    transition: width .30s cubic-bezier(.4,0,.2,1), border-radius .30s ease;
+  }
+
   /* Teacher frame — same width as quiz-mode */
   #app.teacher-mode {
     width: min(860px, 96vw);
@@ -3884,9 +3894,11 @@ function showScreen(id) {
   document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
   var el = document.getElementById(id);
   if (el) el.classList.add('active');
-  // Toggle quiz-mode on #app: expands the phone frame to AI dashboard width on desktop
-  document.getElementById('app').classList.toggle('quiz-mode', id === 'screenQuiz');
-  document.getElementById('app').classList.toggle('teacher-mode', id === 'screenTeacher');
+  // Toggle app-level mode classes — expands phone frame on desktop
+  var app = document.getElementById('app');
+  app.classList.toggle('quiz-mode', id === 'screenQuiz');
+  app.classList.toggle('teacher-mode', id === 'screenTeacher');
+  app.classList.toggle('fk-mode', id === 'screenForbikjoring');
 }
 
 function enterApp() {
@@ -7193,11 +7205,7 @@ function _fkUpdateStaticLabels() {
 
 function showForbikjoring() {
   _fkUpdateStaticLabels();
-  // Show screen
-  document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
-  var scr = document.getElementById('screenForbikjoring');
-  if (scr) scr.classList.add('active');
-  // Render current scenario
+  showScreen('screenForbikjoring');
   fkRender();
 }
 
