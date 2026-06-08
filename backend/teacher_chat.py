@@ -795,7 +795,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
 
     # Load prior conversation (last 20 messages in this session)
     prior = await _chat_col.find(
-        {"session_id": session_id, "language": lang}
+        {"session_id": session_id}
     ).sort("ts", 1).to_list(length=20)
     conversation: List[dict] = [{"role": m["role"], "content": m["content"]} for m in prior]
 

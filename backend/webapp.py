@@ -6718,7 +6718,16 @@ function setLang(lang) {
   if (histScreen && histScreen.classList.contains('active')) {
     loadHistory();
   }
-  if (previousLang && previousLang !== lang) resetTeacherForLanguage();
+  if (previousLang && previousLang !== lang) {
+    if (!_teacherHasUserMsg) {
+      resetTeacherForLanguage();
+    } else {
+      var tNameEl = document.getElementById('teacherNameLbl');
+      if (tNameEl) tNameEl.textContent = t('teacher_name');
+      var tInput = document.getElementById('teacherInput');
+      if (tInput) tInput.placeholder = t('teacher_placeholder');
+    }
+  }
   var teacherScreen = document.getElementById('screenTeacher');
   if (teacherScreen && teacherScreen.classList.contains('active')) {
     loadTeacher();
@@ -6919,7 +6928,11 @@ function _teacherAppendBubble(role, text) {
   }
   row.appendChild(bubble);
   msgs.appendChild(row);
-  msgs.scrollTop = msgs.scrollHeight;
+  if (_teacherHasUserMsg) {
+    msgs.scrollTop = msgs.scrollHeight;
+  } else {
+    msgs.scrollTop = 0;
+  }
 }
 
 function _teacherShowTyping() {
