@@ -6982,6 +6982,19 @@ async function teacherSend(overrideMsg) {
   var msg = (overrideMsg || (input && input.value) || '').trim();
   if (!msg || _teacherTyping) return;
 
+  // Intercept in-app navigation chips
+  var clean = msg.replace(/^[\S]{1,2}\s+/, '').trim().toLowerCase();
+  if (clean === 'åpne studiebok' || clean === 'åpne bok' || clean === 'เปิดหนังสือเรียน' || clean === 'open study book') {
+    if (input && !overrideMsg) input.value = '';
+    showTab('studybook');
+    return;
+  }
+  if (clean === 'min statistikk' || clean === 'สถิติของฉัน' || clean === 'my statistics') {
+    if (input && !overrideMsg) input.value = '';
+    showTab('history');
+    return;
+  }
+
   if (input && !overrideMsg) input.value = '';
   _teacherTyping = true;
   _teacherHideSuggestions();

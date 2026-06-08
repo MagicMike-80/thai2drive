@@ -617,6 +617,34 @@ For off-topic requests, reply:
 Never recommend unsafe driving. Never invent rules."""
 
 
+def _is_clarifying_question(content: str) -> bool:
+    """Detect if the assistant's response was a clarifying question with options."""
+    content_lower = content.lower()
+    
+    # Check for options like A) and B), A: and B:, or A. and B.
+    has_options = (
+        ("a)" in content_lower and "b)" in content_lower) or
+        ("a:" in content_lower and "b:" in content_lower) or
+        ("a." in content_lower and "b." in content_lower)
+    )
+    
+    # Check if it contains multiple emoji choices (at least 3)
+    emoji_count = sum(content.count(opt) for opt in ["🚗", "🛑", "🔴", "⭕", "🚶", "🛣️"])
+    has_emojis = emoji_count >= 3
+    
+    has_question = "?" in content or "？" in content
+    
+    has_clarifying_keywords = any(
+        kw in content_lower
+        for kw in [
+            "hvilken", "velg", "asking about", "are you asking", "choose",
+            "หมายถึง", "สถานการณ์ไหน", "ตัวเลือก", "hvilket", "velge", "kategorier"
+        ]
+    )
+    
+    return has_question and (has_options or has_emojis or has_clarifying_keywords)
+
+
 def _build_system_prompt(lang: str) -> str:
     """Assemble language-aware system prompt — critical language rule injected FIRST.
 
@@ -784,7 +812,23 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             raise RuntimeError("ANTHROPIC_API_KEY not configured")
 
         # _build_system_prompt injects [LANGUAGE] header FIRST, then language-specific examples
-        messages = [{"role": "system", "content": _build_system_prompt(lang)}]
+        system_prompt = _build_system_prompt(lang)
+
+        # Check if the last assistant message in conversation history was a clarifying question
+        last_assistant_msg = None
+        for msg in reversed(conversation):
+            if msg["role"] == "assistant":
+                last_assistant_msg = msg["content"]
+                break
+
+        if last_assistant_msg and _is_clarifying_question(last_assistant_msg):
+            system_prompt += (
+                "\n\nCRITICAL: The user has responded to your clarifying question. "
+                "Do NOT ask another clarifying question or present options. "
+                "You MUST answer the question directly and start teaching now using the structured 5-step driving instructor flow (in the output language specified by [LANGUAGE])."
+            )
+
+        messages = [{"role": "system", "content": system_prompt}]
         messages.extend(conversation)
         messages.append({"role": "user", "content": user_msg})
 
