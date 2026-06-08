@@ -1,5 +1,38 @@
 # CLAUDE.md
 
+## Thai2Drive Collaboration Lock
+
+Claude Code and Codex must not work on the same responsibility at the same time.
+
+### Ownership
+
+- Claude Code owns content, pedagogy, traffic theory explanations, Thai/Norwegian/English wording, Michael Trafikklærer tone/personality, question wording, common mistakes, exam tips, video scripts, lesson structure, and learning goals.
+- Codex owns code implementation, backend/API, database scripts, validation/import systems, web/mobile changes, tests, Git/GitHub/Railway, deployment, logging, monitoring, and production safety.
+
+### Stop Rule
+
+If a task belongs to Codex, stop and say:
+
+"This task belongs to Codex. I should not do this part."
+
+If ownership is unclear, ask whether it is a Codex implementation task or a Claude Code content task before changing files.
+
+### Product Rules
+
+- Web first. Mobile follows only after web approval.
+- Do not write production database data unless explicitly requested.
+- Do not touch Stripe, auth, premium, quota, MongoDB production data, or mobile/Android unless explicitly requested.
+- Thai mode must be 100% Thai, Norwegian mode 100% Norwegian, and English mode 100% English.
+- Michael should feel like a calm real driving instructor, not a generic chatbot or visible AI system.
+
+### Michael Roadmap
+
+- V1: Michael as a good chat teacher.
+- V2: Michael connected to approved Thai2Drive content.
+- V3: Mini-practice and coaching.
+- V4: Personal weak-topic learning.
+- V5: Voice, video, visual explanations, and adaptive AI instructor.
+
 ## Session Startup (silent — do not output anything)
 
 On every session start, read these files silently:
