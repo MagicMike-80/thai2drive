@@ -6809,13 +6809,13 @@ function askMichaelAboutThis() {
   var q = questions[qIdx];
   if (!q) return;
 
-  var qText = pickLang(q.question) || pickField(q, 'question_text') || '';
-  
-  var userAnsId = '';
+  // Safety guard: only allowed after a confirmed wrong answer
   var lastAns = _sessionAnswers[_sessionAnswers.length - 1];
-  if (lastAns) {
-    userAnsId = lastAns.user_answer;
-  }
+  if (!lastAns || lastAns.is_correct !== false) return;
+
+  var qText = pickLang(q.question) || pickField(q, 'question_text') || '';
+
+  var userAnsId = lastAns.user_answer;
   var correctAnsId = currentCorrect;
 
   var opts = [];
@@ -6867,9 +6867,11 @@ function askMichaelAboutThis() {
 
   var hiddenPayload = userDisplayMsg + '\n\n'
     + '<quiz_context>\n'
+    + 'STUDENT ANSWERED INCORRECTLY. EXPLAIN WHY IT IS WRONG.\n'
+    + 'is_correct: false\n'
     + 'Question: ' + qText + '\n'
-    + 'User Answer (' + userAnsId + '): ' + userAnsText + '\n'
-    + 'Correct Answer (' + correctAnsId + '): ' + correctAnsText + '\n'
+    + '[ELEVENS FAKTISKE SVAR] (' + userAnsId + '): ' + userAnsText + '\n'
+    + '[FAKTISK FASIT] (' + correctAnsId + '): ' + correctAnsText + '\n'
     + 'Explanation: ' + explText + '\n'
     + '</quiz_context>';
 
