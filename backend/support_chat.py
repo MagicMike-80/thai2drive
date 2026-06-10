@@ -52,14 +52,24 @@ litellm.suppress_debug_info = True  # keep Railway logs clean
 LLM_KEY = os.environ.get('ANTHROPIC_API_KEY', '').strip()
 LLM_MODEL = os.environ.get('SUPPORT_LLM_MODEL', 'claude-haiku-4-5-20251001')  # override via Railway env var if needed
 
-# ─── Startup diagnostic ──────────────────────────────────────────────────
 _key_source = 'ANTHROPIC_API_KEY' if LLM_KEY else None
+
+# Fallback to OpenAI if Anthropic key is stale/missing
+if not LLM_KEY or LLM_KEY.startswith("sk-ant-api03-dTiG"):
+    openai_key = os.environ.get("OPENAI_API_KEY", "").strip()
+    if openai_key:
+        LLM_KEY = openai_key
+        LLM_MODEL = "gpt-4o-mini"
+        _key_source = "OPENAI_API_KEY"
+        logger.info("Using OpenAI fallback for Support chat — model=%s", LLM_MODEL)
+
+# ─── Startup diagnostic ──────────────────────────────────────────────────
 if LLM_KEY:
     logger.info('Support chat LLM ready — provider=litellm key_source=%s model=%s', _key_source, LLM_MODEL)
 else:
     logger.error(
         'Support chat LLM NOT configured — '
-        'ANTHROPIC_API_KEY absent. All requests will use fallback.'
+        'keys absent. All requests will use fallback.'
     )
 
 SYSTEM_PROMPT = """You are the official support assistant for **Thai2Drive**,
@@ -273,8 +283,32 @@ async def support_chat(req: ChatRequest) -> ChatResponse:
         if not reply_text:
             reply_text = _fallback_reply(req.language or 'no')
     except Exception as e:
-        logger.error('LLM call failed [%s]: %s', type(e).__name__, e)
-        reply_text = _fallback_reply(req.language or 'no')
+        logger.warning("LiteLLM call failed [%s]: %s. Attempting Emergent LlmChat fallback...", type(e).__name__, e)
+        try:
+            from emergentintegrations.llm.chat import LlmChat, UserMessage
+            emergent_key = os.environ.get("EMERGENT_LLM_KEY") or "sk-emergent-b48A3D57008C8350c6"
+            
+            history_list = []
+            if conversation:
+                for m in conversation:
+                    role_name = "User" if m["role"] == "user" else "Support"
+                    history_list.append(f"{role_name}: {m['content']}")
+                history_text = "\n".join(history_list)
+                prompt_text = f"Here is the conversation history:\n{history_text}\n\nUser's new message:\n{user_msg}"
+            else:
+                prompt_text = user_msg
+
+            chat = LlmChat(
+                api_key=emergent_key,
+                session_id=session_id,
+                system_message=system_with_lang,
+            ).with_model("openai", "gpt-4o-mini")
+            
+            resp = await chat.send_message(UserMessage(text=prompt_text))
+            reply_text = str(resp).strip()
+        except Exception as ex:
+            logger.error("Emergent LlmChat fallback also failed: %s", ex)
+            reply_text = _fallback_reply(req.language or 'no')
 
     # 4) Persist both messages
     now = datetime.now(timezone.utc)

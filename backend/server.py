@@ -1371,7 +1371,11 @@ async def get_my_stats(device_id: str):
     """Per-category accuracy for a device, based on quiz_attempts."""
     # Aggregate by category across all attempts
     pipeline = [
-        {"$match": {"device_id": device_id, "total_questions": {"$gt": 0}}},
+        {"$match": {
+            "device_id": device_id,
+            "total_questions": {"$gt": 0},
+            "category": {"$nin": [None, "", "None"]}
+        }},
         {"$group": {
             "_id": "$category",
             "attempts":      {"$sum": 1},
@@ -3626,6 +3630,10 @@ async def admin_book_create_section(data: BookSectionCreate, _: dict = Depends(r
 class StudiebokUpdate(BaseModel):
     title_no: Optional[str] = None
     content_no: Optional[str] = None
+    title_th: Optional[str] = None
+    content_th: Optional[str] = None
+    title_en: Optional[str] = None
+    content_en: Optional[str] = None
     image_url: Optional[str] = None
     video_url: Optional[str] = None
     icon: Optional[str] = None
@@ -3636,6 +3644,10 @@ class StudiebokCreate(BaseModel):
     icon: str = "📄"
     title_no: str
     content_no: str
+    title_th: Optional[str] = ""
+    content_th: Optional[str] = ""
+    title_en: Optional[str] = ""
+    content_en: Optional[str] = ""
     image_url: Optional[str] = ""
     video_url: Optional[str] = ""
 
@@ -3664,6 +3676,10 @@ async def create_studiebok_chapter(
         "icon": data.icon,
         "title_no": data.title_no,
         "content_no": data.content_no,
+        "title_th": data.title_th or "",
+        "content_th": data.content_th or "",
+        "title_en": data.title_en or "",
+        "content_en": data.content_en or "",
         "image_url": data.image_url or "",
         "video_url": data.video_url or "",
         "created_at": datetime.now(timezone.utc).isoformat(),
@@ -3684,6 +3700,14 @@ async def update_studiebok_chapter(
         update["title_no"] = data.title_no
     if data.content_no is not None:
         update["content_no"] = data.content_no
+    if data.title_th is not None:
+        update["title_th"] = data.title_th
+    if data.content_th is not None:
+        update["content_th"] = data.content_th
+    if data.title_en is not None:
+        update["title_en"] = data.title_en
+    if data.content_en is not None:
+        update["content_en"] = data.content_en
     if data.image_url is not None:
         update["image_url"] = data.image_url
     if data.video_url is not None:

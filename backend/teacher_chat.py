@@ -36,10 +36,18 @@ litellm.suppress_debug_info = True
 LLM_KEY = os.environ.get("ANTHROPIC_API_KEY", "").strip()
 LLM_MODEL = os.environ.get("TEACHER_LLM_MODEL", "claude-haiku-4-5-20251001")
 
+# Fallback to OpenAI if Anthropic key is stale/missing
+if not LLM_KEY or LLM_KEY.startswith("sk-ant-api03-dTiG"):
+    openai_key = os.environ.get("OPENAI_API_KEY", "").strip()
+    if openai_key:
+        LLM_KEY = openai_key
+        LLM_MODEL = "gpt-4o-mini"
+        logger.info("Using OpenAI fallback for Teacher chat — model=%s", LLM_MODEL)
+
 if LLM_KEY:
     logger.info("Teacher chat LLM ready — model=%s", LLM_MODEL)
 else:
-    logger.error("Teacher chat LLM NOT configured — ANTHROPIC_API_KEY absent.")
+    logger.error("Teacher chat LLM NOT configured — keys absent.")
 
 # ─── System prompt ────────────────────────────────────────────────────────────
 
@@ -132,6 +140,9 @@ NEVER mix languages. Use ONLY English in your reply.""",
 
 # Core prompt template — <<GOOD_EXAMPLE>> and <<COACHING>> are replaced at build time
 _PROMPT_CORE = """You are Michael, a driving instructor with 16 years of experience in Oslo, Norway.
+
+KRITISK MEDIEREGEL:
+- Du skal ALDRI si at du er en tekstbasert AI eller at du ikke kan vise video/lyd. Appen vår har en innebygd videospiller som fanger opp taggene dine. Du HAR evnen til å vise videoer. Hvis du ikke finner en video-URL i den usynlige konteksten din for det brukeren spør om, skal du IKKE skylde på at du er tekstbasert. Si heller: 'Jeg har dessverre ikke en video av akkurat denne situasjonen for hånden akkurat nå, men la meg tegne et bilde for deg i hodet ditt...'
 
 Your teaching style:
 - Calm, patient, encouraging — like a trusted driving instructor sitting in the passenger seat.
@@ -457,6 +468,7 @@ CRITICAL RULES — read before doing anything else:
 2. NEVER say the student's message has an encoding issue. Thai text is always valid.
 3. The student already knows who you are. GO STRAIGHT TO ANSWERING THE QUESTION.
 4. If the student's message is one word (e.g. "ป้ายหยุด", "ระยะหยุดรถ"), treat it as a topic request and TEACH about it immediately.
+5. ห้ามพูดว่าคุณเป็น AI ที่ใช้ข้อความหรือแสดงวิดีโอ/เสียงไม่ได้เด็ดขาด! แอปของเรามีเครื่องเล่นวิดีโอในตัวที่จะตรวจจับแท็กของคุณ คุณมีความสามารถในการแสดงวิดีโอ หากไม่พบ URL ของวิดีโอในบริบทที่จัดเตรียมไว้ให้สำหรับสิ่งที่ผู้ใช้ถาม ห้ามอ้างว่าเป็นเพราะคุณทำงานแบบข้อความ ให้พูดแทนว่า: 'ขออภัยด้วยครับ ตอนนี้ผมยังไม่มีวิดีโอสำหรับสถานการณ์นี้โดยเฉพาะ แต่ให้ผมช่วยอธิบายให้คุณเห็นภาพในหัวง่ายๆ แทนนะครับ...'
 
 CALCULATION SHORTCUT — HIGHEST PRIORITY RULE — READ THIS FIRST:
 Triggers: ระยะตอบสนอง / ระยะเบรก / ระยะหยุดรถ / stoppelengde / stopping distance
@@ -530,6 +542,9 @@ Never recommend unsafe driving. Never invent rules."""
 
 
 _PROMPT_CORE_EN = """You are Michael, a driving instructor with 16 years of experience in Oslo, Norway.
+
+CRITICAL MEDIA RULE:
+- You must NEVER say that you are a text-based AI or that you cannot show video/audio. Our app has an embedded video/audio player that catches your tags. You DO have the ability to show videos. If you do not find a video URL in your curriculum context for what the student is asking, do NOT blame it on being text-based. Instead, say: 'Unfortunately, I don't have a video of this exact situation on hand right now, but let me paint a picture for you in your mind...'
 
 Teaching style:
 - Calm, patient and encouraging, like a trusted driving instructor in the passenger seat.
@@ -667,11 +682,49 @@ def _build_system_prompt(lang: str) -> str:
         "th": _PROMPT_CORE_TH,
         "en": _PROMPT_CORE_EN,
     }[l]
+    
+    rag_instructions = (
+        "\n\n━━━ SYSTEMINSTRUKSJONER FOR BRUK AV DATABASEN (RAG) ━━━\n"
+        "Når du får servert fakta i seksjonen 'APPROVED THAI2DRIVE CURRICULUM CONTEXT', må du følge disse reglene:\n"
+        "1. Bruk den oppgitte informasjonen fra databasen som din absolutte fasit. Du skal aldri gjette eller finne på egne regler.\n"
+        "2. Du skal ALDRI bare ramse opp den tørre lovteksten eller faktaene du får servert. Du skal oversette og forklare dem på en pedagogisk måte.\n"
+        "3. Du MÅ fortsette å undervise med dine egne pedagogiske metoder (Situasjon før teori, 7-års regelen, 'Kongen og tjeneren', etc.).\n"
+        "4. Spesielt for Vegtrafikkloven § 3 (H-A-V regelen):\n"
+        "   Hvis du får servert databasetekst om Vegtrafikkloven § 3, eller hvis studenten spør om å være hensynsfull, aktpågivende eller varsom, skal du alltid:\n"
+        "   - Bryte det ned slik: H = Hensynsfull, A = Aktpågivende, V = Varsom.\n"
+        "   - Bruke setningen ordrett: 'Hvis du husker HAV-regelen, husker du kjernen i paragraf 3'.\n"
+        "   - Koble loven direkte til handlinger i bilen: du skal ikke hindre, ikke forstyrre, og ikke skape fare.\n"
+        "5. Svar alltid i det språket som er angitt i [LANGUAGE] over (norsk, thai eller engelsk). Oversett eventuell rå norsk lovtekst til dette språket når du forklarer den.\n"
+        "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    )
+
+    multimedia_instructions = (
+        "\n\n━━━ MULTIMEDIA INSTRUCTIONS (V5: Voice, Video & Podcasts) ━━━\n"
+        "You can dynamically recommend videos, podcasts, or images to the student. When explaining a concept where a visual or audio aid is available in the curriculum context, follow these strict rules:\n"
+        "1. MULTIMEDIA TAG FORMATS:\n"
+        "   - To show a video: Use the exact tag format: [video: youtube_url | title_no | title_th | title_en]\n"
+        "   - To show a podcast: Recommend one of the following available podcasts using this exact tag format:\n"
+        "     * [podcast: /public_assets/podcast_kongen_tjeneren.mp3 | Er du kongen eller tjeneren i trafikken? | คุณเป็นราชาหรือคนรับใช้บนท้องถนน? | Are you the king or servant in traffic?]\n"
+        "     * [podcast: /public_assets/podcast_ferske_sjaforer.mp3 | Hvorfor ferske sjåfører er livsfarlige | ทำไมคนขับมือใหม่ถึงอันตรายอย่างยิ่ง | Why fresh drivers are extremely dangerous]\n"
+        "     * [podcast: /public_assets/podcast_fortere_enn_du_ser.mp3 | Du kjører fortere enn du ser | คุณขับรถเร็วกว่าที่คุณเห็น | You drive faster than you can see]\n"
+        "   - To show an image: Use the exact tag format: [image: image_url | caption_no | caption_th | caption_en]\n"
+        "2. PEDAGOGICAL PACKAGING (Never just throw a link):\n"
+        "   - Set up the driving situation first: 'Se for deg at du nærmer deg krysset...' / 'Imagine you are approaching the intersection...'\n"
+        "   - Introduce the video/audio: 'Ta en titt på denne korte videoen som viser nøyaktig hvordan vi gjør dette i praksis:' or 'Hør på denne podcasten der vi snakker om dette:'\n"
+        "   - Insert the tag on its own blank line.\n"
+        "   - End with a single follow-up check question (Mini-practice) to check their understanding: e.g., 'Når du har sett videoen, hva tenker du er den største faren her?'\n"
+        "3. LANGUAGE PURITY (Critical):\n"
+        "   - The entire response, including titles and captions inside the tags, must be translated to the student's chosen language. Never use Norwegian fallback names or text when speaking to Thai or English students.\n"
+        "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    )
+    
     return (
         _LANG_CRITICAL[l]
         + core
         .replace("<<GOOD_EXAMPLE>>", _GOOD_EXAMPLE[l])
         .replace("<<COACHING>>", _COACHING[l])
+        + rag_instructions
+        + multimedia_instructions
     )
 
 
@@ -766,6 +819,203 @@ def _get_suggestions(reply: str, lang: str) -> list:
     return ["❓ Spør videre", "📖 Åpne studiebok", "📊 Min statistikk"]
 
 
+async def _get_curriculum_context(user_msg: str, lang: str) -> str:
+    """
+    Retrieves relevant traffic signs or studiebok chapters from MongoDB
+    based on keywords/numbers in user_msg, using a local scoring ranking.
+    """
+    try:
+        import re
+        # Look for sign numbers (e.g. "202", "302")
+        sign_nums = re.findall(r'\b\d{3}\b', user_msg)
+        
+        context_parts = []
+        matched_sign_ids = set()
+        
+        if sign_nums:
+            for num in sign_nums:
+                # Query db.traffic_signs for matching sign ID (e.g. "202_0")
+                cursor = _db.traffic_signs.find({"id": {"$regex": f"^{num}(_|$)"}})
+                signs = await cursor.to_list(length=3)
+                for sign in signs:
+                    if sign["id"] not in matched_sign_ids:
+                        matched_sign_ids.add(sign["id"])
+                        name_lang = sign.get("name", {}).get(lang) or sign.get("name", {}).get("no") or ""
+                        exp_lang = sign.get("explanation", {}).get(lang) or sign.get("explanation", {}).get("no") or ""
+                        action_lang = sign.get("driver_action", {}).get(lang) or sign.get("driver_action", {}).get("no") or ""
+                        
+                        sign_desc = (
+                            f"Traffic Sign {sign['id']}:\n"
+                            f"- Name: {name_lang}\n"
+                            f"- Explanation: {exp_lang}\n"
+                        )
+                        if action_lang:
+                            sign_desc += f"- Driver Action: {action_lang}\n"
+                        context_parts.append(sign_desc)
+
+        # Clean message to lowercase, strip punctuation
+        clean_msg = re.sub(r'[^\w\s]', ' ', user_msg.lower()).strip()
+        words = [w for w in clean_msg.split() if len(w) >= 3]
+        
+        # Common traffic keywords to trigger specific queries
+        keywords_map = {
+            "vikeplikt": ["vikeplikt", "høyreregel", "forkjørsvei", "yield", "right-of-way", "give way", "การให้ทาง", "ให้ทาง"],
+            "rundkjøring": ["rundkjøring", "roundabout", "วงเวียน"],
+            "fart": ["fart", "fartsgrense", "hastighet", "speed", "stopping distance", "stoppelengde", "bremselengde", "reaksjonslengde", "ความเร็ว", "ระยะหยุด"],
+            "alkohol": ["alkohol", "rus", "promille", "drikke", "kjøreforbud", "alcohol", "drunk", "แอลกอฮอล์", "เหล้า", "เบียร์", "เมา"],
+            "parkering": ["parker", "stans", "parkering", "stop", "stopp", "ลานจอดรถ", "จอดรถ"],
+            "sikkerhet": ["sikkerhet", "belte", "barnesikring", "dekk", "mønsterdybde", "safety", "seatbelt", "เข็มขัดนิรภัย", "ความปลอดภัย"]
+        }
+        
+        matched_categories = set()
+        for cat, kws in keywords_map.items():
+            if any(kw in clean_msg for kw in kws):
+                matched_categories.add(cat)
+                
+        terms_to_search = []
+        for cat in matched_categories:
+            terms_to_search.extend(keywords_map[cat][:2]) # use top 2 Norwegian keywords for broader match
+            
+        for w in words:
+            if w not in terms_to_search and len(w) >= 4:
+                terms_to_search.append(w)
+                
+        if terms_to_search:
+            or_clauses = []
+            for term in terms_to_search[:5]:
+                or_clauses.extend([
+                    {f"title_{lang}": {"$regex": term, "$options": "i"}},
+                    {f"content_{lang}": {"$regex": term, "$options": "i"}},
+                    {"title_no": {"$regex": term, "$options": "i"}},
+                    {"content_no": {"$regex": term, "$options": "i"}}
+                ])
+                
+            if or_clauses:
+                # Fetch up to 20 matches (all chapters) to rank them locally in Python
+                cursor = _db.studiebok_chapters.find({"$or": or_clauses})
+                all_matches = await cursor.to_list(length=20)
+                
+                scored_chapters = []
+                for ch in all_matches:
+                    score = 0
+                    title_no = ch.get("title_no", "").lower()
+                    content_no = ch.get("content_no", "").lower()
+                    title_lang = ch.get(f"title_{lang}", "").lower() if lang else ""
+                    content_lang = ch.get(f"content_{lang}", "").lower() if lang else ""
+                    
+                    # Boost Chapter 1 specifically if asking about basic traffic act / section 3 / HAV rule
+                    msg_lower = user_msg.lower()
+                    if any(x in msg_lower for x in ["§ 3", "paragraf 3", "grunnregl", "hav-regel", "hav reg", "hensynsfull", "aktpågivende", "varsom", "vegtrafikklov"]):
+                        if ch.get("order") == 1:
+                            score += 100
+                            
+                    for term in terms_to_search:
+                        term_lower = term.lower()
+                        if term_lower in title_lang: score += 10
+                        if term_lower in title_no: score += 5
+                        score += content_lang.count(term_lower)
+                        score += content_no.count(term_lower)
+                    scored_chapters.append((score, ch))
+                
+                scored_chapters.sort(key=lambda x: x[0], reverse=True)
+                top_chapters = [ch for score, ch in scored_chapters[:2]]
+                
+                for ch in top_chapters:
+                    title = ch.get(f"title_{lang}") or ch.get("title_no")
+                    content = ch.get(f"content_{lang}") or ch.get("content_no")
+                    # Clean html tags from content
+                    clean_content = re.sub(r'<[^>]+>', ' ', content)
+                    clean_content = re.sub(r'\s+', ' ', clean_content).strip()
+                    if len(clean_content) > 800:
+                        clean_content = clean_content[:800] + "..."
+                        
+                    ch_desc = (
+                        f"Studybook Chapter {ch['order']}: {title}\n"
+                        f"Content: {clean_content}\n"
+                    )
+                    if ch.get("image_url"):
+                        ch_desc += f"- Image URL: {ch['image_url']}\n"
+                    if ch.get("video_url"):
+                        ch_desc += f"- Video/YouTube URL: {ch['video_url']}\n"
+                    context_parts.append(ch_desc)
+
+            # Search for videos in learning_videos matching terms
+            video_or_clauses = []
+            for term in terms_to_search[:5]:
+                video_or_clauses.extend([
+                    {f"title_{lang}": {"$regex": term, "$options": "i"}},
+                    {"title_no": {"$regex": term, "$options": "i"}},
+                    {"topic_tags": {"$regex": term, "$options": "i"}}
+                ])
+            if video_or_clauses:
+                cursor = _db.learning_videos.find({"$or": video_or_clauses})
+                matched_videos = await cursor.to_list(length=3)
+                for vid in matched_videos:
+                    vid_title = vid.get(f"title_{lang}") or vid.get("title_no") or ""
+                    vid_summary = vid.get(f"instructor_summary_{lang}") or vid.get("instructor_summary_no") or ""
+                    vid_desc = (
+                        f"Learning Video:\n"
+                        f"- Title: {vid_title}\n"
+                        f"- YouTube URL: {vid.get('youtube_url')}\n"
+                        f"- Summary: {vid_summary}\n"
+                    )
+                    context_parts.append(vid_desc)
+                    
+            if len(matched_sign_ids) < 2:
+                sign_or_clauses = []
+                for term in terms_to_search[:3]:
+                    sign_or_clauses.extend([
+                        {f"name.{lang}": {"$regex": term, "$options": "i"}},
+                        {f"explanation.{lang}": {"$regex": term, "$options": "i"}},
+                        {"name.no": {"$regex": term, "$options": "i"}},
+                        {"explanation.no": {"$regex": term, "$options": "i"}}
+                    ])
+                if sign_or_clauses:
+                    cursor = _db.traffic_signs.find({"$or": sign_or_clauses})
+                    all_text_signs = await cursor.to_list(length=40)
+                    
+                    scored_signs = []
+                    for sign in all_text_signs:
+                        if sign["id"] in matched_sign_ids:
+                            continue
+                        score = 0
+                        name_no = sign.get("name", {}).get("no", "").lower()
+                        name_lang = sign.get("name", {}).get(lang, "").lower() if lang else ""
+                        exp_no = sign.get("explanation", {}).get("no", "").lower()
+                        exp_lang = sign.get("explanation", {}).get(lang, "").lower() if lang else ""
+                        
+                        for term in terms_to_search:
+                            term_lower = term.lower()
+                            if term_lower in name_lang: score += 10
+                            if term_lower in name_no: score += 5
+                            if term_lower in exp_lang: score += 2
+                            if term_lower in exp_no: score += 1
+                        scored_signs.append((score, sign))
+                        
+                    scored_signs.sort(key=lambda x: x[0], reverse=True)
+                    for score, sign in scored_signs[:2]:
+                        if sign["id"] not in matched_sign_ids:
+                            matched_sign_ids.add(sign["id"])
+                            name_lang = sign.get("name", {}).get(lang) or sign.get("name", {}).get("no") or ""
+                            exp_lang = sign.get("explanation", {}).get(lang) or sign.get("explanation", {}).get("no") or ""
+                            action_lang = sign.get("driver_action", {}).get(lang) or sign.get("driver_action", {}).get("no") or ""
+                            
+                            sign_desc = (
+                                f"Traffic Sign {sign['id']}:\n"
+                                f"- Name: {name_lang}\n"
+                                f"- Explanation: {exp_lang}\n"
+                            )
+                            if action_lang:
+                                sign_desc += f"- Driver Action: {action_lang}\n"
+                            context_parts.append(sign_desc)
+
+        if context_parts:
+            return "\n\n".join(context_parts[:3])
+    except Exception as e:
+        logger.error("Error retrieving RAG context: %s", e)
+    return ""
+
+
 # ─── API ──────────────────────────────────────────────────────────────────────
 teacher_router = APIRouter()
 
@@ -783,7 +1033,7 @@ async def teacher_topics(lang: str = Query(default="no")):
 
 class TeacherChatRequest(BaseModel):
     session_id: Optional[str] = Field(default=None)
-    message: str = Field(min_length=1, max_length=2000)
+    message: str = Field(min_length=1, max_length=5000)
     language: Optional[str] = Field(default="no")
 
 
@@ -795,6 +1045,10 @@ class TeacherChatResponse(BaseModel):
 
 @teacher_router.post("/teacher/chat", response_model=TeacherChatResponse)
 async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
+    import time
+    start_time = time.time()
+    error_str = None
+    
     session_id = req.session_id or f"ts_{uuid.uuid4().hex[:16]}"
     user_msg = req.message.strip()
     lang = (req.language or "no").strip().lower()
@@ -814,6 +1068,19 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         except Exception as e:
             logger.error("Failed to parse quiz context payload: %s", e)
 
+    # Extract stats context if passed in the user message
+    stats_context_str = ""
+    is_weak_topics = False
+    if "<stats_context>" in user_msg and "</stats_context>" in user_msg:
+        is_weak_topics = True
+        try:
+            parts = user_msg.split("<stats_context>")
+            clean_user_msg = parts[0].strip()
+            stats_context_str = parts[1].split("</stats_context>")[0].strip()
+            user_msg = clean_user_msg
+        except Exception as e:
+            logger.error("Failed to parse stats context payload: %s", e)
+
     # Load prior conversation (last 20 messages in this session)
     prior = await _chat_col.find(
         {"session_id": session_id}
@@ -832,8 +1099,18 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         if not LLM_KEY:
             raise RuntimeError("ANTHROPIC_API_KEY not configured")
 
+        # Retrieve curriculum context from database (RAG)
+        context_str = await _get_curriculum_context(user_msg, lang)
+
         # _build_system_prompt injects [LANGUAGE] header FIRST, then language-specific examples
         system_prompt = _build_system_prompt(lang)
+
+        if context_str:
+            system_prompt += (
+                f"\n\n━━━ APPROVED THAI2DRIVE CURRICULUM CONTEXT ━━━\n"
+                f"{context_str}\n"
+                f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            )
 
         # Check if the last assistant message in conversation history was a clarifying question
         last_assistant_msg = None
@@ -855,31 +1132,46 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
                 "⚠️ THE STUDENT ANSWERED INCORRECTLY. This is confirmed. They got it wrong.\n"
                 "The hidden context block below is for YOUR eyes only — the student cannot see it:\n\n"
                 f"{quiz_context_str}\n\n"
-                "STRICT RULES — follow every one without exception:\n"
+                "STRICT RULES FOR QUIZ COACHING — follow every one without exception:\n"
                 "0. ABSOLUTE: The student answered WRONG. NEVER open with praise or agreement. "
-                "BANNED openers (any language): 'Nøyaktig!', 'Riktig!', 'Korrekt!', 'Perfekt!', 'Bra!', "
-                "'Exactly!', 'Correct!', 'That's right!', 'ถูกต้อง!', 'ดีมาก!', 'เก่งมาก!'. "
-                "These words confirm correctness — the student was WRONG, not right. "
-                "Instead open with a gentle correction:\n"
-                "   NO: 'Ikke helt riktig 😊' or 'La oss se på dette sammen 😊'\n"
-                "   TH: 'ยังไม่ถูกต้องครับ 😊' or 'ลองดูเรื่องนี้ด้วยกันครับ 😊'\n"
-                "   EN: 'Not quite right 😊' or 'Let's look at this together 😊'\n"
-                "1. NEVER quote, reveal, paraphrase, or reference the hidden block above. "
-                "The student does not know it exists. Use the information silently to guide your teaching.\n"
-                "2. Go DIRECTLY into the 5-step teaching flow after the correction opener — "
-                "NO long greeting, NO self-introduction, NO clarifying question.\n"
-                "3. Explain WHY the student's answer was wrong and build toward the correct understanding "
-                "— do NOT simply announce 'The correct answer is X'.\n"
-                "4. SAFETY — NEVER invent, guess, or hallucinate traffic rules or directions. "
-                "If you are not 100% certain of a rule, say 'sjekk Statens vegvesen' / 'check the official rules'. "
-                "Known critical fact: in Norway ALL roundabouts flow COUNTER-CLOCKWISE (mot klokken). "
-                "NEVER say 'med klokken' (clockwise) — that is wrong and dangerous.\n"
-                "5. Use the exact 5-step headers in the declared language:\n"
+                "BANNED openers: 'Nøyaktig!', 'Riktig!', 'Korrekt!', 'Perfekt!', 'Bra!', 'Exactly!', 'Correct!', 'ดีมาก!', 'เก่งมาก!'. "
+                "Instead open with a gentle, encouraging correction:\n"
+                "   NO: 'Ikke helt riktig 😊' or 'Dette er en veldig vanlig feil, la oss se på det sammen 😊'\n"
+                "   TH: 'ยังไม่ถูกต้องครับ 😊' or 'นี่เป็นข้อผิดพลาดที่พบบ่อยมาก ลองดูเรื่องนี้ด้วยกันครับ 😊'\n"
+                "   EN: 'Not quite right 😊' or 'This is a very common mistake, let's look at it together 😊'\n"
+                "1. DO NOT JUST REPEAT THE ANSWER: The student already knows the correct option. "
+                "Your job is to explain WHY their chosen answer was wrong, and WHY the correct option is right. "
+                "Never simply state 'The correct option is X'. Translate any raw database facts to the target language.\n"
+                "2. 7-YEARS RULE & SITUATIONS: Use short, simple sentences. Start the explanation by placing the student "
+                "in a concrete driving situation. E.g., 'Se for deg at du sitter i bilen og nærmer deg dette krysset...'\n"
+                "3. MINI-PRACTICE CHALLENGE: You must end the explanation with a new short practical follow-up question "
+                "(a small new scenario testing the same rule) to check if they have understood the logic. Let them try themselves!\n"
+                "4. Use the exact 5-step headers in the declared language:\n"
                 "   NO: 🚗 Situasjon / 💡 Forklaring / ⚠️ Vanlig feil / 📝 Teoriprøve-vinkel / ❓ Oppfølgingsspørsmål\n"
                 "   TH: 🚗 สถานการณ์ / 💡 คำอธิบาย / ⚠️ ข้อผิดพลาดที่พบบ่อย / 📝 จุดเน้นข้อสอบทฤษฎี / ❓ คำถามชวนคิด\n"
                 "   EN: 🚗 Situation / 💡 Explanation / ⚠️ Common mistake / 📝 Theory test focus / ❓ Follow-up question\n"
-                "6. Write the ENTIRE response in the language declared by [LANGUAGE] header. Zero exceptions.\n"
+                "5. Write the ENTIRE response in the language declared by [LANGUAGE] header. Zero exceptions.\n"
                 "━━━━━━━━━━━━━━━━━━━━━━━"
+            )
+
+        if is_weak_topics and stats_context_str:
+            system_prompt += (
+                "\n\n━━━ WEAK TOPIC ANALYSIS MODE ━━━\n"
+                "The student has asked what they should practice. The hidden context block below contains their actual quiz performance and category statistics. This is for YOUR eyes only — the student cannot see it:\n\n"
+                f"{stats_context_str}\n\n"
+                "STRICT RULES FOR WEAK TOPIC ANALYSIS — follow every one without exception:\n"
+                "1. ANALYZE AND BUILD CONFIDENCE: Do NOT start with negative feedback. Identify a category they are strong in (highest percentage/score) and praise/encourage them for it first. (e.g. 'Jeg ser på oversikten din at du har veldig god kontroll på trafikkskilt, strålende jobba!' or similar in their language).\n"
+                "2. CHOOSE ONLY ONE WEAK CATEGORY: Do NOT list all weak categories or repeat raw numbers/percentages. Find the single category with the lowest score/percentage, and suggest focusing on this one. (e.g. 'Jeg ser at vi bør øve litt mer på vikeplikt og plassering' or similar in their language).\n"
+                "3. START TEACHING IMMEDIATELY (MINI-PRACTICE): Once you have selected the weak category, immediately start a short teaching session about this topic using your standard pedagogical flow:\n"
+                "   - 7-YEARS RULE: Use short, simple sentences.\n"
+                "   - SITUATION: Place the student in a concrete driving situation before explaining theory (e.g. 'Se for deg at du...').\n"
+                "   - MINI-PRACTICE CHALLENGE: End the response by asking a single new follow-up question to test their understanding.\n"
+                "4. Use the exact 5-step headers in the declared language:\n"
+                "   NO: 🚗 Situasjon / 💡 Forklaring / ⚠️ Vanlig feil / 📝 Teoriprøve-vinkel / ❓ Oppfølgingsspørsmål\n"
+                "   TH: 🚗 สถานการณ์ / 💡 คำอธิบาย / ⚠️ ข้อผิดพลาดที่พบบ่อย / 📝 จุดเน้นข้อสอบทฤษฎี / ❓ คำถามชวนคิด\n"
+                "   EN: 🚗 Situation / 💡 Explanation / ⚠️ Common mistake / 📝 Theory test focus / ❓ Follow-up question\n"
+                "5. Write the ENTIRE response in the language declared by [LANGUAGE] header. Translate category names (e.g., 'Right of Way', 'vikeplikt', 'fart_og_bremsing') into the active conversation language. Zero exceptions.\n"
+                "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
             )
 
         messages = [{"role": "system", "content": system_prompt}]
@@ -896,8 +1188,34 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         if not reply_text:
             reply_text = _fallback_reply(lang)
     except Exception as e:
-        logger.error("Teacher LLM call failed [%s]: %s", type(e).__name__, e)
-        reply_text = _fallback_reply(lang)
+        logger.warning("LiteLLM call failed [%s]: %s. Attempting Emergent LlmChat fallback...", type(e).__name__, e)
+        try:
+            from emergentintegrations.llm.chat import LlmChat, UserMessage
+            emergent_key = os.environ.get("EMERGENT_LLM_KEY") or "sk-emergent-b48A3D57008C8350c6"
+            
+            history_list = []
+            if conversation:
+                for m in conversation:
+                    role_name = "Student" if m["role"] == "user" else "Michael"
+                    history_list.append(f"{role_name}: {m['content']}")
+                history_text = "\n".join(history_list)
+                prompt_text = f"Her er samtalens historikk så langt:\n{history_text}\n\nStudentens nye spørsmål:\n{user_msg}"
+            else:
+                prompt_text = user_msg
+
+            chat = LlmChat(
+                api_key=emergent_key,
+                session_id=session_id,
+                system_message=system_prompt,
+            ).with_model("openai", "gpt-4o-mini")
+            
+            resp = await chat.send_message(UserMessage(text=prompt_text))
+            reply_text = str(resp).strip()
+            error_str = None  # Clear error since fallback succeeded
+        except Exception as ex:
+            logger.error("Emergent LlmChat fallback also failed: %s", ex)
+            error_str = f"LiteLLM: {type(e).__name__}({e}) | Emergent: {ex}"
+            reply_text = _fallback_reply(lang)
 
     # Persist both messages
     now = datetime.now(timezone.utc)
@@ -917,6 +1235,24 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             "ts": now,
         },
     ])
+
+    duration = time.time() - start_time
+    try:
+        log_doc = {
+            "session_id": session_id,
+            "language": lang,
+            "is_quiz_help": is_quiz_help,
+            "is_weak_topics": is_weak_topics,
+            "question": user_msg,
+            "response_time": duration,
+            "error": error_str,
+            "ts": datetime.now(timezone.utc)
+        }
+        await _db["teacher_chat_logs"].insert_one(log_doc)
+        logger.info("Teacher chat logged: lang=%s is_quiz_help=%s is_weak_topics=%s response_time=%.2fs error=%s", 
+                    lang, is_quiz_help, is_weak_topics, duration, error_str)
+    except Exception as log_ex:
+        logger.error("Failed to write teacher log to DB: %s", log_ex)
 
     suggestions = _get_suggestions(reply_text, lang)
     return TeacherChatResponse(session_id=session_id, reply=reply_text, suggestions=suggestions)
