@@ -104,24 +104,21 @@ html[data-current-lang="en"] [data-lang="en"].block{display:block}
 .landing-onboard-target{position:relative;border-radius:20px}
 .landing-onboard-label{display:none;position:absolute;z-index:80;align-items:center;gap:10px;padding:12px 18px;border-radius:999px;background:#fff;border:3px solid rgba(255,153,51,.55);box-shadow:0 16px 34px rgba(0,0,0,.34),0 0 0 5px rgba(255,153,51,.16);color:#0F172A;font-size:20px;font-weight:950;line-height:1;letter-spacing:.01em;white-space:nowrap;pointer-events:auto;animation:landingLabelBlink 5s ease-in-out infinite}
 .landing-onboard-label-lang{left:34%;top:-54px;transform:translateX(-50%) rotate(-5deg)}
-.landing-onboard-label-web{left:-34px;top:50%;transform:translate(-100%,-50%) rotate(-92deg);transform-origin:center}
-.landing-onboard-label::after{content:'';position:absolute;display:block;background:#fff;border-radius:999px;box-shadow:0 10px 24px rgba(0,0,0,.22);pointer-events:none}
-.landing-onboard-label-lang::after{width:112px;height:12px;right:-38px;bottom:-22px;transform:rotate(16deg)}
-.landing-onboard-label-web::after{width:150px;height:12px;left:52%;bottom:-42px;transform:translateX(-50%) rotate(86deg)}
-.landing-onboard-label::before{content:'';position:absolute;width:0;height:0;border-style:solid;pointer-events:none}
-.landing-onboard-label-lang::before{right:-64px;bottom:-31px;border-width:17px 0 17px 32px;border-color:transparent transparent transparent #fff;transform:rotate(16deg)}
-.landing-onboard-label-web::before{left:50%;bottom:-82px;border-width:18px 0 18px 34px;border-color:transparent transparent transparent #fff;transform:translateX(-50%) rotate(86deg)}
+.landing-onboard-label-web{left:50%;top:auto;bottom:calc(100% + 148px);transform:translateX(-50%) rotate(-4deg)}
+.onboard-arrow{display:none;position:absolute;z-index:79;pointer-events:none;filter:drop-shadow(0 10px 16px rgba(0,0,0,.45))}
+.onboard-arrow-lang{width:112px;height:100px;left:60%;top:-74px}
+.onboard-arrow-web{width:86px;height:150px;left:50%;top:auto;bottom:calc(100% + 2px);transform:translateX(-50%)}
 .landing-onboard-dismiss{width:24px;height:24px;border:0;border-radius:50%;background:rgba(15,23,42,.12);color:#0F172A;font-size:18px;font-weight:950;line-height:24px;cursor:pointer;padding:0;display:inline-flex;align-items:center;justify-content:center}
 .landing-onboard-dismiss:hover{background:rgba(15,23,42,.22)}
 html.landing-onboard-active .landing-onboard-label{display:inline-flex}
 html.landing-onboard-active .landing-onboard-target{animation:landingOnboardPulse 5s ease-in-out infinite}
-html.landing-onboard-active .landing-onboard-label::before,html.landing-onboard-active .landing-onboard-label::after{animation:landingArrowBlink 5s ease-in-out infinite}
+html.landing-onboard-active .onboard-arrow{display:block;animation:landingArrowBlink 5s ease-in-out infinite}
 @keyframes landingOnboardPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,153,51,.18)}50%{box-shadow:0 0 0 9px rgba(255,153,51,.28),0 0 36px rgba(255,153,51,.34)}}
 @keyframes landingLabelBlink{0%,100%{opacity:1;box-shadow:0 16px 34px rgba(0,0,0,.34),0 0 0 5px rgba(255,153,51,.16)}50%{opacity:.45;box-shadow:0 10px 24px rgba(0,0,0,.24),0 0 0 2px rgba(255,153,51,.08)}}
 @keyframes landingArrowBlink{0%,100%{opacity:1}50%{opacity:.45}}
-@media(max-width:700px){.landing-onboard-label{font-size:28px;padding:13px 22px}.landing-onboard-label-lang{left:30%;top:-58px;transform:translateX(-50%) rotate(-8deg)}.landing-onboard-label-web{left:50%;top:auto;bottom:calc(100% + 78px);transform:translateX(-50%) rotate(-92deg)}.landing-onboard-label-lang::after{width:150px;height:14px;right:-92px;bottom:-34px;transform:rotate(16deg)}.landing-onboard-label-lang::before{right:-122px;bottom:-50px;transform:rotate(16deg)}.landing-onboard-label-web::after{width:210px;height:14px;bottom:-64px;transform:translateX(-50%) rotate(88deg)}.landing-onboard-label-web::before{bottom:-112px;transform:translateX(-50%) rotate(88deg)}}
-@media(max-width:430px){.landing-onboard-label{font-size:23px}.landing-onboard-label-lang{left:28%;top:-50px}.landing-onboard-label-web{bottom:calc(100% + 62px)}.landing-onboard-label-lang::after{width:120px;right:-72px;bottom:-30px}.landing-onboard-label-lang::before{right:-98px;bottom:-45px}.landing-onboard-label-web::after{width:170px}}
-@media(prefers-reduced-motion:reduce){html.landing-onboard-active .landing-onboard-target,.landing-onboard-label{animation:none!important}}
+@media(max-width:700px){.landing-onboard-label{font-size:28px;padding:13px 22px}.landing-onboard-label-lang{left:30%;top:-62px;transform:translateX(-50%) rotate(-8deg)}.landing-onboard-label-web{bottom:calc(100% + 168px);transform:translateX(-50%) rotate(-6deg)}.onboard-arrow-lang{width:130px;height:112px;left:58%;top:-84px}.onboard-arrow-web{width:100px;height:168px}}
+@media(max-width:430px){.landing-onboard-label{font-size:23px}.landing-onboard-label-lang{left:28%;top:-54px}.landing-onboard-label-web{bottom:calc(100% + 146px)}.onboard-arrow-lang{width:112px;height:98px;left:60%;top:-72px}.onboard-arrow-web{width:88px;height:146px}}
+@media(prefers-reduced-motion:reduce){html.landing-onboard-active .landing-onboard-target,.landing-onboard-label,.onboard-arrow{animation:none!important}}
 .velg-hint{display:none}
 .mini-flag{display:flex;flex-direction:column;width:38px;height:26px;border-radius:3px;overflow:hidden;flex-shrink:0}
 .mini-flag.flag-th span:nth-child(1){background:#A51931;flex:1}
@@ -524,6 +521,10 @@ def _hero_html() -> str:
         <span data-lang="en">1. Choose language</span>
         <button class="landing-onboard-dismiss" type="button">×</button>
       </span>
+      <svg class="onboard-arrow onboard-arrow-lang" viewBox="0 0 120 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M12 10 C 50 14, 76 36, 86 64" fill="none" stroke="#fff" stroke-width="16" stroke-linecap="round"/>
+        <path d="M99 104 L109 56 L62 73 Z" fill="#fff"/>
+      </svg>
       <button class="lang-btn active" data-set-lang="th" title="ภาษาไทย">
         <span class="cflag"><svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg"><rect width="900" height="600" fill="#A51931"/><rect width="900" height="480" y="60" fill="#F4F5F8"/><rect width="900" height="320" y="140" fill="#241D4F"/></svg></span>
       </button>
@@ -560,6 +561,10 @@ def _hero_html() -> str:
           <span data-lang="en">2. Open web app</span>
           <button class="landing-onboard-dismiss" type="button">×</button>
         </span>
+        <svg class="onboard-arrow onboard-arrow-web" viewBox="0 0 90 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M58 8 C 34 36, 30 72, 40 112" fill="none" stroke="#fff" stroke-width="17" stroke-linecap="round"/>
+          <path d="M50 154 L66 105 L15 119 Z" fill="#fff"/>
+        </svg>
         💻
         <span data-lang="th">เปิดเว็บแอป</span>
         <span data-lang="no">Åpne web-appen</span>
@@ -1220,6 +1225,16 @@ LANDING_JS = r"""
     const btn = document.getElementById('tqTtsBtn');
     if (btn) { btn.textContent = ttsPlaying ? '⏸' : '▶'; btn.classList.toggle('playing', ttsPlaying); }
   }
+
+  // Stop speech when the user leaves the page (close, navigate away, switch app/tab)
+  function stopAllSpeech() {
+    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+    ttsPlaying = false;
+    updateTtsBtn();
+  }
+  window.addEventListener('pagehide', stopAllSpeech);
+  window.addEventListener('beforeunload', stopAllSpeech);
+  document.addEventListener('visibilitychange', () => { if (document.hidden) stopAllSpeech(); });
 
   // ── Sound toggle ──
   const soundToggle = document.getElementById('tqSoundToggle');

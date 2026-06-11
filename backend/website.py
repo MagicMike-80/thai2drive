@@ -1159,9 +1159,9 @@ def laeringsbok():
   }
 
   $('bok-back').addEventListener('click', () => { stopTTS(); show('bok-chapters'); });
-  $('bok-prev').addEventListener('click', () => { if(curIdx>0){curIdx--;renderSection();} });
+  $('bok-prev').addEventListener('click', () => { if(curIdx>0){stopTTS();curIdx--;renderSection();} });
   $('bok-next').addEventListener('click', () => {
-    if(curIdx < sections.length-1){ curIdx++; renderSection(); }
+    if(curIdx < sections.length-1){ stopTTS(); curIdx++; renderSection(); }
     else{ stopTTS(); show('bok-chapters'); }
   });
 
@@ -1189,6 +1189,10 @@ def laeringsbok():
     $('bok-tts-icon').textContent = '⏸';
     $('bok-tts-label').textContent = {no:'Stopp',th:'หยุด',en:'Stop'}[curLang]||'Stopp';
   });
+  // Stop speech when the user leaves the page (close, navigate away, switch app/tab)
+  window.addEventListener('pagehide', stopTTS);
+  window.addEventListener('beforeunload', stopTTS);
+  document.addEventListener('visibilitychange', () => { if (document.hidden) stopTTS(); });
 
   // ── Start ─────────────────────────────────────────────────────────
   checkAuth();

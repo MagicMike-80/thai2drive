@@ -3972,6 +3972,9 @@ function enterApp() {
 }
 
 function showTab(tab, forceType) {
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+  _teacherTtsPlaying = false;
+  ttsPlaying = false;
   activeTab = tab;
   document.querySelectorAll('.bn-tab').forEach(function(b) { b.classList.remove('active'); });
   var tabMap = { home:'bnHome', cats:'bnCats', history:'bnHistory', signs:'bnSigns', studybook:'bnStudybook', bookmarks:'bnBookmarks', settings:'bnSettings', teacher:'bnTeacher' };
@@ -4163,6 +4166,19 @@ document.addEventListener('click', function(e) {
   if (!e.target.closest('.sb-search-wrap') && !e.target.closest('.sb-search-results')) {
     sbCloseSuggest();
   }
+});
+
+// Stop all speech when the user leaves the page (close, navigate away, switch app/tab)
+function stopAllSpeech() {
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+  _teacherTtsPlaying = false;
+  ttsPlaying = false;
+  if (typeof updateTtsBtn === 'function') { try { updateTtsBtn(false); } catch (e) {} }
+}
+window.addEventListener('pagehide', stopAllSpeech);
+window.addEventListener('beforeunload', stopAllSpeech);
+document.addEventListener('visibilitychange', function() {
+  if (document.hidden) stopAllSpeech();
 });
 
 // Swipe left/right on reader
@@ -4502,9 +4518,18 @@ async function loadHome() {
   // Readiness card — last quiz attempt
   if (deviceId) {
     try {
-      var rdata = await api('GET', '/api/quiz-attempts/' + encodeURIComponent(deviceId) + '?limit=1&_=' + Date.now());
+      var rdata;
+      if (token) {
+        rdata = await api('GET', '/api/history?limit=1&_=' + Date.now());
+      } else {
+        rdata = await api('GET', '/api/quiz-attempts/' + encodeURIComponent(deviceId) + '?limit=1&_=' + Date.now());
+      }
       var rattempts = Array.isArray(rdata) ? rdata : (rdata.attempts || rdata.results || []);
-      rattempts = _mergeAttempts(rattempts, _readLocalAttempts().concat(_lastSavedAttempt ? [_lastSavedAttempt] : []));
+      if (token) {
+        rattempts = _mergeAttempts(rattempts, _lastSavedAttempt ? [_lastSavedAttempt] : []);
+      } else {
+        rattempts = _mergeAttempts(rattempts, _readLocalAttempts().concat(_lastSavedAttempt ? [_lastSavedAttempt] : []));
+      }
       if (rattempts.length) {
         var la = rattempts[0];
         var lpct = Math.round(la.score_percentage || 0);
@@ -6091,6 +6116,7 @@ function updateAiPanel(isOk, expl) {
 }
 
 function nextQ() {
+  stopAllSpeech();
   if (_aiPanelTimer) { clearTimeout(_aiPanelTimer); _aiPanelTimer = null; } // never let a delayed panel land on the next question
   // Review mode uses its own card renderer — skip normal quiz flow
   if (_reviewMode) { reviewNext(); return; }
@@ -6325,9 +6351,18 @@ async function loadHistory() {
   var scroll = document.getElementById('histScroll');
   scroll.innerHTML = '<div class="loading-wrap"><div class="spinner"></div></div>';
   try {
-    var data = await api('GET', '/api/quiz-attempts/' + encodeURIComponent(deviceId) + '?limit=50&_=' + Date.now());
+    var data;
+    if (token) {
+      data = await api('GET', '/api/history?limit=50&_=' + Date.now());
+    } else {
+      data = await api('GET', '/api/quiz-attempts/' + encodeURIComponent(deviceId) + '?limit=50&_=' + Date.now());
+    }
     var attempts = Array.isArray(data) ? data : (data.attempts || data.results || []);
-    attempts = _mergeAttempts(attempts, _readLocalAttempts().concat(_lastSavedAttempt ? [_lastSavedAttempt] : []));
+    if (token) {
+      attempts = _mergeAttempts(attempts, _lastSavedAttempt ? [_lastSavedAttempt] : []);
+    } else {
+      attempts = _mergeAttempts(attempts, _readLocalAttempts().concat(_lastSavedAttempt ? [_lastSavedAttempt] : []));
+    }
     _histAttempts = attempts; // store for detail panel access
     document.getElementById('histCount').textContent = '(' + attempts.length + ')';
     if (!attempts.length) {
