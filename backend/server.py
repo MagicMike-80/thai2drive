@@ -1035,6 +1035,178 @@ def _checkout_mode_for_price(plan_id: str, price: Any) -> str:
     return "payment"
 
 
+# ── RevenueCat webhook secret helper ─────────────────────────────────────────
+
+def _rc_webhook_secret() -> str:
+    """Reads RC_WEBHOOK_SECRET from env. Set this in Railway."""
+    return os.environ.get("RC_WEBHOOK_SECRET", "").strip()
+
+
+# ── RevenueCat webhook ────────────────────────────────────────────────────────
+
+@app.post("/api/rc/webhook")
+async def revenuecat_webhook(request: Request):
+    """
+    Receives RevenueCat server notifications and syncs Premium status to MongoDB.
+
+    Security: RevenueCat sends a shared secret in the Authorization header.
+    Set RC_WEBHOOK_SECRET in Railway to the value from:
+      RevenueCat → Project settings → Webhooks → Shared secret
+
+    Supported events (https://www.revenuecat.com/docs/webhooks):
+      INITIAL_PURCHASE  → grant Premium, set premium_expires_at
+      RENEWAL           → extend Premium, update premium_expires_at
+      CANCELLATION      → revoke Premium
+      EXPIRATION        → revoke Premium
+      UNCANCELLATION    → re-grant Premium (user re-enabled before period end)
+    """
+    import json as _json
+    import hmac as _hmac
+
+    rc_secret = _rc_webhook_secret()
+    if not rc_secret:
+        logger.error("RC_WEBHOOK_SECRET not configured — RevenueCat webhook disabled")
+        raise HTTPException(status_code=503, detail="RevenueCat webhook is not configured")
+
+    # ── Signature verification ────────────────────────────────────────────────
+    # RevenueCat sends the shared secret as a plain Bearer token in Authorization.
+    auth_header = request.headers.get("Authorization", "")
+    provided_secret = auth_header.removeprefix("Bearer ").strip()
+    if not _hmac.compare_digest(provided_secret, rc_secret):
+        logger.warning("rc_webhook: invalid Authorization header — rejected")
+        raise HTTPException(status_code=401, detail="Invalid RevenueCat webhook secret")
+
+    payload_bytes = await request.body()
+    try:
+        event = _json.loads(payload_bytes)
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid JSON payload")
+
+    event_type   = (event.get("event") or {}).get("type", "")
+    event_id     = (event.get("event") or {}).get("id", "") or str(uuid.uuid4())
+    subscriber   = event.get("event", {})
+    app_user_id  = subscriber.get("app_user_id", "")
+    aliases      = subscriber.get("aliases", []) or []
+    expiry_ts    = subscriber.get("expiration_at_ms")  # unix ms or None
+
+    logger.info("rc_webhook received event_type=%s event_id=%s app_user_id=%s",
+                event_type, event_id, app_user_id)
+
+    # ── Idempotency guard ─────────────────────────────────────────────────────
+    already = await db.rc_events.find_one({"event_id": event_id, "handled": True})
+    if already:
+        logger.info("rc_webhook: event %s already handled — skipping", event_id)
+        return {"received": True, "skipped": True}
+
+    # ── Resolve user in MongoDB ───────────────────────────────────────────────
+    # RevenueCat app_user_id is the Thai2Drive user_id (set at purchase time via
+    # Purchases.logIn(userId) in the Expo app). Fall back to email-match via aliases.
+    user = None
+    if app_user_id:
+        user = await db.users.find_one({"id": app_user_id}, {"_id": 0, "id": 1, "email": 1})
+    if not user:
+        # Try aliases list (RC may include email as an alias)
+        for alias in aliases:
+            if "@" in str(alias):
+                user = await db.users.find_one(
+                    {"email": alias.strip().lower()}, {"_id": 0, "id": 1, "email": 1}
+                )
+                if user:
+                    break
+
+    now_iso = datetime.now(timezone.utc).isoformat()
+
+    if not user:
+        logger.warning("rc_webhook: cannot resolve user for app_user_id=%s aliases=%s event=%s",
+                       app_user_id, aliases, event_type)
+        await db.rc_events.update_one(
+            {"event_id": event_id},
+            {"$set": {"event_id": event_id, "type": event_type, "handled": False,
+                      "error": "user_not_found", "processed_at": now_iso}},
+            upsert=True,
+        )
+        # Return 200 to stop RC from retrying an event we can never resolve.
+        return {"received": True, "handled": False, "reason": "user_not_found"}
+
+    user_id = user["id"]
+
+    # ── Handle event ──────────────────────────────────────────────────────────
+    handled = True
+    grant_events   = {"INITIAL_PURCHASE", "RENEWAL", "UNCANCELLATION", "SUBSCRIBER_ALIAS"}
+    revoke_events  = {"CANCELLATION", "EXPIRATION", "BILLING_ISSUE"}
+
+    if event_type in grant_events:
+        expires_at = None
+        if expiry_ts:
+            try:
+                expires_at = datetime.fromtimestamp(expiry_ts / 1000, tz=timezone.utc)
+            except Exception:
+                pass
+
+        update: Dict[str, Any] = {
+            "is_premium": True,
+            "premium_source": "revenuecat",
+            "premium_plan": subscriber.get("product_id", "mobile"),
+            "premium_status": "active",
+            "premium_updated_at": now_iso,
+        }
+        if expires_at:
+            update["premium_expires_at"] = expires_at.isoformat()
+
+        mongo_update: Dict[str, Any] = {"$set": update}
+        # Lifetime / non-expiring purchase: remove expiry field
+        if not expires_at:
+            mongo_update["$unset"] = {"premium_expires_at": ""}
+
+        await db.users.update_one({"id": user_id}, mongo_update)
+        # Mirror to subscriptions collection (same pattern as Stripe)
+        try:
+            await db.subscriptions.update_one(
+                {"user_id": user_id, "source": "revenuecat"},
+                {"$set": {**update, "user_id": user_id, "source": "revenuecat"},
+                 "$setOnInsert": {"created_at": now_iso}},
+                upsert=True,
+            )
+        except Exception as exc:
+            logger.warning("rc_webhook: subscriptions mirror failed user=%s: %s", user_id, exc)
+
+        logger.info("rc_webhook: granted Premium user=%s event=%s expires=%s",
+                    user_id, event_type, expires_at)
+
+    elif event_type in revoke_events:
+        await db.users.update_one(
+            {"id": user_id},
+            {"$set": {"is_premium": False, "premium_status": "canceled",
+                      "premium_updated_at": now_iso}},
+        )
+        try:
+            await db.subscriptions.update_one(
+                {"user_id": user_id, "source": "revenuecat"},
+                {"$set": {"premium_status": "canceled", "canceled_at": now_iso}},
+            )
+        except Exception as exc:
+            logger.warning("rc_webhook: subscriptions cancel mirror failed user=%s: %s", user_id, exc)
+
+        logger.info("rc_webhook: revoked Premium user=%s event=%s", user_id, event_type)
+
+    else:
+        # Informational events (e.g. PRODUCT_CHANGE, TRANSFER) — acknowledge without action
+        logger.info("rc_webhook: no action for event_type=%s user=%s", event_type, user_id)
+        handled = False
+
+    # ── Log event ─────────────────────────────────────────────────────────────
+    await db.rc_events.update_one(
+        {"event_id": event_id},
+        {"$set": {"event_id": event_id, "type": event_type, "user_id": user_id,
+                  "handled": handled, "processed_at": now_iso}},
+        upsert=True,
+    )
+
+    return {"received": True, "handled": handled}
+
+
+# ── Premium grant helpers ─────────────────────────────────────────────────────
+
 async def _set_user_premium(
     user_id: str,
     *,
@@ -1372,7 +1544,7 @@ async def get_my_stats(device_id: str):
     # Aggregate by category across all attempts
     pipeline = [
         {"$match": {
-            "device_id": device_id,
+            "$or": [{"device_id": device_id}, {"user_id": device_id}],
             "total_questions": {"$gt": 0},
             "category": {"$nin": [None, "", "None"]}
         }},
@@ -1400,7 +1572,7 @@ async def get_my_stats(device_id: str):
 
     # Overall totals
     totals = await db.quiz_attempts.aggregate([
-        {"$match": {"device_id": device_id}},
+        {"$match": {"$or": [{"device_id": device_id}, {"user_id": device_id}]}},
         {"$group": {
             "_id": None,
             "total_q":       {"$sum": "$total_questions"},
@@ -1608,7 +1780,25 @@ async def save_quiz_attempt(attempt_data: QuizAttemptCreate):
 @api_router.get("/quiz-attempts/{device_id}")
 async def get_quiz_attempts(device_id: str, limit: int = Query(default=20, le=50)):
     attempts = await db.quiz_attempts.find(
-        {"device_id": device_id}, {"_id": 0}
+        {"$or": [{"device_id": device_id}, {"user_id": device_id}]}, {"_id": 0}
+    ).sort("completed_at", -1).limit(limit).to_list(limit)
+    return attempts
+
+@api_router.get("/history")
+async def get_user_history(
+    limit: int = Query(default=20, le=50),
+    current_user: dict = Depends(get_current_user)
+):
+    user_id = current_user["sub"]
+    user_doc = await db.users.find_one({"id": user_id})
+    device_id = user_doc.get("device_id") if user_doc else None
+    
+    query = {"$or": [{"user_id": user_id}]}
+    if device_id:
+        query["$or"].append({"device_id": device_id})
+        
+    attempts = await db.quiz_attempts.find(
+        query, {"_id": 0}
     ).sort("completed_at", -1).limit(limit).to_list(limit)
     return attempts
 

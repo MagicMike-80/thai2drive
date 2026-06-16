@@ -61,6 +61,34 @@ REQUIRED_FIELDS = [
 VALID_DIFFICULTIES = {"easy", "medium", "hard"}
 VALID_LETTERS      = ["A", "B", "C", "D"]
 
+# ── Language Purity constants ─────────────────────────────────────────────────
+# Thai Unicode block: U+0E00 – U+0E7F
+_THAI_RE = __import__("re").compile(r"[\u0e00-\u0e7f]")
+
+# Minimum number of Thai characters required in a _th field to be considered Thai.
+_THAI_MIN_CHARS = 3
+
+# Fields that MUST contain Thai characters
+_THAI_FIELDS = [
+    "question_th", "explanation_th",
+    "options_th",  # checked individually per option
+]
+# Fields that must NOT contain Thai characters
+_NON_THAI_FIELDS = [
+    "question_no", "explanation_no",
+    "question_en", "explanation_en",
+]
+
+
+def _has_thai(text: str) -> bool:
+    """Return True if *text* contains at least _THAI_MIN_CHARS Thai characters."""
+    return len(_THAI_RE.findall(text)) >= _THAI_MIN_CHARS
+
+
+def _has_any_thai(text: str) -> bool:
+    """Return True if *text* contains even a single Thai character."""
+    return bool(_THAI_RE.search(text))
+
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
 def _ok(msg: str)  -> None: print(f"  ✅ {msg}")
@@ -123,6 +151,45 @@ def _validate_question(q: dict, images_dir: Path) -> list[str]:
         img_path = images_dir / image_val.strip()
         if not img_path.exists():
             errors.append(f"[{qid}] Image file not found: images/{image_val.strip()}")
+
+    # ── Language Purity checks (fail-stop) ───────────────────────────────────
+    # Rule 1: _th fields MUST contain Thai characters.
+    for th_key in ("question_th", "explanation_th"):
+        val = q.get(th_key, "")
+        if isinstance(val, str) and val.strip() and not _has_thai(val):
+            errors.append(
+                f"[{qid}] Language Purity FAIL: '{th_key}' contains no Thai characters "
+                f"(min {_THAI_MIN_CHARS} required). Got: {val[:60]!r}"
+            )
+
+    opts_th = q.get("options_th")
+    if isinstance(opts_th, list):
+        for i, opt in enumerate(opts_th):
+            if isinstance(opt, str) and opt.strip() and not _has_thai(opt):
+                errors.append(
+                    f"[{qid}] Language Purity FAIL: 'options_th[{i}]' contains no Thai characters. "
+                    f"Got: {opt[:40]!r}"
+                )
+
+    # Rule 2: _no and _en fields must NOT contain Thai characters.
+    for non_thai_key in _NON_THAI_FIELDS:
+        val = q.get(non_thai_key, "")
+        if isinstance(val, str) and _has_any_thai(val):
+            errors.append(
+                f"[{qid}] Language Purity FAIL: '{non_thai_key}' must not contain Thai characters. "
+                f"Got: {val[:60]!r}"
+            )
+
+    opts_no = q.get("options_no") or []
+    opts_en = q.get("options_en") or []
+    for lang_label, opts in (("no", opts_no), ("en", opts_en)):
+        if isinstance(opts, list):
+            for i, opt in enumerate(opts):
+                if isinstance(opt, str) and _has_any_thai(opt):
+                    errors.append(
+                        f"[{qid}] Language Purity FAIL: 'options_{lang_label}[{i}]' "
+                        f"must not contain Thai characters. Got: {opt[:40]!r}"
+                    )
 
     return errors
 
