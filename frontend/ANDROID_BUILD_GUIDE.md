@@ -61,8 +61,8 @@ eas build --profile preview --platform android
 ### Steg 6: Opprett in-app produkter i Google Play
 1. Google Play Console → Din app → Monetization → Products → Subscriptions
 2. Opprett/oppdater:
-   - Product ID: `monthly_199` → Pris: 99 NOK/måned
-   - Product ID: `threemonth_399` → Pris: 299 NOK/3 måneder
+   - Product ID: `monthly_99` → Pris: 99 NOK/måned
+   - Product ID: `threemonth_249` → Pris: 249 NOK/3 måneder
    - Product ID: `lifetime_699` → Pris: 699 NOK engangsbetaling
 
 ### Steg 7: Koble RevenueCat til Google Play
@@ -70,7 +70,7 @@ eas build --profile preview --platform android
 2. Package name: `com.thai2drive.app`
 3. Last opp Google Play Service Account Key (JSON)
    - Google Play Console → Settings → API access → Service accounts → Create key
-4. RevenueCat → Products → Koble `monthly_199`, `threemonth_399` og `lifetime_699` til Google Play-produktene
+4. RevenueCat → Products → Koble `monthly_99`, `threemonth_249` og `lifetime_699` til Google Play-produktene
 
 ### Steg 8: Bygg for produksjon
 ```bash
@@ -103,7 +103,7 @@ eas submit --platform android
 1. ✋ Opprett **Google Play Developer-konto** ($25)
 2. ✋ Opprett **Expo/EAS-konto** (gratis)
 3. ✋ Kjør `eas init` (genererer projectId)
-4. ✋ Opprett **Google Play subscriptions/products** (monthly_199, threemonth_399, lifetime_699)
+4. ✋ Opprett **Google Play subscriptions/products** (monthly_99, threemonth_249, lifetime_699)
 5. ✋ Koble **RevenueCat → Google Play** (Service Account Key)
 6. ✋ Kjør `eas build` og `eas submit`
 

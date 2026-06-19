@@ -63,7 +63,7 @@ const bar = StyleSheet.create({
 
 export default function StatsScreen() {
   const router = useRouter();
-  const { language, colors, deviceId } = useAppStore();
+  const { language, colors, deviceId, user } = useAppStore();
   const c = colors;
   const t = TR[language] || TR.no;
   const lang = language as 'no' | 'th' | 'en';
@@ -72,12 +72,13 @@ export default function StatsScreen() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!deviceId) { setLoading(false); return; }
-    api.getMyStats(deviceId)
+    const targetId = user?.id || deviceId;
+    if (!targetId) { setLoading(false); return; }
+    api.getMyStats(targetId)
       .then(setStats)
       .catch(() => setStats(null))
       .finally(() => setLoading(false));
-  }, [deviceId]);
+  }, [deviceId, user]);
 
   const sorted = stats?.by_category ?? [];
   const weakest   = [...sorted].sort((a, b) => a.pct - b.pct).slice(0, 3);

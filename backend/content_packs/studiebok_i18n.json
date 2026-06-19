@@ -1,0 +1,66 @@
+{
+  "collection": "studiebok_chapters",
+  "note": "Studiebok 6 kapitler — trespråklig (no/th/en). Kilde: seed_studiebok.py (content_no uendret). Oversatt av Claude Code (Innholdssjef). HTML-struktur og study-tip-klasser er identiske på alle tre språk. Importeres av Codex — Claude Code skriver aldri til produksjonsdatabasen.",
+  "chapters": [
+    {
+      "order": 1,
+      "icon": "🚦",
+      "title_no": "Kapittel 1 — Trafikkregler",
+      "title_th": "บทที่ 1 — กฎจราจร",
+      "title_en": "Chapter 1 — Traffic Rules",
+      "content_no": "<p>I Norge gjelder <strong>høyrekjøring</strong> — du holder til høyre på veien og møter trafikk fra venstre side.</p><p><strong>Vikeplikt:</strong> Som hovedregel har du vikeplikt for trafikk fra høyre, med mindre skilt eller oppmerking sier noe annet.</p><ul><li>Stopp alltid for rødt lys</li><li>Gult lys = forbered deg på stopp</li><li>Grønt lys = kjør, men pass på fotgjengere</li><li>Blinkende gult = sakte, vær forsiktig</li></ul><div class=\"study-tip\"><strong>Tips:</strong> I rundkjøring har trafikk inne i rundkjøringen forkjørsrett. Du må gi vikeplikt når du kjører inn.</div>",
+      "content_th": "<p>ในประเทศนอร์เวย์ใช้ระบบ<strong>ขับชิดขวา</strong> — คุณขับอยู่ฝั่งขวาของถนน และรถที่สวนมาจะอยู่ทางซ้ายของคุณ</p><p><strong>หน้าที่ให้ทาง:</strong> ตามกฎหลัก คุณต้องให้ทางแก่รถที่มาจากทางขวา เว้นแต่ป้ายจราจรหรือเครื่องหมายบนถนนกำหนดไว้เป็นอย่างอื่น</p><ul><li>หยุดทุกครั้งเมื่อสัญญาณไฟแดง</li><li>ไฟเหลือง = เตรียมตัวหยุด</li><li>ไฟเขียว = ขับไปได้ แต่ระวังคนเดินเท้า</li><li>ไฟเหลืองกะพริบ = ชะลอความเร็ว ขับอย่างระมัดระวัง</li></ul><div class=\"study-tip\"><strong>เคล็ดลับ:</strong> ในวงเวียน รถที่อยู่ในวงเวียนมีสิทธิ์ไปก่อน คุณต้องให้ทางก่อนขับเข้าวงเวียนเสมอ</div>",
+      "content_en": "<p>In Norway, traffic drives on the <strong>right-hand side</strong> — you keep to the right and meet oncoming traffic on your left.</p><p><strong>Duty to yield:</strong> As a main rule, you must yield to traffic coming from the right, unless signs or road markings say otherwise.</p><ul><li>Always stop at a red light</li><li>Yellow light = prepare to stop</li><li>Green light = go, but watch out for pedestrians</li><li>Flashing yellow = slow down and be careful</li></ul><div class=\"study-tip\"><strong>Tip:</strong> In a roundabout, traffic already inside the roundabout has the right of way. You must yield before entering.</div>"
+    },
+    {
+      "order": 2,
+      "icon": "⏱️",
+      "title_no": "Kapittel 2 — Fartsgrenser",
+      "title_th": "บทที่ 2 — ขีดจำกัดความเร็ว",
+      "title_en": "Chapter 2 — Speed Limits",
+      "content_no": "<p>Norges standard fartsgrenser:</p><ul><li><strong>50 km/t</strong> — tettbygd strøk (by og bygd)</li><li><strong>80 km/t</strong> — landevei utenfor tettbygd strøk</li><li><strong>110 km/t</strong> — motorvei med midtdeler</li><li><strong>30 km/t</strong> — skolevei, lekeplasser, boliggater</li></ul><p>Fartsgrensen kan senkes eller heves av skilt. Husk at fartsgrensen er en <strong>maksimumsgrense</strong> — du skal alltid kjøre etter forholdene.</p><div class=\"study-tip\"><strong>Tips:</strong> Ved dårlig vær, mørke eller glatt vei skal du redusere farten selv om du holder lovlig hastighet.</div>",
+      "content_th": "<p>ขีดจำกัดความเร็วมาตรฐานของนอร์เวย์:</p><ul><li><strong>50 กม./ชม.</strong> — เขตชุมชน (ในเมืองและหมู่บ้าน)</li><li><strong>80 กม./ชม.</strong> — ถนนนอกเขตชุมชน</li><li><strong>110 กม./ชม.</strong> — ทางหลวงพิเศษที่มีแนวกั้นกลางถนน</li><li><strong>30 กม./ชม.</strong> — เส้นทางหน้าโรงเรียน สนามเด็กเล่น และถนนในย่านที่อยู่อาศัย</li></ul><p>ป้ายจราจรสามารถลดหรือเพิ่มขีดจำกัดความเร็วได้ จำไว้ว่าขีดจำกัดความเร็วคือ<strong>ความเร็วสูงสุดที่อนุญาต</strong> — คุณต้องปรับความเร็วตามสภาพถนนเสมอ</p><div class=\"study-tip\"><strong>เคล็ดลับ:</strong> เมื่ออากาศไม่ดี ท้องฟ้ามืด หรือถนนลื่น คุณต้องลดความเร็วลง ถึงแม้จะขับไม่เกินที่กฎหมายกำหนดก็ตาม</div>",
+      "content_en": "<p>Norway's standard speed limits:</p><ul><li><strong>50 km/h</strong> — built-up areas (towns and villages)</li><li><strong>80 km/h</strong> — rural roads outside built-up areas</li><li><strong>110 km/h</strong> — motorways with a central barrier</li><li><strong>30 km/h</strong> — school routes, playgrounds, residential streets</li></ul><p>Signs can lower or raise the speed limit. Remember that the speed limit is a <strong>maximum limit</strong> — you must always drive according to the conditions.</p><div class=\"study-tip\"><strong>Tip:</strong> In bad weather, darkness or on slippery roads you must reduce your speed, even if you are within the legal limit.</div>"
+    },
+    {
+      "order": 3,
+      "icon": "🪧",
+      "title_no": "Kapittel 3 — Trafikkskilt",
+      "title_th": "บทที่ 3 — ป้ายจราจร",
+      "title_en": "Chapter 3 — Traffic Signs",
+      "content_no": "<p>Norske trafikkskilt er delt i fire grupper:</p><ul><li><strong>Forbudsskilt</strong> — røde, runde. Forbyr noe (f.eks. parkering, innkjøring)</li><li><strong>Påbudsskilt</strong> — blå, runde. Påbyr noe (f.eks. kjøreretning)</li><li><strong>Opplysningsskilt</strong> — blå, firkantede. Gir informasjon</li><li><strong>Advarselsskilt</strong> — gule/hvite, trekantede. Varsler om fare</li></ul><div class=\"study-tip\"><strong>Tips:</strong> En rød trekant med utropstegn betyr generell advarsel om fare. Vær ekstra forsiktig.</div>",
+      "content_th": "<p>ป้ายจราจรของนอร์เวย์แบ่งออกเป็นสี่กลุ่ม:</p><ul><li><strong>ป้ายห้าม</strong> — สีแดง ทรงกลม ห้ามทำบางอย่าง (เช่น ห้ามจอดรถ ห้ามเข้า)</li><li><strong>ป้ายบังคับ</strong> — สีน้ำเงิน ทรงกลม บังคับให้ทำบางอย่าง (เช่น ทิศทางที่ต้องขับ)</li><li><strong>ป้ายแนะนำ</strong> — สีน้ำเงิน ทรงสี่เหลี่ยม ให้ข้อมูล</li><li><strong>ป้ายเตือน</strong> — สีเหลือง/ขาว ทรงสามเหลี่ยม เตือนถึงอันตราย</li></ul><div class=\"study-tip\"><strong>เคล็ดลับ:</strong> สามเหลี่ยมสีแดงที่มีเครื่องหมายอัศเจรีย์ หมายถึงคำเตือนอันตรายทั่วไป ให้ระมัดระวังเป็นพิเศษ</div>",
+      "content_en": "<p>Norwegian traffic signs are divided into four groups:</p><ul><li><strong>Prohibition signs</strong> — red, round. Forbid something (e.g. parking, entry)</li><li><strong>Mandatory signs</strong> — blue, round. Require something (e.g. direction of travel)</li><li><strong>Information signs</strong> — blue, square. Provide information</li><li><strong>Warning signs</strong> — yellow/white, triangular. Warn of danger</li></ul><div class=\"study-tip\"><strong>Tip:</strong> A red triangle with an exclamation mark means a general warning of danger. Be extra careful.</div>"
+    },
+    {
+      "order": 4,
+      "icon": "🍺",
+      "title_no": "Kapittel 4 — Alkohol og rus",
+      "title_th": "บทที่ 4 — แอลกอฮอล์และสารเสพติด",
+      "title_en": "Chapter 4 — Alcohol and Drugs",
+      "content_no": "<p>Norge har <strong>strenge regler</strong> mot kjøring i ruspåvirket tilstand:</p><ul><li>Promillegrense: <strong>0,2 promille</strong></li><li>Under 0,5 promille: bot og kjøreforbud</li><li>Over 0,5 promille: bot + betinget fengsel</li><li>Over 1,2 promille: ubetinget fengsel</li></ul><p>Politiet kan stoppe enhver bilist og ta alkotest uten grunn.</p><div class=\"study-tip\"><strong>Tips:</strong> Alkohol er ikke det eneste som gir promillestraff — narkotika og visse medisiner teller også.</div>",
+      "content_th": "<p>นอร์เวย์มี<strong>กฎที่เข้มงวดมาก</strong>ต่อการขับขี่ขณะมึนเมา:</p><ul><li>ขีดจำกัดแอลกอฮอล์ในเลือด: <strong>0.2 พรอมิลล์</strong></li><li>ต่ำกว่า 0.5 พรอมิลล์: โทษปรับและถูกห้ามขับรถ</li><li>เกิน 0.5 พรอมิลล์: โทษปรับ + จำคุกโดยรอลงอาญา</li><li>เกิน 1.2 พรอมิลล์: จำคุกโดยไม่รอลงอาญา</li></ul><p>ตำรวจสามารถเรียกผู้ขับขี่คนใดก็ได้ให้หยุดตรวจวัดแอลกอฮอล์ โดยไม่จำเป็นต้องมีเหตุสงสัย</p><div class=\"study-tip\"><strong>เคล็ดลับ:</strong> ไม่ใช่เพียงแอลกอฮอล์เท่านั้นที่มีโทษ — ยาเสพติดและยารักษาโรคบางชนิดก็เข้าข่ายความผิดเดียวกันด้วย</div>",
+      "content_en": "<p>Norway has <strong>strict rules</strong> against driving under the influence:</p><ul><li>Blood alcohol limit: <strong>0.2 per mille</strong></li><li>Below 0.5 per mille: fine and driving ban</li><li>Above 0.5 per mille: fine + suspended prison sentence</li><li>Above 1.2 per mille: unconditional prison sentence</li></ul><p>The police can stop any driver and carry out a breathalyser test without any specific reason.</p><div class=\"study-tip\"><strong>Tip:</strong> Alcohol is not the only thing that counts — narcotics and certain medicines are also punishable in the same way.</div>"
+    },
+    {
+      "order": 5,
+      "icon": "🦺",
+      "title_no": "Kapittel 5 — Sikkerhet og verneutstyr",
+      "title_th": "บทที่ 5 — ความปลอดภัยและอุปกรณ์นิรภัย",
+      "title_en": "Chapter 5 — Safety and Protective Equipment",
+      "content_no": "<p><strong>Setebelte</strong> er påbudt for alle i kjøretøyet, både foran og bak. Sjåfør er ansvarlig for at passasjerer under 15 år bruker setebelte eller godkjent sikringsutstyr.</p><ul><li>Barn under 4 år: godkjent barnestol</li><li>Barn 4–135 cm: barnesete eller bilstol</li><li>Mobiltelefon uten håndfri er forbudt under kjøring</li><li>Refleks og varseltrekant i bilen er krav ved uhell</li></ul><div class=\"study-tip\"><strong>Tips:</strong> Sett alltid på varselblink og sett ut varseltrekant 50–150 m bak bilen ved stopp på vei.</div>",
+      "content_th": "<p><strong>เข็มขัดนิรภัย</strong>เป็นข้อบังคับสำหรับทุกคนในรถ ทั้งเบาะหน้าและเบาะหลัง ผู้ขับขี่มีหน้าที่รับผิดชอบให้ผู้โดยสารอายุต่ำกว่า 15 ปีคาดเข็มขัดนิรภัยหรือใช้อุปกรณ์นิรภัยที่ได้รับการรับรอง</p><ul><li>เด็กอายุต่ำกว่า 4 ปี: ใช้คาร์ซีทที่ได้รับการรับรอง</li><li>เด็กอายุ 4 ปีขึ้นไปที่สูงไม่เกิน 135 ซม.: ใช้เบาะนั่งเสริมหรือคาร์ซีท</li><li>ห้ามใช้โทรศัพท์มือถือโดยไม่มีอุปกรณ์แฮนด์ฟรีขณะขับรถ</li><li>ต้องมีเสื้อสะท้อนแสงและป้ายสามเหลี่ยมสะท้อนแสงในรถไว้ใช้เมื่อเกิดเหตุ</li></ul><div class=\"study-tip\"><strong>เคล็ดลับ:</strong> เมื่อต้องจอดรถบนถนน ให้เปิดไฟฉุกเฉินและวางป้ายสามเหลี่ยมสะท้อนแสงไว้ด้านหลังรถ 50–150 เมตรเสมอ</div>",
+      "content_en": "<p><strong>Seat belts</strong> are mandatory for everyone in the vehicle, both front and back. The driver is responsible for ensuring that passengers under 15 use a seat belt or approved safety equipment.</p><ul><li>Children under 4: approved child car seat</li><li>Children aged 4 and up, shorter than 135 cm: booster seat or car seat</li><li>Using a mobile phone without hands-free is forbidden while driving</li><li>A reflective vest and warning triangle must be kept in the car for emergencies</li></ul><div class=\"study-tip\"><strong>Tip:</strong> If you have to stop on the road, always turn on your hazard lights and place the warning triangle 50–150 m behind the car.</div>"
+    },
+    {
+      "order": 6,
+      "icon": "🅿️",
+      "title_no": "Kapittel 6 — Parkering",
+      "title_th": "บทที่ 6 — การจอดรถ",
+      "title_en": "Chapter 6 — Parking",
+      "content_no": "<p>Generelle parkeringsregler i Norge:</p><ul><li>Ikke parker nærmere enn <strong>5 m</strong> fra kryss eller avkjørsel</li><li>Ikke parker foran inn- og utkjøring</li><li>Ikke parker på gangvei, sykkelvei, eller fortau (med mindre tillatt)</li><li>Stoppforbud-skilt = ingen stopp i det hele tatt</li><li>Parkeringsforbud-skilt = kortstopp for av/påstigning er OK</li></ul><div class=\"study-tip\"><strong>Tips:</strong> Gul stripe langs kantstein betyr parkeringsforbud. Hvit stripe betyr parkeringsregulering.</div>",
+      "content_th": "<p>กฎการจอดรถทั่วไปในนอร์เวย์:</p><ul><li>ห้ามจอดรถใกล้ทางแยกหรือทางเข้า-ออกในระยะน้อยกว่า <strong>5 เมตร</strong></li><li>ห้ามจอดรถขวางทางเข้า-ออก</li><li>ห้ามจอดรถบนทางเดินเท้า ทางจักรยาน หรือบาทวิถี (เว้นแต่มีป้ายอนุญาต)</li><li>ป้ายห้ามหยุดรถ = ห้ามหยุดรถโดยเด็ดขาด</li><li>ป้ายห้ามจอดรถ = หยุดชั่วคราวเพื่อรับ-ส่งผู้โดยสารได้</li></ul><div class=\"study-tip\"><strong>เคล็ดลับ:</strong> เส้นสีเหลืองตามขอบทางหมายถึงห้ามจอดรถ เส้นสีขาวหมายถึงมีการควบคุมการจอดรถ</div>",
+      "content_en": "<p>General parking rules in Norway:</p><ul><li>Do not park closer than <strong>5 m</strong> to a junction or exit</li><li>Do not park in front of entrances and exits</li><li>Do not park on footpaths, cycle paths or pavements (unless permitted)</li><li>No-stopping sign = no stopping at all</li><li>No-parking sign = a brief stop to pick up or drop off passengers is OK</li></ul><div class=\"study-tip\"><strong>Tip:</strong> A yellow line along the kerb means parking is forbidden. A white line means parking is regulated.</div>"
+    }
+  ]
+}

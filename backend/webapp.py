@@ -112,9 +112,10 @@ a { color:inherit; text-decoration:none; }
   background:rgba(11,18,38,.92);
   backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
   border-bottom:1px solid var(--border);
-  display:none; align-items:center;
+  display:flex; align-items:center;
   padding:0 16px; gap:12px; z-index:50;
 }
+
 [data-theme="light"] #topBar { background:rgba(241,245,249,.95); }
 .top-logo {
   display:flex; align-items:center; gap:8px;
@@ -2636,7 +2637,7 @@ a { color:inherit; text-decoration:none; }
       <button class="lang-btn" id="topLangEN" onclick="setLang('en')" title="English" style="width:36px;height:36px">
         <span class="cflag"><svg viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg"><rect width="60" height="30" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#C8102E" stroke-width="4"/><rect y="11" width="60" height="8" fill="#fff"/><rect x="26" width="8" height="30" fill="#fff"/><rect y="12" width="60" height="6" fill="#C8102E"/><rect x="27" width="6" height="30" fill="#C8102E"/></svg></span>
       </button>
-      <button onclick="showTab('settings')" title="Innstillinger" style="width:34px;height:34px;border-radius:50%;border:none;background:rgba(255,255,255,.06);color:var(--muted);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,color .2s;flex-shrink:0;" onmouseover="this.style.background='rgba(255,255,255,.12)';this.style.color='var(--text)'" onmouseout="this.style.background='rgba(255,255,255,.06)';this.style.color='var(--muted)'">⚙️</button>
+      <button id="topSettingsBtn" onclick="showTab('settings')" title="Innstillinger" style="display:none;width:34px;height:34px;border-radius:50%;border:none;background:rgba(255,255,255,.06);color:var(--muted);font-size:16px;cursor:pointer;align-items:center;justify-content:center;transition:background .2s,color .2s;flex-shrink:0;" onmouseover="this.style.background='rgba(255,255,255,.12)';this.style.color='var(--text)'" onmouseout="this.style.background='rgba(255,255,255,.06)';this.style.color='var(--muted)'">⚙️</button>
     </div>
   </div>
 
@@ -3178,7 +3179,7 @@ a { color:inherit; text-decoration:none; }
           <div class="paywall-price-card" onclick="selectPlan('three_months',this)" data-plan="three_months" style="position:relative">
             <div class="ppc-badge" data-key="pw_best_value">Best verdi</div>
             <div class="ppc-period" data-key="pw_three_months">3 måneder</div>
-            <div class="ppc-price" data-price-plan="three_months">299 kr</div>
+            <div class="ppc-price" data-price-plan="three_months">249 kr</div>
             <div class="ppc-per" data-key="pw_per_three_months">per 3 måneder</div>
           </div>
           <div class="paywall-price-card" onclick="selectPlan('lifetime',this)" data-plan="lifetime">
@@ -3918,7 +3919,7 @@ function catName(raw) {
 
 var PREMIUM_PRICING = {
   monthly: { display:'99 kr', period:{no:'per måned', th:'ต่อเดือน', en:'per month'} },
-  three_months: { display:'299 kr', period:{no:'per 3 måneder', th:'ต่อ 3 เดือน', en:'per 3 months'} },
+  three_months: { display:'249 kr', period:{no:'per 3 måneder', th:'ต่อ 3 เดือน', en:'per 3 months'} },
   lifetime: { display:'699 kr', period:{no:'engangsbetaling', th:'จ่ายครั้งเดียว', en:'one-time payment'} }
 };
 
@@ -3967,6 +3968,7 @@ function showScreen(id) {
 function enterApp() {
   document.getElementById('topBar').style.display = 'flex';
   document.getElementById('bottomNav').style.display = 'flex';
+  document.getElementById('topSettingsBtn').style.display = 'flex';
   loadAccessStatus();
   showTab('home');
 }
@@ -4483,8 +4485,9 @@ function logout() {
   if (!confirm(t('logout_confirm'))) return;
   _ls.remove('t2d_token');
   token = null; user = null; deviceId = null;
-  document.getElementById('topBar').style.display = 'none';
+  document.getElementById('topBar').style.display = 'flex';
   document.getElementById('bottomNav').style.display = 'none';
+  document.getElementById('topSettingsBtn').style.display = 'none';
   catsLoaded = false;
   showScreen('screenAuth');
   switchTab('login');
@@ -4663,8 +4666,8 @@ function showPaywall() {
   stopExamTimer();
   applyUILang();
   showScreen('screenPaywall');
-  // Hide top/bottom nav while paywall is shown
-  document.getElementById('topBar').style.display = 'none';
+  // Hide bottom nav while paywall is shown
+  document.getElementById('topBar').style.display = 'flex';
   document.getElementById('bottomNav').style.display = 'none';
 }
 

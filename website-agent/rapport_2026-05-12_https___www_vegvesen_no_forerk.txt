@@ -1,0 +1,121 @@
+URL: https://www.vegvesen.no/forerkort/ta-forerkort/teoriproven/
+Dato: 12.5.2026, 19:37:40
+Oppdrag: finn offisielle spørsmål, pensum, kategorier for teoriprøven
+
+# 📊 Analyse av vegvesen.no/forerkort/ta-forerkort/teoriproven/
+
+⚠️ **VIKTIG OBSERVASJON:** URL-en du oppga returnerer en **404-feilside** ("Nettsiden finnes ikke"). Innholdet du ber meg analysere – offisielle spørsmål, pensum og kategorier for teoriprøven – finnes **ikke** på denne URL-en. Den korrekte URL-en er sannsynligvis flyttet til et annet sted på vegvesen.no.
+
+Jeg analyserer det jeg kan se, og gir deretter en grundig vurdering av oppdraget basert på generell kunnskap om Statens vegvesen og teoriprøven.
+
+---
+
+## 🌐 HVA ER DETTE?
+
+Dette er **Statens vegvesens offisielle 404-feilside**. Statens vegvesen er den norske statlige etaten som forvalter veinettet og fører tilsyn med førerkort, kjøretøy og trafikksikkerhet.
+
+- **Målgruppe (egentlig side):** Personer som skal ta førerkort i Norge og forberede seg til teoriprøven
+- **Hva siden tilbyr nå:** Kun en feilmelding med lenker til forsiden, søk, kontaktinformasjon og språkvalg
+- **Formål med vegvesen.no generelt:** Offentlig informasjonsportal for trafikanter, bilister og førerkortkandidater
+
+## ✨ HOVEDFUNKSJONER OG FEATURES
+
+Fra det jeg ser på 404-siden:
+- **Hovednavigasjon** med kategorier: Reiseinformasjon, Vei og skilt, Trafikksikkerhet, Kjøp og salg, Eie og vedlikeholde, Yrkestransport, Ta førerkort, Har førerkort
+- **Søkefunksjon** (GET-form mot `/sok/`)
+- **Cookie-samtykke** (Cookiebot)
+- **Flerspråklig støtte:** Norsk bokmål, nynorsk (utilgjengelig), engelsk
+- **Chatfunksjon** (Kindly-chatbot)
+- **Lenker til sosiale medier** og kontaktinformasjon
+- **Tilgjengelighetserklæring** (offentlig sektor må følge WCAG)
+
+## 🛠️ TECH STACK OG TEKNOLOGI
+
+Fra scripts og oppsett kan jeg utlede:
+- **Frontend:** Sannsynligvis **Vue.js eller lignende SPA-rammeverk** (basert på `entry-client`, `framework.component`, `global.component` – typisk Vite-build med komponentstruktur)
+- **Build tool:** **Vite** (filnavn med hash som `-DOpSEovg.js`)
+- **Analytics:** Google Tag Manager (GTM-5FKSPBXS), Siteimprove Analytics
+- **Cookie-samtykke:** Cookiebot
+- **Chat/AI:** Kindly (norsk chatbot-leverandør)
+- **CMS:** Sannsynligvis **EPiServer/Optimizely** (TinyMCE er nevnt – vanlig i EPiServer-stack)
+- **Hosting:** Statens egen infrastruktur, sannsynligvis Azure
+- **Backend:** Trolig **.NET** (vanlig i offentlig norsk sektor + EPiServer-indikasjon)
+
+## 👥 BRUKERFLYT (for teoriprøveinformasjon)
+
+Typisk reise for en førerkortkandidat:
+1. **Inngang** → Google-søk "teoriprøven" eller vegvesen.no forside
+2. **Navigasjon** → "Ta førerkort" → velg førerkortklasse (B, A1, A2, MC etc.)
+3. **Lese om teoriprøven** → krav, kostnad, hva som testes
+4. **Bestille time** → via "Din side" på vegvesen.no (BankID-innlogging)
+5. **Betale** → kortbetaling for prøven
+6. **Møte opp på trafikkstasjon** → ta prøven på terminal
+
+## 💰 FORRETNINGSMODELL
+
+Dette er en **offentlig etat**, ikke kommersiell:
+- Selve informasjonen er **gratis**
+- **Teoriprøven koster ca. 720 kr** (2024-priser, kan endres)
+- **Praktisk prøve ca. 1 240 kr**
+- Finansiert via skatter og gebyrer
+
+## 🏗️ HVIS JEG SKAL BYGGE/KLONE DETTE
+
+Forutsatt at du vil bygge en **teoriprøve-treningsapp** (siden offisielle spørsmål ikke er offentlig tilgjengelig):
+
+**Du trenger:**
+- Database med øvingsspørsmål (må lages selv eller lisensieres fra f.eks. teoritentamen.no, NAF, Trygg Trafikk)
+- Bilder av trafikkskilt og situasjoner
+- Quiz-motor med tidtaking (teoriprøven har 45 spørsmål, 90 minutter, krav om 85% rett)
+- Brukerkonto for progresjon
+
+**Anbefalt stack:**
+- **Frontend:** Next.js / SvelteKit
+- **Backend:** Node.js / Supabase
+- **Database:** PostgreSQL
+- **Betaling:** Stripe / Vipps
+- **Hosting:** Vercel / Railway
+
+**Kompleksitet:** **Middels**
+- MVP: 2-4 uker
+- Polert produkt med innholdsproduksjon: 3-6 måneder
+
+**Viktigste fokus:**
+1. **Innhold/spørsmålskvalitet** (det er her konkurrentene vinner)
+2. **Realistisk simulering** av faktisk prøvesetting
+3. **Adaptiv læring** (mer fokus på svake områder)
+4. **Mobil-først design**
+
+## ⚡ UNIKE TING / DIFFERENTIATORER
+
+For Statens vegvesen:
+- **Offisiell autoritet** – ingen kan kopiere deres juridiske rolle
+- **Eneste sted å faktisk ta prøven**
+- **BankID-integrasjon** og kobling mot Folkeregisteret
+- **Offisielle spørsmålsbanker** holdes **hemmelige** – dette er en bevisst strategi for å hindre pugging
+
+## 📋 KONKLUSJON OG ANBEFALING
+
+### Om selve oppdraget:
+
+**De offisielle teoriprøvespørsmålene er IKKE offentlig tilgjengelige.** Dette er bevisst politikk fra Statens vegvesen for å sikre prøvens integritet. Du finner derfor ikke disse på nettsiden – verken på riktig URL eller den brutte URL-en du oppga.
+
+### Hva som faktisk finnes offentlig (pensum/kategorier):
+
+Pensum for **klasse B (personbil)** dekker:
+1. **Trafikkregler** (skiltforskriften, trafikkreglene)
+2. **Trafikkskilt** (fareskilt, forbudsskilt, påbudsskilt, opplysningsskilt)
+3. **Kjøretøykunnskap** (vedlikehold, last, dekk)
+4. **Førstehjelp og ulykker**
+5. **Miljø og økonomisk kjøring**
+6. **Mennesket i trafikken** (rus, trøtthet, oppmerksomhet)
+7. **Trafikkopplæringens 4 trinn** (grunnleggende → samhandling)
+
+### Mine anbefalinger:
+
+1. **Finn korrekt URL:** Søk på vegvesen.no etter "teoriprøven" – innholdet er flyttet
+2. **For øvingsspørsmål:** Bruk lisensierte tjenester som **teoritentamen.no**, **NAF teoriprøve**, **Trafikkskolen.no**
+3. **For offisielt pensum:** Last ned **læreplanen for klasse B** fra vegvesen.no (PDF) – denne er offentlig
+4. **Hvis du bygger et produkt:** Du må produsere/lisensiere ditt eget spørsmålssett – det offisielle settet er utilgjengelig av juridiske og etiske grunner
+
+**Vil du at jeg skal foreslå en konkret URL-struktur eller hjelpe deg finne det offisielle læreplandokumentet?**

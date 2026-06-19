@@ -121,7 +121,7 @@ eas build --platform android --profile production --clear-cache
 | Full beskrivelse (4000 tegn) | ⏳ Foreslått under |
 | Innholdsvurdering (Content Rating) | 🔜 Du fyller ut i Play Console |
 | Målaldersgruppe | 🔜 Vanligvis `Alle` / `16+` |
-| Innkjøp i app (in-app products) | 🔜 `monthly_199`, `threemonth_399`, `lifetime_699` |
+| Innkjøp i app (in-app products) | 🔜 `monthly_99`, `threemonth_249`, `lifetime_699` |
 
 ---
 
@@ -168,8 +168,8 @@ Ny test hver dag med 5 spørsmål for å holde formen oppe.
 Få 10 gratis spørsmål hver dag – for alltid. Ingen kredittkort, ingen registrering nødvendig.
 
 ⭐ Premium – når du er klar
-• 199 kr / måned – Ubegrenset tilgang
-• 399 kr / 3 måneder – Beste verdi (spar 34%)
+• 99 kr / måned – Ubegrenset tilgang
+• 249 kr / 3 måneder – Beste verdi (spar 16%)
 • 699 kr / livstid – Betal én gang, bruk for alltid
 
 Ingen annonser. Ingen distraksjoner. Bare fokusert øving.

@@ -4213,6 +4213,78 @@ async def admin_delete_podcast(podcast_id: str, _: dict = Depends(require_admin)
     return {"message": "Deleted", "id": podcast_id}
 
 
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# GLOSSARY — bilingual traffic-term dictionary (NO/TH/EN)
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+def _serialize_glossary(doc: dict) -> dict:
+    doc.pop("_id", None)
+    return doc
+
+
+@api_router.get("/glossary")
+async def get_glossary(lang: str = "no", search: str = ""):
+    """Return all active glossary entries, optionally filtered by search string."""
+    query: dict = {"active": True}
+    if search.strip():
+        search_clean = search.strip()
+        query["$or"] = [
+            {"term_no": {"$regex": search_clean, "$options": "i"}},
+            {"term_th": {"$regex": search_clean, "$options": "i"}},
+            {"term_en": {"$regex": search_clean, "$options": "i"}},
+        ]
+    results = await db.learning_glossary.find(query).sort("term_no", 1).to_list(200)
+    return [_serialize_glossary(r) for r in results]
+
+
+@api_router.get("/glossary/{term_id}")
+async def get_glossary_term(term_id: str):
+    doc = await db.learning_glossary.find_one({"id": term_id, "active": True})
+    if not doc:
+        raise HTTPException(status_code=404, detail="Term not found")
+    return _serialize_glossary(doc)
+
+
+@api_router.get("/admin/glossary")
+async def admin_list_glossary(_: dict = Depends(require_admin)):
+    results = await db.learning_glossary.find({}).sort("term_no", 1).to_list(500)
+    return [_serialize_glossary(r) for r in results]
+
+
+@api_router.post("/admin/glossary")
+async def admin_create_glossary_term(data: dict, _: dict = Depends(require_admin)):
+    term = {
+        "id": str(uuid.uuid4()),
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "active": True,
+        "term_no": "", "term_th": "", "term_en": "",
+        "definition_no": "", "definition_th": "", "definition_en": "",
+        "example_no": "", "example_th": "", "example_en": "",
+        "topic_tags": [],
+        **data,
+    }
+    await db.learning_glossary.insert_one(term)
+    return _serialize_glossary(term)
+
+
+@api_router.patch("/admin/glossary/{term_id}")
+async def admin_update_glossary_term(term_id: str, data: dict, _: dict = Depends(require_admin)):
+    if not data:
+        raise HTTPException(status_code=400, detail="No fields to update")
+    result = await db.learning_glossary.update_one({"id": term_id}, {"$set": data})
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Term not found")
+    return {"message": "Updated", "id": term_id}
+
+
+@api_router.delete("/admin/glossary/{term_id}")
+async def admin_delete_glossary_term(term_id: str, _: dict = Depends(require_admin)):
+    result = await db.learning_glossary.delete_one({"id": term_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Term not found")
+    return {"message": "Deleted", "id": term_id}
+
+
 class TrafficSignCreate(BaseModel):
     group: int
     name: Dict[str, str]           # {no, th, en}

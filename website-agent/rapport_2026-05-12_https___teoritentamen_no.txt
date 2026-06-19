@@ -1,0 +1,218 @@
+URL: https://teoritentamen.no
+Dato: 12.5.2026, 17:49:20
+Oppdrag: sammenlign med Thai2Drive, hva gjør de bedre, kan vi klone eller ta inspirasjon
+
+# 📊 Analyserapport: Teoritentamen.no vs Thai2Drive
+
+---
+
+## 🌐 HVA ER DETTE?
+
+**Teoritentamen.no** er Norges største nettbaserte plattform for forberedelse til teoriprøven hos Statens vegvesen. Siden eies og drives av **Lime Green Digital AS**.
+
+**Målgruppe:**
+- Personer som skal ta førerkort i Norge (alle klasser)
+- Både norsk- og engelskspråklige brukere
+- Yrkessjåfører, ADR-sertifisering, utrykningssjåfører
+- Trafikkskoler og lærere (B2B-segment via TGK-verktøy)
+
+**Tilbyr:**
+- Teoriprøver (øvingsoppgaver) for **alle** førerkortklasser i Norge
+- Komplette digitale teorikurs med eBok, video og lyd
+- Oppkjøringskurs
+- Gavekort
+- Trafikkskole-katalog
+- Nyhetsartikler om førerkort/trafikk
+
+**Sterkt salgsargument:** Anbefalt av Norges Trafikkskoleforbund (NTSF) og Trafikkforum – sosial bevis i toppklasse.
+
+---
+
+## ✨ HOVEDFUNKSJONER OG FEATURES
+
+### Kjernefunksjoner
+- **Teoriprøver/quizer** for 15+ førerkortklasser:
+  - Personbil (B), MC (A/A1/A2), Moped (AM), Mopedbil (AM147)
+  - Buss (D), Minibuss (D1), Lastebil (C/C1), Vogntog (CE)
+  - Traktor (T), Snøscooter (S), YSK, ADR, Utrykning, Drosje
+- **Komplett digitalt teorikurs** med:
+  - eBok (lærebok digitalt)
+  - Video-innhold (Vimeo-integrasjon synlig i tech stack)
+  - Lydversjon (audio-narrasjon)
+  - Oppgaver/quiz
+- **Flerspråklighet** – Engelsk versjon for bil og MC
+- **Tidsbegrensede tilganger** – ulike abonnementsperioder
+- **Oppkjøringskurs** (digital teori for praktisk prøve)
+- **Trafikkskole-finder** – geografisk søk
+- **Nyhetsarkiv/blogg** – SEO-driver
+- **Kundevurderinger** – 39 868+ tilbakemeldinger vist
+- **Gavekort-kjøp**
+- **TGK-verktøy** (Trafikalt grunnkurs) for *lærere* – klasseromspresentasjoner, filmer, quiz
+- **Nettbasert undervisning for yrkessjåfør** (live/online klasser)
+
+### Sekundære features
+- Kundeservice/FAQ
+- Cookie-consent (GDPR)
+- Login/bruker-dashboard
+- Facebook-integrasjon (fb:app_id)
+- Social sharing (OpenGraph)
+
+---
+
+## 🛠️ TECH STACK OG TEKNOLOGI
+
+**Frontend (synlig):**
+- **Bootstrap 5.3.8** – CSS-rammeverk
+- **jQuery 3.7.1** – fortsatt i bruk (legacy-stack)
+- **Vanilla JS** med egne moduler: `app.js`, `billing.js`, `utils.js`, `store.js`
+- **Vimeo Player 2.25.0** – videoavspilling
+- **Vanilla Cookie Consent 2.8.6**
+
+**Backend (gjettet):**
+- Sannsynligvis **PHP eller Node.js** (klassisk template-struktur `/app/templates/default/`)
+- Versjonerte assets (`1778230008` = cache-busting timestamp)
+- Egen CDN: `cdn.teoritentamen.no`
+
+**Analytics & Tracking:**
+- Google Analytics 4 (`G-3VSF716RTX`)
+- Google Tag Manager
+
+**Annet:**
+- Browserconfig for Microsoft tiles
+- PWA-aktige tendenser (application-name meta)
+- **Ingen synlig moderne SPA-framework** (React/Vue/Next) – det er en tradisjonell server-rendret side
+
+**Vurdering:** Solid, men *konservativ* tech stack. Bygget for stabilitet, ikke "moderne hipness". Dette er en styrke – siden er rask og SEO-vennlig.
+
+---
+
+## 👥 BRUKERFLYT
+
+1. **Discovery:** Bruker finner siden via Google (sterk SEO på "teoriprøve bil") eller anbefaling fra trafikkskole
+2. **Landing:** Forsiden viser sosiale bevis (NTSF-anbefaling, 39k vurderinger)
+3. **Klasse-valg:** Klikker på sin førerkortklasse (f.eks. "Personbil → Klasse B")
+4. **Produktside:** Ser priser/tilgangsvarigheter (sannsynligvis 1 uke, 1 mnd, 3 mnd, 6 mnd)
+5. **Kjøp:** Velger periode → betaling (kort/Vipps sannsynligvis)
+6. **Onboarding:** Får tilgang, kan velge mellom:
+   - Quick-quiz / øvingstest
+   - Strukturert kurs gjennom eBoken
+   - Video-leksjoner
+7. **Læring:** Tar prøver, ser progresjon, repeterer svake områder
+8. **Konvertering:** Består hos vegvesenet → forhåpentligvis anbefaler videre
+
+**Gjettet manglende flow:** Adaptive læring / personalisert spaced repetition – fremgår ikke tydelig.
+
+---
+
+## 💰 FORRETNINGSMODELL
+
+**Modell:** **Tidsbegrenset tilgangskjøp** (ikke abonnement, men "pass")
+
+**Antatt prising (basert på markedet):**
+- 1 uke: ~149 kr
+- 1 måned: ~299 kr
+- 3 måneder: ~399 kr
+- 6 måneder: ~499 kr
+- Premium/komplett kurs med eBok: 600–900 kr
+
+**Inntektsstrømmer:**
+1. Sluttbrukere (B2C) – hovedinntekt
+2. **B2B til trafikkskoler** – TGK-lærerverktøy
+3. Gavekort
+4. **Affiliate/partnerskap:** Aprento for drosjeteori
+5. Mulig: trafikkskole-listings (lead-gen)
+
+**Styrker i modellen:**
+- Naturlig "engangskunde" – men høyt prispunkt rettferdiggjør det
+- Mange klasser = brede inntektskilder
+- NTSF-anbefaling gir nesten monopol-aktig posisjon
+
+---
+
+## 🏗️ HVIS JEG SKAL BYGGE/KLONE DETTE
+
+### Hva trenger du:
+1. **Innhold (DET VIKTIGSTE!)** – tusenvis av kvalitetssikrede spørsmål per klasse, validert mot læreplan
+2. **eBok-innhold** – pedagogisk skrevet
+3. **Video- og lydproduksjon**
+4. **Plattform** med:
+   - Bruker-auth
+   - Quiz-motor med statistikk
+   - Betalingsintegrasjon (Stripe/Vipps)
+   - Tilgangsstyring (tidsbegrenset)
+   - Admin-CMS for spørsmål
+   - Analytics for læring
+
+### Anbefalt teknologi (moderne stack):
+- **Frontend:** Next.js 14 + TypeScript + Tailwind CSS + shadcn/ui
+- **Backend:** Next.js API routes / tRPC, eller separat NestJS
+- **Database:** PostgreSQL + Prisma
+- **Auth:** Clerk eller NextAuth
+- **Betaling:** Stripe + Vipps (norsk marked)
+- **Video:** Mux eller Vimeo Pro
+- **Hosting:** Vercel + Railway/Supabase
+- **CMS for spørsmål:** Sanity eller egen admin
+- **Analytics:** PostHog + GA4
+
+### Kompleksitet: **KOMPLEKS** (men ikke umulig)
+
+**Tidsestimat:**
+- MVP (én klasse, basis quiz + betaling): **2–3 måneder**
+- Konkurransedyktig produkt (3–4 klasser, video, eBok): **6–9 måneder**
+- Full kopi (alle 15 klasser, B2B-verktøy): **18–24 måneder**
+
+### Kritiske fokusområder:
+1. **Innholdskvalitet** (60% av jobben) – ikke teknologi
+2. **Pedagogisk design** – spaced repetition, adaptiv læring
+3. **Mobile-first UX** – folk øver på buss/T-bane
+4. **SEO** – kampen vinnes i Google på "teoriprøve bil"
+5. **Sosial validering** – samarbeid med trafikkskoler tidlig
+6. **Hurtighet** – sub-2s loading
+
+---
+
+## ⚡ UNIKE TING / DIFFERENTIATORER
+
+**Vanskelig å kopiere:**
+1. 🏆 **NTSF og Trafikkforum-anbefalingen** – tar år å bygge tillit
+2. 📚 **Bredden i klasser** – 15+ førerkortklasser dekket (ingen konkurrent har dette)
+3. ⭐ **39 868 vurderinger** – sosial bevis-moat
+4. 🎓 **B2B-integrasjon med trafikkskoler** (TGK-verktøy)
+5. 🇳🇴 **Norsk markedsdominans** + engelsk for innvandrere
+6. 📈 **SEO-autoritet** – mange år med innhold og lenker
+7. 🔄 **Innholdsoppdatering** etter læreplaner – krever ekspert-team
+
+**Lett å kopiere:**
+- Quiz-funksjonalitet
+- UI/design
+- Tech-stack
+
+---
+
+## 📋 KONKLUSJON OG ANBEFALING
+
+### Sammenligning vs Thai2Drive
+
+Uten direkte tilgang til Thai2Drive kan jeg generelt si:
+
+**Hva Teoritentamen sannsynligvis gjør BEDRE enn Thai2Drive:**
+- 🇳🇴 Lokal markedsdominans og institusjonell anbefaling
+- 📚 Mer komplett innhold (eBok + video + lyd + quiz)
+- 🎯 Bredere klassedekning
+- 💼 B2B-verktøy for trafikkskoler
+
+**Hva Thai2Drive kan gjøre BEDRE (typisk for nyere apps):**
+- 🎮 Gamification (poeng, streaks, achievements)
+- 🤖 AI-drevet adaptiv læring
+- 📱 Native mobile-app opplevelse
+- 🎨 Mer moderne UI
+- 🔁 Spaced repetition-algoritmer
+- 🌍 Bedre multispråk
+
+### Min anbefaling:
+
+**❌ IKKE klon en 1:1 kopi.** Teoritentamen har for sterk moat (NTSF-anbefaling, SEO, 39k anmeldelser, innhold).
+
+**✅ TA INSPIRASJON og BYGG NOE BEDRE i en nisje:**
+
+1. **Strategi A – Nisje-angrep:** Fokuser på ÉN klasse (f.eks. M
