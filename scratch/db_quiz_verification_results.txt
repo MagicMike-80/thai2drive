@@ -1,5 +1,5 @@
 Verifying learning_quizzes entries count:
-Total in learning_quizzes: 10
+Total in learning_quizzes: 21
 
 Verifying questions entries in category 'Right of Way':
 Question (NO): Hvem har vikeplikt når du kjører ut av en parkeringsplass?
