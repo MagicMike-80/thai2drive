@@ -1,0 +1,20 @@
+Verifying studiebok_chapters count:
+Total in studiebok_chapters: 11
+
+Verifying chapters count in chapters collection:
+Total sections in chapters collection: 21
+
+Verifying details of Chapter 7 in studiebok_chapters:
+Found order 7: Kapittel 7 — Michaels 6 vikepliktregler – Del 1: Fra høyre og rett før sving
+  Icon: 🚦
+  HTML preview (NO): <p><strong>🎬 Situasjon:</strong> Du kjører og kommer til et kryss uten trafikklys eller skilt. To andre biler kjører dit samtidig — en fra høyre, en fra venstre. Hva gjør du?</p><p><strong>📚 Teori — Michaels regel 1: Vikeplikt for høyre:</strong> I N...
+  HTML preview (TH): <p><strong>🎬 สถานการณ์:</strong> คุณขับรถและมาถึงทางแยกที่ไม่มีไฟจราจรหรือป้าย รถอีกสองคันมาที่นั่นพร้อมกัน — คนหนึ่งมาจากด้านขวา คนหนึ่งมาจากด้านซ้าย คุณต้องทำอะไร?</p><p><strong>📚 ทฤษฎี — กฎของไมเคิล 1: ให้ทางสำหรับด้านขวา:</strong> ในนอร์เวย์ กฎนั...
+
+Verifying details of Chapter 7 in chapters collection:
+Found 3 sections for chapter_num 7.
+  Sec 1: Situasjonen: 4-kjørs kryss uten skilt
+    Content (NO): Du kjører og kommer til et kryss uten trafikklys eller skilt. To andre biler kjører dit samtidig — e...
+  Sec 2: Michaels regel 1: Vikeplikt for høyre
+    Content (NO): I Norge er regelen enkel: VIK FOR TRAFIKK FRA HØYRE SIDEN. Ikke fra høyre retning — FOR høyre retnin...
+  Sec 3: Praktisk tips
+    Content (NO): 1. Se på alle retninger før du kjører inn i krysset. 2. Hvis du er usikker, vær defensiv. 3. Husk: f...

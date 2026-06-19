@@ -1,0 +1,19 @@
+Verifying learning_quizzes entries count:
+Total in learning_quizzes: 21
+
+Verifying questions entries in category 'Right of Way':
+Question (NO): Hvem har vikeplikt når du kjører ut av en parkeringsplass?
+  Options: ['Du har forkjørsrett', 'Det avhenger av tid på dagen', 'Trafikk på veien har forkjørsrett', 'Fotgjengere bare']
+  Correct Option: C
+Question (NO): Hva betyr forkjørsrett?
+  Options: ['Du kan kjøre uten å bremse', 'Andre kjøretøy må gi vikeplikt for deg', 'Du kan ignorere trafikklys', 'Du kan kjøre på fortauet']
+  Correct Option: B
+Question (NO): Hva skal du gjøre når du nærmer deg et gangfelt?
+  Options: ['Øke farten for å passere raskt', 'Tute for å varsle fotgjengere', 'Bremse ned og være klar til å stoppe', 'Bytte fil']
+  Correct Option: C
+
+Verifying question with fixed translation in questions collection:
+Found Question (NO): Du skal skifte fil til høyre. Hva må du gjøre først?
+  Options (NO): ['Bare skift fil når du ser plass', 'Sjekk speil, blindspeil, og se over skulder', 'Tut først, deretter filskift']
+  Options (TH): ['เลี้ยวแค่เมื่อคุณเห็นที่ว่าง', 'ตรวจสอบกระจก กระจกด้านข้าง และมองข้ามไหล่', 'บีบแตรก่อน จากนั้นเปลี่ยนเลน']
+  Correct: B

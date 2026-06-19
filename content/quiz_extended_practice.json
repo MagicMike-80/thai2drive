@@ -1,0 +1,343 @@
+[
+  {
+    "question_no": "Hva betyr 'vikeplikt'?",
+    "question_th": "คำว่า 'การให้ทาง' หมายถึงอะไร?",
+    "question_en": "What does 'right-of-way' mean?",
+    "options": [
+      {
+        "text_no": "Retten til å kjøre først",
+        "text_th": "สิทธิ์ที่จะขับรถก่อน",
+        "text_en": "The right to drive first",
+        "correct": false
+      },
+      {
+        "text_no": "Plikten til å la annen trafikk passere",
+        "text_th": "ความจำเป็นที่ต้องให้จราจรอื่นผ่านไป",
+        "text_en": "The obligation to let other traffic pass",
+        "correct": true
+      },
+      {
+        "text_no": "Å kjøre til høyre",
+        "text_th": "การขับรถไปทางขวา",
+        "text_en": "Driving to the right",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Vikeplikt er når du må vike for annen trafikk. Det er en juridisk plikt, ikke en rett.",
+    "explanation_th": "การให้ทางคือเมื่อคุณต้องให้ทางสำหรับจราจรอื่น มันเป็นหน้าที่ทางกฎหมาย ไม่ใช่สิทธิ",
+    "explanation_en": "Right-of-way is when you must yield to other traffic. It's a legal obligation, not a right.",
+    "topic_tags": ["glossary", "vikeplikt"],
+    "difficulty": "easy",
+    "category": "definitions"
+  },
+  {
+    "question_no": "Du forkjører en lastebil. Hva må du gjøre først?",
+    "question_th": "คุณแซงรถบรรทุก คุณต้องทำอะไรก่อน?",
+    "question_en": "You overtake a truck. What must you do first?",
+    "options": [
+      {
+        "text_no": "Trykk på gasspedalen",
+        "text_th": "กดแป้นเร่ง",
+        "text_en": "Press the accelerator",
+        "correct": false
+      },
+      {
+        "text_no": "Sjekk speilet og venstrebremspeilen",
+        "text_th": "ตรวจสอบกระจกและกระจกด้านซ้าย",
+        "text_en": "Check mirror and left side mirror",
+        "correct": true
+      },
+      {
+        "text_no": "Tute",
+        "text_th": "บีบแตร",
+        "text_en": "Honk",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Før du forkjører må du alltid sjekke speilene. Du må se at det ikke kommer trafikk fra foran.",
+    "explanation_th": "ก่อนแซง คุณต้องตรวจสอบกระจกเสมอ คุณต้องแน่ใจว่าไม่มีจราจรมาจากด้านหน้า",
+    "explanation_en": "Before overtaking you must always check mirrors. You must ensure no traffic is coming from ahead.",
+    "topic_tags": ["glossary", "forkjøring", "sikkerhet"],
+    "difficulty": "easy",
+    "category": "safety_checks"
+  },
+  {
+    "question_no": "En solid hvit strek på veien betyr:",
+    "question_th": "เส้นทึบสีขาวบนถนนหมายถึง:",
+    "question_en": "A solid white line on the road means:",
+    "options": [
+      {
+        "text_no": "Du kan forkjøre når du vil",
+        "text_th": "คุณสามารถแซงได้เมื่อไหร่ก็ได้",
+        "text_en": "You can overtake anytime",
+        "correct": false
+      },
+      {
+        "text_no": "Du IKKE kan forkjøre",
+        "text_th": "คุณไม่สามารถแซงได้",
+        "text_en": "You CANNOT overtake",
+        "correct": true
+      },
+      {
+        "text_no": "Bare tunge kjøretøyer kan forkjøre",
+        "text_th": "เฉพาะยานพาหนะหนักเท่านั้นที่สามารถแซงได้",
+        "text_en": "Only heavy vehicles can overtake",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Solid strek = forbud mot forkjøring. Du må vente på stiplet strek.",
+    "explanation_th": "เส้นทึบ = ห้ามแซง คุณต้องรอเส้นประ",
+    "explanation_en": "Solid line = no overtaking allowed. You must wait for dashed line.",
+    "topic_tags": ["glossary", "forkjøring", "skilt"],
+    "difficulty": "easy",
+    "category": "road_signs"
+  },
+  {
+    "question_no": "Du kjører 80 km/t på landevei. Et dyr løper plutselig ut. Kan du stoppe?",
+    "question_th": "คุณขับรถ 80 กม./ชม. บนถนนชนบท สัตว์วิ่งออกมาจู่ๆ คุณหยุดได้หรือไม่?",
+    "question_en": "You're driving 80 km/h on a rural road. An animal suddenly runs out. Can you stop?",
+    "options": [
+      {
+        "text_no": "Ja, lett",
+        "text_th": "ได้ ง่ายๆ",
+        "text_en": "Yes, easily",
+        "correct": false
+      },
+      {
+        "text_no": "Nei, stopplengden er ca. 77 meter",
+        "text_th": "ไม่ ระยะหยุดประมาณ 77 เมตร",
+        "text_en": "No, stopping distance is about 77 meters",
+        "correct": true
+      },
+      {
+        "text_no": "Kanskje, det avhenger av været",
+        "text_th": "บางที มันขึ้นอยู่กับสภาพอากาศ",
+        "text_en": "Maybe, it depends on the weather",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Ved 80 km/t er stopplengden ca. 77 meter. Det er veldig langt! Du kan ikke stoppe med kort varsel.",
+    "explanation_th": "ที่ 80 กม./ชม. ระยะหยุดประมาณ 77 เมตร ไกลมาก! คุณไม่สามารถหยุดได้เร็วเมื่อมีอันตราย",
+    "explanation_en": "At 80 km/h stopping distance is about 77 meters. That's very far! You cannot stop quickly in an emergency.",
+    "topic_tags": ["fart", "bremselengde", "sikkerhet"],
+    "difficulty": "hard",
+    "category": "calculations"
+  },
+  {
+    "question_no": "Hva er reaktidslengde ved 30 km/t?",
+    "question_th": "ระยะตอบสนองที่ 30 กม./ชม. คือเท่าไหร่?",
+    "question_en": "What is reaction distance at 30 km/h?",
+    "options": [
+      {
+        "text_no": "Ca. 8 meter",
+        "text_th": "ประมาณ 8 เมตร",
+        "text_en": "About 8 meters",
+        "correct": true
+      },
+      {
+        "text_no": "Ca. 15 meter",
+        "text_th": "ประมาณ 15 เมตร",
+        "text_en": "About 15 meters",
+        "correct": false
+      },
+      {
+        "text_no": "Ca. 25 meter",
+        "text_th": "ประมาณ 25 เมตร",
+        "text_en": "About 25 meters",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Ved 30 km/t kjører du ca. 8 meter i løpet av 1 sekund (reaktidslengde).",
+    "explanation_th": "ที่ 30 กม./ชม. คุณขับรถประมาณ 8 เมตรในระหว่าง 1 วินาที (ระยะตอบสนอง)",
+    "explanation_en": "At 30 km/h you travel about 8 meters in 1 second (reaction distance).",
+    "topic_tags": ["fart", "reaktidslengde"],
+    "difficulty": "medium",
+    "category": "calculations"
+  },
+  {
+    "question_no": "Du kjører i en rundkjøring og vil kjøre ut. Hvem har prioritet?",
+    "question_th": "คุณขับรถในวงเวียนและต้องการออก ใครมีสิทธิ์?",
+    "question_en": "You're driving in a roundabout and want to exit. Who has priority?",
+    "options": [
+      {
+        "text_no": "Du — du er allereie inne",
+        "text_th": "คุณ — คุณอยู่ข้างในแล้ว",
+        "text_en": "You – you're already inside",
+        "correct": true
+      },
+      {
+        "text_no": "Bil som vil kjøre inn",
+        "text_th": "รถที่ต้องเข้ามา",
+        "text_en": "Car wanting to enter",
+        "correct": false
+      },
+      {
+        "text_no": "Begge har prioritet",
+        "text_th": "ทั้งสองมีสิทธิ์",
+        "text_en": "Both have priority",
+        "correct": false
+      }
+    ],
+    "explanation_no": "I en rundkjøring: Bil INNE > bil som vil kjøre inn. Du kan kjøre ut fordi du er inne.",
+    "explanation_th": "ในวงเวียน: รถข้างใน > รถที่ต้องเข้า คุณสามารถออกได้เพราะคุณอยู่ข้างใน",
+    "explanation_en": "In roundabout: Car INSIDE > car wanting to enter. You can exit because you're inside.",
+    "topic_tags": ["vikeplikt", "rundkjøring"],
+    "difficulty": "easy",
+    "category": "roundabouts"
+  },
+  {
+    "question_no": "En striplet hvit strek betyr:",
+    "question_th": "เส้นประสีขาวหมายถึง:",
+    "question_en": "A dashed white line means:",
+    "options": [
+      {
+        "text_no": "Du kan forkjøre",
+        "text_th": "คุณสามารถแซงได้",
+        "text_en": "You can overtake",
+        "correct": true
+      },
+      {
+        "text_no": "Du kan ikke forkjøre",
+        "text_th": "คุณไม่สามารถแซงได้",
+        "text_en": "You cannot overtake",
+        "correct": false
+      },
+      {
+        "text_no": "Du må stoppe",
+        "text_th": "คุณต้องหยุด",
+        "text_en": "You must stop",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Stiplet strek = forkjøring tillatt. Men du må sjekke speilene først!",
+    "explanation_th": "เส้นประ = อนุญาตให้แซง แต่คุณต้องตรวจสอบกระจกก่อน!",
+    "explanation_en": "Dashed line = overtaking allowed. But you must check mirrors first!",
+    "topic_tags": ["glossary", "forkjøring", "skilt"],
+    "difficulty": "easy",
+    "category": "road_signs"
+  },
+  {
+    "question_no": "Du er på et kryss med trafikklys. Lyset er gult. Hva gjør du?",
+    "question_th": "คุณอยู่ที่สี่แยกที่มีไฟจราจร ไฟเหลือง คุณทำอะไร?",
+    "question_en": "You're at an intersection with traffic lights. The light is yellow. What do you do?",
+    "options": [
+      {
+        "text_no": "Du akselererer for å kjøre gjennom",
+        "text_th": "คุณเพิ่มความเร็วเพื่อขับผ่าน",
+        "text_en": "You accelerate to drive through",
+        "correct": false
+      },
+      {
+        "text_no": "Du setter ned farten og forberederer deg på å stoppe",
+        "text_th": "คุณลดความเร็วและเตรียมพร้อมที่จะหยุด",
+        "text_en": "You slow down and prepare to stop",
+        "correct": true
+      },
+      {
+        "text_no": "Du stopper med det samme",
+        "text_th": "คุณหยุดทันที",
+        "text_en": "You stop immediately",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Gult lys = forberedelse på rødt. Du må redusere farten, ikke øke den.",
+    "explanation_th": "ไฟเหลือง = เตรียมสำหรับไฟแดง คุณต้องลดความเร็ว ไม่เพิ่มมัน",
+    "explanation_en": "Yellow light = prepare for red. You must reduce speed, not increase it.",
+    "topic_tags": ["trafikklys", "sikkerhet"],
+    "difficulty": "easy",
+    "category": "traffic_lights"
+  },
+  {
+    "question_no": "Hva er bremselengde ved 30 km/t?",
+    "question_th": "ระยะการหยุดที่ 30 กม./ชม. คือเท่าไหร่?",
+    "question_en": "What is braking distance at 30 km/h?",
+    "options": [
+      {
+        "text_no": "Ca. 9 meter",
+        "text_th": "ประมาณ 9 เมตร",
+        "text_en": "About 9 meters",
+        "correct": true
+      },
+      {
+        "text_no": "Ca. 20 meter",
+        "text_th": "ประมาณ 20 เมตร",
+        "text_en": "About 20 meters",
+        "correct": false
+      },
+      {
+        "text_no": "Ca. 30 meter",
+        "text_th": "ประมาณ 30 เมตร",
+        "text_en": "About 30 meters",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Ved 30 km/t er bremselengden ca. 9 meter. Mye kortere enn ved 50 km/t (27 meter)!",
+    "explanation_th": "ที่ 30 กม./ชม. ระยะการหยุดประมาณ 9 เมตร สั้นกว่า 50 กม./ชม. (27 เมตร) มาก!",
+    "explanation_en": "At 30 km/h braking distance is about 9 meters. Much shorter than at 50 km/h (27 meters)!",
+    "topic_tags": ["fart", "bremselengde"],
+    "difficulty": "medium",
+    "category": "calculations"
+  },
+  {
+    "question_no": "En fotgjenger står ved fotgjengerovergangen. Hva gjør du?",
+    "question_th": "คนเดินเท้ายืนอยู่ที่ทางข้ามทางเท้า คุณทำอะไร?",
+    "question_en": "A pedestrian stands at a pedestrian crossing. What do you do?",
+    "options": [
+      {
+        "text_no": "Du kjører videre — de venter på din fart",
+        "text_th": "คุณขับรถต่อ — พวกเขารอความเร็วของคุณ",
+        "text_en": "You drive on – they wait for your speed",
+        "correct": false
+      },
+      {
+        "text_no": "Du stopper helt — fotgjengeren har prioritet",
+        "text_th": "คุณหยุดสนิท — คนเดินเท้ามีสิทธิ์",
+        "text_en": "You stop completely – pedestrian has priority",
+        "correct": true
+      },
+      {
+        "text_no": "Du honker for å advare dem",
+        "text_th": "คุณบีบแตรเพื่อเตือนพวกเขา",
+        "text_en": "You honk to warn them",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Fotgjengere på fotgjengerovergangen har ALLTID prioritet. Du må stoppe.",
+    "explanation_th": "คนเดินเท้าที่ทางข้ามมีสิทธิ์เสมอ คุณต้องหยุด",
+    "explanation_en": "Pedestrians at crossings ALWAYS have priority. You must stop.",
+    "topic_tags": ["fotgjenger", "sikkerhet"],
+    "difficulty": "easy",
+    "category": "pedestrian_safety"
+  },
+  {
+    "question_no": "Hva er 'filskift' på norsk?",
+    "question_th": "คำว่า 'filskift' ในภาษานอร์เวย์หมายถึงอะไร?",
+    "question_en": "What does 'filskift' mean in Norwegian?",
+    "options": [
+      {
+        "text_no": "Å skifte gir",
+        "text_th": "การเปลี่ยนเกียร์",
+        "text_en": "Changing gears",
+        "correct": false
+      },
+      {
+        "text_no": "Å skifte fra en kjørefil til en annen",
+        "text_th": "การเปลี่ยนจากเลนหนึ่งไปอีกเลน",
+        "text_en": "Moving from one driving lane to another",
+        "correct": true
+      },
+      {
+        "text_no": "Å skifte hånd på rattet",
+        "text_th": "การเปลี่ยนมือบนพวงมาลัย",
+        "text_en": "Changing hand on the steering wheel",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Filskift = lane change. Du må sjekke speil, blindspeil og skulder før du gjør det.",
+    "explanation_th": "Filskift = การเปลี่ยนเลน คุณต้องตรวจสอบกระจก พื้นที่อับสายตา และไหล่ก่อนทำ",
+    "explanation_en": "Filskift = lane change. You must check mirrors, blind spot and shoulder before doing it.",
+    "topic_tags": ["glossary", "filskift"],
+    "difficulty": "easy",
+    "category": "definitions"
+  }
+]
