@@ -11,13 +11,14 @@ import { LanguageSwitcher } from '../src/components/LanguageSwitcher';
 import { AppBrand } from '../src/components/AppBrand';
 import { CoachBanner } from '../src/components/CoachBanner';
 import { TrafficMathDesktopPanel } from '../src/components/traffic/TrafficMathDesktopPanel';
+import { BottomNavBar } from '../src/components/BottomNavBar';
 
 const T2D_ICON = require('../assets/images/t2d-icon.png');
 
 const TR: Record<string, Record<string, string>> = {
-  no: { subtitle: 'Norsk førerprøve', startQuiz: 'Start quiz', exam: 'Eksamen', accuracy: 'Nøyaktighet', answered: 'Besvart', correct: 'Riktige', premiumCta: 'Premium',  premiumOffer: 'Ubegrenset tilgang · fra 99 kr', premiumActive: 'Premium aktiv', streak: 'dagers rekke', freeLeft: 'gratis igjen', dailyLimitReached: 'Opprett gratis konto for å fortsette', dailyTest: 'Dagens test', moreOptions: 'Flere', accountTitle: 'Opprett gratis konto for å fortsette', accountBody: 'Du har brukt de 5 gjestespørsmålene. Opprett en gratis konto for 10 spørsmål per dag og behold progresjonen din.', accountSignup: 'Opprett konto', accountLogin: 'Logg inn', accountCancel: 'Avbryt', studyBook: 'Læringsbok', signGallery: 'Trafikkskilt', myStats: 'Min statistikk', smartPractice: 'Smart øving', aiInsights: 'AI Analyse', trafficMath: 'Trafikk-matte', michaelTeacher: 'Trafikklærer' },
-  th: { subtitle: 'สอบใบขับขี่นอร์เวย์', startQuiz: 'เริ่มทำแบบทดสอบ', exam: 'สอบ', accuracy: 'ความแม่นยำ', answered: 'ตอบแล้ว', correct: 'ถูกต้อง', premiumCta: 'พรีเมียม', premiumOffer: 'ใช้งานไม่จำกัด · เริ่มต้น 99 kr', premiumActive: 'Premium ใช้งานอยู่', streak: 'วันติดต่อกัน', freeLeft: 'ฟรีเหลือ', dailyLimitReached: 'สร้างบัญชีฟรีเพื่อเรียนต่อ', dailyTest: 'แบบทดสอบประจำวัน', moreOptions: 'เพิ่มเติม', accountTitle: 'สร้างบัญชีฟรีเพื่อเรียนต่อ', accountBody: 'คุณใช้คำถามสำหรับผู้ใช้ทั่วไปครบ 5 ข้อแล้ว สร้างบัญชีฟรีเพื่อรับ 10 คำถามต่อวันและเก็บความก้าวหน้าของคุณไว้', accountSignup: 'สร้างบัญชี', accountLogin: 'เข้าสู่ระบบ', accountCancel: 'ยกเลิก', studyBook: 'หนังสือเรียน', signGallery: 'ป้ายจราจร', myStats: 'สถิติของฉัน', smartPractice: 'ฝึกอัจฉริยะ', aiInsights: 'AI วิเคราะห์', trafficMath: 'คณิตจราจร', michaelTeacher: 'ครูสอนขับ' },
-  en: { subtitle: 'Norwegian driving test', startQuiz: 'Start quiz', exam: 'Exam', accuracy: 'Accuracy', answered: 'Answered', correct: 'Correct', premiumCta: 'Premium', premiumOffer: 'Unlimited access · from 99 NOK', premiumActive: 'Premium active', streak: 'day streak', freeLeft: 'free left', dailyLimitReached: 'Create a free account to continue', dailyTest: 'Daily test', moreOptions: 'More', accountTitle: 'Create a free account to continue', accountBody: 'You have used the 5 guest questions. Create a free account for 10 questions per day and keep your progress.', accountSignup: 'Create account', accountLogin: 'Log in', accountCancel: 'Cancel', studyBook: 'Study Book', signGallery: 'Traffic Signs', myStats: 'My Statistics', smartPractice: 'Smart Practice', aiInsights: 'AI Insights', trafficMath: 'Traffic Math', michaelTeacher: 'Instructor' },
+  no: { subtitle: 'Norsk førerprøve', startQuiz: 'Start quiz', exam: 'Eksamen', accuracy: 'Nøyaktighet', answered: 'Besvart', correct: 'Riktige', premiumCta: 'Premium',  premiumOffer: 'Ubegrenset tilgang · fra 99 kr', premiumActive: 'Premium aktiv', streak: 'dagers rekke', freeLeft: 'gratis igjen', dailyLimitReached: 'Opprett gratis konto for å fortsette', dailyTest: 'Dagens test', moreOptions: 'Flere', accountTitle: 'Opprett gratis konto for å fortsette', accountBody: 'Du har brukt de 5 gjestespørsmålene. Opprett en gratis konto for 10 spørsmål per dag og behold progresjonen din.', accountSignup: 'Opprett konto', accountLogin: 'Logg inn', accountCancel: 'Avbryt', studyBook: 'Læringsbok', signGallery: 'Trafikkskilt', myStats: 'Min statistikk', smartPractice: 'Smart øving', aiInsights: 'AI Analyse', trafficMath: 'Trafikk-matte', michaelTeacher: 'Trafikklærer', library: 'Bibliotek' },
+  th: { subtitle: 'สอบใบขับขี่นอร์เวย์', startQuiz: 'เริ่มทำแบบทดสอบ', exam: 'สอบ', accuracy: 'ความแม่นยำ', answered: 'ตอบแล้ว', correct: 'ถูกต้อง', premiumCta: 'พรีเมียม', premiumOffer: 'ใช้งานไม่จำกัด · เริ่มต้น 99 kr', premiumActive: 'Premium ใช้งานอยู่', streak: 'วันติดต่อกัน', freeLeft: 'ฟรีเหลือ', dailyLimitReached: 'สร้างบัญชีฟรีเพื่อเรียนต่อ', dailyTest: 'แบบทดสอบประจำวัน', moreOptions: 'เพิ่มเติม', accountTitle: 'สร้างบัญชีฟรีเพื่อเรียนต่อ', accountBody: 'คุณใช้คำถามสำหรับผู้ใช้ทั่วไปครบ 5 ข้อแล้ว สร้างบัญชีฟรีเพื่อรับ 10 คำถามต่อวันและเก็บความก้าวหน้าของคุณไว้', accountSignup: 'สร้างบัญชี', accountLogin: 'เข้าสู่ระบบ', accountCancel: 'ยกเลิก', studyBook: 'หนังสือเรียน', signGallery: 'ป้ายจราจร', myStats: 'สถิติของฉัน', smartPractice: 'ฝึกอัจฉริยะ', aiInsights: 'AI วิเคราะห์', trafficMath: 'คณิตจราจร', michaelTeacher: 'ครูสอนขับ', library: 'ห้องสมุด' },
+  en: { subtitle: 'Norwegian driving test', startQuiz: 'Start quiz', exam: 'Exam', accuracy: 'Accuracy', answered: 'Answered', correct: 'Correct', premiumCta: 'Premium', premiumOffer: 'Unlimited access · from 99 NOK', premiumActive: 'Premium active', streak: 'day streak', freeLeft: 'free left', dailyLimitReached: 'Create a free account to continue', dailyTest: 'Daily test', moreOptions: 'More', accountTitle: 'Create a free account to continue', accountBody: 'You have used the 5 guest questions. Create a free account for 10 questions per day and keep your progress.', accountSignup: 'Create account', accountLogin: 'Log in', accountCancel: 'Cancel', studyBook: 'Study Book', signGallery: 'Traffic Signs', myStats: 'My Statistics', smartPractice: 'Smart Practice', aiInsights: 'AI Insights', trafficMath: 'Traffic Math', michaelTeacher: 'Instructor', library: 'Library' },
 };
 
 export default function HomeScreen() {
@@ -276,6 +277,13 @@ export default function HomeScreen() {
             <Text style={{ fontSize: 22 }}>🚗</Text>
             <Text style={[st.quickLabel, { color: '#60A5FA' }]}>{t.michaelTeacher}</Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            testID="library-btn"
+            style={[st.quickBtn, { backgroundColor: 'rgba(16,185,129,0.10)', borderColor: 'rgba(16,185,129,0.35)' }]}
+            onPress={() => router.push('/library')} activeOpacity={0.75}>
+            <Ionicons name="library-outline" size={22} color="#10B981" />
+            <Text style={[st.quickLabel, { color: '#10B981' }]}>{t.library}</Text>
+          </TouchableOpacity>
         </View>
 
         {/* Progress — single clean row, no card nesting */}
@@ -316,6 +324,8 @@ export default function HomeScreen() {
         )}
       </ScrollView>
 
+      <BottomNavBar activeTab="home" />
+
       {/* Desktop traffic math panel — position:fixed escapes the 390px WebAppShell */}
       {isDesktopWeb && (
         <TrafficMathDesktopPanel
@@ -333,7 +343,7 @@ export default function HomeScreen() {
 const st = StyleSheet.create({
   container: { flex: 1 },
   center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  scroll: { padding: 24, paddingBottom: 40 },
+  scroll: { padding: 24, paddingBottom: 110 },
   topBar: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 28 },
   topRight: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   iconBtn: { width: 40, height: 40, borderRadius: 20, justifyContent: 'center', alignItems: 'center', borderWidth: 1 },

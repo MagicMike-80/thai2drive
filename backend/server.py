@@ -96,9 +96,9 @@ PUBLIC_PRICING_FALLBACK = {
         "id": "three_months",
         "stripe_product_name": "Thai2Drive 3 Months",
         "label": {"no": "3 måneder", "th": "3 เดือน", "en": "3 months"},
-        "amount": 299,
+        "amount": 249,
         "currency": "NOK",
-        "display": "299 kr",
+        "display": "249 kr",
         "period": {"no": "per 3 måneder", "th": "ต่อ 3 เดือน", "en": "per 3 months"},
     },
     "lifetime": {
@@ -4114,6 +4114,103 @@ async def admin_delete_video(video_id: str, _: dict = Depends(require_admin)):
     if result.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Video not found")
     return {"message": "Deleted", "id": video_id}
+
+
+# ── Podcasts ─────────────────────────────────────────────────────────────────
+
+class LearningPodcastCreate(BaseModel):
+    """A contextual audio podcast linked to topics or curriculum sections.
+
+    Topic tags MUST exactly match the labels returned by the frontend _dangerLabel() function:
+    (same tag list as LearningVideoCreate)
+    """
+    title_no: str = ""
+    title_th: str = ""
+    title_en: str = ""
+    file_path: str               # e.g. /public_assets/podcast_xxx.mp3
+    duration_seconds: int = 0
+    language: str = "no"         # primary language: no, th, en
+
+    topic_tags: List[str] = []
+    sign_ids: List[str] = []
+    sign_groups: List[str] = []
+    studybook_section_ids: List[str] = []
+
+    see_context: str = ""
+    understand_context: str = ""
+    choose_context: str = ""
+
+    instructor_summary_no: str = ""
+    instructor_summary_th: str = ""
+    instructor_summary_en: str = ""
+
+    active: bool = True
+
+
+def _serialize_podcast(p: dict) -> dict:
+    """Normalize a MongoDB podcast document for the API response."""
+    return {k: val for k, val in p.items() if k != '_id'}
+
+
+@api_router.get("/podcasts/for-topic")
+async def podcasts_for_topic(tags: str = "", limit: int = Query(default=1, le=3)):
+    """Suggest learning podcasts by topic tag(s)."""
+    if not tags.strip():
+        return []
+    tag_list = [t.strip() for t in tags.split(',') if t.strip()]
+    results = await db.learning_podcasts.find(
+        {"active": True, "topic_tags": {"$in": tag_list}}
+    ).limit(limit).to_list(limit)
+    return [_serialize_podcast(r) for r in results]
+
+
+# ── Admin CRUD (podcasts) ────────────────────────────────────────────────────
+
+@api_router.get("/admin/podcasts")
+async def admin_list_podcasts(_: dict = Depends(require_admin)):
+    """List all learning podcasts (active and inactive)."""
+    results = await db.learning_podcasts.find({}).sort("created_at", -1).to_list(500)
+    return [_serialize_podcast(r) for r in results]
+
+
+@api_router.post("/admin/podcasts")
+async def admin_create_podcast(data: dict, _: dict = Depends(require_admin)):
+    """Create a new learning podcast."""
+    podcast = {
+        "id": str(uuid.uuid4()),
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "active": True,
+        # defaults
+        "title_no": "", "title_th": "", "title_en": "",
+        "file_path": "", "duration_seconds": 0,
+        "language": "no",
+        "topic_tags": [], "sign_ids": [], "sign_groups": [], "studybook_section_ids": [],
+        "see_context": "", "understand_context": "", "choose_context": "",
+        "instructor_summary_no": "", "instructor_summary_th": "", "instructor_summary_en": "",
+        **data,
+    }
+    await db.learning_podcasts.insert_one(podcast)
+    return _serialize_podcast(podcast)
+
+
+@api_router.patch("/admin/podcasts/{podcast_id}")
+async def admin_update_podcast(podcast_id: str, data: dict, _: dict = Depends(require_admin)):
+    """Update fields on a learning podcast."""
+    if not data:
+        raise HTTPException(status_code=400, detail="No fields to update")
+    result = await db.learning_podcasts.update_one({"id": podcast_id}, {"$set": data})
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Podcast not found")
+    return {"message": "Updated", "id": podcast_id}
+
+
+@api_router.delete("/admin/podcasts/{podcast_id}")
+async def admin_delete_podcast(podcast_id: str, _: dict = Depends(require_admin)):
+    """Permanently delete a learning podcast."""
+    result = await db.learning_podcasts.delete_one({"id": podcast_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Podcast not found")
+    return {"message": "Deleted", "id": podcast_id}
 
 
 class TrafficSignCreate(BaseModel):

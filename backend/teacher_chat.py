@@ -732,10 +732,9 @@ def _build_system_prompt(lang: str) -> str:
         "You can dynamically recommend videos, podcasts, or images to the student. When explaining a concept where a visual or audio aid is available in the curriculum context, follow these strict rules:\n"
         "1. MULTIMEDIA TAG FORMATS:\n"
         "   - To show a video: Use the exact tag format: [video: youtube_url | title_no | title_th | title_en]\n"
-        "   - To show a podcast: Recommend one of the following available podcasts using this exact tag format:\n"
-        "     * [podcast: /public_assets/podcast_kongen_tjeneren.mp3 | Er du kongen eller tjeneren i trafikken? | คุณเป็นราชาหรือคนรับใช้บนท้องถนน? | Are you the king or servant in traffic?]\n"
-        "     * [podcast: /public_assets/podcast_ferske_sjaforer.mp3 | Hvorfor ferske sjåfører er livsfarlige | ทำไมคนขับมือใหม่ถึงอันตรายอย่างยิ่ง | Why fresh drivers are extremely dangerous]\n"
-        "     * [podcast: /public_assets/podcast_fortere_enn_du_ser.mp3 | Du kjører fortere enn du ser | คุณขับรถเร็วกว่าที่คุณเห็น | You drive faster than you can see]\n"
+        "   - To show a podcast: Only use podcasts listed in the AVAILABLE MULTIMEDIA section below. Use this exact tag format:\n"
+        "     [podcast: file_path | title_no | title_th | title_en]\n"
+        "     Copy the values exactly as listed — never invent or guess file paths or titles.\n"
         "   - To show an image: Use the exact tag format: [image: image_url | caption_no | caption_th | caption_en]\n"
         "2. PEDAGOGICAL PACKAGING (Never just throw a link):\n"
         "   - Set up the driving situation first: 'Se for deg at du nærmer deg krysset...' / 'Imagine you are approaching the intersection...'\n"
@@ -1045,6 +1044,42 @@ async def _get_curriculum_context(user_msg: str, lang: str) -> str:
     return ""
 
 
+async def _get_available_multimedia(lang: str) -> str:
+    """Build an AVAILABLE MULTIMEDIA section for Michael's system prompt from the DB."""
+    try:
+        lines = []
+        videos = await _db.learning_videos.find({"active": True}).to_list(20)
+        for v in videos:
+            title = v.get(f"title_{lang}") or v.get("title_no") or ""
+            title_no = v.get("title_no") or title
+            title_th = v.get("title_th") or title
+            title_en = v.get("title_en") or title
+            url = v.get("youtube_url", "")
+            tags = ", ".join(v.get("topic_tags", []))
+            lines.append(f"VIDEO | {url} | {title_no} | {title_th} | {title_en} | tags: {tags}")
+
+        podcasts = await _db.learning_podcasts.find({"active": True}).to_list(20)
+        for p in podcasts:
+            title_no = p.get("title_no") or ""
+            title_th = p.get("title_th") or title_no
+            title_en = p.get("title_en") or title_no
+            fp = p.get("file_path", "")
+            tags = ", ".join(p.get("topic_tags", []))
+            lines.append(f"PODCAST | {fp} | {title_no} | {title_th} | {title_en} | tags: {tags}")
+
+        if not lines:
+            return ""
+        return (
+            "\n\n━━━ AVAILABLE MULTIMEDIA ━━━\n"
+            "Use ONLY these entries when inserting [video:] or [podcast:] tags.\n"
+            + "\n".join(lines)
+            + "\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        )
+    except Exception as e:
+        logger.error("Error fetching multimedia for system prompt: %s", e)
+        return ""
+
+
 # ─── API ──────────────────────────────────────────────────────────────────────
 teacher_router = APIRouter()
 
@@ -1140,6 +1175,10 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
                 f"{context_str}\n"
                 f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
             )
+
+        multimedia_str = await _get_available_multimedia(lang)
+        if multimedia_str:
+            system_prompt += multimedia_str
 
         # Check if the last assistant message in conversation history was a clarifying question
         last_assistant_msg = None

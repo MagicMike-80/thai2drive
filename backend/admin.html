@@ -174,6 +174,7 @@
     <button class="tab" id="tab-studiebok" onclick="switchTab('studiebok')">📖 Studiebok</button>
     <button class="tab" id="tab-book" onclick="switchTab('book')">📗 Læringsbok</button>
     <button class="tab" id="tab-signs" onclick="switchTab('signs')">🚦 Trafikkskilt</button>
+    <button class="tab" id="tab-podcasts" onclick="switchTab('podcasts')">🎙️ Podcaster</button>
   </div>
 
   <!-- ── QUESTIONS VIEW ─────────────────────────────────── -->
@@ -248,6 +249,18 @@
       <div style="font-size:13px;color:var(--muted)" id="signs-meta"></div>
     </div>
     <div id="signs-groups"></div>
+  </div>
+
+  <!-- ── PODCASTS VIEW ─────────────────────────────────── -->
+  <div id="podcasts-view" style="display:none">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px">
+      <div style="font-size:13px;color:var(--muted)" id="podcasts-meta"></div>
+      <button onclick="openPodcastModal(null)"
+        style="background:var(--good);color:#fff;border:0;padding:8px 18px;border-radius:7px;cursor:pointer;font-size:14px;font-weight:600">
+        ➕ Legg til podcast
+      </button>
+    </div>
+    <div id="podcasts-list"></div>
   </div>
 </main>
 
@@ -1066,13 +1079,16 @@ function switchTab(tab) {
   document.getElementById('studiebok-view').style.display  = tab === 'studiebok'  ? '' : 'none';
   document.getElementById('book-view').style.display       = tab === 'book'       ? '' : 'none';
   document.getElementById('signs-view').style.display      = tab === 'signs'      ? '' : 'none';
+  document.getElementById('podcasts-view').style.display   = tab === 'podcasts'   ? '' : 'none';
   document.getElementById('tab-questions').classList.toggle('active', tab === 'questions');
   document.getElementById('tab-studiebok').classList.toggle('active', tab === 'studiebok');
   document.getElementById('tab-book').classList.toggle('active', tab === 'book');
   document.getElementById('tab-signs').classList.toggle('active', tab === 'signs');
+  document.getElementById('tab-podcasts').classList.toggle('active', tab === 'podcasts');
   if (tab === 'book')      loadBook();
   if (tab === 'signs')     loadSigns();
   if (tab === 'studiebok') loadSbAdmin();
+  if (tab === 'podcasts')  loadPodcasts();
 }
 
 // ══════════════════════════════════════════════════════════
@@ -1704,6 +1720,142 @@ async function deleteSbChapter(order) {
   if (r.ok) { toast('🗑 Kapittel slettet'); loadSbAdmin(); }
   else toast('Feil: ' + (data.detail || 'ukjent'), false);
 }
+
+// ══════════════════════════════════════════════════════════
+//  PODCASTS ADMIN
+// ══════════════════════════════════════════════════════════
+let _podcastsData = [];
+
+async function loadPodcasts() {
+  const container = document.getElementById('podcasts-list');
+  container.innerHTML = '<p style="color:var(--muted);padding:20px">Laster...</p>';
+  try {
+    const data = await api('/admin/podcasts');
+    _podcastsData = Array.isArray(data) ? data : [];
+    document.getElementById('podcasts-meta').textContent = `${_podcastsData.length} podcaster`;
+    if (_podcastsData.length === 0) {
+      container.innerHTML = '<p style="color:var(--muted);padding:20px">Ingen podcaster ennå. Legg til den første!</p>';
+      return;
+    }
+    container.innerHTML = `
+      <table style="width:100%;border-collapse:collapse;font-size:13px">
+        <thead>
+          <tr style="color:var(--muted);text-align:left;border-bottom:1px solid #334155">
+            <th style="padding:8px 10px">Tittel (NO)</th>
+            <th style="padding:8px 10px">Tags</th>
+            <th style="padding:8px 10px">Aktiv</th>
+            <th style="padding:8px 10px">Handlinger</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${_podcastsData.map(p => `
+            <tr style="border-bottom:1px solid #1e293b">
+              <td style="padding:8px 10px;color:var(--text)">${escapeHtml(p.title_no || '—')}</td>
+              <td style="padding:8px 10px;color:var(--muted)">${escapeHtml((p.topic_tags||[]).join(', '))}</td>
+              <td style="padding:8px 10px">${p.active ? '✅' : '❌'}</td>
+              <td style="padding:8px 10px;display:flex;gap:6px">
+                <button class="btn-edit" onclick="openPodcastModal('${p.id}')">✏️ Rediger</button>
+                <button class="btn-del"  onclick="deletePodcast('${p.id}')">🗑</button>
+              </td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>`;
+  } catch(e) {
+    container.innerHTML = '<p style="color:var(--bad);padding:20px">Feil: ' + e.message + '</p>';
+  }
+}
+
+async function deletePodcast(id) {
+  if (!confirm('Slette denne podcasten? Dette kan ikke angres.')) return;
+  const r = await fetch(API + '/admin/podcasts/' + id, {
+    method: 'DELETE', headers: {Authorization: 'Bearer ' + token},
+  });
+  if (r.ok) { toast('🗑 Podcast slettet'); loadPodcasts(); }
+  else toast('Feil ved sletting', false);
+}
+
+function openPodcastModal(id) {
+  const p = id ? _podcastsData.find(x => x.id === id) : null;
+  const tags = (p?.topic_tags || []).join(', ');
+
+  document.getElementById('modal-body').innerHTML = `
+    <button class="close" onclick="closeModal()">✕</button>
+    <h2>${id ? '✏️ Rediger podcast' : '➕ Legg til podcast'}</h2>
+
+    <div style="margin-bottom:12px">
+      <div class="lbl">Filbane (f.eks. /public_assets/podcast_navn.mp3)</div>
+      <input id="pc-filepath" type="text" style="width:100%;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:14px;box-sizing:border-box"
+        placeholder="/public_assets/podcast_xxx.mp3" value="${escapeHtml(p?.file_path||'')}"/>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px">
+      <div><div class="lbl">🇳🇴 Tittel norsk</div>
+        <input id="pc-no" type="text" style="width:100%;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:14px;box-sizing:border-box"
+          value="${escapeHtml(p?.title_no||'')}"/></div>
+      <div><div class="lbl">🇹🇭 Tittel thai</div>
+        <input id="pc-th" type="text" style="width:100%;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:14px;box-sizing:border-box"
+          value="${escapeHtml(p?.title_th||'')}"/></div>
+      <div><div class="lbl">🇬🇧 Tittel engelsk</div>
+        <input id="pc-en" type="text" style="width:100%;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:14px;box-sizing:border-box"
+          value="${escapeHtml(p?.title_en||'')}"/></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px">
+      <div><div class="lbl">Sammendrag norsk</div>
+        <textarea id="pc-sum-no" rows="3" style="width:100%;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:13px;resize:vertical;box-sizing:border-box">${escapeHtml(p?.instructor_summary_no||'')}</textarea></div>
+      <div><div class="lbl">Sammendrag thai</div>
+        <textarea id="pc-sum-th" rows="3" style="width:100%;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:13px;resize:vertical;box-sizing:border-box">${escapeHtml(p?.instructor_summary_th||'')}</textarea></div>
+      <div><div class="lbl">Sammendrag engelsk</div>
+        <textarea id="pc-sum-en" rows="3" style="width:100%;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:13px;resize:vertical;box-sizing:border-box">${escapeHtml(p?.instructor_summary_en||'')}</textarea></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
+      <div><div class="lbl">Emne-tags (kommaseparert)</div>
+        <input id="pc-tags" type="text" style="width:100%;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:14px;box-sizing:border-box"
+          placeholder="Bremsing, Reaksjonstid, Fart" value="${escapeHtml(tags)}"/></div>
+      <div><div class="lbl">Varighet (sekunder)</div>
+        <input id="pc-dur" type="number" style="width:100%;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:14px;box-sizing:border-box"
+          value="${escapeHtml(String(p?.duration_seconds||0))}"/></div>
+    </div>
+
+    <div style="margin-bottom:16px">
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:14px;color:var(--text)">
+        <input id="pc-active" type="checkbox" ${(p?.active !== false) ? 'checked' : ''} style="width:16px;height:16px"/>
+        Aktiv (vises i app og til Michael)
+      </label>
+    </div>
+
+    <div style="display:flex;gap:10px;justify-content:flex-end">
+      <button onclick="closeModal()" style="background:var(--card);color:var(--text);border:1px solid #475569;padding:9px 20px;border-radius:7px;cursor:pointer;font-size:14px">Avbryt</button>
+      <button onclick="savePodcast('${id||''}')" style="background:var(--accent);color:#fff;border:0;padding:9px 20px;border-radius:7px;cursor:pointer;font-size:14px;font-weight:600">
+        ${id ? 'Lagre endringer' : 'Legg til'}
+      </button>
+    </div>`;
+  document.getElementById('modal').style.display = 'flex';
+}
+
+async function savePodcast(id) {
+  const body = {
+    file_path:              document.getElementById('pc-filepath').value.trim(),
+    title_no:               document.getElementById('pc-no').value.trim(),
+    title_th:               document.getElementById('pc-th').value.trim(),
+    title_en:               document.getElementById('pc-en').value.trim(),
+    instructor_summary_no:  document.getElementById('pc-sum-no').value.trim(),
+    instructor_summary_th:  document.getElementById('pc-sum-th').value.trim(),
+    instructor_summary_en:  document.getElementById('pc-sum-en').value.trim(),
+    topic_tags:             document.getElementById('pc-tags').value.split(',').map(t=>t.trim()).filter(Boolean),
+    duration_seconds:       parseInt(document.getElementById('pc-dur').value)||0,
+    active:                 document.getElementById('pc-active').checked,
+  };
+  if (!body.file_path || !body.title_no) { toast('Filbane og norsk tittel er påkrevd', false); return; }
+  const url  = id ? API + '/admin/podcasts/' + id : API + '/admin/podcasts';
+  const method = id ? 'PATCH' : 'POST';
+  const r = await fetch(url, {method, headers:{'Content-Type':'application/json',Authorization:'Bearer '+token}, body:JSON.stringify(body)});
+  if (r.ok) { toast(id ? '✅ Podcast oppdatert!' : '✅ Podcast lagt til!'); closeModal(); loadPodcasts(); }
+  else { const e = await r.json().catch(()=>({detail:'Ukjent feil'})); toast('Feil: ' + (e.detail||'ukjent'), false); }
+}
+
 </script>
 </body>
 </html>
