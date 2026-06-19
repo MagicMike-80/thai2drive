@@ -1,0 +1,16 @@
+Verifying glossary entries...
+Term: Forkjøring
+  Thai: การแซง
+  English: Overtaking / Passing
+Term: Rundkjøring
+  Thai: วงเวียน
+  English: Roundabout
+Term: Grønt lys
+  Thai: ไฟเขียว
+  English: Green light
+
+Verifying podcast entries...
+Podcast: Michaels 6 vikepliktregler – Del 1: Fra høyre og rett før sving
+  Thai: 6 กฎการให้ทางของไมเคิล – ส่วนที่ 1: รถจากด้านขวา และรถที่ไปตรงชนะรถเลี้ยว
+Podcast: Michaels 6 vikepliktregler – Del 2: Rundkjøring, gjenger og møtende trafikk
+  Thai: 6 กฎการให้ทางของไมเคิล – ส่วนที่ 2: วงเวียน การเปลี่ยนเลน และรถสวนทาง
