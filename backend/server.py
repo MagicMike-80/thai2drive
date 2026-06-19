@@ -4619,7 +4619,8 @@ async def text_to_speech(text: str, lang: str = "th-TH"):
         raise HTTPException(status_code=500, detail="GOOGLE_API_KEY not configured on backend.")
         
     # Determine voice name and gender based on language
-    voice_name = "th-TH-Standard-B" if lang.startswith("th") else "nb-NO-Standard-B" if lang.startswith("no") else None
+    # 'th-TH-Standard-B' does not exist on GCP anymore, so we set it to None to let GCP auto-select the default male voice.
+    voice_name = None if lang.startswith("th") else "nb-NO-Standard-B" if lang.startswith("no") else None
     
     url = f"https://texttospeech.googleapis.com/v1/text:synthesize?key={google_key}"
     payload = {
