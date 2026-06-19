@@ -29,7 +29,36 @@ _mongo = AsyncIOMotorClient(os.environ["MONGO_URL"])
 _db = _mongo[os.environ.get("DB_NAME", "thai2drive")]
 _chat_col = _db["teacher_chats"]
 
+def send_admin_alert_email(subject: str, body: str):
+    import smtplib
+    from email.mime.text import MIMEText
+    
+    smtp_host = os.environ.get("SUPPORT_SMTP_HOST")
+    smtp_port = int(os.environ.get("SUPPORT_SMTP_PORT", 587))
+    smtp_user = os.environ.get("SUPPORT_SMTP_USER")
+    smtp_pass = os.environ.get("SUPPORT_SMTP_PASS")
+    email_to = os.environ.get("SUPPORT_EMAIL_TO", "lexuz.zxc@gmail.com")
+    
+    if not (smtp_host and smtp_user and smtp_pass):
+        logger.error("SMTP alert failed: configuration missing.")
+        return
+
+    try:
+        msg = MIMEText(body, 'plain', 'utf-8')
+        msg['Subject'] = subject
+        msg['From'] = smtp_user
+        msg['To'] = email_to
+
+        with smtplib.SMTP(smtp_host, smtp_port) as server:
+            server.starttls()
+            server.login(smtp_user, smtp_pass)
+            server.sendmail(smtp_user, [email_to], msg.as_string())
+        logger.info("Admin alert email sent successfully to %s", email_to)
+    except Exception as e:
+        logger.error("Failed to send admin alert email: %s", e)
+
 # ─── LLM (same litellm pattern as support_chat.py) ───────────────────────────
+
 import litellm
 
 litellm.suppress_debug_info = True
@@ -1189,7 +1218,23 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             reply_text = _fallback_reply(lang)
     except Exception as e:
         logger.warning("LiteLLM call failed [%s]: %s. Attempting Emergent LlmChat fallback...", type(e).__name__, e)
+        
+        # Check if the error is a 401 Authentication/API key error
+        is_auth_error = False
+        if "AuthenticationError" in type(e).__name__ or "401" in str(e) or "invalid x-api-key" in str(e).lower() or "invalid api key" in str(e).lower():
+            is_auth_error = True
+            
+        if is_auth_error:
+            alert_subj = "ALERT: Thai2Drive Anthropic API Key Invalid"
+            alert_body = f"The system detected an invalid or expired Anthropic API Key on {datetime.now(timezone.utc).isoformat()}.\n\nError details: {e}\n\nPlease update ANTHROPIC_API_KEY in your Railway environment variables immediately."
+            try:
+                import asyncio
+                asyncio.create_task(asyncio.to_thread(send_admin_alert_email, alert_subj, alert_body))
+            except Exception as mail_err:
+                logger.error("Failed to spawn alert email thread: %s", mail_err)
+
         try:
+
             from emergentintegrations.llm.chat import LlmChat, UserMessage
             emergent_key = os.environ.get("EMERGENT_LLM_KEY") or "sk-emergent-b48A3D57008C8350c6"
             

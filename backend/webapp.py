@@ -4168,9 +4168,12 @@ document.addEventListener('click', function(e) {
   }
 });
 
-// Stop all speech when the user leaves the page (close, navigate away, switch app/tab)
+var _backendAudio = null;
+var _teacherAudio = null;
 function stopAllSpeech() {
   if (window.speechSynthesis) window.speechSynthesis.cancel();
+  if (_backendAudio) { try { _backendAudio.pause(); } catch(e){} }
+  if (_teacherAudio) { try { _teacherAudio.pause(); } catch(e){} }
   _teacherTtsPlaying = false;
   ttsPlaying = false;
   if (typeof updateTtsBtn === 'function') { try { updateTtsBtn(false); } catch (e) {} }
@@ -6131,8 +6134,7 @@ function nextQ() {
 }
 
 function goBack() {
-  if (window.speechSynthesis) window.speechSynthesis.cancel();
-  ttsPlaying = false;
+  stopAllSpeech();
   stopExamTimer();
   isExamMode = false;
   if (_reviewMode) endReview();
@@ -6688,13 +6690,36 @@ function retryQuiz() {
 // ════════════════════════════════════════════
 function speakQ() {
   var q = questions[qIdx];
-  if (!q || !window.speechSynthesis) return;
+  if (!q) return;
+  var text = pickLang(q.question) || q.question_text_no || '';
+  if (!text) return;
+
+  if (appLang === 'th') {
+    if (ttsPlaying) {
+      stopAllSpeech();
+      return;
+    }
+    if (!_backendAudio) {
+      _backendAudio = new Audio();
+      _backendAudio.onended = function() { ttsPlaying = false; updateTtsBtn(false); };
+      _backendAudio.onerror = function() { ttsPlaying = false; updateTtsBtn(false); };
+    }
+    _backendAudio.src = '/api/tts?lang=th-TH&text=' + encodeURIComponent(text);
+    ttsPlaying = true;
+    updateTtsBtn(true);
+    _backendAudio.play().catch(function(err) {
+       console.error('Audio playback failed:', err);
+       ttsPlaying = false;
+       updateTtsBtn(false);
+    });
+    return;
+  }
+
+  if (!window.speechSynthesis) return;
   if (ttsPlaying) {
     window.speechSynthesis.cancel();
     ttsPlaying = false; updateTtsBtn(false); return;
   }
-  var text = pickLang(q.question) || q.question_text_no || '';
-  if (!text) return;
   var utt = new SpeechSynthesisUtterance(text);
   utt.lang = appLang === 'th' ? 'th-TH' : appLang === 'no' ? 'nb-NO' : 'en-US';
   utt.rate = ttsRate;
@@ -6726,12 +6751,6 @@ function setVolume(v) {
 
 var _teacherTtsPlaying = false;
 function speakText(text) {
-  if (!window.speechSynthesis) return;
-  if (_teacherTtsPlaying) {
-    window.speechSynthesis.cancel();
-    _teacherTtsPlaying = false;
-    return;
-  }
   // Strip any video/audio/image tags and emoji clutter
   var clean = text
     .replace(/\[(video|audio|podcast|image|url):[^\]]+\]/gi, '')
@@ -6739,6 +6758,32 @@ function speakText(text) {
     .trim();
   if (!clean) return;
 
+  if (appLang === 'th') {
+    if (_teacherTtsPlaying) {
+      stopAllSpeech();
+      return;
+    }
+    if (!_teacherAudio) {
+      _teacherAudio = new Audio();
+      _teacherAudio.onended = function() { _teacherTtsPlaying = false; };
+      _teacherAudio.onerror = function() { _teacherTtsPlaying = false; };
+    }
+    _teacherAudio.src = '/api/tts?lang=th-TH&text=' + encodeURIComponent(clean);
+    _teacherTtsPlaying = true;
+    _teacherAudio.play().catch(function(err) {
+       console.error('Teacher audio playback failed:', err);
+       _teacherTtsPlaying = false;
+    });
+    return;
+  }
+
+  if (!window.speechSynthesis) return;
+  if (_teacherTtsPlaying) {
+    window.speechSynthesis.cancel();
+    _teacherTtsPlaying = false;
+    return;
+  }
+  
   var u = new SpeechSynthesisUtterance(clean);
   u.lang = appLang === 'th' ? 'th-TH' : appLang === 'no' ? 'nb-NO' : 'en-US';
   u.rate = ttsRate || 1.0;
@@ -6878,6 +6923,7 @@ function loadSettings() {
 }
 
 function setLang(lang) {
+  stopAllSpeech();
   var previousLang = appLang;
   appLang = lang;
   _ls.set('t2d_lang', lang);

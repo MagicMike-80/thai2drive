@@ -4606,6 +4606,49 @@ async def ensure_indexes():
         logging.getLogger("indexes").warning("Usage index creation skipped: %s", exc)
 
 
+@api_router.get("/tts")
+async def text_to_speech(text: str, lang: str = "th-TH"):
+    import base64
+    import httpx
+    from fastapi import HTTPException
+    from fastapi.responses import Response
+    
+    google_key = os.environ.get("GOOGLE_API_KEY")
+    if not google_key:
+        logger.error("TTS failed: GOOGLE_API_KEY not configured in backend env.")
+        raise HTTPException(status_code=500, detail="GOOGLE_API_KEY not configured on backend.")
+        
+    # Determine voice name and gender based on language
+    voice_name = "th-TH-Standard-B" if lang.startswith("th") else "nb-NO-Standard-B" if lang.startswith("no") else None
+    
+    url = f"https://texttospeech.googleapis.com/v1/text:synthesize?key={google_key}"
+    payload = {
+        "input": {"text": text},
+        "voice": {
+            "languageCode": lang,
+            "ssmlGender": "MALE",
+        },
+        "audioConfig": {"audioEncoding": "MP3"}
+    }
+    if voice_name:
+        payload["voice"]["name"] = voice_name
+        
+    headers = {"Content-Type": "application/json"}
+    
+    try:
+        async with httpx.AsyncClient() as client:
+            r = await client.post(url, json=payload, headers=headers)
+            if r.status_code != 200:
+                logger.error("Google TTS REST API returned error status %d: %s", r.status_code, r.text)
+                raise HTTPException(status_code=r.status_code, detail=f"Google TTS API error: {r.text}")
+            res_data = r.json()
+            audio_data = base64.b64decode(res_data["audioContent"])
+            return Response(content=audio_data, media_type="audio/mpeg")
+    except Exception as e:
+        logger.error("TTS generation failed: %s", e)
+        raise HTTPException(status_code=500, detail=f"TTS synthesis failed: {str(e)}")
+
+
 @app.get("/api/health")
 async def health_check():
     """
