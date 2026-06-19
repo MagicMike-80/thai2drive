@@ -1,0 +1,312 @@
+[
+  {
+    "question_no": "Du kjører fra høyre side av et 4-kjørs kryss uten skilt. Hva gjør du?",
+    "question_th": "คุณขับรถจากด้านขวาของสี่แยกห้องโดยไม่มีป้าย คุณต้องทำอะไร?",
+    "question_en": "You're driving from the right side of a 4-way intersection with no signs. What do you do?",
+    "options": [
+      {
+        "text_no": "Du kjører først fordi du kommer fra høyre",
+        "text_th": "คุณขับรถก่อนเพราะคุณมาจากด้านขวา",
+        "text_en": "You drive first because you come from the right",
+        "correct": false
+      },
+      {
+        "text_no": "Du viker for trafikk fra andre retninger",
+        "text_th": "คุณให้ทางสำหรับจราจรจากทิศทางอื่น",
+        "text_en": "You yield to traffic from other directions",
+        "correct": true
+      },
+      {
+        "text_no": "Du venter på politiet",
+        "text_th": "คุณรอตำรวจ",
+        "text_en": "You wait for police",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Michaels regel: Du vikeplikt FOR trafikk som kommer fra høyre, ikkje fra høyre. Lyt! Alle kryss utan skilt krev at du viker for trafikk som allereie er på krysset.",
+    "explanation_th": "กฎของไมเคิล: คุณต้องให้ทางสำหรับจราจรที่มาจากด้านขวา ไม่ใช่ว่าคุณมาจากด้านขวา ฟัง! สี่แยกทั้งหมดที่ไม่มีป้ายต้องให้ทางสำหรับจราจรที่อยู่บนสี่แยก",
+    "explanation_en": "Michael's rule: You yield FOR traffic coming from the right, not FROM the right. Listen! All intersections without signs require you to yield to traffic already on the intersection.",
+    "topic_tags": ["vikeplikt", "kryss"],
+    "difficulty": "medium",
+    "podcast_reference": "Michaels 6 vikepliktregler – Del 1"
+  },
+  {
+    "question_no": "Bil A kjører rett fram. Bil B skal svinge venstre. Hvem har prioritet?",
+    "question_th": "รถ A ขับรถตรงไป รถ B ต้องเลี้ยวซ้าย ใครมีสิทธิ์?",
+    "question_en": "Car A drives straight. Car B wants to turn left. Who has priority?",
+    "options": [
+      {
+        "text_no": "Bil B har prioritet fordi det skal svinge",
+        "text_th": "รถ B มีสิทธิ์เพราะมันต้องเลี้ยว",
+        "text_en": "Car B has priority because it's turning",
+        "correct": false
+      },
+      {
+        "text_no": "Bil A har prioritet fordi det kjører rett",
+        "text_th": "รถ A มีสิทธิ์เพราะขับรถตรง",
+        "text_en": "Car A has priority because it's driving straight",
+        "correct": true
+      },
+      {
+        "text_no": "Begge har samme prioritet",
+        "text_th": "ทั้งสองมีสิทธิ์เท่ากัน",
+        "text_en": "Both have equal priority",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Michaels regel 2: Rett fram slår alltid sving. Bil B må vike for Bil A fordi A kjører rett fram.",
+    "explanation_th": "กฎที่ 2 ของไมเคิล: ตรงไปจะชนะการเลี้ยวเสมอ รถ B ต้องให้ทางรถ A เพราะ A ขับรถตรง",
+    "explanation_en": "Michael's rule 2: Straight always beats turn. Car B must yield to Car A because A is driving straight.",
+    "topic_tags": ["vikeplikt", "sving"],
+    "difficulty": "easy",
+    "podcast_reference": "Michaels 6 vikepliktregler – Del 1"
+  },
+  {
+    "question_no": "Du er inne i en rundkjøring. En bil vil kjøre inn. Hvem viker?",
+    "question_th": "คุณอยู่ในวงเวียน รถหนึ่งคันต้องเข้ามา ใครให้ทาง?",
+    "question_en": "You're inside a roundabout. A car wants to enter. Who yields?",
+    "options": [
+      {
+        "text_no": "Du viker fordi du er først",
+        "text_th": "คุณให้ทางเพราะคุณมาก่อน",
+        "text_en": "You yield because you arrived first",
+        "correct": false
+      },
+      {
+        "text_no": "Bilen som vil kjøre inn viker",
+        "text_th": "รถที่ต้องเข้ามาให้ทาง",
+        "text_en": "The entering car yields",
+        "correct": true
+      },
+      {
+        "text_no": "Begge viker",
+        "text_th": "ทั้งสองให้ทาง",
+        "text_en": "Both yield",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Michaels regel 3: Runder INNE i rundkjøringen har alltid prioritet. Bil som vil kjøre inn må vike.",
+    "explanation_th": "กฎที่ 3 ของไมเคิล: รถที่อยู่ในวงเวียนจะมีสิทธิ์ก่อน รถที่ต้องเข้าต้องให้ทาง",
+    "explanation_en": "Michael's rule 3: Cars INSIDE the roundabout always have priority. Entering cars must yield.",
+    "topic_tags": ["vikeplikt", "rundkjøring"],
+    "difficulty": "easy",
+    "podcast_reference": "Michaels 6 vikepliktregler – Del 2"
+  },
+  {
+    "question_no": "Du skal skifte fil til høyre. Hva må du gjøre først?",
+    "question_th": "คุณต้องเปลี่ยนเลนไปทางขวา คุณต้องทำอะไรก่อน?",
+    "question_en": "You want to change lanes to the right. What must you do first?",
+    "options": [
+      {
+        "text_no": "Bare skift fil når du ser plass",
+        "text_th": "เลี้ยวแค่เมื่อคุณเห็นที่ว่าง",
+        "text_en": "Just change lanes when you see space",
+        "correct": false
+      },
+      {
+        "text_no": "Sjekk speil, blindspeil, og se over skulder",
+        "text_th": "ตรวจสอบกระจก กระจกด้านข้าง และมองข้ามไหล่",
+        "text_en": "Check mirror, blind spot, and look over shoulder",
+        "correct": true
+      },
+      {
+        "text_no": "Tut først, deretter filskift",
+        "text_th": "บีบแตรก่อน จากนั้นเปลี่ยนเลน",
+        "text_en": "Honk first, then change lanes",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Michaels regel 4: Før filskift må du alltid sjekke speilet, brukspeilet og blindspeilet. Du må vike for trafikk som allereie er i den nye filen.",
+    "explanation_th": "กฎที่ 4 ของไมเคิล: ก่อนเปลี่ยนเลน คุณต้องตรวจสอบกระจก กระจกด้านข้าง และพื้นที่อับสายตา คุณต้องให้ทางสำหรับจราจรที่อยู่ในเลนใหม่",
+    "explanation_en": "Michael's rule 4: Before changing lanes, always check mirror, side mirror, and blind spot. You must yield to traffic already in the new lane.",
+    "topic_tags": ["filskift", "sikkerhet"],
+    "difficulty": "easy",
+    "podcast_reference": "Michaels 6 vikepliktregler – Del 2"
+  },
+  {
+    "question_no": "Du kjører 50 km/t. Hva er bremselengden?",
+    "question_th": "คุณขับรถ 50 กม./ชม. ระยะการหยุดเป็นเท่าไหร่?",
+    "question_en": "You're driving 50 km/h. What's the braking distance?",
+    "options": [
+      {
+        "text_no": "Ca. 10 meter",
+        "text_th": "ประมาณ 10 เมตร",
+        "text_en": "About 10 meters",
+        "correct": false
+      },
+      {
+        "text_no": "Ca. 27 meter",
+        "text_th": "ประมาณ 27 เมตร",
+        "text_en": "About 27 meters",
+        "correct": true
+      },
+      {
+        "text_no": "Ca. 50 meter",
+        "text_th": "ประมาณ 50 เมตร",
+        "text_en": "About 50 meters",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Michaels leksjon: Ved 50 km/t er bremselengden ca. 27 meter. Det er langt! Ved 30 km/t er den bare ca. 9 meter.",
+    "explanation_th": "บทเรียนของไมเคิล: ที่ 50 กม./ชม. ระยะการหยุดประมาณ 27 เมตร ไกลมาก! ที่ 30 กม./ชม. มันแค่ประมาณ 9 เมตร",
+    "explanation_en": "Michael's lesson: At 50 km/h the braking distance is about 27 meters. That's far! At 30 km/h it's only about 9 meters.",
+    "topic_tags": ["fart", "bremselengde"],
+    "difficulty": "medium",
+    "podcast_reference": "Fart og bremselengde"
+  },
+  {
+    "question_no": "Reaktidslengde betyr:",
+    "question_th": "ระยะเวลาตอบสนองหมายถึง:",
+    "question_en": "Reaction distance means:",
+    "options": [
+      {
+        "text_no": "Tiden det tar å snu bilen",
+        "text_th": "เวลาที่ใช้หันรถ",
+        "text_en": "Time to turn the car",
+        "correct": false
+      },
+      {
+        "text_no": "Avstanden bilen kjører mens du reagerer på fare",
+        "text_th": "ระยะที่รถวิ่งขณะที่คุณตอบสนองต่ออันตราย",
+        "text_en": "Distance car travels while you react to danger",
+        "correct": true
+      },
+      {
+        "text_no": "Tiden som treffer deg mentalt",
+        "text_th": "เวลาที่จิตใจคุณตระหนักถึง",
+        "text_en": "Time your mind realizes",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Michaels definisjon: Reaktidslengde er avstanden bilen kjører i løpet av ca. 1 sekund — fra du ser faren til du trykker på bremsen. Ved 50 km/t er det ca. 14 meter.",
+    "explanation_th": "นิยามของไมเคิล: ระยะตอบสนองคือระยะที่รถวิ่งไปในประมาณ 1 วินาที — ตั้งแต่ที่คุณเห็นอันตรายจนกว่าจะกดเบรก ที่ 50 กม./ชม. มันประมาณ 14 เมตร",
+    "explanation_en": "Michael's definition: Reaction distance is the distance the car travels in about 1 second – from when you see danger until you press the brake. At 50 km/h it's about 14 meters.",
+    "topic_tags": ["fart", "reaktidslengde"],
+    "difficulty": "medium",
+    "podcast_reference": "Fart og bremselengde"
+  },
+  {
+    "question_no": "Stopplengde = reaktidslengde + ?",
+    "question_th": "ระยะหยุดรวม = ระยะตอบสนอง + ?",
+    "question_en": "Stopping distance = reaction distance + ?",
+    "options": [
+      {
+        "text_no": "Drifttid",
+        "text_th": "เวลาไดรฟ์",
+        "text_en": "Driving time",
+        "correct": false
+      },
+      {
+        "text_no": "Bremselengde",
+        "text_th": "ระยะการหยุด",
+        "text_en": "Braking distance",
+        "correct": true
+      },
+      {
+        "text_no": "Turtid",
+        "text_th": "เวลาเดินทาง",
+        "text_en": "Travel time",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Michaels formel: Stopplengde = reaktidslengde + bremselengde. Ved 50 km/t er det 14 + 27 = 41 meter!",
+    "explanation_th": "สูตรของไมเคิล: ระยะหยุดรวม = ระยะตอบสนอง + ระยะการหยุด ที่ 50 กม./ชม. คือ 14 + 27 = 41 เมตร!",
+    "explanation_en": "Michael's formula: Stopping distance = reaction distance + braking distance. At 50 km/h it's 14 + 27 = 41 meters!",
+    "topic_tags": ["fart", "stopplengde"],
+    "difficulty": "easy",
+    "podcast_reference": "Fart og bremselengde"
+  },
+  {
+    "question_no": "Hvem har mest makt i norsk trafikk?",
+    "question_th": "ใครมีอำนาจมากที่สุดในจราจรนอร์เวย์?",
+    "question_en": "Who has the most power in Norwegian traffic?",
+    "options": [
+      {
+        "text_no": "Trafikkskilter",
+        "text_th": "ป้ายจราจร",
+        "text_en": "Traffic signs",
+        "correct": false
+      },
+      {
+        "text_no": "Kjøreregler",
+        "text_th": "กฎการขับขี่",
+        "text_en": "Driving rules",
+        "correct": false
+      },
+      {
+        "text_no": "Politiet",
+        "text_th": "ตำรวจ",
+        "text_en": "Police",
+        "correct": true
+      }
+    ],
+    "explanation_no": "Michaels myndighetspyramide: Politiet > vegvesen > skilt > kjøreregler. Hvis en politimann sier du skal kjøre rett, men skiltet sier venstre, du følger politimannen!",
+    "explanation_th": "ปิรามิดอำนาจของไมเคิล: ตำรวจ > บริหารจัดการถนน > ป้าย > กฎการขับขี่ ถ้าตำรวจบอกให้ขับตรง แต่ป้ายบอกซ้าย คุณทำตามตำรวจ!",
+    "explanation_en": "Michael's authority pyramid: Police > road authorities > signs > driving rules. If a police officer says drive straight but the sign says left, you follow the officer!",
+    "topic_tags": ["myndighet", "regler"],
+    "difficulty": "easy",
+    "podcast_reference": "Myndighetspyramiden"
+  },
+  {
+    "question_no": "Hvis en politimann instruerer deg, og skiltet sier noe annet, hva gjør du?",
+    "question_th": "ถ้าตำรวจให้คำแนะนำ และป้ายบอกอะไรอื่น คุณจะทำอะไร?",
+    "question_en": "If a police officer instructs you, and the sign says something else, what do you do?",
+    "options": [
+      {
+        "text_no": "Du følger skiltet",
+        "text_th": "คุณทำตามป้าย",
+        "text_en": "You follow the sign",
+        "correct": false
+      },
+      {
+        "text_no": "Du følger politimannen",
+        "text_th": "คุณทำตามตำรวจ",
+        "text_en": "You follow the police officer",
+        "correct": true
+      },
+      {
+        "text_no": "Du gjør hva som virker rimelig",
+        "text_th": "คุณทำสิ่งที่ดูเหมาะสม",
+        "text_en": "You do what seems reasonable",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Michaels regel: Politiet har alltid høyeste autoritet. Du må følge politimannen — alltid.",
+    "explanation_th": "กฎของไมเคิล: ตำรวจมีอำนาจสูงสุดเสมอ คุณต้องทำตามตำรวจ — เสมอ",
+    "explanation_en": "Michael's rule: Police always have the highest authority. You must follow the officer – always.",
+    "topic_tags": ["myndighet", "politi"],
+    "difficulty": "easy",
+    "podcast_reference": "Myndighetspyramiden"
+  },
+  {
+    "question_no": "I Thailand kjører sjåfører mer 'fritt'. I Norge er det mer disiplin. Hvilken har færre dødsfall?",
+    "question_th": "ในไทย คนขับรถขับอิสระกว่า ในนอร์เวย์มีวินัยมากกว่า ที่ไหนมีการเสียชีวิตน้อยกว่า?",
+    "question_en": "In Thailand drivers drive more 'freely'. In Norway there's more discipline. Which has fewer deaths?",
+    "options": [
+      {
+        "text_no": "Thailand — frihet redder liv",
+        "text_th": "ไทย — เสรีภาพช่วยชีวิต",
+        "text_en": "Thailand – freedom saves lives",
+        "correct": false
+      },
+      {
+        "text_no": "Norge — disiplin redder liv",
+        "text_th": "นอร์เวย์ — วินัยช่วยชีวิต",
+        "text_en": "Norway – discipline saves lives",
+        "correct": true
+      },
+      {
+        "text_no": "Begge er like farlige",
+        "text_th": "ทั้งสองอันตรายเท่ากัน",
+        "text_en": "Both are equally dangerous",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Michaels leksjon: I Norge: order gir frihet, ikke det motsatte. Disiplinen på veien redder liv. Færre regler = flere uhell.",
+    "explanation_th": "บทเรียนของไมเคิล: ในนอร์เวย์: ความเป็นระเบียบให้เสรีภาพ ไม่ใช่สิ่งตรงข้าม วินัยบนถนนช่วยชีวิต กฎน้อยลง = อุบัติเหตุมากขึ้น",
+    "explanation_en": "Michael's lesson: In Norway: order gives freedom, not the opposite. Discipline on the road saves lives. Fewer rules = more accidents.",
+    "topic_tags": ["kultur", "sikkerhet"],
+    "difficulty": "medium",
+    "podcast_reference": "Thailand-norsk trafikk-sammenligning"
+  }
+]

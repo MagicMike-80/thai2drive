@@ -266,6 +266,158 @@ def import_podcasts(db):
     print(f"Podcasts Import Summary: {inserted} inserted, {updated} updated, {skipped} skipped.")
     return inserted, updated, skipped
 
+def import_quizzes(db):
+    print("\n--- Starting Quizzes/Questions Import ---")
+    quizzes_file = os.path.join("content", "quiz_michael_v5.json")
+    if not os.path.exists(quizzes_file):
+        quizzes_file = "quiz_michael_v5.json"
+        if not os.path.exists(quizzes_file):
+            print("Quizzes file quiz_michael_v5.json not found in content/ or root. Skipping.")
+            return 0, 0, 0
+        
+    with open(quizzes_file, "r", encoding="utf-8") as f:
+        items = json.load(f)
+        
+    print(f"Found {len(items)} items in {quizzes_file}.")
+    
+    quizzes_coll = db.learning_quizzes
+    questions_coll = db.questions
+    
+    inserted = 0
+    updated = 0
+    skipped = 0
+    
+    letters = ["A", "B", "C", "D"]
+    
+    for item in items:
+        question_no = item.get("question_no", "Unknown")
+        desc = f"Quiz Question: '{question_no[:40]}...'"
+        
+        # 1. Structural checks
+        errors = []
+        if "options" not in item or not isinstance(item["options"], list) or len(item["options"]) == 0:
+            errors.append("Missing or invalid options list")
+        if "difficulty" not in item:
+            errors.append("Missing difficulty")
+            
+        if errors:
+            print(f"  [VALIDATION FAILED] {desc}:")
+            for err in errors:
+                print(f"    - {err}")
+            skipped += 1
+            continue
+            
+        # 2. Purity check for question text and explanation
+        if not validate_language_purity(item, ["question", "explanation"], desc):
+            skipped += 1
+            continue
+            
+        # 3. Purity check for each option
+        options_valid = True
+        for idx, opt in enumerate(item["options"]):
+            opt_desc = f"{desc} - Option {idx+1}"
+            if not validate_language_purity(opt, ["text"], opt_desc):
+                options_valid = False
+                break
+        if not options_valid:
+            skipped += 1
+            continue
+            
+        # Check if there is exactly one correct answer
+        correct_indices = [idx for idx, opt in enumerate(item["options"]) if opt.get("correct") is True]
+        if len(correct_indices) != 1:
+            print(f"  [VALIDATION FAILED] {desc}: Must have exactly one correct option, found {len(correct_indices)}")
+            skipped += 1
+            continue
+            
+        correct_idx = correct_indices[0]
+        correct_letter = letters[correct_idx]
+        
+        # --- A. Write to learning_quizzes (raw collection, exact copy with id, created_at, active) ---
+        existing_quiz = quizzes_coll.find_one({"question_no": item["question_no"]})
+        if existing_quiz:
+            update_data = {
+                **item,
+                "active": existing_quiz.get("active", True)
+            }
+            quizzes_coll.update_one({"_id": existing_quiz["_id"]}, {"$set": update_data})
+            print(f"  [UPDATE - learning_quizzes] {desc}")
+        else:
+            new_quiz = {
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.now(timezone.utc).isoformat(),
+                "active": True,
+                **item
+            }
+            quizzes_coll.insert_one(new_quiz)
+            print(f"  [INSERT - learning_quizzes] {desc}")
+            
+        # --- B. Write to questions (main quiz collection, formatted to V2 nested schema) ---
+        # Map category based on topic tags
+        topic_tags = [t.lower() for t in item.get("topic_tags", [])]
+        category = "Situations"
+        if any(t in topic_tags for t in ["vikeplikt", "kryss", "sving", "rundkjøring"]):
+            category = "Right of Way"
+        elif any(t in topic_tags for t in ["fart", "bremselengde", "reaktidslengde", "stopplengde"]):
+            category = "Speed Limits"
+        elif any(t in topic_tags for t in ["myndighet", "regler", "politi"]):
+            category = "Road Rules"
+        
+        # Construct V2 document
+        options_formatted = []
+        for idx, opt in enumerate(item["options"]):
+            options_formatted.append({
+                "id": letters[idx],
+                "text": {
+                    "no": opt["text_no"],
+                    "th": opt["text_th"],
+                    "en": opt["text_en"]
+                }
+            })
+            
+        v2_doc = {
+            "question": {
+                "no": item["question_no"],
+                "th": item["question_th"],
+                "en": item["question_en"]
+            },
+            "options": options_formatted,
+            "correctOptionId": correct_letter,
+            "explanation": {
+                "no": item["explanation_no"],
+                "th": item["explanation_th"],
+                "en": item["explanation_en"]
+            },
+            "category": category,
+            "difficulty": item["difficulty"],
+            "topic_tags": item.get("topic_tags", []),
+            "podcast_reference": item.get("podcast_reference", ""),
+            "schema_version": 2
+        }
+        
+        existing_question = questions_coll.find_one({"question.no": item["question_no"]})
+        if existing_question:
+            update_q = {
+                **v2_doc,
+                "active": existing_question.get("active", True)
+            }
+            questions_coll.update_one({"_id": existing_question["_id"]}, {"$set": update_q})
+            print(f"  [UPDATE - questions] {desc}")
+            updated += 1
+        else:
+            new_q = {
+                "id": str(uuid.uuid4()),
+                "created_at": datetime.now(timezone.utc).isoformat(),
+                "active": True,
+                **v2_doc
+            }
+            questions_coll.insert_one(new_q)
+            print(f"  [INSERT - questions] {desc}")
+            inserted += 1
+
+    print(f"Quizzes Import Summary: {inserted} inserted, {updated} updated, {skipped} skipped.")
+    return inserted, updated, skipped
+
 def main():
     print(f"Connecting to MongoDB...")
     # Clean output masking passwords in logging
@@ -283,11 +435,13 @@ def main():
         
         g_ins, g_upd, g_skp = import_glossary(db)
         p_ins, p_upd, p_skp = import_podcasts(db)
+        q_ins, q_upd, q_skp = import_quizzes(db)
         
         print("\n==============================================")
         print("DATABASE IMPORT SUCCESSFULLY COMPLETED!")
         print(f"Total Glossary items: {g_ins} inserted, {g_upd} updated, {g_skp} skipped.")
         print(f"Total Podcast items: {p_ins} inserted, {p_upd} updated, {p_skp} skipped.")
+        print(f"Total Quiz Questions: {q_ins} inserted, {q_upd} updated, {q_skp} skipped.")
         print("==============================================")
         
     except Exception as e:
