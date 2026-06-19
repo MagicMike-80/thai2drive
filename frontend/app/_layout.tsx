@@ -258,6 +258,7 @@ export default function RootLayout() {
           <Stack.Screen name="teacher" />
           <Stack.Screen name="research" />
           <Stack.Screen name="library" />
+          <Stack.Screen name="glossary" />
         </Stack>
       </WebAppShell>
     </SafeAreaProvider>
