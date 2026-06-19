@@ -4621,29 +4621,73 @@ async def text_to_speech(text: str, lang: str = "th-TH"):
     # Determine voice name and gender based on language
     voice_name = "th-TH-Chirp3-HD-Achird" if lang.startswith("th") else "nb-NO-Standard-B" if lang.startswith("no") else None
     
+    # Check if we should chunk the text (Chirp3-HD model has a ~250 character limit per request)
+    # We only need to chunk for Thai (th) since we use Chirp3-HD there.
+    # Other languages use standard/neural voices which support up to 5000 characters.
+    max_chunk_size = 200
+    if lang.startswith("th") and len(text) > max_chunk_size:
+        # Split text into chunks by space to preserve words where possible
+        words = text.split(" ")
+        chunks = []
+        current_chunk = []
+        current_len = 0
+        for word in words:
+            if not word:
+                continue
+            if len(word) > max_chunk_size:
+                if current_chunk:
+                    chunks.append(" ".join(current_chunk))
+                    current_chunk = []
+                    current_len = 0
+                for i in range(0, len(word), max_chunk_size):
+                    chunks.append(word[i:i+max_chunk_size])
+                continue
+            if current_len + len(word) + (1 if current_chunk else 0) <= max_chunk_size:
+                current_chunk.append(word)
+                current_len += len(word) + (1 if len(current_chunk) > 1 else 0)
+            else:
+                chunks.append(" ".join(current_chunk))
+                current_chunk = [word]
+                current_len = len(word)
+        if current_chunk:
+            chunks.append(" ".join(current_chunk))
+        chunks = [c for c in chunks if c.strip()]
+    else:
+        chunks = [text]
+
     url = f"https://texttospeech.googleapis.com/v1/text:synthesize?key={google_key}"
-    payload = {
-        "input": {"text": text},
-        "voice": {
-            "languageCode": lang,
-            "ssmlGender": "MALE",
-        },
-        "audioConfig": {"audioEncoding": "MP3"}
-    }
-    if voice_name:
-        payload["voice"]["name"] = voice_name
-        
     headers = {"Content-Type": "application/json"}
     
-    try:
+    async def fetch_chunk(chunk_text: str) -> bytes:
+        payload = {
+            "input": {"text": chunk_text},
+            "voice": {
+                "languageCode": lang,
+                "ssmlGender": "MALE",
+            },
+            "audioConfig": {"audioEncoding": "MP3"}
+        }
+        if voice_name:
+            payload["voice"]["name"] = voice_name
+            
         async with httpx.AsyncClient() as client:
             r = await client.post(url, json=payload, headers=headers)
             if r.status_code != 200:
                 logger.error("Google TTS REST API returned error status %d: %s", r.status_code, r.text)
                 raise HTTPException(status_code=r.status_code, detail=f"Google TTS API error: {r.text}")
             res_data = r.json()
-            audio_data = base64.b64decode(res_data["audioContent"])
-            return Response(content=audio_data, media_type="audio/mpeg")
+            return base64.b64decode(res_data["audioContent"])
+
+    try:
+        import asyncio
+        # Fetch all chunks in parallel
+        tasks = [fetch_chunk(chunk) for chunk in chunks]
+        audio_contents = await asyncio.gather(*tasks)
+        # Concatenate all MP3 chunks together
+        combined_audio = b"".join(audio_contents)
+        return Response(content=combined_audio, media_type="audio/mpeg")
+    except HTTPException as he:
+        raise he
     except Exception as e:
         logger.error("TTS generation failed: %s", e)
         raise HTTPException(status_code=500, detail=f"TTS synthesis failed: {str(e)}")
