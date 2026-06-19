@@ -1903,7 +1903,10 @@ async function loadGlossary() {
         <tbody>
           ${_glossaryData.map(g => `
             <tr style="border-bottom:1px solid #1e293b">
-              <td style="padding:8px 10px;color:var(--text);font-weight:600">${escapeHtml(g.term_no || '—')}</td>
+              <td style="padding:8px 10px">
+                ${g.image_url ? `<img src="${escapeHtml(g.image_url)}" style="width:36px;height:36px;object-fit:cover;border-radius:6px;vertical-align:middle;margin-right:8px">` : ''}
+                <span style="color:var(--text);font-weight:600">${escapeHtml(g.term_no || '—')}</span>
+              </td>
               <td style="padding:8px 10px;color:var(--text)">${escapeHtml(g.term_th || '—')}</td>
               <td style="padding:8px 10px;color:var(--muted)">${escapeHtml(g.term_en || '—')}</td>
               <td style="padding:8px 10px;color:var(--muted)">${escapeHtml((g.topic_tags||[]).join(', '))}</td>
@@ -1978,6 +1981,12 @@ function openGlossaryModal(id) {
       </div>
     </div>
 
+    <div style="margin-bottom:14px">
+      <div class="lbl">🖼️ Bilde URL (valgfritt)</div>
+      <input id="gc-img" class="inp" value="${escapeHtml(g?.image_url||'')}" placeholder="https://...">
+      ${g?.image_url ? `<img src="${escapeHtml(g.image_url)}" style="margin-top:8px;max-width:120px;max-height:80px;border-radius:8px;object-fit:cover;display:block">` : ''}
+    </div>
+
     <div style="display:grid;grid-template-columns:1fr auto;gap:10px;align-items:end;margin-bottom:18px">
       <div>
         <div class="lbl">Tags (kommaseparert)</div>
@@ -2009,6 +2018,7 @@ async function saveGlossary(id) {
     example_no:     document.getElementById('gc-ex-no').value.trim(),
     example_th:     document.getElementById('gc-ex-th').value.trim(),
     example_en:     document.getElementById('gc-ex-en').value.trim(),
+    image_url:      document.getElementById('gc-img').value.trim(),
     topic_tags:     document.getElementById('gc-tags').value.split(',').map(t=>t.trim()).filter(Boolean),
     active:         document.getElementById('gc-active').checked,
   };
