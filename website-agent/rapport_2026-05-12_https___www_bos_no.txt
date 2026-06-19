@@ -1,0 +1,151 @@
+URL: https://www.bos.no
+Dato: 12.5.2026, 18:21:40
+Oppdrag: hva er dette, sammenlign med Thai2Drive teoriprøve app
+
+# Analyse: bos.no (Bertel O. Steen)
+
+## 🌐 HVA ER DETTE?
+
+**bos.no** er nettsiden til **Bertel O. Steen**, en av Norges største bilforhandlerkjeder med 125-års historie. Dette er en **bedriftsnettside / e-handelsplattform for bilbransjen** – ikke en app eller læringsplattform.
+
+**Målgruppe:**
+- Privatpersoner som skal kjøpe ny eller brukt bil/elbil
+- Bedrifter som trenger varebiler
+- Eksisterende bileiere som trenger service, EU-kontroll eller dekkskift
+- Folk som vil selge bilen sin
+
+**Hva tilbys:**
+- Salg av nye biler (Mercedes-Benz, Kia, Peugeot, smart m.fl. – 7 merker totalt)
+- Brukte biler og innbyttebil-tjenester
+- Bilverksted og service (40 servicepunkter)
+- Leasing
+- Verdivurdering og oppkjøp av bil
+
+---
+
+## ✨ HOVEDFUNKSJONER OG FEATURES
+
+1. **Bilkatalog** – nye biler, elbiler, varebiler, brukte biler
+2. **Kampanjeoversikt** – aktuelle tilbud (f.eks. "over 25 nye elbiler nå")
+3. **Bestilling av verkstedtjenester** – service, EU-kontroll, dekkskift
+4. **Selg-bilen-din-flow** – verdivurdering, oppkjøp, kommisjonssalg
+5. **Forhandlerfinner** – 35+ forhandlere over hele Norge
+6. **Leasingkalkulator/kampanjer**
+7. **Kundeanmeldelser/reviews** med navn, sted og dato
+8. **Innholdsmarkedsføring** – artikler om elbilnyheter, bilkjøp, leasing
+9. **Nyhetsbrev-påmelding** (med personverntilpasset samtykke)
+10. **Cookie-management** (OneTrust) med granulær kontroll
+11. **Merkespesifikke landingssider** for hver bilprodusent
+12. **SoMe-integrasjon** (Facebook, Instagram, YouTube)
+
+---
+
+## 🛠️ TECH STACK OG TEKNOLOGI
+
+**Frontend:**
+- **Next.js** (React-basert SSR/SSG-rammeverk) – synlig via `/_next/static/chunks/`
+- Sannsynligvis TypeScript
+
+**CMS / Innhold:**
+- **Crystallize** (headless commerce/CMS) – bilder serveres fra `media.crystallize.com`
+
+**Analytics & marketing:**
+- Google Tag Manager + Google Analytics 4 (G-Y5JCPB3HXQ)
+- Google Ads / DoubleClick (DC-6220282)
+- Facebook Pixel (fb:app_id)
+- **OneTrust** for cookie consent (GDPR-compliant)
+
+**Hosting:** Sannsynligvis Vercel eller egen Next.js-deploy
+
+**Backend:** Headless arkitektur – Crystallize som commerce-backend, sannsynligvis egne API-er for forhandler-/bilbestand-integrasjon mot DMS (Dealer Management System)
+
+---
+
+## 👥 BRUKERFLYT
+
+**Typiske flow:**
+
+**Kjøpe bil:**
+Forside → Velg merke/kategori → Bilmodell → Konfigurator/spesifikasjoner → Kontakt forhandler / prøvekjør / kjøpsforespørsel
+
+**Bestille verksted:**
+Forside → "Bestill service" → Velg tjeneste → Velg forhandler → Velg tid → Bilinfo → Bekreftelse
+
+**Selge bil:**
+"Selg bilen din" → Skjema med bilinfo → Verdivurdering → Kontakt fra BOS → Oppgjør
+
+---
+
+## 💰 FORRETNINGSMODELL
+
+- **B2C bilsalg** – marginer på nye og brukte biler
+- **Service/verksted** – timepris og deler
+- **Leasing** – månedlige avtaler
+- **Innbytte/oppkjøp** – kjøper biler billig, selger med margin
+- **Tilleggstjenester** – dekkhotell (fra 699 kr), forsikring, finansiering
+
+Selve nettsiden er **gratis** – fungerer som digitalt utstillingsvindu og bestillingsplattform.
+
+---
+
+## 🏗️ HVIS JEG SKAL BYGGE/KLONE DETTE
+
+**Kompleksitet: KOMPLEKS (6-12 måneder med team)**
+
+**Hva trengs:**
+- Next.js + TypeScript frontend
+- Headless CMS (Crystallize, Sanity, Contentful eller Strapi)
+- PostgreSQL/MongoDB for bilbestand
+- Integrasjoner mot DMS (Dealer Management System)
+- Booking-system for verksted
+- Skjemahåndtering + e-postvarsler
+- Søk (Algolia/Meilisearch) for bilbestand
+- Bildehosting/CDN (Cloudinary, Crystallize)
+- Cookie consent (OneTrust eller Cookiebot)
+- Maps API for forhandlerlokasjoner
+
+**Viktigste deler å fokusere på:**
+1. **Bilbestand-database** med god filtrering (merke, modell, pris, drivstoff)
+2. **Verkstedbooking** – kalenderintegrasjon per forhandler
+3. **Lead-håndtering** – skjemaer som ruter til riktig forhandler
+4. **CMS for kampanjer/artikler**
+5. **Mobiloptimering** – mange søker bil på mobil
+
+---
+
+## ⚡ UNIKE TING / DIFFERENTIATORER
+
+- **125 års merkevarehistorikk** – tillit er vanskelig å kopiere
+- **Multimerke-portefølje** (Mercedes, Kia, Peugeot, smart) – krever forhandleravtaler
+- **35+ fysiske forhandlere** – fysisk infrastruktur er ikke en webside
+- **40 verksteder** – servicekapasitet
+- **Etablert kundebase** og anmeldelser
+
+Selve **nettsiden** er teknisk sett ikke unik – det er et standard Next.js + headless CMS-oppsett. Det som ikke kan kopieres er **forretningen bak**.
+
+---
+
+## 📋 KONKLUSJON OG ANBEFALING
+
+### ⚠️ Viktig merknad om oppdraget
+
+Du ba om sammenligning med **Thai2Drive teoriprøve-app**. Disse to har **ingenting med hverandre å gjøre**:
+
+| | bos.no | Thai2Drive |
+|---|---|---|
+| **Type** | Bilforhandler e-commerce | Læringsapp for teoriprøve |
+| **Målgruppe** | Bilkjøpere i Norge | Folk som tar førerkort i Thailand |
+| **Forretningsmodell** | Bilsalg + verksted | Sannsynligvis abonnement/engangskjøp |
+| **Kjernefunksjon** | Vise/selge biler | Quiz/spørsmål-trening |
+| **Teknologi** | Next.js + headless CMS | Mobilapp (React Native/Flutter) |
+| **Kompleksitet** | Stor B2C-plattform | Fokusert quiz-app |
+
+**Eneste fellesnevner:** Begge har med biler å gjøre 🚗
+
+### Anbefaling
+Hvis målet er **inspirasjon til Thai2Drive-appen din**, gir bos.no lite verdi – det er en helt annen produkttype. Du bør heller analysere:
+- **Duolingo** (gamification av læring)
+- **Quizlet** (flashcards/quiz-mekanikk)
+- **Andre teoriprøve-apper** (f.eks. norske "Teoriprøven 2024")
+
+Vil du at jeg skal analysere en konkurrent som faktisk ligner Thai2Drive? Da får du mye mer relevant innsikt.

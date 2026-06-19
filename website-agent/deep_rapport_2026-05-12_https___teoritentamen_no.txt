@@ -1,0 +1,182 @@
+URL: https://teoritentamen.no
+Dato: 12.5.2026, 18:27:54
+Fokus: hvordan vises quiz og spørsmål, UI struktur, brukerflyt fra forside til å svare på spørsmål
+
+# 🔍 Grundig UI/UX-analyse av Teoritentamen.no
+
+## 🎨 DESIGN OG LAYOUT
+
+### Førsteinntrykk
+Nettstedet har et **rolig, profesjonelt og tillitsskapende uttrykk** med en lett "playful" touch via geometriske bakgrunnsfigurer. Det føles seriøst men ikke kjedelig – passer godt for et utdannings-/eksamensprodukt.
+
+### Fargepalett (utdrag fra screenshots)
+- **Mintgrønn (primær CTA):** `#5FCDA4` ish – brukt på "Kom i gang", "Logg inn", anbefalt prisplan
+- **Mørk navy/marineblå:** `#1F4A6B` ish – sekundære prisplaner, tillit
+- **Oransje accent:** `#E8763A` – "BESTÅTTGARANTI"-banner, Vipps-knapp, geometriske figurer
+- **Korall/rød-oransje:** trekant-dekorasjoner
+- **Lys grå bakgrunn:** `#E8E8E6` – behagelig, ikke ren hvit
+- **Hvitt:** kort/cards for kontrast
+- **Mørk tekst:** nesten-sort for høy lesbarhet
+
+### Typografi
+- **Sans-serif** (ser ut som Inter, Poppins eller lignende geometrisk)
+- **Veldig stor H1** (~72-80px) – sterkt visuelt hierarki
+- **Bold weight** på headings, regular på brødtekst
+- Tydelig kontrast i størrelser mellom H1 / H2 / brødtekst
+
+### Layout & Spacing
+- **Sentrert innhold** med maks bredde (~1200px container)
+- **Generøs whitespace** – ikke overfylt
+- **3-kolonne grid** for prisplaner med midtkortet "elevated" (større, annen farge, garanti-banner)
+- **Geometriske bakgrunnselementer** (sirkler, trapeser, trekanter) i hjørnene – gir karakter uten å forstyrre
+
+### Visuelt hierarki
+1. Logo + nav (topp)
+2. Stor H1 + subtekst + CTA (hero)
+3. Telefon-mockup med produktdemo
+4. Sosialt bevis (kundevurderinger)
+5. Kategorivalg (førerkortklasser)
+
+---
+
+## 📱 QUIZ/SPØRSMÅL-STRUKTUR
+
+⚠️ **Viktig:** Selve quiz-grensesnittet ligger bak innlogging og er ikke direkte synlig i screenshots. Men fra telefon-mockupen på forsiden kan vi utlede:
+
+### Det vi ser i mockupen:
+- **Bildebasert spørsmål** øverst (ekte trafikkbilde – ikke illustrasjon)
+- **Progress-indikator:** "4.44 / 45" (spørsmål x av y) i toppen
+- **Lukk-knapp (X)** øverst venstre – gir mulighet til å avbryte
+- **Spørsmålstekst** under bildet (eks: "Hvordan bør du gi tegn når du skal til høyre i...")
+- **Svaralternativer** som vertikale knapper/kort under spørsmålet
+  - "Jeg bør blinke..."
+  - "Jeg trenger bare..."
+- **Bunn-CTA:** "Start ny prøve" (grønn knapp)
+- **Statistikk-skjerm** ved siden: stolpediagram med ytelse over tid, "Teoriprøver Personbil" som tittel
+
+### Antatt quiz-flow (basert på Statens vegvesen-format)
+- **45 spørsmål per prøve** (standard for norsk teoriprøve bil)
+- **Ingen timer synlig** i mockupen – sannsynligvis tidsbasert men ikke aggressivt
+- **Ett spørsmål per skjerm** (full fokus)
+- **Bilde + tekst + 2-4 svaralternativer**
+- **Tilbakemelding sannsynligvis etter hele prøven** (ikke umiddelbart), siden de markedsfører "Forklaringer til oppgavene" som eget feature
+- **Lyd på alt innhold** – TTS for tilgjengelighet
+- **Statistikk-view** med historisk ytelse
+
+---
+
+## 🔄 BRUKERFLYT (forside → svare på spørsmål)
+
+```
+1. FORSIDE (teoritentamen.no)
+   ↓ Klikk "Kom i gang" eller velg førerkortklasse-kort
+   
+2. KATEGORI-SIDE (/teoriproven-for-bil)
+   ↓ Velg pakke (24t / 1 uke / 4 uker)
+   ↓ Klikk "Kjøp tilgang nå"
+   
+3. BETALING / REGISTRERING
+   ↓ Får tilsendt passord på SMS
+   
+4. LOGG INN (/login)
+   ↓ Mobilnummer + passord (eller Vipps)
+   
+5. DASHBOARD (antatt – ikke i screenshots)
+   ↓ Velg "Teoriprøver" / "Skiltprøver" / "Spill" / "Ebok"
+   
+6. PRØVE-OVERSIKT
+   ↓ Start ny prøve
+   
+7. QUIZ-VIEW
+   - Spørsmål 1 av 45 vises
+   - Velg svar
+   - Neste-knapp
+   - ... gjenta
+   
+8. RESULTAT
+   - Score
+   - Gjennomgang av feil med forklaringer
+   - Tilgang til statistikk
+```
+
+**Friksjon:** Du må kjøpe FØR du får prøve quizen (selv om de tilbyr "Test teoriprøven gratis" som en taktikk).
+
+---
+
+## 🧩 KOMPONENTER SOM KAN KOPIERES (React/React Native)
+
+### Core quiz-komponenter
+1. **`<QuestionCard>`** – bilde + spørsmålstekst + alternativer
+2. **`<AnswerOption>`** – tappable option-row med state (default/selected/correct/wrong)
+3. **`<ProgressIndicator>`** – "X / Y" i header
+4. **`<QuizHeader>`** – close-button + progress + (optional) timer
+5. **`<ExplanationModal>`** – vises etter svar med forklaring
+6. **`<ResultScreen>`** – score, pass/fail, gjennomgang
+7. **`<StatisticsChart>`** – stolpediagram over historisk ytelse (Victory Native / react-native-svg-charts)
+
+### Marketing/onboarding-komponenter
+8. **`<PricingCard>`** – 3-kolonne med highlighted midtkort
+9. **`<CategoryCard>`** – førerkortklasse-velger
+10. **`<TestimonialCarousel>`** – kundevurderinger
+11. **`<HeroSection>`** – stor H1 + CTA + mockup
+12. **`<FeatureGrid>`** – ikon + tittel + beskrivelse
+13. **`<LoginForm>`** – mobil + passord + SMS-flow
+
+---
+
+## ✅ HVA ER BRA (ta inspirasjon fra)
+
+1. **Tydelig CTA-strategi:** Én primær mintgrønn knapp gjentar seg overalt – brukeren er aldri i tvil
+2. **3-kolonne prising med midtkort framhevet** – klassisk konverteringsoptimalisering, fungerer
+3. **"Beståttgaranti"-banner** på anbefalt plan – fjerner kjøpsangst (Thai2Drive kan f.eks. tilby "Pass guarantee" eller "money back")
+4. **Sosialt bevis tidlig** – "39869 tilbakemeldinger" + offisielle anbefalinger fra trafikkskole-forbund
+5. **Bildebaserte spørsmål** med ekte trafikksituasjoner (ikke generiske illustrasjoner)
+6. **Lyd på alt innhold** – stor tilgjengelighetsgevinst, særlig for dyslektikere/ESL
+7. **Statistikk-view** – gamification, viser progresjon over tid
+8. **Vipps-innlogging** (lokal payment/auth) – Thai2Drive bør integrere **PromptPay/TrueMoney/Line Login**
+9. **Strukturen "45 spørsmål speiler ekte prøve"** – øvelse under realistiske forhold
+10. **Dark mode toggle** synlig i header (måne-ikon)
+11. **Geometriske bakgrunnselementer** gir merkevareidentitet uten å distrahere
+12. **English-versjon** av nettsiden – Thai2Drive bør ha både Thai + English (og kanskje kinesisk/burmesisk for migrantarbeidere)
+
+---
+
+## ❌ HVA ER DÅRLIG (Thai2Drive kan slå dem på)
+
+1. **Ingen gratis prøveversjon synlig før kjøp** – "Test gratis"-knappen er gjemt. **Thai2Drive bør tilby 10-20 gratis spørsmål uten registrering.**
+2. **Tid-basert tilgang (24t/1 uke/4 uker) er stressende** – brukeren føler press. **Thai2Drive kan tilby livstidstilgang eller månedlig sub.**
+3. **SMS-passord-login er klønete** – krever mobilnummer, ikke selv-valgt passord. Bruk **moderne auth (Google/Apple/Line/Magic link)**.
+4. **Lite gamification synlig** – ingen streaks, achievements, leaderboards i markedsføringen. **Thai2Drive bør være Duolingo-aktig.**
+5. **Statisk design** – ingen animasjoner/microinteractions synlig. Mockupen er statisk.
+6. **Overveldende kategorivalg på forsiden** – 12+ førerkortklasser. Thai2Drive har færre klasser i Thailand → enklere onboarding.
+7. **Pris-kortene er nesten identiske** – bare farge/pris skiller dem. Vanskelig å forstå hvorfor velge hva.
+8. **Ingen synlig spaced repetition / personalisert læring** – bare "tilfeldige" prøver. **Thai2Drive bør bruke SRS-algoritme** (som Anki/Duolingo) for spørsmål du svarte feil på.
+9. **Ingen community/forum** – ensomt å studere alene.
+10. **Mobil-app er kun nevnt, ikke fremhevet** – i 2025 bør mobil være primær. Thai2Drive er **mobile-first React Native**.
+11. **Mockupen viser begrenset feedback** – uklart om man får umiddelbar forklaring eller bare ved slutt.
+
+---
+
+## 🏗️ BYGGEPLAN for Thai2Drive
+
+### Fase 1: Core Quiz Engine (MVP)
+```jsx
+// React Native komponentstruktur
+<QuizScreen>
+  <QuizHeader 
+    progress={{ current: 5, total: 45 }}
+    onClose={...}
+    timer={optional}
+  />
+  <QuestionImage uri={...} />
+  <QuestionText>{...}</QuestionText>
+  <AnswerList>
+    <AnswerOption 
+      state="default | selected | correct | wrong"
+      onPress={...}
+    />
+  </AnswerList>
+  <BottomBar>
+    <PrimaryButton>Next</PrimaryButton>
+  </BottomBar>
+</QuizScreen

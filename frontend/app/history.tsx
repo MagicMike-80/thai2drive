@@ -95,7 +95,7 @@ function statusFor(score: number, t: Record<string, string>) {
 
 export default function HistoryScreen() {
   const router = useRouter();
-  const { language, deviceId, colors } = useAppStore();
+  const { language, deviceId, colors, authToken, isAuthenticated } = useAppStore();
   const lang = (['no', 'th', 'en'].includes(language) ? language : 'th') as Lang;
   const t = TR[lang];
   const [attempts, setAttempts] = useState<QuizAttempt[]>([]);
@@ -106,7 +106,12 @@ export default function HistoryScreen() {
     if (isRefresh) setRefreshing(true);
     else setLoading(true);
     try {
-      const data = await api.getQuizAttempts(deviceId, 50);
+      let data: QuizAttempt[] = [];
+      if (isAuthenticated && authToken) {
+        data = await api.getHistory(authToken, 50);
+      } else {
+        data = await api.getQuizAttempts(deviceId, 50);
+      }
       const sorted = [...data].sort((a, b) => new Date(b.completed_at || b.started_at).getTime() - new Date(a.completed_at || a.started_at).getTime());
       setAttempts(sorted);
     } catch (error) {
@@ -115,7 +120,7 @@ export default function HistoryScreen() {
       setLoading(false);
       setRefreshing(false);
     }
-  }, [deviceId]);
+  }, [deviceId, authToken, isAuthenticated]);
 
   useFocusEffect(useCallback(() => {
     loadHistory(false);

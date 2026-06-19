@@ -74,7 +74,7 @@ This must match `app.json android.package` and `app.json ios.bundleIdentifier`.
 
 ### 2.1 Subscription #1 — Monthly
 **Play Console → Monetize → Products → Subscriptions → Create subscription**
-- **Product ID:** `monthly_199` *(must match exactly — your code uses this)*
+- **Product ID:** `monthly_99` *(must match exactly — your code uses this)*
 - **Name:** `Thai2Drive Premium – Månedlig`
 - **Description:** `Ubegrenset tilgang til alle spørsmål, eksamen og forklaringer.`
 - **Benefits (optional):** add bullets like "Ubegrenset spørsmål", "Eksamensmodus", "TTS på 3 språk"
@@ -88,16 +88,16 @@ Now add a **Base plan**:
 - **Renewal type:** Auto-renewing
 - **Grace period:** 7 days (recommended)
 - **Account hold:** 30 days
-- **Pricing:** Click **Set prices** → Norway → **199.00 NOK** → Save → "Apply price to other countries" (auto-converts to other currencies if you expand later)
+- **Pricing:** Click **Set prices** → Norway → **99.00 NOK** → Save → "Apply price to other countries" (auto-converts to other currencies if you expand later)
 - **Activate**
 
 ### 2.2 Subscription #2 — 3 months
 **Same flow as 2.1**, with:
-- **Product ID:** `threemonth_399`
+- **Product ID:** `threemonth_249`
 - **Name:** `Thai2Drive Premium – 3 måneder`
 - Base plan ID: `quarterly`
 - Billing period: **3 months**
-- Price: **399.00 NOK**
+- Price: **249.00 NOK**
 
 ### 2.3 One-time product — Lifetime
 **Play Console → Monetize → Products → In-app products → Create product**
@@ -193,7 +193,7 @@ RC will now try to validate the connection. If it fails, it's almost always the 
 
 ### 4.5 Import products from Google Play
 1. RC Dashboard → **Product catalog → Products → + New** → **Import from Google Play**
-2. RC pulls in your 3 products: `monthly_199:monthly`, `threemonth_399:quarterly`, `lifetime_699:lifetime`
+2. RC pulls in your 3 products: `monthly_99:monthly`, `threemonth_249:quarterly`, `lifetime_699:lifetime`
 3. Confirm import
 
 > If "no products found", it's the 24–48h wait. Come back later.
@@ -205,8 +205,8 @@ RC will now try to validate the connection. If it fails, it's almost always the 
 **Offerings → + New offering**
 - **Identifier:** `default` (your code reads `offerings.current` which RC routes to whichever offering you mark current)
 - Add 3 packages, mapping each to one product:
-  - Package: `$rc_monthly` → product `monthly_199:monthly`
-  - Package: `$rc_three_month` → product `threemonth_399:quarterly`
+  - Package: `$rc_monthly` → product `monthly_99:monthly`
+  - Package: `$rc_three_month` → product `threemonth_249:quarterly`
   - Package: `$rc_lifetime` → product `lifetime_699:lifetime`
 - Mark this offering as **Current**
 

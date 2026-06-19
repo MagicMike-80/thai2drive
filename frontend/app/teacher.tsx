@@ -359,10 +359,23 @@ export default function TeacherScreen() {
       }
       await Speech.stop();
       setSpeakingIndex(msgIndex);
-      Speech.speak(cleanText, {
-        language: targetLang,
-        onDone: () => setSpeakingIndex(null),
-        onError: () => setSpeakingIndex(null),
+
+      // Split text into smaller sentences or clauses to prevent stuttering
+      const splitRegex = lang === 'th' ? /\s+/ : /(?<=[.?!])\s+/;
+      const chunks = cleanText.split(splitRegex).map(chunk => chunk.trim()).filter(Boolean);
+
+      if (chunks.length === 0) {
+        setSpeakingIndex(null);
+        return;
+      }
+
+      chunks.forEach((chunk, index) => {
+        const isLast = index === chunks.length - 1;
+        Speech.speak(chunk, {
+          language: targetLang,
+          onDone: isLast ? () => setSpeakingIndex(null) : undefined,
+          onError: isLast ? () => setSpeakingIndex(null) : undefined,
+        });
       });
     }
   }, [speakingIndex, lang]);

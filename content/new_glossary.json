@@ -1,0 +1,222 @@
+[
+  {
+    "term_no": "Vikeplikt",
+    "term_th": "การให้ทาง",
+    "term_en": "Right-of-way / Yielding",
+    "definition_no": "Plikten til å la annen trafikk passere før deg. Bestemt av trafikkregler, skilt og kjøreregler.",
+    "definition_th": "ความจำเป็นที่ต้องให้ทางให้จราจรอื่น ๆ ผ่านไปก่อนคุณ กำหนดโดยกฎจราจร ป้าย และกฎการขับขี่",
+    "definition_en": "The obligation to let other traffic pass before you. Determined by traffic laws, signs, and driving regulations.",
+    "example_no": "Ved et 4-kjørs kryss uten skilt må du vike for trafikk fra høyre.",
+    "example_th": "ที่สี่แยกห้องไม่มีป้าย คุณต้องให้ทางสำหรับจราจรจากด้านขวา",
+    "example_en": "At a 4-way intersection with no signs, you must yield to traffic from the right."
+  },
+  {
+    "term_no": "Forkjøring",
+    "term_th": "การแซง",
+    "term_en": "Overtaking / Passing",
+    "definition_no": "Når du kjører forbi en annen bil. Må være gjort trygt og ikke på steder som er forbudt.",
+    "definition_th": "เมื่อคุณขับรถผ่านรถอื่น ต้องทำอย่างปลอดภัยและห้ามในพื้นที่ที่ห้าม",
+    "definition_en": "When you drive past another vehicle. Must be done safely and not in prohibited areas.",
+    "example_no": "Du kan ikke forkjøre på solid strek. Bare på stiplet strek.",
+    "example_th": "คุณไม่สามารถแซงที่เส้นทึบได้ เฉพาะเส้นประเท่านั้น",
+    "example_en": "You cannot overtake on a solid line. Only on dashed lines."
+  },
+  {
+    "term_no": "Bremselengde",
+    "term_th": "ระยะการหยุด",
+    "term_en": "Braking distance",
+    "definition_no": "Distansen bilen trenger fra du trykker på bremsen til den helt stopper. Øker raskt med hastighet.",
+    "definition_th": "ระยะที่รถต้องการตั้งแต่คุณกดเบรกจนกระทั่งรถหยุดสนิท เพิ่มขึ้นอย่างรวดเร็วตามความเร็ว",
+    "definition_en": "The distance a car needs from when you apply the brakes until it completely stops. Increases rapidly with speed.",
+    "example_no": "Ved 50 km/t er bremselengden ca. 27 meter. Ved 80 km/t er den 69 meter.",
+    "example_th": "ที่ 50 กม./ชม. ระยะการหยุดประมาณ 27 เมตร ที่ 80 กม./ชม. คือ 69 เมตร",
+    "example_en": "At 50 km/h the braking distance is about 27 meters. At 80 km/h it's 69 meters."
+  },
+  {
+    "term_no": "Reaktidslengde",
+    "term_th": "ระยะเวลาตอบสนอง",
+    "term_en": "Reaction distance",
+    "definition_no": "Distansen bilen kjører mens du reagerer på en fare (vanligvis 1 sekund). Skjer før du trykker på bremsen.",
+    "definition_th": "ระยะที่รถวิ่งไปขณะที่คุณตอบสนองต่ออันตราย (ปกติ 1 วินาที) เกิดขึ้นก่อนที่คุณจะกดเบรก",
+    "definition_en": "The distance a car travels while you react to a hazard (usually 1 second). Happens before you press the brakes.",
+    "example_no": "Ved 50 km/t kjører du ca. 14 meter i løpet av reaktidslengden.",
+    "example_th": "ที่ 50 กม./ชม. รถวิ่งไปประมาณ 14 เมตรในช่วงเวลาตอบสนอง",
+    "example_en": "At 50 km/h you travel about 14 meters during the reaction time."
+  },
+  {
+    "term_no": "Stopplengde",
+    "term_th": "ระยะหยุดรวม",
+    "term_en": "Stopping distance",
+    "definition_no": "Sum av reaktidslengde og bremselengde. Total avstand fra du ser faren til bilen stopper.",
+    "definition_th": "รวมของระยะตอบสนองและระยะการหยุด ระยะทั้งหมดตั้งแต่ที่คุณเห็นอันตรายจนกระทั่งรถหยุด",
+    "definition_en": "Sum of reaction distance and braking distance. Total distance from when you see the hazard until the car stops.",
+    "example_no": "Ved 50 km/t er stopplengden ca. 41 meter (14 + 27).",
+    "example_th": "ที่ 50 กม./ชม. ระยะหยุดรวมประมาณ 41 เมตร (14 + 27)",
+    "example_en": "At 50 km/h the total stopping distance is about 41 meters (14 + 27)."
+  },
+  {
+    "term_no": "Rundkjøring",
+    "term_th": "วงเวียน",
+    "term_en": "Roundabout",
+    "definition_no": "Sirkulær kryss der trafikk kjører mot klokken. Runder inne i rundkjøringen har prioritet.",
+    "definition_th": "สี่แยกวงกลมที่จราจรขับรถทวนเข็มนาฬิกา รถที่อยู่ในวงเวียนจะมีสิทธิ์ก่อน",
+    "definition_en": "Circular intersection where traffic moves counterclockwise. Cars inside the roundabout have priority.",
+    "example_no": "Når du kommer inn i en rundkjøring, må du vike for trafikk som allerede er inne.",
+    "example_th": "เมื่อคุณเข้าวงเวียน คุณต้องให้ทางสำหรับจราจรที่อยู่ข้างในแล้ว",
+    "example_en": "When entering a roundabout, you must yield to traffic already inside."
+  },
+  {
+    "term_no": "Filskift",
+    "term_th": "การเปลี่ยนเลน",
+    "term_en": "Lane change",
+    "definition_no": "Når du beveger bilen fra en kjørefil til en annen. Du må sikre deg og vike for trafikk i den nye filen.",
+    "definition_th": "เมื่อคุณย้ายรถจากเลนหนึ่งไปอีกเลน คุณต้องตรวจสอบและให้ทางสำหรับจราจรในเลนใหม่",
+    "definition_en": "When you move your car from one lane to another. You must check and yield to traffic in the new lane.",
+    "example_no": "Før filskift må du sjekke speilet, brukspeilet og se over skulderen.",
+    "example_th": "ก่อนเปลี่ยนเลน คุณต้องตรวจสอบกระจก ตรวจสอบด้านข้าง และมองข้ามไหล่",
+    "example_en": "Before changing lanes, check your mirror, side mirror, and look over your shoulder."
+  },
+  {
+    "term_no": "Gul lys",
+    "term_th": "ไฟเหลือง",
+    "term_en": "Yellow light / Amber light",
+    "definition_no": "Varselsignal før rødt lys. Du skal sette ned farten og forberede deg på å stoppe.",
+    "definition_th": "สัญญาณเตือนก่อนไฟแดง คุณควรลดความเร็วและเตรียมพร้อมที่จะหยุด",
+    "definition_en": "Warning signal before red light. You should slow down and prepare to stop.",
+    "example_no": "Hvis du er langt fra krysset når lyset blir gult, må du stoppe – ikke akselerere.",
+    "example_th": "ถ้าคุณอยู่ไกลจากทางแยกเมื่อไฟเหลือง คุณต้องหยุด — อย่าเพิ่มความเร็ว",
+    "example_en": "If you're far from the intersection when the light turns yellow, you must stop – don't accelerate."
+  },
+  {
+    "term_no": "Gjengeskift",
+    "term_th": "การเปลี่ยนเกียร์",
+    "term_en": "Gear change / Gear shift",
+    "definition_no": "Å endre girposisjon på en manuell eller automatisk girkasse. Gjøres når hastigheten endres.",
+    "definition_th": "การเปลี่ยนตำแหน่งเกียร์ในกระปุกเกียร์ธรรมชาติหรืออัตโนมัติ ทำเมื่อความเร็วเปลี่ยนแปลง",
+    "definition_en": "Changing the gear position on a manual or automatic transmission. Done when speed changes.",
+    "example_no": "Ved akselerasjon fra stillestans kjører du fra først gir til andre gir ved ca. 15 km/t.",
+    "example_th": "เมื่อเร่งความเร็วจากการหยุด คุณเปลี่ยนจากเกียร์ที่หนึ่งไปที่สองที่ประมาณ 15 กม./ชม.",
+    "example_en": "When accelerating from a stop, you shift from first gear to second gear at about 15 km/h."
+  },
+  {
+    "term_no": "Bremsepedal",
+    "term_th": "แป้นเบรก",
+    "term_en": "Brake pedal",
+    "definition_no": "Pedalen du trykker ned for å bremse bilen. Ligger på høyre side av gassen.",
+    "definition_th": "แป้นที่คุณกดเพื่อให้เบรก ตั้งอยู่ทางด้านขวาของแป้นเร่ง",
+    "definition_en": "The pedal you press to brake the car. Located to the right of the accelerator.",
+    "example_no": "Bruk høyre foten for både bremsing og akselerasjon – aldri begge samtidig.",
+    "example_th": "ใช้เท้าขวาสำหรับทั้งการเบรกและการเร่ง — ไม่ใช้ทั้งสองพร้อมกัน",
+    "example_en": "Use your right foot for both braking and acceleration – never both at the same time."
+  },
+  {
+    "term_no": "Kryssing av fotgjenger",
+    "term_th": "การข้ามถนนของคนเดิน",
+    "term_en": "Pedestrian crossing / Pedestrian crossing",
+    "definition_no": "Marked område hvor fotgjengere har rett til å krysse veien. Bilister må stoppe og vike.",
+    "definition_th": "พื้นที่ที่ระบุไว้ซึ่งคนเดินเท้ามีสิทธิ์ข้ามถนน ผู้ขับรถต้องหยุดและให้ทาง",
+    "definition_en": "Marked area where pedestrians have the right to cross the road. Drivers must stop and yield.",
+    "example_no": "Når du ser en fotgjenger ved en fotgjengerovergangen, må du stoppe helt – selv om du er i fart.",
+    "example_th": "เมื่อคุณเห็นคนเดินเท้าที่ทางข้ามทางเท้า คุณต้องหยุดสนิท — แม้ว่าคุณกำลังเดินเร็ว",
+    "example_en": "When you see a pedestrian at a crossing, you must stop completely – even if you're moving."
+  },
+  {
+    "term_no": "Trafikklys",
+    "term_th": "สัญญาณไฟจราจร",
+    "term_en": "Traffic light / Traffic signal",
+    "definition_no": "Elektrisk signal som kontrollerer trafikken ved kryss. Rødt = stopp, gult = forberedelse, grønt = kjør.",
+    "definition_th": "สัญญาณไฟฟ้าที่ควบคุมจราจรที่ทางแยก แดง = หยุด เหลือง = เตรียมพร้อม เขียว = ไป",
+    "definition_en": "Electronic signal that controls traffic at intersections. Red = stop, yellow = prepare, green = go.",
+    "example_no": "Du må stoppe ved rødt lys, selv om du ikke ser noen bilar komme.",
+    "example_th": "คุณต้องหยุดที่ไฟแดง แม้ว่าคุณไม่เห็นรถอื่นมาก็ตาม",
+    "example_en": "You must stop at a red light, even if you don't see any other cars coming."
+  },
+  {
+    "term_no": "Grønt lys",
+    "term_th": "ไฟเขียว",
+    "term_en": "Green light",
+    "definition_no": "Signal som betyr du har lov til å kjøre. Du må fortsatt sjekke at det er sikkert før du kjører.",
+    "definition_th": "สัญญาณที่หมายถึงคุณมีสิทธิ์ขับรถ คุณต้องตรวจสอบว่าปลอดภัยก่อนขับรถ",
+    "definition_en": "Signal that means you have permission to drive. You must still check that it's safe before driving.",
+    "example_no": "Selv om lyset er grønt, må du sjekke at ingen kjører gjennom rødt lys før du kjører.",
+    "example_th": "แม้ว่าไฟเขียว คุณต้องตรวจสอบว่าไม่มีรถขับผ่านไฟแดง",
+    "example_en": "Even if the light is green, check that no one is running a red light before you drive."
+  },
+  {
+    "term_no": "Siktslinjer",
+    "term_th": "เส้นทัศนวิสัย",
+    "term_en": "Sightlines / Visibility",
+    "definition_no": "Den avstanden du kan se fram på veien. Hindringer kan redusere sikte og skaper fare.",
+    "definition_th": "ระยะที่คุณสามารถมองเห็นไปข้างหน้าบนถนน อุปสรรคสามารถลดการมองเห็นและสร้างความเสี่ยง",
+    "definition_en": "The distance you can see ahead on the road. Obstacles can reduce sight and create danger.",
+    "example_no": "Hvis det er snø og dårlig sikt, må du kjøre saktere fordi du ikke ser langt nok fram.",
+    "example_th": "ถ้าหิมะตกและทัศนวิสัยไม่ดี คุณต้องขับรถช้าลงเพราะคุณมองไม่ไกลพอ",
+    "example_en": "If there's snow and poor visibility, you must drive slower because you can't see far enough ahead."
+  },
+  {
+    "term_no": "Kjøretid",
+    "term_th": "เวลาขับรถ",
+    "term_en": "Driving time",
+    "definition_no": "Tiden som teller ifølge lov. I Norge kan profesjonelle sjåfører kjøre maksimalt 10 timer per dag.",
+    "definition_th": "เวลาที่นับตามกฎหมาย ในนอร์เวย์ ผู้ขับรถอาชีพสามารถขับได้สูงสุด 10 ชั่วโมงต่อวัน",
+    "definition_en": "Time that counts according to law. In Norway, professional drivers can drive a maximum of 10 hours per day.",
+    "example_no": "Hvis du er trøtt etter 8 timers kjøring, bør du ta en pause – uansett hvis du kunne kjøret 2 timer til.",
+    "example_th": "ถ้าคุณเหนื่อยหลังจาก 8 ชั่วโมงของการขับรถ คุณควรพักผ่อน — แม้ว่าคุณจะสามารถขับเพิ่มอีก 2 ชั่วโมง",
+    "example_en": "If you're tired after 8 hours of driving, you should take a break – even if you could drive 2 more hours."
+  },
+  {
+    "term_no": "Speilovergangen",
+    "term_th": "พื้นที่อับสายตาจากกระจก",
+    "term_en": "Blind spot",
+    "definition_no": "Det området rundt bilen som du ikke kan se i speilene. Det er viktig å sjekke før filskift.",
+    "definition_th": "พื้นที่รอบรถที่คุณไม่สามารถมองเห็นได้ในกระจก สำคัญที่จะตรวจสอบก่อนเปลี่ยนเลน",
+    "definition_en": "The area around the car that you cannot see in the mirrors. Important to check before changing lanes.",
+    "example_no": "Før du skifter fil, sjekk speilet, brukspeilet, og se over skulderen for å se speilovergangen.",
+    "example_th": "ก่อนเปลี่ยนเลน ตรวจสอบกระจก กระจกด้านข้าง และมองข้ามไหล่เพื่อตรวจสอบพื้นที่อับสายตา",
+    "example_en": "Before changing lanes, check your mirror, side mirror, and look over your shoulder to check the blind spot."
+  },
+  {
+    "term_no": "Påkjøringsforbud",
+    "term_th": "ห้ามเข้า",
+    "term_en": "No entry / Do not enter",
+    "definition_no": "Skilt som sier at du ikke kan kjøre inn i dette området. Vanligvis for å beskytte trafikk som kjører mot deg.",
+    "definition_th": "ป้ายที่บอกว่าคุณไม่สามารถเข้าพื้นที่นี้ได้ โดยปกติเพื่อปกป้องจราจรที่เข้ามาหากคุณ",
+    "definition_en": "Sign that says you cannot enter this area. Usually to protect traffic coming towards you.",
+    "example_no": "Hvis du ser et rødt 'Påkjøringsforbud'-skilt, må du ikke kjøre inn – det kan være enveiskjøring.",
+    "example_th": "ถ้าคุณเห็นป้าย 'ห้ามเข้า' สีแดง คุณต้องไม่เข้า — อาจเป็นถนนเดียว",
+    "example_en": "If you see a red 'No entry' sign, do not drive in – it may be a one-way street."
+  },
+  {
+    "term_no": "Fartsgrense",
+    "term_th": "ขีดจำกัดความเร็ว",
+    "term_en": "Speed limit",
+    "definition_no": "Maksimal hastighet du må kjøre. Bestemt av skilter eller loven. I Norge er det oftast 50 km/t i by, 80-90 på landevei.",
+    "definition_th": "ความเร็วสูงสุดที่คุณต้องขับรถ กำหนดโดยป้ายหรือกฎหมาย ในนอร์เวย์มักจะ 50 กม./ชม. ในเมือง 80-90 บนถนนชนบท",
+    "definition_en": "Maximum speed you must drive. Determined by signs or law. In Norway it's usually 50 km/h in cities, 80-90 on rural roads.",
+    "example_no": "Du må aldri kjøre fortere enn fartsgrensen, selv om det virker sikkert og veien er tom.",
+    "example_th": "คุณต้องไม่ขับรถเร็วกว่าขีดจำกัดความเร็ว แม้ว่ามันดูปลอดภัยและถนนว่างเปล่า",
+    "example_en": "You must never drive faster than the speed limit, even if it seems safe and the road is empty."
+  },
+  {
+    "term_no": "Manglende veibeholder",
+    "term_th": "ซ่อมแซมถนนที่ไม่เพียงพอ",
+    "term_en": "Poor road conditions",
+    "definition_no": "Når veien har hull, sprekkker eller er i dårlig stand. Du må kjøre forsiktig og være forberedt på fare.",
+    "definition_th": "เมื่อถนนมีหลุม ร้าว หรือเสื่อมสภาพ คุณต้องขับรถด้วยความระมัดระวังและเตรียมพร้อมสำหรับอันตราย",
+    "definition_en": "When the road has holes, cracks, or is in poor condition. You must drive carefully and be prepared for danger.",
+    "example_no": "Hvis veien har dårlig asfalt eller hull, reduserer du farten og holder større avstand til andre biler.",
+    "example_th": "ถ้าถนนมีแอสฟัลต์เสื่อมหรือหลุม คุณลดความเร็วและเก็บระยะห่างให้มากขึ้นจากรถอื่น",
+    "example_en": "If the road has poor asphalt or holes, reduce your speed and keep a greater distance from other cars."
+  },
+  {
+    "term_no": "Kjørealder",
+    "term_th": "อายุในการขับรถ",
+    "term_en": "Driving age",
+    "definition_no": "Minimalt aldrerkrav for å få førerbevis og kjøre. I Norge er det 18 år for bil.",
+    "definition_th": "อายุขั้นต่ำที่ต้องมีใบขับขี่และขับรถ ในนอร์เวย์คือ 18 ปี",
+    "definition_en": "Minimum age requirement to get a driver's license and drive. In Norway it's 18 years for a car.",
+    "example_no": "Du må være minst 18 år gammel for å kjøre bil i Norge, men 16 år for moped.",
+    "example_th": "คุณต้องมีอายุอย่างน้อย 18 ปีเพื่อขับรถในนอร์เวย์ แต่ 16 ปีสำหรับสกูเตอร์",
+    "example_en": "You must be at least 18 years old to drive a car in Norway, but 16 for a moped."
+  }
+]

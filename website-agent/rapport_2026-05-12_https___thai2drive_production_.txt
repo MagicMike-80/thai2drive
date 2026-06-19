@@ -1,0 +1,131 @@
+URL: https://thai2drive-production.up.railway.app
+Dato: 12.5.2026, 17:47:10
+Oppdrag: hva er dette
+
+# Thai2Drive – Komplett Analyse
+
+## 🌐 HVA ER DETTE?
+
+**Thai2Drive** er en norsk teori-app/læringsplattform for førerkort, spesifikt rettet mot **thailendere som bor i Norge**. Siden hjelper brukere med å bestå den offisielle norske teoriprøven hos Statens vegvesen.
+
+**Målgruppe:** Thai-talende personer i Norge som skal ta førerkort, og som sliter med å forstå teoripensum på norsk eller engelsk alene.
+
+**Verdiløfte:** "Bestå teoriprøven første gang" – med 500+ spørsmål tilgjengelig på **thai, norsk og engelsk** med forklaringer på hvert spørsmål.
+
+Siden finnes både som **webapp** (kan brukes i nettleseren) og **mobilapp** (iOS + Android).
+
+---
+
+## ✨ HOVEDFUNKSJONER OG FEATURES
+
+- **500+ teorispørsmål** som dekker alle kategorier i norsk teoriprøve
+- **3-språks-støtte**: Thai 🇹🇭, Norsk 🇳🇴, Engelsk 🇬🇧 – kan veksles underveis
+- **Forklaring på hvert spørsmål** (ikke bare riktig/galt – men *hvorfor*)
+- **Interaktiv quiz i nettleseren** (10 gratisspørsmål uten registrering)
+- **Eksamenssimulering**: 45 spørsmål, 90 minutter – samme format som ekte prøve
+- **Mobilapp** med QR-kode for nedlasting
+- **Innhold oppdatert** etter Statens vegvesen sine gjeldende regler
+- **Oversatt og kvalitetssikret av morsmålsbrukere** (native thai)
+- **Søkefunksjon/AI-assistent** ("Spør om Thai2Drive...") – ser ut som et chat/spørsmål-felt
+- Ferdig juridisk infrastruktur: Personvern, vilkår, hjelp-sider
+
+---
+
+## 🛠️ TECH STACK OG TEKNOLOGI
+
+Automatisk deteksjon ga lite, men basert på signaturer:
+
+- **Hosting/Deployment**: **Railway** (`railway.app` subdomain → produksjonsmiljøet). Hovedproduksjonsdomene: `thai2drive.no`
+- **Frontend**: Sannsynligvis **React / Next.js** eller **Vite + React** (typisk SPA-oppførsel med interaktiv quiz inline)
+- **Backend**: Egen API (`/api/assets/...` ses i og:image) – kan være Node.js (Express/Fastify) eller Next.js API routes
+- **Database**: Sannsynligvis **PostgreSQL** (Railway sin standard) eller SQLite for spørsmålsbank
+- **Mobilapp**: Enten **React Native** / **Expo** (gjenbruker logikk fra webben) eller **Flutter**
+- **Bilder/assets**: Egen asset-server (`/api/assets/`)
+- **AI/Søk**: Søkefeltet "Spør om Thai2Drive..." tyder på en **LLM-integrasjon** (OpenAI/Anthropic) eller en intern semantisk søk
+
+---
+
+## 👥 BRUKERFLYT
+
+1. **Landing** → Bruker ser thai-tekst, forstår umiddelbart at dette er laget *for dem*
+2. **Try-before-buy** → 10 gratis quiz-spørsmål rett i nettleseren, **ingen registrering kreves**
+3. **Konvertering** → "🚀 เริ่มฝึกฟรี" (Start å øve gratis)
+4. **App-nedlasting** → QR-kode → iOS/Android-app
+5. **(Sannsynligvis) Registrering** → for å spore fremgang
+6. **Trening** → Øv på kategorier, se forklaringer
+7. **Eksamenssimulering** → 45 spørsmål / 90 min
+8. **Bestå teoriprøven** hos Statens vegvesen ✅
+
+---
+
+## 💰 FORRETNINGSMODELL
+
+Basert på språkbruken ("เริ่มฟรีตอนนี้ – ไม่ต้องกรอกบัตร" = "Start gratis nå – uten å oppgi kort"):
+
+**Sannsynlig modell: Freemium**
+- **Gratis**: 10 prøvespørsmål, kanskje grunnleggende tilgang
+- **Premium (sannsynlig)**: Full tilgang til alle 500+ spørsmål, eksamenssimulering, forklaringer
+- **Pris**: Ikke synlig på landingssiden – antakelig **engangsbetaling (kr 99–299)** eller **månedsabonnement (kr 49–99/mnd)** – vanlig for denne nisjen
+- Inntekter kan også komme via **App Store / Google Play** in-app-purchase
+
+---
+
+## 🏗️ HVIS JEG SKAL BYGGE/KLONE DETTE
+
+### Hva du trenger:
+1. **Spørsmålsbank** (det vanskeligste!) – 500+ kvalitetssikrede teorispørsmål oversatt til 3 språk
+2. **Native-oversetter** (thai-morsmål med norsk førerkortkompetanse)
+3. **Juridisk gjennomgang** av spørsmålene mot Statens vegvesen-pensum
+
+### Anbefalt teknologi:
+- **Frontend**: Next.js 14 (App Router) + TailwindCSS + shadcn/ui
+- **Mobil**: Expo (React Native) – gjenbruk komponenter fra web
+- **Backend**: Next.js API routes eller separat Node/Hono
+- **Database**: PostgreSQL (Supabase eller Railway) + Prisma ORM
+- **Auth**: Clerk eller Supabase Auth
+- **Betaling**: Stripe (web) + RevenueCat (mobil-IAP)
+- **Hosting**: Vercel (web) + Railway (API/DB) eller alt på Railway
+- **i18n**: next-intl eller next-i18next for 3-språks-håndtering
+- **AI-assistent**: OpenAI API + vektor-DB (Pinecone/pgvector)
+
+### Kompleksitet: **MIDDELS**
+- Teknisk: Enkel-til-middels (quiz-logikk er rett frem)
+- **Innholdsproduksjon er den store flaskehalsen** – 500 spørsmål × 3 språk × forklaringer = 1500+ tekstenheter
+- **Tidsestimat**:
+  - MVP (web + 100 spørsmål): **3–4 uker**
+  - Full versjon med app: **3–4 måneder**
+  - Hovedtid går til innhold og kvalitetssikring, ikke koding
+
+### Fokusområder:
+1. Spørsmålsbank-kvalitet (viktigst!)
+2. Oversettelseskvalitet (native speaker)
+3. Eksamenssimulering som etterligner ekte format
+4. Mobilopplevelse (de fleste vil øve på mobil)
+
+---
+
+## ⚡ UNIKE TING / DIFFERENTIATORER
+
+1. **Nisje-fokus**: Thaier i Norge er en spesifikk, underbetjent gruppe – stor konkurransefordel
+2. **Innholdsmoat**: 500+ oversatte, kvalitetssikrede spørsmål er **ikke trivielt** å reprodusere
+3. **Kulturell tillit**: "Laget for thai-folk i Norge" – treffer mållruppen emosjonelt
+4. **3-språks-vekslende UX**: Brukeren kan lære norske termer parallelt – pedagogisk smart
+5. **Native speaker-kvalitetssikring**: Vanskelig å automatisere
+6. **AI-spørsmålsfunksjon**: Differensierer fra statiske quiz-apper
+
+**Vanskelig å kopiere:** Nettverkseffekten i thai-miljøet i Norge + innholdskvaliteten.
+
+---
+
+## 📋 KONKLUSJON OG ANBEFALING
+
+**Thai2Drive** er et velfokusert **nisje-edtech-produkt** som løser et reelt problem for thailendere i Norge: forstå norsk teoripensum på morsmålet. Det er en klassisk **"riches in niches"-strategi** – liten målgruppe, men høy intent (folk vil ha førerkort) og høy betalingsvilje.
+
+**Teknisk er det enkelt-middels å bygge** – men forretningssuksessen ligger i:
+- Innholdsproduksjon (oversatte spørsmål)
+- Distribusjon i thai-miljøet i Norge (Facebook-grupper, kirker, foreninger)
+- Tillit gjennom native-speakers
+
+**Anbefaling for ditt oppdrag:** Hvis du vurderer å bygge noe lignende, **velg en annen underbetjent språk-/innvandrergruppe i Norge** (f.eks. polsk, ukrainsk, tigrinya, arabisk) i stedet for å konkurrere direkte med Thai2Drive. Samme arkitektur, ny målgruppe = ny mulighet.
+
+Vil du at jeg skal lage en **konkret byggeplan/prosjektstruktur** for en klone eller en variant?

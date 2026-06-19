@@ -371,6 +371,12 @@ export const api = {
     return fetchJSON(`${API_BASE}/quiz-attempts/${deviceId}?limit=${limit}`);
   },
 
+  async getHistory(token: string, limit = 20): Promise<QuizAttempt[]> {
+    return fetchJSON(`${API_BASE}/history?limit=${limit}`, {
+      headers: authHeaders(token),
+    });
+  },
+
   async addBookmark(deviceId: string, questionId: string): Promise<Bookmark> {
     return fetchJSON(`${API_BASE}/bookmarks`, {
       method: 'POST',

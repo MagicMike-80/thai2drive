@@ -5,8 +5,8 @@ import { useAppStore } from '../store/appStore';
 
 // RevenueCat product identifiers — stable dashboard IDs, not the display price source.
 export const PRODUCT_IDS = {
-  MONTHLY: 'monthly_199',
-  THREE_MONTH: 'threemonth_399',
+  MONTHLY: 'monthly_99',
+  THREE_MONTH: 'threemonth_249',
   LIFETIME: 'lifetime_699',
 };
 
