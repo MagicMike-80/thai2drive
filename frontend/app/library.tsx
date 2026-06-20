@@ -10,11 +10,14 @@ import {
   Linking,
   Animated,
   Platform,
+  Modal,
+  Dimensions,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Audio } from 'expo-av';
 import { LinearGradient } from 'expo-linear-gradient';
+import { WebView } from 'react-native-webview';
 import { useAppStore } from '../src/store/appStore';
 
 const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL || '';
@@ -146,8 +149,57 @@ function PremiumOverlay({ t, onPress }: { t: Record<string, string>; onPress: ()
   );
 }
 
+// ─── YouTube video player modal ────────────────────────────────────────────────
+function YouTubePlayerModal({
+  visible, videoUrl, onClose, colors
+}: {
+  visible: boolean; videoUrl: string; onClose: () => void; colors: any;
+}) {
+  const getYouTubeId = (url: string) => {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    return match && match[2].length === 11 ? match[2] : null;
+  };
+
+  const videoId = getYouTubeId(videoUrl);
+  const { height } = Dimensions.get('window');
+
+  if (!videoId) return null;
+
+  const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=1&modestbranding=1`;
+
+  return (
+    <Modal visible={visible} transparent animationType="fade">
+      <View style={[s.playerBg, { backgroundColor: colors.bg }]}>
+        <TouchableOpacity
+          style={s.playerClose}
+          onPress={onClose}
+          activeOpacity={0.8}
+        >
+          <Ionicons name="close" size={28} color={colors.text} />
+        </TouchableOpacity>
+
+        <View style={[s.playerContainer, { height: height * 0.5 }]}>
+          <WebView
+            source={{ uri: embedUrl }}
+            style={s.webview}
+            allowsFullscreenVideo
+            javaScriptEnabled
+            scrollEnabled={false}
+          />
+        </View>
+      </View>
+    </Modal>
+  );
+}
+
 // ─── Video card ───────────────────────────────────────────────────────────────
-function VideoCard({ item, lang, colors, t }: { item: VideoItem; lang: string; colors: any; t: Record<string, string> }) {
+function VideoCard({
+  item, lang, colors, t, onPress
+}: {
+  item: VideoItem; lang: string; colors: any; t: Record<string, string>;
+  onPress: (url: string) => void;
+}) {
   const title = (item as any)[`title_${lang}`] || item.title_no;
   const summary = (item as any)[`instructor_summary_${lang}`] || item.instructor_summary_no || '';
   const flag = LANG_FLAG[item.language || 'no'] || '🇳🇴';
@@ -155,7 +207,7 @@ function VideoCard({ item, lang, colors, t }: { item: VideoItem; lang: string; c
   return (
     <TouchableOpacity
       style={[s.card, { backgroundColor: colors.card, borderColor: colors.cardBorder }]}
-      onPress={() => Linking.openURL(item.youtube_url).catch(() => {})}
+      onPress={() => onPress(item.youtube_url)}
       activeOpacity={0.85}
     >
       {/* Thumbnail area */}
@@ -180,7 +232,7 @@ function VideoCard({ item, lang, colors, t }: { item: VideoItem; lang: string; c
         <TagRow tags={item.topic_tags} colors={colors} />
       </View>
 
-      <Ionicons name="open-outline" size={16} color={colors.textMuted} style={s.openIcon} />
+      <Ionicons name="play-circle" size={20} color={colors.accent} style={s.openIcon} />
     </TouchableOpacity>
   );
 }
@@ -280,6 +332,11 @@ function TagRow({ tags, colors }: { tags: string[]; colors: any }) {
   );
 }
 
+// ─── Filter chip labels (hardcoded per spec) ─────────────────────────────────
+const FILTER_CHIPS_NO = ['Bremsing', 'Reaksjonstid', 'Vikeplikt', 'Lysbruk'];
+const FILTER_CHIPS_TH = ['เบรกเมื่อเห็นอันตราย', 'เวลาเรียกเร็กเซ่น', 'การหลีกหนี', 'การใช้แสง'];
+const FILTER_CHIPS_EN = ['Braking', 'Reaction Time', 'Right of Way', 'Light Usage'];
+
 // ─── Main screen ──────────────────────────────────────────────────────────────
 export default function LibraryScreen() {
   const router = useRouter();
@@ -288,12 +345,13 @@ export default function LibraryScreen() {
   const c = colors;
   const isDark = c.bg === '#0F172A' || c.bg === '#0B1222';
 
-  const [activeTab, setActiveTab] = useState<'podcasts' | 'videos'>('podcasts');
+  const [activeTab, setActiveTab] = useState<'videos' | 'podcasts'>('videos');
   const [videos, setVideos] = useState<VideoItem[]>([]);
   const [podcasts, setPodcasts] = useState<PodcastItem[]>([]);
   const [loadingVideos, setLoadingVideos] = useState(true);
   const [loadingPodcasts, setLoadingPodcasts] = useState(true);
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
+  const [playingVideoUrl, setPlayingVideoUrl] = useState<string | null>(null);
 
   useEffect(() => {
     fetch(`${BACKEND_URL}/api/videos/for-topic?limit=50`)
@@ -309,13 +367,10 @@ export default function LibraryScreen() {
       .finally(() => setLoadingPodcasts(false));
   }, []);
 
-  const allTags = React.useMemo(() => {
-    const items = activeTab === 'videos' ? videos : podcasts;
-    const set = new Set<string>();
-    items.forEach((item) => item.topic_tags?.forEach((tag) => set.add(tag)));
-    return Array.from(set).sort();
-  }, [activeTab, videos, podcasts]);
+  // Get filter chips for current language
+  const filterChips = language === 'th' ? FILTER_CHIPS_TH : language === 'en' ? FILTER_CHIPS_EN : FILTER_CHIPS_NO;
 
+  // Filter content by selected chip
   const filteredVideos = selectedTag ? videos.filter((v) => v.topic_tags?.includes(selectedTag)) : videos;
   const filteredPodcasts = selectedTag ? podcasts.filter((p) => p.topic_tags?.includes(selectedTag)) : podcasts;
   const isLoading = activeTab === 'videos' ? loadingVideos : loadingPodcasts;
@@ -340,7 +395,7 @@ export default function LibraryScreen() {
 
       {/* Tab bar */}
       <View style={[s.tabBar, { borderBottomColor: c.divider, backgroundColor: c.bg }]}>
-        {(['podcasts', 'videos'] as const).map((tab) => {
+        {(['videos', 'podcasts'] as const).map((tab) => {
           const active = activeTab === tab;
           const icon = tab === 'podcasts' ? 'mic' : 'videocam';
           const label = t[tab];
@@ -364,33 +419,31 @@ export default function LibraryScreen() {
         })}
       </View>
 
-      {/* Tag chips */}
-      {allTags.length > 0 && (
-        <ScrollView
-          horizontal showsHorizontalScrollIndicator={false}
-          style={[s.chipScroll, { backgroundColor: c.bg }]}
-          contentContainerStyle={s.chipContent}
+      {/* Filter chips - hardcoded per spec */}
+      <ScrollView
+        horizontal showsHorizontalScrollIndicator={false}
+        style={[s.chipScroll, { backgroundColor: c.bg }]}
+        contentContainerStyle={s.chipContent}
+      >
+        <TouchableOpacity
+          style={[s.chip, { borderColor: !selectedTag ? c.accent : c.cardBorder, backgroundColor: !selectedTag ? `${c.accent}18` : 'transparent' }]}
+          onPress={() => setSelectedTag(null)}
         >
-          <TouchableOpacity
-            style={[s.chip, { borderColor: !selectedTag ? c.accent : c.cardBorder, backgroundColor: !selectedTag ? `${c.accent}18` : 'transparent' }]}
-            onPress={() => setSelectedTag(null)}
-          >
-            <Text style={[s.chipText, { color: !selectedTag ? c.accent : c.textMuted }]}>{t.all}</Text>
-          </TouchableOpacity>
-          {allTags.map((tag) => {
-            const sel = selectedTag === tag;
-            return (
-              <TouchableOpacity
-                key={tag}
-                style={[s.chip, { borderColor: sel ? c.accent : c.cardBorder, backgroundColor: sel ? `${c.accent}18` : 'transparent' }]}
-                onPress={() => setSelectedTag(sel ? null : tag)}
-              >
-                <Text style={[s.chipText, { color: sel ? c.accent : c.textMuted }]}>{tag}</Text>
-              </TouchableOpacity>
-            );
-          })}
-        </ScrollView>
-      )}
+          <Text style={[s.chipText, { color: !selectedTag ? c.accent : c.textMuted }]}>{t.all}</Text>
+        </TouchableOpacity>
+        {filterChips.map((chipLabel) => {
+          const sel = selectedTag === chipLabel;
+          return (
+            <TouchableOpacity
+              key={chipLabel}
+              style={[s.chip, { borderColor: sel ? c.accent : c.cardBorder, backgroundColor: sel ? `${c.accent}18` : 'transparent' }]}
+              onPress={() => setSelectedTag(sel ? null : chipLabel)}
+            >
+              <Text style={[s.chipText, { color: sel ? c.accent : c.textMuted }]}>{chipLabel}</Text>
+            </TouchableOpacity>
+          );
+        })}
+      </ScrollView>
 
       {/* Content list */}
       <ScrollView style={s.list} contentContainerStyle={s.listContent}>
@@ -403,7 +456,14 @@ export default function LibraryScreen() {
             <Text style={[s.empty, { color: c.textMuted }]}>{t.empty}</Text>
           ) : (
             filteredVideos.map((item) => (
-              <VideoCard key={item.id || item.youtube_url} item={item} lang={language} colors={c} t={t} />
+              <VideoCard
+                key={item.id || item.youtube_url}
+                item={item}
+                lang={language}
+                colors={c}
+                t={t}
+                onPress={(url) => setPlayingVideoUrl(url)}
+              />
             ))
           )
         ) : (
@@ -424,6 +484,14 @@ export default function LibraryScreen() {
         {/* Bottom spacer */}
         <View style={{ height: 32 }} />
       </ScrollView>
+
+      {/* YouTube video player modal */}
+      <YouTubePlayerModal
+        visible={!!playingVideoUrl}
+        videoUrl={playingVideoUrl || ''}
+        onClose={() => setPlayingVideoUrl(null)}
+        colors={c}
+      />
     </SafeAreaView>
   );
 }
@@ -529,4 +597,19 @@ const s = StyleSheet.create({
     paddingHorizontal: 8, paddingVertical: 3, borderRadius: 10,
   },
   lockText: { color: '#fff', fontSize: 10, fontWeight: '700' },
+
+  // YouTube player modal
+  playerBg: {
+    flex: 1, justifyContent: 'center', alignItems: 'center',
+    paddingHorizontal: 12,
+  },
+  playerClose: {
+    position: 'absolute', top: 16, right: 16, zIndex: 10,
+    width: 40, height: 40, alignItems: 'center', justifyContent: 'center',
+  },
+  playerContainer: {
+    width: '100%', borderRadius: 12, overflow: 'hidden',
+    backgroundColor: '#000',
+  },
+  webview: { flex: 1 },
 });
