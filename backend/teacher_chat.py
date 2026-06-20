@@ -1044,6 +1044,131 @@ async def _get_curriculum_context(user_msg: str, lang: str) -> str:
     return ""
 
 
+async def get_relevant_resources(topic_tags: List[str], lang: str) -> dict:
+    """
+    Query learning_videos and learning_podcasts by topic tags.
+    Match ANY tag in topic_tags (OR logic), return top 3 of each.
+
+    Args:
+        topic_tags: List of topic tags to search for (e.g., ["mørkekjøring", "syn"])
+        lang: Language code (no, th, en)
+
+    Returns:
+        dict with structure:
+        {
+            "videos": [
+                {"id": str, "title": str, "url": str, "tags": [str]},
+                ...
+            ],
+            "podcasts": [
+                {"id": str, "title": str, "url": str, "tags": [str]},
+                ...
+            ]
+        }
+    """
+    if not topic_tags:
+        return {"videos": [], "podcasts": []}
+
+    try:
+        result = {"videos": [], "podcasts": []}
+
+        # Build OR clauses for tag matching
+        tag_filters = [
+            {"topic_tags": {"$regex": tag, "$options": "i"}}
+            for tag in topic_tags
+        ]
+
+        # Query learning_videos with ANY matching tag
+        videos = await _db.learning_videos.find({
+            "$or": tag_filters,
+            "active": True
+        }).to_list(3)
+
+        for v in videos:
+            result["videos"].append({
+                "id": str(v.get("_id", "")),
+                "title": v.get(f"title_{lang}") or v.get("title_no") or "",
+                "url": v.get("youtube_url", ""),
+                "tags": v.get("topic_tags", [])
+            })
+
+        # Query learning_podcasts with ANY matching tag
+        podcasts = await _db.learning_podcasts.find({
+            "$or": tag_filters,
+            "active": True
+        }).to_list(3)
+
+        for p in podcasts:
+            result["podcasts"].append({
+                "id": str(p.get("_id", "")),
+                "title": p.get(f"title_{lang}") or p.get("title_no") or "",
+                "url": p.get("file_path", ""),
+                "tags": p.get("topic_tags", [])
+            })
+
+        return result
+    except Exception as e:
+        logger.error("Error fetching relevant resources by topic tags: %s", e)
+        return {"videos": [], "podcasts": []}
+
+
+def _extract_topic_tags_from_context(context_str: str, user_message: str, num_tags: int = 5) -> List[str]:
+    """
+    Extract potential topic tags from the conversation context and user message.
+
+    This is a simple heuristic that finds keywords likely to be in topic_tags.
+    In a more sophisticated system, this could use NER or semantic similarity.
+
+    Args:
+        context_str: The RAG context from the database
+        user_message: The user's latest message
+        num_tags: Maximum number of tags to extract
+
+    Returns:
+        List of potential topic tags to search for
+    """
+    import re
+
+    # Common Norwegian driving/traffic keywords that often match topic_tags in the database
+    # This is a curated list of known topics in the thai2drive curriculum
+    known_keywords = {
+        "mørkekjøring", "nattekjøring", "dårlig_lys", "lys",
+        "syn", "sikt", "oversikt", "bremsing", "bremsestrekning",
+        "reaksjonsstrekning", "reaksjonstid", "stoppelengde",
+        "fart", "hastighet", "fartsgrense", "hastighetsgrense",
+        "vikeplikt", "høyreregelen", "prioritet", "forkjørsvei",
+        "krysning", "rundkjøring", "gangfelt", "fotgjenger",
+        "sykling", "sykkel", "trafikkkontroll", "politi",
+        "parkering", "parkert", "kjørebane", "kjørefelt",
+        "tretthet", "søvn", "oppmerksomhet", "konsentrasjon",
+        "distraksjon", "mobiltelefon", "telefon", "alkohol",
+        "ruspåvirkning", "kjørekort", "kjøreopplæring",
+        "eksamen", "teoriprøve", "kjøreprøve", "kjøretest",
+        "vær", "regn", "snø", "is", "glatt", "såkalt",
+        "vind", "tåke", "oppvarming", "vinduer", "klut"
+    }
+
+    combined_text = (context_str + " " + user_message).lower()
+
+    # Find which known keywords appear in the combined text
+    found_tags = []
+    for keyword in known_keywords:
+        # Use word boundary matching to avoid partial matches
+        pattern = r'\b' + re.escape(keyword) + r'\b'
+        if re.search(pattern, combined_text):
+            found_tags.append(keyword)
+
+    # If not enough matches from known keywords, try extracting noun-like chunks
+    if len(found_tags) < num_tags:
+        # Extract capitalized words or words following common prefixes
+        chunks = re.findall(r'\b[a-zæøå]{3,}\b', combined_text)
+        for chunk in chunks:
+            if chunk not in found_tags and len(found_tags) < num_tags:
+                found_tags.append(chunk)
+
+    return found_tags[:num_tags]
+
+
 async def _get_available_multimedia(lang: str) -> str:
     """Build an AVAILABLE MULTIMEDIA section for Michael's system prompt from the DB."""
     try:
@@ -1175,6 +1300,28 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
                 f"{context_str}\n"
                 f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
             )
+
+            # Extract topic tags from context and user message, then fetch relevant resources
+            extracted_tags = _extract_topic_tags_from_context(context_str, user_msg, num_tags=5)
+            if extracted_tags:
+                relevant_resources = await get_relevant_resources(extracted_tags, lang)
+
+                # Inject relevant resources into system prompt if found
+                if relevant_resources["videos"] or relevant_resources["podcasts"]:
+                    inject_str = "\n\n━━━ RECOMMENDED MULTIMEDIA FOR THIS TOPIC ━━━\n"
+                    inject_str += "Based on the topics we're discussing, here are directly relevant resources:\n\n"
+
+                    for v in relevant_resources["videos"]:
+                        if v["url"] and v["title"]:
+                            inject_str += f"VIDEO: {v['title']} — {v['url']} (tags: {', '.join(v['tags'])})\n"
+
+                    for p in relevant_resources["podcasts"]:
+                        if p["url"] and p["title"]:
+                            inject_str += f"PODCAST: {p['title']} — {p['url']} (tags: {', '.join(p['tags'])})\n"
+
+                    inject_str += "\nConsider recommending these specific resources when appropriate.\n"
+                    inject_str += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+                    system_prompt += inject_str
 
         multimedia_str = await _get_available_multimedia(lang)
         if multimedia_str:
