@@ -1,0 +1,932 @@
+[
+  {
+    "question_no": "Hva er minstekravet til mønsterdybde på sommerdekk for en personbil?",
+    "question_th": "ความลึกของดอกยางขั้นต่ำสำหรับยางฤดูร้อนคือเท่าใดสำหรับรถยนต์นั่งส่วนบุคคล?",
+    "question_en": "What is the minimum tread depth requirement for summer tires on a passenger car?",
+    "options": [
+      {
+        "text_no": "1.6 mm",
+        "text_th": "1.6 มิลลิเมตร",
+        "text_en": "1.6 mm (standard)",
+        "correct": true
+      },
+      {
+        "text_no": "3.0 mm",
+        "text_th": "3.0 มิลลิเมตร",
+        "text_en": "3.0 mm (winter)",
+        "correct": false
+      },
+      {
+        "text_no": "0.0 mm",
+        "text_th": "0.0 มิลลิเมตร",
+        "text_en": "0.0 mm (bald)",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Minstekravet til mønsterdybde på sommerdekk er 1,6 mm. Det anbefales likevel minst 3 mm for god sikkerhet på våt vei.",
+    "explanation_th": "ความลึกของดอกยางขั้นต่ำสำหรับยางฤดูร้อนคือ 1.6 มิลลิเมตร แนะนำให้มีอย่างน้อย 3 มิลลิเมตรเพื่อความปลอดภัยที่ดีบนถนนเปียก",
+    "explanation_en": "The minimum tread depth requirement for summer tires is 1.6 mm. However, at least 3 mm is recommended for good safety on wet roads.",
+    "topic_tags": ["mekanikk", "dekk"],
+    "difficulty": "easy",
+    "category": "Mechanics"
+  },
+  {
+    "question_no": "Hva er minstekravet til mønsterdybde på vinterdekk for en personbil under 3500 kg?",
+    "question_th": "ความลึกของดอกยางขั้นต่ำสำหรับยางฤดูหนาวคือเท่าใดสำหรับรถยนต์นั่งส่วนบุคคลที่มีน้ำหนักต่ำกว่า 3500 กิโลกรัม?",
+    "question_en": "What is the minimum tread depth requirement for winter tires on a passenger car under 3500 kg?",
+    "options": [
+      {
+        "text_no": "3.0 mm",
+        "text_th": "3.0 มิลลิเมตร",
+        "text_en": "3.0 mm (standard)",
+        "correct": true
+      },
+      {
+        "text_no": "1.6 mm",
+        "text_th": "1.6 มิลลิเมตร",
+        "text_en": "1.6 mm (summer)",
+        "correct": false
+      },
+      {
+        "text_no": "5.0 mm",
+        "text_th": "5.0 มิลลิเมตร",
+        "text_en": "5.0 mm (heavy)",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Minstekravet til mønsterdybde på vinterdekk er 3,0 mm fra 1. november (eller 16. oktober i Nord-Norge).",
+    "explanation_th": "ความลึกของดอกยางขั้นต่ำสำหรับยางฤดูหนาวคือ 3.0 มิลลิเมตร เริ่มตั้งแต่วันที่ 1 พฤศจิกายน (หรือ 16 ตุลาคมในภาคเหนือของนอร์เวย์)",
+    "explanation_en": "The minimum tread depth requirement for winter tires is 3.0 mm starting November 1st (or October 16th in Northern Norway).",
+    "topic_tags": ["mekanikk", "dekk"],
+    "difficulty": "easy",
+    "category": "Mechanics"
+  },
+  {
+    "question_no": "Hvor langt bak bilen skal du plassere varseltrekanten om du må stanse på en vei utenfor tettbygd strøk?",
+    "question_th": "คุณควรวางสามเหลี่ยมเตือนภัยไว้ข้างหลังรถไกลเท่าใด หากต้องจอดบนถนนนอกเขตชุมชน?",
+    "question_en": "How far behind the car should you place the warning triangle if you must stop on a road outside a built-up area?",
+    "options": [
+      {
+        "text_no": "Minst 150 meter",
+        "text_th": "อย่างน้อย 150 เมตร",
+        "text_en": "At least 150 meters",
+        "correct": true
+      },
+      {
+        "text_no": "Ca. 50 meter",
+        "text_th": "ประมาณ 50 เมตร",
+        "text_en": "About 50 meters",
+        "correct": false
+      },
+      {
+        "text_no": "Rett bak støtfangeren",
+        "text_th": "ข้างหลังกันชนรถ",
+        "text_en": "Directly behind the bumper",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Utenfor tettbygd strøk skal varseltrekanten plasseres minst 150 meter bak kjøretøyet slik at andre bilister rekker å reagere.",
+    "explanation_th": "นอกเขตชุมชนต้องวางป้ายเตือนสามเหลี่ยมห่างจากท้ายรถอย่างน้อย 150 เมตร เพื่อให้ผู้ขับขี่คนอื่นมีเวลาตอบสนอง",
+    "explanation_en": "Outside built-up areas, the warning triangle must be placed at least 150 meters behind the vehicle so other drivers have time to react.",
+    "topic_tags": ["mekanikk", "sikkerhet"],
+    "difficulty": "medium",
+    "category": "Mechanics"
+  },
+  {
+    "question_no": "Hva bør du gjøre dersom en rød varsellampe lyser i instrumentpanelet under kjøring?",
+    "question_th": "คุณควรทำอย่างไรหากมีไฟเตือนสีแดงสว่างขึ้นในแผงหน้าปัดระหว่างการขับขี่?",
+    "question_en": "What should you do if a red warning light illuminates in the instrument panel while driving?",
+    "options": [
+      {
+        "text_no": "Stoppe umiddelbart på et sikkert sted og slå av motoren",
+        "text_th": "หยุดรถทันทีในที่ปลอดภัยและดับเครื่องยนต์",
+        "text_en": "Stop immediately in a safe place and turn off the engine",
+        "correct": true
+      },
+      {
+        "text_no": "Kjøre videre til nærmeste verksted",
+        "text_th": "ขับต่อไปยังอู่ซ่อมรถที่ใกล้ที่สุด",
+        "text_en": "Drive on to the nearest workshop",
+        "correct": false
+      },
+      {
+        "text_no": "Ignorere lampen til neste service",
+        "text_th": "เพิกเฉยต่อสัญญาณไฟจนกว่าจะถึงรอบเช็ครถครั้งต่อไป",
+        "text_en": "Ignore the light until the next service",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Rødt lys betyr akutt fare. Du må stoppe umiddelbart og sjekke feilen for å unngå motorskade eller ulykker.",
+    "explanation_th": "ไฟเตือนสีแดงหมายถึงอันตรายร้ายแรง คุณต้องหยุดรถทันทีในที่ปลอดภัยและตรวจสอบข้อผิดพลาดเพื่อหลีกเลี่ยงความเสียหายของเครื่องยนต์หรืออุบัติเหตุ",
+    "explanation_en": "A red light indicates acute danger. You must stop immediately and investigate the issue to avoid engine damage or accidents.",
+    "topic_tags": ["mekanikk", "sikkerhet"],
+    "difficulty": "easy",
+    "category": "Mechanics"
+  },
+  {
+    "question_no": "Hvordan kontrollerer du om bremsesystemet har lekkasje?",
+    "question_th": "คุณจะตรวจสอบได้อย่างไรว่าระบบเบรกเกิดการรั่วไหลหรือไม่?",
+    "question_en": "How do you check if the braking system has a leak?",
+    "options": [
+      {
+        "text_no": "Trå hardt på bremsepedalen i 5-10 sekunder og kjenn at den ikke synker",
+        "text_th": "เหยียบแป้นเบรกแรงๆ ค้างไว้ 5-10 วินาที และรู้สึกว่าแป้นไม่จมลง",
+        "text_en": "Press the brake pedal hard for 5-10 seconds and feel that it does not sink",
+        "correct": true
+      },
+      {
+        "text_no": "Se under bilen etter væske mens motoren går",
+        "text_th": "ก้มมองดูใต้ท้องรถเพื่อหาน้ำมันรั่วในขณะที่เครื่องยนต์ทำงาน",
+        "text_en": "Look under the car for fluid while the engine is running",
+        "correct": false
+      },
+      {
+        "text_no": "Bremse hardt i høy hastighet",
+        "text_th": "เหยียบเบรกแรงๆ ในขณะขับขี่ด้วยความเร็วสูง",
+        "text_en": "Brake hard at high speed",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Hvis bremsepedalen synker under konstant trykk, er det lekkasje i bremsesystemet, og bilen er ikke kjørbar.",
+    "explanation_th": "หากแป้นเบรกยุบลงเรื่อยๆ ในขณะที่เหยียบแรงค้างไว้ แสดงว่าเกิดการรั่วไหลในระบบเบรก และรถคันนี้ไม่พร้อมใช้งาน",
+    "explanation_en": "If the brake pedal sinks under constant pressure, there is a leak in the brake system, and the car is not drivable.",
+    "topic_tags": ["mekanikk", "bremser"],
+    "difficulty": "medium",
+    "category": "Mechanics"
+  },
+  {
+    "question_no": "Hva er hovedformålet med ABS-bremser?",
+    "question_th": "วัตถุประสงค์หลักของระบบเบรกเอบีเอสคืออะไร?",
+    "question_en": "What is the main purpose of ABS brakes?",
+    "options": [
+      {
+        "text_no": "Å forhindre at hjulene låser seg, slik at du kan styre under nødbremsing",
+        "text_th": "ป้องกันไม่ให้ล้อล็อก เพื่อให้คุณยังคงบังคับทิศทางรถได้ในขณะเบรกฉุกเฉิน",
+        "text_en": "To prevent wheels from locking, allowing you to steer during emergency braking",
+        "correct": true
+      },
+      {
+        "text_no": "Å redusere bremselengden på tørr asfalt",
+        "text_th": "เพื่อลดระยะการเบรกบนถนนยางมะตอยที่แห้ง",
+        "text_en": "To reduce the braking distance on dry asphalt",
+        "correct": false
+      },
+      {
+        "text_no": "Å øke bilens motorkraft",
+        "text_th": "เพื่อเพิ่มกำลังเครื่องยนต์ของรถ",
+        "text_en": "To increase the car's engine power",
+        "correct": false
+      }
+    ],
+    "explanation_no": "ABS forhindrer at hjulene låser seg. Dette gjør at hjulene ruller og du kan styre unna hindringer mens du bremser maksimalt.",
+    "explanation_th": "ระบบเบรกเอบีเอสช่วยป้องกันไม่ให้ล้อล็อก ส่งผลให้รถยังคงควบคุมและเลี้ยวหลบสิ่งกีดขวางได้ในขณะที่เหยียบเบรกอย่างเต็มที่",
+    "explanation_en": "ABS prevents wheels from locking. This keeps the wheels rolling, allowing you to steer around obstacles during maximum braking.",
+    "topic_tags": ["mekanikk", "bremser"],
+    "difficulty": "easy",
+    "category": "Mechanics"
+  },
+  {
+    "question_no": "Når er det tillatt å bruke tåkelys foran sammen med nærlys?",
+    "question_th": "เมื่อใดที่ได้รับอนุญาตให้ใช้ไฟตัดหมอกหน้าควบคู่กับไฟต่ำได้?",
+    "question_en": "When is it permitted to use front fog lights together with dipped beam headlights?",
+    "options": [
+      {
+        "text_no": "Det er aldri tillatt å bruke tåkelys og nærlys samtidig",
+        "text_th": "ไม่อนุญาตให้เปิดไฟตัดหมอกและไฟต่ำพร้อมกันโดยเด็ดขาด",
+        "text_en": "It is never permitted to use fog lights and dipped beams simultaneously",
+        "correct": true
+      },
+      {
+        "text_no": "Ved kjøring i tett tåke",
+        "text_th": "ในช่วงที่ขับรถท่ามกลางหมอกหนา",
+        "text_en": "When driving in dense fog",
+        "correct": false
+      },
+      {
+        "text_no": "Alltid etter mørkets frembrudd",
+        "text_th": "เปิดได้ทุกครั้งหลังจากพระอาทิตย์ตกดิน",
+        "text_en": "Always after dark",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Det er forbudt å kombinere tåkelys foran med nærlys. De kan brukes sammen med parkeringslys i tett tåke eller kraftig regn.",
+    "explanation_th": "ห้ามเปิดไฟตัดหมอกคู่กับไฟต่ำโดยเด็ดขาด ไฟตัดหมอกสามารถเปิดร่วมกับไฟหรี่ได้เฉพาะในช่วงที่หมอกลงหนาหรือฝนตกหนักมากเท่านั้น",
+    "explanation_en": "Combining front fog lights with dipped beams is prohibited. They may be used with parking lights in dense fog or heavy rain.",
+    "topic_tags": ["mekanikk", "lys"],
+    "difficulty": "medium",
+    "category": "Mechanics"
+  },
+  {
+    "question_no": "Hva kan skje dersom du kjører med for lavt dekktrykk?",
+    "question_th": "จะเกิดอะไรขึ้นหากคุณขับรถด้วยแรงดันลมยางที่ต่ำเกินไป?",
+    "question_en": "What can happen if you drive with too low tire pressure?",
+    "options": [
+      {
+        "text_no": "Drivstofforbruket øker og veigrepet blir dårligere",
+        "text_th": "อัตราการสิ้นเปลืองน้ำมันจะเพิ่มขึ้น และการยึดเกาะถนนจะแย่ลง",
+        "text_en": "Fuel consumption increases and road grip deteriorates",
+        "correct": true
+      },
+      {
+        "text_no": "Dekkene slites kun på midten",
+        "text_th": "ยางรถยนต์จะสึกเฉพาะบริเวณตรงกลางเท่านั้น",
+        "text_en": "Tires wear only in the middle",
+        "correct": false
+      },
+      {
+        "text_no": "Bilen akselererer raskere",
+        "text_th": "รถจะเร่งความเร็วได้เร็วยิ่งขึ้น",
+        "text_en": "The car accelerates faster",
+        "correct": false
+      }
+    ],
+    "explanation_no": "For lavt dekktrykk gir økt rullemotstand (mer bensinforbruk), ujevn slitasje på dekksidene, og redusert stabilitet i svinger.",
+    "explanation_th": "แรงดันลมยางที่ต่ำเกินไปจะเพิ่มแรงต้านการหมุน ทำให้กินน้ำมันมากขึ้น ยางจะสึกหรอบริเวณแก้มยาง และลดความเสถียรในการเข้าโค้ง",
+    "explanation_en": "Too low tire pressure increases rolling resistance (more fuel consumption), causes uneven wear on tire sides, and reduces stability in curves.",
+    "topic_tags": ["mekanikk", "dekk"],
+    "difficulty": "easy",
+    "category": "Mechanics"
+  },
+  {
+    "question_no": "Hvordan påvirker tung last på taket bilens kjøreegenskaper?",
+    "question_th": "การบรรทุกของหนักบนหลังคาจะส่งผลต่อการควบคุมรถอย่างไร?",
+    "question_en": "How does a heavy load on the roof affect the car's handling?",
+    "options": [
+      {
+        "text_no": "Bilens tyngdepunkt blir høyere, noe som gjør den mer ustabil i svinger",
+        "text_th": "จุดศูนย์ถ่วงของรถจะสูงขึ้น ทำให้รถทรงตัวได้ยากขณะเข้าโค้ง",
+        "text_en": "The car's center of gravity becomes higher, making it more unstable in corners",
+        "correct": true
+      },
+      {
+        "text_no": "Bremselengden blir kortere",
+        "text_th": "ระยะการเบรกจะสั้นลง",
+        "text_en": "The braking distance becomes shorter",
+        "correct": false
+      },
+      {
+        "text_no": "Bilen blir mindre følsom for sidevind",
+        "text_th": "รถจะต้านทานต่อลมพัดแรงจากด้านข้างได้ดีขึ้น",
+        "text_en": "The car becomes less sensitive to crosswinds",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Tung taklast hever bilens tyngdepunkt. Bilen krenger mer i svinger og faren for velting eller skrens øker.",
+    "explanation_th": "การบรรทุกสิ่งของหนักบนหลังคาจะทำให้จุดศูนย์ถ่วงของรถสูงขึ้น รถจะเอียงตัวมากกว่าปกติเมื่อเข้าโค้ง และเพิ่มความเสี่ยงต่อการพลิกคว่ำหรือลื่นไถล",
+    "explanation_en": "Heavy roof load raises the car's center of gravity. The car leans more in corners, increasing the risk of rollover or skidding.",
+    "topic_tags": ["mekanikk", "last"],
+    "difficulty": "medium",
+    "category": "Mechanics"
+  },
+  {
+    "question_no": "Hvordan sjekker du at servostyringen fungerer før du kjører?",
+    "question_th": "คุณจะตรวจสอบว่าพวงมาลัยพาวเวอร์ทำงานได้อย่างไรก่อนเริ่มขับรถ?",
+    "question_en": "How do you check that the power steering works before driving?",
+    "options": [
+      {
+        "text_no": "Dra lett i rattet, start motoren, og kjenn at rattet blir merkbart lettere å dreie",
+        "text_th": "ดึงพวงมาลัยเบาๆ สตาร์ทเครื่องยนต์ และรู้สึกว่าพวงมาลัยเบาขึ้นอย่างเห็นได้ชัด",
+        "text_en": "Pull gently on the steering wheel, start the engine, and feel that the wheel becomes noticeably easier to turn",
+        "correct": true
+      },
+      {
+        "text_no": "Sving rattet helt til høyre og venstre mens bilen står stille med motoren av",
+        "text_th": "หมุนพวงมาลัยไปทางขวาและซ้ายให้สุดในขณะที่ดับเครื่องยนต์",
+        "text_en": "Turn the wheel fully right and left while stationary with the engine off",
+        "correct": false
+      },
+      {
+        "text_no": "Sjekk fargen på servovæsken",
+        "text_th": "ตรวจสอบสีของน้ำมันพวงมาลัยพาวเวอร์",
+        "text_en": "Check the color of the power steering fluid",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Rattkontrollen gjøres ved å belaste rattet før start. Når motoren starter, skal servopumpen aktiveres og gjøre rattet lett.",
+    "explanation_th": "การตรวจสอบพวงมาลัยพาวเวอร์ทำได้โดยหมุนพวงมาลัยค้างไว้เล็กน้อยก่อนสตาร์ท เมื่อเครื่องยนต์สตาร์ทแล้ว พวงมาลัยต้องเบาลงและหมุนได้ง่ายขึ้นทันที",
+    "explanation_en": "Check power steering by applying light pressure to the steering wheel before starting. When the engine starts, the power steering pump should engage and make the wheel easy to turn.",
+    "topic_tags": ["mekanikk", "styring"],
+    "difficulty": "medium",
+    "category": "Mechanics"
+  },
+  {
+    "question_no": "Hva bør du gjøre dersom bilen opplever vannplaning?",
+    "question_th": "คุณควรทำอย่างไรหากรถเกิดอาการเหินน้ำ?",
+    "question_en": "What should you do if the car experiences hydroplaning?",
+    "options": [
+      {
+        "text_no": "Trykk inn clutchen (eller sett gir i fri), slipp gassen, og hold rattet rolig i kjøreretningen",
+        "text_th": "เหยียบคลัตช์ (หรือเข้าเกียร์ว่าง) ปล่อยคันเร่ง และถือพวงมาลัยให้ตรงตามทิศทาง",
+        "text_en": "Press the clutch (or put gear in neutral), release the gas, and keep the steering wheel steady in the driving direction",
+        "correct": true
+      },
+      {
+        "text_no": "Bremse hardt med en gang",
+        "text_th": "เหยียบเบรกแรงๆ ทันที",
+        "text_en": "Brake hard immediately",
+        "correct": false
+      },
+      {
+        "text_no": "Svinge raskt fra side til side for å få grep",
+        "text_th": "หมุนพวงมาลัยไปมาอย่างรวดเร็วเพื่อให้ยางเกาะถนน",
+        "text_en": "Turn quickly from side to side to get grip",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Ved vannplaning mister hjulene kontakt med veien. Du må frikoble drivhjulene, slippe gassen og unngå store rattbevegelser til du får grep igjen.",
+    "explanation_th": "เมื่อรถเหินน้ำ ล้อรถจะสูญเสียการยึดเกาะถนน คุณต้องตัดกำลังขับเคลื่อน ปล่อยคันเร่ง และหลีกเลี่ยงการหักเลี้ยวพวงมาลัยจนกว่าจะกลับมายึดเกาะอีกครั้ง",
+    "explanation_en": "During hydroplaning, wheels lose contact with the road. You must disengage the drive wheels, release the gas, and avoid major steering inputs until grip is restored.",
+    "topic_tags": ["situasjoner", "sikkerhet"],
+    "difficulty": "medium",
+    "category": "Situations"
+  },
+  {
+    "question_no": "Hvordan bør du tilpasse kjøringen når sikten er sterkt redusert på grunn av tåke?",
+    "question_th": "คุณควรปรับการขับขี่อย่างไรเมื่อทัศนวิสัยลดลงอย่างมากเนื่องจากหมอกลงหนา?",
+    "question_en": "How should you adjust your driving when visibility is severely reduced due to fog?",
+    "options": [
+      {
+        "text_no": "Senke farten betydelig og øke avstanden til kjøretøyet foran",
+        "text_th": "ลดความเร็วลงอย่างมากและเพิ่มระยะห่างจากรถคันหน้า",
+        "text_en": "Lower your speed significantly and increase the following distance to the vehicle ahead",
+        "correct": true
+      },
+      {
+        "text_no": "Slå på fjernlys for å se bedre gjennom tåken",
+        "text_th": "เปิดไฟสูงเพื่อช่วยให้มองเห็นผ่านหมอกได้ดีขึ้น",
+        "text_en": "Turn on high beams to see better through the fog",
+        "correct": false
+      },
+      {
+        "text_no": "Kjøre tett bak bilen foran og følge baklysene deres",
+        "text_th": "ขับจี้ท้ายรถคันหน้าเพื่อขับตามไฟท้ายของพวกเขา",
+        "text_en": "Drive close behind the car in front and follow their tail lights",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Redusert sikt krever lavere fart og mer sikkerhetsavstand. Fjernlys vil bare reflektere i tåken og blende deg selv.",
+    "explanation_th": "ทัศนวิสัยที่ลดลงกำหนดให้ต้องลดความเร็วและเพิ่มระยะห่าง ไฟสูงจะสะท้อนกับหมอกและทำให้คนขับตาพร่ามัวมากกว่าเดิม",
+    "explanation_en": "Reduced visibility requires lower speed and larger following distance. High beams will only reflect off the fog and blind you.",
+    "topic_tags": ["situasjoner", "sikt"],
+    "difficulty": "easy",
+    "category": "Situations"
+  },
+  {
+    "question_no": "Når er faren for å kjøre på elg eller hjort størst på norske veier?",
+    "question_th": "เมื่อใดที่ความเสี่ยงต่อการชนกวางมูสหรือกวางสายพันธุ์อื่นสูงสุดบนถนนในนอร์เวย์?",
+    "question_en": "When is the danger of colliding with moose or deer highest on Norwegian roads?",
+    "options": [
+      {
+        "text_no": "I skumringen og grålysningen, spesielt i vintermånedene",
+        "text_th": "ในช่วงพลบค่ำและรุ่งเช้า โดยเฉพาะในช่วงฤดูหนาว",
+        "text_en": "At dusk and dawn, especially during the winter months",
+        "correct": true
+      },
+      {
+        "text_no": "Midt på dagen om sommeren",
+        "text_th": "ในช่วงกลางวันแสกๆ ของฤดูร้อน",
+        "text_en": "In the middle of the day during summer",
+        "correct": false
+      },
+      {
+        "text_no": "Bare når det regner kraftig",
+        "text_th": "เฉพาะในช่วงที่ฝนตกหนักมากเท่านั้น",
+        "text_en": "Only when it rains heavily",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Dyr er mest aktive rundt soloppgang og solnedgang. Vinterstid trekker de også ned mot veiene for å finne lettere terreng.",
+    "explanation_th": "สัตว์ป่าจะออกหากินมากที่สุดในช่วงเช้ามืดและพลบค่ำ ในช่วงฤดูหนาวพวกมันมักจะเดินลงมาบนถนนเพื่อความสะดวกในการเดินทาง",
+    "explanation_en": "Wildlife is most active around sunrise and sunset. In winter, they are also drawn to roadsides for easier movement.",
+    "topic_tags": ["situasjoner", "viltfare"],
+    "difficulty": "medium",
+    "category": "Situations"
+  },
+  {
+    "question_no": "Hvorfor bruker vi 3-sekundersregelen på tørr vei?",
+    "question_th": "เหตุใดเราจึงใช้กฎ 3 วินาทีบนถนนที่แห้ง?",
+    "question_en": "Why do we use the 3-second rule on dry roads?",
+    "options": [
+      {
+        "text_no": "For å sikre tilstrekkelig avstand til bilen foran slik at du rekker å stanse om den bråbremser",
+        "text_th": "เพื่อให้แน่ใจว่ามีระยะห่างที่เพียงพอจากรถคันหน้า เพื่อหยุดรถได้ทันหากรถคันหน้าเบรกกะทันหัน",
+        "text_en": "To ensure sufficient distance to the car ahead so you can stop if it brakes suddenly",
+        "correct": true
+      },
+      {
+        "text_no": "For å spare drivstoff under kjøring",
+        "text_th": "เพื่อช่วยประหยัดการใช้เชื้อเพลิงในระหว่างขับขี่",
+        "text_en": "To save fuel while driving",
+        "correct": false
+      },
+      {
+        "text_no": "Det er tiden det tar å sjekke blindsonen",
+        "text_th": "เป็นระยะเวลาที่ใช้ในการตรวจสอบพื้นที่อับสายตาของรถ",
+        "text_en": "It is the time it takes to check the blind spot",
+        "correct": false
+      }
+    ],
+    "explanation_no": "3 sekunder tilsvarer sikkerhetsavstanden under normale forhold. På glatt vei må avstanden økes til 5-6 sekunder eller mer.",
+    "explanation_th": "ระยะเวลา 3 วินาทีคือระยะห่างที่ปลอดภัยภายใต้สภาพถนนปกติ หากถนนลื่นต้องเพิ่มระยะห่างเป็น 5-6 วินาทีหรือมากกว่านั้น",
+    "explanation_en": "Three seconds corresponds to a safe distance under normal conditions. On slippery roads, increase this to 5-6 seconds or more.",
+    "topic_tags": ["situasjoner", "avstand"],
+    "difficulty": "easy",
+    "category": "Situations"
+  },
+  {
+    "question_no": "Hva skal du gjøre når du skal kjøre forbi en syklist på en smal vei?",
+    "question_th": "คุณควรทำอย่างไรเมื่อต้องการแซงคนขี่จักรยานบนถนนที่แคบ?",
+    "question_en": "What should you do when passing a cyclist on a narrow road?",
+    "options": [
+      {
+        "text_no": "Vente til det er fri sikt foran, og holde god sideavstand (minst 1,5 meter) under forbikjøringen",
+        "text_th": "รอจนกว่าจะมองเห็นทางข้างหน้าได้ชัดเจน และเว้นระยะห่างด้านข้างอย่างน้อย 1.5 เมตรในขณะแซง",
+        "text_en": "Wait until there is clear visibility ahead, and maintain a safe side distance (at least 1.5 meters) during the pass",
+        "correct": true
+      },
+      {
+        "text_no": "Tute for å få syklisten til å kjøre av veien",
+        "text_th": "บีบแตรยาวเพื่อให้คนขี่จักรยานหลบลงข้างทางไป",
+        "text_en": "Honk to make the cyclist pull off the road",
+        "correct": false
+      },
+      {
+        "text_no": "Kjøre tett forbi så fort som mulig",
+        "text_th": "ขับแซงผ่านไปอย่างรวดเร็วและชิดตัวจักรยานมากที่สุด",
+        "text_en": "Drive closely past as quickly as possible",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Syklister kan vingle eller falle. Du må alltid sikre god sideavstand (helst minst 1,5 meter) og kun passere når det er trygt for møtende trafikk.",
+    "explanation_th": "คนขี่จักรยานอาจเสียหลักหรือล้มได้ คุณต้องเว้นระยะห่างด้านข้างอย่างน้อย 1.5 เมตร และแซงเมื่อปลอดภัยจากรถที่สวนทางมาเท่านั้น",
+    "explanation_en": "Cyclists can wobble or fall. You must always maintain safe lateral clearance (preferably at least 1.5 meters) and only pass when safe from oncoming traffic.",
+    "topic_tags": ["situasjoner", "forbikjøring"],
+    "difficulty": "medium",
+    "category": "Situations"
+  },
+  {
+    "question_no": "Hvorfor må du være spesielt forsiktig når du kjører nær en stor lastebil i et kryss?",
+    "question_th": "เหตุใดคุณจึงต้องระมัดระวังเป็นพิเศษเมื่อขับขี่ใกล้รถบรรทุกขนาดใหญ่บริเวณทางแยก?",
+    "question_en": "Why must you be especially careful when driving near a large truck at an intersection?",
+    "options": [
+      {
+        "text_no": "Lastebiler har store blindsoner og trenger mer plass til å svinge",
+        "text_th": "รถบรรทุกมีพื้นที่จุดบอดขนาดใหญ่และต้องใช้พื้นที่ในการเลี้ยวมากกว่ารถทั่วไป",
+        "text_en": "Trucks have large blind spots and need more space to turn",
+        "correct": true
+      },
+      {
+        "text_no": "Lastebiler har alltid vikeplikt for mindre personbiler",
+        "text_th": "รถบรรทุกต้องให้ทางแก่รถยนต์ส่วนบุคคลขนาดเล็กกว่าเสมอ",
+        "text_en": "Trucks always yield to smaller passenger cars",
+        "correct": false
+      },
+      {
+        "text_no": "De har kortere bremselengde enn personbiler",
+        "text_th": "รถบรรทุกมีระยะการเบรกที่สั้นกว่ารถยนต์ส่วนบุคคล",
+        "text_en": "They have a shorter braking distance than passenger cars",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Store kjøretøyer har blindsoner rett foran, bak og på sidene. De må ofte også svinge ut i motsatt fil før de svinger.",
+    "explanation_th": "รถบรรทุกขนาดใหญ่มีจุดบอดที่มองไม่เห็นอยู่รอบตัวรถ และบ่อยครั้งที่รถต้องเบี่ยงออกเลนตรงข้ามก่อนเพื่อกวาดวงเลี้ยว",
+    "explanation_en": "Large vehicles have blind spots directly in front, behind, and on the sides. They often need to swing into the opposite lane to make turns.",
+    "topic_tags": ["situasjoner", "lastebil"],
+    "difficulty": "medium",
+    "category": "Situations"
+  },
+  {
+    "question_no": "Hvordan endrer bremselengden seg på isete eller snødekket vei sammenlignet med tørr vei?",
+    "question_th": "ระยะการเบรกบนถนนที่มีหิมะหรือน้ำแข็งเกาะเปลี่ยนไปอย่างไรเมื่อเทียบกับถนนแห้งปกติ?",
+    "question_en": "How does the braking distance on an icy or snow-covered road compare to a dry road?",
+    "options": [
+      {
+        "text_no": "Bremselengden kan bli opptil 4 til 10 ganger lenger",
+        "text_th": "ระยะการเบรกอาจเพิ่มขึ้นยาวนานกว่าปกติ 4 ถึง 10 เท่า",
+        "text_en": "The braking distance can become up to 4 to 10 times longer",
+        "correct": true
+      },
+      {
+        "text_no": "Bremselengden forblir omtrent den samme",
+        "text_th": "ระยะการเบรกยังคงใกล้เคียงกับถนนแห้งปกติ",
+        "text_en": "The braking distance remains roughly the same",
+        "correct": false
+      },
+      {
+        "text_no": "Bremselengden blir kortere på grunn av snøen",
+        "text_th": "ระยะการเบรกจะสั้นลงเนื่องจากหิมะช่วยดักล้อรถ",
+        "text_en": "The braking distance becomes shorter because of the snow",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Friksjonen på is og snø er ekstremt lav. Bremselengden øker dramatisk, og du må redusere farten deretter.",
+    "explanation_th": "แรงเสียดทานบนพื้นน้ำแข็งและหิมะมีค่าต่ำมาก ระยะการเบรกจะเพิ่มขึ้นอย่างมหาศาล คุณต้องลดความเร็วลงอย่างมากเพื่อความปลอดภัย",
+    "explanation_en": "Friction on ice and snow is extremely low. Braking distance increases dramatically; you must reduce your speed accordingly.",
+    "topic_tags": ["situasjoner", "vinterføre"],
+    "difficulty": "hard",
+    "category": "Situations"
+  },
+  {
+    "question_no": "Hva er det viktigste du gjør dersom det oppstår brann i bilen din inne i en tunnel, og du ikke kan kjøre ut?",
+    "question_th": "สิ่งสำคัญที่สุดที่คุณต้องทำหากเกิดไฟไหม้รถยนต์ขณะอยู่ในอุโมงค์และไม่สามารถขับออกไปได้คืออะไร?",
+    "question_en": "What is the most important thing to do if a fire starts in your car inside a tunnel and you cannot drive out?",
+    "options": [
+      {
+        "text_no": "Parkere på en havarilomme (eller til høyre), la nøklene stå i, og evakuere til fots via nødutganger",
+        "text_th": "จอดรถในช่องจอดฉุกเฉิน เสียบกุญแจรถค้างไว้ และอพยพเดินเท้าออกทางประตูหนีไฟฉุกเฉิน",
+        "text_en": "Park in an emergency lay-by (or to the right), leave the keys, and evacuate on foot via emergency exits",
+        "correct": true
+      },
+      {
+        "text_no": "Sitte i bilen og vente på hjelp med vinduene lukket",
+        "text_th": "นั่งรอคอยความช่วยเหลืออยู่ภายในรถและปิดกระจกให้สนิท",
+        "text_en": "Sit in the car and wait for help with the windows closed",
+        "correct": false
+      },
+      {
+        "text_no": "Forsøke å snu bilen og rygge ut av tunnelen",
+        "text_th": "พยายามกลับรถและถอยรถออกจากอุโมงค์ในทันที",
+        "text_en": "Attempt to turn the car around and reverse out of the tunnel",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Røyk er livsfarlig i tunneler. Parker bilen slik at den ikke blokkerer brannbiler, la nøklene stå slik at redningsmannskapet kan flytte den, og gå til nødutgangen.",
+    "explanation_th": "ควันไฟในอุโมงค์เป็นอันตรายถึงชีวิต จอดรถต้องไม่กีดขวางทางรถดับเพลิง เสียบกุญแจค้างไว้เผื่อกู้ภัยต้องเคลื่อนย้ายรถ และเดินอพยพไปทางออกฉุกเฉิน",
+    "explanation_en": "Smoke is deadly in tunnels. Park so you do not block emergency services, leave keys in the ignition so rescuers can move the vehicle, and evacuate to emergency exits.",
+    "topic_tags": ["situasjoner", "tunnel"],
+    "difficulty": "hard",
+    "category": "Situations"
+  },
+  {
+    "question_no": "Hva er den lovlige promillegrensen for bilførere i Norge?",
+    "question_th": "ขีดจำกัดแอลกอฮอล์ในเลือดตามกฎหมายสำหรับผู้ขับขี่รถยนต์ในนอร์เวย์คือเท่าใด?",
+    "question_en": "What is the legal blood alcohol limit for drivers in Norway?",
+    "options": [
+      {
+        "text_no": "0.2 promille",
+        "text_th": "0.2 โปรมิลเล่",
+        "text_en": "0.2 blood alcohol limit (BAC)",
+        "correct": true
+      },
+      {
+        "text_no": "0.5 promille",
+        "text_th": "0.5 โปรมิลเล่",
+        "text_en": "0.5 blood alcohol limit (BAC)",
+        "correct": false
+      },
+      {
+        "text_no": "0.0 promille",
+        "text_th": "0.0 โปรมิลเล่",
+        "text_en": "0.0 blood alcohol limit (BAC)",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Grensen i Norge er 0,2 promille. Straffene for fyllekjøring er strenge og medfører vanligvis tap av førerkort og store bøter.",
+    "explanation_th": "ขีดจำกัดแอลกอฮอล์ในนอร์เวย์คือ 0.2 โปรมิลเล่ การเมาแล้วขับมีบทลงโทษที่รุนแรงมาก รวมถึงการยึดใบขับขี่และปรับเงินจำนวนมาก",
+    "explanation_en": "The blood alcohol limit in Norway is 0.2 promille (0.02% BAC). Penalties for driving under the influence are severe, involving loss of license and heavy fines.",
+    "topic_tags": ["situasjoner", "rusmidler"],
+    "difficulty": "easy",
+    "category": "Situations"
+  },
+  {
+    "question_no": "Hva er det eneste effektive tiltaket dersom du blir ekstremt trøtt under langkjøring?",
+    "question_th": "วิธีแก้ปัญหาที่มีประสิทธิภาพเพียงอย่างเดียวคืออะไร หากคุณรู้สึกง่วงนอนอย่างมากในขณะขับรถระยะไกล?",
+    "question_en": "What is the only effective measure if you become extremely tired during long-distance driving?",
+    "options": [
+      {
+        "text_no": "Stanse på et trygt sted og ta en hvil på 15-20 minutter",
+        "text_th": "หยุดรถในที่ปลอดภัยและนอนพักผ่อนเป็นเวลา 15-20 นาที",
+        "text_en": "Stop in a safe place and take a 15-20 minute nap",
+        "correct": true
+      },
+      {
+        "text_no": "Skru opp volumet på musikken og åpne vinduet",
+        "text_th": "เปิดเสียงดนตรีให้ดังขึ้นและเปิดกระจกรับลมเย็น",
+        "text_en": "Turn up the music volume and open the window",
+        "correct": false
+      },
+      {
+        "text_no": "Drikke en energidrikk og kjøre raskere hjem",
+        "text_th": "ดื่มเครื่องดื่มชูกำลังและรีบขับรถกลับบ้านให้เร็วที่สุด",
+        "text_en": "Drink an energy drink and drive home faster",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Koffein og frisk luft hjelper kun kortvarig. Søvn er den eneste måten å gjenopprette oppmerksomheten på.",
+    "explanation_th": "คาเฟอีนและลมเย็นจากหน้าต่างช่วยได้เพียงชั่วคราวเท่านั้น การนอนหลับพักสายตาเป็นวิธีเดียวที่มีประสิทธิภาพในการฟื้นฟูสติและความปลอดภัย",
+    "explanation_en": "Caffeine and fresh air only help briefly. Sleep is the only way to recover attention.",
+    "topic_tags": ["situasjoner", "sikkerhet"],
+    "difficulty": "easy",
+    "category": "Situations"
+  },
+  {
+    "question_no": "Hvor mange passasjerer kan du maksimalt transportere i en personbil med førerkort klasse B?",
+    "question_th": "คุณสามารถบรรทุกผู้โดยสารได้สูงสุดกี่คนสำหรับรถยนต์นั่งส่วนบุคคลด้วยใบอนุญาตขับขี่ประเภท B?",
+    "question_en": "What is the maximum number of passengers you can transport in a passenger car with a class B driving license?",
+    "options": [
+      {
+        "text_no": "Maksimalt 8 passasjerer",
+        "text_th": "ผู้โดยสารสูงสุดไม่เกิน 8 คน",
+        "text_en": "Maximum of 8 passengers",
+        "correct": true
+      },
+      {
+        "text_no": "Maksimalt 4 passasjerer",
+        "text_th": "ผู้โดยสารสูงสุดไม่เกิน 4 คน",
+        "text_en": "Maximum of 4 passengers",
+        "correct": false
+      },
+      {
+        "text_no": "Grensen bestemmes kun av antall sitteplasser",
+        "text_th": "ไม่จำกัดจำนวน ขึ้นอยู่กับเบาะที่นั่งในรถเท่านั้น",
+        "text_en": "The limit is determined only by the number of seats",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Klasse B gjelder for bil med tillatt totalvekt maks 3500 kg og godkjent for transport av maks 8 passasjerer i tillegg til fører.",
+    "explanation_th": "ใบขับขี่ประเภท B ใช้สำหรับรถยนต์ที่มีน้ำหนักรวมไม่เกิน 3500 กิโลกรัม และได้รับอนุญาตให้บรรทุกผู้โดยสารได้สูงสุดไม่เกิน 8 คนไม่รวมคนขับ",
+    "explanation_en": "A class B license is for vehicles with a maximum weight of 3500 kg and approved for transporting up to 8 passengers in addition to the driver.",
+    "topic_tags": ["sertifisering", "regler"],
+    "difficulty": "easy",
+    "category": "Certification"
+  },
+  {
+    "question_no": "Hva er hovedregelen for den maksimale tillatte totalvekten for bil og tilhenger til sammen på klasse B?",
+    "question_th": "กฎเหล็กเรื่องน้ำหนักรวมสูงสุดของตัวรถยนต์และรถพ่วงรวมกันสำหรับใบขับขี่ประเภท B คือเท่าใด?",
+    "question_en": "What is the main rule for the maximum allowed combined weight of car and trailer on a class B license?",
+    "options": [
+      {
+        "text_no": "Bil + tilhenger skal ikke overskride 3500 kg til sammen",
+        "text_th": "น้ำหนักรวมของรถยนต์และรถพ่วงต้องไม่เกิน 3500 กิโลกรัม",
+        "text_en": "Car + trailer combined must not exceed 3500 kg",
+        "correct": true
+      },
+      {
+        "text_no": "Tilhengeren kan veie opptil 2000 kg uansett bil",
+        "text_th": "รถพ่วงสามารถหนักได้ถึง 2000 กิโลกรัม โดยไม่ขึ้นกับตัวรถ",
+        "text_en": "The trailer can weigh up to 2000 kg regardless of the car",
+        "correct": false
+      },
+      {
+        "text_no": "Det er ingen vektgrense så lenge hengeren har brems",
+        "text_th": "ไม่มีข้อจำกัดเรื่องน้ำหนักหากรถพ่วงมีระบบเบรกในตัว",
+        "text_en": "There is no weight limit as long as the trailer has brakes",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Hovedregelen er at samlet tillatt totalvekt for bil og tilhenger ikke må overskride 3500 kg på klasse B (unntatt campingvogn-regelen).",
+    "explanation_th": "กฎหลักคือค่าน้ำหนักรวมที่อนุญาตของทั้งรถยนต์และรถพ่วงเมื่อนำมารวมกันต้องไม่เกิน 3500 กิโลกรัมสำหรับใบขับขี่ประเภท B",
+    "explanation_en": "The general rule is that the combined allowed total weight of car and trailer must not exceed 3500 kg on a class B license.",
+    "topic_tags": ["sertifisering", "henger"],
+    "difficulty": "medium",
+    "category": "Certification"
+  },
+  {
+    "question_no": "Hvor gammel må ledsageren være ved privat øvingskjøring for personbil (klasse B)?",
+    "question_th": "ผู้ดูแลควบคุมการฝึกหัดขับรถยนต์นั่งส่วนบุคคล (ประเภท B) ต้องมีอายุอย่างน้อยเท่าใด?",
+    "question_en": "How old must the accompanying driver be during private practice driving for a passenger car (class B)?",
+    "options": [
+      {
+        "text_no": "Minst 25 år",
+        "text_th": "อย่างน้อย 25 ปี",
+        "text_en": "At least 25 years old",
+        "correct": true
+      },
+      {
+        "text_no": "Minst 18 år",
+        "text_th": "อย่างน้อย 18 ปี",
+        "text_en": "At least 18 years old",
+        "correct": false
+      },
+      {
+        "text_no": "Minst 21 år",
+        "text_th": "อย่างน้อย 21 ปี",
+        "text_en": "At least 21 years old",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Ledsageren må ha fylt 25 år og ha hatt førerrett for bil sammenhengende de siste 5 årene.",
+    "explanation_th": "ผู้ควบคุมการฝึกหัดขับรถส่วนบุคคลต้องมีอายุอย่างน้อย 25 ปีบริบูรณ์ และต้องมีใบขับขี่รถยนต์ส่วนบุคคลติดต่อกันมาแล้วอย่างน้อย 5 ปีล่าสุด",
+    "explanation_en": "The accompanying driver must be at least 25 years old and must have held a valid car driver's license continuously for the last 5 years.",
+    "topic_tags": ["sertifisering", "øvingskjøring"],
+    "difficulty": "easy",
+    "category": "Certification"
+  },
+  {
+    "question_no": "Hvor lenge er en bestått teoriprøve gyldig?",
+    "question_th": "ผลการสอบภาคทฤษฎีที่ผ่านแล้วจะมีอายุความกี่ปี?",
+    "question_en": "How long is a passed theory test valid?",
+    "options": [
+      {
+        "text_no": "I 3 år",
+        "text_th": "เป็นเวลา 3 ปี",
+        "text_en": "For 3 years",
+        "correct": true
+      },
+      {
+        "text_no": "I 1 år",
+        "text_th": "เป็นเวลา 1 ปี",
+        "text_en": "For 1 year",
+        "correct": false
+      },
+      {
+        "text_no": "Til du fyller 80 år",
+        "text_th": "ตลอดไปจนกว่าจะมีอายุครบ 80 ปี",
+        "text_en": "Until you turn 80",
+        "correct": false
+      }
+    ],
+    "explanation_no": "En bestått teoriprøve er gyldig i 3 år. Du må bestå oppkjøringen innen denne tiden, ellers må du ta teoriprøven på nytt.",
+    "explanation_th": "ผลการสอบทฤษฎีที่ผ่านแล้วจะมีอายุการใช้งาน 3 ปี คุณต้องสอบปฏิบัติให้ผ่านภายในช่วงเวลานี้ มิฉะนั้นต้องเริ่มสอบใหม่ทั้งหมด",
+    "explanation_en": "A passed theory test is valid for 3 years. You must pass the practical road test within this period, or you must retake the theory test.",
+    "topic_tags": ["sertifisering", "eksamen"],
+    "difficulty": "easy",
+    "category": "Certification"
+  },
+  {
+    "question_no": "Hvor mange dager har du på deg til å sende eierskifte (salgsmelding) etter at en bil har byttet eier?",
+    "question_th": "คุณต้องยื่นแจ้งเปลี่ยนโอนกรรมสิทธิ์รถ (แจ้งการขาย) ภายในกี่วันหลังจากทำการเปลี่ยนเจ้าของรถยนต์?",
+    "question_en": "How many days do you have to submit a change of ownership (notification of sale) after a car changes hands?",
+    "options": [
+      {
+        "text_no": "Innen 3 dager",
+        "text_th": "ภายใน 3 วัน",
+        "text_en": "Within 3 days",
+        "correct": true
+      },
+      {
+        "text_no": "Innen 14 dager",
+        "text_th": "ภายใน 14 วัน",
+        "text_en": "Within 14 days",
+        "correct": false
+      },
+      {
+        "text_no": "Innen 30 dager",
+        "text_th": "ภายใน 30 วัน",
+        "text_en": "Within 30 days",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Eierskifte (salgsmelding) må sendes til Statens vegvesen innen 3 dager etter overdragelsen. Dette gjøres vanligvis digitalt.",
+    "explanation_th": "ต้องส่งรายงานการเปลี่ยนเจ้าของรถยนต์ไปยังสำนักงานขนส่งของนอร์เวย์ ภายใน 3 วันทำการหลังจากทำการซื้อขายส่งมอบรถเรียบร้อย",
+    "explanation_en": "Notification of sale/ownership transfer must be submitted to the Public Roads Administration within 3 days of the sale. This is typically done digitally.",
+    "topic_tags": ["sertifisering", "regler"],
+    "difficulty": "medium",
+    "category": "Certification"
+  },
+  {
+    "question_no": "Hvor nær et vegkryss er det forbudt å parkere bilen?",
+    "question_th": "ห้ามจอดรถยนต์ในระยะประชิดทางแยกไม่เกินกี่เมตร?",
+    "question_en": "How close to an intersection is it forbidden to park the car?",
+    "options": [
+      {
+        "text_no": "Nærmere enn 5 meter fra krysset",
+        "text_th": "ใกล้กว่า 5 เมตรจากขอบทางแยก",
+        "text_en": "Closer than 5 meters from the intersection",
+        "correct": true
+      },
+      {
+        "text_no": "Nærmere enn 2 meter fra krysset",
+        "text_th": "ใกล้กว่า 2 เมตรจากขอบทางแยก",
+        "text_en": "Closer than 2 meters from the intersection",
+        "correct": false
+      },
+      {
+        "text_no": "Det er tillatt så lenge du ikke sperrer sikten",
+        "text_th": "จอดได้ตราบใดที่ไม่บังทัศนวิสัยการมองเห็น",
+        "text_en": "It is allowed as long as you do not block visibility",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Det er forbudt å stanse eller parkere nærmere enn 5 meter fra vegkrysset, målt fra der kantsteinene begynner å svinge.",
+    "explanation_th": "ห้ามจอดรถหรือหยุดรถในระยะใกล้กว่า 5 เมตรจากทางแยก โดยวัดจากจุดเริ่มต้นของความโค้งของขอบฟุตบาททางแยก",
+    "explanation_en": "Stopping or parking closer than 5 meters from an intersection is prohibited, measured from the point where the curb starts to curve.",
+    "topic_tags": ["sertifisering", "parkering"],
+    "difficulty": "medium",
+    "category": "Certification"
+  },
+  {
+    "question_no": "Hva er din plikt dersom du kommer først til et ulykkessted med skadde personer?",
+    "question_th": "หน้าที่ของคุณคืออะไรหากคุณมาถึงจุดเกิดเหตุอุบัติเหตุที่มีผู้บาดเจ็บเป็นคนแรก?",
+    "question_en": "What is your duty if you are the first to arrive at an accident scene with injured persons?",
+    "options": [
+      {
+        "text_no": "Du plikter å stanse, sikre skadestedet og gi førstehjelp etter evne",
+        "text_th": "คุณต้องหยุดรถ ช่วยจัดระเบียบความปลอดภัยพื้นที่ และให้การปฐมพยาบาลตามความสามารถ",
+        "text_en": "You are obligated to stop, secure the scene, and provide first aid to the best of your ability",
+        "correct": true
+      },
+      {
+        "text_no": "Du kan kjøre videre om du blir stresset",
+        "text_th": "คุณสามารถขับผ่านไปได้หากรู้สึกตื่นตระหนกตกใจเกินไป",
+        "text_en": "You can drive on if you feel too stressed",
+        "correct": false
+      },
+      {
+        "text_no": "Kun ringe politiet og kjøre videre",
+        "text_th": "ทำเพียงแค่โทรศัพท์แจ้งตำรวจแล้วขับรถผ่านไปได้เลย",
+        "text_en": "Only call the police and drive on",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Alle trafikanter har en lovpålagt plikt til å hjelpe skadde i trafikken. Å forlate et ulykkessted uten å hjelpe er straffbart.",
+    "explanation_th": "ผู้ใช้ถนนทุกคนมีหน้าที่ตามกฎหมายในการช่วยเหลือผู้บาดเจ็บ การหลบหนีหรือละเลยไม่ช่วยเหลือในสถานที่เกิดเหตุมีโทษทางอาญา",
+    "explanation_en": "All road users have a legally mandated duty to help injured persons. Leaving the scene of an accident without helping is a punishable offense.",
+    "topic_tags": ["sertifisering", "førstehjelp"],
+    "difficulty": "easy",
+    "category": "Certification"
+  },
+  {
+    "question_no": "Hva skjer dersom du får 8 prikker på førerkortet i løpet av en 3-årsperiode?",
+    "question_th": "จะเกิดอะไรขึ้นหากคุณได้รับแต้มบันทึกคะแนนใบสั่ง 8 คะแนนบนใบอนุญาตขับขี่ภายในระยะเวลา 3 ปี?",
+    "question_en": "What happens if you accumulate 8 points on your driving license within a 3-year period?",
+    "options": [
+      {
+        "text_no": "Du mister retten til å kjøre bil for en periode på 6 måneder",
+        "text_th": "คุณจะถูกระงับสิทธิ์การขับรถยนต์เป็นระยะเวลา 6 เดือน",
+        "text_en": "You lose the right to drive for a period of 6 months",
+        "correct": true
+      },
+      {
+        "text_no": "Du må betale en bot på 50 000 kroner",
+        "text_th": "คุณต้องชำระค่าปรับเป็นจำนวนเงิน 50,000 โครน",
+        "text_en": "You must pay a fine of 50,000 NOK",
+        "correct": false
+      },
+      {
+        "text_no": "Du får automatisk advarsel i posten og beholder lappen",
+        "text_th": "คุณจะได้รับจดหมายเตือนและยังคงเก็บใบขับขี่ไว้ได้ตามปกติ",
+        "text_en": "You automatically receive a warning in the mail and keep the license",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Dersom du samler 8 prikker i løpet av 3 år, mister du førerkortet for 6 måneder. Nye førere i prøveperioden får dobbelt antall prikker.",
+    "explanation_th": "หากคุณสะสมคะแนนใบสั่งครบ 8 คะแนนในเวลา 3 ปี จะถูกยึดใบขับขี่เป็นเวลา 6 เดือน ผู้ขับขี่ใหม่ในช่วงทดลองขับจะถูกบันทึกคะแนนเป็นสองเท่า",
+    "explanation_en": "If you accumulate 8 points within 3 years, you lose your license for 6 months. New drivers in the trial period receive double points per infraction.",
+    "topic_tags": ["sertifisering", "regler"],
+    "difficulty": "medium",
+    "category": "Certification"
+  },
+  {
+    "question_no": "Hvilken forsikring er lovpålagt (obligatorisk) for alle registrerte biler i Norge?",
+    "question_th": "ประกันภัยรถยนต์ประเภทใดที่กฎหมายบังคับ (ภาคบังคับ) สำหรับรถยนต์ที่จดทะเบียนทุกคันในนอร์เวย์?",
+    "question_en": "Which insurance is mandatory (required by law) for all registered cars in Norway?",
+    "options": [
+      {
+        "text_no": "Ansvarsforsikring (trafikkforsikring)",
+        "text_th": "ประกันภัยรับผิดต่อบุคคลที่สาม (ประกันภัยภาคบังคับ)",
+        "text_en": "Liability insurance (third-party traffic insurance)",
+        "correct": true
+      },
+      {
+        "text_no": "Kaskoforsikring (full kasko)",
+        "text_th": "ประกันภัยรถยนต์ชั้นหนึ่ง (ครอบคลุมความเสียหายทั้งหมด)",
+        "text_en": "Comprehensive insurance (full coverage)",
+        "correct": false
+      },
+      {
+        "text_no": "Fører- og passasjerulykkesforsikring",
+        "text_th": "ประกันภัยอุบัติเหตุส่วนบุคคลเฉพาะคนขับและผู้โดยสาร",
+        "text_en": "Driver and passenger accident insurance",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Ansvarsforsikring er lovpålagt og dekker skader bilen din påfører andre personer, kjøretøy eller eiendom.",
+    "explanation_th": "ประกันภัยรับผิดชอบต่อบุคคลที่สามเป็นประกันภาคบังคับตามกฎหมาย ซึ่งช่วยชดเชยความเสียหายที่รถของคุณก่อขึ้นต่อผู้อื่น รถยนต์อื่น หรือทรัพย์สินสาธารณะ",
+    "explanation_en": "Third-party liability insurance is mandatory by law, covering injury or damage your vehicle causes to other persons, vehicles, or property.",
+    "topic_tags": ["sertifisering", "forsikring"],
+    "difficulty": "easy",
+    "category": "Certification"
+  },
+  {
+    "question_no": "Hvor lenge kan en person bosatt i utlandet bruke et gyldig EU/EØS-førerkort i Norge?",
+    "question_th": "บุคคลที่มีถิ่นพำนักในต่างประเทศสามารถใช้ใบขับขี่กลุ่ม EU/EEA ที่ถูกต้องในนอร์เวย์ได้นานเท่าใด?",
+    "question_en": "How long can a person residing abroad use a valid EU/EEA driving license in Norway?",
+    "options": [
+      {
+        "text_no": "Så lenge førerkortet er gyldig i utstedelseslandet",
+        "text_th": "ตราบเท่าที่ใบขับขี่นั้นยังไม่หมดอายุในประเทศที่ออกใบอนุญาต",
+        "text_en": "As long as the license is valid in the country of issue",
+        "correct": true
+      },
+      {
+        "text_no": "Maksimalt 3 måneder",
+        "text_th": "สูงสุดไม่เกิน 3 เดือน",
+        "text_en": "Maximum of 3 months",
+        "correct": false
+      },
+      {
+        "text_no": "Maksimalt 1 år",
+        "text_th": "สูงสุดไม่เกิน 1 ปี",
+        "text_en": "Maximum of 1 year",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Førerkort utstedt i et EU/EØS-land kan brukes i Norge så lenge det er gyldig i utstedelseslandet, og kan byttes direkte inn i norsk førerkort.",
+    "explanation_th": "ใบอนุญาตขับขี่ที่ออกโดยประเทศในกลุ่มสหภาพยุโรปสามารถใช้ในนอร์เวย์ได้ตราบเท่าที่ใบขับขี่ยังไม่หมดอายุ และสามารถแลกเปลี่ยนเป็นใบขับขี่นอร์เวย์ได้โดยตรง",
+    "explanation_en": "A driving license issued in an EU/EEA country can be used in Norway as long as it remains valid in the issuing country, and is exchangeable directly for a Norwegian license.",
+    "topic_tags": ["sertifisering", "regler"],
+    "difficulty": "medium",
+    "category": "Certification"
+  }
+]

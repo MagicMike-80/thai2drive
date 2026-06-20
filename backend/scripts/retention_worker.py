@@ -39,7 +39,7 @@ SMTP_HOST     = os.environ["SUPPORT_SMTP_HOST"]
 SMTP_PORT     = int(os.environ["SUPPORT_SMTP_PORT"])
 SMTP_USER     = os.environ["SUPPORT_SMTP_USER"]
 SMTP_PASS     = os.environ["SUPPORT_SMTP_PASS"]
-FROM_NAME     = "Michael Trafikklærer"
+FROM_NAME     = "Michael Trafikklaerer"
 FROM_ADDR     = SMTP_USER
 INACTIVITY_DAYS = 3
 DB_NAME       = "thai2drive"
@@ -174,7 +174,7 @@ async def find_inactive_users(db) -> list[dict]:
 
 # ── SMTP send ─────────────────────────────────────────────────────────────────
 
-def send_email(to_email: str, to_name: str, days: int) -> bool:
+def send_email(server, to_email: str, to_name: str, days: int) -> bool:
     name = to_name or "der"
     html = HTML_BODY.format(name=name, days=days)
     text = TEXT_BODY.format(name=name, days=days)
@@ -188,12 +188,7 @@ def send_email(to_email: str, to_name: str, days: int) -> bool:
     msg.attach(MIMEText(html, "html", "utf-8"))
 
     try:
-        ctx = ssl.create_default_context()
-        with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
-            server.ehlo()
-            server.starttls(context=ctx)
-            server.login(SMTP_USER, SMTP_PASS)
-            server.sendmail(FROM_ADDR, to_email, msg.as_string())
+        server.sendmail(FROM_ADDR, [to_email], msg.as_string())
         return True
     except Exception as exc:
         print(f"  SMTP error for {to_email}: {exc}")
@@ -203,12 +198,29 @@ def send_email(to_email: str, to_name: str, days: int) -> bool:
 # ── main ──────────────────────────────────────────────────────────────────────
 
 async def main():
-    print(f"[retention_worker] Starting — cutoff = {INACTIVITY_DAYS} days inactive")
+    print(f"[retention_worker] Starting - cutoff = {INACTIVITY_DAYS} days inactive")
     client = AsyncIOMotorClient(MONGO_URL)
     db = client[DB_NAME]
 
     users = await find_inactive_users(db)
     print(f"[retention_worker] Found {len(users)} inactive user(s)")
+
+    if not users:
+        client.close()
+        print("[retention_worker] No inactive users to email. Done.")
+        return
+
+    # Setup SMTP server connection once
+    try:
+        ctx = ssl.create_default_context()
+        server = smtplib.SMTP(SMTP_HOST, SMTP_PORT)
+        server.ehlo()
+        server.starttls(context=ctx)
+        server.login(SMTP_USER, SMTP_PASS)
+    except Exception as exc:
+        print(f"[retention_worker] Failed to connect/authenticate to SMTP: {exc}")
+        client.close()
+        return
 
     sent = failed = skipped = 0
     now = datetime.now(timezone.utc)
@@ -228,16 +240,24 @@ async def main():
         except Exception:
             days_inactive = INACTIVITY_DAYS
 
-        print(f"  → {email} ({days_inactive}d inactive)")
-        ok = send_email(email, name, days_inactive)
+        print(f"  -> {email} ({days_inactive}d inactive)")
+        ok = send_email(server, email, name, days_inactive)
         if ok:
             sent += 1
-            print(f"    ✓ sent")
+            print(f"    [OK] sent")
         else:
             failed += 1
+        
+        # Respect SMTP rate limits with a small sleep
+        await asyncio.sleep(1)
+
+    try:
+        server.quit()
+    except Exception:
+        pass
 
     client.close()
-    print(f"\n[retention_worker] Done — {sent} sent, {failed} failed, {skipped} skipped (no email)")
+    print(f"\n[retention_worker] Done - {sent} sent, {failed} failed, {skipped} skipped (no email)")
 
 
 if __name__ == "__main__":

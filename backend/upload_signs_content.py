@@ -26,9 +26,10 @@ for s in data:
             'driver_action.no': s['driver_action']['no'],
             'driver_action.th': s['driver_action']['th'],
             'driver_action.en': s['driver_action']['en'],
-        }}
+        }},
+        upsert=True
     )
-    if result.modified_count:
+    if result.modified_count or result.upserted_id:
         updated += 1
 
-print(f"Done — {updated}/{len(data)} signs updated in MongoDB.")
+print(f"Done - {updated}/{len(data)} signs updated or inserted in MongoDB.")

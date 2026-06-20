@@ -1,0 +1,467 @@
+[
+  {
+    "question_no": "Du kommer til et vegkryss uten skilt eller trafikklys. En bil kommer fra høyre. Hvem har vikeplikt?",
+    "question_th": "คุณมาถึงทางแยกที่ไม่มีป้ายจราจรหรือไฟสัญญาณจราจร มีรถคันหนึ่งวิ่งมาจากทางขวา ใครต้องให้ทาง?",
+    "question_en": "You approach an intersection without signs or traffic lights. A car is coming from your right. Who must yield?",
+    "options": [
+      {
+        "text_no": "Du har vikeplikt for bilen fra høyre",
+        "text_th": "คุณต้องให้ทางกับรถที่มาจากทางขวา",
+        "text_en": "You must yield to the car from the right",
+        "correct": true
+      },
+      {
+        "text_no": "Bilen fra høyre har vikeplikt for deg",
+        "text_th": "รถจากทางขวาต้องให้ทางคุณ",
+        "text_en": "The car from the right must yield to you",
+        "correct": false
+      },
+      {
+        "text_no": "Den som kjører raskest har vikeplikt",
+        "text_th": "คนที่ขับรถเร็วกว่าต้องให้ทาง",
+        "text_en": "Whoever drives fastest must yield",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Når krysset er uregulert gjelder høyreregelen. Du må vike for trafikk fra høyre.",
+    "explanation_th": "เมื่อทางแยกไม่มีป้ายจราจรควบคุม ให้ใช้กฎการให้ทางด้านขวา คุณต้องให้ทางสำหรับจราจรที่มาจากด้านขวา",
+    "explanation_en": "When the intersection is unregulated, the right-hand rule applies. You must yield to traffic from the right.",
+    "topic_tags": ["vikeplikt", "høyreregelen"],
+    "difficulty": "easy",
+    "category": "Right of Way"
+  },
+  {
+    "question_no": "Du kjører i et uregulert kryss og en trikk kommer fra venstre. Hvem skal vike?",
+    "question_th": "คุณกำลังขับรถในทางแยกที่ไม่มีป้ายควบคุม และมีรถรางวิ่งมาจากทางซ้าย ใครต้องให้ทาง?",
+    "question_en": "You are driving in an unregulated intersection and a tram is coming from the left. Who must yield?",
+    "options": [
+      {
+        "text_no": "Du har vikeplikt for trikken, selv om den kommer fra venstre",
+        "text_th": "คุณต้องให้ทางแก่รถราง แม้ว่ามันจะมาจากทางซ้ายก็ตาม",
+        "text_en": "You must yield to the tram, even though it is coming from the left",
+        "correct": true
+      },
+      {
+        "text_no": "Trikken må vike for deg på grunn av høyreregelen",
+        "text_th": "รถรางต้องให้ทางคุณเนื่องจากกฎการให้ทางด้านขวา",
+        "text_en": "The tram must yield to you due to the right-hand rule",
+        "correct": false
+      },
+      {
+        "text_no": "Begge må stoppe og avtale hvem som kjører først",
+        "text_th": "ทั้งสองฝ่ายต้องหยุดและตกลงกันว่าใครจะไปก่อน",
+        "text_en": "Both must stop and agree on who goes first",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Trikken har forkjørsrett fremfor biler i uregulerte kryss, selv om trikken kommer fra venstre.",
+    "explanation_th": "รถรางมีสิทธิ์ไปก่อนรถยนต์ในทางแยกที่ไม่มีป้ายควบคุม แม้ว่ารถรางจะมาจากทางซ้ายก็ตาม",
+    "explanation_en": "The tram has priority over cars in unregulated intersections, even if the tram is coming from the left.",
+    "topic_tags": ["vikeplikt", "trikk"],
+    "difficulty": "medium",
+    "category": "Right of Way"
+  },
+  {
+    "question_no": "Du kjører ut fra en parkeringsplass og skal inn på en forkjørsvei. Hva gjelder?",
+    "question_th": "คุณกำลังขับรถออกจากที่จอดรถเพื่อเข้าสู่ทางหลักที่มีสิทธิ์ไปก่อน กฎจราจรกำหนดอย่างไร?",
+    "question_en": "You are driving out of a parking lot to enter a priority road. What rules apply?",
+    "options": [
+      {
+        "text_no": "Du har vikeplikt for all trafikk på veien du skal kjøre inn på",
+        "text_th": "คุณต้องให้ทางแก่รถทุกคันบนถนนที่คุณกำลังจะเลี้ยวเข้า",
+        "text_en": "You must yield to all traffic on the road you are entering",
+        "correct": true
+      },
+      {
+        "text_no": "Trafikken på veien har vikeplikt for deg fordi du kommer fra høyre",
+        "text_th": "รถบนถนนต้องให้ทางคุณเพราะคุณมาจากทางขวา",
+        "text_en": "Traffic on the road must yield to you because you are coming from the right",
+        "correct": false
+      },
+      {
+        "text_no": "Fletting gjelder i denne situasjonen",
+        "text_th": "กฎการร่วมทางหรือการสลับกันไปใช้ในสถานการณ์นี้",
+        "text_en": "Merging rules apply in this situation",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Når du kjører ut fra parkeringsplass, bensinstasjon eller eiendom, har du alltid vikeplikt for all trafikk på veien.",
+    "explanation_th": "เมื่อคุณขับรถออกจากที่จอดรถ ปั๊มน้ำมัน หรือพื้นที่ส่วนบุคคล คุณต้องให้ทางแก่รถทุกคันบนถนนหลักเสมอ",
+    "explanation_en": "When driving out of a parking lot, gas station, or property, you always have yielding duty to all traffic on the road.",
+    "topic_tags": ["vikeplikt", "utkjørsel"],
+    "difficulty": "easy",
+    "category": "Right of Way"
+  },
+  {
+    "question_no": "Hva kreves av deg når du møter et stoppskilt før et kryss?",
+    "question_th": "คุณต้องทำอย่างไรเมื่อพบป้ายหยุดก่อนถึงทางแยก?",
+    "question_en": "What is required of you when you meet a stop sign before an intersection?",
+    "options": [
+      {
+        "text_no": "Du må stoppe helt opp før stopplinjen og ha vikeplikt for all trafikk",
+        "text_th": "คุณต้องหยุดรถให้สนิทก่อนเส้นหยุด และต้องให้ทางแก่รถทุกคัน",
+        "text_en": "You must stop completely before the stop line and yield to all traffic",
+        "correct": true
+      },
+      {
+        "text_no": "Du kan rulle sakte gjennom hvis det ikke kommer andre biler",
+        "text_th": "คุณสามารถค่อยๆ ชะลอผ่านไปได้หากไม่มีรถคันอื่น",
+        "text_en": "You can roll slowly through if no other cars are coming",
+        "correct": false
+      },
+      {
+        "text_no": "Du har forkjørsrett etter at du har stoppet i tre sekunder",
+        "text_th": "คุณมีสิทธิ์ไปก่อนหลังจากที่คุณหยุดรถเป็นเวลาสามวินาที",
+        "text_en": "You have priority after stopping for three seconds",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Stoppskilt krever full stans av kjøretøyet. Hjulene må stå helt stille bak stopplinjen.",
+    "explanation_th": "ป้ายหยุดกำหนดให้รถต้องหยุดสนิท ล้อรถต้องหยุดนิ่งอยู่หลังเส้นหยุดรถก่อนจะเดินรถต่อไป",
+    "explanation_en": "A stop sign requires a complete stop of the vehicle. Wheels must be completely still behind the stop line.",
+    "topic_tags": ["vikeplikt", "stoppskilt"],
+    "difficulty": "easy",
+    "category": "Right of Way"
+  },
+  {
+    "question_no": "Du skal svinge til venstre i et kryss. Hva gjelder for møtende trafikk som skal rett frem?",
+    "question_th": "คุณต้องการเลี้ยวซ้ายที่ทางแยก กฎจราจรกำหนดอย่างไรสำหรับรถที่สวนทางมาและกำลังจะตรงไป?",
+    "question_en": "You want to turn left at an intersection. What applies regarding oncoming traffic going straight?",
+    "options": [
+      {
+        "text_no": "Du har vikeplikt for den møtende bilen",
+        "text_th": "คุณต้องให้ทางแก่รถที่สวนทางมา",
+        "text_en": "You must yield to the oncoming car",
+        "correct": true
+      },
+      {
+        "text_no": "Den møtende bilen har vikeplikt for deg fordi du blinker tidlig",
+        "text_th": "รถที่สวนทางมาต้องให้ทางคุณเพราะคุณเปิดไฟเลี้ยวล่วงหน้าแล้ว",
+        "text_en": "The oncoming car must yield to you because you signaled early",
+        "correct": false
+      },
+      {
+        "text_no": "Fletting gjelder, så dere kjører annenhver gang",
+        "text_th": "ใช้กฎการสลับกันไป ดังนั้นคุณสลับกันไปคนละครั้ง",
+        "text_en": "Merging applies, so you take turns",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Ved svinging til venstre på tvers av motgående kjørefelt har du vikeplikt for møtende trafikk.",
+    "explanation_th": "เมื่อเลี้ยวซ้ายข้ามช่องทางเดินรถที่สวนทางมา คุณต้องให้ทางแก่รถที่วิ่งสวนทางมาเสมอ",
+    "explanation_en": "When turning left across the oncoming lane, you have yielding duty to oncoming traffic.",
+    "topic_tags": ["vikeplikt", "svinging"],
+    "difficulty": "easy",
+    "category": "Right of Way"
+  },
+  {
+    "question_no": "Det står en parkert bil på din side av veien, og du møter en annen bil. Hvem skal vike?",
+    "question_th": "มีรถจอดอยู่ฝั่งถนนของคุณ และคุณขับรถสวนกับรถอีกคัน ใครต้องให้ทาง?",
+    "question_en": "There is a parked car on your side of the road, and you meet an oncoming car. Who must yield?",
+    "options": [
+      {
+        "text_no": "Du må vente bak den parkerte bilen til den møtende bilen har passert",
+        "text_th": "คุณต้องรออยู่หลังรถที่จอดอยู่จนกว่ารถที่สวนมาจะผ่านไป",
+        "text_en": "You must wait behind the parked car until the oncoming car has passed",
+        "correct": true
+      },
+      {
+        "text_no": "Den møtende bilen må stoppe og slippe deg forbi",
+        "text_th": "รถที่สวนมาต้องหยุดและปล่อยให้คุณผ่านไปก่อน",
+        "text_en": "The oncoming car must stop and let you pass",
+        "correct": false
+      },
+      {
+        "text_no": "Den som har størst kjøretøy kjører først",
+        "text_th": "รถที่มีขนาดใหญ่กว่าจะได้ไปก่อน",
+        "text_en": "Whoever has the larger vehicle goes first",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Den som har hindringen på sin side av veien har vikeplikt for møtende trafikk.",
+    "explanation_th": "ผู้ที่มีสิ่งกีดขวางอยู่ฝั่งทางเดินรถของตนเองต้องเป็นฝ่ายให้ทางแก่รถที่สวนทางมา",
+    "explanation_en": "Whoever has the obstacle on their side of the road must yield to oncoming traffic.",
+    "topic_tags": ["vikeplikt", "hindring"],
+    "difficulty": "easy",
+    "category": "Right of Way"
+  },
+  {
+    "question_no": "Du svinger inn i en ny gate og en fotgjenger er i ferd med å krysse veien der. Hva gjør du?",
+    "question_th": "คุณเลี้ยวเข้าสู่ถนนเส้นใหม่และมีคนเดินเท้ากำลังจะข้ามถนนที่นั่น คุณควรทำอย่างไร?",
+    "question_en": "You turn into a new street and a pedestrian is about to cross the road there. What do you do?",
+    "options": [
+      {
+        "text_no": "Du må stoppe og la fotgjengeren krysse gaten",
+        "text_th": "คุณต้องหยุดรถและปล่อยให้คนเดินเท้าข้ามถนนไปก่อน",
+        "text_en": "You must stop and let the pedestrian cross the street",
+        "correct": true
+      },
+      {
+        "text_no": "Du kjører forbi siden det ikke er fotgjengerfelt",
+        "text_th": "คุณขับผ่านไปได้เลยเนื่องจากไม่มีทางม้าลาย",
+        "text_en": "You drive past since there is no marked pedestrian crossing",
+        "correct": false
+      },
+      {
+        "text_no": "Du tuter for å varsle at du har svingt inn",
+        "text_th": "คุณบีบแตรเพื่อเตือนว่าคุณได้เลี้ยวเข้ามาแล้ว",
+        "text_en": "You honk to warn them that you have turned in",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Du har vikeplikt for fotgjengere i gaten du svinger inn i, selv om det ikke er et oppmerket gangfelt.",
+    "explanation_th": "คุณต้องให้ทางแก่คนเดินเท้าในถนนที่คุณกำลังเลี้ยวเข้าไป แม้ว่าจะไม่มีทางม้าลายที่ทำเครื่องหมายไว้ก็ตาม",
+    "explanation_en": "You have yielding duty to pedestrians in the street you are turning into, even if there is no marked pedestrian crossing.",
+    "topic_tags": ["vikeplikt", "fotgjenger"],
+    "difficulty": "medium",
+    "category": "Right of Way"
+  },
+  {
+    "question_no": "Hva betyr det at du kjører på en vei skiltet med gult kvadrat (forkjørsvei)?",
+    "question_th": "การที่คุณขับรถบนถนนที่มีป้ายสี่เหลี่ยมสีเหลือง (ทางเอก) หมายถึงอะไร?",
+    "question_en": "What does it mean when you drive on a road signed with a yellow diamond (priority road)?",
+    "options": [
+      {
+        "text_no": "Sideveier har vikeplikt for deg i alle kryss til skiltet oppheves",
+        "text_th": "ถนนทางเชื่อมด้านข้างต้องให้ทางคุณในทุกทางแยกจนกว่าจะมีป้ายยกเลิก",
+        "text_en": "Side roads must yield to you at all intersections until the sign is cancelled",
+        "correct": true
+      },
+      {
+        "text_no": "Du har vikeplikt for alle som kommer fra høyre",
+        "text_th": "คุณต้องให้ทางแก่ทุกคนที่มาจากทางขวา",
+        "text_en": "You must yield to everyone coming from the right",
+        "correct": false
+      },
+      {
+        "text_no": "Fartsgrensen er alltid over 80 km/t på slike veier",
+        "text_th": "ขีดจำกัดความเร็วบนถนนประเภทนี้จะสูงกว่า 80 กม./ชม. เสมอ",
+        "text_en": "The speed limit is always above 80 km/h on such roads",
+        "correct": false
+      }
+    ],
+    "explanation_no": "På forkjørsvei opphører høyreregelen. Kjørende fra sideveier har vikeplikt for all trafikk på forkjørsveien.",
+    "explanation_th": "บนทางเอก กฎการให้ทางด้านขวาจะถูกยกเลิก ผู้ขับขี่จากทางเชื่อมด้านข้างต้องให้ทางแก่รถทุกคันบนทางเอก",
+    "explanation_en": "On priority roads, the right-hand rule is suspended. Drivers from side roads must yield to all traffic on the priority road.",
+    "topic_tags": ["vikeplikt", "forkjørsvei"],
+    "difficulty": "easy",
+    "category": "Right of Way"
+  },
+  {
+    "question_no": "Hvordan skal du gi tegn når du skal kjøre ut av en rundkjøring?",
+    "question_th": "คุณควรเปิดไฟเลี้ยวอย่างไรเมื่อต้องการขับออกจากวงเวียน?",
+    "question_en": "How should you signal when you are exiting a roundabout?",
+    "options": [
+      {
+        "text_no": "Du må blinke til høyre i god tid før du svinger ut",
+        "text_th": "คุณต้องเปิดไฟเลี้ยวขวาในเวลาที่เหมาะสมก่อนเลี้ยวออก",
+        "text_en": "You must blink to the right in good time before turning out",
+        "correct": true
+      },
+      {
+        "text_no": "Du må blinke til venstre for å vise at du forlater rundkjøringen",
+        "text_th": "คุณต้องเปิดไฟเลี้ยวซ้ายเพื่อแสดงว่าคุณกำลังออกจากวงเวียน",
+        "text_en": "You must blink to the left to show you are leaving the roundabout",
+        "correct": false
+      },
+      {
+        "text_no": "Det er ikke nødvendig å blinke hvis du skal rett frem",
+        "text_th": "ไม่จำเป็นต้องเปิดไฟเลี้ยวหากคุณกำลังตรงไป",
+        "text_en": "It is not necessary to signal if you are going straight",
+        "correct": false
+      }
+    ],
+    "explanation_no": "For å opprettholde god flyt og varsle andre bilister må du alltid blinke til høyre når du forlater en rundkjøring.",
+    "explanation_th": "เพื่อรักษาความคล่องตัวจราจรและแจ้งให้ผู้ขับขี่อื่นทราบ คุณต้องเปิดไฟเลี้ยวขวาทุกครั้งเมื่ออกจากวงเวียน",
+    "explanation_en": "To maintain good traffic flow and warn other drivers, you must always signal right when exiting a roundabout.",
+    "topic_tags": ["vikeplikt", "rundkjøring"],
+    "difficulty": "easy",
+    "category": "Right of Way"
+  },
+  {
+    "question_no": "Du skal kjøre ut på offentlig vei fra en gårdsvei. Hvem har vikeplikt?",
+    "question_th": "คุณกำลังขับรถออกจากถนนส่วนบุคคลหรือถนนฟาร์มเข้าสู่ถนนสาธารณะ ใครต้องให้ทาง?",
+    "question_en": "You are driving onto a public road from a farm road. Who must yield?",
+    "options": [
+      {
+        "text_no": "Du har vikeplikt for all trafikk på den offentlige veien",
+        "text_th": "คุณต้องให้ทางแก่รถทุกคันบนถนนสาธารณะ",
+        "text_en": "You must yield to all traffic on the public road",
+        "correct": true
+      },
+      {
+        "text_no": "Bilene på den offentlige veien må vike for deg fra høyre",
+        "text_th": "รถบนถนนสาธารณะต้องให้ทางคุณจากทางขวา",
+        "text_en": "Cars on the public road must yield to you from the right",
+        "correct": false
+      },
+      {
+        "text_no": "Den som har høyest fart kjører først",
+        "text_th": "คนที่มีความเร็วสูงกว่าจะได้ไปก่อน",
+        "text_en": "Whoever has the higher speed goes first",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Kjøring ut fra gårdsvei, privat vei, gårdsplass eller lignende områder gir full vikeplikt.",
+    "explanation_th": "การขับรถออกจากถนนในฟาร์ม ถนนส่วนบุคคล หรือพื้นที่ส่วนตัวเข้าสู่ถนนใหญ่ ถือเป็นการให้ทางร้อยเปอร์เซ็นต์",
+    "explanation_en": "Driving out from a farm road, private road, courtyard, or similar areas imposes a full yielding duty.",
+    "topic_tags": ["vikeplikt", "privatvei"],
+    "difficulty": "medium",
+    "category": "Right of Way"
+  },
+  {
+    "question_no": "Du kjører i et flettefelt på motorveien. Hva gjelder for samarbeidet med andre biler?",
+    "question_th": "คุณกำลังขับรถในเลนร่วมบนทางด่วน กฎการร่วมมือกับรถคันอื่นกำหนดไว้อย่างไร?",
+    "question_en": "You are driving in a merging lane on the highway. What applies regarding cooperation with other cars?",
+    "options": [
+      {
+        "text_no": "Dere har gjensidig vikeplikt og skal tilpasse farten for å flette smidig",
+        "text_th": "คุณมีหน้าที่ต้องให้ทางซึ่งกันและกัน และควรปรับความเร็วเพื่อให้สลับกันไปได้อย่างราบรื่น",
+        "text_en": "You have mutual yielding duty and should adjust speed to merge smoothly",
+        "correct": true
+      },
+      {
+        "text_no": "Du har full forkjørsrett fordi du er på vei inn på motorveien",
+        "text_th": "คุณมีสิทธิ์ไปก่อนอย่างเต็มที่เนื่องจากกำลังเข้าสู่ทางด่วน",
+        "text_en": "You have full priority because you are entering the highway",
+        "correct": false
+      },
+      {
+        "text_no": "Bilene på motorveien må stoppe helt for å slippe deg inn",
+        "text_th": "รถบนทางด่วนต้องหยุดรถสนิทเพื่อปล่อยให้คุณเข้าเลน",
+        "text_en": "Cars on the highway must stop completely to let you in",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Flettefelt bruker prinsippet om gjensidig vikeplikt. Begge parter må samarbeide for å flette uten fare.",
+    "explanation_th": "เลนร่วมหรือเลนฟิชเชอร์ใช้หลักการให้ทางซึ่งกันและกัน ทั้งสองฝ่ายต้องร่วมมือกันปรับความเร็วเพื่อให้สลับกันไปได้",
+    "explanation_en": "Merging lanes use the principle of mutual yielding. Both parties must cooperate to merge safely.",
+    "topic_tags": ["vikeplikt", "fletting"],
+    "difficulty": "medium",
+    "category": "Right of Way"
+  },
+  {
+    "question_no": "Hva skjer med vikeplikten når skiltet for forkjørsvei har en rød strek over seg (opphør)?",
+    "question_th": "กฎการให้ทางจะเป็นอย่างไรเมื่อป้ายทางเอกมีเส้นสีแดงพาดทับ (สิ้นสุดทางเอก)?",
+    "question_en": "What happens to the yielding duty when the priority road sign has a red diagonal line across it (ends)?",
+    "options": [
+      {
+        "text_no": "Veien er ikke lenger forkjørsvei, og høyreregelen gjelder i uregulerte kryss",
+        "text_th": "ถนนเส้นนี้จะไม่ใช่ทางเอกอีกต่อไป และต้องใช้กฎการให้ทางด้านขวาในทางแยกที่ไม่มีป้ายควบคุม",
+        "text_en": "The road is no longer a priority road, and the right-hand rule applies at unregulated intersections",
+        "correct": true
+      },
+      {
+        "text_no": "Du har fortsatt forkjørsrett i de neste tre kryssene",
+        "text_th": "คุณยังคงมีสิทธิ์ไปก่อนในสามแยกถัดไป",
+        "text_en": "You still have priority for the next three intersections",
+        "correct": false
+      },
+      {
+        "text_no": "All trafikk må stoppe før de kjører videre",
+        "text_th": "รถทุกคันต้องหยุดก่อนขับต่อไป",
+        "text_en": "All traffic must stop before driving on",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Når forkjørsveien opphører, går man tilbake til den generelle høyreregelen i kryss som ikke har andre skilt.",
+    "explanation_th": "เมื่อสิ้นสุดทางเอก ระบบจราจรจะกลับไปใช้กฎการให้ทางด้านขวาในทุกทางแยกที่ไม่มีป้ายควบคุมแบบเดิม",
+    "explanation_en": "When the priority road ends, you return to the general right-hand rule in intersections that do not have other signs.",
+    "topic_tags": ["vikeplikt", "forkjørsvei"],
+    "difficulty": "hard",
+    "category": "Right of Way"
+  },
+  {
+    "question_no": "Du må rygge bilen din på en offentlig vei. Hva gjelder for vikeplikten?",
+    "question_th": "คุณต้องถอยรถบนถนนสาธารณะ หน้าที่การให้ทางเป็นอย่างไร?",
+    "question_en": "You need to reverse your car on a public road. What applies regarding the yielding duty?",
+    "options": [
+      {
+        "text_no": "Du har vikeplikt for all annen trafikk, inkludert fotgjengere",
+        "text_th": "คุณต้องให้ทางแก่รถและคนเดินเท้าคันอื่นทั้งหมด",
+        "text_en": "You must yield to all other traffic, including pedestrians",
+        "correct": true
+      },
+      {
+        "text_no": "Andre trafikanter må vike for deg fordi du rygger sakte",
+        "text_th": "ผู้ใช้ถนนคนอื่นต้องให้ทางคุณเพราะคุณกำลังถอยรถอย่างช้าๆ",
+        "text_en": "Other road users must yield to you because you are reversing slowly",
+        "correct": false
+      },
+      {
+        "text_no": "Du har vikeplikt kun for biler som kommer bakfra",
+        "text_th": "คุณต้องให้ทางแก่รถที่มาจากด้านหลังเท่านั้น",
+        "text_en": "You must yield only to cars coming from behind",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Ved rygging eller vending har du full vikeplikt overfor alle andre trafikanter. Du må være ekstremt varsom.",
+    "explanation_th": "เมื่อทำการถอยรถหรือกลับรถ คุณต้องให้ทางแก่ผู้ใช้รถใช้ถนนคนอื่นทั้งหมด และต้องระมัดระวังเป็นพิเศษ",
+    "explanation_en": "When reversing or turning, you have full yielding duty to all other road users. You must be extremely cautious.",
+    "topic_tags": ["vikeplikt", "rygging"],
+    "difficulty": "medium",
+    "category": "Right of Way"
+  },
+  {
+    "question_no": "Du skal kjøre over et fortau for å komme inn i en garasje. Hva gjelder?",
+    "question_th": "คุณต้องการขับรถข้ามทางเท้าเพื่อเข้าสู่อู่รถ กฎจราจรกำหนดอย่างไร?",
+    "question_en": "You are driving across a sidewalk to enter a garage. What applies?",
+    "options": [
+      {
+        "text_no": "Du har vikeplikt for alle gående på fortauet",
+        "text_th": "คุณต้องให้ทางแก่คนเดินเท้าทุกคนบนทางเท้า",
+        "text_en": "You must yield to all pedestrians on the sidewalk",
+        "correct": true
+      },
+      {
+        "text_no": "De gående må stoppe og slippe bilen din forbi",
+        "text_th": "คนเดินเท้าต้องหยุดและปล่อยให้รถของคุณผ่านไปก่อน",
+        "text_en": "Pedestrians must stop and let your car pass",
+        "correct": false
+      },
+      {
+        "text_no": "Du must bruke hornet for å rydde veien",
+        "text_th": "คุณต้องบีบแตรเพื่อขอทาง",
+        "text_en": "You must use the horn to clear the way",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Gående på fortauet har alltid prioritert rett. Du må vente til fortauet er tomt før du krysser.",
+    "explanation_th": "คนเดินเท้าบนทางเท้ามีสิทธิ์ได้รับทางก่อนเสมอ คุณต้องรอจนกว่าทางเท้าจะไม่มีคนก่อนที่จะขับรถผ่าน",
+    "explanation_en": "Pedestrians on the sidewalk always have priority. You must wait until the sidewalk is clear before crossing.",
+    "topic_tags": ["vikeplikt", "fortau"],
+    "difficulty": "easy",
+    "category": "Right of Way"
+  },
+  {
+    "question_no": "En buss blinker til venstre for å kjøre ut fra holdeplass på en vei med 50 km/t fartsgrense. Hva gjør du?",
+    "question_th": "รถบัสเปิดไฟเลี้ยวซ้ายเพื่อออกจากป้ายหยุดบนถนนที่มีขีดจำกัดความเร็ว 50 กม./ชม. คุณทำอย่างไร?",
+    "question_en": "A bus signals left to pull out of a stop on a road with a 50 km/h speed limit. What do you do?",
+    "options": [
+      {
+        "text_no": "Du må senke farten og gi bussen mulighet til å kjøre ut",
+        "text_th": "คุณต้องลดความเร็วและเปิดโอกาสให้รถบัสขับออกไปได้",
+        "text_en": "You must slow down and give the bus the opportunity to pull out",
+        "correct": true
+      },
+      {
+        "text_no": "Du kan kjøre forbi bussen fordi du allerede har høyere fart",
+        "text_th": "คุณสามารถขับแซงรถบัสไปได้เพราะคุณมีความเร็วสูงกว่าอยู่แล้ว",
+        "text_en": "You can drive past the bus because you already have higher speed",
+        "correct": false
+      },
+      {
+        "text_no": "Bussregelen gjelder bare på motorvei",
+        "text_th": "กฎรถบัสนี้ใช้เฉพาะบนทางด่วนเท่านั้น",
+        "text_en": "The bus rule only applies on highways",
+        "correct": false
+      }
+    ],
+    "explanation_no": "På veier med fartsgrense 60 km/t eller lavere, har du vikeplikt for rutebuss som blinker ut fra holdeplass.",
+    "explanation_th": "บนถนนที่มีขีดจำกัดความเร็ว 60 กม./ชม. หรือต่ำกว่า คุณต้องให้ทางแก่รถประจำทางที่กำลังเปิดไฟเลี้ยวออกจากป้ายหยุด",
+    "explanation_en": "On roads with a speed limit of 60 km/h or lower, you must yield to a transit bus signaling left to pull out of a stop.",
+    "topic_tags": ["vikeplikt", "buss"],
+    "difficulty": "easy",
+    "category": "Right of Way"
+  }
+]

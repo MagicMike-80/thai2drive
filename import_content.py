@@ -277,7 +277,7 @@ def import_podcasts(db):
 
 def import_quizzes(db):
     print("\n--- Starting Quizzes/Questions Import ---")
-    quiz_files = ["quiz_michael_v5.json", "quiz_extended_practice.json"]
+    quiz_files = ["quiz_michael_v5.json", "quiz_extended_practice.json", "quiz_row_questions.json", "quiz_extra_questions.json"]
     total_inserted = 0
     total_updated = 0
     total_skipped = 0
