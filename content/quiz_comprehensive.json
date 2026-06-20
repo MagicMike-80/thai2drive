@@ -1,0 +1,542 @@
+[
+  {
+    "question_id": "quiz_speed_14kmh",
+    "question_no": "Du kjører 14 km/h. Kva er reaktidslengda?",
+    "question_th": "คุณขับรถ 14 กม./ชม. ระยะตอบสนองคืออะไร?",
+    "question_en": "You drive at 14 km/h. What is the reaction distance?",
+    "options": [
+      {"text_no": "3 meter", "text_th": "3 เมตร", "text_en": "3 meters", "correct": true},
+      {"text_no": "5 meter", "text_th": "5 เมตร", "text_en": "5 meters", "correct": false},
+      {"text_no": "7 meter", "text_th": "7 เมตร", "text_en": "7 meters", "correct": false},
+      {"text_no": "10 meter", "text_th": "10 เมตร", "text_en": "10 meters", "correct": false}
+    ],
+    "explanation_no": "Ved 14 km/h er reaktidslengda ca. 3 meter. Reaktidslengda aukar med farten.",
+    "explanation_th": "ที่ 14 กม./ชม. ระยะตอบสนองประมาณ 3 เมตร ระยะตอบสนองเพิ่มขึ้นตามความเร็ว",
+    "explanation_en": "At 14 km/h, reaction distance is about 3 meters. Reaction distance increases with speed.",
+    "topic_tags": ["fart", "reaktidslengde", "bremsing"],
+    "difficulty": "easy",
+    "podcast_reference": "podcast_speed_braking"
+  },
+  {
+    "question_id": "quiz_stop_complete",
+    "question_no": "Kva betyr eit stoppskilt?",
+    "question_th": "ป้ายหยุดหมายความว่าอะไร?",
+    "question_en": "What does a stop sign mean?",
+    "options": [
+      {"text_no": "Du må stoppe fullstendig — ingen rulling", "text_th": "คุณต้องหยุดเต็มที่ — ไม่มีการเลื่อน", "text_en": "You must stop completely — no rolling", "correct": true},
+      {"text_no": "Du kan sakta kjøre gjennom", "text_th": "คุณสามารถขับรถผ่านได้ช้า ๆ", "text_en": "You can slowly drive through", "correct": false},
+      {"text_no": "Du kan bremse medan du kjører gjennom", "text_th": "คุณสามารถเบรกขณะผ่าน", "text_en": "You can brake while driving through", "correct": false},
+      {"text_no": "Du må sjekke og kjøre vidare", "text_th": "คุณต้องตรวจสอบและขับต่อไป", "text_en": "You must check and drive on", "correct": false}
+    ],
+    "explanation_no": "Stoppskilt krev fullstendig stopp. Hjula må vere stille. Ikkje rulling eller langsamkøyring.",
+    "explanation_th": "ป้ายหยุดต้องการให้หยุดเต็มที่ ล้อต้องหยุดนิ่ง ไม่มีการหมุนหรือขับรถช้า ๆ",
+    "explanation_en": "Stop sign requires complete stop. Wheels must be still. No rolling or slow driving.",
+    "topic_tags": ["stoppskilt", "vikeplikt"],
+    "difficulty": "easy",
+    "podcast_reference": "podcast_right_of_way"
+  },
+  {
+    "question_id": "quiz_solid_line",
+    "question_no": "Kva betyr ein heilstig linje på veien?",
+    "question_th": "เส้นทึบหมายความว่าอะไร?",
+    "question_en": "What does a solid line on the road mean?",
+    "options": [
+      {"text_no": "Forbyte å forbeike", "text_th": "ห้ามแซง", "text_en": "No overtaking", "correct": true},
+      {"text_no": "Tillate å forbeike", "text_th": "อนุญาตให้แซง", "text_en": "Allowed to overtake", "correct": false},
+      {"text_no": "Sakta kjøre", "text_th": "ขับรถช้า", "text_en": "Slow driving", "correct": false},
+      {"text_no": "Parkering tillate", "text_th": "อนุญาตให้จอด", "text_en": "Parking allowed", "correct": false}
+    ],
+    "explanation_no": "Heilstig linje = forbyte. Du kan IKKJE forbeike ein annan bil. Stipla linje = tillate.",
+    "explanation_th": "เส้นทึบ = ห้าม คุณไม่สามารถแซงรถอื่นได้ เส้นประ = อนุญาต",
+    "explanation_en": "Solid line = forbidden. You CANNOT overtake another car. Dashed line = allowed.",
+    "topic_tags": ["forkjøring", "linjer"],
+    "difficulty": "easy",
+    "podcast_reference": null
+  },
+  {
+    "question_id": "quiz_dashed_line",
+    "question_no": "Kva betyr ein stipla linje på veien?",
+    "question_th": "เส้นประหมายความว่าอะไร?",
+    "question_en": "What does a dashed line on the road mean?",
+    "options": [
+      {"text_no": "Tillate å forbeike når det er trygt", "text_th": "อนุญาตให้แซงเมื่อปลอดภัย", "text_en": "Allowed to overtake when safe", "correct": true},
+      {"text_no": "Forbyte å forbeike", "text_th": "ห้ามแซง", "text_en": "No overtaking", "correct": false},
+      {"text_no": "Parkering berre her", "text_th": "จอดได้เฉพาะที่นี่", "text_en": "Parking only here", "correct": false},
+      {"text_no": "Sakta kjøre alltid", "text_th": "ขับรถช้าเสมอ", "text_en": "Always slow driving", "correct": false}
+    ],
+    "explanation_no": "Stipla linje = tillate forbeike. Men du må sjekka at det er trygt før du forbeike.",
+    "explanation_th": "เส้นประ = อนุญาตแซง แต่คุณต้องตรวจสอบว่าปลอดภัยก่อนแซง",
+    "explanation_en": "Dashed line = allowed to overtake. But you must check that it's safe before overtaking.",
+    "topic_tags": ["forkjøring", "linjer"],
+    "difficulty": "easy",
+    "podcast_reference": null
+  },
+  {
+    "question_id": "quiz_pedestrian_crossing",
+    "question_no": "Du ser ein fotgjengerplass. Kva gjer du?",
+    "question_th": "คุณเห็นทางข้ามถนน คุณทำอะไร?",
+    "question_en": "You see a pedestrian crossing. What do you do?",
+    "options": [
+      {"text_no": "Kjøre sakla og vere merksam på fotgjengarar", "text_th": "ขับรถช้าและระวังคนเดิน", "text_en": "Drive slowly and watch for pedestrians", "correct": true},
+      {"text_no": "Kjøre raskt gjennom", "text_th": "ขับรถอย่างรวดเร็วผ่าน", "text_en": "Drive quickly through", "correct": false},
+      {"text_no": "Honke for å sjå fotgjengarane", "text_th": "บีบแตรเพื่อดูคนเดิน", "text_en": "Honk to see pedestrians", "correct": false},
+      {"text_no": "Ikkje gå og kjøre gjennom", "text_th": "ไม่หยุดและขับผ่าน", "text_en": "Don't stop and drive through", "correct": false}
+    ],
+    "explanation_no": "Fotgjengarplass = fotgjengarar har prioritet. Du må stoppe om dei kryssar, eller sakla kjøre og vere merksam.",
+    "explanation_th": "ทางข้ามถนน = คนเดินมีสิทธิได้ก่อน คุณต้องหยุดถ้าพวกเขาข้าม หรือขับรถช้าและระวัง",
+    "explanation_en": "Pedestrian crossing = pedestrians have priority. You must stop if they cross, or drive slowly and watch.",
+    "topic_tags": ["fotgjengerar", "sikkerheit"],
+    "difficulty": "easy",
+    "podcast_reference": "podcast_right_of_way"
+  },
+  {
+    "question_id": "quiz_roundabout_enter",
+    "question_no": "Du skal inn i ein rundkjøring. Kva gjer du?",
+    "question_th": "คุณจะเข้าไปในวงกลม คุณทำอะไร?",
+    "question_en": "You're entering a roundabout. What do you do?",
+    "options": [
+      {"text_no": "Gje veke for bilar inne i rundkjøringa", "text_th": "สละทางให้รถในวงกลม", "text_en": "Give way to cars inside the roundabout", "correct": true},
+      {"text_no": "Kjøre inn fyrst", "text_th": "ขับเข้าไปก่อน", "text_en": "Drive in first", "correct": false},
+      {"text_no": "Honke for å sjå bililar", "text_th": "บีปแตรเพื่อดูรถ", "text_en": "Honk to see cars", "correct": false},
+      {"text_no": "Stoppa og vente kvar gong", "text_th": "หยุดและรอทุกครั้ง", "text_en": "Stop and wait every time", "correct": false}
+    ],
+    "explanation_no": "Rundkjøring: bilar INNE i rundkjøringa har prioritet. Du må gje veke og sjekka før du kjører inn.",
+    "explanation_th": "วงกลม: รถในวงกลมมีสิทธิได้ก่อน คุณต้องสละทางและตรวจสอบก่อนเข้า",
+    "explanation_en": "Roundabout: cars INSIDE the roundabout have priority. You must give way and check before entering.",
+    "topic_tags": ["rundkjøring", "vikeplikt"],
+    "difficulty": "easy",
+    "podcast_reference": "podcast_right_of_way"
+  },
+  {
+    "question_id": "quiz_right_of_way_left_turn",
+    "question_no": "Du skal sveinge til venstre. Ein bil køyer imot deg. Kven har prioritet?",
+    "question_th": "คุณเลี้ยวซ้าย รถคันหนึ่งกำลังมาหากันจากด้านหน้า ใครมีสิทธิได้ก่อน?",
+    "question_en": "You're turning left. A car is coming towards you. Who has priority?",
+    "options": [
+      {"text_no": "Bilen som køyer imot deg har prioritet", "text_th": "รถที่มากันจากด้านหน้ามีสิทธิได้ก่อน", "text_en": "The car coming towards you has priority", "correct": true},
+      {"text_no": "Du har prioritet fordi du sveinger", "text_th": "คุณมีสิทธิได้ก่อนเพราะคุณกำลังเลี้ยว", "text_en": "You have priority because you're turning", "correct": false},
+      {"text_no": "Dykk kan kjøre samstundes", "text_th": "พวกคุณสามารถขับรถในเวลาเดียวกัน", "text_en": "You both can drive at the same time", "correct": false},
+      {"text_no": "Det avhenger av fartsgrensa", "text_th": "ขึ้นอยู่กับขีดจำกัดความเร็ว", "text_en": "It depends on the speed limit", "correct": false}
+    ],
+    "explanation_no": "Når du sveinger til venstre, må du gje veke for bilar som køyer imot deg. Dei har prioritet!",
+    "explanation_th": "เมื่อคุณเลี้ยวซ้าย คุณต้องสละทางให้รถที่มากันจากด้านหน้า พวกเขามีสิทธิได้ก่อน!",
+    "explanation_en": "When turning left, you must give way to cars coming towards you. They have priority!",
+    "topic_tags": ["vikeplikt", "sveinging"],
+    "difficulty": "medium",
+    "podcast_reference": "podcast_right_of_way"
+  },
+  {
+    "question_id": "quiz_yellow_light",
+    "question_no": "Lyset skiftar til gult. Kva skal du gjere?",
+    "question_th": "ไฟเปลี่ยนเป็นสีเหลือง คุณควรทำอะไร?",
+    "question_en": "The light turns yellow. What should you do?",
+    "options": [
+      {"text_no": "Prepare to brake — rødt lys kommer neste", "text_th": "เตรียมเบรก — ไฟแดงมาต่อไป", "text_en": "Prepare to brake — red light comes next", "correct": true},
+      {"text_no": "Akselerere og kjøre gjennom", "text_th": "เร่งความเร็วและขับผ่าน", "text_en": "Accelerate and drive through", "correct": false},
+      {"text_no": "Honke på alle biliar", "text_th": "บีปแตรทุกรถ", "text_en": "Honk at all cars", "correct": false},
+      {"text_no": "Reversere straks", "text_th": "ถอยกลับทันที", "text_en": "Reverse immediately", "correct": false}
+    ],
+    "explanation_no": "Gult lys = forberedelsessignal. Rødt lys kjem neste. Du skal bremse eller vere klar.",
+    "explanation_th": "ไฟเหลือง = สัญญาณเตรียม ไฟแดงจะมาถัดไป คุณควรเบรกหรือเตรียมพร้อม",
+    "explanation_en": "Yellow light = preparation signal. Red light comes next. You should brake or be ready.",
+    "topic_tags": ["trafikklys", "bremsing"],
+    "difficulty": "easy",
+    "podcast_reference": null
+  },
+  {
+    "question_id": "quiz_green_light",
+    "question_no": "Lyset er grønt. Kan du kjøre?",
+    "question_th": "ไฟเขียว คุณสามารถขับรถได้ไหม?",
+    "question_en": "The light is green. Can you drive?",
+    "options": [
+      {"text_no": "Ja, men du må sjekka at det er trygt fyrst", "text_th": "ใช่ แต่คุณต้องตรวจสอบว่าปลอดภัยก่อน", "text_en": "Yes, but you must check it's safe first", "correct": true},
+      {"text_no": "Ja, kjøre alltid gjennom", "text_th": "ใช่ ขับผ่านเสมอ", "text_en": "Yes, always drive through", "correct": false},
+      {"text_no": "Nei, grønt lys er farleg", "text_th": "ไม่ ไฟเขียวอันตราย", "text_en": "No, green light is dangerous", "correct": false},
+      {"text_no": "Det avhenger av vêret", "text_th": "ขึ้นอยู่กับสภาพอากาศ", "text_en": "It depends on the weather", "correct": false}
+    ],
+    "explanation_no": "Grønt lys = du kan kjøre. Men alltid sjekk fyrst at det er trygt — fotgjengarar kan still krysse.",
+    "explanation_th": "ไฟเขียว = คุณสามารถขับรถได้ แต่ตรวจสอบเสมอว่าปลอดภัยก่อน — คนเดินอาจยังข้ามอยู่",
+    "explanation_en": "Green light = you can drive. But always check first it's safe — pedestrians may still be crossing.",
+    "topic_tags": ["trafikklys", "sikkerheit"],
+    "difficulty": "easy",
+    "podcast_reference": null
+  },
+  {
+    "question_id": "quiz_braking_distance_80kmh",
+    "question_no": "Du kjører 80 km/h. Kva er omtrent bremselengda?",
+    "question_th": "คุณขับรถ 80 กม./ชม. ระยะเบรกประมาณเท่าไร?",
+    "question_en": "You drive at 80 km/h. What is the approximate braking distance?",
+    "options": [
+      {"text_no": "60 meter", "text_th": "60 เมตร", "text_en": "60 meters", "correct": true},
+      {"text_no": "30 meter", "text_th": "30 เมตร", "text_en": "30 meters", "correct": false},
+      {"text_no": "90 meter", "text_th": "90 เมตร", "text_en": "90 meters", "correct": false},
+      {"text_no": "20 meter", "text_th": "20 เมตร", "text_en": "20 meters", "correct": false}
+    ],
+    "explanation_no": "Ved 80 km/h, bremselengda er omtrent 60 meter. Høgare fart = lengre bremselengde!",
+    "explanation_th": "ที่ 80 กม./ชม. ระยะเบรกประมาณ 60 เมตร ความเร็วสูงขึ้น = ระยะเบรกยาวขึ้น!",
+    "explanation_en": "At 80 km/h, braking distance is about 60 meters. Higher speed = longer braking distance!",
+    "topic_tags": ["fart", "bremselengde"],
+    "difficulty": "medium",
+    "podcast_reference": "podcast_speed_braking"
+  },
+  {
+    "question_id": "quiz_right_from_right",
+    "question_no": "Kva er Michael sitt første regel?",
+    "question_th": "กฎข้อแรกของไมเคิลคืออะไร?",
+    "question_en": "What is Michael's first rule?",
+    "options": [
+      {"text_no": "Vikeplikt frå høgre — bilen frå høgre har prioritet", "text_th": "สิทธิจากขวา — รถจากด้านขวามีสิทธิได้ก่อน", "text_en": "Right of way from right — car from right has priority", "correct": true},
+      {"text_no": "Vikeplikt frå venstre", "text_th": "สิทธิจากซ้าย", "text_en": "Right of way from left", "correct": false},
+      {"text_no": "Vikeplikt frå framfor", "text_th": "สิทธิจากด้านหน้า", "text_en": "Right of way from front", "correct": false},
+      {"text_no": "Vikeplikt frå bak", "text_th": "สิทธิจากด้านหลัง", "text_en": "Right of way from behind", "correct": false}
+    ],
+    "explanation_no": "Michael sitt første regel: Noreg — vikeplikt FRÅ HØGRE! Ikkje frå venstre som i Thailand. Bilen frå høgre har PRIORITET!",
+    "explanation_th": "กฎข้อแรกของไมเคิล: นอร์เวย์ — สิทธิจากขวา! ไม่ใช่จากซ้ายเหมือนในไทย รถจากด้านขวามีสิทธิได้ก่อน!",
+    "explanation_en": "Michael's first rule: Norway — right of way FROM RIGHT! Not from left like Thailand. Car from right has PRIORITY!",
+    "topic_tags": ["vikeplikt", "michael_6_rules"],
+    "difficulty": "easy",
+    "podcast_reference": "podcast_michael_6_rules_part1"
+  },
+  {
+    "question_id": "quiz_speed_norway_vs_thailand",
+    "question_no": "50 km/h i Noreg er?",
+    "question_th": "50 กม./ชม. ในนอร์เวย์คือ?",
+    "question_en": "50 km/h in Norway is?",
+    "options": [
+      {"text_no": "Einskild normal fart i byar", "text_th": "ความเร็วปกติในเมือง", "text_en": "Typical speed in cities", "correct": true},
+      {"text_no": "Ein fartsgrense på motorveg", "text_th": "ขีดจำกัดความเร็วบนทางหลวง", "text_en": "A highway speed limit", "correct": false},
+      {"text_no": "For langsam for Noreg", "text_th": "ช้าเกินไปสำหรับนอร์เวย์", "text_en": "Too slow for Norway", "correct": false},
+      {"text_no": "Ikkje lovleg i Noreg", "text_th": "ผิดกฎหมายในนอร์เวย์", "text_en": "Illegal in Norway", "correct": false}
+    ],
+    "explanation_no": "50 km/h er typisk fartsgrense i norske byar. I Thailand, 50 km/h var sikker. I Noreg, 50 km/h er BAKEGROP!",
+    "explanation_th": "50 กม./ชม. คือขีดจำกัดความเร็วทั่วไปในเมืองนอร์เวย์ ในไทย 50 กม./ชม. ปลอดภัย ในนอร์เวย์ 50 กม./ชม. เป็นแบก!",
+    "explanation_en": "50 km/h is typical speed limit in Norwegian cities. In Thailand, 50 km/h was safe. In Norway, 50 km/h is SLOW!",
+    "topic_tags": ["fart", "michael_speed_rules"],
+    "difficulty": "easy",
+    "podcast_reference": "podcast_speed_braking"
+  },
+  {
+    "question_id": "quiz_distance_between_cars",
+    "question_no": "Kva er rett avstand mellom bilar i Noreg?",
+    "question_th": "ระยะห่างที่ถูกต้องระหว่างรถในนอร์เวย์คืออะไร?",
+    "question_en": "What is the correct distance between cars in Norway?",
+    "options": [
+      {"text_no": "Minst 2 sekundar køyretid", "text_th": "อย่างน้อย 2 วินาทีของการขับรถ", "text_en": "At least 2 seconds of driving time", "correct": true},
+      {"text_no": "Minst 1 sekund køyretid", "text_th": "อย่างน้อย 1 วินาทีของการขับรถ", "text_en": "At least 1 second of driving time", "correct": false},
+      {"text_no": "Minst 5 sekund køyretid", "text_th": "อย่างน้อย 5 วินาทีของการขับรถ", "text_en": "At least 5 seconds of driving time", "correct": false},
+      {"text_no": "Ikkje nødvendig, kjøre tett", "text_th": "ไม่จำเป็น ขับรถติดกัน", "text_en": "Not necessary, drive close", "correct": false}
+    ],
+    "explanation_no": "Noreg: minst 2 sekundar avstand mellom bilar. Det vil seie, når bilen framfor passererer eit punkt, du burde passere det same punktet etter minst 2 sekund.",
+    "explanation_th": "นอร์เวย์: ระยะห่างอย่างน้อย 2 วินาที ซึ่งหมายความว่า เมื่อรถด้านหน้าผ่านจุด คุณควรผ่านจุดเดียวกันหลังจาก 2 วินาทีขึ้นไป",
+    "explanation_en": "Norway: at least 2 seconds distance between cars. This means when the car ahead passes a point, you should pass that same point after at least 2 seconds.",
+    "topic_tags": ["avstand", "sikkerheit"],
+    "difficulty": "medium",
+    "podcast_reference": "podcast_speed_braking"
+  },
+  {
+    "question_id": "quiz_rain_visibility",
+    "question_no": "Du kjører i regnvær. Kva skal du gjere?",
+    "question_th": "คุณขับรถในสภาพฝนตก คุณควรทำอะไร?",
+    "question_en": "You drive in rainy weather. What should you do?",
+    "options": [
+      {"text_no": "Slå på lys, reduser farten, auk avstand", "text_th": "เปิดไฟ ลดความเร็ว เพิ่มระยะห่าง", "text_en": "Turn on lights, reduce speed, increase distance", "correct": true},
+      {"text_no": "Kjøre normale farten", "text_th": "ขับรถความเร็วปกติ", "text_en": "Drive normal speed", "correct": false},
+      {"text_no": "Slå av lysa fordi regnet er sterk", "text_th": "ปิดไฟเพราะฝนตกหนัก", "text_en": "Turn off lights because rain is heavy", "correct": false},
+      {"text_no": "Honke på alle biliar", "text_th": "บีปแตรทุกรถ", "text_en": "Honk at all cars", "correct": false}
+    ],
+    "explanation_no": "Regnvær: lys + reduser farten + auk avstand. Du ser dårleg, andre ser deg dårleg, veien er glatt.",
+    "explanation_th": "ฝนตก: ไฟ + ลดความเร็ว + เพิ่มระยะห่าง คุณมองเห็นไม่ชัด คนอื่นมองเห็นคุณไม่ชัด ถนนลื่น",
+    "explanation_en": "Rainy weather: lights + reduce speed + increase distance. You see poorly, others see you poorly, road is slippery.",
+    "topic_tags": ["vêr", "sikkerheit", "fart"],
+    "difficulty": "easy",
+    "podcast_reference": null
+  },
+  {
+    "question_id": "quiz_night_driving",
+    "question_no": "Du kjører om natta. Kva skal du gjere?",
+    "question_th": "คุณขับรถในตอนกลางคืน คุณควรทำอะไร?",
+    "question_en": "You drive at night. What should you do?",
+    "options": [
+      {"text_no": "Slå på billysa, reduser farten, vere merksam", "text_th": "เปิดไฟรถ ลดความเร็ว อยู่ระวัง", "text_en": "Turn on car lights, reduce speed, be alert", "correct": true},
+      {"text_no": "Kjøre vanleg — natta er sikker", "text_th": "ขับรถปกติ — กลางคืนปลอดภัย", "text_en": "Drive normal — night is safe", "correct": false},
+      {"text_no": "Bruk berre fjernlysa", "text_th": "ใช้เฉพาะไฟสูง", "text_en": "Use only high beams", "correct": false},
+      {"text_no": "Slå av lysa og see i mørkret", "text_th": "ปิดไฟและมองในความมืด", "text_en": "Turn off lights and see in the dark", "correct": false}
+    ],
+    "explanation_no": "Nattekøyring: slå på lys, reduser farten, vere merksam. Sikt er dårleg, fotgjengarar kan vere vanskelig å sjå.",
+    "explanation_th": "ขับรถกลางคืน: เปิดไฟ ลดความเร็ว อยู่ระวัง มองเห็นไม่ชัด คนเดินอาจมองเห็นไม่ชัด",
+    "explanation_en": "Night driving: turn on lights, reduce speed, be alert. Vision is poor, pedestrians may be hard to see.",
+    "topic_tags": ["natt", "sikkerheit"],
+    "difficulty": "easy",
+    "podcast_reference": null
+  },
+  {
+    "question_id": "quiz_ice_conditions",
+    "question_no": "Veien har is. Kva skal du gjere?",
+    "question_th": "ถนนเป็นน้ำแข็ง คุณควรทำอะไร?",
+    "question_en": "The road has ice. What should you do?",
+    "options": [
+      {"text_no": "Kjøre veldig sakla, bruk låg gir, auk avstand", "text_th": "ขับรถตัวอักษรช้ามาก ใช้เกียร์ต่ำ เพิ่มระยะห่าง", "text_en": "Drive very slowly, use low gear, increase distance", "correct": true},
+      {"text_no": "Kjøre normale farten", "text_th": "ขับรถความเร็วปกติ", "text_en": "Drive normal speed", "correct": false},
+      {"text_no": "Akselerere og 'teste' isen", "text_th": "เร่งความเร็วและ 'ทดสอบ' น้ำแข็ง", "text_en": "Accelerate and 'test' the ice", "correct": false},
+      {"text_no": "Bruke handbrake for å kontrollere", "text_th": "ใช้เบรกมือเพื่อควบคุม", "text_en": "Use handbrake to control", "correct": false}
+    ],
+    "explanation_no": "Is = ekstrem fare! Køyre veldig sakla, bruk låg gir, auk avstand, vere merksam. Biliar glid lett!",
+    "explanation_th": "น้ำแข็ง = อันตรายสูง! ขับรถตัวอักษรช้า ใช้เกียร์ต่ำ เพิ่มระยะห่าง อยู่ระวัง รถลื่นง่าย!",
+    "explanation_en": "Ice = extreme danger! Drive very slowly, use low gear, increase distance, be alert. Cars slip easily!",
+    "topic_tags": ["vêr", "is", "sikkerheit"],
+    "difficulty": "high",
+    "podcast_reference": null
+  },
+  {
+    "question_id": "quiz_emergency_stop",
+    "question_no": "Nødbremsing: kva skal du gjere?",
+    "question_th": "เบรกฉุกเฉิน: คุณควรทำอะไร?",
+    "question_en": "Emergency braking: what should you do?",
+    "options": [
+      {"text_no": "Bremsing hardt, hold styring, kjem av veien trygt", "text_th": "เบรกแรง ถือพวงมาลัย ออกจากถนนอย่างปลอดภัย", "text_en": "Brake hard, hold steering, get off road safely", "correct": true},
+      {"text_no": "Brems langsomt og sakla", "text_th": "เบรกช้า ๆ", "text_en": "Brake slowly", "correct": false},
+      {"text_no": "Accelerere for å unngå", "text_th": "เร่งความเร็วเพื่อหลีกเลี่ยง", "text_en": "Accelerate to avoid", "correct": false},
+      {"text_no": "Sveinge til venstre straks", "text_th": "เลี้ยวซ้ายทันที", "text_en": "Turn left immediately", "correct": false}
+    ],
+    "explanation_no": "Nødbremsing: bremsing HARDT, hold styring fast, kjem trygt av veien. Ikkje sveinge brått — det kan vere farleg!",
+    "explanation_th": "เบรกฉุกเฉิน: เบรกแรง ถือพวงมาลัยให้แน่น ออกจากถนนอย่างปลอดภัย อย่าเลี้ยวหักเห — อาจอันตราย!",
+    "explanation_en": "Emergency braking: brake HARD, hold steering firmly, get safely off road. Don't swerve sharply — it can be dangerous!",
+    "topic_tags": ["nød", "sikkerheit"],
+    "difficulty": "high",
+    "podcast_reference": null
+  },
+  {
+    "question_id": "quiz_merge_from_side",
+    "question_no": "Du skal merge inn på motorveg frå rampe. Kva gjør du?",
+    "question_th": "คุณเข้าไปในทางหลวงจากทางลาด คุณทำอะไร?",
+    "question_en": "You're merging onto highway from ramp. What do you do?",
+    "options": [
+      {"text_no": "Akselerere å få same farten, sjekka speil, merge sakla", "text_th": "เร่งความเร็ว ตรวจสอบกระจก เข้าไปช่วยเข้า", "text_en": "Accelerate to match speed, check mirror, merge smoothly", "correct": true},
+      {"text_no": "Kjøre inn utan å sjekka", "text_th": "เข้าไปโดยไม่ตรวจสอบ", "text_en": "Drive in without checking", "correct": false},
+      {"text_no": "Stoppe på rampen og vente", "text_th": "หยุดบนทางลาดและรอ", "text_en": "Stop on ramp and wait", "correct": false},
+      {"text_no": "Kjøre imot trafikken for å merge", "text_th": "ขับรถสวนทางจราจร", "text_en": "Drive against traffic to merge", "correct": false}
+    ],
+    "explanation_no": "Merge: akselerere til same farten, sjekka speil og blind spot, merge sakla. Aldri stoppe på rampen!",
+    "explanation_th": "เข้าไป: เร่งความเร็วให้เท่ากับ ตรวจสอบกระจกและจุดอับสายตา เข้าไปช่วย ไม่เคยหยุดบนทางลาด!",
+    "explanation_en": "Merge: accelerate to match speed, check mirror and blind spot, merge smoothly. Never stop on ramp!",
+    "topic_tags": ["motorveg", "sikkerheit"],
+    "difficulty": "medium",
+    "podcast_reference": null
+  },
+  {
+    "question_id": "quiz_authority_pyramid",
+    "question_no": "Kva er autoritetspyramiden i Noreg?",
+    "question_th": "อำนาจพีระมิดในนอร์เวย์คืออะไร?",
+    "question_en": "What is the authority pyramid in Norway?",
+    "options": [
+      {"text_no": "Lovverk > politimann > trafikkskilt > gjore som alle andre", "text_th": "กฎหมาย > ตำรวจ > ป้ายจราจร > ทำตามคนอื่น", "text_en": "Law > police > traffic signs > doing what others do", "correct": true},
+      {"text_no": "Gjore som politimannen seier, uansett loven", "text_th": "ทำตามตำรวจ ไม่ว่าจะเป็นกฎหมายหรือไม่", "text_en": "Do what police say, regardless of law", "correct": false},
+      {"text_no": "Gjore som alle andre, uansett skilter", "text_th": "ทำตามคนอื่น ไม่ว่าป้ายจะพูดอะไร", "text_en": "Do what others do, regardless of signs", "correct": false},
+      {"text_no": "Gjore som du vil, ingen regel", "text_th": "ทำตามใจ ไม่มีกฎ", "text_en": "Do what you want, no rules", "correct": false}
+    ],
+    "explanation_no": "Michael sitt autoritetspyramide: 1. Lovverk (øverst), 2. Politimann, 3. Trafikkskilt, 4. Gjere som andre (lågast). I Thailand er det omvendt!",
+    "explanation_th": "พีระมิดอำนาจของไมเคิล: 1. กฎหมาย (บนสุด) 2. ตำรวจ 3. ป้ายจราจร 4. ทำตามคนอื่น (ล่างสุด) ในไทยเป็นคนละทาง!",
+    "explanation_en": "Michael's authority pyramid: 1. Law (top), 2. Police, 3. Traffic signs, 4. Doing what others do (bottom). In Thailand it's the opposite!",
+    "topic_tags": ["michael_6_rules", "lovverk"],
+    "difficulty": "medium",
+    "podcast_reference": "podcast_authority_pyramid"
+  },
+  {
+    "question_id": "quiz_horn_when",
+    "question_no": "Når skal du bruka hornet?",
+    "question_th": "เมื่อไหร่ที่คุณควรบีปแตร?",
+    "question_en": "When should you use the horn?",
+    "options": [
+      {"text_no": "Berre når det er fare eller for å advare", "text_th": "เพียงเมื่อมีอันตรายหรือเพื่อเตือน", "text_en": "Only when there's danger or to warn", "correct": true},
+      {"text_no": "Hornet kvar gong du er irritert", "text_th": "บีปแตรทุกครั้งที่คุณโกรธ", "text_en": "Horn every time you're annoyed", "correct": false},
+      {"text_no": "Hornet på alle fotgjengarar", "text_th": "บีปแตรคนเดินทั้งหมด", "text_en": "Horn at all pedestrians", "correct": false},
+      {"text_no": "Ikkje bruka hornet, det er ulovleg", "text_th": "ไม่ใช้แตร มันผิดกฎหมาย", "text_en": "Don't use horn, it's illegal", "correct": false}
+    ],
+    "explanation_no": "Horn er berre for fare eller advarsel — ikkje for irritasjon. I Noreg, horn er for sikkerheit, ikkje for sosial kommunikasjon!",
+    "explanation_th": "แตรใช้เพื่อความปลอดภัยและเตือน — ไม่ใช่เพื่อความโกรธ ในนอร์เวย์ แตรใช้เพื่อความปลอดภัย ไม่ใช่การสื่อสาร!",
+    "explanation_en": "Horn is only for danger or warning — not for annoyance. In Norway, horn is for safety, not for social communication!",
+    "topic_tags": ["sikkerheit"],
+    "difficulty": "easy",
+    "podcast_reference": null
+  },
+  {
+    "question_id": "quiz_fog_lights",
+    "question_no": "Når skal du bruka tydeleg lys (fog lights)?",
+    "question_th": "เมื่อไหร่ที่คุณควรใช้ไฟหมอก?",
+    "question_en": "When should you use fog lights?",
+    "options": [
+      {"text_no": "Berre når det er tåke eller veldig dårleg sikt", "text_th": "เพียงเมื่อมีหมอกหรือมองเห็นไม่ชัด", "text_en": "Only when there's fog or very poor visibility", "correct": true},
+      {"text_no": "Alltid når du kjører", "text_th": "เสมออย่างไรก็ตาม", "text_en": "Always when you drive", "correct": false},
+      {"text_no": "Berre om natta", "text_th": "เฉพาะตอนกลางคืน", "text_en": "Only at night", "correct": false},
+      {"text_no": "Aldri — det er ikkje lovleg", "text_th": "ไม่เคย — ผิดกฎหมาย", "text_en": "Never — it's illegal", "correct": false}
+    ],
+    "explanation_no": "Fog lights: berre ved tåke eller veldig dårleg sikt. Ikkje om natta utan tåke.",
+    "explanation_th": "ไฟหมอก: เพียงเมื่อมีหมอกหรือมองเห็นไม่ชัด ไม่ใช่ตอนกลางคืนปกติ",
+    "explanation_en": "Fog lights: only in fog or very poor visibility. Not at normal night without fog.",
+    "topic_tags": ["lys", "sikkerheit"],
+    "difficulty": "easy",
+    "podcast_reference": null
+  },
+  {
+    "question_id": "quiz_parking_hill",
+    "question_no": "Du parkerer på ein bakke. Kva skal du gjere?",
+    "question_th": "คุณจอดรถบนลาดเอียง คุณควรทำอะไร?",
+    "question_en": "You park on a hill. What should you do?",
+    "options": [
+      {"text_no": "Bruk handbrake, slå hjuler til siden, legg i gir", "text_th": "ใช้เบรกมือ หันล้อ เข้าเกียร์", "text_en": "Use handbrake, turn wheels to side, put in gear", "correct": true},
+      {"text_no": "Berre slå av motoren", "text_th": "เพียงปิดเครื่องยนต์", "text_en": "Just turn off engine", "correct": false},
+      {"text_no": "Bremsepedal hald inne medan du er borte", "text_th": "บีบเบรกตลอดเวลา", "text_en": "Keep foot on brake pedal while gone", "correct": false},
+      {"text_no": "Ikkje bruka handbrake, det var fareg", "text_th": "อย่าใช้เบรกมือ มันอันตราย", "text_en": "Don't use handbrake, it's dangerous", "correct": false}
+    ],
+    "explanation_no": "Parkering på bakke: handbrake (eller foothbrake hvis automatisk) + hjuler slåtte til siden + gir innlagd. Sikrar at bilen ikkje rollest!",
+    "explanation_th": "จอดบนลาด: เบรกมือ + หันล้อด้านข้าง + เข้าเกียร์ ช่วยให้แน่ใจว่ารถจะไม่กลิ้ง!",
+    "explanation_en": "Parking on hill: handbrake + turn wheels to side + put in gear. Ensures car won't roll!",
+    "topic_tags": ["parkering", "sikkerheit"],
+    "difficulty": "easy",
+    "podcast_reference": null
+  },
+  {
+    "question_id": "quiz_school_bus_stop",
+    "question_no": "Du ser ein skolebuss som stoppar. Kva gjør du?",
+    "question_th": "คุณเห็นรถโรงเรียนหยุด คุณทำอะไร?",
+    "question_en": "You see a school bus stopping. What do you do?",
+    "options": [
+      {"text_no": "Stoppe og vente til bussen starter igjen", "text_th": "หยุดและรอจนกว่ารถจะเริ่มขับอีกครั้ง", "text_en": "Stop and wait until bus starts again", "correct": true},
+      {"text_no": "Kjøre forbi med forsiktig", "text_th": "ขับผ่านด้วยความระมัดระวัง", "text_en": "Drive past carefully", "correct": false},
+      {"text_no": "Honke til bussen move", "text_th": "บีปแตรจนกว่ารถจะเคลื่อน", "text_en": "Honk until bus moves", "correct": false},
+      {"text_no": "Kjøre normalt, barn er indre bussen", "text_th": "ขับรถปกติ เด็กอยู่ในรถ", "text_en": "Drive normally, children are inside bus", "correct": false}
+    ],
+    "explanation_no": "Skolebuss: når den stoppar, barn skal av/på. Du MÅ stoppe og vente. Barn er prioritet!",
+    "explanation_th": "รถโรงเรียน: เมื่อหยุด เด็กลงขึ้น คุณต้องหยุดและรอ เด็กเป็นสิ่งสำคัญ!",
+    "explanation_en": "School bus: when it stops, children are getting on/off. You MUST stop and wait. Children are priority!",
+    "topic_tags": ["barn", "sikkerheit"],
+    "difficulty": "easy",
+    "podcast_reference": null
+  },
+  {
+    "question_id": "quiz_bicycle_space",
+    "question_no": "Du ser ein syklist framfor deg. Kva gjer du?",
+    "question_th": "คุณเห็นนักปั่นจักรยานด้านหน้า คุณทำอะไร?",
+    "question_en": "You see a cyclist ahead of you. What do you do?",
+    "options": [
+      {"text_no": "Gje god avstand, ikkje overtake tett, vere merksam", "text_th": "ให้ระยะห่างที่ดี อย่าแซงแน่น อยู่ระวัง", "text_en": "Give good distance, don't overtake closely, be alert", "correct": true},
+      {"text_no": "Hornet for å få han av veien", "text_th": "บีปแตรเพื่อให้เขาออกจากถนน", "text_en": "Honk to get him off road", "correct": false},
+      {"text_no": "Overtake tett og raskt", "text_th": "แซงแน่นและเร็ว", "text_en": "Overtake tightly and fast", "correct": false},
+      {"text_no": "Stanna på syklist", "text_th": "หยุดและรอนักปั่นจักรยาน", "text_en": "Stop and wait cyclist", "correct": false}
+    ],
+    "explanation_no": "Syklist: gje minst 1 meter avstand når du overtaker. Syklist kan falle eller sveinge plutseleg. Vere merksam!",
+    "explanation_th": "นักปั่น: ให้ระยะห่างอย่างน้อย 1 เมตรเมื่อแซง นักปั่นอาจล้มหรือเลี้ยวทันใจ อยู่ระวัง!",
+    "explanation_en": "Cyclist: give at least 1 meter distance when overtaking. Cyclist may fall or turn suddenly. Be alert!",
+    "topic_tags": ["syklist", "sikkerheit"],
+    "difficulty": "easy",
+    "podcast_reference": null
+  },
+  {
+    "question_id": "quiz_thai_vs_norway_culture",
+    "question_no": "Kva er ein stor kulturforskjell i køyring mellom Thailand og Noreg?",
+    "question_th": "ความแตกต่างทางวัฒนธรรมในการขับรถระหว่างไทยกับนอร์เวย์คืออะไร?",
+    "question_en": "What is a major cultural difference in driving between Thailand and Norway?",
+    "options": [
+      {"text_no": "Thailand: relasjon og forhandling. Noreg: regel og disiplin.", "text_th": "ไทย: สัมพันธ์และเจรจา นอร์เวย์: กฎและวินัย", "text_en": "Thailand: relation and negotiation. Norway: rules and discipline.", "correct": true},
+      {"text_no": "Thailand har betre vegar enn Noreg", "text_th": "ไทยมีถนนที่ดีกว่านอร์เวย์", "text_en": "Thailand has better roads than Norway", "correct": false},
+      {"text_no": "Noreg bruker ikkje trafikklys", "text_th": "นอร์เวย์ไม่ใช้ไฟจราจร", "text_en": "Norway doesn't use traffic lights", "correct": false},
+      {"text_no": "Thailand og Noreg har same regel", "text_th": "ไทยและนอร์เวย์มีกฎเดียวกัน", "text_en": "Thailand and Norway have same rules", "correct": false}
+    ],
+    "explanation_no": "Thailand: køyring er relasjonell — forhandla, give bort, respekt for makt. Noreg: køyring er regelbasert — lovar, disiplin, respekt for lov. Stor kulturforskjell!",
+    "explanation_th": "ไทย: การขับรถเป็นสัมพันธ์ — เจรจา ยอม เคารพอำนาจ นอร์เวย์: การขับรถขึ้นอยู่กับกฎ — กฎหมาย วินัย เคารพกฎหมาย ความแตกต่างทางวัฒนธรรมอย่างมาก!",
+    "explanation_en": "Thailand: driving is relational — negotiate, give way, respect for power. Norway: driving is rule-based — laws, discipline, respect for law. Major cultural difference!",
+    "topic_tags": ["kulturforskjell", "thailand_vs_norway"],
+    "difficulty": "medium",
+    "podcast_reference": "podcast_thailand_vs_norway"
+  },
+  {
+    "question_id": "quiz_glossary_vikeplikt",
+    "question_no": "Kva er 'vikeplikt'?",
+    "question_th": "'vikeplikt' คืออะไร?",
+    "question_en": "What is 'vikeplikt'?",
+    "options": [
+      {"text_no": "Å gje veke (prioritet) til annan bil i viss situasjon", "text_th": "การสละทาง (สิทธิ) ให้รถอื่นในสถานการณ์บางอย่าง", "text_en": "To give way (priority) to another car in certain situations", "correct": true},
+      {"text_no": "Å køyre fort", "text_th": "ขับรถอย่างรวดเร็ว", "text_en": "To drive fast", "correct": false},
+      {"text_no": "Å parkere på siden", "text_th": "จอดด้านข้าง", "text_en": "To park on the side", "correct": false},
+      {"text_no": "Å gå på foten", "text_th": "เดินบ้านเท้า", "text_en": "To walk on foot", "correct": false}
+    ],
+    "explanation_no": "Vikeplikt = prioritet-regel. I visse situasjonar, ein bil MUST gje veke til annan. Døme: bilen frå høgre har vikeplikt.",
+    "explanation_th": "vikeplikt = กฎสิทธิ ในสถานการณ์บางอย่าง รถคันหนึ่งต้องสละทาง ตัวอย่าง: รถจากด้านขวามีสิทธิได้ก่อน",
+    "explanation_en": "Vikeplikt = right-of-way rule. In certain situations, one car MUST give way to another. Example: car from right has vikeplikt.",
+    "topic_tags": ["glossary", "vikeplikt"],
+    "difficulty": "easy",
+    "podcast_reference": "podcast_glossary"
+  },
+  {
+    "question_id": "quiz_glossary_forkjøring",
+    "question_no": "Kva er 'forkjøring'?",
+    "question_th": "'forkjøring' คืออะไร?",
+    "question_en": "What is 'forkjøring'?",
+    "options": [
+      {"text_no": "Å køyre forbi ein annan bil", "text_th": "ขับรถผ่านรถอื่น", "text_en": "To drive past another car", "correct": true},
+      {"text_no": "Å bremsing hard", "text_th": "เบรกแรง", "text_en": "To brake hard", "correct": false},
+      {"text_no": "Å parkere", "text_th": "จอดรถ", "text_en": "To park", "correct": false},
+      {"text_no": "Å sveinge til høgre", "text_th": "เลี้ยวไปทางขวา", "text_en": "To turn right", "correct": false}
+    ],
+    "explanation_no": "Forkjøring = overtaking. Du køyre på sida av ein annan bil for å gå forbi henne. Heilstig linje = forbyte, stipla linje = tillate.",
+    "explanation_th": "forkjøring = แซง คุณขับรถข้างรถอื่นเพื่อผ่านไป เส้นทึบ = ห้าม เส้นประ = อนุญาต",
+    "explanation_en": "Forkjøring = overtaking. You drive beside another car to pass her. Solid line = forbidden, dashed line = allowed.",
+    "topic_tags": ["glossary", "forkjøring"],
+    "difficulty": "easy",
+    "podcast_reference": "podcast_glossary"
+  },
+  {
+    "question_id": "quiz_glossary_bremselengde",
+    "question_no": "Kva er 'bremselengde'?",
+    "question_th": "'bremselengde' คืออะไร?",
+    "question_en": "What is 'bremselengde'?",
+    "options": [
+      {"text_no": "Avstanden bilen køyre frå du trykker bremsepedal til bilen stopper fullstendig", "text_th": "ระยะที่รถเลื่อนไปจนกว่าจะหยุดเต็มที่", "text_en": "The distance the car travels from pressing brake to stopping completely", "correct": true},
+      {"text_no": "Tida det tek å bremsing", "text_th": "เวลาที่ใช้ในการเบรก", "text_en": "The time it takes to brake", "correct": false},
+      {"text_no": "Avstanden mellom biliar", "text_th": "ระยะห่างระหว่างรถ", "text_en": "The distance between cars", "correct": false},
+      {"text_no": "Køyrefarten på motorveg", "text_th": "ความเร็วในการขับรถบนทางหลวง", "text_en": "The driving speed on highway", "correct": false}
+    ],
+    "explanation_no": "Bremselengde = avstanden frå bremsepedal til full stopp. Høgare fart = lengre bremselengde. Ved 50 km/h ≈ 27 meter.",
+    "explanation_th": "bremselengde = ระยะจากเบรกจนหยุดเต็มที่ ความเร็วสูงขึ้น = ระยะเบรกยาวขึ้น ที่ 50 กม./ชม. ≈ 27 เมตร",
+    "explanation_en": "Bremselengde = distance from brake to complete stop. Higher speed = longer braking distance. At 50 km/h ≈ 27 meters.",
+    "topic_tags": ["glossary", "bremselengde"],
+    "difficulty": "easy",
+    "podcast_reference": "podcast_glossary"
+  },
+  {
+    "question_id": "quiz_glossary_reaktidslengde",
+    "question_no": "Kva er 'reaktidslengde'?",
+    "question_th": "'reaktidslengde' คืออะไร?",
+    "question_en": "What is 'reaktidslengde'?",
+    "options": [
+      {"text_no": "Avstanden bilen køyre medan du tenkar og pressar bremsepedal", "text_th": "ระยะที่รถเลื่อนไปขณะคุณคิดและเบรก", "text_en": "The distance car travels while you think and press brake", "correct": true},
+      {"text_no": "Tida det tek å tenka", "text_th": "เวลาที่ใช้ในการคิด", "text_en": "The time it takes to think", "correct": false},
+      {"text_no": "Bremselengda på glatt veg", "text_th": "ระยะเบรกบนถนนลื่น", "text_en": "Braking distance on slippery road", "correct": false},
+      {"text_no": "Hastigheta på bakke", "text_th": "ความเร็วบนลาดเอียง", "text_en": "Speed on a hill", "correct": false}
+    ],
+    "explanation_no": "Reaktidslengde = avstanden bilen køyre medan du reagerer (1 sekund). Ved 50 km/h ≈ 14 meter. Du tenkar, du ser fare, du trykkar pedal. Bilen køyre heile tida!",
+    "explanation_th": "reaktidslengde = ระยะที่รถเลื่อนไปขณะคุณตอบสนอง (1 วินาที) ที่ 50 กม./ชม. ≈ 14 เมตร คุณคิด เห็นอันตราย กดเบรก รถยังเลื่อนต่อไป!",
+    "explanation_en": "Reaktidslengde = distance car travels while you react (1 second). At 50 km/h ≈ 14 meters. You think, you see danger, you press brake. Car keeps moving!",
+    "topic_tags": ["glossary", "reaktidslengde"],
+    "difficulty": "easy",
+    "podcast_reference": "podcast_glossary"
+  },
+  {
+    "question_id": "quiz_glossary_stopplengde",
+    "question_no": "Kva er 'stopplengde'?",
+    "question_th": "'stopplengde' คืออะไร?",
+    "question_en": "What is 'stopplengde'?",
+    "options": [
+      {"text_no": "Reaktidslengde + bremselengde = total avstand frå fare til stopp", "text_th": "reaktidslengde + bremselengde = ระยะรวมจากอันตรายจนหยุด", "text_en": "Reaction distance + braking distance = total distance from danger to stop", "correct": true},
+      {"text_no": "Berre bremselengda", "text_th": "เพียงระยะเบรก", "text_en": "Only braking distance", "correct": false},
+      {"text_no": "Berre reaktidslengda", "text_th": "เพียงระยะตอบสนอง", "text_en": "Only reaction distance", "correct": false},
+      {"text_no": "Avstanden mellom biliar", "text_th": "ระยะห่างระหว่างรถ", "text_en": "Distance between cars", "correct": false}
+    ],
+    "explanation_no": "Stopplengde = total! Reaktid (14m) + bremsing (27m) = 41 meter ved 50 km/h. Michael seier: det er livsfarleg å ikkje vite desse tala!",
+    "explanation_th": "stopplengde = รวมทั้งหมด! ตอบสนอง (14 เมตร) + เบรก (27 เมตร) = 41 เมตร ที่ 50 กม./ชม. ไมเคิล: มันอันตรายชีวิตที่ไม่รู้ตัวเลขเหล่านี้!",
+    "explanation_en": "Stopplengde = total! Reaction (14m) + braking (27m) = 41 meters at 50 km/h. Michael says: it's life-threatening not to know these numbers!",
+    "topic_tags": ["glossary", "stopplengde"],
+    "difficulty": "medium",
+    "podcast_reference": "podcast_glossary"
+  }
+]
