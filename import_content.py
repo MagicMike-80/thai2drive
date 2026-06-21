@@ -277,7 +277,7 @@ def import_podcasts(db):
 
 def import_quizzes(db):
     print("\n--- Starting Quizzes/Questions Import ---")
-    quiz_files = ["quiz_michael_v5.json", "quiz_extended_practice.json", "quiz_row_questions.json", "quiz_extra_questions.json"]
+    quiz_files = ["quiz_michael_v5.json", "quiz_extended_practice.json", "quiz_row_questions.json", "quiz_extra_questions.json", "quiz_comprehensive.json"]
     total_inserted = 0
     total_updated = 0
     total_skipped = 0
@@ -704,6 +704,125 @@ def import_marketing_videos(db):
     print(f"Marketing Videos Import Summary: {inserted} inserted, {updated} updated, {skipped} skipped.")
     return inserted, updated, skipped
 
+def import_traffic_signs(db):
+    print("\n--- Starting Traffic Signs Import ---")
+    sign_files = ["traffic_signs_explained.json", "traffic_signs_expanded.json"]
+    total_inserted = 0
+    total_updated = 0
+    total_skipped = 0
+    
+    for filename in sign_files:
+        signs_file = os.path.join("content", filename)
+        if not os.path.exists(signs_file):
+            signs_file = filename
+            if not os.path.exists(signs_file):
+                print(f"Traffic signs file {filename} not found in content/ or root. Skipping.")
+                continue
+                
+        print(f"\nProcessing {filename}...")
+        with open(signs_file, "r", encoding="utf-8") as f:
+            items = json.load(f)
+            
+        print(f"Found {len(items)} items in {filename}.")
+        
+        collection = db.learning_traffic_signs
+        
+        sign_fields = ["sign_name", "visual_description", "situation", "what_it_means", "what_to_do", "michael_tip", "frequency"]
+        
+        for item in items:
+            sign_id = item.get("sign_id", "Unknown")
+            desc = f"Traffic Sign: '{sign_id}'"
+            
+            # 1. Structural checks
+            errors = []
+            if not sign_id:
+                errors.append("Missing sign_id")
+                
+            if errors:
+                print(f"  [VALIDATION FAILED] {desc}:")
+                for err in errors:
+                    print(f"    - {err}")
+                total_skipped += 1
+                continue
+                
+            # 2. Validate purity
+            if not validate_language_purity(item, sign_fields, desc):
+                total_skipped += 1
+                continue
+                
+            # Check if already exists in DB
+            existing = collection.find_one({"sign_id": item["sign_id"]})
+            
+            if existing:
+                # Update existing sign
+                update_data = {
+                    "sign_id": item["sign_id"],
+                    "sign_name_no": item["sign_name_no"],
+                    "sign_name_th": item["sign_name_th"],
+                    "sign_name_en": item["sign_name_en"],
+                    "visual_description_no": item["visual_description_no"],
+                    "visual_description_th": item["visual_description_th"],
+                    "visual_description_en": item["visual_description_en"],
+                    "situation_no": item["situation_no"],
+                    "situation_th": item["situation_th"],
+                    "situation_en": item["situation_en"],
+                    "what_it_means_no": item["what_it_means_no"],
+                    "what_it_means_th": item["what_it_means_th"],
+                    "what_it_means_en": item["what_it_means_en"],
+                    "what_to_do_no": item["what_to_do_no"],
+                    "what_to_do_th": item["what_to_do_th"],
+                    "what_to_do_en": item["what_to_do_en"],
+                    "michael_tip_no": item["michael_tip_no"],
+                    "michael_tip_th": item["michael_tip_th"],
+                    "michael_tip_en": item["michael_tip_en"],
+                    "danger_level": item["danger_level"],
+                    "frequency_no": item["frequency_no"],
+                    "frequency_th": item["frequency_th"],
+                    "frequency_en": item["frequency_en"],
+                    "related_glossary": item.get("related_glossary", []),
+                    "active": existing.get("active", True)
+                }
+                collection.update_one({"_id": existing["_id"]}, {"$set": update_data})
+                print(f"  [UPDATE] {desc}")
+                total_updated += 1
+            else:
+                # Create new sign
+                new_doc = {
+                    "id": str(uuid.uuid4()),
+                    "created_at": datetime.now(timezone.utc).isoformat(),
+                    "active": True,
+                    "sign_id": item["sign_id"],
+                    "sign_name_no": item["sign_name_no"],
+                    "sign_name_th": item["sign_name_th"],
+                    "sign_name_en": item["sign_name_en"],
+                    "visual_description_no": item["visual_description_no"],
+                    "visual_description_th": item["visual_description_th"],
+                    "visual_description_en": item["visual_description_en"],
+                    "situation_no": item["situation_no"],
+                    "situation_th": item["situation_th"],
+                    "situation_en": item["situation_en"],
+                    "what_it_means_no": item["what_it_means_no"],
+                    "what_it_means_th": item["what_it_means_th"],
+                    "what_it_means_en": item["what_it_means_en"],
+                    "what_to_do_no": item["what_to_do_no"],
+                    "what_to_do_th": item["what_to_do_th"],
+                    "what_to_do_en": item["what_to_do_en"],
+                    "michael_tip_no": item["michael_tip_no"],
+                    "michael_tip_th": item["michael_tip_th"],
+                    "michael_tip_en": item["michael_tip_en"],
+                    "danger_level": item["danger_level"],
+                    "frequency_no": item["frequency_no"],
+                    "frequency_th": item["frequency_th"],
+                    "frequency_en": item["frequency_en"],
+                    "related_glossary": item.get("related_glossary", [])
+                }
+                collection.insert_one(new_doc)
+                print(f"  [INSERT] {desc}")
+                total_inserted += 1
+                
+    print(f"Traffic Signs Import Summary: {total_inserted} inserted, {total_updated} updated, {total_skipped} skipped.")
+    return total_inserted, total_updated, total_skipped
+
 def main():
     print(f"Connecting to MongoDB...")
     # Clean output masking passwords in logging
@@ -724,6 +843,7 @@ def main():
         q_ins, q_upd, q_skp = import_quizzes(db)
         b_ins, b_upd, b_skp = import_studybook_chapters(db)
         v_ins, v_upd, v_skp = import_marketing_videos(db)
+        s_ins, s_upd, s_skp = import_traffic_signs(db)
         
         print("\n==============================================")
         print("DATABASE IMPORT SUCCESSFULLY COMPLETED!")
@@ -732,6 +852,7 @@ def main():
         print(f"Total Quiz Questions: {q_ins} inserted, {q_upd} updated, {q_skp} skipped.")
         print(f"Total Studybook Chapters: {b_ins} inserted, {b_upd} updated, {b_skp} skipped.")
         print(f"Total Marketing Videos: {v_ins} inserted, {v_upd} updated, {v_skp} skipped.")
+        print(f"Total Traffic Signs: {s_ins} inserted, {s_upd} updated, {s_skp} skipped.")
         print("==============================================")
         
     except Exception as e:

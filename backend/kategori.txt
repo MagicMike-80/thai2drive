@@ -1,0 +1,6 @@
+2821:         <div class="screen-title">📚 <span data-key="cats">Kategorier</span> <span id="catCount"></span></div>
+3268:   <!-- BOTTOM NAV — 8 tabs: Hjem → Kategorier → Historikk → Michael → Skilt → Studiebok → Bokmerker → Innstillinger -->
+3274:       <span class="bn-icon">📚</span>Kategorier
+3438:   cats:        {th:'หมวดหมู่',          no:'Kategorier',      en:'Categories'},
+3499:   mode_category:{th:'หมวดหมู่',             no:'Kategori',         en:'Category'},
+3886: // Kategori navn per språk

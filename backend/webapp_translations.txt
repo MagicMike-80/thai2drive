@@ -1,0 +1,20 @@
+
+// ── UI string translations ──────────────────────────────────
+var UI = {
+  back:        {th:'← กลับ',          no:'← Tilbake',      en:'← Back'},
+  question:    {th:'คำถามที่',          no:'Spørsmål',        en:'Question'},
+  of:          {th:'จาก',              no:'av',              en:'of'},
+  next:        {th:'ถัดไป →',          no:'Neste →',         en:'Next →'},
+  home:        {th:'หน้าแรก',          no:'Hjem',            en:'Home'},
+  cats:        {th:'หมวดหมู่',          no:'Kategorier',      en:'Categories'},
+  bookmarks:   {th:'ที่คั่นหน้า',       no:'Bokmerker',       en:'Bookmarks'},
+  settings:    {th:'การตั้งค่า',        no:'Innstillinger',   en:'Settings'},
+  correct:     {th:'🎉 ถูกต้อง!',       no:'✓ Riktig!',        en:'✓ Correct!'},
+  wrong:       {th:'↩ ลองใหม่',        no:'↩ Ikke riktig',   en:'↩ Not quite'},
+  retry:       {th:'🔄 ลองใหม่',        no:'🔄 Prøv igjen',   en:'🔄 Try again'},
+  backhome:    {th:'🏠 กลับหน้าแรก',    no:'🏠 Tilbake til hjem', en:'🏠 Back to home'},
+  pickcat:     {th:'📚 เลือกหมวดหมู่',  no:'📚 Velg kategori', en:'📚 Pick category'},
+  startquiz:   {th:'▶  เริ่มควิซ',      no:'▶  Start quiz',   en:'▶  Start quiz'},
+  exam:        {th:'📋 สอบ',            no:'📋 Eksamen',       en:'📋 Exam'},
+  daily:       {th:'📅 ทดสอบรายวัน',    no:'📅 Daglig test',   en:'📅 Daily test'},
+  loading:     {th:'กำลังโหลด…',        no:'Laster spørsmål…', en:'Loading…'},

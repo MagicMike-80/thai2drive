@@ -1,0 +1,40 @@
+        <button class="tsp-btn" data-tsp-btn="theory">📝 <span data-tsp="theory"></span></button>
+        <button class="tsp-btn" data-tsp-btn="app">❓ <span data-tsp="app"></span></button>
+      </div><!-- /teacher-side-panel -->
+
+    </div><!-- /screenTeacher -->
+
+  </div><!-- /content -->
+
+  <!-- BOTTOM NAV — 8 tabs: Hjem → Kategorier → Historikk → Michael → Skilt → Studiebok → Bokmerker → Innstillinger -->
+  <div id="bottomNav">
+    <button class="bn-tab active" id="bnHome" onclick="showTab('home')">
+      <span class="bn-icon">🏠</span>Hjem
+    </button>
+    <button class="bn-tab" id="bnCats" onclick="showTab('cats')">
+      <span class="bn-icon">📚</span>Kategorier
+    </button>
+    <button class="bn-tab" id="bnHistory" onclick="showTab('history')">
+      <span class="bn-icon">📊</span>Historikk
+    </button>
+    <button class="bn-tab bn-tab-michael" id="bnTeacher" onclick="showTab('teacher')">
+      <span class="bn-icon">🚗</span>Michael
+    </button>
+    <button class="bn-tab" id="bnSigns" onclick="showTab('signs')">
+      <span class="bn-icon">🪧</span>Skilt
+    </button>
+    <button class="bn-tab" id="bnStudybook" onclick="showTab('studybook')">
+      <span class="bn-icon">📖</span>Studiebok
+    </button>
+    <button class="bn-tab" id="bnBookmarks" onclick="showTab('bookmarks')">
+      <span class="bn-icon">🔖</span>Bokmerker
+    </button>
+    <button class="bn-tab" id="bnSettings" onclick="showTab('settings')">
+      <span class="bn-icon">⚙️</span>Innstillinger
+    </button>
+  </div>
+
+</div><!-- /app -->
+
+<!-- ═══ SIGN DETAIL PANEL ═══ -->
+<div class="sign-panel-backdrop" id="signPanelBackdrop" onclick="closeSignDetail()"></div>
