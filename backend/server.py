@@ -4811,9 +4811,12 @@ async def text_to_speech(text: str, lang: str = "th-TH"):
                 "Content-Type": "application/json",
                 "xi-api-key": elevenlabs_key
             }
+            # eleven_multilingual_v2 does NOT support Thai/Norwegian.
+            # eleven_flash_v2_5 supports all three: Thai, Norwegian, English.
+            model = "eleven_flash_v2_5" if lang in ("th-TH", "nb-NO") else "eleven_multilingual_v2"
             payload = {
                 "text": text,
-                "model_id": "eleven_multilingual_v2",
+                "model_id": model,
                 "voice_settings": {
                     "stability": 0.5,
                     "similarity_boost": 0.75
