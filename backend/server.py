@@ -4782,65 +4782,13 @@ _GOOGLE_TTS_VOICES = {
     "en-US": "en-US-Wavenet-D",
 }
 
-@app.get("/api/tts")
-async def text_to_speech(text: str, lang: str = "th-TH"):
-    import hashlib
+async def _google_tts(text: str, lang: str, google_key: str, cache_path: str):
+    """Helper — synthesize speech via Google Cloud TTS and return MP3."""
     import base64
     import httpx
     from fastapi import HTTPException
-    from fastapi.responses import FileResponse, Response
+    from fastapi.responses import FileResponse
 
-    # Create a unique cache key based on language and text
-    cache_key = hashlib.md5(f"{lang}:{text}".encode('utf-8')).hexdigest()
-    cache_dir = os.path.join("public_assets", "audio")
-    os.makedirs(cache_dir, exist_ok=True)
-    cache_path = os.path.join(cache_dir, f"{cache_key}.mp3")
-
-    # Return cached audio if it exists
-    if os.path.exists(cache_path):
-        return FileResponse(cache_path, media_type="audio/mpeg")
-
-    # ── Try ElevenLabs first (your cloned voice) ──────────────────────────
-    elevenlabs_key = os.environ.get("ELEVENLABS_API_KEY")
-    if elevenlabs_key:
-        try:
-            voice_id = "IoOuTUO7t2kI2VTJqI10"
-            url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}"
-            headers = {
-                "Accept": "audio/mpeg",
-                "Content-Type": "application/json",
-                "xi-api-key": elevenlabs_key
-            }
-            # eleven_multilingual_v2 does NOT support Thai/Norwegian.
-            # eleven_flash_v2_5 supports all three: Thai, Norwegian, English.
-            model = "eleven_flash_v2_5" if lang in ("th-TH", "nb-NO") else "eleven_multilingual_v2"
-            payload = {
-                "text": text,
-                "model_id": model,
-                "voice_settings": {
-                    "stability": 0.5,
-                    "similarity_boost": 0.75
-                }
-            }
-            async with httpx.AsyncClient() as client:
-                r = await client.post(url, json=payload, headers=headers, timeout=60.0)
-                if r.status_code == 200:
-                    with open(cache_path, "wb") as f:
-                        f.write(r.content)
-                    return FileResponse(cache_path, media_type="audio/mpeg")
-                else:
-                    logger.warning("ElevenLabs API error %d — falling back to Google TTS", r.status_code)
-        except Exception as e:
-            logger.warning("ElevenLabs request failed: %s — falling back to Google TTS", e)
-    else:
-        logger.info("ELEVENLABS_API_KEY not set — using Google Cloud TTS")
-
-    # ── Fallback: Google Cloud Text-to-Speech ──────────────────────────────
-    google_key = os.environ.get("GOOGLE_API_KEY")
-    if not google_key:
-        raise HTTPException(status_code=500, detail="No TTS provider available (neither ELEVENLABS_API_KEY nor GOOGLE_API_KEY configured).")
-
-    # Pick the best voice for the language
     voice_name = _GOOGLE_TTS_VOICES.get(lang, "th-TH-Standard-A")
     gurl = f"https://texttospeech.googleapis.com/v1/text:synthesize?key={google_key}"
     gpayload = {
@@ -4870,6 +4818,75 @@ async def text_to_speech(text: str, lang: str = "th-TH"):
     except Exception as e:
         logger.error("Google TTS synthesis failed: %s", e)
         raise HTTPException(status_code=500, detail=f"TTS synthesis failed: {str(e)}")
+
+
+@app.get("/api/tts")
+async def text_to_speech(text: str, lang: str = "th-TH"):
+    import hashlib
+    import base64
+    import httpx
+    from fastapi import HTTPException
+    from fastapi.responses import FileResponse, Response
+
+    # Create a unique cache key based on language and text
+    cache_key = hashlib.md5(f"{lang}:{text}".encode('utf-8')).hexdigest()
+    cache_dir = os.path.join("public_assets", "audio")
+    os.makedirs(cache_dir, exist_ok=True)
+    cache_path = os.path.join(cache_dir, f"{cache_key}.mp3")
+
+    # Return cached audio if it exists
+    if os.path.exists(cache_path):
+        return FileResponse(cache_path, media_type="audio/mpeg")
+
+    # ── Language-based routing ────────────────────────────────────────────
+    # Thai → Google Cloud TTS (native Thai voice, no accent issues)
+    # Norwegian/English → ElevenLabs Ai Mike (your cloned voice)
+    google_key = os.environ.get("GOOGLE_API_KEY")
+
+    if lang == "th-TH" and google_key:
+        # Thai goes directly to Google Cloud TTS — ElevenLabs can't do Thai
+        # with a Norwegian-cloned voice without sounding accented.
+        logger.info("Thai TTS → Google Cloud TTS (native Thai voice)")
+        return await _google_tts(text, lang, google_key, cache_path)
+
+    # Norwegian/English → ElevenLabs Ai Mike (your cloned voice)
+    elevenlabs_key = os.environ.get("ELEVENLABS_API_KEY")
+    if elevenlabs_key and lang != "th-TH":
+        try:
+            voice_id = "IoOuTUO7t2kI2VTJqI10"
+            url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}"
+            headers = {
+                "Accept": "audio/mpeg",
+                "Content-Type": "application/json",
+                "xi-api-key": elevenlabs_key
+            }
+            # eleven_flash_v2_5 supports Norwegian + English
+            payload = {
+                "text": text,
+                "model_id": "eleven_flash_v2_5",
+                "voice_settings": {
+                    "stability": 0.5,
+                    "similarity_boost": 0.75
+                }
+            }
+            async with httpx.AsyncClient() as client:
+                r = await client.post(url, json=payload, headers=headers, timeout=60.0)
+                if r.status_code == 200:
+                    with open(cache_path, "wb") as f:
+                        f.write(r.content)
+                    return FileResponse(cache_path, media_type="audio/mpeg")
+                else:
+                    logger.warning("ElevenLabs API error %d — falling back to Google TTS", r.status_code)
+        except Exception as e:
+            logger.warning("ElevenLabs request failed: %s — falling back to Google TTS", e)
+    else:
+        logger.info("ELEVENLABS_API_KEY not set — using Google Cloud TTS")
+
+    # ── Fallback: Google Cloud Text-to-Speech ──────────────────────────────
+    if not google_key:
+        raise HTTPException(status_code=500, detail="No TTS provider available (neither ELEVENLABS_API_KEY nor GOOGLE_API_KEY configured).")
+
+    return await _google_tts(text, lang, google_key, cache_path)
 
 @app.get("/api/health")
 async def health_check():
