@@ -3974,9 +3974,7 @@ function enterApp() {
 }
 
 function showTab(tab, forceType) {
-  if (window.speechSynthesis) window.speechSynthesis.cancel();
-  _teacherTtsPlaying = false;
-  ttsPlaying = false;
+  stopAllSpeech();
   activeTab = tab;
   document.querySelectorAll('.bn-tab').forEach(function(b) { b.classList.remove('active'); });
   var tabMap = { home:'bnHome', cats:'bnCats', history:'bnHistory', signs:'bnSigns', studybook:'bnStudybook', bookmarks:'bnBookmarks', settings:'bnSettings', teacher:'bnTeacher' };
@@ -4173,7 +4171,6 @@ document.addEventListener('click', function(e) {
 var _backendAudio = null;
 var _teacherAudio = null;
 function stopAllSpeech() {
-  if (window.speechSynthesis) window.speechSynthesis.cancel();
   if (_backendAudio) { try { _backendAudio.pause(); } catch(e){} }
   if (_teacherAudio) { try { _teacherAudio.pause(); } catch(e){} }
   _teacherTtsPlaying = false;
@@ -4662,7 +4659,7 @@ function checkPaywall() {
 }
 
 function showPaywall() {
-  if (window.speechSynthesis) window.speechSynthesis.cancel();
+  stopAllSpeech();
   stopExamTimer();
   applyUILang();
   showScreen('screenPaywall');
@@ -5110,8 +5107,7 @@ async function selectAns(btn, picked) {
   }, 180);
 
   playSound(isOk ? 'correct' : 'wrong');
-  if (window.speechSynthesis) window.speechSynthesis.cancel();
-  ttsPlaying = false;
+  stopAllSpeech();
 
   // Collapse Se→Forstå→Velg lens — feedback takes over, no need for both
   var _lens = document.querySelector('.q-observe');
@@ -6612,7 +6608,7 @@ function _buildDebrief(pct, total) {
 }
 
 function showEnd() {
-  if (window.speechSynthesis) window.speechSynthesis.cancel();
+  stopAllSpeech();
   stopExamTimer();
   showScreen('screenEnd');
   var total  = questions.length;
@@ -6697,40 +6693,26 @@ function speakQ() {
   var text = pickLang(q.question) || q.question_text_no || '';
   if (!text) return;
 
-  if (appLang === 'th') {
-    if (ttsPlaying) {
-      stopAllSpeech();
-      return;
-    }
-    if (!_backendAudio) {
-      _backendAudio = new Audio();
-      _backendAudio.onended = function() { ttsPlaying = false; updateTtsBtn(false); };
-      _backendAudio.onerror = function() { ttsPlaying = false; updateTtsBtn(false); };
-    }
-    _backendAudio.src = '/api/tts?lang=th-TH&text=' + encodeURIComponent(text);
-    ttsPlaying = true;
-    updateTtsBtn(true);
-    _backendAudio.play().catch(function(err) {
-       console.error('Audio playback failed:', err);
-       ttsPlaying = false;
-       updateTtsBtn(false);
-    });
+  if (ttsPlaying) {
+    stopAllSpeech();
     return;
   }
-
-  if (!window.speechSynthesis) return;
-  if (ttsPlaying) {
-    window.speechSynthesis.cancel();
-    ttsPlaying = false; updateTtsBtn(false); return;
+  if (!_backendAudio) {
+    _backendAudio = new Audio();
+    _backendAudio.onended = function() { ttsPlaying = false; updateTtsBtn(false); };
+    _backendAudio.onerror = function() { ttsPlaying = false; updateTtsBtn(false); };
   }
-  var utt = new SpeechSynthesisUtterance(text);
-  utt.lang = appLang === 'th' ? 'th-TH' : appLang === 'no' ? 'nb-NO' : 'en-US';
-  utt.rate = ttsRate;
-  utt.volume = ttsVolume;
-  ttsPlaying = true; updateTtsBtn(true);
-  utt.onend   = function() { ttsPlaying = false; updateTtsBtn(false); };
-  utt.onerror = function() { ttsPlaying = false; updateTtsBtn(false); };
-  window.speechSynthesis.speak(utt);
+  var langParam = appLang === 'th' ? 'th-TH' : appLang === 'no' ? 'nb-NO' : 'en-US';
+  _backendAudio.src = '/api/tts?lang=' + langParam + '&text=' + encodeURIComponent(text);
+  _backendAudio.playbackRate = ttsRate || 1.0;
+  _backendAudio.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
+  ttsPlaying = true;
+  updateTtsBtn(true);
+  _backendAudio.play().catch(function(err) {
+     console.error('Audio playback failed:', err);
+     ttsPlaying = false;
+     updateTtsBtn(false);
+  });
 }
 function updateTtsBtn(playing) {
   var btn = document.getElementById('qTtsBtn');
@@ -6740,12 +6722,16 @@ function updateTtsBtn(playing) {
 }
 function setRate(r, el) {
   ttsRate = r;
+  if (_backendAudio) _backendAudio.playbackRate = r;
+  if (_teacherAudio) _teacherAudio.playbackRate = r;
   document.querySelectorAll('.spd-btn').forEach(function(b) {
     b.classList.toggle('active', parseFloat(b.dataset.rate) === r);
   });
 }
 function setVolume(v) {
   ttsVolume = v;
+  if (_backendAudio) _backendAudio.volume = v;
+  if (_teacherAudio) _teacherAudio.volume = v;
   _ls.set('t2d_vol', String(v));
   document.querySelectorAll('.vol-btn').forEach(function(b) {
     b.classList.toggle('active', parseFloat(b.dataset.vol) === v);
@@ -6761,42 +6747,24 @@ function speakText(text) {
     .trim();
   if (!clean) return;
 
-  if (appLang === 'th') {
-    if (_teacherTtsPlaying) {
-      stopAllSpeech();
-      return;
-    }
-    if (!_teacherAudio) {
-      _teacherAudio = new Audio();
-      _teacherAudio.onended = function() { _teacherTtsPlaying = false; };
-      _teacherAudio.onerror = function() { _teacherTtsPlaying = false; };
-    }
-    _teacherAudio.src = '/api/tts?lang=th-TH&text=' + encodeURIComponent(clean);
-    _teacherTtsPlaying = true;
-    _teacherAudio.play().catch(function(err) {
-       console.error('Teacher audio playback failed:', err);
-       _teacherTtsPlaying = false;
-    });
-    return;
-  }
-
-  if (!window.speechSynthesis) return;
   if (_teacherTtsPlaying) {
-    window.speechSynthesis.cancel();
-    _teacherTtsPlaying = false;
+    stopAllSpeech();
     return;
   }
-  
-  var u = new SpeechSynthesisUtterance(clean);
-  u.lang = appLang === 'th' ? 'th-TH' : appLang === 'no' ? 'nb-NO' : 'en-US';
-  u.rate = ttsRate || 1.0;
-  u.volume = ttsVolume || 1.0;
-  
+  if (!_teacherAudio) {
+    _teacherAudio = new Audio();
+    _teacherAudio.onended = function() { _teacherTtsPlaying = false; };
+    _teacherAudio.onerror = function() { _teacherTtsPlaying = false; };
+  }
+  var langParam = appLang === 'th' ? 'th-TH' : appLang === 'no' ? 'nb-NO' : 'en-US';
+  _teacherAudio.src = '/api/tts?lang=' + langParam + '&text=' + encodeURIComponent(clean);
+  _teacherAudio.playbackRate = ttsRate || 1.0;
+  _teacherAudio.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
   _teacherTtsPlaying = true;
-  u.onend = function() { _teacherTtsPlaying = false; };
-  u.onerror = function() { _teacherTtsPlaying = false; };
-  
-  window.speechSynthesis.speak(u);
+  _teacherAudio.play().catch(function(err) {
+     console.error('Teacher audio playback failed:', err);
+     _teacherTtsPlaying = false;
+  });
 }
 
 function buildPodcastCard(p) {
@@ -7825,7 +7793,7 @@ function closeSignDetail() {
   document.getElementById('signPanelBackdrop').classList.remove('open');
   document.getElementById('signPanel').classList.remove('open');
   document.body.style.overflow = '';
-  if (window.speechSynthesis) window.speechSynthesis.cancel();
+  stopAllSpeech();
 }
 
 function setSignPanelLang(lang) {
@@ -7995,17 +7963,26 @@ function _renderSignPanel() {
 }
 
 function speakSign() {
-  if (!window.speechSynthesis) return;
   var sign = _signPanelData;
   if (!sign) return;
   var lang = _signPanelLang;
   var text = _getProp(sign.name, lang);
   var expl = _getProp(sign.explanation, lang);
   if (expl) text += '. ' + expl;
-  var u = new SpeechSynthesisUtterance(text.trim());
-  u.lang = lang === 'th' ? 'th-TH' : lang === 'en' ? 'en-US' : 'nb-NO';
-  window.speechSynthesis.cancel();
-  window.speechSynthesis.speak(u);
+  text = text.trim();
+  if (!text) return;
+  
+  stopAllSpeech();
+  if (!_backendAudio) {
+    _backendAudio = new Audio();
+    _backendAudio.onended = function() { ttsPlaying = false; updateTtsBtn(false); };
+    _backendAudio.onerror = function() { ttsPlaying = false; updateTtsBtn(false); };
+  }
+  var langParam = lang === 'th' ? 'th-TH' : lang === 'en' ? 'en-US' : 'nb-NO';
+  _backendAudio.src = '/api/tts?lang=' + langParam + '&text=' + encodeURIComponent(text);
+  _backendAudio.playbackRate = ttsRate || 1.0;
+  _backendAudio.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
+  _backendAudio.play().catch(function(err){ console.error('Sign TTS error:', err); });
 }
 
 function toggleSignFavorite() {
@@ -8078,11 +8055,20 @@ function askAiAboutSign() {
 }
 
 function speakSignAiText() {
-  if (!window.speechSynthesis || !window._spAiText) return;
-  var u = new SpeechSynthesisUtterance(window._spAiText.trim());
-  u.lang = window._spAiLang === 'th' ? 'th-TH' : window._spAiLang === 'en' ? 'en-US' : 'nb-NO';
-  window.speechSynthesis.cancel();
-  window.speechSynthesis.speak(u);
+  if (!window._spAiText) return;
+  var text = window._spAiText.trim();
+  if (!text) return;
+  stopAllSpeech();
+  if (!_teacherAudio) {
+    _teacherAudio = new Audio();
+    _teacherAudio.onended = function() { _teacherTtsPlaying = false; };
+    _teacherAudio.onerror = function() { _teacherTtsPlaying = false; };
+  }
+  var langParam = window._spAiLang === 'th' ? 'th-TH' : window._spAiLang === 'en' ? 'en-US' : 'nb-NO';
+  _teacherAudio.src = '/api/tts?lang=' + langParam + '&text=' + encodeURIComponent(text);
+  _teacherAudio.playbackRate = ttsRate || 1.0;
+  _teacherAudio.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
+  _teacherAudio.play().catch(function(err){ console.error('Sign AI TTS error:', err); });
 }
 
 </script>

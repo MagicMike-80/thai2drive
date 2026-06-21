@@ -1167,8 +1167,12 @@ def laeringsbok():
 
   // ── TTS ───────────────────────────────────────────────────────────
   const langVoice = {no:'nb-NO', th:'th-TH', en:'en-US'};
+  let bokAudio = null;
   function stopTTS(){
-    speechSynthesis.cancel();
+    if (bokAudio) {
+      bokAudio.pause();
+      bokAudio.currentTime = 0;
+    }
     speaking = false;
     $('bok-tts-icon').textContent = '🔊';
     $('bok-tts-label').textContent = {no:'Les opp',th:'อ่านออกเสียง',en:'Read aloud'}[curLang]||'Les opp';
@@ -1179,12 +1183,17 @@ def laeringsbok():
     const title = (sec.section_title && sec.section_title[curLang]) || '';
     const content = (sec.content && sec.content[curLang]) || '';
     const text = title + '. ' + content;
-    const utt = new SpeechSynthesisUtterance(text);
-    utt.lang = langVoice[curLang] || 'nb-NO';
-    utt.rate = 0.88;
-    utt.onend = () => stopTTS();
-    utt.onerror = () => stopTTS();
-    speechSynthesis.speak(utt);
+    const langParam = langVoice[curLang] || 'nb-NO';
+    if (!bokAudio) {
+      bokAudio = new Audio();
+      bokAudio.onended = () => stopTTS();
+      bokAudio.onerror = () => stopTTS();
+    }
+    bokAudio.src = '/api/tts?lang=' + langParam + '&text=' + encodeURIComponent(text);
+    bokAudio.play().catch(e => {
+       console.error("Audio playback failed", e);
+       stopTTS();
+    });
     speaking = true;
     $('bok-tts-icon').textContent = '⏸';
     $('bok-tts-label').textContent = {no:'Stopp',th:'หยุด',en:'Stop'}[curLang]||'Stopp';

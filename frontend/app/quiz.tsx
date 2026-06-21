@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import * as Speech from 'expo-speech';
+import { Audio } from 'expo-av';
 import * as Haptics from 'expo-haptics';
 import { Platform, Vibration } from 'react-native';
 import { useAppStore } from '../src/store/appStore';
@@ -80,8 +80,8 @@ export default function QuizScreen() {
   const [ttsSpeed, setTtsSpeed] = useState(1.0); // 1x, 1.5x, 2x
   const ttsSpeedRef = useRef(1.0); // Live ref so speakSequence always reads the current speed
   const ttsCancelled = useRef(false);
-  const ttsGen = useRef(0); // Monotonic counter — invalidates any in-flight speakSequence
-  const voiceMapRef = useRef<Record<string, string | undefined>>({}); // lang → preferred voice identifier
+  const ttsGen = useRef(0); // Monotonic counter — invalidates any in-flight playback
+  const soundRef = useRef<Audio.Sound | null>(null);
 
   const fade = useRef(new Animated.Value(1)).current;
   const glowAnim = useRef(new Animated.Value(0)).current;
@@ -101,7 +101,7 @@ export default function QuizScreen() {
   const isDaily = mode === 'daily';
   const isSmart = mode === 'smart';
 
-  useEffect(() => { loadQ(); return () => { if (timerRef.current) clearInterval(timerRef.current); Speech.stop(); cleanupSounds(); }; }, []);
+  useEffect(() => { loadQ(); return () => { if (timerRef.current) clearInterval(timerRef.current); stopTts(); cleanupSounds(); }; }, []);
 
   // Stop TTS when question changes
   useEffect(() => { stopTts(); }, [idx]);
@@ -306,16 +306,19 @@ export default function QuizScreen() {
     router.replace({ pathname: '/results', params: { total: questions.length.toString(), correct: cor.toString(), mode: mode || 'practice', passed: isExam ? (pct >= PASS ? 'true' : 'false') : '' } });
   };
 
-  // Stop any in-flight TTS *cleanly*. The generation counter is enough to make
-  // speakSequence bail between segments — so we only need a SINGLE Speech.stop().
-  // Earlier versions scheduled delayed stops at 30ms/250ms which killed the first
-  // 1–2 segments of the NEXT playback when the user rapidly tapped play again.
-  const stopTts = () => {
-    ttsGen.current += 1; // invalidates any in-flight speakSequence
+  // Stop any in-flight TTS cleanly.
+  const stopTts = async () => {
+    ttsGen.current += 1; // invalidates any in-flight playback
     ttsCancelled.current = true;
     setTtsPlaying(null);
     setSpeaking(false);
-    try { Speech.stop(); } catch {}
+    if (soundRef.current) {
+      try {
+        await soundRef.current.stopAsync();
+        await soundRef.current.unloadAsync();
+      } catch {}
+      soundRef.current = null;
+    }
   };
 
   const langCode = (l: string) => l === 'th' ? 'th-TH' : l === 'no' ? 'nb-NO' : 'en-US';
@@ -333,47 +336,7 @@ export default function QuizScreen() {
     }
   };
 
-  // Prefer male voices for speech. Expo Speech doesn't expose "gender" directly,
-  // so we heuristically match voice identifiers/names against known male markers.
-  // Google TTS uses x-ttm (Thai male), x-stm/wavenet-D (male English), etc.
-  // We pick per-language once on mount and cache the identifier.
-  const MALE_PATTERNS: Record<string, RegExp[]> = {
-    'th-TH': [/-ttm\b|-stm\b|\bmale\b|-a\b|\bm01\b/i],
-    'nb-NO': [/-ttm\b|-wavenet-b\b|-wavenet-c\b|\bmale\b|\bm01\b/i],
-    'en-US': [/-wavenet-[abd]\b|-neural2-[abd]\b|-ttm\b|\bmale\b|\bm01\b/i],
-  };
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const voices = await Speech.getAvailableVoicesAsync();
-        const pickFor = (lang: string): string | undefined => {
-          const candidates = voices.filter((v: any) =>
-            typeof v.language === 'string' && v.language.toLowerCase().startsWith(lang.toLowerCase())
-          );
-          if (!candidates.length) return undefined;
-          const patterns = MALE_PATTERNS[lang] || [];
-          // 1) Match against known male patterns on identifier + name
-          for (const p of patterns) {
-            const hit = candidates.find((v: any) => p.test(v.identifier || '') || p.test(v.name || ''));
-            if (hit) return hit.identifier;
-          }
-          // 2) Fall back to the first "enhanced/local" voice if available (better quality)
-          const enhanced = candidates.find((v: any) => String(v.quality || '').toLowerCase() === 'enhanced');
-          return (enhanced || candidates[0]).identifier;
-        };
-        voiceMapRef.current = {
-          'th-TH': pickFor('th-TH'),
-          'nb-NO': pickFor('nb-NO'),
-          'en-US': pickFor('en-US'),
-        };
-        // One-time log so user can see what was picked
-        console.log('[Speech] Picked voices:', voiceMapRef.current);
-      } catch (e) {
-        console.warn('[Speech] voice enumeration failed', e);
-      }
-    })();
-  }, []);
 
   const SPEED_OPTIONS = [
     { label: '1x', value: 1.0 },
@@ -397,71 +360,37 @@ export default function QuizScreen() {
     }
   };
 
-  const speakSequence = async (segments: { text: string; lang: string }[]) => {
+  const playAudio = async (text: string, lang: string) => {
     ttsCancelled.current = false;
-    const myGen = ++ttsGen.current; // claim this generation; any newer stopTts will invalidate us
+    const myGen = ++ttsGen.current;
 
-    // ── Android TTS warm-up (initial) ──
-    // Speech.stop() (called by stopTts before us) doesn't fully drain on Android
-    // for ~150-250ms. Any Speech.speak() fired during that window is silently
-    // dropped — that was the "starts from B" bug. We unconditionally wait here
-    // so the first segment (the question itself) ALWAYS plays.
-    await new Promise(r => setTimeout(r, 220));
-    if (ttsCancelled.current || ttsGen.current !== myGen) return;
+    try {
+      const langParam = lang === 'th' ? 'th-TH' : lang === 'no' ? 'nb-NO' : 'en-US';
+      const url = `${process.env.EXPO_PUBLIC_BACKEND_URL}/api/tts?lang=${langParam}&text=${encodeURIComponent(text)}`;
+      
+      const { sound } = await Audio.Sound.createAsync(
+        { uri: url },
+        { shouldPlay: true, rate: ttsSpeedRef.current }
+      );
 
-    for (let i = 0; i < segments.length; i++) {
-      if (ttsCancelled.current || ttsGen.current !== myGen) break;
-      const s = segments[i];
-      const code = langCode(s.lang);
-      const baseRate = s.lang === 'th' ? 0.85 : 0.9;
-      const rate = Math.min(2.0, Math.max(0.1, baseRate * ttsSpeedRef.current));
-
-      // ── Inter-segment safety on Android ──
-      // After onDone fires for the previous segment, the Android TTS engine
-      // is still finalizing for ~50-200ms. Calling Speech.speak() during
-      // that window silently drops the utterance — that was the
-      // "skips option A" bug. We poll Speech.isSpeakingAsync() until the
-      // engine reports idle, then add a small fixed gap. iOS doesn't have
-      // this bug, so we use a much shorter delay there.
-      if (i > 0) {
-        if (Platform.OS === 'android') {
-          // Poll up to ~1.5s (usually idle within 50-100ms)
-          for (let tries = 0; tries < 30; tries++) {
-            if (ttsCancelled.current || ttsGen.current !== myGen) break;
-            try {
-              const speaking = await Speech.isSpeakingAsync();
-              if (!speaking) break;
-            } catch {}
-            await new Promise(r => setTimeout(r, 50));
-          }
-          // Fixed gap so the next utterance is reliably accepted
-          if (!ttsCancelled.current && ttsGen.current === myGen) {
-            await new Promise(r => setTimeout(r, 180));
-          }
-        } else {
-          await new Promise(r => setTimeout(r, 80));
-        }
-        if (ttsCancelled.current || ttsGen.current !== myGen) break;
+      if (ttsCancelled.current || ttsGen.current !== myGen) {
+        await sound.unloadAsync();
+        return;
       }
 
-      // NOTE: intentionally NOT passing `voice`. On Android, picking a voice
-      // identifier via getAvailableVoicesAsync() is unreliable — if the exact
-      // voice isn't installed/downloaded, Speech.speak silently drops the first
-      // 1–2 utterances before falling back to default. Using only `language`
-      // lets Android pick the default installed voice for that locale.
-      await new Promise<void>((resolve) => {
-        let resolved = false;
-        const finish = () => { if (!resolved) { resolved = true; resolve(); } };
-        Speech.speak(s.text, {
-          language: code,
-          rate,
-          onDone: finish,
-          onError: finish,
-          onStopped: finish,
-        });
+      soundRef.current = sound;
+      
+      sound.setOnPlaybackStatusUpdate((status: any) => {
+        if (status.isLoaded && status.didJustFinish) {
+          setTtsPlaying(null);
+          setSpeaking(false);
+          sound.unloadAsync();
+        }
       });
-      // Extra guard: if we were cancelled while a segment was running, bail now
-      if (ttsCancelled.current || ttsGen.current !== myGen) break;
+    } catch (e) {
+      console.warn('[TTS] playback failed', e);
+      setTtsPlaying(null);
+      setSpeaking(false);
     }
   };
 
@@ -472,14 +401,13 @@ export default function QuizScreen() {
     setTtsPlaying('question');
     setSpeaking(true);
 
-    const segments: { text: string; lang: string }[] = [];
-    // Always read in Thai only
-    segments.push({ text: qT(q, 'th'), lang: 'th' });
+    const langToSpeak = language === 'no' ? 'no' : language === 'th' ? 'th' : 'en';
+    const textParts = [qT(q, langToSpeak)];
     for (const L of LETTERS) {
-      segments.push({ text: `${L}. ${optText(q, L, 'th')}`, lang: 'th' });
+      textParts.push(`${L}. ${optText(q, L, langToSpeak)}`);
     }
 
-    await speakSequence(segments);
+    await playAudio(textParts.join('. '), langToSpeak);
     setTtsPlaying(null);
     setSpeaking(false);
   };
@@ -491,11 +419,8 @@ export default function QuizScreen() {
     setTtsPlaying('explanation');
     setSpeaking(true);
 
-    const segments: { text: string; lang: string }[] = [];
-    // Always read explanation in Thai only
-    segments.push({ text: eT(q, 'th'), lang: 'th' });
-
-    await speakSequence(segments);
+    const langToSpeak = language === 'no' ? 'no' : language === 'th' ? 'th' : 'en';
+    await playAudio(eT(q, langToSpeak), langToSpeak);
     setTtsPlaying(null);
     setSpeaking(false);
   };

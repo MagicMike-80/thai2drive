@@ -8,7 +8,7 @@ const SCREEN_W = Dimensions.get('window').width;
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import * as Speech from 'expo-speech';
+import { Audio } from 'expo-av';
 import { useAppStore } from '../src/store/appStore';
 import { api, BookChapter, BookSection } from '../src/services/api';
 import { BookHtml } from '../src/components/BookHtml';
@@ -79,9 +79,22 @@ export default function BookScreen() {
   const [speaking, setSpeaking] = useState(false);
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
+  const soundRef = useRef<Audio.Sound | null>(null);
+
+  const stopTts = async () => {
+    setSpeaking(false);
+    if (soundRef.current) {
+      try {
+        await soundRef.current.stopAsync();
+        await soundRef.current.unloadAsync();
+      } catch {}
+      soundRef.current = null;
+    }
+  };
+
   useEffect(() => {
     loadChapters();
-    return () => { Speech.stop(); };
+    return () => { stopTts(); };
   }, []);
 
   useEffect(() => {
@@ -108,8 +121,7 @@ export default function BookScreen() {
 
   const loadSections = async (chapterNum: number) => {
     setLoading(true);
-    Speech.stop();
-    setSpeaking(false);
+    stopTts();
     try {
       const data = await api.getChapterSections(chapterNum);
       setSections(data);
@@ -123,35 +135,54 @@ export default function BookScreen() {
 
   const currentSection = sections[selectedSection] || null;
 
-  const toggleSpeech = () => {
+  const toggleSpeech = async () => {
     if (speaking) {
-      Speech.stop();
-      setSpeaking(false);
+      await stopTts();
       return;
     }
     if (!currentSection) return;
-    const text = currentSection.content[lang] || currentSection.content.no;
-    const title = currentSection.section_title[lang] || currentSection.section_title.no;
-    Speech.speak(`${title}. ${text}`, {
-      language: LANG_CODES[lang] || 'nb-NO',
-      rate: 0.85,
-      onDone: () => setSpeaking(false),
-      onError: () => setSpeaking(false),
-    });
+    const text = currentSection.content[lang] || currentSection.content.no || '';
+    const title = currentSection.section_title[lang] || currentSection.section_title.no || '';
+    
+    // Strip HTML tags for clean reading
+    const cleanText = text.replace(/<[^>]+>/g, '');
+    const fullText = `${title}. ${cleanText}`;
+    if (!fullText.trim()) return;
+
     setSpeaking(true);
+
+    try {
+      const targetLang = lang === 'th' ? 'th-TH' : lang === 'no' ? 'nb-NO' : 'en-US';
+      const url = `${process.env.EXPO_PUBLIC_BACKEND_URL}/api/tts?lang=${targetLang}&text=${encodeURIComponent(fullText)}`;
+      
+      const { sound } = await Audio.Sound.createAsync(
+        { uri: url },
+        { shouldPlay: true }
+      );
+      
+      soundRef.current = sound;
+      
+      sound.setOnPlaybackStatusUpdate((status: any) => {
+        if (status.isLoaded && status.didJustFinish) {
+          setSpeaking(false);
+          sound.unloadAsync();
+        }
+      });
+    } catch (e) {
+      console.warn('[Book TTS] playback failed', e);
+      setSpeaking(false);
+    }
   };
 
   const goNext = () => {
-    Speech.stop();
-    setSpeaking(false);
+    stopTts();
     if (selectedSection < sections.length - 1) {
       setSelectedSection(s => s + 1);
     }
   };
 
   const goPrev = () => {
-    Speech.stop();
-    setSpeaking(false);
+    stopTts();
     if (selectedSection > 0) {
       setSelectedSection(s => s - 1);
     }
@@ -210,7 +241,7 @@ export default function BookScreen() {
     <SafeAreaView style={[st.container, { backgroundColor: c.bg }]}>
       {/* Header */}
       <View style={[st.header, { borderBottomColor: c.divider }]}>
-        <TouchableOpacity onPress={() => { Speech.stop(); setSpeaking(false); setSelectedChapter(null); setSections([]); }} style={st.backBtn}>
+        <TouchableOpacity onPress={() => { stopTts(); setSelectedChapter(null); setSections([]); }} style={st.backBtn}>
           <Ionicons name="arrow-back" size={24} color={c.text} />
         </TouchableOpacity>
         <Text style={[st.headerTitle, { color: c.text }]} numberOfLines={1}>

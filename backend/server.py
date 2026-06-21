@@ -4775,92 +4775,66 @@ async def ensure_indexes():
         logging.getLogger("indexes").warning("Usage index creation skipped: %s", exc)
 
 
-@api_router.get("/tts")
+@app.get("/api/tts")
 async def text_to_speech(text: str, lang: str = "th-TH"):
-    import base64
+    import hashlib
     import httpx
     from fastapi import HTTPException
-    from fastapi.responses import Response
+    from fastapi.responses import FileResponse, Response
     
-    google_key = os.environ.get("GOOGLE_API_KEY")
-    if not google_key:
-        logger.error("TTS failed: GOOGLE_API_KEY not configured in backend env.")
-        raise HTTPException(status_code=500, detail="GOOGLE_API_KEY not configured on backend.")
+    elevenlabs_key = os.environ.get("ELEVENLABS_API_KEY")
+    if not elevenlabs_key:
+        logger.error("TTS failed: ELEVENLABS_API_KEY not configured in backend env.")
+        raise HTTPException(status_code=500, detail="ELEVENLABS_API_KEY not configured on backend.")
         
-    # Determine voice name and gender based on language
-    voice_name = "th-TH-Chirp3-HD-Achird" if lang.startswith("th") else "nb-NO-Standard-B" if lang.startswith("no") else None
+    # Create a unique cache key based on language and text
+    cache_key = hashlib.md5(f"{lang}:{text}".encode('utf-8')).hexdigest()
+    cache_dir = os.path.join("public_assets", "audio")
+    os.makedirs(cache_dir, exist_ok=True)
+    cache_path = os.path.join(cache_dir, f"{cache_key}.mp3")
     
-    # Check if we should chunk the text (Chirp3-HD model has a ~250 character limit per request)
-    # We only need to chunk for Thai (th) since we use Chirp3-HD there.
-    # Other languages use standard/neural voices which support up to 5000 characters.
-    max_chunk_size = 200
-    if lang.startswith("th") and len(text) > max_chunk_size:
-        # Split text into chunks by space to preserve words where possible
-        words = text.split(" ")
-        chunks = []
-        current_chunk = []
-        current_len = 0
-        for word in words:
-            if not word:
-                continue
-            if len(word) > max_chunk_size:
-                if current_chunk:
-                    chunks.append(" ".join(current_chunk))
-                    current_chunk = []
-                    current_len = 0
-                for i in range(0, len(word), max_chunk_size):
-                    chunks.append(word[i:i+max_chunk_size])
-                continue
-            if current_len + len(word) + (1 if current_chunk else 0) <= max_chunk_size:
-                current_chunk.append(word)
-                current_len += len(word) + (1 if len(current_chunk) > 1 else 0)
-            else:
-                chunks.append(" ".join(current_chunk))
-                current_chunk = [word]
-                current_len = len(word)
-        if current_chunk:
-            chunks.append(" ".join(current_chunk))
-        chunks = [c for c in chunks if c.strip()]
-    else:
-        chunks = [text]
-
-    url = f"https://texttospeech.googleapis.com/v1/text:synthesize?key={google_key}"
-    headers = {"Content-Type": "application/json"}
+    # Return cached audio if it exists
+    if os.path.exists(cache_path):
+        return FileResponse(cache_path, media_type="audio/mpeg")
     
-    async def fetch_chunk(chunk_text: str) -> bytes:
-        payload = {
-            "input": {"text": chunk_text},
-            "voice": {
-                "languageCode": lang,
-                "ssmlGender": "MALE",
-            },
-            "audioConfig": {"audioEncoding": "MP3"}
+    # ElevenLabs setup
+    voice_id = "F7EKLV3w90UpbDtDBU44"
+    url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}"
+    
+    headers = {
+        "Accept": "audio/mpeg",
+        "Content-Type": "application/json",
+        "xi-api-key": elevenlabs_key
+    }
+    
+    payload = {
+        "text": text,
+        "model_id": "eleven_multilingual_v2",
+        "voice_settings": {
+            "stability": 0.5,
+            "similarity_boost": 0.75
         }
-        if voice_name:
-            payload["voice"]["name"] = voice_name
-            
-        async with httpx.AsyncClient() as client:
-            r = await client.post(url, json=payload, headers=headers)
-            if r.status_code != 200:
-                logger.error("Google TTS REST API returned error status %d: %s", r.status_code, r.text)
-                raise HTTPException(status_code=r.status_code, detail=f"Google TTS API error: {r.text}")
-            res_data = r.json()
-            return base64.b64decode(res_data["audioContent"])
-
+    }
+    
     try:
-        import asyncio
-        # Fetch all chunks in parallel
-        tasks = [fetch_chunk(chunk) for chunk in chunks]
-        audio_contents = await asyncio.gather(*tasks)
-        # Concatenate all MP3 chunks together
-        combined_audio = b"".join(audio_contents)
-        return Response(content=combined_audio, media_type="audio/mpeg")
+        async with httpx.AsyncClient() as client:
+            # ElevenLabs can sometimes take a while for longer texts
+            r = await client.post(url, json=payload, headers=headers, timeout=60.0)
+            if r.status_code != 200:
+                logger.error("ElevenLabs API error %d: %s", r.status_code, r.text)
+                raise HTTPException(status_code=r.status_code, detail=f"ElevenLabs API error: {r.text}")
+            
+            # Save audio to cache
+            with open(cache_path, "wb") as f:
+                f.write(r.content)
+                
+            return FileResponse(cache_path, media_type="audio/mpeg")
+            
     except HTTPException as he:
         raise he
     except Exception as e:
         logger.error("TTS generation failed: %s", e)
         raise HTTPException(status_code=500, detail=f"TTS synthesis failed: {str(e)}")
-
 
 @app.get("/api/health")
 async def health_check():

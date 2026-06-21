@@ -1208,17 +1208,31 @@ LANDING_JS = r"""
     } catch(e) {}
   }
 
+  let _landingAudio = null;
+
   // ── TTS ──
   function speakText(text) {
-    if (!('speechSynthesis' in window)) return;
-    window.speechSynthesis.cancel();
-    if (ttsPlaying) { ttsPlaying = false; updateTtsBtn(); return; }
-    const utt = new SpeechSynthesisUtterance(text);
-    utt.lang = 'th-TH';
-    utt.rate = ttsRate;
-    utt.onstart = () => { ttsPlaying = true; updateTtsBtn(); };
-    utt.onend = utt.onerror = () => { ttsPlaying = false; updateTtsBtn(); };
-    window.speechSynthesis.speak(utt);
+    var wasPlaying = ttsPlaying;
+    stopAllSpeech();
+    if (wasPlaying) return;
+    
+    if (!_landingAudio) {
+      _landingAudio = new Audio();
+      _landingAudio.onended = () => { ttsPlaying = false; updateTtsBtn(); };
+      _landingAudio.onerror = () => { ttsPlaying = false; updateTtsBtn(); };
+    }
+    
+    // Always Thai on landing page try-quiz
+    _landingAudio.src = '/api/tts?lang=th-TH&text=' + encodeURIComponent(text);
+    _landingAudio.playbackRate = ttsRate || 1.0;
+    
+    ttsPlaying = true;
+    updateTtsBtn();
+    _landingAudio.play().catch(err => {
+      console.error('Landing TTS failed:', err);
+      ttsPlaying = false;
+      updateTtsBtn();
+    });
   }
 
   function updateTtsBtn() {
@@ -1228,7 +1242,7 @@ LANDING_JS = r"""
 
   // Stop speech when the user leaves the page (close, navigate away, switch app/tab)
   function stopAllSpeech() {
-    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+    if (_landingAudio) { try { _landingAudio.pause(); } catch(e){} }
     ttsPlaying = false;
     updateTtsBtn();
   }

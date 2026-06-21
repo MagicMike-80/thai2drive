@@ -16,7 +16,6 @@ import {
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Audio } from 'expo-av';
-import * as Speech from 'expo-speech';
 import { useAppStore } from '../src/store/appStore';
 
 // ─── Translation strings ─────────────────────────────────────────────────────
@@ -326,6 +325,18 @@ export default function TeacherScreen() {
   }, [lang]);
 
   const [speakingIndex, setSpeakingIndex] = useState<number | null>(null);
+  const teacherSoundRef = useRef<Audio.Sound | null>(null);
+
+  const stopTts = async () => {
+    setSpeakingIndex(null);
+    if (teacherSoundRef.current) {
+      try {
+        await teacherSoundRef.current.stopAsync();
+        await teacherSoundRef.current.unloadAsync();
+      } catch {}
+      teacherSoundRef.current = null;
+    }
+  };
 
   const handleSpeak = useCallback(async (text: string, msgIndex: number) => {
     const cleanText = text
@@ -334,62 +345,41 @@ export default function TeacherScreen() {
       .trim();
     if (!cleanText) return;
 
-    const targetLang = lang === 'th' ? 'th-TH' : lang === 'en' ? 'en-US' : 'nb-NO';
+    if (speakingIndex === msgIndex) {
+      await stopTts();
+      return;
+    }
+    
+    await stopTts();
+    setSpeakingIndex(msgIndex);
 
-    if (Platform.OS === 'web') {
-      const synth = (globalThis as any).speechSynthesis;
-      if (!synth) return;
-      if (speakingIndex === msgIndex) {
-        synth.cancel();
-        setSpeakingIndex(null);
-        return;
-      }
-      synth.cancel();
-      const utter = new (globalThis as any).SpeechSynthesisUtterance(cleanText);
-      utter.lang = targetLang;
-      utter.onend = () => setSpeakingIndex(null);
-      utter.onerror = () => setSpeakingIndex(null);
-      setSpeakingIndex(msgIndex);
-      synth.speak(utter);
-    } else {
-      if (speakingIndex === msgIndex) {
-        await Speech.stop();
-        setSpeakingIndex(null);
-        return;
-      }
-      await Speech.stop();
-      setSpeakingIndex(msgIndex);
-
-      // Split text into smaller sentences or clauses to prevent stuttering
-      const splitRegex = lang === 'th' ? /\s+/ : /(?<=[.?!])\s+/;
-      const chunks = cleanText.split(splitRegex).map(chunk => chunk.trim()).filter(Boolean);
-
-      if (chunks.length === 0) {
-        setSpeakingIndex(null);
-        return;
-      }
-
-      chunks.forEach((chunk, index) => {
-        const isLast = index === chunks.length - 1;
-        Speech.speak(chunk, {
-          language: targetLang,
-          onDone: isLast ? () => setSpeakingIndex(null) : undefined,
-          onError: isLast ? () => setSpeakingIndex(null) : undefined,
-        });
+    try {
+      const targetLang = lang === 'th' ? 'th-TH' : lang === 'no' ? 'nb-NO' : 'en-US';
+      const url = `${process.env.EXPO_PUBLIC_BACKEND_URL}/api/tts?lang=${targetLang}&text=${encodeURIComponent(cleanText)}`;
+      
+      const { sound } = await Audio.Sound.createAsync(
+        { uri: url },
+        { shouldPlay: true }
+      );
+      
+      teacherSoundRef.current = sound;
+      
+      sound.setOnPlaybackStatusUpdate((status: any) => {
+        if (status.isLoaded && status.didJustFinish) {
+          setSpeakingIndex(null);
+          sound.unloadAsync();
+        }
       });
+    } catch (e) {
+      console.warn('[Teacher TTS] playback failed', e);
+      setSpeakingIndex(null);
     }
   }, [speakingIndex, lang]);
 
   // Cancel speech on language switch or screen unmount
   React.useEffect(() => {
     return () => {
-      if (Platform.OS === 'web') {
-        const synth = (globalThis as any).speechSynthesis;
-        if (synth) { synth.cancel(); }
-      } else {
-        Speech.stop();
-      }
-      setSpeakingIndex(null);
+      stopTts();
     };
   }, [lang]);
 
