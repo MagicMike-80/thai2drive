@@ -4838,20 +4838,11 @@ async def text_to_speech(text: str, lang: str = "th-TH"):
     if os.path.exists(cache_path):
         return FileResponse(cache_path, media_type="audio/mpeg")
 
-    # ── Language-based routing ────────────────────────────────────────────
-    # Thai → Google Cloud TTS (native Thai voice, no accent issues)
-    # Norwegian/English → ElevenLabs Ai Mike (your cloned voice)
+    # ── Language routing ──────────────────────────────────────────────────
+    # All languages → ElevenLabs Ai Mike (eleven_flash_v2_5 supports Thai, Norsk, English)
     google_key = os.environ.get("GOOGLE_API_KEY")
-
-    if lang == "th-TH" and google_key:
-        # Thai goes directly to Google Cloud TTS — ElevenLabs can't do Thai
-        # with a Norwegian-cloned voice without sounding accented.
-        logger.info("Thai TTS → Google Cloud TTS (native Thai voice)")
-        return await _google_tts(text, lang, google_key, cache_path)
-
-    # Norwegian/English → ElevenLabs Ai Mike (your cloned voice)
     elevenlabs_key = os.environ.get("ELEVENLABS_API_KEY")
-    if elevenlabs_key and lang != "th-TH":
+    if elevenlabs_key:
         try:
             voice_id = "IoOuTUO7t2kI2VTJqI10"
             url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}"
