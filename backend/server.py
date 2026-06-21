@@ -4804,7 +4804,7 @@ async def text_to_speech(text: str, lang: str = "th-TH"):
     elevenlabs_key = os.environ.get("ELEVENLABS_API_KEY")
     if elevenlabs_key:
         try:
-            voice_id = "F7EKLV3w90UpbDtDBU44"
+            voice_id = "IoOuTUO7t2kI2VTJqI10"
             url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}"
             headers = {
                 "Accept": "audio/mpeg",
