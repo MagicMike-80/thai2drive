@@ -8,7 +8,6 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useAppStore } from '../src/store/appStore';
 import { api } from '../src/services/api';
 import { LanguageSwitcher } from '../src/components/LanguageSwitcher';
-import { AppBrand } from '../src/components/AppBrand';
 import { CoachBanner } from '../src/components/CoachBanner';
 import { BottomNavBar } from '../src/components/BottomNavBar';
 import { ExpandableButtonGroup } from '../src/components/ExpandableButtonGroup';
@@ -144,7 +143,7 @@ export default function HomeScreen() {
       )}
 
       <ScrollView contentContainerStyle={st.scroll} showsVerticalScrollIndicator={false}>
-        {/* Top bar: language + settings | brand */}
+        {/* Top bar: language + settings */}
         <View style={st.topBar}>
           <View style={st.topRight}>
             <LanguageSwitcher size="sm" />
@@ -152,7 +151,6 @@ export default function HomeScreen() {
               <Ionicons name="settings-outline" size={20} color={c.text} />
             </TouchableOpacity>
           </View>
-          <AppBrand size="md" />
         </View>
 
         {/* Brand */}
