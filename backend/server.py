@@ -4775,65 +4775,97 @@ async def ensure_indexes():
         logging.getLogger("indexes").warning("Usage index creation skipped: %s", exc)
 
 
+# Google Cloud TTS voice mapping for all three app languages
+_GOOGLE_TTS_VOICES = {
+    "th-TH": "th-TH-Standard-A",
+    "nb-NO": "nb-NO-Wavenet-A",
+    "en-US": "en-US-Wavenet-D",
+}
+
 @app.get("/api/tts")
 async def text_to_speech(text: str, lang: str = "th-TH"):
     import hashlib
+    import base64
     import httpx
     from fastapi import HTTPException
     from fastapi.responses import FileResponse, Response
-    
-    elevenlabs_key = os.environ.get("ELEVENLABS_API_KEY")
-    if not elevenlabs_key:
-        logger.error("TTS failed: ELEVENLABS_API_KEY not configured in backend env.")
-        raise HTTPException(status_code=500, detail="ELEVENLABS_API_KEY not configured on backend.")
-        
+
     # Create a unique cache key based on language and text
     cache_key = hashlib.md5(f"{lang}:{text}".encode('utf-8')).hexdigest()
     cache_dir = os.path.join("public_assets", "audio")
     os.makedirs(cache_dir, exist_ok=True)
     cache_path = os.path.join(cache_dir, f"{cache_key}.mp3")
-    
+
     # Return cached audio if it exists
     if os.path.exists(cache_path):
         return FileResponse(cache_path, media_type="audio/mpeg")
-    
-    # ElevenLabs setup
-    voice_id = "F7EKLV3w90UpbDtDBU44"
-    url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}"
-    
-    headers = {
-        "Accept": "audio/mpeg",
-        "Content-Type": "application/json",
-        "xi-api-key": elevenlabs_key
+
+    # ── Try ElevenLabs first (your cloned voice) ──────────────────────────
+    elevenlabs_key = os.environ.get("ELEVENLABS_API_KEY")
+    if elevenlabs_key:
+        try:
+            voice_id = "F7EKLV3w90UpbDtDBU44"
+            url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}"
+            headers = {
+                "Accept": "audio/mpeg",
+                "Content-Type": "application/json",
+                "xi-api-key": elevenlabs_key
+            }
+            payload = {
+                "text": text,
+                "model_id": "eleven_multilingual_v2",
+                "voice_settings": {
+                    "stability": 0.5,
+                    "similarity_boost": 0.75
+                }
+            }
+            async with httpx.AsyncClient() as client:
+                r = await client.post(url, json=payload, headers=headers, timeout=60.0)
+                if r.status_code == 200:
+                    with open(cache_path, "wb") as f:
+                        f.write(r.content)
+                    return FileResponse(cache_path, media_type="audio/mpeg")
+                else:
+                    logger.warning("ElevenLabs API error %d — falling back to Google TTS", r.status_code)
+        except Exception as e:
+            logger.warning("ElevenLabs request failed: %s — falling back to Google TTS", e)
+    else:
+        logger.info("ELEVENLABS_API_KEY not set — using Google Cloud TTS")
+
+    # ── Fallback: Google Cloud Text-to-Speech ──────────────────────────────
+    google_key = os.environ.get("GOOGLE_API_KEY")
+    if not google_key:
+        raise HTTPException(status_code=500, detail="No TTS provider available (neither ELEVENLABS_API_KEY nor GOOGLE_API_KEY configured).")
+
+    # Pick the best voice for the language
+    voice_name = _GOOGLE_TTS_VOICES.get(lang, "th-TH-Standard-A")
+    gurl = f"https://texttospeech.googleapis.com/v1/text:synthesize?key={google_key}"
+    gpayload = {
+        "input": {"text": text},
+        "voice": {"languageCode": lang, "name": voice_name},
+        "audioConfig": {"audioEncoding": "MP3"}
     }
-    
-    payload = {
-        "text": text,
-        "model_id": "eleven_multilingual_v2",
-        "voice_settings": {
-            "stability": 0.5,
-            "similarity_boost": 0.75
-        }
-    }
-    
+    gheaders = {"Content-Type": "application/json"}
+
     try:
         async with httpx.AsyncClient() as client:
-            # ElevenLabs can sometimes take a while for longer texts
-            r = await client.post(url, json=payload, headers=headers, timeout=60.0)
+            r = await client.post(gurl, json=gpayload, headers=gheaders, timeout=30.0)
             if r.status_code != 200:
-                logger.error("ElevenLabs API error %d: %s", r.status_code, r.text)
-                raise HTTPException(status_code=r.status_code, detail=f"ElevenLabs API error: {r.text}")
-            
-            # Save audio to cache
+                logger.error("Google TTS API error %d: %s", r.status_code, r.text)
+                raise HTTPException(status_code=r.status_code, detail=f"Google TTS API error: {r.text}")
+
+            data = r.json()
+            audio_bytes = base64.b64decode(data["audioContent"])
+
             with open(cache_path, "wb") as f:
-                f.write(r.content)
-                
+                f.write(audio_bytes)
+
             return FileResponse(cache_path, media_type="audio/mpeg")
-            
+
     except HTTPException as he:
         raise he
     except Exception as e:
-        logger.error("TTS generation failed: %s", e)
+        logger.error("Google TTS synthesis failed: %s", e)
         raise HTTPException(status_code=500, detail=f"TTS synthesis failed: {str(e)}")
 
 @app.get("/api/health")
