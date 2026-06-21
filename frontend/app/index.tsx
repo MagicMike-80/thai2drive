@@ -11,6 +11,7 @@ import { LanguageSwitcher } from '../src/components/LanguageSwitcher';
 import { AppBrand } from '../src/components/AppBrand';
 import { CoachBanner } from '../src/components/CoachBanner';
 import { BottomNavBar } from '../src/components/BottomNavBar';
+import { ExpandableButtonGroup } from '../src/components/ExpandableButtonGroup';
 
 const T2D_ICON = require('../assets/images/t2d-icon.png');
 
@@ -230,72 +231,103 @@ export default function HomeScreen() {
           </TouchableOpacity>
         </View>
 
-        {/* Quick-access row: Book · Signs · Stats · AI */}
+        {/* Quick-access buttons: 3 expandable groups */}
         <View style={st.quickRow}>
-          <TouchableOpacity
-            style={[st.quickBtn, { backgroundColor: c.card, borderColor: c.cardBorder }]}
-            onPress={() => router.push('/book')} activeOpacity={0.75}>
-            <Ionicons name="book-outline" size={22} color={c.accent} />
-            <Text style={[st.quickLabel, { color: c.text }]}>{t.studyBook}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[st.quickBtn, { backgroundColor: c.card, borderColor: c.cardBorder }]}
-            onPress={() => router.push('/signs')} activeOpacity={0.75}>
-            <Ionicons name="warning-outline" size={22} color="#F59E0B" />
-            <Text style={[st.quickLabel, { color: c.text }]}>{t.signGallery}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[st.quickBtn, { backgroundColor: c.card, borderColor: c.cardBorder }]}
-            onPress={() => router.push('/stats')} activeOpacity={0.75}>
-            <Ionicons name="bar-chart-outline" size={22} color="#10B981" />
-            <Text style={[st.quickLabel, { color: c.text }]}>{t.myStats}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            testID="ai-dashboard-btn"
-            style={[st.quickBtn, { backgroundColor: c.accentBg, borderColor: `${c.accent}50` }]}
-            onPress={() => router.push('/ai-dashboard')} activeOpacity={0.75}>
-            <Ionicons name="sparkles" size={22} color={c.accent} />
-            <Text style={[st.quickLabel, { color: c.accent }]}>{t.aiInsights}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            testID="traffic-math-btn"
-            style={[st.quickBtn, { backgroundColor: 'rgba(249,115,22,0.10)', borderColor: 'rgba(249,115,22,0.35)' }]}
-            onPress={() => {
-              if (isDesktopWeb) setShowTrafficPanel(true);
-              else router.push('/traffic-math');
-            }}
-            activeOpacity={0.75}>
-            <Ionicons name="speedometer-outline" size={22} color="#F97316" />
-            <Text style={[st.quickLabel, { color: '#F97316' }]}>{t.trafficMath}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            testID="teacher-btn"
-            style={[st.quickBtn, { backgroundColor: 'rgba(30,58,95,0.25)', borderColor: 'rgba(59,130,246,0.40)' }]}
-            onPress={() => router.push('/teacher')} activeOpacity={0.75}>
-            <Text style={{ fontSize: 22 }}>🚗</Text>
-            <Text style={[st.quickLabel, { color: '#60A5FA' }]}>{t.michaelTeacher}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            testID="library-btn"
-            style={[st.quickBtn, { backgroundColor: 'rgba(16,185,129,0.10)', borderColor: 'rgba(16,185,129,0.35)' }]}
-            onPress={() => router.push('/library')} activeOpacity={0.75}>
-            <Ionicons name="library-outline" size={22} color="#10B981" />
-            <Text style={[st.quickLabel, { color: '#10B981' }]}>{t.library}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            testID="glossary-btn"
-            style={[st.quickBtn, { backgroundColor: 'rgba(168,85,247,0.10)', borderColor: 'rgba(168,85,247,0.35)' }]}
-            onPress={() => router.push('/glossary')} activeOpacity={0.75}>
-            <Ionicons name="language-outline" size={22} color="#A855F7" />
-            <Text style={[st.quickLabel, { color: '#A855F7' }]}>{t.glossary}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            testID="social-btn"
-            style={[st.quickBtn, { backgroundColor: 'rgba(239,68,68,0.10)', borderColor: 'rgba(239,68,68,0.35)' }]}
-            onPress={() => router.push('/social')} activeOpacity={0.75}>
-            <Ionicons name="share-social-outline" size={22} color="#EF4444" />
-            <Text style={[st.quickLabel, { color: '#EF4444' }]}>{t.social}</Text>
-          </TouchableOpacity>
+          {/* Group 1: Lærer (Instructor) — cyan parent */}
+          <ExpandableButtonGroup
+            parentId="teacher"
+            parentLabel={t.michaelTeacher}
+            parentIcon="emoji"
+            parentColor="#00FFFF"
+            children={[
+              {
+                id: 'library',
+                label: t.library,
+                icon: 'library-outline',
+                color: '#FF69B4',
+                onPress: () => router.push('/library'),
+              },
+              {
+                id: 'social',
+                label: t.social,
+                icon: 'share-social-outline',
+                color: '#FF1493',
+                onPress: () => router.push('/social'),
+              },
+              {
+                id: 'book',
+                label: t.studyBook,
+                icon: 'book-outline',
+                color: '#00FFFF',
+                onPress: () => router.push('/book'),
+              },
+            ]}
+          />
+
+          {/* Group 2: Skilt (Signs) — lime parent */}
+          <ExpandableButtonGroup
+            parentId="signs"
+            parentLabel={t.signGallery}
+            parentIcon="warning-outline"
+            parentColor="#00FF00"
+            children={[
+              {
+                id: 'traffic-math',
+                label: t.trafficMath,
+                icon: 'speedometer-outline',
+                color: '#FF6600',
+                onPress: () => {
+                  if (isDesktopWeb) setShowTrafficPanel(true);
+                  else router.push('/traffic-math');
+                },
+              },
+              {
+                id: 'stats',
+                label: t.myStats,
+                icon: 'bar-chart-outline',
+                color: '#00FF00',
+                onPress: () => router.push('/stats'),
+              },
+              {
+                id: 'ai',
+                label: t.aiInsights,
+                icon: 'sparkles',
+                color: '#FF6600',
+                onPress: () => router.push('/ai-dashboard'),
+              },
+            ]}
+          />
+
+          {/* Group 3: Læring (Learning) — magenta parent */}
+          <ExpandableButtonGroup
+            parentId="learning"
+            parentLabel="Læring"
+            parentIcon="book-outline"
+            parentColor="#FF1493"
+            children={[
+              {
+                id: 'book',
+                label: t.studyBook,
+                icon: 'book-outline',
+                color: '#00FFFF',
+                onPress: () => router.push('/book'),
+              },
+              {
+                id: 'ai-insights',
+                label: t.aiInsights,
+                icon: 'sparkles',
+                color: '#FF1493',
+                onPress: () => router.push('/ai-dashboard'),
+              },
+              {
+                id: 'glossary',
+                label: t.glossary,
+                icon: 'language-outline',
+                color: '#00FF00',
+                onPress: () => router.push('/glossary'),
+              },
+            ]}
+          />
         </View>
 
         {/* Progress — single clean row, no card nesting */}

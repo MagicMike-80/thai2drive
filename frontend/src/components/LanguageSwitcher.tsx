@@ -49,15 +49,7 @@ export function LanguageSwitcher({ size = 'md', align = 'flex-start' }: Props) {
               },
             ]}
           >
-            {isThai ? (
-              <Image
-                source={T2D_ICON}
-                style={{ width: dim - 6, height: dim - 6, borderRadius: (dim - 6) / 2 }}
-                resizeMode="cover"
-              />
-            ) : (
-              <Flag code={l.code} size={flagSize} />
-            )}
+            <Flag code={l.code} size={flagSize} />
           </TouchableOpacity>
         );
       })}
