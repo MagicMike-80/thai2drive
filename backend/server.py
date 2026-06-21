@@ -4777,7 +4777,7 @@ async def ensure_indexes():
 
 # Google Cloud TTS voice mapping for all three app languages
 _GOOGLE_TTS_VOICES = {
-    "th-TH": "th-TH-Standard-A",
+    "th-TH": "th-TH-Standard-C",
     "nb-NO": "nb-NO-Wavenet-A",
     "en-US": "en-US-Wavenet-D",
 }
