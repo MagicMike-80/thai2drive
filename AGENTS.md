@@ -49,6 +49,25 @@ Thai2Drive is a Norwegian driving theory app/course for Thai-speaking learners i
 - V4: Personal weak-topic learning.
 - V5: Voice, video, visual explanations, and adaptive AI instructor.
 
+## Feature Tracking — context/FEATURES.md
+
+All agents (Claude Code, Codex, and others) must maintain `context/FEATURES.md` automatically.
+This is the permanent, living wishlist for everything Michael wants in Thai2Drive.
+
+### Rules
+- When Michael expresses any wish, request, or idea: add it to `context/FEATURES.md` immediately — same response, no waiting.
+- When a feature is completed and deployed: move it to `## ✅ LEVERT` in `context/FEATURES.md`.
+- Never ask Michael to update the list himself. Agents do it automatically.
+- Web app first: all UI features get a note `(web først, mobil etter godkjenning)`.
+- Do not commit `context/FEATURES.md` to git. Local tracking file only.
+- Never store API keys, passwords, or secrets in `context/FEATURES.md`. Use Railway env variable names.
+
+### Status Labels
+- ✅ LEVERT — deployed and live on Railway
+- 🔴 PRIORITERT — decided, not yet built
+- 🟡 PLANLAGT — planned, details still missing
+- ⏳ IDEER — mentioned but not yet decided
+
 ## Before Editing
 - Inspect existing code first.
 - Identify exact files and line areas.

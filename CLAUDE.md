@@ -17,6 +17,18 @@ If a task belongs to Codex, stop and say:
 
 If ownership is unclear, ask whether it is a Codex implementation task or a Claude Code content task before changing files.
 
+### Master Blueprint
+
+`context/MASTER_BLUEPRINT.md` is the approved product vision for Thai2Drive. Read it when starting work on any new feature. It defines architecture, pedagogy, business model, and ownership rules.
+
+### Feature Wishlist — Automatic Rule
+
+`context/FEATURES.md` is the permanent wishlist for everything Michael wants.
+- When Michael mentions any wish, idea, or feature request: add it to `context/FEATURES.md` immediately in the same response — do not wait.
+- When a feature ships to Railway: move it to ✅ LEVERT in `context/FEATURES.md`.
+- Never store secrets in `context/FEATURES.md`. Never commit it to git.
+- All UI features: web app first, mobile only after Michael's explicit approval.
+
 ### Product Rules
 
 - Web first. Mobile follows only after web approval.
