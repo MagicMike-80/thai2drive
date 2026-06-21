@@ -433,6 +433,110 @@ footer p{color:#64748B;font-size:13px}
   .qr-text{max-width:none;text-align:center}
   .shot{width:190px;border-width:2px}
 }
+
+/* ═══════════════════════════════════════════
+   NEON DESIGN — Thai2Drive Marketing Page
+   Cyan #00F5FF · Magenta #FF00E5 · Gold #FFD700
+   ═══════════════════════════════════════════ */
+:root{
+  --neon-cyan:#00F5FF;
+  --neon-magenta:#FF00E5;
+  --neon-gold:#FFD700;
+  --neon-cyan-glow:rgba(0,245,255,.4);
+  --neon-gold-glow:rgba(255,215,0,.4);
+  --neon-magenta-glow:rgba(255,0,229,.35);
+}
+
+/* Aurora hero glow */
+.hero::before{
+  background:
+    radial-gradient(ellipse 900px 500px at 30% 60%,rgba(0,245,255,.07),transparent 65%),
+    radial-gradient(ellipse 700px 400px at 75% 40%,rgba(255,0,229,.06),transparent 65%),
+    radial-gradient(ellipse 600px 300px at 50% 20%,rgba(255,215,0,.05),transparent 60%)!important;
+  width:100%;height:900px;top:-10%!important;
+}
+
+/* Hero h1 highlight word */
+.hero h1 em{color:var(--neon-gold);text-shadow:0 0 28px var(--neon-gold-glow),0 0 8px var(--neon-gold-glow)}
+
+/* Section eyebrow labels */
+.eyebrow{color:var(--neon-magenta)!important;text-shadow:0 0 14px var(--neon-magenta-glow)}
+
+/* Stats numbers */
+.stat-num{color:var(--neon-gold)!important;text-shadow:0 0 22px var(--neon-gold-glow),0 0 6px var(--neon-gold-glow)}
+.stat{border-color:rgba(0,245,255,.12)!important;box-shadow:inset 0 0 24px rgba(0,245,255,.03)}
+
+/* Feature icon + card */
+.feat-icon{background:rgba(0,245,255,.12)!important;color:var(--neon-cyan)!important;box-shadow:0 0 18px rgba(0,245,255,.15)}
+.feat:hover{border-color:rgba(0,245,255,.35)!important;background:rgba(0,245,255,.03)!important;box-shadow:0 8px 32px rgba(0,245,255,.08)}
+
+/* Why-section number circles */
+.why-num{background:rgba(0,245,255,.12)!important;color:var(--neon-cyan)!important;box-shadow:0 0 14px rgba(0,245,255,.18)}
+.why-item:hover{border-color:rgba(255,0,229,.3)!important;background:rgba(255,0,229,.03)!important}
+
+/* Primary CTA button — cyan glow */
+.cta-primary{
+  background:linear-gradient(135deg,var(--neon-cyan),#00C8E8)!important;
+  color:#0B1226!important;
+  box-shadow:0 0 32px var(--neon-cyan-glow),0 16px 40px rgba(0,245,255,.25)!important;
+}
+.cta-primary:hover{box-shadow:0 0 48px var(--neon-cyan-glow),0 20px 48px rgba(0,245,255,.35)!important}
+
+/* Try panel — next buttons */
+.try-next-big{background:linear-gradient(180deg,var(--neon-cyan),#00C8E8)!important;color:#0B1226!important;box-shadow:0 0 20px var(--neon-cyan-glow)}
+.try-next-big:not(:disabled):hover{background:linear-gradient(180deg,#18FFFF,var(--neon-cyan))!important}
+.try-next{background:linear-gradient(135deg,var(--neon-cyan),#00C8E8)!important;color:#0B1226!important;box-shadow:0 0 16px var(--neon-cyan-glow)}
+.try-bar>div{background:linear-gradient(90deg,var(--neon-cyan),var(--neon-magenta))!important}
+.try-progress .accent{color:var(--neon-cyan)!important}
+.try-opt:hover{border-color:rgba(0,245,255,.45)!important}
+
+/* TTS play button */
+.tts-play:hover,.tts-play.playing{border-color:var(--neon-cyan)!important;color:var(--neon-cyan)!important}
+.tts-speed:hover{border-color:var(--neon-cyan)!important;color:#E2E8F0!important}
+.tts-speed.active{background:rgba(0,245,255,.12)!important;border-color:var(--neon-cyan)!important;color:var(--neon-cyan)!important}
+.sound-toggle.on{border-color:var(--neon-cyan)!important;color:var(--neon-cyan)!important;background:rgba(0,245,255,.08)!important}
+
+/* Video play button */
+.vid-play-btn{background:rgba(0,245,255,.88)!important;box-shadow:0 0 24px var(--neon-cyan-glow),0 6px 24px rgba(0,0,0,.4)!important}
+.vid-badge{background:rgba(0,245,255,.85)!important;color:#0B1226!important}
+.vid-card:hover{box-shadow:0 20px 48px rgba(0,0,0,.45),0 0 28px rgba(0,245,255,.12)!important}
+
+/* Guide blink */
+.guide-blink{color:var(--neon-gold)!important;text-shadow:0 0 12px var(--neon-gold-glow)!important}
+
+/* Lang hint bubble */
+.lang-hint-bubble{background:linear-gradient(135deg,var(--neon-cyan),#00C8E8)!important;color:#0B1226!important;box-shadow:0 8px 24px var(--neon-cyan-glow)!important}
+.lang-hint-arrow{color:var(--neon-cyan)!important}
+
+/* Paywall lock badge */
+.try-paywall .lock-badge{background:rgba(0,245,255,.12)!important;color:var(--neon-cyan)!important}
+.plan-mini.best{border-color:var(--neon-cyan)!important;background:rgba(0,245,255,.06)!important}
+
+/* Premium video teaser */
+.vid-premium-teaser{background:linear-gradient(135deg,rgba(0,245,255,.07),rgba(255,0,229,.04))!important;border-color:rgba(0,245,255,.2)!important}
+.vpt-title span{color:var(--neon-cyan)!important}
+
+/* CTA band */
+.cta-band{background:linear-gradient(180deg,rgba(0,245,255,.05) 0%,rgba(11,18,38,.80) 100%)!important}
+
+/* Nav web-app button */
+.nav-links a[href="/api/web"]{
+  background:linear-gradient(135deg,var(--neon-cyan),#00C8E8)!important;
+  color:#0B1226!important;
+  box-shadow:0 0 16px rgba(0,245,255,.3)!important;
+}
+
+/* Onboard pulse colours */
+@keyframes landingOnboardPulse{0%,100%{box-shadow:0 0 0 0 rgba(0,245,255,.18)}50%{box-shadow:0 0 0 9px rgba(0,245,255,.28),0 0 36px rgba(0,245,255,.34)}}
+.landing-onboard-label{border-color:rgba(0,245,255,.55)!important;box-shadow:0 16px 34px rgba(0,0,0,.34),0 0 0 5px rgba(0,245,255,.16)!important}
+
+/* Flag pulse → cyan */
+@keyframes flagpulse{
+  0%,100%   {transform:scale(1);    box-shadow:none; border-color:rgba(255,255,255,.2);}
+  10%,40%   {transform:scale(1.08); box-shadow:0 0 0 3px rgba(0,245,255,.28),0 0 10px rgba(0,245,255,.15); border-color:var(--neon-cyan);}
+  70%       {transform:scale(1);    box-shadow:none; border-color:rgba(255,255,255,.2);}
+}
+.lang-row .lang-btn.active{border-color:var(--neon-cyan)!important;box-shadow:0 0 0 3px rgba(0,245,255,.4)!important}
 """
 
 
