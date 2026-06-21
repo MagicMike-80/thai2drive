@@ -4,6 +4,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import React, { useEffect, useState } from 'react';
 import { View, ActivityIndicator, StyleSheet, Platform } from 'react-native';
 import { useAppStore } from '../src/store/appStore';
+import { TrafficMathDesktopPanel } from '../src/components/traffic/TrafficMathDesktopPanel';
 import { IS_PREVIEW_BUILD } from '../src/buildFlags';
 
 /**
@@ -196,6 +197,10 @@ export default function RootLayout() {
   const initDeviceId = useAppStore((s) => s.initDeviceId);
   const colors = useAppStore((s) => s.colors);
   const isDark = useAppStore((s) => s.isDark);
+  const language = useAppStore((s) => s.language);
+  const showTrafficPanel = useAppStore((s) => s.showTrafficPanel);
+  const setShowTrafficPanel = useAppStore((s) => s.setShowTrafficPanel);
+
   useEffect(() => {
     (async () => {
       try { await initDeviceId(); } catch (e) { console.error(e); }
@@ -262,6 +267,16 @@ export default function RootLayout() {
           <Stack.Screen name="social" />
         </Stack>
       </WebAppShell>
+
+      {/* Desktop traffic math panel — rendered OUTSIDE WebAppShell at root level
+          so position:fixed can escape the 390px frame's overflow:hidden */}
+      <TrafficMathDesktopPanel
+        visible={showTrafficPanel}
+        onClose={() => setShowTrafficPanel(false)}
+        language={language}
+        colors={colors}
+        isDark={isDark}
+      />
     </SafeAreaProvider>
   );
 }

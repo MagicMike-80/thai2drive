@@ -10,7 +10,6 @@ import { api } from '../src/services/api';
 import { LanguageSwitcher } from '../src/components/LanguageSwitcher';
 import { AppBrand } from '../src/components/AppBrand';
 import { CoachBanner } from '../src/components/CoachBanner';
-import { TrafficMathDesktopPanel } from '../src/components/traffic/TrafficMathDesktopPanel';
 import { BottomNavBar } from '../src/components/BottomNavBar';
 
 const T2D_ICON = require('../assets/images/t2d-icon.png');
@@ -23,10 +22,9 @@ const TR: Record<string, Record<string, string>> = {
 
 export default function HomeScreen() {
   const router = useRouter();
-  const { language, deviceId, setProgress, progress, colors, isPremium, isAuthenticated, freeRemaining, streak, updateStreak } = useAppStore();
+  const { language, deviceId, setProgress, progress, colors, isPremium, isAuthenticated, freeRemaining, streak, updateStreak, setShowTrafficPanel } = useAppStore();
   const [loading, setLoading] = useState(true);
   const [dailyDone, setDailyDone] = useState(false);
-  const [showTrafficPanel, setShowTrafficPanel] = useState(false);
   const { width: winWidth } = useWindowDimensions();
   const t = TR[language] || TR.en;
   const c = colors;
@@ -339,17 +337,6 @@ export default function HomeScreen() {
       </ScrollView>
 
       <BottomNavBar activeTab="home" />
-
-      {/* Desktop traffic math panel — position:fixed escapes the 390px WebAppShell */}
-      {isDesktopWeb && (
-        <TrafficMathDesktopPanel
-          visible={showTrafficPanel}
-          onClose={() => setShowTrafficPanel(false)}
-          language={language}
-          colors={c}
-          isDark={isDark}
-        />
-      )}
     </SafeAreaView>
   );
 }
