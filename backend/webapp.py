@@ -504,18 +504,20 @@ a { color:inherit; text-decoration:none; }
   box-shadow:0 4px 24px rgba(0,0,0,.06);
 }
 .carousel-3d-item.active {
-  border-color:var(--cat-color);
-  box-shadow:
-    0 0 12px var(--cat-glow),
-    0 0 30px var(--cat-glow),
-    0 0 60px rgba(0,0,0,.15),
-    inset 0 0 20px var(--cat-glow);
-  animation:neonFlow 5s linear infinite;
+  border-color:transparent;
+  box-shadow:0 0 28px var(--cat-glow), inset 0 0 14px var(--cat-glow);
+}
+@property --neon-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
 }
 @keyframes neonFlow {
-  0%   { filter:hue-rotate(0deg); }
-  50%  { filter:hue-rotate(180deg); }
-  100% { filter:hue-rotate(360deg); }
+  to { --neon-angle: 360deg; }
+}
+@keyframes neonFlowFallback {
+  0%   { transform:rotate(0deg); }
+  100% { transform:rotate(360deg); }
 }
 [data-theme="light"] .carousel-3d-item.active {
   box-shadow:0 0 30px rgba(255,153,51,.12), 0 0 60px rgba(255,153,51,.04);
@@ -541,15 +543,29 @@ a { color:inherit; text-decoration:none; }
 }
 .carousel-3d-active-ring {
   position:absolute; top:50%; left:50%;
-  width:175px; height:220px; margin-left:-87.5px; margin-top:-110px;
-  border-radius:20px;
+  width:179px; height:224px; margin-left:-89.5px; margin-top:-112px;
+  border-radius:22px;
   pointer-events:none;
-  border:2px solid rgba(0,245,255,.8);
   opacity:0;
-  transition:opacity .35s;
-  box-shadow:0 0 24px rgba(0,245,255,.35), 0 0 60px rgba(0,245,255,.12), inset 0 0 20px rgba(0,245,255,.05);
+  transition:opacity .45s;
+  padding:3px;
+  background:conic-gradient(from var(--neon-angle, 0deg),
+    transparent 0%,
+    var(--cat-color, #FF9933) 18%,
+    rgba(255,255,255,.95) 24%,
+    var(--cat-color, #FF9933) 30%,
+    transparent 48%
+  );
+  -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor;
+  mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite:exclude;
+  animation:neonFlow 2.4s linear infinite;
 }
-.carousel-3d-active-ring.visible { opacity:1; }
+.carousel-3d-active-ring.visible {
+  opacity:1;
+  filter:drop-shadow(0 0 6px var(--cat-color, #FF9933)) drop-shadow(0 0 14px var(--cat-glow, rgba(255,153,51,.5)));
+}
 
 /* ── Carousel dots ── */
 .carousel-3d-dots {
@@ -4835,9 +4851,18 @@ function updateCarousel(activeIdx, animate, dragAngleOffset) {
     item.classList.toggle('active', delta === 0);
   }
   if (ring) {
-    ring.style.transition = 'transform ' + dur + ' ' + timing + ', opacity 0.35s';
+    ring.style.transition = 'transform ' + dur + ' ' + timing + ', opacity 0.45s';
     ring.style.transform = 'rotateY(0deg) translateZ(' + _carouselRadius + 'px)';
     ring.classList.toggle('visible', true);
+    // Inherit the active card's neon color so the ring glows in the right colour
+    var activeEl = items[activeIdx];
+    if (activeEl) {
+      var cs = getComputedStyle(activeEl);
+      var cc = cs.getPropertyValue('--cat-color').trim() || '#FF9933';
+      var cg = cs.getPropertyValue('--cat-glow').trim() || 'rgba(255,153,51,.45)';
+      ring.style.setProperty('--cat-color', cc);
+      ring.style.setProperty('--cat-glow', cg);
+    }
   }
   var dotEls = document.querySelectorAll('.carousel-3d-dot');
   for (var j = 0; j < dotEls.length; j++) {
