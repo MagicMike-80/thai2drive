@@ -359,15 +359,18 @@ a { color:inherit; text-decoration:none; }
 
 .home-cta {
   width:100%; padding:16px;
-  background:linear-gradient(135deg,#FF9933,#e6891f);
+  border:2px solid transparent !important;
+  background:linear-gradient(135deg,#FF9933,#e6891f) padding-box,
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #FFD700, #00F5FF) border-box !important;
+  animation:neonFlow 3s linear infinite;
   color:#0F172A; font-weight:900; font-size:1rem;
-  border:none; border-radius:14px; cursor:pointer;
+  border-radius:14px; cursor:pointer;
   display:flex; align-items:center; justify-content:center; gap:10px;
   box-shadow:0 6px 24px rgba(255,153,51,.4);
   transition:transform .15s, box-shadow .15s;
 }
-.home-cta:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(255,153,51,.5); }
-.home-cta:active { transform:translateY(0); }
+.home-cta:hover { transform:translateY(-2px); box-shadow:0 0 24px rgba(0,245,255,.5), 0 0 8px rgba(255,153,51,.4); }
+.home-cta:active { transform:translateY(0) scale(0.97); box-shadow:0 0 32px rgba(0,245,255,.7), 0 0 12px rgba(255,153,51,.6); }
 
 .home-sec-btns {
   display:grid; grid-template-columns:1fr 1fr;
@@ -375,14 +378,26 @@ a { color:inherit; text-decoration:none; }
 }
 .home-sec-btn {
   padding:13px 10px;
-  background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.12);
+  border:1.5px solid transparent !important;
+  background:linear-gradient(rgba(255,255,255,.05), rgba(255,255,255,.05)) padding-box,
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #FFD700, #00F5FF) border-box !important;
+  animation:neonFlow 4s linear infinite;
   backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
   border-radius:14px; color:var(--text); font-weight:700;
   font-size:.85rem; cursor:pointer;
   display:flex; align-items:center; justify-content:center; gap:6px;
-  transition:border-color .2s, background .2s;
+  box-shadow:0 0 8px rgba(0, 245, 255, 0.1);
+  transition:border-color .2s, background .2s, box-shadow 0.3s, transform 0.1s;
 }
-.home-sec-btn:hover { border-color:rgba(255,255,255,.3); background:rgba(255,255,255,.08); }
+.home-sec-btn:hover {
+  background:linear-gradient(rgba(255,255,255,.08), rgba(255,255,255,.08)) padding-box,
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #FFD700, #00F5FF) border-box !important;
+  box-shadow:0 0 16px rgba(0, 245, 255, 0.3);
+}
+.home-sec-btn:active {
+  transform: scale(0.97);
+  box-shadow: 0 0 22px rgba(0, 245, 255, 0.5);
+}
 
 /* Stats — one unified card, three columns with vertical dividers */
 .home-stats {
@@ -609,7 +624,8 @@ a { color:inherit; text-decoration:none; }
 [data-theme="light"] .carousel-3d-hint { color:rgba(0,0,0,.16); }
 
 /* ── Per-category neon color themes ── */
-.carousel-3d-item[data-ckey="Speed Limits"]
+.carousel-3d-item[data-ckey="Speed Limits"],
+.carousel-3d-item[data-ckey="fart_og_bremsing"]
   { --cat-color:#FF6A00; --cat-glow:rgba(255,106,0,.50); --cat-bg1:rgba(50,15,0,.95); --cat-bg2:rgba(20,5,0,.99); }
 .carousel-3d-item[data-ckey="Road Rules"],
 .carousel-3d-item[data-ckey="Trafikkregler"]
@@ -795,22 +811,45 @@ a { color:inherit; text-decoration:none; }
 .ans-btn {
   display:flex; align-items:center; gap:14px;
   padding:15px 16px;
-  background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.08); border-radius:14px;
+  position: relative;
+  border: 1.5px solid transparent !important;
+  background: linear-gradient(rgba(255,255,255,.04), rgba(255,255,255,.04)) padding-box,
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #FFD700, #00F5FF) border-box !important;
+  animation: neonFlow 4s linear infinite;
   cursor:pointer; text-align:left; color:var(--text);
   font-size:.88rem; font-weight:600;
-  transition:border-color .18s, background .18s;
   width:100%;
+  box-shadow: 0 0 6px rgba(0, 245, 255, 0.08);
+  transition: transform 0.1s, box-shadow 0.3s, background 0.2s;
 }
 .ans-btn:hover:not(:disabled) {
-  border-color:rgba(255,153,51,.35);
-  background:rgba(255,153,51,.06);
+  background: linear-gradient(rgba(255,153,51,.06), rgba(255,153,51,.06)) padding-box,
+              conic-gradient(from var(--neon-angle, 0deg), #FF9933, #FF00E5, #00F5FF, #FF9933) border-box !important;
+  box-shadow: 0 0 14px rgba(255, 153, 51, 0.3);
 }
-.ans-btn:active:not(:disabled) { opacity:.82; }
+.ans-btn:active:not(:disabled) {
+  transform: scale(0.98);
+  box-shadow: 0 0 20px rgba(255, 153, 51, 0.5);
+}
 .ans-btn:disabled { cursor:default; }
-.ans-btn.correct { border-color:rgba(16,185,129,.45); background:rgba(16,185,129,.10); }
-.ans-btn.wrong   { border-color:rgba(239,68,68,.40);  background:rgba(239,68,68,.09);  }
-.ans-btn.reveal  { border-color:rgba(16,185,129,.45); background:rgba(16,185,129,.07); }
+.ans-btn.correct {
+  background: rgba(16,185,129,.10) !important;
+  border: 1.5px solid rgba(16,185,129,.45) !important;
+  animation: none !important;
+  box-shadow: 0 0 16px rgba(16,185,129,.25) !important;
+}
+.ans-btn.wrong {
+  background: rgba(239,68,68,.09) !important;
+  border: 1.5px solid rgba(239,68,68,.40) !important;
+  animation: none !important;
+  box-shadow: 0 0 16px rgba(239,68,68,.20) !important;
+}
+.ans-btn.reveal {
+  background: rgba(16,185,129,.07) !important;
+  border: 1.5px solid rgba(16,185,129,.45) !important;
+  animation: none !important;
+  box-shadow: 0 0 12px rgba(16,185,129,.15) !important;
+}
 .ans-letter {
   width:32px; height:32px; border-radius:50%;
   background:rgba(255,153,51,.12); color:var(--orange);
@@ -4060,8 +4099,10 @@ var CAT_ICONS = {
 var CAT_SVG = (function(){
   var s = 'stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" fill="none"';
   var h = function(d){ return '<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" '+s+' stroke-width="2.8">'+d+'</svg>'; };
+  var speedSvg = h('<circle cx="24" cy="28" r="15"/><path d="M24 13V7M17 9l1.5 3M31 9l-1.5 3M11 20l2.5 1.5M37 20l-2.5 1.5"/><path d="M24 28L32 18" stroke-width="3"/><circle cx="24" cy="28" r="2.5" fill="currentColor" stroke="none"/>');
   return {
-    'Speed Limits':     h('<circle cx="24" cy="28" r="15"/><path d="M24 13V7M17 9l1.5 3M31 9l-1.5 3M11 20l2.5 1.5M37 20l-2.5 1.5"/><path d="M24 28L32 18" stroke-width="3"/><circle cx="24" cy="28" r="2.5" fill="currentColor" stroke="none"/>'),
+    'Speed Limits':     speedSvg,
+    'fart_og_bremsing':  speedSvg,
     'Road Rules':       h('<rect x="14" y="6" width="20" height="28" rx="3"/><rect x="17" y="18" width="14" height="12" rx="2"/><circle cx="20.5" cy="21.5" r="2" fill="currentColor" stroke="none"/><circle cx="24" cy="21.5" r="2" fill="currentColor" stroke="none"/><circle cx="27.5" cy="21.5" r="2" fill="currentColor" stroke="none"/><line x1="17" y1="10" x2="31" y2="10"/><line x1="17" y1="14" x2="31" y2="14"/>'),
     'Traffic Signs':    h('<path d="M24 8L42 38H6Z"/><line x1="24" y1="18" x2="24" y2="28"/><circle cx="24" cy="32" r="1.5" fill="currentColor" stroke="none"/>'),
     'Right of Way':     h('<path d="M24 8L42 38H6Z"/><line x1="24" y1="18" x2="24" y2="28"/><circle cx="24" cy="32" r="1.5" fill="currentColor" stroke="none"/>'),
