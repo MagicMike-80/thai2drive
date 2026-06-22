@@ -435,7 +435,10 @@ a { color:inherit; text-decoration:none; }
   padding:0;
   background:#0B1226;
 }
-.cats-header {
+/* ═══ 3D CYLINDER CAROUSEL ═══
+   Categories arranged along a horizontal 3D cylinder.
+   Active item center, adjacent curve backward into space. */
+.carousel-3d-header {
   padding:14px 16px 10px; flex-shrink:0;
   background:transparent;
 }
@@ -443,49 +446,125 @@ a { color:inherit; text-decoration:none; }
   font-size:1.6rem; font-weight:900; letter-spacing:-.3px;
 }
 .screen-title span { color:var(--muted); font-size:.95rem; font-weight:600; margin-left:6px; }
-.cats-scroll {
-  flex:1; overflow-y:auto; overflow-x:hidden;
-  padding:0 16px 16px;
-  -webkit-overflow-scrolling:touch;
+.carousel-3d-scroll {
+  flex:1; position:relative; display:flex; align-items:center; justify-content:center;
+  overflow:hidden; min-height:0;
 }
-.cats-scroll::-webkit-scrollbar { width:4px; }
-.cats-scroll::-webkit-scrollbar-track { background:transparent; }
-.cats-scroll::-webkit-scrollbar-thumb { background:rgba(255,255,255,.1); border-radius:2px; }
-
-.cat-grid {
-  display:grid;
-  /* auto-fit responds to the container width, not the viewport —
-     minmax(140px,1fr) gives 2 cols in the 390 px shell, more on a
-     real wide screen. No viewport media queries needed. */
-  grid-template-columns:repeat(auto-fit, minmax(140px,1fr));
-  gap:10px;
+.carousel-3d-wrap {
+  width:100%; height:340px;
+  perspective:1000px; perspective-origin:50% 50%;
+  display:flex; align-items:center; justify-content:center;
+  position:relative; overflow:hidden;
+  touch-action:pan-y; /* horizontal swipe, let browser handle vertical */
+  user-select:none; -webkit-user-select:none;
 }
-
-.cat-card {
-  background:#131B2E; border:1.5px solid rgba(255,255,255,.10);
-  border-radius:14px; padding:14px 12px;
-  cursor:pointer; transition:border-color .2s, transform .15s, box-shadow .2s;
-  display:flex; flex-direction:column; gap:6px;
+.carousel-3d-stage {
+  width:220px; height:100%;
+  transform-style:preserve-3d;
+  position:relative;
+  display:flex; align-items:center; justify-content:center;
+}
+.carousel-3d-item {
+  position:absolute; left:50%; top:50%;
+  width:200px; height:260px;
+  margin-left:-100px; margin-top:-130px;
+  border-radius:20px;
+  cursor:pointer; backface-visibility:hidden;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:8px; padding:20px 16px;
+  background:linear-gradient(160deg, rgba(19,27,46,.92) 0%, rgba(15,23,42,.96) 100%);
+  border:1.5px solid rgba(255,255,255,.08);
+  box-shadow:0 4px 30px rgba(0,0,0,.3);
   color:var(--text);
+  transition:border-color .3s, box-shadow .4s;
+  will-change:transform, opacity;
 }
-[data-theme="light"] .cat-card {
-  background:rgba(255,255,255,.82); border-color:rgba(0,0,0,.1); /* color inherited from var(--text) */
+[data-theme="light"] .carousel-3d-item {
+  background:linear-gradient(160deg, rgba(255,255,255,.92) 0%, rgba(241,245,249,.96) 100%);
+  border-color:rgba(0,0,0,.08);
+  box-shadow:0 4px 24px rgba(0,0,0,.06);
 }
-.cat-count { display:none; }
-.cat-card:hover {
-  border-color:var(--orange); transform:translateY(-2px);
-  box-shadow:0 8px 20px rgba(255,153,51,.12);
+.carousel-3d-item.active {
+  border-color:var(--orange);
+  box-shadow:0 0 30px rgba(255,153,51,.15), 0 0 60px rgba(255,153,51,.06);
+  animation:neonFlow 4s linear infinite;
 }
-.cat-card:active { transform:translateY(0); }
-.cat-icon { font-size:2rem; line-height:1; }
-.cat-name { font-weight:800; font-size:1.05rem; line-height:1.3; }
-.cat-count { font-size:.9rem; color:var(--muted); font-weight:500; }
-.cat-bar-wrap {
-  height:3px; background:rgba(255,255,255,.07);
-  border-radius:2px; overflow:hidden; margin-top:2px;
+@keyframes neonFlow {
+  0%   { filter:hue-rotate(0deg); }
+  50%  { filter:hue-rotate(180deg); }
+  100% { filter:hue-rotate(360deg); }
 }
-[data-theme="light"] .cat-bar-wrap { background:rgba(0,0,0,.07); }
-.cat-bar { height:100%; background:var(--orange); border-radius:2px; }
+[data-theme="light"] .carousel-3d-item.active {
+  box-shadow:0 0 30px rgba(255,153,51,.12), 0 0 60px rgba(255,153,51,.04);
+}
+.carousel-3d-item:active { transform:scale(.97); }
+.carousel-3d-icon {
+  font-size:3.2rem; line-height:1; margin-bottom:4px;
+  filter:drop-shadow(0 2px 8px rgba(255,153,51,.15));
+  transition:filter .3s;
+}
+.carousel-3d-item.active .carousel-3d-icon {
+  filter:drop-shadow(0 2px 12px rgba(255,153,51,.30));
+}
+.carousel-3d-label {
+  font-weight:800; font-size:1.15rem; line-height:1.3; text-align:center;
+  letter-spacing:-.2px;
+}
+.carousel-3d-count {
+  font-size:.85rem; color:var(--muted); font-weight:600;
+}
+.carousel-3d-active-ring {
+  position:absolute; top:50%; left:50%;
+  width:200px; height:260px; margin-left:-100px; margin-top:-130px;
+  border-radius:20px;
+  pointer-events:none;
+  border:2px solid var(--orange);
+  opacity:0;
+  transition:opacity .35s;
+  box-shadow:0 0 40px rgba(255,153,51,.10), inset 0 0 40px rgba(255,153,51,.03);
+}
+.carousel-3d-active-ring.visible { opacity:1; }
+
+/* ── Carousel dots ── */
+.carousel-3d-dots {
+  position:absolute; bottom:12px; left:0; right:0;
+  display:flex; justify-content:center; gap:6px; padding:0 16px;
+  pointer-events:none; z-index:2;
+}
+.carousel-3d-dot {
+  width:6px; height:6px; border-radius:50%;
+  background:rgba(255,255,255,.18);
+  transition:all .35s;
+}
+[data-theme="light"] .carousel-3d-dot { background:rgba(0,0,0,.14); }
+.carousel-3d-dot.active { width:20px; border-radius:3px; background:var(--orange); }
+.carousel-3d-dot.adjacent { width:8px; border-radius:4px; background:rgba(255,255,255,.30); }
+[data-theme="light"] .carousel-3d-dot.adjacent { background:rgba(0,0,0,.24); }
+
+/* ── Edge gradient fade (left/right vignette) ── */
+.carousel-3d-fade-left,
+.carousel-3d-fade-right {
+  position:absolute; top:0; bottom:0; width:50px;
+  pointer-events:none; z-index:3;
+}
+.carousel-3d-fade-left {
+  left:0;
+  background:linear-gradient(90deg, var(--bg) 0%, transparent 100%);
+}
+.carousel-3d-fade-right {
+  right:0;
+  background:linear-gradient(270deg, var(--bg) 0%, transparent 100%);
+}
+
+/* ── Swipe hint ── */
+.carousel-3d-hint {
+  position:absolute; bottom:40px; left:50%; transform:translateX(-50%);
+  font-size:.75rem; color:rgba(255,255,255,.20); font-weight:500;
+  white-space:nowrap; letter-spacing:.5px;
+  pointer-events:none; z-index:1;
+  transition:opacity 1s;
+}
+[data-theme="light"] .carousel-3d-hint { color:rgba(0,0,0,.16); }
 
 /* ══════════════════════════════════════════
    QUIZ SCREEN — fully height-based, NO scroll
@@ -2818,15 +2897,23 @@ a { color:inherit; text-decoration:none; }
 
     <!-- ═══ CATEGORIES SCREEN ═══ -->
     <div class="screen" id="screenCats">
-      <div class="cats-header">
+      <div class="carousel-3d-header">
         <div class="screen-title">📚 <span data-key="cats">Kategorier</span> <span id="catCount"></span></div>
       </div>
-      <div class="cats-scroll">
-        <div class="cat-grid" id="catGrid">
-          <div class="loading-wrap" style="grid-column:1/-1">
-            <div class="spinner"></div>
-            <span style="color:var(--muted);font-size:.85rem">Laster kategorier…</span>
+      <!-- 3D Cylinder Carousel -->
+      <div class="carousel-3d-scroll">
+        <div class="carousel-3d-wrap" id="carouselWrap">
+          <div class="carousel-3d-fade-left"></div>
+          <div class="carousel-3d-fade-right"></div>
+          <div class="carousel-3d-stage" id="carouselStage">
+            <div class="carousel-3d-active-ring" id="carouselRing"></div>
+            <!-- items rendered by JS -->
+            <div class="loading-wrap" style="position:absolute;top:50%;left:50%;margin:-24px 0 0 -24px;">
+              <div class="spinner"></div>
+            </div>
           </div>
+          <div class="carousel-3d-dots" id="carouselDots"></div>
+          <div class="carousel-3d-hint" id="carouselHint">← Sveip for å bla →</div>
         </div>
       </div>
     </div>
@@ -3269,28 +3356,28 @@ a { color:inherit; text-decoration:none; }
   <!-- BOTTOM NAV — 8 tabs: Hjem → Kategorier → Historikk → Michael → Skilt → Studiebok → Bokmerker → Innstillinger -->
   <div id="bottomNav">
     <button class="bn-tab active" id="bnHome" onclick="showTab('home')">
-      <span class="bn-icon">🏠</span>Hjem
+      <span class="bn-icon">🏠</span><span data-key="home">Hjem</span>
     </button>
     <button class="bn-tab" id="bnCats" onclick="showTab('cats')">
-      <span class="bn-icon">📚</span>Kategorier
+      <span class="bn-icon">📚</span><span data-key="cats">Kategorier</span>
     </button>
     <button class="bn-tab" id="bnHistory" onclick="showTab('history')">
-      <span class="bn-icon">📊</span>Historikk
+      <span class="bn-icon">📊</span><span data-key="history">Historikk</span>
     </button>
     <button class="bn-tab bn-tab-michael" id="bnTeacher" onclick="showTab('teacher')">
-      <span class="bn-icon">🚗</span>Michael
+      <span class="bn-icon">🚗</span><span data-key="teacher">Michael</span>
     </button>
     <button class="bn-tab" id="bnSigns" onclick="showTab('signs')">
-      <span class="bn-icon">🪧</span>Skilt
+      <span class="bn-icon">🪧</span><span data-key="signs">Skilt</span>
     </button>
     <button class="bn-tab" id="bnStudybook" onclick="showTab('studybook')">
-      <span class="bn-icon">📖</span>Studiebok
+      <span class="bn-icon">📖</span><span data-key="sb_nav">Studiebok</span>
     </button>
     <button class="bn-tab" id="bnBookmarks" onclick="showTab('bookmarks')">
-      <span class="bn-icon">🔖</span>Bokmerker
+      <span class="bn-icon">🔖</span><span data-key="bookmarks">Bokmerker</span>
     </button>
     <button class="bn-tab" id="bnSettings" onclick="showTab('settings')">
-      <span class="bn-icon">⚙️</span>Innstillinger
+      <span class="bn-icon">⚙️</span><span data-key="settings">Innstillinger</span>
     </button>
   </div>
 
@@ -3705,8 +3792,8 @@ var UI = {
   sb_prev:         {th:'‹ ก่อนหน้า',    no:'‹ Forrige',     en:'‹ Previous'},
   sb_next:         {th:'ถัดไป ›',        no:'Neste ›',       en:'Next ›'},
   sb_search_ph:    {th:'ค้นหาหรือหมายเลข §...', no:'Søk eller § nummer...', en:'Search or § number...'},
-  sb_nav:          {th:'Studiebok',      no:'Studiebok',     en:'Study Book'},
-  sb_home_btn:     {th:'📖 Studiebok — กฎจราจรนอร์เวย์', no:'📖 Studiebok — Norsk trafikk', en:'📖 Study Book — Norwegian traffic'},
+  sb_nav:          {th:'หนังสือเรียน',    no:'Studiebok',     en:'Study Book'},
+  sb_home_btn:     {th:'📖 หนังสือเรียน — กฎจราจรนอร์เวย์', no:'📖 Studiebok — Norsk trafikk', en:'📖 Study Book — Norwegian traffic'},
   sb_cancel:       {th:'ยกเลิก',         no:'Avbryt',        en:'Cancel'},
   sb_save:         {th:'บันทึก',         no:'Lagre',         en:'Save'},
   sb_not_available:{th:'เนื้อหานี้ยังไม่มีในภาษาของคุณ', no:'Dette innholdet er ikke tilgjengelig på ditt språk ennå.', en:'This content is not available in your language yet.'},
@@ -4528,11 +4615,8 @@ async function loadHome() {
         rdata = await api('GET', '/api/quiz-attempts/' + encodeURIComponent(deviceId) + '?limit=1&_=' + Date.now());
       }
       var rattempts = Array.isArray(rdata) ? rdata : (rdata.attempts || rdata.results || []);
-      if (token) {
-        rattempts = _mergeAttempts(rattempts, _lastSavedAttempt ? [_lastSavedAttempt] : []);
-      } else {
-        rattempts = _mergeAttempts(rattempts, _readLocalAttempts().concat(_lastSavedAttempt ? [_lastSavedAttempt] : []));
-      }
+      // Always merge with local data
+      rattempts = _mergeAttempts(rattempts, _readLocalAttempts().concat(_lastSavedAttempt ? [_lastSavedAttempt] : []));
       if (rattempts.length) {
         var la = rattempts[0];
         var lpct = Math.round(la.score_percentage || 0);
@@ -4556,34 +4640,142 @@ async function loadHome() {
 // ════════════════════════════════════════════
 //  CATEGORIES
 // ════════════════════════════════════════════
+// ════════════════════════════════════════════
+//  3D CYLINDER CAROUSEL
+// ════════════════════════════════════════════
+var _carouselCats = [];
+var _carouselActive = 0;
+var _carouselAngleStep = 48;
+var _carouselRadius = 340;
+var _carouselDragStart = null;
+var _carouselDragIdx = 0;
+
 async function loadCategories() {
   if (catsLoaded) return;
-  var grid = document.getElementById('catGrid');
-  grid.innerHTML = '<div class="loading-wrap" style="grid-column:1/-1"><div class="spinner"></div></div>';
+  var stage = document.getElementById('carouselStage');
+  stage.innerHTML = '<div class="loading-wrap" style="position:absolute;top:50%;left:50%;margin:-24px 0 0 -24px;"><div class="spinner"></div></div>';
   try {
     var cats = await api('GET', '/api/categories');
     catsLoaded = true;
     document.getElementById('catCount').textContent = '(' + cats.length + ')';
     if (!cats.length) {
-      grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="es-icon">📭</div><p>' + t('categories_empty') + '</p></div>';
+      stage.innerHTML = '<div class="empty-state" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;"><div class="es-icon">📭</div><p>' + t('categories_empty') + '</p></div>';
       return;
     }
-    grid.innerHTML = cats.map(function(c) {
-      var icon  = CAT_ICONS[c.name] || '📖';
-      var count = c.question_count || c.count || '';
-      var id    = escH(String(c.id || c.name));
-      var name  = catName(c.name);
-      var qWord = t('questions_word');
-      return '<div class="cat-card" onclick="startQuiz(\'' + escH(String(c.id||c.name)) + '\',\'' + escH(c.name) + '\')">'
-        + '<div class="cat-icon">' + icon + '</div>'
-        + '<div class="cat-name">' + escH(name) + '</div>'
-        + '<div class="cat-count">' + (count ? count + ' ' + qWord : '') + '</div>'
-        + '<div class="cat-bar-wrap"><div class="cat-bar" style="width:0%"></div></div>'
-        + '</div>';
-    }).join('');
+    renderCarousel(cats);
   } catch(e) {
-    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="es-icon">⚠️</div><p>' + t('categories_load_error') + '</p></div>';
+    stage.innerHTML = '<div class="empty-state" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;"><div class="es-icon">⚠️</div><p>' + t('categories_load_error') + '</p></div>';
   }
+}
+
+function renderCarousel(cats) {
+  _carouselCats = cats;
+  _carouselActive = 0;
+  var stage = document.getElementById('carouselStage');
+  var itemsHtml = cats.map(function(c, i) {
+    var icon = CAT_ICONS[c.name] || '📖';
+    var count = c.question_count || c.count || '';
+    var name = catName(c.name);
+    var qWord = t('questions_word');
+    return '<div class="carousel-3d-item" data-idx="' + i + '" onclick="carouselClick(' + i + ')">'
+      + '<div class="carousel-3d-icon">' + icon + '</div>'
+      + '<div class="carousel-3d-label">' + escH(name) + '</div>'
+      + '<div class="carousel-3d-count">' + (count ? count + ' ' + qWord : '') + '</div>'
+      + '</div>';
+  }).join('');
+  stage.innerHTML = itemsHtml + '<div class="carousel-3d-active-ring" id="carouselRing"></div>';
+  renderDots(cats.length);
+  updateCarousel(0, false);
+  bindCarouselDrag();
+  var hint = document.getElementById('carouselHint');
+  if (hint) setTimeout(function(){ hint.style.opacity='0'; }, 5000);
+}
+
+function renderDots(n) {
+  var dots = document.getElementById('carouselDots');
+  if (!dots) return;
+  dots.innerHTML = '';
+  for (var i = 0; i < n; i++) {
+    var dot = document.createElement('div');
+    dot.className = 'carousel-3d-dot' + (i === 0 ? ' active' : '');
+    dots.appendChild(dot);
+  }
+}
+
+function updateCarousel(activeIdx, animate, dragAngleOffset) {
+  var items = document.querySelectorAll('.carousel-3d-item');
+  var n = items.length;
+  if (!n) return;
+  if (activeIdx < 0) activeIdx = 0;
+  if (activeIdx >= n) activeIdx = n - 1;
+  _carouselActive = activeIdx;
+  var ring = document.getElementById('carouselRing');
+  var dur = animate ? '0.45s' : '0s';
+  var timing = 'cubic-bezier(.22,.68,0,1)';
+  for (var i = 0; i < n; i++) {
+    var item = items[i];
+    var delta = i - activeIdx;
+    var angle = delta * _carouselAngleStep + (dragAngleOffset || 0);
+    var visible = Math.abs(angle) <= 100;
+    if (!visible) { item.style.display='none'; item.style.pointerEvents='none'; continue; }
+    item.style.display = 'flex';
+    item.style.pointerEvents = 'auto';
+    var absD = Math.abs(delta);
+    var scale = Math.max(1 - absD * 0.12, 0.50);
+    var opacity = Math.max(1 - absD * 0.15, 0.30);
+    item.style.transition = 'transform ' + dur + ' ' + timing + ', opacity ' + dur + ' ease';
+    item.style.transform = 'rotateY(' + angle + 'deg) translateZ(' + _carouselRadius + 'px)';
+    item.style.opacity = opacity;
+    item.style.zIndex = n - absD;
+    item.style.scale = scale;
+    item.classList.toggle('active', delta === 0);
+  }
+  if (ring) {
+    ring.style.transition = 'transform ' + dur + ' ' + timing + ', opacity 0.35s';
+    ring.style.transform = 'rotateY(0deg) translateZ(' + _carouselRadius + 'px)';
+    ring.classList.toggle('visible', true);
+  }
+  var dotEls = document.querySelectorAll('.carousel-3d-dot');
+  for (var j = 0; j < dotEls.length; j++) {
+    dotEls[j].className = 'carousel-3d-dot' + (j === activeIdx ? ' active' : '') + (Math.abs(j - activeIdx) === 1 ? ' adjacent' : '');
+  }
+}
+
+function carouselClick(idx) {
+  if (idx === _carouselActive) {
+    var cat = _carouselCats[idx];
+    if (cat) startQuiz(escH(String(cat.id||cat.name)), cat.name);
+  } else {
+    updateCarousel(idx, true);
+  }
+}
+
+function bindCarouselDrag() {
+  var wrap = document.getElementById('carouselWrap');
+  if (!wrap) return;
+  var dragging = false, startX = 0, lastX = 0, startIdx = 0;
+  function onStart(x) { dragging = true; startX = x; lastX = x; startIdx = _carouselActive; }
+  function onMove(x) {
+    if (!dragging) return;
+    var dx = x - startX;
+    lastX = x;
+    var steps = -dx / 85;
+    var tempIdx = Math.round(startIdx + steps);
+    tempIdx = Math.max(0, Math.min(tempIdx, _carouselCats.length - 1));
+    updateCarousel(tempIdx, false);
+  }
+  function onEnd() {
+    if (!dragging) return;
+    dragging = false;
+    // Snap — current active is already set by onMove
+  }
+  wrap.addEventListener('mousedown', function(e){ onStart(e.clientX); });
+  wrap.addEventListener('mousemove', function(e){ onMove(e.clientX); });
+  wrap.addEventListener('mouseup', onEnd);
+  wrap.addEventListener('mouseleave', onEnd);
+  wrap.addEventListener('touchstart', function(e){ onStart(e.touches[0].clientX); }, {passive:true});
+  wrap.addEventListener('touchmove', function(e){ onMove(e.touches[0].clientX); e.preventDefault(); }, {passive:false});
+  wrap.addEventListener('touchend', onEnd);
 }
 
 // ════════════════════════════════════════════
@@ -6359,11 +6551,8 @@ async function loadHistory() {
       data = await api('GET', '/api/quiz-attempts/' + encodeURIComponent(deviceId) + '?limit=50&_=' + Date.now());
     }
     var attempts = Array.isArray(data) ? data : (data.attempts || data.results || []);
-    if (token) {
-      attempts = _mergeAttempts(attempts, _lastSavedAttempt ? [_lastSavedAttempt] : []);
-    } else {
-      attempts = _mergeAttempts(attempts, _readLocalAttempts().concat(_lastSavedAttempt ? [_lastSavedAttempt] : []));
-    }
+    // Always merge with local data — covers the gap between quiz end and POST completion
+    attempts = _mergeAttempts(attempts, _readLocalAttempts().concat(_lastSavedAttempt ? [_lastSavedAttempt] : []));
     _histAttempts = attempts; // store for detail panel access
     document.getElementById('histCount').textContent = '(' + attempts.length + ')';
     if (!attempts.length) {
