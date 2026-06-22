@@ -466,18 +466,33 @@ a { color:inherit; text-decoration:none; }
 }
 .carousel-3d-item {
   position:absolute; left:50%; top:50%;
-  width:200px; height:260px;
-  margin-left:-100px; margin-top:-130px;
+  width:175px; height:220px;
+  margin-left:-87.5px; margin-top:-110px;
   border-radius:20px;
   cursor:pointer; backface-visibility:hidden;
   display:flex; flex-direction:column; align-items:center; justify-content:center;
-  gap:8px; padding:20px 16px;
+  gap:8px; padding:16px 12px;
   background:linear-gradient(160deg, rgba(19,27,46,.92) 0%, rgba(15,23,42,.96) 100%);
   border:1.5px solid rgba(255,255,255,.08);
   box-shadow:0 4px 30px rgba(0,0,0,.3);
   color:var(--text);
   transition:border-color .3s, box-shadow .4s;
   will-change:transform, opacity;
+  overflow:hidden;
+}
+.carousel-3d-item::before {
+  content:'';
+  position:absolute; inset:0;
+  border-radius:20px;
+  pointer-events:none;
+  opacity:.06;
+  background-image:
+    linear-gradient(rgba(0,245,255,.6) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,245,255,.6) 1px, transparent 1px),
+    radial-gradient(circle 2px at 16px 16px, rgba(0,245,255,.8) 100%, transparent 100%),
+    radial-gradient(circle 2px at 48px 48px, rgba(255,0,229,.8) 100%, transparent 100%),
+    radial-gradient(circle 1.5px at 80px 24px, rgba(255,215,0,.8) 100%, transparent 100%);
+  background-size:32px 32px, 32px 32px, 96px 96px, 96px 96px, 96px 96px;
 }
 [data-theme="light"] .carousel-3d-item {
   background:linear-gradient(160deg, rgba(255,255,255,.92) 0%, rgba(241,245,249,.96) 100%);
@@ -485,8 +500,13 @@ a { color:inherit; text-decoration:none; }
   box-shadow:0 4px 24px rgba(0,0,0,.06);
 }
 .carousel-3d-item.active {
-  border-color:var(--orange);
-  box-shadow:0 0 30px rgba(255,153,51,.15), 0 0 60px rgba(255,153,51,.06);
+  border-color:rgba(0,245,255,.7);
+  box-shadow:
+    0 0 12px rgba(0,245,255,.55),
+    0 0 30px rgba(0,245,255,.30),
+    0 0 60px rgba(0,245,255,.12),
+    0 0 4px rgba(255,0,229,.40),
+    inset 0 0 20px rgba(0,245,255,.06);
   animation:neonFlow 4s linear infinite;
 }
 @keyframes neonFlow {
@@ -515,13 +535,13 @@ a { color:inherit; text-decoration:none; }
 }
 .carousel-3d-active-ring {
   position:absolute; top:50%; left:50%;
-  width:200px; height:260px; margin-left:-100px; margin-top:-130px;
+  width:175px; height:220px; margin-left:-87.5px; margin-top:-110px;
   border-radius:20px;
   pointer-events:none;
-  border:2px solid var(--orange);
+  border:2px solid rgba(0,245,255,.8);
   opacity:0;
   transition:opacity .35s;
-  box-shadow:0 0 40px rgba(255,153,51,.10), inset 0 0 40px rgba(255,153,51,.03);
+  box-shadow:0 0 24px rgba(0,245,255,.35), 0 0 60px rgba(0,245,255,.12), inset 0 0 20px rgba(0,245,255,.05);
 }
 .carousel-3d-active-ring.visible { opacity:1; }
 
@@ -4721,7 +4741,7 @@ function updateCarousel(activeIdx, animate, dragAngleOffset) {
     item.style.display = 'flex';
     item.style.pointerEvents = 'auto';
     var absD = Math.abs(delta);
-    var scale = Math.max(1 - absD * 0.12, 0.50);
+    var scale = delta === 0 ? 1.08 : Math.max(1 - absD * 0.12, 0.50);
     var opacity = Math.max(1 - absD * 0.15, 0.30);
     item.style.transition = 'transform ' + dur + ' ' + timing + ', opacity ' + dur + ' ease';
     item.style.transform = 'rotateY(' + angle + 'deg) translateZ(' + _carouselRadius + 'px)';
