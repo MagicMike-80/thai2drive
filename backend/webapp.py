@@ -454,8 +454,8 @@ a { color:inherit; text-decoration:none; }
   width:100%; height:340px;
   perspective:1000px; perspective-origin:50% 50%;
   display:flex; align-items:center; justify-content:center;
-  position:relative; overflow:hidden;
-  touch-action:pan-y; /* horizontal swipe, let browser handle vertical */
+  position:relative; overflow:visible;
+  touch-action:pan-y;
   user-select:none; -webkit-user-select:none;
 }
 .carousel-3d-stage {
@@ -4775,7 +4775,8 @@ async function loadCategories() {
   var stage = document.getElementById('carouselStage');
   stage.innerHTML = '<div class="loading-wrap" style="position:absolute;top:50%;left:50%;margin:-24px 0 0 -24px;"><div class="spinner"></div></div>';
   try {
-    var cats = await api('GET', '/api/categories');
+    var rawCats = await api('GET', '/api/categories');
+    var cats = rawCats.filter(function(c) { return c.name && c.name.indexOf('_') === -1; });
     catsLoaded = true;
     document.getElementById('catCount').textContent = '(' + cats.length + ')';
     if (!cats.length) {
