@@ -192,6 +192,7 @@ class QuizAttempt(BaseModel):
     completed_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
 class QuizAttemptCreate(BaseModel):
+    client_attempt_id: Optional[str] = None
     device_id: str
     mode: str
     category: Optional[str] = None
@@ -201,6 +202,7 @@ class QuizAttemptCreate(BaseModel):
     passed: Optional[bool] = None
     questions_answered: List[Dict[str, Any]]
     started_at: str
+    completed_at: Optional[str] = None
 
 class Bookmark(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
@@ -1771,8 +1773,11 @@ async def update_user_progress(device_id: str, answered_correct: bool, category:
 
 @api_router.post("/quiz-attempts")
 async def save_quiz_attempt(attempt_data: QuizAttemptCreate):
-    attempt = QuizAttempt(**attempt_data.dict())
-    doc = attempt.dict()
+    # Build doc from client data — preserve client_attempt_id and client completed_at
+    doc = attempt_data.dict(exclude_none=True)
+    doc["id"] = doc.pop("client_attempt_id", None) or str(uuid.uuid4())
+    if "completed_at" not in doc:
+        doc["completed_at"] = datetime.now(timezone.utc).isoformat()
     await db.quiz_attempts.insert_one(doc)
     doc.pop("_id", None)
     return doc
@@ -4777,7 +4782,7 @@ async def ensure_indexes():
 
 # Google Cloud TTS voice mapping for all three app languages
 _GOOGLE_TTS_VOICES = {
-    "th-TH": "th-TH-Standard-C",
+    "th-TH": "th-TH-Chirp3-HD-Achird",   # Male Chirp3 HD — Google deprecated th-TH-Standard-C
     "nb-NO": "nb-NO-Wavenet-A",
     "en-US": "en-US-Wavenet-D",
 }
