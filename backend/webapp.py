@@ -465,6 +465,10 @@ a { color:inherit; text-decoration:none; }
   display:flex; align-items:center; justify-content:center;
 }
 .carousel-3d-item {
+  --cat-color:#FF9933;
+  --cat-glow:rgba(255,153,51,.45);
+  --cat-bg1:rgba(19,27,46,.94);
+  --cat-bg2:rgba(11,18,38,.98);
   position:absolute; left:50%; top:50%;
   width:175px; height:220px;
   margin-left:-87.5px; margin-top:-110px;
@@ -472,7 +476,7 @@ a { color:inherit; text-decoration:none; }
   cursor:pointer; backface-visibility:hidden;
   display:flex; flex-direction:column; align-items:center; justify-content:center;
   gap:8px; padding:16px 12px;
-  background:linear-gradient(160deg, rgba(19,27,46,.92) 0%, rgba(15,23,42,.96) 100%);
+  background:linear-gradient(160deg, var(--cat-bg1) 0%, var(--cat-bg2) 100%);
   border:1.5px solid rgba(255,255,255,.08);
   box-shadow:0 4px 30px rgba(0,0,0,.3);
   color:var(--text);
@@ -500,14 +504,13 @@ a { color:inherit; text-decoration:none; }
   box-shadow:0 4px 24px rgba(0,0,0,.06);
 }
 .carousel-3d-item.active {
-  border-color:rgba(0,245,255,.7);
+  border-color:var(--cat-color);
   box-shadow:
-    0 0 12px rgba(0,245,255,.55),
-    0 0 30px rgba(0,245,255,.30),
-    0 0 60px rgba(0,245,255,.12),
-    0 0 4px rgba(255,0,229,.40),
-    inset 0 0 20px rgba(0,245,255,.06);
-  animation:neonFlow 4s linear infinite;
+    0 0 12px var(--cat-glow),
+    0 0 30px var(--cat-glow),
+    0 0 60px rgba(0,0,0,.15),
+    inset 0 0 20px var(--cat-glow);
+  animation:neonFlow 5s linear infinite;
 }
 @keyframes neonFlow {
   0%   { filter:hue-rotate(0deg); }
@@ -519,12 +522,15 @@ a { color:inherit; text-decoration:none; }
 }
 .carousel-3d-item:active { transform:scale(.97); }
 .carousel-3d-icon {
-  font-size:3.2rem; line-height:1; margin-bottom:4px;
-  filter:drop-shadow(0 2px 8px rgba(255,153,51,.15));
-  transition:filter .3s;
+  width:62px; height:62px; margin-bottom:4px;
+  display:flex; align-items:center; justify-content:center;
+  color:var(--cat-color);
+  filter:drop-shadow(0 2px 10px var(--cat-glow));
+  transition:filter .3s, color .3s;
 }
+.carousel-3d-icon svg { width:100%; height:100%; }
 .carousel-3d-item.active .carousel-3d-icon {
-  filter:drop-shadow(0 2px 12px rgba(255,153,51,.30));
+  filter:drop-shadow(0 0 14px var(--cat-glow)) drop-shadow(0 0 4px var(--cat-glow));
 }
 .carousel-3d-label {
   font-weight:800; font-size:1.15rem; line-height:1.3; text-align:center;
@@ -585,6 +591,50 @@ a { color:inherit; text-decoration:none; }
   transition:opacity 1s;
 }
 [data-theme="light"] .carousel-3d-hint { color:rgba(0,0,0,.16); }
+
+/* ── Per-category neon color themes ── */
+.carousel-3d-item[data-ckey="Speed Limits"]
+  { --cat-color:#FF6A00; --cat-glow:rgba(255,106,0,.50); --cat-bg1:rgba(50,15,0,.95); --cat-bg2:rgba(20,5,0,.99); }
+.carousel-3d-item[data-ckey="Road Rules"],
+.carousel-3d-item[data-ckey="Trafikkregler"]
+  { --cat-color:#FF4500; --cat-glow:rgba(255,69,0,.48); --cat-bg1:rgba(45,10,0,.95); --cat-bg2:rgba(18,4,0,.99); }
+.carousel-3d-item[data-ckey="Traffic Signs"]
+  { --cat-color:#FFD700; --cat-glow:rgba(255,215,0,.48); --cat-bg1:rgba(40,30,0,.95); --cat-bg2:rgba(15,12,0,.99); }
+.carousel-3d-item[data-ckey="Right of Way"]
+  { --cat-color:#AAFF00; --cat-glow:rgba(170,255,0,.48); --cat-bg1:rgba(12,32,0,.95); --cat-bg2:rgba(4,14,0,.99); }
+.carousel-3d-item[data-ckey="Traffic Rules"]
+  { --cat-color:#CC44FF; --cat-glow:rgba(204,68,255,.48); --cat-bg1:rgba(28,5,40,.95); --cat-bg2:rgba(10,0,18,.99); }
+.carousel-3d-item[data-ckey="Situations"]
+  { --cat-color:#00FF6A; --cat-glow:rgba(0,255,106,.45); --cat-bg1:rgba(0,30,12,.95); --cat-bg2:rgba(0,12,5,.99); }
+.carousel-3d-item[data-ckey="Safety"]
+  { --cat-color:#00AAFF; --cat-glow:rgba(0,170,255,.48); --cat-bg1:rgba(0,18,40,.95); --cat-bg2:rgba(0,6,18,.99); }
+.carousel-3d-item[data-ckey="Driving Conditions"],
+.carousel-3d-item[data-ckey="Road Conditions"]
+  { --cat-color:#00C8FF; --cat-glow:rgba(0,200,255,.45); --cat-bg1:rgba(0,20,35,.95); --cat-bg2:rgba(0,8,16,.99); }
+.carousel-3d-item[data-ckey="Accidents"]
+  { --cat-color:#FF1744; --cat-glow:rgba(255,23,68,.50); --cat-bg1:rgba(45,0,8,.95); --cat-bg2:rgba(18,0,3,.99); }
+.carousel-3d-item[data-ckey="Alcohol"]
+  { --cat-color:#FF3D71; --cat-glow:rgba(255,61,113,.45); --cat-bg1:rgba(40,0,12,.95); --cat-bg2:rgba(16,0,5,.99); }
+.carousel-3d-item[data-ckey="Highway"]
+  { --cat-color:#00E5FF; --cat-glow:rgba(0,229,255,.45); --cat-bg1:rgba(0,22,32,.95); --cat-bg2:rgba(0,8,14,.99); }
+.carousel-3d-item[data-ckey="Intersections"]
+  { --cat-color:#FF8C00; --cat-glow:rgba(255,140,0,.48); --cat-bg1:rgba(42,18,0,.95); --cat-bg2:rgba(16,6,0,.99); }
+.carousel-3d-item[data-ckey="Parking"]
+  { --cat-color:#00E5FF; --cat-glow:rgba(0,229,255,.42); --cat-bg1:rgba(0,20,30,.95); --cat-bg2:rgba(0,7,12,.99); }
+.carousel-3d-item[data-ckey="Vehicle"]
+  { --cat-color:#4FC3F7; --cat-glow:rgba(79,195,247,.42); --cat-bg1:rgba(0,18,30,.95); --cat-bg2:rgba(0,6,14,.99); }
+.carousel-3d-item[data-ckey="Lights"]
+  { --cat-color:#FFE033; --cat-glow:rgba(255,224,51,.45); --cat-bg1:rgba(38,28,0,.95); --cat-bg2:rgba(14,10,0,.99); }
+.carousel-3d-item[data-ckey="Tires"]
+  { --cat-color:#B0C4DE; --cat-glow:rgba(176,196,222,.38); --cat-bg1:rgba(12,16,22,.95); --cat-bg2:rgba(4,6,10,.99); }
+.carousel-3d-item[data-ckey="Overtaking"]
+  { --cat-color:#00FF80; --cat-glow:rgba(0,255,128,.45); --cat-bg1:rgba(0,28,14,.95); --cat-bg2:rgba(0,10,5,.99); }
+.carousel-3d-item[data-ckey="Pedestrians"]
+  { --cat-color:#FF9800; --cat-glow:rgba(255,152,0,.48); --cat-bg1:rgba(40,20,0,.95); --cat-bg2:rgba(16,7,0,.99); }
+.carousel-3d-item[data-ckey="Environment"]
+  { --cat-color:#00E676; --cat-glow:rgba(0,230,118,.45); --cat-bg1:rgba(0,26,14,.95); --cat-bg2:rgba(0,10,5,.99); }
+.carousel-3d-item[data-ckey="Hazardous Goods"]
+  { --cat-color:#FF6D00; --cat-glow:rgba(255,109,0,.50); --cat-bg1:rgba(40,14,0,.95); --cat-bg2:rgba(16,5,0,.99); }
 
 /* ══════════════════════════════════════════
    QUIZ SCREEN — fully height-based, NO scroll
@@ -3991,6 +4041,40 @@ var CAT_ICONS = {
   'Accidents':'🚨','Highway':'🛣️'
 };
 
+var CAT_SVG = (function(){
+  var s = 'stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" fill="none"';
+  var h = function(d){ return '<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" '+s+' stroke-width="2.8">'+d+'</svg>'; };
+  return {
+    'Speed Limits':     h('<circle cx="24" cy="28" r="15"/><path d="M24 13V7M17 9l1.5 3M31 9l-1.5 3M11 20l2.5 1.5M37 20l-2.5 1.5"/><path d="M24 28L32 18" stroke-width="3"/><circle cx="24" cy="28" r="2.5" fill="currentColor" stroke="none"/>'),
+    'Road Rules':       h('<rect x="14" y="6" width="20" height="28" rx="3"/><rect x="17" y="18" width="14" height="12" rx="2"/><circle cx="20.5" cy="21.5" r="2" fill="currentColor" stroke="none"/><circle cx="24" cy="21.5" r="2" fill="currentColor" stroke="none"/><circle cx="27.5" cy="21.5" r="2" fill="currentColor" stroke="none"/><line x1="17" y1="10" x2="31" y2="10"/><line x1="17" y1="14" x2="31" y2="14"/>'),
+    'Traffic Signs':    h('<path d="M24 8L42 38H6Z"/><line x1="24" y1="18" x2="24" y2="28"/><circle cx="24" cy="32" r="1.5" fill="currentColor" stroke="none"/>'),
+    'Right of Way':     h('<path d="M24 8L42 38H6Z"/><line x1="24" y1="18" x2="24" y2="28"/><circle cx="24" cy="32" r="1.5" fill="currentColor" stroke="none"/>'),
+    'Traffic Rules':    h('<rect x="16" y="8" width="16" height="36" rx="8"/><circle cx="24" cy="17" r="4" fill="currentColor" stroke="none" opacity=".4"/><circle cx="24" cy="28" r="4" fill="currentColor" stroke="none" opacity=".4"/><circle cx="24" cy="38" r="4" fill="currentColor" stroke="none"/>'),
+    'Situations':       h('<path d="M34 14a14 14 0 1 0 2 8"/><path d="M36 8v8h-8"/>'),
+    'Safety':           h('<path d="M24 6l14 5v12c0 8-6 14-14 17C16 37 10 31 10 23V11Z"/><path d="M17 23l5 5 9-10"/>'),
+    'Driving Conditions':h('<path d="M8 34a10 10 0 0 1 10-10 8 8 0 0 1 15-3 10 10 0 0 1 7 10"/><line x1="14" y1="38" x2="14" y2="43"/><line x1="20" y1="38" x2="20" y2="43"/><line x1="26" y1="38" x2="26" y2="43"/><line x1="32" y1="38" x2="32" y2="43"/>'),
+    'Road Conditions':  h('<path d="M8 34a10 10 0 0 1 10-10 8 8 0 0 1 15-3 10 10 0 0 1 7 10"/><line x1="14" y1="38" x2="14" y2="43"/><line x1="20" y1="38" x2="20" y2="43"/><line x1="26" y1="38" x2="26" y2="43"/><line x1="32" y1="38" x2="32" y2="43"/>'),
+    'Accidents':        h('<path d="M24 6l3 12h12l-10 7 4 13L24 30l-9 8 4-13L9 18h12Z"/>'),
+    'Alcohol':          h('<path d="M18 8h12l-3 14a8 8 0 1 1-6 0Z"/><line x1="24" y1="36" x2="24" y2="44"/><line x1="18" y1="44" x2="30" y2="44"/>'),
+    'Highway':          h('<path d="M4 40h40M12 40L16 8M36 40L32 8"/><line x1="24" y1="12" x2="24" y2="20"/><line x1="24" y1="26" x2="24" y2="34"/>'),
+    'Intersections':    h('<line x1="24" y1="4" x2="24" y2="44"/><line x1="4" y1="24" x2="44" y2="24"/><circle cx="24" cy="24" r="5"/>'),
+    'Parking':          h('<rect x="10" y="8" width="28" height="36" rx="4"/><path d="M19 24h6a5 5 0 0 0 0-10h-6v18"/><line x1="19" y1="24" x2="30" y2="24"/>'),
+    'Vehicle':          h('<rect x="6" y="20" width="36" height="16" rx="4"/><path d="M12 20l4-10h16l4 10"/><circle cx="14" cy="36" r="5"/><circle cx="34" cy="36" r="5"/><rect x="28" y="14" width="8" height="6" rx="1"/>'),
+    'Lights':           h('<path d="M24 8a10 10 0 0 1 10 10c0 5-3 8-4 10H18c-1-2-4-5-4-10A10 10 0 0 1 24 8Z"/><line x1="21" y1="28" x2="27" y2="28"/><line x1="22" y1="32" x2="26" y2="32"/><line x1="24" y1="4" x2="24" y2="6"/><line x1="10" y1="10" x2="12" y2="12"/><line x1="38" y1="10" x2="36" y2="12"/>'),
+    'Tires':            h('<circle cx="24" cy="24" r="16"/><circle cx="24" cy="24" r="7"/><line x1="24" y1="8" x2="24" y2="17"/><line x1="24" y1="31" x2="24" y2="40"/><line x1="8" y1="24" x2="17" y2="24"/><line x1="31" y1="24" x2="40" y2="24"/>'),
+    'Overtaking':       h('<rect x="4" y="22" width="18" height="10" rx="3"/><circle cx="9" cy="32" r="3"/><circle cx="17" cy="32" r="3"/><rect x="26" y="14" width="18" height="10" rx="3"/><circle cx="31" cy="24" r="3"/><circle cx="39" cy="24" r="3"/><path d="M28 22l-8-8"/>'),
+    'Pedestrians':      h('<circle cx="24" cy="10" r="5"/><path d="M24 16v14M17 22h14M20 30l-4 12M28 30l4 12"/>'),
+    'Environment':      h('<path d="M24 40V22"/><path d="M24 22a12 12 0 0 0 12-12 12 12 0 0 0-12 12Z"/><path d="M24 30a10 10 0 0 1-10-10 10 10 0 0 1 10 10Z"/>'),
+    'Hazardous Goods':  h('<circle cx="24" cy="24" r="17"/><path d="M24 14v12M17 26l6-12 6 12M14 30h20"/>'),
+    'Fellesskjøring':   h('<circle cx="16" cy="20" r="6"/><circle cx="32" cy="20" r="6"/><path d="M10 36a6 6 0 0 1 12 0M26 36a6 6 0 0 1 12 0"/>'),
+    'Lastsikring':      h('<rect x="8" y="20" width="32" height="18" rx="3"/><path d="M16 20v-8a8 8 0 0 1 16 0v8"/><path d="M8 32h32"/><circle cx="24" cy="32" r="3"/>'),
+    'Gangfelt':         h('<line x1="8" y1="36" x2="40" y2="36"/><line x1="8" y1="28" x2="40" y2="28"/><circle cx="24" cy="10" r="5"/><path d="M24 16v12M17 22h14M20 28l-4 8M28 28l4 8"/>'),
+    'Motorvei':         h('<path d="M4 40h40M12 40L16 8M36 40L32 8"/><line x1="24" y1="12" x2="24" y2="20"/><line x1="24" y1="26" x2="24" y2="34"/>'),
+    'Kryss':            h('<line x1="24" y1="4" x2="24" y2="44"/><line x1="4" y1="24" x2="44" y2="24"/><circle cx="24" cy="24" r="5"/>'),
+    'default':          h('<rect x="10" y="8" width="28" height="36" rx="3"/><line x1="16" y1="18" x2="32" y2="18"/><line x1="16" y1="24" x2="32" y2="24"/><line x1="16" y1="30" x2="26" y2="30"/>')
+  };
+})();
+
 // Kategori navn per språk
 var CAT_NAMES = {
   'Road Rules':       {no:'Trafikkregler',   th:'กฎจราจร',          en:'Road Rules'},
@@ -4693,12 +4777,12 @@ function renderCarousel(cats) {
   _carouselActive = 0;
   var stage = document.getElementById('carouselStage');
   var itemsHtml = cats.map(function(c, i) {
-    var icon = CAT_ICONS[c.name] || '📖';
+    var svgIcon = CAT_SVG[c.name] || CAT_SVG['default'];
     var count = c.question_count || c.count || '';
     var name = catName(c.name);
     var qWord = t('questions_word');
-    return '<div class="carousel-3d-item" data-idx="' + i + '" onclick="carouselClick(' + i + ')">'
-      + '<div class="carousel-3d-icon">' + icon + '</div>'
+    return '<div class="carousel-3d-item" data-idx="' + i + '" data-ckey="' + escH(c.name) + '" onclick="carouselClick(' + i + ')">'
+      + '<div class="carousel-3d-icon">' + svgIcon + '</div>'
       + '<div class="carousel-3d-label">' + escH(name) + '</div>'
       + '<div class="carousel-3d-count">' + (count ? count + ' ' + qWord : '') + '</div>'
       + '</div>';
