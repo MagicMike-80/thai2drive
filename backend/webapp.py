@@ -8438,3 +8438,165 @@ async def web_app():
 async def web_version():
     """Returns the current deploy version. Use this to confirm what build is live."""
     return {"version": DEPLOY_VERSION, "endpoint": "/api/web"}
+
+VOICE_TESTER_HTML = """<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Thai Voice Tester</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #0d0d0d;
+    color: #e0e0e0;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .card {
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    border-radius: 16px;
+    padding: 32px;
+    width: 100%;
+    max-width: 520px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+  }
+  .logo { display:flex; align-items:center; gap:10px; margin-bottom:28px; }
+  .logo-icon {
+    width:40px; height:40px; border-radius:10px;
+    background: linear-gradient(135deg,#8b5cf6,#6366f1);
+    display:flex; align-items:center; justify-content:center;
+    font-size:20px;
+  }
+  .logo h1 { font-size:1.15rem; font-weight:600; color:#fff; }
+  .logo p { font-size:0.75rem; color:#666; }
+  label { display:block; font-size:0.8rem; color:#888; margin-bottom:6px; font-weight:500; letter-spacing:.04em; text-transform:uppercase; }
+  input, textarea {
+    width:100%; background:#111; border:1px solid #2a2a2a;
+    border-radius:8px; color:#e0e0e0; font-size:0.95rem;
+    padding:11px 14px; outline:none; transition:border-color .2s;
+    font-family: inherit;
+  }
+  input:focus, textarea:focus { border-color:#6366f1; }
+  textarea { resize:vertical; min-height:120px; line-height:1.6; }
+  .field { margin-bottom:18px; }
+  .row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .btn {
+    width:100%; padding:13px; border:none; border-radius:10px; cursor:pointer;
+    font-size:1rem; font-weight:600; letter-spacing:.02em;
+    background: linear-gradient(135deg,#8b5cf6,#6366f1);
+    color:#fff; margin-top:8px; transition:opacity .2s, transform .1s;
+  }
+  .btn:hover { opacity:.9; }
+  .btn:active { transform:scale(.98); }
+  .btn:disabled { opacity:.45; cursor:not-allowed; }
+  .status {
+    margin-top:16px; padding:12px 14px; border-radius:8px;
+    font-size:0.875rem; display:none;
+  }
+  .status.error { background:#2d1515; border:1px solid #5a1a1a; color:#f87171; display:block; }
+  .status.ok { background:#142014; border:1px solid #1a4a1a; color:#86efac; display:block; }
+  .status.loading { background:#1a1a2e; border:1px solid #2a2a5a; color:#a5b4fc; display:block; }
+  audio { width:100%; margin-top:14px; border-radius:8px; display:none; }
+  .hint { font-size:0.72rem; color:#555; margin-top:5px; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">
+    <div class="logo-icon">🎙️</div>
+    <div>
+      <h1>AI Thai Voice Tester</h1>
+      <p>ElevenLabs · eleven_multilingual_v2</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="field">
+      <label>ElevenLabs API Key</label>
+      <input type="password" id="apiKey" placeholder="sk-..." autocomplete="off">
+      <div class="hint">Aldri lagret — kun i nettleseren</div>
+    </div>
+    <div class="field">
+      <label>Voice ID</label>
+      <input type="text" id="voiceId" placeholder="21m00Tcm..." value="21m00Tcm4TlvDq8ikWAM">
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Thai-tekst</label>
+    <textarea id="thaiText">กรุณาหยุดรถที่ป้ายหยุดรถ แล้วมองซ้ายขวาก่อนออกตัว ขับรถด้วยความระมัดระวัง</textarea>
+  </div>
+
+  <button class="btn" id="genBtn" onclick="generate()">&#9654; Generer Lyd</button>
+  <div class="status" id="status"></div>
+  <audio controls id="player"></audio>
+</div>
+
+<script>
+async function generate() {
+  var key = document.getElementById('apiKey').value.trim();
+  var voiceId = document.getElementById('voiceId').value.trim();
+  var text = document.getElementById('thaiText').value.trim();
+  var btn = document.getElementById('genBtn');
+  var status = document.getElementById('status');
+  var player = document.getElementById('player');
+
+  if (!key) { showStatus('error', 'Skriv inn ElevenLabs API Key.'); return; }
+  if (!voiceId) { showStatus('error', 'Skriv inn Voice ID.'); return; }
+  if (!text) { showStatus('error', 'Skriv inn Thai-tekst.'); return; }
+
+  btn.disabled = true;
+  player.style.display = 'none';
+  showStatus('loading', 'Genererer lyd...');
+
+  try {
+    var res = await fetch('https://api.elevenlabs.io/v1/text-to-speech/' + voiceId, {
+      method: 'POST',
+      headers: {
+        'xi-api-key': key,
+        'Content-Type': 'application/json',
+        'Accept': 'audio/mpeg'
+      },
+      body: JSON.stringify({
+        text: text,
+        model_id: 'eleven_multilingual_v2',
+        voice_settings: { stability: 0.5, similarity_boost: 0.75 }
+      })
+    });
+
+    if (!res.ok) {
+      var err = await res.json().catch(function(){ return {}; });
+      throw new Error(err.detail && err.detail.message ? err.detail.message : 'Status ' + res.status);
+    }
+
+    var blob = await res.blob();
+    var url = URL.createObjectURL(blob);
+    player.src = url;
+    player.style.display = 'block';
+    player.play();
+    showStatus('ok', 'Lyd klar! Spilles av na.');
+  } catch(e) {
+    showStatus('error', 'Feil: ' + e.message);
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+function showStatus(type, msg) {
+  var el = document.getElementById('status');
+  el.className = 'status ' + type;
+  el.textContent = msg;
+}
+</script>
+</body>
+</html>"""
+
+@webapp_router.get("/web/voice-tester", response_class=HTMLResponse)
+async def voice_tester():
+    return HTMLResponse(content=VOICE_TESTER_HTML)
