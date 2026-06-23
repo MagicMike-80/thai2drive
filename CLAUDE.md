@@ -37,6 +37,12 @@ If ownership is unclear, ask whether it is a Codex implementation task or a Clau
 - Thai mode must be 100% Thai, Norwegian mode 100% Norwegian, and English mode 100% English.
 - Michael should feel like a calm real driving instructor, not a generic chatbot or visible AI system.
 
+### Karpathy Coding Principles
+- **Tenk før du koder:** Still oppklarende spørsmål hvis oppgaven er uklar; gjør aldri antakelser i stillhet.
+- **Enkelhet først:** Bygg den enkleste mulige løsningen; unngå over-engineering og spekulative abstraksjoner.
+- **Kirurgiske endringer:** Gjør kun presise endringer som er direkte nødvendige for oppgaven; ikke refaktorer eller endre urelatert kode.
+- **Ikke fiks det som fungerer:** La fungerende kode være i fred hvis det ikke er en del av den forespurte oppgaven.
+
 ### Michael Roadmap
 
 - V1: Michael as a good chat teacher.

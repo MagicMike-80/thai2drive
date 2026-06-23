@@ -15,32 +15,25 @@ Michael trenger bare si hva han ønsker — resten skjer av seg selv.
 ## ✅ LEVERT
 - ✅ Kompakt knapp-layout (ExpandableButtonGroup)
 - ✅ ElevenLabs voice (TTS) i app og web (Codex)
+- ✅ **Bibliotek (Library) — Ryggraden for repetisjon**
+  - Historikk, Bokmerker, Studiebok, Trafikkskilt-katalog via web-first.
+- ✅ **Michael hurtigvalg-knapper (Kontekst-spesifikk hjelp)**
+  - Web-appen har nå suggestion chips og hurtigvalg-knapper i sidemenyen/mobilmenyen (Codex).
+- ✅ **AI feillogg (Codex)**
+  - Logger språk, spørsmål, svartid og feil til `teacher_chat_logs`.
+- ✅ **Smart Øving (Spaced Repetition / Adaptivt læringsløp)**
+  - Analyserer svakeste temaer per elev via `ai_learning.py` og bygger adaptiv queue i quizzen.
+- ✅ **Neon design — markedsføringssiden (landing.py)**
+  - Cyan #00F5FF hero-knapper, aurora bakgrunn, magenta #FF00E5 eyebrows, gull #FFD700 stats og hero-highlight. Commit 7f2e747.
 
 ---
 
 ## 🔴 PRIORITERT — IKKE KLAR
-- 🔴 **Bibliotek (Library) — Ryggraden for repetisjon**
-  - Historikk, Bokmerker for vanskelige situasjoner, Studiebok, Komplett Skilt-katalog.
-  - Skal bygges web-first.
-
-- 🔴 **Michael hurtigvalg-knapper (Kontekst-spesifikk hjelp)**
-  - 🛑 Forklar et skilt
-  - 🚗 Hjelp med vikeplikt
-  - 📖 Forklar en trafikkregel
-  - Be om forklaring på spørsmål brukeren svarte feil på.
-  - Kobles mot `/api/teacher/chat`.
-
-- 🔴 **AI feillogg (Codex)**
-  - Logger språk, spørsmål, svartid og feil for å sikre at Michael underviser korrekt over tid.
-
-- 🔴 **Smart Øving (Spaced Repetition / Adaptivt læringsløp)**
-  - Analyserer svakeste temaer per elev.
-
----
+- 🔴 **Globalt Neon-design & Knappeeffekter**
+  - Implementer dynamisk, flytende neon-ramme (color-shifting border glow) rundt alle knapper og kanter i hele appen.
+  - Fargene må flyte/bevege seg rundt hele omkretsen (perimeteren) av knappene/kantene, ikke være statiske eller låst til ett sted (slik som på 3D-karusellens sidekort eller toppen).
 
 ## 🟡 PLANLAGT
-- 🟡 **Neon design — web app**
-  - Cyan #00F5FF, magenta #FF00E5, gul #FFD700 på markedsføringssiden.
 
 ---
 

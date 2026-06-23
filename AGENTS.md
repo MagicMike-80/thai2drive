@@ -49,6 +49,11 @@ Thai2Drive is a Norwegian driving theory app/course for Thai-speaking learners i
 - V4: Personal weak-topic learning.
 - V5: Voice, video, visual explanations, and adaptive AI instructor.
 
+## Neon Design Guidelines (Global)
+- **Dynamiske flytende neon-rammer:** Neon-gløden (border glow) rundt knapper, kort og rammer i appen skal ikke være statisk eller konsentrert på ett sted (for eksempel bare på toppen/sidene). Fargen må flyte og bevege seg kontinuerlig rundt hele perimeteren/omkretsen til knappen eller kanten.
+- **Neon color-shifting:** Bruk jevne gradientoverganger og animert fargeforskyvning (f.eks. CSS hue-rotate eller roterende gradientvinkler) slik at fargene flyter rundt hele grensen til elementet.
+- **Global anvendelse:** Denne flytende neon-rammen skal brukes på alle aktive knapper, kort og sidekanter for å gi et eksklusivt og "dyrt" preg.
+
 ## Feature Tracking — context/FEATURES.md
 
 All agents (Claude Code, Codex, and others) must maintain `context/FEATURES.md` automatically.

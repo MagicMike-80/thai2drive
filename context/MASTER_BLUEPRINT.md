@@ -64,4 +64,11 @@ Absolutt forbud mot å arbeide i hverandres ansvarsområder samtidig.
 
 ---
 
-*Godkjent av Michael — 2026-06-21*
+## DEL 6: Design & Visuell Identitet (Neon/Cyborg Dashboard)
+
+- **Dynamiske flytende neon-rammer:** Alle knapper og kanter i applikasjonen skal ha en dynamisk, flytende neon-glød (border glow). Fargen skal bevege/rotere seg kontinuerlig rundt hele objektets omkrets (perimeter) og ikke være fiksert på ett sted (for eksempel bare på toppen eller sidene).
+- **Høyverdig "dyrt" utseende:** Bruk animert CSS hue-rotation, mørke tekniske grid-bakgrunner, og pulserende glødeeffekter for å skape et eksklusivt cyber-dashboard-look som føles påkostet og moderne.
+
+---
+
+*Godkjent av Michael — 2026-06-22*

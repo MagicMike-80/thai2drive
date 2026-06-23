@@ -149,33 +149,74 @@ a { color:inherit; text-decoration:none; }
 
 /* BOTTOM NAV — glass, floating, app-native */
 #bottomNav {
-  height:var(--bottom-h); flex-shrink:0;
-  background:rgba(7,12,26,.88);
-  backdrop-filter:blur(32px) saturate(1.6); -webkit-backdrop-filter:blur(32px) saturate(1.6);
-  border-top:1px solid rgba(255,255,255,.055);
-  box-shadow:0 -1px 0 rgba(255,255,255,.03), 0 -12px 36px rgba(0,0,0,.28);
-  display:none; align-items:stretch; z-index:50;
-  overflow-x:auto; overflow-y:hidden;
-  -webkit-overflow-scrolling:touch;
-  scrollbar-width:none;
+  height: calc(var(--bottom-h) + 12px); flex-shrink: 0;
+  background: rgba(7, 12, 26, 0.92);
+  backdrop-filter: blur(32px) saturate(1.8); -webkit-backdrop-filter: blur(32px) saturate(1.8);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.03), 0 -12px 36px rgba(0, 0, 0, 0.35);
+  display: none; align-items: center; z-index: 50;
+  overflow-x: auto; overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  scroll-snap-type: x mandatory;
+  padding: 0 8px;
+  gap: 8px;
 }
-#bottomNav::-webkit-scrollbar { display:none; }
+#bottomNav::-webkit-scrollbar { display: none; }
 [data-theme="light"] #bottomNav {
-  background:rgba(241,245,249,.90);
-  border-top:1px solid rgba(0,0,0,.06);
-  box-shadow:0 -8px 24px rgba(0,0,0,.06);
+  background: rgba(241, 245, 249, 0.94);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.08);
 }
 .bn-tab {
-  flex:0 0 auto; min-width:64px; display:flex; flex-direction:column;
-  align-items:center; justify-content:center; gap:3px;
-  border:none; background:transparent; color:var(--muted);
-  cursor:pointer; font-size:.67rem; font-weight:600;
-  transition:color .18s; padding:6px 8px; letter-spacing:.1px;
+  flex: 0 0 calc(33.333% - 11px);
+  height: calc(100% - 16px);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--muted);
+  cursor: pointer; font-size: 0.68rem; font-weight: 700;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 6px 4px; letter-spacing: 0.2px;
+  scroll-snap-align: center;
+  border-radius: 14px;
+  box-shadow: inset 0 1px 1px rgba(255,255,255,0.03), 0 2px 4px rgba(0,0,0,0.15);
 }
-.bn-icon { font-size:22px; line-height:1; transition:transform .18s; }
-.bn-tab.active { color:var(--orange); }
-.bn-tab.active .bn-icon { transform:scale(1.14); }
-.bn-tab:active .bn-icon { transform:scale(.88); }
+[data-theme="light"] .bn-tab {
+  border: 1px solid rgba(0, 0, 0, 0.03);
+  background: rgba(0, 0, 0, 0.01);
+  box-shadow: inset 0 1px 1px rgba(255,255,255,0.8), 0 2px 4px rgba(0,0,0,0.04);
+}
+.bn-icon {
+  font-size: 24px; line-height: 1; 
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), filter 0.25s;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5)) contrast(1.15) saturate(1.25);
+  display: inline-block;
+}
+.bn-tab.active {
+  color: #00F5FF;
+  border: 1.5px solid transparent !important;
+  background: linear-gradient(rgba(11, 18, 38, 0.90), rgba(11, 18, 38, 0.90)) padding-box,
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #FFD700, #00F5FF) border-box !important;
+  animation: neonFlow 4s linear infinite;
+  box-shadow: 0 0 14px rgba(0, 245, 255, 0.22), inset 0 1px 2px rgba(255,255,255,0.08);
+  transform: translateY(-2px);
+}
+[data-theme="light"] .bn-tab.active {
+  color: var(--orange);
+  background: linear-gradient(#FFFFFF, #FFFFFF) padding-box,
+              conic-gradient(from var(--neon-angle, 0deg), #FF9933, #FF00E5, #00F5FF, #FF9933) border-box !important;
+  box-shadow: 0 0 14px rgba(255, 153, 51, 0.22), inset 0 1px 2px rgba(255,255,255,0.9);
+}
+.bn-tab.active .bn-icon {
+  transform: scale(1.2) translateY(-1px);
+  filter: drop-shadow(0 0 6px rgba(0, 245, 255, 0.6)) drop-shadow(0 2px 4px rgba(0,0,0,0.6)) contrast(1.3) saturate(1.5);
+}
+[data-theme="light"] .bn-tab.active .bn-icon {
+  filter: drop-shadow(0 0 6px rgba(255, 153, 51, 0.6)) drop-shadow(0 2px 4px rgba(0,0,0,0.3)) contrast(1.3) saturate(1.5);
+}
+.bn-tab:active .bn-icon { transform: scale(0.85); }
 
 /* ══════════════════════════════════════════
    SCREENS — each fills content area, height:100%
@@ -2806,6 +2847,78 @@ a { color:inherit; text-decoration:none; }
 }
 .teacher-send-btn:hover { background:var(--orange-dk); }
 .teacher-send-btn:disabled { background:var(--border); cursor:default; }
+
+/* ═══ CYBER & NEON STYLING (Gemini Blueprint) ═══ */
+/* Container for rullende karusell */
+.carousel-track {
+  display: flex;
+  animation: scroll-left 15s linear infinite;
+  gap: 20px;
+}
+
+/* Neon-glød og 3D-effekt på knapper */
+.cyber-button {
+  background: #0a0a0a;
+  border: 2px solid transparent;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.3); /* Cyan neon */
+  transition: transform 0.3s ease;
+}
+
+.cyber-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 25px rgba(255, 165, 0, 0.7); /* Orange glow */
+}
+
+/* Roterende neon-kant */
+.neon-border-animation {
+  position: absolute;
+  border: 2px solid #0ff;
+  animation: border-rotate 3s linear infinite;
+}
+
+@keyframes scroll-left {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+@keyframes border-rotate {
+  0% { border-color: #0ff; }
+  50% { border-color: #f90; }
+  100% { border-color: #0ff; }
+}
+
+/* Cyber-grid background for Library cards (Bookmarks, History, Signs) */
+.hist-card, .sign-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.bm-card::before, .hist-card::before, .sign-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: .06;
+  background-image:
+    linear-gradient(rgba(0,245,255,.6) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,245,255,.6) 1px, transparent 1px),
+    radial-gradient(circle 2px at 16px 16px, rgba(0,245,255,.8) 100%, transparent 100%),
+    radial-gradient(circle 2px at 48px 48px, rgba(255,0,229,.8) 100%, transparent 100%),
+    radial-gradient(circle 1.5px at 80px 24px, rgba(255,215,0,.8) 100%, transparent 100%);
+  background-size: 32px 32px, 32px 32px, 96px 96px, 96px 96px, 96px 96px;
+  z-index: 0;
+}
+
+/* Ensure content overlays above the grid backplate */
+.bm-card > *, .hist-card > *, .sign-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.bm-card-remove, .hist-badge {
+  z-index: 2 !important;
+}
 </style>
 </head>
 <body>
@@ -3473,28 +3586,28 @@ a { color:inherit; text-decoration:none; }
   <!-- BOTTOM NAV — 8 tabs: Hjem → Kategorier → Historikk → Michael → Skilt → Studiebok → Bokmerker → Innstillinger -->
   <div id="bottomNav">
     <button class="bn-tab active" id="bnHome" onclick="showTab('home')">
-      <span class="bn-icon">🏠</span><span data-key="home">Hjem</span>
+      <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span><span data-key="home">Hjem</span>
     </button>
     <button class="bn-tab" id="bnCats" onclick="showTab('cats')">
-      <span class="bn-icon">📚</span><span data-key="cats">Kategorier</span>
+      <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span><span data-key="cats">Kategorier</span>
     </button>
     <button class="bn-tab" id="bnHistory" onclick="showTab('history')">
-      <span class="bn-icon">📊</span><span data-key="history">Historikk</span>
+      <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span><span data-key="history">Historikk</span>
     </button>
     <button class="bn-tab bn-tab-michael" id="bnTeacher" onclick="showTab('teacher')">
-      <span class="bn-icon">🚗</span><span data-key="teacher">Michael</span>
+      <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1 .4-1.4 .9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6 .4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/><path d="M9 17h6"/></svg></span><span data-key="teacher">Michael</span>
     </button>
     <button class="bn-tab" id="bnSigns" onclick="showTab('signs')">
-      <span class="bn-icon">🪧</span><span data-key="signs">Skilt</span>
+      <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 22 2 22"/><line x1="12" y1="9" x2="12" y2="15"/><circle cx="12" cy="18" r="0.5" fill="currentColor"/></svg></span><span data-key="signs">Skilt</span>
     </button>
     <button class="bn-tab" id="bnStudybook" onclick="showTab('studybook')">
-      <span class="bn-icon">📖</span><span data-key="sb_nav">Studiebok</span>
+      <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span><span data-key="sb_nav">Studiebok</span>
     </button>
     <button class="bn-tab" id="bnBookmarks" onclick="showTab('bookmarks')">
-      <span class="bn-icon">🔖</span><span data-key="bookmarks">Bokmerker</span>
+      <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></span><span data-key="bookmarks">Bokmerker</span>
     </button>
     <button class="bn-tab" id="bnSettings" onclick="showTab('settings')">
-      <span class="bn-icon">⚙️</span><span data-key="settings">Innstillinger</span>
+      <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span><span data-key="settings">Innstillinger</span>
     </button>
   </div>
 
@@ -3959,14 +4072,14 @@ function applyUILang() {
   // back buttons
   document.querySelectorAll('.back-btn').forEach(function(b){ b.textContent = t('back'); });
   // bottom nav
-  var nb = document.getElementById('bnHome');      if(nb) nb.innerHTML = '<span class="bn-icon">🏠</span>' + t('home');
-  var nc = document.getElementById('bnCats');      if(nc) nc.innerHTML = '<span class="bn-icon">📚</span>' + t('cats');
-  var nh = document.getElementById('bnHistory');   if(nh) nh.innerHTML = '<span class="bn-icon">📊</span>' + t('history');
-  var nsg= document.getElementById('bnSigns');     if(nsg) nsg.innerHTML = '<span class="bn-icon">🪧</span>' + t('signs');
-  var nbm= document.getElementById('bnBookmarks'); if(nbm) nbm.innerHTML = '<span class="bn-icon">🔖</span>' + t('bookmarks');
-  var ns = document.getElementById('bnSettings');  if(ns) ns.innerHTML = '<span class="bn-icon">⚙️</span>' + t('settings');
-  var nt = document.getElementById('bnTeacher');   if(nt) nt.innerHTML = '<span class="bn-icon">🚗</span>' + t('teacher');
-  var nsb= document.getElementById('bnStudybook'); if(nsb) nsb.innerHTML = '<span class="bn-icon">📖</span>' + t('sb_nav');
+  var nb = document.getElementById('bnHome');      if(nb) nb.innerHTML = '<span class="bn-icon">' + NAV_SVG.home + '</span>' + t('home');
+  var nc = document.getElementById('bnCats');      if(nc) nc.innerHTML = '<span class="bn-icon">' + NAV_SVG.cats + '</span>' + t('cats');
+  var nh = document.getElementById('bnHistory');   if(nh) nh.innerHTML = '<span class="bn-icon">' + NAV_SVG.history + '</span>' + t('history');
+  var nsg= document.getElementById('bnSigns');     if(nsg) nsg.innerHTML = '<span class="bn-icon">' + NAV_SVG.signs + '</span>' + t('signs');
+  var nbm= document.getElementById('bnBookmarks'); if(nbm) nbm.innerHTML = '<span class="bn-icon">' + NAV_SVG.bookmarks + '</span>' + t('bookmarks');
+  var ns = document.getElementById('bnSettings');  if(ns) ns.innerHTML = '<span class="bn-icon">' + NAV_SVG.settings + '</span>' + t('settings');
+  var nt = document.getElementById('bnTeacher');   if(nt) nt.innerHTML = '<span class="bn-icon">' + NAV_SVG.teacher + '</span>' + t('teacher');
+  var nsb= document.getElementById('bnStudybook'); if(nsb) nsb.innerHTML = '<span class="bn-icon">' + NAV_SVG.studybook + '</span>' + t('sb_nav');
   // Update teacher UI if visible
   var tNameEl = document.getElementById('teacherNameLbl');
   if (tNameEl) tNameEl.textContent = t('teacher_name');
@@ -4086,6 +4199,17 @@ var CAT_ICONS = {
   'Lights':'💡','Tires':'🔄','Overtaking':'🏎️','Intersections':'✛',
   'Pedestrians':'🚶','Alcohol':'🍺','Environment':'🌿','Vehicle':'🚗',
   'Accidents':'🚨','Highway':'🛣️'
+};
+
+var NAV_SVG = {
+  home: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>',
+  cats: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
+  history: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>',
+  teacher: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1 .4-1.4 .9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6 .4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/><path d="M9 17h6"/></svg>',
+  signs: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 22 2 22"/><line x1="12" y1="9" x2="12" y2="15"/><circle cx="12" cy="18" r="0.5" fill="currentColor"/></svg>',
+  studybook: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>',
+  bookmarks: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>',
+  settings: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>'
 };
 
 var CAT_SVG = (function(){
@@ -4218,7 +4342,11 @@ function showTab(tab, forceType) {
   activeTab = tab;
   document.querySelectorAll('.bn-tab').forEach(function(b) { b.classList.remove('active'); });
   var tabMap = { home:'bnHome', cats:'bnCats', history:'bnHistory', signs:'bnSigns', studybook:'bnStudybook', bookmarks:'bnBookmarks', settings:'bnSettings', teacher:'bnTeacher' };
-  if (tabMap[tab]) document.getElementById(tabMap[tab]).classList.add('active');
+  if (tabMap[tab]) {
+    var btn = document.getElementById(tabMap[tab]);
+    btn.classList.add('active');
+    btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  }
   var screenMap = {
     home:'screenHome', cats:'screenCats',
     history:'screenHistory', signs:'screenSigns', bookmarks:'screenBookmarks',
@@ -4803,13 +4931,83 @@ var _carouselRadius = 340;
 var _carouselDragStart = null;
 var _carouselDragIdx = 0;
 
+var CYBER_ICONS = {
+  'sparkles': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="m5 3 1 2.5L8.5 6 6 7 5 9.5 4 7 1.5 6 4 5.5z"/><path d="m19 17 1 2.5 2.5.5-2.5 1-1 2.5-1-2.5-2.5-1 2.5-1z"/></svg>',
+  'git-merge': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M6 9v9a3 3 0 0 0 3 3h9"/></svg>',
+  'file-text': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>',
+  'cloud-rain': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M16 14v6"/><path d="M8 14v6"/><path d="M12 16v6"/></svg>',
+  'refresh-cw': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg>'
+};
+
 async function loadCategories() {
   if (catsLoaded) return;
   var stage = document.getElementById('carouselStage');
   stage.innerHTML = '<div class="loading-wrap" style="position:absolute;top:50%;left:50%;margin:-24px 0 0 -24px;"><div class="spinner"></div></div>';
   try {
     var rawCats = await api('GET', '/api/categories');
-    var cats = rawCats.filter(function(c) { return c.name && c.name.indexOf('_') === -1; });
+    var countMap = {};
+    var totalCount = 0;
+    rawCats.forEach(function(c) {
+      if (c.name) {
+        countMap[c.name] = c.count;
+        totalCount += c.count;
+      }
+    });
+
+    var CYBER_CATEGORIES = [
+      {
+        id: "all",
+        title: { no: "Alle kategorier", th: "ทุกหมวดหมู่", en: "All Categories" },
+        icon: "sparkles",
+        dbName: "",
+        color: "#00F5FF",
+        glow: "rgba(0,245,255,.45)",
+        count: totalCount
+      },
+      {
+        id: "right_of_way",
+        title: { no: "Vikeplikt", th: "สิทธิการผ่านทาง", en: "Right of Way" },
+        icon: "git-merge",
+        dbName: "Right of Way",
+        color: "#FF00E5",
+        glow: "rgba(255,0,229,.45)",
+        count: countMap["Right of Way"] || 0
+      },
+      {
+        id: "traffic_rules",
+        title: { no: "Trafikkregler", th: "กฎจราจร", en: "Traffic Rules" },
+        icon: "file-text",
+        dbName: "Road Rules",
+        color: "#FFD700",
+        glow: "rgba(255,215,0,.45)",
+        count: countMap["Road Rules"] || 0
+      },
+      {
+        id: "driving_conditions",
+        title: { no: "Kjøreforhold", th: "สภาพการขับขี่", en: "Driving Conditions" },
+        icon: "cloud-rain",
+        dbName: "Driving Conditions",
+        color: "#10B981",
+        glow: "rgba(16,185,129,.45)",
+        count: countMap["Driving Conditions"] || 0
+      },
+      {
+        id: "situations",
+        title: { no: "Situasjoner", th: "สถานการณ์", en: "Situations" },
+        icon: "refresh-cw",
+        dbName: "Situations",
+        color: "#3B82F6",
+        glow: "rgba(59,130,246,.45)",
+        count: countMap["Situations"] || 0
+      }
+    ];
+
+    // Filter categories to enforce language isolation (no Norwegian fallback in Thai mode)
+    var cats = CYBER_CATEGORIES.filter(function(cat) {
+      var title = cat.title[appLang];
+      return title && title.trim().length > 0;
+    });
+
     catsLoaded = true;
     document.getElementById('catCount').textContent = '(' + cats.length + ')';
     if (!cats.length) {
@@ -4818,6 +5016,7 @@ async function loadCategories() {
     }
     renderCarousel(cats);
   } catch(e) {
+    console.error("loadCategories error:", e);
     stage.innerHTML = '<div class="empty-state" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;"><div class="es-icon">⚠️</div><p>' + t('categories_load_error') + '</p></div>';
   }
 }
@@ -4827,11 +5026,12 @@ function renderCarousel(cats) {
   _carouselActive = 0;
   var stage = document.getElementById('carouselStage');
   var itemsHtml = cats.map(function(c, i) {
-    var svgIcon = CAT_SVG[c.name] || CAT_SVG['default'];
-    var count = c.question_count || c.count || '';
-    var name = catName(c.name);
+    var svgIcon = CYBER_ICONS[c.icon] || '';
+    var count = c.count || '';
+    var name = c.title[appLang];
     var qWord = t('questions_word');
-    return '<div class="carousel-3d-item" data-idx="' + i + '" data-ckey="' + escH(c.name) + '" onclick="carouselClick(' + i + ')">'
+    var styleStr = 'style="--cat-color:' + c.color + '; --cat-glow:' + c.glow + ';"';
+    return '<div class="carousel-3d-item" data-idx="' + i + '" data-ckey="' + escH(c.id) + '" ' + styleStr + ' onclick="carouselClick(' + i + ')">'
       + '<div class="carousel-3d-icon">' + svgIcon + '</div>'
       + '<div class="carousel-3d-label">' + escH(name) + '</div>'
       + '<div class="carousel-3d-count">' + (count ? count + ' ' + qWord : '') + '</div>'
@@ -4907,7 +5107,7 @@ function updateCarousel(activeIdx, animate, dragAngleOffset) {
 function carouselClick(idx) {
   if (idx === _carouselActive) {
     var cat = _carouselCats[idx];
-    if (cat) startQuiz(escH(String(cat.id||cat.name)), cat.name);
+    if (cat) startQuiz(escH(String(cat.dbName || '')), cat.title[appLang]);
   } else {
     updateCarousel(idx, true);
   }

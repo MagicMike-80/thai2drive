@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 // Stop hook: captures first 500 chars of assistant response to daily transcript file
-const input = JSON.parse(fs.readFileSync('/dev/stdin', 'utf8'));
+const input = JSON.parse(fs.readFileSync(0, 'utf8'));
 
 if (input.stop_reason === 'end_turn' && input.response) {
   const today = new Date().toISOString().slice(0, 10);
