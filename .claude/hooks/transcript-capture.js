@@ -6,7 +6,7 @@ const input = JSON.parse(fs.readFileSync(0, 'utf8'));
 
 if (input.stop_reason === 'end_turn' && input.response) {
   const today = new Date().toISOString().slice(0, 10);
-  const dir = path.join(process.env.CLAUDE_PROJECT_DIR || '.', 'context', 'transcripts');
+  const dir = path.join(__dirname, '..', '..', 'context', 'transcripts');
   const file = path.join(dir, `${today}.md`);
 
   try {

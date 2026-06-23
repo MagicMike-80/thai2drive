@@ -2240,7 +2240,7 @@ a { color:inherit; text-decoration:none; }
 #topLangTH:not(.active){ animation:topflagpulse 6s ease-in-out infinite 0s; }
 #topLangNO:not(.active){ animation:topflagpulse 6s ease-in-out infinite 2s; }
 #topLangEN:not(.active){ animation:topflagpulse 6s ease-in-out infinite 4s; }
-.lang-btn.active{ animation:none!important; }
+.lang-btn.active{ animation:none; }
 
 /* ══════════════════════════════════════════
    STUDIEBOK SCREEN
@@ -2918,6 +2918,73 @@ a { color:inherit; text-decoration:none; }
 
 .bm-card-remove, .hist-badge {
   z-index: 2 !important;
+}
+
+/* Global rotating neon borders for active/primary buttons and active flags */
+.lang-btn.active,
+.seg-btn.active,
+.spd-btn.active,
+.vol-btn.active,
+.fk-sc-btn.active,
+.home-sec-btn,
+.paywall-buy-btn,
+.end-btn-pri,
+.sp-btn-primary,
+.hp-btn-pri {
+  border: 1.5px solid transparent !important;
+  background: linear-gradient(rgba(17, 24, 39, 0.95), rgba(17, 24, 39, 0.95)) padding-box,
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #FFD700, #00F5FF) border-box !important;
+  animation: neonFlow 4s linear infinite !important;
+  box-shadow: 0 0 10px rgba(0, 245, 255, 0.25) !important;
+  transition: transform 0.2s, box-shadow 0.2s !important;
+}
+
+/* Ensure active text and SVG colors stand out in active states */
+.seg-btn.active,
+.spd-btn.active,
+.vol-btn.active,
+.fk-sc-btn.active {
+  color: #00F5FF !important;
+}
+
+/* Hover effects for regular buttons: light up with rotating neon borders */
+.auth-btn:hover,
+.home-sec-btn:hover,
+.sb-tool-btn:hover,
+.sb-nav-btn:hover,
+.fk-sc-btn:hover,
+.end-btn-pri:hover,
+.end-btn-sec:hover,
+.paywall-buy-btn:hover,
+.tsp-btn:hover,
+.sp-btn-primary:hover,
+.sp-btn-sm:hover,
+.hp-btn-pri:hover,
+.hp-btn-sec:hover,
+.ask-michael-btn:hover,
+.hist-btn-pri:hover,
+.hist-btn-sec:hover,
+.back-btn:hover,
+.logout-btn:hover {
+  border: 1.5px solid transparent !important;
+  background: linear-gradient(rgba(17, 24, 39, 0.95), rgba(17, 24, 39, 0.95)) padding-box,
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #FFD700, #00F5FF) border-box !important;
+  animation: neonFlow 4s linear infinite !important;
+  box-shadow: 0 0 12px rgba(255, 0, 229, 0.3) !important;
+  transform: scale(1.03) !important;
+}
+
+/* Hover effects for all cards: light up with rotating neon borders */
+.settings-card:hover,
+.quiz-card:hover,
+.sign-card:hover,
+.hist-card:hover,
+.bm-card:hover {
+  border: 1.5px solid transparent !important;
+  background: linear-gradient(rgba(19, 27, 46, 0.96), rgba(11, 18, 38, 0.98)) padding-box,
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #FFD700, #00F5FF) border-box !important;
+  animation: neonFlow 5s linear infinite !important;
+  box-shadow: 0 0 15px rgba(0, 245, 255, 0.22) !important;
 }
 </style>
 </head>
