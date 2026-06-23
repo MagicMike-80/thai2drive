@@ -25,10 +25,9 @@ const getFullUrl = (url: string) => url.startsWith('/') ? BACKEND_URL + url : ur
 
 const LANG_FLAG: Record<string, string> = { no: '🇳🇴', th: '🇹🇭', en: '🇬🇧' };
 
-const TR: Record<string, Record<string, string>> = {
   no: {
     title: 'Innholdsbibliotek',
-    subtitle: 'Kurert av Michael Trafikklærer',
+    subtitle: 'Ryggraden for repetisjon',
     videos: 'Videoer',
     podcasts: 'Podcaster',
     all: 'Alle',
@@ -39,10 +38,15 @@ const TR: Record<string, Record<string, string>> = {
     new: 'NY',
     recommended: 'Michael anbefaler',
     minutes: 'min',
+    studyBook: 'Studiebok',
+    signs: 'Trafikkskilt',
+    bookmarks: 'Bokmerker',
+    history: 'Historikk',
+    media: 'Anbefalt Multimedia',
   },
   th: {
     title: 'ห้องสมุดเนื้อหา',
-    subtitle: 'คัดสรรโดย ไมเคิล ครูสอนขับรถ',
+    subtitle: 'ศูนย์กลางการทบทวน',
     videos: 'วิดีโอ',
     podcasts: 'พอดแคสต์',
     all: 'ทั้งหมด',
@@ -53,10 +57,15 @@ const TR: Record<string, Record<string, string>> = {
     new: 'ใหม่',
     recommended: 'ไมเคิลแนะนำ',
     minutes: 'นาที',
+    studyBook: 'หนังสือเรียน',
+    signs: 'ป้ายจราจร',
+    bookmarks: 'บุ๊กมาร์ก',
+    history: 'ประวัติ',
+    media: 'มัลติมีเดียที่แนะนำ',
   },
   en: {
     title: 'Content Library',
-    subtitle: 'Curated by Michael Driving Instructor',
+    subtitle: 'The backbone of repetition',
     videos: 'Videos',
     podcasts: 'Podcasts',
     all: 'All',
@@ -67,8 +76,12 @@ const TR: Record<string, Record<string, string>> = {
     new: 'NEW',
     recommended: 'Michael recommends',
     minutes: 'min',
+    studyBook: 'Study Book',
+    signs: 'Traffic Signs',
+    bookmarks: 'Bookmarks',
+    history: 'History',
+    media: 'Recommended Media',
   },
-};
 
 interface VideoItem {
   id: string;
@@ -332,6 +345,22 @@ function TagRow({ tags, colors }: { tags: string[]; colors: any }) {
   );
 }
 
+// ─── Hub Card ─────────────────────────────────────────────────────────────────
+function HubCard({ icon, color, label, onPress, isDark, c }: any) {
+  return (
+    <TouchableOpacity
+      style={[s.hubCard, { backgroundColor: c.card, borderColor: c.cardBorder }]}
+      onPress={onPress}
+      activeOpacity={0.8}
+    >
+      <View style={[s.hubIconBg, { backgroundColor: `${color}15` }]}>
+        <Ionicons name={icon} size={22} color={color} />
+      </View>
+      <Text style={[s.hubLabel, { color: c.text }]}>{label}</Text>
+    </TouchableOpacity>
+  );
+}
+
 // ─── Filter chip labels (hardcoded per spec) ─────────────────────────────────
 const FILTER_CHIPS_NO = ['Bremsing', 'Reaksjonstid', 'Vikeplikt', 'Lysbruk'];
 const FILTER_CHIPS_TH = ['เบรกเมื่อเห็นอันตราย', 'เวลาเรียกเร็กเซ่น', 'การหลีกหนี', 'การใช้แสง'];
@@ -392,6 +421,16 @@ export default function LibraryScreen() {
         </View>
         <View style={{ width: 40 }} />
       </LinearGradient>
+
+      {/* Hub Grid */}
+      <View style={s.hubGrid}>
+        <HubCard icon="book" color="#3B82F6" label={t.studyBook} onPress={() => router.push('/book')} isDark={isDark} c={c} />
+        <HubCard icon="warning" color="#EF4444" label={t.signs} onPress={() => router.push('/signs')} isDark={isDark} c={c} />
+        <HubCard icon="bookmark" color="#F59E0B" label={t.bookmarks} onPress={() => router.push('/bookmarks')} isDark={isDark} c={c} />
+        <HubCard icon="time" color="#10B981" label={t.history} onPress={() => router.push('/history')} isDark={isDark} c={c} />
+      </View>
+
+      <Text style={[s.sectionTitle, { color: c.text }]}>{t.media}</Text>
 
       {/* Tab bar */}
       <View style={[s.tabBar, { borderBottomColor: c.divider, backgroundColor: c.bg }]}>
@@ -498,6 +537,33 @@ export default function LibraryScreen() {
 
 const s = StyleSheet.create({
   root: { flex: 1 },
+
+  // Hub Grid
+  hubGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    padding: 16,
+    gap: 12,
+  },
+  hubCard: {
+    width: '47%',
+    flexGrow: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 12,
+    borderRadius: 14,
+    borderWidth: 1,
+    gap: 12,
+  },
+  hubIconBg: {
+    width: 40, height: 40, borderRadius: 12,
+    alignItems: 'center', justifyContent: 'center',
+  },
+  hubLabel: { fontSize: 14, fontWeight: '700' },
+  sectionTitle: {
+    fontSize: 16, fontWeight: '800',
+    paddingHorizontal: 16, paddingTop: 16, paddingBottom: 8,
+  },
 
   // Header
   headerGrad: {

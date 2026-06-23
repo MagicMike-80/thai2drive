@@ -4481,6 +4481,59 @@ from fastapi.responses import HTMLResponse, FileResponse  # noqa: E402
 from pathlib import Path as _Path  # noqa: E402
 
 _ADMIN_HTML_PATH = _Path(__file__).resolve().parent / "admin.html"
+_VOICE_TESTER_HTML_PATH = _Path(__file__).resolve().parent / "voice_tester.html"
+
+
+@app.get("/api/admin/voice-tester", response_class=HTMLResponse)
+async def voice_tester_page():
+    if _VOICE_TESTER_HTML_PATH.exists():
+        html = _VOICE_TESTER_HTML_PATH.read_text(encoding="utf-8")
+        api_key = os.environ.get("ELEVENLABS_API_KEY", "")
+        html = html.replace("{{ELEVENLABS_API_KEY}}", api_key)
+        html = html.replace("{{VOICE_ID}}", "IoOuTUO7t2kI2VTJqI10")
+        return HTMLResponse(html)
+    return HTMLResponse("<h1>Voice tester not installed</h1>", status_code=500)
+
+
+@app.post("/api/admin/voice-test")
+async def voice_test(data: dict):
+    import httpx
+    from fastapi import HTTPException
+    from fastapi.responses import Response
+
+    text = data.get("text", "")
+    voice_id = data.get("voice_id", "")
+    api_key = data.get("api_key", "")
+
+    if not text or not voice_id or not api_key:
+        raise HTTPException(status_code=400, detail="Mangler påkrevde felt")
+
+    url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}"
+    headers = {
+        "Accept": "audio/mpeg",
+        "Content-Type": "application/json",
+        "xi-api-key": api_key
+    }
+    payload = {
+        "text": text,
+        "model_id": "eleven_multilingual_v2",
+        "voice_settings": {
+            "stability": 0.5,
+            "similarity_boost": 0.75
+        }
+    }
+
+    try:
+        async with httpx.AsyncClient() as client:
+            r = await client.post(url, json=payload, headers=headers, timeout=60.0)
+            if r.status_code == 200:
+                return Response(content=r.content, media_type="audio/mpeg")
+            else:
+                logger.error("ElevenLabs tester error %d: %s", r.status_code, r.text)
+                raise HTTPException(status_code=r.status_code, detail=f"ElevenLabs feil: {r.text}")
+    except Exception as e:
+        logger.error("ElevenLabs tester exception: %s", e)
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @api_router.get("/admin/page", response_class=HTMLResponse)

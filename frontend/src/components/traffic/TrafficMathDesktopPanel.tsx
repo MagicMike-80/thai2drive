@@ -2,8 +2,8 @@
  * TrafficMathDesktopPanel
  * ────────────────────────────────────────────────────────────────────────────
  * Wide two-column panel for desktop web only.
- * Rendered as a SIBLING to WebAppShell in _layout.tsx, so it escapes the
- * 390 px phone frame and covers the full browser viewport via position:absolute.
+ * Uses react-dom createPortal to render at document.body level, completely
+ * bypassing the 390 px WebAppShell frame and its overflow:hidden.
  *
  * Left column  — speed input, road conditions, step-by-step breakdown
  * Right column — stopping distance visualisation (diagram + numbers)
@@ -35,6 +35,14 @@ import {
   type Lang,
   getConditionMeta,
 } from '../../constants/trafficMath';
+
+// ─── Web portal helper ────────────────────────────────────────────────────────
+// Renders at document.body level, bypassing ALL ancestor overflow:hidden
+// including the 390 px WebAppShell phone frame.
+let _portal: ((node: React.ReactNode, container: Element) => any) | null = null;
+if (Platform.OS === 'web') {
+  try { _portal = require('react-dom').createPortal; } catch {}
+}
 
 // ─── Translations ─────────────────────────────────────────────────────────────
 
@@ -283,9 +291,9 @@ export function TrafficMathDesktopPanel({
   // ── Nothing to render on native or when hidden ───────────────────────────
   if (Platform.OS !== 'web' || !visible) return null;
 
-  return (
-    // Full-viewport overlay — lives outside WebAppShell so it's not clipped
-    // by the 390 px frame. Position:absolute fills the SafeAreaProvider root.
+  const overlayContent = (
+    // Full-viewport overlay rendered via portal at document.body level,
+    // so it is guaranteed to escape the 390 px WebAppShell overflow:hidden.
     <View style={st.overlay}>
       {/* ── Backdrop ── */}
       <Pressable style={st.backdrop} onPress={onClose}>
@@ -471,6 +479,12 @@ export function TrafficMathDesktopPanel({
       </Pressable>
     </View>
   );
+
+  // Use portal to render at document.body — guaranteed to escape overflow:hidden
+  if (_portal && typeof document !== 'undefined' && document.body) {
+    return _portal(overlayContent, document.body);
+  }
+  return overlayContent;
 }
 
 // ─── Styles ───────────────────────────────────────────────────────────────────

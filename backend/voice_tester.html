@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>AI Thai Voice Tester</title>
+<style>
+  :root {
+    --bg: #0b1226;
+    --panel: #131b2e;
+    --input-bg: #0e1628;
+    --border: #222d44;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --cyan: #00F5FF;
+    --magenta: #FF00E5;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    width: 100%;
+    max-width: 500px;
+    padding: 30px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  }
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .header svg {
+    color: var(--cyan);
+    flex-shrink: 0;
+  }
+  .header h1 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 800;
+    background: linear-gradient(90deg, var(--cyan), #3b82f6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-bottom: 24px;
+  }
+  .field {
+    margin-bottom: 20px;
+  }
+  .field-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--muted);
+  }
+  .field-label svg {
+    color: var(--muted);
+  }
+  input, textarea {
+    width: 100%;
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    padding: 12px 14px;
+    font-size: 15px;
+    font-family: inherit;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  input:focus, textarea:focus {
+    outline: none;
+    border-color: var(--cyan);
+    box-shadow: 0 0 10px rgba(0, 245, 255, 0.15);
+  }
+  textarea {
+    resize: vertical;
+  }
+  .btn {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(90deg, var(--cyan), var(--magenta));
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: transform 0.15s, opacity 0.15s;
+    box-shadow: 0 10px 25px rgba(0, 245, 255, 0.2);
+  }
+  .btn:hover {
+    transform: translateY(-1px);
+    opacity: 0.95;
+  }
+  .btn:active {
+    transform: translateY(1px);
+  }
+  .btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+  .audio-player {
+    margin-top: 20px;
+    display: none;
+    width: 100%;
+  }
+  audio {
+    width: 100%;
+  }
+  .error {
+    color: #ef4444;
+    font-size: 13px;
+    margin-top: 10px;
+    text-align: center;
+    display: none;
+  }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="header">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
+    <h1>AI Thai Voice Tester</h1>
+  </div>
+  <p class="desc">Dette verktøyet tvinger API-et til å bruke Multilingual v2-modellen for perfekt Thai-uttale med din stemme.</p>
+
+  <div class="field">
+    <div class="field-label">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3M17 6l3 3"/></svg>
+      <span>ElevenLabs API Key</span>
+    </div>
+    <input type="password" id="api-key" value="{{ELEVENLABS_API_KEY}}" placeholder="Din hemmelige API-nøkkel..." />
+  </div>
+
+  <div class="field">
+    <div class="field-label">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12a10 10 0 0 1 13-9.54"/><path d="M22 20V8a2 2 0 0 0-2-2h-3.9"/><path d="M16 11V6a2 2 0 0 0-2-2h-3.9"/><path d="M12 2a10 10 0 0 0-10 10c0 4.4 3.6 8 8 8s8-3.6 8-8v-4"/><circle cx="12" cy="12" r="3"/></svg>
+      <span>Din Voice ID</span>
+    </div>
+    <input type="text" id="voice-id" value="{{VOICE_ID}}" placeholder="F.eks. EXAVITQu4vr4xnSDxMaL (Din klonede stemme)" />
+  </div>
+
+  <div class="field">
+    <div class="field-label">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 8 6 6 6-6"/><path d="M4 14h16"/></svg>
+      <span>Tekst på Thai</span>
+    </div>
+    <textarea id="text" rows="4">สวัสดีครับ วันนี้เราจะมาเรียนรู้เรื่องป้ายจราจรกันนะครับ (Hei, i dag skal vi lære om trafikkskilt)</textarea>
+  </div>
+
+  <button class="btn" id="gen-btn" onclick="generateSound()">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+    <span>Generer Lyd</span>
+  </button>
+
+  <div class="audio-player" id="player-container">
+    <audio id="audio-player" controls></audio>
+  </div>
+
+  <div class="error" id="error-msg"></div>
+</div>
+
+<script>
+async function generateSound() {
+  const btn = document.getElementById('gen-btn');
+  const errorMsg = document.getElementById('error-msg');
+  const playerContainer = document.getElementById('player-container');
+  const player = document.getElementById('audio-player');
+
+  errorMsg.style.display = 'none';
+  playerContainer.style.display = 'none';
+
+  const text = document.getElementById('text').value.trim();
+  const voiceId = document.getElementById('voice-id').value.trim();
+  const apiKey = document.getElementById('api-key').value.trim();
+
+  if (!text || !voiceId || !apiKey) {
+    errorMsg.textContent = 'Vennligst fyll ut alle feltene.';
+    errorMsg.style.display = 'block';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.querySelector('span').textContent = 'Genererer...';
+
+  try {
+    const response = await fetch('/api/admin/voice-test', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ text, voice_id: voiceId, api_key: apiKey })
+    });
+
+    if (response.ok) {
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      player.src = url;
+      playerContainer.style.display = 'block';
+      player.play();
+    } else {
+      const errData = await response.json();
+      errorMsg.textContent = 'Feil: ' + (errData.detail || 'Kunne ikke generere lyd.');
+      errorMsg.style.display = 'block';
+    }
+  } catch (err) {
+    errorMsg.textContent = 'Nettverksfeil: ' + err.message;
+    errorMsg.style.display = 'block';
+  } finally {
+    btn.disabled = false;
+    btn.querySelector('span').textContent = 'Generer Lyd';
+  }
+}
+</script>
+</body>
+</html>
