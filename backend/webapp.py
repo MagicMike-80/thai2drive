@@ -445,6 +445,99 @@ a { color:inherit; text-decoration:none; }
   box-shadow: 0 0 22px rgba(0, 245, 255, 0.5);
 }
 
+/* ══════════════════════════════════════════
+   HOME SCROLL MENU — Horisontal rullende meny
+   Teoriapp dark-mode: dyp blå + lys oransje neon
+   Ingen aggressiv rotasjon — ro for kveldsøving
+══════════════════════════════════════════ */
+.hsm-container {
+  position: relative;
+  margin: 0 -16px 20px;
+}
+.hsm-fade-left,
+.hsm-fade-right {
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 28px;
+  pointer-events: none;
+  z-index: 2;
+}
+.hsm-fade-left  { left: 0;  background: linear-gradient(to right, var(--bg), transparent); }
+.hsm-fade-right { right: 0; background: linear-gradient(to left,  var(--bg), transparent); }
+.home-scroll-menu {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+  padding: 6px 16px 14px;
+}
+.home-scroll-menu::-webkit-scrollbar { display: none; }
+.hsm-card {
+  flex: 0 0 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 8px;
+  border-radius: 16px;
+  background: rgba(5, 14, 38, 0.88);
+  border: 1.5px solid rgba(0, 82, 255, 0.2);
+  box-shadow: 0 0 8px rgba(0, 82, 255, 0.06), inset 0 1px 0 rgba(255,255,255,0.04);
+  cursor: pointer;
+  scroll-snap-align: start;
+  transition: border-color 0.28s ease, box-shadow 0.28s ease, transform 0.15s ease, background 0.28s ease;
+}
+.hsm-card:hover {
+  border-color: rgba(255, 127, 0, 0.55);
+  box-shadow: 0 0 16px rgba(255, 127, 0, 0.25), 0 0 6px rgba(255, 127, 0, 0.12), inset 0 1px 0 rgba(255,255,255,0.07);
+  background: rgba(10, 21, 54, 0.92);
+  transform: translateY(-2px);
+}
+.hsm-card:active {
+  transform: translateY(0) scale(0.95);
+  box-shadow: 0 0 10px rgba(255, 127, 0, 0.45);
+}
+.hsm-icon {
+  font-size: 1.45rem;
+  line-height: 1;
+  filter: drop-shadow(0 0 5px rgba(0, 100, 255, 0.4));
+  transition: filter 0.28s ease;
+}
+.hsm-card:hover .hsm-icon {
+  filter: drop-shadow(0 0 8px rgba(255, 140, 0, 0.65));
+}
+.hsm-label {
+  font-size: 0.64rem;
+  font-weight: 700;
+  text-align: center;
+  color: #7A90B8;
+  letter-spacing: 0.15px;
+  line-height: 1.25;
+  transition: color 0.28s ease;
+  word-break: keep-all;
+  hyphens: none;
+}
+.hsm-card:hover .hsm-label { color: #FF9933; }
+[data-theme="light"] .hsm-card {
+  background: rgba(255,255,255,0.88);
+  border-color: rgba(0, 82, 255, 0.12);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+[data-theme="light"] .hsm-card:hover {
+  border-color: rgba(217,119,6,0.45);
+  background: rgba(255,255,255,0.96);
+  box-shadow: 0 0 14px rgba(217,119,6,0.18);
+}
+[data-theme="light"] .hsm-label { color: #64748B; }
+[data-theme="light"] .hsm-card:hover .hsm-label { color: #D97706; }
+[data-theme="light"] .hsm-fade-left  { background: linear-gradient(to right, var(--bg), transparent); }
+[data-theme="light"] .hsm-fade-right { background: linear-gradient(to left,  var(--bg), transparent); }
+
 /* Stats — one unified card, three columns with vertical dividers */
 .home-stats {
   display:grid; grid-template-columns:repeat(3,1fr);
@@ -3172,10 +3265,44 @@ a { color:inherit; text-decoration:none; }
         ▶&nbsp;&nbsp;Start quiz
       </button>
 
-      <div class="home-sec-btns">
-        <button class="home-sec-btn" onclick="startExam()">📋 Eksamen</button>
-        <button class="home-sec-btn" onclick="startDailyTest()">📅 Daglig test</button>
-        <button class="home-sec-btn" onclick="showTab('library')" style="grid-column:1/-1" data-key="library_home">📚 Bibliotek — Video & Podcast</button>
+      <!-- Horisontal, rullende navigasjonsmeny (Protokoll Null) -->
+      <div class="hsm-container">
+        <div class="hsm-fade-left"></div>
+        <div class="hsm-fade-right"></div>
+        <div class="home-scroll-menu" id="homeScrollMenu">
+          <button class="hsm-card" onclick="startExam()">
+            <span class="hsm-icon">📋</span>
+            <span class="hsm-label" data-hsm-key="exam_short">Eksamen</span>
+          </button>
+          <button class="hsm-card" onclick="startDailyTest()">
+            <span class="hsm-icon">📅</span>
+            <span class="hsm-label" data-hsm-key="daily_short">Daglig test</span>
+          </button>
+          <button class="hsm-card" onclick="showTab('signs')">
+            <span class="hsm-icon">🛑</span>
+            <span class="hsm-label" data-hsm-key="signs_short">Skilt</span>
+          </button>
+          <button class="hsm-card" onclick="showTab('studybook')">
+            <span class="hsm-icon">📖</span>
+            <span class="hsm-label" data-hsm-key="sb_short">Studiebok</span>
+          </button>
+          <button class="hsm-card" onclick="showForbikjoring()">
+            <span class="hsm-icon">🚗</span>
+            <span class="hsm-label" data-hsm-key="fk_short">Trafikk-matte</span>
+          </button>
+          <button class="hsm-card" onclick="showTab('library')">
+            <span class="hsm-icon">📚</span>
+            <span class="hsm-label" data-hsm-key="lib_short">Bibliotek</span>
+          </button>
+          <button class="hsm-card" onclick="showTab('bookmarks')">
+            <span class="hsm-icon">🔖</span>
+            <span class="hsm-label" data-hsm-key="bm_short">Bokmerker</span>
+          </button>
+          <button class="hsm-card" onclick="showTab('history')">
+            <span class="hsm-icon">📊</span>
+            <span class="hsm-label" data-hsm-key="hist_short">Historikk</span>
+          </button>
+        </div>
       </div>
 
       <!-- Michael Trafikklærer card -->
@@ -3189,9 +3316,6 @@ a { color:inherit; text-decoration:none; }
         </div>
         <div class="michael-card-arrow">›</div>
       </button>
-
-      <div class="home-sec-btns" style="display:none"><!-- placeholder to keep JS index intact -->
-      </div>
 
       <div class="home-stats">
         <div class="home-stat">
@@ -3881,6 +4005,14 @@ var UI = {
   startquiz:   {th:'▶  เริ่มควิซ',      no:'▶  Start quiz',   en:'▶  Start quiz'},
   exam:        {th:'📋 สอบ',            no:'📋 Eksamen',       en:'📋 Exam'},
   daily:       {th:'📅 ทดสอบรายวัน',    no:'📅 Daglig test',   en:'📅 Daily test'},
+  exam_short:  {th:'สอบ',               no:'Eksamen',          en:'Exam'},
+  daily_short: {th:'ทดสอบรายวัน',       no:'Daglig test',      en:'Daily'},
+  signs_short: {th:'ป้ายจราจร',         no:'Skilt',            en:'Signs'},
+  sb_short:    {th:'หนังสือเรียน',       no:'Studiebok',        en:'Study Book'},
+  fk_short:    {th:'คำนวณระยะ',         no:'Trafikk-matte',    en:'Math'},
+  lib_short:   {th:'ห้องสมุด',           no:'Bibliotek',        en:'Library'},
+  bm_short:    {th:'บุ๊กมาร์ก',         no:'Bokmerker',        en:'Bookmarks'},
+  hist_short:  {th:'ประวัติ',            no:'Historikk',        en:'History'},
   loading:     {th:'กำลังโหลด…',        no:'Laster spørsmål…', en:'Loading…'},
   streak:      {th:'วันติดต่อกัน',     no:'dag streak',      en:'day streak'},
   answered:    {th:'ตอบแล้ว',          no:'BESVART',          en:'ANSWERED'},
@@ -4247,10 +4379,10 @@ function applyUILang() {
   }
   // home buttons
   document.querySelectorAll('.home-cta').forEach(function(b){ b.innerHTML = t('startquiz').replace(/^▶\s*/,'▶&nbsp;&nbsp;'); });
-  document.querySelectorAll('.home-sec-btn').forEach(function(b,i){
-    if (i===0) b.textContent = t('exam');
-    else if (i===1) b.textContent = t('daily');
-    else if (i===2) b.textContent = t('studybook_home');
+  // Oppdater horisontal scrollmeny-labels
+  document.querySelectorAll('.hsm-label[data-hsm-key]').forEach(function(el) {
+    var key = el.getAttribute('data-hsm-key');
+    if (UI[key]) el.textContent = t(key);
   });
   var sbSearch = document.getElementById('sbSearchInput');
   if (sbSearch) sbSearch.placeholder = t('studybook_search_placeholder');
