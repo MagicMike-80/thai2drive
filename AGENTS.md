@@ -85,3 +85,22 @@ Alle agenter skal vedlikeholde `context/FEATURES.md` automatisk:
 - **V3:** Minipraksis og coaching.
 - **V4:** Personlig tilpasset svak-tema læring.
 - **V5:** Tale, video, visuelle forklaringer og adaptiv AI-instruktør.
+
+---
+
+## 🛡️ Regresjonsforebygging (Lagt til juni 2026)
+
+For å forhindre at språklekkasje, krasj ved seeding, og uønsket deaktivering av web-funksjoner oppstår igjen:
+
+### 1. Synkronisering av Seed-data og Databasedomene
+* **Regel:** Hver gang databaseskjemaet endres eller refaktores (f.eks. ved migrasjon fra V1 til V2), **MÅ** de hardkodede testspørsmålene og seed-dataene i backend (som `/seed` i `server.py` eller migreringsskripter) oppdateres i samme endring/patch.
+* **Formål:** Hindre at test-, lokal- og forhåndsvisningsmiljøer blir fylt med utdatert testdata som krasjer frontend på grunn av uoverensstemmelser i feltnavn (som `image_url` vs `bildeUrl`).
+
+### 2. Forbud mot ordboks-fallbacks
+* **Regel:** Det er strengt forbudt å bruke fallbacks til andre språk i oversettelsesordbøker (f.eks. `|| TR.en`, `|| TRANSLATIONS.no`, `|| T.en`, `|| PAY_TEXT.en`, `|| WARNING_MESSAGES.en`).
+* **Formål:** Dersom en oversettelse mangler, skal koden falle tilbake på et tomt objekt `|| {}` eller en tom streng `|| ''` slik at elementet enten skjules eller feiler trygt, framfor å vise feil språk til brukeren.
+
+### 3. Graceful Degradation framfor harde plattformsperrer
+* **Regel:** Unngå å deaktivere kjernefunksjoner helt på web/mobil via brede plattformsperrer (f.eks. `Platform.OS === 'web'`) dersom deler av funksjonen (f.eks. lyd/TTS) kan fungere.
+* **Formål:** Pakk plattformspesifikke deler av koden (som haptiske vibrasjoner) inn i lokale `try-catch`-blokker slik at de feiler lydløst på plattformer uten støtte, mens hovedfunksjonen (f.eks. lydavspilling) forblir funksjonell.
+
