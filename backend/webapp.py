@@ -1478,6 +1478,42 @@ a { color:inherit; text-decoration:none; }
 }
 
 /* ══════════════════════════════════════════
+   LIBRARY SCREEN
+══════════════════════════════════════════ */
+#screenLibrary { padding:0; background:#0B1226; display:flex; flex-direction:column; }
+.lib-header {
+  padding:14px 16px 10px; flex-shrink:0;
+  display:flex; align-items:center; gap:10px;
+}
+.lib-tabs {
+  display: flex; gap: 8px; margin: 0 16px 16px;
+  background: var(--panel); padding: 4px; border-radius: 10px;
+  flex-shrink: 0;
+}
+.lib-tab {
+  flex: 1; padding: 10px; border-radius: 8px; border: 0;
+  background: none; color: var(--muted); font-size: .85rem;
+  font-weight: 700; cursor: pointer; transition: all .15s;
+}
+.lib-tab.active {
+  background: var(--accent); color: #fff;
+  box-shadow: 0 0 10px rgba(0, 245, 255, 0.3);
+}
+.lib-scroll {
+  flex: 1; overflow-y: auto; padding: 0 16px 16px;
+  -webkit-overflow-scrolling: touch;
+}
+.lib-scroll::-webkit-scrollbar { width:4px; }
+.lib-scroll::-webkit-scrollbar-track { background:transparent; }
+.lib-scroll::-webkit-scrollbar-thumb { background:rgba(255,255,255,.12); border-radius:2px; }
+.library-grid {
+  display: grid; grid-template-columns: 1fr; gap: 12px;
+}
+.library-list {
+  display: flex; flex-direction: column; gap: 10px;
+}
+
+/* ══════════════════════════════════════════
    SIGNS SCREEN
 ══════════════════════════════════════════ */
 #screenSigns { padding:0; background:#0B1226; }
@@ -3139,7 +3175,7 @@ a { color:inherit; text-decoration:none; }
       <div class="home-sec-btns">
         <button class="home-sec-btn" onclick="startExam()">📋 Eksamen</button>
         <button class="home-sec-btn" onclick="startDailyTest()">📅 Daglig test</button>
-        <button class="home-sec-btn" onclick="showTab('studybook')" style="grid-column:1/-1" data-key="studybook_home">📖 Studiebok — Norsk trafikk</button>
+        <button class="home-sec-btn" onclick="showTab('library')" style="grid-column:1/-1" data-key="library_home">📚 Bibliotek — Video & Podcast</button>
       </div>
 
       <!-- Michael Trafikklærer card -->
@@ -3290,6 +3326,20 @@ a { color:inherit; text-decoration:none; }
       </div>
       <div class="signs-scroll" id="signsScroll">
         <div class="loading-wrap"><div class="spinner"></div></div>
+      </div>
+    </div>
+
+    <!-- ═══ LIBRARY SCREEN ═══ -->
+    <div class="screen" id="screenLibrary">
+      <div class="lib-header">
+        <div class="screen-title">📚 <span data-key="library">Bibliotek</span></div>
+      </div>
+      <div class="lib-tabs">
+        <button class="lib-tab active" data-tab="videos" onclick="setLibraryTab('videos')">🎬 Videoer</button>
+        <button class="lib-tab" data-tab="podcasts" onclick="setLibraryTab('podcasts')">🎙️ Podcaster</button>
+      </div>
+      <div class="lib-scroll">
+        <div id="libraryContent"></div>
       </div>
     </div>
 
@@ -3997,6 +4047,8 @@ var UI = {
   account_unavailable:{th:'บัญชีนี้ไม่พร้อมใช้งาน กรุณาติดต่อฝ่ายสนับสนุน', no:'Denne kontoen er ikke tilgjengelig. Kontakt support.', en:'This account is not available. Contact support.'},
   logout_confirm:{th:'คุณแน่ใจหรือว่าต้องการออกจากระบบ?', no:'Er du sikker på at du vil logge ut?', en:'Are you sure you want to log out?'},
   studybook_home:{th:'📖 หนังสือเรียน — การจราจรนอร์เวย์', no:'📖 Studiebok — Norsk trafikk', en:'📖 Study book — Norwegian traffic'},
+  library_home:{th:'📚 ห้องสมุด — วิดีโอและพอดแคสต์', no:'📚 Bibliotek — Video & Podcast', en:'📚 Library — Videos & Podcasts'},
+  library:{th:'ห้องสมุด', no:'Bibliotek', en:'Library'},
   forbikjoring_label:{th:'🚗 แซง', no:'🚗 Forbikjøring', en:'🚗 Overtaking'},
   fk_title:{th:'🚗 การแซง — คำนวณระยะ', no:'🚗 Forbikjøring — Avstandskalkulator', en:'🚗 Overtaking — Distance Calculator'},
   fk_scenario_easy:{th:'🟢 ง่าย', no:'🟢 Lett', en:'🟢 Easy'},
@@ -4417,7 +4469,8 @@ function showTab(tab, forceType) {
   var screenMap = {
     home:'screenHome', cats:'screenCats',
     history:'screenHistory', signs:'screenSigns', bookmarks:'screenBookmarks',
-    settings:'screenSettings', studybook:'screenStudybook', teacher:'screenTeacher'
+    settings:'screenSettings', studybook:'screenStudybook', teacher:'screenTeacher',
+    library:'screenLibrary'
   };
   if (screenMap[tab]) {
     // Premium-only tabs
@@ -4433,7 +4486,8 @@ function showTab(tab, forceType) {
     if (tab === 'signs')     loadSigns();
     if (tab === 'bookmarks') loadBookmarks();
     if (tab === 'settings')  loadSettings();
-    if (tab === 'studybook') loadStudiebok();
+    if (tab === 'studybook') loadStudybook();
+    if (tab === 'library')   loadLibrary();
     if (tab === 'teacher') {
       if (forceType) {
         switchTeacherSession(forceType);
@@ -4448,6 +4502,75 @@ function showTab(tab, forceType) {
 function toggleChapter(id) {
   var ch = document.getElementById(id);
   if (ch) ch.classList.toggle('open');
+}
+
+// ════════════════════════════════════════════
+//  LIBRARY SCREEN — VIDEOS & PODCASTS
+// ════════════════════════════════════════════
+var _videosCached = null;
+var _podcastsCached = null;
+var _libraryActiveTab = 'videos';
+
+async function loadLibrary() {
+  var container = document.getElementById('libraryContent');
+  if (!container) return;
+  
+  if (_videosCached && _podcastsCached) {
+    renderLibrary();
+    return;
+  }
+  
+  container.innerHTML = '<div class="loading-wrap"><div class="spinner"></div></div>';
+  try {
+    var pVideo = api('GET', '/api/videos/for-topic?limit=50');
+    var pPodcast = api('GET', '/api/podcasts/for-topic?limit=50');
+    
+    var res = await Promise.all([pVideo, pPodcast]);
+    var dVideo = res[0];
+    var dPodcast = res[1];
+    
+    _videosCached = dVideo.videos || dVideo || [];
+    _podcastsCached = dPodcast.podcasts || dPodcast || [];
+    
+    renderLibrary();
+  } catch(e) {
+    container.innerHTML = '<div style="padding:24px;text-align:center;color:var(--muted);">Kunne ikke laste biblioteket.</div>';
+  }
+}
+
+function renderLibrary() {
+  var container = document.getElementById('libraryContent');
+  if (!container) return;
+  
+  var items = _libraryActiveTab === 'videos' ? _videosCached : _podcastsCached;
+  if (!items || items.length === 0) {
+    container.innerHTML = '<div class="empty-state" style="padding:40px;text-align:center;color:var(--muted);">📭 Ingen innhold tilgjengelig</div>';
+    return;
+  }
+  
+  var html = '';
+  if (_libraryActiveTab === 'videos') {
+    html += '<div class="library-grid">';
+    items.forEach(function(v) {
+      html += buildVideoCard(v);
+    });
+    html += '</div>';
+  } else {
+    html += '<div class="library-list">';
+    items.forEach(function(p) {
+      html += buildPodcastCard(p);
+    });
+    html += '</div>';
+  }
+  container.innerHTML = html;
+}
+
+function setLibraryTab(tab) {
+  _libraryActiveTab = tab;
+  document.querySelectorAll('.lib-tab').forEach(function(b) {
+    b.classList.toggle('active', b.getAttribute('data-tab') === tab);
+  });
+  renderLibrary();
 }
 
 // ════════════════════════════════════════════
