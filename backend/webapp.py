@@ -1578,6 +1578,19 @@ a { color:inherit; text-decoration:none; }
   padding:14px 16px 10px; flex-shrink:0;
   display:flex; align-items:center; gap:10px;
 }
+.lib-back-btn {
+  background: none; border: 1.5px solid rgba(0,82,255,0.22);
+  border-radius: 10px; color: #7A90B8;
+  font-size: 1rem; line-height:1;
+  padding: 6px 10px; cursor: pointer;
+  transition: border-color .2s, color .2s, background .2s;
+  flex-shrink: 0;
+}
+.lib-back-btn:hover {
+  border-color: rgba(255,127,0,0.55);
+  color: #FF9933;
+  background: rgba(255,127,0,0.07);
+}
 .lib-tabs {
   display: flex; gap: 8px; margin: 0 16px 16px;
   background: var(--panel); padding: 4px; border-radius: 10px;
@@ -3282,10 +3295,6 @@ a { color:inherit; text-decoration:none; }
             <span class="hsm-icon">🛑</span>
             <span class="hsm-label" data-hsm-key="signs_short">Skilt</span>
           </button>
-          <button class="hsm-card" onclick="showTab('studybook')">
-            <span class="hsm-icon">📖</span>
-            <span class="hsm-label" data-hsm-key="sb_short">Studiebok</span>
-          </button>
           <button class="hsm-card" onclick="showForbikjoring()">
             <span class="hsm-icon">🚗</span>
             <span class="hsm-label" data-hsm-key="fk_short">Trafikk-matte</span>
@@ -3456,6 +3465,7 @@ a { color:inherit; text-decoration:none; }
     <!-- ═══ LIBRARY SCREEN ═══ -->
     <div class="screen" id="screenLibrary">
       <div class="lib-header">
+        <button class="lib-back-btn" onclick="showTab('home')" title="Tilbake til hjem">🏠</button>
         <div class="screen-title">📚 <span data-key="library">Bibliotek</span></div>
       </div>
       <div class="lib-tabs">
