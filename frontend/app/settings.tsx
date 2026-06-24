@@ -24,7 +24,7 @@ const THEME_OPTIONS: { mode: ThemeMode; icon: keyof typeof Ionicons.glyphMap }[]
 export default function SettingsScreen() {
   const router = useRouter();
   const { language, colors, themeMode, setThemeMode, soundEnabled, setSoundEnabled, soundStyle, setSoundStyle, hapticsEnabled, setHapticsEnabled, user, isPremium, logout, isAuthenticated } = useAppStore();
-  const t = TRANSLATIONS[language] || TRANSLATIONS.en;
+  const t = TRANSLATIONS[language] || {};
   const isDark = colors.bg === '#0F172A' || colors.bg === '#0B1222';
 
   // Preview the selected sound style when user taps a chip

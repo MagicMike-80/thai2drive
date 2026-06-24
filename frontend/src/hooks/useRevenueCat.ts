@@ -135,7 +135,7 @@ export function useRevenueCat(): UseRevenueCatReturn {
   const [purchasing, setPurchasing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const language = useAppStore((s) => s.language) as Lang;
-  const msg = PAY_TEXT[language] || PAY_TEXT.en;
+  const msg = PAY_TEXT[language] || {};
 
   useEffect(() => {
     let alive = true;

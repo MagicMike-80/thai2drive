@@ -48,7 +48,7 @@ export default function BookmarksScreen() {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState<string | null>(null);
-  const t = TRANSLATIONS[language as keyof typeof TRANSLATIONS] || TRANSLATIONS.en;
+  const t = TRANSLATIONS[language as keyof typeof TRANSLATIONS] || {};
 
   // Screen capture protection
   useScreenProtection(language);

@@ -42,7 +42,7 @@ export function useScreenProtection(language: string = 'en') {
         if (Platform.OS === 'ios' || Platform.OS === 'web') {
           subscription = ScreenCapture.addScreenshotListener(() => {
             setScreenshotDetected(true);
-            const msg = WARNING_MESSAGES[language] || WARNING_MESSAGES.en;
+            const msg = WARNING_MESSAGES[language] || {};
             Alert.alert(msg.title, msg.message);
 
             // Reset after 3 seconds

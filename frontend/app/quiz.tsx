@@ -41,7 +41,7 @@ export default function QuizScreen() {
   const { mode, category } = useLocalSearchParams<{ mode: string; category: string }>();
   const store = useAppStore();
   const { language, deviceId, addBookmark, removeBookmark, isBookmarked, setProgress, colors: c, soundEnabled, soundStyle, hapticsEnabled, isPremium, isAuthenticated, canAnswerFree, freeRemaining, consumeQuestionAccess, updateStreak, setLastAttempt } = store;
-  const t = T[language] || T.en;
+  const t = T[language] || {};
 
   // Screen capture protection
   useScreenProtection(language);
