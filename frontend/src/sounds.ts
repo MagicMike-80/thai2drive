@@ -167,7 +167,6 @@ async function playKind(kind: Kind, style: SoundStyle) {
 // ─── Haptics ───
 // Haptics are cheap; we don't need anti-stacking beyond what the OS already does.
 async function hapticCorrect(style: SoundStyle) {
-  if (Platform.OS === 'web') return;
   try {
     if (style === 'strong') {
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
@@ -178,7 +177,6 @@ async function hapticCorrect(style: SoundStyle) {
 }
 
 async function hapticIncorrect(style: SoundStyle) {
-  if (Platform.OS === 'web') return;
   try {
     if (style === 'strong') {
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);

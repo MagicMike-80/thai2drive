@@ -51,7 +51,7 @@ export default function LoginScreen() {
   const router = useRouter();
   const { redirect } = useLocalSearchParams<{ redirect?: string }>();
   const { language, colors, login: doLogin } = useAppStore();
-  const t = TR[language] || TR.en;
+  const t = TR[language] || {};
   const c = colors;
 
   const [email, setEmail] = useState('');

@@ -92,7 +92,7 @@ const TR: Record<string, Record<string, string>> = {
 export default function PaywallScreen() {
   const router = useRouter();
   const { language, colors, setPremium, isAuthenticated, freeRemaining, authToken, deviceId, refreshAccessStatus } = useAppStore();
-  const t = TR[language] || TR.en;
+  const t = TR[language] || {};
   const c = colors;
   // Default selection = Best Value (3 months)
   const [plan, setPlan] = useState<Plan>('threemonth');

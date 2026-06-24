@@ -74,16 +74,16 @@ export default function BookmarksScreen() {
   };
 
   const getQuestionText = (q: Question) => {
-    return q.question?.[language] || q.question?.no || '';
+    return q.question?.[language] || '';
   };
 
   const getAnswerText = (q: Question, optId: string) => {
     const opt = q.options?.find(o => o.id === optId);
-    return opt?.text?.[language] || opt?.text?.no || '';
+    return opt?.text?.[language] || '';
   };
 
   const getExplanation = (q: Question) => {
-    return q.explanation?.[language] || q.explanation?.no || '';
+    return q.explanation?.[language] || '';
   };
 
   if (loading) {

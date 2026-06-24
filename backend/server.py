@@ -3263,14 +3263,39 @@ async def seed_database():
         },
     ]
 
+    normalized_questions = []
     for q in sample_questions:
-        q["id"] = str(uuid.uuid4())
-        q["created_at"] = datetime.now(timezone.utc).isoformat()
-        if "image_url" not in q:
-            q["image_url"] = None
+        qid = str(uuid.uuid4())
+        created = datetime.now(timezone.utc).isoformat()
+        norm = {
+            "id": qid,
+            "question": {
+                "no": q.get("question_text_no", ""),
+                "th": q.get("question_text_th", ""),
+                "en": q.get("question_text_en", ""),
+            },
+            "options": [
+                {"id": "A", "text": {"no": q.get("answer_a_no", ""), "th": q.get("answer_a_th", ""), "en": q.get("answer_a_en", "")}},
+                {"id": "B", "text": {"no": q.get("answer_b_no", ""), "th": q.get("answer_b_th", ""), "en": q.get("answer_b_en", "")}},
+                {"id": "C", "text": {"no": q.get("answer_c_no", ""), "th": q.get("answer_c_th", ""), "en": q.get("answer_c_en", "")}},
+                {"id": "D", "text": {"no": q.get("answer_d_no", ""), "th": q.get("answer_d_th", ""), "en": q.get("answer_d_en", "")}},
+            ],
+            "correctOptionId": q.get("correct_answer", "A"),
+            "explanation": {
+                "no": q.get("explanation_no", ""),
+                "th": q.get("explanation_th", ""),
+                "en": q.get("explanation_en", ""),
+            },
+            "bildeUrl": q.get("image_url") or q.get("bildeUrl") or None,
+            "category": q.get("category", ""),
+            "difficulty": q.get("difficulty", "medium"),
+            "active": q.get("active", True),
+            "created_at": created,
+        }
+        normalized_questions.append(norm)
 
-    await db.questions.insert_many(sample_questions)
-    return {"message": f"Seeded {len(sample_questions)} questions", "seeded": True}
+    await db.questions.insert_many(normalized_questions)
+    return {"message": f"Seeded {len(normalized_questions)} questions", "seeded": True}
 
 # ==================== ADMIN PANEL ENDPOINTS ====================
 

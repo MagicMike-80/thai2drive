@@ -112,7 +112,7 @@ export default function CategoriesScreen() {
   const { language, colors, progress } = useAppStore();
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
-  const t = TR[language] || TR.en;
+  const t = TR[language] || {};
   const c = colors;
   const isDark = c.bg === '#0F172A' || c.bg === '#0B1222';
 

@@ -51,7 +51,7 @@ export default function ResultsScreen() {
   const router = useRouter();
   const { total, correct, mode, passed } = useLocalSearchParams<{ total: string; correct: string; mode: string; passed: string }>();
   const { language, isPremium, lastAttempt } = useAppStore();
-  const t = TR[language] || TR.en;
+  const t = TR[language] || {};
   const c = useAppStore((s) => s.colors);
 
   const [showReview, setShowReview] = useState(false);
@@ -89,12 +89,12 @@ export default function ResultsScreen() {
   const wrongCount = lastAttempt?.answers.filter((a) => !a.correct).length || 0;
 
   // V2 helpers
-  const qT = (qu: any, l?: string) => qu?.question?.[l || language] || qu?.question?.no || '';
+  const qT = (qu: any, l?: string) => qu?.question?.[l || language] || '';
   const optText = (qu: any, optId: string, l?: string) => {
     const opt = qu?.options?.find((o: any) => o.id === optId);
-    return opt?.text?.[l || language] || opt?.text?.no || '';
+    return opt?.text?.[l || language] || '';
   };
-  const eT = (qu: any, l?: string) => qu?.explanation?.[l || language] || qu?.explanation?.no || '';
+  const eT = (qu: any, l?: string) => qu?.explanation?.[l || language] || '';
 
   const reviewItems = hasAttempt
     ? lastAttempt!.questions.map((q, i) => {

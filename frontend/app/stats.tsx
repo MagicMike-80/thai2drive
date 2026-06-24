@@ -66,7 +66,7 @@ export default function StatsScreen() {
   const router = useRouter();
   const { language, colors, deviceId, user } = useAppStore();
   const c = colors;
-  const t = TR[language] || TR.no;
+  const t = TR[language] || {};
   const lang = language as 'no' | 'th' | 'en';
 
   const [stats, setStats] = useState<MyStats | null>(null);

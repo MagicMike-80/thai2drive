@@ -61,7 +61,7 @@ const TR: Record<string, { title: string; srs: string; go: string }> = {
 
 export function CoachBanner({ deviceId, lang, streak, colors: c }: CoachBannerProps) {
   const router = useRouter();
-  const t = TR[lang] || TR.en;
+  const t = TR[lang] || {};
 
   // Dev-only render counter. More than ~5 renders on a stable home screen
   // indicates a rerender loop. Stripped in production builds (__DEV__ === false).

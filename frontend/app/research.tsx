@@ -104,7 +104,7 @@ interface PlaybackState {
 export default function ResearchScreen() {
   const router = useRouter();
   const { language, colors: c, isDark } = useAppStore();
-  const t = TR[language] || TR.en;
+  const t = TR[language] || {};
 
   const [playbackState, setPlaybackState] = useState<PlaybackState>({
     filename: null,

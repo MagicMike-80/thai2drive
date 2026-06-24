@@ -70,7 +70,7 @@ export default function GlossaryScreen() {
   const { language, colors } = useAppStore();
   const c = colors;
   const isDark = c.bg === '#0F172A' || c.bg === '#0B1222';
-  const t = TR[language] || TR.en;
+  const t = TR[language] || {};
 
   const [terms, setTerms] = useState<GlossaryTerm[]>([]);
   const [filtered, setFiltered] = useState<GlossaryTerm[]>([]);

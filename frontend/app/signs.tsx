@@ -106,7 +106,7 @@ const TR: Record<Lang, Record<string, string>> = {
 function pick(text: any, lang: Lang): string {
   if (!text) return '';
   if (typeof text === 'string') return text;
-  return text[lang] || text.no || text.en || text.th || '';
+  return text[lang] || '';
 }
 
 function signCode(sign: TrafficSign): string {
@@ -114,15 +114,15 @@ function signCode(sign: TrafficSign): string {
 }
 
 function videoTitle(video: LearningVideo, lang: Lang) {
-  return lang === 'th' ? (video.title_th || video.title_no || video.title_en || '') :
-    lang === 'en' ? (video.title_en || video.title_no || video.title_th || '') :
-    (video.title_no || video.title_en || video.title_th || '');
+  return lang === 'th' ? (video.title_th || '') :
+    lang === 'en' ? (video.title_en || '') :
+    (video.title_no || '');
 }
 
 function videoSummary(video: LearningVideo, lang: Lang) {
-  return lang === 'th' ? (video.instructor_summary_th || video.instructor_summary_no || video.instructor_summary_en || '') :
-    lang === 'en' ? (video.instructor_summary_en || video.instructor_summary_no || video.instructor_summary_th || '') :
-    (video.instructor_summary_no || video.instructor_summary_en || video.instructor_summary_th || '');
+  return lang === 'th' ? (video.instructor_summary_th || '') :
+    lang === 'en' ? (video.instructor_summary_en || '') :
+    (video.instructor_summary_no || '');
 }
 
 export default function SignsScreen() {

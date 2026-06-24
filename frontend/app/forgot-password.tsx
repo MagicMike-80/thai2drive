@@ -60,7 +60,7 @@ type Step = 'email' | 'code' | 'done';
 export default function ForgotPasswordScreen() {
   const router = useRouter();
   const { language, colors } = useAppStore();
-  const t = TR[language] || TR.en;
+  const t = TR[language] || {};
   const c = colors;
 
   const [step, setStep] = useState<Step>('email');

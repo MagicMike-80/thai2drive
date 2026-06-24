@@ -63,7 +63,7 @@ export default function BookScreen() {
   const params = useLocalSearchParams<{ chapter?: string; section?: string }>();
   const { language, colors } = useAppStore();
   const c = colors;
-  const t = TR[language] || TR.no;
+  const t = TR[language] || {};
   const lang = language as 'no' | 'th' | 'en';
   const isDark = c.bg === '#0F172A';
 
@@ -141,8 +141,8 @@ export default function BookScreen() {
       return;
     }
     if (!currentSection) return;
-    const text = currentSection.content[lang] || currentSection.content.no || '';
-    const title = currentSection.section_title[lang] || currentSection.section_title.no || '';
+    const text = currentSection.content[lang] || '';
+    const title = currentSection.section_title[lang] || '';
     
     // Strip HTML tags for clean reading
     const cleanText = text.replace(/<[^>]+>/g, '');
@@ -224,7 +224,7 @@ export default function BookScreen() {
                   <Text style={[st.chapterNumText, { color: c.accent }]}>{ch.chapter_num}</Text>
                 </View>
                 <View style={st.chapterInfo}>
-                  <Text style={[st.chapterTitle, { color: c.text }]}>{ch.title[lang] || ch.title.no}</Text>
+                  <Text style={[st.chapterTitle, { color: c.text }]}>{ch.title[lang] || ''}</Text>
                   <Text style={[st.chapterSub, { color: c.textMuted }]}>{ch.section_count} {t.sections}</Text>
                 </View>
                 <Ionicons name="chevron-forward" size={20} color={c.textMuted} />
@@ -278,7 +278,7 @@ export default function BookScreen() {
           {/* Content */}
           <Animated.ScrollView style={{ opacity: fadeAnim }} contentContainerStyle={st.content}>
             <Text style={[st.sectionTitle, { color: c.accent }]}>
-              {currentSection.section_title[lang] || currentSection.section_title.no}
+              {currentSection.section_title[lang] || ''}
             </Text>
             {currentSection.image ? (
               <View style={st.imageWrapper}>
@@ -290,7 +290,7 @@ export default function BookScreen() {
               </View>
             ) : null}
             <BookHtml
-              html={currentSection.content[lang] || currentSection.content.no || ''}
+              html={currentSection.content[lang] || ''}
               textColor={c.text}
               accentColor={c.accent}
               isDark={isDark}

@@ -159,7 +159,7 @@ export default function SocialScreen() {
   const { language, colors } = useAppStore();
   const c = colors;
   const isDark = c.bg === '#0F172A' || c.bg === '#0B1222';
-  const t = TR[language] || TR.en;
+  const t = TR[language] || {};
 
   const open = (url: string) => Linking.openURL(url);
 

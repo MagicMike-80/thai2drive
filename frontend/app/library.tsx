@@ -372,7 +372,7 @@ const FILTER_CHIPS_EN = ['Braking', 'Reaction Time', 'Right of Way', 'Light Usag
 export default function LibraryScreen() {
   const router = useRouter();
   const { language, colors, isPremium } = useAppStore();
-  const t = TR[language] || TR.no;
+  const t = TR[language] || {};
   const c = colors;
   const isDark = c.bg === '#0F172A' || c.bg === '#0B1222';
 

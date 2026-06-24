@@ -304,8 +304,8 @@ export default function TeacherScreen() {
   const router = useRouter();
   const { language, colors, deviceId } = useAppStore();
   const c = colors;
-  const t = TR[language] || TR.no;
-  const lang = language || 'no';
+  const t = TR[language] || {};
+  const lang = language || 'th';
 
   // Per-language session state — each language keeps its own chat history
   const [sessions, setSessions] = useState<Record<string, LangSession>>({

@@ -52,7 +52,7 @@ export default function SignupScreen() {
   const router = useRouter();
   const { redirect } = useLocalSearchParams<{ redirect?: string }>();
   const { language, colors, signup: doSignup } = useAppStore();
-  const t = TR[language] || TR.en;
+  const t = TR[language] || {};
   const c = colors;
 
   const [email, setEmail] = useState('');

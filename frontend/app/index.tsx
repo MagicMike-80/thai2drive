@@ -26,7 +26,7 @@ export default function HomeScreen() {
   const [loading, setLoading] = useState(true);
   const [dailyDone, setDailyDone] = useState(false);
   const { width: winWidth } = useWindowDimensions();
-  const t = TR[language] || TR.en;
+  const t = TR[language] || {};
   const c = colors;
   const isDark = c.bg === '#0F172A' || c.bg === '#0B1222';
   // Desktop web = wide viewport inside browser (breaks out of 390px phone frame)

@@ -187,7 +187,7 @@ const catStyles = StyleSheet.create({
 export default function AIDashboardScreen() {
   const router = useRouter();
   const { language, colors: c, deviceId, streak } = useAppStore();
-  const t = TR[language] || TR.en;
+  const t = TR[language] || {};
   const isDark = c.bg === '#0F172A' || c.bg === '#0B1222';
 
   const [loading, setLoading]   = useState(true);

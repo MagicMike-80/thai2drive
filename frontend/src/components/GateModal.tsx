@@ -66,7 +66,7 @@ export function GateModal({
   onSignup, onLogin, onPremium, onDismiss,
   language, colors: c,
 }: GateModalProps) {
-  const t = TR[language] || TR.en;
+  const t = TR[language] || {};
 
   return (
     <Modal

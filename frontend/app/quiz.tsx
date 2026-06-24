@@ -198,12 +198,12 @@ export default function QuizScreen() {
   const q = questions[idx];
 
   // V2 helpers: access localized text from nested schema
-  const qT = (qu: Question, l?: string) => qu.question?.[l || language] || qu.question?.no || '';
+  const qT = (qu: Question, l?: string) => qu.question?.[l || language] || '';
   const optText = (qu: Question, optId: string, l?: string) => {
     const opt = qu.options?.find(o => o.id === optId);
-    return opt?.text?.[l || language] || opt?.text?.no || '';
+    return opt?.text?.[l || language] || '';
   };
-  const eT = (qu: Question, l?: string) => qu.explanation?.[l || language] || qu.explanation?.no || '';
+  const eT = (qu: Question, l?: string) => qu.explanation?.[l || language] || '';
 
   const handleCheck = async () => {
     if (!sel || !q) return;

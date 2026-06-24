@@ -110,7 +110,7 @@ export function ExplanationCard({
   lang,
   colors: c,
 }: ExplanationCardProps) {
-  const t = TR[lang] || TR.en;
+  const t = TR[lang] || {};
 
   const [state, setState] = useState<'idle' | 'loading' | 'loaded' | 'error'>('idle');
   const [data, setData] = useState<AIExplanation | null>(null);
