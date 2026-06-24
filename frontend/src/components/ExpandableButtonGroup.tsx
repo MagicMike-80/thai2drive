@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet, Animated } from 'react-native';
+import { View, TouchableOpacity, Text, StyleSheet, Animated, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 interface ButtonChild {
@@ -17,6 +17,7 @@ interface ExpandableButtonGroupProps {
   parentColor: string;
   children: ButtonChild[];
   onParentPress?: () => void;
+  avatar?: any;
 }
 
 export const ExpandableButtonGroup: React.FC<ExpandableButtonGroupProps> = ({
@@ -26,6 +27,7 @@ export const ExpandableButtonGroup: React.FC<ExpandableButtonGroupProps> = ({
   parentColor,
   children,
   onParentPress,
+  avatar,
 }) => {
   const [expanded, setExpanded] = useState(false);
   const [selectedChildId, setSelectedChildId] = useState<string | null>(null);
@@ -52,15 +54,28 @@ export const ExpandableButtonGroup: React.FC<ExpandableButtonGroupProps> = ({
         style={[
           st.parentBtn,
           {
-            backgroundColor: 'rgba(0,0,0,0.6)',
+            backgroundColor: 'rgba(26, 40, 68, 0.65)',
             borderColor: parentColor,
             shadowColor: parentColor,
-            shadowOpacity: selectedChildId === parentId ? 0.8 : 0.4,
-            shadowRadius: selectedChildId === parentId ? 20 : 8,
+            shadowOffset: { width: 0, height: 0 },
+            shadowOpacity: selectedChildId === parentId ? 0.9 : 0.65,
+            shadowRadius: selectedChildId === parentId ? 18 : 10,
+            elevation: selectedChildId === parentId ? 8 : 4,
           },
         ]}
       >
-        {parentIcon.startsWith('emoji') ? (
+        {avatar ? (
+          <Image
+            source={avatar}
+            style={{
+              width: 28,
+              height: 28,
+              borderRadius: 14,
+              borderWidth: 1.5,
+              borderColor: parentColor,
+            }}
+          />
+        ) : parentIcon.startsWith('emoji') ? (
           <Text style={{ fontSize: 22 }}>🚗</Text>
         ) : (
           <Ionicons name={parentIcon as any} size={22} color={parentColor} />
@@ -79,11 +94,13 @@ export const ExpandableButtonGroup: React.FC<ExpandableButtonGroupProps> = ({
               style={[
                 st.childBtn,
                 {
-                  backgroundColor: 'rgba(0,0,0,0.6)',
+                  backgroundColor: 'rgba(26, 40, 68, 0.75)',
                   borderColor: child.color,
                   shadowColor: child.color,
-                  shadowOpacity: selectedChildId === child.id ? 0.8 : 0.4,
-                  shadowRadius: selectedChildId === child.id ? 16 : 6,
+                  shadowOffset: { width: 0, height: 0 },
+                  shadowOpacity: selectedChildId === child.id ? 0.9 : 0.6,
+                  shadowRadius: selectedChildId === child.id ? 15 : 8,
+                  elevation: selectedChildId === child.id ? 6 : 3,
                   // Stagger animation
                   opacity: expanded ? 1 : 0,
                   transform: [{ scale: expanded ? 1 : 0.5 }],
@@ -115,7 +132,7 @@ const st = StyleSheet.create({
     paddingHorizontal: 12,
     minWidth: 90,
     justifyContent: 'center',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 0, height: 0 },
     elevation: 4,
   },
   parentLabel: {
@@ -136,7 +153,7 @@ const st = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 10,
     justifyContent: 'center',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 0, height: 0 },
     elevation: 3,
   },
   childLabel: {

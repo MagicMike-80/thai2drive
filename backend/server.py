@@ -44,37 +44,71 @@ security = HTTPBearer(auto_error=False)
 
 
 def normalize_question(q: dict) -> dict:
-    """Convert v1 flat schema to v2 nested schema expected by the frontend."""
+    """Convert v1 flat schema to v2 nested schema expected by the frontend and dynamically shuffle options."""
+    # Create a copy to avoid side-effects on shared memory
+    q = dict(q)
     q.pop("_id", None)
-    # Already v2 if 'question' key exists as dict
-    if isinstance(q.get("question"), dict):
-        return q
-    # Convert v1 → v2
-    return {
-        "id": q.get("id", ""),
-        "question": {
-            "no": q.get("question_text_no", ""),
-            "th": q.get("question_text_th", ""),
-            "en": q.get("question_text_en", ""),
-        },
-        "options": [
-            {"id": "A", "text": {"no": q.get("answer_a_no", ""), "th": q.get("answer_a_th", ""), "en": q.get("answer_a_en", "")}},
-            {"id": "B", "text": {"no": q.get("answer_b_no", ""), "th": q.get("answer_b_th", ""), "en": q.get("answer_b_en", "")}},
-            {"id": "C", "text": {"no": q.get("answer_c_no", ""), "th": q.get("answer_c_th", ""), "en": q.get("answer_c_en", "")}},
-            {"id": "D", "text": {"no": q.get("answer_d_no", ""), "th": q.get("answer_d_th", ""), "en": q.get("answer_d_en", "")}},
-        ],
-        "correctOptionId": q.get("correct_answer", "A"),
-        "explanation": {
-            "no": q.get("explanation_no", ""),
-            "th": q.get("explanation_th", ""),
-            "en": q.get("explanation_en", ""),
-        },
-        "bildeUrl": q.get("bildeUrl") or q.get("image_url") or None,
-        "category": q.get("category", ""),
-        "difficulty": q.get("difficulty", "medium"),
-        "active": q.get("active", True),
-        "created_at": q.get("created_at", ""),
-    }
+    
+    # Ensure it's in v2 structure
+    if not isinstance(q.get("question"), dict):
+        # Convert v1 → v2
+        normalized = {
+            "id": q.get("id", ""),
+            "question": {
+                "no": q.get("question_text_no", ""),
+                "th": q.get("question_text_th", ""),
+                "en": q.get("question_text_en", ""),
+            },
+            "options": [
+                {"id": "A", "text": {"no": q.get("answer_a_no", ""), "th": q.get("answer_a_th", ""), "en": q.get("answer_a_en", "")}},
+                {"id": "B", "text": {"no": q.get("answer_b_no", ""), "th": q.get("answer_b_th", ""), "en": q.get("answer_b_en", "")}},
+                {"id": "C", "text": {"no": q.get("answer_c_no", ""), "th": q.get("answer_c_th", ""), "en": q.get("answer_c_en", "")}},
+                {"id": "D", "text": {"no": q.get("answer_d_no", ""), "th": q.get("answer_d_th", ""), "en": q.get("answer_d_en", "")}},
+            ],
+            "correctOptionId": q.get("correct_answer", "A"),
+            "explanation": {
+                "no": q.get("explanation_no", ""),
+                "th": q.get("explanation_th", ""),
+                "en": q.get("explanation_en", ""),
+            },
+            "bildeUrl": q.get("bildeUrl") or q.get("image_url") or None,
+            "category": q.get("category", ""),
+            "difficulty": q.get("difficulty", "medium"),
+            "active": q.get("active", True),
+            "created_at": q.get("created_at", ""),
+        }
+    else:
+        import copy
+        normalized = copy.deepcopy(q)
+
+    # Dynamic option shuffling
+    options = normalized.get("options", [])
+    correct_id = normalized.get("correctOptionId")
+    if options and correct_id:
+        items = []
+        for o in options:
+            is_correct = (o.get("id") == correct_id)
+            opt_data = {k: v for k, v in o.items() if k != "id"}
+            items.append((opt_data, is_correct))
+        
+        import random as _random
+        _random.shuffle(items)
+        
+        # Reconstruct options with A, B, C, D IDs
+        shuffled_options = []
+        letters = ["A", "B", "C", "D"][:len(items)]
+        new_correct_id = correct_id
+        for letter, (opt_data, is_correct) in zip(letters, items):
+            new_opt = {"id": letter}
+            new_opt.update(opt_data)
+            shuffled_options.append(new_opt)
+            if is_correct:
+                new_correct_id = letter
+        
+        normalized["options"] = shuffled_options
+        normalized["correctOptionId"] = new_correct_id
+
+    return normalized
 
 app = FastAPI()
 api_router = APIRouter(prefix="/api")
@@ -4031,17 +4065,18 @@ def _serialize_video(v: dict) -> dict:
 # ── Public read endpoints ──────────────────────────────────────────────────────
 
 @api_router.get("/videos/for-topic")
-async def videos_for_topic(tags: str = "", limit: int = Query(default=1, le=3)):
+async def videos_for_topic(tags: str = "", limit: int = Query(default=50, le=50)):
     """Suggest learning videos by topic tag(s).
     tags: comma-separated labels from the _dangerLabel() frontend function.
     Returns up to `limit` videos ranked by first matching tag.
     """
     if not tags.strip():
-        return []
-    tag_list = [t.strip() for t in tags.split(',') if t.strip()]
-    results = await db.learning_videos.find(
-        {"active": True, "topic_tags": {"$in": tag_list}}
-    ).limit(limit).to_list(limit)
+        query = {"active": True}
+    else:
+        tag_list = [t.strip() for t in tags.split(',') if t.strip()]
+        query = {"active": True, "topic_tags": {"$in": tag_list}}
+
+    results = await db.learning_videos.find(query).limit(limit).to_list(limit)
     return [_serialize_video(r) for r in results]
 
 
@@ -4158,14 +4193,15 @@ def _serialize_podcast(p: dict) -> dict:
 
 
 @api_router.get("/podcasts/for-topic")
-async def podcasts_for_topic(tags: str = "", limit: int = Query(default=1, le=3)):
+async def podcasts_for_topic(tags: str = "", limit: int = Query(default=50, le=50)):
     """Suggest learning podcasts by topic tag(s)."""
     if not tags.strip():
-        return []
-    tag_list = [t.strip() for t in tags.split(',') if t.strip()]
-    results = await db.learning_podcasts.find(
-        {"active": True, "topic_tags": {"$in": tag_list}}
-    ).limit(limit).to_list(limit)
+        query = {"active": True}
+    else:
+        tag_list = [t.strip() for t in tags.split(',') if t.strip()]
+        query = {"active": True, "topic_tags": {"$in": tag_list}}
+
+    results = await db.learning_podcasts.find(query).limit(limit).to_list(limit)
     return [_serialize_podcast(r) for r in results]
 
 

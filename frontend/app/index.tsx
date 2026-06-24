@@ -180,7 +180,19 @@ export default function HomeScreen() {
         <Animated.View style={{ transform: [{ scale: ctaScale }] }}>
           <TouchableOpacity
             testID="start-quiz-btn"
-            style={[st.startBtn, { backgroundColor: locked ? c.letterBg : c.accent }]}
+            style={[
+              st.startBtn,
+              {
+                backgroundColor: locked ? c.letterBg : c.accent,
+                shadowColor: locked ? 'transparent' : c.accent,
+                shadowOffset: { width: 0, height: 0 },
+                shadowOpacity: locked ? 0 : 0.85,
+                shadowRadius: locked ? 0 : 15,
+                borderColor: locked ? 'transparent' : c.accent,
+                borderWidth: locked ? 0 : 1.5,
+                elevation: locked ? 0 : 8,
+              }
+            ]}
             onPress={startPractice}
             onPressIn={pressIn}
             onPressOut={pressOut}
@@ -202,30 +214,63 @@ export default function HomeScreen() {
         <View style={st.secondaryRow}>
           <TouchableOpacity
             testID="exam-mode-btn"
-            style={[st.secBtn, { borderColor: c.cardBorder }]}
+            style={[
+              st.secBtn,
+              {
+                borderColor: '#FF1493',
+                backgroundColor: 'rgba(26, 40, 68, 0.65)',
+                shadowColor: '#FF1493',
+                shadowOffset: { width: 0, height: 0 },
+                shadowOpacity: 0.85,
+                shadowRadius: 12,
+                elevation: 5,
+              }
+            ]}
             onPress={() => { if (locked) handleLockedNav(); else router.push({ pathname: '/quiz', params: { mode: 'exam', category: 'all' } }); }}
             activeOpacity={0.7}
           >
-            <Ionicons name="school-outline" size={18} color={c.text} />
-            <Text style={[st.secText, { color: c.text }]}>{t.exam}</Text>
+            <Ionicons name="school-outline" size={18} color="#FF1493" />
+            <Text style={[st.secText, { color: '#FF1493' }]}>{t.exam}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             testID="daily-test-btn"
-            style={[st.secBtn, { borderColor: dailyDone ? `${c.correct}60` : c.cardBorder }]}
+            style={[
+              st.secBtn,
+              {
+                borderColor: dailyDone ? c.correct : '#FF9900',
+                backgroundColor: 'rgba(26, 40, 68, 0.65)',
+                shadowColor: dailyDone ? c.correct : '#FF9900',
+                shadowOffset: { width: 0, height: 0 },
+                shadowOpacity: 0.75,
+                shadowRadius: 10,
+                elevation: 5,
+              }
+            ]}
             onPress={() => router.push({ pathname: '/quiz', params: { mode: 'daily', category: 'all' } })}
             activeOpacity={0.7}
           >
-            <Ionicons name={dailyDone ? 'checkmark-circle' : 'today-outline'} size={18} color={dailyDone ? c.correct : c.text} />
-            <Text style={[st.secText, { color: dailyDone ? c.correct : c.text }]}>{t.dailyTest}</Text>
+            <Ionicons name={dailyDone ? 'checkmark-circle' : 'today-outline'} size={18} color={dailyDone ? c.correct : '#FF9900'} />
+            <Text style={[st.secText, { color: dailyDone ? c.correct : '#FF9900' }]}>{t.dailyTest}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             testID="smart-practice-btn"
-            style={[st.secBtn, { borderColor: `${c.accent}50`, backgroundColor: c.accentBg }]}
+            style={[
+              st.secBtn,
+              {
+                borderColor: '#00FFFF',
+                backgroundColor: 'rgba(26, 40, 68, 0.65)',
+                shadowColor: '#00FFFF',
+                shadowOffset: { width: 0, height: 0 },
+                shadowOpacity: 0.8,
+                shadowRadius: 12,
+                elevation: 5,
+              }
+            ]}
             onPress={() => { if (locked) handleLockedNav(); else router.push({ pathname: '/quiz', params: { mode: 'smart', category: 'all' } }); }}
             activeOpacity={0.7}
           >
-            <Ionicons name="flash-outline" size={18} color={c.accent} />
-            <Text style={[st.secText, { color: c.accent }]}>{t.smartPractice}</Text>
+            <Ionicons name="flash-outline" size={18} color="#00FFFF" />
+            <Text style={[st.secText, { color: '#00FFFF' }]}>{t.smartPractice}</Text>
           </TouchableOpacity>
         </View>
 
@@ -237,6 +282,7 @@ export default function HomeScreen() {
             parentLabel={t.michaelTeacher}
             parentIcon="emoji"
             parentColor="#00FFFF"
+            avatar={require('../assets/michael_avatar.png')}
             children={[
               {
                 id: 'library',
@@ -267,7 +313,7 @@ export default function HomeScreen() {
             parentId="signs"
             parentLabel={t.signGallery}
             parentIcon="warning-outline"
-            parentColor="#00FF00"
+            parentColor="#00FFFF"
             children={[
               {
                 id: 'traffic-math',
@@ -283,7 +329,7 @@ export default function HomeScreen() {
                 id: 'stats',
                 label: t.myStats,
                 icon: 'bar-chart-outline',
-                color: '#00FF00',
+                color: '#00FFFF',
                 onPress: () => router.push('/stats'),
               },
               {
@@ -321,7 +367,7 @@ export default function HomeScreen() {
                 id: 'glossary',
                 label: t.glossary,
                 icon: 'language-outline',
-                color: '#00FF00',
+                color: '#FF1493',
                 onPress: () => router.push('/glossary'),
               },
             ]}
@@ -350,7 +396,23 @@ export default function HomeScreen() {
 
         {/* Premium banner / active */}
         {!isPremium ? (
-          <TouchableOpacity testID="home-premium-btn" style={[st.premBanner, { backgroundColor: c.accentBg, borderColor: `${c.accent}80` }]} onPress={() => router.push('/paywall')} activeOpacity={0.85}>
+          <TouchableOpacity
+            testID="home-premium-btn"
+            style={[
+              st.premBanner,
+              {
+                backgroundColor: 'rgba(26, 40, 68, 0.65)',
+                borderColor: c.accent,
+                shadowColor: c.accent,
+                shadowOffset: { width: 0, height: 0 },
+                shadowOpacity: 0.75,
+                shadowRadius: 10,
+                elevation: 5,
+              }
+            ]}
+            onPress={() => router.push('/paywall')}
+            activeOpacity={0.85}
+          >
             <Ionicons name="diamond" size={18} color={c.accent} />
             <View style={{ flex: 1, marginLeft: 10 }}>
               <Text style={[st.premTitle, { color: c.accent }]}>{t.premiumCta}</Text>
@@ -359,7 +421,20 @@ export default function HomeScreen() {
             <Ionicons name="chevron-forward" size={20} color={c.accent} />
           </TouchableOpacity>
         ) : (
-          <View style={[st.premActive, { backgroundColor: `${c.correct}14`, borderColor: `${c.correct}40` }]}>
+          <View
+            style={[
+              st.premActive,
+              {
+                backgroundColor: 'rgba(26, 40, 68, 0.65)',
+                borderColor: c.correct,
+                shadowColor: c.correct,
+                shadowOffset: { width: 0, height: 0 },
+                shadowOpacity: 0.75,
+                shadowRadius: 10,
+                elevation: 5,
+              }
+            ]}
+          >
             <Ionicons name="diamond" size={16} color={c.correct} />
             <Text style={[st.premActiveText, { color: c.correct }]}>{t.premiumActive}</Text>
           </View>

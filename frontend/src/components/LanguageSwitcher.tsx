@@ -46,6 +46,11 @@ export function LanguageSwitcher({ size = 'md', align = 'flex-start' }: Props) {
                 backgroundColor: active ? c.accentBg : 'transparent',
                 borderColor: active ? c.accent : c.cardBorder,
                 borderWidth: active ? 2.5 : 1,
+                shadowColor: active ? c.accent : 'transparent',
+                shadowOffset: { width: 0, height: 0 },
+                shadowOpacity: active ? 0.85 : 0,
+                shadowRadius: active ? 10 : 0,
+                elevation: active ? 6 : 0,
               },
             ]}
           >

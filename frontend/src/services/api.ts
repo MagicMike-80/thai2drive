@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL || '';
 const API_BASE = `${BACKEND_URL}/api`;
 
@@ -360,11 +361,39 @@ export const api = {
   },
 
   async saveQuizAttempt(data: any): Promise<QuizAttempt> {
-    return fetchJSON(`${API_BASE}/quiz-attempts`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
+    const localAttempt: QuizAttempt = {
+      id: data.id || `local_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
+      device_id: data.device_id,
+      mode: data.mode,
+      category: data.category,
+      total_questions: data.total_questions,
+      correct_answers: data.correct_answers,
+      score_percentage: data.score_percentage,
+      passed: data.passed,
+      questions_answered: data.questions_answered || [],
+      started_at: data.started_at || new Date().toISOString(),
+      completed_at: data.completed_at || new Date().toISOString(),
+    };
+
+    try {
+      const existing = await AsyncStorage.getItem('t2d_local_quiz_attempts');
+      const attempts = existing ? JSON.parse(existing) : [];
+      attempts.unshift(localAttempt);
+      await AsyncStorage.setItem('t2d_local_quiz_attempts', JSON.stringify(attempts.slice(0, 50)));
+    } catch (e) {
+      console.warn('Failed to cache attempt locally:', e);
+    }
+
+    try {
+      return await fetchJSON(`${API_BASE}/quiz-attempts`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+    } catch (err) {
+      console.warn('Backend saveQuizAttempt failed, returning local cached copy:', err);
+      return localAttempt;
+    }
   },
 
   async getQuizAttempts(deviceId: string, limit = 20): Promise<QuizAttempt[]> {

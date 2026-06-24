@@ -7,6 +7,7 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAppStore } from '../src/store/appStore';
 import { api, MyStats, CategoryStat } from '../src/services/api';
+import { BottomNavBar } from '../src/components/BottomNavBar';
 
 const TR: Record<string, Record<string, string>> = {
   no: {
@@ -152,6 +153,7 @@ export default function StatsScreen() {
 
         </ScrollView>
       )}
+      <BottomNavBar activeTab="stats" />
     </SafeAreaView>
   );
 }
@@ -183,7 +185,7 @@ const st = StyleSheet.create({
   header:         { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 14, borderBottomWidth: 1 },
   backBtn:        { width: 40, height: 40, justifyContent: 'center' },
   headerTitle:    { flex: 1, fontSize: 17, fontWeight: '700', textAlign: 'center' },
-  scroll:         { padding: 16, gap: 8, paddingBottom: 40 },
+  scroll:         { padding: 16, gap: 8, paddingBottom: 110 },
   overallCard:    { borderRadius: 16, borderWidth: 1, padding: 20, marginBottom: 8, gap: 8 },
   overallLabel:   { fontSize: 12, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1 },
   overallPct:     { fontSize: 48, fontWeight: '900' },

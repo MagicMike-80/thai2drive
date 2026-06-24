@@ -25,6 +25,7 @@ const getFullUrl = (url: string) => url.startsWith('/') ? BACKEND_URL + url : ur
 
 const LANG_FLAG: Record<string, string> = { no: '🇳🇴', th: '🇹🇭', en: '🇬🇧' };
 
+const TR: Record<string, Record<string, string>> = {
   no: {
     title: 'Innholdsbibliotek',
     subtitle: 'Ryggraden for repetisjon',
@@ -52,7 +53,7 @@ const LANG_FLAG: Record<string, string> = { no: '🇳🇴', th: '🇹🇭', en: 
     all: 'ทั้งหมด',
     loading: 'กำลังโหลด...',
     empty: 'ไม่มีเนื้อหาที่ใช้ได้',
-    premiumLock: 'พรีเมียม',
+    premiumLock: 'พี่เมียม',
     premiumCta: 'ปลดล็อกเนื้อหาทั้งหมด',
     new: 'ใหม่',
     recommended: 'ไมเคิลแนะนำ',
@@ -82,6 +83,7 @@ const LANG_FLAG: Record<string, string> = { no: '🇳🇴', th: '🇹🇭', en: 
     history: 'History',
     media: 'Recommended Media',
   },
+};
 
 interface VideoItem {
   id: string;

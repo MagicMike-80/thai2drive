@@ -17,6 +17,7 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Audio } from 'expo-av';
 import { useAppStore } from '../src/store/appStore';
+import { BottomNavBar } from '../src/components/BottomNavBar';
 
 // ─── Translation strings ─────────────────────────────────────────────────────
 const TR: Record<string, Record<string, any>> = {
@@ -697,7 +698,7 @@ export default function TeacherScreen() {
         </ScrollView>
 
         {/* Input bar */}
-        <View style={[s.inputBar, { backgroundColor: c.card, borderTopColor: c.cardBorder }]}>
+        <View style={[s.inputBar, { backgroundColor: c.card, borderTopColor: c.cardBorder, marginBottom: 88 }]}>
           <TextInput
             style={[s.input, { backgroundColor: c.bg, color: c.text, borderColor: c.cardBorder }]}
             placeholder={t.inputPlaceholder}
@@ -720,6 +721,7 @@ export default function TeacherScreen() {
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
+      <BottomNavBar activeTab="teacher" />
     </SafeAreaView>
   );
 }

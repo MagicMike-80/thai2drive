@@ -174,6 +174,7 @@
     <button class="tab" id="tab-studiebok" onclick="switchTab('studiebok')">📖 Studiebok</button>
     <button class="tab" id="tab-book" onclick="switchTab('book')">📗 Læringsbok</button>
     <button class="tab" id="tab-signs" onclick="switchTab('signs')">🚦 Trafikkskilt</button>
+    <button class="tab" id="tab-videos" onclick="switchTab('videos')">🎬 Videoer</button>
     <button class="tab" id="tab-podcasts" onclick="switchTab('podcasts')">🎙️ Podcaster</button>
     <button class="tab" id="tab-glossary" onclick="switchTab('glossary')">📚 Ordliste</button>
   </div>
@@ -250,6 +251,18 @@
       <div style="font-size:13px;color:var(--muted)" id="signs-meta"></div>
     </div>
     <div id="signs-groups"></div>
+  </div>
+
+  <!-- ── VIDEOS VIEW ─────────────────────────────────── -->
+  <div id="videos-view" style="display:none">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px">
+      <div style="font-size:13px;color:var(--muted)" id="videos-meta"></div>
+      <button onclick="openVideoModal(null)"
+        style="background:var(--good);color:#fff;border:0;padding:8px 18px;border-radius:7px;cursor:pointer;font-size:14px;font-weight:600">
+        ➕ Legg til video
+      </button>
+    </div>
+    <div id="videos-list"></div>
   </div>
 
   <!-- ── PODCASTS VIEW ─────────────────────────────────── -->
@@ -555,7 +568,7 @@ function renderDetail(q, editing) {
     ${q.audit_image_identification ? `<div style="color:var(--muted);font-size:13px;margin-bottom:12px">🔎 AI så: <em>${escapeHtml(q.audit_image_identification)}</em></div>` : ''}
 
     <div class="lang-row"><div class="lbl">🇳🇴 Spørsmål (NO)</div>${escapeHtml(q.question?.no || '')}</div>
-    <div class="lang-row"><div class="lbl">🇬🇧 Question (EN)</div>${escapeHtml(q.question?.en || '')}</div>
+    <div class="lang-row"><div class="lbl">🇬🇧 Spørsmål (EN)</div>${escapeHtml(q.question?.en || '')}</div>
     <div class="lang-row"><div class="lbl">🇹🇭 คำถาม (TH)</div>${escapeHtml(q.question?.th || '')}</div>
 
     <h3 style="margin-bottom:8px">Alternativer</h3>
@@ -568,9 +581,9 @@ function renderDetail(q, editing) {
     `).join('')}
 
     <h3 style="margin-top:16px;margin-bottom:8px">Forklaring</h3>
-    <div class="lang-row"><div class="lbl">🇳🇴 NO</div>${escapeHtml(q.explanation?.no || '')}</div>
-    <div class="lang-row"><div class="lbl">🇬🇧 EN</div>${escapeHtml(q.explanation?.en || '')}</div>
-    <div class="lang-row"><div class="lbl">🇹🇭 TH</div>${escapeHtml(q.explanation?.th || '')}</div>
+    <div class="lang-row"><div class="lbl">🇳🇴 Norsk (NO)</div>${escapeHtml(q.explanation?.no || '')}</div>
+    <div class="lang-row"><div class="lbl">🇬🇧 Engelsk (EN)</div>${escapeHtml(q.explanation?.en || '')}</div>
+    <div class="lang-row"><div class="lbl">🇹🇭 Thai (TH)</div>${escapeHtml(q.explanation?.th || '')}</div>
 
     <div style="margin-top:16px;display:flex;gap:6px;flex-wrap:wrap">
       <span class="tag">📂 ${q.category || '—'}</span>
@@ -622,9 +635,9 @@ function renderForm(q) {
 
     <!-- Question texts -->
     <h3 style="margin-bottom:6px;font-size:14px">Spørsmål</h3>
-    <div class="lang-row"><div class="lbl">🇳🇴 NO</div><textarea id="e_qno" style="${inputStyle()}">${escapeHtml(q.question?.no || '')}</textarea></div>
-    <div class="lang-row"><div class="lbl">🇬🇧 EN</div><textarea id="e_qen" style="${inputStyle()}">${escapeHtml(q.question?.en || '')}</textarea></div>
-    <div class="lang-row"><div class="lbl">🇹🇭 TH</div><textarea id="e_qth" style="${inputStyle()}">${escapeHtml(q.question?.th || '')}</textarea></div>
+    <div class="lang-row"><div class="lbl">🇳🇴 Norsk (NO)</div><textarea id="e_qno" style="${inputStyle()}">${escapeHtml(q.question?.no || '')}</textarea></div>
+    <div class="lang-row"><div class="lbl">🇬🇧 Engelsk (EN)</div><textarea id="e_qen" style="${inputStyle()}">${escapeHtml(q.question?.en || '')}</textarea></div>
+    <div class="lang-row"><div class="lbl">🇹🇭 Thai (TH)</div><textarea id="e_qth" style="${inputStyle()}">${escapeHtml(q.question?.th || '')}</textarea></div>
 
     <!-- Options with radio for correct answer -->
     <h3 style="margin:14px 0 6px;font-size:14px">Alternativer — velg riktig svar (🔘 markerer riktig)</h3>
@@ -636,18 +649,18 @@ function renderForm(q) {
             <input type="radio" name="correct" value="${id}" ${id === q.correctOptionId ? 'checked' : ''} style="width:20px;height:20px;accent-color:var(--good)" />
             <strong style="font-size:16px">${id}.</strong>
           </div>
-          <input id="e_opt_${id}_no" placeholder="🇳🇴 Norsk" value="${escapeAttr(o.text?.no || '')}" style="${inputStyle('single')}" />
-          <input id="e_opt_${id}_en" placeholder="🇬🇧 English" value="${escapeAttr(o.text?.en || '')}" style="${inputStyle('single')}" />
-          <input id="e_opt_${id}_th" placeholder="🇹🇭 ไทย" value="${escapeAttr(o.text?.th || '')}" style="${inputStyle('single')}" />
+          <input id="e_opt_${id}_no" placeholder="🇳🇴 Norsk (NO)" value="${escapeAttr(o.text?.no || '')}" style="${inputStyle('single')}" />
+          <input id="e_opt_${id}_en" placeholder="🇬🇧 Engelsk (EN)" value="${escapeAttr(o.text?.en || '')}" style="${inputStyle('single')}" />
+          <input id="e_opt_${id}_th" placeholder="🇹🇭 Thai (TH)" value="${escapeAttr(o.text?.th || '')}" style="${inputStyle('single')}" />
         </div>
       `;
     }).join('')}
 
     <!-- Explanation -->
     <h3 style="margin:14px 0 6px;font-size:14px">Forklaring</h3>
-    <div class="lang-row"><div class="lbl">🇳🇴 NO</div><textarea id="e_expno" style="${inputStyle()}">${escapeHtml(q.explanation?.no || '')}</textarea></div>
-    <div class="lang-row"><div class="lbl">🇬🇧 EN</div><textarea id="e_expen" style="${inputStyle()}">${escapeHtml(q.explanation?.en || '')}</textarea></div>
-    <div class="lang-row"><div class="lbl">🇹🇭 TH</div><textarea id="e_expth" style="${inputStyle()}">${escapeHtml(q.explanation?.th || '')}</textarea></div>
+    <div class="lang-row"><div class="lbl">🇳🇴 Norsk (NO)</div><textarea id="e_expno" style="${inputStyle()}">${escapeHtml(q.explanation?.no || '')}</textarea></div>
+    <div class="lang-row"><div class="lbl">🇬🇧 Engelsk (EN)</div><textarea id="e_expen" style="${inputStyle()}">${escapeHtml(q.explanation?.en || '')}</textarea></div>
+    <div class="lang-row"><div class="lbl">🇹🇭 Thai (TH)</div><textarea id="e_expth" style="${inputStyle()}">${escapeHtml(q.explanation?.th || '')}</textarea></div>
 
     <!-- Metadata -->
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-top:12px">
@@ -1010,7 +1023,10 @@ async function reaudit(id) {
   } catch (e) { toast('Audit feilet: ' + e.message, false); }
 }
 
-function closeModal() { document.getElementById('modal').classList.remove('show'); }
+function closeModal() {
+  document.getElementById('modal').classList.remove('show');
+  document.getElementById('modal').style.display = '';
+}
 
 async function deleteQuestion(id) {
   if (!confirm('Er du sikker på at du vil deaktivere dette spørsmålet?')) return;
@@ -1092,17 +1108,20 @@ function switchTab(tab) {
   document.getElementById('studiebok-view').style.display  = tab === 'studiebok'  ? '' : 'none';
   document.getElementById('book-view').style.display       = tab === 'book'       ? '' : 'none';
   document.getElementById('signs-view').style.display      = tab === 'signs'      ? '' : 'none';
+  document.getElementById('videos-view').style.display     = tab === 'videos'     ? '' : 'none';
   document.getElementById('podcasts-view').style.display   = tab === 'podcasts'   ? '' : 'none';
   document.getElementById('glossary-view').style.display   = tab === 'glossary'   ? '' : 'none';
   document.getElementById('tab-questions').classList.toggle('active', tab === 'questions');
   document.getElementById('tab-studiebok').classList.toggle('active', tab === 'studiebok');
   document.getElementById('tab-book').classList.toggle('active', tab === 'book');
   document.getElementById('tab-signs').classList.toggle('active', tab === 'signs');
+  document.getElementById('tab-videos').classList.toggle('active', tab === 'videos');
   document.getElementById('tab-podcasts').classList.toggle('active', tab === 'podcasts');
   document.getElementById('tab-glossary').classList.toggle('active', tab === 'glossary');
   if (tab === 'book')      loadBook();
   if (tab === 'signs')     loadSigns();
   if (tab === 'studiebok') loadSbAdmin();
+  if (tab === 'videos')    loadVideos();
   if (tab === 'podcasts')  loadPodcasts();
   if (tab === 'glossary')  loadGlossary();
 }
@@ -1735,6 +1754,194 @@ async function deleteSbChapter(order) {
   const data = await r.json();
   if (r.ok) { toast('🗑 Kapittel slettet'); loadSbAdmin(); }
   else toast('Feil: ' + (data.detail || 'ukjent'), false);
+}
+
+// ══════════════════════════════════════════════════════════
+//  VIDEOS ADMIN
+// ══════════════════════════════════════════════════════════
+let _videosData = [];
+
+async function loadVideos() {
+  const container = document.getElementById('videos-list');
+  container.innerHTML = '<p style="color:var(--muted);padding:20px">Laster...</p>';
+  try {
+    const data = await api('/admin/videos');
+    _videosData = Array.isArray(data) ? data : [];
+    document.getElementById('videos-meta').textContent = `${_videosData.length} videoer`;
+    if (_videosData.length === 0) {
+      container.innerHTML = '<p style="color:var(--muted);padding:20px">Ingen videoer ennå. Legg til den første!</p>';
+      return;
+    }
+    container.innerHTML = `
+      <table style="width:100%;border-collapse:collapse;font-size:13px">
+        <thead>
+          <tr style="color:var(--muted);text-align:left;border-bottom:1px solid #334155">
+            <th style="padding:8px 10px">Tittel (NO)</th>
+            <th style="padding:8px 10px">YouTube-URL</th>
+            <th style="padding:8px 10px">Tags</th>
+            <th style="padding:8px 10px">Aktiv</th>
+            <th style="padding:8px 10px">Handlinger</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${_videosData.map(v => `
+            <tr style="border-bottom:1px solid #1e293b">
+              <td style="padding:8px 10px;color:var(--text)">${escapeHtml(v.title_no || '—')}</td>
+              <td style="padding:8px 10px;color:var(--muted)">
+                <a href="${escapeHtml(v.youtube_url)}" target="_blank" style="color:var(--accent);text-decoration:none">
+                  ${escapeHtml(v.youtube_url || '—')}
+                </a>
+              </td>
+              <td style="padding:8px 10px;color:var(--muted)">${escapeHtml((v.topic_tags || []).join(', '))}</td>
+              <td style="padding:8px 10px">${v.active ? '✅' : '❌'}</td>
+              <td style="padding:8px 10px;display:flex;gap:6px">
+                <button class="btn-edit" onclick="openVideoModal('${v.id}')">✏️ Rediger</button>
+                <button class="btn-del"  onclick="deleteVideo('${v.id}')">🗑</button>
+              </td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>`;
+  } catch(e) {
+    container.innerHTML = '<p style="color:var(--bad);padding:20px">Feil: ' + e.message + '</p>';
+  }
+}
+
+async function deleteVideo(id) {
+  if (!confirm('Slette denne videoen? Dette kan ikke angres.')) return;
+  try {
+    const r = await fetch(API + '/admin/videos/' + id, {
+      method: 'DELETE',
+      headers: { Authorization: 'Bearer ' + token },
+    });
+    if (r.ok) {
+      toast('🗑 Video slettet');
+      loadVideos();
+    } else {
+      const e = await r.json().catch(() => ({ detail: 'Ukjent feil' }));
+      toast('Feil ved sletting: ' + (e.detail || 'ukjent'), false);
+    }
+  } catch(e) {
+    toast('Feil: ' + e.message, false);
+  }
+}
+
+function openVideoModal(id) {
+  const v = id ? _videosData.find(x => x.id === id) : null;
+  const tags = (v?.topic_tags || []).join(', ');
+  const signIds = (v?.sign_ids || []).join(', ');
+  const signGroups = (v?.sign_groups || []).join(', ');
+
+  document.getElementById('modal-body').innerHTML = `
+    <button class="close" onclick="closeModal()">✕</button>
+    <h2>${id ? '✏️ Rediger video' : '➕ Legg til video'}</h2>
+
+    <div style="margin-bottom:12px">
+      <div class="lbl">YouTube-URL</div>
+      <input id="vd-url" type="text" style="width:100%;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:14px;box-sizing:border-box"
+        placeholder="https://www.youtube.com/watch?v=..." value="${escapeHtml(v?.youtube_url || '')}"/>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px">
+      <div><div class="lbl">🇳🇴 Tittel norsk</div>
+        <input id="vd-title-no" type="text" style="width:100%;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:14px;box-sizing:border-box"
+          value="${escapeHtml(v?.title_no || '')}"/></div>
+      <div><div class="lbl">🇹🇭 Tittel thai</div>
+        <input id="vd-title-th" type="text" style="width:100%;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:14px;box-sizing:border-box"
+          value="${escapeHtml(v?.title_th || '')}"/></div>
+      <div><div class="lbl">🇬🇧 Tittel engelsk</div>
+        <input id="vd-title-en" type="text" style="width:100%;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:14px;box-sizing:border-box"
+          value="${escapeHtml(v?.title_en || '')}"/></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px">
+      <div><div class="lbl">Sammendrag norsk</div>
+        <textarea id="vd-sum-no" rows="3" style="width:100%;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:13px;resize:vertical;box-sizing:border-box">${escapeHtml(v?.instructor_summary_no || '')}</textarea></div>
+      <div><div class="lbl">Sammendrag thai</div>
+        <textarea id="vd-sum-th" rows="3" style="width:100%;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:13px;resize:vertical;box-sizing:border-box">${escapeHtml(v?.instructor_summary_th || '')}</textarea></div>
+      <div><div class="lbl">Sammendrag engelsk</div>
+        <textarea id="vd-sum-en" rows="3" style="width:100%;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:13px;resize:vertical;box-sizing:border-box">${escapeHtml(v?.instructor_summary_en || '')}</textarea></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px">
+      <div><div class="lbl">Emne-tags (kommaseparert)</div>
+        <input id="vd-tags" type="text" style="width:100%;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:14px;box-sizing:border-box"
+          placeholder="Bremsing, Reaksjonstid" value="${escapeHtml(tags)}"/></div>
+      <div><div class="lbl">Skilt-IDer (kommaseparert)</div>
+        <input id="vd-sign-ids" type="text" style="width:100%;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:14px;box-sizing:border-box"
+          placeholder="101, 202" value="${escapeHtml(signIds)}"/></div>
+      <div><div class="lbl">Skiltgrupper (kommaseparert)</div>
+        <input id="vd-sign-groups" type="text" style="width:100%;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:14px;box-sizing:border-box"
+          placeholder="1, 2, 3" value="${escapeHtml(signGroups)}"/></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
+      <div><div class="lbl">Språk (no/th/en)</div>
+        <select id="vd-lang" style="width:100%;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:14px;box-sizing:border-box">
+          <option value="no" ${(v?.language || 'no') === 'no' ? 'selected' : ''}>Norsk (no)</option>
+          <option value="th" ${(v?.language) === 'th' ? 'selected' : ''}>Thai (th)</option>
+          <option value="en" ${(v?.language) === 'en' ? 'selected' : ''}>Engelsk (en)</option>
+        </select></div>
+      <div><div class="lbl">Varighet (sekunder)</div>
+        <input id="vd-dur" type="number" style="width:100%;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:14px;box-sizing:border-box"
+          value="${escapeHtml(String(v?.duration_seconds || 0))}"/></div>
+    </div>
+
+    <div style="margin-bottom:16px">
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:14px;color:var(--text)">
+        <input id="vd-active" type="checkbox" ${(v?.active !== false) ? 'checked' : ''} style="width:16px;height:16px"/>
+        Aktiv (vises i app)
+      </label>
+    </div>
+
+    <div style="display:flex;gap:10px;justify-content:flex-end">
+      <button onclick="closeModal()" style="background:var(--card);color:var(--text);border:1px solid #475569;padding:9px 20px;border-radius:7px;cursor:pointer;font-size:14px">Avbryt</button>
+      <button onclick="saveVideo('${id||''}')" style="background:var(--accent);color:#fff;border:0;padding:9px 20px;border-radius:7px;cursor:pointer;font-size:14px;font-weight:600">
+        ${id ? 'Lagre endringer' : 'Legg til'}
+      </button>
+    </div>`;
+  document.getElementById('modal').classList.add('show');
+}
+
+async function saveVideo(id) {
+  const body = {
+    youtube_url:            document.getElementById('vd-url').value.trim(),
+    title_no:               document.getElementById('vd-title-no').value.trim(),
+    title_th:               document.getElementById('vd-title-th').value.trim(),
+    title_en:               document.getElementById('vd-title-en').value.trim(),
+    instructor_summary_no:  document.getElementById('vd-sum-no').value.trim(),
+    instructor_summary_th:  document.getElementById('vd-sum-th').value.trim(),
+    instructor_summary_en:  document.getElementById('vd-sum-en').value.trim(),
+    topic_tags:             document.getElementById('vd-tags').value.split(',').map(t=>t.trim()).filter(Boolean),
+    sign_ids:               document.getElementById('vd-sign-ids').value.split(',').map(t=>t.trim()).filter(Boolean),
+    sign_groups:            document.getElementById('vd-sign-groups').value.split(',').map(t=>t.trim()).filter(Boolean),
+    language:               document.getElementById('vd-lang').value,
+    duration_seconds:       parseInt(document.getElementById('vd-dur').value)||0,
+    active:                 document.getElementById('vd-active').checked,
+  };
+  if (!body.youtube_url || !body.title_no) { toast('YouTube-URL og norsk tittel er påkrevd', false); return; }
+  const url  = id ? API + '/admin/videos/' + id : API + '/admin/videos';
+  const method = id ? 'PATCH' : 'POST';
+  try {
+    const r = await fetch(url, {
+      method,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      },
+      body: JSON.stringify(body)
+    });
+    if (r.ok) {
+      toast(id ? '✅ Video oppdatert!' : '✅ Video lagt til!');
+      closeModal();
+      loadVideos();
+    } else {
+      const e = await r.json().catch(() => ({ detail: 'Ukjent feil' }));
+      toast('Feil: ' + (e.detail || 'ukjent'), false);
+    }
+  } catch(e) {
+    toast('Feil: ' + e.message, false);
+  }
 }
 
 // ══════════════════════════════════════════════════════════

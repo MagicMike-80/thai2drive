@@ -2933,7 +2933,7 @@ a { color:inherit; text-decoration:none; }
 .hp-btn-pri {
   border: 1.5px solid transparent !important;
   background: linear-gradient(rgba(17, 24, 39, 0.95), rgba(17, 24, 39, 0.95)) padding-box,
-              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #FFD700, #00F5FF) border-box !important;
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #FF6600, #00F5FF) border-box !important;
   animation: neonFlow 4s linear infinite !important;
   box-shadow: 0 0 10px rgba(0, 245, 255, 0.25) !important;
   transition: transform 0.2s, box-shadow 0.2s !important;
@@ -2968,7 +2968,7 @@ a { color:inherit; text-decoration:none; }
 .logout-btn:hover {
   border: 1.5px solid transparent !important;
   background: linear-gradient(rgba(17, 24, 39, 0.95), rgba(17, 24, 39, 0.95)) padding-box,
-              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #FFD700, #00F5FF) border-box !important;
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #FF6600, #00F5FF) border-box !important;
   animation: neonFlow 4s linear infinite !important;
   box-shadow: 0 0 12px rgba(255, 0, 229, 0.3) !important;
   transform: scale(1.03) !important;
@@ -2982,7 +2982,7 @@ a { color:inherit; text-decoration:none; }
 .bm-card:hover {
   border: 1.5px solid transparent !important;
   background: linear-gradient(rgba(19, 27, 46, 0.96), rgba(11, 18, 38, 0.98)) padding-box,
-              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #FFD700, #00F5FF) border-box !important;
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #FF6600, #00F5FF) border-box !important;
   animation: neonFlow 5s linear infinite !important;
   box-shadow: 0 0 15px rgba(0, 245, 255, 0.22) !important;
 }

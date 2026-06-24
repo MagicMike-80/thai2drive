@@ -10,6 +10,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useAppStore } from '../src/store/appStore';
 import { api, Category } from '../src/services/api';
 import { AppBrand } from '../src/components/AppBrand';
+import { BottomNavBar } from '../src/components/BottomNavBar';
 
 const { width: SCREEN_W } = Dimensions.get('window');
 
@@ -266,6 +267,7 @@ export default function CategoriesScreen() {
           })}
         </View>
       </ScrollView>
+      <BottomNavBar activeTab="categories" />
     </SafeAreaView>
   );
 }
@@ -289,7 +291,7 @@ const st = StyleSheet.create({
   modeLabel: { fontSize: 11, textTransform: 'uppercase', letterSpacing: 1.5, fontWeight: '800' },
   title: { fontSize: 22, fontWeight: '800', marginTop: 3, letterSpacing: -0.4 },
 
-  scroll: { padding: 16, paddingTop: 18, paddingBottom: 40 },
+  scroll: { padding: 16, paddingTop: 18, paddingBottom: 110 },
 
   // All categories featured card
   allCard: {
