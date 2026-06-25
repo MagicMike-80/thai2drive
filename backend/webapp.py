@@ -1546,6 +1546,9 @@ a { color:inherit; text-decoration:none; }
 .podcast-title {
   font-size:.82rem; font-weight:700; color:var(--text); line-height:1.38;
 }
+.podcast-dur {
+  font-size:.63rem; color:var(--muted); margin-top:2px;
+}
 .podcast-player {
   width:100%; height:32px; border-radius:6px; outline:none;
 }
@@ -4701,20 +4704,31 @@ function renderLibrary() {
   }
   
   var html = '';
+  var cardCount = 0;
   if (_libraryActiveTab === 'videos') {
     html += '<div class="library-grid">';
     items.forEach(function(v) {
-      html += buildVideoCard(v);
+      try {
+        var card = buildVideoCard(v);
+        if (card) { html += card; cardCount++; }
+      } catch(e) { console.error('Video card error:', e); }
     });
     html += '</div>';
   } else {
     html += '<div class="library-list">';
     items.forEach(function(p) {
-      html += buildPodcastCard(p);
+      try {
+        var card = buildPodcastCard(p);
+        if (card) { html += card; cardCount++; }
+      } catch(e) { console.error('Podcast card error:', e); }
     });
     html += '</div>';
   }
-  container.innerHTML = html;
+  if (cardCount === 0) {
+    container.innerHTML = '<div class="empty-state" style="padding:40px;text-align:center;color:var(--muted);">📭 Ingen innhold tilgjengelig</div>';
+  } else {
+    container.innerHTML = html;
+  }
 }
 
 function setLibraryTab(tab) {
@@ -7668,15 +7682,22 @@ function buildPodcastCard(p) {
     (p.title_no || '')
   );
   if (!title) return '';
-  var url = escH(p.audio_url || '');
+  var rawUrl = p.file_path || p.audio_url || '';
+  // Convert file_path (e.g. /public_assets/podcast.mp3) to proper API URL
+  if (rawUrl && rawUrl.indexOf('/public_assets/') === 0) {
+    rawUrl = '/api/assets/' + rawUrl.substring('/public_assets/'.length);
+  }
+  var url = escH(rawUrl);
   if (!url) return '';
-  
+  var dur = _fmtDur(p.duration_seconds);
+
   return '<div class="podcast-card">'
     + '<div class="podcast-info">'
       + '<div class="podcast-lbl">' + escH(t('podcast_short')) + '</div>'
       + '<div class="podcast-title">' + title + '</div>'
+      + (dur ? '<div class="podcast-dur">' + dur + '</div>' : '')
     + '</div>'
-    + '<audio class="podcast-player" controls src="' + url + '"></audio>'
+    + '<audio class="podcast-player" controls preload="none" src="' + url + '"></audio>'
     + '</div>';
 }
 
