@@ -1,0 +1,53 @@
+# Large binaries — must not enter Docker build context
+*.aab
+*.pdf
+*.pptx
+*.apk
+*.ipa
+*.dmg
+*.exe
+*.zip
+*.tar.gz
+*.7z
+*.rar
+
+# Dependencies — installed fresh inside the image
+__pycache__/
+*.pyc
+node_modules/
+.venv/
+venv/
+.pytest_cache/
+
+# Git
+.git/
+.gitignore
+
+# Local env
+.env
+.env.*
+*.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+.dockerignore
+
+# Frontend mobile app (not needed for backend Docker build)
+frontend/node_modules/
+frontend/.expo/
+frontend/dist/
+
+# Docs and content not needed for backend
+content/
+docs/
+scratch/
+legal-pages-for-netlify/
