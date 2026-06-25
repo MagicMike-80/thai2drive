@@ -42,6 +42,15 @@ ADMIN_BOOTSTRAP_SECRET = os.environ.get('ADMIN_BOOTSTRAP_SECRET', '')
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 security = HTTPBearer(auto_error=False)
 
+# ── Segment analytics ──────────────────────────────────────────────────────────────
+import analytics as segment_analytics
+SEGMENT_WRITE_KEY = os.environ.get('SEGMENT_WRITE_KEY', '')
+if SEGMENT_WRITE_KEY:
+    segment_analytics.write_key = SEGMENT_WRITE_KEY
+    logger.info("Segment analytics initialized (write_key set)")
+else:
+    logger.warning("SEGMENT_WRITE_KEY not set — analytics disabled")
+
 
 def normalize_question(q: dict) -> dict:
     """Convert v1 flat schema to v2 nested schema expected by the frontend and dynamically shuffle options."""
@@ -1814,6 +1823,18 @@ async def save_quiz_attempt(attempt_data: QuizAttemptCreate):
         doc["completed_at"] = datetime.now(timezone.utc).isoformat()
     await db.quiz_attempts.insert_one(doc)
     doc.pop("_id", None)
+
+    # ── Segment track ──
+    if SEGMENT_WRITE_KEY:
+        user_id = doc.get("user_id") or doc.get("device_id") or "anonymous"
+        segment_analytics.track(user_id, "Quiz Attempt Completed", {
+            "score": doc.get("score", 0),
+            "total": doc.get("total", 0),
+            "category": doc.get("category", "unknown"),
+            "mode": doc.get("mode", "practice"),
+            "attempt_id": doc["id"],
+        })
+
     return doc
 
 @api_router.get("/quiz-attempts/{device_id}")
@@ -1916,6 +1937,11 @@ async def signup(data: AuthSignup):
             {"$set": {"linked_user_id": user_id}},
         )
 
+    # ── Segment track ──
+    if SEGMENT_WRITE_KEY:
+        segment_analytics.identify(user_id, {"email": data.email, "name": data.name, "is_premium": is_premium, "is_admin": is_admin})
+        segment_analytics.track(user_id, "User Signed Up", {"email": data.email, "method": "email", "is_premium": is_premium})
+
     token = create_token(user_id, data.email, is_premium=is_premium)
     return {
         "token": token,
@@ -1957,6 +1983,12 @@ async def login(data: AuthLogin):
 
     is_premium_active = _user_has_active_premium(user)
     token = create_token(user["id"], user["email"], is_premium=is_premium_active)
+
+    # ── Segment track ──
+    if SEGMENT_WRITE_KEY:
+        segment_analytics.identify(user["id"], {"email": user["email"], "name": user.get("name"), "is_premium": is_premium_active})
+        segment_analytics.track(user["id"], "User Logged In", {"email": user["email"]})
+
     return {
         "token": token,
         "user": {

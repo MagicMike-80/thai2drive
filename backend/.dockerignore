@@ -1,0 +1,39 @@
+# Large binaries — must not enter Docker build context
+*.aab
+*.pdf
+*.pptx
+*.apk
+*.ipa
+*.dmg
+*.exe
+*.zip
+*.tar.gz
+
+# Dependencies — installed fresh inside the image
+__pycache__/
+*.pyc
+node_modules/
+.venv/
+venv/
+
+# Git
+.git/
+.gitignore
+
+# Local env
+.env
+.env.*
+*.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+.dockerignore

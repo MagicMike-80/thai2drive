@@ -1,3 +1,4 @@
+analytics-python==2.1.8
 aiofiles==24.1.0
 aiohappyeyeballs==2.6.1
 aiohttp==3.13.5
