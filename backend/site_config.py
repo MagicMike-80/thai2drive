@@ -6,8 +6,7 @@ How to change domains (now or in the future):
 
     PUBLIC_SITE_URL=https://thai2drive.no
 
-  If unset, falls back to the current Emergent preview URL so everything keeps
-  working without any code changes.
+  If unset, falls back to the default below.
 
 Any code that needs the absolute public URL (SEO meta tags, sitemap, social
 sharing, emails, etc.) MUST import from here — never hard-code a domain.
@@ -52,11 +51,11 @@ def website_base() -> str:
     """
     Base URL segment where the marketing pages are served.
 
-    On the current Emergent preview the pages live under /api/ because the
-    k8s ingress routes /api/* to the backend. When we deploy on a custom
-    domain, set SITE_ROUTING_MODE=clean to drop the /api/ prefix from the
-    canonical URLs (the actual FastAPI routes keep their /api prefix — we
-    would add a front-door redirect at deploy time).
+    The pages live under /api/ on Railway because the
+    domain proxy routes /api/* to the backend. When we deploy on a custom
+    domain with clean routing, set SITE_ROUTING_MODE=clean to drop the /api/
+    prefix from the canonical URLs (the actual FastAPI routes keep their /api
+    prefix — we would add a front-door redirect at deploy time).
     """
     mode = os.environ.get("SITE_ROUTING_MODE", "prefixed")
     return "" if mode == "clean" else "/api"

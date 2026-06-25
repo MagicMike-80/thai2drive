@@ -3686,14 +3686,9 @@ async def admin_audit_question(question_id: str, _: dict = Depends(require_admin
     if not bilde.startswith("data:"):
         raise HTTPException(status_code=400, detail="Question has no image to audit")
 
-    emergent_key = os.getenv("EMERGENT_LLM_KEY")
-    if not emergent_key:
-        raise HTTPException(status_code=500, detail="EMERGENT_LLM_KEY not configured")
-
-    try:
-        from emergentintegrations.llm.chat import LlmChat, UserMessage, ImageContent
-    except ImportError:
-        raise HTTPException(status_code=500, detail="emergentintegrations not installed")
+    api_key = os.getenv("ANTHROPIC_API_KEY")
+    if not api_key:
+        raise HTTPException(status_code=500, detail="ANTHROPIC_API_KEY not configured")
 
     import json as _json
     system_prompt = """You are a Norwegian driving theory expert auditing quiz content.
@@ -3722,21 +3717,27 @@ Return ONLY strict JSON:
         if comma >= 0:
             b64 = b64[comma + 1:]
 
-    chat = LlmChat(
-        api_key=emergent_key,
-        session_id=f"audit-{question_id}",
-        system_message=system_prompt,
-    ).with_model("gemini", "gemini-2.5-pro")
+    try:
+        import litellm
+    except ImportError:
+        raise HTTPException(status_code=500, detail="litellm not installed")
 
     try:
-        raw = await chat.send_message(UserMessage(
-            text=prompt,
-            file_contents=[ImageContent(image_base64=b64)],
-        ))
+        raw = await litellm.acompletion(
+            model="claude-sonnet-4-20250514",
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": [
+                    {"type": "text", "text": prompt},
+                    {"type": "image_url", "image_url": {"url": f"data:image/png;base64,{b64}"}}
+                ]}
+            ],
+            max_tokens=600,
+            api_key=api_key,
+        )
+        text = (raw.choices[0].message.content or "").strip()
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"AI audit failed: {e}")
-
-    text = str(raw).strip()
     if text.startswith("```"):
         text = text.split("```", 2)[1]
         if text.startswith("json"):

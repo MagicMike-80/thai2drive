@@ -161,46 +161,105 @@ def _quick_escalation_check(msg: str) -> tuple[bool, str, str]:
 
 
 # ─── Email sending ──────────────────────────────────────────────────────
-def _send_escalation_email(session_id: str, user_message: str,
+def _build_escalation_body(session_id: str, user_message: str,
                             ai_reply: str, category: str, priority: str,
-                            conversation: List[dict]) -> tuple[bool, str]:
-    """Returns (success, info)."""
-    if not (_SMTP_HOST and _SMTP_USER and _SMTP_PASS):
-        return False, 'SMTP not configured — logged only'
-
-    subject = f"[Thai2Drive Support] {priority.upper()} – {category}"
-    body_lines = [
-        f"⚠️  ESCALATED SUPPORT MESSAGE",
-        f"",
+                            conversation: List[dict]) -> str:
+    """Build plain text body for escalation email (shared by all senders)."""
+    lines = [
+        "⚠️  ESCALATED SUPPORT MESSAGE",
+        "",
         f"Priority : {priority.upper()}",
         f"Category : {category}",
         f"Time     : {datetime.now(timezone.utc).isoformat()}",
         f"Session  : {session_id}",
-        f"",
-        f"──── USER MESSAGE ─────────────────────────",
+        "",
+        "──── USER MESSAGE ─────────────────────────",
         user_message,
-        f"",
-        f"──── AI AUTO-REPLY ──────────────────────────",
+        "",
+        "──── AI AUTO-REPLY ──────────────────────────",
         ai_reply,
-        f"",
-        f"──── CONVERSATION LOG ───────────────────────",
+        "",
+        "──── CONVERSATION LOG ───────────────────────",
     ]
     for m in conversation[-10:]:
         role = m.get('role', '?')
         content = m.get('content', '')
-        body_lines.append(f"[{role}] {content}")
-    body_lines.extend([
-        f"",
-        f"───────────────────────────────────────────",
-        f"Reply to the user by finding their address in MongoDB → support_chats collection, filtered by session_id.",
+        lines.append(f"[{role}] {content}")
+    lines.extend([
+        "",
+        "───────────────────────────────────────────",
+        "Reply to the user by finding their address in MongoDB → support_chats collection, filtered by session_id.",
     ])
+    return '\n'.join(lines)
 
-    msg = MIMEText('\n'.join(body_lines), 'plain', 'utf-8')
+
+def _send_via_sendgrid(subject: str, body_text: str) -> tuple[bool, str]:
+    """Send email via SendGrid HTTP API (works on Railway — HTTPS port 443)."""
+    import urllib.request
+    import urllib.error
+    import json as _json
+
+    api_key = os.environ.get("SENDGRID_API_KEY", "").strip()
+    if not api_key:
+        return False, "SENDGRID_API_KEY not set"
+
+    from_email = os.environ.get("SENDGRID_FROM_EMAIL", "noreply@thai2drive.no").strip()
+    from_name = os.environ.get("SENDGRID_FROM_NAME", "Thai2Drive").strip()
+
+    payload = _json.dumps({
+        "personalizations": [{"to": [{"email": SUPPORT_EMAIL_TO}]}],
+        "from": {"email": from_email, "name": from_name},
+        "subject": subject,
+        "content": [{"type": "text/plain", "value": body_text}],
+    }).encode("utf-8")
+
+    req = urllib.request.Request(
+        "https://api.sendgrid.com/v3/mail/send",
+        data=payload,
+        headers={
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
+        },
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            logger.info("sendgrid_sent_ok to=%s status=%d",
+                         SUPPORT_EMAIL_TO, resp.status)
+            return True, "sent"
+    except urllib.error.HTTPError as exc:
+        body = exc.read().decode("utf-8", errors="replace")
+        logger.error("sendgrid_failed status=%d body=%s", exc.code, body[:300])
+        return False, f"SendGrid HTTP {exc.code}: {body[:200]}"
+    except Exception as exc:
+        logger.error("sendgrid_failed type=%s detail=%s", type(exc).__name__, exc)
+        return False, str(exc)
+
+
+def _send_escalation_email(session_id: str, user_message: str,
+                            ai_reply: str, category: str, priority: str,
+                            conversation: List[dict]) -> tuple[bool, str]:
+    """Returns (success, info). Uses SendGrid HTTPS API first, falls back to SMTP."""
+    subject = f"[Thai2Drive Support] {priority.upper()} – {category}"
+    body_text = _build_escalation_body(session_id, user_message, ai_reply, category, priority, conversation)
+
+    # Try SendGrid first (works on Railway — HTTPS port 443)
+    sendgrid_key = os.environ.get("SENDGRID_API_KEY", "").strip()
+    if sendgrid_key:
+        sent, info = _send_via_sendgrid(subject, body_text)
+        if sent:
+            return True, info
+        logger.warning("SendGrid failed (%s), falling back to SMTP", info)
+
+    # Fallback to SMTP (blocked on Railway but works from other hosts)
+    if not (_SMTP_HOST and _SMTP_USER and _SMTP_PASS):
+        return False, 'SMTP not configured — logged only'
+
+    msg = MIMEText(body_text, 'plain', 'utf-8')
     msg['Subject'] = subject
     msg['From'] = _SMTP_USER
     msg['To'] = SUPPORT_EMAIL_TO
 
-    # Try up to 3 times — Yahoo / some SMTP servers drop connections sporadically
     import time
     last_err = None
     for attempt in range(1, 4):
@@ -211,10 +270,10 @@ def _send_escalation_email(session_id: str, user_message: str,
                 s.ehlo()
                 s.login(_SMTP_USER, _SMTP_PASS)
                 s.sendmail(_SMTP_USER, [SUPPORT_EMAIL_TO], msg.as_string())
-            return True, f'sent (attempt {attempt})'
+            return True, f'sent via SMTP (attempt {attempt})'
         except Exception as e:
             last_err = e
-            logger.warning('Email send attempt %d failed: %s', attempt, e)
+            logger.warning('SMTP email attempt %d failed: %s', attempt, e)
             if attempt < 3:
                 time.sleep(1.5 * attempt)
 
@@ -283,32 +342,8 @@ async def support_chat(req: ChatRequest) -> ChatResponse:
         if not reply_text:
             reply_text = _fallback_reply(req.language or 'no')
     except Exception as e:
-        logger.warning("LiteLLM call failed [%s]: %s. Attempting Emergent LlmChat fallback...", type(e).__name__, e)
-        try:
-            from emergentintegrations.llm.chat import LlmChat, UserMessage
-            emergent_key = os.environ.get("EMERGENT_LLM_KEY") or "sk-emergent-b48A3D57008C8350c6"
-            
-            history_list = []
-            if conversation:
-                for m in conversation:
-                    role_name = "User" if m["role"] == "user" else "Support"
-                    history_list.append(f"{role_name}: {m['content']}")
-                history_text = "\n".join(history_list)
-                prompt_text = f"Here is the conversation history:\n{history_text}\n\nUser's new message:\n{user_msg}"
-            else:
-                prompt_text = user_msg
-
-            chat = LlmChat(
-                api_key=emergent_key,
-                session_id=session_id,
-                system_message=system_with_lang,
-            ).with_model("openai", "gpt-4o-mini")
-            
-            resp = await chat.send_message(UserMessage(text=prompt_text))
-            reply_text = str(resp).strip()
-        except Exception as ex:
-            logger.error("Emergent LlmChat fallback also failed: %s", ex)
-            reply_text = _fallback_reply(req.language or 'no')
+        logger.error("LiteLLM call failed [%s]: %s", type(e).__name__, e)
+        reply_text = _fallback_reply(req.language or 'no')
 
     # 4) Persist both messages
     now = datetime.now(timezone.utc)

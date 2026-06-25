@@ -1403,13 +1403,13 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         if not reply_text:
             reply_text = _fallback_reply(lang)
     except Exception as e:
-        logger.warning("LiteLLM call failed [%s]: %s. Attempting Emergent LlmChat fallback...", type(e).__name__, e)
-        
+        logger.error("LiteLLM call failed [%s]: %s", type(e).__name__, e)
+
         # Check if the error is a 401 Authentication/API key error
         is_auth_error = False
         if "AuthenticationError" in type(e).__name__ or "401" in str(e) or "invalid x-api-key" in str(e).lower() or "invalid api key" in str(e).lower():
             is_auth_error = True
-            
+
         if is_auth_error:
             alert_subj = "ALERT: Thai2Drive Anthropic API Key Invalid"
             alert_body = f"The system detected an invalid or expired Anthropic API Key on {datetime.now(timezone.utc).isoformat()}.\n\nError details: {e}\n\nPlease update ANTHROPIC_API_KEY in your Railway environment variables immediately."
@@ -1419,34 +1419,8 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             except Exception as mail_err:
                 logger.error("Failed to spawn alert email thread: %s", mail_err)
 
-        try:
-
-            from emergentintegrations.llm.chat import LlmChat, UserMessage
-            emergent_key = os.environ.get("EMERGENT_LLM_KEY") or "sk-emergent-b48A3D57008C8350c6"
-            
-            history_list = []
-            if conversation:
-                for m in conversation:
-                    role_name = "Student" if m["role"] == "user" else "Michael"
-                    history_list.append(f"{role_name}: {m['content']}")
-                history_text = "\n".join(history_list)
-                prompt_text = f"Her er samtalens historikk så langt:\n{history_text}\n\nStudentens nye spørsmål:\n{user_msg}"
-            else:
-                prompt_text = user_msg
-
-            chat = LlmChat(
-                api_key=emergent_key,
-                session_id=session_id,
-                system_message=system_prompt,
-            ).with_model("openai", "gpt-4o-mini")
-            
-            resp = await chat.send_message(UserMessage(text=prompt_text))
-            reply_text = str(resp).strip()
-            error_str = None  # Clear error since fallback succeeded
-        except Exception as ex:
-            logger.error("Emergent LlmChat fallback also failed: %s", ex)
-            error_str = f"LiteLLM: {type(e).__name__}({e}) | Emergent: {ex}"
-            reply_text = _fallback_reply(lang)
+        error_str = f"LiteLLM: {type(e).__name__}({e})"
+        reply_text = _fallback_reply(lang)
 
     # Persist both messages
     now = datetime.now(timezone.utc)
