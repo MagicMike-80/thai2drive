@@ -9159,4 +9159,3 @@ function showStatus(type, msg) {
 @webapp_router.get("/web/voice-tester", response_class=HTMLResponse)
 async def voice_tester():
     return HTMLResponse(content=VOICE_TESTER_HTML)
-              
