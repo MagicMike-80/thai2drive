@@ -7,7 +7,7 @@ import requests
 import os
 
 # Use public URL for testing
-BASE_URL = "https://norge-quiz-app.preview.emergentagent.com"
+BASE_URL = "https://www.thai2drive.no"
 API_BASE = f"{BASE_URL}/api"
 
 # Test device ID

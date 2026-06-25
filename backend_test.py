@@ -11,7 +11,7 @@ import sys
 from typing import Dict, Any, Optional
 
 # Backend URL from frontend .env
-BASE_URL = "https://norge-quiz-app.preview.emergentagent.com/api"
+BASE_URL = "https://www.thai2drive.no/api"
 
 # Test credentials from /app/memory/test_credentials.md
 TEST_USER_EMAIL = "test@thai2drive.com"

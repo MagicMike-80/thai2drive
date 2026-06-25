@@ -12,7 +12,7 @@
         "gradleCommand": ":app:assembleDebug"
       },
       "env": {
-        "EXPO_PUBLIC_BACKEND_URL": "https://thai2drive-production.up.railway.app",
+
         "EXPO_PUBLIC_RC_API_KEY": "test_MciTZyYeSIinvNBocwBillyssXD"
       }
     },
@@ -24,7 +24,7 @@
       },
       "autoIncrement": true,
       "env": {
-        "EXPO_PUBLIC_BACKEND_URL": "https://thai2drive-production.up.railway.app",
+        "EXPO_PUBLIC_BACKEND_URL": "https://www.thai2drive.no",
         "EXPO_PUBLIC_RC_API_KEY": "test_MciTZyYeSIinvNBocwBillyssXD",
         "EXPO_PUBLIC_PREVIEW_BUILD": "true"
       }
@@ -37,7 +37,7 @@
       },
       "autoIncrement": true,
       "env": {
-        "EXPO_PUBLIC_BACKEND_URL": "https://thai2drive-production.up.railway.app",
+        "EXPO_PUBLIC_BACKEND_URL": "https://www.thai2drive.no",
         "EXPO_PUBLIC_RC_API_KEY": "test_MciTZyYeSIinvNBocwBillyssXD",
         "EXPO_PUBLIC_PREVIEW_BUILD": "false"
       }
@@ -48,9 +48,8 @@
         "resourceClass": "medium"
       },
       "autoIncrement": true,
-      "channel": "production",
       "env": {
-        "EXPO_PUBLIC_BACKEND_URL": "https://thai2drive-production.up.railway.app",
+        "EXPO_PUBLIC_BACKEND_URL": "https://www.thai2drive.no",
         "EXPO_PUBLIC_RC_API_KEY": "test_MciTZyYeSIinvNBocwBillyssXD",
         "EXPO_PUBLIC_PREVIEW_BUILD": "false"
       }

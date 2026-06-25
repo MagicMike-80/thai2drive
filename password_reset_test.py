@@ -8,7 +8,7 @@ import subprocess
 import re
 import time
 
-BASE_URL = "https://norge-quiz-app.preview.emergentagent.com/api"
+BASE_URL = "https://www.thai2drive.no/api"
 TEST_EMAIL = "resettest@thai2drive.com"
 
 def test_password_reset():

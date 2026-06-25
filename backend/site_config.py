@@ -19,7 +19,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # ─── Defaults (current preview) ───
-_DEFAULT_PUBLIC_URL = "https://thai2drive.no"
+_DEFAULT_PUBLIC_URL = "https://www.thai2drive.no"
 
 # Alternate domains the site may also answer on (used for redirects/canonical).
 # If you buy more than one domain, list them here.
