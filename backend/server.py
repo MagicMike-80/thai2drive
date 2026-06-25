@@ -42,15 +42,6 @@ ADMIN_BOOTSTRAP_SECRET = os.environ.get('ADMIN_BOOTSTRAP_SECRET', '')
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 security = HTTPBearer(auto_error=False)
 
-# ── Segment analytics ──────────────────────────────────────────────────────────────
-import analytics as segment_analytics
-SEGMENT_WRITE_KEY = os.environ.get('SEGMENT_WRITE_KEY', '')
-if SEGMENT_WRITE_KEY:
-    segment_analytics.write_key = SEGMENT_WRITE_KEY
-    logger.info("Segment analytics initialized (write_key set)")
-else:
-    logger.warning("SEGMENT_WRITE_KEY not set — analytics disabled")
-
 
 def normalize_question(q: dict) -> dict:
     """Convert v1 flat schema to v2 nested schema expected by the frontend and dynamically shuffle options."""
@@ -124,6 +115,15 @@ api_router = APIRouter(prefix="/api")
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
+
+# ── Segment analytics ──────────────────────────────────────────────────────────────
+import analytics as segment_analytics
+SEGMENT_WRITE_KEY = os.environ.get('SEGMENT_WRITE_KEY', '')
+if SEGMENT_WRITE_KEY:
+    segment_analytics.write_key = SEGMENT_WRITE_KEY
+    logger.info("Segment analytics initialized (write_key set)")
+else:
+    logger.warning("SEGMENT_WRITE_KEY not set — analytics disabled")
 
 PUBLIC_PRICING_FALLBACK = {
     "monthly": {
