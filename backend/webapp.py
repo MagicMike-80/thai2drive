@@ -6738,11 +6738,10 @@ function _fmtDur(secs) {
 
 function buildVideoCard(v) {
   if (!v) return '';
-  // No cross-language title fallback — hide the card if the selected language is missing.
   var title = escH(
-    appLang === 'th' ? (v.title_th || '') :
-    appLang === 'en' ? (v.title_en || '') :
-    (v.title_no || '')
+    appLang === 'th' ? (v.title_th || v.title_no || v.title_en || '') :
+    appLang === 'en' ? (v.title_en || v.title_no || v.title_th || '') :
+    (v.title_no || v.title_en || v.title_th || '')
   );
   if (!title) return '';
   var url   = escH(v.youtube_url || '');
