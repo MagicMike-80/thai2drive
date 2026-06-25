@@ -1576,7 +1576,7 @@ a { color:inherit; text-decoration:none; }
 /* ══════════════════════════════════════════
    LIBRARY SCREEN
 ══════════════════════════════════════════ */
-#screenLibrary { padding:0; background:#0B1226; display:flex; flex-direction:column; }
+#screenLibrary { padding:0; background:#0B1226; flex-direction:column; }
 .lib-header {
   padding:14px 16px 10px; flex-shrink:0;
   display:flex; align-items:center; gap:10px;
@@ -9159,3 +9159,4 @@ function showStatus(type, msg) {
 @webapp_router.get("/web/voice-tester", response_class=HTMLResponse)
 async def voice_tester():
     return HTMLResponse(content=VOICE_TESTER_HTML)
+              
