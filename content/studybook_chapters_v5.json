@@ -1,25 +1,25 @@
 [
   {
     "chapter_id": "ch_right_of_way_1",
-    "title_no": "Michaels 6 vikepliktregler – Del 1: Fra høyre og rett før sving",
+    "title_no": "Michaels 6 vikepliktregler – Del 1: Vikeplikt fra høyre og rett fram foran sving",
     "title_th": "6 กฎการให้ทางของไมเคิล – ส่วนที่ 1: รถจากด้านขวา และรถที่ไปตรงชนะรถเลี้ยว",
     "title_en": "Michael's 6 Right-of-Way Rules – Part 1: Right-side vehicles and straight beats turn",
     "sections": [
       {
         "section_type": "situation",
-        "title_no": "Situasjonen: 4-kjørs kryss uten skilt",
+        "title_no": "Situasjonen: 4-armet kryss uten skilt",
         "title_th": "สถานการณ์: สี่แยกห้องโดยไม่มีป้าย",
         "title_en": "The situation: 4-way intersection with no signs",
-        "content_no": "Du kjører og kommer til et kryss uten trafikklys eller skilt. To andre biler kjører dit samtidig — en fra høyre, en fra venstre. Hva gjør du?",
+        "content_no": "Du kjører og ankommer et kryss uten trafikklys eller skilt. To andre biler ankommer krysset samtidig — en fra høyre og en fra venstre. Hva gjør du?",
         "content_th": "คุณขับรถและมาถึงทางแยกที่ไม่มีไฟจราจรหรือป้าย รถอีกสองคันมาที่นั่นพร้อมกัน — คนหนึ่งมาจากด้านขวา คนหนึ่งมาจากด้านซ้าย คุณต้องทำอะไร?",
         "content_en": "You're driving and reach an intersection with no traffic lights or signs. Two other cars arrive at the same time – one from the right, one from the left. What do you do?"
       },
       {
         "section_type": "theory",
-        "title_no": "Michaels regel 1: Vikeplikt for høyre",
+        "title_no": "Michaels regel 1: Vikeplikt for trafikk fra høyre",
         "title_th": "กฎของไมเคิล 1: ให้ทางสำหรับด้านขวา",
         "title_en": "Michael's rule 1: Yield to the right",
-        "content_no": "I Norge er regelen enkel: VIK FOR TRAFIKK FRA HØYRE SIDEN. Ikke fra høyre retning — FOR høyre retning. Hvis en bil kommer fra høyre, må du vike. Dette gjelder alle kryss uten skilt.",
+        "content_no": "I Norge gjelder høyreregelen i alle uregulerte kryss. Tenk på «Kongen og tjeneren»: Bilen som kommer fra høyre er kongen, og du er tjeneren. Du må stoppe helt opp og gi vikeplikt FOR trafikken som kommer fra høyre.",
         "content_th": "ในนอร์เวย์ กฎนั้นง่าย: ให้ทางสำหรับจราจรจากด้านขวา ไม่ใช่จากทิศทางขวา — สำหรับทิศทางขวา ถ้ารถมาจากด้านขวา คุณต้องให้ทาง นี่ใช้กับสี่แยกทั้งหมดที่ไม่มีป้าย",
         "content_en": "In Norway the rule is simple: YIELD TO TRAFFIC FROM YOUR RIGHT. Not from the right direction – FOR the right direction. If a car comes from your right, you must yield. This applies to all intersections without signs."
       },
@@ -28,7 +28,7 @@
         "title_no": "Praktisk tips",
         "title_th": "เคล็ดลับปฏิบัติ",
         "title_en": "Practical tips",
-        "content_no": "1. Se på alle retninger før du kjører inn i krysset. 2. Hvis du er usikker, vær defensiv. 3. Husk: fra høyre = de har prioritet, ikke deg.",
+        "content_no": "1. Se i alle retninger før du kjører inn i krysset. 2. Vis aktsomhet og vær defensiv. 3. Husk: Kommer de fra høyre, er de kongen og har forkjørsrett.",
         "content_th": "1. มองทุกทิศทางก่อนที่คุณจะเข้าไปในทางแยก 2. ถ้าคุณไม่แน่ใจ ขับรถป้องกัน 3. จำไว้: จากด้านขวา = พวกเขามีสิทธิ์ ไม่ใช่คุณ",
         "content_en": "1. Look in all directions before entering the intersection. 2. If unsure, be defensive. 3. Remember: from the right = they have priority, not you."
       }
@@ -46,19 +46,19 @@
     "sections": [
       {
         "section_type": "situation",
-        "title_no": "Situasjonen: To biler på samme kryss",
+        "title_no": "Situasjonen: To biler i samme kryss",
         "title_th": "สถานการณ์: รถสองคันในสี่แยกเดียวกัน",
         "title_en": "The situation: Two cars at the same intersection",
-        "content_no": "Bil A kjører rett fram gjennom krysset. Bil B vil svinge venstre. De ankommer krysset på samme tid. Hvem skal vike?",
+        "content_no": "Bil A skal kjøre rett fram gjennom krysset. Bil B kommer imot og vil svinge til venstre. De ankommer krysset samtidig. Hvem må gi vikeplikt?",
         "content_th": "รถ A ขับรถตรงผ่านทางแยก รถ B ต้องเลี้ยวซ้าย พวกเขามาถึงทางแยกพร้อมกัน ใครต้องให้ทาง?",
         "content_en": "Car A drives straight through the intersection. Car B wants to turn left. They arrive at the intersection at the same time. Who must yield?"
       },
       {
         "section_type": "theory",
-        "title_no": "Michaels regel 2: Rett fram > sving",
+        "title_no": "Michaels regel 2: Rett fram slår sving",
         "title_th": "กฎของไมเคิล 2: ตรงไป > เลี้ยว",
         "title_en": "Michael's rule 2: Straight > turn",
-        "content_no": "En kjøretur som går rett fram har ALLTID prioritet over en kjøretur som svinger. Dette er en av de viktigste reglene i norsk trafikk. Bil A kan kjøre rett fram. Bil B må vike og vente.",
+        "content_no": "Et kjøretøy som kjører rett fram har ALLTID forkjørsrett foran et kjøretøy som svinger. Dette er en av de aller viktigste reglene i norsk trafikk. Bil A er kongen og kjører først. Bil B er tjeneren som svinger, og må derfor vente.",
         "content_th": "รถที่ขับตรงมีสิทธิ์เสมอเหนือรถที่เลี้ยว นี่คือกฎที่สำคัญที่สุดข้อหนึ่งในจราจรนอร์เวย์ รถ A สามารถขับตรงผ่านได้ รถ B ต้องให้ทางและรอ",
         "content_en": "A vehicle driving straight always has priority over a turning vehicle. This is one of the most important rules in Norwegian traffic. Car A can drive straight. Car B must yield and wait."
       },
@@ -67,7 +67,7 @@
         "title_no": "Praktisk tips",
         "title_th": "เคล็ดลับปฏิบัติ",
         "title_en": "Practical tips",
-        "content_no": "1. Planlegg svinget ditt før krysset. 2. Hvis du skal svinge og ser en bil som kjører rett fram, vent. 3. Tvil = vent. Sikkerhet først.",
+        "content_no": "1. Planlegg svingen din i god tid før krysset. 2. Hvis du skal svinge og får møtende trafikk som skal rett fram, må du vente. 3. Er du i tvil, så vent. Sikkerhet kommer alltid først.",
         "content_th": "1. วางแผนเลี้ยวของคุณก่อนทางแยก 2. ถ้าคุณต้องเลี้ยวและเห็นรถที่ขับตรง ให้รอ 3. สงสัย = รอ ความปลอดภัยสำคัญที่สุด",
         "content_en": "1. Plan your turn before the intersection. 2. If you must turn and see a car driving straight, wait. 3. Doubt = wait. Safety first."
       }
@@ -79,25 +79,25 @@
   },
   {
     "chapter_id": "ch_speed_braking",
-    "title_no": "Fart og bremselengde – Hvorfor 50 km/t kan drepe",
+    "title_no": "Fart og bremselengde – Hvorfor 50 km/t kan være livsfarlig",
     "title_th": "ความเร็วและระยะการหยุด — ทำไม 50 กม./ชม. ถึงอันตราย",
     "title_en": "Speed and braking distance – Why 50 km/h can kill",
     "sections": [
       {
         "section_type": "situation",
-        "title_no": "Situasjonen: En barn løper inn på veien",
+        "title_no": "Situasjonen: Et barn løper ut i veien",
         "title_th": "สถานการณ์: เด็กวิ่งออกมาบนถนน",
         "title_en": "The situation: A child runs onto the road",
-        "content_no": "Du kjører i en by. Hastigheten er 50 km/t. Plutselig løper et barn ut på veien 30 meter foran deg. Kan du stoppe i tide?",
+        "content_no": "Du kjører i et boligområde i 50 km/t. Plutselig løper et barn ut i veien 30 meter foran deg. Klarer du å stoppe i tide?",
         "content_th": "คุณขับรถในเมือง ความเร็วคือ 50 กม./ชม. จู่ๆ เด็กวิ่งออกมาบนถนนห่างจากคุณ 30 เมตร คุณสามารถหยุดได้ทันเวลาหรือไม่?",
         "content_en": "You're driving in a city at 50 km/h. Suddenly a child runs onto the road 30 meters ahead. Can you stop in time?"
       },
       {
         "section_type": "theory",
-        "title_no": "Michaels formel: Stopplengde = reaktidslengde + bremselengde",
+        "title_no": "Michaels formel: Stopplengde = reaksjonslengde + bremselengde",
         "title_th": "สูตรของไมเคิล: ระยะหยุดรวม = ระยะตอบสนอง + ระยะการหยุด",
         "title_en": "Michael's formula: Stopping distance = reaction distance + braking distance",
-        "content_no": "Ved 50 km/t:\n- Reaktidslengde: ca. 14 meter (1 sekund)\n- Bremselengde: ca. 27 meter\n- TOTAL STOPPLENGDE: 41 meter\n\nDet barnet er 30 meter unna. Du treffer barnet. Dette er hvorfor farten er så viktig.",
+        "content_no": "Ved 50 km/t:\n- Reaksjonslengde: ca. 14 meter (basert på 1 sekunds reaksjonstid)\n- Bremselengde: ca. 27 meter\n- TOTAL STOPPLENGDE: 41 meter\n\nBarnet er 30 meter unna, og bilen bruker 41 meter på å stoppe. Du vil ende opp med å treffe barnet. Husk HAV-regelen: Vær varsom og avpass farten etter forholdene.",
         "content_th": "ที่ 50 กม./ชม.:\n- ระยะตอบสนอง: ประมาณ 14 เมตร (1 วินาที)\n- ระยะการหยุด: ประมาณ 27 เมตร\n- ระยะหยุดรวม: 41 เมตร\n\nเด็กอยู่ห่าง 30 เมตร คุณชนเด็ก นี่คือเหตุผลที่ความเร็วสำคัญ",
         "content_en": "At 50 km/h:\n- Reaction distance: about 14 meters (1 second)\n- Braking distance: about 27 meters\n- TOTAL STOPPING DISTANCE: 41 meters\n\nThe child is 30 meters away. You hit the child. This is why speed matters."
       },
@@ -106,7 +106,7 @@
         "title_no": "Praktisk tips",
         "title_th": "เคล็ดลับปฏิบัติ",
         "title_en": "Practical tips",
-        "content_no": "1. I byer: Hold 30 km/t eller mindre. 2. På landevei: Beregn stopplengden. 3. I regn/snø: Stopplengde øker. Kjør langsommere.",
+        "content_no": "1. I trange gater og boligområder: Hold 30 km/t eller lavere. 2. På landeveien: Vær oppmerksom på total stopplengde. 3. På våt eller glatt veibane øker bremselengden dramatisk – senk farten!",
         "content_th": "1. ในเมือง: ขับรถ 30 กม./ชม. หรือน้อยกว่า 2. บนถนนชนบท: คำนวณระยะหยุด 3. ในฝนหรือหิมะ: ระยะหยุดเพิ่มขึ้น ขับรถช้าลง",
         "content_en": "1. In cities: Drive 30 km/h or less. 2. On rural roads: Calculate stopping distance. 3. In rain/snow: Stopping distance increases. Drive slower."
       }
@@ -124,10 +124,10 @@
     "sections": [
       {
         "section_type": "situation",
-        "title_no": "Situasjonen: Politimannen motsi skiltet",
+        "title_no": "Situasjonen: Politibetjenten overstyrer trafikkskiltet",
         "title_th": "สถานการณ์: ตำรวจขัดแย้งกับป้าย",
         "title_en": "The situation: A police officer contradicts the sign",
-        "content_no": "En politimann står på en busy gate og instruerer trafikk. Han vinker deg til høyre. Men skiltet på gaten sier VENSTRE. Hva gjør du?",
+        "content_no": "En politibetjent står i en trafikkert gate og dirigerer trafikken. Han vinker deg til høyre, men trafikkskiltet i gaten viser påbudt kjøreretning til venstre. Hva gjør du?",
         "content_th": "ตำรวจยืนอยู่บนถนนที่มีการจราจรหนาแน่นและควบคุมจราจร เขาไม่ให้คุณไปทางขวา แต่ป้ายบนถนนบอก ไป ทางซ้าย คุณต้องทำอะไร?",
         "content_en": "A police officer stands on a busy street directing traffic. He waves you right. But the sign on the street says LEFT. What do you do?"
       },
@@ -136,7 +136,7 @@
         "title_no": "Michaels myndighetspyramide",
         "title_th": "ปิรามิดอำนาจของไมเคิล",
         "title_en": "Michael's authority pyramid",
-        "content_no": "Top to bottom:\n1. POLITIET (Police) — Highest authority\n2. VEGVESENET (Road authorities)\n3. TRAFIKKSKILTER (Traffic signs)\n4. KJØREREGLER (Driving rules)\n\nDu følger ALLTID den høyeste. Politimann > skilt > regler.",
+        "content_no": "Fra øverst til nederst:\n1. POLITIET — Høyeste myndighet\n2. TRAFIKKLYS\n3. TRAFIKKSKILTER OG VEGOPPMERKING\n4. TRAFIKKREGLER\n\nDu skal ALLTID rette deg etter det som står øverst i pyramiden. Politiets anvisning overstyrer både trafikklys, skilt og generelle regler.",
         "content_th": "จากบนลงล่าง:\n1. ตำรวจ — อำนาจสูงสุด\n2. บริหารจัดการถนน\n3. ป้ายจราจร\n4. กฎการขับขี่\n\nคุณทำตามอันดับสูงสุดเสมอ ตำรวจ > ป้าย > กฎ",
         "content_en": "Top to bottom:\n1. POLICE — Highest authority\n2. ROAD AUTHORITIES\n3. TRAFFIC SIGNS\n4. DRIVING RULES\n\nYou always follow the highest. Police > signs > rules."
       },
@@ -145,7 +145,7 @@
         "title_no": "Praktisk tips",
         "title_th": "เคล็ดลับปฏิบัติ",
         "title_en": "Practical tips",
-        "content_no": "1. Respekter politiet. 2. Hvis politiet instruerer, følg dem. 3. Skilt kan endres. Politiet er alltid høyest. 4. I Norge: orden = frihet.",
+        "content_no": "1. Respekter alltid politiets anvisninger. 2. Ser du manuell dirigering, følg betjentens tegn. 3. Skilt gjelder kun når det ikke er politi eller fungerende trafikklys til stede. 4. I Norge gir tydelig orden frihet og trygghet for alle.",
         "content_th": "1. เคารพตำรวจ 2. ถ้าตำรวจให้คำแนะนำ ให้ทำตามเขา 3. ป้ายสามารถเปลี่ยนได้ ตำรวจมีอำนาจสูงสุดเสมอ 4. ในนอร์เวย์: ความเป็นระเบียบ = เสรีภาพ",
         "content_en": "1. Respect the police. 2. If police instruct, follow them. 3. Signs can change. Police are always highest. 4. In Norway: order = freedom."
       }
@@ -163,19 +163,19 @@
     "sections": [
       {
         "section_type": "situation",
-        "title_no": "Situasjonen: To måter å kjøre",
+        "title_no": "Situasjonen: To helt ulike kjørekulturer",
         "title_th": "สถานการณ์: สองวิธีในการขับรถ",
         "title_en": "The situation: Two ways to drive",
-        "content_no": "I Thailand: Sjåfører kjører mer 'fritt'. Regler er ikke så strenge. Du forhandler med politiet hvis du blir tatt. I Norge: Regler er strenge. Du følger dem. Færre ulykker. Hva er bedre?",
+        "content_no": "I Thailand opplever mange at sjåfører kjører mer 'fritt' og at reglene er mindre strenge. I Norge er trafikkreglene absolutte, og bøtene er høye. Til gjengjeld har Norge færrest ulykker i verden. Hvorfor er det slik?",
         "content_th": "ในไทย: คนขับรถขับอิสระกว่า กฎไม่เข้มงวด คุณสามารถเจรจากับตำรวจได้ ในนอร์เวย์ กฎเข้มงวด คุณทำตาม อุบัติเหตุน้อยลง ซึ่งดีกว่า?",
         "content_en": "In Thailand: Drivers drive more 'freely'. Rules aren't strict. You negotiate with police if caught. In Norway: Rules are strict. You follow them. Fewer accidents. Which is better?"
       },
       {
         "section_type": "theory",
-        "title_no": "Michaels leksjon: Orden gir frihet",
+        "title_no": "Michaels leksjon: Orden og trygghet gir frihet",
         "title_th": "บทเรียนของไมเคิล: ความเป็นระเบียบให้เสรีภาพ",
         "title_en": "Michael's lesson: Order gives freedom",
-        "content_no": "I Norge: Orden på veien gir deg FRIHET, ikke det motsatte.\n- Færre regler = flere ulykker = mye stress\n- Mer regler = færre ulykker = mer frihet\n\nVindulet ditt er åpent fordi det er trygt. Du kan kjøre hjemmet ditt selv. Du kan være alene. Det er FRIHET.",
+        "content_no": "I Norge gjelder Vegtrafikkloven § 3 og HAV-regelen: Alle skal ferdes hensynsfullt, aktpågivende og varsomt. Orden på veien gir ekte frihet, ikke begrensninger.\n- Færre regler = flere ulykker og høyt stressnivå i trafikken.\n- Gode regler og samspill = færre ulykker og frihet til å ferdes trygt.\n\nBilvinduet ditt kan stå åpent fordi samfunnet er trygt. Du kan trygt kjøre hjem på egenhånd, uansett hvem du er. Det er ekte frihet.",
         "content_th": "ในนอร์เวย์: ความเป็นระเบียบบนถนนให้คุณเสรีภาพ ไม่ใช่สิ่งตรงข้าม\n- กฎน้อยลง = อุบัติเหตุมากขึ้น = ความเครียดมาก\n- กฎเพิ่มขึ้น = อุบัติเหตุน้อยลง = เสรีภาพมากขึ้น\n\nหน้าต่างของคุณเปิด เพราะปลอดภัย คุณสามารถขับรถจากที่หนึ่งไปอีกที่ได้คนเดียว คุณสามารถเดินตามลำพัง นั่นคือเสรีภาพ",
         "content_en": "In Norway: Order on the road gives you FREEDOM, not the opposite.\n- Fewer rules = more accidents = lots of stress\n- More rules = fewer accidents = more freedom\n\nYour car window is open because it's safe. You can drive by yourself. You can be alone. That's FREEDOM."
       },
@@ -184,7 +184,7 @@
         "title_no": "Praktisk tips",
         "title_th": "เคล็ดลับปฏิบัติ",
         "title_en": "Practical tips",
-        "content_no": "1. Skift fra Thai-mentality til Norsk-mentality. 2. I Norge: Regler = trygghet = frihet. 3. Respekter systemet. Systemet respekterer deg.",
+        "content_no": "1. Omstill deg fra thailandsk kjøremåte til norsk trafikkultur og samspill. 2. Husk at reglene finnes for å beskytte deg og dine medtrafikanter. 3. Opptrer du ryddig og forutsigbart, vil andre sjåfører respektere deg.",
         "content_th": "1. เปลี่ยนจากจิตสำนึกของไทยเป็นจิตสำนึกของนอร์เวย์ 2. ในนอร์เวย์ กฎ = ความปลอดภัย = เสรีภาพ 3. เคารพระบบ ระบบเคารพคุณ",
         "content_en": "1. Shift from Thai mentality to Norwegian mentality. 2. In Norway: Rules = safety = freedom. 3. Respect the system. The system respects you."
       }

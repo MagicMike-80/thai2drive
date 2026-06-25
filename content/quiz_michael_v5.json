@@ -1,6 +1,6 @@
 [
   {
-    "question_no": "Du kjører fra høyre side av et 4-kjørs kryss uten skilt. Hva gjør du?",
+    "question_no": "Du kommer til et 4-armet kryss uten skilt. Hva gjør du?",
     "question_th": "คุณขับรถจากด้านขวาของสี่แยกห้องโดยไม่มีป้าย คุณต้องทำอะไร?",
     "question_en": "You're driving from the right side of a 4-way intersection with no signs. What do you do?",
     "options": [
@@ -11,7 +11,7 @@
         "correct": false
       },
       {
-        "text_no": "Du viker for trafikk fra andre retninger",
+        "text_no": "Du gir vikeplikt for trafikk fra andre retninger som har forkjørsrett",
         "text_th": "คุณให้ทางสำหรับจราจรจากทิศทางอื่น",
         "text_en": "You yield to traffic from other directions",
         "correct": true
@@ -23,7 +23,7 @@
         "correct": false
       }
     ],
-    "explanation_no": "Michaels regel: Du vikeplikt FOR trafikk som kommer fra høyre, ikkje fra høyre. Lyt! Alle kryss utan skilt krev at du viker for trafikk som allereie er på krysset.",
+    "explanation_no": "Michaels regel: Tenk på «Kongen og tjeneren». Du er tjeneren og må gi vikeplikt FOR trafikk som kommer fra høyre (kongen). I kryss uten skilt må du alltid stoppe og la dem kjøre først.",
     "explanation_th": "กฎของไมเคิล: คุณต้องให้ทางสำหรับจราจรที่มาจากด้านขวา ไม่ใช่ว่าคุณมาจากด้านขวา ฟัง! สี่แยกทั้งหมดที่ไม่มีป้ายต้องให้ทางสำหรับจราจรที่อยู่บนสี่แยก",
     "explanation_en": "Michael's rule: You yield FOR traffic coming from the right, not FROM the right. Listen! All intersections without signs require you to yield to traffic already on the intersection.",
     "topic_tags": ["vikeplikt", "kryss"],
@@ -31,30 +31,30 @@
     "podcast_reference": "Michaels 6 vikepliktregler – Del 1"
   },
   {
-    "question_no": "Bil A kjører rett fram. Bil B skal svinge venstre. Hvem har prioritet?",
+    "question_no": "Bil A kjører rett fram. Bil B skal svinge til venstre. Hvem har forkjørsrett?",
     "question_th": "รถ A ขับรถตรงไป รถ B ต้องเลี้ยวซ้าย ใครมีสิทธิ์?",
     "question_en": "Car A drives straight. Car B wants to turn left. Who has priority?",
     "options": [
       {
-        "text_no": "Bil B har prioritet fordi det skal svinge",
+        "text_no": "Bil B har forkjørsrett fordi den skal svinge",
         "text_th": "รถ B มีสิทธิ์เพราะมันต้องเลี้ยว",
         "text_en": "Car B has priority because it's turning",
         "correct": false
       },
       {
-        "text_no": "Bil A har prioritet fordi det kjører rett",
+        "text_no": "Bil A har forkjørsrett fordi den kjører rett fram",
         "text_th": "รถ A มีสิทธิ์เพราะขับรถตรง",
         "text_en": "Car A has priority because it's driving straight",
         "correct": true
       },
       {
-        "text_no": "Begge har samme prioritet",
+        "text_no": "Begge har lik forkjørsrett",
         "text_th": "ทั้งสองมีสิทธิ์เท่ากัน",
         "text_en": "Both have equal priority",
         "correct": false
       }
     ],
-    "explanation_no": "Michaels regel 2: Rett fram slår alltid sving. Bil B må vike for Bil A fordi A kjører rett fram.",
+    "explanation_no": "Michaels regel 2: Rett fram slår alltid sving. Bil A er kongen fordi den kjører rett fram. Bil B skal svinge, og blir derfor tjeneren som må vente.",
     "explanation_th": "กฎที่ 2 ของไมเคิล: ตรงไปจะชนะการเลี้ยวเสมอ รถ B ต้องให้ทางรถ A เพราะ A ขับรถตรง",
     "explanation_en": "Michael's rule 2: Straight always beats turn. Car B must yield to Car A because A is driving straight.",
     "topic_tags": ["vikeplikt", "sving"],
@@ -62,30 +62,30 @@
     "podcast_reference": "Michaels 6 vikepliktregler – Del 1"
   },
   {
-    "question_no": "Du er inne i en rundkjøring. En bil vil kjøre inn. Hvem viker?",
+    "question_no": "Du er inne i en rundkjøring. En bil vil kjøre inn. Hvem har vikeplikt?",
     "question_th": "คุณอยู่ในวงเวียน รถหนึ่งคันต้องเข้ามา ใครให้ทาง?",
     "question_en": "You're inside a roundabout. A car wants to enter. Who yields?",
     "options": [
       {
-        "text_no": "Du viker fordi du er først",
+        "text_no": "Du har vikeplikt fordi du kom først",
         "text_th": "คุณให้ทางเพราะคุณมาก่อน",
         "text_en": "You yield because you arrived first",
         "correct": false
       },
       {
-        "text_no": "Bilen som vil kjøre inn viker",
+        "text_no": "Bilen som vil kjøre inn har vikeplikt",
         "text_th": "รถที่ต้องเข้ามาให้ทาง",
         "text_en": "The entering car yields",
         "correct": true
       },
       {
-        "text_no": "Begge viker",
+        "text_no": "Begge har vikeplikt",
         "text_th": "ทั้งสองให้ทาง",
         "text_en": "Both yield",
         "correct": false
       }
     ],
-    "explanation_no": "Michaels regel 3: Runder INNE i rundkjøringen har alltid prioritet. Bil som vil kjøre inn må vike.",
+    "explanation_no": "Michaels regel 3: Biler som allerede er INNE i rundkjøringen har alltid forkjørsrett. Bilen som vil kjøre inn er tjeneren og må gi vikeplikt for deg.",
     "explanation_th": "กฎที่ 3 ของไมเคิล: รถที่อยู่ในวงเวียนจะมีสิทธิ์ก่อน รถที่ต้องเข้าต้องให้ทาง",
     "explanation_en": "Michael's rule 3: Cars INSIDE the roundabout always have priority. Entering cars must yield.",
     "topic_tags": ["vikeplikt", "rundkjøring"],
@@ -98,25 +98,25 @@
     "question_en": "You want to change lanes to the right. What must you do first?",
     "options": [
       {
-        "text_no": "Bare skift fil når du ser plass",
-        "text_th": "เลี้ยวแค่เมื่อคุณเห็นที่ว่าง",
-        "text_en": "Just change lanes when you see space",
+        "text_no": "Det holder å sjekke sidespeilet og gi blinklys",
+        "text_th": "แค่ดูกระจกข้างและเปิดไฟเลี้ยวก็พอ",
+        "text_en": "It's enough to check the side mirror and signal",
         "correct": false
       },
       {
-        "text_no": "Sjekk speil, blindspeil, og se over skulder",
-        "text_th": "ตรวจสอบกระจก กระจกด้านข้าง และมองข้ามไหล่",
-        "text_en": "Check mirror, blind spot, and look over shoulder",
+        "text_no": "Sjekk bakspeil, sidespeil, og se over skulderen (blindsone)",
+        "text_th": "ตรวจสอบกระจกหลัง กระจกข้าง และมองข้ามไหล่ (จุดบอด)",
+        "text_en": "Check rear mirror, side mirror, and look over shoulder (blind spot)",
         "correct": true
       },
       {
-        "text_no": "Tut først, deretter filskift",
-        "text_th": "บีบแตรก่อน จากนั้นเปลี่ยนเลน",
-        "text_en": "Honk first, then change lanes",
+        "text_no": "Gi blinklys og skift fil med én gang, de andre må tilpasse seg",
+        "text_th": "เปิดไฟเลี้ยวแล้วเปลี่ยนเลนทันที คนอื่นต้องปรับตัว",
+        "text_en": "Signal and change lanes immediately, others must adjust",
         "correct": false
       }
     ],
-    "explanation_no": "Michaels regel 4: Før filskift må du alltid sjekke speilet, brukspeilet og blindspeilet. Du må vike for trafikk som allereie er i den nye filen.",
+    "explanation_no": "Michaels regel 4: Før filskift må du alltid sjekke bakspeilet, sidespeilet og blindsonen. Husk HAV-regelen: Vær hensynsfull, aktpågivende og varsom. Du har vikeplikt for bilene som allerede er i den nye filen.",
     "explanation_th": "กฎที่ 4 ของไมเคิล: ก่อนเปลี่ยนเลน คุณต้องตรวจสอบกระจก กระจกด้านข้าง และพื้นที่อับสายตา คุณต้องให้ทางสำหรับจราจรที่อยู่ในเลนใหม่",
     "explanation_en": "Michael's rule 4: Before changing lanes, always check mirror, side mirror, and blind spot. You must yield to traffic already in the new lane.",
     "topic_tags": ["filskift", "sikkerhet"],
@@ -124,7 +124,7 @@
     "podcast_reference": "Michaels 6 vikepliktregler – Del 2"
   },
   {
-    "question_no": "Du kjører 50 km/t. Hva er bremselengden?",
+    "question_no": "Du kjører i 50 km/t. Hva er bremselengden?",
     "question_th": "คุณขับรถ 50 กม./ชม. ระยะการหยุดเป็นเท่าไหร่?",
     "question_en": "You're driving 50 km/h. What's the braking distance?",
     "options": [
@@ -147,7 +147,7 @@
         "correct": false
       }
     ],
-    "explanation_no": "Michaels leksjon: Ved 50 km/t er bremselengden ca. 27 meter. Det er langt! Ved 30 km/t er den bare ca. 9 meter.",
+    "explanation_no": "Michaels leksjon: Ved 50 km/t er bremselengden ca. 27 meter. Det er veldig langt! Til sammenligning er den bare ca. 9 meter ved 30 km/t. Fart dreper, så hold farten nede.",
     "explanation_th": "บทเรียนของไมเคิล: ที่ 50 กม./ชม. ระยะการหยุดประมาณ 27 เมตร ไกลมาก! ที่ 30 กม./ชม. มันแค่ประมาณ 9 เมตร",
     "explanation_en": "Michael's lesson: At 50 km/h the braking distance is about 27 meters. That's far! At 30 km/h it's only about 9 meters.",
     "topic_tags": ["fart", "bremselengde"],
@@ -155,30 +155,30 @@
     "podcast_reference": "Fart og bremselengde"
   },
   {
-    "question_no": "Reaktidslengde betyr:",
+    "question_no": "Reaksjonslengde betyr:",
     "question_th": "ระยะเวลาตอบสนองหมายถึง:",
     "question_en": "Reaction distance means:",
     "options": [
       {
-        "text_no": "Tiden det tar å snu bilen",
-        "text_th": "เวลาที่ใช้หันรถ",
-        "text_en": "Time to turn the car",
+        "text_no": "Avstanden bilen bruker fra du trykker bremsen til bilen stopper helt",
+        "text_th": "ระยะทางที่รถใช้ตั้งแต่เหยียบเบรกจนรถหยุดสนิท",
+        "text_en": "The distance the car travels from when you press the brake until it stops completely",
         "correct": false
       },
       {
-        "text_no": "Avstanden bilen kjører mens du reagerer på fare",
-        "text_th": "ระยะที่รถวิ่งขณะที่คุณตอบสนองต่ออันตราย",
-        "text_en": "Distance car travels while you react to danger",
+        "text_no": "Avstanden bilen kjører mens du oppfatter faren og flytter foten til bremsen",
+        "text_th": "ระยะทางที่รถวิ่งตั้งแต่คุณเห็นอันตรายจนเท้าแตะเบรก",
+        "text_en": "The distance the car travels while you notice the danger and move your foot to the brake",
         "correct": true
       },
       {
-        "text_no": "Tiden som treffer deg mentalt",
-        "text_th": "เวลาที่จิตใจคุณตระหนักถึง",
-        "text_en": "Time your mind realizes",
+        "text_no": "Den totale avstanden fra du ser faren til bilen stopper helt",
+        "text_th": "ระยะทางทั้งหมดตั้งแต่เห็นอันตรายจนรถหยุดสนิท",
+        "text_en": "The total distance from seeing the danger until the car stops completely",
         "correct": false
       }
     ],
-    "explanation_no": "Michaels definisjon: Reaktidslengde er avstanden bilen kjører i løpet av ca. 1 sekund — fra du ser faren til du trykker på bremsen. Ved 50 km/t er det ca. 14 meter.",
+    "explanation_no": "Michaels definisjon: Reaksjonslengde er avstanden bilen kjører i løpet av ca. 1 sekund — fra du oppdager faren til foten din trykker på bremsepedalen. Ved 50 km/t beveger bilen seg ca. 14 meter på dette ene sekundet.",
     "explanation_th": "นิยามของไมเคิล: ระยะตอบสนองคือระยะที่รถวิ่งไปในประมาณ 1 วินาที — ตั้งแต่ที่คุณเห็นอันตรายจนกว่าจะกดเบรก ที่ 50 กม./ชม. มันประมาณ 14 เมตร",
     "explanation_en": "Michael's definition: Reaction distance is the distance the car travels in about 1 second – from when you see danger until you press the brake. At 50 km/h it's about 14 meters.",
     "topic_tags": ["fart", "reaktidslengde"],
@@ -186,30 +186,30 @@
     "podcast_reference": "Fart og bremselengde"
   },
   {
-    "question_no": "Stopplengde = reaktidslengde + ?",
+    "question_no": "Stopplengde = reaksjonslengde + ?",
     "question_th": "ระยะหยุดรวม = ระยะตอบสนอง + ?",
     "question_en": "Stopping distance = reaction distance + ?",
     "options": [
       {
-        "text_no": "Drifttid",
-        "text_th": "เวลาไดรฟ์",
-        "text_en": "Driving time",
+        "text_no": "Farten du kjører i (km/t)",
+        "text_th": "ความเร็วที่คุณขับ (กม./ชม.)",
+        "text_en": "The speed you are driving (km/h)",
         "correct": false
       },
       {
         "text_no": "Bremselengde",
-        "text_th": "ระยะการหยุด",
+        "text_th": "ระยะเบรก",
         "text_en": "Braking distance",
         "correct": true
       },
       {
-        "text_no": "Turtid",
-        "text_th": "เวลาเดินทาง",
-        "text_en": "Travel time",
+        "text_no": "Sikkerhetsmarginen til bilen foran",
+        "text_th": "ระยะห่างที่ปลอดภัยจากรถคันหน้า",
+        "text_en": "The safety margin to the car ahead",
         "correct": false
       }
     ],
-    "explanation_no": "Michaels formel: Stopplengde = reaktidslengde + bremselengde. Ved 50 km/t er det 14 + 27 = 41 meter!",
+    "explanation_no": "Michaels formel: Stopplengde = reaksjonslengde + bremselengde. Ved 50 km/t blir dette 14 meter + 27 meter = hele 41 meter total stopplengde!",
     "explanation_th": "สูตรของไมเคิล: ระยะหยุดรวม = ระยะตอบสนอง + ระยะการหยุด ที่ 50 กม./ชม. คือ 14 + 27 = 41 เมตร!",
     "explanation_en": "Michael's formula: Stopping distance = reaction distance + braking distance. At 50 km/h it's 14 + 27 = 41 meters!",
     "topic_tags": ["fart", "stopplengde"],
@@ -217,7 +217,7 @@
     "podcast_reference": "Fart og bremselengde"
   },
   {
-    "question_no": "Hvem har mest makt i norsk trafikk?",
+    "question_no": "Hvem har høyeste myndighet i norsk trafikk?",
     "question_th": "ใครมีอำนาจมากที่สุดในจราจรนอร์เวย์?",
     "question_en": "Who has the most power in Norwegian traffic?",
     "options": [
@@ -228,7 +228,7 @@
         "correct": false
       },
       {
-        "text_no": "Kjøreregler",
+        "text_no": "Trafikkregler",
         "text_th": "กฎการขับขี่",
         "text_en": "Driving rules",
         "correct": false
@@ -240,7 +240,7 @@
         "correct": true
       }
     ],
-    "explanation_no": "Michaels myndighetspyramide: Politiet > vegvesen > skilt > kjøreregler. Hvis en politimann sier du skal kjøre rett, men skiltet sier venstre, du følger politimannen!",
+    "explanation_no": "Michaels myndighetspyramide: Politiet > Trafikklys > Trafikkskilter > Trafikkregler. Politiet er øverste myndighet. Hvis en politibetjent ber deg kjøre rett fram, men skiltet sier venstre, må du alltid følge politiets anvisning!",
     "explanation_th": "ปิรามิดอำนาจของไมเคิล: ตำรวจ > บริหารจัดการถนน > ป้าย > กฎการขับขี่ ถ้าตำรวจบอกให้ขับตรง แต่ป้ายบอกซ้าย คุณทำตามตำรวจ!",
     "explanation_en": "Michael's authority pyramid: Police > road authorities > signs > driving rules. If a police officer says drive straight but the sign says left, you follow the officer!",
     "topic_tags": ["myndighet", "regler"],
@@ -248,7 +248,7 @@
     "podcast_reference": "Myndighetspyramiden"
   },
   {
-    "question_no": "Hvis en politimann instruerer deg, og skiltet sier noe annet, hva gjør du?",
+    "question_no": "Hvis en politibetjent dirigerer trafikken i strid med et trafikkskilt, hva gjør du?",
     "question_th": "ถ้าตำรวจให้คำแนะนำ และป้ายบอกอะไรอื่น คุณจะทำอะไร?",
     "question_en": "If a police officer instructs you, and the sign says something else, what do you do?",
     "options": [
@@ -259,19 +259,19 @@
         "correct": false
       },
       {
-        "text_no": "Du følger politimannen",
+        "text_no": "Du følger politibetjenten",
         "text_th": "คุณทำตามตำรวจ",
         "text_en": "You follow the police officer",
         "correct": true
       },
       {
-        "text_no": "Du gjør hva som virker rimelig",
+        "text_no": "Du gjør det du selv mener er tryggest",
         "text_th": "คุณทำสิ่งที่ดูเหมาะสม",
         "text_en": "You do what seems reasonable",
         "correct": false
       }
     ],
-    "explanation_no": "Michaels regel: Politiet har alltid høyeste autoritet. Du må følge politimannen — alltid.",
+    "explanation_no": "Michaels regel: Politiet står øverst i myndighetspyramiden. Politiets anvisninger overstyrer både trafikklys, skilt og trafikkregler. Du må alltid følge politibetjenten.",
     "explanation_th": "กฎของไมเคิล: ตำรวจมีอำนาจสูงสุดเสมอ คุณต้องทำตามตำรวจ — เสมอ",
     "explanation_en": "Michael's rule: Police always have the highest authority. You must follow the officer – always.",
     "topic_tags": ["myndighet", "politi"],
@@ -279,7 +279,7 @@
     "podcast_reference": "Myndighetspyramiden"
   },
   {
-    "question_no": "I Thailand kjører sjåfører mer 'fritt'. I Norge er det mer disiplin. Hvilken har færre dødsfall?",
+    "question_no": "I Thailand kjører mange mer 'fritt'. I Norge kreves streng disiplin. Hvilket land har færre dødsulykker?",
     "question_th": "ในไทย คนขับรถขับอิสระกว่า ในนอร์เวย์มีวินัยมากกว่า ที่ไหนมีการเสียชีวิตน้อยกว่า?",
     "question_en": "In Thailand drivers drive more 'freely'. In Norway there's more discipline. Which has fewer deaths?",
     "options": [
@@ -296,17 +296,128 @@
         "correct": true
       },
       {
-        "text_no": "Begge er like farlige",
+        "text_no": "Begge land har like mange ulykker",
         "text_th": "ทั้งสองอันตรายเท่ากัน",
         "text_en": "Both are equally dangerous",
         "correct": false
       }
     ],
-    "explanation_no": "Michaels leksjon: I Norge: order gir frihet, ikke det motsatte. Disiplinen på veien redder liv. Færre regler = flere uhell.",
+    "explanation_no": "Michaels leksjon: I Norge gjelder HAV-regelen (Hensynsfull, Aktpågivende, Varsom). Orden og tydelige regler gir frihet og trygghet for alle. Streng disiplin på veien redder liv, mens færre regler fører til langt flere ulykker.",
     "explanation_th": "บทเรียนของไมเคิล: ในนอร์เวย์: ความเป็นระเบียบให้เสรีภาพ ไม่ใช่สิ่งตรงข้าม วินัยบนถนนช่วยชีวิต กฎน้อยลง = อุบัติเหตุมากขึ้น",
     "explanation_en": "Michael's lesson: In Norway: order gives freedom, not the opposite. Discipline on the road saves lives. Fewer rules = more accidents.",
     "topic_tags": ["kultur", "sikkerhet"],
     "difficulty": "medium",
     "podcast_reference": "Thailand-norsk trafikk-sammenligning"
+  },
+  {
+    "question_no": "Du nærmer deg en rundkjøring. Inne i rundkjøringen kjører en lastebil som skal ut i din avkjørsel. Du vil også kjøre inn. Hvem er 'kongen'?",
+    "question_th": "คุณกำลังเข้าใกล้วงเวียน ในวงเวียนมีรถบรรทุกกำลังจะออกที่ทางออกของคุณ คุณก็ต้องการเข้าวงเวียนด้วย ใครคือ 'ราชา'?",
+    "question_en": "You approach a roundabout. Inside, a truck is heading for your exit. You also want to enter. Who is the 'king'?",
+    "options": [
+      {
+        "text_no": "Du er kongen fordi du kom først til rundkjøringen",
+        "text_th": "คุณเป็นราชาเพราะคุณมาถึงวงเวียนก่อน",
+        "text_en": "You are the king because you arrived at the roundabout first",
+        "correct": false
+      },
+      {
+        "text_no": "Lastebilen er kongen fordi den allerede er inne i rundkjøringen",
+        "text_th": "รถบรรทุกเป็นราชาเพราะอยู่ในวงเวียนแล้ว",
+        "text_en": "The truck is the king because it is already inside the roundabout",
+        "correct": true
+      },
+      {
+        "text_no": "Ingen er kongen — personbiler har alltid forkjørsrett foran tunge kjøretøy",
+        "text_th": "ไม่มีใครเป็นราชา — รถเก๋งมีสิทธิ์ก่อนรถใหญ่เสมอ",
+        "text_en": "Nobody is the king — passenger cars always have priority over heavy vehicles",
+        "correct": false
+      },
+      {
+        "text_no": "Lastebilen må gi deg vikeplikt fordi den skal svinge ut",
+        "text_th": "รถบรรทุกต้องให้ทางคุณเพราะมันกำลังจะออก",
+        "text_en": "The truck must yield to you because it is exiting",
+        "correct": false
+      }
+    ],
+    "explanation_no": "Michaels regel: I rundkjøringen er alle kjøretøy som allerede er INNE i ringen kongen. Du er tjeneren og MÅ vente til det er trygt å kjøre inn, uansett om det er en personbil eller en stor lastebil. Størrelsen på kjøretøyet endrer ikke regelen.",
+    "explanation_th": "กฎของไมเคิล: ในวงเวียน รถทุกคันที่อยู่ข้างในแล้วคือราชา คุณเป็นคนรับใช้และต้องรอจนกว่าจะปลอดภัยที่จะเข้า ไม่ว่าจะเป็นรถเก๋งหรือรถบรรทุกขนาดใหญ่ ขนาดของรถไม่เปลี่ยนกฎ",
+    "explanation_en": "Michael's rule: In a roundabout, every vehicle already INSIDE is the king. You are the servant and MUST wait until it is safe to enter, regardless of whether it is a car or a large truck. The size of the vehicle does not change the rule.",
+    "topic_tags": ["vikeplikt", "rundkjøring"],
+    "difficulty": "hard",
+    "podcast_reference": "Michaels 6 vikepliktregler – Del 2"
+  },
+  {
+    "question_no": "Det regner kraftig. Du kjører i 50 km/t og nærmer deg et fotgjengerfelt. En fotgjenger står på fortauet og ser ut som om den vurderer å krysse. Hva gjør du?",
+    "question_th": "ฝนตกหนัก คุณขับ 50 กม./ชม. และกำลังเข้าใกล้ทางม้าลาย มีคนเดินเท้ายืนอยู่บนทางเท้าและดูเหมือนกำลังจะข้าม คุณทำอย่างไร?",
+    "question_en": "It's raining heavily. You're driving 50 km/h and approaching a pedestrian crossing. A pedestrian stands on the sidewalk looking like they might cross. What do you do?",
+    "options": [
+      {
+        "text_no": "Holder farten og kjører forbi — fotgjengeren har ikke gått ut i veien ennå",
+        "text_th": "รักษาความเร็วและขับผ่าน — คนเดินเท้ายังไม่ได้ก้าวลงถนน",
+        "text_en": "Maintain speed and drive past — the pedestrian hasn't stepped onto the road yet",
+        "correct": false
+      },
+      {
+        "text_no": "Senker farten til 30 km/t og kjører forsiktig videre",
+        "text_th": "ลดความเร็วเหลือ 30 กม./ชม. แล้วขับต่อไปอย่างระมัดระวัง",
+        "text_en": "Reduce speed to 30 km/h and carefully continue",
+        "correct": false
+      },
+      {
+        "text_no": "Bremser ned i god tid, er klar til å stoppe helt, og gir fotgjengeren tydelig tegn",
+        "text_th": "ชะลอล่วงหน้า เตรียมหยุดสนิท และให้สัญญาณชัดเจนแก่คนเดินเท้า",
+        "text_en": "Slow down well in advance, be ready to stop completely, and give the pedestrian a clear signal",
+        "correct": true
+      },
+      {
+        "text_no": "Tuter for å varsle fotgjengeren om at du kommer",
+        "text_th": "บีบแตรเพื่อเตือนคนเดินเท้าว่าคุณกำลังมา",
+        "text_en": "Honk to warn the pedestrian that you are coming",
+        "correct": false
+      }
+    ],
+    "explanation_no": "HAV-regelen i praksis: Du skal alltid være hensynsfull, aktpågivende og varsom. I regnvær øker bremselengden kraftig, og en fotgjenger som ser mot veien må antas å ville krysse. Du er tjeneren og fotgjengeren er kongen. Brems ned tidlig og vær klar til å stoppe helt.",
+    "explanation_th": "กฎ HAV ในทางปฏิบัติ: คุณต้องเอาใจใส่ ระมัดระวัง และรอบคอบเสมอ ในสภาพฝนตก ระยะเบรกเพิ่มขึ้นมาก และคนเดินเท้าที่มองมาที่ถนนต้องถือว่าจะข้าม คุณเป็นคนรับใช้ คนเดินเท้าเป็นราชา ชะลอล่วงหน้าและเตรียมหยุดสนิท",
+    "explanation_en": "The HAV rule in practice: You must always be considerate, attentive, and cautious. In rain, braking distance increases significantly, and a pedestrian looking toward the road must be assumed to want to cross. You are the servant and the pedestrian is the king. Slow down early and be ready to stop completely.",
+    "topic_tags": ["fotgjengerfelt", "regn", "sikkerhet"],
+    "difficulty": "hard",
+    "podcast_reference": "Fart og bremselengde"
+  },
+  {
+    "question_no": "Det er vinter og veien er dekket av is. Du kjører i 60 km/t på en landevei og ser et vikepliktskilt 100 meter foran. Hva er riktig fremgangsmåte?",
+    "question_th": "เป็นฤดูหนาวและถนนเป็นน้ำแข็ง คุณขับ 60 กม./ชม. บนถนนชนบทและเห็นป้ายให้ทางอยู่ข้างหน้า 100 เมตร วิธีที่ถูกต้องคืออะไร?",
+    "question_en": "It's winter and the road is covered in ice. You're driving 60 km/h on a rural road and see a yield sign 100 meters ahead. What is the correct approach?",
+    "options": [
+      {
+        "text_no": "Bremser hardt rett før skiltet for å rekke å stoppe",
+        "text_th": "เบรกแรงก่อนถึงป้ายเพื่อหยุดทัน",
+        "text_en": "Brake hard just before the sign to manage to stop",
+        "correct": false
+      },
+      {
+        "text_no": "Holder farten og regner med at ABS-bremsene ordner det på isen",
+        "text_th": "รักษาความเร็วและวางใจว่าเบรก ABS จะจัดการบนน้ำแข็งได้",
+        "text_en": "Maintain speed and trust that ABS brakes will handle it on ice",
+        "correct": false
+      },
+      {
+        "text_no": "Senker farten gradvis i god tid fordi bremselengden på is kan bli tre til ti ganger lengre enn normalt",
+        "text_th": "ค่อยๆ ลดความเร็วล่วงหน้าเพราะระยะเบรกบนน้ำแข็งอาจยาวกว่าปกติสามถึงสิบเท่า",
+        "text_en": "Gradually reduce speed well in advance because braking distance on ice can be three to ten times longer than normal",
+        "correct": true
+      },
+      {
+        "text_no": "Kjører ut på veiskulderen for å bremse der, fordi grusen gir bedre feste",
+        "text_th": "ขับออกไปที่ไหล่ทางเพื่อเบรกตรงนั้น เพราะกรวดจะยึดเกาะดีกว่า",
+        "text_en": "Drive onto the road shoulder to brake there, because the gravel gives better grip",
+        "correct": false
+      }
+    ],
+    "explanation_no": "HAV-regelen redder liv om vinteren: Vær varsom og avpass farten etter forholdene. På isglatt vei kan bremselengden bli tre til ti ganger lengre enn på tørr asfalt. Ved 60 km/t på is kan stopplengden bli over 200 meter! Hard bremsing fører til skrens. Du må bremse mykt og tidlig — som en tjeneren som planlegger hvert steg med omtanke.",
+    "explanation_th": "กฎ HAV ช่วยชีวิตในฤดูหนาว: ระมัดระวังและปรับความเร็วตามสภาพถนน บนถนนน้ำแข็ง ระยะเบรกอาจยาวกว่าปกติสามถึงสิบเท่า ที่ 60 กม./ชม. บนน้ำแข็ง ระยะหยุดอาจมากกว่า 200 เมตร! การเบรกแรงทำให้รถลื่นไถล คุณต้องเบรกเบาๆ และล่วงหน้า — เหมือนคนรับใช้ที่วางแผนทุกก้าวอย่างรอบคอบ",
+    "explanation_en": "The HAV rule saves lives in winter: Be cautious and adjust your speed to the conditions. On icy roads, braking distance can be three to ten times longer than on dry asphalt. At 60 km/h on ice, stopping distance can exceed 200 meters! Hard braking causes skidding. You must brake gently and early — like a servant who plans every step with care.",
+    "topic_tags": ["vinterforhold", "bremselengde", "sikkerhet"],
+    "difficulty": "hard",
+    "podcast_reference": "Fart og bremselengde"
   }
 ]
