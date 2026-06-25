@@ -20,4 +20,4 @@ COPY . .
 ENV PORT=8080
 
 # Start FastAPI with uvicorn
-CMD uvicorn server:app --host 0.0.0.0 --port $PORT
+CMD ["uvicorn", "server:app", "--host", "0.0.0.0", "--port", "8080"]
