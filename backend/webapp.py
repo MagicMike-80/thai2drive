@@ -3601,7 +3601,7 @@ a { color:inherit; text-decoration:none; }
     <!-- ═══ HISTORY SCREEN ═══ -->
     <div class="screen" id="screenHistory">
       <div class="hist-header">
-        <div class="screen-title">📊 <span data-key="history">Historikk</span> <span id="histCount"></span></div>
+        <div class="screen-title" style="display:flex;align-items:center;gap:10px;">📊 <span data-key="history">Historikk</span> <span id="histCount"></span><button onclick="loadHistory()" style="background:none;border:none;cursor:pointer;padding:4px 8px;border-radius:8px;color:#8899aa;font-size:20px;line-height:1;" title="Oppdater">↻</button></div>
       </div>
       <div class="hist-scroll" id="histScroll">
         <div class="loading-wrap">
@@ -7578,6 +7578,9 @@ function showEnd() {
       .then(function(saved) {
         _writeLocalAttempt(saved || _lastSavedAttempt);
         toast(t('result_saved'), 2000);
+        // Auto-refresh history if visible — so new result appears immediately
+        var hs = document.getElementById('screenHistory');
+        if (hs && hs.classList.contains('active')) loadHistory();
       })
       .catch(function(e) {
         console.warn('Quiz attempt save failed:', e.message);
