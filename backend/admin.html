@@ -1695,17 +1695,27 @@ function openSbModal(order, ch) {
         style="width:100%;padding:10px;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;font-size:13px;font-family:monospace;resize:vertical">${escapeHtml(ch.content_no)}</textarea>
     </div>
 
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px">
-      <div>
-        <div class="lbl" style="font-size:12px;color:var(--muted);margin-bottom:4px">🖼️ Bilde URL</div>
-        <input id="sb-img" type="text" value="${escapeHtml(ch.image_url||'')}" placeholder="https://..."
-          style="width:100%;padding:8px;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;font-size:13px"/>
+    <div style="margin-bottom:14px">
+      <div class="lbl" style="font-size:12px;color:var(--muted);margin-bottom:6px">🖼️ Bilde</div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <input id="sb-img" type="text" value="${escapeHtml(ch.image_url||'')}" placeholder="URL eller last opp fil →"
+          style="flex:1;min-width:160px;padding:8px;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;font-size:13px"/>
+        <label style="background:var(--accent);color:#fff;padding:8px 14px;border-radius:6px;cursor:pointer;font-size:13px;white-space:nowrap">
+          📁 Last opp
+          <input type="file" accept="image/*" style="display:none"
+            onchange="uploadSbImage(this, '${order||''}')">
+        </label>
+        ${order ? '<button onclick="removeSbImage('+order+')" style="background:#ef4444;color:#fff;border:0;padding:8px 12px;border-radius:6px;cursor:pointer;font-size:13px">🗑</button>' : ''}
       </div>
-      <div>
-        <div class="lbl" style="font-size:12px;color:var(--muted);margin-bottom:4px">🎥 Video URL</div>
-        <input id="sb-video" type="text" value="${escapeHtml(ch.video_url||'')}" placeholder="https://..."
-          style="width:100%;padding:8px;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;font-size:13px"/>
+      <div id="sb-img-preview" style="margin-top:8px">
+        ${ch.image_url ? '<img src="'+escapeHtml(ch.image_url)+'" style="max-height:80px;border-radius:6px;border:1px solid #475569">' : ''}
       </div>
+    </div>
+
+    <div style="margin-bottom:18px">
+      <div class="lbl" style="font-size:12px;color:var(--muted);margin-bottom:4px">🎥 Video URL (YouTube, Vimeo o.l.)</div>
+      <input id="sb-video" type="text" value="${escapeHtml(ch.video_url||'')}" placeholder="https://youtube.com/watch?v=..."
+        style="width:100%;padding:8px;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;font-size:13px"/>
     </div>
 
     <div style="display:flex;gap:10px;justify-content:flex-end">
@@ -1714,6 +1724,31 @@ function openSbModal(order, ch) {
     </div>
   `;
   document.getElementById('modal').classList.add('show');
+}
+
+async function uploadSbImage(input, order) {
+  if (!input.files[0] || !order) { alert('Lagre kapitlet først, last deretter opp bilde.'); return; }
+  const fd = new FormData();
+  fd.append('file', input.files[0]);
+  const r = await fetch(API + '/admin/studiebok/' + order + '/image', {
+    method: 'POST', headers: { Authorization: 'Bearer ' + token }, body: fd,
+  });
+  const data = await r.json();
+  if (r.ok) {
+    toast(`✅ Bilde lastet opp (${data.size_kb} KB)`);
+    loadSbAdmin();
+    // Re-open modal to show preview
+    const ch = _sbAdmin.find(c => c.order === +order);
+    if (ch) { const updated = await (await fetch(API + '/studiebok', {headers:{Authorization:'Bearer '+token}})).json(); _sbAdmin = updated; openSbModal(order, _sbAdmin.find(c=>c.order===+order)||ch); }
+  } else toast('Feil: ' + (data.detail || 'ukjent'), false);
+}
+
+async function removeSbImage(order) {
+  if (!confirm('Fjern bildet fra dette kapitlet?')) return;
+  const r = await fetch(API + '/admin/studiebok/' + order + '/image', {
+    method: 'DELETE', headers: { Authorization: 'Bearer ' + token },
+  });
+  if (r.ok) { toast('🗑 Bilde fjernet'); loadSbAdmin(); openEditSbChapter(order); }
 }
 
 async function saveSbChapter(order) {
