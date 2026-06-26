@@ -1,16 +1,58 @@
-name: Thai2Drive Auto Deploy
+name: Thai2Drive Safety Check
 
 on:
   push:
     branches: [main]
-  schedule:
-    - cron: '0 2 * * *'
-  workflow_dispatch:
+  pull_request:
+    branches: [main]
 
 jobs:
-  deploy:
+  syntax-check:
     runs-on: ubuntu-latest
+    name: Python Syntax Check
     steps:
       - uses: actions/checkout@v3
-      - name: Deploy
-        run: echo "Thai2Drive Deployed"
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Check Python syntax
+        run: |
+          echo "Checking Python syntax..."
+          python -m py_compile backend/server.py && echo "✅ server.py OK"
+          python -m py_compile backend/webapp.py && echo "✅ webapp.py OK"
+
+      - name: Check for undefined JS functions
+        run: |
+          echo "Checking for common JS bugs in webapp.py..."
+          # Extract JS function definitions and calls
+          python3 - <<'PYEOF'
+          import re
+          with open('backend/webapp.py', 'r') as f:
+              content = f.read()
+          
+          # Find all function definitions
+          defs = set(re.findall(r'function (\w+)\s*\(', content))
+          
+          # Check showTab calls match defined functions
+          tab_calls = re.findall(r'if \(tab === [\'"](\w+)[\'"\)].*?load(\w+)\(\)', content)
+          
+          errors = []
+          for tab, fn_suffix in tab_calls:
+              fn_name = f"load{fn_suffix}"
+              if fn_name not in defs:
+                  errors.append(f"ERROR: showTab calls {fn_name}() but it is not defined!")
+          
+          if errors:
+              for e in errors:
+                  print(e)
+              exit(1)
+          else:
+              print(f"✅ All showTab function calls verified ({len(tab_calls)} checked)")
+          PYEOF
+
+      - name: Version tag present
+        run: |
+          grep -q 'deploy-version' backend/webapp.py && echo "✅ deploy-version tag found" || echo "⚠️ deploy-version tag missing"
