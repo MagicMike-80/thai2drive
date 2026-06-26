@@ -4641,7 +4641,7 @@ function showTab(tab, forceType) {
     if (tab === 'signs')     loadSigns();
     if (tab === 'bookmarks') loadBookmarks();
     if (tab === 'settings')  loadSettings();
-    if (tab === 'studybook') loadStudybook();
+    if (tab === 'studybook') loadStudiebok();
     if (tab === 'library')   loadLibrary();
     if (tab === 'teacher') {
       if (forceType) {
