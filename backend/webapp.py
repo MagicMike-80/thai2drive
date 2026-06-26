@@ -102,7 +102,7 @@ a { color:inherit; text-decoration:none; }
     border-left: 2px solid transparent;
     border-right: 2px solid transparent;
     background: linear-gradient(var(--bg), var(--bg)) padding-box,
-                conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #FF6600, #00F5FF) border-box;
+                conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #00F5FF) border-box;
     animation: neonFlow 5s linear infinite;
     box-shadow:
       -8px 0 40px rgba(0,0,0,.60),
@@ -198,7 +198,7 @@ a { color:inherit; text-decoration:none; }
   color: #00F5FF;
   border: 1.5px solid transparent !important;
   background: linear-gradient(rgba(11, 18, 38, 0.90), rgba(11, 18, 38, 0.90)) padding-box,
-              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #FF6600, #00F5FF) border-box !important;
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #00F5FF) border-box !important;
   animation: neonFlow 4s linear infinite;
   box-shadow: 0 0 14px rgba(0, 245, 255, 0.22), inset 0 1px 2px rgba(255,255,255,0.08);
   transform: translateY(-2px);
@@ -407,7 +407,7 @@ a { color:inherit; text-decoration:none; }
   width:100%; padding:16px;
   border:2px solid transparent !important;
   background:linear-gradient(135deg,#FF9933,#e6891f) padding-box,
-              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #FF6600, #00F5FF) border-box !important;
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #00F5FF) border-box !important;
   animation:neonFlow 3s linear infinite;
   color:#0F172A; font-weight:900; font-size:1rem;
   border-radius:14px; cursor:pointer;
@@ -426,7 +426,7 @@ a { color:inherit; text-decoration:none; }
   padding:13px 10px;
   border:1.5px solid transparent !important;
   background:linear-gradient(rgba(255,255,255,.05), rgba(255,255,255,.05)) padding-box,
-              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #FF6600, #00F5FF) border-box !important;
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #00F5FF) border-box !important;
   animation:neonFlow 4s linear infinite;
   backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
   border-radius:14px; color:var(--text); font-weight:700;
@@ -437,7 +437,7 @@ a { color:inherit; text-decoration:none; }
 }
 .home-sec-btn:hover {
   background:linear-gradient(rgba(255,255,255,.08), rgba(255,255,255,.08)) padding-box,
-              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #FF6600, #00F5FF) border-box !important;
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #00F5FF) border-box !important;
   box-shadow:0 0 16px rgba(0, 245, 255, 0.3);
 }
 .home-sec-btn:active {
@@ -544,7 +544,7 @@ a { color:inherit; text-decoration:none; }
   gap:0;
   border:1.5px solid transparent !important;
   background:linear-gradient(rgba(255,255,255,.05), rgba(255,255,255,.05)) padding-box,
-              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #FF6600, #00F5FF) border-box !important;
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #00F5FF) border-box !important;
   animation:neonFlow 5s linear infinite;
   border-radius:16px; overflow:hidden;
   box-shadow:0 0 8px rgba(0, 245, 255, 0.08);
@@ -2799,7 +2799,7 @@ a { color:inherit; text-decoration:none; }
   width:100%; padding:14px 16px;
   border:1.5px solid transparent !important;
   background:linear-gradient(135deg, rgba(30,58,95,.55) 0%, rgba(37,99,235,.20) 100%) padding-box,
-              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #FF6600, #00F5FF) border-box !important;
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #00F5FF) border-box !important;
   animation:neonFlow 4s linear infinite;
   border-radius:16px; cursor:pointer;
   transition:background .15s, border-color .15s, box-shadow 0.3s;
@@ -2808,7 +2808,7 @@ a { color:inherit; text-decoration:none; }
 }
 .michael-card:hover {
   background:linear-gradient(135deg,rgba(30,58,95,.7) 0%,rgba(37,99,235,.30) 100%) padding-box,
-              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #FF6600, #00F5FF) border-box !important;
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #00F5FF) border-box !important;
   box-shadow:0 0 16px rgba(0, 245, 255, 0.3);
 }
 .michael-card-left  { display:flex; align-items:center; gap:12px; }
@@ -3078,7 +3078,7 @@ a { color:inherit; text-decoration:none; }
 .hp-btn-pri {
   border: 1.5px solid transparent !important;
   background: linear-gradient(rgba(17, 24, 39, 0.95), rgba(17, 24, 39, 0.95)) padding-box,
-              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #FF6600, #00F5FF) border-box !important;
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #00F5FF) border-box !important;
   animation: neonFlow 4s linear infinite !important;
   box-shadow: 0 0 10px rgba(0, 245, 255, 0.25) !important;
   transition: transform 0.2s, box-shadow 0.2s !important;
@@ -3113,7 +3113,7 @@ a { color:inherit; text-decoration:none; }
 .logout-btn:hover {
   border: 1.5px solid transparent !important;
   background: linear-gradient(rgba(17, 24, 39, 0.95), rgba(17, 24, 39, 0.95)) padding-box,
-              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #FF6600, #00F5FF) border-box !important;
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #00F5FF) border-box !important;
   animation: neonFlow 4s linear infinite !important;
   box-shadow: 0 0 12px rgba(255, 0, 229, 0.3) !important;
   transform: scale(1.03) !important;
@@ -3127,7 +3127,7 @@ a { color:inherit; text-decoration:none; }
 .bm-card:hover {
   border: 1.5px solid transparent !important;
   background: linear-gradient(rgba(19, 27, 46, 0.96), rgba(11, 18, 38, 0.98)) padding-box,
-              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #FF6600, #00F5FF) border-box !important;
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #00F5FF) border-box !important;
   animation: neonFlow 5s linear infinite !important;
   box-shadow: 0 0 15px rgba(0, 245, 255, 0.22) !important;
 }
