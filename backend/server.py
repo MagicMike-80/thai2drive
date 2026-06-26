@@ -4009,6 +4009,57 @@ async def update_studiebok_chapter(
     return {"ok": True}
 
 
+
+@api_router.post("/admin/studiebok/{order}/image")
+async def admin_studiebok_upload_image(
+    order: int,
+    file: UploadFile = File(...),
+    _: dict = Depends(require_admin),
+):
+    """Upload / replace image for a Studiebok chapter (stored as base64 data-URI)."""
+    import base64 as _b64, io as _io
+    try:
+        from PIL import Image as _Img
+    except ImportError:
+        raise HTTPException(status_code=500, detail="Pillow not installed")
+
+    raw = await file.read()
+    if not raw:
+        raise HTTPException(status_code=400, detail="Empty file")
+    if len(raw) > 15 * 1024 * 1024:
+        raise HTTPException(status_code=413, detail="Max 15 MB")
+
+    img = _Img.open(_io.BytesIO(raw))
+    img.load()
+    if img.mode in ("RGBA", "P", "LA"):
+        bg = _Img.new("RGB", img.size, (255, 255, 255))
+        bg.paste(img, mask=img.split()[-1] if img.mode in ("RGBA", "LA") else None)
+        img = bg
+    elif img.mode != "RGB":
+        img = img.convert("RGB")
+    if img.width > 1200:
+        r = 1200 / img.width
+        img = img.resize((1200, int(img.height * r)), _Img.LANCZOS)
+
+    buf = _io.BytesIO()
+    img.save(buf, format="JPEG", quality=82, optimize=True)
+    data_uri = "data:image/jpeg;base64," + _b64.b64encode(buf.getvalue()).decode()
+
+    result = await db.studiebok_chapters.update_one(
+        {"order": order}, {"$set": {"image_url": data_uri}}
+    )
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Chapter not found")
+    return {"ok": True, "size_kb": round(len(buf.getvalue()) / 1024, 1)}
+
+
+@api_router.delete("/admin/studiebok/{order}/image")
+async def admin_studiebok_remove_image(order: int, _: dict = Depends(require_admin)):
+    """Remove image from a Studiebok chapter."""
+    await db.studiebok_chapters.update_one({"order": order}, {"$unset": {"image_url": ""}})
+    return {"ok": True}
+
+
 @api_router.delete("/studiebok/{order}")
 async def delete_studiebok_chapter(
     order: int,
