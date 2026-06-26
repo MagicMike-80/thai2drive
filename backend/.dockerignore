@@ -3,9 +3,6 @@ __pycache__/
 *.pyc
 *.pyo
 
-# Local env
-.env
-
 # OS
 .DS_Store
 Thumbs.db
