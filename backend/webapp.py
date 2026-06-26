@@ -3065,6 +3065,20 @@ a { color:inherit; text-decoration:none; }
   z-index: 2 !important;
 }
 
+/* ── Universal neon border — ALL buttons, always rotating ── */
+.auth-btn, .home-sec-btn, .sb-tool-btn, .sb-nav-btn, .sb-video-btn,
+.fk-sc-btn, .end-btn-pri, .end-btn-sec, .paywall-buy-btn,
+.tsp-btn, .sp-btn-primary, .sp-btn-sm, .sp-btn-sm-ai, .sp-btn-sm-audio, .sp-btn-sm-bm,
+.hp-btn-pri, .hp-btn-sec, .ask-michael-btn, .hist-btn-pri, .hist-btn-sec,
+.back-btn, .logout-btn, .lang-btn, .seg-btn, .spd-btn, .vol-btn, .rv-done-btn,
+.lib-back-btn, .teacher-send-btn, .tm-chip-btn, .sb-edit-btn, .ai-expand-btn,
+.q-bookmark-btn, .sp-ai-tts-btn {
+  border: 1.5px solid transparent !important;
+  background: linear-gradient(var(--btn-bg, rgba(17,24,39,0.95)), var(--btn-bg, rgba(17,24,39,0.95))) padding-box,
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #00F5FF) border-box !important;
+  animation: neonFlow 3s linear infinite !important;
+}
+
 /* Global rotating neon borders for active/primary buttons and active flags */
 .lang-btn.active,
 .seg-btn.active,
