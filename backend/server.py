@@ -5233,11 +5233,41 @@ async def shutdown_db_client():
 # ─── Serve Expo web app at /quiz-app ────────────────────────────────────────
 _WEBAPP_DIR = Path(__file__).parent / "webapp"
 if _WEBAPP_DIR.exists():
-    app.mount("/quiz-app", StaticFiles(directory=str(_WEBAPP_DIR), html=True), name="webapp")
+    # Mount static asset subdirs directly (JS bundles, images, fonts)
+    for _static_sub in ["_expo", "assets"]:
+        _sub = _WEBAPP_DIR / _static_sub
+        if _sub.exists():
+            app.mount(
+                f"/quiz-app/{_static_sub}",
+                StaticFiles(directory=str(_sub)),
+                name=f"webapp-{_static_sub}",
+            )
+
+    @app.get("/quiz-app")
+    @app.get("/quiz-app/")
+    async def serve_webapp_root():
+        """Serve the Expo web app root."""
+        return FastAPIFileResponse(str(_WEBAPP_DIR / "index.html"))
+
+    @app.get("/quiz-app/favicon.ico")
+    async def serve_favicon():
+        fav = _WEBAPP_DIR / "favicon.ico"
+        if fav.exists():
+            return FastAPIFileResponse(str(fav))
+        raise HTTPException(status_code=404)
 
     @app.get("/quiz-app/{full_path:path}")
     async def serve_webapp(full_path: str):
-        """Fallback: serve index.html for all SPA routes."""
+        """Serve Expo Router pages: try exact → {name}.html → index.html fallback."""
+        # Exact file (catches .html, .ico, etc.)
+        exact = _WEBAPP_DIR / full_path
+        if exact.exists() and exact.is_file():
+            return FastAPIFileResponse(str(exact))
+        # Expo Router generates per-route HTML files: /library → library.html
+        html_file = _WEBAPP_DIR / (full_path.rstrip("/") + ".html")
+        if html_file.exists():
+            return FastAPIFileResponse(str(html_file))
+        # SPA client-side routing fallback
         index = _WEBAPP_DIR / "index.html"
         if index.exists():
             return FastAPIFileResponse(str(index))
