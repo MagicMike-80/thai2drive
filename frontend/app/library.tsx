@@ -55,15 +55,15 @@ export default function LibraryScreen() {
   }, []);
 
   const titleFor = (item: any) => {
-    if (language === 'th') return item.title_th || item.title_no || item.title || '';
-    if (language === 'en') return item.title_en || item.title_no || item.title || '';
-    return item.title_no || item.title || '';
+    if (language === 'th') return item.title_th || item.title_no || item.title_en || item.title || '';
+    if (language === 'en') return item.title_en || item.title_no || item.title_th || item.title || '';
+    return item.title_no || item.title_en || item.title_th || item.title || '';
   };
 
   const descFor = (item: any) => {
-    if (language === 'th') return item.description_th || item.description_no || item.description || '';
-    if (language === 'en') return item.description_en || item.description_no || item.description || '';
-    return item.description_no || item.description || '';
+    if (language === 'th') return item.description_th || item.description_no || item.description_en || item.description || '';
+    if (language === 'en') return item.description_en || item.description_no || item.description_th || item.description || '';
+    return item.description_no || item.description_en || item.description_th || item.description || '';
   };
 
   // Unified audio toggle — used by both videos and podcasts tabs
