@@ -470,4 +470,15 @@ export const api = {
     params.append('limit', limit.toString());
     return fetchJSON(`${API_BASE}/videos/for-topic?${params}`);
   },
+
+  // ==================== BIBLIOTEK ====================
+  async getLearningVideos(language?: string): Promise<LearningVideo[]> {
+    const params = language ? `?language=${language}` : '';
+    return fetchJSON(`${API_BASE}/learning-videos${params}`);
+  },
+
+  async getLearningPodcasts(language?: string): Promise<any[]> {
+    const params = language ? `?language=${language}` : '';
+    return fetchJSON(`${API_BASE}/learning-podcasts${params}`);
+  },
 };
