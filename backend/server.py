@@ -4365,6 +4365,16 @@ async def admin_delete_podcast(podcast_id: str, _: dict = Depends(require_admin)
 
 # ── Public podcast list ──────────────────────────────────────────────────────
 
+@api_router.get("/learning-videos")
+async def list_learning_videos(language: str = ""):
+    """Return all active videos for the library screen, optionally filtered by language."""
+    query = {"active": True}
+    if language in ("no", "th", "en"):
+        query["language"] = language
+    results = await db.learning_videos.find(query).sort("title_no", 1).to_list(500)
+    return [_serialize_video(r) for r in results]
+
+
 @api_router.get("/learning-podcasts")
 async def list_learning_podcasts(language: str = ""):
     """Return all active podcasts, optionally filtered by language (no/th/en)."""
