@@ -4,7 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse as FastAPIFileResponse
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
-from motor.motor_asyncio import AsyncIOMotorClient
+from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorGridFSBucket
 import os
 import logging
 import hashlib
@@ -4361,6 +4361,114 @@ async def admin_delete_podcast(podcast_id: str, _: dict = Depends(require_admin)
     if result.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Podcast not found")
     return {"message": "Deleted", "id": podcast_id}
+
+
+# ── Public podcast list ──────────────────────────────────────────────────────
+
+@api_router.get("/learning-podcasts")
+async def list_learning_podcasts(language: str = ""):
+    """Return all active podcasts, optionally filtered by language (no/th/en)."""
+    query = {"active": True}
+    if language in ("no", "th", "en"):
+        query["language"] = language
+    results = await db.learning_podcasts.find(query).sort("title_no", 1).to_list(500)
+    return [_serialize_podcast(r) for r in results]
+
+
+# ── GridFS audio upload / stream ─────────────────────────────────────────────
+
+@api_router.post("/admin/audio/upload")
+async def admin_upload_audio(
+    file: UploadFile = File(...),
+    _: dict = Depends(require_admin),
+):
+    """Upload an audio/video file to MongoDB GridFS. Returns {file_id, url}."""
+    MAX = 120 * 1024 * 1024  # 120 MB
+    raw = await file.read()
+    if len(raw) > MAX:
+        raise HTTPException(status_code=413, detail="Max 120 MB")
+    bucket = AsyncIOMotorGridFSBucket(db)
+    import io as _io
+    file_id = await bucket.upload_from_stream(
+        file.filename or "audio",
+        _io.BytesIO(raw),
+        metadata={"content_type": file.content_type or "audio/mpeg"},
+    )
+    return {"file_id": str(file_id), "url": f"/api/audio/{str(file_id)}"}
+
+
+@api_router.delete("/admin/audio/{file_id}")
+async def admin_delete_audio(file_id: str, _: dict = Depends(require_admin)):
+    """Delete an audio file from GridFS."""
+    from bson import ObjectId
+    try:
+        oid = ObjectId(file_id)
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid file_id")
+    bucket = AsyncIOMotorGridFSBucket(db)
+    await bucket.delete(oid)
+    return {"ok": True}
+
+
+@api_router.get("/audio/{file_id}")
+async def stream_audio(file_id: str, request: Request):
+    """Stream audio from GridFS with HTTP 206 Range support."""
+    from bson import ObjectId
+    from starlette.responses import StreamingResponse
+    try:
+        oid = ObjectId(file_id)
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid file_id")
+
+    bucket = AsyncIOMotorGridFSBucket(db)
+    cursor = bucket.find({"_id": oid})
+    docs = await cursor.to_list(1)
+    if not docs:
+        raise HTTPException(status_code=404, detail="Audio not found")
+
+    doc = docs[0]
+    total = doc.length
+    ct = (doc.metadata or {}).get("content_type", "audio/mpeg")
+
+    range_hdr = request.headers.get("Range", "")
+    m = re.match(r"bytes=(\d+)-(\d*)", range_hdr)
+    if m:
+        start = int(m.group(1))
+        end = int(m.group(2)) if m.group(2) else total - 1
+        end = min(end, total - 1)
+        length = end - start + 1
+        grid_out = await bucket.open_download_stream(oid)
+        await grid_out.seek(start)
+        async def _range_gen():
+            remaining = length
+            while remaining > 0:
+                chunk = await grid_out.read(min(65536, remaining))
+                if not chunk:
+                    break
+                remaining -= len(chunk)
+                yield chunk
+        return StreamingResponse(
+            _range_gen(), status_code=206,
+            media_type=ct,
+            headers={
+                "Content-Range": f"bytes {start}-{end}/{total}",
+                "Accept-Ranges": "bytes",
+                "Content-Length": str(length),
+            },
+        )
+
+    # Full stream
+    grid_out = await bucket.open_download_stream(oid)
+    async def _full_gen():
+        while True:
+            chunk = await grid_out.read(65536)
+            if not chunk:
+                break
+            yield chunk
+    return StreamingResponse(
+        _full_gen(), media_type=ct,
+        headers={"Content-Length": str(total), "Accept-Ranges": "bytes"},
+    )
 
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
