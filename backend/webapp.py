@@ -523,6 +523,23 @@ a { color:inherit; text-decoration:none; }
   hyphens: none;
 }
 .hsm-card:hover .hsm-label { color: #FF9933; }
+.hsm-exam-timer {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.82rem; font-weight: 700; letter-spacing: 2px;
+  color: #FF3B3B;
+  background: #1a0000;
+  border: 1.5px solid #FF3B3B;
+  border-radius: 5px;
+  padding: 3px 5px;
+  text-shadow: 0 0 8px rgba(255,59,59,0.9), 0 0 16px rgba(255,59,59,0.5);
+  box-shadow: 0 0 8px rgba(255,59,59,0.35), inset 0 0 6px rgba(255,0,0,0.1);
+  animation: exam-glow 1.2s ease-in-out infinite alternate;
+  display: inline-block; line-height: 1;
+}
+@keyframes exam-glow {
+  from { box-shadow: 0 0 4px rgba(255,59,59,0.25), inset 0 0 4px rgba(255,0,0,0.05); }
+  to   { box-shadow: 0 0 14px rgba(255,59,59,0.7), inset 0 0 8px rgba(255,0,0,0.15); }
+}
 [data-theme="light"] .hsm-card {
   background: rgba(255,255,255,0.88);
   border-color: rgba(0, 82, 255, 0.12);
@@ -3301,7 +3318,7 @@ a { color:inherit; text-decoration:none; }
         <div class="hsm-fade-right"></div>
         <div class="home-scroll-menu" id="homeScrollMenu">
           <button class="hsm-card" onclick="startExam()">
-            <span class="hsm-icon">📋</span>
+            <span class="hsm-icon"><span class="hsm-exam-timer">90:00</span></span>
             <span class="hsm-label" data-hsm-key="exam_short">Eksamen</span>
           </button>
           <button class="hsm-card" onclick="startDailyTest()">
