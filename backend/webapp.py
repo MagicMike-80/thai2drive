@@ -2813,7 +2813,7 @@ a { color:inherit; text-decoration:none; }
 }
 .michael-card-left  { display:flex; align-items:center; gap:12px; }
 .michael-card-avatar {
-  width:44px; height:44px; border-radius:50%;
+  width:60px; height:60px; border-radius:50%;
   background:#1E3A5F; border:1.5px solid rgba(59,130,246,.5);
   display:flex; align-items:center; justify-content:center;
   font-size:22px; flex-shrink:0;
@@ -3851,7 +3851,7 @@ a { color:inherit; text-decoration:none; }
       <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span><span data-key="history">Historikk</span>
     </button>
     <button class="bn-tab bn-tab-michael" id="bnTeacher" onclick="showTab('teacher')">
-      <span class="bn-icon"><img src="/api/assets/michael_avatar.png" style="width:24px;height:24px;border-radius:50%;object-fit:cover;" alt="Michael"></span><span data-key="teacher">Michael</span>
+      <span class="bn-icon"><img src="/api/assets/michael_avatar.png" style="width:30px;height:30px;border-radius:50%;object-fit:cover;" alt="Michael"></span><span data-key="teacher">Michael</span>
     </button>
     <button class="bn-tab" id="bnSigns" onclick="showTab('signs')">
       <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 22 2 22"/><line x1="12" y1="9" x2="12" y2="15"/><circle cx="12" cy="18" r="0.5" fill="currentColor"/></svg></span><span data-key="signs">Skilt</span>
