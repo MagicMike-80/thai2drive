@@ -1541,6 +1541,18 @@ a { color:inherit; text-decoration:none; }
 }
 .vid-dur      { font-size:.63rem; color:var(--muted); margin-top:2px; }
 .vid-arrow    { font-size:.90rem; color:var(--orange); flex-shrink:0; opacity:.65; }
+.vid-card-local {
+  display:flex; flex-direction:column; gap:8px;
+  padding:12px; border-radius:11px;
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.08);
+  transition:border-color .18s;
+}
+.vid-card-local:hover { border-color:rgba(255,153,51,.30); }
+.vid-player {
+  width:100%; border-radius:6px; outline:none;
+  max-height:220px; background:#000;
+}
 /* Wrapper — adds section label above the card */
 .vid-section  { display:flex; flex-direction:column; gap:6px; }
 .vid-sec-lbl  {
@@ -6777,10 +6789,28 @@ function buildVideoCard(v) {
     (v.title_no || v.title_en || v.title_th || '')
   );
   if (!title) return '';
-  var url   = escH(v.youtube_url || '');
+  var dur = _fmtDur(v.duration_seconds);
+
+  // Local mp4 file
+  var rawPath = v.file_path || '';
+  if (rawPath && rawPath.indexOf('/public_assets/') === 0) {
+    rawPath = '/api/assets/' + rawPath.substring('/public_assets/'.length);
+  }
+  if (rawPath) {
+    return '<div class="vid-card vid-card-local">'
+      + '<div class="vid-info">'
+        + '<div class="vid-lbl">' + escH(t('video_short')) + '</div>'
+        + '<div class="vid-title">' + title + '</div>'
+        + (dur ? '<div class="vid-dur">' + dur + '</div>' : '')
+      + '</div>'
+      + '<video class="vid-player" controls preload="none" src="' + escH(rawPath) + '"></video>'
+      + '</div>';
+  }
+
+  // YouTube link
+  var url = escH(v.youtube_url || '');
   if (!url) return '';
   var thumb = v.thumbnail_url || _ytThumb(v.youtube_url);
-  var dur   = _fmtDur(v.duration_seconds);
   return '<a class="vid-card" href="' + url + '" target="_blank" rel="noopener">'
     + '<div class="vid-thumb-wrap">'
       + (thumb ? '<img class="vid-thumb" src="' + escH(thumb) + '" loading="lazy" alt="">' : '▶')
