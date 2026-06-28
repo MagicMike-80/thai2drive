@@ -3322,7 +3322,7 @@ a { color:inherit; text-decoration:none; }
       <!-- Michael Trafikklærer card -->
       <button class="michael-card" onclick="showTab('teacher')">
         <div class="michael-card-left">
-          <div class="michael-card-avatar">🚗</div>
+          <div class="michael-card-avatar"><img src="/api/assets/michael_avatar.png" style="width:100%;height:100%;border-radius:50%;object-fit:cover;" alt="Michael"></div>
           <div class="michael-card-text">
             <div class="michael-card-name" data-key="teacher_name">Michael Trafikklærer</div>
             <div class="michael-card-sub" id="michaelCardSub">Still et spørsmål om trafikk</div>
@@ -3851,7 +3851,7 @@ a { color:inherit; text-decoration:none; }
       <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span><span data-key="history">Historikk</span>
     </button>
     <button class="bn-tab bn-tab-michael" id="bnTeacher" onclick="showTab('teacher')">
-      <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1 .4-1.4 .9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6 .4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/><path d="M9 17h6"/></svg></span><span data-key="teacher">Michael</span>
+      <span class="bn-icon"><img src="/api/assets/michael_avatar.png" style="width:24px;height:24px;border-radius:50%;object-fit:cover;" alt="Michael"></span><span data-key="teacher">Michael</span>
     </button>
     <button class="bn-tab" id="bnSigns" onclick="showTab('signs')">
       <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 22 2 22"/><line x1="12" y1="9" x2="12" y2="15"/><circle cx="12" cy="18" r="0.5" fill="currentColor"/></svg></span><span data-key="signs">Skilt</span>
