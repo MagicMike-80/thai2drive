@@ -3308,10 +3308,6 @@ a { color:inherit; text-decoration:none; }
             <span class="hsm-icon">📅</span>
             <span class="hsm-label" data-hsm-key="daily_short">Daglig test</span>
           </button>
-          <button class="hsm-card" onclick="showTab('signs')">
-            <span class="hsm-icon">🛑</span>
-            <span class="hsm-label" data-hsm-key="signs_short">Skilt</span>
-          </button>
           <button class="hsm-card" onclick="showForbikjoring()">
             <span class="hsm-icon">🚗</span>
             <span class="hsm-label" data-hsm-key="fk_short">Trafikk-matte</span>
@@ -3319,14 +3315,6 @@ a { color:inherit; text-decoration:none; }
           <button class="hsm-card" onclick="showTab('library')">
             <span class="hsm-icon">📚</span>
             <span class="hsm-label" data-hsm-key="lib_short">Bibliotek</span>
-          </button>
-          <button class="hsm-card" onclick="showTab('bookmarks')">
-            <span class="hsm-icon">🔖</span>
-            <span class="hsm-label" data-hsm-key="bm_short">Bokmerker</span>
-          </button>
-          <button class="hsm-card" onclick="showTab('history')">
-            <span class="hsm-icon">📊</span>
-            <span class="hsm-label" data-hsm-key="hist_short">Historikk</span>
           </button>
         </div>
       </div>

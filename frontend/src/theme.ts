@@ -10,6 +10,12 @@ export interface ThemeColors {
   textMuted: string;
   accent: string;
   accentBg: string;
+  neonCyan: string;
+  neonCyanGlow: string;
+  neonMagenta: string;
+  neonMagentaGlow: string;
+  neonOrange: string;
+  neonOrangeGlow: string;
   correct: string;
   correctBg: string;
   incorrect: string;
@@ -24,45 +30,57 @@ export interface ThemeColors {
 }
 
 export const darkTheme: ThemeColors = {
-  bg: '#0F172A',
-  card: '#1A2844',            // richer deep-navy card (was #1E293B)
-  cardBorder: 'rgba(42, 68, 108, 0.55)',  // navy-tinted border (was rgba(51,65,85,0.4))
-  text: '#F8FAFC',
+  bg: '#0a0f1c',              // Deep matte dark blue (design spec)
+  card: '#131a2e',            // Secondary surface (design spec)
+  cardBorder: 'rgba(0, 217, 255, 0.15)',  // Subtle cyan border
+  text: '#e8eaed',            // Light gray text (design spec)
   textSecondary: '#94A3B8',
   textMuted: '#64748B',
-  accent: '#F59E0B',
-  accentBg: 'rgba(245, 158, 11, 0.12)',
+  accent: '#ff0080',          // Magenta primary action
+  accentBg: 'rgba(255, 0, 128, 0.12)',    // Magenta-tinted background
+  neonCyan: '#00d9ff',        // Cyan neon (active states, highlights)
+  neonCyanGlow: 'rgba(0, 217, 255, 0.4)', // Cyan glow for box-shadow
+  neonMagenta: '#ff0080',     // Magenta neon (interactive elements, CTA)
+  neonMagentaGlow: 'rgba(255, 0, 128, 0.4)', // Magenta glow
+  neonOrange: '#ff8c00',      // Orange neon (warnings, secondary actions)
+  neonOrangeGlow: 'rgba(255, 140, 0, 0.4)', // Orange glow
   correct: '#10B981',
   correctBg: 'rgba(16, 185, 129, 0.07)',
   incorrect: '#EF4444',
   incorrectBg: 'rgba(239, 68, 68, 0.07)',
   progressBg: '#1A2844',
   answerBg: '#1A2844',
-  answerBorder: 'rgba(42, 68, 108, 0.55)',
-  letterBg: '#243561',        // navy-blue option chips (was #334155)
+  answerBorder: 'rgba(0, 217, 255, 0.25)',  // Cyan border for answer options
+  letterBg: '#243561',        // Navy-blue option chips
   letterText: '#F8FAFC',
-  divider: 'rgba(42, 68, 108, 0.6)',
+  divider: 'rgba(0, 217, 255, 0.2)',     // Subtle cyan dividers
   statusBar: 'light',
 };
 
 export const lightTheme: ThemeColors = {
   bg: '#F8FAFC',
   card: '#FFFFFF',
-  cardBorder: 'rgba(180, 210, 238, 0.9)',  // visible blue-grey border (was rgba(226,232,240,0.8))
+  cardBorder: 'rgba(0, 217, 255, 0.2)',     // Subtle cyan border
   text: '#0F172A',
-  textSecondary: '#475569',   // darker for better contrast (was #64748B)
-  textMuted: '#5E7A99',       // readable muted (was #94A3B8 — too light)
-  accent: '#D97706',
-  accentBg: 'rgba(217, 119, 6, 0.09)',
-  correct: '#047857',         // slightly richer green (was #059669)
+  textSecondary: '#475569',   // Darker for better contrast
+  textMuted: '#5E7A99',       // Readable muted
+  accent: '#ff0080',          // Magenta primary action
+  accentBg: 'rgba(255, 0, 128, 0.09)',      // Magenta-tinted background
+  neonCyan: '#00b8cc',        // Cyan (darker for light mode)
+  neonCyanGlow: 'rgba(0, 184, 204, 0.3)',   // Cyan glow
+  neonMagenta: '#e01e5a',     // Magenta (darker for light mode)
+  neonMagentaGlow: 'rgba(224, 30, 90, 0.3)', // Magenta glow
+  neonOrange: '#dd6620',      // Orange (darker for light mode)
+  neonOrangeGlow: 'rgba(221, 102, 32, 0.3)', // Orange glow
+  correct: '#047857',         // Richer green
   correctBg: 'rgba(4, 120, 87, 0.07)',
   incorrect: '#DC2626',
   incorrectBg: 'rgba(220, 38, 38, 0.07)',
-  progressBg: '#C8DAF0',      // clearly visible track (was #E2E8F0)
+  progressBg: '#C8DAF0',      // Clearly visible track
   answerBg: '#FFFFFF',
-  answerBorder: '#C2D5EC',    // visible separator (was #E2E8F0)
-  letterBg: '#DCE8F5',        // clearly distinct from white card (was #F1F5F9)
+  answerBorder: 'rgba(0, 184, 204, 0.3)',   // Cyan border
+  letterBg: '#DCE8F5',        // Clearly distinct from card
   letterText: '#0F172A',
-  divider: '#BDD0E8',         // clearly visible (was #E2E8F0)
+  divider: 'rgba(0, 184, 204, 0.15)',       // Subtle cyan dividers
   statusBar: 'dark',
 };
