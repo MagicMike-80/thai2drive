@@ -10,7 +10,24 @@ import { api } from '../src/services/api';
 import { LanguageSwitcher } from '../src/components/LanguageSwitcher';
 import { CoachBanner } from '../src/components/CoachBanner';
 import { BottomNavBar } from '../src/components/BottomNavBar';
-import { ExpandableButtonGroup } from '../src/components/ExpandableButtonGroup';
+
+// Gradient border button wrapper
+const GradientBorderButton = ({ children, onPress, activeOpacity = 0.7 }: any) => {
+  return (
+    <TouchableOpacity onPress={onPress} activeOpacity={activeOpacity}>
+      <LinearGradient
+        colors={['#06FFA5', '#00BFFF', '#9D4EDD', '#FF1493', '#06FFA5']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={st.gradientBorder}
+      >
+        <View style={st.carouselBtnInner}>
+          {children}
+        </View>
+      </LinearGradient>
+    </TouchableOpacity>
+  );
+};
 
 const T2D_ICON = require('../assets/images/t2d-icon.png');
 
@@ -214,165 +231,116 @@ export default function HomeScreen() {
         <View style={st.secondaryRow}>
           <TouchableOpacity
             testID="exam-mode-btn"
-            style={[
-              st.secBtn,
-              {
-                borderColor: '#FF1493',
-                backgroundColor: 'rgba(26, 40, 68, 0.65)',
-                shadowColor: '#FF1493',
-                shadowOffset: { width: 0, height: 0 },
-                shadowOpacity: 0.85,
-                shadowRadius: 12,
-                elevation: 5,
-              }
-            ]}
+            style={[st.secBtn, { borderColor: c.cardBorder, backgroundColor: c.card }]}
             onPress={() => { if (locked) handleLockedNav(); else router.push({ pathname: '/quiz', params: { mode: 'exam', category: 'all' } }); }}
             activeOpacity={0.7}
           >
-            <Ionicons name="school-outline" size={18} color="#FF1493" />
-            <Text style={[st.secText, { color: '#FF1493' }]}>{t.exam}</Text>
+            <Ionicons name="school-outline" size={18} color={c.accent} />
+            <Text style={[st.secText, { color: c.text }]}>{t.exam}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             testID="daily-test-btn"
-            style={[
-              st.secBtn,
-              {
-                borderColor: dailyDone ? c.correct : '#FF9900',
-                backgroundColor: 'rgba(26, 40, 68, 0.65)',
-                shadowColor: dailyDone ? c.correct : '#FF9900',
-                shadowOffset: { width: 0, height: 0 },
-                shadowOpacity: 0.75,
-                shadowRadius: 10,
-                elevation: 5,
-              }
-            ]}
+            style={[st.secBtn, { borderColor: dailyDone ? c.correct : c.accent, backgroundColor: c.card }]}
             onPress={() => router.push({ pathname: '/quiz', params: { mode: 'daily', category: 'all' } })}
             activeOpacity={0.7}
           >
-            <Ionicons name={dailyDone ? 'checkmark-circle' : 'today-outline'} size={18} color={dailyDone ? c.correct : '#FF9900'} />
-            <Text style={[st.secText, { color: dailyDone ? c.correct : '#FF9900' }]}>{t.dailyTest}</Text>
+            <Ionicons name={dailyDone ? 'checkmark-circle' : 'today-outline'} size={18} color={dailyDone ? c.correct : c.accent} />
+            <Text style={[st.secText, { color: dailyDone ? c.correct : c.text }]}>{t.dailyTest}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             testID="smart-practice-btn"
-            style={[
-              st.secBtn,
-              {
-                borderColor: '#00FFFF',
-                backgroundColor: 'rgba(26, 40, 68, 0.65)',
-                shadowColor: '#00FFFF',
-                shadowOffset: { width: 0, height: 0 },
-                shadowOpacity: 0.8,
-                shadowRadius: 12,
-                elevation: 5,
-              }
-            ]}
+            style={[st.secBtn, { borderColor: c.cardBorder, backgroundColor: c.card }]}
             onPress={() => { if (locked) handleLockedNav(); else router.push({ pathname: '/quiz', params: { mode: 'smart', category: 'all' } }); }}
             activeOpacity={0.7}
           >
-            <Ionicons name="flash-outline" size={18} color="#00FFFF" />
-            <Text style={[st.secText, { color: '#00FFFF' }]}>{t.smartPractice}</Text>
+            <Ionicons name="flash-outline" size={18} color={c.accent} />
+            <Text style={[st.secText, { color: c.text }]}>{t.smartPractice}</Text>
           </TouchableOpacity>
         </View>
 
-        {/* Quick-access buttons: 3 expandable groups */}
-        <View style={st.quickRow}>
-          {/* Group 1: Lærer (Instructor) — cyan parent */}
-          <ExpandableButtonGroup
-            parentId="teacher"
-            parentLabel={t.michaelTeacher}
-            parentIcon="emoji"
-            parentColor="#00FFFF"
-            avatar={require('../assets/michael_avatar.png')}
-            children={[
-              {
-                id: 'library',
-                label: t.library,
-                icon: 'library-outline',
-                color: '#FF69B4',
-                onPress: () => router.push('/library'),
-              },
-              {
-                id: 'social',
-                label: t.social,
-                icon: 'share-social-outline',
-                color: '#FF1493',
-                onPress: () => router.push('/social'),
-              },
-              {
-                id: 'book',
-                label: t.studyBook,
-                icon: 'book-outline',
-                color: '#00FFFF',
-                onPress: () => router.push('/book'),
-              },
-            ]}
-          />
+        {/* Horizontal carousel: Quick-access buttons — compact mobile-friendly layout */}
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          scrollEventThrottle={16}
+          style={st.carouselContainer}
+          contentContainerStyle={st.carouselContent}
+        >
+          {/* Eksamen */}
+          <GradientBorderButton
+            onPress={() => { if (locked) handleLockedNav(); else router.push({ pathname: '/quiz', params: { mode: 'exam', category: 'all' } }); }}
+          >
+            <Ionicons name="school-outline" size={20} color={c.accent} />
+            <Text style={[st.carouselLabel, { color: c.text }]}>{t.exam}</Text>
+          </GradientBorderButton>
 
-          {/* Group 2: Skilt (Signs) — lime parent */}
-          <ExpandableButtonGroup
-            parentId="signs"
-            parentLabel={t.signGallery}
-            parentIcon="warning-outline"
-            parentColor="#00FFFF"
-            children={[
-              {
-                id: 'traffic-math',
-                label: t.trafficMath,
-                icon: 'speedometer-outline',
-                color: '#FF6600',
-                onPress: () => {
-                  if (isDesktopWeb) setShowTrafficPanel(true);
-                  else router.push('/traffic-math');
-                },
-              },
-              {
-                id: 'stats',
-                label: t.myStats,
-                icon: 'bar-chart-outline',
-                color: '#00FFFF',
-                onPress: () => router.push('/stats'),
-              },
-              {
-                id: 'ai',
-                label: t.aiInsights,
-                icon: 'sparkles',
-                color: '#FF6600',
-                onPress: () => router.push('/ai-dashboard'),
-              },
-            ]}
-          />
+          {/* Dagens test */}
+          <GradientBorderButton
+            onPress={() => router.push({ pathname: '/quiz', params: { mode: 'daily', category: 'all' } })}
+          >
+            <Ionicons name={dailyDone ? 'checkmark-circle' : 'today-outline'} size={20} color={dailyDone ? c.correct : c.accent} />
+            <Text style={[st.carouselLabel, { color: dailyDone ? c.correct : c.text }]}>{t.dailyTest}</Text>
+          </GradientBorderButton>
 
-          {/* Group 3: Læring (Learning) — magenta parent */}
-          <ExpandableButtonGroup
-            parentId="learning"
-            parentLabel="Læring"
-            parentIcon="book-outline"
-            parentColor="#FF1493"
-            children={[
-              {
-                id: 'book',
-                label: t.studyBook,
-                icon: 'book-outline',
-                color: '#00FFFF',
-                onPress: () => router.push('/book'),
-              },
-              {
-                id: 'ai-insights',
-                label: t.aiInsights,
-                icon: 'sparkles',
-                color: '#FF1493',
-                onPress: () => router.push('/ai-dashboard'),
-              },
-              {
-                id: 'glossary',
-                label: t.glossary,
-                icon: 'language-outline',
-                color: '#FF1493',
-                onPress: () => router.push('/glossary'),
-              },
-            ]}
-          />
-        </View>
+          {/* Smart øving */}
+          <GradientBorderButton
+            onPress={() => { if (locked) handleLockedNav(); else router.push({ pathname: '/quiz', params: { mode: 'smart', category: 'all' } }); }}
+          >
+            <Ionicons name="flash-outline" size={20} color={c.accent} />
+            <Text style={[st.carouselLabel, { color: c.text }]}>{t.smartPractice}</Text>
+          </GradientBorderButton>
+
+          {/* Trafikklærer */}
+          <GradientBorderButton
+            onPress={() => router.push('/teacher')}
+          >
+            <Image source={require('../assets/michael_avatar.png')} style={st.carouselAvatar} />
+            <Text style={[st.carouselLabel, { color: c.accent, fontWeight: '700' }]}>Michael</Text>
+          </GradientBorderButton>
+
+          {/* Trafikkskilt */}
+          <GradientBorderButton
+            onPress={() => router.push('/signs')}
+          >
+            <Ionicons name="warning-outline" size={20} color={c.accent} />
+            <Text style={[st.carouselLabel, { color: c.text }]}>{t.signGallery}</Text>
+          </GradientBorderButton>
+
+          {/* Læringsbok */}
+          <GradientBorderButton
+            onPress={() => router.push('/book')}
+          >
+            <Ionicons name="book-outline" size={20} color={c.accent} />
+            <Text style={[st.carouselLabel, { color: c.text }]}>{t.studyBook}</Text>
+          </GradientBorderButton>
+
+          {/* Min statistikk */}
+          <GradientBorderButton
+            onPress={() => router.push('/stats')}
+          >
+            <Ionicons name="bar-chart-outline" size={20} color={c.accent} />
+            <Text style={[st.carouselLabel, { color: c.text }]}>{t.myStats}</Text>
+          </GradientBorderButton>
+
+          {/* AI Analyse */}
+          <GradientBorderButton
+            onPress={() => router.push('/ai-dashboard')}
+          >
+            <Ionicons name="sparkles" size={20} color={c.accent} />
+            <Text style={[st.carouselLabel, { color: c.text }]}>{t.aiInsights}</Text>
+          </GradientBorderButton>
+
+          {/* Trafikk-matte */}
+          <GradientBorderButton
+            onPress={() => {
+              if (isDesktopWeb) setShowTrafficPanel(true);
+              else router.push('/traffic-math');
+            }}
+          >
+            <Ionicons name="speedometer-outline" size={20} color={c.accent} />
+            <Text style={[st.carouselLabel, { color: c.text }]}>{t.trafficMath}</Text>
+          </GradientBorderButton>
+        </ScrollView>
 
         {/* Progress — single clean row, no card nesting */}
         {progress.total_questions_answered > 0 && (
@@ -401,13 +369,8 @@ export default function HomeScreen() {
             style={[
               st.premBanner,
               {
-                backgroundColor: 'rgba(26, 40, 68, 0.65)',
+                backgroundColor: c.card,
                 borderColor: c.accent,
-                shadowColor: c.accent,
-                shadowOffset: { width: 0, height: 0 },
-                shadowOpacity: 0.75,
-                shadowRadius: 10,
-                elevation: 5,
               }
             ]}
             onPress={() => router.push('/paywall')}
@@ -425,13 +388,8 @@ export default function HomeScreen() {
             style={[
               st.premActive,
               {
-                backgroundColor: 'rgba(26, 40, 68, 0.65)',
+                backgroundColor: c.card,
                 borderColor: c.correct,
-                shadowColor: c.correct,
-                shadowOffset: { width: 0, height: 0 },
-                shadowOpacity: 0.75,
-                shadowRadius: 10,
-                elevation: 5,
               }
             ]}
           >
@@ -479,6 +437,14 @@ const st = StyleSheet.create({
   quickRow:  { flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginBottom: 28 },
   quickBtn:  { flex: 1, alignItems: 'center', gap: 8, borderRadius: 14, borderWidth: 1, paddingVertical: 16 },
   quickLabel:{ fontSize: 12, fontWeight: '600', textAlign: 'center' },
+  // Horizontal carousel — matches web layout (icon above label, square buttons)
+  carouselContainer: { marginBottom: 28, marginHorizontal: -24, paddingHorizontal: 24 },
+  carouselContent: { gap: 12, paddingRight: 24 },
+  gradientBorder: { padding: 2, borderRadius: 12, width: 100, minWidth: 100 },
+  carouselBtnInner: { flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 6, borderRadius: 11, backgroundColor: '#0B1226', paddingHorizontal: 14, paddingVertical: 14, width: '100%' },
+  carouselBtn: { flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 6, borderRadius: 12, borderWidth: 1, paddingHorizontal: 14, paddingVertical: 14, minWidth: 100, width: 100 },
+  carouselLabel: { fontSize: 12, fontWeight: '600', textAlign: 'center', lineHeight: 14 },
+  carouselAvatar: { width: 28, height: 28, borderRadius: 14 },
   // Language hint
   langHintWrap: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 99, alignItems: 'flex-start', justifyContent: 'flex-start', paddingTop: 70, paddingLeft: 16 },
   langHintDismiss: { alignItems: 'center' },

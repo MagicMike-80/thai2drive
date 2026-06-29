@@ -71,14 +71,9 @@ export function BottomNavBar({ activeTab }: BottomNavBarProps) {
             style={[
               styles.tab,
               active && {
-                backgroundColor: 'rgba(0, 255, 255, 0.12)',
-                borderColor: '#00FFFF',
+                backgroundColor: c.accentBg,
+                borderColor: c.accent,
                 borderWidth: 1.5,
-                // Inner glow
-                shadowColor: '#00FFFF',
-                shadowOffset: { width: 0, height: 0 },
-                shadowOpacity: 0.6,
-                shadowRadius: 6,
               },
             ]}
             onPress={() => navigateTo(tab.route)}
@@ -87,9 +82,9 @@ export function BottomNavBar({ activeTab }: BottomNavBarProps) {
             <Ionicons
               name={active ? tab.activeIcon : tab.inactiveIcon}
               size={18}
-              color={active ? '#00FFFF' : c.textMuted}
+              color={active ? c.accent : c.textMuted}
             />
-            <Text style={[styles.label, { color: active ? '#00FFFF' : c.textMuted }]}>
+            <Text style={[styles.label, { color: active ? c.accent : c.textMuted }]}>
               {labels[tab.id] || tab.id}
             </Text>
           </TouchableOpacity>
@@ -103,7 +98,7 @@ export function BottomNavBar({ activeTab }: BottomNavBarProps) {
   if (Platform.OS === 'ios') {
     return (
       <View style={styles.wrapper}>
-        <BlurView intensity={80} tint="dark" style={[styles.blur, { borderColor: 'rgba(0, 255, 255, 0.3)' }]}>
+        <BlurView intensity={80} tint="dark" style={[styles.blur, { borderColor: c.cardBorder }]}>
           {renderContent()}
         </BlurView>
       </View>
@@ -112,7 +107,7 @@ export function BottomNavBar({ activeTab }: BottomNavBarProps) {
 
   return (
     <View style={styles.wrapper}>
-      <View style={[styles.blur, { backgroundColor: 'rgba(11, 18, 34, 0.85)', borderColor: 'rgba(0, 255, 255, 0.25)' }]}>
+      <View style={[styles.blur, { backgroundColor: 'rgba(11, 18, 34, 0.92)', borderColor: c.cardBorder }]}>
         {renderContent()}
       </View>
     </View>
@@ -127,10 +122,10 @@ const styles = StyleSheet.create({
     right: 20,
     zIndex: 1000,
     elevation: 10,
-    shadowColor: '#00FFFF',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.6,
-    shadowRadius: 15,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 12,
   },
   blur: {
     borderRadius: 24,

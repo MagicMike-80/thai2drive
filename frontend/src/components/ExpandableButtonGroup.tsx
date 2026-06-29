@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, Animated, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useAppStore } from '../store/appStore';
 
 interface ButtonChild {
   id: string;
@@ -29,6 +30,7 @@ export const ExpandableButtonGroup: React.FC<ExpandableButtonGroupProps> = ({
   onParentPress,
   avatar,
 }) => {
+  const { colors: c } = useAppStore();
   const [expanded, setExpanded] = useState(false);
   const [selectedChildId, setSelectedChildId] = useState<string | null>(null);
 
@@ -54,13 +56,8 @@ export const ExpandableButtonGroup: React.FC<ExpandableButtonGroupProps> = ({
         style={[
           st.parentBtn,
           {
-            backgroundColor: 'rgba(26, 40, 68, 0.65)',
+            backgroundColor: c.card,
             borderColor: parentColor,
-            shadowColor: parentColor,
-            shadowOffset: { width: 0, height: 0 },
-            shadowOpacity: selectedChildId === parentId ? 0.9 : 0.65,
-            shadowRadius: selectedChildId === parentId ? 18 : 10,
-            elevation: selectedChildId === parentId ? 8 : 4,
           },
         ]}
       >
@@ -94,14 +91,8 @@ export const ExpandableButtonGroup: React.FC<ExpandableButtonGroupProps> = ({
               style={[
                 st.childBtn,
                 {
-                  backgroundColor: 'rgba(26, 40, 68, 0.75)',
+                  backgroundColor: c.card,
                   borderColor: child.color,
-                  shadowColor: child.color,
-                  shadowOffset: { width: 0, height: 0 },
-                  shadowOpacity: selectedChildId === child.id ? 0.9 : 0.6,
-                  shadowRadius: selectedChildId === child.id ? 15 : 8,
-                  elevation: selectedChildId === child.id ? 6 : 3,
-                  // Stagger animation
                   opacity: expanded ? 1 : 0,
                   transform: [{ scale: expanded ? 1 : 0.5 }],
                 },

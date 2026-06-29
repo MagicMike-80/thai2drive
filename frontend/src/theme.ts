@@ -1,4 +1,4 @@
-// Theme definitions for Thai2Drive
+// Theme definitions for Thai2Drive — matches webapp.py CSS variables
 export type ThemeMode = 'light' | 'dark' | 'system';
 
 export interface ThemeColors {
@@ -30,57 +30,57 @@ export interface ThemeColors {
 }
 
 export const darkTheme: ThemeColors = {
-  bg: '#0a0f1c',              // Deep matte dark blue (design spec)
-  card: '#131a2e',            // Secondary surface (design spec)
-  cardBorder: 'rgba(0, 217, 255, 0.15)',  // Subtle cyan border
-  text: '#e8eaed',            // Light gray text (design spec)
-  textSecondary: '#94A3B8',
+  bg: '#0B1226',                         // --bg (webapp.py)
+  card: '#111827',                        // --bg2 (webapp.py)
+  cardBorder: 'rgba(255,255,255,0.09)',   // --border (webapp.py)
+  text: '#E2E8F0',                        // --text (webapp.py)
+  textSecondary: '#94A3B8',               // --muted (webapp.py)
   textMuted: '#64748B',
-  accent: '#ff0080',          // Magenta primary action
-  accentBg: 'rgba(255, 0, 128, 0.12)',    // Magenta-tinted background
-  neonCyan: '#00d9ff',        // Cyan neon (active states, highlights)
-  neonCyanGlow: 'rgba(0, 217, 255, 0.4)', // Cyan glow for box-shadow
-  neonMagenta: '#ff0080',     // Magenta neon (interactive elements, CTA)
-  neonMagentaGlow: 'rgba(255, 0, 128, 0.4)', // Magenta glow
-  neonOrange: '#ff8c00',      // Orange neon (warnings, secondary actions)
-  neonOrangeGlow: 'rgba(255, 140, 0, 0.4)', // Orange glow
-  correct: '#10B981',
-  correctBg: 'rgba(16, 185, 129, 0.07)',
-  incorrect: '#EF4444',
-  incorrectBg: 'rgba(239, 68, 68, 0.07)',
-  progressBg: '#1A2844',
-  answerBg: '#1A2844',
-  answerBorder: 'rgba(0, 217, 255, 0.25)',  // Cyan border for answer options
-  letterBg: '#243561',        // Navy-blue option chips
-  letterText: '#F8FAFC',
-  divider: 'rgba(0, 217, 255, 0.2)',     // Subtle cyan dividers
+  accent: '#FF9933',                      // --orange (webapp.py)
+  accentBg: 'rgba(255,153,51,0.18)',      // --orange-glow (webapp.py)
+  neonCyan: '#3B82F6',                    // --blue (webapp.py) — kept for compat
+  neonCyanGlow: 'rgba(59,130,246,0.2)',
+  neonMagenta: '#FF9933',                 // mapped to orange for compat
+  neonMagentaGlow: 'rgba(255,153,51,0.18)',
+  neonOrange: '#e6891f',                  // --orange-dk (webapp.py)
+  neonOrangeGlow: 'rgba(230,137,31,0.2)',
+  correct: '#10B981',                     // --green (webapp.py)
+  correctBg: 'rgba(16,185,129,0.08)',
+  incorrect: '#EF4444',                   // --red (webapp.py)
+  incorrectBg: 'rgba(239,68,68,0.08)',
+  progressBg: 'rgba(255,255,255,0.08)',
+  answerBg: '#111827',
+  answerBorder: 'rgba(255,255,255,0.09)',
+  letterBg: '#1a2235',
+  letterText: '#E2E8F0',
+  divider: 'rgba(255,255,255,0.09)',
   statusBar: 'light',
 };
 
 export const lightTheme: ThemeColors = {
-  bg: '#F8FAFC',
-  card: '#FFFFFF',
-  cardBorder: 'rgba(0, 217, 255, 0.2)',     // Subtle cyan border
-  text: '#0F172A',
-  textSecondary: '#475569',   // Darker for better contrast
-  textMuted: '#5E7A99',       // Readable muted
-  accent: '#ff0080',          // Magenta primary action
-  accentBg: 'rgba(255, 0, 128, 0.09)',      // Magenta-tinted background
-  neonCyan: '#00b8cc',        // Cyan (darker for light mode)
-  neonCyanGlow: 'rgba(0, 184, 204, 0.3)',   // Cyan glow
-  neonMagenta: '#e01e5a',     // Magenta (darker for light mode)
-  neonMagentaGlow: 'rgba(224, 30, 90, 0.3)', // Magenta glow
-  neonOrange: '#dd6620',      // Orange (darker for light mode)
-  neonOrangeGlow: 'rgba(221, 102, 32, 0.3)', // Orange glow
-  correct: '#047857',         // Richer green
-  correctBg: 'rgba(4, 120, 87, 0.07)',
+  bg: '#F1F5F9',                          // --bg light (webapp.py)
+  card: '#FFFFFF',                         // --card2 light
+  cardBorder: 'rgba(0,0,0,0.08)',          // --border light (webapp.py)
+  text: '#0F172A',                         // --text light (webapp.py)
+  textSecondary: '#475569',
+  textMuted: '#64748B',                    // --muted light (webapp.py)
+  accent: '#FF9933',                       // --orange (same in both modes)
+  accentBg: 'rgba(255,153,51,0.12)',
+  neonCyan: '#3B82F6',
+  neonCyanGlow: 'rgba(59,130,246,0.2)',
+  neonMagenta: '#e6891f',
+  neonMagentaGlow: 'rgba(230,137,31,0.2)',
+  neonOrange: '#e6891f',
+  neonOrangeGlow: 'rgba(230,137,31,0.2)',
+  correct: '#047857',
+  correctBg: 'rgba(4,120,87,0.08)',
   incorrect: '#DC2626',
-  incorrectBg: 'rgba(220, 38, 38, 0.07)',
-  progressBg: '#C8DAF0',      // Clearly visible track
+  incorrectBg: 'rgba(220,38,38,0.08)',
+  progressBg: '#E2E8F0',
   answerBg: '#FFFFFF',
-  answerBorder: 'rgba(0, 184, 204, 0.3)',   // Cyan border
-  letterBg: '#DCE8F5',        // Clearly distinct from card
+  answerBorder: 'rgba(0,0,0,0.08)',
+  letterBg: '#E2E8F0',
   letterText: '#0F172A',
-  divider: 'rgba(0, 184, 204, 0.15)',       // Subtle cyan dividers
+  divider: 'rgba(0,0,0,0.08)',
   statusBar: 'dark',
 };

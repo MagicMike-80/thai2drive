@@ -22,6 +22,48 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ---
 
+## Repository Structure at a Glance
+
+```
+thai2drive/
+├── backend/                    # FastAPI server, database, AI logic
+│   ├── server.py              # Main app, all route definitions
+│   ├── teacher_chat.py        # Michael teacher AI implementation
+│   ├── ai_explanations.py     # AI-generated quiz explanations
+│   ├── ai_learning.py         # Adaptive learning logic
+│   ├── auth.py                # JWT authentication
+│   ├── requirements.txt        # Python dependencies
+│   ├── thai2drive.db          # Local SQLite database
+│   ├── scripts/               # Utility scripts (seed, audit, generate)
+│   └── tests/                 # Pytest test suite
+├── frontend/                   # Expo/React Native mobile + web
+│   ├── app/                   # Expo Router file-based routing
+│   │   ├── _layout.tsx        # Root layout + navigation
+│   │   ├── index.tsx          # Home screen
+│   │   ├── quiz.tsx           # Quiz mode
+│   │   ├── teacher.tsx        # Michael chat screen
+│   │   ├── book.tsx           # Study book
+│   │   └── ...                # Other screens
+│   ├── src/
+│   │   ├── store/             # Zustand state management
+│   │   ├── services/          # API client (api.ts)
+│   │   ├── components/        # Reusable UI components
+│   │   ├── hooks/             # Custom React hooks
+│   │   └── theme.ts           # Design tokens (colors, spacing)
+│   ├── package.json           # npm/yarn dependencies
+│   ├── app.json               # Expo configuration
+│   └── README.md              # Frontend-specific setup
+├── website/                    # Static website (Netlify)
+├── content/                    # JSON content files
+├── context/                    # Session memory and blueprints
+├── .github/
+│   └── workflows/             # CI/CD pipeline (auto-deploy to Railway)
+├── CLAUDE.md                   # This file
+└── README.md                   # Project overview
+```
+
+---
+
 ## High-Level Architecture
 
 ### Stack
@@ -133,20 +175,133 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### Backend Scripts (`backend/scripts/`)
 
-Key utility scripts (run from `backend/` directory):
+Key utility scripts (run from `backend/` directory with `python scripts/<name>.py`):
 
 | Script | Purpose |
 |--------|---------|
 | `seed_database.py` | Seed all content from content JSON files |
 | `seed_studiebok.py` | Seed study book chapters |
 | `seed_v2_questions.py` | Seed quiz questions (V2 schema) |
-| `audit_questions.py` | Validate question quality |
-| `audit_images.py` | Audit sign images |
-| `balance_difficulty.py` | Balance difficulty distribution |
-| `generate_questions.py` | Generate new questions from source |
-| `check_quiz_quality.py` | Check quiz quality metrics |
-| `retention_worker.py` | Background retention worker |
-| `ab_test_openrouter.py` | A/B test models on Michael's system prompt |
+| `seed_podcasts_v4.py` | Seed podcast content |
+| `seed_videos_v1.py` | Seed video content |
+| `audit_questions.py` | Validate question quality (difficulty balance, translations, clarity) |
+| `audit_images.py` | Audit sign images for S3 upload |
+| `balance_difficulty.py` | Rebalance difficulty distribution across categories |
+| `generate_questions.py` | Generate new questions from source documents |
+| `check_quiz_quality.py` | Check quiz quality metrics and coverage |
+| `retention_worker.py` | Background retention worker for adaptive learning |
+| `ab_test_openrouter.py` | A/B test models on Michael's system prompt (requires OPENROUTER_API_KEY) |
+
+**Run seed scripts on production with caution** — they write to the database. Always test locally first.
+
+---
+
+## Common Development Tasks
+
+### Running Tests
+```bash
+# All backend tests
+cd backend && pytest tests/ -v
+
+# Single test file
+cd backend && pytest tests/test_auth.py -v
+
+# Single test
+cd backend && pytest tests/test_auth.py::test_login_success -v
+
+# With coverage report
+cd backend && pytest tests/ --cov --cov-report=term-missing
+
+# Run only failing tests
+cd backend && pytest --lf -v
+```
+
+### Database & Schema Changes
+
+**SQLite (local development):**
+- Database file: `backend/thai2drive.db`
+- Schema changes: edit models in relevant files, then run seed scripts to update
+
+**MongoDB (production via Railway):**
+- Connection via `motor` (async MongoDB driver)
+- Migrations: handled via application logic, not schema migrations
+- To inspect: Use MongoDB Compass with production connection string from Railway dashboard
+
+**When schema changes:**
+1. Update model definitions in the affected module (e.g., `ai_explanations.py`)
+2. Test locally with SQLite
+3. Run seed scripts on production database carefully (Railway admin can snapshot before)
+
+### Environment Variables (.env)
+
+**Required for backend:**
+```
+OPENAI_API_KEY=sk-...
+STRIPE_SECRET_KEY=sk_live_...
+GEMINI_API_KEY=...  # Optional, falls back to OpenAI
+MONGODB_URL=mongodb+srv://user:pass@cluster.mongodb.net/database  # Production only
+AWS_ACCESS_KEY_ID=...
+AWS_SECRET_ACCESS_KEY=...
+AWS_S3_BUCKET_NAME=thai2drive
+JWT_SECRET_KEY=<random-secret>
+OPENROUTER_API_KEY=sk-or-...  # Optional, for A/B testing models
+```
+
+**Frontend (.env in frontend/.env.local):**
+```
+EXPO_PUBLIC_API_URL=http://localhost:8000  # or production URL
+```
+
+Never commit `.env` — use `.env.example` as template.
+
+### AI Components
+
+**Michael Teacher Chat** (`backend/teacher_chat.py`):
+- System prompt in Michael's voice (calm, real driving instructor tone)
+- Enforces Thai/Norwegian/English language purity (no code-switching)
+- No visible AI system messages
+- Uses Gemini/OpenAI via LiteLLM for routing
+
+**AI Explanations** (`backend/ai_explanations.py`):
+- Explains quiz answers with pedagogy focus
+- Follows exam tips and common mistakes pattern
+- Respects question difficulty level in explanation depth
+
+**Adaptive Learning** (`backend/ai_learning.py`):
+- Personal weak-topic analysis per user
+- Suggests practice based on quiz history
+- Tracks improvement over time
+
+**Models used (via LiteLLM):**
+- Default: `gpt-4-turbo` or `gpt-3.5-turbo`
+- Alternative: `gemini-1.5-pro`
+- Cost-aware: Falls back based on `LITELLM_LOG=DEBUG`
+
+### Debugging Tips
+
+**Backend logging:**
+```bash
+# See all API calls and AI prompts
+LITELLM_LOG=DEBUG uvicorn server:app --reload --port 8000
+
+# See database queries
+SQLALCHEMY_ECHO=true uvicorn server:app --reload
+```
+
+**Frontend console:**
+- Android: `npx expo start --android` → press `i` for console logs
+- Run `console.log()` statements to debug Zustand state changes
+
+**Common issues:**
+
+| Issue | Solution |
+|-------|----------|
+| `ModuleNotFoundError` in backend | Activate venv: `source venv/Scripts/activate` (Windows) or `venv/bin/activate` (Unix) |
+| Expo metro bundler timeout | Restart with `npx expo start --clear` |
+| Backend won't start (port 8000 in use) | `lsof -i :8000` and kill process, or change `--port 9000` |
+| JWT token expired errors | Token expires after 30 days; test with fresh login |
+| Database locked (SQLite) | Close any other connections; only one process should write at a time |
+| AI endpoints timeout (>30s) | Check `OPENAI_API_KEY` or increase timeout in `backend/server.py` |
 
 ---
 
@@ -207,3 +362,102 @@ If ownership is unclear, ask whether it is a Codex implementation task or a Clau
 - V3: Mini-practice and coaching.
 - V4: Personal weak-topic learning.
 - V5: Voice, video, visual explanations, and adaptive AI instructor.
+
+---
+
+## Dependency Management
+
+### Frontend (Expo)
+- **Expo SDK:** 54.0.33 (major upgrades break Native modules)
+- **React Native:** 0.81.5 (pinned; upgrading requires testing on both Android & iOS)
+- **React:** 19.1.0 (Hooks, Suspense stable)
+- **Zustand:** 5.0.12 (state management, no boilerplate)
+- **Expo Router:** 6.0.22 (file-based routing, replaces React Navigation)
+
+**Upgrade process:**
+1. Test in development build first (`eas build --platform android --profile preview`)
+2. Verify on actual Android device (emulator can hide issues)
+3. Run `npx expo lint` before committing
+4. Update `package.json` and `yarn.lock`
+
+### Backend (Python)
+- **Python:** 3.12
+- **FastAPI:** 0.110.1 (async, auto-docs)
+- **Pydantic:** 2.12.5 (validation, JSON schemas)
+- **Motor:** 3.3.1 (async MongoDB driver)
+- **Stripe:** 15.0.1 (payment processing)
+- **Google Generative AI:** 0.8.6 (Gemini)
+- **OpenAI:** 1.99.9 (LLM)
+- **LiteLLM:** 1.80.0 (model routing, fallback)
+- **PyJWT:** 2.12.1 (JWT auth)
+
+**Upgrade process:**
+1. Update `requirements.txt` with new versions
+2. Test locally with SQLite
+3. Run full test suite: `pytest tests/ -v`
+4. Deploy to Railway staging first (create feature branch)
+5. Verify with live API tests before deploying to production
+
+**Known constraints:**
+- Motor must match MongoDB version compatibility
+- Pydantic 2.x has breaking changes from 1.x (field validation)
+- LiteLLM handles model routing; changing default model requires testing all AI endpoints
+
+---
+
+## Performance & Optimization
+
+### Frontend Performance
+
+**Bundle size:** Expo web export should stay under 1MB gzipped
+- Use `expo export --platform web` to build and check size
+- Avoid inline images; use Expo Image for optimization
+- Lazy load screens with Expo Router route-specific splitting
+
+**Mobile performance:**
+- Avoid re-renders: use `useMemo` for expensive computations
+- Zustand subscriptions are fine (don't cause unnecessary renders)
+- Use Reanimated 4.1.1 for smooth animations (not CSS)
+
+### Backend Performance
+
+**API latency targets:**
+- Quiz retrieval: <100ms
+- AI explanations: <5s (LLM inference time)
+- Teacher chat: <10s (streaming preferred)
+- User stats: <200ms
+
+**Database optimization:**
+- SQLite: Add indexes on frequently queried columns (user_id, category, created_at)
+- MongoDB: Use `motor` for non-blocking queries
+- Caching: Zustand on frontend caches user state (avoids refetches)
+
+**AI cost optimization:**
+- Use `gpt-3.5-turbo` for simple explanations
+- Use `gpt-4-turbo` only for complex reasoning (teacher chat)
+- Cache quiz explanations server-side (same question, same explanation)
+- LiteLLM can fallback to cheaper models on token limits
+
+---
+
+## Production Safety Checklist
+
+Before deploying to Railway:
+
+- [ ] Backend tests pass: `pytest tests/ -v`
+- [ ] No hardcoded API keys in code (use `.env`)
+- [ ] Frontend builds without warnings: `npm run lint` or `yarn lint`
+- [ ] Database migrations tested locally
+- [ ] AI endpoints tested with real API keys
+- [ ] Error handling for timeouts (AI, S3, Stripe)
+- [ ] CORS configured correctly (check Railway logs for 403 errors)
+- [ ] Stripe webhook secret matches Railway config
+- [ ] JWT_SECRET_KEY is strong and consistent
+- [ ] MongoDB connection string uses production credentials
+- [ ] S3 bucket permissions allow uploads
+- [ ] Rate limiting tested (user quota enforced server-side)
+
+**Rollback procedure:**
+- Railway keeps previous deployments; click "Redeploy" on prior version
+- SQLite data is local; MongoDB has snapshots via Atlas
+- Notify mobile users to force refresh app (clear cache)

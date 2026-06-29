@@ -89,8 +89,8 @@ const BLOCKS: {
   { key: 'realSituation',  icon: 'car-outline',            accentColor: '#F59E0B' },
   { key: 'commonMistake',  icon: 'alert-circle-outline',   accentColor: '#EF4444' },
   { key: 'examTip',        icon: 'school-outline',         accentColor: '#8B5CF6' },
-  { key: 'memoryRule',     icon: 'bulb-outline',           accentColor: '#EC4899' },
-  { key: 'formula',        icon: 'calculator-outline',     accentColor: '#06B6D4' },
+  { key: 'memoryRule',     icon: 'bulb-outline',           accentColor: '#FF9933' },
+  { key: 'formula',        icon: 'calculator-outline',     accentColor: '#3B82F6' },
 ];
 
 // ─── Props ────────────────────────────────────────────────────────────────────

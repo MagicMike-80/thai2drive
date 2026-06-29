@@ -14,22 +14,21 @@ import { BottomNavBar } from '../src/components/BottomNavBar';
 
 const { width: SCREEN_W } = Dimensions.get('window');
 
-// ─── Per-category identity: subtle hue + semantic difficulty ───
+// ─── Per-category identity: icon + semantic difficulty ───
 type CatMeta = {
   icon: keyof typeof Ionicons.glyphMap;
-  hue: string;       // accent color (used for tile + glow)
   difficulty: 1 | 2 | 3;
 };
 const CAT_META: Record<string, CatMeta> = {
-  'Traffic Signs':       { icon: 'warning',              hue: '#F59E0B', difficulty: 1 },
-  'Road Rules':          { icon: 'document-text',        hue: '#3B82F6', difficulty: 2 },
-  'Right of Way':        { icon: 'git-branch',           hue: '#A855F7', difficulty: 3 },
-  'Speed Limits':        { icon: 'speedometer',          hue: '#F43F5E', difficulty: 1 },
-  'Safety':              { icon: 'shield-checkmark',     hue: '#22C55E', difficulty: 2 },
-  'Driving Conditions':  { icon: 'rainy',                hue: '#06B6D4', difficulty: 2 },
-  'Situations':          { icon: 'bulb',                 hue: '#EC4899', difficulty: 3 },
-  'Traffic Rules':       { icon: 'book',                 hue: '#14B8A6', difficulty: 2 },
-  'Road Conditions':     { icon: 'cloudy',               hue: '#F97316', difficulty: 2 },
+  'Traffic Signs':       { icon: 'warning',              difficulty: 1 },
+  'Road Rules':          { icon: 'document-text',        difficulty: 2 },
+  'Right of Way':        { icon: 'git-branch',           difficulty: 3 },
+  'Speed Limits':        { icon: 'speedometer',          difficulty: 1 },
+  'Safety':              { icon: 'shield-checkmark',     difficulty: 2 },
+  'Driving Conditions':  { icon: 'rainy',                difficulty: 2 },
+  'Situations':          { icon: 'bulb',                 difficulty: 3 },
+  'Traffic Rules':       { icon: 'book',                 difficulty: 2 },
+  'Road Conditions':     { icon: 'cloudy',               difficulty: 2 },
 };
 
 const TR: Record<string, Record<string, any>> = {
@@ -208,7 +207,7 @@ export default function CategoriesScreen() {
         {/* ── CATEGORY GRID ── */}
         <View style={st.grid}>
           {categories.map((cat) => {
-            const meta = CAT_META[cat.name] || { icon: 'help-circle' as const, hue: c.accent, difficulty: 2 as const };
+            const meta = CAT_META[cat.name] || { icon: 'help-circle' as const, difficulty: 2 as const };
             const name = (t.categories as any)[cat.name] || cat.name;
             const completion = pct(cat.name, cat.count);
 
@@ -217,20 +216,10 @@ export default function CategoriesScreen() {
                 key={cat.name}
                 testID={`category-${cat.name}`}
                 onPress={() => startQuiz(cat.name)}
-                style={[st.catCard, { borderColor: `${meta.hue}33`, shadowColor: meta.hue }]}
+                style={[st.catCard, { borderColor: c.cardBorder, backgroundColor: c.card }]}
               >
-                {/* Subtle diagonal gradient giving each card its own hue */}
-                <LinearGradient
-                  colors={[`${meta.hue}22`, `${meta.hue}0A`, 'transparent']}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 1 }}
-                  style={StyleSheet.absoluteFill}
-                />
-                {/* Top-right glow blob */}
-                <View style={[st.glowBlob, { backgroundColor: `${meta.hue}1F` }]} pointerEvents="none" />
-
-                <View style={[st.catIcon, { backgroundColor: `${meta.hue}1F`, borderColor: `${meta.hue}55` }]}>
-                  <Ionicons name={meta.icon} size={22} color={meta.hue} />
+                <View style={[st.catIcon, { backgroundColor: c.accentBg, borderColor: `${c.accent}55` }]}>
+                  <Ionicons name={meta.icon} size={22} color={c.accent} />
                 </View>
 
                 <Text style={[st.catName, { color: c.text }]} numberOfLines={2}>{name}</Text>
@@ -256,7 +245,7 @@ export default function CategoriesScreen() {
                 {/* Progress bar at the bottom */}
                 <View style={st.catProgressWrap}>
                   <View style={[st.progressTrack, { backgroundColor: `${c.textMuted}22` }]}>
-                    <View style={[st.progressFill, { width: `${completion}%`, backgroundColor: meta.hue }]} />
+                    <View style={[st.progressFill, { width: `${completion}%`, backgroundColor: c.accent }]} />
                   </View>
                   {completion > 0 && (
                     <Text style={[st.catProgressPct, { color: c.textMuted }]}>{completion}%</Text>
