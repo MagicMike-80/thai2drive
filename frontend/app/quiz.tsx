@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator, Animated, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator, Animated, Image , Platform, Vibration } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Audio } from 'expo-av';
 import * as Haptics from 'expo-haptics';
-import { Platform, Vibration } from 'react-native';
+
 import { useAppStore } from '../src/store/appStore';
 import { api, Question } from '../src/services/api';
 import { playCorrectSound, playIncorrectSound, cleanupSounds } from '../src/sounds';
@@ -94,7 +94,7 @@ export default function QuizScreen() {
   // timeUp in an effect placed after timeUp is defined (below).
   // This prevents the exam timer's setInterval from capturing a stale closure
   // where hist always reads as [] when time runs out.
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
+   
   const timeUpRef = useRef<() => void>(() => {});
   const isExam = mode === 'exam';
   const isReviewWrong = mode === 'review-wrong';
@@ -192,7 +192,7 @@ export default function QuizScreen() {
   // Sync timeUpRef after every render so the exam timer's setInterval always
   // calls the latest timeUp (which closes over the latest hist).
   // No deps array → runs every render, which is intentional and very cheap.
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+   
   useEffect(() => { timeUpRef.current = timeUp; });
 
   const q = questions[idx];

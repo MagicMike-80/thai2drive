@@ -3,8 +3,6 @@ import {
   View, Text, StyleSheet, TouchableOpacity, ScrollView,
   ActivityIndicator, Animated, Image, Dimensions
 } from 'react-native';
-
-const SCREEN_W = Dimensions.get('window').width;
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -12,6 +10,8 @@ import { Audio } from 'expo-av';
 import { useAppStore } from '../src/store/appStore';
 import { api, BookChapter, BookSection } from '../src/services/api';
 import { BookHtml } from '../src/components/BookHtml';
+
+const SCREEN_W = Dimensions.get('window').width;
 
 const TR: Record<string, Record<string, string>> = {
   no: {

@@ -28,11 +28,13 @@
 | Element | Hex | Position | Usage |
 |---------|-----|----------|-------|
 | Cyan | #06FFA5 | Start | Gradient border animation |
-| Cyan Blue | #00BFFF | 33% | Gradient border transition |
+| Blue | #00BFFF | 33% | Gradient border transition |
 | Purple | #9D4EDD | 66% | Gradient border transition |
 | Magenta | #FF1493 | End | Gradient border cycle |
 
-**Gradient Animation:** Cyan → Cyan-Blue → Purple → Magenta → loops back to Cyan
+**Gradient Animation:** Cyan (#06FFA5) → Blue (#00BFFF) → Purple (#9D4EDD) → Magenta (#FF1493) → loops back to Cyan
+
+**UNIVERSAL RULE:** ALL carousel buttons (on ALL screens/pages where buttons scroll horizontally) use THIS SAME animated gradient. The gradient cycles continuously around the button border. If visual complexity becomes excessive, remove entire carousels rather than changing the gradient.
 
 ---
 
@@ -68,25 +70,10 @@
 - Border: Cyan glow (rgba(100, 200, 255, 0.4))
 - Padding: 18px
 - Border radius: 16px
+- Full width
 - Action: Navigate to quiz (mode: 'exam', category: 'all')
 
-**E. Free Limit Hint**
-- Text: "{remaining} gratis igjen" or "Opprett gratis konto for å fortsette"
-- Color: Conditional (red if locked, muted gray if available)
-- Font size: 12px
-
-**F. Secondary Row** (3 buttons)
-| Button | Icon | Label | Action |
-|--------|------|-------|--------|
-| Eksamen | school-outline | Eksamen | Quiz (exam mode) |
-| Daglig test | today-outline | Dagens test | Quiz (daily mode) |
-| Smart øving | flash-outline | Smart øving | Quiz (smart mode) |
-- Background: #111827 (card)
-- Border: 1px, color: #FF9933 or #10B981 (if daily complete)
-- Flex layout: 1/3 width each
-- Padding: 13px vertical
-
-**G. CAROUSEL BUTTONS** (Horizontal ScrollView) — **CYAN→MAGENTA GRADIENT BORDERS**
+**E. CAROUSEL 1** (Horizontal ScrollView) — **3 BUTTONS** — **CYAN→MAGENTA GRADIENT BORDERS**
 
 **Component:** GradientBorderButton wrapper with LinearGradient
 
@@ -102,16 +89,10 @@ Button Specs:
 - Gap: 6px (between icon and label)
 - Padding (inner): 14px horizontal, 14px vertical
 
-**Buttons (in order):**
+**Buttons (in Carousel 1):**
 1. **Eksamen** — school-outline icon, orange color
 2. **Daglig test** — today-outline icon, green if done, orange if not
-3. **Smart øving** — flash-outline icon, orange color
-4. **Trafikklærer** — Michael avatar (28×28px circle), text "Michael" bold
-5. **Trafikkskilt** — warning-outline icon, orange color
-6. **Læringsbok** — book-outline icon, orange color
-7. **Min statistikk** — bar-chart-outline icon, orange color
-8. **AI Analyse** — sparkles icon, orange color
-9. **Trafikk-matte** — speedometer-outline icon, orange color
+3. **Trafikk-matte** — speedometer-outline icon, orange color
 
 **Carousel specs:**
 - Horizontal ScrollView
@@ -119,13 +100,7 @@ Button Specs:
 - Right edge padding: 24px (safe area)
 - Touch target: 100×100px (well above 44×44px minimum)
 
-**H. Stats Block** (if has answered questions)
-- Layout: Row with dividers
-- 3 columns: "Answered" | "Correct" | "Accuracy %"
-- Font: 24px bold (values), 11px muted (labels)
-- Accuracy color: Green if ≥70%, white if <70%
-
-**I. Michael Banner** (FEATURED SECTION)
+**F. Michael Banner** (FEATURED SECTION)
 - Gradient: cyan (#3B82F6) → magenta/purple (#9D4EDD)
 - Text: "Michael Trafikklærer" (white, large)
 - Subtitle: "Still et spørsmål om trafikk" (cyan color)
@@ -134,7 +109,7 @@ Button Specs:
 - Border radius: 12px
 - Action: Navigate to `/teacher`
 
-**J. SISTE ØKT** (Last Session)
+**G. SISTE ØKT** (Last Session)
 - Background: #111827 (card)
 - Title: "SISTE ØKT" (uppercase, muted gray, 10px)
 - Content: 
@@ -143,7 +118,7 @@ Button Specs:
   - "33%" (orange, large font)
 - Layout: Row (left text, right percentage)
 
-**K. Premium Banner** (if not premium)
+**H. Premium Banner** (if not premium)
 - Background: #111827
 - Border: 1px solid #FF9933
 - Icon: diamond (18px, orange)
@@ -152,6 +127,33 @@ Button Specs:
 - Chevron right icon
 - Action: Navigate to `/paywall`
 - Or if premium: Green "Premium aktiv" status with checkmark
+
+**I. CAROUSEL 2** (Toggle Buttons) — **2 BUTTONS** — **HISTORIKK | BIBLIOTEK**
+- Button 1: **Historikk** — shows test history when selected
+- Button 2: **Bibliotek** — shows study library (videos, podcasts) when selected
+- Style: Tab-like toggle buttons with active/inactive states
+- Action: Toggles content display between History and Library views
+- **Note:** These buttons "bytter plass" (switch/toggle) to show different content
+
+**J. CAROUSEL 3** (Bottom Navigation) — **HORIZONTAL SCROLLING CAROUSEL**
+- **9 buttons total** ✅ CONFIRMED
+- **IMPORTANT:** Does NOT include buttons from Carousel 1 (Eksamen, Daglig test, Trafikk-matte) to avoid duplication
+- Button style: Tab-like navigation with gradient borders (cyan→magenta)
+- Spacing: Horizontal scroll
+- Touch target: 44px minimum
+
+**Buttons (Bottom Carousel 3):**
+1. **Hjem** (Home)
+2. **Kategorier** (Categories)
+3. **Historikk** (History)
+4. **Michael** (Trainer/Teacher)
+5. **Trafikskilt** (Traffic signs)
+6. **Studiebøk** (Study book)
+7. **Bokmerker** (Bookmarks)
+8. **Innstillinger** (Settings)
+9. **Profil** (Profile)
+
+**Navigation Coverage:** These 9 buttons provide access to ALL major screens/sections of the app.
 
 ---
 

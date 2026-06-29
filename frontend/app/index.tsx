@@ -11,24 +11,6 @@ import { LanguageSwitcher } from '../src/components/LanguageSwitcher';
 import { CoachBanner } from '../src/components/CoachBanner';
 import { BottomNavBar } from '../src/components/BottomNavBar';
 
-// Gradient border button wrapper
-const GradientBorderButton = ({ children, onPress, activeOpacity = 0.7 }: any) => {
-  return (
-    <TouchableOpacity onPress={onPress} activeOpacity={activeOpacity}>
-      <LinearGradient
-        colors={['#06FFA5', '#00BFFF', '#9D4EDD', '#FF1493', '#06FFA5']}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={st.gradientBorder}
-      >
-        <View style={st.carouselBtnInner}>
-          {children}
-        </View>
-      </LinearGradient>
-    </TouchableOpacity>
-  );
-};
-
 const T2D_ICON = require('../assets/images/t2d-icon.png');
 
 const TR: Record<string, Record<string, string>> = {
@@ -42,6 +24,7 @@ export default function HomeScreen() {
   const { language, deviceId, setProgress, progress, colors, isPremium, isAuthenticated, freeRemaining, streak, updateStreak, setShowTrafficPanel } = useAppStore();
   const [loading, setLoading] = useState(true);
   const [dailyDone, setDailyDone] = useState(false);
+  const [carousel2Tab, setCarousel2Tab] = useState<'history' | 'library'>('history');
   const { width: winWidth } = useWindowDimensions();
   const t = TR[language] || {};
   const c = colors;
@@ -172,7 +155,7 @@ export default function HomeScreen() {
 
         {/* Brand */}
         <View style={st.brand}>
-          <Image source={T2D_ICON} style={st.brandIcon} />
+          <Image source={T2D_ICON} style={st.brandIcon} accessibilityLabel="Thai2Drive logo" />
           <Text style={[st.title, { color: c.text }]} testID="home-title">Thai2Drive</Text>
           <Text style={[st.subtitle, { color: c.textMuted }]}>{t.subtitle}</Text>
         </View>
@@ -180,7 +163,7 @@ export default function HomeScreen() {
         {/* Streak (only if >0) */}
         {streak > 0 && (
           <View style={st.streakPill}>
-            <Text style={st.streakFire}>🔥</Text>
+            <Ionicons name="flame" size={16} color="#FF6B35" />
             <Text style={[st.streakText, { color: c.accent }]}>{streak} {t.streak}</Text>
           </View>
         )}
@@ -227,119 +210,266 @@ export default function HomeScreen() {
           </Text>
         )}
 
-        {/* Secondary row: Exam + Daily Test + Smart Practice */}
-        <View style={st.secondaryRow}>
-          <TouchableOpacity
-            testID="exam-mode-btn"
-            style={[st.secBtn, { borderColor: c.cardBorder, backgroundColor: c.card }]}
-            onPress={() => { if (locked) handleLockedNav(); else router.push({ pathname: '/quiz', params: { mode: 'exam', category: 'all' } }); }}
-            activeOpacity={0.7}
-          >
-            <Ionicons name="school-outline" size={18} color={c.accent} />
-            <Text style={[st.secText, { color: c.text }]}>{t.exam}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            testID="daily-test-btn"
-            style={[st.secBtn, { borderColor: dailyDone ? c.correct : c.accent, backgroundColor: c.card }]}
-            onPress={() => router.push({ pathname: '/quiz', params: { mode: 'daily', category: 'all' } })}
-            activeOpacity={0.7}
-          >
-            <Ionicons name={dailyDone ? 'checkmark-circle' : 'today-outline'} size={18} color={dailyDone ? c.correct : c.accent} />
-            <Text style={[st.secText, { color: dailyDone ? c.correct : c.text }]}>{t.dailyTest}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            testID="smart-practice-btn"
-            style={[st.secBtn, { borderColor: c.cardBorder, backgroundColor: c.card }]}
-            onPress={() => { if (locked) handleLockedNav(); else router.push({ pathname: '/quiz', params: { mode: 'smart', category: 'all' } }); }}
-            activeOpacity={0.7}
-          >
-            <Ionicons name="flash-outline" size={18} color={c.accent} />
-            <Text style={[st.secText, { color: c.text }]}>{t.smartPractice}</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* Horizontal carousel: Quick-access buttons — compact mobile-friendly layout */}
+        {/* CAROUSEL 1: Quick-access buttons — single visible with arrow indicator */}
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
           scrollEventThrottle={16}
-          style={st.carouselContainer}
-          contentContainerStyle={st.carouselContent}
+          style={st.carousel1Container}
+          contentContainerStyle={st.carousel1Content}
         >
           {/* Eksamen */}
-          <GradientBorderButton
+          <TouchableOpacity
+            testID="exam-mode-btn"
             onPress={() => { if (locked) handleLockedNav(); else router.push({ pathname: '/quiz', params: { mode: 'exam', category: 'all' } }); }}
+            activeOpacity={0.7}
           >
-            <Ionicons name="school-outline" size={20} color={c.accent} />
-            <Text style={[st.carouselLabel, { color: c.text }]}>{t.exam}</Text>
-          </GradientBorderButton>
+            <LinearGradient
+              colors={['#06FFA5', '#00BFFF', '#9D4EDD', '#FF1493', '#06FFA5']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={st.carousel1GradientBorder}
+            >
+              <View style={[st.carousel1BtnInner, { backgroundColor: c.bg }]}>
+                <Ionicons name="school-outline" size={20} color={c.accent} />
+                <Text style={[st.carousel1Label, { color: c.text }]}>{t.exam}</Text>
+                <Text style={[st.carousel1Arrow, { color: c.accent }]}>›</Text>
+              </View>
+            </LinearGradient>
+          </TouchableOpacity>
 
-          {/* Dagens test */}
-          <GradientBorderButton
+          {/* Daglig test */}
+          <TouchableOpacity
+            testID="daily-test-btn"
             onPress={() => router.push({ pathname: '/quiz', params: { mode: 'daily', category: 'all' } })}
+            activeOpacity={0.7}
           >
-            <Ionicons name={dailyDone ? 'checkmark-circle' : 'today-outline'} size={20} color={dailyDone ? c.correct : c.accent} />
-            <Text style={[st.carouselLabel, { color: dailyDone ? c.correct : c.text }]}>{t.dailyTest}</Text>
-          </GradientBorderButton>
-
-          {/* Smart øving */}
-          <GradientBorderButton
-            onPress={() => { if (locked) handleLockedNav(); else router.push({ pathname: '/quiz', params: { mode: 'smart', category: 'all' } }); }}
-          >
-            <Ionicons name="flash-outline" size={20} color={c.accent} />
-            <Text style={[st.carouselLabel, { color: c.text }]}>{t.smartPractice}</Text>
-          </GradientBorderButton>
-
-          {/* Trafikklærer */}
-          <GradientBorderButton
-            onPress={() => router.push('/teacher')}
-          >
-            <Image source={require('../assets/michael_avatar.png')} style={st.carouselAvatar} />
-            <Text style={[st.carouselLabel, { color: c.accent, fontWeight: '700' }]}>Michael</Text>
-          </GradientBorderButton>
-
-          {/* Trafikkskilt */}
-          <GradientBorderButton
-            onPress={() => router.push('/signs')}
-          >
-            <Ionicons name="warning-outline" size={20} color={c.accent} />
-            <Text style={[st.carouselLabel, { color: c.text }]}>{t.signGallery}</Text>
-          </GradientBorderButton>
-
-          {/* Læringsbok */}
-          <GradientBorderButton
-            onPress={() => router.push('/book')}
-          >
-            <Ionicons name="book-outline" size={20} color={c.accent} />
-            <Text style={[st.carouselLabel, { color: c.text }]}>{t.studyBook}</Text>
-          </GradientBorderButton>
-
-          {/* Min statistikk */}
-          <GradientBorderButton
-            onPress={() => router.push('/stats')}
-          >
-            <Ionicons name="bar-chart-outline" size={20} color={c.accent} />
-            <Text style={[st.carouselLabel, { color: c.text }]}>{t.myStats}</Text>
-          </GradientBorderButton>
-
-          {/* AI Analyse */}
-          <GradientBorderButton
-            onPress={() => router.push('/ai-dashboard')}
-          >
-            <Ionicons name="sparkles" size={20} color={c.accent} />
-            <Text style={[st.carouselLabel, { color: c.text }]}>{t.aiInsights}</Text>
-          </GradientBorderButton>
+            <LinearGradient
+              colors={['#06FFA5', '#00BFFF', '#9D4EDD', '#FF1493', '#06FFA5']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={st.carousel1GradientBorder}
+            >
+              <View style={[st.carousel1BtnInner, { backgroundColor: c.bg }]}>
+                <Ionicons name={dailyDone ? 'checkmark-circle' : 'today-outline'} size={20} color={dailyDone ? c.correct : c.accent} />
+                <Text style={[st.carousel1Label, { color: dailyDone ? c.correct : c.text }]}>{t.dailyTest}</Text>
+                <Text style={[st.carousel1Arrow, { color: c.accent }]}>›</Text>
+              </View>
+            </LinearGradient>
+          </TouchableOpacity>
 
           {/* Trafikk-matte */}
-          <GradientBorderButton
+          <TouchableOpacity
+            testID="traffic-math-btn"
             onPress={() => {
               if (isDesktopWeb) setShowTrafficPanel(true);
               else router.push('/traffic-math');
             }}
+            activeOpacity={0.7}
           >
-            <Ionicons name="speedometer-outline" size={20} color={c.accent} />
-            <Text style={[st.carouselLabel, { color: c.text }]}>{t.trafficMath}</Text>
-          </GradientBorderButton>
+            <LinearGradient
+              colors={['#06FFA5', '#00BFFF', '#9D4EDD', '#FF1493', '#06FFA5']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={st.carousel1GradientBorder}
+            >
+              <View style={[st.carousel1BtnInner, { backgroundColor: c.bg }]}>
+                <Ionicons name="speedometer-outline" size={20} color={c.accent} />
+                <Text style={[st.carousel1Label, { color: c.text }]}>{t.trafficMath}</Text>
+                <Text style={[st.carousel1Arrow, { color: c.accent }]}>›</Text>
+              </View>
+            </LinearGradient>
+          </TouchableOpacity>
+        </ScrollView>
+
+        {/* CAROUSEL 2: Toggle buttons — Historikk | Bibliotek */}
+        <View style={st.carousel2Container}>
+          <TouchableOpacity
+            onPress={() => setCarousel2Tab('history')}
+            activeOpacity={0.7}
+          >
+            <LinearGradient
+              colors={['#06FFA5', '#00BFFF', '#9D4EDD', '#FF1493', '#06FFA5']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={st.carousel2GradientBorder}
+            >
+              <View style={[st.carousel2BtnInner, { backgroundColor: c.bg }]}>
+                <Ionicons name="time-outline" size={18} color={carousel2Tab === 'history' ? c.accent : c.textMuted} />
+                <Text style={[st.carousel2Label, { color: carousel2Tab === 'history' ? c.text : c.textMuted }]}>Historikk</Text>
+              </View>
+            </LinearGradient>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => setCarousel2Tab('library')}
+            activeOpacity={0.7}
+          >
+            <LinearGradient
+              colors={['#06FFA5', '#00BFFF', '#9D4EDD', '#FF1493', '#06FFA5']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={st.carousel2GradientBorder}
+            >
+              <View style={[st.carousel2BtnInner, { backgroundColor: c.bg }]}>
+                <Ionicons name="library-outline" size={18} color={carousel2Tab === 'library' ? c.accent : c.textMuted} />
+                <Text style={[st.carousel2Label, { color: carousel2Tab === 'library' ? c.text : c.textMuted }]}>Bibliotek</Text>
+              </View>
+            </LinearGradient>
+          </TouchableOpacity>
+        </View>
+
+        {/* CAROUSEL 3: Navigation buttons — single visible with arrow indicator */}
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          scrollEventThrottle={16}
+          style={st.carousel3Container}
+          contentContainerStyle={st.carousel3Content}
+        >
+          {/* Hjem */}
+          <TouchableOpacity onPress={() => router.push('/')} activeOpacity={0.7}>
+            <LinearGradient
+              colors={['#06FFA5', '#00BFFF', '#9D4EDD', '#FF1493', '#06FFA5']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={st.carousel3GradientBorder}
+            >
+              <View style={[st.carousel3BtnInner, { backgroundColor: c.bg }]}>
+                <Ionicons name="home-outline" size={20} color={c.accent} />
+                <Text style={[st.carousel3Label, { color: c.text }]}>Hjem</Text>
+                <Text style={[st.carousel3Arrow, { color: c.accent }]}>›</Text>
+              </View>
+            </LinearGradient>
+          </TouchableOpacity>
+
+          {/* Kategorier */}
+          <TouchableOpacity onPress={() => router.push('/categories')} activeOpacity={0.7}>
+            <LinearGradient
+              colors={['#06FFA5', '#00BFFF', '#9D4EDD', '#FF1493', '#06FFA5']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={st.carousel3GradientBorder}
+            >
+              <View style={[st.carousel3BtnInner, { backgroundColor: c.bg }]}>
+                <Ionicons name="grid-outline" size={20} color={c.accent} />
+                <Text style={[st.carousel3Label, { color: c.text }]}>Kategorier</Text>
+                <Text style={[st.carousel3Arrow, { color: c.accent }]}>›</Text>
+              </View>
+            </LinearGradient>
+          </TouchableOpacity>
+
+          {/* Historikk */}
+          <TouchableOpacity onPress={() => router.push('/history')} activeOpacity={0.7}>
+            <LinearGradient
+              colors={['#06FFA5', '#00BFFF', '#9D4EDD', '#FF1493', '#06FFA5']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={st.carousel3GradientBorder}
+            >
+              <View style={[st.carousel3BtnInner, { backgroundColor: c.bg }]}>
+                <Ionicons name="time-outline" size={20} color={c.accent} />
+                <Text style={[st.carousel3Label, { color: c.text }]}>Historikk</Text>
+                <Text style={[st.carousel3Arrow, { color: c.accent }]}>›</Text>
+              </View>
+            </LinearGradient>
+          </TouchableOpacity>
+
+          {/* Michael */}
+          <TouchableOpacity onPress={() => router.push('/teacher')} activeOpacity={0.7}>
+            <LinearGradient
+              colors={['#06FFA5', '#00BFFF', '#9D4EDD', '#FF1493', '#06FFA5']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={st.carousel3GradientBorder}
+            >
+              <View style={[st.carousel3BtnInner, { backgroundColor: c.bg }]}>
+                <Image source={require('../assets/michael_avatar.png')} style={st.carousel3Avatar} />
+                <Text style={[st.carousel3Label, { color: c.accent, fontWeight: '700' }]}>Michael</Text>
+                <Text style={[st.carousel3Arrow, { color: c.accent }]}>›</Text>
+              </View>
+            </LinearGradient>
+          </TouchableOpacity>
+
+          {/* Trafikkskilt */}
+          <TouchableOpacity onPress={() => router.push('/signs')} activeOpacity={0.7}>
+            <LinearGradient
+              colors={['#06FFA5', '#00BFFF', '#9D4EDD', '#FF1493', '#06FFA5']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={st.carousel3GradientBorder}
+            >
+              <View style={[st.carousel3BtnInner, { backgroundColor: c.bg }]}>
+                <Ionicons name="warning-outline" size={20} color={c.accent} />
+                <Text style={[st.carousel3Label, { color: c.text }]}>Skilt</Text>
+                <Text style={[st.carousel3Arrow, { color: c.accent }]}>›</Text>
+              </View>
+            </LinearGradient>
+          </TouchableOpacity>
+
+          {/* Studiebøk */}
+          <TouchableOpacity onPress={() => router.push('/book')} activeOpacity={0.7}>
+            <LinearGradient
+              colors={['#06FFA5', '#00BFFF', '#9D4EDD', '#FF1493', '#06FFA5']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={st.carousel3GradientBorder}
+            >
+              <View style={[st.carousel3BtnInner, { backgroundColor: c.bg }]}>
+                <Ionicons name="book-outline" size={20} color={c.accent} />
+                <Text style={[st.carousel3Label, { color: c.text }]}>Bok</Text>
+                <Text style={[st.carousel3Arrow, { color: c.accent }]}>›</Text>
+              </View>
+            </LinearGradient>
+          </TouchableOpacity>
+
+          {/* Bokmerker */}
+          <TouchableOpacity onPress={() => router.push('/bookmarks')} activeOpacity={0.7}>
+            <LinearGradient
+              colors={['#06FFA5', '#00BFFF', '#9D4EDD', '#FF1493', '#06FFA5']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={st.carousel3GradientBorder}
+            >
+              <View style={[st.carousel3BtnInner, { backgroundColor: c.bg }]}>
+                <Ionicons name="bookmark-outline" size={20} color={c.accent} />
+                <Text style={[st.carousel3Label, { color: c.text }]}>Merker</Text>
+                <Text style={[st.carousel3Arrow, { color: c.accent }]}>›</Text>
+              </View>
+            </LinearGradient>
+          </TouchableOpacity>
+
+          {/* Innstillinger */}
+          <TouchableOpacity onPress={() => router.push('/settings')} activeOpacity={0.7}>
+            <LinearGradient
+              colors={['#06FFA5', '#00BFFF', '#9D4EDD', '#FF1493', '#06FFA5']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={st.carousel3GradientBorder}
+            >
+              <View style={[st.carousel3BtnInner, { backgroundColor: c.bg }]}>
+                <Ionicons name="settings-outline" size={20} color={c.accent} />
+                <Text style={[st.carousel3Label, { color: c.text }]}>Instill</Text>
+                <Text style={[st.carousel3Arrow, { color: c.accent }]}>›</Text>
+              </View>
+            </LinearGradient>
+          </TouchableOpacity>
+
+          {/* Profil → går til statistikk (profilside finnes ikke som egen rute) */}
+          <TouchableOpacity onPress={() => router.push('/stats')} activeOpacity={0.7}>
+            <LinearGradient
+              colors={['#06FFA5', '#00BFFF', '#9D4EDD', '#FF1493', '#06FFA5']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={st.carousel3GradientBorder}
+            >
+              <View style={[st.carousel3BtnInner, { backgroundColor: c.bg }]}>
+                <Ionicons name="bar-chart-outline" size={20} color={c.accent} />
+                <Text style={[st.carousel3Label, { color: c.text }]}>Statistikk</Text>
+                <Text style={[st.carousel3Arrow, { color: c.accent }]}>›</Text>
+              </View>
+            </LinearGradient>
+          </TouchableOpacity>
         </ScrollView>
 
         {/* Progress — single clean row, no card nesting */}
@@ -416,14 +546,22 @@ const st = StyleSheet.create({
   title: { fontSize: 34, fontWeight: '800', letterSpacing: -1 },
   subtitle: { fontSize: 14, marginTop: 4 },
   streakPill: { flexDirection: 'row', alignItems: 'center', alignSelf: 'center', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 14, gap: 6, marginBottom: 20 },
-  streakFire: { fontSize: 15 },
   streakText: { fontSize: 13, fontWeight: '700' },
   startBtn: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', borderRadius: 18, paddingVertical: 20, gap: 10, marginBottom: 8 },
   startText: { fontSize: 18, fontWeight: '800', letterSpacing: 0.2 },
   freeHint: { fontSize: 12, textAlign: 'center', marginBottom: 24 },
-  secondaryRow: { flexDirection: 'row', gap: 10, marginBottom: 32 },
-  secBtn: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, paddingVertical: 13, borderRadius: 12, borderWidth: 1 },
-  secText: { fontSize: 14, fontWeight: '600' },
+  // Carousel 1 — single button visible with arrow indicator
+  carousel1Container: { marginBottom: 32, marginHorizontal: -24, paddingHorizontal: 24, overflow: 'hidden' },
+  carousel1Content: { gap: 12, paddingRight: 24 },
+  carousel1GradientBorder: { padding: 2, borderRadius: 12, width: 350, minWidth: 350 },
+  carousel1BtnInner: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12, borderRadius: 11, paddingHorizontal: 18, paddingVertical: 16, width: '100%' },
+  carousel1Label: { fontSize: 16, fontWeight: '600', flex: 1, marginLeft: 8 },
+  carousel1Arrow: { fontSize: 24, fontWeight: '700', opacity: 0.8 },
+  // Carousel 2 — toggle buttons (Historikk | Bibliotek)
+  carousel2Container: { flexDirection: 'row', gap: 12, marginBottom: 28, justifyContent: 'space-between' },
+  carousel2GradientBorder: { padding: 2, borderRadius: 12, flex: 1 },
+  carousel2BtnInner: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, borderRadius: 11, paddingHorizontal: 16, paddingVertical: 14, width: '100%' },
+  carousel2Label: { fontSize: 14, fontWeight: '600' },
   statsBlock: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', paddingVertical: 6, marginBottom: 28 },
   statCol: { alignItems: 'center', flex: 1 },
   statVal: { fontSize: 24, fontWeight: '800' },
@@ -434,17 +572,14 @@ const st = StyleSheet.create({
   premSub: { fontSize: 12, marginTop: 2 },
   premActive: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 12, paddingVertical: 10, gap: 6, borderWidth: 1 },
   premActiveText: { fontSize: 13, fontWeight: '700' },
-  quickRow:  { flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginBottom: 28 },
-  quickBtn:  { flex: 1, alignItems: 'center', gap: 8, borderRadius: 14, borderWidth: 1, paddingVertical: 16 },
-  quickLabel:{ fontSize: 12, fontWeight: '600', textAlign: 'center' },
-  // Horizontal carousel — matches web layout (icon above label, square buttons)
-  carouselContainer: { marginBottom: 28, marginHorizontal: -24, paddingHorizontal: 24 },
-  carouselContent: { gap: 12, paddingRight: 24 },
-  gradientBorder: { padding: 2, borderRadius: 12, width: 100, minWidth: 100 },
-  carouselBtnInner: { flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 6, borderRadius: 11, backgroundColor: '#0B1226', paddingHorizontal: 14, paddingVertical: 14, width: '100%' },
-  carouselBtn: { flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 6, borderRadius: 12, borderWidth: 1, paddingHorizontal: 14, paddingVertical: 14, minWidth: 100, width: 100 },
-  carouselLabel: { fontSize: 12, fontWeight: '600', textAlign: 'center', lineHeight: 14 },
-  carouselAvatar: { width: 28, height: 28, borderRadius: 14 },
+  // Carousel 3 — single button visible with arrow indicator
+  carousel3Container: { marginBottom: 28, marginHorizontal: -24, paddingHorizontal: 24, overflow: 'hidden' },
+  carousel3Content: { gap: 12, paddingRight: 24 },
+  carousel3GradientBorder: { padding: 2, borderRadius: 12, width: 350, minWidth: 350 },
+  carousel3BtnInner: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12, borderRadius: 11, paddingHorizontal: 18, paddingVertical: 16, width: '100%' },
+  carousel3Label: { fontSize: 16, fontWeight: '600', flex: 1, marginLeft: 8 },
+  carousel3Arrow: { fontSize: 24, fontWeight: '700', opacity: 0.8 },
+  carousel3Avatar: { width: 28, height: 28, borderRadius: 14 },
   // Language hint
   langHintWrap: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 99, alignItems: 'flex-start', justifyContent: 'flex-start', paddingTop: 70, paddingLeft: 16 },
   langHintDismiss: { alignItems: 'center' },
