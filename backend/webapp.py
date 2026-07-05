@@ -1530,6 +1530,20 @@ a { color:inherit; text-decoration:none; }
   display:flex; align-items:center; justify-content:center;
 }
 .vid-thumb    { width:100%; height:100%; object-fit:cover; display:block; }
+.vid-card-thumb {
+  width:100%; height:100px; border-radius:8px; overflow:hidden;
+  background:rgba(255,255,255,.06); background-size:cover; background-position:center;
+  display:flex; align-items:center; justify-content:center; cursor:pointer;
+  position:relative;
+}
+.vid-card-thumb .vid-card-play {
+  width:40px; height:40px; border-radius:50%;
+  background:rgba(0,240,255,0.8); color:#000;
+  display:flex; align-items:center; justify-content:center;
+  font-size:1rem; box-shadow:0 0 15px rgba(0,240,255,0.5);
+  transition:transform .2s;
+}
+.vid-card-thumb:hover .vid-card-play { transform:scale(1.1); }
 .vid-info     { flex:1; min-width:0; }
 .vid-lbl      {
   font-size:.55rem; font-weight:900; text-transform:uppercase;
@@ -1546,7 +1560,7 @@ a { color:inherit; text-decoration:none; }
   padding:12px; border-radius:11px;
   background:rgba(255,255,255,.03);
   border:1px solid rgba(255,255,255,.08);
-  transition:border-color .18s;
+  transition:border-color .18s; cursor:pointer;
 }
 .vid-card-local:hover { border-color:rgba(255,153,51,.30); }
 .vid-player {
@@ -1649,6 +1663,127 @@ a { color:inherit; text-decoration:none; }
 }
 .library-list {
   display: flex; flex-direction: column; gap: 10px;
+}
+
+/* ══════════════════════════════════════════
+   VIDEO PLAYER — The Road Ahead
+══════════════════════════════════════════ */
+#screenVideoPlayer { padding:0; background:#0B1226; flex-direction:column; }
+.vp-header {
+  padding:10px 14px; flex-shrink:0;
+  display:flex; align-items:center; gap:10px;
+}
+.vp-back-btn {
+  background: none; border:1.5px solid rgba(0,82,255,0.22);
+  border-radius:10px; color:#7A90B8;
+  font-size:1rem; line-height:1;
+  padding:6px 10px; cursor:pointer; flex-shrink:0;
+}
+.vp-back-btn:hover {
+  border-color:rgba(255,127,0,0.55);
+  color:#FF9933; background:rgba(255,127,0,0.07);
+}
+.vp-title {
+  flex:1; font-size:.95rem; font-weight:600;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  color:#e0e8f0;
+}
+.vp-player-wrap {
+  flex-shrink:0; width:100%;
+  background:#000; position:relative;
+}
+.vp-player-wrap video {
+  width:100%; display:block; max-height:60vh;
+}
+.vp-scroll {
+  flex:1; overflow-y:auto; padding:0 14px 16px;
+  -webkit-overflow-scrolling:touch;
+}
+/* Glow Road */
+.vp-glow-road {
+  flex-shrink:0; padding:10px 14px 6px;
+  display:flex; align-items:center; gap:2px;
+  background:rgba(0,0,0,0.3);
+}
+.vp-glow-track {
+  flex:1; height:3px; background:rgba(255,255,255,0.1);
+  border-radius:2px; position:relative; display:flex; align-items:center;
+}
+.vp-glow-dot {
+  flex:1; height:8px; width:8px; border-radius:50%;
+  background:rgba(255,255,255,0.15); cursor:pointer;
+  transition:all .3s; position:relative; z-index:1;
+  margin:0 -1px;
+}
+.vp-glow-dot.active {
+  background:#00f0ff; box-shadow:0 0 12px rgba(0,240,255,0.7);
+  transform:scale(1.3);
+}
+.vp-glow-dot.passed {
+  background:rgba(0,240,255,0.5);
+}
+.vp-glow-label {
+  font-size:.6rem; color:rgba(255,255,255,0.4);
+  text-align:center; white-space:nowrap; overflow:hidden;
+  text-overflow:ellipsis; max-width:50px;
+}
+.vp-glow-dot-wrap {
+  display:flex; flex-direction:column; align-items:center;
+  flex:1; min-width:0;
+}
+/* Knowledge Cards */
+.vp-knowledge-area {
+  padding:12px 0; display:flex; flex-direction:column; gap:10px;
+}
+.vp-knowledge-card {
+  background:rgba(0,240,255,0.06); border:1px solid rgba(0,240,255,0.2);
+  border-radius:12px; padding:14px; animation:kcIn .4s ease;
+  transition:opacity .5s, transform .5s;
+}
+.vp-knowledge-card.fading {
+  opacity:0; transform:translateY(-10px);
+}
+@keyframes kcIn {
+  from { opacity:0; transform:translateY(10px); }
+  to { opacity:1; transform:translateY(0); }
+}
+.vp-kc-title {
+  font-size:.85rem; font-weight:600; color:#00f0ff; margin-bottom:6px;
+}
+.vp-kc-body {
+  font-size:.8rem; color:#b0c0d8; line-height:1.5;
+}
+.vp-kc-img {
+  max-width:100%; max-height:120px; border-radius:6px;
+  margin-top:8px; object-fit:contain;
+}
+/* Mini Check */
+.vp-mini-check {
+  padding:12px 0; text-align:center;
+}
+.vp-mc-question {
+  font-size:.9rem; font-weight:600; margin-bottom:12px;
+  color:#e0e8f0;
+}
+.vp-mc-options {
+  display:flex; gap:10px; justify-content:center;
+}
+.vp-mc-btn {
+  padding:10px 24px; border-radius:10px; border:1.5px solid rgba(255,255,255,0.15);
+  background:rgba(255,255,255,0.05); color:#d0d8e8;
+  font-size:.85rem; cursor:pointer; transition:all .2s;
+}
+.vp-mc-btn:hover {
+  border-color:rgba(0,240,255,0.4); background:rgba(0,240,255,0.08);
+}
+.vp-mc-btn.correct {
+  border-color:#00ff88; background:rgba(0,255,136,0.1); color:#00ff88;
+}
+.vp-mc-btn.wrong {
+  border-color:#ff4466; background:rgba(255,68,102,0.1); color:#ff4466;
+}
+.vp-mc-result {
+  margin-top:10px; font-size:.8rem; animation:kcIn .3s ease;
 }
 
 /* ══════════════════════════════════════════
@@ -3511,6 +3646,22 @@ a { color:inherit; text-decoration:none; }
       </div>
     </div>
 
+    <!-- ═══ VIDEO PLAYER SCREEN ═══ -->
+    <div class="screen" id="screenVideoPlayer">
+      <div class="vp-header">
+        <button class="vp-back-btn" onclick="closeVideoPlayer()">⬅</button>
+        <div class="vp-title" id="vpTitle">–</div>
+      </div>
+      <div class="vp-player-wrap">
+        <video id="vpVideo" controls preload="metadata" playsinline></video>
+      </div>
+      <div class="vp-glow-road" id="vpGlowRoad"></div>
+      <div class="vp-scroll">
+        <div class="vp-knowledge-area" id="vpKnowledge"></div>
+        <div class="vp-mini-check" id="vpMiniCheck" style="display:none"></div>
+      </div>
+    </div>
+
     <!-- ═══ SETTINGS SCREEN ═══ -->
     <div class="screen" id="screenSettings">
       <div class="settings-inner">
@@ -4643,6 +4794,9 @@ function enterApp() {
 }
 
 function showTab(tab, forceType) {
+  // Close video player if active
+  var vpScreen = document.getElementById('screenVideoPlayer');
+  if (vpScreen && vpScreen.classList.contains('active')) closeVideoPlayer();
   stopAllSpeech();
   activeTab = tab;
   document.querySelectorAll('.bn-tab').forEach(function(b) { b.classList.remove('active'); });
@@ -4768,6 +4922,225 @@ function setLibraryTab(tab) {
     b.classList.toggle('active', b.getAttribute('data-tab') === tab);
   });
   renderLibrary();
+}
+
+// ════════════════════════════════════════════
+//  VIDEO PLAYER — The Road Ahead
+// ════════════════════════════════════════════
+var _currentVideo = null;
+var _vpWaypoints = [];
+var _vpKnowledgeIds = [];
+var _vpTimer = null;
+
+function openVideoPlayer(filePath) {
+  // Find video in cache
+  var v = null;
+  if (_videosCached) {
+    for (var i = 0; i < _videosCached.length; i++) {
+      var c = _videosCached[i];
+      if (c.file_path === filePath || c.youtube_url === filePath) { v = c; break; }
+    }
+  }
+  if (!v) return;
+
+  _currentVideo = v;
+  _vpKnowledgeIds = [];
+
+  // Title
+  var title = appLang === 'th' ? (v.title_th || v.title_no || v.title_en || '') :
+    appLang === 'en' ? (v.title_en || v.title_no || v.title_th || '') :
+    (v.title_no || v.title_en || v.title_th || '');
+  document.getElementById('vpTitle').textContent = title;
+
+  // Build waypoints from topic_tags
+  var tags = v.topic_tags || [];
+  var dur = v.duration_seconds || 60;
+  _vpWaypoints = [];
+  if (tags.length) {
+    var seg = dur / tags.length;
+    tags.forEach(function(t, i) {
+      _vpWaypoints.push({ time: Math.round(seg * i), label: t, shown: false, index: i });
+    });
+  }
+  // Always add an end waypoint
+  _vpWaypoints.push({ time: dur, label: '', shown: false, index: _vpWaypoints.length });
+
+  // Build Glow Road
+  buildGlowRoad();
+
+  // Set video source
+  var vid = document.getElementById('vpVideo');
+  var rawPath = v.file_path || '';
+  if (rawPath && rawPath.indexOf('/public_assets/') === 0) {
+    rawPath = '/api/assets/' + rawPath.substring('/public_assets/'.length);
+  }
+  if (rawPath) {
+    vid.src = rawPath;
+  } else if (v.youtube_url) {
+    vid.innerHTML = '<iframe src="https://www.youtube.com/embed/' + _extractYtId(v.youtube_url) + '?autoplay=1" style="width:100%;aspect-ratio:16/9" frameborder="0" allow="autoplay;encrypted-media" allowfullscreen></iframe>';
+    vid.style.display = 'none';
+  }
+
+  // Reset knowledge area
+  document.getElementById('vpKnowledge').innerHTML = '<div style="text-align:center;color:var(--muted);padding:12px;font-size:.8rem">🧠 Kunnskapskort dukker opp underveis</div>';
+  document.getElementById('vpMiniCheck').style.display = 'none';
+
+  // Time update listener
+  if (vid) {
+    vid.ontimeupdate = onVpTimeUpdate;
+    vid.onended = onVpEnded;
+    vid.onplay = function() { startVpTimer(); };
+    vid.onpause = function() { stopVpTimer(); };
+  }
+
+  showScreen('screenVideoPlayer');
+  // Hide bottom nav for full player experience
+  document.getElementById('bottomNav').style.display = 'none';
+}
+
+function closeVideoPlayer() {
+  stopVpTimer();
+  var vid = document.getElementById('vpVideo');
+  if (vid) { vid.pause(); vid.src = ''; vid.ontimeupdate = null; vid.onended = null; vid.onplay = null; vid.onpause = null; }
+  _currentVideo = null;
+  document.getElementById('bottomNav').style.display = 'flex';
+  showScreen('screenLibrary');
+}
+
+function _extractYtId(url) {
+  if (!url) return '';
+  var m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/);
+  return m ? m[1] : '';
+}
+
+function buildGlowRoad() {
+  var road = document.getElementById('vpGlowRoad');
+  if (!road) return;
+  var html = '<div class="vp-glow-track">';
+  _vpWaypoints.forEach(function(wp, i) {
+    if (wp.index === _vpWaypoints.length - 1) return; // skip end marker in visual
+    var label = wp.label ? wp.label.substring(0, 12) : '';
+    html += '<div class="vp-glow-dot-wrap">'
+      + '<div class="vp-glow-dot" id="vpDot' + i + '" title="' + escH(wp.label) + '" onclick="seekToWaypoint(' + i + ')"></div>'
+      + (label ? '<div class="vp-glow-label">' + escH(label) + '</div>' : '')
+      + '</div>';
+  });
+  html += '</div>';
+  road.innerHTML = html;
+}
+
+function seekToWaypoint(idx) {
+  var wp = _vpWaypoints[idx];
+  if (!wp) return;
+  var vid = document.getElementById('vpVideo');
+  if (vid && vid.duration) { vid.currentTime = wp.time; vid.play(); }
+}
+
+function onVpTimeUpdate() {
+  var vid = document.getElementById('vpVideo');
+  if (!vid || !vid.duration) return;
+  var t = vid.currentTime;
+  var dur = vid.duration;
+
+  // Update glow dots
+  _vpWaypoints.forEach(function(wp, i) {
+    if (wp.index === _vpWaypoints.length - 1) return;
+    var dot = document.getElementById('vpDot' + i);
+    if (!dot) return;
+    var wpEnd = _vpWaypoints[i + 1] ? _vpWaypoints[i + 1].time : dur;
+    if (t >= wpEnd) {
+      dot.className = 'vp-glow-dot passed';
+    } else if (t >= wp.time) {
+      dot.className = 'vp-glow-dot active';
+      // Show knowledge card if not shown yet
+      if (!wp.shown && wp.label) {
+        wp.shown = true;
+        showKnowledgeCard(wp);
+      }
+    } else {
+      dot.className = 'vp-glow-dot';
+    }
+  });
+}
+
+function showKnowledgeCard(wp) {
+  var area = document.getElementById('vpKnowledge');
+  // Remove placeholder
+  var placeholder = area.querySelector('div[style]');
+  if (placeholder && !_vpKnowledgeIds.length) area.innerHTML = '';
+
+  var id = 'kc' + Date.now() + Math.random().toString(36).substr(2,3);
+  _vpKnowledgeIds.push(id);
+
+  var body = '';
+  switch((wp.label || '').toLowerCase()) {
+    case 'vikeplikt': body = 'Hvem har vikeplikt? Tenk på høyregelen, forkjørsvei og skilting.'; break;
+    case 'fartsgrenser': body = 'Farten skal alltid tilpasses føre-, sikt- og trafikkforholdene.'; break;
+    case 'skilt': body = 'Trafikkskilt gir deg påbud, forbud og veiledning. Lær deg gruppene!'; break;
+    case 'forbikjøring': body = 'Forbikjøring skal skje til venstre. Sjekk sikt og fart før du kjører forbi.'; break;
+    case 'parkering': body = 'Parkering er all hensetting av kjøretøy. Unntak: kortest mulig stans.'; break;
+    case 'rygging': body = 'Den som rygger har vikeplikt for all annen trafikk.'; break;
+    case 'motorvei': body = 'På motorvei: hold farten, bruk høyre felt, ingen rygging eller vending.'; break;
+    case 'alkohol': body = '0,2 promille er lovens grense. Ingen alkohol før du kjører!'; break;
+    case 'gangfelt': body = 'Vikeplikt for gående som er i gangfeltet eller på vei ut i det.'; break;
+    case 'sikkerhet': body = 'Bilbelte er påbudt for alle. Sikre løse gjenstander før kjøring.'; break;
+    default: body = 'Viktig tema: ' + escH(wp.label) + '. Følg trafikkreglene for sikker kjøring.'; break;
+  }
+
+  var html = '<div class="vp-knowledge-card" id="' + id + '">'
+    + '<div class="vp-kc-title">📍 ' + escH(wp.label) + '</div>'
+    + '<div class="vp-kc-body">' + body + '</div>'
+    + '</div>';
+  area.insertAdjacentHTML('beforeend', html);
+
+  // Auto-fade after 5s
+  setTimeout(function() {
+    var el = document.getElementById(id);
+    if (el) { el.classList.add('fading'); setTimeout(function() { if (el) el.remove(); }, 500); }
+  }, 5000);
+}
+
+function startVpTimer() {
+  stopVpTimer();
+  _vpTimer = setInterval(function() {
+    var vid = document.getElementById('vpVideo');
+    if (!vid || !vid.duration || vid.paused) return;
+    onVpTimeUpdate();
+  }, 500);
+}
+
+function stopVpTimer() {
+  if (_vpTimer) { clearInterval(_vpTimer); _vpTimer = null; }
+}
+
+function onVpEnded() {
+  // Show mini-check
+  var tags = _currentVideo ? (_currentVideo.topic_tags || []) : [];
+  var topic = tags.length ? tags[0] : 'temaet';
+  var question = 'Lærte du noe nytt om ' + topic + '?';
+  var html = '<div class="vp-mc-question">🤔 ' + escH(question) + '</div>'
+    + '<div class="vp-mc-options">'
+    + '<button class="vp-mc-btn" onclick="answerMiniCheck(this,true)">Ja, det gjorde jeg!</button>'
+    + '<button class="vp-mc-btn" onclick="answerMiniCheck(this,false)">Ikke helt</button>'
+    + '</div>'
+    + '<div class="vp-mc-result" id="vpMcResult"></div>';
+  var mc = document.getElementById('vpMiniCheck');
+  mc.innerHTML = html;
+  mc.style.display = 'block';
+  mc.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function answerMiniCheck(btn, correct) {
+  document.querySelectorAll('.vp-mc-btn').forEach(function(b) { b.disabled = true; });
+  btn.classList.add(correct ? 'correct' : 'wrong');
+  var result = document.getElementById('vpMcResult');
+  if (result) {
+    if (correct) {
+      result.innerHTML = '⭐ Topp! Fortsett å øve, så sitter det!';
+    } else {
+      result.innerHTML = '💪 Ingen fare! Se videoen en gang til eller les i Studieboken.';
+    }
+  }
 }
 
 // ════════════════════════════════════════════
@@ -6791,37 +7164,24 @@ function buildVideoCard(v) {
   if (!title) return '';
   var dur = _fmtDur(v.duration_seconds);
 
-  // Local mp4 file
-  var rawPath = v.file_path || '';
-  if (rawPath && rawPath.indexOf('/public_assets/') === 0) {
-    rawPath = '/api/assets/' + rawPath.substring('/public_assets/'.length);
-  }
-  if (rawPath) {
-    return '<div class="vid-card vid-card-local">'
-      + '<div class="vid-info">'
-        + '<div class="vid-lbl">' + escH(t('video_short')) + '</div>'
-        + '<div class="vid-title">' + title + '</div>'
-        + (dur ? '<div class="vid-dur">' + dur + '</div>' : '')
-      + '</div>'
-      + '<video class="vid-player" controls preload="none" src="' + escH(rawPath) + '"></video>'
-      + '</div>';
-  }
+  // Determine source key (file_path or youtube_url)
+  var srcKey = v.file_path || v.youtube_url || '';
+  if (!srcKey) return '';
+  if (v.youtube_url) srcKey = v.youtube_url;
 
-  // YouTube link
-  var url = escH(v.youtube_url || '');
-  if (!url) return '';
-  var thumb = v.thumbnail_url || _ytThumb(v.youtube_url);
-  return '<a class="vid-card" href="' + url + '" target="_blank" rel="noopener">'
-    + '<div class="vid-thumb-wrap">'
-      + (thumb ? '<img class="vid-thumb" src="' + escH(thumb) + '" loading="lazy" alt="">' : '▶')
+  var thumb = v.thumbnail_url || '';
+  var thumbStyle = thumb ? ' style="background-image:url(' + escH(thumb) + ')"' : '';
+
+  return '<div class="vid-card vid-card-local" onclick="openVideoPlayer(\'' + escH(srcKey) + '\')">'
+    + '<div class="vid-card-thumb"' + thumbStyle + '>'
+      + '<div class="vid-card-play"><span>▶</span></div>'
     + '</div>'
     + '<div class="vid-info">'
       + '<div class="vid-lbl">' + escH(t('video_short')) + '</div>'
       + '<div class="vid-title">' + title + '</div>'
       + (dur ? '<div class="vid-dur">' + dur + '</div>' : '')
     + '</div>'
-    + '<div class="vid-arrow">→</div>'
-    + '</a>';
+    + '</div>';
 }
 
 async function fetchVideoForTopic(tag) {
