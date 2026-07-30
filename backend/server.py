@@ -5096,32 +5096,42 @@ async def ensure_indexes():
         logging.getLogger("indexes").warning("Usage index creation skipped: %s", exc)
 
 
-# ── TTS-ruting: absolutt språkisolasjon i lyd ──────────────────────────────
-#   th-TH  → Google Cloud TTS (thai mannsstemme). Aldri klonet stemme.
+# ── TTS-ruting: Michaels klonede stemme på alle språk ──────────────────────
+#   th-TH  → ElevenLabs "Ai Mike" (Michaels klonede stemme)
 #   nb-NO  → ElevenLabs "Ai Mike" (Michaels klonede stemme)
 #   en-US  → ElevenLabs "Ai Mike" (Michaels klonede stemme)
-# Google brukes for norsk/engelsk kun som nødfallback når ElevenLabs svikter,
-# og da logges det som feil — det er aldri ønsket lydopplevelse.
+# Google Cloud TTS er kun nødfallback når ElevenLabs svikter, og logges da som
+# feil — det er aldri ønsket lydopplevelse.
+#
+# Språkisolasjonen ligger i TEKSTEN, ikke i leverandøren: hvert språk sender sin
+# egen tekst, og cache-nøkkelen holder språkene fysisk adskilt.
 
-# Google Cloud TTS voice mapping for all three app languages
+# Google Cloud TTS voice mapping — brukes kun ved nødfallback
 _GOOGLE_TTS_VOICES = {
     "th-TH": "th-TH-Chirp3-HD-Achird",   # Male Chirp3 HD — Google deprecated th-TH-Standard-C
     "nb-NO": "nb-NO-Wavenet-A",
     "en-US": "en-US-Wavenet-D",
 }
 
-# Språk som skal snakkes med Michaels klonede stemme. Thai er bevisst utelatt:
-# den klonede stemmen er trent på norsk/engelsk og bryter språkisolasjonen.
-_CLONED_VOICE_LANGS = ("nb-NO", "en-US")
-
 # Voice ID kan overstyres med env-variabel slik at bytte av ElevenLabs-konto
 # ikke krever kodeendring. Default er Michaels eksisterende "Ai Mike".
 _DEFAULT_ELEVENLABS_VOICE_ID = "IoOuTUO7t2kI2VTJqI10"
+
+# Modell-ID er env-styrbar. eleven_flash_v2_5 dekker norsk og engelsk godt, men
+# thai-støtten er usikker. Blir thai-uttalen feil, kan modellen byttes i
+# Railway-variablene uten ny deploy — cache-nøkkelen inkluderer modellen, så
+# gammel thai-lyd blir aldri servert etter et modellbytte.
+_DEFAULT_ELEVENLABS_MODEL_ID = "eleven_flash_v2_5"
 
 
 def _elevenlabs_voice_id() -> str:
     """Klonet Voice ID — env-overstyrbar, med Ai Mike som fallback."""
     return (os.environ.get("ELEVENLABS_VOICE_ID") or "").strip() or _DEFAULT_ELEVENLABS_VOICE_ID
+
+
+def _elevenlabs_model_id() -> str:
+    """ElevenLabs-modell — env-overstyrbar uten kodeendring."""
+    return (os.environ.get("ELEVENLABS_MODEL_ID") or "").strip() or _DEFAULT_ELEVENLABS_MODEL_ID
 
 
 def _tts_cache_path(provider: str, voice: str, lang: str, text: str) -> str:
@@ -5192,25 +5202,12 @@ async def text_to_speech(text: str, lang: str = "th-TH"):
         "google", _GOOGLE_TTS_VOICES.get(lang, "th-TH-Standard-A"), lang, text
     )
 
-    # ── Thai → Google Cloud TTS. Ingen ElevenLabs-rute, ingen unntak. ──────
-    if lang not in _CLONED_VOICE_LANGS:
-        if os.path.exists(google_cache_path):
-            return FileResponse(
-                google_cache_path,
-                media_type="audio/mpeg",
-                headers={"X-TTS-Provider": "google-cached"},
-            )
-        if not google_key:
-            raise HTTPException(
-                status_code=500,
-                detail=f"GOOGLE_API_KEY mangler — kan ikke lage lyd for {lang}.",
-            )
-        logger.info("TTS %s → Google Cloud TTS", lang)
-        return await _google_tts(text, lang, google_key, google_cache_path)
-
-    # ── Norsk/engelsk → Michaels klonede ElevenLabs-stemme ────────────────
+    # ── Alle språk → Michaels klonede ElevenLabs-stemme ────────────────────
     voice_id = _elevenlabs_voice_id()
-    cloned_cache_path = _tts_cache_path("elevenlabs", voice_id, lang, text)
+    model_id = _elevenlabs_model_id()
+    # Modellen er en del av leverandør-nøkkelen: bytter vi modell for å fikse
+    # thai-uttale, får vi nye filer i stedet for gammel, feiluttalt cache.
+    cloned_cache_path = _tts_cache_path(f"elevenlabs:{model_id}", voice_id, lang, text)
 
     if os.path.exists(cloned_cache_path):
         return FileResponse(
@@ -5234,10 +5231,9 @@ async def text_to_speech(text: str, lang: str = "th-TH"):
                 "Content-Type": "application/json",
                 "xi-api-key": elevenlabs_key,
             }
-            # eleven_flash_v2_5 supports Norwegian + English
             payload = {
                 "text": text,
-                "model_id": "eleven_flash_v2_5",
+                "model_id": model_id,
                 "voice_settings": {
                     "stability": 0.5,
                     "similarity_boost": 0.75,
@@ -5248,7 +5244,10 @@ async def text_to_speech(text: str, lang: str = "th-TH"):
                 if r.status_code == 200:
                     with open(cloned_cache_path, "wb") as f:
                         f.write(r.content)
-                    logger.info("TTS %s → ElevenLabs klonet stemme %s", lang, voice_id)
+                    logger.info(
+                        "TTS %s → ElevenLabs klonet stemme %s (modell %s)",
+                        lang, voice_id, model_id,
+                    )
                     return FileResponse(
                         cloned_cache_path,
                         media_type="audio/mpeg",
@@ -5256,8 +5255,8 @@ async def text_to_speech(text: str, lang: str = "th-TH"):
                     )
                 # Logges som ERROR, ikke WARNING: dette er tap av Michaels stemme.
                 logger.error(
-                    "KLONET STEMME FEILET: ElevenLabs svarte %d for voice_id=%s (%s). Svar: %s",
-                    r.status_code, voice_id, lang, r.text[:300],
+                    "KLONET STEMME FEILET: ElevenLabs svarte %d for voice_id=%s modell=%s (%s). Svar: %s",
+                    r.status_code, voice_id, model_id, lang, r.text[:300],
                 )
         except Exception as e:
             logger.error(
@@ -5265,7 +5264,7 @@ async def text_to_speech(text: str, lang: str = "th-TH"):
                 e, voice_id, lang,
             )
 
-    # ── Nodfallback for norsk/engelsk: Google, i egen cache-nokkel ─────────
+    # ── Nodfallback: Google Cloud TTS, i egen cache-nokkel ────────────────
     # Egen nokkel gjor at fallback-lyden ALDRI serveres igjen nar den klonede
     # stemmen er tilbake — da treffer forespørselen elevenlabs-nokkelen.
     if not google_key:
@@ -5291,25 +5290,22 @@ async def tts_status():
     has_eleven = bool(os.environ.get("ELEVENLABS_API_KEY"))
     has_google = bool(os.environ.get("GOOGLE_API_KEY"))
     voice_id = _elevenlabs_voice_id()
+    model_id = _elevenlabs_model_id()
 
     def route(lang: str) -> dict:
-        if lang in _CLONED_VOICE_LANGS:
-            return {
-                "intended": f"elevenlabs:{voice_id}",
-                "actual": f"elevenlabs:{voice_id}" if has_eleven
-                          else (f"google:{_GOOGLE_TTS_VOICES[lang]} (FALLBACK)" if has_google else "ingen"),
-                "ok": has_eleven,
-            }
         return {
-            "intended": f"google:{_GOOGLE_TTS_VOICES.get(lang)}",
-            "actual": f"google:{_GOOGLE_TTS_VOICES.get(lang)}" if has_google else "ingen",
-            "ok": has_google,
+            "intended": f"elevenlabs:{voice_id}",
+            "actual": f"elevenlabs:{voice_id}" if has_eleven
+                      else (f"google:{_GOOGLE_TTS_VOICES[lang]} (FALLBACK)" if has_google else "ingen"),
+            "ok": has_eleven,
         }
 
     return {
         "elevenlabs_key_configured": has_eleven,
         "google_key_configured": has_google,
         "cloned_voice_id": voice_id,
+        "elevenlabs_model_id": model_id,
+        "fallback_provider": "google" if has_google else None,
         "languages": {lang: route(lang) for lang in ("th-TH", "nb-NO", "en-US")},
     }
 
