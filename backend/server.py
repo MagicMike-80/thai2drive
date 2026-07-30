@@ -5096,12 +5096,48 @@ async def ensure_indexes():
         logging.getLogger("indexes").warning("Usage index creation skipped: %s", exc)
 
 
+# ── TTS-ruting: absolutt språkisolasjon i lyd ──────────────────────────────
+#   th-TH  → Google Cloud TTS (thai mannsstemme). Aldri klonet stemme.
+#   nb-NO  → ElevenLabs "Ai Mike" (Michaels klonede stemme)
+#   en-US  → ElevenLabs "Ai Mike" (Michaels klonede stemme)
+# Google brukes for norsk/engelsk kun som nødfallback når ElevenLabs svikter,
+# og da logges det som feil — det er aldri ønsket lydopplevelse.
+
 # Google Cloud TTS voice mapping for all three app languages
 _GOOGLE_TTS_VOICES = {
     "th-TH": "th-TH-Chirp3-HD-Achird",   # Male Chirp3 HD — Google deprecated th-TH-Standard-C
     "nb-NO": "nb-NO-Wavenet-A",
     "en-US": "en-US-Wavenet-D",
 }
+
+# Språk som skal snakkes med Michaels klonede stemme. Thai er bevisst utelatt:
+# den klonede stemmen er trent på norsk/engelsk og bryter språkisolasjonen.
+_CLONED_VOICE_LANGS = ("nb-NO", "en-US")
+
+# Voice ID kan overstyres med env-variabel slik at bytte av ElevenLabs-konto
+# ikke krever kodeendring. Default er Michaels eksisterende "Ai Mike".
+_DEFAULT_ELEVENLABS_VOICE_ID = "IoOuTUO7t2kI2VTJqI10"
+
+
+def _elevenlabs_voice_id() -> str:
+    """Klonet Voice ID — env-overstyrbar, med Ai Mike som fallback."""
+    return (os.environ.get("ELEVENLABS_VOICE_ID") or "").strip() or _DEFAULT_ELEVENLABS_VOICE_ID
+
+
+def _tts_cache_path(provider: str, voice: str, lang: str, text: str) -> str:
+    """
+    Cache-sti som inkluderer leverandør + stemme i nøkkelen.
+
+    Uten dette ville en fil generert under et ElevenLabs-utfall (altså med
+    Google-stemmen) ligge på samme nøkkel og servere feil stemme for alltid,
+    selv etter at den klonede stemmen er tilbake.
+    """
+    import hashlib
+    cache_key = hashlib.md5(f"{provider}:{voice}:{lang}:{text}".encode("utf-8")).hexdigest()
+    cache_dir = os.path.join("public_assets", "audio")
+    os.makedirs(cache_dir, exist_ok=True)
+    return os.path.join(cache_dir, f"{cache_key}.mp3")
+
 
 async def _google_tts(text: str, lang: str, google_key: str, cache_path: str):
     """Helper — synthesize speech via Google Cloud TTS and return MP3."""
@@ -5132,7 +5168,11 @@ async def _google_tts(text: str, lang: str, google_key: str, cache_path: str):
             with open(cache_path, "wb") as f:
                 f.write(audio_bytes)
 
-            return FileResponse(cache_path, media_type="audio/mpeg")
+            return FileResponse(
+                cache_path,
+                media_type="audio/mpeg",
+                headers={"X-TTS-Provider": "google", "X-TTS-Voice": voice_name},
+            )
 
     except HTTPException as he:
         raise he
@@ -5143,40 +5183,56 @@ async def _google_tts(text: str, lang: str, google_key: str, cache_path: str):
 
 @app.get("/api/tts")
 async def text_to_speech(text: str, lang: str = "th-TH"):
-    import hashlib
-    import base64
     import httpx
     from fastapi import HTTPException
-    from fastapi.responses import FileResponse, Response
+    from fastapi.responses import FileResponse
 
-    # Create a unique cache key based on language and text
-    cache_key = hashlib.md5(f"{lang}:{text}".encode('utf-8')).hexdigest()
-    cache_dir = os.path.join("public_assets", "audio")
-    os.makedirs(cache_dir, exist_ok=True)
-    cache_path = os.path.join(cache_dir, f"{cache_key}.mp3")
-
-    # Return cached audio if it exists
-    if os.path.exists(cache_path):
-        return FileResponse(cache_path, media_type="audio/mpeg")
-
-    # ── Language routing ──────────────────────────────────────────────────
-    # Thai → Google Cloud TTS (male voice, no accent issues)
-    # Norwegian/English → ElevenLabs Ai Mike (your cloned voice)
     google_key = os.environ.get("GOOGLE_API_KEY")
+    google_cache_path = _tts_cache_path(
+        "google", _GOOGLE_TTS_VOICES.get(lang, "th-TH-Standard-A"), lang, text
+    )
 
-    if lang == "th-TH" and google_key:
-        logger.info("Thai TTS → Google Cloud TTS (male Thai voice)")
-        return await _google_tts(text, lang, google_key, cache_path)
+    # ── Thai → Google Cloud TTS. Ingen ElevenLabs-rute, ingen unntak. ──────
+    if lang not in _CLONED_VOICE_LANGS:
+        if os.path.exists(google_cache_path):
+            return FileResponse(
+                google_cache_path,
+                media_type="audio/mpeg",
+                headers={"X-TTS-Provider": "google-cached"},
+            )
+        if not google_key:
+            raise HTTPException(
+                status_code=500,
+                detail=f"GOOGLE_API_KEY mangler — kan ikke lage lyd for {lang}.",
+            )
+        logger.info("TTS %s → Google Cloud TTS", lang)
+        return await _google_tts(text, lang, google_key, google_cache_path)
+
+    # ── Norsk/engelsk → Michaels klonede ElevenLabs-stemme ────────────────
+    voice_id = _elevenlabs_voice_id()
+    cloned_cache_path = _tts_cache_path("elevenlabs", voice_id, lang, text)
+
+    if os.path.exists(cloned_cache_path):
+        return FileResponse(
+            cloned_cache_path,
+            media_type="audio/mpeg",
+            headers={"X-TTS-Provider": "elevenlabs-cached", "X-TTS-Voice": voice_id},
+        )
 
     elevenlabs_key = os.environ.get("ELEVENLABS_API_KEY")
-    if elevenlabs_key:
+    if not elevenlabs_key:
+        logger.error(
+            "KLONET STEMME UTILGJENGELIG: ELEVENLABS_API_KEY er ikke satt — %s "
+            "faller tilbake til Google-stemme. Sett nokkelen i miljovariablene.",
+            lang,
+        )
+    else:
         try:
-            voice_id = "IoOuTUO7t2kI2VTJqI10"
             url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}"
             headers = {
                 "Accept": "audio/mpeg",
                 "Content-Type": "application/json",
-                "xi-api-key": elevenlabs_key
+                "xi-api-key": elevenlabs_key,
             }
             # eleven_flash_v2_5 supports Norwegian + English
             payload = {
@@ -5184,27 +5240,78 @@ async def text_to_speech(text: str, lang: str = "th-TH"):
                 "model_id": "eleven_flash_v2_5",
                 "voice_settings": {
                     "stability": 0.5,
-                    "similarity_boost": 0.75
-                }
+                    "similarity_boost": 0.75,
+                },
             }
             async with httpx.AsyncClient() as client:
                 r = await client.post(url, json=payload, headers=headers, timeout=60.0)
                 if r.status_code == 200:
-                    with open(cache_path, "wb") as f:
+                    with open(cloned_cache_path, "wb") as f:
                         f.write(r.content)
-                    return FileResponse(cache_path, media_type="audio/mpeg")
-                else:
-                    logger.warning("ElevenLabs API error %d — falling back to Google TTS", r.status_code)
+                    logger.info("TTS %s → ElevenLabs klonet stemme %s", lang, voice_id)
+                    return FileResponse(
+                        cloned_cache_path,
+                        media_type="audio/mpeg",
+                        headers={"X-TTS-Provider": "elevenlabs", "X-TTS-Voice": voice_id},
+                    )
+                # Logges som ERROR, ikke WARNING: dette er tap av Michaels stemme.
+                logger.error(
+                    "KLONET STEMME FEILET: ElevenLabs svarte %d for voice_id=%s (%s). Svar: %s",
+                    r.status_code, voice_id, lang, r.text[:300],
+                )
         except Exception as e:
-            logger.warning("ElevenLabs request failed: %s — falling back to Google TTS", e)
-    else:
-        logger.info("ELEVENLABS_API_KEY not set — using Google Cloud TTS")
+            logger.error(
+                "KLONET STEMME FEILET: ElevenLabs-kall kastet %s for voice_id=%s (%s)",
+                e, voice_id, lang,
+            )
 
-    # ── Fallback: Google Cloud Text-to-Speech ──────────────────────────────
+    # ── Nodfallback for norsk/engelsk: Google, i egen cache-nokkel ─────────
+    # Egen nokkel gjor at fallback-lyden ALDRI serveres igjen nar den klonede
+    # stemmen er tilbake — da treffer forespørselen elevenlabs-nokkelen.
     if not google_key:
-        raise HTTPException(status_code=500, detail="No TTS provider available (neither ELEVENLABS_API_KEY nor GOOGLE_API_KEY configured).")
+        raise HTTPException(
+            status_code=500,
+            detail="Ingen TTS-leverandor tilgjengelig (verken ELEVENLABS_API_KEY eller GOOGLE_API_KEY er satt).",
+        )
+    if os.path.exists(google_cache_path):
+        return FileResponse(
+            google_cache_path,
+            media_type="audio/mpeg",
+            headers={"X-TTS-Provider": "google-fallback-cached"},
+        )
+    return await _google_tts(text, lang, google_key, google_cache_path)
 
-    return await _google_tts(text, lang, google_key, cache_path)
+
+@app.get("/api/tts/status")
+async def tts_status():
+    """
+    Diagnostikk for lydruting — viser hvilken stemme hvert sprak faktisk far.
+    Returnerer ingen hemmeligheter, kun om nokler er konfigurert.
+    """
+    has_eleven = bool(os.environ.get("ELEVENLABS_API_KEY"))
+    has_google = bool(os.environ.get("GOOGLE_API_KEY"))
+    voice_id = _elevenlabs_voice_id()
+
+    def route(lang: str) -> dict:
+        if lang in _CLONED_VOICE_LANGS:
+            return {
+                "intended": f"elevenlabs:{voice_id}",
+                "actual": f"elevenlabs:{voice_id}" if has_eleven
+                          else (f"google:{_GOOGLE_TTS_VOICES[lang]} (FALLBACK)" if has_google else "ingen"),
+                "ok": has_eleven,
+            }
+        return {
+            "intended": f"google:{_GOOGLE_TTS_VOICES.get(lang)}",
+            "actual": f"google:{_GOOGLE_TTS_VOICES.get(lang)}" if has_google else "ingen",
+            "ok": has_google,
+        }
+
+    return {
+        "elevenlabs_key_configured": has_eleven,
+        "google_key_configured": has_google,
+        "cloned_voice_id": voice_id,
+        "languages": {lang: route(lang) for lang in ("th-TH", "nb-NO", "en-US")},
+    }
 
 @app.get("/api/health")
 async def health_check():
