@@ -285,7 +285,13 @@ a { color:inherit; text-decoration:none; }
 .auth-flag {
   width:28px; height:28px; border-radius:50%;
   overflow:hidden; display:inline-flex; flex-shrink:0;
+  /* Knapp-reset: flaggene er ekte språkknapper, men skal se ut som før */
+  padding:0; border:none; background:transparent; cursor:pointer;
+  transition:box-shadow .15s ease, opacity .15s ease;
+  opacity:.6;
 }
+.auth-flag.active { opacity:1; box-shadow:0 0 0 2px var(--orange); }
+.auth-flag:hover:not(.active) { opacity:.85; }
 .auth-flag svg { width:100%; height:100%; display:block; }
 
 .auth-tabs {
@@ -3349,14 +3355,17 @@ a { color:inherit; text-decoration:none; }
         <div class="auth-header">
           <div class="auth-big-icon"><img src="/api/assets/developer-icon-512.png" style="width:56px;height:56px;border-radius:14px;object-fit:cover;"></div>
           <h1>Thai<span>2Drive</span></h1>
-          <p>Teoriprøven på thai</p>
+          <p data-key="auth_tagline">Teoriprøven på thai</p>
           <div class="auth-flags">
-            <span class="auth-flag">
+            <button type="button" class="auth-flag" id="authLangTH" onclick="setLang('th')" title="ภาษาไทย" aria-label="ภาษาไทย">
               <svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg"><rect width="900" height="600" fill="#A51931"/><rect width="900" height="480" y="60" fill="#F4F5F8"/><rect width="900" height="320" y="140" fill="#241D4F"/></svg>
-            </span>
-            <span class="auth-flag">
+            </button>
+            <button type="button" class="auth-flag" id="authLangNO" onclick="setLang('no')" title="Norsk" aria-label="Norsk">
               <svg viewBox="0 0 22 16" xmlns="http://www.w3.org/2000/svg"><rect width="22" height="16" fill="#EF2B2D"/><rect x="6" width="4" height="16" fill="#fff"/><rect y="6" width="22" height="4" fill="#fff"/><rect x="7" width="2" height="16" fill="#002868"/><rect y="7" width="22" height="2" fill="#002868"/></svg>
-            </span>
+            </button>
+            <button type="button" class="auth-flag" id="authLangEN" onclick="setLang('en')" title="English" aria-label="English">
+              <svg viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg"><rect width="60" height="30" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#C8102E" stroke-width="4"/><rect y="11" width="60" height="8" fill="#fff"/><rect x="26" width="8" height="30" fill="#fff"/><rect y="12" width="60" height="6" fill="#C8102E"/><rect x="27" width="6" height="30" fill="#C8102E"/></svg>
+            </button>
           </div>
         </div>
 
@@ -3419,7 +3428,7 @@ a { color:inherit; text-decoration:none; }
 
         <!-- RESET PASSWORD (enter code + new password) -->
         <div id="formReset" style="display:none">
-          <p style="font-size:.85rem;color:var(--muted);margin-bottom:12px;line-height:1.5" id="resetInstructions">Sjekk e-posten din for koden</p>
+          <p style="font-size:.85rem;color:var(--muted);margin-bottom:12px;line-height:1.5" id="resetInstructions" data-key="reset_instructions">Sjekk e-posten din for koden</p>
           <div class="form-group">
             <label data-key="reset_code_label">Kode</label>
             <input type="text" id="resetCode" placeholder="123456" inputmode="numeric" maxlength="6" autocomplete="one-time-code" style="letter-spacing:.2em;font-size:1.2rem">
@@ -3427,7 +3436,7 @@ a { color:inherit; text-decoration:none; }
           <div class="form-group">
             <label data-key="reset_new_pass_label">Nytt passord</label>
             <div class="pw-wrap">
-              <input type="password" id="resetNewPass" placeholder="Minst 6 tegn" autocomplete="new-password">
+              <input type="password" id="resetNewPass" placeholder="Minst 6 tegn" data-placeholder-key="auth_password_min_placeholder" autocomplete="new-password">
               <button type="button" class="pw-eye" onclick="togglePw(this)" tabindex="-1" title="Vis/skjul passord" aria-label="Vis/skjul passord">👁</button>
             </div>
           </div>
@@ -4266,6 +4275,7 @@ var UI = {
   signs:       {th:'ป้ายจราจร',          no:'Trafikkskilt',     en:'Traffic Signs'},
   signs_empty: {th:'ไม่พบป้าย',           no:'Ingen skilt funnet', en:'No signs found'},
   login:       {th:'เข้าสู่ระบบ',          no:'Logg inn',         en:'Log in'},
+  auth_tagline:{th:'ข้อสอบทฤษฎีใบขับขี่นอร์เวย์', no:'Teoriprøven på thai', en:'The Norwegian theory test'},
   no_results:  {th:'ไม่พบผลลัพธ์',          no:'Ingen treff',      en:'No results'},
   generic_error:{th:'มีบางอย่างผิดพลาด',    no:'Noe gikk galt',    en:'Something went wrong'},
   saved_chapter:{th:'บันทึกบทเรียนแล้ว',    no:'Kapittel lagret',  en:'Chapter saved'},
@@ -4750,10 +4760,12 @@ var PREMIUM_PRICING = {
   applyThemeFromStorage();
   applyUILang();
   loadPremiumPricing();
-  // Init top bar language buttons
+  // Init top bar + innloggingsskjermens språkknapper
   ['TH','NO','EN'].forEach(function(l) {
     var topBtn = document.getElementById('topLang' + l);
     if (topBtn) topBtn.classList.toggle('active', appLang === l.toLowerCase());
+    var authBtn = document.getElementById('authLang' + l);
+    if (authBtn) authBtn.classList.toggle('active', appLang === l.toLowerCase());
   });
   if (token) {
     try {
@@ -8229,6 +8241,8 @@ function setLang(lang) {
     if (btn) btn.classList.toggle('active', lang === l.toLowerCase());
     var topBtn = document.getElementById('topLang' + l);
     if (topBtn) topBtn.classList.toggle('active', lang === l.toLowerCase());
+    var authBtn = document.getElementById('authLang' + l);
+    if (authBtn) authBtn.classList.toggle('active', lang === l.toLowerCase());
   });
   applyUILang();
   // Reset signs cache so it reloads in new language
