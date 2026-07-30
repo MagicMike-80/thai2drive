@@ -92,9 +92,13 @@ credentials.json
 *.pem
 *.key
 .credentials
+SIGNING-KEYS-REFERENCE.md
 
 # Temp script output files
 backend/scripts/from_file_*.json
 
 context/transcripts/
 .memsearch/
+
+# Agent pact - mellom meg og Stein
+context/agent-pact.md
