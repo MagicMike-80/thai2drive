@@ -5114,14 +5114,18 @@ _GOOGLE_TTS_VOICES = {
 }
 
 # Voice ID kan overstyres med env-variabel slik at bytte av ElevenLabs-konto
-# ikke krever kodeendring. Default er Michaels eksisterende "Ai Mike".
-_DEFAULT_ELEVENLABS_VOICE_ID = "IoOuTUO7t2kI2VTJqI10"
+# ikke krever kodeendring. Default er Michaels klonede stemme "Michael 1".
+# Den forrige defaulten ("Ai Mike", IoOuTUO7t2kI2VTJqI10) finnes ikke lenger på
+# kontoen og svarte 404 voice_not_found på alle språk — hvert TTS-kall falt da
+# gjennom til Google-nødfallbacken. Verifiser alltid en ny ID med et faktisk
+# TTS-kall før den settes her.
+_DEFAULT_ELEVENLABS_VOICE_ID = "eulvRsWu7NGAUD1FzMVP"
 
-# Modell-ID er env-styrbar. eleven_flash_v2_5 dekker norsk og engelsk godt, men
-# thai-støtten er usikker. Blir thai-uttalen feil, kan modellen byttes i
-# Railway-variablene uten ny deploy — cache-nøkkelen inkluderer modellen, så
-# gammel thai-lyd blir aldri servert etter et modellbytte.
-_DEFAULT_ELEVENLABS_MODEL_ID = "eleven_flash_v2_5"
+# Modell-ID er env-styrbar. eleven_v3 er den eneste modellen på kontoen som har
+# "th" i språklisten (verifisert mot /v1/models) og er derfor påkrevd for thai;
+# den dekker norsk og engelsk like godt. Modellen inngår i cache-nøkkelen, så et
+# modellbytte gir nye filer i stedet for gammel, feiluttalt lyd.
+_DEFAULT_ELEVENLABS_MODEL_ID = "eleven_v3"
 
 
 def _elevenlabs_voice_id() -> str:
