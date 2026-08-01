@@ -26,9 +26,22 @@ import usage as usage_mod
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
-mongo_url = os.environ['MONGO_URL']
+# Fail-soft på modulnivå: en manglende miljøvariabel skal ikke drepe prosessen
+# under import. Da rekker aldri /api/health å svare, og Railway rapporterer bare
+# «1/1 replicas never became healthy» uten å vise hva som mangler.
+# Med .get logges den nøyaktige årsaken, appen booter, og /api/health svarer
+# 200 med db=disconnected slik at feilen er synlig i stedet for stum.
+_boot_log = logging.getLogger("boot")
+mongo_url = os.environ.get('MONGO_URL')
+_db_name = os.environ.get('DB_NAME')
+if not mongo_url:
+    _boot_log.critical("MONGO_URL mangler i miljøet — databasen blir utilgjengelig. Sett den i Railway.")
+    mongo_url = "mongodb://127.0.0.1:27017"
+if not _db_name:
+    _boot_log.critical("DB_NAME mangler i miljøet — faller tilbake til 'thai2drive'. Sett den i Railway.")
+    _db_name = "thai2drive"
 client = AsyncIOMotorClient(mongo_url)
-db = client[os.environ['DB_NAME']]
+db = client[_db_name]
 
 JWT_SECRET = os.environ.get('JWT_SECRET', 'fallback-secret-change-me')
 JWT_ALGORITHM = "HS256"
@@ -5150,54 +5163,60 @@ async def seed_studiebok():
         {"order":15,"icon":"⚠️","title_no":"Kapittel 15 — Risiko, ulykker og unge sjåfører","content_no":'<p>Kunnskap om risiko og ulykkesstatistikk hjelper deg å forstå hvorfor reglene finnes og ta bedre beslutninger.</p>\n\n<p><strong>Hva er risiko?</strong></p>\n<p>Risiko er et mål som kombinerer <em>sannsynligheten</em> og <em>virkningen</em> av en hendelse. En hendelse kan ha stor risiko fordi den er svært sannsynlig, eller fordi konsekvensene vil være katastrofale selv om den er usannsynlig.</p>\n\n<p><strong>Ulykkesstatistikk:</strong></p>\n<ul>\n<li>Ungdom er <strong>overrepresentert</strong> i trafikkulykker</li>\n<li>Bortsett fra selvmord er trafikkulykker den vanligste dødsårsaken blant gutter mellom 15 og 24 år</li>\n<li>Nær <strong>80 prosent</strong> av de omkomne i trafikken er menn</li>\n<li>De første 9 månedene med førerkort: <strong>40 ganger høyere risiko</strong> for å kjøre av veien</li>\n<li>Etter hvert som kjøringen automatiseres, synker risikoen kraftig</li>\n</ul>\n\n<p><strong>Vanligste årsaker til ungdomsulykker:</strong></p>\n<ul>\n<li>For høy fart — manglende evne til å beregne riktig fart</li>\n<li>Tretthet og søvnmangel</li>\n<li>Alkohol og rusmidler</li>\n<li>Uoppmerksomhet (mobil, passasjerer)</li>\n<li>Dårlig vær- og veigrep</li>\n<li>Forbikjøring på feil sted</li>\n</ul>\n\n<p><strong>Kjøreprosessen — SE, FORSTÅ, VELGE:</strong></p>\n<ul>\n<li><strong>SE</strong> — systematisk og aktivt innhente informasjon om trafikkmiljøet. Bruk speil, se langt frem, beveg blikket.</li>\n<li><strong>FORSTÅ</strong> — tolke det du ser. Hva betyr det? Hva kan skje? Hvilken fare foreligger?</li>\n<li><strong>VELGE</strong> — velg riktig handling: fart, plassering, signal/tegn.</li>\n</ul>\n\n<div class="study-tip"><strong>Tips:</strong> En god sjåfør er <em>defensiv og forutseende</em> — ikke nødvendigvis den raskeste. Hensynsfullhet og hjelpsomhet bidrar mer til trafikksikkerheten enn kjøreteknikk alene.</div>\n\n<p><strong>Faktorer som påvirker din kjøreevne negativt:</strong></p>\n<ul>\n<li>Tretthet — etter 17 timer uten søvn er du like svekket som ved 0,5 promille</li>\n<li>Mobil/distraksjon — risikoen for ulykke øker 4-8 ganger</li>\n<li>Alkohol og rusmidler</li>\n<li>Sterke følelser (sinne, sorg, stress)</li>\n<li>Sykdom og medisiner</li>\n</ul>\n\n<p><strong>Selskinnsikkerhet — hvem er ekstra sårbare i trafikken:</strong></p>\n<ul>\n<li>Barn — uforutsigbare, lav synlighet, manglende trafikkforståelse</li>\n<li>Eldre — redusert syn, hørsel og reaksjonsevne</li>\n<li>Syklister og fotgjengere — lite beskyttelse ved kollisjon</li>\n<li>Motorsyklister — svært utsatt i kollisjon</li>\n</ul>'},
     ]
 
-    # Seed studiebok_chapters (used by webapp) — ONLY if empty
-    col = db.studiebok_chapters
-    sb_count = await col.count_documents({})
-    if sb_count == 0:
-        await col.insert_many([{**ch, "image_url": "", "video_url": "", "created_at": now} for ch in CHAPTERS])
+    # Hele seedingen er fail-soft. Den er en bekvemmelighet, ikke en forutsetning
+    # for at API-et kan svare. Uten try/except vil en enkelt DB-timeout her avbryte
+    # oppstarten, /api/health svarer aldri, og Railway melder «never became healthy».
+    try:
+        # Seed studiebok_chapters (used by webapp) — ONLY if empty
+        col = db.studiebok_chapters
+        sb_count = await col.count_documents({})
+        if sb_count == 0:
+            await col.insert_many([{**ch, "image_url": "", "video_url": "", "created_at": now} for ch in CHAPTERS])
 
-    # Seed chapters (used by admin panel Læringsbok) — ONLY if empty
-    col2 = db.chapters
-    ch_count = await col2.count_documents({})
-    if ch_count == 0:
-        admin_docs = []
-        for ch in CHAPTERS:
-            title = ch["title_no"].split(" — ", 1)[-1]
-            admin_docs.append({
+        # Seed chapters (used by admin panel Læringsbok) — ONLY if empty
+        col2 = db.chapters
+        ch_count = await col2.count_documents({})
+        if ch_count == 0:
+            admin_docs = []
+            for ch in CHAPTERS:
+                title = ch["title_no"].split(" — ", 1)[-1]
+                admin_docs.append({
+                    "id": str(uuid.uuid4()),
+                    "chapter_num": ch["order"],
+                    "section_num": 1,
+                    "icon": ch["icon"],
+                    "section_title": {"no": title, "th": "", "en": ""},
+                    "content": {"no": ch["content_no"], "th": "", "en": ""},
+                    "image_url": "",
+                    "video_url": "",
+                    "created_at": now,
+                })
+            await col2.insert_many(admin_docs)
+
+        # Always ensure admin user exists with correct password
+        admin_email = "admin@thai2drive.com"
+        admin_password = "admin123"
+        if not await db.admin_users.find_one({"email": admin_email}):
+            await db.admin_users.insert_one({"email": admin_email})
+        admin_hash = pwd_context.hash(admin_password)
+        existing_admin_user = await db.users.find_one({"email": admin_email})
+        if existing_admin_user:
+            await db.users.update_one({"email": admin_email}, {"$set": {
+                "password_hash": admin_hash,
+                "is_admin": True,
+                "is_premium": True,
+            }})
+        else:
+            await db.users.insert_one({
                 "id": str(uuid.uuid4()),
-                "chapter_num": ch["order"],
-                "section_num": 1,
-                "icon": ch["icon"],
-                "section_title": {"no": title, "th": "", "en": ""},
-                "content": {"no": ch["content_no"], "th": "", "en": ""},
-                "image_url": "",
-                "video_url": "",
+                "email": admin_email,
+                "password_hash": admin_hash,
+                "is_admin": True,
+                "is_premium": True,
                 "created_at": now,
             })
-        await col2.insert_many(admin_docs)
-
-    # Always ensure admin user exists with correct password
-    admin_email = "admin@thai2drive.com"
-    admin_password = "admin123"
-    if not await db.admin_users.find_one({"email": admin_email}):
-        await db.admin_users.insert_one({"email": admin_email})
-    admin_hash = pwd_context.hash(admin_password)
-    existing_admin_user = await db.users.find_one({"email": admin_email})
-    if existing_admin_user:
-        await db.users.update_one({"email": admin_email}, {"$set": {
-            "password_hash": admin_hash,
-            "is_admin": True,
-            "is_premium": True,
-        }})
-    else:
-        await db.users.insert_one({
-            "id": str(uuid.uuid4()),
-            "email": admin_email,
-            "password_hash": admin_hash,
-            "is_admin": True,
-            "is_premium": True,
-            "created_at": now,
-        })
+    except Exception as exc:
+        logging.getLogger("boot").error("Studiebok-seeding hoppet over: %s", exc)
 
 @app.on_event("startup")
 async def log_smtp_config():

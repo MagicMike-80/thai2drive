@@ -30,8 +30,13 @@ import ai_explanations
 logger = logging.getLogger("ai_routes")
 
 # ─── DB (own connection, same pattern as support_chat.py) ─────────────────────
-_mongo = AsyncIOMotorClient(os.environ["MONGO_URL"])
-_db    = _mongo[os.environ.get("DB_NAME", "thai2drive")]
+# Fail-soft: manglende MONGO_URL skal logges, ikke drepe importen av server.py.
+_mongo_url = os.environ.get("MONGO_URL")
+if not _mongo_url:
+    logger.critical("MONGO_URL mangler — AI-rutene får ingen databasetilgang.")
+    _mongo_url = "mongodb://127.0.0.1:27017"
+_mongo = AsyncIOMotorClient(_mongo_url)
+_db    = _mongo[os.environ.get("DB_NAME") or "thai2drive"]
 
 ai_router = APIRouter()
 
