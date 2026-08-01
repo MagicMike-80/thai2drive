@@ -97,11 +97,57 @@ def _next_oslo_midnight_utc() -> str:
 
 # ── Tier resolution ───────────────────────────────────────────────────────────
 
+def premium_is_active(user: Optional[dict]) -> bool:
+    """True only if the caller has premium access *right now*.
+
+    Closes the 168-hour JWT loophole: a token minted while premium was active
+    stays valid for authentication for its full lifetime, but it carries the
+    expiry of the access itself in `premium_until`. We re-check that on every
+    request, so a free week (or a lapsed subscription) stops granting premium
+    the moment it runs out — without logging the user out.
+
+    Accepts both shapes:
+      • decoded JWT payload  → is_premium + premium_until
+      • raw users document   → is_admin / is_premium + premium_expires_at + trial_expires_at
+    """
+    if not user:
+        return False
+    if user.get("is_admin"):
+        return True
+
+    now = datetime.now(timezone.utc)
+
+    def _parse(value) -> Optional[datetime]:
+        if not value:
+            return None
+        try:
+            parsed = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+        except Exception:
+            return None
+        return parsed if parsed.tzinfo else parsed.replace(tzinfo=timezone.utc)
+
+    # Active free week — granted in MongoDB, never on the client.
+    trial_until = _parse(user.get("trial_expires_at"))
+    if trial_until and trial_until > now:
+        return True
+
+    if not user.get("is_premium"):
+        return False
+
+    until = user.get("premium_until") or user.get("premium_expires_at")
+    if not until:
+        return True  # lifetime premium, or a legacy token minted before this field existed
+    expires = _parse(until)
+    if expires is None:
+        return False  # unparseable expiry → fail closed
+    return expires > now
+
+
 def resolve_tier(user: Optional[dict]) -> str:
     """Determine the access tier from a decoded JWT payload (or None for guest)."""
     if not user:
         return TIER_GUEST
-    if user.get("is_premium"):
+    if premium_is_active(user):
         return TIER_PREMIUM
     return TIER_REGISTERED
 
@@ -377,7 +423,7 @@ async def require_premium(user: Optional[dict]) -> dict:
             "gate":  "register",
             "tier":  TIER_GUEST,
         })
-    if not user.get("is_premium"):
+    if not premium_is_active(user):
         raise HTTPException(status_code=402, detail={
             "error": "premium_required",
             "gate":  "upgrade",

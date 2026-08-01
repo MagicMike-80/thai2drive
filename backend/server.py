@@ -34,6 +34,11 @@ JWT_SECRET = os.environ.get('JWT_SECRET', 'fallback-secret-change-me')
 JWT_ALGORITHM = "HS256"
 JWT_EXPIRE_HOURS = 168  # 7 days
 
+# ── Gratisuken («Value before payment») ────────────────────────────────────────
+# Prøveperioden styres 100 % i vår egen MongoDB. Stripe/betalingsmuren slår først
+# inn når prøveuken er utløpt. Én gratisuke per e-post OG per device_id.
+TRIAL_DAYS = 7
+
 # ── Admin bootstrap secret ─────────────────────────────────────────────────────
 # Required header: X-Admin-Secret: <value>
 # If not set in env → /admin/add is permanently blocked (safe default).
@@ -340,11 +345,23 @@ class CheckoutSessionRequest(BaseModel):
 
 # ==================== AUTH HELPERS ====================
 
-def create_token(user_id: str, email: str, is_premium: bool = False) -> str:
+def create_token(
+    user_id: str,
+    email: str,
+    is_premium: bool = False,
+    premium_until: Optional[str] = None,
+    premium_status: str = "none",
+) -> str:
+    # Tokenet lever i 168 timer (uendret). Men tilgangen kan utløpe før tokenet gjør
+    # det — en gratisuke tar slutt, et abonnement går ut. Derfor bærer payloaden sin
+    # egen utløpsdato: `premium_until`. usage.premium_is_active() leser den ved hvert
+    # kall, så premium-porten stenger i tide uten at brukeren blir logget ut.
     payload = {
         "sub": user_id,
         "email": email,
         "is_premium": is_premium,
+        "premium_until": premium_until,   # ISO-8601 UTC, eller None ved livstid/ingen tilgang
+        "premium_status": premium_status,  # trialing | active | expired | none
         "exp": datetime.now(timezone.utc) + timedelta(hours=JWT_EXPIRE_HOURS),
         "iat": datetime.now(timezone.utc),
     }
@@ -353,6 +370,14 @@ def create_token(user_id: str, email: str, is_premium: bool = False) -> str:
 def verify_token(token: str) -> Optional[dict]:
     try:
         payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        if payload.get("is_premium") and payload.get("premium_until"):
+            try:
+                exp_dt = datetime.fromisoformat(str(payload["premium_until"]).replace("Z", "+00:00"))
+                if exp_dt < datetime.now(timezone.utc):
+                    payload["is_premium"] = False
+                    payload["premium_status"] = "expired"
+            except Exception:
+                pass
         return payload
     except jwt.ExpiredSignatureError:
         return None
@@ -608,22 +633,133 @@ async def _send_password_reset_email(to_email: str, code: str) -> tuple[bool, st
     return await asyncio.to_thread(_send_password_reset_email_sync, to_email, code)
 
 
+def _parse_iso_utc(value) -> Optional[datetime]:
+    """Tolk en lagret ISO-8601-streng som UTC. Returnerer None hvis den ikke kan tolkes."""
+    if not value:
+        return None
+    try:
+        parsed = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+    except Exception:
+        return None
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed
+
+
+def _paid_premium_active(user: Optional[dict]) -> bool:
+    """Betalt abonnement som fortsatt løper. Gratisuken telles ikke med her."""
+    if not user or not user.get("is_premium"):
+        return False
+    expires_at = user.get("premium_expires_at")
+    if expires_at:
+        expires = _parse_iso_utc(expires_at)
+        if expires is None or expires < datetime.now(timezone.utc):
+            return False
+    return True
+
+
+def _user_has_active_trial(user: Optional[dict]) -> bool:
+    if not user:
+        return False
+    expires = _parse_iso_utc(user.get("trial_expires_at"))
+    return bool(expires and expires > datetime.now(timezone.utc))
+
+
+def _user_trial_days_left(user: Optional[dict]) -> int:
+    """Hele dager igjen av gratisuken. En påbegynt dag teller som én."""
+    expires = _parse_iso_utc((user or {}).get("trial_expires_at"))
+    if not expires:
+        return 0
+    seconds = (expires - datetime.now(timezone.utc)).total_seconds()
+    if seconds <= 0:
+        return 0
+    return int((seconds + 86399) // 86400)
+
+
+def _user_premium_status(user: Optional[dict]) -> str:
+    """Statusen webappen leser: trialing | active | expired | none."""
+    if not user:
+        return "none"
+    if user.get("is_admin") or _paid_premium_active(user):
+        return "active"
+    if _user_has_active_trial(user):
+        return "trialing"
+    if user.get("trial_used") or user.get("is_premium") or user.get("premium_expires_at"):
+        return "expired"
+    return "none"
+
+
+def _access_expires_at(user: Optional[dict]) -> Optional[str]:
+    """Når tilgangen faktisk tar slutt. None = livstid, admin eller ingen tilgang."""
+    if not user or user.get("is_admin"):
+        return None
+    candidates = []
+    if _paid_premium_active(user):
+        paid = _parse_iso_utc(user.get("premium_expires_at"))
+        if paid is None:
+            return None  # betalt premium uten utløp = livstid
+        candidates.append(paid)
+    if _user_has_active_trial(user):
+        trial = _parse_iso_utc(user.get("trial_expires_at"))
+        if trial:
+            candidates.append(trial)
+    if not candidates:
+        return None
+    return max(candidates).isoformat()
+
+
 def _user_has_active_premium(user: Optional[dict]) -> bool:
+    """Full tilgang: admin, betalende kunde ELLER bruker med aktiv gratisuke."""
     if not user:
         return False
     if user.get("is_admin"):
         return True
-    if not user.get("is_premium"):
-        return False
-    expires_at = user.get("premium_expires_at")
-    if expires_at:
-        try:
-            expires = datetime.fromisoformat(str(expires_at).replace("Z", "+00:00"))
-            if expires < datetime.now(timezone.utc):
-                return False
-        except Exception:
-            return False
-    return True
+    return _paid_premium_active(user) or _user_has_active_trial(user)
+
+
+def _auth_user_payload(user: dict) -> dict:
+    """Én felles brukerform for /auth/signup, /auth/login og /auth/me.
+
+    De fire prøveuke-feltene er kontrakten webappen leser (se GRATISUKE i webapp.py):
+    premium_status, premium_expires_at, trial_days_left, trial_used.
+    """
+    return {
+        "id": user["id"],
+        "name": user.get("name") or "",
+        "email": user["email"],
+        "is_admin": user.get("is_admin", False),
+        "is_premium": _user_has_active_premium(user),
+        "premium_status": _user_premium_status(user),
+        "premium_expires_at": _access_expires_at(user),
+        "trial_days_left": _user_trial_days_left(user),
+        "trial_used": bool(user.get("trial_used")),
+    }
+
+
+async def _grant_trial_if_eligible(email: str, device_id: Optional[str], user_id: str) -> Optional[str]:
+    """Gi 7 dagers gratisuke — men bare én gang per e-post OG per device_id.
+
+    Returnerer ISO-utløpstidspunktet, eller None hvis kvoten allerede er brukt.
+    Ingen kort, ingen Stripe: prøveperioden lever kun i vår egen database.
+    """
+    email_key = (email or "").strip().lower()
+    match = [{"email": email_key}]
+    if device_id:
+        match.append({"device_id": device_id})
+    already = await db.trial_grants.find_one({"$or": match})
+    if already:
+        return None
+
+    now = datetime.now(timezone.utc)
+    expires = now + timedelta(days=TRIAL_DAYS)
+    await db.trial_grants.insert_one({
+        "email": email_key,
+        "device_id": device_id or None,
+        "user_id": user_id,
+        "granted_at": now.isoformat(),
+        "expires_at": expires.isoformat(),
+    })
+    return expires.isoformat()
 
 
 def _oslo_day_key(dt: Optional[datetime] = None) -> str:
@@ -1917,6 +2053,12 @@ async def signup(data: AuthSignup):
     is_admin = admin_entry is not None
     is_premium = is_admin  # Admins get auto premium
 
+    # Gratisuken: verdi før betaling. Gis kun til nye registreringer, og kun én gang
+    # per e-post/device_id — ellers kan man lage uendelig mange gratiskontoer og
+    # tømme AI-læreren for penger.
+    trial_expires_at = await _grant_trial_if_eligible(data.email, data.device_id, user_id)
+    now_iso = datetime.now(timezone.utc).isoformat()
+
     user_doc = {
         "id": user_id,
         "email": data.email,
@@ -1925,7 +2067,10 @@ async def signup(data: AuthSignup):
         "is_admin": is_admin,
         "is_premium": is_premium,
         "device_id": data.device_id or None,
-        "created_at": datetime.now(timezone.utc).isoformat(),
+        "trial_started_at": now_iso if trial_expires_at else None,
+        "trial_expires_at": trial_expires_at,
+        "trial_used": True,
+        "created_at": now_iso,
     }
     await db.users.insert_one(user_doc)
     await _migrate_guest_learning_to_user(data.device_id, user_id)
@@ -1942,17 +2087,17 @@ async def signup(data: AuthSignup):
         segment_analytics.identify(user_id, {"email": data.email, "name": data.name, "is_premium": is_premium, "is_admin": is_admin})
         segment_analytics.track(user_id, "User Signed Up", {"email": data.email, "method": "email", "is_premium": is_premium})
 
-    token = create_token(user_id, data.email, is_premium=is_premium)
+    has_access = _user_has_active_premium(user_doc)
+    token = create_token(
+        user_id,
+        data.email,
+        is_premium=has_access,
+        premium_until=_access_expires_at(user_doc),
+        premium_status=_user_premium_status(user_doc),
+    )
     return {
         "token": token,
-        "user": {
-            "id": user_id,
-            "name": data.name or "",
-            "email": data.email,
-            "name": user_doc["name"],
-            "is_admin": is_admin,
-            "is_premium": is_premium,
-        }
+        "user": _auth_user_payload(user_doc),
     }
 
 @api_router.post("/auth/login")
@@ -1982,7 +2127,13 @@ async def login(data: AuthLogin):
     await _migrate_guest_learning_to_user(data.device_id, user["id"])
 
     is_premium_active = _user_has_active_premium(user)
-    token = create_token(user["id"], user["email"], is_premium=is_premium_active)
+    token = create_token(
+        user["id"],
+        user["email"],
+        is_premium=is_premium_active,
+        premium_until=_access_expires_at(user),
+        premium_status=_user_premium_status(user),
+    )
 
     # ── Segment track ──
     if SEGMENT_WRITE_KEY:
@@ -1991,14 +2142,7 @@ async def login(data: AuthLogin):
 
     return {
         "token": token,
-        "user": {
-            "id": user["id"],
-            "name": user.get("name", ""),
-            "email": user["email"],
-            "name": user.get("name"),
-            "is_admin": user.get("is_admin", False),
-            "is_premium": is_premium_active,
-        }
+        "user": _auth_user_payload(user),
     }
 
 @api_router.get("/auth/me")
@@ -2006,13 +2150,7 @@ async def get_me(current_user: dict = Depends(get_current_user)):
     user = await db.users.find_one({"id": current_user["sub"]}, {"_id": 0, "password_hash": 0})
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
-    return {
-        "id": user["id"],
-        "name": user.get("name", ""),
-        "email": user["email"],
-        "is_admin": user.get("is_admin", False),
-        "is_premium": _user_has_active_premium(user),
-    }
+    return _auth_user_payload(user)
 
 @api_router.post("/auth/forgot-password")
 async def forgot_password(data: ForgotPasswordRequest):
@@ -3718,9 +3856,22 @@ async def admin_audit_question(question_id: str, _: dict = Depends(require_admin
     if not bilde.startswith("data:"):
         raise HTTPException(status_code=400, detail="Question has no image to audit")
 
-    api_key = os.getenv("ANTHROPIC_API_KEY")
+    # Bilderevisjon krever en modell som kan LESE bilder. DeepSeek-chat er tekst-only,
+    # så dette endepunktet kan ikke bruke samme motor som Michael-chatten.
+    # Rekkefølge: OpenAI (gpt-4o) → Anthropic (sonnet) → tydelig feilmelding.
+    api_key = os.environ.get("OPENAI_API_KEY", "").strip()
+    vision_model = os.environ.get("VISION_LLM_MODEL", "gpt-4o")
     if not api_key:
-        raise HTTPException(status_code=500, detail="ANTHROPIC_API_KEY not configured")
+        api_key = os.environ.get("ANTHROPIC_API_KEY", "").strip()
+        vision_model = os.environ.get("VISION_LLM_MODEL", "claude-sonnet-4-20250514")
+    if not api_key:
+        raise HTTPException(
+            status_code=500,
+            detail=(
+                "Bilderevisjon krever en vision-modell. Sett OPENAI_API_KEY (gpt-4o) "
+                "eller ANTHROPIC_API_KEY — DeepSeek-chat kan ikke lese bilder."
+            ),
+        )
 
     import json as _json
     system_prompt = """You are a Norwegian driving theory expert auditing quiz content.
@@ -3756,7 +3907,7 @@ Return ONLY strict JSON:
 
     try:
         raw = await litellm.acompletion(
-            model="claude-sonnet-4-20250514",
+            model=vision_model,
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": [
@@ -4164,10 +4315,16 @@ class LearningVideoCreate(BaseModel):
 def _serialize_video(v: dict) -> dict:
     """Normalize a MongoDB video document for the API response."""
     v = {k: val for k, val in v.items() if k != '_id'}
-    if not v.get('thumbnail_url') and v.get('youtube_url'):
-        yt_id = _extract_youtube_id(v['youtube_url'])
-        if yt_id:
-            v['thumbnail_url'] = f"https://img.youtube.com/vi/{yt_id}/mqdefault.jpg"
+    if not v.get('thumbnail_url'):
+        if v.get('youtube_url'):
+            yt_id = _extract_youtube_id(v['youtube_url'])
+            if yt_id:
+                v['thumbnail_url'] = f"https://img.youtube.com/vi/{yt_id}/mqdefault.jpg"
+        elif v.get('file_path'):
+            # Derive a local thumbnail from the video filename
+            fname = v['file_path'].rsplit('/', 1)[-1]  # video_xxx.mp4
+            stem = fname.rsplit('.', 1)[0]  # video_xxx
+            v['thumbnail_url'] = f"/api/assets/thumbs/thumb_{stem}.jpg"
     return v
 
 
@@ -4960,7 +5117,10 @@ app.add_middleware(TimingMiddleware)
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
-    allow_origins=["*"],
+    allow_origins=[
+        "https://thai2drive.no",
+        "https://www.thai2drive.no",
+    ],
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -5196,10 +5356,41 @@ async def _google_tts(text: str, lang: str, google_key: str, cache_path: str):
 
 
 @app.get("/api/tts")
-async def text_to_speech(text: str, lang: str = "th-TH"):
+@app.post("/api/tts")
+@api_router.get("/tts")
+@api_router.post("/tts")
+async def text_to_speech(request: Request, text: Optional[str] = None, lang: Optional[str] = None):
     import httpx
     from fastapi import HTTPException
     from fastapi.responses import FileResponse
+
+    # `lang` MÅ defaulte til None, ikke "th-TH". En truthy default gjør
+    # `lang or body.get("lang")` til en no-op, og da ble all POST-tekst lest med
+    # thai stemme — også norsk og engelsk. Standardspråket settes derfor først
+    # etter at body er slått sammen, se lang_map-oppslaget under.
+    if request.method == "POST":
+        try:
+            body = await request.json()
+            if isinstance(body, dict):
+                text = text or body.get("text")
+                lang = lang or body.get("lang")
+        except Exception:
+            pass
+
+    text = (text or "").strip()
+    if not text:
+        raise HTTPException(status_code=400, detail="Text parameter is required")
+
+    lang_map = {
+        "th": "th-TH",
+        "no": "nb-NO",
+        "nb": "nb-NO",
+        "en": "en-US",
+        "th-th": "th-TH",
+        "nb-no": "nb-NO",
+        "en-us": "en-US",
+    }
+    lang = lang_map.get((lang or "").strip().lower(), lang or "th-TH")
 
     google_key = os.environ.get("GOOGLE_API_KEY")
     google_cache_path = _tts_cache_path(

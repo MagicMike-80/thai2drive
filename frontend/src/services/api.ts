@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL || '';
+export const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL || '';
 const API_BASE = `${BACKEND_URL}/api`;
 
 // ==================== STATS TYPES ====================

@@ -45,23 +45,35 @@ _SMTP_PORT = int(os.environ.get('SUPPORT_SMTP_PORT', '587'))
 _SMTP_USER = os.environ.get('SUPPORT_SMTP_USER')
 _SMTP_PASS = os.environ.get('SUPPORT_SMTP_PASS')
 
-# ─── LLM (LiteLLM → Anthropic) ──────────────────────────────────────────
+# ─── LLM (LiteLLM → DeepSeek) ───────────────────────────────────────────
 import litellm  # noqa: E402
 
 litellm.suppress_debug_info = True  # keep Railway logs clean
-LLM_KEY = os.environ.get('ANTHROPIC_API_KEY', '').strip()
-LLM_MODEL = os.environ.get('SUPPORT_LLM_MODEL', 'claude-haiku-4-5-20251001')  # override via Railway env var if needed
 
-_key_source = 'ANTHROPIC_API_KEY' if LLM_KEY else None
+# Samme motorvalg som teacher_chat.py — DeepSeek direkte, ellers via OpenRouter.
+# Modellen kan overstyres med SUPPORT_LLM_MODEL uten kodeendring.
+LLM_KEY = ''
+LLM_MODEL = ''
+_key_source = None
 
-# Fallback to OpenAI if Anthropic key is stale/missing
-if not LLM_KEY or LLM_KEY.startswith("sk-ant-api03-dTiG"):
-    openai_key = os.environ.get("OPENAI_API_KEY", "").strip()
+_deepseek_key = os.environ.get('DEEPSEEK_API_KEY', '').strip()
+_openrouter_key = os.environ.get('OPENROUTER_API_KEY', '').strip()
+
+if _deepseek_key:
+    LLM_KEY = _deepseek_key
+    LLM_MODEL = os.environ.get('SUPPORT_LLM_MODEL', 'deepseek/deepseek-chat')
+    _key_source = 'DEEPSEEK_API_KEY'
+elif _openrouter_key:
+    LLM_KEY = _openrouter_key
+    LLM_MODEL = os.environ.get('SUPPORT_LLM_MODEL', 'openrouter/deepseek/deepseek-chat')
+    _key_source = 'OPENROUTER_API_KEY'
+else:
+    openai_key = os.environ.get('OPENAI_API_KEY', '').strip()
     if openai_key:
         LLM_KEY = openai_key
-        LLM_MODEL = "gpt-4o-mini"
-        _key_source = "OPENAI_API_KEY"
-        logger.info("Using OpenAI fallback for Support chat — model=%s", LLM_MODEL)
+        LLM_MODEL = os.environ.get('SUPPORT_OPENAI_MODEL', 'gpt-4o-mini')
+        _key_source = 'OPENAI_API_KEY'
+        logger.warning('DEEPSEEK_API_KEY mangler — Support chat faller tilbake til OpenAI.')
 
 # ─── Startup diagnostic ──────────────────────────────────────────────────
 if LLM_KEY:
@@ -316,7 +328,7 @@ async def support_chat(req: ChatRequest) -> ChatResponse:
     # 3) Ask LLM
     try:
         if not LLM_KEY:
-            raise RuntimeError('ANTHROPIC_API_KEY not configured')
+            raise RuntimeError('DEEPSEEK_API_KEY not configured')
         lang_map = {'no': 'Norwegian', 'th': 'Thai', 'en': 'English'}
         ui_lang = lang_map.get(req.language or 'no', 'Norwegian')
         lang_rule = (

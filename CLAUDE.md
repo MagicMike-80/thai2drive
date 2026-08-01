@@ -28,16 +28,51 @@ Les `context/MEMORY.md` og `context/USER.md` ved starten av hver sesjon.
 | Layer | Path | Command |
 |-------|------|---------|
 | Backend (FastAPI) | `backend/` | `cd backend && uvicorn server:app --reload --port 8000` |
+| Webapp (produksjon) | `backend/webapp.py` | Start backend, åpne `http://localhost:8000/api/web` |
 | Mobile (Expo/React Native) | `frontend/` | `cd frontend && yarn android` |
-| Web (Expo web) | `frontend/` | `cd frontend && yarn web` |
-| Backend tests | `backend/` | `cd backend && pytest -v` |
-| Single test | `backend/` | `cd backend && pytest tests/test_auth.py::test_login_success -v` |
+| Expo web (sekundær) | `frontend/` | `cd frontend && yarn web` |
 | Lint frontend | `frontend/` | `cd frontend && yarn lint` |
 | Scripts | `backend/scripts/` | `cd backend && python scripts/<script>.py` |
 | Build mobile (APK) | `frontend/` | `cd frontend && eas build --platform android --profile preview` |
 | Backend Docker | `backend/` | `docker build -t thai2drive backend/` |
 
 **Package manager:** `yarn` (pinnet til v1.22.22) — bruk aldri `npm` for frontend.
+
+**`uvicorn server:app` krever `MONGO_URL` og `DB_NAME`** — `server.py` leser dem med
+`os.environ[...]` på importtidspunktet og kræsjer uten dem. Det finnes ingen SQLite-fallback;
+`backend/thai2drive.db` er en levning og brukes ikke av serveren.
+
+## Testing — les dette før du kjører pytest
+
+⚠️ **`pytest` i dette repoet kjører mot PRODUKSJON, ikke lokalt.** Både
+`backend/tests/test_thai2drive_api.py` og `backend_test.py` har hardkodet
+`BASE_URL = "https://www.thai2drive.no"`. Den første gjør i tillegg
+`POST /api/seed` mot produksjonsdatabasen.
+
+Ikke kjør `pytest -v` blindt. Kjør én navngitt test mot ett endepunkt du har vurdert:
+
+```bash
+cd backend && pytest tests/test_thai2drive_api.py::TestCategories -v
+```
+
+Det finnes ingen `conftest.py`, ingen `pytest.ini` og ingen lokal testfikstur.
+Å legge til lokal testoppsett er Antis kall — ikke gjør det uoppfordret.
+
+## De to web-flatene (viktig — de forveksles lett)
+
+Repoet har to separate web-apper. Sjekk hvilken du er i før du endrer noe:
+
+| Flate | Kilde | URL | Status |
+|-------|-------|-----|--------|
+| **Webapp** | `backend/webapp.py` — én ~9 500-linjers Python-streng `WEBAPP_HTML` med all HTML/CSS/JS inline | `/api/web` | **Produksjon.** Stripe-checkout returnerer hit. |
+| Expo web | `frontend/` bygget til `backend/webapp/` (statisk eksport) | `/quiz-app` | Sekundær, servert av `server.py`-mount |
+
+Endringer i webappen gjøres i `WEBAPP_HTML`-strengen i `backend/webapp.py` — ikke i
+`backend/webapp/`, som er et byggeartefakt og overskrives. `/api/web/version` returnerer
+deploy-versjonen; bruk den for å bekrefte hvilken build som faktisk er live.
+
+Alle routere monteres under `/api` i `server.py` (~linje 4716–4745). `website_router`
+monteres to ganger — både på `""` og `/api` — fordi Railway ruter på `/api/*`.
 
 ## Dokumentasjonsindeks (Just-In-Time)
 

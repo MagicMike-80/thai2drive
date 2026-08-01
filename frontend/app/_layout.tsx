@@ -236,6 +236,19 @@ export default function RootLayout() {
     <SafeAreaProvider>
       <StatusBar style={isDark ? 'light' : 'dark'} />
       <WebAppShell>
+        {/* Subtle Thai flag background — exact match with web app's flag-bg */}
+        {/* On web the flag-bg CSS comes from webapp.py — only render for native */}
+        {Platform.OS !== 'web' && (
+        <View style={thaiFlagStyles.container} pointerEvents="none">
+          <View style={thaiFlagStyles.stripeRed} />
+          <View style={thaiFlagStyles.stripeWhite} />
+          <View style={thaiFlagStyles.stripeNavy} />
+          <View style={thaiFlagStyles.stripeWhite} />
+          <View style={thaiFlagStyles.stripeRed} />
+          {/* Dark overlay so content stays readable — web app uses rgba(10,14,30,.15) dark / rgba(230,236,244,.70) light */}
+          <View style={[thaiFlagStyles.overlay, { backgroundColor: isDark ? 'rgba(10,14,30,.15)' : 'rgba(230,236,244,.70)' }]} />
+        </View>
+        )}
         <Stack
           screenOptions={{
             headerShown: false,
@@ -283,4 +296,29 @@ export default function RootLayout() {
 
 const styles = StyleSheet.create({
   loading: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+});
+
+// Thai flag background — exact match with web app flag-bg (webapp.py lines 235-251)
+// Proportions: 1(red) : 1(white) : 2(navy) : 1(white) : 1(red)
+// Colors: #A51931 (crimson), #F0F0F0 (off-white), #1A1464 (deep navy)
+const thaiFlagStyles = StyleSheet.create({
+  container: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    flexDirection: 'column',
+    zIndex: -1,
+  },
+  stripeRed:   { flex: 1, backgroundColor: '#A51931' },
+  stripeWhite: { flex: 1, backgroundColor: '#F0F0F0' },
+  stripeNavy:  { flex: 2, backgroundColor: '#1A1464' },
+  overlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
 });

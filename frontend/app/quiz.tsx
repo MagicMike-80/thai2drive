@@ -31,16 +31,16 @@ const EXAM_TIME = 90 * 60;
 const PASS = 85;
 
 const T: Record<string, Record<string, string>> = {
-  no: { check: 'Sjekk svar', next: 'Neste', finish: 'Fullfør', correct: 'Riktig!', incorrect: 'Feil!', hint: 'Trykk for Thai', limitMsg: 'Gratis grense nådd', unlock: 'Lås opp Premium', listen: 'Lytt', listening: 'Spiller...', listenExpl: 'Lytt', accountTitle: 'Opprett gratis konto for å fortsette', accountBody: 'Du har brukt de 5 gjestespørsmålene. Opprett en gratis konto for 10 spørsmål per dag og behold progresjonen din.', accountSignup: 'Opprett konto', accountLogin: 'Logg inn', accountCancel: 'Avbryt' },
-  th: { check: 'ตรวจคำตอบ', next: 'ถัดไป', finish: 'เสร็จสิ้น', correct: 'ถูกต้อง!', incorrect: 'ผิด!', hint: 'แตะเพื่อแปล', limitMsg: 'ถึงขีดจำกัดฟรี', unlock: 'ปลดล็อค Premium', listen: 'ฟัง', listening: 'กำลังเล่น...', listenExpl: 'ฟัง', accountTitle: 'สร้างบัญชีฟรีเพื่อเรียนต่อ', accountBody: 'คุณใช้คำถามสำหรับผู้ใช้ทั่วไปครบ 5 ข้อแล้ว สร้างบัญชีฟรีเพื่อรับ 10 คำถามต่อวันและเก็บความก้าวหน้าของคุณไว้', accountSignup: 'สร้างบัญชี', accountLogin: 'เข้าสู่ระบบ', accountCancel: 'ยกเลิก' },
-  en: { check: 'Check Answer', next: 'Next', finish: 'Finish', correct: 'Correct!', incorrect: 'Incorrect!', hint: 'Tap for Thai', limitMsg: 'Free limit reached', unlock: 'Unlock Premium', listen: 'Listen', listening: 'Playing...', listenExpl: 'Listen', accountTitle: 'Create a free account to continue', accountBody: 'You have used the 5 guest questions. Create a free account for 10 questions per day and keep your progress.', accountSignup: 'Create account', accountLogin: 'Log in', accountCancel: 'Cancel' },
+  no: { askMichael: 'Spør Michael', askWhy: 'Hvorfor er dette feil?', check: 'Sjekk svar', next: 'Neste', finish: 'Fullfør', correct: 'Riktig!', incorrect: 'Feil!', hint: 'Trykk for Thai', limitMsg: 'Gratis grense nådd', unlock: 'Lås opp Premium', listen: 'Lytt', listening: 'Spiller...', listenExpl: 'Lytt', accountTitle: 'Opprett gratis konto for å fortsette', accountBody: 'Du har brukt de 5 gjestespørsmålene. Opprett en gratis konto for 10 spørsmål per dag og behold progresjonen din.', accountSignup: 'Opprett konto', accountLogin: 'Logg inn', accountCancel: 'Avbryt' },
+  th: { askMichael: 'ถามครูไมเคิล', askWhy: 'ทำไมข้อนี้ถึงผิดครับ?', check: 'ตรวจคำตอบ', next: 'ถัดไป', finish: 'เสร็จสิ้น', correct: 'ถูกต้อง!', incorrect: 'ผิด!', hint: 'แตะเพื่อแปล', limitMsg: 'ถึงขีดจำกัดฟรี', unlock: 'ปลดล็อค Premium', listen: 'ฟัง', listening: 'กำลังเล่น...', listenExpl: 'ฟัง', accountTitle: 'สร้างบัญชีฟรีเพื่อเรียนต่อ', accountBody: 'คุณใช้คำถามสำหรับผู้ใช้ทั่วไปครบ 5 ข้อแล้ว สร้างบัญชีฟรีเพื่อรับ 10 คำถามต่อวันและเก็บความก้าวหน้าของคุณไว้', accountSignup: 'สร้างบัญชี', accountLogin: 'เข้าสู่ระบบ', accountCancel: 'ยกเลิก' },
+  en: { askMichael: 'Ask Michael', askWhy: 'Why is this wrong?', check: 'Check Answer', next: 'Next', finish: 'Finish', correct: 'Correct!', incorrect: 'Incorrect!', hint: 'Tap for Thai', limitMsg: 'Free limit reached', unlock: 'Unlock Premium', listen: 'Listen', listening: 'Playing...', listenExpl: 'Listen', accountTitle: 'Create a free account to continue', accountBody: 'You have used the 5 guest questions. Create a free account for 10 questions per day and keep your progress.', accountSignup: 'Create account', accountLogin: 'Log in', accountCancel: 'Cancel' },
 };
 
 export default function QuizScreen() {
   const router = useRouter();
   const { mode, category } = useLocalSearchParams<{ mode: string; category: string }>();
   const store = useAppStore();
-  const { language, deviceId, addBookmark, removeBookmark, isBookmarked, setProgress, colors: c, soundEnabled, soundStyle, hapticsEnabled, isPremium, isAuthenticated, canAnswerFree, freeRemaining, consumeQuestionAccess, updateStreak, setLastAttempt } = store;
+  const { language, deviceId, addBookmark, removeBookmark, isBookmarked, setProgress, colors: c, soundEnabled, soundStyle, hapticsEnabled, isPremium, isAuthenticated, canAnswerFree, freeRemaining, consumeQuestionAccess, updateStreak, setLastAttempt, setPendingQuizContext } = store;
   const t = T[language] || {};
 
   // Screen capture protection
@@ -321,6 +321,25 @@ export default function QuizScreen() {
     }
   };
 
+  // "Spør Michael" — only offered after a wrong answer. Hands the full picture
+  // (question, what the learner picked, the fasit) to the teacher screen through
+  // an in-memory store field, so the payload never shows up in the web URL bar.
+  // `push` keeps this screen mounted, so idx/hist/sel/timer survive the trip.
+  const askMichael = () => {
+    if (!q || !sel) return;
+    stopTts();
+    const lines = [
+      `QUESTION: ${qT(q)}`,
+      `STUDENT ANSWERED: ${sel}. ${optText(q, sel)}`,
+      `CORRECT ANSWER: ${q.correctOptionId}. ${optText(q, q.correctOptionId)}`,
+    ];
+    if (q.category) lines.push(`CATEGORY: ${q.category}`);
+    const expl = eT(q);
+    if (expl) lines.push(`OFFICIAL EXPLANATION: ${expl}`);
+    setPendingQuizContext({ display: t.askWhy, context: lines.join('\n') });
+    router.push('/teacher');
+  };
+
   const langCode = (l: string) => l === 'th' ? 'th-TH' : l === 'no' ? 'nb-NO' : 'en-US';
 
   // Light tactile tick. Used for answer-letter selection and the next button.
@@ -582,6 +601,20 @@ export default function QuizScreen() {
                   colors={c}
                 />
               </SafeExplanation>
+
+              {/* Ask Michael — wrong answers only. Never shown while the learner
+                  is still deliberating, and never on a correct answer. */}
+              {sel !== q.correctOptionId && (
+                <TouchableOpacity
+                  testID="quiz-ask-michael-btn"
+                  style={[st.askBtn, { backgroundColor: `${c.accent}12`, borderColor: `${c.accent}55` }]}
+                  onPress={askMichael}
+                  activeOpacity={0.8}
+                >
+                  <Ionicons name="chatbubble-ellipses-outline" size={16} color={c.accent} />
+                  <Text style={[st.askBtnTxt, { color: c.accent }]}>{t.askMichael}</Text>
+                </TouchableOpacity>
+              )}
             </View>
           )}
 
@@ -666,6 +699,8 @@ const st = StyleSheet.create({
   ttsSmall: { width: 28, height: 28, borderRadius: 14, justifyContent: 'center', alignItems: 'center' },
   fbE: { fontSize: 13, lineHeight: 19, opacity: 0.75 },
   fbTh: { fontSize: 12, lineHeight: 18, marginTop: 3 },
+  askBtn: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 7, marginTop: 12, borderRadius: 12, borderWidth: 1, paddingVertical: 11, paddingHorizontal: 18 },
+  askBtnTxt: { fontSize: 13, fontWeight: '700' },
   limitCard: { marginTop: 16, borderRadius: 16, paddingVertical: 16, paddingHorizontal: 20, alignItems: 'center' },
   limitMsg: { fontSize: 13, fontWeight: '500', textAlign: 'center', marginBottom: 14 },
   limitBtn: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 12, paddingVertical: 12, paddingHorizontal: 24, gap: 6 },

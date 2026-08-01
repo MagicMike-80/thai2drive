@@ -280,7 +280,8 @@ export default function ResearchScreen() {
 
         {/* Track list */}
         <View style={st.tracksList}>
-          {TRACKS.map((track) => {
+          {/* Fail-Stop: spor uten tittel på aktivt språk listes ikke. */}
+          {TRACKS.filter((tr) => !!tr.title[language]).map((track) => {
             const isActive = playbackState.filename === track.filename;
             const isPlaying = isActive && playbackState.isPlaying;
             const isBuffering = isActive && playbackState.isBuffering;
@@ -291,8 +292,9 @@ export default function ResearchScreen() {
                 ? (playbackState.positionMillis / playbackState.durationMillis) * 100
                 : 0;
 
-            const titleText = track.title[language] || track.title.en;
-            const descriptionText = track.description[language] || track.description.en;
+            // Språkrenhet: kun aktivt språk — aldri lån tekst fra et annet språk.
+            const titleText = track.title[language] || '';
+            const descriptionText = track.description[language] || '';
 
             return (
               <View
@@ -317,7 +319,9 @@ export default function ResearchScreen() {
 
                   <View style={st.trackInfo}>
                     <Text style={[st.trackTitle, { color: c.text }]}>{titleText}</Text>
-                    <Text style={[st.trackDesc, { color: c.textSecondary }]}>{descriptionText}</Text>
+                    {!!descriptionText && (
+                      <Text style={[st.trackDesc, { color: c.textSecondary }]}>{descriptionText}</Text>
+                    )}
                   </View>
 
                   {/* Play/Pause Button on inactive or top-right of active */}
@@ -399,7 +403,7 @@ export default function ResearchScreen() {
       </ScrollView>
 
       {/* Persistent Bottom Navigation Bar */}
-      <BottomNavBar activeTab="research" />
+      <BottomNavBar activeTab="none" />
     </SafeAreaView>
   );
 }

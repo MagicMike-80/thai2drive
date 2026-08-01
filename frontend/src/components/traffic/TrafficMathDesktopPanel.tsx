@@ -145,8 +145,9 @@ const StoppingDistanceViz = memo(function StoppingDistanceViz({
   const reactionFrac = total > 0 ? reaction / total : 0.38;
   const brakingFrac  = total > 0 ? braking  / total : 0.62;
 
-  const condLabel = result.condition_info.label[lang] ?? result.condition_info.label.en;
-  const condNote  = result.condition_info.note[lang]  ?? result.condition_info.note.en;
+  // Språkrenhet: kun aktivt språk. Mangler teksten, skjules den (Fail-Stop).
+  const condLabel = result.condition_info.label[lang] ?? '';
+  const condNote  = result.condition_info.note[lang]  ?? '';
 
   return (
     <View style={viz.wrap}>
@@ -224,13 +225,15 @@ const StoppingDistanceViz = memo(function StoppingDistanceViz({
           color={accentColor}
           trackColor={isDark ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.08)'}
         />
-        <Text style={[viz.condNote, { color: textSec }]}>{condNote}</Text>
+        {!!condNote && <Text style={[viz.condNote, { color: textSec }]}>{condNote}</Text>}
       </View>
 
       {/* ── Condition pill ── */}
-      <View style={[viz.condPill, { backgroundColor: `${accentColor}14`, borderColor: `${accentColor}35` }]}>
-        <Text style={[viz.condText, { color: accentColor }]}>{t.condition}: {condLabel}</Text>
-      </View>
+      {!!condLabel && (
+        <View style={[viz.condPill, { backgroundColor: `${accentColor}14`, borderColor: `${accentColor}35` }]}>
+          <Text style={[viz.condText, { color: accentColor }]}>{t.condition}: {condLabel}</Text>
+        </View>
+      )}
 
     </View>
   );
@@ -260,7 +263,7 @@ export function TrafficMathDesktopPanel({
   visible, onClose, language, colors: c, isDark,
 }: TrafficMathDesktopPanelProps) {
 
-  const t    = TR[language] ?? TR.en;
+  const t    = TR[language] ?? {};
   const lang = (['no', 'th', 'en'].includes(language) ? language : 'en') as Lang;
 
   // ── Input state ───────────────────────────────────────────────────────────

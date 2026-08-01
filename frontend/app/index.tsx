@@ -8,15 +8,14 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useAppStore } from '../src/store/appStore';
 import { api } from '../src/services/api';
 import { LanguageSwitcher } from '../src/components/LanguageSwitcher';
-import { CoachBanner } from '../src/components/CoachBanner';
 import { BottomNavBar } from '../src/components/BottomNavBar';
 
 const T2D_ICON = require('../assets/images/t2d-icon.png');
 
 const TR: Record<string, Record<string, string>> = {
-  no: { subtitle: 'Norsk førerprøve', startQuiz: 'Start quiz', exam: 'Eksamen', accuracy: 'Nøyaktighet', answered: 'Besvart', correct: 'Riktige', premiumCta: 'Premium',  premiumOffer: 'Ubegrenset tilgang · fra 99 kr', premiumActive: 'Premium aktiv', streak: 'dagers rekke', freeLeft: 'gratis igjen', dailyLimitReached: 'Opprett gratis konto for å fortsette', dailyTest: 'Dagens test', moreOptions: 'Flere', accountTitle: 'Opprett gratis konto for å fortsette', accountBody: 'Du har brukt de 5 gjestespørsmålene. Opprett en gratis konto for 10 spørsmål per dag og behold progresjonen din.', accountSignup: 'Opprett konto', accountLogin: 'Logg inn', accountCancel: 'Avbryt', studyBook: 'Læringsbok', signGallery: 'Trafikkskilt', myStats: 'Min statistikk', smartPractice: 'Smart øving', aiInsights: 'AI Analyse', trafficMath: 'Trafikk-matte', michaelTeacher: 'Trafikklærer', library: 'Bibliotek', glossary: 'Ordliste', social: 'Sosiale' },
-  th: { subtitle: 'สอบใบขับขี่นอร์เวย์', startQuiz: 'เริ่มทำแบบทดสอบ', exam: 'สอบ', accuracy: 'ความแม่นยำ', answered: 'ตอบแล้ว', correct: 'ถูกต้อง', premiumCta: 'พรีเมียม', premiumOffer: 'ใช้งานไม่จำกัด · เริ่มต้น 99 kr', premiumActive: 'Premium ใช้งานอยู่', streak: 'วันติดต่อกัน', freeLeft: 'ฟรีเหลือ', dailyLimitReached: 'สร้างบัญชีฟรีเพื่อเรียนต่อ', dailyTest: 'แบบทดสอบประจำวัน', moreOptions: 'เพิ่มเติม', accountTitle: 'สร้างบัญชีฟรีเพื่อเรียนต่อ', accountBody: 'คุณใช้คำถามสำหรับผู้ใช้ทั่วไปครบ 5 ข้อแล้ว สร้างบัญชีฟรีเพื่อรับ 10 คำถามต่อวันและเก็บความก้าวหน้าของคุณไว้', accountSignup: 'สร้างบัญชี', accountLogin: 'เข้าสู่ระบบ', accountCancel: 'ยกเลิก', studyBook: 'หนังสือเรียน', signGallery: 'ป้ายจราจร', myStats: 'สถิติของฉัน', smartPractice: 'ฝึกอัจฉริยะ', aiInsights: 'AI วิเคราะห์', trafficMath: 'คณิตจราจร', michaelTeacher: 'ครูสอนขับ', library: 'ห้องสมุด', glossary: 'คำศัพท์', social: 'โซเชียล' },
-  en: { subtitle: 'Norwegian driving test', startQuiz: 'Start quiz', exam: 'Exam', accuracy: 'Accuracy', answered: 'Answered', correct: 'Correct', premiumCta: 'Premium', premiumOffer: 'Unlimited access · from 99 NOK', premiumActive: 'Premium active', streak: 'day streak', freeLeft: 'free left', dailyLimitReached: 'Create a free account to continue', dailyTest: 'Daily test', moreOptions: 'More', accountTitle: 'Create a free account to continue', accountBody: 'You have used the 5 guest questions. Create a free account for 10 questions per day and keep your progress.', accountSignup: 'Create account', accountLogin: 'Log in', accountCancel: 'Cancel', studyBook: 'Study Book', signGallery: 'Traffic Signs', myStats: 'My Statistics', smartPractice: 'Smart Practice', aiInsights: 'AI Insights', trafficMath: 'Traffic Math', michaelTeacher: 'Instructor', library: 'Library', glossary: 'Glossary', social: 'Social' },
+  no: { subtitle: 'Norsk førerprøve', startQuiz: 'Start quiz', exam: 'Eksamen', accuracy: 'Nøyaktighet', answered: 'Besvart', correct: 'Riktige', premiumCta: 'Premium', premiumOffer: 'Ubegrenset tilgang · fra 99 kr', premiumActive: 'Premium aktiv', streak: 'dagers rekke', freeLeft: 'gratis igjen', dailyLimitReached: 'Opprett gratis konto for å fortsette', dailyTest: 'Dagens test', moreOptions: 'Flere', accountTitle: 'Opprett gratis konto for å fortsette', accountBody: 'Du har brukt de 5 gjestespørsmålene. Opprett en gratis konto for 10 spørsmål per dag og behold progresjonen din.', accountSignup: 'Opprett konto', accountLogin: 'Logg inn', accountCancel: 'Avbryt', studyBook: 'Læringsbok', signGallery: 'Trafikkskilt', myStats: 'Min statistikk', smartPractice: 'Smart øving', aiInsights: 'AI Analyse', trafficMath: 'Trafikk-matte', michaelTeacher: 'Trafikklærer', library: 'Bibliotek', glossary: 'Ordliste', social: 'Sosiale', askQuestion: 'Still et spørsmål om trafikk' },
+  th: { subtitle: 'สอบใบขับขี่นอร์เวย์', startQuiz: 'เริ่มทำแบบทดสอบ', exam: 'สอบ', accuracy: 'ความแม่นยำ', answered: 'ตอบแล้ว', correct: 'ถูกต้อง', premiumCta: 'พรีเมียม', premiumOffer: 'ใช้งานไม่จำกัด · เริ่มต้น 99 kr', premiumActive: 'Premium ใช้งานอยู่', streak: 'วันติดต่อกัน', freeLeft: 'ฟรีเหลือ', dailyLimitReached: 'สร้างบัญชีฟรีเพื่อเรียนต่อ', dailyTest: 'แบบทดสอบประจำวัน', moreOptions: 'เพิ่มเติม', accountTitle: 'สร้างบัญชีฟรีเพื่อเรียนต่อ', accountBody: 'คุณใช้คำถามสำหรับผู้ใช้ทั่วไปครบ 5 ข้อแล้ว สร้างบัญชีฟรีเพื่อรับ 10 คำถามต่อวันและเก็บความก้าวหน้าของคุณไว้', accountSignup: 'สร้างบัญชี', accountLogin: 'เข้าสู่ระบบ', accountCancel: 'ยกเลิก', studyBook: 'หนังสือเรียน', signGallery: 'ป้ายจราจร', myStats: 'สถิติของฉัน', smartPractice: 'ฝึกอัจฉริยะ', aiInsights: 'AI วิเคราะห์', trafficMath: 'คณิตจราจร', michaelTeacher: 'ครูสอนขับ', library: 'ห้องสมุด', glossary: 'คำศัพท์', social: 'โซเชียล', askQuestion: 'ถามคำถามเกี่ยวกับการจราจร' },
+  en: { subtitle: 'Norwegian driving test', startQuiz: 'Start quiz', exam: 'Exam', accuracy: 'Accuracy', answered: 'Answered', correct: 'Correct', premiumCta: 'Premium', premiumOffer: 'Unlimited access · from 99 NOK', premiumActive: 'Premium active', streak: 'day streak', freeLeft: 'free left', dailyLimitReached: 'Create a free account to continue', dailyTest: 'Daily test', moreOptions: 'More', accountTitle: 'Create a free account to continue', accountBody: 'You have used the 5 guest questions. Create a free account for 10 questions per day and keep your progress.', accountSignup: 'Create account', accountLogin: 'Log in', accountCancel: 'Cancel', studyBook: 'Study Book', signGallery: 'Traffic Signs', myStats: 'My Statistics', smartPractice: 'Smart Practice', aiInsights: 'AI Insights', trafficMath: 'Traffic Math', michaelTeacher: 'Instructor', library: 'Library', glossary: 'Glossary', social: 'Social', askQuestion: 'Ask a question about traffic' },
 };
 
 export default function HomeScreen() {
@@ -24,7 +23,6 @@ export default function HomeScreen() {
   const { language, deviceId, setProgress, progress, colors, isPremium, isAuthenticated, freeRemaining, streak, updateStreak, setShowTrafficPanel } = useAppStore();
   const [loading, setLoading] = useState(true);
   const [dailyDone, setDailyDone] = useState(false);
-  const [carousel2Tab, setCarousel2Tab] = useState<'history' | 'library'>('history');
   const { width: winWidth } = useWindowDimensions();
   const t = TR[language] || {};
   const c = colors;
@@ -143,8 +141,17 @@ export default function HomeScreen() {
       )}
 
       <ScrollView contentContainerStyle={st.scroll} showsVerticalScrollIndicator={false}>
-        {/* Top bar: language + settings */}
+        {/* Top bar: streak (left) + language switcher + settings (right) */}
         <View style={st.topBar}>
+          <View style={st.topLeft}>
+            {/* Mini streak indicator in top bar — number only, no badge */}
+            {streak > 0 && (
+              <View style={st.topStreak}>
+                <Ionicons name="flame" size={12} color="#FF9933" />
+                <Text style={st.topStreakNum}>{streak}</Text>
+              </View>
+            )}
+          </View>
           <View style={st.topRight}>
             <LanguageSwitcher size="sm" />
             <TouchableOpacity testID="settings-btn" style={[st.iconBtn, { backgroundColor: c.card, borderColor: c.cardBorder }]} onPress={() => router.push('/settings')}>
@@ -153,28 +160,21 @@ export default function HomeScreen() {
           </View>
         </View>
 
-        {/* Brand */}
+        {/* Brand section */}
         <View style={st.brand}>
           <Image source={T2D_ICON} style={st.brandIcon} accessibilityLabel="Thai2Drive logo" />
           <Text style={[st.title, { color: c.text }]} testID="home-title">Thai2Drive</Text>
           <Text style={[st.subtitle, { color: c.textMuted }]}>{t.subtitle}</Text>
         </View>
 
-        {/* Streak (only if >0) */}
+        {/* Streak badge — below brand, centered, oval pill (matches web home-top layout) */}
         {streak > 0 && (
-          <View style={st.streakPill}>
-            <Ionicons name="flame" size={16} color="#FF6B35" />
-            <Text style={[st.streakText, { color: c.accent }]}>{streak} {t.streak}</Text>
+          <View style={[st.streakBadge, { backgroundColor: 'rgba(255,153,51,0.11)', borderColor: 'rgba(255,153,51,0.25)' }]}>
+            <Text style={st.streakFire}>🔥</Text>
+            <Text style={[st.streakNum, { color: '#FF9933' }]}>{streak}</Text>
+            <Text style={[st.streakLbl, { color: c.textMuted }]}>{t.streak}</Text>
           </View>
         )}
-
-        {/* AI Coach Banner */}
-        <CoachBanner
-          deviceId={deviceId}
-          lang={language}
-          streak={streak}
-          colors={c}
-        />
 
         {/* PRIMARY CTA: Start Quiz */}
         <Animated.View style={{ transform: [{ scale: ctaScale }] }}>
@@ -210,32 +210,26 @@ export default function HomeScreen() {
           </Text>
         )}
 
-        {/* CAROUSEL 1: Quick-access buttons — single visible with arrow indicator */}
+        {/* Horizontal scroll menu — compact hsm-cards (matches web hsm-card design) */}
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
           scrollEventThrottle={16}
-          style={st.carousel1Container}
-          contentContainerStyle={st.carousel1Content}
+          decelerationRate="fast"
+          style={st.hsmContainer}
+          contentContainerStyle={st.hsmContent}
         >
-          {/* Eksamen */}
+          {/* Eksamen — with timer display (matches web hsm-exam-timer) */}
           <TouchableOpacity
             testID="exam-mode-btn"
             onPress={() => { if (locked) handleLockedNav(); else router.push({ pathname: '/quiz', params: { mode: 'exam', category: 'all' } }); }}
             activeOpacity={0.7}
+            style={[st.hsmCard, { backgroundColor: 'rgba(5,14,38,0.88)', borderColor: 'rgba(0,82,255,0.2)' }]}
           >
-            <LinearGradient
-              colors={['#06FFA5', '#00BFFF', '#9D4EDD', '#FF1493', '#06FFA5']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={st.carousel1GradientBorder}
-            >
-              <View style={[st.carousel1BtnInner, { backgroundColor: c.bg }]}>
-                <Ionicons name="school-outline" size={20} color={c.accent} />
-                <Text style={[st.carousel1Label, { color: c.text }]}>{t.exam}</Text>
-                <Text style={[st.carousel1Arrow, { color: c.accent }]}>›</Text>
-              </View>
-            </LinearGradient>
+            <View style={st.hsmTimer}>
+              <Text style={st.hsmTimerText}>90:00</Text>
+            </View>
+            <Text style={[st.hsmLabel, { color: '#7A90B8' }]}>{t.exam}</Text>
           </TouchableOpacity>
 
           {/* Daglig test */}
@@ -243,19 +237,10 @@ export default function HomeScreen() {
             testID="daily-test-btn"
             onPress={() => router.push({ pathname: '/quiz', params: { mode: 'daily', category: 'all' } })}
             activeOpacity={0.7}
+            style={[st.hsmCard, { backgroundColor: 'rgba(5,14,38,0.88)', borderColor: 'rgba(0,82,255,0.2)' }]}
           >
-            <LinearGradient
-              colors={['#06FFA5', '#00BFFF', '#9D4EDD', '#FF1493', '#06FFA5']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={st.carousel1GradientBorder}
-            >
-              <View style={[st.carousel1BtnInner, { backgroundColor: c.bg }]}>
-                <Ionicons name={dailyDone ? 'checkmark-circle' : 'today-outline'} size={20} color={dailyDone ? c.correct : c.accent} />
-                <Text style={[st.carousel1Label, { color: dailyDone ? c.correct : c.text }]}>{t.dailyTest}</Text>
-                <Text style={[st.carousel1Arrow, { color: c.accent }]}>›</Text>
-              </View>
-            </LinearGradient>
+            <Text style={st.hsmEmoji}>📅</Text>
+            <Text style={[st.hsmLabel, { color: '#7A90B8' }]}>{t.dailyTest}</Text>
           </TouchableOpacity>
 
           {/* Trafikk-matte */}
@@ -266,230 +251,77 @@ export default function HomeScreen() {
               else router.push('/traffic-math');
             }}
             activeOpacity={0.7}
+            style={[st.hsmCard, { backgroundColor: 'rgba(5,14,38,0.88)', borderColor: 'rgba(0,82,255,0.2)' }]}
           >
-            <LinearGradient
-              colors={['#06FFA5', '#00BFFF', '#9D4EDD', '#FF1493', '#06FFA5']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={st.carousel1GradientBorder}
-            >
-              <View style={[st.carousel1BtnInner, { backgroundColor: c.bg }]}>
-                <Ionicons name="speedometer-outline" size={20} color={c.accent} />
-                <Text style={[st.carousel1Label, { color: c.text }]}>{t.trafficMath}</Text>
-                <Text style={[st.carousel1Arrow, { color: c.accent }]}>›</Text>
-              </View>
-            </LinearGradient>
+            <Text style={st.hsmEmoji}>🚗</Text>
+            <Text style={[st.hsmLabel, { color: '#7A90B8' }]}>{t.trafficMath}</Text>
+          </TouchableOpacity>
+
+          {/* Bibliotek */}
+          <TouchableOpacity
+            testID="library-btn"
+            onPress={() => router.push('/library')}
+            activeOpacity={0.7}
+            style={[st.hsmCard, { backgroundColor: 'rgba(5,14,38,0.88)', borderColor: 'rgba(0,82,255,0.2)' }]}
+          >
+            <Text style={st.hsmEmoji}>📚</Text>
+            <Text style={[st.hsmLabel, { color: '#7A90B8' }]}>{t.library}</Text>
           </TouchableOpacity>
         </ScrollView>
 
-        {/* CAROUSEL 2: Toggle buttons — Historikk | Bibliotek */}
-        <View style={st.carousel2Container}>
-          <TouchableOpacity
-            onPress={() => setCarousel2Tab('history')}
-            activeOpacity={0.7}
-          >
-            <LinearGradient
-              colors={['#06FFA5', '#00BFFF', '#9D4EDD', '#FF1493', '#06FFA5']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={st.carousel2GradientBorder}
-            >
-              <View style={[st.carousel2BtnInner, { backgroundColor: c.bg }]}>
-                <Ionicons name="time-outline" size={18} color={carousel2Tab === 'history' ? c.accent : c.textMuted} />
-                <Text style={[st.carousel2Label, { color: carousel2Tab === 'history' ? c.text : c.textMuted }]}>Historikk</Text>
-              </View>
-            </LinearGradient>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => setCarousel2Tab('library')}
-            activeOpacity={0.7}
-          >
-            <LinearGradient
-              colors={['#06FFA5', '#00BFFF', '#9D4EDD', '#FF1493', '#06FFA5']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={st.carousel2GradientBorder}
-            >
-              <View style={[st.carousel2BtnInner, { backgroundColor: c.bg }]}>
-                <Ionicons name="library-outline" size={18} color={carousel2Tab === 'library' ? c.accent : c.textMuted} />
-                <Text style={[st.carousel2Label, { color: carousel2Tab === 'library' ? c.text : c.textMuted }]}>Bibliotek</Text>
-              </View>
-            </LinearGradient>
-          </TouchableOpacity>
-        </View>
-
-        {/* CAROUSEL 3: Navigation buttons — single visible with arrow indicator */}
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          scrollEventThrottle={16}
-          style={st.carousel3Container}
-          contentContainerStyle={st.carousel3Content}
+        {/* Michael card — navigates to teacher (matches web home layout) */}
+        <TouchableOpacity
+          testID="michael-card-btn"
+          onPress={() => router.push('/teacher')}
+          activeOpacity={0.7}
+          style={st.michaelCardOuter}
         >
-          {/* Hjem */}
-          <TouchableOpacity onPress={() => router.push('/')} activeOpacity={0.7}>
-            <LinearGradient
-              colors={['#06FFA5', '#00BFFF', '#9D4EDD', '#FF1493', '#06FFA5']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={st.carousel3GradientBorder}
-            >
-              <View style={[st.carousel3BtnInner, { backgroundColor: c.bg }]}>
-                <Ionicons name="home-outline" size={20} color={c.accent} />
-                <Text style={[st.carousel3Label, { color: c.text }]}>Hjem</Text>
-                <Text style={[st.carousel3Arrow, { color: c.accent }]}>›</Text>
+          <LinearGradient
+            colors={['#00F5FF', '#FF00E5', '#00F5FF']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={st.michaelCardBorder}
+          >
+            <View style={[st.michaelCardInner, { backgroundColor: isDark ? 'rgba(30,58,138,0.35)' : 'rgba(219,234,254,0.60)' }]}>
+              <View style={st.michaelCardLeft}>
+                <View style={st.michaelCardAvatar}>
+                  <Image source={require('../assets/michael_avatar.png')} style={st.michaelAvatarImg} />
+                </View>
+                <View style={st.michaelCardText}>
+                  <Text style={[st.michaelCardName, { color: '#93C5FD' }]}>Michael Trafikklærer</Text>
+                  <Text style={[st.michaelCardSub, { color: '#64748B' }]}>{t.askQuestion}</Text>
+                </View>
               </View>
-            </LinearGradient>
-          </TouchableOpacity>
+              <Text style={[st.michaelCardArrow, { color: '#3B82F6' }]}>›</Text>
+            </View>
+          </LinearGradient>
+        </TouchableOpacity>
 
-          {/* Kategorier */}
-          <TouchableOpacity onPress={() => router.push('/categories')} activeOpacity={0.7}>
-            <LinearGradient
-              colors={['#06FFA5', '#00BFFF', '#9D4EDD', '#FF1493', '#06FFA5']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={st.carousel3GradientBorder}
-            >
-              <View style={[st.carousel3BtnInner, { backgroundColor: c.bg }]}>
-                <Ionicons name="grid-outline" size={20} color={c.accent} />
-                <Text style={[st.carousel3Label, { color: c.text }]}>Kategorier</Text>
-                <Text style={[st.carousel3Arrow, { color: c.accent }]}>›</Text>
-              </View>
-            </LinearGradient>
-          </TouchableOpacity>
-
-          {/* Historikk */}
-          <TouchableOpacity onPress={() => router.push('/history')} activeOpacity={0.7}>
-            <LinearGradient
-              colors={['#06FFA5', '#00BFFF', '#9D4EDD', '#FF1493', '#06FFA5']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={st.carousel3GradientBorder}
-            >
-              <View style={[st.carousel3BtnInner, { backgroundColor: c.bg }]}>
-                <Ionicons name="time-outline" size={20} color={c.accent} />
-                <Text style={[st.carousel3Label, { color: c.text }]}>Historikk</Text>
-                <Text style={[st.carousel3Arrow, { color: c.accent }]}>›</Text>
-              </View>
-            </LinearGradient>
-          </TouchableOpacity>
-
-          {/* Michael */}
-          <TouchableOpacity onPress={() => router.push('/teacher')} activeOpacity={0.7}>
-            <LinearGradient
-              colors={['#06FFA5', '#00BFFF', '#9D4EDD', '#FF1493', '#06FFA5']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={st.carousel3GradientBorder}
-            >
-              <View style={[st.carousel3BtnInner, { backgroundColor: c.bg }]}>
-                <Image source={require('../assets/michael_avatar.png')} style={st.carousel3Avatar} />
-                <Text style={[st.carousel3Label, { color: c.accent, fontWeight: '700' }]}>Michael</Text>
-                <Text style={[st.carousel3Arrow, { color: c.accent }]}>›</Text>
-              </View>
-            </LinearGradient>
-          </TouchableOpacity>
-
-          {/* Trafikkskilt */}
-          <TouchableOpacity onPress={() => router.push('/signs')} activeOpacity={0.7}>
-            <LinearGradient
-              colors={['#06FFA5', '#00BFFF', '#9D4EDD', '#FF1493', '#06FFA5']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={st.carousel3GradientBorder}
-            >
-              <View style={[st.carousel3BtnInner, { backgroundColor: c.bg }]}>
-                <Ionicons name="warning-outline" size={20} color={c.accent} />
-                <Text style={[st.carousel3Label, { color: c.text }]}>Skilt</Text>
-                <Text style={[st.carousel3Arrow, { color: c.accent }]}>›</Text>
-              </View>
-            </LinearGradient>
-          </TouchableOpacity>
-
-          {/* Studiebøk */}
-          <TouchableOpacity onPress={() => router.push('/book')} activeOpacity={0.7}>
-            <LinearGradient
-              colors={['#06FFA5', '#00BFFF', '#9D4EDD', '#FF1493', '#06FFA5']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={st.carousel3GradientBorder}
-            >
-              <View style={[st.carousel3BtnInner, { backgroundColor: c.bg }]}>
-                <Ionicons name="book-outline" size={20} color={c.accent} />
-                <Text style={[st.carousel3Label, { color: c.text }]}>Bok</Text>
-                <Text style={[st.carousel3Arrow, { color: c.accent }]}>›</Text>
-              </View>
-            </LinearGradient>
-          </TouchableOpacity>
-
-          {/* Bokmerker */}
-          <TouchableOpacity onPress={() => router.push('/bookmarks')} activeOpacity={0.7}>
-            <LinearGradient
-              colors={['#06FFA5', '#00BFFF', '#9D4EDD', '#FF1493', '#06FFA5']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={st.carousel3GradientBorder}
-            >
-              <View style={[st.carousel3BtnInner, { backgroundColor: c.bg }]}>
-                <Ionicons name="bookmark-outline" size={20} color={c.accent} />
-                <Text style={[st.carousel3Label, { color: c.text }]}>Merker</Text>
-                <Text style={[st.carousel3Arrow, { color: c.accent }]}>›</Text>
-              </View>
-            </LinearGradient>
-          </TouchableOpacity>
-
-          {/* Innstillinger */}
-          <TouchableOpacity onPress={() => router.push('/settings')} activeOpacity={0.7}>
-            <LinearGradient
-              colors={['#06FFA5', '#00BFFF', '#9D4EDD', '#FF1493', '#06FFA5']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={st.carousel3GradientBorder}
-            >
-              <View style={[st.carousel3BtnInner, { backgroundColor: c.bg }]}>
-                <Ionicons name="settings-outline" size={20} color={c.accent} />
-                <Text style={[st.carousel3Label, { color: c.text }]}>Instill</Text>
-                <Text style={[st.carousel3Arrow, { color: c.accent }]}>›</Text>
-              </View>
-            </LinearGradient>
-          </TouchableOpacity>
-
-          {/* Profil → går til statistikk (profilside finnes ikke som egen rute) */}
-          <TouchableOpacity onPress={() => router.push('/stats')} activeOpacity={0.7}>
-            <LinearGradient
-              colors={['#06FFA5', '#00BFFF', '#9D4EDD', '#FF1493', '#06FFA5']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={st.carousel3GradientBorder}
-            >
-              <View style={[st.carousel3BtnInner, { backgroundColor: c.bg }]}>
-                <Ionicons name="bar-chart-outline" size={20} color={c.accent} />
-                <Text style={[st.carousel3Label, { color: c.text }]}>Statistikk</Text>
-                <Text style={[st.carousel3Arrow, { color: c.accent }]}>›</Text>
-              </View>
-            </LinearGradient>
-          </TouchableOpacity>
-        </ScrollView>
-
-        {/* Progress — single clean row, no card nesting */}
+        {/* Progress — neon gradient border stats row (matches web .home-stats conic-gradient) */}
         {progress.total_questions_answered > 0 && (
-          <View style={st.statsBlock}>
-            <View style={st.statCol}>
-              <Text style={[st.statVal, { color: c.text }]}>{progress.total_questions_answered}</Text>
-              <Text style={[st.statLbl, { color: c.textMuted }]}>{t.answered}</Text>
+          <LinearGradient
+            colors={['#00F5FF', '#FF00E5', '#00F5FF']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={st.statsGradientBorder}
+          >
+            <View style={[st.statsBlock, { backgroundColor: isDark ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.92)' }]}>
+              <View style={st.statCol}>
+                <Text style={[st.statVal, { color: '#FF9933' }]}>{progress.total_questions_answered}</Text>
+                <Text style={[st.statLbl, { color: c.textMuted }]}>{t.answered}</Text>
+              </View>
+              <View style={[st.statDivider, { backgroundColor: c.divider }]} />
+              <View style={st.statCol}>
+                <Text style={[st.statVal, { color: '#FF9933' }]}>{progress.correct_answers}</Text>
+                <Text style={[st.statLbl, { color: c.textMuted }]}>{t.correct}</Text>
+              </View>
+              <View style={[st.statDivider, { backgroundColor: c.divider }]} />
+              <View style={st.statCol}>
+                <Text style={[st.statVal, { color: '#FF9933' }]}>{accuracy}%</Text>
+                <Text style={[st.statLbl, { color: c.textMuted }]}>{t.accuracy}</Text>
+              </View>
             </View>
-            <View style={[st.divider, { backgroundColor: c.divider }]} />
-            <View style={st.statCol}>
-              <Text style={[st.statVal, { color: c.text }]}>{progress.correct_answers}</Text>
-              <Text style={[st.statLbl, { color: c.textMuted }]}>{t.correct}</Text>
-            </View>
-            <View style={[st.divider, { backgroundColor: c.divider }]} />
-            <View style={st.statCol}>
-              <Text style={[st.statVal, { color: accuracy >= 70 ? c.correct : c.text }]}>{accuracy}%</Text>
-              <Text style={[st.statLbl, { color: c.textMuted }]}>{t.accuracy}</Text>
-            </View>
-          </View>
+          </LinearGradient>
         )}
 
         {/* Premium banner / active */}
@@ -499,32 +331,28 @@ export default function HomeScreen() {
             style={[
               st.premBanner,
               {
-                backgroundColor: c.card,
-                borderColor: c.accent,
+                backgroundColor: 'rgba(16,185,129,0.1)',
+                borderColor: 'rgba(16,185,129,0.25)',
               }
             ]}
             onPress={() => router.push('/paywall')}
             activeOpacity={0.85}
           >
-            <Ionicons name="diamond" size={18} color={c.accent} />
-            <View style={{ flex: 1, marginLeft: 10 }}>
-              <Text style={[st.premTitle, { color: c.accent }]}>{t.premiumCta}</Text>
-              <Text style={[st.premSub, { color: c.textSecondary }]}>{t.premiumOffer}</Text>
-            </View>
-            <Ionicons name="chevron-forward" size={20} color={c.accent} />
+            <Text style={{ fontSize: 16 }}>💎</Text>
+            <Text style={[st.premTitle, { color: '#10B981' }]}>{t.premiumCta}</Text>
           </TouchableOpacity>
         ) : (
           <View
             style={[
               st.premActive,
               {
-                backgroundColor: c.card,
-                borderColor: c.correct,
+                backgroundColor: 'rgba(16,185,129,0.1)',
+                borderColor: 'rgba(16,185,129,0.25)',
               }
             ]}
           >
-            <Ionicons name="diamond" size={16} color={c.correct} />
-            <Text style={[st.premActiveText, { color: c.correct }]}>{t.premiumActive}</Text>
+            <Text style={{ fontSize: 14 }}>💎</Text>
+            <Text style={[st.premActiveText, { color: '#10B981' }]}>{t.premiumActive}</Text>
           </View>
         )}
       </ScrollView>
@@ -538,48 +366,108 @@ const st = StyleSheet.create({
   container: { flex: 1 },
   center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   scroll: { padding: 24, paddingBottom: 110 },
-  topBar: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 28 },
+  topBar: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 },
+  topLeft: { flex: 1, flexDirection: 'row', alignItems: 'center' },
+  // Mini streak in top bar — matches web's #topStreak (compact, always visible when streak>0)
+  topStreak: { flexDirection: 'row', alignItems: 'center', gap: 3 },
+  topStreakNum: { fontSize: 12, fontWeight: '800', color: '#FF9933' },
   topRight: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   iconBtn: { width: 40, height: 40, borderRadius: 20, justifyContent: 'center', alignItems: 'center', borderWidth: 1 },
-  brand: { alignItems: 'center', marginBottom: 20 },
+  brand: { alignItems: 'center', marginBottom: 24 },
   brandIcon: { width: 64, height: 64, borderRadius: 16, marginBottom: 14 },
   title: { fontSize: 34, fontWeight: '800', letterSpacing: -1 },
   subtitle: { fontSize: 14, marginTop: 4 },
-  streakPill: { flexDirection: 'row', alignItems: 'center', alignSelf: 'center', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 14, gap: 6, marginBottom: 20 },
-  streakText: { fontSize: 13, fontWeight: '700' },
+  // Main streak badge — oval pill in content area, below brand (matches web .streak-badge)
+  streakBadge: { flexDirection: 'row', alignItems: 'center', alignSelf: 'center', gap: 7, borderRadius: 50, paddingHorizontal: 14, paddingVertical: 5, borderWidth: 1, marginBottom: 24 },
+  streakFire: { fontSize: 18 },
+  streakNum: { fontSize: 17.6, fontWeight: '900' },
+  streakLbl: { fontSize: 12.5, fontWeight: '600' },
   startBtn: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', borderRadius: 18, paddingVertical: 20, gap: 10, marginBottom: 8 },
   startText: { fontSize: 18, fontWeight: '800', letterSpacing: 0.2 },
   freeHint: { fontSize: 12, textAlign: 'center', marginBottom: 24 },
-  // Carousel 1 — single button visible with arrow indicator
-  carousel1Container: { marginBottom: 32, marginHorizontal: -24, paddingHorizontal: 24, overflow: 'hidden' },
-  carousel1Content: { gap: 12, paddingRight: 24 },
-  carousel1GradientBorder: { padding: 2, borderRadius: 12, width: 350, minWidth: 350 },
-  carousel1BtnInner: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12, borderRadius: 11, paddingHorizontal: 18, paddingVertical: 16, width: '100%' },
-  carousel1Label: { fontSize: 16, fontWeight: '600', flex: 1, marginLeft: 8 },
-  carousel1Arrow: { fontSize: 24, fontWeight: '700', opacity: 0.8 },
-  // Carousel 2 — toggle buttons (Historikk | Bibliotek)
-  carousel2Container: { flexDirection: 'row', gap: 12, marginBottom: 28, justifyContent: 'space-between' },
-  carousel2GradientBorder: { padding: 2, borderRadius: 12, flex: 1 },
-  carousel2BtnInner: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, borderRadius: 11, paddingHorizontal: 16, paddingVertical: 14, width: '100%' },
-  carousel2Label: { fontSize: 14, fontWeight: '600' },
-  statsBlock: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', paddingVertical: 6, marginBottom: 28 },
+  // HSM (Horizontal Scroll Menu) — compact 85px cards matching web hsm-card
+  hsmContainer: { marginBottom: 24, marginHorizontal: -24, overflow: 'hidden' },
+  hsmContent: { gap: 10, paddingHorizontal: 24, paddingVertical: 6, paddingRight: 28 },
+  hsmCard: {
+    width: 85,
+    height: 85,
+    borderRadius: 16,
+    borderWidth: 1.5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    paddingHorizontal: 8,
+    paddingVertical: 12,
+    // Match web blue glow shadow
+    shadowColor: 'rgba(0,82,255,0.25)',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  hsmTimer: {
+    backgroundColor: '#1a0000',
+    borderWidth: 1.5,
+    borderColor: '#FF3B3B',
+    borderRadius: 5,
+    paddingHorizontal: 4,
+    paddingVertical: 2,
+  },
+  hsmTimerText: {
+    fontFamily: Platform.OS === 'ios' ? 'Courier New' : 'monospace',
+    fontSize: 13,
+    fontWeight: '700',
+    letterSpacing: 2,
+    color: '#FF3B3B',
+  },
+  hsmEmoji: {
+    fontSize: 23,
+    lineHeight: 26,
+  },
+  hsmLabel: {
+    fontSize: 10,
+    fontWeight: '700',
+    textAlign: 'center',
+    letterSpacing: 0.15,
+    lineHeight: 13,
+  },
+  // Michael card — gradient border, avatar, name, subtitle, arrow
+  michaelCardOuter: { width: '100%', marginBottom: 24 },
+  michaelCardBorder: { padding: 1.5, borderRadius: 16 },
+  michaelCardInner: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderRadius: 15, paddingVertical: 10, paddingHorizontal: 14 },
+  michaelCardLeft: { flexDirection: 'row', alignItems: 'center', flex: 1 },
+  michaelCardAvatar: { marginRight: 12 },
+  michaelAvatarImg: { width: 40, height: 40, borderRadius: 20 },
+  michaelCardText: { flex: 1 },
+  michaelCardName: { fontSize: 15.2, fontWeight: '800' },
+  michaelCardSub: { fontSize: 12.8, fontWeight: '500', marginTop: 2 },
+  michaelCardArrow: { fontSize: 24, fontWeight: '700', marginLeft: 12 },
+  // Stats row — gradient border wrapper (matches web .home-stats conic-gradient)
+  statsGradientBorder: {
+    padding: 1.5,
+    borderRadius: 16,
+    marginBottom: 28,
+    overflow: 'hidden',
+    shadowColor: 'rgba(0,245,255,0.15)',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.5,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  statsBlock: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', paddingVertical: 14, borderRadius: 15 },
   statCol: { alignItems: 'center', flex: 1 },
-  statVal: { fontSize: 24, fontWeight: '800' },
-  statLbl: { fontSize: 11, marginTop: 4, textTransform: 'uppercase', letterSpacing: 0.8 },
-  divider: { width: 1, height: 30 },
-  premBanner: { flexDirection: 'row', alignItems: 'center', borderRadius: 14, paddingHorizontal: 16, paddingVertical: 14, borderWidth: 1 },
-  premTitle: { fontSize: 15, fontWeight: '800' },
-  premSub: { fontSize: 12, marginTop: 2 },
-  premActive: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 12, paddingVertical: 10, gap: 6, borderWidth: 1 },
+  statVal: { fontSize: 25, fontWeight: '900', lineHeight: 28 },
+  statLbl: { fontSize: 10, marginTop: 5, letterSpacing: 0.4, textTransform: 'uppercase', fontWeight: '700' },
+  statDivider: { width: 1, height: 30 },
+  // Premium banner — green pill (matches web .premium-banner)
+  premBanner: {
+    flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
+    borderRadius: 50, paddingVertical: 10, paddingHorizontal: 20, borderWidth: 1,
+  },
+  premTitle: { fontSize: 13.6, fontWeight: '800' },
+  premSub: { display: 'none' }, // hidden on web too
+  premActive: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderRadius: 50, paddingVertical: 10, paddingHorizontal: 20, borderWidth: 1, alignSelf: 'center', gap: 6 },
   premActiveText: { fontSize: 13, fontWeight: '700' },
-  // Carousel 3 — single button visible with arrow indicator
-  carousel3Container: { marginBottom: 28, marginHorizontal: -24, paddingHorizontal: 24, overflow: 'hidden' },
-  carousel3Content: { gap: 12, paddingRight: 24 },
-  carousel3GradientBorder: { padding: 2, borderRadius: 12, width: 350, minWidth: 350 },
-  carousel3BtnInner: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12, borderRadius: 11, paddingHorizontal: 18, paddingVertical: 16, width: '100%' },
-  carousel3Label: { fontSize: 16, fontWeight: '600', flex: 1, marginLeft: 8 },
-  carousel3Arrow: { fontSize: 24, fontWeight: '700', opacity: 0.8 },
-  carousel3Avatar: { width: 28, height: 28, borderRadius: 14 },
   // Language hint
   langHintWrap: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 99, alignItems: 'flex-start', justifyContent: 'flex-start', paddingTop: 70, paddingLeft: 16 },
   langHintDismiss: { alignItems: 'center' },

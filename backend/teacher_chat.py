@@ -62,32 +62,56 @@ def send_admin_alert_email(subject: str, body: str):
 import litellm
 
 litellm.suppress_debug_info = True
-LLM_KEY = os.environ.get("ANTHROPIC_API_KEY", "").strip()
-LLM_MODEL = os.environ.get("TEACHER_LLM_MODEL", "claude-haiku-4-5-20251001")
 
-# Fallback to OpenAI if Anthropic key is stale/missing
-if not LLM_KEY or LLM_KEY.startswith("sk-ant-api03-dTiG"):
-    openai_key = os.environ.get("OPENAI_API_KEY", "").strip()
-    if openai_key:
-        LLM_KEY = openai_key
-        LLM_MODEL = "gpt-4o-mini"
-        logger.info("Using OpenAI fallback for Teacher chat — model=%s", LLM_MODEL)
+# ─── AI-motor: DeepSeek ──────────────────────────────────────────────────────
+# Michael byttet motor fra Anthropic til DeepSeek (hastighet + driftskostnad).
+# To måter å koble til, i prioritert rekkefølge:
+#   1. DEEPSEEK_API_KEY   → direkte mot DeepSeek → model "deepseek/deepseek-chat"
+#   2. OPENROUTER_API_KEY → via OpenRouter       → model "openrouter/deepseek/deepseek-chat"
+# Begge rutes gjennom litellm, som har DeepSeek innebygd fra 1.57 (vi er på 1.80).
+# Modellnavnet kan overstyres med TEACHER_LLM_MODEL uten kodeendring.
+
+LLM_KEY = ""
+LLM_MODEL = ""
+LLM_PROVIDER = "none"
+
+_deepseek_key = os.environ.get("DEEPSEEK_API_KEY", "").strip()
+_openrouter_key = os.environ.get("OPENROUTER_API_KEY", "").strip()
+
+if _deepseek_key:
+    LLM_KEY = _deepseek_key
+    LLM_MODEL = os.environ.get("TEACHER_LLM_MODEL", "deepseek/deepseek-chat")
+    LLM_PROVIDER = "deepseek"
+elif _openrouter_key:
+    LLM_KEY = _openrouter_key
+    LLM_MODEL = os.environ.get("TEACHER_LLM_MODEL", "openrouter/deepseek/deepseek-chat")
+    LLM_PROVIDER = "openrouter"
+else:
+    # Siste utvei: holder læreren i live hvis DeepSeek-nøkkelen mangler ved oppstart.
+    _openai_key = os.environ.get("OPENAI_API_KEY", "").strip()
+    if _openai_key:
+        LLM_KEY = _openai_key
+        LLM_MODEL = os.environ.get("TEACHER_OPENAI_MODEL", "gpt-4o-mini")
+        LLM_PROVIDER = "openai"
+        logger.warning("DEEPSEEK_API_KEY mangler — Teacher chat faller tilbake til OpenAI.")
 
 if LLM_KEY:
-    logger.info("Teacher chat LLM ready — model=%s", LLM_MODEL)
+    logger.info("Teacher chat LLM ready — provider=%s model=%s", LLM_PROVIDER, LLM_MODEL)
 else:
-    logger.error("Teacher chat LLM NOT configured — keys absent.")
+    logger.error(
+        "Teacher chat LLM NOT configured — sett DEEPSEEK_API_KEY (eller OPENROUTER_API_KEY)."
+    )
 
 # ─── System prompt ────────────────────────────────────────────────────────────
 
-# Critical language header — injected FIRST so Haiku reads it before any examples
+# Critical language header — injected FIRST so the model reads it before any examples
 _LANG_CRITICAL = {
     "no": "[LANGUAGE: no]\nCRITICAL: Reply in Bokmål Norwegian ONLY. Every single word must be Norwegian. No Thai, no English.\n\n",
     "th": "[ภาษา: th]\nสำคัญมาก: ตอบเป็นภาษาไทยเท่านั้น ทุกคำต้องเป็นภาษาไทย ห้ามใช้ภาษานอร์เวย์หรือภาษาอังกฤษเลย\n\n",
     "en": "[LANGUAGE: en]\nCRITICAL: Reply in English ONLY. Every single word must be English. No Norwegian, no Thai.\n\n",
 }
 
-# GOOD example — language-specific so Haiku patterns on the declared language's prose style
+# GOOD example — language-specific so the model patterns on the declared language's prose style
 _GOOD_EXAMPLE = {
     "no": '''"Ok 😊
 
@@ -700,10 +724,10 @@ def _is_clarifying_question(content: str) -> bool:
 def _build_system_prompt(lang: str) -> str:
     """Assemble language-aware system prompt — critical language rule injected FIRST.
 
-    Putting the [LANGUAGE] header at the very top of the system prompt gives Haiku
+    Putting the [LANGUAGE] header at the very top of the system prompt gives the model
     the strongest possible signal before it reads any examples or coaching phrases.
     The GOOD example and coaching phrases are then injected in the declared language
-    only, so Haiku has no Norwegian prose to pattern-match from when lang=th/en.
+    only, so the model has no Norwegian prose to pattern-match from when lang=th/en.
     """
     l = lang if lang in ("no", "th", "en") else "no"
     core = {
@@ -1276,7 +1300,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
     ).sort("ts", 1).to_list(length=20)
     conversation: List[dict] = [{"role": m["role"], "content": m["content"]} for m in prior]
 
-    # Primer: for brand-new sessions, inject a silent assistant turn so Haiku
+    # Primer: for brand-new sessions, inject a silent assistant turn so the model
     # does not treat the first user message as "first contact" and introduce itself.
     _primer = {"no": "โอเค ครับ 😊", "th": "โอเครับ 😊", "en": "Sure 😊"}
     if not conversation:
@@ -1286,7 +1310,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
     # Call LLM
     try:
         if not LLM_KEY:
-            raise RuntimeError("ANTHROPIC_API_KEY not configured")
+            raise RuntimeError("DEEPSEEK_API_KEY not configured")
 
         # Retrieve curriculum context from database (RAG)
         context_str = await _get_curriculum_context(user_msg, lang)
@@ -1411,8 +1435,13 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             is_auth_error = True
 
         if is_auth_error:
-            alert_subj = "ALERT: Thai2Drive Anthropic API Key Invalid"
-            alert_body = f"The system detected an invalid or expired Anthropic API Key on {datetime.now(timezone.utc).isoformat()}.\n\nError details: {e}\n\nPlease update ANTHROPIC_API_KEY in your Railway environment variables immediately."
+            _key_env = {
+                "deepseek": "DEEPSEEK_API_KEY",
+                "openrouter": "OPENROUTER_API_KEY",
+                "openai": "OPENAI_API_KEY",
+            }.get(LLM_PROVIDER, "DEEPSEEK_API_KEY")
+            alert_subj = f"ALERT: Thai2Drive {LLM_PROVIDER} API Key Invalid"
+            alert_body = f"The system detected an invalid or expired {LLM_PROVIDER} API Key (model={LLM_MODEL}) on {datetime.now(timezone.utc).isoformat()}.\n\nError details: {e}\n\nPlease update {_key_env} in your Railway environment variables immediately."
             try:
                 import asyncio
                 asyncio.create_task(asyncio.to_thread(send_admin_alert_email, alert_subj, alert_body))

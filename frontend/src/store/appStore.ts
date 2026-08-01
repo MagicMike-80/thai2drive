@@ -73,6 +73,15 @@ interface AppState {
   } | null;
   setLastAttempt: (attempt: AppState['lastAttempt']) => void;
 
+  // Hand-off from quiz → Michael ("Spør Michael" on a wrong answer).
+  // Deliberately in-memory only: `context` is a hidden payload the learner
+  // must never see in the URL bar, and it must not survive a page refresh.
+  pendingQuizContext: {
+    display: string; // what the learner sees in their own chat bubble
+    context: string; // hidden <quiz_context> body — for Michael's eyes only
+  } | null;
+  setPendingQuizContext: (ctx: AppState['pendingQuizContext']) => void;
+
   // Desktop overlay panels (rendered outside 390 px WebAppShell)
   showTrafficPanel: boolean;
   setShowTrafficPanel: (v: boolean) => void;
@@ -354,6 +363,10 @@ export const useAppStore = create<AppState>((set, get) => ({
   // Last quiz attempt (in-memory, for review on results screen)
   lastAttempt: null,
   setLastAttempt: (attempt) => set({ lastAttempt: attempt }),
+
+  // Quiz → Michael hand-off (in-memory, consumed once by the teacher screen)
+  pendingQuizContext: null,
+  setPendingQuizContext: (ctx) => set({ pendingQuizContext: ctx }),
 
   // Desktop overlay panels
   showTrafficPanel: false,

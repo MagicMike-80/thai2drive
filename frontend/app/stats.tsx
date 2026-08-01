@@ -153,7 +153,7 @@ export default function StatsScreen() {
 
         </ScrollView>
       )}
-      <BottomNavBar activeTab="stats" />
+      <BottomNavBar activeTab="none" />
     </SafeAreaView>
   );
 }

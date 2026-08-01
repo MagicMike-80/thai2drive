@@ -3331,7 +3331,7 @@ a { color:inherit; text-decoration:none; }
       <span>Thai<span class="logo-t">2</span>Drive</span>
     </div>
     <div class="top-spacer"></div>
-    <div id="topStreak">🔥 <span id="topStreakNum">0</span> <span data-key="streak">dag streak</span></div>
+    <div id="topStreak">🔥 <span id="topStreakNum">0</span> <span data-key="streak">dagers rekke</span></div>
     <div style="display:flex;gap:8px;align-items:center;margin-left:12px">
       <button class="lang-btn active" id="topLangTH" onclick="setLang('th')" title="ภาษาไทย" style="width:36px;height:36px">
         <span class="cflag"><svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg"><rect width="900" height="600" fill="#A51931"/><rect width="900" height="480" y="60" fill="#F4F5F8"/><rect width="900" height="320" y="140" fill="#241D4F"/></svg></span>
@@ -3460,7 +3460,7 @@ a { color:inherit; text-decoration:none; }
         <div class="streak-badge">
           <span class="streak-fire">🔥</span>
           <span class="streak-num" id="homeStreakNum">0</span>
-          <span class="streak-lbl" data-key="streak">dag streak</span>
+          <span class="streak-lbl" data-key="streak">dagers rekke</span>
         </div>
       </div>
 
@@ -4234,7 +4234,7 @@ var UI = {
   bm_short:    {th:'บุ๊กมาร์ก',         no:'Bokmerker',        en:'Bookmarks'},
   hist_short:  {th:'ประวัติ',            no:'Historikk',        en:'History'},
   loading:     {th:'กำลังโหลด…',        no:'Laster spørsmål…', en:'Loading…'},
-  streak:      {th:'วันติดต่อกัน',     no:'dag streak',      en:'day streak'},
+  streak:      {th:'วันติดต่อกัน',     no:'dagers rekke',    en:'day streak'},
   answered:    {th:'ตอบแล้ว',          no:'BESVART',          en:'ANSWERED'},
   correct_stat:{th:'ถูกต้อง',           no:'RIKTIGE',          en:'CORRECT'},
   accuracy:    {th:'ความแม่นยำ',        no:'NØYAKTIGHET',      en:'ACCURACY'},
@@ -4503,6 +4503,36 @@ var UI = {
   tts_tempo_sub:   {th:'ความเร็วของเสียงสังเคราะห์', no:'Hastighet på talesyntese', en:'Speed of speech synthesis'},
   tts_volum:       {th:'การอ่านออกเสียง — ระดับเสียง', no:'Opplesing — Volum', en:'Read Aloud — Volume'},
   tts_volum_sub:   {th:'ความดังของเสียงสังเคราะห์', no:'Lydstyrke på talesyntese', en:'Volume of speech synthesis'},
+
+  // ── Språkrenhet: nøkler for tekst som tidligere var hardkodet på norsk ──────
+  missing_text:    {th:'ยังไม่มีข้อมูลภาษาไทย', no:'Ikke oversatt ennå', en:'Not translated yet'},
+  error_prefix:    {th:'ข้อผิดพลาด: ',        no:'Feil: ',            en:'Error: '},
+  load_error:      {th:'โหลดไม่สำเร็จ',        no:'Feil ved lasting',  en:'Loading failed'},
+  invalid_response:{th:'การตอบกลับไม่ถูกต้อง', no:'Ugyldig respons',   en:'Invalid response'},
+  lib_load_failed: {th:'โหลดคลังเนื้อหาไม่ได้', no:'Kunne ikke laste biblioteket.', en:'Could not load the library.'},
+  empty_no_content:{th:'📭 ไม่มีเนื้อหาที่ใช้ได้', no:'📭 Ingen innhold tilgjengelig', en:'📭 No content available'},
+  video_retry_hint:{th:'💪 ไม่เป็นไร! ดูวิดีโออีกครั้งหรืออ่านในหนังสือเรียน', no:'💪 Ingen fare! Se videoen en gang til eller les i Studieboken.', en:'💪 No worries! Watch the video again or read the Study Book.'},
+  access_check_failed:{th:'ตรวจสอบสิทธิ์การเข้าใช้ไม่สำเร็จ ลองอีกครั้ง', no:'Kunne ikke bekrefte tilgangen din. Prøv igjen.', en:'Could not verify your access. Please try again.'},
+  vp_mc_q_topic:   {th:'คุณได้เรียนรู้อะไรใหม่เกี่ยวกับ{topic}ไหม?', no:'Lærte du noe nytt om {topic}?', en:'Did you learn something new about {topic}?'},
+  vp_mc_q_generic: {th:'คุณได้เรียนรู้อะไรใหม่ไหม?', no:'Lærte du noe nytt?', en:'Did you learn something new?'},
+  vp_mc_yes:       {th:'ใช่ ได้เรียนรู้เลย!',    no:'Ja, det gjorde jeg!', en:'Yes, I did!'},
+  vp_mc_no:        {th:'ยังไม่ค่อยเข้าใจ',       no:'Ikke helt',           en:'Not quite'},
+  vp_mc_correct:   {th:'⭐ เยี่ยมมาก! ฝึกต่อไปแล้วจะจำได้แน่นอน', no:'⭐ Topp! Fortsett å øve, så sitter det!', en:'⭐ Great! Keep practising and it will stick!'},
+
+  // ── Gratisuke: 7 dagers prøveperiode ───────────────────────────────────────
+  // Ingen emoji i strengene — .pb-icon bærer 🎁 mens prøveuken varer.
+  trial_active:    {th:'สัปดาห์ทดลองใช้ฟรีของคุณกำลังทำงานอยู่', no:'Gratisuken din er i gang', en:'Your free week is running'},
+  trial_days_left: {th:'เหลืออีก {days} วันของสัปดาห์ทดลองใช้ฟรี', no:'{days} dager igjen av gratisuken', en:'{days} days left of your free week'},
+  trial_two_days:  {th:'เหลืออีกแค่ 2 วันของสัปดาห์ทดลองใช้ฟรี! คุณทำได้ดีมาก', no:'Bare 2 dager igjen av gratisuken! Du gjør det bra.', en:'Only 2 days left of your free week! You are doing great.'},
+  trial_last_day:  {th:'วันสุดท้ายของการใช้งานฟรี — อีกนิดเดียวเท่านั้น!', no:'Siste dag med gratis tilgang — du er nesten i mål!', en:'Last day of free access — you are almost there!'},
+  trial_sub:       {th:'คุณใช้ได้ทุกฟีเจอร์ในระหว่างสัปดาห์ทดลองใช้ฟรี', no:'Du har tilgang til alle funksjoner i gratisuken', en:'You have access to all features during your free week'},
+  trial_ended:     {th:'สัปดาห์ทดลองใช้ฟรีของคุณสิ้นสุดแล้ว เลือกแพ็กเกจเพื่อฝึกต่อ', no:'Gratisuken din er over. Velg et abonnement for å fortsette å øve.', en:'Your free week has ended. Choose a plan to keep practising.'},
+
+  // ── Retur fra Stripe-checkout ──────────────────────────────────────────────
+  premium_activated_toast:  {th:'เปิดใช้ Premium แล้ว', no:'Premium er aktivert', en:'Premium activated'},
+  payment_unconfirmed_toast:{th:'ยังยืนยันการชำระเงินไม่ได้', no:'Betalingen kunne ikke bekreftes ennå', en:'Payment could not be confirmed yet'},
+  checkout_unavailable_toast:{th:'ไม่สามารถเปิดการชำระเงินได้ในตอนนี้', no:'Betaling er ikke tilgjengelig akkurat nå', en:'Payment is not available right now'},
+  free_questions_left:      {th:'เหลือ {count} คำถามฟรี', no:'{count} gratis spørsmål igjen', en:'{count} free questions left'},
 };
 
 function t(key) {
@@ -4520,6 +4550,20 @@ function tf(key, vars) {
   });
   return s;
 }
+// ── Språkrenhet: lån aldri tekst fra et annet språk ─────────────────────────
+// Mangler oversettelsen skal elementet skjules (tom streng) eller vise en
+// nøytral etikett på DET AKTIVE språket. Se t() og _getProp() for samme regel.
+var MISSING_TEXT = { th:'ยังไม่มีข้อมูลภาษาไทย', no:'Ikke oversatt ennå', en:'Not translated yet' };
+function missingText() { return MISSING_TEXT[appLang] || ''; }
+
+// Strikt erstatning for pickLang(): kun aktivt språk, ellers tom streng.
+function pickStrict(obj) {
+  if (!obj) return '';
+  if (typeof obj === 'string') return obj;
+  var v = obj[appLang];
+  return (typeof v === 'string' && v.trim() !== '') ? v : '';
+}
+
 function modeLabel(mode) {
   var labels = {exam:t('mode_exam'), category:t('mode_category'), daily:t('mode_daily'), random:t('mode_random')};
   return labels[mode] || mode || 'Quiz';
@@ -4650,9 +4694,9 @@ function applyUILang() {
   document.querySelectorAll('.home-stat-lbl').forEach(function(el,i){
     el.textContent = [t('answered'), t('correct_stat'), t('accuracy')][i] || el.textContent;
   });
-  // Premium banner
-  var pb = document.getElementById('homePremiumBanner');
-  if(pb) { var ptitle = pb.querySelector('.pb-title'); var psub = pb.querySelector('.pb-sub'); if(ptitle) ptitle.textContent = t('premium_on'); if(psub) psub.textContent = t('premium_sub'); }
+  // Premium banner (håndterer også gratisuken) + betalingsmurens undertekst
+  renderPremiumBanner();
+  renderPaywallSub();
   if (spBm && _signPanelData) spBm.textContent = _signFavorites.indexOf(_signPanelData.id) >= 0 ? t('saved') : t('save');
   var aiStatus = document.getElementById('quizAiStatus');
   if (aiStatus && aiStatus.classList.contains('idle')) aiStatus.textContent = t('ai_waiting');
@@ -4744,7 +4788,7 @@ Object.keys(CAT_NAMES).forEach(function(k){ CAT_NO[k] = CAT_NAMES[k].no; });
 function catName(raw) {
   var entry = CAT_NAMES[raw];
   if (!entry) return raw;
-  return entry[appLang] || entry['no'] || raw;
+  return pickStrict(entry) || missingText();
 }
 
 var PREMIUM_PRICING = {
@@ -4803,6 +4847,7 @@ function enterApp() {
   document.getElementById('topSettingsBtn').style.display = 'flex';
   loadAccessStatus();
   showTab('home');
+  setTimeout(maybeShowTrialNotice, 1200);
 }
 
 function showTab(tab, forceType) {
@@ -4886,7 +4931,7 @@ async function loadLibrary() {
     
     renderLibrary();
   } catch(e) {
-    container.innerHTML = '<div style="padding:24px;text-align:center;color:var(--muted);">Kunne ikke laste biblioteket.</div>';
+    container.innerHTML = '<div style="padding:24px;text-align:center;color:var(--muted);">' + escH(t('lib_load_failed')) + '</div>';
   }
 }
 
@@ -4896,7 +4941,7 @@ function renderLibrary() {
   
   var items = _libraryActiveTab === 'videos' ? _videosCached : _podcastsCached;
   if (!items || items.length === 0) {
-    container.innerHTML = '<div class="empty-state" style="padding:40px;text-align:center;color:var(--muted);">📭 Ingen innhold tilgjengelig</div>';
+    container.innerHTML = '<div class="empty-state" style="padding:40px;text-align:center;color:var(--muted);">' + escH(t('empty_no_content')) + '</div>';
     return;
   }
   
@@ -4922,7 +4967,7 @@ function renderLibrary() {
     html += '</div>';
   }
   if (cardCount === 0) {
-    container.innerHTML = '<div class="empty-state" style="padding:40px;text-align:center;color:var(--muted);">📭 Ingen innhold tilgjengelig</div>';
+    container.innerHTML = '<div class="empty-state" style="padding:40px;text-align:center;color:var(--muted);">' + escH(t('empty_no_content')) + '</div>';
   } else {
     container.innerHTML = html;
   }
@@ -4959,9 +5004,7 @@ function openVideoPlayer(filePath) {
   _vpKnowledgeIds = [];
 
   // Title
-  var title = appLang === 'th' ? (v.title_th || v.title_no || v.title_en || '') :
-    appLang === 'en' ? (v.title_en || v.title_no || v.title_th || '') :
-    (v.title_no || v.title_en || v.title_th || '');
+  var title = (v['title_' + appLang] || '');
   document.getElementById('vpTitle').textContent = title;
 
   // Build waypoints from topic_tags
@@ -5075,8 +5118,71 @@ function onVpTimeUpdate() {
   });
 }
 
+// Kunnskapskort i videospilleren — full tre-språks-dekning, ingen fallback.
+// Mangler emnet eller det aktive språket, vises ingen kort (Fail-Stop).
+var VP_TOPICS = {
+  'vikeplikt': {
+    title: {th:'การให้ทาง', no:'Vikeplikt', en:'Yielding'},
+    body: {th:'ใครต้องให้ทาง? นึกถึงกฎรถทางขวา ถนนสายหลัก และป้ายจราจร',
+           no:'Hvem har vikeplikt? Tenk på høyregelen, forkjørsvei og skilting.',
+           en:'Who has to yield? Think of the right-hand rule, priority roads, and signs.'}},
+  'fartsgrenser': {
+    title: {th:'จำกัดความเร็ว', no:'Fartsgrenser', en:'Speed limits'},
+    body: {th:'ความเร็วต้องเหมาะกับสภาพถนน ทัศนวิสัย และการจราจรเสมอ',
+           no:'Farten skal alltid tilpasses føre-, sikt- og trafikkforholdene.',
+           en:'Speed must always match road, visibility, and traffic conditions.'}},
+  'skilt': {
+    title: {th:'ป้ายจราจร', no:'Skilt', en:'Road signs'},
+    body: {th:'ป้ายจราจรบอกข้อบังคับ ข้อห้าม และคำแนะนำ เรียนรู้กลุ่มของป้ายให้ดี',
+           no:'Trafikkskilt gir deg påbud, forbud og veiledning. Lær deg gruppene!',
+           en:'Road signs give orders, prohibitions, and guidance. Learn the groups!'}},
+  'forbikjøring': {
+    title: {th:'การแซง', no:'Forbikjøring', en:'Overtaking'},
+    body: {th:'แซงทางด้านซ้ายเสมอ ตรวจทัศนวิสัยและความเร็วก่อนแซง',
+           no:'Forbikjøring skal skje til venstre. Sjekk sikt og fart før du kjører forbi.',
+           en:'Overtake on the left. Check visibility and speed before you pass.'}},
+  'parkering': {
+    title: {th:'การจอดรถ', no:'Parkering', en:'Parking'},
+    body: {th:'การจอดคือการทิ้งรถไว้ ยกเว้นการหยุดชั่วครู่ที่สั้นที่สุด',
+           no:'Parkering er all hensetting av kjøretøy. Unntak: kortest mulig stans.',
+           en:'Parking is leaving the vehicle standing. Exception: the shortest possible stop.'}},
+  'rygging': {
+    title: {th:'การถอยรถ', no:'Rygging', en:'Reversing'},
+    body: {th:'ผู้ที่ถอยรถต้องให้ทางแก่การจราจรอื่นทั้งหมด',
+           no:'Den som rygger har vikeplikt for all annen trafikk.',
+           en:'Whoever reverses must yield to all other traffic.'}},
+  'motorvei': {
+    title: {th:'ทางด่วน', no:'Motorvei', en:'Motorway'},
+    body: {th:'บนทางด่วน: รักษาความเร็ว ใช้เลนขวา ห้ามถอยหรือกลับรถ',
+           no:'På motorvei: hold farten, bruk høyre felt, ingen rygging eller vending.',
+           en:'On the motorway: keep your speed, use the right lane, no reversing or turning.'}},
+  'alkohol': {
+    title: {th:'แอลกอฮอล์', no:'Alkohol', en:'Alcohol'},
+    body: {th:'0.2 โปรมิลล์คือขีดจำกัดตามกฎหมาย ห้ามดื่มก่อนขับรถ',
+           no:'0,2 promille er lovens grense. Ingen alkohol før du kjører!',
+           en:'0.2 per mille is the legal limit. No alcohol before you drive!'}},
+  'gangfelt': {
+    title: {th:'ทางม้าลาย', no:'Gangfelt', en:'Pedestrian crossing'},
+    body: {th:'ต้องให้ทางแก่คนเดินเท้าที่อยู่บนทางม้าลายหรือกำลังก้าวลงมา',
+           no:'Vikeplikt for gående som er i gangfeltet eller på vei ut i det.',
+           en:'Yield to pedestrians on the crossing or about to step onto it.'}},
+  'sikkerhet': {
+    title: {th:'ความปลอดภัย', no:'Sikkerhet', en:'Safety'},
+    body: {th:'เข็มขัดนิรภัยเป็นข้อบังคับสำหรับทุกคน ยึดสิ่งของที่หลวมให้แน่นก่อนขับ',
+           no:'Bilbelte er påbudt for alle. Sikre løse gjenstander før kjøring.',
+           en:'Seat belts are mandatory for everyone. Secure loose objects before driving.'}}
+};
+
 function showKnowledgeCard(wp) {
+  // Fail-Stop: ukjent emne eller manglende oversettelse → vis ingenting.
+  var topic = VP_TOPICS[(wp.label || '').toLowerCase()];
+  if (!topic) return;
+  var body  = pickStrict(topic.body);
+  var title = pickStrict(topic.title);
+  if (!body || !title) return;
+
   var area = document.getElementById('vpKnowledge');
+  if (!area) return;
   // Remove placeholder
   var placeholder = area.querySelector('div[style]');
   if (placeholder && !_vpKnowledgeIds.length) area.innerHTML = '';
@@ -5084,24 +5190,9 @@ function showKnowledgeCard(wp) {
   var id = 'kc' + Date.now() + Math.random().toString(36).substr(2,3);
   _vpKnowledgeIds.push(id);
 
-  var body = '';
-  switch((wp.label || '').toLowerCase()) {
-    case 'vikeplikt': body = 'Hvem har vikeplikt? Tenk på høyregelen, forkjørsvei og skilting.'; break;
-    case 'fartsgrenser': body = 'Farten skal alltid tilpasses føre-, sikt- og trafikkforholdene.'; break;
-    case 'skilt': body = 'Trafikkskilt gir deg påbud, forbud og veiledning. Lær deg gruppene!'; break;
-    case 'forbikjøring': body = 'Forbikjøring skal skje til venstre. Sjekk sikt og fart før du kjører forbi.'; break;
-    case 'parkering': body = 'Parkering er all hensetting av kjøretøy. Unntak: kortest mulig stans.'; break;
-    case 'rygging': body = 'Den som rygger har vikeplikt for all annen trafikk.'; break;
-    case 'motorvei': body = 'På motorvei: hold farten, bruk høyre felt, ingen rygging eller vending.'; break;
-    case 'alkohol': body = '0,2 promille er lovens grense. Ingen alkohol før du kjører!'; break;
-    case 'gangfelt': body = 'Vikeplikt for gående som er i gangfeltet eller på vei ut i det.'; break;
-    case 'sikkerhet': body = 'Bilbelte er påbudt for alle. Sikre løse gjenstander før kjøring.'; break;
-    default: body = 'Viktig tema: ' + escH(wp.label) + '. Følg trafikkreglene for sikker kjøring.'; break;
-  }
-
   var html = '<div class="vp-knowledge-card" id="' + id + '">'
-    + '<div class="vp-kc-title">📍 ' + escH(wp.label) + '</div>'
-    + '<div class="vp-kc-body">' + body + '</div>'
+    + '<div class="vp-kc-title">📍 ' + escH(title) + '</div>'
+    + '<div class="vp-kc-body">' + escH(body) + '</div>'
     + '</div>';
   area.insertAdjacentHTML('beforeend', html);
 
@@ -5128,12 +5219,15 @@ function stopVpTimer() {
 function onVpEnded() {
   // Show mini-check
   var tags = _currentVideo ? (_currentVideo.topic_tags || []) : [];
-  var topic = tags.length ? tags[0] : 'temaet';
-  var question = 'Lærte du noe nytt om ' + topic + '?';
+  // topic_tags er norske nøkler fra backend. Slå dem opp i VP_TOPICS for å få
+  // emnenavnet på aktivt språk; finnes det ikke, still spørsmålet uten emne.
+  var tEntry = tags.length ? VP_TOPICS[String(tags[0]).toLowerCase()] : null;
+  var topicName = tEntry ? pickStrict(tEntry.title) : '';
+  var question = topicName ? tf('vp_mc_q_topic', {topic: topicName}) : t('vp_mc_q_generic');
   var html = '<div class="vp-mc-question">🤔 ' + escH(question) + '</div>'
     + '<div class="vp-mc-options">'
-    + '<button class="vp-mc-btn" onclick="answerMiniCheck(this,true)">Ja, det gjorde jeg!</button>'
-    + '<button class="vp-mc-btn" onclick="answerMiniCheck(this,false)">Ikke helt</button>'
+    + '<button class="vp-mc-btn" onclick="answerMiniCheck(this,true)">' + escH(t('vp_mc_yes')) + '</button>'
+    + '<button class="vp-mc-btn" onclick="answerMiniCheck(this,false)">' + escH(t('vp_mc_no')) + '</button>'
     + '</div>'
     + '<div class="vp-mc-result" id="vpMcResult"></div>';
   var mc = document.getElementById('vpMiniCheck');
@@ -5148,9 +5242,9 @@ function answerMiniCheck(btn, correct) {
   var result = document.getElementById('vpMcResult');
   if (result) {
     if (correct) {
-      result.innerHTML = '⭐ Topp! Fortsett å øve, så sitter det!';
+      result.innerHTML = escH(t('vp_mc_correct'));
     } else {
-      result.innerHTML = '💪 Ingen fare! Se videoen en gang til eller les i Studieboken.';
+      result.innerHTML = escH(t('video_retry_hint'));
     }
   }
 }
@@ -5310,6 +5404,69 @@ document.addEventListener('click', function(e) {
 
 var _backendAudio = null;
 var _teacherAudio = null;
+var _audioUnlocked = false;
+
+// iOS/Safari lar deg bare starte lyd fra et ekte brukertrykk. Et <audio>-element som
+// aldri har spilt inne i en gest, nekter senere .play() — og det er derfor lyden er
+// stille selv om /api/tts svarer. Vi lager derfor begge elementene tidlig og «velsigner»
+// dem med en stum WAV ved første trykk. AudioContext.resume() dekker IKKE dette; den
+// gjelder kun WebAudio-pipet i playSound().
+var _SILENT_WAV = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
+
+function _ensureBackendAudio() {
+  if (!_backendAudio) {
+    _backendAudio = new Audio();
+    _backendAudio.preload = 'auto';
+    _backendAudio.onended = function() { ttsPlaying = false; updateTtsBtn(false); };
+    _backendAudio.onerror = function() { ttsPlaying = false; updateTtsBtn(false); };
+  }
+  return _backendAudio;
+}
+
+function _ensureTeacherAudio() {
+  if (!_teacherAudio) {
+    _teacherAudio = new Audio();
+    _teacherAudio.preload = 'auto';
+    _teacherAudio.onended = function() { _teacherTtsPlaying = false; };
+    _teacherAudio.onerror = function() { _teacherTtsPlaying = false; };
+  }
+  return _teacherAudio;
+}
+
+function _primeAudioEl(el) {
+  if (!el) return;
+  try {
+    el.src = _SILENT_WAV;
+    el.muted = true;
+    var p = el.play();
+    if (p && p.then) {
+      p.then(function() {
+        try { el.pause(); el.currentTime = 0; } catch (e) {}
+        el.muted = false;
+      }).catch(function() { el.muted = false; });
+    } else {
+      try { el.pause(); } catch (e) {}
+      el.muted = false;
+    }
+  } catch (e) {
+    el.muted = false;
+  }
+}
+
+function _unlockAudioPlayback() {
+  if (_audioUnlocked) return;
+  _audioUnlocked = true;
+  _primeAudioEl(_ensureBackendAudio());
+  _primeAudioEl(_ensureTeacherAudio());
+  if (typeof _getAudioCtx === 'function') { try { _getAudioCtx(); } catch (e) {} }
+}
+
+// Første ekte brukergest på siden låser opp all lyd — begge <audio>-elementene og
+// WebAudio-konteksten. `once` gjør at det skjer nøyaktig én gang.
+document.addEventListener('touchstart', _unlockAudioPlayback, { once: true, passive: true });
+document.addEventListener('click', _unlockAudioPlayback, { once: true });
+document.addEventListener('keydown', _unlockAudioPlayback, { once: true });
+
 function stopAllSpeech() {
   if (_backendAudio) { try { _backendAudio.pause(); } catch(e){} }
   if (_teacherAudio) { try { _teacherAudio.pause(); } catch(e){} }
@@ -5390,9 +5547,9 @@ async function saveStudiebokChapter() {
     }
     closeStudiebokModal();
     sbRender();
-    toast('Kapittel lagret');
+    toast(t('saved_chapter'));
   } catch(e) {
-    toast('Feil: ' + e.message);
+    toast(t('error_prefix') + e.message);
   }
 }
 
@@ -5411,11 +5568,11 @@ async function api(method, url, body) {
     if (typeof det === 'string') {
       msg = t(det) !== det ? t(det) : det;
     } else if (det && typeof det === 'object' && !Array.isArray(det)) {
-      msg = (det[appLang] || (det.key ? t(det.key) : '') || det.no || det.en || det.th || JSON.stringify(det));
+      msg = pickStrict(det) || (det.key ? t(det.key) : '') || t('generic_error');
     } else if (Array.isArray(det)) {
       msg = det.map(function(d){return d.msg||d;}).join(', ');
     } else {
-      msg = 'Noe gikk galt';
+      msg = t('generic_error');
     }
     var err = new Error(msg);
     err.status = r.status;
@@ -5452,10 +5609,10 @@ async function handleCheckoutReturn() {
     var status = await api('GET', '/api/checkout/status?session_id=' + encodeURIComponent(sessionId));
     await refreshCurrentUser();
     if (status && status.is_premium) {
-      toast({th:'เปิดใช้ Premium แล้ว', no:'Premium er aktivert', en:'Premium activated'}[appLang] || 'Premium activated', 4500);
+      toast(t('premium_activated_toast'), 4500);
     }
   } catch(e) {
-    toast(({th:'ยังยืนยันการชำระเงินไม่ได้', no:'Betalingen kunne ikke bekreftes ennå', en:'Payment could not be confirmed yet'}[appLang] || 'Payment could not be confirmed yet'), 5000);
+    toast(t('payment_unconfirmed_toast'), 5000);
   }
   window.history.replaceState({}, '', window.location.pathname);
   return true;
@@ -5469,7 +5626,7 @@ function renderPremiumPricing() {
     var card = document.querySelector('[data-plan="' + planId + '"]');
     var periodEl = card ? card.querySelector('.ppc-per') : null;
     if (periodEl && plan.period) {
-      periodEl.textContent = plan.period[appLang] || plan.period.no || plan.period.en || periodEl.textContent;
+      periodEl.textContent = pickStrict(plan.period) || periodEl.textContent;
     }
   });
 }
@@ -5686,8 +5843,8 @@ async function loadHome() {
     } catch(e) {}
   }
 
-  // Premium badge
-  document.getElementById('homePremiumBanner').style.display = (user && user.is_premium) ? 'flex' : 'none';
+  // Premium badge — viser nedtelling når gratisuken er aktiv
+  renderPremiumBanner();
 }
 
 // ════════════════════════════════════════════
@@ -5944,6 +6101,72 @@ function isPremium() {
   return user && user.is_premium === true;
 }
 
+// ════════════════════════════════════════════
+//  GRATISUKE (7 dagers prøveperiode)
+// ════════════════════════════════════════════
+// Kilden er /api/auth/me: premium_status === 'trialing' + premium_expires_at.
+// Prøvebrukere ER premium, så isPremium() og alle portene virker uendret —
+// dette laget styrer kun hva brukeren SER, ikke hva hen får lov til.
+function trialDaysLeft() {
+  if (!user) return 0;
+  if (typeof user.trial_days_left === 'number') return Math.max(0, user.trial_days_left);
+  var raw = user.premium_expires_at;
+  if (!raw) return 0;
+  var s = String(raw).trim().replace(' ', 'T');
+  if (!/([Zz]|[+\-]\d{2}:?\d{2})$/.test(s)) s += 'Z';  // naiv ISO tolkes som UTC
+  var ms = Date.parse(s);
+  if (isNaN(ms)) return 0;
+  var diff = ms - Date.now();
+  return diff <= 0 ? 0 : Math.max(1, Math.ceil(diff / 86400000));
+}
+
+function isTrialActive() {
+  return !!(user && user.premium_status === 'trialing' && trialDaysLeft() > 0);
+}
+
+// Én tekst per dag-tilstand. t()/tf() er strikte — ingen fallback til andre språk.
+function trialBannerText() {
+  var d = trialDaysLeft();
+  if (d <= 0) return t('trial_active');
+  if (d === 1) return t('trial_last_day');
+  if (d === 2) return t('trial_two_days');
+  return tf('trial_days_left', {days: d});
+}
+
+// Gjenbruker den eksisterende grønne pillen #homePremiumBanner — ingen ny design.
+function renderPremiumBanner() {
+  var pb = document.getElementById('homePremiumBanner');
+  if (!pb) return;
+  if (!(user && user.is_premium)) { pb.style.display = 'none'; return; }
+  var trial  = isTrialActive();
+  var icon   = pb.querySelector('.pb-icon');
+  var ptitle = pb.querySelector('.pb-title');
+  var psub   = pb.querySelector('.pb-sub');
+  if (icon)   icon.textContent   = trial ? '🎁' : '💎';
+  if (ptitle) ptitle.textContent = trial ? trialBannerText() : t('premium_on');
+  if (psub)   psub.textContent   = trial ? t('trial_sub')    : t('premium_sub');
+  pb.style.display = 'flex';
+}
+
+// Betalingsmuren skal forklare hvorfor den dukket opp når gratisuken er brukt opp.
+function renderPaywallSub() {
+  var el = document.querySelector('#screenPaywall .paywall-sub');
+  if (!el) return;
+  var spent = !!(user && user.trial_used === true) && !isTrialActive();
+  el.textContent = spent ? t('trial_ended') : t('pw_sub');
+}
+
+// Oppmuntrende varsel de to siste dagene — maks én gang per dag per tilstand.
+function maybeShowTrialNotice() {
+  if (!isTrialActive()) return;
+  var d = trialDaysLeft();
+  if (d > 2) return;
+  var stamp = new Date().toISOString().slice(0, 10) + ':' + d;
+  if (_ls.get('t2d_trial_notice') === stamp) return;
+  _ls.set('t2d_trial_notice', stamp);
+  toast(d === 1 ? t('trial_last_day') : t('trial_two_days'), 5000);
+}
+
 async function loadAccessStatus() {
   if (!deviceId) return null;
   try {
@@ -5964,10 +6187,14 @@ async function consumeQuestionAccess(q) {
     });
     return true;
   } catch(e) {
+    // Fail-closed (Michaels avgjørelse): betalingsmuren skal beskytte innholdet.
+    // Kan vi ikke bekrefte tilgangen, slipper vi ingen gjennom.
     if (e.status === 402) { await loadAccessStatus(); showPaywall(); return false; }
-    // Non-402 errors (network, 500) — don't block the user
-    console.warn('[gate]', e && e.message ? e.message : e);
-    return true;
+    console.warn('[gate] fail-closed:', e && e.message ? e.message : e);
+    toast(t('access_check_failed'));
+    await loadAccessStatus();
+    showPaywall();
+    return false;
   }
 }
 
@@ -6025,11 +6252,7 @@ async function buyPremium() {
     }
     throw new Error('Checkout unavailable');
   } catch(e) {
-    toast(({
-      th:'ไม่สามารถเปิดการชำระเงินได้ในตอนนี้',
-      no:'Betaling er ikke tilgjengelig akkurat nå',
-      en:'Payment is not available right now'
-    }[appLang] || 'Payment is not available right now'), 5000);
+    toast(t('checkout_unavailable_toast'), 5000);
   }
 }
 
@@ -6125,12 +6348,12 @@ async function loadQuiz(url) {
 function pickLang(obj) {
   if (!obj) return '';
   if (typeof obj === 'string') return obj;
-  return obj[appLang] || obj['th'] || obj['en'] || obj['no'] || Object.values(obj)[0] || '';
+  return pickStrict(obj);
 }
 
 // Pick language-suffixed field from a question object (e.g. question_text_th, answer_a_no)
 function pickField(q, base) {
-  return q[base + '_' + appLang] || q[base + '_th'] || q[base + '_en'] || q[base + '_no'] || q[base] || '';
+  return q[base + '_' + appLang] || '';
 }
 
 function renderQuestion() {
@@ -6203,9 +6426,9 @@ function renderQuestion() {
     : (FREE_LIMIT - qIdx);
   if (!isPremium() && policyRemaining > 0) {
     var remaining = Math.max(0, policyRemaining);
-    var freeMsg = {th:'เหลือ ' + remaining + ' คำถามฟรี', no:remaining + ' gratis spørsmål igjen', en:remaining + ' free questions left'}[appLang] || remaining + ' gratis spørsmål igjen';
+    var freeMsg = tf('free_questions_left', {count: remaining});
     freeBanner = '<div style="text-align:center;font-size:.72rem;color:var(--orange);font-weight:700;margin-top:6px;flex-shrink:0;">'
-      + '⚡ ' + freeMsg + ' — <span style="text-decoration:underline;cursor:pointer" onclick="showPaywall()">' + escH(t('upgrade')) + '</span>'
+      + '⚡ ' + escH(freeMsg) + ' — <span style="text-decoration:underline;cursor:pointer" onclick="showPaywall()">' + escH(t('upgrade')) + '</span>'
       + '</div>';
   }
 
@@ -6295,14 +6518,11 @@ function _correctPhrases() {
     th:['ถูกต้อง','ใช่แล้ว','สังเกตได้ถูกต้อง','ถูกต้อง นั่นคือหลักการสำคัญ','ตัดสินใจได้ถูกต้อง'],
     no:['Riktig.','Det stemmer.','Riktig observert.','Korrekt — det er nettopp slik det fungerer.','Det er riktig.','Riktig vurdering.'],
     en:['Correct.','That is right.','Good observation.','Correct — that is exactly how it works.','That is correct.','Sound judgement.']
-  }[appLang] || {
-    th:['ถูกต้อง'],
-    no:['Riktig.'],
-    en:['Correct.']
-  }.no;
+  }[appLang] || [];  // Fail-Stop: ukjent språk gir tom pool, aldri norsk fallback
 }
 function _nextCorrectPhrase() {
   var pool = _correctPhrases();
+  if (!pool.length) return '';
   var p = pool[_correctPhraseIdx % pool.length];
   _correctPhraseIdx++;
   return p;
@@ -6373,7 +6593,7 @@ function topicLabel(label) {
     'Grenseverdi': {th:'ค่าจำกัดตามกฎหมาย', no:'Grenseverdi', en:'Legal limit'}
   };
   var item = map[label] || null;
-  return item ? (item[appLang] || item.th || item.en || item.no) : label;
+  return item ? (pickStrict(item) || label) : label;
 }
 
 async function selectAns(btn, picked) {
@@ -6475,7 +6695,10 @@ function classifyAlerts(expl) {
   if (!expl) return alerts;
   var t = expl.toLowerCase();
   function A(icon, type, label, th, no, en) {
-    alerts.push({icon:icon, type:type, label:label, text:({th:th, no:no, en:en}[appLang] || th || en || no)});
+    // Språkrenhet: mangler teksten på det aktive språket skjules kortet helt.
+    var txt = {th:th, no:no, en:en}[appLang] || '';
+    if (!txt) return;
+    alerts.push({icon:icon, type:type, label:label, text:txt});
   }
 
   if (/forbikjør|forbi\s|overtakings/i.test(t))
@@ -7038,17 +7261,25 @@ function lensText(text) {
     'Hva er den viktigste faktoren her?': {th:'ปัจจัยที่สำคัญที่สุดในที่นี้คืออะไร?', en:'What is the most important factor here?'},
     'Velg det alternativet som er tryggest for alle i trafikken': {th:'เลือกตัวเลือกที่ปลอดภัยที่สุดสำหรับทุกคนในการจราจร', en:'Choose the option that is safest for everyone in traffic'}
   };
+  // Nøklene i map ER den norske teksten, så norsk returnerer nøkkelen direkte.
+  // Mangler thai/engelsk, returneres tom streng — raden skjules (Fail-Stop).
+  // Aldri norsk tekst i thai- eller engelsk-modus.
+  if (appLang === 'no') return text;
   var item = map[text];
-  return item ? (item[appLang] || text) : text;
+  return (item && item[appLang]) || '';
 }
 
 function buildSituationLensHtml(qText, expl) {
   var lens = buildSituationLens(qText, expl);
-  return '<div class="q-observe">'
-    + '<div class="q-observe-row"><span class="q-observe-tag">' + escH(t('see_tag')) + '</span>' + escH(lensText(lens.see)) + '</div>'
-    + '<div class="q-observe-row"><span class="q-observe-tag">' + escH(t('understand_tag')) + '</span>' + escH(lensText(lens.understand)) + '</div>'
-    + '<div class="q-observe-row"><span class="q-observe-tag">' + escH(t('choose_tag')) + '</span>' + escH(lensText(lens.choose)) + '</div>'
-    + '</div>';
+  // Fail-Stop: rader uten tekst på aktivt språk vises ikke i det hele tatt.
+  function _row(tagKey, raw) {
+    var txt = lensText(raw);
+    if (!txt) return '';
+    return '<div class="q-observe-row"><span class="q-observe-tag">' + escH(t(tagKey)) + '</span>' + escH(txt) + '</div>';
+  }
+  var rows = _row('see_tag', lens.see) + _row('understand_tag', lens.understand) + _row('choose_tag', lens.choose);
+  if (!rows) return '';
+  return '<div class="q-observe">' + rows + '</div>';
 }
 
 // ════════════════════════════════════════════
@@ -7168,11 +7399,7 @@ function _fmtDur(secs) {
 
 function buildVideoCard(v) {
   if (!v) return '';
-  var title = escH(
-    appLang === 'th' ? (v.title_th || v.title_no || v.title_en || '') :
-    appLang === 'en' ? (v.title_en || v.title_no || v.title_th || '') :
-    (v.title_no || v.title_en || v.title_th || '')
-  );
+  var title = escH(v['title_' + appLang] || '');
   if (!title) return '';
   var dur = _fmtDur(v.duration_seconds);
 
@@ -7599,7 +7826,7 @@ async function loadSigns() {
   scroll.innerHTML = '<div class="loading-wrap"><div class="spinner"></div></div>';
   try {
     var groups = await api('GET', '/api/traffic-signs');
-    if (!Array.isArray(groups)) throw new Error('Ugyldig respons');
+    if (!Array.isArray(groups)) throw new Error(t('invalid_response'));
     _signGroups = groups;
     _allSigns = [];
 
@@ -7623,10 +7850,8 @@ async function loadSigns() {
       var gNum  = group.group || SIGN_GROUP_ORDER[group.group_key] || 0;
       var gMeta = SIGN_GROUP_META[gNum] || { color:'var(--orange)', desc:{} };
       var gName = group.group_name;
-      var gLabel = typeof gName === 'object'
-        ? (gName[appLang] || gName.no || gName.en || '')
-        : (gName || '');
-      var gDesc = (gMeta.desc[appLang] || gMeta.desc.no || '');
+      var gLabel = pickStrict(gName);
+      var gDesc = pickStrict(gMeta.desc);
       var gCount = group.signs.length;
 
       var headerEl = document.createElement('div');
@@ -7649,9 +7874,7 @@ async function loadSigns() {
         sign._groupIndex = groups.indexOf(group);
         _allSigns.push(sign);
         var sName = sign.name;
-        var nameText = typeof sName === 'object'
-          ? (sName[appLang] || (appLang !== 'no' ? sName.en : '') || sName.no || '')
-          : (sName || '');
+        var nameText = pickStrict(sName) || missingText();
         var imgUrl = sign.image_url || '';
         var card = document.createElement('div');
         card.className = 'sign-card';
@@ -7668,7 +7891,7 @@ async function loadSigns() {
 
     signsLoaded = true;
   } catch(e) {
-    scroll.innerHTML = '<div class="empty-state"><div class="es-icon">⚠️</div><p>' + escH(e.message || 'Feil ved lasting') + '</p></div>';
+    scroll.innerHTML = '<div class="empty-state"><div class="es-icon">⚠️</div><p>' + escH(e.message || t('load_error')) + '</p></div>';
   }
 }
 
@@ -8018,21 +8241,22 @@ function retryQuiz() {
 // ════════════════════════════════════════════
 //  TTS
 // ════════════════════════════════════════════
+// _unlockAudioPlayback(), _ensureBackendAudio() og _ensureTeacherAudio() er definert
+// sammen med lyd-globalene lenger oppe — ikke dupliser dem her. Funksjonsdeklarasjoner
+// heises, så en kopi lenger ned i filen ville stille overskrevet originalen.
+
 function speakQ() {
   var q = questions[qIdx];
   if (!q) return;
-  var text = pickLang(q.question) || q.question_text_no || '';
+  var text = pickLang(q.question) || pickField(q, 'question_text') || '';
   if (!text) return;
 
   if (ttsPlaying) {
     stopAllSpeech();
     return;
   }
-  if (!_backendAudio) {
-    _backendAudio = new Audio();
-    _backendAudio.onended = function() { ttsPlaying = false; updateTtsBtn(false); };
-    _backendAudio.onerror = function() { ttsPlaying = false; updateTtsBtn(false); };
-  }
+  _unlockAudioPlayback();
+  _ensureBackendAudio();
   var langParam = appLang === 'th' ? 'th-TH' : appLang === 'no' ? 'nb-NO' : 'en-US';
   _backendAudio.src = '/api/tts?lang=' + langParam + '&text=' + encodeURIComponent(text);
   _backendAudio.playbackRate = ttsRate || 1.0;
@@ -8082,11 +8306,8 @@ function speakText(text) {
     stopAllSpeech();
     return;
   }
-  if (!_teacherAudio) {
-    _teacherAudio = new Audio();
-    _teacherAudio.onended = function() { _teacherTtsPlaying = false; };
-    _teacherAudio.onerror = function() { _teacherTtsPlaying = false; };
-  }
+  _unlockAudioPlayback();
+  _ensureTeacherAudio();
   var langParam = appLang === 'th' ? 'th-TH' : appLang === 'no' ? 'nb-NO' : 'en-US';
   _teacherAudio.src = '/api/tts?lang=' + langParam + '&text=' + encodeURIComponent(clean);
   _teacherAudio.playbackRate = ttsRate || 1.0;
@@ -9173,7 +9394,7 @@ function _relatedSignsFor(sign, count) {
 }
 
 function _renderRelatedSignCard(sign, lang) {
-  var name = _getProp(sign.name, lang) || _getProp(sign.name, 'no') || '–';
+  var name = _getProp(sign.name, lang) || '–';
   var code = sign.code || _signCode(sign);
   var clickId = JSON.stringify(sign.id || '').replace(/"/g, '&quot;');
   return '<button class="sp-related-card" type="button" onclick="openSignDetailById(' + clickId + ')">'
@@ -9199,7 +9420,7 @@ function _renderSignPanel() {
 
   // Name
   var nameEl = document.getElementById('spName');
-  if (nameEl) nameEl.textContent = _getProp(sign.name, lang) || (lang !== 'no' ? _getProp(sign.name, 'en') : '') || _getProp(sign.name, 'no') || '–';
+  if (nameEl) nameEl.textContent = _getProp(sign.name, lang) || _tIn('missing_text', lang);
 
   // Group label
   var groupEl = document.getElementById('spGroupLabel');
@@ -9310,11 +9531,8 @@ function speakSign() {
   if (!text) return;
   
   stopAllSpeech();
-  if (!_backendAudio) {
-    _backendAudio = new Audio();
-    _backendAudio.onended = function() { ttsPlaying = false; updateTtsBtn(false); };
-    _backendAudio.onerror = function() { ttsPlaying = false; updateTtsBtn(false); };
-  }
+  _unlockAudioPlayback();
+  _ensureBackendAudio();
   var langParam = lang === 'th' ? 'th-TH' : lang === 'en' ? 'en-US' : 'nb-NO';
   _backendAudio.src = '/api/tts?lang=' + langParam + '&text=' + encodeURIComponent(text);
   _backendAudio.playbackRate = ttsRate || 1.0;
@@ -9340,7 +9558,7 @@ function practiceThisSign() {
 // Lookup a UI key in a specific language (bypasses global appLang)
 function _tIn(key, lang) {
   var e = UI[key];
-  return (e && (e[lang] || e['no'] || e['en'] || e['th'])) || key;
+  return (e && e[lang]) || key;
 }
 
 function askAiAboutSign() {
@@ -9348,7 +9566,7 @@ function askAiAboutSign() {
   if (!sign) return;
   var lang = _signPanelLang;
 
-  var name = _getProp(sign.name, lang) || _getProp(sign.name, 'no') || '';
+  var name = _getProp(sign.name, lang) || '';
   var code = sign.code || _signCode(sign) || sign.id || '';
   var expl = _getProp(sign.explanation, lang) || _tIn('sign_fallback_meaning', lang);
   var driver = _getProp(sign.driverAction || sign.driver_action || sign.whyDangerous || sign.why_dangerous, lang)
@@ -9396,11 +9614,8 @@ function speakSignAiText() {
   var text = window._spAiText.trim();
   if (!text) return;
   stopAllSpeech();
-  if (!_teacherAudio) {
-    _teacherAudio = new Audio();
-    _teacherAudio.onended = function() { _teacherTtsPlaying = false; };
-    _teacherAudio.onerror = function() { _teacherTtsPlaying = false; };
-  }
+  _unlockAudioPlayback();
+  _ensureTeacherAudio();
   var langParam = window._spAiLang === 'th' ? 'th-TH' : window._spAiLang === 'en' ? 'en-US' : 'nb-NO';
   _teacherAudio.src = '/api/tts?lang=' + langParam + '&text=' + encodeURIComponent(text);
   _teacherAudio.playbackRate = ttsRate || 1.0;

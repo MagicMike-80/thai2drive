@@ -37,8 +37,9 @@ function StepCardInner({
   const [open, setOpen] = useState(false);
 
   const color   = STEP_COLORS[step.order - 1] ?? '#10B981';
-  const label   = step.label[lang]   ?? step.label.en;
-  const note    = step.note[lang]    ?? step.note.en;
+  // Språkrenhet: kun aktivt språk. Mangler teksten, vises ingenting (Fail-Stop).
+  const label   = step.label[lang]   ?? '';
+  const note    = step.note[lang]    ?? '';
 
   return (
     <Pressable
@@ -81,7 +82,7 @@ function StepCardInner({
         </View>
 
         {/* ── Expandable note — no animation, just conditional render ── */}
-        {open && (
+        {open && !!note && (
           <Text style={[st.note, { color: textSecondary }]}>{note}</Text>
         )}
       </View>

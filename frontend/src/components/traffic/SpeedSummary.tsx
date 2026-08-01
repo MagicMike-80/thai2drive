@@ -20,7 +20,7 @@ import type { Lang } from '../../constants/trafficMath';
 import { CAR_LENGTH_M } from '../../constants/trafficMath';
 
 const LABELS: Record<Lang, { reaction: string; braking: string; total: string; cars: string }> = {
-  no: { reaction: 'Reaksjon', braking: 'Bremsing', total: 'Stoppeavstand', cars: 'biller' },
+  no: { reaction: 'Reaksjon', braking: 'Bremsing', total: 'Stoppeavstand', cars: 'billengder' },
   th: { reaction: 'ปฏิกิริยา', braking: 'เบรก', total: 'ระยะหยุดรวม', cars: 'คัน' },
   en: { reaction: 'Reaction', braking: 'Braking', total: 'Stopping distance', cars: 'cars' },
 };
@@ -43,7 +43,9 @@ function SpeedSummaryInner({
   const l = LABELS[lang];
   const r = result.results;
   const carLengths = Math.round(r.stopping_distance_m / CAR_LENGTH_M);
-  const condNote   = result.condition_info.note[lang] ?? result.condition_info.note.en;
+  // Språkrenhet: kun aktivt språk. Mangler teksten, skjules den (Fail-Stop).
+  const condNote   = result.condition_info.note[lang] ?? '';
+  const condLabel  = result.condition_info.label[lang] ?? '';
 
   return (
     <View style={[st.wrap, { backgroundColor: cardBg, borderColor: `${accentColor}35` }]}>
@@ -53,9 +55,11 @@ function SpeedSummaryInner({
         <Text style={[st.speed, { color: accentColor }]}>
           {result.input.speed_kmh} km/h
         </Text>
-        <Text style={[st.condLabel, { color: textMuted }]}>
-          · {result.condition_info.label[lang] ?? result.condition_info.label.en}
-        </Text>
+        {condLabel ? (
+          <Text style={[st.condLabel, { color: textMuted }]}>
+            · {condLabel}
+          </Text>
+        ) : null}
       </View>
 
       {/* Three numbers */}
@@ -69,7 +73,7 @@ function SpeedSummaryInner({
 
       {/* Car-length context */}
       <Text style={[st.context, { color: textSecondary }]}>
-        ≈ {carLengths} {l.cars} · {condNote}
+        ≈ {carLengths} {l.cars}{condNote ? ` · ${condNote}` : ''}
       </Text>
     </View>
   );

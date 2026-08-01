@@ -30,8 +30,20 @@ litellm.suppress_debug_info = True
 
 logger = logging.getLogger("ai_explanations")
 
-LLM_KEY   = os.environ.get("ANTHROPIC_API_KEY", "").strip()
-LLM_MODEL = os.environ.get("EXPLAIN_LLM_MODEL", "claude-haiku-4-5-20251001")
+# Samme motorvalg som teacher_chat.py — DeepSeek direkte, ellers via OpenRouter.
+# Modellen kan overstyres med EXPLAIN_LLM_MODEL uten kodeendring.
+_deepseek_key   = os.environ.get("DEEPSEEK_API_KEY", "").strip()
+_openrouter_key = os.environ.get("OPENROUTER_API_KEY", "").strip()
+
+if _deepseek_key:
+    LLM_KEY   = _deepseek_key
+    LLM_MODEL = os.environ.get("EXPLAIN_LLM_MODEL", "deepseek/deepseek-chat")
+elif _openrouter_key:
+    LLM_KEY   = _openrouter_key
+    LLM_MODEL = os.environ.get("EXPLAIN_LLM_MODEL", "openrouter/deepseek/deepseek-chat")
+else:
+    LLM_KEY   = os.environ.get("OPENAI_API_KEY", "").strip()
+    LLM_MODEL = os.environ.get("EXPLAIN_OPENAI_MODEL", "gpt-4o-mini")
 
 # ─── Math question detection ──────────────────────────────────────────────────
 
@@ -134,7 +146,7 @@ _FALLBACK_EXPLANATION = {
 async def _generate_via_llm(question_data: dict, lang: str) -> dict:
     """Call the LLM and parse the JSON response. Returns fallback on any error."""
     if not LLM_KEY:
-        logger.warning("ai_explanations: ANTHROPIC_API_KEY not configured — returning fallback")
+        logger.warning("ai_explanations: DEEPSEEK_API_KEY not configured — returning fallback")
         return {**_FALLBACK_EXPLANATION, "_error": "api_key_missing"}
 
     system, user = _build_prompt(question_data, lang)

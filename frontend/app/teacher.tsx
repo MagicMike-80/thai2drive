@@ -302,7 +302,7 @@ function MessageContent({ text, lang, colors }: { text: string; lang: string; co
 // ─── Component ───────────────────────────────────────────────────────────────
 export default function TeacherScreen() {
   const router = useRouter();
-  const { language, colors, deviceId } = useAppStore();
+  const { language, colors, deviceId, pendingQuizContext, setPendingQuizContext } = useAppStore();
   const c = colors;
   const t = TR[language] || {};
   const lang = language || 'th';
@@ -316,6 +316,12 @@ export default function TeacherScreen() {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const scrollRef = useRef<ScrollView>(null);
+
+  // Hand-off from the quiz screen ("Spør Michael" after a wrong answer).
+  // The hidden context rides in a ref, never in component state, so the visible
+  // chat bubble shows only the learner's own question.
+  const quizContextRef = useRef<string | null>(null);
+  const consumedHandoff = useRef<object | null>(null);
 
   // Derive current language's session
   const sess = sessions[lang] ?? emptySession();
@@ -434,6 +440,11 @@ export default function TeacherScreen() {
     const msg = text.trim();
     if (!msg || loading) return;
 
+    // Consume the quiz hand-off. Read after the guard above so an early return
+    // never silently eats the context.
+    const quizContext = quizContextRef.current;
+    quizContextRef.current = null;
+
     setInput('');
     setLoading(true);
 
@@ -460,7 +471,15 @@ export default function TeacherScreen() {
     );
 
     let payloadMsg = msg;
-    if (isWeakTopic) {
+    if (quizContext) {
+      // Michael needs the whole picture: the question, the answer the student
+      // picked, and the fasit. Appended to the payload only — `msg` (the visible
+      // bubble) stays clean. Backend strips the tag and feeds it to the prompt.
+      payloadMsg = msg + '\n\n'
+        + '<quiz_context>\n'
+        + quizContext + '\n'
+        + '</quiz_context>';
+    } else if (isWeakTopic) {
       let statsText = "No quiz attempts recorded yet.";
       if (deviceId) {
         try {
@@ -530,6 +549,19 @@ export default function TeacherScreen() {
       setTimeout(() => scrollRef.current?.scrollToEnd({ animated: true }), 150);
     }
   }, [loading, lang, t, deviceId]);
+
+  // Quiz → Michael hand-off: auto-ask on arrival, once per hand-off.
+  // Guarding on the object identity (not a plain boolean) keeps StrictMode's
+  // double-invoke from sending twice, while still allowing a fresh hand-off
+  // if the learner comes back from the quiz with another wrong answer.
+  React.useEffect(() => {
+    if (!pendingQuizContext || consumedHandoff.current === pendingQuizContext) return;
+    consumedHandoff.current = pendingQuizContext;
+    const { display, context } = pendingQuizContext;
+    setPendingQuizContext(null);
+    quizContextRef.current = context;
+    sendMessage(display);
+  }, [pendingQuizContext, setPendingQuizContext, sendMessage]);
 
   return (
     <SafeAreaView style={[s.safe, { backgroundColor: c.bg }]}>

@@ -85,7 +85,7 @@ export default function TrafficMathScreen() {
   const router = useRouter();
   const { language, colors } = useAppStore();
   const c   = colors;
-  const t   = TR[language] ?? TR.en;
+  const t   = TR[language] ?? {};
   const lang = (['no', 'th', 'en'].includes(language) ? language : 'en') as Lang;
   const isDark = c.bg === '#0F172A' || c.bg === '#0B1222';
 
