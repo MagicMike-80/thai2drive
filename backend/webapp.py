@@ -4459,6 +4459,8 @@ var UI = {
   // Paywall
   pw_title:    {th:'ปลดล็อก Thai2Drive Premium', no:'Lås opp Thai2Drive Premium', en:'Unlock Thai2Drive Premium'},
   pw_sub:      {th:'คุณใช้คำถามฟรีหมดแล้ว อัปเกรดเพื่อใช้งานไม่จำกัด!', no:'Du har brukt opp de gratis spørsmålene dine. Oppgrader for ubegrenset tilgang!', en:'You have used all your free questions. Upgrade for unlimited access!'},
+  pw_sub_daily:{th:'คุณใช้ {count} คำถามฟรีของวันนี้หมดแล้ว อัปเกรดเพื่อใช้งานไม่จำกัด!', no:'Du har brukt opp dine {count} gratis spørsmål for i dag. Oppgrader for ubegrenset tilgang!', en:'You have used all {count} of your free questions for today. Upgrade for unlimited access!'},
+  pw_sub_total:{th:'คุณใช้ {count} คำถามฟรีหมดแล้ว อัปเกรดเพื่อใช้งานไม่จำกัด!', no:'Du har brukt opp dine {count} gratis spørsmål. Oppgrader for ubegrenset tilgang!', en:'You have used all {count} of your free questions. Upgrade for unlimited access!'},
   pw_f1:       {th:'คำถามและหมวดหมู่ไม่จำกัด', no:'Ubegrenset spørsmål og kategorier', en:'Unlimited questions and categories'},
   pw_f2:       {th:'โหมดสอบเต็มรูปแบบ (45 ข้อ)', no:'Fullstendig eksamensmode (45 spørsmål)', en:'Full exam mode (45 questions)'},
   pw_f3:       {th:'ทดสอบรายวันและโหมดฝึกซ้อม', no:'Daglig test og øvingsmodus', en:'Daily test and practice mode'},
@@ -6153,7 +6155,19 @@ function renderPaywallSub() {
   var el = document.querySelector('#screenPaywall .paywall-sub');
   if (!el) return;
   var spent = !!(user && user.trial_used === true) && !isTrialActive();
-  el.textContent = spent ? t('trial_ended') : t('pw_sub');
+  if (spent) { el.textContent = t('trial_ended'); return; }
+  // Gratisgrensen er ikke den samme for alle: gjest = 5 totalt, registrert = 10 per dag.
+  // Vi leser den faktiske grensen fra accessState i stedet for å hardkode et tall,
+  // slik at muren ikke kan påstå noe som er usant for den som faktisk ser den.
+  var limit = (accessState && accessState.limit !== null && accessState.limit !== undefined)
+    ? Number(accessState.limit)
+    : null;
+  if (limit) {
+    var daily = !!(accessState && accessState.is_authenticated);
+    el.textContent = tf(daily ? 'pw_sub_daily' : 'pw_sub_total', {count: limit});
+  } else {
+    el.textContent = t('pw_sub');
+  }
 }
 
 // Oppmuntrende varsel de to siste dagene — maks én gang per dag per tilstand.
