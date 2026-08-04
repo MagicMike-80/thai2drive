@@ -9,13 +9,16 @@ import { useAppStore } from '../src/store/appStore';
 import { api } from '../src/services/api';
 import { LanguageSwitcher } from '../src/components/LanguageSwitcher';
 import { BottomNavBar } from '../src/components/BottomNavBar';
+import { Lang, asLang, tr, missingNotice } from '../src/constants/i18n';
 
 const T2D_ICON = require('../assets/images/t2d-icon.png');
 
-const TR: Record<string, Record<string, string>> = {
-  no: { subtitle: 'Norsk førerprøve', startQuiz: 'Start quiz', exam: 'Eksamen', accuracy: 'Nøyaktighet', answered: 'Besvart', correct: 'Riktige', premiumCta: 'Premium', premiumOffer: 'Ubegrenset tilgang · fra 99 kr', premiumActive: 'Premium aktiv', streak: 'dagers rekke', freeLeft: 'gratis igjen', dailyLimitReached: 'Opprett gratis konto for å fortsette', dailyTest: 'Dagens test', moreOptions: 'Flere', accountTitle: 'Opprett gratis konto for å fortsette', accountBody: 'Du har brukt de 5 gjestespørsmålene. Opprett en gratis konto for 10 spørsmål per dag og behold progresjonen din.', accountSignup: 'Opprett konto', accountLogin: 'Logg inn', accountCancel: 'Avbryt', studyBook: 'Læringsbok', signGallery: 'Trafikkskilt', myStats: 'Min statistikk', smartPractice: 'Smart øving', aiInsights: 'AI Analyse', trafficMath: 'Trafikk-matte', michaelTeacher: 'Trafikklærer', library: 'Bibliotek', glossary: 'Ordliste', social: 'Sosiale', askQuestion: 'Still et spørsmål om trafikk' },
-  th: { subtitle: 'สอบใบขับขี่นอร์เวย์', startQuiz: 'เริ่มทำแบบทดสอบ', exam: 'สอบ', accuracy: 'ความแม่นยำ', answered: 'ตอบแล้ว', correct: 'ถูกต้อง', premiumCta: 'พรีเมียม', premiumOffer: 'ใช้งานไม่จำกัด · เริ่มต้น 99 kr', premiumActive: 'Premium ใช้งานอยู่', streak: 'วันติดต่อกัน', freeLeft: 'ฟรีเหลือ', dailyLimitReached: 'สร้างบัญชีฟรีเพื่อเรียนต่อ', dailyTest: 'แบบทดสอบประจำวัน', moreOptions: 'เพิ่มเติม', accountTitle: 'สร้างบัญชีฟรีเพื่อเรียนต่อ', accountBody: 'คุณใช้คำถามสำหรับผู้ใช้ทั่วไปครบ 5 ข้อแล้ว สร้างบัญชีฟรีเพื่อรับ 10 คำถามต่อวันและเก็บความก้าวหน้าของคุณไว้', accountSignup: 'สร้างบัญชี', accountLogin: 'เข้าสู่ระบบ', accountCancel: 'ยกเลิก', studyBook: 'หนังสือเรียน', signGallery: 'ป้ายจราจร', myStats: 'สถิติของฉัน', smartPractice: 'ฝึกอัจฉริยะ', aiInsights: 'AI วิเคราะห์', trafficMath: 'คณิตจราจร', michaelTeacher: 'ครูสอนขับ', library: 'ห้องสมุด', glossary: 'คำศัพท์', social: 'โซเชียล', askQuestion: 'ถามคำถามเกี่ยวกับการจราจร' },
-  en: { subtitle: 'Norwegian driving test', startQuiz: 'Start quiz', exam: 'Exam', accuracy: 'Accuracy', answered: 'Answered', correct: 'Correct', premiumCta: 'Premium', premiumOffer: 'Unlimited access · from 99 NOK', premiumActive: 'Premium active', streak: 'day streak', freeLeft: 'free left', dailyLimitReached: 'Create a free account to continue', dailyTest: 'Daily test', moreOptions: 'More', accountTitle: 'Create a free account to continue', accountBody: 'You have used the 5 guest questions. Create a free account for 10 questions per day and keep your progress.', accountSignup: 'Create account', accountLogin: 'Log in', accountCancel: 'Cancel', studyBook: 'Study Book', signGallery: 'Traffic Signs', myStats: 'My Statistics', smartPractice: 'Smart Practice', aiInsights: 'AI Insights', trafficMath: 'Traffic Math', michaelTeacher: 'Instructor', library: 'Library', glossary: 'Glossary', social: 'Social', askQuestion: 'Ask a question about traffic' },
+// Fail-Stop: mangler en nøkkel på elevens språk, skjules elementet.
+// Ingen fallback til norsk/engelsk. Se src/constants/i18n.ts.
+const TR: Record<Lang, Record<string, string>> = {
+  no: { subtitle: 'Norsk førerprøve', startQuiz: 'Start quiz', exam: 'Eksamen', accuracy: 'Nøyaktighet', answered: 'Besvart', correct: 'Riktige', premiumCta: 'Premium', premiumOffer: 'Ubegrenset tilgang · fra 99 kr', premiumActive: 'Premium aktiv', streak: 'dagers rekke', freeLeft: 'gratis igjen', dailyLimitReached: 'Opprett gratis konto for å fortsette', dailyTest: 'Dagens test', moreOptions: 'Flere', accountTitle: 'Opprett gratis konto for å fortsette', accountBody: 'Du har brukt de 5 gjestespørsmålene. Opprett en gratis konto for 10 spørsmål per dag og behold progresjonen din.', accountSignup: 'Opprett konto', accountLogin: 'Logg inn', accountCancel: 'Avbryt', studyBook: 'Læringsbok', signGallery: 'Trafikkskilt', myStats: 'Min statistikk', smartPractice: 'Smart øving', aiInsights: 'AI Analyse', trafficMath: 'Trafikk-matte', michaelTeacher: 'Trafikklærer', library: 'Bibliotek', glossary: 'Ordliste', social: 'Sosiale', askQuestion: 'Still et spørsmål om trafikk', michaelName: 'Michael Trafikklærer' },
+  th: { subtitle: 'สอบใบขับขี่นอร์เวย์', startQuiz: 'เริ่มทำแบบทดสอบ', exam: 'สอบ', accuracy: 'ความแม่นยำ', answered: 'ตอบแล้ว', correct: 'ถูกต้อง', premiumCta: 'พรีเมียม', premiumOffer: 'ใช้งานไม่จำกัด · เริ่มต้น 99 kr', premiumActive: 'Premium ใช้งานอยู่', streak: 'วันติดต่อกัน', freeLeft: 'ฟรีเหลือ', dailyLimitReached: 'สร้างบัญชีฟรีเพื่อเรียนต่อ', dailyTest: 'แบบทดสอบประจำวัน', moreOptions: 'เพิ่มเติม', accountTitle: 'สร้างบัญชีฟรีเพื่อเรียนต่อ', accountBody: 'คุณใช้คำถามสำหรับผู้ใช้ทั่วไปครบ 5 ข้อแล้ว สร้างบัญชีฟรีเพื่อรับ 10 คำถามต่อวันและเก็บความก้าวหน้าของคุณไว้', accountSignup: 'สร้างบัญชี', accountLogin: 'เข้าสู่ระบบ', accountCancel: 'ยกเลิก', studyBook: 'หนังสือเรียน', signGallery: 'ป้ายจราจร', myStats: 'สถิติของฉัน', smartPractice: 'ฝึกอัจฉริยะ', aiInsights: 'AI วิเคราะห์', trafficMath: 'คณิตจราจร', michaelTeacher: 'ครูสอนขับ', library: 'ห้องสมุด', glossary: 'คำศัพท์', social: 'โซเชียล', askQuestion: 'ถามคำถามเกี่ยวกับการจราจร', michaelName: 'ไมเคิล ครูสอนขับรถ' },
+  en: { subtitle: 'Norwegian driving test', startQuiz: 'Start quiz', exam: 'Exam', accuracy: 'Accuracy', answered: 'Answered', correct: 'Correct', premiumCta: 'Premium', premiumOffer: 'Unlimited access · from 99 NOK', premiumActive: 'Premium active', streak: 'day streak', freeLeft: 'free left', dailyLimitReached: 'Create a free account to continue', dailyTest: 'Daily test', moreOptions: 'More', accountTitle: 'Create a free account to continue', accountBody: 'You have used the 5 guest questions. Create a free account for 10 questions per day and keep your progress.', accountSignup: 'Create account', accountLogin: 'Log in', accountCancel: 'Cancel', studyBook: 'Study Book', signGallery: 'Traffic Signs', myStats: 'My Statistics', smartPractice: 'Smart Practice', aiInsights: 'AI Insights', trafficMath: 'Traffic Math', michaelTeacher: 'Instructor', library: 'Library', glossary: 'Glossary', social: 'Social', askQuestion: 'Ask a question about traffic', michaelName: 'Michael Driving Instructor' },
 };
 
 export default function HomeScreen() {
@@ -24,8 +27,14 @@ export default function HomeScreen() {
   const [loading, setLoading] = useState(true);
   const [dailyDone, setDailyDone] = useState(false);
   const { width: winWidth } = useWindowDimensions();
-  const t = TR[language] || {};
+  const lang = asLang(language);
+  const t = TR[lang];
   const c = colors;
+  // Thai skrives ikke med versaler, og letterSpacing river fra hverandre
+  // kombinerende tegn — derfor kun på latinsk skrift.
+  const capStyle = lang === 'th'
+    ? { textTransform: 'none' as const, letterSpacing: 0 }
+    : null;
   const isDark = c.bg === '#0F172A' || c.bg === '#0B1222';
   // Desktop web = wide viewport inside browser (breaks out of 390px phone frame)
   const isDesktopWeb = Platform.OS === 'web' && winWidth > 700;
@@ -204,10 +213,21 @@ export default function HomeScreen() {
         </Animated.View>
 
         {/* Free limit hint */}
+        {/* Vises kun når vi faktisk har et tall OG teksten finnes på elevens
+            språk — ellers skjules hintet framfor å vise «undefined ฟรีเหลือ».
+            Selve kvotelogikken (`freeRemaining`) er urørt. */}
         {!isPremium && (
-          <Text style={[st.freeHint, { color: locked ? c.incorrect : c.textMuted }]}>
-            {locked ? t.dailyLimitReached : `${remaining} ${t.freeLeft}`}
-          </Text>
+          locked
+            ? tr(t, 'dailyLimitReached') && (
+                <Text style={[st.freeHint, { color: c.incorrect }]}>
+                  {tr(t, 'dailyLimitReached')}
+                </Text>
+              )
+            : Number.isFinite(remaining) && tr(t, 'freeLeft') && (
+                <Text style={[st.freeHint, { color: c.textMuted }]}>
+                  {`${remaining} ${tr(t, 'freeLeft')}`}
+                </Text>
+              )
         )}
 
         {/* Horizontal scroll menu — compact hsm-cards (matches web hsm-card design) */}
@@ -288,8 +308,12 @@ export default function HomeScreen() {
                   <Image source={require('../assets/michael_avatar.png')} style={st.michaelAvatarImg} />
                 </View>
                 <View style={st.michaelCardText}>
-                  <Text style={[st.michaelCardName, { color: '#93C5FD' }]}>Michael Trafikklærer</Text>
-                  <Text style={[st.michaelCardSub, { color: '#64748B' }]}>{t.askQuestion}</Text>
+                  <Text style={[st.michaelCardName, { color: '#93C5FD' }]}>
+                    {tr(t, 'michaelName') ?? missingNotice(lang)}
+                  </Text>
+                  {tr(t, 'askQuestion') && (
+                    <Text style={[st.michaelCardSub, { color: '#64748B' }]}>{tr(t, 'askQuestion')}</Text>
+                  )}
                 </View>
               </View>
               <Text style={[st.michaelCardArrow, { color: '#3B82F6' }]}>›</Text>
@@ -306,20 +330,26 @@ export default function HomeScreen() {
             style={st.statsGradientBorder}
           >
             <View style={[st.statsBlock, { backgroundColor: isDark ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.92)' }]}>
-              <View style={st.statCol}>
-                <Text style={[st.statVal, { color: '#FF9933' }]}>{progress.total_questions_answered}</Text>
-                <Text style={[st.statLbl, { color: c.textMuted }]}>{t.answered}</Text>
-              </View>
+              {tr(t, 'answered') && (
+                <View style={st.statCol}>
+                  <Text style={[st.statVal, { color: '#FF9933' }]}>{progress.total_questions_answered}</Text>
+                  <Text style={[st.statLbl, capStyle, { color: c.textMuted }]}>{tr(t, 'answered')}</Text>
+                </View>
+              )}
               <View style={[st.statDivider, { backgroundColor: c.divider }]} />
-              <View style={st.statCol}>
-                <Text style={[st.statVal, { color: '#FF9933' }]}>{progress.correct_answers}</Text>
-                <Text style={[st.statLbl, { color: c.textMuted }]}>{t.correct}</Text>
-              </View>
+              {tr(t, 'correct') && (
+                <View style={st.statCol}>
+                  <Text style={[st.statVal, { color: '#FF9933' }]}>{progress.correct_answers}</Text>
+                  <Text style={[st.statLbl, capStyle, { color: c.textMuted }]}>{tr(t, 'correct')}</Text>
+                </View>
+              )}
               <View style={[st.statDivider, { backgroundColor: c.divider }]} />
-              <View style={st.statCol}>
-                <Text style={[st.statVal, { color: '#FF9933' }]}>{accuracy}%</Text>
-                <Text style={[st.statLbl, { color: c.textMuted }]}>{t.accuracy}</Text>
-              </View>
+              {tr(t, 'accuracy') && (
+                <View style={st.statCol}>
+                  <Text style={[st.statVal, { color: '#FF9933' }]}>{accuracy}%</Text>
+                  <Text style={[st.statLbl, capStyle, { color: c.textMuted }]}>{tr(t, 'accuracy')}</Text>
+                </View>
+              )}
             </View>
           </LinearGradient>
         )}
