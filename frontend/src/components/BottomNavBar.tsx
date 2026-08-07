@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useAppStore } from '../store/appStore';
 import { BlurView } from 'expo-blur';
+import { Lang, asLang, tr } from '../constants/i18n';
 
 interface BottomNavBarProps {
   activeTab: 'home' | 'categories' | 'teacher' | 'history' | 'signs' | 'book' | 'bookmarks' | 'settings' | 'none';
@@ -24,7 +25,9 @@ const TABS = [
   { id: 'settings', route: '/settings', activeIcon: 'settings', inactiveIcon: 'settings-outline' },
 ] as const;
 
-const LABELS: Record<string, Record<string, string>> = {
+// Fail-Stop: mangler en etikett på elevens språk, vises fanen med ikon alene.
+// Aldri den rå tab-id-en ('home', 'categories') — det er engelsk lekkasje.
+const LABELS: Record<Lang, Record<string, string>> = {
   no: {
     home: 'Hjem',
     categories: 'Kategorier',
@@ -59,7 +62,7 @@ const LABELS: Record<string, Record<string, string>> = {
 
 function ActiveTabContent({ tab, label, iconColor, labelColor }: {
   tab: typeof TABS[number];
-  label: string;
+  label: string | null;
   iconColor: string;
   labelColor: string;
 }) {
@@ -88,9 +91,11 @@ function ActiveTabContent({ tab, label, iconColor, labelColor }: {
             color={iconColor}
           />
         </Animated.View>
-        <Text style={[styles.label, { color: labelColor }]}>
-          {label}
-        </Text>
+        {label && (
+          <Text style={[styles.label, { color: labelColor }]}>
+            {label}
+          </Text>
+        )}
       </View>
     </LinearGradient>
   );
@@ -98,7 +103,7 @@ function ActiveTabContent({ tab, label, iconColor, labelColor }: {
 
 function InactiveTabContent({ tab, label, iconColor, labelColor }: {
   tab: typeof TABS[number];
-  label: string;
+  label: string | null;
   iconColor: string;
   labelColor: string;
 }) {
@@ -109,9 +114,11 @@ function InactiveTabContent({ tab, label, iconColor, labelColor }: {
         size={22}
         color={iconColor}
       />
-      <Text style={[styles.label, { color: labelColor }]}>
-        {label}
-      </Text>
+      {label && (
+        <Text style={[styles.label, { color: labelColor }]}>
+          {label}
+        </Text>
+      )}
     </View>
   );
 }
@@ -121,7 +128,7 @@ export function BottomNavBar({ activeTab }: BottomNavBarProps) {
   const { language, colors: c } = useAppStore();
   const scrollRef = useRef<ScrollView>(null);
 
-  const labels = LABELS[language] || {};
+  const labels = LABELS[asLang(language)];
 
   const navigateTo = (route: string) => {
     router.replace(route as any);
@@ -141,7 +148,7 @@ export function BottomNavBar({ activeTab }: BottomNavBarProps) {
         const active = activeTab === tab.id;
         const iconColor = active ? '#00F5FF' : c.textMuted;
         const labelColor = active ? '#00F5FF' : c.textMuted;
-        const label = labels[tab.id] || tab.id;
+        const label = tr(labels, tab.id);
 
         return (
           <TouchableOpacity

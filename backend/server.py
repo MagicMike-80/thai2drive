@@ -172,6 +172,14 @@ PUBLIC_PRICING_FALLBACK = {
         "period": {"no": "engangsbetaling", "th": "จ่ายครั้งเดียว", "en": "one-time payment"},
     },
 }
+# ─── Lanseringskampanje: 7 dagers gratis prøvetid til de 50 første ───────────
+# En Stripe-kupong (max_redemptions) gir rabatt, ikke prøvetid, så antallet må
+# telles her. Reservasjonen er atomisk ($lt-filter + $inc i én operasjon), slik at
+# to samtidige kjøp ikke kan dele samme plass.
+LAUNCH_TRIAL_PLAN_ID = "three_months"
+LAUNCH_TRIAL_DAYS = 7
+LAUNCH_TRIAL_MAX_REDEMPTIONS = 50
+
 _pricing_cache = {"ts": 0.0, "data": None}
 
 ACCESS_GUEST_TOTAL_LIMIT = 5
@@ -1525,6 +1533,37 @@ async def _activate_from_checkout_session(session: dict) -> bool:
     return True
 
 
+async def _reserve_launch_trial(user_id: str) -> bool:
+    """Reserver én av de 50 prøveperiodene. Returnerer True hvis brukeren skal få trial.
+
+    Fail-soft: enhver DB-feil gir False, altså checkout uten prøvetid. Kampanjen skal
+    aldri kunne blokkere et kjøp.
+    """
+    try:
+        # Samme bruker som starter checkout på nytt beholder plassen sin — et avbrutt
+        # kjøp skal ikke brenne en plass, og et nytt forsøk skal ikke brenne to.
+        if await db.campaign_trial_grants.find_one({"_id": user_id}):
+            return True
+        await db.campaign_counters.update_one(
+            {"_id": "launch_trial"}, {"$setOnInsert": {"count": 0}}, upsert=True
+        )
+        res = await db.campaign_counters.update_one(
+            {"_id": "launch_trial", "count": {"$lt": LAUNCH_TRIAL_MAX_REDEMPTIONS}},
+            {"$inc": {"count": 1}},
+        )
+        if res.modified_count != 1:
+            return False  # alle 50 plassene er brukt
+        await db.campaign_trial_grants.update_one(
+            {"_id": user_id},
+            {"$setOnInsert": {"granted_at": datetime.now(timezone.utc).isoformat()}},
+            upsert=True,
+        )
+        return True
+    except Exception as exc:
+        logger.warning("launch trial reservation failed, selling without trial: %s", exc)
+        return False
+
+
 @api_router.post("/create-checkout-session")
 async def create_checkout_session(data: CheckoutSessionRequest, current_user: dict = Depends(get_current_user)):
     user = await db.users.find_one({"id": current_user["sub"]}, {"_id": 0, "password_hash": 0})
@@ -1572,7 +1611,11 @@ async def create_checkout_session(data: CheckoutSessionRequest, current_user: di
     else:
         session_kwargs["customer_email"] = user.get("email")
     if mode == "subscription":
-        session_kwargs["subscription_data"] = {"metadata": metadata}
+        subscription_data = {"metadata": metadata}
+        if data.plan_id == LAUNCH_TRIAL_PLAN_ID and await _reserve_launch_trial(user["id"]):
+            subscription_data["trial_period_days"] = LAUNCH_TRIAL_DAYS
+            metadata["launch_trial_days"] = str(LAUNCH_TRIAL_DAYS)
+        session_kwargs["subscription_data"] = subscription_data
     else:
         session_kwargs["payment_intent_data"] = {"metadata": metadata}
 
@@ -1763,6 +1806,81 @@ async def get_my_stats(device_id: str):
         {"$sort": {"pct": 1}},
     ]
     rows = await db.quiz_attempts.aggregate(pipeline).to_list(100)
+
+    # Eksamensmodus lagres med category=null og falt derfor helt ut av svakhetsanalysen
+    # over. Selve forsøket har ingen kategori — den ligger på hvert enkelt spørsmål — så
+    # kategorien må slås opp i db.questions per besvart spørsmål.
+    # Fail-soft: slår oppslaget feil, returnerer vi kategoritallene vi allerede har.
+    try:
+        exam_pipeline = [
+            {"$match": {
+                "$or": [{"device_id": device_id}, {"user_id": device_id}],
+                "category": {"$in": [None, "", "None"]},
+            }},
+            {"$unwind": "$questions_answered"},
+            # Bare svar der fasit faktisk kan avgjøres — ellers blåser total_q opp og
+            # trekker prosenten kunstig ned.
+            {"$match": {
+                "questions_answered.question_id": {"$nin": [None, ""]},
+                "$or": [
+                    {"questions_answered.is_correct": {"$type": "bool"}},
+                    {"questions_answered.user_answer": {"$exists": True, "$nin": [None, ""]}},
+                ],
+            }},
+            {"$lookup": {
+                "from": "questions",
+                "localField": "questions_answered.question_id",
+                "foreignField": "id",
+                "as": "q",
+            }},
+            {"$unwind": "$q"},
+            {"$match": {"q.category": {"$nin": [None, "", "None"]}}},
+            {"$group": {
+                "_id": "$q.category",
+                "attempt_ids": {"$addToSet": "$_id"},
+                "total_q": {"$sum": 1},
+                "total_correct": {"$sum": {"$cond": [
+                    {"$or": [
+                        {"$eq": ["$questions_answered.is_correct", True]},
+                        # Eldre forsøk mangler is_correct — fall tilbake på svarteksten.
+                        {"$and": [
+                            {"$ne": [{"$type": "$questions_answered.is_correct"}, "bool"]},
+                            {"$eq": [
+                                {"$toUpper": {"$ifNull": ["$questions_answered.user_answer", ""]}},
+                                {"$toUpper": {"$ifNull": ["$questions_answered.correct_answer", "__NO_ANSWER__"]}},
+                            ]},
+                        ]},
+                    ]},
+                    1, 0,
+                ]}},
+            }},
+            {"$project": {
+                "_id": 0,
+                "category": "$_id",
+                "attempts": {"$size": "$attempt_ids"},
+                "total_q": 1,
+                "total_correct": 1,
+            }},
+        ]
+        exam_rows = await db.quiz_attempts.aggregate(exam_pipeline).to_list(100)
+    except Exception as exc:
+        logger.warning("stats/me: exam-mode category lookup failed: %s", exc)
+        exam_rows = []
+
+    if exam_rows:
+        merged: dict = {r["category"]: dict(r) for r in rows}
+        for r in exam_rows:
+            cur = merged.setdefault(
+                r["category"],
+                {"category": r["category"], "attempts": 0, "total_q": 0, "total_correct": 0},
+            )
+            cur["attempts"] += r["attempts"]
+            cur["total_q"] += r["total_q"]
+            cur["total_correct"] += r["total_correct"]
+        rows = list(merged.values())
+        for r in rows:
+            r["pct"] = (r["total_correct"] / r["total_q"] * 100) if r["total_q"] else 0
+        rows.sort(key=lambda r: r["pct"])
 
     # Overall totals
     totals = await db.quiz_attempts.aggregate([

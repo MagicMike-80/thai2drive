@@ -89,6 +89,7 @@ Les kun filen du trenger for oppgaven — ikke alle.
 | [`performance.md`](docs/claude_context/performance.md) | Bundle-størrelse, latency-mål, DB- og AI-kostnadsoptimalisering |
 | [`deployment.md`](docs/claude_context/deployment.md) | Railway, Netlify, CI/CD, sikkerhetssjekkliste, rollback |
 | [`workflow.md`](docs/claude_context/workflow.md) | Eierskap, Collaboration Lock, produktregler, Karpathy, `context/`-systemet |
+| [`revenue-team/`](revenue-team/README.md) | Markedsføring, tilbud, prisforslag, innholdsvinkler, lead magnet — `/revenue-team` |
 
 ## gstack
 

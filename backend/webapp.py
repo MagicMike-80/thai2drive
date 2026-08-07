@@ -3924,13 +3924,13 @@ a { color:inherit; text-decoration:none; }
       <div class="paywall-card">
         <div class="paywall-gem">💎</div>
         <div class="paywall-title" data-key="pw_title">Lås opp <span>Thai2Drive Premium</span></div>
-        <div class="paywall-sub" data-key="pw_sub">Du har brukt 5 gratis spørsmål. Oppgrader for ubegrenset tilgang!</div>
+        <div class="paywall-sub" data-key="pw_sub">Du har brukt opp de gratis spørsmålene dine. Oppgrader for ubegrenset tilgang!</div>
         <ul class="paywall-features">
+          <li><span class="pf-check">✓</span><span data-key="pw_f5">Tålmodig AI-veiledning fra Michael på 100 % ren thai</span></li>
           <li><span class="pf-check">✓</span><span data-key="pw_f1">Ubegrenset spørsmål og kategorier</span></li>
           <li><span class="pf-check">✓</span><span data-key="pw_f2">Fullstendig eksamensmode (45 spørsmål)</span></li>
           <li><span class="pf-check">✓</span><span data-key="pw_f3">Daglig test og øvingsmodus</span></li>
           <li><span class="pf-check">✓</span><span data-key="pw_f4">Historikk og fremgangsstatistikk</span></li>
-          <li><span class="pf-check">✓</span><span data-key="pw_f5">Trafikkskilt-galleri</span></li>
         </ul>
         <div class="paywall-price-row">
           <div class="paywall-price-card selected" onclick="selectPlan('monthly',this)" data-plan="monthly">
@@ -4458,12 +4458,14 @@ var UI = {
   sign_fallback_memory:{th:'จำเป็นลำดับ: รูปทรง → สี → สัญลักษณ์ → สิ่งที่ต้องทำ', no:'Husk rekkefølgen: form → farge → symbol → handling.', en:'Remember the order: shape → colour → symbol → action.'},
   // Paywall
   pw_title:    {th:'ปลดล็อก Thai2Drive Premium', no:'Lås opp Thai2Drive Premium', en:'Unlock Thai2Drive Premium'},
-  pw_sub:      {th:'คุณใช้ 5 คำถามฟรีแล้ว อัปเกรดเพื่อใช้งานไม่จำกัด!', no:'Du har brukt 5 gratis spørsmål. Oppgrader for ubegrenset tilgang!', en:'You have used 5 free questions. Upgrade for unlimited access!'},
+  pw_sub:      {th:'คุณใช้คำถามฟรีหมดแล้ว อัปเกรดเพื่อใช้งานไม่จำกัด!', no:'Du har brukt opp de gratis spørsmålene dine. Oppgrader for ubegrenset tilgang!', en:'You have used all your free questions. Upgrade for unlimited access!'},
+  pw_sub_daily:{th:'คุณใช้ {count} คำถามฟรีของวันนี้หมดแล้ว อัปเกรดเพื่อใช้งานไม่จำกัด!', no:'Du har brukt opp dine {count} gratis spørsmål for i dag. Oppgrader for ubegrenset tilgang!', en:'You have used all {count} of your free questions for today. Upgrade for unlimited access!'},
+  pw_sub_total:{th:'คุณใช้ {count} คำถามฟรีหมดแล้ว อัปเกรดเพื่อใช้งานไม่จำกัด!', no:'Du har brukt opp dine {count} gratis spørsmål. Oppgrader for ubegrenset tilgang!', en:'You have used all {count} of your free questions. Upgrade for unlimited access!'},
   pw_f1:       {th:'คำถามและหมวดหมู่ไม่จำกัด', no:'Ubegrenset spørsmål og kategorier', en:'Unlimited questions and categories'},
   pw_f2:       {th:'โหมดสอบเต็มรูปแบบ (45 ข้อ)', no:'Fullstendig eksamensmode (45 spørsmål)', en:'Full exam mode (45 questions)'},
   pw_f3:       {th:'ทดสอบรายวันและโหมดฝึกซ้อม', no:'Daglig test og øvingsmodus', en:'Daily test and practice mode'},
   pw_f4:       {th:'ประวัติและสถิติความก้าวหน้า', no:'Historikk og fremgangsstatistikk', en:'History and progress statistics'},
-  pw_f5:       {th:'แกลเลอรีป้ายจราจร', no:'Trafikkskilt-galleri', en:'Traffic signs gallery'},
+  pw_f5:       {th:'คำแนะนำจากครูไมเคิลอย่างใจเย็น เป็นภาษาไทยล้วน', no:'Tålmodig AI-veiledning fra Michael på 100 % ren thai', en:'Patient AI guidance from Michael, in 100% Thai'},
   pw_month:    {th:'รายเดือน', no:'Månedlig', en:'Monthly'},
   pw_three_months:{th:'3 เดือน', no:'3 måneder', en:'3 months'},
   pw_lifetime: {th:'ตลอดชีพ', no:'Livstid', en:'Lifetime'},
@@ -6153,7 +6155,19 @@ function renderPaywallSub() {
   var el = document.querySelector('#screenPaywall .paywall-sub');
   if (!el) return;
   var spent = !!(user && user.trial_used === true) && !isTrialActive();
-  el.textContent = spent ? t('trial_ended') : t('pw_sub');
+  if (spent) { el.textContent = t('trial_ended'); return; }
+  // Gratisgrensen er ikke den samme for alle: gjest = 5 totalt, registrert = 10 per dag.
+  // Vi leser den faktiske grensen fra accessState i stedet for å hardkode et tall,
+  // slik at muren ikke kan påstå noe som er usant for den som faktisk ser den.
+  var limit = (accessState && accessState.limit !== null && accessState.limit !== undefined)
+    ? Number(accessState.limit)
+    : null;
+  if (limit) {
+    var daily = !!(accessState && accessState.is_authenticated);
+    el.textContent = tf(daily ? 'pw_sub_daily' : 'pw_sub_total', {count: limit});
+  } else {
+    el.textContent = t('pw_sub');
+  }
 }
 
 // Oppmuntrende varsel de to siste dagene — maks én gang per dag per tilstand.

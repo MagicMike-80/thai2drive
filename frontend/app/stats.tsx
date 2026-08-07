@@ -8,8 +8,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { useAppStore } from '../src/store/appStore';
 import { api, MyStats, CategoryStat } from '../src/services/api';
 import { BottomNavBar } from '../src/components/BottomNavBar';
+import { Lang, asLang, tr, missingNotice } from '../src/constants/i18n';
+import { categoryLabel } from '../src/constants/categoryLabels';
 
-const TR: Record<string, Record<string, string>> = {
+// Fail-Stop: mangler en nøkkel på elevens språk, skjules elementet.
+// Ingen fallback til norsk/engelsk. Se src/constants/i18n.ts.
+const TR: Record<Lang, Record<string, string>> = {
   no: {
     title: 'Min statistikk', overall: 'Totalt', correct: 'Riktige', attempts: 'Øvelser',
     weakest: 'Svakeste områder', strongest: 'Sterkeste områder', all: 'Alle kategorier',
@@ -26,23 +30,6 @@ const TR: Record<string, Record<string, string>> = {
     noData: 'No data yet — do some practice first!', questions: 'questions',
   },
 };
-
-const CAT_LABELS: Record<string, { no: string; th: string; en: string }> = {
-  'Traffic Signs':            { no: 'Trafikkskilt',    th: 'ป้ายจราจร',      en: 'Traffic Signs' },
-  'Road Rules':               { no: 'Trafikkregler',   th: 'กฎจราจร',        en: 'Road Rules' },
-  'Right of Way':             { no: 'Vikeplikt',       th: 'การให้ทาง',      en: 'Right of Way' },
-  'Speed Limits':             { no: 'Fartsgrenser',    th: 'ความเร็ว',       en: 'Speed Limits' },
-  'Safety':                   { no: 'Sikkerhet',       th: 'ความปลอดภัย',    en: 'Safety' },
-  'Driving Conditions':       { no: 'Kjøreforhold',    th: 'สภาพการขับขี่', en: 'Driving Conditions' },
-  'Situations':               { no: 'Situasjoner',     th: 'สถานการณ์',      en: 'Situations' },
-  'Pedestrians and Cyclists': { no: 'Gående/Syklister',th: 'คนเดิน/จักรยาน',en: 'Pedestrians & Cyclists' },
-  'Vehicle Knowledge':        { no: 'Kjøretøy',        th: 'ความรู้รถ',      en: 'Vehicle Knowledge' },
-  'Environment and Economy':  { no: 'Miljø/Økonomi',   th: 'สิ่งแวดล้อม',    en: 'Environment & Economy' },
-};
-
-function catLabel(category: string, lang: 'no' | 'th' | 'en') {
-  return CAT_LABELS[category]?.[lang] ?? category;
-}
 
 function pctColor(pct: number) {
   if (pct >= 75) return '#10B981';
@@ -66,8 +53,11 @@ export default function StatsScreen() {
   const router = useRouter();
   const { language, colors, deviceId, user } = useAppStore();
   const c = colors;
-  const t = TR[language] || {};
-  const lang = language as 'no' | 'th' | 'en';
+  const lang = asLang(language);
+  const t = TR[lang];
+  const capStyle = lang === 'th'
+    ? { textTransform: 'none' as const, letterSpacing: 0 }
+    : null;
 
   const [stats, setStats] = useState<MyStats | null>(null);
   const [loading, setLoading] = useState(true);
@@ -92,7 +82,9 @@ export default function StatsScreen() {
         <TouchableOpacity onPress={() => router.back()} style={st.backBtn}>
           <Ionicons name="arrow-back" size={24} color={c.text} />
         </TouchableOpacity>
-        <Text style={[st.headerTitle, { color: c.text }]}>{t.title}</Text>
+        <Text style={[st.headerTitle, { color: c.text }]}>
+          {tr(t, 'title') ?? missingNotice(lang)}
+        </Text>
         <View style={{ width: 40 }} />
       </View>
 
@@ -101,55 +93,81 @@ export default function StatsScreen() {
       ) : !stats || stats.overall.total_q === 0 ? (
         <View style={st.center}>
           <Text style={{ fontSize: 48 }}>📊</Text>
-          <Text style={[st.emptyText, { color: c.textMuted }]}>{t.noData}</Text>
+          <Text style={[st.emptyText, { color: c.textMuted }]}>
+            {tr(t, 'noData') ?? missingNotice(lang)}
+          </Text>
         </View>
       ) : (
         <ScrollView contentContainerStyle={st.scroll}>
 
           {/* Overall card */}
           <View style={[st.overallCard, { backgroundColor: c.card, borderColor: c.cardBorder }]}>
-            <Text style={[st.overallLabel, { color: c.textMuted }]}>{t.overall}</Text>
+            <Text style={[st.overallLabel, capStyle, { color: c.textMuted }]}>
+              {tr(t, 'overall') ?? missingNotice(lang)}
+            </Text>
             <Text style={[st.overallPct, { color: pctColor(stats.overall.pct) }]}>
               {Math.round(stats.overall.pct)}%
             </Text>
             <ScoreBar pct={stats.overall.pct} color={pctColor(stats.overall.pct)} />
             <View style={st.overallRow}>
-              <View style={st.overallStat}>
-                <Text style={[st.overallStatVal, { color: c.text }]}>{stats.overall.total_correct}</Text>
-                <Text style={[st.overallStatLbl, { color: c.textMuted }]}>{t.correct}</Text>
-              </View>
-              <View style={st.overallStat}>
-                <Text style={[st.overallStatVal, { color: c.text }]}>{stats.overall.total_q}</Text>
-                <Text style={[st.overallStatLbl, { color: c.textMuted }]}>{t.questions}</Text>
-              </View>
-              <View style={st.overallStat}>
-                <Text style={[st.overallStatVal, { color: c.text }]}>{stats.overall.attempts}</Text>
-                <Text style={[st.overallStatLbl, { color: c.textMuted }]}>{t.attempts}</Text>
-              </View>
+              {tr(t, 'correct') && (
+                <View style={st.overallStat}>
+                  <Text style={[st.overallStatVal, { color: c.text }]}>{stats.overall.total_correct}</Text>
+                  <Text style={[st.overallStatLbl, capStyle, { color: c.textMuted }]}>
+                    {tr(t, 'correct')}
+                  </Text>
+                </View>
+              )}
+              {tr(t, 'questions') && (
+                <View style={st.overallStat}>
+                  <Text style={[st.overallStatVal, { color: c.text }]}>{stats.overall.total_q}</Text>
+                  <Text style={[st.overallStatLbl, capStyle, { color: c.textMuted }]}>
+                    {tr(t, 'questions')}
+                  </Text>
+                </View>
+              )}
+              {tr(t, 'attempts') && (
+                <View style={st.overallStat}>
+                  <Text style={[st.overallStatVal, { color: c.text }]}>{stats.overall.attempts}</Text>
+                  <Text style={[st.overallStatLbl, capStyle, { color: c.textMuted }]}>
+                    {tr(t, 'attempts')}
+                  </Text>
+                </View>
+              )}
             </View>
           </View>
 
           {/* Weakest */}
-          {weakest.length > 0 && (
+          {weakest.length > 0 && tr(t, 'weakest') && (
             <>
-              <Text style={[st.sectionHead, { color: c.textMuted }]}>🔴 {t.weakest}</Text>
+              <Text style={[st.sectionHead, capStyle, { color: c.textMuted }]}>
+                🔴 {tr(t, 'weakest')}
+              </Text>
               {weakest.map(s => <CategoryRow key={s.category} s={s} lang={lang} c={c} />)}
             </>
           )}
 
           {/* Strongest */}
-          {strongest.length > 0 && (
+          {strongest.length > 0 && tr(t, 'strongest') && (
             <>
-              <Text style={[st.sectionHead, { color: c.textMuted }]}>🟢 {t.strongest}</Text>
+              <Text style={[st.sectionHead, capStyle, { color: c.textMuted }]}>
+                🟢 {tr(t, 'strongest')}
+              </Text>
               {strongest.map(s => <CategoryRow key={s.category} s={s} lang={lang} c={c} />)}
             </>
           )}
 
           {/* All categories */}
-          <Text style={[st.sectionHead, { color: c.textMuted }]}>📋 {t.all}</Text>
-          {[...sorted].sort((a, b) => b.total_q - a.total_q).map(s => (
-            <CategoryRow key={s.category} s={s} lang={lang} c={c} />
-          ))}
+          {tr(t, 'all') && (
+            <>
+              <Text style={[st.sectionHead, capStyle, { color: c.textMuted }]}>
+                📋 {tr(t, 'all')}
+              </Text>
+              {[...sorted].sort((a, b) => b.total_q - a.total_q).map(s => (
+                <CategoryRow key={s.category} s={s} lang={lang} c={c} />
+              ))}
+            </>
+          )}
 
         </ScrollView>
       )}
@@ -158,14 +176,19 @@ export default function StatsScreen() {
   );
 }
 
-function CategoryRow({ s, lang, c }: { s: CategoryStat; lang: 'no' | 'th' | 'en'; c: any }) {
+function CategoryRow({ s, lang, c }: { s: CategoryStat; lang: Lang; c: any }) {
+  // Fail-Stop: uten oversatt kategorinavn viser vi ingen rad — aldri den rå
+  // databasenøkkelen ('Right of Way', 'fart_og_bremsing').
+  const name = categoryLabel(s.category, lang);
+  if (!name) return null;
+
   const pct = Math.round(s.pct);
   const color = pctColor(pct);
   return (
     <View style={[st.catRow, { backgroundColor: c.card, borderColor: c.cardBorder }]}>
       <View style={st.catTop}>
         <Text style={[st.catName, { color: c.text }]} numberOfLines={1}>
-          {catLabel(s.category, lang)}
+          {name}
         </Text>
         <Text style={[st.catPct, { color }]}>{pct}%</Text>
       </View>
