@@ -1238,6 +1238,7 @@ def _rc_webhook_secret() -> str:
 
 # ── RevenueCat webhook ────────────────────────────────────────────────────────
 
+@app.post("/api/webhooks/revenuecat")
 @app.post("/api/rc/webhook")
 async def revenuecat_webhook(request: Request):
     """
@@ -1247,12 +1248,13 @@ async def revenuecat_webhook(request: Request):
     Set RC_WEBHOOK_SECRET in Railway to the value from:
       RevenueCat → Project settings → Webhooks → Shared secret
 
-    Supported events (https://www.revenuecat.com/docs/webhooks):
-      INITIAL_PURCHASE  → grant Premium, set premium_expires_at
-      RENEWAL           → extend Premium, update premium_expires_at
-      CANCELLATION      → revoke Premium
-      EXPIRATION        → revoke Premium
-      UNCANCELLATION    → re-grant Premium (user re-enabled before period end)
+    Supported events:
+      INITIAL_PURCHASE / RENEWAL / UNCANCELLATION / NON_RENEWING_PURCHASE
+        → grant Premium and set premium_expires_at when RevenueCat sends one.
+      CANCELLATION / BILLING_ISSUE
+        → mark subscription state, but keep access until the entitlement expires.
+      EXPIRATION / REFUND
+        → revoke Premium.
     """
     import json as _json
     import hmac as _hmac
@@ -1276,12 +1278,15 @@ async def revenuecat_webhook(request: Request):
     except Exception:
         raise HTTPException(status_code=400, detail="Invalid JSON payload")
 
-    event_type   = (event.get("event") or {}).get("type", "")
-    event_id     = (event.get("event") or {}).get("id", "") or str(uuid.uuid4())
-    subscriber   = event.get("event", {})
-    app_user_id  = subscriber.get("app_user_id", "")
-    aliases      = subscriber.get("aliases", []) or []
-    expiry_ts    = subscriber.get("expiration_at_ms")  # unix ms or None
+    event_body = event.get("event") or {}
+    event_type = event_body.get("type", "")
+    event_id = event_body.get("id", "") or str(uuid.uuid4())
+    app_user_id = event_body.get("app_user_id", "")
+    aliases = event_body.get("aliases", []) or []
+    expiry_ts = event_body.get("expiration_at_ms")  # unix ms or None
+    product_id = event_body.get("product_id", "mobile")
+    entitlement_ids = event_body.get("entitlement_ids") or []
+    subscriber_attributes = event_body.get("subscriber_attributes") or {}
 
     logger.info("rc_webhook received event_type=%s event_id=%s app_user_id=%s",
                 event_type, event_id, app_user_id)
@@ -1292,14 +1297,29 @@ async def revenuecat_webhook(request: Request):
         logger.info("rc_webhook: event %s already handled — skipping", event_id)
         return {"received": True, "skipped": True}
 
+    # If RevenueCat includes entitlement IDs, only the Thai2Drive Premium
+    # entitlement may affect MongoDB access. Older/test events without this field
+    # are allowed through so production does not silently drop valid purchases.
+    if entitlement_ids and "pro" not in entitlement_ids:
+        now_iso = datetime.now(timezone.utc).isoformat()
+        logger.info("rc_webhook: ignored non-premium entitlement event=%s entitlements=%s",
+                    event_id, entitlement_ids)
+        await db.rc_events.update_one(
+            {"event_id": event_id},
+            {"$set": {"event_id": event_id, "type": event_type, "handled": False,
+                      "ignored": True, "reason": "non_premium_entitlement",
+                      "processed_at": now_iso}},
+            upsert=True,
+        )
+        return {"received": True, "handled": False, "reason": "non_premium_entitlement"}
+
     # ── Resolve user in MongoDB ───────────────────────────────────────────────
-    # RevenueCat app_user_id is the Thai2Drive user_id (set at purchase time via
-    # Purchases.logIn(userId) in the Expo app). Fall back to email-match via aliases.
+    # RevenueCat app_user_id should be the Thai2Drive user_id. Fall back to aliases
+    # and subscriber_attributes.$email so existing anonymous RC users can still sync.
     user = None
     if app_user_id:
         user = await db.users.find_one({"id": app_user_id}, {"_id": 0, "id": 1, "email": 1})
     if not user:
-        # Try aliases list (RC may include email as an alias)
         for alias in aliases:
             if "@" in str(alias):
                 user = await db.users.find_one(
@@ -1307,6 +1327,13 @@ async def revenuecat_webhook(request: Request):
                 )
                 if user:
                     break
+    if not user:
+        email_attr = subscriber_attributes.get("$email") or subscriber_attributes.get("email") or {}
+        email_value = email_attr.get("value") if isinstance(email_attr, dict) else email_attr
+        if email_value and "@" in str(email_value):
+            user = await db.users.find_one(
+                {"email": str(email_value).strip().lower()}, {"_id": 0, "id": 1, "email": 1}
+            )
 
     now_iso = datetime.now(timezone.utc).isoformat()
 
@@ -1326,8 +1353,9 @@ async def revenuecat_webhook(request: Request):
 
     # ── Handle event ──────────────────────────────────────────────────────────
     handled = True
-    grant_events   = {"INITIAL_PURCHASE", "RENEWAL", "UNCANCELLATION", "SUBSCRIBER_ALIAS"}
-    revoke_events  = {"CANCELLATION", "EXPIRATION", "BILLING_ISSUE"}
+    grant_events = {"INITIAL_PURCHASE", "RENEWAL", "UNCANCELLATION", "NON_RENEWING_PURCHASE"}
+    pending_events = {"CANCELLATION", "BILLING_ISSUE"}
+    revoke_events = {"EXPIRATION", "REFUND"}
 
     if event_type in grant_events:
         expires_at = None
@@ -1340,7 +1368,7 @@ async def revenuecat_webhook(request: Request):
         update: Dict[str, Any] = {
             "is_premium": True,
             "premium_source": "revenuecat",
-            "premium_plan": subscriber.get("product_id", "mobile"),
+            "premium_plan": product_id,
             "premium_status": "active",
             "premium_updated_at": now_iso,
         }
@@ -1370,18 +1398,47 @@ async def revenuecat_webhook(request: Request):
     elif event_type in revoke_events:
         await db.users.update_one(
             {"id": user_id},
-            {"$set": {"is_premium": False, "premium_status": "canceled",
+            {"$set": {"is_premium": False, "premium_status": "expired",
                       "premium_updated_at": now_iso}},
         )
         try:
             await db.subscriptions.update_one(
                 {"user_id": user_id, "source": "revenuecat"},
-                {"$set": {"premium_status": "canceled", "canceled_at": now_iso}},
+                {"$set": {"premium_status": "expired", "expired_at": now_iso}},
             )
         except Exception as exc:
             logger.warning("rc_webhook: subscriptions cancel mirror failed user=%s: %s", user_id, exc)
 
         logger.info("rc_webhook: revoked Premium user=%s event=%s", user_id, event_type)
+
+    elif event_type in pending_events:
+        status = "billing_issue" if event_type == "BILLING_ISSUE" else "canceled"
+        update: Dict[str, Any] = {
+            "premium_source": "revenuecat",
+            "premium_plan": product_id,
+            "premium_status": status,
+            "premium_updated_at": now_iso,
+        }
+        if expiry_ts:
+            try:
+                expires_at = datetime.fromtimestamp(expiry_ts / 1000, tz=timezone.utc)
+                update["premium_expires_at"] = expires_at.isoformat()
+                update["is_premium"] = expires_at > datetime.now(timezone.utc)
+            except Exception:
+                pass
+        await db.users.update_one({"id": user_id}, {"$set": update})
+        try:
+            await db.subscriptions.update_one(
+                {"user_id": user_id, "source": "revenuecat"},
+                {"$set": {**update, "user_id": user_id, "source": "revenuecat"},
+                 "$setOnInsert": {"created_at": now_iso}},
+                upsert=True,
+            )
+        except Exception as exc:
+            logger.warning("rc_webhook: subscriptions pending mirror failed user=%s: %s", user_id, exc)
+
+        logger.info("rc_webhook: marked Premium pending user=%s event=%s status=%s",
+                    user_id, event_type, status)
 
     else:
         # Informational events (e.g. PRODUCT_CHANGE, TRANSFER) — acknowledge without action

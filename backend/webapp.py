@@ -189,7 +189,7 @@ a { color:inherit; text-decoration:none; }
   box-shadow: inset 0 1px 1px rgba(255,255,255,0.8), 0 2px 4px rgba(0,0,0,0.04);
 }
 .bn-icon {
-  font-size: 24px; line-height: 1; 
+  font-size: 24px; line-height: 1;
   transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), filter 0.25s;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5)) contrast(1.15) saturate(1.25);
   display: inline-block;
@@ -3675,12 +3675,14 @@ a { color:inherit; text-decoration:none; }
     <div class="screen" id="screenSettings">
       <div class="settings-inner">
 
-        <!-- Profile hero -->
-        <div class="settings-profile-hero">
-          <div class="settings-avatar" id="settAvatar">👤</div>
-          <div class="settings-profile-name" id="settName">–</div>
-          <div class="settings-profile-email" id="settEmail">–</div>
-          <div class="settings-profile-badges account-badges" id="settBadges"></div>
+        <div class="settings-section">
+          <div class="settings-label" data-key="acct">Konto</div>
+          <div class="settings-profile-hero">
+            <div class="settings-avatar" id="settAvatar">👤</div>
+            <div class="settings-profile-name" id="settName">–</div>
+            <div class="settings-profile-email" id="settEmail">–</div>
+            <div class="settings-profile-badges account-badges" id="settBadges"></div>
+          </div>
         </div>
 
         <!-- Språk -->
@@ -3710,7 +3712,7 @@ a { color:inherit; text-decoration:none; }
 
         <!-- Lyd -->
         <div class="settings-section">
-          <div class="settings-label" data-key="sound">Lyd</div>
+          <div class="settings-label" data-key="sound">Lyd og vibrasjon</div>
           <div class="settings-card">
             <div class="settings-row">
               <div class="sr-icon green">🔊</div>
@@ -3737,16 +3739,16 @@ a { color:inherit; text-decoration:none; }
             <div class="settings-row" style="flex-wrap:wrap; gap:8px;">
               <div class="sr-icon green">🎙️</div>
               <div class="sr-label" style="flex:1; min-width:80px;">
-                <div class="sr-title">Opplesing — Tempo</div>
-                <div class="sr-sub">Hastighet på talesyntese</div>
+                <div class="sr-title" data-key="tts_tempo">Opplesing – Tempo</div>
+                <div class="sr-sub" data-key="tts_tempo_sub">Hastighet på talesyntese</div>
               </div>
               <div id="settSpdBtns" style="display:flex;gap:5px;flex-wrap:wrap;"></div>
             </div>
             <div class="settings-row" style="flex-wrap:wrap; gap:8px;">
               <div class="sr-icon green">🔈</div>
               <div class="sr-label" style="flex:1; min-width:80px;">
-                <div class="sr-title">Opplesing — Volum</div>
-                <div class="sr-sub">Lydstyrke på talesyntese</div>
+                <div class="sr-title" data-key="tts_volum">Opplesing – Volum</div>
+                <div class="sr-sub" data-key="tts_volum_sub">Lydstyrke på talesyntese</div>
               </div>
               <div id="settVolBtns" style="display:flex;gap:5px;flex-wrap:wrap;"></div>
             </div>
@@ -3771,20 +3773,20 @@ a { color:inherit; text-decoration:none; }
 
         <!-- Om appen -->
         <div class="settings-section">
-          <div class="settings-label">Om appen</div>
+          <div class="settings-label" data-key="about_app">Om appen</div>
           <div class="settings-card">
             <div class="settings-row">
               <div class="sr-icon gray">📱</div>
               <div class="sr-label">
                 <div class="sr-title">Thai2Drive Web</div>
-                <div class="sr-sub">Teoriprøven på thai for Norge</div>
+                <div class="sr-sub" data-key="about_app_sub">Teoriprøven på thai for Norge</div>
               </div>
               <div style="color:var(--muted);font-size:.78rem;font-weight:700;background:rgba(255,255,255,.07);padding:3px 9px;border-radius:20px;">v2.0</div>
             </div>
           </div>
         </div>
 
-        <button class="logout-btn" onclick="logout()">🚪 &nbsp;Logg ut</button>
+        <button class="logout-btn" onclick="logout()">🚪 &nbsp;<span data-key="logout">Logg ut</span></button>
 
       </div>
     </div>
@@ -3863,7 +3865,7 @@ a { color:inherit; text-decoration:none; }
     <div id="studiebokEditModal" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.6);align-items:center;justify-content:center;">
       <div style="background:var(--card);border-radius:16px;padding:24px;width:min(92vw,520px);max-height:80vh;overflow-y:auto;display:flex;flex-direction:column;gap:12px;">
         <div style="font-weight:700;font-size:1.05rem;" data-key="studybook_edit_chapter">✏️ Rediger kapittel</div>
-        
+
         <div style="border:1px solid var(--border);border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:8px;">
           <div style="font-weight:600;font-size:.9rem;color:var(--orange);">🇳🇴 Norsk (NO)</div>
           <label style="font-size:.8rem;color:var(--muted);">Tittel (NO)</label>
@@ -3902,7 +3904,7 @@ a { color:inherit; text-decoration:none; }
     <!-- ═══ END SCREEN ═══ -->
     <div class="screen" id="screenEnd">
       <div class="end-wrap">
-        <div class="end-score-quiet" id="endScoreQuiet">0 av 0 riktige</div>
+        <div class="end-score-quiet" id="endScoreQuiet"></div>
         <div class="end-heading" id="endHeading" data-key="result_done">Øvelsen er ferdig.</div>
         <p class="end-body" id="endBody"></p>
         <div class="end-focus" id="endFocus" style="display:none">
@@ -3912,8 +3914,8 @@ a { color:inherit; text-decoration:none; }
           </div>
         </div>
         <div class="end-btns">
-          <button class="end-btn-pri" onclick="retryQuiz()">Øv igjen</button>
-          <button class="end-btn-sec" onclick="showTab('home')" data-key="backhome">Tilbake til hjem</button>
+          <button class="end-btn-pri" onclick="retryQuiz()" data-key="result_retry">Prøv igjen</button>
+          <button class="end-btn-sec" onclick="showTab('home')" data-key="home">Hjem</button>
           <button class="end-btn-sec" onclick="showTab('cats')" data-key="pickcat">Velg kategori</button>
         </div>
       </div>
@@ -3923,35 +3925,36 @@ a { color:inherit; text-decoration:none; }
     <div class="screen" id="screenPaywall">
       <div class="paywall-card">
         <div class="paywall-gem">💎</div>
-        <div class="paywall-title" data-key="pw_title">Lås opp <span>Thai2Drive Premium</span></div>
-        <div class="paywall-sub" data-key="pw_sub">Du har brukt 5 gratis spørsmål. Oppgrader for ubegrenset tilgang!</div>
+        <div class="paywall-title"><span data-key="pw_title"></span></div>
+        <div class="paywall-sub" data-key="pw_sub"></div>
         <ul class="paywall-features">
-          <li><span class="pf-check">✓</span><span data-key="pw_f1">Ubegrenset spørsmål og kategorier</span></li>
-          <li><span class="pf-check">✓</span><span data-key="pw_f2">Fullstendig eksamensmode (45 spørsmål)</span></li>
-          <li><span class="pf-check">✓</span><span data-key="pw_f3">Daglig test og øvingsmodus</span></li>
-          <li><span class="pf-check">✓</span><span data-key="pw_f4">Historikk og fremgangsstatistikk</span></li>
-          <li><span class="pf-check">✓</span><span data-key="pw_f5">Trafikkskilt-galleri</span></li>
+          <li><span class="pf-check">✓</span><span data-key="pw_f1"></span></li>
+          <li><span class="pf-check">✓</span><span data-key="pw_f2"></span></li>
+          <li><span class="pf-check">✓</span><span data-key="pw_f3"></span></li>
+          <li><span class="pf-check">✓</span><span data-key="pw_f4"></span></li>
+          <li><span class="pf-check">✓</span><span data-key="pw_f5"></span></li>
         </ul>
         <div class="paywall-price-row">
           <div class="paywall-price-card selected" onclick="selectPlan('monthly',this)" data-plan="monthly">
-            <div class="ppc-period" data-key="pw_month">Månedlig</div>
-            <div class="ppc-price" data-price-plan="monthly">99 kr</div>
-            <div class="ppc-per" data-key="pw_per_month">per måned</div>
+            <div class="ppc-period" data-key="pw_month"></div>
+            <div class="ppc-price" data-price-plan="monthly">99 NOK</div>
+            <div class="ppc-per" data-key="pw_per_month"></div>
           </div>
           <div class="paywall-price-card" onclick="selectPlan('three_months',this)" data-plan="three_months" style="position:relative">
-            <div class="ppc-badge" data-key="pw_best_value">Best verdi</div>
-            <div class="ppc-period" data-key="pw_three_months">3 måneder</div>
-            <div class="ppc-price" data-price-plan="three_months">249 kr</div>
-            <div class="ppc-per" data-key="pw_per_three_months">per 3 måneder</div>
+            <div class="ppc-badge" data-key="pw_best_value"></div>
+            <div class="ppc-period" data-key="pw_three_months"></div>
+            <div class="ppc-price" data-price-plan="three_months">249 NOK</div>
+            <div class="ppc-per" data-key="pw_per_three_months"></div>
           </div>
           <div class="paywall-price-card" onclick="selectPlan('lifetime',this)" data-plan="lifetime">
-            <div class="ppc-period" data-key="pw_lifetime">Livstid</div>
-            <div class="ppc-price" data-price-plan="lifetime">699 kr</div>
-            <div class="ppc-per" data-key="pw_per_lifetime">engangsbetaling</div>
+            <div class="ppc-period" data-key="pw_lifetime"></div>
+            <div class="ppc-price" data-price-plan="lifetime">699 NOK</div>
+            <div class="ppc-per" data-key="pw_lifetime_note"></div>
           </div>
         </div>
-        <button class="paywall-buy-btn" onclick="buyPremium()">⭐ <span data-key="pw_buy">Kjøp Premium</span></button>
-        <button class="paywall-skip" onclick="paywallSkip()" data-key="pw_skip">Fortsett gratis</button>
+        <button class="paywall-buy-btn" onclick="buyPremium()">⭐ <span data-key="pw_buy"></span></button>
+        <button class="paywall-skip" onclick="restorePurchase()" data-key="pw_restore_purchase"></button>
+        <div class="paywall-skip" style="border:none;background:transparent;cursor:default" data-key="pw_cancel_anytime"></div>
       </div>
     </div>
 
@@ -4240,8 +4243,8 @@ var UI = {
   accuracy:    {th:'ความแม่นยำ',        no:'NØYAKTIGHET',      en:'ACCURACY'},
   premium_on:  {th:'⭐ พรีเมียม',       no:'⭐ Premium',        en:'⭐ Premium'},
   premium_sub: {th:'คุณมีสิทธิ์ทุกฟีเจอร์', no:'Du har tilgang til alle funksjoner', en:'You have access to all features'},
-  acct:        {th:'บัญชี',             no:'KONTO',            en:'ACCOUNT'},
-  language:    {th:'ภาษา',              no:'SPRÅK',            en:'LANGUAGE'},
+  acct:        {th:'บัญชี',             no:'Konto',            en:'Account'},
+  language:    {th:'ภาษา',              no:'Språk',            en:'Language'},
   teacher:     {th:'Michael',            no:'Michael',          en:'Michael'},
   teacher_name:{th:'ครูสอนขับรถ Michael', no:'Michael Trafikklærer', en:'Michael Driving Teacher'},
   teacher_sub: {th:'ถามคำถามเกี่ยวกับการจราจร', no:'Still et spørsmål om trafikk', en:'Ask a question about traffic'},
@@ -4256,20 +4259,22 @@ var UI = {
   tsp_theory:  {th:'ช่วยเรื่องข้อสอบ', no:'Hjelp med teoriprøven', en:'Help with the theory test'},
   tsp_app:     {th:'ถามเกี่ยวกับแอป', no:'Spør om Thai2Drive',   en:'Ask about Thai2Drive'},
   choose_topic:{th:'🚗 เลือกหัวข้อ:',  no:'🚗 Velg tema:',        en:'🚗 Choose topic:'},
-  q_lang:      {th:'ภาษาคำถาม',         no:'Spørsmålsspråk',   en:'Question language'},
+  q_lang:      {th:'ภาษาของคำถาม',      no:'Spørsmålsspråk',   en:'Question language'},
   q_lang_sub:  {th:'เลือกภาษาสำหรับคำถามและคำตอบ', no:'Velg språk for spørsmål og svar', en:'Choose language for questions and answers'},
-  sound:       {th:'เสียง',             no:'LYD',              en:'SOUND'},
+  sound:       {th:'เสียงและระบบสั่น',  no:'Lyd og vibrasjon', en:'Sound and vibration'},
   sfx:         {th:'เอฟเฟกต์เสียง',     no:'Lydeffekter',      en:'Sound effects'},
-  sfx_sub:     {th:'เสียงเมื่อถูก/ผิด',  no:'Pling ved riktig, buzz ved feil', en:'Pling correct, buzz wrong'},
-  style:       {th:'สไตล์',             no:'Stil',             en:'Style'},
-  style_sub:   {th:'การแสดงผลเมื่อตอบ', no:'Tilbakemelding når du svarer', en:'Feedback when answering'},
+  sfx_sub:     {th:'เสียงเตือนเมื่อตอบถูกและตอบผิด', no:'Pling ved riktig, buzz ved feil', en:'Pling on correct, buzz on wrong'},
+  style:       {th:'รูปแบบ',            no:'Stil',             en:'Style'},
+  style_sub:   {th:'การตอบสนองเมื่อคุณตอบคำถาม', no:'Tilbakemelding når du svarer', en:'Feedback style when answering'},
   soft:        {th:'นุ่มนวล',            no:'Myk',              en:'Soft'},
-  strong:      {th:'เข้มข้น',            no:'Sterk',            en:'Strong'},
-  appearance:  {th:'รูปลักษณ์',          no:'UTSEENDE',         en:'APPEARANCE'},
+  strong:      {th:'หนักแน่น',           no:'Sterk',            en:'Strong'},
+  appearance:  {th:'รูปลักษณ์',          no:'Utseende',         en:'Appearance'},
   theme:       {th:'ธีม',               no:'Tema',             en:'Theme'},
   light:       {th:'สว่าง',              no:'Lys',              en:'Light'},
   dark:        {th:'มืด',               no:'Mørk',             en:'Dark'},
-  auto:        {th:'อัตโนมัติ',           no:'Auto',             en:'Auto'},
+  auto:        {th:'ตามระบบ',            no:'Auto',             en:'Auto'},
+  about_app:   {th:'เกี่ยวกับแอป',       no:'Om appen',         en:'About the app'},
+  about_app_sub:{th:'แบบทดสอบข้อเขียนใบขับขี่นอร์เวย์เป็นภาษาไทย', no:'Teoriprøven på thai for Norge', en:'Norwegian driving theory test in Thai'},
   logout:      {th:'ออกจากระบบ',         no:'Logg ut',          en:'Log out'},
   history:     {th:'ประวัติ',            no:'Historikk',        en:'History'},
   signs:       {th:'ป้ายจราจร',          no:'Trafikkskilt',     en:'Traffic Signs'},
@@ -4346,19 +4351,26 @@ var UI = {
   history_login:{th:'เข้าสู่ระบบเพื่อดูประวัติ', no:'Logg inn for å se historikk', en:'Log in to see history'},
   history_empty:{th:'ยังไม่มีประวัติควิซ<br>ทำควิซให้เสร็จ แล้วผลลัพธ์จะแสดงที่นี่', no:'Ingen quiz-historikk ennå.<br>Fullfør en quiz for å se resultatene her.', en:'No quiz history yet.<br>Finish a quiz to see results here.'},
   history_load_error:{th:'โหลดประวัติไม่ได้', no:'Kunne ikke laste historikk.', en:'Could not load history.'},
+  retry_category_unavailable:{th:'ไม่พบหมวดหมู่นี้แล้ว', no:'Fant ikke denne kategorien lenger.', en:'Could not find this category anymore.'},
   result_saved:{th:'บันทึกผลแล้ว ✓',        no:'Resultat lagret ✓', en:'Result saved ✓'},
   result_save_failed:{th:'บันทึกผลไม่สำเร็จ: ', no:'Lagring feilet: ', en:'Save failed: '},
   result_score:{th:'{correct} จาก {total} ถูก', no:'{correct} av {total} riktige', en:'{correct} of {total} correct'},
   result_focus:{th:'หัวข้อแนะนำให้ฝึก',      no:'Anbefalt øvelse',  en:'Recommended practice'},
   result_done:{th:'ทำแบบฝึกเสร็จแล้ว',       no:'Øvelsen er ferdig.', en:'Practice finished.'},
+  result_retry:{th:'ลองอีกครั้ง',             no:'Prøv igjen',        en:'Try again'},
   result_exam_pass_head:{th:'ผ่าน',          no:'Bestått.',         en:'Passed.'},
   result_exam_pass_body:{th:'คุณพร้อมสำหรับการสอบทฤษฎีแล้ว ลองทำอีกหนึ่งรอบเพื่อเพิ่มความมั่นใจ', no:'Du er klar for teoriprøven. Gjennomfør gjerne enda en runde for å bygge selvtillit.', en:'You are ready for the theory test. Do one more round to build confidence.'},
   result_exam_fail_head:{th:'ครั้งนี้ยังไม่ผ่าน', no:'Ikke bestått denne gangen.', en:'Not passed this time.'},
+  result_exam_focus_body:{th:'ควรใช้เวลาเพิ่มกับเรื่อง {topic} ฝึกต่อแล้วลองอีกครั้ง', no:'Det er verdt å bruke litt mer tid på {topic}. Øv på det og prøv igjen.', en:'It is worth spending more time on {topic}. Practice it and try again.'},
   result_solid_head:{th:'ทำได้มั่นคง',       no:'Solid gjennomkjøring.', en:'Solid run-through.'},
   result_solid_body:{th:'คุณเริ่มจำสถานการณ์จราจรและตัดสินใจได้ถูกต้อง นี่คือสิ่งสำคัญในการขับจริง', no:'Du gjenkjenner trafikksituasjonene godt og vurderer riktig. Det er det som teller i praksis.', en:'You recognize traffic situations well and make sound decisions. That is what matters in real driving.'},
+  result_short_practice_body:{th:'คุณทำได้ดี ลองชุดที่ยาวขึ้นเพื่อยืนยันความเข้าใจ', no:'Du traff godt. Prøv et lengre sett for å bekrefte forståelsen.', en:'You did well. Try a longer set to confirm the understanding.'},
   result_right_way_head:{th:'คุณมาถูกทางแล้ว', no:'Du er på rett vei.', en:'You are on the right track.'},
+  result_right_way_focus_body:{th:'ส่วนใหญ่เข้าใจดีแล้ว มาฝึกเพิ่มอีกนิดกับ {topic}', no:'Forståelsen er god på det meste. La oss bruke litt mer tid på {topic}.', en:'Most of the understanding is good. Let us spend a bit more time on {topic}.'},
+  result_right_way_body:{th:'บางสถานการณ์ยังไม่ติดแน่น ซึ่งเป็นเรื่องปกติ ฝึกต่ออย่างใจเย็น', no:'Noen situasjoner har ikke satt seg helt ennå — det er normalt. Fortsett å øve.', en:'Some situations have not fully settled yet. That is normal. Keep practicing.'},
   result_more_head:{th:'มาฝึกเพิ่มอีกนิด',   no:'La oss øve litt mer.', en:'Let us practice a bit more.'},
   result_more_body:{th:'กฎจราจรไม่ได้ติดตัวในรอบเดียว ฝึกต่ออย่างใจเย็น ความเข้าใจจะค่อย ๆ ชัดขึ้น', no:'Trafikkreglene sitter ikke alltid med én runde. Prøv igjen — det tar tid å bygge forståelse.', en:'Traffic rules do not always settle after one round. Keep practicing calmly; understanding grows with time.'},
+  result_more_focus_body:{th:'ควรดูเรื่อง {topic} ให้ละเอียดขึ้น อ่านคำอธิบายอย่างใจเย็น', no:'Det er verdt å gå litt nærmere inn på {topic}. Les forklaringene grundig.', en:'It is worth looking more closely at {topic}. Read the explanations carefully.'},
   result_learn_head:{th:'ยังมีเรื่องให้เรียนรู้เพิ่ม', no:'Her er det mer å lære.', en:'There is more to learn here.'},
   result_learn_body:{th:'ไม่ต้องกังวล ความเข้าใจสร้างได้ทีละขั้น ใช้คำอธิบายอย่างใจเย็น', no:'Ikke bekymre deg — forståelse bygges gradvis. Bruk forklaringene aktivt og ta det steg for steg.', en:'Do not worry. Understanding builds gradually. Use the explanations calmly, step by step.'},
   lang_updated:{th:'อัปเดตภาษาแล้ว',        no:'Språk oppdatert',  en:'Language updated'},
@@ -4457,8 +4469,8 @@ var UI = {
   sign_fallback_exam:{th:'ในข้อสอบ ให้ถามว่า: ป้ายนี้เปลี่ยนการกระทำของฉันตรงนี้อย่างไร?', no:'På prøven: spør hva skiltet endrer for handlingen din akkurat her.', en:'In the exam, ask what this sign changes about your action right here.'},
   sign_fallback_memory:{th:'จำเป็นลำดับ: รูปทรง → สี → สัญลักษณ์ → สิ่งที่ต้องทำ', no:'Husk rekkefølgen: form → farge → symbol → handling.', en:'Remember the order: shape → colour → symbol → action.'},
   // Paywall
-  pw_title:    {th:'ปลดล็อก Thai2Drive Premium', no:'Lås opp Thai2Drive Premium', en:'Unlock Thai2Drive Premium'},
-  pw_sub:      {th:'คุณใช้ 5 คำถามฟรีแล้ว อัปเกรดเพื่อใช้งานไม่จำกัด!', no:'Du har brukt 5 gratis spørsmål. Oppgrader for ubegrenset tilgang!', en:'You have used 5 free questions. Upgrade for unlimited access!'},
+  pw_title:    {th:'ปลดล็อกการเข้าถึงทั้งหมด', no:'Lås opp full tilgang', en:'Unlock full access'},
+  pw_sub:      {th:'คุณได้ใช้สิทธิ์ทดลองเรียนฟรีครบแล้ว', no:'Du har brukt gratisprøven', en:'You have used your free trial'},
   pw_f1:       {th:'คำถามและหมวดหมู่ไม่จำกัด', no:'Ubegrenset spørsmål og kategorier', en:'Unlimited questions and categories'},
   pw_f2:       {th:'โหมดสอบเต็มรูปแบบ (45 ข้อ)', no:'Fullstendig eksamensmode (45 spørsmål)', en:'Full exam mode (45 questions)'},
   pw_f3:       {th:'ทดสอบรายวันและโหมดฝึกซ้อม', no:'Daglig test og øvingsmodus', en:'Daily test and practice mode'},
@@ -4470,8 +4482,11 @@ var UI = {
   pw_per_month:{th:'ต่อเดือน', no:'per måned', en:'per month'},
   pw_per_three_months:{th:'ต่อ 3 เดือน', no:'per 3 måneder', en:'per 3 months'},
   pw_per_lifetime:{th:'จ่ายครั้งเดียว', no:'engangsbetaling', en:'one-time payment'},
-  pw_best_value:{th:'คุ้มที่สุด', no:'Best verdi', en:'Best value'},
-  pw_buy:      {th:'ซื้อ Premium', no:'Kjøp Premium', en:'Buy Premium'},
+  pw_best_value:{th:'คุ้มค่าที่สุด – ประหยัด 34%', no:'Best verdi – spar 34%', en:'Best value – save 34%'},
+  pw_lifetime_note:{th:'จ่ายครั้งเดียว – ใช้งานได้ตลอดไป', no:'Betal én gang – bruk for alltid', en:'Pay once – use forever'},
+  pw_buy:      {th:'ปลดล็อกพรีเมียมเพื่อเข้าถึงแบบไม่จำกัด', no:'Lås opp Premium for ubegrenset tilgang', en:'Unlock Premium for unlimited access'},
+  pw_restore_purchase:{th:'กู้คืนการซื้อ', no:'Gjenopprett kjøp', en:'Restore purchase'},
+  pw_cancel_anytime:{th:'ยกเลิกเมื่อไหร่ก็ได้', no:'Avslutt når som helst', en:'Cancel anytime'},
   pw_skip:     {th:'ใช้ต่อแบบฟรี', no:'Fortsett gratis', en:'Continue free'},
   // Auth
   auth_login_tab:  {th:'เข้าสู่ระบบ',    no:'Logg inn',      en:'Log in'},
@@ -4499,10 +4514,10 @@ var UI = {
   sb_cancel:       {th:'ยกเลิก',         no:'Avbryt',        en:'Cancel'},
   sb_save:         {th:'บันทึก',         no:'Lagre',         en:'Save'},
   sb_not_available:{th:'เนื้อหานี้ยังไม่มีในภาษาของคุณ', no:'Dette innholdet er ikke tilgjengelig på ditt språk ennå.', en:'This content is not available in your language yet.'},
-  tts_tempo:       {th:'การอ่านออกเสียง — ความเร็ว', no:'Opplesing — Tempo', en:'Read Aloud — Speed'},
-  tts_tempo_sub:   {th:'ความเร็วของเสียงสังเคราะห์', no:'Hastighet på talesyntese', en:'Speed of speech synthesis'},
-  tts_volum:       {th:'การอ่านออกเสียง — ระดับเสียง', no:'Opplesing — Volum', en:'Read Aloud — Volume'},
-  tts_volum_sub:   {th:'ความดังของเสียงสังเคราะห์', no:'Lydstyrke på talesyntese', en:'Volume of speech synthesis'},
+  tts_tempo:       {th:'ความเร็วในการอ่านออกเสียง', no:'Opplesing – Tempo', en:'Read aloud – Tempo'},
+  tts_tempo_sub:   {th:'ความเร็วของระบบสังเคราะห์เสียง', no:'Hastighet på talesyntese', en:'Text-to-speech speed'},
+  tts_volum:       {th:'ระดับเสียงของการอ่านออกเสียง', no:'Opplesing – Volum', en:'Read aloud – Volume'},
+  tts_volum_sub:   {th:'ระดับความดังของระบบสังเคราะห์เสียง', no:'Lydstyrke på talesyntese', en:'Text-to-speech volume'},
 
   // ── Språkrenhet: nøkler for tekst som tidligere var hardkodet på norsk ──────
   missing_text:    {th:'ยังไม่มีข้อมูลภาษาไทย', no:'Ikke oversatt ennå', en:'Not translated yet'},
@@ -4663,9 +4678,9 @@ function applyUILang() {
   if (sbInfo && (!_sbLoaded || !_sbChapters.length)) sbInfo.textContent = t('studybook_loading');
   if (sbInfo && _sbLoaded && _sbChapters.length) sbRender();
   // end screen buttons
-  var er = document.querySelector('.end-btn-pri'); if(er) er.innerHTML = t('retry');
+  var er = document.querySelector('.end-btn-pri'); if(er) er.textContent = t('result_retry');
   var endSecBtns = document.querySelectorAll('.end-btn-sec');
-  if (endSecBtns[0]) endSecBtns[0].innerHTML = t('backhome');
+  if (endSecBtns[0]) endSecBtns[0].textContent = t('home');
   if (endSecBtns[1]) endSecBtns[1].innerHTML = t('pickcat');
   // next buttons
   document.querySelectorAll('#qNextBig,#qNextMobile').forEach(function(b){ b.textContent = t('next'); });
@@ -4785,16 +4800,60 @@ var CAT_NAMES = {
 var CAT_NO = {};
 Object.keys(CAT_NAMES).forEach(function(k){ CAT_NO[k] = CAT_NAMES[k].no; });
 
+var CAT_ALIASES = {
+  'สิทธิการผ่านทาง': 'Right of Way',
+  'Alle kategorier': '',
+  'ทุกหมวดหมู่': '',
+  'All Categories': ''
+};
+
+var _CAT_REV = (function() {
+  var rev = {};
+  function add(raw, key) {
+    if (typeof raw !== 'string') return;
+    var s = raw.trim();
+    if (!s) return;
+    rev[s] = key;
+    rev[s.toLowerCase()] = key;
+  }
+  Object.keys(CAT_NAMES).forEach(function(key) {
+    var entry = CAT_NAMES[key] || {};
+    add(key, key);
+    add(entry.no, key);
+    add(entry.th, key);
+    add(entry.en, key);
+  });
+  Object.keys(CAT_ALIASES).forEach(function(alias) {
+    add(alias, CAT_ALIASES[alias]);
+  });
+  return rev;
+})();
+
+function catKey(raw) {
+  if (raw === null || raw === undefined) return '';
+  var s = String(raw).trim();
+  if (!s) return '';
+  return _CAT_REV[s] || _CAT_REV[s.toLowerCase()] || '';
+}
+
 function catName(raw) {
-  var entry = CAT_NAMES[raw];
-  if (!entry) return raw;
+  var key = catKey(raw);
+  if (!key) {
+    if (raw !== null && raw !== undefined && String(raw).trim()) console.warn('[i18n] unknown category', raw);
+    return '';
+  }
+  var entry = CAT_NAMES[key];
+  if (!entry) {
+    console.warn('[i18n] missing CAT_NAMES entry', key);
+    return '';
+  }
   return pickStrict(entry) || missingText();
 }
 
 var PREMIUM_PRICING = {
-  monthly: { display:'99 kr', period:{no:'per måned', th:'ต่อเดือน', en:'per month'} },
-  three_months: { display:'249 kr', period:{no:'per 3 måneder', th:'ต่อ 3 เดือน', en:'per 3 months'} },
-  lifetime: { display:'699 kr', period:{no:'engangsbetaling', th:'จ่ายครั้งเดียว', en:'one-time payment'} }
+  monthly: { display:'99 NOK', period:{no:'per måned', th:'ต่อเดือน', en:'per month'} },
+  three_months: { display:'249 NOK', period:{no:'per 3 måneder', th:'ต่อ 3 เดือน', en:'per 3 months'} },
+  lifetime: { display:'699 NOK', period:{no:'engangsbetaling', th:'จ่ายครั้งเดียว', en:'one-time payment'} }
 };
 
 // ════════════════════════════════════════════
@@ -4911,24 +4970,24 @@ var _libraryActiveTab = 'videos';
 async function loadLibrary() {
   var container = document.getElementById('libraryContent');
   if (!container) return;
-  
+
   if (_videosCached && _podcastsCached) {
     renderLibrary();
     return;
   }
-  
+
   container.innerHTML = '<div class="loading-wrap"><div class="spinner"></div></div>';
   try {
     var pVideo = api('GET', '/api/videos/for-topic?limit=50');
     var pPodcast = api('GET', '/api/podcasts/for-topic?limit=50');
-    
+
     var res = await Promise.all([pVideo, pPodcast]);
     var dVideo = res[0];
     var dPodcast = res[1];
-    
+
     _videosCached = dVideo.videos || dVideo || [];
     _podcastsCached = dPodcast.podcasts || dPodcast || [];
-    
+
     renderLibrary();
   } catch(e) {
     container.innerHTML = '<div style="padding:24px;text-align:center;color:var(--muted);">' + escH(t('lib_load_failed')) + '</div>';
@@ -4938,13 +4997,13 @@ async function loadLibrary() {
 function renderLibrary() {
   var container = document.getElementById('libraryContent');
   if (!container) return;
-  
+
   var items = _libraryActiveTab === 'videos' ? _videosCached : _podcastsCached;
   if (!items || items.length === 0) {
     container.innerHTML = '<div class="empty-state" style="padding:40px;text-align:center;color:var(--muted);">' + escH(t('empty_no_content')) + '</div>';
     return;
   }
-  
+
   var html = '';
   var cardCount = 0;
   if (_libraryActiveTab === 'videos') {
@@ -5527,23 +5586,23 @@ async function saveStudiebokChapter() {
   var video_url   = document.getElementById('sbEditVideoUrl').value.trim();
   if (!title_no || !content_no) { toast(t('sb_empty_fields')); return; }
   try {
-    await api('PUT', '/api/studiebok/' + _sbEditOrder, { 
-      title_no, content_no, 
-      title_th, content_th, 
-      title_en, content_en, 
-      image_url, video_url 
+    await api('PUT', '/api/studiebok/' + _sbEditOrder, {
+      title_no, content_no,
+      title_th, content_th,
+      title_en, content_en,
+      image_url, video_url
     });
     // Update local cache
     var idx = _sbChapters.findIndex(function(c) { return c.order === _sbEditOrder; });
-    if (idx >= 0) { 
-      _sbChapters[idx].title_no = title_no; 
-      _sbChapters[idx].content_no = content_no; 
-      _sbChapters[idx].title_th = title_th; 
-      _sbChapters[idx].content_th = content_th; 
-      _sbChapters[idx].title_en = title_en; 
-      _sbChapters[idx].content_en = content_en; 
-      _sbChapters[idx].image_url = image_url; 
-      _sbChapters[idx].video_url = video_url; 
+    if (idx >= 0) {
+      _sbChapters[idx].title_no = title_no;
+      _sbChapters[idx].content_no = content_no;
+      _sbChapters[idx].title_th = title_th;
+      _sbChapters[idx].content_th = content_th;
+      _sbChapters[idx].title_en = title_en;
+      _sbChapters[idx].content_en = content_en;
+      _sbChapters[idx].image_url = image_url;
+      _sbChapters[idx].video_url = video_url;
     }
     closeStudiebokModal();
     sbRender();
@@ -5622,12 +5681,16 @@ function renderPremiumPricing() {
   Object.keys(PREMIUM_PRICING || {}).forEach(function(planId) {
     var plan = PREMIUM_PRICING[planId] || {};
     var priceEl = document.querySelector('[data-price-plan="' + planId + '"]');
-    if (priceEl && plan.display) priceEl.textContent = plan.display;
+    var displayByPlan = { monthly:'99 NOK', three_months:'249 NOK', lifetime:'699 NOK' };
+    if (priceEl) priceEl.textContent = displayByPlan[planId] || plan.display || priceEl.textContent;
     var card = document.querySelector('[data-plan="' + planId + '"]');
-    var periodEl = card ? card.querySelector('.ppc-per') : null;
-    if (periodEl && plan.period) {
-      periodEl.textContent = pickStrict(plan.period) || periodEl.textContent;
-    }
+    if (!card) return;
+    var labelEl = card.querySelector('.ppc-period');
+    if (labelEl) labelEl.textContent = pickStrict(plan.label) || t(labelEl.getAttribute('data-key'));
+    var periodEl = card.querySelector('.ppc-per');
+    if (periodEl) periodEl.textContent = t(periodEl.getAttribute('data-key')) || pickStrict(plan.period) || periodEl.textContent;
+    var badgeEl = card.querySelector('.ppc-badge');
+    if (badgeEl) badgeEl.textContent = t(badgeEl.getAttribute('data-key'));
   });
 }
 
@@ -5832,7 +5895,10 @@ async function loadHome() {
         var lpct = Math.round(la.score_percentage || 0);
         var ready = readinessForPct(lpct, false);
         var lmode = modeLabel(la.mode);
-        if (la.category) lmode += ' — ' + catName(la.category);
+        if (la.category) {
+          var laCat = catName(la.category);
+          if (laCat) lmode += ' — ' + laCat;
+        }
         document.getElementById('hrDot').className = 'hr-dot hr-dot-' + ready.cls;
         document.getElementById('hrStatus').textContent = ready.text;
         document.getElementById('hrSub').textContent = lmode;
@@ -6036,7 +6102,7 @@ function updateCarousel(activeIdx, animate, dragAngleOffset) {
 function carouselClick(idx) {
   if (idx === _carouselActive) {
     var cat = _carouselCats[idx];
-    if (cat) startQuiz(escH(String(cat.dbName || '')), cat.title[appLang]);
+    if (cat) startQuiz(String(cat.dbName || ''));
   } else {
     updateCarousel(idx, true);
   }
@@ -6153,7 +6219,7 @@ function renderPaywallSub() {
   var el = document.querySelector('#screenPaywall .paywall-sub');
   if (!el) return;
   var spent = !!(user && user.trial_used === true) && !isTrialActive();
-  el.textContent = spent ? t('trial_ended') : t('pw_sub');
+  el.textContent = t('pw_sub');
 }
 
 // Oppmuntrende varsel de to siste dagene — maks én gang per dag per tilstand.
@@ -6256,10 +6322,25 @@ async function buyPremium() {
   }
 }
 
-function paywallSkip() {
-  hidePaywall();
-  showTab('home');
+async function restorePurchase() {
+  if (!token) {
+    showScreen('screenAuth');
+    return;
+  }
+  try {
+    await refreshCurrentUser();
+    if (isPremium()) {
+      hidePaywall();
+      showTab('home');
+      toast(t('premium_activated_toast'), 4500);
+      return;
+    }
+    toast(t('payment_unconfirmed_toast'), 5000);
+  } catch(e) {
+    toast(t('payment_unconfirmed_toast'), 5000);
+  }
 }
+
 
 async function startExam() {
   if (!isPremium()) { showPaywall(); return; }
@@ -6302,10 +6383,13 @@ function updateTimerLabel(lbl, secs) {
   if (lbl) lbl.textContent = m + ':' + (s < 10 ? '0' : '') + s;
 }
 
-async function startQuiz(catId, catRawName) {
-  currentCat = { id: catId, name: catRawName };
+async function startQuiz(catId) {
+  var key = catKey(catId);
+  currentCat = key ? { id: key, key: key } : null;
   isExamMode = false;
-  await loadQuiz('/api/questions/random?count=30&has_image=true&category=' + encodeURIComponent(catId));
+  var url = '/api/questions/random?count=30&has_image=true';
+  if (key) url += '&category=' + encodeURIComponent(key);
+  await loadQuiz(url);
 }
 
 async function loadQuiz(url) {
@@ -7990,7 +8074,10 @@ function openHistDetail(idx) {
 
   // Mode label
   var modeStr = modeLabel(a.mode);
-  if (a.category) modeStr += ' — ' + catName(a.category);
+  if (a.category) {
+    var detailCat = catName(a.category);
+    if (detailCat) modeStr += ' — ' + detailCat;
+  }
   document.getElementById('hpModeLbl').textContent = modeStr;
 
   // Score headline
@@ -8077,7 +8164,12 @@ function retryAttempt(idx) {
   if (a.mode === 'exam') {
     startExam();
   } else if (a.mode === 'category' && a.category) {
-    startQuiz(a.category, a.category);
+    var retryKey = catKey(a.category);
+    if (retryKey) startQuiz(retryKey);
+    else {
+      console.warn('[i18n] cannot retry unknown category', a.category);
+      toast(t('retry_category_unavailable'));
+    }
   } else {
     startRandomQuiz();
   }
@@ -8122,33 +8214,23 @@ function _buildDebrief(pct, total) {
     } else {
       heading = t('result_exam_fail_head');
       body = topTopic
-        ? (appLang === 'th' ? 'ควรใช้เวลาเพิ่มกับเรื่อง ' + topicLabel(topTopic) + ' ฝึกต่อแล้วลองอีกครั้ง'
-          : appLang === 'en' ? 'It is worth spending more time on ' + topicLabel(topTopic).toLowerCase() + '. Practice it and try again.'
-          : 'Det er verdt å bruke litt mer tid på ' + topTopic.toLowerCase() + '. Øv på det og prøv igjen.')
+        ? tf('result_exam_focus_body', {topic: topicLabel(topTopic)})
         : t('result_more_body');
     }
   } else if (pct >= 85) {
     heading = t('result_solid_head');
     body = total >= 15
       ? t('result_solid_body')
-      : (appLang === 'th' ? 'คุณทำได้ดี ลองชุดที่ยาวขึ้นเพื่อยืนยันความเข้าใจ'
-        : appLang === 'en' ? 'You did well. Try a longer set to confirm the understanding.'
-        : 'Du traff godt. Prøv et lengre sett for å bekrefte forståelsen.');
+      : t('result_short_practice_body');
   } else if (pct >= 65) {
     heading = t('result_right_way_head');
     body = topTopic
-      ? (appLang === 'th' ? 'ส่วนใหญ่เข้าใจดีแล้ว มาฝึกเพิ่มอีกนิดกับ ' + topicLabel(topTopic)
-        : appLang === 'en' ? 'Most of the understanding is good. Let us spend a bit more time on ' + topicLabel(topTopic).toLowerCase() + '.'
-        : 'Forståelsen er god på det meste. La oss bruke litt mer tid på ' + topTopic.toLowerCase() + '.')
-      : (appLang === 'th' ? 'บางสถานการณ์ยังไม่ติดแน่น ซึ่งเป็นเรื่องปกติ ฝึกต่ออย่างใจเย็น'
-        : appLang === 'en' ? 'Some situations have not fully settled yet. That is normal. Keep practicing.'
-        : 'Noen situasjoner har ikke satt seg helt ennå — det er normalt. Fortsett å øve.');
+      ? tf('result_right_way_focus_body', {topic: topicLabel(topTopic)})
+      : t('result_right_way_body');
   } else if (pct >= 40) {
     heading = t('result_more_head');
     body = topTopic
-      ? (appLang === 'th' ? 'ควรดูเรื่อง ' + topicLabel(topTopic) + ' ให้ละเอียดขึ้น อ่านคำอธิบายอย่างใจเย็น'
-        : appLang === 'en' ? 'It is worth looking more closely at ' + topicLabel(topTopic).toLowerCase() + '. Read the explanations carefully.'
-        : 'Det er verdt å gå litt nærmere inn på ' + topTopic.toLowerCase() + '. Les forklaringene grundig.')
+      ? tf('result_more_focus_body', {topic: topicLabel(topTopic)})
       : t('result_more_body');
   } else {
     heading = t('result_learn_head');
@@ -8191,7 +8273,7 @@ function showEnd() {
       client_attempt_id: clientAttemptId,
       device_id: deviceId,
       mode: mode,
-      category: currentCat ? currentCat.name : null,
+      category: currentCat && currentCat.key ? currentCat.key : null,
       total_questions: total,
       correct_answers: qScore,
       score_percentage: pct,
@@ -8234,7 +8316,7 @@ function showEnd() {
 }
 
 function retryQuiz() {
-  if (currentCat) startQuiz(currentCat.id, currentCat.name);
+  if (currentCat) startQuiz(currentCat.id);
   else startRandomQuiz();
 }
 
@@ -8476,6 +8558,10 @@ function setLang(lang) {
   var quizScreen = document.getElementById('screenQuiz');
   if (quizScreen && quizScreen.classList.contains('active') && questions.length) {
     renderQuestion();
+  }
+  var endScreen = document.getElementById('screenEnd');
+  if (endScreen && endScreen.classList.contains('active') && questions.length) {
+    showEnd();
   }
   // Re-render bookmarks if active
   var bmScreen = document.getElementById('screenBookmarks');
@@ -8732,17 +8818,17 @@ function _buildAssistantContent(text, container) {
       var capNo = (imgMatch[2] || '').trim();
       var capTh = (imgMatch[3] || '').trim();
       var capEn = (imgMatch[4] || '').trim();
-      
+
       var caption = appLang === 'th' ? capTh : appLang === 'en' ? capEn : capNo;
       var wrap = document.createElement('div');
       wrap.className = 'img-section';
       wrap.style.cssText = 'margin-top:10px; margin-bottom:10px; border-radius:11px; overflow:hidden; border:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.02); padding:8px;';
-      
+
       var img = document.createElement('img');
       img.src = imgUrl;
       img.style.cssText = 'width:100%; border-radius:8px; display:block; height:auto;';
       wrap.appendChild(img);
-      
+
       if (caption) {
         var capEl = document.createElement('div');
         capEl.style.cssText = 'font-size:0.75rem; color:var(--muted); margin-top:6px; text-align:center;';
@@ -8888,7 +8974,7 @@ function _teacherAppendBubble(role, text) {
     bubble.style.display = 'flex';
     bubble.style.flexDirection = 'column';
     _buildAssistantContent(text, bubble);
-    
+
     // Append TTS Speaker button
     var ttsBtn = document.createElement('button');
     ttsBtn.className = 'tm-bubble-tts';
@@ -9003,7 +9089,9 @@ async function teacherSend(overrideMsg, customDisplayMsg) {
           if (Array.isArray(stats.by_category)) {
             stats.by_category.forEach(function(c) {
               var catDisplayName = catName(c.category);
-              lines.push("- " + catDisplayName + " (" + c.category + "): " + Math.round(c.pct) + "% accuracy (" + c.total_correct + "/" + c.total_q + " correct, " + c.attempts + " attempts)");
+              // AI context may keep the raw stats key as fallback; this is not visible UI text.
+              var catContextName = catDisplayName || c.category || 'unknown category';
+              lines.push("- " + catContextName + " (" + c.category + "): " + Math.round(c.pct) + "% accuracy (" + c.total_correct + "/" + c.total_q + " correct, " + c.attempts + " attempts)");
             });
           }
           statsText = lines.join("\n");
@@ -9529,7 +9617,7 @@ function speakSign() {
   if (expl) text += '. ' + expl;
   text = text.trim();
   if (!text) return;
-  
+
   stopAllSpeech();
   _unlockAudioPlayback();
   _ensureBackendAudio();
