@@ -5332,17 +5332,16 @@ async def ensure_indexes():
         logging.getLogger("indexes").warning("Usage index creation skipped: %s", exc)
 
 
-# ── TTS-ruting: Michaels klonede stemme på alle språk ──────────────────────
-#   th-TH  → ElevenLabs "Ai Mike" (Michaels klonede stemme)
-#   nb-NO  → ElevenLabs "Ai Mike" (Michaels klonede stemme)
-#   en-US  → ElevenLabs "Ai Mike" (Michaels klonede stemme)
-# Google Cloud TTS er kun nødfallback når ElevenLabs svikter, og logges da som
-# feil — det er aldri ønsket lydopplevelse.
+# ── TTS-ruting: skybasert MP3 for web ───────────────────────────────────────
+#   th-TH  → Google Cloud TTS først, fordi nettleser-TTS ofte mangler thai.
+#   nb-NO  → ElevenLabs "Ai Mike" først, Google som nødfallback.
+#   en-US  → ElevenLabs "Ai Mike" først, Google som nødfallback.
+# Thai faller tilbake til ElevenLabs hvis Google feiler eller mangler nøkkel.
 #
 # Språkisolasjonen ligger i TEKSTEN, ikke i leverandøren: hvert språk sender sin
 # egen tekst, og cache-nøkkelen holder språkene fysisk adskilt.
 
-# Google Cloud TTS voice mapping — brukes kun ved nødfallback
+# Google Cloud TTS voice mapping — thai er primærrute, øvrige språk er fallback
 _GOOGLE_TTS_VOICES = {
     "th-TH": "th-TH-Chirp3-HD-Achird",   # Male Chirp3 HD — Google deprecated th-TH-Standard-C
     "nb-NO": "nb-NO-Wavenet-A",
@@ -5362,7 +5361,9 @@ _DEFAULT_ELEVENLABS_VOICE_ID = "eulvRsWu7NGAUD1FzMVP"
 # den dekker norsk og engelsk like godt. Modellen inngår i cache-nøkkelen, så et
 # modellbytte gir nye filer i stedet for gammel, feiluttalt lyd.
 _DEFAULT_ELEVENLABS_MODEL_ID = "eleven_v3"
-
+_TTS_BREAKER_FAILURE_LIMIT = int(os.environ.get("TTS_BREAKER_FAILURE_LIMIT", "3"))
+_TTS_BREAKER_COOLDOWN_SECONDS = int(os.environ.get("TTS_BREAKER_COOLDOWN_SECONDS", "300"))
+_TTS_PROVIDER_STATE: Dict[str, Dict[str, Any]] = {}
 
 def _elevenlabs_voice_id() -> str:
     """Klonet Voice ID — env-overstyrbar, med Ai Mike som fallback."""
@@ -5373,6 +5374,56 @@ def _elevenlabs_model_id() -> str:
     """ElevenLabs-modell — env-overstyrbar uten kodeendring."""
     return (os.environ.get("ELEVENLABS_MODEL_ID") or "").strip() or _DEFAULT_ELEVENLABS_MODEL_ID
 
+
+def _tts_provider_key(provider: str, lang: str) -> str:
+    return f"{provider}:{lang}"
+
+
+def _tts_provider_status(provider: str, lang: str) -> dict:
+    state = _TTS_PROVIDER_STATE.get(_tts_provider_key(provider, lang), {})
+    now = time.time()
+    disabled_until = float(state.get("disabled_until") or 0)
+    cooldown_remaining = max(0, int(disabled_until - now))
+    return {
+        "provider": provider,
+        "lang": lang,
+        "failures": int(state.get("failures") or 0),
+        "circuit_open": cooldown_remaining > 0,
+        "cooldown_remaining_seconds": cooldown_remaining,
+        "last_status": state.get("last_status"),
+        "last_error": state.get("last_error"),
+        "last_failure_at": state.get("last_failure_at"),
+    }
+
+
+def _tts_provider_available(provider: str, lang: str) -> bool:
+    return not _tts_provider_status(provider, lang)["circuit_open"]
+
+
+def _tts_record_success(provider: str, lang: str) -> None:
+    _TTS_PROVIDER_STATE[_tts_provider_key(provider, lang)] = {
+        "failures": 0,
+        "disabled_until": 0,
+        "last_status": "ok",
+        "last_error": None,
+        "last_failure_at": None,
+    }
+
+
+def _tts_record_failure(provider: str, lang: str, error: str, status_code: Optional[int] = None) -> None:
+    key = _tts_provider_key(provider, lang)
+    state = _TTS_PROVIDER_STATE.get(key, {})
+    failures = int(state.get("failures") or 0) + 1
+    disabled_until = 0
+    if failures >= _TTS_BREAKER_FAILURE_LIMIT:
+        disabled_until = time.time() + _TTS_BREAKER_COOLDOWN_SECONDS
+    _TTS_PROVIDER_STATE[key] = {
+        "failures": failures,
+        "disabled_until": disabled_until,
+        "last_status": status_code or "error",
+        "last_error": str(error)[:240],
+        "last_failure_at": datetime.now(timezone.utc).isoformat(),
+    }
 
 def _tts_cache_path(provider: str, voice: str, lang: str, text: str) -> str:
     """
@@ -5389,12 +5440,25 @@ def _tts_cache_path(provider: str, voice: str, lang: str, text: str) -> str:
     return os.path.join(cache_dir, f"{cache_key}.mp3")
 
 
+def _stream_mp3_file(path: str, headers: Optional[dict] = None):
+    from fastapi.responses import StreamingResponse
+
+    def chunks():
+        with open(path, "rb") as f:
+            while True:
+                data = f.read(64 * 1024)
+                if not data:
+                    break
+                yield data
+
+    return StreamingResponse(chunks(), media_type="audio/mpeg", headers=headers or {})
+
+
 async def _google_tts(text: str, lang: str, google_key: str, cache_path: str):
     """Helper — synthesize speech via Google Cloud TTS and return MP3."""
     import base64
     import httpx
     from fastapi import HTTPException
-    from fastapi.responses import FileResponse
 
     voice_name = _GOOGLE_TTS_VOICES.get(lang, "th-TH-Standard-A")
     gurl = f"https://texttospeech.googleapis.com/v1/text:synthesize?key={google_key}"
@@ -5410,6 +5474,7 @@ async def _google_tts(text: str, lang: str, google_key: str, cache_path: str):
             r = await client.post(gurl, json=gpayload, headers=gheaders, timeout=30.0)
             if r.status_code != 200:
                 logger.error("Google TTS API error %d: %s", r.status_code, r.text)
+                _tts_record_failure("google", lang, r.text, r.status_code)
                 raise HTTPException(status_code=r.status_code, detail=f"Google TTS API error: {r.text}")
 
             data = r.json()
@@ -5418,9 +5483,9 @@ async def _google_tts(text: str, lang: str, google_key: str, cache_path: str):
             with open(cache_path, "wb") as f:
                 f.write(audio_bytes)
 
-            return FileResponse(
+            _tts_record_success("google", lang)
+            return _stream_mp3_file(
                 cache_path,
-                media_type="audio/mpeg",
                 headers={"X-TTS-Provider": "google", "X-TTS-Voice": voice_name},
             )
 
@@ -5428,17 +5493,21 @@ async def _google_tts(text: str, lang: str, google_key: str, cache_path: str):
         raise he
     except Exception as e:
         logger.error("Google TTS synthesis failed: %s", e)
+        _tts_record_failure("google", lang, str(e))
         raise HTTPException(status_code=500, detail=f"TTS synthesis failed: {str(e)}")
 
 
+@app.get("/api/tts/stream")
+@app.post("/api/tts/stream")
 @app.get("/api/tts")
 @app.post("/api/tts")
+@api_router.get("/tts/stream")
+@api_router.post("/tts/stream")
 @api_router.get("/tts")
 @api_router.post("/tts")
 async def text_to_speech(request: Request, text: Optional[str] = None, lang: Optional[str] = None):
     import httpx
     from fastapi import HTTPException
-    from fastapi.responses import FileResponse
 
     # `lang` MÅ defaulte til None, ikke "th-TH". En truthy default gjør
     # `lang or body.get("lang")` til en no-op, og da ble all POST-tekst lest med
@@ -5472,8 +5541,31 @@ async def text_to_speech(request: Request, text: Optional[str] = None, lang: Opt
     google_cache_path = _tts_cache_path(
         "google", _GOOGLE_TTS_VOICES.get(lang, "th-TH-Standard-A"), lang, text
     )
+    google_primary_failed = False
 
-    # ── Alle språk → Michaels klonede ElevenLabs-stemme ────────────────────
+    # Thai på web skal alltid være skybasert MP3 via Google først. Nettleserens
+    # SpeechSynthesis mangler ofte th-TH, og ElevenLabs brukes bare som fallback.
+    if lang == "th-TH":
+        if google_key and _tts_provider_available("google", lang):
+            if os.path.exists(google_cache_path):
+                return _stream_mp3_file(
+                    google_cache_path,
+                    headers={"X-TTS-Provider": "google-primary-cached"},
+                )
+            try:
+                return await _google_tts(text, lang, google_key, google_cache_path)
+            except HTTPException as e:
+                google_primary_failed = True
+                logger.error("Google TTS for thai feilet med HTTP %s; prøver ElevenLabs fallback.", e.status_code)
+            except Exception as e:
+                google_primary_failed = True
+                logger.error("Google TTS for thai feilet; prøver ElevenLabs fallback: %s", e)
+        elif google_key:
+            logger.error("Google TTS circuit breaker er åpen for thai; prøver ElevenLabs fallback.")
+        else:
+            logger.error("GOOGLE_API_KEY mangler for thai TTS; prøver ElevenLabs fallback.")
+
+    # ── Norsk/engelsk → Michaels klonede ElevenLabs-stemme. Thai kommer hit kun som fallback. ──
     voice_id = _elevenlabs_voice_id()
     model_id = _elevenlabs_model_id()
     # Modellen er en del av leverandør-nøkkelen: bytter vi modell for å fikse
@@ -5481,9 +5573,8 @@ async def text_to_speech(request: Request, text: Optional[str] = None, lang: Opt
     cloned_cache_path = _tts_cache_path(f"elevenlabs:{model_id}", voice_id, lang, text)
 
     if os.path.exists(cloned_cache_path):
-        return FileResponse(
+        return _stream_mp3_file(
             cloned_cache_path,
-            media_type="audio/mpeg",
             headers={"X-TTS-Provider": "elevenlabs-cached", "X-TTS-Voice": voice_id},
         )
 
@@ -5494,6 +5585,8 @@ async def text_to_speech(request: Request, text: Optional[str] = None, lang: Opt
             "faller tilbake til Google-stemme. Sett nokkelen i miljovariablene.",
             lang,
         )
+    elif not _tts_provider_available("elevenlabs", lang):
+        logger.error("ElevenLabs circuit breaker er åpen for %s; prøver neste TTS-rute.", lang)
     else:
         try:
             url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}"
@@ -5515,40 +5608,44 @@ async def text_to_speech(request: Request, text: Optional[str] = None, lang: Opt
                 if r.status_code == 200:
                     with open(cloned_cache_path, "wb") as f:
                         f.write(r.content)
+                    _tts_record_success("elevenlabs", lang)
                     logger.info(
                         "TTS %s → ElevenLabs klonet stemme %s (modell %s)",
                         lang, voice_id, model_id,
                     )
-                    return FileResponse(
+                    return _stream_mp3_file(
                         cloned_cache_path,
-                        media_type="audio/mpeg",
                         headers={"X-TTS-Provider": "elevenlabs", "X-TTS-Voice": voice_id},
                     )
                 # Logges som ERROR, ikke WARNING: dette er tap av Michaels stemme.
+                _tts_record_failure("elevenlabs", lang, r.text, r.status_code)
                 logger.error(
                     "KLONET STEMME FEILET: ElevenLabs svarte %d for voice_id=%s modell=%s (%s). Svar: %s",
                     r.status_code, voice_id, model_id, lang, r.text[:300],
                 )
         except Exception as e:
+            _tts_record_failure("elevenlabs", lang, str(e))
             logger.error(
                 "KLONET STEMME FEILET: ElevenLabs-kall kastet %s for voice_id=%s (%s)",
                 e, voice_id, lang,
             )
 
-    # ── Nodfallback: Google Cloud TTS, i egen cache-nokkel ────────────────
-    # Egen nokkel gjor at fallback-lyden ALDRI serveres igjen nar den klonede
-    # stemmen er tilbake — da treffer forespørselen elevenlabs-nokkelen.
+    # ── Nødfallback: Google Cloud TTS, i egen cache-nøkkel ────────────────
+    # Ferdige MP3-filer kan fortsatt serveres selv om provider eller nøkkel er nede.
+    if os.path.exists(google_cache_path):
+        return _stream_mp3_file(
+            google_cache_path,
+            headers={"X-TTS-Provider": "google-fallback-cached"},
+        )
+    if lang == "th-TH" and google_primary_failed:
+        raise HTTPException(status_code=502, detail="Thai TTS feilet hos både Google og ElevenLabs.")
     if not google_key:
         raise HTTPException(
             status_code=500,
             detail="Ingen TTS-leverandor tilgjengelig (verken ELEVENLABS_API_KEY eller GOOGLE_API_KEY er satt).",
         )
-    if os.path.exists(google_cache_path):
-        return FileResponse(
-            google_cache_path,
-            media_type="audio/mpeg",
-            headers={"X-TTS-Provider": "google-fallback-cached"},
-        )
+    if not _tts_provider_available("google", lang):
+        raise HTTPException(status_code=503, detail="Google TTS er midlertidig utilgjengelig; prøv igjen om litt.")
     return await _google_tts(text, lang, google_key, google_cache_path)
 
 
@@ -5564,11 +5661,26 @@ async def tts_status():
     model_id = _elevenlabs_model_id()
 
     def route(lang: str) -> dict:
+        google_health = _tts_provider_status("google", lang)
+        eleven_health = _tts_provider_status("elevenlabs", lang)
+        google_ready = has_google and not google_health["circuit_open"]
+        eleven_ready = has_eleven and not eleven_health["circuit_open"]
+        if lang == "th-TH":
+            return {
+                "intended": f"google:{_GOOGLE_TTS_VOICES[lang]}",
+                "actual": f"google:{_GOOGLE_TTS_VOICES[lang]}" if google_ready
+                          else (f"elevenlabs:{voice_id} (FALLBACK)" if eleven_ready else "cache-or-none"),
+                "fallback_provider": "elevenlabs" if eleven_ready else None,
+                "ok": google_ready or eleven_ready,
+                "providers": {"google": google_health, "elevenlabs": eleven_health},
+            }
         return {
             "intended": f"elevenlabs:{voice_id}",
-            "actual": f"elevenlabs:{voice_id}" if has_eleven
-                      else (f"google:{_GOOGLE_TTS_VOICES[lang]} (FALLBACK)" if has_google else "ingen"),
-            "ok": has_eleven,
+            "actual": f"elevenlabs:{voice_id}" if eleven_ready
+                      else (f"google:{_GOOGLE_TTS_VOICES[lang]} (FALLBACK)" if google_ready else "cache-or-none"),
+            "fallback_provider": "google" if google_ready else None,
+            "ok": eleven_ready or google_ready,
+            "providers": {"elevenlabs": eleven_health, "google": google_health},
         }
 
     return {
@@ -5576,7 +5688,10 @@ async def tts_status():
         "google_key_configured": has_google,
         "cloned_voice_id": voice_id,
         "elevenlabs_model_id": model_id,
-        "fallback_provider": "google" if has_google else None,
+        "circuit_breaker": {
+            "failure_limit": _TTS_BREAKER_FAILURE_LIMIT,
+            "cooldown_seconds": _TTS_BREAKER_COOLDOWN_SECONDS,
+        },
         "languages": {lang: route(lang) for lang in ("th-TH", "nb-NO", "en-US")},
     }
 

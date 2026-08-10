@@ -4588,8 +4588,15 @@ function readinessForPct(pct, compact) {
   if (pct >= 60) return {cls:'ok', text:(compact ? '▲ ' : '') + t('almost_ready'), color:'var(--orange)'};
   return {cls:'bad', text:(compact ? '↺ ' : '') + t('practice_more'), color:'#EF4444'};
 }
+function localeForLangKey(lang) {
+  return lang === 'th' ? 'th-TH' : lang === 'en' ? 'en-US' : 'nb-NO';
+}
 function localeForLang() {
-  return appLang === 'th' ? 'th-TH' : appLang === 'en' ? 'en-US' : 'nb-NO';
+  return localeForLangKey(appLang);
+}
+function ttsStreamUrl(text, lang) {
+  var locale = lang ? localeForLangKey(lang) : localeForLang();
+  return '/api/tts/stream?lang=' + encodeURIComponent(locale) + '&text=' + encodeURIComponent(text || '');
 }
 
 function applyUILang() {
@@ -8339,8 +8346,7 @@ function speakQ() {
   }
   _unlockAudioPlayback();
   _ensureBackendAudio();
-  var langParam = appLang === 'th' ? 'th-TH' : appLang === 'no' ? 'nb-NO' : 'en-US';
-  _backendAudio.src = '/api/tts?lang=' + langParam + '&text=' + encodeURIComponent(text);
+  _backendAudio.src = ttsStreamUrl(text, appLang);
   _backendAudio.playbackRate = ttsRate || 1.0;
   _backendAudio.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
   ttsPlaying = true;
@@ -8390,8 +8396,7 @@ function speakText(text) {
   }
   _unlockAudioPlayback();
   _ensureTeacherAudio();
-  var langParam = appLang === 'th' ? 'th-TH' : appLang === 'no' ? 'nb-NO' : 'en-US';
-  _teacherAudio.src = '/api/tts?lang=' + langParam + '&text=' + encodeURIComponent(clean);
+  _teacherAudio.src = ttsStreamUrl(clean, appLang);
   _teacherAudio.playbackRate = ttsRate || 1.0;
   _teacherAudio.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
   _teacherTtsPlaying = true;
@@ -8573,14 +8578,7 @@ function setLang(lang) {
     loadHistory();
   }
   if (previousLang && previousLang !== lang) {
-    if (!_teacherHasUserMsg) {
-      resetTeacherForLanguage();
-    } else {
-      var tNameEl = document.getElementById('teacherNameLbl');
-      if (tNameEl) tNameEl.textContent = t('teacher_name');
-      var tInput = document.getElementById('teacherInput');
-      if (tInput) tInput.placeholder = t('teacher_placeholder');
-    }
+    resetTeacherForLanguage();
   }
   var teacherScreen = document.getElementById('screenTeacher');
   if (teacherScreen && teacherScreen.classList.contains('active')) {
@@ -8728,6 +8726,12 @@ function resetTeacherForLanguage() {
   _teacherHasUserMsg = false;
   _teacherWelcomeLang = null;
   _teacherTyping = false;
+  _teacherActiveSessionType = 'normal';
+  _teacherQuizSessionId = null;
+  _teacherNormalHtml = '';
+  _teacherQuizHtml = '';
+  _teacherNormalHasUserMsg = false;
+  _teacherQuizHasUserMsg = false;
   var input = document.getElementById('teacherInput');
   if (input) input.value = '';
   var msgs = document.getElementById('teacherMessages');
@@ -9621,8 +9625,7 @@ function speakSign() {
   stopAllSpeech();
   _unlockAudioPlayback();
   _ensureBackendAudio();
-  var langParam = lang === 'th' ? 'th-TH' : lang === 'en' ? 'en-US' : 'nb-NO';
-  _backendAudio.src = '/api/tts?lang=' + langParam + '&text=' + encodeURIComponent(text);
+  _backendAudio.src = ttsStreamUrl(text, lang);
   _backendAudio.playbackRate = ttsRate || 1.0;
   _backendAudio.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
   _backendAudio.play().catch(function(err){ console.error('Sign TTS error:', err); });
@@ -9704,8 +9707,7 @@ function speakSignAiText() {
   stopAllSpeech();
   _unlockAudioPlayback();
   _ensureTeacherAudio();
-  var langParam = window._spAiLang === 'th' ? 'th-TH' : window._spAiLang === 'en' ? 'en-US' : 'nb-NO';
-  _teacherAudio.src = '/api/tts?lang=' + langParam + '&text=' + encodeURIComponent(text);
+  _teacherAudio.src = ttsStreamUrl(text, window._spAiLang || appLang);
   _teacherAudio.playbackRate = ttsRate || 1.0;
   _teacherAudio.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
   _teacherAudio.play().catch(function(err){ console.error('Sign AI TTS error:', err); });
