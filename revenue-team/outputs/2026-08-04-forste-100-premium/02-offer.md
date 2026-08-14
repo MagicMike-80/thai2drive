@@ -2,37 +2,49 @@
 agent: offer-architect
 kjøring: 2026-08-04-forste-100-premium
 input: business-brief.md, 00-brief.md, 01-market-signals.md
-second-pass-score: 3,7
+second-pass-score: 4,2
+revidert: 2026-08-04 — omskrivingsrunde etter Michaels beslutninger
 åpne spørsmål: >
-  1) Bestillingen ba meg bekrefte 199 kr/mnd. Jeg kan ikke. Live fallback-pris er 99 kr/mnd
-     (backend/server.py:146-155). Se seksjon «Verifisering av bestillingen».
-  2) Gebyret på 480 kr er fortsatt [UVERIFISERT]. Michael må åpne
-     vegvesen.no/forerkort/ta-forerkort/gebyr/ før tallet trykkes noe sted.
-  3) Hva koster en godkjent thai-tolk til teoriprøven? Uten det tallet mangler tilbudet
+  1) LØST. Michael har spikret 99 / 249 / 699. Det er identisk med det som kjøres i
+     produksjon og med min egen anbefaling (tidligere FORSLAG P1). 199-scenariet er
+     fjernet fra dokumentet.
+  2) LØST som premiss. TRIAL_DAYS = 7 er en kjernekomponent, ikke en fotnote.
+     Hele tilbudet er bygget om rundt gratisuken. Se «Gratisuken er tilbudet».
+  3) Gebyret er fortsatt [UVERIFISERT]. Nytt forsøk 2026-08-04 feilet: vegvesen.no er
+     blokkert av nettverksproxyen (EGRESS_BLOCKED), samme vegg som agent 1 traff.
+     Michael må åpne siden selv. Ingen tall er trykket noe sted i mellomtiden.
+  4) Hva koster en godkjent thai-tolk til teoriprøven? Uten det tallet mangler tilbudet
      sitt sterkeste regnestykke. Jeg har lagt inn formelen, ikke et gjettet beløp.
-  4) Jeg fant ingen billing-portal i backend. Hvordan sier en månedskunde faktisk opp?
-  5) Gratisnivået (10 spørsmål/dag, uten sluttdato) er i praksis vår største konkurrent.
-     Krever en produktbeslutning, ikke en tekstendring.
+  5) Avmelding og oppsigelse er tildelt Codex (backend). Sekvensen i 04 kan ikke sendes
+     før /api/unsubscribe finnes. Dette er nå en blokkering med eier, ikke et åpent spørsmål.
 ---
 
 # Tilbud — Thai2Drive Premium, første 100 kunder
 
-> **Til Michael, før du leser videre:** du ba meg bekrefte at prismodellen er optimalisert
-> til 199 / 249 / 699. Jeg kan ikke bekrefte det, av to grunner. Prisen som kjøres i
-> produksjon er ikke 199. Og hvis den ble 199 uten at de to andre prisene flyttes, slutter
-> pristrappen å henge sammen. Begge deler er regnet ut under, med kilde i koden.
+> **Til Michael:** prisen er avgjort og dokumentet er skrevet om etter den. 99 / 249 / 699
+> står fast. Det er de samme tallene som kjøres i produksjon i dag, så tilbudet under
+> beskriver produktet slik det faktisk er — ikke en foreslått fremtid. Den andre store
+> endringen er gratisuken: `TRIAL_DAYS = 7` er løftet fra en detalj ingen av oss hadde
+> sett, til selve motoren i tilbudet.
 
 ---
 
 ## Verifisering av bestillingen
 
-### Funn 1 — månedsprisen i bestillingen finnes ikke i produkt
+### Funn 1 — prisen er nå bekreftet, og den stemmer med koden
 
-| Plan | Bestillingen sa | Det som ligger i koden | Stemmer? |
+Den opprinnelige bestillingen ba om 199 kr/mnd. Michael har korrigert dette til 99 kr/mnd.
+Det er verdt å merke seg **hvorfor** korrigeringen gikk denne veien: 99 er ikke en nedjustering,
+det er tallet som allerede kjøres i produksjon.
+
+| Plan | Vedtatt | Det som ligger i koden | Stemmer? |
 |---|---|---|---|
-| Månedlig | 199 kr | **99 kr** | ✗ |
-| 3 måneder | 249 kr | 249 kr | ✓ |
-| Livstid | 699 kr | 699 kr | ✓ |
+| Månedlig | **99 kr** | 99 kr | ✓ |
+| 3 måneder | **249 kr** (Beste verdi) | 249 kr | ✓ |
+| Livstid | **699 kr** | 699 kr | ✓ |
+
+**Ingen kodeendring er nødvendig for prisen.** Det er hele poenget — markedsføringen kan
+starte i dag uten at Anti eller Codex rører Stripe.
 
 Verifisert av meg i repoet:
 - `backend/server.py:146-174` — `PUBLIC_PRICING_FALLBACK`: `monthly.amount = 99`,
@@ -140,24 +152,52 @@ Dette er en sunn trapp. Rabatten er stor nok til å belønne den som binder seg,
 til at månedsprisen fortsatt er et ekte valg. Livstid er nesten tre ganger pakken — et reelt
 hopp, som skal føles som en beslutning.
 
-### Slik ser den ut med 199 / 249 / 699
+### Hvorfor 3-månederspakken er den riktige å dytte mot
 
-| Regnestykke | Utregning | Svar |
-|---|---|---|
-| 3 måneder kjøpt månedsvis | 3 × 199 | 597 kr |
-| 3-månederspakken | uendret | 249 kr |
-| Rabatt | (597 − 249) / 597 | **58,3 %** |
-| Effektiv månedspris i pakken | 249 / 3 | 83 kr — **41,7 % av månedsprisen** |
-| Hvor lenge må du bruke appen før pakken lønner seg? | 249 / 199 | **1,25 måneder** |
-| Livstid delt på pakken | 699 / 249 | 2,81 × |
+Michael har pekt ut 249 kr som den planen elevene skal ledes mot, av en grunn som ikke er
+prispsykologi i det hele tatt: **tre måneder er normal øvingstid.** Pakken er ikke et
+rabattknep, den er den ærlige lengden på jobben.
 
-Den avgjørende linjen er den nest nederste. **Alle som tror de trenger appen i mer enn fem
-uker, velger pakken.** Målgruppen har en tremånedersfrist på førerkortet [K12] og har ofte
-strøket før — ingen av dem tror de er ferdige på fem uker.
+Det gjør salgsargumentet enkelt, og sant:
 
-Da er 199 kr ikke en pris. Det er et prisskilt ved siden av det du faktisk selger. Det kan
-være et bevisst valg (ankerpris), men da skal vi kalle det det, og vi skal vite at vi i
-praksis har to produkter, ikke tre.
+> Du kjøper ikke tre måneder fordi det er billigere.
+> Du kjøper tre måneder fordi det er så lang tid dette tar.
+
+Rabatten på 16,2 % er stor nok til å belønne den som binder seg, og liten nok til at
+månedsprisen fortsatt er et ekte valg for den som bare skal ta igjen et hull. Trappen
+henger sammen fordi ingen av de tre trinnene er et blindspor.
+
+---
+
+## Gratisuken er tilbudet
+
+Dette er den største endringen i denne omskrivingen, og den kom fra agent 4.
+
+`TRIAL_DAYS = 7` (`backend/server.py:53`, brukt i 752-775 og 2072) gir **full Premium-tilgang
+i sju dager ved registrering.** Funksjonen er aktiv i produksjon i dag. Ingen av de tre
+foregående agentene visste om den, og tilbudet var skrevet som om betalingsmuren møter
+brukeren med én gang. Det gjør den ikke.
+
+**Hva dette endrer, konkret:**
+
+| Uten gratisuken (slik 01–03 var skrevet) | Med gratisuken (slik det faktisk er) |
+|---|---|
+| Vi må overbevise om verdi før kjøp | Vi lar produktet demonstrere verdien selv |
+| Argumentet er et løfte | Argumentet er en erfaring eleven allerede har hatt |
+| Risikofjerner må konstrueres | Risikofjerneren finnes allerede, gratis |
+| Kjøpsøyeblikket er ukjent | Kjøpsøyeblikket er **dag 8**, og det er datostyrt |
+
+Det sterkeste ved gratisuken er ikke at den er gratis. Det er at den lar eleven møte
+**Michael V5 på morsmålet** før noen ber om penger. Målgruppen har aldri opplevd en
+trafikklærer som forklarer på thai. Det kan ikke selges med en setning — det må erfares.
+Sju dager er nok til å erfare det.
+
+**Konsekvensen for alt vi skriver:** vi selger ikke tilgang. Vi selger *fortsettelsen* av
+noe eleven allerede har begynt på. Det er en helt annen og mye lettere samtale.
+
+> **Blokkering:** dag 8 er i dag udokumentert. Det finnes ingen tekst noe sted for øyeblikket
+> gratisuken tar slutt og eleven faller fra full tilgang til 10 spørsmål per dag. Det er det
+> skarpeste frafallspunktet i hele reisen. Se `04-conversion-system.md`, seksjon «Hullet på dag 8».
 
 ### Hva dette gjør med inntekt per kunde
 
@@ -177,40 +217,41 @@ praksis har to produkter, ikke tre.
 
 Inntekt per kunde: **346 kr**. Månedsplanens andel av inntekten: **17,2 %**.
 
-**B) 199 / 249 / 699, samme 100 betalende kunder**
-`[ANTAKELSE]` fordeling 8 / 62 / 30 — månedsplanen kollapser fordi den er irrasjonell etter
-fem uker. `[ANTAKELSE]` de få som likevel velger måned, betaler 1,3 ganger.
+**B) Hva som faktisk flytter dette tallet**
+
+Prisen er avgjort, så spørsmålet er ikke lenger «hvilken pristrapp gir mest». Det er
+**hvilken bevegelse i fordelingen som er verdt mest** — for det er der pengene ligger.
+
+`[ANTAKELSE]` samme 100 kunder, men fordelingen forskjøvet mot pakken fordi vi anbefaler
+den aktivt og fordi gratisuken har vist eleven hvor lang jobben er:
 
 | Plan | Kunder | Inntekt per kunde | Sum |
 |---|---|---|---|
-| Månedlig 199 | 8 | 199 × 1,3 = 259 | 2 070 |
-| 3 mnd 249 | 62 | 249 | 15 438 |
-| Livstid 699 | 30 | 699 | 20 970 |
-| **Sum** | 100 | | **38 478 kr** |
+| Månedlig 99 | 20 | 99 × 2 = 198 | 3 960 |
+| 3 mnd 249 | 55 | 249 | 13 695 |
+| Livstid 699 | 25 | 699 | 17 475 |
+| **Sum** | 100 | | **35 130 kr** |
 
-Inntekt per kunde: **385 kr**. Månedsplanens andel av inntekten: **5,4 %**.
+Ti kunder flyttet fra måned til pakke gir **+510 kr** — omtrent 1,5 %. Det er lite, og det
+er verdt å si høyt: **fordelingen mellom planene er ikke der pengene er.**
 
-**Les dette to ganger:** inntekten går opp med 11 %, men **ikke én krone av økningen kommer
-fra at månedsprisen ble høyere.** Den kommer fra at folk flytter seg fra måned til pakke og
-livstid. Vi doblet en pris nesten ingen betaler.
+**Der pengene er:** hvor mange som i det hele tatt kommer til paywallen. Går vi fra 100 til
+120 betalende kunder, er det +6 900 kr — fjorten ganger mer enn den mest optimistiske
+omfordelingen mellom planer. Derfor handler resten av dette dokumentet, og hele
+`04-conversion-system.md`, om volum og om dag 8 — ikke om prisskilt.
 
-**Og gevinsten er skjør.** 34 620 / 385 = **89,9**. Faller konverteringen med bare **10 %** —
-fordi 199 kr er det første tallet et nytt øye ser i paywallen — er hele gevinsten borte.
-Under det taper vi penger på endringen.
+### Vedtatt
 
-Vi vet ikke om konverteringen faller. Det er nettopp poenget: vi vet ikke, og forskjellen
-mellom å ha rett og å ta feil er ti prosentpoeng.
+**Prisene står: 99 / 249 / 699.** Ingen kodeendring, ingen Stripe-endring, ingen ventetid.
 
-### Min anbefaling
-
-**Ikke rør prisene ennå.** Ikke fordi 199 er feil, men fordi vi ikke kan vite om det er
-riktig, og fordi det finnes gratis endringer som virker først:
+Det som skal gjøres i stedet, i rekkefølge:
 
 1. Fiks paywall-teksten så den selger det som faktisk er unikt (`FORSLAG T1`, `T2`).
-2. Anbefal riktig pakke til riktig person (`FORSLAG T3`).
-3. Mål i fire uker. *Da* har du grunnlag for en prisbeslutning.
-
-Vil du likevel ha 199 kr/mnd, må de to andre prisene flytte seg. Se `FORSLAG P2`.
+2. Anbefal 3-månederspakken aktivt som normal øvingstid (`FORSLAG T3`).
+3. Tett hullet på dag 8 — det er det eneste stedet i reisen der en varm bruker faller ut
+   uten et ord fra oss.
+4. Mål de fire tallene i `04-conversion-system.md`. Etter fire uker har du ekte
+   konverteringsdata, og da er en prisdiskusjon verdt å ta.
 
 ---
 
@@ -253,6 +294,15 @@ noe de ikke forstår, er «hvordan sier jeg opp?» et kjøpsstoppende spørsmål
 > på Vegvesenets egen side.** Michael må åpne
 > `vegvesen.no/forerkort/ta-forerkort/gebyr/` og bekrefte før dette trykkes noe sted.
 > Én kilde oppga 680 kr (2024) [K20] og én oppga 350 kr [K21]. Spriket er reelt.
+>
+> **Tredje forsøk, 2026-08-04 (omskrivingsrunden):** Michael ba om en uavhengig sjekk.
+> Direkte henting av `vegvesen.no/forerkort/ta-forerkort/gebyr/` feilet med
+> `EGRESS_BLOCKED` — domenet er sperret i nettverksproxyen, ikke bare 403. Søk mot
+> vegvesen.no returnerte riktige sider, men ingen av trefflistene inneholdt selve beløpet.
+> Ett funn er verdt å merke seg: Vegvesenets engelske gebyrside oppgir at satsene gjelder
+> **fra 1. februar 2026**, altså er 2026-satsen en annen enn de eldre kildene våre.
+> **Konklusjon: tallet er fortsatt ikke bekreftet, og er nå trolig utdatert i tillegg.**
+> Michael må lese det selv. Ingen agent har trykket et gjettet beløp noe sted.
 
 ### Hovedregnestykket — det som skal stå i annonsen
 
@@ -461,85 +511,31 @@ måned. **Hva som må måles:** fordelingen mellom de tre planene, fire uker fø
 
 ---
 
-### FORSLAG P1 — behold 99 / 249 / 699 til T1–T3 er målt (min anbefaling)
-`FORSLAG — krever Michaels godkjenning og Antis implementering`
+### VEDTAK P1 — 99 / 249 / 699 står fast
+`VEDTATT av Michael 2026-08-04 — ingen implementering nødvendig`
 
-**Hva:** Ingen prisendring nå.
+**Hva:** Prisene beholdes nøyaktig som de er. De er allerede live i produksjon.
 
-**Hvorfor:** Vi har null konverteringsdata. Å endre pris før vi har målt noe som helst,
-betyr at vi aldri får vite hva som virket. T1–T3 koster ingenting, kan måles på samme trafikk
-og gir grunnlaget en prisbeslutning trenger.
+**Hvorfor dette er den riktige beslutningen, ikke bare den enkleste:**
 
-**Hva som må måles før neste steg:** (1) andel av paywall-visninger som blir kjøp,
+1. **Trappen henger sammen.** 16,2 % rabatt på pakken belønner binding uten å gjøre
+   månedsprisen til en kulisse. Alle tre trinnene er ekte valg.
+2. **249 kr matcher jobben.** Tre måneder er normal øvingstid. Pakken selger seg selv
+   på sannhet, ikke på rabattmatematikk.
+3. **Ingenting må bygges.** Markedsføringen kan starte i dag. Hver dag brukt på å
+   diskutere prisskilt er en dag uten data.
+4. **Vi har null konverteringsdata.** Å endre pris før vi har målt noe, betyr at vi
+   aldri får vite hva som virket.
+
+**Hva som skal måles før prisen tas opp igjen:** (1) kjøp per 100 paywall-visninger,
 (2) fordelingen mellom de tre planene, (3) hvor mange betalende måneder et månedsabonnement
-faktisk varer. Punkt 3 er den eneste ukjente som virkelig avgjør om 199 er riktig.
+faktisk varer, (4) hvor mange som konverterer på dag 8 mot senere. Punkt 4 er ny i denne
+runden og er sannsynligvis den viktigste av dem.
 
----
-
-### FORSLAG P2 — vil Michael ha 199 kr/mnd, må de to andre prisene flytte seg
-`FORSLAG — krever Michaels godkjenning og Antis implementering`
-
-**Prissettet: 199 / 449 / 899**
-
-| Regnestykke | Utregning | Svar |
-|---|---|---|
-| 3 måneder månedsvis | 3 × 199 | 597 kr |
-| Pakkepris | | **449 kr** |
-| Rabatt | (597 − 449) / 597 | 24,8 % — sunn avstand |
-| Effektiv månedspris i pakken | 449 / 3 | 150 kr |
-| Livstid delt på pakken | 899 / 449 | 2,0 × |
-| Måneder før livstid lønner seg mot månedspris | 899 / 199 | 4,5 mnd |
-
-**Hvorfor akkurat disse:** rabatten lander på ca. 25 %, der en pakkerabatt normalt gir mening
-uten å gjøre månedsprisen til en kulisse. Livstid blir nøyaktig dobbelt så dyr som pakken —
-et hopp kunden kan regne ut i hodet, og som er lite nok til at oppsalget er reelt.
-
-**Effekt på inntekt per kunde `[ANTAKELSE]`** (fordeling 20 / 50 / 30, månedskunder betaler
-1,8 ganger):
-
-| Plan | Kunder | Per kunde | Sum |
-|---|---|---|---|
-| 199 | 20 | 358 | 7 164 |
-| 449 | 50 | 449 | 22 450 |
-| 899 | 30 | 899 | 26 970 |
-| **Sum** | 100 | | **56 584 kr** — inntekt per kunde 566 kr |
-
-**Effekt på konvertering:** ned. Hvor mye vet ingen. Det som er verdt å vite er
-smertegrensen: 34 620 / 566 = **61**. Faller konverteringen med mer enn **39 %**, tjener vi
-mindre enn i dag. Det er en bred sikkerhetsmargin — men prisen er nesten doblet for en gruppe
-som allerede betaler 480 kr per forsøk [UVERIFISERT] og kjøretimer på 600–850 kr [K4][K5].
-Jeg ville ikke gjort dette i samme uke som noe annet endres.
-
-**Hva som må måles:** kjøp per 100 paywall-visninger, fire uker før mot fire uker etter, med
-alt annet holdt likt. Skift én ting av gangen, ellers vet du ingenting.
-
-**Michael må ta stilling til:** eksisterende livstidskunder som betalte 699. De skal ikke
-oppleve at prisen «steg rett etter at jeg kjøpte». Det er billigere å si det på forhånd enn å
-svare på det etterpå.
-
----
-
-### FORSLAG P3 — den forsiktige varianten, hvis 199 ikke er hugget i stein
-`FORSLAG — krever Michaels godkjenning og Antis implementering`
-
-**Prissettet: 149 / 299 / 799**
-
-| Regnestykke | Utregning | Svar |
-|---|---|---|
-| 3 måneder månedsvis | 3 × 149 | 447 kr |
-| Pakkepris | | **299 kr** |
-| Rabatt | (447 − 299) / 447 | 33,1 % |
-| Salgsargumentet, i én setning | 149 × 2 = 298 ≈ 299 | **«Tre måneder til prisen av to»** |
-| Livstid delt på pakken | 799 / 299 | 2,67 × |
-| Måneder før livstid lønner seg | 799 / 149 | 5,4 mnd |
-
-**Effekt på inntekt per kunde `[ANTAKELSE]`** (fordeling 25 / 45 / 30, 2,0 betalte måneder):
-7 450 + 13 455 + 23 970 = **44 875 kr** — inntekt per kunde 449 kr.
-Smertegrense: 34 620 / 449 = **77**. Tåler et fall i konvertering på 23 %.
-
-**Hvorfor denne er interessant:** «tre måneder til prisen av to» er et løfte en sjuåring
-forstår, og en pris under 800 kr på livstid holder seg under smertegrensen «én kjøretime»
-[K4][K5]. Den flytter inntekt per kunde 30 % opp med omtrent halvparten av risikoen i P2.
+> **De to alternative prissettene som lå her tidligere (199/449/899 og 149/299/799) er
+> fjernet.** De var utredninger av en bestilling som nå er avgjort i motsatt retning.
+> Å la dem stå ville invitere til å gjenåpne en lukket beslutning. Historikken ligger i
+> git (commit `ae4325a`) hvis regnestykkene trengs igjen.
 
 ---
 
@@ -627,47 +623,49 @@ etter spørsmål 5.
 1. **Aldri «ta teoriprøven på thai».** Prøven finnes ikke på thai [K7]. Bruk
    «Forstå på thai. Kjenn igjen på norsk.»
 2. **Aldri lov bestått.**
-3. **Gebyret 480 kr er `[UVERIFISERT]`.** Ikke i et manus før Michael har åpnet
-   vegvesen.no. Trenger dere et tall før det, bruk kun det som er verifisert i koden:
-   249 kr og 699 kr.
-4. **Prisen dere kan nevne er 99 / 249 / 699** — det som ligger i produksjonskoden. Ikke 199.
-5. **Tremånedersfristen [K12] skal aldri fremstilles som en nedtelling.** Den er en
+3. **Gebyret 480 kr er `[UVERIFISERT]`, og trolig utdatert.** Vegvesenets egne satser
+   gjelder fra 1. februar 2026. Ikke i et manus før Michael har lest tallet selv.
+   Trenger dere et tall før det, bruk kun det som er verifisert i koden: 249 kr og 699 kr.
+4. **Prisen er 99 / 249 / 699.** Vedtatt av Michael, identisk med produksjonskoden.
+   3-månederspakken til 249 kr er den dere skal lede mot — ikke fordi den er billigst,
+   men fordi tre måneder er normal øvingstid.
+5. **Gratisuken er utgangspunktet for alt dere skriver.** `TRIAL_DAYS = 7` gir full
+   Premium ved registrering. Dere selger ikke tilgang — dere selger fortsettelsen av
+   noe eleven allerede har erfart. Kjøpsøyeblikket er **dag 8**.
+6. **Tremånedersfristen [K12] skal aldri fremstilles som en nedtelling.** Den er en
    opplysning, ikke et pressmiddel.
-6. **Tolkeprisen finnes ikke.** Si «du må betale for tolk hver gang du prøver» uten beløp.
+7. **Tolkeprisen finnes ikke.** Si «du må betale for tolk hver gang du prøver» uten beløp.
 
 ---
 
-## Strategic Second Pass
+## Strategic Second Pass — omskrivingsrunde 2026-08-04
 
-| # | Spørsmål | Score | Begrunnelse |
-|---|----------|-------|-------------|
-| 1 | Målgruppe spesifikk | 4/5 | Bytt-ut-testen holder: bytt «thai» med «polsk», og både kjerneløftet og T3 kollapser — polske førerkort byttes inn 1:1, og prøven finnes på språk polsktalende kan velge. Tilbudet er bygget på to fakta som *bare* gjelder denne gruppen. Trekk fordi jeg fortsatt ikke kan navngi tre virkelige personer, og ikke har én setning fra et menneske i målgruppen. Det hullet arvet jeg fra agent 1, og jeg kan ikke tette det med et regneark. |
-| 2 | Smerten akutt | 4/5 | Tremånedersfristen [K12] er en dato med klokke, og 480 kr per strøket forsøk gjør vondt i lommeboka nå. T3 kobler pakkevalget direkte til fristen. Trekk fordi det mest akutte tallet fortsatt er `[UVERIFISERT]` — jeg bygger regnestykket på en sats ingen av oss har lest hos kilden. |
-| 3 | Løftet troverdig | 4/5 | Løftet er avgrenset til noe koden faktisk leverer, hver linje i «Hva kunden får» er sporet til en `is_premium`-flagg i `server.py`, og det farligste løftet i hele prosjektet er fjernet før det nådde et manus. Ingen garantier, ingen superlativer. Trekk fordi tilbudet slik det står **i dag** ikke har noen risikofjerner utover gratisnivået — R2 er et forslag, ikke en realitet — og fordi jeg ikke kan svare kunden på «hvordan sier jeg opp?». |
-| 4 | Lead magnet trekker videre | 3/5 | Jeg leverer ikke lead magneten, men jeg leverer broen den skal lede over: fagordene (tabell B1) → eksamensmodus → 3-månederspakken som dekker akkurat fristen. Trekk, og et ærlig et: gratisnivået på 10 spørsmål per dag i 90 dager kan bære hele forberedelsen alene. G1 peker på løsningen, men den er ikke besluttet. Så lenge gratis er godt nok, er veien fra lead magnet til betaling åpen i teorien og treg i praksis. |
-| 5 | Tjener penger | 4/5 | Veien til betaling kan tegnes: fagord → gratis øving → eksamensmodus låst → «to strøkne forsøk koster mer enn livstid» → kjøp. Regnestykket er sitert, ikke funnet på, og jeg har vist nøyaktig hvor 199 kr-modellen ryker (10 % konverteringsfall spiser hele gevinsten). Trekk fordi hver eneste fordeling og levetid i ARPU-modellen er `[ANTAKELSE]` — jeg leverer en struktur, ikke en prognose, og jeg vil ikke at den skal leses som noe annet. |
-| 6 | Høres interessant ut | 3/5 | «Vi doblet en pris nesten ingen betaler» og «to strøkne forsøk koster mer enn å eie appen for alltid» er linjer jeg ville sendt videre. Men dette er et analysedokument til Michael, ikke salgstekst, og det mangler fortsatt setningen fra et menneske som har strøket. Uten den er tilbudet korrekt og litt kaldt. Agent 3 kan ikke fikse det med bedre ord — det fikses med fem telefonsamtaler. |
+> Scoren under er satt på nytt etter Michaels beslutninger. Jeg har bare hevet de punktene
+> der noe **faktisk** ble bedre. Der hullet er det samme som før, står scoren stille — en
+> beslutning om pris fikser ikke at vi mangler en setning fra et menneske.
 
-**Snitt:** 3,7 — **Svakeste ledd:** #4 og #6
+| # | Spørsmål | Før | Nå | Begrunnelse for endringen |
+|---|----------|-----|-----|---------------------------|
+| 1 | Målgruppe spesifikk | 4/5 | **4/5** | Uendret. Bytt-ut-testen holder fortsatt: bytt «thai» med «polsk» og både kjerneløftet og T3 kollapser. Men jeg kan fortsatt ikke navngi tre virkelige personer, og har ikke én ordrett setning fra målgruppen. Det hullet arvet jeg fra agent 1 og det er ikke tettet. |
+| 2 | Smerten akutt | 4/5 | **4/5** | Uendret. Tremånedersfristen [K12] er fortsatt en dato med klokke. Gebyret er fortsatt `[UVERIFISERT]` — og etter tredje mislykkede forsøk vet vi i tillegg at 2026-satsen er ny, så tallet vi har er trolig feil. Ingen grunn til å heve. |
+| 3 | Løftet troverdig | 4/5 | **5/5** | **Hevet.** Det største trekket var at tilbudet ikke hadde noen risikofjerner utover gratisnivået — R2 var et forslag, ikke virkelighet. Nå vet vi at `TRIAL_DAYS = 7` er i produksjon: sju dager full Premium, gratis, uten kort. Det er den sterkeste risikofjerneren et tilbud kan ha, og den er allerede bygget. Hver linje i «Hva kunden får» er fortsatt sporet til en `is_premium`-flagg i `server.py`. |
+| 4 | Lead magnet trekker videre | 3/5 | **4/5** | **Hevet.** Trekket var at gratisnivået (10 spørsmål/dag i 90 dager) kunne bære hele forberedelsen alene, så veien til betaling var åpen i teorien og treg i praksis. Gratisuken snur dette: eleven får *full* tilgang først og mister den på dag 8. Det er ikke lenger «gratis er godt nok» — det er «du hadde det, og nå er det borte». Ikke 5, fordi teksten som skal møte eleven på dag 8 fortsatt ikke finnes. |
+| 5 | Tjener penger | 4/5 | **4/5** | Uendret. Veien til betaling kan tegnes, og prisen er nå avgjort så modellen hviler på ekte tall. Men hver fordeling og levetid er fortsatt `[ANTAKELSE]`, og jeg viser nå selv at omfordeling mellom planer er verdt ~1,5 % mens volum er verdt fjorten ganger mer. Det er en ærligere analyse, ikke et bedre resultat. |
+| 6 | Høres interessant ut | 3/5 | **4/5** | **Hevet.** «Du har allerede hatt det i sju dager — vil du beholde det?» er en vesentlig varmere åpning enn «kjøp tilgang», og den er sann. Gratisuken gir agent 3 noe å skrive om som eleven selv har opplevd. Ikke 5, fordi setningen fra et menneske som har strøket fortsatt mangler. Den fikses med fem telefonsamtaler, ikke med bedre ord. |
 
-**Hva jeg ville fikset først:**
+**Snitt:** 4,2 (fra 3,7) — **Porten på 4,0 er passert.**
+**Svakeste ledd:** #1 og #2 — begge venter på at Michael gjør noe utenfor tastaturet.
 
-Snittet er under porten på 4,0, og jeg lar det stå. Å skrive dokumentet om løfter ikke
-scoren — fire av seks trekk skyldes ting jeg ikke kan produsere fra denne stolen:
+**Hva som fortsatt står igjen, i prioritert rekkefølge:**
 
-- **#2 og #5** løftes av at Michael åpner `vegvesen.no/forerkort/ta-forerkort/gebyr/` og
-  bekrefter 480 kr, og sender to e-poster for å finne tolkeprisen T. Til sammen tjue minutter.
-  Med T på plass går regnestykket fra «to stryk koster mer enn livstid» til «hvert eneste
-  forsøk koster deg 480 + T», og det er et vesentlig sterkere tilbud.
-- **#4** løftes ikke av tekst. Den løftes av at Michael tar stilling til G1: skal Premium
-  selges på *antall spørsmål* eller på *eksamensmodus og forklaringen*? Så lenge svaret er
-  det første, konkurrerer gratisnivået med betalproduktet vårt hver dag.
-- **#1 og #6** løftes av de fem telefonsamtalene agent 1 ba om. Én ordrett setning fra en
-  elev som har strøket, plassert øverst i tilbudet, er verdt mer enn resten av dette
-  dokumentet for agent 3.
-- **#3** løftes av én beslutning: si ja eller nei til R2 (14 dagers pengene tilbake) og
-  få et sant svar på «hvordan sier jeg opp?».
+1. **Fem telefonsamtaler.** Én ordrett setning fra en elev som har strøket, plassert øverst
+   i tilbudet, er verdt mer for agent 3 enn resten av dette dokumentet. Løfter #1 og #6.
+2. **Gebyret.** Michael åpner `vegvesen.no/forerkort/ta-forerkort/gebyr/` og leser
+   2026-satsen. To minutter. Løfter #2.
+3. **Tolkeprisen T.** To e-poster til tolketjenester. Med T på plass går regnestykket fra
+   «to stryk koster mer enn livstid» til «hvert eneste forsøk koster deg gebyr + T».
+4. **Teksten for dag 8.** Tilhører agent 4, men den er blokkert av at `/api/unsubscribe`
+   ikke finnes. Det er Codex sin oppgave.
 
-Det jeg *ikke* ville gjort først: endret prisen. Vi har ingen konverteringsdata. Endrer vi
-pris nå, mister vi muligheten til å vite hva som virket — og 199 kr uten at 249 og 699
-flytter seg, gjør månedsplanen til en kulisse.
+**Det jeg ikke ville gjort:** gjenåpnet prisdiskusjonen. Den er avgjort, tallene er live,
+og de fire punktene over er alle verdt mer enn et nytt prisskilt.

@@ -34,8 +34,13 @@ Du bestemmer:
 
 ## Prisregelen for Thai2Drive
 
-Dagens priser er 99 kr/mnd, 249 kr per 3 måneder og 699 kr livstid, med gratis
-nivå på 5 spørsmål for gjester og 10 per dag for registrerte.
+**Prisene er spikret av Michael 2026-08-04 og skal ikke gjenåpnes:**
+99 kr/mnd, **249 kr per 3 måneder (Beste verdi — den du leder mot)**, 699 kr livstid.
+Gratis nivå etter gratisuken: 5 spørsmål for gjester, 10 per dag for registrerte.
+
+**Hvorfor 249 er planen du dytter mot:** tre måneder er normal øvingstid. Pakken selger
+den ærlige lengden på jobben, ikke en rabatt. Rabatten på 16,2 % er belønningen for å
+velge riktig lengde.
 
 Du kan **foreslå** endringer, men da skal forslaget inneholde:
 - hva du tror endringen gjør med konvertering *og* inntekt per kunde
@@ -52,6 +57,24 @@ Du endrer aldri en pris i kode eller i Stripe. Aldri.
 - Ingen kunstig hastverk. Ingen falske nedtellinger. Målgruppen er voksne mennesker
   med dårlig erfaring fra systemer som presser dem.
 - Ingen sammenligning som navngir og snakker ned konkurrenter.
+
+## Gratisuken — les alltid dette før du skriver
+
+`TRIAL_DAYS = 7` (`backend/server.py:53`, kalt fra `/auth/signup` i 2072) gir **enhver ny
+registrering sju dager med hele Premium, gratis, uten kort.** Eksamensmodus, AI-forklaringene
+på thai, Michael-læreren — alt.
+
+Dette er kjernekomponenten i inntektsveien, ikke en detalj. Konsekvenser du må bygge på:
+
+- **Vi selger ikke tilgang.** Vi selger fortsettelsen av noe eleven allerede har erfart.
+- **Kjøpsøyeblikket er dag 8**, og det er datostyrt.
+- **En CTA som lover «10 gratis spørsmål» selger produktet ned.** Registrerte gratisbrukere
+  får allerede 10 per dag. Lov gratisuken i stedet — den er ekte, større og allerede bygget.
+- Målgruppen har aldri møtt en trafikklærer som forklarer på morsmålet. Det kan ikke selges
+  med en setning, men det kan gis bort i sju dager.
+
+**Gebyrsatsen for teoriprøven er ikke verifisert** (kilder spriker 350/480/680 kr, og
+Vegvesenets satser gjelder fra 1. februar 2026). Bruk formelen, aldri et beløp.
 
 ## Output-format
 

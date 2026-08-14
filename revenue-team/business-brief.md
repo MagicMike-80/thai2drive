@@ -64,9 +64,38 @@ første jobb — ikke gjett.
 Priser hentes live fra Stripe med disse som fallback
 (`PUBLIC_PRICING_FALLBACK` i `backend/server.py`).
 
-Gratis nivå:
+**Hvorfor trappen ser slik ut** (vedtatt av Michael 2026-08-04):
+249 kr er planen elevene skal ledes mot, og «Beste verdi»-merket ligger allerede der
+(`backend/webapp.py:3942`). Begrunnelsen er ikke rabattpsykologi alene — **tre måneder
+er normal øvingstid**. Pakken selger den ærlige lengden på jobben. Rabatten på 16,2 %
+er den synlige belønningen for å velge riktig lengde.
+
+### Gratisuken — les denne før du skriver ett ord markedsføring
+
+```
+TRIAL_DAYS = 7                       backend/server.py:53
+_grant_trial_if_eligible(...)        backend/server.py:752-775
+  → kalles ved /auth/signup          backend/server.py:2072
+```
+
+**Enhver ny registrering gir sju dager med hele Premium. Gratis. Uten kort.**
+Eksamensmodus, AI-forklaringene på thai, Michael-læreren, trening på svake temaer,
+historikk — alle `is_premium`-flaggene i `server.py:824-833` står true i de sju dagene.
+Kun én gang per e-post og per device_id (`server.py:758-764`).
+
+Dette er **ikke en detalj**. Det er kjernekomponenten i hele inntektsveien, av én grunn:
+målgruppen har aldri møtt en trafikklærer som forklarer på morsmålet deres. Det kan ikke
+selges med en setning — men det kan gis bort i sju dager, og da selger det seg selv.
+
+**Konsekvenser enhver agent må bygge på:**
+- Vi selger ikke tilgang. Vi selger *fortsettelsen* av noe eleven allerede har erfart.
+- Kjøpsøyeblikket er **dag 8**, og det er datostyrt.
+- Dag 8 er også det skarpeste frafallspunktet i reisen, og er per 2026-08-04 udokumentert.
+- En CTA som lover «10 gratis spørsmål» selger produktet **ned**. Lov gratisuken.
+
+Gratis nivå etter at uken er over:
 - Gjest: 5 spørsmål totalt
-- Registrert, ikke betalende: 10 spørsmål per dag
+- Registrert, ikke betalende: 10 spørsmål per dag, uten sluttdato
 
 Betaling: Stripe på web, RevenueCat på mobil.
 
@@ -84,8 +113,14 @@ Det tilbudet må slå: **kostnaden ved å stryke**.
 - Måneder uten førerkort = færre jobber som krever bil
 
 En livstidslisens til 699 kr trenger bare å spare **ett** strøket forsøk
-for å ha betalt seg selv. Det er den regnestykket all kommunikasjon skal lene seg på —
+for å ha betalt seg selv. Det er regnestykket all kommunikasjon skal lene seg på —
 men de faktiske gebyrsatsene skal hentes fra Vegvesenet og siteres, ikke gjettes.
+
+> **Gebyrsatsen er per 2026-08-04 ikke verifisert.** Tre forsøk har feilet: vegvesen.no
+> gir 403 eller er blokkert av nettverksproxyen. Kilder spriker mellom 350, 480 og 680 kr,
+> og Vegvesenets egne satser gjelder **fra 1. februar 2026** — så alle tall vi har er
+> trolig utdaterte. **Ingen agent skal trykke et gebyrbeløp noe sted** før Michael har
+> lest 2026-satsen på `vegvesen.no/forerkort/ta-forerkort/gebyr/`. Bruk formelen, ikke tallet.
 
 ---
 

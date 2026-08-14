@@ -2,7 +2,7 @@
 agent: market-signal-researcher
 kjøring: 2026-08-04-forste-100-premium
 input: business-brief.md, 00-brief.md
-second-pass-score: 3,8
+second-pass-score: 3,7 (IKKE passert — krever fem telefonsamtaler, ikke omskriving)
 åpne spørsmål: >
   1) Ingen førstepersonssitater fra thaitalende elever funnet — se «Hva jeg IKKE fant».
   2) Gebyret for teoriprøven oppgis ulikt i tre kilder (480 / 680 / 350 kr). Må verifiseres
@@ -566,32 +566,49 @@ publisering.
 
 ---
 
-## Strategic Second Pass
+## Strategic Second Pass — omskrivingsrunde 2026-08-04
 
-| # | Spørsmål | Score | Begrunnelse |
-|---|----------|-------|-------------|
-| 1 | Målgruppe spesifikk | 3/5 | Funnene består bytt-ut-testen: bytter du «thai» med «polsk», kollapser både smerte 1 og 2 (polske førerkort byttes inn 1:1, polsk er EØS). Det er ekte spesifisitet. Men jeg kan ikke navngi tre virkelige personer, og det finnes ikke én setning fra et faktisk menneske i målgruppen i dokumentet. Det er strukturelt riktig og menneskelig tomt. |
-| 2 | Smerten akutt | 4/5 | Tremånedersfristen på utenlandsk førerkort [K12] er en dato med klokke på. 480 kr per strøket forsøk er akutt. Trekk fordi jeg ikke har belegg for at *denne uka* er den uka det gjør vondt — jeg har logikken, ikke opplevelsen. |
-| 3 | Løftet troverdig | 4/5 | Dokumentets viktigste bidrag er å ta bort et løfte, ikke legge til ett: «ta teoriprøven på thai» er ikke sant, og jeg har stoppet det før det kom i et manus. Ingen garantier, ingen superlativer. Trekk fordi alle eksterne kilder er andrehånds (403 på alt) — troverdigheten hviler på at noen åpner lenkene. |
-| 4 | Lead magnet trekker videre | 4/5 | Jeg leverer ikke lead magneten, men jeg leverer den åpenbare formen på den: fagords-broen i tabell B1. «De 7 norske ordene som får folk til å stryke — forklart på thai» løser ett ekte problem og har betalproduktet som naturlig neste steg. Trekk fordi B3 (thai-ordene) ikke er validert, og lead magneten må være 100 % thai. |
-| 5 | Tjener penger | 5/5 | Linjen er kort og tegnbar: 480 kr per strøket forsøk → to stryk = 960 kr → livstid 699 kr er billigere enn å stryke to ganger. Tallet er sitert, ikke funnet på. Kanalen (norsk-thailandsk presse, tolkemiljøet) er identifisert. |
-| 6 | Høres interessant ut | 3/5 | «Du har kjørt i tjue år i Thailand. Norge sier du må begynne på null» er en krok jeg ville sendt videre. Men dokumentet som helhet leser som skrivebordsresearch, fordi det *er* skrivebordsresearch. Uten én eneste elevstemme mangler det den setningen som gjør at noen kjenner seg igjen. |
+> **Dette dokumentet passerer ikke porten, og det skal det ikke.** Michael bestilte en
+> omskrivingsrunde på alle fire. For de tre andre var det riktig — de hadde åpne spørsmål
+> som beslutningene hans lukket. Dette dokumentet har ett hull, og det er datainnsamling.
+> Ingen beslutning tetter det, og å heve scoren ville skjult nøyaktig det Michael trenger
+> å vite. **Ett punkt går i tillegg ned**, av en grunn som ble oppdaget i denne runden.
 
-**Snitt:** 3,8 — **Svakeste ledd:** #1 og #6 (samme årsak: null førstepersonsstemmer)
+| # | Spørsmål | Før | Nå | Begrunnelse |
+|---|----------|-----|-----|-------------|
+| 1 | Målgruppe spesifikk | 3/5 | **3/5** | Uendret. Funnene består bytt-ut-testen — bytt «thai» med «polsk» og både smerte 1 og 2 kollapser. Men jeg kan fortsatt ikke navngi tre virkelige personer, og det finnes fortsatt ikke én setning fra et faktisk menneske i målgruppen. Strukturelt riktig, menneskelig tomt. Ingenting i denne runden endret det. |
+| 2 | Smerten akutt | 4/5 | **4/5** | Uendret. Michael bekrefter fra 16 år som trafikklærer at vikeplikt og rundkjøringer er de største smertepunktene, og det er verdt mer enn mine andrehåndskilder [K14][K15]. Men jeg har fortsatt logikken, ikke opplevelsen — og fagpersonens inntrykk er ikke elevens ord. |
+| 3 | Løftet troverdig | 4/5 | **4/5** | Uendret. Dokumentets viktigste bidrag står: «ta teoriprøven på thai» er stoppet før det nådde et manus. Troverdigheten hviler fortsatt på at noen åpner lenkene, siden alle eksterne kilder er andrehånds. |
+| 4 | Lead magnet trekker videre | 4/5 | **4/5** | Uendret. Fagords-broen i tabell B1 står, og agent 4 bygget lead magneten på den. B3 (thai-ordene) er fortsatt ikke validert av en morsmålsbruker. |
+| 5 | Tjener penger | 5/5 | **4/5** | **SENKET.** Dette er den eneste scoren i hele kjøringen som går ned, og grunnen er et funn fra denne runden. Regnestykket mitt — «to strøkne forsøk = 960 kr > 699 kr for livstid» — hviler på at gebyret er 480 kr. Tredje forsøk på å verifisere det avdekket at **Vegvesenets satser gjelder fra 1. februar 2026**, altså er tallet vårt trolig utdatert. Retningen i argumentet holder over hele det plausible spennet (350–680 kr), men marginen gjør det ikke: ved 350 kr blir to stryk 700 kr mot 699 kr for livstid, og hele poenget forsvinner. **Jeg ga 5/5 til et regnestykke jeg ikke kunne stå inne for.** Det korrigeres her. |
+| 6 | Høres interessant ut | 3/5 | **3/5** | Uendret. «Du har kjørt i tjue år i Thailand. Norge sier du må begynne på null» er fortsatt en krok jeg ville sendt videre. Dokumentet som helhet leser fortsatt som skrivebordsresearch, fordi det er det. |
 
-**Hva jeg ville fikset først:**
-Snittet er under porten på 4,0, og jeg lar det stå slik med vilje. Å skrive dokumentet om
-løfter ikke scoren — hullet er ikke formulering, det er datainnsamling, og verktøyene jeg
-har (blokkert websidehenting, søkemotor som ikke indekserer thai-i-Norge-innhold, lukkede
-Facebook-grupper) kommer ikke forbi det. Å pynte på scoren ville skjult nettopp det
-Michael trenger å vite.
+**Snitt:** 3,7 (fra 3,8) — **Porten på 4,0 er IKKE passert.**
+**Svakeste ledd:** #1 og #6 — samme årsak som før: null førstepersonsstemmer.
 
-Porten passeres av fem telefonsamtaler, ikke av en ny AI-runde. Spørsmålene står i
-«Hva jeg IKKE fant». Med fem ordrette elevsvar går #1 til 5 og #6 til 4–5, og agent 3 får
-et manus som kan bygges på et menneske i stedet for en logisk slutning.
+**Hvorfor jeg ikke skriver dette dokumentet om for å passere:**
+
+Fordi det ikke ville virke. Trekkene handler ikke om formuleringer. De handler om at
+dokumentet ikke inneholder ett eneste menneske. Verktøyene jeg har — blokkert
+websidehenting, en søkemotor som ikke indekserer thai-i-Norge-innhold, lukkede
+Facebook-grupper — kommer ikke forbi det. En ny AI-runde produserer bedre setninger om
+det samme tomrommet.
+
+**Porten passeres av fem telefonsamtaler.** Spørsmålene står ferdig i «Hva jeg IKKE fant».
+Med fem ordrette elevsvar går #1 til 5 og #6 til 4–5, og snittet lander over 4,0 uten at
+jeg endrer ett ord av analysen. Det er tjue minutter av Michaels tid, og det er den
+høyest betalte tjue minuttene i hele dette prosjektet.
+
+**Det som ble bedre i denne runden, selv om scoren ikke viser det:**
+
+- **Del A har fått en eier.** MongoDB-koblingen er oppe og Codex skal kjøre
+  aggregeringen. Spørringen min går fra «noe Michael kanskje gjør» til en tildelt oppgave.
+- **Gebyret er nå kjent utrygt, ikke antatt trygt.** Det er en forbedring i kunnskap selv
+  om det er en forverring i score. Agent 2, 3 og 4 er alle instruert om å ikke trykke
+  tallet noe sted.
 
 **I mellomtiden kan agent 2–4 trygt bygge videre på:**
-- Gebyr- og strykstatistikken (verifiser 480 kr først)
 - Smerte 1 og 2 — begge er strukturelle fakta, ikke stemninger
 - Tabell B1 og B2 — dokumentert, brukbart som det står
 - **Ikke** tabell B3 før Michael har validert den
+- **Ikke** gebyrtallet i noen form før Michael har lest 2026-satsen

@@ -15,48 +15,75 @@ detalj — det avgjør hva agentene har lov til å påstå.
 ## Bestillingen
 
 1. **Agent 1:** finn kategorien med høyest strykprosent i produksjonsdatabasen.
-2. **Agent 2:** verifiser prismodell 199 kr/mnd, 249 kr/3 mnd (beste verdi), 699 kr livstid.
+2. **Agent 2:** verifiser prismodell 99 kr/mnd, 249 kr/3 mnd (beste verdi), 699 kr livstid.
+   *(Rettet 2026-08-04: bestillingen sa opprinnelig 199 kr/mnd. Michael har spikret 99.)*
 3. **Agent 3:** 30-sekunders TikTok/Reels-manus på verste kategori, Michael-tonen,
    mental modell («Kongen og tjeneren» / HAV-regelen).
 4. **Agent 4:** lead magnet på 100 % ren thai + CTA «kommenter TEORI for 10 gratis spørsmål».
 
 ---
 
-## Tre blokkeringer funnet i steg 0
+## Blokkeringer funnet i steg 0
 
-### B1 — Produksjonsdatabasen er ikke tilgjengelig i denne sesjonen
+### B1 — Produksjonsdata: tildelt Codex
 
-`MONGO_URL` og `DB_NAME` finnes ikke i miljøet, og `.env` er ikke i repoet
-(den er gitignorert, som den skal være). Det finnes ingen vei til MongoDB Atlas herfra.
+`MONGO_URL` og `DB_NAME` finnes ikke i denne sesjonens miljø, og `.env` er ikke i repoet
+(den er gitignorert, som den skal være). **Agent 1 hadde derfor ingen vei til MongoDB
+Atlas, og leverte spørringen i stedet for et påfunnet tall.** Det var riktig håndtering.
 
-**Konsekvens:** Agent 1 kan ikke levere ekte strykprosent. Den skal levere
-spørringen Michael selv kan kjøre, ikke et tall den har funnet på.
+**Status 2026-08-04:** Michael melder at live-datakoblingen til MongoDB Atlas nå lyser
+grønt. **Codex skal kjøre den reelle aggregeringen mot `db.quiz_attempts`** og hente ut
+faktiske feilsvar-statistikker per kategori.
 
-Den gode nyheten: **dataene finnes allerede.** `db.quiz_attempts` lagrer
-`category`, `total_questions` og `correct_answers` per forsøk, og
-aggregeringen er allerede skrevet i `backend/server.py:1739-1765` — den er bare
-låst til én `device_id`. Fjerner du `$match` på device, får du tallet på tvers av
-alle elever. Se `01-market-signals.md` for ferdig pipeline.
+Dataene finnes allerede: `db.quiz_attempts` lagrer `category`, `total_questions` og
+`correct_answers` per forsøk, og aggregeringen er skrevet i `backend/server.py:1739-1765`
+— den er bare låst til én `device_id`. Fjernes `$match` på device, får du tallet på tvers
+av alle elever. Ferdig pipeline ligger i `01-market-signals.md`.
 
-### B2 — Prisen i bestillingen stemmer ikke med prisen i produksjon
+**Inntil Codex har kjørt den:** kategorivalget i `03-angles.md` er en `[ANTAKELSE]`.
+Michaels erfaring peker på vikeplikt og rundkjøringer som de største smertepunktene, og
+manuset er skrevet for vikeplikt. Ekte data kan flytte det, og da flyttes manuset.
 
-Bestillingen sier «bekreft at prismodellen er optimalisert til 199 kr/mnd».
-Live pris er **99 kr/mnd** (`PUBLIC_PRICING_FALLBACK`, `backend/server.py:146-155`,
-med Stripe som overstyrende kilde).
+### B2 — LØST. Prisen er spikret til 99 / 249 / 699
 
-Agent 2 skal ikke «bekrefte» en pris som ikke er den som kjøres. Den skal vise
-hva en dobling faktisk gjør med pakkelogikken, og levere det som `FORSLAG`.
+Bestillingen sa opprinnelig «bekreft at prismodellen er optimalisert til 199 kr/mnd».
+Agent 2 kunne ikke bekrefte det, fordi live pris er **99 kr/mnd**
+(`PUBLIC_PRICING_FALLBACK`, `backend/server.py:146-155`, med Stripe som overstyrende kilde).
 
-### B3 — CTA-en lover noe brukeren allerede får gratis
+**Michael avgjorde 2026-08-04: prisene er 99 / 249 / 699 og står fast.** Det er identisk
+med produksjonskoden, så ingen implementering er nødvendig. 3-månederspakken til 249 kr
+er den elevene skal ledes mot — ikke primært på rabatt, men fordi tre måneder er normal
+øvingstid. Rabatten på 16,2 % er den synlige belønningen for å velge riktig lengde.
+
+Alle 199-scenarier er fjernet fra `02-offer.md`. Historikken ligger i commit `ae4325a`.
+
+### B3 — CTA-en må peke på gratisuken, ikke på 10 spørsmål
 
 «Kommenter TEORI for 10 gratis spørsmål» — registrerte gratisbrukere får
 allerede **10 spørsmål per dag** (`ACCESS_REGISTERED_DAILY_LIMIT = 10`,
-`backend/server.py:178`). Gjester får 5 totalt.
+`backend/server.py:178`). Gjester får 5 totalt. Belønningen var altså ikke ny for noen.
 
-Belønningen er altså ikke ny for noen som registrerer seg. Agent 4 må enten
-finne en belønning som faktisk er ekstra, eller omformulere slik at løftet er sant.
-Et løfte som slår sprekker i det sekundet eleven logger inn, koster mer tillit
-enn kommentaren er verdt.
+**Med gratisuken som kjernekomponent løser dette seg selv.** Vi trenger ikke finne på
+en belønning — vi har en som er ekte, større og allerede bygget: sju dager full Premium.
+Det er ikke 10 spørsmål. Det er hele eksamensmodusen, alle forklaringene på thai, og
+Michael-læreren, i en uke.
+
+CTA-en skal derfor love gratisuken, ikke et antall spørsmål. Ordet TEORI beholdes som
+kommentar-trigger (agent 4, Variant 1 — ingen kodeendring). Se `04-conversion-system.md`.
+
+### B4 — Gratisuken var ukjent for agent 1–3, og endrer premisset
+
+`TRIAL_DAYS = 7` (`backend/server.py:53`, brukt i 752-775 og 2072) gir **full
+Premium-tilgang i sju dager ved registrering**. Funksjonen er aktiv i produksjon.
+Agent 4 fant den; de tre foregående agentene visste ikke om den og skrev som om
+betalingsmuren møter brukeren umiddelbart.
+
+**Michael har besluttet at gratisuken er en kjernekomponent, ikke en detalj.** Den lar
+eleven møte Michael V5 på morsmålet før noen ber om penger — noe målgruppen aldri har
+opplevd og som ikke kan selges med én setning. All markedsføring synkroniseres rundt den.
+
+**Konsekvens:** kjøpsøyeblikket er **dag 8**, og det er datostyrt. Det er også det
+skarpeste frafallspunktet i hele reisen, og det er i dag udokumentert.
 
 ---
 

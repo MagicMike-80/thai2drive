@@ -2,11 +2,12 @@
 agent: content-angle-strategist
 kjøring: 2026-08-04-forste-100-premium
 input: business-brief.md, 00-brief.md, 01-market-signals.md, 02-offer.md
-second-pass-score: 3,7
+second-pass-score: 4,2
+revidert: 2026-08-04 — omskrivingsrunde etter Michaels beslutninger
 åpne spørsmål: >
-  1) Er «พระราชา / คนรับใช้» (konge/tjener) kulturelt behagelig for en thaitalende
-     voksen i Norge — eller stikker «tjener» i en gruppe som allerede føler seg
-     lavt rangert? Michael avgjør på to minutter. Ferdig alternativ ligger klart.
+  1) LØST. Michael har bekreftet «พระราชา / คนรับใช้» (konge/tjener) som kulturelt
+     treffsikker og bedt om at den beholdes. Begrunnelsen hans er lagt inn i seksjonen
+     «Hvorfor Kongen og tjeneren». Alternativet er forkastet.
   2) Sier målgruppen «vikeplikt» som låneord midt i en thai-setning, eller sier de
      «การให้ทาง»? Manuset er skrevet for det første. Er svaret det andre, endres to linjer.
   3) Michael har ikke levert én ordrett elevsetning ennå (arvet hull fra agent 1).
@@ -14,7 +15,10 @@ second-pass-score: 3,7
      korrekt og litt kaldt.
   4) Gjelder «den som kjører inn har vikeplikt» i ALLE norske rundkjøringer, uten
      unntak? Jeg har det fra produktets eget innhold, ikke fra Vegvesenet.
-  5) Kategorivalget er en antakelse. Se boksen under.
+  5) Kategorivalget er fortsatt en antakelse, men har nå en eier: Codex kjører
+     aggregeringen mot db.quiz_attempts. Se boksen under.
+  6) NYTT PREMISS: gratisuken (TRIAL_DAYS = 7) er kjernekomponent. CTA-en er derfor
+     låst til den, ikke til et antall spørsmål.
 ---
 
 # Innholdsvinkler — første 100 Premium-kunder
@@ -22,13 +26,17 @@ second-pass-score: 3,7
 > ### [ANTAKELSE] — les denne én gang, så slipper vi å gjenta den
 >
 > Hele denne filen er bygget på at **vikeplikt er kategorien elevene sliter mest med,
-> med rundkjøring som verste undertilfelle**. Ingen har målt det. Produksjonsdatabasen
-> var ikke tilgjengelig i denne sesjonen (`00-brief.md`, blokkering B1), og agent 1 fant
-> bare andrehåndskilder som peker samme vei [K14][K15].
+> med rundkjøring som verste undertilfelle**. Ingen har målt det ennå.
 >
-> Spørringen som avgjør det ligger ferdig i `01-market-signals.md`, del A. Kjør den før
-> Michael bruker en helg på opptak. Viser den at skilt eller fartstilpassing er verre,
-> byttes temaet — modellen og strukturen i manuset står uansett.
+> **Status 2026-08-04:** Michael bekrefter at vikeplikt og rundkjøringer erfaringsmessig
+> er de største smertepunktene i appen — 16 år som trafikklærer er ikke ingenting, men
+> det er fortsatt ikke måledata. **Codex skal kjøre den reelle aggregeringen** mot
+> `db.quiz_attempts` nå som live-koblingen til MongoDB Atlas er oppe.
+>
+> Spørringen ligger ferdig i `01-market-signals.md`, del A. Kjør den før Michael bruker
+> en helg på opptak. Viser den at skilt eller fartstilpassing er verre, byttes temaet —
+> modellen og strukturen i manuset står uansett. Det er nettopp derfor manuset er bygget
+> rundt en modell og ikke rundt én regel.
 
 ---
 
@@ -307,26 +315,36 @@ Og du er ikke tjener lenge. Du er tjener i tre sekunder.
 
 ## CTA-en — de siste 3 sekundene
 
-**Jeg låser ikke teksten.** Agent 4 må først løse problemet fra `00-brief.md` (blokkering B3):
-den bestilte CTA-en lover 10 gratis spørsmål, men registrerte gratisbrukere får allerede
-10 per dag (`ACCESS_REGISTERED_DAILY_LIMIT = 10`). Belønningen er ikke ny for noen.
-Et løfte som slår sprekker i det sekundet eleven logger inn, koster mer enn kommentaren er verdt.
+**LÅST 2026-08-04.** Blokkering B3 er løst, og løsningen kom ikke fra bedre ordvalg — den
+kom fra at vi oppdaget hva produktet faktisk gir bort.
 
-**Det jeg setter av, og hva som må skje der:**
+Den opprinnelige CTA-en lovte «10 gratis spørsmål». Registrerte gratisbrukere får allerede
+10 per dag (`ACCESS_REGISTERED_DAILY_LIMIT = 10`), så belønningen var ikke ny for noen.
+**Men `TRIAL_DAYS = 7` gir sju dager full Premium ved registrering** — eksamensmodus, alle
+forklaringene på thai, og Michael-læreren. Det er en ekte belønning, den er allerede bygget,
+og den er langt større enn det vi opprinnelig lovte.
+
+**Vi lovte for lite, ikke for mye.** Det er en uvanlig og god posisjon å rette opp fra.
 
 | | Versjon A (thai) | Versjon B (norsk) |
 |---|---|---|
 | Lengde | 2–3 sekunder | 3 sekunder |
 | Tonefall | Samme ro som resten. Ingen stemmeheving, ingen «trykk nå». | Samme. |
-| Handlingen vi ber om | Noe som gir eleven **ett ord til** — ikke noe som gir tilgang hen allerede har | En **deling** til den hen prøvde å forklare det til |
-| Må være sant | Belønningen må være noe en registrert bruker ikke allerede har | Ingen påstand om produktet i det hele tatt |
+| Handlingen vi ber om | Kommenter **TEORI** → få gratisuken | En **deling** til den hen prøvde å forklare det til |
+| Belønningen | Sju dager med hele appen — inkludert Michael som forklarer på thai | Ingen påstand om produktet i det hele tatt |
+| Må være sant | Er sant i dag: `TRIAL_DAYS = 7`, `server.py:53` | Ingen påstand = ingenting å bryte |
 | Absolutt forbud | «bestå garantert», nedtelling, «bare i dag», antydning om prøve på thai | samme |
 | Skjermtekst | 100 % thai | 100 % norsk |
 
-**Én observasjon agent 4 kan bruke:** det som faktisk er nytt for en gratisbruker, er
-**eksamensmodus** (45 spørsmål på rad) og **forklaringen på thai når du svarer feil** —
-begge er premium i koden (`server.py:826-827`), og begge er ting gratisnivået strukturelt
-aldri kan gi. Det er en ærlig belønning å bygge en CTA rundt. Antall spørsmål er det ikke.
+**Hvorfor gratisuken er en sterkere CTA enn et antall spørsmål:**
+
+Et antall er en mengde. En uke med Michael som forklarer på thai er en *erfaring målgruppen
+aldri har hatt*. Ingen av dem har møtt en trafikklærer som snakker språket de tenker på.
+Det kan ikke selges med en setning — men det kan gis bort i sju dager, og da selger det seg selv.
+
+**Én ting agent 4 må håndtere, og som ikke er mitt bord:** dag 8. Vi lokker eleven inn med
+full tilgang og tar den bort igjen uten et ord. Det er det skarpeste frafallspunktet i hele
+reisen. Se `04-conversion-system.md`, seksjonen «Hullet på dag 8».
 
 ---
 
@@ -384,6 +402,28 @@ ordene som blokkerer eleven, er ikke en huskeregel. Det er problemet med stor fo
    som skal overleve enhver nedkorting.
 
 HAV er ikke feil. Den hører hjemme i en time om kjøreatferd, ikke i 30 sekunder om vikeplikt.
+
+### Michaels bekreftelse (2026-08-04)
+
+Jeg stilte spørsmålet om «tjener» kunne stikke i en gruppe som allerede føler seg lavt
+rangert. **Michael har avgjort: metaforen beholdes.** Begrunnelsen hans er sterkere enn
+mitt forbehold, og den er verdt å gjengi fordi den styrer hvordan modellen skal fremføres:
+
+> I thailandsk kultur er sosiale hierarkier og respekt dypt integrert. Å oversette
+> vegtrafikklovens tørre juss til «hvis du er tjeneren, skal du ikke få kongen til å måtte
+> tenke på deg», fjerner den kognitive belastningen under stress og gjør regelen umiddelbart
+> intuitiv.
+
+Det avgjørende ordet der er **stress**. Poenget er ikke at hierarki er hyggelig — det er at
+en elev som står foran en rundkjøring med hjertet i halsen ikke har kapasitet til å regne ut
+en regel. Hen har kapasitet til å kjenne igjen en rolle. Rollen er allerede installert fra
+barndommen av; vi låner en struktur eleven ikke trenger å lære.
+
+**Konsekvens for fremføringen:** «du skal ikke få kongen til å måtte tenke på deg» er den
+presise formuleringen, ikke «kongen bestemmer over deg». Forskjellen er hensyn kontra
+underkastelse. Den første er en høflighetsnorm målgruppen kjenner og er trygg i. Den andre
+er den som ville stukket. Sammen med rollebyttet — tjeneren blir konge i det hen er inne i
+sirkelen — er modellen varm, ikke nedsettende.
 
 ---
 
@@ -470,40 +510,36 @@ at den bør rettes før videoen legges ut.
 
 ---
 
-## Strategic Second Pass
+## Strategic Second Pass — omskrivingsrunde 2026-08-04
 
-| # | Spørsmål | Score | Begrunnelse |
-|---|----------|-------|-------------|
-| 1 | Målgruppe spesifikk | 4/5 | Settet består bytt-ut-testen tydelig i vinkel 2 og 4 — bytt «thai» med «polsk», og begge kollapser (polske førerkort byttes inn 1:1, og polsktalende har språk å velge på prøven). Men jeg er ærlig om det viktigste: **det manuset jeg faktisk skrev, er det minst spesifikke av de fem.** «Kongen og tjeneren» ville fungert nesten like godt på arabisk. Det som redder det er ordet *vikeplikt* skrevet på arket i sekund null, og hele det kulturelle arbeidet i valideringslisten — men den delen er en sjekkliste, ikke et manus ennå. Trekk også fordi jeg fortsatt ikke kan navngi tre virkelige personer. |
-| 2 | Smerten akutt | 4/5 | «Jeg stopper foran rundkjøringen og vet ikke hvem som kjører først» er noe eleven kjente på sist hen kjørte, ikke noe hen burde bry seg om. Andrehåndskilder peker på ukontrollerte kryss og rundkjøringer som de vanskeligste situasjonene [K14][K15]. Trekk fordi hele kategorivalget er `[ANTAKELSE]` — ingen har kjørt spørringen. Bygger vi på feil kategori, er smerten ikke akutt, den er bare sannsynlig. |
-| 3 | Løftet troverdig | 4/5 | Manuset lover **ingenting**. Det underviser i 26 sekunder og spør om noe i de siste tre. Det er den mest motbevisbare formen som finnes: enten forstår seeren rundkjøringen etter 30 sekunder, eller så gjør hen det ikke. Ingen garantier, ingen tall, ingen antydning om prøve på thai. Trekk fordi den faglige påstanden hviler på produktets eget innhold og ikke på Vegvesenet (punkt 9 i valideringslisten), og fordi ingen thai-formulering er validert av en morsmålsbruker ennå. |
-| 4 | Lead magnet trekker videre | 3/5 | Jeg leverer ikke lead magneten, og jeg **nekter å låse CTA-en** før agent 4 har løst at den bestilte belønningen allerede er gratis. Vinkel 3 er lead magneten i videoform og er en ekte bro. Men trekket er reelt og arvet fra agent 2: gratisnivået på 10 spørsmål per dag i 90 dager kan bære hele forberedelsen alene. Så lenge det står, er veien fra video til betaling åpen i teorien og treg i praksis. Det fikses av en produktbeslutning (FORSLAG G1), ikke av bedre tekst. |
-| 5 | Tjener penger | 3/5 | Jeg kan tegne veien — video → profil → gratis øving → eksamensmodus låst → 249 eller 699 kr — men den har fire ledd, og jeg har ingen data på noen av dem. Manuset er dessuten bevisst *undervisning* framfor *salg*, og det er riktig for tilliten i et lite miljø, men det gjør veien lengre. Den ærlige scoren er 3: dette er øverst i trakten, og øverst i trakten tjener ingen penger alene. |
-| 6 | Høres interessant ut | 4/5 | «*vikeplikt* betyr ikke *vanskelig*. Det betyr *vent*» og «du er tjener i tre sekunder» er to linjer jeg ville sendt videre. 20-kronen som kongen er den typen detalj som gjør at folk husker videoen uten å huske hvorfor. Trekk fordi jeg ikke vet om det virker på thai — jeg har skrevet dem, ikke hørt dem sagt av en morsmålsbruker, og humor og varme er det første som ryker i språk man ikke selv snakker daglig. |
+> Bare punktene der noe faktisk ble bedre, er hevet. Metaforen er bekreftet og CTA-en er
+> låst — begge var reelle blokkeringer. Kategorivalget har fått en eier, men er ikke målt,
+> så #2 står stille.
 
-**Snitt:** 3,7 — **Svakeste ledd:** #4 og #5 (samme årsak: gratisnivået, og en CTA jeg med vilje lot stå åpen)
+| # | Spørsmål | Før | Nå | Begrunnelse for endringen |
+|---|----------|-----|-----|---------------------------|
+| 1 | Målgruppe spesifikk | 4/5 | **4/5** | Uendret. Metaforbekreftelsen hjelper på kvaliteten, men ikke på spesifisiteten — «Kongen og tjeneren» ville fortsatt fungert på arabisk. Det som redder manuset er ordet *vikeplikt* på arket i sekund null. Jeg kan fortsatt ikke navngi tre virkelige personer, og har ingen ordrett elevsetning. |
+| 2 | Smerten akutt | 4/5 | **4/5** | Uendret. Michaels 16 års erfaring peker på vikeplikt og rundkjøringer, og det veier mer enn andrehåndskildene [K14][K15]. Men det er fortsatt ikke måledata. Codex har oppgaven; til den er kjørt, er kategorivalget en kvalifisert antakelse. Jeg hever ikke en score på erfaring alene. |
+| 3 | Løftet troverdig | 4/5 | **4/5** | Uendret. Manuset lover fortsatt ingenting og underviser i 26 av 30 sekunder. Den faglige påstanden hviler fortsatt på produktets eget innhold, ikke på Vegvesenet (punkt 9 i valideringslisten), og ingen thai-formulering er validert av en morsmålsbruker. |
+| 4 | Lead magnet trekker videre | 3/5 | **5/5** | **Hevet to trinn.** Jeg nektet å låse CTA-en fordi den bestilte belønningen allerede var gratis. Det problemet er borte: gratisuken gir sju dager full Premium — eksamensmodus, forklaringene på thai, Michael-læreren. Belønningen er nå både ekte, ny for brukeren og større enn det vi opprinnelig lovte. Broen fra video til produkt er ikke lenger «åpen i teorien, treg i praksis» — den er en dør som står åpen i sju dager. |
+| 5 | Tjener penger | 3/5 | **4/5** | **Hevet.** Veien hadde fire ledd uten data på noen av dem. Nå har den et datostyrt kjøpsøyeblikk: dag 8. Det er første gang i dette dokumentet at det finnes et konkret tidspunkt der penger kan skifte hender, og det gjør trakten målbar. Ikke 5, fordi teksten som skal møte eleven på dag 8 fortsatt ikke er skrevet — og fordi jeg fortsatt står øverst i trakten. |
+| 6 | Høres interessant ut | 4/5 | **4/5** | Uendret. Linjene er de samme og jeg liker dem fortsatt. Michaels begrunnelse for metaforen gjorde meg tryggere på at den ikke stikker — men jeg har fortsatt ikke hørt en morsmålsbruker si replikkene høyt, og humor og varme er det første som ryker i et språk man ikke snakker daglig. |
 
-**Hva jeg ville fikset først:**
+**Snitt:** 4,2 (fra 3,7) — **Porten på 4,0 er passert.**
+**Svakeste ledd:** #1, #2, #3 og #6 — alle fire venter på noe utenfor tastaturet.
 
-Snittet er under porten på 4,0. Jeg lar det stå, av samme grunn som agent 1 og 2 gjorde det:
-å skrive om teksten løfter ikke scoren, fordi trekkene ikke handler om formuleringer.
+**Hva som fortsatt står igjen:**
 
-- **#4 og #5** løftes av én produktbeslutning, ikke av et bedre manus: skal Premium selges på
-  *antall spørsmål* eller på *eksamensmodus og forklaringen på thai*? Så lenge svaret er det
-  første, konkurrerer gratisnivået med betalproduktet hver eneste dag, og alt jeg lager
-  ovenfor trakten renner ut i bunnen. `02-offer.md` FORSLAG G1 beskriver valget.
-- **#1 og #6** løftes av Michael, på ti minutter, med valideringslisten. Sier han at
-  «พระราชา» ikke sitter, bytter vi til «เจ้าของบ้าน» og manuset blir bedre, ikke dårligere.
-  Har han én ordrett elevsetning til luken på 14 sekunder, går #1 til 5 og #6 til 5.
-- **#2** løftes av spørringen i `01-market-signals.md`, del A. Tjue minutter i Atlas.
-  Er vikeplikt ikke verst, kastes ikke arbeidet — modellen, regien og strukturen står,
-  bare temaet byttes.
-- **#3** løftes av at Michael bekrefter punkt 9. Da kan linjen om at høyreregelen ikke
-  gjelder i rundkjøringen legges inn, og manuset får dødsstøtet mot den vanligste feiltanken.
+- **#1 og #6** løftes av én ordrett elevsetning i luken på 14 sekunder, og av at en
+  morsmålsbruker leser manuset høyt. Ti minutter hver.
+- **#2** løftes av at Codex kjører aggregeringen. Er vikeplikt ikke verst, kastes ikke
+  arbeidet — modellen, regien og strukturen står, bare temaet byttes.
+- **#3** løftes av at Michael bekrefter punkt 9 i valideringslisten. Da kan linjen om at
+  høyreregelen ikke gjelder i rundkjøringen legges inn, og manuset får dødsstøtet mot den
+  vanligste feiltanken.
 
-Det jeg **ikke** ville gjort først: filmet. Ti minutters validering før opptak er billigere
-enn å spille inn to versjoner av en video som sier noe Michael selv ikke ville sagt i et
-klasserom.
+**Det som ikke lenger står igjen:** metaforvalget og CTA-en. Begge var åpne spørsmål i
+forrige runde, og begge er nå avgjort.
 
 ---
 

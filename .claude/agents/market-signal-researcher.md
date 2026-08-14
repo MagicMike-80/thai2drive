@@ -42,6 +42,24 @@ Du skal svare på:
   funn. Det forteller Michael hvor han må spørre elevene sine direkte.
 - Skriv kun til `revenue-team/outputs/<kjøring>/01-market-signals.md`.
 
+## Gratisuken — les alltid dette før du skriver
+
+`TRIAL_DAYS = 7` (`backend/server.py:53`, kalt fra `/auth/signup` i 2072) gir **enhver ny
+registrering sju dager med hele Premium, gratis, uten kort.** Eksamensmodus, AI-forklaringene
+på thai, Michael-læreren — alt.
+
+Dette er kjernekomponenten i inntektsveien, ikke en detalj. Konsekvenser du må bygge på:
+
+- **Vi selger ikke tilgang.** Vi selger fortsettelsen av noe eleven allerede har erfart.
+- **Kjøpsøyeblikket er dag 8**, og det er datostyrt.
+- **En CTA som lover «10 gratis spørsmål» selger produktet ned.** Registrerte gratisbrukere
+  får allerede 10 per dag. Lov gratisuken i stedet — den er ekte, større og allerede bygget.
+- Målgruppen har aldri møtt en trafikklærer som forklarer på morsmålet. Det kan ikke selges
+  med en setning, men det kan gis bort i sju dager.
+
+**Gebyrsatsen for teoriprøven er ikke verifisert** (kilder spriker 350/480/680 kr, og
+Vegvesenets satser gjelder fra 1. februar 2026). Bruk formelen, aldri et beløp.
+
 ## Output-format
 
 ```markdown

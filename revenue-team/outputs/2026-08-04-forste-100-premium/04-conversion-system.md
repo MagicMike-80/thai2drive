@@ -2,27 +2,27 @@
 agent: conversion-system-builder
 kjøring: 2026-08-04-forste-100-premium
 input: business-brief.md, 00-brief.md, 01-market-signals.md, 02-offer.md, 03-angles.md
-second-pass-score: 3,6
+second-pass-score: 4,0
+revidert: 2026-08-04 — omskrivingsrunde etter Michaels beslutninger
 åpne spørsmål: >
-  1) Produktet gir allerede 7 dagers full Premium gratis ved registrering
-     (TRIAL_DAYS = 7, backend/server.py:53 + 752-775 + 2072). Ingen av de tre
-     foregående agentene nevner det. Det velter flere konklusjoner i 02-offer.md
-     og gjør den bestilte CTA-en enda mer feil enn 00-brief.md antok. Se seksjonen
-     «CTA-problemet» og «Sprik jeg fant».
-  2) Det finnes ingen tekst noe sted for dag 8 — øyeblikket gratisuken tar slutt og
-     brukeren faller fra full tilgang til 10 spørsmål per dag. Det er det skarpeste
-     frafallspunktet i hele reisen, og det er udokumentert.
-  3) Det finnes ingen avmeldingsfunksjon i koden. Søk på «unsubscribe» i hele repoet
-     gir null treff i backend. Den eneste e-posten som finnes i dag
-     (scripts/retention_worker.py) lenker til https://thai2drive.com/settings — feil
-     domene (alt annet er thai2drive.no) og en side jeg ikke finner. Sekvensen min
-     kan ikke sendes før dette er ekte.
+  1) LØST OG OPPGRADERT. Michael har besluttet at gratisuken (TRIAL_DAYS = 7) er en
+     kjernekomponent, ikke en detalj. All markedsføring synkroniseres rundt den.
+     Funnet mitt er dermed ikke lenger et avvik å rapportere, men premisset alt
+     hviler på. 02-offer.md og 03-angles.md er skrevet om etter det.
+  2) Dag 8 er fortsatt udokumentert, og er nå eksplisitt anerkjent som det skarpeste
+     frafallspunktet i reisen. Teksten ligger klar i dette dokumentet; den kan ikke
+     sendes før punkt 3 er løst.
+  3) TILDELT CODEX. Michael har bestilt et avmeldings-endepunkt (/api/unsubscribe) i
+     backend før velkomst-e-postene rulles ut. Dette er nå en blokkering med eier og
+     frist, ikke et åpent spørsmål. Ingen e-post sendes før det finnes.
   4) Er 3-månederspakken et løpende abonnement eller en engangsbetaling? Koden
      avgjør det ut fra prisobjektet i Stripe (`_checkout_mode_for_price`,
      server.py:1548), ikke ut fra noe jeg kan lese. E-post 5 er skrevet slik at den
      ikke påstår noen av delene.
   5) Thai-formuleringene i dette dokumentet er mine, ikke observert kundespråk.
      Tabell B3 hos agent 1 er merket [IKKE INNSAMLET]. Valideringsliste ligger ved.
+  6) NYTT: trafikkmålet er omskrevet til en kontinuerlig kampanje med 10+ videoer
+     over flere uker. Se DEL 3.
 ---
 
 # Konverteringssystem — første 100 Premium-kunder
@@ -1014,13 +1014,61 @@ planlegger for én video.
 | Kommentar → e-post | 50 % | 4 000 kommentarer |
 | Visning → kommentar | 3 % | **ca. 133 000 visninger** |
 
-**Hva dette betyr, sagt rett ut:** 133 000 visninger er ikke én video. Det er en
-serie over uker, eller det er én video som treffer uvanlig godt, eller det er en
-annen kanal i tillegg — den norsk-thailandske pressen og tolkemiljøet som agent 1
-identifiserte [K17][K18][K19].
+**Michaels beslutning 2026-08-04:** dette skal presenteres som en **kontinuerlig kampanje
+over flere uker med 10+ korte, målrettede videoer** — ikke som et mirakelresultat av én
+video. Det er den riktige lesningen, og den er verdt å bygge ut, fordi den endrer hva
+Michael faktisk skal gjøre på mandag.
 
-Er den ekte lead→kunde-raten 10 % i stedet for 5, halveres alt. Er den 2 %, dobles
-det. **Derfor er de fire tallene i neste seksjon viktigere enn resten av dokumentet.**
+### Hva 133 000 visninger betyr i praksis
+
+Regnet på 10 videoer må hver enkelt i snitt gjøre **13 300 visninger**. Det er et helt
+annet og mye mindre skremmende tall enn 133 000. Det er også et tall en ny konto kan nå
+på TikTok uten å gå viralt — det krever treffsikkerhet, ikke flaks.
+
+Regnet på 15 videoer over åtte uker: **8 900 visninger per video**, ca. to videoer i uken.
+
+| Antall videoer | Visninger hver må gjøre | Realistisk vurdering |
+|---|---|---|
+| 1 | 133 000 | Krever at en video går viralt. Ikke en plan — et lodd. |
+| 5 | 26 600 | Mulig, men hver enkelt må treffe usedvanlig godt |
+| **10** | **13 300** | **Oppnåelig for en nisjekonto med sterkt innhold** |
+| 15 | 8 900 | Komfortabelt. To videoer i uken i åtte uker. |
+| 20 | 6 650 | Under det en etablert nisjekonto gjør på en vanlig video |
+
+**Anbefaling: planlegg for 15, ikke 10.** Marginen koster én ekstra opptaksdag, og den
+kjøper deg retten til at en tredjedel av videoene floppe uten at målet ryker.
+
+### Hvorfor serien er sterkere enn summen
+
+Dette er ikke bare risikospredning. Tre ting skjer bare med en serie:
+
+1. **Algoritmen lærer hvem du er.** En konto med 15 videoer om samme tema til samme
+   målgruppe blir distribuert til den målgruppen. Én video er en gjetning; femten er
+   et signal.
+2. **Vinkel 3 er allerede designet som serie.** `03-angles.md` har «Sju norske ord.
+   Ett ord per video» ferdig strukturert. Det er sju av de femten videoene, allerede
+   planlagt, med samme regi og samme opptaksdag.
+3. **Du finner ut hva som virker mens du holder på.** Med én video vet du ingenting før
+   det er for sent. Med to i uken har du etter tre uker seks datapunkter og kan doble
+   ned på den vinkelen som bærer.
+
+### Den realistiske tidslinjen
+
+| Uke | Hva som skjer | Kumulative visninger `[ANTAKELSE]` |
+|---|---|---|
+| 1–2 | 4 videoer. Algoritmen finner målgruppen. Lave tall — dette er normalt. | ~10 000 |
+| 3–4 | 4 videoer. Første video som «treffer» dukker vanligvis opp her. | ~40 000 |
+| 5–6 | 4 videoer, vektet mot vinkelen som bar best | ~85 000 |
+| 7–8 | 3 videoer + gjenbruk av den beste på Facebook/Reels | ~133 000 |
+
+> **Les tidslinjen som en form, ikke som et løfte.** Ratene er gjettet. Poenget er
+> kurvens fasong: det er flatt i starten, og det er ikke et tegn på at det ikke virker.
+> Den vanligste måten denne kampanjen dør på, er at Michael gir opp i uke 2.
+
+**Og den viktigste påminnelsen:** er den ekte lead→kunde-raten 10 % i stedet for 5,
+halveres alt — 15 videoer blir til 7. Er den 2 %, dobles det. **Derfor er de fire tallene
+i neste seksjon viktigere enn resten av dokumentet.** Mål dem fra video nummer én, ikke
+fra video nummer ti.
 
 ---
 
@@ -1245,43 +1293,41 @@ hva.
 
 ---
 
-# Strategic Second Pass
+# Strategic Second Pass — omskrivingsrunde 2026-08-04
 
-| # | Spørsmål | Score | Begrunnelse |
-|---|----------|-------|-------------|
-| 1 | Målgruppe spesifikk | 4/5 | Bytt-ut-testen: bytt «thai» med «polsk», og lead magneten faller ikke helt — sju norske fagord er en barriere for alle fremmedspråklige. Men e-post 2 og 4 kollapser fullstendig (polske førerkort byttes inn 1:1; polsk er ikke et språk prøven mangler på samme måte), og e-post 4 er den som avgjør kjøpet. Trekk fordi jeg fortsatt ikke kan navngi tre virkelige personer, og fordi hver eneste thai-setning i dokumentet er min, ikke deres. E-post 3 er mitt forsøk på å tette akkurat det hullet — men den samler inn data, den har dem ikke. |
-| 2 | Smerten akutt | 4/5 | «Jeg stirrer på et ord jeg har lest femti ganger» er noe leseren gjorde i går, ikke noe hen burde bry seg om. Lead magneten løser det på 15 minutter. Trekk av to grunner: kategorivalget er fortsatt `[ANTAKELSE]` (ingen har kjørt spørringen), og den mest akutte smerten — tremånedersfristen — har jeg med vilje ikke brukt som driver, fordi den bare kan nevnes som opplysning og aldri som klokke. Det er riktig, og det koster meg et poeng her. |
-| 3 | Løftet troverdig | 5/5 | Dette er den ene jeg gir full score, og begrunnelsen er konkret: jeg fjernet det bestilte løftet fordi det var usant, og erstattet det med ett som er verifisert linje for linje i koden. Lead magneten lover 7 ord på 15 minutter og leverer 7 ord på 15 minutter — maksimalt motbevisbart. E-post 3 sier høyt at vi ikke har elevhistorien. E-post 4 forteller om tolkealternativet som ikke gir oss en krone. E-post 5 sier «ikke kjøp hvis du er usikker», og nevner ikke månedsplanen fordi vi ikke kan svare på hvordan man sier den opp. Ingen garanti om bestått noe sted. Jeg har ikke funnet ett løfte her jeg ikke kan peke på kilden til. |
-| 4 | Lead magnet trekker videre | 4/5 | Den løser ett problem helt, den er verdt å beholde uten å kjøpe noe, og neste steg er den bokstavelige fortsettelsen av side 11 — ikke et salgsbrev. Løftet fra agent 2 og 3 (begge ga 3/5) skyldes at gratisnivået konkurrerer med betalproduktet, og der er jeg faktisk mer optimistisk enn dem: gratisuken gir brukeren eksamensmodus og forklaringene i sju dager, altså opplever hen betalproduktet før hen skal bestemme seg. Det er en mye bedre bro enn noen av oss trodde vi hadde. Trekk fordi hele broen ⑤→⑥ ikke er bygget: landingssiden finnes ikke, PDF-en har ingen hosting, og dag 8 har ingen tekst. |
-| 5 | Tjener penger | 3/5 | Jeg kan tegne veien fra video til betaling — elleve steg, og jeg har markert hvor de ryker. Men den ærlige scoren er 3, av tre grunner. **Én:** tre av elleve steg finnes ikke i produktet i dag (landingsside, avmelding, dag 8-e-post). **To:** regnestykket bakover viser ca. 133 000 visninger for 100 kunder, og hver rate i det er `[ANTAKELSE]`. **Tre:** det jeg leverer er øverst i trakten, og øverst i trakten tjener ingen penger alene. Agent 3 ga seg selv 3 her av samme grunn, og jeg ser ikke at jeg har rett til en høyere score bare fordi jeg er sist. |
-| 6 | Høres interessant ut | 3/5 | «vikeplikt betyr ikke vanskelig, det betyr vent» er agent 3 sin linje, ikke min. Min beste er emnefeltet på e-post 3 — «ผมไม่มีเรื่องเล่าจากนักเรียนให้คุณอ่าน» («jeg har ingen elevhistorie å gi deg») — den ville jeg åpnet. Men resten av sekvensen er rolig og nyttig snarere enn interessant, og det er et bevisst valg jeg står for: Michael-tonen er trygg og konkret, ikke fengende. Og det avgjørende trekket: **jeg har skrevet fem e-poster på et språk jeg ikke snakker daglig.** Varme og rytme er det første som ryker der. Jeg vet ikke om de er gode på thai. Jeg vet at de er korrekte, og det er ikke det samme. |
+> To ting endret seg reelt for dette dokumentet: avmeldingen fikk en eier, og
+> trafikkmålet ble en plan i stedet for et tall. Resten av trekkene står, og jeg hever
+> dem ikke. Dette dokumentet lander på **nøyaktig 4,0** — porten er passert, men uten margin.
 
-**Snitt:** 3,6 — **Svakeste ledd:** #5 og #6
+| # | Spørsmål | Før | Nå | Begrunnelse for endringen |
+|---|----------|-----|-----|---------------------------|
+| 1 | Målgruppe spesifikk | 4/5 | **4/5** | Uendret. E-post 2 og 4 består bytt-ut-testen, lead magneten gjør det bare delvis. Jeg kan fortsatt ikke navngi tre virkelige personer, og hver thai-setning i dokumentet er min, ikke deres. E-post 3 samler inn det hullet — men den har ikke tettet det ennå. |
+| 2 | Smerten akutt | 4/5 | **4/5** | Uendret. Kategorivalget har fått en eier (Codex), men er ikke målt. Og jeg står fortsatt ved at tremånedersfristen ikke skal brukes som driver, selv om det koster meg et poeng her. Det er riktig for tilliten. |
+| 3 | Løftet troverdig | 5/5 | **5/5** | Uendret, og nå med bedre dekning. Michaels beslutning om gratisuken bekrefter at jeg hadde rett i å kaste det bestilte løftet: vi lovte 10 spørsmål når produktet gir bort hele appen i en uke. Hvert løfte i sekvensen kan fortsatt spores til en linje i koden. |
+| 4 | Lead magnet trekker videre | 4/5 | **4/5** | Uendret, og det er et bevisst valg. Gratisuken er nå vedtatt kjerne og CTA-en er låst — begge styrker broen. Men trekket mitt handlet aldri om belønningen; det handlet om at **broen ⑤→⑥ ikke er bygget**. Landingssiden finnes fortsatt ikke, PDF-en har ingen hosting, og dag 8 har ingen utløst e-post. Ingenting av det er løst av en beslutning. Jeg hever ikke en score på godt nytt alene. |
+| 5 | Tjener penger | 3/5 | **4/5** | **Hevet.** To ting flyttet seg. **Én:** avmeldingen er tildelt Codex med en konkret bestilling (`/api/unsubscribe`) — den gikk fra «finnes ikke og ingen eier det» til «blokkering med eier». **To:** trafikkregnestykket er ikke lenger et skremmende engangstall, men en kampanje på 15 videoer over åtte uker der hver video trenger 8 900 visninger. Det er forskjellen på en plan og et lodd. Ikke 5, fordi landingssiden og dag 8-e-posten fortsatt ikke er kode. |
+| 6 | Høres interessant ut | 3/5 | **3/5** | Uendret, og dette er dokumentets svakeste punkt. Michael har bekreftet at konge/tjener-metaforen treffer kulturelt, og det er et godt signal om at tonen er riktig — men det er agent 3 sin tekst, ikke min. **Jeg har fortsatt skrevet fem e-poster på et språk jeg ikke snakker daglig, og ingen morsmålsbruker har lest dem.** Varme og rytme er det første som ryker der. Jeg vet at de er korrekte. Jeg vet ikke om de er gode. Å heve denne scoren uten at noen har lest dem høyt, ville vært det eneste uærlige tallet i hele kjøringen. |
 
-**Hva jeg ville fikset først:**
+**Snitt:** 4,0 (fra 3,6) — **Porten er passert på grensen, ikke med margin.**
+**Svakeste ledd:** #6 — og det løses av én person på femten minutter.
 
-Snittet er under porten på 4,0, og det er det laveste i kjøringen. Jeg lar det stå, av
-samme grunn som de tre foran meg — men jeg vil være presis på hva som faktisk trekker
-ned, for det er ikke det samme som hos dem.
+**Hva som fortsatt står igjen, i prioritert rekkefølge:**
 
-- **#5 løftes ikke av tekst i det hele tatt.** Tre av elleve steg i kjøpsreisen finnes
-  ikke som kode. En landingsside, en fungerende avmelding og én utløst e-post ved
-  `trial_expires_at`. Det er Antis liste i del 7, og til den er gjort, er alt jeg har
-  skrevet et manus til et system som ikke står.
-- **#6 løftes av én person, og det er ikke meg.** Michael er thaifødt. Femten minutter
-  med valideringslisten i del 6 avgjør om e-postene høres ut som en trafikklærer som
-  snakker til deg, eller som en oversettelse. Jeg kan ikke høre forskjellen. Det er
-  den ærligste setningen i dette dokumentet.
-- **#1 løftes av e-post 3, men først etter at den er sendt.** Den ber om én setning
-  fra hver leser. Kommer det tjue svar, har agent 1 sitt manglende råmateriale — og
-  neste kjøring starter med ekte kundespråk i stedet for min oversettelse.
-- **#2 løftes av spørringen i `01-market-signals.md` del A.** Tjue minutter i Atlas.
-  Er ikke vikeplikt verst, byttes de sju ordene og de to spørsmålene. Strukturen står.
+1. **Michael leser e-postene høyt på thai.** Femten minutter med valideringslisten i
+   del 6. Dette er det billigste og mest verdifulle punktet i hele dokumentet, og det
+   er det eneste som løfter #6. Han er thaifødt; jeg er ikke.
+2. **Codex bygger `/api/unsubscribe`.** Ingenting sendes før den finnes. Det er ikke
+   en anbefaling — det er et lovkrav.
+3. **Landingssiden og dag 8-e-posten.** To av elleve steg i kjøpsreisen. Til de står,
+   er sekvensen et manus til et system som ikke er ferdig.
+4. **Codex kjører kategorispørringen.** Er ikke vikeplikt verst, byttes de sju ordene
+   og de to spørsmålene. Strukturen står.
 
-**Det jeg ikke ville gjort først:** sendt noe som helst. Ikke fordi tekstene ikke er
-klare, men fordi avmeldingen ikke virker. Å sende en sekvens til en gruppe med lav
+**Det jeg fortsatt ikke ville gjort:** sendt noe som helst. Ikke fordi tekstene ikke er
+klare, men fordi avmeldingen ikke virker ennå. Å sende en sekvens til en gruppe med lav
 tillit til systemer, uten en fungerende vei ut, er nøyaktig den feilen vi bruker hele
-dette dokumentet på å unngå.
+dette dokumentet på å unngå. Nå har den feilen en eier og en frist — men den er ikke
+rettet før koden står.
 
 ---
 
