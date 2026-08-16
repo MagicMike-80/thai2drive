@@ -3643,12 +3643,12 @@ a { color:inherit; text-decoration:none; }
     <!-- ═══ LIBRARY SCREEN ═══ -->
     <div class="screen" id="screenLibrary">
       <div class="lib-header">
-        <button class="lib-back-btn" onclick="showTab('home')" title="Tilbake til hjem">🏠</button>
+        <button class="lib-back-btn" onclick="showTab('home')" data-title-key="backhome" title="">🏠</button>
         <div class="screen-title">📚 <span data-key="library">Bibliotek</span></div>
       </div>
       <div class="lib-tabs">
-        <button class="lib-tab active" data-tab="videos" onclick="setLibraryTab('videos')">🎬 Videoer</button>
-        <button class="lib-tab" data-tab="podcasts" onclick="setLibraryTab('podcasts')">🎙️ Podcaster</button>
+        <button class="lib-tab active" data-tab="videos" onclick="setLibraryTab('videos')">🎬 <span data-key="lib_videos">Videoer</span></button>
+        <button class="lib-tab" data-tab="podcasts" onclick="setLibraryTab('podcasts')">🎙️ <span data-key="lib_podcasts">Podcaster</span></button>
       </div>
       <div class="lib-scroll">
         <div id="libraryContent"></div>
@@ -3935,18 +3935,18 @@ a { color:inherit; text-decoration:none; }
           <li><span class="pf-check">✓</span><span data-key="pw_f5"></span></li>
         </ul>
         <div class="paywall-price-row">
-          <div class="paywall-price-card selected" onclick="selectPlan('monthly',this)" data-plan="monthly">
+          <div class="paywall-price-card selected" onclick="buyPremium('monthly',this)" data-plan="monthly">
             <div class="ppc-period" data-key="pw_month"></div>
-            <div class="ppc-price" data-price-plan="monthly">99 NOK</div>
+            <div class="ppc-price" data-price-plan="monthly">199 NOK</div>
             <div class="ppc-per" data-key="pw_per_month"></div>
           </div>
-          <div class="paywall-price-card" onclick="selectPlan('three_months',this)" data-plan="three_months" style="position:relative">
+          <div class="paywall-price-card" onclick="buyPremium('three_months',this)" data-plan="three_months" style="position:relative">
             <div class="ppc-badge" data-key="pw_best_value"></div>
             <div class="ppc-period" data-key="pw_three_months"></div>
-            <div class="ppc-price" data-price-plan="three_months">249 NOK</div>
+            <div class="ppc-price" data-price-plan="three_months">399 NOK</div>
             <div class="ppc-per" data-key="pw_per_three_months"></div>
           </div>
-          <div class="paywall-price-card" onclick="selectPlan('lifetime',this)" data-plan="lifetime">
+          <div class="paywall-price-card" onclick="buyPremium('lifetime',this)" data-plan="lifetime">
             <div class="ppc-period" data-key="pw_lifetime"></div>
             <div class="ppc-price" data-price-plan="lifetime">699 NOK</div>
             <div class="ppc-per" data-key="pw_lifetime_note"></div>
@@ -4414,6 +4414,8 @@ var UI = {
   studybook_home:{th:'📖 หนังสือเรียน — การจราจรนอร์เวย์', no:'📖 Studiebok — Norsk trafikk', en:'📖 Study book — Norwegian traffic'},
   library_home:{th:'📚 ห้องสมุด — วิดีโอและพอดแคสต์', no:'📚 Bibliotek — Video & Podcast', en:'📚 Library — Videos & Podcasts'},
   library:{th:'ห้องสมุด', no:'Bibliotek', en:'Library'},
+  lib_videos:{th:'วิดีโอ', no:'Videoer', en:'Videos'},
+  lib_podcasts:{th:'พอดแคสต์', no:'Podcaster', en:'Podcasts'},
   forbikjoring_label:{th:'🚗 แซง', no:'🚗 Forbikjøring', en:'🚗 Overtaking'},
   fk_title:{th:'🚗 การแซง — คำนวณระยะ', no:'🚗 Forbikjøring — Avstandskalkulator', en:'🚗 Overtaking — Distance Calculator'},
   fk_scenario_easy:{th:'🟢 ง่าย', no:'🟢 Lett', en:'🟢 Easy'},
@@ -4610,6 +4612,10 @@ function applyUILang() {
     var key = el.getAttribute('data-placeholder-key');
     var val = t(key);
     if (val) el.setAttribute('placeholder', val);
+  });
+  document.querySelectorAll('[data-title-key]').forEach(function(el) {
+    var val = t(el.getAttribute('data-title-key'));
+    if (val) el.setAttribute('title', val.replace(/^\\S+\\s*/, ''));
   });
   // back buttons
   document.querySelectorAll('.back-btn').forEach(function(b){ b.textContent = t('back'); });
@@ -4858,8 +4864,8 @@ function catName(raw) {
 }
 
 var PREMIUM_PRICING = {
-  monthly: { display:'99 NOK', period:{no:'per måned', th:'ต่อเดือน', en:'per month'} },
-  three_months: { display:'249 NOK', period:{no:'per 3 måneder', th:'ต่อ 3 เดือน', en:'per 3 months'} },
+  monthly: { display:'199 NOK', period:{no:'per måned', th:'ต่อเดือน', en:'per month'} },
+  three_months: { display:'399 NOK', period:{no:'per 3 måneder', th:'ต่อ 3 เดือน', en:'per 3 months'} },
   lifetime: { display:'699 NOK', period:{no:'engangsbetaling', th:'จ่ายครั้งเดียว', en:'one-time payment'} }
 };
 
@@ -5688,8 +5694,7 @@ function renderPremiumPricing() {
   Object.keys(PREMIUM_PRICING || {}).forEach(function(planId) {
     var plan = PREMIUM_PRICING[planId] || {};
     var priceEl = document.querySelector('[data-price-plan="' + planId + '"]');
-    var displayByPlan = { monthly:'99 NOK', three_months:'249 NOK', lifetime:'699 NOK' };
-    if (priceEl) priceEl.textContent = displayByPlan[planId] || plan.display || priceEl.textContent;
+    if (priceEl) priceEl.textContent = plan.display || priceEl.textContent;
     var card = document.querySelector('[data-plan="' + planId + '"]');
     if (!card) return;
     var labelEl = card.querySelector('.ppc-period');
@@ -6306,11 +6311,15 @@ function selectPlan(plan, el) {
   if (el) el.classList.add('selected');
 }
 
-async function buyPremium() {
+var _checkoutStarting = false;
+async function buyPremium(plan, el) {
+  if (_checkoutStarting) return;
+  if (plan) selectPlan(plan, el);
   if (!token) {
     showScreen('screenAuth');
     return;
   }
+  _checkoutStarting = true;
   try {
     var base = window.location.origin + window.location.pathname;
     var session = await api('POST', '/api/create-checkout-session', {
@@ -6326,6 +6335,8 @@ async function buyPremium() {
     throw new Error('Checkout unavailable');
   } catch(e) {
     toast(t('checkout_unavailable_toast'), 5000);
+  } finally {
+    _checkoutStarting = false;
   }
 }
 
@@ -8559,6 +8570,7 @@ function setLang(lang) {
   if (signsScreen && signsScreen.classList.contains('active')) loadSigns();
   // Re-render categories in new language (force re-render by resetting cache)
   if (catsLoaded) { catsLoaded = false; loadCategories(); }
+  if (_videosCached || _podcastsCached) renderLibrary();
   // Re-render quiz if active so question+answers switch language immediately
   var quizScreen = document.getElementById('screenQuiz');
   if (quizScreen && quizScreen.classList.contains('active') && questions.length) {

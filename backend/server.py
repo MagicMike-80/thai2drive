@@ -148,18 +148,18 @@ PUBLIC_PRICING_FALLBACK = {
         "id": "monthly",
         "stripe_product_name": "Thai2Drive Premium",
         "label": {"no": "Månedlig", "th": "รายเดือน", "en": "Monthly"},
-        "amount": 99,
+        "amount": 199,
         "currency": "NOK",
-        "display": "99 kr",
+        "display": "199 kr",
         "period": {"no": "per måned", "th": "ต่อเดือน", "en": "per month"},
     },
     "three_months": {
         "id": "three_months",
         "stripe_product_name": "Thai2Drive 3 Months",
         "label": {"no": "3 måneder", "th": "3 เดือน", "en": "3 months"},
-        "amount": 249,
+        "amount": 399,
         "currency": "NOK",
-        "display": "249 kr",
+        "display": "399 kr",
         "period": {"no": "per 3 måneder", "th": "ต่อ 3 เดือน", "en": "per 3 months"},
     },
     "lifetime": {
@@ -1141,9 +1141,19 @@ def _get_live_stripe_plan_prices_sync() -> Optional[dict]:
                 if getattr(price, "livemode", False) is not True:
                     logger.warning("Ignoring non-live Stripe price for %s", base["stripe_product_name"])
                     return None
-                base["stripe_price"] = price
                 amount = int(price.unit_amount or 0)
                 currency = (price.currency or "nok").upper()
+                expected_minor = int(base["amount"]) * 100
+                if currency != "NOK" or amount != expected_minor:
+                    logger.error(
+                        "Live Stripe price mismatch for %s: expected %s NOK, got %s %s",
+                        base["stripe_product_name"],
+                        base["amount"],
+                        amount / 100,
+                        currency,
+                    )
+                    return None
+                base["stripe_price"] = price
                 base.update({
                     "amount": int(round(amount / 100)),
                     "amount_minor": amount,
@@ -5333,10 +5343,9 @@ async def ensure_indexes():
 
 
 # ── TTS-ruting: skybasert MP3 for web ───────────────────────────────────────
-#   th-TH  → Google Cloud TTS først, fordi nettleser-TTS ofte mangler thai.
-#   nb-NO  → ElevenLabs "Ai Mike" først, Google som nødfallback.
-#   en-US  → ElevenLabs "Ai Mike" først, Google som nødfallback.
-# Thai faller tilbake til ElevenLabs hvis Google feiler eller mangler nøkkel.
+#   th-TH  → Michaels ElevenLabs-klone først, Google som nødfallback.
+#   nb-NO  → Michaels ElevenLabs-klone først, Google som nødfallback.
+#   en-US  → Michaels ElevenLabs-klone først, Google som nødfallback.
 #
 # Språkisolasjonen ligger i TEKSTEN, ikke i leverandøren: hvert språk sender sin
 # egen tekst, og cache-nøkkelen holder språkene fysisk adskilt.
@@ -5354,7 +5363,16 @@ _GOOGLE_TTS_VOICES = {
 # kontoen og svarte 404 voice_not_found på alle språk — hvert TTS-kall falt da
 # gjennom til Google-nødfallbacken. Verifiser alltid en ny ID med et faktisk
 # TTS-kall før den settes her.
-_DEFAULT_ELEVENLABS_VOICE_ID = "eulvRsWu7NGAUD1FzMVP"
+_DEFAULT_ELEVENLABS_VOICE_IDS = {
+    "th-TH": "eulvRsWu7NGAUD1FzMVP",
+    "nb-NO": "eulvRsWu7NGAUD1FzMVP",
+    "en-US": "eulvRsWu7NGAUD1FzMVP",
+}
+_ELEVENLABS_VOICE_ENV = {
+    "th-TH": ("ELEVENLABS_TH_VOICE_ID", "ELEVENLABS_VOICE_ID_TH"),
+    "nb-NO": ("ELEVENLABS_NO_VOICE_ID", "ELEVENLABS_VOICE_ID_NO"),
+    "en-US": ("ELEVENLABS_EN_VOICE_ID", "ELEVENLABS_VOICE_ID_EN"),
+}
 
 # Modell-ID er env-styrbar. eleven_v3 er den eneste modellen på kontoen som har
 # "th" i språklisten (verifisert mot /v1/models) og er derfor påkrevd for thai;
@@ -5365,9 +5383,17 @@ _TTS_BREAKER_FAILURE_LIMIT = int(os.environ.get("TTS_BREAKER_FAILURE_LIMIT", "3"
 _TTS_BREAKER_COOLDOWN_SECONDS = int(os.environ.get("TTS_BREAKER_COOLDOWN_SECONDS", "300"))
 _TTS_PROVIDER_STATE: Dict[str, Dict[str, Any]] = {}
 
-def _elevenlabs_voice_id() -> str:
-    """Klonet Voice ID — env-overstyrbar, med Ai Mike som fallback."""
-    return (os.environ.get("ELEVENLABS_VOICE_ID") or "").strip() or _DEFAULT_ELEVENLABS_VOICE_ID
+def _elevenlabs_voice_id(lang: str) -> str:
+    """Returner Michaels språkspesifikke klonestemme."""
+    env_names = _ELEVENLABS_VOICE_ENV[lang]
+    for env_name in env_names:
+        voice_id = (os.environ.get(env_name) or "").strip()
+        if voice_id:
+            return voice_id
+    return (
+        (os.environ.get("ELEVENLABS_VOICE_ID") or "").strip()
+        or _DEFAULT_ELEVENLABS_VOICE_IDS[lang]
+    )
 
 
 def _elevenlabs_model_id() -> str:
@@ -5535,38 +5561,17 @@ async def text_to_speech(request: Request, text: Optional[str] = None, lang: Opt
         "nb-no": "nb-NO",
         "en-us": "en-US",
     }
-    lang = lang_map.get((lang or "").strip().lower(), lang or "th-TH")
+    requested_lang = (lang or "th").strip().lower()
+    if requested_lang not in lang_map:
+        raise HTTPException(status_code=400, detail="Unsupported TTS language")
+    lang = lang_map[requested_lang]
 
     google_key = os.environ.get("GOOGLE_API_KEY")
     google_cache_path = _tts_cache_path(
         "google", _GOOGLE_TTS_VOICES.get(lang, "th-TH-Standard-A"), lang, text
     )
-    google_primary_failed = False
-
-    # Thai på web skal alltid være skybasert MP3 via Google først. Nettleserens
-    # SpeechSynthesis mangler ofte th-TH, og ElevenLabs brukes bare som fallback.
-    if lang == "th-TH":
-        if google_key and _tts_provider_available("google", lang):
-            if os.path.exists(google_cache_path):
-                return _stream_mp3_file(
-                    google_cache_path,
-                    headers={"X-TTS-Provider": "google-primary-cached"},
-                )
-            try:
-                return await _google_tts(text, lang, google_key, google_cache_path)
-            except HTTPException as e:
-                google_primary_failed = True
-                logger.error("Google TTS for thai feilet med HTTP %s; prøver ElevenLabs fallback.", e.status_code)
-            except Exception as e:
-                google_primary_failed = True
-                logger.error("Google TTS for thai feilet; prøver ElevenLabs fallback: %s", e)
-        elif google_key:
-            logger.error("Google TTS circuit breaker er åpen for thai; prøver ElevenLabs fallback.")
-        else:
-            logger.error("GOOGLE_API_KEY mangler for thai TTS; prøver ElevenLabs fallback.")
-
-    # ── Norsk/engelsk → Michaels klonede ElevenLabs-stemme. Thai kommer hit kun som fallback. ──
-    voice_id = _elevenlabs_voice_id()
+    # ── Alle språk → Michaels språkspesifikke ElevenLabs-klonestemme ─────
+    voice_id = _elevenlabs_voice_id(lang)
     model_id = _elevenlabs_model_id()
     # Modellen er en del av leverandør-nøkkelen: bytter vi modell for å fikse
     # thai-uttale, får vi nye filer i stedet for gammel, feiluttalt cache.
@@ -5637,8 +5642,6 @@ async def text_to_speech(request: Request, text: Optional[str] = None, lang: Opt
             google_cache_path,
             headers={"X-TTS-Provider": "google-fallback-cached"},
         )
-    if lang == "th-TH" and google_primary_failed:
-        raise HTTPException(status_code=502, detail="Thai TTS feilet hos både Google og ElevenLabs.")
     if not google_key:
         raise HTTPException(
             status_code=500,
@@ -5657,7 +5660,6 @@ async def tts_status():
     """
     has_eleven = bool(os.environ.get("ELEVENLABS_API_KEY"))
     has_google = bool(os.environ.get("GOOGLE_API_KEY"))
-    voice_id = _elevenlabs_voice_id()
     model_id = _elevenlabs_model_id()
 
     def route(lang: str) -> dict:
@@ -5665,15 +5667,7 @@ async def tts_status():
         eleven_health = _tts_provider_status("elevenlabs", lang)
         google_ready = has_google and not google_health["circuit_open"]
         eleven_ready = has_eleven and not eleven_health["circuit_open"]
-        if lang == "th-TH":
-            return {
-                "intended": f"google:{_GOOGLE_TTS_VOICES[lang]}",
-                "actual": f"google:{_GOOGLE_TTS_VOICES[lang]}" if google_ready
-                          else (f"elevenlabs:{voice_id} (FALLBACK)" if eleven_ready else "cache-or-none"),
-                "fallback_provider": "elevenlabs" if eleven_ready else None,
-                "ok": google_ready or eleven_ready,
-                "providers": {"google": google_health, "elevenlabs": eleven_health},
-            }
+        voice_id = _elevenlabs_voice_id(lang)
         return {
             "intended": f"elevenlabs:{voice_id}",
             "actual": f"elevenlabs:{voice_id}" if eleven_ready
@@ -5686,7 +5680,10 @@ async def tts_status():
     return {
         "elevenlabs_key_configured": has_eleven,
         "google_key_configured": has_google,
-        "cloned_voice_id": voice_id,
+        "cloned_voice_ids": {
+            lang: _elevenlabs_voice_id(lang)
+            for lang in ("th-TH", "nb-NO", "en-US")
+        },
         "elevenlabs_model_id": model_id,
         "circuit_breaker": {
             "failure_limit": _TTS_BREAKER_FAILURE_LIMIT,
