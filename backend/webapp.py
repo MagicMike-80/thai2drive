@@ -20,7 +20,9 @@ WEBAPP_HTML = r"""<!DOCTYPE html>
 <html lang="th" data-theme="dark">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta id="metaDescription" name="description" content="ฝึกข้อสอบทฤษฎีใบขับขี่นอร์เวย์ด้วยภาษาไทย นอร์เวย์ และอังกฤษกับ Thai2Drive">
+<link rel="icon" href="/api/assets/favicon.ico" sizes="any">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta name="deploy-version" content="__DEPLOY_VERSION__">
@@ -3327,7 +3329,7 @@ a { color:inherit; text-decoration:none; }
   <!-- TOP BAR -->
   <div id="topBar">
     <div class="top-logo">
-      <img src="/api/assets/developer-icon-512.png" style="width:32px;height:32px;border-radius:9px;object-fit:cover;">
+      <img src="/api/assets/developer-icon-512.png" alt="Thai2Drive logo" style="width:32px;height:32px;border-radius:9px;object-fit:cover;">
       <span>Thai<span class="logo-t">2</span>Drive</span>
     </div>
     <div class="top-spacer"></div>
@@ -3353,7 +3355,7 @@ a { color:inherit; text-decoration:none; }
     <div class="screen active" id="screenAuth">
       <div class="auth-card">
         <div class="auth-header">
-          <div class="auth-big-icon"><img src="/api/assets/developer-icon-512.png" style="width:56px;height:56px;border-radius:14px;object-fit:cover;"></div>
+          <div class="auth-big-icon"><img src="/api/assets/developer-icon-512.png" alt="Thai2Drive logo" style="width:56px;height:56px;border-radius:14px;object-fit:cover;"></div>
           <h1>Thai<span>2Drive</span></h1>
           <p data-key="auth_tagline">Teoriprøven på thai</p>
           <div class="auth-flags">
@@ -3387,10 +3389,10 @@ a { color:inherit; text-decoration:none; }
             <label data-key="auth_password">Passord</label>
             <div class="pw-wrap">
               <input type="password" id="loginPass" placeholder="••••••••" data-placeholder-key="auth_password_placeholder" autocomplete="current-password">
-              <button type="button" class="pw-eye" onclick="togglePw(this)" tabindex="-1" title="Vis/skjul passord" aria-label="Vis/skjul passord">👁</button>
+              <button type="button" class="pw-eye" onclick="togglePw(this)" tabindex="-1" data-label-key="toggle_password">👁</button>
             </div>
           </div>
-          <div class="forgot-link"><a onclick="showForgot()" data-key="forgot_password">Glemt passord?</a></div>
+          <div class="forgot-link"><a href="#forgot" onclick="showForgot(); return false;" data-key="forgot_password">Glemt passord?</a></div>
           <button class="auth-btn" onclick="doLogin()" data-key="login">Logg inn</button>
         </div>
 
@@ -3408,7 +3410,7 @@ a { color:inherit; text-decoration:none; }
             <label data-key="auth_password">Passord</label>
             <div class="pw-wrap">
               <input type="password" id="regPass" placeholder="Minst 6 tegn" data-placeholder-key="auth_password_min_placeholder" autocomplete="new-password">
-              <button type="button" class="pw-eye" onclick="togglePw(this)" tabindex="-1" title="Vis/skjul passord" aria-label="Vis/skjul passord">👁</button>
+              <button type="button" class="pw-eye" onclick="togglePw(this)" tabindex="-1" data-label-key="toggle_password">👁</button>
             </div>
           </div>
           <button class="auth-btn" onclick="doRegister()" data-key="create_account">Opprett konto</button>
@@ -3422,7 +3424,7 @@ a { color:inherit; text-decoration:none; }
           </div>
           <button class="auth-btn" id="forgotSubmitBtn" onclick="doForgot()" data-key="send_reset">Send tilbakestillingslenke</button>
           <div style="text-align:center;margin-top:12px">
-            <a style="font-size:.78rem;color:var(--muted);cursor:pointer" onclick="switchTab('login')" data-key="back">← Tilbake</a>
+            <a href="#login" style="font-size:.78rem;color:var(--muted);cursor:pointer" onclick="switchTab('login'); return false;" data-key="back">← Tilbake</a>
           </div>
         </div>
 
@@ -3437,12 +3439,12 @@ a { color:inherit; text-decoration:none; }
             <label data-key="reset_new_pass_label">Nytt passord</label>
             <div class="pw-wrap">
               <input type="password" id="resetNewPass" placeholder="Minst 6 tegn" data-placeholder-key="auth_password_min_placeholder" autocomplete="new-password">
-              <button type="button" class="pw-eye" onclick="togglePw(this)" tabindex="-1" title="Vis/skjul passord" aria-label="Vis/skjul passord">👁</button>
+              <button type="button" class="pw-eye" onclick="togglePw(this)" tabindex="-1" data-label-key="toggle_password">👁</button>
             </div>
           </div>
           <button class="auth-btn" id="resetSubmitBtn" onclick="doResetPassword()" data-key="reset_submit">Sett nytt passord</button>
           <div style="text-align:center;margin-top:12px">
-            <a style="font-size:.78rem;color:var(--muted);cursor:pointer" onclick="switchTab('forgot')" data-key="back">← Tilbake</a>
+            <a href="#forgot" style="font-size:.78rem;color:var(--muted);cursor:pointer" onclick="switchTab('forgot'); return false;" data-key="back">← Tilbake</a>
           </div>
         </div>
       </div>
@@ -3452,7 +3454,7 @@ a { color:inherit; text-decoration:none; }
     <div class="screen" id="screenHome">
       <div class="home-top">
         <div class="home-logo-row">
-          <img src="/api/assets/developer-icon-512.png" style="width:64px;height:64px;border-radius:18px;object-fit:cover;box-shadow:0 8px 24px rgba(255,153,51,.35);">
+          <img src="/api/assets/developer-icon-512.png" alt="Thai2Drive logo" style="width:64px;height:64px;border-radius:18px;object-fit:cover;box-shadow:0 8px 24px rgba(255,153,51,.35);">
           <div class="home-title">Thai<span>2</span>Drive</div>
           <div class="home-sub" data-key="app_sub">สอบใบขับขี่นอร์เวย์</div>
         </div>
@@ -4212,6 +4214,8 @@ function _mergeAttempts(remote, local) {
 
 // ── UI string translations ──────────────────────────────────
 var UI = {
+  meta_description:{th:'ฝึกข้อสอบทฤษฎีใบขับขี่นอร์เวย์ด้วยภาษาไทย นอร์เวย์ และอังกฤษกับ Thai2Drive', no:'Øv til norsk teoriprøve på thai, norsk og engelsk med Thai2Drive.', en:'Practise for the Norwegian driving theory test in Thai, Norwegian and English with Thai2Drive.'},
+  toggle_password:{th:'แสดงหรือซ่อนรหัสผ่าน', no:'Vis eller skjul passord', en:'Show or hide password'},
   back:        {th:'← กลับ',          no:'← Tilbake',      en:'← Back'},
   question:    {th:'คำถามที่',          no:'Spørsmål',        en:'Question'},
   of:          {th:'จาก',              no:'av',              en:'of'},
@@ -4602,6 +4606,9 @@ function ttsStreamUrl(text, lang) {
 }
 
 function applyUILang() {
+  document.documentElement.lang = appLang === 'no' ? 'nb' : appLang;
+  var metaDescription = document.getElementById('metaDescription');
+  if (metaDescription) metaDescription.setAttribute('content', t('meta_description'));
   // Generic text and placeholders first, so every visible static label follows appLang.
   document.querySelectorAll('[data-key]').forEach(function(el) {
     var key = el.getAttribute('data-key');
@@ -4612,6 +4619,13 @@ function applyUILang() {
     var key = el.getAttribute('data-placeholder-key');
     var val = t(key);
     if (val) el.setAttribute('placeholder', val);
+  });
+  document.querySelectorAll('[data-label-key]').forEach(function(el) {
+    var val = t(el.getAttribute('data-label-key'));
+    if (val) {
+      el.setAttribute('title', val);
+      el.setAttribute('aria-label', val);
+    }
   });
   document.querySelectorAll('[data-title-key]').forEach(function(el) {
     var val = t(el.getAttribute('data-title-key'));
@@ -5405,7 +5419,7 @@ function sbRender() {
     ? '<button class="sb-edit-btn" onclick="openStudiebokModal(' + ch.order + ')" title="Rediger">✏️</button>'
     : '';
 
-  var imgHtml = ch.image_url ? '<img src="' + ch.image_url + '" class="study-img" alt="">' : '';
+  var imgHtml = ch.image_url ? '<img src="' + escH(ch.image_url) + '" class="study-img" alt="' + escH(title) + '">' : '';
   var vidHtml = ch.video_url
     ? '<div><a class="sb-video-btn" href="' + escH(ch.video_url) + '" target="_blank" rel="noopener">🎬 ' + escH(t('sb_watch_video')) + '</a></div>'
     : '';
@@ -5749,7 +5763,7 @@ function togglePw(btn) {
   var show = inp.type === 'password';
   inp.type = show ? 'text' : 'password';
   btn.textContent = show ? '🙈' : '👁';
-  var lbl = appLang === 'th' ? 'แสดง/ซ่อนรหัสผ่าน' : appLang === 'en' ? 'Show/hide password' : 'Vis/skjul passord';
+  var lbl = t('toggle_password');
   btn.setAttribute('title', lbl);
   btn.setAttribute('aria-label', lbl);
 }
@@ -6537,7 +6551,7 @@ function renderQuestion() {
   qCard.innerHTML =
     '<div class="q-left">'
       + '<div class="q-img-wrap" id="qImgWrap">'
-        + '<img class="q-img" src="' + escH(imgUrl) + '" alt="" onerror="this.parentElement.style.display=\'none\'" loading="lazy">'
+        + '<img class="q-img" src="' + escH(imgUrl) + '" alt="' + escH(qText) + '" onerror="this.parentElement.style.display=\'none\'" loading="lazy">'
       + '</div>'
       + '<div class="q-text">' + escH(qText) + '</div>'
       + '<div style="flex-shrink:0;"><button class="tts-play" id="qTtsBtn" title="' + escH(t('read_aloud')) + '" onclick="speakQ()">▶</button></div>'
@@ -6562,7 +6576,7 @@ function renderQuestion() {
   var aiImgbox = document.querySelector('.quiz-ai-imgbox');
   if (aiImgbox) aiImgbox.className = 'quiz-ai-imgbox'; // clear glow
   var aiImg = document.getElementById('quizAiImg');
-  if (aiImg) { aiImg.src = imgUrl; aiImg.className = 'quiz-ai-img'; } // clear flash
+  if (aiImg) { aiImg.src = imgUrl; aiImg.alt = qText; aiImg.className = 'quiz-ai-img'; } // clear flash
   var aiOverlay = document.getElementById('quizAiOverlay');
   if (aiOverlay) aiOverlay.className = 'quiz-ai-img-overlay';
   var aiStatus = document.getElementById('quizAiStatus');
@@ -7858,7 +7872,7 @@ async function loadBookmarks() {
       if (!ansText) {
         ansText = pickField(q, 'answer_' + correct.toLowerCase()) || '';
       }
-      var imgHtml = imgUrl ? '<div class="bm-card-img-wrap"><img class="bm-card-img" src="' + escH(imgUrl) + '" alt="" onerror="this.parentElement.style.display=\'none\'"></div>' : '';
+      var imgHtml = imgUrl ? '<div class="bm-card-img-wrap"><img class="bm-card-img" src="' + escH(imgUrl) + '" alt="' + escH(qText) + '" onerror="this.parentElement.style.display=\'none\'"></div>' : '';
       var ansHtml = ansText ? '<div class="bm-card-ans">✓ ' + escH(ansText) + '</div>' : '';
       return '<div class="bm-card">'
         + '<button class="bm-card-remove" onclick="removeBookmark(\'' + qId + '\',this.closest(\'.bm-card\'))" title="Fjern">✕</button>'
@@ -7982,7 +7996,7 @@ async function loadSigns() {
         card.className = 'sign-card';
         card.innerHTML =
           (imgUrl
-            ? '<div class="sign-img-wrap"><img class="sign-img" src="' + escH(imgUrl) + '" alt="" loading="lazy"></div>'
+            ? '<div class="sign-img-wrap"><img class="sign-img" src="' + escH(imgUrl) + '" alt="' + escH(nameText) + '" loading="lazy"></div>'
             : '') +
           '<div class="sign-ans">' + escH(nameText || '–') + '</div>';
         (function(s){ card.onclick = function(){ openSignDetail(s); }; })(sign);
@@ -9502,7 +9516,7 @@ function _renderRelatedSignCard(sign, lang) {
   var code = sign.code || _signCode(sign);
   var clickId = JSON.stringify(sign.id || '').replace(/"/g, '&quot;');
   return '<button class="sp-related-card" type="button" onclick="openSignDetailById(' + clickId + ')">'
-    + '<div class="sp-related-img">' + (sign.image_url ? '<img src="' + escH(sign.image_url) + '" alt="" loading="lazy">' : '') + '</div>'
+    + '<div class="sp-related-img">' + (sign.image_url ? '<img src="' + escH(sign.image_url) + '" alt="' + escH(name) + '" loading="lazy">' : '') + '</div>'
     + '<div class="sp-related-code">' + escH(code || '') + '</div>'
     + '<div class="sp-related-name">' + escH(name) + '</div>'
     + '</button>';
@@ -9520,7 +9534,7 @@ function _renderSignPanel() {
 
   // Image
   var imgEl = document.getElementById('spImg');
-  if (imgEl) { imgEl.src = sign.image_url || ''; }
+  if (imgEl) { imgEl.src = sign.image_url || ''; imgEl.alt = _getProp(sign.name, lang) || ''; }
 
   // Name
   var nameEl = document.getElementById('spName');
