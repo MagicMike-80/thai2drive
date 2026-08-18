@@ -822,6 +822,14 @@ MICHAEL_TOPICS = {
     ],
 }
 
+
+def _strict_lang_value(doc: dict, field_prefix: str, lang: str) -> str:
+    """Return only the requested language field; never borrow Norwegian text."""
+    key = f"{field_prefix}_{lang}"
+    value = doc.get(key)
+    return value.strip() if isinstance(value, str) and value.strip() else ""
+
+
 # ─── Contextual chip suggestions (multilingual keyword detection) ─────────────
 _KW = {
     "vikeplikt": {
@@ -978,8 +986,10 @@ async def _get_curriculum_context(user_msg: str, lang: str) -> str:
                 top_chapters = [ch for score, ch in scored_chapters[:2]]
                 
                 for ch in top_chapters:
-                    title = ch.get(f"title_{lang}") or ch.get("title_no")
-                    content = ch.get(f"content_{lang}") or ch.get("content_no")
+                    title = _strict_lang_value(ch, "title", lang)
+                    content = _strict_lang_value(ch, "content", lang)
+                    if not title or not content:
+                        continue
                     # Clean html tags from content
                     clean_content = re.sub(r'<[^>]+>', ' ', content)
                     clean_content = re.sub(r'\s+', ' ', clean_content).strip()
@@ -1008,8 +1018,10 @@ async def _get_curriculum_context(user_msg: str, lang: str) -> str:
                 cursor = _db.learning_videos.find({"$or": video_or_clauses})
                 matched_videos = await cursor.to_list(length=3)
                 for vid in matched_videos:
-                    vid_title = vid.get(f"title_{lang}") or vid.get("title_no") or ""
-                    vid_summary = vid.get(f"instructor_summary_{lang}") or vid.get("instructor_summary_no") or ""
+                    vid_title = _strict_lang_value(vid, "title", lang)
+                    vid_summary = _strict_lang_value(vid, "instructor_summary", lang)
+                    if not vid_title:
+                        continue
                     vid_desc = (
                         f"Learning Video:\n"
                         f"- Title: {vid_title}\n"
@@ -1114,9 +1126,12 @@ async def get_relevant_resources(topic_tags: List[str], lang: str) -> dict:
         }).to_list(3)
 
         for v in videos:
+            title = _strict_lang_value(v, "title", lang)
+            if not title:
+                continue
             result["videos"].append({
                 "id": str(v.get("_id", "")),
-                "title": v.get(f"title_{lang}") or v.get("title_no") or "",
+                "title": title,
                 "url": v.get("youtube_url", ""),
                 "tags": v.get("topic_tags", [])
             })
@@ -1128,9 +1143,12 @@ async def get_relevant_resources(topic_tags: List[str], lang: str) -> dict:
         }).to_list(3)
 
         for p in podcasts:
+            title = _strict_lang_value(p, "title", lang)
+            if not title:
+                continue
             result["podcasts"].append({
                 "id": str(p.get("_id", "")),
-                "title": p.get(f"title_{lang}") or p.get("title_no") or "",
+                "title": title,
                 "url": p.get("file_path", ""),
                 "tags": p.get("topic_tags", [])
             })
@@ -1199,27 +1217,26 @@ def _extract_topic_tags_from_context(context_str: str, user_message: str, num_ta
 
 
 async def _get_available_multimedia(lang: str) -> str:
-    """Build an AVAILABLE MULTIMEDIA section for Michael's system prompt from the DB."""
+    """Build an AVAILABLE MULTIMEDIA section without cross-language title fallback."""
     try:
         lines = []
         videos = await _db.learning_videos.find({"active": True}).to_list(20)
         for v in videos:
-            title = v.get(f"title_{lang}") or v.get("title_no") or ""
-            title_no = v.get("title_no") or title
-            title_th = v.get("title_th") or title
-            title_en = v.get("title_en") or title
+            title = _strict_lang_value(v, "title", lang)
+            if not title:
+                continue
             url = v.get("youtube_url", "")
             tags = ", ".join(v.get("topic_tags", []))
-            lines.append(f"VIDEO | {url} | {title_no} | {title_th} | {title_en} | tags: {tags}")
+            lines.append(f"VIDEO | {url} | {title} | {title} | {title} | tags: {tags}")
 
         podcasts = await _db.learning_podcasts.find({"active": True}).to_list(20)
         for p in podcasts:
-            title_no = p.get("title_no") or ""
-            title_th = p.get("title_th") or title_no
-            title_en = p.get("title_en") or title_no
+            title = _strict_lang_value(p, "title", lang)
+            if not title:
+                continue
             fp = p.get("file_path", "")
             tags = ", ".join(p.get("topic_tags", []))
-            lines.append(f"PODCAST | {fp} | {title_no} | {title_th} | {title_en} | tags: {tags}")
+            lines.append(f"PODCAST | {fp} | {title} | {title} | {title} | tags: {tags}")
 
         if not lines:
             return ""
@@ -1434,12 +1451,21 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
     except Exception as e:
         logger.error("LiteLLM call failed [%s]: %s", type(e).__name__, e)
 
-        # Check if the error is a 401 Authentication/API key error
-        is_auth_error = False
-        if "AuthenticationError" in type(e).__name__ or "401" in str(e) or "invalid x-api-key" in str(e).lower() or "invalid api key" in str(e).lower():
-            is_auth_error = True
+        # Check if the error is an auth/quota API error; user-facing fallback stays localized.
+        err_lower = str(e).lower()
+        is_api_config_error = False
+        if (
+            "AuthenticationError" in type(e).__name__
+            or "401" in str(e)
+            or "429" in str(e)
+            or "invalid x-api-key" in err_lower
+            or "invalid api key" in err_lower
+            or "quota" in err_lower
+            or "rate limit" in err_lower
+        ):
+            is_api_config_error = True
 
-        if is_auth_error:
+        if is_api_config_error:
             _key_env = {
                 "deepseek": "DEEPSEEK_API_KEY",
                 "openrouter": "OPENROUTER_API_KEY",
@@ -1499,10 +1525,10 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
 
 def _fallback_reply(lang: str) -> str:
     if lang == "th":
-        return "ขอโทษค่ะ ระบบไม่พร้อมใช้งานในขณะนี้ กรุณาลองใหม่อีกครั้งในภายหลังค่ะ"
+        return "ขออภัยค่ะ ขณะนี้ครูไมเคิลไม่สามารถให้บริการได้ชั่วคราว กรุณาลองใหม่อีกครั้งในภายหลังนะคะ"
     if lang == "en":
-        return "Sorry, I'm not available right now. Please try again in a moment."
-    return "Beklager, jeg er ikke tilgjengelig akkurat nå. Prøv igjen om litt."
+        return "Sorry, Michael is not available right now. Please try again in a moment."
+    return "Beklager, Michael er ikke tilgjengelig akkurat nå. Prøv igjen om litt."
 
 
 # ─── Feedback ─────────────────────────────────────────────────────────────────
