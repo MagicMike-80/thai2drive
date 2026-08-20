@@ -9658,48 +9658,46 @@ VOICE_TESTER_HTML = """<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Thai Voice Tester</title>
+<title>Stemmetest — Michaels klonede stemme</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    background: #0d0d0d;
-    color: #e0e0e0;
+    background: #0d0d0d; color: #e0e0e0;
     font-family: 'Segoe UI', system-ui, sans-serif;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
+    min-height: 100vh; display: flex; align-items: flex-start;
+    justify-content: center; padding: 24px;
   }
   .card {
-    background: #1a1a1a;
-    border: 1px solid #2a2a2a;
-    border-radius: 16px;
-    padding: 32px;
-    width: 100%;
-    max-width: 520px;
+    background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 16px;
+    padding: 32px; width: 100%; max-width: 620px;
     box-shadow: 0 8px 40px rgba(0,0,0,0.5);
   }
-  .logo { display:flex; align-items:center; gap:10px; margin-bottom:28px; }
+  .logo { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
   .logo-icon {
     width:40px; height:40px; border-radius:10px;
     background: linear-gradient(135deg,#8b5cf6,#6366f1);
-    display:flex; align-items:center; justify-content:center;
-    font-size:20px;
+    display:flex; align-items:center; justify-content:center; font-size:20px;
   }
   .logo h1 { font-size:1.15rem; font-weight:600; color:#fff; }
   .logo p { font-size:0.75rem; color:#666; }
+  .lead { font-size:0.85rem; color:#888; line-height:1.6; margin:16px 0 24px; }
   label { display:block; font-size:0.8rem; color:#888; margin-bottom:6px; font-weight:500; letter-spacing:.04em; text-transform:uppercase; }
-  input, textarea {
-    width:100%; background:#111; border:1px solid #2a2a2a;
-    border-radius:8px; color:#e0e0e0; font-size:0.95rem;
-    padding:11px 14px; outline:none; transition:border-color .2s;
-    font-family: inherit;
+  textarea {
+    width:100%; background:#111; border:1px solid #2a2a2a; border-radius:8px;
+    color:#e0e0e0; font-size:0.95rem; padding:11px 14px; outline:none;
+    transition:border-color .2s; font-family: inherit; resize:vertical;
+    min-height:90px; line-height:1.7;
   }
-  input:focus, textarea:focus { border-color:#6366f1; }
-  textarea { resize:vertical; min-height:120px; line-height:1.6; }
-  .field { margin-bottom:18px; }
-  .row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  textarea:focus { border-color:#6366f1; }
+  .field { margin-bottom:20px; }
+  .langrow { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:20px; }
+  .langbtn {
+    padding:12px 8px; border:1px solid #2a2a2a; border-radius:10px; cursor:pointer;
+    background:#111; color:#bbb; font-size:0.9rem; font-weight:600;
+    transition:all .15s; font-family:inherit;
+  }
+  .langbtn:hover { border-color:#6366f1; color:#fff; }
+  .langbtn.active { background:linear-gradient(135deg,#8b5cf6,#6366f1); color:#fff; border-color:transparent; }
   .btn {
     width:100%; padding:13px; border:none; border-radius:10px; cursor:pointer;
     font-size:1rem; font-weight:600; letter-spacing:.02em;
@@ -9709,15 +9707,26 @@ VOICE_TESTER_HTML = """<!DOCTYPE html>
   .btn:hover { opacity:.9; }
   .btn:active { transform:scale(.98); }
   .btn:disabled { opacity:.45; cursor:not-allowed; }
+  .btn.secondary { background:#222; border:1px solid #333; margin-top:10px; }
   .status {
     margin-top:16px; padding:12px 14px; border-radius:8px;
-    font-size:0.875rem; display:none;
+    font-size:0.875rem; display:none; line-height:1.6;
   }
   .status.error { background:#2d1515; border:1px solid #5a1a1a; color:#f87171; display:block; }
   .status.ok { background:#142014; border:1px solid #1a4a1a; color:#86efac; display:block; }
+  .status.warn { background:#2a2113; border:1px solid #5a4a1a; color:#fcd34d; display:block; }
   .status.loading { background:#1a1a2e; border:1px solid #2a2a5a; color:#a5b4fc; display:block; }
   audio { width:100%; margin-top:14px; border-radius:8px; display:none; }
-  .hint { font-size:0.72rem; color:#555; margin-top:5px; }
+  .hint { font-size:0.72rem; color:#555; margin-top:6px; line-height:1.6; }
+  .diag { margin-top:24px; padding-top:20px; border-top:1px solid #242424; }
+  .diag h2 { font-size:0.8rem; color:#888; text-transform:uppercase; letter-spacing:.04em; margin-bottom:12px; }
+  table { width:100%; border-collapse:collapse; font-size:0.82rem; }
+  th, td { text-align:left; padding:7px 8px; border-bottom:1px solid #222; }
+  th { color:#666; font-weight:500; }
+  td { color:#ccc; font-family:ui-monospace, monospace; font-size:0.78rem; word-break:break-all; }
+  .pill { display:inline-block; padding:2px 8px; border-radius:99px; font-size:0.7rem; font-weight:600; }
+  .pill.good { background:#142014; color:#86efac; border:1px solid #1a4a1a; }
+  .pill.bad { background:#2d1515; color:#f87171; border:1px solid #5a1a1a; }
 </style>
 </head>
 <body>
@@ -9725,87 +9734,148 @@ VOICE_TESTER_HTML = """<!DOCTYPE html>
   <div class="logo">
     <div class="logo-icon">🎙️</div>
     <div>
-      <h1>AI Thai Voice Tester</h1>
-      <p>ElevenLabs · eleven_multilingual_v2</p>
+      <h1>Stemmetest — Michaels klonede stemme</h1>
+      <p>Tester den ekte produksjonsruten /api/tts</p>
     </div>
   </div>
 
-  <div class="row">
-    <div class="field">
-      <label>ElevenLabs API Key</label>
-      <input type="password" id="apiKey" placeholder="sk-..." autocomplete="off">
-      <div class="hint">Aldri lagret — kun i nettleseren</div>
-    </div>
-    <div class="field">
-      <label>Voice ID</label>
-      <input type="text" id="voiceId" placeholder="21m00Tcm..." value="21m00Tcm4TlvDq8ikWAM">
+  <p class="lead">
+    Denne siden kaller <strong>samme endepunkt som appen bruker</strong>. Hører du stemmen
+    din her, virker den i quizen og i Michael-chatten også. Ingen API-nøkkel skal limes inn
+    — nøkkelen ligger i serveren.
+  </p>
+
+  <div class="field">
+    <label>Språk</label>
+    <div class="langrow">
+      <button class="langbtn active" data-lang="th-TH" onclick="pickLang(this)">🇹🇭 Thai</button>
+      <button class="langbtn" data-lang="nb-NO" onclick="pickLang(this)">🇳🇴 Norsk</button>
+      <button class="langbtn" data-lang="en-US" onclick="pickLang(this)">🇬🇧 English</button>
     </div>
   </div>
 
   <div class="field">
-    <label>Thai-tekst</label>
-    <textarea id="thaiText">กรุณาหยุดรถที่ป้ายหยุดรถ แล้วมองซ้ายขวาก่อนออกตัว ขับรถด้วยความระมัดระวัง</textarea>
+    <label>Tekst</label>
+    <textarea id="text"></textarea>
+    <p class="hint">Teksten byttes automatisk når du velger språk. Du kan skrive din egen.</p>
   </div>
 
-  <button class="btn" id="genBtn" onclick="generate()">&#9654; Generer Lyd</button>
+  <button class="btn" id="genBtn" onclick="generate()">Spill av stemmen min</button>
+  <button class="btn secondary" onclick="checkStatus()">Sjekk lydoppsettet (/api/tts/status)</button>
+
   <div class="status" id="status"></div>
-  <audio controls id="player"></audio>
+  <audio id="player" controls></audio>
+
+  <div class="diag" id="diag" style="display:none">
+    <h2>Diagnostikk</h2>
+    <table id="diagTable"></table>
+  </div>
 </div>
 
 <script>
-async function generate() {
-  var key = document.getElementById('apiKey').value.trim();
-  var voiceId = document.getElementById('voiceId').value.trim();
-  var text = document.getElementById('thaiText').value.trim();
-  var btn = document.getElementById('genBtn');
-  var status = document.getElementById('status');
-  var player = document.getElementById('player');
+var SAMPLES = {
+  'th-TH': 'สวัสดีครับ ผมชื่อไมเคิล ผมเป็นครูสอนขับรถ วันนี้เราจะมาเรียนเรื่องการให้ทางกันครับ',
+  'nb-NO': 'Hei, jeg heter Michael, og jeg er trafikklærer. I dag skal vi snakke om vikeplikt.',
+  'en-US': 'Hello, my name is Michael and I am a driving instructor. Today we will talk about right of way.'
+};
+var currentLang = 'th-TH';
 
-  if (!key) { showStatus('error', 'Skriv inn ElevenLabs API Key.'); return; }
-  if (!voiceId) { showStatus('error', 'Skriv inn Voice ID.'); return; }
-  if (!text) { showStatus('error', 'Skriv inn Thai-tekst.'); return; }
+document.getElementById('text').value = SAMPLES[currentLang];
 
-  btn.disabled = true;
-  player.style.display = 'none';
-  showStatus('loading', 'Genererer lyd...');
-
-  try {
-    var res = await fetch('https://api.elevenlabs.io/v1/text-to-speech/' + voiceId, {
-      method: 'POST',
-      headers: {
-        'xi-api-key': key,
-        'Content-Type': 'application/json',
-        'Accept': 'audio/mpeg'
-      },
-      body: JSON.stringify({
-        text: text,
-        model_id: 'eleven_multilingual_v2',
-        voice_settings: { stability: 0.5, similarity_boost: 0.75 }
-      })
-    });
-
-    if (!res.ok) {
-      var err = await res.json().catch(function(){ return {}; });
-      throw new Error(err.detail && err.detail.message ? err.detail.message : 'Status ' + res.status);
-    }
-
-    var blob = await res.blob();
-    var url = URL.createObjectURL(blob);
-    player.src = url;
-    player.style.display = 'block';
-    player.play();
-    showStatus('ok', 'Lyd klar! Spilles av na.');
-  } catch(e) {
-    showStatus('error', 'Feil: ' + e.message);
-  } finally {
-    btn.disabled = false;
+function pickLang(btn) {
+  var els = document.querySelectorAll('.langbtn');
+  for (var i = 0; i < els.length; i++) { els[i].classList.remove('active'); }
+  btn.classList.add('active');
+  var prev = currentLang;
+  currentLang = btn.getAttribute('data-lang');
+  var box = document.getElementById('text');
+  if (!box.value.trim() || box.value.trim() === SAMPLES[prev]) {
+    box.value = SAMPLES[currentLang];
   }
 }
 
 function showStatus(type, msg) {
   var el = document.getElementById('status');
   el.className = 'status ' + type;
-  el.textContent = msg;
+  el.innerHTML = msg;
+}
+
+async function generate() {
+  var text = document.getElementById('text').value.trim();
+  var btn = document.getElementById('genBtn');
+  var player = document.getElementById('player');
+  if (!text) { showStatus('error', 'Skriv inn tekst først.'); return; }
+
+  btn.disabled = true;
+  player.style.display = 'none';
+  showStatus('loading', 'Genererer lyd via /api/tts …');
+
+  try {
+    var url = '/api/tts?lang=' + encodeURIComponent(currentLang) + '&text=' + encodeURIComponent(text);
+    var res = await fetch(url);
+    if (!res.ok) {
+      var detail = '';
+      try { var j = await res.json(); detail = j.detail || ''; } catch (e) {}
+      throw new Error('Status ' + res.status + (detail ? ' — ' + detail : ''));
+    }
+
+    var provider = res.headers.get('X-TTS-Provider') || 'ukjent';
+    var voice = res.headers.get('X-TTS-Voice') || 'ukjent';
+    var blob = await res.blob();
+    player.src = URL.createObjectURL(blob);
+    player.style.display = 'block';
+    player.play().catch(function(){});
+
+    if (provider.indexOf('elevenlabs') === 0) {
+      showStatus('ok',
+        '<strong>Dette er din klonede stemme.</strong><br>' +
+        'Leverandør: <code>' + provider + '</code><br>Voice ID: <code>' + voice + '</code>');
+    } else {
+      showStatus('warn',
+        '<strong>Dette er IKKE stemmen din.</strong> Du hører en Google-robotstemme, ' +
+        'fordi ElevenLabs ikke svarte.<br>Leverandør: <code>' + provider + '</code>' +
+        (voice !== 'ukjent' ? '<br>Stemme: <code>' + voice + '</code>' : '') +
+        '<br>Trykk «Sjekk lydoppsettet» for å se hvorfor.');
+    }
+  } catch (err) {
+    showStatus('error', 'Feilet: ' + err.message);
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+async function checkStatus() {
+  showStatus('loading', 'Henter /api/tts/status ...');
+  try {
+    var res = await fetch('/api/tts/status');
+    var d = await res.json();
+    var rows = '';
+    rows += '<tr><th>ElevenLabs-nøkkel satt</th><td>' +
+      (d.elevenlabs_key_configured ? '<span class="pill good">JA</span>' : '<span class="pill bad">NEI</span>') + '</td></tr>';
+    rows += '<tr><th>Google-nøkkel (nødfallback)</th><td>' +
+      (d.google_key_configured ? '<span class="pill good">JA</span>' : '<span class="pill bad">NEI</span>') + '</td></tr>';
+    rows += '<tr><th>Klonet Voice ID</th><td>' + d.cloned_voice_id + '</td></tr>';
+    rows += '<tr><th>Modell</th><td>' + d.elevenlabs_model_id + '</td></tr>';
+    for (var lang in d.languages) {
+      var r = d.languages[lang];
+      rows += '<tr><th>' + lang + '</th><td>' +
+        (r.ok ? '<span class="pill good">klonet stemme</span>' : '<span class="pill bad">fallback</span>') +
+        '<br>' + r.actual + '</td></tr>';
+    }
+    document.getElementById('diagTable').innerHTML = rows;
+    document.getElementById('diag').style.display = 'block';
+
+    if (d.elevenlabs_key_configured) {
+      showStatus('ok', 'ELEVENLABS_API_KEY er satt. Alle tre språk skal gi din klonede stemme.');
+    } else {
+      showStatus('error',
+        '<strong>ELEVENLABS_API_KEY mangler i serveren.</strong><br>' +
+        'Det er derfor du ikke hører stemmen din. Den må settes som miljøvariabel i Railway. ' +
+        'Dette er en backend-oppgave (Anti/Codex).');
+    }
+  } catch (err) {
+    showStatus('error', 'Klarte ikke hente status: ' + err.message);
+  }
 }
 </script>
 </body>
