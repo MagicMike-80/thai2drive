@@ -21,7 +21,11 @@ def _env_flag(name: str, default: bool) -> bool:
 
 
 # ── Hovedbryteren ─────────────────────────────────────────────────────────────
-FREE_PROMO_MODE = _env_flag("FREE_PROMO_MODE", True)
+# Standard er AV. Kampanjen skal ikke starte fordi koden ble deployet — den skal
+# starte når Michael bestemmer det. Slå den PÅ uten deploy og uten kodeendring:
+# sett miljøvariabelen FREE_PROMO_MODE=true i Railway. Neste forespørsel leser
+# den, og gratisperioden er i gang. Sett den til false igjen for å avslutte.
+FREE_PROMO_MODE = _env_flag("FREE_PROMO_MODE", False)
 
 # Hvor lenge en bruker som registrerer seg UNDER kampanjen beholder full tilgang.
 # Dette er en ekte prøveperiode i databasen, ikke en visningseffekt: slås

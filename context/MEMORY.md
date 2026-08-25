@@ -2,12 +2,12 @@
 # Working Memory
 
 ## Active Threads
-- **⚠️ AI-TEAMET LIGGER KUN PÅ GRENEN `claude/ai-team-revenue-generation-nc97hw`, IKKE PÅ MAIN.** Starter en økt fra main finnes verken `.claude/agents/` (4 agenter) eller `/revenue-team`. Merges PR #8, blir teamet permanent for alle økter.
+- **AI-teamet:** 4 agenter i `.claude/agents/` + `/revenue-team`. Ligger på main etter merge av PR #8, altså tilgjengelig i enhver økt.
 - Thai2Drive: teoriprøve klasse B på thai, for thaitalende i Norge.
 - Webapp før mobil. **Utseendet er godkjent — ikke endre design som bieffekt.**
 - **Språkisolasjon er kritisk** — th/no/en-lekkasje har kostet mye debug.
-- **PR #8 (åpen, draft, CI grønn, 16 dager):** dashbord-språkrenhet, dynamisk paywall, Revenue Team, kampanje, stemmetester, kontrastfiks. Intet av det er ute hos elevene.
-- **Kampanje ferdig i kode (8c1ccaf):** `promo_config.py`, `FREE_PROMO_MODE=True`, 30 dager full tilgang til innloggede, gjester beholder registreringsvegg. Av-bryter virker uten deploy. `/api/unsubscribe` HMAC-signert.
+- **PR #8 merget til main:** dashbord-språkrenhet, dynamisk paywall, Revenue Team, kampanje (av), stemmetester, kontrastfiks på «Logg inn»/«Kjøp Premium».
+- **Kampanje ligger klar, men er AV.** `promo_config.py`, standard `FREE_PROMO_MODE=False`. Slå på: miljøvariabel `FREE_PROMO_MODE=true` i Railway — ingen deploy. Gir 30 dager full tilgang til innloggede; gjester beholder registreringsveggen. `/api/unsubscribe` HMAC-signert.
 - **TTS:** alle tre språk går til Michaels klonede ElevenLabs-stemme «Michael 1» (`eulvRsWu7NGAUD1FzMVP`, `eleven_v3`). Stemmetester: `/api/web/voice-tester`.
 - **2026-07-30:** "Spør Michael" (quiz) ferdig lokalt, IKKE committet: quiz.tsx, teacher.tsx, appStore.ts.
 
