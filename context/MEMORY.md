@@ -2,29 +2,24 @@
 # Working Memory
 
 ## Active Threads
-- Thai2Drive: Norwegian class B driving theory app/course for Thai speakers in Norway.
-- Current priority: stabilize web app first before mobile.
-- **Neon glow (Michael, 2026-06-23):** must flow/rotate around the full perimeter of buttons, cards and page edges (not static). Web first; wants status report when live.
-- **Language isolation is a critical quality rule** — th/no/en bleed-through in UI and AI teacher cost significant debug time.
-- **2026-08-04:** Språkrenhet mobil-dashbord pushet (c9642e7). PR #8 åpen/draft/CI grønn på branch claude/ai-team-revenue-generation-nc97hw, IKKE overvåket. Nye moduler src/constants/i18n.ts + categoryLabels.ts (Fail-Stop, ingen fallbacks).
-- Thai TTS fixed: voice th-TH-Chirp3-HD-Achird (th-TH-Standard-C deprecated). Deployed (a9a4804).
-- PowerShell profile loads DeepSeek env vars ($env:ANTHROPIC_BASE_URL etc.) automatically.
-- AI automation work is a parallel project: Thai2Drive Builder System.
-- **Web app appearance is approved — do not change visual design as a side effect of a feature.**
-- **2026-07-30:** "Spør Michael" (quiz) DONE + verified locally, NOT committed. Shows after wrong answer; sends hidden `<quiz_context>` to /api/teacher/chat. Files: quiz.tsx, teacher.tsx, appStore.ts.
+- **⚠️ AI-TEAMET LIGGER KUN PÅ GRENEN `claude/ai-team-revenue-generation-nc97hw`, IKKE PÅ MAIN.** Starter en økt fra main finnes verken `.claude/agents/` (4 agenter) eller `/revenue-team`. Merges PR #8, blir teamet permanent for alle økter.
+- Thai2Drive: teoriprøve klasse B på thai, for thaitalende i Norge.
+- Webapp før mobil. **Utseendet er godkjent — ikke endre design som bieffekt.**
+- **Språkisolasjon er kritisk** — th/no/en-lekkasje har kostet mye debug.
+- **PR #8 (åpen, draft, CI grønn, 16 dager):** dashbord-språkrenhet, dynamisk paywall, Revenue Team, kampanje, stemmetester, kontrastfiks. Intet av det er ute hos elevene.
+- **Kampanje ferdig i kode (8c1ccaf):** `promo_config.py`, `FREE_PROMO_MODE=True`, 30 dager full tilgang til innloggede, gjester beholder registreringsvegg. Av-bryter virker uten deploy. `/api/unsubscribe` HMAC-signert.
+- **TTS:** alle tre språk går til Michaels klonede ElevenLabs-stemme «Michael 1» (`eulvRsWu7NGAUD1FzMVP`, `eleven_v3`). Stemmetester: `/api/web/voice-tester`.
+- **2026-07-30:** "Spør Michael" (quiz) ferdig lokalt, IKKE committet: quiz.tsx, teacher.tsx, appStore.ts.
 
 ## Environment Notes
-- Live site: thai2drive.no | Backend: Railway + FastAPI | DB: MongoDB Atlas
-- Payments: Stripe for web, RevenueCat for mobile
-- Backend is source of truth for auth, premium, quota, and subscription status.
-- Key endpoints: /api/auth/me, /api/access/status, /api/access/consume, /api/create-checkout-session, /api/stripe/webhook.
-- Michael Trafikklærer is the AI teacher. It must answer in the same language as the user message.
+- thai2drive.no | Railway + FastAPI | MongoDB Atlas | Stripe (web) + RevenueCat (mobil)
+- Backend er fasit for auth, premium, kvote, abonnement.
+- Endepunkter: /api/auth/me, /access/status, /access/consume, /create-checkout-session, /stripe/webhook, /tts/status, /unsubscribe
+- Michael Trafikklærer svarer alltid på samme språk som eleven skriver.
+- **thai2drive.no og vegvesen.no er blokkert av nettverksproxyen i Claude-økter.** Michael må åpne dem selv.
 
 ## Pending Decisions
-- **TTS:** venter på at Michael åpner /api/tts/status. Ubesvart: skal synlig TTS-feilmelding bli egen patch?
-- **Urørt (krever ok):** premium-strenger har latinske tegn i thai-modus; freeRemaining() appStore.ts:330 sjekker !== null, ikke undefined.
-- Commit "Spør Michael" after Anti's review (~46 unrelated files still staged — untangle first).
-- Check OpenAI billing: LiteLLM returns RateLimitError, so Michael may be down in production too.
-- Create or update AGENTS.md for Codex compatibility.
-- Build a stronger Thai2Drive language system document.
-- AI work rules: small patches only, no big rewrites, never touch Stripe/premium/auth unless asked.
+- **⚠️ METAFORKONFLIKT:** AI-læreren bruker vert/gjest (`เจ้าของบ้าน/แขก`, teacher_chat.py:523) på thai, TikTok-manuset bruker konge/tjener. Michael må velge én.
+- **Michael, ~1 time:** åpne stemmetesteren; fem elevtelefoner (løfter agent 1 fra 3,7); lese e-postene høyt på thai; sjekke 2026-gebyret på vegvesen.no.
+- Urørt (krever ok): premium-strenger har latinske tegn i thai-modus; `freeRemaining()` appStore.ts:330 sjekker `!== null`.
+- Commit "Spør Michael" etter Antis review. AGENTS.md for Codex.
