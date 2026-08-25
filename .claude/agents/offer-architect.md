@@ -34,8 +34,17 @@ Du bestemmer:
 
 ## Prisregelen for Thai2Drive
 
-**Prisene er spikret av Michael 2026-08-04 og skal ikke gjenåpnes:**
-99 kr/mnd, **249 kr per 3 måneder (Beste verdi — den du leder mot)**, 699 kr livstid.
+**Vedtatt mål (Michael 2026-08-04):** 99 kr/mnd, **249 kr per 3 måneder (Beste verdi —
+den du leder mot)**, 699 kr livstid.
+
+**MEN produksjon kjører 199 / 399 / 699 per 2026-08-25.** Skriv aldri 99 kr som om det
+er dagens pris — da lover du noe kunden ikke får. Sjekk `PUBLIC_PRICING_FALLBACK`
+(`backend/server.py:151`) før du bruker et tall.
+
+Prisbytte krever Stripe Dashboard FØRST, deretter konstanten. Konstanten er en sperre:
+avvik mot Stripe gir `None` fra `_get_live_stripe_plan_prices_sync` og 503 fra
+`create_checkout_session`. Endres koden først, dør checkout. Stripe eies av Michael/Anti.
+
 Gratis nivå etter gratisuken: 5 spørsmål for gjester, 10 per dag for registrerte.
 
 **Hvorfor 249 er planen du dytter mot:** tre måneder er normal øvingstid. Pakken selger

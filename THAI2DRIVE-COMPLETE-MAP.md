@@ -41,7 +41,7 @@ File: `railway.json` (repo root)
   "build": { "builder": "DOCKERFILE", "dockerfilePath": "backend/Dockerfile" },
   "deploy": {
     "healthcheckPath": "/api/_whoami",
-    "healthcheckTimeout": 30,
+    "healthcheckTimeout": 300,
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 3
   }

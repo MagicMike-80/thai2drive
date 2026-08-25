@@ -44,18 +44,23 @@ av alle elever. Ferdig pipeline ligger i `01-market-signals.md`.
 Michaels erfaring peker på vikeplikt og rundkjøringer som de største smertepunktene, og
 manuset er skrevet for vikeplikt. Ekte data kan flytte det, og da flyttes manuset.
 
-### B2 — LØST. Prisen er spikret til 99 / 249 / 699
+### B2 — Prisen er vedtatt, men IKKE i drift
 
 Bestillingen sa opprinnelig «bekreft at prismodellen er optimalisert til 199 kr/mnd».
-Agent 2 kunne ikke bekrefte det, fordi live pris er **99 kr/mnd**
-(`PUBLIC_PRICING_FALLBACK`, `backend/server.py:146-155`, med Stripe som overstyrende kilde).
+Agent 2 kunne ikke bekrefte det, fordi live pris den gang var 99 kr/mnd.
 
-**Michael avgjorde 2026-08-04: prisene er 99 / 249 / 699 og står fast.** Det er identisk
-med produksjonskoden, så ingen implementering er nødvendig. 3-månederspakken til 249 kr
-er den elevene skal ledes mot — ikke primært på rabatt, men fordi tre måneder er normal
-øvingstid. Rabatten på 16,2 % er den synlige belønningen for å velge riktig lengde.
+**Michael vedtok 2026-08-04: 99 / 249 / 699.** Men per 2026-08-25 kjører produksjon
+**199 / 399 / 699** (`PUBLIC_PRICING_FALLBACK`, `server.py:151`). Vedtaket er altså en
+endring som gjenstår, ikke dagens tilstand.
 
-Alle 199-scenarier er fjernet fra `02-offer.md`. Historikken ligger i commit `ae4325a`.
+**Rekkefølgen er tvungen:** Stripe Dashboard først (eies av Michael/Anti), deretter
+konstanten i koden. Konstanten er en sperre — `_get_live_stripe_plan_prices_sync`
+returnerer `None` ved avvik mot Stripe (`server.py:1146`), og `create_checkout_session`
+kaster da 503 (`server.py:1604`). Endres koden først, **dør checkout for alle tre planene**.
+
+3-månederspakken til 249 kr er den elevene skal ledes mot — ikke primært på rabatt, men
+fordi tre måneder er normal øvingstid. Merk at rabattlogikken endrer seg med prisen:
+ved 99/249 er rabatten 16,2 %, ved dagens 199/399 er den 33,2 %.
 
 ### B3 — CTA-en må peke på gratisuken, ikke på 10 spørsmål
 

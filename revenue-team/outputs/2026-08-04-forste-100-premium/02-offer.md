@@ -5,9 +5,10 @@ input: business-brief.md, 00-brief.md, 01-market-signals.md
 second-pass-score: 4,2
 revidert: 2026-08-04 — omskrivingsrunde etter Michaels beslutninger
 åpne spørsmål: >
-  1) LØST. Michael har spikret 99 / 249 / 699. Det er identisk med det som kjøres i
-     produksjon og med min egen anbefaling (tidligere FORSLAG P1). 199-scenariet er
-     fjernet fra dokumentet.
+  1) DELVIS LØST. Michael har spikret 99 / 249 / 699 som mål, i tråd med min egen
+     anbefaling (tidligere FORSLAG P1). MEN produksjon kjører 199 / 399 / 699, og
+     byttet krever at Stripe oppdateres FØRST — ellers svarer checkout 503 for alle
+     planer. Stripe-operasjonen eies av Michael/Anti og er ikke gjort.
   2) LØST som premiss. TRIAL_DAYS = 7 er en kjernekomponent, ikke en fotnote.
      Hele tilbudet er bygget om rundt gratisuken. Se «Gratisuken er tilbudet».
   3) Gebyret er fortsatt [UVERIFISERT]. Nytt forsøk 2026-08-04 feilet: vegvesen.no er
@@ -21,39 +22,52 @@ revidert: 2026-08-04 — omskrivingsrunde etter Michaels beslutninger
 
 # Tilbud — Thai2Drive Premium, første 100 kunder
 
-> **Til Michael:** prisen er avgjort og dokumentet er skrevet om etter den. 99 / 249 / 699
-> står fast. Det er de samme tallene som kjøres i produksjon i dag, så tilbudet under
-> beskriver produktet slik det faktisk er — ikke en foreslått fremtid. Den andre store
-> endringen er gratisuken: `TRIAL_DAYS = 7` er løftet fra en detalj ingen av oss hadde
-> sett, til selve motoren i tilbudet.
+> **Til Michael:** prisen er avgjort — **99 / 249 / 699** — men den er ennå ikke i drift.
+> Produksjon kjører i dag **199 / 399 / 699** (`PUBLIC_PRICING_FALLBACK`, `server.py:151`).
+> Tilbudet under beskriver altså den **vedtatte** prisen, ikke dagens.
+>
+> **Rekkefølgen er tvungen og kan ikke snus:** Stripe må få de nye prisene først,
+> deretter oppdateres konstanten i koden. `create_checkout_session` krever
+> `source == "stripe_live"` (`server.py:1604`), og `_get_live_stripe_plan_prices_sync`
+> returnerer `None` så snart én plan avviker fra Stripe (`server.py:1146`). Endres koden
+> først, svarer checkout **503 for alle tre planene** — ikke feil pris, men ingen pris.
+> Stripe-operasjonen eies av Michael/Anti.
+>
+> Den andre store endringen er gratisuken: `TRIAL_DAYS = 7` er løftet fra en detalj
+> ingen av oss hadde sett, til selve motoren i tilbudet.
 
 ---
 
 ## Verifisering av bestillingen
 
-### Funn 1 — prisen er nå bekreftet, og den stemmer med koden
+### Funn 1 — prisen er vedtatt, men ikke i drift
 
-Den opprinnelige bestillingen ba om 199 kr/mnd. Michael har korrigert dette til 99 kr/mnd.
-Det er verdt å merke seg **hvorfor** korrigeringen gikk denne veien: 99 er ikke en nedjustering,
-det er tallet som allerede kjøres i produksjon.
+Den opprinnelige bestillingen ba om 199 kr/mnd. Michael har vedtatt 99 kr/mnd som mål.
+Merk rekkefølgen: da dette dokumentet først ble skrevet, *var* 99 kr live. Siden har
+produksjon blitt satt til 199 / 399 / 699. Vedtaket er altså nå en **endring som skal
+gjøres**, ikke en beskrivelse av dagens tilstand.
 
-| Plan | Vedtatt | Det som ligger i koden | Stemmer? |
+| Plan | Vedtatt mål | I produksjon nå | Status |
 |---|---|---|---|
-| Månedlig | **99 kr** | 99 kr | ✓ |
-| 3 måneder | **249 kr** (Beste verdi) | 249 kr | ✓ |
-| Livstid | **699 kr** | 699 kr | ✓ |
+| Månedlig | **99 kr** | 199 kr | venter på Stripe |
+| 3 måneder | **249 kr** (Beste verdi) | 399 kr | venter på Stripe |
+| Livstid | **699 kr** | 699 kr | ✓ allerede riktig |
 
-**Ingen kodeendring er nødvendig for prisen.** Det er hele poenget — markedsføringen kan
-starte i dag uten at Anti eller Codex rører Stripe.
+**Prisen krever to steg, i denne rekkefølgen:** (1) nye Prices opprettes i Stripe
+Dashboard, (2) `PUBLIC_PRICING_FALLBACK` settes til 99 / 249 / 699. Steg 1 eies av
+Michael/Anti. Gjøres steg 2 først, dør checkout.
 
-Verifisert av meg i repoet:
-- `backend/server.py:146-174` — `PUBLIC_PRICING_FALLBACK`: `monthly.amount = 99`,
-  `three_months.amount = 249`, `lifetime.amount = 699`.
-- `backend/webapp.py:3938, 3944, 3949` — paywall-kortene viser «99 kr», «249 kr», «699 kr»
-  som HTML før JavaScript henter live pris. `backend/webapp.py:4795-4797` har samme tre
-  tall som klientside-fallback.
-- «Best verdi»-merket ligger allerede på 3-månederskortet (`backend/webapp.py:3942`).
-  Den delen av bestillingen er altså allerede implementert.
+**Markedsføringen kan likevel starte før prisen er byttet** — gratisuken og
+lanseringskampanjen krever ingen prisendring i det hele tatt.
+
+Verifisert i repoet (oppdatert 2026-08-25):
+- `backend/server.py:151-173` — `PUBLIC_PRICING_FALLBACK` står på **199 / 399 / 699**.
+- `backend/webapp.py` — paywall-kortene viser «199 NOK», «399 NOK», «699 NOK».
+- **Konstanten er en sperre, ikke bare en pris.** `_get_live_stripe_plan_prices_sync`
+  sammenligner hver plan mot Stripe (`expected_minor`, `server.py:1146`) og returnerer
+  `None` ved avvik. `create_checkout_session` kaster da 503 (`server.py:1604`).
+  Derfor må Stripe endres først.
+- «Best verdi»-merket ligger allerede på 3-månederskortet. Den delen er implementert.
 
 ### Funn 2 — hvem som egentlig bestemmer prisen
 
@@ -69,9 +83,11 @@ prisen ligger i Stripe, og jeg har verken tilgang dit eller lov til å se etter.
 
 **Michael kan verifisere selv på ti sekunder** — åpne
 `https://www.thai2drive.no/api/pricing` i nettleseren. Står det `"source": "stripe_live"`,
-er beløpene der de ekte prisene. Står det `"fallback"`, er det 99 / 249 / 699 som vises.
-Gjør dette **før** du godkjenner noe under. Hele regnestykket mitt hviler på at
-månedsprisen er 99.
+er beløpene der de ekte prisene. Står det `"fallback"`, er det konstanten i koden som
+vises — i dag 199 / 399 / 699.
+
+**Regnestykkene i resten av dokumentet forutsetter 99 / 249 / 699.** De gjelder altså
+etter at Stripe og konstanten er oppdatert, ikke i dag.
 
 ---
 
@@ -514,7 +530,8 @@ måned. **Hva som må måles:** fordelingen mellom de tre planene, fire uker fø
 ### VEDTAK P1 — 99 / 249 / 699 står fast
 `VEDTATT av Michael 2026-08-04 — ingen implementering nødvendig`
 
-**Hva:** Prisene beholdes nøyaktig som de er. De er allerede live i produksjon.
+**Hva:** 99 / 249 / 699 er vedtatt som mål. Produksjon står i dag på 199 / 399 / 699,
+og byttet skjer først når Stripe er oppdatert (se boksen øverst).
 
 **Hvorfor dette er den riktige beslutningen, ikke bare den enkleste:**
 

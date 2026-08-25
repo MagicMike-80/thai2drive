@@ -55,14 +55,27 @@ første jobb — ikke gjett.
 
 ## 4. Hvordan det tjener penger i dag
 
-| Plan | Pris | Merk |
-|------|------|------|
-| Månedlig | 99 kr | Løpende |
-| 3 måneder | 249 kr | Ca. 83 kr/mnd |
-| Livstid | 699 kr | Engangsbetaling |
+| Plan | I produksjon nå | Vedtatt mål | Merk |
+|------|-----------------|-------------|------|
+| Månedlig | **199 kr** | 99 kr | Løpende |
+| 3 måneder | **399 kr** | 249 kr | Målet gir ca. 83 kr/mnd |
+| Livstid | **699 kr** | 699 kr | Uendret |
 
-Priser hentes live fra Stripe med disse som fallback
-(`PUBLIC_PRICING_FALLBACK` i `backend/server.py`).
+> **Ikke bruk målprisen som om den er live.** Michael har vedtatt 99 / 249 / 699,
+> men produksjon kjører 199 / 399 / 699 per 2026-08-25. Skriver du markedsføring med
+> 99 kr før byttet er gjort, lover du en pris kunden ikke får.
+
+**Prisbytte krever to steg, i tvungen rekkefølge:**
+1. Nye Prices opprettes i **Stripe Dashboard** — eies av Michael/Anti
+2. Deretter settes `PUBLIC_PRICING_FALLBACK` (`backend/server.py:151`) til 99 / 249 / 699
+
+Konstanten er **en sperre, ikke bare et tall**: `_get_live_stripe_plan_prices_sync`
+sammenligner hver plan mot Stripe (`expected_minor`, `server.py:1146`) og returnerer
+`None` ved avvik, hvorpå `create_checkout_session` kaster 503 (`server.py:1604`).
+Endres koden før Stripe, **dør checkout for alle tre planene**.
+
+Merk også: `allow_promotion_codes: False` er hardkodet i checkout (`server.py:1635`).
+En «kampanje» kan derfor ikke være en Stripe-rabattkode.
 
 **Hvorfor trappen ser slik ut** (vedtatt av Michael 2026-08-04):
 249 kr er planen elevene skal ledes mot, og «Beste verdi»-merket ligger allerede der

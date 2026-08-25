@@ -152,18 +152,18 @@ PUBLIC_PRICING_FALLBACK = {
         "id": "monthly",
         "stripe_product_name": "Thai2Drive Premium",
         "label": {"no": "Månedlig", "th": "รายเดือน", "en": "Monthly"},
-        "amount": 99,
+        "amount": 199,
         "currency": "NOK",
-        "display": "99 kr",
+        "display": "199 kr",
         "period": {"no": "per måned", "th": "ต่อเดือน", "en": "per month"},
     },
     "three_months": {
         "id": "three_months",
         "stripe_product_name": "Thai2Drive 3 Months",
         "label": {"no": "3 måneder", "th": "3 เดือน", "en": "3 months"},
-        "amount": 249,
+        "amount": 399,
         "currency": "NOK",
-        "display": "249 kr",
+        "display": "399 kr",
         "period": {"no": "per 3 måneder", "th": "ต่อ 3 เดือน", "en": "per 3 months"},
     },
     "lifetime": {
@@ -1175,9 +1175,19 @@ def _get_live_stripe_plan_prices_sync() -> Optional[dict]:
                 if getattr(price, "livemode", False) is not True:
                     logger.warning("Ignoring non-live Stripe price for %s", base["stripe_product_name"])
                     return None
-                base["stripe_price"] = price
                 amount = int(price.unit_amount or 0)
                 currency = (price.currency or "nok").upper()
+                expected_minor = int(base["amount"]) * 100
+                if currency != "NOK" or amount != expected_minor:
+                    logger.error(
+                        "Live Stripe price mismatch for %s: expected %s NOK, got %s %s",
+                        base["stripe_product_name"],
+                        base["amount"],
+                        amount / 100,
+                        currency,
+                    )
+                    return None
+                base["stripe_price"] = price
                 base.update({
                     "amount": int(round(amount / 100)),
                     "amount_minor": amount,
@@ -1272,6 +1282,7 @@ def _rc_webhook_secret() -> str:
 
 # ── RevenueCat webhook ────────────────────────────────────────────────────────
 
+@app.post("/api/webhooks/revenuecat")
 @app.post("/api/rc/webhook")
 async def revenuecat_webhook(request: Request):
     """
@@ -1281,12 +1292,13 @@ async def revenuecat_webhook(request: Request):
     Set RC_WEBHOOK_SECRET in Railway to the value from:
       RevenueCat → Project settings → Webhooks → Shared secret
 
-    Supported events (https://www.revenuecat.com/docs/webhooks):
-      INITIAL_PURCHASE  → grant Premium, set premium_expires_at
-      RENEWAL           → extend Premium, update premium_expires_at
-      CANCELLATION      → revoke Premium
-      EXPIRATION        → revoke Premium
-      UNCANCELLATION    → re-grant Premium (user re-enabled before period end)
+    Supported events:
+      INITIAL_PURCHASE / RENEWAL / UNCANCELLATION / NON_RENEWING_PURCHASE
+        → grant Premium and set premium_expires_at when RevenueCat sends one.
+      CANCELLATION / BILLING_ISSUE
+        → mark subscription state, but keep access until the entitlement expires.
+      EXPIRATION / REFUND
+        → revoke Premium.
     """
     import json as _json
     import hmac as _hmac
@@ -1310,12 +1322,15 @@ async def revenuecat_webhook(request: Request):
     except Exception:
         raise HTTPException(status_code=400, detail="Invalid JSON payload")
 
-    event_type   = (event.get("event") or {}).get("type", "")
-    event_id     = (event.get("event") or {}).get("id", "") or str(uuid.uuid4())
-    subscriber   = event.get("event", {})
-    app_user_id  = subscriber.get("app_user_id", "")
-    aliases      = subscriber.get("aliases", []) or []
-    expiry_ts    = subscriber.get("expiration_at_ms")  # unix ms or None
+    event_body = event.get("event") or {}
+    event_type = event_body.get("type", "")
+    event_id = event_body.get("id", "") or str(uuid.uuid4())
+    app_user_id = event_body.get("app_user_id", "")
+    aliases = event_body.get("aliases", []) or []
+    expiry_ts = event_body.get("expiration_at_ms")  # unix ms or None
+    product_id = event_body.get("product_id", "mobile")
+    entitlement_ids = event_body.get("entitlement_ids") or []
+    subscriber_attributes = event_body.get("subscriber_attributes") or {}
 
     logger.info("rc_webhook received event_type=%s event_id=%s app_user_id=%s",
                 event_type, event_id, app_user_id)
@@ -1326,14 +1341,29 @@ async def revenuecat_webhook(request: Request):
         logger.info("rc_webhook: event %s already handled — skipping", event_id)
         return {"received": True, "skipped": True}
 
+    # If RevenueCat includes entitlement IDs, only the Thai2Drive Premium
+    # entitlement may affect MongoDB access. Older/test events without this field
+    # are allowed through so production does not silently drop valid purchases.
+    if entitlement_ids and "pro" not in entitlement_ids:
+        now_iso = datetime.now(timezone.utc).isoformat()
+        logger.info("rc_webhook: ignored non-premium entitlement event=%s entitlements=%s",
+                    event_id, entitlement_ids)
+        await db.rc_events.update_one(
+            {"event_id": event_id},
+            {"$set": {"event_id": event_id, "type": event_type, "handled": False,
+                      "ignored": True, "reason": "non_premium_entitlement",
+                      "processed_at": now_iso}},
+            upsert=True,
+        )
+        return {"received": True, "handled": False, "reason": "non_premium_entitlement"}
+
     # ── Resolve user in MongoDB ───────────────────────────────────────────────
-    # RevenueCat app_user_id is the Thai2Drive user_id (set at purchase time via
-    # Purchases.logIn(userId) in the Expo app). Fall back to email-match via aliases.
+    # RevenueCat app_user_id should be the Thai2Drive user_id. Fall back to aliases
+    # and subscriber_attributes.$email so existing anonymous RC users can still sync.
     user = None
     if app_user_id:
         user = await db.users.find_one({"id": app_user_id}, {"_id": 0, "id": 1, "email": 1})
     if not user:
-        # Try aliases list (RC may include email as an alias)
         for alias in aliases:
             if "@" in str(alias):
                 user = await db.users.find_one(
@@ -1341,6 +1371,13 @@ async def revenuecat_webhook(request: Request):
                 )
                 if user:
                     break
+    if not user:
+        email_attr = subscriber_attributes.get("$email") or subscriber_attributes.get("email") or {}
+        email_value = email_attr.get("value") if isinstance(email_attr, dict) else email_attr
+        if email_value and "@" in str(email_value):
+            user = await db.users.find_one(
+                {"email": str(email_value).strip().lower()}, {"_id": 0, "id": 1, "email": 1}
+            )
 
     now_iso = datetime.now(timezone.utc).isoformat()
 
@@ -1360,8 +1397,9 @@ async def revenuecat_webhook(request: Request):
 
     # ── Handle event ──────────────────────────────────────────────────────────
     handled = True
-    grant_events   = {"INITIAL_PURCHASE", "RENEWAL", "UNCANCELLATION", "SUBSCRIBER_ALIAS"}
-    revoke_events  = {"CANCELLATION", "EXPIRATION", "BILLING_ISSUE"}
+    grant_events = {"INITIAL_PURCHASE", "RENEWAL", "UNCANCELLATION", "NON_RENEWING_PURCHASE"}
+    pending_events = {"CANCELLATION", "BILLING_ISSUE"}
+    revoke_events = {"EXPIRATION", "REFUND"}
 
     if event_type in grant_events:
         expires_at = None
@@ -1374,7 +1412,7 @@ async def revenuecat_webhook(request: Request):
         update: Dict[str, Any] = {
             "is_premium": True,
             "premium_source": "revenuecat",
-            "premium_plan": subscriber.get("product_id", "mobile"),
+            "premium_plan": product_id,
             "premium_status": "active",
             "premium_updated_at": now_iso,
         }
@@ -1404,18 +1442,47 @@ async def revenuecat_webhook(request: Request):
     elif event_type in revoke_events:
         await db.users.update_one(
             {"id": user_id},
-            {"$set": {"is_premium": False, "premium_status": "canceled",
+            {"$set": {"is_premium": False, "premium_status": "expired",
                       "premium_updated_at": now_iso}},
         )
         try:
             await db.subscriptions.update_one(
                 {"user_id": user_id, "source": "revenuecat"},
-                {"$set": {"premium_status": "canceled", "canceled_at": now_iso}},
+                {"$set": {"premium_status": "expired", "expired_at": now_iso}},
             )
         except Exception as exc:
             logger.warning("rc_webhook: subscriptions cancel mirror failed user=%s: %s", user_id, exc)
 
         logger.info("rc_webhook: revoked Premium user=%s event=%s", user_id, event_type)
+
+    elif event_type in pending_events:
+        status = "billing_issue" if event_type == "BILLING_ISSUE" else "canceled"
+        update: Dict[str, Any] = {
+            "premium_source": "revenuecat",
+            "premium_plan": product_id,
+            "premium_status": status,
+            "premium_updated_at": now_iso,
+        }
+        if expiry_ts:
+            try:
+                expires_at = datetime.fromtimestamp(expiry_ts / 1000, tz=timezone.utc)
+                update["premium_expires_at"] = expires_at.isoformat()
+                update["is_premium"] = expires_at > datetime.now(timezone.utc)
+            except Exception:
+                pass
+        await db.users.update_one({"id": user_id}, {"$set": update})
+        try:
+            await db.subscriptions.update_one(
+                {"user_id": user_id, "source": "revenuecat"},
+                {"$set": {**update, "user_id": user_id, "source": "revenuecat"},
+                 "$setOnInsert": {"created_at": now_iso}},
+                upsert=True,
+            )
+        except Exception as exc:
+            logger.warning("rc_webhook: subscriptions pending mirror failed user=%s: %s", user_id, exc)
+
+        logger.info("rc_webhook: marked Premium pending user=%s event=%s status=%s",
+                    user_id, event_type, status)
 
     else:
         # Informational events (e.g. PRODUCT_CHANGE, TRANSFER) — acknowledge without action
@@ -5419,17 +5486,15 @@ async def ensure_indexes():
         logging.getLogger("indexes").warning("Usage index creation skipped: %s", exc)
 
 
-# ── TTS-ruting: Michaels klonede stemme på alle språk ──────────────────────
-#   th-TH  → ElevenLabs "Ai Mike" (Michaels klonede stemme)
-#   nb-NO  → ElevenLabs "Ai Mike" (Michaels klonede stemme)
-#   en-US  → ElevenLabs "Ai Mike" (Michaels klonede stemme)
-# Google Cloud TTS er kun nødfallback når ElevenLabs svikter, og logges da som
-# feil — det er aldri ønsket lydopplevelse.
+# ── TTS-ruting: skybasert MP3 for web ───────────────────────────────────────
+#   th-TH  → Michaels ElevenLabs-klone først, Google som nødfallback.
+#   nb-NO  → Michaels ElevenLabs-klone først, Google som nødfallback.
+#   en-US  → Michaels ElevenLabs-klone først, Google som nødfallback.
 #
 # Språkisolasjonen ligger i TEKSTEN, ikke i leverandøren: hvert språk sender sin
 # egen tekst, og cache-nøkkelen holder språkene fysisk adskilt.
 
-# Google Cloud TTS voice mapping — brukes kun ved nødfallback
+# Google Cloud TTS voice mapping — thai er primærrute, øvrige språk er fallback
 _GOOGLE_TTS_VOICES = {
     "th-TH": "th-TH-Chirp3-HD-Achird",   # Male Chirp3 HD — Google deprecated th-TH-Standard-C
     "nb-NO": "nb-NO-Wavenet-A",
@@ -5442,24 +5507,93 @@ _GOOGLE_TTS_VOICES = {
 # kontoen og svarte 404 voice_not_found på alle språk — hvert TTS-kall falt da
 # gjennom til Google-nødfallbacken. Verifiser alltid en ny ID med et faktisk
 # TTS-kall før den settes her.
-_DEFAULT_ELEVENLABS_VOICE_ID = "eulvRsWu7NGAUD1FzMVP"
+_DEFAULT_ELEVENLABS_VOICE_IDS = {
+    "th-TH": "eulvRsWu7NGAUD1FzMVP",
+    "nb-NO": "eulvRsWu7NGAUD1FzMVP",
+    "en-US": "eulvRsWu7NGAUD1FzMVP",
+}
+_ELEVENLABS_VOICE_ENV = {
+    "th-TH": ("ELEVENLABS_TH_VOICE_ID", "ELEVENLABS_VOICE_ID_TH"),
+    "nb-NO": ("ELEVENLABS_NO_VOICE_ID", "ELEVENLABS_VOICE_ID_NO"),
+    "en-US": ("ELEVENLABS_EN_VOICE_ID", "ELEVENLABS_VOICE_ID_EN"),
+}
 
 # Modell-ID er env-styrbar. eleven_v3 er den eneste modellen på kontoen som har
 # "th" i språklisten (verifisert mot /v1/models) og er derfor påkrevd for thai;
 # den dekker norsk og engelsk like godt. Modellen inngår i cache-nøkkelen, så et
 # modellbytte gir nye filer i stedet for gammel, feiluttalt lyd.
 _DEFAULT_ELEVENLABS_MODEL_ID = "eleven_v3"
+_TTS_BREAKER_FAILURE_LIMIT = int(os.environ.get("TTS_BREAKER_FAILURE_LIMIT", "3"))
+_TTS_BREAKER_COOLDOWN_SECONDS = int(os.environ.get("TTS_BREAKER_COOLDOWN_SECONDS", "300"))
+_TTS_PROVIDER_STATE: Dict[str, Dict[str, Any]] = {}
 
-
-def _elevenlabs_voice_id() -> str:
-    """Klonet Voice ID — env-overstyrbar, med Ai Mike som fallback."""
-    return (os.environ.get("ELEVENLABS_VOICE_ID") or "").strip() or _DEFAULT_ELEVENLABS_VOICE_ID
+def _elevenlabs_voice_id(lang: str) -> str:
+    """Returner Michaels språkspesifikke klonestemme."""
+    env_names = _ELEVENLABS_VOICE_ENV[lang]
+    for env_name in env_names:
+        voice_id = (os.environ.get(env_name) or "").strip()
+        if voice_id:
+            return voice_id
+    return (
+        (os.environ.get("ELEVENLABS_VOICE_ID") or "").strip()
+        or _DEFAULT_ELEVENLABS_VOICE_IDS[lang]
+    )
 
 
 def _elevenlabs_model_id() -> str:
     """ElevenLabs-modell — env-overstyrbar uten kodeendring."""
     return (os.environ.get("ELEVENLABS_MODEL_ID") or "").strip() or _DEFAULT_ELEVENLABS_MODEL_ID
 
+
+def _tts_provider_key(provider: str, lang: str) -> str:
+    return f"{provider}:{lang}"
+
+
+def _tts_provider_status(provider: str, lang: str) -> dict:
+    state = _TTS_PROVIDER_STATE.get(_tts_provider_key(provider, lang), {})
+    now = time.time()
+    disabled_until = float(state.get("disabled_until") or 0)
+    cooldown_remaining = max(0, int(disabled_until - now))
+    return {
+        "provider": provider,
+        "lang": lang,
+        "failures": int(state.get("failures") or 0),
+        "circuit_open": cooldown_remaining > 0,
+        "cooldown_remaining_seconds": cooldown_remaining,
+        "last_status": state.get("last_status"),
+        "last_error": state.get("last_error"),
+        "last_failure_at": state.get("last_failure_at"),
+    }
+
+
+def _tts_provider_available(provider: str, lang: str) -> bool:
+    return not _tts_provider_status(provider, lang)["circuit_open"]
+
+
+def _tts_record_success(provider: str, lang: str) -> None:
+    _TTS_PROVIDER_STATE[_tts_provider_key(provider, lang)] = {
+        "failures": 0,
+        "disabled_until": 0,
+        "last_status": "ok",
+        "last_error": None,
+        "last_failure_at": None,
+    }
+
+
+def _tts_record_failure(provider: str, lang: str, error: str, status_code: Optional[int] = None) -> None:
+    key = _tts_provider_key(provider, lang)
+    state = _TTS_PROVIDER_STATE.get(key, {})
+    failures = int(state.get("failures") or 0) + 1
+    disabled_until = 0
+    if failures >= _TTS_BREAKER_FAILURE_LIMIT:
+        disabled_until = time.time() + _TTS_BREAKER_COOLDOWN_SECONDS
+    _TTS_PROVIDER_STATE[key] = {
+        "failures": failures,
+        "disabled_until": disabled_until,
+        "last_status": status_code or "error",
+        "last_error": str(error)[:240],
+        "last_failure_at": datetime.now(timezone.utc).isoformat(),
+    }
 
 def _tts_cache_path(provider: str, voice: str, lang: str, text: str) -> str:
     """
@@ -5476,12 +5610,25 @@ def _tts_cache_path(provider: str, voice: str, lang: str, text: str) -> str:
     return os.path.join(cache_dir, f"{cache_key}.mp3")
 
 
+def _stream_mp3_file(path: str, headers: Optional[dict] = None):
+    from fastapi.responses import StreamingResponse
+
+    def chunks():
+        with open(path, "rb") as f:
+            while True:
+                data = f.read(64 * 1024)
+                if not data:
+                    break
+                yield data
+
+    return StreamingResponse(chunks(), media_type="audio/mpeg", headers=headers or {})
+
+
 async def _google_tts(text: str, lang: str, google_key: str, cache_path: str):
     """Helper — synthesize speech via Google Cloud TTS and return MP3."""
     import base64
     import httpx
     from fastapi import HTTPException
-    from fastapi.responses import FileResponse
 
     voice_name = _GOOGLE_TTS_VOICES.get(lang, "th-TH-Standard-A")
     gurl = f"https://texttospeech.googleapis.com/v1/text:synthesize?key={google_key}"
@@ -5497,6 +5644,7 @@ async def _google_tts(text: str, lang: str, google_key: str, cache_path: str):
             r = await client.post(gurl, json=gpayload, headers=gheaders, timeout=30.0)
             if r.status_code != 200:
                 logger.error("Google TTS API error %d: %s", r.status_code, r.text)
+                _tts_record_failure("google", lang, r.text, r.status_code)
                 raise HTTPException(status_code=r.status_code, detail=f"Google TTS API error: {r.text}")
 
             data = r.json()
@@ -5505,9 +5653,9 @@ async def _google_tts(text: str, lang: str, google_key: str, cache_path: str):
             with open(cache_path, "wb") as f:
                 f.write(audio_bytes)
 
-            return FileResponse(
+            _tts_record_success("google", lang)
+            return _stream_mp3_file(
                 cache_path,
-                media_type="audio/mpeg",
                 headers={"X-TTS-Provider": "google", "X-TTS-Voice": voice_name},
             )
 
@@ -5515,17 +5663,21 @@ async def _google_tts(text: str, lang: str, google_key: str, cache_path: str):
         raise he
     except Exception as e:
         logger.error("Google TTS synthesis failed: %s", e)
+        _tts_record_failure("google", lang, str(e))
         raise HTTPException(status_code=500, detail=f"TTS synthesis failed: {str(e)}")
 
 
+@app.get("/api/tts/stream")
+@app.post("/api/tts/stream")
 @app.get("/api/tts")
 @app.post("/api/tts")
+@api_router.get("/tts/stream")
+@api_router.post("/tts/stream")
 @api_router.get("/tts")
 @api_router.post("/tts")
 async def text_to_speech(request: Request, text: Optional[str] = None, lang: Optional[str] = None):
     import httpx
     from fastapi import HTTPException
-    from fastapi.responses import FileResponse
 
     # `lang` MÅ defaulte til None, ikke "th-TH". En truthy default gjør
     # `lang or body.get("lang")` til en no-op, og da ble all POST-tekst lest med
@@ -5553,24 +5705,25 @@ async def text_to_speech(request: Request, text: Optional[str] = None, lang: Opt
         "nb-no": "nb-NO",
         "en-us": "en-US",
     }
-    lang = lang_map.get((lang or "").strip().lower(), lang or "th-TH")
+    requested_lang = (lang or "th").strip().lower()
+    if requested_lang not in lang_map:
+        raise HTTPException(status_code=400, detail="Unsupported TTS language")
+    lang = lang_map[requested_lang]
 
     google_key = os.environ.get("GOOGLE_API_KEY")
     google_cache_path = _tts_cache_path(
         "google", _GOOGLE_TTS_VOICES.get(lang, "th-TH-Standard-A"), lang, text
     )
-
-    # ── Alle språk → Michaels klonede ElevenLabs-stemme ────────────────────
-    voice_id = _elevenlabs_voice_id()
+    # ── Alle språk → Michaels språkspesifikke ElevenLabs-klonestemme ─────
+    voice_id = _elevenlabs_voice_id(lang)
     model_id = _elevenlabs_model_id()
     # Modellen er en del av leverandør-nøkkelen: bytter vi modell for å fikse
     # thai-uttale, får vi nye filer i stedet for gammel, feiluttalt cache.
     cloned_cache_path = _tts_cache_path(f"elevenlabs:{model_id}", voice_id, lang, text)
 
     if os.path.exists(cloned_cache_path):
-        return FileResponse(
+        return _stream_mp3_file(
             cloned_cache_path,
-            media_type="audio/mpeg",
             headers={"X-TTS-Provider": "elevenlabs-cached", "X-TTS-Voice": voice_id},
         )
 
@@ -5581,6 +5734,8 @@ async def text_to_speech(request: Request, text: Optional[str] = None, lang: Opt
             "faller tilbake til Google-stemme. Sett nokkelen i miljovariablene.",
             lang,
         )
+    elif not _tts_provider_available("elevenlabs", lang):
+        logger.error("ElevenLabs circuit breaker er åpen for %s; prøver neste TTS-rute.", lang)
     else:
         try:
             url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}"
@@ -5602,40 +5757,42 @@ async def text_to_speech(request: Request, text: Optional[str] = None, lang: Opt
                 if r.status_code == 200:
                     with open(cloned_cache_path, "wb") as f:
                         f.write(r.content)
+                    _tts_record_success("elevenlabs", lang)
                     logger.info(
                         "TTS %s → ElevenLabs klonet stemme %s (modell %s)",
                         lang, voice_id, model_id,
                     )
-                    return FileResponse(
+                    return _stream_mp3_file(
                         cloned_cache_path,
-                        media_type="audio/mpeg",
                         headers={"X-TTS-Provider": "elevenlabs", "X-TTS-Voice": voice_id},
                     )
                 # Logges som ERROR, ikke WARNING: dette er tap av Michaels stemme.
+                _tts_record_failure("elevenlabs", lang, r.text, r.status_code)
                 logger.error(
                     "KLONET STEMME FEILET: ElevenLabs svarte %d for voice_id=%s modell=%s (%s). Svar: %s",
                     r.status_code, voice_id, model_id, lang, r.text[:300],
                 )
         except Exception as e:
+            _tts_record_failure("elevenlabs", lang, str(e))
             logger.error(
                 "KLONET STEMME FEILET: ElevenLabs-kall kastet %s for voice_id=%s (%s)",
                 e, voice_id, lang,
             )
 
-    # ── Nodfallback: Google Cloud TTS, i egen cache-nokkel ────────────────
-    # Egen nokkel gjor at fallback-lyden ALDRI serveres igjen nar den klonede
-    # stemmen er tilbake — da treffer forespørselen elevenlabs-nokkelen.
+    # ── Nødfallback: Google Cloud TTS, i egen cache-nøkkel ────────────────
+    # Ferdige MP3-filer kan fortsatt serveres selv om provider eller nøkkel er nede.
+    if os.path.exists(google_cache_path):
+        return _stream_mp3_file(
+            google_cache_path,
+            headers={"X-TTS-Provider": "google-fallback-cached"},
+        )
     if not google_key:
         raise HTTPException(
             status_code=500,
             detail="Ingen TTS-leverandor tilgjengelig (verken ELEVENLABS_API_KEY eller GOOGLE_API_KEY er satt).",
         )
-    if os.path.exists(google_cache_path):
-        return FileResponse(
-            google_cache_path,
-            media_type="audio/mpeg",
-            headers={"X-TTS-Provider": "google-fallback-cached"},
-        )
+    if not _tts_provider_available("google", lang):
+        raise HTTPException(status_code=503, detail="Google TTS er midlertidig utilgjengelig; prøv igjen om litt.")
     return await _google_tts(text, lang, google_key, google_cache_path)
 
 
@@ -5746,23 +5903,35 @@ async def tts_status():
     """
     has_eleven = bool(os.environ.get("ELEVENLABS_API_KEY"))
     has_google = bool(os.environ.get("GOOGLE_API_KEY"))
-    voice_id = _elevenlabs_voice_id()
     model_id = _elevenlabs_model_id()
 
     def route(lang: str) -> dict:
+        google_health = _tts_provider_status("google", lang)
+        eleven_health = _tts_provider_status("elevenlabs", lang)
+        google_ready = has_google and not google_health["circuit_open"]
+        eleven_ready = has_eleven and not eleven_health["circuit_open"]
+        voice_id = _elevenlabs_voice_id(lang)
         return {
             "intended": f"elevenlabs:{voice_id}",
-            "actual": f"elevenlabs:{voice_id}" if has_eleven
-                      else (f"google:{_GOOGLE_TTS_VOICES[lang]} (FALLBACK)" if has_google else "ingen"),
-            "ok": has_eleven,
+            "actual": f"elevenlabs:{voice_id}" if eleven_ready
+                      else (f"google:{_GOOGLE_TTS_VOICES[lang]} (FALLBACK)" if google_ready else "cache-or-none"),
+            "fallback_provider": "google" if google_ready else None,
+            "ok": eleven_ready or google_ready,
+            "providers": {"elevenlabs": eleven_health, "google": google_health},
         }
 
     return {
         "elevenlabs_key_configured": has_eleven,
         "google_key_configured": has_google,
-        "cloned_voice_id": voice_id,
+        "cloned_voice_ids": {
+            lang: _elevenlabs_voice_id(lang)
+            for lang in ("th-TH", "nb-NO", "en-US")
+        },
         "elevenlabs_model_id": model_id,
-        "fallback_provider": "google" if has_google else None,
+        "circuit_breaker": {
+            "failure_limit": _TTS_BREAKER_FAILURE_LIMIT,
+            "cooldown_seconds": _TTS_BREAKER_COOLDOWN_SECONDS,
+        },
         "languages": {lang: route(lang) for lang in ("th-TH", "nb-NO", "en-US")},
     }
 
