@@ -1302,6 +1302,47 @@ class TeacherChatResponse(BaseModel):
     suggestions: list = []
 
 
+@teacher_router.get("/teacher/status")
+async def teacher_status():
+    """
+    Diagnostikk for Michael-chatten. Returnerer ingen hemmeligheter — kun hvilken
+    leverandor som er aktiv, hvilken modell som kalles, og om en nokkel finnes.
+
+    Hvorfor dette trengs: /teacher/chat kaster ALDRI 500. Feiler LLM-kallet,
+    fanges det og brukeren far _fallback_reply() med HTTP 200. Det er riktig for
+    eleven, men det gjor at feilen er usynlig utenfra — den finnes kun i
+    Railway-loggen. Dette endepunktet gjor arsaken lesbar pa ti sekunder.
+    """
+    keys_present = {
+        "DEEPSEEK_API_KEY": bool(os.environ.get("DEEPSEEK_API_KEY", "").strip()),
+        "OPENROUTER_API_KEY": bool(os.environ.get("OPENROUTER_API_KEY", "").strip()),
+        "OPENAI_API_KEY": bool(os.environ.get("OPENAI_API_KEY", "").strip()),
+    }
+    # Rekkefolgen her MA speile if/elif-kjeden ved modulimport, ellers lyver svaret.
+    if keys_present["DEEPSEEK_API_KEY"]:
+        needed = None
+    elif keys_present["OPENROUTER_API_KEY"]:
+        needed = None
+    elif keys_present["OPENAI_API_KEY"]:
+        needed = None
+    else:
+        needed = "DEEPSEEK_API_KEY"
+
+    return {
+        "ok": bool(LLM_KEY),
+        "provider": LLM_PROVIDER,
+        "model": LLM_MODEL,
+        "keys_configured": keys_present,
+        "missing_key_to_set": needed,
+        # Konfigurasjonen leses ved modulimport, ikke per forespoersel. Legger du
+        # inn nokkelen i Railway, ma tjenesten restarte for den tas i bruk.
+        "note": (
+            "Konfigurasjon leses ved oppstart. Ny miljovariabel krever restart. "
+            "ANTHROPIC_API_KEY brukes ikke av denne modulen."
+        ),
+    }
+
+
 @teacher_router.post("/teacher/chat", response_model=TeacherChatResponse)
 async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
     import time
@@ -1503,6 +1544,8 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             except Exception as mail_err:
                 logger.error("Failed to spawn alert email thread: %s", mail_err)
 
+        # error_str persisteres i teacher_chat_logs og logges — den er kildene
+        # til hvorfor eleven fikk fallback. Ma settes her.
         error_str = f"LiteLLM: {type(e).__name__}({e})"
         reply_text = _fallback_reply(lang)
 
