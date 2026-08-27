@@ -5593,8 +5593,9 @@ async def text_to_speech(request: Request, text: Optional[str] = None, lang: Opt
     elif not _tts_provider_available("elevenlabs", lang):
         logger.error("ElevenLabs circuit breaker er åpen for %s; prøver neste TTS-rute.", lang)
     else:
+        client = None
         try:
-            url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}"
+            url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}/stream"
             headers = {
                 "Accept": "audio/mpeg",
                 "Content-Type": "application/json",
@@ -5608,27 +5609,60 @@ async def text_to_speech(request: Request, text: Optional[str] = None, lang: Opt
                     "similarity_boost": 0.75,
                 },
             }
-            async with httpx.AsyncClient() as client:
-                r = await client.post(url, json=payload, headers=headers, timeout=60.0)
-                if r.status_code == 200:
-                    with open(cloned_cache_path, "wb") as f:
-                        f.write(r.content)
-                    _tts_record_success("elevenlabs", lang)
-                    logger.info(
-                        "TTS %s → ElevenLabs klonet stemme %s (modell %s)",
-                        lang, voice_id, model_id,
-                    )
-                    return _stream_mp3_file(
-                        cloned_cache_path,
-                        headers={"X-TTS-Provider": "elevenlabs", "X-TTS-Voice": voice_id},
-                    )
-                # Logges som ERROR, ikke WARNING: dette er tap av Michaels stemme.
-                _tts_record_failure("elevenlabs", lang, r.text, r.status_code)
-                logger.error(
-                    "KLONET STEMME FEILET: ElevenLabs svarte %d for voice_id=%s modell=%s (%s). Svar: %s",
-                    r.status_code, voice_id, model_id, lang, r.text[:300],
+            client = httpx.AsyncClient(timeout=60.0)
+            request_to_eleven = client.build_request("POST", url, json=payload, headers=headers)
+            r = await client.send(request_to_eleven, stream=True)
+            if r.status_code == 200:
+                from fastapi.responses import StreamingResponse
+
+                temp_cache_path = f"{cloned_cache_path}.{uuid.uuid4().hex}.tmp"
+
+                async def stream_and_cache():
+                    completed = False
+                    try:
+                        with open(temp_cache_path, "wb") as cache_file:
+                            async for chunk in r.aiter_bytes():
+                                if not chunk:
+                                    continue
+                                cache_file.write(chunk)
+                                yield chunk
+                        os.replace(temp_cache_path, cloned_cache_path)
+                        completed = True
+                        _tts_record_success("elevenlabs", lang)
+                        logger.info(
+                            "TTS %s → ElevenLabs klonet stemme %s (modell %s, streamet)",
+                            lang, voice_id, model_id,
+                        )
+                    finally:
+                        await r.aclose()
+                        await client.aclose()
+                        if not completed and os.path.exists(temp_cache_path):
+                            try:
+                                os.remove(temp_cache_path)
+                            except OSError:
+                                pass
+
+                return StreamingResponse(
+                    stream_and_cache(),
+                    media_type="audio/mpeg",
+                    headers={"X-TTS-Provider": "elevenlabs", "X-TTS-Voice": voice_id},
                 )
+
+            # Logges som ERROR, ikke WARNING: dette er tap av Michaels stemme.
+            error_body = (await r.aread()).decode("utf-8", errors="replace")
+            await r.aclose()
+            await client.aclose()
+            _tts_record_failure("elevenlabs", lang, error_body, r.status_code)
+            logger.error(
+                "KLONET STEMME FEILET: ElevenLabs svarte %d for voice_id=%s modell=%s (%s). Svar: %s",
+                r.status_code, voice_id, model_id, lang, error_body[:300],
+            )
         except Exception as e:
+            if client is not None:
+                try:
+                    await client.aclose()
+                except Exception:
+                    pass
             _tts_record_failure("elevenlabs", lang, str(e))
             logger.error(
                 "KLONET STEMME FEILET: ElevenLabs-kall kastet %s for voice_id=%s (%s)",
