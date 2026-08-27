@@ -5545,11 +5545,15 @@ function _primeAudioEl(el) {
   }
 }
 
-function _unlockAudioPlayback() {
+function _unlockAudioPlayback(activeEl) {
   if (_audioUnlocked) return;
   _audioUnlocked = true;
-  _primeAudioEl(_ensureBackendAudio());
-  _primeAudioEl(_ensureTeacherAudio());
+  var backendEl = _ensureBackendAudio();
+  var teacherEl = _ensureTeacherAudio();
+  // The element started by this exact user gesture does not need priming.
+  // Priming it here can race with the real MP3 and abort play() via pause().
+  if (backendEl !== activeEl) _primeAudioEl(backendEl);
+  if (teacherEl !== activeEl) _primeAudioEl(teacherEl);
   if (typeof _getAudioCtx === 'function') { try { _getAudioCtx(); } catch (e) {} }
 }
 
@@ -8375,8 +8379,8 @@ function speakQ() {
     stopAllSpeech();
     return;
   }
-  _unlockAudioPlayback();
   _ensureBackendAudio();
+  _unlockAudioPlayback(_backendAudio);
   _backendAudio.src = ttsStreamUrl(text, appLang);
   _backendAudio.playbackRate = ttsRate || 1.0;
   _backendAudio.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
@@ -8425,8 +8429,8 @@ function speakText(text) {
     stopAllSpeech();
     return;
   }
-  _unlockAudioPlayback();
   _ensureTeacherAudio();
+  _unlockAudioPlayback(_teacherAudio);
   _teacherAudio.src = ttsStreamUrl(clean, appLang);
   _teacherAudio.playbackRate = ttsRate || 1.0;
   _teacherAudio.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
@@ -9655,8 +9659,8 @@ function speakSign() {
   if (!text) return;
 
   stopAllSpeech();
-  _unlockAudioPlayback();
   _ensureBackendAudio();
+  _unlockAudioPlayback(_backendAudio);
   _backendAudio.src = ttsStreamUrl(text, lang);
   _backendAudio.playbackRate = ttsRate || 1.0;
   _backendAudio.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
@@ -9737,8 +9741,8 @@ function speakSignAiText() {
   var text = window._spAiText.trim();
   if (!text) return;
   stopAllSpeech();
-  _unlockAudioPlayback();
   _ensureTeacherAudio();
+  _unlockAudioPlayback(_teacherAudio);
   _teacherAudio.src = ttsStreamUrl(text, window._spAiLang || appLang);
   _teacherAudio.playbackRate = ttsRate || 1.0;
   _teacherAudio.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
