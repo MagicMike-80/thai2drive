@@ -4501,6 +4501,8 @@ var UI = {
   sign_fallback_exam:{th:'ในข้อสอบ ให้ถามว่า: ป้ายนี้เปลี่ยนการกระทำของฉันตรงนี้อย่างไร?', no:'På prøven: spør hva skiltet endrer for handlingen din akkurat her.', en:'In the exam, ask what this sign changes about your action right here.'},
   sign_fallback_memory:{th:'จำเป็นลำดับ: รูปทรง → สี → สัญลักษณ์ → สิ่งที่ต้องทำ', no:'Husk rekkefølgen: form → farge → symbol → handling.', en:'Remember the order: shape → colour → symbol → action.'},
   // Paywall
+  tts_tap_first:{th:'แตะหน้าจอหนึ่งครั้งก่อน แล้วกดฟังอีกที', no:'Trykk én gang på skjermen, og prøv å spille av igjen.', en:'Tap the screen once, then press play again.'},
+  tts_failed:  {th:'ขออภัย ตอนนี้เล่นเสียงไม่ได้ กรุณาลองใหม่อีกครั้ง', no:'Lyden kunne ikke spilles av nå. Prøv igjen.', en:'The audio could not be played. Please try again.'},
   promo_head:  {th:'ทุกอย่างฟรีในช่วงเปิดตัว', no:'Alt er gratis under lanseringen', en:'Everything is free during launch'},
   promo_title: {th:'แคมเปญเปิดตัว!', no:'Lanseringskampanje!', en:'Launch campaign!'},
   promo_body:  {th:'สมัครบัญชีฟรีวันนี้ รับสิทธิ์เข้าถึงเนื้อหาทั้งหมดเต็มรูปแบบ 30 วัน!', no:'Opprett en gratis konto i dag og få 30 dagers full tilgang til alt innhold!', en:'Create a free account today and get 30 days of full access to everything!'},
@@ -5572,12 +5574,37 @@ function _primeAudioEl(el) {
   }
 }
 
-function _unlockAudioPlayback() {
+// `skipEl` er elementet kalleren er i ferd med å spille ekte lyd på.
+// Det MÅ ikke primes: primingen setter src til en stum WAV og starter play(),
+// og når kalleren straks etter bytter src, avbrytes den avspillingen med
+// AbortError — som lander i kallerens .catch og gir stillhet på første trykk.
+// Elementet trenger heller ingen priming: det låses opp av sitt eget play()
+// i den samme brukergesten. Priming er kun for de elementene vi IKKE spiller nå.
+function _unlockAudioPlayback(skipEl) {
   if (_audioUnlocked) return;
   _audioUnlocked = true;
-  _primeAudioEl(_ensureBackendAudio());
-  _primeAudioEl(_ensureTeacherAudio());
+  var back = _ensureBackendAudio();
+  var teach = _ensureTeacherAudio();
+  if (back !== skipEl) _primeAudioEl(back);
+  if (teach !== skipEl) _primeAudioEl(teach);
   if (typeof _getAudioCtx === 'function') { try { _getAudioCtx(); } catch (e) {} }
+}
+
+// Én felles feilhåndtering for all TTS-avspilling. Uten dette feiler lyden
+// stille: brukeren ser bare at ingenting skjer, og vi får aldri vite hvorfor.
+function _ttsPlaybackFailed(err, el) {
+  var name = (err && err.name) || 'Error';
+  console.error('TTS-avspilling feilet:', name, err);
+  // AbortError betyr at src ble byttet mens play() pågikk — ikke noe brukeren
+  // kan gjøre noe med, og ikke verdt å skremme med.
+  if (name === 'AbortError') return;
+  if (name === 'NotAllowedError') {
+    toast(t('tts_tap_first'), 5000);
+    return;
+  }
+  // Alt annet: nettverksfeil, 500 fra serveren, ugyldig lyd. Si det rett ut.
+  var code = el && el.error ? (' (kode ' + el.error.code + ')') : '';
+  toast(t('tts_failed') + code, 5000);
 }
 
 // Første ekte brukergest på siden låser opp all lyd — begge <audio>-elementene og
@@ -8468,17 +8495,17 @@ function speakQ() {
     stopAllSpeech();
     return;
   }
-  _unlockAudioPlayback();
   _ensureBackendAudio();
+  _unlockAudioPlayback(_backendAudio);
   _backendAudio.src = ttsStreamUrl(text, appLang);
   _backendAudio.playbackRate = ttsRate || 1.0;
   _backendAudio.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
   ttsPlaying = true;
   updateTtsBtn(true);
   _backendAudio.play().catch(function(err) {
-     console.error('Audio playback failed:', err);
      ttsPlaying = false;
      updateTtsBtn(false);
+     _ttsPlaybackFailed(err, _backendAudio);
   });
 }
 function updateTtsBtn(playing) {
@@ -8518,15 +8545,15 @@ function speakText(text) {
     stopAllSpeech();
     return;
   }
-  _unlockAudioPlayback();
   _ensureTeacherAudio();
+  _unlockAudioPlayback(_teacherAudio);
   _teacherAudio.src = ttsStreamUrl(clean, appLang);
   _teacherAudio.playbackRate = ttsRate || 1.0;
   _teacherAudio.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
   _teacherTtsPlaying = true;
   _teacherAudio.play().catch(function(err) {
-     console.error('Teacher audio playback failed:', err);
      _teacherTtsPlaying = false;
+     _ttsPlaybackFailed(err, _teacherAudio);
   });
 }
 
@@ -9753,7 +9780,7 @@ function speakSign() {
   _backendAudio.src = ttsStreamUrl(text, lang);
   _backendAudio.playbackRate = ttsRate || 1.0;
   _backendAudio.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
-  _backendAudio.play().catch(function(err){ console.error('Sign TTS error:', err); });
+  _backendAudio.play().catch(function(err){ _ttsPlaybackFailed(err, _backendAudio); });
 }
 
 function toggleSignFavorite() {
@@ -9835,7 +9862,7 @@ function speakSignAiText() {
   _teacherAudio.src = ttsStreamUrl(text, window._spAiLang || appLang);
   _teacherAudio.playbackRate = ttsRate || 1.0;
   _teacherAudio.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
-  _teacherAudio.play().catch(function(err){ console.error('Sign AI TTS error:', err); });
+  _teacherAudio.play().catch(function(err){ _ttsPlaybackFailed(err, _teacherAudio); });
 }
 
 </script>
