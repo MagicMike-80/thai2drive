@@ -17,10 +17,11 @@ def _deploy_version() -> str:
 DEPLOY_VERSION = _deploy_version()
 
 WEBAPP_HTML = r"""<!DOCTYPE html>
-<html lang="th" data-theme="dark">
+<html lang="th" data-theme="dark" translate="no" class="notranslate">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google" content="notranslate">
 <meta id="metaDescription" name="description" content="ฝึกข้อสอบทฤษฎีใบขับขี่นอร์เวย์ด้วยภาษาไทย นอร์เวย์ และอังกฤษกับ Thai2Drive">
 <link rel="icon" href="/api/assets/favicon.ico" sizes="any">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -5538,8 +5539,14 @@ function _ensureBackendAudio() {
   if (!_backendAudio) {
     _backendAudio = new Audio();
     _backendAudio.preload = 'auto';
-    _backendAudio.onended = function() { ttsPlaying = false; updateTtsBtn(false); };
-    _backendAudio.onerror = function() { ttsPlaying = false; updateTtsBtn(false); };
+    // Alle veier ut av avspilling nullstiller flagget. Uten dette kan et
+    // element som aldri kom i gang la ttsPlaying sta igjen som true, og da
+    // returnerer neste trykk i stillhet via toggle-sjekken overst i speakQ.
+    var _resetBackend = function() { ttsPlaying = false; updateTtsBtn(false); };
+    _backendAudio.onended = _resetBackend;
+    _backendAudio.onerror = _resetBackend;
+    _backendAudio.onabort = _resetBackend;
+    _backendAudio.onemptied = _resetBackend;
   }
   return _backendAudio;
 }
@@ -5548,8 +5555,11 @@ function _ensureTeacherAudio() {
   if (!_teacherAudio) {
     _teacherAudio = new Audio();
     _teacherAudio.preload = 'auto';
-    _teacherAudio.onended = function() { _teacherTtsPlaying = false; };
-    _teacherAudio.onerror = function() { _teacherTtsPlaying = false; };
+    var _resetTeacher = function() { _teacherTtsPlaying = false; };
+    _teacherAudio.onended = _resetTeacher;
+    _teacherAudio.onerror = _resetTeacher;
+    _teacherAudio.onabort = _resetTeacher;
+    _teacherAudio.onemptied = _resetTeacher;
   }
   return _teacherAudio;
 }
@@ -5558,11 +5568,16 @@ function _primeAudioEl(el) {
   if (!el) return;
   try {
     el.src = _SILENT_WAV;
+    var primedSrc = el.src;
     el.muted = true;
     var p = el.play();
     if (p && p.then) {
       p.then(function() {
-        try { el.pause(); el.currentTime = 0; } catch (e) {}
+        // The user action may already have replaced the silent WAV with real
+        // TTS. Never let the async priming callback pause that new source.
+        if (el.src === primedSrc) {
+          try { el.pause(); el.currentTime = 0; } catch (e) {}
+        }
         el.muted = false;
       }).catch(function() { el.muted = false; });
     } else {
@@ -5574,20 +5589,55 @@ function _primeAudioEl(el) {
   }
 }
 
-// `skipEl` er elementet kalleren er i ferd med å spille ekte lyd på.
+// `activeEl` er elementet kalleren er i ferd med å spille ekte lyd på.
 // Det MÅ ikke primes: primingen setter src til en stum WAV og starter play(),
-// og når kalleren straks etter bytter src, avbrytes den avspillingen med
-// AbortError — som lander i kallerens .catch og gir stillhet på første trykk.
-// Elementet trenger heller ingen priming: det låses opp av sitt eget play()
-// i den samme brukergesten. Priming er kun for de elementene vi IKKE spiller nå.
-function _unlockAudioPlayback(skipEl) {
+// og når kalleren straks etter bytter src, avbrytes avspillingen med AbortError.
+// Elementet trenger heller ingen priming — det låses opp av sitt eget play()
+// i den samme brukergesten. Priming gjelder kun elementene vi IKKE spiller nå.
+function _unlockAudioPlayback(activeEl) {
   if (_audioUnlocked) return;
   _audioUnlocked = true;
-  var back = _ensureBackendAudio();
-  var teach = _ensureTeacherAudio();
-  if (back !== skipEl) _primeAudioEl(back);
-  if (teach !== skipEl) _primeAudioEl(teach);
+  var backendEl = _ensureBackendAudio();
+  var teacherEl = _ensureTeacherAudio();
+  if (backendEl !== activeEl) _primeAudioEl(backendEl);
+  if (teacherEl !== activeEl) _primeAudioEl(teacherEl);
   if (typeof _getAudioCtx === 'function') { try { _getAudioCtx(); } catch (e) {} }
+}
+
+// Vaktbikkje: play() gir et lofte som kan bli hengende hvis serveren bruker lang
+// tid pa a generere lyd. Blir det aldri innfridd, fyres verken 'playing' eller
+// 'error', og tilstandsflagget star igjen som true. Neste trykk treffer da
+// toggle-sjekken og returnerer i stillhet. Vakten bryter den lasen.
+var _TTS_START_TIMEOUT_MS = 12000;
+function _armTtsWatchdog(el, reset) {
+  if (!el) return;
+  if (el._ttsWatchdog) { clearTimeout(el._ttsWatchdog); el._ttsWatchdog = null; }
+  var cleared = false;
+  var clear = function() {
+    if (cleared) return;
+    cleared = true;
+    if (el._ttsWatchdog) { clearTimeout(el._ttsWatchdog); el._ttsWatchdog = null; }
+    el.removeEventListener('playing', clear);
+  };
+  el.addEventListener('playing', clear);
+  el._ttsWatchdog = setTimeout(function() {
+    if (cleared) return;
+    clear();
+    // Kom aldri i gang. Frigi flagget sa neste trykk faktisk forsoker pa nytt,
+    // og si fra — stillhet uten forklaring er det verste utfallet.
+    try { el.pause(); } catch (e) {}
+    if (typeof reset === 'function') reset();
+    toast(t('tts_failed'), 5000);
+  }, _TTS_START_TIMEOUT_MS);
+}
+
+// Samme lyd to ganger pa rad: nar src er uendret spoler ikke alle nettlesere
+// tilbake av seg selv, og play() blir en stille no-op. Vi spoler eksplisitt.
+function _rewindIfSameSource(el, url) {
+  if (!el) return;
+  if (el.src === url || el.currentSrc === url) {
+    try { el.currentTime = 0; } catch (e) {}
+  }
 }
 
 // Én felles feilhåndtering for all TTS-avspilling. Uten dette feiler lyden
@@ -8497,11 +8547,14 @@ function speakQ() {
   }
   _ensureBackendAudio();
   _unlockAudioPlayback(_backendAudio);
-  _backendAudio.src = ttsStreamUrl(text, appLang);
+  var _u = ttsStreamUrl(text, appLang);
+  _rewindIfSameSource(_backendAudio, _u);
+  _backendAudio.src = _u;
   _backendAudio.playbackRate = ttsRate || 1.0;
   _backendAudio.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
   ttsPlaying = true;
   updateTtsBtn(true);
+  _armTtsWatchdog(_backendAudio, function() { ttsPlaying = false; updateTtsBtn(false); });
   _backendAudio.play().catch(function(err) {
      ttsPlaying = false;
      updateTtsBtn(false);
@@ -8547,10 +8600,13 @@ function speakText(text) {
   }
   _ensureTeacherAudio();
   _unlockAudioPlayback(_teacherAudio);
-  _teacherAudio.src = ttsStreamUrl(clean, appLang);
+  var _tu = ttsStreamUrl(clean, appLang);
+  _rewindIfSameSource(_teacherAudio, _tu);
+  _teacherAudio.src = _tu;
   _teacherAudio.playbackRate = ttsRate || 1.0;
   _teacherAudio.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
   _teacherTtsPlaying = true;
+  _armTtsWatchdog(_teacherAudio, function() { _teacherTtsPlaying = false; });
   _teacherAudio.play().catch(function(err) {
      _teacherTtsPlaying = false;
      _ttsPlaybackFailed(err, _teacherAudio);
@@ -9775,8 +9831,8 @@ function speakSign() {
   if (!text) return;
 
   stopAllSpeech();
-  _unlockAudioPlayback();
   _ensureBackendAudio();
+  _unlockAudioPlayback(_backendAudio);
   _backendAudio.src = ttsStreamUrl(text, lang);
   _backendAudio.playbackRate = ttsRate || 1.0;
   _backendAudio.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
@@ -9857,8 +9913,8 @@ function speakSignAiText() {
   var text = window._spAiText.trim();
   if (!text) return;
   stopAllSpeech();
-  _unlockAudioPlayback();
   _ensureTeacherAudio();
+  _unlockAudioPlayback(_teacherAudio);
   _teacherAudio.src = ttsStreamUrl(text, window._spAiLang || appLang);
   _teacherAudio.playbackRate = ttsRate || 1.0;
   _teacherAudio.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
