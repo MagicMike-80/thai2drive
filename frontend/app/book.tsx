@@ -8,7 +8,7 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Audio } from 'expo-av';
 import { useAppStore } from '../src/store/appStore';
-import { api, BookChapter, BookSection } from '../src/services/api';
+import { api, BookChapter, BookSection, buildTtsUrl } from '../src/services/api';
 import { BookHtml } from '../src/components/BookHtml';
 
 const SCREEN_W = Dimensions.get('window').width;
@@ -153,7 +153,7 @@ export default function BookScreen() {
 
     try {
       const targetLang = lang === 'th' ? 'th-TH' : lang === 'no' ? 'nb-NO' : 'en-US';
-      const url = `${process.env.EXPO_PUBLIC_BACKEND_URL}/api/tts?lang=${targetLang}&text=${encodeURIComponent(fullText)}`;
+      const url = buildTtsUrl(fullText, targetLang);
       
       const { sound } = await Audio.Sound.createAsync(
         { uri: url },

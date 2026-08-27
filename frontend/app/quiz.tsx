@@ -8,7 +8,7 @@ import { Audio } from 'expo-av';
 import * as Haptics from 'expo-haptics';
 
 import { useAppStore } from '../src/store/appStore';
-import { api, Question } from '../src/services/api';
+import { api, buildTtsUrl, Question } from '../src/services/api';
 import { playCorrectSound, playIncorrectSound, cleanupSounds } from '../src/sounds';
 import { useScreenProtection } from '../src/hooks/useScreenProtection';
 import { aiLearningApi } from '../src/services/aiLearning';
@@ -385,7 +385,7 @@ export default function QuizScreen() {
 
     try {
       const langParam = lang === 'th' ? 'th-TH' : lang === 'no' ? 'nb-NO' : 'en-US';
-      const url = `${process.env.EXPO_PUBLIC_BACKEND_URL}/api/tts?lang=${langParam}&text=${encodeURIComponent(text)}`;
+      const url = buildTtsUrl(text, langParam);
       
       const { sound } = await Audio.Sound.createAsync(
         { uri: url },

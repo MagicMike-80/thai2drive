@@ -8,7 +8,8 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "verify:tts": "node ./scripts/verify-tts-contract.cjs"
   },
   "dependencies": {
     "@babel/runtime": "^7.20.6",

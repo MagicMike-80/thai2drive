@@ -2,6 +2,19 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL || '';
 const API_BASE = `${BACKEND_URL}/api`;
 
+const TTS_LOCALES: Record<string, string> = {
+  no: 'nb-NO',
+  nb: 'nb-NO',
+  th: 'th-TH',
+  en: 'en-US',
+};
+
+export function buildTtsUrl(text: string, language: string): string {
+  const baseUrl = BACKEND_URL.replace(/\/$/, '');
+  const locale = TTS_LOCALES[language] || language;
+  return `${baseUrl}/api/tts?lang=${encodeURIComponent(locale)}&text=${encodeURIComponent(text)}`;
+}
+
 // ==================== STATS TYPES ====================
 export interface CategoryStat {
   category: string;

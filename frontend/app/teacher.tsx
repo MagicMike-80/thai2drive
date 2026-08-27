@@ -18,6 +18,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Audio } from 'expo-av';
 import { useAppStore } from '../src/store/appStore';
 import { BottomNavBar } from '../src/components/BottomNavBar';
+import { buildTtsUrl } from '../src/services/api';
 
 // ─── Translation strings ─────────────────────────────────────────────────────
 const TR: Record<string, Record<string, any>> = {
@@ -362,7 +363,7 @@ export default function TeacherScreen() {
 
     try {
       const targetLang = lang === 'th' ? 'th-TH' : lang === 'no' ? 'nb-NO' : 'en-US';
-      const url = `${process.env.EXPO_PUBLIC_BACKEND_URL}/api/tts?lang=${targetLang}&text=${encodeURIComponent(cleanText)}`;
+      const url = buildTtsUrl(cleanText, targetLang);
       
       const { sound } = await Audio.Sound.createAsync(
         { uri: url },
