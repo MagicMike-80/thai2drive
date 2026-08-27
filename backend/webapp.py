@@ -17,10 +17,11 @@ def _deploy_version() -> str:
 DEPLOY_VERSION = _deploy_version()
 
 WEBAPP_HTML = r"""<!DOCTYPE html>
-<html lang="th" data-theme="dark">
+<html lang="th" data-theme="dark" translate="no" class="notranslate">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google" content="notranslate">
 <meta id="metaDescription" name="description" content="ฝึกข้อสอบทฤษฎีใบขับขี่นอร์เวย์ด้วยภาษาไทย นอร์เวย์ และอังกฤษกับ Thai2Drive">
 <link rel="icon" href="/api/assets/favicon.ico" sizes="any">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -5523,11 +5524,16 @@ function _primeAudioEl(el) {
   if (!el) return;
   try {
     el.src = _SILENT_WAV;
+    var primedSrc = el.src;
     el.muted = true;
     var p = el.play();
     if (p && p.then) {
       p.then(function() {
-        try { el.pause(); el.currentTime = 0; } catch (e) {}
+        // The user action may already have replaced the silent WAV with real
+        // TTS. Never let the async priming callback pause that new source.
+        if (el.src === primedSrc) {
+          try { el.pause(); el.currentTime = 0; } catch (e) {}
+        }
         el.muted = false;
       }).catch(function() { el.muted = false; });
     } else {
