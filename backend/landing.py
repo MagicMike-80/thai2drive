@@ -7,7 +7,6 @@ from __future__ import annotations
 
 ICON_URL = "/api/assets/developer-icon-512.png"
 HEADER_URL = "/api/assets/developer-header-4096x2304.jpg"
-QR_URL = "/api/assets/qr-download.png"
 
 # ── YouTube video ─────────────────────────────────────────────
 # Paste your YouTube video ID here (the part after ?v= in the URL)
@@ -674,21 +673,6 @@ def _hero_html() -> str:
         <span data-lang="no">Åpne web-appen</span>
         <span data-lang="en">Open web app</span>
       </a>
-      <a href="#download" class="cta-btn cta-secondary">
-        📱
-        <span data-lang="th">ดาวน์โหลดแอป</span>
-        <span data-lang="no">Last ned app</span>
-        <span data-lang="en">Download app</span>
-      </a>
-    </div>
-
-    <div class="qr-box" id="download">
-      <img src="{QR_URL}" alt="QR code"/>
-      <div class="qr-text">
-        <span data-lang="th" class="block">สแกนเพื่อดาวน์โหลดแอปทันที<small>เปิดลิงก์บนมือถือก็ได้</small></span>
-        <span data-lang="no" class="block">Scan for å laste ned appen direkte<small>eller åpne lenken på mobil</small></span>
-        <span data-lang="en" class="block">Scan to download the app instantly<small>or open the link on mobile</small></span>
-      </div>
     </div>
 
     <div class="hero-badges">
@@ -1192,17 +1176,9 @@ def _bottom_cta_html() -> str:
         <span data-lang="no">🚀 Prøv gratis</span>
         <span data-lang="en">🚀 Try free</span>
       </a>
-      <a href="#download" class="cta-btn cta-secondary">
-        📱 <span data-lang="th">ดาวน์โหลดแอป</span><span data-lang="no">Last ned app</span><span data-lang="en">Download app</span>
+      <a href="/api/web" class="cta-btn cta-secondary">
+        💻 <span data-lang="th">เปิดเว็บแอป</span><span data-lang="no">Åpne web-appen</span><span data-lang="en">Open web app</span>
       </a>
-    </div>
-    <div class="qr-box" style="margin-top:20px">
-      <img src="{QR_URL}" alt="QR code"/>
-      <div class="qr-text">
-        <span data-lang="th" class="block">สแกนเพื่อดาวน์โหลดแอปทันที<small>บน iOS และ Android</small></span>
-        <span data-lang="no" class="block">Scan for å laste ned appen direkte<small>på iOS og Android</small></span>
-        <span data-lang="en" class="block">Scan to download the app instantly<small>on iOS and Android</small></span>
-      </div>
     </div>
   </div>
 </section>
@@ -1495,19 +1471,19 @@ LANDING_JS = r"""
     barEl.style.width = '100%';
     nowEl.textContent = TOTAL;
     const titles = {
-      th: 'เริ่มใช้งานเต็มรูปแบบในแอป',
-      no: 'Fortsett øvingen i appen',
-      en: 'Continue practicing in the app',
+      th: 'ฝึกต่อในเว็บแอป',
+      no: 'Fortsett øvingen i webappen',
+      en: 'Continue practicing in the web app',
     };
     const subs = {
-      th: 'ดาวน์โหลดแอปเพื่อเข้าถึงคำถามทั้งหมด 500+ ข้อ พร้อมคำอธิบายและโหมดสอบจริง',
-      no: 'Last ned appen for tilgang til alle 500+ spørsmål, forklaringer og ekte eksamensmodus.',
-      en: 'Download the app for access to all 500+ questions, explanations, and real exam mode.',
+      th: 'เปิดเว็บแอปเพื่อเข้าถึงคำถามทั้งหมด 500+ ข้อ พร้อมคำอธิบายและโหมดสอบจริง',
+      no: 'Åpne webappen for tilgang til alle 500+ spørsmål, forklaringer og ekte eksamensmodus.',
+      en: 'Open the web app for access to all 500+ questions, explanations, and real exam mode.',
     };
     const ctas = {
-      th: 'ดาวน์โหลดแอปฟรี',
-      no: 'Last ned app – gratis',
-      en: 'Download app – free',
+      th: 'เปิดเว็บแอป',
+      no: 'Åpne webappen',
+      en: 'Open web app',
     };
     const scoreLbl = { th: 'คะแนนของคุณ', no: 'Din score', en: 'Your score' }[lang];
     const lockTxt = { th: 'ล็อกแล้ว', no: 'Låst', en: 'Locked' }[lang];
@@ -1527,7 +1503,7 @@ LANDING_JS = r"""
           <div class="plan-mini best"><h4>${threeLbl}</h4><div class="p">299 kr<small> / 3 ${perMo}</small></div></div>
           <div class="plan-mini"><h4>${lifeLbl}</h4><div class="p">699 kr<small> / ${once}</small></div></div>
         </div>
-        <a href="#download" class="cta-btn cta-primary" style="margin-top:8px">${ctas[lang]} →</a>
+        <a href="/api/web" class="cta-btn cta-primary" style="margin-top:8px">${ctas[lang]} →</a>
         <p style="margin-top:14px;font-size:13px;color:#94A3B8">${scoreLbl}: <strong style="color:#FF9933">${score} / ${TOTAL}</strong></p>
       </div>`;
     nextBtn.disabled = true;
