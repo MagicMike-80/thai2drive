@@ -82,6 +82,7 @@ LLM_PROVIDER = "none"
 
 _deepseek_key = os.environ.get("DEEPSEEK_API_KEY", "").strip()
 _openrouter_key = os.environ.get("OPENROUTER_API_KEY", "").strip()
+_openai_key = os.environ.get("OPENAI_API_KEY", "").strip()
 
 if _deepseek_key:
     LLM_KEY = _deepseek_key
@@ -93,7 +94,6 @@ elif _openrouter_key:
     LLM_PROVIDER = "openrouter"
 else:
     # Siste utvei: holder læreren i live hvis DeepSeek-nøkkelen mangler ved oppstart.
-    _openai_key = os.environ.get("OPENAI_API_KEY", "").strip()
     if _openai_key:
         LLM_KEY = _openai_key
         LLM_MODEL = os.environ.get("TEACHER_OPENAI_MODEL", "gpt-4o-mini")
@@ -106,6 +106,92 @@ else:
     logger.error(
         "Teacher chat LLM NOT configured — sett DEEPSEEK_API_KEY (eller OPENROUTER_API_KEY)."
     )
+
+_OPENROUTER_FALLBACK_MODELS = (
+    "openrouter/deepseek/deepseek-chat",
+    "openrouter/google/gemini-2.5-flash",
+    "openrouter/openai/gpt-4o-mini",
+)
+_TEACHER_LLM_TIMEOUT_SECONDS = float(os.environ.get("TEACHER_LLM_TIMEOUT_SECONDS", "10"))
+_TEACHER_LLM_TEMPERATURE = float(os.environ.get("TEACHER_LLM_TEMPERATURE", "0.3"))
+
+
+def _build_llm_attempts() -> List[dict]:
+    """Build an ordered, provider-safe model list without duplicate models."""
+    attempts: List[dict] = []
+    seen = set()
+
+    def add(model: str, api_key: str, provider: str) -> None:
+        model = (model or "").strip()
+        if not model or not api_key or model in seen:
+            return
+        seen.add(model)
+        attempts.append({"model": model, "api_key": api_key, "provider": provider})
+
+    if LLM_PROVIDER == "deepseek":
+        add(LLM_MODEL, _deepseek_key, "deepseek")
+
+    if _openrouter_key:
+        primary_openrouter_model = (
+            LLM_MODEL
+            if LLM_PROVIDER == "openrouter"
+            else os.environ.get("TEACHER_OPENROUTER_MODEL", _OPENROUTER_FALLBACK_MODELS[0])
+        )
+        add(primary_openrouter_model, _openrouter_key, "openrouter")
+        for model in _OPENROUTER_FALLBACK_MODELS:
+            add(model, _openrouter_key, "openrouter")
+
+    if LLM_PROVIDER == "openai":
+        add(LLM_MODEL, _openai_key, "openai")
+
+    return attempts
+
+
+LLM_ATTEMPTS = _build_llm_attempts()
+
+
+async def _completion_with_fallback(messages: List[dict]):
+    """Return the first non-empty LiteLLM response, trying reserves in order."""
+    if not LLM_ATTEMPTS:
+        raise RuntimeError("Teacher chat LLM is not configured")
+
+    last_error: Optional[Exception] = None
+    for index, attempt in enumerate(LLM_ATTEMPTS, start=1):
+        model = attempt["model"]
+        provider = attempt["provider"]
+        try:
+            logger.info(
+                "Teacher LLM attempt %s/%s — provider=%s model=%s",
+                index, len(LLM_ATTEMPTS), provider, model,
+            )
+            response = await litellm.acompletion(
+                model=model,
+                messages=messages,
+                max_tokens=600,
+                temperature=_TEACHER_LLM_TEMPERATURE,
+                timeout=_TEACHER_LLM_TIMEOUT_SECONDS,
+                api_key=attempt["api_key"],
+            )
+            content = (response.choices[0].message.content or "").strip()
+            if not content:
+                raise RuntimeError("LLM returned an empty response")
+            logger.info("Teacher LLM success — provider=%s model=%s", provider, model)
+            return response
+        except Exception as exc:
+            last_error = exc
+            try:
+                setattr(exc, "teacher_provider", provider)
+                setattr(exc, "teacher_model", model)
+            except Exception:
+                pass
+            logger.warning(
+                "Teacher LLM failed — provider=%s model=%s error=%s detail=%s; trying next model",
+                provider, model, type(exc).__name__, str(exc)[:240],
+            )
+
+    if last_error is not None:
+        raise last_error
+    raise RuntimeError("Teacher chat has no available LLM attempts")
 
 # ─── System prompt ────────────────────────────────────────────────────────────
 
@@ -1439,12 +1525,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         messages.extend(conversation)
         messages.append({"role": "user", "content": user_msg})
 
-        resp = await litellm.acompletion(
-            model=LLM_MODEL,
-            messages=messages,
-            max_tokens=600,
-            api_key=LLM_KEY,
-        )
+        resp = await _completion_with_fallback(messages)
         reply_text = (resp.choices[0].message.content or "").strip()
         if not reply_text:
             reply_text = _fallback_reply(lang)
@@ -1466,13 +1547,15 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             is_api_config_error = True
 
         if is_api_config_error:
+            failed_provider = getattr(e, "teacher_provider", LLM_PROVIDER)
+            failed_model = getattr(e, "teacher_model", LLM_MODEL)
             _key_env = {
                 "deepseek": "DEEPSEEK_API_KEY",
                 "openrouter": "OPENROUTER_API_KEY",
                 "openai": "OPENAI_API_KEY",
-            }.get(LLM_PROVIDER, "DEEPSEEK_API_KEY")
-            alert_subj = f"ALERT: Thai2Drive {LLM_PROVIDER} API Key Invalid"
-            alert_body = f"The system detected an invalid or expired {LLM_PROVIDER} API Key (model={LLM_MODEL}) on {datetime.now(timezone.utc).isoformat()}.\n\nError details: {e}\n\nPlease update {_key_env} in your Railway environment variables immediately."
+            }.get(failed_provider, "DEEPSEEK_API_KEY")
+            alert_subj = f"ALERT: Thai2Drive {failed_provider} API Key Invalid"
+            alert_body = f"The system detected an invalid or expired {failed_provider} API Key (model={failed_model}) on {datetime.now(timezone.utc).isoformat()}.\n\nError details: {e}\n\nPlease update {_key_env} in your Railway environment variables immediately."
             try:
                 import asyncio
                 asyncio.create_task(asyncio.to_thread(send_admin_alert_email, alert_subj, alert_body))

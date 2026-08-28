@@ -1,0 +1,152 @@
+import asyncio
+import importlib.util
+import os
+import sys
+import types
+import unittest
+from pathlib import Path
+
+
+class _Router:
+    def get(self, *args, **kwargs):
+        return lambda func: func
+
+    def post(self, *args, **kwargs):
+        return lambda func: func
+
+
+class _Mongo:
+    def __getitem__(self, key):
+        return self
+
+
+def _load_teacher_chat():
+    fastapi = types.ModuleType("fastapi")
+    fastapi.APIRouter = lambda *args, **kwargs: _Router()
+    fastapi.Query = lambda default=None, **kwargs: default
+
+    pydantic = types.ModuleType("pydantic")
+    pydantic.BaseModel = object
+    pydantic.Field = lambda default=None, **kwargs: default
+
+    motor = types.ModuleType("motor")
+    motor_asyncio = types.ModuleType("motor.motor_asyncio")
+    motor_asyncio.AsyncIOMotorClient = lambda *args, **kwargs: _Mongo()
+    motor.motor_asyncio = motor_asyncio
+
+    dotenv = types.ModuleType("dotenv")
+    dotenv.load_dotenv = lambda: None
+
+    litellm = types.ModuleType("litellm")
+    litellm.suppress_debug_info = True
+
+    stubs = {
+        "fastapi": fastapi,
+        "pydantic": pydantic,
+        "motor": motor,
+        "motor.motor_asyncio": motor_asyncio,
+        "dotenv": dotenv,
+        "litellm": litellm,
+    }
+    previous = {name: sys.modules.get(name) for name in stubs}
+    old_env = {name: os.environ.get(name) for name in (
+        "MONGO_URL", "DEEPSEEK_API_KEY", "OPENROUTER_API_KEY", "OPENAI_API_KEY",
+        "TEACHER_LLM_MODEL",
+    )}
+    try:
+        sys.modules.update(stubs)
+        os.environ["MONGO_URL"] = "mongodb://test"
+        os.environ.pop("DEEPSEEK_API_KEY", None)
+        os.environ["OPENROUTER_API_KEY"] = "test-openrouter-key"
+        os.environ.pop("OPENAI_API_KEY", None)
+        os.environ.pop("TEACHER_LLM_MODEL", None)
+
+        path = Path(__file__).resolve().parents[1] / "teacher_chat.py"
+        spec = importlib.util.spec_from_file_location("teacher_chat_fallback_test_module", path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        return module
+    finally:
+        for name, value in previous.items():
+            if value is None:
+                sys.modules.pop(name, None)
+            else:
+                sys.modules[name] = value
+        for name, value in old_env.items():
+            if value is None:
+                os.environ.pop(name, None)
+            else:
+                os.environ[name] = value
+
+
+def _response(text="ok"):
+    message = types.SimpleNamespace(content=text)
+    choice = types.SimpleNamespace(message=message)
+    return types.SimpleNamespace(choices=[choice])
+
+
+class TeacherChatFallbackTests(unittest.TestCase):
+    def setUp(self):
+        self.module = _load_teacher_chat()
+        self.messages = [{"role": "system", "content": "same prompt"}]
+
+    def test_openrouter_attempt_order(self):
+        self.assertEqual(
+            [attempt["model"] for attempt in self.module.LLM_ATTEMPTS],
+            [
+                "openrouter/deepseek/deepseek-chat",
+                "openrouter/google/gemini-2.5-flash",
+                "openrouter/openai/gpt-4o-mini",
+            ],
+        )
+
+    def test_primary_success_stops_after_one_attempt(self):
+        calls = []
+
+        async def fake_completion(**kwargs):
+            calls.append(kwargs)
+            return _response()
+
+        self.module.litellm.acompletion = fake_completion
+        result = asyncio.run(self.module._completion_with_fallback(self.messages))
+
+        self.assertEqual(result.choices[0].message.content, "ok")
+        self.assertEqual(len(calls), 1)
+        self.assertIs(calls[0]["messages"], self.messages)
+        self.assertEqual(calls[0]["temperature"], 0.3)
+        self.assertEqual(calls[0]["timeout"], 10.0)
+
+    def test_failure_uses_next_model_with_same_messages(self):
+        calls = []
+
+        async def fake_completion(**kwargs):
+            calls.append(kwargs)
+            if len(calls) == 1:
+                raise TimeoutError("primary timeout")
+            return _response("fallback ok")
+
+        self.module.litellm.acompletion = fake_completion
+        result = asyncio.run(self.module._completion_with_fallback(self.messages))
+
+        self.assertEqual(result.choices[0].message.content, "fallback ok")
+        self.assertEqual([call["model"] for call in calls], [
+            "openrouter/deepseek/deepseek-chat",
+            "openrouter/google/gemini-2.5-flash",
+        ])
+        self.assertTrue(all(call["messages"] is self.messages for call in calls))
+
+    def test_all_failures_raise_last_error(self):
+        calls = []
+
+        async def fake_completion(**kwargs):
+            calls.append(kwargs)
+            raise RuntimeError(kwargs["model"])
+
+        self.module.litellm.acompletion = fake_completion
+        with self.assertRaisesRegex(RuntimeError, "gpt-4o-mini"):
+            asyncio.run(self.module._completion_with_fallback(self.messages))
+        self.assertEqual(len(calls), 3)
+
+
+if __name__ == "__main__":
+    unittest.main()
