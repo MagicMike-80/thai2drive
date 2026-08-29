@@ -427,6 +427,24 @@ a { color:inherit; text-decoration:none; }
 .home-cta:hover { transform:translateY(-2px); box-shadow:0 0 24px rgba(0,245,255,.5), 0 0 8px rgba(255,153,51,.4); }
 .home-cta:active { transform:translateY(0) scale(0.97); box-shadow:0 0 32px rgba(0,245,255,.7), 0 0 12px rgba(255,153,51,.6); }
 
+.home-main-label { font-size:.72rem; font-weight:800; letter-spacing:.09em; text-transform:uppercase; color:var(--muted); }
+.home-main-actions { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.home-main-choice {
+  min-height:92px; padding:13px; border-radius:16px; cursor:pointer; text-align:left;
+  color:var(--text); border:1.5px solid rgba(0,245,255,.24);
+  background:linear-gradient(145deg,rgba(17,32,64,.94),rgba(11,18,38,.98));
+  display:flex; align-items:center; gap:11px; transition:transform .15s,box-shadow .2s,border-color .2s;
+}
+.home-main-choice:hover { transform:translateY(-2px); border-color:rgba(0,245,255,.55); box-shadow:0 0 18px rgba(0,245,255,.18); }
+.home-main-choice-icon { font-size:1.65rem; flex:0 0 auto; }
+.home-main-choice-copy { display:flex; flex-direction:column; gap:3px; min-width:0; }
+.home-main-choice-title { font-size:.86rem; font-weight:900; line-height:1.25; }
+.home-main-choice-sub { font-size:.7rem; color:var(--muted); line-height:1.35; }
+.target-practice-menu { display:none; grid-column:1/-1; grid-template-columns:1fr 1fr; gap:8px; }
+.target-practice-menu.open { display:grid; }
+.target-practice-option { padding:11px 9px; border-radius:12px; border:1px solid rgba(255,153,51,.28); background:rgba(255,153,51,.08); color:var(--text); font-size:.78rem; font-weight:800; cursor:pointer; }
+@media (max-width:420px) { .home-main-actions { grid-template-columns:1fr; } .target-practice-menu { grid-column:1; } }
+
 .home-sec-btns {
   display:grid; grid-template-columns:1fr 1fr;
   gap:9px;
@@ -1686,6 +1704,17 @@ a { color:inherit; text-decoration:none; }
   -webkit-overflow-scrolling: touch;
 }
 .lib-scroll::-webkit-scrollbar { width:4px; }
+.micro-intro { margin-bottom:12px; color:var(--muted); font-size:.82rem; line-height:1.5; }
+.micro-lessons { display:flex; flex-direction:column; gap:10px; }
+.micro-lesson { border:1px solid rgba(0,245,255,.18); border-radius:15px; overflow:hidden; background:linear-gradient(145deg,rgba(17,32,64,.9),rgba(11,18,38,.96)); }
+.micro-lesson-btn { width:100%; padding:14px; border:0; background:transparent; color:var(--text); cursor:pointer; display:flex; align-items:center; gap:12px; text-align:left; }
+.micro-lesson-icon { width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; flex:0 0 auto; background:rgba(0,245,255,.09); font-size:1.35rem; }
+.micro-lesson-title { flex:1; font-size:.88rem; font-weight:850; line-height:1.35; }
+.micro-lesson-chevron { color:var(--cyan); transition:transform .2s; }
+.micro-lesson.open .micro-lesson-chevron { transform:rotate(180deg); }
+.micro-lesson-body { display:none; padding:0 14px 15px 68px; color:var(--muted); font-size:.8rem; line-height:1.55; }
+.micro-lesson.open .micro-lesson-body { display:block; }
+.micro-lesson-action { margin-top:8px; color:var(--orange); font-weight:750; }
 .lib-scroll::-webkit-scrollbar-track { background:transparent; }
 .lib-scroll::-webkit-scrollbar-thumb { background:rgba(255,255,255,.12); border-radius:2px; }
 .library-grid {
@@ -3488,50 +3517,31 @@ a { color:inherit; text-decoration:none; }
         </div>
       </div>
 
+      <div class="home-main-label" data-key="home_choose_action">Velg hva du vil gjøre</div>
       <button class="home-cta" onclick="startRandomQuiz()">
-        ▶&nbsp;&nbsp;Start quiz
+        <span data-key="home_primary_action">▶ Start quiz / daglig test</span>
       </button>
 
-      <!-- Horisontal, rullende navigasjonsmeny (Protokoll Null) -->
-      <div class="hsm-container">
-        <div class="hsm-fade-left"></div>
-        <div class="hsm-fade-right"></div>
-        <div class="home-scroll-menu" id="homeScrollMenu">
-          <button class="hsm-card" onclick="startExam()">
-            <span class="hsm-icon"><span class="hsm-exam-timer">90:00</span></span>
-            <span class="hsm-label" data-hsm-key="exam_short">Eksamen</span>
-          </button>
-          <button class="hsm-card" onclick="startDailyTest()">
-            <span class="hsm-icon">📅</span>
-            <span class="hsm-label" data-hsm-key="daily_short">Daglig test</span>
-          </button>
-          <button class="hsm-card" id="mistakesHomeBtn" onclick="startMistakeQuiz()" style="flex-basis:150px">
-            <span class="hsm-icon">↩</span>
-            <span class="hsm-label" data-hsm-key="mistakes_short">แบบฝึกหัดข้อที่เคยตอบผิด</span>
-            <span class="hsm-label" id="mistakesHomeCount" style="font-size:.68rem;opacity:.75"></span>
-          </button>
-          <button class="hsm-card" onclick="showForbikjoring()">
-            <span class="hsm-icon">🚗</span>
-            <span class="hsm-label" data-hsm-key="fk_short">Trafikk-matte</span>
-          </button>
-          <button class="hsm-card" onclick="showTab('library')">
-            <span class="hsm-icon">📚</span>
-            <span class="hsm-label" data-hsm-key="lib_short">Bibliotek</span>
-          </button>
+      <div class="home-main-actions">
+        <button class="home-main-choice" onclick="showTab('teacher')">
+          <span class="home-main-choice-icon">👨‍🏫</span>
+          <span class="home-main-choice-copy">
+            <span class="home-main-choice-title" data-key="home_ask_michael">Spør Michael AI</span>
+            <span class="home-main-choice-sub" data-key="teacher_sub">Still et spørsmål om trafikk</span>
+          </span>
+        </button>
+        <button class="home-main-choice" onclick="toggleTargetPracticeMenu()" aria-controls="targetPracticeMenu" aria-expanded="false" id="targetPracticeToggle">
+          <span class="home-main-choice-icon">🎯</span>
+          <span class="home-main-choice-copy">
+            <span class="home-main-choice-title" data-key="home_targeted">Øv på mine feil & skiltkatalog</span>
+            <span class="home-main-choice-sub" id="mistakesHomeCount"></span>
+          </span>
+        </button>
+        <div class="target-practice-menu" id="targetPracticeMenu">
+          <button class="target-practice-option" id="mistakesHomeBtn" onclick="startMistakeQuiz()" data-key="mistakes_short">Øv på mine feil</button>
+          <button class="target-practice-option" onclick="showTab('signs')" data-key="home_open_signs">Åpne skiltkatalog</button>
         </div>
       </div>
-
-      <!-- Michael Trafikklærer card -->
-      <button class="michael-card" onclick="showTab('teacher')">
-        <div class="michael-card-left">
-          <div class="michael-card-avatar"><img src="/api/assets/michael_avatar.png" style="width:100%;height:100%;border-radius:50%;object-fit:cover;" alt="Michael"></div>
-          <div class="michael-card-text">
-            <div class="michael-card-name" data-key="teacher_name">Michael Trafikklærer</div>
-            <div class="michael-card-sub" id="michaelCardSub">Still et spørsmål om trafikk</div>
-          </div>
-        </div>
-        <div class="michael-card-arrow">›</div>
-      </button>
 
       <div class="home-stats">
         <div class="home-stat">
@@ -3689,6 +3699,7 @@ a { color:inherit; text-decoration:none; }
       <div class="lib-tabs">
         <button class="lib-tab active" data-tab="videos" onclick="setLibraryTab('videos')">🎬 <span data-key="lib_videos">Videoer</span></button>
         <button class="lib-tab" data-tab="podcasts" onclick="setLibraryTab('podcasts')">🎙️ <span data-key="lib_podcasts">Podcaster</span></button>
+        <button class="lib-tab" data-tab="micro" onclick="setLibraryTab('micro')">🇹🇭🇳🇴 <span data-key="lib_micro">Thailand vs. Norge</span></button>
       </div>
       <div class="lib-scroll">
         <div id="libraryContent"></div>
@@ -4269,6 +4280,11 @@ var UI = {
   backhome:    {th:'🏠 กลับหน้าแรก',    no:'🏠 Tilbake til hjem', en:'🏠 Back to home'},
   pickcat:     {th:'📚 เลือกหมวดหมู่',  no:'📚 Velg kategori', en:'📚 Pick category'},
   startquiz:   {th:'▶  เริ่มควิซ',      no:'▶  Start quiz',   en:'▶  Start quiz'},
+  home_choose_action:{th:'เลือกสิ่งที่คุณต้องการฝึก', no:'Velg hva du vil gjøre', en:'Choose what you want to do'},
+  home_primary_action:{th:'▶ เริ่มควิซ / แบบทดสอบประจำวัน', no:'▶ Start quiz / daglig test', en:'▶ Start quiz / daily test'},
+  home_ask_michael:{th:'ถาม Michael AI', no:'Spør Michael AI', en:'Ask Michael AI'},
+  home_targeted:{th:'ฝึกข้อที่ตอบผิดและคลังป้ายจราจร', no:'Øv på mine feil & skiltkatalog', en:'Practise my mistakes & road signs'},
+  home_open_signs:{th:'เปิดคลังป้ายจราจร', no:'Åpne skiltkatalog', en:'Open road sign catalogue'},
   exam:        {th:'📋 สอบ',            no:'📋 Eksamen',       en:'📋 Exam'},
   daily:       {th:'📅 ทดสอบรายวัน',    no:'📅 Daglig test',   en:'📅 Daily test'},
   exam_short:  {th:'สอบ',               no:'Eksamen',          en:'Exam'},
@@ -4475,6 +4491,20 @@ var UI = {
   library:{th:'ห้องสมุด', no:'Bibliotek', en:'Library'},
   lib_videos:{th:'วิดีโอ', no:'Videoer', en:'Videos'},
   lib_podcasts:{th:'พอดแคสต์', no:'Podcaster', en:'Podcasts'},
+  lib_micro:{th:'ไทยกับนอร์เวย์', no:'Thailand vs. Norge', en:'Thailand vs. Norway'},
+  micro_intro:{th:'บทเรียนสั้น ๆ สำหรับผู้ขับขี่ชาวไทยที่กำลังเรียนกฎจราจรของนอร์เวย์ แตะบทเรียนเพื่อเปิด', no:'Korte leksjoner for thai-førere som lærer norske trafikkregler. Trykk for å åpne.', en:'Short lessons for Thai drivers learning Norwegian traffic rules. Tap to open.'},
+  micro_road_side_title:{th:'ขับชิดขวาในนอร์เวย์ เทียบกับขับชิดซ้ายในไทย', no:'Høyrekjøring i Norge vs. venstrekjøring i Thailand', en:'Driving on the right in Norway vs. the left in Thailand'},
+  micro_road_side_body:{th:'ในนอร์เวย์ คุณต้องขับทางด้านขวาของถนน การเลี้ยวและตำแหน่งรถในทางแยกจึงกลับด้านจากที่คุ้นเคยในไทย', no:'I Norge kjører du på høyre side. Plassering før sving og gjennom kryss blir derfor motsatt av vanen fra Thailand.', en:'In Norway you drive on the right. Positioning before turns and through intersections is therefore opposite to the habit from Thailand.'},
+  micro_road_side_action:{th:'จำไว้: หลังเลี้ยว ให้รถอยู่ในช่องทางขวาของทิศทางที่คุณกำลังไป', no:'Husk: Etter en sving skal bilen inn på høyre side i kjøreretningen.', en:'Remember: After turning, place the car on the right side in your direction of travel.'},
+  micro_yield_title:{th:'กฎให้ทางขวาและการให้ทางในทางแยกนอร์เวย์', no:'Høyreregelen og vikeplikt i norske veikryss', en:'The right-hand rule and yielding at Norwegian intersections'},
+  micro_yield_body:{th:'หากไม่มีป้ายหรือสัญญาณไฟ คุณต้องให้ทางแก่รถที่มาจากด้านขวา มองหาป้ายให้ทางและเส้นสามเหลี่ยมบนถนนเสมอ', no:'Når skilt eller trafikklys ikke regulerer krysset, har du normalt vikeplikt for trafikk fra høyre. Se alltid etter vikepliktskilt og haitenner.', en:'When signs or traffic lights do not control the intersection, you normally yield to traffic from the right. Always look for yield signs and shark teeth.'},
+  micro_yield_action:{th:'ชะลอความเร็วก่อนถึงทางแยก มองซ้าย–ขวา–ซ้าย และเตรียมหยุด', no:'Senk farten før krysset, se til begge sider og vær klar til å stoppe.', en:'Slow down before the intersection, look both ways and be ready to stop.'},
+  micro_winter_title:{th:'การขับรถในฤดูหนาว หิมะ น้ำแข็ง และความมืด', no:'Vinterkjøring, snø, is og mørkekjøring', en:'Winter driving, snow, ice and darkness'},
+  micro_winter_body:{th:'พื้นถนนลื่นทำให้ระยะเบรกยาวขึ้นมาก ลดความเร็ว เพิ่มระยะห่าง และใช้พวงมาลัย คันเร่ง และเบรกอย่างนุ่มนวล', no:'Glatt føre kan gi mye lengre bremselengde. Senk farten, øk avstanden og bruk ratt, gass og brems mykt.', en:'Slippery roads can greatly increase braking distance. Reduce speed, increase the gap and use steering, throttle and brakes smoothly.'},
+  micro_winter_action:{th:'ตรวจยาง ไฟ และกระจกก่อนออกเดินทาง และเผื่อระยะหยุดมากกว่าปกติ', no:'Sjekk dekk, lys og ruter før turen, og planlegg med ekstra stoppavstand.', en:'Check tyres, lights and windows before driving, and allow extra stopping distance.'},
+  micro_roundabout_title:{th:'วงเวียนและกฎการใช้ไฟเลี้ยวในนอร์เวย์', no:'Rundkjøringer og blinklys i Norge', en:'Roundabouts and signalling in Norway'},
+  micro_roundabout_body:{th:'ให้ทางแก่รถที่อยู่ในวงเวียน เลือกช่องทางให้เหมาะสม และเปิดไฟเลี้ยวขวาก่อนออกจากวงเวียน', no:'Du har vikeplikt for trafikken i rundkjøringen. Velg riktig felt og blink til høyre før du kjører ut.', en:'Yield to traffic in the roundabout. Choose the correct lane and signal right before exiting.'},
+  micro_roundabout_action:{th:'มองกระจกและจุดบอดก่อนเปลี่ยนช่องทางหรือออกจากวงเวียน', no:'Sjekk speil og blindsone før feltskifte og før du kjører ut.', en:'Check mirrors and blind spots before changing lanes or exiting.'},
   forbikjoring_label:{th:'🚗 แซง', no:'🚗 Forbikjøring', en:'🚗 Overtaking'},
   fk_title:{th:'🚗 การแซง — คำนวณระยะ', no:'🚗 Forbikjøring — Avstandskalkulator', en:'🚗 Overtaking — Distance Calculator'},
   fk_scenario_easy:{th:'🟢 ง่าย', no:'🟢 Lett', en:'🟢 Easy'},
@@ -4744,7 +4774,7 @@ function applyUILang() {
     catsTitleEl.innerHTML = '📚 <span data-key="cats">' + t('cats') + '</span> <span id="catCount">' + catsCountText + '</span>';
   }
   // home buttons
-  document.querySelectorAll('.home-cta').forEach(function(b){ b.innerHTML = t('startquiz').replace(/^▶\s*/,'▶&nbsp;&nbsp;'); });
+  document.querySelectorAll('.home-cta').forEach(function(b){ b.innerHTML = '<span data-key="home_primary_action">' + t('home_primary_action') + '</span>'; });
   // Oppdater horisontal scrollmeny-labels
   document.querySelectorAll('.hsm-label[data-hsm-key]').forEach(function(el) {
     var key = el.getAttribute('data-hsm-key');
@@ -5054,6 +5084,11 @@ async function loadLibrary() {
   var container = document.getElementById('libraryContent');
   if (!container) return;
 
+  if (_libraryActiveTab === 'micro') {
+    renderLibrary();
+    return;
+  }
+
   if (_videosCached && _podcastsCached) {
     renderLibrary();
     return;
@@ -5080,6 +5115,11 @@ async function loadLibrary() {
 function renderLibrary() {
   var container = document.getElementById('libraryContent');
   if (!container) return;
+
+  if (_libraryActiveTab === 'micro') {
+    renderMicroLessons(container);
+    return;
+  }
 
   var items = _libraryActiveTab === 'videos' ? _videosCached : _podcastsCached;
   if (!items || items.length === 0) {
@@ -5121,6 +5161,42 @@ function setLibraryTab(tab) {
     b.classList.toggle('active', b.getAttribute('data-tab') === tab);
   });
   renderLibrary();
+}
+
+function renderMicroLessons(container) {
+  var lessons = [
+    {id:'road-side', icon:'↔️', title:'micro_road_side_title', body:'micro_road_side_body', action:'micro_road_side_action'},
+    {id:'yield', icon:'🔺', title:'micro_yield_title', body:'micro_yield_body', action:'micro_yield_action'},
+    {id:'winter', icon:'❄️', title:'micro_winter_title', body:'micro_winter_body', action:'micro_winter_action'},
+    {id:'roundabout', icon:'🔄', title:'micro_roundabout_title', body:'micro_roundabout_body', action:'micro_roundabout_action'}
+  ];
+  var html = '<p class="micro-intro">' + escH(t('micro_intro')) + '</p><div class="micro-lessons">';
+  lessons.forEach(function(lesson) {
+    html += '<article class="micro-lesson" id="micro-' + lesson.id + '">' +
+      '<button class="micro-lesson-btn" type="button" onclick="toggleMicroLesson(\'' + lesson.id + '\')" aria-expanded="false">' +
+      '<span class="micro-lesson-icon">' + lesson.icon + '</span>' +
+      '<span class="micro-lesson-title">' + escH(t(lesson.title)) + '</span>' +
+      '<span class="micro-lesson-chevron">⌄</span></button>' +
+      '<div class="micro-lesson-body"><div>' + escH(t(lesson.body)) + '</div>' +
+      '<div class="micro-lesson-action">✓ ' + escH(t(lesson.action)) + '</div></div></article>';
+  });
+  container.innerHTML = html + '</div>';
+}
+
+function toggleMicroLesson(id) {
+  var card = document.getElementById('micro-' + id);
+  if (!card) return;
+  var open = card.classList.toggle('open');
+  var button = card.querySelector('.micro-lesson-btn');
+  if (button) button.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+
+function toggleTargetPracticeMenu() {
+  var menu = document.getElementById('targetPracticeMenu');
+  var toggle = document.getElementById('targetPracticeToggle');
+  if (!menu) return;
+  var open = menu.classList.toggle('open');
+  if (toggle) toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
 }
 
 // ════════════════════════════════════════════
