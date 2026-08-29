@@ -22,7 +22,7 @@ from datetime import datetime, timezone, timedelta
 from zoneinfo import ZoneInfo
 from passlib.context import CryptContext
 import usage as usage_mod
-from ai_learning import get_active_user_mistakes, record_user_mistake
+from ai_learning import compute_user_readiness, get_active_user_mistakes, record_user_mistake
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -1077,6 +1077,41 @@ async def get_quiz_mistakes(
     by_id = {str(q.get("id")): normalize_question(q) for q in question_docs}
     ordered = [by_id[qid] for qid in question_ids if qid in by_id]
     return {"count": len(ordered), "questions": ordered}
+
+
+@api_router.get("/user/readiness")
+async def get_user_readiness(current_user: dict = Depends(get_current_user)):
+    """Return the authenticated learner's transparent 0-100 readiness score."""
+    user_id = current_user["sub"]
+    user_doc = await db.users.find_one({"id": user_id}, {"_id": 0, "device_id": 1})
+    identities = [{"user_id": user_id}]
+    if user_doc and user_doc.get("device_id"):
+        identities.append({"device_id": user_doc["device_id"]})
+
+    recent = await db.quiz_attempts.aggregate([
+        {"$match": {"$or": identities}},
+        {"$sort": {"completed_at": -1}},
+        {"$unwind": "$questions_answered"},
+        {"$match": {"questions_answered.is_correct": {"$type": "bool"}}},
+        {"$limit": 50},
+        {"$group": {
+            "_id": None,
+            "total": {"$sum": 1},
+            "correct": {"$sum": {"$cond": ["$questions_answered.is_correct", 1, 0]}},
+        }},
+    ]).to_list(1)
+    recent_stats = recent[0] if recent else {"total": 0, "correct": 0}
+
+    active_count, mastered_count = await asyncio.gather(
+        db.user_mistakes.count_documents({"user_id": user_id, "active": True}),
+        db.user_mistakes.count_documents({"user_id": user_id, "mastered": True}),
+    )
+    return compute_user_readiness(
+        recent_correct=recent_stats.get("correct", 0),
+        recent_total=recent_stats.get("total", 0),
+        mastered_mistakes=mastered_count,
+        active_mistakes=active_count,
+    )
 
 @api_router.post("/questions", response_model=Question)
 async def create_question(question_data: QuestionCreate):

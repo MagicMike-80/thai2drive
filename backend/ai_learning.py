@@ -279,6 +279,37 @@ async def get_active_user_mistakes(db, user_id: str, limit: int = 50) -> list[di
     return await cursor.to_list(safe_limit)
 
 
+def compute_user_readiness(
+    recent_correct: int,
+    recent_total: int,
+    mastered_mistakes: int,
+    active_mistakes: int,
+) -> dict:
+    """Deterministic readiness: 70% recent accuracy + 30% mistake mastery."""
+    recent_total = max(0, int(recent_total))
+    recent_correct = max(0, min(int(recent_correct), recent_total))
+    mastered_mistakes = max(0, int(mastered_mistakes))
+    active_mistakes = max(0, int(active_mistakes))
+
+    accuracy = (recent_correct / recent_total * 100) if recent_total else 0.0
+    tracked_mistakes = mastered_mistakes + active_mistakes
+    if tracked_mistakes:
+        mastery = mastered_mistakes / tracked_mistakes * 100
+    else:
+        # No mistakes is positive only after the learner has actually answered.
+        mastery = 100.0 if recent_total else 0.0
+
+    score = round(accuracy * 0.70 + mastery * 0.30)
+    return {
+        "score": max(0, min(100, score)),
+        "recent_accuracy": round(accuracy, 1),
+        "mistake_mastery": round(mastery, 1),
+        "recent_answered": recent_total,
+        "mastered_mistakes": mastered_mistakes,
+        "active_mistakes": active_mistakes,
+    }
+
+
 # ─── Analytics ────────────────────────────────────────────────────────────────
 
 async def get_category_stats(db, device_id: str) -> list[dict]:

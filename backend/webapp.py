@@ -532,6 +532,27 @@ a { color:inherit; text-decoration:none; }
   hyphens: none;
 }
 .hsm-card:hover .hsm-label { color: #FF9933; }
+.readiness-meter { height:7px; margin-top:7px; border-radius:999px; overflow:hidden; background:rgba(255,255,255,.08); }
+.readiness-meter-fill { height:100%; width:0; border-radius:inherit; transition:width .45s ease; }
+
+/* Michael quiz coach: non-blocking bottom sheet after a wrong answer. */
+.michael-quiz-coach {
+  position:fixed; left:50%; bottom:18px; z-index:2500;
+  width:min(560px, calc(100vw - 24px)); max-height:min(62vh, 520px); overflow:auto;
+  transform:translate(-50%, calc(100% + 40px)); opacity:0; pointer-events:none;
+  border:1px solid rgba(0,245,255,.28); border-radius:20px;
+  background:linear-gradient(155deg, rgba(7,19,45,.98), rgba(10,13,35,.98));
+  box-shadow:0 0 34px rgba(0,245,255,.18), 0 18px 50px rgba(0,0,0,.48);
+  transition:transform .25s ease, opacity .2s ease;
+}
+.michael-quiz-coach.open { transform:translate(-50%, 0); opacity:1; pointer-events:auto; }
+.mqc-head { display:flex; align-items:center; gap:10px; padding:14px 16px; border-bottom:1px solid rgba(255,255,255,.08); }
+.mqc-avatar { width:38px; height:38px; border-radius:50%; object-fit:cover; }
+.mqc-title { flex:1; font-weight:850; color:var(--text); }
+.mqc-close { border:0; background:transparent; color:var(--muted); font-size:1.25rem; cursor:pointer; }
+.mqc-body { padding:15px 17px; color:var(--text); line-height:1.65; font-size:.88rem; white-space:pre-wrap; }
+.mqc-action { display:none; width:calc(100% - 34px); margin:0 17px 17px; padding:11px 14px; border-radius:12px; border:1px solid rgba(255,153,51,.35); background:rgba(255,153,51,.12); color:var(--orange); font-weight:800; cursor:pointer; }
+.mqc-action.show { display:block; }
 .hsm-exam-timer {
   font-family: 'Courier New', Courier, monospace;
   font-size: 0.82rem; font-weight: 700; letter-spacing: 2px;
@@ -3531,9 +3552,10 @@ a { color:inherit; text-decoration:none; }
       <div class="home-readiness" id="homeReadiness" style="display:none" onclick="showTab('history')">
         <div class="hr-dot" id="hrDot"></div>
         <div class="hr-main">
-          <div class="hr-label">Siste økt</div>
+          <div class="hr-label" data-key="readiness_title">ความพร้อมสำหรับการสอบ</div>
           <div class="hr-status" id="hrStatus"></div>
           <div class="hr-sub" id="hrSub"></div>
+          <div class="readiness-meter"><div class="readiness-meter-fill" id="hrGaugeFill"></div></div>
         </div>
         <div class="hr-pct" id="hrPct"></div>
       </div>
@@ -3545,6 +3567,16 @@ a { color:inherit; text-decoration:none; }
           <p class="pb-sub" data-key="premium_sub">Du har tilgang til alle funksjoner</p>
         </div>
       </div>
+    </div>
+
+    <div class="michael-quiz-coach" id="michaelQuizCoach" role="dialog" aria-live="polite" aria-label="Michael">
+      <div class="mqc-head">
+        <img class="mqc-avatar" src="/api/assets/michael_avatar.png" alt="Michael">
+        <div class="mqc-title" data-key="coach_title">Michael อธิบาย</div>
+        <button class="mqc-close" onclick="closeMichaelQuizCoach()" data-label-key="close" aria-label="ปิด">×</button>
+      </div>
+      <div class="mqc-body" id="michaelQuizCoachBody"></div>
+      <button class="mqc-action" id="michaelQuizCoachAction" onclick="requestCoachPractice()" data-key="coach_practical">สิ่งนี้หมายถึงอะไรในทางปฏิบัติ?</button>
     </div>
 
     <!-- ═══ CATEGORIES SCREEN ═══ -->
@@ -4309,6 +4341,16 @@ var UI = {
   mode_daily:  {th:'ทดสอบรายวัน',          no:'Daglig test',      en:'Daily test'},
   mode_random: {th:'ควิซสุ่ม',              no:'Tilfeldig quiz',   en:'Random quiz'},
   mode_mistakes:{th:'แบบฝึกหัดข้อที่เคยตอบผิด', no:'Øv på mine feil', en:'Practice my mistakes'},
+  readiness_title:{th:'ความพร้อมสำหรับการสอบ', no:'Klar for prøven', en:'Ready for the test'},
+  readiness_keep:{th:'ฝึกต่อไป!', no:'Fortsett å øve!', en:'Keep practising!'},
+  readiness_close:{th:'ใกล้พร้อมแล้ว!', no:'Nærmer seg klar!', en:'Getting close!'},
+  readiness_ready:{th:'คุณพร้อมสอบทฤษฎีกับ Statens vegvesen แล้ว! 🚗', no:'Du er klar for teoriprøven hos Statens vegvesen! 🚗', en:'You are ready for the theory test at Statens vegvesen! 🚗'},
+  readiness_breakdown:{th:'50 ข้อล่าสุด: {accuracy}% · ฝึกข้อผิดสำเร็จ: {mastery}%', no:'Siste 50: {accuracy}% · Mestret feil: {mastery}%', en:'Last 50: {accuracy}% · Mistakes mastered: {mastery}%'},
+  coach_title:{th:'Michael อธิบาย', no:'Michael forklarer', en:'Michael explains'},
+  coach_loading:{th:'Michael กำลังดูคำถาม…', no:'Michael ser på spørsmålet…', en:'Michael is reviewing the question…'},
+  coach_unavailable:{th:'ตอนนี้ Michael ตอบไม่ได้ อ่านคำอธิบายปกติและทำแบบทดสอบต่อได้เลย', no:'Michael svarer ikke akkurat nå. Bruk den vanlige forklaringen og fortsett quizen.', en:'Michael is unavailable right now. Use the regular explanation and continue the quiz.'},
+  coach_practical:{th:'สิ่งนี้หมายถึงอะไรในทางปฏิบัติ?', no:'Hva betyr dette i praksis?', en:'What does this mean in practice?'},
+  coach_practice_loading:{th:'Michael กำลังสร้างคำถามฝึกสั้น ๆ…', no:'Michael lager et kort kontrollspørsmål…', en:'Michael is creating a short practice question…'},
   questions_word:{th:'คำถาม',              no:'spørsmål',         en:'questions'},
   signs_word:  {th:'ป้าย',                 no:'skilt',            en:'signs'},
   categories_empty:{th:'ไม่พบหมวดหมู่',     no:'Ingen kategorier funnet', en:'No categories found'},
@@ -4930,6 +4972,7 @@ var PREMIUM_PRICING = {
 //  SCREEN & TAB MANAGEMENT
 // ════════════════════════════════════════════
 function showScreen(id) {
+  if (id !== 'screenQuiz') closeMichaelQuizCoach();
   document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
   var el = document.getElementById(id);
   if (el) el.classList.add('active');
@@ -5939,35 +5982,33 @@ async function loadHome() {
     }
   }
 
-  // Readiness card — last quiz attempt
-  if (deviceId) {
+  // Deterministic readiness for registered users: 70% recent accuracy,
+  // 30% mastery in the persistent mistake bank.
+  var readinessCard = document.getElementById('homeReadiness');
+  if (readinessCard) readinessCard.style.display = 'none';
+  if (token) {
     try {
-      var rdata;
-      if (token) {
-        rdata = await api('GET', '/api/history?limit=1&_=' + Date.now());
-      } else {
-        rdata = await api('GET', '/api/quiz-attempts/' + encodeURIComponent(deviceId) + '?limit=1&_=' + Date.now());
-      }
-      var rattempts = Array.isArray(rdata) ? rdata : (rdata.attempts || rdata.results || []);
-      // Always merge with local data
-      rattempts = _mergeAttempts(rattempts, _readLocalAttempts().concat(_lastSavedAttempt ? [_lastSavedAttempt] : []));
-      if (rattempts.length) {
-        var la = rattempts[0];
-        var lpct = Math.round(la.score_percentage || 0);
-        var ready = readinessForPct(lpct, false);
-        var lmode = modeLabel(la.mode);
-        if (la.category) {
-          var laCat = catName(la.category);
-          if (laCat) lmode += ' — ' + laCat;
-        }
-        document.getElementById('hrDot').className = 'hr-dot hr-dot-' + ready.cls;
-        document.getElementById('hrStatus').textContent = ready.text;
-        document.getElementById('hrSub').textContent = lmode;
-        document.getElementById('hrPct').textContent = lpct + '%';
-        document.getElementById('hrPct').style.color = ready.color;
-        document.getElementById('homeReadiness').style.display = 'flex';
-      }
-    } catch(e) {}
+      var readiness = await api('GET', '/api/user/readiness?_=' + Date.now());
+      var rScore = Math.max(0, Math.min(100, Number(readiness.score || 0)));
+      var rState = rScore >= 85
+        ? {cls:'good', key:'readiness_ready', color:'var(--green)'}
+        : rScore >= 60
+          ? {cls:'ok', key:'readiness_close', color:'var(--orange)'}
+          : {cls:'bad', key:'readiness_keep', color:'#EF4444'};
+      document.getElementById('hrDot').className = 'hr-dot hr-dot-' + rState.cls;
+      document.getElementById('hrStatus').textContent = t(rState.key);
+      document.getElementById('hrSub').textContent = tf('readiness_breakdown', {
+        accuracy: Math.round(Number(readiness.recent_accuracy || 0)),
+        mastery: Math.round(Number(readiness.mistake_mastery || 0))
+      });
+      document.getElementById('hrPct').textContent = rScore + '%';
+      document.getElementById('hrPct').style.color = rState.color;
+      var gauge = document.getElementById('hrGaugeFill');
+      if (gauge) { gauge.style.width = rScore + '%'; gauge.style.background = rState.color; }
+      if (readinessCard) readinessCard.style.display = 'flex';
+    } catch(e) {
+      console.warn('Readiness load failed:', e.message);
+    }
   }
 
   // Premium badge — viser nedtelling når gratisuken er aktiv
@@ -7834,6 +7875,10 @@ function updateAiPanel(isOk, expl) {
     });
   }
 
+  // Michael is an enhancement, never a gate. The ordinary explanation and
+  // Next button are already available before this asynchronous call starts.
+  if (!isOk) openMichaelQuizCoach();
+
   // Mobile question image tint
   var imgWrap = document.getElementById('qImgWrap');
   if (imgWrap) {
@@ -7845,6 +7890,7 @@ function updateAiPanel(isOk, expl) {
 
 function nextQ() {
   stopAllSpeech();
+  closeMichaelQuizCoach();
   if (_aiPanelTimer) { clearTimeout(_aiPanelTimer); _aiPanelTimer = null; } // never let a delayed panel land on the next question
   // Review mode uses its own card renderer — skip normal quiz flow
   if (_reviewMode) { reviewNext(); return; }
@@ -8689,6 +8735,107 @@ var _teacherNormalHtml        = '';
 var _teacherQuizHtml          = '';
 var _teacherNormalHasUserMsg  = false;
 var _teacherQuizHasUserMsg    = false;
+var _quizCoachSessionId       = null;
+var _quizCoachAbort           = null;
+
+function _quizCoachContext() {
+  var q = questions[qIdx];
+  var lastAns = _sessionAnswers[_sessionAnswers.length - 1];
+  if (!q || !lastAns || lastAns.is_correct !== false) return null;
+  var qText = pickLang(q.question) || pickField(q, 'question_text') || '';
+  var userAnsText = _displayedAnswerText(lastAns.user_answer);
+  var correctAnsText = _displayedAnswerText(currentCorrect);
+  return {
+    questionId: String(q._id || q.id || q.question_id || 'question'),
+    question: qText,
+    userAnswerId: lastAns.user_answer,
+    userAnswer: userAnsText,
+    correctAnswerId: currentCorrect,
+    correctAnswer: correctAnsText,
+    explanation: currentExpl || ''
+  };
+}
+
+async function _quizCoachRequest(message) {
+  if (_quizCoachAbort) _quizCoachAbort.abort();
+  var controller = new AbortController();
+  _quizCoachAbort = controller;
+  var timeoutId = setTimeout(function(){ controller.abort(); }, 12000);
+  try {
+    var headers = {'Content-Type':'application/json'};
+    if (token) headers.Authorization = 'Bearer ' + token;
+    var res = await fetch('/api/teacher/chat', {
+      method:'POST', headers:headers, signal:controller.signal,
+      body:JSON.stringify({session_id:_quizCoachSessionId, message:message, language:appLang})
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    var data = await res.json();
+    if (data.session_id) _quizCoachSessionId = data.session_id;
+    return data.reply || '';
+  } finally {
+    clearTimeout(timeoutId);
+    if (_quizCoachAbort === controller) _quizCoachAbort = null;
+  }
+}
+
+async function openMichaelQuizCoach() {
+  var ctx = _quizCoachContext();
+  if (!ctx) return;
+  var panel = document.getElementById('michaelQuizCoach');
+  var body = document.getElementById('michaelQuizCoachBody');
+  var action = document.getElementById('michaelQuizCoachAction');
+  if (!panel || !body || !action) return;
+
+  _quizCoachSessionId = 'quiz_coach_' + appLang + '_' + ctx.questionId.replace(/[^a-zA-Z0-9_-]/g,'').slice(0,32) + '_' + Date.now().toString(36);
+  body.textContent = t('coach_loading');
+  action.classList.remove('show');
+  action.disabled = false;
+  panel.classList.add('open');
+
+  var languageName = {th:'Thai', no:'Norwegian', en:'English'}[appLang] || '';
+  var prompt = 'You are Michael, a calm Norwegian driving instructor. Answer only in ' + languageName + '. '
+    + 'Never mix languages. Keep the answer short enough for a mobile panel. Explain why the student answer is wrong, why the correct answer is right, and give one practical traffic example. '
+    + 'Use the mental model "Kongen og tjeneren" or "HAV-regelen" only when it fits naturally; never force either model.\n\n'
+    + '<quiz_context>\nQuestion: ' + ctx.question
+    + '\nStudent answer (' + ctx.userAnswerId + '): ' + ctx.userAnswer
+    + '\nCorrect answer (' + ctx.correctAnswerId + '): ' + ctx.correctAnswer
+    + '\nExisting explanation: ' + ctx.explanation + '\n</quiz_context>';
+  try {
+    var reply = await _quizCoachRequest(prompt);
+    if (!panel.classList.contains('open')) return;
+    body.textContent = reply || t('coach_unavailable');
+    if (reply) action.classList.add('show');
+  } catch(e) {
+    if (panel.classList.contains('open')) body.textContent = t('coach_unavailable');
+  }
+}
+
+async function requestCoachPractice() {
+  var body = document.getElementById('michaelQuizCoachBody');
+  var action = document.getElementById('michaelQuizCoachAction');
+  if (!body || !action || !_quizCoachSessionId) return;
+  action.disabled = true;
+  body.textContent = t('coach_practice_loading');
+  var promptByLang = {
+    th:'ยกตัวอย่างสถานการณ์จราจรสั้น ๆ หนึ่งสถานการณ์ แล้วถามคำถามตรวจสอบความเข้าใจหนึ่งข้อ อย่าเฉลยทันที',
+    no:'Gi én kort trafikksituasjon og still ett enkelt kontrollspørsmål. Ikke avslør svaret med én gang.',
+    en:'Give one short traffic situation and ask one simple check question. Do not reveal the answer immediately.'
+  };
+  try {
+    var reply = await _quizCoachRequest(promptByLang[appLang] || '');
+    body.textContent = reply || t('coach_unavailable');
+    action.classList.remove('show');
+  } catch(e) {
+    body.textContent = t('coach_unavailable');
+    action.disabled = false;
+  }
+}
+
+function closeMichaelQuizCoach() {
+  var panel = document.getElementById('michaelQuizCoach');
+  if (panel) panel.classList.remove('open');
+  if (_quizCoachAbort) { _quizCoachAbort.abort(); _quizCoachAbort = null; }
+}
 
 function switchTeacherSession(type) {
   var msgs = document.getElementById('teacherMessages');

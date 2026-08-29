@@ -2,7 +2,11 @@ from datetime import datetime, timezone
 from unittest import IsolatedAsyncioTestCase
 from unittest.mock import AsyncMock, MagicMock
 
-from backend.ai_learning import get_active_user_mistakes, record_user_mistake
+from backend.ai_learning import (
+    compute_user_readiness,
+    get_active_user_mistakes,
+    record_user_mistake,
+)
 
 
 class UserMistakeTests(IsolatedAsyncioTestCase):
@@ -78,3 +82,22 @@ class UserMistakeTests(IsolatedAsyncioTestCase):
         cursor.limit.assert_called_once_with(100)
         cursor.to_list.assert_awaited_once_with(100)
         self.assertEqual(result, [{"question_id": "q2"}])
+
+
+class ReadinessTests(IsolatedAsyncioTestCase):
+    def test_readiness_uses_70_30_formula(self):
+        result = compute_user_readiness(40, 50, 6, 4)
+        self.assertEqual(result["recent_accuracy"], 80.0)
+        self.assertEqual(result["mistake_mastery"], 60.0)
+        self.assertEqual(result["score"], 74)
+
+    def test_readiness_is_zero_for_new_user(self):
+        self.assertEqual(compute_user_readiness(0, 0, 0, 0)["score"], 0)
+
+    def test_perfect_answers_without_mistakes_are_fully_ready(self):
+        self.assertEqual(compute_user_readiness(50, 50, 0, 0)["score"], 100)
+
+    def test_readiness_is_clamped_to_0_100(self):
+        result = compute_user_readiness(999, 50, 999, 0)
+        self.assertGreaterEqual(result["score"], 0)
+        self.assertLessEqual(result["score"], 100)
