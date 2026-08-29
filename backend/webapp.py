@@ -437,6 +437,10 @@ a { color:inherit; text-decoration:none; }
 }
 .home-main-choice:hover { transform:translateY(-2px); border-color:rgba(0,245,255,.55); box-shadow:0 0 18px rgba(0,245,255,.18); }
 .home-main-choice-icon { font-size:1.65rem; flex:0 0 auto; }
+.home-main-choice-icon.michael-photo {
+  width:48px; height:48px; border-radius:50%; object-fit:cover; object-position:center 15%;
+  border:2px solid rgba(0,245,255,.65); box-shadow:0 0 14px rgba(214,0,255,.28);
+}
 .home-main-choice-copy { display:flex; flex-direction:column; gap:3px; min-width:0; }
 .home-main-choice-title { font-size:.86rem; font-weight:900; line-height:1.25; }
 .home-main-choice-sub { font-size:.7rem; color:var(--muted); line-height:1.35; }
@@ -3053,16 +3057,21 @@ a { color:inherit; text-decoration:none; }
    MICHAEL TRAFIKKLÆRER — CHAT UI
 ══════════════════════════════════════════ */
 .teacher-header {
-  display:flex; align-items:center; gap:12px;
-  padding:14px 16px; border-bottom:1px solid var(--border);
-  background:var(--bg2); flex-shrink:0;
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+  min-height:148px; padding:16px 18px; border-bottom:1px solid rgba(0,245,255,.22);
+  background:linear-gradient(135deg,#071326 0%,#101637 62%,#221044 100%);
+  flex-shrink:0; overflow:hidden; position:relative;
 }
 .teacher-avatar {
-  width:40px; height:40px; border-radius:50%;
-  background:#1E3A5F; display:flex; align-items:center;
-  justify-content:center; font-size:20px; flex-shrink:0;
+  width:112px; height:132px; border-radius:24px 24px 14px 14px;
+  object-fit:cover; object-position:center 14%; flex-shrink:0;
+  border:2px solid rgba(0,245,255,.65);
+  box-shadow:0 0 24px rgba(0,245,255,.30),0 0 38px rgba(214,0,255,.20);
 }
-.teacher-name { font-size:.95rem; font-weight:700; color:var(--text); }
+.teacher-header-info { min-width:0; position:relative; z-index:1; }
+.teacher-eyebrow { font-size:.68rem; font-weight:900; letter-spacing:.08em; text-transform:uppercase; color:#67E8F9; margin-bottom:5px; }
+.teacher-name { font-size:1.08rem; font-weight:900; color:#fff; line-height:1.2; }
+.teacher-experience { font-size:.76rem; color:#CBD5E1; margin-top:5px; }
 .teacher-status { font-size:.75rem; color:#10B981; margin-top:2px; }
 
 /* Mobile baseline — chat col fills screen, side panel hidden */
@@ -3084,8 +3093,8 @@ a { color:inherit; text-decoration:none; }
 
 .tm-av {
   width:28px; height:28px; border-radius:50%;
-  background:#1E3A5F; display:flex; align-items:center;
-  justify-content:center; font-size:13px; flex-shrink:0;
+  background:#1E3A5F; object-fit:cover; object-position:center 15%;
+  border:1px solid rgba(0,245,255,.55); flex-shrink:0;
 }
 .tm-bubble {
   max-width:84%; min-width:0; padding:14px 16px; border-radius:18px;
@@ -3164,6 +3173,11 @@ a { color:inherit; text-decoration:none; }
   text-transform:uppercase; color:var(--orange);
   padding:7px 2px 0; margin-top:1px;
 }
+.teacher-topics-toggle {
+  display:none; width:100%; min-height:48px; border-radius:14px;
+  border:1px solid rgba(0,245,255,.35); background:rgba(0,245,255,.08);
+  color:#A5F3FC; font:inherit; font-size:.82rem; font-weight:900; cursor:pointer;
+}
 
 /* Contextual reply chips — shown after assistant messages */
 .tm-chips {
@@ -3215,6 +3229,26 @@ a { color:inherit; text-decoration:none; }
 }
 .teacher-send-btn:hover { background:var(--orange-dk); }
 .teacher-send-btn:disabled { background:var(--border); cursor:default; }
+
+@media (max-width:767px) {
+  #app.teacher-mode .flag-bg { display:none; }
+  #screenTeacher { background:#071326; }
+  .teacher-header { min-height:152px; padding:14px 16px; }
+  .teacher-avatar { width:112px; height:136px; }
+  .teacher-messages { padding:14px 12px 18px; gap:12px; }
+  .tm-bubble { max-width:88%; padding:12px 14px; font-size:.96rem; line-height:1.6; }
+  .teacher-suggestions { padding:9px 12px; gap:8px; background:#0A1530; }
+  .teacher-suggestions:not(.expanded) .teacher-chip:nth-of-type(n+4),
+  .teacher-suggestions:not(.expanded) .teacher-chip-hdr { display:none; }
+  .teacher-chip {
+    flex:1 1 100%; width:100%; min-height:50px; padding:11px 14px;
+    border-radius:14px; justify-content:flex-start; text-align:left; font-size:.86rem;
+  }
+  .teacher-topics-toggle { display:block; }
+  .teacher-inputbar { padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px)); background:#071326; position:relative; z-index:2; }
+  .teacher-input { min-height:50px; font-size:1rem; }
+  .teacher-send-btn { width:50px; height:50px; }
+}
 
 /* ═══ CYBER & NEON STYLING (Gemini Blueprint) ═══ */
 /* Container for rullende karusell */
@@ -3524,7 +3558,7 @@ a { color:inherit; text-decoration:none; }
 
       <div class="home-main-actions">
         <button class="home-main-choice" onclick="showTab('teacher')">
-          <span class="home-main-choice-icon">👨‍🏫</span>
+          <img class="home-main-choice-icon michael-photo" src="/api/assets/michael_profile.jpg" alt="Michael">
           <span class="home-main-choice-copy">
             <span class="home-main-choice-title" data-key="home_ask_michael">Spør Michael AI</span>
             <span class="home-main-choice-sub" data-key="teacher_sub">Still et spørsmål om trafikk</span>
@@ -3581,7 +3615,7 @@ a { color:inherit; text-decoration:none; }
 
     <div class="michael-quiz-coach" id="michaelQuizCoach" role="dialog" aria-live="polite" aria-label="Michael">
       <div class="mqc-head">
-        <img class="mqc-avatar" src="/api/assets/michael_avatar.png" alt="Michael">
+        <img class="mqc-avatar" src="/api/assets/michael_profile.jpg" alt="Michael">
         <div class="mqc-title" data-key="coach_title">Michael อธิบาย</div>
         <button class="mqc-close" onclick="closeMichaelQuizCoach()" data-label-key="close" aria-label="ปิด">×</button>
       </div>
@@ -4017,11 +4051,13 @@ a { color:inherit; text-decoration:none; }
 
         <!-- Chat header -->
         <div class="teacher-header">
-          <div class="teacher-avatar">🚗</div>
           <div class="teacher-header-info">
+            <div class="teacher-eyebrow" data-key="teacher_role">Trafikklærer</div>
             <div class="teacher-name" id="teacherNameLbl">Michael Trafikklærer</div>
+            <div class="teacher-experience" data-key="teacher_experience">16 års erfaring</div>
             <div class="teacher-status" data-key="teacher_online">● Online</div>
           </div>
+          <img class="teacher-avatar" src="/api/assets/michael_profile.jpg" alt="Michael">
         </div>
 
         <!-- Message list -->
@@ -4057,6 +4093,7 @@ a { color:inherit; text-decoration:none; }
           <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)"
             data-label-no="🌧️ Våt/glatt vei" data-label-th="🌧️ ถนนเปียก/ลื่น" data-label-en="🌧️ Wet/slippery road"
             data-msg-no="🌧️ Våt og glatt vei — hvordan påvirker det bremselengden?" data-msg-th="🌧️ ถนนเปียก/ลื่น — ส่งผลต่อระยะเบรกอย่างไร?" data-msg-en="🌧️ Wet/slippery road — how does it affect braking distance?">🌧️ <span class="chip-lbl"></span></button>
+          <button class="teacher-topics-toggle" id="teacherMoreBtn" type="button" aria-expanded="false" onclick="toggleTeacherTopics()" data-key="teacher_more_topics">Flere emner</button>
         </div>
 
         <!-- Input bar -->
@@ -4094,7 +4131,7 @@ a { color:inherit; text-decoration:none; }
       <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span><span data-key="history">Historikk</span>
     </button>
     <button class="bn-tab bn-tab-michael" id="bnTeacher" onclick="showTab('teacher')">
-      <span class="bn-icon"><img src="/api/assets/michael_avatar.png" style="width:30px;height:30px;border-radius:50%;object-fit:cover;" alt="Michael"></span><span data-key="teacher">Michael</span>
+      <span class="bn-icon"><img src="/api/assets/michael_profile.jpg" style="width:30px;height:30px;border-radius:50%;object-fit:cover;object-position:center 15%;" alt="Michael"></span><span data-key="teacher">Michael</span>
     </button>
     <button class="bn-tab" id="bnSigns" onclick="showTab('signs')">
       <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 22 2 22"/><line x1="12" y1="9" x2="12" y2="15"/><circle cx="12" cy="18" r="0.5" fill="currentColor"/></svg></span><span data-key="signs">Skilt</span>
@@ -4311,6 +4348,10 @@ var UI = {
   language:    {th:'ภาษา',              no:'Språk',            en:'Language'},
   teacher:     {th:'Michael',            no:'Michael',          en:'Michael'},
   teacher_name:{th:'ครูสอนขับรถ Michael', no:'Michael Trafikklærer', en:'Michael Driving Teacher'},
+  teacher_role:{th:'ครูสอนขับรถ', no:'Trafikklærer', en:'Driving teacher'},
+  teacher_experience:{th:'ประสบการณ์ 16 ปี', no:'16 års erfaring', en:'16 years of experience'},
+  teacher_more_topics:{th:'หัวข้อเพิ่มเติม', no:'Flere emner', en:'More topics'},
+  teacher_fewer_topics:{th:'แสดงน้อยลง', no:'Vis færre', en:'Show fewer'},
   teacher_sub: {th:'ถามคำถามเกี่ยวกับการจราจร', no:'Still et spørsmål om trafikk', en:'Ask a question about traffic'},
   teacher_placeholder: {th:'ถามคำถาม...', no:'Still et spørsmål...', en:'Ask a question...'},
   teacher_error: {th:'ขอโทษ เกิดข้อผิดพลาด ลองใหม่อีกครั้ง', no:'Beklager, noe gikk galt. Prøv igjen.', en:'Sorry, something went wrong. Please try again.'},
@@ -4725,13 +4766,16 @@ function applyUILang() {
   var nsg= document.getElementById('bnSigns');     if(nsg) nsg.innerHTML = '<span class="bn-icon">' + NAV_SVG.signs + '</span>' + t('signs');
   var nbm= document.getElementById('bnBookmarks'); if(nbm) nbm.innerHTML = '<span class="bn-icon">' + NAV_SVG.bookmarks + '</span>' + t('bookmarks');
   var ns = document.getElementById('bnSettings');  if(ns) ns.innerHTML = '<span class="bn-icon">' + NAV_SVG.settings + '</span>' + t('settings');
-  var nt = document.getElementById('bnTeacher');   if(nt) nt.innerHTML = '<span class="bn-icon">' + NAV_SVG.teacher + '</span>' + t('teacher');
+  var nt = document.getElementById('bnTeacher');   if(nt) nt.innerHTML = '<span class="bn-icon"><img src="/api/assets/michael_profile.jpg" style="width:30px;height:30px;border-radius:50%;object-fit:cover;object-position:center 15%;" alt="Michael"></span>' + t('teacher');
   var nsb= document.getElementById('bnStudybook'); if(nsb) nsb.innerHTML = '<span class="bn-icon">' + NAV_SVG.studybook + '</span>' + t('sb_nav');
   // Update teacher UI if visible
   var tNameEl = document.getElementById('teacherNameLbl');
   if (tNameEl) tNameEl.textContent = t('teacher_name');
   var tInput = document.getElementById('teacherInput');
   if (tInput) tInput.placeholder = t('teacher_placeholder');
+  var tMore = document.getElementById('teacherMoreBtn');
+  var tSuggestions = document.getElementById('teacherSuggestions');
+  if (tMore) tMore.textContent = t(tSuggestions && tSuggestions.classList.contains('expanded') ? 'teacher_fewer_topics' : 'teacher_more_topics');
   var tSub = document.getElementById('michaelCardSub');
   if (tSub) tSub.textContent = t('teacher_sub');
   // Side panel labels
@@ -9263,6 +9307,15 @@ function _teacherUpdateChips() {
   });
 }
 
+function toggleTeacherTopics() {
+  var suggestions = document.getElementById('teacherSuggestions');
+  var button = document.getElementById('teacherMoreBtn');
+  if (!suggestions || !button) return;
+  var expanded = suggestions.classList.toggle('expanded');
+  button.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+  button.textContent = t(expanded ? 'teacher_fewer_topics' : 'teacher_more_topics');
+}
+
 function _teacherAppendBubble(role, text) {
   var msgs = document.getElementById('teacherMessages');
   if (!msgs) return;
@@ -9270,9 +9323,10 @@ function _teacherAppendBubble(role, text) {
   var row = document.createElement('div');
   row.className = 'tm-row ' + role;
   if (role === 'assistant') {
-    var av = document.createElement('div');
+    var av = document.createElement('img');
     av.className = 'tm-av';
-    av.textContent = '🚗';
+    av.src = '/api/assets/michael_profile.jpg';
+    av.alt = 'Michael';
     row.appendChild(av);
   }
   var bubble = document.createElement('div');
@@ -9309,9 +9363,10 @@ function _teacherShowTyping() {
   var row = document.createElement('div');
   row.className = 'tm-row assistant';
   row.id = 'teacherTypingRow';
-  var av = document.createElement('div');
+  var av = document.createElement('img');
   av.className = 'tm-av';
-  av.textContent = '🚗';
+  av.src = '/api/assets/michael_profile.jpg';
+  av.alt = 'Michael';
   row.appendChild(av);
   var bubble = document.createElement('div');
   bubble.className = 'tm-bubble assistant tm-typing';
