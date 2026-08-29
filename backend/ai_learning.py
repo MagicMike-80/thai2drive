@@ -192,6 +192,73 @@ async def record_attempt(
     return updated
 
 
+async def record_user_mistake(
+    db,
+    user_id: str,
+    question_id: str,
+    is_correct: bool,
+    mode: str,
+    now: Optional[datetime] = None,
+) -> Optional[dict]:
+    """Update the simple, persistent mistake lifecycle for a registered user.
+
+    Normal correct answers intentionally do nothing. Correct answers only build
+    mastery inside the dedicated ``mistakes`` mode. A later wrong answer always
+    reactivates a mastered question.
+    """
+    user_id = str(user_id or "").strip()
+    question_id = str(question_id or "").strip()
+    if not user_id or not question_id:
+        return None
+
+    timestamp = (now or _now()).isoformat()
+    key = {"user_id": user_id, "question_id": question_id}
+
+    if not is_correct:
+        await db.user_mistakes.update_one(
+            key,
+            {
+                "$inc": {"wrong_count": 1},
+                "$set": {
+                    "correct_streak": 0,
+                    "active": True,
+                    "mastered": False,
+                    "last_wrong_at": timestamp,
+                    "updated_at": timestamp,
+                },
+                "$setOnInsert": {
+                    "user_id": user_id,
+                    "question_id": question_id,
+                    "last_practiced_at": None,
+                    "created_at": timestamp,
+                },
+            },
+            upsert=True,
+        )
+        return await db.user_mistakes.find_one(key, {"_id": 0})
+
+    if mode != "mistakes":
+        return None
+
+    # Pipeline update keeps the streak increment and mastery transition atomic.
+    return await db.user_mistakes.find_one_and_update(
+        {**key, "active": True},
+        [
+            {"$set": {
+                "correct_streak": {"$add": [{"$ifNull": ["$correct_streak", 0]}, 1]},
+                "last_practiced_at": timestamp,
+                "updated_at": timestamp,
+            }},
+            {"$set": {
+                "active": {"$lt": ["$correct_streak", 2]},
+                "mastered": {"$gte": ["$correct_streak", 2]},
+            }},
+        ],
+        # Motor/PyMongo accepts True as the AFTER value for return_document.
+        return_document=True,
+    )
+
+
 # ─── Analytics ────────────────────────────────────────────────────────────────
 
 async def get_category_stats(db, device_id: str) -> list[dict]:

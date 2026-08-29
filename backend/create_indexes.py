@@ -70,6 +70,21 @@ async def create_all_indexes(db) -> dict[str, list[str]]:
     )
     created["ai_srs_cards"] = ["device_question_unique", "device_review"]
 
+    # ── user_mistakes ─────────────────────────────────────────────────────────
+    await db.user_mistakes.create_index(
+        [("user_id", ASCENDING), ("question_id", ASCENDING)],
+        unique=True,
+        background=True,
+        name="user_question_unique",
+    )
+    await db.user_mistakes.create_index(
+        [("user_id", ASCENDING), ("active", ASCENDING),
+         ("wrong_count", DESCENDING), ("last_practiced_at", ASCENDING)],
+        background=True,
+        name="user_active_priority",
+    )
+    created["user_mistakes"] = ["user_question_unique", "user_active_priority"]
+
     # ── ai_explanations ────────────────────────────────────────────────────────
     # Queries:
     #   get_explanation (ai_explanations.py) → find_one({question_id, lang}) + upsert

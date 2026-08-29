@@ -22,6 +22,7 @@ from datetime import datetime, timezone, timedelta
 from zoneinfo import ZoneInfo
 from passlib.context import CryptContext
 import usage as usage_mod
+from ai_learning import record_user_mistake
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -2031,14 +2032,39 @@ async def update_user_progress(device_id: str, answered_correct: bool, category:
     return {"success": True, "progress": progress}
 
 @api_router.post("/quiz-attempts")
-async def save_quiz_attempt(attempt_data: QuizAttemptCreate):
+async def save_quiz_attempt(
+    attempt_data: QuizAttemptCreate,
+    current_user: Optional[dict] = Depends(get_optional_user),
+):
     # Build doc from client data — preserve client_attempt_id and client completed_at
     doc = attempt_data.dict(exclude_none=True)
     doc["id"] = doc.pop("client_attempt_id", None) or str(uuid.uuid4())
     if "completed_at" not in doc:
         doc["completed_at"] = datetime.now(timezone.utc).isoformat()
+    if current_user and current_user.get("id"):
+        doc["user_id"] = current_user["id"]
     await db.quiz_attempts.insert_one(doc)
     doc.pop("_id", None)
+
+    # Registered-user mistake bank. This is deliberately fail-soft: analytics
+    # must never prevent a completed quiz from being saved.
+    if current_user and current_user.get("id"):
+        try:
+            await asyncio.gather(*(
+                record_user_mistake(
+                    db=db,
+                    user_id=current_user["id"],
+                    question_id=answer.get("question_id"),
+                    is_correct=bool(answer.get("is_correct")),
+                    mode=doc.get("mode", ""),
+                )
+                for answer in doc.get("questions_answered", [])
+                if answer.get("question_id") and isinstance(answer.get("is_correct"), bool)
+            ))
+        except Exception as exc:
+            logging.getLogger("quiz_attempts").warning(
+                "Mistake-bank update failed for saved attempt %s: %s", doc["id"], exc
+            )
 
     # ── Segment track ──
     if SEGMENT_WRITE_KEY:
