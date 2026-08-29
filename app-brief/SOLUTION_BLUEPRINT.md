@@ -1,49 +1,24 @@
-# SOLUTION BLUEPRINT: Webapp som eneste lanseringsvei
+# SOLUTION BLUEPRINT: Standardiser nettsiden til 1000+
 
 ## Mål
 
-Gjør webappen til den eneste tydelige konverteringsveien på landingssiden inntil mobilappen faktisk lanseres.
+Oppdater bare offentlige markedsføringstekster fra 500+/700+ til 1000+ i alle tre språk.
 
 ## Ikke-mål
 
-- Ingen endring av webappen, API-ruter eller autentisering.
-- Ingen endring av Stripe, RevenueCat, priser, premiumlogikk eller tilgangsgrenser.
-- Ingen deploy eller produksjonskonfigurasjon.
+Ingen endring av spørsmålsdata, API-er, tilgang, premium, priser, Stripe, RevenueCat eller deploykonfigurasjon.
 
-## Berørt fil og komponenter
+## Filer og patchplan
 
-- `backend/landing.py`
-  - hero-CTA og QR-blokk
-  - bunn-CTA og QR-blokk
-  - demoens sluttvisning
+1. Oppdater relevante tekster og metadata i `backend/landing.py`.
+2. Oppdater tilsvarende tekster og metadata i `backend/website.py`.
+3. Søk etter gjenværende markedsføringsreferanser til 500/700 og test Python-syntaks.
+4. Verifiser NO/TH/EN og fersk produksjon etter deploy.
 
-## Dataflyt og API-kontrakt
+## Risiko og rollback
 
-Alle nye CTA-er bruker den eksisterende GET-ruten `/api/web`. Ingen kontrakter endres.
+Lav risiko: ren tekstendring i to offentlige nettsidebyggere. Rollback er å reversere committen.
 
-## Språk, tilgang og premium
-
-Norsk, thai og engelsk oppdateres parallelt. Guest/free/premium og viste priser berøres ikke.
-
-## Patchplan
-
-1. Fjern heroens mobilappknapp og appnedlastings-QR.
-2. Erstatt bunnens mobilappknapp med en lenke til webappen og fjern QR-blokken.
-3. Endre demoens slutttekst og CTA fra appnedlasting til å fortsette i webappen.
-4. Fjern konstanten for QR-bildet dersom den blir ubrukt.
-
-## Verifisering
-
-- Python-syntakssjekk av `backend/landing.py`.
-- Render HTML lokalt og bekreft at mobilapp-/nedlastingstekst og `#download` er borte.
-- Bekreft at `/api/web` finnes i hero, bunn-CTA og demoens sluttvisning.
-- Kontroller diff for utilsiktede backend-, betalings- eller tilgangsendringer.
-- Fersk produksjonskontroll kan først utføres etter en separat, uttrykkelig godkjent deploy.
-
-## Rollback og risiko
-
-Rollback er å reversere den ene frontend-innholdspatchen. Risikoen er lav og begrenset til landingssidens navigasjon og tekst.
-
-Ingen ytterligere avgjørelser kreves: Michael har uttrykkelig bestemt at bare webappen skal lanseres nå.
+Michael har oppgitt 1000+ som korrekt produktantall.
 
 READY FOR AGENT 3

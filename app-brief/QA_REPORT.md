@@ -1,32 +1,26 @@
-# QA REPORT: Webapp-only landingside
+# QA REPORT: 1000+ spørsmål
 
-## Rotårsak og scope
+## Scope og rotårsak
 
-PASS. Diffen fjerner den dokumenterte parallelle mobilapp-veien fra hero, bunn-CTA og demoens sluttvisning. Bare `backend/landing.py` er endret som applikasjonskode.
+PASS. Diffen adresserer de statiske, utdaterte markedsføringstallene i de to offentlige nettsidebyggerne. Ingen andre applikasjonsfiler er endret.
+
+## Språk
+
+PASS. Landingssiden viser 1000+ konsistent på thai, norsk og engelsk. Den eldre norske nettsideruten og metadata er også oppdatert.
 
 ## Automatiske kontroller
 
 - Python-syntaks: PASS.
-- Smal komponent-render og assertions for forbudt nedlastingscopy og `/api/web`: PASS.
-- `git diff --check`: PASS, med kun forventet lokalt LF/CRLF-varsel.
-- Hemmelighetssøk i diff: PASS.
+- Render-/kildeassertions: PASS.
+- Gamle produktantall 500+/700+: borte.
+- Diff-format og hemmelighetsscope: PASS.
 
-## Språk
+## Tilgang, betaling og regresjon
 
-PASS. Thai, norsk og engelsk er oppdatert parallelt i alle berørte tekster. Ingen appnedlastingscopy eller `#download` gjenstår i `backend/landing.py`.
-
-## Tilgang og betaling
-
-PASS. Ingen endringer i guest/free/premium-logikk, autentisering, Stripe eller RevenueCat. Prislinjene som vises i diffen er uendret kontekst.
-
-## Mobil, tilstander og hovedflyt
-
-PASS WITH WARNING. HTML-strukturen blir enklere på små skjermer fordi knapp og QR-blokker fjernes. Hero, bunn-CTA og demoens sluttvisning bruker eksisterende `/api/web`. Visuell nettleserkontroll av den patched versjonen er ikke utført fordi fullt lokalt runtime-miljø mangler `python-dotenv`.
+PASS. Ingen endringer i quizdata, guest/free/premium, autentisering, priser, Stripe eller RevenueCat. Tekniske 500/700-verdier som CSS, timeout og feltlengde er beholdt.
 
 ## Produksjon
 
-Ikke verifisert og ikke deployet. Live-siden endres først etter separat commit/push/deploy.
+Ikke verifisert før deploy. Krever fersk live-kontroll etter Railway er grønn.
 
-## Resultat
-
-PASS WITH WARNINGS – patchen er liten, scope-riktig og klar for Michaels vurdering. Restpunktet er visuell kontroll og fersk live-verifisering etter godkjent deploy.
+PASS – klar for publisering og live-verifisering.

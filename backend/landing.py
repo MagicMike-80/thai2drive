@@ -646,9 +646,9 @@ def _hero_html() -> str:
     </h1>
 
     <p class="sub">
-      <span data-lang="th" class="block">ฝึกด้วยคำถามกว่า 500 ข้อ พร้อมคำอธิบาย ใน 3 ภาษา</span>
-      <span data-lang="no" class="block">Øv med 500+ spørsmål med forklaringer på 3 språk</span>
-      <span data-lang="en" class="block">Practice with 500+ questions with explanations in 3 languages</span>
+      <span data-lang="th" class="block">ฝึกด้วยคำถามมากกว่า 1000 ข้อ พร้อมคำอธิบาย ใน 3 ภาษา</span>
+      <span data-lang="no" class="block">Øv med 1000+ spørsmål med forklaringer på 3 språk</span>
+      <span data-lang="en" class="block">Practice with 1000+ questions with explanations in 3 languages</span>
     </p>
 
     <div class="cta-group">
@@ -677,9 +677,9 @@ def _hero_html() -> str:
 
     <div class="hero-badges">
       <span class="badge-chip"><span class="ok"></span>
-        <span data-lang="th">มากกว่า 700 ข้อ</span>
-        <span data-lang="no">700+ spørsmål</span>
-        <span data-lang="en">700+ questions</span>
+        <span data-lang="th">มากกว่า 1000 ข้อ</span>
+        <span data-lang="no">1000+ spørsmål</span>
+        <span data-lang="en">1000+ questions</span>
       </span>
       <span class="badge-chip">🇹🇭🇳🇴
         <span data-lang="th">ใช้โดยคนไทยในนอร์เวย์</span>
@@ -763,7 +763,7 @@ def _stats_html() -> str:
   <div class="container">
     <div class="stats-row">
       <div class="stat">
-        <div class="stat-num">700+</div>
+        <div class="stat-num">1000+</div>
         <div class="stat-label">
           <span data-lang="th">คำถาม</span>
           <span data-lang="no">spørsmål</span>
@@ -904,9 +904,9 @@ def _video_html() -> str:
           <span data-lang="en">Want to learn <span>more</span>?</span>
         </div>
         <div class="vpt-sub">
-          <span data-lang="th">700+ คำถาม · AI ครู · ป้ายจราจร · ไทย นอร์เวย์ อังกฤษ · คอร์สวิดีโอ Premium</span>
-          <span data-lang="no">700+ spørsmål · AI-lærer · Trafikkskilt · Thai, norsk og engelsk · Premium videokurs</span>
-          <span data-lang="en">700+ questions · AI teacher · Traffic signs · Thai, Norwegian and English · Premium video courses</span>
+          <span data-lang="th">1000+ คำถาม · AI ครู · ป้ายจราจร · ไทย นอร์เวย์ อังกฤษ · คอร์สวิดีโอ Premium</span>
+          <span data-lang="no">1000+ spørsmål · AI-lærer · Trafikkskilt · Thai, norsk og engelsk · Premium videokurs</span>
+          <span data-lang="en">1000+ questions · AI teacher · Traffic signs · Thai, Norwegian and English · Premium video courses</span>
         </div>
         <div class="vpt-features">{feat_html}</div>
         <a href="#pricing" class="cta-btn" style="display:inline-flex;text-decoration:none">
@@ -997,7 +997,7 @@ def _why_html() -> str:
 
 def _features_html() -> str:
     features = [
-        ('📚', {'th': '500+ คำถาม', 'no': '500+ spørsmål', 'en': '500+ questions'},
+        ('📚', {'th': '1000+ คำถาม', 'no': '1000+ spørsmål', 'en': '1000+ questions'},
                {'th': 'ครอบคลุมทุกหมวดหมู่ของข้อสอบใบขับขี่นอร์เวย์',
                 'no': 'Dekker alle kategoriene i den norske teoriprøven',
                 'en': 'Covers every category of the Norwegian test'}),
@@ -1476,9 +1476,9 @@ LANDING_JS = r"""
       en: 'Continue practicing in the web app',
     };
     const subs = {
-      th: 'เปิดเว็บแอปเพื่อเข้าถึงคำถามทั้งหมด 500+ ข้อ พร้อมคำอธิบายและโหมดสอบจริง',
-      no: 'Åpne webappen for tilgang til alle 500+ spørsmål, forklaringer og ekte eksamensmodus.',
-      en: 'Open the web app for access to all 500+ questions, explanations, and real exam mode.',
+      th: 'เปิดเว็บแอปเพื่อเข้าถึงคำถามทั้งหมด 1000+ ข้อ พร้อมคำอธิบายและโหมดสอบจริง',
+      no: 'Åpne webappen for tilgang til alle 1000+ spørsmål, forklaringer og ekte eksamensmodus.',
+      en: 'Open the web app for access to all 1000+ questions, explanations, and real exam mode.',
     };
     const ctas = {
       th: 'เปิดเว็บแอป',
@@ -1532,7 +1532,7 @@ def build_landing_page(chat_css: str, chat_widget_html: str, chat_js: str) -> st
     from site_config import public_site_url, canonical_url
     canon = canonical_url("/")
     og_image = public_site_url() + HEADER_URL  # absolute URL for social previews
-    desc = "Bestå den norske teoriprøven – 500+ spørsmål på thai, norsk og engelsk. Laget for thai-folk i Norge."
+    desc = "Bestå den norske teoriprøven – 1000+ spørsmål på thai, norsk og engelsk. Laget for thai-folk i Norge."
     return f"""<!doctype html>
 <html lang="th" data-current-lang="th">
 <head>
