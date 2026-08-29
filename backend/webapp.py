@@ -3484,6 +3484,11 @@ a { color:inherit; text-decoration:none; }
             <span class="hsm-icon">📅</span>
             <span class="hsm-label" data-hsm-key="daily_short">Daglig test</span>
           </button>
+          <button class="hsm-card" id="mistakesHomeBtn" onclick="startMistakeQuiz()" style="flex-basis:150px">
+            <span class="hsm-icon">↩</span>
+            <span class="hsm-label" data-hsm-key="mistakes_short">แบบฝึกหัดข้อที่เคยตอบผิด</span>
+            <span class="hsm-label" id="mistakesHomeCount" style="font-size:.68rem;opacity:.75"></span>
+          </button>
           <button class="hsm-card" onclick="showForbikjoring()">
             <span class="hsm-icon">🚗</span>
             <span class="hsm-label" data-hsm-key="fk_short">Trafikk-matte</span>
@@ -4136,6 +4141,7 @@ var _sessionAnswers   = []; // per-question answer log — powers history detail
 var _histAttempts     = []; // loaded attempts array — keyed by index for detail panel
 var _histOpenIdx      = null;
 var _reviewMode       = false; // true while in "Øv på feil" review flow
+var isMistakeMode     = false; // active answerable quiz sourced from user_mistakes
 var _aiPanelTimer     = null; // delayed AI panel — cleared on nextQ to prevent cross-question bleed
 var _reviewQuestions  = []; // wrong questions to review
 var _reviewIdx        = 0;  // current review position
@@ -4235,6 +4241,11 @@ var UI = {
   daily:       {th:'📅 ทดสอบรายวัน',    no:'📅 Daglig test',   en:'📅 Daily test'},
   exam_short:  {th:'สอบ',               no:'Eksamen',          en:'Exam'},
   daily_short: {th:'ทดสอบรายวัน',       no:'Daglig test',      en:'Daily'},
+  mistakes_short:{th:'แบบฝึกหัดข้อที่เคยตอบผิด', no:'Øv på mine feil', en:'Practice my mistakes'},
+  mistakes_count:{th:'{count} ข้อที่ต้องทบทวน', no:'{count} spørsmål å repetere', en:'{count} questions to review'},
+  mistakes_empty:{th:'ยังไม่มีข้อที่ต้องทบทวน', no:'Du har ingen aktive feil å øve på.', en:'You have no active mistakes to practise.'},
+  mistakes_login:{th:'เข้าสู่ระบบเพื่อฝึกข้อที่เคยตอบผิด', no:'Logg inn for å øve på feilene dine.', en:'Log in to practise your mistakes.'},
+  mistakes_load_error:{th:'โหลดข้อที่เคยตอบผิดไม่ได้', no:'Kunne ikke laste feilene dine.', en:'Could not load your mistakes.'},
   signs_short: {th:'ป้ายจราจร',         no:'Skilt',            en:'Signs'},
   sb_short:    {th:'หนังสือเรียน',       no:'Studiebok',        en:'Study Book'},
   fk_short:    {th:'คำนวณระยะ',         no:'Trafikk-matte',    en:'Math'},
@@ -4297,6 +4308,7 @@ var UI = {
   mode_category:{th:'หมวดหมู่',             no:'Kategori',         en:'Category'},
   mode_daily:  {th:'ทดสอบรายวัน',          no:'Daglig test',      en:'Daily test'},
   mode_random: {th:'ควิซสุ่ม',              no:'Tilfeldig quiz',   en:'Random quiz'},
+  mode_mistakes:{th:'แบบฝึกหัดข้อที่เคยตอบผิด', no:'Øv på mine feil', en:'Practice my mistakes'},
   questions_word:{th:'คำถาม',              no:'spørsmål',         en:'questions'},
   signs_word:  {th:'ป้าย',                 no:'skilt',            en:'signs'},
   categories_empty:{th:'ไม่พบหมวดหมู่',     no:'Ingen kategorier funnet', en:'No categories found'},
@@ -4587,7 +4599,7 @@ function pickStrict(obj) {
 }
 
 function modeLabel(mode) {
-  var labels = {exam:t('mode_exam'), category:t('mode_category'), daily:t('mode_daily'), random:t('mode_random')};
+  var labels = {exam:t('mode_exam'), category:t('mode_category'), daily:t('mode_daily'), random:t('mode_random'), mistakes:t('mode_mistakes')};
   return labels[mode] || mode || 'Quiz';
 }
 function readinessForPct(pct, compact) {
@@ -5914,6 +5926,19 @@ async function loadHome() {
     }
   }
 
+  // Persistent mistake-bank count for registered users.
+  var mistakeCount = document.getElementById('mistakesHomeCount');
+  if (mistakeCount) mistakeCount.textContent = '';
+  if (token) {
+    try {
+      var mistakeData = await api('GET', '/api/quiz/mistakes?limit=100&_=' + Date.now());
+      var activeMistakes = Number(mistakeData.count || 0);
+      if (mistakeCount) mistakeCount.textContent = tf('mistakes_count', {count: activeMistakes});
+    } catch(e) {
+      console.warn('Mistake count load failed:', e.message);
+    }
+  }
+
   // Readiness card — last quiz attempt
   if (deviceId) {
     try {
@@ -6176,6 +6201,7 @@ function bindCarouselDrag() {
 //  QUIZ
 // ════════════════════════════════════════════
 async function startRandomQuiz() {
+  isMistakeMode = false;
   currentCat = null;
   isExamMode = false;
   await loadQuiz('/api/questions/random?count=30&has_image=true');
@@ -6183,9 +6209,21 @@ async function startRandomQuiz() {
 
 async function startDailyTest() {
   if (!isPremium()) { showPaywall(); return; }
+  isMistakeMode = false;
   currentCat = null;
   isExamMode = false;
   await loadQuiz('/api/questions/random?count=10&has_image=true');
+}
+
+async function startMistakeQuiz() {
+  if (!token) {
+    toast(t('mistakes_login'));
+    return;
+  }
+  isMistakeMode = true;
+  currentCat = null;
+  isExamMode = false;
+  await loadQuiz('/api/quiz/mistakes?limit=100&_=' + Date.now());
 }
 
 var isExamMode = false;
@@ -6386,6 +6424,7 @@ async function restorePurchase() {
 
 async function startExam() {
   if (!isPremium()) { showPaywall(); return; }
+  isMistakeMode = false;
   currentCat = null;
   isExamMode = true;
   await loadQuiz('/api/questions/random?count=45&has_image=true&mode=exam');
@@ -6426,6 +6465,7 @@ function updateTimerLabel(lbl, secs) {
 }
 
 async function startQuiz(catId) {
+  isMistakeMode = false;
   var key = catKey(catId);
   currentCat = key ? { id: key, key: key } : null;
   isExamMode = false;
@@ -6455,7 +6495,8 @@ async function loadQuiz(url) {
       });
     }
     if (!questions.length) {
-      qCard.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="es-icon">📭</div><p>' + t('questions_empty') + '</p></div>';
+      var emptyKey = isMistakeMode ? 'mistakes_empty' : 'questions_empty';
+      qCard.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="es-icon">📭</div><p>' + t(emptyKey) + '</p></div>';
       return;
     }
     qIdx = 0; qScore = 0; qAnswered = false;
@@ -6467,7 +6508,8 @@ async function loadQuiz(url) {
     renderQuestion();
   } catch(e) {
     if (e.status === 402) { showPaywall(); return; }
-    qCard.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="es-icon">⚠️</div><p>' + t('generic_error') + '<br>' + escH(e.message) + '</p></div>';
+    var errorKey = isMistakeMode ? 'mistakes_load_error' : 'generic_error';
+    qCard.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="es-icon">⚠️</div><p>' + t(errorKey) + '<br>' + escH(e.message) + '</p></div>';
   }
 }
 
@@ -8308,7 +8350,7 @@ function showEnd() {
 
   // ── Save attempt — always runs, even if display above failed ──
   if (deviceId && total > 0) {
-    var mode = isExamMode ? 'exam' : (currentCat ? 'category' : 'daily');
+    var mode = isMistakeMode ? 'mistakes' : (isExamMode ? 'exam' : (currentCat ? 'category' : 'daily'));
     var completedAt = new Date().toISOString();
     var clientAttemptId = 'web_' + completedAt + '_' + Math.random().toString(36).slice(2, 8);
     var attemptData = {
@@ -8324,7 +8366,8 @@ function showEnd() {
         return { question_id: String(q._id || q.id || q.question_id || ''), index: i };
       }),
       started_at: quizStartedAt || completedAt,
-      completed_at: completedAt
+      completed_at: completedAt,
+      is_mistake_mode: isMistakeMode
     };
     // Build a local mirror immediately so History shows it even before the DB catches up
     _lastSavedAttempt = {
@@ -8358,7 +8401,8 @@ function showEnd() {
 }
 
 function retryQuiz() {
-  if (currentCat) startQuiz(currentCat.id);
+  if (isMistakeMode) startMistakeQuiz();
+  else if (currentCat) startQuiz(currentCat.id);
   else startRandomQuiz();
 }
 

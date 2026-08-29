@@ -22,7 +22,7 @@ from datetime import datetime, timezone, timedelta
 from zoneinfo import ZoneInfo
 from passlib.context import CryptContext
 import usage as usage_mod
-from ai_learning import record_user_mistake
+from ai_learning import get_active_user_mistakes, record_user_mistake
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -265,6 +265,7 @@ class QuizAttemptCreate(BaseModel):
     questions_answered: List[Dict[str, Any]]
     started_at: str
     completed_at: Optional[str] = None
+    is_mistake_mode: bool = False
 
 class Bookmark(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
@@ -1047,6 +1048,35 @@ async def get_question(question_id: str):
     if not question:
         raise HTTPException(status_code=404, detail="Question not found")
     return normalize_question(question)
+
+
+@api_router.get("/quiz/mistakes")
+async def get_quiz_mistakes(
+    user_id: Optional[str] = None,
+    limit: int = Query(default=50, ge=1, le=100),
+    current_user: dict = Depends(get_current_user),
+):
+    """Return active mistake-bank questions for the authenticated user.
+
+    ``user_id`` is accepted for backwards-compatible callers, but it may never
+    be used to read another learner's data.
+    """
+    authenticated_user_id = current_user["sub"]
+    if user_id and user_id != authenticated_user_id:
+        raise HTTPException(status_code=403, detail="Cannot access another user's mistakes")
+
+    mistakes = await get_active_user_mistakes(db, authenticated_user_id, limit)
+
+    question_ids = [m["question_id"] for m in mistakes if m.get("question_id")]
+    if not question_ids:
+        return {"count": 0, "questions": []}
+
+    question_docs = await db.questions.find(
+        {"id": {"$in": question_ids}, **IMAGE_ONLY_FILTER}, {"_id": 0}
+    ).to_list(len(question_ids))
+    by_id = {str(q.get("id")): normalize_question(q) for q in question_docs}
+    ordered = [by_id[qid] for qid in question_ids if qid in by_id]
+    return {"count": len(ordered), "questions": ordered}
 
 @api_router.post("/questions", response_model=Question)
 async def create_question(question_data: QuestionCreate):
@@ -2038,6 +2068,9 @@ async def save_quiz_attempt(
 ):
     # Build doc from client data — preserve client_attempt_id and client completed_at
     doc = attempt_data.dict(exclude_none=True)
+    is_mistake_mode = bool(doc.pop("is_mistake_mode", False))
+    if is_mistake_mode:
+        doc["mode"] = "mistakes"
     doc["id"] = doc.pop("client_attempt_id", None) or str(uuid.uuid4())
     if "completed_at" not in doc:
         doc["completed_at"] = datetime.now(timezone.utc).isoformat()

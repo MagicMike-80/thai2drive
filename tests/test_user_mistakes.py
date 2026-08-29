@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 from unittest import IsolatedAsyncioTestCase
 from unittest.mock import AsyncMock, MagicMock
 
-from backend.ai_learning import record_user_mistake
+from backend.ai_learning import get_active_user_mistakes, record_user_mistake
 
 
 class UserMistakeTests(IsolatedAsyncioTestCase):
@@ -58,3 +58,23 @@ class UserMistakeTests(IsolatedAsyncioTestCase):
             await record_user_mistake(self.db, "", "q1", False, "daily", self.now)
         )
         self.collection.update_one.assert_not_awaited()
+
+    async def test_active_mistakes_use_expected_filter_and_priority(self):
+        cursor = MagicMock()
+        cursor.sort.return_value = cursor
+        cursor.limit.return_value = cursor
+        cursor.to_list = AsyncMock(return_value=[{"question_id": "q2"}])
+        self.collection.find.return_value = cursor
+
+        result = await get_active_user_mistakes(self.db, "u1", 250)
+
+        self.collection.find.assert_called_once_with(
+            {"user_id": "u1", "active": True, "mastered": {"$ne": True}},
+            {"_id": 0},
+        )
+        cursor.sort.assert_called_once_with(
+            [("wrong_count", -1), ("last_practiced_at", 1)]
+        )
+        cursor.limit.assert_called_once_with(100)
+        cursor.to_list.assert_awaited_once_with(100)
+        self.assertEqual(result, [{"question_id": "q2"}])

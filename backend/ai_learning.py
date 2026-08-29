@@ -259,6 +259,26 @@ async def record_user_mistake(
     )
 
 
+async def get_active_user_mistakes(db, user_id: str, limit: int = 50) -> list[dict]:
+    """Return active mistakes in stable practice priority order."""
+    user_id = str(user_id or "").strip()
+    if not user_id:
+        return []
+    safe_limit = max(1, min(int(limit), 100))
+    cursor = db.user_mistakes.find(
+        {
+            "user_id": user_id,
+            "active": True,
+            "mastered": {"$ne": True},
+        },
+        {"_id": 0},
+    ).sort([
+        ("wrong_count", -1),
+        ("last_practiced_at", 1),
+    ]).limit(safe_limit)
+    return await cursor.to_list(safe_limit)
+
+
 # ─── Analytics ────────────────────────────────────────────────────────────────
 
 async def get_category_stats(db, device_id: str) -> list[dict]:
