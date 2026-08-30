@@ -40,6 +40,24 @@ class MichaelMobileUiContractTests(unittest.TestCase):
         self.assertIn("function _teacherAppendBubble(role, text)", WEBAPP)
         self.assertIn("function _teacherShowTyping()", WEBAPP)
 
+    def test_second_teacher_audio_replaces_previous_audio(self):
+        self.assertIn("var _teacherActiveText = '';", WEBAPP)
+        self.assertIn("var _teacherAudioToken = 0;", WEBAPP)
+        self.assertIn("_teacherTtsPlaying && _teacherActiveText === clean", WEBAPP)
+        self.assertIn("var playToken = ++_teacherAudioToken;", WEBAPP)
+        self.assertIn("playToken === _teacherAudioToken", WEBAPP)
+
+    def test_contextual_mobile_topics_show_three_before_expansion(self):
+        self.assertIn("index >= 3 ? ' mobile-extra' : ''", WEBAPP)
+        self.assertIn("chips.length > 3", WEBAPP)
+        self.assertIn(".tm-chips .tm-chip-btn.mobile-extra { display:none; }", WEBAPP)
+        self.assertIn(".tm-chips.expanded .tm-chip-btn.mobile-extra", WEBAPP)
+        self.assertIn("toggle.setAttribute('aria-expanded'", WEBAPP)
+
+    def test_mobile_teacher_header_is_compact(self):
+        self.assertIn(".teacher-header { min-height:132px", WEBAPP)
+        self.assertIn(".teacher-avatar { width:94px; height:112px", WEBAPP)
+
 
 if __name__ == "__main__":
     unittest.main()

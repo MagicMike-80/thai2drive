@@ -3204,6 +3204,11 @@ a { color:inherit; text-decoration:none; }
 .tm-chip-btn:active { transform:scale(.97); }
 [data-theme="light"] .tm-chip-btn { background:#1e3a5f; border-color:rgba(59,130,246,.35); color:#F8FAFC; }
 [data-theme="light"] .tm-chip-btn:hover { background:#1a2744; border-color:rgba(255,153,51,.55); }
+.tm-chips-toggle {
+  display:none; flex:1 0 100%; min-height:44px; border-radius:12px;
+  border:1px solid rgba(0,245,255,.32); background:rgba(0,245,255,.07);
+  color:#A5F3FC; font:inherit; font-size:.78rem; font-weight:900; cursor:pointer;
+}
 
 .teacher-inputbar {
   display:flex; align-items:flex-end; gap:8px;
@@ -3233,8 +3238,9 @@ a { color:inherit; text-decoration:none; }
 @media (max-width:767px) {
   #app.teacher-mode .flag-bg { display:none; }
   #screenTeacher { background:#071326; }
-  .teacher-header { min-height:152px; padding:14px 16px; }
-  .teacher-avatar { width:112px; height:136px; }
+  .teacher-header { min-height:132px; padding:12px 16px; }
+  .teacher-avatar { width:94px; height:112px; border-radius:20px 20px 12px 12px; }
+  .teacher-name { font-size:1rem; }
   .teacher-messages { padding:14px 12px 18px; gap:12px; }
   .tm-bubble { max-width:88%; padding:12px 14px; font-size:.96rem; line-height:1.6; }
   .teacher-suggestions { padding:9px 12px; gap:8px; background:#0A1530; }
@@ -3245,6 +3251,9 @@ a { color:inherit; text-decoration:none; }
     border-radius:14px; justify-content:flex-start; text-align:left; font-size:.86rem;
   }
   .teacher-topics-toggle { display:block; }
+  .tm-chips .tm-chip-btn.mobile-extra { display:none; }
+  .tm-chips.expanded .tm-chip-btn.mobile-extra { display:inline-flex; }
+  .tm-chips-toggle { display:block; }
   .teacher-inputbar { padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px)); background:#071326; position:relative; z-index:2; }
   .teacher-input { min-height:50px; font-size:1rem; }
   .teacher-send-btn { width:50px; height:50px; }
@@ -5667,6 +5676,8 @@ document.addEventListener('click', function(e) {
 var _backendAudio = null;
 var _teacherAudio = null;
 var _audioUnlocked = false;
+var _teacherActiveText = '';
+var _teacherAudioToken = 0;
 
 // iOS/Safari lar deg bare starte lyd fra et ekte brukertrykk. Et <audio>-element som
 // aldri har spilt inne i en gest, nekter senere .play() — og det er derfor lyden er
@@ -5689,8 +5700,14 @@ function _ensureTeacherAudio() {
   if (!_teacherAudio) {
     _teacherAudio = new Audio();
     _teacherAudio.preload = 'auto';
-    _teacherAudio.onended = function() { _teacherTtsPlaying = false; };
-    _teacherAudio.onerror = function() { _teacherTtsPlaying = false; };
+    _teacherAudio.onended = function() {
+      _teacherTtsPlaying = false;
+      _teacherActiveText = '';
+    };
+    _teacherAudio.onerror = function() {
+      _teacherTtsPlaying = false;
+      _teacherActiveText = '';
+    };
   }
   return _teacherAudio;
 }
@@ -5739,9 +5756,11 @@ document.addEventListener('click', _unlockAudioPlayback, { once: true });
 document.addEventListener('keydown', _unlockAudioPlayback, { once: true });
 
 function stopAllSpeech() {
+  _teacherAudioToken += 1;
   if (_backendAudio) { try { _backendAudio.pause(); } catch(e){} }
   if (_teacherAudio) { try { _teacherAudio.pause(); } catch(e){} }
   _teacherTtsPlaying = false;
+  _teacherActiveText = '';
   ttsPlaying = false;
   if (typeof updateTtsBtn === 'function') { try { updateTtsBtn(false); } catch (e) {} }
 }
@@ -8635,19 +8654,29 @@ function speakText(text) {
     .trim();
   if (!clean) return;
 
-  if (_teacherTtsPlaying) {
+  // The same bubble toggles playback off. A different bubble replaces the old
+  // audio and starts immediately with this same user gesture.
+  if (_teacherTtsPlaying && _teacherActiveText === clean) {
     stopAllSpeech();
     return;
   }
+  if (_teacherTtsPlaying || (_teacherAudio && !_teacherAudio.paused)) {
+    stopAllSpeech();
+  }
   _ensureTeacherAudio();
   _unlockAudioPlayback(_teacherAudio);
+  var playToken = ++_teacherAudioToken;
+  _teacherActiveText = clean;
   _teacherAudio.src = ttsStreamUrl(clean, appLang);
   _teacherAudio.playbackRate = ttsRate || 1.0;
   _teacherAudio.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
   _teacherTtsPlaying = true;
   _teacherAudio.play().catch(function(err) {
      console.error('Teacher audio playback failed:', err);
-     _teacherTtsPlaying = false;
+     if (playToken === _teacherAudioToken) {
+       _teacherTtsPlaying = false;
+       _teacherActiveText = '';
+     }
   });
 }
 
@@ -9402,13 +9431,26 @@ function _teacherAppendChips(chips) {
   hdr.className = 'tm-chips-hdr';
   hdr.textContent = t('choose_topic');
   row.appendChild(hdr);
-  chips.forEach(function(label) {
+  chips.forEach(function(label, index) {
     var btn = document.createElement('button');
-    btn.className = 'tm-chip-btn';
+    btn.className = 'tm-chip-btn' + (index >= 3 ? ' mobile-extra' : '');
     btn.textContent = label;
     btn.onclick = function() { teacherSend(label); };
     row.appendChild(btn);
   });
+  if (chips.length > 3) {
+    var toggle = document.createElement('button');
+    toggle.type = 'button';
+    toggle.className = 'tm-chips-toggle';
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.textContent = t('teacher_more_topics');
+    toggle.onclick = function() {
+      var expanded = row.classList.toggle('expanded');
+      toggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+      toggle.textContent = t(expanded ? 'teacher_fewer_topics' : 'teacher_more_topics');
+    };
+    row.appendChild(toggle);
+  }
   msgs.appendChild(row);
   msgs.scrollTop = msgs.scrollHeight;
 }
