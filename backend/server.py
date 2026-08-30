@@ -1002,6 +1002,7 @@ async def _get_exam_questions(
 @api_router.get("/questions/random")
 async def get_random_questions(
     category: Optional[str] = None,
+    sign_id: Optional[str] = Query(default=None, min_length=1, max_length=80),
     count: int = Query(default=10, le=200),
     has_image: Optional[bool] = None,
     mode: Optional[str] = Query(default=None),   # "exam" → hard-weighted selection
@@ -1025,6 +1026,16 @@ async def get_random_questions(
     match_stage: dict = {}
     if category:
         match_stage["category"] = category
+    if sign_id:
+        safe_sign_id = re.escape(sign_id.strip())
+        image_alias = re.escape(sign_id.strip().replace("_", "."))
+        match_stage["$or"] = [
+            {"sign_id": sign_id.strip()},
+            {"sign_ids": sign_id.strip()},
+            {"traffic_sign_id": sign_id.strip()},
+            {"bildeUrl": {"$regex": f"({safe_sign_id}|{image_alias})", "$options": "i"}},
+            {"image_url": {"$regex": f"({safe_sign_id}|{image_alias})", "$options": "i"}},
+        ]
     if has_image is True:
         match_stage["bildeUrl"] = {"$exists": True, "$nin": [None, ""]}
     if match_stage:
@@ -1032,8 +1043,9 @@ async def get_random_questions(
     pipeline.append({"$sample": {"size": approved}})
     pipeline.append({"$project": {"_id": 0}})
     questions = await db.questions.aggregate(pipeline).to_list(approved)
-    # If category filter with has_image returns nothing, fall back without category
-    if not questions and category and has_image:
+    # Category practice may fall back to a mixed image set. Sign-specific practice
+    # must never silently pretend that an unrelated question belongs to the sign.
+    if not questions and category and has_image and not sign_id:
         pipeline2 = [
             {"$match": {"bildeUrl": {"$exists": True, "$nin": [None, ""]}}},
             {"$sample": {"size": approved}},
@@ -1917,9 +1929,70 @@ async def get_my_stats(device_id: str):
 # ==================== TRAFIKKSKILT ====================
 
 @api_router.get("/signs")
-async def get_signs():
+async def get_signs(tag: Optional[str] = Query(default=None, min_length=1, max_length=80)):
+    if tag:
+        signs = await db.traffic_signs.find({}, {"_id": 0}).sort([("group", 1), ("order", 1)]).to_list(1000)
+        needle = tag.strip().casefold()
+        matches = [
+            _normalize_sign_for_api(sign)
+            for sign in signs
+            if needle in _sign_search_text(sign)
+        ]
+        return {"count": len(matches), "signs": matches}
+
+    # Preserve the legacy grouped response for existing clients that call
+    # /api/signs without the new tag filter.
     from signs_data import get_signs_grouped
     return get_signs_grouped()
+
+
+def _multilang(value: Any) -> Dict[str, str]:
+    if isinstance(value, dict):
+        return {lang: str(value.get(lang) or "").strip() for lang in ("no", "th", "en")}
+    text = str(value or "").strip()
+    return {"no": text, "th": "", "en": ""}
+
+
+def _sign_search_text(sign: dict) -> str:
+    fields = [sign.get("id"), sign.get("code"), sign.get("category")]
+    for key in ("name", "explanation", "driver_action", "group_name"):
+        value = sign.get(key)
+        fields.extend(value.values() if isinstance(value, dict) else [value])
+    fields.extend(sign.get("tags") or [])
+    return " ".join(str(value or "") for value in fields).casefold()
+
+
+def _normalize_sign_for_api(sign: dict) -> dict:
+    sign_id = str(sign.get("id") or "").strip()
+    group = sign.get("group")
+    group_name = sign.get("group_name") or SIGN_GROUPS.get(group, {})
+    image_url = str(sign.get("image_url") or "").strip()
+    if not image_url and sign_id:
+        local_image = ROOT_DIR / "sign_images" / f"{sign_id}.jpg"
+        if local_image.is_file():
+            image_url = f"/api/sign-images/{sign_id}.jpg"
+    return {
+        "id": sign_id,
+        "code": str(sign.get("code") or sign_id.replace("_", ".")),
+        "file": image_url,
+        "image_url": image_url,
+        "category": sign.get("category") or str(group or ""),
+        "group": group,
+        "group_name": _multilang(group_name),
+        "name": _multilang(sign.get("name")),
+        "explanation": _multilang(sign.get("explanation")),
+        "driver_action": _multilang(sign.get("driver_action")),
+        "tags": list(sign.get("tags") or []),
+        "related": list(sign.get("related") or []),
+    }
+
+
+@api_router.get("/signs/{sign_id}")
+async def get_sign(sign_id: str):
+    sign = await db.traffic_signs.find_one({"id": sign_id}, {"_id": 0})
+    if not sign:
+        raise HTTPException(status_code=404, detail="Sign not found")
+    return _normalize_sign_for_api(sign)
 
 
 # ==================== BOK / CHAPTERS ====================

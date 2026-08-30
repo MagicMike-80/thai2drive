@@ -3057,22 +3057,28 @@ a { color:inherit; text-decoration:none; }
    MICHAEL TRAFIKKLÆRER — CHAT UI
 ══════════════════════════════════════════ */
 .teacher-header {
-  display:flex; align-items:center; justify-content:space-between; gap:16px;
-  min-height:148px; padding:16px 18px; border-bottom:1px solid rgba(0,245,255,.22);
-  background:linear-gradient(135deg,#071326 0%,#101637 62%,#221044 100%);
+  display:flex; align-items:center; justify-content:flex-start; gap:14px;
+  height:90px; max-height:90px; min-height:90px; padding:12px 18px;
+  border-bottom:1px solid rgba(148,163,184,.18);
+  background:#071326;
   flex-shrink:0; overflow:hidden; position:relative;
 }
 .teacher-avatar {
-  width:112px; height:132px; border-radius:24px 24px 14px 14px;
+  width:64px; height:64px; border-radius:50%;
   object-fit:cover; object-position:center 14%; flex-shrink:0;
-  border:2px solid rgba(0,245,255,.65);
-  box-shadow:0 0 24px rgba(0,245,255,.30),0 0 38px rgba(214,0,255,.20);
+  border:2px solid rgba(59,130,246,.7); box-shadow:none;
 }
-.teacher-header-info { min-width:0; position:relative; z-index:1; }
+.teacher-header-info { min-width:0; position:relative; z-index:1; display:flex; flex-direction:column; justify-content:center; }
 .teacher-eyebrow { font-size:.68rem; font-weight:900; letter-spacing:.08em; text-transform:uppercase; color:#67E8F9; margin-bottom:5px; }
 .teacher-name { font-size:1.08rem; font-weight:900; color:#fff; line-height:1.2; }
-.teacher-experience { font-size:.76rem; color:#CBD5E1; margin-top:5px; }
-.teacher-status { font-size:.75rem; color:#10B981; margin-top:2px; }
+.teacher-meta-line { font-size:.76rem; color:#CBD5E1; margin-top:5px; white-space:nowrap; }
+.teacher-meta-wrap { display:flex; align-items:center; gap:9px; min-width:0; }
+.teacher-online-badge {
+  display:inline-flex; align-items:center; margin-top:5px; padding:2px 8px;
+  border-radius:999px; background:rgba(16,185,129,.14); color:#34D399;
+  border:1px solid rgba(16,185,129,.4); font-size:.64rem; font-weight:900;
+  letter-spacing:.06em;
+}
 
 /* Mobile baseline — chat col fills screen, side panel hidden */
 .teacher-chat-col {
@@ -3090,6 +3096,7 @@ a { color:inherit; text-decoration:none; }
 .tm-row { display:flex; align-items:flex-end; gap:8px; min-width:0; width:100%; }
 .tm-row.user  { justify-content:flex-end; }
 .tm-row.assistant { justify-content:flex-start; }
+.tm-row.assistant .tm-av { display:none; }
 
 .tm-av {
   width:28px; height:28px; border-radius:50%;
@@ -3097,8 +3104,8 @@ a { color:inherit; text-decoration:none; }
   border:1px solid rgba(0,245,255,.55); flex-shrink:0;
 }
 .tm-bubble {
-  max-width:84%; min-width:0; padding:14px 16px; border-radius:18px;
-  font-size:1rem; line-height:1.75;
+  max-width:92%; min-width:0; padding:24px; border-radius:18px;
+  font-size:1rem; line-height:1.6;
   word-break:break-word; overflow-wrap:break-word;
   letter-spacing:.01em;
 }
@@ -3119,6 +3126,7 @@ a { color:inherit; text-decoration:none; }
 /* Paragraph spacing inside assistant bubbles */
 .tm-para { display:block; margin-bottom:.85em; }
 .tm-para:last-child { margin-bottom:0; }
+.tm-question-title { margin:4px 0 12px; color:#fff; font-size:1.5rem; line-height:1.35; font-weight:900; }
 
 /* Section header (Situasjon:, Forklaring:, Teori:) */
 .tm-section-hdr {
@@ -3173,6 +3181,7 @@ a { color:inherit; text-decoration:none; }
   text-transform:uppercase; color:var(--orange);
   padding:7px 2px 0; margin-top:1px;
 }
+.tm-bubble.assistant { width:100%; max-width:100%; }
 .teacher-topics-toggle {
   display:none; width:100%; min-height:48px; border-radius:14px;
   border:1px solid rgba(0,245,255,.35); background:rgba(0,245,255,.08);
@@ -3181,23 +3190,23 @@ a { color:inherit; text-decoration:none; }
 
 /* Contextual reply chips — shown after assistant messages */
 .tm-chips {
-  display:flex; flex-direction:row; flex-wrap:wrap; gap:7px;
+  display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px;
   padding:10px 14px 4px 14px;
   border-top:1px solid rgba(255,255,255,.06);
   margin-top:4px;
 }
 .tm-chips-hdr {
-  flex:1 0 100%;
+  grid-column:1/-1;
   font-size:.68rem; font-weight:800; letter-spacing:.06em;
   color:var(--orange); text-transform:uppercase;
   margin-bottom:0;
 }
 .tm-chip-btn {
   display:inline-flex; align-items:center; justify-content:center; gap:7px;
-  background:#1a2744; border:1px solid rgba(59,130,246,.28);
-  color:#F8FAFC; border-radius:999px;
-  padding:8px 12px; min-height:38px; font-size:.78rem; font-weight:800;
-  cursor:pointer; text-align:center; width:auto; max-width:100%;
+  background:#111827; border:1px solid #475569 !important;
+  color:#F8FAFC; border-radius:12px;
+  padding:10px 12px; min-height:46px; font-size:.82rem; font-weight:800;
+  cursor:pointer; text-align:center; width:100%; max-width:100%; animation:none !important;
   transition:background .15s, border-color .15s, transform .12s;
 }
 .tm-chip-btn:hover  { background:#1e3a5f; border-color:rgba(255,153,51,.65); color:#fff; transform:translateY(-1px); }
@@ -3209,40 +3218,70 @@ a { color:inherit; text-decoration:none; }
   border:1px solid rgba(0,245,255,.32); background:rgba(0,245,255,.07);
   color:#A5F3FC; font:inherit; font-size:.78rem; font-weight:900; cursor:pointer;
 }
+.tm-chips .tm-chip-btn:first-of-type {
+  background:#2563EB !important; border:2px solid #60A5FA !important;
+  box-shadow:none !important;
+}
+.tm-sign-actions-row { grid-template-columns:1fr; }
 
 .teacher-inputbar {
-  display:flex; align-items:flex-end; gap:8px;
+  display:flex; align-items:center; gap:10px;
   padding:10px 14px calc(10px + env(safe-area-inset-bottom, 0px)) 14px;
   border-top:1px solid var(--border);
   background:var(--bg2); flex-shrink:0;
 }
 .teacher-input {
   flex:1; background:var(--bg); border:1px solid var(--border);
-  color:var(--text); border-radius:12px;
-  padding:10px 14px; font-size:.875rem; font-family:inherit;
-  resize:none; max-height:100px; line-height:1.4;
+  color:var(--text); border-radius:16px;
+  padding:16px 18px; min-height:56px; font-size:1rem; font-family:inherit;
+  resize:none; max-height:112px; line-height:1.4;
   outline:none;
 }
 .teacher-input:focus { border-color:var(--orange); }
 .teacher-input::placeholder { color:var(--muted); }
 .teacher-send-btn {
-  width:42px; height:42px; border-radius:50%;
-  background:var(--orange); border:none; color:#fff;
-  font-size:1rem; cursor:pointer; flex-shrink:0;
+  min-width:104px; height:56px; border-radius:16px;
+  background:#2563EB !important; border:1px solid #60A5FA !important; color:#fff;
+  font-size:.9rem; font-weight:900; cursor:pointer; flex-shrink:0; animation:none !important;
   transition:background .15s; display:flex;
   align-items:center; justify-content:center;
 }
-.teacher-send-btn:hover { background:var(--orange-dk); }
+.teacher-send-btn:hover { background:#1D4ED8 !important; }
 .teacher-send-btn:disabled { background:var(--border); cursor:default; }
 
+#app.teacher-mode #bottomNav .bn-tab { display:none; }
+#app.teacher-mode #bottomNav #bnCats,
+#app.teacher-mode #bottomNav #bnHistory,
+#app.teacher-mode #bottomNav #bnTeacher { display:flex; flex:1 1 33.333%; }
+#app.teacher-mode #bnTeacher .bn-icon img {
+  outline:3px solid #3B82F6; outline-offset:2px; box-shadow:none;
+}
+
+.tm-sign-strip {
+  display:flex; gap:12px; width:100%; margin-top:16px; padding-bottom:4px;
+  overflow-x:auto; scroll-snap-type:x mandatory;
+}
+.tm-sign-card {
+  flex:1 0 min(100%,640px); display:grid; grid-template-columns:200px minmax(0,1fr);
+  gap:20px; padding:20px; border-radius:18px; background:#111C30;
+  border:1px solid rgba(96,165,250,.35); scroll-snap-align:start;
+}
+.tm-sign-image-wrap { display:flex; align-items:center; justify-content:center; min-height:200px; }
+.tm-sign-image { width:200px; height:200px; object-fit:contain; filter:drop-shadow(0 10px 14px rgba(0,0,0,.35)); }
+.tm-sign-copy { min-width:0; display:flex; flex-direction:column; justify-content:center; gap:8px; }
+.tm-sign-tag { color:#67E8F9; font-size:.7rem; font-weight:900; letter-spacing:.08em; text-transform:uppercase; }
+.tm-sign-title { margin:0; color:#fff; font-size:1.5rem; line-height:1.25; font-weight:900; }
+.tm-sign-text { color:#DCE6F3; font-size:1rem; line-height:1.6; }
 @media (max-width:767px) {
   #app.teacher-mode .flag-bg { display:none; }
   #screenTeacher { background:#071326; }
-  .teacher-header { min-height:132px; padding:12px 16px; }
-  .teacher-avatar { width:94px; height:112px; border-radius:20px 20px 12px 12px; }
+  .teacher-header { height:90px; max-height:90px; min-height:90px; padding:12px 16px; }
+  .teacher-avatar { width:64px; height:64px; border-radius:50%; }
   .teacher-name { font-size:1rem; }
+  .teacher-meta-line { font-size:.69rem; }
+  .teacher-online-badge { font-size:.58rem; padding:2px 6px; }
   .teacher-messages { padding:14px 12px 18px; gap:12px; }
-  .tm-bubble { max-width:88%; padding:12px 14px; font-size:.96rem; line-height:1.6; }
+  .tm-bubble { max-width:94%; padding:18px; font-size:.96rem; line-height:1.6; }
   .teacher-suggestions { padding:9px 12px; gap:8px; background:#0A1530; }
   .teacher-suggestions:not(.expanded) .teacher-chip:nth-of-type(n+4),
   .teacher-suggestions:not(.expanded) .teacher-chip-hdr { display:none; }
@@ -3253,10 +3292,15 @@ a { color:inherit; text-decoration:none; }
   .teacher-topics-toggle { display:block; }
   .tm-chips .tm-chip-btn.mobile-extra { display:none; }
   .tm-chips.expanded .tm-chip-btn.mobile-extra { display:inline-flex; }
-  .tm-chips-toggle { display:block; }
+  .tm-chips-toggle { display:block; grid-column:1/-1; }
   .teacher-inputbar { padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px)); background:#071326; position:relative; z-index:2; }
-  .teacher-input { min-height:50px; font-size:1rem; }
-  .teacher-send-btn { width:50px; height:50px; }
+  .teacher-input { min-height:56px; font-size:1rem; }
+  .teacher-send-btn { min-width:86px; height:56px; }
+  .tm-sign-card { flex-basis:100%; grid-template-columns:96px minmax(0,1fr); gap:14px; padding:14px; }
+  .tm-sign-image-wrap { min-height:96px; }
+  .tm-sign-image { width:96px; height:96px; }
+  .tm-sign-title { font-size:1.2rem; }
+  .tm-sign-text { font-size:.9rem; line-height:1.5; }
 }
 
 /* ═══ CYBER & NEON STYLING (Gemini Blueprint) ═══ */
@@ -4070,13 +4114,14 @@ a { color:inherit; text-decoration:none; }
 
         <!-- Chat header -->
         <div class="teacher-header">
-          <div class="teacher-header-info">
-            <div class="teacher-eyebrow" data-key="teacher_role">Trafikklærer</div>
-            <div class="teacher-name" id="teacherNameLbl">Michael Trafikklærer</div>
-            <div class="teacher-experience" data-key="teacher_experience">16 års erfaring</div>
-            <div class="teacher-status" data-key="teacher_online">● Online</div>
-          </div>
           <img class="teacher-avatar" src="/api/assets/michael_profile.jpg" alt="Michael">
+          <div class="teacher-header-info">
+            <div class="teacher-name" id="teacherNameLbl">Michael Trafikklærer</div>
+            <div class="teacher-meta-wrap">
+              <div class="teacher-meta-line" data-key="teacher_meta">Pålogget • AI-lærer • 16 års erfaring</div>
+              <div class="teacher-online-badge" data-key="teacher_online_badge">ONLINE</div>
+            </div>
+          </div>
         </div>
 
         <!-- Message list -->
@@ -4118,7 +4163,7 @@ a { color:inherit; text-decoration:none; }
         <!-- Input bar -->
         <div class="teacher-inputbar">
           <textarea class="teacher-input" id="teacherInput" rows="1" placeholder="..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();teacherSend();}"></textarea>
-          <button class="teacher-send-btn" id="teacherSendBtn" onclick="teacherSend()">➤</button>
+          <button class="teacher-send-btn" id="teacherSendBtn" onclick="teacherSend()"><span data-key="teacher_send">Send</span>&nbsp;➤</button>
         </div>
 
       </div><!-- /teacher-chat-col -->
@@ -4369,10 +4414,13 @@ var UI = {
   teacher_name:{th:'ครูสอนขับรถ Michael', no:'Michael Trafikklærer', en:'Michael Driving Teacher'},
   teacher_role:{th:'ครูสอนขับรถ', no:'Trafikklærer', en:'Driving teacher'},
   teacher_experience:{th:'ประสบการณ์ 16 ปี', no:'16 års erfaring', en:'16 years of experience'},
+  teacher_meta:{th:'เข้าสู่ระบบ • ครู AI • ประสบการณ์ 16 ปี', no:'Pålogget • AI-lærer • 16 års erfaring', en:'Signed in • AI teacher • 16 years experience'},
+  teacher_online_badge:{th:'ออนไลน์', no:'ONLINE', en:'ONLINE'},
+  teacher_send:{th:'ส่ง', no:'Send', en:'Send'},
   teacher_more_topics:{th:'หัวข้อเพิ่มเติม', no:'Flere emner', en:'More topics'},
   teacher_fewer_topics:{th:'แสดงน้อยลง', no:'Vis færre', en:'Show fewer'},
   teacher_sub: {th:'ถามคำถามเกี่ยวกับการจราจร', no:'Still et spørsmål om trafikk', en:'Ask a question about traffic'},
-  teacher_placeholder: {th:'ถามคำถาม...', no:'Still et spørsmål...', en:'Ask a question...'},
+  teacher_placeholder: {th:'ถามไมเคิล...', no:'Spør Michael...', en:'Ask Michael...'},
   teacher_error: {th:'ขอโทษ เกิดข้อผิดพลาด ลองใหม่อีกครั้ง', no:'Beklager, noe gikk galt. Prøv igjen.', en:'Sorry, something went wrong. Please try again.'},
   teacher_online:{th:'● ออนไลน์', no:'● Pålogget', en:'● Online'},
   tsp_title:   {th:'หัวข้อ',           no:'Emner',               en:'Topics'},
@@ -4601,6 +4649,12 @@ var UI = {
   cancel:      {th:'ยกเลิก', no:'Avbryt', en:'Cancel'},
   sb_empty_fields:{th:'ชื่อเรื่องและเนื้อหาห้ามว่าง', no:'Tittel og innhold kan ikke være tomme', en:'Title and content cannot be empty'},
   practice_this_sign:{th:'📚 ฝึกป้ายนี้',     no:'📚 Øv på dette skiltet', en:'📚 Practice this sign'},
+  practice_similar:{th:'ฝึกโจทย์ที่คล้ายกัน', no:'Øv på liknende', en:'Practice similar'},
+  see_similar:{th:'ดูป้ายคล้ายกัน', no:'Se lignende', en:'See similar'},
+  read_more:{th:'อ่านเพิ่มเติม', no:'Les mer', en:'Read more'},
+  ask_more:{th:'ถามเพิ่มเติม', no:'Spør mer', en:'Ask more'},
+  sign_card_tip:{th:'เคล็ดลับ', no:'Tips', en:'Tip'},
+  sign_practice_empty:{th:'ยังไม่มีคำถามเฉพาะสำหรับป้ายนี้', no:'Det finnes ingen egne spørsmål for dette skiltet ennå.', en:'There are no sign-specific questions yet.'},
   save:        {th:'บันทึก',                no:'Lagre',            en:'Save'},
   saved:       {th:'บันทึกแล้ว',             no:'Lagret',           en:'Saved'},
   read_aloud:  {th:'อ่านออกเสียง',           no:'Les høyt',         en:'Read aloud'},
@@ -5081,7 +5135,13 @@ function enterApp() {
   document.getElementById('bottomNav').style.display = 'flex';
   document.getElementById('topSettingsBtn').style.display = 'flex';
   loadAccessStatus();
-  showTab('home');
+  var requestedSign = new URLSearchParams(window.location.search).get('sign');
+  if (requestedSign) {
+    showTab('signs');
+    loadSigns().then(function() { openSignDetailById(requestedSign); });
+  } else {
+    showTab('home');
+  }
   setTimeout(maybeShowTrialNotice, 1200);
 }
 
@@ -9260,6 +9320,15 @@ function _buildAssistantContent(text, container) {
       return;
     }
 
+    // A concise learner question is a real heading, never clipped body copy.
+    if (singleLine && /[?？]$/.test(block) && block.length < 180) {
+      var questionTitle = document.createElement('h1');
+      questionTitle.className = 'tm-question-title';
+      questionTitle.textContent = block;
+      container.appendChild(questionTitle);
+      return;
+    }
+
     // Regular paragraph — preserve internal line breaks
     var para = document.createElement('span');
     para.className = 'tm-para';
@@ -9357,7 +9426,7 @@ function toggleTeacherTopics() {
 
 function _teacherAppendBubble(role, text) {
   var msgs = document.getElementById('teacherMessages');
-  if (!msgs) return;
+  if (!msgs) return null;
   if (role === 'user') _teacherHasUserMsg = true;
   var row = document.createElement('div');
   row.className = 'tm-row ' + role;
@@ -9394,6 +9463,109 @@ function _teacherAppendBubble(role, text) {
   } else {
     msgs.scrollTop = 0;
   }
+  return bubble;
+}
+
+function _teacherTextOnlyReply(text) {
+  return String(text || '').replace(/\[image:[^\]]*\]/gi, '').replace(/\n{3,}/g, '\n\n').trim();
+}
+
+function _teacherSignValue(sign, field) {
+  return _getProp((sign && sign[field]) || {}, appLang) || '';
+}
+
+async function practiceSignFromChat(signId) {
+  var nextUrl = new URL(window.location.href);
+  nextUrl.searchParams.set('sign', signId);
+  window.history.replaceState({}, '', nextUrl.pathname + nextUrl.search);
+  currentCat = null;
+  await loadQuiz('/api/questions/random?count=1&has_image=true&sign_id=' + encodeURIComponent(signId));
+}
+
+async function showSimilarSignsFromChat(sign) {
+  await loadSigns();
+  var fullSign = _allSigns.find(function(item) { return item && item.id === sign.id; });
+  if (fullSign) {
+    openSignDetail(fullSign);
+    return;
+  }
+  showTab('signs');
+}
+
+function _buildTeacherSignCard(sign) {
+  var card = document.createElement('article');
+  card.className = 'tm-sign-card';
+
+  var imageWrap = document.createElement('div');
+  imageWrap.className = 'tm-sign-image-wrap';
+  var image = document.createElement('img');
+  image.className = 'tm-sign-image';
+  image.src = sign.image_url || sign.file || '';
+  image.alt = _teacherSignValue(sign, 'name');
+  image.loading = 'lazy';
+  image.onerror = function() { imageWrap.hidden = true; };
+  imageWrap.appendChild(image);
+  card.appendChild(imageWrap);
+
+  var copy = document.createElement('div');
+  copy.className = 'tm-sign-copy';
+  var tag = document.createElement('div');
+  tag.className = 'tm-sign-tag';
+  var groupName = _teacherSignValue(sign, 'group_name');
+  tag.textContent = [sign.code || sign.id, groupName].filter(Boolean).join(' • ');
+  copy.appendChild(tag);
+
+  var title = document.createElement('h1');
+  title.className = 'tm-sign-title';
+  title.textContent = _teacherSignValue(sign, 'name') || sign.id;
+  copy.appendChild(title);
+
+  var explanation = document.createElement('div');
+  explanation.className = 'tm-sign-text';
+  explanation.textContent = _teacherSignValue(sign, 'driver_action') || _teacherSignValue(sign, 'explanation') || t('sign_fallback_meaning');
+  copy.appendChild(explanation);
+  card.appendChild(copy);
+  return card;
+}
+
+async function _teacherAppendSignCards(signIds, bubble) {
+  if (!bubble || !Array.isArray(signIds) || !signIds.length) return;
+  var uniqueIds = signIds.filter(function(id, index, items) { return id && items.indexOf(id) === index; }).slice(0, 4);
+  var results = await Promise.all(uniqueIds.map(async function(id) {
+    try { return await api('GET', '/api/signs/' + encodeURIComponent(id)); }
+    catch (e) { console.warn('SignCard unavailable:', id, e); return null; }
+  }));
+  var signs = results.filter(Boolean);
+  if (!signs.length) return;
+  var strip = document.createElement('div');
+  strip.className = 'tm-sign-strip';
+  signs.forEach(function(sign) { strip.appendChild(_buildTeacherSignCard(sign)); });
+  bubble.appendChild(strip);
+  var msgs = document.getElementById('teacherMessages');
+  if (msgs) {
+    var answerRow = bubble.closest('.tm-row');
+    msgs.scrollTop = Math.max(0, (answerRow ? answerRow.offsetTop : 0) - 12);
+  }
+}
+
+function _teacherAppendSignActions(sign) {
+  if (!sign) return;
+  var msgs = document.getElementById('teacherMessages');
+  if (!msgs) return;
+  var row = document.createElement('div');
+  row.className = 'tm-chips tm-sign-actions-row';
+  var actions = [
+    { label:t('practice_similar'), run:function(){ practiceSignFromChat(sign.id); } }
+  ];
+  actions.forEach(function(action) {
+    var button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'tm-chip-btn';
+    button.textContent = action.label;
+    button.onclick = action.run;
+    row.appendChild(button);
+  });
+  msgs.appendChild(row);
 }
 
 function _teacherShowTyping() {
@@ -9549,8 +9721,20 @@ async function teacherSend(overrideMsg, customDisplayMsg) {
       }
     }
     _teacherHideTyping();
-    _teacherAppendBubble('assistant', data.reply || t('teacher_error'));
-    _teacherAppendChips(data.suggestions || []);
+    var responseText = data.reply || t('teacher_error');
+    var visibleText = (data.sign_ids && data.sign_ids.length) ? _teacherTextOnlyReply(responseText) : responseText;
+    var assistantBubble = _teacherAppendBubble('assistant', visibleText);
+    await _teacherAppendSignCards(data.sign_ids || [], assistantBubble);
+    if (data.sign_ids && data.sign_ids.length) {
+      try {
+        var signForActions = await api('GET', '/api/signs/' + encodeURIComponent(data.sign_ids[0]));
+        _teacherAppendSignActions(signForActions);
+      } catch (signActionError) {
+        _teacherAppendChips(data.suggestions || []);
+      }
+    } else {
+      _teacherAppendChips(data.suggestions || []);
+    }
     // Video card — show for math/braking topics (all languages)
     if (/reaksjonslengde|bremselengde|stoppelengde|reaksjonstid|alle formler|reaction distance|braking distance|stopping distance|ระยะตอบสนอง|ระยะปฏิกิริยา|ระยะเบรก|ระยะหยุดรถ|สูตรทั้งหมด/i.test(msg)) {
       fetchVideoForTopic('Bremsing').then(function(v) {
@@ -10051,8 +10235,13 @@ function toggleSignFavorite() {
   _renderSignPanel();
 }
 
-function practiceThisSign() {
+async function practiceThisSign() {
+  var signId = _signPanelData && _signPanelData.id;
   closeSignDetail();
+  if (signId) {
+    await practiceSignFromChat(signId);
+    return;
+  }
   showTab('cats');
 }
 

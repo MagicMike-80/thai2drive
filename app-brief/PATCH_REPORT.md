@@ -1,22 +1,219 @@
-# PATCH REPORT: 1000+ spørsmål
+# PATCH REPORT: Fase 2B — Michael quiz-coach og readiness
 
 ## Endrede applikasjonsfiler
 
-- `backend/landing.py`
-- `backend/website.py`
+- `backend/ai_learning.py`: ren og testbar 70/30-readinessformel.
+- `backend/server.py`: JWT-sikret `GET /api/user/readiness` basert på siste 50 svar og feilbankmestring.
+- `backend/webapp.py`: readiness-måler og fail-soft Michael bottom-sheet etter feil svar.
+- `tests/test_user_mistakes.py`: fire formeltester.
+- `tests/test_phase2b_contract.py`: auth-, språk- og coach-kontrakter.
 
-Alle synlige produktantall og relevante metadata er standardisert fra 500+/700+ til 1000+ på thai, norsk og engelsk. Tekniske tall er beholdt.
+## Readiness
+
+Scoren er `70 % * treffprosent siste 50 + 30 % * mestrede feil / alle sporede feil`. En helt ny bruker får 0. En bruker med besvarte spørsmål og ingen registrerte feil får 100 % feilbankmestring. Resultatet klemmes til 0–100 og dashboardet bruker rød 0–59, gul 60–84 og grønn 85–100.
+
+## Michael
+
+Feil svar viser ordinær forklaring og aktiverer Neste før Michael-kallet starter. Bottom-sheet sender spørsmål, elevens svar, fasit, eksisterende forklaring og aktivt språk til eksisterende `/api/teacher/chat`. Kallet avbrytes etter 12 sekunder og viser en språkren fail-soft melding. «Hva betyr dette i praksis?» fortsetter samme økt med ett kontrollspørsmål som ikke teller i quizen.
 
 ## Tester
 
-- `python -m py_compile backend/landing.py backend/website.py`: PASS.
-- Komponent-render og kildekontroll: PASS.
-- Ingen markedsføringsreferanser til `500+`, `700+` eller `Over 500` gjenstår.
-- `1000+` er verifisert på thai, norsk og engelsk.
-- `git diff --check`: PASS med kun lokalt LF/CRLF-varsel.
+- Python-syntaks: PASS.
+- Inline JavaScript-syntaks: PASS.
+- 12 målrettede tester: PASS.
+- `git diff --check`: PASS med kun Windows LF/CRLF-varsel.
 
 ## Risiko og rollback
 
-Lav risiko. Ingen funksjons-, data-, tilgangs- eller betalingslogikk er endret. Reverser committen for rollback.
+Michael-kallet skjer automatisk etter feil og kan øke AI-forbruket. Feil/timeout påvirker ikke quizen. Rollback er å fjerne auto-kallet/panelet og readiness-ruten; spørsmål, auth, kvoter og betalingsdata er uendret.
 
 Klar for Agent 4.
+
+---
+
+# PATCH REPORT: kompakt Michael-side og datadrevne skiltkort
+
+## Endrede applikasjonsfiler
+
+- `backend/webapp.py`: Michael-header er maksimalt 90 px med 64 × 64-portrett,
+  rolig online-badge, større leseflate, 2 × 2 handlingshierarki, 56 px input/send
+  og tre bunnmenyvalg i Michael-modus.
+- `backend/webapp.py`: renderer språkrene SignCard-kort under svaret, støtter flere
+  skilt horisontalt og kobler øving til `?sign=<id>` uten tilfeldig fallback.
+- `backend/server.py`: legger additivt til tag-filtrering på `/api/signs`,
+  detaljruten `/api/signs/{sign_id}` og valgfri `sign_id` for spørsmål.
+- `backend/teacher_chat.py`: returnerer strukturerte `sign_ids` fra allerede
+  godkjent læreplankontekst, samtidig som `reply` og `suggestions` bevares.
+- Kontrakttester er oppdatert for header, språk, navigasjon, SignCard, API og
+  sign-ID-utledning.
+
+## Datakilde og avgrensning
+
+Patchen gjenbruker eksisterende `traffic_signs` med 316 språkberikede skilt og
+de lokale `/api/sign-images/`-bildene. Det er derfor ikke opprettet et konkurrerende
+20-skiltbibliotek i `public/`. Next.js/Tailwind ble ikke introdusert fordi den
+aktive produksjonssiden er FastAPI med innebygd HTML/CSS/JavaScript.
+
+Ingen data er migrert. Ingen endring er gjort i Stripe, RevenueCat, hemmeligheter,
+premiumstatus eller deploykonfigurasjon. Ingen commit, push eller deploy er utført.
+
+## Verifisering
+
+- Inline JavaScript-syntaks via Node: PASS.
+- UI- og sign-API-kontrakttokens: PASS.
+- Kjente skilt `362_50` og `506`: bilder finnes og NO/TH/EN-innhold er komplett.
+- `git diff --check`: PASS med kun Windows LF/CRLF-varsler.
+- Python-kompilering via innebygd Codex-runtime: PASS.
+- Målrettede Python-kontrakttester: 21/21 PASS.
+- Hele oppdagede frontend-/kontraktsuiten: 30/30 PASS.
+
+## Godkjent mockup-tilpasning
+
+Etter Michaels «GO» er den faktiske headerstrukturen justert til den godkjente
+mockupen: det uendrede portrettet står til venstre, navn og status står kompakt
+ved siden av, ONLINE-badge ligger på samme statusrad, og gjentatt miniatyravatar
+i hver assistentboble er skjult slik at svaret og SignCard bruker full bredde.
+Ny målrettet kjøring: 24/24 tester PASS; full oppdaget suite: 30/30 PASS;
+Python-kompilering, inline JavaScript og diff-format PASS.
+
+Klar for QA-gate; visuell nettleser- og livekontroll gjenstår før publisering.
+
+## Lokal nettleserkontroll 2026-08-30
+
+Den faktiske `WEBAPP_HTML`-flaten ble åpnet lokalt i Codex-nettleseren med et
+representativt Michael-svar og godkjent skilt 362.50. Desktop og 390 × 844 px
+mobilbredde viser 90 px header, synlig spørsmål uten avkutting, skiltkort,
+handlinger, 56 px input/send og tre bunnfaner. Kontrollen avdekket at automatisk
+scroll kunne legge spørsmålet under headeren; scrollmålet ble begrenset til
+svarets egen rad og verifisert visuelt etter patchen.
+
+Ingen commit, push eller deploy er utført.
+
+---
+
+# PATCH REPORT: godkjente norske skiltbilder i Michael
+
+## Endrede applikasjonsfiler
+
+- `backend/teacher_chat.py`: sender godkjent `traffic_signs.image_url` og NO/TH/EN-navn som en eksakt bildetagg i læreplankonteksten.
+- `backend/teacher_chat.py`: fjerner oppdiktede bildetagger og legger deterministisk til første godkjente skiltbilde hvis modellen utelater det.
+- `backend/tests/test_teacher_chat_fallback.py`: tester sikker URL, komplett språkdekning, én-gangs innsetting og fjerning av ikke-godkjent bilde.
+
+## Avgrensning
+
+Patchen gjelder bare konkrete skilt som allerede matcher i `traffic_signs`. Manglende eller ufullstendig bilde gir tekst-only fallback. Norske veiscener er utsatt til et eget kuratert bildebibliotek. Frontend-renderer, TTS, auth, kvoter, Stripe og RevenueCat er urørt.
+
+## Tester og resultat
+
+- Python-syntaks: PASS.
+- Frontend-/læringsregresjon: 24/24 PASS.
+- Teacher-backendtester: 7/7 relevante PASS.
+- Full backend discovery: BLOCKED for én eldre testmodul fordi lokal runtime mangler `pytest`; ingen testfeil ble observert.
+- `git diff --check`: PASS med kun Windows LF/CRLF-varsler.
+
+## Risiko og rollback
+
+Live MongoDB-match og visuell mobilgjengivelse må kontrolleres etter en separat godkjent deploy. Rollback er å reversere helperne, promptlinjene og de nye testene i denne avgrensede patchen.
+
+Klar for Agent 4.
+
+---
+
+# PATCH REPORT: Michael mobilprofil og forenklet lærerflate
+
+## Endrede applikasjonsfiler
+
+- `backend/public_assets/michael_profile.jpg`: Michaels godkjente portrett er lagt inn som lokal webressurs.
+- `backend/webapp.py`: portrett i startsidens Michael-valg, lærerheader, chatbobler, quiz-coach og bunnmeny.
+- `backend/webapp.py`: tre hovedemner vises først på mobil; resten åpnes med en språkstyrt «Flere emner»-knapp.
+- `tests/test_michael_mobile_ui_contract.py`: kontrakttest for bilde, språk, mobilknapper og eksisterende chat-endepunkt.
+
+## Mobilgrep
+
+Michael-siden har fått en rolig, kompakt profilheader med ekte portrett, rolle, 16 års erfaring og online-status. Flaggdekoren skjules bare i Michael-modus på mobil. De tre første emnevalgene har minst 50 px trykkhøyde, mens øvrige temaer og regnestykker er sammenfoldet. Chatfelt og sendeknapp har også minst 50 px høyde.
+
+## Avgrensning
+
+Ingen endringer i `/api/teacher/chat`, AI-modeller, TTS, auth, kvoter, Stripe, RevenueCat eller øvrig betalingslogikk.
+
+## Verifisering
+
+- Python-syntaks: PASS.
+- 21 målrettede regresjons- og kontrakttester: PASS.
+- `git diff --check`: PASS med kun eksisterende Windows LF/CRLF-varsler.
+
+Klar for QA-gate og visuell kontroll før eventuell publisering.
+# PATCH REPORT: stabil lærerlyd og roligere Michael-mobilflate
+
+## Endrede applikasjonsfiler
+
+- `backend/webapp.py`: sporer aktiv lærer-tekst og avspillings-token, slik at lyd fra en annen svarboble erstatter gammel lyd med ett trykk.
+- `backend/webapp.py`: nullstiller lærerens aktive lydtekst ved ended, error, navigasjon og eksplisitt stopp.
+- `backend/webapp.py`: viser tre kontekstforslag først på mobil og gjenbruker eksisterende NO/TH/EN «Flere emner» / «Vis færre».
+- `backend/webapp.py`: reduserer mobilheader til 132 px og portrett til 94 × 112 px.
+- `tests/test_michael_mobile_ui_contract.py`: tre nye kontrakttester for lydbytte, kontekstforslag og kompakt header.
+
+## Tester og resultater
+
+- Python-syntaks: PASS.
+- Inline JavaScript-syntaks via Node: PASS.
+- Michael-kontrakttester: 7/7 PASS.
+- Hele oppdagede testsuiten: 24/24 PASS.
+- `git diff --check`: PASS med kun Windows LF/CRLF-varsel.
+- Fersk produksjonsdiagnostikk før patch: to sekvensielle TTS-kall ga HTTP 200, `audio/mpeg`, `ID3` og ikke-tomme ElevenLabs-filer. Backend ble derfor ikke endret.
+
+## Omfang
+
+Ingen endring i `/api/tts/stream`, stemmer, AI-chat, auth, kvoter, Stripe, RevenueCat eller premiumstatus. Ingen nye learner-facing tekster.
+
+## Gjenværende risiko og rollback
+
+Automatiske tester beviser state-kontrakten og syntaksen, men faktisk hørbar mobilavspilling krever kontroll i en ekte innlogget mobilnettleser etter eventuell deploy. Rollback er én frontend-revert av aktiv tekst/token, `mobile-extra` og de tre mobile CSS-reglene.
+
+Klar for Agent 4.
+
+---
+# PATCH REPORT: informasjonskort med to elevvalg
+
+## Endring
+
+- `backend/webapp.py`: skiltkortet viser nå bilde, kode/gruppe, navn og én
+  konkret driver action/forklaring. «TEORI», gjentatt tips og begge indre
+  knapper er fjernet.
+- `backend/webapp.py`: handlingsområdet under svaret har bare «Øv på dette
+  skiltet» og lokalisert «Spør Michael».
+- `backend/webapp.py`: mobilbildet er redusert til 96 × 96 px og tekststørrelsen
+  strammet slik at kortet passer uten horisontal side-scroll.
+- `tests/test_michael_mobile_ui_contract.py`: kontrakt for null kortknapper og
+  nøyaktig de to ønskede handlingstypene.
+
+## Verifisering
+
+- Python-syntaks: PASS.
+- 25 målrettede UI-, API- og lærerbackendtester: PASS.
+- Lokal 390 × 844 px nettleserkontroll: PASS — kort 130 px høyt, null knapper i
+  kortet, to handlinger under og ingen horisontal overflow.
+- Produksjonens `/api/tts/status` ble kontrollert separat etter spørsmål fra
+  Michael og rapporterer `elevenlabs_model_id: eleven_v3`; lydbackend er ikke
+  endret i denne patchen.
+- Ingen commit, push eller deploy.
+
+Rollback er å reversere de avgrensede kort-/handlingslinjene og den nye testen.
+Klar for Agent 4.
+
+---
+# PATCH REPORT: ett øvingsvalg og Michael i inputfeltet
+
+- Fjernet «Spør Michael» som egen kontekstknapp.
+- Endret lærerinput til språkstyrt «Spør Michael...» / thai / engelsk.
+- Lagt til egen språkstyrt chat-handling «Øv på liknende» uten å endre
+  «Øv på dette skiltet» i skiltbibliotekets detaljpanel.
+- Handlingsraden bruker én fullbreddeknapp og beholder dagens skiltfiltrerte
+  øvingsrute som grunnlag for senere utvidelse til veikryss.
+- 25 målrettede tester PASS; lokal 390 px kontroll viser én knapp, korrekt
+  placeholder og ingen horisontal overflow.
+- Ingen backend-, betalings- eller deployendring. Ingen commit/push.
+
+Klar for Agent 4.
+
+---

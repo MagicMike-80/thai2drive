@@ -1438,6 +1438,7 @@ class TeacherChatResponse(BaseModel):
     session_id: str
     reply: str
     suggestions: list = []
+    sign_ids: list[str] = Field(default_factory=list)
 
 
 @teacher_router.post("/teacher/chat", response_model=TeacherChatResponse)
@@ -1492,6 +1493,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
 
     # Determine reply language — request param takes priority
     # Call LLM
+    context_str = ""
     try:
         if not LLM_KEY:
             raise RuntimeError("DEEPSEEK_API_KEY not configured")
@@ -1681,7 +1683,13 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         logger.error("Failed to write teacher log to DB: %s", log_ex)
 
     suggestions = _get_suggestions(reply_text, lang)
-    return TeacherChatResponse(session_id=session_id, reply=reply_text, suggestions=suggestions)
+    sign_ids = _sign_ids_from_context(context_str)
+    return TeacherChatResponse(
+        session_id=session_id,
+        reply=reply_text,
+        suggestions=suggestions,
+        sign_ids=sign_ids,
+    )
 
 
 def _fallback_reply(lang: str) -> str:
