@@ -1212,7 +1212,9 @@ async def _get_curriculum_context(user_msg: str, lang: str) -> str:
                     for score, sign in scored_signs[:2]:
                         if sign["id"] not in matched_sign_ids:
                             matched_sign_ids.add(sign["id"])
-                            context_parts.append(_format_sign_context(sign, lang))
+                            # A concrete sign must survive the final context_parts[:3]
+                            # limit ahead of broader studybook/video resources.
+                            context_parts.insert(0, _format_sign_context(sign, lang))
 
         if context_parts:
             return "\n\n".join(context_parts[:3])

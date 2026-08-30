@@ -179,6 +179,10 @@ class TeacherChatFallbackTests(unittest.TestCase):
             "Forklaring",
         )
 
+    def test_text_matched_sign_is_prioritized_before_general_resources(self):
+        source = (Path(__file__).resolve().parents[1] / "teacher_chat.py").read_text(encoding="utf-8")
+        self.assertIn("context_parts.insert(0, _format_sign_context(sign, lang))", source)
+
     def test_sign_ids_are_extracted_in_context_order_without_duplicates(self):
         context = (
             "Traffic Sign 362_50:\n- Name: Fartsgrense 50\n"
