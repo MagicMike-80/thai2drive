@@ -10,6 +10,7 @@ and the Norwegian theory test. He speaks in the language the user writes in.
 from __future__ import annotations
 
 import os
+import re
 import uuid
 import logging
 from datetime import datetime, timezone
@@ -851,6 +852,8 @@ def _build_system_prompt(lang: str) -> str:
         "     [podcast: file_path | title_no | title_th | title_en]\n"
         "     Copy the values exactly as listed — never invent or guess file paths or titles.\n"
         "   - To show an image: Use the exact tag format: [image: image_url | caption_no | caption_th | caption_en]\n"
+        "     Only use an exact Approved Image Tag supplied in APPROVED THAI2DRIVE CURRICULUM CONTEXT. Never invent, rewrite, or guess an image URL.\n"
+        "     If no Approved Image Tag is supplied, explain with text only.\n"
         "2. PEDAGOGICAL PACKAGING (Never just throw a link):\n"
         "   - Set up the driving situation first: 'Se for deg at du nærmer deg krysset...' / 'Imagine you are approaching the intersection...'\n"
         "   - Introduce the video/audio: 'Ta en titt på denne korte videoen som viser nøyaktig hvordan vi gjør dette i praksis:' or 'Hør på denne podcasten der vi snakker om dette:'\n"
@@ -914,6 +917,75 @@ def _strict_lang_value(doc: dict, field_prefix: str, lang: str) -> str:
     key = f"{field_prefix}_{lang}"
     value = doc.get(key)
     return value.strip() if isinstance(value, str) and value.strip() else ""
+
+
+def _safe_image_tag_part(value: str) -> str:
+    """Keep database values on one line and inside the existing image-tag grammar."""
+    return " ".join(str(value).replace("|", " ").replace("]", " ").split())
+
+
+def _approved_sign_image_tag(sign: dict) -> str:
+    """Return a renderable tag only for a trusted, fully translated sign image."""
+    image_url = str(sign.get("image_url") or "").strip()
+    if not image_url.startswith(("https://", "http://", "/api/sign-images/")):
+        return ""
+
+    names = sign.get("name") or {}
+    captions = [_safe_image_tag_part(names.get(code) or "") for code in ("no", "th", "en")]
+    if not all(captions):
+        return ""
+    return f"[image: {_safe_image_tag_part(image_url)} | {' | '.join(captions)}]"
+
+
+def _format_sign_context(sign: dict, lang: str) -> str:
+    """Build one curriculum entry with an optional approved Norwegian sign image."""
+    names = sign.get("name") or {}
+    explanations = sign.get("explanation") or {}
+    actions = sign.get("driver_action") or {}
+    name_lang = names.get(lang) or names.get("no") or ""
+    exp_lang = explanations.get(lang) or explanations.get("no") or ""
+    action_lang = actions.get(lang) or actions.get("no") or ""
+
+    sign_desc = (
+        f"Traffic Sign {sign['id']}:\n"
+        f"- Name: {name_lang}\n"
+        f"- Explanation: {exp_lang}\n"
+    )
+    if action_lang:
+        sign_desc += f"- Driver Action: {action_lang}\n"
+    image_tag = _approved_sign_image_tag(sign)
+    if image_tag:
+        sign_desc += f"- Approved Image Tag: {image_tag}\n"
+    return sign_desc
+
+
+def _enforce_approved_image_tags(reply_text: str, context_str: str) -> str:
+    """Remove invented image tags and ensure the first approved sign image is shown."""
+    marker = "- Approved Image Tag:"
+    approved = [
+        line[len(marker):].strip()
+        for line in context_str.splitlines()
+        if line.startswith(marker) and line[len(marker):].strip()
+    ]
+
+    def keep_only_approved(match) -> str:
+        candidate = match.group(0)
+        return candidate if candidate in approved else ""
+
+    cleaned = re.sub(r"\[image:[^\]]*\]", keep_only_approved, reply_text, flags=re.IGNORECASE)
+    cleaned = re.sub(r"\n{3,}", "\n\n", cleaned).strip()
+    if approved and approved[0] not in cleaned:
+        return f"{cleaned}\n\n{approved[0]}" if cleaned else approved[0]
+    return cleaned
+
+
+def _sign_ids_from_context(context_str: str) -> list[str]:
+    """Return concrete, approved curriculum sign IDs in display order."""
+    sign_ids = []
+    for sign_id in re.findall(r"^Traffic Sign ([A-Za-z0-9_.-]+):", context_str, flags=re.MULTILINE):
+        if sign_id not in sign_ids:
+            sign_ids.append(sign_id)
+    return sign_ids[:4]
 
 
 # ─── Contextual chip suggestions (multilingual keyword detection) ─────────────
@@ -991,18 +1063,7 @@ async def _get_curriculum_context(user_msg: str, lang: str) -> str:
                 for sign in signs:
                     if sign["id"] not in matched_sign_ids:
                         matched_sign_ids.add(sign["id"])
-                        name_lang = sign.get("name", {}).get(lang) or sign.get("name", {}).get("no") or ""
-                        exp_lang = sign.get("explanation", {}).get(lang) or sign.get("explanation", {}).get("no") or ""
-                        action_lang = sign.get("driver_action", {}).get(lang) or sign.get("driver_action", {}).get("no") or ""
-                        
-                        sign_desc = (
-                            f"Traffic Sign {sign['id']}:\n"
-                            f"- Name: {name_lang}\n"
-                            f"- Explanation: {exp_lang}\n"
-                        )
-                        if action_lang:
-                            sign_desc += f"- Driver Action: {action_lang}\n"
-                        context_parts.append(sign_desc)
+                        context_parts.append(_format_sign_context(sign, lang))
 
         # Clean message to lowercase, strip punctuation
         clean_msg = re.sub(r'[^\w\s]', ' ', user_msg.lower()).strip()
@@ -1151,18 +1212,7 @@ async def _get_curriculum_context(user_msg: str, lang: str) -> str:
                     for score, sign in scored_signs[:2]:
                         if sign["id"] not in matched_sign_ids:
                             matched_sign_ids.add(sign["id"])
-                            name_lang = sign.get("name", {}).get(lang) or sign.get("name", {}).get("no") or ""
-                            exp_lang = sign.get("explanation", {}).get(lang) or sign.get("explanation", {}).get("no") or ""
-                            action_lang = sign.get("driver_action", {}).get(lang) or sign.get("driver_action", {}).get("no") or ""
-                            
-                            sign_desc = (
-                                f"Traffic Sign {sign['id']}:\n"
-                                f"- Name: {name_lang}\n"
-                                f"- Explanation: {exp_lang}\n"
-                            )
-                            if action_lang:
-                                sign_desc += f"- Driver Action: {action_lang}\n"
-                            context_parts.append(sign_desc)
+                            context_parts.append(_format_sign_context(sign, lang))
 
         if context_parts:
             return "\n\n".join(context_parts[:3])
@@ -1529,6 +1579,8 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         reply_text = (resp.choices[0].message.content or "").strip()
         if not reply_text:
             reply_text = _fallback_reply(lang)
+        else:
+            reply_text = _enforce_approved_image_tags(reply_text, context_str)
     except Exception as e:
         logger.error("LiteLLM call failed [%s]: %s", type(e).__name__, e)
 

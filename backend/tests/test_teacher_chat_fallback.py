@@ -147,6 +147,46 @@ class TeacherChatFallbackTests(unittest.TestCase):
             asyncio.run(self.module._completion_with_fallback(self.messages))
         self.assertEqual(len(calls), 3)
 
+    def test_approved_sign_image_tag_requires_safe_url_and_all_languages(self):
+        sign = {
+            "id": "204_0",
+            "image_url": "/api/sign-images/204_0.jpg",
+            "name": {"no": "Vikeplikt", "th": "ป้ายให้ทาง", "en": "Give way"},
+        }
+        tag = self.module._approved_sign_image_tag(sign)
+        self.assertEqual(
+            tag,
+            "[image: /api/sign-images/204_0.jpg | Vikeplikt | ป้ายให้ทาง | Give way]",
+        )
+
+        sign["image_url"] = "data:image/jpeg;base64,unsafe-for-prompt"
+        self.assertEqual(self.module._approved_sign_image_tag(sign), "")
+        sign["image_url"] = "/api/sign-images/204_0.jpg"
+        del sign["name"]["th"]
+        self.assertEqual(self.module._approved_sign_image_tag(sign), "")
+
+    def test_approved_image_is_enforced_once(self):
+        tag = "[image: /api/sign-images/202_0.jpg | Stopp | หยุด | Stop]"
+        context = f"Traffic Sign 202_0:\n- Approved Image Tag: {tag}\n"
+        reply = self.module._enforce_approved_image_tags("Forklaring", context)
+        self.assertEqual(reply, f"Forklaring\n\n{tag}")
+        self.assertEqual(self.module._enforce_approved_image_tags(reply, context), reply)
+
+    def test_unapproved_image_tag_is_removed(self):
+        invented = "[image: https://example.com/wrong.jpg | Feil | ผิด | Wrong]"
+        self.assertEqual(
+            self.module._enforce_approved_image_tags(f"Forklaring\n\n{invented}", ""),
+            "Forklaring",
+        )
+
+    def test_sign_ids_are_extracted_in_context_order_without_duplicates(self):
+        context = (
+            "Traffic Sign 362_50:\n- Name: Fartsgrense 50\n"
+            "Traffic Sign 506:\n- Name: Tettsted\n"
+            "Traffic Sign 362_50:\n- Name: Fartsgrense 50\n"
+        )
+        self.assertEqual(self.module._sign_ids_from_context(context), ["362_50", "506"])
+
 
 if __name__ == "__main__":
     unittest.main()
