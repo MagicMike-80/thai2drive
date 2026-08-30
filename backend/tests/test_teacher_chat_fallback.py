@@ -187,6 +187,10 @@ class TeacherChatFallbackTests(unittest.TestCase):
         for message in ("Forklar vikepliktskiltet", "Explain the give way sign", "อธิบายป้ายให้ทาง"):
             self.assertEqual(self.module._explicit_sign_ids_for_message(message), ["202_0"])
 
+    def test_explicit_sign_skips_broader_sign_search(self):
+        source = (Path(__file__).resolve().parents[1] / "teacher_chat.py").read_text(encoding="utf-8")
+        self.assertIn("if len(matched_sign_ids) < 2 and not explicit_sign_ids:", source)
+
     def test_sign_ids_are_extracted_in_context_order_without_duplicates(self):
         context = (
             "Traffic Sign 362_50:\n- Name: Fartsgrense 50\n"

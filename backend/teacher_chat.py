@@ -1072,7 +1072,8 @@ async def _get_curriculum_context(user_msg: str, lang: str) -> str:
 
         # Resolve exact sign concepts before general chapters/videos so a known
         # Norwegian sign and its approved image cannot be crowded out.
-        for sign_id in _explicit_sign_ids_for_message(user_msg):
+        explicit_sign_ids = _explicit_sign_ids_for_message(user_msg)
+        for sign_id in explicit_sign_ids:
             sign = await _db.traffic_signs.find_one({"id": sign_id})
             if sign and sign_id not in matched_sign_ids:
                 matched_sign_ids.add(sign_id)
@@ -1200,7 +1201,7 @@ async def _get_curriculum_context(user_msg: str, lang: str) -> str:
                     )
                     context_parts.append(vid_desc)
                     
-            if len(matched_sign_ids) < 2:
+            if len(matched_sign_ids) < 2 and not explicit_sign_ids:
                 sign_or_clauses = []
                 for term in terms_to_search[:3]:
                     sign_or_clauses.extend([
