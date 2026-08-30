@@ -3411,6 +3411,16 @@ a { color:inherit; text-decoration:none; }
   animation: neonFlow 5s linear infinite !important;
   box-shadow: 0 0 15px rgba(0, 245, 255, 0.22) !important;
 }
+/* Michael readability hotfix: compact teaching images and readable mobile copy. */
+.teacher-inline-image {
+  display:block; width:auto; max-width:100%; max-height:360px; height:auto;
+  object-fit:contain; margin:0 auto; border-radius:8px; background:#fff;
+}
+.teacher-inline-caption { font-size:.82rem; color:var(--muted); margin-top:8px; text-align:center; }
+@media (max-width:767px) {
+  #screenTeacher .tm-bubble { font-size:1.05rem; line-height:1.65; }
+  #screenTeacher .teacher-inline-image { max-height:210px; }
+}
 </style>
 </head>
 <body>
@@ -9206,12 +9216,12 @@ function _buildAssistantContent(text, container) {
 
       var img = document.createElement('img');
       img.src = imgUrl;
-      img.style.cssText = 'width:100%; border-radius:8px; display:block; height:auto;';
+      img.className = 'teacher-inline-image';
       wrap.appendChild(img);
 
       if (caption) {
         var capEl = document.createElement('div');
-        capEl.style.cssText = 'font-size:0.75rem; color:var(--muted); margin-top:6px; text-align:center;';
+        capEl.className = 'teacher-inline-caption';
         capEl.textContent = caption;
         wrap.appendChild(capEl);
       }
