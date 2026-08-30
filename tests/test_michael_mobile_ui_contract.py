@@ -14,11 +14,16 @@ class MichaelMobileUiContractTests(unittest.TestCase):
         self.assertGreater(portrait.stat().st_size, 10_000)
         self.assertGreaterEqual(WEBAPP.count("/api/assets/michael_profile.jpg"), 6)
 
-    def test_mobile_topics_are_collapsible_and_touch_friendly(self):
-        self.assertIn('id="teacherMoreBtn"', WEBAPP)
-        self.assertIn("function toggleTeacherTopics()", WEBAPP)
-        self.assertIn("min-height:50px", WEBAPP)
-        self.assertIn("teacher-suggestions:not(.expanded)", WEBAPP)
+    def test_topics_are_in_a_toggleable_sidebar(self):
+        self.assertIn('id="teacherSidebarToggle"', WEBAPP)
+        self.assertIn('id="teacherSidebarBackdrop"', WEBAPP)
+        self.assertIn("function toggleTeacherSidebar()", WEBAPP)
+        self.assertIn("function closeTeacherSidebar()", WEBAPP)
+        self.assertIn(".teacher-suggestions {", WEBAPP)
+        self.assertIn("display:none !important", WEBAPP)
+        self.assertIn(".teacher-side-panel .tsp-btn { color:#F8FAFC !important; }", WEBAPP)
+        self.assertEqual(WEBAPP.count('data-tsp-btn="'), 6)
+        self.assertIn("closeTeacherSidebar(); teacherSend(msg);", WEBAPP)
         self.assertIn("#app.teacher-mode .flag-bg { display:none; }", WEBAPP)
 
     def test_new_learner_text_has_all_three_languages(self):
@@ -29,6 +34,8 @@ class MichaelMobileUiContractTests(unittest.TestCase):
             "teacher_online_badge",
             "teacher_send",
             "teacher_placeholder",
+            "teacher_topics_open",
+            "teacher_topics_close",
             "practice_similar",
             "teacher_more_topics",
             "teacher_fewer_topics",

@@ -1,3 +1,32 @@
+# SOLUTION BLUEPRINT — vis/skjul emner i Michael-sidefelt
+
+## Mål
+
+Hold Michael-chatten rolig ved å skjule de store startknappene fra hovedflaten og gjenbruke de seks eksisterende, språkrene emnene i et sidefelt som eleven åpner ved behov.
+
+## Avgrenset patch
+
+- Legg én kompakt vis/skjul-knapp i Michael-headeren.
+- Vis de seks eksisterende emnene i et off-canvas sidefelt på mobil og desktop.
+- Lukk sidefeltet ved emnevalg, trykk utenfor eller Escape.
+- Bevar skrivefeltet «Spør Michael…» og den ene kontekstknappen «Øv på liknende».
+- Bevar API, AI-svar, TTS, auth, premium, Stripe, RevenueCat og betaling urørt.
+
+## Risiko og rollback
+
+Endringen er kun HTML/CSS/JavaScript i eksisterende webflate. Rollback er å fjerne toggle/backdrop og gjenopprette den tidligere synlige emnelayouten.
+
+## Verifikasjon
+
+- Statisk kontrakttest for seks emner, skjult hovedmeny, toggle, backdrop og tre språk.
+- Python-syntaks, relevante Michael-/skilt-tester og `git diff --check`.
+- Mobil visuell kontroll med sidefelt lukket, åpent og lukket etter valg.
+- Etter push: GitHub Safety Check, produksjonsversjon og live HTML-canary.
+
+READY FOR AGENT 3
+
+---
+
 # SOLUTION BLUEPRINT: Fase 2 i små production-safe patcher
 
 ## Mål

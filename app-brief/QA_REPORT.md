@@ -240,3 +240,18 @@ utført.
 PASS WITH WARNINGS — klar for Michaels vurdering.
 
 ---
+# QA GATE: vis/skjul Michael-emner
+
+- PASS: hovedchatten viser ikke de gamle store startknappene.
+- PASS: sidefeltet inneholder nøyaktig seks emner og er lukket som standard.
+- PASS: panelet åpnes fra headeren og lukkes ved valg, bakteppe eller Escape.
+- PASS: norsk, thai og engelsk har egne tekster for åpne/lukke-kontrollen.
+- PASS: «Spør Michael...» og «Øv på liknende» er uendret.
+- PASS: mobilkontroll ved 390 × 844 px viser lesbar hvit knappetekst uten
+  horisontal overflow.
+- PASS: 15 målrettede tester, Python-/JavaScript-syntaks og diff-format.
+- PASS: backend, TTS, auth, premium, Stripe, RevenueCat og betaling er urørt.
+
+GODKJENT LOKALT — klar for den uttrykkelig bestilte commit, push og deploy.
+
+---

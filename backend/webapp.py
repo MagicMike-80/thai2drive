@@ -3063,6 +3063,16 @@ a { color:inherit; text-decoration:none; }
   background:#071326;
   flex-shrink:0; overflow:hidden; position:relative;
 }
+.teacher-sidebar-toggle {
+  width:44px; height:44px; min-width:44px; margin-left:auto;
+  display:inline-flex; align-items:center; justify-content:center;
+  border:1px solid rgba(96,165,250,.45); border-radius:12px;
+  background:#13223A; color:#E2E8F0; cursor:pointer;
+  transition:background .15s,border-color .15s,transform .12s;
+}
+.teacher-sidebar-toggle:hover { background:#1E3A5F; border-color:#67E8F9; }
+.teacher-sidebar-toggle:active { transform:scale(.96); }
+.teacher-sidebar-toggle svg { width:22px; height:22px; }
 .teacher-avatar {
   width:64px; height:64px; border-radius:50%;
   object-fit:cover; object-position:center 14%; flex-shrink:0;
@@ -3080,12 +3090,32 @@ a { color:inherit; text-decoration:none; }
   letter-spacing:.06em;
 }
 
-/* Mobile baseline — chat col fills screen, side panel hidden */
+/* Michael chat + optional topic drawer */
+#screenTeacher { position:relative; overflow:hidden; }
 .teacher-chat-col {
   display:flex; flex-direction:column;
   flex:1; min-height:0;
 }
-.teacher-side-panel { display:none; }
+.teacher-side-panel {
+  display:flex; flex-direction:column; gap:8px;
+  position:absolute; z-index:12; top:90px; bottom:0; left:0;
+  width:min(300px,84%); padding:18px 14px; overflow-y:auto;
+  background:#071326; border-right:1px solid rgba(96,165,250,.28);
+  box-shadow:18px 0 44px rgba(0,0,0,.45);
+  transform:translateX(-105%); visibility:hidden; pointer-events:none;
+  transition:transform .22s ease,visibility .22s;
+}
+.teacher-side-panel.open {
+  transform:translateX(0); visibility:visible; pointer-events:auto;
+}
+.teacher-side-panel .tsp-btn { color:#F8FAFC !important; }
+.teacher-sidebar-backdrop {
+  display:block; position:absolute; z-index:11; inset:90px 0 0;
+  border:0; padding:0; background:rgba(2,8,23,.66);
+  opacity:0; visibility:hidden; pointer-events:none;
+  transition:opacity .2s ease,visibility .2s;
+}
+.teacher-sidebar-backdrop.open { opacity:1; visibility:visible; pointer-events:auto; }
 
 .teacher-messages {
   flex:1; min-height:0; overflow-y:auto; padding:16px 14px 80px;
@@ -3162,7 +3192,7 @@ a { color:inherit; text-decoration:none; }
 }
 
 .teacher-suggestions {
-  padding:8px 14px 6px; display:flex; flex-direction:row;
+  padding:8px 14px 6px; display:none !important; flex-direction:row;
   flex-wrap:wrap; gap:7px; flex-shrink:0;
   align-content:flex-start;
 }
@@ -4122,6 +4152,9 @@ a { color:inherit; text-decoration:none; }
               <div class="teacher-online-badge" data-key="teacher_online_badge">ONLINE</div>
             </div>
           </div>
+          <button class="teacher-sidebar-toggle" id="teacherSidebarToggle" type="button" onclick="toggleTeacherSidebar()" aria-controls="teacherSidePanel" aria-expanded="false" aria-label="Vis emner" title="Vis emner">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/></svg>
+          </button>
         </div>
 
         <!-- Message list -->
@@ -4130,7 +4163,7 @@ a { color:inherit; text-decoration:none; }
         </div>
 
         <!-- Suggestion chips — shown only before first user message -->
-        <div class="teacher-suggestions" id="teacherSuggestions">
+        <div class="teacher-suggestions" id="teacherSuggestions" aria-hidden="true">
           <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="🛑 Forklar et skilt" data-msg-th="🛑 อธิบายป้ายจราจร" data-msg-en="🛑 Explain a sign">🛑 <span class="chip-lbl"></span></button>
           <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="🚗 Hjelp med vikeplikt" data-msg-th="🚗 ช่วยเรื่องการให้ทาง" data-msg-en="🚗 Help with right-of-way">🚗 <span class="chip-lbl"></span></button>
           <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="📖 Forklar en trafikkregel" data-msg-th="📖 อธิบายกฎจราจร" data-msg-en="📖 Explain a traffic rule">📖 <span class="chip-lbl"></span></button>
@@ -4168,8 +4201,10 @@ a { color:inherit; text-decoration:none; }
 
       </div><!-- /teacher-chat-col -->
 
-      <!-- RIGHT: helper panel — only visible on desktop via CSS -->
-      <div class="teacher-side-panel" id="teacherSidePanel">
+      <button class="teacher-sidebar-backdrop" id="teacherSidebarBackdrop" type="button" onclick="closeTeacherSidebar()" aria-label="Lukk emner"></button>
+
+      <!-- Topic drawer — opened on demand on mobile and desktop -->
+      <div class="teacher-side-panel" id="teacherSidePanel" aria-hidden="true">
         <div class="tsp-title" id="tspTitle" data-key="tsp_title">Emner</div>
         <button class="tsp-btn" data-tsp-btn="sign">🛑 <span data-tsp="sign"></span></button>
         <button class="tsp-btn" data-tsp-btn="vikeplikt">🚗 <span data-tsp="vikeplikt"></span></button>
@@ -4421,6 +4456,8 @@ var UI = {
   teacher_fewer_topics:{th:'แสดงน้อยลง', no:'Vis færre', en:'Show fewer'},
   teacher_sub: {th:'ถามคำถามเกี่ยวกับการจราจร', no:'Still et spørsmål om trafikk', en:'Ask a question about traffic'},
   teacher_placeholder: {th:'ถามไมเคิล...', no:'Spør Michael...', en:'Ask Michael...'},
+  teacher_topics_open:{th:'แสดงหัวข้อ', no:'Vis emner', en:'Show topics'},
+  teacher_topics_close:{th:'ปิดหัวข้อ', no:'Lukk emner', en:'Close topics'},
   teacher_error: {th:'ขอโทษ เกิดข้อผิดพลาด ลองใหม่อีกครั้ง', no:'Beklager, noe gikk galt. Prøv igjen.', en:'Sorry, something went wrong. Please try again.'},
   teacher_online:{th:'● ออนไลน์', no:'● Pålogget', en:'● Online'},
   tsp_title:   {th:'หัวข้อ',           no:'Emner',               en:'Topics'},
@@ -4846,6 +4883,15 @@ function applyUILang() {
   if (tNameEl) tNameEl.textContent = t('teacher_name');
   var tInput = document.getElementById('teacherInput');
   if (tInput) tInput.placeholder = t('teacher_placeholder');
+  var tSidebarToggle = document.getElementById('teacherSidebarToggle');
+  if (tSidebarToggle) {
+    var sidebarOpen = tSidebarToggle.getAttribute('aria-expanded') === 'true';
+    var sidebarLabel = t(sidebarOpen ? 'teacher_topics_close' : 'teacher_topics_open');
+    tSidebarToggle.setAttribute('aria-label', sidebarLabel);
+    tSidebarToggle.title = sidebarLabel;
+  }
+  var tSidebarBackdrop = document.getElementById('teacherSidebarBackdrop');
+  if (tSidebarBackdrop) tSidebarBackdrop.setAttribute('aria-label', t('teacher_topics_close'));
   var tMore = document.getElementById('teacherMoreBtn');
   var tSuggestions = document.getElementById('teacherSuggestions');
   if (tMore) tMore.textContent = t(tSuggestions && tSuggestions.classList.contains('expanded') ? 'teacher_fewer_topics' : 'teacher_more_topics');
@@ -9184,6 +9230,7 @@ function resetTeacherForLanguage() {
   if (msgs) msgs.innerHTML = '';
   var suggestions = document.getElementById('teacherSuggestions');
   if (suggestions) suggestions.style.display = '';
+  closeTeacherSidebar();
   _teacherRemoveChips();
 }
 
@@ -9388,7 +9435,7 @@ async function loadTeacher() {
       var btn = tspBtns[i];
       if (!btn) return;
       btn.innerHTML = topic.icon + ' <span>' + topic.text + '</span>';
-      btn.onclick = (function(msg){ return function(){ teacherSend(msg); }; })(topic.icon + ' ' + topic.text);
+      btn.onclick = (function(msg){ return function(){ closeTeacherSidebar(); teacherSend(msg); }; })(topic.icon + ' ' + topic.text);
     });
   } catch(e) {
     // Fallback: keep existing hardcoded chips
@@ -9399,7 +9446,7 @@ async function loadTeacher() {
       if (!key) return;
       el.textContent = t(key);
       var btn = el.closest('.tsp-btn');
-      if (btn) { var label = t(key); btn.onclick = (function(lbl){ return function(){ teacherSend(lbl); }; })(label); }
+      if (btn) { var label = t(key); btn.onclick = (function(lbl){ return function(){ closeTeacherSidebar(); teacherSend(lbl); }; })(label); }
     });
   }
 }
@@ -9423,6 +9470,33 @@ function toggleTeacherTopics() {
   button.setAttribute('aria-expanded', expanded ? 'true' : 'false');
   button.textContent = t(expanded ? 'teacher_fewer_topics' : 'teacher_more_topics');
 }
+
+function setTeacherSidebar(open) {
+  var panel = document.getElementById('teacherSidePanel');
+  var backdrop = document.getElementById('teacherSidebarBackdrop');
+  var button = document.getElementById('teacherSidebarToggle');
+  if (!panel || !backdrop || !button) return;
+  panel.classList.toggle('open', !!open);
+  backdrop.classList.toggle('open', !!open);
+  panel.setAttribute('aria-hidden', open ? 'false' : 'true');
+  button.setAttribute('aria-expanded', open ? 'true' : 'false');
+  var label = t(open ? 'teacher_topics_close' : 'teacher_topics_open');
+  button.setAttribute('aria-label', label);
+  button.title = label;
+}
+
+function toggleTeacherSidebar() {
+  var panel = document.getElementById('teacherSidePanel');
+  setTeacherSidebar(!(panel && panel.classList.contains('open')));
+}
+
+function closeTeacherSidebar() {
+  setTeacherSidebar(false);
+}
+
+document.addEventListener('keydown', function(event) {
+  if (event.key === 'Escape') closeTeacherSidebar();
+});
 
 function _teacherAppendBubble(role, text) {
   var msgs = document.getElementById('teacherMessages');

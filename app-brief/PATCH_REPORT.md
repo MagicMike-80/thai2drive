@@ -30,6 +30,25 @@ Michael-kallet skjer automatisk etter feil og kan øke AI-forbruket. Feil/timeou
 Klar for Agent 4.
 
 ---
+# PATCH REPORT: vis/skjul emner i Michael-sidefelt
+
+- Gjenbruker de seks eksisterende språkstyrte Michael-emnene i et skjult
+  sidefelt på mobil og desktop.
+- Legger én kompakt vis/skjul-knapp i Michael-headeren og et bakteppe som lukker
+  panelet ved trykk utenfor.
+- Panelet lukker seg også ved emnevalg og Escape.
+- De gamle store startknappene er skjult fra hovedchatten; «Spør Michael...» og
+  den ene konteksthandlingen «Øv på liknende» er bevart.
+- Ingen endring i API, AI-svar, TTS, auth, premium, Stripe, RevenueCat eller
+  betaling.
+- 15 målrettede tester, Python- og JavaScript-syntaks og `git diff --check`:
+  PASS.
+- Lokal 390 × 844 px kontroll: PASS for lukket panel, seks lesbare valg, skjulte
+  hovedknapper og automatisk lukking etter valg.
+
+Klar for Agent 4.
+
+---
 
 # PATCH REPORT: kompakt Michael-side og datadrevne skiltkort
 
