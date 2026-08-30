@@ -988,6 +988,21 @@ def _sign_ids_from_context(context_str: str) -> list[str]:
     return sign_ids[:4]
 
 
+def _explicit_sign_ids_for_message(user_msg: str) -> list[str]:
+    """Resolve unambiguous learner terms before broader curriculum ranking."""
+    message = user_msg.casefold()
+    aliases = {
+        "202_0": (
+            "vikepliktskilt",
+            "vikepliktsskilt",
+            "give way sign",
+            "yield sign",
+            "ป้ายให้ทาง",
+        ),
+    }
+    return [sign_id for sign_id, terms in aliases.items() if any(term in message for term in terms)]
+
+
 # ─── Contextual chip suggestions (multilingual keyword detection) ─────────────
 _KW = {
     "vikeplikt": {
@@ -1054,6 +1069,14 @@ async def _get_curriculum_context(user_msg: str, lang: str) -> str:
         
         context_parts = []
         matched_sign_ids = set()
+
+        # Resolve exact sign concepts before general chapters/videos so a known
+        # Norwegian sign and its approved image cannot be crowded out.
+        for sign_id in _explicit_sign_ids_for_message(user_msg):
+            sign = await _db.traffic_signs.find_one({"id": sign_id})
+            if sign and sign_id not in matched_sign_ids:
+                matched_sign_ids.add(sign_id)
+                context_parts.append(_format_sign_context(sign, lang))
         
         if sign_nums:
             for num in sign_nums:
