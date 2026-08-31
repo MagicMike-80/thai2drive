@@ -85,10 +85,12 @@ class MichaelMediaCardsContractTests(unittest.TestCase):
         send = WEBAPP[send_start:send_end]
         cards = send.index("await _teacherAppendSignCards(fallbackSignIds, assistantBubble)")
         scroll = send.index("_teacherScrollToAnswerStart(assistantBubble)")
-        suggestions = send.index("_teacherAppendChips(data.suggestions || [])", scroll)
         self.assertLess(cards, scroll)
-        self.assertLess(scroll, suggestions)
-        self.assertIn("_teacherScrollToAnswerStart(bubble)", send)
+        self.assertNotIn("_teacherAppendChips(data.suggestions || [])", send)
+        self.assertNotIn("_teacherAppendSignActions(signForActions)", send)
+        self.assertNotIn("fetchVideoForTopic('Bremsing')", send)
+        self.assertIn("_teacherScrollToAnswerStart(assistantBubble)", send)
+        self.assertNotIn("action.classList.add('show')", WEBAPP)
         self.assertIn("_teacherScrollToAnswerStart(errorBubble)", send)
         self.assertNotIn("bubble.appendChild(wrap);\n        msgs.scrollTop = msgs.scrollHeight", send)
 

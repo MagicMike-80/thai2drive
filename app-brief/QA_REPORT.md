@@ -249,6 +249,25 @@ PASS — klar for commit, push og live-verifisering.
 
 ---
 
+# QA GATE: ett konkret Michael-svar
+
+- PASS: sluttprompt og backendfilter begrenser norsk, thai og engelsk til ett
+  konkret regelsvar på 1–2 setninger; norsk/engelsk er begrenset til 30 ord.
+- PASS: overskrifter, ekstra avsnitt, spørsmål, mediatagger, HAV og
+  «Kongen og tjeneren» fjernes også dersom modellen ikke følger prompten.
+- PASS: `suggestions` er tom, og responsen kan bare inneholde ett godkjent
+  mediaelement av typen `sign`.
+- PASS: hovedchat og quiz-coach viser ingen svarmeny eller mini-practice-knapp.
+- PASS: Python-syntaks og `git diff --check`.
+- PASS: 60/60 lokale frontend-/kontrakttester og 39/39 trygge backendtester.
+- MERKNAD: `backend/tests/test_thai2drive_api.py` ble ikke kjørt; den krever
+  `pytest` som ikke finnes i den bundne runtime og er tidligere klassifisert
+  som produksjonsrettet. Ingen produksjonsmuterende test ble forsøkt.
+
+PASS — klar for commit, push og fersk live-verifisering.
+
+---
+
 # QA REPORT: Michael mobilprofil og forenklet lærerflate
 
 ## Visuell kontrakt og mobil

@@ -1131,3 +1131,20 @@ READY FOR AGENT 3 — PATCH A ONLY
 Ingen endring i spørsmål, tilgangskvoter, auth, betaling eller database.
 
 READY FOR AGENT 3
+---
+
+# SOLUTION BLUEPRINT: én konkret ting fra Michael
+
+1. Legg en siste, språktilpasset korthetsinstruks rett før LLM-kallet, slik at
+   den overstyrer eldre pedagogiske langformatinstrukser.
+2. Normaliser modellsvaret deterministisk: fjern media-/markdowntagger,
+   overskrifter og forbudte metaforsetninger; behold høyst to setninger og
+   maksimalt 30 mellomromsdelte ord (Thai: kort tegnbegrensning).
+3. Returner `suggestions=[]`, maksimalt ett `sign_id` og bare det tilhørende
+   `sign`-mediaobjektet. Ingen video/podcast i chatresponsen.
+4. Fjern frontendens etterfølgende svarmeny og automatiske videokort, men
+   behold inngangsmenyen før eleven spør.
+5. Test NO/TH/EN, ord-/setningsgrense, metaforfilter, skiltmedia og fravær av
+   svarmeny. Ingen endring i andre tjenester.
+
+READY FOR AGENT 3

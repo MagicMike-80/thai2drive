@@ -9155,7 +9155,8 @@ async function openMichaelQuizCoach() {
   try {
     var data = await _quizCoachRequest(prompt);
     if (!panel.classList.contains('open')) return;
-    if (_renderQuizCoachResponse(body, data)) action.classList.add('show');
+    _renderQuizCoachResponse(body, data);
+    action.classList.remove('show');
   } catch(e) {
     if (panel.classList.contains('open')) body.textContent = t('coach_unavailable');
   }
@@ -10165,34 +10166,6 @@ async function teacherSend(overrideMsg, customDisplayMsg) {
     });
     await _teacherAppendSignCards(fallbackSignIds, assistantBubble);
     _teacherScrollToAnswerStart(assistantBubble);
-    if (data.sign_ids && data.sign_ids.length) {
-      try {
-        var signForActions = await api('GET', '/api/signs/' + encodeURIComponent(data.sign_ids[0]));
-        _teacherAppendSignActions(signForActions);
-      } catch (signActionError) {
-        _teacherAppendChips(data.suggestions || []);
-      }
-    } else {
-      _teacherAppendChips(data.suggestions || []);
-    }
-    // Video card — show for math/braking topics (all languages)
-    if (/reaksjonslengde|bremselengde|stoppelengde|reaksjonstid|alle formler|reaction distance|braking distance|stopping distance|ระยะตอบสนอง|ระยะปฏิกิริยา|ระยะเบรก|ระยะหยุดรถ|สูตรทั้งหมด/i.test(msg)) {
-      fetchVideoForTopic('Bremsing').then(function(v) {
-        if (!v) return;
-        var msgs = document.getElementById('teacherMessages');
-        if (!msgs) return;
-        var rows = msgs.querySelectorAll('.tm-row.assistant');
-        var lastRow = rows[rows.length - 1];
-        if (!lastRow) return;
-        var bubble = lastRow.querySelector('.tm-bubble');
-        if (!bubble || bubble.querySelector('.vid-card')) return;
-        var wrap = document.createElement('div');
-        wrap.style.cssText = 'margin-top:10px;';
-        wrap.innerHTML = buildVideoCard(v);
-        bubble.appendChild(wrap);
-        _teacherScrollToAnswerStart(bubble);
-      });
-    }
   } catch(e) {
     _teacherHideTyping();
     var errorBubble = _teacherAppendBubble('assistant', t('teacher_error'));

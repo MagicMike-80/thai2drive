@@ -172,7 +172,7 @@ async def _completion_with_fallback(messages: List[dict]):
             response = await litellm.acompletion(
                 model=model,
                 messages=messages,
-                max_tokens=600,
+                max_tokens=120,
                 temperature=_TEACHER_LLM_TEMPERATURE,
                 timeout=_TEACHER_LLM_TIMEOUT_SECONDS,
                 api_key=attempt["api_key"],
@@ -983,6 +983,75 @@ def _enforce_approved_image_tags(reply_text: str, context_str: str) -> str:
     if approved and approved[0] not in cleaned:
         return f"{cleaned}\n\n{approved[0]}" if cleaned else approved[0]
     return cleaned
+
+
+_CONCISE_FORBIDDEN_TERMS = (
+    "kongen", "tjener", "king", "servant", "กษัตริย์", "ผู้รับใช้",
+    "hav-regel", "hav regelen", "h-a-v",
+)
+_CONCISE_KEEP_PREFIXES = ("forklaring", "explanation", "คำอธิบาย")
+_CONCISE_DROP_PREFIXES = (
+    "situasjon", "vanlig feil", "teoriprøve-vinkel", "oppfølgingsspørsmål",
+    "situation", "common mistake", "theory test focus", "follow-up question",
+    "สถานการณ์", "ข้อผิดพลาดที่พบบ่อย", "จุดเน้นข้อสอบทฤษฎี", "คำถามชวนคิด",
+)
+
+
+def _concise_teacher_reply(reply_text: str, lang: str) -> str:
+    """Enforce one short rule answer even if a model ignores the final prompt."""
+    text = re.sub(r"\[(?:image|video|podcast):[^\]]*\]", "", reply_text or "", flags=re.IGNORECASE)
+    text = re.sub(r"^#{1,6}\s*", "", text, flags=re.MULTILINE)
+    text = re.sub(r"[*_`]+", "", text)
+    cleaned_lines = []
+    for raw_line in text.splitlines():
+        line = re.sub(r"^[\s\-•🚗💡⚠️📝❓:]+", "", raw_line).strip()
+        lowered = line.casefold()
+        if any(lowered.startswith(f"{prefix}:") for prefix in _CONCISE_DROP_PREFIXES):
+            continue
+        for prefix in _CONCISE_KEEP_PREFIXES:
+            marker = f"{prefix}:"
+            if lowered.startswith(marker):
+                line = line[len(marker):].strip()
+                break
+        if line:
+            cleaned_lines.append(line)
+    text = " ".join(cleaned_lines)
+    text = re.sub(r"\s+", " ", text).strip()
+
+    sentences = [part.strip() for part in re.findall(r"[^.!?。！？]+[.!?。！？]?", text)]
+    allowed = [
+        sentence for sentence in sentences
+        if sentence
+        and not sentence.endswith(("?", "？"))
+        and not any(term in sentence.casefold() for term in _CONCISE_FORBIDDEN_TERMS)
+    ][:2]
+    concise = " ".join(allowed).strip()
+    if not concise:
+        return {
+            "th": "ตอนนี้ Michael ยังตอบให้สั้นและชัดเจนไม่ได้ กรุณาลองถามอีกครั้งครับ",
+            "en": "Michael cannot give a short, precise answer right now. Please try again.",
+            "no": "Michael kan ikke gi et kort og presist svar akkurat nå. Prøv igjen.",
+        }.get(lang, "Michael kan ikke gi et kort og presist svar akkurat nå. Prøv igjen.")
+
+    if lang == "th":
+        return concise if len(concise) <= 180 else concise[:179].rstrip() + "…"
+    words = concise.split()
+    if len(words) > 30:
+        concise = " ".join(words[:30]).rstrip(" ,;:") + "."
+    return concise
+
+
+def _concise_output_instruction(lang: str) -> str:
+    language = {"no": "Norwegian", "th": "Thai", "en": "English"}.get(lang, "Norwegian")
+    return (
+        "\n\n━━━ FINAL OUTPUT CONTRACT — OVERRIDES ALL EARLIER FORMAT RULES ━━━\n"
+        f"Answer only in {language}. Give exactly one concrete rule or legal definition. "
+        "Use 1–2 sentences and no more than 30 words. Output plain text only. "
+        "Do not use headings, lists, extra paragraphs, examples, follow-up questions, "
+        "metaphors, Kongen og tjeneren, the King/Servant model, or the HAV mnemonic. "
+        "Do not output image, video, or podcast tags; the app renders the exact sign separately.\n"
+        "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    )
 
 
 def _sign_ids_from_context(context_str: str) -> list[str]:
@@ -1892,6 +1961,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
                 "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
             )
 
+        system_prompt += _concise_output_instruction(lang)
         messages = [{"role": "system", "content": system_prompt}]
         messages.extend(conversation)
         messages.append({"role": "user", "content": user_msg})
@@ -1902,6 +1972,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             reply_text = _fallback_reply(lang)
         else:
             reply_text = _enforce_approved_image_tags(reply_text, context_str)
+            reply_text = _concise_teacher_reply(reply_text, lang)
     except Exception as e:
         logger.error("LiteLLM call failed [%s]: %s", type(e).__name__, e)
 
@@ -1975,8 +2046,12 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
     except Exception as log_ex:
         logger.error("Failed to write teacher log to DB: %s", log_ex)
 
-    suggestions = _get_suggestions(reply_text, lang)
-    sign_ids = explicit_sign_ids or _sign_ids_from_context(context_str)
+    suggestions = []
+    sign_ids = (explicit_sign_ids or _sign_ids_from_context(context_str))[:1]
+    media = [
+        item for item in media
+        if item.get("type") == "sign" and item.get("sign_id") in sign_ids
+    ][:1]
     return TeacherChatResponse(
         session_id=session_id,
         reply=reply_text,

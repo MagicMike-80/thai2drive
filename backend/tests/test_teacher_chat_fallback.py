@@ -215,7 +215,7 @@ class TeacherChatFallbackTests(unittest.TestCase):
         source = (Path(__file__).resolve().parents[1] / "teacher_chat.py").read_text(encoding="utf-8")
         self.assertIn("explicit_sign_ids = _explicit_sign_ids_for_message(user_msg)", source)
         self.assertIn("explicit_sign_ids=explicit_sign_ids", source)
-        self.assertIn("sign_ids = explicit_sign_ids or _sign_ids_from_context(context_str)", source)
+        self.assertIn("sign_ids = (explicit_sign_ids or _sign_ids_from_context(context_str))[:1]", source)
 
     def test_explicit_sign_skips_broader_sign_search(self):
         source = (Path(__file__).resolve().parents[1] / "teacher_chat.py").read_text(encoding="utf-8")
@@ -228,6 +228,36 @@ class TeacherChatFallbackTests(unittest.TestCase):
             "Traffic Sign 362_50:\n- Name: Fartsgrense 50\n"
         )
         self.assertEqual(self.module._sign_ids_from_context(context), ["362_50", "506"])
+
+    def test_concise_reply_removes_structure_metaphors_questions_and_media_tags(self):
+        source = (
+            "🚗 Situasjon: Du nærmer deg et kryss.\n\n"
+            "💡 Forklaring: Du skal vike for trafikken i krysset. Dette hindrer fare.\n\n"
+            "Kongen og tjeneren gjør regelen enkel.\n\n"
+            "❓ Hva gjør du nå?\n\n"
+            "[image: /api/sign-images/202_0.jpg | Vikeplikt | ให้ทาง | Give way]"
+        )
+        result = self.module._concise_teacher_reply(source, "no")
+        self.assertEqual(result, "Du skal vike for trafikken i krysset. Dette hindrer fare.")
+        self.assertNotIn("?", result)
+        self.assertNotIn("Kongen", result)
+        self.assertLessEqual(len(result.split()), 30)
+
+    def test_concise_reply_is_language_safe_for_thai_and_english(self):
+        thai = self.module._concise_teacher_reply("คำอธิบาย: คุณต้องให้ทางแก่รถในทางแยก。", "th")
+        english = self.module._concise_teacher_reply(
+            "Explanation: You must give way to traffic in the intersection. Stop if needed.",
+            "en",
+        )
+        self.assertEqual(thai, "คุณต้องให้ทางแก่รถในทางแยก。")
+        self.assertEqual(english, "You must give way to traffic in the intersection. Stop if needed.")
+
+    def test_endpoint_contract_has_no_reply_menu_and_only_one_sign_media(self):
+        source = (Path(__file__).resolve().parents[1] / "teacher_chat.py").read_text(encoding="utf-8")
+        self.assertIn("system_prompt += _concise_output_instruction(lang)", source)
+        self.assertIn("suggestions = []", source)
+        self.assertIn(")[:1]", source)
+        self.assertIn('if item.get("type") == "sign"', source)
 
 
 if __name__ == "__main__":

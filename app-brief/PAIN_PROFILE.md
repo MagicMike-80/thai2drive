@@ -669,3 +669,24 @@ Fremdrift skal bruke faktisk øktlengde, og oppsummeringen skal tilby ny økt
 eller Michael. Guest/free/premium-kvoter og betalingslogikk skal ikke endres.
 
 Rotårsaken er bevist. Klar for Solution Architect.
+---
+
+# PAIN PROFILE: Michael gir mer enn én konkret ting
+
+## Bevist rotårsak
+
+`teacher_chat.py` instruerer modellen til å lage flere seksjoner, eksempler,
+metaforer og oppfølgingsspørsmål. Deretter genererer backend `suggestions`, mens
+`webapp.py` også legger til skilt-/emneknapper under svaret. Prompt alene kan
+derfor ikke garantere brukerens ønskede minimum.
+
+## Avgrensning og akseptanse
+
+Chatresponsen skal inneholde ett språkfritt, kort regelsvar på maksimalt to
+setninger og omtrent 30 ord. Ingen overskrifter, metaforer, oppfølgingsspørsmål,
+video eller podcast. Ved konkret skilt beholdes maksimalt ett eksakt skiltasset
+øverst. `suggestions` skal være tomt, og frontend skal ikke bygge svarmeny.
+Quiz-coach bruker samme endpoint og får samme korte regel. TTS, auth, kvoter,
+betaling og mediekatalogens øvrige API-er er urørt.
+
+Rotårsaken er bevist. Klar for Solution Architect.

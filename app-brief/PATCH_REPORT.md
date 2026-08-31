@@ -139,6 +139,27 @@ ikke.
 
 Klar for Agent 4.
 
+---
+
+# PATCH REPORT: ett konkret Michael-svar
+
+- `backend/teacher_chat.py`: siste systeminstruks krever ett kort svar på valgt
+  språk, 1–2 setninger og maks 30 ord, uten overskrifter, eksempler,
+  kontrollspørsmål, HAV eller «Kongen og tjeneren».
+- Backend etterbehandler svaret deterministisk og fjerner seksjoner,
+  mediatagger, spørsmål og forbudte metaforer dersom en reservemodell avviker.
+- Responsen returnerer ingen forslag og maksimalt ett godkjent skiltbilde når
+  et skilt er identifisert.
+- `backend/webapp.py`: menyknapper, automatisk bremsevideo og den synlige
+  mini-practice-knappen vises ikke etter Michael-svaret.
+- Ingen endring i auth, kvoter, premium, Stripe, RevenueCat eller betaling.
+
+Verifisert med Python-syntaks, 51 målrettede tester, hele lokale `tests/`
+(60/60), trygge backendtester uten produksjonskall (39/39) og `git diff
+--check`.
+
+Klar for Agent 4.
+
 ### QA-fiks: forslag beholdt ikke svarstart
 
 - Fjernet den absolutte bunnscrollen fra `_teacherAppendChips()`. Forslagene
