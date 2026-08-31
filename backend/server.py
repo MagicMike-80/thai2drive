@@ -4669,6 +4669,168 @@ async def admin_delete_video(video_id: str, _: dict = Depends(require_admin)):
     return {"message": "Deleted", "id": video_id}
 
 
+# ── Michael material library ─────────────────────────────────────────────────
+
+MICHAEL_MATERIAL_TYPES = {"sign", "intersection_image", "video"}
+MICHAEL_MATERIAL_FIELDS = {
+    "type", "source_id", "source_url", "title", "caption", "topic_tags",
+    "sign_ids", "situation_tags", "active", "approved_for_michael", "priority",
+}
+
+
+def _clean_string_list(value: Any) -> List[str]:
+    """Return a stable, de-duplicated list of non-empty strings."""
+    if not isinstance(value, list):
+        return []
+    result: List[str] = []
+    seen = set()
+    for item in value:
+        cleaned = str(item).strip()
+        if cleaned and cleaned not in seen:
+            result.append(cleaned)
+            seen.add(cleaned)
+    return result
+
+
+def _clean_multilang(value: Any) -> Dict[str, str]:
+    value = value if isinstance(value, dict) else {}
+    return {lang: str(value.get(lang, "")).strip() for lang in ("no", "th", "en")}
+
+
+def _is_safe_michael_material_url(value: str) -> bool:
+    """Accept only existing API assets or regular HTTPS/HTTP media references."""
+    value = (value or "").strip()
+    return value.startswith("/api/") or value.startswith("https://") or value.startswith("http://")
+
+
+def _normalize_michael_material_payload(data: dict, *, partial: bool = False) -> dict:
+    """Allow-list and normalize admin input before it reaches MongoDB."""
+    if not isinstance(data, dict):
+        raise HTTPException(status_code=400, detail="Material data must be an object")
+    unknown = set(data) - MICHAEL_MATERIAL_FIELDS
+    if unknown:
+        raise HTTPException(status_code=400, detail=f"Unknown fields: {', '.join(sorted(unknown))}")
+
+    normalized: Dict[str, Any] = {}
+    if "type" in data or not partial:
+        material_type = str(data.get("type", "")).strip()
+        if material_type not in MICHAEL_MATERIAL_TYPES:
+            raise HTTPException(status_code=400, detail="Type must be sign, intersection_image, or video")
+        normalized["type"] = material_type
+    for field in ("source_id", "source_url"):
+        if field in data or not partial:
+            normalized[field] = str(data.get(field, "")).strip()
+    for field in ("title", "caption"):
+        if field in data or not partial:
+            normalized[field] = _clean_multilang(data.get(field))
+    for field in ("topic_tags", "sign_ids", "situation_tags"):
+        if field in data or not partial:
+            normalized[field] = _clean_string_list(data.get(field))
+    for field in ("active", "approved_for_michael"):
+        if field in data or not partial:
+            normalized[field] = bool(data.get(field, False))
+    if "priority" in data or not partial:
+        try:
+            normalized["priority"] = max(0, min(1000, int(data.get("priority", 100))))
+        except (TypeError, ValueError):
+            raise HTTPException(status_code=400, detail="Priority must be a number")
+    return normalized
+
+
+def _validate_ready_michael_material(material: dict) -> None:
+    """Approved active references must be complete and safe for learner use."""
+    material_type = material.get("type", "")
+    if material_type in {"sign", "video"} and not material.get("source_id"):
+        raise HTTPException(status_code=400, detail="Existing source ID is required for sign and video")
+    if material_type == "intersection_image":
+        if not material.get("source_url") or not _is_safe_michael_material_url(material["source_url"]):
+            raise HTTPException(status_code=400, detail="A safe image URL is required for an intersection image")
+    if material.get("active") and material.get("approved_for_michael"):
+        for field in ("title", "caption"):
+            missing = [lang for lang in ("no", "th", "en") if not material.get(field, {}).get(lang)]
+            if missing:
+                raise HTTPException(status_code=400, detail=f"{field} is missing: {', '.join(missing)}")
+
+
+async def _resolve_michael_material_source(material: dict) -> dict:
+    """Verify referenced source records and derive their approved preview URL."""
+    material_type = material.get("type")
+    source_id = material.get("source_id", "")
+    if material_type == "sign":
+        source = await db.traffic_signs.find_one({"id": source_id}, {"_id": 0, "image_url": 1})
+        if not source:
+            raise HTTPException(status_code=404, detail="Traffic sign source not found")
+        preview_url = source.get("image_url", "")
+        if preview_url:
+            material["source_url"] = preview_url
+    elif material_type == "video":
+        source = await db.learning_videos.find_one({"id": source_id}, {"_id": 0})
+        if not source:
+            raise HTTPException(status_code=404, detail="Video source not found")
+        serialized = _serialize_video(source)
+        material["source_url"] = serialized.get("thumbnail_url") or serialized.get("youtube_url", "")
+    if material.get("source_url") and not _is_safe_michael_material_url(material["source_url"]):
+        raise HTTPException(status_code=400, detail="Unsafe source URL")
+    if material.get("active") and material.get("approved_for_michael") and not material.get("source_url"):
+        raise HTTPException(status_code=400, detail="Approved material must have a previewable source")
+    return material
+
+
+def _serialize_michael_material(material: dict) -> dict:
+    return {key: value for key, value in material.items() if key != "_id"}
+
+
+@api_router.get("/admin/michael-materials")
+async def admin_list_michael_materials(
+    material_type: str = "",
+    status: str = "",
+    _: dict = Depends(require_admin),
+):
+    """List curated Michael references without duplicating source media."""
+    query: Dict[str, Any] = {}
+    if material_type:
+        if material_type not in MICHAEL_MATERIAL_TYPES:
+            raise HTTPException(status_code=400, detail="Invalid material type")
+        query["type"] = material_type
+    if status == "active":
+        query["active"] = True
+    elif status == "inactive":
+        query["active"] = False
+    elif status == "approved":
+        query["approved_for_michael"] = True
+    elif status and status != "all":
+        raise HTTPException(status_code=400, detail="Invalid status filter")
+    results = await db.michael_materials.find(query).sort([("priority", 1), ("updated_at", -1)]).to_list(1000)
+    return [_serialize_michael_material(item) for item in results]
+
+
+@api_router.post("/admin/michael-materials")
+async def admin_create_michael_material(data: dict, _: dict = Depends(require_admin)):
+    material = _normalize_michael_material_payload(data)
+    _validate_ready_michael_material(material)
+    await _resolve_michael_material_source(material)
+    now = datetime.now(timezone.utc).isoformat()
+    material.update({"id": str(uuid.uuid4()), "created_at": now, "updated_at": now})
+    await db.michael_materials.insert_one(material)
+    return _serialize_michael_material(material)
+
+
+@api_router.patch("/admin/michael-materials/{material_id}")
+async def admin_update_michael_material(material_id: str, data: dict, _: dict = Depends(require_admin)):
+    current = await db.michael_materials.find_one({"id": material_id})
+    if not current:
+        raise HTTPException(status_code=404, detail="Michael material not found")
+    update = _normalize_michael_material_payload(data, partial=True)
+    candidate = {**_serialize_michael_material(current), **update}
+    _validate_ready_michael_material(candidate)
+    await _resolve_michael_material_source(candidate)
+    update["source_url"] = candidate.get("source_url", "")
+    update["updated_at"] = datetime.now(timezone.utc).isoformat()
+    await db.michael_materials.update_one({"id": material_id}, {"$set": update})
+    candidate.update(update)
+    return _serialize_michael_material(candidate)
+
+
 # ── Podcasts ─────────────────────────────────────────────────────────────────
 
 class LearningPodcastCreate(BaseModel):

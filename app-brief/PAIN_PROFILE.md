@@ -1,3 +1,60 @@
+# PAIN PROFILE: adminpanelet er ikke ett samlet Michael-materialbibliotek
+
+## Brukersmerte og forventning
+
+Michael skal kunne vise et godkjent trafikkskilt, veikryss-/situasjonsbilde eller
+en relevant video når det passer elevens samtale. Michael skal hente alt fra
+Thai2Drive Admin, slik at Michael kan vedlikeholde materialet uten kodeendring og
+uten at AI-en finner på medie-URL-er.
+
+## Verifiserte observasjoner
+
+- `backend/admin.html` har allerede separate adminflater for spørsmål,
+  studiebok, trafikkskilt, videoer, podkaster og ordliste.
+- `traffic_signs` har språkrene navn/forklaringer og `image_url`; skiltbildene
+  finnes også lokalt under `backend/sign_images`.
+- `learning_videos` har `topic_tags`, `sign_ids`, `sign_groups`, språk,
+  sammendrag og aktiv-status. Studiebokkapitler kan ha `image_url` og
+  `video_url`.
+- `backend/teacher_chat.py::_get_curriculum_context()` søker i skilt,
+  studiebokkapitler og videoer, og godkjente skiltbilder håndheves separat.
+- `TeacherChatResponse` returnerer strukturert `sign_ids`, men ingen generell
+  strukturert medieliste for veikryssbilder eller videoer.
+- Veikryss-/situasjonsbilder kan finnes som spørsmåls- eller studiebokbilder,
+  men har ikke én felles godkjent Michael-indeks med emne, situasjon, språk og
+  aktiv-status.
+
+## Bevist rotårsak
+
+Materialet finnes i flere samlinger og adminfaner, men bare skilt har en
+deterministisk strukturert vei helt fra treff til frontendkort. Veikryssbilder og
+videoer mangler én felles, godkjent metadata- og responskontrakt. Derfor kan ikke
+Michael sikkert og konsekvent knytte riktig materiale til samtalen.
+
+## Omfang og risiko
+
+Berørt er adminstyrt metadata, Michael-retrieval og rendering av godkjente
+medier. Spørsmålsbank, originale skiltdata, TTS, auth, kvoter, premium, Stripe,
+RevenueCat og betaling skal ikke endres. Største risiko er feil medietreff eller
+språkblanding; tekst-only skal alltid være sikker fallback.
+
+## Akseptansekriterier
+
+1. Admin kan registrere og redigere godkjente skilt-, veikryssbilde- og
+   videoreferanser med NO/TH/EN-tekst, tags, koblede skilt/situasjoner og aktiv.
+2. Eksisterende skilt- og videofiler gjenbrukes; medieinnhold dupliseres ikke.
+3. Michael får maks relevante, aktive og godkjente medier i en strukturert
+   respons; AI-en kan ikke finne på URL-er.
+4. Skilt treffes via `sign_id`; øvrige medier treffes via kontrollerte tags og
+   situasjons-ID-er.
+5. Valgt språk har komplett tittel/bildetekst, ellers skjules mediet.
+6. Ingen treff eller mediefeil gir et normalt tekstsvar uten å blokkere chatten.
+7. Tester dekker riktig treff, feil treff, språkisolasjon og deaktivert materiale.
+
+Rotårsaken er bevist. Klar for Solution Architect.
+
+---
+
 # PAIN PROFILE: Michael, Mine feil og readiness
 
 ## Brukersmerte

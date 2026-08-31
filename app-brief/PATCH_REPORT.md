@@ -1,3 +1,44 @@
+# PATCH REPORT: Michael-materiale i adminpanelet
+
+## Endring
+
+- `backend/server.py`: ny, adminbeskyttet `michael_materials`-samling med
+  liste-, opprettings- og oppdateringsrute. Referanser peker til eksisterende
+  skilt/video eller en godkjent situasjonsbilde-URL; mediet kopieres ikke.
+- `backend/server.py`: allow-list på felter og typer, sikker URL-kontroll,
+  kildeoppslag, dedupliserte knagger og krav om tittel og forklaring på NO/TH/EN
+  før en aktiv post kan godkjennes for Michael.
+- `backend/admin.html`: ny fane «Michael-materiale» med type-/statusfilter,
+  kortvisning med forhåndsvisning, opprett/rediger-skjema og trygg deaktivering
+  uten å slette kildemediet.
+- `tests/test_michael_material_admin_contract.py`: kontrakt- og
+  valideringstester for auth, kildereferanser, språk, sikker URL og adminflyt.
+
+## Avgrensning
+
+Patchen oppretter bare adminbiblioteket. Michael-chatten leser ikke fra den nye
+samlingen ennå, og lærerresponsen er ikke endret. Ingen eksisterende skilt,
+spørsmål, videoer eller mediefiler er flyttet. Auth-policy, TTS, premium,
+Stripe, RevenueCat og betaling er urørt. Ingen commit, push eller deploy.
+
+## Verifisering
+
+- Python-syntaks: PASS.
+- Inline JavaScript-syntaks: PASS.
+- 22 målrettede admin-, skilt- og Michael-kontrakttester: PASS.
+- `git diff --check`: PASS med kun Windows LF/CRLF-varsler.
+
+## Risiko og rollback
+
+Den nye samlingen er tom til administrator legger inn referanser. Feil eller
+manglende kilde-ID avvises før lagring. Rollback er å fjerne de tre additive
+rutene, adminfanen og den nye kontrakttesten; eksisterende materiale påvirkes
+ikke.
+
+Klar for Agent 4.
+
+---
+
 # PATCH REPORT: Fase 2B — Michael quiz-coach og readiness
 
 ## Endrede applikasjonsfiler

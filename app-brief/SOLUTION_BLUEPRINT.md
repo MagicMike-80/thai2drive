@@ -1,3 +1,128 @@
+# SOLUTION BLUEPRINT — Thai2Drive Admin som Michaels materialbibliotek
+
+## Mål
+
+Gjør adminpanelet til kontrollrom for godkjente skilt, veikryss-/situasjonsbilder
+og videoer som Michael kan hente deterministisk når de passer samtalen.
+
+## Ikke-mål
+
+Ingen flytting eller kopiering av dagens 316 skiltposter, ingen ny AI-modell,
+ingen fri nettsøk/AI-genererte URL-er, ingen redesign av hele adminpanelet og
+ingen endring i TTS, auth, premium, Stripe, RevenueCat eller betaling.
+
+## Data og kontrakt
+
+Legg en additiv `michael_materials`-indeks som peker til eksisterende kilder i
+stedet for å duplisere dem. Hver post inneholder minst:
+
+- `id`, `type` (`sign`, `intersection_image`, `video`), `source_id`/`source_url`
+- `title.no/th/en` og `caption.no/th/en`
+- `topic_tags`, `sign_ids`, `situation_tags`
+- `active`, `approved_for_michael`, `priority`, `created_at`, `updated_at`
+
+Utvid `POST /api/teacher/chat` additivt med:
+
+`media: [{id, type, url, title, caption, sign_id?}]`
+
+Behold eksisterende `reply`, `suggestions` og `sign_ids` uendret. Backend velger
+mediene; frontend rendrer bare den godkjente listen. Manglende komplett tekst på
+aktivt språk gir ingen mediepost.
+
+## Trinnvis patchplan
+
+### Patch 1 — adminindeks og CRUD
+
+- Legg én ny «Michael-materiale»-fane i `backend/admin.html`.
+- Opprett/liste/rediger/deaktiver referanser til eksisterende skilt, bilder og
+  videoer.
+- Vis forhåndsvisning og valider at kilde-URL/ID finnes.
+- Ingen kobling til chatten ennå.
+
+### Patch 2 — deterministisk retrieval
+
+- Legg en isolert backend-helper som rangerer aktive, godkjente materialer etter
+  eksplisitt `sign_id`, deretter situasjons-/emnetags og priority.
+- Returner maks to medier og tekst-only ved manglende sikkert treff.
+- Bevar dagens skiltlogikk som førsteprioritet.
+
+### Patch 3 — additiv chatrespons og webkort
+
+- Legg `media` til `TeacherChatResponse` uten å fjerne eksisterende felt.
+- Render bilde/video under riktig Michael-svar, med aktivt språk og mobiltilpasset
+  størrelse.
+- Ved mediefeil beholdes svaret og kortet skjules.
+
+### Patch 4 — kontroll og opprydding
+
+- Adminfilter for type, tag, språk, aktiv og «mangler kobling».
+- Rapport over skilt/materiale uten komplett NO/TH/EN eller gyldig kilde.
+
+## Tester og manuell verifisering
+
+- API-kontrakt for additivt `media`-felt og uendret `sign_ids`.
+- Trefftest: «vikeplikt» → skilt `202_0`; relevant veikryss → koblet bilde;
+  relevant video → godkjent video.
+- Negative tester for oppdiktet URL, deaktivert materiale, feil tag og manglende
+  aktivt språk.
+- Mobiltest på NO/TH/EN og tekst-only fallback.
+
+## Rollback og produksjonsrisiko
+
+Alle patcher er additive. Funksjonen kan slås av ved å ignorere
+`michael_materials`/`media`, mens dagens skiltkort og tekstchat fortsetter.
+Største risiko er feil kobling; derfor kreves eksplisitt godkjenning, maks to
+medier og prioritert ID-treff foran frie teksttags.
+
+## Avgjørelse fra Michael
+
+Før Agent 3 starter må Michael godkjenne at første leveranse er Patch 1 alene:
+adminindeks og forhåndsvisning, uten chatkobling eller deploy av de senere
+trinnene.
+
+READY FOR AGENT 3
+
+---
+
+# SOLUTION BLUEPRINT — ekte vikepliktskilt i Michael-sidefeltet
+
+## Mål
+
+Knytt teksten «Hjelp med vikeplikt» visuelt til det godkjente norske
+vikepliktskiltet, uten å gjøre sidefeltet større eller endre betydningen av
+temaet.
+
+## Minste production-sikre patch
+
+- Erstatt bil-emojien bare på vikepliktvalget med et 32–36 px miniatyrbilde av
+  eksisterende skilt `202_0`.
+- Hent bildet via eksisterende skiltdata/API (`image_url`); ikke legg inn en ny,
+  tilfeldig eller AI-generert illustrasjon.
+- Behold hele raden som én klikkbar knapp og samme Michael-temamelding.
+- Behold språkrene tekster på norsk, thai og engelsk.
+- Når Michael faktisk forklarer skiltet, gjenbrukes eksisterende `sign_ids`/
+  skiltkort til større bilde under svaret.
+
+## Ikke-mål
+
+Ingen endring i skiltdata, lærer-API, prompt, TTS, auth, premium, Stripe,
+RevenueCat eller betaling. Miniatyrbildet betyr ikke at alle vikepliktsregler
+alltid er skiltet.
+
+## Sannsynlige filer og test
+
+- `backend/webapp.py`: miniatyrmarkup, rolig størrelse og fallback til dagens
+  symbol hvis bildet mangler.
+- `tests/test_michael_mobile_ui_contract.py`: lås `202_0`, bilde-alttekst,
+  språkren tekst og uendret knapphandling.
+- Manuell 390 px kontroll på NO/TH/EN og kontroll av bilde-feilfallback.
+
+Rollback er å fjerne miniatyrmarkuppen og vise det tidligere symbolet igjen.
+
+READY FOR AGENT 3
+
+---
+
 # SOLUTION BLUEPRINT — vis/skjul emner i Michael-sidefelt
 
 ## Mål

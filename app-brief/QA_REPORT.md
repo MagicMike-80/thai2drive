@@ -1,3 +1,49 @@
+# QA GATE: Michael-materiale i adminpanelet
+
+## Omfang og datakilde
+
+- PASS: patchen er additiv og bruker en egen `michael_materials`-samling som
+  refererer eksisterende `traffic_signs`, `learning_videos` eller godkjent
+  situasjonsbilde-URL; eksisterende medier kopieres eller slettes ikke.
+- PASS: administrator kan liste, filtrere, opprette, redigere og deaktivere
+  referanser. Skilt- og videokilder tilbys fra eksisterende admin-API-er.
+- PASS: Michael-chatten, lærerresponsen og learner-facing webappen er urørt i
+  Patch 1. Materialet blir derfor ikke automatisk vist i samtaler ennå.
+
+## Sikkerhet, språk og feiltilstander
+
+- PASS: alle tre ruter krever `require_admin`.
+- PASS: innkommende felter og materialtyper er allow-listet; ukjente felter,
+  ugyldig type, usikker URL og manglende kilde avvises.
+- PASS: en aktiv og Michael-godkjent post krever komplett tittel og forklaring
+  på norsk, thai og engelsk, samt en forhåndsvisbar kilde.
+- PASS: deaktivering endrer bare referansestatus og sletter ikke skilt, video
+  eller bilde.
+- PASS: auth-policy, elevkvoter, TTS, premium, Stripe, RevenueCat, hemmeligheter
+  og betaling er urørt.
+
+## Automatiske kontroller
+
+- Python-syntaks: PASS.
+- Inline JavaScript-syntaks: PASS.
+- 22 målrettede admin-, skilt- og Michael-kontrakttester: PASS.
+- `git diff --check`: PASS med kun ufarlige Windows LF/CRLF-varsler.
+- `backend/teacher_chat.py` og `backend/webapp.py`: ingen diff.
+- Lokalt skiltbibliotek: 313 bildefiler funnet; ingen av dem er endret.
+
+## Restpunkt
+
+- WARNING: det nye biblioteket er tomt frem til administrator oppretter de
+  første referansene.
+- WARNING: ekte MongoDB-oppretting og visuell innlogget adminflyt er ikke kjørt
+  i denne lokale QA-runden. Det må kontrolleres etter en separat godkjent
+  commit/deploy før produksjon kan kalles verifisert.
+
+PASS WITH WARNINGS — Patch 1 er lokalt ferdig og avgrenset. Ingen commit, push
+eller deploy er utført.
+
+---
+
 # QA REPORT: Fase 2B — Michael quiz-coach og readiness
 
 ## Readiness
