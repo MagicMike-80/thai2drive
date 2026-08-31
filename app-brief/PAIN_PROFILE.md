@@ -530,3 +530,125 @@ som fullført produksjonsseeding før innholdseieren/den andre agenten har lever
 og godkjent det manglende seedgrunnlaget.
 
 ---
+
+# PAIN PROFILE: Michael-chatten mangler en rolig, sentrert samtaleflate
+
+## Brukersmerte og forventet oppførsel
+
+Skjermbildet viser at Michael-chatten oppleves som en bred app-/kortflate, ikke
+som én rolig ChatGPT-/Codex-lignende samtale. Den synlige starten av Michaels
+svar er avkuttet under toppområdet, to mediekort ligger side ved side og kortet
+til høyre blir visuelt avskåret ved viewportkanten. Eleven forventer en kompakt
+Michael-header, én sentrert vertikal meldingskolonne, ett kort under riktig svar,
+ingen horisontal avskjæring og et skrivefelt som alltid er tilgjengelig nederst.
+
+Målmappe og berørt flyt er kun Michael-frontend i `backend/webapp.py`. Backend,
+chat-API, auth, kvoter, premium og betaling er utenfor denne layoutpatchen.
+
+## Verifiserte observasjoner
+
+- Den generelle desktop-regelen gjør hele appen til en fast 390 px telefonramme
+  (`backend/webapp.py:90-114`). Michael-modus overstyrer dette til en egen bred
+  860 px app-ramme (`backend/webapp.py:1149-1161`) i stedet for å la en smal
+  samtalekolonne ligge sentrert i en normal sideflate.
+- Michael-headeren er låst til 90 px med en 64 px avatar både globalt og på
+  mobil (`backend/webapp.py:3064-3085,3364-3371`). Sammen med den separate
+  globale topplinjen på 56 px (`backend/webapp.py:50,118-125`) bruker de to
+  toppområdene 146 px før samtalen begynner. Skjermbildet bekrefter at dette
+  oppleves som et høyt, dominerende toppområde.
+- Meldingslisten er riktig nok en egen vertikal scrollflate, men innholdet har
+  ingen sentrert lesebredde: `.teacher-messages` fyller chatkolonnen
+  (`backend/webapp.py:3125-3128`), og alle assistentbobler tvinges til 100 %
+  bredde (`backend/webapp.py:3220`). Den eksisterende `52ch`-grensen gjelder
+  bare hvert avsnitt, ikke selve samtaleraden, kortene eller handlingene
+  (`backend/webapp.py:3162-3165`).
+- `_teacherAppendBubble()` setter scrollposisjonen til hele listens bunn straks
+  et assistentsvar legges inn (`backend/webapp.py:9583-9622`). For et langt nytt
+  svar betyr det at eleven havner ved slutten, ikke ved starten. Når skiltet
+  kommer via `data.media`, legges kortet til etterpå uten tilsvarende
+  startjustering (`backend/webapp.py:9867-9883,10149-10157`). Dette forklarer den
+  synlig avkuttede svarstarten under headeren i skjermbildet.
+- Mediestripen bruker to like kolonner på desktop
+  (`backend/webapp.py:3314-3317`), og frontend tillater opptil to kort per svar
+  (`backend/webapp.py:9867-9880`). Skjermbildet viser nettopp to brede skiltkort
+  side ved side, der kort nummer to fortsetter ut mot og blir avskåret ved høyre
+  viewportkant. Mobilregelen går først over til én kolonne under 768 px
+  (`backend/webapp.py:3393`).
+- Flere forfedre bruker `overflow:hidden`, blant annet `#app`, `#content` og
+  `#screenTeacher` (`backend/webapp.py:77-80,147-151,3099`). En bred visuell
+  komponent får derfor ingen trygg side-scroll eller ombrekking utenfor sin
+  lokale gridregel; den blir klippet.
+- Skrivefeltet ligger allerede etter den fleksible meldingslisten, har
+  `flex-shrink:0` og forblir nederst i chatkolonnen
+  (`backend/webapp.py:3263-3286,4262-4268`). Problemet er derfor ikke mangel på
+  en composer, men at hele composer-, meldings- og medieflaten følger den brede
+  app-rammen uten en felles sentrert maksbreddwrapper.
+- Eksisterende kontrakttester låser dagens 90 px header/64 px avatar og
+  to-kolonnehandlinger (`tests/test_michael_mobile_ui_contract.py:68-84`).
+  Medietesten krever bare én kolonne i mobilregelen og beskytter ikke mot den
+  brede desktopstripen (`tests/test_michael_media_cards_contract.py:18-27`).
+
+## Bevist rotårsak
+
+Rotårsaken er **BEVIST lokalt** som fire sammenhengende frontendvalg:
+
+1. Michael bruker en egen bred app-ramme i stedet for en sentrert lesekolonne.
+2. Toppbaren og den låste 90 px Michael-headeren tar uforholdsmessig mye høyde.
+3. Nye assistentsvar scrolles automatisk til bunnen før etterslepende media er
+   ferdig rendret, slik at starten på svaret ikke blir lesepunktet.
+4. Medier gjengis som en to-kolonners desktopstrip med opptil to kort, mens
+   overordnede flater klipper overflow.
+
+Det er ikke nødvendig å endre chat-API-et eller gjøre en stor rewrite for å
+rette dette. Eksisterende DOM-rekkefølge for header, meldingsliste og composer
+kan beholdes.
+
+## Omfang, risiko og ukjent
+
+- Berørt: CSS-layout for Michael-modus og den lokale scrollplasseringen etter
+  et nytt assistentsvar.
+- Skal ikke berøres: svarinnhold, mediematching, språkdata, sidepanel-logikk,
+  backend, database, TTS, auth, kvoter, premium, Stripe, RevenueCat eller
+  mobilappen.
+- Hovedrisiko: en global endring av `#app` eller generelle mediekort kan gi
+  regresjon i quiz, bibliotek eller quiz-coach. Endringen må derfor scopes til
+  `#app.teacher-mode`/`#screenTeacher` og ordinær Michael-chat.
+- Hovedrisiko på små skjermer: en faktisk `position:fixed` composer kan kollidere
+  med tastatur og safe-area. Den eksisterende flex-composeren bør beholdes som
+  fast bunnrad i chat-shellen fremfor å løsnes fra layouten.
+- **IKKE BEVIST:** eksakt fysisk viewportbredde, nettleserzoom og OS-skalering i
+  skjermbildet. Den synlige avskjæringen er bevist visuelt, men disse faktorene
+  bør ikke brukes som rotårsak når kodevalgene over allerede forklarer den.
+
+## Akseptansekriterier for Solution Architect
+
+1. Michael-headeren komprimeres tydelig på desktop og mobil uten at navn,
+   aktivt språk eller emneknapp blir utilgjengelig.
+2. Meldinger, handlinger, media og composer deler én sentrert maksbreddwrapper;
+   desktop har luft på sidene, mens mobil bruker tilgjengelig bredde.
+3. Samtalen er én vertikal strøm. Ordinær Michael-chat viser maksimalt én
+   mediekolonne og ingen komponent skaper eller skjuler horisontal overflow ved
+   320, 390, 768 eller vanlig desktopbredde.
+4. Et nytt langt Michael-svar plasserer leseren ved starten av den nye
+   assistentraden etter at kortene er lagt til, ikke ved listens absolutte bunn.
+5. Composer forblir synlig nederst via dagens flex-shell, håndterer safe-area og
+   mobil-tastatur, og får ingen global `position:fixed` som kan overlappe svar.
+6. Thai2Drive-paletten beholdes: mørk navy, cyan/blå detaljer og eksisterende
+   oransje aksent. Ingen ny designsystemrewrite.
+7. Sidepanelet åpnes fortsatt på forespørsel og tar ikke permanent plass fra
+   den sentrerte samtalekolonnen.
+8. Eksisterende NO/TH/EN-tekst og språkisolasjon forblir uendret; patchen legger
+   ikke til learner-facing tekst.
+9. Målrettede layoutkontrakter oppdateres for kompakt header, sentrert kolonne,
+   én media-kolonne, overflow-sikkerhet og startscroll. Inline-JS-syntaks,
+   relevante enhetstester og `git diff --check` må passere.
+
+## Handoff til Agent 2
+
+Utform én smal frontend-only patch i `backend/webapp.py`: scope en sentrert
+samtalewrapper til Michael-modus, komprimer headeren, tving ordinær chatmedia til
+én kolonne og juster scrollen først etter at assistentsvar og media er rendret.
+Behold eksisterende DOM, flex-composer, sidepanel, Thai2Drive-farger og all
+backendlogikk.
+
+---

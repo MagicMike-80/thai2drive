@@ -424,6 +424,193 @@ READY FOR AGENT 3 — PATCH A ONLY
 
 ---
 
+# SOLUTION BLUEPRINT — rolig Michael-chat koblet til eksisterende medieflyt
+
+## Beslutning og leveransegrense
+
+Brukerens godkjente retning er en ChatGPT-/Codex-lignende samtaleflyt med
+Thai2Drive-identitet: mørk navy, cyan/blå detaljer og eksisterende oransje
+aksent. Dette løses som to små patcher. **Agent 3 skal nå implementere bare
+Patch 1.** Patch 2 er en separat bibliotekleveranse og skal ikke blandes inn i
+layoutrettingen.
+
+## Patch 1 — implementeres nå
+
+### Mål
+
+- Komprimer toppområdet og gi Michael én sentrert, vertikal lesekolonne på
+  omtrent 760 px på desktop og full tilgjengelig bredde på mobil.
+- Behold eksisterende DOM-rekkefølge og flex-shell: header, scrollende
+  meldingsliste og composer som bunnrad.
+- Vis ordinære Michael-medier i én kolonne uten karusell eller horisontal
+  avskjæring.
+- Plasser leseren ved starten av et nytt langt Michael-svar etter at tilhørende
+  media er ferdig lagt inn.
+- La Michaels mediekort åpne den samme eksisterende, eksakte ressursflyten som
+  biblioteket bruker, uten å endre responskontrakten eller katalogdata.
+
+### Eksplisitte ikke-mål
+
+- Ingen endring i `backend/server.py`, `backend/teacher_chat.py`, API,
+  `media_catalog`, seed-data, database, mediematching eller språkinnhold.
+- Ingen omforming eller migrering av selve biblioteksiden i Patch 1.
+- Ingen endring i auth, gjeste-/gratis-/premiumregler, kvoter, Stripe,
+  RevenueCat, betaling, TTS eller mobilappen.
+- Ingen global redesign av `#app`, quiz, quiz-coach, skiltbibliotek eller andre
+  skjermer.
+
+## Filer og presise komponenter
+
+Patch 1 kan bare endre:
+
+- `backend/webapp.py`
+  - scoped layout: `#app.teacher-mode`, `#screenTeacher`,
+    `.teacher-chat-col`, `.teacher-header`, `.teacher-messages`, `.tm-row`,
+    `.tm-chips`, `.tm-media-strip` og `.teacher-inputbar`
+  - scroll: `_teacherAppendBubble()`, ny lokal
+    `_teacherScrollToAnswerStart()` og kallstedet i `teacherSendMessage()`
+  - mediaåpning: eksisterende `_openTeacherMediaVideo()`,
+    `_buildTeacherMediaCard()` og eksisterende podcast-`<audio>`
+- `tests/test_michael_mobile_ui_contract.py`
+- `tests/test_michael_media_cards_contract.py`
+
+Ingen andre produksjonsfiler er nødvendige.
+
+## Layoutplan
+
+1. Utvid bare Michael-rammen på desktop nok til å gi rolig side-luft, men legg
+   en felles `width:min(760px,100%)`/`margin-inline:auto` på header,
+   meldingslisten og composer i `.teacher-chat-col`. Mobil bruker 100 prosent
+   minus eksisterende sikre sidepadding. Ikke endre global telefonramme for
+   andre skjermer.
+2. Komprimer `.teacher-header` fra 90 px til omtrent 72 px på desktop og mobil,
+   reduser `.teacher-avatar` proporsjonalt til omtrent 48 px og behold navn,
+   språk/meta, online-status og `.teacher-sidebar-toggle`. Oppdater samtidig
+   `top`/`inset` på `.teacher-side-panel` og `.teacher-sidebar-backdrop` til den
+   samme headerhøyden, slik at sidepanelet ikke får glippe eller overlapper.
+3. Behold `.teacher-chat-col` som `display:flex; flex-direction:column;
+   min-height:0`. `.teacher-messages` forblir den eneste vertikale
+   scrollflaten, mens `.teacher-inputbar` beholder `flex-shrink:0`, safe-area og
+   dagens textarea/sendeknapp. Ikke bruk `position:fixed` eller `sticky` på
+   composeren.
+4. Scope ordinær chat til `min-width:0; max-width:100%; overflow-x:clip` eller
+   tilsvarende sikker klipping på den sentrerte wrapperen, og sørg for at
+   `.tm-row`, `.tm-bubble`, `.tm-chips`, `.tm-sign-strip`, `.tm-media-strip` og
+   kortenes innhold kan krympe og bryte tekst. Ingen `white-space:nowrap` på
+   innhold som kan være langt på thai.
+5. Sett `#screenTeacher .tm-media-strip` til nøyaktig én kolonne på alle
+   breakpoints. Behold grensen på opptil to godkjente API-medier som to kort
+   under hverandre; ikke gjør den om til karusell. Eksakt skilt beholder dagens
+   kompakte 80/90 px-bilde. Quiz-coach-regler skal ikke endres.
+6. Sidepanelet for emner/historikk forblir et overlay og tar aldri permanent
+   bredde fra samtalen. Eksisterende åpne/lukke-, backdrop- og Escape-logikk
+   beholdes.
+
+## Scrollplan
+
+- `_teacherAppendBubble()` skal fortsatt føre brukerens egen melding til bunnen,
+  men skal ikke sende et nytt assistentsvar til listens absolutte bunn.
+- Legg én lokal helper `_teacherScrollToAnswerStart(bubble)` som finner nærmeste
+  `.tm-row`, og setter `.teacher-messages.scrollTop` til radens `offsetTop` med
+  en liten intern toppmargin. Bruk deterministisk lokal scroll; ikke global
+  `scrollIntoView`, som kan flytte hele appvinduet.
+- I `teacherSendMessage()` kalles helperen etter
+  `_teacherLinkSignReferences()`, `_teacherAppendMediaCards()` og den awaitede
+  `_teacherAppendSignCards()`. Dermed er kortenes endelige høyde kjent før
+  lesepunktet settes.
+- Den eldre asynkrone `fetchVideoForTopic()`-callbacken skal bruke samme helper
+  etter innsetting og ikke `msgs.scrollTop = msgs.scrollHeight`. Eksisterende
+  startscroll inne i `_teacherAppendSignCards()` samles i helperen, slik at det
+  bare finnes én regel.
+- Feil-/tekst-only-svar bruker samme startplassering og må aldri blokkere
+  meldingen dersom scrolling eller media feiler.
+
+## Minimal kobling til bibliotek og avspilling
+
+Patch 1 gjenbruker dagens strukturerte `media`-payload (`id`, `type`, `url`,
+`title`, `caption`, eventuelt `sign_id`) og lager ingen ny frontendkontrakt:
+
+- `video`: hele videokontrollen fortsetter å kalle
+  `_openTeacherMediaVideo(media)`. Den bygger en språkren, midlertidig post i
+  eksisterende `_videosCached` og åpner eksisterende `openVideoPlayer()`.
+  `openVideoPlayer()` registrerer aktiv skjerm som retur, så lukk fører tilbake
+  til `screenTeacher` med samtale-DOM, sesjon og scrollposisjon intakt.
+- `podcast`: behold sikker, eksakt inline `<audio controls preload="none">` med
+  katalogens godkjente URL. Dette er samme native avspillingsmønster som dagens
+  bibliotekspodkast, og navigerer derfor ikke bort eller nullstiller chatten.
+- `sign`: behold eksisterende autoritative skiltdetalj via
+  `_openTeacherSignDetailById(media.sign_id)`.
+- `intersection_image`: forblir et ikke-navigerende, språkmerket bilde under
+  riktig svar.
+
+Kortene er dermed direkte innganger til korrekt ressurs/avspiller, mens
+bibliotekets fulle kategorisering og deep-link/highlight av en katalogpost
+utsettes til Patch 2. Ikke legg inn en knapp som bare sender eleven til toppen
+av biblioteket; det er ikke en eksakt ressurskobling.
+
+## Språk, tilgang og feilhåndtering
+
+Patchen legger ikke til learner-facing tekst. Den bruker bare allerede
+lokalisert `media.title`/`media.caption` og eksisterende globale NO/TH/EN-nøkler.
+Manglende tittel, bildetekst eller sikker URL fortsetter å skjule kortet
+fail-stop. Tekstsvar og composer fungerer selv om mediekort, bilde, video eller
+podkast ikke kan åpnes. Tilgangs- og premiumkonsekvensen er null.
+
+## Akseptansekriterier
+
+1. Ved 320, 390, 768 px og vanlig desktopbredde finnes ingen horisontal
+   scrolling eller avskåret kort; media står i én vertikal kolonne.
+2. Desktop viser én sentrert lesekolonne på omtrent 700–800 px med rolig luft på
+   sidene. Mobil bruker hele tilgjengelige bredden.
+3. Headeren er tydelig lavere enn dagens samlede toppområde, men navn, status,
+   aktivt språk og emneknapp er synlige og brukbare.
+4. Et langt nytt Michael-svar begynner i leseposisjonen. Dette gjelder også når
+   strukturert media, awaitet skiltkort eller eldre asynkron video legges til.
+5. Composer forblir synlig nederst i flex-shellen, minst 56 px høy, med safe-area
+   og uten overlapp med mobilens tastatur.
+6. Video åpner eksisterende spiller på eksakt ressurs og lukking returnerer til
+   samme Michael-samtale. Podcast spiller eksakt ressurs inline. Skilt åpner
+   korrekt autoritativ detalj.
+7. Sidepanelet åpnes/lukkes som før og reduserer ikke lesekolonnens bredde.
+8. NO/TH/EN-innhold, API, auth, kvoter, premium og betaling er uendret.
+
+## Tester og manuell verifisering
+
+- Oppdater layoutkontrakten til å låse scoped ca. 72 px header/48 px avatar,
+  sentrert 760 px-kolonne, flex-composer, panel-inset og overflow-sikring.
+- Oppdater mediekontrakten til å kreve én kolonne også på desktop og bevare
+  maksimalt to kort vertikalt, sikker URL, videoåpner, podcastkontroller og
+  skiltdetalj.
+- Legg kontrakt for `_teacherScrollToAnswerStart`, fravær av assistentens
+  bunnscroll og kall etter umiddelbar/awaitet/asynkron mediainnsetting.
+- Kjør de to målrettede kontrakttestene, relevante eksisterende Michael-tester,
+  Python AST, inline-JavaScript-syntaks og `git diff --check`.
+- Manuelt lokalt: lang NO-, TH- og EN-respons ved 390 px og desktop; to medier;
+  video inn/ut av spiller; podcast play/pause; sidepanel åpent/lukket; composer
+  med mobiltastatur. Ingen produksjonsmuterende chat-POST i QA.
+
+## Rollback og risiko
+
+Rollback er én frontend-revert av de scoped CSS-reglene, scrollhelperen og de
+to kontrakttestene. Ingen data må migreres eller slettes. Største risiko er at
+endrede bredder treffer andre skjermer eller at sen async media flytter
+lesepunktet; derfor må alle regler scopes til `#app.teacher-mode`/
+`#screenTeacher`, og alle media-paths bruke den ene scrollhelperen.
+
+## Patch 2 — separat, ikke implementer nå
+
+En senere godkjent patch kan forme hele `screenLibrary` som et samlet,
+strukturert video-/podkastbibliotek, koble det til `media_catalog`, og legge til
+eksakt deep-link/highlight og retur til opprinnelig samtale. Den patchen krever
+egen smerteprofil, innholds-/seedgodkjenning og tester. Patch 1 skal ikke vente
+på eller foregripe dette.
+
+Ingen ny avgjørelse kreves fra Michael for Patch 1.
+
+READY FOR AGENT 3 — PATCH 1 ONLY
+
+---
+
 # SOLUTION BLUEPRINT: eksakt skilt og kompakt ordkobling i Michael-chat
 
 ## Mål

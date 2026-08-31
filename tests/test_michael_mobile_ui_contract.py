@@ -67,13 +67,23 @@ class MichaelMobileUiContractTests(unittest.TestCase):
         self.assertIn("toggle.setAttribute('aria-expanded'", WEBAPP)
 
     def test_mobile_teacher_header_is_compact(self):
-        self.assertIn("height:90px; max-height:90px; min-height:90px", WEBAPP)
-        self.assertIn(".teacher-avatar { width:64px; height:64px", WEBAPP)
+        self.assertIn("height:72px; max-height:72px; min-height:72px", WEBAPP)
+        self.assertIn(".teacher-avatar { width:48px; height:48px", WEBAPP)
         self.assertIn("teacher-meta-line", WEBAPP)
         self.assertIn("teacher-meta-wrap", WEBAPP)
         self.assertIn("teacher-online-badge", WEBAPP)
         header = WEBAPP[WEBAPP.index('<!-- Chat header -->'):WEBAPP.index('<!-- Message list -->')]
         self.assertLess(header.index('class="teacher-avatar"'), header.index('class="teacher-header-info"'))
+
+    def test_teacher_chat_is_a_centered_overflow_safe_reading_column(self):
+        self.assertIn("width:min(760px,100%)", WEBAPP)
+        self.assertGreaterEqual(WEBAPP.count("margin-inline:auto"), 3)
+        self.assertIn("max-width:100%; overflow-x:clip", WEBAPP)
+        self.assertIn("top:72px; bottom:0; left:0", WEBAPP)
+        self.assertIn("inset:72px 0 0", WEBAPP)
+        inputbar = WEBAPP[WEBAPP.index(".teacher-inputbar {"):WEBAPP.index(".teacher-input {")]
+        self.assertIn("flex-shrink:0", inputbar)
+        self.assertNotIn("position:fixed", inputbar)
 
     def test_teacher_actions_and_input_have_clear_hierarchy(self):
         self.assertIn("grid-template-columns:repeat(2,minmax(0,1fr))", WEBAPP)

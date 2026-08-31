@@ -1148,7 +1148,7 @@ a { color:inherit; text-decoration:none; }
 
   /* Teacher frame — same width as quiz-mode */
   #app.teacher-mode {
-    width: min(860px, 96vw);
+    width: min(1040px, 96vw);
     max-width: none;
     margin-left: auto;
     margin-right: auto;
@@ -3063,7 +3063,8 @@ a { color:inherit; text-decoration:none; }
 ══════════════════════════════════════════ */
 .teacher-header {
   display:flex; align-items:center; justify-content:flex-start; gap:14px;
-  height:90px; max-height:90px; min-height:90px; padding:12px 18px;
+  width:min(760px,100%); height:72px; max-height:72px; min-height:72px;
+  margin-inline:auto; padding:10px 14px;
   border-bottom:1px solid rgba(148,163,184,.18);
   background:#071326;
   flex-shrink:0; overflow:hidden; position:relative;
@@ -3079,14 +3080,14 @@ a { color:inherit; text-decoration:none; }
 .teacher-sidebar-toggle:active { transform:scale(.96); }
 .teacher-sidebar-toggle svg { width:22px; height:22px; }
 .teacher-avatar {
-  width:64px; height:64px; border-radius:50%;
+  width:48px; height:48px; border-radius:50%;
   object-fit:cover; object-position:center 14%; flex-shrink:0;
   border:2px solid rgba(59,130,246,.7); box-shadow:none;
 }
 .teacher-header-info { min-width:0; position:relative; z-index:1; display:flex; flex-direction:column; justify-content:center; }
 .teacher-eyebrow { font-size:.68rem; font-weight:900; letter-spacing:.08em; text-transform:uppercase; color:#67E8F9; margin-bottom:5px; }
 .teacher-name { font-size:1.08rem; font-weight:900; color:#fff; line-height:1.2; }
-.teacher-meta-line { font-size:.76rem; color:#CBD5E1; margin-top:5px; white-space:nowrap; }
+.teacher-meta-line { font-size:.72rem; color:#CBD5E1; margin-top:3px; white-space:normal; overflow-wrap:anywhere; }
 .teacher-meta-wrap { display:flex; align-items:center; gap:9px; min-width:0; }
 .teacher-online-badge {
   display:inline-flex; align-items:center; margin-top:5px; padding:2px 8px;
@@ -3099,11 +3100,11 @@ a { color:inherit; text-decoration:none; }
 #screenTeacher { position:relative; overflow:hidden; }
 .teacher-chat-col {
   display:flex; flex-direction:column;
-  flex:1; min-height:0;
+  flex:1; min-width:0; min-height:0; max-width:100%; overflow-x:clip;
 }
 .teacher-side-panel {
   display:flex; flex-direction:column; gap:8px;
-  position:absolute; z-index:12; top:90px; bottom:0; left:0;
+  position:absolute; z-index:12; top:72px; bottom:0; left:0;
   width:min(300px,84%); padding:18px 14px; overflow-y:auto;
   background:#071326; border-right:1px solid rgba(96,165,250,.28);
   box-shadow:18px 0 44px rgba(0,0,0,.45);
@@ -3115,7 +3116,7 @@ a { color:inherit; text-decoration:none; }
 }
 .teacher-side-panel .tsp-btn { color:#F8FAFC !important; }
 .teacher-sidebar-backdrop {
-  display:block; position:absolute; z-index:11; inset:90px 0 0;
+  display:block; position:absolute; z-index:11; inset:72px 0 0;
   border:0; padding:0; background:rgba(2,8,23,.66);
   opacity:0; visibility:hidden; pointer-events:none;
   transition:opacity .2s ease,visibility .2s;
@@ -3123,12 +3124,13 @@ a { color:inherit; text-decoration:none; }
 .teacher-sidebar-backdrop.open { opacity:1; visibility:visible; pointer-events:auto; }
 
 .teacher-messages {
-  flex:1; min-height:0; overflow-y:auto; padding:16px 14px 80px;
+  width:min(760px,100%); max-width:100%; margin-inline:auto;
+  flex:1; min-height:0; overflow-y:auto; overflow-x:clip; padding:16px 14px 80px;
   display:flex; flex-direction:column; gap:14px;
 }
 .teacher-messages::-webkit-scrollbar { width:0; }
 
-.tm-row { display:flex; align-items:flex-end; gap:8px; min-width:0; width:100%; }
+.tm-row { display:flex; align-items:flex-end; gap:8px; min-width:0; width:100%; max-width:100%; }
 .tm-row.user  { justify-content:flex-end; }
 .tm-row.assistant { justify-content:flex-start; }
 .tm-row.assistant .tm-av { display:none; }
@@ -3227,6 +3229,7 @@ a { color:inherit; text-decoration:none; }
 /* Contextual reply chips — shown after assistant messages */
 .tm-chips {
   display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px;
+  min-width:0; max-width:100%;
   padding:10px 14px 4px 14px;
   border-top:1px solid rgba(255,255,255,.06);
   margin-top:4px;
@@ -3262,6 +3265,7 @@ a { color:inherit; text-decoration:none; }
 
 .teacher-inputbar {
   display:flex; align-items:center; gap:10px;
+  width:min(760px,100%); max-width:100%; margin-inline:auto;
   padding:10px 14px calc(10px + env(safe-area-inset-bottom, 0px)) 14px;
   border-top:1px solid var(--border);
   background:var(--bg2); flex-shrink:0;
@@ -3294,7 +3298,7 @@ a { color:inherit; text-decoration:none; }
 }
 
 .tm-sign-strip {
-  display:grid; gap:12px; width:100%; margin-top:14px;
+  display:grid; gap:12px; min-width:0; width:100%; max-width:100%; margin-top:14px;
 }
 .tm-sign-card {
   width:100%; display:grid; grid-template-columns:90px minmax(0,1fr);
@@ -3312,8 +3316,8 @@ a { color:inherit; text-decoration:none; }
 .tm-sign-title { margin:0; color:#fff; font-size:1.05rem; line-height:1.3; font-weight:900; }
 .tm-sign-text { color:#DCE6F3; font-size:.88rem; line-height:1.5; }
 .tm-media-strip {
-  display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px;
-  width:100%; margin-top:14px;
+  display:grid; grid-template-columns:1fr; gap:12px;
+  min-width:0; width:100%; max-width:100%; margin-top:14px;
 }
 .tm-media-card {
   min-width:0; overflow:hidden; border-radius:16px; background:#0B172A;
@@ -3364,12 +3368,12 @@ a { color:inherit; text-decoration:none; }
 @media (max-width:767px) {
   #app.teacher-mode .flag-bg { display:none; }
   #screenTeacher { background:#071326; }
-  .teacher-header { height:90px; max-height:90px; min-height:90px; padding:12px 16px; }
-  .teacher-avatar { width:64px; height:64px; border-radius:50%; }
+  .teacher-header { width:100%; height:72px; max-height:72px; min-height:72px; padding:10px 12px; }
+  .teacher-avatar { width:48px; height:48px; border-radius:50%; }
   .teacher-name { font-size:1rem; }
   .teacher-meta-line { font-size:.69rem; }
   .teacher-online-badge { font-size:.58rem; padding:2px 6px; }
-  .teacher-messages { padding:14px 12px 18px; gap:12px; }
+  .teacher-messages { width:100%; padding:14px 12px 18px; gap:12px; }
   .tm-bubble { max-width:94%; padding:18px; font-size:.96rem; line-height:1.6; }
   .teacher-suggestions { padding:9px 12px; gap:8px; background:#0A1530; }
   .teacher-suggestions:not(.expanded) .teacher-chip:nth-of-type(n+4),
@@ -3382,7 +3386,7 @@ a { color:inherit; text-decoration:none; }
   .tm-chips .tm-chip-btn.mobile-extra { display:none; }
   .tm-chips.expanded .tm-chip-btn.mobile-extra { display:inline-flex; }
   .tm-chips-toggle { display:block; grid-column:1/-1; }
-  .teacher-inputbar { padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px)); background:#071326; position:relative; z-index:2; }
+  .teacher-inputbar { width:100%; padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px)); background:#071326; position:relative; z-index:2; }
   .teacher-input { min-height:56px; font-size:1rem; }
   .teacher-send-btn { min-width:86px; height:56px; }
   .tm-sign-card { grid-template-columns:90px minmax(0,1fr); gap:12px; padding:12px; }
@@ -9614,12 +9618,23 @@ function _teacherAppendBubble(role, text) {
   }
   row.appendChild(bubble);
   msgs.appendChild(row);
-  if (_teacherHasUserMsg) {
+  if (role === 'user') {
     msgs.scrollTop = msgs.scrollHeight;
-  } else {
+  } else if (!_teacherHasUserMsg) {
     msgs.scrollTop = 0;
   }
   return bubble;
+}
+
+function _teacherScrollToAnswerStart(bubble) {
+  try {
+    var msgs = document.getElementById('teacherMessages');
+    var answerRow = bubble && bubble.closest ? bubble.closest('.tm-row') : null;
+    if (!msgs || !answerRow) return;
+    msgs.scrollTop = Math.max(0, answerRow.offsetTop - 12);
+  } catch (scrollError) {
+    // Scrolling is progressive enhancement; the answer must remain readable.
+  }
 }
 
 function _teacherTextOnlyReply(text) {
@@ -9966,11 +9981,6 @@ async function _teacherAppendSignCards(signIds, bubble) {
   strip.className = 'tm-sign-strip';
   signs.forEach(function(sign) { strip.appendChild(_buildTeacherSignCard(sign)); });
   bubble.appendChild(strip);
-  var msgs = document.getElementById('teacherMessages');
-  if (msgs) {
-    var answerRow = bubble.closest('.tm-row');
-    msgs.scrollTop = Math.max(0, (answerRow ? answerRow.offsetTop : 0) - 12);
-  }
 }
 
 function _teacherAppendSignActions(sign) {
@@ -10059,7 +10069,6 @@ function _teacherAppendChips(chips) {
     row.appendChild(toggle);
   }
   msgs.appendChild(row);
-  msgs.scrollTop = msgs.scrollHeight;
 }
 
 async function teacherSend(overrideMsg, customDisplayMsg) {
@@ -10155,6 +10164,7 @@ async function teacherSend(overrideMsg, customDisplayMsg) {
       return mediaSignIds.indexOf(signId) === -1;
     });
     await _teacherAppendSignCards(fallbackSignIds, assistantBubble);
+    _teacherScrollToAnswerStart(assistantBubble);
     if (data.sign_ids && data.sign_ids.length) {
       try {
         var signForActions = await api('GET', '/api/signs/' + encodeURIComponent(data.sign_ids[0]));
@@ -10180,12 +10190,13 @@ async function teacherSend(overrideMsg, customDisplayMsg) {
         wrap.style.cssText = 'margin-top:10px;';
         wrap.innerHTML = buildVideoCard(v);
         bubble.appendChild(wrap);
-        msgs.scrollTop = msgs.scrollHeight;
+        _teacherScrollToAnswerStart(bubble);
       });
     }
   } catch(e) {
     _teacherHideTyping();
-    _teacherAppendBubble('assistant', t('teacher_error'));
+    var errorBubble = _teacherAppendBubble('assistant', t('teacher_error'));
+    _teacherScrollToAnswerStart(errorBubble);
   } finally {
     _teacherTyping = false;
     if (sendBtn) sendBtn.disabled = false;

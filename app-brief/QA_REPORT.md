@@ -569,3 +569,127 @@ vurdering/deploy. Patch B (aktiv seed og bibliotekovergang) er BLOCKED på
 godkjent innholdsgrunnlag og må ikke fremstilles som levert.**
 
 ---
+
+# QA GATE: rolig, sentrert Michael-chat — Patch 1
+
+## Vurdert omfang
+
+QA er utført mot siste chat-layoutseksjon i `PAIN_PROFILE.md`, den godkjente
+to-patch-blueprinten, `PATCH_REPORT.md` og faktisk arbeidsdiff. Denne porten
+gjelder bare Patch 1; biblioteksidens senere ombygging er ikke vurdert som
+levert.
+
+## Layout og eksisterende medieflyt
+
+- PASS: eneste endrede produksjonsfil er `backend/webapp.py`. Ingen diff finnes
+  i `server.py`, `teacher_chat.py`, auth, kvoter, premium, Stripe, RevenueCat,
+  `media_catalog`, seed-skript eller databasekode.
+- PASS: Michael-rammen er utvidet bare gjennom `#app.teacher-mode`, mens header,
+  meldingsliste og eksisterende flex-composer deler
+  `width:min(760px,100%)` og `margin-inline:auto`. Mobilreglene bruker 100 %.
+- PASS: header/avatar er 72/48 px på desktop og mobil. Sidepanel og backdrop
+  bruker samme 72 px top/inset, og eksisterende overlay/open/close/Escape-kode
+  er ikke endret.
+- PASS: `.teacher-chat-col` beholder flex-kolonnen og composer beholder
+  `flex-shrink:0`, 56 px kontroller, safe-area og uten `position:fixed`.
+- PASS: ordinær `.tm-media-strip` har én kolonne på alle breakpoints. Chatkolonne,
+  rader, chips og sign-/mediestriper har lokale min-/maksbreddevern, og eksakte
+  skiltbilder forblir 80/90 px.
+- PASS: eksisterende ressursflyt er bevart: video kaller
+  `_openTeacherMediaVideo(media)`, podkast bruker eksakt inline
+  `<audio controls preload="none">`, og skilt åpner autoritativ skiltdetalj.
+  Ingen ny learner-facing tekst eller språkfallback er lagt til.
+- WARNING: det er ikke kjørt en ekte lokal nettleserkontroll ved 320, 390, 768
+  og desktop i denne QA-runden. Statiske regler og kontrakter gir god støtte,
+  men kan ikke alene bevise fysisk fravær av klipping eller mobiltastatur-overlapp.
+
+## Portstopp: startscroll blir opphevet
+
+- FAIL: `teacherSend()` kaller riktig nok `_teacherScrollToAnswerStart()` etter
+  strukturert media og awaitet skiltkort. For vanlige svar kaller den deretter
+  `_teacherAppendChips(data.suggestions)`, og `_teacherAppendChips()` avslutter
+  fortsatt med `msgs.scrollTop = msgs.scrollHeight`. Forslagsraden flytter
+  derfor leseren tilbake til listens absolutte bunn etter den nye helperen.
+  Et langt svar uten den særskilte, senere bremsevideoen begynner fremdeles
+  ikke i leseposisjonen, i strid med akseptansekriterium 4.
+- FAIL: den nye testen kontrollerer at gammel bunnscroll er borte fra
+  `_teacherAppendBubble()` og den asynkrone videoveien, men kontrollerer ikke
+  `_teacherAppendChips()`. Dermed består kontrakttesten selv om hovedregresjonen
+  fortsatt finnes.
+- TIL AGENT 3: gjør én liten frontendrettelse slik at forslag/handlinger legges
+  til før siste startscroll, eller fjern forslag-radens ubetingede bunnscroll og
+  bruk én sluttplassering etter komplett svar. Legg en kontrakt som eksplisitt
+  avviser `msgs.scrollTop = msgs.scrollHeight` i `_teacherAppendChips()` for
+  svarflyten. Bevar bruker-/typing-scroll og øvrig scope.
+
+## Uavhengige kontroller
+
+- Full lokal `tests/`-suite: 54/54 PASS.
+- Trygge backendtester, eksplisitt uten produksjonsmuterende
+  `test_thai2drive_api.py`: 36/36 PASS.
+- Python AST: 152 filer PASS.
+- Inline JavaScript via `node --check`: PASS.
+- `git diff --check`: PASS; kun varsler om framtidig LF/CRLF-konvertering.
+- Hemmelighetsskann av tillagte difflinjer: PASS.
+- `context/FEATURES.md` er lokal og skal fortsatt utelates fra commit som angitt
+  i prosjektreglene.
+- Ingen produksjonskall, commit, push eller deploy ble utført av QA.
+
+**FAIL — send tilbake til Agent 3. Startscrollkravet er ikke oppfylt fordi
+forslagsrenderingen fortsatt tvinger meldingslisten til bunnen.**
+
+---
+
+# QA RE-GATE: rolig, sentrert Michael-chat — Patch 1
+
+## Retest av tidligere portstopp
+
+- PASS: `_teacherAppendChips()` legger fortsatt forslagene til i DOM-en, men
+  inneholder ikke lenger `msgs.scrollTop = msgs.scrollHeight`. Forslagsraden kan
+  derfor ikke oppheve `_teacherScrollToAnswerStart()` etter et langt svar.
+- PASS: den målrettede kontrakten avgrenser `_teacherAppendChips()` og krever
+  både `msgs.appendChild(row)` og fravær av bunnscroll. Den låser også at
+  awaitet skiltinnsetting skjer før startscroll, og at forslag legges til uten
+  en senere scrollendring.
+- PASS: brukerens egen melding og typingindikator beholder eksisterende
+  bunnscroll. Bare assistentsvarets tidligere feilbane er endret.
+
+## Full regresjons- og scopekontroll
+
+- PASS: 72 px header, 48 px avatar, sentrert 760 px header/meldinger/composer,
+  full mobilbredde, lokale overflowvern og én mediekolonne på alle breakpoints
+  er fortsatt til stede.
+- PASS: composer er fortsatt flex-bunnrad med `flex-shrink:0`, 56 px kontroller
+  og safe-area, uten fixed/sticky-posisjonering.
+- PASS: emnepanelet/backdrop er fortsatt overlay med 72 px inset; eksisterende
+  åpne/lukke/Escape-logikk og historikk-/bunnnavigasjon er urørt.
+- PASS: video bruker eksisterende spiller og returflyt, podkast spiller inline,
+  skilt åpner autoritativ detalj, og kompakte skiltbilder er fortsatt 80/90 px.
+- PASS: ingen learner-facing streng eller NO/TH/EN-logikk er endret. Ingen
+  fallback til et annet språk er lagt til.
+- PASS: eneste endrede produksjonsfil er `backend/webapp.py`. Ingen endring i
+  backend-API, `teacher_chat.py`, auth, kvoter, premium, Stripe, RevenueCat,
+  betaling, `media_catalog`, seed-data eller database.
+- PASS: hemmelighetsskann av tillagte difflinjer fant ingen nøkkel, URI,
+  passord eller privat token.
+- MERKNAD: fysisk visuell kontroll ved 320, 390, 768 px og desktop er ikke kjørt
+  i denne QA-runden. Den gjenstår som en ikke-blokkerende visuell kontroll før
+  eller etter publisering; statiske layoutkontrakter og kodeaudit består.
+
+## Uavhengige testresultater
+
+- Målrettede layout-/mediakontrakter: 22/22 PASS.
+- Full lokal `tests/`-suite: 54/54 PASS.
+- Trygge backendtester, eksplisitt uten produksjonsmuterende
+  `test_thai2drive_api.py`: 36/36 PASS.
+- Python AST: 152 filer PASS.
+- Inline JavaScript via `node --check`: PASS.
+- `git diff --check`: PASS; kun varsler om framtidig LF/CRLF-konvertering.
+- Ingen produksjonskall, commit, push eller deploy ble utført av QA.
+- `context/FEATURES.md` må fortsatt utelates fra commit i henhold til
+  prosjektregelen.
+
+**PASS — tidligere portstopp er lukket. Patch 1 er klar for Michaels vurdering
+og den uttrykkelig autoriserte publiseringsflyten.**
+
+---

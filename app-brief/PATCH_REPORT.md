@@ -139,6 +139,62 @@ ikke.
 
 Klar for Agent 4.
 
+### QA-fiks: forslag beholdt ikke svarstart
+
+- Fjernet den absolutte bunnscrollen fra `_teacherAppendChips()`. Forslagene
+  legges fortsatt inn etter svaret, men flytter ikke leseren bort fra starten
+  som `_teacherScrollToAnswerStart()` nettopp har valgt.
+- Kontrakten låser både rekkefølgen svar/media/startscroll/forslag og at
+  `_teacherAppendChips()` ikke skriver `scrollHeight` til meldingslisten.
+
+---
+
+# PATCH REPORT: rolig Michael-chat koblet til eksisterende medieflyt
+
+## Endrede applikasjonsfiler
+
+- `backend/webapp.py`: utvider bare Michael-rammen på desktop og sentrerer
+  header, meldingsliste og eksisterende flex-composer i en lesekolonne på
+  maksimalt 760 px. Mobil bruker full tilgjengelig bredde.
+- `backend/webapp.py`: komprimerer headeren til 72 px og portrettet til 48 px,
+  med sidepanel og backdrop flyttet til samme 72 px-inset.
+- `backend/webapp.py`: gjør ordinære Michael-medier til én vertikal kolonne på
+  alle breakpoints og legger lokale krympe-/overflow-regler på chatinnholdet.
+- `backend/webapp.py`: legger `_teacherScrollToAnswerStart()` som plasserer
+  leseren ved starten av det nye svaret etter strukturert media og awaitede
+  skiltkort. Den eldre asynkrone videoveien og feilresponsen bruker samme regel.
+- `tests/test_michael_mobile_ui_contract.py`: kontrakt for 72/48 px-header,
+  sentrert 760 px-kolonne, panel-inset, overflow og uendret flex-composer.
+- `tests/test_michael_media_cards_contract.py`: kontrakt for én mediekolonne,
+  sikker bredde og startscroll etter alle avtalte mediaflyter.
+
+## Avgrensning
+
+Ingen endring i backend-API, `teacher_chat.py`, `media_catalog`, seed-data,
+bibliotekdata, språkinnhold, auth, kvoter, premium, Stripe, RevenueCat,
+betaling, TTS eller mobilappen. Eksisterende videoåpner med retur til Michael,
+inline podcastlyd og autoritativ skiltdetalj er bevart. Emne-/historikk-overlay
+og composerens flexplassering er uendret.
+
+## Verifisering
+
+- Målrettede layout- og mediakontrakter: 22/22 PASS.
+- Full lokal `tests/`-suite: 54/54 PASS.
+- Relevante sikre teacher-/material-/katalogtester: 34/34 PASS.
+- Python AST: 152 filer PASS.
+- Inline JavaScript via `node --check`: 1/1 blokk PASS.
+- `git diff --check`: PASS med kun Windows LF/CRLF-varsler.
+- Ingen produksjonskall eller produksjonsmuterende test er kjørt.
+
+## Gjenværende risiko og rollback
+
+Kontrakttestene låser layout- og scrollreglene, men faktisk viewport/kamera-
+tastaturatferd bør kontrolleres visuelt ved 320, 390, 768 px og desktop i QA.
+Rollback er å reversere de scoped CSS-reglene, scrollhelperen og de to
+kontrakttestene; ingen data må migreres eller slettes.
+
+Klar for Agent 4.
+
 ---
 
 # PATCH REPORT: additiv `media_catalog` med streng seed-gate

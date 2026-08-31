@@ -23,7 +23,10 @@ class MichaelMediaCardsContractTests(unittest.TestCase):
         self.assertIn("caption.textContent = media.caption", card)
         self.assertNotIn("innerHTML", card)
         self.assertIn(".tm-media-card.intersection_image .tm-media-image { object-fit:cover; }", WEBAPP)
-        self.assertIn(".tm-media-strip { grid-template-columns:1fr; }", WEBAPP)
+        media_css = WEBAPP[WEBAPP.index(".tm-media-strip {"):WEBAPP.index(".tm-media-card {")]
+        self.assertIn("grid-template-columns:1fr", media_css)
+        self.assertNotIn("repeat(2", media_css)
+        self.assertIn("max-width:100%", media_css)
 
     def test_video_card_has_three_language_label_and_opens_player(self):
         match = re.search(r"teacher_video_explanation:\s*\{([^}]+)\}", WEBAPP)
@@ -69,6 +72,37 @@ class MichaelMediaCardsContractTests(unittest.TestCase):
         self.assertIn("podcastTitle.textContent = media.title", card)
         self.assertIn("podcastCaption.textContent = media.caption", card)
         self.assertNotIn("innerHTML", card)
+
+    def test_new_assistant_answer_scrolls_to_start_after_all_media_paths(self):
+        helper_start = WEBAPP.index("function _teacherScrollToAnswerStart(bubble)")
+        helper_end = WEBAPP.index("function _teacherTextOnlyReply", helper_start)
+        helper = WEBAPP[helper_start:helper_end]
+        self.assertIn("answerRow.offsetTop - 12", helper)
+        self.assertNotIn("scrollIntoView", helper)
+
+        send_start = WEBAPP.index("async function teacherSend(")
+        send_end = WEBAPP.index("function toggleSound", send_start)
+        send = WEBAPP[send_start:send_end]
+        cards = send.index("await _teacherAppendSignCards(fallbackSignIds, assistantBubble)")
+        scroll = send.index("_teacherScrollToAnswerStart(assistantBubble)")
+        suggestions = send.index("_teacherAppendChips(data.suggestions || [])", scroll)
+        self.assertLess(cards, scroll)
+        self.assertLess(scroll, suggestions)
+        self.assertIn("_teacherScrollToAnswerStart(bubble)", send)
+        self.assertIn("_teacherScrollToAnswerStart(errorBubble)", send)
+        self.assertNotIn("bubble.appendChild(wrap);\n        msgs.scrollTop = msgs.scrollHeight", send)
+
+        append_start = WEBAPP.index("function _teacherAppendBubble(role, text)")
+        append_end = WEBAPP.index("function _teacherScrollToAnswerStart", append_start)
+        append = WEBAPP[append_start:append_end]
+        self.assertIn("if (role === 'user')", append)
+        self.assertNotIn("if (_teacherHasUserMsg) {\n    msgs.scrollTop = msgs.scrollHeight", append)
+
+        chips_start = WEBAPP.index("function _teacherAppendChips(chips)")
+        chips_end = WEBAPP.index("async function teacherSend(", chips_start)
+        chips = WEBAPP[chips_start:chips_end]
+        self.assertIn("msgs.appendChild(row)", chips)
+        self.assertNotIn("msgs.scrollTop = msgs.scrollHeight", chips)
 
 
 if __name__ == "__main__":
