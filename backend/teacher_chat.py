@@ -1068,6 +1068,41 @@ def _material_lang_value(material: dict, field: str, lang: str) -> str:
     return value.strip() if isinstance(value, str) and value.strip() else ""
 
 
+async def _get_exact_sign_media(sign_ids: List[str], lang: str, limit: int = 2) -> list[dict]:
+    """Build trusted, localized media directly from matched traffic signs."""
+    media = []
+    for raw_sign_id in sign_ids:
+        sign_id = str(raw_sign_id or "").strip()
+        if not sign_id or any(item["sign_id"] == sign_id for item in media):
+            continue
+        sign = await _db["traffic_signs"].find_one({"id": sign_id})
+        if not sign:
+            continue
+        image_url = str(sign.get("image_url") or "").strip()
+        if not _safe_michael_material_url(image_url):
+            logger.warning("Matched sign %s has no safe image asset", sign_id)
+            continue
+        names = sign.get("name") if isinstance(sign.get("name"), dict) else {}
+        actions = sign.get("driver_action") if isinstance(sign.get("driver_action"), dict) else {}
+        explanations = sign.get("explanation") if isinstance(sign.get("explanation"), dict) else {}
+        title = str(names.get(lang) or "").strip()
+        caption = str(actions.get(lang) or explanations.get(lang) or "").strip()
+        if not title or not caption:
+            logger.warning("Matched sign %s lacks complete %s text", sign_id, lang)
+            continue
+        media.append({
+            "id": f"traffic-sign:{sign_id}",
+            "type": "sign",
+            "sign_id": sign_id,
+            "url": image_url,
+            "title": title,
+            "caption": caption,
+        })
+        if len(media) >= max(0, min(limit, 2)):
+            break
+    return media
+
+
 async def _get_relevant_michael_materials(
     user_msg: str,
     lang: str,
@@ -1718,13 +1753,22 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         # Retrieve curriculum context from database (RAG)
         context_str = await _get_curriculum_context(user_msg, lang)
         context_sign_ids = _sign_ids_from_context(context_str)
-        media = await _get_relevant_michael_materials(
+        exact_sign_media = await _get_exact_sign_media(
+            explicit_sign_ids or context_sign_ids,
+            lang,
+        )
+        approved_media = await _get_relevant_michael_materials(
             user_msg,
             lang,
             sign_ids=context_sign_ids,
             explicit_sign_ids=explicit_sign_ids,
             extra_context=quiz_context_str,
         )
+        exact_sign_ids_in_media = {item.get("sign_id") for item in exact_sign_media}
+        media = exact_sign_media + [
+            item for item in approved_media
+            if item.get("sign_id") not in exact_sign_ids_in_media
+        ]
         catalog_media = []
         if not explicit_sign_ids and requested_language in SUPPORTED_LANGUAGES:
             catalog_media = await _get_relevant_catalog_media(

@@ -40,11 +40,12 @@ class _Collection:
 
 
 class _Database:
-    def __init__(self, materials, videos=None, catalog=None):
+    def __init__(self, materials, videos=None, catalog=None, signs=None):
         self.collections = {
             "michael_materials": _Collection(materials),
             "learning_videos": _Collection(videos or []),
             "media_catalog": _Collection(catalog or []),
+            "traffic_signs": _Collection(signs or []),
         }
 
     def __getitem__(self, name):
@@ -116,6 +117,22 @@ class MichaelMaterialRetrievalTests(unittest.TestCase):
         )
         self.assertEqual([item["id"] for item in result], ["sign-202"])
         self.assertEqual(result[0]["sign_id"], "202_0")
+
+    def test_exact_sign_media_uses_authoritative_sign_asset_and_selected_language(self):
+        sign = {
+            "id": "202_0",
+            "image_url": "/api/sign-images/202_0_Vikeplikt.jpg",
+            "name": {"no": "Vikeplikt", "th": "ป้ายให้ทาง", "en": "Give way"},
+            "explanation": {"no": "Forklaring", "th": "คำอธิบาย", "en": "Explanation"},
+            "driver_action": {"no": "Gi fri vei.", "th": "ให้ทาง", "en": "Give way."},
+        }
+        self.module._db = _Database([], signs=[sign])
+        result = asyncio.run(self.module._get_exact_sign_media(["202_0"], "th"))
+        self.assertEqual(result[0]["id"], "traffic-sign:202_0")
+        self.assertEqual(result[0]["sign_id"], "202_0")
+        self.assertEqual(result[0]["url"], "/api/sign-images/202_0_Vikeplikt.jpg")
+        self.assertEqual(result[0]["title"], "ป้ายให้ทาง")
+        self.assertEqual(result[0]["caption"], "ให้ทาง")
 
     def test_explicit_sign_with_incomplete_language_or_unsafe_url_is_text_only(self):
         missing_thai = _material(

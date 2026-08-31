@@ -3152,6 +3152,7 @@ a { color:inherit; text-decoration:none; }
   background:#0d1b2e; color:#F1F5F9;
   border:1px solid rgba(59,130,246,.18);
   border-bottom-left-radius:5px;
+  font-size:1.06rem; line-height:1.72; letter-spacing:0;
 }
 [data-theme="light"] .tm-bubble.assistant {
   background:#fff; color:#0F172A;
@@ -3159,15 +3160,15 @@ a { color:inherit; text-decoration:none; }
 }
 
 /* Paragraph spacing inside assistant bubbles */
-.tm-para { display:block; margin-bottom:.85em; }
+.tm-para { display:block; max-width:52ch; margin-bottom:1.05em; font-weight:500; }
 .tm-para:last-child { margin-bottom:0; }
-.tm-question-title { margin:4px 0 12px; color:#fff; font-size:1.5rem; line-height:1.35; font-weight:900; }
+.tm-question-title { margin:6px 0 14px; color:#fff; font-size:1.35rem; line-height:1.4; font-weight:800; }
 
 /* Section header (Situasjon:, Forklaring:, Teori:) */
 .tm-section-hdr {
-  display:block; font-weight:800; font-size:.82rem;
-  letter-spacing:.06em; text-transform:uppercase;
-  color:#60A5FA; margin-bottom:.35em; margin-top:.1em;
+  display:block; font-weight:750; font-size:1rem;
+  letter-spacing:0; text-transform:none;
+  color:#93C5FD; margin-bottom:.45em; margin-top:.2em;
 }
 
 /* Practical advice box */
@@ -3327,17 +3328,17 @@ a { color:inherit; text-decoration:none; }
 .tm-media-image { display:block; width:100%; height:100%; object-fit:contain; }
 .tm-media-card.intersection_image .tm-media-image { object-fit:cover; }
 .tm-media-card.sign {
-  width:100%; display:grid; grid-template-columns:90px minmax(0,1fr); padding:0;
+  width:100%; display:grid; grid-template-columns:80px minmax(0,1fr); padding:0;
   font:inherit; text-align:left; cursor:pointer;
 }
 .tm-media-card.sign .tm-media-visual {
-  width:90px; height:90px; min-height:48px; padding:8px; background:#111C30;
+  width:80px; height:80px; min-height:48px; padding:7px; background:#111C30;
 }
 .tm-media-card.sign .tm-media-image {
-  width:100%; max-width:90px; height:100%; max-height:90px; object-fit:contain;
+  width:100%; max-width:80px; height:100%; max-height:80px; object-fit:contain;
 }
 .tm-media-card.sign .tm-media-copy { justify-content:center; padding:10px 12px; }
-.mqc-body .tm-media-card.sign .tm-media-visual { height:90px; }
+.mqc-body .tm-media-card.sign .tm-media-visual { height:80px; }
 .tm-sign-term {
   display:inline; padding:0 2px; border:0; border-bottom:1px solid #67E8F9;
   background:transparent; color:#67E8F9; font:inherit; font-weight:800; cursor:pointer;
@@ -3391,7 +3392,7 @@ a { color:inherit; text-decoration:none; }
   .tm-sign-text { font-size:.9rem; line-height:1.5; }
   .tm-media-strip { grid-template-columns:1fr; }
   .tm-media-visual { height:160px; }
-  .tm-media-card.sign .tm-media-visual { height:90px; }
+  .tm-media-card.sign .tm-media-visual { height:80px; }
   .tm-media-title { font-size:.92rem; }
   .tm-media-caption { font-size:.82rem; }
 }
@@ -3555,7 +3556,8 @@ a { color:inherit; text-decoration:none; }
 }
 .teacher-inline-caption { font-size:.82rem; color:var(--muted); margin-top:8px; text-align:center; }
 @media (max-width:767px) {
-  #screenTeacher .tm-bubble { font-size:1.05rem; line-height:1.65; }
+  #screenTeacher .tm-bubble { font-size:1.08rem; line-height:1.72; }
+  #screenTeacher .tm-para { max-width:100%; margin-bottom:1.1em; }
   #screenTeacher .teacher-inline-image { max-height:210px; }
 }
 </style>
@@ -9841,7 +9843,10 @@ function _buildTeacherMediaCard(media) {
   image.src = media.url;
   image.alt = media.title;
   image.loading = 'lazy';
-  image.onerror = function() { visual.hidden = true; };
+  image.onerror = function() {
+    if (media.type === 'sign') card.hidden = true;
+    else visual.hidden = true;
+  };
   visual.appendChild(image);
   card.appendChild(visual);
 

@@ -45,13 +45,20 @@ class MichaelMediaCardsContractTests(unittest.TestCase):
 
     def test_sign_media_is_compact_and_opens_authoritative_sign_detail(self):
         self.assertIn(".tm-media-card.sign .tm-media-visual", WEBAPP)
-        self.assertIn("width:90px; height:90px; min-height:48px", WEBAPP)
-        self.assertIn("max-width:90px", WEBAPP)
-        self.assertIn("max-height:90px", WEBAPP)
+        self.assertIn("width:80px; height:80px; min-height:48px", WEBAPP)
+        self.assertIn("max-width:80px", WEBAPP)
+        self.assertIn("max-height:80px", WEBAPP)
         card = WEBAPP[WEBAPP.index("function _buildTeacherMediaCard(media)"):WEBAPP.index("function _teacherAppendMediaCards")]
         self.assertIn("media.type === 'sign' ? 'button' : 'article'", card)
         self.assertIn("_openTeacherSignDetailById(media.sign_id)", card)
         self.assertIn("card.setAttribute('aria-label', media.title)", card)
+        self.assertIn("if (media.type === 'sign') card.hidden = true", card)
+
+    def test_michael_answer_typography_reads_like_prose(self):
+        self.assertIn("font-size:1.06rem; line-height:1.72; letter-spacing:0", WEBAPP)
+        self.assertIn("max-width:52ch; margin-bottom:1.05em", WEBAPP)
+        self.assertIn("letter-spacing:0; text-transform:none", WEBAPP)
+        self.assertIn("font-size:1.08rem; line-height:1.72", WEBAPP)
 
     def test_podcast_card_uses_safe_dom_and_localized_payload(self):
         card = WEBAPP[WEBAPP.index("function _buildTeacherMediaCard(media)"):WEBAPP.index("function _teacherAppendMediaCards")]
