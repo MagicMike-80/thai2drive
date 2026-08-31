@@ -4234,8 +4234,8 @@ a { color:inherit; text-decoration:none; }
 
         <!-- Suggestion chips — shown only before first user message -->
         <div class="teacher-suggestions" id="teacherSuggestions" aria-hidden="true">
-          <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="🛑 Forklar et skilt" data-msg-th="🛑 อธิบายป้ายจราจร" data-msg-en="🛑 Explain a sign">🛑 <span class="chip-lbl"></span></button>
-          <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="🚗 Hjelp med vikeplikt" data-msg-th="🚗 ช่วยเรื่องการให้ทาง" data-msg-en="🚗 Help with right-of-way">🚗 <span class="chip-lbl"></span></button>
+          <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="🪧 Forklar et skilt" data-msg-th="🪧 อธิบายป้ายจราจร" data-msg-en="🪧 Explain a sign">🪧 <span class="chip-lbl"></span></button>
+          <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="⚠️ Hjelp med vikeplikt" data-msg-th="⚠️ ช่วยเรื่องการให้ทาง" data-msg-en="⚠️ Help with right-of-way">⚠️ <span class="chip-lbl"></span></button>
           <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="📖 Forklar en trafikkregel" data-msg-th="📖 อธิบายกฎจราจร" data-msg-en="📖 Explain a traffic rule">📖 <span class="chip-lbl"></span></button>
           <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="📝 Hjelp med teoriprøven" data-msg-th="📝 ช่วยเรื่องข้อสอบทฤษฎี" data-msg-en="📝 Help with the theory test">📝 <span class="chip-lbl"></span></button>
           <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="📊 Hva bør jeg øve på?" data-msg-th="📊 ฉันควรฝึกเรื่องอะไร?" data-msg-en="📊 What should I practise?">📊 <span class="chip-lbl"></span></button>
@@ -4276,8 +4276,8 @@ a { color:inherit; text-decoration:none; }
       <!-- Topic drawer — opened on demand on mobile and desktop -->
       <div class="teacher-side-panel" id="teacherSidePanel" aria-hidden="true">
         <div class="tsp-title" id="tspTitle" data-key="tsp_title">Emner</div>
-        <button class="tsp-btn" data-tsp-btn="sign">🛑 <span data-tsp="sign"></span></button>
-        <button class="tsp-btn" data-tsp-btn="vikeplikt">🚗 <span data-tsp="vikeplikt"></span></button>
+        <button class="tsp-btn" data-tsp-btn="sign">🪧 <span data-tsp="sign"></span></button>
+        <button class="tsp-btn" data-tsp-btn="vikeplikt">⚠️ <span data-tsp="vikeplikt"></span></button>
         <button class="tsp-btn" data-tsp-btn="rule">📖 <span data-tsp="rule"></span></button>
         <button class="tsp-btn" data-tsp-btn="practice">📊 <span data-tsp="practice"></span></button>
         <button class="tsp-btn" data-tsp-btn="theory">📝 <span data-tsp="theory"></span></button>
