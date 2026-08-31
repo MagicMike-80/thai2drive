@@ -6448,7 +6448,7 @@ async function loadCategories() {
     });
 
     catsLoaded = true;
-    document.getElementById('catCount').textContent = '(' + cats.length + ')';
+    document.getElementById('catCount').textContent = '';
     if (!cats.length) {
       stage.innerHTML = '<div class="empty-state" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;"><div class="es-icon">📭</div><p>' + t('categories_empty') + '</p></div>';
       return;
@@ -6466,14 +6466,11 @@ function renderCarousel(cats) {
   var stage = document.getElementById('carouselStage');
   var itemsHtml = cats.map(function(c, i) {
     var svgIcon = CYBER_ICONS[c.icon] || '';
-    var count = c.count || '';
     var name = c.title[appLang];
-    var qWord = t('questions_word');
     var styleStr = 'style="--cat-color:' + c.color + '; --cat-glow:' + c.glow + ';"';
     return '<div class="carousel-3d-item" data-idx="' + i + '" data-ckey="' + escH(c.id) + '" ' + styleStr + ' onclick="carouselClick(' + i + ')">'
       + '<div class="carousel-3d-icon">' + svgIcon + '</div>'
       + '<div class="carousel-3d-label">' + escH(name) + '</div>'
-      + '<div class="carousel-3d-count">' + (count ? count + ' ' + qWord : '') + '</div>'
       + '</div>';
   }).join('');
   stage.innerHTML = itemsHtml + '<div class="carousel-3d-active-ring" id="carouselRing"></div>';
