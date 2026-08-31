@@ -942,9 +942,11 @@ def _format_sign_context(sign: dict, lang: str) -> str:
     names = sign.get("name") or {}
     explanations = sign.get("explanation") or {}
     actions = sign.get("driver_action") or {}
-    name_lang = names.get(lang) or names.get("no") or ""
-    exp_lang = explanations.get(lang) or explanations.get("no") or ""
-    action_lang = actions.get(lang) or actions.get("no") or ""
+    name_lang = names.get(lang) or ""
+    exp_lang = explanations.get(lang) or ""
+    action_lang = actions.get(lang) or ""
+    if not name_lang or not exp_lang:
+        return ""
 
     sign_desc = (
         f"Traffic Sign {sign['id']}:\n"
@@ -999,8 +1001,28 @@ def _explicit_sign_ids_for_message(user_msg: str) -> list[str]:
             "yield sign",
             "ป้ายให้ทาง",
         ),
+        "204_0": (
+            "stoppskilt",
+            "stopp skilt",
+            "stop sign",
+            "ป้ายหยุด",
+        ),
+        "208_0": (
+            "forkjørsvei",
+            "forkjørsveg",
+            "forkjørsrett",
+            "priority road",
+            "ถนนสายหลัก",
+            "ป้ายทางเอก",
+        ),
     }
-    return [sign_id for sign_id, terms in aliases.items() if any(term in message for term in terms)]
+
+    def matches(term: str) -> bool:
+        if re.search(r"[a-zæøå]", term):
+            return bool(re.search(rf"(?<!\w){re.escape(term)}(?:et)?(?!\w)", message))
+        return term in message
+
+    return [sign_id for sign_id, terms in aliases.items() if any(matches(term) for term in terms)]
 
 
 _MATERIAL_TOPIC_ALIASES = (
@@ -1046,6 +1068,7 @@ async def _get_relevant_michael_materials(
     user_msg: str,
     lang: str,
     sign_ids: Optional[List[str]] = None,
+    explicit_sign_ids: Optional[List[str]] = None,
     extra_context: str = "",
     limit: int = 2,
 ) -> list[dict]:
@@ -1058,7 +1081,12 @@ async def _get_relevant_michael_materials(
         if not approved:
             return []
 
-        exact_sign_ids = {str(sign_id).strip() for sign_id in (sign_ids or []) if str(sign_id).strip()}
+        linked_context_sign_ids = {
+            str(sign_id).strip() for sign_id in (sign_ids or []) if str(sign_id).strip()
+        }
+        exact_sign_ids = {
+            str(sign_id).strip() for sign_id in (explicit_sign_ids or []) if str(sign_id).strip()
+        }
         query = _normalize_material_match_text(f"{user_msg} {extra_context}")
         terms = _material_match_terms(user_msg, extra_context)
         ranked = []
@@ -1080,9 +1108,21 @@ async def _get_relevant_michael_materials(
             if material_type == "sign" and source_id:
                 linked_sign_ids.add(source_id)
 
+            if exact_sign_ids:
+                exact_matches = exact_sign_ids & linked_sign_ids
+                if material_type != "sign" or len(exact_matches) != 1:
+                    continue
+                matched_sign_id = next(iter(exact_matches))
+                if source_id and source_id != matched_sign_id:
+                    continue
+                if linked_sign_ids != {matched_sign_id}:
+                    continue
+            else:
+                exact_matches = set()
+
             score = 0
-            exact_matches = exact_sign_ids & linked_sign_ids
-            if exact_matches:
+            context_matches = linked_context_sign_ids & linked_sign_ids
+            if exact_matches or context_matches:
                 score += 1000
 
             for field, weight in (("situation_tags", 200), ("topic_tags", 100)):
@@ -1103,7 +1143,8 @@ async def _get_relevant_michael_materials(
             if not _safe_michael_material_url(url):
                 continue
 
-            sign_id = sorted(exact_matches)[0] if exact_matches else ""
+            matches = exact_matches or context_matches
+            sign_id = sorted(matches)[0] if matches else ""
             if not sign_id and material_type == "sign":
                 sign_id = source_id
             payload = {
@@ -1122,7 +1163,8 @@ async def _get_relevant_michael_materials(
             ranked.append((-score, priority, payload["id"], payload))
 
         ranked.sort(key=lambda item: item[:3])
-        return [item[3] for item in ranked[:max(0, min(limit, 2))]]
+        result_limit = 1 if exact_sign_ids else max(0, min(limit, 2))
+        return [item[3] for item in ranked[:result_limit]]
     except Exception as exc:
         logger.error("Error retrieving Michael material: %s", exc)
         return []
@@ -1621,6 +1663,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
     # Call LLM
     context_str = ""
     media = []
+    explicit_sign_ids = _explicit_sign_ids_for_message(user_msg)
     try:
         # Retrieve curriculum context from database (RAG)
         context_str = await _get_curriculum_context(user_msg, lang)
@@ -1629,6 +1672,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             user_msg,
             lang,
             sign_ids=context_sign_ids,
+            explicit_sign_ids=explicit_sign_ids,
             extra_context=quiz_context_str,
         )
 
@@ -1830,7 +1874,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         logger.error("Failed to write teacher log to DB: %s", log_ex)
 
     suggestions = _get_suggestions(reply_text, lang)
-    sign_ids = _sign_ids_from_context(context_str)
+    sign_ids = explicit_sign_ids or _sign_ids_from_context(context_str)
     return TeacherChatResponse(
         session_id=session_id,
         reply=reply_text,

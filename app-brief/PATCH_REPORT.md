@@ -1,3 +1,65 @@
+# PATCH REPORT: eksakt skilt og kompakt ordkobling i Michael-chat
+
+## Endrede filer
+
+- `backend/teacher_chat.py`: kontrollerte NO/TH/EN-aliaser for `202_0`,
+  `204_0` og `208_0`; latinske aliaser krever hele ord/frase. Eksplisitte
+  skiltspørsmål returnerer maksimalt ett godkjent `type=sign`-medium med samme
+  ID, uten generisk bilde, video eller annet skilt. Responsens `sign_ids` bruker
+  eksplisitte ID-er når de finnes. Skiltkontekst låner aldri norsk når valgt
+  språk mangler.
+- `backend/webapp.py`: begge eksisterende skiltkortene er mørke, klikkbare og
+  begrenset til 90 x 90 px skiltbilde. Kort og første eksakte skiltnavn i
+  svarteksten åpner eksisterende `GET /api/signs/{id}` / `openSignDetail`.
+  Ordkoblingen går via tekstnoder og `textContent`, aldri modellstyrt HTML.
+- `backend/tests/test_teacher_chat_fallback.py`: aliasmatrise for NO/TH/EN,
+  negative grensetreff, responsflyt og språk-fail-stop.
+- `backend/tests/test_michael_material_retrieval.py`: streng eksklusivitet,
+  tekst-only ved utrygg/ufullstendig media og bevart bred mediaflyt.
+- `tests/test_michael_media_cards_contract.py`: kompakt, tilgjengelig og
+  detaljkoblet sign-medium.
+- `tests/test_michael_mobile_ui_contract.py`: 90 px fallbackkort, eksisterende
+  detalj-API og sikker tekstnodekobling.
+- `context/FEATURES.md`: lokal ønsket/levert-status oppdatert. Filen skal ikke
+  stages eller committes.
+- `app-brief/PATCH_REPORT.md`: denne handoff-rapporten.
+
+`app-brief/PAIN_PROFILE.md` og `app-brief/SOLUTION_BLUEPRINT.md` var allerede
+oppdatert av Agent 1 og 2 i samme teamflyt.
+
+## Avgrensning
+
+Ingen auth-, kvote-, premium-, Stripe-, RevenueCat-, betalings-, database-,
+mobilapp- eller deployendring. Fargekoder vises ikke fordi dagens autoritative
+skilt-API mangler feltet; dekorative UI-farger fremstilles ikke som offisielle.
+
+## Verifisering
+
+- 39 målrettede backend-/frontendtester: PASS.
+- Hele oppdagede `tests/`-suiten, 45 tester: PASS.
+- Python AST/syntaks, 126 filer med BOM-sikker lesing: PASS.
+- Inline JavaScript-syntaks via Node: PASS.
+- `git diff --check`: PASS; bare Windows LF/CRLF-varsler.
+- Ingen produksjons-POST eller test som muterer produksjonsdata ble kjørt.
+
+## Gjenværende risiko og rollback
+
+Automatiske kontrakter dekker ID-er, språk, sikker DOM og størrelsesgrenser,
+men faktisk klikk/fokus og lang thai-tekst bør kontrolleres visuelt ved ca.
+390 px i QA. Rollback er å reversere alias-/eksklusivitetsgrenene og de
+avgrensede kort-/detaljkoblingene; ingen data må migreres eller slettes.
+
+## QA-fiks
+
+- Fallback-skiltkort rendres nå bare når `GET /api/signs/{id}` har et navn på
+  aktiv `appLang`; manglende aktiv språkverdi skjules fail-stop.
+- Den dupliserte norske frontend-aliasen er erstattet med den backend-godkjente
+  formen `vikepliktskiltet`, og begge forhold er låst i målrettet kontrakttest.
+
+Ingen commit, push eller deploy er utført. Klar for Agent 4.
+
+---
+
 # PATCH REPORT: Patch 2 — Michael-chat og visuelle media-kort
 
 ## Endring

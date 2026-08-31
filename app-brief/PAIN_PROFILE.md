@@ -210,3 +210,120 @@ API, skiltdata, språkvalg, auth, kvoter, premium, TTS og betaling er ikke berø
 Handoff til Agent 2: utform én smal frontendpatch uten API-endring.
 
 ---
+
+# PAIN PROFILE: eksakt skilt og kompakt ordkobling i Michael-chat
+
+## Brukersmerte og forventet oppførsel
+
+Når Michael nevner ett konkret skilt, skal eleven bare se dette norske skiltet:
+`202_0` for vikeplikt, `204_0` for stopp og `208_0` for forkjørsveg. Et
+generisk veikryssbilde eller et annet skilt skal ikke følge med. Skiltet skal
+være et lite, lesbart kort/badge (maksimalt 90 px), og skiltnavnet i svaret skal
+kunne åpne kort offisiell skiltinformasjon på aktivt språk (NO, TH eller EN).
+
+Målmappe og berørt flyt er `backend/teacher_chat.py` sitt
+`POST /api/teacher/chat`-svar og Michael-renderingen i `backend/webapp.py`.
+
+## Verifiserte observasjoner
+
+- `backend/teacher_chat.py:991-1003` har en eksplisitt aliasresolver, men den
+  dekker bare vikeplikt (`202_0`). En lokal, ikke-muterende reproduksjon ga tom
+  liste for «stoppskilt», «stop sign», `ป้ายหยุด`, «forkjørsvei», «priority
+  road» og `ถนนสายหลัก`. Skiltdataene i repoet identifiserer stopp som `204_0`
+  og forkjørsveg som `208_0`.
+- `backend/teacher_chat.py:1061-1125` gir 1000 poeng til eksakt skiltkobling,
+  men filtrerer ikke bort andre materialer når `exact_sign_ids` finnes. Et
+  ordinært emne-/situasjonstreff kan derfor fylle plass nummer to.
+- Den eksisterende kontrakttesten
+  `backend/tests/test_michael_material_retrieval.py:77-93` låser faktisk den
+  uønskede oppførselen: et eksakt `202_0`-skilt returneres sammen med
+  `tag-first`. Den målrettede testen passerte lokalt og bekrefter dagens
+  kontrakt, ikke ønsket produktatferd.
+- `backend/teacher_chat.py:1626-1633` sender alle skilt-ID-er som kan utledes fra
+  læreplankonteksten videre som `exact_sign_ids`. For brede treff er dette ikke
+  nødvendigvis det samme som et skilt eleven uttrykkelig nevnte.
+- `backend/webapp.py:3299-3309` viser det strukturerte fallback-skiltkortet med
+  200 x 200 px bilde på desktop. Mobilregelen i `backend/webapp.py:3365-3369`
+  bruker 96 x 96 px. Begge overskrider ønsket maksimum på 90 px.
+- Når godkjent media inneholder skiltet, brukes i stedet
+  `backend/webapp.py:3314-3328`: skiltbildet ligger i en 180 px høy medieflate,
+  160 px på mobil. `teacherSendMessage` undertrykker samtidig fallbackkortet
+  for samme `sign_id` (`backend/webapp.py:9982-9986`). Resultatet er at den
+  største av de to skiltvariantene ofte vinner.
+- `backend/webapp.py:9312-9440` gjengir ordinære svaravsnitt med `textContent`.
+  Det finnes ingen strukturert kobling mellom navn i svaret og `sign_ids`.
+  Verken skilt-mediekortet (`9635-9698`) eller fallback-skiltkortet
+  (`9750-9784`) åpner skiltdetaljer ved klikk.
+- Eksisterende `GET /api/signs/{sign_id}` returnerer ID/kode, gruppe,
+  språkdelte navn, forklaring og `driver_action`
+  (`backend/server.py:1965-1995`). API-kontrakten har ikke et felt for
+  offisielle fargekoder. `SIGN_GROUP_META` i webappen er presentasjonsfarger,
+  ikke dokumenterte offisielle skiltfarger, og må ikke fremstilles som det.
+- Språkisolasjonen i denne kjeden er allerede sterk: materialtekst krever
+  eksakt `lang` (`backend/teacher_chat.py:1037-1042`), skiltkortet velger bare
+  `appLang` (`backend/webapp.py:9604-9605`), og detaljpanelets `_getProp`
+  nekter språkfallback (`backend/webapp.py:10307-10313`).
+
+## Bevist rotårsak
+
+Rotårsaken er en kombinasjon av tre smale kontraktsgap:
+
+1. Eksplisitt begrepsmatching er ufullstendig og dekker bare `202_0`.
+2. Materialrangeringen prioriterer et eksakt skilt, men håndhever ikke
+   eksklusivitet; generisk tag-media kan fortsatt returneres.
+3. Frontend har to separate skiltgjengivere uten felles kompakt grense eller
+   tekstkobling. Det eksisterende detalj-API-et blir ikke brukt fra svaret.
+
+Dette er **BEVIST lokalt**. Produksjonschat er ikke kalt, fordi et slikt POST-kall
+oppretter samtale-/loggdata. Ingen påstand om fersk produksjonsatferd gjøres her.
+
+## Omfang, risiko og ukjent
+
+- Berørt: eksakt skiltutledning, filtrering av godkjent Michael-media og
+  skiltpresentasjon/-kobling i webchat og den delte quiz-coach-rendereren.
+- Skal ikke berøres: auth, gjeste-/gratiskvoter, premium, Stripe, RevenueCat,
+  betaling, TTS, databaseinnhold eller mobilappen.
+- Hovedrisiko: substring-aliaser kan gi falske treff; koblingen må derfor bruke
+  en liten eksplisitt NO/TH/EN-tabell og strukturerte `sign_ids`, ikke fri
+  fuzzy matching eller modellgenererte URL-er.
+- Hovedrisiko for språk: en ny detaljlabel eller fallback må finnes i alle tre
+  språk, ellers skjules den. Norsk fallback i thai/engelsk er ikke tillatt.
+- **IKKE BEVIST / datagap:** autoritative «offisielle fargekoder» finnes ikke i
+  dagens sign-API eller dokumenterte skiltmetadata. Agent 2 må bruke en allerede
+  godkjent kilde dersom den finnes utenfor denne flyten, eller definere fail-stop
+  (skjul feltet) fremfor å merke UI-/hex-farger som offisielle.
+
+## Akseptansekriterier for Solution Architect
+
+1. Eksakte NO/TH/EN-aliaser for vikeplikt, stopp og forkjørsveg gir henholdsvis
+   bare `202_0`, `204_0` og `208_0`; tester dekker minst ett uttrykk per språk.
+2. Når en eksplisitt skilt-ID finnes, returnerer `media` maksimalt ett
+   `type=sign`-element med samme ID. Ingen `intersection_image`, video, annet
+   skilt eller rent tag-treff returneres i samme svar.
+3. Brede spørsmål uten eksplisitt skilt («forklar vikeplikt», «trafikkskilt»)
+   beholder dagens godkjente, begrensede mediaflyt og tekst-only fallback.
+4. Backend fortsetter å være source of truth. Frontend bruker bare strukturerte
+   `sign_ids`/`GET /api/signs/{id}` og sikre URL-er; ingen HTML fra modellen
+   gjøres klikkbar.
+5. Alle skiltbilder i Michael-chat/quiz-coach er `max-width:90px` og
+   `max-height:90px`, også når skiltet kom via `media`, på desktop og mobil.
+   Kortet er mørkt, kompakt, tastaturtilgjengelig og lar teksten ha hovedfokus.
+6. Det lokaliserte skiltnavnet i svaret utheves bare ved en eksakt, strukturert
+   navnematch og åpner samme detalj som skiltkortet. Manglende navnematch gir et
+   klikkbart kort uten å omskrive svaret.
+7. Detaljen viser skiltkode/nummer og kort `driver_action` eller `explanation`
+   kun på aktivt språk. Fargekoder vises bare fra autoritativ metadata; ellers
+   skjules feltet eksplisitt.
+8. Mobiltekst beholder minst dagens `1.05rem` og `line-height:1.65`; ingen ny
+   horisontal scrolling eller dupliserte skiltkort introduseres.
+9. Målrettede retrieval-, frontendkontrakt-, NO/TH/EN-, syntaks- og
+   `git diff --check`-tester passerer uten produksjonsmuterende kall.
+
+## Handoff til Agent 2
+
+Utform én liten backend- og frontendpatch rundt aliasresolveren,
+materialfilteret og eksisterende skiltkort/detalj-API. Unngå ny database,
+skjemamigrasjon, generisk fuzzy matching og redesign av Michael eller
+skiltbiblioteket.
+
+---

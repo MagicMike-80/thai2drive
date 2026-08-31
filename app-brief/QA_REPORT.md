@@ -1,3 +1,127 @@
+# QA GATE RE-RUN: eksakt skilt og kompakt ordkobling i Michael-chat
+
+## Endelig resultat
+
+- PASS: de to tidligere blokkererne er rettet. Fallback-skiltkort krever nå
+  et navn på aktivt språk før rendering, og den norske kontrollerte listen har
+  både `vikepliktsskiltet` og `vikepliktskiltet` uten duplikat.
+- PASS: en uavhengig 9-aliasmatrise verifiserte NO/TH/EN for `202_0`, `204_0`
+  og `208_0`. En separat lokal retrieval-kjøring verifiserte for hver ID at
+  resultatet er nøyaktig ett korrekt `type="sign"`-medium, uten generisk bilde,
+  video eller annet skilt.
+- PASS: negative latinske grenser hindrer falske eksplisitte treff som
+  «stoppelengde» og «stop distance».
+- PASS: bred flyt uten eksplisitt skilt beholder eksisterende maks-to-rangering
+  og tekst-only fallback.
+- PASS: `sign_ids` bruker eksplisitte ID-er når de finnes og eksisterende
+  kontekst-ID-er ellers.
+- PASS: materiale, skiltkontekst, kort, ordkobling og detaljpanel bruker bare
+  aktivt NO/TH/EN. Manglende språkverdi feiler trygt uten norsk fallback.
+- PASS: ordkoblingen bruker validerte strukturerte ID-er, tekstnoder og
+  `textContent`; kort og første eksakte term åpner eksisterende
+  `GET /api/signs/{id}` / `openSignDetail` og er tastaturtilgjengelige.
+- PASS: begge skiltbildevariantene er maksimalt 90 x 90 px på desktop, mobil
+  og quiz-coach. Mobilens Michael-tekst beholder minst `1.05rem` og
+  `line-height:1.65`; signkortet introduserer ikke horisontal kortrekke.
+- PASS: detaljen viser eksisterende skiltkode og aktivt språks korte regel.
+  Fargekoder skjules fordi dagens autoritative API ikke leverer dem.
+- PASS: auth, kvoter, premium, Stripe, RevenueCat, betaling, database,
+  `backend/server.py`, admin, mobilapp og deploykonfigurasjon er urørt.
+- PASS: `context/FEATURES.md` er ikke staged og skal fortsatt holdes utenfor
+  commit som lokal-only sporingsfil.
+
+## Verifisering etter retting
+
+- 40/40 målrettede backend-/frontendtester: PASS.
+- Hele sikre lokale `tests/`-suiten: 46/46 PASS.
+- Uavhengig eksakt-ID-matrise: 9 språkaliaser og eksklusivt media for alle tre
+  ID-er PASS.
+- Python AST/syntaks: 147 filer PASS.
+- Inline JavaScript-syntaks via Node: PASS.
+- `git diff --check`: PASS; bare ufarlige Windows LF/CRLF-varsler.
+- Diffbasert hemmelighetssøk: ingen nye nøkkel-, passord-, secret- eller
+  privatnøkkelverdier.
+- Ingen produksjons-POST, databaseendrende test, commit, push eller deploy ble
+  utført av QA.
+
+En faktisk innlogget mobilchat og Railway-visning må fortsatt kontrolleres som
+liveverifisering etter godkjent publisering; dette er ikke en lokal
+kodeblokkerer og produksjonsdata ble bevisst ikke mutert i QA.
+
+**PASS — klar for Michaels vurdering og kontrollert commit/push/liveverifisering.**
+
+---
+
+# QA GATE: eksakt skilt og kompakt ordkobling i Michael-chat
+
+## Resultat per krav
+
+- PASS: NO/TH/EN-aliasmatrisen gir `202_0`, `204_0` og `208_0` for de
+  målrettede uttrykkene. Latinske negative treff som «stoppelengde», «stop
+  distance», «trafikkskilt» og bred «vikeplikt» blir ikke eksplisitte skilt-ID-er.
+- PASS: eksplisitt skiltmodus filtrerer før rangering og returnerer maksimalt
+  ett `type="sign"`-medium med nøyaktig samme ID. Generisk situasjonsbilde,
+  video, rent tag-treff, annet skilt og fler-ID-skilt blir utelatt.
+- PASS: spørsmål uten eksplisitt skilt beholder eksisterende rangerte
+  maks-to-materialflyt. Tomt/utrygt/ufullstendig media faller tilbake til tekst.
+- PASS: responsens `sign_ids` bruker eksplisitte ID-er når de finnes og dagens
+  kontekstutledning ellers.
+- PASS: backendmateriale og skiltkontekst krever aktivt språk; norsk tekst
+  lånes ikke inn i thai eller engelsk.
+- PASS: begge skiltbildetyper er låst til maksimum 90 x 90 px, mørkt kort,
+  synlig tastaturfokus og ingen ny horisontal skrolling. Michaels mobile
+  svartekst beholder `1.05rem` og `line-height:1.65`.
+- PASS: sign-media og fallbackkort åpner eksisterende
+  `GET /api/signs/{id}` / `openSignDetail`; modelltekst blir fortsatt bygget
+  med tekstnoder/`textContent`, ikke usikker `innerHTML`.
+- PASS: skiltkode og aktivt språks `driver_action`/`explanation` kommer fra
+  eksisterende detalj-API. Fargekoder vises ikke fordi API-et mangler
+  autoritativ fargemetadata; dekorative CSS-farger presenteres ikke som
+  offisielle.
+- PASS: diffen endrer ikke auth, kvoter, premium, Stripe, RevenueCat,
+  betaling, `backend/server.py`, database eller deploykonfigurasjon.
+- PASS: `context/FEATURES.md` er bare lokal sporing og må holdes utenfor
+  staging/commit.
+
+## Blokkerende funn til Agent 3
+
+1. **Aktivt språk mangler, men fallbackkortet vises likevel.**
+   `backend/webapp.py:9928` bruker `results.filter(Boolean)` og sender posten
+   direkte til `_buildTeacherSignCard`. Kortbyggeren ved `backend/webapp.py:9883`
+   krever ikke `_teacherSignValue(sign, 'name')`; den kan derfor vise bilde,
+   nøytral ID og generell fallbacktekst samt åpne detaljpanelet selv om valgt
+   NO/TH/EN-navn mangler. Dette bryter blueprintens fail-stop-krav om at
+   koblingen/kortet skal skjules når aktiv språkverdi mangler. Filtrer tegnene
+   på komplett nødvendig aktiv språkverdi før kortet bygges, og lås det med en
+   målrettet kontraktstest.
+2. **Norsk kontrollert ordkobling mangler en backend-godkjent variant.**
+   `backend/webapp.py:9631` har `vikepliktsskiltet` to ganger, men mangler
+   `vikepliktskiltet` (én `s`), mens backendresolveren godtar grunnformen
+   `vikepliktskilt` og den bestemte formen gjennom `(?:et)?`. Dersom Michael
+   bruker «vikepliktskiltet», returneres `202_0`, men ordet blir ikke klikkbart
+   med dagens grensetest. Erstatt duplikatet med den manglende varianten og
+   legg til en test som beviser koblingstermen.
+
+## Uavhengige kontroller
+
+- 39 målrettede backend-/frontendtester: PASS.
+- Hele sikre lokale `tests/`-suiten: 45/45 PASS.
+- Python AST/syntaks: 147 filer PASS.
+- Inline JavaScript-syntaks via Node: PASS.
+- `git diff --check`: PASS; bare Windows LF/CRLF-varsler.
+- Diffbasert hemmelighetssøk: ingen nye nøkkel-, token-, passord- eller
+  privatnøkkelverdier funnet.
+- Ingen produksjons-POST, databaseendrende test, commit, push eller deploy er
+  utført av QA.
+
+Visuell 390 px-nettleserkontroll ble ikke brukt som erstatning for de to
+blokkerende kontraktsfunnene. Etter retting må målrettede tester, full lokal
+suite, syntaks og `git diff --check` kjøres på nytt.
+
+**FAIL — send tilbake til Agent 3 med de to konkrete funnene over.**
+
+---
+
 # QA GATE: Patch 2 — Michael-chat og visuelle media-kort
 
 ## Funksjon og kontrakt

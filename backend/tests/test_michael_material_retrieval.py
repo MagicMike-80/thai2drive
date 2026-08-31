@@ -65,16 +65,20 @@ class MichaelMaterialRetrievalTests(unittest.TestCase):
     def setUp(self):
         self.module = _load_teacher_chat()
 
-    def retrieve(self, materials, message, lang="no", sign_ids=None, videos=None, extra_context=""):
+    def retrieve(
+        self, materials, message, lang="no", sign_ids=None, explicit_sign_ids=None,
+        videos=None, extra_context="",
+    ):
         self.module._db = _Database(materials, videos)
         return asyncio.run(self.module._get_relevant_michael_materials(
             message,
             lang,
             sign_ids=sign_ids or [],
+            explicit_sign_ids=explicit_sign_ids or [],
             extra_context=extra_context,
         ))
 
-    def test_exact_sign_match_ranks_before_tag_match_and_returns_at_most_two(self):
+    def test_explicit_sign_match_excludes_tag_media_and_returns_only_same_sign(self):
         materials = [
             _material("tag-first", topic_tags=["vikeplikt"], priority=1),
             _material(
@@ -85,12 +89,63 @@ class MichaelMaterialRetrievalTests(unittest.TestCase):
                 sign_ids=["202_0"],
                 priority=900,
             ),
+            _material(
+                "sign-204",
+                "sign",
+                source_id="204_0",
+                source_url="/api/sign-images/204_0.jpg",
+                sign_ids=["204_0"],
+            ),
+            _material("video-202", "video", sign_ids=["202_0"], topic_tags=["vikeplikt"]),
             _material("tag-second", topic_tags=["vikeplikt"], priority=2),
+        ]
+        result = self.retrieve(
+            materials,
+            "Forklar vikepliktskiltet",
+            sign_ids=["202_0"],
+            explicit_sign_ids=["202_0"],
+        )
+        self.assertEqual([item["id"] for item in result], ["sign-202"])
+        self.assertEqual(result[0]["sign_id"], "202_0")
+
+    def test_explicit_sign_with_incomplete_language_or_unsafe_url_is_text_only(self):
+        missing_thai = _material(
+            "sign-204-missing",
+            "sign",
+            source_id="204_0",
+            source_url="/api/sign-images/204_0.jpg",
+            sign_ids=["204_0"],
+        )
+        missing_thai["caption"]["th"] = ""
+        unsafe = _material(
+            "sign-204-unsafe",
+            "sign",
+            source_id="204_0",
+            source_url="javascript:alert(1)",
+            sign_ids=["204_0"],
+        )
+        result = self.retrieve(
+            [missing_thai, unsafe],
+            "อธิบายป้ายหยุด",
+            lang="th",
+            explicit_sign_ids=["204_0"],
+        )
+        self.assertEqual(result, [])
+
+    def test_broad_context_sign_match_keeps_existing_ranked_media_flow(self):
+        materials = [
+            _material("tag-first", topic_tags=["vikeplikt"], priority=1),
+            _material(
+                "sign-202",
+                "sign",
+                source_id="202_0",
+                source_url="/api/sign-images/202_0.jpg",
+                sign_ids=["202_0"],
+                priority=900,
+            ),
         ]
         result = self.retrieve(materials, "Forklar vikeplikt", sign_ids=["202_0"])
         self.assertEqual([item["id"] for item in result], ["sign-202", "tag-first"])
-        self.assertEqual(result[0]["sign_id"], "202_0")
-        self.assertEqual(len(result), 2)
 
     def test_thai_query_matches_controlled_topic_alias_and_never_borrows_norwegian(self):
         complete = _material("thai", topic_tags=["vikeplikt"])

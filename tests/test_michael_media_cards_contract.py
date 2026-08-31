@@ -43,6 +43,16 @@ class MichaelMediaCardsContractTests(unittest.TestCase):
         self.assertIn("['sign','intersection_image','video'].indexOf(media.type)", WEBAPP)
         self.assertIn("mediaSignIds.indexOf(signId) === -1", WEBAPP)
 
+    def test_sign_media_is_compact_and_opens_authoritative_sign_detail(self):
+        self.assertIn(".tm-media-card.sign .tm-media-visual", WEBAPP)
+        self.assertIn("width:90px; height:90px; min-height:48px", WEBAPP)
+        self.assertIn("max-width:90px", WEBAPP)
+        self.assertIn("max-height:90px", WEBAPP)
+        card = WEBAPP[WEBAPP.index("function _buildTeacherMediaCard(media)"):WEBAPP.index("function _teacherAppendMediaCards")]
+        self.assertIn("media.type === 'sign' ? 'button' : 'article'", card)
+        self.assertIn("_openTeacherSignDetailById(media.sign_id)", card)
+        self.assertIn("card.setAttribute('aria-label', media.title)", card)
+
 
 if __name__ == "__main__":
     unittest.main()

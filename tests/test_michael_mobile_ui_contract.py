@@ -93,6 +93,35 @@ class MichaelMobileUiContractTests(unittest.TestCase):
         self.assertNotIn("tm-sign-actions", card)
         self.assertNotIn("sign_card_tip", card)
 
+    def test_sign_cards_and_linked_terms_are_compact_safe_detail_controls(self):
+        self.assertIn(".tm-sign-image { display:block; width:90px; max-width:90px; height:90px; max-height:90px", WEBAPP)
+        self.assertIn("function _getTeacherSign(signId)", WEBAPP)
+        self.assertIn("'/api/signs/' + encodeURIComponent(id)", WEBAPP)
+        self.assertIn("function _teacherLinkSignName(container, sign)", WEBAPP)
+        self.assertIn("document.createTreeWalker", WEBAPP)
+        self.assertIn("button.textContent = text.slice(index, index + needle.length)", WEBAPP)
+        self.assertIn("await _teacherLinkSignReferences(assistantBubble, data.sign_ids || [])", WEBAPP)
+        linker = WEBAPP[
+            WEBAPP.index("function _teacherLinkSignName(container, sign)"):
+            WEBAPP.index("async function _teacherLinkSignReferences")
+        ]
+        self.assertNotIn("innerHTML", linker)
+        self.assertIn("!_teacherIsWordChar(text.charAt(index - 1))", linker)
+        self.assertIn("openSignDetail(sign)", linker)
+
+    def test_sign_card_requires_active_language_name_and_uses_approved_alias(self):
+        append_cards = WEBAPP[
+            WEBAPP.index("async function _teacherAppendSignCards(signIds, bubble)"):
+            WEBAPP.index("function _teacherAppendSignActions(sign)")
+        ]
+        self.assertIn("return sign && _teacherSignValue(sign, 'name');", append_cards)
+        aliases = WEBAPP[
+            WEBAPP.index("var _teacherSignAliases = {"):
+            WEBAPP.index("async function _getTeacherSign(signId)")
+        ]
+        self.assertIn("'vikepliktskiltet'", aliases)
+        self.assertEqual(aliases.count("'vikepliktsskiltet'"), 1)
+
     def test_sign_response_has_only_similar_practice_action(self):
         actions = WEBAPP[WEBAPP.index("function _teacherAppendSignActions(sign)"):WEBAPP.index("function _teacherShowTyping()")]
         self.assertIn("t('practice_similar')", actions)

@@ -3293,20 +3293,23 @@ a { color:inherit; text-decoration:none; }
 }
 
 .tm-sign-strip {
-  display:flex; gap:12px; width:100%; margin-top:16px; padding-bottom:4px;
-  overflow-x:auto; scroll-snap-type:x mandatory;
+  display:grid; gap:12px; width:100%; margin-top:14px;
 }
 .tm-sign-card {
-  flex:1 0 min(100%,640px); display:grid; grid-template-columns:200px minmax(0,1fr);
-  gap:20px; padding:20px; border-radius:18px; background:#111C30;
-  border:1px solid rgba(96,165,250,.35); scroll-snap-align:start;
+  width:100%; display:grid; grid-template-columns:90px minmax(0,1fr);
+  gap:14px; padding:12px; border-radius:16px; background:#111C30;
+  border:1px solid rgba(96,165,250,.35); color:#F8FAFC;
+  font:inherit; text-align:left; cursor:pointer;
 }
-.tm-sign-image-wrap { display:flex; align-items:center; justify-content:center; min-height:200px; }
-.tm-sign-image { width:200px; height:200px; object-fit:contain; filter:drop-shadow(0 10px 14px rgba(0,0,0,.35)); }
+.tm-sign-card:focus-visible, .tm-media-card.sign:focus-visible, .tm-sign-term:focus-visible {
+  outline:3px solid #67E8F9; outline-offset:3px;
+}
+.tm-sign-image-wrap { display:flex; align-items:center; justify-content:center; min-height:48px; }
+.tm-sign-image { display:block; width:90px; max-width:90px; height:90px; max-height:90px; object-fit:contain; filter:drop-shadow(0 8px 12px rgba(0,0,0,.35)); }
 .tm-sign-copy { min-width:0; display:flex; flex-direction:column; justify-content:center; gap:8px; }
 .tm-sign-tag { color:#67E8F9; font-size:.7rem; font-weight:900; letter-spacing:.08em; text-transform:uppercase; }
-.tm-sign-title { margin:0; color:#fff; font-size:1.5rem; line-height:1.25; font-weight:900; }
-.tm-sign-text { color:#DCE6F3; font-size:1rem; line-height:1.6; }
+.tm-sign-title { margin:0; color:#fff; font-size:1.05rem; line-height:1.3; font-weight:900; }
+.tm-sign-text { color:#DCE6F3; font-size:.88rem; line-height:1.5; }
 .tm-media-strip {
   display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px;
   width:100%; margin-top:14px;
@@ -3323,6 +3326,22 @@ a { color:inherit; text-decoration:none; }
 .tm-media-card.intersection_image .tm-media-visual { padding:0; background:#111827; }
 .tm-media-image { display:block; width:100%; height:100%; object-fit:contain; }
 .tm-media-card.intersection_image .tm-media-image { object-fit:cover; }
+.tm-media-card.sign {
+  width:100%; display:grid; grid-template-columns:90px minmax(0,1fr); padding:0;
+  font:inherit; text-align:left; cursor:pointer;
+}
+.tm-media-card.sign .tm-media-visual {
+  width:90px; height:90px; min-height:48px; padding:8px; background:#111C30;
+}
+.tm-media-card.sign .tm-media-image {
+  width:100%; max-width:90px; height:100%; max-height:90px; object-fit:contain;
+}
+.tm-media-card.sign .tm-media-copy { justify-content:center; padding:10px 12px; }
+.mqc-body .tm-media-card.sign .tm-media-visual { height:90px; }
+.tm-sign-term {
+  display:inline; padding:0 2px; border:0; border-bottom:1px solid #67E8F9;
+  background:transparent; color:#67E8F9; font:inherit; font-weight:800; cursor:pointer;
+}
 .tm-media-copy { display:flex; flex-direction:column; gap:5px; padding:12px 14px 14px; }
 .tm-media-title { color:#FFF; font-size:.94rem; line-height:1.3; font-weight:900; }
 .tm-media-caption { color:#C9D5E7; font-size:.8rem; line-height:1.5; }
@@ -3362,13 +3381,14 @@ a { color:inherit; text-decoration:none; }
   .teacher-inputbar { padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px)); background:#071326; position:relative; z-index:2; }
   .teacher-input { min-height:56px; font-size:1rem; }
   .teacher-send-btn { min-width:86px; height:56px; }
-  .tm-sign-card { flex-basis:100%; grid-template-columns:96px minmax(0,1fr); gap:14px; padding:14px; }
-  .tm-sign-image-wrap { min-height:96px; }
-  .tm-sign-image { width:96px; height:96px; }
-  .tm-sign-title { font-size:1.2rem; }
+  .tm-sign-card { grid-template-columns:90px minmax(0,1fr); gap:12px; padding:12px; }
+  .tm-sign-image-wrap { min-height:48px; }
+  .tm-sign-image { width:90px; max-width:90px; height:90px; max-height:90px; }
+  .tm-sign-title { font-size:1.05rem; }
   .tm-sign-text { font-size:.9rem; line-height:1.5; }
   .tm-media-strip { grid-template-columns:1fr; }
   .tm-media-visual { height:160px; }
+  .tm-media-card.sign .tm-media-visual { height:90px; }
   .tm-media-title { font-size:.92rem; }
   .tm-media-caption { font-size:.82rem; }
 }
@@ -9605,6 +9625,113 @@ function _teacherSignValue(sign, field) {
   return _getProp((sign && sign[field]) || {}, appLang) || '';
 }
 
+var _teacherSignCache = {};
+var _teacherSignAliases = {
+  no: {
+    '202_0':['vikepliktsskiltet','vikepliktskiltet','vikepliktsskilt','vikepliktskilt'],
+    '204_0':['stoppskiltet','stoppskilt'],
+    '208_0':['forkjørsveiskiltet','forkjørsvegskiltet','forkjørsvei','forkjørsveg','forkjørsrett']
+  },
+  th: {
+    '202_0':['ป้ายให้ทาง'],
+    '204_0':['ป้ายหยุด'],
+    '208_0':['ป้ายทางเอก','ถนนสายหลัก']
+  },
+  en: {
+    '202_0':['give way sign','yield sign'],
+    '204_0':['stop sign'],
+    '208_0':['priority road sign','priority road']
+  }
+};
+
+async function _getTeacherSign(signId) {
+  var id = String(signId || '').trim();
+  if (!id) return null;
+  if (!_teacherSignCache[id]) {
+    _teacherSignCache[id] = api('GET', '/api/signs/' + encodeURIComponent(id)).catch(function(error) {
+      delete _teacherSignCache[id];
+      console.warn('Sign detail unavailable:', id, error);
+      return null;
+    });
+  }
+  return await _teacherSignCache[id];
+}
+
+async function _openTeacherSignDetailById(signId) {
+  var sign = await _getTeacherSign(signId);
+  if (!sign || !_teacherSignValue(sign, 'name')) return;
+  openSignDetail(sign);
+}
+
+function _teacherSignLinkTerms(sign) {
+  var terms = [];
+  var localizedName = _teacherSignValue(sign, 'name');
+  if (localizedName) terms.push(localizedName);
+  var controlled = ((_teacherSignAliases[appLang] || {})[sign.id] || []);
+  controlled.forEach(function(term) { if (terms.indexOf(term) === -1) terms.push(term); });
+  return terms.sort(function(a, b) { return b.length - a.length; });
+}
+
+function _teacherIsWordChar(value) {
+  return !!value && /[\p{L}\p{N}_]/u.test(value);
+}
+
+function _teacherLinkSignName(container, sign) {
+  if (!container || !sign || !_teacherSignValue(sign, 'name')) return false;
+  var walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, {
+    acceptNode:function(node) {
+      return node.parentElement && !node.parentElement.closest('button, .tm-sign-strip, .tm-media-strip')
+        ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+    }
+  });
+  var nodes = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+  var terms = _teacherSignLinkTerms(sign);
+
+  for (var i = 0; i < nodes.length; i += 1) {
+    var node = nodes[i];
+    var text = node.nodeValue || '';
+    var lower = text.toLocaleLowerCase(appLang);
+    for (var j = 0; j < terms.length; j += 1) {
+      var term = terms[j];
+      var needle = term.toLocaleLowerCase(appLang);
+      var from = 0;
+      while (from <= lower.length - needle.length) {
+        var index = lower.indexOf(needle, from);
+        if (index === -1) break;
+        var needsBoundary = appLang !== 'th';
+        var beforeOk = !needsBoundary || !_teacherIsWordChar(text.charAt(index - 1));
+        var afterOk = !needsBoundary || !_teacherIsWordChar(text.charAt(index + needle.length));
+        if (beforeOk && afterOk) {
+          var tail = node.splitText(index);
+          tail.nodeValue = tail.nodeValue.slice(needle.length);
+          var button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'tm-sign-term';
+          button.textContent = text.slice(index, index + needle.length);
+          button.setAttribute('aria-label', _teacherSignValue(sign, 'name'));
+          button.onclick = function() { openSignDetail(sign); };
+          tail.parentNode.insertBefore(button, tail);
+          return true;
+        }
+        from = index + needle.length;
+      }
+    }
+  }
+  return false;
+}
+
+async function _teacherLinkSignReferences(container, signIds) {
+  if (!container || !Array.isArray(signIds)) return;
+  var uniqueIds = signIds.filter(function(id, index, items) {
+    return id && items.indexOf(id) === index;
+  }).slice(0, 4);
+  for (var i = 0; i < uniqueIds.length; i += 1) {
+    var sign = await _getTeacherSign(uniqueIds[i]);
+    if (sign) _teacherLinkSignName(container, sign);
+  }
+}
+
 function _teacherMediaSafeUrl(value) {
   var url = String(value || '').trim();
   return url.indexOf('/api/') === 0 || /^https?:\/\//i.test(url);
@@ -9637,9 +9764,15 @@ function _buildTeacherMediaCard(media) {
   if (['sign','intersection_image','video'].indexOf(media.type) === -1) return null;
   if (!media.title || !media.caption) return null;
 
-  var card = document.createElement('article');
+  var card = document.createElement(media.type === 'sign' ? 'button' : 'article');
   card.className = 'tm-media-card ' + media.type;
   card.dataset.materialId = media.id;
+  if (media.type === 'sign') {
+    if (!media.sign_id) return null;
+    card.type = 'button';
+    card.setAttribute('aria-label', media.title);
+    card.onclick = function() { _openTeacherSignDetailById(media.sign_id); };
+  }
 
   if (media.type === 'video') {
     var button = document.createElement('button');
@@ -9748,8 +9881,11 @@ async function showSimilarSignsFromChat(sign) {
 }
 
 function _buildTeacherSignCard(sign) {
-  var card = document.createElement('article');
+  var card = document.createElement('button');
+  card.type = 'button';
   card.className = 'tm-sign-card';
+  card.setAttribute('aria-label', _teacherSignValue(sign, 'name'));
+  card.onclick = function() { openSignDetail(sign); };
 
   var imageWrap = document.createElement('div');
   imageWrap.className = 'tm-sign-image-wrap';
@@ -9787,10 +9923,11 @@ async function _teacherAppendSignCards(signIds, bubble) {
   if (!bubble || !Array.isArray(signIds) || !signIds.length) return;
   var uniqueIds = signIds.filter(function(id, index, items) { return id && items.indexOf(id) === index; }).slice(0, 4);
   var results = await Promise.all(uniqueIds.map(async function(id) {
-    try { return await api('GET', '/api/signs/' + encodeURIComponent(id)); }
-    catch (e) { console.warn('SignCard unavailable:', id, e); return null; }
+    return await _getTeacherSign(id);
   }));
-  var signs = results.filter(Boolean);
+  var signs = results.filter(function(sign) {
+    return sign && _teacherSignValue(sign, 'name');
+  });
   if (!signs.length) return;
   var strip = document.createElement('div');
   strip.className = 'tm-sign-strip';
@@ -9979,6 +10116,7 @@ async function teacherSend(overrideMsg, customDisplayMsg) {
     var responseText = data.reply || t('teacher_error');
     var visibleText = (data.sign_ids && data.sign_ids.length) ? _teacherTextOnlyReply(responseText) : responseText;
     var assistantBubble = _teacherAppendBubble('assistant', visibleText);
+    await _teacherLinkSignReferences(assistantBubble, data.sign_ids || []);
     var mediaSignIds = _teacherAppendMediaCards(data.media || [], assistantBubble);
     var fallbackSignIds = (data.sign_ids || []).filter(function(signId) {
       return mediaSignIds.indexOf(signId) === -1;

@@ -172,6 +172,18 @@ class TeacherChatFallbackTests(unittest.TestCase):
         self.assertEqual(reply, f"Forklaring\n\n{tag}")
         self.assertEqual(self.module._enforce_approved_image_tags(reply, context), reply)
 
+    def test_sign_context_never_borrows_norwegian_for_missing_selected_language(self):
+        sign = {
+            "id": "204_0",
+            "name": {"no": "Stopp", "en": "Stop"},
+            "explanation": {"no": "Norsk regel", "en": "English rule"},
+            "driver_action": {"no": "Stans", "en": "Stop"},
+        }
+        self.assertEqual(self.module._format_sign_context(sign, "th"), "")
+        english = self.module._format_sign_context(sign, "en")
+        self.assertIn("- Name: Stop", english)
+        self.assertNotIn("Norsk regel", english)
+
     def test_unapproved_image_tag_is_removed(self):
         invented = "[image: https://example.com/wrong.jpg | Feil | ผิด | Wrong]"
         self.assertEqual(
@@ -183,9 +195,27 @@ class TeacherChatFallbackTests(unittest.TestCase):
         source = (Path(__file__).resolve().parents[1] / "teacher_chat.py").read_text(encoding="utf-8")
         self.assertIn("context_parts.insert(0, _format_sign_context(sign, lang))", source)
 
-    def test_vikeplikt_aliases_resolve_to_norwegian_sign_202(self):
-        for message in ("Forklar vikepliktskiltet", "Explain the give way sign", "อธิบายป้ายให้ทาง"):
-            self.assertEqual(self.module._explicit_sign_ids_for_message(message), ["202_0"])
+    def test_explicit_sign_aliases_resolve_in_each_supported_language(self):
+        cases = {
+            "202_0": ("Forklar vikepliktskiltet", "Explain the give way sign", "อธิบายป้ายให้ทาง"),
+            "204_0": ("Forklar stoppskiltet", "Explain the stop sign", "อธิบายป้ายหยุด"),
+            "208_0": ("Forklar forkjørsvei", "Explain the priority road", "อธิบายถนนสายหลัก"),
+        }
+        for sign_id, messages in cases.items():
+            for message in messages:
+                with self.subTest(sign_id=sign_id, message=message):
+                    self.assertEqual(self.module._explicit_sign_ids_for_message(message), [sign_id])
+
+    def test_explicit_sign_aliases_require_whole_latin_terms(self):
+        for message in ("Forklar stoppelengde", "Explain stop distance", "Forklar trafikkskilt", "Forklar vikeplikt"):
+            with self.subTest(message=message):
+                self.assertEqual(self.module._explicit_sign_ids_for_message(message), [])
+
+    def test_endpoint_uses_explicit_ids_for_media_and_response(self):
+        source = (Path(__file__).resolve().parents[1] / "teacher_chat.py").read_text(encoding="utf-8")
+        self.assertIn("explicit_sign_ids = _explicit_sign_ids_for_message(user_msg)", source)
+        self.assertIn("explicit_sign_ids=explicit_sign_ids", source)
+        self.assertIn("sign_ids = explicit_sign_ids or _sign_ids_from_context(context_str)", source)
 
     def test_explicit_sign_skips_broader_sign_search(self):
         source = (Path(__file__).resolve().parents[1] / "teacher_chat.py").read_text(encoding="utf-8")

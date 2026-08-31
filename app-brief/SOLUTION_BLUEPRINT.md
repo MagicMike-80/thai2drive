@@ -84,6 +84,182 @@ READY FOR AGENT 3
 
 ---
 
+# SOLUTION BLUEPRINT: eksakt skilt og kompakt ordkobling i Michael-chat
+
+## Mål
+
+Når elevens melding eksplisitt nevner ett av de tre avtalte skiltene, skal
+Michael-responsen inneholde bare dette skiltet som strukturert media og
+skiltreferanse:
+
+- `202_0`: Vikeplikt / Give Way / ให้ทาง
+- `204_0`: Stopp / Stop / หยุด
+- `208_0`: repoets forkjørsvegskilt; ID-en er fasit, mens synlig navn hentes fra
+  `GET /api/signs/208_0` (dagens norske datapost heter «Forkjørsrett» og engelsk
+  navn er «Priority Road»)
+
+Skiltet skal vises som et mørkt, kompakt kort med bilde innenfor 90 x 90 px.
+Et kontrollert, lokalisert skiltnavn i Michael-teksten skal kunne åpne den samme
+skiltdetaljen som kortet.
+
+## Eksplisitte ikke-mål
+
+- Ingen fuzzy matching, fri AI-tolkning av skilt eller modellgenererte URL-er.
+- Ingen ny database, migrasjon, skiltmetadata eller duplisering av bilder.
+- Ingen endring i promptens pedagogiske innhold, TTS, mobilappen, auth, kvoter,
+  premium, Stripe, RevenueCat, betaling eller produksjonshemmeligheter.
+- Ingen visning av «offisielle fargekoder» i denne patchen. Dagens API har ikke
+  autoritativ fargemetadata. `SIGN_GROUP_META` er dekorativ UI-farge og må aldri
+  merkes som en offisiell skiltfarge.
+- Ingen redesign av Michael, skiltbiblioteket eller det eksisterende
+  detaljpanelet.
+
+## Filer og komponenter
+
+Bare følgende applikasjonsfiler skal sannsynligvis endres:
+
+- `backend/teacher_chat.py`
+  - `_explicit_sign_ids_for_message`
+  - `_get_relevant_michael_materials`
+  - den avgrensede sign/media-dataflyten i lærerchat-endepunktet
+- `backend/webapp.py`
+  - `.tm-sign-*` og `.tm-media-card.sign` / `.tm-media-*`
+  - `_buildAssistantContent`, `_buildTeacherMediaCard`,
+    `_buildTeacherSignCard` og signkortinnsettingen
+  - eksisterende `openSignDetail`/`GET /api/signs/{id}`-flyt
+- målrettede tester i `backend/tests/test_michael_material_retrieval.py` og
+  `tests/test_michael_mobile_ui_contract.py`; en egen liten alias-test kan
+  brukes dersom det holder testen tydeligere.
+
+`backend/server.py`, API-skjemaet, admin, skiltdata og betalings-/tilgangsfiler
+skal ikke endres.
+
+## Dataflyt og kontrakter
+
+1. Kjør `_explicit_sign_ids_for_message(user_msg)` én gang for den aktuelle
+   elevmeldingen. Resolveren skal bruke en liten, eksplisitt NO/TH/EN-tabell for
+   bare `202_0`, `204_0` og `208_0`. Latin-baserte aliaser skal ha ord-/
+   frasegrenser, slik at eksempelvis «stoppelengde» ikke blir `204_0`; thai
+   bruker de eksplisitte hele frasene. Flere varianter som peker på samme ID
+   dedupliseres i stabil rekkefølge.
+2. Bevar dagens numeriske skiltoppslag og brede læreplansøk. Når en eksplisitt
+   ID finnes, skal responsens `sign_ids` begrenses til den eller de eksplisitte
+   ID-ene. Når ingen eksplisitt ID finnes, brukes dagens kontekstutledede
+   `sign_ids` uendret.
+3. Send eksplisitte ID-er separat inn i materialvalget. Hvis listen ikke er
+   tom, skal `_get_relevant_michael_materials` gå i streng skiltmodus: filtrer
+   kandidater før rangering og returner maksimalt ett `type="sign"`-element der
+   `source_id`/`sign_ids` er nøyaktig samme ID. Ikke returner
+   `intersection_image`, `video`, annet skilt eller et rent tag-treff i samme
+   svar. Hvis det godkjente skiltmediet mangler komplett aktivt språk, trygg URL
+   eller eksakt ID, returneres ingen media; tekst og strukturert `sign_ids`
+   fortsetter slik at eksisterende GET-fallback kan brukes.
+4. Når ingen eksplisitt ID finnes, behold dagens godkjente maks-to-materialer,
+   rangering, språkkrav og tekst-only fallback. Dette hindrer regresjon for
+   brede spørsmål om eksempelvis vikeplikt, trafikkskilt eller veikryss.
+5. Behold `TeacherChatResponse` uendret: `reply`, `suggestions`, `sign_ids` og
+   `media`. Backend er fortsatt source of truth; frontend bruker bare disse
+   strukturerte feltene og `GET /api/signs/{id}`.
+6. Frontend henter/skjuler skiltdetaljen fail-soft via eksisterende
+   `GET /api/signs/{id}`. Et sign-mediekort og fallbackkort skal begge åpne
+   `openSignDetail(sign)` med den hentede posten. Manglende GET, bilde eller
+   aktiv språkverdi skjuler den berørte koblingen/kortdelen uten å blokkere
+   Michael-teksten.
+
+## Tekstkobling uten usikker HTML
+
+- AI-svaret skal fortsatt bygges med DOM og `textContent`; ikke gjør modelltekst
+  til `innerHTML`.
+- Etter at en strukturert sign-ID er validert og signposten er hentet, søkes kun
+  i tekstnoder i det aktuelle assistantsvar-et. Kandidater er det lokaliserte
+  API-navnet og en liten kontrollert aliasliste for samme ID og aktivt språk.
+- Bare første eksakte, grensekontrollerte forekomst erstattes med en ekte
+  `<button type="button">`. Knappen får lokalisert navn i tilgjengelig label,
+  tastaturfokus og åpner `openSignDetail(sign)`. Ingen teksttreff uten en
+  strukturert ID, og ingen kobling på deler av andre ord.
+- Manglende navnetreff omskriver ikke svaret; det kompakte kortet forblir den
+  tilgjengelige inngangen til detaljen.
+- Detaljpanelet starter på `appLang`. `name`, `explanation` og `driver_action`
+  leses bare for valgt språk gjennom eksisterende strenge `_getProp`. Hvis
+  tekst mangler, skjules den aktuelle detaljen fremfor norsk fallback.
+
+## Kompakt layout og lesbarhet
+
+- Både `.tm-sign-image` og signvarianten av `.tm-media-image` får
+  `width/max-width:90px`, `height/max-height:90px` og `object-fit:contain` på
+  desktop, mobil og quiz-coach.
+- Signvarianten av `.tm-media-visual` skal ikke arve 180/160/150 px høyde fra
+  generiske media. Bruk innholdstilpasset kompakt flate med minst 48 px
+  klikkmål, mørk bakgrunn og eksisterende cyan/oransje aksent.
+- Begge signkortvariantene skal være knapper eller inneholde én fullkort-knapp,
+  med synlig `:focus-visible`, uten horisontal scrolling og uten nye
+  handlingsknapper.
+- Behold mobilens svartekst på minst `1.05rem` og `line-height:1.65`. Korttekst
+  skal være kort `driver_action`, ellers `explanation`, kun på aktivt språk.
+- Eksisterende deduplisering mellom `media.sign_id` og fallback-`sign_ids`
+  beholdes, slik at samme skilt aldri rendres to ganger.
+
+## Trinnvis patchplan
+
+1. Utvid og test den eksplisitte aliasresolveren for `202_0`, `204_0` og
+   `208_0`, inkludert negative kollisjonstester som «stoppelengde».
+2. Legg inn streng eksklusivitetsgren i materialhelperen og oppdater testen som
+   i dag forventer `sign-202` sammen med `tag-first`.
+3. Bruk eksplisitte ID-er som responsens `sign_ids` og materialgrunnlag bare når
+   de finnes; behold dagens brede flyt ellers.
+4. Gjør begge eksisterende signkortvariantene kompakte og klikkbare via én
+   liten, delt detaljåpner/cache rundt `GET /api/signs/{id}`.
+5. Legg en sikker tekstnode-kobler for aktivt språk og kall den bare med den
+   strukturerte signposten for det aktuelle svaret.
+6. Lås kontrakten med backend- og frontendtester, deretter full lokal QA.
+
+## Tester og manuell verifisering
+
+- Aliasmatrise: minst ett eksplisitt uttrykk per NO/TH/EN for hver av de tre
+  ID-ene; forvent bare henholdsvis `202_0`, `204_0` og `208_0`.
+- Negative aliaser: «stoppelengde», «stop distance» og brede
+  «trafikkskilt»/«vikeplikt» skal ikke feilaktig bli stoppskilt eller en annen
+  eksplisitt ID.
+- Retrieval: eksakt sign + tag-bilde + video + annet skilt skal returnere bare
+  samme sign; deaktivert, språkufullstendig eller utrygt eksakt signmedium gir
+  `media=[]`.
+- Bred retrieval uten eksplisitt ID skal fortsatt kunne returnere dagens
+  godkjente, begrensede media.
+- Frontendkontrakt: 90 px-grense for begge signrenderere, ett kort per ID,
+  klikkbart kort, sikker tekstnode-knapp, `GET /api/signs/{id}` og ingen bruk av
+  `innerHTML` for AI-svaret.
+- Språk: NO/TH/EN-navn og kortregel kommer bare fra aktivt språk; manglende
+  verdi skjules. Ingen ny learner-facing label uten alle tre språk.
+- Manuelt lokalt ved ca. 390 px: ordkobling, kort, fokus, detaljåpning,
+  bilde-feilfallback, lang thai-tekst og ingen horisontal scrolling.
+- Kjør relevante lokale enhetstester, Python AST/syntaks, inline-JavaScript-
+  syntaks og `git diff --check`. Ikke kall produksjonens `POST /api/teacher/chat`
+  eller andre tester som skriver samtale-, bruker- eller produksjonsdata.
+
+## Tilgang, premium og produksjonsrisiko
+
+Tilgangs- og premiumkonsekvensen er null: samme eksisterende chatrespons og
+samme tilgangsgrenser brukes. Hovedrisikoene er falske substringtreff, dobbelt
+skiltkort og språkfallback; de avgrenses med eksplisitte aliaser, eksakt
+ID-filter, eksisterende deduplisering og fail-stop per språk.
+
+Ved feil frontenddetalj skal Michael-svaret fortsatt vises som ren tekst.
+Backendendringen kan rulles tilbake ved å fjerne de nye aliasene og den strenge
+eksaktgrenen. Frontend kan rulles tilbake ved å fjerne detaljåpner/
+tekstnodekobler og gjenopprette tidligere kort-CSS. Ingen data må migreres eller
+slettes.
+
+## Avgjørelser som krever Michael
+
+Ingen ny avgjørelse er nødvendig for denne patchen. «Offisielle fargekoder» er
+ikke tilgjengelige i dagens autoritative API og skal derfor skjules. Hvis feltet
+senere ønskes, må Michael først godkjenne en autoritativ datakilde og en separat
+metadataendring.
+
+READY FOR AGENT 3
+
+---
+
 # SOLUTION BLUEPRINT — ekte vikepliktskilt i Michael-sidefeltet
 
 ## Mål
