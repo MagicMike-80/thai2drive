@@ -572,7 +572,8 @@ a { color:inherit; text-decoration:none; }
 .mqc-avatar { width:38px; height:38px; border-radius:50%; object-fit:cover; }
 .mqc-title { flex:1; font-weight:850; color:var(--text); }
 .mqc-close { border:0; background:transparent; color:var(--muted); font-size:1.25rem; cursor:pointer; }
-.mqc-body { padding:15px 17px; color:var(--text); line-height:1.65; font-size:.88rem; white-space:pre-wrap; }
+.mqc-body { padding:15px 17px; color:var(--text); line-height:1.65; font-size:.88rem; }
+.mqc-answer { white-space:pre-wrap; }
 .mqc-action { display:none; width:calc(100% - 34px); margin:0 17px 17px; padding:11px 14px; border-radius:12px; border:1px solid rgba(255,153,51,.35); background:rgba(255,153,51,.12); color:var(--orange); font-weight:800; cursor:pointer; }
 .mqc-action.show { display:block; }
 .hsm-exam-timer {
@@ -1758,6 +1759,10 @@ a { color:inherit; text-decoration:none; }
 .vp-player-wrap video {
   width:100%; display:block; max-height:60vh;
 }
+.vp-player-wrap iframe {
+  width:100%; aspect-ratio:16/9; display:block; border:0;
+}
+.vp-player-wrap iframe[hidden] { display:none; }
 .vp-scroll {
   flex:1; overflow-y:auto; padding:0 14px 16px;
   -webkit-overflow-scrolling:touch;
@@ -3302,6 +3307,37 @@ a { color:inherit; text-decoration:none; }
 .tm-sign-tag { color:#67E8F9; font-size:.7rem; font-weight:900; letter-spacing:.08em; text-transform:uppercase; }
 .tm-sign-title { margin:0; color:#fff; font-size:1.5rem; line-height:1.25; font-weight:900; }
 .tm-sign-text { color:#DCE6F3; font-size:1rem; line-height:1.6; }
+.tm-media-strip {
+  display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px;
+  width:100%; margin-top:14px;
+}
+.tm-media-card {
+  min-width:0; overflow:hidden; border-radius:16px; background:#0B172A;
+  border:1px solid rgba(103,232,249,.34); color:#F8FAFC;
+  box-shadow:0 10px 26px rgba(0,0,0,.2);
+}
+.tm-media-visual {
+  display:flex; align-items:center; justify-content:center; width:100%; height:180px;
+  padding:12px; background:#F8FAFC;
+}
+.tm-media-card.intersection_image .tm-media-visual { padding:0; background:#111827; }
+.tm-media-image { display:block; width:100%; height:100%; object-fit:contain; }
+.tm-media-card.intersection_image .tm-media-image { object-fit:cover; }
+.tm-media-copy { display:flex; flex-direction:column; gap:5px; padding:12px 14px 14px; }
+.tm-media-title { color:#FFF; font-size:.94rem; line-height:1.3; font-weight:900; }
+.tm-media-caption { color:#C9D5E7; font-size:.8rem; line-height:1.5; }
+.tm-media-video {
+  width:100%; display:flex; align-items:center; gap:12px; padding:15px;
+  border:0; background:#111C30; color:#FFF; font:inherit; text-align:left; cursor:pointer;
+}
+.tm-media-play {
+  width:44px; height:44px; flex:0 0 44px; display:grid; place-items:center;
+  border-radius:50%; background:#2563EB; color:#FFF; font-size:1rem;
+  box-shadow:0 0 0 3px rgba(96,165,250,.22);
+}
+.tm-media-video-label { color:#67E8F9; font-size:.7rem; font-weight:900; letter-spacing:.04em; text-transform:uppercase; }
+.mqc-body .tm-media-strip { grid-template-columns:1fr; margin-top:12px; }
+.mqc-body .tm-media-visual { height:150px; }
 @media (max-width:767px) {
   #app.teacher-mode .flag-bg { display:none; }
   #screenTeacher { background:#071326; }
@@ -3331,6 +3367,10 @@ a { color:inherit; text-decoration:none; }
   .tm-sign-image { width:96px; height:96px; }
   .tm-sign-title { font-size:1.2rem; }
   .tm-sign-text { font-size:.9rem; line-height:1.5; }
+  .tm-media-strip { grid-template-columns:1fr; }
+  .tm-media-visual { height:160px; }
+  .tm-media-title { font-size:.92rem; }
+  .tm-media-caption { font-size:.82rem; }
 }
 
 /* ═══ CYBER & NEON STYLING (Gemini Blueprint) ═══ */
@@ -3841,6 +3881,7 @@ a { color:inherit; text-decoration:none; }
       </div>
       <div class="vp-player-wrap">
         <video id="vpVideo" controls preload="metadata" playsinline></video>
+        <iframe id="vpYoutube" title="Video" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen hidden></iframe>
       </div>
       <div class="vp-glow-road" id="vpGlowRoad"></div>
       <div class="vp-scroll">
@@ -4512,6 +4553,7 @@ var UI = {
   coach_unavailable:{th:'ตอนนี้ Michael ตอบไม่ได้ อ่านคำอธิบายปกติและทำแบบทดสอบต่อได้เลย', no:'Michael svarer ikke akkurat nå. Bruk den vanlige forklaringen og fortsett quizen.', en:'Michael is unavailable right now. Use the regular explanation and continue the quiz.'},
   coach_practical:{th:'สิ่งนี้หมายถึงอะไรในทางปฏิบัติ?', no:'Hva betyr dette i praksis?', en:'What does this mean in practice?'},
   coach_practice_loading:{th:'Michael กำลังสร้างคำถามฝึกสั้น ๆ…', no:'Michael lager et kort kontrollspørsmål…', en:'Michael is creating a short practice question…'},
+  teacher_video_explanation:{th:'ดูวิดีโอคำอธิบาย', no:'Se videoforklaring', en:'Watch video explanation'},
   questions_word:{th:'คำถาม',              no:'spørsmål',         en:'questions'},
   signs_word:  {th:'ป้าย',                 no:'skilt',            en:'signs'},
   categories_empty:{th:'ไม่พบหมวดหมู่',     no:'Ingen kategorier funnet', en:'No categories found'},
@@ -5375,6 +5417,7 @@ var _currentVideo = null;
 var _vpWaypoints = [];
 var _vpKnowledgeIds = [];
 var _vpTimer = null;
+var _videoReturnScreen = 'screenLibrary';
 
 function openVideoPlayer(filePath) {
   // Find video in cache
@@ -5386,6 +5429,9 @@ function openVideoPlayer(filePath) {
     }
   }
   if (!v) return;
+
+  var activeScreen = document.querySelector('.screen.active');
+  if (activeScreen && activeScreen.id !== 'screenVideoPlayer') _videoReturnScreen = activeScreen.id;
 
   _currentVideo = v;
   _vpKnowledgeIds = [];
@@ -5412,15 +5458,25 @@ function openVideoPlayer(filePath) {
 
   // Set video source
   var vid = document.getElementById('vpVideo');
+  var youtubeFrame = document.getElementById('vpYoutube');
   var rawPath = v.file_path || '';
   if (rawPath && rawPath.indexOf('/public_assets/') === 0) {
     rawPath = '/api/assets/' + rawPath.substring('/public_assets/'.length);
   }
   if (rawPath) {
+    if (youtubeFrame) { youtubeFrame.src = ''; youtubeFrame.hidden = true; }
+    vid.style.display = 'block';
     vid.src = rawPath;
   } else if (v.youtube_url) {
-    vid.innerHTML = '<iframe src="https://www.youtube.com/embed/' + _extractYtId(v.youtube_url) + '?autoplay=1" style="width:100%;aspect-ratio:16/9" frameborder="0" allow="autoplay;encrypted-media" allowfullscreen></iframe>';
+    var youtubeId = _extractYtId(v.youtube_url);
+    if (!youtubeId || !youtubeFrame) return;
+    vid.pause();
+    vid.removeAttribute('src');
+    vid.load();
     vid.style.display = 'none';
+    youtubeFrame.src = 'https://www.youtube.com/embed/' + youtubeId + '?autoplay=1';
+    youtubeFrame.title = title;
+    youtubeFrame.hidden = false;
   }
 
   // Reset knowledge area
@@ -5444,14 +5500,16 @@ function closeVideoPlayer() {
   stopVpTimer();
   var vid = document.getElementById('vpVideo');
   if (vid) { vid.pause(); vid.src = ''; vid.ontimeupdate = null; vid.onended = null; vid.onplay = null; vid.onpause = null; }
+  var youtubeFrame = document.getElementById('vpYoutube');
+  if (youtubeFrame) { youtubeFrame.src = ''; youtubeFrame.hidden = true; }
   _currentVideo = null;
   document.getElementById('bottomNav').style.display = 'flex';
-  showScreen('screenLibrary');
+  showScreen(_videoReturnScreen || 'screenLibrary');
 }
 
 function _extractYtId(url) {
   if (!url) return '';
-  var m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/);
+  var m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/(?:embed|shorts)\/)([a-zA-Z0-9_-]{11})/);
   return m ? m[1] : '';
 }
 
@@ -9036,7 +9094,7 @@ async function _quizCoachRequest(message) {
     if (!res.ok) throw new Error('HTTP ' + res.status);
     var data = await res.json();
     if (data.session_id) _quizCoachSessionId = data.session_id;
-    return data.reply || '';
+    return data;
   } finally {
     clearTimeout(timeoutId);
     if (_quizCoachAbort === controller) _quizCoachAbort = null;
@@ -9066,10 +9124,9 @@ async function openMichaelQuizCoach() {
     + '\nCorrect answer (' + ctx.correctAnswerId + '): ' + ctx.correctAnswer
     + '\nExisting explanation: ' + ctx.explanation + '\n</quiz_context>';
   try {
-    var reply = await _quizCoachRequest(prompt);
+    var data = await _quizCoachRequest(prompt);
     if (!panel.classList.contains('open')) return;
-    body.textContent = reply || t('coach_unavailable');
-    if (reply) action.classList.add('show');
+    if (_renderQuizCoachResponse(body, data)) action.classList.add('show');
   } catch(e) {
     if (panel.classList.contains('open')) body.textContent = t('coach_unavailable');
   }
@@ -9087,8 +9144,8 @@ async function requestCoachPractice() {
     en:'Give one short traffic situation and ask one simple check question. Do not reveal the answer immediately.'
   };
   try {
-    var reply = await _quizCoachRequest(promptByLang[appLang] || '');
-    body.textContent = reply || t('coach_unavailable');
+    var data = await _quizCoachRequest(promptByLang[appLang] || '');
+    _renderQuizCoachResponse(body, data);
     action.classList.remove('show');
   } catch(e) {
     body.textContent = t('coach_unavailable');
@@ -9548,6 +9605,130 @@ function _teacherSignValue(sign, field) {
   return _getProp((sign && sign[field]) || {}, appLang) || '';
 }
 
+function _teacherMediaSafeUrl(value) {
+  var url = String(value || '').trim();
+  return url.indexOf('/api/') === 0 || /^https?:\/\//i.test(url);
+}
+
+function _openTeacherMediaVideo(media) {
+  if (!media || !_teacherMediaSafeUrl(media.url)) return;
+  var isYoutube = !!_extractYtId(media.url);
+  var video = {
+    id:media.id || '',
+    file_path:isYoutube ? '' : media.url,
+    youtube_url:isYoutube ? media.url : '',
+    title_no:appLang === 'no' ? media.title : '',
+    title_th:appLang === 'th' ? media.title : '',
+    title_en:appLang === 'en' ? media.title : '',
+    topic_tags:[],
+    duration_seconds:0
+  };
+  if (!_videosCached) _videosCached = [];
+  var source = video.file_path || video.youtube_url;
+  var exists = _videosCached.some(function(item) {
+    return item && (item.file_path === source || item.youtube_url === source);
+  });
+  if (!exists) _videosCached.push(video);
+  openVideoPlayer(source);
+}
+
+function _buildTeacherMediaCard(media) {
+  if (!media || !media.id || !_teacherMediaSafeUrl(media.url)) return null;
+  if (['sign','intersection_image','video'].indexOf(media.type) === -1) return null;
+  if (!media.title || !media.caption) return null;
+
+  var card = document.createElement('article');
+  card.className = 'tm-media-card ' + media.type;
+  card.dataset.materialId = media.id;
+
+  if (media.type === 'video') {
+    var button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'tm-media-video';
+    button.setAttribute('aria-label', t('teacher_video_explanation') + ': ' + media.title);
+
+    var play = document.createElement('span');
+    play.className = 'tm-media-play';
+    play.setAttribute('aria-hidden', 'true');
+    play.textContent = '▶';
+    button.appendChild(play);
+
+    var videoCopy = document.createElement('span');
+    videoCopy.className = 'tm-media-copy';
+    var videoLabel = document.createElement('span');
+    videoLabel.className = 'tm-media-video-label';
+    videoLabel.textContent = t('teacher_video_explanation');
+    var videoTitle = document.createElement('span');
+    videoTitle.className = 'tm-media-title';
+    videoTitle.textContent = media.title;
+    var videoCaption = document.createElement('span');
+    videoCaption.className = 'tm-media-caption';
+    videoCaption.textContent = media.caption;
+    videoCopy.appendChild(videoLabel);
+    videoCopy.appendChild(videoTitle);
+    videoCopy.appendChild(videoCaption);
+    button.appendChild(videoCopy);
+    button.onclick = function() { _openTeacherMediaVideo(media); };
+    card.appendChild(button);
+    return card;
+  }
+
+  var visual = document.createElement('div');
+  visual.className = 'tm-media-visual';
+  var image = document.createElement('img');
+  image.className = 'tm-media-image';
+  image.src = media.url;
+  image.alt = media.title;
+  image.loading = 'lazy';
+  image.onerror = function() { visual.hidden = true; };
+  visual.appendChild(image);
+  card.appendChild(visual);
+
+  var copy = document.createElement('div');
+  copy.className = 'tm-media-copy';
+  var title = document.createElement('div');
+  title.className = 'tm-media-title';
+  title.textContent = media.title;
+  var caption = document.createElement('div');
+  caption.className = 'tm-media-caption';
+  caption.textContent = media.caption;
+  copy.appendChild(title);
+  copy.appendChild(caption);
+  card.appendChild(copy);
+  return card;
+}
+
+function _teacherAppendMediaCards(mediaItems, container) {
+  if (!container || !Array.isArray(mediaItems) || !mediaItems.length) return [];
+  var seen = {};
+  var renderedSignIds = [];
+  var strip = document.createElement('div');
+  strip.className = 'tm-media-strip';
+  mediaItems.slice(0, 2).forEach(function(media) {
+    if (!media || seen[media.id]) return;
+    var card = _buildTeacherMediaCard(media);
+    if (!card) return;
+    seen[media.id] = true;
+    if (media.sign_id) renderedSignIds.push(media.sign_id);
+    strip.appendChild(card);
+  });
+  if (!strip.children.length) return renderedSignIds;
+  container.appendChild(strip);
+  return renderedSignIds;
+}
+
+function _renderQuizCoachResponse(container, data) {
+  if (!container) return false;
+  var reply = data && data.reply ? data.reply : '';
+  container.innerHTML = '';
+  var answer = document.createElement('div');
+  answer.className = 'mqc-answer';
+  answer.textContent = reply || t('coach_unavailable');
+  container.appendChild(answer);
+  _teacherAppendMediaCards((data && data.media) || [], container);
+  return !!reply;
+}
+
 async function practiceSignFromChat(signId) {
   var nextUrl = new URL(window.location.href);
   nextUrl.searchParams.set('sign', signId);
@@ -9798,7 +9979,11 @@ async function teacherSend(overrideMsg, customDisplayMsg) {
     var responseText = data.reply || t('teacher_error');
     var visibleText = (data.sign_ids && data.sign_ids.length) ? _teacherTextOnlyReply(responseText) : responseText;
     var assistantBubble = _teacherAppendBubble('assistant', visibleText);
-    await _teacherAppendSignCards(data.sign_ids || [], assistantBubble);
+    var mediaSignIds = _teacherAppendMediaCards(data.media || [], assistantBubble);
+    var fallbackSignIds = (data.sign_ids || []).filter(function(signId) {
+      return mediaSignIds.indexOf(signId) === -1;
+    });
+    await _teacherAppendSignCards(fallbackSignIds, assistantBubble);
     if (data.sign_ids && data.sign_ids.length) {
       try {
         var signForActions = await api('GET', '/api/signs/' + encodeURIComponent(data.sign_ids[0]));

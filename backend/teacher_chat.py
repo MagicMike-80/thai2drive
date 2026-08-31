@@ -1003,6 +1003,131 @@ def _explicit_sign_ids_for_message(user_msg: str) -> list[str]:
     return [sign_id for sign_id, terms in aliases.items() if any(term in message for term in terms)]
 
 
+_MATERIAL_TOPIC_ALIASES = (
+    ("vikeplikt", "høyreregel", "right of way", "right-of-way", "give way", "yield", "การให้ทาง", "ให้ทาง"),
+    ("rundkjøring", "roundabout", "วงเวียน"),
+    ("fartsgrense", "hastighet", "speed limit", "speed", "ความเร็ว"),
+    ("stoppelengde", "stopping distance", "ระยะหยุดรถ"),
+    ("bremselengde", "braking distance", "ระยะเบรก"),
+    ("reaksjonslengde", "reaction distance", "ระยะตอบสนอง", "ระยะปฏิกิริยา"),
+    ("parkering", "parking", "จอดรถ", "ลานจอดรถ"),
+)
+
+
+def _normalize_material_match_text(value: str) -> str:
+    return re.sub(r"\s+", " ", re.sub(r"[^\w\s-]", " ", (value or "").casefold())).strip()
+
+
+def _material_match_terms(user_msg: str, extra_context: str = "") -> set[str]:
+    """Expand only known multilingual traffic concepts; never use free AI URLs."""
+    query = _normalize_material_match_text(f"{user_msg} {extra_context}")
+    terms = {word for word in query.split() if len(word) >= 3}
+    for aliases in _MATERIAL_TOPIC_ALIASES:
+        normalized_aliases = {_normalize_material_match_text(alias) for alias in aliases}
+        if any(alias and alias in query for alias in normalized_aliases):
+            terms.update(normalized_aliases)
+    return terms
+
+
+def _safe_michael_material_url(value: str) -> bool:
+    value = (value or "").strip()
+    return value.startswith("/api/") or value.startswith("https://") or value.startswith("http://")
+
+
+def _material_lang_value(material: dict, field: str, lang: str) -> str:
+    values = material.get(field)
+    if not isinstance(values, dict):
+        return ""
+    value = values.get(lang)
+    return value.strip() if isinstance(value, str) and value.strip() else ""
+
+
+async def _get_relevant_michael_materials(
+    user_msg: str,
+    lang: str,
+    sign_ids: Optional[List[str]] = None,
+    extra_context: str = "",
+    limit: int = 2,
+) -> list[dict]:
+    """Rank approved admin references deterministically and return safe localized media."""
+    try:
+        approved = await _db["michael_materials"].find({
+            "active": True,
+            "approved_for_michael": True,
+        }).to_list(length=500)
+        if not approved:
+            return []
+
+        exact_sign_ids = {str(sign_id).strip() for sign_id in (sign_ids or []) if str(sign_id).strip()}
+        query = _normalize_material_match_text(f"{user_msg} {extra_context}")
+        terms = _material_match_terms(user_msg, extra_context)
+        ranked = []
+
+        for material in approved:
+            title = _material_lang_value(material, "title", lang)
+            caption = _material_lang_value(material, "caption", lang)
+            if not title or not caption:
+                continue
+
+            material_type = str(material.get("type", "")).strip()
+            if material_type not in {"sign", "intersection_image", "video"}:
+                continue
+            source_id = str(material.get("source_id", "")).strip()
+            linked_sign_ids = {
+                str(sign_id).strip() for sign_id in material.get("sign_ids", [])
+                if str(sign_id).strip()
+            }
+            if material_type == "sign" and source_id:
+                linked_sign_ids.add(source_id)
+
+            score = 0
+            exact_matches = exact_sign_ids & linked_sign_ids
+            if exact_matches:
+                score += 1000
+
+            for field, weight in (("situation_tags", 200), ("topic_tags", 100)):
+                for raw_tag in material.get(field, []):
+                    tag = _normalize_material_match_text(str(raw_tag))
+                    if tag and (tag in query or tag in terms):
+                        score += weight
+
+            if score <= 0:
+                continue
+
+            url = str(material.get("source_url", "")).strip()
+            if material_type == "video" and source_id:
+                video = await _db["learning_videos"].find_one({"id": source_id, "active": True})
+                if not video:
+                    continue
+                url = str(video.get("youtube_url", "")).strip()
+            if not _safe_michael_material_url(url):
+                continue
+
+            sign_id = sorted(exact_matches)[0] if exact_matches else ""
+            if not sign_id and material_type == "sign":
+                sign_id = source_id
+            payload = {
+                "id": str(material.get("id", "")).strip(),
+                "type": material_type,
+                "url": url,
+                "title": title,
+                "caption": caption,
+            }
+            if sign_id:
+                payload["sign_id"] = sign_id
+            try:
+                priority = max(0, int(material.get("priority", 100)))
+            except (TypeError, ValueError):
+                priority = 100
+            ranked.append((-score, priority, payload["id"], payload))
+
+        ranked.sort(key=lambda item: item[:3])
+        return [item[3] for item in ranked[:max(0, min(limit, 2))]]
+    except Exception as exc:
+        logger.error("Error retrieving Michael material: %s", exc)
+        return []
+
+
 # ─── Contextual chip suggestions (multilingual keyword detection) ─────────────
 _KW = {
     "vikeplikt": {
@@ -1439,6 +1564,7 @@ class TeacherChatResponse(BaseModel):
     reply: str
     suggestions: list = []
     sign_ids: list[str] = Field(default_factory=list)
+    media: list[dict] = Field(default_factory=list)
 
 
 @teacher_router.post("/teacher/chat", response_model=TeacherChatResponse)
@@ -1494,12 +1620,20 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
     # Determine reply language — request param takes priority
     # Call LLM
     context_str = ""
+    media = []
     try:
-        if not LLM_KEY:
-            raise RuntimeError("DEEPSEEK_API_KEY not configured")
-
         # Retrieve curriculum context from database (RAG)
         context_str = await _get_curriculum_context(user_msg, lang)
+        context_sign_ids = _sign_ids_from_context(context_str)
+        media = await _get_relevant_michael_materials(
+            user_msg,
+            lang,
+            sign_ids=context_sign_ids,
+            extra_context=quiz_context_str,
+        )
+
+        if not LLM_KEY:
+            raise RuntimeError("DEEPSEEK_API_KEY not configured")
 
         # _build_system_prompt injects [LANGUAGE] header FIRST, then language-specific examples
         system_prompt = _build_system_prompt(lang)
@@ -1532,6 +1666,19 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
                     inject_str += "\nConsider recommending these specific resources when appropriate.\n"
                     inject_str += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
                     system_prompt += inject_str
+
+        if media:
+            system_prompt += (
+                "\n\n━━━ APPROVED MICHAEL MATERIAL ━━━\n"
+                "The app will render these resources separately. Refer to their teaching point "
+                "only when relevant; never invent or rewrite their URLs.\n"
+            )
+            for item in media:
+                system_prompt += (
+                    f"MATERIAL {item['id']} | {item['type']} | {item['title']} | "
+                    f"{item['caption']} | {item['url']}\n"
+                )
+            system_prompt += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
         multimedia_str = await _get_available_multimedia(lang)
         if multimedia_str:
@@ -1689,6 +1836,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         reply=reply_text,
         suggestions=suggestions,
         sign_ids=sign_ids,
+        media=media,
     )
 
 

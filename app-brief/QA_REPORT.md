@@ -1,3 +1,43 @@
+# QA GATE: Patch 2 — Michael-chat og visuelle media-kort
+
+## Funksjon og kontrakt
+
+- PASS: bare `active: true` og `approved_for_michael: true` vurderes.
+- PASS: eksakt godkjent skilt-ID rangeres foran emne- og situasjonsknagger.
+- PASS: responsen er bakoverkompatibel og legger kun til `media` med maksimalt
+  to ressurser; eksisterende `sign_ids` er bevart.
+- PASS: video må ha en aktiv kilde i `learning_videos`, og klienten får
+  avspillings-URL-en fremfor et miniatyrbilde.
+- PASS: manglende bibliotek, databasefeil eller manglende treff gir tom
+  `media`-liste og stopper ikke Michaels tekstsvar.
+- PASS: både vanlig chat og quiz-coach viser media under Michaels tekst.
+- PASS: skilt og situasjonsbilder har begrenset høyde, høy kontrast, tittel,
+  forklaring og énkolonne-layout på mobil.
+- PASS: video har språkstyrt knapp på NO/TH/EN og åpnes i appens videospiller.
+- PASS: lukking av video returnerer eleven til den opprinnelige skjermen.
+
+## Språk og sikkerhet
+
+- PASS: tittel og forklaring hentes bare fra aktivt NO-, TH- eller EN-felt;
+  det finnes ingen norsk fallback inn i thai eller engelsk.
+- PASS: en ressurs uten komplett tekst i elevens aktive språk blir utelatt.
+- PASS: bare interne `/api/`-URL-er og HTTP(S)-URL-er returneres.
+- PASS: URL-er genereres ikke av AI; kun admin-godkjente databaseverdier brukes.
+
+## Automatiske kontroller
+
+- Python-syntaks: PASS.
+- Inline JavaScript-syntaks: PASS.
+- 40/40 målrettede tester: PASS.
+- `git diff --check`: PASS med kun ufarlige Windows LF/CRLF-varsler.
+- Urelaterte lokale endringer i `context/FEATURES.md` og
+  `content/video_scripts/` er ikke endret eller inkludert.
+
+PASS — backend, frontend og mobilkontrakt er klare for commit/push og fersk
+produksjonskontroll.
+
+---
+
 # QA GATE: Michael-materiale i adminpanelet
 
 ## Omfang og datakilde

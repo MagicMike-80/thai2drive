@@ -1,3 +1,43 @@
+# PATCH REPORT: Patch 2 — Michael-chat og visuelle media-kort
+
+## Endring
+
+- `backend/teacher_chat.py`: `/api/teacher/chat` rangerer aktive og
+  Michael-godkjente skilt, situasjonsbilder og videoer fra
+  `michael_materials` mot elevens spørsmål, quizkontekst og godkjente skilt-ID-er.
+- Responsen beholder `reply`, `suggestions` og `sign_ids`, og legger additivt til
+  `media` med opptil to elementer (`id`, `type`, `url`, språkstyrt `title` og
+  `caption`, samt `sign_id` når relevant).
+- Eksakt skilt-ID prioriteres foran kontrollerte emne- og situasjonsknagger.
+  Videoreferanser må peke på en aktiv post i `learning_videos`.
+- Materialet legges i Michaels skjulte kontekst, mens klienten får strukturerte
+  data og kan vise kortet separat fra tekstsvaret.
+- `backend/webapp.py`: vanlig Michael-chat og quiz-coachen rendrer samme sikre
+  media-komponent. Skilt og situasjonsbilder får bilde, tittel og kort
+  forklaring; videoer får en språkstyrt avspillingsknapp.
+- Media-kortene bruker én kolonne på mobil, begrenset bildehøyde og Dark Mode.
+  Eksisterende skiltkort beholdes som fallback uten dobbeltvisning.
+- YouTube-materiale åpnes i appens videospiller, som returnerer eleven til
+  skjermen der videoen ble åpnet.
+- Nye tester dekker rangering, grensen på to ressurser, sikker URL, aktiv- og
+  godkjenningskrav, videokilde og strengt språkvalg for NO/TH/EN.
+
+## Avgrensning
+
+Ingen data migreres, og auth, TTS, premium, Stripe, RevenueCat, betaling og
+deploykonfigurasjon er urørt.
+
+## Verifisering
+
+- Python-syntaks: PASS.
+- Inline JavaScript-syntaks: PASS.
+- 40 målrettede Michael-, admin-, språk-, media- og mobiltester: PASS.
+- `git diff --check`: PASS med kun Windows LF/CRLF-varsler.
+
+Klar for commit, push og live-verifisering.
+
+---
+
 # PATCH REPORT: Michael-materiale i adminpanelet
 
 ## Endring

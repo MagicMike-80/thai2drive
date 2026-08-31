@@ -111,9 +111,10 @@ class MichaelMaterialAdminContractTests(unittest.TestCase):
         ):
             self.assertIn(token, ADMIN)
 
-    def test_patch_one_does_not_add_material_response_to_teacher_chat(self):
-        self.assertNotIn("michael_materials", TEACHER_CHAT)
-        self.assertNotIn("approved_for_michael", TEACHER_CHAT)
+    def test_patch_two_connects_only_approved_materials_to_teacher_chat(self):
+        self.assertIn('_db["michael_materials"]', TEACHER_CHAT)
+        self.assertIn('"approved_for_michael": True', TEACHER_CHAT)
+        self.assertIn('media: list[dict] = Field(default_factory=list)', TEACHER_CHAT)
 
 
 if __name__ == "__main__":
