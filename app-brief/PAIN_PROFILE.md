@@ -530,7 +530,6 @@ som fullført produksjonsseeding før innholdseieren/den andre agenten har lever
 og godkjent det manglende seedgrunnlaget.
 
 ---
-
 # PAIN PROFILE: Michael-chatten mangler en rolig, sentrert samtaleflate
 
 ## Brukersmerte og forventet oppførsel
@@ -652,3 +651,21 @@ Behold eksisterende DOM, flex-composer, sidepanel, Thai2Drive-farger og all
 backendlogikk.
 
 ---
+
+# PAIN PROFILE: vanlig quiz starter fortsatt 30 spørsmål
+
+## Bevist rotårsak
+
+Backendens `GET /api/questions/random` har allerede standard `count=10`, men
+webappen overstyrer dette med `count=30` i tilfeldig quiz, kategoriquiz og
+kategori-fallback. Den statiske fremdriftsteksten starter også med «1 av 30».
+Daglig test bruker allerede 10, mens teoriprøvemodus bevisst bruker 45.
+
+## Omfang og akseptanse
+
+Vanlig quiz, kategoriquiz, kategori-fallback og «Mine feil» skal hente maksimalt
+10 spørsmål per økt. Teoriprøvemodus (45) og skiltøving (1) skal være urørt.
+Fremdrift skal bruke faktisk øktlengde, og oppsummeringen skal tilby ny økt
+eller Michael. Guest/free/premium-kvoter og betalingslogikk skal ikke endres.
+
+Rotårsaken er bevist. Klar for Solution Architect.

@@ -489,3 +489,19 @@ Klar for Agent 4.
 Klar for Agent 4.
 
 ---
+---
+
+# PATCH REPORT: 10-spørsmåls quizøkter
+
+- `backend/webapp.py`: én `QUIZ_SESSION_SIZE = 10` brukes av tilfeldig quiz,
+  daglig test, kategoriquiz, kategori-fallback og feilbankøkt.
+- Starttelleren viser «Spørsmål 1 av 10»; videre teller bruker faktisk lastet
+  øktlengde og avslutter via eksisterende `showEnd()`.
+- Oppsummeringen tilbyr ny tilsvarende økt og en språkstyrt knapp til Michael.
+- Backendens eksisterende standard `count=10` er bekreftet og trenger ingen
+  endring. Eksamen (45) og skiltøving (1) er bevart.
+- Ny kontrakttest dekker backendstandard, alle frontendkall, fremdrift,
+  oppsummeringsvalg og de eksplisitte unntakene.
+
+Ingen endring i spørsmål, access/consume, guest/free/premium, auth eller betaling.
+Klar for Agent 4.

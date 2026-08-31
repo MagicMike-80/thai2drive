@@ -1115,3 +1115,19 @@ produksjonsseed og omkobling av biblioteksiden er BLOCKED til de fem oppførte
 innholds- og filkravene er levert og godkjent.
 
 READY FOR AGENT 3 — PATCH A ONLY
+---
+
+# SOLUTION BLUEPRINT: 10-spørsmåls quizpulser
+
+1. Definer én frontendkonstant `QUIZ_SESSION_SIZE = 10`.
+2. Bruk konstanten i tilfeldig quiz, kategoriquiz, kategori-fallback og
+   feilbankøkter. Bevar 45 spørsmål i teoriprøvemodus og 1 i skiltøving.
+3. Endre statisk startteller til «1 av 10»; dynamisk teller beholder faktisk
+   antall spørsmål slik at tomme/korte kategorier aldri lyver.
+4. Legg til en språkstyrt Michael-knapp på eksisterende oppsummeringsskjerm.
+5. Bekreft med kontrakttest at backendstandard, frontendkall, teller,
+   oppsummering og eksplisitte unntak er korrekte.
+
+Ingen endring i spørsmål, tilgangskvoter, auth, betaling eller database.
+
+READY FOR AGENT 3

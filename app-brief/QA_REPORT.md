@@ -569,7 +569,6 @@ vurdering/deploy. Patch B (aktiv seed og bibliotekovergang) er BLOCKED på
 godkjent innholdsgrunnlag og må ikke fremstilles som levert.**
 
 ---
-
 # QA GATE: rolig, sentrert Michael-chat — Patch 1
 
 ## Vurdert omfang
@@ -693,3 +692,16 @@ forslagsrenderingen fortsatt tvinger meldingslisten til bunnen.**
 og den uttrykkelig autoriserte publiseringsflyten.**
 
 ---
+
+# QA GATE: 10-spørsmåls quizøkter
+
+- PASS: backendstandard er `count=10`.
+- PASS: vanlig quiz, daglig test, kategori og feilbank bruker én felles
+  10-spørsmålsverdi; ingen `count=30` finnes i normal quizflyt.
+- PASS: telleren starter på 1 av 10 og bruker faktisk øktlengde videre.
+- PASS: eksisterende avslutning åpnes etter siste lastede spørsmål og viser
+  både ny økt og Michael-knapp på NO/TH/EN.
+- PASS: eksamen (45), skiltøving (1) og eksisterende access/consume er urørt.
+- PASS: Python-syntaks, kontrakttester og diff-format.
+
+PASS — klar for commit, push og live-verifisering.

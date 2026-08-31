@@ -3816,7 +3816,7 @@ a { color:inherit; text-decoration:none; }
         <div class="quiz-top">
           <button class="back-btn" onclick="goBack()">← Tilbake</button>
           <div class="quiz-prog-wrap">
-            <div class="quiz-prog-lbl" id="qProgLbl">Spørsmål 1 av 30</div>
+            <div class="quiz-prog-lbl" id="qProgLbl">Spørsmål 1 av 10</div>
             <div class="quiz-prog-bar">
               <div class="quiz-prog-fill" id="qProgFill" style="width:0%"></div>
             </div>
@@ -4163,6 +4163,7 @@ a { color:inherit; text-decoration:none; }
         </div>
         <div class="end-btns">
           <button class="end-btn-pri" onclick="retryQuiz()" data-key="result_retry">Prøv igjen</button>
+          <button class="end-btn-sec" onclick="showTab('teacher')" data-key="result_michael">Gå til Michael</button>
           <button class="end-btn-sec" onclick="showTab('home')" data-key="home">Hjem</button>
           <button class="end-btn-sec" onclick="showTab('cats')" data-key="pickcat">Velg kategori</button>
         </div>
@@ -4380,6 +4381,7 @@ var _ls = {
 var token = _ls.get('t2d_token');
 var user = null;
 var deviceId = null;
+var QUIZ_SESSION_SIZE = 10;
 var questions = [];
 var qIdx = 0;
 var qScore = 0;
@@ -4649,6 +4651,7 @@ var UI = {
   result_focus:{th:'หัวข้อแนะนำให้ฝึก',      no:'Anbefalt øvelse',  en:'Recommended practice'},
   result_done:{th:'ทำแบบฝึกเสร็จแล้ว',       no:'Øvelsen er ferdig.', en:'Practice finished.'},
   result_retry:{th:'ลองอีกครั้ง',             no:'Prøv igjen',        en:'Try again'},
+  result_michael:{th:'ไปหา Michael เพื่อทบทวนข้อผิดพลาด', no:'Gå til Michael for feilretting', en:'Go to Michael to review mistakes'},
   result_exam_pass_head:{th:'ผ่าน',          no:'Bestått.',         en:'Passed.'},
   result_exam_pass_body:{th:'คุณพร้อมสำหรับการสอบทฤษฎีแล้ว ลองทำอีกหนึ่งรอบเพื่อเพิ่มความมั่นใจ', no:'Du er klar for teoriprøven. Gjennomfør gjerne enda en runde for å bygge selvtillit.', en:'You are ready for the theory test. Do one more round to build confidence.'},
   result_exam_fail_head:{th:'ครั้งนี้ยังไม่ผ่าน', no:'Ikke bestått denne gangen.', en:'Not passed this time.'},
@@ -6584,7 +6587,7 @@ async function startRandomQuiz() {
   isMistakeMode = false;
   currentCat = null;
   isExamMode = false;
-  await loadQuiz('/api/questions/random?count=30&has_image=true');
+  await loadQuiz('/api/questions/random?count=' + QUIZ_SESSION_SIZE + '&has_image=true');
 }
 
 async function startDailyTest() {
@@ -6592,7 +6595,7 @@ async function startDailyTest() {
   isMistakeMode = false;
   currentCat = null;
   isExamMode = false;
-  await loadQuiz('/api/questions/random?count=10&has_image=true');
+  await loadQuiz('/api/questions/random?count=' + QUIZ_SESSION_SIZE + '&has_image=true');
 }
 
 async function startMistakeQuiz() {
@@ -6603,7 +6606,7 @@ async function startMistakeQuiz() {
   isMistakeMode = true;
   currentCat = null;
   isExamMode = false;
-  await loadQuiz('/api/quiz/mistakes?limit=100&_=' + Date.now());
+  await loadQuiz('/api/quiz/mistakes?limit=' + QUIZ_SESSION_SIZE + '&_=' + Date.now());
 }
 
 var isExamMode = false;
@@ -6849,7 +6852,7 @@ async function startQuiz(catId) {
   var key = catKey(catId);
   currentCat = key ? { id: key, key: key } : null;
   isExamMode = false;
-  var url = '/api/questions/random?count=30&has_image=true';
+  var url = '/api/questions/random?count=' + QUIZ_SESSION_SIZE + '&has_image=true';
   if (key) url += '&category=' + encodeURIComponent(key);
   await loadQuiz(url);
 }
@@ -6867,7 +6870,7 @@ async function loadQuiz(url) {
       return u && typeof u === 'string' && u.length > 0;
     });
     if (!questions.length && currentCat) {
-      var r2 = await api('GET', '/api/questions/random?count=30&has_image=true');
+      var r2 = await api('GET', '/api/questions/random?count=' + QUIZ_SESSION_SIZE + '&has_image=true');
       if (!Array.isArray(r2)) r2 = r2.questions || [];
       questions = r2.filter(function(q) {
         var u = q.bildeUrl || q.image_url || '';
