@@ -84,6 +84,346 @@ READY FOR AGENT 3
 
 ---
 
+# SOLUTION BLUEPRINT: additiv `media_catalog` med streng seed-gate
+
+## Beslutning og leveransestatus
+
+Oppgaven deles i to små leveranser fordi kodekontrakten er implementerbar, men
+det bestilte produksjonsinnholdet ikke er det:
+
+- **Patch A er klar for implementasjon nå:** felles, testbart katalogskjema,
+  indekser, fail-stop-serialisering, JWT-beskyttet leserute, et begrenset
+  Michael-oppslag og et seed-verktøy som validerer/dry-runner en ekstern
+  manifestfil. Tom katalog endrer ingen synlig produksjonsflyt.
+- **Patch B er blokkert:** aktiv seeding av de ti postene og bytte av det
+  eksisterende biblioteket til katalogen. Dette skjer først når innholdseier har
+  levert den komplette, godkjente manifesten som beskrives nedenfor.
+
+Dette er den minste production-sikre løsningen. Tomt eller ufullstendig
+`media_catalog` gir tekst-only i Michael og beholder dagens bibliotek uendret.
+
+## Mål
+
+- Etabler `media_catalog` som én additiv source of truth for nye, kuraterte
+  videoer og podkaster.
+- Returner kun den valgte språkpostens tittel og beskrivelse; aldri hele
+  `i18n`-objektet eller tekst fra et annet språk.
+- La Michael legge til maksimalt ett katalogmedium fra kontrollerte tags uten
+  at modellen kan levere eller konstruere URL-en.
+- Legg til `GET /api/library/media?language=no|th|en` med eksisterende JWT-
+  avhengighet og deterministisk sortering.
+- Gjør seeding idempotent, forhåndsvalidert og eksplisitt før den kan skrive.
+
+## Eksplisitte ikke-mål
+
+- Ingen automatisk migrasjon, kopiering eller sletting av `learning_videos`,
+  `learning_podcasts` eller `michael_materials`.
+- Ingen oppdiktede oversettelser, beskrivelser, tags, URL-er eller thumbnails.
+- Ingen aktivering av de ti ønskede postene før hele manifesten er godkjent.
+- Ingen endring i authimplementasjon, gjest/gratis/premium, kvoter, Stripe,
+  RevenueCat, betaling, quiz, TTS, mobilapp eller hemmeligheter.
+- Ingen produksjons-POST mot Michael i QA; chatruten skriver historikk/logg.
+
+## Skjema og språkmodell
+
+Opprett en liten delt modul `backend/media_catalog.py`. Den skal inneholde
+konstanter, ren validering, lokalisert serialisering og deterministisk ranking,
+slik at `server.py`, `teacher_chat.py`, seed-skriptet og enhetstester bruker
+samme regler.
+
+Et gyldig MongoDB-dokument har:
+
+```text
+media_id: string, unik og ikke tom
+type: "video" | "podcast"
+category: "vikeplikt" | "stoppelengde" | "skilt" |
+          "morkekjoring" | "hav_regelen"
+tags: unik liste med normaliserte, godkjente kanoniske emnetags
+media_url: sikker, ikke tom URL
+thumbnail_url: sikker, ikke tom URL
+is_active: boolean, default true
+content_language: "no" | "th" | "en" | "neutral"
+i18n.no.title / i18n.no.description: ikke tom
+i18n.th.title / i18n.th.description: ikke tom
+i18n.en.title / i18n.en.description: ikke tom
+created_at / updated_at: UTC-tid satt av seedlaget
+```
+
+`content_language` er et nødvendig, additivt sikkerhetsfelt. Ett toppnivå-
+`media_url` kan ikke representere tre forskjellige talespor. En post kan bare
+eksponeres når `content_language == requested_language`, eller når innholdseier
+uttrykkelig har godkjent filen som `neutral` fordi den ikke inneholder tale,
+tekst eller andre språkbærende elementer. Flere språkversjoner av samme tema er
+separate dokumenter med separate unike `media_id`-er, for eksempel suffiks
+`_no`, `_th` og `_en`. De ti foreslåtte ID-ene kan derfor bare beholdes uten
+språksuffiks dersom hver tilhørende fil er dokumentert språkneutral, eller hvis
+ID-en representerer kun ett eksplisitt `content_language` og skjules for de to
+andre språkene.
+
+Metadata-`i18n` alene overstyrer aldri denne filspråkgaten. Manglende eller
+ugyldig `content_language`, tittel, beskrivelse eller URL gjør posten usynlig.
+Det brukes aldri norsk fallback.
+
+Tillatte URL-er er absolutte `https://`-URL-er eller eksisterende lokale
+`/api/assets/`-URL-er. Generell `/api/`, `http://`, `javascript:`, `data:` og
+protokollrelative URL-er avvises. Seedens apply-modus må i tillegg verifisere
+HTTP 200 og forventet video/audio/bilde-innholdstype for media og thumbnail før
+første databaseskriving. Relative assets verifiseres mot en eksplisitt
+`--base-url`; ingen thumbnail avledes fra filnavn.
+
+## Indekser og databaseoppstart
+
+Utvid `backend/create_indexes.py` gjennom dagens idempotente startupmønster:
+
+1. `media_id_unique`: `{media_id: 1}`, `unique=True`.
+2. `media_active_language_tags`: `{is_active: 1, content_language: 1, tags: 1}`
+   for Michael-oppslaget og aktiv språkfiltrering.
+
+Bibliotekets lille resultatsett sorteres etter en eksplisitt kategoriorden i
+Python; det krever ikke en tredje indeks før målinger viser behov. En
+indeksfeil ved eksisterende duplikater skal logges tydelig og må ikke repareres
+ved automatisk sletting. Read-only Pain Hunter-sjekk viste ingen eksisterende
+samling, så deployrekkefølgen er indeks først, seed etterpå.
+
+## Felles lokaliserings- og responskontrakt
+
+Den delte serializeren tar dokument + eksplisitt språk og returnerer enten
+`None` eller kun:
+
+```json
+{
+  "id": "vid_stopp_01",
+  "media_id": "vid_stopp_01",
+  "type": "video",
+  "category": "stoppelengde",
+  "tags": ["stoppelengde"],
+  "url": "/api/assets/example.mp4",
+  "thumbnail_url": "/api/assets/thumbs/example.jpg",
+  "title": "lokalisert tittel",
+  "description": "lokalisert beskrivelse",
+  "caption": "samme lokaliserte beskrivelse"
+}
+```
+
+`id`, `url` og `caption` bevarer Michaels eksisterende mediekortkontrakt;
+`media_id`, `description`, `category`, `tags` og `thumbnail_url` er additive.
+`i18n` og `content_language` sendes ikke til elevklienten. Kun `no`, `th` og
+`en` aksepteres; ugyldig eller manglende språk gir ingen serialisert post.
+
+## `GET /api/library/media`
+
+Legg ruten i `backend/server.py`:
+
+```text
+GET /api/library/media?language=no|th|en
+Authorization: Bearer <eksisterende JWT>
+200 { "language": "no", "media": [lokaliserte poster] }
+```
+
+- `language` er obligatorisk og valideres til nøyaktig `no`, `th` eller `en`;
+  manglende/ugyldig verdi gir 422, ikke norsk fallback.
+- Bruk uendret `Depends(get_current_user)` og stol ikke på bruker-ID fra query.
+- Spørr kun `is_active: true` og `content_language in [language, neutral]`.
+- Serialiser fail-stop og sorter etter fast kategoriorden fra den godkjente
+  enumen, deretter `type` (`video` før `podcast`), lokalisert tittel og
+  `media_id`. Ukjent kategori er ugyldig og skjules av valideringen.
+- Tom katalog returnerer HTTP 200 med `media: []`.
+
+Patch A kobler **ikke** den synlige biblioteksiden over til en tom katalog.
+Etter godkjent seed skal Patch B endre bare `loadLibrary()` til ett kall mot
+denne ruten, splitte den allerede lokaliserte listen på `type`, og adaptere
+feltene til dagens `buildVideoCard`/`buildPodcastCard`. Cache skal tømmes og
+ruten lastes på nytt ved `setLang()`, ellers kan NO-data bli liggende når eleven
+bytter til TH/EN. Ingen respons skal kopieres inn i flere `title_*`-felt og
+senere gjenbrukes på et annet språk.
+
+En ikke-innlogget bruker får eksisterende JWT-feil fra den nye ruten. Patch B
+skal ikke legge inn en offentlig fallback til katalogen. Eventuell ny
+learner-facing innloggingsmelding må leveres/godkjennes på alle tre språk av
+innholdseier; frem til det kan eksisterende språkrene `lib_load_failed` brukes.
+
+## Michael-oppslag
+
+Legg en separat helper i `teacher_chat.py` som leser `media_catalog` og bruker
+den delte rankeren:
+
+- Katalogen spørres kun når requestens opprinnelige `language` er gyldig.
+- Hent en begrenset mengde aktive dokumenter for valgt/neutral
+  `content_language`; utfør ikke regex fra bruker- eller modelltekst i MongoDB.
+- Normaliser melding, quizkontekst og dokumentets **godkjente** tags med samme
+  rene normalisering. Bare hele, kontrollerte tagfraser teller. Tagdata er
+  katalogstyrt; modellen får aldri velge URL.
+- Rangering: flest eksakte tagtreff først, så fast kategoriorden, video før
+  podcast og til slutt `media_id`. Returner maksimalt én serialisert post.
+- Eksplisitt trafikkskilt beholder forrige sikkerhetskontrakt: når
+  `explicit_sign_ids` finnes, returneres bare det eksakte skiltmediet og ingen
+  katalogvideo/podkast.
+- Uten eksplisitt skilt plasseres maksimalt ett katalogmedium i eksisterende
+  `media`; dagens kuraterte ikke-katalogmedium kan fylle den andre plassen.
+  Totalgrensen forblir to. Hvis katalogen er tom/ugyldig, beholdes dagens
+  `michael_materials`-resultat uendret.
+- Database-, validerings- eller URL-feil logges uten innhold/hemmeligheter og
+  gir normal tekst-only/eksisterende media, aldri chatfeil.
+
+`TeacherChatRequest.language` beholdes; ikke introduser et parallelt
+`user_language`-felt. Dagens øvrige chatfallback endres ikke i denne patchen,
+men kataloghelperen skal bruke den rå, validerte requestverdien og skjule media
+ved ugyldig språk.
+
+Frontendens `_buildTeacherMediaCard()` utvides i Patch A til å godta
+`podcast`. Den bygger `<audio controls preload="none">` med DOM/
+`textContent`, bruker bare den allerede lokaliserte tittelen/beskrivelsen og
+avviser utrygg URL. Video beholder dagens åpner. Ingen `innerHTML` fra
+modelltekst og ingen språkfallback introduseres.
+
+## Idempotent seed-verktøy
+
+Lag `backend/seed_media_catalog.py` som standard kjører **dry-run** og leser en
+eksplisitt JSON-manifeststi. Kodepatchen kan inneholde den bestilte listen over
+forventede ID-er og deres eksplisitt oppgitte type/kategori, men skal ikke
+inneholde tomme eller oppdiktede produksjonsposter. Verktøyet avviser en
+manifest som mangler eller har ekstra ID-er:
+
+```text
+vid_stopp_01, vid_stopp_02, vid_stopp_03, pod_stopp_01
+vid_vike_01, vid_vike_02, pod_vike_01
+vid_hav_01
+vid_skilt_01, vid_skilt_02
+```
+
+Den eneste metadata-mappingen Codex kan låse fra bestillingen er:
+
+| ID-er | Type | Kategori |
+|---|---|---|
+| `vid_stopp_01`–`vid_stopp_03` | `video` | `stoppelengde` |
+| `pod_stopp_01` | `podcast` | `stoppelengde` |
+| `vid_vike_01`–`vid_vike_02` | `video` | `vikeplikt` |
+| `pod_vike_01` | `podcast` | `vikeplikt` |
+| `vid_hav_01` | `video` | `hav_regelen` |
+| `vid_skilt_01`–`vid_skilt_02` | `video` | `skilt` |
+
+Kategori `morkekjoring` støttes av skjemaet, men ingen av de ti postene flyttes
+dit uten en eksplisitt redaksjonell avgjørelse; `vid_stopp_03` står under
+Stoppelengde i bestillingen. Tags og øvrig innhold må fortsatt komme fra den
+godkjente manifesten.
+
+Flyt:
+
+1. Les fil og valider **alle** dokumenter, enums, unike ID-er/tags,
+   `content_language`, full `i18n` og URL-policy før Mongo-klient opprettes.
+2. I apply-modus verifiser alle media-/thumbnail-URL-er før Mongo-klient og
+   før første skriv. Én feil stopper hele kjøringen.
+3. Bruk `MONGO_URL` og `DB_NAME` fra miljøet; aldri hardkod databasenavn eller
+   skriv URI/hemmeligheter til logg.
+4. Krev eksplisitt `--apply` og `--confirm-db-name <DB_NAME>` for skriving.
+5. Upsert hver validerte post med filter `{media_id: ...}`, `$set` for
+   kuraterte felt/`updated_at` og `$setOnInsert` for `created_at`. Ikke slett
+   eller deaktiver andre poster.
+6. Rapporter bare database, antall `matched`, `modified`, `upserted` og
+   uendrede; ikke logg tokens eller hele innholdsdokumenter.
+7. Før apply lagres en kontrollert before-snapshot for de berørte ID-ene.
+   Rollback gjenoppretter tidligere dokumenter og setter nyinnsatte ID-er til
+   `is_active:false`; den sletter ikke produksjonsdata.
+8. Andre identiske apply skal gi `upserted=0` og `modified=0` bortsett fra at
+   `updated_at` ikke må endres når innholdet er identisk.
+
+Tester må injisere falsk collection/HTTP-validator; import eller dry-run skal
+aldri koble til MongoDB.
+
+## Trinnvis patchplan
+
+### Patch A — implementerbar nå
+
+1. Opprett `backend/media_catalog.py` med schema-/URL-/språkvalidering,
+   serializer og ren ranker.
+2. Legg de to indeksene til `backend/create_indexes.py`.
+3. Legg JWT-ruten til `backend/server.py`; tom katalog skal gi 200/empty.
+4. Legg fail-soft katalogoppslag og maks-én-komponering til
+   `backend/teacher_chat.py`, uten å svekke eksakt-skilt-regelen.
+5. Legg podkaststøtte i Michaels strukturerte kort i `backend/webapp.py`.
+6. Lag det sikre seed-verktøyet og en dokumentert manifestmal uten
+   produksjonsverdier; den skal feile tydelig før DB ved manglende data.
+7. Legg isolerte tester. Deploy av Patch A kan skje etter QA fordi tom katalog
+   ikke endrer dagens synlige bibliotek og Michael beholder fallback.
+
+### Patch B — blokkert til godkjent manifest
+
+1. Innholdseier fyller og godkjenner manifesten.
+2. Codex kjører lokal validering/dry-run og URL-sjekk uten DB-skriv.
+3. Codex verifiserer unik indeks, tar before-snapshot og kjører én eksplisitt
+   apply mot korrekt `DB_NAME`, deretter en identisk andre apply.
+4. Verifiser JWT-ruten read-only på NO/TH/EN og at feil språk/manglende JWT
+   avvises. Ikke POST til produksjonschat.
+5. Koble `loadLibrary()` over til katalogruten, med språkbytte-cache-reset og
+   tester; deploy og verifiser live HTML/API.
+
+## Tester og QA
+
+- Ren schema-test: alle obligatoriske felter, enums, `is_active=True`, URL-
+  avvisning, duplikate ID-er/tags og full `i18n`.
+- Språkmatrise: distinkte NO/TH/EN-sentineler viser at serializeren bare
+  returnerer valgt språk og aldri `i18n`; manglende felt skjuler posten.
+- Mediespråk: NO-post skjules for TH/EN, neutral vises for alle, ugyldig eller
+  manglende `content_language` skjules.
+- Ranker: inaktiv post, null treff, taggrense, deterministisk tie-break og maks
+  ett video/podcast-treff.
+- Michael: eksisterende eksakt skilt forblir eksklusivt; bredt emnetreff får
+  maks ett katalogmedium; katalogfeil beholder tekst/eksisterende media.
+- API med dependency override/falsk DB: gyldig JWT-avhengighet, 401 uten auth,
+  422 ved manglende/ugyldig språk, aktive poster, sortering og HTTP 200 empty.
+- Seed med falsk collection: valider-alt-før-skriv, korrekt `$set`/
+  `$setOnInsert`, andre kjøring uten endring, tellere og ingen sletting.
+- Frontendkontrakt: `podcast` godtas, sikker URL kreves, `<audio>` bruker
+  localized API-felter og ingen fallback/AI-HTML.
+- Kjør relevante enhetstester, alle eksisterende trygge testsuiter, Python AST
+  for alle `.py`, inline-JavaScript-syntaks og `git diff --check`. Ikke kjør
+  `backend/tests/test_thai2drive_api.py` eller annen test som kan skrive til
+  produksjon.
+
+Etter Patch A-deploy verifiseres `/api/health` og en autentisert, read-only
+`GET /api/library/media?language=<lang>` dersom en sikker test-JWT allerede er
+tilgjengelig. Ingen nøkkel skal etterspørres eller rapporteres. At ruten svarer
+200 med tom liste beviser kode/deploy, ikke at produksjonsseed er fullført.
+
+## Rollback og produksjonsrisiko
+
+Patch A kan reverseres ved å fjerne katalogruten/helperen, podkastgrenen og de
+to indeksdefinisjonene; gamle samlinger og bibliotekflyt er urørt. En tom
+samling/indeks er additiv og trenger ikke slettes ved rollback.
+
+Etter Patch B deaktiveres nyinnsatte seed-ID-er ved rollback, mens eventuelle
+tidligere versjoner gjenopprettes fra before-snapshot. Deretter går
+`loadLibrary()` tilbake til dagens to endepunkter. Ingen automatisk database-
+sletting inngår.
+
+Største produksjonsrisiko er språklekkasje fra selve lyd-/videofilen, deretter
+feil URL-mapping og stale frontendcache etter språkbytte. De avgrenses med
+`content_language`, forhåndsverifiserte URL-er, fail-stop-serializer og cache-
+reset før biblioteket kobles over.
+
+## Data og avgjørelser som kreves fra Michael / innholdseier
+
+For hver av de ti bestilte ID-ene må Patch B få:
+
+1. endelig `type`, `category` og godkjent kanonisk `tags`-liste, inkludert
+   godkjente søkebegreper/aliaser som dekker NO, TH og EN uten fuzzy matching;
+2. eksakt `media_url` og `thumbnail_url`, samt bekreftelse på at hver svarer
+   HTTP 200 med korrekt fil;
+3. godkjent `title` og `description` for **alle tre språk**;
+4. eksplisitt `content_language` for selve filen, eller dokumentert
+   `neutral`; og
+5. ved separate NO/TH/EN-filer: tre URL-er og tre separate, godkjente unike
+   `media_id`-er per konsept.
+
+Dette innholdet tilhører den andre agenten. Codex kan validere, seede og
+produksjonssette det etter levering, men skal ikke skrive eller oversette det.
+
+**Produksjonsseed og bibliotekovergang: BLOCKED inntil punktene 1–5 er levert.**
+
+READY FOR AGENT 3 — PATCH A ONLY
+
+---
+
 # SOLUTION BLUEPRINT: eksakt skilt og kompakt ordkobling i Michael-chat
 
 ## Mål
@@ -579,3 +919,12 @@ skal bruke nye, separate NO/TH/EN-nøkler og ikke endre den eksisterende
 READY FOR AGENT 3
 
 ---
+
+# CURRENT HANDOFF: `media_catalog`
+
+Gjeldende oppgave styres av blueprinten **«additiv `media_catalog` med streng
+seed-gate»** ovenfor. Agent 3 skal implementere bare Patch A. Aktiv
+produksjonsseed og omkobling av biblioteksiden er BLOCKED til de fem oppførte
+innholds- og filkravene er levert og godkjent.
+
+READY FOR AGENT 3 — PATCH A ONLY

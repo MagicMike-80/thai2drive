@@ -165,6 +165,29 @@ async def create_all_indexes(db) -> dict[str, list[str]]:
     created["subscriptions"] = ["user_source", "stripe_subscription"]
     created["stripe_events"] = ["stripe_event_unique"]
 
+    # -- curated media catalog --------------------------------------------
+    # Kept last so an unexpected duplicate never prevents established indexes
+    # from being verified. Existing data is never repaired or deleted here.
+    await db.media_catalog.create_index(
+        [("media_id", ASCENDING)],
+        unique=True,
+        background=True,
+        name="media_id_unique",
+    )
+    await db.media_catalog.create_index(
+        [
+            ("is_active", ASCENDING),
+            ("content_language", ASCENDING),
+            ("tags", ASCENDING),
+        ],
+        background=True,
+        name="media_active_language_tags",
+    )
+    created["media_catalog"] = [
+        "media_id_unique",
+        "media_active_language_tags",
+    ]
+
     return created
 
 

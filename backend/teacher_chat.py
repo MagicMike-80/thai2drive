@@ -20,6 +20,10 @@ from fastapi import APIRouter, Query
 from pydantic import BaseModel, Field
 from motor.motor_asyncio import AsyncIOMotorClient
 from dotenv import load_dotenv
+try:
+    from media_catalog import SUPPORTED_LANGUAGES, rank_catalog_media
+except ImportError:  # package-style imports used by isolated tests
+    from backend.media_catalog import SUPPORTED_LANGUAGES, rank_catalog_media
 
 load_dotenv()
 
@@ -1170,6 +1174,51 @@ async def _get_relevant_michael_materials(
         return []
 
 
+async def _get_relevant_catalog_media(
+    user_msg: str,
+    language: str,
+    extra_context: str = "",
+) -> list[dict]:
+    """Fail-soft lookup of at most one curated, language-compatible resource."""
+    if language not in SUPPORTED_LANGUAGES:
+        return []
+    try:
+        documents = await _db["media_catalog"].find({
+            "is_active": True,
+            "content_language": {"$in": [language, "neutral"]},
+        }).to_list(length=200)
+        return rank_catalog_media(
+            documents,
+            f"{user_msg} {extra_context}",
+            language,
+            limit=1,
+        )
+    except Exception as exc:
+        logger.warning("Media catalog lookup skipped: %s", type(exc).__name__)
+        return []
+
+
+def _compose_teacher_media(
+    approved_media: list[dict],
+    catalog_media: list[dict],
+    explicit_sign_ids: Optional[List[str]] = None,
+) -> list[dict]:
+    """Keep exact signs exclusive and preserve the existing total limit of two."""
+    if explicit_sign_ids:
+        return approved_media[:1]
+    if not catalog_media:
+        return approved_media[:2]
+    result = list(catalog_media[:1])
+    seen_ids = {str(item.get("id", "")) for item in result}
+    for item in approved_media:
+        if str(item.get("id", "")) in seen_ids:
+            continue
+        result.append(item)
+        if len(result) == 2:
+            break
+    return result
+
+
 # ─── Contextual chip suggestions (multilingual keyword detection) ─────────────
 _KW = {
     "vikeplikt": {
@@ -1617,7 +1666,8 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
     
     session_id = req.session_id or f"ts_{uuid.uuid4().hex[:16]}"
     user_msg = req.message.strip()
-    lang = (req.language or "no").strip().lower()
+    requested_language = (req.language or "").strip().lower()
+    lang = requested_language
     if lang not in ("no", "th", "en"):
         lang = "no"
 
@@ -1675,6 +1725,14 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             explicit_sign_ids=explicit_sign_ids,
             extra_context=quiz_context_str,
         )
+        catalog_media = []
+        if not explicit_sign_ids and requested_language in SUPPORTED_LANGUAGES:
+            catalog_media = await _get_relevant_catalog_media(
+                user_msg,
+                requested_language,
+                extra_context=quiz_context_str,
+            )
+        media = _compose_teacher_media(media, catalog_media, explicit_sign_ids)
 
         if not LLM_KEY:
             raise RuntimeError("DEEPSEEK_API_KEY not configured")

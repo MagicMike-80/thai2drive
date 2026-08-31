@@ -40,7 +40,7 @@ class MichaelMediaCardsContractTests(unittest.TestCase):
     def test_media_is_bounded_validated_and_does_not_duplicate_sign_card(self):
         self.assertIn("mediaItems.slice(0, 2)", WEBAPP)
         self.assertIn("_teacherMediaSafeUrl(media.url)", WEBAPP)
-        self.assertIn("['sign','intersection_image','video'].indexOf(media.type)", WEBAPP)
+        self.assertIn("['sign','intersection_image','video','podcast'].indexOf(media.type)", WEBAPP)
         self.assertIn("mediaSignIds.indexOf(signId) === -1", WEBAPP)
 
     def test_sign_media_is_compact_and_opens_authoritative_sign_detail(self):
@@ -52,6 +52,16 @@ class MichaelMediaCardsContractTests(unittest.TestCase):
         self.assertIn("media.type === 'sign' ? 'button' : 'article'", card)
         self.assertIn("_openTeacherSignDetailById(media.sign_id)", card)
         self.assertIn("card.setAttribute('aria-label', media.title)", card)
+
+    def test_podcast_card_uses_safe_dom_and_localized_payload(self):
+        card = WEBAPP[WEBAPP.index("function _buildTeacherMediaCard(media)"):WEBAPP.index("function _teacherAppendMediaCards")]
+        self.assertIn("if (media.type === 'podcast')", card)
+        self.assertIn("audio.controls = true", card)
+        self.assertIn("audio.preload = 'none'", card)
+        self.assertIn("audio.src = media.url", card)
+        self.assertIn("podcastTitle.textContent = media.title", card)
+        self.assertIn("podcastCaption.textContent = media.caption", card)
+        self.assertNotIn("innerHTML", card)
 
 
 if __name__ == "__main__":

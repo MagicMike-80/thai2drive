@@ -465,3 +465,107 @@ PASS WITH WARNINGS — klar for Michaels vurdering.
 GODKJENT LOKALT — klar for den uttrykkelig bestilte commit, push og deploy.
 
 ---
+
+# QA GATE: additiv `media_catalog`, Patch A
+
+## Vurdert omfang
+
+QA er utført mot gjeldende Pain Profile, blueprintens eksplisitte Patch A og
+den faktiske arbeidsdiffen. Aktiv produksjonsseed av de ti mediene og overgang
+av den synlige biblioteksiden er ikke del av Patch A.
+
+## Skjema, språk og oppslag
+
+- PASS: `backend/media_catalog.py` krever unik, ikke-tom `media_id` gjennom
+  validering av manifestsettet og databaseindeksen `media_id_unique`.
+- PASS: `type`, `category`, ikke-tomme normaliserte/unikke tags, sikre URL-er,
+  boolsk `is_active`, komplett `i18n.no/th/en` og eksplisitt
+  `content_language` valideres fail-stop.
+- PASS: bare `https://` og avgrenset `/api/assets/` godtas i katalogskjemaet;
+  generell `/api/`, `http://`, credentials, query/fragment på lokale assets og
+  katalogtraversering avvises.
+- PASS: serializer returnerer bare valgt `title`, `description` og `caption`.
+  Den eksponerer verken `i18n` eller `content_language`, og en NO-fil skjules
+  for TH/EN. `neutral` krever fremdeles separat metadata på valgt språk.
+- PASS: rankeren bruker hele, normaliserte tagfraser, deterministisk tie-break
+  og returnerer maksimalt ett katalogmedium.
+- PASS: Michaels eksakte skiltregel er bevart. Eksplisitt skilt returnerer bare
+  det eksisterende eksakte skiltmediet; katalogvideo/podkast komponeres ikke
+  inn. Uten eksplisitt skilt er totalgrensen fortsatt to, hvorav maks ett er fra
+  katalogen.
+- PASS: katalogfeil og ugyldig råspråk feiler mykt uten norsk katalogfallback
+  eller feil i lærerchatten.
+
+## Bibliotek, JWT og frontend
+
+- PASS: `GET /api/library/media` bruker uendret
+  `Depends(get_current_user)`, krever eksakt `no|th|en`, returnerer tom katalog
+  som `{language, media: []}` og bruker ikke klientlevert bruker-ID.
+- PASS: bibliotekhelperen spør bare etter aktive poster for valgt eller
+  uttrykkelig nøytralt filspråk og sorterer etter fast kategoriorden, video før
+  podkast, lokalisert tittel og `media_id`.
+- PASS: podkastkortet bygges med DOM/`textContent`, sikkerhetskontrollert URL og
+  `<audio controls preload="none">`; ingen AI-tekst settes med `innerHTML`.
+- PASS: eksisterende biblioteksides to endepunkter og auth-policy er uendret.
+  Tom Patch A-katalog kan derfor ikke gjøre dagens bibliotek tomt.
+- WARNING: lokal QA-runtime mangler `fastapi`, så den nye ruten kunne ikke
+  kjøres gjennom en ekte ASGI-klient. Rute, JWT-avhengighet, 422-gren og
+  serializerkall er dekket av statisk kontrakt, mens helperen er kjørt mot
+  falsk samling. Fersk HTTP 200 for den nye JWT-ruten må verifiseres read-only
+  etter deploy dersom en eksisterende sikker test-JWT finnes.
+
+## Seed-gate og database
+
+- PASS: `backend/seed_media_catalog.py` er dry-run som standard og validerer
+  hele manifesten, nøyaktig ID-sett, låst type/kategori, språk og URL-policy før
+  Mongo-klient kan opprettes.
+- PASS: apply krever både `--apply` og eksakt `--confirm-db-name`; `MONGO_URL`
+  og `DB_NAME` leses fra miljøet og logges ikke.
+- PASS: apply verifiserer alle media-/thumbnail-URL-er med HTTP 200 og forventet
+  video/audio/image-type før første databaseskriv.
+- PASS: upsert bruker `{media_id}`, `$set` og `$setOnInsert`, hopper over
+  identiske dokumenter, tar before-snapshot og inneholder ingen delete eller
+  automatisk deaktivering av andre poster.
+- PASS: to identiske falsk-DB-kjøringer ga først 10 upserts og deretter
+  `modified=0`, `upserted=0`, `unchanged=10`.
+- PASS: eksempelmanifesten er med hensikt tom og inneholder ingen dummy-URL-er,
+  oppdiktede oversettelser eller aktive produksjonsposter. Lokal dry-run stoppet
+  med alle ti manglende ID-er før databasekontakt, som forventet.
+- PASS: startupindeksene er additive og oppretter unik `media_id` samt minimal
+  aktiv/språk/tags-indeks. Ingen eksisterende samling migreres eller slettes.
+
+## Uavhengige kontroller
+
+- Målrettet katalog/Michael/frontend-suite: 31/31 PASS.
+- Full trygg `tests/`-suite: 51/51 PASS.
+- Trygge backendtester, eksplisitt uten `test_thai2drive_api.py`: 35/35 PASS.
+- Python AST med eksisterende BOM-filer håndtert som `utf-8-sig`: 152 filer
+  PASS.
+- Inline JavaScript via `node --check`: 1/1 blokk PASS.
+- `git diff --check`: PASS; bare varsler om framtidig LF/CRLF-konvertering.
+- Egen trailing-whitespace-kontroll av seks nye/untracked filer: PASS.
+- Hemmelighetsskann av applikasjonsdiffen: PASS; ingen URI, nøkkel eller privat
+  nøkkel lagt til.
+- Scope-audit: PASS. Ingen endring i authimplementasjon, kvoter, premium,
+  Stripe, RevenueCat, betaling, TTS, quiz eller mobilkode.
+- `context/FEATURES.md` er fortsatt lokal/unstaged og må uttrykkelig utelates
+  fra commit i henhold til `AGENTS.md`.
+
+## Blokkering og restverifikasjon
+
+- **BLOCKED — aktiv produksjonsseed:** ingen av de ti bestilte postene kan
+  seedes før innholdseier leverer og godkjenner eksakte media-/thumbnail-URL-er,
+  komplette NO/TH/EN-tekster, kanoniske tags og dokumentert filspråk eller
+  språkneutralitet. Seedverktøyet skal fortsette å stoppe frem til dette finnes.
+- **BLOCKED — biblioteksideovergang:** `loadLibrary()` skal ikke kobles til den
+  tomme katalogen før godkjent seed er verifisert idempotent og read-only på
+  alle tre språk. Dagens bibliotek skal beholdes i Patch A.
+- WARNING: ingen produksjonsdatabase, produksjonschat, commit, push eller deploy
+  ble mutert av QA. Etter eventuell Patch A-deploy gjenstår `/api/health` og,
+  dersom sikker JWT allerede finnes, read-only katalogrute på NO/TH/EN.
+
+**PASS WITH WARNINGS — Patch A er production-sikker og klar for Michaels
+vurdering/deploy. Patch B (aktiv seed og bibliotekovergang) er BLOCKED på
+godkjent innholdsgrunnlag og må ikke fremstilles som levert.**
+
+---

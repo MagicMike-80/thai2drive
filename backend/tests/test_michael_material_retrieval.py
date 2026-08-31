@@ -18,9 +18,17 @@ class _Collection:
         self.docs = list(docs)
 
     def find(self, query):
+        def matches(doc):
+            for key, value in query.items():
+                if isinstance(value, dict) and "$in" in value:
+                    if doc.get(key) not in value["$in"]:
+                        return False
+                elif doc.get(key) != value:
+                    return False
+            return True
         docs = [
             doc for doc in self.docs
-            if all(doc.get(key) == value for key, value in query.items())
+            if matches(doc)
         ]
         return _Cursor(docs)
 
@@ -32,10 +40,11 @@ class _Collection:
 
 
 class _Database:
-    def __init__(self, materials, videos=None):
+    def __init__(self, materials, videos=None, catalog=None):
         self.collections = {
             "michael_materials": _Collection(materials),
             "learning_videos": _Collection(videos or []),
+            "media_catalog": _Collection(catalog or []),
         }
 
     def __getitem__(self, name):
@@ -193,6 +202,54 @@ class MichaelMaterialRetrievalTests(unittest.TestCase):
         self.assertIn("media: list[dict] = Field(default_factory=list)", source)
         self.assertIn("sign_ids: list[str] = Field(default_factory=list)", source)
         self.assertIn("media=media", source)
+
+    def test_catalog_composition_is_bounded_and_exact_sign_stays_exclusive(self):
+        approved = [{"id": "approved", "type": "video"}]
+        catalog = [{"id": "catalog", "type": "podcast"}]
+        self.assertEqual(
+            [item["id"] for item in self.module._compose_teacher_media(approved, catalog)],
+            ["catalog", "approved"],
+        )
+        self.assertEqual(
+            self.module._compose_teacher_media(approved, catalog, ["204_0"]),
+            approved,
+        )
+
+    def test_invalid_language_never_queries_catalog(self):
+        self.assertEqual(
+            asyncio.run(self.module._get_relevant_catalog_media("stoppelengde", "nb")),
+            [],
+        )
+
+    def test_catalog_lookup_returns_one_language_pure_exact_tag_match(self):
+        catalog = []
+        for media_id, language, title in (
+            ("no-item", "no", "Norsk"),
+            ("th-item", "th", "ไทย"),
+        ):
+            catalog.append({
+                "media_id": media_id,
+                "type": "video",
+                "category": "stoppelengde",
+                "tags": ["stoppelengde"],
+                "media_url": "https://media.example/video.mp4",
+                "thumbnail_url": "https://media.example/thumb.jpg",
+                "is_active": True,
+                "content_language": language,
+                "i18n": {
+                    "no": {"title": "Norsk", "description": "Norsk beskrivelse"},
+                    "th": {"title": "ไทย", "description": "คำอธิบาย"},
+                    "en": {"title": "English", "description": "Description"},
+                },
+            })
+        self.module._db = _Database([], catalog=catalog)
+        result = asyncio.run(
+            self.module._get_relevant_catalog_media("Forklar stoppelengde", "no")
+        )
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result[0]["id"], "no-item")
+        self.assertEqual(result[0]["title"], "Norsk")
+        self.assertNotIn("i18n", result[0])
 
 
 if __name__ == "__main__":

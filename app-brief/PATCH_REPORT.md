@@ -141,6 +141,60 @@ Klar for Agent 4.
 
 ---
 
+# PATCH REPORT: additiv `media_catalog` med streng seed-gate
+
+## Implementert Patch A
+
+- `backend/media_catalog.py`: felles schema-, enum-, URL- og full NO/TH/EN-
+  validering, `content_language`-gate, språkren serializer, kategorisortering og
+  deterministisk heltagsranking med maks ett treff.
+- `backend/create_indexes.py`: idempotent unik `media_id`-indeks og sammensatt
+  aktiv/språk/tags-indeks. Katalogindeksene kjøres sist, slik at en eventuell
+  katalogduplikat ikke hindrer verifikasjon av etablerte indekser.
+- `backend/server.py`: JWT-beskyttet `GET /api/library/media` med obligatorisk
+  eksakt `no|th|en`, HTTP 422 ved ugyldig språk og HTTP 200/tom liste ved tom
+  katalog.
+- `backend/teacher_chat.py`: fail-soft katalogoppslag mot kontrollerte tags,
+  maks ett katalogmedium og totalgrense to. Eksplisitt trafikkskilt forblir
+  eksklusivt og ugyldig request-språk får aldri katalogmedia.
+- `backend/webapp.py`: strukturert podcastkort med sikre DOM-operasjoner og
+  `<audio controls preload="none">`; eksisterende bibliotekflyt er uendret.
+- `backend/seed_media_catalog.py`: dry-run som standard, full manifest- og URL-
+  validering før Mongo-klient, dobbel apply-bekreftelse, before-snapshot og
+  idempotente upserts uten sletting/deaktivering av andre poster.
+- `backend/media_catalog_manifest.example.json`: dokumentert tom manifestmal,
+  ikke aktive eller oppdiktede produksjonsposter.
+
+## Tester
+
+- Nye falsk-DB/enhetstester dekker schema, URL-policy, duplikater, språkmatrise,
+  filspråkgate, ranker, sortering, tom katalog, Michael-komponering og to
+  identiske seedkjøringer uten andre gangs skriv.
+- Nye statiske kontrakter dekker JWT-rute, indeksnavn, fail-soft Michael-gren,
+  seed-gater og podcastkort uten `innerHTML`.
+- Målrettet suite: 31/31 PASS.
+- Full oppdaget lokal kontraktsuite: 51/51 PASS.
+- Alle trygge backendtester: 35/35 PASS.
+- Python AST: 152 filer PASS.
+- Inline JavaScript: 2/2 blokker PASS.
+- `git diff --check`: PASS med kun Windows LF/CRLF-varsler.
+
+## Avgrensning og gjenværende blokkering
+
+Ingen auth-policy, kvote, premium, Stripe, RevenueCat, betaling, TTS, mobilkode
+eller eksisterende bibliotekendepunkt er endret. Ingen produksjonsdatabase er
+kontaktet eller mutert, og ingen commit/push/deploy er utført.
+
+Aktiv seeding av de ti innholds-ID-ene og omkobling av biblioteksiden er fortsatt
+Patch B og **BLOCKED** til innholdseier leverer godkjente filer/URL-er, tags,
+NO/TH/EN-tekst og eksplisitt filspråk. Eksempelmanifesten skal derfor feile
+dry-run frem til den fylles med godkjent innhold.
+
+Rollback er å fjerne den additive katalogmodulen/ruten/helperen, podcastgrenen
+og indeksdefinisjonene. Eksisterende mediesamlinger og synlig bibliotek er urørt.
+
+Klar for Agent 4.
+
 # PATCH REPORT: Fase 2B — Michael quiz-coach og readiness
 
 ## Endrede applikasjonsfiler

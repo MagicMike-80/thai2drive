@@ -23,6 +23,10 @@ from zoneinfo import ZoneInfo
 from passlib.context import CryptContext
 import usage as usage_mod
 from ai_learning import compute_user_readiness, get_active_user_mistakes, record_user_mistake
+try:
+    from media_catalog import SUPPORTED_LANGUAGES, list_localized_catalog_media
+except ImportError:  # package-style imports used by isolated tests
+    from backend.media_catalog import SUPPORTED_LANGUAGES, list_localized_catalog_media
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -4949,6 +4953,19 @@ async def list_learning_podcasts(language: str = ""):
         query["language"] = language
     results = await db.learning_podcasts.find(query).sort("title_no", 1).to_list(500)
     return [_serialize_podcast(r) for r in results]
+
+
+@api_router.get("/library/media")
+async def list_media_catalog(
+    language: str = Query(...),
+    current_user: dict = Depends(get_current_user),
+):
+    """Return active, language-pure curated media for an authenticated learner."""
+    del current_user  # Authentication is the policy gate; identity is not query input.
+    if language not in SUPPORTED_LANGUAGES:
+        raise HTTPException(status_code=422, detail="Unsupported language")
+    media = await list_localized_catalog_media(db.media_catalog, language)
+    return {"language": language, "media": media}
 
 
 # ── GridFS audio upload / stream ─────────────────────────────────────────────

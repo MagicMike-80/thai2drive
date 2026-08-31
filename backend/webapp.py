@@ -3355,6 +3355,9 @@ a { color:inherit; text-decoration:none; }
   box-shadow:0 0 0 3px rgba(96,165,250,.22);
 }
 .tm-media-video-label { color:#67E8F9; font-size:.7rem; font-weight:900; letter-spacing:.04em; text-transform:uppercase; }
+.tm-media-card.podcast { padding:14px; }
+.tm-media-podcast { display:flex; flex-direction:column; gap:10px; }
+.tm-media-podcast audio { display:block; width:100%; min-height:44px; }
 .mqc-body .tm-media-strip { grid-template-columns:1fr; margin-top:12px; }
 .mqc-body .tm-media-visual { height:150px; }
 @media (max-width:767px) {
@@ -9761,7 +9764,7 @@ function _openTeacherMediaVideo(media) {
 
 function _buildTeacherMediaCard(media) {
   if (!media || !media.id || !_teacherMediaSafeUrl(media.url)) return null;
-  if (['sign','intersection_image','video'].indexOf(media.type) === -1) return null;
+  if (['sign','intersection_image','video','podcast'].indexOf(media.type) === -1) return null;
   if (!media.title || !media.caption) return null;
 
   var card = document.createElement(media.type === 'sign' ? 'button' : 'article');
@@ -9803,6 +9806,31 @@ function _buildTeacherMediaCard(media) {
     button.appendChild(videoCopy);
     button.onclick = function() { _openTeacherMediaVideo(media); };
     card.appendChild(button);
+    return card;
+  }
+
+  if (media.type === 'podcast') {
+    var podcastWrap = document.createElement('div');
+    podcastWrap.className = 'tm-media-podcast';
+    var podcastLabel = document.createElement('div');
+    podcastLabel.className = 'tm-media-video-label';
+    podcastLabel.textContent = t('podcast_short');
+    var podcastTitle = document.createElement('div');
+    podcastTitle.className = 'tm-media-title';
+    podcastTitle.textContent = media.title;
+    var podcastCaption = document.createElement('div');
+    podcastCaption.className = 'tm-media-caption';
+    podcastCaption.textContent = media.caption;
+    var audio = document.createElement('audio');
+    audio.controls = true;
+    audio.preload = 'none';
+    audio.src = media.url;
+    audio.setAttribute('aria-label', media.title);
+    podcastWrap.appendChild(podcastLabel);
+    podcastWrap.appendChild(podcastTitle);
+    podcastWrap.appendChild(podcastCaption);
+    podcastWrap.appendChild(audio);
+    card.appendChild(podcastWrap);
     return card;
   }
 
