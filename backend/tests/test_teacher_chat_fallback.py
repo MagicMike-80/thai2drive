@@ -216,9 +216,90 @@ class TeacherChatFallbackTests(unittest.TestCase):
         self.assertIn("explicit_sign_ids = _explicit_sign_ids_for_message(user_msg)", source)
         self.assertIn("explicit_sign_ids=explicit_sign_ids", source)
         self.assertIn("reply_sign_ids = _sign_ids_from_reply(reply_text)", source)
-        self.assertIn("sign_ids = _merge_sign_ids(explicit_sign_ids, reply_sign_ids, limit=2)", source)
-        self.assertIn("elif _is_right_hand_rule_query(user_msg):", source)
+        self.assertIn("sign_ids = _strict_response_sign_ids(explicit_sign_ids, reply_sign_ids)", source)
         self.assertIn("exact_response_media = await _get_exact_sign_media(sign_ids, lang, limit=2)", source)
+
+    def test_section_7_2_prompt_is_explicit_in_every_language(self):
+        prompts = {lang: self.module._build_system_prompt(lang) for lang in ("no", "th", "en")}
+        self.assertIn("TRAFIKKREGLENE § 7 NR. 2", prompts["no"])
+        self.assertIn("Du må ALDRI sløyfe", prompts["no"])
+        self.assertIn("กฎจราจรนอร์เวย์ § 7 ข้อ 2", prompts["th"])
+        self.assertIn("ห้ามบอก", prompts["th"])
+        self.assertIn("NORWEGIAN TRAFFIC RULES SECTION 7(2)", prompts["en"])
+        self.assertIn("NEVER claim", prompts["en"])
+
+    def test_section_7_2_fail_safe_corrects_wrong_model_reply_in_each_language(self):
+        cases = (
+            (
+                "no",
+                "Når jeg svinger til venstre og har vikeplikt for møtende bil, er dette høyreregelen?",
+                "Nei, dette er ikke høyreregelen.",
+                "Ja, dette er høyreregelen etter § 7 nr. 2.",
+            ),
+            (
+                "th",
+                "เมื่อเลี้ยวซ้ายและต้องให้ทางรถสวนทาง นี่คือกฎการให้ทางจากขวาใช่ไหม",
+                "ไม่ใช่กฎมือขวา",
+                "ใช่ครับ นี่คือกฎการให้ทางจากขวาตาม § 7 ข้อ 2",
+            ),
+            (
+                "en",
+                "When turning left for oncoming traffic, is this the right-hand rule?",
+                "No, this is not the right-hand rule.",
+                "Yes, this is the right-hand rule under section 7(2).",
+            ),
+        )
+        for lang, question, wrong_reply, expected_start in cases:
+            with self.subTest(lang=lang):
+                corrected = self.module._apply_section_7_2_fail_safe(question, wrong_reply, lang)
+                self.assertTrue(corrected.startswith(expected_start))
+                self.assertNotIn("Nei", corrected)
+                self.assertNotIn("No,", corrected)
+                self.assertNotIn("ไม่ใช่", corrected)
+
+    def test_section_7_2_fail_safe_has_narrow_boundaries(self):
+        cases = (
+            "Hva betyr høyreregelen?",
+            "Hvordan svinger jeg til venstre?",
+            "Har jeg vikeplikt for gående når jeg svinger til venstre?",
+            "Do I yield to oncoming traffic when turning left?",
+            "อธิบายกฎการให้ทางจากขวา",
+        )
+        original = "Behold modellsvaret"
+        for question in cases:
+            with self.subTest(question=question):
+                self.assertFalse(self.module._is_section_7_2_left_turn_query(question))
+                self.assertEqual(
+                    self.module._apply_section_7_2_fail_safe(question, original, "no"),
+                    original,
+                )
+
+    def test_section_7_2_full_citation_contains_both_sentences_and_no_sign(self):
+        question = "Hva sier paragraf 7 andre ledd?"
+        reply = self.module._apply_section_7_2_fail_safe(question, "Feil modelltekst", "no")
+        self.assertIn("Kjørende har vikeplikt for kjøretøy som kommer fra høyre.", reply)
+        self.assertIn(
+            "Det samme gjelder når kjørende som vil svinge til venstre, vil få kjøretøy på sin høyre side.",
+            reply,
+        )
+        sign_ids = self.module._strict_response_sign_ids(
+            self.module._explicit_sign_ids_for_message(question),
+            self.module._sign_ids_from_reply(reply),
+        )
+        self.assertEqual(sign_ids, [])
+
+    def test_strict_sign_validation_ignores_unrelated_rag_context(self):
+        unrelated_context = "Traffic Sign 334_0: Forbikjøring forbudt for lastebil"
+        self.assertEqual(self.module._sign_ids_from_context(unrelated_context), ["334_0"])
+        self.assertEqual(self.module._strict_response_sign_ids([], []), [])
+        self.assertEqual(self.module._strict_response_sign_ids(["202_0"], []), ["202_0"])
+        self.assertEqual(self.module._strict_response_sign_ids([], ["204_0"]), ["204_0"])
+
+    def test_endpoint_applies_section_7_2_fail_safe_before_sign_resolution(self):
+        source = (Path(__file__).resolve().parents[1] / "teacher_chat.py").read_text(encoding="utf-8")
+        fail_safe = source.index("reply_text = _apply_section_7_2_fail_safe(user_msg, reply_text, lang)")
+        sign_resolution = source.index("reply_sign_ids = _sign_ids_from_reply(reply_text)")
+        self.assertLess(fail_safe, sign_resolution)
 
     def test_reply_sign_labels_resolve_in_each_supported_language(self):
         cases = (

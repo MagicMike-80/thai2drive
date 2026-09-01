@@ -1,3 +1,69 @@
+# PAIN PROFILE: Michael avviser feilaktig høyreregelen ved venstresving (§ 7 nr. 2)
+
+## Brukersmerte og forventning
+
+Michael svarer kategorisk at vikeplikt for møtende kjøretøy ved venstresving
+ikke er høyreregelen. Eleven får dermed feil juridisk forklaring i en konkret
+vikepliktsituasjon. Forventet svar er at trafikkreglene § 7 nr. 2 også gjelder
+når en venstresvingende vil få det møtende kjøretøyet på sin høyre side.
+
+## Verifiserte observasjoner
+
+- Fersk produksjonstest mot `POST /api/teacher/chat` gjenga feilen to ganger:
+  «Nei, dette er ikke høyreregelen» og «Nei, høyreregelen gjelder ikke ved
+  venstresving.»
+- En separat fersk test med «Hva sier paragraf 7 andre ledd?» returnerte et
+  generisk feilsvar samt `sign_ids=["316_0"]`: «Forbikjøring forbudt for
+  lastebil». Dette skiltet har ingen sammenheng med § 7 nr. 2.
+- Gjeldende Lovdata-tekst for trafikkreglene § 7 nr. 2 sier at kjørende har
+  vikeplikt for kjøretøy fra høyre, og at det samme gjelder når en kjørende som
+  vil svinge til venstre, vil få kjøretøy på sin høyre side.
+- `backend/teacher_chat.py` lærer i dag Michael at venstresvingeren må vike
+  fordi han krysser den møtendes kjørefelt. Prompten knytter ikke dette
+  uttrykkelig til § 7 nr. 2 og forbyr ikke den dokumenterte feilavvisningen.
+- Etter modellsvaret finnes ingen juridisk fail-safe. Svaret går gjennom
+  godkjent-mediafiltrering og kortformat før det returneres.
+- Når verken brukeren eller svaret har en kontrollert skilt-ID, bruker endpointet
+  første skilt-ID fra bred RAG-kontekst. Dette gjør et tilfeldig katalogtreff
+  om til synlig `sign_ids`/`media` selv uten en konkret skiltmatch.
+
+## Rotårsak
+
+**BEVIST:** Kunnskapsinstruksen er ufullstendig og pedagogisk formulert på en
+måte som lar modellen klassifisere venstresving som en separat regel. Samtidig
+mangler den deterministiske responsflyten et smalt vern for den eksakte
+§ 7 nr. 2-situasjonen. Den brede skiltfallbacken godtar samtidig konteksttreff
+som om de var eksakte skiltreferanser. Resultatet er reproduserbar juridisk
+feilinformasjon med urelatert visuelt materiale.
+
+## Omfang og risiko
+
+Berørt flate er Michaels vanlige chat og quiz-coach når samme
+`teacher_chat.py`-flyt brukes. Feilen gjelder juridisk trafikklære og kan føre
+til feil svar på teoriprøven eller feil forståelse i trafikken. Auth, kvoter,
+premium, betaling, TTS, media, database og Michael-portrett er ikke berørt.
+
+## Akseptansekriterier
+
+1. Systemprompten beskriver § 7 nr. 2 korrekt på NO/TH/EN og sier uttrykkelig
+   at venstresving med møtende kjøretøy på høyre side omfattes.
+2. Den dokumenterte venstresving-/høyreregel-intensjonen får et deterministisk,
+   språktilpasset korrekt svar selv om modellen svarer «Nei» eller feiler.
+3. Vanlige spørsmål om høyreregelen og andre venstresving-situasjoner blir ikke
+   ukritisk tvunget til samme svar.
+4. Tester dekker positiv NO/TH/EN-matrise, feilaktig modellavvisning og negative
+   grenseeksempler.
+5. Eksisterende API-kontrakt, språkrenhet, media og tilgang er uendret.
+6. Generiske RAG-skilt kan ikke bli responsmedia; bare kontrollert skiltmatch i
+   brukermelding eller ferdig Michael-svar tillates.
+
+## Handoff
+
+Rotårsaken er bevist med kode, offisiell lovtekst og fersk produksjonsreproduksjon.
+Klar for en liten løsningsplan uten rewrite.
+
+---
+
 # PAIN PROFILE: skiltord i Michaels avklaringsliste er ren tekst
 
 ## Brukersmerte og forventet oppførsel

@@ -207,6 +207,30 @@ _LANG_CRITICAL = {
     "en": "[LANGUAGE: en]\nCRITICAL: Reply in English ONLY. Every single word must be English. No Norwegian, no Thai.\n\n",
 }
 
+_SECTION_7_2_PROMPT = {
+    "no": (
+        "TRAFIKKREGLENE § 7 NR. 2 — ABSOLUTT FASIT:\n"
+        'Hele ordlyden er: "Kjørende har vikeplikt for kjøretøy som kommer fra høyre. '
+        'Det samme gjelder når kjørende som vil svinge til venstre, vil få kjøretøy '
+        'på sin høyre side." Begge setningene er obligatoriske når eleven spør om '
+        "§ 7 nr. 2 eller venstresving. Du må ALDRI sløyfe andre setning eller si at "
+        "denne venstresving-situasjonen ikke er høyreregelen.\n\n"
+    ),
+    "th": (
+        "กฎจราจรนอร์เวย์ § 7 ข้อ 2 — ข้อเท็จจริงที่ต้องยึดถือ:\n"
+        "กฎการให้ทางจากขวาใช้ทั้งเมื่อมีรถมาจากทางขวา และเมื่อคุณเลี้ยวซ้าย "
+        "ซึ่งทำให้รถที่สวนมาอยู่ทางขวามือของคุณ ทั้งสองกรณีเป็นกฎเดียวกันตาม § 7 ข้อ 2 "
+        "ห้ามบอกว่าสถานการณ์เลี้ยวซ้ายนี้ไม่ใช่กฎการให้ทางจากขวาเด็ดขาด\n\n"
+    ),
+    "en": (
+        "NORWEGIAN TRAFFIC RULES SECTION 7(2) — ABSOLUTE FACT:\n"
+        "The right-hand rule applies both to vehicles coming from the right and when "
+        "you turn left and the oncoming vehicle is then on your right-hand side. "
+        "Both are the same rule under section 7(2). NEVER claim that this left-turn "
+        "situation is not the right-hand rule.\n\n"
+    ),
+}
+
 # GOOD example — language-specific so the model patterns on the declared language's prose style
 _GOOD_EXAMPLE = {
     "no": '''"Ok 😊
@@ -481,7 +505,7 @@ or "hvordan tenke ved vikeplikt".
 
 2. Høyreregelen
    Vikeplikt for trafikk fra høyre.
-   Når du svinger til venstre: du krysser den møtendes kjørefelt — derfor må du vike.
+   Når du svinger til venstre, kommer den møtende bilen på din høyre side. Dette omfattes av trafikkreglene § 7 nr. 2, og derfor må du vike.
 
 3. Sykkelvei
    Når du svinger: tenk alltid at det kommer en syklist.
@@ -870,6 +894,7 @@ def _build_system_prompt(lang: str) -> str:
     
     return (
         _LANG_CRITICAL[l]
+        + _SECTION_7_2_PROMPT[l]
         + core
         .replace("<<GOOD_EXAMPLE>>", _GOOD_EXAMPLE[l])
         .replace("<<COACHING>>", _COACHING[l])
@@ -1149,6 +1174,108 @@ def _is_right_hand_rule_query(user_msg: str) -> bool:
         "กฎมือขวา",
     )
     return any(alias in message for alias in aliases)
+
+
+def _is_section_7_2_left_turn_query(user_msg: str) -> bool:
+    """Match only the statutory left-turn/right-side scenario in § 7 no. 2."""
+    message = (user_msg or "").casefold()
+    right_hand_rule_terms = (
+        "høyreregelen",
+        "høyreregel",
+        "right-hand rule",
+        "right hand rule",
+        "กฎการให้ทางจากขวา",
+        "กฎมือขวา",
+    )
+    left_turn_terms = (
+        "venstresving",
+        "svinger til venstre",
+        "svinge til venstre",
+        "turning left",
+        "turn left",
+        "left turn",
+        "เลี้ยวซ้าย",
+    )
+    opposing_or_right_terms = (
+        "møtende",
+        "motgående",
+        "på min høyre side",
+        "på din høyre side",
+        "på høyre side",
+        "oncoming",
+        "opposing traffic",
+        "on my right",
+        "on your right",
+        "right-hand side",
+        "right side",
+        "รถสวนทาง",
+        "รถที่สวนมา",
+        "ด้านขวา",
+        "ทางขวามือ",
+    )
+    return (
+        any(term in message for term in right_hand_rule_terms)
+        and any(term in message for term in left_turn_terms)
+        and any(term in message for term in opposing_or_right_terms)
+    )
+
+
+def _is_section_7_2_citation_query(user_msg: str) -> bool:
+    """Match direct requests for the full wording of § 7 no. 2."""
+    message = (user_msg or "").casefold()
+    section_terms = ("§ 7", "§7", "paragraf 7", "section 7", "มาตรา 7")
+    number_two_terms = (
+        "nr. 2",
+        "nr 2",
+        "nummer 2",
+        "andre ledd",
+        "annet ledd",
+        "paragraph 2",
+        "second paragraph",
+        "subsection 2",
+        "ข้อ 2",
+    )
+    return any(term in message for term in section_terms) and any(
+        term in message for term in number_two_terms
+    )
+
+
+def _apply_section_7_2_fail_safe(user_msg: str, reply_text: str, lang: str) -> str:
+    """Return a controlled legal answer for the precise § 7 no. 2 scenario."""
+    is_left_turn = _is_section_7_2_left_turn_query(user_msg)
+    if not is_left_turn and not _is_section_7_2_citation_query(user_msg):
+        return reply_text
+    replies = {
+        "no": (
+            "Trafikkreglene § 7 nr. 2 sier: «Kjørende har vikeplikt for kjøretøy som "
+            "kommer fra høyre. Det samme gjelder når kjørende som vil svinge til "
+            "venstre, vil få kjøretøy på sin høyre side.»"
+        ),
+        "th": (
+            "กฎจราจรนอร์เวย์ § 7 ข้อ 2 ระบุว่า «ผู้ขับขี่ต้องให้ทางแก่รถที่มาจาก "
+            "ด้านขวา กฎเดียวกันนี้ใช้เมื่อผู้ขับขี่ต้องการเลี้ยวซ้ายและจะมีรถอยู่ "
+            "ทางขวามือของตน»"
+        ),
+        "en": (
+            "Section 7(2) of the Norwegian traffic rules states: “A driver must yield "
+            "to vehicles coming from the right. The same applies when a driver who "
+            "intends to turn left will have a vehicle on their right-hand side.”"
+        ),
+    }
+    grounded = replies.get(lang, replies["no"])
+    if not is_left_turn:
+        return grounded
+    confirmations = {
+        "no": "Ja, dette er høyreregelen etter § 7 nr. 2. ",
+        "th": "ใช่ครับ นี่คือกฎการให้ทางจากขวาตาม § 7 ข้อ 2 ",
+        "en": "Yes, this is the right-hand rule under section 7(2). ",
+    }
+    return confirmations.get(lang, confirmations["no"]) + grounded
+
+
+def _strict_response_sign_ids(explicit_sign_ids: list[str], reply_sign_ids: list[str]) -> list[str]:
+    """Allow only controlled user/reply sign matches; never generic RAG sign hits."""
+    return _merge_sign_ids(explicit_sign_ids, reply_sign_ids, limit=2)
 
 
 _MATERIAL_TOPIC_ALIASES = (
@@ -2062,14 +2189,9 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         error_str = f"LiteLLM: {type(e).__name__}({e})"
         reply_text = _fallback_reply(lang)
 
+    reply_text = _apply_section_7_2_fail_safe(user_msg, reply_text, lang)
     reply_sign_ids = _sign_ids_from_reply(reply_text)
-    context_sign_ids = _sign_ids_from_context(context_str)
-    if explicit_sign_ids or reply_sign_ids:
-        sign_ids = _merge_sign_ids(explicit_sign_ids, reply_sign_ids, limit=2)
-    elif _is_right_hand_rule_query(user_msg):
-        sign_ids = []
-    else:
-        sign_ids = context_sign_ids[:1]
+    sign_ids = _strict_response_sign_ids(explicit_sign_ids, reply_sign_ids)
 
     if sign_ids:
         try:

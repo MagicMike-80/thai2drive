@@ -1,3 +1,82 @@
+# SOLUTION BLUEPRINT: juridisk vern for høyreregelen ved venstresving
+
+## Mål
+
+Rette den dokumenterte § 7 nr. 2-feilen med én liten backendpatch som både
+styrker Michaels kunnskapsinstruks og garanterer korrekt svar i den presise
+venstresving-situasjonen.
+
+## Ikke-mål
+
+- Ingen generell regelmotor eller stor omskriving av prompten.
+- Ingen endring av API-kontrakt, frontend, database, media, auth, kvoter,
+  premium, Stripe, RevenueCat, betaling, TTS eller deploykonfigurasjon.
+- Ingen automatisk «Ja» for alle spørsmål som inneholder venstresving eller
+  høyreregelen.
+
+## Endrede filer
+
+1. `backend/teacher_chat.py`
+   - Legg til en språktilpasset § 7 nr. 2-instruks i systemprompten.
+   - Legg til en smal intent-detektor som krever høyreregel, venstresving og
+     møtende/høyre-side-kontekst.
+   - Legg til en deterministisk språktilpasset fail-safe etter modell/fallback
+     og før `sign_ids`/media beregnes.
+   - Fjern generisk RAG-kontekst som fallback for responsens skilt-ID-er. Bare
+     kontrollerte treff i brukerens eller Michaels tekst kan velges.
+2. `backend/tests/test_teacher_chat_fallback.py`
+   - Lås promptfakta, positiv NO/TH/EN-matrise, modellens kategoriske feil og
+     negative grenseeksempler.
+3. `app-brief/PATCH_REPORT.md` og `app-brief/QA_REPORT.md`
+   - Dokumenter patch- og QA-evidens.
+
+## Dataflyt og kontrakt
+
+`TeacherChatRequest` og `TeacherChatResponse` endres ikke. Normal flyt er:
+brukermelding → systemprompt/RAG → modell → kortformat → § 7 nr. 2-fail-safe →
+streng skiltvalidering fra eksplisitt bruker-/svarmatch → eksisterende media →
+respons. Fail-safe returnerer bare tekst og bred RAG-kontekst kan ikke lenger
+introdusere et urelatert skilt.
+
+## Språk og tilgang
+
+Korrekt kanonisk svar finnes separat for norsk, thai og engelsk. Aktivt
+`language`-felt bestemmer hele svaret. Guest/gratis/premium følger samme
+eksisterende endpoint uten tilgangsendring.
+
+## Patchplan
+
+1. Definer `_SECTION_7_2_PROMPT` for NO/TH/EN og injiser riktig språkvariant i
+   `_build_system_prompt`.
+2. Implementer `_is_section_7_2_left_turn_query` med kontrollerte språkfraser.
+3. Implementer `_apply_section_7_2_fail_safe` og bruk den én gang etter både
+   vellykket modellrespons og feilfallback.
+4. Implementer `_strict_response_sign_ids` uten generisk kontekstfallback.
+5. Legg til smale enhetstester og kjør eksisterende relevante/full suite.
+6. QA diff, språk, hemmeligheter og regresjonsflater før avgrenset push.
+
+## Test og manuell verifisering
+
+- Prompten inneholder § 7 nr. 2-fakta på NO/TH/EN.
+- Feilmodellsvaret «Nei, dette er ikke høyreregelen» korrigeres for den eksakte
+  situasjonen i alle tre språk.
+- «Hva betyr høyreregelen?», «Hvordan svinger jeg til venstre?» og spørsmål om
+  gående/syklende ved sving utløser ikke fail-safe.
+- «Hva sier paragraf 7 andre ledd?» inneholder begge lovsetningene og har
+  `sign_ids=[]`/`media=[]`, selv om RAG-konteksten inneholder et annet skilt.
+- Eksisterende Michael-, media- og kontrakttester er grønne.
+- Etter deploy: ferske live-canaries på NO/TH/EN og kontroll av versjonsmarkør.
+
+## Rollback og risiko
+
+Rollback er én revert av den avgrensede committen; ingen data migreres. Største
+risiko er et for bredt intent-treff, redusert ved å kreve tre samtidige
+begrepsgrupper og ved negative tester.
+
+**READY FOR AGENT 3**
+
+---
+
 # SOLUTION BLUEPRINT — Thai2Drive Admin som Michaels materialbibliotek
 
 ## Mål

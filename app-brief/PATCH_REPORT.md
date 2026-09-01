@@ -1,3 +1,40 @@
+# PATCH REPORT: § 7 nr. 2-grounding og streng skiltvalidering
+
+## Endring
+
+- `backend/teacher_chat.py` inneholder nå hele ordlyden i trafikkreglene
+  § 7 nr. 2 som en absolutt systeminstruks. NO/TH/EN har hver sin
+  språktilpassede instruks.
+- En smal intent-detektor kjenner igjen direkte spørsmål om § 7 nr. 2 samt den
+  konkrete kombinasjonen høyreregel + venstresving + møtende/høyre-side.
+- En deterministisk fail-safe kjøres etter både modellrespons og feilfallback.
+  Den returnerer alltid begge lovsetningene og korrigerer kategoriske «Nei»-svar
+  i den dokumenterte venstresving-situasjonen.
+- Responsens `sign_ids` bygges nå bare fra kontrollerte eksplisitte bruker- eller
+  svarmatcher. Generiske skilt-ID-er fra bred RAG-kontekst kan ikke lenger bli
+  responsmedia; `316_0`-feilen er derfor stengt.
+- API-kontrakt, frontend, database, auth, kvoter, premium, betaling, TTS,
+  deploykonfigurasjon og Michael-portrett er urørt.
+
+## Tester
+
+- 28/28 direkte prompt-, fail-safe-, paragraf- og skiltvalideringstester: PASS.
+- 40/40 målrettede backendtester: PASS.
+- 51/51 Michael-, media- og mobilkontrakttester: PASS.
+- 60/60 full sikker `tests/`-suite: PASS.
+- Python-syntaks og `git diff --check`: PASS.
+
+## Risiko og rollback
+
+Fail-safe krever tre samtidige begrepsgrupper for venstresving-intensjon, eller
+en eksplisitt henvisning til § 7 nr. 2. Negative tester viser at generell
+høyreregel, vanlig venstresving og vikeplikt for gående ikke overstyres.
+Rollback er én revert; ingen data migreres.
+
+Klar for uavhengig QA Gate og deretter autorisert commit/push/liveverifisering.
+
+---
+
 # PATCH REPORT: skiltord koblet til 202/204 i Michael-chat
 
 ## Endring

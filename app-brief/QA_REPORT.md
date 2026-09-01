@@ -1,3 +1,45 @@
+# QA REPORT: § 7 nr. 2-grounding og feilfrost for skilt
+
+## Resultat
+
+- PASS: rotårsaken er dokumentert med to ferske produksjonsavvisninger og en
+  separat produksjonsrespons som feilaktig returnerte lastebilskilt `316_0` for
+  «Hva sier paragraf 7 andre ledd?».
+- PASS: den norske systeminstruksen inneholder hele offisielle Lovdata-ordlyden
+  med begge setninger. Thai og engelsk har full, språktilpasset betydning og
+  uttrykkelig forbud mot feilavvisningen.
+- PASS: fail-safe ligger etter både modellrespons og feilfallback, men før
+  `sign_ids`/media. Direkte § 7 nr. 2-spørsmål får alltid begge setninger;
+  presis venstresving-intensjon får i tillegg et tydelig «Ja».
+- PASS: venstresving-detektoren krever høyreregel, venstresving og
+  møtende/høyre-side samtidig. Generell høyreregel, vanlig venstresving,
+  gående/syklende og engelsk venstresving uten definisjonsspørsmål overstyres
+  ikke.
+- PASS: responsens skilt-ID-er kan bare komme fra kontrollerte eksplisitte
+  bruker-/svarmatcher. Bred RAG-kontekst er fjernet som skiltfallback. Testen
+  simulerer et urelatert skilt og får `sign_ids=[]`.
+- PASS: eksisterende `202_0`/`204_0`-matcher, mediafilter og API-kontrakt er
+  bevart. Ingen frontendendring er nødvendig.
+- PASS: 28/28 direkte tester, 40/40 målrettede backendtester, 51/51 Michael-/
+  media-/mobiltester og 60/60 full sikker kontraktsuite.
+- PASS: Python-syntaks, `git diff --check` og hemmelighetsskann. Bare normale
+  Windows LF/CRLF-varsler.
+- PASS: Michael-portrettets Git-blob er uendret
+  (`bdef6149a9cc80a5dc873097146ab1d5ee3ab6a9`).
+- PASS: auth, guest/gratis/premium, Stripe, RevenueCat, betaling, TTS, database
+  og deploykonfigurasjon er urørt.
+
+## Gjenværende kontroll
+
+Produksjon er ikke endret av QA. Etter autorisert push må ferske live-canaries
+bevise at både venstresving-spørsmålet og «Hva sier paragraf 7 andre ledd?»
+returnerer begge lovsetninger med `sign_ids=[]`/`media=[]`, mens eksplisitte
+Vikepliktskilt/Stoppskilt fortsatt returnerer `202_0`/`204_0`.
+
+**PASS WITH WARNINGS — lokal patch er trygg; navngitt livekontroll gjenstår etter deploy.**
+
+---
+
 # QA REPORT: strukturerte skiltlenker for 202/204
 
 ## Resultat
