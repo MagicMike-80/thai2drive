@@ -197,8 +197,8 @@ class TeacherChatFallbackTests(unittest.TestCase):
 
     def test_explicit_sign_aliases_resolve_in_each_supported_language(self):
         cases = {
-            "202_0": ("Forklar vikepliktskiltet", "Explain the give way sign", "อธิบายป้ายให้ทาง"),
-            "204_0": ("Forklar stoppskiltet", "Explain the stop sign", "อธิบายป้ายหยุด"),
+            "202_0": ("Forklar vikepliktskiltet", "Explain the give way sign", "อธิบายป้ายให้ทาง", "Vis skilt 202"),
+            "204_0": ("Forklar stoppskiltet", "Explain the stop sign", "อธิบายป้ายหยุด", "Vis skilt 204"),
             "208_0": ("Forklar forkjørsvei", "Explain the priority road", "อธิบายถนนสายหลัก"),
         }
         for sign_id, messages in cases.items():
@@ -215,7 +215,53 @@ class TeacherChatFallbackTests(unittest.TestCase):
         source = (Path(__file__).resolve().parents[1] / "teacher_chat.py").read_text(encoding="utf-8")
         self.assertIn("explicit_sign_ids = _explicit_sign_ids_for_message(user_msg)", source)
         self.assertIn("explicit_sign_ids=explicit_sign_ids", source)
-        self.assertIn("sign_ids = (explicit_sign_ids or _sign_ids_from_context(context_str))[:1]", source)
+        self.assertIn("reply_sign_ids = _sign_ids_from_reply(reply_text)", source)
+        self.assertIn("sign_ids = _merge_sign_ids(explicit_sign_ids, reply_sign_ids, limit=2)", source)
+        self.assertIn("elif _is_right_hand_rule_query(user_msg):", source)
+        self.assertIn("exact_response_media = await _get_exact_sign_media(sign_ids, lang, limit=2)", source)
+
+    def test_reply_sign_labels_resolve_in_each_supported_language(self):
+        cases = (
+            ("Høyreregelen 🛑 Vikepliktskilt 🔴 Stoppskilt ⭕ Rundkjøring", ["202_0", "204_0"]),
+            ("กฎการให้ทางจากขวา 🛑 ป้ายให้ทาง 🔴 ป้ายหยุด", ["202_0", "204_0"]),
+            ("Right-hand rule 🛑 Give Way sign 🔴 Stop sign", ["202_0", "204_0"]),
+            ("Skilt 202 og skilt 204", ["202_0", "204_0"]),
+            ("Vikeplikt", ["202_0"]),
+            ("Stopp", ["204_0"]),
+        )
+        for reply, expected in cases:
+            with self.subTest(reply=reply):
+                self.assertEqual(self.module._sign_ids_from_reply(reply), expected)
+
+    def test_reply_sign_matching_does_not_turn_rules_into_signs(self):
+        cases = (
+            "Høyreregelen betyr at du har vikeplikt for trafikk fra høyre.",
+            "Stoppelengde er reaksjonslengde pluss bremselengde. Stopp rolig.",
+            "Right-hand rule means you yield to traffic from the right.",
+            "คุณต้องให้ทางแก่รถที่มาจากทางขวา",
+        )
+        for reply in cases:
+            with self.subTest(reply=reply):
+                self.assertEqual(self.module._sign_ids_from_reply(reply), [])
+
+    def test_sign_id_merge_is_stable_deduplicated_and_bounded(self):
+        self.assertEqual(
+            self.module._merge_sign_ids(["202_0"], ["202_0", "204_0"], ["208_0"], limit=2),
+            ["202_0", "204_0"],
+        )
+
+    def test_right_hand_rule_queries_do_not_use_context_sign_fallback(self):
+        for message in (
+            "Hva betyr Høyreregelen?",
+            "Explain the right-hand rule",
+            "อธิบายกฎการให้ทางจากขวา",
+        ):
+            with self.subTest(message=message):
+                self.assertTrue(self.module._is_right_hand_rule_query(message))
+
+        for message in ("Forklar vikepliktskilt", "Vis skilt 202", "Explain the stop sign"):
+            with self.subTest(message=message):
+                self.assertFalse(self.module._is_right_hand_rule_query(message))
 
     def test_explicit_sign_skips_broader_sign_search(self):
         source = (Path(__file__).resolve().parents[1] / "teacher_chat.py").read_text(encoding="utf-8")
@@ -252,11 +298,12 @@ class TeacherChatFallbackTests(unittest.TestCase):
         self.assertEqual(thai, "คุณต้องให้ทางแก่รถในทางแยก。")
         self.assertEqual(english, "You must give way to traffic in the intersection. Stop if needed.")
 
-    def test_endpoint_contract_has_no_reply_menu_and_only_one_sign_media(self):
+    def test_endpoint_contract_has_no_reply_menu_and_at_most_two_sign_media(self):
         source = (Path(__file__).resolve().parents[1] / "teacher_chat.py").read_text(encoding="utf-8")
         self.assertIn("system_prompt += _concise_output_instruction(lang)", source)
         self.assertIn("suggestions = []", source)
-        self.assertIn(")[:1]", source)
+        self.assertIn("reply_sign_ids = _sign_ids_from_reply(reply_text)", source)
+        self.assertIn("][:2]", source)
         self.assertIn('if item.get("type") == "sign"', source)
 
     def test_new_session_primer_is_language_pure(self):

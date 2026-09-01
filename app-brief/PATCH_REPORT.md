@@ -1,3 +1,42 @@
+# PATCH REPORT: skiltord koblet til 202/204 i Michael-chat
+
+## Endring
+
+- `backend/teacher_chat.py` analyserer nå Michaels ferdige, synlige svar med en
+  liten kontrollert NO/TH/EN-tabell. Eksakte Vikepliktskilt-/Give Way-/ป้ายให้ทาง-
+  uttrykk og skilt 202 gir `202_0`; Stoppskilt-/Stop sign-/ป้ายหยุด-uttrykk og
+  skilt 204 gir `204_0`.
+- Eksplisitte bruker-ID-er prioriteres, deretter kontrollerte svar-ID-er. De
+  dedupliseres i stabil rekkefølge og begrenses til to. Generisk kontekst brukes
+  bare når verken brukeren eller svaret har et konkret skilt.
+- Backend bygger lokaliserte, autoritative skiltmedier etter at svaret finnes og
+  filtrerer media slik at hver media-ID samsvarer med responsens `sign_ids`.
+- Rene spørsmål om Høyreregelen på NO/TH/EN stopper den generiske
+  kontekst-fallbacken. De forblir derfor regeltekst uten skiltbilde, med mindre
+  brukeren eller Michael faktisk navngir et konkret skilt.
+- `backend/webapp.py` ble kontrollert, men ikke endret: dagens sikre mediakort er
+  allerede klikkbart og har 80 x 80 px skiltbilde på mobil og desktop.
+- Michael-portrett, auth, kvoter, premium, betaling, TTS, database og
+  deploykonfigurasjon er urørt.
+
+## Tester
+
+- 45/45 målrettede matcher-, media- og mobilkontrakttester: PASS.
+- 60/60 full sikker `tests/`-suite: PASS.
+- 34/34 målrettede backendtester: PASS.
+- Python-syntaks: PASS.
+- `git diff --check`: PASS med bare Windows LF/CRLF-varsler.
+
+## Risiko og rollback
+
+Falske positive begrenses med eksakte skiltfraser, kontrollerte standalone-valg
+og negative tester for Høyreregelen, generell vikeplikt og stoppelengde. Rollback
+er én revert av denne avgrensede committen; ingen data migreres.
+
+Klar for uavhengig QA Gate og deretter kontrollert commit/push/liveverifisering.
+
+---
+
 # PATCH REPORT: fase 1 - språkren Michael og to tydelige nestevalg
 
 ## Endring

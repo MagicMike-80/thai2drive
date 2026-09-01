@@ -1,3 +1,40 @@
+# QA REPORT: strukturerte skiltlenker for 202/204
+
+## Resultat
+
+- PASS: den dokumenterte rotårsaken er adressert etter modellsvaret, før API-
+  responsen bygges. Kontrollerte skiltord blir strukturerte `sign_ids`, og
+  eksisterende autoritativ sign-media bygges i samme rekkefølge.
+- PASS: NO/TH/EN-matrisen gir `202_0` og `204_0` for Vikepliktskilt/Stoppskilt,
+  Give Way/Stop sign og ป้ายให้ทาง/ป้ายหยุด, samt eksplisitt skilt 202/204.
+- PASS: Høyreregelen med vanlig vikeplikttekst, stoppelengde, vanlig stopphandling
+  og thai høyreregeltekst gir ingen falsk skilt-ID.
+- PASS: rene NO/TH/EN-spørsmål om Høyreregelen blokkerer også den eldre
+  kontekst-fallbacken, slik at regelen ikke får et tilfeldig skiltkort.
+- PASS: eksplisitte bruker-ID-er prioriteres, ID-er dedupliseres stabilt og
+  sluttkontrakten er begrenset til to samsvarende skiltmedier.
+- PASS: frontendens eksisterende sikre DOM-rendering viser skiltmediet som en
+  klikkbar knapp, åpner autoritativ skilt-ID og bruker 80 x 80 px bilde på mobil
+  og desktop. Ingen frontendendring var nødvendig.
+- PASS: 45/45 målrettede tester, 60/60 full sikker frontend-/kontraktsuite og
+  34/34 målrettede backendtester.
+- PASS: Python-syntaks og `git diff --check`; ingen nye hemmeligheter.
+- PASS: Michael-portrettets Git-blob er uendret
+  (`bdef6149a9cc80a5dc873097146ab1d5ee3ab6a9`).
+- PASS: auth, guest/gratis/premium, Stripe, RevenueCat, betaling, TTS, database
+  og deploykonfigurasjon er urørt.
+
+## Gjenværende kontroll
+
+Produksjon er ikke endret av QA. Etter autorisert push må ferske NO/TH/EN-
+canaries bevise ikke-tomme `sign_ids`/`media`, fungerende bilde-URL-er og synlige
+klikkbare kort i live DOM for «Forklar en trafikkregel». Høyreregelen alene skal
+fortsatt gi null skiltmedia.
+
+**PASS WITH WARNINGS — lokal patch er trygg; navngitt livekontroll gjenstår etter deploy.**
+
+---
+
 # QA GATE RE-RUN: eksakt skilt og kompakt ordkobling i Michael-chat
 
 ## Endelig resultat

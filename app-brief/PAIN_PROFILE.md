@@ -1,3 +1,59 @@
+# PAIN PROFILE: skiltord i Michaels avklaringsliste er ren tekst
+
+## Brukersmerte og forventet oppførsel
+
+Etter at eleven velger «Forklar en trafikkregel», viser Michael blant annet
+«Vikepliktskilt», «Stoppskilt» og «Rundkjøring». Eleven forventer at
+konkrete skiltord har et lite korrekt skiltbilde og kan åpne skiltet. I live-UI
+er hele listen bare tekst.
+
+## Verifiserte observasjoner
+
+- Fersk produksjonskontroll av deploy `2026-09-01-31357c04` viste svaret
+  `Høyreregelen 🛑 Vikepliktskilt 🔴 Stoppskilt ⭕ Rundkjøring 🚶 Gangfelt`,
+  men ingen klikkbare `.tm-sign-term`-elementer.
+- Den samme live-forespørselen til `/api/teacher/chat` returnerte
+  `sign_ids=[]` og `media=[]` for `Forklar en trafikkregel`.
+- `backend/webapp.py` kobler bare ord via
+  `_teacherLinkSignReferences(assistantBubble, data.sign_ids || [])` og bygger
+  bare mediakort fra `data.media`. Frontend har derfor ingen autoritativ ID den
+  kan bruke for denne listen.
+- `backend/teacher_chat.py` ber modellen skrive fem avklaringsvalg som fri
+  svartekst. `_explicit_sign_ids_for_message()` analyserer bare elevens
+  inngående melding, ikke de konkrete skiltordene Michael legger i svaret.
+- Kontrollgruppen `Hjelp med vikeplikt` kan returnere `sign_ids=["202_0"]` og
+  ett fungerende skiltmedium. Bilde-API og selve kortkomponenten fungerer derfor;
+  feilen er i koblingskontrakten for den brede avklaringslisten.
+
+## Rotårsak
+
+**BEVIST:** Frie skiltord i Michaels avklaringssvar har ingen strukturerte
+ressurs-ID-er. Frontend er med hensikt avhengig av `sign_ids`/`media` og skal
+ikke gjette skilt fra tekst. Resultatet blir korrekt, men ikke klikkbar ren tekst.
+
+## Omfang og risiko
+
+- Berører brede innganger som «Forklar en trafikkregel» og andre svar der
+  Michael nevner flere valg uten strukturerte ID-er.
+- Eksakte skiltspørsmål fungerer og må ikke regresjonstestes bort.
+- En løsning må skille regler uten skilt (for eksempel Høyreregelen) fra
+  konkrete skilt og ikke koble feil ID til generelle begreper.
+- Språkrenhet NO/TH/EN og maksimum for antall media må bevares.
+
+## Akseptansekriterier for neste lille patch
+
+1. Brede avklaringsvalg leveres som strukturerte, språkrene valg med eksplisitt
+   `sign_id` bare når valget faktisk er et konkret skilt.
+2. Vikepliktskilt og Stoppskilt viser korrekt lite bilde og er klikkbare;
+   Høyreregelen forblir et regelvalg uten oppdiktet skilt.
+3. Ingen tilfeldig katalograngering kan vise et irrelevant skilt for
+   «Forklar et skilt» eller «Forklar en trafikkregel».
+4. Eksakte skiltspørsmål beholder ett korrekt kort, og NO/TH/EN testmatrise er
+   grønn på mobil og desktop.
+5. Ingen endring i portrett, auth, betaling, database eller deploykonfigurasjon.
+
+---
+
 # PAIN PROFILE: adminpanelet er ikke ett samlet Michael-materialbibliotek
 
 ## Brukersmerte og forventning

@@ -1070,6 +1070,10 @@ def _explicit_sign_ids_for_message(user_msg: str) -> list[str]:
         "202_0": (
             "vikepliktskilt",
             "vikepliktsskilt",
+            "skilt 202",
+            "sign 202",
+            "traffic sign 202",
+            "ป้าย 202",
             "give way sign",
             "yield sign",
             "ป้ายให้ทาง",
@@ -1077,6 +1081,10 @@ def _explicit_sign_ids_for_message(user_msg: str) -> list[str]:
         "204_0": (
             "stoppskilt",
             "stopp skilt",
+            "skilt 204",
+            "sign 204",
+            "traffic sign 204",
+            "ป้าย 204",
             "stop sign",
             "ป้ายหยุด",
         ),
@@ -1096,6 +1104,51 @@ def _explicit_sign_ids_for_message(user_msg: str) -> list[str]:
         return term in message
 
     return [sign_id for sign_id, terms in aliases.items() if any(matches(term) for term in terms)]
+
+
+def _sign_ids_from_reply(reply_text: str) -> list[str]:
+    """Resolve only controlled concrete sign labels from Michael's visible reply."""
+    sign_ids = _explicit_sign_ids_for_message(reply_text or "")
+    standalone_labels = {
+        "202_0": {"vikeplikt", "give way", "yield", "ป้ายให้ทาง", "การให้ทาง"},
+        "204_0": {"stopp", "stop", "ป้ายหยุด", "หยุด"},
+    }
+    segments = re.split(r"(?:\r?\n)+|[|•]|(?=[🛑🔴])", reply_text or "")
+    normalized_segments = {
+        re.sub(r"^\W+|\W+$", "", segment.casefold()).strip()
+        for segment in segments
+        if segment.strip()
+    }
+    for sign_id, labels in standalone_labels.items():
+        if sign_id not in sign_ids and normalized_segments & labels:
+            sign_ids.append(sign_id)
+    return sign_ids[:2]
+
+
+def _merge_sign_ids(*groups: list[str], limit: int = 2) -> list[str]:
+    merged = []
+    for group in groups:
+        for raw_sign_id in group or []:
+            sign_id = str(raw_sign_id or "").strip()
+            if sign_id and sign_id not in merged:
+                merged.append(sign_id)
+                if len(merged) >= limit:
+                    return merged
+    return merged
+
+
+def _is_right_hand_rule_query(user_msg: str) -> bool:
+    """Keep a pure right-hand-rule question as a rule unless a sign is named."""
+    message = (user_msg or "").casefold()
+    aliases = (
+        "høyreregelen",
+        "høyreregel",
+        "right-hand rule",
+        "right hand rule",
+        "กฎการให้ทางจากขวา",
+        "กฎมือขวา",
+    )
+    return any(alias in message for alias in aliases)
 
 
 _MATERIAL_TOPIC_ALIASES = (
@@ -2009,6 +2062,35 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         error_str = f"LiteLLM: {type(e).__name__}({e})"
         reply_text = _fallback_reply(lang)
 
+    reply_sign_ids = _sign_ids_from_reply(reply_text)
+    context_sign_ids = _sign_ids_from_context(context_str)
+    if explicit_sign_ids or reply_sign_ids:
+        sign_ids = _merge_sign_ids(explicit_sign_ids, reply_sign_ids, limit=2)
+    elif _is_right_hand_rule_query(user_msg):
+        sign_ids = []
+    else:
+        sign_ids = context_sign_ids[:1]
+
+    if sign_ids:
+        try:
+            exact_response_media = await _get_exact_sign_media(sign_ids, lang, limit=2)
+        except Exception as media_ex:
+            logger.error("Failed to resolve exact response sign media: %s", media_ex)
+            exact_response_media = []
+        existing_sign_media = {
+            item.get("sign_id"): item
+            for item in media
+            if item.get("type") == "sign" and item.get("sign_id")
+        }
+        exact_sign_media = {item.get("sign_id"): item for item in exact_response_media}
+        media = [
+            exact_sign_media.get(sign_id) or existing_sign_media.get(sign_id)
+            for sign_id in sign_ids
+            if exact_sign_media.get(sign_id) or existing_sign_media.get(sign_id)
+        ]
+    else:
+        media = []
+
     # Persist both messages
     now = datetime.now(timezone.utc)
     await _chat_col.insert_many([
@@ -2047,11 +2129,10 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         logger.error("Failed to write teacher log to DB: %s", log_ex)
 
     suggestions = []
-    sign_ids = (explicit_sign_ids or _sign_ids_from_context(context_str))[:1]
     media = [
         item for item in media
         if item.get("type") == "sign" and item.get("sign_id") in sign_ids
-    ][:1]
+    ][:2]
     return TeacherChatResponse(
         session_id=session_id,
         reply=reply_text,

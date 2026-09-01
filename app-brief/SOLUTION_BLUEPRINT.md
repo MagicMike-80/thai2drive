@@ -1148,3 +1148,62 @@ READY FOR AGENT 3
    svarmeny. Ingen endring i andre tjenester.
 
 READY FOR AGENT 3
+
+---
+
+# SOLUTION BLUEPRINT: strukturerte skiltlenker i Michaels avklaringssvar
+
+## Mål
+
+Når Michael nevner et konkret, godkjent skilt i sin ferdige svartekst, skal
+backend legge nøyaktig riktig ID i den eksisterende `sign_ids`-kontrakten og
+bygge det eksisterende lokaliserte skiltmediet. Frontend skal gjenbruke dagens
+sikre detaljåpning og vise maksimalt to kompakte, klikkbare 80 x 80 px skilt.
+
+## Ikke-mål
+
+- Ikke koble Høyreregelen eller andre generelle regler til et oppdiktet skilt.
+- Ikke gjette fra frie ord som «stopp» eller «vikeplikt» i vanlig brødtekst;
+  bare kontrollerte eksakte skiltuttrykk og skiltnummer kvalifiserer.
+- Ingen endring i LLM-leverandør, database, admin, auth, kvoter, premium,
+  betaling, TTS, portrett eller deploykonfigurasjon.
+
+## Filer og dataflyt
+
+1. `backend/teacher_chat.py`
+   - Utvid den eksisterende kontrollerte resolveren til å kunne analysere både
+     elevens melding og Michaels ferdige svar.
+   - `202_0`: eksakte NO/TH/EN-varianter av Vikepliktskilt / Give Way sign /
+     ป้ายให้ทาง og eksplisitt skilt 202.
+   - `204_0`: eksakte NO/TH/EN-varianter av Stoppskilt / Stop sign / ป้ายหยุด
+     og eksplisitt skilt 204.
+   - Slå sammen eksplisitte bruker-ID-er og kontrollerte svar-ID-er i stabil
+     rekkefølge, dedupliser og begrens til to.
+   - Bygg media etter at svaret finnes, via eksisterende `_get_exact_sign_media`,
+     og behold sluttfilteret slik at media-ID og `sign_ids` alltid samsvarer.
+2. `backend/webapp.py`
+   - Behold dagens datasikre rendering og klikk til `openSignDetail`.
+   - Sett det konkrete skiltbildet til 80 x 80 px på mobil og desktop uten å
+     redusere tekstlesbarhet eller lage horisontal overflow.
+3. Tester
+   - Lås NO/TH/EN, skiltnummer 202/204, deduplisering, maksimum to og negative
+     grenser for Høyreregelen, stoppelengde og generisk vikepliktstekst.
+   - Lås at live-responskontrakten gir samsvarende `sign_ids` og media, samt
+     80 px klikkbart frontendkort.
+
+## Språk, tilgang og risiko
+
+Alle synlige titler og forklaringer kommer fortsatt fra eksisterende
+språkfelt for valgt NO/TH/EN. Endringen berører ikke tilgangsnivåer. Største
+risiko er falske positive teksttreff; derfor brukes en liten kontrollert tabell,
+ordgrenser og negative regresjonstester, aldri generell AI-/regex-gjetting.
+
+## Verifisering og rollback
+
+Kjør målrettede backend- og frontendkontrakttester, full sikker lokal test-suite,
+Python-/inline-JS-syntaks og `git diff --check`. Etter godkjent push skal ferske
+NO/TH/EN-canaries bevise `202_0` og `204_0`, fungerende bilde-URL-er, 80 px DOM
+og null skiltkobling for Høyreregelen alene. Rollback er én reversering av den
+avgrensede committen; ingen datamigrering finnes.
+
+READY FOR AGENT 3
