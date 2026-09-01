@@ -1,3 +1,46 @@
+# PATCH REPORT: fase 1 - språkren Michael og to tydelige nestevalg
+
+## Endring
+
+- `backend/teacher_chat.py`: den skjulte primeren for en ny norsk samtale er
+  rettet fra thai til norsk. Norsk, thai og engelsk har nå hver sin rene primer,
+  og ukjent språk faller kontrollert tilbake til engelsk.
+- `backend/webapp.py`: et konkret skiltkort får to språkrene nestevalg:
+  `Vis eksempel` sender en kort, lokalisert oppfølgingsforespørsel til samme
+  Michael-samtale, mens `Test meg` åpner eksisterende skiltøving.
+- Eksisterende eksakt skiltmedia og det ekte Michael-portrettet gjenbrukes.
+  Portrettets Git-blob er uendret (`bdef6149a9cc80a5dc873097146ab1d5ee3ab6a9`).
+- Kontrakttester låser språkprimeren, de to handlingene og komplette NO/TH/EN-
+  tekster.
+
+## Avgrensning
+
+Ingen ny AI-motor, database, auth-, kvote-, premium-, Stripe-, RevenueCat-,
+betalings-, TTS-, bilde-, deploy- eller produksjonsendring. Ingen brukerfiler
+utenfor den rene arbeidsgrenen er berørt.
+
+## Verifisering
+
+- 40 målrettede Michael-, media-, språk- og mobiltester: PASS.
+- Hele `tests/`-suiten, 60 tester: PASS.
+- Backend discovery: 40 tester PASS; én ekstra fil kunne ikke samles fordi den
+  valgfrie lokale testavhengigheten `pytest` ikke er installert i runtime.
+- Python-syntaks: PASS.
+- Inline JavaScript-syntaks via Node: PASS.
+- `git diff --check`: PASS med bare Windows LF/CRLF-varsler.
+- Michael-portrettet er byte-identisk med `HEAD`.
+
+## Gjenværende kontroll og rollback
+
+Før push/deploy bør Michael vurdere den lokale patchen. Etter eventuell deploy
+må en fersk NO/TH/EN-canary bevise: kort svar, riktig vikepliktskilt, `Vis
+eksempel` og `Test meg`. Rollback er å reversere de fire avgrensede filene;
+ingen data må migreres eller slettes.
+
+Klar for QA Gate.
+
+---
+
 # PATCH REPORT: eksakt skilt og kompakt ordkobling i Michael-chat
 
 ## Endrede filer

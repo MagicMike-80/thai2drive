@@ -259,6 +259,12 @@ class TeacherChatFallbackTests(unittest.TestCase):
         self.assertIn(")[:1]", source)
         self.assertIn('if item.get("type") == "sign"', source)
 
+    def test_new_session_primer_is_language_pure(self):
+        source = (Path(__file__).resolve().parents[1] / "teacher_chat.py").read_text(encoding="utf-8")
+        self.assertIn('_primer = {"no": "Klart 😊", "th": "โอเคครับ 😊", "en": "Sure 😊"}', source)
+        self.assertIn('_primer.get(lang, _primer["en"])', source)
+        self.assertNotIn('"no": "โอเค ครับ 😊"', source)
+
 
 if __name__ == "__main__":
     unittest.main()

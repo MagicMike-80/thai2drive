@@ -1809,9 +1809,9 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
 
     # Primer: for brand-new sessions, inject a silent assistant turn so the model
     # does not treat the first user message as "first contact" and introduce itself.
-    _primer = {"no": "โอเค ครับ 😊", "th": "โอเครับ 😊", "en": "Sure 😊"}
+    _primer = {"no": "Klart 😊", "th": "โอเคครับ 😊", "en": "Sure 😊"}
     if not conversation:
-        conversation = [{"role": "assistant", "content": _primer.get(lang, "โอเครับ 😊")}]
+        conversation = [{"role": "assistant", "content": _primer.get(lang, _primer["en"])}]
 
     # Determine reply language — request param takes priority
     # Call LLM

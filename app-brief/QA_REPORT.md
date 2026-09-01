@@ -724,3 +724,41 @@ og den uttrykkelig autoriserte publiseringsflyten.**
 - PASS: Python-syntaks, kontrakttester og diff-format.
 
 PASS — klar for commit, push og live-verifisering.
+# QA REPORT: fase 1 - språkren Michael og to tydelige nestevalg
+
+## Kontroll og evidens
+
+- **Rotårsak:** norsk ny-sesjon-primer inneholdt thai. Den er nå norsk, og testen
+  avviser den tidligere kryssspråklige verdien.
+- **Synlig elevflyt:** eksisterende eksakt skiltkort beholdes; handlingene under
+  kortet er avgrenset til `Vis eksempel` og `Test meg`. Første handling fortsetter
+  samme samtale, den andre gjenbruker eksisterende skiltøving.
+- **Språk:** alle nye elevtekster og oppfølgingsprompten finnes separat på norsk,
+  thai og engelsk. Ingen norsk fallback brukes for thai eller engelsk.
+- **Mobil og feiltilstand:** eksisterende én-kolonne handlingsrad og tekst-only
+  fallback er uendret. Mediefeil påvirker ikke Michael-svaret.
+- **Tilgang og sikkerhet:** guest/gratis/premium, auth, kvoter, betaling og
+  produksjonskonfigurasjon er ikke endret. Ingen hemmeligheter er lagt til.
+- **Portrett:** `backend/public_assets/michael_profile.jpg` har samme Git-blob i
+  arbeidskopi og `HEAD`: `bdef6149a9cc80a5dc873097146ab1d5ee3ab6a9`.
+- **Diff:** fire applikasjons-/testfiler, 28 innsettinger og 5 slettinger før
+  rapportene; ingen opportunistisk refaktorering.
+
+## Tester
+
+- 40 målrettede tester: PASS.
+- Hele `tests/`: 60/60 PASS.
+- Relevante backendtester: 40 PASS. Full backend discovery er ikke komplett
+  fordi lokal runtime mangler `pytest` for `test_thai2drive_api.py`.
+- Python-syntaks, inline JavaScript og `git diff --check`: PASS.
+
+## Restpunkt før produksjon
+
+Patchen er ikke pushet eller deployet. En eventuell produksjonslansering krever
+fersk visuell mobilkontroll og live NO/TH/EN-canary. Dette er et navngitt
+verifikasjonsrestpunkt, ikke en skjult funksjonsfeil.
+
+**PASS WITH WARNINGS** - klar for Michaels vurdering; produksjonsbevis og den
+valgfrie `pytest`-baserte samlingen gjenstår.
+
+---

@@ -4528,6 +4528,9 @@ var UI = {
   teacher_fewer_topics:{th:'แสดงน้อยลง', no:'Vis færre', en:'Show fewer'},
   teacher_sub: {th:'ถามคำถามเกี่ยวกับการจราจร', no:'Still et spørsmål om trafikk', en:'Ask a question about traffic'},
   teacher_placeholder: {th:'ถามไมเคิล...', no:'Spør Michael...', en:'Ask Michael...'},
+  teacher_show_example:{th:'ดูตัวอย่าง', no:'Vis eksempel', en:'Show example'},
+  teacher_show_example_prompt:{th:'แสดงตัวอย่างสถานการณ์จริงที่สั้นและเข้าใจง่ายสำหรับป้ายนี้', no:'Vis meg et kort, praktisk eksempel med dette skiltet.', en:'Show me a short practical example using this sign.'},
+  teacher_test_me:{th:'ทดสอบฉัน', no:'Test meg', en:'Test me'},
   teacher_topics_open:{th:'แสดงหัวข้อ', no:'Vis emner', en:'Show topics'},
   teacher_topics_close:{th:'ปิดหัวข้อ', no:'Lukk emner', en:'Close topics'},
   teacher_error: {th:'ขอโทษ เกิดข้อผิดพลาด ลองใหม่อีกครั้ง', no:'Beklager, noe gikk galt. Prøv igjen.', en:'Sorry, something went wrong. Please try again.'},
@@ -9991,7 +9994,8 @@ function _teacherAppendSignActions(sign) {
   var row = document.createElement('div');
   row.className = 'tm-chips tm-sign-actions-row';
   var actions = [
-    { label:t('practice_similar'), run:function(){ practiceSignFromChat(sign.id); } }
+    { label:t('teacher_show_example'), run:function(){ teacherSend(t('teacher_show_example_prompt'), t('teacher_show_example')); } },
+    { label:t('teacher_test_me'), run:function(){ practiceSignFromChat(sign.id); } }
   ];
   actions.forEach(function(action) {
     var button = document.createElement('button');

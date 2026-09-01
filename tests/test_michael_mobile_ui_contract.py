@@ -132,9 +132,14 @@ class MichaelMobileUiContractTests(unittest.TestCase):
         self.assertIn("'vikepliktskiltet'", aliases)
         self.assertEqual(aliases.count("'vikepliktsskiltet'"), 1)
 
-    def test_sign_response_has_only_similar_practice_action(self):
+    def test_sign_response_has_two_progressive_actions(self):
         actions = WEBAPP[WEBAPP.index("function _teacherAppendSignActions(sign)"):WEBAPP.index("function _teacherShowTyping()")]
-        self.assertIn("t('practice_similar')", actions)
+        self.assertIn("t('teacher_show_example')", actions)
+        self.assertIn("t('teacher_show_example_prompt')", actions)
+        self.assertIn("teacherSend(t('teacher_show_example_prompt'), t('teacher_show_example'))", actions)
+        self.assertIn("t('teacher_test_me')", actions)
+        self.assertIn("practiceSignFromChat(sign.id)", actions)
+        self.assertNotIn("t('practice_similar')", actions)
         self.assertNotIn("t('practice_this_sign')", actions)
         self.assertNotIn("t('ask_ai')", actions)
         self.assertNotIn("t('read_more')", actions)
@@ -142,6 +147,14 @@ class MichaelMobileUiContractTests(unittest.TestCase):
         self.assertNotIn("t('ask_more')", actions)
         self.assertIn(".tm-sign-actions-row { grid-template-columns:1fr; }", WEBAPP)
         self.assertIn("no:'Spør Michael...'", WEBAPP)
+
+        for key in ("teacher_show_example", "teacher_show_example_prompt", "teacher_test_me"):
+            match = re.search(rf"{key}:\s*\{{([^}}]+)\}}", WEBAPP)
+            self.assertIsNotNone(match, key)
+            value = match.group(1)
+            self.assertIn("th:", value)
+            self.assertIn("no:", value)
+            self.assertIn("en:", value)
 
     def test_teacher_mode_bottom_nav_is_reduced_to_three_items(self):
         self.assertIn("#app.teacher-mode #bottomNav .bn-tab { display:none; }", WEBAPP)
