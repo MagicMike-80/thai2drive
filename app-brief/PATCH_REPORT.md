@@ -1,3 +1,83 @@
+# PATCH REPORT: Lov-tag-mapping (§3 HAV-regelen, §7 vikeplikt) for medieoppslag
+
+## Bakgrunn
+
+Oppdrag fra Michael (Agent 3/Code Builder-rolle): koble situasjonsbilder/skilt
+mot Vegtrafikkloven §3 og Trafikkreglene §7 via hashtags, slik at Michael-chat
+finner riktig bilde når brukeren spør om paragrafen eller synonymer for den.
+
+Den fysiske bilde-CSV-en (170 bilder, `michael_image_catalog_current.csv`) er
+ikke levert til denne økten ennå — den ligger fortsatt kun lokalt på Michaels
+maskin. Dette patchet leverer derfor **infrastrukturen** (lov→tag-oppslag +
+kobling i begge Michael-medieoppslagsstiene + tester), klar til å ta imot de
+reelle 100+ bildene den dagen katalogen når repoet.
+
+## Endring
+
+- `backend/media_catalog.py`: Ny `LAW_MAPPING` (§3 HAV-regelen, §7 nr. 2
+  vikeplikt/høyreregel, §7 nr. 4 bussregelen) med kanoniske tags og
+  fritekst-synonymer, pluss `expand_law_synonyms()` som slår opp en melding
+  mot kartet. Lengste synonym vinner og "spises" av teksten før kortere
+  synonymer sjekkes, slik at f.eks. "paragraf 7 nr 4" ikke også leser ut de
+  bredere §7 nr. 2-tagsene (den korte formen er bokstavelig en delstreng av
+  den lange).
+  - **Bevisst avvik fra oppdraget:** `"§ 3"` / `"§ 7-2"`-formene er utelatt.
+    Eksisterende normalisering (`normalize_catalog_text`) fjerner paragraftegn
+    og bindestrek, så `"§ 3"` ville blitt til det rene sifferet `"3"` og gitt
+    falske treff på enhver melding som nevner tallet 3 (spørsmålsnummer,
+    fartsgrense, osv.). Kun de fulle tekstlige synonymene ("paragraf 3",
+    "hav-regelen", ...) er derfor med — i tråd med kodebasens eksisterende
+    "aldri fuzzy match"-prinsipp.
+- `backend/teacher_chat.py`: `expand_law_synonyms()` er koblet inn i begge
+  medieoppslagsstiene — `_material_match_terms()` (michael_materials:
+  topic_tags/situation_tags) og `_get_relevant_catalog_media()`
+  (media_catalog: tags). En bruker som skriver "paragraf 7", "vikeplikt
+  venstresving" eller "hav-regelen" matcher nå bilder tagget med de
+  tilsvarende kanoniske tagsene, uansett hvilken av de to samlingene bildet
+  ligger i.
+- 80×80 kompakt, klikkbar bilde-rendering i chat-boblen (`webapp.py`,
+  `.tm-media-card.sign`) fantes allerede for `type: "sign"`-medier — ingen
+  endring nødvendig der. Situasjons-/veikryssbilder (`type:
+  "intersection_image"`) beholder bevisst sin større 180px-visning; å tvinge
+  foto av trafikksituasjoner ned til 80×80 ville gått på bekostning av
+  lesbarhet, så dette er ikke endret uten eksplisitt bekreftelse.
+- CSV/bilde-manifest-import til `michael_materials` er **ikke** bygget i
+  dette patchet — kolonneformatet i den reelle katalogen er ukjent før filen
+  er levert, og å gjette et skjema nå ville vært spekulativ kode ingen kan
+  verifisere. Når filen er tilgjengelig i denne økten, er neste steg et
+  import-skript etter samme trygge mønster som `seed_media_catalog.py`
+  (dry-run som standard, snapshot før skriving, `--confirm-db-name`).
+- API-kontrakt, frontend utenom det nevnte, database-skjema, auth, kvoter,
+  premium, betaling, TTS, deploykonfigurasjon og Michael-portrett er urørt.
+
+## Tester
+
+- Nye: 6 tester i `test_media_catalog.py` (lov-synonym-oppløsning, inkl.
+  eksplisitt negativ test på at bare sifferet fra "§ 3" ikke skal matche) og
+  2 tester i `test_michael_material_retrieval.py` som verifiserer QA-kravet
+  ordrett: "vikeplikt venstresving" og "paragraf 7" returnerer riktig
+  `#7_2`-bilde, og at "paragraf 7 nr 4" ikke lekker det generiske §7 nr.
+  2-bildet foran bussregel-bildet.
+- 26/26 i `test_media_catalog.py` + `test_michael_material_retrieval.py`: PASS.
+- 30/30 i `test_teacher_chat_fallback.py` + `test_media_catalog_seed.py`
+  (uendret, ingen regresjon): PASS.
+- Python-syntaks (`py_compile`) og `git diff --check`: PASS.
+- Ingen produksjonstester (`BASE_URL`-suiten) er kjørt, per CLAUDE.md.
+
+## Risiko og rollback
+
+Ren tilleggslogikk — ingen eksisterende felt, skjema eller produksjons-DB er
+endret. `expand_law_synonyms()` er en ren funksjon uten sideeffekter; feil i
+den kan i verste fall gi 0 eller feil medietreff, aldri en krasj (begge
+kallstedene er allerede i `try/except`-blokker som fail-softer til tom
+liste). Rollback er én revert av dette patchet.
+
+Gjenstår før "ferdig levert": den fysiske bildekatalogen (CSV + 170 bilder)
+må inn i denne økten (opplasting, Google Drive, eller git), deretter bygges
+og kjøres import-skriptet inn i `michael_materials`, og til slutt push/PR.
+
+---
+
 # PATCH REPORT: § 7 nr. 2-grounding og streng skiltvalidering
 
 ## Endring

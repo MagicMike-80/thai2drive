@@ -2,7 +2,9 @@ import asyncio
 import unittest
 
 from backend.media_catalog import (
+    LAW_MAPPING,
     MediaCatalogValidationError,
+    expand_law_synonyms,
     list_localized_catalog_media,
     rank_catalog_media,
     serialize_catalog_document,
@@ -91,6 +93,25 @@ class MediaCatalogTests(unittest.TestCase):
             with self.subTest(language=language):
                 payload = serialize_catalog_document(item, language)
                 self.assertEqual(payload["title"], sentinel)
+
+    def test_law_synonyms_resolve_paragraf_and_venstresving_to_7_2_tags(self):
+        for query in ("Hva sier paragraf 7 om vikeplikt?", "vikeplikt venstresving"):
+            with self.subTest(query=query):
+                resolved = expand_law_synonyms(query)
+                self.assertEqual(resolved, set(LAW_MAPPING["7_2"]["tags"]))
+
+    def test_law_synonyms_resolve_paragraf_3_to_hav_regelen_tags(self):
+        resolved = expand_law_synonyms("Kan du forklare hav-regelen fra paragraf 3?")
+        self.assertEqual(resolved, set(LAW_MAPPING["3"]["tags"]))
+
+    def test_law_synonyms_ignore_bare_section_sign_digits(self):
+        # "§ 3" would normalize to the bare digit "3" and cause false positives
+        # on any unrelated message mentioning that number, so it must not match.
+        self.assertEqual(expand_law_synonyms("Spørsmål 3 av 10 i teoriprøven"), set())
+
+    def test_law_synonyms_narrow_bus_rule_does_not_leak_generic_paragraf_7(self):
+        resolved = expand_law_synonyms("paragraf 7 nr 4 om bussregelen")
+        self.assertTrue(set(LAW_MAPPING["7_4"]["tags"]).issubset(resolved))
 
     def test_ranker_uses_whole_tags_and_deterministic_order_with_max_one(self):
         unrelated = _item("unrelated", tags=["stopp"])

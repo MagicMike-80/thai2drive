@@ -21,9 +21,13 @@ from pydantic import BaseModel, Field
 from motor.motor_asyncio import AsyncIOMotorClient
 from dotenv import load_dotenv
 try:
-    from media_catalog import SUPPORTED_LANGUAGES, rank_catalog_media
+    from media_catalog import SUPPORTED_LANGUAGES, expand_law_synonyms, rank_catalog_media
 except ImportError:  # package-style imports used by isolated tests
-    from backend.media_catalog import SUPPORTED_LANGUAGES, rank_catalog_media
+    from backend.media_catalog import (
+        SUPPORTED_LANGUAGES,
+        expand_law_synonyms,
+        rank_catalog_media,
+    )
 
 load_dotenv()
 
@@ -1301,6 +1305,7 @@ def _material_match_terms(user_msg: str, extra_context: str = "") -> set[str]:
         normalized_aliases = {_normalize_material_match_text(alias) for alias in aliases}
         if any(alias and alias in query for alias in normalized_aliases):
             terms.update(normalized_aliases)
+    terms.update(expand_law_synonyms(query))
     return terms
 
 
@@ -1471,9 +1476,10 @@ async def _get_relevant_catalog_media(
             "is_active": True,
             "content_language": {"$in": [language, "neutral"]},
         }).to_list(length=200)
+        law_tags = expand_law_synonyms(f"{user_msg} {extra_context}")
         return rank_catalog_media(
             documents,
-            f"{user_msg} {extra_context}",
+            f"{user_msg} {extra_context} {' '.join(law_tags)}",
             language,
             limit=1,
         )
