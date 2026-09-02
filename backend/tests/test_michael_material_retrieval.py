@@ -238,6 +238,29 @@ class MichaelMaterialRetrievalTests(unittest.TestCase):
             [],
         )
 
+    def test_paragraf_7_and_venstresving_queries_match_the_7_2_tagged_image(self):
+        target = _material(
+            "sit_vike_venstre_01",
+            topic_tags=["7", "7_2", "vikeplikt", "høyreregel", "venstresving", "møtende"],
+        )
+        unrelated = _material("unrelated", topic_tags=["parkering"])
+        for query in ("Hva sier paragraf 7 om dette?", "vikeplikt venstresving i kryss"):
+            with self.subTest(query=query):
+                result = self.retrieve([unrelated, target], query)
+                self.assertEqual([item["id"] for item in result], ["sit_vike_venstre_01"])
+
+    def test_bussregelen_query_matches_7_4_not_generic_7_2_image(self):
+        bus_rule = _material(
+            "sit_buss_regel_01",
+            topic_tags=["7", "7_4", "bussregelen", "vikeplikt_buss"],
+        )
+        venstresving = _material(
+            "sit_vike_venstre_01",
+            topic_tags=["7", "7_2", "vikeplikt", "høyreregel", "venstresving"],
+        )
+        result = self.retrieve([venstresving, bus_rule], "paragraf 7 nr 4 om bussregelen")
+        self.assertEqual([item["id"] for item in result], ["sit_buss_regel_01", "sit_vike_venstre_01"])
+
     def test_catalog_lookup_returns_one_language_pure_exact_tag_match(self):
         catalog = []
         for media_id, language, title in (

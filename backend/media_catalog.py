@@ -199,6 +199,57 @@ def rank_catalog_media(
     return [item[-1] for item in ranked[: min(limit, 1)]]
 
 
+LAW_MAPPING: dict[str, dict[str, list[str]]] = {
+    "3": {
+        "tags": ["3", "hav", "grunnregel", "hensynsfull", "aktpågivende", "varsom"],
+        "synonyms": ["paragraf 3", "hav-regelen", "aktpågivende", "hensynsfull", "varsom"],
+    },
+    "7_2": {
+        "tags": ["7", "7_2", "vikeplikt", "høyreregel", "venstresving", "møtende"],
+        "synonyms": [
+            "paragraf 7",
+            "høyreregelen",
+            "vikeplikt venstresving",
+            "møtende trafikk",
+        ],
+    },
+    "7_4": {
+        "tags": ["7", "7_4", "bussregelen", "vikeplikt_buss"],
+        "synonyms": ["paragraf 7 nr 4", "bussregelen", "vikeplikt buss"],
+    },
+}
+
+
+def expand_law_synonyms(text: str) -> set[str]:
+    """Resolve legal-paragraph synonyms (e.g. "paragraf 7") to their canonical tags.
+
+    Only whole textual synonyms are matched (never bare digits): "§ 3" would
+    normalize to the single character "3" and match any unrelated message
+    containing that digit, so section-sign forms are intentionally excluded.
+
+    Longer synonyms are matched first and consumed from the text before
+    shorter ones are checked, so a narrow phrase like "paragraf 7 nr 4"
+    (bussregelen) is not also read as the broader "paragraf 7" (§7 nr 2) —
+    the broader synonym is literally a substring of the narrower one.
+    """
+    remaining = f" {normalize_catalog_text(text)} "
+    candidates = sorted(
+        (
+            (normalize_catalog_text(synonym), entry)
+            for entry in LAW_MAPPING.values()
+            for synonym in entry["synonyms"]
+        ),
+        key=lambda pair: len(pair[0]),
+        reverse=True,
+    )
+    resolved: set[str] = set()
+    for normalized_synonym, entry in candidates:
+        if normalized_synonym and normalized_synonym in remaining:
+            resolved.update(entry["tags"])
+            remaining = remaining.replace(normalized_synonym, " ", 1)
+    return resolved
+
+
 async def list_localized_catalog_media(collection: Any, language: str) -> list[dict[str, Any]]:
     if language not in SUPPORTED_LANGUAGES:
         return []
