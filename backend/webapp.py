@@ -161,9 +161,13 @@ a { color:inherit; text-decoration:none; }
   overflow-x: auto; overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
-  scroll-snap-type: x mandatory;
+  scroll-snap-type: none;
   padding: 0 16px;
   gap: 12px;
+}
+#bottomNav.js-scrolling,
+.js-scrolling {
+  scroll-snap-type: none !important;
 }
 #bottomNav::-webkit-scrollbar { display: none; }
 [data-theme="light"] #bottomNav {
@@ -183,7 +187,6 @@ a { color:inherit; text-decoration:none; }
   cursor: pointer; font-size: 0.70rem; font-weight: 700;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   padding: 6px 6px; letter-spacing: 0.2px;
-  scroll-snap-align: center;
   border-radius: 16px;
   box-shadow: inset 0 1px 1px rgba(255,255,255,0.05), 0 3px 8px rgba(0,0,0,0.3);
   white-space: nowrap;
@@ -5679,6 +5682,12 @@ function showTab(tab, forceType) {
       btn.classList.add('active');
       var nav = document.getElementById('bottomNav');
       if (nav) {
+        nav.classList.add('js-scrolling');
+        if (nav._scrollSnapTimer) clearTimeout(nav._scrollSnapTimer);
+        nav._scrollSnapTimer = setTimeout(function() {
+          nav.classList.remove('js-scrolling');
+        }, 350);
+
         var navRect = nav.getBoundingClientRect();
         var btnRect = btn.getBoundingClientRect();
         var targetScroll = nav.scrollLeft + (btnRect.left - navRect.left) - (nav.clientWidth / 2) + (btn.clientWidth / 2);
@@ -6294,8 +6303,6 @@ var _teacherActiveText = '';
 var _teacherAudioToken = 0;
 var _teacherWatchdog = null;
 
-var _SILENT_WAV = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
-
 function _getGlobalAudio() {
   if (!_globalAudio) {
     _globalAudio = new Audio();
@@ -6332,93 +6339,23 @@ function _resetTeacherWatchdog() {
   }, 14000);
 }
 
-function _unlockGlobalAudioOnce() {
-  if (_audioUnlocked) return;
+function _unlockAudioPlayback(activeEl) {
   _audioUnlocked = true;
   var a = _getGlobalAudio();
-  _teacherAudio = a;
-  _backendAudio = a;
-  try {
-    a.src = _SILENT_WAV;
-    a.muted = true;
-    var p = a.play();
-    if (p && p.then) {
-      p.then(function() {
-        a.pause();
-        a.currentTime = 0;
-        a.muted = false;
-      }).catch(function() { a.muted = false; });
-    } else {
-      a.pause();
-      a.currentTime = 0;
-      a.muted = false;
-    }
-  } catch(e) { a.muted = false; }
-}
-
-['touchstart', 'touchend', 'click', 'keydown'].forEach(function(evt) {
-  document.addEventListener(evt, _unlockGlobalAudioOnce, { once: true, passive: true });
-});
-
-function _primeAudioEl(el) {
-  if (!el) return;
-  try {
-    el.src = _SILENT_WAV;
-    var primedSrc = el.src;
-    el.muted = true;
-    var p = el.play();
-    if (p && p.then) {
-      p.then(function() {
-        // The user action may already have replaced the silent WAV with real
-        // TTS. Never let the async priming callback pause that new source.
-        if (el.src === primedSrc) {
-          try { el.pause(); el.currentTime = 0; } catch (e) {}
-        }
-        el.muted = false;
-      }).catch(function() { el.muted = false; });
-    } else {
-      try { el.pause(); } catch (e) {}
-      el.muted = false;
-    }
-  } catch (e) {
-    el.muted = false;
+  if (a) {
+    a.muted = false;
   }
 }
-
-function _unlockAudioPlayback(activeEl) {
-  if (_audioUnlocked) return;
-  _audioUnlocked = true;
-  var backendEl = _ensureBackendAudio();
-  var teacherEl = _ensureTeacherAudio();
-  // The element started by this exact user gesture does not need priming.
-  // Priming it here can race with the real MP3 and abort play() via pause().
-  if (backendEl !== activeEl) _primeAudioEl(backendEl);
-  if (teacherEl !== activeEl) _primeAudioEl(teacherEl);
-  if (typeof _getAudioCtx === 'function') { try { _getAudioCtx(); } catch (e) {} }
-}
-
-// Første ekte brukergest på siden låser opp all lyd — begge <audio>-elementene og
-// WebAudio-konteksten. `once` gjør at det skjer nøyaktig én gang.
-document.addEventListener('touchstart', _unlockAudioPlayback, { once: true, passive: true });
-document.addEventListener('click', _unlockAudioPlayback, { once: true });
-document.addEventListener('keydown', _unlockAudioPlayback, { once: true });
 
 function stopAllSpeech() {
   _teacherAudioToken += 1;
-  if (_backendAudio) {
+  var a = _getGlobalAudio();
+  if (a) {
     try {
-      _backendAudio.pause();
-      _backendAudio.currentTime = 0;
-      _backendAudio.src = '';
-      _backendAudio.load();
-    } catch(e){}
-  }
-  if (_teacherAudio) {
-    try {
-      _teacherAudio.pause();
-      _teacherAudio.currentTime = 0;
-      _teacherAudio.src = '';
-      _teacherAudio.load();
+      a.pause();
+      a.currentTime = 0;
+      a.src = '';
+      a.load();
     } catch(e){}
   }
   if (_teacherWatchdog) {
@@ -9376,18 +9313,30 @@ function speakQ() {
     stopAllSpeech();
     return;
   }
-  _ensureBackendAudio();
-  _unlockAudioPlayback(_backendAudio);
-  _backendAudio.src = ttsStreamUrl(text, appLang);
-  _backendAudio.playbackRate = ttsRate || 1.0;
-  _backendAudio.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
+  var audio = _ensureBackendAudio();
+  audio.src = ttsStreamUrl(text, appLang);
+  audio.playbackRate = ttsRate || 1.0;
+  audio.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
   ttsPlaying = true;
   updateTtsBtn(true);
-  _backendAudio.play().catch(function(err) {
-     console.error('Audio playback failed:', err);
-     ttsPlaying = false;
-     updateTtsBtn(false);
-  });
+
+  try { audio.load(); } catch (e) {}
+  var playPromise = audio.play();
+  if (playPromise !== undefined) {
+    playPromise.catch(function(err) {
+      console.error('Audio playback failed on iOS:', err);
+      ttsPlaying = false;
+      updateTtsBtn(false);
+    });
+  }
+
+  if (window._ttsWatchdog) clearTimeout(window._ttsWatchdog);
+  window._ttsWatchdog = setTimeout(function() {
+    if (ttsPlaying && audio && audio.paused) {
+      console.warn('TTS playback timed out');
+      stopAllSpeech();
+    }
+  }, 5000);
 }
 function updateTtsBtn(playing) {
   var btn = document.getElementById('qTtsBtn');
@@ -9431,21 +9380,33 @@ function speakText(text) {
   if (_teacherTtsPlaying || (_teacherAudio && !_teacherAudio.paused)) {
     stopAllSpeech();
   }
-  _ensureTeacherAudio();
-  _unlockAudioPlayback(_teacherAudio);
+  var audio = _ensureTeacherAudio();
   var playToken = ++_teacherAudioToken;
   _teacherActiveText = clean;
-  _teacherAudio.src = ttsStreamUrl(clean, appLang);
-  _teacherAudio.playbackRate = ttsRate || 1.0;
-  _teacherAudio.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
+  audio.src = ttsStreamUrl(clean, appLang);
+  audio.playbackRate = ttsRate || 1.0;
+  audio.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
   _teacherTtsPlaying = true;
-  _teacherAudio.play().catch(function(err) {
-     console.error('Teacher audio playback failed:', err);
-     if (playToken === _teacherAudioToken) {
-       _teacherTtsPlaying = false;
-       _teacherActiveText = '';
-     }
-  });
+
+  try { audio.load(); } catch (e) {}
+  var playPromise = audio.play();
+  if (playPromise !== undefined) {
+    playPromise.catch(function(err) {
+      console.error('Teacher audio playback failed on iOS:', err);
+      if (playToken === _teacherAudioToken) {
+        _teacherTtsPlaying = false;
+        _teacherActiveText = '';
+      }
+    });
+  }
+
+  if (window._teacherWatchdogTimer) clearTimeout(window._teacherWatchdogTimer);
+  window._teacherWatchdogTimer = setTimeout(function() {
+    if (_teacherTtsPlaying && audio && audio.paused && playToken === _teacherAudioToken) {
+      console.warn('Teacher TTS playback timed out');
+      stopAllSpeech();
+    }
+  }, 5000);
 }
 
 function buildPodcastCard(p) {
@@ -10167,6 +10128,7 @@ function _teacherAppendBubble(role, text) {
     var av = document.createElement('img');
     av.className = 'tm-av';
     av.src = '/api/assets/michael_profile.jpg';
+    av.onerror = function() { this.onerror = null; this.src = '/api/assets/michael_avatar.png'; };
     av.alt = 'Michael';
     row.appendChild(av);
   }
@@ -11242,12 +11204,15 @@ function speakSign() {
   if (!text) return;
 
   stopAllSpeech();
-  _ensureBackendAudio();
-  _unlockAudioPlayback(_backendAudio);
-  _backendAudio.src = ttsStreamUrl(text, lang);
-  _backendAudio.playbackRate = ttsRate || 1.0;
-  _backendAudio.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
-  _backendAudio.play().catch(function(err){ console.error('Sign TTS error:', err); });
+  var audio = _ensureBackendAudio();
+  audio.src = ttsStreamUrl(text, lang);
+  audio.playbackRate = ttsRate || 1.0;
+  audio.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
+  try { audio.load(); } catch (e) {}
+  var playPromise = audio.play();
+  if (playPromise !== undefined) {
+    playPromise.catch(function(err){ console.error('Sign TTS error on iOS:', err); });
+  }
 }
 
 function toggleSignFavorite() {
@@ -11329,12 +11294,28 @@ function speakSignAiText() {
   var text = window._spAiText.trim();
   if (!text) return;
   stopAllSpeech();
-  _ensureTeacherAudio();
-  _unlockAudioPlayback(_teacherAudio);
-  _teacherAudio.src = ttsStreamUrl(text, window._spAiLang || appLang);
-  _teacherAudio.playbackRate = ttsRate || 1.0;
-  _teacherAudio.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
-  _teacherAudio.play().catch(function(err){ console.error('Sign AI TTS error:', err); });
+  var audio = _ensureTeacherAudio();
+  audio.src = ttsStreamUrl(text, window._spAiLang || appLang);
+  audio.playbackRate = ttsRate || 1.0;
+  audio.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
+  try { audio.load(); } catch (e) {}
+  var playPromise = audio.play();
+  if (playPromise !== undefined) {
+    playPromise.catch(function(err){ console.error('Sign AI TTS error on iOS:', err); });
+  }
+}
+
+// ════════════════════════════════════════════
+//  SERVICE WORKER REGISTRATION (Offline mode)
+// ════════════════════════════════════════════
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('/service-worker.js').catch(function() {
+      navigator.serviceWorker.register('/api/service-worker.js').catch(function(err) {
+        console.log('SW registration skipped:', err);
+      });
+    });
+  });
 }
 
 </script>

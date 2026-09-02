@@ -5324,6 +5324,36 @@ from webapp import webapp_router  # noqa: E402
 app.include_router(webapp_router, prefix="/api")
 app.include_router(admin_analytics_router, prefix="/api")
 
+# ==================== MICRO LESSONS (Thailand vs Norge) ====================
+from micro_lessons import router as micro_lessons_router  # noqa: E402
+app.include_router(micro_lessons_router)
+
+# ==================== READINESS SCORE (Michaels Exam Mode) ====================
+from readiness import router as readiness_router  # noqa: E402
+app.include_router(readiness_router)
+
+# ==================== REVENUECAT BILLING ====================
+from billing import router as billing_router  # noqa: E402
+app.include_router(billing_router)
+
+# ==================== SERVICE WORKER (Offline mode) ====================
+_SW_PATH = _Path(__file__).resolve().parent / "service-worker.js"
+
+@app.get("/service-worker.js")
+@app.get("/api/service-worker.js")
+async def get_service_worker():
+    if _SW_PATH.exists():
+        return FileResponse(
+            _SW_PATH,
+            media_type="application/javascript",
+            headers={
+                "Service-Worker-Allowed": "/",
+                "Cache-Control": "no-cache, no-store, must-revalidate",
+            }
+        )
+    from fastapi.responses import Response
+    return Response("console.log('SW not found');", media_type="application/javascript", status_code=404)
+
 
 # ==================== ADMIN HTML PAGE ====================
 from fastapi.responses import HTMLResponse, FileResponse  # noqa: E402
@@ -5445,6 +5475,7 @@ async def assetlinks():
 
 
 @app.get("/api/assets/{filename:path}")
+@app.get("/assets/{filename:path}")
 async def public_asset(filename: str):
     """Serve static files from backend/public_assets/ (e.g. developer icon for Play Console)."""
     # Prevent path traversal
@@ -5826,7 +5857,15 @@ def _stream_mp3_file(path: str, headers: Optional[dict] = None):
                     break
                 yield data
 
-    return StreamingResponse(chunks(), media_type="audio/mpeg", headers=headers or {})
+    resp_headers = {
+        "Content-Type": "audio/mpeg",
+        "Accept-Ranges": "bytes",
+        "Cache-Control": "no-cache",
+    }
+    if headers:
+        resp_headers.update(headers)
+
+    return StreamingResponse(chunks(), media_type="audio/mpeg", headers=resp_headers)
 
 
 async def _google_tts(text: str, lang: str, google_key: str, cache_path: str):
@@ -5991,10 +6030,17 @@ async def text_to_speech(request: Request, text: Optional[str] = None, lang: Opt
                             except OSError:
                                 pass
 
+                resp_headers = {
+                    "Content-Type": "audio/mpeg",
+                    "Accept-Ranges": "bytes",
+                    "Cache-Control": "no-cache",
+                    "X-TTS-Provider": "elevenlabs",
+                    "X-TTS-Voice": voice_id,
+                }
                 return StreamingResponse(
                     stream_and_cache(),
                     media_type="audio/mpeg",
-                    headers={"X-TTS-Provider": "elevenlabs", "X-TTS-Voice": voice_id},
+                    headers=resp_headers,
                 )
 
             # Logges som ERROR, ikke WARNING: dette er tap av Michaels stemme.
