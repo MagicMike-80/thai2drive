@@ -3624,6 +3624,225 @@ a { color:inherit; text-decoration:none; }
 }
 .t2d-lightbox-close:hover { background:rgba(239,68,68,.85); }
 
+
+/* ═══ HOME MEDIA CAROUSEL (Touch Glide) ═══ */
+.home-carousel-section {
+  margin: 18px 0 24px;
+  width: 100%;
+}
+.home-carousel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding: 0 4px;
+}
+.home-carousel-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.home-carousel-icon {
+  font-size: 1.2rem;
+}
+.home-carousel-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #F8FAFC;
+  letter-spacing: -0.01em;
+}
+.home-carousel-see-all {
+  background: transparent;
+  border: none;
+  color: #00F5FF;
+  font-size: 0.84rem;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 4px 8px;
+  transition: opacity 0.2s;
+}
+.home-carousel-see-all:hover {
+  opacity: 0.8;
+}
+.home-carousel-track {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 14px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding: 4px 4px 16px 4px;
+}
+.home-carousel-track::-webkit-scrollbar {
+  display: none;
+}
+.home-carousel-card {
+  flex: 0 0 230px;
+  width: 230px;
+  scroll-snap-align: start;
+  background: linear-gradient(145deg, rgba(19, 27, 46, 0.95), rgba(11, 18, 38, 0.98));
+  border: 1.5px solid rgba(0, 245, 255, 0.25);
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+.home-carousel-card:hover {
+  transform: translateY(-3px);
+  border-color: #00F5FF;
+  box-shadow: 0 8px 24px rgba(0, 245, 255, 0.2);
+}
+.home-carousel-thumb {
+  width: 100%;
+  height: 125px;
+  background-color: #0F172A;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.home-carousel-thumb-play {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  border: 1.5px solid rgba(0, 245, 255, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #00F5FF;
+  font-size: 16px;
+  box-shadow: 0 0 12px rgba(0, 245, 255, 0.4);
+  transition: transform 0.2s, background 0.2s;
+}
+.home-carousel-card:hover .home-carousel-thumb-play {
+  transform: scale(1.12);
+  background: rgba(0, 245, 255, 0.85);
+  color: #071326;
+}
+.home-carousel-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: rgba(239, 68, 68, 0.85);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.5px;
+}
+.home-carousel-badge.podcast {
+  background: rgba(168, 85, 247, 0.85);
+}
+.media-lang-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #FFFFFF !important;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 3px 7px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  z-index: 2;
+}
+.home-carousel-body {
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: space-between;
+}
+.home-carousel-card-title {
+  font-size: 0.90rem;
+  font-weight: 700;
+  color: #E2E8F0;
+  margin: 0 0 6px 0;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.home-carousel-card-dur {
+  font-size: 0.75rem;
+  color: #94A3B8;
+  font-weight: 600;
+}
+
+/* ═══ MICHAEL 80px x 80px THUMBNAILS (Situation images & signs) ═══ */
+.tm-media-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+.tm-media-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(15, 23, 42, 0.75);
+  border: 1.5px solid rgba(0, 245, 255, 0.3);
+  border-radius: 12px;
+  padding: 6px;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s;
+}
+.tm-media-card:hover {
+  transform: scale(1.03);
+  border-color: #00F5FF;
+}
+.tm-media-visual {
+  width: 80px !important;
+  height: 80px !important;
+  min-width: 80px !important;
+  min-height: 80px !important;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #0B1226;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255,255,255,0.15);
+}
+.tm-media-image {
+  width: 80px !important;
+  height: 80px !important;
+  object-fit: contain;
+  cursor: zoom-in;
+}
+.tm-sign-image-wrap {
+  width: 80px !important;
+  height: 80px !important;
+  min-width: 80px !important;
+  border-radius: 8px;
+  background: #0B1226;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(0, 245, 255, 0.3);
+}
+.tm-sign-image {
+  width: 72px !important;
+  height: 72px !important;
+  object-fit: contain;
+  cursor: zoom-in;
+}
+
 </style>
 </head>
 <body>
@@ -5976,56 +6195,77 @@ document.addEventListener('click', function(e) {
   }
 });
 
-var _backendAudio = null;
-var _teacherAudio = null;
+var _globalAudio = null;
 var _audioUnlocked = false;
 var _teacherActiveText = '';
 var _teacherAudioToken = 0;
+var _teacherWatchdog = null;
 
-// iOS/Safari lar deg bare starte lyd fra et ekte brukertrykk. Et <audio>-element som
-// aldri har spilt inne i en gest, nekter senere .play() — og det er derfor lyden er
-// stille selv om /api/tts svarer. Vi lager derfor begge elementene tidlig og «velsigner»
-// dem med en stum WAV ved første trykk. AudioContext.resume() dekker IKKE dette; den
-// gjelder kun WebAudio-pipet i playSound().
 var _SILENT_WAV = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
 
-function _ensureBackendAudio() {
-  if (!_backendAudio) {
-    _backendAudio = new Audio();
-    _backendAudio.preload = 'auto';
-    _backendAudio.onended = function() { ttsPlaying = false; updateTtsBtn(false); };
-    _backendAudio.onerror = function() { ttsPlaying = false; updateTtsBtn(false); };
+function _getGlobalAudio() {
+  if (!_globalAudio) {
+    _globalAudio = new Audio();
+    _globalAudio.preload = 'auto';
+    _globalAudio.onended = function() {
+      if (_teacherWatchdog) clearTimeout(_teacherWatchdog);
+      _teacherTtsPlaying = false;
+      _teacherActiveText = '';
+      ttsPlaying = false;
+      updateTtsBtn(false);
+    };
+    _globalAudio.onerror = function() {
+      if (_teacherWatchdog) clearTimeout(_teacherWatchdog);
+      _teacherTtsPlaying = false;
+      _teacherActiveText = '';
+      ttsPlaying = false;
+      updateTtsBtn(false);
+    };
   }
-  return _backendAudio;
+  return _globalAudio;
 }
 
-var _teacherWatchdog = null;
+function _ensureBackendAudio() { return _getGlobalAudio(); }
+function _ensureTeacherAudio() { return _getGlobalAudio(); }
+var _teacherAudio = null; // alias for backwards compat
+var _backendAudio = null; // alias for backwards compat
+
 function _resetTeacherWatchdog() {
   if (_teacherWatchdog) clearTimeout(_teacherWatchdog);
   _teacherWatchdog = setTimeout(function() {
-    if (_teacherTtsPlaying && _teacherAudio) {
+    if (_teacherTtsPlaying && _globalAudio) {
       stopAllSpeech();
     }
   }, 14000);
 }
 
-function _ensureTeacherAudio() {
-  if (!_teacherAudio) {
-    _teacherAudio = new Audio();
-    _teacherAudio.preload = 'auto';
-    _teacherAudio.onended = function() {
-      if (_teacherWatchdog) clearTimeout(_teacherWatchdog);
-      _teacherTtsPlaying = false;
-      _teacherActiveText = '';
-    };
-    _teacherAudio.onerror = function() {
-      if (_teacherWatchdog) clearTimeout(_teacherWatchdog);
-      _teacherTtsPlaying = false;
-      _teacherActiveText = '';
-    };
-  }
-  return _teacherAudio;
+function _unlockGlobalAudioOnce() {
+  if (_audioUnlocked) return;
+  _audioUnlocked = true;
+  var a = _getGlobalAudio();
+  _teacherAudio = a;
+  _backendAudio = a;
+  try {
+    a.src = _SILENT_WAV;
+    a.muted = true;
+    var p = a.play();
+    if (p && p.then) {
+      p.then(function() {
+        a.pause();
+        a.currentTime = 0;
+        a.muted = false;
+      }).catch(function() { a.muted = false; });
+    } else {
+      a.pause();
+      a.currentTime = 0;
+      a.muted = false;
+    }
+  } catch(e) { a.muted = false; }
 }
+
+['touchstart', 'touchend', 'click', 'keydown'].forEach(function(evt) {
+  document.addEventListener(evt, _unlockGlobalAudioOnce, { once: true, passive: true });
+});
 
 function _primeAudioEl(el) {
   if (!el) return;
@@ -6560,6 +6800,7 @@ async function renderHomeCarousel() {
     track.innerHTML = items.map(function(it) {
       var badgeCls = it.type === 'podcast' ? 'home-carousel-badge podcast' : 'home-carousel-badge';
       var badgeText = it.type === 'podcast' ? '🎙️ PODCAST' : '🎬 VIDEO';
+      var langBadge = _getMediaLangBadge(it.item || it);
       var thumbStyle = it.thumb ? ' style="background-image:url(' + escH(it.thumb) + ');"' : '';
       var playIcon = it.type === 'podcast' ? '🎙️' : '▶';
       var clickAction = it.type === 'video' 
@@ -6569,6 +6810,7 @@ async function renderHomeCarousel() {
       return '<div class="home-carousel-card" onclick="' + clickAction + '">'
         + '<div class="home-carousel-thumb"' + thumbStyle + '>'
           + '<span class="' + badgeCls + '">' + badgeText + '</span>'
+          + langBadge
           + '<div class="home-carousel-thumb-play"><span>' + playIcon + '</span></div>'
         + '</div>'
         + '<div class="home-carousel-body">'
@@ -8186,7 +8428,7 @@ function buildVideoCard(v) {
   var thumbStyle = thumb ? ' style="background-image:url(' + escH(thumb) + ')"' : '';
 
   return '<div class="vid-card vid-card-local" onclick="openVideoPlayer(\'' + escH(srcKey) + '\')">'
-    + '<div class="vid-card-thumb"' + thumbStyle + '>'
+    + '<div class="vid-card-thumb"' + thumbStyle + '>' + _getMediaLangBadge(v)'
       + '<div class="vid-card-play"><span>▶</span></div>'
     + '</div>'
     + '<div class="vid-info">'
@@ -9123,9 +9365,13 @@ function buildPodcastCard(p) {
   if (!url) return '';
   var dur = _fmtDur(p.duration_seconds);
 
+  var langBadge = _getMediaLangBadge(p);
   return '<div class="podcast-card">'
     + '<div class="podcast-info">'
-      + '<div class="podcast-lbl">' + escH(t('podcast_short')) + '</div>'
+      + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">'
+        + '<div class="podcast-lbl">' + escH(t('podcast_short')) + '</div>'
+        + langBadge
+      + '</div>'
       + '<div class="podcast-title">' + title + '</div>'
       + (dur ? '<div class="podcast-dur">' + dur + '</div>' : '')
     + '</div>'
@@ -10107,6 +10353,11 @@ function _buildTeacherMediaCard(media) {
   image.src = media.url;
   image.alt = media.title;
   image.loading = 'lazy';
+  image.style.cursor = 'zoom-in';
+  image.onclick = function(e) {
+    e.stopPropagation();
+    openLightbox(media.url, media.title + (media.caption ? ' — ' + media.caption : ''));
+  };
   image.onerror = function() {
     if (media.type === 'sign') card.hidden = true;
     else visual.hidden = true;
@@ -10191,6 +10442,11 @@ function _buildTeacherSignCard(sign) {
   image.src = sign.image_url || sign.file || '';
   image.alt = _teacherSignValue(sign, 'name');
   image.loading = 'lazy';
+  image.style.cursor = 'zoom-in';
+  image.onclick = function(e) {
+    e.stopPropagation();
+    openLightbox(sign.image_url || sign.file || '', _teacherSignValue(sign, 'name'));
+  };
   image.onerror = function() { imageWrap.hidden = true; };
   imageWrap.appendChild(image);
   card.appendChild(imageWrap);
