@@ -1077,7 +1077,7 @@ def _concise_teacher_reply(reply_text: str, lang: str) -> str:
     concise = " ".join(allowed).strip()
     if not concise:
         return {
-            "th": "ตอนนี้ Michael ยังตอบให้สั้นและชัดเจนไม่ได้ กรุณาลองถามอีกครั้งครับ",
+            "th": "ตอนนี้ไมเคิลยังตอบให้สั้นและชัดเจนไม่ได้ กรุณาลองถามอีกครั้งครับ",
             "en": "Michael cannot give a short, precise answer right now. Please try again.",
             "no": "Michael kan ikke gi et kort og presist svar akkurat nå. Prøv igjen.",
         }.get(lang, "Michael kan ikke gi et kort og presist svar akkurat nå. Prøv igjen.")
@@ -2333,7 +2333,11 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
 
 def _fallback_reply(lang: str) -> str:
     if lang == "th":
-        return "ขออภัยค่ะ ขณะนี้ครูไมเคิลไม่สามารถให้บริการได้ชั่วคราว กรุณาลองใหม่อีกครั้งในภายหลังนะคะ"
+        # Michael er mann. ครับ er den mannlige hoflighetspartikkelen — ค่ะ/นะคะ
+        # er kvinnelige, og brot karakteren i den ene meldingen eleven ser
+        # nar noe feiler. Alle andre Michael-replikker i denne filen bruker
+        # allerede ครับ og ผม; denne var den eneste avvikeren.
+        return "ขออภัยครับ ขณะนี้ครูไมเคิลไม่สามารถให้บริการได้ชั่วคราว กรุณาลองใหม่อีกครั้งในภายหลังนะครับ"
     if lang == "en":
         return "Sorry, Michael is not available right now. Please try again in a moment."
     return "Beklager, Michael er ikke tilgjengelig akkurat nå. Prøv igjen om litt."
