@@ -11309,12 +11309,46 @@ function speakSignAiText() {
 //  SERVICE WORKER REGISTRATION (Offline mode)
 // ════════════════════════════════════════════
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function() {
-    navigator.serviceWorker.register('/service-worker.js').catch(function() {
-      navigator.serviceWorker.register('/api/service-worker.js').catch(function(err) {
-        console.log('SW registration skipped:', err);
+  var refreshing = false;
+  navigator.serviceWorker.addEventListener('controllerchange', function() {
+    if (!refreshing) {
+      refreshing = true;
+      console.log('Ny Service Worker aktivert (controllerchange), reloader...');
+      window.location.reload();
+    }
+  });
+
+  function setupSwUpdate(reg) {
+    if (!reg) return;
+    reg.addEventListener('updatefound', function() {
+      var newWorker = reg.installing;
+      if (!newWorker) return;
+      newWorker.addEventListener('statechange', function() {
+        if (newWorker.state === 'activated' && navigator.serviceWorker.controller) {
+          console.log('Ny versjon aktivert, reloader...');
+          if (!refreshing) {
+            refreshing = true;
+            window.location.reload();
+          }
+        }
       });
     });
+  }
+
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(function(reg) {
+        setupSwUpdate(reg);
+      })
+      .catch(function() {
+        navigator.serviceWorker.register('/api/service-worker.js')
+          .then(function(reg) {
+            setupSwUpdate(reg);
+          })
+          .catch(function(err) {
+            console.log('SW registration skipped:', err);
+          });
+      });
   });
 }
 

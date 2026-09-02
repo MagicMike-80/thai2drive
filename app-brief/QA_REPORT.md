@@ -1,57 +1,23 @@
-# 🎯 QA REPORT: Fullført Fremtidsliste & Masterplan (16/16 PASS)
+# 🛡️ QA REPORT: Service Worker Forced Activation & Auto-reload
 
-**Resultat:** PASS (Karakter: 5/5 — 100 % Fullført)  
+**Resultat:** PASS  
 **Dato:** 2026-09-02  
-**Eier:** Agent 4: QA & Tester (Fase: Trigger)  
+**Eier:** Agent 4: QA Gate (Fase: Kvalitetskontroll)  
 
 ---
 
-## 1. Verifikasjonsresultater for Hele Veikartet
+## 1. Kvalitetssjekker
 
-| Oppdrag / Modul | Teststatus | Verifiserte Egenskaper |
+| Sjekk | Status | Kommentar / Evidens |
 |---|---|---|
-| **Kjerne: Media & Lovdata** | **PASS** | `media_catalog.py`, `LAW_MAPPING`, toveis hashtag, skilt-støyfilter. |
-| **Kjerne: Web-First UI** | **PASS** | 80x80 px skilt/bilder, Lightbox-modal, ren Dark Mode cyberpunk uten forbudte neonfarger. |
-| **Oppdrag 1: Kognitiv Loop** | **PASS** | Beslutningsmodell **Se ➔ Oppfatte ➔ Avgjøre**, 5-stegs-pedagogikk («Kongen og tjeneren» / «HAV»), thai-låsing (**ครับ/ผม**), null smiger. |
-| **Oppdrag 2: Karusell-Risting** | **PASS** | `.js-scrolling` klasse med `scroll-snap-type: none !important` og 350 ms `setTimeout` i `showTab()`. |
-| **Oppdrag 3: Backend-TTS** | **PASS** | Streaming-headere `Accept-Ranges: bytes`, `Cache-Control: no-cache`, synkron `audio.load()`/`play()` i klikk-callstack, og 5s timeout watchdog. |
-| **Oppdrag 5: Mikroleksjoner** | **PASS** | `backend/micro_lessons.py` og `/api/lessons/culture` med kjørekultur (Høyreregel, Gangfelt, Rundkjøring, Vinter) på NO, TH, EN. |
-| **Oppdrag 6: Exam Mode & Score** | **PASS** | `backend/readiness.py` og `/api/user/readiness` med 50/30/20 vekting og pedagogisk tilbakemelding (🌱 / 📈 / 👑). |
-| **Oppdrag 7: RevenueCat Billing** | **PASS** | `backend/billing.py` og `/api/billing/subscription` med miljøstyrt nøkkel og fail-soft fallback. |
-| **Oppdrag 8: Offline-Modus** | **PASS** | `backend/service-worker.js`, servering under `/service-worker.js` og registrering i `backend/webapp.py`. |
+| **Rotårsak adressert** | ✅ PASS | `self.skipWaiting()` og `clients.claim()` tvinger ny Service Worker ut av ventemodus. `controllerchange` og `updatefound` i `webapp.py` trigger automatisk reload av appen. |
+| **Språkisolasjon** | ✅ PASS | Ingen hardkodede språkstrenger i learner-facing UI er endret eller påvirket. |
+| **Audiostreaming & API** | ✅ PASS | `/api/`, Range requests og mediefiler (`.mp3`, `.m4a`, etc.) forblir 100 % ekskludert fra service worker intercept, i tråd med iOS Safari kravene. |
+| **Ingen loop-fare** | ✅ PASS | `var refreshing = false;` beskytter mot gjentatte unødvendige reloads på klienten. |
+| **Syntaksvalidering** | ✅ PASS | `node --check backend/service-worker.js` bestått uten advarsler eller feil. |
+| **Diff-størrelse** | ✅ PASS | Kun 2 filer endret, kun relevante linjer tilknyttet Service Worker livssyklus. Ingen hemmeligheter eller utilsiktede filer berørt. |
 
 ---
 
-## 2. Testkjøring & Utfall
-
-```
-🚀 Running Michael AI BLAST Contract Tests & Missions 1–8 Suite...
-  ✅ PASS: Media Catalog contains core traffic topics
-  ✅ PASS: teacher_chat connects to approved media and includes media in TeacherChatResponse
-  ✅ PASS: teacher_chat has data-driven weakness coaching and open conversational greetings
-  ✅ PASS: admin_analytics_router mounted in server.py and endpoints defined
-  ✅ PASS: webapp.py contains Lightbox modal and click handlers
-  ✅ PASS: webapp.py contains hardened audio lifecycle with instance destruction & watchdog
-  ✅ PASS: webapp.py contains Video button adjacent to Michael and horizontal Home Carousel
-  ✅ PASS: Language purity: no forbidden cross-language fallback patterns
-  ✅ PASS: Oppdrag 1: Michaels Kognitive Loop (Se -> Oppfatte -> Avgjore + Thai ครับ/ผม)
-  ✅ PASS: Oppdrag 2: Karusell-Risting iOS (.js-scrolling + 350ms timer)
-  ✅ PASS: Oppdrag 3: Backend-TTS & Mobil Lydavspilling
-  ✅ PASS: Oppdrag 5: «Thailand vs Norge» Mikroleksjoner
-  ✅ PASS: Oppdrag 6: Michaels Exam Mode & Intelligent Klar-Score
-  ✅ PASS: Oppdrag 7: RevenueCat Billing & Fail-Soft
-  ✅ PASS: Oppdrag 8: Offline-Modus & ServiceWorker
-
-🎉 ALL 16/16 CONTRACT TESTS PASSED! FULL VERIFICATION SUCCESS!
-```
-
----
-
-## 3. Sluttkarakter
-
-- **Smerte-eliminering:** 5/5
-- **UX & Pedagogisk dybde:** 5/5
-- **Arkitektur & Robusthet:** 5/5
-- **Språkrenhet & Protokoll Null:** 5/5
-
-**Sluttvurdering:** **100 % GODKJENT (PASS)**
+## 2. Konklusjon
+Patchen er 100 % godkjent (`PASS`) og klar for commit og push til Railway.
