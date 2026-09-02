@@ -150,13 +150,17 @@ a { color:inherit; text-decoration:none; }
   display:flex; flex-direction:column;
 }
 
-/* BOTTOM NAV — Rolling glass carousel track */
+/* BOTTOM NAV — Floating Neon Capsule Carousel («En lang knapp som går som en karusell») */
 #bottomNav {
-  height: calc(var(--bottom-h) + 14px); flex-shrink: 0;
-  background: rgba(7, 12, 26, 0.95);
+  height: calc(var(--bottom-h) + 8px); flex-shrink: 0;
+  margin: 6px 12px 14px;
+  border-radius: 28px;
+  border: 1.5px solid transparent !important;
+  background: linear-gradient(rgba(11, 18, 38, 0.94), rgba(11, 18, 38, 0.94)) padding-box,
+              conic-gradient(from var(--neon-angle, 0deg), rgba(0, 245, 255, 0.75), rgba(255, 0, 229, 0.75), rgba(0, 245, 255, 0.75)) border-box !important;
+  animation: neonFlow 6s linear infinite;
   backdrop-filter: blur(32px) saturate(1.8); -webkit-backdrop-filter: blur(32px) saturate(1.8);
-  border-top: 1.5px solid rgba(0, 245, 255, 0.25);
-  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.6), 0 -1px 0 rgba(0, 245, 255, 0.15);
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.75), 0 0 24px rgba(0, 245, 255, 0.22), inset 0 1px 1px rgba(255, 255, 255, 0.12);
   display: none; flex-direction: row;
   flex-wrap: nowrap !important;
   align-items: center; z-index: 50;
@@ -165,8 +169,8 @@ a { color:inherit; text-decoration:none; }
   scrollbar-width: none;
   -ms-overflow-style: none;
   scroll-snap-type: none;
-  padding: 0 16px;
-  gap: 12px;
+  padding: 0 10px;
+  gap: 10px;
 }
 #bottomNav.js-scrolling,
 .js-scrolling {
@@ -174,30 +178,31 @@ a { color:inherit; text-decoration:none; }
 }
 #bottomNav::-webkit-scrollbar { display: none; width: 0; height: 0; }
 [data-theme="light"] #bottomNav {
-  background: rgba(241, 245, 249, 0.94);
-  border-top: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.08);
+  background: linear-gradient(rgba(241, 245, 249, 0.95), rgba(241, 245, 249, 0.95)) padding-box,
+              conic-gradient(from var(--neon-angle, 0deg), #FF9933, #FF00E5, #00F5FF, #FF9933) border-box !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 0 16px rgba(255, 153, 51, 0.2);
 }
 .bn-tab {
-  flex: 0 0 102px;
-  width: 102px;
-  height: calc(100% - 14px);
+  flex: 0 0 98px;
+  width: 98px;
+  height: calc(100% - 10px);
   display: flex; flex-direction: column;
-  align-items: center; justify-content: center; gap: 4px;
+  align-items: center; justify-content: center; gap: 3px;
   border: 1.5px solid rgba(255, 255, 255, 0.08);
-  background: rgba(15, 23, 42, 0.65);
+  background: rgba(15, 23, 42, 0.7);
   color: #94A3B8;
   cursor: pointer; font-size: 0.70rem; font-weight: 700;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  padding: 6px 6px; letter-spacing: 0.2px;
-  border-radius: 16px;
-  box-shadow: inset 0 1px 1px rgba(255,255,255,0.05), 0 3px 8px rgba(0,0,0,0.3);
+  padding: 4px 6px; letter-spacing: 0.2px;
+  border-radius: 20px;
+  box-shadow: inset 0 1px 1px rgba(255,255,255,0.06), 0 2px 6px rgba(0,0,0,0.35);
   white-space: nowrap;
 }
 .bn-tab:hover {
-  border-color: rgba(0, 245, 255, 0.4);
-  color: #E2E8F0;
+  border-color: rgba(0, 245, 255, 0.45);
+  color: #FFFFFF;
   transform: translateY(-2px);
+  background: rgba(15, 23, 42, 0.9);
 }
 [data-theme="light"] .bn-tab {
   border: 1px solid rgba(0, 0, 0, 0.03);
@@ -5626,7 +5631,16 @@ function bindBottomNavCarousel() {
   nav.addEventListener('wheel', function(e) {
     if (e.deltaY !== 0) {
       e.preventDefault();
-      nav.scrollLeft += e.deltaY;
+      var maxScroll = nav.scrollWidth - nav.clientWidth;
+      if (maxScroll > 10) {
+        if (nav.scrollLeft + e.deltaY > maxScroll + 5 && e.deltaY > 0) {
+          nav.scrollTo({ left: 0, behavior: 'smooth' });
+        } else if (nav.scrollLeft + e.deltaY < -5 && e.deltaY < 0) {
+          nav.scrollTo({ left: maxScroll, behavior: 'smooth' });
+        } else {
+          nav.scrollLeft += e.deltaY;
+        }
+      }
     }
   }, { passive: false });
 
@@ -5648,6 +5662,15 @@ function bindBottomNavCarousel() {
       if (nav) {
         nav.style.cursor = 'pointer';
         nav.style.removeProperty('user-select');
+        var maxScroll = nav.scrollWidth - nav.clientWidth;
+        if (maxScroll > 10) {
+          if (nav.scrollLeft >= maxScroll - 2) {
+            // Myk overgang ved høyre ende
+            nav.scrollTo({ left: maxScroll, behavior: 'smooth' });
+          } else if (nav.scrollLeft <= 2) {
+            nav.scrollTo({ left: 0, behavior: 'smooth' });
+          }
+        }
       }
     }
   });
