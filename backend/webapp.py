@@ -6763,6 +6763,15 @@ async function loadHome() {
   renderHomeCarousel();
 }
 
+function _getMediaLangBadge(item) {
+  if (!item) return '';
+  var lang = (item.language || item.lang || '').toLowerCase();
+  if (lang === 'th') return '<span class="media-lang-badge">🇹🇭 TH</span>';
+  if (lang === 'no') return '<span class="media-lang-badge">🇳🇴 NO</span>';
+  if (lang === 'en') return '<span class="media-lang-badge">🇬🇧 EN</span>';
+  return '';
+}
+
 async function renderHomeCarousel() {
   var track = document.getElementById('homeCarouselTrack');
   if (!track) return;
@@ -8448,7 +8457,7 @@ function _fmtDur(secs) {
 
 function buildVideoCard(v) {
   if (!v) return '';
-  var title = escH(v['title_' + appLang] || '');
+  var title = escH(v['title_' + appLang] || v.title_no || v.title_th || v.title_en || '');
   if (!title) return '';
   var dur = _fmtDur(v.duration_seconds);
 
@@ -9415,9 +9424,9 @@ function speakText(text) {
 function buildPodcastCard(p) {
   if (!p) return '';
   var title = escH(
-    appLang === 'th' ? (p.title_th || '') :
-    appLang === 'en' ? (p.title_en || '') :
-    (p.title_no || '')
+    appLang === 'th' ? (p.title_th || p.title_no || p.title_en || '') :
+    appLang === 'en' ? (p.title_en || p.title_no || p.title_th || '') :
+    (p.title_no || p.title_th || p.title_en || '')
   );
   if (!title) return '';
   var rawUrl = p.file_path || p.audio_url || '';
