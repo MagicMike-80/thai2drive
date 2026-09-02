@@ -501,7 +501,7 @@ def _send_via_sendgrid(to_email: str, code: str) -> tuple[bool, str]:
         f"Tilbakestillingskoden din for Thai2Drive er: {code}\n\n"
         "Koden er gyldig i 15 minutter. Hvis du ikke ba om dette, kan du ignorere denne e-posten.\n\n"
         "Thai2Drive\n\n"
-        "สวัสดีครับ/ค่ะ\n\n"
+        "สวัสดีครับ\n\n"
         f"รหัสรีเซ็ตรหัสผ่าน Thai2Drive ของคุณคือ: {code}\n\n"
         "รหัสนี้ใช้ได้ 15 นาที หากคุณไม่ได้ขอรีเซ็ตรหัสผ่าน กรุณาเพิกเฉยต่ออีเมลนี้\n"
     )
@@ -548,7 +548,7 @@ def _send_via_resend(to_email: str, code: str) -> tuple[bool, str]:
         f"Tilbakestillingskoden din for Thai2Drive er: {code}\n\n"
         "Koden er gyldig i 15 minutter. Hvis du ikke ba om dette, kan du ignorere denne e-posten.\n\n"
         "Thai2Drive\n\n"
-        "สวัสดีครับ/ค่ะ\n\n"
+        "สวัสดีครับ\n\n"
         f"รหัสรีเซ็ตรหัสผ่าน Thai2Drive ของคุณคือ: {code}\n\n"
         "รหัสนี้ใช้ได้ 15 นาที หากคุณไม่ได้ขอรีเซ็ตรหัสผ่าน กรุณาเพิกเฉยต่ออีเมลนี้\n"
     )
@@ -619,7 +619,7 @@ def _send_password_reset_email_sync(to_email: str, code: str) -> tuple[bool, str
         f"Tilbakestillingskoden din for Thai2Drive er: {code}\n\n"
         "Koden er gyldig i 15 minutter. Hvis du ikke ba om dette, kan du ignorere denne e-posten.\n\n"
         "Thai2Drive\n\n"
-        "สวัสดีครับ/ค่ะ\n\n"
+        "สวัสดีครับ\n\n"
         f"รหัสรีเซ็ตรหัสผ่าน Thai2Drive ของคุณคือ: {code}\n\n"
         "รหัสนี้ใช้ได้ 15 นาที หากคุณไม่ได้ขอรีเซ็ตรหัสผ่าน กรุณาเพิกเฉยต่ออีเมลนี้\n"
     )
@@ -5474,8 +5474,10 @@ async def assetlinks():
 
 @app.get("/api/assets/{filename:path}")
 @app.get("/assets/{filename:path}")
+@app.get("/public_assets/{filename:path}")
+@app.get("/api/public_assets/{filename:path}")
 async def public_asset(filename: str):
-    """Serve static files from backend/public_assets/ (e.g. developer icon for Play Console)."""
+    """Serve static files from backend/public_assets/ (e.g. developer icon for Play Console, podcasts, videos)."""
     # Prevent path traversal
     safe_name = filename.replace("..", "").lstrip("/")
     file_path = (_PUBLIC_ASSETS_DIR / safe_name).resolve()
@@ -5486,7 +5488,7 @@ async def public_asset(filename: str):
     if not file_path.exists() or not file_path.is_file():
         return HTMLResponse("Not found", status_code=404)
 
-    # Simple content-type sniffing
+    # Content-type sniffing including full audio/video MIME types for Android/Chrome
     ext = file_path.suffix.lower()
     media_type = {
         ".png": "image/png",
@@ -5496,9 +5498,18 @@ async def public_asset(filename: str):
         ".svg": "image/svg+xml",
         ".ico": "image/x-icon",
         ".pdf": "application/pdf",
+        ".mp3": "audio/mpeg",
+        ".mp4": "video/mp4",
+        ".m4a": "audio/mp4",
+        ".wav": "audio/wav",
+        ".ogg": "audio/ogg",
     }.get(ext, "application/octet-stream")
 
-    return FileResponse(str(file_path), media_type=media_type)
+    return FileResponse(
+        str(file_path),
+        media_type=media_type,
+        headers={"Accept-Ranges": "bytes", "Cache-Control": "public, max-age=86400"}
+    )
 
 
 # ── Sign images — served from backend/sign_images/ ────────────────────────────
@@ -5845,16 +5856,6 @@ def _tts_cache_path(provider: str, voice: str, lang: str, text: str) -> str:
 
 
 def _stream_mp3_file(path: str, headers: Optional[dict] = None):
-    from fastapi.responses import StreamingResponse
-
-    def chunks():
-        with open(path, "rb") as f:
-            while True:
-                data = f.read(64 * 1024)
-                if not data:
-                    break
-                yield data
-
     resp_headers = {
         "Content-Type": "audio/mpeg",
         "Accept-Ranges": "bytes",
@@ -5863,7 +5864,11 @@ def _stream_mp3_file(path: str, headers: Optional[dict] = None):
     if headers:
         resp_headers.update(headers)
 
-    return StreamingResponse(chunks(), media_type="audio/mpeg", headers=resp_headers)
+    return FileResponse(
+        str(path),
+        media_type="audio/mpeg",
+        headers=resp_headers
+    )
 
 
 async def _google_tts(text: str, lang: str, google_key: str, cache_path: str):

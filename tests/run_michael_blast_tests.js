@@ -153,4 +153,26 @@ test('Oppdrag 8: Offline-Modus & ServiceWorker', () => {
   assert(sw_code.includes('OFFLINE_URLS'), 'ServiceWorker must define OFFLINE_URLS');
 });
 
-console.log('\n🎉 ALL 17/17 CONTRACT & GROUNDING TESTS PASSED! 100% PRODUCTION READY!\n');
+// ─── Android / Chrome Live Hardening Tests ───
+test('Samsung/Android Hardening: Section 7.2 Dialect ("koer imot") & Male Gender Lock', () => {
+  assert(teacher_code.includes('"koer imot"'), 'teacher_chat.py must explicitly cover dialect "koer imot"');
+  assert(teacher_code.includes('_sanitize_gender_particles'), 'teacher_chat.py must include _sanitize_gender_particles');
+  assert(teacher_code.includes('ครับผม'), 'teacher_chat.py fallback must use ครับผม');
+  const support_code = fs.readFileSync(path.join(ROOT, 'backend', 'support_chat.py'), 'utf8');
+  assert(!support_code.includes('ขอโทษค่ะ'), 'support_chat.py must not contain female particle ขอโทษค่ะ');
+  assert(support_code.includes('ขอโทษครับ'), 'support_chat.py must use polite male particle ขอโทษครับ');
+});
+
+test('Samsung/Android Hardening: FileResponse & HTTP 206 Range Streaming in server.py', () => {
+  assert(server_code.includes('return FileResponse('), 'server.py _stream_mp3_file must return FileResponse for HTTP 206 support');
+  assert(server_code.includes('.mp3": "audio/mpeg"'), 'public_asset must sniff .mp3 as audio/mpeg');
+  assert(server_code.includes('.mp4": "video/mp4"'), 'public_asset must sniff .mp4 as video/mp4');
+  assert(server_code.includes('@app.get("/public_assets/{filename:path}")'), 'public_assets path must be registered in server.py');
+});
+
+test('Samsung/Android Hardening: #bottomNav flex-wrap nowrap & Hidden Scrollbars in webapp.py', () => {
+  assert(webapp_code.includes('flex-wrap: nowrap !important;'), '#bottomNav must have flex-wrap: nowrap !important');
+  assert(webapp_code.includes('-ms-overflow-style: none;'), '#bottomNav must hide scrollbars on all platforms');
+});
+
+console.log('\n🎉 ALL 20/20 CONTRACT & GROUNDING TESTS PASSED! 100% PRODUCTION READY!\n');

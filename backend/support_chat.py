@@ -440,8 +440,8 @@ async def support_chat(req: ChatRequest) -> ChatResponse:
 
 def _fallback_reply(lang: str) -> str:
     if lang == 'th':
-        return ('ขอโทษค่ะ ระบบไม่สามารถตอบได้ในขณะนี้ '
-                'ทีมงานได้รับข้อความของคุณแล้ว และจะติดต่อกลับทางอีเมลที่ลงทะเบียนไว้ค่ะ')
+        return ('ขอโทษครับ ระบบไม่สามารถตอบได้ในขณะนี้ '
+                'ทีมงานได้รับข้อความของคุณแล้ว และจะติดต่อกลับทางอีเมลที่ลงทะเบียนไว้ครับผม')
     if lang == 'en':
         return ('Sorry, I cannot answer right now. Your message has been forwarded '
                 'to our team — please email lexuz.zxc@gmail.com if urgent.')

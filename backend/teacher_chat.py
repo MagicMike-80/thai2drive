@@ -1208,19 +1208,29 @@ def _is_right_hand_rule_query(user_msg: str) -> bool:
 
 def _is_section_7_2_left_turn_query(user_msg: str) -> bool:
     """Match queries about left-turn right-of-way, oncoming traffic, and Section 7(2)."""
-    message = (user_msg or "").casefold()
+    raw = (user_msg or "").casefold()
+    message = raw.replace("i mot", "imot").replace("i-mot", "imot")
     left_turn_terms = (
         "venstresving", "svinger til venstre", "svinge til venstre", "svinge venstre",
-        "svinger venstre", "venstre", "turning left", "turn left", "left turn", "เลี้ยวซ้าย",
+        "svinger venstre", "sving venstre", "sving til venstre", "venstre",
+        "turning left", "turn left", "left turn", "เลี้ยวซ้าย",
     )
     opposing_or_oncoming_terms = (
-        "møtende", "motgående", "kjører imot", "kjører mot", "koer imot", "imot",
+        "møtende", "motgående", "møtande", "kjører imot", "kjører mot", "kjøre imot", "kjøre mot",
+        "koer imot", "koer mot", "koere imot", "koere mot",
+        "køyrer imot", "køyrer mot", "køyre imot", "køyre mot",
+        "kjem imot", "kommer imot", "kjem mot", "kommer mot",
+        "bil imot", "biler imot", "trafikk imot", "imot",
         "krysse min vei", "krysse veien", "krysse mitt felt", "på min høyre side", "på din høyre side", "på høyre side",
         "oncoming", "opposing traffic", "cross my path", "on my right", "on your right",
         "right-hand side", "right side", "รถสวนทาง", "รถที่สวนมา", "ด้านขวา", "ทางขวามือ"
     )
     is_left_opposing = any(t in message for t in left_turn_terms) and any(t in message for t in opposing_or_oncoming_terms)
-    is_direct_oncoming = any(t in message for t in ("kjører imot", "koer imot", "møtende bil", "møtende trafikk", "oncoming traffic", "รถสวนทาง"))
+    is_direct_oncoming = any(t in message for t in (
+        "kjører imot", "kjøre imot", "koer imot", "koere imot", "køyrer imot", "køyre imot",
+        "kjem imot", "kommer imot", "bil imot", "biler imot", "møtende bil", "møtende trafikk",
+        "oncoming traffic", "รถสวนทาง"
+    ))
     return is_left_opposing or is_direct_oncoming
 
 
@@ -2351,6 +2361,8 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         reply_text = _fallback_reply(lang)
 
     reply_text = _apply_section_7_2_fail_safe(user_msg, reply_text, lang)
+    if lang == "th":
+        reply_text = _sanitize_gender_particles(reply_text)
     reply_sign_ids = _sign_ids_from_reply(reply_text)
     sign_ids = _strict_response_sign_ids(explicit_sign_ids, reply_sign_ids)
 
@@ -2425,9 +2437,20 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
     )
 
 
+def _sanitize_gender_particles(text: str) -> str:
+    """Sanitize female Thai polite particles (ค่ะ, นะคะ, ค่า) to polite male particles (ครับ / ครับผม)."""
+    if not text:
+        return text
+    text = text.replace("นะคะ", "นะครับ")
+    text = text.replace("นะค่ะ", "นะครับ")
+    text = text.replace("ค่ะ", "ครับ")
+    text = text.replace("ค่า", "ครับ")
+    return text
+
+
 def _fallback_reply(lang: str) -> str:
     if lang == "th":
-        return "ขออภัยครับ ขณะนี้ครูไมเคิลไม่สามารถให้บริการได้ชั่วคราว กรุณาลองใหม่อีกครั้งในภายหลังนะครับ"
+        return "ขออภัยครับ ขณะนี้ครูไมเคิลไม่สามารถให้บริการได้ชั่วคราว กรุณาลองใหม่อีกครั้งในภายหลังครับผม"
     if lang == "en":
         return "Sorry, Michael is not available right now. Please try again in a moment."
     return "Beklager, Michael er ikke tilgjengelig akkurat nå. Prøv igjen om litt."
