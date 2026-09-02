@@ -5337,7 +5337,9 @@ from billing import router as billing_router  # noqa: E402
 app.include_router(billing_router)
 
 # ==================== SERVICE WORKER (Offline mode) ====================
-_SW_PATH = _Path(__file__).resolve().parent / "service-worker.js"
+from fastapi.responses import HTMLResponse, FileResponse, Response  # noqa: E402
+
+_SW_PATH = Path(__file__).resolve().parent / "service-worker.js"
 
 @app.get("/service-worker.js")
 @app.get("/api/service-worker.js")
@@ -5351,16 +5353,12 @@ async def get_service_worker():
                 "Cache-Control": "no-cache, no-store, must-revalidate",
             }
         )
-    from fastapi.responses import Response
     return Response("console.log('SW not found');", media_type="application/javascript", status_code=404)
 
 
 # ==================== ADMIN HTML PAGE ====================
-from fastapi.responses import HTMLResponse, FileResponse  # noqa: E402
-from pathlib import Path as _Path  # noqa: E402
-
-_ADMIN_HTML_PATH = _Path(__file__).resolve().parent / "admin.html"
-_VOICE_TESTER_HTML_PATH = _Path(__file__).resolve().parent / "voice_tester.html"
+_ADMIN_HTML_PATH = Path(__file__).resolve().parent / "admin.html"
+_VOICE_TESTER_HTML_PATH = Path(__file__).resolve().parent / "voice_tester.html"
 
 
 @app.get("/api/admin/voice-tester", response_class=HTMLResponse)
