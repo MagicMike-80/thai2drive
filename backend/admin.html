@@ -144,6 +144,33 @@
   .sign-info .sign-sub{font-size:12px;color:var(--muted);margin-top:2px}
   .sign-actions{display:flex;gap:6px;flex-shrink:0}
   .sign-actions button{padding:5px 10px;border:0;border-radius:6px;font-size:12px;cursor:pointer;font-weight:600}
+
+  /* Michael material library */
+  .material-toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;
+                    margin-bottom:14px;flex-wrap:wrap}
+  .material-filters{display:flex;gap:8px;flex-wrap:wrap}
+  .material-filters select{background:var(--card);color:var(--text);border:1px solid #475569;
+                           border-radius:6px;padding:8px 10px}
+  .material-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:12px}
+  .material-card{background:var(--panel);border:1px solid #334155;border-radius:10px;padding:14px;
+                 display:grid;grid-template-columns:88px 1fr;gap:12px}
+  .material-preview{width:88px;height:88px;background:var(--bg);border-radius:8px;overflow:hidden;
+                    display:flex;align-items:center;justify-content:center;color:var(--muted)}
+  .material-preview img{width:100%;height:100%;object-fit:contain}
+  .material-title{font-size:15px;font-weight:700;margin-bottom:4px}
+  .material-meta{font-size:12px;color:var(--muted);line-height:1.5}
+  .material-badges{display:flex;gap:5px;flex-wrap:wrap;margin:7px 0}
+  .material-badge{font-size:11px;background:var(--card);border-radius:999px;padding:3px 7px}
+  .material-badge.good{background:#064e3b;color:#a7f3d0}
+  .material-badge.off{background:#451a1a;color:#fecaca}
+  .material-actions{grid-column:1/-1;display:flex;justify-content:flex-end;gap:6px}
+  .material-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .material-form-grid .wide{grid-column:1/-1}
+  .material-form-grid label{font-size:12px;color:var(--muted);display:block;margin-bottom:4px}
+  .material-form-grid input,.material-form-grid select,.material-form-grid textarea{
+    width:100%;background:var(--card);color:var(--text);border:1px solid #475569;
+    border-radius:6px;padding:9px;font:inherit}
+  @media(max-width:620px){.material-form-grid{grid-template-columns:1fr}.material-form-grid .wide{grid-column:auto}}
 </style>
 </head>
 <body>
@@ -175,6 +202,7 @@
     <button class="tab" id="tab-book" onclick="switchTab('book')">📗 Læringsbok</button>
     <button class="tab" id="tab-signs" onclick="switchTab('signs')">🚦 Trafikkskilt</button>
     <button class="tab" id="tab-videos" onclick="switchTab('videos')">🎬 Videoer</button>
+    <button class="tab" id="tab-michael-materials" onclick="switchTab('michael-materials')">🧰 Michael-materiale</button>
     <button class="tab" id="tab-podcasts" onclick="switchTab('podcasts')">🎙️ Podcaster</button>
     <button class="tab" id="tab-glossary" onclick="switchTab('glossary')">📚 Ordliste</button>
   </div>
@@ -263,6 +291,35 @@
       </button>
     </div>
     <div id="videos-list"></div>
+  </div>
+
+  <!-- ── MICHAEL MATERIALS VIEW ─────────────────────────── -->
+  <div id="michael-materials-view" style="display:none">
+    <div class="material-toolbar">
+      <div>
+        <strong>Godkjent materiale for Michael</strong>
+        <div id="michael-materials-meta" style="font-size:13px;color:var(--muted);margin-top:3px"></div>
+      </div>
+      <div class="material-filters">
+        <select id="mm-type-filter" onchange="loadMichaelMaterials()">
+          <option value="">Alle typer</option>
+          <option value="sign">Trafikkskilt</option>
+          <option value="intersection_image">Veikryss / situasjonsbilde</option>
+          <option value="video">Video</option>
+        </select>
+        <select id="mm-status-filter" onchange="loadMichaelMaterials()">
+          <option value="all">Alle statuser</option>
+          <option value="approved">Godkjent for Michael</option>
+          <option value="active">Aktive</option>
+          <option value="inactive">Inaktive</option>
+        </select>
+        <button onclick="openMichaelMaterialModal(null)"
+          style="background:var(--good);color:#fff;border:0;padding:9px 16px;border-radius:7px;cursor:pointer;font-weight:600">
+          ➕ Ny materialreferanse
+        </button>
+      </div>
+    </div>
+    <div id="michael-materials-list" class="material-grid"></div>
   </div>
 
   <!-- ── PODCASTS VIEW ─────────────────────────────────── -->
@@ -1109,6 +1166,7 @@ function switchTab(tab) {
   document.getElementById('book-view').style.display       = tab === 'book'       ? '' : 'none';
   document.getElementById('signs-view').style.display      = tab === 'signs'      ? '' : 'none';
   document.getElementById('videos-view').style.display     = tab === 'videos'     ? '' : 'none';
+  document.getElementById('michael-materials-view').style.display = tab === 'michael-materials' ? '' : 'none';
   document.getElementById('podcasts-view').style.display   = tab === 'podcasts'   ? '' : 'none';
   document.getElementById('glossary-view').style.display   = tab === 'glossary'   ? '' : 'none';
   document.getElementById('tab-questions').classList.toggle('active', tab === 'questions');
@@ -1116,12 +1174,14 @@ function switchTab(tab) {
   document.getElementById('tab-book').classList.toggle('active', tab === 'book');
   document.getElementById('tab-signs').classList.toggle('active', tab === 'signs');
   document.getElementById('tab-videos').classList.toggle('active', tab === 'videos');
+  document.getElementById('tab-michael-materials').classList.toggle('active', tab === 'michael-materials');
   document.getElementById('tab-podcasts').classList.toggle('active', tab === 'podcasts');
   document.getElementById('tab-glossary').classList.toggle('active', tab === 'glossary');
   if (tab === 'book')      loadBook();
   if (tab === 'signs')     loadSigns();
   if (tab === 'studiebok') loadSbAdmin();
   if (tab === 'videos')    loadVideos();
+  if (tab === 'michael-materials') loadMichaelMaterials();
   if (tab === 'podcasts')  loadPodcasts();
   if (tab === 'glossary')  loadGlossary();
 }
@@ -1977,6 +2037,162 @@ async function saveVideo(id) {
   } catch(e) {
     toast('Feil: ' + e.message, false);
   }
+}
+
+// ══════════════════════════════════════════════════════════
+//  MICHAEL MATERIAL LIBRARY
+// ══════════════════════════════════════════════════════════
+let _michaelMaterialsData = [];
+
+function michaelMaterialTypeLabel(type) {
+  return ({sign:'🚦 Trafikkskilt', intersection_image:'🛣️ Veikryss / situasjonsbilde', video:'🎬 Video'})[type] || type;
+}
+
+function michaelMaterialSafeUrl(url) {
+  return typeof url === 'string' && (url.startsWith('/api/') || url.startsWith('https://') || url.startsWith('http://'));
+}
+
+function michaelMaterialPreview(item) {
+  if (!michaelMaterialSafeUrl(item.source_url)) return '<span>Ingen<br>forhåndsvisning</span>';
+  return `<img src="${escapeHtml(item.source_url)}" alt="${escapeHtml(item.title?.no || 'Materiale')}" loading="lazy">`;
+}
+
+async function loadMichaelMaterials() {
+  const container = document.getElementById('michael-materials-list');
+  const type = document.getElementById('mm-type-filter').value;
+  const status = document.getElementById('mm-status-filter').value;
+  container.innerHTML = '<p style="color:var(--muted);padding:20px">Laster...</p>';
+  try {
+    const params = new URLSearchParams();
+    if (type) params.set('material_type', type);
+    if (status) params.set('status', status);
+    const data = await api('/admin/michael-materials?' + params.toString());
+    _michaelMaterialsData = Array.isArray(data) ? data : [];
+    const approved = _michaelMaterialsData.filter(x => x.approved_for_michael && x.active).length;
+    document.getElementById('michael-materials-meta').textContent =
+      `${_michaelMaterialsData.length} referanser • ${approved} aktive og godkjente`;
+    if (!_michaelMaterialsData.length) {
+      container.innerHTML = '<p style="color:var(--muted);padding:20px">Ingen materialreferanser med dette filteret.</p>';
+      return;
+    }
+    container.innerHTML = _michaelMaterialsData.map(item => `
+      <article class="material-card">
+        <div class="material-preview">${michaelMaterialPreview(item)}</div>
+        <div>
+          <div class="material-title">${escapeHtml(item.title?.no || 'Uten norsk tittel')}</div>
+          <div class="material-meta">${escapeHtml(michaelMaterialTypeLabel(item.type))}</div>
+          <div class="material-meta">Kilde: ${escapeHtml(item.source_id || item.source_url || '—')}</div>
+          <div class="material-meta">Prioritet: ${Number(item.priority || 0)}</div>
+          <div class="material-badges">
+            <span class="material-badge ${item.active ? 'good' : 'off'}">${item.active ? 'Aktiv' : 'Inaktiv'}</span>
+            <span class="material-badge ${item.approved_for_michael ? 'good' : 'off'}">${item.approved_for_michael ? 'Godkjent' : 'Ikke godkjent'}</span>
+            ${(item.topic_tags || []).slice(0,3).map(tag => `<span class="material-badge">${escapeHtml(tag)}</span>`).join('')}
+          </div>
+        </div>
+        <div class="material-actions">
+          <button class="btn-edit" onclick="openMichaelMaterialModal('${item.id}')">✏️ Rediger</button>
+          ${item.active ? `<button class="btn-del" onclick="deactivateMichaelMaterial('${item.id}')">Deaktiver</button>` : ''}
+        </div>
+      </article>`).join('');
+  } catch(e) {
+    container.innerHTML = '<p style="color:var(--bad);padding:20px">Feil: ' + escapeHtml(e.message) + '</p>';
+  }
+}
+
+function openMichaelMaterialModal(id) {
+  const item = id ? _michaelMaterialsData.find(x => x.id === id) : null;
+  const value = (field, lang) => escapeHtml(item?.[field]?.[lang] || '');
+  const csv = field => escapeHtml((item?.[field] || []).join(', '));
+  document.getElementById('modal-body').innerHTML = `
+    <button class="close" onclick="closeModal()">✕</button>
+    <h2>${id ? '✏️ Rediger Michael-materiale' : '➕ Nytt Michael-materiale'}</h2>
+    <p style="color:var(--muted);font-size:13px">Referansen peker til eksisterende skilt, video eller godkjent situasjonsbilde. Mediet kopieres ikke.</p>
+    <div class="material-form-grid">
+      <div><label>Type</label><select id="mm-type" onchange="populateMichaelMaterialSources(this.value)">
+        <option value="sign" ${item?.type === 'sign' ? 'selected' : ''}>Trafikkskilt</option>
+        <option value="intersection_image" ${item?.type === 'intersection_image' ? 'selected' : ''}>Veikryss / situasjonsbilde</option>
+        <option value="video" ${item?.type === 'video' ? 'selected' : ''}>Video</option>
+      </select></div>
+      <div><label>Prioritet (0–1000, lavest først)</label><input id="mm-priority" type="number" min="0" max="1000" value="${Number(item?.priority ?? 100)}"></div>
+      <div><label>Eksisterende kilde-ID (påkrevd for skilt/video)</label><input id="mm-source-id" list="mm-source-options" value="${escapeHtml(item?.source_id || '')}" placeholder="Velg eller skriv kilde-ID"><datalist id="mm-source-options"></datalist></div>
+      <div><label>Godkjent bilde-URL (for veikryss/situasjon)</label><input id="mm-source-url" value="${escapeHtml(item?.type === 'intersection_image' ? item?.source_url || '' : '')}" placeholder="/api/... eller https://..."></div>
+      ${['no','th','en'].map(lang => `
+        <div><label>Tittel ${lang.toUpperCase()}</label><input id="mm-title-${lang}" value="${value('title',lang)}"></div>
+        <div><label>Kort forklaring ${lang.toUpperCase()}</label><textarea id="mm-caption-${lang}" rows="3">${value('caption',lang)}</textarea></div>`).join('')}
+      <div class="wide"><label>Emneknagger (kommaseparert)</label><input id="mm-topic-tags" value="${csv('topic_tags')}" placeholder="vikeplikt, rundkjøring"></div>
+      <div><label>Koblede skilt-ID-er</label><input id="mm-sign-ids" value="${csv('sign_ids')}" placeholder="202_0, 204_0"></div>
+      <div><label>Situasjonsknagger</label><input id="mm-situation-tags" value="${csv('situation_tags')}" placeholder="T-kryss, rundkjøring"></div>
+      <label style="display:flex;align-items:center;gap:8px;color:var(--text)"><input id="mm-active" type="checkbox" style="width:auto" ${item?.active !== false ? 'checked' : ''}> Aktiv</label>
+      <label style="display:flex;align-items:center;gap:8px;color:var(--text)"><input id="mm-approved" type="checkbox" style="width:auto" ${item?.approved_for_michael ? 'checked' : ''}> Godkjent for Michael</label>
+    </div>
+    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:18px">
+      <button onclick="closeModal()" style="background:var(--card);color:var(--text);border:0;padding:9px 16px;border-radius:7px;cursor:pointer">Avbryt</button>
+      <button onclick="saveMichaelMaterial('${id || ''}')" style="background:var(--accent);color:#fff;border:0;padding:9px 16px;border-radius:7px;cursor:pointer;font-weight:600">Lagre</button>
+    </div>`;
+  document.getElementById('modal').classList.add('show');
+  populateMichaelMaterialSources(item?.type || 'sign');
+}
+
+async function populateMichaelMaterialSources(type) {
+  const options = document.getElementById('mm-source-options');
+  const input = document.getElementById('mm-source-id');
+  if (!options || !input) return;
+  input.disabled = type === 'intersection_image';
+  options.innerHTML = '';
+  if (type === 'intersection_image') return;
+  try {
+    if (type === 'sign') {
+      const groups = await api('/traffic-signs');
+      const signs = (groups || []).flatMap(group => group.signs || []);
+      options.innerHTML = signs.map(sign =>
+        `<option value="${escapeHtml(sign.id || '')}">${escapeHtml(sign.name?.no || sign.code || sign.id || '')}</option>`
+      ).join('');
+    } else if (type === 'video') {
+      const videos = await api('/admin/videos');
+      options.innerHTML = (videos || []).map(video =>
+        `<option value="${escapeHtml(video.id || '')}">${escapeHtml(video.title_no || video.youtube_url || video.id || '')}</option>`
+      ).join('');
+    }
+  } catch(e) {
+    toast('Kunne ikke laste kildelisten: ' + e.message, false);
+  }
+}
+
+function michaelMaterialCsv(id) {
+  return document.getElementById(id).value.split(',').map(x => x.trim()).filter(Boolean);
+}
+
+async function saveMichaelMaterial(id) {
+  const body = {
+    type: document.getElementById('mm-type').value,
+    source_id: document.getElementById('mm-source-id').value.trim(),
+    source_url: document.getElementById('mm-source-url').value.trim(),
+    title: Object.fromEntries(['no','th','en'].map(lang => [lang, document.getElementById('mm-title-'+lang).value.trim()])),
+    caption: Object.fromEntries(['no','th','en'].map(lang => [lang, document.getElementById('mm-caption-'+lang).value.trim()])),
+    topic_tags: michaelMaterialCsv('mm-topic-tags'),
+    sign_ids: michaelMaterialCsv('mm-sign-ids'),
+    situation_tags: michaelMaterialCsv('mm-situation-tags'),
+    active: document.getElementById('mm-active').checked,
+    approved_for_michael: document.getElementById('mm-approved').checked,
+    priority: Number(document.getElementById('mm-priority').value || 100),
+  };
+  try {
+    await api('/admin/michael-materials' + (id ? '/' + id : ''), {
+      method: id ? 'PATCH' : 'POST', body: JSON.stringify(body),
+    });
+    toast(id ? '✅ Materialet er oppdatert' : '✅ Materialet er lagt til');
+    closeModal();
+    loadMichaelMaterials();
+  } catch(e) { toast('Feil: ' + e.message, false); }
+}
+
+async function deactivateMichaelMaterial(id) {
+  if (!confirm('Deaktivere denne referansen? Mediefilen slettes ikke.')) return;
+  try {
+    await api('/admin/michael-materials/' + id, {method:'PATCH', body:JSON.stringify({active:false})});
+    toast('Referansen er deaktivert');
+    loadMichaelMaterials();
+  } catch(e) { toast('Feil: ' + e.message, false); }
 }
 
 // ══════════════════════════════════════════════════════════

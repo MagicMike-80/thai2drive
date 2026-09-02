@@ -70,6 +70,21 @@ async def create_all_indexes(db) -> dict[str, list[str]]:
     )
     created["ai_srs_cards"] = ["device_question_unique", "device_review"]
 
+    # ── user_mistakes ─────────────────────────────────────────────────────────
+    await db.user_mistakes.create_index(
+        [("user_id", ASCENDING), ("question_id", ASCENDING)],
+        unique=True,
+        background=True,
+        name="user_question_unique",
+    )
+    await db.user_mistakes.create_index(
+        [("user_id", ASCENDING), ("active", ASCENDING),
+         ("wrong_count", DESCENDING), ("last_practiced_at", ASCENDING)],
+        background=True,
+        name="user_active_priority",
+    )
+    created["user_mistakes"] = ["user_question_unique", "user_active_priority"]
+
     # ── ai_explanations ────────────────────────────────────────────────────────
     # Queries:
     #   get_explanation (ai_explanations.py) → find_one({question_id, lang}) + upsert
@@ -149,6 +164,29 @@ async def create_all_indexes(db) -> dict[str, list[str]]:
     created["checkout_sessions"] = ["stripe_session_unique"]
     created["subscriptions"] = ["user_source", "stripe_subscription"]
     created["stripe_events"] = ["stripe_event_unique"]
+
+    # -- curated media catalog --------------------------------------------
+    # Kept last so an unexpected duplicate never prevents established indexes
+    # from being verified. Existing data is never repaired or deleted here.
+    await db.media_catalog.create_index(
+        [("media_id", ASCENDING)],
+        unique=True,
+        background=True,
+        name="media_id_unique",
+    )
+    await db.media_catalog.create_index(
+        [
+            ("is_active", ASCENDING),
+            ("content_language", ASCENDING),
+            ("tags", ASCENDING),
+        ],
+        background=True,
+        name="media_active_language_tags",
+    )
+    created["media_catalog"] = [
+        "media_id_unique",
+        "media_active_language_tags",
+    ]
 
     return created
 

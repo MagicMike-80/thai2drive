@@ -427,6 +427,28 @@ a { color:inherit; text-decoration:none; }
 .home-cta:hover { transform:translateY(-2px); box-shadow:0 0 24px rgba(0,245,255,.5), 0 0 8px rgba(255,153,51,.4); }
 .home-cta:active { transform:translateY(0) scale(0.97); box-shadow:0 0 32px rgba(0,245,255,.7), 0 0 12px rgba(255,153,51,.6); }
 
+.home-main-label { font-size:.72rem; font-weight:800; letter-spacing:.09em; text-transform:uppercase; color:var(--muted); }
+.home-main-actions { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.home-main-choice {
+  min-height:92px; padding:13px; border-radius:16px; cursor:pointer; text-align:left;
+  color:var(--text); border:1.5px solid rgba(0,245,255,.24);
+  background:linear-gradient(145deg,rgba(17,32,64,.94),rgba(11,18,38,.98));
+  display:flex; align-items:center; gap:11px; transition:transform .15s,box-shadow .2s,border-color .2s;
+}
+.home-main-choice:hover { transform:translateY(-2px); border-color:rgba(0,245,255,.55); box-shadow:0 0 18px rgba(0,245,255,.18); }
+.home-main-choice-icon { font-size:1.65rem; flex:0 0 auto; }
+.home-main-choice-icon.michael-photo {
+  width:48px; height:48px; border-radius:50%; object-fit:cover; object-position:center 15%;
+  border:2px solid rgba(0,245,255,.65); box-shadow:0 0 14px rgba(214,0,255,.28);
+}
+.home-main-choice-copy { display:flex; flex-direction:column; gap:3px; min-width:0; }
+.home-main-choice-title { font-size:.86rem; font-weight:900; line-height:1.25; }
+.home-main-choice-sub { font-size:.7rem; color:var(--muted); line-height:1.35; }
+.target-practice-menu { display:none; grid-column:1/-1; grid-template-columns:1fr 1fr; gap:8px; }
+.target-practice-menu.open { display:grid; }
+.target-practice-option { padding:11px 9px; border-radius:12px; border:1px solid rgba(255,153,51,.28); background:rgba(255,153,51,.08); color:var(--text); font-size:.78rem; font-weight:800; cursor:pointer; }
+@media (max-width:420px) { .home-main-actions { grid-template-columns:1fr; } .target-practice-menu { grid-column:1; } }
+
 .home-sec-btns {
   display:grid; grid-template-columns:1fr 1fr;
   gap:9px;
@@ -532,6 +554,28 @@ a { color:inherit; text-decoration:none; }
   hyphens: none;
 }
 .hsm-card:hover .hsm-label { color: #FF9933; }
+.readiness-meter { height:7px; margin-top:7px; border-radius:999px; overflow:hidden; background:rgba(255,255,255,.08); }
+.readiness-meter-fill { height:100%; width:0; border-radius:inherit; transition:width .45s ease; }
+
+/* Michael quiz coach: non-blocking bottom sheet after a wrong answer. */
+.michael-quiz-coach {
+  position:fixed; left:50%; bottom:18px; z-index:2500;
+  width:min(560px, calc(100vw - 24px)); max-height:min(62vh, 520px); overflow:auto;
+  transform:translate(-50%, calc(100% + 40px)); opacity:0; pointer-events:none;
+  border:1px solid rgba(0,245,255,.28); border-radius:20px;
+  background:linear-gradient(155deg, rgba(7,19,45,.98), rgba(10,13,35,.98));
+  box-shadow:0 0 34px rgba(0,245,255,.18), 0 18px 50px rgba(0,0,0,.48);
+  transition:transform .25s ease, opacity .2s ease;
+}
+.michael-quiz-coach.open { transform:translate(-50%, 0); opacity:1; pointer-events:auto; }
+.mqc-head { display:flex; align-items:center; gap:10px; padding:14px 16px; border-bottom:1px solid rgba(255,255,255,.08); }
+.mqc-avatar { width:38px; height:38px; border-radius:50%; object-fit:cover; }
+.mqc-title { flex:1; font-weight:850; color:var(--text); }
+.mqc-close { border:0; background:transparent; color:var(--muted); font-size:1.25rem; cursor:pointer; }
+.mqc-body { padding:15px 17px; color:var(--text); line-height:1.65; font-size:.88rem; }
+.mqc-answer { white-space:pre-wrap; }
+.mqc-action { display:none; width:calc(100% - 34px); margin:0 17px 17px; padding:11px 14px; border-radius:12px; border:1px solid rgba(255,153,51,.35); background:rgba(255,153,51,.12); color:var(--orange); font-weight:800; cursor:pointer; }
+.mqc-action.show { display:block; }
 .hsm-exam-timer {
   font-family: 'Courier New', Courier, monospace;
   font-size: 0.82rem; font-weight: 700; letter-spacing: 2px;
@@ -1104,7 +1148,7 @@ a { color:inherit; text-decoration:none; }
 
   /* Teacher frame — same width as quiz-mode */
   #app.teacher-mode {
-    width: min(860px, 96vw);
+    width: min(1040px, 96vw);
     max-width: none;
     margin-left: auto;
     margin-right: auto;
@@ -1665,6 +1709,17 @@ a { color:inherit; text-decoration:none; }
   -webkit-overflow-scrolling: touch;
 }
 .lib-scroll::-webkit-scrollbar { width:4px; }
+.micro-intro { margin-bottom:12px; color:var(--muted); font-size:.82rem; line-height:1.5; }
+.micro-lessons { display:flex; flex-direction:column; gap:10px; }
+.micro-lesson { border:1px solid rgba(0,245,255,.18); border-radius:15px; overflow:hidden; background:linear-gradient(145deg,rgba(17,32,64,.9),rgba(11,18,38,.96)); }
+.micro-lesson-btn { width:100%; padding:14px; border:0; background:transparent; color:var(--text); cursor:pointer; display:flex; align-items:center; gap:12px; text-align:left; }
+.micro-lesson-icon { width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; flex:0 0 auto; background:rgba(0,245,255,.09); font-size:1.35rem; }
+.micro-lesson-title { flex:1; font-size:.88rem; font-weight:850; line-height:1.35; }
+.micro-lesson-chevron { color:var(--cyan); transition:transform .2s; }
+.micro-lesson.open .micro-lesson-chevron { transform:rotate(180deg); }
+.micro-lesson-body { display:none; padding:0 14px 15px 68px; color:var(--muted); font-size:.8rem; line-height:1.55; }
+.micro-lesson.open .micro-lesson-body { display:block; }
+.micro-lesson-action { margin-top:8px; color:var(--orange); font-weight:750; }
 .lib-scroll::-webkit-scrollbar-track { background:transparent; }
 .lib-scroll::-webkit-scrollbar-thumb { background:rgba(255,255,255,.12); border-radius:2px; }
 .library-grid {
@@ -1704,6 +1759,10 @@ a { color:inherit; text-decoration:none; }
 .vp-player-wrap video {
   width:100%; display:block; max-height:60vh;
 }
+.vp-player-wrap iframe {
+  width:100%; aspect-ratio:16/9; display:block; border:0;
+}
+.vp-player-wrap iframe[hidden] { display:none; }
 .vp-scroll {
   flex:1; overflow-y:auto; padding:0 14px 16px;
   -webkit-overflow-scrolling:touch;
@@ -2920,10 +2979,7 @@ a { color:inherit; text-decoration:none; }
   border-radius:16px; padding:22px 20px; margin:18px 0 6px; text-align:center;
 }
 .promo-spark { font-size:34px; line-height:1; margin-bottom:8px; }
-.promo-head {
-  font-size:1.18rem; font-weight:800; color:var(--orange);
-  letter-spacing:-.01em; margin-bottom:6px;
-}
+.promo-head { font-size:1.18rem; font-weight:800; color:var(--orange); letter-spacing:-.01em; margin-bottom:6px; }
 .promo-body { font-size:.95rem; line-height:1.6; opacity:.92; }
 .paywall-price-row {
   display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:8px;
@@ -3014,43 +3070,87 @@ a { color:inherit; text-decoration:none; }
    MICHAEL TRAFIKKLÆRER — CHAT UI
 ══════════════════════════════════════════ */
 .teacher-header {
-  display:flex; align-items:center; gap:12px;
-  padding:14px 16px; border-bottom:1px solid var(--border);
-  background:var(--bg2); flex-shrink:0;
+  display:flex; align-items:center; justify-content:flex-start; gap:14px;
+  width:min(760px,100%); height:72px; max-height:72px; min-height:72px;
+  margin-inline:auto; padding:10px 14px;
+  border-bottom:1px solid rgba(148,163,184,.18);
+  background:#071326;
+  flex-shrink:0; overflow:hidden; position:relative;
 }
+.teacher-sidebar-toggle {
+  width:44px; height:44px; min-width:44px; margin-left:auto;
+  display:inline-flex; align-items:center; justify-content:center;
+  border:1px solid rgba(96,165,250,.45); border-radius:12px;
+  background:#13223A; color:#E2E8F0; cursor:pointer;
+  transition:background .15s,border-color .15s,transform .12s;
+}
+.teacher-sidebar-toggle:hover { background:#1E3A5F; border-color:#67E8F9; }
+.teacher-sidebar-toggle:active { transform:scale(.96); }
+.teacher-sidebar-toggle svg { width:22px; height:22px; }
 .teacher-avatar {
-  width:40px; height:40px; border-radius:50%;
-  background:#1E3A5F; display:flex; align-items:center;
-  justify-content:center; font-size:20px; flex-shrink:0;
+  width:48px; height:48px; border-radius:50%;
+  object-fit:cover; object-position:center 14%; flex-shrink:0;
+  border:2px solid rgba(59,130,246,.7); box-shadow:none;
 }
-.teacher-name { font-size:.95rem; font-weight:700; color:var(--text); }
-.teacher-status { font-size:.75rem; color:#10B981; margin-top:2px; }
+.teacher-header-info { min-width:0; position:relative; z-index:1; display:flex; flex-direction:column; justify-content:center; }
+.teacher-eyebrow { font-size:.68rem; font-weight:900; letter-spacing:.08em; text-transform:uppercase; color:#67E8F9; margin-bottom:5px; }
+.teacher-name { font-size:1.08rem; font-weight:900; color:#fff; line-height:1.2; }
+.teacher-meta-line { font-size:.72rem; color:#CBD5E1; margin-top:3px; white-space:normal; overflow-wrap:anywhere; }
+.teacher-meta-wrap { display:flex; align-items:center; gap:9px; min-width:0; }
+.teacher-online-badge {
+  display:inline-flex; align-items:center; margin-top:5px; padding:2px 8px;
+  border-radius:999px; background:rgba(16,185,129,.14); color:#34D399;
+  border:1px solid rgba(16,185,129,.4); font-size:.64rem; font-weight:900;
+  letter-spacing:.06em;
+}
 
-/* Mobile baseline — chat col fills screen, side panel hidden */
+/* Michael chat + optional topic drawer */
+#screenTeacher { position:relative; overflow:hidden; }
 .teacher-chat-col {
   display:flex; flex-direction:column;
-  flex:1; min-height:0;
+  flex:1; min-width:0; min-height:0; max-width:100%; overflow-x:clip;
 }
-.teacher-side-panel { display:none; }
+.teacher-side-panel {
+  display:flex; flex-direction:column; gap:8px;
+  position:absolute; z-index:12; top:72px; bottom:0; left:0;
+  width:min(300px,84%); padding:18px 14px; overflow-y:auto;
+  background:#071326; border-right:1px solid rgba(96,165,250,.28);
+  box-shadow:18px 0 44px rgba(0,0,0,.45);
+  transform:translateX(-105%); visibility:hidden; pointer-events:none;
+  transition:transform .22s ease,visibility .22s;
+}
+.teacher-side-panel.open {
+  transform:translateX(0); visibility:visible; pointer-events:auto;
+}
+.teacher-side-panel .tsp-btn { color:#F8FAFC !important; }
+.teacher-sidebar-backdrop {
+  display:block; position:absolute; z-index:11; inset:72px 0 0;
+  border:0; padding:0; background:rgba(2,8,23,.66);
+  opacity:0; visibility:hidden; pointer-events:none;
+  transition:opacity .2s ease,visibility .2s;
+}
+.teacher-sidebar-backdrop.open { opacity:1; visibility:visible; pointer-events:auto; }
 
 .teacher-messages {
-  flex:1; min-height:0; overflow-y:auto; padding:16px 14px 80px;
+  width:min(760px,100%); max-width:100%; margin-inline:auto;
+  flex:1; min-height:0; overflow-y:auto; overflow-x:clip; padding:16px 14px 80px;
   display:flex; flex-direction:column; gap:14px;
 }
 .teacher-messages::-webkit-scrollbar { width:0; }
 
-.tm-row { display:flex; align-items:flex-end; gap:8px; min-width:0; width:100%; }
+.tm-row { display:flex; align-items:flex-end; gap:8px; min-width:0; width:100%; max-width:100%; }
 .tm-row.user  { justify-content:flex-end; }
 .tm-row.assistant { justify-content:flex-start; }
+.tm-row.assistant .tm-av { display:none; }
 
 .tm-av {
   width:28px; height:28px; border-radius:50%;
-  background:#1E3A5F; display:flex; align-items:center;
-  justify-content:center; font-size:13px; flex-shrink:0;
+  background:#1E3A5F; object-fit:cover; object-position:center 15%;
+  border:1px solid rgba(0,245,255,.55); flex-shrink:0;
 }
 .tm-bubble {
-  max-width:84%; min-width:0; padding:14px 16px; border-radius:18px;
-  font-size:1rem; line-height:1.75;
+  max-width:92%; min-width:0; padding:24px; border-radius:18px;
+  font-size:1rem; line-height:1.6;
   word-break:break-word; overflow-wrap:break-word;
   letter-spacing:.01em;
 }
@@ -3062,6 +3162,7 @@ a { color:inherit; text-decoration:none; }
   background:#0d1b2e; color:#F1F5F9;
   border:1px solid rgba(59,130,246,.18);
   border-bottom-left-radius:5px;
+  font-size:1.06rem; line-height:1.72; letter-spacing:0;
 }
 [data-theme="light"] .tm-bubble.assistant {
   background:#fff; color:#0F172A;
@@ -3069,14 +3170,15 @@ a { color:inherit; text-decoration:none; }
 }
 
 /* Paragraph spacing inside assistant bubbles */
-.tm-para { display:block; margin-bottom:.85em; }
+.tm-para { display:block; max-width:52ch; margin-bottom:1.05em; font-weight:500; }
 .tm-para:last-child { margin-bottom:0; }
+.tm-question-title { margin:6px 0 14px; color:#fff; font-size:1.35rem; line-height:1.4; font-weight:800; }
 
 /* Section header (Situasjon:, Forklaring:, Teori:) */
 .tm-section-hdr {
-  display:block; font-weight:800; font-size:.82rem;
-  letter-spacing:.06em; text-transform:uppercase;
-  color:#60A5FA; margin-bottom:.35em; margin-top:.1em;
+  display:block; font-weight:750; font-size:1rem;
+  letter-spacing:0; text-transform:none;
+  color:#93C5FD; margin-bottom:.45em; margin-top:.2em;
 }
 
 /* Practical advice box */
@@ -3106,7 +3208,7 @@ a { color:inherit; text-decoration:none; }
 }
 
 .teacher-suggestions {
-  padding:8px 14px 6px; display:flex; flex-direction:row;
+  padding:8px 14px 6px; display:none !important; flex-direction:row;
   flex-wrap:wrap; gap:7px; flex-shrink:0;
   align-content:flex-start;
 }
@@ -3125,57 +3227,187 @@ a { color:inherit; text-decoration:none; }
   text-transform:uppercase; color:var(--orange);
   padding:7px 2px 0; margin-top:1px;
 }
+.tm-bubble.assistant { width:100%; max-width:100%; }
+.teacher-topics-toggle {
+  display:none; width:100%; min-height:48px; border-radius:14px;
+  border:1px solid rgba(0,245,255,.35); background:rgba(0,245,255,.08);
+  color:#A5F3FC; font:inherit; font-size:.82rem; font-weight:900; cursor:pointer;
+}
 
 /* Contextual reply chips — shown after assistant messages */
 .tm-chips {
-  display:flex; flex-direction:row; flex-wrap:wrap; gap:7px;
+  display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px;
+  min-width:0; max-width:100%;
   padding:10px 14px 4px 14px;
   border-top:1px solid rgba(255,255,255,.06);
   margin-top:4px;
 }
 .tm-chips-hdr {
-  flex:1 0 100%;
+  grid-column:1/-1;
   font-size:.68rem; font-weight:800; letter-spacing:.06em;
   color:var(--orange); text-transform:uppercase;
   margin-bottom:0;
 }
 .tm-chip-btn {
   display:inline-flex; align-items:center; justify-content:center; gap:7px;
-  background:#1a2744; border:1px solid rgba(59,130,246,.28);
-  color:#F8FAFC; border-radius:999px;
-  padding:8px 12px; min-height:38px; font-size:.78rem; font-weight:800;
-  cursor:pointer; text-align:center; width:auto; max-width:100%;
+  background:#111827; border:1px solid #475569 !important;
+  color:#F8FAFC; border-radius:12px;
+  padding:10px 12px; min-height:46px; font-size:.82rem; font-weight:800;
+  cursor:pointer; text-align:center; width:100%; max-width:100%; animation:none !important;
   transition:background .15s, border-color .15s, transform .12s;
 }
 .tm-chip-btn:hover  { background:#1e3a5f; border-color:rgba(255,153,51,.65); color:#fff; transform:translateY(-1px); }
 .tm-chip-btn:active { transform:scale(.97); }
 [data-theme="light"] .tm-chip-btn { background:#1e3a5f; border-color:rgba(59,130,246,.35); color:#F8FAFC; }
 [data-theme="light"] .tm-chip-btn:hover { background:#1a2744; border-color:rgba(255,153,51,.55); }
+.tm-chips-toggle {
+  display:none; flex:1 0 100%; min-height:44px; border-radius:12px;
+  border:1px solid rgba(0,245,255,.32); background:rgba(0,245,255,.07);
+  color:#A5F3FC; font:inherit; font-size:.78rem; font-weight:900; cursor:pointer;
+}
+.tm-chips .tm-chip-btn:first-of-type {
+  background:#2563EB !important; border:2px solid #60A5FA !important;
+  box-shadow:none !important;
+}
+.tm-sign-actions-row { grid-template-columns:1fr; }
 
 .teacher-inputbar {
-  display:flex; align-items:flex-end; gap:8px;
+  display:flex; align-items:center; gap:10px;
+  width:min(760px,100%); max-width:100%; margin-inline:auto;
   padding:10px 14px calc(10px + env(safe-area-inset-bottom, 0px)) 14px;
   border-top:1px solid var(--border);
   background:var(--bg2); flex-shrink:0;
 }
 .teacher-input {
   flex:1; background:var(--bg); border:1px solid var(--border);
-  color:var(--text); border-radius:12px;
-  padding:10px 14px; font-size:.875rem; font-family:inherit;
-  resize:none; max-height:100px; line-height:1.4;
+  color:var(--text); border-radius:16px;
+  padding:16px 18px; min-height:56px; font-size:1rem; font-family:inherit;
+  resize:none; max-height:112px; line-height:1.4;
   outline:none;
 }
 .teacher-input:focus { border-color:var(--orange); }
 .teacher-input::placeholder { color:var(--muted); }
 .teacher-send-btn {
-  width:42px; height:42px; border-radius:50%;
-  background:var(--orange); border:none; color:#fff;
-  font-size:1rem; cursor:pointer; flex-shrink:0;
+  min-width:104px; height:56px; border-radius:16px;
+  background:#2563EB !important; border:1px solid #60A5FA !important; color:#fff;
+  font-size:.9rem; font-weight:900; cursor:pointer; flex-shrink:0; animation:none !important;
   transition:background .15s; display:flex;
   align-items:center; justify-content:center;
 }
-.teacher-send-btn:hover { background:var(--orange-dk); }
+.teacher-send-btn:hover { background:#1D4ED8 !important; }
 .teacher-send-btn:disabled { background:var(--border); cursor:default; }
+
+#app.teacher-mode #bottomNav .bn-tab { display:none; }
+#app.teacher-mode #bottomNav #bnCats,
+#app.teacher-mode #bottomNav #bnHistory,
+#app.teacher-mode #bottomNav #bnTeacher { display:flex; flex:1 1 33.333%; }
+#app.teacher-mode #bnTeacher .bn-icon img {
+  outline:3px solid #3B82F6; outline-offset:2px; box-shadow:none;
+}
+
+.tm-sign-strip {
+  display:grid; gap:12px; min-width:0; width:100%; max-width:100%; margin-top:14px;
+}
+.tm-sign-card {
+  width:100%; display:grid; grid-template-columns:90px minmax(0,1fr);
+  gap:14px; padding:12px; border-radius:16px; background:#111C30;
+  border:1px solid rgba(96,165,250,.35); color:#F8FAFC;
+  font:inherit; text-align:left; cursor:pointer;
+}
+.tm-sign-card:focus-visible, .tm-media-card.sign:focus-visible, .tm-sign-term:focus-visible {
+  outline:3px solid #67E8F9; outline-offset:3px;
+}
+.tm-sign-image-wrap { display:flex; align-items:center; justify-content:center; min-height:48px; }
+.tm-sign-image { display:block; width:90px; max-width:90px; height:90px; max-height:90px; object-fit:contain; filter:drop-shadow(0 8px 12px rgba(0,0,0,.35)); }
+.tm-sign-copy { min-width:0; display:flex; flex-direction:column; justify-content:center; gap:8px; }
+.tm-sign-tag { color:#67E8F9; font-size:.7rem; font-weight:900; letter-spacing:.08em; text-transform:uppercase; }
+.tm-sign-title { margin:0; color:#fff; font-size:1.05rem; line-height:1.3; font-weight:900; }
+.tm-sign-text { color:#DCE6F3; font-size:.88rem; line-height:1.5; }
+.tm-media-strip {
+  display:grid; grid-template-columns:1fr; gap:12px;
+  min-width:0; width:100%; max-width:100%; margin-top:14px;
+}
+.tm-media-card {
+  min-width:0; overflow:hidden; border-radius:16px; background:#0B172A;
+  border:1px solid rgba(103,232,249,.34); color:#F8FAFC;
+  box-shadow:0 10px 26px rgba(0,0,0,.2);
+}
+.tm-media-visual {
+  display:flex; align-items:center; justify-content:center; width:100%; height:180px;
+  padding:12px; background:#F8FAFC;
+}
+.tm-media-card.intersection_image .tm-media-visual { padding:0; background:#111827; }
+.tm-media-image { display:block; width:100%; height:100%; object-fit:contain; }
+.tm-media-card.intersection_image .tm-media-image { object-fit:cover; }
+.tm-media-card.sign {
+  width:100%; display:grid; grid-template-columns:80px minmax(0,1fr); padding:0;
+  font:inherit; text-align:left; cursor:pointer;
+}
+.tm-media-card.sign .tm-media-visual {
+  width:80px; height:80px; min-height:48px; padding:7px; background:#111C30;
+}
+.tm-media-card.sign .tm-media-image {
+  width:100%; max-width:80px; height:100%; max-height:80px; object-fit:contain;
+}
+.tm-media-card.sign .tm-media-copy { justify-content:center; padding:10px 12px; }
+.mqc-body .tm-media-card.sign .tm-media-visual { height:80px; }
+.tm-sign-term {
+  display:inline; padding:0 2px; border:0; border-bottom:1px solid #67E8F9;
+  background:transparent; color:#67E8F9; font:inherit; font-weight:800; cursor:pointer;
+}
+.tm-media-copy { display:flex; flex-direction:column; gap:5px; padding:12px 14px 14px; }
+.tm-media-title { color:#FFF; font-size:.94rem; line-height:1.3; font-weight:900; }
+.tm-media-caption { color:#C9D5E7; font-size:.8rem; line-height:1.5; }
+.tm-media-video {
+  width:100%; display:flex; align-items:center; gap:12px; padding:15px;
+  border:0; background:#111C30; color:#FFF; font:inherit; text-align:left; cursor:pointer;
+}
+.tm-media-play {
+  width:44px; height:44px; flex:0 0 44px; display:grid; place-items:center;
+  border-radius:50%; background:#2563EB; color:#FFF; font-size:1rem;
+  box-shadow:0 0 0 3px rgba(96,165,250,.22);
+}
+.tm-media-video-label { color:#67E8F9; font-size:.7rem; font-weight:900; letter-spacing:.04em; text-transform:uppercase; }
+.tm-media-card.podcast { padding:14px; }
+.tm-media-podcast { display:flex; flex-direction:column; gap:10px; }
+.tm-media-podcast audio { display:block; width:100%; min-height:44px; }
+.mqc-body .tm-media-strip { grid-template-columns:1fr; margin-top:12px; }
+.mqc-body .tm-media-visual { height:150px; }
+@media (max-width:767px) {
+  #app.teacher-mode .flag-bg { display:none; }
+  #screenTeacher { background:#071326; }
+  .teacher-header { width:100%; height:72px; max-height:72px; min-height:72px; padding:10px 12px; }
+  .teacher-avatar { width:48px; height:48px; border-radius:50%; }
+  .teacher-name { font-size:1rem; }
+  .teacher-meta-line { font-size:.69rem; }
+  .teacher-online-badge { font-size:.58rem; padding:2px 6px; }
+  .teacher-messages { width:100%; padding:14px 12px 18px; gap:12px; }
+  .tm-bubble { max-width:94%; padding:18px; font-size:.96rem; line-height:1.6; }
+  .teacher-suggestions { padding:9px 12px; gap:8px; background:#0A1530; }
+  .teacher-suggestions:not(.expanded) .teacher-chip:nth-of-type(n+4),
+  .teacher-suggestions:not(.expanded) .teacher-chip-hdr { display:none; }
+  .teacher-chip {
+    flex:1 1 100%; width:100%; min-height:50px; padding:11px 14px;
+    border-radius:14px; justify-content:flex-start; text-align:left; font-size:.86rem;
+  }
+  .teacher-topics-toggle { display:block; }
+  .tm-chips .tm-chip-btn.mobile-extra { display:none; }
+  .tm-chips.expanded .tm-chip-btn.mobile-extra { display:inline-flex; }
+  .tm-chips-toggle { display:block; grid-column:1/-1; }
+  .teacher-inputbar { width:100%; padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px)); background:#071326; position:relative; z-index:2; }
+  .teacher-input { min-height:56px; font-size:1rem; }
+  .teacher-send-btn { min-width:86px; height:56px; }
+  .tm-sign-card { grid-template-columns:90px minmax(0,1fr); gap:12px; padding:12px; }
+  .tm-sign-image-wrap { min-height:48px; }
+  .tm-sign-image { width:90px; max-width:90px; height:90px; max-height:90px; }
+  .tm-sign-title { font-size:1.05rem; }
+  .tm-sign-text { font-size:.9rem; line-height:1.5; }
+  .tm-media-strip { grid-template-columns:1fr; }
+  .tm-media-visual { height:160px; }
+  .tm-media-card.sign .tm-media-visual { height:80px; }
+  .tm-media-title { font-size:.92rem; }
+  .tm-media-caption { font-size:.82rem; }
+}
 
 /* ═══ CYBER & NEON STYLING (Gemini Blueprint) ═══ */
 /* Container for rullende karusell */
@@ -3265,8 +3497,8 @@ a { color:inherit; text-decoration:none; }
 
 /* ── Lesbarhetsfiks: neon-regelen over setter mørk bakgrunn på primærknappene
    med !important, men tekstfargen deres var laget for den gamle lyse/oransje
-   bakgrunnen. Resultatet var mørk tekst på mørk knapp — målt kontrast 1,01,
-   altså praktisk talt usynlig, på blant annet «Logg inn» og «Kjøp Premium».
+   bakgrunnen. Resultatet er mørk tekst på mørk knapp — målt kontrast 1,01 på
+   «Logg inn» og «Kjøp Premium», altså praktisk talt usynlig tekst.
    Her settes kun tekstfargen. Bakgrunn, form og neon-animasjon røres ikke. ── */
 .auth-btn, .end-btn-pri, .paywall-buy-btn, .sp-btn-primary, .hp-btn-pri, .lang-btn {
   color: #F8FAFC !important;
@@ -3338,6 +3570,50 @@ a { color:inherit; text-decoration:none; }
   animation: neonFlow 5s linear infinite !important;
   box-shadow: 0 0 15px rgba(0, 245, 255, 0.22) !important;
 }
+/* Michael readability hotfix: compact teaching images and readable mobile copy. */
+.teacher-inline-image {
+  display:block; width:auto; max-width:100%; max-height:360px; height:auto;
+  object-fit:contain; margin:0 auto; border-radius:8px; background:#fff;
+}
+.teacher-inline-caption { font-size:.82rem; color:var(--muted); margin-top:8px; text-align:center; }
+@media (max-width:767px) {
+  #screenTeacher .tm-bubble { font-size:1.08rem; line-height:1.72; }
+  #screenTeacher .tm-para { max-width:100%; margin-bottom:1.1em; }
+  #screenTeacher .teacher-inline-image { max-height:210px; }
+}
+
+/* ═══ LIGHTBOX MODAL (Enlarge situation & sign images) ═══ */
+.t2d-lightbox {
+  position:fixed; inset:0; z-index:99999;
+  background:rgba(7,19,38,.92); backdrop-filter:blur(8px);
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; pointer-events:none; transition:opacity .2s ease;
+  padding:20px;
+}
+.t2d-lightbox.active {
+  opacity:1; pointer-events:auto;
+}
+.t2d-lightbox-content {
+  position:relative; max-width:90vw; max-height:88vh;
+  display:flex; flex-direction:column; align-items:center;
+}
+.t2d-lightbox-content img {
+  max-width:100%; max-height:76vh; object-fit:contain;
+  border-radius:14px; border:1px solid rgba(0,245,255,.4);
+  box-shadow:0 12px 32px rgba(0,0,0,.8), 0 0 24px rgba(0,245,255,.2);
+}
+.t2d-lightbox-caption {
+  margin-top:12px; color:#E2E8F0; font-size:.95rem; font-weight:700; text-align:center;
+}
+.t2d-lightbox-close {
+  position:absolute; top:-38px; right:-6px;
+  background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.25);
+  color:#fff; font-size:24px; line-height:1; width:34px; height:34px;
+  border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  transition:background .15s;
+}
+.t2d-lightbox-close:hover { background:rgba(239,68,68,.85); }
+
 </style>
 </head>
 <body>
@@ -3487,45 +3763,38 @@ a { color:inherit; text-decoration:none; }
         </div>
       </div>
 
+      <div class="home-main-label" data-key="home_choose_action">Velg hva du vil gjøre</div>
       <button class="home-cta" onclick="startRandomQuiz()">
-        ▶&nbsp;&nbsp;Start quiz
+        <span data-key="home_primary_action">▶ Start quiz / daglig test</span>
       </button>
 
-      <!-- Horisontal, rullende navigasjonsmeny (Protokoll Null) -->
-      <div class="hsm-container">
-        <div class="hsm-fade-left"></div>
-        <div class="hsm-fade-right"></div>
-        <div class="home-scroll-menu" id="homeScrollMenu">
-          <button class="hsm-card" onclick="startExam()">
-            <span class="hsm-icon"><span class="hsm-exam-timer">90:00</span></span>
-            <span class="hsm-label" data-hsm-key="exam_short">Eksamen</span>
-          </button>
-          <button class="hsm-card" onclick="startDailyTest()">
-            <span class="hsm-icon">📅</span>
-            <span class="hsm-label" data-hsm-key="daily_short">Daglig test</span>
-          </button>
-          <button class="hsm-card" onclick="showForbikjoring()">
-            <span class="hsm-icon">🚗</span>
-            <span class="hsm-label" data-hsm-key="fk_short">Trafikk-matte</span>
-          </button>
-          <button class="hsm-card" onclick="showTab('library')">
-            <span class="hsm-icon">📚</span>
-            <span class="hsm-label" data-hsm-key="lib_short">Bibliotek</span>
-          </button>
+      <div class="home-main-actions">
+        <button class="home-main-choice" onclick="showTab('teacher')">
+          <img class="home-main-choice-icon michael-photo" src="/api/assets/michael_profile.jpg" alt="Michael">
+          <span class="home-main-choice-copy">
+            <span class="home-main-choice-title" data-key="home_ask_michael">Spør Michael AI</span>
+            <span class="home-main-choice-sub" data-key="teacher_sub">Still et spørsmål om trafikk</span>
+          </span>
+        </button>
+        <button class="home-main-choice" onclick="showTab('library')">
+          <span class="home-main-choice-icon">🎬</span>
+          <span class="home-main-choice-copy">
+            <span class="home-main-choice-title" data-key="home_open_library">Videokurs & Podkaster</span>
+            <span class="home-main-choice-sub" data-key="library_sub">Se leksjoner og hør forklaringer</span>
+          </span>
+        </button>
+        <button class="home-main-choice" onclick="toggleTargetPracticeMenu()" aria-controls="targetPracticeMenu" aria-expanded="false" id="targetPracticeToggle">
+          <span class="home-main-choice-icon">🎯</span>
+          <span class="home-main-choice-copy">
+            <span class="home-main-choice-title" data-key="home_targeted">Øv på mine feil & skiltkatalog</span>
+            <span class="home-main-choice-sub" id="mistakesHomeCount"></span>
+          </span>
+        </button>
+        <div class="target-practice-menu" id="targetPracticeMenu">
+          <button class="target-practice-option" id="mistakesHomeBtn" onclick="startMistakeQuiz()" data-key="mistakes_short">Øv på mine feil</button>
+          <button class="target-practice-option" onclick="showTab('signs')" data-key="home_open_signs">Åpne skiltkatalog</button>
         </div>
       </div>
-
-      <!-- Michael Trafikklærer card -->
-      <button class="michael-card" onclick="showTab('teacher')">
-        <div class="michael-card-left">
-          <div class="michael-card-avatar"><img src="/api/assets/michael_avatar.png" style="width:100%;height:100%;border-radius:50%;object-fit:cover;" alt="Michael"></div>
-          <div class="michael-card-text">
-            <div class="michael-card-name" data-key="teacher_name">Michael Trafikklærer</div>
-            <div class="michael-card-sub" id="michaelCardSub">Still et spørsmål om trafikk</div>
-          </div>
-        </div>
-        <div class="michael-card-arrow">›</div>
-      </button>
 
       <div class="home-stats">
         <div class="home-stat">
@@ -3546,9 +3815,10 @@ a { color:inherit; text-decoration:none; }
       <div class="home-readiness" id="homeReadiness" style="display:none" onclick="showTab('history')">
         <div class="hr-dot" id="hrDot"></div>
         <div class="hr-main">
-          <div class="hr-label">Siste økt</div>
+          <div class="hr-label" data-key="readiness_title">ความพร้อมสำหรับการสอบ</div>
           <div class="hr-status" id="hrStatus"></div>
           <div class="hr-sub" id="hrSub"></div>
+          <div class="readiness-meter"><div class="readiness-meter-fill" id="hrGaugeFill"></div></div>
         </div>
         <div class="hr-pct" id="hrPct"></div>
       </div>
@@ -3560,6 +3830,30 @@ a { color:inherit; text-decoration:none; }
           <p class="pb-sub" data-key="premium_sub">Du har tilgang til alle funksjoner</p>
         </div>
       </div>
+
+      <!-- ═══ HOME MEDIA CAROUSEL (Videos & Podcasts) ═══ -->
+      <div class="home-carousel-section" id="homeCarouselSection">
+        <div class="home-carousel-header">
+          <div class="home-carousel-title-wrap">
+            <span class="home-carousel-icon">🎬</span>
+            <span class="home-carousel-title" data-key="home_media_carousel_title">Videokurs & Podkaster</span>
+          </div>
+          <button class="home-carousel-see-all" onclick="showTab('library')" data-key="see_all">Se alle →</button>
+        </div>
+        <div class="home-carousel-track" id="homeCarouselTrack" tabindex="0" role="region" aria-label="Videokurs og Podkaster">
+          <!-- Populated by renderHomeCarousel() -->
+        </div>
+      </div>
+    </div>
+
+    <div class="michael-quiz-coach" id="michaelQuizCoach" role="dialog" aria-live="polite" aria-label="Michael">
+      <div class="mqc-head">
+        <img class="mqc-avatar" src="/api/assets/michael_profile.jpg" alt="Michael">
+        <div class="mqc-title" data-key="coach_title">Michael อธิบาย</div>
+        <button class="mqc-close" onclick="closeMichaelQuizCoach()" data-label-key="close" aria-label="ปิด">×</button>
+      </div>
+      <div class="mqc-body" id="michaelQuizCoachBody"></div>
+      <button class="mqc-action" id="michaelQuizCoachAction" onclick="requestCoachPractice()" data-key="coach_practical">สิ่งนี้หมายถึงอะไรในทางปฏิบัติ?</button>
     </div>
 
     <!-- ═══ CATEGORIES SCREEN ═══ -->
@@ -3593,7 +3887,7 @@ a { color:inherit; text-decoration:none; }
         <div class="quiz-top">
           <button class="back-btn" onclick="goBack()">← Tilbake</button>
           <div class="quiz-prog-wrap">
-            <div class="quiz-prog-lbl" id="qProgLbl">Spørsmål 1 av 30</div>
+            <div class="quiz-prog-lbl" id="qProgLbl">Spørsmål 1 av 10</div>
             <div class="quiz-prog-bar">
               <div class="quiz-prog-fill" id="qProgFill" style="width:0%"></div>
             </div>
@@ -3672,6 +3966,7 @@ a { color:inherit; text-decoration:none; }
       <div class="lib-tabs">
         <button class="lib-tab active" data-tab="videos" onclick="setLibraryTab('videos')">🎬 <span data-key="lib_videos">Videoer</span></button>
         <button class="lib-tab" data-tab="podcasts" onclick="setLibraryTab('podcasts')">🎙️ <span data-key="lib_podcasts">Podcaster</span></button>
+        <button class="lib-tab" data-tab="micro" onclick="setLibraryTab('micro')">🇹🇭🇳🇴 <span data-key="lib_micro">Thailand vs. Norge</span></button>
       </div>
       <div class="lib-scroll">
         <div id="libraryContent"></div>
@@ -3686,6 +3981,7 @@ a { color:inherit; text-decoration:none; }
       </div>
       <div class="vp-player-wrap">
         <video id="vpVideo" controls preload="metadata" playsinline></video>
+        <iframe id="vpYoutube" title="Video" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen hidden></iframe>
       </div>
       <div class="vp-glow-road" id="vpGlowRoad"></div>
       <div class="vp-scroll">
@@ -3938,6 +4234,7 @@ a { color:inherit; text-decoration:none; }
         </div>
         <div class="end-btns">
           <button class="end-btn-pri" onclick="retryQuiz()" data-key="result_retry">Prøv igjen</button>
+          <button class="end-btn-sec" onclick="showTab('teacher')" data-key="result_michael">Gå til Michael</button>
           <button class="end-btn-sec" onclick="showTab('home')" data-key="home">Hjem</button>
           <button class="end-btn-sec" onclick="showTab('cats')" data-key="pickcat">Velg kategori</button>
         </div>
@@ -3995,11 +4292,17 @@ a { color:inherit; text-decoration:none; }
 
         <!-- Chat header -->
         <div class="teacher-header">
-          <div class="teacher-avatar">🚗</div>
+          <img class="teacher-avatar" src="/api/assets/michael_profile.jpg" alt="Michael">
           <div class="teacher-header-info">
             <div class="teacher-name" id="teacherNameLbl">Michael Trafikklærer</div>
-            <div class="teacher-status" data-key="teacher_online">● Online</div>
+            <div class="teacher-meta-wrap">
+              <div class="teacher-meta-line" data-key="teacher_meta">Pålogget • AI-lærer • 16 års erfaring</div>
+              <div class="teacher-online-badge" data-key="teacher_online_badge">ONLINE</div>
+            </div>
           </div>
+          <button class="teacher-sidebar-toggle" id="teacherSidebarToggle" type="button" onclick="toggleTeacherSidebar()" aria-controls="teacherSidePanel" aria-expanded="false" aria-label="Vis emner" title="Vis emner">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/></svg>
+          </button>
         </div>
 
         <!-- Message list -->
@@ -4008,9 +4311,9 @@ a { color:inherit; text-decoration:none; }
         </div>
 
         <!-- Suggestion chips — shown only before first user message -->
-        <div class="teacher-suggestions" id="teacherSuggestions">
-          <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="🛑 Forklar et skilt" data-msg-th="🛑 อธิบายป้ายจราจร" data-msg-en="🛑 Explain a sign">🛑 <span class="chip-lbl"></span></button>
-          <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="🚗 Hjelp med vikeplikt" data-msg-th="🚗 ช่วยเรื่องการให้ทาง" data-msg-en="🚗 Help with right-of-way">🚗 <span class="chip-lbl"></span></button>
+        <div class="teacher-suggestions" id="teacherSuggestions" aria-hidden="true">
+          <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="🪧 Forklar et skilt" data-msg-th="🪧 อธิบายป้ายจราจร" data-msg-en="🪧 Explain a sign">🪧 <span class="chip-lbl"></span></button>
+          <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="⚠️ Hjelp med vikeplikt" data-msg-th="⚠️ ช่วยเรื่องการให้ทาง" data-msg-en="⚠️ Help with right-of-way">⚠️ <span class="chip-lbl"></span></button>
           <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="📖 Forklar en trafikkregel" data-msg-th="📖 อธิบายกฎจราจร" data-msg-en="📖 Explain a traffic rule">📖 <span class="chip-lbl"></span></button>
           <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="📝 Hjelp med teoriprøven" data-msg-th="📝 ช่วยเรื่องข้อสอบทฤษฎี" data-msg-en="📝 Help with the theory test">📝 <span class="chip-lbl"></span></button>
           <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="📊 Hva bør jeg øve på?" data-msg-th="📊 ฉันควรฝึกเรื่องอะไร?" data-msg-en="📊 What should I practise?">📊 <span class="chip-lbl"></span></button>
@@ -4035,21 +4338,24 @@ a { color:inherit; text-decoration:none; }
           <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)"
             data-label-no="🌧️ Våt/glatt vei" data-label-th="🌧️ ถนนเปียก/ลื่น" data-label-en="🌧️ Wet/slippery road"
             data-msg-no="🌧️ Våt og glatt vei — hvordan påvirker det bremselengden?" data-msg-th="🌧️ ถนนเปียก/ลื่น — ส่งผลต่อระยะเบรกอย่างไร?" data-msg-en="🌧️ Wet/slippery road — how does it affect braking distance?">🌧️ <span class="chip-lbl"></span></button>
+          <button class="teacher-topics-toggle" id="teacherMoreBtn" type="button" aria-expanded="false" onclick="toggleTeacherTopics()" data-key="teacher_more_topics">Flere emner</button>
         </div>
 
         <!-- Input bar -->
         <div class="teacher-inputbar">
           <textarea class="teacher-input" id="teacherInput" rows="1" placeholder="..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();teacherSend();}"></textarea>
-          <button class="teacher-send-btn" id="teacherSendBtn" onclick="teacherSend()">➤</button>
+          <button class="teacher-send-btn" id="teacherSendBtn" onclick="teacherSend()"><span data-key="teacher_send">Send</span>&nbsp;➤</button>
         </div>
 
       </div><!-- /teacher-chat-col -->
 
-      <!-- RIGHT: helper panel — only visible on desktop via CSS -->
-      <div class="teacher-side-panel" id="teacherSidePanel">
+      <button class="teacher-sidebar-backdrop" id="teacherSidebarBackdrop" type="button" onclick="closeTeacherSidebar()" aria-label="Lukk emner"></button>
+
+      <!-- Topic drawer — opened on demand on mobile and desktop -->
+      <div class="teacher-side-panel" id="teacherSidePanel" aria-hidden="true">
         <div class="tsp-title" id="tspTitle" data-key="tsp_title">Emner</div>
-        <button class="tsp-btn" data-tsp-btn="sign">🛑 <span data-tsp="sign"></span></button>
-        <button class="tsp-btn" data-tsp-btn="vikeplikt">🚗 <span data-tsp="vikeplikt"></span></button>
+        <button class="tsp-btn" data-tsp-btn="sign">🪧 <span data-tsp="sign"></span></button>
+        <button class="tsp-btn" data-tsp-btn="vikeplikt">⚠️ <span data-tsp="vikeplikt"></span></button>
         <button class="tsp-btn" data-tsp-btn="rule">📖 <span data-tsp="rule"></span></button>
         <button class="tsp-btn" data-tsp-btn="practice">📊 <span data-tsp="practice"></span></button>
         <button class="tsp-btn" data-tsp-btn="theory">📝 <span data-tsp="theory"></span></button>
@@ -4072,7 +4378,10 @@ a { color:inherit; text-decoration:none; }
       <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span><span data-key="history">Historikk</span>
     </button>
     <button class="bn-tab bn-tab-michael" id="bnTeacher" onclick="showTab('teacher')">
-      <span class="bn-icon"><img src="/api/assets/michael_avatar.png" style="width:30px;height:30px;border-radius:50%;object-fit:cover;" alt="Michael"></span><span data-key="teacher">Michael</span>
+      <span class="bn-icon"><img src="/api/assets/michael_profile.jpg" style="width:30px;height:30px;border-radius:50%;object-fit:cover;object-position:center 15%;" alt="Michael"></span><span data-key="teacher">Michael</span>
+    </button>
+    <button class="bn-tab" id="bnLibrary" onclick="showTab('library')">
+      <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></span><span data-key="lib_videos">Videoer</span>
     </button>
     <button class="bn-tab" id="bnSigns" onclick="showTab('signs')">
       <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 22 2 22"/><line x1="12" y1="9" x2="12" y2="15"/><circle cx="12" cy="18" r="0.5" fill="currentColor"/></svg></span><span data-key="signs">Skilt</span>
@@ -4089,6 +4398,15 @@ a { color:inherit; text-decoration:none; }
   </div>
 
 </div><!-- /app -->
+
+<!-- ═══ LIGHTBOX MODAL (Image Enlarge) ═══ -->
+<div class="t2d-lightbox" id="t2dLightbox" onclick="closeLightbox(event)" aria-hidden="true" role="dialog">
+  <div class="t2d-lightbox-content" onclick="event.stopPropagation()">
+    <button class="t2d-lightbox-close" onclick="closeLightbox(event)" aria-label="Lukk">✕</button>
+    <img id="t2dLightboxImg" src="" alt="">
+    <div class="t2d-lightbox-caption" id="t2dLightboxCaption"></div>
+  </div>
+</div>
 
 <!-- ═══ SIGN DETAIL PANEL ═══ -->
 <div class="sign-panel-backdrop" id="signPanelBackdrop" onclick="closeSignDetail()"></div>
@@ -4152,6 +4470,7 @@ var _ls = {
 var token = _ls.get('t2d_token');
 var user = null;
 var deviceId = null;
+var QUIZ_SESSION_SIZE = 10;
 var questions = [];
 var qIdx = 0;
 var qScore = 0;
@@ -4162,6 +4481,7 @@ var _sessionAnswers   = []; // per-question answer log — powers history detail
 var _histAttempts     = []; // loaded attempts array — keyed by index for detail panel
 var _histOpenIdx      = null;
 var _reviewMode       = false; // true while in "Øv på feil" review flow
+var isMistakeMode     = false; // active answerable quiz sourced from user_mistakes
 var _aiPanelTimer     = null; // delayed AI panel — cleared on nextQ to prevent cross-question bleed
 var _reviewQuestions  = []; // wrong questions to review
 var _reviewIdx        = 0;  // current review position
@@ -4257,10 +4577,20 @@ var UI = {
   backhome:    {th:'🏠 กลับหน้าแรก',    no:'🏠 Tilbake til hjem', en:'🏠 Back to home'},
   pickcat:     {th:'📚 เลือกหมวดหมู่',  no:'📚 Velg kategori', en:'📚 Pick category'},
   startquiz:   {th:'▶  เริ่มควิซ',      no:'▶  Start quiz',   en:'▶  Start quiz'},
+  home_choose_action:{th:'เลือกสิ่งที่คุณต้องการฝึก', no:'Velg hva du vil gjøre', en:'Choose what you want to do'},
+  home_primary_action:{th:'▶ เริ่มควิซ / แบบทดสอบประจำวัน', no:'▶ Start quiz / daglig test', en:'▶ Start quiz / daily test'},
+  home_ask_michael:{th:'ถาม Michael AI', no:'Spør Michael AI', en:'Ask Michael AI'},
+  home_targeted:{th:'ฝึกข้อที่ตอบผิดและคลังป้ายจราจร', no:'Øv på mine feil & skiltkatalog', en:'Practise my mistakes & road signs'},
+  home_open_signs:{th:'เปิดคลังป้ายจราจร', no:'Åpne skiltkatalog', en:'Open road sign catalogue'},
   exam:        {th:'📋 สอบ',            no:'📋 Eksamen',       en:'📋 Exam'},
   daily:       {th:'📅 ทดสอบรายวัน',    no:'📅 Daglig test',   en:'📅 Daily test'},
   exam_short:  {th:'สอบ',               no:'Eksamen',          en:'Exam'},
   daily_short: {th:'ทดสอบรายวัน',       no:'Daglig test',      en:'Daily'},
+  mistakes_short:{th:'แบบฝึกหัดข้อที่เคยตอบผิด', no:'Øv på mine feil', en:'Practice my mistakes'},
+  mistakes_count:{th:'{count} ข้อที่ต้องทบทวน', no:'{count} spørsmål å repetere', en:'{count} questions to review'},
+  mistakes_empty:{th:'ยังไม่มีข้อที่ต้องทบทวน', no:'Du har ingen aktive feil å øve på.', en:'You have no active mistakes to practise.'},
+  mistakes_login:{th:'เข้าสู่ระบบเพื่อฝึกข้อที่เคยตอบผิด', no:'Logg inn for å øve på feilene dine.', en:'Log in to practise your mistakes.'},
+  mistakes_load_error:{th:'โหลดข้อที่เคยตอบผิดไม่ได้', no:'Kunne ikke laste feilene dine.', en:'Could not load your mistakes.'},
   signs_short: {th:'ป้ายจราจร',         no:'Skilt',            en:'Signs'},
   sb_short:    {th:'หนังสือเรียน',       no:'Studiebok',        en:'Study Book'},
   fk_short:    {th:'คำนวณระยะ',         no:'Trafikk-matte',    en:'Math'},
@@ -4278,8 +4608,20 @@ var UI = {
   language:    {th:'ภาษา',              no:'Språk',            en:'Language'},
   teacher:     {th:'Michael',            no:'Michael',          en:'Michael'},
   teacher_name:{th:'ครูสอนขับรถ Michael', no:'Michael Trafikklærer', en:'Michael Driving Teacher'},
+  teacher_role:{th:'ครูสอนขับรถ', no:'Trafikklærer', en:'Driving teacher'},
+  teacher_experience:{th:'ประสบการณ์ 16 ปี', no:'16 års erfaring', en:'16 years of experience'},
+  teacher_meta:{th:'เข้าสู่ระบบ • ครู AI • ประสบการณ์ 16 ปี', no:'Pålogget • AI-lærer • 16 års erfaring', en:'Signed in • AI teacher • 16 years experience'},
+  teacher_online_badge:{th:'ออนไลน์', no:'ONLINE', en:'ONLINE'},
+  teacher_send:{th:'ส่ง', no:'Send', en:'Send'},
+  teacher_more_topics:{th:'หัวข้อเพิ่มเติม', no:'Flere emner', en:'More topics'},
+  teacher_fewer_topics:{th:'แสดงน้อยลง', no:'Vis færre', en:'Show fewer'},
   teacher_sub: {th:'ถามคำถามเกี่ยวกับการจราจร', no:'Still et spørsmål om trafikk', en:'Ask a question about traffic'},
-  teacher_placeholder: {th:'ถามคำถาม...', no:'Still et spørsmål...', en:'Ask a question...'},
+  teacher_placeholder: {th:'ถามไมเคิล...', no:'Spør Michael...', en:'Ask Michael...'},
+  teacher_show_example:{th:'ดูตัวอย่าง', no:'Vis eksempel', en:'Show example'},
+  teacher_show_example_prompt:{th:'แสดงตัวอย่างสถานการณ์จริงที่สั้นและเข้าใจง่ายสำหรับป้ายนี้', no:'Vis meg et kort, praktisk eksempel med dette skiltet.', en:'Show me a short practical example using this sign.'},
+  teacher_test_me:{th:'ทดสอบฉัน', no:'Test meg', en:'Test me'},
+  teacher_topics_open:{th:'แสดงหัวข้อ', no:'Vis emner', en:'Show topics'},
+  teacher_topics_close:{th:'ปิดหัวข้อ', no:'Lukk emner', en:'Close topics'},
   teacher_error: {th:'ขอโทษ เกิดข้อผิดพลาด ลองใหม่อีกครั้ง', no:'Beklager, noe gikk galt. Prøv igjen.', en:'Sorry, something went wrong. Please try again.'},
   teacher_online:{th:'● ออนไลน์', no:'● Pålogget', en:'● Online'},
   tsp_title:   {th:'หัวข้อ',           no:'Emner',               en:'Topics'},
@@ -4323,6 +4665,18 @@ var UI = {
   mode_category:{th:'หมวดหมู่',             no:'Kategori',         en:'Category'},
   mode_daily:  {th:'ทดสอบรายวัน',          no:'Daglig test',      en:'Daily test'},
   mode_random: {th:'ควิซสุ่ม',              no:'Tilfeldig quiz',   en:'Random quiz'},
+  mode_mistakes:{th:'แบบฝึกหัดข้อที่เคยตอบผิด', no:'Øv på mine feil', en:'Practice my mistakes'},
+  readiness_title:{th:'ความพร้อมสำหรับการสอบ', no:'Klar for prøven', en:'Ready for the test'},
+  readiness_keep:{th:'ฝึกต่อไป!', no:'Fortsett å øve!', en:'Keep practising!'},
+  readiness_close:{th:'ใกล้พร้อมแล้ว!', no:'Nærmer seg klar!', en:'Getting close!'},
+  readiness_ready:{th:'คุณพร้อมสอบทฤษฎีกับ Statens vegvesen แล้ว! 🚗', no:'Du er klar for teoriprøven hos Statens vegvesen! 🚗', en:'You are ready for the theory test at Statens vegvesen! 🚗'},
+  readiness_breakdown:{th:'50 ข้อล่าสุด: {accuracy}% · ฝึกข้อผิดสำเร็จ: {mastery}%', no:'Siste 50: {accuracy}% · Mestret feil: {mastery}%', en:'Last 50: {accuracy}% · Mistakes mastered: {mastery}%'},
+  coach_title:{th:'Michael อธิบาย', no:'Michael forklarer', en:'Michael explains'},
+  coach_loading:{th:'Michael กำลังดูคำถาม…', no:'Michael ser på spørsmålet…', en:'Michael is reviewing the question…'},
+  coach_unavailable:{th:'ตอนนี้ Michael ตอบไม่ได้ อ่านคำอธิบายปกติและทำแบบทดสอบต่อได้เลย', no:'Michael svarer ikke akkurat nå. Bruk den vanlige forklaringen og fortsett quizen.', en:'Michael is unavailable right now. Use the regular explanation and continue the quiz.'},
+  coach_practical:{th:'สิ่งนี้หมายถึงอะไรในทางปฏิบัติ?', no:'Hva betyr dette i praksis?', en:'What does this mean in practice?'},
+  coach_practice_loading:{th:'Michael กำลังสร้างคำถามฝึกสั้น ๆ…', no:'Michael lager et kort kontrollspørsmål…', en:'Michael is creating a short practice question…'},
+  teacher_video_explanation:{th:'ดูวิดีโอคำอธิบาย', no:'Se videoforklaring', en:'Watch video explanation'},
   questions_word:{th:'คำถาม',              no:'spørsmål',         en:'questions'},
   signs_word:  {th:'ป้าย',                 no:'skilt',            en:'signs'},
   categories_empty:{th:'ไม่พบหมวดหมู่',     no:'Ingen kategorier funnet', en:'No categories found'},
@@ -4389,6 +4743,7 @@ var UI = {
   result_focus:{th:'หัวข้อแนะนำให้ฝึก',      no:'Anbefalt øvelse',  en:'Recommended practice'},
   result_done:{th:'ทำแบบฝึกเสร็จแล้ว',       no:'Øvelsen er ferdig.', en:'Practice finished.'},
   result_retry:{th:'ลองอีกครั้ง',             no:'Prøv igjen',        en:'Try again'},
+  result_michael:{th:'ไปหา Michael เพื่อทบทวนข้อผิดพลาด', no:'Gå til Michael for feilretting', en:'Go to Michael to review mistakes'},
   result_exam_pass_head:{th:'ผ่าน',          no:'Bestått.',         en:'Passed.'},
   result_exam_pass_body:{th:'คุณพร้อมสำหรับการสอบทฤษฎีแล้ว ลองทำอีกหนึ่งรอบเพื่อเพิ่มความมั่นใจ', no:'Du er klar for teoriprøven. Gjennomfør gjerne enda en runde for å bygge selvtillit.', en:'You are ready for the theory test. Do one more round to build confidence.'},
   result_exam_fail_head:{th:'ครั้งนี้ยังไม่ผ่าน', no:'Ikke bestått denne gangen.', en:'Not passed this time.'},
@@ -4447,6 +4802,20 @@ var UI = {
   library:{th:'ห้องสมุด', no:'Bibliotek', en:'Library'},
   lib_videos:{th:'วิดีโอ', no:'Videoer', en:'Videos'},
   lib_podcasts:{th:'พอดแคสต์', no:'Podcaster', en:'Podcasts'},
+  lib_micro:{th:'ไทยกับนอร์เวย์', no:'Thailand vs. Norge', en:'Thailand vs. Norway'},
+  micro_intro:{th:'บทเรียนสั้น ๆ สำหรับผู้ขับขี่ชาวไทยที่กำลังเรียนกฎจราจรของนอร์เวย์ แตะบทเรียนเพื่อเปิด', no:'Korte leksjoner for thai-førere som lærer norske trafikkregler. Trykk for å åpne.', en:'Short lessons for Thai drivers learning Norwegian traffic rules. Tap to open.'},
+  micro_road_side_title:{th:'ขับชิดขวาในนอร์เวย์ เทียบกับขับชิดซ้ายในไทย', no:'Høyrekjøring i Norge vs. venstrekjøring i Thailand', en:'Driving on the right in Norway vs. the left in Thailand'},
+  micro_road_side_body:{th:'ในนอร์เวย์ คุณต้องขับทางด้านขวาของถนน การเลี้ยวและตำแหน่งรถในทางแยกจึงกลับด้านจากที่คุ้นเคยในไทย', no:'I Norge kjører du på høyre side. Plassering før sving og gjennom kryss blir derfor motsatt av vanen fra Thailand.', en:'In Norway you drive on the right. Positioning before turns and through intersections is therefore opposite to the habit from Thailand.'},
+  micro_road_side_action:{th:'จำไว้: หลังเลี้ยว ให้รถอยู่ในช่องทางขวาของทิศทางที่คุณกำลังไป', no:'Husk: Etter en sving skal bilen inn på høyre side i kjøreretningen.', en:'Remember: After turning, place the car on the right side in your direction of travel.'},
+  micro_yield_title:{th:'กฎให้ทางขวาและการให้ทางในทางแยกนอร์เวย์', no:'Høyreregelen og vikeplikt i norske veikryss', en:'The right-hand rule and yielding at Norwegian intersections'},
+  micro_yield_body:{th:'หากไม่มีป้ายหรือสัญญาณไฟ คุณต้องให้ทางแก่รถที่มาจากด้านขวา มองหาป้ายให้ทางและเส้นสามเหลี่ยมบนถนนเสมอ', no:'Når skilt eller trafikklys ikke regulerer krysset, har du normalt vikeplikt for trafikk fra høyre. Se alltid etter vikepliktskilt og haitenner.', en:'When signs or traffic lights do not control the intersection, you normally yield to traffic from the right. Always look for yield signs and shark teeth.'},
+  micro_yield_action:{th:'ชะลอความเร็วก่อนถึงทางแยก มองซ้าย–ขวา–ซ้าย และเตรียมหยุด', no:'Senk farten før krysset, se til begge sider og vær klar til å stoppe.', en:'Slow down before the intersection, look both ways and be ready to stop.'},
+  micro_winter_title:{th:'การขับรถในฤดูหนาว หิมะ น้ำแข็ง และความมืด', no:'Vinterkjøring, snø, is og mørkekjøring', en:'Winter driving, snow, ice and darkness'},
+  micro_winter_body:{th:'พื้นถนนลื่นทำให้ระยะเบรกยาวขึ้นมาก ลดความเร็ว เพิ่มระยะห่าง และใช้พวงมาลัย คันเร่ง และเบรกอย่างนุ่มนวล', no:'Glatt føre kan gi mye lengre bremselengde. Senk farten, øk avstanden og bruk ratt, gass og brems mykt.', en:'Slippery roads can greatly increase braking distance. Reduce speed, increase the gap and use steering, throttle and brakes smoothly.'},
+  micro_winter_action:{th:'ตรวจยาง ไฟ และกระจกก่อนออกเดินทาง และเผื่อระยะหยุดมากกว่าปกติ', no:'Sjekk dekk, lys og ruter før turen, og planlegg med ekstra stoppavstand.', en:'Check tyres, lights and windows before driving, and allow extra stopping distance.'},
+  micro_roundabout_title:{th:'วงเวียนและกฎการใช้ไฟเลี้ยวในนอร์เวย์', no:'Rundkjøringer og blinklys i Norge', en:'Roundabouts and signalling in Norway'},
+  micro_roundabout_body:{th:'ให้ทางแก่รถที่อยู่ในวงเวียน เลือกช่องทางให้เหมาะสม และเปิดไฟเลี้ยวขวาก่อนออกจากวงเวียน', no:'Du har vikeplikt for trafikken i rundkjøringen. Velg riktig felt og blink til høyre før du kjører ut.', en:'Yield to traffic in the roundabout. Choose the correct lane and signal right before exiting.'},
+  micro_roundabout_action:{th:'มองกระจกและจุดบอดก่อนเปลี่ยนช่องทางหรือออกจากวงเวียน', no:'Sjekk speil og blindsone før feltskifte og før du kjører ut.', en:'Check mirrors and blind spots before changing lanes or exiting.'},
   forbikjoring_label:{th:'🚗 แซง', no:'🚗 Forbikjøring', en:'🚗 Overtaking'},
   fk_title:{th:'🚗 การแซง — คำนวณระยะ', no:'🚗 Forbikjøring — Avstandskalkulator', en:'🚗 Overtaking — Distance Calculator'},
   fk_scenario_easy:{th:'🟢 ง่าย', no:'🟢 Lett', en:'🟢 Easy'},
@@ -4483,6 +4852,12 @@ var UI = {
   cancel:      {th:'ยกเลิก', no:'Avbryt', en:'Cancel'},
   sb_empty_fields:{th:'ชื่อเรื่องและเนื้อหาห้ามว่าง', no:'Tittel og innhold kan ikke være tomme', en:'Title and content cannot be empty'},
   practice_this_sign:{th:'📚 ฝึกป้ายนี้',     no:'📚 Øv på dette skiltet', en:'📚 Practice this sign'},
+  practice_similar:{th:'ฝึกโจทย์ที่คล้ายกัน', no:'Øv på liknende', en:'Practice similar'},
+  see_similar:{th:'ดูป้ายคล้ายกัน', no:'Se lignende', en:'See similar'},
+  read_more:{th:'อ่านเพิ่มเติม', no:'Les mer', en:'Read more'},
+  ask_more:{th:'ถามเพิ่มเติม', no:'Spør mer', en:'Ask more'},
+  sign_card_tip:{th:'เคล็ดลับ', no:'Tips', en:'Tip'},
+  sign_practice_empty:{th:'ยังไม่มีคำถามเฉพาะสำหรับป้ายนี้', no:'Det finnes ingen egne spørsmål for dette skiltet ennå.', en:'There are no sign-specific questions yet.'},
   save:        {th:'บันทึก',                no:'Lagre',            en:'Save'},
   saved:       {th:'บันทึกแล้ว',             no:'Lagret',           en:'Saved'},
   read_aloud:  {th:'อ่านออกเสียง',           no:'Les høyt',         en:'Read aloud'},
@@ -4511,13 +4886,11 @@ var UI = {
   promo_active:{th:'คุณมีสิทธิ์เข้าถึงเต็มรูปแบบจากแคมเปญเปิดตัว', no:'Du har full tilgang gjennom lanseringskampanjen', en:'You have full access through the launch campaign'},
   pw_title:    {th:'ปลดล็อกการเข้าถึงทั้งหมด', no:'Lås opp full tilgang', en:'Unlock full access'},
   pw_sub:      {th:'คุณได้ใช้สิทธิ์ทดลองเรียนฟรีครบแล้ว', no:'Du har brukt gratisprøven', en:'You have used your free trial'},
-  pw_sub_daily:{th:'คุณใช้ {count} คำถามฟรีของวันนี้หมดแล้ว อัปเกรดเพื่อใช้งานไม่จำกัด!', no:'Du har brukt opp dine {count} gratis spørsmål for i dag. Oppgrader for ubegrenset tilgang!', en:'You have used all {count} of your free questions for today. Upgrade for unlimited access!'},
-  pw_sub_total:{th:'คุณใช้ {count} คำถามฟรีหมดแล้ว อัปเกรดเพื่อใช้งานไม่จำกัด!', no:'Du har brukt opp dine {count} gratis spørsmål. Oppgrader for ubegrenset tilgang!', en:'You have used all {count} of your free questions. Upgrade for unlimited access!'},
   pw_f1:       {th:'คำถามและหมวดหมู่ไม่จำกัด', no:'Ubegrenset spørsmål og kategorier', en:'Unlimited questions and categories'},
   pw_f2:       {th:'โหมดสอบเต็มรูปแบบ (45 ข้อ)', no:'Fullstendig eksamensmode (45 spørsmål)', en:'Full exam mode (45 questions)'},
   pw_f3:       {th:'ทดสอบรายวันและโหมดฝึกซ้อม', no:'Daglig test og øvingsmodus', en:'Daily test and practice mode'},
   pw_f4:       {th:'ประวัติและสถิติความก้าวหน้า', no:'Historikk og fremgangsstatistikk', en:'History and progress statistics'},
-  pw_f5:       {th:'คำแนะนำจากครูไมเคิลอย่างใจเย็น เป็นภาษาไทยล้วน', no:'Tålmodig AI-veiledning fra Michael på 100 % ren thai', en:'Patient AI guidance from Michael, in 100% Thai'},
+  pw_f5:       {th:'แกลเลอรีป้ายจราจร', no:'Trafikkskilt-galleri', en:'Traffic signs gallery'},
   pw_month:    {th:'รายเดือน', no:'Månedlig', en:'Monthly'},
   pw_three_months:{th:'3 เดือน', no:'3 måneder', en:'3 months'},
   pw_lifetime: {th:'ตลอดชีพ', no:'Livstid', en:'Lifetime'},
@@ -4622,7 +4995,7 @@ function pickStrict(obj) {
 }
 
 function modeLabel(mode) {
-  var labels = {exam:t('mode_exam'), category:t('mode_category'), daily:t('mode_daily'), random:t('mode_random')};
+  var labels = {exam:t('mode_exam'), category:t('mode_category'), daily:t('mode_daily'), random:t('mode_random'), mistakes:t('mode_mistakes')};
   return labels[mode] || mode || 'Quiz';
 }
 function readinessForPct(pct, compact) {
@@ -4676,13 +5049,26 @@ function applyUILang() {
   var nsg= document.getElementById('bnSigns');     if(nsg) nsg.innerHTML = '<span class="bn-icon">' + NAV_SVG.signs + '</span>' + t('signs');
   var nbm= document.getElementById('bnBookmarks'); if(nbm) nbm.innerHTML = '<span class="bn-icon">' + NAV_SVG.bookmarks + '</span>' + t('bookmarks');
   var ns = document.getElementById('bnSettings');  if(ns) ns.innerHTML = '<span class="bn-icon">' + NAV_SVG.settings + '</span>' + t('settings');
-  var nt = document.getElementById('bnTeacher');   if(nt) nt.innerHTML = '<span class="bn-icon">' + NAV_SVG.teacher + '</span>' + t('teacher');
+  var nt = document.getElementById('bnTeacher');   if(nt) nt.innerHTML = '<span class="bn-icon"><img src="/api/assets/michael_profile.jpg" style="width:30px;height:30px;border-radius:50%;object-fit:cover;object-position:center 15%;" alt="Michael"></span>' + t('teacher');
+  var nl = document.getElementById('bnLibrary');   if(nl) nl.innerHTML = '<span class="bn-icon">' + (NAV_SVG.library || '') + '</span>' + t('lib_videos');
   var nsb= document.getElementById('bnStudybook'); if(nsb) nsb.innerHTML = '<span class="bn-icon">' + NAV_SVG.studybook + '</span>' + t('sb_nav');
   // Update teacher UI if visible
   var tNameEl = document.getElementById('teacherNameLbl');
   if (tNameEl) tNameEl.textContent = t('teacher_name');
   var tInput = document.getElementById('teacherInput');
   if (tInput) tInput.placeholder = t('teacher_placeholder');
+  var tSidebarToggle = document.getElementById('teacherSidebarToggle');
+  if (tSidebarToggle) {
+    var sidebarOpen = tSidebarToggle.getAttribute('aria-expanded') === 'true';
+    var sidebarLabel = t(sidebarOpen ? 'teacher_topics_close' : 'teacher_topics_open');
+    tSidebarToggle.setAttribute('aria-label', sidebarLabel);
+    tSidebarToggle.title = sidebarLabel;
+  }
+  var tSidebarBackdrop = document.getElementById('teacherSidebarBackdrop');
+  if (tSidebarBackdrop) tSidebarBackdrop.setAttribute('aria-label', t('teacher_topics_close'));
+  var tMore = document.getElementById('teacherMoreBtn');
+  var tSuggestions = document.getElementById('teacherSuggestions');
+  if (tMore) tMore.textContent = t(tSuggestions && tSuggestions.classList.contains('expanded') ? 'teacher_fewer_topics' : 'teacher_more_topics');
   var tSub = document.getElementById('michaelCardSub');
   if (tSub) tSub.textContent = t('teacher_sub');
   // Side panel labels
@@ -4725,7 +5111,7 @@ function applyUILang() {
     catsTitleEl.innerHTML = '📚 <span data-key="cats">' + t('cats') + '</span> <span id="catCount">' + catsCountText + '</span>';
   }
   // home buttons
-  document.querySelectorAll('.home-cta').forEach(function(b){ b.innerHTML = t('startquiz').replace(/^▶\s*/,'▶&nbsp;&nbsp;'); });
+  document.querySelectorAll('.home-cta').forEach(function(b){ b.innerHTML = '<span data-key="home_primary_action">' + t('home_primary_action') + '</span>'; });
   // Oppdater horisontal scrollmeny-labels
   document.querySelectorAll('.hsm-label[data-hsm-key]').forEach(function(el) {
     var key = el.getAttribute('data-hsm-key');
@@ -4953,6 +5339,7 @@ var PREMIUM_PRICING = {
 //  SCREEN & TAB MANAGEMENT
 // ════════════════════════════════════════════
 function showScreen(id) {
+  if (id !== 'screenQuiz') closeMichaelQuizCoach();
   document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
   var el = document.getElementById(id);
   if (el) el.classList.add('active');
@@ -4968,7 +5355,13 @@ function enterApp() {
   document.getElementById('bottomNav').style.display = 'flex';
   document.getElementById('topSettingsBtn').style.display = 'flex';
   loadAccessStatus();
-  showTab('home');
+  var requestedSign = new URLSearchParams(window.location.search).get('sign');
+  if (requestedSign) {
+    showTab('signs');
+    loadSigns().then(function() { openSignDetailById(requestedSign); });
+  } else {
+    showTab('home');
+  }
   setTimeout(maybeShowTrialNotice, 1200);
 }
 
@@ -5034,6 +5427,11 @@ async function loadLibrary() {
   var container = document.getElementById('libraryContent');
   if (!container) return;
 
+  if (_libraryActiveTab === 'micro') {
+    renderLibrary();
+    return;
+  }
+
   if (_videosCached && _podcastsCached) {
     renderLibrary();
     return;
@@ -5060,6 +5458,11 @@ async function loadLibrary() {
 function renderLibrary() {
   var container = document.getElementById('libraryContent');
   if (!container) return;
+
+  if (_libraryActiveTab === 'micro') {
+    renderMicroLessons(container);
+    return;
+  }
 
   var items = _libraryActiveTab === 'videos' ? _videosCached : _podcastsCached;
   if (!items || items.length === 0) {
@@ -5103,6 +5506,42 @@ function setLibraryTab(tab) {
   renderLibrary();
 }
 
+function renderMicroLessons(container) {
+  var lessons = [
+    {id:'road-side', icon:'↔️', title:'micro_road_side_title', body:'micro_road_side_body', action:'micro_road_side_action'},
+    {id:'yield', icon:'🔺', title:'micro_yield_title', body:'micro_yield_body', action:'micro_yield_action'},
+    {id:'winter', icon:'❄️', title:'micro_winter_title', body:'micro_winter_body', action:'micro_winter_action'},
+    {id:'roundabout', icon:'🔄', title:'micro_roundabout_title', body:'micro_roundabout_body', action:'micro_roundabout_action'}
+  ];
+  var html = '<p class="micro-intro">' + escH(t('micro_intro')) + '</p><div class="micro-lessons">';
+  lessons.forEach(function(lesson) {
+    html += '<article class="micro-lesson" id="micro-' + lesson.id + '">' +
+      '<button class="micro-lesson-btn" type="button" onclick="toggleMicroLesson(\'' + lesson.id + '\')" aria-expanded="false">' +
+      '<span class="micro-lesson-icon">' + lesson.icon + '</span>' +
+      '<span class="micro-lesson-title">' + escH(t(lesson.title)) + '</span>' +
+      '<span class="micro-lesson-chevron">⌄</span></button>' +
+      '<div class="micro-lesson-body"><div>' + escH(t(lesson.body)) + '</div>' +
+      '<div class="micro-lesson-action">✓ ' + escH(t(lesson.action)) + '</div></div></article>';
+  });
+  container.innerHTML = html + '</div>';
+}
+
+function toggleMicroLesson(id) {
+  var card = document.getElementById('micro-' + id);
+  if (!card) return;
+  var open = card.classList.toggle('open');
+  var button = card.querySelector('.micro-lesson-btn');
+  if (button) button.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+
+function toggleTargetPracticeMenu() {
+  var menu = document.getElementById('targetPracticeMenu');
+  var toggle = document.getElementById('targetPracticeToggle');
+  if (!menu) return;
+  var open = menu.classList.toggle('open');
+  if (toggle) toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+
 // ════════════════════════════════════════════
 //  VIDEO PLAYER — The Road Ahead
 // ════════════════════════════════════════════
@@ -5110,6 +5549,7 @@ var _currentVideo = null;
 var _vpWaypoints = [];
 var _vpKnowledgeIds = [];
 var _vpTimer = null;
+var _videoReturnScreen = 'screenLibrary';
 
 function openVideoPlayer(filePath) {
   // Find video in cache
@@ -5121,6 +5561,9 @@ function openVideoPlayer(filePath) {
     }
   }
   if (!v) return;
+
+  var activeScreen = document.querySelector('.screen.active');
+  if (activeScreen && activeScreen.id !== 'screenVideoPlayer') _videoReturnScreen = activeScreen.id;
 
   _currentVideo = v;
   _vpKnowledgeIds = [];
@@ -5147,15 +5590,25 @@ function openVideoPlayer(filePath) {
 
   // Set video source
   var vid = document.getElementById('vpVideo');
+  var youtubeFrame = document.getElementById('vpYoutube');
   var rawPath = v.file_path || '';
   if (rawPath && rawPath.indexOf('/public_assets/') === 0) {
     rawPath = '/api/assets/' + rawPath.substring('/public_assets/'.length);
   }
   if (rawPath) {
+    if (youtubeFrame) { youtubeFrame.src = ''; youtubeFrame.hidden = true; }
+    vid.style.display = 'block';
     vid.src = rawPath;
   } else if (v.youtube_url) {
-    vid.innerHTML = '<iframe src="https://www.youtube.com/embed/' + _extractYtId(v.youtube_url) + '?autoplay=1" style="width:100%;aspect-ratio:16/9" frameborder="0" allow="autoplay;encrypted-media" allowfullscreen></iframe>';
+    var youtubeId = _extractYtId(v.youtube_url);
+    if (!youtubeId || !youtubeFrame) return;
+    vid.pause();
+    vid.removeAttribute('src');
+    vid.load();
     vid.style.display = 'none';
+    youtubeFrame.src = 'https://www.youtube.com/embed/' + youtubeId + '?autoplay=1';
+    youtubeFrame.title = title;
+    youtubeFrame.hidden = false;
   }
 
   // Reset knowledge area
@@ -5179,14 +5632,16 @@ function closeVideoPlayer() {
   stopVpTimer();
   var vid = document.getElementById('vpVideo');
   if (vid) { vid.pause(); vid.src = ''; vid.ontimeupdate = null; vid.onended = null; vid.onplay = null; vid.onpause = null; }
+  var youtubeFrame = document.getElementById('vpYoutube');
+  if (youtubeFrame) { youtubeFrame.src = ''; youtubeFrame.hidden = true; }
   _currentVideo = null;
   document.getElementById('bottomNav').style.display = 'flex';
-  showScreen('screenLibrary');
+  showScreen(_videoReturnScreen || 'screenLibrary');
 }
 
 function _extractYtId(url) {
   if (!url) return '';
-  var m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/);
+  var m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/(?:embed|shorts)\/)([a-zA-Z0-9_-]{11})/);
   return m ? m[1] : '';
 }
 
@@ -5527,6 +5982,8 @@ document.addEventListener('click', function(e) {
 var _backendAudio = null;
 var _teacherAudio = null;
 var _audioUnlocked = false;
+var _teacherActiveText = '';
+var _teacherAudioToken = 0;
 
 // iOS/Safari lar deg bare starte lyd fra et ekte brukertrykk. Et <audio>-element som
 // aldri har spilt inne i en gest, nekter senere .play() — og det er derfor lyden er
@@ -5539,27 +5996,36 @@ function _ensureBackendAudio() {
   if (!_backendAudio) {
     _backendAudio = new Audio();
     _backendAudio.preload = 'auto';
-    // Alle veier ut av avspilling nullstiller flagget. Uten dette kan et
-    // element som aldri kom i gang la ttsPlaying sta igjen som true, og da
-    // returnerer neste trykk i stillhet via toggle-sjekken overst i speakQ.
-    var _resetBackend = function() { ttsPlaying = false; updateTtsBtn(false); };
-    _backendAudio.onended = _resetBackend;
-    _backendAudio.onerror = _resetBackend;
-    _backendAudio.onabort = _resetBackend;
-    _backendAudio.onemptied = _resetBackend;
+    _backendAudio.onended = function() { ttsPlaying = false; updateTtsBtn(false); };
+    _backendAudio.onerror = function() { ttsPlaying = false; updateTtsBtn(false); };
   }
   return _backendAudio;
+}
+
+var _teacherWatchdog = null;
+function _resetTeacherWatchdog() {
+  if (_teacherWatchdog) clearTimeout(_teacherWatchdog);
+  _teacherWatchdog = setTimeout(function() {
+    if (_teacherTtsPlaying && _teacherAudio) {
+      stopAllSpeech();
+    }
+  }, 14000);
 }
 
 function _ensureTeacherAudio() {
   if (!_teacherAudio) {
     _teacherAudio = new Audio();
     _teacherAudio.preload = 'auto';
-    var _resetTeacher = function() { _teacherTtsPlaying = false; };
-    _teacherAudio.onended = _resetTeacher;
-    _teacherAudio.onerror = _resetTeacher;
-    _teacherAudio.onabort = _resetTeacher;
-    _teacherAudio.onemptied = _resetTeacher;
+    _teacherAudio.onended = function() {
+      if (_teacherWatchdog) clearTimeout(_teacherWatchdog);
+      _teacherTtsPlaying = false;
+      _teacherActiveText = '';
+    };
+    _teacherAudio.onerror = function() {
+      if (_teacherWatchdog) clearTimeout(_teacherWatchdog);
+      _teacherTtsPlaying = false;
+      _teacherActiveText = '';
+    };
   }
   return _teacherAudio;
 }
@@ -5589,72 +6055,16 @@ function _primeAudioEl(el) {
   }
 }
 
-// `activeEl` er elementet kalleren er i ferd med å spille ekte lyd på.
-// Det MÅ ikke primes: primingen setter src til en stum WAV og starter play(),
-// og når kalleren straks etter bytter src, avbrytes avspillingen med AbortError.
-// Elementet trenger heller ingen priming — det låses opp av sitt eget play()
-// i den samme brukergesten. Priming gjelder kun elementene vi IKKE spiller nå.
 function _unlockAudioPlayback(activeEl) {
   if (_audioUnlocked) return;
   _audioUnlocked = true;
   var backendEl = _ensureBackendAudio();
   var teacherEl = _ensureTeacherAudio();
+  // The element started by this exact user gesture does not need priming.
+  // Priming it here can race with the real MP3 and abort play() via pause().
   if (backendEl !== activeEl) _primeAudioEl(backendEl);
   if (teacherEl !== activeEl) _primeAudioEl(teacherEl);
   if (typeof _getAudioCtx === 'function') { try { _getAudioCtx(); } catch (e) {} }
-}
-
-// Vaktbikkje: play() gir et lofte som kan bli hengende hvis serveren bruker lang
-// tid pa a generere lyd. Blir det aldri innfridd, fyres verken 'playing' eller
-// 'error', og tilstandsflagget star igjen som true. Neste trykk treffer da
-// toggle-sjekken og returnerer i stillhet. Vakten bryter den lasen.
-var _TTS_START_TIMEOUT_MS = 12000;
-function _armTtsWatchdog(el, reset) {
-  if (!el) return;
-  if (el._ttsWatchdog) { clearTimeout(el._ttsWatchdog); el._ttsWatchdog = null; }
-  var cleared = false;
-  var clear = function() {
-    if (cleared) return;
-    cleared = true;
-    if (el._ttsWatchdog) { clearTimeout(el._ttsWatchdog); el._ttsWatchdog = null; }
-    el.removeEventListener('playing', clear);
-  };
-  el.addEventListener('playing', clear);
-  el._ttsWatchdog = setTimeout(function() {
-    if (cleared) return;
-    clear();
-    // Kom aldri i gang. Frigi flagget sa neste trykk faktisk forsoker pa nytt,
-    // og si fra — stillhet uten forklaring er det verste utfallet.
-    try { el.pause(); } catch (e) {}
-    if (typeof reset === 'function') reset();
-    toast(t('tts_failed'), 5000);
-  }, _TTS_START_TIMEOUT_MS);
-}
-
-// Samme lyd to ganger pa rad: nar src er uendret spoler ikke alle nettlesere
-// tilbake av seg selv, og play() blir en stille no-op. Vi spoler eksplisitt.
-function _rewindIfSameSource(el, url) {
-  if (!el) return;
-  if (el.src === url || el.currentSrc === url) {
-    try { el.currentTime = 0; } catch (e) {}
-  }
-}
-
-// Én felles feilhåndtering for all TTS-avspilling. Uten dette feiler lyden
-// stille: brukeren ser bare at ingenting skjer, og vi får aldri vite hvorfor.
-function _ttsPlaybackFailed(err, el) {
-  var name = (err && err.name) || 'Error';
-  console.error('TTS-avspilling feilet:', name, err);
-  // AbortError betyr at src ble byttet mens play() pågikk — ikke noe brukeren
-  // kan gjøre noe med, og ikke verdt å skremme med.
-  if (name === 'AbortError') return;
-  if (name === 'NotAllowedError') {
-    toast(t('tts_tap_first'), 5000);
-    return;
-  }
-  // Alt annet: nettverksfeil, 500 fra serveren, ugyldig lyd. Si det rett ut.
-  var code = el && el.error ? (' (kode ' + el.error.code + ')') : '';
-  toast(t('tts_failed') + code, 5000);
 }
 
 // Første ekte brukergest på siden låser opp all lyd — begge <audio>-elementene og
@@ -5664,9 +6074,29 @@ document.addEventListener('click', _unlockAudioPlayback, { once: true });
 document.addEventListener('keydown', _unlockAudioPlayback, { once: true });
 
 function stopAllSpeech() {
-  if (_backendAudio) { try { _backendAudio.pause(); } catch(e){} }
-  if (_teacherAudio) { try { _teacherAudio.pause(); } catch(e){} }
+  _teacherAudioToken += 1;
+  if (_backendAudio) {
+    try {
+      _backendAudio.pause();
+      _backendAudio.currentTime = 0;
+      _backendAudio.src = '';
+      _backendAudio.load();
+    } catch(e){}
+  }
+  if (_teacherAudio) {
+    try {
+      _teacherAudio.pause();
+      _teacherAudio.currentTime = 0;
+      _teacherAudio.src = '';
+      _teacherAudio.load();
+    } catch(e){}
+  }
+  if (_teacherWatchdog) {
+    clearTimeout(_teacherWatchdog);
+    _teacherWatchdog = null;
+  }
   _teacherTtsPlaying = false;
+  _teacherActiveText = '';
   ttsPlaying = false;
   if (typeof updateTtsBtn === 'function') { try { updateTtsBtn(false); } catch (e) {} }
 }
@@ -6014,39 +6444,117 @@ async function loadHome() {
     }
   }
 
-  // Readiness card — last quiz attempt
-  if (deviceId) {
+  // Persistent mistake-bank count for registered users.
+  var mistakeCount = document.getElementById('mistakesHomeCount');
+  if (mistakeCount) mistakeCount.textContent = '';
+  if (token) {
     try {
-      var rdata;
-      if (token) {
-        rdata = await api('GET', '/api/history?limit=1&_=' + Date.now());
-      } else {
-        rdata = await api('GET', '/api/quiz-attempts/' + encodeURIComponent(deviceId) + '?limit=1&_=' + Date.now());
-      }
-      var rattempts = Array.isArray(rdata) ? rdata : (rdata.attempts || rdata.results || []);
-      // Always merge with local data
-      rattempts = _mergeAttempts(rattempts, _readLocalAttempts().concat(_lastSavedAttempt ? [_lastSavedAttempt] : []));
-      if (rattempts.length) {
-        var la = rattempts[0];
-        var lpct = Math.round(la.score_percentage || 0);
-        var ready = readinessForPct(lpct, false);
-        var lmode = modeLabel(la.mode);
-        if (la.category) {
-          var laCat = catName(la.category);
-          if (laCat) lmode += ' — ' + laCat;
-        }
-        document.getElementById('hrDot').className = 'hr-dot hr-dot-' + ready.cls;
-        document.getElementById('hrStatus').textContent = ready.text;
-        document.getElementById('hrSub').textContent = lmode;
-        document.getElementById('hrPct').textContent = lpct + '%';
-        document.getElementById('hrPct').style.color = ready.color;
-        document.getElementById('homeReadiness').style.display = 'flex';
-      }
-    } catch(e) {}
+      var mistakeData = await api('GET', '/api/quiz/mistakes?limit=100&_=' + Date.now());
+      var activeMistakes = Number(mistakeData.count || 0);
+      if (mistakeCount) mistakeCount.textContent = tf('mistakes_count', {count: activeMistakes});
+    } catch(e) {
+      console.warn('Mistake count load failed:', e.message);
+    }
+  }
+
+  // Deterministic readiness for registered users: 70% recent accuracy,
+  // 30% mastery in the persistent mistake bank.
+  var readinessCard = document.getElementById('homeReadiness');
+  if (readinessCard) readinessCard.style.display = 'none';
+  if (token) {
+    try {
+      var readiness = await api('GET', '/api/user/readiness?_=' + Date.now());
+      var rScore = Math.max(0, Math.min(100, Number(readiness.score || 0)));
+      var rState = rScore >= 85
+        ? {cls:'good', key:'readiness_ready', color:'var(--green)'}
+        : rScore >= 60
+          ? {cls:'ok', key:'readiness_close', color:'var(--orange)'}
+          : {cls:'bad', key:'readiness_keep', color:'#EF4444'};
+      document.getElementById('hrDot').className = 'hr-dot hr-dot-' + rState.cls;
+      document.getElementById('hrStatus').textContent = t(rState.key);
+      document.getElementById('hrSub').textContent = tf('readiness_breakdown', {
+        accuracy: Math.round(Number(readiness.recent_accuracy || 0)),
+        mastery: Math.round(Number(readiness.mistake_mastery || 0))
+      });
+      document.getElementById('hrPct').textContent = rScore + '%';
+      document.getElementById('hrPct').style.color = rState.color;
+      var gauge = document.getElementById('hrGaugeFill');
+      if (gauge) { gauge.style.width = rScore + '%'; gauge.style.background = rState.color; }
+      if (readinessCard) readinessCard.style.display = 'flex';
+    } catch(e) {
+      console.warn('Readiness load failed:', e.message);
+    }
   }
 
   // Premium badge — viser nedtelling når gratisuken er aktiv
   renderPremiumBanner();
+
+  // Horisontal karusell med videoer og podkaster nederst på hjemskjermen
+  renderHomeCarousel();
+}
+
+async function renderHomeCarousel() {
+  var track = document.getElementById('homeCarouselTrack');
+  if (!track) return;
+
+  try {
+    var vPromise = api('GET', '/api/videos/for-topic?limit=6').catch(function() { return []; });
+    var pPromise = api('GET', '/api/podcasts/for-topic?limit=6').catch(function() { return []; });
+    var res = await Promise.all([vPromise, pPromise]);
+    var videos = Array.isArray(res[0]) ? res[0] : [];
+    var podcasts = Array.isArray(res[1]) ? res[1] : [];
+
+    var items = [];
+    videos.forEach(function(v) {
+      items.push({
+        type: 'video',
+        title: v['title_' + appLang] || v.title_no || v.title || '',
+        dur: _fmtDur(v.duration_seconds || 0),
+        thumb: v.thumbnail_url || '',
+        srcKey: v.youtube_url || v.file_path || '',
+        item: v
+      });
+    });
+    podcasts.forEach(function(p) {
+      items.push({
+        type: 'podcast',
+        title: p['title_' + appLang] || p.title_no || p.title || '',
+        dur: _fmtDur(p.duration_seconds || 0),
+        thumb: '',
+        srcKey: p.audio_url || p.file_path || '',
+        item: p
+      });
+    });
+
+    if (!items.length) {
+      track.innerHTML = '<div style="color:#94A3B8; font-size:.85rem; padding:12px 6px;">' + escH(t('empty_no_content')) + '</div>';
+      return;
+    }
+
+    track.innerHTML = items.map(function(it) {
+      var badgeCls = it.type === 'podcast' ? 'home-carousel-badge podcast' : 'home-carousel-badge';
+      var badgeText = it.type === 'podcast' ? '🎙️ PODCAST' : '🎬 VIDEO';
+      var thumbStyle = it.thumb ? ' style="background-image:url(' + escH(it.thumb) + ');"' : '';
+      var playIcon = it.type === 'podcast' ? '🎙️' : '▶';
+      var clickAction = it.type === 'video' 
+        ? "openVideoPlayer('" + escH(it.srcKey) + "')" 
+        : "showTab('library')";
+
+      return '<div class="home-carousel-card" onclick="' + clickAction + '">'
+        + '<div class="home-carousel-thumb"' + thumbStyle + '>'
+          + '<span class="' + badgeCls + '">' + badgeText + '</span>'
+          + '<div class="home-carousel-thumb-play"><span>' + playIcon + '</span></div>'
+        + '</div>'
+        + '<div class="home-carousel-body">'
+          + '<h4 class="home-carousel-card-title">' + escH(it.title) + '</h4>'
+          + (it.dur ? '<span class="home-carousel-card-dur">' + escH(it.dur) + '</span>' : '')
+        + '</div>'
+      + '</div>';
+    }).join('');
+
+  } catch(e) {
+    console.warn('Failed to render home carousel:', e);
+  }
 }
 
 // ════════════════════════════════════════════
@@ -6140,7 +6648,7 @@ async function loadCategories() {
     });
 
     catsLoaded = true;
-    document.getElementById('catCount').textContent = '(' + cats.length + ')';
+    document.getElementById('catCount').textContent = '';
     if (!cats.length) {
       stage.innerHTML = '<div class="empty-state" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;"><div class="es-icon">📭</div><p>' + t('categories_empty') + '</p></div>';
       return;
@@ -6158,14 +6666,11 @@ function renderCarousel(cats) {
   var stage = document.getElementById('carouselStage');
   var itemsHtml = cats.map(function(c, i) {
     var svgIcon = CYBER_ICONS[c.icon] || '';
-    var count = c.count || '';
     var name = c.title[appLang];
-    var qWord = t('questions_word');
     var styleStr = 'style="--cat-color:' + c.color + '; --cat-glow:' + c.glow + ';"';
     return '<div class="carousel-3d-item" data-idx="' + i + '" data-ckey="' + escH(c.id) + '" ' + styleStr + ' onclick="carouselClick(' + i + ')">'
       + '<div class="carousel-3d-icon">' + svgIcon + '</div>'
       + '<div class="carousel-3d-label">' + escH(name) + '</div>'
-      + '<div class="carousel-3d-count">' + (count ? count + ' ' + qWord : '') + '</div>'
       + '</div>';
   }).join('');
   stage.innerHTML = itemsHtml + '<div class="carousel-3d-active-ring" id="carouselRing"></div>';
@@ -6276,16 +6781,29 @@ function bindCarouselDrag() {
 //  QUIZ
 // ════════════════════════════════════════════
 async function startRandomQuiz() {
+  isMistakeMode = false;
   currentCat = null;
   isExamMode = false;
-  await loadQuiz('/api/questions/random?count=30&has_image=true');
+  await loadQuiz('/api/questions/random?count=' + QUIZ_SESSION_SIZE + '&has_image=true');
 }
 
 async function startDailyTest() {
   if (!isPremium()) { showPaywall(); return; }
+  isMistakeMode = false;
   currentCat = null;
   isExamMode = false;
-  await loadQuiz('/api/questions/random?count=10&has_image=true');
+  await loadQuiz('/api/questions/random?count=' + QUIZ_SESSION_SIZE + '&has_image=true');
+}
+
+async function startMistakeQuiz() {
+  if (!token) {
+    toast(t('mistakes_login'));
+    return;
+  }
+  isMistakeMode = true;
+  currentCat = null;
+  isExamMode = false;
+  await loadQuiz('/api/quiz/mistakes?limit=' + QUIZ_SESSION_SIZE + '&_=' + Date.now());
 }
 
 var isExamMode = false;
@@ -6350,15 +6868,15 @@ function renderPremiumBanner() {
   pb.style.display = 'flex';
 }
 
+// Betalingsmuren skal forklare hvorfor den dukket opp når gratisuken er brukt opp.
 // ── Lanseringskampanje ────────────────────────────────────────────────────
-// Kampanjen leses fra accessState.promo, som serveren setter ved hver
-// forespørsel. Skrur Michael av FREE_PROMO_MODE, forsvinner banneret og
-// prisene er tilbake ved neste kall — uten deploy og uten kodeendring her.
+// Leses fra accessState.promo, som serveren setter ved hver forespørsel.
+// Skrus FREE_PROMO_MODE av, forsvinner banneret og prisene er tilbake ved
+// neste kall — uten deploy og uten kodeendring her.
 function promoActive() {
   return !!(accessState && accessState.promo && accessState.promo.active);
 }
 
-// Veksler betalingssiden mellom kampanje og ordinær betalingsmur.
 function renderPromoState() {
   var on       = promoActive();
   var banner   = document.getElementById('promoBanner');
@@ -6373,20 +6891,15 @@ function renderPromoState() {
   // Innlogget bruker har allerede tilgang under kampanjen — ingenting å be om.
   if (promoBtn) promoBtn.style.display = (on && !loggedIn) ? '' : 'none';
 
-  // Tittelen skal ikke si «Lås opp Premium» når alt er gratis.
   var title = document.querySelector('#screenPaywall .paywall-title');
   if (title) {
-    // Originalen tas vare på første gang, slik at den kan settes tilbake
-    // nøyaktig som den var når kampanjen skrus av (den inneholder <span>).
     if (title.getAttribute('data-orig') === null) {
       title.setAttribute('data-orig', title.innerHTML);
     }
     if (on) { title.textContent = t('promo_head'); }
     else { title.innerHTML = title.getAttribute('data-orig'); }
   }
-  // Undertittelen ville gjentatt bannerteksten ordrett. Innlogget bruker
-  // får en setning som faktisk sier noe nytt; gjest får ingen — banneret
-  // sier det allerede, og to like setninger over hverandre ser ut som en feil.
+  // Undertittelen ville gjentatt bannerteksten ordrett for en gjest.
   var sub = document.querySelector('#screenPaywall .paywall-sub');
   if (sub && on) {
     sub.textContent = loggedIn ? t('promo_active') : '';
@@ -6401,26 +6914,11 @@ function promoSignup() {
   if (typeof switchTab === 'function') switchTab('register');
 }
 
-// Betalingsmuren skal forklare hvorfor den dukket opp når gratisuken er brukt opp.
 function renderPaywallSub() {
-  // Under kampanjen er det ingen mur å forklare — banneret tar over siden.
   if (promoActive()) { renderPromoState(); return; }
   var el = document.querySelector('#screenPaywall .paywall-sub');
   if (!el) return;
-  var spent = !!(user && user.trial_used === true) && !isTrialActive();
-  if (spent) { el.textContent = t('trial_ended'); return; }
-  // Gratisgrensen er ikke den samme for alle: gjest = 5 totalt, registrert = 10 per dag.
-  // Vi leser den faktiske grensen fra accessState i stedet for å hardkode et tall,
-  // slik at muren ikke kan påstå noe som er usant for den som faktisk ser den.
-  var limit = (accessState && accessState.limit !== null && accessState.limit !== undefined)
-    ? Number(accessState.limit)
-    : null;
-  if (limit) {
-    var daily = !!(accessState && accessState.is_authenticated);
-    el.textContent = tf(daily ? 'pw_sub_daily' : 'pw_sub_total', {count: limit});
-  } else {
-    el.textContent = t('pw_sub');
-  }
+  el.textContent = t('pw_sub');
 }
 
 // Oppmuntrende varsel de to siste dagene — maks én gang per dag per tilstand.
@@ -6552,6 +7050,7 @@ async function restorePurchase() {
 
 async function startExam() {
   if (!isPremium()) { showPaywall(); return; }
+  isMistakeMode = false;
   currentCat = null;
   isExamMode = true;
   await loadQuiz('/api/questions/random?count=45&has_image=true&mode=exam');
@@ -6592,10 +7091,11 @@ function updateTimerLabel(lbl, secs) {
 }
 
 async function startQuiz(catId) {
+  isMistakeMode = false;
   var key = catKey(catId);
   currentCat = key ? { id: key, key: key } : null;
   isExamMode = false;
-  var url = '/api/questions/random?count=30&has_image=true';
+  var url = '/api/questions/random?count=' + QUIZ_SESSION_SIZE + '&has_image=true';
   if (key) url += '&category=' + encodeURIComponent(key);
   await loadQuiz(url);
 }
@@ -6613,7 +7113,7 @@ async function loadQuiz(url) {
       return u && typeof u === 'string' && u.length > 0;
     });
     if (!questions.length && currentCat) {
-      var r2 = await api('GET', '/api/questions/random?count=30&has_image=true');
+      var r2 = await api('GET', '/api/questions/random?count=' + QUIZ_SESSION_SIZE + '&has_image=true');
       if (!Array.isArray(r2)) r2 = r2.questions || [];
       questions = r2.filter(function(q) {
         var u = q.bildeUrl || q.image_url || '';
@@ -6621,7 +7121,8 @@ async function loadQuiz(url) {
       });
     }
     if (!questions.length) {
-      qCard.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="es-icon">📭</div><p>' + t('questions_empty') + '</p></div>';
+      var emptyKey = isMistakeMode ? 'mistakes_empty' : 'questions_empty';
+      qCard.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="es-icon">📭</div><p>' + t(emptyKey) + '</p></div>';
       return;
     }
     qIdx = 0; qScore = 0; qAnswered = false;
@@ -6633,7 +7134,8 @@ async function loadQuiz(url) {
     renderQuestion();
   } catch(e) {
     if (e.status === 402) { showPaywall(); return; }
-    qCard.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="es-icon">⚠️</div><p>' + t('generic_error') + '<br>' + escH(e.message) + '</p></div>';
+    var errorKey = isMistakeMode ? 'mistakes_load_error' : 'generic_error';
+    qCard.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="es-icon">⚠️</div><p>' + t(errorKey) + '<br>' + escH(e.message) + '</p></div>';
   }
 }
 
@@ -7958,6 +8460,10 @@ function updateAiPanel(isOk, expl) {
     });
   }
 
+  // Michael is an enhancement, never a gate. The ordinary explanation and
+  // Next button are already available before this asynchronous call starts.
+  if (!isOk) openMichaelQuizCoach();
+
   // Mobile question image tint
   var imgWrap = document.getElementById('qImgWrap');
   if (imgWrap) {
@@ -7969,6 +8475,7 @@ function updateAiPanel(isOk, expl) {
 
 function nextQ() {
   stopAllSpeech();
+  closeMichaelQuizCoach();
   if (_aiPanelTimer) { clearTimeout(_aiPanelTimer); _aiPanelTimer = null; } // never let a delayed panel land on the next question
   // Review mode uses its own card renderer — skip normal quiz flow
   if (_reviewMode) { reviewNext(); return; }
@@ -8474,7 +8981,7 @@ function showEnd() {
 
   // ── Save attempt — always runs, even if display above failed ──
   if (deviceId && total > 0) {
-    var mode = isExamMode ? 'exam' : (currentCat ? 'category' : 'daily');
+    var mode = isMistakeMode ? 'mistakes' : (isExamMode ? 'exam' : (currentCat ? 'category' : 'daily'));
     var completedAt = new Date().toISOString();
     var clientAttemptId = 'web_' + completedAt + '_' + Math.random().toString(36).slice(2, 8);
     var attemptData = {
@@ -8490,7 +8997,8 @@ function showEnd() {
         return { question_id: String(q._id || q.id || q.question_id || ''), index: i };
       }),
       started_at: quizStartedAt || completedAt,
-      completed_at: completedAt
+      completed_at: completedAt,
+      is_mistake_mode: isMistakeMode
     };
     // Build a local mirror immediately so History shows it even before the DB catches up
     _lastSavedAttempt = {
@@ -8524,7 +9032,8 @@ function showEnd() {
 }
 
 function retryQuiz() {
-  if (currentCat) startQuiz(currentCat.id);
+  if (isMistakeMode) startMistakeQuiz();
+  else if (currentCat) startQuiz(currentCat.id);
   else startRandomQuiz();
 }
 
@@ -8534,6 +9043,19 @@ function retryQuiz() {
 // _unlockAudioPlayback(), _ensureBackendAudio() og _ensureTeacherAudio() er definert
 // sammen med lyd-globalene lenger oppe — ikke dupliser dem her. Funksjonsdeklarasjoner
 // heises, så en kopi lenger ned i filen ville stille overskrevet originalen.
+
+// Én felles feilhåndtering for all TTS-avspilling. Uten dette feiler lyden
+// stille: brukeren ser bare at ingenting skjer, og vi får aldri vite hvorfor.
+function _ttsPlaybackFailed(err, el) {
+  var name = (err && err.name) || 'Error';
+  console.error('TTS-avspilling feilet:', name, err);
+  // AbortError betyr at src ble byttet mens play() pågikk — forventet når
+  // brukeren trykker på en ny boble, og ikke noe å skremme med.
+  if (name === 'AbortError') return;
+  if (name === 'NotAllowedError') { toast(t('tts_tap_first'), 5000); return; }
+  var code = el && el.error ? (' (kode ' + el.error.code + ')') : '';
+  toast(t('tts_failed') + code, 5000);
+}
 
 function speakQ() {
   var q = questions[qIdx];
@@ -8547,14 +9069,11 @@ function speakQ() {
   }
   _ensureBackendAudio();
   _unlockAudioPlayback(_backendAudio);
-  var _u = ttsStreamUrl(text, appLang);
-  _rewindIfSameSource(_backendAudio, _u);
-  _backendAudio.src = _u;
+  _backendAudio.src = ttsStreamUrl(text, appLang);
   _backendAudio.playbackRate = ttsRate || 1.0;
   _backendAudio.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
   ttsPlaying = true;
   updateTtsBtn(true);
-  _armTtsWatchdog(_backendAudio, function() { ttsPlaying = false; updateTtsBtn(false); });
   _backendAudio.play().catch(function(err) {
      ttsPlaying = false;
      updateTtsBtn(false);
@@ -8594,22 +9113,31 @@ function speakText(text) {
     .trim();
   if (!clean) return;
 
-  if (_teacherTtsPlaying) {
+  // The same bubble toggles playback off. A different bubble replaces the old
+  // audio and starts immediately with this same user gesture.
+  if (_teacherTtsPlaying && _teacherActiveText === clean) {
     stopAllSpeech();
     return;
   }
+  if (_teacherTtsPlaying || (_teacherAudio && !_teacherAudio.paused)) {
+    stopAllSpeech();
+  }
   _ensureTeacherAudio();
   _unlockAudioPlayback(_teacherAudio);
-  var _tu = ttsStreamUrl(clean, appLang);
-  _rewindIfSameSource(_teacherAudio, _tu);
-  _teacherAudio.src = _tu;
+  var playToken = ++_teacherAudioToken;
+  _teacherActiveText = clean;
+  _teacherAudio.src = ttsStreamUrl(clean, appLang);
   _teacherAudio.playbackRate = ttsRate || 1.0;
   _teacherAudio.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
   _teacherTtsPlaying = true;
-  _armTtsWatchdog(_teacherAudio, function() { _teacherTtsPlaying = false; });
   _teacherAudio.play().catch(function(err) {
-     _teacherTtsPlaying = false;
-     _ttsPlaybackFailed(err, _teacherAudio);
+     // Token-vakten er Antis: en forsinket feil fra en avlyst avspilling skal
+     // ikke nullstille tilstanden til den som spiller nå.
+     if (playToken === _teacherAudioToken) {
+       _teacherTtsPlaying = false;
+       _teacherActiveText = '';
+       _ttsPlaybackFailed(err, _teacherAudio);
+     }
   });
 }
 
@@ -8817,6 +9345,107 @@ var _teacherNormalHtml        = '';
 var _teacherQuizHtml          = '';
 var _teacherNormalHasUserMsg  = false;
 var _teacherQuizHasUserMsg    = false;
+var _quizCoachSessionId       = null;
+var _quizCoachAbort           = null;
+
+function _quizCoachContext() {
+  var q = questions[qIdx];
+  var lastAns = _sessionAnswers[_sessionAnswers.length - 1];
+  if (!q || !lastAns || lastAns.is_correct !== false) return null;
+  var qText = pickLang(q.question) || pickField(q, 'question_text') || '';
+  var userAnsText = _displayedAnswerText(lastAns.user_answer);
+  var correctAnsText = _displayedAnswerText(currentCorrect);
+  return {
+    questionId: String(q._id || q.id || q.question_id || 'question'),
+    question: qText,
+    userAnswerId: lastAns.user_answer,
+    userAnswer: userAnsText,
+    correctAnswerId: currentCorrect,
+    correctAnswer: correctAnsText,
+    explanation: currentExpl || ''
+  };
+}
+
+async function _quizCoachRequest(message) {
+  if (_quizCoachAbort) _quizCoachAbort.abort();
+  var controller = new AbortController();
+  _quizCoachAbort = controller;
+  var timeoutId = setTimeout(function(){ controller.abort(); }, 12000);
+  try {
+    var headers = {'Content-Type':'application/json'};
+    if (token) headers.Authorization = 'Bearer ' + token;
+    var res = await fetch('/api/teacher/chat', {
+      method:'POST', headers:headers, signal:controller.signal,
+      body:JSON.stringify({session_id:_quizCoachSessionId, message:message, language:appLang})
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    var data = await res.json();
+    if (data.session_id) _quizCoachSessionId = data.session_id;
+    return data;
+  } finally {
+    clearTimeout(timeoutId);
+    if (_quizCoachAbort === controller) _quizCoachAbort = null;
+  }
+}
+
+async function openMichaelQuizCoach() {
+  var ctx = _quizCoachContext();
+  if (!ctx) return;
+  var panel = document.getElementById('michaelQuizCoach');
+  var body = document.getElementById('michaelQuizCoachBody');
+  var action = document.getElementById('michaelQuizCoachAction');
+  if (!panel || !body || !action) return;
+
+  _quizCoachSessionId = 'quiz_coach_' + appLang + '_' + ctx.questionId.replace(/[^a-zA-Z0-9_-]/g,'').slice(0,32) + '_' + Date.now().toString(36);
+  body.textContent = t('coach_loading');
+  action.classList.remove('show');
+  action.disabled = false;
+  panel.classList.add('open');
+
+  var languageName = {th:'Thai', no:'Norwegian', en:'English'}[appLang] || '';
+  var prompt = 'You are Michael, a calm Norwegian driving instructor. Answer only in ' + languageName + '. '
+    + 'Never mix languages. Keep the answer short enough for a mobile panel. Explain why the student answer is wrong, why the correct answer is right, and give one practical traffic example. '
+    + 'Use the mental model "Kongen og tjeneren" or "HAV-regelen" only when it fits naturally; never force either model.\n\n'
+    + '<quiz_context>\nQuestion: ' + ctx.question
+    + '\nStudent answer (' + ctx.userAnswerId + '): ' + ctx.userAnswer
+    + '\nCorrect answer (' + ctx.correctAnswerId + '): ' + ctx.correctAnswer
+    + '\nExisting explanation: ' + ctx.explanation + '\n</quiz_context>';
+  try {
+    var data = await _quizCoachRequest(prompt);
+    if (!panel.classList.contains('open')) return;
+    _renderQuizCoachResponse(body, data);
+    action.classList.remove('show');
+  } catch(e) {
+    if (panel.classList.contains('open')) body.textContent = t('coach_unavailable');
+  }
+}
+
+async function requestCoachPractice() {
+  var body = document.getElementById('michaelQuizCoachBody');
+  var action = document.getElementById('michaelQuizCoachAction');
+  if (!body || !action || !_quizCoachSessionId) return;
+  action.disabled = true;
+  body.textContent = t('coach_practice_loading');
+  var promptByLang = {
+    th:'ยกตัวอย่างสถานการณ์จราจรสั้น ๆ หนึ่งสถานการณ์ แล้วถามคำถามตรวจสอบความเข้าใจหนึ่งข้อ อย่าเฉลยทันที',
+    no:'Gi én kort trafikksituasjon og still ett enkelt kontrollspørsmål. Ikke avslør svaret med én gang.',
+    en:'Give one short traffic situation and ask one simple check question. Do not reveal the answer immediately.'
+  };
+  try {
+    var data = await _quizCoachRequest(promptByLang[appLang] || '');
+    _renderQuizCoachResponse(body, data);
+    action.classList.remove('show');
+  } catch(e) {
+    body.textContent = t('coach_unavailable');
+    action.disabled = false;
+  }
+}
+
+function closeMichaelQuizCoach() {
+  var panel = document.getElementById('michaelQuizCoach');
+  if (panel) panel.classList.remove('open');
+  if (_quizCoachAbort) { _quizCoachAbort.abort(); _quizCoachAbort = null; }
+}
 
 function switchTeacherSession(type) {
   var msgs = document.getElementById('teacherMessages');
@@ -8946,6 +9575,7 @@ function resetTeacherForLanguage() {
   if (msgs) msgs.innerHTML = '';
   var suggestions = document.getElementById('teacherSuggestions');
   if (suggestions) suggestions.style.display = '';
+  closeTeacherSidebar();
   _teacherRemoveChips();
 }
 
@@ -9038,12 +9668,12 @@ function _buildAssistantContent(text, container) {
 
       var img = document.createElement('img');
       img.src = imgUrl;
-      img.style.cssText = 'width:100%; border-radius:8px; display:block; height:auto;';
+      img.className = 'teacher-inline-image';
       wrap.appendChild(img);
 
       if (caption) {
         var capEl = document.createElement('div');
-        capEl.style.cssText = 'font-size:0.75rem; color:var(--muted); margin-top:6px; text-align:center;';
+        capEl.className = 'teacher-inline-caption';
         capEl.textContent = caption;
         wrap.appendChild(capEl);
       }
@@ -9079,6 +9709,15 @@ function _buildAssistantContent(text, container) {
       hdrEl.className = 'tm-section-hdr';
       hdrEl.textContent = block;
       container.appendChild(hdrEl);
+      return;
+    }
+
+    // A concise learner question is a real heading, never clipped body copy.
+    if (singleLine && /[?？]$/.test(block) && block.length < 180) {
+      var questionTitle = document.createElement('h1');
+      questionTitle.className = 'tm-question-title';
+      questionTitle.textContent = block;
+      container.appendChild(questionTitle);
       return;
     }
 
@@ -9141,7 +9780,7 @@ async function loadTeacher() {
       var btn = tspBtns[i];
       if (!btn) return;
       btn.innerHTML = topic.icon + ' <span>' + topic.text + '</span>';
-      btn.onclick = (function(msg){ return function(){ teacherSend(msg); }; })(topic.icon + ' ' + topic.text);
+      btn.onclick = (function(msg){ return function(){ closeTeacherSidebar(); teacherSend(msg); }; })(topic.icon + ' ' + topic.text);
     });
   } catch(e) {
     // Fallback: keep existing hardcoded chips
@@ -9152,7 +9791,7 @@ async function loadTeacher() {
       if (!key) return;
       el.textContent = t(key);
       var btn = el.closest('.tsp-btn');
-      if (btn) { var label = t(key); btn.onclick = (function(lbl){ return function(){ teacherSend(lbl); }; })(label); }
+      if (btn) { var label = t(key); btn.onclick = (function(lbl){ return function(){ closeTeacherSidebar(); teacherSend(lbl); }; })(label); }
     });
   }
 }
@@ -9168,16 +9807,53 @@ function _teacherUpdateChips() {
   });
 }
 
+function toggleTeacherTopics() {
+  var suggestions = document.getElementById('teacherSuggestions');
+  var button = document.getElementById('teacherMoreBtn');
+  if (!suggestions || !button) return;
+  var expanded = suggestions.classList.toggle('expanded');
+  button.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+  button.textContent = t(expanded ? 'teacher_fewer_topics' : 'teacher_more_topics');
+}
+
+function setTeacherSidebar(open) {
+  var panel = document.getElementById('teacherSidePanel');
+  var backdrop = document.getElementById('teacherSidebarBackdrop');
+  var button = document.getElementById('teacherSidebarToggle');
+  if (!panel || !backdrop || !button) return;
+  panel.classList.toggle('open', !!open);
+  backdrop.classList.toggle('open', !!open);
+  panel.setAttribute('aria-hidden', open ? 'false' : 'true');
+  button.setAttribute('aria-expanded', open ? 'true' : 'false');
+  var label = t(open ? 'teacher_topics_close' : 'teacher_topics_open');
+  button.setAttribute('aria-label', label);
+  button.title = label;
+}
+
+function toggleTeacherSidebar() {
+  var panel = document.getElementById('teacherSidePanel');
+  setTeacherSidebar(!(panel && panel.classList.contains('open')));
+}
+
+function closeTeacherSidebar() {
+  setTeacherSidebar(false);
+}
+
+document.addEventListener('keydown', function(event) {
+  if (event.key === 'Escape') closeTeacherSidebar();
+});
+
 function _teacherAppendBubble(role, text) {
   var msgs = document.getElementById('teacherMessages');
-  if (!msgs) return;
+  if (!msgs) return null;
   if (role === 'user') _teacherHasUserMsg = true;
   var row = document.createElement('div');
   row.className = 'tm-row ' + role;
   if (role === 'assistant') {
-    var av = document.createElement('div');
+    var av = document.createElement('img');
     av.className = 'tm-av';
-    av.textContent = '🚗';
+    av.src = '/api/assets/michael_profile.jpg';
+    av.alt = 'Michael';
     row.appendChild(av);
   }
   var bubble = document.createElement('div');
@@ -9201,11 +9877,412 @@ function _teacherAppendBubble(role, text) {
   }
   row.appendChild(bubble);
   msgs.appendChild(row);
-  if (_teacherHasUserMsg) {
+  if (role === 'user') {
     msgs.scrollTop = msgs.scrollHeight;
-  } else {
+  } else if (!_teacherHasUserMsg) {
     msgs.scrollTop = 0;
   }
+  return bubble;
+}
+
+function _teacherScrollToAnswerStart(bubble) {
+  try {
+    var msgs = document.getElementById('teacherMessages');
+    var answerRow = bubble && bubble.closest ? bubble.closest('.tm-row') : null;
+    if (!msgs || !answerRow) return;
+    msgs.scrollTop = Math.max(0, answerRow.offsetTop - 12);
+  } catch (scrollError) {
+    // Scrolling is progressive enhancement; the answer must remain readable.
+  }
+}
+
+function openLightbox(src, alt, caption) {
+  var lb = document.getElementById('t2dLightbox');
+  if (!lb) return;
+  var img = document.getElementById('t2dLightboxImg');
+  var cap = document.getElementById('t2dLightboxCaption');
+  if (!img) return;
+  img.src = src;
+  img.alt = alt || '';
+  if (cap) cap.textContent = caption || alt || '';
+  lb.classList.add('active');
+  lb.setAttribute('aria-hidden', 'false');
+}
+
+function closeLightbox(e) {
+  if (e && e.stopPropagation) e.stopPropagation();
+  var lb = document.getElementById('t2dLightbox');
+  if (lb) {
+    lb.classList.remove('active');
+    lb.setAttribute('aria-hidden', 'true');
+  }
+}
+
+function _teacherTextOnlyReply(text) {
+  return String(text || '').replace(/\[image:[^\]]*\]/gi, '').replace(/\n{3,}/g, '\n\n').trim();
+}
+
+function _teacherSignValue(sign, field) {
+  return _getProp((sign && sign[field]) || {}, appLang) || '';
+}
+
+var _teacherSignCache = {};
+var _teacherSignAliases = {
+  no: {
+    '202_0':['vikepliktsskiltet','vikepliktskiltet','vikepliktsskilt','vikepliktskilt'],
+    '204_0':['stoppskiltet','stoppskilt'],
+    '208_0':['forkjørsveiskiltet','forkjørsvegskiltet','forkjørsvei','forkjørsveg','forkjørsrett']
+  },
+  th: {
+    '202_0':['ป้ายให้ทาง'],
+    '204_0':['ป้ายหยุด'],
+    '208_0':['ป้ายทางเอก','ถนนสายหลัก']
+  },
+  en: {
+    '202_0':['give way sign','yield sign'],
+    '204_0':['stop sign'],
+    '208_0':['priority road sign','priority road']
+  }
+};
+
+async function _getTeacherSign(signId) {
+  var id = String(signId || '').trim();
+  if (!id) return null;
+  if (!_teacherSignCache[id]) {
+    _teacherSignCache[id] = api('GET', '/api/signs/' + encodeURIComponent(id)).catch(function(error) {
+      delete _teacherSignCache[id];
+      console.warn('Sign detail unavailable:', id, error);
+      return null;
+    });
+  }
+  return await _teacherSignCache[id];
+}
+
+async function _openTeacherSignDetailById(signId) {
+  var sign = await _getTeacherSign(signId);
+  if (!sign || !_teacherSignValue(sign, 'name')) return;
+  openSignDetail(sign);
+}
+
+function _teacherSignLinkTerms(sign) {
+  var terms = [];
+  var localizedName = _teacherSignValue(sign, 'name');
+  if (localizedName) terms.push(localizedName);
+  var controlled = ((_teacherSignAliases[appLang] || {})[sign.id] || []);
+  controlled.forEach(function(term) { if (terms.indexOf(term) === -1) terms.push(term); });
+  return terms.sort(function(a, b) { return b.length - a.length; });
+}
+
+function _teacherIsWordChar(value) {
+  return !!value && /[\p{L}\p{N}_]/u.test(value);
+}
+
+function _teacherLinkSignName(container, sign) {
+  if (!container || !sign || !_teacherSignValue(sign, 'name')) return false;
+  var walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, {
+    acceptNode:function(node) {
+      return node.parentElement && !node.parentElement.closest('button, .tm-sign-strip, .tm-media-strip')
+        ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+    }
+  });
+  var nodes = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+  var terms = _teacherSignLinkTerms(sign);
+
+  for (var i = 0; i < nodes.length; i += 1) {
+    var node = nodes[i];
+    var text = node.nodeValue || '';
+    var lower = text.toLocaleLowerCase(appLang);
+    for (var j = 0; j < terms.length; j += 1) {
+      var term = terms[j];
+      var needle = term.toLocaleLowerCase(appLang);
+      var from = 0;
+      while (from <= lower.length - needle.length) {
+        var index = lower.indexOf(needle, from);
+        if (index === -1) break;
+        var needsBoundary = appLang !== 'th';
+        var beforeOk = !needsBoundary || !_teacherIsWordChar(text.charAt(index - 1));
+        var afterOk = !needsBoundary || !_teacherIsWordChar(text.charAt(index + needle.length));
+        if (beforeOk && afterOk) {
+          var tail = node.splitText(index);
+          tail.nodeValue = tail.nodeValue.slice(needle.length);
+          var button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'tm-sign-term';
+          button.textContent = text.slice(index, index + needle.length);
+          button.setAttribute('aria-label', _teacherSignValue(sign, 'name'));
+          button.onclick = function() { openSignDetail(sign); };
+          tail.parentNode.insertBefore(button, tail);
+          return true;
+        }
+        from = index + needle.length;
+      }
+    }
+  }
+  return false;
+}
+
+async function _teacherLinkSignReferences(container, signIds) {
+  if (!container || !Array.isArray(signIds)) return;
+  var uniqueIds = signIds.filter(function(id, index, items) {
+    return id && items.indexOf(id) === index;
+  }).slice(0, 4);
+  for (var i = 0; i < uniqueIds.length; i += 1) {
+    var sign = await _getTeacherSign(uniqueIds[i]);
+    if (sign) _teacherLinkSignName(container, sign);
+  }
+}
+
+function _teacherMediaSafeUrl(value) {
+  var url = String(value || '').trim();
+  return url.indexOf('/api/') === 0 || /^https?:\/\//i.test(url);
+}
+
+function _openTeacherMediaVideo(media) {
+  if (!media || !_teacherMediaSafeUrl(media.url)) return;
+  var isYoutube = !!_extractYtId(media.url);
+  var video = {
+    id:media.id || '',
+    file_path:isYoutube ? '' : media.url,
+    youtube_url:isYoutube ? media.url : '',
+    title_no:appLang === 'no' ? media.title : '',
+    title_th:appLang === 'th' ? media.title : '',
+    title_en:appLang === 'en' ? media.title : '',
+    topic_tags:[],
+    duration_seconds:0
+  };
+  if (!_videosCached) _videosCached = [];
+  var source = video.file_path || video.youtube_url;
+  var exists = _videosCached.some(function(item) {
+    return item && (item.file_path === source || item.youtube_url === source);
+  });
+  if (!exists) _videosCached.push(video);
+  openVideoPlayer(source);
+}
+
+function _buildTeacherMediaCard(media) {
+  if (!media || !media.id || !_teacherMediaSafeUrl(media.url)) return null;
+  if (['sign','intersection_image','video','podcast'].indexOf(media.type) === -1) return null;
+  if (!media.title || !media.caption) return null;
+
+  var card = document.createElement(media.type === 'sign' ? 'button' : 'article');
+  card.className = 'tm-media-card ' + media.type;
+  card.dataset.materialId = media.id;
+  if (media.type === 'sign') {
+    if (!media.sign_id) return null;
+    card.type = 'button';
+    card.setAttribute('aria-label', media.title);
+    card.onclick = function() { _openTeacherSignDetailById(media.sign_id); };
+  }
+
+  if (media.type === 'video') {
+    var button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'tm-media-video';
+    button.setAttribute('aria-label', t('teacher_video_explanation') + ': ' + media.title);
+
+    var play = document.createElement('span');
+    play.className = 'tm-media-play';
+    play.setAttribute('aria-hidden', 'true');
+    play.textContent = '▶';
+    button.appendChild(play);
+
+    var videoCopy = document.createElement('span');
+    videoCopy.className = 'tm-media-copy';
+    var videoLabel = document.createElement('span');
+    videoLabel.className = 'tm-media-video-label';
+    videoLabel.textContent = t('teacher_video_explanation');
+    var videoTitle = document.createElement('span');
+    videoTitle.className = 'tm-media-title';
+    videoTitle.textContent = media.title;
+    var videoCaption = document.createElement('span');
+    videoCaption.className = 'tm-media-caption';
+    videoCaption.textContent = media.caption;
+    videoCopy.appendChild(videoLabel);
+    videoCopy.appendChild(videoTitle);
+    videoCopy.appendChild(videoCaption);
+    button.appendChild(videoCopy);
+    button.onclick = function() { _openTeacherMediaVideo(media); };
+    card.appendChild(button);
+    return card;
+  }
+
+  if (media.type === 'podcast') {
+    var podcastWrap = document.createElement('div');
+    podcastWrap.className = 'tm-media-podcast';
+    var podcastLabel = document.createElement('div');
+    podcastLabel.className = 'tm-media-video-label';
+    podcastLabel.textContent = t('podcast_short');
+    var podcastTitle = document.createElement('div');
+    podcastTitle.className = 'tm-media-title';
+    podcastTitle.textContent = media.title;
+    var podcastCaption = document.createElement('div');
+    podcastCaption.className = 'tm-media-caption';
+    podcastCaption.textContent = media.caption;
+    var audio = document.createElement('audio');
+    audio.controls = true;
+    audio.preload = 'none';
+    audio.src = media.url;
+    audio.setAttribute('aria-label', media.title);
+    podcastWrap.appendChild(podcastLabel);
+    podcastWrap.appendChild(podcastTitle);
+    podcastWrap.appendChild(podcastCaption);
+    podcastWrap.appendChild(audio);
+    card.appendChild(podcastWrap);
+    return card;
+  }
+
+  var visual = document.createElement('div');
+  visual.className = 'tm-media-visual';
+  var image = document.createElement('img');
+  image.className = 'tm-media-image';
+  image.src = media.url;
+  image.alt = media.title;
+  image.loading = 'lazy';
+  image.onerror = function() {
+    if (media.type === 'sign') card.hidden = true;
+    else visual.hidden = true;
+  };
+  visual.appendChild(image);
+  card.appendChild(visual);
+
+  var copy = document.createElement('div');
+  copy.className = 'tm-media-copy';
+  var title = document.createElement('div');
+  title.className = 'tm-media-title';
+  title.textContent = media.title;
+  var caption = document.createElement('div');
+  caption.className = 'tm-media-caption';
+  caption.textContent = media.caption;
+  copy.appendChild(title);
+  copy.appendChild(caption);
+  card.appendChild(copy);
+  return card;
+}
+
+function _teacherAppendMediaCards(mediaItems, container) {
+  if (!container || !Array.isArray(mediaItems) || !mediaItems.length) return [];
+  var seen = {};
+  var renderedSignIds = [];
+  var strip = document.createElement('div');
+  strip.className = 'tm-media-strip';
+  mediaItems.slice(0, 2).forEach(function(media) {
+    if (!media || seen[media.id]) return;
+    var card = _buildTeacherMediaCard(media);
+    if (!card) return;
+    seen[media.id] = true;
+    if (media.sign_id) renderedSignIds.push(media.sign_id);
+    strip.appendChild(card);
+  });
+  if (!strip.children.length) return renderedSignIds;
+  container.appendChild(strip);
+  return renderedSignIds;
+}
+
+function _renderQuizCoachResponse(container, data) {
+  if (!container) return false;
+  var reply = data && data.reply ? data.reply : '';
+  container.innerHTML = '';
+  var answer = document.createElement('div');
+  answer.className = 'mqc-answer';
+  answer.textContent = reply || t('coach_unavailable');
+  container.appendChild(answer);
+  _teacherAppendMediaCards((data && data.media) || [], container);
+  return !!reply;
+}
+
+async function practiceSignFromChat(signId) {
+  var nextUrl = new URL(window.location.href);
+  nextUrl.searchParams.set('sign', signId);
+  window.history.replaceState({}, '', nextUrl.pathname + nextUrl.search);
+  currentCat = null;
+  await loadQuiz('/api/questions/random?count=1&has_image=true&sign_id=' + encodeURIComponent(signId));
+}
+
+async function showSimilarSignsFromChat(sign) {
+  await loadSigns();
+  var fullSign = _allSigns.find(function(item) { return item && item.id === sign.id; });
+  if (fullSign) {
+    openSignDetail(fullSign);
+    return;
+  }
+  showTab('signs');
+}
+
+function _buildTeacherSignCard(sign) {
+  var card = document.createElement('button');
+  card.type = 'button';
+  card.className = 'tm-sign-card';
+  card.setAttribute('aria-label', _teacherSignValue(sign, 'name'));
+  card.onclick = function() { openSignDetail(sign); };
+
+  var imageWrap = document.createElement('div');
+  imageWrap.className = 'tm-sign-image-wrap';
+  var image = document.createElement('img');
+  image.className = 'tm-sign-image';
+  image.src = sign.image_url || sign.file || '';
+  image.alt = _teacherSignValue(sign, 'name');
+  image.loading = 'lazy';
+  image.onerror = function() { imageWrap.hidden = true; };
+  imageWrap.appendChild(image);
+  card.appendChild(imageWrap);
+
+  var copy = document.createElement('div');
+  copy.className = 'tm-sign-copy';
+  var tag = document.createElement('div');
+  tag.className = 'tm-sign-tag';
+  var groupName = _teacherSignValue(sign, 'group_name');
+  tag.textContent = [sign.code || sign.id, groupName].filter(Boolean).join(' • ');
+  copy.appendChild(tag);
+
+  var title = document.createElement('h1');
+  title.className = 'tm-sign-title';
+  title.textContent = _teacherSignValue(sign, 'name') || sign.id;
+  copy.appendChild(title);
+
+  var explanation = document.createElement('div');
+  explanation.className = 'tm-sign-text';
+  explanation.textContent = _teacherSignValue(sign, 'driver_action') || _teacherSignValue(sign, 'explanation') || t('sign_fallback_meaning');
+  copy.appendChild(explanation);
+  card.appendChild(copy);
+  return card;
+}
+
+async function _teacherAppendSignCards(signIds, bubble) {
+  if (!bubble || !Array.isArray(signIds) || !signIds.length) return;
+  var uniqueIds = signIds.filter(function(id, index, items) { return id && items.indexOf(id) === index; }).slice(0, 4);
+  var results = await Promise.all(uniqueIds.map(async function(id) {
+    return await _getTeacherSign(id);
+  }));
+  var signs = results.filter(function(sign) {
+    return sign && _teacherSignValue(sign, 'name');
+  });
+  if (!signs.length) return;
+  var strip = document.createElement('div');
+  strip.className = 'tm-sign-strip';
+  signs.forEach(function(sign) { strip.appendChild(_buildTeacherSignCard(sign)); });
+  bubble.appendChild(strip);
+}
+
+function _teacherAppendSignActions(sign) {
+  if (!sign) return;
+  var msgs = document.getElementById('teacherMessages');
+  if (!msgs) return;
+  var row = document.createElement('div');
+  row.className = 'tm-chips tm-sign-actions-row';
+  var actions = [
+    { label:t('teacher_show_example'), run:function(){ teacherSend(t('teacher_show_example_prompt'), t('teacher_show_example')); } },
+    { label:t('teacher_test_me'), run:function(){ practiceSignFromChat(sign.id); } }
+  ];
+  actions.forEach(function(action) {
+    var button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'tm-chip-btn';
+    button.textContent = action.label;
+    button.onclick = action.run;
+    row.appendChild(button);
+  });
+  msgs.appendChild(row);
 }
 
 function _teacherShowTyping() {
@@ -9214,9 +10291,10 @@ function _teacherShowTyping() {
   var row = document.createElement('div');
   row.className = 'tm-row assistant';
   row.id = 'teacherTypingRow';
-  var av = document.createElement('div');
+  var av = document.createElement('img');
   av.className = 'tm-av';
-  av.textContent = '🚗';
+  av.src = '/api/assets/michael_profile.jpg';
+  av.alt = 'Michael';
   row.appendChild(av);
   var bubble = document.createElement('div');
   bubble.className = 'tm-bubble assistant tm-typing';
@@ -9252,15 +10330,27 @@ function _teacherAppendChips(chips) {
   hdr.className = 'tm-chips-hdr';
   hdr.textContent = t('choose_topic');
   row.appendChild(hdr);
-  chips.forEach(function(label) {
+  chips.forEach(function(label, index) {
     var btn = document.createElement('button');
-    btn.className = 'tm-chip-btn';
+    btn.className = 'tm-chip-btn' + (index >= 3 ? ' mobile-extra' : '');
     btn.textContent = label;
     btn.onclick = function() { teacherSend(label); };
     row.appendChild(btn);
   });
+  if (chips.length > 3) {
+    var toggle = document.createElement('button');
+    toggle.type = 'button';
+    toggle.className = 'tm-chips-toggle';
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.textContent = t('teacher_more_topics');
+    toggle.onclick = function() {
+      var expanded = row.classList.toggle('expanded');
+      toggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+      toggle.textContent = t(expanded ? 'teacher_fewer_topics' : 'teacher_more_topics');
+    };
+    row.appendChild(toggle);
+  }
   msgs.appendChild(row);
-  msgs.scrollTop = msgs.scrollHeight;
 }
 
 async function teacherSend(overrideMsg, customDisplayMsg) {
@@ -9347,29 +10437,20 @@ async function teacherSend(overrideMsg, customDisplayMsg) {
       }
     }
     _teacherHideTyping();
-    _teacherAppendBubble('assistant', data.reply || t('teacher_error'));
-    _teacherAppendChips(data.suggestions || []);
-    // Video card — show for math/braking topics (all languages)
-    if (/reaksjonslengde|bremselengde|stoppelengde|reaksjonstid|alle formler|reaction distance|braking distance|stopping distance|ระยะตอบสนอง|ระยะปฏิกิริยา|ระยะเบรก|ระยะหยุดรถ|สูตรทั้งหมด/i.test(msg)) {
-      fetchVideoForTopic('Bremsing').then(function(v) {
-        if (!v) return;
-        var msgs = document.getElementById('teacherMessages');
-        if (!msgs) return;
-        var rows = msgs.querySelectorAll('.tm-row.assistant');
-        var lastRow = rows[rows.length - 1];
-        if (!lastRow) return;
-        var bubble = lastRow.querySelector('.tm-bubble');
-        if (!bubble || bubble.querySelector('.vid-card')) return;
-        var wrap = document.createElement('div');
-        wrap.style.cssText = 'margin-top:10px;';
-        wrap.innerHTML = buildVideoCard(v);
-        bubble.appendChild(wrap);
-        msgs.scrollTop = msgs.scrollHeight;
-      });
-    }
+    var responseText = data.reply || t('teacher_error');
+    var visibleText = (data.sign_ids && data.sign_ids.length) ? _teacherTextOnlyReply(responseText) : responseText;
+    var assistantBubble = _teacherAppendBubble('assistant', visibleText);
+    await _teacherLinkSignReferences(assistantBubble, data.sign_ids || []);
+    var mediaSignIds = _teacherAppendMediaCards(data.media || [], assistantBubble);
+    var fallbackSignIds = (data.sign_ids || []).filter(function(signId) {
+      return mediaSignIds.indexOf(signId) === -1;
+    });
+    await _teacherAppendSignCards(fallbackSignIds, assistantBubble);
+    _teacherScrollToAnswerStart(assistantBubble);
   } catch(e) {
     _teacherHideTyping();
-    _teacherAppendBubble('assistant', t('teacher_error'));
+    var errorBubble = _teacherAppendBubble('assistant', t('teacher_error'));
+    _teacherScrollToAnswerStart(errorBubble);
   } finally {
     _teacherTyping = false;
     if (sendBtn) sendBtn.disabled = false;
@@ -9849,8 +10930,13 @@ function toggleSignFavorite() {
   _renderSignPanel();
 }
 
-function practiceThisSign() {
+async function practiceThisSign() {
+  var signId = _signPanelData && _signPanelData.id;
   closeSignDetail();
+  if (signId) {
+    await practiceSignFromChat(signId);
+    return;
+  }
   showTab('cats');
 }
 
@@ -9942,46 +11028,48 @@ VOICE_TESTER_HTML = """<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Stemmetest — Michaels klonede stemme</title>
+<title>AI Thai Voice Tester</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    background: #0d0d0d; color: #e0e0e0;
+    background: #0d0d0d;
+    color: #e0e0e0;
     font-family: 'Segoe UI', system-ui, sans-serif;
-    min-height: 100vh; display: flex; align-items: flex-start;
-    justify-content: center; padding: 24px;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
   }
   .card {
-    background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 16px;
-    padding: 32px; width: 100%; max-width: 620px;
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    border-radius: 16px;
+    padding: 32px;
+    width: 100%;
+    max-width: 520px;
     box-shadow: 0 8px 40px rgba(0,0,0,0.5);
   }
-  .logo { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+  .logo { display:flex; align-items:center; gap:10px; margin-bottom:28px; }
   .logo-icon {
     width:40px; height:40px; border-radius:10px;
     background: linear-gradient(135deg,#8b5cf6,#6366f1);
-    display:flex; align-items:center; justify-content:center; font-size:20px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:20px;
   }
   .logo h1 { font-size:1.15rem; font-weight:600; color:#fff; }
   .logo p { font-size:0.75rem; color:#666; }
-  .lead { font-size:0.85rem; color:#888; line-height:1.6; margin:16px 0 24px; }
   label { display:block; font-size:0.8rem; color:#888; margin-bottom:6px; font-weight:500; letter-spacing:.04em; text-transform:uppercase; }
-  textarea {
-    width:100%; background:#111; border:1px solid #2a2a2a; border-radius:8px;
-    color:#e0e0e0; font-size:0.95rem; padding:11px 14px; outline:none;
-    transition:border-color .2s; font-family: inherit; resize:vertical;
-    min-height:90px; line-height:1.7;
+  input, textarea {
+    width:100%; background:#111; border:1px solid #2a2a2a;
+    border-radius:8px; color:#e0e0e0; font-size:0.95rem;
+    padding:11px 14px; outline:none; transition:border-color .2s;
+    font-family: inherit;
   }
-  textarea:focus { border-color:#6366f1; }
-  .field { margin-bottom:20px; }
-  .langrow { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:20px; }
-  .langbtn {
-    padding:12px 8px; border:1px solid #2a2a2a; border-radius:10px; cursor:pointer;
-    background:#111; color:#bbb; font-size:0.9rem; font-weight:600;
-    transition:all .15s; font-family:inherit;
-  }
-  .langbtn:hover { border-color:#6366f1; color:#fff; }
-  .langbtn.active { background:linear-gradient(135deg,#8b5cf6,#6366f1); color:#fff; border-color:transparent; }
+  input:focus, textarea:focus { border-color:#6366f1; }
+  textarea { resize:vertical; min-height:120px; line-height:1.6; }
+  .field { margin-bottom:18px; }
+  .row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
   .btn {
     width:100%; padding:13px; border:none; border-radius:10px; cursor:pointer;
     font-size:1rem; font-weight:600; letter-spacing:.02em;
@@ -9991,26 +11079,15 @@ VOICE_TESTER_HTML = """<!DOCTYPE html>
   .btn:hover { opacity:.9; }
   .btn:active { transform:scale(.98); }
   .btn:disabled { opacity:.45; cursor:not-allowed; }
-  .btn.secondary { background:#222; border:1px solid #333; margin-top:10px; }
   .status {
     margin-top:16px; padding:12px 14px; border-radius:8px;
-    font-size:0.875rem; display:none; line-height:1.6;
+    font-size:0.875rem; display:none;
   }
   .status.error { background:#2d1515; border:1px solid #5a1a1a; color:#f87171; display:block; }
   .status.ok { background:#142014; border:1px solid #1a4a1a; color:#86efac; display:block; }
-  .status.warn { background:#2a2113; border:1px solid #5a4a1a; color:#fcd34d; display:block; }
   .status.loading { background:#1a1a2e; border:1px solid #2a2a5a; color:#a5b4fc; display:block; }
   audio { width:100%; margin-top:14px; border-radius:8px; display:none; }
-  .hint { font-size:0.72rem; color:#555; margin-top:6px; line-height:1.6; }
-  .diag { margin-top:24px; padding-top:20px; border-top:1px solid #242424; }
-  .diag h2 { font-size:0.8rem; color:#888; text-transform:uppercase; letter-spacing:.04em; margin-bottom:12px; }
-  table { width:100%; border-collapse:collapse; font-size:0.82rem; }
-  th, td { text-align:left; padding:7px 8px; border-bottom:1px solid #222; }
-  th { color:#666; font-weight:500; }
-  td { color:#ccc; font-family:ui-monospace, monospace; font-size:0.78rem; word-break:break-all; }
-  .pill { display:inline-block; padding:2px 8px; border-radius:99px; font-size:0.7rem; font-weight:600; }
-  .pill.good { background:#142014; color:#86efac; border:1px solid #1a4a1a; }
-  .pill.bad { background:#2d1515; color:#f87171; border:1px solid #5a1a1a; }
+  .hint { font-size:0.72rem; color:#555; margin-top:5px; }
 </style>
 </head>
 <body>
@@ -10018,148 +11095,87 @@ VOICE_TESTER_HTML = """<!DOCTYPE html>
   <div class="logo">
     <div class="logo-icon">🎙️</div>
     <div>
-      <h1>Stemmetest — Michaels klonede stemme</h1>
-      <p>Tester den ekte produksjonsruten /api/tts</p>
+      <h1>AI Thai Voice Tester</h1>
+      <p>ElevenLabs · eleven_multilingual_v2</p>
     </div>
   </div>
 
-  <p class="lead">
-    Denne siden kaller <strong>samme endepunkt som appen bruker</strong>. Hører du stemmen
-    din her, virker den i quizen og i Michael-chatten også. Ingen API-nøkkel skal limes inn
-    — nøkkelen ligger i serveren.
-  </p>
-
-  <div class="field">
-    <label>Språk</label>
-    <div class="langrow">
-      <button class="langbtn active" data-lang="th-TH" onclick="pickLang(this)">🇹🇭 Thai</button>
-      <button class="langbtn" data-lang="nb-NO" onclick="pickLang(this)">🇳🇴 Norsk</button>
-      <button class="langbtn" data-lang="en-US" onclick="pickLang(this)">🇬🇧 English</button>
+  <div class="row">
+    <div class="field">
+      <label>ElevenLabs API Key</label>
+      <input type="password" id="apiKey" placeholder="sk-..." autocomplete="off">
+      <div class="hint">Aldri lagret — kun i nettleseren</div>
+    </div>
+    <div class="field">
+      <label>Voice ID</label>
+      <input type="text" id="voiceId" placeholder="21m00Tcm..." value="21m00Tcm4TlvDq8ikWAM">
     </div>
   </div>
 
   <div class="field">
-    <label>Tekst</label>
-    <textarea id="text"></textarea>
-    <p class="hint">Teksten byttes automatisk når du velger språk. Du kan skrive din egen.</p>
+    <label>Thai-tekst</label>
+    <textarea id="thaiText">กรุณาหยุดรถที่ป้ายหยุดรถ แล้วมองซ้ายขวาก่อนออกตัว ขับรถด้วยความระมัดระวัง</textarea>
   </div>
 
-  <button class="btn" id="genBtn" onclick="generate()">Spill av stemmen min</button>
-  <button class="btn secondary" onclick="checkStatus()">Sjekk lydoppsettet (/api/tts/status)</button>
-
+  <button class="btn" id="genBtn" onclick="generate()">&#9654; Generer Lyd</button>
   <div class="status" id="status"></div>
-  <audio id="player" controls></audio>
-
-  <div class="diag" id="diag" style="display:none">
-    <h2>Diagnostikk</h2>
-    <table id="diagTable"></table>
-  </div>
+  <audio controls id="player"></audio>
 </div>
 
 <script>
-var SAMPLES = {
-  'th-TH': 'สวัสดีครับ ผมชื่อไมเคิล ผมเป็นครูสอนขับรถ วันนี้เราจะมาเรียนเรื่องการให้ทางกันครับ',
-  'nb-NO': 'Hei, jeg heter Michael, og jeg er trafikklærer. I dag skal vi snakke om vikeplikt.',
-  'en-US': 'Hello, my name is Michael and I am a driving instructor. Today we will talk about right of way.'
-};
-var currentLang = 'th-TH';
+async function generate() {
+  var key = document.getElementById('apiKey').value.trim();
+  var voiceId = document.getElementById('voiceId').value.trim();
+  var text = document.getElementById('thaiText').value.trim();
+  var btn = document.getElementById('genBtn');
+  var status = document.getElementById('status');
+  var player = document.getElementById('player');
 
-document.getElementById('text').value = SAMPLES[currentLang];
+  if (!key) { showStatus('error', 'Skriv inn ElevenLabs API Key.'); return; }
+  if (!voiceId) { showStatus('error', 'Skriv inn Voice ID.'); return; }
+  if (!text) { showStatus('error', 'Skriv inn Thai-tekst.'); return; }
 
-function pickLang(btn) {
-  var els = document.querySelectorAll('.langbtn');
-  for (var i = 0; i < els.length; i++) { els[i].classList.remove('active'); }
-  btn.classList.add('active');
-  var prev = currentLang;
-  currentLang = btn.getAttribute('data-lang');
-  var box = document.getElementById('text');
-  if (!box.value.trim() || box.value.trim() === SAMPLES[prev]) {
-    box.value = SAMPLES[currentLang];
+  btn.disabled = true;
+  player.style.display = 'none';
+  showStatus('loading', 'Genererer lyd...');
+
+  try {
+    var res = await fetch('https://api.elevenlabs.io/v1/text-to-speech/' + voiceId, {
+      method: 'POST',
+      headers: {
+        'xi-api-key': key,
+        'Content-Type': 'application/json',
+        'Accept': 'audio/mpeg'
+      },
+      body: JSON.stringify({
+        text: text,
+        model_id: 'eleven_multilingual_v2',
+        voice_settings: { stability: 0.5, similarity_boost: 0.75 }
+      })
+    });
+
+    if (!res.ok) {
+      var err = await res.json().catch(function(){ return {}; });
+      throw new Error(err.detail && err.detail.message ? err.detail.message : 'Status ' + res.status);
+    }
+
+    var blob = await res.blob();
+    var url = URL.createObjectURL(blob);
+    player.src = url;
+    player.style.display = 'block';
+    player.play();
+    showStatus('ok', 'Lyd klar! Spilles av na.');
+  } catch(e) {
+    showStatus('error', 'Feil: ' + e.message);
+  } finally {
+    btn.disabled = false;
   }
 }
 
 function showStatus(type, msg) {
   var el = document.getElementById('status');
   el.className = 'status ' + type;
-  el.innerHTML = msg;
-}
-
-async function generate() {
-  var text = document.getElementById('text').value.trim();
-  var btn = document.getElementById('genBtn');
-  var player = document.getElementById('player');
-  if (!text) { showStatus('error', 'Skriv inn tekst først.'); return; }
-
-  btn.disabled = true;
-  player.style.display = 'none';
-  showStatus('loading', 'Genererer lyd via /api/tts …');
-
-  try {
-    var url = '/api/tts?lang=' + encodeURIComponent(currentLang) + '&text=' + encodeURIComponent(text);
-    var res = await fetch(url);
-    if (!res.ok) {
-      var detail = '';
-      try { var j = await res.json(); detail = j.detail || ''; } catch (e) {}
-      throw new Error('Status ' + res.status + (detail ? ' — ' + detail : ''));
-    }
-
-    var provider = res.headers.get('X-TTS-Provider') || 'ukjent';
-    var voice = res.headers.get('X-TTS-Voice') || 'ukjent';
-    var blob = await res.blob();
-    player.src = URL.createObjectURL(blob);
-    player.style.display = 'block';
-    player.play().catch(function(){});
-
-    if (provider.indexOf('elevenlabs') === 0) {
-      showStatus('ok',
-        '<strong>Dette er din klonede stemme.</strong><br>' +
-        'Leverandør: <code>' + provider + '</code><br>Voice ID: <code>' + voice + '</code>');
-    } else {
-      showStatus('warn',
-        '<strong>Dette er IKKE stemmen din.</strong> Du hører en Google-robotstemme, ' +
-        'fordi ElevenLabs ikke svarte.<br>Leverandør: <code>' + provider + '</code>' +
-        (voice !== 'ukjent' ? '<br>Stemme: <code>' + voice + '</code>' : '') +
-        '<br>Trykk «Sjekk lydoppsettet» for å se hvorfor.');
-    }
-  } catch (err) {
-    showStatus('error', 'Feilet: ' + err.message);
-  } finally {
-    btn.disabled = false;
-  }
-}
-
-async function checkStatus() {
-  showStatus('loading', 'Henter /api/tts/status ...');
-  try {
-    var res = await fetch('/api/tts/status');
-    var d = await res.json();
-    var rows = '';
-    rows += '<tr><th>ElevenLabs-nøkkel satt</th><td>' +
-      (d.elevenlabs_key_configured ? '<span class="pill good">JA</span>' : '<span class="pill bad">NEI</span>') + '</td></tr>';
-    rows += '<tr><th>Google-nøkkel (nødfallback)</th><td>' +
-      (d.google_key_configured ? '<span class="pill good">JA</span>' : '<span class="pill bad">NEI</span>') + '</td></tr>';
-    rows += '<tr><th>Klonet Voice ID</th><td>' + d.cloned_voice_id + '</td></tr>';
-    rows += '<tr><th>Modell</th><td>' + d.elevenlabs_model_id + '</td></tr>';
-    for (var lang in d.languages) {
-      var r = d.languages[lang];
-      rows += '<tr><th>' + lang + '</th><td>' +
-        (r.ok ? '<span class="pill good">klonet stemme</span>' : '<span class="pill bad">fallback</span>') +
-        '<br>' + r.actual + '</td></tr>';
-    }
-    document.getElementById('diagTable').innerHTML = rows;
-    document.getElementById('diag').style.display = 'block';
-
-    if (d.elevenlabs_key_configured) {
-      showStatus('ok', 'ELEVENLABS_API_KEY er satt. Alle tre språk skal gi din klonede stemme.');
-    } else {
-      showStatus('error',
-        '<strong>ELEVENLABS_API_KEY mangler i serveren.</strong><br>' +
-        'Det er derfor du ikke hører stemmen din. Den må settes som miljøvariabel i Railway. ' +
-        'Dette er en backend-oppgave (Anti/Codex).');
-    }
-  } catch (err) {
-    showStatus('error', 'Klarte ikke hente status: ' + err.message);
-  }
+  el.textContent = msg;
 }
 </script>
 </body>

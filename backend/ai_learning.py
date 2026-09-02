@@ -192,6 +192,124 @@ async def record_attempt(
     return updated
 
 
+async def record_user_mistake(
+    db,
+    user_id: str,
+    question_id: str,
+    is_correct: bool,
+    mode: str,
+    now: Optional[datetime] = None,
+) -> Optional[dict]:
+    """Update the simple, persistent mistake lifecycle for a registered user.
+
+    Normal correct answers intentionally do nothing. Correct answers only build
+    mastery inside the dedicated ``mistakes`` mode. A later wrong answer always
+    reactivates a mastered question.
+    """
+    user_id = str(user_id or "").strip()
+    question_id = str(question_id or "").strip()
+    if not user_id or not question_id:
+        return None
+
+    timestamp = (now or _now()).isoformat()
+    key = {"user_id": user_id, "question_id": question_id}
+
+    if not is_correct:
+        await db.user_mistakes.update_one(
+            key,
+            {
+                "$inc": {"wrong_count": 1},
+                "$set": {
+                    "correct_streak": 0,
+                    "active": True,
+                    "mastered": False,
+                    "last_wrong_at": timestamp,
+                    "updated_at": timestamp,
+                },
+                "$setOnInsert": {
+                    "user_id": user_id,
+                    "question_id": question_id,
+                    "last_practiced_at": None,
+                    "created_at": timestamp,
+                },
+            },
+            upsert=True,
+        )
+        return await db.user_mistakes.find_one(key, {"_id": 0})
+
+    if mode != "mistakes":
+        return None
+
+    # Pipeline update keeps the streak increment and mastery transition atomic.
+    return await db.user_mistakes.find_one_and_update(
+        {**key, "active": True},
+        [
+            {"$set": {
+                "correct_streak": {"$add": [{"$ifNull": ["$correct_streak", 0]}, 1]},
+                "last_practiced_at": timestamp,
+                "updated_at": timestamp,
+            }},
+            {"$set": {
+                "active": {"$lt": ["$correct_streak", 2]},
+                "mastered": {"$gte": ["$correct_streak", 2]},
+            }},
+        ],
+        # Motor/PyMongo accepts True as the AFTER value for return_document.
+        return_document=True,
+    )
+
+
+async def get_active_user_mistakes(db, user_id: str, limit: int = 50) -> list[dict]:
+    """Return active mistakes in stable practice priority order."""
+    user_id = str(user_id or "").strip()
+    if not user_id:
+        return []
+    safe_limit = max(1, min(int(limit), 100))
+    cursor = db.user_mistakes.find(
+        {
+            "user_id": user_id,
+            "active": True,
+            "mastered": {"$ne": True},
+        },
+        {"_id": 0},
+    ).sort([
+        ("wrong_count", -1),
+        ("last_practiced_at", 1),
+    ]).limit(safe_limit)
+    return await cursor.to_list(safe_limit)
+
+
+def compute_user_readiness(
+    recent_correct: int,
+    recent_total: int,
+    mastered_mistakes: int,
+    active_mistakes: int,
+) -> dict:
+    """Deterministic readiness: 70% recent accuracy + 30% mistake mastery."""
+    recent_total = max(0, int(recent_total))
+    recent_correct = max(0, min(int(recent_correct), recent_total))
+    mastered_mistakes = max(0, int(mastered_mistakes))
+    active_mistakes = max(0, int(active_mistakes))
+
+    accuracy = (recent_correct / recent_total * 100) if recent_total else 0.0
+    tracked_mistakes = mastered_mistakes + active_mistakes
+    if tracked_mistakes:
+        mastery = mastered_mistakes / tracked_mistakes * 100
+    else:
+        # No mistakes is positive only after the learner has actually answered.
+        mastery = 100.0 if recent_total else 0.0
+
+    score = round(accuracy * 0.70 + mastery * 0.30)
+    return {
+        "score": max(0, min(100, score)),
+        "recent_accuracy": round(accuracy, 1),
+        "mistake_mastery": round(mastery, 1),
+        "recent_answered": recent_total,
+        "mastered_mistakes": mastered_mistakes,
+        "active_mistakes": active_mistakes,
+    }
+
+
 # ─── Analytics ────────────────────────────────────────────────────────────────
 
 async def get_category_stats(db, device_id: str) -> list[dict]:

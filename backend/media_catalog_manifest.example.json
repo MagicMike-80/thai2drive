@@ -1,0 +1,4 @@
+{
+  "instructions": "Replace this empty list with the ten fully approved records. Dry-run must fail until every required ID, URL, content language and NO/TH/EN text is present.",
+  "media": []
+}

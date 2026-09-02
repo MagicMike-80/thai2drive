@@ -542,7 +542,7 @@ def landing():
 <section class="hero container">
   <img src="{ICON_URL}" alt="{BRAND} app icon" class="hero-icon" loading="lazy"/>
   <h1>Bestå norsk teoriprøve<br/>på <span>ditt språk</span></h1>
-  <p>Over 500 spørsmål på thai, norsk og engelsk med forklaringer – laget for thai-folk som bor i Norge.</p>
+  <p>Over 1000 spørsmål på thai, norsk og engelsk med forklaringer – laget for thai-folk som bor i Norge.</p>
 
   <div class="flags" aria-label="Språk">
     <div class="flag flag-th"><div></div><div></div><div></div><div></div><div></div></div>
@@ -551,7 +551,7 @@ def landing():
   </div>
 
   <div class="hero-badges">
-    <span class="badge"><span class="dot"></span> 500+ spørsmål</span>
+    <span class="badge"><span class="dot"></span> 1000+ spørsmål</span>
     <span class="badge">🇹🇭 Thai · 🇳🇴 Norsk · 🇬🇧 Engelsk</span>
     <span class="badge">🎯 Ekte eksamensformat</span>
   </div>
@@ -578,7 +578,7 @@ def landing():
     </div>
     <div class="feature">
       <div class="feature-icon">📚</div>
-      <h3>500+ ekte spørsmål</h3>
+      <h3>1000+ ekte spørsmål</h3>
       <p>Dekker alle kategoriene: vikeplikt, fartsgrenser, trafikkskilt, sikkerhet og mer.</p>
     </div>
     <div class="feature">
@@ -672,7 +672,7 @@ def landing():
     return HTMLResponse(_page(
         f"{BRAND} – Norsk teoriprøve på thai, norsk og engelsk",
         body,
-        description="Bestå den norske teoriprøven lettere – 500+ spørsmål med forklaringer på thai, norsk og engelsk. Laget for thai-folk i Norge.",
+        description="Bestå den norske teoriprøven lettere – 1000+ spørsmål med forklaringer på thai, norsk og engelsk. Laget for thai-folk i Norge.",
     ))
 
 

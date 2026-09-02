@@ -10,6 +10,7 @@ and the Norwegian theory test. He speaks in the language the user writes in.
 from __future__ import annotations
 
 import os
+import re
 import uuid
 import logging
 from datetime import datetime, timezone
@@ -19,6 +20,10 @@ from fastapi import APIRouter, Query
 from pydantic import BaseModel, Field
 from motor.motor_asyncio import AsyncIOMotorClient
 from dotenv import load_dotenv
+try:
+    from media_catalog import SUPPORTED_LANGUAGES, rank_catalog_media
+except ImportError:  # package-style imports used by isolated tests
+    from backend.media_catalog import SUPPORTED_LANGUAGES, rank_catalog_media
 
 load_dotenv()
 
@@ -82,6 +87,7 @@ LLM_PROVIDER = "none"
 
 _deepseek_key = os.environ.get("DEEPSEEK_API_KEY", "").strip()
 _openrouter_key = os.environ.get("OPENROUTER_API_KEY", "").strip()
+_openai_key = os.environ.get("OPENAI_API_KEY", "").strip()
 
 if _deepseek_key:
     LLM_KEY = _deepseek_key
@@ -93,7 +99,6 @@ elif _openrouter_key:
     LLM_PROVIDER = "openrouter"
 else:
     # Siste utvei: holder læreren i live hvis DeepSeek-nøkkelen mangler ved oppstart.
-    _openai_key = os.environ.get("OPENAI_API_KEY", "").strip()
     if _openai_key:
         LLM_KEY = _openai_key
         LLM_MODEL = os.environ.get("TEACHER_OPENAI_MODEL", "gpt-4o-mini")
@@ -107,6 +112,92 @@ else:
         "Teacher chat LLM NOT configured — sett DEEPSEEK_API_KEY (eller OPENROUTER_API_KEY)."
     )
 
+_OPENROUTER_FALLBACK_MODELS = (
+    "openrouter/deepseek/deepseek-chat",
+    "openrouter/google/gemini-2.5-flash",
+    "openrouter/openai/gpt-4o-mini",
+)
+_TEACHER_LLM_TIMEOUT_SECONDS = float(os.environ.get("TEACHER_LLM_TIMEOUT_SECONDS", "10"))
+_TEACHER_LLM_TEMPERATURE = float(os.environ.get("TEACHER_LLM_TEMPERATURE", "0.3"))
+
+
+def _build_llm_attempts() -> List[dict]:
+    """Build an ordered, provider-safe model list without duplicate models."""
+    attempts: List[dict] = []
+    seen = set()
+
+    def add(model: str, api_key: str, provider: str) -> None:
+        model = (model or "").strip()
+        if not model or not api_key or model in seen:
+            return
+        seen.add(model)
+        attempts.append({"model": model, "api_key": api_key, "provider": provider})
+
+    if LLM_PROVIDER == "deepseek":
+        add(LLM_MODEL, _deepseek_key, "deepseek")
+
+    if _openrouter_key:
+        primary_openrouter_model = (
+            LLM_MODEL
+            if LLM_PROVIDER == "openrouter"
+            else os.environ.get("TEACHER_OPENROUTER_MODEL", _OPENROUTER_FALLBACK_MODELS[0])
+        )
+        add(primary_openrouter_model, _openrouter_key, "openrouter")
+        for model in _OPENROUTER_FALLBACK_MODELS:
+            add(model, _openrouter_key, "openrouter")
+
+    if LLM_PROVIDER == "openai":
+        add(LLM_MODEL, _openai_key, "openai")
+
+    return attempts
+
+
+LLM_ATTEMPTS = _build_llm_attempts()
+
+
+async def _completion_with_fallback(messages: List[dict]):
+    """Return the first non-empty LiteLLM response, trying reserves in order."""
+    if not LLM_ATTEMPTS:
+        raise RuntimeError("Teacher chat LLM is not configured")
+
+    last_error: Optional[Exception] = None
+    for index, attempt in enumerate(LLM_ATTEMPTS, start=1):
+        model = attempt["model"]
+        provider = attempt["provider"]
+        try:
+            logger.info(
+                "Teacher LLM attempt %s/%s — provider=%s model=%s",
+                index, len(LLM_ATTEMPTS), provider, model,
+            )
+            response = await litellm.acompletion(
+                model=model,
+                messages=messages,
+                max_tokens=120,
+                temperature=_TEACHER_LLM_TEMPERATURE,
+                timeout=_TEACHER_LLM_TIMEOUT_SECONDS,
+                api_key=attempt["api_key"],
+            )
+            content = (response.choices[0].message.content or "").strip()
+            if not content:
+                raise RuntimeError("LLM returned an empty response")
+            logger.info("Teacher LLM success — provider=%s model=%s", provider, model)
+            return response
+        except Exception as exc:
+            last_error = exc
+            try:
+                setattr(exc, "teacher_provider", provider)
+                setattr(exc, "teacher_model", model)
+            except Exception:
+                pass
+            logger.warning(
+                "Teacher LLM failed — provider=%s model=%s error=%s detail=%s; trying next model",
+                provider, model, type(exc).__name__, str(exc)[:240],
+            )
+
+    if last_error is not None:
+        raise last_error
+    raise RuntimeError("Teacher chat has no available LLM attempts")
+
 # ─── System prompt ────────────────────────────────────────────────────────────
 
 # Critical language header — injected FIRST so the model reads it before any examples
@@ -114,6 +205,30 @@ _LANG_CRITICAL = {
     "no": "[LANGUAGE: no]\nCRITICAL: Reply in Bokmål Norwegian ONLY. Every single word must be Norwegian. No Thai, no English.\n\n",
     "th": "[ภาษา: th]\nสำคัญมาก: ตอบเป็นภาษาไทยเท่านั้น ทุกคำต้องเป็นภาษาไทย ห้ามใช้ภาษานอร์เวย์หรือภาษาอังกฤษเลย\n\n",
     "en": "[LANGUAGE: en]\nCRITICAL: Reply in English ONLY. Every single word must be English. No Norwegian, no Thai.\n\n",
+}
+
+_SECTION_7_2_PROMPT = {
+    "no": (
+        "TRAFIKKREGLENE § 7 NR. 2 — ABSOLUTT FASIT:\n"
+        'Hele ordlyden er: "Kjørende har vikeplikt for kjøretøy som kommer fra høyre. '
+        'Det samme gjelder når kjørende som vil svinge til venstre, vil få kjøretøy '
+        'på sin høyre side." Begge setningene er obligatoriske når eleven spør om '
+        "§ 7 nr. 2 eller venstresving. Du må ALDRI sløyfe andre setning eller si at "
+        "denne venstresving-situasjonen ikke er høyreregelen.\n\n"
+    ),
+    "th": (
+        "กฎจราจรนอร์เวย์ § 7 ข้อ 2 — ข้อเท็จจริงที่ต้องยึดถือ:\n"
+        "กฎการให้ทางจากขวาใช้ทั้งเมื่อมีรถมาจากทางขวา และเมื่อคุณเลี้ยวซ้าย "
+        "ซึ่งทำให้รถที่สวนมาอยู่ทางขวามือของคุณ ทั้งสองกรณีเป็นกฎเดียวกันตาม § 7 ข้อ 2 "
+        "ห้ามบอกว่าสถานการณ์เลี้ยวซ้ายนี้ไม่ใช่กฎการให้ทางจากขวาเด็ดขาด\n\n"
+    ),
+    "en": (
+        "NORWEGIAN TRAFFIC RULES SECTION 7(2) — ABSOLUTE FACT:\n"
+        "The right-hand rule applies both to vehicles coming from the right and when "
+        "you turn left and the oncoming vehicle is then on your right-hand side. "
+        "Both are the same rule under section 7(2). NEVER claim that this left-turn "
+        "situation is not the right-hand rule.\n\n"
+    ),
 }
 
 # GOOD example — language-specific so the model patterns on the declared language's prose style
@@ -390,7 +505,7 @@ or "hvordan tenke ved vikeplikt".
 
 2. Høyreregelen
    Vikeplikt for trafikk fra høyre.
-   Når du svinger til venstre: du krysser den møtendes kjørefelt — derfor må du vike.
+   Når du svinger til venstre, kommer den møtende bilen på din høyre side. Dette omfattes av trafikkreglene § 7 nr. 2, og derfor må du vike.
 
 3. Sykkelvei
    Når du svinger: tenk alltid at det kommer en syklist.
@@ -789,6 +904,8 @@ def _build_system_prompt(lang: str) -> str:
         "     [podcast: file_path | title_no | title_th | title_en]\n"
         "     Copy the values exactly as listed — never invent or guess file paths or titles.\n"
         "   - To show an image: Use the exact tag format: [image: image_url | caption_no | caption_th | caption_en]\n"
+        "     Only use an exact Approved Image Tag supplied in APPROVED THAI2DRIVE CURRICULUM CONTEXT. Never invent, rewrite, or guess an image URL.\n"
+        "     If no Approved Image Tag is supplied, explain with text only.\n"
         "2. PEDAGOGICAL PACKAGING (Never just throw a link):\n"
         "   - Set up the driving situation first: 'Se for deg at du nærmer deg krysset...' / 'Imagine you are approaching the intersection...'\n"
         "   - Introduce the video/audio: 'Ta en titt på denne korte videoen som viser nøyaktig hvordan vi gjør dette i praksis:' or 'Hør på denne podcasten der vi snakker om dette:'\n"
@@ -801,6 +918,7 @@ def _build_system_prompt(lang: str) -> str:
     
     return (
         _LANG_CRITICAL[l]
+        + _SECTION_7_2_PROMPT[l]
         + core
         .replace("<<GOOD_EXAMPLE>>", _GOOD_EXAMPLE[l])
         .replace("<<COACHING>>", _COACHING[l])
@@ -852,6 +970,561 @@ def _strict_lang_value(doc: dict, field_prefix: str, lang: str) -> str:
     key = f"{field_prefix}_{lang}"
     value = doc.get(key)
     return value.strip() if isinstance(value, str) and value.strip() else ""
+
+
+def _safe_image_tag_part(value: str) -> str:
+    """Keep database values on one line and inside the existing image-tag grammar."""
+    return " ".join(str(value).replace("|", " ").replace("]", " ").split())
+
+
+def _approved_sign_image_tag(sign: dict) -> str:
+    """Return a renderable tag only for a trusted, fully translated sign image."""
+    image_url = str(sign.get("image_url") or "").strip()
+    if not image_url.startswith(("https://", "http://", "/api/sign-images/")):
+        return ""
+
+    names = sign.get("name") or {}
+    captions = [_safe_image_tag_part(names.get(code) or "") for code in ("no", "th", "en")]
+    if not all(captions):
+        return ""
+    return f"[image: {_safe_image_tag_part(image_url)} | {' | '.join(captions)}]"
+
+
+def _format_sign_context(sign: dict, lang: str) -> str:
+    """Build one curriculum entry with an optional approved Norwegian sign image."""
+    names = sign.get("name") or {}
+    explanations = sign.get("explanation") or {}
+    actions = sign.get("driver_action") or {}
+    name_lang = names.get(lang) or ""
+    exp_lang = explanations.get(lang) or ""
+    action_lang = actions.get(lang) or ""
+    if not name_lang or not exp_lang:
+        return ""
+
+    sign_desc = (
+        f"Traffic Sign {sign['id']}:\n"
+        f"- Name: {name_lang}\n"
+        f"- Explanation: {exp_lang}\n"
+    )
+    if action_lang:
+        sign_desc += f"- Driver Action: {action_lang}\n"
+    image_tag = _approved_sign_image_tag(sign)
+    if image_tag:
+        sign_desc += f"- Approved Image Tag: {image_tag}\n"
+    return sign_desc
+
+
+def _enforce_approved_image_tags(reply_text: str, context_str: str) -> str:
+    """Remove invented image tags and ensure the first approved sign image is shown."""
+    marker = "- Approved Image Tag:"
+    approved = [
+        line[len(marker):].strip()
+        for line in context_str.splitlines()
+        if line.startswith(marker) and line[len(marker):].strip()
+    ]
+
+    def keep_only_approved(match) -> str:
+        candidate = match.group(0)
+        return candidate if candidate in approved else ""
+
+    cleaned = re.sub(r"\[image:[^\]]*\]", keep_only_approved, reply_text, flags=re.IGNORECASE)
+    cleaned = re.sub(r"\n{3,}", "\n\n", cleaned).strip()
+    if approved and approved[0] not in cleaned:
+        return f"{cleaned}\n\n{approved[0]}" if cleaned else approved[0]
+    return cleaned
+
+
+_CONCISE_FORBIDDEN_TERMS = (
+    "kongen", "tjener", "king", "servant", "กษัตริย์", "ผู้รับใช้",
+    "hav-regel", "hav regelen", "h-a-v",
+)
+_CONCISE_KEEP_PREFIXES = ("forklaring", "explanation", "คำอธิบาย")
+_CONCISE_DROP_PREFIXES = (
+    "situasjon", "vanlig feil", "teoriprøve-vinkel", "oppfølgingsspørsmål",
+    "situation", "common mistake", "theory test focus", "follow-up question",
+    "สถานการณ์", "ข้อผิดพลาดที่พบบ่อย", "จุดเน้นข้อสอบทฤษฎี", "คำถามชวนคิด",
+)
+
+
+def _concise_teacher_reply(reply_text: str, lang: str) -> str:
+    """Enforce one short rule answer even if a model ignores the final prompt."""
+    text = re.sub(r"\[(?:image|video|podcast):[^\]]*\]", "", reply_text or "", flags=re.IGNORECASE)
+    text = re.sub(r"^#{1,6}\s*", "", text, flags=re.MULTILINE)
+    text = re.sub(r"[*_`]+", "", text)
+    cleaned_lines = []
+    for raw_line in text.splitlines():
+        line = re.sub(r"^[\s\-•🚗💡⚠️📝❓:]+", "", raw_line).strip()
+        lowered = line.casefold()
+        if any(lowered.startswith(f"{prefix}:") for prefix in _CONCISE_DROP_PREFIXES):
+            continue
+        for prefix in _CONCISE_KEEP_PREFIXES:
+            marker = f"{prefix}:"
+            if lowered.startswith(marker):
+                line = line[len(marker):].strip()
+                break
+        if line:
+            cleaned_lines.append(line)
+    text = " ".join(cleaned_lines)
+    text = re.sub(r"\s+", " ", text).strip()
+
+    sentences = [part.strip() for part in re.findall(r"[^.!?。！？]+[.!?。！？]?", text)]
+    allowed = [
+        sentence for sentence in sentences
+        if sentence
+        and not sentence.endswith(("?", "？"))
+        and not any(term in sentence.casefold() for term in _CONCISE_FORBIDDEN_TERMS)
+    ][:2]
+    concise = " ".join(allowed).strip()
+    if not concise:
+        return {
+            "th": "ตอนนี้ Michael ยังตอบให้สั้นและชัดเจนไม่ได้ กรุณาลองถามอีกครั้งครับ",
+            "en": "Michael cannot give a short, precise answer right now. Please try again.",
+            "no": "Michael kan ikke gi et kort og presist svar akkurat nå. Prøv igjen.",
+        }.get(lang, "Michael kan ikke gi et kort og presist svar akkurat nå. Prøv igjen.")
+
+    if lang == "th":
+        return concise if len(concise) <= 180 else concise[:179].rstrip() + "…"
+    words = concise.split()
+    if len(words) > 30:
+        concise = " ".join(words[:30]).rstrip(" ,;:") + "."
+    return concise
+
+
+def _concise_output_instruction(lang: str) -> str:
+    language = {"no": "Norwegian", "th": "Thai", "en": "English"}.get(lang, "Norwegian")
+    return (
+        "\n\n━━━ FINAL OUTPUT CONTRACT — OVERRIDES ALL EARLIER FORMAT RULES ━━━\n"
+        f"Answer only in {language}. Give exactly one concrete rule or legal definition. "
+        "Use 1–2 sentences and no more than 30 words. Output plain text only. "
+        "Do not use headings, lists, extra paragraphs, examples, follow-up questions, "
+        "metaphors, Kongen og tjeneren, the King/Servant model, or the HAV mnemonic. "
+        "Do not output image, video, or podcast tags; the app renders the exact sign separately.\n"
+        "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    )
+
+
+def _sign_ids_from_context(context_str: str) -> list[str]:
+    """Return concrete, approved curriculum sign IDs in display order."""
+    sign_ids = []
+    for sign_id in re.findall(r"^Traffic Sign ([A-Za-z0-9_.-]+):", context_str, flags=re.MULTILINE):
+        if sign_id not in sign_ids:
+            sign_ids.append(sign_id)
+    return sign_ids[:4]
+
+
+def _explicit_sign_ids_for_message(user_msg: str) -> list[str]:
+    """Resolve unambiguous learner terms before broader curriculum ranking."""
+    message = user_msg.casefold()
+    aliases = {
+        "202_0": (
+            "vikepliktskilt",
+            "vikepliktsskilt",
+            "skilt 202",
+            "sign 202",
+            "traffic sign 202",
+            "ป้าย 202",
+            "give way sign",
+            "yield sign",
+            "ป้ายให้ทาง",
+        ),
+        "204_0": (
+            "stoppskilt",
+            "stopp skilt",
+            "skilt 204",
+            "sign 204",
+            "traffic sign 204",
+            "ป้าย 204",
+            "stop sign",
+            "ป้ายหยุด",
+        ),
+        "208_0": (
+            "forkjørsvei",
+            "forkjørsveg",
+            "forkjørsrett",
+            "priority road",
+            "ถนนสายหลัก",
+            "ป้ายทางเอก",
+        ),
+    }
+
+    def matches(term: str) -> bool:
+        if re.search(r"[a-zæøå]", term):
+            return bool(re.search(rf"(?<!\w){re.escape(term)}(?:et)?(?!\w)", message))
+        return term in message
+
+    return [sign_id for sign_id, terms in aliases.items() if any(matches(term) for term in terms)]
+
+
+def _sign_ids_from_reply(reply_text: str) -> list[str]:
+    """Resolve only controlled concrete sign labels from Michael's visible reply."""
+    sign_ids = _explicit_sign_ids_for_message(reply_text or "")
+    standalone_labels = {
+        "202_0": {"vikeplikt", "give way", "yield", "ป้ายให้ทาง", "การให้ทาง"},
+        "204_0": {"stopp", "stop", "ป้ายหยุด", "หยุด"},
+    }
+    segments = re.split(r"(?:\r?\n)+|[|•]|(?=[🛑🔴])", reply_text or "")
+    normalized_segments = {
+        re.sub(r"^\W+|\W+$", "", segment.casefold()).strip()
+        for segment in segments
+        if segment.strip()
+    }
+    for sign_id, labels in standalone_labels.items():
+        if sign_id not in sign_ids and normalized_segments & labels:
+            sign_ids.append(sign_id)
+    return sign_ids[:2]
+
+
+def _merge_sign_ids(*groups: list[str], limit: int = 2) -> list[str]:
+    merged = []
+    for group in groups:
+        for raw_sign_id in group or []:
+            sign_id = str(raw_sign_id or "").strip()
+            if sign_id and sign_id not in merged:
+                merged.append(sign_id)
+                if len(merged) >= limit:
+                    return merged
+    return merged
+
+
+def _is_right_hand_rule_query(user_msg: str) -> bool:
+    """Keep a pure right-hand-rule question as a rule unless a sign is named."""
+    message = (user_msg or "").casefold()
+    aliases = (
+        "høyreregelen",
+        "høyreregel",
+        "right-hand rule",
+        "right hand rule",
+        "กฎการให้ทางจากขวา",
+        "กฎมือขวา",
+    )
+    return any(alias in message for alias in aliases)
+
+
+def _is_section_7_2_left_turn_query(user_msg: str) -> bool:
+    """Match only the statutory left-turn/right-side scenario in § 7 no. 2."""
+    message = (user_msg or "").casefold()
+    right_hand_rule_terms = (
+        "høyreregelen",
+        "høyreregel",
+        "right-hand rule",
+        "right hand rule",
+        "กฎการให้ทางจากขวา",
+        "กฎมือขวา",
+    )
+    left_turn_terms = (
+        "venstresving",
+        "svinger til venstre",
+        "svinge til venstre",
+        "turning left",
+        "turn left",
+        "left turn",
+        "เลี้ยวซ้าย",
+    )
+    opposing_or_right_terms = (
+        "møtende",
+        "motgående",
+        "på min høyre side",
+        "på din høyre side",
+        "på høyre side",
+        "oncoming",
+        "opposing traffic",
+        "on my right",
+        "on your right",
+        "right-hand side",
+        "right side",
+        "รถสวนทาง",
+        "รถที่สวนมา",
+        "ด้านขวา",
+        "ทางขวามือ",
+    )
+    return (
+        any(term in message for term in right_hand_rule_terms)
+        and any(term in message for term in left_turn_terms)
+        and any(term in message for term in opposing_or_right_terms)
+    )
+
+
+def _is_section_7_2_citation_query(user_msg: str) -> bool:
+    """Match direct requests for the full wording of § 7 no. 2."""
+    message = (user_msg or "").casefold()
+    section_terms = ("§ 7", "§7", "paragraf 7", "section 7", "มาตรา 7")
+    number_two_terms = (
+        "nr. 2",
+        "nr 2",
+        "nummer 2",
+        "andre ledd",
+        "annet ledd",
+        "paragraph 2",
+        "second paragraph",
+        "subsection 2",
+        "ข้อ 2",
+    )
+    return any(term in message for term in section_terms) and any(
+        term in message for term in number_two_terms
+    )
+
+
+def _apply_section_7_2_fail_safe(user_msg: str, reply_text: str, lang: str) -> str:
+    """Return a controlled legal answer for the precise § 7 no. 2 scenario."""
+    is_left_turn = _is_section_7_2_left_turn_query(user_msg)
+    if not is_left_turn and not _is_section_7_2_citation_query(user_msg):
+        return reply_text
+    replies = {
+        "no": (
+            "Trafikkreglene § 7 nr. 2 sier: «Kjørende har vikeplikt for kjøretøy som "
+            "kommer fra høyre. Det samme gjelder når kjørende som vil svinge til "
+            "venstre, vil få kjøretøy på sin høyre side.»"
+        ),
+        "th": (
+            "กฎจราจรนอร์เวย์ § 7 ข้อ 2 ระบุว่า «ผู้ขับขี่ต้องให้ทางแก่รถที่มาจาก "
+            "ด้านขวา กฎเดียวกันนี้ใช้เมื่อผู้ขับขี่ต้องการเลี้ยวซ้ายและจะมีรถอยู่ "
+            "ทางขวามือของตน»"
+        ),
+        "en": (
+            "Section 7(2) of the Norwegian traffic rules states: “A driver must yield "
+            "to vehicles coming from the right. The same applies when a driver who "
+            "intends to turn left will have a vehicle on their right-hand side.”"
+        ),
+    }
+    grounded = replies.get(lang, replies["no"])
+    if not is_left_turn:
+        return grounded
+    confirmations = {
+        "no": "Ja, dette er høyreregelen etter § 7 nr. 2. ",
+        "th": "ใช่ครับ นี่คือกฎการให้ทางจากขวาตาม § 7 ข้อ 2 ",
+        "en": "Yes, this is the right-hand rule under section 7(2). ",
+    }
+    return confirmations.get(lang, confirmations["no"]) + grounded
+
+
+def _strict_response_sign_ids(explicit_sign_ids: list[str], reply_sign_ids: list[str]) -> list[str]:
+    """Allow only controlled user/reply sign matches; never generic RAG sign hits."""
+    return _merge_sign_ids(explicit_sign_ids, reply_sign_ids, limit=2)
+
+
+_MATERIAL_TOPIC_ALIASES = (
+    ("vikeplikt", "høyreregel", "right of way", "right-of-way", "give way", "yield", "การให้ทาง", "ให้ทาง"),
+    ("rundkjøring", "roundabout", "วงเวียน"),
+    ("fartsgrense", "hastighet", "speed limit", "speed", "ความเร็ว"),
+    ("stoppelengde", "stopping distance", "ระยะหยุดรถ"),
+    ("bremselengde", "braking distance", "ระยะเบรก"),
+    ("reaksjonslengde", "reaction distance", "ระยะตอบสนอง", "ระยะปฏิกิริยา"),
+    ("parkering", "parking", "จอดรถ", "ลานจอดรถ"),
+)
+
+
+def _normalize_material_match_text(value: str) -> str:
+    return re.sub(r"\s+", " ", re.sub(r"[^\w\s-]", " ", (value or "").casefold())).strip()
+
+
+def _material_match_terms(user_msg: str, extra_context: str = "") -> set[str]:
+    """Expand only known multilingual traffic concepts; never use free AI URLs."""
+    query = _normalize_material_match_text(f"{user_msg} {extra_context}")
+    terms = {word for word in query.split() if len(word) >= 3}
+    for aliases in _MATERIAL_TOPIC_ALIASES:
+        normalized_aliases = {_normalize_material_match_text(alias) for alias in aliases}
+        if any(alias and alias in query for alias in normalized_aliases):
+            terms.update(normalized_aliases)
+    return terms
+
+
+def _safe_michael_material_url(value: str) -> bool:
+    value = (value or "").strip()
+    return value.startswith("/api/") or value.startswith("https://") or value.startswith("http://")
+
+
+def _material_lang_value(material: dict, field: str, lang: str) -> str:
+    values = material.get(field)
+    if not isinstance(values, dict):
+        return ""
+    value = values.get(lang)
+    return value.strip() if isinstance(value, str) and value.strip() else ""
+
+
+async def _get_exact_sign_media(sign_ids: List[str], lang: str, limit: int = 2) -> list[dict]:
+    """Build trusted, localized media directly from matched traffic signs."""
+    media = []
+    for raw_sign_id in sign_ids:
+        sign_id = str(raw_sign_id or "").strip()
+        if not sign_id or any(item["sign_id"] == sign_id for item in media):
+            continue
+        sign = await _db["traffic_signs"].find_one({"id": sign_id})
+        if not sign:
+            continue
+        image_url = str(sign.get("image_url") or "").strip()
+        if not _safe_michael_material_url(image_url):
+            logger.warning("Matched sign %s has no safe image asset", sign_id)
+            continue
+        names = sign.get("name") if isinstance(sign.get("name"), dict) else {}
+        actions = sign.get("driver_action") if isinstance(sign.get("driver_action"), dict) else {}
+        explanations = sign.get("explanation") if isinstance(sign.get("explanation"), dict) else {}
+        title = str(names.get(lang) or "").strip()
+        caption = str(actions.get(lang) or explanations.get(lang) or "").strip()
+        if not title or not caption:
+            logger.warning("Matched sign %s lacks complete %s text", sign_id, lang)
+            continue
+        media.append({
+            "id": f"traffic-sign:{sign_id}",
+            "type": "sign",
+            "sign_id": sign_id,
+            "url": image_url,
+            "title": title,
+            "caption": caption,
+        })
+        if len(media) >= max(0, min(limit, 2)):
+            break
+    return media
+
+
+async def _get_relevant_michael_materials(
+    user_msg: str,
+    lang: str,
+    sign_ids: Optional[List[str]] = None,
+    explicit_sign_ids: Optional[List[str]] = None,
+    extra_context: str = "",
+    limit: int = 2,
+) -> list[dict]:
+    """Rank approved admin references deterministically and return safe localized media."""
+    try:
+        approved = await _db["michael_materials"].find({
+            "active": True,
+            "approved_for_michael": True,
+        }).to_list(length=500)
+        if not approved:
+            return []
+
+        linked_context_sign_ids = {
+            str(sign_id).strip() for sign_id in (sign_ids or []) if str(sign_id).strip()
+        }
+        exact_sign_ids = {
+            str(sign_id).strip() for sign_id in (explicit_sign_ids or []) if str(sign_id).strip()
+        }
+        query = _normalize_material_match_text(f"{user_msg} {extra_context}")
+        terms = _material_match_terms(user_msg, extra_context)
+        ranked = []
+
+        for material in approved:
+            title = _material_lang_value(material, "title", lang)
+            caption = _material_lang_value(material, "caption", lang)
+            if not title or not caption:
+                continue
+
+            material_type = str(material.get("type", "")).strip()
+            if material_type not in {"sign", "intersection_image", "video"}:
+                continue
+            source_id = str(material.get("source_id", "")).strip()
+            linked_sign_ids = {
+                str(sign_id).strip() for sign_id in material.get("sign_ids", [])
+                if str(sign_id).strip()
+            }
+            if material_type == "sign" and source_id:
+                linked_sign_ids.add(source_id)
+
+            if exact_sign_ids:
+                exact_matches = exact_sign_ids & linked_sign_ids
+                if material_type != "sign" or len(exact_matches) != 1:
+                    continue
+                matched_sign_id = next(iter(exact_matches))
+                if source_id and source_id != matched_sign_id:
+                    continue
+                if linked_sign_ids != {matched_sign_id}:
+                    continue
+            else:
+                exact_matches = set()
+
+            score = 0
+            context_matches = linked_context_sign_ids & linked_sign_ids
+            if exact_matches or context_matches:
+                score += 1000
+
+            for field, weight in (("situation_tags", 200), ("topic_tags", 100)):
+                for raw_tag in material.get(field, []):
+                    tag = _normalize_material_match_text(str(raw_tag))
+                    if tag and (tag in query or tag in terms):
+                        score += weight
+
+            if score <= 0:
+                continue
+
+            url = str(material.get("source_url", "")).strip()
+            if material_type == "video" and source_id:
+                video = await _db["learning_videos"].find_one({"id": source_id, "active": True})
+                if not video:
+                    continue
+                url = str(video.get("youtube_url", "")).strip()
+            if not _safe_michael_material_url(url):
+                continue
+
+            matches = exact_matches or context_matches
+            sign_id = sorted(matches)[0] if matches else ""
+            if not sign_id and material_type == "sign":
+                sign_id = source_id
+            payload = {
+                "id": str(material.get("id", "")).strip(),
+                "type": material_type,
+                "url": url,
+                "title": title,
+                "caption": caption,
+            }
+            if sign_id:
+                payload["sign_id"] = sign_id
+            try:
+                priority = max(0, int(material.get("priority", 100)))
+            except (TypeError, ValueError):
+                priority = 100
+            ranked.append((-score, priority, payload["id"], payload))
+
+        ranked.sort(key=lambda item: item[:3])
+        result_limit = 1 if exact_sign_ids else max(0, min(limit, 2))
+        return [item[3] for item in ranked[:result_limit]]
+    except Exception as exc:
+        logger.error("Error retrieving Michael material: %s", exc)
+        return []
+
+
+async def _get_relevant_catalog_media(
+    user_msg: str,
+    language: str,
+    extra_context: str = "",
+) -> list[dict]:
+    """Fail-soft lookup of at most one curated, language-compatible resource."""
+    if language not in SUPPORTED_LANGUAGES:
+        return []
+    try:
+        documents = await _db["media_catalog"].find({
+            "is_active": True,
+            "content_language": {"$in": [language, "neutral"]},
+        }).to_list(length=200)
+        return rank_catalog_media(
+            documents,
+            f"{user_msg} {extra_context}",
+            language,
+            limit=1,
+        )
+    except Exception as exc:
+        logger.warning("Media catalog lookup skipped: %s", type(exc).__name__)
+        return []
+
+
+def _compose_teacher_media(
+    approved_media: list[dict],
+    catalog_media: list[dict],
+    explicit_sign_ids: Optional[List[str]] = None,
+) -> list[dict]:
+    """Keep exact signs exclusive and preserve the existing total limit of two."""
+    if explicit_sign_ids:
+        return approved_media[:1]
+    if not catalog_media:
+        return approved_media[:2]
+    result = list(catalog_media[:1])
+    seen_ids = {str(item.get("id", "")) for item in result}
+    for item in approved_media:
+        if str(item.get("id", "")) in seen_ids:
+            continue
+        result.append(item)
+        if len(result) == 2:
+            break
+    return result
 
 
 # ─── Contextual chip suggestions (multilingual keyword detection) ─────────────
@@ -920,6 +1593,15 @@ async def _get_curriculum_context(user_msg: str, lang: str) -> str:
         
         context_parts = []
         matched_sign_ids = set()
+
+        # Resolve exact sign concepts before general chapters/videos so a known
+        # Norwegian sign and its approved image cannot be crowded out.
+        explicit_sign_ids = _explicit_sign_ids_for_message(user_msg)
+        for sign_id in explicit_sign_ids:
+            sign = await _db.traffic_signs.find_one({"id": sign_id})
+            if sign and sign_id not in matched_sign_ids:
+                matched_sign_ids.add(sign_id)
+                context_parts.append(_format_sign_context(sign, lang))
         
         if sign_nums:
             for num in sign_nums:
@@ -929,18 +1611,7 @@ async def _get_curriculum_context(user_msg: str, lang: str) -> str:
                 for sign in signs:
                     if sign["id"] not in matched_sign_ids:
                         matched_sign_ids.add(sign["id"])
-                        name_lang = sign.get("name", {}).get(lang) or sign.get("name", {}).get("no") or ""
-                        exp_lang = sign.get("explanation", {}).get(lang) or sign.get("explanation", {}).get("no") or ""
-                        action_lang = sign.get("driver_action", {}).get(lang) or sign.get("driver_action", {}).get("no") or ""
-                        
-                        sign_desc = (
-                            f"Traffic Sign {sign['id']}:\n"
-                            f"- Name: {name_lang}\n"
-                            f"- Explanation: {exp_lang}\n"
-                        )
-                        if action_lang:
-                            sign_desc += f"- Driver Action: {action_lang}\n"
-                        context_parts.append(sign_desc)
+                        context_parts.append(_format_sign_context(sign, lang))
 
         # Clean message to lowercase, strip punctuation
         clean_msg = re.sub(r'[^\w\s]', ' ', user_msg.lower()).strip()
@@ -1054,7 +1725,7 @@ async def _get_curriculum_context(user_msg: str, lang: str) -> str:
                     )
                     context_parts.append(vid_desc)
                     
-            if len(matched_sign_ids) < 2:
+            if len(matched_sign_ids) < 2 and not explicit_sign_ids:
                 sign_or_clauses = []
                 for term in terms_to_search[:3]:
                     sign_or_clauses.extend([
@@ -1089,18 +1760,9 @@ async def _get_curriculum_context(user_msg: str, lang: str) -> str:
                     for score, sign in scored_signs[:2]:
                         if sign["id"] not in matched_sign_ids:
                             matched_sign_ids.add(sign["id"])
-                            name_lang = sign.get("name", {}).get(lang) or sign.get("name", {}).get("no") or ""
-                            exp_lang = sign.get("explanation", {}).get(lang) or sign.get("explanation", {}).get("no") or ""
-                            action_lang = sign.get("driver_action", {}).get(lang) or sign.get("driver_action", {}).get("no") or ""
-                            
-                            sign_desc = (
-                                f"Traffic Sign {sign['id']}:\n"
-                                f"- Name: {name_lang}\n"
-                                f"- Explanation: {exp_lang}\n"
-                            )
-                            if action_lang:
-                                sign_desc += f"- Driver Action: {action_lang}\n"
-                            context_parts.append(sign_desc)
+                            # A concrete sign must survive the final context_parts[:3]
+                            # limit ahead of broader studybook/video resources.
+                            context_parts.insert(0, _format_sign_context(sign, lang))
 
         if context_parts:
             return "\n\n".join(context_parts[:3])
@@ -1300,6 +1962,8 @@ class TeacherChatResponse(BaseModel):
     session_id: str
     reply: str
     suggestions: list = []
+    sign_ids: list[str] = Field(default_factory=list)
+    media: list[dict] = Field(default_factory=list)
 
 
 @teacher_router.get("/teacher/status")
@@ -1351,7 +2015,8 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
     
     session_id = req.session_id or f"ts_{uuid.uuid4().hex[:16]}"
     user_msg = req.message.strip()
-    lang = (req.language or "no").strip().lower()
+    requested_language = (req.language or "").strip().lower()
+    lang = requested_language
     if lang not in ("no", "th", "en"):
         lang = "no"
 
@@ -1389,18 +2054,46 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
 
     # Primer: for brand-new sessions, inject a silent assistant turn so the model
     # does not treat the first user message as "first contact" and introduce itself.
-    _primer = {"no": "โอเค ครับ 😊", "th": "โอเครับ 😊", "en": "Sure 😊"}
+    _primer = {"no": "Klart 😊", "th": "โอเคครับ 😊", "en": "Sure 😊"}
     if not conversation:
-        conversation = [{"role": "assistant", "content": _primer.get(lang, "โอเครับ 😊")}]
+        conversation = [{"role": "assistant", "content": _primer.get(lang, _primer["en"])}]
 
     # Determine reply language — request param takes priority
     # Call LLM
+    context_str = ""
+    media = []
+    explicit_sign_ids = _explicit_sign_ids_for_message(user_msg)
     try:
-        if not LLM_KEY:
-            raise RuntimeError("DEEPSEEK_API_KEY not configured")
-
         # Retrieve curriculum context from database (RAG)
         context_str = await _get_curriculum_context(user_msg, lang)
+        context_sign_ids = _sign_ids_from_context(context_str)
+        exact_sign_media = await _get_exact_sign_media(
+            explicit_sign_ids or context_sign_ids,
+            lang,
+        )
+        approved_media = await _get_relevant_michael_materials(
+            user_msg,
+            lang,
+            sign_ids=context_sign_ids,
+            explicit_sign_ids=explicit_sign_ids,
+            extra_context=quiz_context_str,
+        )
+        exact_sign_ids_in_media = {item.get("sign_id") for item in exact_sign_media}
+        media = exact_sign_media + [
+            item for item in approved_media
+            if item.get("sign_id") not in exact_sign_ids_in_media
+        ]
+        catalog_media = []
+        if not explicit_sign_ids and requested_language in SUPPORTED_LANGUAGES:
+            catalog_media = await _get_relevant_catalog_media(
+                user_msg,
+                requested_language,
+                extra_context=quiz_context_str,
+            )
+        media = _compose_teacher_media(media, catalog_media, explicit_sign_ids)
+
+        if not LLM_KEY:
+            raise RuntimeError("DEEPSEEK_API_KEY not configured")
 
         # _build_system_prompt injects [LANGUAGE] header FIRST, then language-specific examples
         system_prompt = _build_system_prompt(lang)
@@ -1433,6 +2126,19 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
                     inject_str += "\nConsider recommending these specific resources when appropriate.\n"
                     inject_str += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
                     system_prompt += inject_str
+
+        if media:
+            system_prompt += (
+                "\n\n━━━ APPROVED MICHAEL MATERIAL ━━━\n"
+                "The app will render these resources separately. Refer to their teaching point "
+                "only when relevant; never invent or rewrite their URLs.\n"
+            )
+            for item in media:
+                system_prompt += (
+                    f"MATERIAL {item['id']} | {item['type']} | {item['title']} | "
+                    f"{item['caption']} | {item['url']}\n"
+                )
+            system_prompt += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
         multimedia_str = await _get_available_multimedia(lang)
         if multimedia_str:
@@ -1500,19 +2206,18 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
                 "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
             )
 
+        system_prompt += _concise_output_instruction(lang)
         messages = [{"role": "system", "content": system_prompt}]
         messages.extend(conversation)
         messages.append({"role": "user", "content": user_msg})
 
-        resp = await litellm.acompletion(
-            model=LLM_MODEL,
-            messages=messages,
-            max_tokens=600,
-            api_key=LLM_KEY,
-        )
+        resp = await _completion_with_fallback(messages)
         reply_text = (resp.choices[0].message.content or "").strip()
         if not reply_text:
             reply_text = _fallback_reply(lang)
+        else:
+            reply_text = _enforce_approved_image_tags(reply_text, context_str)
+            reply_text = _concise_teacher_reply(reply_text, lang)
     except Exception as e:
         logger.error("LiteLLM call failed [%s]: %s", type(e).__name__, e)
 
@@ -1531,13 +2236,15 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             is_api_config_error = True
 
         if is_api_config_error:
+            failed_provider = getattr(e, "teacher_provider", LLM_PROVIDER)
+            failed_model = getattr(e, "teacher_model", LLM_MODEL)
             _key_env = {
                 "deepseek": "DEEPSEEK_API_KEY",
                 "openrouter": "OPENROUTER_API_KEY",
                 "openai": "OPENAI_API_KEY",
-            }.get(LLM_PROVIDER, "DEEPSEEK_API_KEY")
-            alert_subj = f"ALERT: Thai2Drive {LLM_PROVIDER} API Key Invalid"
-            alert_body = f"The system detected an invalid or expired {LLM_PROVIDER} API Key (model={LLM_MODEL}) on {datetime.now(timezone.utc).isoformat()}.\n\nError details: {e}\n\nPlease update {_key_env} in your Railway environment variables immediately."
+            }.get(failed_provider, "DEEPSEEK_API_KEY")
+            alert_subj = f"ALERT: Thai2Drive {failed_provider} API Key Invalid"
+            alert_body = f"The system detected an invalid or expired {failed_provider} API Key (model={failed_model}) on {datetime.now(timezone.utc).isoformat()}.\n\nError details: {e}\n\nPlease update {_key_env} in your Railway environment variables immediately."
             try:
                 import asyncio
                 asyncio.create_task(asyncio.to_thread(send_admin_alert_email, alert_subj, alert_body))
@@ -1548,6 +2255,30 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         # til hvorfor eleven fikk fallback. Ma settes her.
         error_str = f"LiteLLM: {type(e).__name__}({e})"
         reply_text = _fallback_reply(lang)
+
+    reply_text = _apply_section_7_2_fail_safe(user_msg, reply_text, lang)
+    reply_sign_ids = _sign_ids_from_reply(reply_text)
+    sign_ids = _strict_response_sign_ids(explicit_sign_ids, reply_sign_ids)
+
+    if sign_ids:
+        try:
+            exact_response_media = await _get_exact_sign_media(sign_ids, lang, limit=2)
+        except Exception as media_ex:
+            logger.error("Failed to resolve exact response sign media: %s", media_ex)
+            exact_response_media = []
+        existing_sign_media = {
+            item.get("sign_id"): item
+            for item in media
+            if item.get("type") == "sign" and item.get("sign_id")
+        }
+        exact_sign_media = {item.get("sign_id"): item for item in exact_response_media}
+        media = [
+            exact_sign_media.get(sign_id) or existing_sign_media.get(sign_id)
+            for sign_id in sign_ids
+            if exact_sign_media.get(sign_id) or existing_sign_media.get(sign_id)
+        ]
+    else:
+        media = []
 
     # Persist both messages
     now = datetime.now(timezone.utc)
@@ -1586,8 +2317,18 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
     except Exception as log_ex:
         logger.error("Failed to write teacher log to DB: %s", log_ex)
 
-    suggestions = _get_suggestions(reply_text, lang)
-    return TeacherChatResponse(session_id=session_id, reply=reply_text, suggestions=suggestions)
+    suggestions = []
+    media = [
+        item for item in media
+        if item.get("type") == "sign" and item.get("sign_id") in sign_ids
+    ][:2]
+    return TeacherChatResponse(
+        session_id=session_id,
+        reply=reply_text,
+        suggestions=suggestions,
+        sign_ids=sign_ids,
+        media=media,
+    )
 
 
 def _fallback_reply(lang: str) -> str:

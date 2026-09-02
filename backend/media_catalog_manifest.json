@@ -1,0 +1,121 @@
+{
+  "version": "1.0.0",
+  "items": [
+    {
+      "id": "sit_hav_3",
+      "type": "situation_image",
+      "url": "/api/assets/grunnregel_hav.png",
+      "tags": ["#3", "#hav", "#grunnregel", "#hensynsfull", "#aktpaagivende", "#varsom"],
+      "title": {
+        "no": "Vegtrafikkloven § 3 — HAV-regelen",
+        "th": "กฎหมายจราจรมาตรา 3 — กฎ HAV (เอาใจใส่ ระมัดระวัง รอบคอบ)",
+        "en": "Road Traffic Act § 3 — HAV Rule (Considerate, Attentive, Careful)"
+      },
+      "caption": {
+        "no": "Enhver skal ferdes hensynsfullt, aktpågivende og varsomt så det ikke oppstår fare.",
+        "th": "ทุกคนต้องใช้รถใช้ถนนอย่างเกรงใจ เอาใจใส่ และระมัดระวัง เพื่อไม่ให้เกิดอันตราย",
+        "en": "Everyone must travel considerately, attentively, and carefully to avoid danger."
+      }
+    },
+    {
+      "id": "sit_kryss_venstresving_7_2",
+      "type": "intersection_image",
+      "url": "/api/assets/kryss_venstresving.png",
+      "tags": ["#7", "#7_2", "#vikeplikt", "#hoyreregel", "#venstresving", "#motende"],
+      "sign_ids": ["202_0"],
+      "title": {
+        "no": "Trafikkreglene § 7 nr. 2 — Venstresving i veikryss",
+        "th": "กฎจราจรมาตรา 7 ข้อ 2 — การเลี้ยวซ้ายที่ทางแยก (ตามหลักสากล)",
+        "en": "Traffic Rules § 7(2) — Left turn at intersections"
+      },
+      "caption": {
+        "no": "Kjørende som skal svinge til venstre har vikeplikt for møtende trafikk som skal rett fram eller svinge til høyre (Trafikkreglene § 7 nr. 2).",
+        "th": "ผู้ขับขี่ที่จะเลี้ยวข้ามเลนมีหน้าที่ให้ทางแก่รถที่แล่นสวนมาตรงไปหรือเลี้ยว (มาตรา 7 ข้อ 2)",
+        "en": "Drivers turning left must yield to oncoming traffic going straight or turning right (§ 7(2))."
+      }
+    },
+    {
+      "id": "sit_kryss_hoyreregel_7",
+      "type": "intersection_image",
+      "url": "/api/assets/kryss_hoyreregel.png",
+      "tags": ["#7", "#7_2", "#hoyreregel", "#vikeplikt"],
+      "title": {
+        "no": "Høyreregelen i likeverdig kryss (§ 7 nr. 2)",
+        "th": "กฎการให้ทางจากทางขวาที่ทางแยกเสมอภาค (มาตรา 7 ข้อ 2)",
+        "en": "Right-hand rule at uncontrolled intersections (§ 7(2))"
+      },
+      "caption": {
+        "no": "I kryss uten skilt gjelder høyreregelen: du har vikeplikt for trafikk som kommer fra høyre.",
+        "th": "ทางแยกที่ไม่มีป้าย ให้ใช้กฎให้ทางจากขวา: คุณต้องให้ทางแก่รถที่มาจากขวามือ",
+        "en": "At unmarked intersections, yield to traffic approaching from the right."
+      }
+    },
+    {
+      "id": "sit_buss_7_4",
+      "type": "situation_image",
+      "url": "/api/assets/buss_holdeplass.png",
+      "tags": ["#7", "#7_4", "#bussregelen", "#vikeplikt_buss"],
+      "title": {
+        "no": "Trafikkreglene § 7 nr. 4 — Bussregelen",
+        "th": "กฎจราจรมาตรา 7 ข้อ 4 — กฎการให้ทางรถเมล์ออกจากป้าย",
+        "en": "Traffic Rules § 7(4) — Bus yield rule"
+      },
+      "caption": {
+        "no": "På vei med fartsgrense 60 km/t eller lavere skal du gi vikeplikt for buss som blinker ut fra holdeplass.",
+        "th": "บนถนนที่จำกัดความเร็ว 60 กม./ชม. หรือต่ำกว่า คุณต้องให้ทางแก่รถเมล์ที่เปิดไฟเลี้ยวออกจากป้าย",
+        "en": "On roads with speed limit 60 km/h or less, yield to buses signaling to leave a bus stop."
+      }
+    },
+    {
+      "id": "sign_202_vikeplikt",
+      "type": "sign",
+      "url": "/api/sign-images/202_0.svg",
+      "tags": ["#202", "#vikeplikt", "#vikepliktskilt"],
+      "sign_ids": ["202_0"],
+      "title": {
+        "no": "Skilt 202: Vikeplikt",
+        "th": "ป้าย 202: ให้ทาง",
+        "en": "Sign 202: Give Way"
+      },
+      "caption": {
+        "no": "Skiltet angir at kjørende har vikeplikt for kjørende trafikk i begge retninger på kryssende vei.",
+        "th": "ป้ายนี้ระบุว่าผู้ขับขี่ต้องให้ทางแก่รถที่แล่นผ่านในทั้งสองทิศทางบนถนนที่ตัดกัน",
+        "en": "Indicates that drivers must give way to traffic in both directions on the intersecting road."
+      }
+    },
+    {
+      "id": "sign_204_stopp",
+      "type": "sign",
+      "url": "/api/sign-images/204_0.svg",
+      "tags": ["#204", "#stopp", "#stoppskilt"],
+      "sign_ids": ["204_0"],
+      "title": {
+        "no": "Skilt 204: Stopp",
+        "th": "ป้าย 204: หยุด",
+        "en": "Sign 204: Stop"
+      },
+      "caption": {
+        "no": "Skiltet påbyr full stans før innkjøring på kryssende vei og vikeplikt for all trafikk.",
+        "th": "ป้ายนี้บังคับให้หยุดรถสนิทก่อนเข้าสู่ถนนที่ตัดกัน และต้องให้ทางแก่รถทุกคัน",
+        "en": "Requires a complete stop before entering the intersecting road, and yielding to all traffic."
+      }
+    },
+    {
+      "id": "sit_rundkjoring",
+      "type": "intersection_image",
+      "url": "/api/assets/rundkjoring1.jpg",
+      "tags": ["#rundkjoring", "#vikeplikt", "#filskifte"],
+      "sign_ids": ["236_0"],
+      "title": {
+        "no": "Kjøring i rundkjøring",
+        "th": "การขับขี่ในวงเวียน",
+        "en": "Driving in roundabouts"
+      },
+      "caption": {
+        "no": "Trafikk i rundkjøring går alltid mot klokken. Du har vikeplikt ved innkjøring hvis skilt 202 står oppsatt.",
+        "th": "การจราจรในวงเวียนวิ่งทวนเข็มนาฬิกาเสมอ คุณต้องให้ทางเมื่อเข้าสู่วงเวียนหากมีป้าย 202",
+        "en": "Roundabout traffic always flows counter-clockwise. Yield upon entry when sign 202 is present."
+      }
+    }
+  ]
+}

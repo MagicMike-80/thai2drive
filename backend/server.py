@@ -24,6 +24,11 @@ from datetime import datetime, timezone, timedelta
 from zoneinfo import ZoneInfo
 from passlib.context import CryptContext
 import usage as usage_mod
+from ai_learning import compute_user_readiness, get_active_user_mistakes, record_user_mistake
+try:
+    from media_catalog import SUPPORTED_LANGUAGES, list_localized_catalog_media
+except ImportError:  # package-style imports used by isolated tests
+    from backend.media_catalog import SUPPORTED_LANGUAGES, list_localized_catalog_media
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -131,6 +136,8 @@ def normalize_question(q: dict) -> dict:
         normalized["correctOptionId"] = new_correct_id
 
     return normalized
+
+from admin_analytics import admin_analytics_router
 
 app = FastAPI()
 api_router = APIRouter(prefix="/api")
@@ -276,6 +283,7 @@ class QuizAttemptCreate(BaseModel):
     questions_answered: List[Dict[str, Any]]
     started_at: str
     completed_at: Optional[str] = None
+    is_mistake_mode: bool = False
 
 class Bookmark(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
@@ -1034,6 +1042,7 @@ async def _get_exam_questions(
 @api_router.get("/questions/random")
 async def get_random_questions(
     category: Optional[str] = None,
+    sign_id: Optional[str] = Query(default=None, min_length=1, max_length=80),
     count: int = Query(default=10, le=200),
     has_image: Optional[bool] = None,
     mode: Optional[str] = Query(default=None),   # "exam" → hard-weighted selection
@@ -1057,6 +1066,16 @@ async def get_random_questions(
     match_stage: dict = {}
     if category:
         match_stage["category"] = category
+    if sign_id:
+        safe_sign_id = re.escape(sign_id.strip())
+        image_alias = re.escape(sign_id.strip().replace("_", "."))
+        match_stage["$or"] = [
+            {"sign_id": sign_id.strip()},
+            {"sign_ids": sign_id.strip()},
+            {"traffic_sign_id": sign_id.strip()},
+            {"bildeUrl": {"$regex": f"({safe_sign_id}|{image_alias})", "$options": "i"}},
+            {"image_url": {"$regex": f"({safe_sign_id}|{image_alias})", "$options": "i"}},
+        ]
     if has_image is True:
         match_stage["bildeUrl"] = {"$exists": True, "$nin": [None, ""]}
     if match_stage:
@@ -1064,8 +1083,9 @@ async def get_random_questions(
     pipeline.append({"$sample": {"size": approved}})
     pipeline.append({"$project": {"_id": 0}})
     questions = await db.questions.aggregate(pipeline).to_list(approved)
-    # If category filter with has_image returns nothing, fall back without category
-    if not questions and category and has_image:
+    # Category practice may fall back to a mixed image set. Sign-specific practice
+    # must never silently pretend that an unrelated question belongs to the sign.
+    if not questions and category and has_image and not sign_id:
         pipeline2 = [
             {"$match": {"bildeUrl": {"$exists": True, "$nin": [None, ""]}}},
             {"$sample": {"size": approved}},
@@ -1080,6 +1100,70 @@ async def get_question(question_id: str):
     if not question:
         raise HTTPException(status_code=404, detail="Question not found")
     return normalize_question(question)
+
+
+@api_router.get("/quiz/mistakes")
+async def get_quiz_mistakes(
+    user_id: Optional[str] = None,
+    limit: int = Query(default=50, ge=1, le=100),
+    current_user: dict = Depends(get_current_user),
+):
+    """Return active mistake-bank questions for the authenticated user.
+
+    ``user_id`` is accepted for backwards-compatible callers, but it may never
+    be used to read another learner's data.
+    """
+    authenticated_user_id = current_user["sub"]
+    if user_id and user_id != authenticated_user_id:
+        raise HTTPException(status_code=403, detail="Cannot access another user's mistakes")
+
+    mistakes = await get_active_user_mistakes(db, authenticated_user_id, limit)
+
+    question_ids = [m["question_id"] for m in mistakes if m.get("question_id")]
+    if not question_ids:
+        return {"count": 0, "questions": []}
+
+    question_docs = await db.questions.find(
+        {"id": {"$in": question_ids}, **IMAGE_ONLY_FILTER}, {"_id": 0}
+    ).to_list(len(question_ids))
+    by_id = {str(q.get("id")): normalize_question(q) for q in question_docs}
+    ordered = [by_id[qid] for qid in question_ids if qid in by_id]
+    return {"count": len(ordered), "questions": ordered}
+
+
+@api_router.get("/user/readiness")
+async def get_user_readiness(current_user: dict = Depends(get_current_user)):
+    """Return the authenticated learner's transparent 0-100 readiness score."""
+    user_id = current_user["sub"]
+    user_doc = await db.users.find_one({"id": user_id}, {"_id": 0, "device_id": 1})
+    identities = [{"user_id": user_id}]
+    if user_doc and user_doc.get("device_id"):
+        identities.append({"device_id": user_doc["device_id"]})
+
+    recent = await db.quiz_attempts.aggregate([
+        {"$match": {"$or": identities}},
+        {"$sort": {"completed_at": -1}},
+        {"$unwind": "$questions_answered"},
+        {"$match": {"questions_answered.is_correct": {"$type": "bool"}}},
+        {"$limit": 50},
+        {"$group": {
+            "_id": None,
+            "total": {"$sum": 1},
+            "correct": {"$sum": {"$cond": ["$questions_answered.is_correct", 1, 0]}},
+        }},
+    ]).to_list(1)
+    recent_stats = recent[0] if recent else {"total": 0, "correct": 0}
+
+    active_count, mastered_count = await asyncio.gather(
+        db.user_mistakes.count_documents({"user_id": user_id, "active": True}),
+        db.user_mistakes.count_documents({"user_id": user_id, "mastered": True}),
+    )
+    return compute_user_readiness(
+        recent_correct=recent_stats.get("correct", 0),
+        recent_total=recent_stats.get("total", 0),
+        mastered_mistakes=mastered_count,
+        active_mistakes=active_count,
+    )
 
 @api_router.post("/questions", response_model=Question)
 async def create_question(question_data: QuestionCreate):
@@ -1995,9 +2079,70 @@ async def get_my_stats(device_id: str):
 # ==================== TRAFIKKSKILT ====================
 
 @api_router.get("/signs")
-async def get_signs():
+async def get_signs(tag: Optional[str] = Query(default=None, min_length=1, max_length=80)):
+    if tag:
+        signs = await db.traffic_signs.find({}, {"_id": 0}).sort([("group", 1), ("order", 1)]).to_list(1000)
+        needle = tag.strip().casefold()
+        matches = [
+            _normalize_sign_for_api(sign)
+            for sign in signs
+            if needle in _sign_search_text(sign)
+        ]
+        return {"count": len(matches), "signs": matches}
+
+    # Preserve the legacy grouped response for existing clients that call
+    # /api/signs without the new tag filter.
     from signs_data import get_signs_grouped
     return get_signs_grouped()
+
+
+def _multilang(value: Any) -> Dict[str, str]:
+    if isinstance(value, dict):
+        return {lang: str(value.get(lang) or "").strip() for lang in ("no", "th", "en")}
+    text = str(value or "").strip()
+    return {"no": text, "th": "", "en": ""}
+
+
+def _sign_search_text(sign: dict) -> str:
+    fields = [sign.get("id"), sign.get("code"), sign.get("category")]
+    for key in ("name", "explanation", "driver_action", "group_name"):
+        value = sign.get(key)
+        fields.extend(value.values() if isinstance(value, dict) else [value])
+    fields.extend(sign.get("tags") or [])
+    return " ".join(str(value or "") for value in fields).casefold()
+
+
+def _normalize_sign_for_api(sign: dict) -> dict:
+    sign_id = str(sign.get("id") or "").strip()
+    group = sign.get("group")
+    group_name = sign.get("group_name") or SIGN_GROUPS.get(group, {})
+    image_url = str(sign.get("image_url") or "").strip()
+    if not image_url and sign_id:
+        local_image = ROOT_DIR / "sign_images" / f"{sign_id}.jpg"
+        if local_image.is_file():
+            image_url = f"/api/sign-images/{sign_id}.jpg"
+    return {
+        "id": sign_id,
+        "code": str(sign.get("code") or sign_id.replace("_", ".")),
+        "file": image_url,
+        "image_url": image_url,
+        "category": sign.get("category") or str(group or ""),
+        "group": group,
+        "group_name": _multilang(group_name),
+        "name": _multilang(sign.get("name")),
+        "explanation": _multilang(sign.get("explanation")),
+        "driver_action": _multilang(sign.get("driver_action")),
+        "tags": list(sign.get("tags") or []),
+        "related": list(sign.get("related") or []),
+    }
+
+
+@api_router.get("/signs/{sign_id}")
+async def get_sign(sign_id: str):
+    sign = await db.traffic_signs.find_one({"id": sign_id}, {"_id": 0})
+    if not sign:
+        raise HTTPException(status_code=404, detail="Sign not found")
+    return _normalize_sign_for_api(sign)
 
 
 # ==================== BOK / CHAPTERS ====================
@@ -2175,14 +2320,42 @@ async def update_user_progress(device_id: str, answered_correct: bool, category:
     return {"success": True, "progress": progress}
 
 @api_router.post("/quiz-attempts")
-async def save_quiz_attempt(attempt_data: QuizAttemptCreate):
+async def save_quiz_attempt(
+    attempt_data: QuizAttemptCreate,
+    current_user: Optional[dict] = Depends(get_optional_user),
+):
     # Build doc from client data — preserve client_attempt_id and client completed_at
     doc = attempt_data.dict(exclude_none=True)
+    is_mistake_mode = bool(doc.pop("is_mistake_mode", False))
+    if is_mistake_mode:
+        doc["mode"] = "mistakes"
     doc["id"] = doc.pop("client_attempt_id", None) or str(uuid.uuid4())
     if "completed_at" not in doc:
         doc["completed_at"] = datetime.now(timezone.utc).isoformat()
+    if current_user and current_user.get("id"):
+        doc["user_id"] = current_user["id"]
     await db.quiz_attempts.insert_one(doc)
     doc.pop("_id", None)
+
+    # Registered-user mistake bank. This is deliberately fail-soft: analytics
+    # must never prevent a completed quiz from being saved.
+    if current_user and current_user.get("id"):
+        try:
+            await asyncio.gather(*(
+                record_user_mistake(
+                    db=db,
+                    user_id=current_user["id"],
+                    question_id=answer.get("question_id"),
+                    is_correct=bool(answer.get("is_correct")),
+                    mode=doc.get("mode", ""),
+                )
+                for answer in doc.get("questions_answered", [])
+                if answer.get("question_id") and isinstance(answer.get("is_correct"), bool)
+            ))
+        except Exception as exc:
+            logging.getLogger("quiz_attempts").warning(
+                "Mistake-bank update failed for saved attempt %s: %s", doc["id"], exc
+            )
 
     # ── Segment track ──
     if SEGMENT_WRITE_KEY:
@@ -4646,6 +4819,168 @@ async def admin_delete_video(video_id: str, _: dict = Depends(require_admin)):
     return {"message": "Deleted", "id": video_id}
 
 
+# ── Michael material library ─────────────────────────────────────────────────
+
+MICHAEL_MATERIAL_TYPES = {"sign", "intersection_image", "video"}
+MICHAEL_MATERIAL_FIELDS = {
+    "type", "source_id", "source_url", "title", "caption", "topic_tags",
+    "sign_ids", "situation_tags", "active", "approved_for_michael", "priority",
+}
+
+
+def _clean_string_list(value: Any) -> List[str]:
+    """Return a stable, de-duplicated list of non-empty strings."""
+    if not isinstance(value, list):
+        return []
+    result: List[str] = []
+    seen = set()
+    for item in value:
+        cleaned = str(item).strip()
+        if cleaned and cleaned not in seen:
+            result.append(cleaned)
+            seen.add(cleaned)
+    return result
+
+
+def _clean_multilang(value: Any) -> Dict[str, str]:
+    value = value if isinstance(value, dict) else {}
+    return {lang: str(value.get(lang, "")).strip() for lang in ("no", "th", "en")}
+
+
+def _is_safe_michael_material_url(value: str) -> bool:
+    """Accept only existing API assets or regular HTTPS/HTTP media references."""
+    value = (value or "").strip()
+    return value.startswith("/api/") or value.startswith("https://") or value.startswith("http://")
+
+
+def _normalize_michael_material_payload(data: dict, *, partial: bool = False) -> dict:
+    """Allow-list and normalize admin input before it reaches MongoDB."""
+    if not isinstance(data, dict):
+        raise HTTPException(status_code=400, detail="Material data must be an object")
+    unknown = set(data) - MICHAEL_MATERIAL_FIELDS
+    if unknown:
+        raise HTTPException(status_code=400, detail=f"Unknown fields: {', '.join(sorted(unknown))}")
+
+    normalized: Dict[str, Any] = {}
+    if "type" in data or not partial:
+        material_type = str(data.get("type", "")).strip()
+        if material_type not in MICHAEL_MATERIAL_TYPES:
+            raise HTTPException(status_code=400, detail="Type must be sign, intersection_image, or video")
+        normalized["type"] = material_type
+    for field in ("source_id", "source_url"):
+        if field in data or not partial:
+            normalized[field] = str(data.get(field, "")).strip()
+    for field in ("title", "caption"):
+        if field in data or not partial:
+            normalized[field] = _clean_multilang(data.get(field))
+    for field in ("topic_tags", "sign_ids", "situation_tags"):
+        if field in data or not partial:
+            normalized[field] = _clean_string_list(data.get(field))
+    for field in ("active", "approved_for_michael"):
+        if field in data or not partial:
+            normalized[field] = bool(data.get(field, False))
+    if "priority" in data or not partial:
+        try:
+            normalized["priority"] = max(0, min(1000, int(data.get("priority", 100))))
+        except (TypeError, ValueError):
+            raise HTTPException(status_code=400, detail="Priority must be a number")
+    return normalized
+
+
+def _validate_ready_michael_material(material: dict) -> None:
+    """Approved active references must be complete and safe for learner use."""
+    material_type = material.get("type", "")
+    if material_type in {"sign", "video"} and not material.get("source_id"):
+        raise HTTPException(status_code=400, detail="Existing source ID is required for sign and video")
+    if material_type == "intersection_image":
+        if not material.get("source_url") or not _is_safe_michael_material_url(material["source_url"]):
+            raise HTTPException(status_code=400, detail="A safe image URL is required for an intersection image")
+    if material.get("active") and material.get("approved_for_michael"):
+        for field in ("title", "caption"):
+            missing = [lang for lang in ("no", "th", "en") if not material.get(field, {}).get(lang)]
+            if missing:
+                raise HTTPException(status_code=400, detail=f"{field} is missing: {', '.join(missing)}")
+
+
+async def _resolve_michael_material_source(material: dict) -> dict:
+    """Verify referenced source records and derive their approved preview URL."""
+    material_type = material.get("type")
+    source_id = material.get("source_id", "")
+    if material_type == "sign":
+        source = await db.traffic_signs.find_one({"id": source_id}, {"_id": 0, "image_url": 1})
+        if not source:
+            raise HTTPException(status_code=404, detail="Traffic sign source not found")
+        preview_url = source.get("image_url", "")
+        if preview_url:
+            material["source_url"] = preview_url
+    elif material_type == "video":
+        source = await db.learning_videos.find_one({"id": source_id}, {"_id": 0})
+        if not source:
+            raise HTTPException(status_code=404, detail="Video source not found")
+        serialized = _serialize_video(source)
+        material["source_url"] = serialized.get("thumbnail_url") or serialized.get("youtube_url", "")
+    if material.get("source_url") and not _is_safe_michael_material_url(material["source_url"]):
+        raise HTTPException(status_code=400, detail="Unsafe source URL")
+    if material.get("active") and material.get("approved_for_michael") and not material.get("source_url"):
+        raise HTTPException(status_code=400, detail="Approved material must have a previewable source")
+    return material
+
+
+def _serialize_michael_material(material: dict) -> dict:
+    return {key: value for key, value in material.items() if key != "_id"}
+
+
+@api_router.get("/admin/michael-materials")
+async def admin_list_michael_materials(
+    material_type: str = "",
+    status: str = "",
+    _: dict = Depends(require_admin),
+):
+    """List curated Michael references without duplicating source media."""
+    query: Dict[str, Any] = {}
+    if material_type:
+        if material_type not in MICHAEL_MATERIAL_TYPES:
+            raise HTTPException(status_code=400, detail="Invalid material type")
+        query["type"] = material_type
+    if status == "active":
+        query["active"] = True
+    elif status == "inactive":
+        query["active"] = False
+    elif status == "approved":
+        query["approved_for_michael"] = True
+    elif status and status != "all":
+        raise HTTPException(status_code=400, detail="Invalid status filter")
+    results = await db.michael_materials.find(query).sort([("priority", 1), ("updated_at", -1)]).to_list(1000)
+    return [_serialize_michael_material(item) for item in results]
+
+
+@api_router.post("/admin/michael-materials")
+async def admin_create_michael_material(data: dict, _: dict = Depends(require_admin)):
+    material = _normalize_michael_material_payload(data)
+    _validate_ready_michael_material(material)
+    await _resolve_michael_material_source(material)
+    now = datetime.now(timezone.utc).isoformat()
+    material.update({"id": str(uuid.uuid4()), "created_at": now, "updated_at": now})
+    await db.michael_materials.insert_one(material)
+    return _serialize_michael_material(material)
+
+
+@api_router.patch("/admin/michael-materials/{material_id}")
+async def admin_update_michael_material(material_id: str, data: dict, _: dict = Depends(require_admin)):
+    current = await db.michael_materials.find_one({"id": material_id})
+    if not current:
+        raise HTTPException(status_code=404, detail="Michael material not found")
+    update = _normalize_michael_material_payload(data, partial=True)
+    candidate = {**_serialize_michael_material(current), **update}
+    _validate_ready_michael_material(candidate)
+    await _resolve_michael_material_source(candidate)
+    update["source_url"] = candidate.get("source_url", "")
+    update["updated_at"] = datetime.now(timezone.utc).isoformat()
+    await db.michael_materials.update_one({"id": material_id}, {"$set": update})
+    candidate.update(update)
+    return _serialize_michael_material(candidate)
+
+
 # ── Podcasts ─────────────────────────────────────────────────────────────────
 
 class LearningPodcastCreate(BaseModel):
@@ -4764,6 +5099,19 @@ async def list_learning_podcasts(language: str = ""):
         query["language"] = language
     results = await db.learning_podcasts.find(query).sort("title_no", 1).to_list(500)
     return [_serialize_podcast(r) for r in results]
+
+
+@api_router.get("/library/media")
+async def list_media_catalog(
+    language: str = Query(...),
+    current_user: dict = Depends(get_current_user),
+):
+    """Return active, language-pure curated media for an authenticated learner."""
+    del current_user  # Authentication is the policy gate; identity is not query input.
+    if language not in SUPPORTED_LANGUAGES:
+        raise HTTPException(status_code=422, detail="Unsupported language")
+    media = await list_localized_catalog_media(db.media_catalog, language)
+    return {"language": language, "media": media}
 
 
 # ── GridFS audio upload / stream ─────────────────────────────────────────────
@@ -5118,6 +5466,7 @@ app.include_router(quiz_web_router, prefix="/api")
 # ==================== WEB APP ====================
 from webapp import webapp_router  # noqa: E402
 app.include_router(webapp_router, prefix="/api")
+app.include_router(admin_analytics_router, prefix="/api")
 
 
 # ==================== ADMIN HTML PAGE ====================
@@ -5737,8 +6086,9 @@ async def text_to_speech(request: Request, text: Optional[str] = None, lang: Opt
     elif not _tts_provider_available("elevenlabs", lang):
         logger.error("ElevenLabs circuit breaker er åpen for %s; prøver neste TTS-rute.", lang)
     else:
+        client = None
         try:
-            url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}"
+            url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}/stream"
             headers = {
                 "Accept": "audio/mpeg",
                 "Content-Type": "application/json",
@@ -5752,27 +6102,60 @@ async def text_to_speech(request: Request, text: Optional[str] = None, lang: Opt
                     "similarity_boost": 0.75,
                 },
             }
-            async with httpx.AsyncClient() as client:
-                r = await client.post(url, json=payload, headers=headers, timeout=60.0)
-                if r.status_code == 200:
-                    with open(cloned_cache_path, "wb") as f:
-                        f.write(r.content)
-                    _tts_record_success("elevenlabs", lang)
-                    logger.info(
-                        "TTS %s → ElevenLabs klonet stemme %s (modell %s)",
-                        lang, voice_id, model_id,
-                    )
-                    return _stream_mp3_file(
-                        cloned_cache_path,
-                        headers={"X-TTS-Provider": "elevenlabs", "X-TTS-Voice": voice_id},
-                    )
-                # Logges som ERROR, ikke WARNING: dette er tap av Michaels stemme.
-                _tts_record_failure("elevenlabs", lang, r.text, r.status_code)
-                logger.error(
-                    "KLONET STEMME FEILET: ElevenLabs svarte %d for voice_id=%s modell=%s (%s). Svar: %s",
-                    r.status_code, voice_id, model_id, lang, r.text[:300],
+            client = httpx.AsyncClient(timeout=60.0)
+            request_to_eleven = client.build_request("POST", url, json=payload, headers=headers)
+            r = await client.send(request_to_eleven, stream=True)
+            if r.status_code == 200:
+                from fastapi.responses import StreamingResponse
+
+                temp_cache_path = f"{cloned_cache_path}.{uuid.uuid4().hex}.tmp"
+
+                async def stream_and_cache():
+                    completed = False
+                    try:
+                        with open(temp_cache_path, "wb") as cache_file:
+                            async for chunk in r.aiter_bytes():
+                                if not chunk:
+                                    continue
+                                cache_file.write(chunk)
+                                yield chunk
+                        os.replace(temp_cache_path, cloned_cache_path)
+                        completed = True
+                        _tts_record_success("elevenlabs", lang)
+                        logger.info(
+                            "TTS %s → ElevenLabs klonet stemme %s (modell %s, streamet)",
+                            lang, voice_id, model_id,
+                        )
+                    finally:
+                        await r.aclose()
+                        await client.aclose()
+                        if not completed and os.path.exists(temp_cache_path):
+                            try:
+                                os.remove(temp_cache_path)
+                            except OSError:
+                                pass
+
+                return StreamingResponse(
+                    stream_and_cache(),
+                    media_type="audio/mpeg",
+                    headers={"X-TTS-Provider": "elevenlabs", "X-TTS-Voice": voice_id},
                 )
+
+            # Logges som ERROR, ikke WARNING: dette er tap av Michaels stemme.
+            error_body = (await r.aread()).decode("utf-8", errors="replace")
+            await r.aclose()
+            await client.aclose()
+            _tts_record_failure("elevenlabs", lang, error_body, r.status_code)
+            logger.error(
+                "KLONET STEMME FEILET: ElevenLabs svarte %d for voice_id=%s modell=%s (%s). Svar: %s",
+                r.status_code, voice_id, model_id, lang, error_body[:300],
+            )
         except Exception as e:
+            if client is not None:
+                try:
+                    await client.aclose()
+                except Exception:
+                    pass
             _tts_record_failure("elevenlabs", lang, str(e))
             logger.error(
                 "KLONET STEMME FEILET: ElevenLabs-kall kastet %s for voice_id=%s (%s)",
