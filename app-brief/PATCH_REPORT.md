@@ -1,3 +1,71 @@
+# PATCH REPORT: SE → OPPFATTE → AVGJØRE — forsterket beslutningsmodell i Michael-prompten
+
+## Bakgrunn
+
+Michael rapporterte live at et bredt "vikeplikt"-spørsmål fikk Michael til å
+sitere "paragraf 7.2" med en gang, uten oppklarende spørsmål og uten
+Kongen-og-tjeneren-metaforen. Undersøkt mot `_is_section_7_2_left_turn_query`/
+`_apply_section_7_2_fail_safe` (den eneste deterministiske kilden som kan
+injisere § 7 nr. 2-tekst): den krever høyreregel + venstresving +
+møtende/høyre-side-ord sammen, eller en eksplisitt "§7"+"nr 2"-forespørsel —
+et rent "vikeplikt" treffer ingen av delene. CLARIFYING QUESTION RULE nevner
+"vikeplikt" som eksplisitt eksempel allerede. Konklusjon: ingen deterministisk
+kodefeil funnet — dette er trolig LLM-avdrift fra en ~2200-linjers prompt der
+den kritiske regelen ligger ca. 300 linjer inn, ikke rett etter identiteten.
+
+## Endring
+
+Lagt til et nytt, kort, sterkt formulert **KRITISK BESLUTNINGSMODELL — SE →
+OPPFATTE → AVGJØRE**-avsnitt helt øverst i alle tre systemprompt-varianter i
+`backend/teacher_chat.py` (`_PROMPT_CORE` /no/, `_PROMPT_CORE_TH` /th/,
+`_PROMPT_CORE_EN` /en/) — plassert rett etter den eksisterende
+KRITISK MEDIEREGEL/CRITICAL RULES-blokken, samme mønster som allerede virker
+for medieregelen. Dette er en forsterkning av eksisterende regler (bevisst
+IKKE en ny, motstridende regel):
+
+- **SE:** ved brede spørsmål — forbud mot å svare med en gang, still ett
+  oppklarende spørsmål (viser til den allerede eksisterende CLARIFYING
+  QUESTION RULE).
+- **OPPFATTE:** tolk elevens svar (språkbarriere vs. situasjonsforvirring).
+- **AVGJØRE:** skriv svaret først nå, i eksisterende TEACHING ORDER — aldri
+  innled med jus/paragraf/definisjon.
+
+I tillegg er steg 4 i alle tre TEACHING ORDER-blokkene ("Teoriprøve-vinkel" /
+"จุดเน้นข้อสอบทฤษฎี" / "Theory test focus") utvidet med én setning: dette er
+det TIDLIGSTE punktet loven/paragrafen kan nevnes — aldri før.
+
+**Bevisst IKKE gjort:**
+- Ingen endring av de 5 eksisterende emoji-headerne (🚗/💡/⚠️/📝/❓) eller
+  rekkefølgen deres — de er referert identisk 5 steder i filen (inkl. i
+  `_is_clarifying_question()`-heuristikken og retry-instruksjonene), og å
+  gjenbenevne dem er unødvendig risiko for denne oppgaven.
+- Ingen endring av CALCULATION SHORTCUT-unntaket (stoppelengde/bremselengde
+  hopper bevisst over oppklaringsspørsmålet) — det nye avsnittet sier
+  eksplisitt at det ikke gjelder der.
+- Ingen endring av `_apply_section_7_2_fail_safe` — den er en smal,
+  deterministisk sikkerhetsgaranti for én presis juridisk situasjon, urørt.
+
+## Tester
+
+- 56/56 i `test_teacher_chat_fallback.py` + `test_michael_material_retrieval.py`
+  + `test_media_catalog.py` + `test_media_catalog_seed.py`: PASS (ingen
+  regresjon).
+- `py_compile` og `git diff --check`: PASS.
+- **Ikke testet:** faktisk LLM-atferd live (krever produksjons-API-nøkler
+  som ikke finnes i denne økten). Dette er en promptendring — den endelige
+  verifiseringen må skje ved at Michael spør Michael-chatten "vikeplikt" på
+  alle tre språk live og bekrefter at han nå stiller ett oppklarende
+  spørsmål før forklaringen, og ikke nevner § 7 før steg 4.
+
+## Risiko og rollback
+
+Rent tillegg til systemprompten — ingen eksisterende kode-logikk, skjema
+eller deterministisk sikkerhetsmekanisme er endret. Verste utfall er at
+prompt-tilføyelsen ikke endrer modellatferd nok (samme risiko som før
+patchen), ikke at den ødelegger noe som fungerte. Rollback er én revert.
+
+---
+
 # PATCH REPORT: Lov-tag-mapping (§3 HAV-regelen, §7 vikeplikt) for medieoppslag
 
 ## Bakgrunn
