@@ -152,9 +152,10 @@ a { color:inherit; text-decoration:none; }
 
 /* BOTTOM NAV — Floating Neon Capsule Carousel («En lang knapp som går som en karusell») */
 #bottomNav {
-  height: calc(var(--bottom-h) + 8px); flex-shrink: 0;
+  height: 62px;
+  flex-shrink: 0;
   margin: 6px 12px 14px;
-  border-radius: 28px;
+  border-radius: 30px;
   border: 1.5px solid transparent !important;
   background: linear-gradient(rgba(11, 18, 38, 0.94), rgba(11, 18, 38, 0.94)) padding-box,
               conic-gradient(from var(--neon-angle, 0deg), rgba(0, 245, 255, 0.75), rgba(255, 0, 229, 0.75), rgba(0, 245, 255, 0.75)) border-box !important;
@@ -169,8 +170,8 @@ a { color:inherit; text-decoration:none; }
   scrollbar-width: none;
   -ms-overflow-style: none;
   scroll-snap-type: none;
-  padding: 0 10px;
-  gap: 10px;
+  padding: 0 8px;
+  gap: 8px;
 }
 #bottomNav.js-scrolling,
 .js-scrolling {
@@ -183,18 +184,24 @@ a { color:inherit; text-decoration:none; }
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 0 16px rgba(255, 153, 51, 0.2);
 }
 .bn-tab {
-  flex: 0 0 98px;
-  width: 98px;
-  height: calc(100% - 10px);
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center; gap: 3px;
+  flex: 0 0 auto;
+  min-width: 86px;
+  height: 48px;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
   border: 1.5px solid rgba(255, 255, 255, 0.08);
-  background: rgba(15, 23, 42, 0.7);
+  background: rgba(15, 23, 42, 0.75);
   color: #94A3B8;
-  cursor: pointer; font-size: 0.70rem; font-weight: 700;
+  cursor: pointer;
+  font-size: 0.70rem;
+  font-weight: 700;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  padding: 4px 6px; letter-spacing: 0.2px;
-  border-radius: 20px;
+  padding: 4px 10px;
+  letter-spacing: 0.2px;
+  border-radius: 24px;
   box-shadow: inset 0 1px 1px rgba(255,255,255,0.06), 0 2px 6px rgba(0,0,0,0.35);
   white-space: nowrap;
 }
@@ -210,24 +217,35 @@ a { color:inherit; text-decoration:none; }
   box-shadow: inset 0 1px 1px rgba(255,255,255,0.8), 0 2px 4px rgba(0,0,0,0.04);
 }
 .bn-icon {
-  font-size: 20px; line-height: 1;
-  display: flex; align-items: center; justify-content: center;
-  width: 26px; height: 26px;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
   transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), filter 0.25s;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
 }
 .bn-icon svg {
-  width: 20px; height: 20px;
+  width: 18px;
+  height: 18px;
   stroke: currentColor;
   stroke-width: 2.2;
   display: block;
 }
 .bn-icon img {
-  width: 26px; height: 26px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   object-fit: cover;
   object-position: center 15%;
   display: block;
+}
+.bn-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1.1;
+  white-space: nowrap;
 }
 .bn-tab.active {
   color: #00F5FF;
@@ -3656,123 +3674,7 @@ a { color:inherit; text-decoration:none; }
 .t2d-lightbox-close:hover { background:rgba(239,68,68,.85); }
 
 
-/* ═══ HOME MEDIA CAROUSEL (Touch Glide) ═══ */
-.home-carousel-section {
-  margin: 18px 0 24px;
-  width: 100%;
-}
-.home-carousel-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-  padding: 0 4px;
-}
-.home-carousel-title-wrap {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.home-carousel-icon {
-  font-size: 1.2rem;
-}
-.home-carousel-title {
-  font-size: 1.05rem;
-  font-weight: 800;
-  color: #F8FAFC;
-  letter-spacing: -0.01em;
-}
-.home-carousel-see-all {
-  background: transparent;
-  border: none;
-  color: #00F5FF;
-  font-size: 0.84rem;
-  font-weight: 700;
-  cursor: pointer;
-  padding: 4px 8px;
-  transition: opacity 0.2s;
-}
-.home-carousel-see-all:hover {
-  opacity: 0.8;
-}
-.home-carousel-track {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  gap: 14px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  padding: 4px 4px 16px 4px;
-}
-.home-carousel-track::-webkit-scrollbar {
-  display: none;
-}
-.home-carousel-card {
-  flex: 0 0 230px;
-  width: 230px;
-  scroll-snap-align: start;
-  background: linear-gradient(145deg, rgba(19, 27, 46, 0.95), rgba(11, 18, 38, 0.98));
-  border: 1.5px solid rgba(0, 245, 255, 0.25);
-  border-radius: 16px;
-  overflow: hidden;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
-  display: flex;
-  flex-direction: column;
-}
-.home-carousel-card:hover {
-  transform: translateY(-3px);
-  border-color: #00F5FF;
-  box-shadow: 0 8px 24px rgba(0, 245, 255, 0.2);
-}
-.home-carousel-thumb {
-  width: 100%;
-  height: 125px;
-  background-color: #0F172A;
-  background-size: cover;
-  background-position: center;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.home-carousel-thumb-play {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.65);
-  backdrop-filter: blur(4px);
-  border: 1.5px solid rgba(0, 245, 255, 0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #00F5FF;
-  font-size: 16px;
-  box-shadow: 0 0 12px rgba(0, 245, 255, 0.4);
-  transition: transform 0.2s, background 0.2s;
-}
-.home-carousel-card:hover .home-carousel-thumb-play {
-  transform: scale(1.12);
-  background: rgba(0, 245, 255, 0.85);
-  color: #071326;
-}
-.home-carousel-badge {
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  background: rgba(239, 68, 68, 0.85);
-  color: #fff;
-  font-size: 0.65rem;
-  font-weight: 800;
-  padding: 3px 8px;
-  border-radius: 6px;
-  letter-spacing: 0.5px;
-}
-.home-carousel-badge.podcast {
-  background: rgba(168, 85, 247, 0.85);
-}
+
 .media-lang-badge {
   position: absolute;
   top: 8px;
@@ -4112,20 +4014,6 @@ a { color:inherit; text-decoration:none; }
         <div class="pb-text">
           <h4 class="pb-title" data-key="premium_on">⭐ Premium</h4>
           <p class="pb-sub" data-key="premium_sub">Du har tilgang til alle funksjoner</p>
-        </div>
-      </div>
-
-      <!-- ═══ HOME MEDIA CAROUSEL (Videos & Podcasts) ═══ -->
-      <div class="home-carousel-section" id="homeCarouselSection">
-        <div class="home-carousel-header">
-          <div class="home-carousel-title-wrap">
-            <span class="home-carousel-icon">🎬</span>
-            <span class="home-carousel-title" data-key="home_media_carousel_title">Videokurs & Podkaster</span>
-          </div>
-          <button class="home-carousel-see-all" onclick="showTab('library')" data-key="see_all">Se alle →</button>
-        </div>
-        <div class="home-carousel-track" id="homeCarouselTrack" tabindex="0" role="region" aria-label="Videokurs og Podkaster">
-          <!-- Populated by renderHomeCarousel() -->
         </div>
       </div>
     </div>
@@ -4644,34 +4532,34 @@ a { color:inherit; text-decoration:none; }
 
   </div><!-- /content -->
 
-  <!-- BOTTOM NAV — 8 tabs: Hjem → Kategorier → Historikk → Michael → Skilt → Studiebok → Bokmerker → Innstillinger -->
+  <!-- BOTTOM NAV — 9 tabs: Hjem → Kategorier → Historikk → Michael → Videoer → Skilt → Studiebok → Bokmerker → Innstillinger -->
   <div id="bottomNav">
     <button class="bn-tab active" id="bnHome" onclick="showTab('home')">
-      <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span><span data-key="home">Hjem</span>
+      <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span><span class="bn-label" data-key="home">Hjem</span>
     </button>
     <button class="bn-tab" id="bnCats" onclick="showTab('cats')">
-      <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span><span data-key="cats">Kategorier</span>
+      <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span><span class="bn-label" data-key="cats">Kategorier</span>
     </button>
     <button class="bn-tab" id="bnHistory" onclick="showTab('history')">
-      <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span><span data-key="history">Historikk</span>
+      <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span><span class="bn-label" data-key="history">Historikk</span>
     </button>
     <button class="bn-tab bn-tab-michael" id="bnTeacher" onclick="showTab('teacher')">
-      <span class="bn-icon"><img src="/api/assets/michael_profile.jpg" style="width:30px;height:30px;border-radius:50%;object-fit:cover;object-position:center 15%;" alt="Michael"></span><span data-key="teacher">Michael</span>
+      <span class="bn-icon"><img src="/api/assets/michael_profile.jpg" alt="Michael"></span><span class="bn-label" data-key="teacher">Michael</span>
     </button>
     <button class="bn-tab" id="bnLibrary" onclick="showTab('library')">
-      <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></span><span data-key="lib_videos">Videoer</span>
+      <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></span><span class="bn-label" data-key="lib_videos">Videoer</span>
     </button>
     <button class="bn-tab" id="bnSigns" onclick="showTab('signs')">
-      <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 22 2 22"/><line x1="12" y1="9" x2="12" y2="15"/><circle cx="12" cy="18" r="0.5" fill="currentColor"/></svg></span><span data-key="signs">Skilt</span>
+      <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 22 2 22"/><line x1="12" y1="9" x2="12" y2="15"/><circle cx="12" cy="18" r="0.5" fill="currentColor"/></svg></span><span class="bn-label" data-key="signs">Skilt</span>
     </button>
     <button class="bn-tab" id="bnStudybook" onclick="showTab('studybook')">
-      <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span><span data-key="sb_nav">Studiebok</span>
+      <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span><span class="bn-label" data-key="sb_nav">Studiebok</span>
     </button>
     <button class="bn-tab" id="bnBookmarks" onclick="showTab('bookmarks')">
-      <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></span><span data-key="bookmarks">Bokmerker</span>
+      <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></span><span class="bn-label" data-key="bookmarks">Bokmerker</span>
     </button>
     <button class="bn-tab" id="bnSettings" onclick="showTab('settings')">
-      <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span><span data-key="settings">Innstillinger</span>
+      <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span><span class="bn-label" data-key="settings">Innstillinger</span>
     </button>
   </div>
 
@@ -4778,6 +4666,7 @@ var NAV_SVG = {
   cats: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
   history: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>',
   teacher: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1 .4-1.4 .9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6 .4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/><path d="M9 17h6"/></svg>',
+  library: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>',
   signs: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 22 2 22"/><line x1="12" y1="9" x2="12" y2="15"/><circle cx="12" cy="18" r="0.5" fill="currentColor"/></svg>',
   studybook: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>',
   bookmarks: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>',
@@ -5315,15 +5204,15 @@ function applyUILang() {
   // back buttons
   document.querySelectorAll('.back-btn').forEach(function(b){ b.textContent = t('back'); });
   // bottom nav
-  var nb = document.getElementById('bnHome');      if(nb) nb.innerHTML = '<span class="bn-icon">' + NAV_SVG.home + '</span>' + t('home');
-  var nc = document.getElementById('bnCats');      if(nc) nc.innerHTML = '<span class="bn-icon">' + NAV_SVG.cats + '</span>' + t('cats');
-  var nh = document.getElementById('bnHistory');   if(nh) nh.innerHTML = '<span class="bn-icon">' + NAV_SVG.history + '</span>' + t('history');
-  var nsg= document.getElementById('bnSigns');     if(nsg) nsg.innerHTML = '<span class="bn-icon">' + NAV_SVG.signs + '</span>' + t('signs');
-  var nbm= document.getElementById('bnBookmarks'); if(nbm) nbm.innerHTML = '<span class="bn-icon">' + NAV_SVG.bookmarks + '</span>' + t('bookmarks');
-  var ns = document.getElementById('bnSettings');  if(ns) ns.innerHTML = '<span class="bn-icon">' + NAV_SVG.settings + '</span>' + t('settings');
-  var nt = document.getElementById('bnTeacher');   if(nt) nt.innerHTML = '<span class="bn-icon"><img src="/api/assets/michael_profile.jpg" style="width:30px;height:30px;border-radius:50%;object-fit:cover;object-position:center 15%;" alt="Michael"></span>' + t('teacher');
-  var nl = document.getElementById('bnLibrary');   if(nl) nl.innerHTML = '<span class="bn-icon">' + (NAV_SVG.library || '') + '</span>' + t('lib_videos');
-  var nsb= document.getElementById('bnStudybook'); if(nsb) nsb.innerHTML = '<span class="bn-icon">' + NAV_SVG.studybook + '</span>' + t('sb_nav');
+  var nb = document.getElementById('bnHome');      if(nb) nb.innerHTML = '<span class="bn-icon">' + NAV_SVG.home + '</span><span class="bn-label">' + t('home') + '</span>';
+  var nc = document.getElementById('bnCats');      if(nc) nc.innerHTML = '<span class="bn-icon">' + NAV_SVG.cats + '</span><span class="bn-label">' + t('cats') + '</span>';
+  var nh = document.getElementById('bnHistory');   if(nh) nh.innerHTML = '<span class="bn-icon">' + NAV_SVG.history + '</span><span class="bn-label">' + t('history') + '</span>';
+  var nsg= document.getElementById('bnSigns');     if(nsg) nsg.innerHTML = '<span class="bn-icon">' + NAV_SVG.signs + '</span><span class="bn-label">' + t('signs') + '</span>';
+  var nbm= document.getElementById('bnBookmarks'); if(nbm) nbm.innerHTML = '<span class="bn-icon">' + NAV_SVG.bookmarks + '</span><span class="bn-label">' + t('bookmarks') + '</span>';
+  var ns = document.getElementById('bnSettings');  if(ns) ns.innerHTML = '<span class="bn-icon">' + NAV_SVG.settings + '</span><span class="bn-label">' + t('settings') + '</span>';
+  var nt = document.getElementById('bnTeacher');   if(nt) nt.innerHTML = '<span class="bn-icon"><img src="/api/assets/michael_profile.jpg" alt="Michael"></span><span class="bn-label">' + t('teacher') + '</span>';
+  var nl = document.getElementById('bnLibrary');   if(nl) nl.innerHTML = '<span class="bn-icon">' + NAV_SVG.library + '</span><span class="bn-label">' + t('lib_videos') + '</span>';
+  var nsb= document.getElementById('bnStudybook'); if(nsb) nsb.innerHTML = '<span class="bn-icon">' + NAV_SVG.studybook + '</span><span class="bn-label">' + t('sb_nav') + '</span>';
   // Update teacher UI if visible
   var tNameEl = document.getElementById('teacherNameLbl');
   if (tNameEl) tNameEl.textContent = t('teacher_name');
@@ -6796,9 +6685,6 @@ async function loadHome() {
 
   // Premium badge — viser nedtelling når gratisuken er aktiv
   renderPremiumBanner();
-
-  // Horisontal karusell med videoer og podkaster nederst på hjemskjermen
-  renderHomeCarousel();
 }
 
 function _getMediaLangBadge(item) {
@@ -6810,100 +6696,7 @@ function _getMediaLangBadge(item) {
   return '';
 }
 
-async function renderHomeCarousel() {
-  var track = document.getElementById('homeCarouselTrack');
-  if (!track) return;
 
-  try {
-    var vPromise = api('GET', '/api/videos/for-topic?limit=6').catch(function() { return []; });
-    var pPromise = api('GET', '/api/podcasts/for-topic?limit=6').catch(function() { return []; });
-    var res = await Promise.all([vPromise, pPromise]);
-    var videos = Array.isArray(res[0]) ? res[0] : [];
-    var podcasts = Array.isArray(res[1]) ? res[1] : [];
-
-    var items = [];
-    videos.forEach(function(v) {
-      items.push({
-        type: 'video',
-        title: v['title_' + appLang] || v.title_no || v.title || '',
-        dur: _fmtDur(v.duration_seconds || 0),
-        thumb: v.thumbnail_url || '',
-        srcKey: v.youtube_url || v.file_path || '',
-        item: v
-      });
-    });
-    podcasts.forEach(function(p) {
-      items.push({
-        type: 'podcast',
-        title: p['title_' + appLang] || p.title_no || p.title || '',
-        dur: _fmtDur(p.duration_seconds || 0),
-        thumb: '',
-        srcKey: p.audio_url || p.file_path || '',
-        item: p
-      });
-    });
-
-    if (!items.length) {
-      // Curated baseline cards ensuring the carousel is always visual and active
-      items = [
-        {
-          type: 'video',
-          title: appLang === 'th' ? 'การให้ทางและการเลี้ยวซ้าย (§ 7 ข้อ 2)' : appLang === 'en' ? 'Right of Way & Left Turn (§ 7(2))' : 'Vikeplikt og Venstresving (§ 7 nr. 2)',
-          dur: '2:25',
-          thumb: '/api/assets/kryss_venstresving.png',
-          srcKey: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
-        },
-        {
-          type: 'podcast',
-          title: appLang === 'th' ? 'ระยะหยุดรถและเวลาตอบสนอง' : appLang === 'en' ? 'Stopping Distance & Reaction Time' : 'Stoppelengde og Reaksjonstid',
-          dur: '3:00',
-          thumb: '/api/assets/grunnregel_hav.png',
-          srcKey: '/api/assets/podcast_stoppelengde.mp3'
-        },
-        {
-          type: 'video',
-          title: appLang === 'th' ? 'กฎหมายจราจรมาตรา 3 (กฎ HAV)' : appLang === 'en' ? 'Road Traffic Act § 3 (HAV Rule)' : 'Vegtrafikkloven § 3 (HAV-regelen)',
-          dur: '2:00',
-          thumb: '/api/assets/grunnregel_hav.png',
-          srcKey: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
-        },
-        {
-          type: 'podcast',
-          title: appLang === 'th' ? 'กฎการให้ทางรถเมล์ออกจากป้าย (§ 7 ข้อ 4)' : appLang === 'en' ? 'Bus Yield Rule (§ 7(4))' : 'Bussregelen og Kollektivfelt (§ 7 nr. 4)',
-          dur: '2:35',
-          thumb: '/api/assets/buss_holdeplass.png',
-          srcKey: '/api/assets/podcast_bussregelen.mp3'
-        }
-      ];
-    }
-
-    track.innerHTML = items.map(function(it) {
-      var badgeCls = it.type === 'podcast' ? 'home-carousel-badge podcast' : 'home-carousel-badge';
-      var badgeText = it.type === 'podcast' ? '🎙️ PODCAST' : '🎬 VIDEO';
-      var langBadge = _getMediaLangBadge(it.item || it);
-      var thumbStyle = it.thumb ? ' style="background-image:url(' + escH(it.thumb) + ');"' : '';
-      var playIcon = it.type === 'podcast' ? '🎙️' : '▶';
-      var clickAction = it.type === 'video' 
-        ? "openVideoPlayer('" + escH(it.srcKey) + "')" 
-        : "showTab('library')";
-
-      return '<div class="home-carousel-card" onclick="' + clickAction + '">'
-        + '<div class="home-carousel-thumb"' + thumbStyle + '>'
-          + '<span class="' + badgeCls + '">' + badgeText + '</span>'
-          + langBadge
-          + '<div class="home-carousel-thumb-play"><span>' + playIcon + '</span></div>'
-        + '</div>'
-        + '<div class="home-carousel-body">'
-          + '<h4 class="home-carousel-card-title">' + escH(it.title) + '</h4>'
-          + (it.dur ? '<span class="home-carousel-card-dur">' + escH(it.dur) + '</span>' : '')
-        + '</div>'
-      + '</div>';
-    }).join('');
-
-  } catch(e) {
-    console.warn('Failed to render home carousel:', e);
-  }
-}
 
 // ════════════════════════════════════════════
 //  CATEGORIES

@@ -1,5 +1,5 @@
 /**
- * Thai2Drive Offline Service Worker (v1.0.5)
+ * Thai2Drive Offline Service Worker (v1.0.6)
  * -------------------------------------------
  * Cacher kjerne-UI og skilt for offline øving.
  *
@@ -9,7 +9,7 @@
  * til nettverket slik at audio/video streaming fungerer 100% på iPhone/Safari.
  */
 
-const CACHE_NAME = 'thai2drive-offline-v1.0.5';
+const CACHE_NAME = 'thai2drive-offline-v1.0.6';
 const OFFLINE_URLS = [
   '/',
   '/api/assets/favicon.ico'

@@ -67,13 +67,13 @@ test('webapp.py contains hardened audio lifecycle with instance destruction & wa
   assert(webapp_code.includes('a.load()'), 'Audio load must be present in stopAllSpeech');
 });
 
-test('webapp.py contains Video button adjacent to Michael and horizontal Home Carousel', () => {
+test('webapp.py contains Video button adjacent to Michael and Media Cards', () => {
   assert(webapp_code.includes('id="bnTeacher" onclick="showTab(\'teacher\')">'), 'bnTeacher must exist');
   assert(webapp_code.includes('id="bnLibrary" onclick="showTab(\'library\')">'), 'bnLibrary must exist');
   assert(webapp_code.indexOf('id="bnTeacher"') < webapp_code.indexOf('id="bnLibrary"'), 'bnLibrary must be adjacent to bnTeacher in bottomNav');
-  assert(webapp_code.includes('id="homeCarouselSection"'), 'Home carousel section must exist');
-  assert(webapp_code.includes('renderHomeCarousel()'), 'renderHomeCarousel function must exist');
+  assert(webapp_code.includes('buildVideoCard('), 'buildVideoCard function must exist');
   assert(webapp_code.includes('buildPodcastCard('), 'buildPodcastCard function must exist');
+  assert(webapp_code.includes('bindBottomNavCarousel()'), 'bindBottomNavCarousel function must exist');
 });
 
 test('Language purity: no forbidden cross-language fallback patterns', () => {
