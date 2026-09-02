@@ -210,10 +210,24 @@ a { color:inherit; text-decoration:none; }
   box-shadow: inset 0 1px 1px rgba(255,255,255,0.8), 0 2px 4px rgba(0,0,0,0.04);
 }
 .bn-icon {
-  font-size: 24px; line-height: 1;
+  font-size: 20px; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px;
   transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), filter 0.25s;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5)) contrast(1.15) saturate(1.25);
-  display: inline-block;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+}
+.bn-icon svg {
+  width: 20px; height: 20px;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  display: block;
+}
+.bn-icon img {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center 15%;
+  display: block;
 }
 .bn-tab.active {
   color: #00F5FF;
@@ -221,7 +235,7 @@ a { color:inherit; text-decoration:none; }
   background: linear-gradient(rgba(11, 18, 38, 0.90), rgba(11, 18, 38, 0.90)) padding-box,
               conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #00F5FF) border-box !important;
   animation: neonFlow 4s linear infinite;
-  box-shadow: 0 0 14px rgba(0, 245, 255, 0.22), inset 0 1px 2px rgba(255,255,255,0.08);
+  box-shadow: 0 0 16px rgba(0, 245, 255, 0.3), inset 0 1px 2px rgba(255,255,255,0.12);
   transform: translateY(-2px);
 }
 [data-theme="light"] .bn-tab.active {
@@ -231,11 +245,12 @@ a { color:inherit; text-decoration:none; }
   box-shadow: 0 0 14px rgba(255, 153, 51, 0.22), inset 0 1px 2px rgba(255,255,255,0.9);
 }
 .bn-tab.active .bn-icon {
-  transform: scale(1.2) translateY(-1px);
-  filter: drop-shadow(0 0 6px rgba(0, 245, 255, 0.6)) drop-shadow(0 2px 4px rgba(0,0,0,0.6)) contrast(1.3) saturate(1.5);
+  transform: scale(1.15) translateY(-1px);
+  filter: drop-shadow(0 0 6px rgba(0, 245, 255, 0.8)) contrast(1.3) saturate(1.5);
+  color: #00F5FF;
 }
 [data-theme="light"] .bn-tab.active .bn-icon {
-  filter: drop-shadow(0 0 6px rgba(255, 153, 51, 0.6)) drop-shadow(0 2px 4px rgba(0,0,0,0.3)) contrast(1.3) saturate(1.5);
+  filter: drop-shadow(0 0 6px rgba(255, 153, 51, 0.8)) contrast(1.3) saturate(1.5);
 }
 .bn-tab:active .bn-icon { transform: scale(0.85); }
 
