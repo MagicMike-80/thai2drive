@@ -3564,6 +3564,39 @@ a { color:inherit; text-decoration:none; }
   #screenTeacher .tm-para { max-width:100%; margin-bottom:1.1em; }
   #screenTeacher .teacher-inline-image { max-height:210px; }
 }
+
+/* ═══ LIGHTBOX MODAL (Enlarge situation & sign images) ═══ */
+.t2d-lightbox {
+  position:fixed; inset:0; z-index:99999;
+  background:rgba(7,19,38,.92); backdrop-filter:blur(8px);
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; pointer-events:none; transition:opacity .2s ease;
+  padding:20px;
+}
+.t2d-lightbox.active {
+  opacity:1; pointer-events:auto;
+}
+.t2d-lightbox-content {
+  position:relative; max-width:90vw; max-height:88vh;
+  display:flex; flex-direction:column; align-items:center;
+}
+.t2d-lightbox-content img {
+  max-width:100%; max-height:76vh; object-fit:contain;
+  border-radius:14px; border:1px solid rgba(0,245,255,.4);
+  box-shadow:0 12px 32px rgba(0,0,0,.8), 0 0 24px rgba(0,245,255,.2);
+}
+.t2d-lightbox-caption {
+  margin-top:12px; color:#E2E8F0; font-size:.95rem; font-weight:700; text-align:center;
+}
+.t2d-lightbox-close {
+  position:absolute; top:-38px; right:-6px;
+  background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.25);
+  color:#fff; font-size:24px; line-height:1; width:34px; height:34px;
+  border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  transition:background .15s;
+}
+.t2d-lightbox-close:hover { background:rgba(239,68,68,.85); }
+
 </style>
 </head>
 <body>
@@ -3726,6 +3759,13 @@ a { color:inherit; text-decoration:none; }
             <span class="home-main-choice-sub" data-key="teacher_sub">Still et spørsmål om trafikk</span>
           </span>
         </button>
+        <button class="home-main-choice" onclick="showTab('library')">
+          <span class="home-main-choice-icon">🎬</span>
+          <span class="home-main-choice-copy">
+            <span class="home-main-choice-title" data-key="home_open_library">Videokurs & Podkaster</span>
+            <span class="home-main-choice-sub" data-key="library_sub">Se leksjoner og hør forklaringer</span>
+          </span>
+        </button>
         <button class="home-main-choice" onclick="toggleTargetPracticeMenu()" aria-controls="targetPracticeMenu" aria-expanded="false" id="targetPracticeToggle">
           <span class="home-main-choice-icon">🎯</span>
           <span class="home-main-choice-copy">
@@ -3771,6 +3811,20 @@ a { color:inherit; text-decoration:none; }
         <div class="pb-text">
           <h4 class="pb-title" data-key="premium_on">⭐ Premium</h4>
           <p class="pb-sub" data-key="premium_sub">Du har tilgang til alle funksjoner</p>
+        </div>
+      </div>
+
+      <!-- ═══ HOME MEDIA CAROUSEL (Videos & Podcasts) ═══ -->
+      <div class="home-carousel-section" id="homeCarouselSection">
+        <div class="home-carousel-header">
+          <div class="home-carousel-title-wrap">
+            <span class="home-carousel-icon">🎬</span>
+            <span class="home-carousel-title" data-key="home_media_carousel_title">Videokurs & Podkaster</span>
+          </div>
+          <button class="home-carousel-see-all" onclick="showTab('library')" data-key="see_all">Se alle →</button>
+        </div>
+        <div class="home-carousel-track" id="homeCarouselTrack" tabindex="0" role="region" aria-label="Videokurs og Podkaster">
+          <!-- Populated by renderHomeCarousel() -->
         </div>
       </div>
     </div>
@@ -4303,6 +4357,9 @@ a { color:inherit; text-decoration:none; }
     <button class="bn-tab bn-tab-michael" id="bnTeacher" onclick="showTab('teacher')">
       <span class="bn-icon"><img src="/api/assets/michael_profile.jpg" style="width:30px;height:30px;border-radius:50%;object-fit:cover;object-position:center 15%;" alt="Michael"></span><span data-key="teacher">Michael</span>
     </button>
+    <button class="bn-tab" id="bnLibrary" onclick="showTab('library')">
+      <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></span><span data-key="lib_videos">Videoer</span>
+    </button>
     <button class="bn-tab" id="bnSigns" onclick="showTab('signs')">
       <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 22 2 22"/><line x1="12" y1="9" x2="12" y2="15"/><circle cx="12" cy="18" r="0.5" fill="currentColor"/></svg></span><span data-key="signs">Skilt</span>
     </button>
@@ -4318,6 +4375,15 @@ a { color:inherit; text-decoration:none; }
   </div>
 
 </div><!-- /app -->
+
+<!-- ═══ LIGHTBOX MODAL (Image Enlarge) ═══ -->
+<div class="t2d-lightbox" id="t2dLightbox" onclick="closeLightbox(event)" aria-hidden="true" role="dialog">
+  <div class="t2d-lightbox-content" onclick="event.stopPropagation()">
+    <button class="t2d-lightbox-close" onclick="closeLightbox(event)" aria-label="Lukk">✕</button>
+    <img id="t2dLightboxImg" src="" alt="">
+    <div class="t2d-lightbox-caption" id="t2dLightboxCaption"></div>
+  </div>
+</div>
 
 <!-- ═══ SIGN DETAIL PANEL ═══ -->
 <div class="sign-panel-backdrop" id="signPanelBackdrop" onclick="closeSignDetail()"></div>
@@ -4954,6 +5020,7 @@ function applyUILang() {
   var nbm= document.getElementById('bnBookmarks'); if(nbm) nbm.innerHTML = '<span class="bn-icon">' + NAV_SVG.bookmarks + '</span>' + t('bookmarks');
   var ns = document.getElementById('bnSettings');  if(ns) ns.innerHTML = '<span class="bn-icon">' + NAV_SVG.settings + '</span>' + t('settings');
   var nt = document.getElementById('bnTeacher');   if(nt) nt.innerHTML = '<span class="bn-icon"><img src="/api/assets/michael_profile.jpg" style="width:30px;height:30px;border-radius:50%;object-fit:cover;object-position:center 15%;" alt="Michael"></span>' + t('teacher');
+  var nl = document.getElementById('bnLibrary');   if(nl) nl.innerHTML = '<span class="bn-icon">' + (NAV_SVG.library || '') + '</span>' + t('lib_videos');
   var nsb= document.getElementById('bnStudybook'); if(nsb) nsb.innerHTML = '<span class="bn-icon">' + NAV_SVG.studybook + '</span>' + t('sb_nav');
   // Update teacher UI if visible
   var tNameEl = document.getElementById('teacherNameLbl');
@@ -5905,15 +5972,27 @@ function _ensureBackendAudio() {
   return _backendAudio;
 }
 
+var _teacherWatchdog = null;
+function _resetTeacherWatchdog() {
+  if (_teacherWatchdog) clearTimeout(_teacherWatchdog);
+  _teacherWatchdog = setTimeout(function() {
+    if (_teacherTtsPlaying && _teacherAudio) {
+      stopAllSpeech();
+    }
+  }, 14000);
+}
+
 function _ensureTeacherAudio() {
   if (!_teacherAudio) {
     _teacherAudio = new Audio();
     _teacherAudio.preload = 'auto';
     _teacherAudio.onended = function() {
+      if (_teacherWatchdog) clearTimeout(_teacherWatchdog);
       _teacherTtsPlaying = false;
       _teacherActiveText = '';
     };
     _teacherAudio.onerror = function() {
+      if (_teacherWatchdog) clearTimeout(_teacherWatchdog);
       _teacherTtsPlaying = false;
       _teacherActiveText = '';
     };
@@ -5966,8 +6045,26 @@ document.addEventListener('keydown', _unlockAudioPlayback, { once: true });
 
 function stopAllSpeech() {
   _teacherAudioToken += 1;
-  if (_backendAudio) { try { _backendAudio.pause(); } catch(e){} }
-  if (_teacherAudio) { try { _teacherAudio.pause(); } catch(e){} }
+  if (_backendAudio) {
+    try {
+      _backendAudio.pause();
+      _backendAudio.currentTime = 0;
+      _backendAudio.src = '';
+      _backendAudio.load();
+    } catch(e){}
+  }
+  if (_teacherAudio) {
+    try {
+      _teacherAudio.pause();
+      _teacherAudio.currentTime = 0;
+      _teacherAudio.src = '';
+      _teacherAudio.load();
+    } catch(e){}
+  }
+  if (_teacherWatchdog) {
+    clearTimeout(_teacherWatchdog);
+    _teacherWatchdog = null;
+  }
   _teacherTtsPlaying = false;
   _teacherActiveText = '';
   ttsPlaying = false;
@@ -6361,6 +6458,73 @@ async function loadHome() {
 
   // Premium badge — viser nedtelling når gratisuken er aktiv
   renderPremiumBanner();
+
+  // Horisontal karusell med videoer og podkaster nederst på hjemskjermen
+  renderHomeCarousel();
+}
+
+async function renderHomeCarousel() {
+  var track = document.getElementById('homeCarouselTrack');
+  if (!track) return;
+
+  try {
+    var vPromise = api('GET', '/api/videos/for-topic?limit=6').catch(function() { return []; });
+    var pPromise = api('GET', '/api/podcasts/for-topic?limit=6').catch(function() { return []; });
+    var res = await Promise.all([vPromise, pPromise]);
+    var videos = Array.isArray(res[0]) ? res[0] : [];
+    var podcasts = Array.isArray(res[1]) ? res[1] : [];
+
+    var items = [];
+    videos.forEach(function(v) {
+      items.push({
+        type: 'video',
+        title: v['title_' + appLang] || v.title_no || v.title || '',
+        dur: _fmtDur(v.duration_seconds || 0),
+        thumb: v.thumbnail_url || '',
+        srcKey: v.youtube_url || v.file_path || '',
+        item: v
+      });
+    });
+    podcasts.forEach(function(p) {
+      items.push({
+        type: 'podcast',
+        title: p['title_' + appLang] || p.title_no || p.title || '',
+        dur: _fmtDur(p.duration_seconds || 0),
+        thumb: '',
+        srcKey: p.audio_url || p.file_path || '',
+        item: p
+      });
+    });
+
+    if (!items.length) {
+      track.innerHTML = '<div style="color:#94A3B8; font-size:.85rem; padding:12px 6px;">' + escH(t('empty_no_content')) + '</div>';
+      return;
+    }
+
+    track.innerHTML = items.map(function(it) {
+      var badgeCls = it.type === 'podcast' ? 'home-carousel-badge podcast' : 'home-carousel-badge';
+      var badgeText = it.type === 'podcast' ? '🎙️ PODCAST' : '🎬 VIDEO';
+      var thumbStyle = it.thumb ? ' style="background-image:url(' + escH(it.thumb) + ');"' : '';
+      var playIcon = it.type === 'podcast' ? '🎙️' : '▶';
+      var clickAction = it.type === 'video' 
+        ? "openVideoPlayer('" + escH(it.srcKey) + "')" 
+        : "showTab('library')";
+
+      return '<div class="home-carousel-card" onclick="' + clickAction + '">'
+        + '<div class="home-carousel-thumb"' + thumbStyle + '>'
+          + '<span class="' + badgeCls + '">' + badgeText + '</span>'
+          + '<div class="home-carousel-thumb-play"><span>' + playIcon + '</span></div>'
+        + '</div>'
+        + '<div class="home-carousel-body">'
+          + '<h4 class="home-carousel-card-title">' + escH(it.title) + '</h4>'
+          + (it.dur ? '<span class="home-carousel-card-dur">' + escH(it.dur) + '</span>' : '')
+        + '</div>'
+      + '</div>';
+    }).join('');
+
+  } catch(e) {
+    console.warn('Failed to render home carousel:', e);
+  }
 }
 
 // ════════════════════════════════════════════
@@ -9638,6 +9802,28 @@ function _teacherScrollToAnswerStart(bubble) {
     msgs.scrollTop = Math.max(0, answerRow.offsetTop - 12);
   } catch (scrollError) {
     // Scrolling is progressive enhancement; the answer must remain readable.
+  }
+}
+
+function openLightbox(src, alt, caption) {
+  var lb = document.getElementById('t2dLightbox');
+  if (!lb) return;
+  var img = document.getElementById('t2dLightboxImg');
+  var cap = document.getElementById('t2dLightboxCaption');
+  if (!img) return;
+  img.src = src;
+  img.alt = alt || '';
+  if (cap) cap.textContent = caption || alt || '';
+  lb.classList.add('active');
+  lb.setAttribute('aria-hidden', 'false');
+}
+
+function closeLightbox(e) {
+  if (e && e.stopPropagation) e.stopPropagation();
+  var lb = document.getElementById('t2dLightbox');
+  if (lb) {
+    lb.classList.remove('active');
+    lb.setAttribute('aria-hidden', 'true');
   }
 }
 

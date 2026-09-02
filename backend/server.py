@@ -133,6 +133,8 @@ def normalize_question(q: dict) -> dict:
 
     return normalized
 
+from admin_analytics import admin_analytics_router
+
 app = FastAPI()
 api_router = APIRouter(prefix="/api")
 
@@ -5320,6 +5322,7 @@ app.include_router(quiz_web_router, prefix="/api")
 # ==================== WEB APP ====================
 from webapp import webapp_router  # noqa: E402
 app.include_router(webapp_router, prefix="/api")
+app.include_router(admin_analytics_router, prefix="/api")
 
 
 # ==================== ADMIN HTML PAGE ====================
