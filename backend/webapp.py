@@ -3480,11 +3480,16 @@ a { color:inherit; text-decoration:none; }
 .hp-btn-pri, .hp-btn-sec, .ask-michael-btn, .hist-btn-pri, .hist-btn-sec,
 .back-btn, .logout-btn, .lang-btn, .seg-btn, .spd-btn, .vol-btn, .rv-done-btn,
 .lib-back-btn, .teacher-send-btn, .tm-chip-btn, .sb-edit-btn, .ai-expand-btn,
-.q-bookmark-btn, .sp-ai-tts-btn {
+.q-bookmark-btn, .sp-ai-tts-btn, .rv-next {
   border: 1.5px solid transparent !important;
   background: linear-gradient(var(--btn-bg, rgba(17,24,39,0.95)), var(--btn-bg, rgba(17,24,39,0.95))) padding-box,
               conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #00F5FF) border-box !important;
   animation: neonFlow 3s linear infinite !important;
+  color: #FFFFFF !important;
+}
+
+.lang-btn {
+  background: transparent !important;
 }
 
 /* Global rotating neon borders for active/primary buttons and active flags */
@@ -3497,12 +3502,15 @@ a { color:inherit; text-decoration:none; }
 .paywall-buy-btn,
 .end-btn-pri,
 .sp-btn-primary,
-.hp-btn-pri {
+.hp-btn-pri,
+.auth-btn,
+.rv-next {
   border: 1.5px solid transparent !important;
   background: linear-gradient(rgba(17, 24, 39, 0.95), rgba(17, 24, 39, 0.95)) padding-box,
               conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #00F5FF) border-box !important;
   animation: neonFlow 4s linear infinite !important;
   box-shadow: 0 0 10px rgba(0, 245, 255, 0.25) !important;
+  color: #FFFFFF !important;
   transition: transform 0.2s, box-shadow 0.2s !important;
 }
 
