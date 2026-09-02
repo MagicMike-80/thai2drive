@@ -2272,7 +2272,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
 
 def _fallback_reply(lang: str) -> str:
     if lang == "th":
-        return "ขออภัยค่ะ ขณะนี้ครูไมเคิลไม่สามารถให้บริการได้ชั่วคราว กรุณาลองใหม่อีกครั้งในภายหลังนะคะ"
+        return "ขออภัยครับ ขณะนี้ครูไมเคิลไม่สามารถให้บริการได้ชั่วคราว กรุณาลองใหม่อีกครั้งในภายหลังนะครับ"
     if lang == "en":
         return "Sorry, Michael is not available right now. Please try again in a moment."
     return "Beklager, Michael er ikke tilgjengelig akkurat nå. Prøv igjen om litt."

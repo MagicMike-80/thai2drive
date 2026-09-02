@@ -1,3 +1,206 @@
+# SOLUTION SPEC: «Se norsk fagord»-knappen (Thai quiz → norske fagord)
+
+> Agent 2 (Solution Architect) → Agent 3 (Code Builder / Anti). Ingen kode er
+> skrevet av dette spec-et selv, bortsett fra én ett-linjers innholdsfiks i
+> `teacher_chat.py` beskrevet under «Kvalitetsfunn» — den ligger i
+> Deep/Claude sitt eierskapsområde (Michaels tone) og var trygg å rette med
+> det samme.
+
+## Mål
+
+Når en elev øver quizen på thai, skal hen kunne trykke på én knapp under
+spørsmålet og få en kort, ren thai↔norsk ordliste over fagordene i akkurat
+det spørsmålet — uten å forlate quizen.
+
+## Ikke-mål
+
+- Ingen endring av mobilappen (web-only, jf. pause på mobil).
+- Ingen endring av quiz-logikk, poengsystem, spørsmålsrekkefølge, betaling,
+  auth, kvoter eller deploykonfigurasjon.
+- Ingen ny AI-samtale — dette er statisk, forhåndsdefinert ordbok-oppslag,
+  ikke en LLM-forespørsel. (Holder kost og latency på null.)
+- Ikke et forsøk på en komplett ordbok for alle spørsmål på dag én — se
+  «Fase 1 vs. senere» under.
+
+## Kvalitetsfunn (Strategic Second Pass) — viktig før Anti bygger
+
+**1. Oversettelsen i oppdragsteksten er faglig feil og må IKKE brukes.**
+Eksempelet i oppdraget parer `สิทธิ์ทาง ➔ Vikeplikt`. `สิทธิ์ทาง` betyr
+«rett til veien / forkjørsrett» — det er praktisk talt det MOTSATTE av
+vikeplikt (plikten til å slippe andre først). Å lære elever dette ville gitt
+dem feil begrep rett før den virkelige prøven — akkurat den typen feil
+4-agent-rammeverket vårt (Strategic Second Pass) finnes for å fange opp.
+Riktig thai-term for «vikeplikt» er allerede etablert flere steder i
+kodebasen (`_MATERIAL_TOPIC_ALIASES` i `teacher_chat.py`, skilt `202_0`):
+**การให้ทาง**. Ordlisten under bruker konsekvent de samme thai-termene som
+allerede finnes i produksjonskoden, ikke nye oversettelser — for å unngå at
+appen sier to forskjellige ting om samme begrep to steder.
+
+**2. Michaels kvinnelige høflighetspartikler — funnet og rettet.**
+Søk gjennom `teacher_chat.py` og `webapp.py` fant én forekomst av
+`ค่ะ`/`นะคะ` (kvinnelig) mot en ellers konsekvent `ครับ`-stemme (mannlig):
+`_fallback_reply()`-funksjonen sin thai-streng (linje ~2274). Denne er
+rettet i samme patch som dette spec-et, siden det er en trygg
+ett-linjers innholdsendring i Deep/Claude sitt eierskapsområde. Ingen andre
+forekomster funnet i webapp.py eller `content/`.
+
+## Pedagogisk flyt
+
+1. Eleven har `appLang === 'th'` og er på quiz-skjermen (`renderQuestion()`
+   i `webapp.py`).
+2. Rett under spørsmålsteksten (`.q-text`, innenfor `.q-left`) vises en
+   liten sekundærknapp: **📖 ดูคำศัพท์นอร์เวย์ (Se norske fagord)** — kun
+   hvis spørsmålet har minst ett fagord registrert (se datastruktur under).
+   Ingen knapp vises hvis listen er tom — ingen dødklikk.
+3. Klikk glir et mørkt kort ned rett under knappen (samme visuelle språk som
+   `.q-observe`-boksen som `buildSituationLensHtml()` allerede bygger — bruk
+   samme mørke bakgrunn/border-radius/spacing-tokens, ikke en ny stil).
+4. Kortet lister opp fagordene for nettopp dette spørsmålet, én rad per
+   ord, format: **thai-term ➔ norsk fagord** *(kort thai-forklaring)*.
+5. Ingen TTS, ingen AI-kall, ingen navigasjon vekk fra spørsmålet. Knappen
+   er en ren visnings-toggle (`aria-expanded`, samme mønster som
+   `toggleMicroLesson()` / `.micro-lesson-btn` lenger opp i filen).
+
+## Datastruktur (backend)
+
+**Nøkkel:** `topic_tags`, ikke spørsmåls-ID.
+
+Begrunnelse: spørsmålsobjektet har ingen ID-felt konsekvent på tvers av
+kilder — `renderQuestion()` selv leter etter tre mulige felt (`q._id ||
+q.id || q.question_id`), og noen content-filer (f.eks.
+`content/quiz_michael_v5.json`) har ingen ID i det hele tatt. `topic_tags`
+derimot finnes allerede på hvert spørsmål og er samme felt som
+`LAW_MAPPING`/media-koblingen fra forrige patch allerede bruker til å koble
+spørsmål mot begreper. Å gjenbruke det samme feltet betyr: ingen ny
+migrasjon, ingen risiko for at spørsmål mister koblingen sin hvis ID-format
+endres senere.
+
+```python
+# backend/fagord_glossary.py (nytt, lite, rent oppslagsmodul —
+# samme mønster som media_catalog.py sin LAW_MAPPING)
+
+FAGORD_GLOSSARY: dict[str, dict[str, str]] = {
+    "vikeplikt": {
+        "th": "การให้ทาง",
+        "no": "Vikeplikt",
+        "th_definition": "หน้าที่ต้องให้รถคันอื่นไปก่อน",
+    },
+    "hoyreregel": {
+        "th": "กฎให้ทางขวา",
+        "no": "Høyreregelen",
+        "th_definition": "กฎที่บอกว่าต้องให้ทางรถที่มาจากด้านขวา เมื่อไม่มีป้ายควบคุม",
+    },
+    "forkjorsvei": {
+        "th": "ทางเอก",
+        "no": "Forkjørsvei",
+        "th_definition": "ถนนที่รถซึ่งตัดผ่านต้องให้ทาง",
+    },
+    "rundkjoring": {
+        "th": "วงเวียน",
+        "no": "Rundkjøring",
+        "th_definition": "ทางแยกวงกลมที่รถวิ่งวนทางเดียว",
+    },
+    "fartsgrense": {
+        "th": "จำกัดความเร็ว",
+        "no": "Fartsgrense",
+        "th_definition": "ความเร็วสูงสุดที่กฎหมายอนุญาตบนถนนนั้น",
+    },
+    "stoppelengde": {
+        "th": "ระยะหยุดรถ",
+        "no": "Stoppelengde",
+        "th_definition": "ระยะทางรวมตั้งแต่เห็นอันตรายจนรถหยุดสนิท",
+    },
+    "bremselengde": {
+        "th": "ระยะเบรก",
+        "no": "Bremselengde",
+        "th_definition": "ระยะทางที่รถวิ่งไปหลังจากเหยียบเบรกจนหยุด",
+    },
+    "reaksjonslengde": {
+        "th": "ระยะตอบสนอง",
+        "no": "Reaksjonslengde",
+        "th_definition": "ระยะทางที่รถวิ่งไปในช่วงเวลาที่คนขับตอบสนองต่ออันตราย",
+    },
+    "kryss": {
+        "th": "ทางแยก",
+        "no": "Veikryss",
+        "th_definition": "จุดที่ถนนสองสายขึ้นไปตัดกัน",
+    },
+    "gangfelt": {
+        "th": "ทางม้าลาย",
+        "no": "Gangfelt",
+        "th_definition": "ทางที่คนเดินเท้าข้ามถนนอย่างปลอดภัย",
+    },
+    "vikepliktskilt": {
+        "th": "ป้ายให้ทาง",
+        "no": "Vikepliktskiltet",
+        "th_definition": "ป้ายรูปสามเหลี่ยมหัวกลับที่บอกว่าต้องให้ทาง",
+    },
+    "stoppskilt": {
+        "th": "ป้ายหยุด",
+        "no": "Stoppskiltet",
+        "th_definition": "ป้ายแปดเหลี่ยมสีแดงที่บอกว่าต้องหยุดสนิท",
+    },
+}
+```
+
+Oppslagsfunksjon (ren, ingen sideeffekt, samme stil som
+`expand_law_synonyms`):
+
+```python
+def get_fagord_for_question(topic_tags: list[str]) -> list[dict[str, str]]:
+    """Return glossary rows for a question's topic_tags, in FAGORD_GLOSSARY order."""
+    normalized = {tag.strip().lower() for tag in topic_tags}
+    return [
+        entry for key, entry in FAGORD_GLOSSARY.items()
+        if key in normalized
+    ]
+```
+
+Serveres via eksisterende spørsmål-endepunkt: legg `fagord` som et ekstra,
+valgfritt felt på hvert spørsmåls-objekt i responsen (ikke et nytt
+endepunkt — færre nettverkskall, og knappen kan skjules synkront med
+`if (!q.fagord || !q.fagord.length) return '';` uten en ekstra fetch).
+
+## Integrasjon i `webapp.py`
+
+1. `renderQuestion()` (linje ~6913): legg `var fagordHtml =
+   buildFagordButtonHtml(q.fagord);` og sett den inn i `.q-left`, rett
+   etter `.q-text`-diven (linje ~6994).
+2. Ny funksjon `buildFagordButtonHtml(fagord)`:
+   - Returnerer `''` hvis `!fagord || !fagord.length` (knapp skjules helt).
+   - Ellers: knapp + skjult kort, samme `aria-expanded`-mønster som
+     `toggleMicroLesson()`.
+   - Knappeteksten er **kun** på thai og vises **kun** når
+     `appLang === 'th'` (samme guard-mønster som linje 7351/9281/10447) —
+     ingen norsk/engelsk variant, siden funksjonen ikke gir mening utenfor
+     thai-modus.
+3. Ny toggle-funksjon `toggleFagordCard(btn)`, speiler
+   `toggleMicroLesson(id)` (linje ~5437): `aria-expanded`-attributt +
+   CSS `max-height`-transition for slide-down (unngå `display:none`→`block`
+   hopp, som ikke kan animeres jevnt).
+4. CSS: gjenbruk `.q-observe`-fargene/border-radius (samme fil, nær
+   `buildSituationLensHtml`) for kortet, så det ikke introduserer en ny,
+   inkonsistent visuell stil.
+
+## Fase 1 vs. senere
+
+- **Fase 1 (dette spec-et):** ordboken dekker de ~12 begrepene over.
+  `get_fagord_for_question` returnerer tom liste for spørsmål utenfor disse
+  temaene → knappen skjules automatisk der, helt trygt.
+- **Senere (egen oppgave, ikke en del av dette spec-et):** utvide
+  `FAGORD_GLOSSARY` med flere begreper etter hvert som Michael/Deep
+  identifiserer hvilke ord elever faktisk sliter med — samme mønster,
+  ingen kodeendring nødvendig, kun flere ordbok-oppføringer.
+
+## Risiko og rollback
+
+Rent tillegg: nytt valgfritt felt på spørsmålsobjektet, ny ren
+oppslagsfunksjon, ny UI-komponent som er usynlig når den ikke har data.
+Ingen eksisterende felt, quiz-logikk eller API-kontrakt endres. Rollback er
+én revert.
+
+---
+
 # SOLUTION BLUEPRINT: juridisk vern for høyreregelen ved venstresving
 
 ## Mål
