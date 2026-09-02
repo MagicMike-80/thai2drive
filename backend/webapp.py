@@ -3848,6 +3848,30 @@ a { color:inherit; text-decoration:none; }
   cursor: zoom-in;
 }
 
+
+.quiz-coach-trigger-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  justify-content: center;
+  padding: 11px 16px;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.25), rgba(6, 182, 212, 0.25)) !important;
+  border: 1.5px solid rgba(0, 245, 255, 0.45) !important;
+  border-radius: 12px;
+  color: #FFFFFF !important;
+  font-size: 0.90rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 0 14px rgba(0, 245, 255, 0.22);
+  transition: transform 0.15s, border-color 0.15s;
+}
+.quiz-coach-trigger-btn:hover {
+  transform: translateY(-1px);
+  border-color: #00F5FF !important;
+  box-shadow: 0 0 20px rgba(0, 245, 255, 0.4);
+}
+
 </style>
 </head>
 <body>
@@ -5091,6 +5115,7 @@ var UI = {
   read_aloud:  {th:'อ่านออกเสียง',           no:'Les høyt',         en:'Read aloud'},
   podcast_short:{th:'🎙️ พอดแคสต์', no:'🎙️ Podcast-forklaring', en:'🎙️ Podcast explanation'},
   ask_ai:      {th:'🚗 ถามไมเคิล',           no:'🚗 Spør Michael',   en:'🚗 Ask Michael'},
+  quiz_ask_michael_expl: {th:'🤖 ถามไมเคิลเพื่อฟังคำอธิบาย', no:'🤖 Spør Michael om forklaring', en:'🤖 Ask Michael for explanation'},
   ai_teacher_hint:{th:'ครู AI',              no:'AI-kjørelærer',    en:'AI teacher'},
   sign_ai_lesson:{th:'ดูป้ายนี้ร่วมกับสถานการณ์บนถนนจริง: {name}. ให้สังเกตรูปทรง สี สัญลักษณ์ และสิ่งที่ผู้ขับขี่ต้องทำทันที ใช้ป้ายนี้เพื่อปรับความเร็ว ตำแหน่งรถ และความระวังอย่างสงบ', no:'Se dette skiltet sammen med trafikksituasjonen: {name}. Legg merke til form, farge, symbol og hva føreren må gjøre nå. Bruk skiltet til å tilpasse fart, plassering og oppmerksomhet rolig.', en:'Read this sign together with the road situation: {name}. Notice the shape, colour, symbol, and what the driver must do now. Use the sign to adapt speed, position, and attention calmly.'},
   close:       {th:'ปิด',                   no:'Lukk',             en:'Close'},
@@ -5652,7 +5677,13 @@ function showTab(tab, forceType) {
     var btn = document.getElementById(tabMap[tab]);
     if (btn) {
       btn.classList.add('active');
-      btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      var nav = document.getElementById('bottomNav');
+      if (nav) {
+        var navRect = nav.getBoundingClientRect();
+        var btnRect = btn.getBoundingClientRect();
+        var targetScroll = nav.scrollLeft + (btnRect.left - navRect.left) - (nav.clientWidth / 2) + (btn.clientWidth / 2);
+        nav.scrollTo({ left: targetScroll, behavior: 'smooth' });
+      }
     }
   }
   bindBottomNavCarousel();
@@ -8490,7 +8521,7 @@ function buildVideoCard(v) {
   var thumbStyle = thumb ? ' style="background-image:url(' + escH(thumb) + ')"' : '';
 
   return '<div class="vid-card vid-card-local" onclick="openVideoPlayer(\'' + escH(srcKey) + '\')">'
-    + '<div class="vid-card-thumb"' + thumbStyle + '>' + _getMediaLangBadge(v)'
+    + '<div class="vid-card-thumb"' + thumbStyle + '>' + _getMediaLangBadge(v)
       + '<div class="vid-card-play"><span>▶</span></div>'
     + '</div>'
     + '<div class="vid-info">'
@@ -8744,9 +8775,16 @@ function updateAiPanel(isOk, expl) {
     });
   }
 
-  // Michael is an enhancement, never a gate. The ordinary explanation and
-  // Next button are already available before this asynchronous call starts.
-  if (!isOk) openMichaelQuizCoach();
+  // Michael is an opt-in enhancement: never auto-pop, user taps button on demand
+  if (!isOk) {
+    var askBtnHtml = '<div class="quiz-coach-btn-wrap" style="margin-top:10px;margin-bottom:6px;">'
+      + '<button type="button" class="quiz-coach-trigger-btn" onclick="openMichaelQuizCoach()">'
+      + '<span style="font-size:18px;">🤖</span> <span data-key="quiz_ask_michael_expl">' + escH(t('quiz_ask_michael_expl')) + '</span>'
+      + '</button>'
+      + '</div>';
+    if (body) body.insertAdjacentHTML('beforeend', askBtnHtml);
+    if (mobile) mobile.insertAdjacentHTML('beforeend', askBtnHtml);
+  }
 
   // Mobile question image tint
   var imgWrap = document.getElementById('qImgWrap');
