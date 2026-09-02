@@ -1917,10 +1917,85 @@ async def _get_available_multimedia(lang: str) -> str:
 teacher_router = APIRouter()
 
 
+
+async def _get_student_weakness(device_id: Optional[str] = None, user_id: Optional[str] = None, lang: str = "no") -> Optional[dict]:
+    """Find the student's weakest topic from quiz attempts or mistake bank."""
+    match_conds = []
+    if user_id:
+        match_conds.append({"user_id": user_id})
+    if device_id:
+        match_conds.append({"device_id": device_id})
+    if not match_conds:
+        return None
+
+    match_filter = {"$or": match_conds} if len(match_conds) > 1 else match_conds[0]
+
+    topic_labels = {
+        "vikeplikt": {"no": "vikeplikt og høyreregelen", "th": "การให้ทางและกฎจากขวา", "en": "right-of-way rules"},
+        "planovergang": {"no": "planoverganger og jernbane", "th": "ทางข้ามทางรถไฟ", "en": "railway level crossings"},
+        "stoppelengde": {"no": "reaksjonstid og stoppelengde", "th": "ระยะตอบสนองและระยะหยุดรถ", "en": "stopping distance and reaction time"},
+        "fartsgrense": {"no": "fartsgrenser", "th": "ขีดจำกัดความเร็ว", "en": "speed limits"},
+        "skilt": {"no": "trafikkskilt", "th": "ป้ายจราจร", "en": "traffic signs"},
+        "rundkjoring": {"no": "kjøring i rundkjøring", "th": "การขับขี่ในวงเวียน", "en": "roundabouts"},
+        "morkekjoring": {"no": "mørkekjøring og lysbruk", "th": "การขับรถเวลากลางคืนและการใช้ไฟ", "en": "night driving and light usage"},
+        "hav": {"no": "grunnregelen for trafikk (§ 3 HAV)", "th": "กฎพื้นฐานจราจร (มาตรา 3 HAV)", "en": "basic traffic rule (§ 3 HAV)"},
+    }
+
+    try:
+        # Check failed attempts in quiz_attempts
+        pipeline = [
+            {"$match": {**match_filter, "correct": False}},
+            {"$group": {"_id": "$category", "fails": {"$sum": 1}}},
+            {"$sort": {"fails": -1}},
+            {"$limit": 1}
+        ]
+        results = await _db["quiz_attempts"].aggregate(pipeline).to_list(length=1)
+        if results and results[0].get("_id"):
+            raw_cat = str(results[0]["_id"]).lower()
+            for key, trans in topic_labels.items():
+                if key in raw_cat:
+                    return {"key": key, "name": trans.get(lang, trans["no"]), "fails": results[0].get("fails", 0)}
+            # If category is not in standard keys, clean and return
+            cleaned_cat = raw_cat.replace("_", " ").title()
+            return {"key": "custom", "name": cleaned_cat, "fails": results[0].get("fails", 0)}
+
+        # Also check mistake bank
+        mistake = await _db["mistakes"].find_one({**match_filter, "active": True})
+        if mistake:
+            raw_cat = str(mistake.get("category") or mistake.get("topic") or "").lower()
+            for key, trans in topic_labels.items():
+                if key in raw_cat:
+                    return {"key": key, "name": trans.get(lang, trans["no"]), "fails": 1}
+            if raw_cat:
+                return {"key": "custom", "name": raw_cat.title(), "fails": 1}
+    except Exception as e:
+        logger.warning("Error fetching student weakness: %s", e)
+
+    return None
+
 @teacher_router.get("/teacher/welcome")
-async def teacher_welcome(lang: str = Query(default="no")):
-    lang = lang if lang in MICHAEL_WELCOME else "no"
-    return {"lang": lang, "welcome": MICHAEL_WELCOME[lang]}
+async def teacher_welcome(
+    lang: str = Query(default="no"),
+    device_id: Optional[str] = Query(default=None),
+    user_id: Optional[str] = Query(default=None),
+):
+    lang = lang if lang in ("no", "th", "en") else "no"
+    weakness = await _get_student_weakness(device_id, user_id, lang)
+    if weakness and weakness.get("name"):
+        topic_name = weakness["name"]
+        greetings = {
+            "no": f"Hei! Jeg ser i historikken din at du har hatt noen feil på {topic_name} i det siste. Skal vi ta en kjapp prat om det, eller har du noe annet du vil spørre meg om i dag? 😊",
+            "th": f"สวัสดีครับ! ผมเห็นในประวัติของคุณว่ามีข้อผิดพลาดเรื่อง{topic_name}อยู่บ้างเมื่อเร็วๆ นี้ เรามาคุยเรื่องนี้กันสักนิดไหมครับ หรือวันนี้มีเรื่องอื่นที่อยากถามผมก่อนไหมครับ? 😊",
+            "en": f"Hi! I noticed in your history that you've had a few mistakes on {topic_name} lately. Shall we have a quick chat about that, or is there something else you'd like to ask me today? 😊",
+        }
+        return {"lang": lang, "welcome": greetings[lang], "weakness": weakness}
+
+    open_greetings = {
+        "no": "Hei! Hva vil du at vi skal øve på i dag? Spør meg om hva som helst innen trafikk, så forklarer jeg det enkelt! 🚗",
+        "th": "สวัสดีครับ! วันนี้อยากให้เราฝึกเรื่องอะไรดีครับ? ถามผมได้ทุกเรื่องเกี่ยวกับการจราจรเลย ผมจะอธิบายให้เข้าใจง่ายๆ ครับ! 🚗",
+        "en": "Hi! What would you like us to practice today? Ask me anything about driving theory, and I'll explain it simply! 🚗",
+    }
+    return {"lang": lang, "welcome": open_greetings[lang], "weakness": None}
 
 @teacher_router.get("/teacher/topics")
 async def teacher_topics(lang: str = Query(default="no")):
@@ -1932,6 +2007,8 @@ class TeacherChatRequest(BaseModel):
     session_id: Optional[str] = Field(default=None)
     message: str = Field(min_length=1, max_length=5000)
     language: Optional[str] = Field(default="no")
+    device_id: Optional[str] = Field(default=None)
+    user_id: Optional[str] = Field(default=None)
 
 
 class TeacherChatResponse(BaseModel):
@@ -1980,6 +2057,51 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             user_msg = clean_user_msg
         except Exception as e:
             logger.error("Failed to parse stats context payload: %s", e)
+
+    # Detect if user clicked "Hjelp med teoriprøven" or asked what to practice
+    clean_prompt = user_msg.replace("📝", "").replace("📊", "").replace("❓", "").strip().lower()
+    is_theory_help = clean_prompt in (
+        "hjelp med teoriprøven", "hjelp med teoriproven", "hva bør jeg øve på?", "hva bør jeg øve på",
+        "hva bor jeg ove pa?", "hva bor jeg ove pa", "ช่วยเรื่องข้อสอบทฤษฎี", "ฉันควรฝึกเรื่องอะไร?",
+        "ฉันควรฝึกเรื่องอะไร", "help with the theory test", "help with theory", "what should i practise?",
+        "what should i practise", "what should i practice?", "what should i practice"
+    )
+
+    if is_theory_help and not quiz_context_str:
+        weakness = await _get_student_weakness(req.device_id, req.user_id, lang)
+        if weakness and weakness.get("name"):
+            topic_name = weakness["name"]
+            replies = {
+                "no": f"Hei! Jeg ser i historikken din at du har hatt noen feil på {topic_name} i det siste. Skal vi ta en kjapp prat om det, eller har du noe annet du vil spørre meg om i dag? 😊",
+                "th": f"สวัสดีครับ! ผมเห็นในประวัติของคุณว่ามีข้อผิดพลาดเรื่อง{topic_name}อยู่บ้างเมื่อเร็วๆ นี้ เรามาคุยเรื่องนี้กันสักนิดไหมครับ หรือวันนี้มีเรื่องอื่นที่อยากถามผมก่อนไหมครับ? 😊",
+                "en": f"Hi! I noticed in your history that you've had a few mistakes on {topic_name} lately. Shall we have a quick chat about that, or is there something else you'd like to ask me today? 😊",
+            }
+            suggestions = {
+                "no": [f"Ja, forklar {topic_name} 🚗", "Forklar et skilt 🛑", "Hjelp med vikeplikt 📖"],
+                "th": [f"ใช่ อธิบายเรื่อง{topic_name} 🚗", "อธิบายป้ายจราจร 🛑", "ช่วยเรื่องการให้ทาง 📖"],
+                "en": [f"Yes, explain {topic_name} 🚗", "Explain a sign 🛑", "Help with right-of-way 📖"],
+            }
+            reply_text = replies.get(lang, replies["no"])
+            sug_list = suggestions.get(lang, suggestions["no"])
+            await _chat_col.insert_one({"session_id": session_id, "role": "user", "content": user_msg, "ts": datetime.now(timezone.utc)})
+            await _chat_col.insert_one({"session_id": session_id, "role": "assistant", "content": reply_text, "ts": datetime.now(timezone.utc)})
+            return TeacherChatResponse(session_id=session_id, reply=reply_text, suggestions=sug_list)
+        else:
+            open_replies = {
+                "no": "Hei! Hva vil du at vi skal øve på i dag? Spør meg om hva som helst innen trafikk, så forklarer jeg det enkelt! 🚗",
+                "th": "สวัสดีครับ! วันนี้อยากให้เราฝึกเรื่องอะไรดีครับ? ถามผมได้ทุกเรื่องเกี่ยวกับการจราจรเลย ผมจะอธิบายให้เข้าใจง่ายๆ ครับ! 🚗",
+                "en": "Hi! What would you like us to practice today? Ask me anything about driving theory, and I'll explain it simply! 🚗",
+            }
+            open_suggestions = {
+                "no": ["Forklar vikeplikt 🚗", "Forklar et skilt 🛑", "Forklar bremselengde 📏"],
+                "th": ["ช่วยเรื่องการให้ทาง 🚗", "อธิบายป้ายจราจร 🛑", "อธิบายระยะเบรก 📏"],
+                "en": ["Explain right-of-way 🚗", "Explain a sign 🛑", "Explain braking distance 📏"],
+            }
+            reply_text = open_replies.get(lang, open_replies["no"])
+            sug_list = open_suggestions.get(lang, open_suggestions["no"])
+            await _chat_col.insert_one({"session_id": session_id, "role": "user", "content": user_msg, "ts": datetime.now(timezone.utc)})
+            await _chat_col.insert_one({"session_id": session_id, "role": "assistant", "content": reply_text, "ts": datetime.now(timezone.utc)})
+            return TeacherChatResponse(session_id=session_id, reply=reply_text, suggestions=sug_list)
 
     # Load prior conversation (last 20 messages in this session)
     prior = await _chat_col.find(

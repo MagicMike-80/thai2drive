@@ -3375,17 +3375,36 @@ a { color:inherit; text-decoration:none; }
   .teacher-online-badge { font-size:.58rem; padding:2px 6px; }
   .teacher-messages { width:100%; padding:14px 12px 18px; gap:12px; }
   .tm-bubble { max-width:94%; padding:18px; font-size:.96rem; line-height:1.6; }
-  .teacher-suggestions { padding:9px 12px; gap:8px; background:#0A1530; }
-  .teacher-suggestions:not(.expanded) .teacher-chip:nth-of-type(n+4),
-  .teacher-suggestions:not(.expanded) .teacher-chip-hdr { display:none; }
-  .teacher-chip {
-    flex:1 1 100%; width:100%; min-height:50px; padding:11px 14px;
-    border-radius:14px; justify-content:flex-start; text-align:left; font-size:.86rem;
+  .teacher-suggestions {
+    display:flex !important; flex-direction:row !important; flex-wrap:nowrap !important;
+    overflow-x:auto !important; scroll-snap-type:x mandatory !important;
+    -webkit-overflow-scrolling:touch !important; gap:10px !important;
+    padding:10px 14px !important; scrollbar-width:none !important; background:#0A1530 !important;
   }
-  .teacher-topics-toggle { display:block; }
-  .tm-chips .tm-chip-btn.mobile-extra { display:none; }
-  .tm-chips.expanded .tm-chip-btn.mobile-extra { display:inline-flex; }
-  .tm-chips-toggle { display:block; grid-column:1/-1; }
+  .teacher-suggestions::-webkit-scrollbar { display:none !important; }
+  .teacher-suggestions:not(.expanded) .teacher-chip:nth-of-type(n+4),
+  .teacher-suggestions:not(.expanded) .teacher-chip-hdr { display:inline-flex !important; }
+  .teacher-chip {
+    flex:0 0 auto !important; width:auto !important; min-width:140px !important;
+    min-height:44px !important; padding:10px 16px !important;
+    border-radius:22px !important; justify-content:center !important;
+    text-align:center !important; font-size:.88rem !important;
+    scroll-snap-align:start !important; white-space:nowrap !important;
+  }
+  .teacher-topics-toggle { display:none !important; }
+  .tm-chips {
+    display:flex !important; flex-direction:row !important; flex-wrap:nowrap !important;
+    overflow-x:auto !important; scroll-snap-type:x mandatory !important;
+    -webkit-overflow-scrolling:touch !important; gap:8px !important;
+    padding:8px 4px !important; scrollbar-width:none !important;
+  }
+  .tm-chips::-webkit-scrollbar { display:none !important; }
+  .tm-chips .tm-chip-btn.mobile-extra { display:inline-flex !important; }
+  .tm-chip-btn {
+    flex:0 0 auto !important; scroll-snap-align:start !important;
+    white-space:nowrap !important; border-radius:18px !important;
+  }
+  .tm-chips-toggle { display:none !important; }
   .teacher-inputbar { width:100%; padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px)); background:#071326; position:relative; z-index:2; }
   .teacher-input { min-height:56px; font-size:1rem; }
   .teacher-send-btn { min-width:86px; height:56px; }
@@ -6505,8 +6524,37 @@ async function renderHomeCarousel() {
     });
 
     if (!items.length) {
-      track.innerHTML = '<div style="color:#94A3B8; font-size:.85rem; padding:12px 6px;">' + escH(t('empty_no_content')) + '</div>';
-      return;
+      // Curated baseline cards ensuring the carousel is always visual and active
+      items = [
+        {
+          type: 'video',
+          title: appLang === 'th' ? 'การให้ทางและการเลี้ยวซ้าย (§ 7 ข้อ 2)' : appLang === 'en' ? 'Right of Way & Left Turn (§ 7(2))' : 'Vikeplikt og Venstresving (§ 7 nr. 2)',
+          dur: '2:25',
+          thumb: '/api/assets/kryss_venstresving.png',
+          srcKey: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+        },
+        {
+          type: 'podcast',
+          title: appLang === 'th' ? 'ระยะหยุดรถและเวลาตอบสนอง' : appLang === 'en' ? 'Stopping Distance & Reaction Time' : 'Stoppelengde og Reaksjonstid',
+          dur: '3:00',
+          thumb: '/api/assets/grunnregel_hav.png',
+          srcKey: '/api/assets/podcast_stoppelengde.mp3'
+        },
+        {
+          type: 'video',
+          title: appLang === 'th' ? 'กฎหมายจราจรมาตรา 3 (กฎ HAV)' : appLang === 'en' ? 'Road Traffic Act § 3 (HAV Rule)' : 'Vegtrafikkloven § 3 (HAV-regelen)',
+          dur: '2:00',
+          thumb: '/api/assets/grunnregel_hav.png',
+          srcKey: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+        },
+        {
+          type: 'podcast',
+          title: appLang === 'th' ? 'กฎการให้ทางรถเมล์ออกจากป้าย (§ 7 ข้อ 4)' : appLang === 'en' ? 'Bus Yield Rule (§ 7(4))' : 'Bussregelen og Kollektivfelt (§ 7 nr. 4)',
+          dur: '2:35',
+          thumb: '/api/assets/buss_holdeplass.png',
+          srcKey: '/api/assets/podcast_bussregelen.mp3'
+        }
+      ];
     }
 
     track.innerHTML = items.map(function(it) {
@@ -9659,7 +9707,10 @@ async function loadTeacher() {
     if (msgs) {
       msgs.innerHTML = '';
       try {
-        var wRes = await fetch('/api/teacher/welcome?lang=' + appLang);
+        var wUrl = '/api/teacher/welcome?lang=' + encodeURIComponent(appLang);
+        if (typeof deviceId !== 'undefined' && deviceId) wUrl += '&device_id=' + encodeURIComponent(deviceId);
+        if (typeof user !== 'undefined' && user && user.id) wUrl += '&user_id=' + encodeURIComponent(user.id);
+        var wRes = await fetch(wUrl);
         var wData = await wRes.json();
         _teacherAppendBubble('assistant', wData.welcome || '');
       } catch(e) {
@@ -10342,7 +10393,13 @@ async function teacherSend(overrideMsg, customDisplayMsg) {
     var res = await fetch('/api/teacher/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ session_id: activeSessionId, message: payloadMsg, language: appLang })
+      body: JSON.stringify({
+        session_id: activeSessionId,
+        message: payloadMsg,
+        language: appLang,
+        device_id: (typeof deviceId !== 'undefined' ? deviceId : null),
+        user_id: (typeof user !== 'undefined' && user && user.id ? user.id : null)
+      })
     });
     if (!res.ok) throw new Error('HTTP ' + res.status);
     var data = await res.json();

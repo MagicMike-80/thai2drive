@@ -35,6 +35,15 @@ test('teacher_chat connects to approved media and includes media in TeacherChatR
   assert(teacher_code.includes('_db["michael_materials"]'), 'teacher_chat must query michael_materials');
 });
 
+test('teacher_chat has data-driven weakness coaching and open conversational greetings', () => {
+  assert(teacher_code.includes('def _get_student_weakness'), '_get_student_weakness helper must exist');
+  assert(teacher_code.includes('is_theory_help'), 'Dynamic theory help detection must exist');
+  assert(teacher_code.includes('Hva vil du at vi skal øve på i dag?'), 'Open friendly NO greeting must exist');
+  assert(teacher_code.includes('วันนี้อยากให้เราฝึกเรื่องอะไรดีครับ?'), 'Open friendly TH greeting must exist');
+  assert(teacher_code.includes('What would you like us to practice today?'), 'Open friendly EN greeting must exist');
+  assert(teacher_code.includes('Jeg ser i historikken din at du har hatt noen feil på'), 'Proactive weakness NO greeting must exist');
+});
+
 test('admin_analytics_router mounted in server.py and endpoints defined', () => {
   assert(server_code.includes('admin_analytics_router'), 'server.py must import admin_analytics_router');
   assert(server_code.includes('app.include_router(admin_analytics_router, prefix="/api")'), 'server.py must mount admin_analytics_router');
@@ -65,9 +74,14 @@ test('webapp.py contains Video button adjacent to Michael and horizontal Home Ca
   assert(webapp_code.includes('buildPodcastCard('), 'buildPodcastCard function must exist');
 });
 
+test('webapp.py has horizontal touch-carousel for teacher suggestions and crystal-clear button contrast', () => {
+  assert(webapp_code.includes('scroll-snap-type:x mandatory'), 'Carousel scroll-snap must exist');
+  assert(webapp_code.includes('color: #FFFFFF !important'), 'High-contrast white button text must be set');
+});
+
 test('Language purity: no forbidden cross-language fallback patterns', () => {
   assert(!webapp_code.includes('|| TR.en'), 'No TR.en fallback');
   assert(!webapp_code.includes('|| TRANSLATIONS.no'), 'No TRANSLATIONS.no fallback');
 });
 
-console.log('\n🎉 ALL 7/7 BLAST ARCHITECTURE & UI CONTRACT TESTS PASSED PERFECTLY!\n');
+console.log('\n🎉 ALL 9/9 BLAST ARCHITECTURE, COACHING & UI CONTRACT TESTS PASSED PERFECTLY!\n');
