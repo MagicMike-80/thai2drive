@@ -164,7 +164,11 @@ test('Samsung/Android Hardening: Section 7.2 Dialect ("koer imot") & Male Gender
 });
 
 test('Samsung/Android Hardening: FileResponse & HTTP 206 Range Streaming in server.py', () => {
-  assert(server_code.includes('return FileResponse('), 'server.py _stream_mp3_file must return FileResponse for HTTP 206 support');
+  assert(server_code.includes('def _range_file_response('), 'server.py must define an explicit on-disk Range helper');
+  assert(server_code.includes('status_code=206'), 'Range responses must return HTTP 206');
+  assert(server_code.includes('"Content-Range"'), 'Range responses must include Content-Range');
+  assert(server_code.includes('status_code=416'), 'Invalid ranges must return HTTP 416');
+  assert(server_code.includes('return FileResponse('), 'ordinary full-file GET must retain FileResponse');
   assert(server_code.includes('.mp3": "audio/mpeg"'), 'public_asset must sniff .mp3 as audio/mpeg');
   assert(server_code.includes('.mp4": "video/mp4"'), 'public_asset must sniff .mp4 as video/mp4');
   assert(server_code.includes('@app.get("/public_assets/{filename:path}")'), 'public_assets path must be registered in server.py');

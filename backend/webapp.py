@@ -3364,6 +3364,10 @@ a { color:inherit; text-decoration:none; }
 .tm-sign-tag { color:#67E8F9; font-size:.7rem; font-weight:900; letter-spacing:.08em; text-transform:uppercase; }
 .tm-sign-title { margin:0; color:#fff; font-size:1.05rem; line-height:1.3; font-weight:900; }
 .tm-sign-text { color:#DCE6F3; font-size:.88rem; line-height:1.5; }
+.tm-no-term { min-height:34px; display:flex; align-items:center; gap:8px; margin-top:8px; }
+.tm-no-term-btn { border:1px solid rgba(103,232,249,.35); border-radius:999px; background:rgba(8,145,178,.12); color:#CFFAFE; padding:6px 10px; font:inherit; font-size:.78rem; font-weight:800; cursor:pointer; }
+.tm-no-term-value { color:#F8FAFC; font-size:.84rem; font-weight:800; opacity:0; visibility:hidden; transition:opacity .16s ease; }
+.tm-no-term.revealed .tm-no-term-value { opacity:1; visibility:visible; }
 .tm-media-strip {
   display:grid; grid-template-columns:1fr; gap:12px;
   min-width:0; width:100%; max-width:100%; margin-top:14px;
@@ -4787,6 +4791,7 @@ var UI = {
   teacher_show_example:{th:'ดูตัวอย่าง', no:'Vis eksempel', en:'Show example'},
   teacher_show_example_prompt:{th:'แสดงตัวอย่างสถานการณ์จริงที่สั้นและเข้าใจง่ายสำหรับป้ายนี้', no:'Vis meg et kort, praktisk eksempel med dette skiltet.', en:'Show me a short practical example using this sign.'},
   teacher_test_me:{th:'ทดสอบฉัน', no:'Test meg', en:'Test me'},
+  teacher_show_norwegian_term:{th:'ดูคำศัพท์นอร์เวย์', no:'Se norsk fagord', en:'Show Norwegian term'},
   teacher_topics_open:{th:'แสดงหัวข้อ', no:'Vis emner', en:'Show topics'},
   teacher_topics_close:{th:'ปิดหัวข้อ', no:'Lukk emner', en:'Close topics'},
   teacher_error: {th:'ขอโทษ เกิดข้อผิดพลาด ลองใหม่อีกครั้ง', no:'Beklager, noe gikk galt. Prøv igjen.', en:'Sorry, something went wrong. Please try again.'},
@@ -10377,6 +10382,31 @@ function _buildTeacherSignCard(sign) {
   return card;
 }
 
+function _buildNorwegianTermToggle(sign) {
+  if (appLang !== 'th') return null;
+  var norwegianTerm = _getProp((sign && sign.name) || {}, 'no') || '';
+  if (!norwegianTerm) return null;
+  var row = document.createElement('div');
+  row.className = 'tm-no-term';
+  var button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'tm-no-term-btn';
+  button.textContent = t('teacher_show_norwegian_term');
+  button.setAttribute('aria-expanded', 'false');
+  var value = document.createElement('span');
+  value.className = 'tm-no-term-value';
+  value.textContent = norwegianTerm;
+  value.setAttribute('aria-hidden', 'true');
+  button.onclick = function() {
+    var revealed = row.classList.toggle('revealed');
+    button.setAttribute('aria-expanded', revealed ? 'true' : 'false');
+    value.setAttribute('aria-hidden', revealed ? 'false' : 'true');
+  };
+  row.appendChild(button);
+  row.appendChild(value);
+  return row;
+}
+
 async function _teacherAppendSignCards(signIds, bubble) {
   if (!bubble || !Array.isArray(signIds) || !signIds.length) return;
   var uniqueIds = signIds.filter(function(id, index, items) { return id && items.indexOf(id) === index; }).slice(0, 4);
@@ -10389,7 +10419,11 @@ async function _teacherAppendSignCards(signIds, bubble) {
   if (!signs.length) return;
   var strip = document.createElement('div');
   strip.className = 'tm-sign-strip';
-  signs.forEach(function(sign) { strip.appendChild(_buildTeacherSignCard(sign)); });
+  signs.forEach(function(sign) {
+    strip.appendChild(_buildTeacherSignCard(sign));
+    var norwegianTerm = _buildNorwegianTermToggle(sign);
+    if (norwegianTerm) strip.appendChild(norwegianTerm);
+  });
   bubble.appendChild(strip);
 }
 

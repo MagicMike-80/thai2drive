@@ -5337,7 +5337,7 @@ from billing import router as billing_router  # noqa: E402
 app.include_router(billing_router)
 
 # ==================== SERVICE WORKER (Offline mode) ====================
-from fastapi.responses import HTMLResponse, FileResponse, Response  # noqa: E402
+from fastapi.responses import HTMLResponse, FileResponse, Response, StreamingResponse  # noqa: E402
 
 _SW_PATH = Path(__file__).resolve().parent / "service-worker.js"
 
@@ -5456,6 +5456,65 @@ async def admin_page_catchall(rest: str):
 _PUBLIC_ASSETS_DIR = Path(__file__).parent / "public_assets"
 
 
+def _range_file_response(
+    file_path: Path,
+    request: Request,
+    media_type: str,
+    headers: Optional[dict] = None,
+):
+    """Serve one on-disk byte range; use FileResponse for ordinary full GETs."""
+    response_headers = {"Accept-Ranges": "bytes"}
+    if headers:
+        response_headers.update(headers)
+
+    range_header = (request.headers.get("range") or "").strip()
+    if not range_header:
+        return FileResponse(str(file_path), media_type=media_type, headers=response_headers)
+
+    total = file_path.stat().st_size
+    match = re.fullmatch(r"bytes=(\d*)-(\d*)", range_header, flags=re.IGNORECASE)
+    if not match or total <= 0:
+        return Response(status_code=416, headers={**response_headers, "Content-Range": f"bytes */{total}"})
+
+    start_text, end_text = match.groups()
+    if not start_text and not end_text:
+        return Response(status_code=416, headers={**response_headers, "Content-Range": f"bytes */{total}"})
+
+    if start_text:
+        start = int(start_text)
+        end = int(end_text) if end_text else total - 1
+    else:
+        suffix_length = int(end_text)
+        if suffix_length <= 0:
+            return Response(status_code=416, headers={**response_headers, "Content-Range": f"bytes */{total}"})
+        start = max(total - suffix_length, 0)
+        end = total - 1
+
+    if start >= total or start > end:
+        return Response(status_code=416, headers={**response_headers, "Content-Range": f"bytes */{total}"})
+    end = min(end, total - 1)
+    content_length = end - start + 1
+
+    def iter_range():
+        remaining = content_length
+        with file_path.open("rb") as audio_file:
+            audio_file.seek(start)
+            while remaining:
+                chunk = audio_file.read(min(64 * 1024, remaining))
+                if not chunk:
+                    break
+                remaining -= len(chunk)
+                yield chunk
+
+    response_headers.update({
+        "Content-Range": f"bytes {start}-{end}/{total}",
+        "Content-Length": str(content_length),
+    })
+    return StreamingResponse(
+        iter_range(), status_code=206, media_type=media_type, headers=response_headers
+    )
+
+
 @app.get("/.well-known/assetlinks.json")
 async def assetlinks():
     """Android App Links verification file."""
@@ -5476,7 +5535,7 @@ async def assetlinks():
 @app.get("/assets/{filename:path}")
 @app.get("/public_assets/{filename:path}")
 @app.get("/api/public_assets/{filename:path}")
-async def public_asset(filename: str):
+async def public_asset(filename: str, request: Request):
     """Serve static files from backend/public_assets/ (e.g. developer icon for Play Console, podcasts, videos)."""
     # Prevent path traversal
     safe_name = filename.replace("..", "").lstrip("/")
@@ -5505,11 +5564,10 @@ async def public_asset(filename: str):
         ".ogg": "audio/ogg",
     }.get(ext, "application/octet-stream")
 
-    return FileResponse(
-        str(file_path),
-        media_type=media_type,
-        headers={"Accept-Ranges": "bytes", "Cache-Control": "public, max-age=86400"}
-    )
+    asset_headers = {"Cache-Control": "public, max-age=86400"}
+    if ext in {".mp3", ".m4a", ".wav", ".ogg"}:
+        return _range_file_response(file_path, request, media_type, asset_headers)
+    return FileResponse(str(file_path), media_type=media_type, headers=asset_headers)
 
 
 # ── Sign images — served from backend/sign_images/ ────────────────────────────
@@ -5855,7 +5913,7 @@ def _tts_cache_path(provider: str, voice: str, lang: str, text: str) -> str:
     return os.path.join(cache_dir, f"{cache_key}.mp3")
 
 
-def _stream_mp3_file(path: str, headers: Optional[dict] = None):
+def _stream_mp3_file(path: str, request: Request, headers: Optional[dict] = None):
     resp_headers = {
         "Content-Type": "audio/mpeg",
         "Accept-Ranges": "bytes",
@@ -5864,14 +5922,10 @@ def _stream_mp3_file(path: str, headers: Optional[dict] = None):
     if headers:
         resp_headers.update(headers)
 
-    return FileResponse(
-        str(path),
-        media_type="audio/mpeg",
-        headers=resp_headers
-    )
+    return _range_file_response(Path(path), request, "audio/mpeg", resp_headers)
 
 
-async def _google_tts(text: str, lang: str, google_key: str, cache_path: str):
+async def _google_tts(text: str, lang: str, google_key: str, cache_path: str, request: Request):
     """Helper — synthesize speech via Google Cloud TTS and return MP3."""
     import base64
     import httpx
@@ -5903,6 +5957,7 @@ async def _google_tts(text: str, lang: str, google_key: str, cache_path: str):
             _tts_record_success("google", lang)
             return _stream_mp3_file(
                 cache_path,
+                request,
                 headers={"X-TTS-Provider": "google", "X-TTS-Voice": voice_name},
             )
 
@@ -5971,6 +6026,7 @@ async def text_to_speech(request: Request, text: Optional[str] = None, lang: Opt
     if os.path.exists(cloned_cache_path):
         return _stream_mp3_file(
             cloned_cache_path,
+            request,
             headers={"X-TTS-Provider": "elevenlabs-cached", "X-TTS-Voice": voice_id},
         )
 
@@ -6072,6 +6128,7 @@ async def text_to_speech(request: Request, text: Optional[str] = None, lang: Opt
     if os.path.exists(google_cache_path):
         return _stream_mp3_file(
             google_cache_path,
+            request,
             headers={"X-TTS-Provider": "google-fallback-cached"},
         )
     if not google_key:
@@ -6081,7 +6138,7 @@ async def text_to_speech(request: Request, text: Optional[str] = None, lang: Opt
         )
     if not _tts_provider_available("google", lang):
         raise HTTPException(status_code=503, detail="Google TTS er midlertidig utilgjengelig; prøv igjen om litt.")
-    return await _google_tts(text, lang, google_key, google_cache_path)
+    return await _google_tts(text, lang, google_key, google_cache_path, request)
 
 
 @app.get("/api/tts/status")

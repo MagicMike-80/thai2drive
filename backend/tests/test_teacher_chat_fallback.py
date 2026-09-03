@@ -222,7 +222,7 @@ class TeacherChatFallbackTests(unittest.TestCase):
     def test_section_7_2_prompt_is_explicit_in_every_language(self):
         prompts = {lang: self.module._build_system_prompt(lang) for lang in ("no", "th", "en")}
         self.assertIn("TRAFIKKREGLENE § 7 NR. 2", prompts["no"])
-        self.assertIn("Du må ALDRI sløyfe", prompts["no"])
+        self.assertIn("Du må ALDRI si", prompts["no"])
         self.assertIn("กฎจราจรนอร์เวย์ § 7 ข้อ 2", prompts["th"])
         self.assertIn("ห้ามบอก", prompts["th"])
         self.assertIn("NORWEGIAN TRAFFIC RULES SECTION 7(2)", prompts["en"])
@@ -234,19 +234,19 @@ class TeacherChatFallbackTests(unittest.TestCase):
                 "no",
                 "Når jeg svinger til venstre og har vikeplikt for møtende bil, er dette høyreregelen?",
                 "Nei, dette er ikke høyreregelen.",
-                "Ja, dette er høyreregelen etter § 7 nr. 2.",
+                "Når du skal svinge til venstre",
             ),
             (
                 "th",
                 "เมื่อเลี้ยวซ้ายและต้องให้ทางรถสวนทาง นี่คือกฎการให้ทางจากขวาใช่ไหม",
                 "ไม่ใช่กฎมือขวา",
-                "ใช่ครับ นี่คือกฎการให้ทางจากขวาตาม § 7 ข้อ 2",
+                "เมื่อคุณจะเลี้ยวซ้าย",
             ),
             (
                 "en",
                 "When turning left for oncoming traffic, is this the right-hand rule?",
                 "No, this is not the right-hand rule.",
-                "Yes, this is the right-hand rule under section 7(2).",
+                "When you are turning left",
             ),
         )
         for lang, question, wrong_reply, expected_start in cases:
@@ -262,7 +262,6 @@ class TeacherChatFallbackTests(unittest.TestCase):
             "Hva betyr høyreregelen?",
             "Hvordan svinger jeg til venstre?",
             "Har jeg vikeplikt for gående når jeg svinger til venstre?",
-            "Do I yield to oncoming traffic when turning left?",
             "อธิบายกฎการให้ทางจากขวา",
         )
         original = "Behold modellsvaret"
@@ -273,6 +272,16 @@ class TeacherChatFallbackTests(unittest.TestCase):
                     self.module._apply_section_7_2_fail_safe(question, original, "no"),
                     original,
                 )
+
+        for question in (
+            "Do I yield to oncoming traffic when turning left?",
+            "Jeg svinger venstre og bilen koer imot",
+        ):
+            with self.subTest(question=question):
+                self.assertTrue(self.module._is_section_7_2_left_turn_query(question))
+                corrected = self.module._apply_section_7_2_fail_safe(question, original, "no")
+                self.assertIn("tjeneren", corrected)
+                self.assertIn("kongen", corrected)
 
     def test_section_7_2_full_citation_contains_both_sentences_and_no_sign(self):
         question = "Hva sier paragraf 7 andre ledd?"

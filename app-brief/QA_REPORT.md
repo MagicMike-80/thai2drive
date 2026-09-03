@@ -21,3 +21,24 @@
 
 ## 2. Konklusjon
 Patchen er 100 % godkjent (`PASS`) og klar for commit og push til Railway.
+
+---
+
+# QA GATE: Android Range/206 og Produksjonsordre 4
+
+- PASS: vanlig filhenting er standard HTTP 200/FileResponse; Range er ekte
+  HTTP 206 med korrekt avgrenset innhold, ikke bare en påklistret statuskode.
+- PASS: 416 og `Content-Range: bytes */total` beskytter mot ugyldige områder.
+- PASS: alle tre TTS-cachebaner videresender requesten til samme Range-helper.
+- PASS: Produksjonsordre 4 opprettes bare når `appLang === 'th'`; norsk fagord
+  er skjult til brukertrykk og fast minimumshøyde hindrer risting.
+- PASS: § 7 nr. 2-testen dekker eksplisitt `koer imot` og krever både
+  «tjeneren» og «kongen» i det kontrollerte norske svaret.
+- PASS: bottom-nav beholder `nowrap` og skjulte scrollbars.
+- PASS: 64/64 regresjonstester, 3/3 Range-tester, 20/20 BLAST, Python-syntaks,
+  inline JavaScript og `git diff --check`.
+- PASS: ingen hemmeligheter eller betalings-/tilgangsendringer i diffen.
+- GJENSTÅR: produksjons-206 og faktisk Samsung-interaksjon må bekreftes etter
+  deploy; lokal QA kan ikke bevise fysisk berøring på sjefens telefon.
+
+PASS — klar for commit, push og fersk live-verifisering.

@@ -59,11 +59,11 @@ class MichaelMobileUiContractTests(unittest.TestCase):
         self.assertIn("var playToken = ++_teacherAudioToken;", WEBAPP)
         self.assertIn("playToken === _teacherAudioToken", WEBAPP)
 
-    def test_contextual_mobile_topics_show_three_before_expansion(self):
+    def test_contextual_mobile_topics_use_stable_horizontal_carousel(self):
         self.assertIn("index >= 3 ? ' mobile-extra' : ''", WEBAPP)
         self.assertIn("chips.length > 3", WEBAPP)
-        self.assertIn(".tm-chips .tm-chip-btn.mobile-extra { display:none; }", WEBAPP)
-        self.assertIn(".tm-chips.expanded .tm-chip-btn.mobile-extra", WEBAPP)
+        self.assertIn(".tm-chips .tm-chip-btn.mobile-extra { display:inline-flex !important; }", WEBAPP)
+        self.assertIn(".tm-chips-toggle { display:none !important; }", WEBAPP)
         self.assertIn("toggle.setAttribute('aria-expanded'", WEBAPP)
 
     def test_mobile_teacher_header_is_compact(self):
@@ -156,11 +156,14 @@ class MichaelMobileUiContractTests(unittest.TestCase):
             self.assertIn("no:", value)
             self.assertIn("en:", value)
 
-    def test_teacher_mode_bottom_nav_is_reduced_to_three_items(self):
-        self.assertIn("#app.teacher-mode #bottomNav .bn-tab { display:none; }", WEBAPP)
-        self.assertIn("#app.teacher-mode #bottomNav #bnCats", WEBAPP)
-        self.assertIn("#app.teacher-mode #bottomNav #bnHistory", WEBAPP)
-        self.assertIn("#app.teacher-mode #bottomNav #bnTeacher", WEBAPP)
+    def test_teacher_mode_bottom_nav_keeps_stable_full_carousel(self):
+        self.assertIn("#app.teacher-mode #bottomNav .bn-tab { display:flex; }", WEBAPP)
+        self.assertIn("flex-wrap: nowrap !important", WEBAPP)
+        self.assertIn("#bottomNav::-webkit-scrollbar { display: none; width: 0; height: 0; }", WEBAPP)
+        self.assertIn("function _buildNorwegianTermToggle(sign)", WEBAPP)
+        self.assertIn("if (appLang !== 'th') return null;", WEBAPP)
+        self.assertIn("teacher_show_norwegian_term:{th:'ดูคำศัพท์นอร์เวย์'", WEBAPP)
+        self.assertIn("min-height:34px", WEBAPP)
 
 
 if __name__ == "__main__":
