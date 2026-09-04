@@ -150,41 +150,66 @@ a { color:inherit; text-decoration:none; }
   display:flex; flex-direction:column;
 }
 
-/* BOTTOM NAV — glass, floating, app-native */
+/* BOTTOM NAV — Floating Neon Capsule Carousel («En lang knapp som går som en karusell») */
 #bottomNav {
-  height: calc(var(--bottom-h) + 12px); flex-shrink: 0;
-  background: rgba(7, 12, 26, 0.92);
+  height: 62px;
+  flex-shrink: 0;
+  margin: 6px 12px 14px;
+  border-radius: 30px;
+  border: 1.5px solid transparent !important;
+  background: linear-gradient(rgba(11, 18, 38, 0.94), rgba(11, 18, 38, 0.94)) padding-box,
+              conic-gradient(from var(--neon-angle, 0deg), rgba(0, 245, 255, 0.75), rgba(255, 0, 229, 0.75), rgba(0, 245, 255, 0.75)) border-box !important;
+  animation: neonFlow 6s linear infinite;
   backdrop-filter: blur(32px) saturate(1.8); -webkit-backdrop-filter: blur(32px) saturate(1.8);
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.03), 0 -12px 36px rgba(0, 0, 0, 0.35);
-  display: none; align-items: center; z-index: 50;
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.75), 0 0 24px rgba(0, 245, 255, 0.22), inset 0 1px 1px rgba(255, 255, 255, 0.12);
+  display: none; flex-direction: row;
+  flex-wrap: nowrap !important;
+  align-items: center; z-index: 50;
   overflow-x: auto; overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
-  scroll-snap-type: x mandatory;
+  -ms-overflow-style: none;
+  scroll-snap-type: none;
   padding: 0 8px;
   gap: 8px;
 }
-#bottomNav::-webkit-scrollbar { display: none; }
+#bottomNav.js-scrolling,
+.js-scrolling {
+  scroll-snap-type: none !important;
+}
+#bottomNav::-webkit-scrollbar { display: none; width: 0; height: 0; }
 [data-theme="light"] #bottomNav {
-  background: rgba(241, 245, 249, 0.94);
-  border-top: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.08);
+  background: linear-gradient(rgba(241, 245, 249, 0.95), rgba(241, 245, 249, 0.95)) padding-box,
+              conic-gradient(from var(--neon-angle, 0deg), #FF9933, #FF00E5, #00F5FF, #FF9933) border-box !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 0 16px rgba(255, 153, 51, 0.2);
 }
 .bn-tab {
-  flex: 0 0 calc(33.333% - 11px);
-  height: calc(100% - 16px);
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center; gap: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  background: rgba(255, 255, 255, 0.02);
-  color: var(--muted);
-  cursor: pointer; font-size: 0.68rem; font-weight: 700;
+  flex: 0 0 auto;
+  min-width: 86px;
+  height: 48px;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  border: 1.5px solid rgba(255, 255, 255, 0.08);
+  background: rgba(15, 23, 42, 0.75);
+  color: #94A3B8;
+  cursor: pointer;
+  font-size: 0.70rem;
+  font-weight: 700;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  padding: 6px 4px; letter-spacing: 0.2px;
-  scroll-snap-align: center;
-  border-radius: 14px;
-  box-shadow: inset 0 1px 1px rgba(255,255,255,0.03), 0 2px 4px rgba(0,0,0,0.15);
+  padding: 4px 10px;
+  letter-spacing: 0.2px;
+  border-radius: 24px;
+  box-shadow: inset 0 1px 1px rgba(255,255,255,0.06), 0 2px 6px rgba(0,0,0,0.35);
+  white-space: nowrap;
+}
+.bn-tab:hover {
+  border-color: rgba(0, 245, 255, 0.45);
+  color: #FFFFFF;
+  transform: translateY(-2px);
+  background: rgba(15, 23, 42, 0.9);
 }
 [data-theme="light"] .bn-tab {
   border: 1px solid rgba(0, 0, 0, 0.03);
@@ -192,10 +217,35 @@ a { color:inherit; text-decoration:none; }
   box-shadow: inset 0 1px 1px rgba(255,255,255,0.8), 0 2px 4px rgba(0,0,0,0.04);
 }
 .bn-icon {
-  font-size: 24px; line-height: 1;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
   transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), filter 0.25s;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5)) contrast(1.15) saturate(1.25);
-  display: inline-block;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+}
+.bn-icon svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  display: block;
+}
+.bn-icon img {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center 15%;
+  display: block;
+}
+.bn-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1.1;
+  white-space: nowrap;
 }
 .bn-tab.active {
   color: #00F5FF;
@@ -203,7 +253,7 @@ a { color:inherit; text-decoration:none; }
   background: linear-gradient(rgba(11, 18, 38, 0.90), rgba(11, 18, 38, 0.90)) padding-box,
               conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #00F5FF) border-box !important;
   animation: neonFlow 4s linear infinite;
-  box-shadow: 0 0 14px rgba(0, 245, 255, 0.22), inset 0 1px 2px rgba(255,255,255,0.08);
+  box-shadow: 0 0 16px rgba(0, 245, 255, 0.3), inset 0 1px 2px rgba(255,255,255,0.12);
   transform: translateY(-2px);
 }
 [data-theme="light"] .bn-tab.active {
@@ -213,11 +263,12 @@ a { color:inherit; text-decoration:none; }
   box-shadow: 0 0 14px rgba(255, 153, 51, 0.22), inset 0 1px 2px rgba(255,255,255,0.9);
 }
 .bn-tab.active .bn-icon {
-  transform: scale(1.2) translateY(-1px);
-  filter: drop-shadow(0 0 6px rgba(0, 245, 255, 0.6)) drop-shadow(0 2px 4px rgba(0,0,0,0.6)) contrast(1.3) saturate(1.5);
+  transform: scale(1.15) translateY(-1px);
+  filter: drop-shadow(0 0 6px rgba(0, 245, 255, 0.8)) contrast(1.3) saturate(1.5);
+  color: #00F5FF;
 }
 [data-theme="light"] .bn-tab.active .bn-icon {
-  filter: drop-shadow(0 0 6px rgba(255, 153, 51, 0.6)) drop-shadow(0 2px 4px rgba(0,0,0,0.3)) contrast(1.3) saturate(1.5);
+  filter: drop-shadow(0 0 6px rgba(255, 153, 51, 0.8)) contrast(1.3) saturate(1.5);
 }
 .bn-tab:active .bn-icon { transform: scale(0.85); }
 
@@ -2979,7 +3030,7 @@ a { color:inherit; text-decoration:none; }
   border-radius:16px; padding:22px 20px; margin:18px 0 6px; text-align:center;
 }
 .promo-spark { font-size:34px; line-height:1; margin-bottom:8px; }
-.promo-head { font-size:1.18rem; font-weight:800; color:var(--orange); letter-spacing:-.01em; margin-bottom:6px; }
+.promo-head { font-size:1.18rem; font-weight:800; color:var(--orange); margin-bottom:6px; }
 .promo-body { font-size:.95rem; line-height:1.6; opacity:.92; }
 .paywall-price-row {
   display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:8px;
@@ -3297,10 +3348,8 @@ a { color:inherit; text-decoration:none; }
 .teacher-send-btn:hover { background:#1D4ED8 !important; }
 .teacher-send-btn:disabled { background:var(--border); cursor:default; }
 
-#app.teacher-mode #bottomNav .bn-tab { display:none; }
-#app.teacher-mode #bottomNav #bnCats,
-#app.teacher-mode #bottomNav #bnHistory,
-#app.teacher-mode #bottomNav #bnTeacher { display:flex; flex:1 1 33.333%; }
+/* Teacher mode bottomNav keeps full carousel navigation */
+#app.teacher-mode #bottomNav .bn-tab { display:flex; }
 #app.teacher-mode #bnTeacher .bn-icon img {
   outline:3px solid #3B82F6; outline-offset:2px; box-shadow:none;
 }
@@ -3323,6 +3372,10 @@ a { color:inherit; text-decoration:none; }
 .tm-sign-tag { color:#67E8F9; font-size:.7rem; font-weight:900; letter-spacing:.08em; text-transform:uppercase; }
 .tm-sign-title { margin:0; color:#fff; font-size:1.05rem; line-height:1.3; font-weight:900; }
 .tm-sign-text { color:#DCE6F3; font-size:.88rem; line-height:1.5; }
+.tm-no-term { min-height:34px; display:flex; align-items:center; gap:8px; margin-top:8px; }
+.tm-no-term-btn { border:1px solid rgba(103,232,249,.35); border-radius:999px; background:rgba(8,145,178,.12); color:#CFFAFE; padding:6px 10px; font:inherit; font-size:.78rem; font-weight:800; cursor:pointer; }
+.tm-no-term-value { color:#F8FAFC; font-size:.84rem; font-weight:800; opacity:0; visibility:hidden; transition:opacity .16s ease; }
+.tm-no-term.revealed .tm-no-term-value { opacity:1; visibility:visible; }
 .tm-media-strip {
   display:grid; grid-template-columns:1fr; gap:12px;
   min-width:0; width:100%; max-width:100%; margin-top:14px;
@@ -3383,17 +3436,36 @@ a { color:inherit; text-decoration:none; }
   .teacher-online-badge { font-size:.58rem; padding:2px 6px; }
   .teacher-messages { width:100%; padding:14px 12px 18px; gap:12px; }
   .tm-bubble { max-width:94%; padding:18px; font-size:.96rem; line-height:1.6; }
-  .teacher-suggestions { padding:9px 12px; gap:8px; background:#0A1530; }
-  .teacher-suggestions:not(.expanded) .teacher-chip:nth-of-type(n+4),
-  .teacher-suggestions:not(.expanded) .teacher-chip-hdr { display:none; }
-  .teacher-chip {
-    flex:1 1 100%; width:100%; min-height:50px; padding:11px 14px;
-    border-radius:14px; justify-content:flex-start; text-align:left; font-size:.86rem;
+  .teacher-suggestions {
+    display:flex !important; flex-direction:row !important; flex-wrap:nowrap !important;
+    overflow-x:auto !important; scroll-snap-type:x mandatory !important;
+    -webkit-overflow-scrolling:touch !important; gap:10px !important;
+    padding:10px 14px !important; scrollbar-width:none !important; background:#0A1530 !important;
   }
-  .teacher-topics-toggle { display:block; }
-  .tm-chips .tm-chip-btn.mobile-extra { display:none; }
-  .tm-chips.expanded .tm-chip-btn.mobile-extra { display:inline-flex; }
-  .tm-chips-toggle { display:block; grid-column:1/-1; }
+  .teacher-suggestions::-webkit-scrollbar { display:none !important; }
+  .teacher-suggestions:not(.expanded) .teacher-chip:nth-of-type(n+4),
+  .teacher-suggestions:not(.expanded) .teacher-chip-hdr { display:inline-flex !important; }
+  .teacher-chip {
+    flex:0 0 auto !important; width:auto !important; min-width:140px !important;
+    min-height:44px !important; padding:10px 16px !important;
+    border-radius:22px !important; justify-content:center !important;
+    text-align:center !important; font-size:.88rem !important;
+    scroll-snap-align:start !important; white-space:nowrap !important;
+  }
+  .teacher-topics-toggle { display:none !important; }
+  .tm-chips {
+    display:flex !important; flex-direction:row !important; flex-wrap:nowrap !important;
+    overflow-x:auto !important; scroll-snap-type:x mandatory !important;
+    -webkit-overflow-scrolling:touch !important; gap:8px !important;
+    padding:8px 4px !important; scrollbar-width:none !important;
+  }
+  .tm-chips::-webkit-scrollbar { display:none !important; }
+  .tm-chips .tm-chip-btn.mobile-extra { display:inline-flex !important; }
+  .tm-chip-btn {
+    flex:0 0 auto !important; scroll-snap-align:start !important;
+    white-space:nowrap !important; border-radius:18px !important;
+  }
+  .tm-chips-toggle { display:none !important; }
   .teacher-inputbar { width:100%; padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px)); background:#071326; position:relative; z-index:2; }
   .teacher-input { min-height:56px; font-size:1rem; }
   .teacher-send-btn { min-width:86px; height:56px; }
@@ -3488,18 +3560,22 @@ a { color:inherit; text-decoration:none; }
 .hp-btn-pri, .hp-btn-sec, .ask-michael-btn, .hist-btn-pri, .hist-btn-sec,
 .back-btn, .logout-btn, .lang-btn, .seg-btn, .spd-btn, .vol-btn, .rv-done-btn,
 .lib-back-btn, .teacher-send-btn, .tm-chip-btn, .sb-edit-btn, .ai-expand-btn,
-.q-bookmark-btn, .sp-ai-tts-btn {
+.q-bookmark-btn, .sp-ai-tts-btn, .rv-next {
   border: 1.5px solid transparent !important;
   background: linear-gradient(var(--btn-bg, rgba(17,24,39,0.95)), var(--btn-bg, rgba(17,24,39,0.95))) padding-box,
               conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #00F5FF) border-box !important;
   animation: neonFlow 3s linear infinite !important;
+  color: #FFFFFF !important;
 }
 
-/* ── Lesbarhetsfiks: neon-regelen over setter mørk bakgrunn på primærknappene
-   med !important, men tekstfargen deres var laget for den gamle lyse/oransje
-   bakgrunnen. Resultatet er mørk tekst på mørk knapp — målt kontrast 1,01 på
-   «Logg inn» og «Kjøp Premium», altså praktisk talt usynlig tekst.
-   Her settes kun tekstfargen. Bakgrunn, form og neon-animasjon røres ikke. ── */
+.lang-btn {
+  background: transparent !important;
+}
+
+/* ── Lesbarhetsfiks: neon-regelen under setter mørk bakgrunn på primærknappene
+   med !important, men tekstfargen var laget for den gamle lyse bakgrunnen.
+   Målt kontrast 1,01 på «Logg inn» og «Kjøp Premium» — usynlig tekst.
+   Kun tekstfargen settes her. Bakgrunn, form og neon-animasjon røres ikke. ── */
 .auth-btn, .end-btn-pri, .paywall-buy-btn, .sp-btn-primary, .hp-btn-pri, .lang-btn {
   color: #F8FAFC !important;
 }
@@ -3514,12 +3590,15 @@ a { color:inherit; text-decoration:none; }
 .paywall-buy-btn,
 .end-btn-pri,
 .sp-btn-primary,
-.hp-btn-pri {
+.hp-btn-pri,
+.auth-btn,
+.rv-next {
   border: 1.5px solid transparent !important;
   background: linear-gradient(rgba(17, 24, 39, 0.95), rgba(17, 24, 39, 0.95)) padding-box,
               conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #00F5FF) border-box !important;
   animation: neonFlow 4s linear infinite !important;
   box-shadow: 0 0 10px rgba(0, 245, 255, 0.25) !important;
+  color: #FFFFFF !important;
   transition: transform 0.2s, box-shadow 0.2s !important;
 }
 
@@ -3613,6 +3692,133 @@ a { color:inherit; text-decoration:none; }
   transition:background .15s;
 }
 .t2d-lightbox-close:hover { background:rgba(239,68,68,.85); }
+
+
+
+.media-lang-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #FFFFFF !important;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 3px 7px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  z-index: 2;
+}
+.home-carousel-body {
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: space-between;
+}
+.home-carousel-card-title {
+  font-size: 0.90rem;
+  font-weight: 700;
+  color: #E2E8F0;
+  margin: 0 0 6px 0;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.home-carousel-card-dur {
+  font-size: 0.75rem;
+  color: #94A3B8;
+  font-weight: 600;
+}
+
+/* ═══ MICHAEL 80px x 80px THUMBNAILS (Situation images & signs) ═══ */
+.tm-media-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+.tm-media-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(15, 23, 42, 0.75);
+  border: 1.5px solid rgba(0, 245, 255, 0.3);
+  border-radius: 12px;
+  padding: 6px;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s;
+}
+.tm-media-card:hover {
+  transform: scale(1.03);
+  border-color: #00F5FF;
+}
+.tm-media-visual {
+  width: 80px !important;
+  height: 80px !important;
+  min-width: 80px !important;
+  min-height: 80px !important;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #0B1226;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255,255,255,0.15);
+}
+.tm-media-image {
+  width: 80px !important;
+  height: 80px !important;
+  object-fit: contain;
+  cursor: zoom-in;
+}
+.tm-sign-image-wrap {
+  width: 80px !important;
+  height: 80px !important;
+  min-width: 80px !important;
+  border-radius: 8px;
+  background: #0B1226;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(0, 245, 255, 0.3);
+}
+.tm-sign-image {
+  width: 72px !important;
+  height: 72px !important;
+  object-fit: contain;
+  cursor: zoom-in;
+}
+
+
+.quiz-coach-trigger-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  justify-content: center;
+  padding: 11px 16px;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.25), rgba(6, 182, 212, 0.25)) !important;
+  border: 1.5px solid rgba(0, 245, 255, 0.45) !important;
+  border-radius: 12px;
+  color: #FFFFFF !important;
+  font-size: 0.90rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 0 14px rgba(0, 245, 255, 0.22);
+  transition: transform 0.15s, border-color 0.15s;
+}
+.quiz-coach-trigger-btn:hover {
+  transform: translateY(-1px);
+  border-color: #00F5FF !important;
+  box-shadow: 0 0 20px rgba(0, 245, 255, 0.4);
+}
 
 </style>
 </head>
@@ -3828,20 +4034,6 @@ a { color:inherit; text-decoration:none; }
         <div class="pb-text">
           <h4 class="pb-title" data-key="premium_on">⭐ Premium</h4>
           <p class="pb-sub" data-key="premium_sub">Du har tilgang til alle funksjoner</p>
-        </div>
-      </div>
-
-      <!-- ═══ HOME MEDIA CAROUSEL (Videos & Podcasts) ═══ -->
-      <div class="home-carousel-section" id="homeCarouselSection">
-        <div class="home-carousel-header">
-          <div class="home-carousel-title-wrap">
-            <span class="home-carousel-icon">🎬</span>
-            <span class="home-carousel-title" data-key="home_media_carousel_title">Videokurs & Podkaster</span>
-          </div>
-          <button class="home-carousel-see-all" onclick="showTab('library')" data-key="see_all">Se alle →</button>
-        </div>
-        <div class="home-carousel-track" id="homeCarouselTrack" tabindex="0" role="region" aria-label="Videokurs og Podkaster">
-          <!-- Populated by renderHomeCarousel() -->
         </div>
       </div>
     </div>
@@ -4366,34 +4558,34 @@ a { color:inherit; text-decoration:none; }
 
   </div><!-- /content -->
 
-  <!-- BOTTOM NAV — 8 tabs: Hjem → Kategorier → Historikk → Michael → Skilt → Studiebok → Bokmerker → Innstillinger -->
+  <!-- BOTTOM NAV — 9 tabs: Hjem → Kategorier → Historikk → Michael → Videoer → Skilt → Studiebok → Bokmerker → Innstillinger -->
   <div id="bottomNav">
     <button class="bn-tab active" id="bnHome" onclick="showTab('home')">
-      <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span><span data-key="home">Hjem</span>
+      <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span><span class="bn-label" data-key="home">Hjem</span>
     </button>
     <button class="bn-tab" id="bnCats" onclick="showTab('cats')">
-      <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span><span data-key="cats">Kategorier</span>
+      <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span><span class="bn-label" data-key="cats">Kategorier</span>
     </button>
     <button class="bn-tab" id="bnHistory" onclick="showTab('history')">
-      <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span><span data-key="history">Historikk</span>
+      <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span><span class="bn-label" data-key="history">Historikk</span>
     </button>
     <button class="bn-tab bn-tab-michael" id="bnTeacher" onclick="showTab('teacher')">
-      <span class="bn-icon"><img src="/api/assets/michael_profile.jpg" style="width:30px;height:30px;border-radius:50%;object-fit:cover;object-position:center 15%;" alt="Michael"></span><span data-key="teacher">Michael</span>
+      <span class="bn-icon"><img src="/api/assets/michael_profile.jpg" alt="Michael"></span><span class="bn-label" data-key="teacher">Michael</span>
     </button>
     <button class="bn-tab" id="bnLibrary" onclick="showTab('library')">
-      <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></span><span data-key="lib_videos">Videoer</span>
+      <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></span><span class="bn-label" data-key="lib_videos">Videoer</span>
     </button>
     <button class="bn-tab" id="bnSigns" onclick="showTab('signs')">
-      <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 22 2 22"/><line x1="12" y1="9" x2="12" y2="15"/><circle cx="12" cy="18" r="0.5" fill="currentColor"/></svg></span><span data-key="signs">Skilt</span>
+      <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 22 2 22"/><line x1="12" y1="9" x2="12" y2="15"/><circle cx="12" cy="18" r="0.5" fill="currentColor"/></svg></span><span class="bn-label" data-key="signs">Skilt</span>
     </button>
     <button class="bn-tab" id="bnStudybook" onclick="showTab('studybook')">
-      <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span><span data-key="sb_nav">Studiebok</span>
+      <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span><span class="bn-label" data-key="sb_nav">Studiebok</span>
     </button>
     <button class="bn-tab" id="bnBookmarks" onclick="showTab('bookmarks')">
-      <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></span><span data-key="bookmarks">Bokmerker</span>
+      <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></span><span class="bn-label" data-key="bookmarks">Bokmerker</span>
     </button>
     <button class="bn-tab" id="bnSettings" onclick="showTab('settings')">
-      <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span><span data-key="settings">Innstillinger</span>
+      <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span><span class="bn-label" data-key="settings">Innstillinger</span>
     </button>
   </div>
 
@@ -4500,6 +4692,7 @@ var NAV_SVG = {
   cats: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
   history: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>',
   teacher: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1 .4-1.4 .9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6 .4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/><path d="M9 17h6"/></svg>',
+  library: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>',
   signs: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 22 2 22"/><line x1="12" y1="9" x2="12" y2="15"/><circle cx="12" cy="18" r="0.5" fill="currentColor"/></svg>',
   studybook: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>',
   bookmarks: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>',
@@ -4620,6 +4813,7 @@ var UI = {
   teacher_show_example:{th:'ดูตัวอย่าง', no:'Vis eksempel', en:'Show example'},
   teacher_show_example_prompt:{th:'แสดงตัวอย่างสถานการณ์จริงที่สั้นและเข้าใจง่ายสำหรับป้ายนี้', no:'Vis meg et kort, praktisk eksempel med dette skiltet.', en:'Show me a short practical example using this sign.'},
   teacher_test_me:{th:'ทดสอบฉัน', no:'Test meg', en:'Test me'},
+  teacher_show_norwegian_term:{th:'ดูคำศัพท์นอร์เวย์', no:'Se norsk fagord', en:'Show Norwegian term'},
   teacher_topics_open:{th:'แสดงหัวข้อ', no:'Vis emner', en:'Show topics'},
   teacher_topics_close:{th:'ปิดหัวข้อ', no:'Lukk emner', en:'Close topics'},
   teacher_error: {th:'ขอโทษ เกิดข้อผิดพลาด ลองใหม่อีกครั้ง', no:'Beklager, noe gikk galt. Prøv igjen.', en:'Sorry, something went wrong. Please try again.'},
@@ -4863,6 +5057,7 @@ var UI = {
   read_aloud:  {th:'อ่านออกเสียง',           no:'Les høyt',         en:'Read aloud'},
   podcast_short:{th:'🎙️ พอดแคสต์', no:'🎙️ Podcast-forklaring', en:'🎙️ Podcast explanation'},
   ask_ai:      {th:'🚗 ถามไมเคิล',           no:'🚗 Spør Michael',   en:'🚗 Ask Michael'},
+  quiz_ask_michael_expl: {th:'🤖 ถามไมเคิลเพื่อฟังคำอธิบาย', no:'🤖 Spør Michael om forklaring', en:'🤖 Ask Michael for explanation'},
   ai_teacher_hint:{th:'ครู AI',              no:'AI-kjørelærer',    en:'AI teacher'},
   sign_ai_lesson:{th:'ดูป้ายนี้ร่วมกับสถานการณ์บนถนนจริง: {name}. ให้สังเกตรูปทรง สี สัญลักษณ์ และสิ่งที่ผู้ขับขี่ต้องทำทันที ใช้ป้ายนี้เพื่อปรับความเร็ว ตำแหน่งรถ และความระวังอย่างสงบ', no:'Se dette skiltet sammen med trafikksituasjonen: {name}. Legg merke til form, farge, symbol og hva føreren må gjøre nå. Bruk skiltet til å tilpasse fart, plassering og oppmerksomhet rolig.', en:'Read this sign together with the road situation: {name}. Notice the shape, colour, symbol, and what the driver must do now. Use the sign to adapt speed, position, and attention calmly.'},
   close:       {th:'ปิด',                   no:'Lukk',             en:'Close'},
@@ -4878,7 +5073,7 @@ var UI = {
   sign_fallback_memory:{th:'จำเป็นลำดับ: รูปทรง → สี → สัญลักษณ์ → สิ่งที่ต้องทำ', no:'Husk rekkefølgen: form → farge → symbol → handling.', en:'Remember the order: shape → colour → symbol → action.'},
   // Paywall
   tts_tap_first:{th:'แตะหน้าจอหนึ่งครั้งก่อน แล้วกดฟังอีกที', no:'Trykk én gang på skjermen, og prøv å spille av igjen.', en:'Tap the screen once, then press play again.'},
-  tts_failed:  {th:'ขออภัย ตอนนี้เล่นเสียงไม่ได้ กรุณาลองใหม่อีกครั้ง', no:'Lyden kunne ikke spilles av nå. Prøv igjen.', en:'The audio could not be played. Please try again.'},
+  tts_failed:  {th:'ขออภัยครับ ตอนนี้เล่นเสียงไม่ได้ กรุณาลองใหม่อีกครั้ง', no:'Lyden kunne ikke spilles av nå. Prøv igjen.', en:'The audio could not be played. Please try again.'},
   promo_head:  {th:'ทุกอย่างฟรีในช่วงเปิดตัว', no:'Alt er gratis under lanseringen', en:'Everything is free during launch'},
   promo_title: {th:'แคมเปญเปิดตัว!', no:'Lanseringskampanje!', en:'Launch campaign!'},
   promo_body:  {th:'สมัครบัญชีฟรีวันนี้ รับสิทธิ์เข้าถึงเนื้อหาทั้งหมดเต็มรูปแบบ 30 วัน!', no:'Opprett en gratis konto i dag og få 30 dagers full tilgang til alt innhold!', en:'Create a free account today and get 30 days of full access to everything!'},
@@ -5043,15 +5238,15 @@ function applyUILang() {
   // back buttons
   document.querySelectorAll('.back-btn').forEach(function(b){ b.textContent = t('back'); });
   // bottom nav
-  var nb = document.getElementById('bnHome');      if(nb) nb.innerHTML = '<span class="bn-icon">' + NAV_SVG.home + '</span>' + t('home');
-  var nc = document.getElementById('bnCats');      if(nc) nc.innerHTML = '<span class="bn-icon">' + NAV_SVG.cats + '</span>' + t('cats');
-  var nh = document.getElementById('bnHistory');   if(nh) nh.innerHTML = '<span class="bn-icon">' + NAV_SVG.history + '</span>' + t('history');
-  var nsg= document.getElementById('bnSigns');     if(nsg) nsg.innerHTML = '<span class="bn-icon">' + NAV_SVG.signs + '</span>' + t('signs');
-  var nbm= document.getElementById('bnBookmarks'); if(nbm) nbm.innerHTML = '<span class="bn-icon">' + NAV_SVG.bookmarks + '</span>' + t('bookmarks');
-  var ns = document.getElementById('bnSettings');  if(ns) ns.innerHTML = '<span class="bn-icon">' + NAV_SVG.settings + '</span>' + t('settings');
-  var nt = document.getElementById('bnTeacher');   if(nt) nt.innerHTML = '<span class="bn-icon"><img src="/api/assets/michael_profile.jpg" style="width:30px;height:30px;border-radius:50%;object-fit:cover;object-position:center 15%;" alt="Michael"></span>' + t('teacher');
-  var nl = document.getElementById('bnLibrary');   if(nl) nl.innerHTML = '<span class="bn-icon">' + (NAV_SVG.library || '') + '</span>' + t('lib_videos');
-  var nsb= document.getElementById('bnStudybook'); if(nsb) nsb.innerHTML = '<span class="bn-icon">' + NAV_SVG.studybook + '</span>' + t('sb_nav');
+  var nb = document.getElementById('bnHome');      if(nb) nb.innerHTML = '<span class="bn-icon">' + NAV_SVG.home + '</span><span class="bn-label">' + t('home') + '</span>';
+  var nc = document.getElementById('bnCats');      if(nc) nc.innerHTML = '<span class="bn-icon">' + NAV_SVG.cats + '</span><span class="bn-label">' + t('cats') + '</span>';
+  var nh = document.getElementById('bnHistory');   if(nh) nh.innerHTML = '<span class="bn-icon">' + NAV_SVG.history + '</span><span class="bn-label">' + t('history') + '</span>';
+  var nsg= document.getElementById('bnSigns');     if(nsg) nsg.innerHTML = '<span class="bn-icon">' + NAV_SVG.signs + '</span><span class="bn-label">' + t('signs') + '</span>';
+  var nbm= document.getElementById('bnBookmarks'); if(nbm) nbm.innerHTML = '<span class="bn-icon">' + NAV_SVG.bookmarks + '</span><span class="bn-label">' + t('bookmarks') + '</span>';
+  var ns = document.getElementById('bnSettings');  if(ns) ns.innerHTML = '<span class="bn-icon">' + NAV_SVG.settings + '</span><span class="bn-label">' + t('settings') + '</span>';
+  var nt = document.getElementById('bnTeacher');   if(nt) nt.innerHTML = '<span class="bn-icon"><img src="/api/assets/michael_profile.jpg" alt="Michael"></span><span class="bn-label">' + t('teacher') + '</span>';
+  var nl = document.getElementById('bnLibrary');   if(nl) nl.innerHTML = '<span class="bn-icon">' + NAV_SVG.library + '</span><span class="bn-label">' + t('lib_videos') + '</span>';
+  var nsb= document.getElementById('bnStudybook'); if(nsb) nsb.innerHTML = '<span class="bn-icon">' + NAV_SVG.studybook + '</span><span class="bn-label">' + t('sb_nav') + '</span>';
   // Update teacher UI if visible
   var tNameEl = document.getElementById('teacherNameLbl');
   if (tNameEl) tNameEl.textContent = t('teacher_name');
@@ -5365,6 +5560,68 @@ function enterApp() {
   setTimeout(maybeShowTrialNotice, 1200);
 }
 
+
+function bindBottomNavCarousel() {
+  var nav = document.getElementById('bottomNav');
+  if (!nav || nav._boundCarousel) return;
+  nav._boundCarousel = true;
+
+  nav.addEventListener('wheel', function(e) {
+    if (e.deltaY !== 0) {
+      e.preventDefault();
+      var maxScroll = nav.scrollWidth - nav.clientWidth;
+      if (maxScroll > 10) {
+        if (nav.scrollLeft + e.deltaY > maxScroll + 5 && e.deltaY > 0) {
+          nav.scrollTo({ left: 0, behavior: 'smooth' });
+        } else if (nav.scrollLeft + e.deltaY < -5 && e.deltaY < 0) {
+          nav.scrollTo({ left: maxScroll, behavior: 'smooth' });
+        } else {
+          nav.scrollLeft += e.deltaY;
+        }
+      }
+    }
+  }, { passive: false });
+
+  var isDown = false;
+  var startX = 0;
+  var scrollLeft = 0;
+
+  nav.addEventListener('mousedown', function(e) {
+    isDown = true;
+    startX = e.pageX - nav.offsetLeft;
+    scrollLeft = nav.scrollLeft;
+    nav.style.cursor = 'grabbing';
+    nav.style.userSelect = 'none';
+  });
+
+  window.addEventListener('mouseup', function() {
+    if (isDown) {
+      isDown = false;
+      if (nav) {
+        nav.style.cursor = 'pointer';
+        nav.style.removeProperty('user-select');
+        var maxScroll = nav.scrollWidth - nav.clientWidth;
+        if (maxScroll > 10) {
+          if (nav.scrollLeft >= maxScroll - 2) {
+            // Myk overgang ved høyre ende
+            nav.scrollTo({ left: maxScroll, behavior: 'smooth' });
+          } else if (nav.scrollLeft <= 2) {
+            nav.scrollTo({ left: 0, behavior: 'smooth' });
+          }
+        }
+      }
+    }
+  });
+
+  nav.addEventListener('mousemove', function(e) {
+    if (!isDown) return;
+    e.preventDefault();
+    var x = e.pageX - nav.offsetLeft;
+    var walk = (x - startX) * 1.5;
+    nav.scrollLeft = scrollLeft - walk;
+  });
+}
+
 function showTab(tab, forceType) {
   // Close video player if active
   var vpScreen = document.getElementById('screenVideoPlayer');
@@ -5372,12 +5629,37 @@ function showTab(tab, forceType) {
   stopAllSpeech();
   activeTab = tab;
   document.querySelectorAll('.bn-tab').forEach(function(b) { b.classList.remove('active'); });
-  var tabMap = { home:'bnHome', cats:'bnCats', history:'bnHistory', signs:'bnSigns', studybook:'bnStudybook', bookmarks:'bnBookmarks', settings:'bnSettings', teacher:'bnTeacher' };
+  var tabMap = {
+    home: 'bnHome',
+    cats: 'bnCats',
+    history: 'bnHistory',
+    teacher: 'bnTeacher',
+    library: 'bnLibrary',
+    signs: 'bnSigns',
+    studybook: 'bnStudybook',
+    bookmarks: 'bnBookmarks',
+    settings: 'bnSettings'
+  };
   if (tabMap[tab]) {
     var btn = document.getElementById(tabMap[tab]);
-    btn.classList.add('active');
-    btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    if (btn) {
+      btn.classList.add('active');
+      var nav = document.getElementById('bottomNav');
+      if (nav) {
+        nav.classList.add('js-scrolling');
+        if (nav._scrollSnapTimer) clearTimeout(nav._scrollSnapTimer);
+        nav._scrollSnapTimer = setTimeout(function() {
+          nav.classList.remove('js-scrolling');
+        }, 350);
+
+        var navRect = nav.getBoundingClientRect();
+        var btnRect = btn.getBoundingClientRect();
+        var targetScroll = nav.scrollLeft + (btnRect.left - navRect.left) - (nav.clientWidth / 2) + (btn.clientWidth / 2);
+        nav.scrollTo({ left: targetScroll, behavior: 'smooth' });
+      }
+    }
   }
+  bindBottomNavCarousel();
   var screenMap = {
     home:'screenHome', cats:'screenCats',
     history:'screenHistory', signs:'screenSigns', bookmarks:'screenBookmarks',
@@ -5979,116 +6261,65 @@ document.addEventListener('click', function(e) {
   }
 });
 
-var _backendAudio = null;
-var _teacherAudio = null;
+var _globalAudio = null;
 var _audioUnlocked = false;
 var _teacherActiveText = '';
 var _teacherAudioToken = 0;
+var _teacherWatchdog = null;
 
-// iOS/Safari lar deg bare starte lyd fra et ekte brukertrykk. Et <audio>-element som
-// aldri har spilt inne i en gest, nekter senere .play() — og det er derfor lyden er
-// stille selv om /api/tts svarer. Vi lager derfor begge elementene tidlig og «velsigner»
-// dem med en stum WAV ved første trykk. AudioContext.resume() dekker IKKE dette; den
-// gjelder kun WebAudio-pipet i playSound().
-var _SILENT_WAV = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
-
-function _ensureBackendAudio() {
-  if (!_backendAudio) {
-    _backendAudio = new Audio();
-    _backendAudio.preload = 'auto';
-    _backendAudio.onended = function() { ttsPlaying = false; updateTtsBtn(false); };
-    _backendAudio.onerror = function() { ttsPlaying = false; updateTtsBtn(false); };
+function _getGlobalAudio() {
+  if (!_globalAudio) {
+    _globalAudio = new Audio();
+    _globalAudio.preload = 'auto';
+    _globalAudio.onended = function() {
+      if (_teacherWatchdog) clearTimeout(_teacherWatchdog);
+      _teacherTtsPlaying = false;
+      _teacherActiveText = '';
+      ttsPlaying = false;
+      updateTtsBtn(false);
+    };
+    _globalAudio.onerror = function() {
+      if (_teacherWatchdog) clearTimeout(_teacherWatchdog);
+      _teacherTtsPlaying = false;
+      _teacherActiveText = '';
+      ttsPlaying = false;
+      updateTtsBtn(false);
+    };
   }
-  return _backendAudio;
+  return _globalAudio;
 }
 
-var _teacherWatchdog = null;
+function _ensureBackendAudio() { return _getGlobalAudio(); }
+function _ensureTeacherAudio() { return _getGlobalAudio(); }
+var _teacherAudio = null; // alias for backwards compat
+var _backendAudio = null; // alias for backwards compat
+
 function _resetTeacherWatchdog() {
   if (_teacherWatchdog) clearTimeout(_teacherWatchdog);
   _teacherWatchdog = setTimeout(function() {
-    if (_teacherTtsPlaying && _teacherAudio) {
+    if (_teacherTtsPlaying && _globalAudio) {
       stopAllSpeech();
     }
   }, 14000);
 }
 
-function _ensureTeacherAudio() {
-  if (!_teacherAudio) {
-    _teacherAudio = new Audio();
-    _teacherAudio.preload = 'auto';
-    _teacherAudio.onended = function() {
-      if (_teacherWatchdog) clearTimeout(_teacherWatchdog);
-      _teacherTtsPlaying = false;
-      _teacherActiveText = '';
-    };
-    _teacherAudio.onerror = function() {
-      if (_teacherWatchdog) clearTimeout(_teacherWatchdog);
-      _teacherTtsPlaying = false;
-      _teacherActiveText = '';
-    };
-  }
-  return _teacherAudio;
-}
-
-function _primeAudioEl(el) {
-  if (!el) return;
-  try {
-    el.src = _SILENT_WAV;
-    var primedSrc = el.src;
-    el.muted = true;
-    var p = el.play();
-    if (p && p.then) {
-      p.then(function() {
-        // The user action may already have replaced the silent WAV with real
-        // TTS. Never let the async priming callback pause that new source.
-        if (el.src === primedSrc) {
-          try { el.pause(); el.currentTime = 0; } catch (e) {}
-        }
-        el.muted = false;
-      }).catch(function() { el.muted = false; });
-    } else {
-      try { el.pause(); } catch (e) {}
-      el.muted = false;
-    }
-  } catch (e) {
-    el.muted = false;
-  }
-}
-
 function _unlockAudioPlayback(activeEl) {
-  if (_audioUnlocked) return;
   _audioUnlocked = true;
-  var backendEl = _ensureBackendAudio();
-  var teacherEl = _ensureTeacherAudio();
-  // The element started by this exact user gesture does not need priming.
-  // Priming it here can race with the real MP3 and abort play() via pause().
-  if (backendEl !== activeEl) _primeAudioEl(backendEl);
-  if (teacherEl !== activeEl) _primeAudioEl(teacherEl);
-  if (typeof _getAudioCtx === 'function') { try { _getAudioCtx(); } catch (e) {} }
+  var a = _getGlobalAudio();
+  if (a) {
+    a.muted = false;
+  }
 }
-
-// Første ekte brukergest på siden låser opp all lyd — begge <audio>-elementene og
-// WebAudio-konteksten. `once` gjør at det skjer nøyaktig én gang.
-document.addEventListener('touchstart', _unlockAudioPlayback, { once: true, passive: true });
-document.addEventListener('click', _unlockAudioPlayback, { once: true });
-document.addEventListener('keydown', _unlockAudioPlayback, { once: true });
 
 function stopAllSpeech() {
   _teacherAudioToken += 1;
-  if (_backendAudio) {
+  var a = _getGlobalAudio();
+  if (a) {
     try {
-      _backendAudio.pause();
-      _backendAudio.currentTime = 0;
-      _backendAudio.src = '';
-      _backendAudio.load();
-    } catch(e){}
-  }
-  if (_teacherAudio) {
-    try {
-      _teacherAudio.pause();
-      _teacherAudio.currentTime = 0;
-      _teacherAudio.src = '';
-      _teacherAudio.load();
+      a.pause();
+      a.currentTime = 0;
+      a.src = '';
+      a.load();
     } catch(e){}
   }
   if (_teacherWatchdog) {
@@ -6488,74 +6719,18 @@ async function loadHome() {
 
   // Premium badge — viser nedtelling når gratisuken er aktiv
   renderPremiumBanner();
-
-  // Horisontal karusell med videoer og podkaster nederst på hjemskjermen
-  renderHomeCarousel();
 }
 
-async function renderHomeCarousel() {
-  var track = document.getElementById('homeCarouselTrack');
-  if (!track) return;
-
-  try {
-    var vPromise = api('GET', '/api/videos/for-topic?limit=6').catch(function() { return []; });
-    var pPromise = api('GET', '/api/podcasts/for-topic?limit=6').catch(function() { return []; });
-    var res = await Promise.all([vPromise, pPromise]);
-    var videos = Array.isArray(res[0]) ? res[0] : [];
-    var podcasts = Array.isArray(res[1]) ? res[1] : [];
-
-    var items = [];
-    videos.forEach(function(v) {
-      items.push({
-        type: 'video',
-        title: v['title_' + appLang] || v.title_no || v.title || '',
-        dur: _fmtDur(v.duration_seconds || 0),
-        thumb: v.thumbnail_url || '',
-        srcKey: v.youtube_url || v.file_path || '',
-        item: v
-      });
-    });
-    podcasts.forEach(function(p) {
-      items.push({
-        type: 'podcast',
-        title: p['title_' + appLang] || p.title_no || p.title || '',
-        dur: _fmtDur(p.duration_seconds || 0),
-        thumb: '',
-        srcKey: p.audio_url || p.file_path || '',
-        item: p
-      });
-    });
-
-    if (!items.length) {
-      track.innerHTML = '<div style="color:#94A3B8; font-size:.85rem; padding:12px 6px;">' + escH(t('empty_no_content')) + '</div>';
-      return;
-    }
-
-    track.innerHTML = items.map(function(it) {
-      var badgeCls = it.type === 'podcast' ? 'home-carousel-badge podcast' : 'home-carousel-badge';
-      var badgeText = it.type === 'podcast' ? '🎙️ PODCAST' : '🎬 VIDEO';
-      var thumbStyle = it.thumb ? ' style="background-image:url(' + escH(it.thumb) + ');"' : '';
-      var playIcon = it.type === 'podcast' ? '🎙️' : '▶';
-      var clickAction = it.type === 'video' 
-        ? "openVideoPlayer('" + escH(it.srcKey) + "')" 
-        : "showTab('library')";
-
-      return '<div class="home-carousel-card" onclick="' + clickAction + '">'
-        + '<div class="home-carousel-thumb"' + thumbStyle + '>'
-          + '<span class="' + badgeCls + '">' + badgeText + '</span>'
-          + '<div class="home-carousel-thumb-play"><span>' + playIcon + '</span></div>'
-        + '</div>'
-        + '<div class="home-carousel-body">'
-          + '<h4 class="home-carousel-card-title">' + escH(it.title) + '</h4>'
-          + (it.dur ? '<span class="home-carousel-card-dur">' + escH(it.dur) + '</span>' : '')
-        + '</div>'
-      + '</div>';
-    }).join('');
-
-  } catch(e) {
-    console.warn('Failed to render home carousel:', e);
-  }
+function _getMediaLangBadge(item) {
+  if (!item) return '';
+  var lang = (item.language || item.lang || '').toLowerCase();
+  if (lang === 'th') return '<span class="media-lang-badge">🇹🇭 TH</span>';
+  if (lang === 'no') return '<span class="media-lang-badge">🇳🇴 NO</span>';
+  if (lang === 'en') return '<span class="media-lang-badge">🇬🇧 EN</span>';
+  return '';
 }
+
+
 
 // ════════════════════════════════════════════
 //  CATEGORIES
@@ -6871,24 +7046,23 @@ function renderPremiumBanner() {
 // Betalingsmuren skal forklare hvorfor den dukket opp når gratisuken er brukt opp.
 // ── Lanseringskampanje ────────────────────────────────────────────────────
 // Leses fra accessState.promo, som serveren setter ved hver forespørsel.
-// Skrus FREE_PROMO_MODE av, forsvinner banneret og prisene er tilbake ved
-// neste kall — uten deploy og uten kodeendring her.
+// Skrus FREE_PROMO_MODE av, er prisene tilbake ved neste kall — uten deploy.
 function promoActive() {
   return !!(accessState && accessState.promo && accessState.promo.active);
 }
 
 function renderPromoState() {
-  var on       = promoActive();
-  var banner   = document.getElementById('promoBanner');
-  var prices   = document.getElementById('paywallPriceRow');
-  var buyBtn   = document.getElementById('paywallBuyBtn');
+  var on = promoActive();
+  var banner = document.getElementById('promoBanner');
+  var prices = document.getElementById('paywallPriceRow');
+  var buyBtn = document.getElementById('paywallBuyBtn');
   var promoBtn = document.getElementById('promoSignupBtn');
   var loggedIn = !!(user && user.email);
 
   if (banner) banner.style.display = on ? 'block' : 'none';
   if (prices) prices.style.display = on ? 'none'  : '';
   if (buyBtn) buyBtn.style.display = on ? 'none'  : '';
-  // Innlogget bruker har allerede tilgang under kampanjen — ingenting å be om.
+  // Innlogget bruker har allerede tilgang under kampanjen.
   if (promoBtn) promoBtn.style.display = (on && !loggedIn) ? '' : 'none';
 
   var title = document.querySelector('#screenPaywall .paywall-title');
@@ -6904,9 +7078,7 @@ function renderPromoState() {
   if (sub && on) {
     sub.textContent = loggedIn ? t('promo_active') : '';
     sub.style.display = loggedIn ? '' : 'none';
-  } else if (sub) {
-    sub.style.display = '';
-  }
+  } else if (sub) { sub.style.display = ''; }
 }
 
 function promoSignup() {
@@ -8193,7 +8365,7 @@ function _fmtDur(secs) {
 
 function buildVideoCard(v) {
   if (!v) return '';
-  var title = escH(v['title_' + appLang] || '');
+  var title = escH(v['title_' + appLang] || v.title_no || v.title_th || v.title_en || '');
   if (!title) return '';
   var dur = _fmtDur(v.duration_seconds);
 
@@ -8206,7 +8378,7 @@ function buildVideoCard(v) {
   var thumbStyle = thumb ? ' style="background-image:url(' + escH(thumb) + ')"' : '';
 
   return '<div class="vid-card vid-card-local" onclick="openVideoPlayer(\'' + escH(srcKey) + '\')">'
-    + '<div class="vid-card-thumb"' + thumbStyle + '>'
+    + '<div class="vid-card-thumb"' + thumbStyle + '>' + _getMediaLangBadge(v)
       + '<div class="vid-card-play"><span>▶</span></div>'
     + '</div>'
     + '<div class="vid-info">'
@@ -8460,9 +8632,16 @@ function updateAiPanel(isOk, expl) {
     });
   }
 
-  // Michael is an enhancement, never a gate. The ordinary explanation and
-  // Next button are already available before this asynchronous call starts.
-  if (!isOk) openMichaelQuizCoach();
+  // Michael is an opt-in enhancement: never auto-pop, user taps button on demand
+  if (!isOk) {
+    var askBtnHtml = '<div class="quiz-coach-btn-wrap" style="margin-top:10px;margin-bottom:6px;">'
+      + '<button type="button" class="quiz-coach-trigger-btn" onclick="openMichaelQuizCoach()">'
+      + '<span style="font-size:18px;">🤖</span> <span data-key="quiz_ask_michael_expl">' + escH(t('quiz_ask_michael_expl')) + '</span>'
+      + '</button>'
+      + '</div>';
+    if (body) body.insertAdjacentHTML('beforeend', askBtnHtml);
+    if (mobile) mobile.insertAdjacentHTML('beforeend', askBtnHtml);
+  }
 
   // Mobile question image tint
   var imgWrap = document.getElementById('qImgWrap');
@@ -9044,13 +9223,12 @@ function retryQuiz() {
 // sammen med lyd-globalene lenger oppe — ikke dupliser dem her. Funksjonsdeklarasjoner
 // heises, så en kopi lenger ned i filen ville stille overskrevet originalen.
 
-// Én felles feilhåndtering for all TTS-avspilling. Uten dette feiler lyden
-// stille: brukeren ser bare at ingenting skjer, og vi får aldri vite hvorfor.
+// Én felles feilhåndtering for all TTS-avspilling. Uten dette feiler lyden stille:
+// brukeren ser bare at ingenting skjer, og vi får aldri vite hvorfor.
 function _ttsPlaybackFailed(err, el) {
   var name = (err && err.name) || 'Error';
   console.error('TTS-avspilling feilet:', name, err);
-  // AbortError betyr at src ble byttet mens play() pågikk — forventet når
-  // brukeren trykker på en ny boble, og ikke noe å skremme med.
+  // AbortError er forventet når brukeren trykker på en ny boble. Ikke skrem.
   if (name === 'AbortError') return;
   if (name === 'NotAllowedError') { toast(t('tts_tap_first'), 5000); return; }
   var code = el && el.error ? (' (kode ' + el.error.code + ')') : '';
@@ -9067,18 +9245,30 @@ function speakQ() {
     stopAllSpeech();
     return;
   }
-  _ensureBackendAudio();
-  _unlockAudioPlayback(_backendAudio);
-  _backendAudio.src = ttsStreamUrl(text, appLang);
-  _backendAudio.playbackRate = ttsRate || 1.0;
-  _backendAudio.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
+  var audio = _ensureBackendAudio();
+  audio.src = ttsStreamUrl(text, appLang);
+  audio.playbackRate = ttsRate || 1.0;
+  audio.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
   ttsPlaying = true;
   updateTtsBtn(true);
-  _backendAudio.play().catch(function(err) {
-     ttsPlaying = false;
-     updateTtsBtn(false);
-     _ttsPlaybackFailed(err, _backendAudio);
-  });
+
+  try { audio.load(); } catch (e) {}
+  var playPromise = audio.play();
+  if (playPromise !== undefined) {
+    playPromise.catch(function(err) {
+      _ttsPlaybackFailed(err, audio);
+      ttsPlaying = false;
+      updateTtsBtn(false);
+    });
+  }
+
+  if (window._ttsWatchdog) clearTimeout(window._ttsWatchdog);
+  window._ttsWatchdog = setTimeout(function() {
+    if (ttsPlaying && audio && audio.paused) {
+      console.warn('TTS playback timed out');
+      stopAllSpeech();
+    }
+  }, 5000);
 }
 function updateTtsBtn(playing) {
   var btn = document.getElementById('qTtsBtn');
@@ -9122,31 +9312,41 @@ function speakText(text) {
   if (_teacherTtsPlaying || (_teacherAudio && !_teacherAudio.paused)) {
     stopAllSpeech();
   }
-  _ensureTeacherAudio();
-  _unlockAudioPlayback(_teacherAudio);
+  var audio = _ensureTeacherAudio();
   var playToken = ++_teacherAudioToken;
   _teacherActiveText = clean;
-  _teacherAudio.src = ttsStreamUrl(clean, appLang);
-  _teacherAudio.playbackRate = ttsRate || 1.0;
-  _teacherAudio.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
+  audio.src = ttsStreamUrl(clean, appLang);
+  audio.playbackRate = ttsRate || 1.0;
+  audio.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
   _teacherTtsPlaying = true;
-  _teacherAudio.play().catch(function(err) {
-     // Token-vakten er Antis: en forsinket feil fra en avlyst avspilling skal
-     // ikke nullstille tilstanden til den som spiller nå.
-     if (playToken === _teacherAudioToken) {
-       _teacherTtsPlaying = false;
-       _teacherActiveText = '';
-       _ttsPlaybackFailed(err, _teacherAudio);
-     }
-  });
+
+  try { audio.load(); } catch (e) {}
+  var playPromise = audio.play();
+  if (playPromise !== undefined) {
+    playPromise.catch(function(err) {
+      _ttsPlaybackFailed(err, audio);
+      if (playToken === _teacherAudioToken) {
+        _teacherTtsPlaying = false;
+        _teacherActiveText = '';
+      }
+    });
+  }
+
+  if (window._teacherWatchdogTimer) clearTimeout(window._teacherWatchdogTimer);
+  window._teacherWatchdogTimer = setTimeout(function() {
+    if (_teacherTtsPlaying && audio && audio.paused && playToken === _teacherAudioToken) {
+      console.warn('Teacher TTS playback timed out');
+      stopAllSpeech();
+    }
+  }, 5000);
 }
 
 function buildPodcastCard(p) {
   if (!p) return '';
   var title = escH(
-    appLang === 'th' ? (p.title_th || '') :
-    appLang === 'en' ? (p.title_en || '') :
-    (p.title_no || '')
+    appLang === 'th' ? (p.title_th || p.title_no || p.title_en || '') :
+    appLang === 'en' ? (p.title_en || p.title_no || p.title_th || '') :
+    (p.title_no || p.title_th || p.title_en || '')
   );
   if (!title) return '';
   var rawUrl = p.file_path || p.audio_url || '';
@@ -9158,9 +9358,13 @@ function buildPodcastCard(p) {
   if (!url) return '';
   var dur = _fmtDur(p.duration_seconds);
 
+  var langBadge = _getMediaLangBadge(p);
   return '<div class="podcast-card">'
     + '<div class="podcast-info">'
-      + '<div class="podcast-lbl">' + escH(t('podcast_short')) + '</div>'
+      + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">'
+        + '<div class="podcast-lbl">' + escH(t('podcast_short')) + '</div>'
+        + langBadge
+      + '</div>'
       + '<div class="podcast-title">' + title + '</div>'
       + (dur ? '<div class="podcast-dur">' + dur + '</div>' : '')
     + '</div>'
@@ -9742,7 +9946,10 @@ async function loadTeacher() {
     if (msgs) {
       msgs.innerHTML = '';
       try {
-        var wRes = await fetch('/api/teacher/welcome?lang=' + appLang);
+        var wUrl = '/api/teacher/welcome?lang=' + encodeURIComponent(appLang);
+        if (typeof deviceId !== 'undefined' && deviceId) wUrl += '&device_id=' + encodeURIComponent(deviceId);
+        if (typeof user !== 'undefined' && user && user.id) wUrl += '&user_id=' + encodeURIComponent(user.id);
+        var wRes = await fetch(wUrl);
         var wData = await wRes.json();
         _teacherAppendBubble('assistant', wData.welcome || '');
       } catch(e) {
@@ -9853,6 +10060,7 @@ function _teacherAppendBubble(role, text) {
     var av = document.createElement('img');
     av.className = 'tm-av';
     av.src = '/api/assets/michael_profile.jpg';
+    av.onerror = function() { this.onerror = null; this.src = '/api/assets/michael_avatar.png'; };
     av.alt = 'Michael';
     row.appendChild(av);
   }
@@ -10139,6 +10347,11 @@ function _buildTeacherMediaCard(media) {
   image.src = media.url;
   image.alt = media.title;
   image.loading = 'lazy';
+  image.style.cursor = 'zoom-in';
+  image.onclick = function(e) {
+    e.stopPropagation();
+    openLightbox(media.url, media.title + (media.caption ? ' — ' + media.caption : ''));
+  };
   image.onerror = function() {
     if (media.type === 'sign') card.hidden = true;
     else visual.hidden = true;
@@ -10223,6 +10436,11 @@ function _buildTeacherSignCard(sign) {
   image.src = sign.image_url || sign.file || '';
   image.alt = _teacherSignValue(sign, 'name');
   image.loading = 'lazy';
+  image.style.cursor = 'zoom-in';
+  image.onclick = function(e) {
+    e.stopPropagation();
+    openLightbox(sign.image_url || sign.file || '', _teacherSignValue(sign, 'name'));
+  };
   image.onerror = function() { imageWrap.hidden = true; };
   imageWrap.appendChild(image);
   card.appendChild(imageWrap);
@@ -10248,6 +10466,31 @@ function _buildTeacherSignCard(sign) {
   return card;
 }
 
+function _buildNorwegianTermToggle(sign) {
+  if (appLang !== 'th') return null;
+  var norwegianTerm = _getProp((sign && sign.name) || {}, 'no') || '';
+  if (!norwegianTerm) return null;
+  var row = document.createElement('div');
+  row.className = 'tm-no-term';
+  var button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'tm-no-term-btn';
+  button.textContent = t('teacher_show_norwegian_term');
+  button.setAttribute('aria-expanded', 'false');
+  var value = document.createElement('span');
+  value.className = 'tm-no-term-value';
+  value.textContent = norwegianTerm;
+  value.setAttribute('aria-hidden', 'true');
+  button.onclick = function() {
+    var revealed = row.classList.toggle('revealed');
+    button.setAttribute('aria-expanded', revealed ? 'true' : 'false');
+    value.setAttribute('aria-hidden', revealed ? 'false' : 'true');
+  };
+  row.appendChild(button);
+  row.appendChild(value);
+  return row;
+}
+
 async function _teacherAppendSignCards(signIds, bubble) {
   if (!bubble || !Array.isArray(signIds) || !signIds.length) return;
   var uniqueIds = signIds.filter(function(id, index, items) { return id && items.indexOf(id) === index; }).slice(0, 4);
@@ -10260,7 +10503,11 @@ async function _teacherAppendSignCards(signIds, bubble) {
   if (!signs.length) return;
   var strip = document.createElement('div');
   strip.className = 'tm-sign-strip';
-  signs.forEach(function(sign) { strip.appendChild(_buildTeacherSignCard(sign)); });
+  signs.forEach(function(sign) {
+    strip.appendChild(_buildTeacherSignCard(sign));
+    var norwegianTerm = _buildNorwegianTermToggle(sign);
+    if (norwegianTerm) strip.appendChild(norwegianTerm);
+  });
   bubble.appendChild(strip);
 }
 
@@ -10425,7 +10672,13 @@ async function teacherSend(overrideMsg, customDisplayMsg) {
     var res = await fetch('/api/teacher/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ session_id: activeSessionId, message: payloadMsg, language: appLang })
+      body: JSON.stringify({
+        session_id: activeSessionId,
+        message: payloadMsg,
+        language: appLang,
+        device_id: (typeof deviceId !== 'undefined' ? deviceId : null),
+        user_id: (typeof user !== 'undefined' && user && user.id ? user.id : null)
+      })
     });
     if (!res.ok) throw new Error('HTTP ' + res.status);
     var data = await res.json();
@@ -10912,12 +11165,15 @@ function speakSign() {
   if (!text) return;
 
   stopAllSpeech();
-  _ensureBackendAudio();
-  _unlockAudioPlayback(_backendAudio);
-  _backendAudio.src = ttsStreamUrl(text, lang);
-  _backendAudio.playbackRate = ttsRate || 1.0;
-  _backendAudio.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
-  _backendAudio.play().catch(function(err){ _ttsPlaybackFailed(err, _backendAudio); });
+  var audio = _ensureBackendAudio();
+  audio.src = ttsStreamUrl(text, lang);
+  audio.playbackRate = ttsRate || 1.0;
+  audio.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
+  try { audio.load(); } catch (e) {}
+  var playPromise = audio.play();
+  if (playPromise !== undefined) {
+    playPromise.catch(function(err){ _ttsPlaybackFailed(err, audio); });
+  }
 }
 
 function toggleSignFavorite() {
@@ -10999,12 +11255,62 @@ function speakSignAiText() {
   var text = window._spAiText.trim();
   if (!text) return;
   stopAllSpeech();
-  _ensureTeacherAudio();
-  _unlockAudioPlayback(_teacherAudio);
-  _teacherAudio.src = ttsStreamUrl(text, window._spAiLang || appLang);
-  _teacherAudio.playbackRate = ttsRate || 1.0;
-  _teacherAudio.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
-  _teacherAudio.play().catch(function(err){ _ttsPlaybackFailed(err, _teacherAudio); });
+  var audio = _ensureTeacherAudio();
+  audio.src = ttsStreamUrl(text, window._spAiLang || appLang);
+  audio.playbackRate = ttsRate || 1.0;
+  audio.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
+  try { audio.load(); } catch (e) {}
+  var playPromise = audio.play();
+  if (playPromise !== undefined) {
+    playPromise.catch(function(err){ _ttsPlaybackFailed(err, audio); });
+  }
+}
+
+// ════════════════════════════════════════════
+//  SERVICE WORKER REGISTRATION (Offline mode)
+// ════════════════════════════════════════════
+if ('serviceWorker' in navigator) {
+  var refreshing = false;
+  navigator.serviceWorker.addEventListener('controllerchange', function() {
+    if (!refreshing) {
+      refreshing = true;
+      console.log('Ny Service Worker aktivert (controllerchange), reloader...');
+      window.location.reload();
+    }
+  });
+
+  function setupSwUpdate(reg) {
+    if (!reg) return;
+    reg.addEventListener('updatefound', function() {
+      var newWorker = reg.installing;
+      if (!newWorker) return;
+      newWorker.addEventListener('statechange', function() {
+        if (newWorker.state === 'activated' && navigator.serviceWorker.controller) {
+          console.log('Ny versjon aktivert, reloader...');
+          if (!refreshing) {
+            refreshing = true;
+            window.location.reload();
+          }
+        }
+      });
+    });
+  }
+
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(function(reg) {
+        setupSwUpdate(reg);
+      })
+      .catch(function() {
+        navigator.serviceWorker.register('/api/service-worker.js')
+          .then(function(reg) {
+            setupSwUpdate(reg);
+          })
+          .catch(function(err) {
+            console.log('SW registration skipped:', err);
+          });
+      });
+  });
 }
 
 </script>

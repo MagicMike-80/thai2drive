@@ -21,9 +21,13 @@ from pydantic import BaseModel, Field
 from motor.motor_asyncio import AsyncIOMotorClient
 from dotenv import load_dotenv
 try:
-    from media_catalog import SUPPORTED_LANGUAGES, rank_catalog_media
+    from media_catalog import SUPPORTED_LANGUAGES, expand_law_synonyms, rank_catalog_media
 except ImportError:  # package-style imports used by isolated tests
-    from backend.media_catalog import SUPPORTED_LANGUAGES, rank_catalog_media
+    from backend.media_catalog import (
+        SUPPORTED_LANGUAGES,
+        expand_law_synonyms,
+        rank_catalog_media,
+    )
 
 load_dotenv()
 
@@ -203,31 +207,48 @@ async def _completion_with_fallback(messages: List[dict]):
 # Critical language header — injected FIRST so the model reads it before any examples
 _LANG_CRITICAL = {
     "no": "[LANGUAGE: no]\nCRITICAL: Reply in Bokmål Norwegian ONLY. Every single word must be Norwegian. No Thai, no English.\n\n",
-    "th": "[ภาษา: th]\nสำคัญมาก: ตอบเป็นภาษาไทยเท่านั้น ทุกคำต้องเป็นภาษาไทย ห้ามใช้ภาษานอร์เวย์หรือภาษาอังกฤษเลย\n\n",
+    "th": (
+        "[ภาษา: th]\n"
+        "สำคัญมาก: ตอบเป็นภาษาไทยเท่านั้น ทุกคำต้องเป็นภาษาไทย ห้ามใช้ภาษานอร์เวย์หรือภาษาอังกฤษเลย\n"
+        "กฎการใช้คำสุภาพและสรรพนาม (เข้มงวด 100%):\n"
+        "- ใช้สรรพนามแทนตัวเองว่า 'ผม' (phom) เท่านั้น\n"
+        "- ใช้คำลงท้ายสุภาพเพศชายว่า 'ครับ' (khrap) เท่านั้น\n"
+        "- ห้ามใช้คำลงท้ายเพศหญิง เช่น 'ค่ะ' หรือ 'นะคะ' โดยเด็ดขาด!\n\n"
+    ),
     "en": "[LANGUAGE: en]\nCRITICAL: Reply in English ONLY. Every single word must be English. No Norwegian, no Thai.\n\n",
 }
 
 _SECTION_7_2_PROMPT = {
     "no": (
-        "TRAFIKKREGLENE § 7 NR. 2 — ABSOLUTT FASIT:\n"
-        'Hele ordlyden er: "Kjørende har vikeplikt for kjøretøy som kommer fra høyre. '
-        'Det samme gjelder når kjørende som vil svinge til venstre, vil få kjøretøy '
-        'på sin høyre side." Begge setningene er obligatoriske når eleven spør om '
-        "§ 7 nr. 2 eller venstresving. Du må ALDRI sløyfe andre setning eller si at "
-        "denne venstresving-situasjonen ikke er høyreregelen.\n\n"
+        "TRAFIKKREGLENE § 7 NR. 2 — ABSOLUTT JURIDISK FASIT FOR MØTENDE TRAFIKK OG VENSTRESVING:\n"
+        'Hele ordlyden i Trafikkreglene § 7 nr. 2 er: "Kjørende har vikeplikt for kjøretøy som kommer fra høyre. '
+        'Det samme gjelder når kjørende som vil svinge til venstre, vil få kjøretøy på sin høyre side."\n'
+        "KRITISK PEDAGOGISK REGEL:\n"
+        "Når en sjåfør skal svinge til venstre i et kryss eller vei, vil den møtende bilen havne på sjåførens høyre side. "
+        "Dette betyr at den som svinger til venstre har UBETINGET VIKEPLIKT for møtende trafikk etter høyreregelen (§ 7 nr. 2)!\n"
+        "FORBUDT FEIL: Du må ALDRI si at høyreregelen ikke gjelder for møtende trafikk som skal krysse din vei. "
+        "Du må ALDRI si at møtende trafikk har vikeplikt for deg når du svinger til venstre.\n"
+        "Forklar det alltid pedagogisk slik:\n"
+        "«Når du skal svinge til venstre, vil den møtende bilen havne på din høyre side. "
+        "Det betyr at du har vikeplikt etter høyreregelen (§ 7 nr. 2). Du er tjeneren, og den møtende bilen er kongen – du må la kongen kjøre først!»\n\n"
     ),
     "th": (
-        "กฎจราจรนอร์เวย์ § 7 ข้อ 2 — ข้อเท็จจริงที่ต้องยึดถือ:\n"
-        "กฎการให้ทางจากขวาใช้ทั้งเมื่อมีรถมาจากทางขวา และเมื่อคุณเลี้ยวซ้าย "
-        "ซึ่งทำให้รถที่สวนมาอยู่ทางขวามือของคุณ ทั้งสองกรณีเป็นกฎเดียวกันตาม § 7 ข้อ 2 "
-        "ห้ามบอกว่าสถานการณ์เลี้ยวซ้ายนี้ไม่ใช่กฎการให้ทางจากขวาเด็ดขาด\n\n"
+        "กฎจราจรนอร์เวย์ § 7 ข้อ 2 — ข้อเท็จจริงที่ต้องยึดถือสำหรับรถสวนทางและการเลี้ยวซ้าย:\n"
+        "กฎจราจร § 7 ข้อ 2 ระบุว่า: กฎการให้ทางจากขวาใช้ทั้งเมื่อมีรถมาจากทางขวา และเมื่อคุณเลี้ยวซ้าย "
+        "ซึ่งทำให้รถที่สวนมาอยู่ทางขวามือของคุณ ทั้งสองกรณีเป็นกฎเดียวกันตาม § 7 ข้อ 2\n"
+        "ข้อห้ามเด็ดขาด: ห้ามบอกว่ากฎการให้ทางจากขวาไม่ใช้กับรถสวนทาง หรือรถสวนทางต้องให้ทางเราตอนเราเลี้ยวซ้ายเด็ดขาด!\n"
+        "ให้อธิบายอย่างเข้าใจง่ายเสมอว่า:\n"
+        "«เมื่อคุณจะเลี้ยวซ้าย รถที่สวนทางมาจะอยู่ทางขวามือของคุณ นั่นหมายความว่าคุณมีหน้าที่ต้องให้ทางตามกฎการให้ทางจากขวา (§ 7 ข้อ 2) "
+        "คุณคือคนรับใช้ และรถที่สวนมาคือพระราชา – คุณต้องให้พระราชาไปก่อนเสมอครับผม!»\n\n"
     ),
     "en": (
-        "NORWEGIAN TRAFFIC RULES SECTION 7(2) — ABSOLUTE FACT:\n"
-        "The right-hand rule applies both to vehicles coming from the right and when "
-        "you turn left and the oncoming vehicle is then on your right-hand side. "
-        "Both are the same rule under section 7(2). NEVER claim that this left-turn "
-        "situation is not the right-hand rule.\n\n"
+        "NORWEGIAN TRAFFIC RULES SECTION 7(2) — ABSOLUTE FACT FOR ONCOMING TRAFFIC & LEFT TURNS:\n"
+        "Section 7(2) states: The right-hand rule applies both to vehicles from the right and when turning left "
+        "where oncoming traffic will be on your right-hand side. The left-turning vehicle MUST ALWAYS yield to oncoming traffic.\n"
+        "NEVER claim that the right-hand rule does not apply to oncoming traffic during left turns.\n"
+        "Always explain it pedagogically:\n"
+        "“When you are turning left, the oncoming car will be on your right-hand side. "
+        "This means you have right-of-way duty under the right-hand rule (§ 7 no. 2). You are the servant, and the oncoming car is the king – you must let the king drive first!”\n\n"
     ),
 }
 
@@ -247,7 +268,7 @@ Deretter bruker hjernen din litt tid på å reagere.
 Først etter det begynner bilen å bremse.
 
 Det er tre faser — og til sammen kalles det stoppelengde."''',
-    "th": '''"โอเครับ 😊
+    "th": '''"โอเคครับ 😊
 
 ลองนึกภาพว่าคุณขับรถด้วยความเร็ว 50 กม./ชม.
 แล้วมีเด็กวิ่งตัดหน้ารถออกมา
@@ -312,23 +333,32 @@ NEVER mix languages. Use ONLY English in your reply.""",
 }
 
 # Core prompt template — <<GOOD_EXAMPLE>> and <<COACHING>> are replaced at build time
-_PROMPT_CORE = """You are Michael, a driving instructor with 16 years of experience in Oslo, Norway.
+_PROMPT_CORE = """You are Michael, a patient and calm driving instructor with 16 years of experience in Oslo, Norway.
 
 KRITISK MEDIEREGEL:
 - Du skal ALDRI si at du er en tekstbasert AI eller at du ikke kan vise video/lyd. Appen vår har en innebygd videospiller som fanger opp taggene dine. Du HAR evnen til å vise videoer. Hvis du ikke finner en video-URL i den usynlige konteksten din for det brukeren spør om, skal du IKKE skylde på at du er tekstbasert. Si heller: 'Jeg har dessverre ikke en video av akkurat denne situasjonen for hånden akkurat nå, men la meg tegne et bilde for deg i hodet ditt...'
 
-Your teaching style:
-- Calm, patient, encouraging — like a trusted driving instructor sitting in the passenger seat.
-- You never judge. You say "La oss se på dette sammen" not "Du tok feil."
-- You ask ONE clarifying question before giving a long explanation, when the topic is broad.
-- You guide the conversation step by step, like a real instructor during a driving lesson.
+MICHAELS KOGNITIVE BESLUTNINGSLØKKE:
+Følg alltid denne 3-trinns modellen:
+1. STEG 1: SE (Spør og lytt!)
+   Når eleven starter en samtale eller stiller et bredt spørsmål om et tema (som vikeplikt, rundkjøringer, skilt eller bremsing), har du STRENGT FORBUD mot å gi forklaringen eller sitere paragrafer med en gang.
+   Stopp opp og still KUN ETT enkelt, målrettet, oppklarende spørsmål med alternativer for å se hvor eleven står.
+2. STEG 2: OPPFATTE (Analyser elevens svar)
+   Når eleven svarer, oppfatt om hodebryet skyldes språkbarrierer eller ren kjørepedagogikk.
+3. STEG 3: AVGJØRE (Svar med 5-stegs-pedagogikken)
+   Oversett stive regler til visuelle situasjoner og ryggmarksreflekser i denne rekkefølgen:
+   🚗 Situasjon: Plasser eleven bak rattet først ("Se for deg at du nærmer deg et kryss..."). ALDRI innled med juss eller paragrafer!
+   💡 Forklaring (med godkjente metaforer):
+      - For vikeplikt (høyreregelen, vikepliktskilt, vikeplikt ved venstresving): Bruk alltid «Kongen og tjeneren» ("Har du vikeplikt, er du tjeneren. Tjeneren skal ALDRI få kongen til å bremse eller tvile!").
+      - For Vegtrafikkloven § 3: Bruk alltid «HAV-regelen» ("H = Hensynsfull, A = Aktpågivende, V = Varsom. Husker du HAV-regelen, husker du hele kjernen i trafikkreglene!").
+   🔧 Praktisk råd: Konkret handling i trafikken ("Senk farten i god tid, vis med bilens kroppsspråk at du viker.").
+   📖 Teori (KUN TIL SLUTT): Først nå, etter at forståelsen er bygget, kobler du på lovverket som bekreftelse ("Dette kalles høyreregelen i trafikkreglene § 7.").
+   ❓ Oppfølgingsspørsmål: Avslutt med ett kort relevant spørsmål for å holde eleven engasjert.
 
-TEACHING ORDER (for non-calculation topics) — always follow this sequence:
-1. 🚗 Situasjon: Start with a real traffic situation (paint the picture first). Never start with a textbook definition.
-2. 💡 Forklaring: Explain what actually happens / what the rule means. Use short sentences and simple, practical words.
-3. ⚠️ Vanlig feil: Clearly state a common mistake that students make in this situation.
-4. 📝 Teoriprøve-vinkel: Highlight what the official theory exam tests or asks about on this topic.
-5. ❓ Oppfølgingsspørsmål: End the explanation with exactly ONE short relevant question to keep the student engaged.
+ABSOLUTTE FORBUD:
+1. Ingen juridisk døråpner: Svaret skal ALDRI starte med tørre paragrafer, lovreferanser eller formelle juridiske definisjoner.
+2. Språkrenhet og kjønn: På Thai skal du KONSEKVENT bruke den høflige mannlige formen ครับ (khrap) og ผม (phom). Kvinnelige partikler (ค่ะ / นะคะ) er TOTALT FORBUDT.
+3. Ingen falsk AI-skryt: Ikke si "Det har du helt rett i!" eller overøs eleven med falsk ros hvis de svarer feil. Vær en rolig, ærlig og tålmodig veileder.
 
 BAD (textbook style — do not do this):
 "Stoppelengde er summen av reaksjonsstrekning og bremsestrekning."
@@ -341,11 +371,11 @@ GOOD (instructor style — do this):
 FORMATTING RULES — follow these exactly:
 - Keep paragraphs short: 1–3 sentences maximum per paragraph.
 - Separate each paragraph with a blank line.
-- Always use these exact emoji headers on their own line to structure your lessons (must be written in Norwegian):
+- When explaining, you may structure with emoji labels:
   🚗 Situasjon:
   💡 Forklaring:
-  ⚠️ Vanlig feil:
-  📝 Teoriprøve-vinkel:
+  🔧 Praktisk råd:
+  📖 Teori:
   ❓ [A short relevant follow-up question here]
 - Never write more than 5 lines of continuous text without a paragraph break.
 
@@ -355,30 +385,30 @@ do NOT give a full lesson immediately. Instead, ask ONE short clarifying questio
 
 Example structure — reply entirely in the DECLARED language:
 - NO: "Selvfølgelig 😊\n\nHvilken situasjon gjelder det?\n\n🚗 Høyreregelen\n🛑 Vikepliktskilt\n🔴 Stoppskilt\n⭕ Rundkjøring\n🚶 Gangfelt"
-- TH: "แน่นอนครับ 😊\n\nคุณหมายถึงสถานการณ์ไหน?\n\n🚗 กฎการให้ทางจากขวา\n🛑 ป้ายให้ทาง\n🔴 ป้ายหยุด\n⭕ วงเวียน\n🚶 ทางข้าม"
-- EN: "Of course 😊\n\nWhich situation do you mean?\n\n🚗 Right-of-way rule\n🛑 Give Way sign\n🔴 Stop sign\n⭕ Roundabout\n🚶 Pedestrian crossing"
+- TH: "แน่นอนครับ 😊\n\nคุณอยากเน้นเรื่องไหนเป็นพิเศษครับ?\n\n🚗 กฎการให้ทางจากขวา (høyreregelen)\n🛑 ป้ายให้ทาง (vikepliktskilt)\n🔴 ป้ายหยุด (stoppskilt)\n⭕ วงเวียน (rundkjøring)\n🚶 ทางข้ามคนเดิน (gangfelt)"
+- EN: "Of course 😊\n\nWhich situation would you like to focus on?\n\n🚗 Right-hand rule (høyreregelen)\n🛑 Give Way sign (vikepliktskilt)\n🔴 Stop sign (stoppskilt)\n⭕ Roundabout (rundkjøring)\n🚶 Pedestrian crossing (gangfelt)"
 
 MAXIMUM 1 CLARIFICATION RULE (critical):
 You may ask a clarifying question ONCE per topic.
-As soon as the student gives ANY answer — even a short one, even a chip selection — you MUST start teaching.
+As soon as the student gives ANY answer — even a short one, even a chip selection — you MUST start teaching using the 5-step pedagogy.
 Do NOT ask another broad clarifying question after the student has already answered once.
 Do NOT chain questions: Question → Question → Question is forbidden.
 
 The only correct flow is:
 1. Broad question from student → You ask ONE clarifying question
-2. Student answers (anything) → You teach
+2. Student answers (anything) → You teach (Situasjon ➔ Forklaring ➔ Praktisk råd ➔ Teori)
 
 If you are unsure what the student means after their answer, make a reasonable assumption and teach.
 A partial answer is enough — start the lesson.
 
-When the question is already specific (e.g. "Hva betyr høyreregelen?"), answer directly. No clarification needed.
+When the question is already specific (e.g. "Hva betyr høyreregelen?"), answer directly using the 5-step pedagogy. No clarification needed.
 
 FOLLOW-UP QUESTION RULE (Phase 2):
-After every answer, end with ONE short follow-up question to help the student practise or go deeper.
+After every lesson, end with ONE short follow-up question to help the student practise or reflect.
 Examples:
 - "Vil du prøve en beregning? Si meg en fart 😊"
-- "Hva tror du skjer hvis du er 5 km/t for sen til å bremse?"
-- "Husker du hva de tre fasene i stoppelengde heter?"
+- "Hva tror du tjeneren må passe aller mest på her?"
+- "Husker du hva de tre bokstavene i HAV står for?"
 Keep it short — one line. Never skip this.
 
 TERMINOLOGY RULES:
@@ -1201,47 +1231,31 @@ def _is_right_hand_rule_query(user_msg: str) -> bool:
 
 
 def _is_section_7_2_left_turn_query(user_msg: str) -> bool:
-    """Match only the statutory left-turn/right-side scenario in § 7 no. 2."""
-    message = (user_msg or "").casefold()
-    right_hand_rule_terms = (
-        "høyreregelen",
-        "høyreregel",
-        "right-hand rule",
-        "right hand rule",
-        "กฎการให้ทางจากขวา",
-        "กฎมือขวา",
-    )
+    """Match queries about left-turn right-of-way, oncoming traffic, and Section 7(2)."""
+    raw = (user_msg or "").casefold()
+    message = raw.replace("i mot", "imot").replace("i-mot", "imot")
     left_turn_terms = (
-        "venstresving",
-        "svinger til venstre",
-        "svinge til venstre",
-        "turning left",
-        "turn left",
-        "left turn",
-        "เลี้ยวซ้าย",
+        "venstresving", "svinger til venstre", "svinge til venstre", "svinge venstre",
+        "svinger venstre", "sving venstre", "sving til venstre", "venstre",
+        "turning left", "turn left", "left turn", "เลี้ยวซ้าย",
     )
-    opposing_or_right_terms = (
-        "møtende",
-        "motgående",
-        "på min høyre side",
-        "på din høyre side",
-        "på høyre side",
-        "oncoming",
-        "opposing traffic",
-        "on my right",
-        "on your right",
-        "right-hand side",
-        "right side",
-        "รถสวนทาง",
-        "รถที่สวนมา",
-        "ด้านขวา",
-        "ทางขวามือ",
+    opposing_or_oncoming_terms = (
+        "møtende", "motgående", "møtande", "kjører imot", "kjører mot", "kjøre imot", "kjøre mot",
+        "koer imot", "koer mot", "koere imot", "koere mot",
+        "køyrer imot", "køyrer mot", "køyre imot", "køyre mot",
+        "kjem imot", "kommer imot", "kjem mot", "kommer mot",
+        "bil imot", "biler imot", "trafikk imot", "imot",
+        "krysse min vei", "krysse veien", "krysse mitt felt", "på min høyre side", "på din høyre side", "på høyre side",
+        "oncoming", "opposing traffic", "cross my path", "on my right", "on your right",
+        "right-hand side", "right side", "รถสวนทาง", "รถที่สวนมา", "ด้านขวา", "ทางขวามือ"
     )
-    return (
-        any(term in message for term in right_hand_rule_terms)
-        and any(term in message for term in left_turn_terms)
-        and any(term in message for term in opposing_or_right_terms)
-    )
+    is_left_opposing = any(t in message for t in left_turn_terms) and any(t in message for t in opposing_or_oncoming_terms)
+    is_direct_oncoming = any(t in message for t in (
+        "kjører imot", "kjøre imot", "koer imot", "koere imot", "køyrer imot", "køyre imot",
+        "kjem imot", "kommer imot", "bil imot", "biler imot", "møtende bil", "møtende trafikk",
+        "oncoming traffic", "รถสวนทาง"
+    ))
+    return is_left_opposing or is_direct_oncoming
 
 
 def _is_section_7_2_citation_query(user_msg: str) -> bool:
@@ -1265,11 +1279,52 @@ def _is_section_7_2_citation_query(user_msg: str) -> bool:
 
 
 def _apply_section_7_2_fail_safe(user_msg: str, reply_text: str, lang: str) -> str:
-    """Return a controlled legal answer for the precise § 7 no. 2 scenario."""
+    """Return a controlled, pedagogically and legally correct answer for the § 7 no. 2 left-turn scenario."""
     is_left_turn = _is_section_7_2_left_turn_query(user_msg)
-    if not is_left_turn and not _is_section_7_2_citation_query(user_msg):
+    is_citation = _is_section_7_2_citation_query(user_msg)
+
+    # Fang opp eventuelle farlige feilpåstander fra LLM-en
+    reply_lower = (reply_text or "").casefold()
+    has_dangerous_negation = (
+        "høyreregelen gjelder ikke for møtende" in reply_lower
+        or "gjelder ikke for møtende" in reply_lower
+        or "høyreregelen gjelder ikke når" in reply_lower
+        or "ikke vikeplikt for møtende" in reply_lower
+        or "møtende trafikk har vike" in reply_lower
+    )
+
+    if not is_left_turn and not is_citation and not has_dangerous_negation:
         return reply_text
-    replies = {
+
+    pedagogical_explanations = {
+        "no": (
+            "Når du skal svinge til venstre, vil den møtende bilen havne på din høyre side. "
+            "Det betyr at du har vikeplikt etter høyreregelen (§ 7 nr. 2). "
+            "Du er tjeneren, og den møtende bilen er kongen – du må la kongen kjøre først!\n\n"
+            "Trafikkreglene § 7 nr. 2 slår fast: «Kjørende har vikeplikt for kjøretøy som kommer fra høyre. "
+            "Det samme gjelder når kjørende som vil svinge til venstre, vil få kjøretøy på sin høyre side.»"
+        ),
+        "th": (
+            "เมื่อคุณจะเลี้ยวซ้าย รถที่สวนทางมาจะอยู่ทางขวามือของคุณครับ "
+            "นั่นหมายความว่าคุณมีหน้าที่ต้องให้ทางตามกฎการให้ทางจากขวา (§ 7 ข้อ 2) "
+            "คุณคือคนรับใช้ และรถที่สวนมาคือพระราชา – คุณต้องให้พระราชาไปก่อนเสมอครับผม!\n\n"
+            "กฎจราจรนอร์เวย์ § 7 ข้อ 2 ระบุว่า: «ผู้ขับขี่ต้องให้ทางแก่รถที่มาจากด้านขวา "
+            "กฎเดียวกันนี้ใช้เมื่อผู้ขับขี่ต้องการเลี้ยวซ้ายและจะมีรถอยู่ทางขวามือของตน»"
+        ),
+        "en": (
+            "When you are turning left, the oncoming car will be on your right-hand side. "
+            "This means you have right-of-way duty under the right-hand rule (§ 7 no. 2). "
+            "You are the servant, and the oncoming car is the king – you must let the king drive first!\n\n"
+            "Section 7(2) of the Norwegian traffic rules states: “A driver must yield to vehicles coming from the right. "
+            "The same applies when a driver who intends to turn left will have a vehicle on their right-hand side.”"
+        )
+    }
+
+    if is_left_turn or has_dangerous_negation:
+        return pedagogical_explanations.get(lang, pedagogical_explanations["no"])
+
+    # Ren sitatforespørsel
+    statute_replies = {
         "no": (
             "Trafikkreglene § 7 nr. 2 sier: «Kjørende har vikeplikt for kjøretøy som "
             "kommer fra høyre. Det samme gjelder når kjørende som vil svinge til "
@@ -1286,15 +1341,7 @@ def _apply_section_7_2_fail_safe(user_msg: str, reply_text: str, lang: str) -> s
             "intends to turn left will have a vehicle on their right-hand side.”"
         ),
     }
-    grounded = replies.get(lang, replies["no"])
-    if not is_left_turn:
-        return grounded
-    confirmations = {
-        "no": "Ja, dette er høyreregelen etter § 7 nr. 2. ",
-        "th": "ใช่ครับ นี่คือกฎการให้ทางจากขวาตาม § 7 ข้อ 2 ",
-        "en": "Yes, this is the right-hand rule under section 7(2). ",
-    }
-    return confirmations.get(lang, confirmations["no"]) + grounded
+    return statute_replies.get(lang, statute_replies["no"])
 
 
 def _strict_response_sign_ids(explicit_sign_ids: list[str], reply_sign_ids: list[str]) -> list[str]:
@@ -1325,6 +1372,7 @@ def _material_match_terms(user_msg: str, extra_context: str = "") -> set[str]:
         normalized_aliases = {_normalize_material_match_text(alias) for alias in aliases}
         if any(alias and alias in query for alias in normalized_aliases):
             terms.update(normalized_aliases)
+    terms.update(expand_law_synonyms(query))
     return terms
 
 
@@ -1495,9 +1543,10 @@ async def _get_relevant_catalog_media(
             "is_active": True,
             "content_language": {"$in": [language, "neutral"]},
         }).to_list(length=200)
+        law_tags = expand_law_synonyms(f"{user_msg} {extra_context}")
         return rank_catalog_media(
             documents,
-            f"{user_msg} {extra_context}",
+            f"{user_msg} {extra_context} {' '.join(law_tags)}",
             language,
             limit=1,
         )
@@ -1941,10 +1990,85 @@ async def _get_available_multimedia(lang: str) -> str:
 teacher_router = APIRouter()
 
 
+
+async def _get_student_weakness(device_id: Optional[str] = None, user_id: Optional[str] = None, lang: str = "no") -> Optional[dict]:
+    """Find the student's weakest topic from quiz attempts or mistake bank."""
+    match_conds = []
+    if user_id:
+        match_conds.append({"user_id": user_id})
+    if device_id:
+        match_conds.append({"device_id": device_id})
+    if not match_conds:
+        return None
+
+    match_filter = {"$or": match_conds} if len(match_conds) > 1 else match_conds[0]
+
+    topic_labels = {
+        "vikeplikt": {"no": "vikeplikt og høyreregelen", "th": "การให้ทางและกฎจากขวา", "en": "right-of-way rules"},
+        "planovergang": {"no": "planoverganger og jernbane", "th": "ทางข้ามทางรถไฟ", "en": "railway level crossings"},
+        "stoppelengde": {"no": "reaksjonstid og stoppelengde", "th": "ระยะตอบสนองและระยะหยุดรถ", "en": "stopping distance and reaction time"},
+        "fartsgrense": {"no": "fartsgrenser", "th": "ขีดจำกัดความเร็ว", "en": "speed limits"},
+        "skilt": {"no": "trafikkskilt", "th": "ป้ายจราจร", "en": "traffic signs"},
+        "rundkjoring": {"no": "kjøring i rundkjøring", "th": "การขับขี่ในวงเวียน", "en": "roundabouts"},
+        "morkekjoring": {"no": "mørkekjøring og lysbruk", "th": "การขับรถเวลากลางคืนและการใช้ไฟ", "en": "night driving and light usage"},
+        "hav": {"no": "grunnregelen for trafikk (§ 3 HAV)", "th": "กฎพื้นฐานจราจร (มาตรา 3 HAV)", "en": "basic traffic rule (§ 3 HAV)"},
+    }
+
+    try:
+        # Check failed attempts in quiz_attempts
+        pipeline = [
+            {"$match": {**match_filter, "correct": False}},
+            {"$group": {"_id": "$category", "fails": {"$sum": 1}}},
+            {"$sort": {"fails": -1}},
+            {"$limit": 1}
+        ]
+        results = await _db["quiz_attempts"].aggregate(pipeline).to_list(length=1)
+        if results and results[0].get("_id"):
+            raw_cat = str(results[0]["_id"]).lower()
+            for key, trans in topic_labels.items():
+                if key in raw_cat:
+                    return {"key": key, "name": trans.get(lang, trans["no"]), "fails": results[0].get("fails", 0)}
+            # If category is not in standard keys, clean and return
+            cleaned_cat = raw_cat.replace("_", " ").title()
+            return {"key": "custom", "name": cleaned_cat, "fails": results[0].get("fails", 0)}
+
+        # Also check mistake bank
+        mistake = await _db["mistakes"].find_one({**match_filter, "active": True})
+        if mistake:
+            raw_cat = str(mistake.get("category") or mistake.get("topic") or "").lower()
+            for key, trans in topic_labels.items():
+                if key in raw_cat:
+                    return {"key": key, "name": trans.get(lang, trans["no"]), "fails": 1}
+            if raw_cat:
+                return {"key": "custom", "name": raw_cat.title(), "fails": 1}
+    except Exception as e:
+        logger.warning("Error fetching student weakness: %s", e)
+
+    return None
+
 @teacher_router.get("/teacher/welcome")
-async def teacher_welcome(lang: str = Query(default="no")):
-    lang = lang if lang in MICHAEL_WELCOME else "no"
-    return {"lang": lang, "welcome": MICHAEL_WELCOME[lang]}
+async def teacher_welcome(
+    lang: str = Query(default="no"),
+    device_id: Optional[str] = Query(default=None),
+    user_id: Optional[str] = Query(default=None),
+):
+    lang = lang if lang in ("no", "th", "en") else "no"
+    weakness = await _get_student_weakness(device_id, user_id, lang)
+    if weakness and weakness.get("name"):
+        topic_name = weakness["name"]
+        greetings = {
+            "no": f"Hei! Jeg ser i historikken din at du har hatt noen feil på {topic_name} i det siste. Skal vi ta en kjapp prat om det, eller har du noe annet du vil spørre meg om i dag? 😊",
+            "th": f"สวัสดีครับ! ผมเห็นในประวัติของคุณว่ามีข้อผิดพลาดเรื่อง{topic_name}อยู่บ้างเมื่อเร็วๆ นี้ เรามาคุยเรื่องนี้กันสักนิดไหมครับ หรือวันนี้มีเรื่องอื่นที่อยากถามผมก่อนไหมครับ? 😊",
+            "en": f"Hi! I noticed in your history that you've had a few mistakes on {topic_name} lately. Shall we have a quick chat about that, or is there something else you'd like to ask me today? 😊",
+        }
+        return {"lang": lang, "welcome": greetings[lang], "weakness": weakness}
+
+    open_greetings = {
+        "no": "Hei! Hva vil du at vi skal øve på i dag? Spør meg om hva som helst innen trafikk, så forklarer jeg det enkelt! 🚗",
+        "th": "สวัสดีครับ! วันนี้อยากให้เราฝึกเรื่องอะไรดีครับ? ถามผมได้ทุกเรื่องเกี่ยวกับการจราจรเลย ผมจะอธิบายให้เข้าใจง่ายๆ ครับ! 🚗",
+        "en": "Hi! What would you like us to practice today? Ask me anything about driving theory, and I'll explain it simply! 🚗",
+    }
+    return {"lang": lang, "welcome": open_greetings[lang], "weakness": None}
 
 @teacher_router.get("/teacher/topics")
 async def teacher_topics(lang: str = Query(default="no")):
@@ -1956,6 +2080,8 @@ class TeacherChatRequest(BaseModel):
     session_id: Optional[str] = Field(default=None)
     message: str = Field(min_length=1, max_length=5000)
     language: Optional[str] = Field(default="no")
+    device_id: Optional[str] = Field(default=None)
+    user_id: Optional[str] = Field(default=None)
 
 
 class TeacherChatResponse(BaseModel):
@@ -2045,6 +2171,51 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             user_msg = clean_user_msg
         except Exception as e:
             logger.error("Failed to parse stats context payload: %s", e)
+
+    # Detect if user clicked "Hjelp med teoriprøven" or asked what to practice
+    clean_prompt = user_msg.replace("📝", "").replace("📊", "").replace("❓", "").strip().lower()
+    is_theory_help = clean_prompt in (
+        "hjelp med teoriprøven", "hjelp med teoriproven", "hva bør jeg øve på?", "hva bør jeg øve på",
+        "hva bor jeg ove pa?", "hva bor jeg ove pa", "ช่วยเรื่องข้อสอบทฤษฎี", "ฉันควรฝึกเรื่องอะไร?",
+        "ฉันควรฝึกเรื่องอะไร", "help with the theory test", "help with theory", "what should i practise?",
+        "what should i practise", "what should i practice?", "what should i practice"
+    )
+
+    if is_theory_help and not quiz_context_str:
+        weakness = await _get_student_weakness(req.device_id, req.user_id, lang)
+        if weakness and weakness.get("name"):
+            topic_name = weakness["name"]
+            replies = {
+                "no": f"Hei! Jeg ser i historikken din at du har hatt noen feil på {topic_name} i det siste. Skal vi ta en kjapp prat om det, eller har du noe annet du vil spørre meg om i dag? 😊",
+                "th": f"สวัสดีครับ! ผมเห็นในประวัติของคุณว่ามีข้อผิดพลาดเรื่อง{topic_name}อยู่บ้างเมื่อเร็วๆ นี้ เรามาคุยเรื่องนี้กันสักนิดไหมครับ หรือวันนี้มีเรื่องอื่นที่อยากถามผมก่อนไหมครับ? 😊",
+                "en": f"Hi! I noticed in your history that you've had a few mistakes on {topic_name} lately. Shall we have a quick chat about that, or is there something else you'd like to ask me today? 😊",
+            }
+            suggestions = {
+                "no": [f"Ja, forklar {topic_name} 🚗", "Forklar et skilt 🛑", "Hjelp med vikeplikt 📖"],
+                "th": [f"ใช่ อธิบายเรื่อง{topic_name} 🚗", "อธิบายป้ายจราจร 🛑", "ช่วยเรื่องการให้ทาง 📖"],
+                "en": [f"Yes, explain {topic_name} 🚗", "Explain a sign 🛑", "Help with right-of-way 📖"],
+            }
+            reply_text = replies.get(lang, replies["no"])
+            sug_list = suggestions.get(lang, suggestions["no"])
+            await _chat_col.insert_one({"session_id": session_id, "role": "user", "content": user_msg, "ts": datetime.now(timezone.utc)})
+            await _chat_col.insert_one({"session_id": session_id, "role": "assistant", "content": reply_text, "ts": datetime.now(timezone.utc)})
+            return TeacherChatResponse(session_id=session_id, reply=reply_text, suggestions=sug_list)
+        else:
+            open_replies = {
+                "no": "Hei! Hva vil du at vi skal øve på i dag? Spør meg om hva som helst innen trafikk, så forklarer jeg det enkelt! 🚗",
+                "th": "สวัสดีครับ! วันนี้อยากให้เราฝึกเรื่องอะไรดีครับ? ถามผมได้ทุกเรื่องเกี่ยวกับการจราจรเลย ผมจะอธิบายให้เข้าใจง่ายๆ ครับ! 🚗",
+                "en": "Hi! What would you like us to practice today? Ask me anything about driving theory, and I'll explain it simply! 🚗",
+            }
+            open_suggestions = {
+                "no": ["Forklar vikeplikt 🚗", "Forklar et skilt 🛑", "Forklar bremselengde 📏"],
+                "th": ["ช่วยเรื่องการให้ทาง 🚗", "อธิบายป้ายจราจร 🛑", "อธิบายระยะเบรก 📏"],
+                "en": ["Explain right-of-way 🚗", "Explain a sign 🛑", "Explain braking distance 📏"],
+            }
+            reply_text = open_replies.get(lang, open_replies["no"])
+            sug_list = open_suggestions.get(lang, open_suggestions["no"])
+            await _chat_col.insert_one({"session_id": session_id, "role": "user", "content": user_msg, "ts": datetime.now(timezone.utc)})
+            await _chat_col.insert_one({"session_id": session_id, "role": "assistant", "content": reply_text, "ts": datetime.now(timezone.utc)})
+            return TeacherChatResponse(session_id=session_id, reply=reply_text, suggestions=sug_list)
 
     # Load prior conversation (last 20 messages in this session)
     prior = await _chat_col.find(
@@ -2257,6 +2428,8 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         reply_text = _fallback_reply(lang)
 
     reply_text = _apply_section_7_2_fail_safe(user_msg, reply_text, lang)
+    if lang == "th":
+        reply_text = _sanitize_gender_particles(reply_text)
     reply_sign_ids = _sign_ids_from_reply(reply_text)
     sign_ids = _strict_response_sign_ids(explicit_sign_ids, reply_sign_ids)
 
@@ -2331,12 +2504,24 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
     )
 
 
+def _sanitize_gender_particles(text: str) -> str:
+    """Sanitize female Thai polite particles (ค่ะ, นะคะ, ค่า) to polite male particles (ครับ / ครับผม)."""
+    if not text:
+        return text
+    text = text.replace("นะคะ", "นะครับ")
+    text = text.replace("นะค่ะ", "นะครับ")
+    text = text.replace("ค่ะ", "ครับ")
+    text = text.replace("ค่า", "ครับ")
+    return text
+
+
 def _fallback_reply(lang: str) -> str:
     if lang == "th":
-        # Michael er mann. ครับ er den mannlige hoflighetspartikkelen — ค่ะ/นะคะ
-        # er kvinnelige, og brot karakteren i den ene meldingen eleven ser
-        # nar noe feiler. Alle andre Michael-replikker i denne filen bruker
-        # allerede ครับ og ผม; denne var den eneste avvikeren.
+        # Michael er mann. ครับ er den mannlige hoflighetspartikkelen.
+        # Endelsen นะครับ (ikke ครับผม) er valgt bevisst: begge er mannlige,
+        # men ครับผม er mer underdanig — det klinger som en ekspeditor.
+        # Michael er trafikklaerer med 16 ars erfaring og skal vaere trygg
+        # og rolig, ikke servil. Michael kan overprove pa to sekunder.
         return "ขออภัยครับ ขณะนี้ครูไมเคิลไม่สามารถให้บริการได้ชั่วคราว กรุณาลองใหม่อีกครั้งในภายหลังนะครับ"
     if lang == "en":
         return "Sorry, Michael is not available right now. Please try again in a moment."
