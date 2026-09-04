@@ -49,8 +49,8 @@ TERMS = [
         "topic_tags": ["Vikeplikt", "Kryss"],
     },
     {
-        "term_no": "Prioritert vei",
-        "term_th": "ถนนหลัก (ถนนที่มีสิทธิ์ก่อน)",
+        "term_no": "Forkjørsvei",
+        "term_th": "ถนนหลัก",
         "term_en": "Priority road",
         "definition_no": "Vei merket med skilt 220 der du har forkjørsrett over all trafikk fra kryssende veier.",
         "definition_th": "ถนนที่ติดป้าย 220 ซึ่งคุณมีสิทธิ์ก่อนรถทุกคันจากถนนที่ตัดกัน",
@@ -242,7 +242,7 @@ TERMS = [
     },
     {
         "term_no": "Vikepliktskilt",
-        "term_th": "ป้ายให้ทาง (สามเหลี่ยม)",
+        "term_th": "ป้ายให้ทาง",
         "term_en": "Yield sign (triangle)",
         "definition_no": "Rød trekant (skilt 202) — du plikter å gi fri bane for all kryssende trafikk.",
         "definition_th": "สามเหลี่ยมสีแดง (ป้าย 202) — คุณต้องเปิดทางให้รถที่ตัดผ่านทุกคัน",
@@ -254,9 +254,9 @@ TERMS = [
     },
     {
         "term_no": "Stopp-skilt",
-        "term_th": "ป้ายหยุด (แปดเหลี่ยม)",
+        "term_th": "ป้ายหยุด",
         "term_en": "Stop sign (octagon)",
-        "definition_no": "Rødt åttekant-skilt (128) — du MUST stanse helt og gi vikeplikt før du kan fortsette.",
+        "definition_no": "Rødt åttekant-skilt (128) — du MÅ stanse helt og gi vikeplikt før du kan fortsette.",
         "definition_th": "ป้ายแปดเหลี่ยมสีแดง (128) — คุณต้องหยุดสนิทและให้ทางก่อนจะขับต่อ",
         "definition_en": "Red octagonal sign (128) — you MUST stop completely and yield before continuing.",
         "example_no": "Kjører du uten å stoppe forbi stopp-skilt, er det straffbart.",

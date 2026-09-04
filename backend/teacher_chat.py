@@ -589,6 +589,8 @@ Teaching goal: student identifies FIRST — "Er jeg kongen eller tjeneren?" — 
 thinking about the specific rule. Simplifies complex situations.
 
 Adapt the King/Servant metaphor naturally to the declared language when teaching.
+NOTE: this Norwegian core is used for [LANGUAGE: no] only. The Thai core uses a
+host/guest metaphor instead — see _PROMPT_CORE_TH. Do not mix the two.
 
 ══════════════════════════════════════════
 REGEL 3 — 🚗 Michaels rundkjøringsregel
@@ -719,9 +721,31 @@ Thai vocabulary to use:
 - ระยะตอบสนอง, ระยะเบรก, ระยะหยุดรถ
 - การให้ทาง, วงเวียน, ป้ายหยุด, ป้ายให้ทาง, ทางม้าลาย, ถนนที่มีสิทธิ์ก่อน
 
-RIGHT-OF-WAY (การให้ทาง / vikeplikt):
-First ask: "คุณเป็นคนมีสิทธิ์ก่อน หรือคนต้องให้ทาง?"
+RIGHT-OF-WAY (การให้ทาง / vikeplikt) — 🏠 HOST OR GUEST:
+Use this as the mental first step whenever the student asks about การให้ทาง, วงเวียน,
+ป้ายหยุด, ป้ายให้ทาง, or "ใครต้องให้ทาง?".
+
+First ask: "คุณเป็นเจ้าของบ้าน หรือเป็นแขก?"
+
+Explanation:
+- 🏠 เจ้าของบ้าน (host) — you have right of way. This is your road.
+- 🚶 แขก (guest) — you must yield. You are entering someone else's road.
+
+Michael quote (deliver in Thai): "ถ้าคุณเป็นแขก ให้ขับแบบที่เจ้าของบ้านไม่ต้องลังเล ไม่ต้องชะลอ และไม่ต้องเบรกในบ้านของเขาเอง"
+
+Examples where the student is แขก (guest):
+- ป้ายให้ทาง → แขก
+- ป้ายหยุด → แขก (ต้องหยุดสนิทก่อนไปต่อ)
+- ออกจากที่จอดรถ → แขก
+- ข้ามทางเท้าเข้าถนน → แขก
+- เข้าวงเวียน → แขก
+- กฎรถทางขวา: รถที่มาจากทางขวาคือเจ้าของบ้าน
+
 Teach: การให้ทาง = วางแผนล่วงหน้า ไม่กีดขวาง ไม่รบกวน
+
+IMPORTANT — this metaphor is deliberately domestic, never hierarchical. A guest is
+welcome, not lesser. Never frame the student as a servant or as subordinate to another
+driver, and never use king/servant wording in Thai under any circumstance.
 
 ข้อเท็จจริงสำคัญ — วงเวียน: ในนอร์เวย์ วงเวียนทุกแห่งรถวิ่งทวนเข็มนาฬิกา (ซ้ายมือ) เสมอ ห้ามบอกว่าตามเข็มนาฬิกา — ผิดและอันตราย
 
@@ -891,7 +915,7 @@ def _build_system_prompt(lang: str) -> str:
         "Når du får servert fakta i seksjonen 'APPROVED THAI2DRIVE CURRICULUM CONTEXT', må du følge disse reglene:\n"
         "1. Bruk den oppgitte informasjonen fra databasen som din absolutte fasit. Du skal aldri gjette eller finne på egne regler.\n"
         "2. Du skal ALDRI bare ramse opp den tørre lovteksten eller faktaene du får servert. Du skal oversette og forklare dem på en pedagogisk måte.\n"
-        "3. Du MÅ fortsette å undervise med dine egne pedagogiske metoder (Situasjon før teori, 7-års regelen, 'Kongen og tjeneren', etc.).\n"
+        "3. Du MÅ fortsette å undervise med dine egne pedagogiske metoder (Situasjon før teori, 7-års regelen, vikepliktsmetaforen som er beskrevet i kjerneinstruksen over, etc.).\n"
         "4. Spesielt for Vegtrafikkloven § 3 (H-A-V regelen):\n"
         "   Hvis du får servert databasetekst om Vegtrafikkloven § 3, eller hvis studenten spør om å være hensynsfull, aktpågivende eller varsom, skal du alltid:\n"
         "   - Bryte det ned slik: H = Hensynsfull, A = Aktpågivende, V = Varsom.\n"
@@ -1083,7 +1107,7 @@ def _concise_teacher_reply(reply_text: str, lang: str) -> str:
     concise = " ".join(allowed).strip()
     if not concise:
         return {
-            "th": "ตอนนี้ Michael ยังตอบให้สั้นและชัดเจนไม่ได้ กรุณาลองถามอีกครั้งครับ",
+            "th": "ตอนนี้ไมเคิลยังตอบให้สั้นและชัดเจนไม่ได้ กรุณาลองถามอีกครั้งครับ",
             "en": "Michael cannot give a short, precise answer right now. Please try again.",
             "no": "Michael kan ikke gi et kort og presist svar akkurat nå. Prøv igjen.",
         }.get(lang, "Michael kan ikke gi et kort og presist svar akkurat nå. Prøv igjen.")
@@ -2068,6 +2092,47 @@ class TeacherChatResponse(BaseModel):
     media: list[dict] = Field(default_factory=list)
 
 
+@teacher_router.get("/teacher/status")
+async def teacher_status():
+    """
+    Diagnostikk for Michael-chatten. Returnerer ingen hemmeligheter — kun hvilken
+    leverandor som er aktiv, hvilken modell som kalles, og om en nokkel finnes.
+
+    Hvorfor dette trengs: /teacher/chat kaster ALDRI 500. Feiler LLM-kallet,
+    fanges det og brukeren far _fallback_reply() med HTTP 200. Det er riktig for
+    eleven, men det gjor at feilen er usynlig utenfra — den finnes kun i
+    Railway-loggen. Dette endepunktet gjor arsaken lesbar pa ti sekunder.
+    """
+    keys_present = {
+        "DEEPSEEK_API_KEY": bool(os.environ.get("DEEPSEEK_API_KEY", "").strip()),
+        "OPENROUTER_API_KEY": bool(os.environ.get("OPENROUTER_API_KEY", "").strip()),
+        "OPENAI_API_KEY": bool(os.environ.get("OPENAI_API_KEY", "").strip()),
+    }
+    # Rekkefolgen her MA speile if/elif-kjeden ved modulimport, ellers lyver svaret.
+    if keys_present["DEEPSEEK_API_KEY"]:
+        needed = None
+    elif keys_present["OPENROUTER_API_KEY"]:
+        needed = None
+    elif keys_present["OPENAI_API_KEY"]:
+        needed = None
+    else:
+        needed = "DEEPSEEK_API_KEY"
+
+    return {
+        "ok": bool(LLM_KEY),
+        "provider": LLM_PROVIDER,
+        "model": LLM_MODEL,
+        "keys_configured": keys_present,
+        "missing_key_to_set": needed,
+        # Konfigurasjonen leses ved modulimport, ikke per forespoersel. Legger du
+        # inn nokkelen i Railway, ma tjenesten restarte for den tas i bruk.
+        "note": (
+            "Konfigurasjon leses ved oppstart. Ny miljovariabel krever restart. "
+            "ANTHROPIC_API_KEY brukes ikke av denne modulen."
+        ),
+    }
+
+
 @teacher_router.post("/teacher/chat", response_model=TeacherChatResponse)
 async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
     import time
@@ -2357,6 +2422,8 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             except Exception as mail_err:
                 logger.error("Failed to spawn alert email thread: %s", mail_err)
 
+        # error_str persisteres i teacher_chat_logs og logges — den er kildene
+        # til hvorfor eleven fikk fallback. Ma settes her.
         error_str = f"LiteLLM: {type(e).__name__}({e})"
         reply_text = _fallback_reply(lang)
 
@@ -2450,7 +2517,12 @@ def _sanitize_gender_particles(text: str) -> str:
 
 def _fallback_reply(lang: str) -> str:
     if lang == "th":
-        return "ขออภัยครับ ขณะนี้ครูไมเคิลไม่สามารถให้บริการได้ชั่วคราว กรุณาลองใหม่อีกครั้งในภายหลังครับผม"
+        # Michael er mann. ครับ er den mannlige hoflighetspartikkelen.
+        # Endelsen นะครับ (ikke ครับผม) er valgt bevisst: begge er mannlige,
+        # men ครับผม er mer underdanig — det klinger som en ekspeditor.
+        # Michael er trafikklaerer med 16 ars erfaring og skal vaere trygg
+        # og rolig, ikke servil. Michael kan overprove pa to sekunder.
+        return "ขออภัยครับ ขณะนี้ครูไมเคิลไม่สามารถให้บริการได้ชั่วคราว กรุณาลองใหม่อีกครั้งในภายหลังนะครับ"
     if lang == "en":
         return "Sorry, Michael is not available right now. Please try again in a moment."
     return "Beklager, Michael er ikke tilgjengelig akkurat nå. Prøv igjen om litt."

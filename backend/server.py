@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter, HTTPException, Query, Depends, UploadFile, File, Header, Request
+from fastapi import FastAPI, APIRouter, HTTPException, Query, Depends, UploadFile, File, Header, Request, Body
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse as FastAPIFileResponse
@@ -8,6 +8,8 @@ from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorGridFSBucket
 import os
 import logging
 import hashlib
+import hmac
+import urllib.parse
 import smtplib
 from pathlib import Path
 from email.mime.text import MIMEText
@@ -51,6 +53,8 @@ db = client[_db_name]
 JWT_SECRET = os.environ.get('JWT_SECRET', 'fallback-secret-change-me')
 JWT_ALGORITHM = "HS256"
 JWT_EXPIRE_HOURS = 168  # 7 days
+
+from promo_config import FREE_PROMO_DAYS, free_promo_active  # noqa: E402
 
 # ── Gratisuken («Value before payment») ────────────────────────────────────────
 # Prøveperioden styres 100 % i vår egen MongoDB. Stripe/betalingsmuren slår først
@@ -179,6 +183,14 @@ PUBLIC_PRICING_FALLBACK = {
         "period": {"no": "engangsbetaling", "th": "จ่ายครั้งเดียว", "en": "one-time payment"},
     },
 }
+# ─── Lanseringskampanje: 7 dagers gratis prøvetid til de 50 første ───────────
+# En Stripe-kupong (max_redemptions) gir rabatt, ikke prøvetid, så antallet må
+# telles her. Reservasjonen er atomisk ($lt-filter + $inc i én operasjon), slik at
+# to samtidige kjøp ikke kan dele samme plass.
+LAUNCH_TRIAL_PLAN_ID = "three_months"
+LAUNCH_TRIAL_DAYS = 7
+LAUNCH_TRIAL_MAX_REDEMPTIONS = 50
+
 _pricing_cache = {"ts": 0.0, "data": None}
 
 ACCESS_GUEST_TOTAL_LIMIT = 5
@@ -698,11 +710,15 @@ def _user_trial_days_left(user: Optional[dict]) -> int:
 
 
 def _user_premium_status(user: Optional[dict]) -> str:
-    """Statusen webappen leser: trialing | active | expired | none."""
+    """Statusen webappen leser: trialing | active | promo | expired | none."""
     if not user:
         return "none"
     if user.get("is_admin") or _paid_premium_active(user):
         return "active"
+    if free_promo_active() and not _user_has_active_trial(user):
+        # Kampanjetilgang uten egen proveperiode — egen verdi, ikke «trialing»,
+        # slik at UI kan si sannheten om hvorfor brukeren har tilgang.
+        return "promo"
     if _user_has_active_trial(user):
         return "trialing"
     if user.get("trial_used") or user.get("is_premium") or user.get("premium_expires_at"):
@@ -730,10 +746,17 @@ def _access_expires_at(user: Optional[dict]) -> Optional[str]:
 
 
 def _user_has_active_premium(user: Optional[dict]) -> bool:
-    """Full tilgang: admin, betalende kunde ELLER bruker med aktiv gratisuke."""
+    """Full tilgang: admin, betalende kunde, aktiv gratisuke ELLER lanseringskampanje.
+
+    Under kampanjen (FREE_PROMO_MODE) far enhver INNLOGGET bruker full tilgang.
+    Gjester far det aldri — `if not user` over stopper dem, og det er bevisst:
+    registreringsveggen er hele poenget med kampanjen.
+    """
     if not user:
         return False
     if user.get("is_admin"):
+        return True
+    if free_promo_active():
         return True
     return _paid_premium_active(user) or _user_has_active_trial(user)
 
@@ -772,8 +795,15 @@ async def _grant_trial_if_eligible(email: str, device_id: Optional[str], user_id
         return None
 
     now = datetime.now(timezone.utc)
-    expires = now + timedelta(days=TRIAL_DAYS)
+    # Under lanseringskampanjen gis 30 dager i stedet for 7. Dette lagres som en
+    # ekte proveperiode, slik at brukeren beholder resten av perioden hvis
+    # kampanjen skrus av — i stedet for a miste tilgangen midt i lopet.
+    promo = free_promo_active()
+    days = FREE_PROMO_DAYS if promo else TRIAL_DAYS
+    expires = now + timedelta(days=days)
     await db.trial_grants.insert_one({
+        "granted_under_promo": promo,
+        "granted_days": days,
         "email": email_key,
         "device_id": device_id or None,
         "user_id": user_id,
@@ -823,6 +853,10 @@ def _access_policy_payload(user: Optional[dict], usage: Optional[dict]) -> dict:
         "tier": tier,
         "is_authenticated": is_registered,
         "is_premium": is_premium,
+        "promo": {
+            "active": free_promo_active(),
+            "days": FREE_PROMO_DAYS,
+        },
         "can_answer": can_answer,
         "limit": limit,
         "used": used,
@@ -1676,6 +1710,37 @@ async def _activate_from_checkout_session(session: dict) -> bool:
     return True
 
 
+async def _reserve_launch_trial(user_id: str) -> bool:
+    """Reserver én av de 50 prøveperiodene. Returnerer True hvis brukeren skal få trial.
+
+    Fail-soft: enhver DB-feil gir False, altså checkout uten prøvetid. Kampanjen skal
+    aldri kunne blokkere et kjøp.
+    """
+    try:
+        # Samme bruker som starter checkout på nytt beholder plassen sin — et avbrutt
+        # kjøp skal ikke brenne en plass, og et nytt forsøk skal ikke brenne to.
+        if await db.campaign_trial_grants.find_one({"_id": user_id}):
+            return True
+        await db.campaign_counters.update_one(
+            {"_id": "launch_trial"}, {"$setOnInsert": {"count": 0}}, upsert=True
+        )
+        res = await db.campaign_counters.update_one(
+            {"_id": "launch_trial", "count": {"$lt": LAUNCH_TRIAL_MAX_REDEMPTIONS}},
+            {"$inc": {"count": 1}},
+        )
+        if res.modified_count != 1:
+            return False  # alle 50 plassene er brukt
+        await db.campaign_trial_grants.update_one(
+            {"_id": user_id},
+            {"$setOnInsert": {"granted_at": datetime.now(timezone.utc).isoformat()}},
+            upsert=True,
+        )
+        return True
+    except Exception as exc:
+        logger.warning("launch trial reservation failed, selling without trial: %s", exc)
+        return False
+
+
 @api_router.post("/create-checkout-session")
 async def create_checkout_session(data: CheckoutSessionRequest, current_user: dict = Depends(get_current_user)):
     user = await db.users.find_one({"id": current_user["sub"]}, {"_id": 0, "password_hash": 0})
@@ -1723,7 +1788,11 @@ async def create_checkout_session(data: CheckoutSessionRequest, current_user: di
     else:
         session_kwargs["customer_email"] = user.get("email")
     if mode == "subscription":
-        session_kwargs["subscription_data"] = {"metadata": metadata}
+        subscription_data = {"metadata": metadata}
+        if data.plan_id == LAUNCH_TRIAL_PLAN_ID and await _reserve_launch_trial(user["id"]):
+            subscription_data["trial_period_days"] = LAUNCH_TRIAL_DAYS
+            metadata["launch_trial_days"] = str(LAUNCH_TRIAL_DAYS)
+        session_kwargs["subscription_data"] = subscription_data
     else:
         session_kwargs["payment_intent_data"] = {"metadata": metadata}
 
@@ -1914,6 +1983,81 @@ async def get_my_stats(device_id: str):
         {"$sort": {"pct": 1}},
     ]
     rows = await db.quiz_attempts.aggregate(pipeline).to_list(100)
+
+    # Eksamensmodus lagres med category=null og falt derfor helt ut av svakhetsanalysen
+    # over. Selve forsøket har ingen kategori — den ligger på hvert enkelt spørsmål — så
+    # kategorien må slås opp i db.questions per besvart spørsmål.
+    # Fail-soft: slår oppslaget feil, returnerer vi kategoritallene vi allerede har.
+    try:
+        exam_pipeline = [
+            {"$match": {
+                "$or": [{"device_id": device_id}, {"user_id": device_id}],
+                "category": {"$in": [None, "", "None"]},
+            }},
+            {"$unwind": "$questions_answered"},
+            # Bare svar der fasit faktisk kan avgjøres — ellers blåser total_q opp og
+            # trekker prosenten kunstig ned.
+            {"$match": {
+                "questions_answered.question_id": {"$nin": [None, ""]},
+                "$or": [
+                    {"questions_answered.is_correct": {"$type": "bool"}},
+                    {"questions_answered.user_answer": {"$exists": True, "$nin": [None, ""]}},
+                ],
+            }},
+            {"$lookup": {
+                "from": "questions",
+                "localField": "questions_answered.question_id",
+                "foreignField": "id",
+                "as": "q",
+            }},
+            {"$unwind": "$q"},
+            {"$match": {"q.category": {"$nin": [None, "", "None"]}}},
+            {"$group": {
+                "_id": "$q.category",
+                "attempt_ids": {"$addToSet": "$_id"},
+                "total_q": {"$sum": 1},
+                "total_correct": {"$sum": {"$cond": [
+                    {"$or": [
+                        {"$eq": ["$questions_answered.is_correct", True]},
+                        # Eldre forsøk mangler is_correct — fall tilbake på svarteksten.
+                        {"$and": [
+                            {"$ne": [{"$type": "$questions_answered.is_correct"}, "bool"]},
+                            {"$eq": [
+                                {"$toUpper": {"$ifNull": ["$questions_answered.user_answer", ""]}},
+                                {"$toUpper": {"$ifNull": ["$questions_answered.correct_answer", "__NO_ANSWER__"]}},
+                            ]},
+                        ]},
+                    ]},
+                    1, 0,
+                ]}},
+            }},
+            {"$project": {
+                "_id": 0,
+                "category": "$_id",
+                "attempts": {"$size": "$attempt_ids"},
+                "total_q": 1,
+                "total_correct": 1,
+            }},
+        ]
+        exam_rows = await db.quiz_attempts.aggregate(exam_pipeline).to_list(100)
+    except Exception as exc:
+        logger.warning("stats/me: exam-mode category lookup failed: %s", exc)
+        exam_rows = []
+
+    if exam_rows:
+        merged: dict = {r["category"]: dict(r) for r in rows}
+        for r in exam_rows:
+            cur = merged.setdefault(
+                r["category"],
+                {"category": r["category"], "attempts": 0, "total_q": 0, "total_correct": 0},
+            )
+            cur["attempts"] += r["attempts"]
+            cur["total_q"] += r["total_q"]
+            cur["total_correct"] += r["total_correct"]
+        rows = list(merged.values())
+        for r in rows:
+            r["pct"] = (r["total_correct"] / r["total_q"] * 100) if r["total_q"] else 0
+        rows.sort(key=lambda r: r["pct"])
 
     # Overall totals
     totals = await db.quiz_attempts.aggregate([
@@ -6139,6 +6283,105 @@ async def text_to_speech(request: Request, text: Optional[str] = None, lang: Opt
     if not _tts_provider_available("google", lang):
         raise HTTPException(status_code=503, detail="Google TTS er midlertidig utilgjengelig; prøv igjen om litt.")
     return await _google_tts(text, lang, google_key, google_cache_path, request)
+
+
+# ── GDPR: avmelding fra e-post ────────────────────────────────────────────────
+# Avmeldingslenken ma virke uten innlogging (folk klikker den fra innboksen,
+# ofte pa en annen enhet). Da kan den ikke ta imot en naken e-postadresse —
+# hvem som helst kunne meldt av hvem som helst. Lenken signeres derfor med
+# HMAC over JWT_SECRET. Ingen database-oppslag kreves for a validere.
+
+def _unsubscribe_token(email: str) -> str:
+    """Signatur som knytter en avmeldingslenke til én bestemt e-postadresse."""
+    msg = (email or "").strip().lower().encode("utf-8")
+    return hmac.new(JWT_SECRET.encode("utf-8"), msg, hashlib.sha256).hexdigest()[:32]
+
+
+def unsubscribe_link(email: str, base_url: str = "https://www.thai2drive.no") -> str:
+    """Bygg en ferdig avmeldingslenke. Brukes av e-postutsendere."""
+    addr = (email or "").strip().lower()
+    return (
+        f"{base_url}/api/unsubscribe"
+        f"?email={urllib.parse.quote(addr)}&token={_unsubscribe_token(addr)}"
+    )
+
+
+async def _record_optout(email: str, source: str) -> None:
+    addr = (email or "").strip().lower()
+    await db.email_optouts.update_one(
+        {"email": addr},
+        {"$set": {"email": addr, "opted_out_at": datetime.now(timezone.utc).isoformat(),
+                  "source": source}},
+        upsert=True,
+    )
+
+
+async def is_email_opted_out(email: str) -> bool:
+    """Sjekkes FOR hver utsending. Ingen e-post skal sendes til en avmeldt adresse."""
+    addr = (email or "").strip().lower()
+    if not addr:
+        return True
+    return await db.email_optouts.find_one({"email": addr}) is not None
+
+
+_UNSUB_PAGE = """<!DOCTYPE html><html lang="{lang}"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{title}</title><style>
+body{{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
+background:#0F172A;color:#F8FAFC;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;padding:24px}}
+.c{{background:#1E293B;border:1px solid rgba(51,65,85,.6);border-radius:16px;padding:32px;max-width:440px;text-align:center}}
+h1{{font-size:1.25rem;margin:0 0 12px}} p{{color:#94A3B8;line-height:1.6;margin:0}}
+.i{{font-size:40px;margin-bottom:12px}}</style></head>
+<body><div class="c"><div class="i">{icon}</div><h1>{title}</h1><p>{body}</p></div></body></html>"""
+
+_UNSUB_TEXT = {
+    "no": ("Du er meldt av", "Vi sender deg ikke flere e-poster. Du kan fortsatt bruke Thai2Drive som vanlig."),
+    "th": ("ยกเลิกการรับอีเมลแล้ว", "เราจะไม่ส่งอีเมลถึงคุณอีก คุณยังใช้ Thai2Drive ได้ตามปกติ"),
+    "en": ("You are unsubscribed", "We will not send you any more emails. You can keep using Thai2Drive as usual."),
+}
+_UNSUB_BAD = {
+    "no": ("Lenken er ugyldig", "Denne avmeldingslenken er ikke gyldig. Kontakt oss, sa ordner vi det manuelt."),
+    "th": ("ลิงก์ไม่ถูกต้อง", "ลิงก์ยกเลิกนี้ไม่ถูกต้อง กรุณาติดต่อเรา แล้วเราจะจัดการให้"),
+    "en": ("Invalid link", "This unsubscribe link is not valid. Contact us and we will handle it manually."),
+}
+
+
+@app.get("/api/unsubscribe", response_class=HTMLResponse)
+@api_router.get("/unsubscribe", response_class=HTMLResponse)
+async def unsubscribe_via_link(email: str = "", token: str = "", lang: str = "no"):
+    """Klikkbar avmelding fra e-post. Signaturen ma stemme."""
+    lang = lang if lang in _UNSUB_TEXT else "no"
+    addr = (email or "").strip().lower()
+    if not addr or not hmac.compare_digest(token or "", _unsubscribe_token(addr)):
+        title, body = _UNSUB_BAD[lang]
+        return HTMLResponse(
+            _UNSUB_PAGE.format(lang=lang, title=title, body=body, icon="\u26a0\ufe0f"),
+            status_code=400,
+        )
+    await _record_optout(addr, "link")
+    title, body = _UNSUB_TEXT[lang]
+    return HTMLResponse(_UNSUB_PAGE.format(lang=lang, title=title, body=body, icon="\u2709\ufe0f"))
+
+
+@app.post("/api/unsubscribe")
+@api_router.post("/unsubscribe")
+async def unsubscribe_via_api(payload: dict = Body(...)):
+    """Avmelding for innlogget bruker eller intern bruk. Krever gyldig signatur."""
+    addr = (payload.get("email") or "").strip().lower()
+    token = payload.get("token") or ""
+    if not addr:
+        raise HTTPException(status_code=400, detail="email mangler")
+    if not hmac.compare_digest(token, _unsubscribe_token(addr)):
+        raise HTTPException(status_code=403, detail="ugyldig token")
+    await _record_optout(addr, "api")
+    return {"ok": True, "email": addr, "opted_out": True}
+
+
+@app.get("/api/unsubscribe/status")
+@api_router.get("/unsubscribe/status")
+async def unsubscribe_status(email: str = ""):
+    """Sjekk om en adresse er avmeldt. Brukes av utsenderne for hver e-post."""
+    return {"email": (email or "").strip().lower(), "opted_out": await is_email_opted_out(email)}
 
 
 @app.get("/api/tts/status")

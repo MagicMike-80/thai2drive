@@ -3024,6 +3024,14 @@ a { color:inherit; text-decoration:none; }
   display:flex; align-items:center; justify-content:center;
   color:#10B981; font-size:13px; flex-shrink:0;
 }
+.promo-banner {
+  background:linear-gradient(135deg,rgba(255,153,51,.16),rgba(255,153,51,.05));
+  border:1px solid rgba(255,153,51,.45);
+  border-radius:16px; padding:22px 20px; margin:18px 0 6px; text-align:center;
+}
+.promo-spark { font-size:34px; line-height:1; margin-bottom:8px; }
+.promo-head { font-size:1.18rem; font-weight:800; color:var(--orange); margin-bottom:6px; }
+.promo-body { font-size:.95rem; line-height:1.6; opacity:.92; }
 .paywall-price-row {
   display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:8px;
   margin-bottom:18px;
@@ -3562,6 +3570,14 @@ a { color:inherit; text-decoration:none; }
 
 .lang-btn {
   background: transparent !important;
+}
+
+/* ── Lesbarhetsfiks: neon-regelen under setter mørk bakgrunn på primærknappene
+   med !important, men tekstfargen var laget for den gamle lyse bakgrunnen.
+   Målt kontrast 1,01 på «Logg inn» og «Kjøp Premium» — usynlig tekst.
+   Kun tekstfargen settes her. Bakgrunn, form og neon-animasjon røres ikke. ── */
+.auth-btn, .end-btn-pri, .paywall-buy-btn, .sp-btn-primary, .hp-btn-pri, .lang-btn {
+  color: #F8FAFC !important;
 }
 
 /* Global rotating neon borders for active/primary buttons and active flags */
@@ -4430,7 +4446,12 @@ a { color:inherit; text-decoration:none; }
           <li><span class="pf-check">✓</span><span data-key="pw_f4"></span></li>
           <li><span class="pf-check">✓</span><span data-key="pw_f5"></span></li>
         </ul>
-        <div class="paywall-price-row">
+        <div class="promo-banner" id="promoBanner" style="display:none">
+          <div class="promo-spark">🎉</div>
+          <div class="promo-head" data-key="promo_title"></div>
+          <div class="promo-body" data-key="promo_body"></div>
+        </div>
+        <div class="paywall-price-row" id="paywallPriceRow">
           <div class="paywall-price-card selected" onclick="buyPremium('monthly',this)" data-plan="monthly">
             <div class="ppc-period" data-key="pw_month"></div>
             <div class="ppc-price" data-price-plan="monthly">199 NOK</div>
@@ -4448,7 +4469,8 @@ a { color:inherit; text-decoration:none; }
             <div class="ppc-per" data-key="pw_lifetime_note"></div>
           </div>
         </div>
-        <button class="paywall-buy-btn" onclick="buyPremium()">⭐ <span data-key="pw_buy"></span></button>
+        <button class="paywall-buy-btn" id="paywallBuyBtn" onclick="buyPremium()">⭐ <span data-key="pw_buy"></span></button>
+        <button class="paywall-buy-btn" id="promoSignupBtn" style="display:none" onclick="promoSignup()">✨ <span data-key="promo_cta"></span></button>
         <button class="paywall-skip" onclick="restorePurchase()" data-key="pw_restore_purchase"></button>
         <div class="paywall-skip" style="border:none;background:transparent;cursor:default" data-key="pw_cancel_anytime"></div>
       </div>
@@ -5050,6 +5072,13 @@ var UI = {
   sign_fallback_exam:{th:'ในข้อสอบ ให้ถามว่า: ป้ายนี้เปลี่ยนการกระทำของฉันตรงนี้อย่างไร?', no:'På prøven: spør hva skiltet endrer for handlingen din akkurat her.', en:'In the exam, ask what this sign changes about your action right here.'},
   sign_fallback_memory:{th:'จำเป็นลำดับ: รูปทรง → สี → สัญลักษณ์ → สิ่งที่ต้องทำ', no:'Husk rekkefølgen: form → farge → symbol → handling.', en:'Remember the order: shape → colour → symbol → action.'},
   // Paywall
+  tts_tap_first:{th:'แตะหน้าจอหนึ่งครั้งก่อน แล้วกดฟังอีกที', no:'Trykk én gang på skjermen, og prøv å spille av igjen.', en:'Tap the screen once, then press play again.'},
+  tts_failed:  {th:'ขออภัยครับ ตอนนี้เล่นเสียงไม่ได้ กรุณาลองใหม่อีกครั้ง', no:'Lyden kunne ikke spilles av nå. Prøv igjen.', en:'The audio could not be played. Please try again.'},
+  promo_head:  {th:'ทุกอย่างฟรีในช่วงเปิดตัว', no:'Alt er gratis under lanseringen', en:'Everything is free during launch'},
+  promo_title: {th:'แคมเปญเปิดตัว!', no:'Lanseringskampanje!', en:'Launch campaign!'},
+  promo_body:  {th:'สมัครบัญชีฟรีวันนี้ รับสิทธิ์เข้าถึงเนื้อหาทั้งหมดเต็มรูปแบบ 30 วัน!', no:'Opprett en gratis konto i dag og få 30 dagers full tilgang til alt innhold!', en:'Create a free account today and get 30 days of full access to everything!'},
+  promo_cta:   {th:'สร้างบัญชีฟรี', no:'Opprett gratis konto', en:'Create free account'},
+  promo_active:{th:'คุณมีสิทธิ์เข้าถึงเต็มรูปแบบจากแคมเปญเปิดตัว', no:'Du har full tilgang gjennom lanseringskampanjen', en:'You have full access through the launch campaign'},
   pw_title:    {th:'ปลดล็อกการเข้าถึงทั้งหมด', no:'Lås opp full tilgang', en:'Unlock full access'},
   pw_sub:      {th:'คุณได้ใช้สิทธิ์ทดลองเรียนฟรีครบแล้ว', no:'Du har brukt gratisprøven', en:'You have used your free trial'},
   pw_f1:       {th:'คำถามและหมวดหมู่ไม่จำกัด', no:'Ubegrenset spørsmål og kategorier', en:'Unlimited questions and categories'},
@@ -7015,10 +7044,52 @@ function renderPremiumBanner() {
 }
 
 // Betalingsmuren skal forklare hvorfor den dukket opp når gratisuken er brukt opp.
+// ── Lanseringskampanje ────────────────────────────────────────────────────
+// Leses fra accessState.promo, som serveren setter ved hver forespørsel.
+// Skrus FREE_PROMO_MODE av, er prisene tilbake ved neste kall — uten deploy.
+function promoActive() {
+  return !!(accessState && accessState.promo && accessState.promo.active);
+}
+
+function renderPromoState() {
+  var on = promoActive();
+  var banner = document.getElementById('promoBanner');
+  var prices = document.getElementById('paywallPriceRow');
+  var buyBtn = document.getElementById('paywallBuyBtn');
+  var promoBtn = document.getElementById('promoSignupBtn');
+  var loggedIn = !!(user && user.email);
+
+  if (banner) banner.style.display = on ? 'block' : 'none';
+  if (prices) prices.style.display = on ? 'none'  : '';
+  if (buyBtn) buyBtn.style.display = on ? 'none'  : '';
+  // Innlogget bruker har allerede tilgang under kampanjen.
+  if (promoBtn) promoBtn.style.display = (on && !loggedIn) ? '' : 'none';
+
+  var title = document.querySelector('#screenPaywall .paywall-title');
+  if (title) {
+    if (title.getAttribute('data-orig') === null) {
+      title.setAttribute('data-orig', title.innerHTML);
+    }
+    if (on) { title.textContent = t('promo_head'); }
+    else { title.innerHTML = title.getAttribute('data-orig'); }
+  }
+  // Undertittelen ville gjentatt bannerteksten ordrett for en gjest.
+  var sub = document.querySelector('#screenPaywall .paywall-sub');
+  if (sub && on) {
+    sub.textContent = loggedIn ? t('promo_active') : '';
+    sub.style.display = loggedIn ? '' : 'none';
+  } else if (sub) { sub.style.display = ''; }
+}
+
+function promoSignup() {
+  showScreen('screenAuth');
+  if (typeof switchTab === 'function') switchTab('register');
+}
+
 function renderPaywallSub() {
+  if (promoActive()) { renderPromoState(); return; }
   var el = document.querySelector('#screenPaywall .paywall-sub');
   if (!el) return;
-  var spent = !!(user && user.trial_used === true) && !isTrialActive();
   el.textContent = t('pw_sub');
 }
 
@@ -7082,6 +7153,7 @@ function showPaywall() {
   stopAllSpeech();
   stopExamTimer();
   applyUILang();
+  renderPromoState();
   showScreen('screenPaywall');
   // Hide bottom nav while paywall is shown
   document.getElementById('topBar').style.display = 'flex';
@@ -9151,6 +9223,18 @@ function retryQuiz() {
 // sammen med lyd-globalene lenger oppe — ikke dupliser dem her. Funksjonsdeklarasjoner
 // heises, så en kopi lenger ned i filen ville stille overskrevet originalen.
 
+// Én felles feilhåndtering for all TTS-avspilling. Uten dette feiler lyden stille:
+// brukeren ser bare at ingenting skjer, og vi får aldri vite hvorfor.
+function _ttsPlaybackFailed(err, el) {
+  var name = (err && err.name) || 'Error';
+  console.error('TTS-avspilling feilet:', name, err);
+  // AbortError er forventet når brukeren trykker på en ny boble. Ikke skrem.
+  if (name === 'AbortError') return;
+  if (name === 'NotAllowedError') { toast(t('tts_tap_first'), 5000); return; }
+  var code = el && el.error ? (' (kode ' + el.error.code + ')') : '';
+  toast(t('tts_failed') + code, 5000);
+}
+
 function speakQ() {
   var q = questions[qIdx];
   if (!q) return;
@@ -9172,7 +9256,7 @@ function speakQ() {
   var playPromise = audio.play();
   if (playPromise !== undefined) {
     playPromise.catch(function(err) {
-      console.error('Audio playback failed on iOS:', err);
+      _ttsPlaybackFailed(err, audio);
       ttsPlaying = false;
       updateTtsBtn(false);
     });
@@ -9240,7 +9324,7 @@ function speakText(text) {
   var playPromise = audio.play();
   if (playPromise !== undefined) {
     playPromise.catch(function(err) {
-      console.error('Teacher audio playback failed on iOS:', err);
+      _ttsPlaybackFailed(err, audio);
       if (playToken === _teacherAudioToken) {
         _teacherTtsPlaying = false;
         _teacherActiveText = '';
@@ -11088,7 +11172,7 @@ function speakSign() {
   try { audio.load(); } catch (e) {}
   var playPromise = audio.play();
   if (playPromise !== undefined) {
-    playPromise.catch(function(err){ console.error('Sign TTS error on iOS:', err); });
+    playPromise.catch(function(err){ _ttsPlaybackFailed(err, audio); });
   }
 }
 
@@ -11178,7 +11262,7 @@ function speakSignAiText() {
   try { audio.load(); } catch (e) {}
   var playPromise = audio.play();
   if (playPromise !== undefined) {
-    playPromise.catch(function(err){ console.error('Sign AI TTS error on iOS:', err); });
+    playPromise.catch(function(err){ _ttsPlaybackFailed(err, audio); });
   }
 }
 

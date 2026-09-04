@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"C:\\Users\\Stein Hoang\\thai2drive\\.claude\\hooks\\transcript-capture.js\""
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/transcript-capture.js\""
           }
         ]
       }
