@@ -5841,9 +5841,24 @@ function openVideoPlayer(filePath) {
   // Build Glow Road
   buildGlowRoad();
 
-  // Set video source
+  // Set video source and rebuild language tracks for this exact lesson.
   var vid = document.getElementById('vpVideo');
   var youtubeFrame = document.getElementById('vpYoutube');
+  Array.from(vid.querySelectorAll('track')).forEach(function(track) { track.remove(); });
+  var subtitleTracks = Array.isArray(v.subtitle_tracks) ? v.subtitle_tracks : [];
+  subtitleTracks.forEach(function(item) {
+    if (!item || !item.lang || !_teacherMediaSafeUrl(item.url)) return;
+    var track = document.createElement('track');
+    track.kind = 'subtitles';
+    track.srclang = item.lang;
+    track.label = item.label || item.lang;
+    track.src = item.url;
+    track.default = item.lang === appLang;
+    vid.appendChild(track);
+  });
+  // Norwegian source audio must not leak into Thai mode. Thai learners get
+  // the selected-language subtitle track instead.
+  vid.muted = !!(v.audio_language && v.audio_language !== appLang);
   var rawPath = v.file_path || '';
   if (rawPath && rawPath.indexOf('/public_assets/') === 0) {
     rawPath = '/api/assets/' + rawPath.substring('/public_assets/'.length);
@@ -6237,24 +6252,54 @@ var _audioUnlocked = false;
 var _teacherActiveText = '';
 var _teacherAudioToken = 0;
 var _teacherWatchdog = null;
+var _pendingTtsFallback = null;
+
+function _finishSpeechPlayback() {
+  _teacherTtsPlaying = false;
+  _teacherActiveText = '';
+  ttsPlaying = false;
+  updateTtsBtn(false);
+}
+
+function _armTtsFallback(text, lang) {
+  _pendingTtsFallback = { text:String(text || '').trim(), lang:lang || appLang };
+}
+
+function _consumeTtsFallback() {
+  var pending = _pendingTtsFallback;
+  _pendingTtsFallback = null;
+  if (!pending || !pending.text || !('speechSynthesis' in window) || !window.SpeechSynthesisUtterance) {
+    return false;
+  }
+  try {
+    window.speechSynthesis.cancel();
+    var utterance = new SpeechSynthesisUtterance(pending.text);
+    utterance.lang = localeForLangKey(pending.lang);
+    utterance.rate = ttsRate || 1.0;
+    utterance.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
+    utterance.onend = _finishSpeechPlayback;
+    utterance.onerror = _finishSpeechPlayback;
+    window.speechSynthesis.speak(utterance);
+    return true;
+  } catch (error) {
+    console.warn('Browser speech fallback unavailable:', error);
+    return false;
+  }
+}
 
 function _getGlobalAudio() {
   if (!_globalAudio) {
     _globalAudio = new Audio();
     _globalAudio.preload = 'auto';
     _globalAudio.onended = function() {
+      _pendingTtsFallback = null;
       if (_teacherWatchdog) clearTimeout(_teacherWatchdog);
-      _teacherTtsPlaying = false;
-      _teacherActiveText = '';
-      ttsPlaying = false;
-      updateTtsBtn(false);
+      _finishSpeechPlayback();
     };
     _globalAudio.onerror = function() {
       if (_teacherWatchdog) clearTimeout(_teacherWatchdog);
-      _teacherTtsPlaying = false;
-      _teacherActiveText = '';
-      ttsPlaying = false;
-      updateTtsBtn(false);
+      if (_consumeTtsFallback()) return;
+      _finishSpeechPlayback();
     };
   }
   return _globalAudio;
@@ -6284,6 +6329,10 @@ function _unlockAudioPlayback(activeEl) {
 
 function stopAllSpeech() {
   _teacherAudioToken += 1;
+  _pendingTtsFallback = null;
+  if ('speechSynthesis' in window) {
+    try { window.speechSynthesis.cancel(); } catch (e) {}
+  }
   var a = _getGlobalAudio();
   if (a) {
     try {
@@ -9162,6 +9211,7 @@ function speakQ() {
     return;
   }
   var audio = _ensureBackendAudio();
+  _armTtsFallback(text, appLang);
   audio.src = ttsStreamUrl(text, appLang);
   audio.playbackRate = ttsRate || 1.0;
   audio.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
@@ -9173,6 +9223,7 @@ function speakQ() {
   if (playPromise !== undefined) {
     playPromise.catch(function(err) {
       console.error('Audio playback failed on iOS:', err);
+      if (_consumeTtsFallback()) return;
       ttsPlaying = false;
       updateTtsBtn(false);
     });
@@ -9231,6 +9282,7 @@ function speakText(text) {
   var audio = _ensureTeacherAudio();
   var playToken = ++_teacherAudioToken;
   _teacherActiveText = clean;
+  _armTtsFallback(clean, appLang);
   audio.src = ttsStreamUrl(clean, appLang);
   audio.playbackRate = ttsRate || 1.0;
   audio.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
@@ -9241,6 +9293,7 @@ function speakText(text) {
   if (playPromise !== undefined) {
     playPromise.catch(function(err) {
       console.error('Teacher audio playback failed on iOS:', err);
+      if (_consumeTtsFallback()) return;
       if (playToken === _teacherAudioToken) {
         _teacherTtsPlaying = false;
         _teacherActiveText = '';
@@ -10173,7 +10226,9 @@ function _openTeacherMediaVideo(media) {
     title_th:appLang === 'th' ? media.title : '',
     title_en:appLang === 'en' ? media.title : '',
     topic_tags:[],
-    duration_seconds:0
+    duration_seconds:0,
+    audio_language:media.audio_language || '',
+    subtitle_tracks:Array.isArray(media.subtitle_tracks) ? media.subtitle_tracks : []
   };
   if (!_videosCached) _videosCached = [];
   var source = video.file_path || video.youtube_url;
@@ -11172,13 +11227,17 @@ function speakSignAiText() {
   if (!text) return;
   stopAllSpeech();
   var audio = _ensureTeacherAudio();
+  _armTtsFallback(text, window._spAiLang || appLang);
   audio.src = ttsStreamUrl(text, window._spAiLang || appLang);
   audio.playbackRate = ttsRate || 1.0;
   audio.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
   try { audio.load(); } catch (e) {}
   var playPromise = audio.play();
   if (playPromise !== undefined) {
-    playPromise.catch(function(err){ console.error('Sign AI TTS error on iOS:', err); });
+    playPromise.catch(function(err){
+      console.error('Sign AI TTS error on iOS:', err);
+      if (!_consumeTtsFallback()) _finishSpeechPlayback();
+    });
   }
 }
 

@@ -213,9 +213,9 @@ LAW_MAPPING: dict[str, dict[str, list[str]]] = {
             "møtende trafikk",
         ],
     },
-    "7_4": {
-        "tags": ["7", "7_4", "bussregelen", "vikeplikt_buss"],
-        "synonyms": ["paragraf 7 nr 4", "bussregelen", "vikeplikt buss"],
+    "7_5": {
+        "tags": ["7", "7_5", "bussregelen", "vikeplikt_buss"],
+        "synonyms": ["paragraf 7 nr 5", "bussregelen", "vikeplikt buss"],
     },
 }
 
@@ -228,7 +228,7 @@ def expand_law_synonyms(text: str) -> set[str]:
     containing that digit, so section-sign forms are intentionally excluded.
 
     Longer synonyms are matched first and consumed from the text before
-    shorter ones are checked, so a narrow phrase like "paragraf 7 nr 4"
+    shorter ones are checked, so a narrow phrase like "paragraf 7 nr 5"
     (bussregelen) is not also read as the broader "paragraf 7" (§7 nr 2) —
     the broader synonym is literally a substring of the narrower one.
     """

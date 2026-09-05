@@ -85,9 +85,14 @@ class Patch2MediaRecoveryTests(unittest.TestCase):
         self.assertIn("status_code=416", SERVER)
 
     def test_all_30_local_thumbnail_mappings_resolve_to_existing_files(self):
+        from backend.michael_video_import import VIDEO_SPECS
+
         thumbnail_dir = ROOT / "backend" / "public_assets" / "thumbs"
         files = sorted(thumbnail_dir.glob("thumb_*.jpg"))
-        self.assertEqual(len(files), 30)
+        patch_a_names = {spec.thumbnail_name for spec in VIDEO_SPECS}
+        legacy_files = [path for path in files if path.name not in patch_a_names]
+        self.assertEqual(len(legacy_files), 30)
+        self.assertEqual(len(files), 55)
         for target in files:
             suffix = target.stem.removeprefix("thumb_")
             file_path = f"/public_assets/video_{suffix}.mp4"

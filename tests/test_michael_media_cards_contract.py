@@ -39,6 +39,16 @@ class MichaelMediaCardsContractTests(unittest.TestCase):
         self.assertIn('id="vpYoutube"', WEBAPP)
         self.assertIn("youtubeFrame.src = 'https://www.youtube.com/embed/'", WEBAPP)
         self.assertIn(".vp-player-wrap iframe[hidden] { display:none; }", WEBAPP)
+        self.assertIn("track.kind = 'subtitles'", WEBAPP)
+        self.assertIn("track.default = item.lang === appLang", WEBAPP)
+        self.assertIn("vid.muted = !!(v.audio_language && v.audio_language !== appLang)", WEBAPP)
+        self.assertIn("subtitle_tracks:Array.isArray(media.subtitle_tracks)", WEBAPP)
+
+    def test_tts_has_selected_language_browser_fallback(self):
+        self.assertIn("function _consumeTtsFallback()", WEBAPP)
+        self.assertIn("utterance.lang = localeForLangKey(pending.lang)", WEBAPP)
+        self.assertIn("window.speechSynthesis.speak(utterance)", WEBAPP)
+        self.assertIn("if (_consumeTtsFallback()) return", WEBAPP)
 
     def test_media_is_bounded_validated_and_does_not_duplicate_sign_card(self):
         self.assertIn("mediaItems.slice(0, 2)", WEBAPP)

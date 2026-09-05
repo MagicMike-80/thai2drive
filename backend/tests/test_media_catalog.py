@@ -110,8 +110,8 @@ class MediaCatalogTests(unittest.TestCase):
         self.assertEqual(expand_law_synonyms("Spørsmål 3 av 10 i teoriprøven"), set())
 
     def test_law_synonyms_narrow_bus_rule_does_not_leak_generic_paragraf_7(self):
-        resolved = expand_law_synonyms("paragraf 7 nr 4 om bussregelen")
-        self.assertTrue(set(LAW_MAPPING["7_4"]["tags"]).issubset(resolved))
+        resolved = expand_law_synonyms("paragraf 7 nr 5 om bussregelen")
+        self.assertTrue(set(LAW_MAPPING["7_5"]["tags"]).issubset(resolved))
 
     def test_ranker_uses_whole_tags_and_deterministic_order_with_max_one(self):
         unrelated = _item("unrelated", tags=["stopp"])
