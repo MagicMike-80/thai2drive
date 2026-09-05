@@ -56,3 +56,25 @@ regresjonstester PASS, 3/3 Range-tester PASS og 20/20 BLAST PASS.
 
 Ingen endring i auth, kvoter, Stripe, RevenueCat-konfigurasjon, hemmeligheter
 eller mobilappen. Klar for Agent 4.
+
+---
+
+# PATCH REPORT: Michael WebVTT MIME-hotfix
+
+**Status:** IMPLEMENTERT OG LOKALT TESTET
+**Dato:** 2026-09-05
+**Scope:** Kun korrekt MIME-type for de publiserte thai-undertekstene.
+
+- `backend/server.py`: `.vtt` leveres som `text/vtt` fra den eksisterende
+  `/api/assets/{filename}`-ruten.
+- `tests/test_michael_media_cards_contract.py`: kontrakttest hindrer fallback
+  til `application/octet-stream`.
+- Relevant Michael-, skilt- og medieregresjon: **84/84 PASS**.
+- `git diff --check`: **PASS**; kun eksisterende LF/CRLF-varsler.
+- Ingen learner-facing tekst, database, auth, betaling, premium, kvote eller
+  TTS-providerkonfigurasjon er endret.
+
+Live-status krever etter deploy HTTP 200 og `Content-Type: text/vtt` på alle
+25 spor. Rollback er å reversere MIME-tabellinjen og kontrakttesten.
+
+Handoff til QA Gate før produksjonsstatus settes grønn.

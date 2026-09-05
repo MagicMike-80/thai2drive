@@ -4,6 +4,7 @@ from pathlib import Path
 
 
 WEBAPP = (Path(__file__).resolve().parents[1] / "backend" / "webapp.py").read_text(encoding="utf-8")
+SERVER = (Path(__file__).resolve().parents[1] / "backend" / "server.py").read_text(encoding="utf-8")
 
 
 class MichaelMediaCardsContractTests(unittest.TestCase):
@@ -43,6 +44,9 @@ class MichaelMediaCardsContractTests(unittest.TestCase):
         self.assertIn("track.default = item.lang === appLang", WEBAPP)
         self.assertIn("vid.muted = !!(v.audio_language && v.audio_language !== appLang)", WEBAPP)
         self.assertIn("subtitle_tracks:Array.isArray(media.subtitle_tracks)", WEBAPP)
+
+    def test_public_asset_route_serves_webvtt_with_browser_safe_mime(self):
+        self.assertIn('\".vtt\": \"text/vtt\"', SERVER)
 
     def test_tts_has_selected_language_browser_fallback(self):
         self.assertIn("function _consumeTtsFallback()", WEBAPP)
