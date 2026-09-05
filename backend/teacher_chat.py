@@ -1320,6 +1320,66 @@ def _apply_section_7_2_fail_safe(user_msg: str, reply_text: str, lang: str) -> s
     return statute_replies.get(lang, statute_replies["no"])
 
 
+def _apply_right_rule_definition_fail_safe(user_msg: str, reply_text: str, lang: str) -> str:
+    """Keep a direct right-rule explanation complete after the global concise pass."""
+    message = (user_msg or "").casefold()
+    right_rule_terms = (
+        "høyreregel",
+        "hoyreregel",
+        "right-hand rule",
+        "right hand rule",
+        "กฎให้ทางจากขวา",
+        "กฎการให้ทางจากขวา",
+    )
+    if not any(term in message for term in right_rule_terms):
+        return reply_text
+    if _is_section_7_2_left_turn_query(user_msg) or _is_section_7_2_citation_query(user_msg):
+        return reply_text
+    application_terms = (
+        "når", "gjelder", "ikke", "unntak", "parkeringsplass", "utkjøring", "avkjørsel",
+        "when", "apply", "applies", "not", "exception", "parking", "leaving", "driveway",
+        "เมื่อ", "ใช้", "ไม่", "ยกเว้น", "ลานจอด", "ออกจาก",
+    )
+    if any(term in message for term in application_terms):
+        return reply_text
+    definition_terms = (
+        "forklar", "hva er", "hva betyr", "lær meg",
+        "explain", "what is", "what does", "teach me",
+        "อธิบาย", "คืออะไร", "หมายถึง", "สอน",
+    )
+    stripped = re.sub(r"[^\wæøåก-๙-]+", " ", message, flags=re.UNICODE).strip()
+    is_bare_rule_request = stripped in {
+        "høyreregelen", "høyreregel", "right hand rule",
+        "กฎให้ทางจากขวา", "กฎการให้ทางจากขวา", "กฎมือขวา",
+    }
+    if not is_bare_rule_request and not any(term in message for term in definition_terms):
+        return reply_text
+    if lang not in SUPPORTED_LANGUAGES:
+        return reply_text
+
+    explanations = {
+        "no": (
+            "Høyreregelen betyr at du skal gi vikeplikt til kjøretøy som kommer fra høyre "
+            "i et likeverdig kryss der ingen skilt, signaler eller andre vikepliktregler bestemmer. "
+            "Senk farten og vær klar til å stanse. "
+            "Selv når du kommer fra høyre, må du kjøre hensynsfullt og forsiktig."
+        ),
+        "th": (
+            "กฎให้ทางจากขวาหมายความว่า ที่ทางแยกซึ่งถนนมีลำดับความสำคัญเท่ากัน "
+            "และไม่มีป้าย สัญญาณไฟ หรือกฎอื่นกำหนดสิทธิ์ทาง คุณต้องให้ทางแก่รถที่มาจากด้านขวาครับ "
+            "ลดความเร็วและเตรียมหยุดรถครับ "
+            "แม้คุณจะมาจากด้านขวา คุณก็ยังต้องขับอย่างระมัดระวังและคำนึงถึงผู้อื่นครับ"
+        ),
+        "en": (
+            "The right-hand rule means you must yield to vehicles approaching from the right "
+            "at an equal-priority intersection where no sign, signal, or other priority rule decides. "
+            "Slow down and be ready to stop. "
+            "Even when you approach from the right, you must drive carefully and considerately."
+        ),
+    }
+    return explanations[lang]
+
+
 def _strict_response_sign_ids(explicit_sign_ids: list[str], reply_sign_ids: list[str]) -> list[str]:
     """Allow only controlled user/reply sign matches; never generic RAG sign hits."""
     return _merge_sign_ids(explicit_sign_ids, reply_sign_ids, limit=2)
@@ -2413,6 +2473,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         reply_text = _fallback_reply(lang)
 
     reply_text = _apply_section_7_2_fail_safe(user_msg, reply_text, lang)
+    reply_text = _apply_right_rule_definition_fail_safe(user_msg, reply_text, lang)
     if lang == "th":
         reply_text = _sanitize_gender_particles(reply_text)
     reply_sign_ids = _sign_ids_from_reply(reply_text)

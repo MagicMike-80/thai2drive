@@ -81,6 +81,34 @@ Handoff til QA Gate før produksjonsstatus settes grønn.
 
 ---
 
+# PATCH REPORT: Michael høyreregelbilde og komplett svar
+
+**Status:** LOKALT TESTET – PRODUKSJON IKKE VERIFISERT
+**Dato:** 2026-09-05
+
+- `backend/public_assets/michael_hoyreregel.svg`: språkneutral illustrasjon med
+  stabilt filnavn for Michael-kortet.
+- `backend/media_catalog_manifest.json`: tre døde bildebaner er erstattet med
+  faktiske deploy-filer; bussreferansen er samtidig korrigert til § 7 nr. 5.
+- `backend/scripts/link_michael_core_media.py`: idempotent og eksplisitt
+  produksjonskobling. Den krever eksakt databasenavn, tar tapsfritt snapshot
+  med rollback og stopper dersom aktiv bussvideo, korrekt koblet § 7 nr. 5-
+  materiale, thai-undertekst eller skilt 202 mangler.
+- `backend/teacher_chat.py`: direkte spørsmål om høyreregelen får en komplett,
+  kontrollert forklaring på valgt språk etter den generelle kortversjonen.
+- `tests/test_michael_core_media_link.py`: dekker filer, NO/TH/EN-oppslag,
+  databaseforutsetninger, rollback-snapshot og komplett svar.
+
+Verifisering: 40/40 målrettede tester PASS, Python-kompilering PASS,
+dry-run PASS, `git diff --check` PASS og ingen hemmeligheter funnet i diffen.
+Fire kjente legacy-feil i `tests.test_michael_unified` er uendret og ikke brukt
+som grønt bevis.
+
+Ikke berørt: auth, kvoter, premium, Stripe, RevenueCat, TTS-konfigurasjon eller
+mobilkode. Rollback er å gjenopprette snapshot-posten og reversere commit.
+
+---
+
 # PATCH REPORT: Michael MP4 Range-hotfix
 
 **Status:** IMPLEMENTERT OG LOKALT TESTET
