@@ -5053,7 +5053,7 @@ async def stream_audio(file_id: str, request: Request):
         start, end = byte_range
         length = end - start + 1
         grid_out = await bucket.open_download_stream(oid)
-        await grid_out.seek(start)
+        grid_out.seek(start)
         async def _range_gen():
             remaining = length
             while remaining > 0:
