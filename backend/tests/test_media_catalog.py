@@ -113,6 +113,14 @@ class MediaCatalogTests(unittest.TestCase):
         resolved = expand_law_synonyms("paragraf 7 nr 5 om bussregelen")
         self.assertTrue(set(LAW_MAPPING["7_5"]["tags"]).issubset(resolved))
 
+    def test_law_synonyms_resolve_natural_thai_bus_rule_phrases(self):
+        for query in ("กฎรถบัส", "รถบัสออกจากป้าย", "การให้ทางรถบัส"):
+            with self.subTest(query=query):
+                self.assertEqual(
+                    expand_law_synonyms(query),
+                    set(LAW_MAPPING["7_5"]["tags"]),
+                )
+
     def test_ranker_uses_whole_tags_and_deterministic_order_with_max_one(self):
         unrelated = _item("unrelated", tags=["stopp"])
         best = _item("best", tags=["stoppelengde", "bremselengde"])

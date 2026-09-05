@@ -94,3 +94,11 @@ Handoff til QA Gate før produksjonsstatus settes grønn.
 - Ingen database-, språk-, auth-, betalings-, kvote- eller TTS-endring.
 
 Live-status krever 25/25 HTTP 206 med korrekt `Content-Range` etter deploy.
+
+## Thai bussvideo-ruting
+
+- `backend/media_catalog.py`: § 7 nr. 5 har tre kontrollerte thai-synonymer
+  for naturlige spørsmål om bussregelen.
+- To regresjonstester krever at thai-spørsmålet rangerer bussmaterialet først
+  og beholder thai tittel/caption uten norsk fallback.
+- Relevant samlet suite etter utvidelsen: **86/86 PASS**.

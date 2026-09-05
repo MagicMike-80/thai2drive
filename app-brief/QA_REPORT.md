@@ -43,6 +43,15 @@ Patchen er 100 % godkjent (`PASS`) og klar for commit og push til Railway.
 
 PASS — klar for commit, push og fersk live-verifisering.
 
+## Thai bussvideo-ruting
+
+- PASS: produksjonsproben viste at naturlig `กฎรถบัส` ga tekst uten video;
+  lovkartet manglet thai-synonymer for § 7 nr. 5.
+- PASS: tre eksplisitte thai-uttrykk gir bare de kontrollerte `7_5`-taggene.
+- PASS: Michael-testen krever thai metadata og bussmaterialet rangert først.
+- PASS: relevant samlet suite er **86/86**.
+- GJENSTÅR: samme naturlige thai-spørsmål må returnere video live etter deploy.
+
 ---
 
 # QA GATE: Michael MP4 Range-hotfix

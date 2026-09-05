@@ -323,6 +323,10 @@ class MichaelMaterialRetrievalTests(unittest.TestCase):
         result = self.retrieve([venstresving, bus_rule], "paragraf 7 nr 5 om bussregelen")
         self.assertEqual([item["id"] for item in result], ["sit_buss_regel_01", "sit_vike_venstre_01"])
 
+        thai = self.retrieve([venstresving, bus_rule], "อธิบายกฎรถบัส", lang="th")
+        self.assertEqual(thai[0]["id"], "sit_buss_regel_01")
+        self.assertEqual(thai[0]["title"], "ชื่อภาษาไทย")
+
     def test_catalog_lookup_returns_one_language_pure_exact_tag_match(self):
         catalog = []
         for media_id, language, title in (

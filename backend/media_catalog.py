@@ -215,7 +215,14 @@ LAW_MAPPING: dict[str, dict[str, list[str]]] = {
     },
     "7_5": {
         "tags": ["7", "7_5", "bussregelen", "vikeplikt_buss"],
-        "synonyms": ["paragraf 7 nr 5", "bussregelen", "vikeplikt buss"],
+        "synonyms": [
+            "paragraf 7 nr 5",
+            "bussregelen",
+            "vikeplikt buss",
+            "กฎรถบัส",
+            "รถบัสออกจากป้าย",
+            "การให้ทางรถบัส",
+        ],
     },
 }
 
