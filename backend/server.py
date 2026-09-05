@@ -24,10 +24,10 @@ from passlib.context import CryptContext
 import usage as usage_mod
 from ai_learning import compute_user_readiness, get_active_user_mistakes, record_user_mistake
 try:
-    from streaming_helpers import RangeNotSatisfiable, gridfs_content_type, parse_byte_range
+    from streaming_helpers import RangeNotSatisfiable, gridfs_content_type, gridfs_file_length, parse_byte_range
     from video_thumbnails import normalize_video_thumbnail_url
 except ImportError:  # package-style imports used by isolated tests
-    from backend.streaming_helpers import RangeNotSatisfiable, gridfs_content_type, parse_byte_range
+    from backend.streaming_helpers import RangeNotSatisfiable, gridfs_content_type, gridfs_file_length, parse_byte_range
     from backend.video_thumbnails import normalize_video_thumbnail_url
 try:
     from media_catalog import SUPPORTED_LANGUAGES, list_localized_catalog_media
@@ -5029,20 +5029,26 @@ async def stream_audio(file_id: str, request: Request):
         raise HTTPException(status_code=404, detail="Audio not found")
 
     doc = docs[0]
-    total = doc.length
+    try:
+        total = gridfs_file_length(doc)
+    except ValueError:
+        logger.error("GridFS audio document has invalid length: %s", file_id)
+        raise HTTPException(status_code=500, detail="Audio metadata is invalid")
     # Older GridFS uploads have no metadata attribute. Direct ``doc.metadata``
     # raises AttributeError for those files and previously surfaced as HTTP 500.
     ct = gridfs_content_type(doc)
 
-    range_hdr = request.headers.get("Range", "")
-    try:
-        byte_range = parse_byte_range(range_hdr, total)
-    except RangeNotSatisfiable:
-        raise HTTPException(
-            status_code=416,
-            detail="Requested range not satisfiable",
-            headers={"Content-Range": f"bytes */{total}"},
-        )
+    range_hdr = request.headers.get("Range")
+    byte_range = None
+    if range_hdr is not None:
+        try:
+            byte_range = parse_byte_range(range_hdr, total)
+        except RangeNotSatisfiable:
+            raise HTTPException(
+                status_code=416,
+                detail="Requested range not satisfiable",
+                headers={"Content-Range": f"bytes */{total}"},
+            )
     if byte_range:
         start, end = byte_range
         length = end - start + 1
