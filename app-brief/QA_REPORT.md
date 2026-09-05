@@ -42,3 +42,18 @@ Patchen er 100 % godkjent (`PASS`) og klar for commit og push til Railway.
   deploy; lokal QA kan ikke bevise fysisk berøring på sjefens telefon.
 
 PASS — klar for commit, push og fersk live-verifisering.
+
+---
+
+# QA GATE: Michael WebVTT MIME-hotfix
+
+- PASS: rotårsaken er direkte adressert; `.vtt` får eksplisitt `text/vtt`
+  i den samme asset-ruten som leverer de 25 thai-sporene.
+- PASS: kontrakttesten feiler dersom MIME-mappingen senere fjernes.
+- PASS: relevant Michael-, skilt- og medieregresjon er **84/84**.
+- PASS: diffen er avgrenset til én serverlinje, én test og dokumentasjon.
+- PASS: ingen learner-facing språk, tilgang, betaling, database eller
+  leverandørhemmelighet er endret.
+- GJENSTÅR: alle 25 VTT-responser må vise HTTP 200 og `text/vtt` etter deploy.
+
+PASS — klar for commit, push og fersk live-verifisering.

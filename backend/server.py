@@ -5579,6 +5579,7 @@ async def public_asset(filename: str, request: Request):
         ".pdf": "application/pdf",
         ".mp3": "audio/mpeg",
         ".mp4": "video/mp4",
+        ".vtt": "text/vtt",
         ".m4a": "audio/mp4",
         ".wav": "audio/wav",
         ".ogg": "audio/ogg",
