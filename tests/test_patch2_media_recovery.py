@@ -4,7 +4,12 @@ import importlib.util
 import unittest
 from pathlib import Path
 
-from backend.streaming_helpers import RangeNotSatisfiable, gridfs_content_type, parse_byte_range
+from backend.streaming_helpers import (
+    RangeNotSatisfiable,
+    gridfs_content_type,
+    gridfs_file_length,
+    parse_byte_range,
+)
 from backend.video_thumbnails import normalize_video_thumbnail_url, thumbnail_url_for_video
 
 
@@ -22,6 +27,17 @@ class LegacyGridOut:
 
 
 class Patch2MediaRecoveryTests(unittest.TestCase):
+    def test_gridfs_dict_length(self):
+        self.assertEqual(gridfs_file_length({"length": 100}), 100)
+
+    def test_gridfs_object_length(self):
+        self.assertEqual(gridfs_file_length(LegacyGridOut()), 100)
+
+    def test_gridfs_invalid_length_fails_closed(self):
+        for document in ({}, {"length": -1}, {"length": "100"}):
+            with self.subTest(document=document), self.assertRaises(ValueError):
+                gridfs_file_length(document)
+
     def test_legacy_gridfs_metadata_fails_soft(self):
         self.assertEqual(gridfs_content_type(LegacyGridOut()), "audio/mpeg")
         snake = type("GridOut", (), {"metadata": {"content_type": "audio/mp4"}})()
@@ -29,19 +45,38 @@ class Patch2MediaRecoveryTests(unittest.TestCase):
         self.assertEqual(gridfs_content_type(snake), "audio/mp4")
         self.assertEqual(gridfs_content_type(camel), "video/mp4")
 
-    def test_range_contract(self):
+    def test_gridfs_dict_metadata_content_type(self):
+        self.assertEqual(gridfs_content_type({"metadata": {"content_type": "audio/ogg"}}), "audio/ogg")
+        self.assertEqual(gridfs_content_type({"metadata": {"contentType": "audio/wav"}}), "audio/wav")
+
+    def test_gridfs_invalid_metadata_fails_soft(self):
+        self.assertEqual(gridfs_content_type({"metadata": "invalid"}), "audio/mpeg")
+
+    def test_empty_range_value_returns_full_stream_marker(self):
         self.assertIsNone(parse_byte_range("", 100))
+
+    def test_single_byte_range(self):
         self.assertEqual(parse_byte_range("bytes=0-0", 100), (0, 0))
+
+    def test_range_end_is_capped_at_file_length(self):
         self.assertEqual(parse_byte_range("bytes=90-200", 100), (90, 99))
+
+    def test_open_ended_range(self):
         self.assertEqual(parse_byte_range("bytes=90-", 100), (90, 99))
+
+    def test_suffix_range(self):
         self.assertEqual(parse_byte_range("bytes=-10", 100), (90, 99))
+
+    def test_invalid_ranges_fail_with_416_marker(self):
         for value in ("bytes=100-", "bytes=20-10", "bytes=-0", "bytes=0-1,4-5"):
             with self.subTest(value=value), self.assertRaises(RangeNotSatisfiable):
                 parse_byte_range(value, 100)
 
     def test_server_route_uses_gridfs_helpers_and_range_headers(self):
+        self.assertIn("total = gridfs_file_length(doc)", SERVER)
         self.assertIn("ct = gridfs_content_type(doc)", SERVER)
         self.assertIn("byte_range = parse_byte_range(range_hdr, total)", SERVER)
+        self.assertIn("if range_hdr is not None:", SERVER)
         self.assertIn('"Content-Range": f"bytes {start}-{end}/{total}"', SERVER)
         self.assertIn('"Content-Length": str(length)', SERVER)
         self.assertIn("status_code=206", SERVER)

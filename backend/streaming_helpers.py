@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import re
+from collections.abc import Mapping
 from typing import Optional
 
 
@@ -10,9 +11,27 @@ class RangeNotSatisfiable(ValueError):
     """Raised when a single HTTP byte range cannot be served."""
 
 
-def gridfs_content_type(grid_out, default: str = "audio/mpeg") -> str:
+def gridfs_file_length(document) -> int:
+    """Read a GridFS file length from either a mapping or GridOut object."""
+    value = (
+        document.get("length")
+        if isinstance(document, Mapping)
+        else getattr(document, "length", None)
+    )
+    if not isinstance(value, int) or isinstance(value, bool) or value < 0:
+        raise ValueError("GridFS document has no valid length")
+    return value
+
+
+def gridfs_content_type(document, default: str = "audio/mpeg") -> str:
     """Read content type safely from both new and legacy GridFS documents."""
-    metadata = getattr(grid_out, "metadata", None) or {}
+    metadata = (
+        document.get("metadata", {})
+        if isinstance(document, Mapping)
+        else getattr(document, "metadata", None) or {}
+    )
+    if not isinstance(metadata, Mapping):
+        return default
     return metadata.get("content_type") or metadata.get("contentType") or default
 
 
