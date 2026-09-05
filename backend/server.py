@@ -5785,6 +5785,26 @@ async def log_smtp_config():
 
 
 @app.on_event("startup")
+async def publish_michael_video_catalog():
+    """Run the guarded, one-time MP4 catalog migration after deployment."""
+    try:
+        from michael_video_seed import seed_michael_video_catalog
+
+        result = await seed_michael_video_catalog(db)
+        logging.getLogger("michael_video_seed").info(
+            "Michael video catalog status=%s videos=%s",
+            result.get("status"),
+            result.get("videos"),
+        )
+    except Exception as exc:
+        # Media publication must not make the entire app unavailable. The
+        # migration remains incomplete and retries on the next restart.
+        logging.getLogger("michael_video_seed").error(
+            "Michael video catalog publication failed: %s", exc
+        )
+
+
+@app.on_event("startup")
 async def ensure_indexes():
     """
     Create / verify all MongoDB indexes on every deploy.

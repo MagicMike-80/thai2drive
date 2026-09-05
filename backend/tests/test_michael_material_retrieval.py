@@ -213,6 +213,53 @@ class MichaelMaterialRetrievalTests(unittest.TestCase):
         result = self.retrieve([material], "Vis stoppelengde", videos=videos)
         self.assertEqual(result[0]["url"], "https://youtu.be/abcdefghijk")
 
+    def test_video_uses_safe_local_asset_and_honours_learner_language(self):
+        material = _material(
+            "video-local",
+            "video",
+            source_id="video-local-1",
+            source_url="/api/assets/thumbs/thumb_local.jpg",
+            topic_tags=["vikeplikt"],
+        )
+        videos = [{
+            "id": "video-local-1",
+            "active": True,
+            "youtube_url": "",
+            "file_path": "/public_assets/video_local.mp4",
+            "learner_languages": ["no"],
+        }]
+        norwegian = self.retrieve([material], "Forklar vikeplikt", videos=videos)
+        thai = self.retrieve([material], "อธิบายการให้ทาง", lang="th", videos=videos)
+        self.assertEqual(norwegian[0]["url"], "/api/assets/video_local.mp4")
+        self.assertEqual(thai, [])
+
+    def test_video_returns_only_safe_subtitle_tracks_and_audio_language(self):
+        material = _material(
+            "video-subtitles",
+            "video",
+            source_id="video-subtitles-1",
+            topic_tags=["vikeplikt"],
+        )
+        videos = [{
+            "id": "video-subtitles-1",
+            "active": True,
+            "file_path": "/public_assets/video_subtitles.mp4",
+            "audio_language": "no",
+            "learner_languages": ["no", "th"],
+            "subtitle_tracks": [
+                {"lang": "th", "label": "ไทย", "url": "/api/assets/subtitles/video.th.vtt"},
+                {"lang": "xx", "label": "Bad", "url": "/api/assets/subtitles/bad.vtt"},
+                {"lang": "en", "label": "Bad URL", "url": "javascript:alert(1)"},
+            ],
+        }]
+        result = self.retrieve([material], "อธิบายการให้ทาง", lang="th", videos=videos)
+        self.assertEqual(result[0]["audio_language"], "no")
+        self.assertEqual(result[0]["subtitle_tracks"], [{
+            "lang": "th",
+            "label": "ไทย",
+            "url": "/api/assets/subtitles/video.th.vtt",
+        }])
+
     def test_empty_library_is_text_only_and_response_contract_is_additive(self):
         self.assertEqual(self.retrieve([], "vikeplikt"), [])
         source = (Path(__file__).resolve().parents[1] / "teacher_chat.py").read_text(encoding="utf-8")
@@ -232,6 +279,21 @@ class MichaelMaterialRetrievalTests(unittest.TestCase):
             approved,
         )
 
+    def test_final_response_keeps_approved_video_and_prefers_exact_sign(self):
+        video = {"id": "video", "type": "video"}
+        correct_sign = {"id": "sign", "type": "sign", "sign_id": "202_0"}
+        unrelated_sign = {"id": "other", "type": "sign", "sign_id": "204_0"}
+        self.assertEqual(
+            self.module._reconcile_teacher_media([video], [], []),
+            [video],
+        )
+        self.assertEqual(
+            self.module._reconcile_teacher_media(
+                [video, unrelated_sign], ["202_0"], [correct_sign]
+            ),
+            [correct_sign, video],
+        )
+
     def test_invalid_language_never_queries_catalog(self):
         self.assertEqual(
             asyncio.run(self.module._get_relevant_catalog_media("stoppelengde", "nb")),
@@ -249,16 +311,16 @@ class MichaelMaterialRetrievalTests(unittest.TestCase):
                 result = self.retrieve([unrelated, target], query)
                 self.assertEqual([item["id"] for item in result], ["sit_vike_venstre_01"])
 
-    def test_bussregelen_query_matches_7_4_not_generic_7_2_image(self):
+    def test_bussregelen_query_matches_7_5_not_generic_7_2_image(self):
         bus_rule = _material(
             "sit_buss_regel_01",
-            topic_tags=["7", "7_4", "bussregelen", "vikeplikt_buss"],
+            topic_tags=["7", "7_5", "bussregelen", "vikeplikt_buss"],
         )
         venstresving = _material(
             "sit_vike_venstre_01",
             topic_tags=["7", "7_2", "vikeplikt", "høyreregel", "venstresving"],
         )
-        result = self.retrieve([venstresving, bus_rule], "paragraf 7 nr 4 om bussregelen")
+        result = self.retrieve([venstresving, bus_rule], "paragraf 7 nr 5 om bussregelen")
         self.assertEqual([item["id"] for item in result], ["sit_buss_regel_01", "sit_vike_venstre_01"])
 
     def test_catalog_lookup_returns_one_language_pure_exact_tag_match(self):

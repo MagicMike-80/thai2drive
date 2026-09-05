@@ -1471,11 +1471,38 @@ async def _get_relevant_michael_materials(
                 continue
 
             url = str(material.get("source_url", "")).strip()
+            video_metadata = {}
             if material_type == "video" and source_id:
                 video = await _db["learning_videos"].find_one({"id": source_id, "active": True})
                 if not video:
                     continue
+                allowed_languages = video.get("learner_languages")
+                if isinstance(allowed_languages, list) and lang not in allowed_languages:
+                    continue
                 url = str(video.get("youtube_url", "")).strip()
+                if not url:
+                    file_path = str(video.get("file_path", "")).strip().replace("\\", "/")
+                    if file_path.startswith("/public_assets/"):
+                        url = f"/api/assets/{file_path[len('/public_assets/') :]}"
+                    elif file_path.startswith("/api/assets/"):
+                        url = file_path
+                subtitle_tracks = []
+                for track in video.get("subtitle_tracks", []):
+                    if not isinstance(track, dict):
+                        continue
+                    track_lang = str(track.get("lang", "")).strip()
+                    track_url = str(track.get("url", "")).strip()
+                    if track_lang not in SUPPORTED_LANGUAGES or not _safe_michael_material_url(track_url):
+                        continue
+                    subtitle_tracks.append({
+                        "lang": track_lang,
+                        "label": str(track.get("label", "")).strip(),
+                        "url": track_url,
+                    })
+                video_metadata = {
+                    "audio_language": str(video.get("audio_language", "")).strip(),
+                    "subtitle_tracks": subtitle_tracks,
+                }
             if not _safe_michael_material_url(url):
                 continue
 
@@ -1490,6 +1517,8 @@ async def _get_relevant_michael_materials(
                 "title": title,
                 "caption": caption,
             }
+            if material_type == "video":
+                payload.update(video_metadata)
             if sign_id:
                 payload["sign_id"] = sign_id
             try:
@@ -1550,6 +1579,29 @@ def _compose_teacher_media(
         if len(result) == 2:
             break
     return result
+
+
+def _reconcile_teacher_media(
+    media: list[dict],
+    sign_ids: list[str],
+    exact_response_media: list[dict],
+) -> list[dict]:
+    """Replace sign cards with authoritative records and retain lesson media."""
+    lesson_media = [item for item in media if item.get("type") != "sign"]
+    if not sign_ids:
+        return lesson_media[:2]
+    existing_sign_media = {
+        item.get("sign_id"): item
+        for item in media
+        if item.get("type") == "sign" and item.get("sign_id")
+    }
+    exact_sign_media = {item.get("sign_id"): item for item in exact_response_media}
+    sign_media = [
+        exact_sign_media.get(sign_id) or existing_sign_media.get(sign_id)
+        for sign_id in sign_ids
+        if exact_sign_media.get(sign_id) or existing_sign_media.get(sign_id)
+    ]
+    return (sign_media + lesson_media)[:2]
 
 
 # ─── Contextual chip suggestions (multilingual keyword detection) ─────────────
@@ -2366,25 +2418,13 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
     reply_sign_ids = _sign_ids_from_reply(reply_text)
     sign_ids = _strict_response_sign_ids(explicit_sign_ids, reply_sign_ids)
 
+    exact_response_media = []
     if sign_ids:
         try:
             exact_response_media = await _get_exact_sign_media(sign_ids, lang, limit=2)
         except Exception as media_ex:
             logger.error("Failed to resolve exact response sign media: %s", media_ex)
-            exact_response_media = []
-        existing_sign_media = {
-            item.get("sign_id"): item
-            for item in media
-            if item.get("type") == "sign" and item.get("sign_id")
-        }
-        exact_sign_media = {item.get("sign_id"): item for item in exact_response_media}
-        media = [
-            exact_sign_media.get(sign_id) or existing_sign_media.get(sign_id)
-            for sign_id in sign_ids
-            if exact_sign_media.get(sign_id) or existing_sign_media.get(sign_id)
-        ]
-    else:
-        media = []
+    media = _reconcile_teacher_media(media, sign_ids, exact_response_media)
 
     # Persist both messages
     now = datetime.now(timezone.utc)
@@ -2424,10 +2464,6 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         logger.error("Failed to write teacher log to DB: %s", log_ex)
 
     suggestions = []
-    media = [
-        item for item in media
-        if item.get("type") == "sign" and item.get("sign_id") in sign_ids
-    ][:2]
     return TeacherChatResponse(
         session_id=session_id,
         reply=reply_text,
