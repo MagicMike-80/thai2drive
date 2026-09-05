@@ -78,3 +78,27 @@ Live-status krever etter deploy HTTP 200 og `Content-Type: text/vtt` på alle
 25 spor. Rollback er å reversere MIME-tabellinjen og kontrakttesten.
 
 Handoff til QA Gate før produksjonsstatus settes grønn.
+
+---
+
+# PATCH REPORT: Michael MP4 Range-hotfix
+
+**Status:** IMPLEMENTERT OG LOKALT TESTET
+**Dato:** 2026-09-05
+
+- `backend/server.py`: `.mp4` bruker eksisterende, testet byte-range-hjelper.
+- `tests/test_michael_media_cards_contract.py`: kontrakten krever MP4 i
+  Range-rutingen.
+- Relevant Michael-, skilt- og medieregresjon: **85/85 PASS**.
+- Vanlig GET skal fortsatt gi HTTP 200; gyldig Range skal gi HTTP 206.
+- Ingen database-, språk-, auth-, betalings-, kvote- eller TTS-endring.
+
+Live-status krever 25/25 HTTP 206 med korrekt `Content-Range` etter deploy.
+
+## Thai bussvideo-ruting
+
+- `backend/media_catalog.py`: § 7 nr. 5 har tre kontrollerte thai-synonymer
+  for naturlige spørsmål om bussregelen.
+- To regresjonstester krever at thai-spørsmålet rangerer bussmaterialet først
+  og beholder thai tittel/caption uten norsk fallback.
+- Relevant samlet suite etter utvidelsen: **86/86 PASS**.

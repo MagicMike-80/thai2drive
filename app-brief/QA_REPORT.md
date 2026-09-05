@@ -43,6 +43,31 @@ Patchen er 100 % godkjent (`PASS`) og klar for commit og push til Railway.
 
 PASS — klar for commit, push og fersk live-verifisering.
 
+## Thai bussvideo-ruting
+
+- PASS: produksjonsproben viste at naturlig `กฎรถบัส` ga tekst uten video;
+  lovkartet manglet thai-synonymer for § 7 nr. 5.
+- PASS: tre eksplisitte thai-uttrykk gir bare de kontrollerte `7_5`-taggene.
+- PASS: Michael-testen krever thai metadata og bussmaterialet rangert først.
+- PASS: relevant samlet suite er **86/86**.
+- GJENSTÅR: samme naturlige thai-spørsmål må returnere video live etter deploy.
+
+---
+
+# QA GATE: Michael MP4 Range-hotfix
+
+- PASS: produksjonsproben beviste rotårsaken: Range-forespørsler på MP4 ga
+  HTTP 200 og hele filen fordi `.mp4` manglet i Range-betingelsen.
+- PASS: patchen gjenbruker eksisterende `_range_file_response`; ingen ny
+  streamingimplementasjon eller refaktorering.
+- PASS: **85/85** relevante Michael-, skilt- og medietester.
+- PASS: diffen er avgrenset til én serverbetingelse, én test og rapportering.
+- PASS: ingen learner-facing tekst, tilgang, betaling, database eller
+  leverandørkonfigurasjon er berørt.
+- GJENSTÅR: 25/25 MP4 må gi HTTP 206 og korrekt byteantall live.
+
+PASS — klar for commit, push og fersk live-verifisering.
+
 ---
 
 # QA GATE: Michael WebVTT MIME-hotfix
