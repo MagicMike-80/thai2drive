@@ -5586,7 +5586,7 @@ async def public_asset(filename: str, request: Request):
     }.get(ext, "application/octet-stream")
 
     asset_headers = {"Cache-Control": "public, max-age=86400"}
-    if ext in {".mp3", ".m4a", ".wav", ".ogg"}:
+    if ext in {".mp3", ".mp4", ".m4a", ".wav", ".ogg"}:
         return _range_file_response(file_path, request, media_type, asset_headers)
     return FileResponse(str(file_path), media_type=media_type, headers=asset_headers)
 

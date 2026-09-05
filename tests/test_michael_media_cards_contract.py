@@ -48,6 +48,10 @@ class MichaelMediaCardsContractTests(unittest.TestCase):
     def test_public_asset_route_serves_webvtt_with_browser_safe_mime(self):
         self.assertIn('\".vtt\": \"text/vtt\"', SERVER)
 
+    def test_public_asset_route_uses_byte_ranges_for_mp4(self):
+        self.assertIn('if ext in {\".mp3\", \".mp4\",', SERVER)
+        self.assertIn("return _range_file_response(file_path, request, media_type, asset_headers)", SERVER)
+
     def test_tts_has_selected_language_browser_fallback(self):
         self.assertIn("function _consumeTtsFallback()", WEBAPP)
         self.assertIn("utterance.lang = localeForLangKey(pending.lang)", WEBAPP)

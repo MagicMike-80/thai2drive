@@ -45,6 +45,22 @@ PASS — klar for commit, push og fersk live-verifisering.
 
 ---
 
+# QA GATE: Michael MP4 Range-hotfix
+
+- PASS: produksjonsproben beviste rotårsaken: Range-forespørsler på MP4 ga
+  HTTP 200 og hele filen fordi `.mp4` manglet i Range-betingelsen.
+- PASS: patchen gjenbruker eksisterende `_range_file_response`; ingen ny
+  streamingimplementasjon eller refaktorering.
+- PASS: **85/85** relevante Michael-, skilt- og medietester.
+- PASS: diffen er avgrenset til én serverbetingelse, én test og rapportering.
+- PASS: ingen learner-facing tekst, tilgang, betaling, database eller
+  leverandørkonfigurasjon er berørt.
+- GJENSTÅR: 25/25 MP4 må gi HTTP 206 og korrekt byteantall live.
+
+PASS — klar for commit, push og fersk live-verifisering.
+
+---
+
 # QA GATE: Michael WebVTT MIME-hotfix
 
 - PASS: rotårsaken er direkte adressert; `.vtt` får eksplisitt `text/vtt`
