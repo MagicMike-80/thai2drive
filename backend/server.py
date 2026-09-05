@@ -24,6 +24,12 @@ from passlib.context import CryptContext
 import usage as usage_mod
 from ai_learning import compute_user_readiness, get_active_user_mistakes, record_user_mistake
 try:
+    from streaming_helpers import RangeNotSatisfiable, gridfs_content_type, parse_byte_range
+    from video_thumbnails import normalize_video_thumbnail_url
+except ImportError:  # package-style imports used by isolated tests
+    from backend.streaming_helpers import RangeNotSatisfiable, gridfs_content_type, parse_byte_range
+    from backend.video_thumbnails import normalize_video_thumbnail_url
+try:
     from media_catalog import SUPPORTED_LANGUAGES, list_localized_catalog_media
 except ImportError:  # package-style imports used by isolated tests
     from backend.media_catalog import SUPPORTED_LANGUAGES, list_localized_catalog_media
@@ -4568,16 +4574,17 @@ class LearningVideoCreate(BaseModel):
 def _serialize_video(v: dict) -> dict:
     """Normalize a MongoDB video document for the API response."""
     v = {k: val for k, val in v.items() if k != '_id'}
-    if not v.get('thumbnail_url'):
+    normalized_thumbnail = normalize_video_thumbnail_url(
+        v.get('thumbnail_url', ''),
+        v.get('file_path', ''),
+    )
+    if normalized_thumbnail:
+        v['thumbnail_url'] = normalized_thumbnail
+    else:
         if v.get('youtube_url'):
             yt_id = _extract_youtube_id(v['youtube_url'])
             if yt_id:
                 v['thumbnail_url'] = f"https://img.youtube.com/vi/{yt_id}/mqdefault.jpg"
-        elif v.get('file_path'):
-            # Derive a local thumbnail from the video filename
-            fname = v['file_path'].rsplit('/', 1)[-1]  # video_xxx.mp4
-            stem = fname.rsplit('.', 1)[0]  # video_xxx
-            v['thumbnail_url'] = f"/api/assets/thumbs/thumb_{stem}.jpg"
     return v
 
 
@@ -5023,14 +5030,21 @@ async def stream_audio(file_id: str, request: Request):
 
     doc = docs[0]
     total = doc.length
-    ct = (doc.metadata or {}).get("content_type", "audio/mpeg")
+    # Older GridFS uploads have no metadata attribute. Direct ``doc.metadata``
+    # raises AttributeError for those files and previously surfaced as HTTP 500.
+    ct = gridfs_content_type(doc)
 
     range_hdr = request.headers.get("Range", "")
-    m = re.match(r"bytes=(\d+)-(\d*)", range_hdr)
-    if m:
-        start = int(m.group(1))
-        end = int(m.group(2)) if m.group(2) else total - 1
-        end = min(end, total - 1)
+    try:
+        byte_range = parse_byte_range(range_hdr, total)
+    except RangeNotSatisfiable:
+        raise HTTPException(
+            status_code=416,
+            detail="Requested range not satisfiable",
+            headers={"Content-Range": f"bytes */{total}"},
+        )
+    if byte_range:
+        start, end = byte_range
         length = end - start + 1
         grid_out = await bucket.open_download_stream(oid)
         await grid_out.seek(start)
