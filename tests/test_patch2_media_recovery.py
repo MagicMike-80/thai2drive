@@ -77,6 +77,8 @@ class Patch2MediaRecoveryTests(unittest.TestCase):
         self.assertIn("ct = gridfs_content_type(doc)", SERVER)
         self.assertIn("byte_range = parse_byte_range(range_hdr, total)", SERVER)
         self.assertIn("if range_hdr is not None:", SERVER)
+        self.assertIn("grid_out.seek(start)", SERVER)
+        self.assertNotIn("await grid_out.seek(start)", SERVER)
         self.assertIn('"Content-Range": f"bytes {start}-{end}/{total}"', SERVER)
         self.assertIn('"Content-Length": str(length)', SERVER)
         self.assertIn("status_code=206", SERVER)
