@@ -169,6 +169,33 @@ class MichaelCoreMediaLinkTests(unittest.TestCase):
                 self.assertIn(expected_title, result[0]["title"])
                 self.assertEqual(result[0]["url"], RIGHT_RULE_MATERIAL["source_url"])
 
+    def test_specific_right_rule_phrase_outranks_generic_section_7_media(self):
+        generic_materials = []
+        for suffix in ("a", "b"):
+            generic = dict(RIGHT_RULE_MATERIAL)
+            generic.update({
+                "id": f"generic-section-7-{suffix}",
+                "source_url": f"/api/assets/generic-section-7-{suffix}.jpg",
+                "match_phrases": [],
+                "situation_tags": ["Vikeplikt", "vikeplikt", "7", "7_2"],
+                "topic_tags": ["Vikeplikt", "vikeplikt", "7", "7_2"],
+                "priority": 40,
+            })
+            generic_materials.append(generic)
+
+        cases = (
+            ("no", "Kan du forklare høyreregelen og vise bilde?"),
+            ("th", "อธิบายกฎให้ทางจากขวาและแสดงภาพ"),
+            ("en", "Explain the right-hand rule and show an image"),
+        )
+        for language, question in cases:
+            with self.subTest(language=language):
+                self.teacher._db = _TeacherDatabase(generic_materials + [RIGHT_RULE_MATERIAL])
+                result = asyncio.run(
+                    self.teacher._get_relevant_michael_materials(question, language)
+                )
+                self.assertEqual(result[0]["id"], RIGHT_RULE_MATERIAL["id"])
+
     def test_apply_requires_and_preserves_bus_and_sign_links(self):
         database = _Database()
         proof = verify_existing_sources(database)

@@ -1521,6 +1521,11 @@ async def _get_relevant_michael_materials(
             if exact_matches or context_matches:
                 score += 1000
 
+            for raw_phrase in material.get("match_phrases", []):
+                phrase = _normalize_material_match_text(str(raw_phrase))
+                if phrase and phrase in query:
+                    score += 5000
+
             for field, weight in (("situation_tags", 200), ("topic_tags", 100)):
                 for raw_tag in material.get(field, []):
                     tag = _normalize_material_match_text(str(raw_tag))
