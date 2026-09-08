@@ -295,10 +295,26 @@ class MichaelCoreMediaLinkTests(unittest.TestCase):
             "LLM_KEY": module.LLM_KEY,
         }
 
-        async def no_context(*args, **kwargs):
-            return ""
+        async def context_with_related_signs(*args, **kwargs):
+            return (
+                "Traffic Sign 210_0: Forkjørsvei\n"
+                "Traffic Sign 202_0: Vikeplikt"
+            )
 
-        async def no_media(*args, **kwargs):
+        async def exact_sign_media(sign_ids, *args, **kwargs):
+            return [
+                {
+                    "id": f"traffic-sign:{sign_id}",
+                    "type": "sign",
+                    "sign_id": sign_id,
+                    "url": f"/api/sign-images/{sign_id}.jpg",
+                    "title": sign_id,
+                    "caption": sign_id,
+                }
+                for sign_id in sign_ids
+            ]
+
+        async def no_catalog_media(*args, **kwargs):
             return []
 
         async def truncated_completion(*args, **kwargs):
@@ -308,9 +324,9 @@ class MichaelCoreMediaLinkTests(unittest.TestCase):
         try:
             module._db = _AsyncDatabase()
             module._chat_col = _AsyncCollection()
-            module._get_curriculum_context = no_context
-            module._get_exact_sign_media = no_media
-            module._get_relevant_catalog_media = no_media
+            module._get_curriculum_context = context_with_related_signs
+            module._get_exact_sign_media = exact_sign_media
+            module._get_relevant_catalog_media = no_catalog_media
             module._completion_with_fallback = truncated_completion
             module.TeacherChatResponse = lambda **kwargs: types.SimpleNamespace(**kwargs)
             module.LLM_KEY = "test-key"

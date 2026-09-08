@@ -2290,10 +2290,10 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         # Retrieve curriculum context from database (RAG)
         context_str = await _get_curriculum_context(user_msg, lang)
         context_sign_ids = _sign_ids_from_context(context_str)
-        exact_sign_media = await _get_exact_sign_media(
-            explicit_sign_ids or context_sign_ids,
-            lang,
-        )
+        # Only explicit sign requests may reserve the limited response media slots.
+        # RAG context can mention several related signs; preloading those cards can
+        # otherwise crowd out the lesson image/video the learner actually requested.
+        exact_sign_media = await _get_exact_sign_media(explicit_sign_ids, lang)
         approved_media = await _get_relevant_michael_materials(
             user_msg,
             lang,
