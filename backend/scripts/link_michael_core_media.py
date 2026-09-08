@@ -11,6 +11,7 @@ import os
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlparse
 
 
 RIGHT_RULE_MATERIAL: dict[str, Any] = {
@@ -47,6 +48,12 @@ RIGHT_RULE_MATERIAL: dict[str, Any] = {
 BUS_VIDEO_ID = "michael_vikeplikt_7_5a_buss"
 BUS_MATERIAL_ID = "material_vikeplikt_7_5a_buss"
 SIGN_ID = "202_0"
+SIGN_IMAGE_PATH = "/api/sign-images/202_0.jpg"
+TRUSTED_SIGN_IMAGE_HOSTS = {
+    "thai2drive.no",
+    "www.thai2drive.no",
+    "thai2drive-production.up.railway.app",
+}
 LANGUAGES = ("no", "th", "en")
 
 
@@ -91,6 +98,20 @@ def _complete_localized(document: dict[str, Any], *fields: str) -> bool:
     return True
 
 
+def _trusted_sign_image_url(value: Any) -> bool:
+    image_url = str(value or "").strip()
+    if image_url == SIGN_IMAGE_PATH:
+        return True
+    parsed = urlparse(image_url)
+    return (
+        parsed.scheme == "https"
+        and parsed.hostname in TRUSTED_SIGN_IMAGE_HOSTS
+        and parsed.path == SIGN_IMAGE_PATH
+        and not parsed.query
+        and not parsed.fragment
+    )
+
+
 def verify_existing_sources(database: Any) -> dict[str, Any]:
     bus_video = database.learning_videos.find_one({"id": BUS_VIDEO_ID, "active": True})
     if not bus_video:
@@ -127,7 +148,7 @@ def verify_existing_sources(database: Any) -> dict[str, Any]:
         if any("60" not in str(bus_material[field][language]) for language in LANGUAGES):
             raise RuntimeError("Approved bus material does not state the 60 km/h boundary")
     sign = database.traffic_signs.find_one({"id": SIGN_ID})
-    if not sign or not str(sign.get("image_url", "")).startswith("/api/sign-images/"):
+    if not sign or not _trusted_sign_image_url(sign.get("image_url")):
         raise RuntimeError("Traffic sign 202 has no API image")
     if not _complete_localized(sign, "name", "explanation", "driver_action"):
         raise RuntimeError("Traffic sign 202 is not complete for no/th/en")
