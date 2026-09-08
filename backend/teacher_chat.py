@@ -1380,6 +1380,45 @@ def _apply_right_rule_definition_fail_safe(user_msg: str, reply_text: str, lang:
     return explanations[lang]
 
 
+def _apply_bus_rule_definition_fail_safe(user_msg: str, reply_text: str, lang: str) -> str:
+    """Keep direct bus-stop rule answers complete after the global concise pass."""
+    message = (user_msg or "").casefold()
+    direct_terms = (
+        "bussregel", "bus rule", "กฎรถบัส", "กฎรถโดยสาร",
+    )
+    bus_terms = ("buss", "bus", "รถบัส", "รถโดยสาร")
+    stop_terms = (
+        "holdeplass", "bus stop", "leaving the stop", "leaves the stop",
+        "ออกจากป้าย", "ป้ายรถ",
+    )
+    is_bus_rule_query = any(term in message for term in direct_terms) or (
+        any(term in message for term in bus_terms)
+        and any(term in message for term in stop_terms)
+    )
+    if not is_bus_rule_query or lang not in SUPPORTED_LANGUAGES:
+        return reply_text
+
+    explanations = {
+        "no": (
+            "På vei med fartsgrense 60 km/t eller lavere har du vikeplikt for en buss når "
+            "føreren gir tegn om at bussen skal forlate holdeplassen. Senk farten og la bussen "
+            "kjøre ut. Ved 70 km/t eller høyere gjelder ikke denne særregelen, men du skal "
+            "fortsatt kjøre aktsomt."
+        ),
+        "th": (
+            "บนถนนที่กำหนดความเร็วไม่เกิน 60 กม./ชม. คุณต้องให้ทางแก่รถโดยสารประจำทางเมื่อคนขับ"
+            "ให้สัญญาณว่าจะออกจากป้ายครับ ลดความเร็วและเปิดทางให้รถโดยสารออกครับ ที่ 70 กม./ชม. "
+            "หรือสูงกว่า กฎพิเศษนี้ไม่ใช้ แต่คุณยังต้องขับอย่างระมัดระวังครับ"
+        ),
+        "en": (
+            "On a road with a speed limit of 60 km/h or lower, you must yield when a bus driver "
+            "signals to leave a stop. Slow down and let the bus out. At 70 km/h or higher, this "
+            "special rule does not apply, but you must still drive carefully."
+        ),
+    }
+    return explanations[lang]
+
+
 def _strict_response_sign_ids(explicit_sign_ids: list[str], reply_sign_ids: list[str]) -> list[str]:
     """Allow only controlled user/reply sign matches; never generic RAG sign hits."""
     return _merge_sign_ids(explicit_sign_ids, reply_sign_ids, limit=2)
@@ -2479,6 +2518,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
 
     reply_text = _apply_section_7_2_fail_safe(user_msg, reply_text, lang)
     reply_text = _apply_right_rule_definition_fail_safe(user_msg, reply_text, lang)
+    reply_text = _apply_bus_rule_definition_fail_safe(user_msg, reply_text, lang)
     if lang == "th":
         reply_text = _sanitize_gender_particles(reply_text)
     reply_sign_ids = _sign_ids_from_reply(reply_text)
