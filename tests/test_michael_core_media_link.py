@@ -10,6 +10,7 @@ from backend.scripts.link_michael_core_media import (
     BUS_VIDEO_ID,
     RIGHT_RULE_MATERIAL,
     SIGN_ID,
+    _trusted_sign_image_url,
     apply_link,
     rollback_link,
     validate_material,
@@ -179,6 +180,15 @@ class MichaelCoreMediaLinkTests(unittest.TestCase):
         linked = database.michael_materials.find_one({"id": RIGHT_RULE_MATERIAL["id"]})
         self.assertTrue(linked["active"])
         self.assertTrue(linked["approved_for_michael"])
+
+    def test_production_sign_image_url_is_trusted_but_foreign_hosts_are_not(self):
+        self.assertTrue(_trusted_sign_image_url("/api/sign-images/202_0.jpg"))
+        self.assertTrue(_trusted_sign_image_url(
+            "https://thai2drive-production.up.railway.app/api/sign-images/202_0.jpg"
+        ))
+        self.assertFalse(_trusted_sign_image_url(
+            "https://example.com/api/sign-images/202_0.jpg"
+        ))
 
     def test_snapshot_can_remove_a_newly_inserted_link(self):
         database = _Database()
