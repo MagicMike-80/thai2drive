@@ -282,6 +282,27 @@ class MichaelCoreMediaLinkTests(unittest.TestCase):
         )
         self.assertEqual(answer, "neutral")
 
+    def test_bus_rule_answer_is_complete_and_language_isolated(self):
+        cases = (
+            ("Forklar bussregelen ved holdeplass", "no", "60 km/t", "70 km/t"),
+            ("อธิบายกฎรถบัสออกจากป้าย", "th", "60 กม./ชม.", "70 กม./ชม."),
+            ("Explain the bus rule when leaving a bus stop", "en", "60 km/h", "70 km/h"),
+        )
+        for question, language, lower_limit, upper_limit in cases:
+            with self.subTest(language=language):
+                answer = self.teacher._apply_bus_rule_definition_fail_safe(
+                    question, "truncated model reply", language
+                )
+                self.assertIn(lower_limit, answer)
+                self.assertIn(upper_limit, answer)
+                self.assertNotIn("50", answer)
+
+    def test_bus_rule_unknown_language_fails_stop(self):
+        answer = self.teacher._apply_bus_rule_definition_fail_safe(
+            "Forklar bussregelen ved holdeplass", "neutral", "xx"
+        )
+        self.assertEqual(answer, "neutral")
+
     def test_teacher_chat_response_contains_complete_reply_and_image_card(self):
         module = self.teacher
         originals = {
