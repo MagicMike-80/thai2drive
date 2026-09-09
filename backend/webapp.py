@@ -1023,6 +1023,28 @@ a { color:inherit; text-decoration:none; }
 .q-text {
   font-size:.95rem; font-weight:700; line-height:1.68;
 }
+
+/* Fagordkort — Thai-only "see Norwegian term" helper */
+.fagordkort {
+  border:1px solid rgba(255,153,51,.28);
+  background:rgba(255,153,51,.06);
+  border-radius:12px; padding:2px 12px; width:100%;
+}
+.fgk-summary {
+  cursor:pointer; list-style:none; padding:9px 2px;
+  font-size:.82rem; font-weight:800; color:var(--orange);
+  user-select:none;
+}
+.fgk-summary::-webkit-details-marker { display:none; }
+.fgk-body { display:flex; flex-direction:column; gap:10px; padding:4px 2px 12px; }
+.fgk-row { border-top:1px solid rgba(255,255,255,.08); padding-top:9px; }
+.fgk-row:first-child { border-top:none; padding-top:0; }
+.fgk-pair { display:flex; align-items:baseline; gap:7px; flex-wrap:wrap; }
+.fgk-th { font-size:.9rem; font-weight:700; color:var(--text); }
+.fgk-arrow { color:var(--muted); font-size:.8rem; }
+.fgk-no { font-size:.9rem; font-weight:800; color:var(--orange); }
+.fgk-def { font-size:.8rem; line-height:1.6; color:var(--muted); margin-top:3px; }
+
 .q-settings-bar {
   display:flex; align-items:center; gap:12px;
   background:rgba(255,255,255,.03);
@@ -7404,6 +7426,7 @@ function renderQuestion() {
         + '<img class="q-img" src="' + escH(imgUrl) + '" alt="' + escH(qText) + '" onerror="this.parentElement.style.display=\'none\'" loading="lazy">'
       + '</div>'
       + '<div class="q-text">' + escH(qText) + '</div>'
+      + '<div id="fagordkortMount"></div>'
       + '<div style="flex-shrink:0;"><button class="tts-play" id="qTtsBtn" title="' + escH(t('read_aloud')) + '" onclick="speakQ()">▶</button></div>'
     + '</div>'
     + '<div class="q-mid">'
@@ -7440,6 +7463,47 @@ function renderQuestion() {
       + '<div class="quiz-ai-idle-text">' + escH(t('ai_idle')) + '</div>'
       + '</div>';
   }
+
+  renderFagordkort(qId);
+}
+
+// ── Fagordkort ("📖 ดูคำศัพท์นอร์เวย์") ────────────────────────────────────
+// Thai-only helper: shows the Norwegian traffic terms behind a question so a
+// Thai learner can map term → meaning. Rendered only in Thai mode and only
+// when the backend returns at least one term with a Thai definition.
+async function renderFagordkort(qId) {
+  var mount = document.getElementById('fagordkortMount');
+  if (!mount) return;
+  mount.innerHTML = '';
+  if (appLang !== 'th' || !qId) return;
+
+  var terms = [];
+  try {
+    var data = await api('GET', '/api/quiz/terms?lang=th&question_id=' + encodeURIComponent(qId));
+    terms = (data && data.terms) || [];
+  } catch (e) {
+    return; // silent — the card is an optional aid
+  }
+  if (!terms.length) return;
+  // A later question may have resolved before this fetch — bail if qId moved on.
+  var qNow = questions[qIdx];
+  var qIdNow = qNow && (qNow._id || qNow.id || qNow.question_id);
+  if (String(qIdNow || '') !== String(qId)) return;
+
+  var rows = terms.map(function(tm) {
+    return '<div class="fgk-row">'
+      + '<div class="fgk-pair"><span class="fgk-th">' + escH(tm.term_th || '') + '</span>'
+      + '<span class="fgk-arrow">➔</span>'
+      + '<span class="fgk-no">' + escH(tm.term_no || '') + '</span></div>'
+      + (tm.definition_th ? '<div class="fgk-def">' + escH(tm.definition_th) + '</div>' : '')
+      + '</div>';
+  }).join('');
+
+  mount.innerHTML =
+    '<details class="fagordkort">'
+    + '<summary class="fgk-summary">📖 ดูคำศัพท์นอร์เวย์</summary>'
+    + '<div class="fgk-body">' + rows + '</div>'
+    + '</details>';
 }
 
 var currentCorrect = '';

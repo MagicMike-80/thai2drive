@@ -29,6 +29,10 @@ try:
     from media_catalog import SUPPORTED_LANGUAGES, list_localized_catalog_media
 except ImportError:  # package-style imports used by isolated tests
     from backend.media_catalog import SUPPORTED_LANGUAGES, list_localized_catalog_media
+try:
+    from glossary_match import match_glossary_terms, terms_for_lang
+except ImportError:  # package-style imports used by isolated tests
+    from backend.glossary_match import match_glossary_terms, terms_for_lang
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -5280,6 +5284,75 @@ async def admin_delete_glossary_term(term_id: str, _: dict = Depends(require_adm
     if result.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Term not found")
     return {"message": "Deleted", "id": term_id}
+
+
+# ── Fagordkort — "Se norsk fagord" per quiz question ──────────────────────
+# The ~22 glossary terms are tiny and change only via the admin CRUD above, so
+# they are cached in-process and refreshed on startup. Matching + language
+# projection live in glossary_match.py (pure, offline-testable).
+
+_GLOSSARY_CACHE: List[dict] = []
+
+
+async def _load_glossary_cache() -> None:
+    global _GLOSSARY_CACHE
+    try:
+        rows = await db.learning_glossary.find({"active": True}).to_list(500)
+        for r in rows:
+            r.pop("_id", None)
+        _GLOSSARY_CACHE = rows
+        logging.getLogger("glossary").info("glossary cache loaded: %d terms", len(rows))
+    except Exception as exc:
+        logging.getLogger("glossary").warning("glossary cache load failed: %s", exc)
+
+
+@app.on_event("startup")
+async def _warm_glossary_cache():
+    await _load_glossary_cache()
+
+
+@api_router.get("/quiz/terms")
+async def get_quiz_terms(
+    question_id: str = Query(..., min_length=1, max_length=120),
+    lang: str = Query(default="th"),
+    x_device_id: str = Header(default="", alias="X-Device-ID"),
+):
+    """Norwegian traffic terms that apply to a given quiz question.
+
+    Language-pure: for ``lang=th`` the response carries only Thai fields (plus
+    ``term_no``, the term being taught). A term without a Thai definition is
+    omitted entirely — never backfilled with Norwegian or English.
+    Returns ``{"terms": []}`` when nothing matches.
+    """
+    question = await db.questions.find_one({"id": question_id}, {"_id": 0})
+    if not question:
+        return {"terms": []}
+
+    if not _GLOSSARY_CACHE:
+        await _load_glossary_cache()
+
+    category = question.get("category", "") or ""
+    matched = match_glossary_terms(
+        question.get("question_text_no", "") or "",
+        category,
+        _GLOSSARY_CACHE,
+    )
+    terms = terms_for_lang(matched, lang)
+
+    # Anonymous, best-effort lookup log — never blocks the response.
+    try:
+        await db.glossary_lookup_logs.insert_one({
+            "device_id": x_device_id or None,
+            "question_id": question_id,
+            "category": category,
+            "terms_shown": [t.get("term_no", "") for t in terms],
+            "lang": lang,
+            "created_at": datetime.now(timezone.utc).isoformat(),
+        })
+    except Exception as exc:
+        logging.getLogger("glossary").warning("glossary_lookup_logs insert failed: %s", exc)
+
+    return {"terms": terms}
 
 
 class TrafficSignCreate(BaseModel):
