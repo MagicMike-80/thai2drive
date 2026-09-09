@@ -1793,6 +1793,19 @@ a { color:inherit; text-decoration:none; }
 .micro-lesson-body { display:none; padding:0 14px 15px 68px; color:var(--muted); font-size:.8rem; line-height:1.55; }
 .micro-lesson.open .micro-lesson-body { display:block; }
 .micro-lesson-action { margin-top:8px; color:var(--orange); font-weight:750; }
+
+/* Thailand vs Norge — backend-drevet kortstokk (kun thai) */
+.culture-deck { display:flex; flex-direction:column; gap:12px; margin-top:18px; }
+.culture-deck-head { font-size:.82rem; font-weight:850; color:var(--cyan); letter-spacing:.02em; }
+.culture-note { padding:14px; border:1px dashed rgba(255,255,255,.14); border-radius:14px; color:var(--muted); font-size:.8rem; text-align:center; margin-top:18px; }
+.culture-card { border:1px solid rgba(0,245,255,.18); border-radius:15px; padding:14px; background:linear-gradient(145deg,rgba(17,32,64,.9),rgba(11,18,38,.96)); display:flex; flex-direction:column; gap:10px; }
+.cc-title { font-size:.92rem; font-weight:850; line-height:1.4; }
+.cc-title-no { display:block; margin-top:2px; font-size:.72rem; font-weight:700; color:var(--muted); }
+.cc-row { display:flex; flex-direction:column; gap:3px; border-top:1px solid rgba(255,255,255,.07); padding-top:9px; }
+.cc-row:first-of-type { border-top:none; padding-top:0; }
+.cc-label { font-size:.68rem; font-weight:850; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); }
+.cc-text { font-size:.82rem; line-height:1.6; color:var(--text); }
+.cc-term { font-size:.82rem; line-height:1.55; font-weight:750; color:var(--orange); }
 .lib-scroll::-webkit-scrollbar-track { background:transparent; }
 .lib-scroll::-webkit-scrollbar-thumb { background:rgba(255,255,255,.12); border-radius:2px; }
 .library-grid {
@@ -5827,7 +5840,54 @@ function renderMicroLessons(container) {
       '<div class="micro-lesson-body"><div>' + escH(t(lesson.body)) + '</div>' +
       '<div class="micro-lesson-action">✓ ' + escH(t(lesson.action)) + '</div></div></article>';
   });
-  container.innerHTML = html + '</div>';
+  container.innerHTML = html + '</div><div id="cultureLessonsMount"></div>';
+  renderCultureLessons();
+}
+
+// ── Thailand vs Norge — backend-drevet kortstokk (kun thai) ──────────────
+// Ligger under de statiske mikroleksjonene. Rendres kun i thai-modus; andre
+// språk får en kort notis, aldri norsk/engelsk innholds-fallback.
+async function renderCultureLessons() {
+  var mount = document.getElementById('cultureLessonsMount');
+  if (!mount) return;
+  mount.innerHTML = '';
+  if (appLang !== 'th') {
+    mount.innerHTML = '<div class="culture-note">'
+      + (appLang === 'no' ? 'Denne kortstokken finnes bare på thai.'
+                          : 'This deck is only available in Thai.')
+      + '</div>';
+    return;
+  }
+  var lessons = [];
+  try {
+    var data = await api('GET', '/api/lessons/culture?lang=th');
+    lessons = (data && data.lessons) || [];
+  } catch (e) {
+    return; // valgfri hjelp — skjul ved feil
+  }
+  if (!lessons.length) return;
+
+  var LBL = { th: 'ที่ไทย', no: 'ที่นอร์เวย์', term: 'คำศัพท์นอร์เวย์', tip: 'เคล็ดลับจากไมเคิล' };
+  function row(icon, label, cls, val) {
+    if (!val) return '';
+    return '<div class="cc-row"><span class="cc-label">' + icon + ' ' + escH(label) + '</span>'
+      + '<span class="' + cls + '">' + escH(val) + '</span></div>';
+  }
+  var cards = lessons.map(function(l) {
+    return '<article class="culture-card">'
+      + '<div class="cc-title">' + escH(l.title_th || '')
+      + (l.title_no ? '<span class="cc-title-no">' + escH(l.title_no) + '</span>' : '')
+      + '</div>'
+      + row('🇹🇭', LBL.th, 'cc-text', l.thailand_practice_th)
+      + row('🇳🇴', LBL.no, 'cc-text', l.norway_rule_th)
+      + row('📘', LBL.term, 'cc-term', l.norway_term_no)
+      + row('💡', LBL.tip, 'cc-text', l.michaels_tip_th)
+      + '</article>';
+  }).join('');
+
+  mount.innerHTML = '<div class="culture-deck">'
+    + '<div class="culture-deck-head">🇹🇭 ไทย vs 🇳🇴 นอร์เวย์</div>'
+    + cards + '</div>';
 }
 
 function toggleMicroLesson(id) {

@@ -33,6 +33,10 @@ try:
     from glossary_match import match_glossary_terms, terms_for_lang
 except ImportError:  # package-style imports used by isolated tests
     from backend.glossary_match import match_glossary_terms, terms_for_lang
+try:
+    from culture_lessons import serialize_lesson as _serialize_culture_lesson, lessons_for_lang
+except ImportError:  # package-style imports used by isolated tests
+    from backend.culture_lessons import serialize_lesson as _serialize_culture_lesson, lessons_for_lang
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -5353,6 +5357,70 @@ async def get_quiz_terms(
         logging.getLogger("glossary").warning("glossary_lookup_logs insert failed: %s", exc)
 
     return {"terms": terms}
+
+
+# ── "Thailand vs Norge"-mikroleksjoner (culture_lessons) ──────────────────
+# Small, admin-curated deck. Cached in-process, warmed on startup. Projection +
+# fail-stop live in culture_lessons.py (pure, offline-testable).
+
+_CULTURE_CACHE: List[dict] = []
+
+
+async def _load_culture_cache() -> None:
+    global _CULTURE_CACHE
+    try:
+        rows = await db.culture_lessons.find({"active": True}).to_list(200)
+        for r in rows:
+            r.pop("_id", None)
+        _CULTURE_CACHE = rows
+        logging.getLogger("culture").info("culture_lessons cache loaded: %d", len(rows))
+    except Exception as exc:
+        logging.getLogger("culture").warning("culture_lessons cache load failed: %s", exc)
+
+
+@app.on_event("startup")
+async def _warm_culture_cache():
+    await _load_culture_cache()
+
+
+@api_router.get("/lessons/culture")
+async def get_culture_lessons(
+    lang: str = Query(default="th"),
+    category: Optional[str] = None,
+    id: Optional[str] = Query(default=None, min_length=1, max_length=120),
+    x_device_id: str = Header(default="", alias="X-Device-ID"),
+):
+    """The "Thailand vs Norge" micro-lesson deck.
+
+    Thai-first: ``lang != "th"`` returns ``{"lessons": []}``. Each lesson carries
+    only Thai fields plus ``title_no`` / ``norway_term_no`` (the terms being
+    taught) — never a Norwegian or English prose fallback. A lesson missing a
+    required Thai field is omitted entirely.
+    """
+    if not _CULTURE_CACHE:
+        await _load_culture_cache()
+
+    if id is not None:
+        doc = next((d for d in _CULTURE_CACHE if d.get("id") == id), None)
+        row = _serialize_culture_lesson(doc, lang) if doc else None
+        if row is None:
+            raise HTTPException(status_code=404, detail="Lesson not found")
+        lessons = [row]
+    else:
+        lessons = lessons_for_lang(_CULTURE_CACHE, lang, category)
+
+    try:
+        await db.culture_lesson_views.insert_one({
+            "device_id": x_device_id or None,
+            "lesson_ids": [x.get("id", "") for x in lessons],
+            "category": category or None,
+            "lang": lang,
+            "created_at": datetime.now(timezone.utc).isoformat(),
+        })
+    except Exception as exc:
+        logging.getLogger("culture").warning("culture_lesson_views insert failed: %s", exc)
+
+    return {"lessons": lessons}
 
 
 class TrafficSignCreate(BaseModel):

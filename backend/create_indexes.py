@@ -188,6 +188,23 @@ async def create_all_indexes(db) -> dict[str, list[str]]:
         "media_active_language_tags",
     ]
 
+    # -- "Thailand vs Norge" micro-lessons -------------------------------
+    await db.culture_lessons.create_index(
+        [("id", ASCENDING)],
+        unique=True,
+        background=True,
+        name="culture_lesson_id_unique",
+    )
+    await db.culture_lessons.create_index(
+        [("active", ASCENDING), ("order", ASCENDING)],
+        background=True,
+        name="culture_active_order",
+    )
+    created["culture_lessons"] = [
+        "culture_lesson_id_unique",
+        "culture_active_order",
+    ]
+
     return created
 
 
