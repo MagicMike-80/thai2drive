@@ -1,125 +1,65 @@
-# 📐 SOLUTION BLUEPRINT: Tvunget Service Worker-aktivering & Auto-reload
+# SOLUTION BLUEPRINT: Restore the web guest entry
 
-**Status:** READY FOR AGENT 3  
-**Dato:** 2026-09-02  
-**Eier:** Agent 2: Solution Architect (Fase: Løsningsdesign)  
+**Status:** READY FOR AGENT 3
+**Date:** 2026-09-09
 
----
+## Goal
 
-## 1. Mål & Ikke-mål
+Allow a signed-out customer to enter the existing web app as a guest and reach Michael, using the existing server-authoritative guest access contract.
 
-### Mål:
-- Tvinge ny Service Worker til å overta kontrollen umiddelbart på Android/Chrome (Samsung) og andre enheter.
-- Tvinge frontend til å laste inn nyeste versjon automatisk via `window.location.reload()` når en ny Service Worker er aktivert.
-- Sørge for at endringen er 100 % trygg mot reload-loops.
-- Bevare alle eksisterende unntak for `/api/`, Range requests og lydfiler (`.mp3`, `.m4a`, etc.).
+## Explicit non-goals
 
-### Ikke-mål:
-- Ikke endre backend API-kontrakter eller databaser.
-- Ikke berøre Expo/mobilapp-kode.
+- No backend endpoint or database changes.
+- No changes to login, registration, Stripe, RevenueCat, premium entitlements, quotas, Railway configuration, media ranking, or mobile/Expo.
+- No automatic anonymous account creation.
 
----
+## Files
 
-## 2. Berørte filer
+- `backend/webapp.py`: add localized guest UI, stable browser-local guest device ID, and `enterGuest()`.
+- `tests/test_web_guest_entry_contract.py`: narrow regression contract.
+- `app-brief/PATCH_REPORT.md`: implementation evidence and rollback.
 
-1. `backend/service-worker.js`:
-   - Oppdatere cache-versjon til `thai2drive-offline-v1.0.2`.
-   - Kalle `self.skipWaiting()` direkte ved mottak av `install`-event.
-   - Sikre at `activate`-event tømmer gamle cacher og kjører `clients.claim()`.
-2. `backend/webapp.py`:
-   - Legge til `refreshing`-guard (`var refreshing = false;`) for å forhindre reload-loops.
-   - Lytte på `controllerchange` på `navigator.serviceWorker`.
-   - Lytte på `updatefound` og `newWorker.onstatechange` ved registrering av både `/service-worker.js` og fallback `/api/service-worker.js`.
+## Data flow and API contracts
 
----
+1. Customer chooses the localized guest button.
+2. `ensureGuestDeviceId()` reuses `t2d_guest_device_id` from local storage or creates a random `web_guest_...` identifier. It contains no email, name, or password.
+3. `enterGuest()` clears in-memory authenticated identity, assigns the guest ID, and calls the existing `enterApp()`.
+4. Existing frontend requests continue to pass `device_id` to `/api/access/status`, `/api/access/consume`, and `/api/teacher/chat`.
+5. Backend remains source of truth for the five-question guest allowance.
 
-## 3. Trinnvis patchplan
+## Language, access, and premium consequences
 
-### Trinn 1: Oppdater `backend/service-worker.js`
-```javascript
-const CACHE_NAME = 'thai2drive-offline-v1.0.2';
-const OFFLINE_URLS = [
-  '/',
-  '/api/assets/favicon.ico'
-];
+- The guest button and supporting hint use the global NO/TH/EN UI dictionary.
+- Missing/unknown language behavior remains governed by the existing global language function.
+- The patch grants no premium entitlement and changes no numerical limit.
+- Login and registration remain available and unchanged.
 
-self.addEventListener('install', (event) => {
-  self.skipWaiting(); // Tvinger den nye SW-en ut av ventemodus umiddelbart
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return Promise.allSettled(
-        OFFLINE_URLS.map((url) => cache.add(url).catch((err) => console.log('SW cache skip:', url, err)))
-      );
-    })
-  );
-});
+## Patch plan
 
-self.addEventListener('activate', (event) => {
-  event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((name) => {
-          if (name !== CACHE_NAME) {
-            return caches.delete(name);
-          }
-        })
-      );
-    }).then(() => self.clients.claim()) // Tar kontroll over alle faner umiddelbart
-  );
-});
-```
+1. Add a calm secondary guest action to the auth card.
+2. Add `auth_guest_btn` and `auth_guest_hint` in NO/TH/EN.
+3. Add a stable, random guest device helper plus `enterGuest()` next to existing auth functions.
+4. Add static contract tests for the exact scope.
 
-### Trinn 2: Oppdater registrering i `backend/webapp.py`
-```javascript
-// ════════════════════════════════════════════
-//  SERVICE WORKER REGISTRATION (Offline mode + Auto-update)
-// ════════════════════════════════════════════
-if ('serviceWorker' in navigator) {
-  var refreshing = false;
-  navigator.serviceWorker.addEventListener('controllerchange', function() {
-    if (!refreshing) {
-      refreshing = true;
-      console.log('Ny Service Worker overtok kontrollen, reloader...');
-      window.location.reload();
-    }
-  });
+## Tests and manual verification
 
-  function setupSwUpdate(reg) {
-    if (!reg) return;
-    reg.addEventListener('updatefound', function() {
-      var newWorker = reg.installing;
-      if (!newWorker) return;
-      newWorker.addEventListener('statechange', function() {
-        if (newWorker.state === 'activated' && navigator.serviceWorker.controller) {
-          console.log('Ny versjon aktivert, reloader...');
-          if (!refreshing) {
-            refreshing = true;
-            window.location.reload();
-          }
-        }
-      });
-    });
-  }
+- Run the new guest-entry contract tests.
+- Run existing Michael media/link tests and relevant web contract tests.
+- Inspect the diff for auth/payment/premium spillover and secrets.
+- After approved deployment, verify fresh production customer UI in NO/TH/EN:
+  - guest reaches Michael;
+  - right-rule answer is complete and shows the right-rule image;
+  - bus answer is complete and shows the bus video;
+  - sign 202 answer shows the sign card.
 
-  window.addEventListener('load', function() {
-    navigator.serviceWorker.register('/service-worker.js')
-      .then(function(reg) {
-        setupSwUpdate(reg);
-      })
-      .catch(function() {
-        navigator.serviceWorker.register('/api/service-worker.js')
-          .then(function(reg) {
-            setupSwUpdate(reg);
-          })
-          .catch(function(err) {
-            console.log('SW registration skipped:', err);
-          });
-      });
-  });
-}
-```
+## Rollback
 
----
+Revert the guest markup, two UI dictionary entries, helper functions, and the dedicated test file. No database rollback is needed.
 
-## 4. Status
+## Production risk
+
+Low and localized to signed-out web entry. The main risk is a malformed or unstable device ID; the contract test requires persistent storage and a random generator fallback.
+
+No additional Michael decision is required because the product rules already explicitly define guest access as five questions.
+
 **READY FOR AGENT 3**

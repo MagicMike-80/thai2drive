@@ -408,6 +408,27 @@ a { color:inherit; text-decoration:none; }
 .auth-btn:active { transform:translateY(0); }
 .auth-btn:disabled { opacity:.5; cursor:not-allowed; transform:none; }
 
+.auth-guest {
+  margin-top:18px; padding-top:16px;
+  border-top:1px solid var(--border); text-align:center;
+}
+.auth-guest-btn {
+  width:100%; padding:12px;
+  border:1px solid rgba(0,245,255,.35); border-radius:11px;
+  background:rgba(0,245,255,.06); color:var(--text);
+  font-size:.9rem; font-weight:750; cursor:pointer;
+  transition:border-color .2s, background .2s, transform .15s;
+}
+.auth-guest-btn:hover {
+  border-color:rgba(0,245,255,.65);
+  background:rgba(0,245,255,.11); transform:translateY(-1px);
+}
+.auth-guest-btn:active { transform:translateY(0); }
+.auth-guest-hint {
+  margin:8px 4px 0; color:var(--muted);
+  font-size:.72rem; line-height:1.45;
+}
+
 .auth-error {
   background:rgba(239,68,68,.1); border:1px solid rgba(239,68,68,.3);
   border-radius:9px; padding:10px 13px;
@@ -3934,6 +3955,11 @@ a { color:inherit; text-decoration:none; }
             <a href="#forgot" style="font-size:.78rem;color:var(--muted);cursor:pointer" onclick="switchTab('forgot'); return false;" data-key="back">← Tilbake</a>
           </div>
         </div>
+
+        <div class="auth-guest">
+          <button type="button" class="auth-guest-btn" onclick="enterGuest()" data-key="auth_guest_btn">Fortsett som gjest</button>
+          <p class="auth-guest-hint" data-key="auth_guest_hint">Prøv fem spørsmål uten konto</p>
+        </div>
       </div>
     </div>
 
@@ -5082,6 +5108,8 @@ var UI = {
   auth_back:       {th:'← กลับ',        no:'← Tilbake',     en:'← Back'},
   auth_login_btn:  {th:'เข้าสู่ระบบ',    no:'Logg inn',      en:'Log in'},
   auth_reg_btn:    {th:'สร้างบัญชี',     no:'Opprett konto', en:'Create account'},
+  auth_guest_btn:  {th:'ใช้งานต่อในฐานะผู้เยี่ยมชม', no:'Fortsett som gjest', en:'Continue as guest'},
+  auth_guest_hint: {th:'ทดลองทำข้อสอบ 5 ข้อโดยไม่ต้องสร้างบัญชี', no:'Prøv fem spørsmål uten konto', en:'Try five questions without an account'},
   auth_sending:    {th:'กำลังส่ง…',      no:'Sender…',       en:'Sending…'},
   auth_email_sent: {th:'ส่งอีเมลแล้ว! ตรวจสอบกล่องขาเข้า 📧', no:'E-post sendt! Sjekk innboksen din 📧', en:'Email sent! Check your inbox 📧'},
   auth_fill_email: {th:'กรุณากรอกอีเมล', no:'Fyll inn e-postadressen din', en:'Please enter your email address'},
@@ -6573,6 +6601,36 @@ function clearAuthMessages() {
   document.getElementById('authError').classList.remove('show');
   document.getElementById('authSuccess').classList.remove('show');
 }
+function ensureGuestDeviceId() {
+  var stored = _ls.get('t2d_guest_device_id');
+  if (stored && /^web_guest_[a-z0-9-]{16,}$/i.test(stored)) return stored;
+
+  var randomPart = '';
+  if (window.crypto && typeof window.crypto.randomUUID === 'function') {
+    randomPart = window.crypto.randomUUID();
+  } else if (window.crypto && typeof window.crypto.getRandomValues === 'function') {
+    var bytes = new Uint8Array(16);
+    window.crypto.getRandomValues(bytes);
+    randomPart = Array.prototype.map.call(bytes, function(value) {
+      return value.toString(16).padStart(2, '0');
+    }).join('');
+  } else {
+    randomPart = Date.now().toString(36) + Math.random().toString(36).slice(2);
+  }
+
+  var guestId = 'web_guest_' + randomPart;
+  _ls.set('t2d_guest_device_id', guestId);
+  return guestId;
+}
+
+function enterGuest() {
+  _ls.remove('t2d_token');
+  token = null;
+  user = null;
+  deviceId = ensureGuestDeviceId();
+  enterApp();
+}
+
 
 async function doLogin() {
   clearAuthMessages();
