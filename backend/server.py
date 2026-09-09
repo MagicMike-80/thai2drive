@@ -37,6 +37,10 @@ try:
     from culture_lessons import serialize_lesson as _serialize_culture_lesson, lessons_for_lang
 except ImportError:  # package-style imports used by isolated tests
     from backend.culture_lessons import serialize_lesson as _serialize_culture_lesson, lessons_for_lang
+try:
+    from quiz_readiness import compute_quiz_readiness
+except ImportError:  # package-style imports used by isolated tests
+    from backend.quiz_readiness import compute_quiz_readiness
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -5421,6 +5425,32 @@ async def get_culture_lessons(
         logging.getLogger("culture").warning("culture_lesson_views insert failed: %s", exc)
 
     return {"lessons": lessons}
+
+
+# ── Michaels Exam Mode — klar-score (feilsvar-trend + vikeplikt + tempo) ──
+# Ny, isolert beregning i quiz_readiness.py. De eksisterende
+# /api/user/readiness-implementasjonene er bevisst latt urørt.
+
+@api_router.get("/quiz/readiness")
+async def get_quiz_readiness(
+    device_id: Optional[str] = None,
+    x_device_id: str = Header(default="", alias="X-Device-ID"),
+):
+    """Exam-mode readiness for a device: recency-weighted error trend (45%),
+    vikeplikt-category mastery (30%), and answer-pace (25%). Falls back to a
+    cold-start payload on any lookup failure."""
+    dev_id = (x_device_id or device_id or "").strip()
+    attempts: list[dict] = []
+    if dev_id:
+        try:
+            attempts = await db.ai_attempts.find(
+                {"device_id": dev_id},
+                {"_id": 0, "is_correct": 1, "category": 1, "time_taken_ms": 1, "timestamp": 1},
+            ).sort("timestamp", -1).to_list(120)
+        except Exception as exc:
+            logging.getLogger("readiness").warning("quiz/readiness lookup failed: %s", exc)
+            attempts = []
+    return compute_quiz_readiness(attempts, now=datetime.now(timezone.utc))
 
 
 class TrafficSignCreate(BaseModel):
