@@ -26,6 +26,8 @@ if str(ROOT) not in sys.path:
 from backend.michael_video_import import (  # noqa: E402
     ASSET_DIR,
     EXCLUDED_DUPLICATES,
+    STATIC_IMAGE_DIR,
+    STATIC_VIDEO_DIR,
     THUMB_DIR,
     VIDEO_SPECS,
     learning_video_document,
@@ -101,19 +103,31 @@ def copy_assets(workspace: Path) -> list[str]:
     asset_dir = workspace / ASSET_DIR
     thumb_dir = workspace / THUMB_DIR
     subtitle_dir = asset_dir / "subtitles"
+    static_video_dir = workspace / STATIC_VIDEO_DIR
+    static_image_dir = workspace / STATIC_IMAGE_DIR
     asset_dir.mkdir(parents=True, exist_ok=True)
     thumb_dir.mkdir(parents=True, exist_ok=True)
     subtitle_dir.mkdir(parents=True, exist_ok=True)
+    static_video_dir.mkdir(parents=True, exist_ok=True)
+    static_image_dir.mkdir(parents=True, exist_ok=True)
     for spec in VIDEO_SPECS:
         source = source_path(workspace, spec)
         target = asset_dir / spec.asset_name
         if not target.exists() or _sha256(target) != _sha256(source):
             shutil.copy2(source, target)
             copied.append(str(target.relative_to(workspace)))
+        static_target = static_video_dir / spec.asset_name
+        if not static_target.exists() or _sha256(static_target) != _sha256(source):
+            shutil.copy2(source, static_target)
+            copied.append(str(static_target.relative_to(workspace)))
         thumb = thumb_dir / spec.thumbnail_name
         if not thumb.exists():
             _thumbnail(thumb, spec.category, spec.speed_limit)
             copied.append(str(thumb.relative_to(workspace)))
+        static_thumb = static_image_dir / spec.thumbnail_name
+        if not static_thumb.exists() or _sha256(static_thumb) != _sha256(thumb):
+            shutil.copy2(thumb, static_thumb)
+            copied.append(str(static_thumb.relative_to(workspace)))
         subtitle = subtitle_dir / spec.subtitle_name
         subtitle_text = _subtitle_text(spec)
         if not subtitle.exists() or subtitle.read_text(encoding="utf-8") != subtitle_text:

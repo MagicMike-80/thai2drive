@@ -14,6 +14,8 @@ VIKEPLIKT_SOURCE_DIR = "vikeplit mp4"
 STOPPING_SOURCE_DIR = "Mp4 video  Reaksjonslende+Bremselengde+ Stoppelengde"
 ASSET_DIR = Path("backend/public_assets")
 THUMB_DIR = ASSET_DIR / "thumbs"
+STATIC_VIDEO_DIR = Path("backend/static/videos")
+STATIC_IMAGE_DIR = Path("backend/static/images")
 
 
 @dataclass(frozen=True)
@@ -249,6 +251,8 @@ def learning_video_document(spec: VideoSpec, *, publish: bool = False) -> dict:
         "youtube_url": "",
         "file_path": f"/public_assets/{spec.asset_name}",
         "thumbnail_url": f"/api/assets/thumbs/{spec.thumbnail_name}",
+        "static_url": f"/static/videos/{spec.asset_name}",
+        "static_thumbnail_url": f"/static/images/{spec.thumbnail_name}",
         "duration_seconds": 10,
         "language": "no",
         "audio_language": "no",
@@ -281,8 +285,13 @@ def michael_material_document(spec: VideoSpec, *, publish: bool = False) -> dict
         "type": "video",
         "source_id": spec.video_id,
         "source_url": f"/api/assets/{spec.asset_name}",
+        "static_url": f"/static/videos/{spec.asset_name}",
+        "thumbnail_url": f"/static/images/{spec.thumbnail_name}",
         "title": dict(spec.titles),
         "caption": dict(spec.captions),
+        "language": "no",
+        "learner_languages": list(spec.learner_languages),
+        "category": spec.category,
         "topic_tags": list(spec.topic_tags),
         "sign_ids": [],
         "situation_tags": list(spec.topic_tags),

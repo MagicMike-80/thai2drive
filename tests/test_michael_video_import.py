@@ -4,6 +4,7 @@ import unittest
 from pathlib import Path
 
 from backend.michael_video_import import (
+    EXCLUDED_DUPLICATES,
     VIDEO_SPECS,
     learning_video_document,
     michael_material_document,
@@ -55,6 +56,8 @@ class _Database:
 class MichaelVideoImportTests(unittest.TestCase):
     def test_deploy_bundle_contains_25_complete_unique_video_sets(self):
         asset_root = ROOT / "backend" / "public_assets"
+        static_video_root = ROOT / "backend" / "static" / "videos"
+        static_image_root = ROOT / "backend" / "static" / "images"
         self.assertEqual(len(VIDEO_SPECS), 25)
         self.assertEqual(len({spec.video_id for spec in VIDEO_SPECS}), 25)
         for spec in VIDEO_SPECS:
@@ -62,6 +65,8 @@ class MichaelVideoImportTests(unittest.TestCase):
                 self.assertGreater((asset_root / spec.asset_name).stat().st_size, 0)
                 self.assertGreater((asset_root / "thumbs" / spec.thumbnail_name).stat().st_size, 0)
                 self.assertGreater((asset_root / "subtitles" / spec.subtitle_name).stat().st_size, 0)
+                self.assertGreater((static_video_root / spec.asset_name).stat().st_size, 0)
+                self.assertGreater((static_image_root / spec.thumbnail_name).stat().st_size, 0)
 
     def test_records_are_language_complete_safe_and_draft_by_default(self):
         self.assertEqual(len(VIDEO_SPECS), 25)
@@ -72,12 +77,18 @@ class MichaelVideoImportTests(unittest.TestCase):
                 self.assertRegex(spec.asset_name, r"^video_[a-z0-9_]+\.mp4$")
                 self.assertTrue(video["file_path"].startswith("/public_assets/video_"))
                 self.assertTrue(video["thumbnail_url"].startswith("/api/assets/thumbs/thumb_"))
+                self.assertTrue(video["static_url"].startswith("/static/videos/video_"))
+                self.assertTrue(video["static_thumbnail_url"].startswith("/static/images/thumb_"))
                 self.assertEqual(video["audio_language"], "no")
                 self.assertEqual(video["learner_languages"], ["no", "th"])
                 self.assertEqual(video["subtitle_tracks"][0]["lang"], "th")
                 self.assertTrue(video["subtitle_tracks"][0]["url"].endswith(".th.vtt"))
                 self.assertEqual(set(material["title"]), {"no", "th", "en"})
                 self.assertEqual(set(material["caption"]), {"no", "th", "en"})
+                self.assertEqual(material["language"], "no")
+                self.assertEqual(material["category"], spec.category)
+                self.assertTrue(material["static_url"].startswith("/static/videos/video_"))
+                self.assertTrue(material["thumbnail_url"].startswith("/static/images/thumb_"))
                 self.assertTrue(all(material["title"].values()))
                 self.assertTrue(all(material["caption"].values()))
                 self.assertFalse(video["active"])
@@ -137,6 +148,35 @@ class MichaelVideoImportTests(unittest.TestCase):
                 importer.os.environ.pop("MONGO_URL", None)
             else:
                 importer.os.environ["MONGO_URL"] = old_value
+
+    def test_copy_assets_populates_static_tree_and_is_idempotent(self):
+        from backend.scripts import import_michael_videos as importer
+
+        with tempfile.TemporaryDirectory() as directory:
+            workspace = Path(directory)
+            for index, spec in enumerate(VIDEO_SPECS):
+                source = workspace / spec.source_dir / spec.source_name
+                source.parent.mkdir(parents=True, exist_ok=True)
+                source.write_bytes(f"video-{index}".encode())
+            for duplicate_name, canonical_name in EXCLUDED_DUPLICATES.items():
+                duplicate = workspace / "vikeplit mp4" / duplicate_name
+                canonical = workspace / "vikeplit mp4" / canonical_name
+                duplicate.write_bytes(canonical.read_bytes())
+
+            first = importer.copy_assets(workspace)
+            second = importer.copy_assets(workspace)
+
+            self.assertEqual(len(first), len(VIDEO_SPECS) * 5)
+            self.assertEqual(second, [])
+            for spec in VIDEO_SPECS:
+                self.assertEqual(
+                    (workspace / "backend/static/videos" / spec.asset_name).read_bytes(),
+                    (workspace / spec.source_dir / spec.source_name).read_bytes(),
+                )
+                self.assertGreater(
+                    (workspace / "backend/static/images" / spec.thumbnail_name).stat().st_size,
+                    0,
+                )
 
 
 if __name__ == "__main__":

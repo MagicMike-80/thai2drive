@@ -5474,6 +5474,7 @@ async def admin_page_catchall(rest: str):
 
 # ─── Static public assets (icons, screenshots etc. for Play Store / press use) ───
 _PUBLIC_ASSETS_DIR = Path(__file__).parent / "public_assets"
+_STATIC_MEDIA_DIR = Path(__file__).parent / "static"
 
 
 def _range_file_response(
@@ -5589,6 +5590,50 @@ async def public_asset(filename: str, request: Request):
     if ext in {".mp3", ".mp4", ".m4a", ".wav", ".ogg"}:
         return _range_file_response(file_path, request, media_type, asset_headers)
     return FileResponse(str(file_path), media_type=media_type, headers=asset_headers)
+
+
+@app.get("/static/videos/{filename:path}")
+async def static_video(filename: str, request: Request):
+    """Serve imported lesson videos with browser byte-range support."""
+    if ".." in filename.replace("\\", "/").split("/"):
+        return HTMLResponse("Not found", status_code=404)
+    safe_name = filename.replace("..", "").lstrip("/")
+    root = (_STATIC_MEDIA_DIR / "videos").resolve()
+    file_path = (root / safe_name).resolve()
+    try:
+        file_path.relative_to(root)
+    except ValueError:
+        return HTMLResponse("Not found", status_code=404)
+    if not file_path.is_file() or file_path.suffix.lower() != ".mp4":
+        return HTMLResponse("Not found", status_code=404)
+    return _range_file_response(
+        file_path,
+        request,
+        "video/mp4",
+        {"Cache-Control": "public, max-age=86400"},
+    )
+
+
+@app.get("/static/images/{filename:path}")
+async def static_image(filename: str):
+    """Serve generated lesson thumbnails from backend/static/images."""
+    if ".." in filename.replace("\\", "/").split("/"):
+        return HTMLResponse("Not found", status_code=404)
+    safe_name = filename.replace("..", "").lstrip("/")
+    root = (_STATIC_MEDIA_DIR / "images").resolve()
+    file_path = (root / safe_name).resolve()
+    try:
+        file_path.relative_to(root)
+    except ValueError:
+        return HTMLResponse("Not found", status_code=404)
+    media_type = {".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png"}.get(file_path.suffix.lower())
+    if not file_path.is_file() or media_type is None:
+        return HTMLResponse("Not found", status_code=404)
+    return FileResponse(
+        str(file_path),
+        media_type=media_type,
+        headers={"Cache-Control": "public, max-age=86400"},
+    )
 
 
 # ── Sign images — served from backend/sign_images/ ────────────────────────────
