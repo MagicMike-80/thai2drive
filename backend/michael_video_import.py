@@ -9,6 +9,19 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable
 
+try:
+    from michael_media_phrases import (
+        EXTRA_MATERIALS,
+        extra_topic_tags_for,
+        phrases_for,
+    )
+except ImportError:  # package-style imports used by local tests
+    from backend.michael_media_phrases import (
+        EXTRA_MATERIALS,
+        extra_topic_tags_for,
+        phrases_for,
+    )
+
 
 VIKEPLIKT_SOURCE_DIR = "vikeplit mp4"
 STOPPING_SOURCE_DIR = "Mp4 video  Reaksjonslende+Bremselengde+ Stoppelengde"
@@ -82,7 +95,7 @@ def _law_spec(
         source_name=source_name,
         titles=titles,
         captions=captions,
-        topic_tags=("Vikeplikt", "vikeplikt", "7", f"7_{number}", *extra_tags),
+        topic_tags=("vikeplikt", f"7_{number}", *extra_tags),
         category="vikeplikt",
     )
 
@@ -130,7 +143,9 @@ def _distance_spec(
             f"The video shows the stopping distance {speed_en}: reaction distance plus braking distance.",
         ),
     }[concept]
-    tags = (tag, concept, "stoppelengde")
+    # "stoppelengde" only belongs on the actual stopping-distance clips; the
+    # concept search words for braking/reaction live in EXTRA_TOPIC_TAGS.
+    tags = (tag, concept) + (("stoppelengde",) if concept == "stopping" else ())
     if speed:
         tags = (*tags, f"{speed}_km_t")
     return VideoSpec(
@@ -279,7 +294,18 @@ def learning_video_document(spec: VideoSpec, *, publish: bool = False) -> dict:
     }
 
 
+def _material_topic_tags(spec: VideoSpec) -> list[str]:
+    """Spec tags plus concept-level search words, de-duplicated, order kept."""
+    seen: dict[str, None] = {}
+    for tag in (*spec.topic_tags, *extra_topic_tags_for(spec.slug)):
+        key = str(tag).strip()
+        if key:
+            seen.setdefault(key, None)
+    return list(seen)
+
+
 def michael_material_document(spec: VideoSpec, *, publish: bool = False) -> dict:
+    topic_tags = _material_topic_tags(spec)
     return {
         "id": spec.material_id,
         "type": "video",
@@ -292,9 +318,11 @@ def michael_material_document(spec: VideoSpec, *, publish: bool = False) -> dict
         "language": "no",
         "learner_languages": list(spec.learner_languages),
         "category": spec.category,
-        "topic_tags": list(spec.topic_tags),
+        "speed_limit": spec.speed_limit,
+        "topic_tags": topic_tags,
         "sign_ids": [],
-        "situation_tags": list(spec.topic_tags),
+        "situation_tags": topic_tags,
+        "match_phrases": phrases_for(spec.slug),
         "active": publish,
         "approved_for_michael": publish,
         "priority": 40,

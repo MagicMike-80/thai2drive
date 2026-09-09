@@ -7,19 +7,25 @@ from pathlib import Path
 
 try:
     from michael_video_import import (
+        EXTRA_MATERIALS,
         VIDEO_SPECS,
         learning_video_document,
         michael_material_document,
     )
 except ImportError:  # package-style imports used by local tests
     from backend.michael_video_import import (
+        EXTRA_MATERIALS,
         VIDEO_SPECS,
         learning_video_document,
         michael_material_document,
     )
 
 
-MIGRATION_ID = "michael_video_patch_a_2026_09_05_v1"
+# Bumped from _v1 when the retrieval taxonomy landed: multilingual
+# match_phrases + concept topic_tags on all 25 sets and the right-hand-rule
+# image.  The bump is what re-runs the (snapshotted, upsert-only) migration
+# so the new phrases actually reach an already-seeded database.
+MIGRATION_ID = "michael_video_patch_a_2026_09_05_v2"
 SUPPORTED_LANGUAGES = ("no", "th", "en")
 
 
@@ -59,6 +65,7 @@ async def seed_michael_video_catalog(db, asset_root: Path | None = None) -> dict
 
     video_ids = [spec.video_id for spec in VIDEO_SPECS]
     material_ids = [spec.material_id for spec in VIDEO_SPECS]
+    material_ids += [str(extra["id"]) for extra in EXTRA_MATERIALS]
     old_videos = await db["learning_videos"].find({"id": {"$in": video_ids}}).to_list(length=100)
     old_materials = await db["michael_materials"].find({"id": {"$in": material_ids}}).to_list(length=100)
     now = datetime.now(timezone.utc)
@@ -84,6 +91,14 @@ async def seed_michael_video_catalog(db, asset_root: Path | None = None) -> dict
         await db["michael_materials"].update_one(
             {"id": material["id"]},
             {"$set": {**material, "updated_at": now}, "$setOnInsert": {"created_at": now}},
+            upsert=True,
+        )
+
+    for extra in EXTRA_MATERIALS:
+        document = {**extra, "active": True, "approved_for_michael": True}
+        await db["michael_materials"].update_one(
+            {"id": document["id"]},
+            {"$set": {**document, "updated_at": now}, "$setOnInsert": {"created_at": now}},
             upsert=True,
         )
 

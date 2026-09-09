@@ -1571,6 +1571,15 @@ async def _get_relevant_michael_materials(
                     if tag and (tag in query or tag in terms):
                         score += weight
 
+            # Speed-aware disambiguation for the reaction/braking/stopping
+            # clips: they share concept words, so a message that names a speed
+            # must not keep ranking the wrong-speed video on a tag hit alone.
+            speed_limit = material.get("speed_limit")
+            if isinstance(speed_limit, int) and speed_limit > 0:
+                named_speeds = set(re.findall(r"\b(30|40|50|60|70|80|90|100|110|120)\b", query))
+                if named_speeds:
+                    score += 250 if str(speed_limit) in named_speeds else -250
+
             if score <= 0:
                 continue
 

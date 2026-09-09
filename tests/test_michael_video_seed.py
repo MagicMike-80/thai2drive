@@ -3,7 +3,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from backend.michael_video_import import VIDEO_SPECS
+from backend.michael_video_import import EXTRA_MATERIALS, VIDEO_SPECS
 from backend.michael_video_seed import MIGRATION_ID, seed_michael_video_catalog
 
 
@@ -66,7 +66,9 @@ class MichaelVideoSeedTests(unittest.TestCase):
         self.assertEqual(first, {"status": "published", "videos": 25})
         self.assertEqual(second, {"status": "already-complete", "videos": 25})
         self.assertEqual(len(db["learning_videos"].docs), 25)
-        self.assertEqual(len(db["michael_materials"].docs), 25)
+        # 25 video materials + the curated non-video materials (right-hand-rule
+        # image) folded into the same migration.
+        self.assertEqual(len(db["michael_materials"].docs), 25 + len(EXTRA_MATERIALS))
         self.assertTrue(all(doc["active"] for doc in db["learning_videos"].docs))
         self.assertTrue(all(doc["approved_for_michael"] for doc in db["michael_materials"].docs))
         self.assertIsNotNone(asyncio.run(db["content_migration_snapshots"].find_one({"_id": MIGRATION_ID})))
