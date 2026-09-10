@@ -14,6 +14,7 @@ import re
 import uuid
 import logging
 from datetime import datetime, timezone
+from difflib import get_close_matches
 from typing import Optional, List
 
 from fastapi import APIRouter, Query
@@ -1462,6 +1463,391 @@ def _normalize_material_match_text(value: str) -> str:
     return re.sub(r"\s+", " ", re.sub(r"[^\w\s-]", " ", (value or "").casefold())).strip()
 
 
+# ─── Consolidated Traffic Concept Resolver ────────────────────────────────────
+
+TRAFFIC_CONCEPTS = {
+    "reaksjonslengde": {
+        "canonical": "reaksjonslengde",
+        "category": "stoppelengde",
+        "aliases": [
+            "reaksjonslengde", "reaksjonslengden", "reaksjonslengder", "reaksjonslende",
+            "raksjonslengde", "raksjonslengder", "raksjonstid", "reaksjonstid",
+            "reaction distance", "reaction", "reaction time",
+            "ระยะตอบสนอง", "ระยะปฏิกิริยา", "ตอบสนอง"
+        ],
+        "formula": {
+            "no": "Reaksjonslengde = (Fart ÷ 10) × 3 (i meter). Eksempel ved 50 km/t: (50 ÷ 10) × 3 = 15 m.",
+            "th": "ระยะตอบสนอง = (ความเร็ว ÷ 10) × 3 (เป็นเมตร) ตัวอย่างที่ 50 กม./ชม.: (50 ÷ 10) × 3 = 15 ม.",
+            "en": "Reaction distance = (Speed ÷ 10) × 3 (in metres). Example at 50 km/h: (50 ÷ 10) × 3 = 15 m.",
+        },
+        "definition": {
+            "no": "Reaksjonslengde er strekningen bilen tilbakelegger fra du oppdager en hindring til du begynner å bremse.",
+            "th": "ระยะตอบสนอง คือระยะทางที่รถแล่นไปนับจากที่คุณสังเกตเห็นสิ่งกีดขวางจนกระทั่งเริ่มเหยียบเบรก",
+            "en": "Reaction distance is the distance your vehicle travels from when you observe a hazard until you start braking.",
+        },
+        "title": {
+            "no": "Reaksjonslengde",
+            "th": "ระยะตอบสนอง",
+            "en": "Reaction distance",
+        },
+        "chips": {
+            "no": ["🚗 Bremselengde", "📏 Stoppelengde", "❓ Spør videre"],
+            "th": ["🚗 ระยะเบรก", "📏 ระยะหยุดรถ", "❓ ถามต่อ"],
+            "en": ["🚗 Braking distance", "📏 Stopping distance", "❓ Ask more"],
+        },
+        "tags": ["reaksjonslengde", "stoppelengde"],
+        "media_id": "vid_stopp_01",
+    },
+    "bremselengde": {
+        "canonical": "bremselengde",
+        "category": "stoppelengde",
+        "aliases": [
+            "bremselengde", "bremselengden", "bremselengder", "bremselende", "bremslengde",
+            "braking distance", "braking", "brake distance",
+            "ระยะเบรก", "เบรก"
+        ],
+        "formula": {
+            "no": "Bremselengde = (Fart ÷ 10)² (på tørr asfalt). Eksempel ved 50 km/t: 5 × 5 = 25 m. (På våt vei dobles bremselengden).",
+            "th": "ระยะเบรก = (ความเร็ว ÷ 10)² (ถนนแห้ง) ตัวอย่างที่ 50 กม./ชม.: 5 × 5 = 25 ม. (ถนนเปียกคูณ 2)",
+            "en": "Braking distance = (Speed ÷ 10)² (on dry asphalt). Example at 50 km/h: 5 × 5 = 25 m. (Doubled on wet roads).",
+        },
+        "definition": {
+            "no": "Bremselengde er strekningen bilen tilbakelegger fra du begynner å bremse til bilen står helt stille.",
+            "th": "ระยะเบรก คือระยะทางที่รถเคลื่อนที่นับจากที่คุณเริ่มเหยียบเบรกจนกระทั่งรถหยุดสนิท",
+            "en": "Braking distance is the distance the vehicle travels from when you start braking until it comes to a complete stop.",
+        },
+        "title": {
+            "no": "Bremselengde",
+            "th": "ระยะเบรก",
+            "en": "Braking distance",
+        },
+        "chips": {
+            "no": ["📏 Reaksjonslengde", "🚗 Stoppelengde", "❓ Spør videre"],
+            "th": ["📏 ระยะตอบสนอง", "🚗 ระยะหยุดรถ", "❓ ถามต่อ"],
+            "en": ["📏 Reaction distance", "🚗 Stopping distance", "❓ Ask more"],
+        },
+        "tags": ["bremselengde", "stoppelengde"],
+        "media_id": "vid_stopp_02",
+    },
+    "stoppelengde": {
+        "canonical": "stoppelengde",
+        "category": "stoppelengde",
+        "aliases": [
+            "stoppelengde", "stoppelengden", "stopplengde", "stopplengden", "stoppelende",
+            "stopping distance", "stopping",
+            "ระยะหยุด", "ระยะหยุดรถ"
+        ],
+        "formula": {
+            "no": "Stoppelengde = Reaksjonslengde + Bremselengde. Eksempel ved 50 km/t: 15 m + 25 m = 40 m.",
+            "th": "ระยะหยุดรถ = ระยะตอบสนอง + ระยะเบรก ตัวอย่างที่ 50 กม./ชม.: 15 ม. + 25 ม. = 40 ม.",
+            "en": "Stopping distance = Reaction distance + Braking distance. Example at 50 km/h: 15 m + 25 m = 40 m.",
+        },
+        "definition": {
+            "no": "Stoppelengde er den totale strekningen fra du ser faren til bilen har stoppet helt (reaksjonslengde pluss bremselengde).",
+            "th": "ระยะหยุด คือระยะทางรวมทั้งหมดตั้งแต่เริ่มเห็นอันตรายจนรถหยุดสนิท (ระยะตอบสนองรวมกับระยะเบรก)",
+            "en": "Stopping distance is the total distance from when you see a hazard until the vehicle is fully stopped (reaction distance plus braking distance).",
+        },
+        "title": {
+            "no": "Stoppelengde",
+            "th": "ระยะหยุดรถ",
+            "en": "Stopping distance",
+        },
+        "chips": {
+            "no": ["🚗 I tettsted 50 km/t", "🛣️ Utenfor tettsted 80 km/t", "❓ Spør videre"],
+            "th": ["🚗 ในเมือง 50 กม/ชม", "🛣️ นอกเมือง 80 กม/ชม", "❓ ถามต่อ"],
+            "en": ["🚗 In town 50 km/h", "🛣️ Outside town 80 km/h", "❓ Ask more"],
+        },
+        "tags": ["stoppelengde"],
+        "media_id": "vid_stopp_03",
+    },
+    "vikeplikt": {
+        "canonical": "vikeplikt",
+        "category": "vikeplikt",
+        "aliases": [
+            "vikeplikt", "vikeplikten", "vikeplikter", "vikeplit", "høyreregel", "høyreregelen",
+            "hoyreregel", "hoyreregelen", "right-of-way", "right of way", "give way", "yield",
+            "การให้ทาง", "ให้ทาง", "กฎมือขวา"
+        ],
+        "formula": None,
+        "definition": {
+            "no": "Vikeplikt betyr at du ikke må hindre eller forstyrre annen trafikk som har forkjørsrett.",
+            "th": "การให้ทาง หมายถึงคุณต้องไม่ขัดขวางหรือรบกวนการจราจรอื่นที่มีสิทธิ์ไปก่อน",
+            "en": "Right-of-way means you must not obstruct or disrupt traffic that has priority.",
+        },
+        "title": {
+            "no": "Vikeplikt",
+            "th": "การให้ทาง",
+            "en": "Right-of-way",
+        },
+        "chips": {
+            "no": ["🚗 Høyreregelen", "🛑 Vikepliktskilt", "⭕ Rundkjøring", "🔴 Stoppskilt"],
+            "th": ["🚗 กฎให้ทาง (ขวา)", "🛑 ป้ายให้ทาง", "⭕ วงเวียน", "🔴 ป้ายหยุด"],
+            "en": ["🚗 Right-of-way rule", "🛑 Give Way sign", "⭕ Roundabout", "🔴 Stop sign"],
+        },
+        "tags": ["vikeplikt"],
+        "media_id": "vid_vike_01",
+    },
+    "rundkjøring": {
+        "canonical": "rundkjøring",
+        "category": "vikeplikt",
+        "aliases": [
+            "rundkjøring", "rundkjøringen", "rundkjoring", "roundabout", "วงเวียน"
+        ],
+        "formula": None,
+        "definition": {
+            "no": "I rundkjøring har du vikeplikt for trafikk som allerede er inne i rundkjøringen (fra venstre).",
+            "th": "ในวงเวียน คุณต้องให้ทางแก่รถที่อยู่ในวงเวียนอยู่แล้ว (มาจากทางซ้าย)",
+            "en": "In a roundabout you must give way to traffic already inside the roundabout (from the left).",
+        },
+        "title": {
+            "no": "Rundkjøring",
+            "th": "วงเวียน",
+            "en": "Roundabout",
+        },
+        "chips": {
+            "no": ["⭕ Vikeplikt i rundkjøring", "🚗 Feltvalg og blinklys", "❓ Spør videre"],
+            "th": ["⭕ การให้ทางในวงเวียน", "🚗 การเลือกเลนและเปิดไฟเลี้ยว", "❓ ถามต่อ"],
+            "en": ["⭕ Roundabout right-of-way", "🚗 Lane selection and signaling", "❓ Ask more"],
+        },
+        "tags": ["rundkjøring", "vikeplikt"],
+        "media_id": "vid_vike_02",
+    },
+    "hav_regelen": {
+        "canonical": "hav_regelen",
+        "category": "hav_regelen",
+        "aliases": [
+            "hav", "hav_regelen", "havaregel", "hav-regelen", "hensynsfull", "aktpågivende", "varsom",
+            "vegtrafikkloven § 3", "paragraf 3"
+        ],
+        "formula": None,
+        "definition": {
+            "no": "HAV-regelen (Vegtrafikkloven § 3): Enhver skal ferdes hensynsfullt, aktpågivende og varsomt.",
+            "th": "กฎ HAV (พ.ร.บ. จราจรทางบก มาตรา 3): ทุกคนต้องสัญจรอย่างเกรงใจ ตื่นตัวระมัดระวัง และรอบคอบ",
+            "en": "The HAV rule (Road Traffic Act Section 3): Everyone must travel considerately, alertly, and cautiously.",
+        },
+        "title": {
+            "no": "HAV-regelen (§ 3)",
+            "th": "กฎ HAV (มาตรา 3)",
+            "en": "The HAV rule (Section 3)",
+        },
+        "chips": {
+            "no": ["🚗 Hensynsfull", "👀 Aktpågivende", "🛡️ Varsom"],
+            "th": ["🚗 มีความเกรงใจ", "👀 ตื่นตัวระมัดระวัง", "🛡️ รอบคอบปลอดภัย"],
+            "en": ["🚗 Considerate", "👀 Alert", "🛡️ Cautious"],
+        },
+        "tags": ["hav_regelen"],
+        "media_id": "vid_hav_01",
+    },
+    "mørkekjøring": {
+        "canonical": "mørkekjøring",
+        "category": "morkekjoring",
+        "aliases": [
+            "mørkekjøring", "morkekjoring", "mørkekjøringa", "night driving", "lysregler", "fjernlys",
+            "ขับรถตอนกลางคืน"
+        ],
+        "formula": None,
+        "definition": {
+            "no": "Mørkekjøring krever riktig bruk av lys, tilpasset fart etter sikt og ekstra oppmerksomhet på myke trafikanter.",
+            "th": "การขับรถตอนกลางคืนต้องใช้ไฟอย่างถูกต้อง ปรับความเร็วตามทัศนวิสัย และระวังคนเดินถนนเป็นพิเศษ",
+            "en": "Night driving requires proper use of lights, adjusting speed to visibility, and extra care for pedestrians.",
+        },
+        "title": {
+            "no": "Mørkekjøring",
+            "th": "การขับรถตอนกลางคืน",
+            "en": "Night driving",
+        },
+        "chips": {
+            "no": ["💡 Fjernlysregler", "🚶 Refleksbruk", "❓ Spør videre"],
+            "th": ["💡 การใช้ไฟสูง", "🚶 การใช้อุปกรณ์สะท้อนแสง", "❓ ถามต่อ"],
+            "en": ["💡 High beam rules", "🚶 Use of reflectors", "❓ Ask more"],
+        },
+        "tags": ["morkekjoring"],
+        "media_id": None,
+    },
+}
+
+
+def _match_canonical_concept(query: str) -> Optional[dict]:
+    """Fuzzy and alias match user text against canonical traffic concepts."""
+    if not query:
+        return None
+    normalized = _normalize_material_match_text(query)
+    tokens = [t for t in normalized.split() if len(t) >= 3]
+
+    # 1. Exact alias match
+    for concept_name, data in TRAFFIC_CONCEPTS.items():
+        for alias in data["aliases"]:
+            alias_norm = _normalize_material_match_text(alias)
+            if alias_norm and (alias_norm in normalized or any(t == alias_norm for t in tokens)):
+                return data
+
+    # 2. Fuzzy match token-by-token using difflib
+    all_alias_map = {}
+    for concept_name, data in TRAFFIC_CONCEPTS.items():
+        for alias in data["aliases"]:
+            all_alias_map[_normalize_material_match_text(alias)] = data
+
+    all_keys = list(all_alias_map.keys())
+
+    for token in tokens:
+        # Check direct close matches
+        matches = get_close_matches(token, all_keys, n=1, cutoff=0.72)
+        if matches:
+            return all_alias_map[matches[0]]
+
+        # Check with simple Norwegian stem (remove -er, -en, -ene, -e, -a endings)
+        stem = re.sub(r"(er|en|ene|e|a)$", "", token)
+        if len(stem) >= 4:
+            stem_matches = get_close_matches(stem, all_keys, n=1, cutoff=0.72)
+            if stem_matches:
+                return all_alias_map[stem_matches[0]]
+
+    return None
+
+
+def _offline_media_card(media_id: str, title: str, caption: str, category: str) -> dict:
+    return {
+        "id": media_id,
+        "media_id": media_id,
+        "type": "video",
+        "category": category,
+        "tags": [category],
+        "url": f"/api/assets/{media_id}.mp4",
+        "thumbnail_url": f"/api/assets/thumbs/thumb_{media_id}.jpg",
+        "title": title,
+        "caption": caption,
+        "description": caption,
+    }
+
+
+async def resolve_traffic_concept(
+    query: str,
+    lang: str = "no",
+    db: Any = None,
+) -> Optional[dict]:
+    """
+    Consolidated resolver for traffic concepts across learning_glossary and media_catalog.
+    Handles typos, dialect/grammatical variations, and multilingual aliases.
+    """
+    concept = _match_canonical_concept(query)
+    if not concept:
+        return None
+
+    canonical = concept["canonical"]
+    category = concept["category"]
+    title = concept["title"].get(lang, concept["title"]["no"])
+    definition = concept["definition"].get(lang, concept["definition"]["no"])
+    formula = concept["formula"].get(lang, concept["formula"]["no"]) if concept["formula"] else None
+    chips = list(concept["chips"].get(lang, concept["chips"]["no"]))
+
+    # 1. Enrich from learning_glossary if db is available
+    if db is not None:
+        try:
+            glossary_col = db["learning_glossary"]
+            doc = await glossary_col.find_one({"term_no": {"$regex": f"^{canonical}$", "$options": "i"}})
+            if doc:
+                doc_title = doc.get(f"term_{lang}") or doc.get("term_no")
+                doc_def = doc.get(f"definition_{lang}") or doc.get("definition_no")
+                if doc_title:
+                    title = doc_title
+                if doc_def:
+                    definition = doc_def
+        except Exception as exc:
+            logger.debug("Glossary lookup in resolver skipped: %s", exc)
+
+    # 2. Enrich from media_catalog if db is available
+    media = []
+    if db is not None:
+        try:
+            from media_catalog import serialize_catalog_document
+            catalog_col = db["media_catalog"]
+            cat_docs = await catalog_col.find({
+                "category": category,
+                "is_active": True,
+            }).to_list(length=10)
+            if cat_docs:
+                for d in cat_docs:
+                    serialized = serialize_catalog_document(d, lang)
+                    if serialized:
+                        if any(t in serialized.get("tags", []) for t in concept["tags"]):
+                            media.append(serialized)
+                            break
+                if not media and cat_docs:
+                    s = serialize_catalog_document(cat_docs[0], lang)
+                    if s:
+                        media.append(s)
+        except Exception as exc:
+            logger.debug("Media catalog lookup in resolver skipped: %s", exc)
+
+    # Offline / fallback media card if media_catalog was not found or offline
+    if not media and concept.get("media_id"):
+        media.append(_offline_media_card(
+            concept["media_id"],
+            title,
+            definition,
+            category,
+        ))
+
+    curriculum_parts = [
+        f"Fagbegrep: {title}",
+        f"Definisjon: {definition}",
+    ]
+    if formula:
+        curriculum_parts.append(f"Formel: {formula}")
+    curriculum_context = "\n".join(curriculum_parts)
+
+    return {
+        "canonical": canonical,
+        "category": category,
+        "title": title,
+        "definition": definition,
+        "formula": formula,
+        "chips": chips,
+        "tags": list(concept["tags"]),
+        "media": media,
+        "curriculum_context": curriculum_context,
+    }
+
+
+def _apply_formula_fail_safe(user_msg: str, reply_text: str, lang: str) -> str:
+    """Ensure calculation questions with typos return the full formula and worked example."""
+    concept = _match_canonical_concept(user_msg)
+    if not concept or not concept.get("formula"):
+        return reply_text
+
+    has_formula_math = any(sym in reply_text for sym in ("÷", "/", "×", "*", "²", "^2", "+", "="))
+    is_fallback = "Beklager" in reply_text or "Sorry" in reply_text or "ขออภัย" in reply_text
+
+    if is_fallback or not has_formula_math:
+        title = concept["title"].get(lang, concept["title"]["no"])
+        formula = concept["formula"].get(lang, concept["formula"]["no"])
+        def_text = concept["definition"].get(lang, concept["definition"]["no"])
+
+        if lang == "th":
+            return (
+                f"🚗 {title}\n\n"
+                f"💡 {def_text}\n\n"
+                f"📐 สูตรการคำนวณ:\n{formula}\n\n"
+                f"❓ ลองคำนวณที่ความเร็ว 80 กม./ชม. ดูไหมครับ? 😊"
+            )
+        elif lang == "en":
+            return (
+                f"🚗 {title}\n\n"
+                f"💡 {def_text}\n\n"
+                f"📐 Formula:\n{formula}\n\n"
+                f"❓ What would the distance be at 80 km/h? Give it a try! 😊"
+            )
+        else:
+            return (
+                f"🚗 {title}\n\n"
+                f"💡 {def_text}\n\n"
+                f"📐 Formel:\n{formula}\n\n"
+                f"❓ Hva blir strekningen i 80 km/t? Prøv selv! 😊"
+            )
+
+    return reply_text
+
+
 def _material_match_terms(user_msg: str, extra_context: str = "") -> set[str]:
     """Expand only known multilingual traffic concepts; never use free AI URLs."""
     query = _normalize_material_match_text(f"{user_msg} {extra_context}")
@@ -1770,7 +2156,14 @@ def _kw_match(reply_lower: str, category: str) -> bool:
             return True
     return False
 
-def _get_suggestions(reply: str, lang: str) -> list:
+def _get_suggestions(reply: str, lang: str, user_msg: str = "") -> list:
+    # First check if user message or reply matches a resolved traffic concept with typo-tolerance
+    concept = _match_canonical_concept(user_msg) or _match_canonical_concept(reply)
+    if concept:
+        chips = concept.get("chips", {}).get(lang) or concept.get("chips", {}).get("no")
+        if chips:
+            return list(chips)
+
     r = reply.lower()
     if _kw_match(r, "vikeplikt"):
         if lang == "th": return ["🚗 กฎให้ทาง (ขวา)", "🛑 ป้ายให้ทาง", "⭕ วงเวียน", "🔴 ป้ายหยุด"]
@@ -1829,25 +2222,36 @@ async def _get_curriculum_context(user_msg: str, lang: str) -> str:
         # Clean message to lowercase, strip punctuation
         clean_msg = re.sub(r'[^\w\s]', ' ', user_msg.lower()).strip()
         words = [w for w in clean_msg.split() if len(w) >= 3]
-        
+
+        # Check canonical concept resolver with typo-tolerance
+        concept_data = _match_canonical_concept(clean_msg)
+        if concept_data:
+            resolved_doc = await resolve_traffic_concept(user_msg, lang, _db)
+            if resolved_doc and resolved_doc.get("curriculum_context"):
+                context_parts.append(resolved_doc["curriculum_context"])
+
         # Common traffic keywords to trigger specific queries
         keywords_map = {
             "vikeplikt": ["vikeplikt", "høyreregel", "forkjørsvei", "yield", "right-of-way", "give way", "การให้ทาง", "ให้ทาง"],
             "rundkjøring": ["rundkjøring", "roundabout", "วงเวียน"],
             "fart": ["fart", "fartsgrense", "hastighet", "speed", "stopping distance", "stoppelengde", "bremselengde", "reaksjonslengde", "ความเร็ว", "ระยะหยุด"],
+            "stoppelengde": ["stoppelengde", "bremselengde", "reaksjonslengde", "stopping distance", "braking distance", "reaction distance"],
             "alkohol": ["alkohol", "rus", "promille", "drikke", "kjøreforbud", "alcohol", "drunk", "แอลกอฮอล์", "เหล้า", "เบียร์", "เมา"],
             "parkering": ["parker", "stans", "parkering", "stop", "stopp", "ลานจอดรถ", "จอดรถ"],
             "sikkerhet": ["sikkerhet", "belte", "barnesikring", "dekk", "mønsterdybde", "safety", "seatbelt", "เข็มขัดนิรภัย", "ความปลอดภัย"]
         }
         
         matched_categories = set()
+        if concept_data:
+            matched_categories.add(concept_data["category"])
         for cat, kws in keywords_map.items():
             if any(kw in clean_msg for kw in kws):
                 matched_categories.add(cat)
                 
         terms_to_search = []
         for cat in matched_categories:
-            terms_to_search.extend(keywords_map[cat][:2]) # use top 2 Norwegian keywords for broader match
+            if cat in keywords_map:
+                terms_to_search.extend(keywords_map[cat][:2]) # use top 2 Norwegian keywords for broader match
             
         for w in words:
             if w not in terms_to_search and len(w) >= 4:
@@ -2358,6 +2762,8 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
     media = []
     explicit_sign_ids = _explicit_sign_ids_for_message(user_msg)
     try:
+        resolved_concept = await resolve_traffic_concept(user_msg, lang, _db)
+
         # Retrieve curriculum context from database (RAG)
         context_str = await _get_curriculum_context(user_msg, lang)
         context_sign_ids = _sign_ids_from_context(context_str)
@@ -2384,6 +2790,10 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
                 requested_language,
                 extra_context=quiz_context_str,
             )
+            if not catalog_media and resolved_concept and resolved_concept.get("media"):
+                catalog_media = list(resolved_concept["media"])
+        elif not explicit_sign_ids and resolved_concept and resolved_concept.get("media"):
+            catalog_media = list(resolved_concept["media"])
         media = _compose_teacher_media(media, catalog_media, explicit_sign_ids)
 
         if not LLM_KEY:
@@ -2551,6 +2961,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
     reply_text = _apply_section_7_2_fail_safe(user_msg, reply_text, lang)
     reply_text = _apply_right_rule_definition_fail_safe(user_msg, reply_text, lang)
     reply_text = _apply_bus_rule_definition_fail_safe(user_msg, reply_text, lang)
+    reply_text = _apply_formula_fail_safe(user_msg, reply_text, lang)
     if lang == "th":
         reply_text = _sanitize_gender_particles(reply_text)
     reply_sign_ids = _sign_ids_from_reply(reply_text)
@@ -2602,6 +3013,10 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         logger.error("Failed to write teacher log to DB: %s", log_ex)
 
     suggestions = []
+    if resolved_concept and resolved_concept.get("chips"):
+        suggestions = list(resolved_concept["chips"])
+    else:
+        suggestions = _get_suggestions(reply_text, lang, user_msg=user_msg)
     return TeacherChatResponse(
         session_id=session_id,
         reply=reply_text,
