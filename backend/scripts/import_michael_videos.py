@@ -36,6 +36,32 @@ from backend.michael_video_import import (  # noqa: E402
 )
 
 
+def validate_video_spec(spec):
+    """Guard: stop import if translation incomplete."""
+    if isinstance(spec, dict):
+        title_no = spec.get('title_no')
+        title_th = spec.get('title_th')
+        title_en = spec.get('title_en')
+        media_id = spec.get('media_id') or spec.get('video_id', spec.get('slug', 'unknown'))
+    else:
+        title_no = getattr(spec, 'title_no', None)
+        title_th = getattr(spec, 'title_th', None)
+        title_en = getattr(spec, 'title_en', None)
+        media_id = getattr(spec, 'media_id', None) or getattr(spec, 'video_id', getattr(spec, 'slug', 'unknown'))
+
+        if hasattr(spec, 'titles') and isinstance(spec.titles, dict):
+            title_no = title_no or spec.titles.get('no')
+            title_th = title_th or spec.titles.get('th')
+            title_en = title_en or spec.titles.get('en')
+
+    if title_no == "NEEDS_TRANSLATION":
+        raise ValueError(f"NO translation incomplete: {media_id}")
+    if title_th == "NEEDS_TRANSLATION":
+        raise ValueError(f"TH translation required: {media_id}")
+    if title_en == "NEEDS_TRANSLATION":
+        raise ValueError(f"EN translation required: {media_id}")
+
+
 def _sha256(path: Path) -> str:
     digest = hashlib.sha256()
     with path.open("rb") as handle:
@@ -48,6 +74,7 @@ def validate_sources(workspace: Path) -> list[dict]:
     inventory = []
     seen_hashes: dict[str, str] = {}
     for spec in VIDEO_SPECS:
+        validate_video_spec(spec)
         source = source_path(workspace, spec)
         if not source.is_file():
             raise RuntimeError(f"Missing source video: {source}")
@@ -165,6 +192,7 @@ def apply_local_database(database: str, snapshot_dir: Path, publish: bool) -> di
     snapshot_path.write_text(json.dumps(snapshot, ensure_ascii=False, indent=2), encoding="utf-8")
 
     for spec in VIDEO_SPECS:
+        validate_video_spec(spec)
         video = learning_video_document(spec, publish=publish)
         material = michael_material_document(spec, publish=publish)
         now = datetime.now(timezone.utc).isoformat()
