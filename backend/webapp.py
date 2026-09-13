@@ -10299,7 +10299,7 @@ function _openTeacherMediaVideo(media) {
 
 function _buildTeacherMediaCard(media) {
   if (!media || !media.id || !_teacherMediaSafeUrl(media.url)) return null;
-  if (['sign','intersection_image','video','podcast'].indexOf(media.type) === -1) return null;
+  if (['sign','intersection_image','image','video','podcast','audio','document'].indexOf(media.type) === -1) return null;
   if (!media.title || !media.caption) return null;
 
   var card = document.createElement(media.type === 'sign' ? 'button' : 'article');
@@ -10344,7 +10344,7 @@ function _buildTeacherMediaCard(media) {
     return card;
   }
 
-  if (media.type === 'podcast') {
+  if (media.type === 'podcast' || media.type === 'audio') {
     var podcastWrap = document.createElement('div');
     podcastWrap.className = 'tm-media-podcast';
     var podcastLabel = document.createElement('div');
@@ -10366,6 +10366,25 @@ function _buildTeacherMediaCard(media) {
     podcastWrap.appendChild(podcastCaption);
     podcastWrap.appendChild(audio);
     card.appendChild(podcastWrap);
+    return card;
+  }
+
+  if (media.type === 'document') {
+    var documentLink = document.createElement('a');
+    documentLink.className = 'tm-media-podcast';
+    documentLink.href = media.url;
+    documentLink.target = '_blank';
+    documentLink.rel = 'noopener noreferrer';
+    documentLink.setAttribute('aria-label', media.title);
+    var documentTitle = document.createElement('div');
+    documentTitle.className = 'tm-media-title';
+    documentTitle.textContent = '📄 ' + media.title;
+    var documentCaption = document.createElement('div');
+    documentCaption.className = 'tm-media-caption';
+    documentCaption.textContent = media.caption;
+    documentLink.appendChild(documentTitle);
+    documentLink.appendChild(documentCaption);
+    card.appendChild(documentLink);
     return card;
   }
 
