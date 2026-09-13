@@ -53,7 +53,7 @@ class MichaelMaterialAdminContractTests(unittest.TestCase):
         self.assertIn("db.michael_materials", SERVER)
 
     def test_material_references_existing_sources_and_safe_urls(self):
-        self.assertIn('MICHAEL_MATERIAL_TYPES = {"sign", "intersection_image", "video"}', SERVER)
+        self.assertIn('"image", "video", "podcast", "audio", "document"', SERVER)
         self.assertIn('db.traffic_signs.find_one({"id": source_id}', SERVER)
         self.assertIn('db.learning_videos.find_one({"id": source_id}', SERVER)
         self.assertIn('value.startswith("/api/")', SERVER)
@@ -108,6 +108,8 @@ class MichaelMaterialAdminContractTests(unittest.TestCase):
             'populateMichaelMaterialSources',
             'Koblede skilt-ID-er',
             'Situasjonsknagger',
+            'uploadMichaelMaterialFile',
+            '/admin/media/upload',
         ):
             self.assertIn(token, ADMIN)
 

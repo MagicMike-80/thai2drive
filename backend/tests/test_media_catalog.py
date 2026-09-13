@@ -61,7 +61,7 @@ class MediaCatalogTests(unittest.TestCase):
 
     def test_schema_rejects_invalid_enums_urls_duplicate_tags_and_ids(self):
         cases = [
-            _item(type="image"),
+            _item(type="binary"),
             _item(category="annet"),
             _item(content_language="nb"),
             _item(media_url="http://media.example/video.mp4"),

@@ -213,6 +213,18 @@ class MichaelMaterialRetrievalTests(unittest.TestCase):
         result = self.retrieve([material], "Vis stoppelengde", videos=videos)
         self.assertEqual(result[0]["url"], "https://youtu.be/abcdefghijk")
 
+    def test_uploaded_video_uses_shared_media_url_without_legacy_video_record(self):
+        material = _material(
+            "uploaded-video",
+            "video",
+            source_id="reaksjonslengde_40",
+            source_url="/api/media/files/64b64c000000000000000001",
+            topic_tags=["reaksjonslengde"],
+        )
+        result = self.retrieve([material], "Forklar reaksjonslengde", videos=[])
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result[0]["url"], "/api/media/files/64b64c000000000000000001")
+
     def test_video_uses_safe_local_asset_and_honours_learner_language(self):
         material = _material(
             "video-local",
@@ -341,6 +353,7 @@ class MichaelMaterialRetrievalTests(unittest.TestCase):
                 "media_url": "https://media.example/video.mp4",
                 "thumbnail_url": "https://media.example/thumb.jpg",
                 "is_active": True,
+                "approved_for_michael": True,
                 "content_language": language,
                 "i18n": {
                     "no": {"title": "Norsk", "description": "Norsk beskrivelse"},
