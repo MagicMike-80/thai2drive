@@ -30,9 +30,13 @@ except ImportError:  # package-style imports used by isolated tests
     from backend.streaming_helpers import RangeNotSatisfiable, gridfs_content_type, gridfs_file_length, parse_byte_range
     from backend.video_thumbnails import normalize_video_thumbnail_url
 try:
-    from media_catalog import SUPPORTED_LANGUAGES, list_localized_catalog_media
+    from media_catalog import MediaCatalogValidationError, SUPPORTED_LANGUAGES, list_localized_catalog_media, validate_catalog_document
 except ImportError:  # package-style imports used by isolated tests
-    from backend.media_catalog import SUPPORTED_LANGUAGES, list_localized_catalog_media
+    from backend.media_catalog import MediaCatalogValidationError, SUPPORTED_LANGUAGES, list_localized_catalog_media, validate_catalog_document
+try:
+    from media_storage import MediaUploadError, prepare_media_upload
+except ImportError:  # package-style imports used by isolated tests
+    from backend.media_storage import MediaUploadError, prepare_media_upload
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -3913,56 +3917,48 @@ async def admin_upload_image(
     file: UploadFile = File(...),
     _: dict = Depends(require_admin),
 ):
-    """Admin: upload a new image for a question (stored as Base64 data URI in bildeUrl).
-    Resizes to max 600px, JPEG quality 82, to keep DB payload small."""
-    import base64
-    import io
-    try:
-        from PIL import Image
-    except ImportError:
-        raise HTTPException(status_code=500, detail="Pillow not installed on server")
-
-    # Size check (max 10 MB raw)
-    raw = await file.read()
-    if len(raw) > 10 * 1024 * 1024:
-        raise HTTPException(status_code=413, detail="Image too large (max 10 MB)")
-    if len(raw) == 0:
-        raise HTTPException(status_code=400, detail="Empty file")
-
-    try:
-        img = Image.open(io.BytesIO(raw))
-        img.load()
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=f"Could not decode image: {e}")
-
-    if max(img.size) > 600:
-        ratio = 600 / max(img.size)
-        img = img.resize((int(img.size[0] * ratio), int(img.size[1] * ratio)), Image.LANCZOS)
-    if img.mode != "RGB":
-        img = img.convert("RGB")
-    buf = io.BytesIO()
-    img.save(buf, format="JPEG", quality=82, optimize=True)
-    b64 = base64.b64encode(buf.getvalue()).decode()
-    data_uri = "data:image/jpeg;base64," + b64
-
+    """Admin: store a question image through the shared persistent media workflow."""
     q = await db.questions.find_one({"id": question_id})
     if not q:
         raise HTTPException(status_code=404, detail="Question not found")
     prev = q.get("bildeUrl", "")
+    previous_match = re.fullmatch(r"/api/media/files/([a-fA-F0-9]{24})", str(prev))
+    upload = await admin_upload_media_file(
+        file=file,
+        replace_file_id=previous_match.group(1) if previous_match else None,
+        _=_,
+    )
+    if upload["media_type"] != "image":
+        await admin_delete_media_file(upload["file_id"], _=_)
+        raise HTTPException(status_code=400, detail="Questions accept image files only")
     await db.questions.update_one(
         {"id": question_id},
         {"$set": {
-            "bildeUrl": data_uri,
+            "bildeUrl": upload["url"],
             "bildeUrl_original_backup": prev if prev else q.get("bildeUrl_original_backup"),
         }},
     )
     return {
         "ok": True,
         "id": question_id,
-        "bildeUrl": data_uri,
-        "size_kb": round(len(buf.getvalue()) / 1024, 1),
-        "dimensions": list(img.size),
+        "bildeUrl": upload["url"],
+        "file_id": upload["file_id"],
+        "link_name": upload["link_name"],
+        "size_kb": round(upload["bytes"] / 1024, 1),
+        "transformed": upload["transformed"],
     }
+
+
+@api_router.get("/admin/questions/{question_id}")
+async def admin_get_question(question_id: str, _: dict = Depends(require_admin)):
+    """Admin: fetch one complete question, including its media URL."""
+    question = await db.questions.find_one(
+        {"id": question_id},
+        {"_id": 0, "bildeUrl_original_backup": 0},
+    )
+    if not question:
+        raise HTTPException(status_code=404, detail="Question not found")
+    return question
 
 
 @api_router.get("/admin/questions/{question_id}/thumbnail")
@@ -3980,6 +3976,8 @@ async def admin_question_thumbnail(question_id: str, token: Optional[str] = None
     bilde = q.get("bildeUrl", "")
     if not bilde or len(bilde) < 10:
         raise HTTPException(status_code=404, detail="No image")
+    if bilde.startswith(("/api/", "https://", "http://")):
+        return RedirectResponse(url=bilde, status_code=307)
     # Strip data URI prefix
     if "," in bilde:
         bilde = bilde.split(",", 1)[1]
@@ -4684,7 +4682,7 @@ async def admin_delete_video(video_id: str, _: dict = Depends(require_admin)):
 
 # ── Michael material library ─────────────────────────────────────────────────
 
-MICHAEL_MATERIAL_TYPES = {"sign", "intersection_image", "video"}
+MICHAEL_MATERIAL_TYPES = {"sign", "intersection_image", "image", "video", "podcast", "audio", "document"}
 MICHAEL_MATERIAL_FIELDS = {
     "type", "source_id", "source_url", "title", "caption", "topic_tags",
     "sign_ids", "situation_tags", "active", "approved_for_michael", "priority",
@@ -4728,7 +4726,7 @@ def _normalize_michael_material_payload(data: dict, *, partial: bool = False) ->
     if "type" in data or not partial:
         material_type = str(data.get("type", "")).strip()
         if material_type not in MICHAEL_MATERIAL_TYPES:
-            raise HTTPException(status_code=400, detail="Type must be sign, intersection_image, or video")
+            raise HTTPException(status_code=400, detail="Unsupported Michael material type")
         normalized["type"] = material_type
     for field in ("source_id", "source_url"):
         if field in data or not partial:
@@ -4753,11 +4751,13 @@ def _normalize_michael_material_payload(data: dict, *, partial: bool = False) ->
 def _validate_ready_michael_material(material: dict) -> None:
     """Approved active references must be complete and safe for learner use."""
     material_type = material.get("type", "")
-    if material_type in {"sign", "video"} and not material.get("source_id"):
-        raise HTTPException(status_code=400, detail="Existing source ID is required for sign and video")
-    if material_type == "intersection_image":
+    if material_type == "sign" and not material.get("source_id"):
+        raise HTTPException(status_code=400, detail="Existing source ID is required for a sign")
+    if material_type == "video" and not material.get("source_id") and not material.get("source_url"):
+        raise HTTPException(status_code=400, detail="A video source ID or uploaded URL is required")
+    if material_type in {"intersection_image", "image", "podcast", "audio", "document"}:
         if not material.get("source_url") or not _is_safe_michael_material_url(material["source_url"]):
-            raise HTTPException(status_code=400, detail="A safe image URL is required for an intersection image")
+            raise HTTPException(status_code=400, detail="A safe uploaded or external source URL is required")
     if material.get("active") and material.get("approved_for_michael"):
         for field in ("title", "caption"):
             missing = [lang for lang in ("no", "th", "en") if not material.get(field, {}).get(lang)]
@@ -4776,7 +4776,7 @@ async def _resolve_michael_material_source(material: dict) -> dict:
         preview_url = source.get("image_url", "")
         if preview_url:
             material["source_url"] = preview_url
-    elif material_type == "video":
+    elif material_type == "video" and not str(material.get("source_url", "")).startswith("/api/media/files/"):
         source = await db.learning_videos.find_one({"id": source_id}, {"_id": 0})
         if not source:
             raise HTTPException(status_code=404, detail="Video source not found")
@@ -4977,7 +4977,437 @@ async def list_media_catalog(
     return {"language": language, "media": media}
 
 
+# ── Admin Media & Skilt CMS (CRUD) ──────────────────────────────────────────
+
+try:
+    from backend.scripts.import_michael_videos import validate_video_spec
+except ImportError:
+    try:
+        from scripts.import_michael_videos import validate_video_spec
+    except ImportError:
+        try:
+            from import_michael_videos import validate_video_spec
+        except ImportError:
+            def validate_video_spec(spec):
+                if isinstance(spec, dict):
+                    m_id = spec.get('media_id', 'unknown')
+                    t_no = spec.get('title_no')
+                    t_th = spec.get('title_th')
+                    t_en = spec.get('title_en')
+                else:
+                    m_id = getattr(spec, 'media_id', 'unknown')
+                    t_no = getattr(spec, 'title_no', None)
+                    t_th = getattr(spec, 'title_th', None)
+                    t_en = getattr(spec, 'title_en', None)
+                if t_no == "NEEDS_TRANSLATION":
+                    raise ValueError(f"NO translation incomplete: {m_id}")
+                if t_th == "NEEDS_TRANSLATION":
+                    raise ValueError(f"TH translation required: {m_id}")
+                if t_en == "NEEDS_TRANSLATION":
+                    raise ValueError(f"EN translation required: {m_id}")
+
+
+def _validate_media_i18n(media_id: str, i18n: dict) -> None:
+    """Validate that i18n contains required titles and rejects NEEDS_TRANSLATION placeholders."""
+    if not isinstance(i18n, dict):
+        raise HTTPException(status_code=400, detail="i18n must be an object")
+    for lang in ("no", "th", "en"):
+        if lang not in i18n or not isinstance(i18n[lang], dict) or not str(i18n[lang].get("title", "")).strip():
+            raise HTTPException(status_code=400, detail=f"Missing required title for language '{lang}' in i18n")
+        for field, val in i18n[lang].items():
+            if str(val).strip() == "NEEDS_TRANSLATION":
+                raise HTTPException(status_code=422, detail=f"{lang.upper()} translation required: {media_id} ({field} is incomplete)")
+
+    spec = {
+        "media_id": media_id,
+        "title_no": i18n.get("no", {}).get("title"),
+        "title_th": i18n.get("th", {}).get("title"),
+        "title_en": i18n.get("en", {}).get("title"),
+    }
+    try:
+        validate_video_spec(spec)
+    except ValueError as err:
+        raise HTTPException(status_code=422, detail=str(err))
+
+
+def _validate_admin_media_document(document: dict) -> dict:
+    """Apply the same catalog contract to admin writes and Michael reads."""
+    try:
+        return validate_catalog_document(document)
+    except MediaCatalogValidationError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+
+
+class AdminMediaCreate(BaseModel):
+    media_id: str
+    type: str = "video"  # video, podcast, image, audio, sign
+    category: str = "generelt"
+    tags: List[str] = []
+    media_url: str
+    thumbnail_url: Optional[str] = ""
+    audio_url: Optional[str] = None
+    content_language: str = "neutral"
+    is_active: bool = True
+    approved_for_michael: bool = False
+    i18n: Dict[str, Dict[str, str]]
+
+
+class AdminMediaUpdate(BaseModel):
+    type: Optional[str] = None
+    category: Optional[str] = None
+    tags: Optional[List[str]] = None
+    media_url: Optional[str] = None
+    thumbnail_url: Optional[str] = None
+    audio_url: Optional[str] = None
+    content_language: Optional[str] = None
+    is_active: Optional[bool] = None
+    approved_for_michael: Optional[bool] = None
+    i18n: Optional[Dict[str, Dict[str, str]]] = None
+
+
+ADMIN_MEDIA_OWNERS = {
+    "question": ("questions", "id", str),
+    "book_section": ("chapters", "id", str),
+    "studybook": ("studiebok_chapters", "order", int),
+    "traffic_sign": ("traffic_signs", "id", str),
+    "video": ("learning_videos", "id", str),
+    "podcast": ("learning_podcasts", "id", str),
+    "glossary": ("learning_glossary", "id", str),
+    "michael_material": ("michael_materials", "id", str),
+}
+
+
+def _admin_media_owner(owner_type: str, owner_id: str):
+    config = ADMIN_MEDIA_OWNERS.get(owner_type)
+    if not config:
+        raise HTTPException(status_code=400, detail="Unsupported media owner type")
+    collection_name, id_field, converter = config
+    try:
+        normalized_id = converter(owner_id)
+    except (TypeError, ValueError):
+        raise HTTPException(status_code=400, detail="Invalid media owner ID")
+    return db[collection_name], {id_field: normalized_id}
+
+
+@api_router.get("/admin/media-links/{owner_type}/{owner_id}")
+async def admin_list_media_links(owner_type: str, owner_id: str, _: dict = Depends(require_admin)):
+    """Return all shared-file links attached to one admin content record."""
+    collection, query = _admin_media_owner(owner_type, owner_id)
+    owner = await collection.find_one(query, {"_id": 0, "media_refs": 1})
+    if not owner:
+        raise HTTPException(status_code=404, detail="Content record not found")
+    return {"items": owner.get("media_refs", [])}
+
+
+@api_router.post("/admin/media-links/{owner_type}/{owner_id}")
+async def admin_upload_media_link(
+    owner_type: str,
+    owner_id: str,
+    file: UploadFile = File(...),
+    _: dict = Depends(require_admin),
+):
+    """Upload one shared file and attach it to any supported admin record."""
+    collection, query = _admin_media_owner(owner_type, owner_id)
+    if not await collection.find_one(query, {"_id": 1}):
+        raise HTTPException(status_code=404, detail="Content record not found")
+
+    uploaded = await admin_upload_media_file(file=file, replace_file_id=None, _=_)
+    base_id = uploaded["link_name"]
+    media_id = base_id
+    counter = 2
+    while await db.media_catalog.find_one({"media_id": media_id}, {"_id": 1}):
+        media_id = f"{base_id}_{counter}"
+        counter += 1
+
+    now = datetime.now(timezone.utc).isoformat()
+    media_ref = {
+        "media_id": media_id,
+        "link_name": media_id,
+        "url": uploaded["url"],
+        "file_id": uploaded["file_id"],
+        "type": uploaded["media_type"],
+        "filename": uploaded["filename"],
+        "created_at": now,
+    }
+    await collection.update_one(query, {"$push": {"media_refs": media_ref}})
+    await db.media_catalog.insert_one({
+        "media_id": media_id,
+        "type": uploaded["media_type"],
+        "category": "generelt",
+        "tags": [owner_type.replace("_", " ")],
+        "media_url": uploaded["url"],
+        "thumbnail_url": uploaded["url"],
+        "content_language": "neutral",
+        "is_active": False,
+        "approved_for_michael": False,
+        "archived": False,
+        "draft": True,
+        "i18n": {lang: {"title": "", "description": ""} for lang in SUPPORTED_LANGUAGES},
+        "created_at": now,
+        "updated_at": now,
+    })
+    return {"ok": True, "media_ref": media_ref, "catalog_status": "draft"}
+
+
+@api_router.delete("/admin/media-links/{owner_type}/{owner_id}/{media_id}")
+async def admin_remove_media_link(
+    owner_type: str,
+    owner_id: str,
+    media_id: str,
+    _: dict = Depends(require_admin),
+):
+    """Detach a shared file without deleting the catalog item or physical file."""
+    collection, query = _admin_media_owner(owner_type, owner_id)
+    result = await collection.update_one(query, {"$pull": {"media_refs": {"media_id": media_id}}})
+    if not result.matched_count:
+        raise HTTPException(status_code=404, detail="Content record not found")
+    return {"ok": True, "detached": media_id}
+
+
+@api_router.get("/admin/media")
+async def admin_list_media(
+    type: Optional[str] = None,
+    category: Optional[str] = None,
+    status: Optional[str] = None,
+    approved_for_michael: Optional[bool] = None,
+    search: Optional[str] = None,
+    _: dict = Depends(require_admin),
+):
+    """List all media catalog documents for the Admin CMS."""
+    query: dict = {}
+    if type:
+        query["type"] = type.strip().lower()
+    if category:
+        query["category"] = category.strip().lower()
+    if status == "active":
+        query["is_active"] = True
+        query["archived"] = {"$ne": True}
+    elif status == "inactive":
+        query["is_active"] = False
+        query["archived"] = {"$ne": True}
+    elif status == "archived":
+        query["archived"] = True
+    else:
+        query["archived"] = {"$ne": True}
+
+    if approved_for_michael is not None:
+        query["approved_for_michael"] = approved_for_michael
+
+    if search:
+        s = re.escape(search.strip())
+        query["$or"] = [
+            {"media_id": {"$regex": s, "$options": "i"}},
+            {"tags": {"$regex": s, "$options": "i"}},
+            {"i18n.no.title": {"$regex": s, "$options": "i"}},
+            {"i18n.th.title": {"$regex": s, "$options": "i"}},
+            {"i18n.en.title": {"$regex": s, "$options": "i"}},
+        ]
+
+    cursor = db.media_catalog.find(query, {"_id": 0}).sort("media_id", 1)
+    items = await cursor.to_list(length=1000)
+    return {"items": items, "total": len(items)}
+
+
+@api_router.post("/admin/media")
+async def admin_create_media(
+    data: AdminMediaCreate,
+    _: dict = Depends(require_admin),
+):
+    """Create a new media/sign document in the curated media catalog."""
+    clean_id = data.media_id.strip()
+    if not clean_id:
+        raise HTTPException(status_code=400, detail="media_id cannot be empty")
+
+    existing = await db.media_catalog.find_one({"media_id": clean_id})
+    if existing:
+        raise HTTPException(status_code=400, detail=f"Media with id '{clean_id}' already exists")
+
+    # Validate that i18n is complete and contains NO "NEEDS_TRANSLATION"
+    _validate_media_i18n(clean_id, data.i18n)
+
+    now = datetime.now(timezone.utc).isoformat()
+    doc = {
+        "media_id": clean_id,
+        "type": data.type.strip().lower(),
+        "category": data.category.strip().lower(),
+        "tags": [t.strip().lower() for t in data.tags if t.strip()],
+        "media_url": data.media_url.strip(),
+        "thumbnail_url": (data.thumbnail_url or data.media_url).strip(),
+        "audio_url": data.audio_url.strip() if data.audio_url else None,
+        "content_language": data.content_language.strip().lower(),
+        "is_active": data.is_active,
+        "approved_for_michael": bool(data.approved_for_michael),
+        "archived": False,
+        "i18n": data.i18n,
+        "created_at": now,
+        "updated_at": now,
+    }
+    _validate_admin_media_document(doc)
+    await db.media_catalog.insert_one(doc)
+    doc.pop("_id", None)
+    return {"ok": True, "media": doc}
+
+
+@api_router.put("/admin/media/{media_id}")
+async def admin_update_media(
+    media_id: str,
+    data: AdminMediaUpdate,
+    _: dict = Depends(require_admin),
+):
+    """Update an existing media catalog item."""
+    clean_id = media_id.strip()
+    existing = await db.media_catalog.find_one({"media_id": clean_id})
+    if not existing:
+        raise HTTPException(status_code=404, detail=f"Media item '{clean_id}' not found")
+
+    update_fields: dict = {"updated_at": datetime.now(timezone.utc).isoformat()}
+    if data.type is not None:
+        update_fields["type"] = data.type.strip().lower()
+    if data.category is not None:
+        update_fields["category"] = data.category.strip().lower()
+    if data.tags is not None:
+        update_fields["tags"] = [t.strip().lower() for t in data.tags if t.strip()]
+    if data.media_url is not None:
+        update_fields["media_url"] = data.media_url.strip()
+    if data.thumbnail_url is not None:
+        update_fields["thumbnail_url"] = data.thumbnail_url.strip()
+    if data.audio_url is not None:
+        update_fields["audio_url"] = data.audio_url.strip() if data.audio_url else None
+    if data.content_language is not None:
+        update_fields["content_language"] = data.content_language.strip().lower()
+    if data.is_active is not None:
+        update_fields["is_active"] = data.is_active
+    if data.approved_for_michael is not None:
+        update_fields["approved_for_michael"] = bool(data.approved_for_michael)
+    if data.i18n is not None:
+        current_i18n = existing.get("i18n", {})
+        for lang, trans in data.i18n.items():
+            if isinstance(trans, dict):
+                if lang not in current_i18n:
+                    current_i18n[lang] = {}
+                current_i18n[lang].update(trans)
+        _validate_media_i18n(clean_id, current_i18n)
+        update_fields["i18n"] = current_i18n
+
+    candidate = {key: value for key, value in existing.items() if key != "_id"}
+    candidate.update(update_fields)
+    if not candidate.get("thumbnail_url"):
+        candidate["thumbnail_url"] = candidate.get("media_url", "")
+        update_fields["thumbnail_url"] = candidate["thumbnail_url"]
+    _validate_admin_media_document(candidate)
+
+    await db.media_catalog.update_one({"media_id": clean_id}, {"$set": update_fields})
+    updated_doc = await db.media_catalog.find_one({"media_id": clean_id}, {"_id": 0})
+    return {"ok": True, "media": updated_doc}
+
+
+@api_router.delete("/admin/media/{media_id}")
+async def admin_delete_media(
+    media_id: str,
+    archive: bool = False,
+    confirm: bool = False,
+    _: dict = Depends(require_admin),
+):
+    """Safely delete or archive a media catalog item with confirmation validation."""
+    clean_id = media_id.strip()
+    existing = await db.media_catalog.find_one({"media_id": clean_id})
+    if not existing:
+        raise HTTPException(status_code=404, detail=f"Media item '{clean_id}' not found")
+
+    if archive:
+        now = datetime.now(timezone.utc).isoformat()
+        await db.media_catalog.update_one(
+            {"media_id": clean_id},
+            {"$set": {"archived": True, "is_active": False, "archived_at": now, "updated_at": now}}
+        )
+        return {"ok": True, "archived": clean_id, "is_active": False}
+
+    if not confirm:
+        raise HTTPException(
+            status_code=400,
+            detail="Permanent deletion requires confirmation (?confirm=true). Or use ?archive=true for safe archiving."
+        )
+
+    res = await db.media_catalog.delete_one({"media_id": clean_id})
+    if res.deleted_count == 0:
+        raise HTTPException(status_code=404, detail=f"Media item '{clean_id}' not found")
+    return {"ok": True, "deleted": clean_id}
+
+
 # ── GridFS audio upload / stream ─────────────────────────────────────────────
+
+@api_router.post("/admin/media/upload")
+async def admin_upload_media_file(
+    file: UploadFile = File(...),
+    replace_file_id: Optional[str] = None,
+    _: dict = Depends(require_admin),
+):
+    """Validate and persist a reusable image, audio, video, or document in GridFS."""
+    raw = await file.read()
+    try:
+        prepared = prepare_media_upload(raw, file.filename or "materiale", file.content_type or "")
+    except MediaUploadError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+
+    import io as _io
+    bucket = AsyncIOMotorGridFSBucket(db)
+    file_id = await bucket.upload_from_stream(
+        prepared.filename,
+        _io.BytesIO(prepared.data),
+        metadata={
+            "content_type": prepared.content_type,
+            "media_type": prepared.media_type,
+            "original_filename": prepared.original_filename,
+            "transformed": prepared.transformed,
+        },
+    )
+
+    if replace_file_id:
+        from bson import ObjectId
+        try:
+            ObjectId(replace_file_id)
+        except Exception:
+            await bucket.delete(file_id)
+            raise HTTPException(status_code=400, detail="Invalid replace_file_id")
+
+    string_id = str(file_id)
+    return {
+        "file_id": string_id,
+        "url": f"/api/media/files/{string_id}",
+        "link_name": Path(prepared.filename).stem,
+        "filename": prepared.filename,
+        "media_type": prepared.media_type,
+        "content_type": prepared.content_type,
+        "bytes": len(prepared.data),
+        "transformed": prepared.transformed,
+        "replaced_file_id": replace_file_id,
+    }
+
+
+@api_router.delete("/admin/media/files/{file_id}")
+async def admin_delete_media_file(file_id: str, _: dict = Depends(require_admin)):
+    """Permanently delete one uploaded media blob after its catalog record is removed."""
+    from bson import ObjectId
+    try:
+        oid = ObjectId(file_id)
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid file_id")
+    file_url = f"/api/media/files/{file_id}"
+    references = 0
+    for collection, fields in (
+        (db.media_catalog, ("media_url", "thumbnail_url", "audio_url")),
+        (db.questions, ("bildeUrl",)),
+        (db.michael_materials, ("source_url",)),
+    ):
+        references += await collection.count_documents({"$or": [{field: file_url} for field in fields]})
+    if references:
+        raise HTTPException(status_code=409, detail=f"Media file is still referenced by {references} record(s)")
+    bucket = AsyncIOMotorGridFSBucket(db)
+    try:
+        await bucket.delete(oid)
+    except Exception:
+        raise HTTPException(status_code=404, detail="Media file not found")
+    return {"ok": True, "deleted": file_id}
 
 @api_router.post("/admin/audio/upload")
 async def admin_upload_audio(
@@ -5084,6 +5514,12 @@ async def stream_audio(file_id: str, request: Request):
         _full_gen(), media_type=ct,
         headers={"Content-Length": str(total), "Accept-Ranges": "bytes"},
     )
+
+
+@api_router.get("/media/files/{file_id}")
+async def stream_media_file(file_id: str, request: Request):
+    """Serve shared media using the established range-capable GridFS streamer."""
+    return await stream_audio(file_id, request)
 
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

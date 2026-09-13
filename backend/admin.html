@@ -205,6 +205,39 @@
     <button class="tab" id="tab-michael-materials" onclick="switchTab('michael-materials')">🧰 Michael-materiale</button>
     <button class="tab" id="tab-podcasts" onclick="switchTab('podcasts')">🎙️ Podcaster</button>
     <button class="tab" id="tab-glossary" onclick="switchTab('glossary')">📚 Ordliste</button>
+    <button class="tab" id="tab-media" onclick="switchTab('media')">🖼️ Mediekatalog</button>
+  </div>
+
+  <!-- ── MEDIA CATALOG & SIGNS CMS VIEW ───────────────────── -->
+  <div id="media-view" style="display:none">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px">
+      <div style="font-size:13px;color:var(--muted)" id="media-meta"></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+        <input id="media-search" type="text" placeholder="Søk i medier/skilt…" oninput="filterAdminMedia()"
+          style="background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px 12px;font-size:13px" />
+        <select id="media-type-filter" onchange="loadAdminMedia()"
+          style="background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px 10px;font-size:13px">
+          <option value="">Alle typer</option>
+          <option value="video">Video</option>
+          <option value="podcast">Podcast</option>
+          <option value="image">Bilde</option>
+          <option value="audio">Lyd</option>
+          <option value="sign">Skilt</option>
+          <option value="document">Dokument</option>
+        </select>
+        <select id="media-status-filter" onchange="loadAdminMedia()"
+          style="background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px 10px;font-size:13px">
+          <option value="all">Alle statuser</option>
+          <option value="active">Aktive</option>
+          <option value="inactive">Inaktive</option>
+        </select>
+        <button onclick="openAdminMediaModal(null)"
+          style="background:var(--accent);color:#fff;border:0;padding:8px 18px;border-radius:7px;cursor:pointer;font-size:14px;font-weight:600">
+          ➕ Nytt medie / skilt
+        </button>
+      </div>
+    </div>
+    <div id="media-list"></div>
   </div>
 
   <!-- ── QUESTIONS VIEW ─────────────────────────────────── -->
@@ -594,15 +627,22 @@ function duplicateQuestion() {
   toast('Duplisert — endre og lagre som nytt');
 }
 
-function showDetail(i) {
+async function showDetail(i) {
   const q = window._questions[i];
   window._formMode = 'view';
-  renderDetail(q, false);
   document.getElementById('modal').classList.add('show');
+  try {
+    const fullQuestion = await api('/admin/questions/' + q.id);
+    window._questions[i] = fullQuestion;
+    renderDetail(fullQuestion, false);
+  } catch (error) {
+    toast('Kunne ikke laste spørsmålet: ' + error.message, false);
+    renderDetail(q, false);
+  }
 }
 
 function renderDetail(q, editing) {
-  const hasImg = (q.bildeUrl || '').startsWith('data:');
+  const hasImg = Boolean(q.bildeUrl);
   const body = document.getElementById('modal-body');
   window._currentQ = q;
   window._editing = editing;
@@ -666,7 +706,7 @@ function renderDetail(q, editing) {
 
 function renderForm(q) {
   const isNew = !q.id || window._formMode === 'create';
-  const hasImg = (q.bildeUrl || '').startsWith('data:');
+  const hasImg = Boolean(q.bildeUrl);
   const body = document.getElementById('modal-body');
   window._currentQ = q;
   window._editing = true;
@@ -689,6 +729,7 @@ function renderForm(q) {
       </div>
       ${hasImg ? `<button onclick="removeFormImage()" style="margin-top:8px;background:var(--warn);color:#000;border:0;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px">🖼️ Fjern bilde</button>` : ''}
     </div>
+    ${q.id ? mediaAttachmentsPanel('question', q.id) : '<div style="color:var(--muted);font-size:12px;margin-bottom:12px">Lagre spørsmålet før du legger til flere vedlegg.</div>'}
 
     <!-- Question texts -->
     <h3 style="margin-bottom:6px;font-size:14px">Spørsmål</h3>
@@ -836,34 +877,8 @@ async function handleFormImageUpload(ev) {
   const q = window._currentQ;
   const isNew = !q.id || window._formMode === 'create';
 
-  if (isNew) {
-    // For new question: convert to base64 in browser, stage it
-    try {
-      const reader = new FileReader();
-      reader.onload = e => {
-        // Downscale in browser via canvas
-        const img = new Image();
-        img.onload = () => {
-          const maxDim = 600;
-          let w = img.width, h = img.height;
-          if (Math.max(w, h) > maxDim) {
-            const r = maxDim / Math.max(w, h);
-            w = Math.round(w * r); h = Math.round(h * r);
-          }
-          const canvas = document.createElement('canvas');
-          canvas.width = w; canvas.height = h;
-          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-          const dataUri = canvas.toDataURL('image/jpeg', 0.82);
-          q.bildeUrl = dataUri;
-          toast(`Bilde klar (${Math.round(dataUri.length / 1024)} KB)`);
-          renderForm(q);
-        };
-        img.src = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    } catch (e) { toast('Feil: ' + e.message, false); }
-  } else {
-    // Existing question: upload to server immediately
+  if (!isNew) {
+    // Existing question: shared upload also updates the question record.
     const fd = new FormData();
     fd.append('file', file);
     toast('Laster opp…');
@@ -1169,6 +1184,7 @@ function switchTab(tab) {
   document.getElementById('michael-materials-view').style.display = tab === 'michael-materials' ? '' : 'none';
   document.getElementById('podcasts-view').style.display   = tab === 'podcasts'   ? '' : 'none';
   document.getElementById('glossary-view').style.display   = tab === 'glossary'   ? '' : 'none';
+  document.getElementById('media-view').style.display      = tab === 'media'      ? '' : 'none';
   document.getElementById('tab-questions').classList.toggle('active', tab === 'questions');
   document.getElementById('tab-studiebok').classList.toggle('active', tab === 'studiebok');
   document.getElementById('tab-book').classList.toggle('active', tab === 'book');
@@ -1177,6 +1193,7 @@ function switchTab(tab) {
   document.getElementById('tab-michael-materials').classList.toggle('active', tab === 'michael-materials');
   document.getElementById('tab-podcasts').classList.toggle('active', tab === 'podcasts');
   document.getElementById('tab-glossary').classList.toggle('active', tab === 'glossary');
+  document.getElementById('tab-media').classList.toggle('active', tab === 'media');
   if (tab === 'book')      loadBook();
   if (tab === 'signs')     loadSigns();
   if (tab === 'studiebok') loadSbAdmin();
@@ -1184,6 +1201,7 @@ function switchTab(tab) {
   if (tab === 'michael-materials') loadMichaelMaterials();
   if (tab === 'podcasts')  loadPodcasts();
   if (tab === 'glossary')  loadGlossary();
+  if (tab === 'media')     loadAdminMedia();
 }
 
 // ══════════════════════════════════════════════════════════
@@ -1316,6 +1334,7 @@ function openEditSection(id) {
       <button onclick="uploadSectionImage('${s.id}')" style="background:var(--accent);color:#fff;border:0;padding:8px 14px;border-radius:6px;cursor:pointer;margin-left:8px">Last opp bilde</button>
       <button onclick="removeSectionImage('${s.id}')" style="background:var(--bad);color:#fff;border:0;padding:8px 14px;border-radius:6px;cursor:pointer;margin-left:6px">Fjern bilde</button>
     </div>
+    ${mediaAttachmentsPanel('book_section', s.id)}
 
     <div style="display:flex;gap:10px;justify-content:flex-end">
       <button onclick="closeModal()" style="background:var(--card);color:var(--text);border:0;padding:10px 20px;border-radius:8px;cursor:pointer">Avbryt</button>
@@ -1593,6 +1612,7 @@ function openSignModal(id, defaultGroup) {
       <div id="s-img-preview" style="margin-bottom:8px">${sign?.image_url ? `<img src="${escapeHtml(sign.image_url)}" style="max-height:120px;border-radius:8px;border:1px solid var(--card)"/>` : ''}</div>
       <input id="s-img" style="width:100%;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:13px;color:var(--muted)" placeholder="…eller lim inn bilde-URL her" value="${escapeHtml(sign?.image_url||'')}"/>
     </div>
+    ${id ? mediaAttachmentsPanel('traffic_sign', id) : '<div style="color:var(--muted);font-size:12px;margin-bottom:12px">Lagre skiltet før du legger til flere vedlegg.</div>'}
 
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px">
       <div class="lang-row"><div class="lbl">🇳🇴 Beskrivelse norsk (valgfri)</div>
@@ -1777,6 +1797,7 @@ function openSbModal(order, ch) {
       <input id="sb-video" type="text" value="${escapeHtml(ch.video_url||'')}" placeholder="https://youtube.com/watch?v=..."
         style="width:100%;padding:8px;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;font-size:13px"/>
     </div>
+    ${order ? mediaAttachmentsPanel('studybook', order) : '<div style="color:var(--muted);font-size:12px;margin-bottom:12px">Lagre kapitlet før du legger til flere vedlegg.</div>'}
 
     <div style="display:flex;gap:10px;justify-content:flex-end">
       <button onclick="closeModal()" style="background:var(--card);color:var(--text);border:0;padding:10px 20px;border-radius:8px;cursor:pointer">Avbryt</button>
@@ -1988,6 +2009,7 @@ function openVideoModal(id) {
         Aktiv (vises i app)
       </label>
     </div>
+    ${id ? mediaAttachmentsPanel('video', id) : '<div style="color:var(--muted);font-size:12px;margin-bottom:12px">Lagre videoen før du legger til flere vedlegg.</div>'}
 
     <div style="display:flex;gap:10px;justify-content:flex-end">
       <button onclick="closeModal()" style="background:var(--card);color:var(--text);border:1px solid #475569;padding:9px 20px;border-radius:7px;cursor:pointer;font-size:14px">Avbryt</button>
@@ -2045,7 +2067,7 @@ async function saveVideo(id) {
 let _michaelMaterialsData = [];
 
 function michaelMaterialTypeLabel(type) {
-  return ({sign:'🚦 Trafikkskilt', intersection_image:'🛣️ Veikryss / situasjonsbilde', video:'🎬 Video'})[type] || type;
+  return ({sign:'🚦 Trafikkskilt', intersection_image:'🛣️ Veikryss / situasjonsbilde', image:'🖼️ Bilde', video:'🎬 Video', podcast:'🎙️ Podcast', audio:'🔊 Lyd', document:'📄 Dokument'})[type] || type;
 }
 
 function michaelMaterialSafeUrl(url) {
@@ -2111,11 +2133,22 @@ function openMichaelMaterialModal(id) {
       <div><label>Type</label><select id="mm-type" onchange="populateMichaelMaterialSources(this.value)">
         <option value="sign" ${item?.type === 'sign' ? 'selected' : ''}>Trafikkskilt</option>
         <option value="intersection_image" ${item?.type === 'intersection_image' ? 'selected' : ''}>Veikryss / situasjonsbilde</option>
+        <option value="image" ${item?.type === 'image' ? 'selected' : ''}>Bilde</option>
         <option value="video" ${item?.type === 'video' ? 'selected' : ''}>Video</option>
+        <option value="podcast" ${item?.type === 'podcast' ? 'selected' : ''}>Podcast</option>
+        <option value="audio" ${item?.type === 'audio' ? 'selected' : ''}>Lyd</option>
+        <option value="document" ${item?.type === 'document' ? 'selected' : ''}>PDF-dokument</option>
       </select></div>
       <div><label>Prioritet (0–1000, lavest først)</label><input id="mm-priority" type="number" min="0" max="1000" value="${Number(item?.priority ?? 100)}"></div>
       <div><label>Eksisterende kilde-ID (påkrevd for skilt/video)</label><input id="mm-source-id" list="mm-source-options" value="${escapeHtml(item?.source_id || '')}" placeholder="Velg eller skriv kilde-ID"><datalist id="mm-source-options"></datalist></div>
-      <div><label>Godkjent bilde-URL (for veikryss/situasjon)</label><input id="mm-source-url" value="${escapeHtml(item?.type === 'intersection_image' ? item?.source_url || '' : '')}" placeholder="/api/... eller https://..."></div>
+      <div><label>Medie-URL</label><input id="mm-source-url" value="${escapeHtml(item?.source_url || '')}" placeholder="/api/... eller https://..."></div>
+      <div class="wide" id="mm-upload-zone" onclick="document.getElementById('mm-file').click()"
+        ondragover="event.preventDefault()" ondrop="dropMichaelMaterialFile(event)"
+        style="border:2px dashed #475569;border-radius:8px;padding:14px;text-align:center;cursor:pointer;background:var(--card)">
+        <strong>📤 Dra bilde, lyd, video eller PDF hit</strong>
+        <div id="mm-upload-status" style="font-size:12px;color:var(--muted);margin-top:4px">Filen lagres med et stabilt lenkenavn.</div>
+      </div>
+      <input id="mm-file" type="file" style="display:none" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm,audio/mpeg,audio/mp4,audio/wav,.m4a,application/pdf" onchange="uploadMichaelMaterialFile(this)">
       ${['no','th','en'].map(lang => `
         <div><label>Tittel ${lang.toUpperCase()}</label><input id="mm-title-${lang}" value="${value('title',lang)}"></div>
         <div><label>Kort forklaring ${lang.toUpperCase()}</label><textarea id="mm-caption-${lang}" rows="3">${value('caption',lang)}</textarea></div>`).join('')}
@@ -2137,9 +2170,10 @@ async function populateMichaelMaterialSources(type) {
   const options = document.getElementById('mm-source-options');
   const input = document.getElementById('mm-source-id');
   if (!options || !input) return;
-  input.disabled = type === 'intersection_image';
+  const uploadedType = ['intersection_image','image','podcast','audio','document'].includes(type);
+  input.disabled = uploadedType;
   options.innerHTML = '';
-  if (type === 'intersection_image') return;
+  if (uploadedType) return;
   try {
     if (type === 'sign') {
       const groups = await api('/traffic-signs');
@@ -2299,6 +2333,7 @@ function openPodcastModal(id) {
         Aktiv (vises i app og til Michael)
       </label>
     </div>
+    ${id ? mediaAttachmentsPanel('podcast', id) : '<div style="color:var(--muted);font-size:12px;margin-bottom:12px">Lagre podcasten før du legger til flere vedlegg.</div>'}
 
     <div style="display:flex;gap:10px;justify-content:flex-end">
       <button onclick="closeModal()" style="background:var(--card);color:var(--text);border:1px solid #475569;padding:9px 20px;border-radius:7px;cursor:pointer;font-size:14px">Avbryt</button>
@@ -2456,6 +2491,8 @@ function openGlossaryModal(id) {
       </div>
     </div>
 
+    ${id ? mediaAttachmentsPanel('glossary', id) : '<div style="color:var(--muted);font-size:12px;margin-bottom:12px">Lagre begrepet før du legger til flere vedlegg.</div>'}
+
     <div style="display:flex;gap:10px;justify-content:flex-end">
       <button onclick="closeModal()" style="background:#334155;color:var(--text);border:0;padding:9px 20px;border-radius:7px;cursor:pointer">Avbryt</button>
       <button onclick="saveGlossary('${g?.id||''}')" style="background:var(--good);color:#fff;border:0;padding:9px 20px;border-radius:7px;cursor:pointer;font-weight:600">
@@ -2487,6 +2524,462 @@ async function saveGlossary(id) {
   const r = await fetch(url, {method, headers:{'Content-Type':'application/json',Authorization:'Bearer '+token}, body:JSON.stringify(body)});
   if (r.ok) { toast(id ? '✅ Begrep oppdatert!' : '✅ Begrep lagt til!'); closeModal(); loadGlossary(); }
   else { const e = await r.json().catch(()=>({detail:'Ukjent feil'})); toast('Feil: ' + (e.detail||'ukjent'), false); }
+}
+
+
+// ══════════════════════════════════════════════════════════
+//  SHARED MEDIA ATTACHMENTS
+// ══════════════════════════════════════════════════════════
+function mediaAttachmentKey(ownerType, ownerId) {
+  return encodeURIComponent(ownerType + '-' + ownerId).replace(/%/g, '_');
+}
+
+function mediaAttachmentsPanel(ownerType, ownerId) {
+  const key = mediaAttachmentKey(ownerType, ownerId);
+  setTimeout(() => loadMediaAttachments(ownerType, ownerId), 0);
+  return `
+    <section style="margin:14px 0;padding:12px;border:1px solid #334155;border-radius:8px;background:#0f172a">
+      <div class="lbl" style="margin-bottom:7px">📎 Felles medievedlegg</div>
+      <div id="media-refs-${key}" style="color:var(--muted);font-size:12px;margin-bottom:8px">Laster vedlegg…</div>
+      <label style="display:inline-block;background:var(--accent);color:#fff;padding:8px 14px;border-radius:6px;cursor:pointer;font-size:13px;font-weight:600">
+        ➕ Legg til bilde, lyd, video eller PDF
+        <input type="file" style="display:none" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm,audio/mpeg,audio/mp4,audio/wav,.m4a,application/pdf"
+          onchange="uploadMediaAttachment(this, '${escapeAttr(ownerType)}', '${escapeAttr(String(ownerId))}')">
+      </label>
+      <div style="font-size:11px;color:var(--muted);margin-top:6px">Nye filer blir katalogutkast. Fullfør NO/TH/EN i Mediekatalog før Michael-godkjenning.</div>
+    </section>`;
+}
+
+function mediaAttachmentPreview(item) {
+  if (!item || !michaelMaterialSafeUrl(item.url)) return '';
+  if (item.type === 'image') return `<img src="${escapeHtml(item.url)}" style="width:56px;height:42px;object-fit:cover;border-radius:5px">`;
+  if (item.type === 'audio') return '<span style="font-size:22px">🔊</span>';
+  if (item.type === 'video') return '<span style="font-size:22px">🎬</span>';
+  return '<span style="font-size:22px">📄</span>';
+}
+
+async function loadMediaAttachments(ownerType, ownerId) {
+  const key = mediaAttachmentKey(ownerType, ownerId);
+  const container = document.getElementById('media-refs-' + key);
+  if (!container) return;
+  try {
+    const data = await api('/admin/media-links/' + encodeURIComponent(ownerType) + '/' + encodeURIComponent(ownerId));
+    const items = Array.isArray(data.items) ? data.items : [];
+    container.innerHTML = items.length ? items.map(item => `
+      <div style="display:flex;align-items:center;gap:9px;padding:7px;background:var(--card);border-radius:6px;margin-bottom:5px">
+        ${mediaAttachmentPreview(item)}
+        <div style="min-width:0;flex:1"><strong>${escapeHtml(item.link_name || item.media_id)}</strong><div style="color:var(--muted)">${escapeHtml(item.type || '')} · ${escapeHtml(item.filename || '')}</div></div>
+        <button type="button" onclick="detachMediaAttachment('${escapeAttr(ownerType)}','${escapeAttr(String(ownerId))}','${escapeAttr(item.media_id)}')" style="background:var(--bad);color:#fff;border:0;border-radius:5px;padding:5px 8px;cursor:pointer">Fjern kobling</button>
+      </div>`).join('') : 'Ingen ekstra vedlegg.';
+  } catch (error) {
+    container.textContent = 'Kunne ikke laste vedlegg: ' + error.message;
+  }
+}
+
+async function uploadMediaAttachment(input, ownerType, ownerId) {
+  const file = input.files && input.files[0];
+  if (!file) return;
+  const form = new FormData();
+  form.append('file', file);
+  toast('Laster opp og oppretter katalogutkast…');
+  try {
+    const response = await fetch(API + '/admin/media-links/' + encodeURIComponent(ownerType) + '/' + encodeURIComponent(ownerId), {
+      method:'POST', headers:{Authorization:'Bearer ' + token}, body:form,
+    });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.detail || 'Opplastingen feilet');
+    toast('✅ Vedlegg lagret som ' + data.media_ref.link_name);
+    input.value = '';
+    loadMediaAttachments(ownerType, ownerId);
+  } catch (error) { toast('Feil: ' + error.message, false); }
+}
+
+async function detachMediaAttachment(ownerType, ownerId, mediaId) {
+  if (!confirm('Fjerne koblingen til dette vedlegget? Selve katalogfilen beholdes.')) return;
+  try {
+    await api('/admin/media-links/' + encodeURIComponent(ownerType) + '/' + encodeURIComponent(ownerId) + '/' + encodeURIComponent(mediaId), {method:'DELETE'});
+    toast('Koblingen er fjernet');
+    loadMediaAttachments(ownerType, ownerId);
+  } catch (error) { toast('Feil: ' + error.message, false); }
+}
+
+// ══════════════════════════════════════════════════════════
+//  ADMIN MEDIA & SKILT CMS (CRUD)
+// ══════════════════════════════════════════════════════════
+let _adminMediaCache = [];
+let _adminMediaUpload = null;
+
+async function loadAdminMedia() {
+  const container = document.getElementById('media-list');
+  if (!container) return;
+  container.innerHTML = '<p style="color:var(--muted);padding:20px">Laster mediekatalog...</p>';
+  try {
+    const typeFilter = document.getElementById('media-type-filter') ? document.getElementById('media-type-filter').value : '';
+    const statusFilter = document.getElementById('media-status-filter') ? document.getElementById('media-status-filter').value : '';
+    const searchFilter = document.getElementById('media-search') ? document.getElementById('media-search').value.trim() : '';
+    let url = API + '/admin/media?';
+    if (typeFilter) url += 'type=' + encodeURIComponent(typeFilter) + '&';
+    if (statusFilter && statusFilter !== 'all') url += 'status=' + encodeURIComponent(statusFilter) + '&';
+    if (searchFilter) url += 'search=' + encodeURIComponent(searchFilter) + '&';
+
+    const r = await fetch(url, { headers: { Authorization: 'Bearer ' + token } });
+    const data = await r.json();
+    if (!r.ok) {
+      container.innerHTML = '<p style="color:var(--bad);padding:20px">Feil: ' + (data.detail || r.status) + '</p>';
+      return;
+    }
+    _adminMediaCache = Array.isArray(data.items) ? data.items : [];
+    const metaEl = document.getElementById('media-meta');
+    if (metaEl) metaEl.textContent = `${_adminMediaCache.length} mediefiler i katalogen`;
+
+    if (_adminMediaCache.length === 0) {
+      container.innerHTML = '<p style="color:var(--muted);padding:20px">Ingen medier funnet. Klikk «➕ Nytt medie / skilt» for å opprette ett.</p>';
+      return;
+    }
+
+    container.innerHTML = `
+      <table style="width:100%;border-collapse:collapse;font-size:13px;background:var(--panel);border-radius:10px;overflow:hidden">
+        <thead>
+          <tr style="color:var(--muted);text-align:left;border-bottom:1px solid #334155;background:var(--card)">
+            <th style="padding:10px">Forhåndsvisning</th>
+            <th style="padding:10px">ID</th>
+            <th style="padding:10px">Type & Kategori</th>
+            <th style="padding:10px">Tittel (NO / TH / EN)</th>
+            <th style="padding:10px">Emnetagger</th>
+            <th style="padding:10px">Status</th>
+            <th style="padding:10px">Handlinger</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${_adminMediaCache.map(m => {
+            const titleNo = (m.i18n && m.i18n.no && m.i18n.no.title) || '—';
+            const titleTh = (m.i18n && m.i18n.th && m.i18n.th.title) || '—';
+            const titleEn = (m.i18n && m.i18n.en && m.i18n.en.title) || '—';
+            const thumb = m.thumbnail_url || (m.type === 'sign' || m.type === 'image' ? m.media_url : '');
+            return `
+              <tr style="border-bottom:1px solid #1e293b">
+                <td style="padding:10px;width:70px">
+                  ${thumb ? `<img src="${escapeHtml(thumb)}" style="width:56px;height:42px;object-fit:contain;border-radius:4px;background:var(--bg)" onerror="this.style.display='none'">` : '<div style="width:56px;height:42px;display:flex;align-items:center;justify-content:center;background:var(--bg);border-radius:4px">📁</div>'}
+                </td>
+                <td style="padding:10px;font-weight:700;color:var(--accent);font-family:monospace">${escapeHtml(m.media_id)}</td>
+                <td style="padding:10px">
+                  <span style="display:inline-block;padding:2px 6px;border-radius:4px;background:#1e293b;font-size:11px;font-weight:600;text-transform:uppercase">${escapeHtml(m.type || 'video')}</span>
+                  <div style="font-size:11px;color:var(--muted);margin-top:2px">${escapeHtml(m.category || '—')}</div>
+                </td>
+                <td style="padding:10px">
+                  <div style="font-weight:600;color:var(--text)">🇳🇴 ${escapeHtml(titleNo)}</div>
+                  <div style="font-size:12px;color:var(--muted)">🇹🇭 ${escapeHtml(titleTh)}</div>
+                  <div style="font-size:12px;color:var(--muted)">🇬🇧 ${escapeHtml(titleEn)}</div>
+                </td>
+                <td style="padding:10px;color:var(--muted);max-width:180px">${escapeHtml((m.tags || []).join(', '))}</td>
+                <td style="padding:10px">
+                  <span style="display:inline-block;padding:3px 8px;border-radius:999px;font-size:11px;font-weight:600;background:${m.is_active !== false ? '#064e3b' : '#451a1a'};color:${m.is_active !== false ? '#a7f3d0' : '#fecaca'}">
+                    ${m.is_active !== false ? 'Aktiv' : 'Inaktiv'}
+                  </span>
+                </td>
+                <td style="padding:10px;white-space:nowrap">
+                  <button class="btn-edit" onclick="openAdminMediaModal('${escapeHtml(m.media_id)}')">✏️</button>
+                  <button class="btn-del" onclick="deleteAdminMedia('${escapeHtml(m.media_id)}')">🗑</button>
+                </td>
+              </tr>
+            `;
+          }).join('')}
+        </tbody>
+      </table>
+    `;
+  } catch(e) {
+    container.innerHTML = '<p style="color:var(--bad);padding:20px">Feil: ' + e.message + '</p>';
+  }
+}
+
+function filterAdminMedia() {
+  loadAdminMedia();
+}
+
+function openAdminMediaModal(id) {
+  const m = id ? _adminMediaCache.find(x => x.media_id === id) : null;
+  _adminMediaUpload = null;
+  const noTitle = (m && m.i18n && m.i18n.no && m.i18n.no.title) || '';
+  const noDesc  = (m && m.i18n && m.i18n.no && m.i18n.no.description) || '';
+  const thTitle = (m && m.i18n && m.i18n.th && m.i18n.th.title) || '';
+  const thDesc  = (m && m.i18n && m.i18n.th && m.i18n.th.description) || '';
+  const enTitle = (m && m.i18n && m.i18n.en && m.i18n.en.title) || '';
+  const enDesc  = (m && m.i18n && m.i18n.en && m.i18n.en.description) || '';
+
+  document.getElementById('modal-body').innerHTML = `
+    <button class="close" onclick="closeModal()">✕</button>
+    <h2>${m ? '✏️ Rediger medie / skilt' : '➕ Legg til nytt medie / skilt'}</h2>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px">
+      <div>
+        <label style="font-size:12px;color:var(--muted)">Medie-ID (unik)</label>
+        <input id="am-id" type="text" class="inp" ${m ? 'readonly style="background:#1e293b;color:var(--muted)"' : ''} value="${escapeHtml(m ? m.media_id : '')}" placeholder="f.eks. vid_stopp_02 eller sign_102">
+      </div>
+      <div>
+        <label style="font-size:12px;color:var(--muted)">Type</label>
+        <select id="am-type" class="inp">
+          <option value="video" ${(m?.type==='video')?'selected':''}>Video</option>
+          <option value="podcast" ${(m?.type==='podcast')?'selected':''}>Podcast</option>
+          <option value="image" ${(m?.type==='image')?'selected':''}>Bilde</option>
+          <option value="audio" ${(m?.type==='audio')?'selected':''}>Lydfil</option>
+          <option value="sign" ${(m?.type==='sign')?'selected':''}>Skilt</option>
+          <option value="document" ${(m?.type==='document')?'selected':''}>PDF-dokument</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:12px;color:var(--muted)">Kategori</label>
+        <select id="am-category" class="inp">
+          <option value="generelt" ${(!m || m?.category==='generelt')?'selected':''}>Generelt</option>
+          <option value="vikeplikt" ${(m?.category==='vikeplikt')?'selected':''}>Vikeplikt</option>
+          <option value="stoppelengde" ${(m?.category==='stoppelengde')?'selected':''}>Stoppelengde</option>
+          <option value="skilt" ${(m?.category==='skilt')?'selected':''}>Skilt</option>
+          <option value="morkekjoring" ${(m?.category==='morkekjoring')?'selected':''}>Mørkekjøring</option>
+          <option value="hav_regelen" ${(m?.category==='hav_regelen')?'selected':''}>HAV-regelen</option>
+        </select>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+      <div>
+        <label style="font-size:12px;color:var(--muted)">Medie-URL (MP4, bilde, lyd, https:// eller /api/assets/)</label>
+        <input id="am-url" type="text" class="inp" value="${escapeHtml(m ? m.media_url : '')}" placeholder="/api/assets/... eller https://...">
+      </div>
+      <div>
+        <label style="font-size:12px;color:var(--muted)">Thumbnail-URL</label>
+        <input id="am-thumb" type="text" class="inp" value="${escapeHtml(m ? m.thumbnail_url : '')}" placeholder="/api/assets/thumbs/... eller https://...">
+      </div>
+    </div>
+
+    <div id="am-upload-zone" onclick="document.getElementById('am-file').click()"
+      ondragover="event.preventDefault()" ondrop="dropAdminMediaFile(event, '${m ? escapeHtml(m.media_url || '') : ''}')"
+      style="border:2px dashed #475569;border-radius:8px;padding:16px;text-align:center;cursor:pointer;background:var(--card);margin-bottom:12px">
+      <strong>📤 Dra fil hit eller klikk for å laste opp</strong>
+      <div style="font-size:12px;color:var(--muted);margin-top:4px">JPG, PNG, WebP, MP4, WebM, MP3, M4A, WAV eller PDF</div>
+      <div id="am-upload-status" style="font-size:12px;color:var(--muted);margin-top:5px">${m?.media_url ? 'Nåværende fil beholdes til en ny er lastet opp.' : ''}</div>
+    </div>
+    <input id="am-file" type="file" style="display:none"
+      accept="image/jpeg,image/png,image/webp,video/mp4,video/webm,audio/mpeg,audio/mp4,audio/wav,.m4a,application/pdf"
+      onchange="uploadAdminMediaFile(this, '${m ? escapeHtml(m.media_url || '') : ''}')">
+
+    <div style="display:grid;grid-template-columns:2fr 1fr;gap:10px;margin-bottom:12px">
+      <div>
+        <label style="font-size:12px;color:var(--muted)">Emnetagger (kommaseparert, påkrevd)</label>
+        <input id="am-tags" type="text" class="inp" value="${escapeHtml((m?.tags || []).join(', '))}" placeholder="f.eks. vikeplikt, høyreregel, rundkjøring">
+      </div>
+      <div>
+        <label style="font-size:12px;color:var(--muted)">Lyd-URL (valgfri)</label>
+        <input id="am-audio" type="text" class="inp" value="${escapeHtml(m ? (m.audio_url || '') : '')}" placeholder="/api/audio/...">
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px">
+      <div>
+        <label style="font-size:12px;color:var(--muted)">🇳🇴 Tittel (norsk)</label>
+        <input id="am-title-no" type="text" class="inp" value="${escapeHtml(noTitle)}" placeholder="Norsk tittel">
+        <label style="font-size:12px;color:var(--muted);margin-top:6px;display:block">Beskrivelse (norsk)</label>
+        <textarea id="am-desc-no" rows="3" class="inp" style="resize:vertical">${escapeHtml(noDesc)}</textarea>
+      </div>
+      <div>
+        <label style="font-size:12px;color:var(--muted)">🇹🇭 Tittel (thai)</label>
+        <input id="am-title-th" type="text" class="inp" value="${escapeHtml(thTitle)}" placeholder="ชื่อเรื่องภาษาไทย">
+        <label style="font-size:12px;color:var(--muted);margin-top:6px;display:block">Beskrivelse (thai)</label>
+        <textarea id="am-desc-th" rows="3" class="inp" style="resize:vertical">${escapeHtml(thDesc)}</textarea>
+      </div>
+      <div>
+        <label style="font-size:12px;color:var(--muted)">🇬🇧 Tittel (engelsk)</label>
+        <input id="am-title-en" type="text" class="inp" value="${escapeHtml(enTitle)}" placeholder="English title">
+        <label style="font-size:12px;color:var(--muted);margin-top:6px;display:block">Beskrivelse (engelsk)</label>
+        <textarea id="am-desc-en" rows="3" class="inp" style="resize:vertical">${escapeHtml(enDesc)}</textarea>
+      </div>
+    </div>
+
+    <div style="margin-bottom:16px;display:flex;align-items:center;gap:8px">
+      <input type="checkbox" id="am-active" ${(m?.is_active !== false) ? 'checked' : ''}>
+      <label for="am-active" style="color:var(--text);font-size:14px;cursor:pointer">Aktiv (synlig i appen og for læreren)</label>
+      <input type="checkbox" id="am-approved" ${m?.approved_for_michael ? 'checked' : ''}>
+      <label for="am-approved" style="color:var(--text);font-size:14px;cursor:pointer">Godkjent for Michael</label>
+    </div>
+
+    <div style="display:flex;gap:10px;justify-content:flex-end">
+      <button onclick="closeModal()" style="background:#334155;color:var(--text);border:0;padding:9px 20px;border-radius:7px;cursor:pointer">Avbryt</button>
+      <button onclick="saveAdminMedia('${m ? escapeHtml(m.media_id) : ''}')" style="background:var(--accent);color:#fff;border:0;padding:9px 20px;border-radius:7px;cursor:pointer;font-weight:600">
+        ${m ? '💾 Lagre endringer' : '➕ Opprett medie'}
+      </button>
+    </div>
+  `;
+  document.getElementById('modal').style.display = 'flex';
+}
+
+async function saveAdminMedia(existingId) {
+  const mediaId = existingId || document.getElementById('am-id').value.trim();
+  const mediaType = document.getElementById('am-type').value;
+  const category = document.getElementById('am-category').value;
+  const mediaUrl = document.getElementById('am-url').value.trim();
+  const thumbUrl = document.getElementById('am-thumb').value.trim();
+  const audioUrl = document.getElementById('am-audio').value.trim();
+  const tags = document.getElementById('am-tags').value.split(',').map(t => t.trim()).filter(Boolean);
+  const active = document.getElementById('am-active').checked;
+
+  const titleNo = document.getElementById('am-title-no').value.trim();
+  const descNo  = document.getElementById('am-desc-no').value.trim();
+  const titleTh = document.getElementById('am-title-th').value.trim();
+  const descTh  = document.getElementById('am-desc-th').value.trim();
+  const titleEn = document.getElementById('am-title-en').value.trim();
+  const descEn  = document.getElementById('am-desc-en').value.trim();
+
+  if (!mediaId) { toast('Medie-ID er påkrevd', false); return; }
+  if (!mediaUrl) { toast('Medie-URL er påkrevd', false); return; }
+  if (!tags.length) { toast('Minst én emnetagg er påkrevd', false); return; }
+  if (!titleNo || !titleTh || !titleEn) {
+    toast('Tittel på alle tre språk (NO, TH, EN) er påkrevd', false);
+    return;
+  }
+
+  const payload = {
+    media_id: mediaId,
+    type: mediaType,
+    category: category,
+    tags: tags,
+    media_url: mediaUrl,
+    thumbnail_url: thumbUrl || mediaUrl,
+    audio_url: audioUrl || null,
+    is_active: active,
+    approved_for_michael: document.getElementById('am-approved').checked,
+    content_language: 'neutral',
+    i18n: {
+      no: { title: titleNo, description: descNo },
+      th: { title: titleTh, description: descTh },
+      en: { title: titleEn, description: descEn }
+    }
+  };
+
+  const url = existingId ? API + '/admin/media/' + encodeURIComponent(existingId) : API + '/admin/media';
+  const method = existingId ? 'PUT' : 'POST';
+
+  try {
+    const r = await fetch(url, {
+      method: method,
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+      body: JSON.stringify(payload)
+    });
+    const data = await r.json();
+    if (r.ok) {
+      toast(existingId ? '✅ Medie oppdatert!' : '✅ Nytt medie lagt til!');
+      closeModal();
+      loadAdminMedia();
+    } else {
+      toast('Feil ved lagring: ' + (data.detail || 'ukjent'), false);
+    }
+  } catch(err) {
+    toast('Nettverksfeil: ' + err.message, false);
+  }
+}
+
+async function uploadMichaelMaterialFile(input) {
+  const file = input.files && input.files[0];
+  if (!file) return;
+  const status = document.getElementById('mm-upload-status');
+  status.textContent = 'Laster opp og behandler ' + file.name + '…';
+  const form = new FormData();
+  form.append('file', file);
+  try {
+    const response = await fetch(API + '/admin/media/upload', {method:'POST', headers:{Authorization:'Bearer ' + token}, body:form});
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.detail || 'Opplastingen feilet');
+    const typeMap = {image:'image', video:'video', audio:'audio', document:'document'};
+    document.getElementById('mm-type').value = typeMap[data.media_type] || data.media_type;
+    document.getElementById('mm-source-id').disabled = false;
+    document.getElementById('mm-source-id').value = data.link_name;
+    document.getElementById('mm-source-url').value = data.url;
+    status.textContent = `✅ ${data.filename} · lenkenavn: ${data.link_name}`;
+    document.getElementById('mm-upload-zone').style.borderColor = '#10b981';
+  } catch (error) {
+    status.textContent = '❌ ' + error.message;
+    document.getElementById('mm-upload-zone').style.borderColor = 'var(--bad)';
+  }
+}
+
+function dropMichaelMaterialFile(event) {
+  event.preventDefault();
+  event.stopPropagation();
+  const file = event.dataTransfer && event.dataTransfer.files && event.dataTransfer.files[0];
+  if (file) uploadMichaelMaterialFile({files:[file]});
+}
+
+async function uploadAdminMediaFile(input, currentUrl) {
+  const file = input.files && input.files[0];
+  if (!file) return;
+  const status = document.getElementById('am-upload-status');
+  const zone = document.getElementById('am-upload-zone');
+  status.textContent = 'Laster opp og behandler ' + file.name + '…';
+  zone.style.borderColor = 'var(--accent)';
+  const form = new FormData();
+  form.append('file', file);
+  let url = API + '/admin/media/upload';
+  const oldMatch = String(currentUrl || '').match(/^\/api\/media\/files\/([a-f0-9]{24})$/i);
+  if (oldMatch) url += '?replace_file_id=' + encodeURIComponent(oldMatch[1]);
+  try {
+    const response = await fetch(url, {method:'POST', headers:{Authorization:'Bearer ' + token}, body:form});
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.detail || 'Opplastingen feilet');
+    _adminMediaUpload = data;
+    document.getElementById('am-url').value = data.url;
+    if (!document.getElementById('am-id').value.trim()) document.getElementById('am-id').value = data.link_name;
+    const typeSelect = document.getElementById('am-type');
+    const mappedType = data.media_type === 'document' ? 'document' : data.media_type;
+    if ([...typeSelect.options].some(option => option.value === mappedType)) typeSelect.value = mappedType;
+    if (data.media_type === 'image') document.getElementById('am-thumb').value = data.url;
+    status.textContent = `✅ ${data.filename} · ${Math.ceil(data.bytes / 1024)} KB${data.transformed ? ' · automatisk optimalisert' : ''}`;
+    zone.style.borderColor = '#10b981';
+  } catch (error) {
+    status.textContent = '❌ ' + error.message;
+    zone.style.borderColor = 'var(--bad)';
+    input.value = '';
+    return;
+  }
+
+  // New question: persist through the same media service, then save its URL with the question.
+  const fd = new FormData();
+  fd.append('file', file);
+  toast('Laster opp og optimaliserer…');
+  try {
+    const r = await fetch(API + '/admin/media/upload', {
+      method: 'POST', headers: {Authorization: 'Bearer ' + token}, body: fd,
+    });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(d.detail || 'HTTP ' + r.status);
+    if (d.media_type !== 'image') throw new Error('Spørsmål støtter bare bildefiler');
+    q.bildeUrl = d.url;
+    q.media_file_id = d.file_id;
+    toast(`✅ Bilde klart (${Math.ceil(d.bytes / 1024)} KB)`);
+    renderForm(q);
+  } catch (e) { toast('Feil: ' + e.message, false); }
+}
+
+function dropAdminMediaFile(event, currentUrl) {
+  event.preventDefault();
+  event.stopPropagation();
+  const file = event.dataTransfer && event.dataTransfer.files && event.dataTransfer.files[0];
+  if (file) uploadAdminMediaFile({files:[file], value:''}, currentUrl);
+}
+
+async function deleteAdminMedia(id) {
+  if (!confirm('Slette mediet "' + id + '" fra katalogen? Dette kan ikke angres.')) return;
+  try {
+    const r = await fetch(API + '/admin/media/' + encodeURIComponent(id) + '?archive=true', {
+      method: 'DELETE',
+      headers: { Authorization: 'Bearer ' + token }
+    });
+    if (r.ok) {
+      toast('🗑 Medie "' + id + '" slettet');
+      loadAdminMedia();
+    } else {
+      const e = await r.json().catch(() => ({ detail: 'Ukjent feil' }));
+      toast('Feil ved sletting: ' + (e.detail || 'ukjent'), false);
+    }
+  } catch(err) {
+    toast('Feil: ' + err.message, false);
+  }
 }
 
 </script>

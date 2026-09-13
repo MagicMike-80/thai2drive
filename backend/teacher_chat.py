@@ -1942,7 +1942,7 @@ async def _get_relevant_michael_materials(
                 continue
 
             material_type = str(material.get("type", "")).strip()
-            if material_type not in {"sign", "intersection_image", "video"}:
+            if material_type not in {"sign", "intersection_image", "image", "video", "podcast", "audio", "document"}:
                 continue
             source_id = str(material.get("source_id", "")).strip()
             linked_sign_ids = {
@@ -1994,7 +1994,7 @@ async def _get_relevant_michael_materials(
 
             url = str(material.get("source_url", "")).strip()
             video_metadata = {}
-            if material_type == "video" and source_id:
+            if material_type == "video" and source_id and not url.startswith("/api/media/files/"):
                 video = await _db["learning_videos"].find_one({"id": source_id, "active": True})
                 if not video:
                     continue
@@ -2068,6 +2068,7 @@ async def _get_relevant_catalog_media(
     try:
         documents = await _db["media_catalog"].find({
             "is_active": True,
+            "approved_for_michael": True,
             "content_language": {"$in": [language, "neutral"]},
         }).to_list(length=200)
         law_tags = expand_law_synonyms(f"{user_msg} {extra_context}")
@@ -2790,9 +2791,9 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
                 requested_language,
                 extra_context=quiz_context_str,
             )
-            if not catalog_media and resolved_concept and resolved_concept.get("media"):
+            if not catalog_media and not approved_media and resolved_concept and resolved_concept.get("media"):
                 catalog_media = list(resolved_concept["media"])
-        elif not explicit_sign_ids and resolved_concept and resolved_concept.get("media"):
+        elif not explicit_sign_ids and not approved_media and resolved_concept and resolved_concept.get("media"):
             catalog_media = list(resolved_concept["media"])
         media = _compose_teacher_media(media, catalog_media, explicit_sign_ids)
 
