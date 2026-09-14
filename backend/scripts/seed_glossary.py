@@ -49,13 +49,13 @@ TERMS = [
         "topic_tags": ["Vikeplikt", "Kryss"],
     },
     {
-        "term_no": "Prioritert vei",
+        "term_no": "Forkjørsvei",
         "term_th": "ถนนหลัก (ถนนที่มีสิทธิ์ก่อน)",
         "term_en": "Priority road",
         "definition_no": "Vei merket med skilt 206 der du har forkjørsrett over all trafikk fra kryssende veier.",
         "definition_th": "ถนนที่ติดป้าย 206 ซึ่งคุณมีสิทธิ์ก่อนรถทุกคันจากถนนที่ตัดกัน",
         "definition_en": "Road marked with sign 206 where you have right of way over all traffic from crossing roads.",
-        "example_no": "Skilt 206 er gul rombe — du er på prioritert vei.",
+        "example_no": "Skilt 206 er gul rombe — du er på forkjørsvei.",
         "example_th": "ป้าย 206 คือรูปสี่เหลี่ยมเหลือง — คุณอยู่บนถนนหลัก",
         "example_en": "Sign 206 is a yellow diamond — you are on a priority road.",
         "topic_tags": ["Vikeplikt", "Skilt", "Kryss"],
@@ -294,6 +294,22 @@ TERMS = [
 async def main():
     client = AsyncIOMotorClient(MONGO_URL)
     db = client[DB_NAME]
+
+    # Migration: "Prioritert vei" was never official Norwegian traffic terminology —
+    # "Forkjørsvei" is the term Statens vegvesen and Michael's own rules use.
+    # Idempotent: re-running gives matched=0 once the rename has landed.
+    res = await db.learning_glossary.update_one(
+        {"term_no": "Prioritert vei"},
+        {"$set": {
+            "term_no": "Forkjørsvei",
+            "example_no": "Skilt 206 er gul rombe — du er på forkjørsvei.",
+            "definition_no": "Vei merket med skilt 206 der du har forkjørsrett over all "
+                             "trafikk fra kryssende veier.",
+            "updated_at": datetime.now(timezone.utc).isoformat(),
+        }},
+    )
+    print(f"  MIGRATE Prioritert vei -> Forkjørsvei: matched={res.matched_count}")
+
     inserted = skipped = 0
     for t in TERMS:
         existing = await db.learning_glossary.find_one({"term_no": t["term_no"]})

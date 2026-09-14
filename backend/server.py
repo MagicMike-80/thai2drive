@@ -5775,6 +5775,10 @@ app.include_router(math_router, prefix="/api")
 from quiz_web import quiz_web_router  # noqa: E402
 app.include_router(quiz_web_router, prefix="/api")
 
+# ==================== QUIZ GLOSSARY TERMS (Fagordkortet) ====================
+from quiz_terms import quiz_terms_router  # noqa: E402
+app.include_router(quiz_terms_router, prefix="/api")
+
 # ==================== WEB APP ====================
 from webapp import webapp_router  # noqa: E402
 app.include_router(webapp_router, prefix="/api")
@@ -6284,6 +6288,17 @@ async def publish_michael_video_catalog():
         logging.getLogger("michael_video_seed").error(
             "Michael video catalog publication failed: %s", exc
         )
+
+
+@app.on_event("startup")
+async def load_quiz_glossary_cache():
+    """Load the Fagordkortet glossary cache. Fail-soft — the endpoint answers
+    {"terms": []} rather than 500 if this fails or hasn't run yet."""
+    try:
+        from quiz_terms import load_glossary_cache
+        await load_glossary_cache(db)
+    except Exception as exc:
+        logging.getLogger("quiz_terms").error("Glossary cache startup load failed: %s", exc)
 
 
 @app.on_event("startup")

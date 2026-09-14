@@ -1103,6 +1103,24 @@ a { color:inherit; text-decoration:none; }
 .q-answers {
   display:flex; flex-direction:column; gap:8px; flex-shrink:0;
 }
+.glossary-btn-wrap { flex-shrink:0; }
+.glossary-term-btn {
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  width:100%; padding:11px 14px;
+  background:rgba(0,245,255,.06);
+  border:1px solid rgba(0,245,255,.35); border-radius:12px;
+  color:#00F5FF; font-size:.84rem; font-weight:700;
+  cursor:pointer; transition:background .18s, border-color .18s;
+}
+.glossary-term-btn:hover { background:rgba(0,245,255,.12); border-color:rgba(0,245,255,.55); }
+.glossary-panel {
+  margin-top:8px; padding:12px 14px;
+  background:var(--card); border:1px solid rgba(0,245,255,.25); border-radius:12px;
+  display:flex; flex-direction:column; gap:12px;
+}
+.glossary-term-item { display:flex; flex-direction:column; gap:4px; }
+.glossary-term-heading { font-size:.88rem; font-weight:800; color:#00F5FF; }
+.glossary-term-def { font-size:.84rem; line-height:1.6; color:var(--text); }
 .ans-btn {
   display:flex; align-items:center; gap:14px;
   padding:15px 16px;
@@ -7410,6 +7428,7 @@ function renderQuestion() {
   currentExpl    = pickLang(q.explanation) || pickField(q, 'explanation') || '';
   var qId     = q._id || q.id || q.question_id || '';
   var isBm    = bookmarkedIds[qId] ? true : false;
+  resetGlossaryTerms();
 
   var opts = [];
   if (q.options && Array.isArray(q.options) && q.options.length) {
@@ -7476,6 +7495,7 @@ function renderQuestion() {
     + '<div class="q-mid">'
       + buildSituationLensHtml(qText, currentExpl)
       + '<div class="q-answers" id="qAnswers">' + ansHtml + '</div>'
+      + '<div class="glossary-btn-wrap" id="glossaryBtnWrap"></div>'
       + '<div class="q-feedback" id="qFeedback"></div>'
       // Mobile AI section — empty until answered (:empty hides it), then expands in-flow
       + '<div class="quiz-ai-mobile" id="quizAiMobile"></div>'
@@ -7488,6 +7508,8 @@ function renderQuestion() {
       + '</button>'
     + '</div>'
     + (freeBanner ? freeBanner : '');
+
+  if (qId) loadGlossaryTerms(qId);
 
   // ── Reset AI right panel for new question ─────────────────────────
   var aiImgbox = document.querySelector('.quiz-ai-imgbox');
@@ -7511,6 +7533,57 @@ function renderQuestion() {
 
 var currentCorrect = '';
 var currentExpl = '';
+
+// ── Fagordkortet (glossary term card) — Thai UI only, see renderQuestion() ──
+var currentTerms = [];
+
+function resetGlossaryTerms() {
+  currentTerms = [];
+  var wrap = document.getElementById('glossaryBtnWrap');
+  if (wrap) wrap.innerHTML = '';
+}
+
+function renderGlossaryButton() {
+  var wrap = document.getElementById('glossaryBtnWrap');
+  if (!wrap) return;
+  if (appLang === 'th' && currentTerms.length > 0) {
+    wrap.innerHTML = '<button class="glossary-term-btn" id="glossaryTermBtn" onclick="toggleGlossaryPanel()">📖 ดูคำศัพท์นอร์เวย์</button>';
+  } else {
+    wrap.innerHTML = '';
+  }
+}
+
+function loadGlossaryTerms(qId) {
+  fetch('/api/quiz/terms?question_id=' + encodeURIComponent(qId) + '&lang=' + encodeURIComponent(appLang))
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      currentTerms = (data && data.terms) || [];
+      renderGlossaryButton();
+    })
+    .catch(function() { currentTerms = []; renderGlossaryButton(); });
+}
+
+function toggleGlossaryPanel() {
+  var wrap = document.getElementById('glossaryBtnWrap');
+  if (!wrap) return;
+  var existing = document.getElementById('glossaryPanel');
+  if (existing) { existing.remove(); return; }
+
+  var itemsHtml = currentTerms.map(function(term) {
+    if (!term.definition_th) return ''; // defensive — API already filters this
+    return '<div class="glossary-term-item">'
+      + '<div class="glossary-term-heading">' + escH(term.term_th) + ' ➔ ' + escH(term.term_no) + '</div>'
+      + '<div class="glossary-term-def">' + escH(term.definition_th) + '</div>'
+      + '</div>';
+  }).join('');
+  if (!itemsHtml) return;
+
+  var panel = document.createElement('div');
+  panel.id = 'glossaryPanel';
+  panel.className = 'glossary-panel';
+  panel.innerHTML = itemsHtml;
+  wrap.appendChild(panel);
+}
 
 /**
  * Shuffle answer options and rebind display letters A/B/C/D.

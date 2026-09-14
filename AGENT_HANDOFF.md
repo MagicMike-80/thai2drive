@@ -72,9 +72,10 @@ pytest -v
 
 | Branch | Eier | Status | Deadline | Task |
 |--------|------|--------|----------|------|
-| `feat/exam-ui-clean` | **Codex** | 🔴 Not Started | 2026-09-13 17:00 | Task 1 |
+| `feat/exam-ui-clean` | **Codex** | ✅ Merged to main (commit `9e34f10`) | 2026-09-13 17:00 | Task 1 |
 | `feat/admin-media-backend` | **Anti** | 🔴 Not Started | 2026-09-13 17:00 | Task 2 |
 | `fix/michael-media-streaming` | **Anti** | 🔴 Blocked | 2026-09-13 17:00 | Task 3 |
+| `feat/glossary-clean` | **Claude Code** | 🟡 Implemented, offline tests green, committed locally, NOT pushed | — | Task 4 (Ordre 4 — Fagordkortet + chat widget language fix) |
 
 ---
 
@@ -251,6 +252,79 @@ pytest tests/integration/test_michael_media.py -v
 
 ### Notater for neste agent:
 - [Space for handoff notes from Anti]
+
+---
+
+## 📌 TASK 4: FAGORDKORTET ("📖 ดูคำศัพท์นอร์เวย์") — ORDRE 4
+
+**Status:** 🟡 Implemented + offline tests green — committed locally to `feat/glossary-clean`, NOT pushed
+**Branch:** `feat/glossary-clean` (branched from `main` @ `9e34f10`)
+**Owner:** Claude Code (this session)
+**Plan:** [`ordre-4-se-norsk-fagord-implementering.md`](ordre-4-se-norsk-fagord-implementering.md)
+**Prerequisite:** None
+
+### Hva som er implementert (per planen §1–§4):
+```
+✓ backend/scripts/seed_glossary.py — "Prioritert vei" → "Forkjørsvei" rename
+  (term_no + example_no; skiltnummer var allerede 206, ikke 220 som planen antok)
+  + idempotent db.learning_glossary.update_one(...) migreringssteg i main()
+  — koden er IKKE kjørt mot noen database, verken lokal eller prod.
+✓ backend/quiz_terms.py (ny modul) — GET /api/quiz/terms?question_id=&lang=
+  cache + _match_terms + fail-stop språkfilter + anonym glossary_lookup_logs
+✓ server.py — quiz_terms_router registrert (prefix /api) + startup-hook
+  load_quiz_glossary_cache() (fail-soft, samme mønster som andre startup-hooks)
+✓ backend/webapp.py — «📖 ดูคำศัพท์นอร์เวย์»-knapp + panel i renderQuestion(),
+  kun for appLang==='th' og currentTerms.length>0, nullstilt per spørsmål
+✓ backend/tests/test_quiz_terms.py (ny, offline, 8 tester — dekker alle 4a-4f
+  fra planen + 2 ekstra: ukjent question_id, ukjent lang)
+```
+
+### Tillegg — 3 språklekkasjer rettet i Chat Support Widget (backend/website.py)
+Ikke del av `ordre-4`-planen, men samme oppdrag/branch. `_CHAT_JS` i
+`backend/website.py` (ikke `webapp.py` — oppdraget pekte feil fil) hadde 3
+hardkodede norske fallback-strenger uten thai/engelsk motstykke: `data.reply`-
+fallback, eskaleringsbekreftelse (`✓ Meldingen din er videresendt...`), og
+nettverksfeil-meldingen. Alle tre er nå `{th,no,en}`-objekter lest via samme
+`getLang()`-mønster som filens eksisterende `greetings`-objekt. Merk: `lang`
+fra `try`-blokken er utenfor scope i `catch` — catch-blokken kaller `getLang()`
+på nytt selv.
+
+Ny test: `backend/tests/test_chat_widget_language.py` (offline, 5 tester) —
+verifiserer alle tre lang-objekter har `th`/`no`/`en`, at ingen av de gamle
+bare-norske fallback-strengene gjenstår, og at catch-blokken har sin egen
+`getLang()`-kall.
+
+```bash
+cd backend && ../.venv/Scripts/pytest.exe tests/test_chat_widget_language.py -v
+```
+5 passed, 0 failed.
+
+### Test kommando:
+```bash
+cd backend && ../.venv/Scripts/pytest.exe tests/test_quiz_terms.py -v
+```
+8 passed, 0 failed, 0 nettverk, 0 prod.
+
+### ⚠️ IKKE GJORT — krever eksplisitt eiervalg før det skjer:
+1. **`seed_glossary.py` er IKKE kjørt mot prod.** Migreringskoden er skrevet og
+   idempotent, men å faktisk kjøre `python scripts/seed_glossary.py` mot
+   produksjons-MongoDB er en bevisst, separat handling — se planens §1.3-1.4
+   for verifiseringsstegene i Atlas.
+2. **Ingenting er committet.** Endringene ligger uncommitted på `main`. Ikke
+   `git add -A` blindt — se advarselen under.
+3. **`GET /api/quiz/terms` er ikke E2E-testet mot en ekte server/DB** — kun
+   offline enhetstester av matching/filter-logikken.
+
+### ⚠️ Advarsel til neste agent — samtidig redigering oppdaget
+Under implementeringen viste `git diff --stat` at `backend/webapp.py` (531
+linjer) og `backend/website.py` (22 linjer, aldri rørt av denne oppgaven) var
+endret UTOVER det denne oppgaven gjorde. Dette repoet redigeres tydeligvis av
+en annen samtidig prosess/agent akkurat nå — untracked-filer i `git status`
+har også endret seg mellom kommandoer i denne økten uten at noen her gjorde
+det. **Ikke kjør `git add -A` eller commit uten å lese gjennom hele diffen
+først** — den inneholder sannsynligvis en annen agents uferdige arbeid i
+tillegg til Task 4 sine 4 filer (`seed_glossary.py`, `quiz_terms.py`
+[ny], `server.py`, `webapp.py`, `tests/test_quiz_terms.py` [ny]).
 
 ---
 
