@@ -498,6 +498,17 @@ a { color:inherit; text-decoration:none; }
 }
 .home-cta:hover { transform:translateY(-2px); box-shadow:0 0 24px rgba(0,245,255,.5), 0 0 8px rgba(255,153,51,.4); }
 .home-cta:active { transform:translateY(0) scale(0.97); box-shadow:0 0 32px rgba(0,245,255,.7), 0 0 12px rgba(255,153,51,.6); }
+.home-cta-exam {
+  margin-top:10px;
+  background:linear-gradient(135deg,#162447,#0F172A) padding-box,
+             conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #3B82F6, #FF9933, #00F5FF) border-box !important;
+  color:#E2E8F0 !important;
+  box-shadow:0 4px 20px rgba(0,245,255,.25);
+}
+.home-cta-exam:hover {
+  color:#FFFFFF !important;
+  box-shadow:0 0 24px rgba(0,245,255,.5), 0 0 12px rgba(255,153,51,.3);
+}
 
 .home-main-label { font-size:.72rem; font-weight:800; letter-spacing:.09em; text-transform:uppercase; color:var(--muted); }
 .home-main-actions { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
@@ -3983,6 +3994,9 @@ a { color:inherit; text-decoration:none; }
       <button class="home-cta" onclick="startRandomQuiz()">
         <span data-key="home_primary_action">▶ Start quiz / daglig test</span>
       </button>
+      <button class="home-cta home-cta-exam" id="startExamBtn" onclick="startExam()">
+        <span data-key="home_exam_action"></span>
+      </button>
 
       <div class="home-main-actions">
         <button class="home-main-choice" onclick="showTab('teacher')">
@@ -4096,6 +4110,7 @@ a { color:inherit; text-decoration:none; }
           </div>
           <div class="quiz-score-badge">✓ <span id="qScoreNum">0</span></div>
           <div id="examTimerBadge" style="display:none;background:rgba(239,68,68,.18);border:1px solid rgba(239,68,68,.4);color:#EF4444;border-radius:20px;padding:4px 12px;font-size:.85rem;font-weight:700;margin-left:8px;">⏱ <span id="examTimerLbl">90:00</span></div>
+          <button id="examSubmitBtn" class="exam-submit-btn" style="display:none;background:rgba(239,68,68,.25);border:1px solid #EF4444;color:#FCA5A5;border-radius:12px;padding:5px 12px;font-size:.8rem;font-weight:700;cursor:pointer;margin-left:8px;" onclick="confirmSubmitExam()" data-key="exam_submit"></button>
         </div>
         <div class="quiz-body">
           <div class="quiz-card" id="qCard">
@@ -4776,6 +4791,10 @@ var UI = {
   startquiz:   {th:'▶  เริ่มควิซ',      no:'▶  Start quiz',   en:'▶  Start quiz'},
   home_choose_action:{th:'เลือกสิ่งที่คุณต้องการฝึก', no:'Velg hva du vil gjøre', en:'Choose what you want to do'},
   home_primary_action:{th:'▶ เริ่มควิซ / แบบทดสอบประจำวัน', no:'▶ Start quiz / daglig test', en:'▶ Start quiz / daily test'},
+  home_exam_action:{th:'📝 เริ่มทำข้อสอบทฤษฎีเสมือนจริง (45 ข้อ – 90 นาที)', no:'📝 Start Offisiell Teoriprøve (45 spørsmål – 90 min)', en:'📝 Start Official Theory Exam (45 questions – 90 min)'},
+  home_exam_sub:   {th:'รูปแบบ Statens vegvesen • ผิดได้ไม่เกิน 7 ข้อ', no:'Statens vegvesen-format • Maks 7 feil', en:'Official test format • Max 7 mistakes'},
+  exam_submit:     {th:'ส่งข้อสอบ', no:'Lever prøve', en:'Submit exam'},
+  exam_submit_confirm:{th:'คุณแน่ใจหรือไม่ว่าต้องการส่งข้อสอบตอนนี้?', no:'Er du sikker på at du vil levere teoriprøven nå?', en:'Are you sure you want to submit the exam now?'},
   home_ask_michael:{th:'ถาม Michael AI', no:'Spør Michael AI', en:'Ask Michael AI'},
   home_targeted:{th:'ฝึกข้อที่ตอบผิดและคลังป้ายจราจร', no:'Øv på mine feil & skiltkatalog', en:'Practise my mistakes & road signs'},
   home_open_signs:{th:'เปิดคลังป้ายจราจร', no:'Åpne skiltkatalog', en:'Open road sign catalogue'},
@@ -5305,7 +5324,9 @@ function applyUILang() {
     catsTitleEl.innerHTML = '📚 <span data-key="cats">' + t('cats') + '</span> <span id="catCount">' + catsCountText + '</span>';
   }
   // home buttons
-  document.querySelectorAll('.home-cta').forEach(function(b){ b.innerHTML = '<span data-key="home_primary_action">' + t('home_primary_action') + '</span>'; });
+  document.querySelectorAll('.home-cta:not(.home-cta-exam)').forEach(function(b){ b.innerHTML = '<span data-key="home_primary_action">' + t('home_primary_action') + '</span>'; });
+  var examBtn = document.getElementById('startExamBtn');
+  if (examBtn) examBtn.innerHTML = '<span data-key="home_exam_action">' + t('home_exam_action') + '</span>';
   // Oppdater horisontal scrollmeny-labels
   document.querySelectorAll('.hsm-label[data-hsm-key]').forEach(function(el) {
     var key = el.getAttribute('data-hsm-key');
@@ -7263,12 +7284,21 @@ async function startExam() {
   await loadQuiz('/api/questions/random?count=45&has_image=true&mode=exam');
 }
 
+function confirmSubmitExam() {
+  var msg = t('exam_submit_confirm');
+  if (confirm(msg)) {
+    showEnd();
+  }
+}
+
 function startExamTimer() {
   if (examTimerInterval) clearInterval(examTimerInterval);
   examSecondsLeft = 90 * 60; // 90 minutes
   var badge = document.getElementById('examTimerBadge');
   var lbl   = document.getElementById('examTimerLbl');
+  var submitBtn = document.getElementById('examSubmitBtn');
   if (badge) badge.style.display = 'flex';
+  if (submitBtn) submitBtn.style.display = 'inline-flex';
   updateTimerLabel(lbl, examSecondsLeft);
   examTimerInterval = setInterval(function() {
     examSecondsLeft--;
@@ -7289,6 +7319,8 @@ function stopExamTimer() {
   if (examTimerInterval) { clearInterval(examTimerInterval); examTimerInterval = null; }
   var badge = document.getElementById('examTimerBadge');
   if (badge) badge.style.display = 'none';
+  var submitBtn = document.getElementById('examSubmitBtn');
+  if (submitBtn) submitBtn.style.display = 'none';
 }
 
 function updateTimerLabel(lbl, secs) {
@@ -9137,7 +9169,9 @@ function _buildDebrief(pct, total) {
   var heading, body;
 
   if (isExamMode) {
-    if (pct >= 85) {
+    var examErrors = Math.max(0, total - qScore);
+    var examPassed = examErrors <= 7;
+    if (examPassed) {
       heading = t('result_exam_pass_head');
       body = t('result_exam_pass_body');
     } else {
@@ -9206,7 +9240,7 @@ function showEnd() {
       total_questions: total,
       correct_answers: qScore,
       score_percentage: pct,
-      passed: isExamMode ? pct >= 85 : null,
+      passed: isExamMode ? ((total - qScore) <= 7) : null,
       questions_answered: _sessionAnswers.length ? _sessionAnswers : questions.map(function(q, i) {
         return { question_id: String(q._id || q.id || q.question_id || ''), index: i };
       }),
