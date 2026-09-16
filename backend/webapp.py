@@ -5246,6 +5246,7 @@ function ttsStreamUrl(text, lang) {
 }
 
 function applyUILang() {
+  if (typeof renderStopping === 'function' && document.getElementById('stopSpeed')) renderStopping();
   document.documentElement.lang = appLang === 'no' ? 'nb' : appLang;
   var metaDescription = document.getElementById('metaDescription');
   if (metaDescription) metaDescription.setAttribute('content', t('meta_description'));
@@ -5572,6 +5573,7 @@ var PREMIUM_PRICING = {
 //  SCREEN & TAB MANAGEMENT
 // ════════════════════════════════════════════
 function showScreen(id) {
+  if (id !== 'screenStopping' && document.getElementById('screenStopping') && document.getElementById('screenStopping').classList.contains('active')) { deactivateStopping(); clearStoppingUrl(); }
   if (id !== 'screenQuiz') closeMichaelQuizCoach();
   document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
   var el = document.getElementById(id);
@@ -5581,6 +5583,7 @@ function showScreen(id) {
   app.classList.toggle('quiz-mode', id === 'screenQuiz');
   app.classList.toggle('teacher-mode', id === 'screenTeacher');
   app.classList.toggle('fk-mode', id === 'screenForbikjoring');
+  app.classList.toggle('stopping-mode', id === 'screenStopping');
 }
 
 function enterApp() {
@@ -5589,7 +5592,9 @@ function enterApp() {
   document.getElementById('topSettingsBtn').style.display = 'flex';
   loadAccessStatus();
   var requestedSign = new URLSearchParams(window.location.search).get('sign');
-  if (requestedSign) {
+  if (new URLSearchParams(window.location.search).get('tool') === 'stopping-distance') {
+    showTab('stopping');
+  } else if (requestedSign) {
     showTab('signs');
     loadSigns().then(function() { openSignDetailById(requestedSign); });
   } else {
@@ -5702,7 +5707,7 @@ function showTab(tab, forceType) {
     home:'screenHome', cats:'screenCats',
     history:'screenHistory', signs:'screenSigns', bookmarks:'screenBookmarks',
     settings:'screenSettings', studybook:'screenStudybook', teacher:'screenTeacher',
-    library:'screenLibrary'
+    library:'screenLibrary', stopping:'screenStopping'
   };
   if (screenMap[tab]) {
     // Premium-only tabs
@@ -5720,6 +5725,7 @@ function showTab(tab, forceType) {
     if (tab === 'settings')  loadSettings();
     if (tab === 'studybook') loadStudiebok();
     if (tab === 'library')   loadLibrary();
+    if (tab === 'stopping')  loadStopping(false);
     if (tab === 'teacher') {
       if (forceType) {
         switchTeacherSession(forceType);
@@ -11480,7 +11486,8 @@ if ('serviceWorker' in navigator) {
 
 @webapp_router.get("/web", response_class=HTMLResponse)
 async def web_app():
-    html = WEBAPP_HTML.replace('__DEPLOY_VERSION__', DEPLOY_VERSION)
+    from stopping_distance_web import install
+    html = install(WEBAPP_HTML).replace('__DEPLOY_VERSION__', DEPLOY_VERSION)
     return HTMLResponse(content=html)
 
 @webapp_router.get("/web/version")
