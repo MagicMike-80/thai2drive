@@ -25,6 +25,14 @@ def _load_teacher_chat():
     fastapi.APIRouter = lambda *args, **kwargs: _Router()
     fastapi.Query = lambda default=None, **kwargs: default
 
+    class _HTTPException(Exception):
+        def __init__(self, status_code=None, detail=None):
+            super().__init__(detail)
+            self.status_code = status_code
+            self.detail = detail
+
+    fastapi.HTTPException = _HTTPException
+
     pydantic = types.ModuleType("pydantic")
     pydantic.BaseModel = object
     pydantic.Field = lambda default=None, **kwargs: default
@@ -399,7 +407,8 @@ class TeacherChatFallbackTests(unittest.TestCase):
     def test_new_session_primer_is_language_pure(self):
         source = (Path(__file__).resolve().parents[1] / "teacher_chat.py").read_text(encoding="utf-8")
         self.assertIn('_primer = {"no": "Klart 😊", "th": "โอเคครับ 😊", "en": "Sure 😊"}', source)
-        self.assertIn('_primer.get(lang, _primer["en"])', source)
+        self.assertIn('_strict_lang_map(_primer, lang) or ""', source)
+        self.assertNotIn('_primer.get(lang,', source)
         self.assertNotIn('"no": "โอเค ครับ 😊"', source)
 
 

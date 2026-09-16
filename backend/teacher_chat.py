@@ -5,7 +5,9 @@ POST /api/teacher/chat  – user sends a message, Michael responds.
 
 Michael is a patient, calm driving instructor with 16 years of experience in Oslo.
 He answers questions about traffic signs, right-of-way rules, traffic regulations,
-and the Norwegian theory test. He speaks in the language the user writes in.
+and the Norwegian theory test. He always replies in the language the user has
+selected (`language`: `no`/`th`/`en`), never mixing languages or borrowing text
+from another language.
 """
 from __future__ import annotations
 
@@ -15,9 +17,9 @@ import uuid
 import logging
 from datetime import datetime, timezone
 from difflib import get_close_matches
-from typing import Optional, List
+from typing import Optional, List, Literal
 
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, Query, HTTPException
 from pydantic import BaseModel, Field
 from motor.motor_asyncio import AsyncIOMotorClient
 from dotenv import load_dotenv
@@ -1002,6 +1004,20 @@ def _strict_lang_value(doc: dict, field_prefix: str, lang: str) -> str:
     return value.strip() if isinstance(value, str) and value.strip() else ""
 
 
+def _strict_lang_map(text_map: Optional[dict], lang: str):
+    """Return text_map[lang] only if present and non-empty; never borrow another language."""
+    if not isinstance(text_map, dict):
+        return None
+    value = text_map.get(lang)
+    if value is None:
+        return None
+    if isinstance(value, str) and not value.strip():
+        return None
+    if isinstance(value, (list, dict)) and not value:
+        return None
+    return value
+
+
 def _safe_image_tag_part(value: str) -> str:
     """Keep database values on one line and inside the existing image-tag grammar."""
     return " ".join(str(value).replace("|", " ").replace("]", " ").split())
@@ -1321,7 +1337,7 @@ def _apply_section_7_2_fail_safe(user_msg: str, reply_text: str, lang: str) -> s
     }
 
     if is_left_turn or has_dangerous_negation:
-        return pedagogical_explanations.get(lang, pedagogical_explanations["no"])
+        return _strict_lang_map(pedagogical_explanations, lang) or reply_text
 
     # Ren sitatforespørsel
     statute_replies = {
@@ -1341,7 +1357,7 @@ def _apply_section_7_2_fail_safe(user_msg: str, reply_text: str, lang: str) -> s
             "intends to turn left will have a vehicle on their right-hand side.”"
         ),
     }
-    return statute_replies.get(lang, statute_replies["no"])
+    return _strict_lang_map(statute_replies, lang) or reply_text
 
 
 def _apply_right_rule_definition_fail_safe(user_msg: str, reply_text: str, lang: str) -> str:
@@ -1735,10 +1751,13 @@ async def resolve_traffic_concept(
 
     canonical = concept["canonical"]
     category = concept["category"]
-    title = concept["title"].get(lang, concept["title"]["no"])
-    definition = concept["definition"].get(lang, concept["definition"]["no"])
-    formula = concept["formula"].get(lang, concept["formula"]["no"]) if concept["formula"] else None
-    chips = list(concept["chips"].get(lang, concept["chips"]["no"]))
+    title = _strict_lang_map(concept["title"], lang)
+    definition = _strict_lang_map(concept["definition"], lang)
+    if title is None or definition is None:
+        # Fail-Stop: never resolve a concept partly in the wrong language.
+        return None
+    formula = _strict_lang_map(concept["formula"], lang) if concept["formula"] else None
+    chips = list(_strict_lang_map(concept["chips"], lang) or [])
 
     # 1. Enrich from learning_glossary if db is available
     if db is not None:
@@ -1746,8 +1765,8 @@ async def resolve_traffic_concept(
             glossary_col = db["learning_glossary"]
             doc = await glossary_col.find_one({"term_no": {"$regex": f"^{canonical}$", "$options": "i"}})
             if doc:
-                doc_title = doc.get(f"term_{lang}") or doc.get("term_no")
-                doc_def = doc.get(f"definition_{lang}") or doc.get("definition_no")
+                doc_title = _strict_lang_value(doc, "term", lang)
+                doc_def = _strict_lang_value(doc, "definition", lang)
                 if doc_title:
                     title = doc_title
                 if doc_def:
@@ -2596,10 +2615,12 @@ async def _get_student_weakness(device_id: Optional[str] = None, user_id: Option
             raw_cat = str(results[0]["_id"]).lower()
             for key, trans in topic_labels.items():
                 if key in raw_cat:
-                    return {"key": key, "name": trans.get(lang, trans["no"]), "fails": results[0].get("fails", 0)}
-            # If category is not in standard keys, clean and return
-            cleaned_cat = raw_cat.replace("_", " ").title()
-            return {"key": "custom", "name": cleaned_cat, "fails": results[0].get("fails", 0)}
+                    name = _strict_lang_map(trans, lang)
+                    if name is None:
+                        return None
+                    return {"key": key, "name": name, "fails": results[0].get("fails", 0)}
+            # Unmapped category: never leak the raw database key to the student.
+            return None
 
         # Also check mistake bank
         mistake = await _db["mistakes"].find_one({**match_filter, "active": True})
@@ -2607,9 +2628,12 @@ async def _get_student_weakness(device_id: Optional[str] = None, user_id: Option
             raw_cat = str(mistake.get("category") or mistake.get("topic") or "").lower()
             for key, trans in topic_labels.items():
                 if key in raw_cat:
-                    return {"key": key, "name": trans.get(lang, trans["no"]), "fails": 1}
-            if raw_cat:
-                return {"key": "custom", "name": raw_cat.title(), "fails": 1}
+                    name = _strict_lang_map(trans, lang)
+                    if name is None:
+                        return None
+                    return {"key": key, "name": name, "fails": 1}
+            # Unmapped category: never leak the raw database key to the student.
+            return None
     except Exception as e:
         logger.warning("Error fetching student weakness: %s", e)
 
@@ -2621,7 +2645,8 @@ async def teacher_welcome(
     device_id: Optional[str] = Query(default=None),
     user_id: Optional[str] = Query(default=None),
 ):
-    lang = lang if lang in ("no", "th", "en") else "no"
+    if lang not in ("no", "th", "en"):
+        raise HTTPException(status_code=422, detail="Unsupported or missing language.")
     weakness = await _get_student_weakness(device_id, user_id, lang)
     if weakness and weakness.get("name"):
         topic_name = weakness["name"]
@@ -2641,14 +2666,15 @@ async def teacher_welcome(
 
 @teacher_router.get("/teacher/topics")
 async def teacher_topics(lang: str = Query(default="no")):
-    lang = lang if lang in MICHAEL_TOPICS else "no"
+    if lang not in MICHAEL_TOPICS:
+        raise HTTPException(status_code=422, detail="Unsupported or missing language.")
     return {"lang": lang, "topics": MICHAEL_TOPICS[lang]}
 
 
 class TeacherChatRequest(BaseModel):
     session_id: Optional[str] = Field(default=None)
     message: str = Field(min_length=1, max_length=5000)
-    language: Optional[str] = Field(default="no")
+    language: Literal["no", "th", "en"]
     device_id: Optional[str] = Field(default=None)
     user_id: Optional[str] = Field(default=None)
 
@@ -2669,10 +2695,9 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
     
     session_id = req.session_id or f"ts_{uuid.uuid4().hex[:16]}"
     user_msg = req.message.strip()
-    requested_language = (req.language or "").strip().lower()
+    # Pydantic's Literal["no", "th", "en"] already rejects anything else with a 422.
+    requested_language = req.language
     lang = requested_language
-    if lang not in ("no", "th", "en"):
-        lang = "no"
 
     # Extract quiz context if passed in the user message
     quiz_context_str = ""
@@ -2723,10 +2748,10 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
                 "th": [f"ใช่ อธิบายเรื่อง{topic_name} 🚗", "อธิบายป้ายจราจร 🛑", "ช่วยเรื่องการให้ทาง 📖"],
                 "en": [f"Yes, explain {topic_name} 🚗", "Explain a sign 🛑", "Help with right-of-way 📖"],
             }
-            reply_text = replies.get(lang, replies["no"])
-            sug_list = suggestions.get(lang, suggestions["no"])
-            await _chat_col.insert_one({"session_id": session_id, "role": "user", "content": user_msg, "ts": datetime.now(timezone.utc)})
-            await _chat_col.insert_one({"session_id": session_id, "role": "assistant", "content": reply_text, "ts": datetime.now(timezone.utc)})
+            reply_text = _strict_lang_map(replies, lang) or ""
+            sug_list = _strict_lang_map(suggestions, lang) or []
+            await _chat_col.insert_one({"session_id": session_id, "role": "user", "content": user_msg, "language": lang, "ts": datetime.now(timezone.utc)})
+            await _chat_col.insert_one({"session_id": session_id, "role": "assistant", "content": reply_text, "language": lang, "ts": datetime.now(timezone.utc)})
             return TeacherChatResponse(session_id=session_id, reply=reply_text, suggestions=sug_list)
         else:
             open_replies = {
@@ -2739,15 +2764,16 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
                 "th": ["ช่วยเรื่องการให้ทาง 🚗", "อธิบายป้ายจราจร 🛑", "อธิบายระยะเบรก 📏"],
                 "en": ["Explain right-of-way 🚗", "Explain a sign 🛑", "Explain braking distance 📏"],
             }
-            reply_text = open_replies.get(lang, open_replies["no"])
-            sug_list = open_suggestions.get(lang, open_suggestions["no"])
-            await _chat_col.insert_one({"session_id": session_id, "role": "user", "content": user_msg, "ts": datetime.now(timezone.utc)})
-            await _chat_col.insert_one({"session_id": session_id, "role": "assistant", "content": reply_text, "ts": datetime.now(timezone.utc)})
+            reply_text = _strict_lang_map(open_replies, lang) or ""
+            sug_list = _strict_lang_map(open_suggestions, lang) or []
+            await _chat_col.insert_one({"session_id": session_id, "role": "user", "content": user_msg, "language": lang, "ts": datetime.now(timezone.utc)})
+            await _chat_col.insert_one({"session_id": session_id, "role": "assistant", "content": reply_text, "language": lang, "ts": datetime.now(timezone.utc)})
             return TeacherChatResponse(session_id=session_id, reply=reply_text, suggestions=sug_list)
 
-    # Load prior conversation (last 20 messages in this session)
+    # Load prior conversation (last 20 messages in this session, same language only —
+    # a language switch must not replay the old language's turns into the new prompt).
     prior = await _chat_col.find(
-        {"session_id": session_id}
+        {"session_id": session_id, "language": lang}
     ).sort("ts", 1).to_list(length=20)
     conversation: List[dict] = [{"role": m["role"], "content": m["content"]} for m in prior]
 
@@ -2755,7 +2781,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
     # does not treat the first user message as "first contact" and introduce itself.
     _primer = {"no": "Klart 😊", "th": "โอเคครับ 😊", "en": "Sure 😊"}
     if not conversation:
-        conversation = [{"role": "assistant", "content": _primer.get(lang, _primer["en"])}]
+        conversation = [{"role": "assistant", "content": _strict_lang_map(_primer, lang) or ""}]
 
     # Determine reply language — request param takes priority
     # Call LLM
