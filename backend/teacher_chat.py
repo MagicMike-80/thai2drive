@@ -956,6 +956,15 @@ def _build_system_prompt(lang: str) -> str:
         .replace("<<COACHING>>", _COACHING[l])
         + rag_instructions
         + multimedia_instructions
+        + (
+            "\n\nCONVERSATION STYLE: Answer the student's actual question directly. "
+            "Vary your wording naturally. Do not repeat a fixed introduction such as "
+            "'Hi, I am Michael' or a fixed closing such as 'Do you have more questions?'. "
+            "Acknowledge uncertainty in a teaching context when useful, for example "
+            "'This is an easy place to get unsure', in the selected language. "
+            "Do not claim to feel emotions or describe your own feelings. "
+            "Keep every learner-facing word in the selected language."
+        )
     )
 
 
@@ -1838,9 +1847,11 @@ def _apply_formula_fail_safe(user_msg: str, reply_text: str, lang: str) -> str:
     is_fallback = "Beklager" in reply_text or "Sorry" in reply_text or "ขออภัย" in reply_text
 
     if is_fallback or not has_formula_math:
-        title = concept["title"].get(lang, concept["title"]["no"])
-        formula = concept["formula"].get(lang, concept["formula"]["no"])
-        def_text = concept["definition"].get(lang, concept["definition"]["no"])
+        title = _strict_lang_map(concept["title"], lang)
+        formula = _strict_lang_map(concept["formula"], lang)
+        def_text = _strict_lang_map(concept["definition"], lang)
+        if not all((title, formula, def_text)):
+            return _fallback_reply(lang) if is_fallback else reply_text
 
         if lang == "th":
             return (
@@ -2180,7 +2191,7 @@ def _get_suggestions(reply: str, lang: str, user_msg: str = "") -> list:
     # First check if user message or reply matches a resolved traffic concept with typo-tolerance
     concept = _match_canonical_concept(user_msg) or _match_canonical_concept(reply)
     if concept:
-        chips = concept.get("chips", {}).get(lang) or concept.get("chips", {}).get("no")
+        chips = _strict_lang_map(concept.get("chips"), lang)
         if chips:
             return list(chips)
 
@@ -2673,6 +2684,8 @@ async def teacher_topics(lang: str = Query(default="no")):
 
 class TeacherChatRequest(BaseModel):
     session_id: Optional[str] = Field(default=None)
+    conversation_id: Optional[str] = Field(default=None)
+    mode: Optional[str] = Field(default="normal_chat")
     message: str = Field(min_length=1, max_length=5000)
     language: Literal["no", "th", "en"]
     device_id: Optional[str] = Field(default=None)
@@ -2681,6 +2694,7 @@ class TeacherChatRequest(BaseModel):
 
 class TeacherChatResponse(BaseModel):
     session_id: str
+    conversation_id: str
     reply: str
     suggestions: list = []
     sign_ids: list[str] = Field(default_factory=list)
@@ -2693,7 +2707,8 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
     start_time = time.time()
     error_str = None
     
-    session_id = req.session_id or f"ts_{uuid.uuid4().hex[:16]}"
+    session_id = req.session_id or req.conversation_id or f"ts_{uuid.uuid4().hex[:16]}"
+    conversation_id = session_id
     user_msg = req.message.strip()
     # Pydantic's Literal["no", "th", "en"] already rejects anything else with a 422.
     requested_language = req.language
@@ -2752,7 +2767,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             sug_list = _strict_lang_map(suggestions, lang) or []
             await _chat_col.insert_one({"session_id": session_id, "role": "user", "content": user_msg, "language": lang, "ts": datetime.now(timezone.utc)})
             await _chat_col.insert_one({"session_id": session_id, "role": "assistant", "content": reply_text, "language": lang, "ts": datetime.now(timezone.utc)})
-            return TeacherChatResponse(session_id=session_id, reply=reply_text, suggestions=sug_list)
+            return TeacherChatResponse(session_id=session_id, conversation_id=conversation_id, reply=reply_text, suggestions=sug_list)
         else:
             open_replies = {
                 "no": "Hei! Hva vil du at vi skal øve på i dag? Spør meg om hva som helst innen trafikk, så forklarer jeg det enkelt! 🚗",
@@ -2768,7 +2783,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             sug_list = _strict_lang_map(open_suggestions, lang) or []
             await _chat_col.insert_one({"session_id": session_id, "role": "user", "content": user_msg, "language": lang, "ts": datetime.now(timezone.utc)})
             await _chat_col.insert_one({"session_id": session_id, "role": "assistant", "content": reply_text, "language": lang, "ts": datetime.now(timezone.utc)})
-            return TeacherChatResponse(session_id=session_id, reply=reply_text, suggestions=sug_list)
+            return TeacherChatResponse(session_id=session_id, conversation_id=conversation_id, reply=reply_text, suggestions=sug_list)
 
     # Load prior conversation (last 20 messages in this session, same language only —
     # a language switch must not replay the old language's turns into the new prompt).
@@ -2828,6 +2843,10 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
 
         # _build_system_prompt injects [LANGUAGE] header FIRST, then language-specific examples
         system_prompt = _build_system_prompt(lang)
+        if req.mode == "quiz_coach":
+            system_prompt += "\n\nCHAT MODE: Coach the student through the current quiz question. Explain the rule without guessing an unseen answer."
+        elif req.mode == "simplify":
+            system_prompt += "\n\nCHAT MODE: Use especially short, simple sentences and one concrete driving example."
 
         if context_str:
             system_prompt += (
@@ -3046,6 +3065,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         suggestions = _get_suggestions(reply_text, lang, user_msg=user_msg)
     return TeacherChatResponse(
         session_id=session_id,
+        conversation_id=conversation_id,
         reply=reply_text,
         suggestions=suggestions,
         sign_ids=sign_ids,

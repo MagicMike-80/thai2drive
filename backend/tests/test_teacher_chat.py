@@ -160,6 +160,23 @@ class TestTeacherChatConsolidatedResolver(unittest.TestCase):
         self.assertIn("ความเร็ว ÷ 10", formatted_th)
         self.assertNotIn("ขออภัย", formatted_th)
 
+    def test_missing_thai_formula_never_uses_norwegian_fields(self):
+        concept = {
+            "formula": {"no": "Norsk formel"},
+            "title": {"no": "Norsk tittel"},
+            "definition": {"no": "Norsk forklaring"},
+        }
+        with patch.object(tc, "_match_canonical_concept", return_value=concept):
+            reply = _apply_formula_fail_safe("formula", "ขออภัยครับ", "th")
+        self.assertNotIn("Norsk", reply)
+        self.assertEqual(reply, tc._fallback_reply("th"))
+
+    def test_missing_thai_chips_never_uses_norwegian_chips(self):
+        with patch.object(tc, "_match_canonical_concept", return_value={"chips": {"no": ["🚗 Norsk chip"]}}):
+            chips = _get_suggestions("", "th", "formula")
+        self.assertNotIn("🚗 Norsk chip", chips)
+        self.assertEqual(chips, ["❓ ถามต่อ", "📖 เปิดหนังสือเรียน", "📊 สถิติของฉัน"])
+
     def test_teacher_chat_with_typo_returns_formula_media_and_chips(self):
         req = TeacherChatRequest(
             session_id="test_session_typo_1",
@@ -168,6 +185,7 @@ class TestTeacherChatConsolidatedResolver(unittest.TestCase):
         )
         res = asyncio.run(teacher_chat(req))
         self.assertIsNotNone(res)
+        self.assertEqual(res.conversation_id, req.session_id)
         # Verify media card
         self.assertTrue(len(res.media) > 0)
         self.assertEqual(res.media[0]["id"], "vid_stopp_01")

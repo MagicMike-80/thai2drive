@@ -123,6 +123,16 @@ class StudentWeaknessNeverLeaksRawKeyTests(unittest.TestCase):
 
 
 class TeacherChatRequestLanguageValidationTests(unittest.TestCase):
+    def test_optional_chat_fields_preserve_legacy_request(self):
+        legacy = TeacherChatRequest(message="hei", language="no", session_id="old-session")
+        self.assertIsNone(legacy.conversation_id)
+        self.assertEqual(legacy.mode, "normal_chat")
+        modern = TeacherChatRequest(
+            message="hei", language="no", conversation_id="new-conversation", mode="simplify"
+        )
+        self.assertEqual(modern.conversation_id, "new-conversation")
+        self.assertEqual(modern.mode, "simplify")
+
     def test_valid_languages_accepted(self):
         for lang in ("no", "th", "en"):
             req = TeacherChatRequest(message="hei", language=lang)
@@ -185,6 +195,17 @@ class TheoryHelpShortcutLanguagePurityTests(unittest.TestCase):
         self.assertNotIn("vikeplikt", response.reply.lower())
         self.assertTrue(tc._chat_col.inserted)
         self.assertTrue(all(doc["language"] == "th" for doc in tc._chat_col.inserted))
+        self.assertEqual(response.conversation_id, response.session_id)
+
+    def test_conversation_id_reuses_session_storage_for_new_callers(self):
+        req = TeacherChatRequest(
+            message="help with the theory test", language="th",
+            conversation_id="conversation-123", mode="quiz_coach",
+        )
+        response = asyncio.run(tc.teacher_chat(req))
+        self.assertEqual(response.session_id, "conversation-123")
+        self.assertEqual(response.conversation_id, "conversation-123")
+        self.assertTrue(all(doc["session_id"] == "conversation-123" for doc in tc._chat_col.inserted))
 
     def test_unmapped_category_falls_back_to_generic_opener_not_raw_key(self):
         tc._db["quiz_attempts"] = _RecordingCollection(
