@@ -37,10 +37,17 @@ class _Cursor:
 
 
 class _Collection:
+    def __init__(self, items=None):
+        self.items = items or []
+
     def find(self, *args, **kwargs):
         return _Cursor()
 
     async def find_one(self, *args, **kwargs):
+        query = args[0] if args else {}
+        for item in self.items:
+            if all(item.get(key) == value for key, value in query.items()):
+                return item
         return None
 
     async def insert_one(self, *args, **kwargs):
@@ -51,8 +58,11 @@ class _Collection:
 
 
 class _Database:
+    def __init__(self, collections=None):
+        self.collections = collections or {}
+
     def __getitem__(self, name):
-        return _Collection()
+        return self.collections.get(name, _Collection())
 
     def __getattr__(self, name):
         return _Collection()
@@ -187,9 +197,8 @@ class TestTeacherChatConsolidatedResolver(unittest.TestCase):
         res = asyncio.run(teacher_chat(req))
         self.assertIsNotNone(res)
         self.assertEqual(res.conversation_id, req.session_id)
-        # Verify media card
-        self.assertTrue(len(res.media) > 0)
-        self.assertEqual(res.media[0]["id"], "vid_stopp_01")
+        # The offline placeholder has no catalog record or asset and must be hidden.
+        self.assertEqual(res.media, [])
         # Verify suggestions
         self.assertIn("🚗 Bremselengde", res.suggestions)
         self.assertIn("📏 Stoppelengde", res.suggestions)
@@ -208,6 +217,37 @@ class TestTeacherChatConsolidatedResolver(unittest.TestCase):
         ):
             response = asyncio.run(teacher_chat(request))
         return response, captured["messages"][0]["content"]
+
+    def test_response_media_requires_existing_id_and_localizes_material(self):
+        material = {
+            "id": "lesson-1", "type": "image", "active": True,
+            "approved_for_michael": True, "source_url": "/api/assets/lesson.jpg",
+            "title": {"no": "Norsk tittel", "th": "ชื่อภาษาไทย", "en": "English title"},
+            "caption": {"no": "Norsk beskrivelse", "th": "คำอธิบายภาษาไทย", "en": "English description"},
+        }
+        tc._db = _Database({"michael_materials": _Collection([material])})
+        candidates = [
+            {"id": "lesson-1", "type": "image", "url": "/api/assets/lesson.jpg",
+             "title": "Norsk tittel", "caption": "Norsk beskrivelse"},
+            {"id": "missing-id", "type": "image", "url": "/api/assets/missing.jpg",
+             "title": "Missing", "caption": "Missing"},
+        ]
+
+        async def materials(*args, **kwargs):
+            return candidates
+
+        async def no_catalog(*args, **kwargs):
+            return []
+
+        with patch.object(tc, "_get_relevant_michael_materials", new=materials), patch.object(
+            tc, "_get_relevant_catalog_media", new=no_catalog
+        ):
+            response, _ = self._chat_with_mock_model(
+                TeacherChatRequest(message="อธิบายภาพนี้", language="th"), "คำอธิบายสั้น ๆ"
+            )
+        self.assertEqual([item["id"] for item in response.media], ["lesson-1"])
+        self.assertEqual(response.media[0]["title"], "ชื่อภาษาไทย")
+        self.assertEqual(response.media[0]["caption"], "คำอธิบายภาษาไทย")
 
     def test_quiz_coach_uses_wrong_answer_context_and_keeps_explanation(self):
         request = TeacherChatRequest(

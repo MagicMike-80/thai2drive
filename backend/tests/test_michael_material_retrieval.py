@@ -370,6 +370,38 @@ class MichaelMaterialRetrievalTests(unittest.TestCase):
         self.assertEqual(result[0]["title"], "Norsk")
         self.assertNotIn("i18n", result[0])
 
+    def test_final_catalog_cards_require_record_and_selected_language(self):
+        document = {
+            "media_id": "catalog-1", "type": "video", "category": "stoppelengde",
+            "tags": ["stoppelengde"], "media_url": "https://media.example/video.mp4",
+            "thumbnail_url": "https://media.example/thumb.jpg", "is_active": True,
+            "approved_for_michael": True, "content_language": "neutral",
+            "i18n": {
+                "no": {"title": "Norsk", "description": "Norsk tekst"},
+                "th": {"title": "ภาษาไทย", "description": "คำอธิบายไทย"},
+                "en": {"title": "English", "description": "English text"},
+            },
+        }
+        self.module._db = _Database([], catalog=[document])
+        candidates = [
+            {"id": "catalog-1", "media_id": "catalog-1", "type": "video",
+             "url": "https://media.example/video.mp4", "title": "Norsk", "caption": "Norsk tekst"},
+            {"id": "missing", "media_id": "missing", "type": "video",
+             "url": "https://media.example/missing.mp4", "title": "Missing", "caption": "Missing"},
+            {"id": "catalog-1", "media_id": "catalog-1", "type": "video",
+             "url": "javascript:alert(1)", "title": "Wrong", "caption": "Wrong"},
+        ]
+        for lang, title, caption in (
+            ("no", "Norsk", "Norsk tekst"),
+            ("th", "ภาษาไทย", "คำอธิบายไทย"),
+            ("en", "English", "English text"),
+        ):
+            with self.subTest(lang=lang):
+                result = asyncio.run(self.module._validate_teacher_response_media(candidates, lang))
+                self.assertEqual(len(result), 1)
+                self.assertEqual(result[0]["title"], title)
+                self.assertEqual(result[0]["caption"], caption)
+
 
 if __name__ == "__main__":
     unittest.main()

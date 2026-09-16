@@ -15,6 +15,7 @@ import os
 import re
 import uuid
 import logging
+from urllib.parse import urlsplit
 from datetime import datetime, timezone
 from difflib import get_close_matches
 from typing import Optional, List, Literal
@@ -24,12 +25,13 @@ from pydantic import BaseModel, Field
 from motor.motor_asyncio import AsyncIOMotorClient
 from dotenv import load_dotenv
 try:
-    from media_catalog import SUPPORTED_LANGUAGES, expand_law_synonyms, rank_catalog_media
+    from media_catalog import SUPPORTED_LANGUAGES, expand_law_synonyms, rank_catalog_media, serialize_catalog_document
 except ImportError:  # package-style imports used by isolated tests
     from backend.media_catalog import (
         SUPPORTED_LANGUAGES,
         expand_law_synonyms,
         rank_catalog_media,
+        serialize_catalog_document,
     )
 
 load_dotenv()
@@ -1929,6 +1931,85 @@ def _safe_michael_material_url(value: str) -> bool:
     return value.startswith("/api/") or value.startswith("https://") or value.startswith("http://")
 
 
+def _safe_teacher_response_media_url(value: str) -> bool:
+    """Accept only existing media route families or a well-formed HTTPS URL."""
+    url = str(value or "").strip()
+    if not url or any(char.isspace() for char in url):
+        return False
+    parsed = urlsplit(url)
+    if parsed.fragment or ".." in parsed.path.split("/"):
+        return False
+    if url.startswith(("/api/assets/", "/api/media/files/", "/api/audio/", "/api/sign-images/")):
+        return bool(parsed.path.rsplit("/", 1)[-1]) and not parsed.netloc and not parsed.query
+    return parsed.scheme == "https" and bool(parsed.netloc) and not parsed.username and not parsed.password
+
+
+async def _validate_teacher_response_media(media: list[dict], lang: str) -> list[dict]:
+    """Recheck response cards against existing records and their selected-language text."""
+    valid = []
+    for item in media:
+        if not isinstance(item, dict):
+            continue
+        media_id = str(item.get("id") or "").strip()
+        if not media_id or not _safe_teacher_response_media_url(item.get("url")):
+            continue
+        try:
+            if media_id.startswith("traffic-sign:"):
+                sign_id = media_id.removeprefix("traffic-sign:")
+                authoritative = await _get_exact_sign_media([sign_id], lang, limit=1)
+                if authoritative and authoritative[0]["url"] == item["url"]:
+                    valid.append(authoritative[0])
+                continue
+            if item.get("media_id"):
+                document = await _db["media_catalog"].find_one({
+                    "media_id": media_id, "is_active": True, "approved_for_michael": True,
+                })
+                authoritative = serialize_catalog_document(document, lang) if document else None
+                if authoritative and authoritative["url"] == item["url"]:
+                    valid.append({key: value for key, value in authoritative.items() if key not in ("category", "tags")})
+                continue
+            material = await _db["michael_materials"].find_one({
+                "id": media_id, "active": True, "approved_for_michael": True,
+            })
+            if not material or material.get("type") != item.get("type"):
+                continue
+            title = _material_lang_value(material, "title", lang)
+            caption = _material_lang_value(material, "caption", lang)
+            if not title or not caption:
+                continue
+            source_url = str(material.get("source_url") or "").strip()
+            if material.get("type") == "video" and material.get("source_id") and not source_url.startswith("/api/media/files/"):
+                video = await _db["learning_videos"].find_one({"id": material["source_id"], "active": True})
+                if not video:
+                    continue
+                source_url = str(video.get("youtube_url") or "").strip()
+                if not source_url:
+                    file_path = str(video.get("file_path") or "").strip().replace("\\", "/")
+                    if file_path.startswith("/public_assets/"):
+                        source_url = "/api/assets/" + file_path[len("/public_assets/"):]
+                    elif file_path.startswith("/api/assets/"):
+                        source_url = file_path
+            if source_url != item["url"]:
+                continue
+            validated = dict(item)
+            validated["title"] = title
+            validated["caption"] = caption
+            if "description" in validated:
+                validated["description"] = caption
+            if "subtitle_tracks" in validated:
+                validated["subtitle_tracks"] = [
+                    dict(track) for track in validated["subtitle_tracks"]
+                    if isinstance(track, dict) and track.get("lang") == lang
+                    and _safe_teacher_response_media_url(track.get("url"))
+                ]
+                for track in validated["subtitle_tracks"]:
+                    track["label"] = {"no": "Norsk", "th": "ไทย", "en": "English"}[lang]
+            valid.append(validated)
+        except Exception as exc:
+            logger.warning("Skipping unverifiable Michael media %s: %s", media_id, type(exc).__name__)
+    return valid[:2]
+
+
 def _material_lang_value(material: dict, field: str, lang: str) -> str:
     values = material.get(field)
     if not isinstance(values, dict):
@@ -2871,6 +2952,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         elif not explicit_sign_ids and not approved_media and resolved_concept and resolved_concept.get("media"):
             catalog_media = list(resolved_concept["media"])
         media = _compose_teacher_media(media, catalog_media, explicit_sign_ids)
+        media = await _validate_teacher_response_media(media, lang)
 
         if not LLM_KEY:
             raise RuntimeError("DEEPSEEK_API_KEY not configured")
@@ -3059,6 +3141,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         except Exception as media_ex:
             logger.error("Failed to resolve exact response sign media: %s", media_ex)
     media = _reconcile_teacher_media(media, sign_ids, exact_response_media)
+    media = await _validate_teacher_response_media(media, lang)
 
     # Persist both messages
     now = datetime.now(timezone.utc)
