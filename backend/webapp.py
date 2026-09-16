@@ -3944,6 +3944,10 @@ a { color:inherit; text-decoration:none; }
             <input type="email" id="regEmail" placeholder="din@epost.com" data-placeholder-key="auth_email_placeholder" autocomplete="email">
           </div>
           <div class="form-group">
+            <label data-key="auth_phone">Mobilnummer</label>
+            <input type="tel" id="regPhone" placeholder="Ditt mobilnummer" data-placeholder-key="auth_phone_placeholder" autocomplete="tel" inputmode="tel">
+          </div>
+          <div class="form-group">
             <label data-key="auth_password">Passord</label>
             <div class="pw-wrap">
               <input type="password" id="regPass" placeholder="Minst 6 tegn" data-placeholder-key="auth_password_min_placeholder" autocomplete="new-password">
@@ -5006,6 +5010,10 @@ var UI = {
   auth_email:  {th:'อีเมล', no:'E-post', en:'Email'},
   auth_password:{th:'รหัสผ่าน', no:'Passord', en:'Password'},
   auth_name:   {th:'ชื่อ', no:'Navn', en:'Name'},
+  auth_phone:  {th:'เบอร์โทรศัพท์มือถือ', no:'Mobilnummer', en:'Mobile number'},
+  auth_phone_placeholder:{th:'เบอร์โทรศัพท์มือถือของคุณ', no:'Ditt mobilnummer', en:'Your mobile number'},
+  phone_already_registered:{th:'เบอร์โทรศัพท์นี้ลงทะเบียนแล้ว กรุณาเข้าสู่ระบบหรือติดต่อฝ่ายสนับสนุน', no:'Dette telefonnummeret er allerede registrert. Logg inn eller kontakt support.', en:'This phone number is already registered. Log in or contact support.'},
+  auth_invalid_signup:{th:'ตรวจสอบชื่อ อีเมล เบอร์โทรศัพท์ และรหัสผ่าน แล้วลองอีกครั้ง', no:'Kontroller navn, e-post, mobilnummer og passord, og prøv igjen.', en:'Check your name, email, mobile number and password, then try again.'},
   auth_email_placeholder:{th:'อีเมลของคุณ', no:'din@epost.com', en:'your@email.com'},
   auth_password_placeholder:{th:'รหัสผ่าน', no:'Passord', en:'Password'},
   auth_password_min_placeholder:{th:'อย่างน้อย 6 ตัวอักษร', no:'Minst 6 tegn', en:'At least 6 characters'},
@@ -6700,13 +6708,14 @@ async function doRegister() {
   clearAuthMessages();
   var name  = document.getElementById('regName').value.trim();
   var email = document.getElementById('regEmail').value.trim();
+  var phone = document.getElementById('regPhone').value.trim();
   var pass  = document.getElementById('regPass').value;
-  if (!name || !email || !pass) return showAuthError(t('auth_missing_all'));
+  if (!name || !email || !phone || !pass) return showAuthError(t('auth_missing_all'));
   if (pass.length < 6) return showAuthError(t('auth_password_short'));
   var btn = document.querySelector('#formRegister .auth-btn');
   btn.disabled = true; btn.textContent = t('register_loading');
   try {
-    var r = await api('POST', '/api/auth/signup', { name: name, email: email, password: pass });
+    var r = await api('POST', '/api/auth/signup', { full_name: name, email: email, phone: phone, password: pass });
     token = r.token; user = r.user;
     deviceId = user._id || user.id || null;
     _ls.set('t2d_token', token);

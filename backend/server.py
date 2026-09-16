@@ -1,17 +1,19 @@
-from fastapi import FastAPI, APIRouter, HTTPException, Query, Depends, UploadFile, File, Header, Request
+from fastapi import FastAPI, APIRouter, HTTPException, Query, Depends, UploadFile, File, Header, Request, Body
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse as FastAPIFileResponse
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorGridFSBucket
+from pymongo import ReturnDocument
+from pymongo.errors import DuplicateKeyError
 import os
 import logging
 import hashlib
 import smtplib
 from pathlib import Path
 from email.mime.text import MIMEText
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, validator, ValidationError
 from typing import List, Optional, Dict, Any
 import uuid
 import re
@@ -303,17 +305,34 @@ class AdminCheckRequest(BaseModel):
 # ==================== AUTH MODELS ====================
 
 class AuthSignup(BaseModel):
-    name: Optional[str] = None        # display name (optional)
+    full_name: Optional[str] = None
+    name: Optional[str] = None        # fallback/display name
     email: str
+    phone: str
     password: str
     device_id: Optional[str] = None   # carry over guest history
 
+    @validator('full_name', pre=True, always=True)
+    def validate_full_name(cls, v, values):
+        val = (v or values.get('name') or '').strip()
+        if not val:
+            raise ValueError('Fullt navn er påkrevd')
+        return val
+
     @validator('email')
     def validate_email(cls, v):
-        v = v.strip().lower()
+        v = (v or '').strip().lower()
         if not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', v):
             raise ValueError('Invalid email format')
         return v
+
+    @validator('phone')
+    def validate_phone(cls, v):
+        v = (v or '').strip()
+        cleaned = re.sub(r'[\s\-\(\)\.]', '', v)
+        if len(cleaned) < 5 or not re.match(r'^\+?[0-9]{5,15}$', cleaned):
+            raise ValueError('Ugyldig telefonnummer')
+        return cleaned
 
     @validator('password')
     def validate_password(cls, v):
@@ -754,12 +773,16 @@ def _auth_user_payload(user: dict) -> dict:
     De fire prøveuke-feltene er kontrakten webappen leser (se GRATISUKE i webapp.py):
     premium_status, premium_expires_at, trial_days_left, trial_used.
     """
+    has_prem = _user_has_active_premium(user)
     return {
         "id": user["id"],
-        "name": user.get("name") or "",
+        "name": user.get("name") or user.get("full_name") or "",
+        "full_name": user.get("full_name") or user.get("name") or "",
         "email": user["email"],
+        "phone": user.get("phone") or "",
         "is_admin": user.get("is_admin", False),
-        "is_premium": _user_has_active_premium(user),
+        "is_premium": has_prem,
+        "has_premium": has_prem,
         "premium_status": _user_premium_status(user),
         "premium_expires_at": _access_expires_at(user),
         "trial_days_left": _user_trial_days_left(user),
@@ -2297,42 +2320,100 @@ async def get_bookmarked_questions(device_id: str):
 # ==================== AUTH ROUTES ====================
 
 @api_router.post("/auth/signup")
-async def signup(data: AuthSignup):
-    existing = await _find_user_by_email(data.email)
+async def signup(payload: dict = Body(...)):
+    try:
+        data = AuthSignup.parse_obj(payload)
+    except ValidationError:
+        raise _auth_error_key(
+            "auth_invalid_signup",
+            "Kontroller navn, e-post, mobilnummer og passord, og prøv igjen.",
+            "ตรวจสอบชื่อ อีเมล เบอร์โทรศัพท์ และรหัสผ่าน แล้วลองอีกครั้ง",
+            "Check your name, email, mobile number and password, then try again.",
+            status_code=400,
+        )
+    full_name = (data.full_name or data.name or "").strip()
+    email = data.email.strip().lower()
+    phone = data.phone.strip()
+
+    # Sjekk mot MongoDB: hvis email finnes fra før -> status 400
+    existing = await _find_user_by_email(email)
     if existing:
         raise _auth_error_key(
             "email_already_registered",
             "Denne e-posten er allerede registrert. Logg inn eller tilbakestill passordet.",
             "อีเมลนี้ลงทะเบียนแล้ว กรุณาเข้าสู่ระบบหรือรีเซ็ตรหัสผ่าน",
             "This email is already registered. Log in or reset password.",
-            status_code=409,
+            status_code=400,
+        )
+
+    # Sjekk mot MongoDB: hvis phone finnes fra før -> status 400
+    existing_phone = await db.users.find_one({"phone": phone})
+    if existing_phone:
+        raise _auth_error_key(
+            "phone_already_registered",
+            "Dette telefonnummeret er allerede registrert. Logg inn eller kontakt support.",
+            "เบอร์โทรศัพท์นี้ลงทะเบียนแล้ว กรุณาเข้าสู่ระบบหรือติดต่อฝ่ายสนับสนุน",
+            "This phone number is already registered. Log in or contact support.",
+            status_code=400,
         )
 
     password_hash = pwd_context.hash(data.password)
     user_id = str(uuid.uuid4())
 
     # Check admin whitelist
-    admin_entry = await db.admin_users.find_one({"email": data.email})
+    admin_entry = await db.admin_users.find_one({"email": email})
     is_admin = admin_entry is not None
-    is_premium = is_admin  # Admins get auto premium
 
-    # Gratisuken: verdi før betaling. Gis kun til nye registreringer, og kun én gang
-    # per e-post/device_id — ellers kan man lage uendelig mange gratiskontoer og
-    # tømme AI-læreren for penger.
-    trial_expires_at = await _grant_trial_if_eligible(data.email, data.device_id, user_id)
-    now_iso = datetime.now(timezone.utc).isoformat()
+    # Reserve each position atomically. Initialize from the existing user count
+    # so accounts created before this campaign also consume a position.
+    user_count = await db.users.count_documents({})
+    try:
+        await db.campaign_counters.update_one(
+            {"_id": "signup_50"}, {"$setOnInsert": {"sequence": user_count}}, upsert=True
+        )
+    except DuplicateKeyError:
+        pass  # Another request initialized the counter first.
+    position_doc = await db.campaign_counters.find_one_and_update(
+        {"_id": "signup_50"}, {"$inc": {"sequence": 1}},
+        return_document=ReturnDocument.AFTER,
+    )
+    campaign_position = position_doc["sequence"]
+    now = datetime.now(timezone.utc)
+    now_iso = now.isoformat()
+
+    if is_admin:
+        is_premium = True
+        has_premium = True
+        premium_expires_at = None
+        trial_expires_at = None
+    elif campaign_position <= 50:
+        is_premium = False
+        has_premium = True
+        expires_30d = (now + timedelta(days=30)).isoformat()
+        premium_expires_at = None
+        trial_expires_at = expires_30d
+    else:
+        is_premium = False
+        has_premium = False
+        premium_expires_at = None
+        trial_expires_at = None
 
     user_doc = {
         "id": user_id,
-        "email": data.email,
-        "name": (data.name or "").strip() or None,
+        "email": email,
+        "name": full_name,
+        "full_name": full_name,
+        "phone": phone,
         "password_hash": password_hash,
         "is_admin": is_admin,
         "is_premium": is_premium,
+        "has_premium": has_premium,
+        "premium_expires_at": premium_expires_at,
         "device_id": data.device_id or None,
-        "trial_started_at": now_iso if trial_expires_at else None,
+        "trial_started_at": now_iso if (campaign_position <= 50 and not is_admin) else None,
         "trial_expires_at": trial_expires_at,
-        "trial_used": True,
+        "trial_used": (campaign_position <= 50 and not is_admin),
+        "campaign_index": campaign_position,
         "created_at": now_iso,
     }
     await db.users.insert_one(user_doc)
@@ -2347,13 +2428,13 @@ async def signup(data: AuthSignup):
 
     # ── Segment track ──
     if SEGMENT_WRITE_KEY:
-        segment_analytics.identify(user_id, {"email": data.email, "name": data.name, "is_premium": is_premium, "is_admin": is_admin})
-        segment_analytics.track(user_id, "User Signed Up", {"email": data.email, "method": "email", "is_premium": is_premium})
+        segment_analytics.identify(user_id, {"email": email, "name": full_name, "phone": phone, "is_premium": is_premium, "is_admin": is_admin})
+        segment_analytics.track(user_id, "User Signed Up", {"email": email, "method": "email", "is_premium": is_premium, "campaign_eligible": (campaign_position <= 50)})
 
     has_access = _user_has_active_premium(user_doc)
     token = create_token(
         user_id,
-        data.email,
+        email,
         is_premium=has_access,
         premium_until=_access_expires_at(user_doc),
         premium_status=_user_premium_status(user_doc),
