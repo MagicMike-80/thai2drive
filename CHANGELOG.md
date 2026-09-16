@@ -2,6 +2,14 @@
 
 All notable changes to Thai2Drive are documented in this file.
 
+## [0.2.0.0] - 2026-09-16
+
+### Added
+
+- Learners can open a wide stopping-distance page from the web home screen, with red and silver Tesla illustrations.
+- Speed and road-condition controls show reaction, braking and total distance, four calculation steps, and 2/3-second following distances in Norwegian, Thai and English.
+- A short stopping animation respects reduced-motion settings; local offline preview and regression tests cover the new screen.
+
 ## [0.1.0.0] - 2026-09-09
 
 ### Added
