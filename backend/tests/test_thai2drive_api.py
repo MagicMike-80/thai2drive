@@ -29,23 +29,26 @@ class TestDatabaseSeeding:
 class TestCategories:
     """Test categories endpoint"""
     
-    def test_get_categories_returns_5_categories(self):
-        """GET /api/categories should return 5 categories"""
+    def test_get_categories_returns_9_categories(self):
+        """GET /api/categories should return 9 categories"""
         response = requests.get(f"{API_BASE}/categories")
         assert response.status_code == 200, f"Expected 200, got {response.status_code}"
-        
+
         categories = response.json()
         assert isinstance(categories, list), "Categories should be a list"
-        assert len(categories) == 5, f"Expected 5 categories, got {len(categories)}"
-        
+        assert len(categories) == 9, f"Expected 9 categories, got {len(categories)}"
+
         # Verify category structure
         for cat in categories:
             assert "name" in cat, "Category should have 'name' field"
             assert "count" in cat, "Category should have 'count' field"
             assert isinstance(cat["count"], int), "Count should be an integer"
-        
+
         category_names = [c["name"] for c in categories]
-        expected_categories = ["Traffic Signs", "Road Rules", "Right of Way", "Speed Limits", "Safety"]
+        expected_categories = [
+            "Traffic Signs", "Road Rules", "Right of Way", "Speed Limits", "Safety",
+            "Driving Conditions", "Road Conditions", "Situations", "Traffic Rules",
+        ]
         assert set(category_names) == set(expected_categories), f"Expected categories {expected_categories}, got {category_names}"
         
         print(f"✓ Categories: {categories}")
@@ -66,13 +69,14 @@ class TestQuestions:
         # Verify question structure
         for q in questions:
             assert "id" in q, "Question should have 'id'"
-            assert "question_text_no" in q, "Question should have Norwegian text"
-            assert "question_text_th" in q, "Question should have Thai text"
-            assert "question_text_en" in q, "Question should have English text"
-            assert "correct_answer" in q, "Question should have correct_answer"
+            assert "question" in q, "Question should have a 'question' object"
+            assert "no" in q["question"], "Question should have Norwegian text"
+            assert "th" in q["question"], "Question should have Thai text"
+            assert "en" in q["question"], "Question should have English text"
+            assert "correctOptionId" in q, "Question should have correctOptionId"
             assert "category" in q, "Question should have category"
-            assert q["correct_answer"] in ["A", "B", "C", "D"], "Correct answer should be A, B, C, or D"
-        
+            assert q["correctOptionId"] in ["A", "B", "C", "D"], "correctOptionId should be A, B, C, or D"
+
         print(f"✓ Retrieved {len(questions)} random questions")
     
     def test_get_random_questions_with_category(self):
@@ -199,9 +203,9 @@ class TestBookmarks:
         # Verify question structure
         for q in questions:
             assert "id" in q
-            assert "question_text_no" in q
-            assert "correct_answer" in q
-        
+            assert "question" in q and "no" in q["question"]
+            assert "correctOptionId" in q
+
         print(f"✓ Retrieved {len(questions)} bookmarked questions")
 
 
