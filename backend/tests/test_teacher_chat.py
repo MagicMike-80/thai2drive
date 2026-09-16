@@ -3,6 +3,7 @@ import os
 import sys
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
 from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -194,6 +195,61 @@ class TestTeacherChatConsolidatedResolver(unittest.TestCase):
         self.assertIn("📏 Stoppelengde", res.suggestions)
         # Verify formula in reply
         self.assertIn("(Fart ÷ 10) × 3", res.reply)
+
+    def _chat_with_mock_model(self, request, model_reply):
+        captured = {}
+
+        async def complete(messages):
+            captured["messages"] = messages
+            return SimpleNamespace(choices=[SimpleNamespace(message=SimpleNamespace(content=model_reply))])
+
+        with patch.object(tc, "LLM_KEY", "test-key"), patch.object(
+            tc, "_completion_with_fallback", new=complete
+        ):
+            response = asyncio.run(teacher_chat(request))
+        return response, captured["messages"][0]["content"]
+
+    def test_quiz_coach_uses_wrong_answer_context_and_keeps_explanation(self):
+        request = TeacherChatRequest(
+            message=(
+                "Hvorfor var svaret mitt feil? <quiz_context>"
+                "Question: Vikeplikt i kryss; Student answer: Kjør først; "
+                "Correct answer: Vikeplikt; Topic: § 7"
+                "</quiz_context>"
+            ),
+            language="no", mode="quiz_coach",
+        )
+        model_reply = (
+            "Det er lett å tro at du kan kjøre først. Valget gjelder ikke fordi bilen "
+            "fra høyre har forkjørsrett her. § 7 sier at du må vike. "
+            "Hvem ville du sluppet fram i dette krysset?"
+        )
+        response, prompt = self._chat_with_mock_model(request, model_reply)
+        self.assertIn("Student answer: Kjør først", prompt)
+        self.assertIn("Correct answer: Vikeplikt", prompt)
+        self.assertIn("why that choice does not apply", prompt)
+        self.assertIn("at most one targeted", prompt)
+        self.assertEqual(response.reply, model_reply)
+        self.assertNotIn("FINAL OUTPUT CONTRACT", prompt)
+
+    def test_simplify_uses_simple_junction_example_and_keeps_follow_up(self):
+        request = TeacherChatRequest(message="Forklar vikeplikt enklere", language="th", mode="simplify")
+        model_reply = "ที่ทางแยกในนอร์เวย์ ให้ดูรถทางขวา. คุณควรหยุดให้รถคันไหนไปก่อน?"
+        response, prompt = self._chat_with_mock_model(request, model_reply)
+        self.assertIn("seven-year-old rule", prompt)
+        self.assertIn("Norwegian road junction", prompt)
+        self.assertIn("only in Thai", prompt)
+        self.assertEqual(response.reply, model_reply)
+        self.assertNotIn("FINAL OUTPUT CONTRACT", prompt)
+
+    def test_quiz_coach_without_answer_details_does_not_assume_wrong_answer(self):
+        request = TeacherChatRequest(message="Can you help with this question?", language="en", mode="quiz_coach")
+        model_reply = "Which answer did you choose, and what was the correct answer?"
+        response, prompt = self._chat_with_mock_model(request, model_reply)
+        self.assertIn("only in English", prompt)
+        self.assertIn("If the answer details are missing", prompt)
+        self.assertIn("(none supplied)", prompt)
+        self.assertEqual(response.reply, model_reply)
 
 
 if __name__ == "__main__":
