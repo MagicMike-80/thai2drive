@@ -66,16 +66,19 @@ pytest -v
 
 ## 🎯 NÅVÆRENDE STATE (Live tracking)
 
-**Last oppdatert:** 2026-09-12 15:15 UTC
+**Last oppdatert:** 2026-09-16 12:45 UTC
 
 ### Branch Status
 
 | Branch | Eier | Status | Deadline | Task |
 |--------|------|--------|----------|------|
 | `feat/exam-ui-clean` | **Codex** | ✅ Merged to main (commit `9e34f10`) | 2026-09-13 17:00 | Task 1 |
-| `feat/admin-media-backend` | **Anti** | 🔴 Not Started | 2026-09-13 17:00 | Task 2 |
-| `fix/michael-media-streaming` | **Anti** | 🔴 Blocked | 2026-09-13 17:00 | Task 3 |
-| `feat/glossary-clean` | **Claude Code** | 🟡 Implemented, offline tests green, committed locally, NOT pushed | — | Task 4 (Ordre 4 — Fagordkortet + chat widget language fix) |
+| `feat/admin-media-backend` | **Anti** | 🔴 Not Started (unverified — not touched this session) | 2026-09-13 17:00 | Task 2 |
+| `fix/michael-media-streaming` | **Anti** | 🔴 Blocked (unverified — not touched this session) | 2026-09-13 17:00 | Task 3 |
+| `feat/glossary-clean` | **Claude Code** | ✅ Merged to main (commit `0b5e398`) and live in prod | — | Task 4 (Ordre 4 — Fagordkortet + chat widget language fix) |
+| `codex/stopplengde-web` | **Codex** | ✅ Merged to main (commit `1fe5688`, `--no-ff`) and live in prod | — | Task 5 (Stopplengde-kalkulator v0.2.0.0) |
+
+**Merkelig:** Tasks 2 og 3 sin status er ikke verifisert i denne sesjonen — ingen har rapportert fremdrift her, så de står som sist kjent. Ikke anta at hele veikartet er ferdig; kun Task 1, 4 og 5 er bekreftet live i produksjon per 2026-09-16.
 
 ---
 
@@ -257,7 +260,7 @@ pytest tests/integration/test_michael_media.py -v
 
 ## 📌 TASK 4: FAGORDKORTET ("📖 ดูคำศัพท์นอร์เวย์") — ORDRE 4
 
-**Status:** 🟡 Implemented + offline tests green — committed locally to `feat/glossary-clean`, NOT pushed
+**Status:** ✅ Merged to `main` (commit `0b5e398`) and pushed to `origin/main` — live in production
 **Branch:** `feat/glossary-clean` (branched from `main` @ `9e34f10`)
 **Owner:** Claude Code (this session)
 **Plan:** [`ordre-4-se-norsk-fagord-implementering.md`](ordre-4-se-norsk-fagord-implementering.md)
@@ -306,12 +309,13 @@ cd backend && ../.venv/Scripts/pytest.exe tests/test_quiz_terms.py -v
 8 passed, 0 failed, 0 nettverk, 0 prod.
 
 ### ⚠️ IKKE GJORT — krever eksplisitt eiervalg før det skjer:
-1. **`seed_glossary.py` er IKKE kjørt mot prod.** Migreringskoden er skrevet og
-   idempotent, men å faktisk kjøre `python scripts/seed_glossary.py` mot
-   produksjons-MongoDB er en bevisst, separat handling — se planens §1.3-1.4
-   for verifiseringsstegene i Atlas.
-2. **Ingenting er committet.** Endringene ligger uncommitted på `main`. Ikke
-   `git add -A` blindt — se advarselen under.
+1. **`seed_glossary.py` er fortsatt IKKE bekreftet kjørt mot prod** (uendret
+   siden forrige oppdatering — ingen har rapportert at dette migreringssteget
+   er utført). Migreringskoden er skrevet og idempotent, men å faktisk kjøre
+   `python scripts/seed_glossary.py` mot produksjons-MongoDB er en bevisst,
+   separat handling — se planens §1.3-1.4 for verifiseringsstegene i Atlas.
+2. ~~Ingenting er committet.~~ Oppdatert 2026-09-16: koden er nå merget til
+   `main` (commit `0b5e398`) og pushet til `origin/main` — live i produksjon.
 3. **`GET /api/quiz/terms` er ikke E2E-testet mot en ekte server/DB** — kun
    offline enhetstester av matching/filter-logikken.
 
@@ -325,6 +329,48 @@ det. **Ikke kjør `git add -A` eller commit uten å lese gjennom hele diffen
 først** — den inneholder sannsynligvis en annen agents uferdige arbeid i
 tillegg til Task 4 sine 4 filer (`seed_glossary.py`, `quiz_terms.py`
 [ny], `server.py`, `webapp.py`, `tests/test_quiz_terms.py` [ny]).
+
+---
+
+## 📌 TASK 5: STOPPLENGDE-KALKULATOR v0.2.0.0 + REVENUECAT PRODUKSJONSHYGIENE
+
+**Status:** ✅ Merged to `main` (commit `1fe5688`, `--no-ff`) and pushed — live in production
+**Branches:** `codex/stopplengde-web` (feature) + billing/test work landed directly on `main`
+**Owner:** Codex (feature) / Claude Code as Anti (billing hardening, test fixes, deploy)
+
+### Hva som er gjort:
+```
+✓ Stopplengdevisualisering (Codex, commits 1afecef + 8c2114a):
+  egen bred side via /api/web?tool=stopping-distance, hjemknapp under
+  teoriprøven, rød/sølvgrå Tesla-visuals, fart/føre/reaksjon/brems/total-
+  regnetrinn og 2/3-sekunders følgeavstand. backend/stopping_distance_web.py
+  (ny), backend/tests/test_stopping_distance_web.py (ny), assets, docs.
+✓ backend/billing.py — fjernet hardkodet RevenueCat sandkasse-testnøkkel
+  ("goog_sandbox_testkey_123456"). REVENUECAT_API_KEY leses nå UTELUKKENDE
+  fra miljøvariabel; sandkasse-fallback-oppførsel er identisk når nøkkelen
+  mangler, bare uten hardkodet streng i kildekoden. (commit fd1683e)
+✓ backend/tests/test_billing.py (ny, 7 tester, offline/mocket httpx) —
+  dekker env-var-lesing, vellykket/mislykket RevenueCat-respons, dokumentert
+  fail-soft-vei ved nettverksfeil, og fravær av hardkodet nøkkel-lekkasje.
+✓ backend/tests/test_thai2drive_api.py oppdatert til gjeldende live-skjema
+  (commit 5619973): 9 kategorier (ikke 5), question_text_no/th/en →
+  question{no,th,en}, correct_answer → correctOptionId.
+```
+
+### Live-verifisering (2026-09-16):
+```
+https://thai2drive.no                          → 200 OK (~0.4s)
+https://thai2drive.no/service-worker.js        → 200 OK
+https://thai2drive.no/api/web?tool=stopping-distance → 200 OK
+pytest backend/tests/ (full suite, på main)    → 143 passed, 0 failed
+```
+
+### ⚠️ Ikke glemt, bare ikke gjort her:
+- Fail-soft-oppførselen i `billing.py` (gir `premium: true` til ALLE brukere
+  hvis RevenueCat-kallet feiler av noen grunn) er dokumentert og bevisst
+  design — IKKE endret. Vurder om dette fortsatt er ønsket policy.
+- `context/FEATURES.md` skal IKKE committes til git (se regel i CLAUDE.md og
+  filens egen header) — oppdater den lokalt i arbeidskatalogen, ikke via git.
 
 ---
 
@@ -384,6 +430,6 @@ En task er **FERDIG** når:
 
 ---
 
-**Last updated:** 2026-09-12 15:15 UTC  
-**Updated by:** @copilot  
+**Last updated:** 2026-09-16 12:45 UTC  
+**Updated by:** Claude Code (as Anti)  
 **Next review:** After each agent rotation
