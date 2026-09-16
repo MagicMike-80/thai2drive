@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator, Animated, Image, Alert, Platform, useWindowDimensions } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, ActivityIndicator, Animated, Image, Alert, Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
@@ -20,15 +20,12 @@ const TR: Record<string, Record<string, string>> = {
 
 export default function HomeScreen() {
   const router = useRouter();
-  const { language, deviceId, setProgress, progress, colors, isPremium, isAuthenticated, freeRemaining, streak, updateStreak, setShowTrafficPanel } = useAppStore();
+  const { language, deviceId, setProgress, progress, colors, isPremium, isAuthenticated, freeRemaining, streak, updateStreak } = useAppStore();
   const [loading, setLoading] = useState(true);
   const [dailyDone, setDailyDone] = useState(false);
-  const { width: winWidth } = useWindowDimensions();
   const t = TR[language] || {};
   const c = colors;
   const isDark = c.bg === '#0F172A' || c.bg === '#0B1222';
-  // Desktop web = wide viewport inside browser (breaks out of 390px phone frame)
-  const isDesktopWeb = Platform.OS === 'web' && winWidth > 700;
   const remaining = freeRemaining();
   const locked = !isPremium && remaining <= 0;
 
@@ -246,10 +243,7 @@ export default function HomeScreen() {
           {/* Trafikk-matte */}
           <TouchableOpacity
             testID="traffic-math-btn"
-            onPress={() => {
-              if (isDesktopWeb) setShowTrafficPanel(true);
-              else router.push('/traffic-math');
-            }}
+            onPress={() => router.push('/traffic-math')}
             activeOpacity={0.7}
             style={[st.hsmCard, { backgroundColor: 'rgba(5,14,38,0.88)', borderColor: 'rgba(0,82,255,0.2)' }]}
           >

@@ -123,10 +123,11 @@ interface VizProps {
   isDark:      boolean;
   lang:        Lang;
   t:           Record<string, string>;
+  large?:      boolean;
 }
 
-const StoppingDistanceViz = memo(function StoppingDistanceViz({
-  result, accentColor, textColor, textMuted, textSec, isDark, lang, t,
+export const StoppingDistanceViz = memo(function StoppingDistanceViz({
+  result, accentColor, textColor, textMuted, textSec, isDark, lang, t, large = false,
 }: VizProps) {
   if (!result) {
     return (
@@ -153,43 +154,43 @@ const StoppingDistanceViz = memo(function StoppingDistanceViz({
     <View style={viz.wrap}>
 
       {/* ── Big speed pill ── */}
-      <View style={[viz.speedPill, { borderColor: `${accentColor}50`, backgroundColor: isDark ? `${accentColor}14` : `${accentColor}0D` }]}>
-        <Text style={[viz.speedNum, { color: accentColor }]}>{result.input.speed_kmh}</Text>
-        <Text style={[viz.speedUnit, { color: textMuted }]}>km/h</Text>
+      <View style={[viz.speedPill, large && viz.speedPillLarge, { borderColor: `${accentColor}50`, backgroundColor: isDark ? `${accentColor}14` : `${accentColor}0D` }]}>
+        <Text style={[viz.speedNum, large && viz.speedNumLarge, { color: accentColor }]}>{result.input.speed_kmh}</Text>
+        <Text style={[viz.speedUnit, large && viz.speedUnitLarge, { color: textMuted }]}>km/h</Text>
       </View>
 
       {/* ── Road diagram ── */}
-      <View style={viz.roadWrap}>
+      <View style={[viz.roadWrap, large && viz.roadWrapLarge]}>
         {/* Road surface */}
-        <View style={[viz.road, { backgroundColor: isDark ? '#1E293B' : '#374151' }]}>
+        <View style={[viz.road, large && viz.roadLarge, { backgroundColor: isDark ? '#1E293B' : '#374151' }]}>
           {/* Dashes */}
           {[...Array(7)].map((_, i) => (
             <View
               key={i}
-              style={[viz.dash, { backgroundColor: isDark ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.25)' }]}
+              style={[viz.dash, large && viz.dashLarge, { backgroundColor: isDark ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.25)' }]}
             />
           ))}
         </View>
 
         {/* Distance bars — sit on top of the road via absolute positioning */}
-        <View style={viz.bars}>
+        <View style={[viz.bars, large && viz.barsLarge]}>
           {/* Reaction bar */}
           <View style={[viz.bar, { flex: reactionFrac, backgroundColor: '#F59E0B', opacity: 0.88 }]}>
-            <Text style={viz.barLabel}>{reaction}m</Text>
+            <Text style={[viz.barLabel, large && viz.barLabelLarge]}>{t.reaction} · {reaction} m</Text>
           </View>
           {/* Braking bar */}
           <View style={[viz.bar, { flex: brakingFrac, backgroundColor: '#EF4444', opacity: 0.88 }]}>
-            <Text style={viz.barLabel}>{braking}m</Text>
+            <Text style={[viz.barLabel, large && viz.barLabelLarge]}>{t.braking} · {braking} m</Text>
           </View>
         </View>
 
         {/* Car icon — left edge */}
-        <View style={[viz.carIcon, { backgroundColor: isDark ? '#0F172A' : '#fff', borderColor: accentColor }]}>
-          <Ionicons name="car-sport" size={20} color={accentColor} />
+        <View style={[viz.carIcon, large && viz.carIconLarge, { backgroundColor: isDark ? '#0F172A' : '#fff', borderColor: accentColor }]}>
+          <Ionicons name="car-sport" size={large ? 34 : 20} color={accentColor} />
         </View>
         {/* Stop icon — right edge */}
-        <View style={[viz.stopIcon, { backgroundColor: '#EF4444' }]}>
-          <Ionicons name="hand-left" size={16} color="#fff" />
+        <View style={[viz.stopIcon, large && viz.stopIconLarge, { backgroundColor: '#EF4444' }]}>
+          <Ionicons name="hand-left" size={large ? 26 : 16} color="#fff" />
         </View>
       </View>
 
@@ -605,8 +606,11 @@ const viz = StyleSheet.create({
     borderRadius: 24,
     borderWidth: 1.5,
   },
+  speedPillLarge: { paddingHorizontal: 30, paddingVertical: 16 },
   speedNum: { fontSize: 64, fontWeight: '900', letterSpacing: -3, lineHeight: 68 },
+  speedNumLarge: { fontSize: 76, lineHeight: 80 },
   speedUnit: { fontSize: 22, fontWeight: '600', paddingBottom: 4 },
+  speedUnitLarge: { fontSize: 26 },
 
   // Road diagram
   roadWrap: {
@@ -615,6 +619,7 @@ const viz = StyleSheet.create({
     overflow: 'hidden',
     position: 'relative',
   },
+  roadWrapLarge: { height: 176, borderRadius: 20 },
   road: {
     flex: 1,
     height: 80,
@@ -623,11 +628,13 @@ const viz = StyleSheet.create({
     justifyContent: 'space-evenly',
     paddingHorizontal: 48,
   },
+  roadLarge: { height: 176, paddingHorizontal: 82 },
   dash: {
     width: 24,
     height: 3,
     borderRadius: 2,
   },
+  dashLarge: { width: 48, height: 5 },
 
   // Proportional distance bars — overlay on road
   bars: {
@@ -640,6 +647,7 @@ const viz = StyleSheet.create({
     borderRadius: 6,
     overflow: 'hidden',
   },
+  barsLarge: { left: 82, right: 82, top: 60, height: 56, borderRadius: 12 },
   bar: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -652,6 +660,7 @@ const viz = StyleSheet.create({
     textShadowOffset: { width: 0, height: 1 },
     textShadowRadius: 2,
   },
+  barLabelLarge: { fontSize: 14 },
 
   // Car / stop icons at road edges
   carIcon: {
@@ -665,6 +674,7 @@ const viz = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  carIconLarge: { left: 14, top: 51, width: 66, height: 66, borderRadius: 18, borderWidth: 2 },
   stopIcon: {
     position: 'absolute',
     right: 8,
@@ -675,6 +685,7 @@ const viz = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  stopIconLarge: { right: 14, top: 55, width: 58, height: 58, borderRadius: 16 },
 
   // Legend
   legend: { flexDirection: 'row', gap: 16, paddingHorizontal: 4 },
