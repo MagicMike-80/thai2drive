@@ -353,6 +353,8 @@ class MichaelCoreMediaLinkTests(unittest.TestCase):
             module.LLM_KEY = "test-key"
             request = types.SimpleNamespace(
                 session_id=None,
+                conversation_id=None,
+                mode="normal_chat",
                 message="Kan du forklare høyreregelen og vise bilde?",
                 language="no",
                 device_id=None,
