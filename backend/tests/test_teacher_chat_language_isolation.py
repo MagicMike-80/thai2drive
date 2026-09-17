@@ -10,11 +10,20 @@ Runs fully offline against fake Mongo collections — never touches the
 production BASE_URL the rest of this repo's pytest suites hit (see CLAUDE.md).
 """
 import asyncio
+import io
+import logging
+import os
+import re
 import sys
 import unittest
+from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
+from unittest.mock import patch
 
+import litellm
 import pydantic
+import pytest
+from dotenv import load_dotenv
 
 ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
@@ -26,6 +35,37 @@ if str(BACKEND_DIR) not in sys.path:
 
 import backend.teacher_chat as tc
 from backend.teacher_chat import TeacherChatRequest
+
+
+def _available_live_teacher_provider():
+    """Probe configured providers without exposing credentials or response text."""
+    load_dotenv(BACKEND_DIR / ".env", override=False)
+    providers = (
+        ("deepseek", "DEEPSEEK_API_KEY", "deepseek/deepseek-chat"),
+        ("openrouter", "OPENROUTER_API_KEY", "openrouter/deepseek/deepseek-chat"),
+    )
+    for provider, key_name, model in providers:
+        api_key = os.environ.get(key_name)
+        if not api_key:
+            continue
+        try:
+            with redirect_stdout(io.StringIO()), redirect_stderr(io.StringIO()):
+                response = asyncio.run(litellm.acompletion(
+                    model=model,
+                    api_key=api_key,
+                    messages=[{"role": "user", "content": "ตอบหนึ่งคำเป็นภาษาไทย"}],
+                    max_tokens=12,
+                    timeout=10,
+                ))
+            if (response.choices[0].message.content or "").strip():
+                return provider, api_key, model
+        except Exception:
+            continue
+    return None
+
+
+_live_teacher_provider = _available_live_teacher_provider()
+live_api_available = _live_teacher_provider is not None
 
 
 class _Cursor:
@@ -239,6 +279,55 @@ class ChatHistoryFilteredByLanguageOnDisk(unittest.TestCase):
             'prior = await _chat_col.find(\n        {"session_id": session_id}\n    )',
             source,
         )
+
+
+class LiveThaiQuizCoachIsolationTests(unittest.TestCase):
+    """Real LLM call with fake Mongo when a configured provider is available."""
+
+    @pytest.mark.skipif(not live_api_available, reason="No configured teacher LLM returned a live response")
+    def test_wrong_quiz_answer_is_explained_only_in_thai(self):
+        provider, api_key, model = _live_teacher_provider
+        real_completion = tc._completion_with_fallback
+        completed = {"ok": False, "error_type": None}
+
+        async def live_completion(messages):
+            try:
+                result = await real_completion(messages)
+            except Exception as exc:
+                completed["error_type"] = type(exc).__name__
+                raise
+            completed["ok"] = True
+            return result
+
+        request = TeacherChatRequest(
+            message=(
+                "ช่วยอธิบายว่าทำไมคำตอบนี้ผิด\n"
+                "<quiz_context>"
+                "คำถาม: ในเขตชุมชนที่ไม่มีป้ายกำหนดความเร็ว ขับได้สูงสุดเท่าไร? "
+                "คำตอบของนักเรียน: 60 กม./ชม. "
+                "คำตอบที่ถูกต้อง: 50 กม./ชม. "
+                "หัวข้อ: ความเร็วในเขตชุมชน"
+                "</quiz_context>"
+            ),
+            language="th", mode="quiz_coach",
+        )
+        previous_logging_disable = logging.root.manager.disable
+        logging.disable(logging.CRITICAL)
+        try:
+            with patch.object(tc, "_db", _Database()), patch.object(
+                tc, "_chat_col", _RecordingCollection()
+            ), patch.object(tc, "LLM_KEY", api_key), patch.object(
+                tc, "LLM_ATTEMPTS", [{"model": model, "api_key": api_key, "provider": provider}]
+            ), patch.object(tc, "_completion_with_fallback", new=live_completion):
+                response = asyncio.run(tc.teacher_chat(request))
+        finally:
+            logging.disable(previous_logging_disable)
+
+        self.assertTrue(completed["ok"], f"The LLM did not return ({completed['error_type']}); fallback is not live proof")
+        self.assertTrue(re.search(r"[\u0E00-\u0E7F]", response.reply), "Reply contains no Thai script")
+        latin_words = re.findall(r"[A-Za-zÆØÅæøå]+", response.reply)
+        self.assertEqual(latin_words, [], "Reply contains Norwegian or English letters")
+        self.assertGreater(len(response.reply.strip()), 40, "Reply is too short to verify an explanation")
 
 
 if __name__ == "__main__":
