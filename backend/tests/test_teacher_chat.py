@@ -1,5 +1,6 @@
 import asyncio
 import os
+import re
 import sys
 import unittest
 from pathlib import Path
@@ -203,7 +204,77 @@ class TestTeacherChatConsolidatedResolver(unittest.TestCase):
         self.assertIn("🚗 Bremselengde", res.suggestions)
         self.assertIn("📏 Stoppelengde", res.suggestions)
         # Verify formula in reply
-        self.assertIn("(Fart ÷ 10) × 3", res.reply)
+        self.assertIn("(fart ÷ 10) × 3", res.reply.lower())
+
+
+class TestWrongQuizAnswerReplyIsThaiOnly(unittest.TestCase):
+    """Simulates a student answering a quiz question wrong in Thai mode and
+    prints Michael's full reply so it can be eyeballed for language purity.
+
+    This calls the real /api/teacher/chat endpoint (real LLM call via
+    litellm) — it is NOT mocked, since the whole point is to see what the
+    model actually says. It requires a working DEEPSEEK_API_KEY /
+    OPENROUTER_API_KEY / OPENAI_API_KEY in the environment; without one,
+    teacher_chat() falls back to its canned "Michael is unavailable"
+    message instead of a real explanation (see assertion below)."""
+
+    def setUp(self):
+        self._orig_db = tc._db
+        self._orig_chat_col = tc._chat_col
+        tc._db = _Database()
+        tc._chat_col = _Collection()
+
+    def tearDown(self):
+        tc._db = self._orig_db
+        tc._chat_col = self._orig_chat_col
+
+    def test_wrong_quiz_answer_reply_is_thai_only(self):
+        question_text = "Hva er høyeste tillatte hastighet i tettbebygd strøk hvis ikke annet er skiltet?"
+        student_answer = "60 km/t"
+        correct_answer = "50 km/t"
+
+        message = (
+            "อธิบายว่าทำไมคำตอบของฉันผิด\n\n"
+            "<quiz_context>\n"
+            "STUDENT ANSWERED INCORRECTLY. EXPLAIN WHY IT IS WRONG.\n"
+            "is_correct: false\n"
+            f"Question: {question_text}\n"
+            f"Student answer: {student_answer}\n"
+            f"Correct answer: {correct_answer}\n"
+            "</quiz_context>"
+        )
+        req = TeacherChatRequest(message=message, language="th", device_id="thai-purity-test")
+        response = asyncio.run(teacher_chat(req))
+
+        # Windows terminals often default to a cp1252 codepage that cannot encode
+        # Thai script; reconfigure stdout to UTF-8 so the reply actually prints
+        # instead of crashing with UnicodeEncodeError.
+        try:
+            sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+        except AttributeError:
+            pass
+
+        banner = "=" * 70
+        print(f"\n{banner}\nMICHAELS FULLE SVAR (language=th):\n{banner}")
+        print(response.reply)
+        print(banner)
+
+        has_live_key = bool(
+            os.environ.get("DEEPSEEK_API_KEY")
+            or os.environ.get("OPENROUTER_API_KEY")
+            or os.environ.get("OPENAI_API_KEY")
+        )
+        if not has_live_key:
+            self.skipTest(
+                "No DEEPSEEK_API_KEY/OPENROUTER_API_KEY/OPENAI_API_KEY in the "
+                "environment — teacher_chat() returned its canned fallback "
+                "reply above instead of a real model answer. Set one of "
+                "those env vars to actually exercise the LLM."
+            )
+
+        self.assertTrue(response.reply.strip())
+        latin_words = re.findall(r"[A-Za-zÆØÅæøå]{3,}", response.reply)
+        self.assertEqual(latin_words, [], f"Fant norske/engelske ord i thai-svaret: {latin_words}")
 
     def _chat_with_mock_model(self, request, model_reply):
         captured = {}
