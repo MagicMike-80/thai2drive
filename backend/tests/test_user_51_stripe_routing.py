@@ -252,3 +252,34 @@ def test_webapp_is_premium_contract():
     assert "async function buyPremium(plan, el)" in webapp_code
     assert "'/api/create-checkout-session'" in webapp_code
     assert "window.location.href = session.url;" in webapp_code
+
+
+def test_paywall_screen_translations_no_language_bleed():
+    """Verify that all paywall UI keys have complete translations with zero language bleed."""
+    webapp_code = (BACKEND_DIR / "webapp.py").read_text(encoding="utf-8")
+
+    paywall_keys = [
+        "pw_title", "pw_sub", "pw_f1", "pw_f2", "pw_f3", "pw_f4", "pw_f5",
+        "pw_month", "pw_three_months", "pw_lifetime", "pw_per_month",
+        "pw_per_three_months", "pw_lifetime_note", "pw_best_value",
+        "pw_buy", "pw_restore_purchase", "pw_cancel_anytime", "pw_skip"
+    ]
+
+    for key in paywall_keys:
+        match = re.search(rf"\b{key}\s*:\s*\{{([^}}]+)\}}", webapp_code)
+        assert match is not None, f"Paywall translation key {key} not found in webapp.py"
+        block = match.group(1)
+
+        th_match = re.search(r"th\s*:\s*['\"]([^'\"]+)['\"]", block)
+        no_match = re.search(r"no\s*:\s*['\"]([^'\"]+)['\"]", block)
+        en_match = re.search(r"en\s*:\s*['\"]([^'\"]+)['\"]", block)
+
+        assert th_match and th_match.group(1).strip(), f"Missing Thai translation for {key}"
+        assert no_match and no_match.group(1).strip(), f"Missing Norwegian translation for {key}"
+        assert en_match and en_match.group(1).strip(), f"Missing English translation for {key}"
+
+        th_text = th_match.group(1)
+        # Brand names allowed: Premium
+        th_sanitized = th_text.replace("Premium", "").replace("NOK", "")
+        latin_words_in_th = re.findall(r"[A-Za-zÆØÅæøå]{2,}", th_sanitized)
+        assert latin_words_in_th == [], f"Language bleed in {key} (Thai): {latin_words_in_th}"
