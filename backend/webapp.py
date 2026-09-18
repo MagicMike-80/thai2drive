@@ -11496,8 +11496,9 @@ if ('serviceWorker' in navigator) {
 
 @webapp_router.get("/web", response_class=HTMLResponse)
 async def web_app():
-    from stopping_distance_web import install
-    html = install(WEBAPP_HTML).replace('__DEPLOY_VERSION__', DEPLOY_VERSION)
+    from stopping_distance_web import install as install_stopping_distance
+    from studybook_web import install as install_studybook
+    html = install_studybook(install_stopping_distance(WEBAPP_HTML)).replace('__DEPLOY_VERSION__', DEPLOY_VERSION)
     return HTMLResponse(content=html)
 
 @webapp_router.get("/web/version")
