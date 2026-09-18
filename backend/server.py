@@ -5872,6 +5872,13 @@ app.include_router(support_chat_router, prefix="/api")
 from teacher_chat import teacher_router  # noqa: E402
 app.include_router(teacher_router, prefix="/api")
 
+# ==================== STUDENT DOCUMENT UPLOAD ====================
+try:
+    from document_routes import document_router  # noqa: E402
+except ImportError:
+    from backend.document_routes import document_router  # noqa: E402
+app.include_router(document_router, prefix="/api")
+
 # ==================== AI LEARNING ENGINE ====================
 from ai_routes import ai_router  # noqa: E402
 app.include_router(ai_router, prefix="/api")
