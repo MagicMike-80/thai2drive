@@ -257,6 +257,27 @@ _SECTION_7_2_PROMPT = {
     ),
 }
 
+_YIELD_VS_STOP_PROMPT = {
+    "no": (
+        "VIKEPLIKTSSKILT 202 MOT STOPPSKILT 204 — ABSOLUTT FAGLIG SKILLE:\n"
+        "Vikeplikt betyr å tilpasse farten i god tid og ikke hindre eller forstyrre trafikken du skal vike for. "
+        "Skilt 202 betyr IKKE obligatorisk stopp. Du skal bare stoppe når det er nødvendig for å overholde vikeplikten. "
+        "Skilt 204 er annerledes: Ved stoppskilt skal du alltid stoppe helt før du kjører videre.\n\n"
+    ),
+    "th": (
+        "ป้ายให้ทาง 202 กับป้ายหยุด 204 — ต้องแยกกฎให้ชัดเจน:\n"
+        "การให้ทางหมายถึงลดและปรับความเร็วล่วงหน้า และต้องไม่กีดขวางหรือรบกวนรถที่มีสิทธิ์ไปก่อน "
+        "ป้าย 202 ไม่ได้บังคับให้หยุดทุกครั้ง ให้หยุดเฉพาะเมื่อจำเป็นเพื่อให้ทางอย่างถูกต้อง "
+        "ป้าย 204 ต่างกัน: เมื่อเจอป้ายหยุดต้องหยุดรถให้สนิททุกครั้งก่อนขับต่อครับ\n\n"
+    ),
+    "en": (
+        "GIVE WAY SIGN 202 VERSUS STOP SIGN 204 — ABSOLUTE RULE DISTINCTION:\n"
+        "Giving way means adjusting speed early and neither obstructing nor disturbing the traffic you must yield to. "
+        "Sign 202 does NOT require a stop every time. Stop only when necessary to comply with the duty to give way. "
+        "Sign 204 is different: At a stop sign, you must always come to a complete stop before proceeding.\n\n"
+    ),
+}
+
 # GOOD example — language-specific so the model patterns on the declared language's prose style
 _GOOD_EXAMPLE = {
     "no": '''"Ok 😊
@@ -953,6 +974,7 @@ def _build_system_prompt(lang: str) -> str:
     return (
         _LANG_CRITICAL[l]
         + _SECTION_7_2_PROMPT[l]
+        + _YIELD_VS_STOP_PROMPT[l]
         + core
         .replace("<<GOOD_EXAMPLE>>", _GOOD_EXAMPLE[l])
         .replace("<<COACHING>>", _COACHING[l])
@@ -2810,6 +2832,7 @@ class TeacherChatRequest(BaseModel):
 class TeacherChatResponse(BaseModel):
     session_id: str
     conversation_id: str
+    mode: str | None = None
     reply: str
     suggestions: list = []
     sign_ids: list[str] = Field(default_factory=list)
@@ -2882,7 +2905,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             sug_list = _strict_lang_map(suggestions, lang) or []
             await _chat_col.insert_one({"session_id": session_id, "role": "user", "content": user_msg, "language": lang, "ts": datetime.now(timezone.utc)})
             await _chat_col.insert_one({"session_id": session_id, "role": "assistant", "content": reply_text, "language": lang, "ts": datetime.now(timezone.utc)})
-            return TeacherChatResponse(session_id=session_id, conversation_id=conversation_id, reply=reply_text, suggestions=sug_list)
+            return TeacherChatResponse(session_id=session_id, conversation_id=conversation_id, mode=req.mode, reply=reply_text, suggestions=sug_list)
         else:
             open_replies = {
                 "no": "Hei! Hva vil du at vi skal øve på i dag? Spør meg om hva som helst innen trafikk, så forklarer jeg det enkelt! 🚗",
@@ -2898,7 +2921,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             sug_list = _strict_lang_map(open_suggestions, lang) or []
             await _chat_col.insert_one({"session_id": session_id, "role": "user", "content": user_msg, "language": lang, "ts": datetime.now(timezone.utc)})
             await _chat_col.insert_one({"session_id": session_id, "role": "assistant", "content": reply_text, "language": lang, "ts": datetime.now(timezone.utc)})
-            return TeacherChatResponse(session_id=session_id, conversation_id=conversation_id, reply=reply_text, suggestions=sug_list)
+            return TeacherChatResponse(session_id=session_id, conversation_id=conversation_id, mode=req.mode, reply=reply_text, suggestions=sug_list)
 
     # Load prior conversation (last 20 messages in this session, same language only —
     # a language switch must not replay the old language's turns into the new prompt).
@@ -3188,6 +3211,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
     return TeacherChatResponse(
         session_id=session_id,
         conversation_id=conversation_id,
+        mode=req.mode,
         reply=reply_text,
         suggestions=suggestions,
         sign_ids=sign_ids,

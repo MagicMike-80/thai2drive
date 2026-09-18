@@ -340,8 +340,19 @@ class TestWrongQuizAnswerReplyIsThaiOnly(unittest.TestCase):
         self.assertIn("Correct answer: Vikeplikt", prompt)
         self.assertIn("why that choice does not apply", prompt)
         self.assertIn("at most one targeted", prompt)
+        self.assertEqual(response.mode, "quiz_coach")
         self.assertEqual(response.reply, model_reply)
         self.assertNotIn("FINAL OUTPUT CONTRACT", prompt)
+
+    def test_system_prompt_distinguishes_yield_sign_from_stop_sign(self):
+        prompts = {lang: tc._build_system_prompt(lang) for lang in ("no", "th", "en")}
+
+        self.assertIn("Skilt 202 betyr IKKE obligatorisk stopp", prompts["no"])
+        self.assertIn("Skilt 204 er annerledes", prompts["no"])
+        self.assertIn("ป้าย 202 ไม่ได้บังคับให้หยุดทุกครั้ง", prompts["th"])
+        self.assertIn("ป้ายหยุดต้องหยุดรถให้สนิททุกครั้ง", prompts["th"])
+        self.assertIn("Sign 202 does NOT require a stop every time", prompts["en"])
+        self.assertIn("must always come to a complete stop", prompts["en"])
 
     def test_simplify_uses_simple_junction_example_and_keeps_follow_up(self):
         request = TeacherChatRequest(message="Forklar vikeplikt enklere", language="th", mode="simplify")
