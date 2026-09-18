@@ -39,6 +39,10 @@ try:
     from media_storage import MediaUploadError, prepare_media_upload
 except ImportError:  # package-style imports used by isolated tests
     from backend.media_storage import MediaUploadError, prepare_media_upload
+try:
+    from exam_logic import evaluate_exam_attempt, EXAM_TOTAL_QUESTIONS, EXAM_MAX_ERRORS, EXAM_PASS_THRESHOLD
+except ImportError:  # package-style imports used by isolated tests
+    from backend.exam_logic import evaluate_exam_attempt, EXAM_TOTAL_QUESTIONS, EXAM_MAX_ERRORS, EXAM_PASS_THRESHOLD
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -2225,6 +2229,28 @@ async def save_quiz_attempt(
         doc["completed_at"] = datetime.now(timezone.utc).isoformat()
     if current_user and current_user.get("id"):
         doc["user_id"] = current_user["id"]
+
+    # Official exam rule enforcement (Statens vegvesen standard: 45 questions, <= 7 errors)
+    if doc.get("mode") == "exam":
+        duration = None
+        if "started_at" in doc and "completed_at" in doc:
+            try:
+                t0 = datetime.fromisoformat(str(doc["started_at"]).replace("Z", "+00:00"))
+                t1 = datetime.fromisoformat(str(doc["completed_at"]).replace("Z", "+00:00"))
+                duration = int((t1 - t0).total_seconds())
+            except Exception:
+                pass
+        exam_eval = evaluate_exam_attempt(
+            total_questions=doc.get("total_questions", EXAM_TOTAL_QUESTIONS),
+            correct_answers=doc.get("correct_answers", 0),
+            duration_seconds=duration,
+        )
+        doc["passed"] = exam_eval["passed"]
+        doc["score_percentage"] = exam_eval["score_percentage"]
+        if duration is not None:
+            doc["duration_seconds"] = duration
+            doc["timed_out"] = exam_eval["timed_out"]
+
     await db.quiz_attempts.insert_one(doc)
     doc.pop("_id", None)
 

@@ -2669,12 +2669,37 @@ a { color:inherit; text-decoration:none; }
   border-left:3px solid rgba(255,153,51,.40);
   border-radius:0 10px 10px 0;
   margin-bottom:24px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
 }
 .end-focus-label {
   font-size:.60rem; font-weight:900; text-transform:uppercase;
   letter-spacing:1px; color:var(--orange); margin-bottom:5px;
 }
 .end-focus-topic { font-size:.86rem; color:var(--text); font-weight:700; }
+.end-focus-btn {
+  background:rgba(0,245,255,0.12);
+  border:1px solid #00F5FF;
+  color:#00F5FF;
+  padding:8px 14px;
+  border-radius:10px;
+  font-weight:700;
+  font-size:.82rem;
+  cursor:pointer;
+  white-space:nowrap;
+  transition:all .15s ease;
+}
+.end-focus-btn:hover {
+  background:rgba(0,245,255,0.22);
+  box-shadow:0 0 12px rgba(0,245,255,0.35);
+}
+.end-btn-coach {
+  background:linear-gradient(135deg, #00F5FF 0%, #0088ff 100%);
+  color:#0B1226;
+  box-shadow:0 0 16px rgba(0,245,255,0.35);
+}
 .end-btns  { display:flex; flex-direction:column; gap:9px; }
 .end-btn-pri {
   padding:13px;
@@ -4466,13 +4491,15 @@ a { color:inherit; text-decoration:none; }
         <div class="end-heading" id="endHeading" data-key="result_done">Øvelsen er ferdig.</div>
         <p class="end-body" id="endBody"></p>
         <div class="end-focus" id="endFocus" style="display:none">
-          <div>
+          <div style="flex:1;">
             <div class="end-focus-label" data-key="result_focus">Anbefalt øvelse</div>
             <div class="end-focus-topic" id="endFocusTopic"></div>
           </div>
+          <button class="end-focus-btn" id="endFocusCoachBtn" onclick="consultMichaelFromExam()" data-key="result_coach_topic">Øv med Michael</button>
         </div>
         <div class="end-btns">
-          <button class="end-btn-pri" onclick="retryQuiz()" data-key="result_retry">Prøv igjen</button>
+          <button class="end-btn-pri end-btn-coach" id="endCoachMichaelPriBtn" onclick="consultMichaelFromExam()" data-key="result_michael_coach" style="display:none;">💬 Gå gjennom med Michael AI</button>
+          <button class="end-btn-pri" id="endRetryBtn" onclick="retryQuiz()" data-key="result_retry">Prøv igjen</button>
           <button class="end-btn-sec" onclick="showTab('teacher')" data-key="result_michael">Gå til Michael</button>
           <button class="end-btn-sec" onclick="showTab('home')" data-key="home">Hjem</button>
           <button class="end-btn-sec" onclick="showTab('cats')" data-key="pickcat">Velg kategori</button>
@@ -4983,6 +5010,8 @@ var UI = {
   result_done:{th:'ทำแบบฝึกเสร็จแล้ว',       no:'Øvelsen er ferdig.', en:'Practice finished.'},
   result_retry:{th:'ลองอีกครั้ง',             no:'Prøv igjen',        en:'Try again'},
   result_michael:{th:'ไปหา Michael เพื่อทบทวนข้อผิดพลาด', no:'Gå til Michael for feilretting', en:'Go to Michael to review mistakes'},
+  result_coach_topic:{th:'ฝึกกับไมเคิล', no:'Øv med Michael', en:'Practice with Michael'},
+  result_michael_coach:{th:'💬 วิเคราะห์ข้อผิดพลาดกับไมเคิล AI', no:'💬 Gå gjennom med Michael AI', en:'💬 Review mistakes with Michael AI'},
   result_exam_pass_head:{th:'ผ่าน',          no:'Bestått.',         en:'Passed.'},
   result_exam_pass_body:{th:'คุณพร้อมสำหรับการสอบทฤษฎีแล้ว ลองทำอีกหนึ่งรอบเพื่อเพิ่มความมั่นใจ', no:'Du er klar for teoriprøven. Gjennomfør gjerne enda en runde for å bygge selvtillit.', en:'You are ready for the theory test. Do one more round to build confidence.'},
   result_exam_fail_head:{th:'ครั้งนี้ยังไม่ผ่าน', no:'Ikke bestått denne gangen.', en:'Not passed this time.'},
@@ -9314,6 +9343,10 @@ function showEnd() {
     } else if (focusEl) {
       focusEl.style.display = 'none';
     }
+    var coachPriBtn = document.getElementById('endCoachMichaelPriBtn');
+    if (coachPriBtn) {
+      coachPriBtn.style.display = isExamMode ? 'inline-flex' : 'none';
+    }
   } catch(displayErr) { console.warn('showEnd display error:', displayErr); }
 
   // ── Save attempt — always runs, even if display above failed ──
@@ -9368,8 +9401,86 @@ function showEnd() {
   }
 }
 
+function consultMichaelFromExam() {
+  var total = (questions && questions.length) ? questions.length : 45;
+  var score = qScore || 0;
+  var errors = Math.max(0, total - score);
+  var passed = isExamMode ? (errors <= 7) : (score / total >= 0.85);
+
+  var topTopic = null, topCount = 0;
+  Object.keys(_topicErrors || {}).forEach(function(lbl) {
+    if (_topicErrors[lbl] > topCount) { topCount = _topicErrors[lbl]; topTopic = lbl; }
+  });
+  var topicTxt = topTopic ? topicLabel(topTopic) : '';
+
+  var prompt = '', display = '';
+
+  if (appLang === 'th') {
+    if (passed) {
+      if (topicTxt) {
+        display = 'ฉันสอบจำลองผ่านแล้ว (' + score + '/' + total + ') แต่ยังมีข้อสงสัยในหัวข้อ ' + topicTxt + ' ช่วยแนะนำหน่อยครับ';
+        prompt = 'ฉันเพิ่งทำข้อสอบจำลองผ่านได้คะแนน ' + score + ' จาก ' + total + ' ข้อ แต่ยังมีข้อผิดพลาดในหัวข้อ ' + topicTxt + ' ช่วยอธิบายหลักการและแนะนำวิธีจำหน่อย';
+      } else {
+        display = 'ฉันสอบจำลองผ่านแล้ว (' + score + '/' + total + ')! มีคำแนะนำเพิ่มเติมก่อนสอบจริงไหมครับ';
+        prompt = 'ฉันเพิ่งทำข้อสอบจำลองผ่านได้คะแนน ' + score + ' จาก ' + total + ' ข้อ ช่วยให้คำแนะนำสำคัญก่อนไปสอบจริงที่ Statens vegvesen หน่อย';
+      }
+    } else {
+      if (topicTxt) {
+        display = 'ฉันสอบจำลองยังไม่ผ่าน (' + score + '/' + total + ') และผิดบ่อยในหัวข้อ ' + topicTxt + ' ช่วยสอนหน่อยครับ';
+        prompt = 'ฉันเพิ่งทำข้อสอบจำลองได้คะแนน ' + score + ' จาก ' + total + ' ข้อ (ยังไม่ผ่าน) และพบว่าทำผิดบ่อยที่สุดในหมวด ' + topicTxt + ' ช่วยอธิบายหลักการจำง่าย ๆ และตั้งคำถามฝึกปฏิบัติให้ฉันลองตอบหน่อย';
+      } else {
+        display = 'ฉันสอบจำลองยังไม่ผ่าน (' + score + '/' + total + ') ควรเริ่มฝึกจากตรงไหนดีครับ';
+        prompt = 'ฉันเพิ่งทำข้อสอบจำลองได้คะแนน ' + score + ' จาก ' + total + ' ข้อ ซึ่งยังไม่ผ่านเกณฑ์ ช่วยวิเคราะห์และแนะนำวิธีฝึกฝนเพื่อเตรียมสอบรอบถัดไปหน่อย';
+      }
+    }
+  } else if (appLang === 'en') {
+    if (passed) {
+      if (topicTxt) {
+        display = 'I passed the mock exam (' + score + '/' + total + '), but need advice on ' + topicTxt + '.';
+        prompt = 'I just passed the exam simulation with a score of ' + score + '/' + total + '. However, I had some mistakes in the topic ' + topicTxt + '. Could you explain the core rule and give me a mini-practice question?';
+      } else {
+        display = 'I passed the mock exam (' + score + '/' + total + ')! Any advice before the official test?';
+        prompt = 'I just passed the exam simulation with a score of ' + score + '/' + total + '. What key tips should I keep in mind before taking the official theory exam at Statens vegvesen?';
+      }
+    } else {
+      if (topicTxt) {
+        display = 'I did not pass the mock exam (' + score + '/' + total + ') with mistakes in ' + topicTxt + '. Please help!';
+        prompt = 'I did not pass the exam simulation this time, scoring ' + score + '/' + total + '. My weakest topic was ' + topicTxt + '. Can you explain the rules in simple terms and challenge me with a practice situation?';
+      } else {
+        display = 'I did not pass the mock exam (' + score + '/' + total + '). Where should I focus?';
+        prompt = 'I did not pass the exam simulation (' + score + '/' + total + ' correct, max 7 errors allowed). Can you give me a structured plan on what to practice next?';
+      }
+    }
+  } else { // Norwegian (no)
+    if (passed) {
+      if (topicTxt) {
+        display = 'Jeg besto prøven (' + score + '/' + total + '), men trenger litt råd om ' + topicTxt + '.';
+        prompt = 'Jeg fullførte nettopp eksamenssimulatoren med ' + score + '/' + total + ' riktige (bestått). Jeg fikk likevel noen feil på ' + topicTxt + '. Kan du forklare hovedregelen enkelt og gi meg et lite oppfølgingsspørsmål?';
+      } else {
+        display = 'Jeg besto prøven (' + score + '/' + total + ')! Har du noen tips før den virkelige teoriprøven?';
+        prompt = 'Jeg fullførte nettopp eksamenssimulatoren med ' + score + '/' + total + ' riktige (bestått). Hva er de viktigste rådene dine før jeg drar til Statens vegvesen for den ekte prøven?';
+      }
+    } else {
+      if (topicTxt) {
+        display = 'Jeg besto ikke prøven (' + score + '/' + total + ') og slet med ' + topicTxt + '. Kan du hjelpe meg?';
+        prompt = 'Jeg besto dessverre ikke eksamenssimulatoren denne gangen (' + score + '/' + total + ' riktige). Jeg hadde flest feil på ' + topicTxt + '. Kan du forklare trafikkreglene for dette og gi meg en praktisk situasjon jeg kan prøve meg på?';
+      } else {
+        display = 'Jeg besto ikke prøven (' + score + '/' + total + '). Hva bør jeg øve mest på nå?';
+        prompt = 'Jeg besto dessverre ikke eksamenssimulatoren denne gangen (' + score + '/' + total + ' riktige, kravet er minst 38). Kan du hjelpe meg å legge opp en plan for hva jeg bør fokusere på?';
+      }
+    }
+  }
+
+  showTab('teacher');
+  switchTeacherSession('normal');
+  setTimeout(function() {
+    teacherSend(prompt, display);
+  }, 120);
+}
+
 function retryQuiz() {
-  if (isMistakeMode) startMistakeQuiz();
+  if (isExamMode) startExam();
+  else if (isMistakeMode) startMistakeQuiz();
   else if (currentCat) startQuiz(currentCat.id);
   else startRandomQuiz();
 }
