@@ -40,7 +40,9 @@ def test_wide_web_screen_and_all_controls():
         assert f'data-speed="{speed}"' in SCREEN
     for condition in ('dry', 'wet', 'snow', 'ice'):
         assert f'data-condition="{condition}"' in SCREEN
-    assert 'data-seconds="2"' in SCREEN and 'data-seconds="3"' in SCREEN
+    assert all(f'data-seconds="{seconds}"' in SCREEN for seconds in (1, 2, 3))
+    assert 'stop-gap-danger' in SCREEN and 'data-key="stop_gap_unsafe"' in SCREEN
+    assert "[1,2,3].indexOf(Number(seconds))>=0" in SCRIPT
     assert 'aria-expanded="false"' in SCREEN
     assert 'closeStopping()' in SCREEN
     assert 'tesla-red' in HOME and 'tesla-road' in SCREEN
@@ -79,9 +81,19 @@ def test_existing_math_all_speeds_and_conditions():
                 assert all(step['label'][lang] for lang in ('no', 'th', 'en'))
     r = client.get('/api/math/stopping-distance?speed=80&condition=dry&reaction=1').json()['results']
     assert (r['reaction_distance_m'], r['braking_distance_m'], r['stopping_distance_m']) == (22.2, 64.0, 86.2)
-    for seconds, expected in [(2, 44.4), (3, 66.7)]:
+    for seconds, expected in [(1, 22.2), (2, 44.4), (3, 66.7)]:
         data = client.get(f'/api/math/following-distance?speed=80&seconds={seconds}').json()
         assert data['results']['following_distance_m'] == expected
+
+
+def test_one_second_gap_is_explicitly_marked_unsafe_in_every_language():
+    match = re.search(r'stop_gap_unsafe:\{([^}]+)\}', SCRIPT)
+    assert match
+    translations = match.group(1)
+    assert "no:'Altfor kort – Farlig avstand'" in translations
+    assert "th:'ระยะห่างน้อยเกินไป – อันตราย'" in translations
+    assert "en:'Too short – Dangerous distance'" in translations
+    assert ".stop-button.stop-gap-danger" in CSS
 
 
 def test_install_does_not_remove_any_existing_markup():

@@ -20,6 +20,7 @@ CSS = r"""
 .stop-caption{position:absolute;bottom:12px;left:0;right:0;text-align:center;color:white;font-size:16px;background:#081426cc;padding:4px}
 .stop-results{margin-top:16px}.stop-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stop-metrics strong{display:block;font-size:26px;margin-top:6px}.stop-orange{color:#ffab4b}.stop-red{color:#ff6b86}.stop-total{color:#fff}
 .stop-equation{font-size:22px;text-align:center;margin:18px 0}.stop-muted{color:#b8c9df;font-size:16px;line-height:1.5}.stop-follow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:18px 0}.stop-follow strong{font-size:22px}
+.stop-button.stop-gap-danger{border-color:#fa3358;color:#ffb7c4}.stop-button.stop-gap-danger[aria-pressed=true]{background:#7d1830;border-color:#ff6b86;box-shadow:0 0 0 1px #ff6b86}.stop-gap-warning{color:#ff9aae;font-weight:700}
 .stop-button:hover:not(:disabled),.stop-home:hover{box-shadow:0 0 0 1px #00F5FF;filter:brightness(1.08)}
 .stop-steps{margin-top:16px}.stop-steps ol{padding-left:24px;margin:0}.stop-steps li{padding:12px 0;border-bottom:1px solid #304e6e}.stop-steps li:last-child{border-bottom:0}.stop-steps code{display:block;margin-top:8px;font-size:18px;white-space:normal;color:#fff}.stop-status{min-height:22px;margin-top:12px}
 @media(min-width:700px){#app.stopping-mode{width:min(1100px,96vw);max-width:none;margin:auto;border-radius:16px}#app.stopping-mode .flag-bg{display:none}}
@@ -51,7 +52,7 @@ SCREEN = r"""
       <div class="stop-results" id="stopResults" hidden>
         <div class="stop-metrics"><div class="stop-orange"><span data-key="stop_reaction"></span><strong id="stopReactionValue"></strong></div><div class="stop-red"><span data-key="stop_braking"></span><strong id="stopBrakingValue"></strong></div><div class="stop-total"><span data-key="stop_total"></span><strong id="stopTotalValue"></strong></div></div>
         <p class="stop-equation" id="stopEquation"></p><p class="stop-muted" id="stopConditionNote"></p>
-        <div class="stop-follow"><span data-key="stop_follow"></span><button class="stop-button" data-seconds="2" onclick="setStoppingGap(2)">2 s</button><button class="stop-button" data-seconds="3" onclick="setStoppingGap(3)">3 s</button><strong id="stopFollowingValue"></strong></div>
+        <div class="stop-follow"><span data-key="stop_follow"></span><button class="stop-button stop-gap-danger" data-seconds="1" onclick="setStoppingGap(1)">1 s</button><button class="stop-button" data-seconds="2" onclick="setStoppingGap(2)">2 s</button><button class="stop-button" data-seconds="3" onclick="setStoppingGap(3)">3 s</button><strong id="stopFollowingValue"></strong><span class="stop-gap-warning" id="stopGapWarning" data-key="stop_gap_unsafe" hidden></span></div>
         <button class="stop-button" id="stopStepsToggle" aria-expanded="false" aria-controls="stopSteps" onclick="toggleStoppingSteps()" data-key="stop_steps"></button>
         <div class="stop-steps" id="stopSteps" hidden><ol id="stopStepList"></ol></div>
         <p class="stop-muted" data-key="stop_estimate"></p>
@@ -74,6 +75,7 @@ Object.assign(UI, {
   stop_point:{no:'Stopp',th:'หยุด',en:'Stop'},
   stop_reaction:{no:'Reaksjon',th:'ปฏิกิริยา',en:'Reaction'},stop_braking:{no:'Brems',th:'เบรก',en:'Braking'},stop_total:{no:'Totalt',th:'รวม',en:'Total'},
   stop_follow:{no:'Følgeavstand',th:'ระยะห่างจากรถคันหน้า',en:'Following distance'},
+  stop_gap_unsafe:{no:'Altfor kort – Farlig avstand',th:'ระยะห่างน้อยเกินไป – อันตราย',en:'Too short – Dangerous distance'},
   stop_steps:{no:'Slik regner vi',th:'วิธีคำนวณ',en:'How we calculate'},
   stop_scale:{no:'Illustrasjon – skalaen tilpasses avstanden',th:'ภาพประกอบ – มาตราส่วนปรับตามระยะทาง',en:'Illustration – scale adapts to the distance'},
   stop_estimate:{no:'Veiledende beregning. Virkelig stopplengde varierer med dekk, føre og fører.',th:'การคำนวณโดยประมาณ ระยะหยุดจริงขึ้นอยู่กับยาง สภาพถนน และผู้ขับขี่',en:'Approximate calculation. Actual stopping distance varies with tyres, road conditions and driver.'},
@@ -94,10 +96,11 @@ function updateStoppingControls(){
   document.querySelectorAll('[data-speed]').forEach(function(b){b.setAttribute('aria-pressed',String(Number(b.dataset.speed)===stoppingState.speed));});
   document.querySelectorAll('[data-condition]').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.condition===stoppingState.condition));});
   document.querySelectorAll('[data-seconds]').forEach(function(b){b.setAttribute('aria-pressed',String(Number(b.dataset.seconds)===stoppingState.seconds));});
+  stopEl('stopGapWarning').hidden=stoppingState.seconds!==1;
 }
 function setStoppingSpeed(speed){stoppingState.speed=Math.min(120,Math.max(30,Number(speed)));updateStoppingControls();loadStopping(false);}
 function setStoppingCondition(condition){if(['dry','wet','snow','ice'].indexOf(condition)<0)return;stoppingState.condition=condition;updateStoppingControls();loadStopping(false);}
-function setStoppingGap(seconds){stoppingState.seconds=seconds===3?3:2;updateStoppingControls();loadStopping(false);}
+function setStoppingGap(seconds){stoppingState.seconds=[1,2,3].indexOf(Number(seconds))>=0?Number(seconds):2;updateStoppingControls();loadStopping(false);}
 function toggleStoppingSteps(){var panel=stopEl('stopSteps');panel.hidden=!panel.hidden;stopEl('stopStepsToggle').setAttribute('aria-expanded',String(!panel.hidden));}
 function renderStopping(){
   updateStoppingControls();stopEl('stopStatus').textContent=stoppingState.statusKey?t(stoppingState.statusKey):'';var data=stoppingState.data;if(!data)return;
