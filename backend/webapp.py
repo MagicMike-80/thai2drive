@@ -7273,6 +7273,7 @@ async function buyPremium(plan, el) {
     var base = window.location.origin + window.location.pathname;
     var session = await api('POST', '/api/create-checkout-session', {
       plan_id: selectedPlan,
+      language: appLang,
       device_id: deviceId || '',
       success_url: base + '?checkout=success&session_id={CHECKOUT_SESSION_ID}',
       cancel_url: base + '?checkout=cancel'

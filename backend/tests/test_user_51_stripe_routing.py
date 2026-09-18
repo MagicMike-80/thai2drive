@@ -73,8 +73,12 @@ def test_user_51_signup_has_no_premium(mock_app_context):
     assert inserted_doc["trial_expires_at"] is None
 
 
-def test_user_51_stripe_checkout_session_success(mock_app_context):
-    """Non-premium user #51 calling create-checkout-session receives live Stripe URL."""
+@pytest.mark.parametrize(
+    ("language", "stripe_locale"),
+    [("no", "nb"), ("th", "th"), ("en", "en")],
+)
+def test_user_51_stripe_checkout_session_success(mock_app_context, language, stripe_locale):
+    """Non-premium user #51 receives a live Stripe URL in the selected language."""
     client, database = mock_app_context
 
     mock_user = {
@@ -127,6 +131,7 @@ def test_user_51_stripe_checkout_session_success(mock_app_context):
             headers={"Authorization": f"Bearer {token}"},
             json={
                 "plan_id": "monthly",
+                "language": language,
                 "success_url": "/api/web?checkout=success",
                 "cancel_url": "/api/web?checkout=cancel",
             },
@@ -137,6 +142,7 @@ def test_user_51_stripe_checkout_session_success(mock_app_context):
     assert body["livemode"] is True
     assert body["session_id"] == "cs_live_user51_checkout_test"
     assert body["url"] == "https://checkout.stripe.com/c/pay/cs_live_user51_checkout_test"
+    assert mock_stripe.checkout.Session.create.call_args.kwargs["locale"] == stripe_locale
     database.checkout_sessions.update_one.assert_awaited_once()
 
 
@@ -251,6 +257,7 @@ def test_webapp_is_premium_contract():
     # Verify paywall buy button triggers create-checkout-session
     assert "async function buyPremium(plan, el)" in webapp_code
     assert "'/api/create-checkout-session'" in webapp_code
+    assert "language: appLang" in webapp_code
     assert "window.location.href = session.url;" in webapp_code
 
 

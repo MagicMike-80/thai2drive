@@ -14,7 +14,7 @@ import smtplib
 from pathlib import Path
 from email.mime.text import MIMEText
 from pydantic import BaseModel, Field, validator, ValidationError
-from typing import List, Optional, Dict, Any
+from typing import List, Optional, Dict, Any, Literal
 import uuid
 import re
 import jwt
@@ -382,6 +382,7 @@ class AccessConsumeRequest(BaseModel):
 
 class CheckoutSessionRequest(BaseModel):
     plan_id: str
+    language: Literal["no", "th", "en"]
     success_url: Optional[str] = None
     cancel_url: Optional[str] = None
     device_id: Optional[str] = None
@@ -1745,6 +1746,7 @@ async def create_checkout_session(data: CheckoutSessionRequest, current_user: di
     session_kwargs = {
         "mode": mode,
         "line_items": [{"price": price.id, "quantity": 1}],
+        "locale": {"no": "nb", "th": "th", "en": "en"}[data.language],
         "success_url": success_url,
         "cancel_url": cancel_url,
         "client_reference_id": user["id"],
