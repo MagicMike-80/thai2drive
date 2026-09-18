@@ -3415,6 +3415,44 @@ a { color:inherit; text-decoration:none; }
 .teacher-send-btn:hover { background:#1D4ED8 !important; }
 .teacher-send-btn:disabled { background:var(--border); cursor:default; }
 
+.teacher-doc-btn {
+  width:48px; min-width:48px; height:56px; border-radius:16px;
+  background:rgba(37,99,235,0.15); border:1px solid rgba(96,165,250,0.4);
+  color:#60A5FA; font-size:1.25rem; cursor:pointer; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  transition:all .15s ease; outline:none;
+}
+.teacher-doc-btn:hover {
+  background:rgba(37,99,235,0.3); border-color:#00F5FF; color:#00F5FF;
+  box-shadow:0 0 10px rgba(0,245,255,0.25);
+}
+.teacher-doc-btn:disabled {
+  opacity:.4; cursor:not-allowed;
+}
+
+.teacher-doc-badge {
+  display:none; align-items:center; gap:8px;
+  width:min(760px,100%); max-width:100%; margin-inline:auto;
+  padding:8px 14px; background:#0B1E3B;
+  border-top:1px solid rgba(96,165,250,0.35);
+  border-left:1px solid rgba(96,165,250,0.35);
+  border-right:1px solid rgba(96,165,250,0.35);
+  border-radius:12px 12px 0 0;
+  color:#93C5FD; font-size:.85rem; box-sizing:border-box; flex-shrink:0;
+}
+.teacher-doc-badge .teacher-doc-icon { font-size:1rem; flex-shrink:0; }
+.teacher-doc-badge .teacher-doc-name {
+  flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:600;
+}
+.teacher-doc-badge .teacher-doc-close {
+  background:none; border:none; color:#F87171; cursor:pointer;
+  font-size:1rem; padding:2px 8px; border-radius:6px; font-weight:900;
+  transition:all .15s ease;
+}
+.teacher-doc-badge .teacher-doc-close:hover {
+  color:#EF4444; background:rgba(239,68,68,0.18);
+}
+
 /* Teacher mode bottomNav keeps full carousel navigation */
 #app.teacher-mode #bottomNav .bn-tab { display:flex; }
 #app.teacher-mode #bnTeacher .bn-icon img {
@@ -4601,8 +4639,17 @@ a { color:inherit; text-decoration:none; }
           <button class="teacher-topics-toggle" id="teacherMoreBtn" type="button" aria-expanded="false" onclick="toggleTeacherTopics()" data-key="teacher_more_topics">Flere emner</button>
         </div>
 
+        <!-- Uploaded Document Badge -->
+        <div class="teacher-doc-badge" id="teacherDocBadge">
+          <span class="teacher-doc-icon">📄</span>
+          <span class="teacher-doc-name" id="teacherDocName"></span>
+          <button type="button" class="teacher-doc-close" id="teacherDocClose" onclick="_teacherClearDoc()" aria-label="Fjern dokument" data-label-key="teacher_doc_remove">✕</button>
+        </div>
+
         <!-- Input bar -->
         <div class="teacher-inputbar">
+          <input type="file" id="teacherDocInput" accept=".pdf,application/pdf" style="display:none" onchange="_teacherUploadDoc(this)">
+          <button type="button" class="teacher-doc-btn" id="teacherDocBtn" onclick="document.getElementById('teacherDocInput').click()" title="Last opp PDF" aria-label="Last opp PDF" data-label-key="teacher_upload_doc">📎</button>
           <textarea class="teacher-input" id="teacherInput" rows="1" placeholder="..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();teacherSend();}"></textarea>
           <button class="teacher-send-btn" id="teacherSendBtn" onclick="teacherSend()"><span data-key="teacher_send">Send</span>&nbsp;➤</button>
         </div>
@@ -4878,6 +4925,11 @@ var UI = {
   teacher_meta:{th:'เข้าสู่ระบบ • ครู AI • ประสบการณ์ 16 ปี', no:'Pålogget • AI-lærer • 16 års erfaring', en:'Signed in • AI teacher • 16 years experience'},
   teacher_online_badge:{th:'ออนไลน์', no:'ONLINE', en:'ONLINE'},
   teacher_send:{th:'ส่ง', no:'Send', en:'Send'},
+  teacher_upload_doc:{th:'แนบเอกสาร PDF', no:'Last opp PDF', en:'Upload PDF'},
+  teacher_doc_chars:{th:'ตัวอักษร', no:'tegn', en:'characters'},
+  teacher_doc_uploading:{th:'กำลังอัปโหลด...', no:'Laster opp...', en:'Uploading...'},
+  teacher_doc_error:{th:'ไม่สามารถอัปโหลด PDF ได้', no:'Kunne ikke laste opp PDF', en:'Could not upload PDF'},
+  teacher_doc_remove:{th:'ลบเอกสาร', no:'Fjern dokument', en:'Remove document'},
   teacher_more_topics:{th:'หัวข้อเพิ่มเติม', no:'Flere emner', en:'More topics'},
   teacher_fewer_topics:{th:'แสดงน้อยลง', no:'Vis færre', en:'Show fewer'},
   teacher_sub: {th:'ถามคำถามเกี่ยวกับการจราจร', no:'Still et spørsmål om trafikk', en:'Ask a question about traffic'},
@@ -5326,6 +5378,14 @@ function applyUILang() {
   if (tNameEl) tNameEl.textContent = t('teacher_name');
   var tInput = document.getElementById('teacherInput');
   if (tInput) tInput.placeholder = t('teacher_placeholder');
+  if (typeof _teacherUploadedDoc !== 'undefined' && _teacherUploadedDoc) {
+    var docBadge = document.getElementById('teacherDocBadge');
+    var docName = document.getElementById('teacherDocName');
+    if (docBadge && docName && docBadge.style.display !== 'none') {
+      var charsLbl = t('teacher_doc_chars');
+      docName.textContent = '📄 ' + (_teacherUploadedDoc.filename || '') + ' (' + (_teacherUploadedDoc.character_count || 0) + ' ' + charsLbl + ')';
+    }
+  }
   var tSidebarToggle = document.getElementById('teacherSidebarToggle');
   if (tSidebarToggle) {
     var sidebarOpen = tSidebarToggle.getAttribute('aria-expanded') === 'true';
@@ -10896,6 +10956,59 @@ function _teacherAppendChips(chips) {
   msgs.appendChild(row);
 }
 
+var _teacherUploadedDoc = null;
+
+async function _teacherUploadDoc(inputEl) {
+  if (!inputEl || !inputEl.files || !inputEl.files[0]) return;
+  var file = inputEl.files[0];
+  var badge = document.getElementById('teacherDocBadge');
+  var nameEl = document.getElementById('teacherDocName');
+  var docBtn = document.getElementById('teacherDocBtn');
+
+  if (badge && nameEl) {
+    badge.style.display = 'flex';
+    nameEl.textContent = '⏳ ' + t('teacher_doc_uploading');
+  }
+  if (docBtn) docBtn.disabled = true;
+
+  try {
+    var fd = new FormData();
+    fd.append('file', file);
+    var res = await fetch('/api/documents/upload', {
+      method: 'POST',
+      body: fd
+    });
+    if (!res.ok) {
+      var errData = await res.json().catch(function(){ return {}; });
+      throw new Error(errData.detail || t('teacher_doc_error'));
+    }
+    var data = await res.json();
+    _teacherUploadedDoc = data;
+    if (badge && nameEl) {
+      badge.style.display = 'flex';
+      var charsLbl = t('teacher_doc_chars');
+      nameEl.textContent = '📄 ' + (data.filename || file.name) + ' (' + (data.character_count || 0) + ' ' + charsLbl + ')';
+    }
+  } catch(e) {
+    _teacherUploadedDoc = null;
+    if (badge) badge.style.display = 'none';
+    alert(e.message || t('teacher_doc_error'));
+  } finally {
+    if (docBtn) docBtn.disabled = false;
+    inputEl.value = '';
+  }
+}
+
+function _teacherClearDoc() {
+  _teacherUploadedDoc = null;
+  var badge = document.getElementById('teacherDocBadge');
+  if (badge) badge.style.display = 'none';
+  var nameEl = document.getElementById('teacherDocName');
+  if (nameEl) nameEl.textContent = '';
+  var inputEl = document.getElementById('teacherDocInput');
+  if (inputEl) inputEl.value = '';
+}
+
 async function teacherSend(overrideMsg, customDisplayMsg) {
   var input = document.getElementById('teacherInput');
   var msg = (overrideMsg || (input && input.value) || '').trim();
@@ -10966,17 +11079,22 @@ async function teacherSend(overrideMsg, customDisplayMsg) {
   try {
     var activeSessionId = _teacherActiveSessionType === 'quiz' ? _teacherQuizSessionId : _teacherSessionId;
     var activeConversationId = _teacherActiveSessionType === 'quiz' ? _teacherQuizConversationId : _teacherConversationId;
+    var chatPayload = {
+      session_id: activeSessionId,
+      conversation_id: activeConversationId || activeSessionId,
+      message: payloadMsg,
+      language: appLang,
+      device_id: (typeof deviceId !== 'undefined' ? deviceId : null),
+      user_id: (typeof user !== 'undefined' && user && user.id ? user.id : null)
+    };
+    if (_teacherUploadedDoc && _teacherUploadedDoc.document_id) {
+      chatPayload.document_id = _teacherUploadedDoc.document_id;
+      chatPayload.document_context = _teacherUploadedDoc.extracted_text;
+    }
     var res = await fetch('/api/teacher/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        session_id: activeSessionId,
-        conversation_id: activeConversationId || activeSessionId,
-        message: payloadMsg,
-        language: appLang,
-        device_id: (typeof deviceId !== 'undefined' ? deviceId : null),
-        user_id: (typeof user !== 'undefined' && user && user.id ? user.id : null)
-      })
+      body: JSON.stringify(chatPayload)
     });
     if (!res.ok) throw new Error('HTTP ' + res.status);
     var data = await res.json();
