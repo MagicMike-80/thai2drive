@@ -9799,6 +9799,7 @@ function setLang(lang) {
 //  MICHAEL TRAFIKKLÆRER — CHAT
 // ════════════════════════════════════════════
 var _teacherSessionId    = null;
+var _teacherConversationId = null;
 var _teacherHasUserMsg   = false;   // true once user sends first message
 var _teacherTyping       = false;
 var _teacherWelcomeLang  = null;    // tracks which language the welcome was rendered in
@@ -9806,11 +9807,13 @@ var _teacherWelcomeLang  = null;    // tracks which language the welcome was ren
 // Quiz-specific teacher session variables
 var _teacherActiveSessionType = 'normal';
 var _teacherQuizSessionId     = null;
+var _teacherQuizConversationId = null;
 var _teacherNormalHtml        = '';
 var _teacherQuizHtml          = '';
 var _teacherNormalHasUserMsg  = false;
 var _teacherQuizHasUserMsg    = false;
 var _quizCoachSessionId       = null;
+var _quizCoachConversationId  = null;
 var _quizCoachAbort           = null;
 
 function _quizCoachContext() {
@@ -9841,11 +9844,18 @@ async function _quizCoachRequest(message) {
     if (token) headers.Authorization = 'Bearer ' + token;
     var res = await fetch('/api/teacher/chat', {
       method:'POST', headers:headers, signal:controller.signal,
-      body:JSON.stringify({session_id:_quizCoachSessionId, message:message, language:appLang})
+      body:JSON.stringify({
+        session_id:_quizCoachSessionId,
+        conversation_id:_quizCoachConversationId || _quizCoachSessionId,
+        message:message,
+        language:appLang,
+        mode:'quiz_coach'
+      })
     });
     if (!res.ok) throw new Error('HTTP ' + res.status);
     var data = await res.json();
     if (data.session_id) _quizCoachSessionId = data.session_id;
+    if (data.conversation_id || data.session_id) _quizCoachConversationId = data.conversation_id || data.session_id;
     return data;
   } finally {
     clearTimeout(timeoutId);
@@ -9862,6 +9872,7 @@ async function openMichaelQuizCoach() {
   if (!panel || !body || !action) return;
 
   _quizCoachSessionId = 'quiz_coach_' + appLang + '_' + ctx.questionId.replace(/[^a-zA-Z0-9_-]/g,'').slice(0,32) + '_' + Date.now().toString(36);
+  _quizCoachConversationId = _quizCoachSessionId;
   body.textContent = t('coach_loading');
   action.classList.remove('show');
   action.disabled = false;
@@ -9991,6 +10002,7 @@ function askMichaelAboutThis() {
   // Generate a fresh language-scoped session ID for this question.
   // Normal Michael chat history uses _teacherSessionId and is not touched.
   _teacherQuizSessionId = 'quiz_help_' + appLang + '_' + qId + '_' + Date.now().toString(36);
+  _teacherQuizConversationId = _teacherQuizSessionId;
   _teacherHasUserMsg = false;
   _teacherWelcomeLang = null;
 
@@ -10025,11 +10037,13 @@ function askMichaelAboutThis() {
 
 function resetTeacherForLanguage() {
   _teacherSessionId = null;
+  _teacherConversationId = null;
   _teacherHasUserMsg = false;
   _teacherWelcomeLang = null;
   _teacherTyping = false;
   _teacherActiveSessionType = 'normal';
   _teacherQuizSessionId = null;
+  _teacherQuizConversationId = null;
   _teacherNormalHtml = '';
   _teacherQuizHtml = '';
   _teacherNormalHasUserMsg = false;
@@ -10951,11 +10965,13 @@ async function teacherSend(overrideMsg, customDisplayMsg) {
 
   try {
     var activeSessionId = _teacherActiveSessionType === 'quiz' ? _teacherQuizSessionId : _teacherSessionId;
+    var activeConversationId = _teacherActiveSessionType === 'quiz' ? _teacherQuizConversationId : _teacherConversationId;
     var res = await fetch('/api/teacher/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         session_id: activeSessionId,
+        conversation_id: activeConversationId || activeSessionId,
         message: payloadMsg,
         language: appLang,
         device_id: (typeof deviceId !== 'undefined' ? deviceId : null),
@@ -10964,11 +10980,19 @@ async function teacherSend(overrideMsg, customDisplayMsg) {
     });
     if (!res.ok) throw new Error('HTTP ' + res.status);
     var data = await res.json();
+    var convId = data.conversation_id || data.session_id;
     if (data.session_id) {
       if (_teacherActiveSessionType === 'quiz') {
         _teacherQuizSessionId = data.session_id;
       } else {
         _teacherSessionId = data.session_id;
+      }
+    }
+    if (convId) {
+      if (_teacherActiveSessionType === 'quiz') {
+        _teacherQuizConversationId = convId;
+      } else {
+        _teacherConversationId = convId;
       }
     }
     _teacherHideTyping();
@@ -10981,6 +11005,7 @@ async function teacherSend(overrideMsg, customDisplayMsg) {
       return mediaSignIds.indexOf(signId) === -1;
     });
     await _teacherAppendSignCards(fallbackSignIds, assistantBubble);
+    _teacherAppendChips(data.suggestions || []);
     _teacherScrollToAnswerStart(assistantBubble);
   } catch(e) {
     _teacherHideTyping();

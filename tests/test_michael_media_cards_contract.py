@@ -103,9 +103,11 @@ class MichaelMediaCardsContractTests(unittest.TestCase):
         send_end = WEBAPP.index("function toggleSound", send_start)
         send = WEBAPP[send_start:send_end]
         cards = send.index("await _teacherAppendSignCards(fallbackSignIds, assistantBubble)")
+        chips = send.index("_teacherAppendChips(data.suggestions || [])")
         scroll = send.index("_teacherScrollToAnswerStart(assistantBubble)")
-        self.assertLess(cards, scroll)
-        self.assertNotIn("_teacherAppendChips(data.suggestions || [])", send)
+        self.assertLess(cards, chips)
+        self.assertLess(chips, scroll)
+        self.assertIn("_teacherAppendChips(data.suggestions || [])", send)
         self.assertNotIn("_teacherAppendSignActions(signForActions)", send)
         self.assertNotIn("fetchVideoForTopic('Bremsing')", send)
         self.assertIn("_teacherScrollToAnswerStart(assistantBubble)", send)
@@ -124,6 +126,12 @@ class MichaelMediaCardsContractTests(unittest.TestCase):
         chips = WEBAPP[chips_start:chips_end]
         self.assertIn("msgs.appendChild(row)", chips)
         self.assertNotIn("msgs.scrollTop = msgs.scrollHeight", chips)
+
+
+    def test_teacher_chat_ui_contract_sends_conversation_id_and_quiz_coach_mode(self):
+        self.assertIn("mode:'quiz_coach'", WEBAPP)
+        self.assertIn("conversation_id:_quizCoachConversationId || _quizCoachSessionId", WEBAPP)
+        self.assertIn("conversation_id: activeConversationId || activeSessionId", WEBAPP)
 
 
 if __name__ == "__main__":
