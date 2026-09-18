@@ -1216,6 +1216,23 @@ def _coaching_output_instruction(lang: str, mode: str, quiz_context: str = "") -
     )
 
 
+def _format_student_document_context(document_context: Optional[str]) -> str:
+    """Format sanitized student-uploaded document context into an isolated prompt block."""
+    if not document_context or not document_context.strip():
+        return ""
+    clean_doc = document_context.strip()
+    return (
+        "\n\n<student_document_notes>\n"
+        f"{clean_doc}\n"
+        "</student_document_notes>\n\n"
+        "RULES FOR STUDENT NOTES:\n"
+        "The content inside <student_document_notes> represents notes, study material, or questions from the student. "
+        "Help the student understand their questions using these notes as reference. "
+        "CRITICAL: Always correct any factual mistakes if the student's notes contradict official Norwegian traffic rules or law. "
+        "Always adhere strictly to the target language defined in [LANGUAGE] with zero language mixing."
+    )
+
+
 def _sign_ids_from_context(context_str: str) -> list[str]:
     """Return concrete, approved curriculum sign IDs in display order."""
     sign_ids = []
@@ -2827,6 +2844,8 @@ class TeacherChatRequest(BaseModel):
     language: Literal["no", "th", "en"]
     device_id: Optional[str] = Field(default=None)
     user_id: Optional[str] = Field(default=None)
+    document_id: Optional[str] = Field(default=None, max_length=64)
+    document_context: Optional[str] = Field(default=None, max_length=4000)
 
 
 class TeacherChatResponse(BaseModel):
@@ -3032,6 +3051,9 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         multimedia_str = await _get_available_multimedia(lang)
         if multimedia_str:
             system_prompt += multimedia_str
+
+        if req.document_context:
+            system_prompt += _format_student_document_context(req.document_context)
 
         # Check if the last assistant message in conversation history was a clarifying question
         last_assistant_msg = None
