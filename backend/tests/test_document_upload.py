@@ -5,7 +5,7 @@ import io
 import sys
 import unittest
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import patch, AsyncMock
 
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
@@ -28,6 +28,13 @@ except ImportError:
         MAX_DOCUMENT_SIZE_BYTES,
         MAX_EXTRACTED_CHARS,
     )
+
+try:
+    from backend.teacher_chat import teacher_router
+    import backend.teacher_chat as tc
+except ImportError:
+    from teacher_chat import teacher_router
+    import teacher_chat as tc
 
 import pypdf
 
@@ -62,6 +69,49 @@ def _create_blank_pdf_bytes() -> bytes:
     buf = io.BytesIO()
     writer.write(buf)
     return buf.getvalue()
+
+
+class _Cursor:
+    def __init__(self, items=None):
+        self.items = items or []
+
+    def sort(self, *args, **kwargs):
+        return self
+
+    async def to_list(self, length=None):
+        return list(self.items)
+
+
+class _Collection:
+    def __init__(self, items=None):
+        self.items = items or []
+
+    def find(self, *args, **kwargs):
+        return _Cursor()
+
+    async def find_one(self, *args, **kwargs):
+        query = args[0] if args else {}
+        for item in self.items:
+            if all(item.get(key) == value for key, value in query.items()):
+                return item
+        return None
+
+    async def insert_one(self, *args, **kwargs):
+        return None
+
+    async def insert_many(self, *args, **kwargs):
+        return None
+
+
+class _Database:
+    def __init__(self, collections=None):
+        self.collections = collections or {}
+
+    def __getitem__(self, name):
+        return self.collections.get(name, _Collection())
+
+    def __getattr__(self, name):
+        return _Collection()
 
 
 class TestDocumentUploadEndpoint(unittest.TestCase):
@@ -162,6 +212,180 @@ class TestDocumentUploadEndpoint(unittest.TestCase):
 
         routes = [route.path for route in server.app.routes]
         self.assertIn("/api/documents/upload", routes)
+
+
+class TestDocumentUploadChatIntegration(unittest.TestCase):
+    """Integration tests connecting /api/documents/upload and /api/teacher/chat (TASK-009)."""
+
+    def setUp(self):
+        self._orig_db = tc._db
+        self._orig_chat_col = tc._chat_col
+        self._orig_llm_key = tc.LLM_KEY
+        tc._db = _Database()
+        tc._chat_col = _Collection()
+        tc.LLM_KEY = "mock_key_for_test"
+
+        app = FastAPI()
+        app.include_router(document_router, prefix="/api")
+        app.include_router(teacher_router, prefix="/api")
+        self.client = TestClient(app)
+
+    def tearDown(self):
+        tc._db = self._orig_db
+        tc._chat_col = self._orig_chat_col
+        tc.LLM_KEY = self._orig_llm_key
+
+    def test_upload_and_chat_integration_norwegian(self):
+        """Upload Norwegian PDF note, send to /api/teacher/chat, verify Michael references student notes."""
+        # 1. Upload PDF
+        files = {
+            "file": ("notater_vikeplikt.pdf", io.BytesIO(VALID_SAMPLE_PDF), "application/pdf")
+        }
+        res_upload = self.client.post("/api/documents/upload", files=files)
+        self.assertEqual(res_upload.status_code, 200)
+        upload_data = res_upload.json()
+        doc_id = upload_data["document_id"]
+        doc_context = upload_data["extracted_text"]
+        self.assertIn("Vikeplikt gjelder fra hoeyre", doc_context)
+
+        # 2. Mock LLM completion
+        mock_choice = AsyncMock()
+        mock_choice.message.content = (
+            "Jeg ser i notatet ditt at du har skrevet at 'Vikeplikt gjelder fra hoeyre'. "
+            "Det stemmer! Husk 'Kongen og tjeneren': bilen som kommer fra høyre er kongen du må vike for."
+        )
+        mock_resp = AsyncMock()
+        mock_resp.choices = [mock_choice]
+        mock_completion = AsyncMock(return_value=mock_resp)
+
+        # 3. Post to /api/teacher/chat with language: "no"
+        chat_payload = {
+            "message": "Kan du forklare dette notatet mitt om vikeplikt?",
+            "language": "no",
+            "document_id": doc_id,
+            "document_context": doc_context,
+        }
+
+        with patch.object(tc, "_completion_with_fallback", mock_completion):
+            res_chat = self.client.post("/api/teacher/chat", json=chat_payload)
+
+        self.assertEqual(res_chat.status_code, 200)
+        chat_data = res_chat.json()
+        self.assertIn("reply", chat_data)
+        self.assertIn("session_id", chat_data)
+
+        # Verify prompt injection
+        mock_completion.assert_called_once()
+        sent_messages = mock_completion.call_args[0][0]
+        system_content = sent_messages[0]["content"]
+        self.assertIn("<student_document_notes>", system_content)
+        self.assertIn("Vikeplikt gjelder fra hoeyre", system_content)
+        self.assertIn("RULES FOR STUDENT NOTES:", system_content)
+
+        # Verify Michael's explanation in Norwegian
+        reply = chat_data["reply"]
+        self.assertIn("notatet ditt", reply)
+        self.assertIn("vikeplikt", reply.lower())
+
+    def test_upload_and_chat_integration_thai_language_isolation(self):
+        """Upload PDF note, send to /api/teacher/chat with language: 'th', verify 100% Thai language isolation."""
+        # 1. Upload PDF
+        files = {
+            "file": ("notat_th.pdf", io.BytesIO(VALID_SAMPLE_PDF), "application/pdf")
+        }
+        res_upload = self.client.post("/api/documents/upload", files=files)
+        self.assertEqual(res_upload.status_code, 200)
+        upload_data = res_upload.json()
+        doc_id = upload_data["document_id"]
+        doc_context = upload_data["extracted_text"]
+
+        # 2. Mock LLM completion with 100% Thai pedagogical response
+        mock_choice = AsyncMock()
+        mock_choice.message.content = (
+            "จากบันทึกของคุณเรื่องกฎการให้ทาง ให้จำกฎ 'ราชาและคนรับใช้' "
+            "รถที่มาจากทางขวาคือราชาที่เราต้องหยุดให้ทางครับ มีตรงไหนอยากให้ครูอธิบายเพิ่มไหม?"
+        )
+        mock_resp = AsyncMock()
+        mock_resp.choices = [mock_choice]
+        mock_completion = AsyncMock(return_value=mock_resp)
+
+        # 3. Post to /api/teacher/chat with language: "th"
+        chat_payload = {
+            "message": "ช่วยอธิบายบันทึกนี้เรื่องกฎการให้ทางหน่อยครับ",
+            "language": "th",
+            "document_id": doc_id,
+            "document_context": doc_context,
+        }
+
+        with patch.object(tc, "_completion_with_fallback", mock_completion):
+            res_chat = self.client.post("/api/teacher/chat", json=chat_payload)
+
+        self.assertEqual(res_chat.status_code, 200)
+        chat_data = res_chat.json()
+        self.assertIn("reply", chat_data)
+        self.assertIn("session_id", chat_data)
+
+        # Verify system prompt has document context
+        mock_completion.assert_called_once()
+        sent_messages = mock_completion.call_args[0][0]
+        system_content = sent_messages[0]["content"]
+        self.assertIn("<student_document_notes>", system_content)
+
+        # Verify 100% Thai language isolation (Thai script present, no Norwegian leak)
+        reply = chat_data["reply"]
+        has_thai_chars = any("\u0e00" <= c <= "\u0e7f" for c in reply)
+        self.assertTrue(has_thai_chars, "Reply must contain Thai characters")
+        self.assertNotIn("vikeplikt", reply.lower())
+        self.assertNotIn("kongen og tjeneren", reply.lower())
+
+    def test_upload_and_chat_integration_english(self):
+        """Upload PDF note, send to /api/teacher/chat with language: 'en', verify pedagogical response in English."""
+        # 1. Upload PDF
+        files = {
+            "file": ("notes_priority.pdf", io.BytesIO(VALID_SAMPLE_PDF), "application/pdf")
+        }
+        res_upload = self.client.post("/api/documents/upload", files=files)
+        self.assertEqual(res_upload.status_code, 200)
+        upload_data = res_upload.json()
+        doc_id = upload_data["document_id"]
+        doc_context = upload_data["extracted_text"]
+
+        # 2. Mock LLM completion with English pedagogical response
+        mock_choice = AsyncMock()
+        mock_choice.message.content = (
+            "Based on your uploaded notes, drivers must yield to traffic approaching from the right. "
+            "This priority rule applies at all unregulated intersections."
+        )
+        mock_resp = AsyncMock()
+        mock_resp.choices = [mock_choice]
+        mock_completion = AsyncMock(return_value=mock_resp)
+
+        # 3. Post to /api/teacher/chat with language: "en"
+        chat_payload = {
+            "message": "Can you explain my notes about the priority rule?",
+            "language": "en",
+            "document_id": doc_id,
+            "document_context": doc_context,
+        }
+
+        with patch.object(tc, "_completion_with_fallback", mock_completion):
+            res_chat = self.client.post("/api/teacher/chat", json=chat_payload)
+
+        self.assertEqual(res_chat.status_code, 200)
+        chat_data = res_chat.json()
+        self.assertIn("reply", chat_data)
+        self.assertIn("session_id", chat_data)
+
+        # Verify system prompt has document context
+        mock_completion.assert_called_once()
+        sent_messages = mock_completion.call_args[0][0]
+        system_content = sent_messages[0]["content"]
+        self.assertIn("<student_document_notes>", system_content)
+
+        # Verify English pedagogical response
+        reply = chat_data["reply"]
+        self.assertIn("uploaded notes", reply)
+        self.assertIn("yield to traffic", reply)
 
 
 if __name__ == "__main__":
