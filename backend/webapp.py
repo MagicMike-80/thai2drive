@@ -1140,6 +1140,16 @@ a { color:inherit; text-decoration:none; }
 .ans-btn.correct { border-color:rgba(16,185,129,.45); background:rgba(16,185,129,.10); }
 .ans-btn.wrong   { border-color:rgba(239,68,68,.40);  background:rgba(239,68,68,.09);  }
 .ans-btn.reveal  { border-color:rgba(16,185,129,.45); background:rgba(16,185,129,.07); }
+.ans-btn.selected {
+  border-color: rgba(0, 245, 255, 0.70);
+  background: rgba(0, 245, 255, 0.12);
+  box-shadow: 0 0 12px rgba(0, 245, 255, 0.22);
+}
+.ans-btn.selected .ans-letter {
+  background: rgba(0, 245, 255, 0.25);
+  color: #00F5FF;
+  border-color: rgba(0, 245, 255, 0.60);
+}
 .ans-letter {
   width:32px; height:32px; border-radius:50%;
   background:rgba(255,153,51,.12); color:var(--orange);
@@ -1181,6 +1191,38 @@ a { color:inherit; text-decoration:none; }
 }
 .q-next-mobile:disabled { display:none; opacity:.30; cursor:not-allowed; }
 .q-next-mobile:not(:disabled):active { opacity:.85; }
+
+.exam-nav-row {
+  display:flex;
+  gap:10px;
+  width:100%;
+  margin-top:4px;
+}
+.q-prev-mobile {
+  display:block;
+  flex:1;
+  padding:14px;
+  background:rgba(255,255,255,.07);
+  color:var(--text);
+  font-weight:700;
+  font-size:.9rem;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:12px;
+  cursor:pointer;
+  transition:all .18s;
+}
+.q-prev-mobile:hover:not(:disabled) {
+  background:rgba(255,255,255,.12);
+  border-color:rgba(0,245,255,.40);
+}
+.q-prev-mobile:disabled {
+  opacity:.35;
+  cursor:not-allowed;
+}
+.exam-nav-row .q-next-mobile {
+  flex:1;
+  margin-top:0;
+}
 
 /* Desktop side column — permanently hidden (we use q-next-mobile everywhere) */
 .q-next-col { display:none !important; }
@@ -2715,6 +2757,34 @@ a { color:inherit; text-decoration:none; }
   border-radius:12px; cursor:pointer;
 }
 .end-btn-sec:hover { border-color:rgba(255,255,255,.22); color:var(--text); }
+
+#screenEnd.has-errors .end-wrap { max-width:540px; }
+.end-exam-errors { width:100%; margin-bottom:24px; text-align:left; }
+.end-exam-errors-title { font-size:1.02rem; font-weight:800; color:var(--text); margin-bottom:12px; }
+.end-exam-errors-list { display:flex; flex-direction:column; gap:12px; max-height:460px; overflow-y:auto; padding-right:4px; }
+.exam-error-card {
+  background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08);
+  border-radius:12px; padding:14px; display:flex; flex-direction:column; gap:8px;
+}
+.exam-error-header { display:flex; align-items:flex-start; gap:8px; }
+.exam-error-num {
+  background:rgba(239,68,68,.2); color:#FCA5A5; font-size:.75rem; font-weight:800;
+  border-radius:6px; padding:2px 7px; flex-shrink:0; margin-top:2px;
+}
+.exam-error-qtext { font-size:.88rem; font-weight:700; color:var(--text); line-height:1.45; }
+.exam-error-ans-row { display:flex; flex-direction:column; gap:4px; font-size:.84rem; }
+.exam-error-user { color:#FCA5A5; }
+.exam-error-correct { color:#6EE7B7; }
+.exam-error-expl { font-size:.80rem; color:var(--muted); line-height:1.5; border-top:1px solid rgba(255,255,255,.06); padding-top:6px; }
+.exam-error-btn {
+  align-self:flex-start; margin-top:4px;
+  background:rgba(0, 245, 255, 0.08); border:1px solid rgba(0, 245, 255, 0.35);
+  color:#00F5FF; font-size:.82rem; font-weight:700; border-radius:8px;
+  padding:7px 12px; cursor:pointer; transition:all .18s; display:inline-flex; align-items:center; gap:6px;
+}
+.exam-error-btn:hover {
+  background:rgba(0, 245, 255, 0.18); border-color:#00F5FF; box-shadow:0 0 10px rgba(0,245,255,0.25);
+}
 
 /* ══════════════════════════════════════════
    LOADING & UTILS
@@ -4535,6 +4605,10 @@ a { color:inherit; text-decoration:none; }
           </div>
           <button class="end-focus-btn" id="endFocusCoachBtn" onclick="consultMichaelFromExam()" data-key="result_coach_topic">Øv med Michael</button>
         </div>
+        <div class="end-exam-errors" id="endExamErrorsContainer" style="display:none;">
+          <div class="end-exam-errors-title" id="endExamErrorsTitle"></div>
+          <div class="end-exam-errors-list" id="endExamErrorsList"></div>
+        </div>
         <div class="end-btns">
           <button class="end-btn-pri end-btn-coach" id="endCoachMichaelPriBtn" onclick="consultMichaelFromExam()" data-key="result_michael_coach" style="display:none;">💬 Gå gjennom med Michael AI</button>
           <button class="end-btn-pri" id="endRetryBtn" onclick="retryQuiz()" data-key="result_retry">Prøv igjen</button>
@@ -4891,6 +4965,14 @@ var UI = {
   home_exam_sub:   {th:'รูปแบบ Statens vegvesen • ผิดได้ไม่เกิน 7 ข้อ', no:'Statens vegvesen-format • Maks 7 feil', en:'Official test format • Max 7 mistakes'},
   exam_submit:     {th:'ส่งข้อสอบ', no:'Lever prøve', en:'Submit exam'},
   exam_submit_confirm:{th:'คุณแน่ใจหรือไม่ว่าต้องการส่งข้อสอบตอนนี้?', no:'Er du sikker på at du vil levere teoriprøven nå?', en:'Are you sure you want to submit the exam now?'},
+  prev:            {th:'‹ ก่อนหน้า', no:'‹ Forrige', en:'‹ Previous'},
+  exam_finish:     {th:'ส่งข้อสอบ', no:'Fullfør', en:'Finish'},
+  exam_errors_heading:{th:'ทบทวนข้อที่ตอบผิด ({count} ข้อ)', no:'Gjennomgang av feil ({count})', en:'Review of mistakes ({count})'},
+  exam_all_correct:{th:'ยอดเยี่ยมมาก! ไม่มีข้อผิดเลย (45/45)', no:'Fantastisk! Ingen feil (45/45)', en:'Fantastic! Zero errors (45/45)'},
+  exam_your_answer:{th:'คำตอบของคุณ', no:'Ditt svar', en:'Your answer'},
+  exam_correct_answer:{th:'คำตอบที่ถูกต้อง', no:'Riktig svar', en:'Correct answer'},
+  exam_unanswered: {th:'ไม่ได้ตอบ', no:'Ikke besvart', en:'Not answered'},
+  ask_michael_ai:  {th:'💬 ถาม Michael AI', no:'💬 Spør Michael AI', en:'💬 Ask Michael AI'},
   home_ask_michael:{th:'ถาม Michael AI', no:'Spør Michael AI', en:'Ask Michael AI'},
   home_targeted:{th:'ฝึกข้อที่ตอบผิดและคลังป้ายจราจร', no:'Øv på mine feil & skiltkatalog', en:'Practise my mistakes & road signs'},
   home_open_signs:{th:'เปิดคลังป้ายจราจร', no:'Åpne skiltkatalog', en:'Open road sign catalogue'},
@@ -5284,6 +5366,7 @@ var UI = {
   checkout_unavailable_toast:{th:'ไม่สามารถเปิดการชำระเงินได้ในตอนนี้', no:'Betaling er ikke tilgjengelig akkurat nå', en:'Payment is not available right now'},
   free_questions_left:      {th:'เหลือ {count} คำถามฟรี', no:'{count} gratis spørsmål igjen', en:'{count} free questions left'},
 };
+var TR = UI;
 
 function t(key) {
   var entry = UI[key];
@@ -7203,6 +7286,8 @@ async function startMistakeQuiz() {
 }
 
 var isExamMode = false;
+var examAnswers = {};
+var _examErrors = [];
 var examTimerInterval = null;
 var examSecondsLeft = 0;
 
@@ -7404,6 +7489,8 @@ async function startExam() {
   isMistakeMode = false;
   currentCat = null;
   isExamMode = true;
+  examAnswers = {};
+  _examErrors = [];
   await loadQuiz('/api/questions/random?count=45&has_image=true&mode=exam');
 }
 
@@ -7457,6 +7544,8 @@ async function startQuiz(catId) {
   var key = catKey(catId);
   currentCat = key ? { id: key, key: key } : null;
   isExamMode = false;
+  examAnswers = {};
+  _examErrors = [];
   var url = '/api/questions/random?count=' + QUIZ_SESSION_SIZE + '&has_image=true';
   if (key) url += '&category=' + encodeURIComponent(key);
   await loadQuiz(url);
@@ -7488,6 +7577,8 @@ async function loadQuiz(url) {
       return;
     }
     qIdx = 0; qScore = 0; qAnswered = false;
+    examAnswers = {};
+    _examErrors = [];
     _wrongStreak = 0; _correctStreak = 0; _correctPhraseIdx = 0;
     _sessionAnswered = 0; _sessionWrongTotal = 0; _recentTopics = []; _topicErrors = {}; _sessionAnswers = [];
     quizStartedAt = new Date().toISOString();
@@ -7524,6 +7615,8 @@ function renderQuestion() {
 
   document.getElementById('qProgLbl').textContent  = t('question') + ' ' + (qIdx + 1) + ' ' + t('of') + ' ' + displayTotal;
   document.getElementById('qProgFill').style.width = pct + '%';
+  var scoreBadge = document.querySelector('.quiz-score-badge');
+  if (scoreBadge) scoreBadge.style.display = isExamMode ? 'none' : 'flex';
   document.getElementById('qScoreNum').textContent = qScore;
 
   var imgUrl  = q.bildeUrl || q.image_url || '';
@@ -7536,31 +7629,36 @@ function renderQuestion() {
   resetGlossaryTerms();
 
   var opts = [];
-  if (q.options && Array.isArray(q.options) && q.options.length) {
-    opts = q.options.map(function(o) {
-      return { id: String(o.id || o.key || '').toUpperCase(), text: pickLang(o.text) || pickLang(o) || String(o.text || '') };
-    });
+  if (q._shuffledOpts) {
+    opts = q._shuffledOpts.opts;
+    currentCorrect = q._shuffledOpts.correct;
   } else {
-    ['A','B','C','D'].forEach(function(l) {
-      var base = 'answer_' + l.toLowerCase();
-      var val = pickField(q, base);
-      if (val) opts.push({ id: l, text: val });
-    });
+    if (q.options && Array.isArray(q.options) && q.options.length) {
+      opts = q.options.map(function(o) {
+        return { id: String(o.id || o.key || '').toUpperCase(), text: pickLang(o.text) || pickLang(o) || String(o.text || '') };
+      });
+    } else {
+      ['A','B','C','D'].forEach(function(l) {
+        var base = 'answer_' + l.toLowerCase();
+        var val = pickField(q, base);
+        if (val) opts.push({ id: l, text: val });
+      });
+    }
+    opts = opts.filter(function(o) { return o.text; });
+    if (opts.length > 1) {
+      var shuffled = shuffleOpts(opts, currentCorrect);
+      opts = shuffled.opts;
+      currentCorrect = shuffled.correct;
+    }
+    q._shuffledOpts = { opts: opts, correct: currentCorrect };
   }
-  opts = opts.filter(function(o) { return o.text; });
 
-  // Shuffle answer options so the correct answer isn't always in the same position.
-  // currentCorrect is updated to the new display letter of the correct option.
-  if (opts.length > 1) {
-    var shuffled = shuffleOpts(opts, currentCorrect);
-    opts = shuffled.opts;
-    currentCorrect = shuffled.correct;
-  }
-
+  var chosenOption = isExamMode ? (examAnswers[qIdx] || '') : '';
   var qCard = document.getElementById('qCard');
   var ansHtml = opts.map(function(o) {
     var txt = typeof o.text === 'object' ? pickLang(o.text) : o.text;
-    return '<button class="ans-btn" data-id="' + escH(o.id) + '" onclick="selectAns(this,\'' + escH(o.id) + '\')">'
+    var isSelected = (isExamMode && chosenOption && o.id.toUpperCase() === chosenOption.toUpperCase());
+    return '<button class="ans-btn' + (isSelected ? ' selected' : '') + '" data-id="' + escH(o.id) + '" onclick="selectAns(this,\'' + escH(o.id) + '\')">'
       + '<span class="ans-letter">' + escH(o.id) + '</span>'
       + '<span class="ans-text">' + escH(txt) + '</span>'
       + '</button>';
@@ -7589,6 +7687,22 @@ function renderQuestion() {
       + '</div>';
   }
 
+  var navButtonsHtml = '';
+  if (isExamMode) {
+    var isLastQ = (qIdx >= questions.length - 1);
+    var nextLbl = isLastQ ? t('exam_finish') : t('next');
+    navButtonsHtml = '<div class="exam-nav-row">'
+      + '<button class="q-prev-mobile" id="qPrevMobile"' + (qIdx === 0 ? ' disabled' : '') + ' onclick="prevQ()">' + t('prev') + '</button>'
+      + '<button class="q-next-mobile" id="qNextMobile" onclick="nextQ()">' + escH(nextLbl) + '</button>'
+      + '</div>';
+  } else {
+    navButtonsHtml = '<button class="q-next-mobile" id="qNextMobile" disabled onclick="nextQ()">' + t('next') + '</button>';
+  }
+
+  var nextBigHtml = isExamMode
+    ? ('<button class="q-next-big" id="qNextBig" onclick="nextQ()">' + (qIdx >= questions.length - 1 ? t('exam_finish') : t('next')) + '</button>')
+    : ('<button class="q-next-big" id="qNextBig" disabled onclick="nextQ()">' + t('next') + '</button>');
+
   qCard.innerHTML =
     '<div class="q-left">'
       + '<div class="q-img-wrap" id="qImgWrap">'
@@ -7604,10 +7718,10 @@ function renderQuestion() {
       + '<div class="q-feedback" id="qFeedback"></div>'
       // Mobile AI section — empty until answered (:empty hides it), then expands in-flow
       + '<div class="quiz-ai-mobile" id="quizAiMobile"></div>'
-      + '<button class="q-next-mobile" id="qNextMobile" disabled onclick="nextQ()">' + t('next') + '</button>'
+      + navButtonsHtml
     + '</div>'
     + '<div class="q-next-col">'
-      + '<button class="q-next-big" id="qNextBig" disabled onclick="nextQ()">' + t('next') + '</button>'
+      + nextBigHtml
       + '<button class="q-bookmark-btn' + (isBm ? ' bookmarked' : '') + '" id="qBmBtn" onclick="toggleBookmark(\'' + escH(qId) + '\')" title="' + escH(t('bookmark')) + '">'
         + (isBm ? '🔖' : '🔖')
       + '</button>'
@@ -7624,14 +7738,14 @@ function renderQuestion() {
   var aiOverlay = document.getElementById('quizAiOverlay');
   if (aiOverlay) aiOverlay.className = 'quiz-ai-img-overlay';
   var aiStatus = document.getElementById('quizAiStatus');
-  if (aiStatus) { aiStatus.textContent = t('ai_waiting'); aiStatus.className = 'quiz-ai-status idle'; }
+  if (aiStatus) { aiStatus.textContent = isExamMode ? t('home_exam_sub') : t('ai_waiting'); aiStatus.className = 'quiz-ai-status idle'; }
   var aiImgBadge = document.getElementById('quizAiImgBadge');
   if (aiImgBadge) aiImgBadge.textContent = t('traffic_situation');
   var aiBody = document.getElementById('quizAiBody');
   if (aiBody) {
     aiBody.innerHTML = '<div class="quiz-ai-idle">'
-      + '<div class="quiz-ai-idle-icon">👆</div>'
-      + '<div class="quiz-ai-idle-text">' + escH(t('ai_idle')) + '</div>'
+      + '<div class="quiz-ai-idle-icon">' + (isExamMode ? '📝' : '👆') + '</div>'
+      + '<div class="quiz-ai-idle-text">' + escH(isExamMode ? t('home_exam_sub') : t('ai_idle')) + '</div>'
       + '</div>';
   }
 }
@@ -7808,10 +7922,27 @@ function topicLabel(label) {
 }
 
 async function selectAns(btn, picked) {
-  if (qAnswered) return;
+  if (!isExamMode && qAnswered) return;
   var _curQ = questions[qIdx];
-  qAnswered = true;
-  if (!(await consumeQuestionAccess(_curQ))) { qAnswered = false; return; }
+  if (!isExamMode) {
+    qAnswered = true;
+    if (!(await consumeQuestionAccess(_curQ))) { qAnswered = false; return; }
+  }
+
+  if (isExamMode) {
+    examAnswers[qIdx] = picked.toUpperCase();
+    document.querySelectorAll('.ans-btn').forEach(function(b) {
+      var id = (b.dataset.id || '').toUpperCase();
+      if (id === picked.toUpperCase()) b.classList.add('selected');
+      else b.classList.remove('selected');
+    });
+    var nb = document.getElementById('qNextBig');
+    var nm = document.getElementById('qNextMobile');
+    if (nb) nb.disabled = false;
+    if (nm) nm.disabled = false;
+    return;
+  }
+
   var correct = currentCorrect;
   var isOk = picked.toUpperCase() === correct.toUpperCase();
   if (isOk) qScore++;
@@ -8897,13 +9028,28 @@ function updateAiPanel(isOk, expl) {
   }
 }
 
+function prevQ() {
+  if (!isExamMode || qIdx <= 0) return;
+  stopAllSpeech();
+  closeMichaelQuizCoach();
+  if (_aiPanelTimer) { clearTimeout(_aiPanelTimer); _aiPanelTimer = null; }
+  qIdx--;
+  renderQuestion();
+  var qb = document.querySelector('.quiz-body');
+  if (qb) qb.scrollTop = 0;
+}
+
 function nextQ() {
   stopAllSpeech();
   closeMichaelQuizCoach();
   if (_aiPanelTimer) { clearTimeout(_aiPanelTimer); _aiPanelTimer = null; } // never let a delayed panel land on the next question
   // Review mode uses its own card renderer — skip normal quiz flow
   if (_reviewMode) { reviewNext(); return; }
-  if (!qAnswered) return;
+  if (!isExamMode && !qAnswered) return;
+  if (isExamMode && qIdx >= questions.length - 1) {
+    confirmSubmitExam();
+    return;
+  }
   qIdx++;
   if (qIdx >= questions.length) { showEnd(); return; }
   if (!checkPaywall()) return;
@@ -8917,6 +9063,10 @@ function goBack() {
   stopAllSpeech();
   stopExamTimer();
   isExamMode = false;
+  examAnswers = {};
+  _examErrors = [];
+  var sb = document.querySelector('.quiz-score-badge');
+  if (sb) sb.style.display = 'flex';
   if (_reviewMode) endReview();
   showTab(activeTab && activeTab !== 'quiz' ? activeTab : 'home');
 }
@@ -9386,6 +9536,67 @@ function showEnd() {
   stopExamTimer();
   showScreen('screenEnd');
   var total  = questions.length;
+
+  if (isExamMode) {
+    qScore = 0;
+    _sessionAnswers = [];
+    _examErrors = [];
+    _topicErrors = {};
+    questions.forEach(function(q, idx) {
+      var userPick = (examAnswers[idx] || '').toUpperCase();
+      var correct = (q.correctOptionId || q.correct_answer || '').toUpperCase();
+      var isOk = (userPick !== '' && userPick === correct);
+      if (isOk) qScore++;
+
+      var qId = String(q._id || q.id || q.question_id || '');
+      var qText = pickLang(q.question) || pickField(q, 'question_text') || '';
+      var expl = pickLang(q.explanation) || pickField(q, 'explanation') || '';
+
+      var userPickText = '';
+      var correctPickText = '';
+      var opts = [];
+      if (q._shuffledOpts && q._shuffledOpts.opts) {
+        opts = q._shuffledOpts.opts;
+      } else if (q.options && Array.isArray(q.options) && q.options.length) {
+        opts = q.options.map(function(o) {
+          return { id: String(o.id || o.key || '').toUpperCase(), text: pickLang(o.text) || pickLang(o) || String(o.text || '') };
+        });
+      } else {
+        ['A','B','C','D'].forEach(function(l) {
+          var base = 'answer_' + l.toLowerCase();
+          var val = pickField(q, base);
+          if (val) opts.push({ id: l, text: val });
+        });
+      }
+      opts.forEach(function(o) {
+        var oid = String(o.id || '').toUpperCase();
+        if (oid === userPick) userPickText = (typeof o.text === 'object' ? pickLang(o.text) : o.text);
+        if (oid === correct) correctPickText = (typeof o.text === 'object' ? pickLang(o.text) : o.text);
+      });
+
+      var ansRecord = {
+        question_id: qId,
+        question_text: qText.slice(0, 200),
+        user_answer: userPick,
+        user_answer_text: userPickText,
+        correct_answer: correct,
+        correct_answer_text: correctPickText,
+        is_correct: isOk,
+        explanation: expl.slice(0, 400),
+        question_index: idx + 1,
+        question_obj: q
+      };
+      _sessionAnswers.push(ansRecord);
+      if (!isOk) {
+        _examErrors.push(ansRecord);
+        var _tLabel = _dangerLabel(expl);
+        if (_tLabel && _tLabel !== 'Forstå situasjonen') {
+          _topicErrors[_tLabel] = (_topicErrors[_tLabel] || 0) + 1;
+        }
+      }
+    });
+  }
+
   var pct    = total > 0 ? Math.round(qScore / total * 100) : 0;
 
   // ── Display (wrapped in try so a DOM error never blocks the save) ──
@@ -9406,6 +9617,47 @@ function showEnd() {
     var coachPriBtn = document.getElementById('endCoachMichaelPriBtn');
     if (coachPriBtn) {
       coachPriBtn.style.display = isExamMode ? 'inline-flex' : 'none';
+    }
+
+    var errContainer = document.getElementById('endExamErrorsContainer');
+    var errTitle = document.getElementById('endExamErrorsTitle');
+    var errList = document.getElementById('endExamErrorsList');
+    var endScreenEl = document.getElementById('screenEnd');
+
+    if (isExamMode && errContainer && errTitle && errList) {
+      if (_examErrors.length === 0) {
+        errTitle.textContent = t('exam_all_correct');
+        errList.innerHTML = '';
+        errContainer.style.display = 'block';
+        if (endScreenEl) endScreenEl.classList.remove('has-errors');
+      } else {
+        errTitle.textContent = tf('exam_errors_heading', {count: _examErrors.length});
+        if (endScreenEl) endScreenEl.classList.add('has-errors');
+        var errHtml = _examErrors.map(function(err, errIdx) {
+          var userStr = err.user_answer ? ('[' + escH(err.user_answer) + '] ' + escH(err.user_answer_text || '')) : escH(t('exam_unanswered'));
+          var correctStr = '[' + escH(err.correct_answer) + '] ' + escH(err.correct_answer_text || '');
+          var explHtml = err.explanation ? ('<div class="exam-error-expl">' + escH(err.explanation) + '</div>') : '';
+          return '<div class="exam-error-card">'
+            + '<div class="exam-error-header">'
+              + '<span class="exam-error-num">#' + err.question_index + '</span>'
+              + '<span class="exam-error-qtext">' + escH(err.question_text) + '</span>'
+            + '</div>'
+            + '<div class="exam-error-ans-row">'
+              + '<div class="exam-error-user">❌ ' + escH(t('exam_your_answer')) + ': ' + userStr + '</div>'
+              + '<div class="exam-error-correct">✓ ' + escH(t('exam_correct_answer')) + ': ' + correctStr + '</div>'
+            + '</div>'
+            + explHtml
+            + '<button class="exam-error-btn" onclick="consultMichaelFromExamQuestion(' + errIdx + ')">'
+              + t('ask_michael_ai')
+            + '</button>'
+            + '</div>';
+        }).join('');
+        errList.innerHTML = errHtml;
+        errContainer.style.display = 'block';
+      }
+    } else if (errContainer) {
+      errContainer.style.display = 'none';
+      if (endScreenEl) endScreenEl.classList.remove('has-errors');
     }
   } catch(displayErr) { console.warn('showEnd display error:', displayErr); }
 
@@ -9534,7 +9786,54 @@ function consultMichaelFromExam() {
   showTab('teacher');
   switchTeacherSession('normal');
   setTimeout(function() {
-    teacherSend(prompt, display);
+    teacherSend(prompt, display, 'quiz_coach');
+  }, 120);
+}
+
+function consultMichaelFromExamQuestion(errorIdx) {
+  var err = _examErrors[errorIdx];
+  if (!err) return;
+  var userAnsDisplay = err.user_answer ? ('(' + err.user_answer + ') ' + err.user_answer_text) : t('exam_unanswered');
+  var correctAnsDisplay = '(' + err.correct_answer + ') ' + err.correct_answer_text;
+
+  var display = '';
+  var prompt = '';
+  if (appLang === 'th') {
+    display = 'ช่วยอธิบายข้อนี้ให้หน่อยครับ: "' + err.question_text.slice(0, 80) + '..."';
+    prompt = 'ฉันตอบผิดในข้อสอบจำลอง ช่วยอธิบายข้อนี้ให้เข้าใจง่าย ๆ หน่อยครับ\n\n'
+      + '<quiz_context>\n'
+      + 'Question: ' + err.question_text + '\n'
+      + 'Student answer: ' + userAnsDisplay + '\n'
+      + 'Correct answer: ' + correctAnsDisplay + '\n'
+      + 'Explanation: ' + err.explanation + '\n'
+      + '</quiz_context>\n'
+      + 'ช่วยอธิบายว่าทำไมคำตอบของฉันถึงไม่ถูกต้อง ทำไมคำตอบที่ถูกถึงถูกต้อง และให้หลักการจำสั้น ๆ สำหรับสถานการณ์นี้';
+  } else if (appLang === 'en') {
+    display = 'Could you explain this question: "' + err.question_text.slice(0, 80) + '..."?';
+    prompt = 'I got this question wrong on my exam simulation. Could you explain the principle calmly?\n\n'
+      + '<quiz_context>\n'
+      + 'Question: ' + err.question_text + '\n'
+      + 'Student answer: ' + userAnsDisplay + '\n'
+      + 'Correct answer: ' + correctAnsDisplay + '\n'
+      + 'Explanation: ' + err.explanation + '\n'
+      + '</quiz_context>\n'
+      + 'Please explain why my pick is incorrect, why the correct answer is right, and give a practical tip.';
+  } else { // Norwegian (no)
+    display = 'Kan du forklare dette spørsmålet: "' + err.question_text.slice(0, 80) + '..."?';
+    prompt = 'Jeg svarte feil på dette spørsmålet under eksamenssimulatoren. Kan du forklare det pedagogisk for meg?\n\n'
+      + '<quiz_context>\n'
+      + 'Question: ' + err.question_text + '\n'
+      + 'Student answer: ' + userAnsDisplay + '\n'
+      + 'Correct answer: ' + correctAnsDisplay + '\n'
+      + 'Explanation: ' + err.explanation + '\n'
+      + '</quiz_context>\n'
+      + 'Forklar hvorfor mitt svar ble feil, hvorfor fasiten er riktig, og gi meg en enkel huskeregel.';
+  }
+
+  showTab('teacher');
+  switchTeacherSession('normal');
+  setTimeout(function() {
+    teacherSend(prompt, display, 'quiz_coach');
   }, 120);
 }
 
@@ -11009,7 +11308,7 @@ function _teacherClearDoc() {
   if (inputEl) inputEl.value = '';
 }
 
-async function teacherSend(overrideMsg, customDisplayMsg) {
+async function teacherSend(overrideMsg, customDisplayMsg, customMode) {
   var input = document.getElementById('teacherInput');
   var msg = (overrideMsg || (input && input.value) || '').trim();
   if (!msg || _teacherTyping) return;
@@ -11087,6 +11386,9 @@ async function teacherSend(overrideMsg, customDisplayMsg) {
       device_id: (typeof deviceId !== 'undefined' ? deviceId : null),
       user_id: (typeof user !== 'undefined' && user && user.id ? user.id : null)
     };
+    if (customMode) {
+      chatPayload.mode = customMode;
+    }
     if (_teacherUploadedDoc && _teacherUploadedDoc.document_id) {
       chatPayload.document_id = _teacherUploadedDoc.document_id;
       chatPayload.document_context = _teacherUploadedDoc.extracted_text;

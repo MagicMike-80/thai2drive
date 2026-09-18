@@ -133,6 +133,66 @@ class MichaelMediaCardsContractTests(unittest.TestCase):
         self.assertIn("conversation_id:_quizCoachConversationId || _quizCoachSessionId", WEBAPP)
         self.assertIn("conversation_id: activeConversationId || activeSessionId", WEBAPP)
 
+    def test_exam_mode_ui_contract_hides_instant_feedback_and_allows_navigation(self):
+        # 1. Verification of selectAns in exam mode
+        select_ans_start = WEBAPP.index("async function selectAns(")
+        select_ans_end = WEBAPP.index("var correct = currentCorrect;", select_ans_start)
+        select_ans_body = WEBAPP[select_ans_start:select_ans_end]
+
+        self.assertIn("if (isExamMode) {", select_ans_body)
+        self.assertIn("examAnswers[qIdx] = picked.toUpperCase();", select_ans_body)
+        self.assertIn("b.classList.add('selected');", select_ans_body)
+        # Ensure that immediate feedback, correct/wrong classes and sounds are after the exam mode return
+        exam_block = select_ans_body[select_ans_body.index("if (isExamMode) {"):]
+        self.assertIn("return;", exam_block)
+        self.assertNotIn("b.classList.add('correct')", exam_block)
+        self.assertNotIn("b.classList.add('wrong')", exam_block)
+        self.assertNotIn("playSound", exam_block)
+
+        # 2. Score badge is hidden during exam
+        self.assertIn("scoreBadge.style.display = isExamMode ? 'none' : 'flex'", WEBAPP)
+
+        # 3. Navigation controls and options preserved across questions
+        self.assertIn("function prevQ()", WEBAPP)
+        self.assertIn("q._shuffledOpts", WEBAPP)
+        self.assertIn("exam-nav-row", WEBAPP)
+        self.assertIn("q-prev-mobile", WEBAPP)
+
+    def test_exam_end_screen_debrief_and_michael_quiz_coach_links(self):
+        # 1. Debrief generation on end screen
+        self.assertIn("function showEnd()", WEBAPP)
+        self.assertIn("endExamErrorsContainer", WEBAPP)
+        self.assertIn("exam-error-card", WEBAPP)
+        self.assertIn("consultMichaelFromExamQuestion", WEBAPP)
+        self.assertIn("consultMichaelFromExam()", WEBAPP)
+
+        # 2. Both exam debrief entrypoints trigger Michael with mode 'quiz_coach'
+        self.assertIn("teacherSend(prompt, display, 'quiz_coach')", WEBAPP)
+        self.assertIn("<quiz_context>", WEBAPP)
+        self.assertIn("Student answer:", WEBAPP)
+        self.assertIn("Correct answer:", WEBAPP)
+
+        # 3. teacherSend attaches customMode to chatPayload.mode
+        send_start = WEBAPP.index("async function teacherSend(")
+        send_end = WEBAPP.index("function toggleSound", send_start)
+        send_body = WEBAPP[send_start:send_end]
+        self.assertIn("chatPayload.mode = customMode;", send_body)
+
+    def test_exam_ui_translations_100_percent_isolated(self):
+        self.assertIn("var TR = UI;", WEBAPP)
+        for key in [
+            'prev', 'exam_finish', 'exam_errors_heading', 'exam_all_correct',
+            'exam_your_answer', 'exam_correct_answer', 'exam_unanswered', 'ask_michael_ai'
+        ]:
+            pattern = rf"{key}\s*:\s*\{{([^\r\n]+)\}}"
+            match = re.search(pattern, WEBAPP)
+            self.assertIsNotNone(match, f"Translation key '{key}' missing from UI/TR")
+            val_str = match.group(1)
+            self.assertIn("th:", val_str, f"Thai translation missing for '{key}'")
+            self.assertIn("no:", val_str, f"Norwegian translation missing for '{key}'")
+            self.assertIn("en:", val_str, f"English translation missing for '{key}'")
+
 
 if __name__ == "__main__":
     unittest.main()
+
