@@ -278,6 +278,7 @@ class QuizAttempt(BaseModel):
 class QuizAttemptCreate(BaseModel):
     client_attempt_id: Optional[str] = None
     device_id: str
+    user_id: Optional[str] = None
     mode: str
     category: Optional[str] = None
     total_questions: int
@@ -1168,6 +1169,426 @@ async def get_user_readiness(current_user: dict = Depends(get_current_user)):
         mastered_mistakes=mastered_count,
         active_mistakes=active_count,
     )
+
+
+# ==================== ELEVFREMDIRFT & DASHBOARD ====================
+
+DASHBOARD_CATEGORY_NAMES: Dict[str, Dict[str, str]] = {
+    "traffic signs": {"no": "Trafikkskilt og vegmerking", "th": "ป้ายจราจรและเครื่องหมายจราจร", "en": "Traffic signs and road markings"},
+    "skilt": {"no": "Trafikkskilt og vegmerking", "th": "ป้ายจราจรและเครื่องหมายจราจร", "en": "Traffic signs and road markings"},
+    "trafikkskilt": {"no": "Trafikkskilt og vegmerking", "th": "ป้ายจราจรและเครื่องหมายจราจร", "en": "Traffic signs and road markings"},
+    "road rules": {"no": "Trafikkregler og grunnregler", "th": "กฎจราจรและข้อบังคับพื้นฐาน", "en": "Road rules and general regulations"},
+    "traffic rules": {"no": "Trafikkregler og grunnregler", "th": "กฎจราจรและข้อบังคับพื้นฐาน", "en": "Road rules and general regulations"},
+    "trafikkregler": {"no": "Trafikkregler og grunnregler", "th": "กฎจราจรและข้อบังคับพื้นฐาน", "en": "Road rules and general regulations"},
+    "right of way": {"no": "Vikeplikt og forkjørsrett", "th": "การให้ทางและกฎสิทธิ์ผ่าน", "en": "Right of way and priority"},
+    "vikeplikt": {"no": "Vikeplikt og forkjørsrett", "th": "การให้ทางและกฎสิทธิ์ผ่าน", "en": "Right of way and priority"},
+    "speed limits": {"no": "Fartsgrenser og avpasning av fart", "th": "ขีดจำกัดความเร็วและการควบคุมความเร็ว", "en": "Speed limits and speed adaptation"},
+    "fartsgrenser": {"no": "Fartsgrenser og avpasning av fart", "th": "ขีดจำกัดความเร็วและการควบคุมความเร็ว", "en": "Speed limits and speed adaptation"},
+    "fart": {"no": "Fartsgrenser og avpasning av fart", "th": "ขีดจำกัดความเร็วและการควบคุมความเร็ว", "en": "Speed limits and speed adaptation"},
+    "safety": {"no": "Sikkerhet og sikring", "th": "ความปลอดภัยและการป้องกัน", "en": "Safety and protection"},
+    "sikkerhet": {"no": "Sikkerhet og sikring", "th": "ความปลอดภัยและการป้องกัน", "en": "Safety and protection"},
+    "driving conditions": {"no": "Kjøreforhold og føreforhold", "th": "สภาพการขับขี่และสภาพถนน", "en": "Driving and road conditions"},
+    "kjøreforhold": {"no": "Kjøreforhold og føreforhold", "th": "สภาพการขับขี่และสภาพถนน", "en": "Driving and road conditions"},
+    "road conditions": {"no": "Veiforhold og føreforhold", "th": "สภาพถนนและการยึดเกาะ", "en": "Road conditions and grip"},
+    "veiforhold": {"no": "Veiforhold og føreforhold", "th": "สภาพถนนและการยึดเกาะ", "en": "Road conditions and grip"},
+    "situations": {"no": "Trafikksituasjoner og samhandling", "th": "สถานการณ์จราจรและการมีปฏิสัมพันธ์", "en": "Traffic situations and interaction"},
+    "situasjoner": {"no": "Trafikksituasjoner og samhandling", "th": "สถานการณ์จราจรและการมีปฏิสัมพันธ์", "en": "Traffic situations and interaction"},
+    "stopping distance": {"no": "Reaksjonstid og stoppelengde", "th": "ระยะตอบสนองและระยะหยุดรถ", "en": "Reaction time and stopping distance"},
+    "stoppelengde": {"no": "Reaksjonstid og stoppelengde", "th": "ระยะตอบสนองและระยะหยุดรถ", "en": "Reaction time and stopping distance"},
+    "roundabouts": {"no": "Kjøring i rundkjøring", "th": "การขับขี่ในวงเวียน", "en": "Roundabouts"},
+    "rundkjoring": {"no": "Kjøring i rundkjøring", "th": "การขับขี่ในวงเวียน", "en": "Roundabouts"},
+    "night driving": {"no": "Mørkekjøring og lysbruk", "th": "การขับรถเวลากลางคืนและการใช้ไฟ", "en": "Night driving and light usage"},
+    "morkekjoring": {"no": "Mørkekjøring og lysbruk", "th": "การขับรถเวลากลางคืนและการใช้ไฟ", "en": "Night driving and light usage"},
+    "level crossings": {"no": "Planoverganger og jernbane", "th": "ทางข้ามทางรถไฟ", "en": "Railway level crossings"},
+    "planovergang": {"no": "Planoverganger og jernbane", "th": "ทางข้ามทางรถไฟ", "en": "Railway level crossings"},
+    "parking": {"no": "Parkering og stans", "th": "การจอดรถและการหยุดรถ", "en": "Parking and stopping"},
+    "parkering": {"no": "Parkering og stans", "th": "การจอดรถและการหยุดรถ", "en": "Parking and stopping"},
+    "vehicle": {"no": "Kjøretøyet og teknisk kontroll", "th": "ยานพาหนะและการตรวจสภาพ", "en": "Vehicle and technical control"},
+    "kjøretøy": {"no": "Kjøretøyet og teknisk kontroll", "th": "ยานพาหนะและการตรวจสภาพ", "en": "Vehicle and technical control"},
+    "overtaking": {"no": "Forbikjøring", "th": "การแซง", "en": "Overtaking"},
+    "forbikjøring": {"no": "Forbikjøring", "th": "การแซง", "en": "Overtaking"},
+    "alcohol": {"no": "Alkohol og rusmidler", "th": "แอลกอฮอล์และสารเสพติด", "en": "Alcohol and intoxicants"},
+    "alkohol": {"no": "Alkohol og rusmidler", "th": "แอลกอฮอล์และสารเสพติด", "en": "Alcohol and intoxicants"},
+    "environment": {"no": "Miljø og økonomisk kjøring", "th": "สิ่งแวดล้อมและการขับขี่ประหยัดพลังงาน", "en": "Environment and eco-driving"},
+    "miljø": {"no": "Miljø og økonomisk kjøring", "th": "สิ่งแวดล้อมและการขับขี่ประหยัดพลังงาน", "en": "Environment and eco-driving"},
+    "accidents": {"no": "Ulykker og førstehjelp", "th": "อุบัติเหตุและการปฐมพยาบาล", "en": "Accidents and first aid"},
+    "ulykker": {"no": "Ulykker og førstehjelp", "th": "อุบัติเหตุและการปฐมพยาบาล", "en": "Accidents and first aid"},
+    "pedestrians": {"no": "Myke trafikanter og gangfelt", "th": "คนเดินเท้าและทางม้าลาย", "en": "Pedestrians and crosswalks"},
+    "gangfelt": {"no": "Myke trafikanter og gangfelt", "th": "คนเดินเท้าและทางม้าลาย", "en": "Pedestrians and crosswalks"},
+    "intersections": {"no": "Kryss og vikeplikt", "th": "ทางแยกและการให้ทาง", "en": "Intersections and priority"},
+    "kryss": {"no": "Kryss og vikeplikt", "th": "ทางแยกและการให้ทาง", "en": "Intersections and priority"},
+    "all": {"no": "Alle emner (blandet prøve)", "th": "ทุกหมวดหมู่ (ข้อสอบรวม)", "en": "All topics (full exam)"},
+    "all categories": {"no": "Alle emner (blandet prøve)", "th": "ทุกหมวดหมู่ (ข้อสอบรวม)", "en": "All topics (full exam)"},
+}
+
+DASHBOARD_MODE_LABELS: Dict[str, Dict[str, str]] = {
+    "practice": {"no": "Øving", "th": "ฝึกซ้อม", "en": "Practice"},
+    "exam": {"no": "Offisiell teoriprøve", "th": "สอบจำลองเสมือนจริง", "en": "Official theory exam"},
+    "daily": {"no": "Daglig test", "th": "แบบทดสอบประจำวัน", "en": "Daily test"},
+    "mistakes": {"no": "Feilsvar (repetisjon)", "th": "ทบทวนข้อที่ตอบผิด", "en": "Mistake review"},
+    "category": {"no": "Kategoriøving", "th": "ฝึกเฉพาะหมวดหมู่", "en": "Category practice"},
+}
+
+
+def _localize_category(cat: Optional[str], lang: str) -> str:
+    lang = lang if lang in ("no", "th", "en") else "no"
+    if not cat:
+        neutral = {"no": "Alle emner", "th": "ทุกหมวดหมู่", "en": "All categories"}
+        return neutral[lang]
+    raw = str(cat).strip()
+    clean = raw.lower()
+    if clean in DASHBOARD_CATEGORY_NAMES and lang in DASHBOARD_CATEGORY_NAMES[clean]:
+        return DASHBOARD_CATEGORY_NAMES[clean][lang]
+    for key, dict_trans in DASHBOARD_CATEGORY_NAMES.items():
+        if key in clean or clean in key:
+            if lang in dict_trans and dict_trans[lang]:
+                return dict_trans[lang]
+    fallback = {
+        "no": "Generell teori",
+        "th": "ทฤษฎีทั่วไป",
+        "en": "General theory",
+    }
+    return fallback[lang]
+
+
+def _localize_mode(mode: Optional[str], lang: str) -> str:
+    lang = lang if lang in ("no", "th", "en") else "no"
+    clean = str(mode or "practice").strip().lower()
+    if clean in DASHBOARD_MODE_LABELS and lang in DASHBOARD_MODE_LABELS[clean]:
+        return DASHBOARD_MODE_LABELS[clean][lang]
+    fallback = {
+        "no": "Quiz",
+        "th": "แบบทดสอบ",
+        "en": "Quiz",
+    }
+    return fallback[lang]
+
+
+def _get_topic_advice(category_key: str, lang: str) -> str:
+    lang = lang if lang in ("no", "th", "en") else "no"
+    clean = str(category_key or "").lower()
+
+    advice_map = {
+        "vikeplikt": {
+            "no": "Trafikklærer Michael råder: Husk 'Kongen og tjeneren'. Den som har vikeplikt må vise det tydelig i god tid.",
+            "th": "ครูไมเคิลแนะนำ: จำกฎ 'ราชาและผู้รับใช้' ผู้ที่มีหน้าที่ให้ทางต้องชะลอรถอย่างชัดเจนตั้งแต่เนิ่นๆ ครับผม",
+            "en": "Driving instructor Michael advises: Remember 'King and servant'. Whoever yields must show it clearly in good time.",
+        },
+        "skilt": {
+            "no": "Trafikklærer Michael råder: Lær fareskilt og vikepliktskilt godt. Fareskilt har rød kant og trekantform.",
+            "th": "ครูไมเคิลแนะนำ: ทำความเข้าใจป้ายเตือนและป้ายให้ทางให้แม่นยำ ป้ายเตือนเป็นรูปสามเหลี่ยมขอบสีแดงครับผม",
+            "en": "Driving instructor Michael advises: Learn warning signs and yield signs thoroughly.",
+        },
+        "stoppelengde": {
+            "no": "Trafikklærer Michael råder: Dobbel fart gir fire ganger så lang bremselengde! Husk 3-sekundersregelen.",
+            "th": "ครูไมเคิลแนะนำ: ความเร็วเพิ่มขึ้นสองเท่า ระยะเบรกจะเพิ่มขึ้นถึงสี่เท่า! อย่าลืมกฎ 3 วินาทีครับผม",
+            "en": "Driving instructor Michael advises: Doubling your speed quadruples braking distance! Remember the 3-second rule.",
+        },
+        "fart": {
+            "no": "Trafikklærer Michael råder: Avpass alltid farten etter sikt og føreforhold, ikke bare fartsgrenseskiltet.",
+            "th": "ครูไมเคิลแนะนำ: ปรับความเร็วตามทัศนวิสัยและสภาพถนนเสมอ ไม่ใช่แค่ตามป้ายจำกัดความเร็วครับผม",
+            "en": "Driving instructor Michael advises: Always adjust speed to visibility and road conditions.",
+        },
+        "safety": {
+            "no": "Trafikklærer Michael råder: Husk HAV-regelen (§ 3) – vis alltid hensyn, aktpågivenhet og varsomhet.",
+            "th": "ครูไมเคิลแนะนำ: จำกฎ HAV (§ 3) – มีน้ำใจ ระมัดระวัง และรอบคอบในทุกการขับขี่ครับผม",
+            "en": "Driving instructor Michael advises: Remember the HAV rule (§ 3) – always drive with care and consideration.",
+        },
+    }
+    for key, trans in advice_map.items():
+        if key in clean:
+            return trans.get(lang, "")
+
+    general_advice = {
+        "no": "Trafikklærer Michael råder: Ta noen ekstra øvingsoppgaver på dette temaet, så sitter teorien!",
+        "th": "ครูไมเคิลแนะนำ: ฝึกทำข้อสอบเพิ่มเติมในหมวดนี้อีกสักนิด แล้วจะมั่นใจและจำแม่นยำขึ้นครับผม",
+        "en": "Driving instructor Michael advises: Practice a few extra questions on this topic to master the theory!",
+    }
+    return general_advice[lang]
+
+
+async def compute_student_weak_topics(
+    db,
+    user_id: Optional[str] = None,
+    device_id: Optional[str] = None,
+    lang: str = "no",
+    limit: int = 5,
+) -> List[Dict[str, Any]]:
+    """Compute weakest categories/topics for student with 100% language isolation."""
+    identities = []
+    if user_id:
+        identities.append({"user_id": user_id})
+    if device_id:
+        identities.append({"device_id": device_id})
+    if not identities:
+        return []
+
+    match_filter = {"$or": identities} if len(identities) > 1 else identities[0]
+
+    pipeline = [
+        {"$match": {
+            **match_filter,
+            "total_questions": {"$gt": 0},
+            "category": {"$nin": [None, "", "None", "all", "All Categories", "alle"]},
+        }},
+        {"$group": {
+            "_id": "$category",
+            "attempts": {"$sum": 1},
+            "total_q": {"$sum": "$total_questions"},
+            "total_correct": {"$sum": "$correct_answers"},
+        }},
+        {"$project": {
+            "_id": 0,
+            "category": "$_id",
+            "attempts": 1,
+            "total_q": 1,
+            "total_correct": 1,
+            "wrong_count": {"$subtract": ["$total_q", "$total_correct"]},
+            "accuracy": {"$cond": [
+                {"$gt": ["$total_q", 0]},
+                {"$round": [{"$multiply": [{"$divide": ["$total_correct", "$total_q"]}, 100]}, 1]},
+                0.0
+            ]},
+        }},
+        {"$sort": {"accuracy": 1, "wrong_count": -1}},
+        {"$limit": limit},
+    ]
+
+    try:
+        rows = await db.quiz_attempts.aggregate(pipeline).to_list(limit)
+    except Exception as exc:
+        logging.getLogger("dashboard").warning("Weak topics aggregation failed: %s", exc)
+        rows = []
+
+    active_mistakes = []
+    if user_id:
+        try:
+            m_cursor = db.user_mistakes.find({"user_id": user_id, "active": True}).limit(20)
+            active_mistakes = await m_cursor.to_list(20)
+        except Exception:
+            active_mistakes = []
+
+    results = []
+    seen_categories = set()
+
+    for r in rows:
+        cat = r["category"]
+        if not cat or cat in seen_categories:
+            continue
+        seen_categories.add(cat)
+        acc = float(r.get("accuracy", 0.0))
+        wrong = int(r.get("wrong_count", 0))
+        total = int(r.get("total_q", 0))
+
+        if acc < 85.0 or wrong > 0:
+            results.append({
+                "category": cat,
+                "name": _localize_category(cat, lang),
+                "accuracy": acc,
+                "total_questions": total,
+                "wrong_count": wrong,
+                "mastered": acc >= 85.0 and wrong == 0,
+                "advice": _get_topic_advice(cat, lang),
+            })
+
+    if not results and active_mistakes:
+        q_ids = [m.get("question_id") for m in active_mistakes if m.get("question_id")]
+        if q_ids:
+            try:
+                q_docs = await db.questions.find({"id": {"$in": q_ids}}, {"_id": 0, "category": 1}).to_list(len(q_ids))
+                cat_counts: Dict[str, int] = {}
+                for q in q_docs:
+                    c = q.get("category")
+                    if c and c not in ("all", "All Categories"):
+                        cat_counts[c] = cat_counts.get(c, 0) + 1
+                for c, fails in sorted(cat_counts.items(), key=lambda x: x[1], reverse=True)[:limit]:
+                    if c not in seen_categories:
+                        seen_categories.add(c)
+                        results.append({
+                            "category": c,
+                            "name": _localize_category(c, lang),
+                            "accuracy": 0.0,
+                            "total_questions": fails,
+                            "wrong_count": fails,
+                            "mastered": False,
+                            "advice": _get_topic_advice(c, lang),
+                        })
+            except Exception:
+                pass
+
+    return results[:limit]
+
+
+async def get_user_completed_sessions(
+    db,
+    user_id: Optional[str] = None,
+    device_id: Optional[str] = None,
+    lang: str = "no",
+    limit: int = 20,
+) -> List[Dict[str, Any]]:
+    """Retrieve and localize completed sessions/attempts with 100% language isolation."""
+    identities = []
+    if user_id:
+        identities.append({"user_id": user_id})
+    if device_id:
+        identities.append({"device_id": device_id})
+    if not identities:
+        return []
+
+    match_filter = {"$or": identities} if len(identities) > 1 else identities[0]
+    safe_limit = max(1, min(int(limit), 50))
+
+    try:
+        attempts = await db.quiz_attempts.find(
+            match_filter, {"_id": 0}
+        ).sort("completed_at", -1).limit(safe_limit).to_list(safe_limit)
+    except Exception as exc:
+        logging.getLogger("dashboard").warning("Completed sessions query failed: %s", exc)
+        return []
+
+    sessions = []
+    for att in attempts:
+        mode = att.get("mode") or "practice"
+        cat = att.get("category")
+        sessions.append({
+            "id": att.get("id", ""),
+            "mode": mode,
+            "mode_label": _localize_mode(mode, lang),
+            "category": cat or "all",
+            "category_name": _localize_category(cat, lang),
+            "score_percentage": round(float(att.get("score_percentage", 0.0)), 1),
+            "correct_answers": int(att.get("correct_answers", 0)),
+            "total_questions": int(att.get("total_questions", 0)),
+            "passed": att.get("passed"),
+            "completed_at": att.get("completed_at", ""),
+            "duration_seconds": att.get("duration_seconds"),
+        })
+    return sessions
+
+
+@api_router.get("/user/dashboard")
+@app.get("/user/dashboard")
+async def get_user_dashboard(
+    request: Request,
+    device_id: Optional[str] = Query(None),
+    user_id: Optional[str] = Query(None),
+    lang: str = Query(default="no"),
+    limit: int = Query(default=20, ge=1, le=50),
+    current_user: Optional[dict] = Depends(optional_auth),
+):
+    """
+    Return comprehensive student progress dashboard:
+    - User profile and premium status
+    - Weak topics with 100% language isolation and Michael AI advice
+    - Completed sessions with localized mode and category labels
+    - Exam readiness score, streak, and overall learning stats
+    """
+    if lang not in ("no", "th", "en"):
+        raise HTTPException(
+            status_code=400,
+            detail={"key": "invalid_language", "message": f"Unsupported language '{lang}'. Must be 'no', 'th', or 'en'."}
+        )
+
+    auth_user_id = current_user.get("sub") if current_user else None
+    target_user_id = auth_user_id or user_id
+    dev_id = device_id
+
+    user_doc = None
+    if target_user_id:
+        user_doc = await db.users.find_one({"id": target_user_id}, {"_id": 0, "password_hash": 0})
+        if user_doc and not dev_id:
+            dev_id = user_doc.get("device_id")
+    elif dev_id:
+        user_doc = await db.users.find_one({"device_id": dev_id}, {"_id": 0, "password_hash": 0})
+        if user_doc:
+            target_user_id = user_doc.get("id")
+
+    weak_topics, completed_sessions = await asyncio.gather(
+        compute_student_weak_topics(db, user_id=target_user_id, device_id=dev_id, lang=lang, limit=5),
+        get_user_completed_sessions(db, user_id=target_user_id, device_id=dev_id, lang=lang, limit=limit),
+    )
+
+    active_mistakes_count = 0
+    mastered_mistakes_count = 0
+    if target_user_id:
+        try:
+            active_mistakes_count, mastered_mistakes_count = await asyncio.gather(
+                db.user_mistakes.count_documents({"user_id": target_user_id, "active": True}),
+                db.user_mistakes.count_documents({"user_id": target_user_id, "mastered": True}),
+            )
+        except Exception:
+            pass
+
+    total_sessions = len(completed_sessions)
+    total_questions = sum(s["total_questions"] for s in completed_sessions)
+    total_correct = sum(s["correct_answers"] for s in completed_sessions)
+    overall_accuracy = round((total_correct / total_questions * 100), 1) if total_questions > 0 else 0.0
+
+    readiness_data = compute_user_readiness(
+        recent_correct=total_correct,
+        recent_total=total_questions,
+        mastered_mistakes=mastered_mistakes_count,
+        active_mistakes=active_mistakes_count,
+    )
+
+    score = readiness_data.get("score", 0)
+    if score < 50:
+        status_msg = {
+            "no": "Vi er i startfasen! Øv jevnt for å bygge et solid grunnlag.",
+            "th": "กำลังเริ่มต้นได้ดีครับ! ฝึกทำข้อสอบอย่างสม่ำเสมอเพื่อสร้างพื้นฐานที่มั่นคงครับผม",
+            "en": "We are in the early stages! Practice steadily to build a solid foundation.",
+        }
+    elif score < 85:
+        status_msg = {
+            "no": "God fremgang! Ta noen fullskala eksamener for å bli helt trygg.",
+            "th": "พัฒนาการดีมากครับ! ฝึกทำข้อสอบจำลองเต็มชุดเพื่อเพิ่มความมั่นใจครับผม",
+            "en": "Great progress! Take some full practice exams to become completely confident.",
+        }
+    else:
+        status_msg = {
+            "no": "Eksamensklar! Kunnskapen din sitter trygt i ryggmargen.",
+            "th": "พร้อมสอบแล้วครับ! ความรู้แน่นและพร้อมสอบผ่านฉลุยแน่นอนครับผม",
+            "en": "Exam ready! Your knowledge is solid and ready for test day.",
+        }
+
+    streak_info = {"current_streak": 0, "best_streak": 0}
+    if user_doc:
+        streak_info = {
+            "current_streak": user_doc.get("current_streak", 0),
+            "best_streak": user_doc.get("best_streak", 0),
+        }
+
+    is_prem = _user_has_active_premium(user_doc) if user_doc else False
+
+    return {
+        "ok": True,
+        "lang": lang,
+        "user": {
+            "id": target_user_id or dev_id or "anonymous",
+            "email": user_doc.get("email") if user_doc else None,
+            "name": (user_doc.get("full_name") or user_doc.get("name")) if user_doc else None,
+            "is_premium": is_prem,
+            "has_premium": is_prem,
+            "is_authenticated": bool(target_user_id and user_doc),
+        },
+        "readiness": {
+            "score": score,
+            "accuracy": readiness_data.get("recent_accuracy", 0.0),
+            "mistake_mastery": readiness_data.get("mistake_mastery", 0.0),
+            "status": status_msg[lang],
+        },
+        "streak": streak_info,
+        "stats": {
+            "total_sessions": total_sessions,
+            "total_questions": total_questions,
+            "total_correct": total_correct,
+            "overall_accuracy": overall_accuracy,
+            "active_mistakes_count": active_mistakes_count,
+            "mastered_mistakes_count": mastered_mistakes_count,
+        },
+        "weak_topics": weak_topics,
+        "completed_sessions": completed_sessions,
+    }
 
 @api_router.post("/questions", response_model=Question)
 async def create_question(question_data: QuestionCreate):
@@ -2227,8 +2648,9 @@ async def save_quiz_attempt(
     doc["id"] = doc.pop("client_attempt_id", None) or str(uuid.uuid4())
     if "completed_at" not in doc:
         doc["completed_at"] = datetime.now(timezone.utc).isoformat()
-    if current_user and current_user.get("id"):
-        doc["user_id"] = current_user["id"]
+    target_user_id = (current_user.get("id") if current_user else None) or (current_user.get("sub") if current_user else None) or doc.get("user_id")
+    if target_user_id:
+        doc["user_id"] = target_user_id
 
     # Official exam rule enforcement (Statens vegvesen standard: 45 questions, <= 7 errors)
     if doc.get("mode") == "exam":
@@ -2256,23 +2678,88 @@ async def save_quiz_attempt(
 
     # Registered-user mistake bank. This is deliberately fail-soft: analytics
     # must never prevent a completed quiz from being saved.
-    if current_user and current_user.get("id"):
+    if target_user_id:
+        def _get_ans_correct(a: dict) -> Optional[bool]:
+            if isinstance(a.get("is_correct"), bool):
+                return a["is_correct"]
+            if isinstance(a.get("correct"), bool):
+                return a["correct"]
+            return None
+
         try:
             await asyncio.gather(*(
                 record_user_mistake(
                     db=db,
-                    user_id=current_user["id"],
+                    user_id=target_user_id,
                     question_id=answer.get("question_id"),
-                    is_correct=bool(answer.get("is_correct")),
+                    is_correct=_get_ans_correct(answer),
                     mode=doc.get("mode", ""),
                 )
                 for answer in doc.get("questions_answered", [])
-                if answer.get("question_id") and isinstance(answer.get("is_correct"), bool)
+                if answer.get("question_id") and _get_ans_correct(answer) is not None
             ))
         except Exception as exc:
             logging.getLogger("quiz_attempts").warning(
                 "Mistake-bank update failed for saved attempt %s: %s", doc["id"], exc
             )
+
+        # Update user profile in MongoDB with quiz/exam progress, activity timestamp, streak and weak topics
+        try:
+            update_data = {
+                "last_activity_date": _oslo_day_key(),
+                "last_quiz_completed_at": doc["completed_at"],
+                "latest_attempt_id": doc["id"],
+            }
+            weak_topics_list = await compute_student_weak_topics(db, user_id=target_user_id, lang="no")
+            if weak_topics_list:
+                update_data["weak_topics"] = [w["category"] for w in weak_topics_list]
+                update_data["weak_topic_details"] = weak_topics_list[:5]
+
+            await db.users.update_one(
+                {"id": target_user_id},
+                {
+                    "$set": update_data,
+                    "$inc": {
+                        "total_quizzes_completed": 1 if doc.get("mode") != "exam" else 0,
+                        "total_exams_completed": 1 if doc.get("mode") == "exam" else 0,
+                        "total_questions_answered": int(doc.get("total_questions") or 0),
+                        "total_correct_answers": int(doc.get("correct_answers") or 0),
+                    },
+                },
+            )
+            try:
+                await usage_mod.record_daily_activity(db, target_user_id)
+            except Exception:
+                pass
+        except Exception as exc:
+            logging.getLogger("quiz_attempts").warning(
+                "User profile update failed for saved attempt %s: %s", doc["id"], exc
+            )
+
+    # Also update user_progress collection for aggregate progress tracking
+    try:
+        dev_id = doc.get("device_id")
+        prog_filter = [{"user_id": target_user_id}] if target_user_id else []
+        if dev_id:
+            prog_filter.append({"device_id": dev_id})
+        if prog_filter:
+            await db.user_progress.update_one(
+                {"$or": prog_filter} if len(prog_filter) > 1 else prog_filter[0],
+                {
+                    "$set": {
+                        "last_activity": doc["completed_at"],
+                        **({"user_id": target_user_id} if target_user_id else {}),
+                        **({"device_id": dev_id} if dev_id else {}),
+                    },
+                    "$inc": {
+                        "total_questions_answered": int(doc.get("total_questions") or 0),
+                        "correct_answers": int(doc.get("correct_answers") or 0),
+                    }
+                },
+                upsert=True
+            )
+    except Exception:
+        pass
 
     # ── Segment track ──
     if SEGMENT_WRITE_KEY:
