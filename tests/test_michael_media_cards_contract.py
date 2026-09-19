@@ -192,6 +192,42 @@ class MichaelMediaCardsContractTests(unittest.TestCase):
             self.assertIn("no:", val_str, f"Norwegian translation missing for '{key}'")
             self.assertIn("en:", val_str, f"English translation missing for '{key}'")
 
+    def test_neon_ui_classes_and_palette_compliance(self):
+        """TASK-013: Verify .btn-neon, .card-neon, .panel-neon, perimeter rotation and 100% color-palette compliance."""
+        # 1. Classes and keyframes exist in webapp.py
+        self.assertIn(".btn-neon", WEBAPP)
+        self.assertIn(".card-neon", WEBAPP)
+        self.assertIn(".panel-neon", WEBAPP)
+        self.assertIn("@keyframes neonFlow", WEBAPP)
+
+        # 2. Keyframes use perimeter angle rotation (0deg to 360deg)
+        self.assertIn("--neon-angle: 360deg", WEBAPP)
+
+        # 3. Main buttons and UI elements have neon styling applied
+        self.assertIn('id="teacherSendBtn"', WEBAPP)
+        self.assertIn('class="teacher-send-btn btn-neon"', WEBAPP)
+        self.assertIn('id="endCoachMichaelPriBtn"', WEBAPP)
+        self.assertIn('btn-neon', WEBAPP[WEBAPP.index('id="endCoachMichaelPriBtn"')-60:WEBAPP.index('id="endCoachMichaelPriBtn"')+60])
+        self.assertIn('id="startExamBtn"', WEBAPP)
+        self.assertIn("#startExamBtn", WEBAPP)
+
+        # 4. Strict color-palette compliance: zero forbidden yellow or green in neon definitions
+        start_idx = WEBAPP.find("TASK-013: DEDICATED NEON UI CLASSES")
+        self.assertNotEqual(start_idx, -1, "TASK-013 neon UI classes block must exist")
+        end_idx = WEBAPP.find("/* ⚡ Universal neon border", start_idx)
+        neon_css = WEBAPP[start_idx:end_idx if end_idx != -1 else start_idx + 2500]
+
+        # Allowed colors present
+        self.assertIn("#00f0ff", neon_css)  # Cyan
+        self.assertIn("#0055ff", neon_css)  # Deep Blue
+        self.assertIn("#ff007f", neon_css)  # Magenta
+        self.assertIn("#ffaa00", neon_css)  # Amber/Orange
+
+        # Forbidden yellow and green strictly absent
+        forbidden_hex = ["#ffff00", "#ffd700", "#ffe033", "#ffff33", "#00ff00", "#00ff80", "#00e676", "#10b981", "#00ff6a", "#aaff00"]
+        for forbidden in forbidden_hex:
+            self.assertNotIn(forbidden, neon_css.lower(), f"Forbidden color {forbidden} found in neon UI classes")
+
 
 if __name__ == "__main__":
     unittest.main()

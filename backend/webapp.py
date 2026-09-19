@@ -38,6 +38,11 @@ WEBAPP_HTML = r"""<!DOCTYPE html>
   --neon-blue: #0066FF;
   --neon-magenta: #FF00E5;
   --neon-amber: #FF9933;
+  --neon-blue-base: #0055ff;
+  --neon-cyan-base: #00f0ff;
+  --neon-magenta-base: #ff007f;
+  --neon-amber-base: #ffaa00;
+  --neon-pulse-glow: 0 0 16px rgba(0, 240, 255, 0.45), 0 0 26px rgba(255, 0, 127, 0.28);
   --neon-flow-gradient: conic-gradient(from var(--neon-angle, 0deg), #00F5FF 0%, #0066FF 25%, #FF00E5 50%, #FF9933 75%, #00F5FF 100%);
   --neon-flow-gradient-soft: conic-gradient(from var(--neon-angle, 0deg), rgba(0,245,255,0.8) 0%, rgba(0,102,255,0.8) 25%, rgba(255,0,229,0.8) 50%, rgba(255,153,51,0.8) 75%, rgba(0,245,255,0.8) 100%);
   --bg: #0B1226;
@@ -3736,6 +3741,64 @@ a { color:inherit; text-decoration:none; }
   z-index: 2 !important;
 }
 
+/* ══════════════════════════════════════════
+   TASK-013: DEDICATED NEON UI CLASSES
+   Color palette: Deep Blue (#0055ff), Cyan (#00f0ff), Magenta (#ff007f), Amber (#ffaa00)
+   Strictly forbidden: Yellow and Green neon accents
+══════════════════════════════════════════ */
+.btn-neon,
+#startExamBtn,
+#teacherSendBtn,
+#endCoachMichaelPriBtn {
+  position: relative;
+  border: 2px solid transparent !important;
+  background: linear-gradient(var(--btn-bg, rgba(15, 23, 42, 0.95)), var(--btn-bg, rgba(15, 23, 42, 0.95))) padding-box,
+              conic-gradient(from var(--neon-angle, 0deg), #00f0ff 0%, #0055ff 25%, #ff007f 50%, #ffaa00 75%, #00f0ff 100%) border-box !important;
+  animation: neonFlow 3s linear infinite !important;
+  box-shadow: 0 0 14px rgba(0, 240, 255, 0.42), 0 0 24px rgba(255, 0, 127, 0.26) !important;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease !important;
+  cursor: pointer;
+}
+
+.btn-neon:hover,
+#startExamBtn:hover,
+#teacherSendBtn:hover,
+#endCoachMichaelPriBtn:hover {
+  transform: translateY(-2px) scale(1.02) !important;
+  box-shadow: 0 0 22px rgba(0, 240, 255, 0.65), 0 0 34px rgba(255, 0, 127, 0.45) !important;
+}
+
+.btn-neon:active,
+#startExamBtn:active,
+#teacherSendBtn:active,
+#endCoachMichaelPriBtn:active {
+  transform: translateY(0) scale(0.98) !important;
+}
+
+.card-neon {
+  position: relative;
+  border: 1.5px solid transparent !important;
+  background: linear-gradient(var(--card-bg, rgba(17, 24, 39, 0.96)), var(--card-bg, rgba(17, 24, 39, 0.96))) padding-box,
+              conic-gradient(from var(--neon-angle, 0deg), #00f0ff 0%, #0055ff 25%, #ff007f 50%, #ffaa00 75%, #00f0ff 100%) border-box !important;
+  animation: neonFlow 4s linear infinite !important;
+  box-shadow: 0 0 14px rgba(0, 240, 255, 0.26), 0 0 22px rgba(0, 85, 255, 0.18) !important;
+  transition: transform 0.2s ease, box-shadow 0.25s ease !important;
+}
+
+.card-neon:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.45), 0 0 30px rgba(255, 0, 127, 0.3) !important;
+}
+
+.panel-neon {
+  position: relative;
+  border: 1.5px solid transparent !important;
+  background: linear-gradient(var(--panel-bg, rgba(11, 18, 38, 0.96)), var(--panel-bg, rgba(11, 18, 38, 0.96))) padding-box,
+              conic-gradient(from var(--neon-angle, 0deg), #00f0ff 0%, #0055ff 25%, #ff007f 50%, #ffaa00 75%, #00f0ff 100%) border-box !important;
+  animation: neonFlow 6s linear infinite !important;
+  box-shadow: 0 0 16px rgba(0, 240, 255, 0.22), 0 0 28px rgba(255, 0, 127, 0.16) !important;
+}
+
 /* ⚡ Universal neon border — ALL buttons, always rotating ⚡ */
 .auth-btn, .auth-guest-btn, .home-cta, .home-cta-exam, .home-sec-btn,
 .sb-tool-btn, .sb-nav-btn, .sb-video-btn, .sb-edit-btn,
@@ -4607,11 +4670,11 @@ a { color:inherit; text-decoration:none; }
 
     <!-- ═══ END SCREEN ═══ -->
     <div class="screen" id="screenEnd">
-      <div class="end-wrap">
+      <div class="end-wrap panel-neon">
         <div class="end-score-quiet" id="endScoreQuiet"></div>
         <div class="end-heading" id="endHeading" data-key="result_done">Øvelsen er ferdig.</div>
         <p class="end-body" id="endBody"></p>
-        <div class="end-focus" id="endFocus" style="display:none">
+        <div class="end-focus card-neon" id="endFocus" style="display:none">
           <div style="flex:1;">
             <div class="end-focus-label" data-key="result_focus">Anbefalt øvelse</div>
             <div class="end-focus-topic" id="endFocusTopic"></div>
@@ -4623,7 +4686,7 @@ a { color:inherit; text-decoration:none; }
           <div class="end-exam-errors-list" id="endExamErrorsList"></div>
         </div>
         <div class="end-btns">
-          <button class="end-btn-pri end-btn-coach" id="endCoachMichaelPriBtn" onclick="consultMichaelFromExam()" data-key="result_michael_coach" style="display:none;">💬 Gå gjennom med Michael AI</button>
+          <button class="end-btn-pri end-btn-coach btn-neon" id="endCoachMichaelPriBtn" onclick="consultMichaelFromExam()" data-key="result_michael_coach" style="display:none;">💬 Gå gjennom med Michael AI</button>
           <button class="end-btn-pri" id="endRetryBtn" onclick="retryQuiz()" data-key="result_retry">Prøv igjen</button>
           <button class="end-btn-sec" onclick="showTab('teacher')" data-key="result_michael">Gå til Michael</button>
           <button class="end-btn-sec" onclick="showTab('home')" data-key="home">Hjem</button>
@@ -4738,7 +4801,7 @@ a { color:inherit; text-decoration:none; }
           <input type="file" id="teacherDocInput" accept=".pdf,application/pdf,image/png,image/jpeg,image/webp" style="display:none" onchange="_teacherUploadDoc(this)">
           <button type="button" class="teacher-doc-btn" id="teacherDocBtn" onclick="document.getElementById('teacherDocInput').click()" title="Last opp PDF" aria-label="Last opp PDF" data-label-key="teacher_upload_doc">📎</button>
           <textarea class="teacher-input" id="teacherInput" rows="1" placeholder="..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();teacherSend();}"></textarea>
-          <button class="teacher-send-btn" id="teacherSendBtn" onclick="teacherSend()"><span data-key="teacher_send">Send</span>&nbsp;➤</button>
+          <button class="teacher-send-btn btn-neon" id="teacherSendBtn" onclick="teacherSend()"><span data-key="teacher_send">Send</span>&nbsp;➤</button>
         </div>
 
       </div><!-- /teacher-chat-col -->
@@ -10927,7 +10990,7 @@ function _buildTeacherMediaCard(media) {
   if (!media.title || !media.caption) return null;
 
   var card = document.createElement(media.type === 'sign' ? 'button' : 'article');
-  card.className = 'tm-media-card ' + media.type;
+  card.className = 'tm-media-card card-neon ' + media.type;
   card.dataset.materialId = media.id;
   if (media.type === 'sign') {
     if (!media.sign_id) return null;
