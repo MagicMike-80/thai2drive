@@ -107,15 +107,53 @@ def test_progress_is_local_and_does_not_call_auth_billing_or_database():
 def test_asset_manifest_has_production_brief_for_every_visual_page():
     required = {
         "asset_id", "page", "scene", "pedagogical_purpose", "camera_angle",
-        "vehicles_road_users", "road_type", "signs_markings",
-        "learner_discovery", "hotspots", "status", "src", "alt",
+        "risk_source", "risikokilde", "vehicles_road_users", "road_type", "signs_markings",
+        "learner_discovery", "hotspots", "pair_asset", "status", "src", "alt",
     }
     assert len(ASSETS) == 12
     assert len({asset["asset_id"] for asset in ASSETS.values()}) == 12
     for asset in ASSETS.values():
         assert set(asset) == required
         assert asset["status"] == "placeholder"
-        assert all(asset[key] for key in required - {"hotspots"})
+        assert all(asset[key] for key in required - {"hotspots", "pair_asset"})
+
+
+def test_permanent_image_ids_and_risk_sources():
+    expected_ids = [f"CH01-BLIKK-{i:03d}" for i in range(1, 13)]
+    actual_ids = [asset["asset_id"] for asset in ASSETS.values()]
+    assert actual_ids == expected_ids
+    for asset in ASSETS.values():
+        assert asset["camera_angle"] and isinstance(asset["camera_angle"], str)
+        assert asset["risk_source"] and isinstance(asset["risk_source"], str)
+        assert asset["risikokilde"] == asset["risk_source"]
+        assert isinstance(asset["hotspots"], list)
+
+
+def test_image_pairs_engine_contracts():
+    # Side 9-10 pair
+    assert ASSETS["too_close"]["pair_asset"] == "split"
+    assert ASSETS["split"]["pair_asset"] == "too_close"
+    assert ASSETS["too_close"]["asset_id"] == "CH01-BLIKK-009"
+    assert ASSETS["split"]["asset_id"] == "CH01-BLIKK-010"
+
+    # Side 11-12 pair
+    assert ASSETS["speed"]["pair_asset"] == "margin"
+    assert ASSETS["margin"]["pair_asset"] == "speed"
+    assert ASSETS["speed"]["asset_id"] == "CH01-BLIKK-011"
+    assert ASSETS["margin"]["asset_id"] == "CH01-BLIKK-012"
+
+    # Non-paired assets have empty pair_asset
+    for key in ("intro", "look_far", "hazards", "gaze", "hidden", "process", "wheels", "predict"):
+        assert ASSETS[key]["pair_asset"] == ""
+
+    # UI engine contracts in SCRIPT and CSS without page reload
+    assert "sbx-pair-toggle" in SCRIPT
+    assert "sbx-pair-btn" in SCRIPT
+    assert "whatChanged" in SCRIPT
+    assert "originalView" in SCRIPT
+    assert "location.reload" not in SCRIPT
+    assert ".sbx-pair-toggle" in CSS
+    assert ".sbx-pair-btn" in CSS
 
 
 def test_hotspot_and_chapter_completion_contracts():
