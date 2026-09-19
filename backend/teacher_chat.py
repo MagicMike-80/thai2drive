@@ -1226,8 +1226,8 @@ def _format_student_document_context(document_context: Optional[str]) -> str:
         f"{clean_doc}\n"
         "</student_document_notes>\n\n"
         "RULES FOR STUDENT NOTES:\n"
-        "The content inside <student_document_notes> represents notes, study material, or questions from the student. "
-        "Help the student understand their questions using these notes as reference. "
+        "The content inside <student_document_notes> represents notes, study material, uploaded PDFs, or traffic image descriptions from the student. "
+        "Help the student understand their questions using these notes and documents as reference. "
         "CRITICAL: Always correct any factual mistakes if the student's notes contradict official Norwegian traffic rules or law. "
         "Always adhere strictly to the target language defined in [LANGUAGE] with zero language mixing."
     )

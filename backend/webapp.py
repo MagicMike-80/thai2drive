@@ -4722,7 +4722,7 @@ a { color:inherit; text-decoration:none; }
 
         <!-- Input bar -->
         <div class="teacher-inputbar">
-          <input type="file" id="teacherDocInput" accept=".pdf,application/pdf" style="display:none" onchange="_teacherUploadDoc(this)">
+          <input type="file" id="teacherDocInput" accept=".pdf,application/pdf,image/png,image/jpeg,image/webp" style="display:none" onchange="_teacherUploadDoc(this)">
           <button type="button" class="teacher-doc-btn" id="teacherDocBtn" onclick="document.getElementById('teacherDocInput').click()" title="Last opp PDF" aria-label="Last opp PDF" data-label-key="teacher_upload_doc">📎</button>
           <textarea class="teacher-input" id="teacherInput" rows="1" placeholder="..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();teacherSend();}"></textarea>
           <button class="teacher-send-btn" id="teacherSendBtn" onclick="teacherSend()"><span data-key="teacher_send">Send</span>&nbsp;➤</button>
@@ -5007,7 +5007,7 @@ var UI = {
   teacher_meta:{th:'เข้าสู่ระบบ • ครู AI • ประสบการณ์ 16 ปี', no:'Pålogget • AI-lærer • 16 års erfaring', en:'Signed in • AI teacher • 16 years experience'},
   teacher_online_badge:{th:'ออนไลน์', no:'ONLINE', en:'ONLINE'},
   teacher_send:{th:'ส่ง', no:'Send', en:'Send'},
-  teacher_upload_doc:{th:'แนบเอกสาร PDF', no:'Last opp PDF', en:'Upload PDF'},
+  teacher_upload_doc:{th:'แนบเอกสาร PDF หรือรูปภาพ', no:'Last opp PDF eller bilde', en:'Upload PDF or image'},
   teacher_doc_chars:{th:'ตัวอักษร', no:'tegn', en:'characters'},
   teacher_doc_uploading:{th:'กำลังอัปโหลด...', no:'Laster opp...', en:'Uploading...'},
   teacher_doc_error:{th:'ไม่สามารถอัปโหลด PDF ได้', no:'Kunne ikke laste opp PDF', en:'Could not upload PDF'},
@@ -11290,7 +11290,7 @@ async function _teacherUploadDoc(inputEl) {
     if (badge && nameEl) {
       badge.style.display = 'flex';
       var charsLbl = t('teacher_doc_chars');
-      nameEl.textContent = '📄 ' + (data.filename || file.name) + ' (' + (data.character_count || 0) + ' ' + charsLbl + ')';
+      var icon = (data.file_type === 'image') ? '🖼️ ' : '📄 '; nameEl.textContent = icon + (data.filename || file.name) + ' (' + (data.character_count || 0) + ' ' + charsLbl + ')';
     }
   } catch(e) {
     _teacherUploadedDoc = null;
