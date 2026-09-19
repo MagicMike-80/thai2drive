@@ -750,6 +750,208 @@ a { color:inherit; text-decoration:none; }
   font-size:.68rem; font-weight:800; color:var(--green);
 }
 
+/* ═══ 50-USER CAMPAIGN BANNER & MODAL ═══ */
+.campaign-banner {
+  margin: 12px 0 6px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1.5px solid transparent !important;
+  background: linear-gradient(rgba(10, 16, 32, .92), rgba(10, 16, 32, .92)) padding-box,
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF 0%, #0066FF 25%, #FF00E5 50%, #FF9933 75%, #00F5FF 100%) border-box !important;
+  animation: neonFlow 4s linear infinite;
+  box-shadow: 0 0 16px rgba(0, 245, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.campaign-banner:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(0, 245, 255, 0.22);
+}
+.cb-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.cb-icon {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+.cb-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.cb-badge {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  color: #00F5FF;
+  background: rgba(0, 245, 255, 0.12);
+  padding: 2px 8px;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 245, 255, 0.3);
+}
+.cb-title {
+  margin: 2px 0 0;
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #fff;
+}
+.cb-desc {
+  margin: 0;
+  font-size: 0.76rem;
+  color: #FF9933;
+  font-weight: 700;
+}
+.cb-btn {
+  border: 1.5px solid transparent !important;
+  background: linear-gradient(#0066FF, #0055dd) padding-box,
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #FF9933, #00F5FF) border-box !important;
+  animation: neonFlow 3s linear infinite;
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.78rem;
+  padding: 8px 14px;
+  border-radius: 10px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+/* Campaign Modal */
+.campaign-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 4, 15, 0.82);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.campaign-modal-card {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  border-radius: 18px;
+  padding: 24px;
+  border: 1.5px solid transparent !important;
+  background: linear-gradient(rgba(12, 18, 36, .98), rgba(12, 18, 36, .98)) padding-box,
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF 0%, #0066FF 25%, #FF00E5 50%, #FF9933 75%, #00F5FF 100%) border-box !important;
+  animation: neonFlow 5s linear infinite;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(0, 245, 255, 0.15);
+  color: #fff;
+}
+.campaign-modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-size: 1.2rem;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cm-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.cm-badge {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #FF00E5;
+  background: rgba(255, 0, 229, 0.12);
+  border: 1px solid rgba(255, 0, 229, 0.3);
+  padding: 3px 10px;
+  border-radius: 20px;
+  margin-bottom: 8px;
+}
+.cm-title {
+  margin: 0 0 6px;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #fff;
+}
+.cm-sub {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.cm-field {
+  margin-bottom: 14px;
+  text-align: left;
+}
+.cm-field label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #00F5FF;
+  margin-bottom: 5px;
+}
+.cm-field input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  color: #fff;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color .2s ease;
+}
+.cm-field input:focus {
+  border-color: #00F5FF;
+  box-shadow: 0 0 8px rgba(0, 245, 255, 0.3);
+}
+.cm-feedback {
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  margin-bottom: 14px;
+  text-align: center;
+  font-weight: 700;
+}
+.cm-feedback.error {
+  background: rgba(255, 50, 50, 0.15);
+  border: 1px solid rgba(255, 50, 50, 0.3);
+  color: #ff6b6b;
+}
+.cm-feedback.success {
+  background: rgba(0, 245, 255, 0.15);
+  border: 1px solid rgba(0, 245, 255, 0.3);
+  color: #00F5FF;
+}
+.cm-submit-btn {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 0.92rem;
+  font-weight: 800;
+  cursor: pointer;
+  border: 1.5px solid transparent !important;
+  background: linear-gradient(135deg, #0066FF, #FF00E5) padding-box,
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #FF9933, #00F5FF) border-box !important;
+  animation: neonFlow 3s linear infinite;
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(0, 102, 255, 0.4);
+}
+
 /* ══════════════════════════════════════════
    CATEGORIES SCREEN — header fixed, grid scrolls
 ══════════════════════════════════════════ */
@@ -4291,6 +4493,19 @@ a { color:inherit; text-decoration:none; }
           <p class="pb-sub" data-key="premium_sub">Du har tilgang til alle funksjoner</p>
         </div>
       </div>
+
+      <!-- 50-Brukers Kampanje Banner -->
+      <div class="campaign-banner" id="homeCampaignBanner" style="display:none" onclick="openCampaignModal()">
+        <div class="cb-left">
+          <span class="cb-icon">🎁</span>
+          <div class="cb-info">
+            <div class="cb-badge" data-key="campaign_badge">⚡ Begrenset tilbud</div>
+            <h4 class="cb-title" data-key="campaign_title">🎁 30 dagers gratis Premium!</h4>
+            <p class="cb-desc" id="cbRemainingText">Kun 50 av 50 plasser igjen!</p>
+          </div>
+        </div>
+        <button class="cb-btn" onclick="event.stopPropagation();openCampaignModal()" data-key="campaign_claim_btn">Sikre din plass</button>
+      </div>
     </div>
 
     <div class="michael-quiz-coach" id="michaelQuizCoach" role="dialog" aria-live="polite" aria-label="Michael">
@@ -4856,6 +5071,36 @@ a { color:inherit; text-decoration:none; }
 
 </div><!-- /app -->
 
+<!-- ═══ 50-USER CAMPAIGN MODAL ═══ -->
+<div class="campaign-modal-backdrop" id="campaignModal" style="display:none" onclick="if(event.target===this)closeCampaignModal()">
+  <div class="campaign-modal-card">
+    <button class="campaign-modal-close" onclick="closeCampaignModal()">&times;</button>
+    <div class="cm-header">
+      <div class="cm-badge">🎁 30 DAGER PREMIUM</div>
+      <h3 class="cm-title" data-key="campaign_modal_title">Registrer deg for 30 dagers gratis Premium</h3>
+      <p class="cm-sub" id="cmModalSubText" data-key="campaign_modal_sub">For de 50 første elevene — sikre deg plass nå!</p>
+    </div>
+    <form id="campaignForm" onsubmit="submitCampaignRegistration(event)">
+      <div class="cm-field">
+        <label data-key="campaign_name_label">Fullt navn</label>
+        <input type="text" id="campName" required placeholder="" autocomplete="name" />
+      </div>
+      <div class="cm-field">
+        <label data-key="campaign_email_label">E-postadresse</label>
+        <input type="email" id="campEmail" required placeholder="navn@epost.no" autocomplete="email" />
+      </div>
+      <div class="cm-field">
+        <label data-key="campaign_phone_label">Telefonnummer</label>
+        <input type="tel" id="campPhone" required placeholder="+47 000 00 000" autocomplete="tel" />
+      </div>
+      <div class="cm-feedback" id="campFeedback" style="display:none"></div>
+      <button type="submit" class="cm-submit-btn" id="campSubmitBtn" data-key="campaign_submit_btn">
+        ✨ Få 30 dager gratis Premium
+      </button>
+    </form>
+  </div>
+</div>
+
 <!-- ═══ LIGHTBOX MODAL (Image Enlarge) ═══ -->
 <div class="t2d-lightbox" id="t2dLightbox" onclick="closeLightbox(event)" aria-hidden="true" role="dialog">
   <div class="t2d-lightbox-content" onclick="event.stopPropagation()">
@@ -5019,6 +5264,19 @@ function _mergeAttempts(remote, local) {
 
 // ── UI string translations ──────────────────────────────────
 var UI = {
+  // ── 50-Brukers Kampanje (30 dager gratis Premium) ─────────────────────────
+  campaign_badge:        {th:'⚡ จำกัด 50 ท่านแรก', no:'⚡ Begrenset tilbud', en:'⚡ Limited Offer'},
+  campaign_title:        {th:'🎁 รับสิทธิ์ Premium ฟรี 30 วัน!', no:'🎁 30 dagers gratis Premium!', en:'🎁 30 Days Free Premium!'},
+  campaign_desc:         {th:'เหลืออีก {remaining} จาก 50 ที่นั่ง', no:'Kun {remaining} av 50 plasser igjen!', en:'Only {remaining} of 50 spots left!'},
+  campaign_claim_btn:    {th:'รับสิทธิ์ทันที', no:'Sikre din plass', en:'Claim Your Spot'},
+  campaign_modal_title:  {th:'ลงทะเบียนรับสิทธิ์ Premium ฟรี 30 วัน', no:'Registrer deg for 30 dagers gratis Premium', en:'Register for 30 Days Free Premium'},
+  campaign_modal_sub:    {th:'สำหรับนักเรียน 50 ท่านแรก — รีบรับสิทธิ์ก่อนเต็ม!', no:'For de 50 første elevene — sikre deg plass nå!', en:'For the first 50 students — claim your spot now!'},
+  campaign_name_label:   {th:'ชื่อ - นามสกุล', no:'Fullt navn', en:'Full Name'},
+  campaign_email_label:  {th:'อีเมล', no:'E-postadresse', en:'Email Address'},
+  campaign_phone_label:  {th:'เบอร์โทรศัพท์', no:'Telefonnummer', en:'Phone Number'},
+  campaign_submit_btn:   {th:'✨ ยืนยันรับสิทธิ์ฟรี 30 วัน', no:'✨ Få 30 dager gratis Premium', en:'✨ Get 30 Days Free Premium'},
+  campaign_sold_out:     {th:'แคมเปญนี้เต็มแล้วครับ (ครบ 50 ที่นั่งแล้ว)', no:'Kampanjen er nå fulltegnet (50 av 50 plasser er tatt)', en:'Campaign is now fully booked (50 of 50 spots taken)'},
+
   meta_description:{th:'ฝึกข้อสอบทฤษฎีใบขับขี่นอร์เวย์ด้วยภาษาไทย นอร์เวย์ และอังกฤษกับ Thai2Drive', no:'Øv til norsk teoriprøve på thai, norsk og engelsk med Thai2Drive.', en:'Practise for the Norwegian driving theory test in Thai, Norwegian and English with Thai2Drive.'},
   toggle_password:{th:'แสดงหรือซ่อนรหัสผ่าน', no:'Vis eller skjul passord', en:'Show or hide password'},
   back:        {th:'← กลับ',          no:'← Tilbake',      en:'← Back'},
@@ -7103,6 +7361,121 @@ async function loadHome() {
 
   // Premium badge — viser nedtelling når gratisuken er aktiv
   renderPremiumBanner();
+  checkCampaignStatus();
+}
+
+// ═══ 50-USER CAMPAIGN LOGIC ═══
+var campaignSeatsRemaining = 50;
+
+async function checkCampaignStatus() {
+  var banner = document.getElementById('homeCampaignBanner');
+  if (!banner) return;
+  // If user is already active premium, hide campaign banner
+  if (user && user.is_premium) {
+    banner.style.display = 'none';
+    return;
+  }
+  try {
+    var res = await api('GET', '/api/campaign/status');
+    if (res && res.success) {
+      campaignSeatsRemaining = res.remaining != null ? res.remaining : 0;
+      var remEl = document.getElementById('cbRemainingText');
+      if (remEl) {
+        remEl.textContent = tf('campaign_desc', { remaining: campaignSeatsRemaining });
+      }
+      if (res.is_active && campaignSeatsRemaining > 0) {
+        banner.style.display = 'flex';
+      } else {
+        banner.style.display = 'none';
+      }
+    }
+  } catch (e) {
+    console.debug('Campaign status check error:', e);
+  }
+}
+
+function openCampaignModal() {
+  var modal = document.getElementById('campaignModal');
+  if (!modal) return;
+  var nameEl = document.getElementById('campName');
+  var emailEl = document.getElementById('campEmail');
+  var phoneEl = document.getElementById('campPhone');
+  var feedback = document.getElementById('campFeedback');
+  if (feedback) { feedback.style.display = 'none'; feedback.textContent = ''; feedback.className = 'cm-feedback'; }
+  if (user) {
+    if (nameEl && !nameEl.value) nameEl.value = user.name || user.full_name || '';
+    if (emailEl && !emailEl.value) emailEl.value = user.email || '';
+    if (phoneEl && !phoneEl.value) phoneEl.value = user.phone || '';
+  }
+  modal.style.display = 'flex';
+}
+
+function closeCampaignModal() {
+  var modal = document.getElementById('campaignModal');
+  if (modal) modal.style.display = 'none';
+}
+
+async function submitCampaignRegistration(event) {
+  if (event) event.preventDefault();
+  var nameEl = document.getElementById('campName');
+  var emailEl = document.getElementById('campEmail');
+  var phoneEl = document.getElementById('campPhone');
+  var feedback = document.getElementById('campFeedback');
+  var submitBtn = document.getElementById('campSubmitBtn');
+
+  var name = nameEl ? nameEl.value.trim() : '';
+  var email = emailEl ? emailEl.value.trim() : '';
+  var phone = phoneEl ? phoneEl.value.trim() : '';
+
+  if (!name || !email || !phone) return;
+
+  if (submitBtn) { submitBtn.disabled = true; submitBtn.style.opacity = '0.7'; }
+  if (feedback) { feedback.style.display = 'none'; }
+
+  try {
+    var response = await fetch('/api/campaign/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: name,
+        email: email,
+        phone: phone,
+        language: appLang || 'th'
+      })
+    });
+    var data = await response.json();
+    if (response.ok && data.success) {
+      if (feedback) {
+        feedback.className = 'cm-feedback success';
+        feedback.textContent = data.message || 'Gratulerer! Du har fått 30 dagers gratis Premium.';
+        feedback.style.display = 'block';
+      }
+      if (user) {
+        user.is_premium = true;
+        user.has_premium = true;
+        user.premium_until = data.premium_until;
+      }
+      setTimeout(function() {
+        closeCampaignModal();
+        checkCampaignStatus();
+        renderPremiumBanner();
+      }, 2200);
+    } else {
+      if (feedback) {
+        feedback.className = 'cm-feedback error';
+        feedback.textContent = data.detail || data.message || 'Feil ved registrering. Prøv igjen.';
+        feedback.style.display = 'block';
+      }
+    }
+  } catch (err) {
+    if (feedback) {
+      feedback.className = 'cm-feedback error';
+      feedback.textContent = err.message || 'Nettverksfeil. Prøv igjen.';
+      feedback.style.display = 'block';
+    }
+  } finally {
+    if (submitBtn) { submitBtn.disabled = false; submitBtn.style.opacity = '1'; }
+  }
 }
 
 function _getMediaLangBadge(item) {

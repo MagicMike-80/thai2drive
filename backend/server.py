@@ -1,7 +1,7 @@
 from fastapi import FastAPI, APIRouter, HTTPException, Query, Depends, UploadFile, File, Header, Request, Body
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse as FastAPIFileResponse
+from fastapi.responses import FileResponse as FastAPIFileResponse, JSONResponse
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorGridFSBucket
@@ -3173,6 +3173,171 @@ async def link_device(
     )
 
     return {"ok": True, "linked": result.modified_count > 0}
+
+
+# ==================== 50-USER CAMPAIGN (30 DAYS FREE PREMIUM) ====================
+
+class CampaignRegisterRequest(BaseModel):
+    name: str
+    email: str
+    phone: str
+    language: Optional[str] = "th"
+
+CAMPAIGN_SOLD_OUT_MSG = {
+    "th": "แคมเปญนี้เต็มแล้วครับ (ครบ 50 ที่นั่งแล้ว) โปรดติดตามข้อเสนอใหม่เร็วๆ นี้ครับผม",
+    "no": "Kampanjen er nå fulltegnet (50 av 50 plasser er tatt). Følg med for nye tilbud!",
+    "en": "This campaign is now fully booked (50 of 50 spots taken). Stay tuned for new offers!"
+}
+
+CAMPAIGN_DUPLICATE_MSG = {
+    "th": "อีเมลหรือเบอร์โทรศัพท์นี้ลงทะเบียนในแคมเปญแล้วครับ",
+    "no": "Denne e-postadressen eller telefonnummeret er allerede registrert i kampanjen.",
+    "en": "This email or phone number is already registered for the campaign."
+}
+
+CAMPAIGN_SUCCESS_MSG = {
+    "th": "ยินดีด้วยครับ! คุณได้รับสิทธิ์ Premium ฟรี 30 วันเรียบร้อยแล้ว (ลำดับที่ {idx} จาก 50)",
+    "no": "Gratulerer! Du har sikret deg 30 dagers gratis Premium (plass {idx} av 50).",
+    "en": "Congratulations! You have secured 30 days of free Premium (spot {idx} of 50)."
+}
+
+CAMPAIGN_INVALID_MSG = {
+    "th": "กรุณากรอกชื่อ อีเมล และเบอร์โทรศัพท์ให้ครบถ้วนครับ",
+    "no": "Vennligst fyll ut navn, e-post og telefonnummer.",
+    "en": "Please fill in your name, email and phone number."
+}
+
+def _normalize_campaign_lang(lang: Optional[str]) -> str:
+    clean = (lang or "th").strip().lower()
+    if clean in ("th", "thai"):
+        return "th"
+    if clean in ("no", "nb", "norwegian", "norsk"):
+        return "no"
+    if clean in ("en", "english"):
+        return "en"
+    return "th"
+
+
+@api_router.get("/campaign/status")
+@app.get("/api/campaign/status")
+async def get_campaign_status():
+    """Return live campaign capacity and remaining spots."""
+    count = await db.campaign_users.count_documents({})
+    remaining = max(0, 50 - count)
+    return JSONResponse({
+        "success": True,
+        "total_seats": 50,
+        "registered": count,
+        "remaining": remaining,
+        "is_active": remaining > 0,
+    })
+
+
+@api_router.post("/campaign/register")
+@app.post("/api/campaign/register")
+async def register_campaign_user(req: CampaignRegisterRequest):
+    """
+    Register user for the 50-user campaign with 30 days free Premium.
+    Enforces maximum 50 users, checks duplicates, and ensures 100% language isolation.
+    """
+    lang = _normalize_campaign_lang(req.language)
+
+    clean_name = (req.name or "").strip()
+    clean_email = (req.email or "").strip().lower()
+    clean_phone = re.sub(r'[\s\-\(\)]', '', (req.phone or "").strip())
+
+    if not clean_name or not clean_email or not clean_phone or "@" not in clean_email:
+        msg = CAMPAIGN_INVALID_MSG[lang]
+        return JSONResponse(
+            status_code=400,
+            content={
+                "success": False,
+                "error": "invalid_input",
+                "detail": msg,
+                "message": msg,
+            }
+        )
+
+    # Check for duplicate registration in db.campaign_users
+    existing = await db.campaign_users.find_one({
+        "$or": [
+            {"email": clean_email},
+            {"phone": clean_phone}
+        ]
+    })
+    if existing:
+        msg = CAMPAIGN_DUPLICATE_MSG[lang]
+        return JSONResponse(
+            status_code=400,
+            content={
+                "success": False,
+                "error": "already_registered",
+                "detail": msg,
+                "message": msg,
+            }
+        )
+
+    # Check capacity limit (max 50 users)
+    current_count = await db.campaign_users.count_documents({})
+    if current_count >= 50:
+        msg = CAMPAIGN_SOLD_OUT_MSG[lang]
+        return JSONResponse(
+            status_code=400,
+            content={
+                "success": False,
+                "error": "campaign_sold_out",
+                "detail": msg,
+                "message": msg,
+                "total_seats": 50,
+                "registered": current_count,
+                "remaining": 0,
+            }
+        )
+
+    campaign_index = current_count + 1
+    now = datetime.now(timezone.utc)
+    expires_at = now + timedelta(days=30)
+    premium_until = expires_at.isoformat()
+
+    campaign_doc = {
+        "name": clean_name,
+        "email": clean_email,
+        "phone": clean_phone,
+        "language": lang,
+        "is_premium": True,
+        "has_premium": True,
+        "premium_until": premium_until,
+        "campaign_index": campaign_index,
+        "created_at": now.isoformat(),
+    }
+    await db.campaign_users.insert_one(campaign_doc)
+
+    # If this user also has an existing account in db.users, grant Premium immediately
+    await db.users.update_many(
+        {"$or": [{"email": clean_email}, {"phone": clean_phone}]},
+        {"$set": {
+            "is_premium": True,
+            "has_premium": True,
+            "premium_expires_at": premium_until,
+            "trial_expires_at": premium_until,
+            "campaign_index": campaign_index,
+        }}
+    )
+
+    success_msg = CAMPAIGN_SUCCESS_MSG[lang].format(idx=campaign_index)
+    return JSONResponse(
+        status_code=200,
+        content={
+            "success": True,
+            "message": success_msg,
+            "detail": success_msg,
+            "campaign_index": campaign_index,
+            "is_premium": True,
+            "has_premium": True,
+            "premium_until": premium_until,
+            "remaining_seats": max(0, 50 - campaign_index),
+        }
+    )
 
 
 # ==================== ADMIN ROUTES ====================
