@@ -1978,7 +1978,7 @@ def _safe_teacher_response_media_url(value: str) -> bool:
     parsed = urlsplit(url)
     if parsed.fragment or ".." in parsed.path.split("/"):
         return False
-    if url.startswith(("/api/assets/", "/api/media/files/", "/api/audio/", "/api/sign-images/")):
+    if url.startswith(("/api/assets/", "/api/media/files/", "/api/audio/", "/api/sign-images/", "/api/micro-lessons/")):
         return bool(parsed.path.rsplit("/", 1)[-1]) and not parsed.netloc and not parsed.query
     return parsed.scheme == "https" and bool(parsed.netloc) and not parsed.username and not parsed.password
 
@@ -1998,6 +1998,19 @@ async def _validate_teacher_response_media(media: list[dict], lang: str) -> list
                 authoritative = await _get_exact_sign_media([sign_id], lang, limit=1)
                 if authoritative and authoritative[0]["url"] == item["url"]:
                     valid.append(authoritative[0])
+                continue
+            if media_id.startswith("micro-lesson:"):
+                from micro_lessons import get_micro_lesson_by_id
+                lesson_id = media_id.removeprefix("micro-lesson:")
+                lesson = get_micro_lesson_by_id(lesson_id, lang)
+                if lesson and item.get("url") == f"/api/micro-lessons/{lesson_id}":
+                    valid.append({
+                        "id": f"micro-lesson:{lesson_id}",
+                        "type": "micro_lesson",
+                        "title": lesson.get("title", ""),
+                        "caption": lesson.get("metafor", "") or lesson.get("norway_rule", ""),
+                        "url": f"/api/micro-lessons/{lesson_id}",
+                    })
                 continue
             if item.get("media_id"):
                 document = await _db["media_catalog"].find_one({
@@ -2342,7 +2355,40 @@ def _kw_match(reply_lower: str, category: str) -> bool:
     return False
 
 def _get_suggestions(reply: str, lang: str, user_msg: str = "") -> list:
-    # First check if user message or reply matches a resolved traffic concept with typo-tolerance
+    # Check if user message or reply matches a Thailand vs Norway micro-lesson
+    try:
+        from micro_lessons import find_relevant_micro_lesson
+        ml = find_relevant_micro_lesson(user_msg, lang) or find_relevant_micro_lesson(reply, lang)
+        if ml:
+            topic = ml.get("topic")
+            if topic == "vikeplikt_hoyreregel":
+                if lang == "th": return ["🇹🇭 vs 🇳🇴 กฎให้ทาง", "🚗 กฎให้ทาง (ขวา)", "🛑 ป้ายให้ทาง", "⭕ วงเวียน"]
+                if lang == "en": return ["🇹🇭 vs 🇳🇴 Right-of-Way", "🚗 Right-hand rule", "🛑 Give Way sign", "⭕ Roundabout"]
+                return ["🇹🇭 vs 🇳🇴 Vikeplikt", "🚗 Høyreregelen", "🛑 Vikepliktskilt", "⭕ Rundkjøring"]
+            elif topic == "fotgjengere_gangfelt":
+                if lang == "th": return ["🇹🇭 vs 🇳🇴 ทางม้าลาย", "🚶 คนเดินเท้า", "🛑 หยุดให้คนข้าม", "❓ ถามต่อ"]
+                if lang == "en": return ["🇹🇭 vs 🇳🇴 Crosswalks", "🚶 Pedestrians", "🛑 Full stop obligation", "❓ Ask more"]
+                return ["🇹🇭 vs 🇳🇴 Gangfelt", "🚶 Fotgjengere", "🛑 Stopplikt", "❓ Spør videre"]
+            elif topic == "rundkjoring":
+                if lang == "th": return ["🇹🇭 vs 🇳🇴 วงเวียน", "⭕ การให้ทางในวงเวียน", "💡 การเปิดไฟเลี้ยว", "❓ ถามต่อ"]
+                if lang == "en": return ["🇹🇭 vs 🇳🇴 Roundabouts", "⭕ Yield in roundabout", "💡 Turn signals", "❓ Ask more"]
+                return ["🇹🇭 vs 🇳🇴 Rundkjøring", "⭕ Vikeplikt i rundkjøring", "💡 Blinklysbruk", "❓ Spør videre"]
+            elif topic == "promillegrense_alkohol":
+                if lang == "th": return ["🇹🇭 vs 🇳🇴 เมาไม่ขับ", "🍺 ขีดจำกัด 0.2", "⛔ ห้ามขับขี่เด็ดขาด", "❓ ถามต่อ"]
+                if lang == "en": return ["🇹🇭 vs 🇳🇴 Alcohol Limits", "🍺 0.2 Limit", "⛔ Zero Tolerance", "❓ Ask more"]
+                return ["🇹🇭 vs 🇳🇴 Promille", "🍺 0.2 promille", "⛔ Totalforbud", "❓ Spør videre"]
+            elif topic == "lys_og_blinklys":
+                if lang == "th": return ["🇹🇭 vs 🇳🇴 ไฟหน้ารถ", "💡 ไฟวิ่งกลางวัน", "⚠️ การกะพริบไฟ", "❓ ถามต่อ"]
+                if lang == "en": return ["🇹🇭 vs 🇳🇴 Lights & Signals", "💡 Daytime lights", "⚠️ Flashing headlights", "❓ Ask more"]
+                return ["🇹🇭 vs 🇳🇴 Kjørelys", "💡 Kjørelys påbudt", "⚠️ Lysblinking", "❓ Spør videre"]
+            elif topic == "vinterkjoring":
+                if lang == "th": return ["🇹🇭 vs 🇳🇴 ขับรถฤดูหนาว", "❄️ ถนนลื่นและน้ำแข็ง", "🚗 ระยะเบรกบนหิมะ", "❓ ถามต่อ"]
+                if lang == "en": return ["🇹🇭 vs 🇳🇴 Winter Driving", "❄️ Black Ice & Snow", "🚗 Stopping Distance", "❓ Ask more"]
+                return ["🇹🇭 vs 🇳🇴 Vinterkjøring", "❄️ Svallis og snø", "🚗 Bremselengde på vinterføre", "❓ Spør videre"]
+    except Exception as _ml_err:
+        logger.debug("Micro-lesson suggestions check error: %s", _ml_err)
+
+    # Then check canonical concept resolver with typo-tolerance
     concept = _match_canonical_concept(user_msg) or _match_canonical_concept(reply)
     if concept:
         chips = _strict_lang_map(concept.get("chips"), lang)
@@ -2414,6 +2460,17 @@ async def _get_curriculum_context(user_msg: str, lang: str) -> str:
             resolved_doc = await resolve_traffic_concept(user_msg, lang, _db)
             if resolved_doc and resolved_doc.get("curriculum_context"):
                 context_parts.append(resolved_doc["curriculum_context"])
+
+        # Check Thailand vs Norway micro-lessons for driving culture pedagogy
+        try:
+            from micro_lessons import find_relevant_micro_lesson, format_micro_lesson_context
+            micro_lesson = find_relevant_micro_lesson(clean_msg or user_msg, lang)
+            if micro_lesson:
+                micro_ctx = format_micro_lesson_context(micro_lesson, lang)
+                if micro_ctx:
+                    context_parts.append(micro_ctx)
+        except Exception as ml_err:
+            logger.debug("Micro-lesson curriculum context error: %s", ml_err)
 
         # Common traffic keywords to trigger specific queries
         keywords_map = {
@@ -2994,6 +3051,16 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         elif not explicit_sign_ids and not approved_media and resolved_concept and resolved_concept.get("media"):
             catalog_media = list(resolved_concept["media"])
         media = _compose_teacher_media(media, catalog_media, explicit_sign_ids)
+        if not explicit_sign_ids and len(media) < 2:
+            try:
+                from micro_lessons import find_relevant_micro_lesson, get_micro_lesson_media_card
+                matched_ml = find_relevant_micro_lesson(user_msg, lang)
+                if matched_ml:
+                    ml_card = get_micro_lesson_media_card(matched_ml, lang)
+                    if ml_card and not any(m.get("id") == ml_card["id"] for m in media):
+                        media.append(ml_card)
+            except Exception as ml_media_err:
+                logger.debug("Micro-lesson media card error: %s", ml_media_err)
         media = await _validate_teacher_response_media(media, lang)
 
         if not LLM_KEY:
