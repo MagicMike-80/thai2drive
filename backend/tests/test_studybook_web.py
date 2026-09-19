@@ -35,21 +35,18 @@ def _walk_i18n(value, path="root"):
 
 
 def test_lesson_model_has_all_required_interactions():
-    assert [lesson["type"] for lesson in LESSONS] == [
-        "spotHazard",
-        "imageLesson",
-        "choice",
-        "choice",
-        "roadCheck",
-    ]
+    assert len(LESSONS) == 15
     assert [lesson["id"] for lesson in LESSONS] == [
-        "spot-hazard",
-        "distance",
-        "right-of-way",
-        "bus",
-        "road-check",
+        "intro", "look-far", "spot-four", "move-eyes", "hidden-danger",
+        "road-check-1", "see-understand-act", "read-clue", "predict-next",
+        "too-close", "two-cars", "speed-changes", "safety-margin",
+        "road-check-2", "chapter-complete",
     ]
-    assert len(LESSONS[-1]["questions"]) == 3
+    assert {lesson["type"] for lesson in LESSONS} == {
+        "intro", "choice", "spotHazard", "sequence", "roadCheck", "chapterComplete"
+    }
+    road_checks = [lesson for lesson in LESSONS if lesson["type"] == "roadCheck"]
+    assert [len(lesson["questions"]) for lesson in road_checks] == [3, 4]
     assert len({lesson["id"] for lesson in LESSONS}) == len(LESSONS)
 
 
@@ -57,6 +54,30 @@ def test_every_learner_facing_value_has_exactly_three_languages():
     _walk_i18n(COPY, "copy")
     _walk_i18n(ASSETS, "assets")
     _walk_i18n(LESSONS, "lessons")
+
+
+def _language_values(value, language):
+    if isinstance(value, dict):
+        if set(value) == {"no", "th", "en"}:
+            yield value[language]
+        else:
+            for nested in value.values():
+                yield from _language_values(nested, language)
+    elif isinstance(value, list):
+        for nested in value:
+            yield from _language_values(nested, language)
+
+
+def test_thai_content_has_thai_script_and_no_known_no_en_leakage():
+    thai = "\n".join(_language_values({"copy": COPY, "assets": ASSETS, "lessons": LESSONS}, "th"))
+    assert re.search(r"[\u0E00-\u0E7F]", thai)
+    allowed_brands_removed = thai.replace("THAI2DRIVE", "").replace("ROAD CHECK", "")
+    forbidden = re.compile(
+        r"\b(?:forrige|fortsett|oversikt|kapittel|fører|fare|bil|buss|"
+        r"previous|continue|chapter|driver|hazard|traffic|learn|next)\b",
+        re.IGNORECASE,
+    )
+    assert not forbidden.search(allowed_brands_removed)
 
 
 def test_strict_language_lookup_has_no_cross_language_fallback():
@@ -79,12 +100,36 @@ def test_progress_is_local_and_does_not_call_auth_billing_or_database():
     assert "localStorage" not in SCRIPT
     for forbidden in ("/api/auth", "stripe", "revenuecat", "fetch(", "/api/progress"):
         assert forbidden not in SCRIPT.lower()
+    assert "version:2" in SCRIPT
+    assert "roadChecks" in SCRIPT
+
+
+def test_asset_manifest_has_production_brief_for_every_visual_page():
+    required = {
+        "asset_id", "page", "scene", "pedagogical_purpose", "camera_angle",
+        "vehicles_road_users", "road_type", "signs_markings",
+        "learner_discovery", "hotspots", "status", "src", "alt",
+    }
+    assert len(ASSETS) == 12
+    assert len({asset["asset_id"] for asset in ASSETS.values()}) == 12
+    for asset in ASSETS.values():
+        assert set(asset) == required
+        assert asset["status"] == "placeholder"
+        assert all(asset[key] for key in required - {"hotspots"})
+
+
+def test_hotspot_and_chapter_completion_contracts():
+    spot = next(lesson for lesson in LESSONS if lesson["id"] == "spot-four")
+    assert len(spot["hazards"]) == 4
+    assert "sbxState.found.length===l.hazards.length" in SCRIPT
+    assert "chapterComplete" in SCRIPT
+    assert "15 / 15" in str(LESSONS[-1]["title"])
 
 
 def test_accessibility_and_responsive_contracts():
     assert 'aria-live="polite"' in SCREEN
-    assert "button.type='button'" in SCRIPT
-    assert "aria-label" in SCRIPT and "img.alt=sbxL(asset.alt)" in SCRIPT
+    assert "if(t==='button')e.type='button'" in SCRIPT
+    assert "aria-label" in SCRIPT and "i.alt=sbxL(a.alt)" in SCRIPT
     assert ":focus-visible" in CSS
     assert "@media(max-width:420px)" in CSS
     assert "@media(min-width:900px)" in CSS
@@ -100,6 +145,10 @@ def test_install_replaces_legacy_screen_once_and_preserves_other_features():
     assert "renderStudybook" in rendered
     assert "studybook-mode" in rendered
     assert "classList.toggle('studybook-mode', tab === 'studybook')" in rendered
+    assert 'id="bnStudybook" onclick="openStudybookChapter()"' in rendered
+    assert "function openStudybookChapter()" in rendered
+    assert "showTab('studybook');" in rendered
+    assert "if (tab === 'studybook') loadStudiebok();" in rendered
 
 
 def test_real_web_route_contains_the_prototype():
@@ -108,6 +157,8 @@ def test_real_web_route_contains_the_prototype():
     assert response.text.count('id="screenStudybook"') == 1
     assert "t2d_studybook_progress_v1" in response.text
     assert "spotHazard" in response.text
+    assert "chapter-complete" in response.text
+    assert "road-check-2" in response.text
     assert "ROAD CHECK" in response.text
 
 

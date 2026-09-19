@@ -4767,7 +4767,7 @@ a { color:inherit; text-decoration:none; }
     <button class="bn-tab" id="bnSigns" onclick="showTab('signs')">
       <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 22 2 22"/><line x1="12" y1="9" x2="12" y2="15"/><circle cx="12" cy="18" r="0.5" fill="currentColor"/></svg></span><span class="bn-label" data-key="signs">Skilt</span>
     </button>
-    <button class="bn-tab" id="bnStudybook" onclick="showTab('studybook')">
+    <button class="bn-tab" id="bnStudybook" onclick="openStudybookChapter()">
       <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span><span class="bn-label" data-key="sb_nav">Studiebok</span>
     </button>
     <button class="bn-tab" id="bnBookmarks" onclick="showTab('bookmarks')">
@@ -5843,6 +5843,10 @@ function bindBottomNavCarousel() {
     var walk = (x - startX) * 1.5;
     nav.scrollLeft = scrollLeft - walk;
   });
+}
+
+function openStudybookChapter() {
+  showTab('studybook');
 }
 
 function showTab(tab, forceType) {

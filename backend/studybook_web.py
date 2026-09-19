@@ -1,309 +1,109 @@
-"""Interactive, web-only Studybook prototype for the existing Thai2Drive shell.
-
-The module is intentionally self-contained: it installs markup, styling and
-behaviour into ``WEBAPP_HTML`` without changing auth, billing, MongoDB or Expo.
-"""
-
+"""Data-driven, web-only Thai2Drive Studybook chapter one."""
 from __future__ import annotations
 
 import json
 
 
 def i18n(no: str, th: str, en: str) -> dict[str, str]:
-    """Create a complete learner-facing translation value."""
     return {"no": no, "th": th, "en": en}
 
 
+_PLACEHOLDERS = [
+    ("intro", "1", "Førerplass på norsk byvei", "Introdusere aktiv observasjon", "førerperspektiv", "biler, syklist og fotgjenger", "byvei", "gangfelt", "mulige hendelser foran", "/api/assets/thumbs/thumb_vikeplikt_7_4.jpg"),
+    ("look_far", "2", "Nærblikk og fjernblikk", "Sammenligne synsfelt", "delt førerperspektiv", "bil foran", "landevei", "midtlinje", "riktig blikkavstand", "/api/assets/stopping-distance-road-v1.png"),
+    ("hazards", "3", "Gate med fire risikokilder", "Trene fareoppdagelse", "førerperspektiv", "fotgjenger, syklist, bil og varebil", "bygate", "gangfelt og sidevei", "fire faresignaler", "/api/assets/thumbs/thumb_vikeplikt_7_4.jpg"),
+    ("gaze", "4", "Rolig trafikksituasjon", "Vise fleksibel blikkflyt", "førerperspektiv", "trafikk foran og bak", "byvei", "feltlinjer", "blikkflyt", "/api/assets/stopping-distance-road-v1.png"),
+    ("hidden", "5", "Varebil skjuler barn", "Tolke små faresignaler", "førerperspektiv", "varebil, barn og ball", "boliggate", "vegkant", "ball og føtter", "/api/assets/thumbs/thumb_vikeplikt_7_4.jpg"),
+    ("process", "6", "Barn nær gangfelt", "Koble observasjon til handling", "førerperspektiv", "barn og bil", "byvei", "gangfelt", "barn kan gå ut", "/api/assets/thumbs/thumb_vikeplikt_7_4.jpg"),
+    ("wheels", "7", "Bil med hjul mot veien", "Tolke retning", "førerperspektiv", "parkert bil", "bygate", "vegkant", "dreide forhjul", "/api/assets/thumbs/thumb_vikeplikt_7_2a.jpg"),
+    ("predict", "8", "Buss blinker ut", "Forutse neste hendelse", "førerperspektiv", "buss og bil", "byvei", "holdeplass", "bussen kan kjøre", "/api/assets/thumbs/thumb_vikeplikt_7_5a_buss.jpg"),
+    ("too_close", "9", "Bil følger for tett", "Knytte avstand til tid", "førerperspektiv", "to biler", "landevei", "midtlinje", "liten tidsmargin", "/api/assets/stopping-distance-road-v1.png"),
+    ("split", "10", "To ulike avstander", "Sammenligne margin", "delt førerperspektiv", "to bilpar", "landevei", "midtlinje", "god avstand", "/api/assets/stopping-distance-road-v1.png"),
+    ("speed", "11", "Fare ved to hastigheter", "Vise fartens virkning", "delt sideprofil", "bil og fare", "landevei", "fartsmerking", "tidlig observasjon", "/api/assets/stopping-distance-road-v1.png"),
+    ("margin", "12", "Sikkerhetsrom rundt bil", "Forklare sikkerhetsmargin", "fugleperspektiv", "bil, syklist og trafikk", "byvei", "feltlinjer", "rom rundt bilen", "/api/assets/thumbs/thumb_vikeplikt_7_4.jpg"),
+]
+
 ASSETS = {
-    "hazard": {
-        "src": "/api/assets/thumbs/thumb_vikeplikt_7_4.jpg",
-        "alt": i18n(
-            "Norsk trafikksituasjon med flere mulige farer",
-            "สถานการณ์จราจรในนอร์เวย์ที่มีอันตรายหลายจุด",
-            "Norwegian traffic situation with several possible hazards",
-        ),
-    },
-    "distance": {
-        "src": "/api/assets/stopping-distance-road-v1.png",
-        "alt": i18n(
-            "Bil som ligger for tett bak bilen foran",
-            "รถที่ขับตามรถคันหน้าใกล้เกินไป",
-            "A car following the vehicle ahead too closely",
-        ),
-    },
-    "right_of_way": {
-        "src": "/api/assets/thumbs/thumb_vikeplikt_7_2a.jpg",
-        "alt": i18n(
-            "Kryss der en bil kommer fra høyre",
-            "ทางแยกที่มีรถมาจากทางขวา",
-            "An intersection where a car approaches from the right",
-        ),
-    },
-    "bus": {
-        "src": "/api/assets/thumbs/thumb_vikeplikt_7_5a_buss.jpg",
-        "alt": i18n(
-            "Buss som blinker ut fra holdeplass",
-            "รถโดยสารเปิดไฟเลี้ยวออกจากป้าย",
-            "A bus indicating to leave a bus stop",
-        ),
-    },
+    key: {"asset_id": f"sb-c1-{int(page):02d}", "page": page, "scene": scene,
+          "pedagogical_purpose": purpose, "camera_angle": camera,
+          "vehicles_road_users": actors, "road_type": road,
+          "signs_markings": markings, "learner_discovery": discovery,
+          "hotspots": [], "status": "placeholder", "src": src,
+          "alt": i18n("Illustrasjon av trafikksituasjon", "ภาพประกอบสถานการณ์จราจร", "Traffic situation illustration")}
+    for key, page, scene, purpose, camera, actors, road, markings, discovery, src in _PLACEHOLDERS
 }
+ASSETS["hazards"]["hotspots"] = [{"x": 23, "y": 55}, {"x": 45, "y": 45}, {"x": 70, "y": 43}, {"x": 84, "y": 60}]
+ASSETS["hidden"]["hotspots"] = [{"x": 64, "y": 62}]
+
+
+def opt(key: str, no: str, th: str, en: str) -> dict:
+    return {"id": key, "label": i18n(no, th, en)}
+
+
+def info(key: str, kind: str, asset_key: str, no: str, th: str, en: str, body: tuple[str, str, str], **extra) -> dict:
+    return {"id": key, "type": kind, "asset": asset_key, "eyebrow": i18n("LÆR", "เรียนรู้", "LEARN"),
+            "title": i18n(no, th, en), "body": i18n(*body), **extra}
+
+
+def question(label: tuple[str, str, str], prompt: tuple[str, str, str], answers: list[dict], correct: str, explanation: tuple[str, str, str]) -> dict:
+    return {"label": i18n(*label), "prompt": i18n(*prompt), "options": answers,
+            "correct": correct, "explanation": i18n(*explanation)}
 
 
 LESSONS = [
-    {
-        "id": "spot-hazard",
-        "type": "spotHazard",
-        "eyebrow": i18n("SE SITUASJONEN", "มองสถานการณ์", "SEE THE SITUATION"),
-        "title": i18n("Hva oppdager du først?", "คุณเห็นอะไรก่อน?", "What do you notice first?"),
-        "body": i18n(
-            "Trykk på området der du forventer at en fare kan utvikle seg.",
-            "แตะบริเวณที่คุณคิดว่าอันตรายอาจเกิดขึ้น",
-            "Select the area where you expect a hazard could develop.",
-        ),
-        "asset": "hazard",
-        "hazards": [
-            {
-                "x": 72,
-                "y": 48,
-                "label": i18n("Mulig konfliktområde", "จุดที่อาจเกิดความขัดแย้ง", "Possible conflict area"),
-                "feedback": i18n(
-                    "Bra sett. Se langt frem, beveg blikket og skaff deg oversikt.",
-                    "เห็นได้ดี มองไปข้างหน้า ขยับสายตา และสำรวจภาพรวม",
-                    "Good observation. Look far ahead, move your eyes and build an overview.",
-                ),
-            }
-        ],
-        "remember": i18n("Se langt frem. Beveg blikket. Få oversikt.", "มองไกล ขยับสายตา มองภาพรวม", "Look far ahead. Move your eyes. Build an overview."),
-    },
-    {
-        "id": "distance",
-        "type": "imageLesson",
-        "eyebrow": i18n("LÆR", "เรียนรู้", "LEARN"),
-        "title": i18n("FOR NÆR! 😬", "ใกล้เกินไป! 😬", "TOO CLOSE! 😬"),
-        "body": i18n(
-            "Bilen foran bremser plutselig. Avstand kjøper deg tid.",
-            "รถคันหน้าเบรกกะทันหัน ระยะห่างช่วยให้คุณมีเวลา",
-            "The car ahead brakes suddenly. Distance buys you time.",
-        ),
-        "asset": "distance",
-        "flow": [
-            i18n("SE", "มองเห็น", "SEE"),
-            i18n("FORSTÅ", "เข้าใจ", "UNDERSTAND"),
-            i18n("VELGE", "เลือก", "CHOOSE"),
-            i18n("HANDLE", "ลงมือทำ", "ACT"),
-        ],
-        "remember": i18n("Mer avstand gir mer tid til å velge trygt.", "ระยะห่างมากขึ้นทำให้มีเวลาเลือกอย่างปลอดภัย", "More distance gives you more time to choose safely."),
-    },
-    {
-        "id": "right-of-way",
-        "type": "choice",
-        "eyebrow": i18n("DIN TUR", "ตาคุณ", "YOUR MOVE"),
-        "title": i18n("Hva gjør du?", "คุณจะทำอย่างไร?", "What do you do?"),
-        "body": i18n(
-            "Du møter en bil fra høyre i et kryss uten skilt.",
-            "คุณพบรถมาจากทางขวาที่ทางแยกซึ่งไม่มีป้าย",
-            "A car approaches from your right at an unsigned intersection.",
-        ),
-        "asset": "right_of_way",
-        "options": [
-            {"id": "drive", "label": i18n("KJØR", "ขับไป", "DRIVE")},
-            {"id": "wait", "label": i18n("VENT", "รอ", "WAIT")},
-        ],
-        "correct": "wait",
-        "correctFeedback": i18n(
-            "Riktig. Bilen fra høyre er kongen. Du venter.",
-            "ถูกต้อง รถจากทางขวามีสิทธิ์ไปก่อน คุณต้องรอ",
-            "Correct. The car from the right goes first. You wait.",
-        ),
-        "wrongFeedback": i18n(
-            "WOAH 😅 Se til høyre én gang til. Der kommer bilen du må vente på.",
-            "เดี๋ยวก่อน 😅 มองทางขวาอีกครั้ง มีรถที่คุณต้องรอ",
-            "WOAH 😅 Look right once more. That is the car you must wait for.",
-        ),
-        "remember": i18n("Uten skilt eller lys: vikeplikt for trafikk fra høyre.", "เมื่อไม่มีป้ายหรือไฟ: ให้ทางรถจากขวา", "Without signs or lights: yield to traffic from the right."),
-    },
-    {
-        "id": "bus",
-        "type": "choice",
-        "eyebrow": i18n("FINN DETALJEN", "หารายละเอียด", "FIND THE DETAIL"),
-        "title": i18n("Bussen vil ut. Hva gjør DU?", "รถโดยสารต้องการออก คุณจะทำอย่างไร?", "The bus wants to leave. What do YOU do?"),
-        "body": i18n(
-            "Bussen blinker ut fra holdeplassen. Fartsgrensen er 50 km/t.",
-            "รถโดยสารเปิดไฟเลี้ยวออกจากป้าย จำกัดความเร็ว 50 กม./ชม.",
-            "The bus indicates to leave the stop. The speed limit is 50 km/h.",
-        ),
-        "asset": "bus",
-        "badge": i18n("50 km/t", "50 กม./ชม.", "50 km/h"),
-        "options": [
-            {"id": "brake", "label": i18n("BREMS", "เบรก", "BRAKE")},
-            {"id": "drive", "label": i18n("KJØR", "ขับไป", "DRIVE")},
-        ],
-        "correct": "brake",
-        "correctFeedback": i18n(
-            "Riktig. Ved 60 km/t eller lavere skal du gi bussen mulighet til å kjøre ut.",
-            "ถูกต้อง เมื่อจำกัดความเร็วไม่เกิน 60 กม./ชม. คุณต้องให้รถโดยสารออกจากป้าย",
-            "Correct. At 60 km/h or less, you must let the bus leave the stop.",
-        ),
-        "wrongFeedback": i18n(
-            "Se på fartsgrensen én gang til. Her er den 50 km/t.",
-            "ดูป้ายจำกัดความเร็วอีกครั้ง ที่นี่คือ 50 กม./ชม.",
-            "Check the speed limit once more. It is 50 km/h here.",
-        ),
-        "remember": i18n("Fartsgrensen kan endre hvem som skal vente.", "ความเร็วที่กำหนดอาจเปลี่ยนว่าใครต้องรอ", "The speed limit can change who must wait."),
-    },
-    {
-        "id": "road-check",
-        "type": "roadCheck",
-        "eyebrow": i18n("ROAD CHECK ⚡", "ROAD CHECK ⚡", "ROAD CHECK ⚡"),
-        "title": i18n("Klar for neste nivå?", "พร้อมสำหรับระดับต่อไปไหม?", "Ready for the next level?"),
-        "body": i18n("Tre raske situasjoner fra det du nettopp lærte.", "สามสถานการณ์สั้น ๆ จากสิ่งที่คุณเพิ่งเรียน", "Three quick situations from what you just learned."),
-        "questions": [
-            {
-                "label": i18n("1/3 FINN FAREN 👀", "1/3 หาอันตราย 👀", "1/3 SPOT IT 👀"),
-                "prompt": i18n("Hvor bør blikket ditt være?", "คุณควรมองไปที่ไหน?", "Where should you look?"),
-                "options": [
-                    {"id": "ahead", "label": i18n("Langt frem", "มองไกลไปข้างหน้า", "Far ahead")},
-                    {"id": "hood", "label": i18n("Rett foran panseret", "ตรงหน้าฝากระโปรง", "Just over the bonnet")},
-                ],
-                "correct": "ahead",
-                "explanation": i18n("Se langt frem for å oppdage farer tidlig.", "มองไกลเพื่อพบอันตรายตั้งแต่เนิ่น ๆ", "Look far ahead to detect hazards early."),
-            },
-            {
-                "label": i18n("2/3 DITT VALG 🚗", "2/3 การตัดสินใจของคุณ 🚗", "2/3 YOUR MOVE 🚗"),
-                "prompt": i18n("Bil fra høyre, ingen skilt. Hva gjør du?", "มีรถจากขวา ไม่มีป้าย คุณทำอย่างไร?", "Car from the right, no signs. What do you do?"),
-                "options": [
-                    {"id": "wait", "label": i18n("Vent", "รอ", "Wait")},
-                    {"id": "drive", "label": i18n("Kjør", "ขับไป", "Drive")},
-                ],
-                "correct": "wait",
-                "explanation": i18n("Høyreregelen betyr at du venter.", "กฎรถทางขวาหมายความว่าคุณต้องรอ", "The right-hand rule means you wait."),
-            },
-            {
-                "label": i18n("3/3 HVA ENDRET SEG? 🧠", "3/3 อะไรเปลี่ยนไป? 🧠", "3/3 WHAT CHANGED? 🧠"),
-                "prompt": i18n("Bussen blinker ut ved 50 km/t. Hva er viktig?", "รถโดยสารเปิดไฟเลี้ยวออกที่ 50 กม./ชม. อะไรสำคัญ?", "The bus indicates at 50 km/h. What matters?"),
-                "options": [
-                    {"id": "limit", "label": i18n("Fartsgrensen", "ป้ายจำกัดความเร็ว", "The speed limit")},
-                    {"id": "colour", "label": i18n("Fargen på bussen", "สีของรถโดยสาร", "The bus colour")},
-                ],
-                "correct": "limit",
-                "explanation": i18n("Ved 60 km/t eller lavere skal du gi bussen plass.", "เมื่อไม่เกิน 60 กม./ชม. คุณต้องให้ทางรถโดยสาร", "At 60 km/h or less, you must give the bus room."),
-            },
-        ],
-    },
+    info("intro", "intro", "intro", "👀 BLIKKET", "👀 การมอง", "👀 VISION", ("En god sjåfør prøver å oppdage hva som kan skje om noen sekunder.", "ผู้ขับขี่ที่ดีพยายามสังเกตว่าอีกไม่กี่วินาทีอาจเกิดอะไรขึ้น", "A good driver tries to notice what may happen in the next few seconds.")),
+    info("look-far", "choice", "look_far", "Se langt frem", "มองไปข้างหน้าให้ไกล", "Look far ahead", ("Hvor får du best tid til å oppdage endringer?", "คุณมองแบบใดจึงมีเวลาสังเกตการเปลี่ยนแปลงได้ดีที่สุด?", "Which view gives most time to notice change?"), options=[opt("near", "Rett foran panseret", "ตรงหน้าฝากระโปรง", "Over the bonnet"), opt("far", "Langt frem", "มองไกลไปข้างหน้า", "Far ahead")], correct="far", correctFeedback=i18n("Tidlig oppdagelse gir mer tid.", "การสังเกตได้เร็วทำให้มีเวลามากขึ้น", "Early discovery gives more time."), wrongFeedback=i18n("Løft blikket og se lenger frem.", "เงยสายตาและมองให้ไกลขึ้น", "Lift your eyes and look farther ahead.")),
+    info("spot-four", "spotHazard", "hazards", "Hva bør du allerede ha oppdaget?", "คุณควรสังเกตเห็นอะไรแล้ว?", "What should you have noticed?", ("Finn fire steder der situasjonen kan endre seg.", "หาสี่จุดที่สถานการณ์อาจเปลี่ยนได้", "Find four places where the situation may change."), hazards=[{"x": x, "y": y, "label": i18n(n, t, e)} for x, y, n, t, e in [(23,55,"Fotgjenger","คนเดินเท้า","Pedestrian"),(45,45,"Syklist","คนขี่จักรยาน","Cyclist"),(70,43,"Sidevei","ทางแยกด้านข้าง","Side road"),(84,60,"Skjult område","พื้นที่ถูกบัง","Hidden area")]], feedback=i18n("Godt sett. Finn alle fire.", "มองเห็นได้ดี ค้นหาให้ครบทั้งสี่จุด", "Good observation. Find all four."), completeFeedback=i18n("Du fant alle fire.", "คุณพบครบทั้งสี่จุดแล้ว", "You found all four.")),
+    info("move-eyes", "sequence", "gaze", "Beveg blikket", "ขยับสายตา", "Move your eyes", ("Situasjonen bestemmer hvor oppmerksomheten må være.", "สถานการณ์เป็นตัวกำหนดว่าคุณควรให้ความสนใจที่ไหน", "The situation decides where attention is needed."), steps=[i18n("LANGT FREM","ไกลไปข้างหน้า","FAR AHEAD"),i18n("SIDER","ด้านข้าง","SIDES"),i18n("SPEIL","กระจก","MIRRORS"),i18n("HELHET","ภาพรวม","WHOLE SCENE")]),
+    info("hidden-danger", "spotHazard", "hidden", "Den skjulte faren", "อันตรายที่ซ่อนอยู่", "The hidden hazard", ("Trykk på detaljen som varsler at noen kan være skjult.", "แตะรายละเอียดที่บอกว่าอาจมีใครถูกบังอยู่", "Select the clue that warns someone may be hidden."), hazards=[{"x":64,"y":62,"label":i18n("Liten ledetråd","เบาะแสเล็ก ๆ","Small clue")}], feedback=i18n("Du trenger ikke se hele faren for å forstå at den kan være der.", "คุณไม่จำเป็นต้องเห็นอันตรายทั้งหมดเพื่อเข้าใจว่าอาจมีอันตรายอยู่", "You need not see the whole hazard to know it may be there."), completeFeedback=i18n("Du tolket tegnet.", "คุณตีความสัญญาณได้", "You read the clue.")),
+    {"id":"road-check-1","type":"roadCheck","eyebrow":i18n("ROAD CHECK 1 ⚡","ROAD CHECK 1 ⚡","ROAD CHECK 1 ⚡"),"title":i18n("Se før det skjer","มองให้เห็นก่อนเกิดเหตุ","See it before it happens"),"body":i18n("Tre korte situasjoner.","สามสถานการณ์สั้น ๆ","Three short situations."),"questions":[
+        question(("OPPMERKSOMHET","จุดสนใจ","ATTENTION"),("Hvor bør du se?","คุณควรมองที่ไหน?","Where should you look?"),[opt("far","Langt frem","ไกลไปข้างหน้า","Far ahead"),opt("near","Bare nær bilen","เฉพาะใกล้รถ","Only near the car")],"far",("Bygg oversikt tidlig.","สร้างภาพรวมตั้งแต่เนิ่น ๆ","Build an overview early.")),
+        question(("SKJULT RISIKO","ความเสี่ยงที่ซ่อนอยู่","HIDDEN RISK"),("Hva kan varebilen skjule?","รถตู้อาจบังอะไร?","What may the van hide?"),[opt("person","En person","คน","A person"),opt("none","Ingenting","ไม่มีอะไร","Nothing")],"person",("Små tegn kan varsle stor endring.","สัญญาณเล็ก ๆ อาจเตือนถึงการเปลี่ยนแปลงครั้งใหญ่","Small clues can warn of big change.")),
+        question(("FORVENT","คาดการณ์","EXPECT"),("Hva kan skje ved gangfeltet?","อาจเกิดอะไรที่ทางม้าลาย?","What may happen at the crossing?"),[opt("cross","Noen går ut","อาจมีคนเดินออกมา","Someone steps out"),opt("same","Ingenting endres","ไม่มีอะไรเปลี่ยน","Nothing changes")],"cross",("Forvent endring før du må reagere.","คาดการณ์ก่อนที่คุณต้องตอบสนอง","Expect change before reacting."))]},
+    info("see-understand-act", "sequence", "process", "Se → forstå → velge → handle", "มองเห็น → เข้าใจ → เลือก → ลงมือทำ", "See → understand → choose → act", ("Barnet kan gå ut. Reduser farten og skap margin.", "เด็กอาจเดินออกมา ลดความเร็วและสร้างระยะปลอดภัย", "The child may step out. Slow down and create a margin."), steps=[i18n("👀 SE","👀 มองเห็น","👀 SEE"),i18n("🧠 FORSTÅ","🧠 เข้าใจ","🧠 UNDERSTAND"),i18n("⚡ VELGE","⚡ เลือก","⚡ CHOOSE"),i18n("🚗 HANDLE","🚗 ลงมือทำ","🚗 ACT")]),
+    info("read-clue", "choice", "wheels", "Du så det. Men forstod du det?", "คุณเห็นแล้ว แต่เข้าใจหรือยัง?", "You saw it. Did you understand?", ("Hva forteller de dreide forhjulene?", "ล้อหน้าที่หันออกบอกอะไร?", "What do the turned wheels tell you?"), options=[opt("move","Bilen kan kjøre ut","รถอาจเคลื่อนออกมา","The car may pull out"),opt("stay","Bilen blir sikkert stående","รถจะจอดอยู่อย่างแน่นอน","The car will stay")], correct="move", correctFeedback=i18n("Små detaljer viser hva som kan skje.","รายละเอียดเล็ก ๆ บอกว่าอะไรอาจเกิดขึ้น","Small details show what may happen."), wrongFeedback=i18n("Se på hjulenes retning.","ดูทิศทางของล้อ","Look at the wheels.")),
+    info("predict-next", "choice", "predict", "Hva skjer de neste tre sekundene?", "อีกสามวินาทีจะเกิดอะไร?", "What happens in the next three seconds?", ("Bussen blinker ut. Hva er mest sannsynlig?", "รถโดยสารเปิดไฟเลี้ยวออก อะไรน่าจะเกิดขึ้น?", "The bus indicates out. What is likely?"), options=[opt("out","Bussen kjører ut","รถโดยสารเคลื่อนออกมา","The bus pulls out"),opt("stay","Bussen blir stående","รถโดยสารยังจอดอยู่","The bus stays"),opt("back","Bussen rygger","รถโดยสารถอยหลัง","The bus reverses")], correct="out", correctFeedback=i18n("Nå kan du lage plass tidlig.","ตอนนี้คุณสร้างพื้นที่ได้ตั้งแต่เนิ่น ๆ","Now you can make room early."), wrongFeedback=i18n("Blinklyset viser førerens plan.","ไฟเลี้ยวแสดงแผนของผู้ขับขี่","The indicator shows the driver's plan.")),
+    info("too-close", "sequence", "too_close", "For nær 😬", "ใกล้เกินไป 😬", "Too close 😬", ("Avstand er tid.", "ระยะห่างคือเวลา", "Distance is time."), steps=[i18n("SE","มองเห็น","SEE"),i18n("FORSTÅ","เข้าใจ","UNDERSTAND"),i18n("VELGE","เลือก","CHOOSE"),i18n("HANDLE","ลงมือทำ","ACT")], remember=i18n("Mer avstand gir mer tid.","ระยะห่างมากขึ้นทำให้มีเวลามากขึ้น","More distance gives more time.")),
+    info("two-cars", "choice", "split", "To biler, samme fart", "รถสองคัน ความเร็วเท่ากัน", "Two cars, same speed", ("Hvem har mest tid?", "ใครมีเวลามากกว่า?", "Who has more time?"), options=[opt("left","Liten avstand","ระยะห่างน้อย","Small gap"),opt("right","God avstand","ระยะห่างดี","Good gap")], correct="right", correctFeedback=i18n("God avstand gir tid.","ระยะห่างที่ดีทำให้มีเวลา","A good gap gives time."), wrongFeedback=i18n("Sammenlign rommet foran bilene.","เปรียบเทียบพื้นที่หน้ารถ","Compare the room ahead.")),
+    info("speed-changes", "choice", "speed", "Farten endrer alt", "ความเร็วเปลี่ยนทุกอย่าง", "Speed changes everything", ("Hva krever høyere fart?", "ความเร็วสูงขึ้นต้องการอะไร?", "What does higher speed demand?"), options=[opt("early","Oppdag faren tidligere","สังเกตอันตรายให้เร็วขึ้น","Notice earlier"),opt("late","Vent lenger","รอนานขึ้น","Wait longer")], correct="early", correctFeedback=i18n("Høyere fart gir mindre tid.","ความเร็วสูงทำให้มีเวลาน้อยลง","Higher speed gives less time."), wrongFeedback=i18n("Du må se endringen tidligere.","คุณต้องเห็นการเปลี่ยนแปลงให้เร็วขึ้น","You must see change earlier.")),
+    info("safety-margin", "sequence", "margin", "Lag rom for feil", "สร้างพื้นที่เผื่อความผิดพลาด", "Make room for mistakes", ("En trygg fører lager rom rundt bilen.", "ผู้ขับขี่ที่ปลอดภัยสร้างพื้นที่รอบรถ", "A safe driver creates room around the car."), steps=[i18n("SIDEAVSTAND","ระยะด้านข้าง","SIDE SPACE"),i18n("AVSTAND FREMOVER","ระยะด้านหน้า","SPACE AHEAD"),i18n("TID","เวลา","TIME")]),
+    {"id":"road-check-2","type":"roadCheck","eyebrow":i18n("ROAD CHECK 2 ⚡","ROAD CHECK 2 ⚡","ROAD CHECK 2 ⚡"),"title":i18n("Bruk det du har lært","ใช้สิ่งที่ได้เรียนรู้","Use what you learned"),"body":i18n("Fire korte situasjoner.","สี่สถานการณ์สั้น ๆ","Four short situations."),"questions":[
+        question(("SPOT IT 👀","ค้นหา 👀","SPOT IT 👀"),("Risiko ved varebilen?","ความเสี่ยงข้างรถตู้?","Risk beside the van?"),[opt("hidden","Noen kan være skjult","อาจมีใครถูกบัง","Someone may be hidden"),opt("none","Ingen risiko","ไม่มีความเสี่ยง","No risk")],"hidden",("Se etter det skjulte.","มองหาสิ่งที่ถูกบัง","Look for what is hidden.")),
+        question(("YOUR MOVE 🚗","ตาคุณ 🚗","YOUR MOVE 🚗"),("Barn nær gangfelt. Hva gjør du?","เด็กใกล้ทางม้าลาย คุณทำอย่างไร?","Child near crossing. What do you do?"),[opt("slow","Reduser farten","ลดความเร็ว","Slow down"),opt("same","Hold farten","คงความเร็ว","Keep speed")],"slow",("Handle før det haster.","ลงมือทำก่อนจะฉุกเฉิน","Act before it is urgent.")),
+        question(("WHAT CHANGED? 🧠","อะไรเปลี่ยนไป? 🧠","WHAT CHANGED? 🧠"),("Hvilken detalj betyr noe?","รายละเอียดใดสำคัญ?","Which detail matters?"),[opt("wheels","Hjulenes retning","ทิศทางของล้อ","Wheel direction"),opt("colour","Bilens farge","สีของรถ","Car colour")],"wheels",("Retningen kan varsle bevegelse.","ทิศทางอาจเตือนถึงการเคลื่อนที่","Direction can warn of movement.")),
+        question(("PREDICT 🔮","คาดการณ์ 🔮","PREDICT 🔮"),("Bussen blinker. Hva kan skje?","รถโดยสารเปิดไฟเลี้ยว อาจเกิดอะไร?","The bus indicates. What may happen?"),[opt("out","Bussen kjører ut","รถโดยสารเคลื่อนออกมา","The bus pulls out"),opt("vanish","Bussen forsvinner","รถโดยสารหายไป","The bus disappears")],"out",("Forutse og lag plass.","คาดการณ์และสร้างพื้นที่","Predict and make room."))]},
+    {"id":"chapter-complete","type":"chapterComplete","eyebrow":i18n("KAPITTEL FULLFØRT","เรียนจบบทแล้ว","CHAPTER COMPLETE"),"title":i18n("BLIKKET · 15 / 15","การมอง · 15 / 15","VISION · 15 / 15"),"body":i18n("Du har lært å se før det skjer.","คุณได้เรียนรู้ที่จะมองเห็นก่อนเกิดเหตุ","You learned to see before it happens."),"skills":[i18n("👀 Oppdage","👀 สังเกต","👀 Notice"),i18n("🧠 Forstå","🧠 เข้าใจ","🧠 Understand"),i18n("🔮 Forutse","🔮 คาดการณ์","🔮 Predict"),i18n("🚗 Skape sikkerhetsmargin","🚗 สร้างระยะปลอดภัย","🚗 Create a safety margin")],"nextChapter":i18n("NESTE: 🚗 PLASSERING","ถัดไป: 🚗 ตำแหน่งรถ","NEXT: 🚗 POSITIONING")},
 ]
 
-
-COPY = {
-    "brand": i18n("THAI2DRIVE STUDIEBOKEN", "หนังสือเรียน THAI2DRIVE", "THAI2DRIVE STUDY BOOK"),
-    "subtitle": i18n("Fra elev til trygg sjåfør", "จากผู้เรียนสู่ผู้ขับขี่ที่ปลอดภัย", "From learner to safe driver"),
-    "continue": i18n("Fortsett der du slapp", "เรียนต่อจากจุดเดิม", "Continue where you left off"),
-    "start": i18n("Start læringen", "เริ่มเรียน", "Start learning"),
-    "progress": i18n("Progresjon", "ความคืบหน้า", "Progress"),
-    "completed": i18n("fullført", "เสร็จแล้ว", "completed"),
-    "chapters": i18n("Læringsløp", "เส้นทางการเรียน", "Learning path"),
-    "backHome": i18n("Oversikt", "ภาพรวม", "Overview"),
-    "previous": i18n("Forrige", "ก่อนหน้า", "Previous"),
-    "next": i18n("Lær videre", "เรียนต่อ", "Keep learning"),
-    "understood": i18n("Jeg forstår", "ฉันเข้าใจ", "I understand"),
-    "choose": i18n("Velg et svar", "เลือกคำตอบ", "Choose an answer"),
-    "correct": i18n("Riktig", "ถูกต้อง", "Correct"),
-    "wrong": i18n("Se én gang til", "ดูอีกครั้ง", "Look once more"),
-    "remember": i18n("HUSK", "จำไว้", "REMEMBER"),
-    "roadCleared": i18n("ROAD CHECK BESTÅTT", "ผ่าน ROAD CHECK", "ROAD CHECK CLEARED"),
-    "roadRetry": i18n("Ta en rask repetisjon", "ทบทวนอย่างรวดเร็ว", "Take a quick review"),
-    "review": i18n("Repeter", "ทบทวน", "Review"),
-    "finish": i18n("Til oversikten", "กลับไปภาพรวม", "Back to overview"),
-    "imageMissing": i18n("Situasjonsbildet kommer snart", "ภาพสถานการณ์จะมาเร็ว ๆ นี้", "Situation image coming soon"),
-    "storageError": i18n("Progresjonen kunne ikke lagres på denne enheten.", "ไม่สามารถบันทึกความคืบหน้าในอุปกรณ์นี้ได้", "Progress could not be saved on this device."),
-    "contentError": i18n("Denne læringssiden kan ikke vises nå.", "ไม่สามารถแสดงบทเรียนนี้ได้ในขณะนี้", "This learning screen cannot be displayed right now."),
-}
-
+COPY = {k: i18n(*v) for k, v in {
+    "brand":("THAI2DRIVE STUDIEBOKEN","หนังสือเรียน THAI2DRIVE","THAI2DRIVE STUDY BOOK"),"chapters":("Kapittel 1 · Blikket","บทที่ 1 · การมอง","Chapter 1 · Vision"),"continue":("Fortsett der du slapp","เรียนต่อจากจุดเดิม","Continue where you left off"),"start":("START →","เริ่ม →","START →"),"progress":("Progresjon","ความคืบหน้า","Progress"),"completed":("fullført","เสร็จแล้ว","completed"),"backHome":("Oversikt","ภาพรวม","Overview"),"previous":("Forrige","ก่อนหน้า","Previous"),"next":("Fortsett","เรียนต่อ","Continue"),"understood":("Jeg forstår","ฉันเข้าใจ","I understand"),"remember":("HUSK","จำไว้","REMEMBER"),"roadCleared":("ROAD CHECK CLEARED ⚡","ผ่าน ROAD CHECK ⚡","ROAD CHECK CLEARED ⚡"),"roadRetry":("Rolig repetisjon","ทบทวนอย่างสงบ","Calm review"),"review":("Repeter","ทบทวน","Review"),"finish":("Fortsett","เรียนต่อ","Continue"),"imageMissing":("THAI2DRIVE-bildet kommer snart","ภาพ THAI2DRIVE จะมาเร็ว ๆ นี้","THAI2DRIVE image coming soon"),"storageError":("Progresjonen kunne ikke lagres.","ไม่สามารถบันทึกความคืบหน้าได้","Progress could not be saved."),"contentError":("Siden kan ikke vises nå.","ไม่สามารถแสดงหน้านี้ได้","This page cannot be displayed.")}.items()}
 
 CSS = r"""
-/* Interactive Studybook v1 */
-#screenStudybook{padding:0;background:#071225;overflow-y:auto;color:var(--text)}
-.sbx-shell{width:min(760px,100%);min-height:100%;margin:0 auto;padding:18px 16px 96px}
-.sbx-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}.sbx-top button{min-height:44px}
-.sbx-logo{font-size:.72rem;font-weight:900;letter-spacing:.13em;color:#60e6ff}.sbx-lang{color:var(--muted);font-size:.75rem}
-.sbx-hero{padding:24px;border-radius:24px;background:radial-gradient(circle at 90% 0,#b82eff33,transparent 38%),linear-gradient(145deg,#102b4b,#101a36);border:1px solid #2c6383;box-shadow:0 18px 45px #0006}
-.sbx-hero h1{font-size:clamp(1.7rem,7vw,2.7rem);line-height:1.02;margin:8px 0}.sbx-hero p{color:#c7d7ea;margin:0 0 20px;font-size:1rem}
-.sbx-progress-row{display:flex;justify-content:space-between;gap:12px;font-size:.78rem;margin-bottom:7px}.sbx-track{height:8px;background:#ffffff16;border-radius:99px;overflow:hidden}.sbx-fill{height:100%;background:linear-gradient(90deg,#00d9ff,#a637ff);border-radius:inherit;transition:width .25s}
-.sbx-primary,.sbx-choice,.sbx-secondary{border:0;border-radius:14px;min-height:48px;padding:12px 18px;font:inherit;font-weight:850;cursor:pointer}.sbx-primary{background:#ff8a1f;color:#111;box-shadow:0 0 22px #ff8a1f44}.sbx-secondary{background:#142844;color:#eaf7ff;border:1px solid #3a5c7d}.sbx-primary:focus-visible,.sbx-secondary:focus-visible,.sbx-choice:focus-visible,.sbx-hotspot:focus-visible{outline:3px solid #62e8ff;outline-offset:3px}
-.sbx-section-title{font-size:1rem;margin:28px 0 12px}.sbx-map{display:grid;gap:10px}.sbx-map-card{display:grid;grid-template-columns:44px 1fr auto;align-items:center;gap:12px;padding:14px;border-radius:16px;background:#101d34;border:1px solid #273c58}.sbx-map-card strong,.sbx-map-card small{display:block}.sbx-map-card small{color:var(--muted);margin-top:3px}.sbx-map-num{width:40px;height:40px;display:grid;place-items:center;border-radius:12px;background:#142f4e;color:#69ebff;font-weight:900}.sbx-map-status{color:#ffad65;font-size:.74rem}
-.sbx-card{overflow:hidden;border-radius:24px;background:#101d34;border:1px solid #2b4665;box-shadow:0 18px 45px #0005}.sbx-copy{padding:20px}.sbx-eyebrow{font-size:.72rem;letter-spacing:.15em;font-weight:900;color:#65eaff}.sbx-copy h1{font-size:clamp(1.55rem,6vw,2.3rem);line-height:1.08;margin:8px 0}.sbx-copy>p{line-height:1.55;color:#c7d5e6}
-.sbx-image{position:relative;min-height:230px;background:#0b1728}.sbx-image img{display:block;width:100%;height:100%;min-height:230px;max-height:420px;object-fit:cover}.sbx-placeholder{min-height:230px;display:grid;place-items:center;padding:24px;text-align:center;color:#aabbd0}.sbx-badge{position:absolute;top:14px;right:14px;background:#d42934;color:#fff;border:4px solid #fff;border-radius:99px;padding:11px;font-weight:900}
-.sbx-hotspot{position:absolute;width:58px;height:58px;border:3px solid #65eaff;border-radius:50%;background:#00d9ff30;box-shadow:0 0 0 8px #00d9ff20,0 0 25px #00d9ff;cursor:pointer;transform:translate(-50%,-50%)}.sbx-hotspot.found{background:#ff8a1f88;border-color:#fff;box-shadow:0 0 0 8px #ff8a1f33}
-.sbx-flow{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:18px}.sbx-flow span{text-align:center;padding:10px 3px;border-radius:10px;background:#142b47;color:#aeefff;font-size:.65rem;font-weight:850}.sbx-flow span+span:before{content:'›';color:#ff9a3c;margin-right:5px}
-.sbx-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}.sbx-choice{background:#152b49;color:#fff;border:2px solid #365a7e}.sbx-choice:hover{border-color:#65eaff}.sbx-choice.correct{background:#194b50;border-color:#65eaff}.sbx-choice.wrong{background:#51233a;border-color:#ff648c}
-.sbx-feedback{margin-top:16px;padding:14px;border-left:4px solid #ff8a1f;border-radius:8px;background:#0b1728;line-height:1.5}.sbx-remember{margin-top:16px;padding:14px;border-radius:14px;background:#60207235;border:1px solid #bd52df66}.sbx-remember strong{display:block;color:#e99aff;font-size:.7rem;letter-spacing:.13em;margin-bottom:5px}
-.sbx-footer{display:flex;justify-content:space-between;gap:10px;margin-top:16px}.sbx-footer button:disabled{opacity:.38;cursor:not-allowed}.sbx-road-head{display:flex;justify-content:space-between;gap:8px;align-items:center}.sbx-road-step{color:#ffae68;font-weight:900}.sbx-result{text-align:center;padding:36px 20px}.sbx-score{font-size:3.2rem;font-weight:950;color:#65eaff;margin:16px 0}.sbx-status{min-height:22px;margin-top:12px;color:#ffb4c7}
-@media(min-width:900px){#app.studybook-mode{width:min(980px,96vw);max-width:none;margin:auto;border-radius:18px}.sbx-shell{width:min(840px,100%);padding-top:28px}.sbx-image{min-height:360px}.sbx-image img{min-height:360px}}
-@media(max-width:420px){.sbx-hero{padding:20px}.sbx-actions{grid-template-columns:1fr}.sbx-flow{grid-template-columns:1fr 1fr}.sbx-footer{position:sticky;bottom:72px;background:#071225e8;padding:10px 0}.sbx-logo{max-width:220px}}
-@media(prefers-reduced-motion:reduce){.sbx-fill{transition:none}.sbx-hotspot{box-shadow:none}}
+#screenStudybook{padding:0;background:#071225;overflow-y:auto;color:var(--text)}.sbx-shell{width:min(760px,100%);min-height:100%;margin:auto;padding:18px 16px 96px}.sbx-top,.sbx-row,.sbx-road-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.sbx-top{margin-bottom:18px}.sbx-logo,.sbx-eyebrow{font-size:.72rem;font-weight:900;letter-spacing:.13em;color:#60e6ff}.sbx-hero,.sbx-card{padding:24px;border-radius:24px;background:linear-gradient(145deg,#102b4b,#101a36);border:1px solid #2c6383;box-shadow:0 18px 45px #0006}.sbx-card{padding:0;overflow:hidden}.sbx-copy{padding:20px}.sbx-track{height:8px;background:#ffffff16;border-radius:99px;overflow:hidden}.sbx-fill{height:100%;background:linear-gradient(90deg,#00d9ff,#a637ff)}.sbx-primary,.sbx-choice,.sbx-secondary{border:0;border-radius:14px;min-height:48px;padding:12px 18px;font:inherit;font-weight:850;cursor:pointer}.sbx-primary{background:#ff8a1f;color:#111}.sbx-secondary,.sbx-choice{background:#142844;color:#eaf7ff;border:1px solid #3a5c7d}.sbx-primary:focus-visible,.sbx-secondary:focus-visible,.sbx-choice:focus-visible,.sbx-hotspot:focus-visible{outline:3px solid #62e8ff}.sbx-map{display:grid;gap:9px;margin-top:18px}.sbx-map-card{display:grid;grid-template-columns:40px 1fr auto;gap:12px;padding:12px;border-radius:14px;background:#101d34}.sbx-map-card small,.sbx-map-card strong{display:block}.sbx-image{position:relative;min-height:230px;background:#0b1728}.sbx-image img{width:100%;min-height:230px;max-height:420px;object-fit:cover}.sbx-hotspot{position:absolute;width:58px;height:58px;border:3px solid #65eaff;border-radius:50%;background:#00d9ff30;transform:translate(-50%,-50%)}.sbx-hotspot.found{background:#ff8a1f88}.sbx-counter{position:absolute;top:12px;right:12px;background:#071225dd;padding:8px;border-radius:20px}.sbx-flow,.sbx-actions,.sbx-skills{display:grid;grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:9px;margin-top:18px}.sbx-flow span,.sbx-skills span{padding:12px;border-radius:10px;background:#142b47;text-align:center}.sbx-choice.correct{border-color:#65eaff}.sbx-choice.wrong{border-color:#ff648c}.sbx-feedback,.sbx-remember{margin-top:16px;padding:14px;border-radius:10px;background:#0b1728;border-left:4px solid #ff8a1f}.sbx-footer{display:flex;justify-content:space-between;margin-top:16px}.sbx-footer button:disabled{opacity:.38}.sbx-result{text-align:center;padding:36px}.sbx-score{font-size:3rem;font-weight:950;color:#65eaff}.sbx-status{color:#ffb4c7}@media(min-width:900px){#app.studybook-mode{width:min(980px,96vw);max-width:none;margin:auto}.sbx-shell{width:min(840px,100%)}.sbx-image,.sbx-image img{min-height:360px}}@media(max-width:420px){.sbx-actions{grid-template-columns:1fr}.sbx-footer{position:sticky;bottom:72px;background:#071225e8;padding:10px 0}}@media(prefers-reduced-motion:reduce){.sbx-fill{transition:none}}
 """
-
-
-SCREEN = r"""
-<div class="screen" id="screenStudybook">
-  <main class="sbx-shell" id="sbxRoot" aria-live="polite"></main>
-</div>
-"""
-
-
+SCREEN = '<div class="screen" id="screenStudybook"><main class="sbx-shell" id="sbxRoot" aria-live="polite"></main></div>'
 _DATA = json.dumps({"assets": ASSETS, "lessons": LESSONS, "copy": COPY}, ensure_ascii=False, separators=(",", ":"))
 
 SCRIPT = r"""
-var SBX_DATA = __SBX_DATA__;
-var SBX_KEY = 't2d_studybook_progress_v1';
-var sbxState = {view:'home',index:0,answered:false,roadIndex:0,roadAnswers:[],storageFailed:false};
-function sbxEl(tag,cls,text){var el=document.createElement(tag);if(cls)el.className=cls;if(typeof text==='string')el.textContent=text;return el;}
-function sbxL(value){if(!value || typeof value!=='object')return '';var text=value[appLang];return typeof text==='string'?text:'';}
-function sbxCopy(key){return sbxL(SBX_DATA.copy[key]);}
-function sbxDefaultProgress(){return {currentLesson:0,completedLessons:[],roadCheck:null,updatedAt:null};}
-function sbxReadProgress(){try{var raw=_ls.get(SBX_KEY);var parsed=raw?JSON.parse(raw):sbxDefaultProgress();if(!parsed || !Array.isArray(parsed.completedLessons))return sbxDefaultProgress();return parsed;}catch(error){return sbxDefaultProgress();}}
-function sbxSaveProgress(progress){try{progress.updatedAt=new Date().toISOString();_ls.set(SBX_KEY,JSON.stringify(progress));sbxState.storageFailed=false;}catch(error){sbxState.storageFailed=true;}}
-function sbxComplete(id){var progress=sbxReadProgress();if(progress.completedLessons.indexOf(id)<0)progress.completedLessons.push(id);progress.currentLesson=Math.min(sbxState.index+1,SBX_DATA.lessons.length-1);sbxSaveProgress(progress);sbxState.answered=true;}
-function sbxImage(assetKey,badge){var asset=SBX_DATA.assets[assetKey],wrap=sbxEl('div','sbx-image');if(!asset)return wrap;var img=document.createElement('img');img.src=asset.src;img.alt=sbxL(asset.alt);img.onerror=function(){var placeholder=sbxEl('div','sbx-placeholder',sbxCopy('imageMissing'));wrap.replaceChildren(placeholder);};wrap.appendChild(img);if(badge){var mark=sbxEl('span','sbx-badge',sbxL(badge));wrap.appendChild(mark);}return wrap;}
-function sbxStatus(root){if(sbxState.storageFailed)root.appendChild(sbxEl('div','sbx-status',sbxCopy('storageError')));}
-function sbxProgressPercent(progress){return Math.round((progress.completedLessons.length/SBX_DATA.lessons.length)*100);}
-function sbxHome(){sbxState.view='home';var root=document.getElementById('sbxRoot');root.replaceChildren();var progress=sbxReadProgress(),percent=sbxProgressPercent(progress);var hero=sbxEl('section','sbx-hero');hero.append(sbxEl('div','sbx-logo',sbxCopy('brand')),sbxEl('h1','',sbxCopy('subtitle')),sbxEl('p','',sbxCopy('continue')));var row=sbxEl('div','sbx-progress-row');row.append(sbxEl('span','',sbxCopy('progress')),sbxEl('strong','',percent+' %'));var track=sbxEl('div','sbx-track'),fill=sbxEl('div','sbx-fill');fill.style.width=percent+'%';track.appendChild(fill);var start=sbxEl('button','sbx-primary',progress.completedLessons.length?sbxCopy('continue'):sbxCopy('start'));start.type='button';start.onclick=function(){sbxOpen(Math.min(Number(progress.currentLesson)||0,SBX_DATA.lessons.length-1));};hero.append(row,track,sbxEl('div','', ' '),start);root.appendChild(hero);root.appendChild(sbxEl('h2','sbx-section-title',sbxCopy('chapters')));var map=sbxEl('div','sbx-map');SBX_DATA.lessons.forEach(function(lesson,index){var card=sbxEl('div','sbx-map-card'),num=sbxEl('span','sbx-map-num',String(index+1)),copy=sbxEl('span',''),status=progress.completedLessons.indexOf(lesson.id)>=0?sbxCopy('completed'):'';copy.append(sbxEl('strong','',sbxL(lesson.title)),sbxEl('small','',sbxL(lesson.eyebrow)));card.append(num,copy,sbxEl('span','sbx-map-status',status));map.appendChild(card);});root.appendChild(map);sbxStatus(root);document.getElementById('app').classList.add('studybook-mode');}
-function sbxHeader(root,lesson){var top=sbxEl('div','sbx-top'),back=sbxEl('button','sbx-secondary',sbxCopy('backHome'));back.type='button';back.onclick=sbxHome;top.append(back,sbxEl('span','sbx-logo',sbxCopy('brand')),sbxEl('span','sbx-lang',appLang.toUpperCase()));root.appendChild(top);}
-function sbxLessonFrame(root,lesson){var card=sbxEl('article','sbx-card'),copy=sbxEl('div','sbx-copy');copy.append(sbxEl('div','sbx-eyebrow',sbxL(lesson.eyebrow)),sbxEl('h1','',sbxL(lesson.title)),sbxEl('p','',sbxL(lesson.body)));card.appendChild(copy);root.appendChild(card);return card;}
-function sbxRemember(card,lesson){if(!lesson.remember)return;var box=sbxEl('div','sbx-remember');box.append(sbxEl('strong','',sbxCopy('remember')),sbxEl('span','',sbxL(lesson.remember)));card.querySelector('.sbx-copy').appendChild(box);}
-function sbxFeedback(card,text,correct){var old=card.querySelector('.sbx-feedback');if(old)old.remove();var feedback=sbxEl('div','sbx-feedback',text);feedback.setAttribute('role','status');feedback.dataset.result=correct?'correct':'wrong';card.querySelector('.sbx-copy').appendChild(feedback);}
-function sbxFooter(root){var footer=sbxEl('div','sbx-footer'),prev=sbxEl('button','sbx-secondary',sbxCopy('previous')),next=sbxEl('button','sbx-primary',sbxCopy('next'));prev.type=next.type='button';prev.disabled=sbxState.index===0;prev.onclick=function(){sbxOpen(sbxState.index-1);};next.disabled=!sbxState.answered;next.onclick=function(){if(sbxState.index<SBX_DATA.lessons.length-1)sbxOpen(sbxState.index+1);else sbxHome();};footer.append(prev,next);root.appendChild(footer);}
-function sbxRenderSpot(card,lesson){var visual=sbxImage(lesson.asset);lesson.hazards.forEach(function(hazard){var button=sbxEl('button','sbx-hotspot');button.type='button';button.style.left=hazard.x+'%';button.style.top=hazard.y+'%';button.setAttribute('aria-label',sbxL(hazard.label));button.onclick=function(){button.classList.add('found');sbxFeedback(card,sbxL(hazard.feedback),true);sbxComplete(lesson.id);sbxRenderFooterState();};visual.appendChild(button);});card.insertBefore(visual,card.firstChild);sbxRemember(card,lesson);}
-function sbxRenderImageLesson(card,lesson){card.insertBefore(sbxImage(lesson.asset),card.firstChild);var flow=sbxEl('div','sbx-flow');lesson.flow.forEach(function(step){flow.appendChild(sbxEl('span','',sbxL(step)));});var confirm=sbxEl('button','sbx-primary',sbxCopy('understood'));confirm.type='button';confirm.onclick=function(){sbxComplete(lesson.id);sbxFeedback(card,sbxL(lesson.remember),true);sbxRenderFooterState();};card.querySelector('.sbx-copy').append(flow,confirm);}
-function sbxRenderChoice(card,lesson){card.insertBefore(sbxImage(lesson.asset,lesson.badge),card.firstChild);var actions=sbxEl('div','sbx-actions');lesson.options.forEach(function(option){var button=sbxEl('button','sbx-choice',sbxL(option.label));button.type='button';button.onclick=function(){var correct=option.id===lesson.correct;actions.querySelectorAll('button').forEach(function(item){item.classList.remove('correct','wrong');});button.classList.add(correct?'correct':'wrong');sbxFeedback(card,sbxL(correct?lesson.correctFeedback:lesson.wrongFeedback),correct);if(correct){sbxComplete(lesson.id);sbxRenderFooterState();}};actions.appendChild(button);});card.querySelector('.sbx-copy').appendChild(actions);sbxRemember(card,lesson);}
-function sbxRenderRoad(card,lesson){var question=lesson.questions[sbxState.roadIndex],copy=card.querySelector('.sbx-copy');copy.replaceChildren();var head=sbxEl('div','sbx-road-head');head.append(sbxEl('div','sbx-eyebrow',sbxL(question.label)),sbxEl('span','sbx-road-step',(sbxState.roadIndex+1)+' / '+lesson.questions.length));copy.append(head,sbxEl('h1','',sbxL(question.prompt)));var actions=sbxEl('div','sbx-actions');question.options.forEach(function(option){var button=sbxEl('button','sbx-choice',sbxL(option.label));button.type='button';button.onclick=function(){var correct=option.id===question.correct;actions.querySelectorAll('button').forEach(function(item){item.disabled=true;});button.classList.add(correct?'correct':'wrong');sbxState.roadAnswers.push(correct);sbxFeedback(card,sbxL(question.explanation),correct);var advance=sbxEl('button','sbx-primary',sbxState.roadIndex+1<lesson.questions.length?sbxCopy('next'):sbxCopy('finish'));advance.type='button';advance.onclick=function(){if(sbxState.roadIndex+1<lesson.questions.length){sbxState.roadIndex+=1;sbxRenderRoad(card,lesson);}else{sbxRoadResult(lesson);}};copy.appendChild(advance);};actions.appendChild(button);});copy.appendChild(actions);}
-function sbxRoadResult(lesson){var root=document.getElementById('sbxRoot'),score=sbxState.roadAnswers.filter(Boolean).length,total=lesson.questions.length,passed=score===total;root.replaceChildren();var card=sbxEl('section','sbx-card sbx-result');card.append(sbxEl('div','sbx-eyebrow',passed?sbxCopy('roadCleared'):sbxCopy('roadRetry')),sbxEl('div','sbx-score',score+' / '+total));var progress=sbxReadProgress();progress.roadCheck={score:score,total:total};if(passed){if(progress.completedLessons.indexOf(lesson.id)<0)progress.completedLessons.push(lesson.id);progress.currentLesson=SBX_DATA.lessons.length-1;}sbxSaveProgress(progress);var action=sbxEl('button',passed?'sbx-primary':'sbx-secondary',passed?sbxCopy('finish'):sbxCopy('review'));action.type='button';action.onclick=passed?sbxHome:function(){sbxState.roadIndex=0;sbxState.roadAnswers=[];sbxOpen(0);};card.appendChild(action);root.appendChild(card);sbxStatus(root);}
-function sbxRenderFooterState(){var next=document.querySelector('#sbxRoot .sbx-footer .sbx-primary');if(next)next.disabled=!sbxState.answered;}
-function sbxOpen(index){var lesson=SBX_DATA.lessons[index],root=document.getElementById('sbxRoot');if(!lesson){root.replaceChildren(sbxEl('div','sbx-feedback',sbxCopy('contentError')));return;}sbxState.view='lesson';sbxState.index=index;sbxState.answered=sbxReadProgress().completedLessons.indexOf(lesson.id)>=0;if(lesson.type==='roadCheck'){sbxState.roadIndex=0;sbxState.roadAnswers=[];}root.replaceChildren();sbxHeader(root,lesson);var card=sbxLessonFrame(root,lesson);if(lesson.type==='spotHazard')sbxRenderSpot(card,lesson);else if(lesson.type==='imageLesson')sbxRenderImageLesson(card,lesson);else if(lesson.type==='choice')sbxRenderChoice(card,lesson);else if(lesson.type==='roadCheck')sbxRenderRoad(card,lesson);else{sbxFeedback(card,sbxCopy('contentError'),false);}if(lesson.type!=='roadCheck')sbxFooter(root);sbxStatus(root);var progress=sbxReadProgress();progress.currentLesson=index;sbxSaveProgress(progress);}
-function loadStudiebok(){var root=document.getElementById('sbxRoot');if(!root)return;document.getElementById('app').classList.add('studybook-mode');if(sbxState.view==='lesson')sbxOpen(sbxState.index);else sbxHome();}
-function renderStudybook(){var screen=document.getElementById('screenStudybook');if(screen && screen.classList.contains('active'))loadStudiebok();}
+var SBX_DATA=__SBX_DATA__,SBX_KEY='t2d_studybook_progress_v1',sbxState={view:'home',index:0,answered:false,roadIndex:0,roadAnswers:[],found:[],storageFailed:false};
+function sbxEl(t,c,x){var e=document.createElement(t);if(t==='button')e.type='button';if(c)e.className=c;if(typeof x==='string')e.textContent=x;return e}function sbxL(value){if(!value||typeof value!=='object')return '';var text=value[appLang];return typeof text==='string'?text:''}function sbxCopy(k){return sbxL(SBX_DATA.copy[k])}function sbxDefaultProgress(){return{version:2,currentLesson:0,completedLessons:[],roadChecks:{},updatedAt:null}}function sbxReadProgress(){try{var r=_ls.get(SBX_KEY),p=r?JSON.parse(r):sbxDefaultProgress();if(!p||!Array.isArray(p.completedLessons))return sbxDefaultProgress();if(!p.roadChecks)p.roadChecks={};return p}catch(e){return sbxDefaultProgress()}}function sbxSaveProgress(p){try{p.version=2;p.updatedAt=new Date().toISOString();_ls.set(SBX_KEY,JSON.stringify(p));sbxState.storageFailed=false}catch(e){sbxState.storageFailed=true}}function sbxComplete(id){var p=sbxReadProgress();if(p.completedLessons.indexOf(id)<0)p.completedLessons.push(id);p.currentLesson=Math.min(sbxState.index+1,SBX_DATA.lessons.length-1);sbxSaveProgress(p);sbxState.answered=true}function sbxImage(k){var a=SBX_DATA.assets[k],w=sbxEl('div','sbx-image');if(!a)return w;var i=document.createElement('img');i.src=a.src;i.alt=sbxL(a.alt);i.onerror=function(){w.replaceChildren(sbxEl('div','sbx-feedback',sbxCopy('imageMissing')))};w.appendChild(i);return w}function sbxFeedback(c,x,ok){var o=c.querySelector('.sbx-feedback');if(o)o.remove();var f=sbxEl('div','sbx-feedback',x);f.role='status';f.dataset.result=ok?'correct':'wrong';c.querySelector('.sbx-copy').appendChild(f)}
+function sbxHome(){sbxState.view='home';var r=document.getElementById('sbxRoot'),p=sbxReadProgress(),pc=Math.round(p.completedLessons.length/SBX_DATA.lessons.length*100),h=sbxEl('section','sbx-hero');r.replaceChildren();h.append(sbxEl('div','sbx-logo',sbxCopy('brand')),sbxEl('h1','',sbxCopy('chapters')),sbxEl('p','',sbxCopy('continue')));var row=sbxEl('div','sbx-row');row.append(sbxEl('span','',sbxCopy('progress')),sbxEl('strong','',pc+' %'));var tr=sbxEl('div','sbx-track'),fi=sbxEl('div','sbx-fill');fi.style.width=pc+'%';tr.appendChild(fi);var b=sbxEl('button','sbx-primary',sbxCopy('start'));b.type='button';b.onclick=function(){sbxOpen(Math.min(Number(p.currentLesson)||0,SBX_DATA.lessons.length-1))};h.append(row,tr,b);r.appendChild(h);var m=sbxEl('div','sbx-map');SBX_DATA.lessons.forEach(function(l,n){var c=sbxEl('div','sbx-map-card'),z=sbxEl('span','');z.append(sbxEl('strong','',sbxL(l.title)),sbxEl('small','',sbxL(l.eyebrow)));c.append(sbxEl('span','',String(n+1)),z,sbxEl('span','',p.completedLessons.includes(l.id)?sbxCopy('completed'):''));m.appendChild(c)});r.appendChild(m)}function sbxHeader(r){var t=sbxEl('div','sbx-top'),b=sbxEl('button','sbx-secondary',sbxCopy('backHome'));b.type='button';b.onclick=sbxHome;t.append(b,sbxEl('span','sbx-logo',sbxCopy('brand')),sbxEl('span','',appLang.toUpperCase()));r.appendChild(t)}function sbxFrame(r,l){var c=sbxEl('article','sbx-card'),x=sbxEl('div','sbx-copy');x.append(sbxEl('div','sbx-eyebrow',sbxL(l.eyebrow)),sbxEl('h1','',sbxL(l.title)),sbxEl('p','',sbxL(l.body)));c.appendChild(x);r.appendChild(c);return c}function sbxFooter(r){var f=sbxEl('div','sbx-footer'),p=sbxEl('button','sbx-secondary',sbxCopy('previous')),n=sbxEl('button','sbx-primary',sbxCopy('next'));p.disabled=sbxState.index===0;p.onclick=function(){sbxOpen(sbxState.index-1)};n.disabled=!sbxState.answered;n.onclick=function(){sbxOpen(Math.min(sbxState.index+1,SBX_DATA.lessons.length-1))};f.append(p,n);r.appendChild(f)}function sbxNext(){var n=document.querySelector('#sbxRoot .sbx-footer .sbx-primary');if(n)n.disabled=!sbxState.answered}
+function sbxIntro(c,l){c.insertBefore(sbxImage(l.asset),c.firstChild);var b=sbxEl('button','sbx-primary',sbxCopy('start'));b.onclick=function(){sbxComplete(l.id);sbxNext()};c.querySelector('.sbx-copy').appendChild(b)}function sbxSequence(c,l){c.insertBefore(sbxImage(l.asset),c.firstChild);var f=sbxEl('div','sbx-flow');l.steps.forEach(function(s){f.appendChild(sbxEl('span','',sbxL(s)))});var b=sbxEl('button','sbx-primary',sbxCopy('understood'));b.onclick=function(){sbxComplete(l.id);sbxFeedback(c,sbxL(l.remember||l.body),true);sbxNext()};c.querySelector('.sbx-copy').append(f,b)}function sbxChoice(c,l){c.insertBefore(sbxImage(l.asset),c.firstChild);var a=sbxEl('div','sbx-actions');l.options.forEach(function(o){var b=sbxEl('button','sbx-choice',sbxL(o.label));b.onclick=function(){var ok=o.id===l.correct;a.querySelectorAll('button').forEach(function(q){q.classList.remove('correct','wrong')});b.classList.add(ok?'correct':'wrong');sbxFeedback(c,sbxL(ok?l.correctFeedback:l.wrongFeedback),ok);if(ok){sbxComplete(l.id);sbxNext()}};a.appendChild(b)});c.querySelector('.sbx-copy').appendChild(a)}function sbxSpot(c,l){var v=sbxImage(l.asset),n=sbxEl('span','sbx-counter','0 / '+l.hazards.length);v.appendChild(n);sbxState.found=[];l.hazards.forEach(function(h,i){var b=sbxEl('button','sbx-hotspot');b.style.left=h.x+'%';b.style.top=h.y+'%';b.setAttribute('aria-label',sbxL(h.label));b.onclick=function(){if(sbxState.found.includes(i))return;sbxState.found.push(i);b.classList.add('found');n.textContent=sbxState.found.length+' / '+l.hazards.length;var done=sbxState.found.length===l.hazards.length;sbxFeedback(c,sbxL(done?l.completeFeedback:l.feedback),true);if(done){sbxComplete(l.id);sbxNext()}};v.appendChild(b)});c.insertBefore(v,c.firstChild)}
+function sbxRoad(c,l){var q=l.questions[sbxState.roadIndex],x=c.querySelector('.sbx-copy');x.replaceChildren();var h=sbxEl('div','sbx-road-head');h.append(sbxEl('div','sbx-eyebrow',sbxL(q.label)),sbxEl('span','',(sbxState.roadIndex+1)+' / '+l.questions.length));x.append(h,sbxEl('h1','',sbxL(q.prompt)));var a=sbxEl('div','sbx-actions');q.options.forEach(function(o){var b=sbxEl('button','sbx-choice',sbxL(o.label));b.onclick=function(){var ok=o.id===q.correct;a.querySelectorAll('button').forEach(function(z){z.disabled=true});sbxState.roadAnswers.push(ok);sbxFeedback(c,sbxL(q.explanation),ok);var n=sbxEl('button','sbx-primary',sbxState.roadIndex+1<l.questions.length?sbxCopy('next'):sbxCopy('finish'));n.onclick=function(){if(++sbxState.roadIndex<l.questions.length)sbxRoad(c,l);else sbxRoadResult(l)};x.appendChild(n)};a.appendChild(b)});x.appendChild(a)}function sbxRoadResult(l){var r=document.getElementById('sbxRoot'),s=sbxState.roadAnswers.filter(Boolean).length,t=l.questions.length,ok=s===t,c=sbxEl('section','sbx-card sbx-result');r.replaceChildren();c.append(sbxEl('div','sbx-eyebrow',sbxCopy(ok?'roadCleared':'roadRetry')),sbxEl('div','sbx-score',s+' / '+t));var p=sbxReadProgress();p.roadChecks[l.id]={score:s,total:t};if(ok){if(!p.completedLessons.includes(l.id))p.completedLessons.push(l.id);p.currentLesson=Math.min(sbxState.index+1,SBX_DATA.lessons.length-1)}sbxSaveProgress(p);var b=sbxEl('button','sbx-primary',sbxCopy(ok?'finish':'review'));b.onclick=ok?function(){sbxOpen(Math.min(sbxState.index+1,SBX_DATA.lessons.length-1))}:function(){sbxState.roadIndex=0;sbxState.roadAnswers=[];sbxOpen(sbxState.index)};c.appendChild(b);r.appendChild(c)}function sbxCompleteScreen(c,l){var x=c.querySelector('.sbx-copy'),s=sbxEl('div','sbx-skills');l.skills.forEach(function(v){s.appendChild(sbxEl('span','',sbxL(v)))});x.append(s,sbxEl('div','sbx-eyebrow',sbxL(l.nextChapter)));var b=sbxEl('button','sbx-primary',sbxCopy('finish'));b.onclick=function(){sbxComplete(l.id);sbxHome()};x.appendChild(b)}
+function sbxOpen(i){var l=SBX_DATA.lessons[i],r=document.getElementById('sbxRoot');if(!l){r.replaceChildren(sbxEl('div','sbx-feedback',sbxCopy('contentError')));return}sbxState.view='lesson';sbxState.index=i;sbxState.answered=sbxReadProgress().completedLessons.includes(l.id);if(l.type==='roadCheck'){sbxState.roadIndex=0;sbxState.roadAnswers=[]}r.replaceChildren();sbxHeader(r);var c=sbxFrame(r,l);if(l.type==='intro')sbxIntro(c,l);else if(l.type==='sequence')sbxSequence(c,l);else if(l.type==='choice')sbxChoice(c,l);else if(l.type==='spotHazard')sbxSpot(c,l);else if(l.type==='roadCheck')sbxRoad(c,l);else if(l.type==='chapterComplete')sbxCompleteScreen(c,l);else sbxFeedback(c,sbxCopy('contentError'),false);if(l.type!=='roadCheck'&&l.type!=='chapterComplete')sbxFooter(r);var p=sbxReadProgress();p.currentLesson=i;sbxSaveProgress(p)}function loadStudiebok(){var r=document.getElementById('sbxRoot');if(!r)return;document.getElementById('app').classList.add('studybook-mode');sbxState.view==='lesson'?sbxOpen(sbxState.index):sbxHome()}function renderStudybook(){var s=document.getElementById('screenStudybook');if(s&&s.classList.contains('active'))loadStudiebok()}
 """.replace("__SBX_DATA__", _DATA)
 
 
 def install(html: str) -> str:
-    """Replace only the legacy Studybook screen and add isolated web assets."""
-    start_marker = '    <!-- ═══ STUDIEBOK SCREEN ═══ -->'
-    end_marker = '    <!-- ═══ FORBIKJØRING SCREEN ═══ -->'
-    if start_marker not in html or end_marker not in html:
+    start = '    <!-- ═══ STUDIEBOK SCREEN ═══ -->'
+    end = '    <!-- ═══ FORBIKJØRING SCREEN ═══ -->'
+    if start not in html or end not in html:
         raise ValueError("Studybook screen markers not found")
-    before, remainder = html.split(start_marker, 1)
-    _, after = remainder.split(end_marker, 1)
-    html = before + start_marker + "\n    " + SCREEN.strip() + "\n\n" + end_marker + after
+    before, rest = html.split(start, 1)
+    _, after = rest.split(end, 1)
+    html = before + start + "\n    " + SCREEN + "\n\n" + end + after
     html = html.replace("</style>", CSS + "\n</style>", 1)
-    html = html.replace(
-        "if (typeof renderStopping === 'function' && document.getElementById('stopSpeed')) renderStopping();",
-        "if (typeof renderStopping === 'function' && document.getElementById('stopSpeed')) renderStopping();\n  if (typeof renderStudybook === 'function') renderStudybook();",
-        1,
-    )
-    html = html.replace(
-        "  activeTab = tab;",
-        "  activeTab = tab;\n  document.getElementById('app').classList.toggle('studybook-mode', tab === 'studybook');",
-        1,
-    )
+    html = html.replace("if (typeof renderStopping === 'function' && document.getElementById('stopSpeed')) renderStopping();", "if (typeof renderStopping === 'function' && document.getElementById('stopSpeed')) renderStopping();\n  if (typeof renderStudybook === 'function') renderStudybook();", 1)
+    html = html.replace("  activeTab = tab;", "  activeTab = tab;\n  document.getElementById('app').classList.toggle('studybook-mode', tab === 'studybook');", 1)
     head, closing = html.rsplit("</script>", 1)
     return head + SCRIPT + "\n</script>" + closing
