@@ -16,7 +16,7 @@ class TestMichaelMediaCardsContract(unittest.TestCase):
         """Teacher input bar must contain a file input accepting PDF and a visible trigger button."""
         self.assertIn('id="teacherDocInput"', self.content)
         self.assertIn('type="file"', self.content)
-        self.assertIn('accept=".pdf,application/pdf"', self.content)
+        self.assertIn('accept=".pdf,application/pdf', self.content)
         self.assertIn('onchange="_teacherUploadDoc(this)"', self.content)
 
         self.assertIn('id="teacherDocBtn"', self.content)

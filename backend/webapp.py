@@ -33,6 +33,13 @@ WEBAPP_HTML = r"""<!DOCTYPE html>
    CSS VARIABLES & RESET
 ══════════════════════════════════════════ */
 :root {
+  --neon-angle: 0deg;
+  --neon-cyan: #00F5FF;
+  --neon-blue: #0066FF;
+  --neon-magenta: #FF00E5;
+  --neon-amber: #FF9933;
+  --neon-flow-gradient: conic-gradient(from var(--neon-angle, 0deg), #00F5FF 0%, #0066FF 25%, #FF00E5 50%, #FF9933 75%, #00F5FF 100%);
+  --neon-flow-gradient-soft: conic-gradient(from var(--neon-angle, 0deg), rgba(0,245,255,0.8) 0%, rgba(0,102,255,0.8) 25%, rgba(255,0,229,0.8) 50%, rgba(255,153,51,0.8) 75%, rgba(0,245,255,0.8) 100%);
   --bg: #0B1226;
   --bg2: #111827;
   --card: rgba(255,255,255,.05);
@@ -105,7 +112,7 @@ a { color:inherit; text-decoration:none; }
     border-left: 2px solid transparent;
     border-right: 2px solid transparent;
     background: linear-gradient(var(--bg), var(--bg)) padding-box,
-                conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #00F5FF) border-box;
+                conic-gradient(from var(--neon-angle, 0deg), #00F5FF 0%, #0066FF 25%, #FF00E5 50%, #FF9933 75%, #00F5FF 100%) border-box;
     animation: neonFlow 5s linear infinite;
     box-shadow:
       -8px 0 40px rgba(0,0,0,.60),
@@ -180,7 +187,7 @@ a { color:inherit; text-decoration:none; }
 #bottomNav::-webkit-scrollbar { display: none; width: 0; height: 0; }
 [data-theme="light"] #bottomNav {
   background: linear-gradient(rgba(241, 245, 249, 0.95), rgba(241, 245, 249, 0.95)) padding-box,
-              conic-gradient(from var(--neon-angle, 0deg), #FF9933, #FF00E5, #00F5FF, #FF9933) border-box !important;
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF 0%, #0066FF 25%, #FF00E5 50%, #FF9933 75%, #00F5FF 100%) border-box !important;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 0 16px rgba(255, 153, 51, 0.2);
 }
 .bn-tab {
@@ -251,7 +258,7 @@ a { color:inherit; text-decoration:none; }
   color: #00F5FF;
   border: 1.5px solid transparent !important;
   background: linear-gradient(rgba(11, 18, 38, 0.90), rgba(11, 18, 38, 0.90)) padding-box,
-              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #00F5FF) border-box !important;
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF 0%, #0066FF 25%, #FF00E5 50%, #FF9933 75%, #00F5FF 100%) border-box !important;
   animation: neonFlow 4s linear infinite;
   box-shadow: 0 0 16px rgba(0, 245, 255, 0.3), inset 0 1px 2px rgba(255,255,255,0.12);
   transform: translateY(-2px);
@@ -259,7 +266,7 @@ a { color:inherit; text-decoration:none; }
 [data-theme="light"] .bn-tab.active {
   color: var(--orange);
   background: linear-gradient(#FFFFFF, #FFFFFF) padding-box,
-              conic-gradient(from var(--neon-angle, 0deg), #FF9933, #FF00E5, #00F5FF, #FF9933) border-box !important;
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF 0%, #0066FF 25%, #FF00E5 50%, #FF9933 75%, #00F5FF 100%) border-box !important;
   box-shadow: 0 0 14px rgba(255, 153, 51, 0.22), inset 0 1px 2px rgba(255,255,255,0.9);
 }
 .bn-tab.active .bn-icon {
@@ -488,7 +495,7 @@ a { color:inherit; text-decoration:none; }
   width:100%; padding:16px;
   border:2px solid transparent !important;
   background:linear-gradient(135deg,#FF9933,#e6891f) padding-box,
-              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #00F5FF) border-box !important;
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF 0%, #0066FF 25%, #FF00E5 50%, #FF9933 75%, #00F5FF 100%) border-box !important;
   animation:neonFlow 3s linear infinite;
   color:#0F172A; font-weight:900; font-size:1rem;
   border-radius:14px; cursor:pointer;
@@ -501,7 +508,7 @@ a { color:inherit; text-decoration:none; }
 .home-cta-exam {
   margin-top:10px;
   background:linear-gradient(135deg,#162447,#0F172A) padding-box,
-             conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #3B82F6, #FF9933, #00F5FF) border-box !important;
+             conic-gradient(from var(--neon-angle, 0deg), #00F5FF 0%, #0066FF 25%, #FF00E5 50%, #FF9933 75%, #00F5FF 100%) border-box !important;
   color:#E2E8F0 !important;
   box-shadow:0 4px 20px rgba(0,245,255,.25);
 }
@@ -540,7 +547,7 @@ a { color:inherit; text-decoration:none; }
   padding:13px 10px;
   border:1.5px solid transparent !important;
   background:linear-gradient(rgba(255,255,255,.05), rgba(255,255,255,.05)) padding-box,
-              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #00F5FF) border-box !important;
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF 0%, #0066FF 25%, #FF00E5 50%, #FF9933 75%, #00F5FF 100%) border-box !important;
   animation:neonFlow 4s linear infinite;
   backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
   border-radius:14px; color:var(--text); font-weight:700;
@@ -551,7 +558,7 @@ a { color:inherit; text-decoration:none; }
 }
 .home-sec-btn:hover {
   background:linear-gradient(rgba(255,255,255,.08), rgba(255,255,255,.08)) padding-box,
-              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #00F5FF) border-box !important;
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF 0%, #0066FF 25%, #FF00E5 50%, #FF9933 75%, #00F5FF 100%) border-box !important;
   box-shadow:0 0 16px rgba(0, 245, 255, 0.3);
 }
 .home-sec-btn:active {
@@ -697,7 +704,7 @@ a { color:inherit; text-decoration:none; }
   gap:0;
   border:1.5px solid transparent !important;
   background:linear-gradient(rgba(255,255,255,.05), rgba(255,255,255,.05)) padding-box,
-              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #00F5FF) border-box !important;
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF 0%, #0066FF 25%, #FF00E5 50%, #FF9933 75%, #00F5FF 100%) border-box !important;
   animation:neonFlow 5s linear infinite;
   border-radius:16px; overflow:hidden;
   box-shadow:0 0 8px rgba(0, 245, 255, 0.08);
@@ -823,7 +830,8 @@ a { color:inherit; text-decoration:none; }
   inherits: false;
 }
 @keyframes neonFlow {
-  to { --neon-angle: 360deg; }
+  from { --neon-angle: 0deg; }
+  to   { --neon-angle: 360deg; }
 }
 @keyframes neonFlowFallback {
   0%   { transform:rotate(0deg); }
@@ -860,11 +868,11 @@ a { color:inherit; text-decoration:none; }
   transition:opacity .45s;
   padding:3px;
   background:conic-gradient(from var(--neon-angle, 0deg),
-    transparent 0%,
-    var(--cat-color, #FF9933) 18%,
-    rgba(255,255,255,.95) 24%,
-    var(--cat-color, #FF9933) 30%,
-    transparent 48%
+    #00F5FF 0%,
+    #0066FF 25%,
+    #FF00E5 50%,
+    #FF9933 75%,
+    #00F5FF 100%
   );
   -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite:xor;
@@ -874,7 +882,7 @@ a { color:inherit; text-decoration:none; }
 }
 .carousel-3d-active-ring.visible {
   opacity:1;
-  filter:drop-shadow(0 0 6px var(--cat-color, #FF9933)) drop-shadow(0 0 14px var(--cat-glow, rgba(255,153,51,.5)));
+  filter:drop-shadow(0 0 8px rgba(0,245,255,.7)) drop-shadow(0 0 16px rgba(255,0,229,.5));
 }
 
 /* ── Carousel dots ── */
@@ -3227,7 +3235,7 @@ a { color:inherit; text-decoration:none; }
   width:100%; padding:14px 16px;
   border:1.5px solid transparent !important;
   background:linear-gradient(135deg, rgba(30,58,95,.55) 0%, rgba(37,99,235,.20) 100%) padding-box,
-              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #00F5FF) border-box !important;
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF 0%, #0066FF 25%, #FF00E5 50%, #FF9933 75%, #00F5FF 100%) border-box !important;
   animation:neonFlow 4s linear infinite;
   border-radius:16px; cursor:pointer;
   transition:background .15s, border-color .15s, box-shadow 0.3s;
@@ -3236,7 +3244,7 @@ a { color:inherit; text-decoration:none; }
 }
 .michael-card:hover {
   background:linear-gradient(135deg,rgba(30,58,95,.7) 0%,rgba(37,99,235,.30) 100%) padding-box,
-              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #00F5FF) border-box !important;
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF 0%, #0066FF 25%, #FF00E5 50%, #FF9933 75%, #00F5FF 100%) border-box !important;
   box-shadow:0 0 16px rgba(0, 245, 255, 0.3);
 }
 .michael-card-left  { display:flex; align-items:center; gap:12px; }
@@ -3728,18 +3736,23 @@ a { color:inherit; text-decoration:none; }
   z-index: 2 !important;
 }
 
-/* ── Universal neon border — ALL buttons, always rotating ── */
-.auth-btn, .home-sec-btn, .sb-tool-btn, .sb-nav-btn, .sb-video-btn,
-.fk-sc-btn, .end-btn-pri, .end-btn-sec, .paywall-buy-btn,
-.tsp-btn, .sp-btn-primary, .sp-btn-sm, .sp-btn-sm-ai, .sp-btn-sm-audio, .sp-btn-sm-bm,
-.hp-btn-pri, .hp-btn-sec, .ask-michael-btn, .hist-btn-pri, .hist-btn-sec,
-.back-btn, .logout-btn, .lang-btn, .seg-btn, .spd-btn, .vol-btn, .rv-done-btn,
-.lib-back-btn, .teacher-send-btn, .tm-chip-btn, .sb-edit-btn, .ai-expand-btn,
-.q-bookmark-btn, .sp-ai-tts-btn, .rv-next {
+/* ⚡ Universal neon border — ALL buttons, always rotating ⚡ */
+.auth-btn, .auth-guest-btn, .home-cta, .home-cta-exam, .home-sec-btn,
+.sb-tool-btn, .sb-nav-btn, .sb-video-btn, .sb-edit-btn,
+.fk-sc-btn, .end-btn-pri, .end-btn-sec, .end-btn-coach, .end-focus-btn,
+.paywall-buy-btn, .tsp-btn, .sp-btn-primary, .sp-btn-sm, .sp-btn-sm-ai,
+.sp-btn-sm-audio, .sp-btn-sm-bm, .hp-btn-pri, .hp-btn-sec, .ask-michael-btn,
+.hist-btn-pri, .hist-btn-sec, .back-btn, .lib-back-btn, .logout-btn,
+.lang-btn, .seg-btn, .spd-btn, .vol-btn, .rv-done-btn, .rv-next,
+.teacher-send-btn, .tm-chip-btn, .tm-no-term-btn, .teacher-doc-btn,
+.ai-expand-btn, .q-bookmark-btn, .sp-ai-tts-btn, .exam-error-btn,
+.glossary-term-btn, .micro-lesson-btn, .target-practice-option,
+.vp-back-btn, .vp-mc-btn, .quiz-coach-trigger-btn, .btn {
   border: 1.5px solid transparent !important;
   background: linear-gradient(var(--btn-bg, rgba(17,24,39,0.95)), var(--btn-bg, rgba(17,24,39,0.95))) padding-box,
-              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #00F5FF) border-box !important;
-  animation: neonFlow 3s linear infinite !important;
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF 0%, #0066FF 25%, #FF00E5 50%, #FF9933 75%, #00F5FF 100%) border-box !important;
+  animation: neonFlow 3.5s linear infinite !important;
+  box-shadow: 0 0 10px rgba(0, 245, 255, 0.4), 0 0 18px rgba(255, 0, 229, 0.25) !important;
   color: #FFFFFF !important;
 }
 
@@ -3762,7 +3775,7 @@ a { color:inherit; text-decoration:none; }
 .rv-next {
   border: 1.5px solid transparent !important;
   background: linear-gradient(rgba(17, 24, 39, 0.95), rgba(17, 24, 39, 0.95)) padding-box,
-              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #00F5FF) border-box !important;
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF 0%, #0066FF 25%, #FF00E5 50%, #FF9933 75%, #00F5FF 100%) border-box !important;
   animation: neonFlow 4s linear infinite !important;
   box-shadow: 0 0 10px rgba(0, 245, 255, 0.25) !important;
   color: #FFFFFF !important;
@@ -3798,7 +3811,7 @@ a { color:inherit; text-decoration:none; }
 .logout-btn:hover {
   border: 1.5px solid transparent !important;
   background: linear-gradient(rgba(17, 24, 39, 0.95), rgba(17, 24, 39, 0.95)) padding-box,
-              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #00F5FF) border-box !important;
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF 0%, #0066FF 25%, #FF00E5 50%, #FF9933 75%, #00F5FF 100%) border-box !important;
   animation: neonFlow 4s linear infinite !important;
   box-shadow: 0 0 12px rgba(255, 0, 229, 0.3) !important;
   transform: scale(1.03) !important;
@@ -3812,7 +3825,7 @@ a { color:inherit; text-decoration:none; }
 .bm-card:hover {
   border: 1.5px solid transparent !important;
   background: linear-gradient(rgba(19, 27, 46, 0.96), rgba(11, 18, 38, 0.98)) padding-box,
-              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #00F5FF) border-box !important;
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF 0%, #0066FF 25%, #FF00E5 50%, #FF9933 75%, #00F5FF 100%) border-box !important;
   animation: neonFlow 5s linear infinite !important;
   box-shadow: 0 0 15px rgba(0, 245, 255, 0.22) !important;
 }
@@ -7100,8 +7113,8 @@ async function loadCategories() {
         title: { no: "Trafikkregler", th: "กฎจราจร", en: "Traffic Rules" },
         icon: "file-text",
         dbName: "Road Rules",
-        color: "#FFD700",
-        glow: "rgba(255,215,0,.45)",
+        color: "#FF9933",
+        glow: "rgba(255,153,51,.45)",
         count: countMap["Road Rules"] || 0
       },
       {
@@ -7109,8 +7122,8 @@ async function loadCategories() {
         title: { no: "Kjøreforhold", th: "สภาพการขับขี่", en: "Driving Conditions" },
         icon: "cloud-rain",
         dbName: "Driving Conditions",
-        color: "#10B981",
-        glow: "rgba(16,185,129,.45)",
+        color: "#00F5FF",
+        glow: "rgba(0,245,255,.45)",
         count: countMap["Driving Conditions"] || 0
       },
       {
