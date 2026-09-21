@@ -188,6 +188,93 @@ class QuizTermsTests(unittest.TestCase):
         self.assertEqual(result["lang"], "th")
 
 
+    def test_filter_language_purity_strips_no_and_en_definitions(self):
+        question = {"question_text_no": "Hva betyr vikeplikt?", "category": "Vikeplikt"}
+        result = self.module._build_terms_response("q7", question, _fake_cache(), "th")
+        for term in result["terms"]:
+            self.assertIn("definition_th", term)
+            self.assertNotIn("definition_no", term)
+            self.assertNotIn("definition_en", term)
+            self.assertIn("term_no", term)
+            self.assertIn("term_no_latin", term)
+
+    def test_weighted_scoring_prefers_text_match_over_category(self):
+        cache = [
+            {
+                "id": "1",
+                "term_no": "TagOnlyTerm",
+                "term_th": "แท็ก",
+                "definition_th": "คำอธิบายแท็ก",
+                "topic_tags": ["Vikeplikt"],
+            },
+            {
+                "id": "2",
+                "term_no": "TextMatchTerm",
+                "term_th": "ข้อความ",
+                "definition_th": "คำอธิบายข้อความ",
+                "topic_tags": ["Annet"],
+            },
+        ]
+        question = {
+            "question_text_no": "Her har vi en tekst med TextMatchTerm i teksten.",
+            "category": "Vikeplikt",
+        }
+        result = self.module._build_terms_response("q8", question, cache, "th")
+        self.assertEqual(len(result["terms"]), 2)
+        # Weight 2 (text match) should be first, Weight 1 (tag match) should be second
+        self.assertEqual(result["terms"][0]["term_no"], "TextMatchTerm")
+        self.assertEqual(result["terms"][1]["term_no"], "TagOnlyTerm")
+
+    def test_word_boundary_matching_prevents_partial_word_leak(self):
+        cache = [
+            {
+                "id": "1",
+                "term_no": "Bil",
+                "term_th": "รถยนต์",
+                "definition_th": "ยานพาหนะ",
+                "topic_tags": ["Kjøretøy"],
+            }
+        ]
+        # "bilbelte" contains "bil", but word boundaries should not trigger for "bilbelte"
+        question = {"question_text_no": "Husk alltid bilbelte under kjøring.", "category": "Sikkerhet"}
+        result = self.module._build_terms_response("q9", question, cache, "th")
+        self.assertEqual(result["terms"], [])
+
+
+class WebappQuizGlossaryContractTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        webapp_path = Path(__file__).resolve().parents[1] / "webapp.py"
+        with open(webapp_path, "r", encoding="utf-8") as f:
+            cls.webapp_content = f.read()
+
+    def test_webapp_html_has_glossary_contract_elements(self):
+        self.assertIn("glossaryBtnWrap", self.webapp_content)
+        self.assertIn("glossary-term-btn", self.webapp_content)
+        self.assertIn("glossary-panel", self.webapp_content)
+        self.assertIn("📖 ดูคำศัพท์นอร์เวย์", self.webapp_content)
+        self.assertIn("loadGlossaryTerms", self.webapp_content)
+        self.assertIn("toggleGlossaryPanel", self.webapp_content)
+        self.assertIn("resetGlossaryTerms", self.webapp_content)
+
+    def test_webapp_glossary_neon_palette_compliance(self):
+        # Extract CSS block for glossary styles
+        self.assertIn(".glossary-term-btn", self.webapp_content)
+        self.assertIn("#00F5FF", self.webapp_content)  # Cyan neon accent
+        # Strict rule: pure neon green and pure neon yellow are forbidden
+        forbidden = ["#39FF14", "#00FF00", "#FFFF00", "neon-green", "neon-yellow"]
+        for f in forbidden:
+            self.assertNotIn(f, self.webapp_content)
+
+    def test_server_mounts_quiz_terms_router(self):
+        server_path = Path(__file__).resolve().parents[1] / "server.py"
+        with open(server_path, "r", encoding="utf-8") as f:
+            server_content = f.read()
+        self.assertIn("from quiz_terms import quiz_terms_router", server_content)
+        self.assertIn("app.include_router(quiz_terms_router, prefix=\"/api\")", server_content)
+        self.assertIn("load_quiz_glossary_cache", server_content)
+
+
 class SeedGlossaryMigrationTests(unittest.TestCase):
     def test_forkjorsvei_naming(self):
         module = _load_seed_glossary()

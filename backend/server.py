@@ -6546,6 +6546,7 @@ app.include_router(quiz_web_router, prefix="/api")
 # ==================== QUIZ GLOSSARY TERMS (Fagordkortet) ====================
 from quiz_terms import quiz_terms_router  # noqa: E402
 app.include_router(quiz_terms_router, prefix="/api")
+app.include_router(quiz_terms_router)
 
 # ==================== WEB APP ====================
 from webapp import webapp_router  # noqa: E402

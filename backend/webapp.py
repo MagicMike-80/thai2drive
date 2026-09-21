@@ -8219,13 +8219,18 @@ function renderGlossaryButton() {
   var wrap = document.getElementById('glossaryBtnWrap');
   if (!wrap) return;
   if (appLang === 'th' && currentTerms.length > 0) {
-    wrap.innerHTML = '<button class="glossary-term-btn" id="glossaryTermBtn" onclick="toggleGlossaryPanel()">📖 ดูคำศัพท์นอร์เวย์</button>';
+    wrap.innerHTML = '<button class="glossary-term-btn" id="glossaryTermBtn" aria-expanded="false" onclick="toggleGlossaryPanel()">📖 ดูคำศัพท์นอร์เวย์</button>';
   } else {
     wrap.innerHTML = '';
   }
 }
 
 function loadGlossaryTerms(qId) {
+  if (appLang !== 'th') {
+    currentTerms = [];
+    renderGlossaryButton();
+    return;
+  }
   fetch('/api/quiz/terms?question_id=' + encodeURIComponent(qId) + '&lang=' + encodeURIComponent(appLang))
     .then(function(r) { return r.json(); })
     .then(function(data) {
@@ -8239,7 +8244,12 @@ function toggleGlossaryPanel() {
   var wrap = document.getElementById('glossaryBtnWrap');
   if (!wrap) return;
   var existing = document.getElementById('glossaryPanel');
-  if (existing) { existing.remove(); return; }
+  var btn = document.getElementById('glossaryTermBtn');
+  if (existing) {
+    existing.remove();
+    if (btn) btn.setAttribute('aria-expanded', 'false');
+    return;
+  }
 
   var itemsHtml = currentTerms.map(function(term) {
     if (!term.definition_th) return ''; // defensive — API already filters this
@@ -8255,6 +8265,7 @@ function toggleGlossaryPanel() {
   panel.className = 'glossary-panel';
   panel.innerHTML = itemsHtml;
   wrap.appendChild(panel);
+  if (btn) btn.setAttribute('aria-expanded', 'true');
 }
 
 /**

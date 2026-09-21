@@ -59,7 +59,9 @@ async def load_glossary_cache(db) -> None:
     """Load active glossary terms into the module-level cache. Fail-soft:
     on error, leave the previous cache in place (empty cache = endpoint
     answers {"terms": []}, never a 500)."""
-    global _GLOSSARY_CACHE, _CACHE_LOADED_AT
+    global _GLOSSARY_CACHE, _CACHE_LOADED_AT, _db
+    if db is not None:
+        _db = db
     try:
         docs = await db.learning_glossary.find({"active": True}, {"_id": 0}).to_list(100)
         for doc in docs:
@@ -132,10 +134,21 @@ def _build_terms_response(question_id: str, question: Optional[dict], cache: lis
 
 @quiz_terms_router.get("/quiz/terms")
 async def get_quiz_terms(question_id: str = Query(...), lang: str = Query("th")):
-    question = await _db.questions.find_one({"id": question_id}, {"_id": 0})
+    global _GLOSSARY_CACHE, _db
+    if not _GLOSSARY_CACHE and _db is not None:
+        await load_glossary_cache(_db)
+    question = None
+    if _db is not None:
+        try:
+            query = {"$or": [{"id": question_id}]}
+            if str(question_id).isdigit():
+                query["$or"].append({"id": int(question_id)})
+            question = await _db.questions.find_one(query, {"_id": 0})
+        except Exception as exc:
+            logger.warning("Failed to lookup question %s: %s", question_id, exc)
     response = _build_terms_response(question_id, question, _GLOSSARY_CACHE, lang)
 
-    if response["terms"]:
+    if response["terms"] and _db is not None:
         try:
             await _db.glossary_lookup_logs.insert_one({
                 "id": str(uuid.uuid4()),
