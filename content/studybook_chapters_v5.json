@@ -1185,5 +1185,135 @@
         ]
       }
     ]
+  },
+  {
+    "chapter_id": "ch_forsikring_registrering",
+    "chapter_code": "CH11",
+    "title_no": "Kapittel 11 — Forsikring, registrering og ansvar",
+    "title_th": "บทที่ 11 — ประกันภัย การจดทะเบียน และความรับผิดชอบ (Forsikring og ansvar)",
+    "title_en": "Chapter 11 — Insurance, Registration, and Responsibility",
+    "difficulty": "beginner",
+    "podcast_reference": "Michaels råd: Rettigheter og ansvar som bileier",
+    "order": 13,
+    "section_tags": [
+      "forsikring",
+      "ansvarsforsikring",
+      "kasko",
+      "vognkort",
+      "eierskifte",
+      "regress",
+      "vegtrafikkloven23"
+    ],
+    "sections": [
+      {
+        "section_type": "situation",
+        "title_no": "Situasjonen: Du kjøper din første bruktbil i Norge",
+        "title_th": "สถานการณ์: คุณกำลังซื้อรถยนต์มือสองคันแรกในนอร์เวย์",
+        "title_en": "The situation: Buying your first used car in Norway",
+        "content_no": "Du har funnet en fin bruktbil og avtalt kjøpet med selgeren. Hvilke dokumenter må fylles ut, og når må forsikringen være i orden før du kan kjøre bilen hjem?",
+        "content_th": "คุณตกลงซื้อรถยนต์มือสองสภาพดีจากผู้ขาย เอกสารใดบ้างที่ต้องกรอกและส่งให้ทางการ และประกันภัยต้องพร้อมเมื่อใดก่อนที่คุณจะขับรถกลับบ้านได้อย่างถูกกฎหมาย?",
+        "content_en": "You agreed to buy a used car. What documents must be submitted, and when must insurance be in place before you can drive it home?"
+      },
+      {
+        "section_type": "theory",
+        "title_no": "Michaels forsikringsregel: Ansvarsforsikring er lovpålagt, kasko er ditt valg",
+        "title_th": "กฎประกันภัยของ Michael: ประกันภาคบังคับกฎหมายกำหนด ส่วน Kasko คือทางเลือกของคุณ",
+        "title_en": "Michael's insurance rule: Liability is mandatory, comprehensive is your choice",
+        "content_no": "Trafikkforsikring (ansvarsforsikring) er lovpålagt og dekker skader på andre personer, kjøretøy og eiendom. Kaskoforsikring er frivillig og dekker skader på din egen bil. Ved eierskifte må salgsmelding leveres innen 3 dager, og vognkort del 1 må alltid medbringes under kjøring.",
+        "content_th": "ประกันภัยภาคบังคับ (Ansvarsforsikring) เป็นกฎหมายที่บังคับให้รถทุกคันต้องมีเพื่อคุ้มครองผู้อื่น ส่วนประกัน Kasko เป็นภาคสมัครใจที่คุ้มครองรถตนเอง เมื่อเปลี่ยนเจ้าของต้องส่งใบแจ้งขายภายใน 3 วัน และต้องพกสมุดคู่มือรถส่วนที่ 1 ไว้เสมอ",
+        "content_en": "Traffic liability insurance is legally mandatory, covering third-party injuries and property. Comprehensive (kasko) is optional, covering your own car. Ownership transfers must be filed within 3 days, and log book part 1 must accompany the drive."
+      },
+      {
+        "section_type": "practice",
+        "title_no": "Praktisk tips: Førerens sjekkplikt før kjøring (§ 23)",
+        "title_th": "คำแนะนำภาคปฏิบัติ: หน้าที่ตรวจสภาพรถของผู้ขับขี่ก่อนเดินทาง (§ 23)",
+        "title_en": "Practical tips: The driver's pre-drive check duty (§ 23)",
+        "content_no": "Vegtrafikkloven § 23 krever at føreren forvisser seg om at bilen er i forsvarlig stand (lys, sikt, bremser og dekk) og forsvarlig lastet før hver kjøretur. Eieren har ansvar for aldri å overlate bilen til noen uten gyldig førerkort.",
+        "content_th": "กฎหมายจราจรมาตรา 23 กำหนดให้ผู้ขับขี่ต้องตรวจสภาพรถให้มั่นใจว่าปลอดภัย (ระบบไฟ กระจกมองเห็น เบรก ยาง) และบรรทุกถูกต้องก่อนออกเดินทาง และเจ้าของรถต้องไม่มอบรถให้ผู้ที่ไม่มีใบขับขี่เด็ดขาด",
+        "content_en": "Traffic Law § 23 requires drivers to ensure the car is in safe mechanical condition and loaded properly before driving. Owners must never lend vehicles to unlicensed individuals."
+      }
+    ],
+    "screens": [
+      {
+        "screen_id": "CH11-001",
+        "screen_type": "intro",
+        "title_no": "Lovpålagt ansvarsforsikring vs. Kasko",
+        "title_th": "ประกันภัยภาคบังคับ (Ansvarsforsikring) vs ประกันภัยภาคสมัครใจ (Kasko)",
+        "asset_id": "CH11-ANSV-001",
+        "pair_asset_id": null,
+        "content_th": "ในนอร์เวย์ รถยนต์ทุกคันต้องมีประกันภัยคุ้มครองผู้ประสบภัย (Ansvarsforsikring) ซึ่งเป็นกฎหมายบังคับ ประกันนี้จ่ายค่าเสียหายให้แก่ผู้อื่นและทรัพย์สินของคู่กรณี ส่วนประกัน Kasko เป็นภาคสมัครใจที่คุ้มครองความเสียหายของตัวรถคุณเอง",
+        "glossary_terms": [
+          "Trafikkforsikring",
+          "Ansvarsforsikring",
+          "Kasko"
+        ]
+      },
+      {
+        "screen_id": "CH11-002",
+        "screen_type": "choice",
+        "title_no": "Hva dekker lovpålagt trafikkforsikring?",
+        "title_th": "ประกันภาคบังคับคุ้มครองความเสียหายใดบ้าง?",
+        "asset_id": "CH11-ANSV-002",
+        "pair_asset_id": "CH11-PAR-001",
+        "content_th": "หากคุณเกิดอุบัติเหตุ ประกันภาคบังคับจะจ่ายค่ารักษาพยาบาลและค่าเสียหายให้แก่คู่กรณีและคนเดินถนน แต่จะไม่จ่ายค่าซ่อมรถของคุณเอง เว้นแต่คุณจะทำประกันแบบ Kasko เสริมไว้",
+        "glossary_terms": [
+          "Skadeoppgjør",
+          "Tredjepart"
+        ]
+      },
+      {
+        "screen_id": "CH11-003",
+        "screen_type": "sequence",
+        "title_no": "Registrering og vognkort ved eierskifte",
+        "title_th": "การจดทะเบียนและสมุดคู่มือรถ (Vognkort) เมื่อเปลี่ยนเจ้าของ",
+        "asset_id": "CH11-ANSV-003",
+        "pair_asset_id": null,
+        "content_th": "เมื่อมีการซื้อขายรถยนต์ ทั้งผู้ซื้อและผู้ขายมีหน้าที่แจ้งเปลี่ยนเจ้าของต่อกรมการขนส่งภายใน 3 วัน และรถต้องมีสมุดคู่มือ (Vognkort) พกติดตัวหรืออยู่ในแอปเสมอ",
+        "glossary_terms": [
+          "Vognkort",
+          "Salgsmelding",
+          "Omregistrering"
+        ]
+      },
+      {
+        "screen_id": "CH11-004",
+        "screen_type": "road_check",
+        "title_no": "Road Check ⚡ Forsikring og ansvar",
+        "title_th": "Road Check ⚡ ทดสอบความเข้าใจ: ประกันภัยและความรับผิดชอบ",
+        "road_check_id": "CH11-RC-001",
+        "asset_id": "CH11-ANSV-004",
+        "pair_asset_id": null,
+        "content_th": "สามคำถามสั้นเพื่อทดสอบความแม่นยำเรื่องกฎหมายประกันภัยและการโอนรถ",
+        "glossary_terms": [
+          "Regress"
+        ]
+      },
+      {
+        "screen_id": "CH11-005",
+        "screen_type": "choice",
+        "title_no": "Førerens vs. Eierens ansvar (Vegtrafikkloven § 23)",
+        "title_th": "ความรับผิดชอบของผู้ขับขี่ vs เจ้าของรถ (§ 23)",
+        "asset_id": "CH11-ANSV-005",
+        "pair_asset_id": "CH11-PAR-002",
+        "content_th": "ผู้ขับขี่มีหน้าที่ตรวจสอบว่ารถอยู่ในสภาพปลอดภัยและบรรทุกถูกต้องก่อนออกเดินทาง ส่วนเจ้าของรถมีหน้าที่ต้องไม่ให้ผู้ที่ไม่มีใบขับขี่นำรถไปใช้เด็ดขาด",
+        "glossary_terms": [
+          "Forsvarlig stand",
+          "Eieransvar"
+        ]
+      },
+      {
+        "screen_id": "CH11-006",
+        "screen_type": "summary",
+        "title_no": "Oppsummering av forsikring og ansvar",
+        "title_th": "สรุป: ประกันภัยและความรับผิดชอบในการใช้รถ",
+        "asset_id": "CH11-ANSV-006",
+        "pair_asset_id": null,
+        "content_th": "คุณเข้าใจความแตกต่างระหว่างประกันภาคบังคับกับ Kasko ทราบขอบเขตความรับผิดชอบของทั้งผู้ขับขี่และเจ้าของรถ และรู้วิธีแจ้งโอนกรรมสิทธิ์อย่างถูกต้องตามกฎหมายแล้ว!",
+        "glossary_terms": [
+          "Bilansvarslova",
+          "Erstatningsansvar"
+        ]
+      }
+    ]
   }
 ]

@@ -1228,6 +1228,112 @@ CH10_LESSONS = [
      "nextChapter": i18n("NESTE: 📋 FORSIKRING OG ANSVAR", "ถัดไป: 📋 ประกันภัยและความรับผิดชอบ", "NEXT: 📋 INSURANCE AND LIABILITY")}
 ]
 
+
+# ─── KAPITTEL 11: FORSIKRING, REGISTRERING OG ANSVAR (CH11) ─────────────────
+_CH11_PLACEHOLDERS = [
+    ("ch11_ansv_001", "1", "CH11-ANSV-001", "Lovpålagt ansvarsforsikring vs kasko", "Forklare forskjellen på lovpålagt ansvarsforsikring og frivillig kasko", "kontorperspektiv", "Ulovlig kjøring uten lovpålagt trafikkforsikring", "forsikringsdokumenter", "forsikringskontor", "skilt og avtale", "ansvarsforsikring vs kasko", "/api/assets/thumbs/thumb_vegtrafikkloven_3.jpg", ""),
+    ("ch11_ansv_002", "2", "CH11-ANSV-002", "Hva dekker lovpålagt trafikkforsikring", "Vise at ansvarsforsikring dekker skade på motpart og personer", "situasjonsperspektiv", "Økonomisk ruin ved ulykke uten gyldig forsikring", "to kjøretøy etter uhell", "veikant", "varseltrekant", "dekning av tredjepartsskade", "/api/assets/thumbs/thumb_uhell_dine_plikter.jpg", "ch11_par_001"),
+    ("ch11_par_001", "2p", "CH11-PAR-001", "Kaskoforsikring dekker skade på eget kjøretøy", "Sammenligne ansvarsforsikring mot kaskodekning", "nærbilde av bilskade", "Manglende erstatning for eget kjøretøy ved kun ansvarsforsikring", "skadet kjøretøy", "verksted", "taksering", "kaskodekning for eget tap", "/api/assets/thumbs/thumb_vegtrafikkloven_3.jpg", "ch11_ansv_002"),
+    ("ch11_ansv_003", "3", "CH11-ANSV-003", "Registrering og vognkort ved eierskifte", "Gjennomgå 3-dagersregelen for salgsmelding og vognkort del 1", "dokumentperspektiv", "Ugyldig registrering og manglende vognkort i bil", "vognkort del 1 og 2", "skranke trafikkstasjon", "skjemaer", "vognkort og eierskifte", "/api/assets/thumbs/thumb_vikeplikt_7_4.jpg", ""),
+    ("ch11_ansv_004", "4", "CH11-ANSV-004", "Road Check førerplass forsikring og ansvar", "Teste kunnskap om bilansvarslova, regress og eieransvar", "førerperspektiv", "Regresskrav fra forsikringsselskap etter grov uaktsomhet", "kjøretøy og politi", "veikant", "kontroll og dokumenter", "ansvarsforhold", "/api/assets/thumbs/thumb_vegtrafikkloven_3.jpg", ""),
+    ("ch11_ansv_005", "5", "CH11-ANSV-005", "Førerens vs eierens ansvar (§ 23)", "Skille mellom førerens sjekkplikt før turen og eierens overlatelsesansvar", "inspeksjonsperspektiv", "Kjøring med uforsvarlig kjøretøy eller overlatelse til ukvalifisert person", "person som sjekker bil", "gårdsplass", "dekk og lys", "ansvar for kjøretøyets stand", "/api/assets/thumbs/thumb_uhell_dine_plikter.jpg", "ch11_par_002"),
+    ("ch11_par_002", "5p", "CH11-PAR-002", "Eierens plikt til forvissing om førerkort", "Vise at eier ikke må overlate bil til person uten førerrett", "overleveringsperspektiv", "Straffansvar for eier som låner ut bil til person uten lappen", "nøkkeloverlevering", "privatvei", "førerkortkontroll", "eierens forvissingsplikt", "/api/assets/thumbs/thumb_vikeplikt_7_2a.jpg", "ch11_ansv_005"),
+    ("ch11_ansv_006", "6", "CH11-ANSV-006", "Oppsummering av forsikring og ansvar", "Feire fullført kapittel med trygg forståelse av juridisk og økonomisk ansvar", "utendørsperspektiv", "Uvitenhet om personlig ansvar ved uhell og kjøring", "bil i god stand", "landevei", "vognkort og førerkort", "ansvarlig eierskap", "/api/assets/thumbs/thumb_vegtrafikkloven_3.jpg", ""),
+]
+
+CH11_ASSETS = {
+    key: {"asset_id": asset_id, "page": page, "scene": scene,
+          "pedagogical_purpose": purpose, "camera_angle": camera,
+          "risk_source": risk, "risikokilde": risk,
+          "vehicles_road_users": actors, "road_type": road,
+          "signs_markings": markings, "learner_discovery": discovery,
+          "hotspots": [], "pair_asset": pair_key, "status": "placeholder", "src": src,
+          "alt": i18n("Illustrasjon av forsikring og ansvar", "ภาพประกอบเรื่องประกันภัยและความรับผิดชอบ", "Illustration of insurance and liability")}
+    for key, page, asset_id, scene, purpose, camera, risk, actors, road, markings, discovery, src, pair_key in _CH11_PLACEHOLDERS
+}
+
+CH11_LESSONS = [
+    info("CH11-001", "intro", "ch11_ansv_001", "Lovpålagt ansvarsforsikring vs. Kasko", "ประกันภัยภาคบังคับ (Ansvarsforsikring) vs ประกันภัยภาคสมัครใจ (Kasko)", "Mandatory liability insurance vs. Comprehensive (Kasko)",
+         ("I Norge er trafikkforsikring (ansvarsforsikring) strengt lovpålagt for alle biler. Den dekker skader på andre personer, kjøretøy og eiendom. Kasko er frivillig og dekker skader på din egen bil.",
+          "ในนอร์เวย์ มีกฎหมายบังคับให้รถทุกคันต้องทำประกันภัยภาคบังคับ เพื่อคุ้มครองความเสียหายต่อผู้อื่น รถคู่กรณี และทรัพย์สิน ส่วนประกัน Kasko เป็นภาคสมัครใจที่คุ้มครองความเสียหายของรถคุณเอง",
+          "In Norway, traffic liability insurance is strictly mandatory for all cars, covering injuries and third-party property. Comprehensive (Kasko) is optional and covers damage to your own vehicle.")),
+    info("CH11-002", "choice", "ch11_ansv_002", "Hva dekker lovpålagt trafikkforsikring?", "ประกันภาคบังคับคุ้มครองความเสียหายใดบ้าง?", "What does mandatory liability insurance cover?",
+         ("Hva dekkes dersom du forårsaker et trafikkuhell og kun har lovpålagt ansvarsforsikring?",
+          "หากคุณเป็นฝ่ายก่อให้เกิดอุบัติเหตุโดยมีเพียงประกันภัยภาคบังคับ สิ่งใดที่จะได้รับความคุ้มครอง?",
+          "What is covered if you cause a traffic accident and only hold mandatory liability insurance?"),
+         options=[opt("third_party_only", "Skader på motpartens bil, eiendom og personskader på alle involverte", "ความเสียหายต่อรถคู่กรณี ทรัพย์สินสาธารณะ และการบาดเจ็บของบุคคลอื่นทั้งหมด", "Damage to the other car, property, and personal injuries to everyone involved"),
+                  opt("own_car_only", "Kun skader på din egen bil", "คุ้มครองเฉพาะค่าซ่อมรถของคุณเองเท่านั้น", "Only damage to your own car")],
+         correct="third_party_only",
+         correctFeedback=i18n("Helt riktig! Ansvarsforsikringen sikrer at uskyldige parter og skadde får erstatning.",
+                              "ถูกต้องที่สุด! ประกันภาคบังคับคุ้มครองคู่กรณีและผู้ได้รับบาดเจ็บเพื่อความเป็นธรรมในสังคม",
+                              "Exactly right! Liability insurance guarantees that victims and third parties receive compensation."),
+         wrongFeedback=i18n("Lovpålagt ansvarsforsikring dekker aldri skader på din egen bil. Til det trengs kasko.",
+                            "ประกันภาคบังคับไม่เคยคุ้มครองค่าซ่อมรถของคุณเอง หากต้องการคุ้มครองรถตนเองต้องทำ Kasko เสริม",
+                            "Mandatory liability never covers damage to your own car. For that, comprehensive (Kasko) is required.")),
+    info("CH11-003", "sequence", "ch11_ansv_003", "Registrering og vognkort ved eierskifte", "การจดทะเบียนและสมุดคู่มือรถ (Vognkort) เมื่อเปลี่ยนเจ้าของ", "Registration and vehicle log book upon change of ownership",
+         ("Ved kjøp og salg av motorvogn gjelder faste juridiske rutiner for omregistrering og dokumentasjon.",
+          "เมื่อมีการซื้อขายรถยนต์ มีขั้นตอนทางกฎหมายที่แน่นอนเกี่ยวกับการโอนทะเบียนและเอกสารประจำรถ",
+          "When buying or selling a motor vehicle, strict legal procedures apply for registration and documentation."),
+         steps=[i18n("1. SALGSMELDING: Leveres av kjøper og selger innen 3 dager", "1. แจ้งเปลี่ยนเจ้าของ: ผู้ซื้อและผู้ขายต้องแจ้งขนส่งภายใน 3 วัน", "1. TRANSFER NOTICE: Submitted by buyer and seller within 3 days"),
+                i18n("2. FORSIKRING: Kjøper må tegne ansvarsforsikring", "2. ทำประกันภัย: ผู้ซื้อต้องจัดทำประกันภัยภาคบังคับให้เรียบร้อย", "2. INSURANCE: Buyer must arrange liability insurance"),
+                i18n("3. AVGIFT: Betal omregistreringsavgift til Vegvesenet", "3. ชำระค่าธรรมเนียม: จ่ายค่าโอนทะเบียนให้แก่กรมการขนส่ง", "3. FEE: Pay registration fee to Statens vegvesen"),
+                i18n("4. VOGNKORT: Del 1 skal alltid medbringes under kjøring", "4. สมุดคู่มือรถ: ส่วนที่ 1 ต้องมีติดไว้ในรถขณะขับขี่เสมอ", "4. LOG BOOK: Part 1 must always be brought along while driving")]),
+    {"id": "CH11-004", "type": "roadCheck", "road_check_id": "CH11-RC-001",
+     "eyebrow": i18n("ROAD CHECK ⚡", "ROAD CHECK ⚡", "ROAD CHECK ⚡"),
+     "title": i18n("Road Check ⚡ Forsikring og ansvar", "Road Check ⚡ ทดสอบความเข้าใจ: ประกันภัยและความรับผิดชอบ", "Road Check ⚡ Insurance and Responsibility"),
+     "body": i18n("Tre korte spørsmål om forsikringsplikt, regress og vognkort.", "สามคำถามสั้นเพื่อทดสอบความแม่นยำเรื่องกฎหมายประกันภัยและการโอนรถ", "Three short questions about insurance obligations, recourse, and log books."),
+     "questions": [
+         question(("FORSIKRINGSPLIKT", "หน้าที่ทำประกันภัย", "INSURANCE OBLIGATION"),
+                  ("Er det tillatt å kjøre en registrert bil uten gyldig ansvarsforsikring?", "อนุญาตให้ขับรถที่จดทะเบียนแล้วโดยไม่มีประกันภัยภาคบังคับได้หรือไม่?", "Is it permitted to drive a registered car without valid liability insurance?"),
+                  [opt("no_never_uninsured", "Nei, ansvarsforsikring er strengt lovpålagt for all kjøring", "ห้ามเด็ดขาด ประกันภัยภาคบังคับเป็นสิ่งจำเป็นตามกฎหมาย", "No, liability insurance is strictly mandatory for all driving"),
+                   opt("yes_short_trip", "Ja, hvis du bare skal en kort tur i nærområdet", "ได้ หากขับไปทำธุระใกล้ ๆ เพียงช่วงสั้น ๆ", "Yes, if only taking a short local trip")],
+                  "no_never_uninsured",
+                  ("Kjøring uten gyldig forsikring er ulovlig og medfører høye dagsgebyrer og avskilting.",
+                   "การขับรถโดยไม่มีประกันภัยถือว่าผิดกฎหมายและมีโทษปรับรายวันรวมถึงถูกยึดป้ายทะเบียน",
+                   "Driving without insurance is illegal, triggering heavy daily penalty fees and de-registration.")),
+         question(("REGRESSKRAV", "การเรียกเงินคืน (Regress)", "RECOURSE / REGRESS"),
+                  ("Hva betyr begrepet regress i forsikringsretten?", "คำว่า Regress (การเรียกเงินคืน) ในกฎหมายประกันภัยหมายถึงอะไร?", "What does the term recourse (regress) mean in insurance law?"),
+                  [opt("payback_claim", "Forsikringsselskapet krever utbetalt erstatning tilbake fra den skyldige", "บริษัทประกันเรียกคืนเงินค่าสินไหมทดแทนที่จ่ายไปจากผู้ก่อเหตุ", "The insurance company demands the compensation back from the at-fault driver"),
+                   opt("discount_bonus", "En ekstra rabatt for skadefri kjøring", "ส่วนลดพิเศษเมื่อไม่มีประวัติการชน", "An extra discount for claim-free driving")],
+                  "payback_claim",
+                  ("Ved grov uaktsomhet, som ruspåvirket kjøring, kan selskapet kreve millioner tilbake fra føreren.",
+                   "หากเกิดจากความประมาทเลินเล่อร้ายแรง เช่น เมาแล้วขับ บริษัทประกันสามารถเรียกเงินคืนได้ทั้งหมด",
+                   "In cases of gross negligence, such as DUI, insurers can demand complete repayment from the driver.")),
+         question(("VOGNKORT UNDER KJØRING", "สมุดคู่มือรถขณะขับขี่", "VEHICLE LOG BOOK"),
+                  ("Hvilken del av vognkortet skal alltid medbringes eller være tilgjengelig under kjøring?", "สมุดคู่มือรถ (Vognkort) ส่วนใดที่ต้องมีติดตัวหรือเปิดดูได้ขณะขับขี่?", "Which part of the vehicle registration log book must always accompany the drive?"),
+                  [opt("part_one", "Del 1 (teknisk del)", "ส่วนที่ 1 (ข้อมูลทางเทคนิค)", "Part 1 (technical part)"),
+                   opt("part_two", "Del 2 (eierdelen)", "ส่วนที่ 2 (ข้อมูลเจ้าของกรรมสิทธิ์)", "Part 2 (ownership part)")],
+                  "part_one",
+                  ("Del 1 inneholder tekniske data om vekter og hengerfeste. Del 2 er verdipapir og skal ligge trygt hjemme.",
+                   "ส่วนที่ 1 แสดงข้อมูลเทคนิคและน้ำหนักบรรทุก ส่วนที่ 2 เป็นเอกสารกรรมสิทธิ์ต้องเก็บไว้ที่บ้านอย่างปลอดภัย",
+                   "Part 1 holds technical specifications. Part 2 proves ownership and must be stored safely at home."))
+     ]},
+    info("CH11-005", "choice", "ch11_ansv_005", "Førerens vs. Eierens ansvar (Vegtrafikkloven § 23)", "ความรับผิดชอบของผู้ขับขี่ vs เจ้าของรถ (§ 23)", "Driver's vs. Owner's responsibility (§ 23)",
+         ("Hvem har ansvaret for at bilen er i forsvarlig stand like før kjøreturen starter?",
+          "ใครมีหน้าที่รับผิดชอบในการตรวจเช็กให้แน่ใจว่ารถอยู่ในสภาพปลอดภัยก่อนออกเดินทาง?",
+          "Who is responsible for ensuring the car is in safe working condition immediately before the trip starts?"),
+         options=[opt("driver_responsibility", "Føreren som skal kjøre bilen på den aktuelle turen", "ผู้ขับขี่ที่จะขับรถในการเดินทางครั้งนั้น", "The driver operating the car on the specific trip"),
+                  opt("mechanic_only", "Kun bilverkstedet ved forrige EU-kontroll", "เฉพาะอู่ซ่อมรถตอนตรวจสภาพครั้งก่อนเท่านั้น", "Only the workshop during previous periodic inspection")],
+         correct="driver_responsibility",
+         correctFeedback=i18n("Helt riktig! Vegtrafikkloven § 23 slår fast at føreren har det direkte ansvaret under turen.",
+                              "ถูกต้องที่สุด! กฎหมายจราจรมาตรา 23 ระบุชัดเจนว่าผู้ขับขี่ต้องรับผิดชอบโดยตรงต่อสภาพรถในการขับขี่",
+                              "Exactly right! Section 23 dictates that the driver is directly responsible for vehicle condition."),
+         wrongFeedback=i18n("Føreren må alltid forvisse seg om lys, sikt, bremser og last før kjøring.",
+                            "ผู้ขับขี่ต้องตรวจสอบไฟ สภาพกระจกมองเห็น แป้นเบรก และการบรรทุกก่อนออกเดินทางเสมอ",
+                            "The driver must always verify lights, vision, brakes, and load before driving.")),
+    {"id": "CH11-006", "type": "chapterComplete",
+     "eyebrow": i18n("KAPITTEL FULLFØRT", "เรียนจบบทแล้ว", "CHAPTER COMPLETE"),
+     "title": i18n("FORSIKRING OG ANSVAR · 6 / 6", "ประกันภัยและความรับผิดชอบ · 6 / 6", "INSURANCE AND RESPONSIBILITY · 6 / 6"),
+     "body": i18n("Gratulerer! Du kjenner nå forskjellen på ansvarsforsikring og kasko, forstår eier- og føreransvar, og vet hvordan eierskifte håndteres lovlig!",
+                  "ยินดีด้วย! คุณเข้าใจความแตกต่างระหว่างประกันภาคบังคับกับ Kasko ทราบขอบเขตความรับผิดชอบของทั้งผู้ขับขี่และเจ้าของรถ และรู้วิธีแจ้งโอนกรรมสิทธิ์อย่างถูกต้องตามกฎหมายแล้ว!",
+                  "Congratulations! You now master liability vs comprehensive insurance, owner and driver duties, and lawful ownership transfer!"),
+     "skills": [i18n("📋 Lovpålagt trafikkforsikring", "📋 ประกันภัยภาคบังคับ", "📋 Mandatory liability insurance"),
+                i18n("🚗 Vognkort del 1 og del 2", "🚗 สมุดคู่มือรถส่วนที่ 1 และ 2", "🚗 Log book parts 1 and 2"),
+                i18n("⚖️ Regress ved grov uaktsomhet", "⚖️ การเรียกเงินคืนเมื่อประมาท", "⚖️ Recourse upon negligence"),
+                i18n("🔍 Førerens sjekkplikt (§ 23)", "🔍 หน้าที่ตรวจสภาพรถของผู้ขับขี่", "🔍 Driver inspection duty (§ 23)")],
+     "nextChapter": i18n("NESTE: 🎓 FØRERKORT OG VIDERE OPPLÆRING", "ถัดไป: 🎓 ใบขับขี่และการฝึกอบรมขั้นต่อไป", "NEXT: 🎓 LICENSING AND FURTHER TRAINING")}
+]
+
 CHAPTERS = {
     "CH01": {"code": "CH01", "title": i18n("Kapittel 1 · Blikket", "บทที่ 1 · การมอง", "Chapter 1 · Vision"), "lessons": LESSONS, "assets": ASSETS},
     "CH03": {"code": "CH03", "title": i18n("Kapittel 3 · Fart og stopplengde", "บทที่ 3 · ความเร็วและระยะหยุดรถ", "Chapter 3 · Speed and Stopping Distance"), "lessons": CH03_LESSONS, "assets": CH03_ASSETS},
@@ -1238,6 +1344,7 @@ CHAPTERS = {
     "CH08": {"code": "CH08", "title": i18n("Kapittel 8 · Trafikkskilt og vegmerking", "บทที่ 8 · ป้ายจราจรและเครื่องหมายบนผิวทาง", "Chapter 8 · Traffic Signs and Road Markings"), "lessons": CH08_LESSONS, "assets": CH08_ASSETS},
     "CH09": {"code": "CH09", "title": i18n("Kapittel 9 · Lys, signal og tegn", "บทที่ 9 · การใช้ไฟ สัญญาณ และการส่งสัญญาณ", "Chapter 9 · Lights, Signals, and Indicators"), "lessons": CH09_LESSONS, "assets": CH09_ASSETS},
     "CH10": {"code": "CH10", "title": i18n("Kapittel 10 · Alkohol, rus og kjøring", "บทที่ 10 · แอลกอฮอล์ สารเสพติด และการขับขี่", "Chapter 10 · Alcohol, Drugs, and Driving"), "lessons": CH10_LESSONS, "assets": CH10_ASSETS},
+    "CH11": {"code": "CH11", "title": i18n("Kapittel 11 · Forsikring, registrering og ansvar", "บทที่ 11 · ประกันภัย การจดทะเบียน และความรับผิดชอบ", "Chapter 11 · Insurance, Registration, and Responsibility"), "lessons": CH11_LESSONS, "assets": CH11_ASSETS},
 }
 
 ALL_ASSETS = {
@@ -1250,6 +1357,7 @@ ALL_ASSETS = {
     **CH08_ASSETS,
     **CH09_ASSETS,
     **CH10_ASSETS,
+    **CH11_ASSETS,
 }
 
 COPY = {k: i18n(*v) for k, v in {"brand":("THAI2DRIVE STUDIEBOKEN","หนังสือเรียน THAI2DRIVE","THAI2DRIVE STUDY BOOK"),"chapters":("Kapittel 1 · Blikket","บทที่ 1 · การมอง","Chapter 1 · Vision"),"continue":("Fortsett der du slapp","เรียนต่อจากจุดเดิม","Continue where you left off"),"start":("START →","เริ่ม →","START →"),"progress":("Progresjon","ความคืบหน้า","Progress"),"completed":("fullført","เสร็จแล้ว","completed"),"backHome":("Oversikt","ภาพรวม","Overview"),"previous":("Forrige","ก่อนหน้า","Previous"),"next":("Fortsett","เรียนต่อ","Continue"),"understood":("Jeg forstår","ฉันเข้าใจ","I understand"),"remember":("HUSK","จำไว้","REMEMBER"),"roadCleared":("ROAD CHECK CLEARED ⚡","ผ่าน ROAD CHECK ⚡","ROAD CHECK CLEARED ⚡"),"roadRetry":("Rolig repetisjon","ทบทวนอย่างสงบ","Calm review"),"review":("Repeter","ทบทวน","Review"),"finish":("Fortsett","เรียนต่อ","Continue"),"imageMissing":("THAI2DRIVE-bildet kommer snart","ภาพ THAI2DRIVE จะมาเร็ว ๆ นี้","THAI2DRIVE image coming soon"),"storageError":("Progresjonen kunne ikke lagres.","ไม่สามารถบันทึกความคืบหน้าได้","Progress could not be saved."),"contentError":("Siden kan ikke vises nå.","ไม่สามารถแสดงหน้านี้ได้","This page cannot be displayed."),"whatChanged":("WHAT CHANGED? 🧠","อะไรเปลี่ยนไป? 🧠","WHAT CHANGED? 🧠"),"originalView":("Opprinnelig bilde","ภาพเดิม","Original image")}.items()}
@@ -1279,6 +1387,8 @@ _DATA = json.dumps({
     "ch09_assets": CH09_ASSETS,
     "ch10_lessons": CH10_LESSONS,
     "ch10_assets": CH10_ASSETS,
+    "ch11_lessons": CH11_LESSONS,
+    "ch11_assets": CH11_ASSETS,
 }, ensure_ascii=False, separators=(",", ":"))
 
 SCRIPT = r"""
