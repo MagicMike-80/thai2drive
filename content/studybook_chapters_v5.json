@@ -1315,5 +1315,542 @@
         ]
       }
     ]
+  },
+  {
+    "chapter_id": "ch_forerkort_opplaering",
+    "chapter_code": "CH12",
+    "title_no": "Kapittel 12 — Førerkort, øvelseskjøring og opplæring",
+    "title_th": "บทที่ 12 — ใบขับขี่ การฝึกขับขี่ และการเรียนขับรถ (Førerkort og opplæring)",
+    "title_en": "Chapter 12 — Driving Licence, Practice Driving, and Training",
+    "difficulty": "intermediate",
+    "podcast_reference": "Michaels råd: Veien til førerkortet og privat øvelseskjøring",
+    "order": 14,
+    "section_tags": [
+      "forerkort",
+      "ovelseskjoring",
+      "ledsager",
+      "trinnvisopplaering",
+      "proveperiode",
+      "prikker"
+    ],
+    "sections": [
+      {
+        "section_type": "situation",
+        "title_no": "Situasjonen: Du skal begynne å øvelseskjøre med en ledsager",
+        "title_th": "สถานการณ์: คุณกำลังจะเริ่มฝึกขับขี่กับผู้ร่วมเดินทาง",
+        "title_en": "The situation: Starting private practice driving with a companion",
+        "content_no": "Du har fullført trafikalt grunnkurs og vil begynne å øvelseskjøre privat. Hvilke krav stilles til deg, til ledsageren og til selve bilen før dere kan legge ut på veien?",
+        "content_th": "คุณผ่านหลักสูตรพื้นฐานแล้วและต้องการเริ่มฝึกขับรถส่วนบุคคล มีข้อกำหนดใดบ้างสำหรับตัวคุณ ผู้ร่วมเดินทาง และตัวรถก่อนออกสู่ถนนจริง?",
+        "content_en": "You completed the basic traffic course and wish to practice driving. What requirements apply to you, the companion, and the vehicle before driving?"
+      },
+      {
+        "section_type": "theory",
+        "title_no": "Michaels opplæringsregel: Ledsageren er føreren, eleven skal lære trygghet",
+        "title_th": "กฎการฝึกอบรมของ Michael: ผู้ร่วมทางคือผู้รับผิดชอบทางกฎหมาย ส่วนผู้เรียนต้องซึมซับความปลอดภัย",
+        "title_en": "Michael's training rule: The companion is the legal driver, the student learns safety",
+        "content_no": "Ved privat øvelseskjøring i klasse B må eleven ha fylt 16 år og ha med kursbevis. Ledsageren må være minst 25 år og ha hatt gyldig førerkort sammenhengende i 5 år. Bilen må merkes bak med en rød L på hvit bakgrunn og ha ekstra innvendig speil.",
+        "content_th": "ในการฝึกขับรถคลาส B ผู้เรียนต้องมีอายุ 16 ปีขึ้นไปและพกบัตรผ่านหลักสูตร ส่วนผู้ร่วมทางต้องมีอายุไม่ต่ำกว่า 25 ปีและถือใบขับขี่ต่อเนื่องมา 5 ปี รถต้องติดป้ายตัว L สีแดงบนพื้นขาวด้านหลังและมีกระจกมองหลังเสริม",
+        "content_en": "For Class B practice driving, the student must be at least 16 with course certificate. The companion must be at least 25 with 5 years continuous licence. The car must display a red L at the rear and have an extra interior mirror."
+      },
+      {
+        "section_type": "practice",
+        "title_no": "Praktisk tips: Prøveperioden og de første 9 månedene",
+        "title_th": "คำแนะนำภาคปฏิบัติ: ระยะทดลองขับขี่และ 9 เดือนแรกหลังได้ใบขับขี่",
+        "title_en": "Practical tips: The probationary period and the first 9 months",
+        "content_no": "Nye førere har 2 års prøveperiode med doble prikker ved overtredelser. Ferske sjåfører har opptil 40 ganger høyere risiko for utforkjøring de første 9 månedene. Kjør defensivt og senk farten!",
+        "content_th": "ผู้ขับขี่ใหม่มีระยะทดลอง 2 ปีโดยจะถูกหักคะแนนความประพฤติเพิ่ม 2 เท่าเมื่อทำผิดกฎ ผู้ขับขี่ใหม่เสี่ยงตกข้างทางสูงขึ้นถึง 40 เท่าในช่วง 9 เดือนแรก จึงต้องขับขี่อย่างระมัดระวังและลดความเร็วเสมอ",
+        "content_en": "New drivers have a 2-year probation with double demerit points. Novice drivers face up to 40x crash risk in the first 9 months. Drive defensively and slow down!"
+      }
+    ],
+    "screens": [
+      {
+        "screen_id": "CH12-001",
+        "screen_type": "intro",
+        "title_no": "Førerkort klasse B og trinnvis opplæring",
+        "title_th": "ใบขับขี่คลาส B และขั้นตอนการเรียนขับรถ",
+        "asset_id": "CH12-KORT-001",
+        "pair_asset_id": null,
+        "content_th": "ในการขอรับใบอนุญาตขับขี่รถยนต์ส่วนบุคคล (คลาส B) ในนอร์เวย์ ต้องมีอายุครบ 18 ปีบริบูรณ์ ผ่านการตรวจสุขภาพและความประพฤติ และสอบผ่านทั้งภาคทฤษฎีและภาคปฏิบัติ โดยหลักสูตรแบ่งเป็น 4 ขั้นตอน",
+        "glossary_terms": [
+          "Klasse B",
+          "Førerprøve",
+          "Opplæringstrinn"
+        ]
+      },
+      {
+        "screen_id": "CH12-002",
+        "screen_type": "choice",
+        "title_no": "Krav til ledsager ved privat øvelseskjøring",
+        "title_th": "ข้อกำหนดสำหรับผู้ร่วมเดินทางในการฝึกขับขี่ส่วนตัว",
+        "asset_id": "CH12-KORT-002",
+        "pair_asset_id": "CH12-PAR-001",
+        "content_th": "ผู้ร่วมเดินทางต้องมีอายุไม่ต่ำกว่า 25 ปีบริบูรณ์ และถือใบอนุญาตขับขี่รถยนต์ส่วนบุคคลต่อเนื่องกันมาอย่างน้อย 5 ปีล่าสุดโดยไม่เคยถูกสั่งพักใช้ใบอนุญาต",
+        "glossary_terms": [
+          "Ledsager",
+          "Øvelseskjøring",
+          "Førerrett"
+        ]
+      },
+      {
+        "screen_id": "CH12-003",
+        "screen_type": "sequence",
+        "title_no": "De fire opplæringstrinnene mot lappen",
+        "title_th": "4 ขั้นตอนสู่การได้รับใบอนุญาตขับขี่",
+        "asset_id": "CH12-KORT-003",
+        "pair_asset_id": null,
+        "content_th": "หลักสูตรการเรียนขับรถในนอร์เวย์ได้รับการออกแบบตามขั้นตอนการเรียนรู้ภาคบังคับ 4 ขั้น เพื่อให้ผู้เรียนมีความรู้ทางทฤษฎีและทักษะความปลอดภัยอย่างครบถ้วน",
+        "glossary_terms": [
+          "Trafikalt grunnkurs",
+          "Trinnvurdering",
+          "Sikkerhetskurs på bane",
+          "Sikkerhetskurs på vei"
+        ]
+      },
+      {
+        "screen_id": "CH12-004",
+        "screen_type": "road_check",
+        "title_no": "Road Check ⚡ Øvelseskjøring",
+        "title_th": "Road Check ⚡ ทดสอบความเข้าใจ: การฝึกขับขี่",
+        "road_check_id": "CH12-RC-001",
+        "asset_id": "CH12-KORT-004",
+        "pair_asset_id": null,
+        "content_th": "สามคำถามสั้นเพื่อทดสอบความแม่นยำเรื่องเกณฑ์อายุ ความรับผิดชอบ และอุปกรณ์ที่ต้องใช้",
+        "glossary_terms": [
+          "Vegtrafikkloven § 26",
+          "Rød L",
+          "Ekstra speil"
+        ]
+      },
+      {
+        "screen_id": "CH12-005",
+        "screen_type": "choice",
+        "title_no": "Prøveperiode og prikkbelastning",
+        "title_th": "ระยะทดลองขับขี่และการหักคะแนน",
+        "asset_id": "CH12-KORT-005",
+        "pair_asset_id": "CH12-PAR-002",
+        "content_th": "ในช่วงระยะทดลอง 2 ปีแรก ผู้ขับขี่จะถูกบันทึกคะแนนความผิดเพิ่มเป็นสองเท่าสำหรับทุกข้อหา เพื่อเน้นย้ำความระมัดระวังสูงสุดในการใช้ถนน",
+        "glossary_terms": [
+          "Prøveperiode",
+          "Prikkbelastning"
+        ]
+      },
+      {
+        "screen_id": "CH12-006",
+        "screen_type": "summary",
+        "title_no": "Oppsummering førerkort og opplæring",
+        "title_th": "สรุป: ใบขับขี่และการฝึกอบรม",
+        "asset_id": "CH12-KORT-006",
+        "pair_asset_id": null,
+        "content_th": "คุณเข้าใจระเบียบการฝึกขับขี่ส่วนบุคคล ข้อกำหนดของผู้ร่วมทางและผู้เรียน และขั้นตอนการฝึกอบรมภาคบังคับทั้ง 4 ขั้นอย่างครบถ้วนแล้ว!",
+        "glossary_terms": [
+          "Føreropplæring",
+          "Kompetansemål"
+        ]
+      }
+    ]
+  },
+  {
+    "chapter_id": "ch_trafikkuhell_forstehjelp",
+    "chapter_code": "CH13",
+    "title_no": "Kapittel 13 — Trafikkuhell og førstehjelp",
+    "title_th": "บทที่ 13 — อุบัติเหตุบนท้องถนนและการปฐมพยาบาล (Trafikkuhell og førstehjelp)",
+    "title_en": "Chapter 13 — Traffic Accidents and First Aid",
+    "difficulty": "intermediate",
+    "podcast_reference": "Michaels råd: Plikter ved uhell og livreddende førstehjelp",
+    "order": 15,
+    "section_tags": [
+      "trafikkuhell",
+      "forstehjelp",
+      "vegtrafikkloven12",
+      "varseltrekant",
+      "nodnummer113",
+      "hlr"
+    ],
+    "sections": [
+      {
+        "section_type": "situation",
+        "title_no": "Situasjonen: Du ankommer først til et alvorlig trafikkuhell",
+        "title_th": "สถานการณ์: คุณเดินทางมาถึงจุดเกิดอุบัติเหตุร้ายแรงเป็นคนแรก",
+        "title_en": "The situation: First to arrive at a serious traffic accident",
+        "content_no": "To biler har kollidert på en mørk landevei, og en person sitter fastklemt. Hva gjør du først for å sikre deg selv, varsle nødetatene og gi livreddende hjelp?",
+        "content_th": "รถยนต์สองคันเฉี่ยวชนกันบนถนนนอกเมืองที่มืดมิดและมีผู้ติดอยู่ในรถ สิ่งแรกที่คุณต้องทำเพื่อป้องกันความปลอดภัยของตนเอง แจ้งเหตุ และให้การช่วยเหลือคืออะไร?",
+        "content_en": "Two cars collided on a dark road and a person is trapped. What do you do first to ensure your safety, notify dispatch, and provide aid?"
+      },
+      {
+        "section_type": "theory",
+        "title_no": "Michaels redningsregel: Sikre — Varsle — Hjelpe",
+        "title_th": "กฎการช่วยเหลือของ Michael: ป้องกัน — แจ้งเหตุ — ช่วยเหลือ",
+        "title_en": "Michael's rescue rule: Secure — Notify — Assist",
+        "content_no": "Vegtrafikkloven § 12 pålegger alle å stanse straks og hjelpe skadde. Ta på refleksvest, tenn nødblink og sett ut varseltrekant minst 50-150 m bak. Ring 113 med nøyaktig posisjon, og gi førstehjelp (frie luftveier, HLR 30:2 eller stabilt sideleie).",
+        "content_th": "กฎหมายจราจรมาตรา 12 บังคับให้ทุกคนต้องหยุดทันทีและช่วยผู้บาดเจ็บ สวมเสื้อสะท้อนแสง เปิดไฟฉุกเฉิน และวางป้ายสามเหลี่ยมเตือนภัยห่าง 50-150 เมตร โทรแจ้ง 113 ระบุพิกัด และปฐมพยาบาลกู้ชีพ (เปิดทางเดินหายใจ ทำ CPR 30:2 หรือจัดท่านอนตะแคง)",
+        "content_en": "Traffic Law § 12 mandates everyone to stop and assist. Put on reflective vest, hazard lights, and warning triangle 50-150m behind. Call 113 with exact coordinates, and provide life support (open airway, CPR 30:2, or recovery position)."
+      },
+      {
+        "section_type": "practice",
+        "title_no": "Praktisk tips: Unngå unødig flytting ved mistanke om nakkeskade",
+        "title_th": "คำแนะนำภาคปฏิบัติ: หลีกเลี่ยงการเคลื่อนย้ายผู้บาดเจ็บโดยไม่จำเป็นหากสงสัยว่ามีกระดูกคอหัก",
+        "title_en": "Practical tips: Avoid moving casualties when neck injuries are suspected",
+        "content_no": "Flytt aldri en skadd person ut av bilen med mindre det er akutt livsfare (brann eller drukning). Unødig bevegelse kan forverre brudd i nakke eller rygg og forårsake lammelse.",
+        "content_th": "ห้ามเคลื่อนย้ายผู้บาดเจ็บออกจากรถเด็ดขาด เว้นแต่เกิดอันตรายถึงชีวิตทันที เช่น ไฟไหม้หรือรถจมน้ำ การเคลื่อนย้ายอาจทำให้กระดูกคอหรือหลังเสียหายจนเป็นอัมพาตได้",
+        "content_en": "Never move an injured person from a car unless acute life hazard exists (fire or drowning). Unnecessary movement risks spinal cord damage and paralysis."
+      }
+    ],
+    "screens": [
+      {
+        "screen_id": "CH13-001",
+        "screen_type": "intro",
+        "title_no": "Plikter ved trafikkuhell (Vegtrafikkloven § 12)",
+        "title_th": "หน้าที่เมื่อเกิดอุบัติเหตุบนท้องถนน (§ 12)",
+        "asset_id": "CH13-UHEL-001",
+        "pair_asset_id": null,
+        "content_th": "ผู้ที่มีส่วนเกี่ยวข้องในอุบัติเหตุต้องหยุดรถทันที ให้ความช่วยเหลือผู้บาดเจ็บ แสดงตัวตน และป้องกันสถานที่เกิดเหตุ หากมีการบาดเจ็บรุนแรงต้องโทรแจ้งตำรวจและรถพยาบาลทันที",
+        "glossary_terms": [
+          "Vegtrafikkloven § 12",
+          "Hjelpeplikt",
+          "Stoppeplikt"
+        ]
+      },
+      {
+        "screen_id": "CH13-002",
+        "screen_type": "choice",
+        "title_no": "Hvor skal varseltrekanten plasseres?",
+        "title_th": "ควรวางป้ายสามเหลี่ยมเตือนภัยไว้ที่ระยะใด?",
+        "asset_id": "CH13-UHEL-002",
+        "pair_asset_id": "CH13-PAR-001",
+        "content_th": "ควรวางป้ายเตือนภัยรูปสามเหลี่ยมไว้ห่างจากท้ายรถบนถนนนอกเมืองเป็นระยะอย่างน้อย 50 ถึง 150 เมตรในจุดที่สังเกตเห็นได้ง่าย",
+        "glossary_terms": [
+          "Varseltrekant",
+          "Refleksvest",
+          "Varselblink"
+        ]
+      },
+      {
+        "screen_id": "CH13-003",
+        "screen_type": "sequence",
+        "title_no": "Handlingsrekkefølgen på skadestedet",
+        "title_th": "ลำดับขั้นตอนการปฏิบัติ ณ จุดเกิดเหตุ",
+        "asset_id": "CH13-UHEL-003",
+        "pair_asset_id": null,
+        "content_th": "ณ จุดเกิดเหตุ จำเป็นต้องปฏิบัติตามขั้นตอนอย่างเป็นระบบ: ป้องกันพื้นที่เพื่อความปลอดภัย แจ้งเหตุต่อสายด่วน และให้การปฐมพยาบาลกู้ชีพ",
+        "glossary_terms": [
+          "Sikre skadested",
+          "Nødnummer 113",
+          "Egen sikkerhet"
+        ]
+      },
+      {
+        "screen_id": "CH13-004",
+        "screen_type": "road_check",
+        "title_no": "Road Check ⚡ Uhell og førstehjelp",
+        "title_th": "Road Check ⚡ ทดสอบความเข้าใจ: อุบัติเหตุและการปฐมพยาบาล",
+        "road_check_id": "CH13-RC-001",
+        "asset_id": "CH13-UHEL-004",
+        "pair_asset_id": null,
+        "content_th": "สามคำถามสั้นเพื่อทดสอบความแม่นยำเรื่องหมายเลขฉุกเฉิน การทำ CPR และท่านอนตะแคงกู้ชีพ",
+        "glossary_terms": [
+          "113",
+          "HLR (30:2)",
+          "Stabilt sideleie"
+        ]
+      },
+      {
+        "screen_id": "CH13-005",
+        "screen_type": "choice",
+        "title_no": "Flytting av skadde ved mistanke om nakkeskade",
+        "title_th": "การเคลื่อนย้ายผู้บาดเจ็บที่มีความเสี่ยงกระดูกคอ",
+        "asset_id": "CH13-UHEL-005",
+        "pair_asset_id": "CH13-PAR-002",
+        "content_th": "ควรปล่อยให้ผู้บาดเจ็บอยู่นิ่ง ๆ ในรถโดยเปิดทางเดินหายใจไว้ เว้นแต่จะมีไฟไหม้หรือจมน้ำที่คุกคามชีวิตในทันที เพื่อป้องกันภาวะอัมพาตจากกระดูกสันหลัง",
+        "glossary_terms": [
+          "Nakkeskade",
+          "Akutt livsfare",
+          "Skånsom redning"
+        ]
+      },
+      {
+        "screen_id": "CH13-006",
+        "screen_type": "summary",
+        "title_no": "Oppsummering trafikkuhell og førstehjelp",
+        "title_th": "สรุป: อุบัติเหตุและการปฐมพยาบาล",
+        "asset_id": "CH13-UHEL-006",
+        "pair_asset_id": null,
+        "content_th": "คุณเข้าใจระเบียบปฏิบัติเมื่อเกิดอุบัติเหตุ รู้วิธีป้องกันสถานที่ด้วยป้ายเตือน จดจำหมายเลขฉุกเฉิน 113 และการปฐมพยาบาลกู้ชีพได้อย่างถูกต้องแล้ว!",
+        "glossary_terms": [
+          "Skadestedshåndtering",
+          "Livredning"
+        ]
+      }
+    ]
+  },
+  {
+    "chapter_id": "ch_kjoretoy_sikkerhet",
+    "chapter_code": "CH14",
+    "title_no": "Kapittel 14 — Kjøretøy, teknisk stand og sikkerhet",
+    "title_th": "บทที่ 14 — ยานพาหนะ สภาพความพร้อมทางเทคนิค และความปลอดภัย (Kjøretøy og sikkerhet)",
+    "title_en": "Chapter 14 — Vehicle, Technical Condition, and Safety",
+    "difficulty": "intermediate",
+    "podcast_reference": "Michaels råd: Sikkerhetskontroll og tekniske krav til bilen",
+    "order": 16,
+    "section_tags": [
+      "kjoretoy",
+      "tekniskstand",
+      "vegtrafikkloven13",
+      "dekkmønster",
+      "aktividat",
+      "passividat",
+      "airbag"
+    ],
+    "sections": [
+      {
+        "section_type": "situation",
+        "title_no": "Situasjonen: Sikkerhetskontroll før du kjører på langtur",
+        "title_th": "สถานการณ์: การตรวจสภาพความปลอดภัยก่อนเดินทางไกล",
+        "title_en": "The situation: Pre-drive safety inspection before a long journey",
+        "content_no": "Bilen er pakket og klar for helgetur. Hvilke tekniske funksjoner og sikkerhetsutstyr må du kontrollere før du vrir om nøkkelen for å være trygg og unngå bøter?",
+        "content_th": "คุณจัดสัมภาระพร้อมสำหรับการเดินทางวันหยุด มีระบบทางเทคนิคและอุปกรณ์ความปลอดภัยใดบ้างที่คุณต้องตรวจสอบให้มั่นใจก่อนออกเดินทางเพื่อความปลอดภัยและไม่ผิดกฎหมาย?",
+        "content_en": "Your car is packed for a trip. What technical functions and safety gear must you check before driving to ensure safety and avoid penalties?"
+      },
+      {
+        "section_type": "theory",
+        "title_no": "Michaels teknikkregel: Aktiv sikkerhet hindrer ulykke, passiv sikkerhet redder liv",
+        "title_th": "กฎเทคนิคของ Michael: ความปลอดภัยเชิงรุกป้องกันอุบัติเหตุ ส่วนความปลอดภัยเชิงรับช่วยปกป้องชีวิต",
+        "title_en": "Michael's tech rule: Active safety prevents crashes, passive safety saves lives",
+        "content_no": "Vegtrafikkloven § 13 krever at kjøretøyet er i forsvarlig stand. Sommerdekk krever minst 1,6 mm mønsterdybde (3 mm anbefalt), og vinterdekk krever minst 3,0 mm. Aktiv sikkerhet inkluderer ABS og ESP, mens passiv sikkerhet omfatter bilbelte, hodestøtte og kollisjonsputer. Radarvarslere er strengt forbudt (§ 13a).",
+        "content_th": "กฎหมายจราจรมาตรา 13 กำหนดให้รถต้องอยู่ในสภาพปลอดภัย ยางฤดูร้อนต้องมีร่องลึกไม่ต่ำกว่า 1.6 มม. (แนะนำ 3 มม.) และยางฤดูหนาวต้องไม่ต่ำกว่า 3.0 มม. ความปลอดภัยเชิงรุกได้แก่ ABS และ ESP ส่วนความปลอดภัยเชิงรับได้แก่ เข็มขัดนิรภัย พนักพิงศีรษะ และถุงลมนิรภัย อุปกรณ์ตรวจจับเรดาร์เป็นสิ่งผิดกฎหมายเด็ดขาด (§ 13a)",
+        "content_en": "Traffic Law § 13 requires the car to be in safe condition. Summer tyres require at least 1.6 mm tread (3 mm recommended), winter tyres require at least 3.0 mm. Active safety covers ABS and ESP; passive covers belts, headrests, and airbags. Radar detectors are strictly banned (§ 13a)."
+      },
+      {
+        "section_type": "practice",
+        "title_no": "Praktisk tips: Barnesikring og deaktivering av kollisjonspute",
+        "title_th": "คำแนะนำภาคปฏิบัติ: เบาะนั่งสำหรับเด็กและการปิดถุงลมนิรภัย",
+        "title_en": "Practical tips: Child safety seats and airbag deactivation",
+        "content_no": "Barn under 135 cm skal sikres med godkjent utstyr tilpasset barnets vekt. Ved bakovervendt barnesete i forsetet MÅ kollisjonsputen alltid kobles ut for å unngå livstruende hodeskader.",
+        "content_th": "เด็กที่มีความสูงต่ำกว่า 135 ซม. ต้องนั่งเบาะสำหรับเด็กที่เหมาะสม หากวางเบาะเด็กแบบหันไปทางด้านหลังที่เบาะหน้า ต้องปิดการทำงานของถุงลมนิรภัยเสมอเพื่อป้องกันอันตรายถึงชีวิต",
+        "content_en": "Children under 135 cm must use approved child seats. When fitting a rear-facing child seat in the front, the airbag MUST always be deactivated to avoid fatal impact."
+      }
+    ],
+    "screens": [
+      {
+        "screen_id": "CH14-001",
+        "screen_type": "intro",
+        "title_no": "Kjøretøyets tekniske stand (Vegtrafikkloven § 13)",
+        "title_th": "สภาพความพร้อมทางเทคนิคของยานพาหนะ (§ 13)",
+        "asset_id": "CH14-TEKN-001",
+        "pair_asset_id": null,
+        "content_th": "ยานพาหนะต้องได้รับการดูแลรักษาและติดตั้งอุปกรณ์ให้ปลอดภัย ไม่ก่อให้เกิดอันตรายต่อผู้อื่น ผู้ขับขี่มีหน้าที่ตรวจสอบระบบเบรก ระบบไฟ พวงมาลัย และยางให้อยู่ในสภาพสมบูรณ์ก่อนออกเดินทางเสมอ",
+        "glossary_terms": [
+          "Vegtrafikkloven § 13",
+          "Sikkerhetskontroll",
+          "Teknisk stand"
+        ]
+      },
+      {
+        "screen_id": "CH14-002",
+        "screen_type": "choice",
+        "title_no": "Krav til mønsterdybde på bildekk",
+        "title_th": "ข้อกำหนดความลึกของร่องดอกยางรถยนต์",
+        "asset_id": "CH14-TEKN-002",
+        "pair_asset_id": "CH14-PAR-001",
+        "content_th": "ข้อกำหนดความลึกขั้นต่ำของร่องดอกยางสำหรับยางฤดูร้อนคือไม่ต่ำกว่า 1.6 มม. และสำหรับยางฤดูหนาวคือไม่ต่ำกว่า 3.0 มม. เพื่อป้องกันการเหินน้ำและการลื่นไถล",
+        "glossary_terms": [
+          "Mønsterdybde",
+          "Sommerdekk (1,6 mm)",
+          "Vinterdekk (3,0 mm)",
+          "Vannplaning"
+        ]
+      },
+      {
+        "screen_id": "CH14-003",
+        "screen_type": "sequence",
+        "title_no": "Sikkerhetskontroll før kjøreturen",
+        "title_th": "การตรวจเช็กความปลอดภัยก่อนขับขี่",
+        "asset_id": "CH14-TEKN-003",
+        "pair_asset_id": null,
+        "content_th": "ดำเนินการตรวจเช็กความปลอดภัยของยานพาหนะอย่างเป็นระบบก่อนออกเดินทาง ทั้งแป้นเบรก ระบบไฟ สภาพกระจกมองเห็น พวงมาลัย และอุปกรณ์ฉุกเฉิน",
+        "glossary_terms": [
+          "Bremsekraftforsterker",
+          "Dødgang",
+          "Sikt og vindusviskere"
+        ]
+      },
+      {
+        "screen_id": "CH14-004",
+        "screen_type": "road_check",
+        "title_no": "Road Check ⚡ Kjøretøy og sikkerhet",
+        "title_th": "Road Check ⚡ ทดสอบความเข้าใจ: ยานพาหนะและความปลอดภัย",
+        "road_check_id": "CH14-RC-001",
+        "asset_id": "CH14-TEKN-004",
+        "pair_asset_id": null,
+        "content_th": "สามคำถามสั้นเพื่อทดสอบความแม่นยำเรื่องความปลอดภัยเชิงรุก การนั่งของเด็ก และกฎหมายห้ามใช้เครื่องตรวจจับเรดาร์",
+        "glossary_terms": [
+          "Aktiv sikkerhet (ESP/ABS)",
+          "Passiv sikkerhet",
+          "Barnesikring",
+          "Radarvarsler (§ 13a)"
+        ]
+      },
+      {
+        "screen_id": "CH14-005",
+        "screen_type": "choice",
+        "title_no": "Riktig innstilling av hodestøtte og bilbelte",
+        "title_th": "การปรับพนักพิงศีรษะและคาดเข็มขัดนิรภัยที่ถูกต้อง",
+        "asset_id": "CH14-TEKN-005",
+        "pair_asset_id": "CH14-PAR-002",
+        "content_th": "พนักพิงศีรษะต้องได้รับการปรับให้ส่วนบนสุดอยู่ในระดับเดียวกับจุดสูงสุดของศีรษะ เพื่อรองรับแรงกระแทกและป้องกันกระดูกคอสะบัดเมื่อถูกชนท้าย",
+        "glossary_terms": [
+          "Hodestøtte",
+          "Nakkesleng (whiplash)",
+          "Bilbelteinnstilling"
+        ]
+      },
+      {
+        "screen_id": "CH14-006",
+        "screen_type": "summary",
+        "title_no": "Oppsummering kjøretøy og sikkerhet",
+        "title_th": "สรุป: ยานพาหนะและความปลอดภัย",
+        "asset_id": "CH14-TEKN-006",
+        "pair_asset_id": null,
+        "content_th": "คุณเข้าใจข้อกำหนดความลึกของร่องยาง เข้าใจความต่างของความปลอดภัยเชิงรุกและเชิงรับ และรู้วิธีตรวจเช็กความพร้อมของรถได้อย่างถูกต้องแล้ว!",
+        "glossary_terms": [
+          "Kjøretøykontroll",
+          "Trafikksikkerhet"
+        ]
+      }
+    ]
+  },
+  {
+    "chapter_id": "ch_risiko_ulykker",
+    "chapter_code": "CH15",
+    "title_no": "Kapittel 15 — Risiko, ulykker og unge sjåfører",
+    "title_th": "บทที่ 15 — ความเสี่ยง อุบัติเหตุ และผู้ขับขี่รุ่นเยาว์ (Risiko og ulykker)",
+    "title_en": "Chapter 15 — Risk, Accidents, and Young Drivers",
+    "difficulty": "intermediate",
+    "podcast_reference": "Michaels råd: Risikoforståelse, tretthet og defensiv kjøring",
+    "order": 17,
+    "section_tags": [
+      "risiko",
+      "ulykkesstatistikk",
+      "ungesjaforer",
+      "tretthet",
+      "mobildistraksjon",
+      "seforstavelge",
+      "del3slutt"
+    ],
+    "sections": [
+      {
+        "section_type": "situation",
+        "title_no": "Situasjonen: Kjøretur sent på kvelden med venner i bilen",
+        "title_th": "สถานการณ์: การขับรถช่วงดึกพร้อมเพื่อนร่วมเดินทางเต็มคัน",
+        "title_en": "The situation: Late-night drive with friends as passengers",
+        "content_no": "Du har hatt lappen i 3 måneder og kjører venner hjem etter en lang dag. Hvilke faktorer (tretthet, fart og gruppepress) utgjør størst fare, og hvordan holder du hodet kaldt?",
+        "content_th": "คุณเพิ่งได้ใบขับขี่มา 3 เดือนและกำลังขับรถพาเพื่อน ๆ กลับบ้านหลังวันที่เหน็ดเหนื่อย ปัจจัยใดบ้าง (ความง่วง ความเร็ว และแรงกดดันจากเพื่อน) ที่เป็นอันตรายที่สุด และคุณจะควบคุมสถานการณ์อย่างไร?",
+        "content_en": "You held your licence for 3 months and are driving friends home. What factors (fatigue, speed, peer pressure) pose highest risk, and how do you stay calm?"
+      },
+      {
+        "section_type": "theory",
+        "title_no": "Michaels risikoregel: SE — FORSTÅ — VELGE overvinner overmot",
+        "title_th": "กฎความเสี่ยงของ Michael: มอง — เข้าใจ — ตัดสินใจ เอาชนะความประมาท",
+        "title_en": "Michael's risk rule: SEE — UNDERSTAND — CHOOSE beats overconfidence",
+        "content_no": "Ferske sjåfører har opptil 40 ganger høyere risiko for utforkjøring de første 9 månedene. Å kjøre etter 17 timer våkentid tilsvarer 0,5 promille. Bruk av håndholdt mobil øker ulykkesrisikoen 4-8 ganger. En god sjåfør kjører defensivt etter kjøreprosessen: SE langt frem, FORSTÅ farene, og VELG trygg fart.",
+        "content_th": "ผู้ขับขี่ใหม่มีความเสี่ยงขับตกข้างทางสูงขึ้นถึง 40 เท่าในช่วง 9 เดือนแรก การขับรถหลังตื่นนาน 17 ชั่วโมงเทียบเท่ากับการมีแอลกอฮอล์ 0.5 ในเลือด การใช้โทรศัพท์เพิ่มความเสี่ยงอุบัติเหตุ 4-8 เท่า ผู้ขับขี่ที่ดีต้องขับขี่เชิงป้องกัน: มองไกล เข้าใจอันตราย และตัดสินใจเลือกความเร็วที่ปลอดภัย",
+        "content_en": "Novice drivers have up to 40x higher risk of running off the road in the first 9 months. Driving after 17 hours awake equals 0.5 per mille alcohol. Handheld phone use increases crash risk 4-8 times. Drive defensively: SEE far ahead, UNDERSTAND hazards, and CHOOSE safe speed."
+      },
+      {
+        "section_type": "practice",
+        "title_no": "Praktisk tips: Slik motvirker du tretthet og gruppepress",
+        "title_th": "คำแนะนำภาคปฏิบัติ: วิธีรับมือกับความง่วงนอนและแรงกดดันจากเพื่อน",
+        "title_en": "Practical tips: Countering driver fatigue and peer pressure",
+        "content_no": "Hverken kaffe, åpent vindu eller høy musikk hjelper mot tretthet — kun en 15-minutters høneblund på en rasteplass gjenoppretter reaksjonsevnen. Tørr å si nei til passasjerer som oppfordrer til villmannskjøring.",
+        "content_th": "ทั้งกาแฟ การเปิดหน้าต่าง หรือเปิดเพลงเสียงดังไม่สามารถขจัดความง่วงได้ มีเพียงการจอดพักงีบ 15 นาทีที่จุดพักรถเท่านั้นที่ช่วยฟื้นฟูการตอบสนอง และจงกล้าปฏิเสธเพื่อนที่คะยั้นคะยอให้ขับรถเร็วเกินไป",
+        "content_en": "Neither coffee, open windows, nor loud music cure fatigue — only a 15-minute nap restores reaction times. Dare to refuse passengers urging reckless speeding."
+      }
+    ],
+    "screens": [
+      {
+        "screen_id": "CH15-001",
+        "screen_type": "intro",
+        "title_no": "Hva er risiko i trafikken?",
+        "title_th": "ความเสี่ยงในการจราจรคืออะไร?",
+        "asset_id": "CH15-RISK-001",
+        "pair_asset_id": null,
+        "content_th": "ความเสี่ยงคือผลรวมระหว่างโอกาสเกิดอุบัติเหตุและความรุนแรงของความเสียหายที่ตามมา สถานการณ์อาจมีความเสี่ยงรุนแรงแม้โอกาสเกิดจะต่ำ ผู้ขับขี่ที่ปลอดภัยจะลดความเสี่ยงด้วยการชะลอความเร็วและเว้นระยะห่างที่ปลอดภัย",
+        "glossary_terms": [
+          "Trafikkrisiko",
+          "Sannsynlighet",
+          "Konsekvens"
+        ]
+      },
+      {
+        "screen_id": "CH15-002",
+        "screen_type": "choice",
+        "title_no": "Ulykkesstatistikk og unge sjåfører",
+        "title_th": "สถิติอุบัติเหตุและผู้ขับขี่รุ่นเยาว์",
+        "asset_id": "CH15-RISK-002",
+        "pair_asset_id": "CH15-PAR-001",
+        "content_th": "สถิติอุบัติเหตุชี้ชัดว่าผู้ขับขี่ใหม่มีความเสี่ยงที่จะขับรถตกข้างทางสูงขึ้นถึง 40 เท่าในช่วง 9 เดือนแรกเนื่องจากยังขาดประสบการณ์ในการประเมินความเร็ว",
+        "glossary_terms": [
+          "Ulykkesstatistikk",
+          "Utforkjøring",
+          "Erfaringseffekt"
+        ]
+      },
+      {
+        "screen_id": "CH15-003",
+        "screen_type": "sequence",
+        "title_no": "Kjøreprosessen: SE - FORSTÅ - VELGE",
+        "title_th": "กระบวนการขับขี่: มอง – เข้าใจ – ตัดสินใจ",
+        "asset_id": "CH15-RISK-003",
+        "pair_asset_id": null,
+        "content_th": "เพื่อการขับขี่เชิงป้องกันและหลีกเลี่ยงอันตราย คุณต้องฝึกฝนกระบวนการคิดในการขับขี่อย่างต่อเนื่อง ทั้งการกวาดสายตามองไกล วิเคราะห์อันตราย ตัดสินใจ และควบคุมรถอย่างนุ่มนวล",
+        "glossary_terms": [
+          "Kjøreprosessen",
+          "SE-FORSTÅ-VELGE",
+          "Defensiv kjøring"
+        ]
+      },
+      {
+        "screen_id": "CH15-004",
+        "screen_type": "road_check",
+        "title_no": "Road Check ⚡ Risiko og ulykker",
+        "title_th": "Road Check ⚡ ทดสอบความเข้าใจ: ความเสี่ยงและอุบัติเหตุ",
+        "road_check_id": "CH15-RC-001",
+        "asset_id": "CH15-RISK-004",
+        "pair_asset_id": null,
+        "content_th": "สามคำถามสั้นเพื่อทดสอบความแม่นยำเรื่องความง่วงนอน การใช้โทรศัพท์ขณะขับรถ และผู้ร่วมทางที่เปราะบาง",
+        "glossary_terms": [
+          "Mobilforbud",
+          "Tretthet bak rattet",
+          "Sårbare trafikanter",
+          "Høneblund"
+        ]
+      },
+      {
+        "screen_id": "CH15-005",
+        "screen_type": "choice",
+        "title_no": "Gruppepress og passasjereffekt",
+        "title_th": "แรงกดดันจากกลุ่มเพื่อนและผู้โดยสาร",
+        "asset_id": "CH15-RISK-005",
+        "pair_asset_id": "CH15-PAR-002",
+        "content_th": "การมีผู้โดยสารวัยเดียวกันนั่งไปด้วยในรถส่งผลให้ความเสี่ยงอุบัติเหตุพุ่งสูงขึ้นอย่างมากจากความฮึกเหิม สิ่งรบกวนสมาธิ และแรงกดดันจากเพื่อน จึงต้องยึดมั่นในการขับขี่อย่างปลอดภัยเสมอ",
+        "glossary_terms": [
+          "Gruppepress",
+          "Passasjereffekt",
+          "Defensiv holdning"
+        ]
+      },
+      {
+        "screen_id": "CH15-006",
+        "screen_type": "summary",
+        "title_no": "Oppsummering av Del III og risiko",
+        "title_th": "สรุป: ส่วนที่ 3 และความเสี่ยง",
+        "asset_id": "CH15-RISK-006",
+        "pair_asset_id": null,
+        "content_th": "คุณเรียนจบเนื้อหาทั้งส่วนที่ 3 แล้ว! คุณเข้าใจความเสี่ยงในมิติต่าง ๆ ชำนาญกระบวนการ มอง-เข้าใจ-ตัดสินใจ และรู้วิธีรับมือความง่วงนอนและแรงกดดันจากผู้อื่นได้อย่างปลอดภัย!",
+        "glossary_terms": [
+          "Risikokompetanse",
+          "Del III fullført"
+        ]
+      }
+    ]
   }
 ]
