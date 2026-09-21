@@ -15,6 +15,9 @@ import os
 import re
 import uuid
 import logging
+import base64
+import binascii
+import ipaddress
 from urllib.parse import urlsplit
 from datetime import datetime, timezone
 from difflib import get_close_matches
@@ -164,24 +167,36 @@ def _build_llm_attempts() -> List[dict]:
 LLM_ATTEMPTS = _build_llm_attempts()
 
 
-async def _completion_with_fallback(messages: List[dict]):
+_VISION_MODEL_MARKERS = ("gemini", "gpt-4o", "gpt-4.1", "claude-3", "claude-sonnet")
+
+
+def _model_supports_vision(model: str) -> bool:
+    return any(marker in (model or "").casefold() for marker in _VISION_MODEL_MARKERS)
+
+
+async def _completion_with_fallback(messages: List[dict], require_vision: bool = False):
     """Return the first non-empty LiteLLM response, trying reserves in order."""
     if not LLM_ATTEMPTS:
         raise RuntimeError("Teacher chat LLM is not configured")
 
     last_error: Optional[Exception] = None
-    for index, attempt in enumerate(LLM_ATTEMPTS, start=1):
+    attempts = [a for a in LLM_ATTEMPTS if not require_vision or _model_supports_vision(a["model"])]
+    if require_vision and not attempts:
+        raise RuntimeError("Teacher chat has no vision-capable model configured")
+    system_text = str(messages[0].get("content", "")) if messages else ""
+    max_tokens = 500 if require_vision or "FINAL QUIZ COACH CONTRACT" in system_text else 120
+    for index, attempt in enumerate(attempts, start=1):
         model = attempt["model"]
         provider = attempt["provider"]
         try:
             logger.info(
                 "Teacher LLM attempt %s/%s — provider=%s model=%s",
-                index, len(LLM_ATTEMPTS), provider, model,
+                index, len(attempts), provider, model,
             )
             response = await litellm.acompletion(
                 model=model,
                 messages=messages,
-                max_tokens=120,
+                max_tokens=max_tokens,
                 temperature=_TEACHER_LLM_TEMPERATURE,
                 timeout=_TEACHER_LLM_TIMEOUT_SECONDS,
                 api_key=attempt["api_key"],
@@ -1174,7 +1189,7 @@ def _concise_output_instruction(lang: str) -> str:
     return (
         "\n\n━━━ FINAL OUTPUT CONTRACT — OVERRIDES ALL EARLIER FORMAT RULES ━━━\n"
         f"Answer only in {language}. Give exactly one concrete rule or legal definition. "
-        "Use 1–2 sentences and no more than 30 words. Output plain text only. "
+        "Use 1–3 sentences and no more than 45 words. Output plain text only. "
         "Do not use headings, lists, extra paragraphs, examples, follow-up questions, "
         "metaphors, Kongen og tjeneren, the King/Servant model, or the HAV mnemonic. "
         "Do not output image, video, or podcast tags; the app renders the exact sign separately.\n"
@@ -1182,10 +1197,88 @@ def _concise_output_instruction(lang: str) -> str:
     )
 
 
+_DIRECT_LOOKUP_PATTERNS = (
+    r"\b(?:hva|what)\s+(?:sier|betyr|er)\b",
+    r"\b(?:paragraf|section|§)\s*\d+",
+    r"(?:คืออะไร|หมายความว่า|มาตรา\s*\d+)",
+)
+
+
+def _is_direct_lookup(message: str) -> bool:
+    text = (message or "").strip().casefold()
+    return bool(text) and any(re.search(pattern, text) for pattern in _DIRECT_LOOKUP_PATTERNS)
+
+
+def _validate_vision_image(image_url: Optional[str], image_data: Optional[str]) -> Optional[str]:
+    """Return one provider-safe image reference without fetching user-controlled URLs."""
+    if image_url and image_data:
+        raise HTTPException(status_code=400, detail="Send either image_url or image_data, not both.")
+    value = (image_data or image_url or "").strip()
+    if not value:
+        return None
+    if value.startswith("data:"):
+        match = re.fullmatch(r"data:(image/(?:jpeg|png|webp));base64,([A-Za-z0-9+/=\r\n]+)", value)
+        if not match:
+            raise HTTPException(status_code=400, detail="Unsupported image data.")
+        try:
+            raw = base64.b64decode(match.group(2), validate=True)
+        except (binascii.Error, ValueError):
+            raise HTTPException(status_code=400, detail="Invalid base64 image data.")
+        if not raw or len(raw) > 4 * 1024 * 1024:
+            raise HTTPException(status_code=413, detail="Image must be 4 MB or smaller.")
+        signatures = {
+            "image/jpeg": raw.startswith(b"\xff\xd8\xff"),
+            "image/png": raw.startswith(b"\x89PNG\r\n\x1a\n"),
+            "image/webp": raw.startswith(b"RIFF") and raw[8:12] == b"WEBP",
+        }
+        if not signatures.get(match.group(1), False):
+            raise HTTPException(status_code=400, detail="Image content does not match its type.")
+        return value
+    parsed = urlsplit(value)
+    if parsed.scheme != "https" or not parsed.hostname or parsed.username or parsed.password:
+        raise HTTPException(status_code=400, detail="image_url must be a public HTTPS URL.")
+    host = parsed.hostname.casefold()
+    if host in {"localhost", "localhost.localdomain"} or host.endswith((".local", ".internal")):
+        raise HTTPException(status_code=400, detail="image_url must be a public HTTPS URL.")
+    try:
+        address = ipaddress.ip_address(host)
+        if not address.is_global:
+            raise HTTPException(status_code=400, detail="image_url must be a public HTTPS URL.")
+    except ValueError:
+        pass
+    return value
+
+
+def _vision_output_instruction(lang: str) -> str:
+    language = {"no": "Norwegian", "th": "Thai", "en": "English"}[lang]
+    sections = {
+        "no": "Situasjon / Vikeplikt / Farepunkter / Teoriprøven",
+        "th": "สถานการณ์ / การให้ทาง / จุดอันตราย / ข้อสอบทฤษฎี",
+        "en": "Situation / Right-of-way / Hazards / Theory test",
+    }[lang]
+    return (
+        "\n\n━━━ FINAL IMAGE ANALYSIS CONTRACT ━━━\n"
+        f"Write every learner-facing word only in {language}. Inspect only what is visible. "
+        "Cover traffic signs, right-of-way, lanes, road markings, and hazards when they are visible. "
+        "Explain the likely theory-test rule and ground legal claims only in Vegtrafikkloven § 3 "
+        "(HAV), Vegtrafikkloven § 7 (right-of-way), or Skiltforskriften when relevant. "
+        "Never invent hidden signs, signals, markings, traffic, road direction, or priority. "
+        "If any fact needed to determine right-of-way is missing, obscured, or unreadable, say clearly "
+        "that the image does not provide enough information and name the missing observation. "
+        f"Use exactly these section headings: {sections}.\n"
+        "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    )
+
+
 def _coaching_output_instruction(lang: str, mode: str, quiz_context: str = "") -> str:
     """Give explicit coaching modes their own final output contract."""
     language = {"no": "Norwegian", "th": "Thai", "en": "English"}[lang]
     if mode == "quiz_coach":
+        sections = {
+            "no": "Situasjon / Kongen og tjeneren eller HAV-regelen / Forklaring / Vanlig feil / Teoriprøve-vinkel",
+            "th": "สถานการณ์ / กษัตริย์กับผู้รับใช้หรือกฎ HAV / คำอธิบาย / ข้อผิดพลาดที่พบบ่อย / มุมมองข้อสอบทฤษฎี",
+            "en": "Situation / King and Servant or the HAV rule / Explanation / Common mistake / Theory-test angle",
+        }[lang]
         return (
             "\n\n━━━ FINAL QUIZ COACH CONTRACT ━━━\n"
             f"Write every learner-facing word only in {language}. "
@@ -1198,7 +1291,8 @@ def _coaching_output_instruction(lang: str, mode: str, quiz_context: str = "") -
             "use HAV or section 7 only when relevant and supported. Never invent a rule, "
             "a student's reasoning, or a missing answer. If the answer details are missing, "
             "ask for the missing detail instead of claiming the student was wrong. "
-            "Use short teaching sentences, no fixed headings, and at most one targeted "
+            f"Use short teaching sentences and exactly these five section headings: {sections}. "
+            "Use the mnemonic section only when the rule is relevant. End with at most one targeted "
             "follow-up question when it will help check understanding.\n"
             f"QUIZ CONTEXT DATA:\n{quiz_context or '(none supplied)'}\n"
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -2903,6 +2997,8 @@ class TeacherChatRequest(BaseModel):
     user_id: Optional[str] = Field(default=None)
     document_id: Optional[str] = Field(default=None, max_length=64)
     document_context: Optional[str] = Field(default=None, max_length=4000)
+    image_url: Optional[str] = Field(default=None, max_length=2048)
+    image_data: Optional[str] = Field(default=None, max_length=5_600_000)
 
 
 class TeacherChatResponse(BaseModel):
@@ -2927,6 +3023,11 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
     # Pydantic's Literal["no", "th", "en"] already rejects anything else with a 422.
     requested_language = req.language
     lang = requested_language
+    vision_image = _validate_vision_image(
+        getattr(req, "image_url", None), getattr(req, "image_data", None)
+    )
+    is_vision = vision_image is not None
+    is_direct_lookup = _is_direct_lookup(user_msg) and not is_vision
 
     # Extract quiz context if passed in the user message
     quiz_context_str = ""
@@ -3068,6 +3169,12 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
 
         # _build_system_prompt injects [LANGUAGE] header FIRST, then language-specific examples
         system_prompt = _build_system_prompt(lang)
+        system_prompt += (
+            "\n\nLEGAL SOURCE RULE: Ground legal explanations only in Vegtrafikkloven § 3 "
+            "(HAV: hensynsfull, aktpågivende, varsom), Vegtrafikkloven § 7 on right-of-way, "
+            "and Skiltforskriften for signs and road markings. Name the relevant source, "
+            "but never invent subsection wording or claim that an unseen fact is present."
+        )
         if req.mode == "quiz_coach":
             system_prompt += "\n\nCHAT MODE: Coach the student through the current quiz question. Explain the rule without guessing an unseen answer."
         elif req.mode == "simplify":
@@ -3184,21 +3291,32 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
                 "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
             )
 
-        if req.mode in ("quiz_coach", "simplify"):
+        if is_vision:
+            system_prompt += _vision_output_instruction(lang)
+        elif req.mode in ("quiz_coach", "simplify"):
             system_prompt += _coaching_output_instruction(lang, req.mode, quiz_context_str)
-        else:
+        elif is_direct_lookup:
             system_prompt += _concise_output_instruction(lang)
         messages = [{"role": "system", "content": system_prompt}]
         messages.extend(conversation)
-        messages.append({"role": "user", "content": user_msg})
+        if is_vision:
+            messages.append({
+                "role": "user",
+                "content": [
+                    {"type": "text", "text": user_msg},
+                    {"type": "image_url", "image_url": {"url": vision_image}},
+                ],
+            })
+        else:
+            messages.append({"role": "user", "content": user_msg})
 
-        resp = await _completion_with_fallback(messages)
+        resp = await _completion_with_fallback(messages, require_vision=True) if is_vision else await _completion_with_fallback(messages)
         reply_text = (resp.choices[0].message.content or "").strip()
         if not reply_text:
             reply_text = _fallback_reply(lang)
         else:
             reply_text = _enforce_approved_image_tags(reply_text, context_str)
-            if req.mode not in ("quiz_coach", "simplify"):
+            if is_direct_lookup:
                 reply_text = _concise_teacher_reply(reply_text, lang)
     except Exception as e:
         logger.error("LiteLLM call failed [%s]: %s", type(e).__name__, e)

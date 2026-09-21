@@ -23,6 +23,8 @@ from backend.teacher_chat import (
     _apply_formula_fail_safe,
     teacher_chat,
     TeacherChatRequest,
+    _is_direct_lookup,
+    _concise_teacher_reply,
 )
 
 
@@ -340,9 +342,25 @@ class TestWrongQuizAnswerReplyIsThaiOnly(unittest.TestCase):
         self.assertIn("Correct answer: Vikeplikt", prompt)
         self.assertIn("why that choice does not apply", prompt)
         self.assertIn("at most one targeted", prompt)
+        self.assertIn("Situasjon / Kongen og tjeneren eller HAV-regelen", prompt)
+        self.assertNotIn("Theory-test angle", prompt)
+        self.assertNotIn("สถานการณ์", prompt)
         self.assertEqual(response.mode, "quiz_coach")
         self.assertEqual(response.reply, model_reply)
         self.assertNotIn("FINAL OUTPUT CONTRACT", prompt)
+
+    def test_direct_legal_lookup_is_detected_and_limited_to_three_sentences(self):
+        self.assertTrue(_is_direct_lookup("Hva sier § 7 annet ledd?"))
+        self.assertTrue(_is_direct_lookup("What does section 7 mean?"))
+        self.assertTrue(_is_direct_lookup("มาตรา 7 หมายความว่าอะไร"))
+        self.assertFalse(_is_direct_lookup("Lær meg vikeplikt med et eksempel"))
+
+        concise = _concise_teacher_reply(
+            "Første setning. Andre setning. Tredje setning. Fjerde setning.", "no"
+        )
+        sentence_count = len(re.findall(r"[^.!?]+[.!?]", concise))
+        self.assertGreaterEqual(sentence_count, 1)
+        self.assertLessEqual(sentence_count, 3)
 
     def test_system_prompt_distinguishes_yield_sign_from_stop_sign(self):
         prompts = {lang: tc._build_system_prompt(lang) for lang in ("no", "th", "en")}

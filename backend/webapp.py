@@ -5346,6 +5346,9 @@ var UI = {
   teacher_doc_uploading:{th:'กำลังอัปโหลด...', no:'Laster opp...', en:'Uploading...'},
   teacher_doc_error:{th:'ไม่สามารถอัปโหลด PDF ได้', no:'Kunne ikke laste opp PDF', en:'Could not upload PDF'},
   teacher_doc_remove:{th:'ลบเอกสาร', no:'Fjern dokument', en:'Remove document'},
+  teacher_image_ready:{th:'รูปภาพพร้อมวิเคราะห์', no:'Bildet er klart for analyse', en:'Image ready for analysis'},
+  teacher_image_error:{th:'ใช้ได้เฉพาะไฟล์ JPG, PNG หรือ WebP ขนาดไม่เกิน 4 MB', no:'Bruk JPG, PNG eller WebP på maksimalt 4 MB', en:'Use a JPG, PNG or WebP image no larger than 4 MB'},
+  teacher_image_prompt:{th:'ช่วยวิเคราะห์สถานการณ์จราจรในภาพนี้ครับ', no:'Analyser trafikksituasjonen i dette bildet.', en:'Analyse the traffic situation in this image.'},
   teacher_more_topics:{th:'หัวข้อเพิ่มเติม', no:'Flere emner', en:'More topics'},
   teacher_fewer_topics:{th:'แสดงน้อยลง', no:'Vis færre', en:'Show fewer'},
   teacher_sub: {th:'ถามคำถามเกี่ยวกับการจราจร', no:'Still et spørsmål om trafikk', en:'Ask a question about traffic'},
@@ -11720,6 +11723,7 @@ function _teacherAppendChips(chips) {
 }
 
 var _teacherUploadedDoc = null;
+var _teacherUploadedImage = null;
 
 async function _teacherUploadDoc(inputEl) {
   if (!inputEl || !inputEl.files || !inputEl.files[0]) return;
@@ -11727,6 +11731,36 @@ async function _teacherUploadDoc(inputEl) {
   var badge = document.getElementById('teacherDocBadge');
   var nameEl = document.getElementById('teacherDocName');
   var docBtn = document.getElementById('teacherDocBtn');
+
+  if (file.type && file.type.indexOf('image/') === 0) {
+    var allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+    if (allowedTypes.indexOf(file.type) === -1 || file.size > 4 * 1024 * 1024) {
+      alert(t('teacher_image_error'));
+      inputEl.value = '';
+      return;
+    }
+    try {
+      var imageData = await new Promise(function(resolve, reject) {
+        var reader = new FileReader();
+        reader.onload = function() { resolve(reader.result); };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+      _teacherUploadedImage = {name:file.name, data:imageData};
+      _teacherUploadedDoc = null;
+      if (badge && nameEl) {
+        badge.style.display = 'flex';
+        nameEl.textContent = '🖼️ ' + file.name + ' — ' + t('teacher_image_ready');
+      }
+    } catch(e) {
+      _teacherUploadedImage = null;
+      if (badge) badge.style.display = 'none';
+      alert(t('teacher_image_error'));
+    } finally {
+      inputEl.value = '';
+    }
+    return;
+  }
 
   if (badge && nameEl) {
     badge.style.display = 'flex';
@@ -11764,6 +11798,7 @@ async function _teacherUploadDoc(inputEl) {
 
 function _teacherClearDoc() {
   _teacherUploadedDoc = null;
+  _teacherUploadedImage = null;
   var badge = document.getElementById('teacherDocBadge');
   if (badge) badge.style.display = 'none';
   var nameEl = document.getElementById('teacherDocName');
@@ -11775,6 +11810,7 @@ function _teacherClearDoc() {
 async function teacherSend(overrideMsg, customDisplayMsg, customMode) {
   var input = document.getElementById('teacherInput');
   var msg = (overrideMsg || (input && input.value) || '').trim();
+  if (!msg && _teacherUploadedImage) msg = t('teacher_image_prompt');
   if (!msg || _teacherTyping) return;
 
   // Intercept in-app navigation chips
@@ -11857,6 +11893,9 @@ async function teacherSend(overrideMsg, customDisplayMsg, customMode) {
       chatPayload.document_id = _teacherUploadedDoc.document_id;
       chatPayload.document_context = _teacherUploadedDoc.extracted_text;
     }
+    if (_teacherUploadedImage && _teacherUploadedImage.data) {
+      chatPayload.image_data = _teacherUploadedImage.data;
+    }
     var res = await fetch('/api/teacher/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -11891,6 +11930,7 @@ async function teacherSend(overrideMsg, customDisplayMsg, customMode) {
     await _teacherAppendSignCards(fallbackSignIds, assistantBubble);
     _teacherAppendChips(data.suggestions || []);
     _teacherScrollToAnswerStart(assistantBubble);
+    if (_teacherUploadedImage) _teacherClearDoc();
   } catch(e) {
     _teacherHideTyping();
     var errorBubble = _teacherAppendBubble('assistant', t('teacher_error'));
