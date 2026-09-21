@@ -28,6 +28,9 @@ from studybook_web import (
     CH13_ASSETS, CH13_LESSONS,
     CH14_ASSETS, CH14_LESSONS,
     CH15_ASSETS, CH15_LESSONS,
+    CH16_ASSETS, CH16_LESSONS,
+    CH17_ASSETS, CH17_LESSONS,
+    CH18_ASSETS, CH18_LESSONS,
     CHAPTERS,
 )
 from webapp import WEBAPP_HTML, webapp_router
@@ -508,16 +511,20 @@ def test_chapter_7_asset_manifest_and_pairs():
     assert CH07_ASSETS["ch07_par_002"]["asset_id"] == "CH07-PAR-002"
 
 
-def test_chapters_3_5_6_7_8_9_10_11_12_13_14_15_assets_exist_on_disk():
+def test_chapters_3_to_18_assets_exist_on_disk():
     assets_root = Path(__file__).resolve().parents[1] / "public_assets"
-    for group in (CH03_ASSETS, CH05_ASSETS, CH06_ASSETS, CH07_ASSETS, CH08_ASSETS, CH09_ASSETS, CH10_ASSETS, CH11_ASSETS, CH12_ASSETS, CH13_ASSETS, CH14_ASSETS, CH15_ASSETS):
+    for group in (
+        CH03_ASSETS, CH05_ASSETS, CH06_ASSETS, CH07_ASSETS, CH08_ASSETS,
+        CH09_ASSETS, CH10_ASSETS, CH11_ASSETS, CH12_ASSETS, CH13_ASSETS,
+        CH14_ASSETS, CH15_ASSETS, CH16_ASSETS, CH17_ASSETS, CH18_ASSETS,
+    ):
         for asset in group.values():
             prefix = "/api/assets/"
             assert asset["src"].startswith(prefix)
             assert (assets_root / asset["src"][len(prefix):]).is_file(), asset["src"]
 
 
-def test_chapters_3_5_6_7_8_9_10_11_12_13_14_15_thai_language_isolation():
+def test_chapters_3_to_18_thai_language_isolation():
     for name, assets, lessons in [
         ("CH03", CH03_ASSETS, CH03_LESSONS),
         ("CH05", CH05_ASSETS, CH05_LESSONS),
@@ -531,6 +538,9 @@ def test_chapters_3_5_6_7_8_9_10_11_12_13_14_15_thai_language_isolation():
         ("CH13", CH13_ASSETS, CH13_LESSONS),
         ("CH14", CH14_ASSETS, CH14_LESSONS),
         ("CH15", CH15_ASSETS, CH15_LESSONS),
+        ("CH16", CH16_ASSETS, CH16_LESSONS),
+        ("CH17", CH17_ASSETS, CH17_LESSONS),
+        ("CH18", CH18_ASSETS, CH18_LESSONS),
     ]:
         _walk_i18n(assets, f"{name}_assets")
         _walk_i18n(lessons, f"{name}_lessons")
@@ -914,7 +924,145 @@ def test_chapter_15_asset_manifest_and_pairs():
     assert CH15_ASSETS["ch15_par_002"]["asset_id"] == "CH15-PAR-002"
 
 
-def test_chapters_3_5_6_7_8_9_10_11_12_13_14_15_in_studybook_chapters_v5_json():
+def test_chapter_16_structure_and_screen_ids():
+    assert len(CH16_LESSONS) == 6
+    assert [lesson["id"] for lesson in CH16_LESSONS] == [
+        "CH16-001", "CH16-002", "CH16-003", "CH16-004", "CH16-005", "CH16-006"
+    ]
+    assert {lesson["type"] for lesson in CH16_LESSONS} == {
+        "intro", "choice", "sequence", "roadCheck", "chapterComplete"
+    }
+    rc = next(lesson for lesson in CH16_LESSONS if lesson["type"] == "roadCheck")
+    assert rc["id"] == "CH16-004"
+    assert rc["road_check_id"] == "CH16-RC-001"
+    assert len(rc["questions"]) == 3
+    assert len({lesson["id"] for lesson in CH16_LESSONS}) == 6
+
+
+def test_chapter_16_asset_manifest_and_pairs():
+    required = {
+        "asset_id", "page", "scene", "pedagogical_purpose", "camera_angle",
+        "risk_source", "risikokilde", "vehicles_road_users", "road_type", "signs_markings",
+        "learner_discovery", "hotspots", "pair_asset", "status", "src", "alt",
+    }
+    assert len(CH16_ASSETS) == 8
+    expected_ids = {
+        "CH16-MANO-001", "CH16-MANO-002", "CH16-PAR-001", "CH16-MANO-003",
+        "CH16-MANO-004", "CH16-MANO-005", "CH16-PAR-002", "CH16-MANO-006",
+    }
+    actual_ids = {asset["asset_id"] for asset in CH16_ASSETS.values()}
+    assert actual_ids == expected_ids
+    for asset in CH16_ASSETS.values():
+        assert set(asset) == required
+        assert asset["status"] == "placeholder"
+        assert all(asset[key] for key in required - {"hotspots", "pair_asset"})
+
+    # Pair 1: Nødbrems med ABS vs Rattgrep 9 og 3
+    assert CH16_ASSETS["ch16_mano_002"]["pair_asset"] == "ch16_par_001"
+    assert CH16_ASSETS["ch16_par_001"]["pair_asset"] == "ch16_mano_002"
+    assert CH16_ASSETS["ch16_mano_002"]["asset_id"] == "CH16-MANO-002"
+    assert CH16_ASSETS["ch16_par_001"]["asset_id"] == "CH16-PAR-001"
+
+    # Pair 2: Svingteknikk vs Sentrifugalkraft
+    assert CH16_ASSETS["ch16_mano_005"]["pair_asset"] == "ch16_par_002"
+    assert CH16_ASSETS["ch16_par_002"]["pair_asset"] == "ch16_mano_005"
+    assert CH16_ASSETS["ch16_mano_005"]["asset_id"] == "CH16-MANO-005"
+    assert CH16_ASSETS["ch16_par_002"]["asset_id"] == "CH16-PAR-002"
+
+
+def test_chapter_17_structure_and_screen_ids():
+    assert len(CH17_LESSONS) == 6
+    assert [lesson["id"] for lesson in CH17_LESSONS] == [
+        "CH17-001", "CH17-002", "CH17-003", "CH17-004", "CH17-005", "CH17-006"
+    ]
+    assert {lesson["type"] for lesson in CH17_LESSONS} == {
+        "intro", "choice", "sequence", "roadCheck", "chapterComplete"
+    }
+    rc = next(lesson for lesson in CH17_LESSONS if lesson["type"] == "roadCheck")
+    assert rc["id"] == "CH17-004"
+    assert rc["road_check_id"] == "CH17-RC-001"
+    assert len(rc["questions"]) == 3
+    assert len({lesson["id"] for lesson in CH17_LESSONS}) == 6
+
+
+def test_chapter_17_asset_manifest_and_pairs():
+    required = {
+        "asset_id", "page", "scene", "pedagogical_purpose", "camera_angle",
+        "risk_source", "risikokilde", "vehicles_road_users", "road_type", "signs_markings",
+        "learner_discovery", "hotspots", "pair_asset", "status", "src", "alt",
+    }
+    assert len(CH17_ASSETS) == 8
+    expected_ids = {
+        "CH17-OKO-001", "CH17-OKO-002", "CH17-PAR-001", "CH17-OKO-003",
+        "CH17-OKO-004", "CH17-OKO-005", "CH17-PAR-002", "CH17-OKO-006",
+    }
+    actual_ids = {asset["asset_id"] for asset in CH17_ASSETS.values()}
+    assert actual_ids == expected_ids
+    for asset in CH17_ASSETS.values():
+        assert set(asset) == required
+        assert asset["status"] == "placeholder"
+        assert all(asset[key] for key in required - {"hotspots", "pair_asset"})
+
+    # Pair 1: Tidlig oppgiring vs Motorbrems
+    assert CH17_ASSETS["ch17_oko_002"]["pair_asset"] == "ch17_par_001"
+    assert CH17_ASSETS["ch17_par_001"]["pair_asset"] == "ch17_oko_002"
+    assert CH17_ASSETS["ch17_oko_002"]["asset_id"] == "CH17-OKO-002"
+    assert CH17_ASSETS["ch17_par_001"]["asset_id"] == "CH17-PAR-001"
+
+    # Pair 2: Luftmotstand/hastighet vs Takboks
+    assert CH17_ASSETS["ch17_oko_005"]["pair_asset"] == "ch17_par_002"
+    assert CH17_ASSETS["ch17_par_002"]["pair_asset"] == "ch17_oko_005"
+    assert CH17_ASSETS["ch17_oko_005"]["asset_id"] == "CH17-OKO-005"
+    assert CH17_ASSETS["ch17_par_002"]["asset_id"] == "CH17-PAR-002"
+
+
+def test_chapter_18_structure_and_screen_ids():
+    assert len(CH18_LESSONS) == 6
+    assert [lesson["id"] for lesson in CH18_LESSONS] == [
+        "CH18-001", "CH18-002", "CH18-003", "CH18-004", "CH18-005", "CH18-006"
+    ]
+    assert {lesson["type"] for lesson in CH18_LESSONS} == {
+        "intro", "choice", "sequence", "roadCheck", "chapterComplete"
+    }
+    rc = next(lesson for lesson in CH18_LESSONS if lesson["type"] == "roadCheck")
+    assert rc["id"] == "CH18-004"
+    assert rc["road_check_id"] == "CH18-RC-001"
+    assert len(rc["questions"]) == 3
+    assert len({lesson["id"] for lesson in CH18_LESSONS}) == 6
+
+
+def test_chapter_18_asset_manifest_and_pairs():
+    required = {
+        "asset_id", "page", "scene", "pedagogical_purpose", "camera_angle",
+        "risk_source", "risikokilde", "vehicles_road_users", "road_type", "signs_markings",
+        "learner_discovery", "hotspots", "pair_asset", "status", "src", "alt",
+    }
+    assert len(CH18_ASSETS) == 8
+    expected_ids = {
+        "CH18-TR2-001", "CH18-TR2-002", "CH18-PAR-001", "CH18-TR2-003",
+        "CH18-TR2-004", "CH18-TR2-005", "CH18-PAR-002", "CH18-TR2-006",
+    }
+    actual_ids = {asset["asset_id"] for asset in CH18_ASSETS.values()}
+    assert actual_ids == expected_ids
+    for asset in CH18_ASSETS.values():
+        assert set(asset) == required
+        assert asset["status"] == "placeholder"
+        assert all(asset[key] for key in required - {"hotspots", "pair_asset"})
+
+    # Pair 1: Automatisering vs Selvevaluering
+    assert CH18_ASSETS["ch18_tr2_002"]["pair_asset"] == "ch18_par_001"
+    assert CH18_ASSETS["ch18_par_001"]["pair_asset"] == "ch18_tr2_002"
+    assert CH18_ASSETS["ch18_tr2_002"]["asset_id"] == "CH18-TR2-002"
+    assert CH18_ASSETS["ch18_par_001"]["asset_id"] == "CH18-PAR-001"
+
+    # Pair 2: Overgang til Trinn 3 vs Sikkerhetskurs på bane
+    assert CH18_ASSETS["ch18_tr2_005"]["pair_asset"] == "ch18_par_002"
+    assert CH18_ASSETS["ch18_par_002"]["pair_asset"] == "ch18_tr2_005"
+    assert CH18_ASSETS["ch18_tr2_005"]["asset_id"] == "CH18-TR2-005"
+    assert CH18_ASSETS["ch18_par_002"]["asset_id"] == "CH18-PAR-002"
+
+
+def test_chapters_3_to_18_in_studybook_chapters_v5_json():
     json_path = Path(__file__).resolve().parents[2] / "content" / "studybook_chapters_v5.json"
     with open(json_path, "r", encoding="utf-8") as f:
         data = json.load(f)
@@ -932,6 +1080,9 @@ def test_chapters_3_5_6_7_8_9_10_11_12_13_14_15_in_studybook_chapters_v5_json():
         ("CH13", "ch_trafikkuhell_forstehjelp", "CH13-RC-001", "CH13-PAR-001", "CH13-PAR-002"),
         ("CH14", "ch_kjoretoy_sikkerhet", "CH14-RC-001", "CH14-PAR-001", "CH14-PAR-002"),
         ("CH15", "ch_risiko_ulykker", "CH15-RC-001", "CH15-PAR-001", "CH15-PAR-002"),
+        ("CH16", "ch_kjoretoybehandling_manovrering", "CH16-RC-001", "CH16-PAR-001", "CH16-PAR-002"),
+        ("CH17", "ch_miljovennlig_okonomisk_kjoring", "CH17-RC-001", "CH17-PAR-001", "CH17-PAR-002"),
+        ("CH18", "ch_trinnvurdering_trinn2", "CH18-RC-001", "CH18-PAR-001", "CH18-PAR-002"),
     ]:
         ch = next((c for c in data if c.get("chapter_code") == code or c.get("chapter_id") == cid), None)
         assert ch is not None, f"Missing {code} in v5 json"

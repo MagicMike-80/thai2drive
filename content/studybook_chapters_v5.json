@@ -1852,5 +1852,408 @@
         ]
       }
     ]
+  },
+  {
+    "chapter_id": "ch_kjoretoybehandling_manovrering",
+    "chapter_code": "CH16",
+    "title_no": "Kapittel 16 — Grunnleggende kjøretøybehandling og manøvrering",
+    "title_th": "บทที่ 16 — การควบคุมรถขั้นพื้นฐานและการเคลื่อนที่ (Kjøretøybehandling og manøvrering)",
+    "title_en": "Chapter 16 — Basic Vehicle Handling and Manoeuvring",
+    "difficulty": "intermediate",
+    "podcast_reference": "Michaels råd: Følsom pedalbruk, nødbremsing og svingteknikk",
+    "order": 18,
+    "section_tags": [
+      "kjoretoybehandling",
+      "manovrering",
+      "pedalfolsomhet",
+      "krypkjoring",
+      "nodbrems",
+      "abs",
+      "rattgrep",
+      "sentrifugalkraft"
+    ],
+    "sections": [
+      {
+        "section_type": "situation",
+        "title_no": "Situasjonen: Presisjonsmanøvrering på trang parkeringsplass og nødbrems",
+        "title_th": "สถานการณ์: การเคลื่อนที่อย่างแม่นยำในที่จอดรถแคบและการเบรกฉุกเฉิน",
+        "title_en": "The situation: Precision manoeuvring in tight spaces and emergency braking",
+        "content_no": "Du skal finmanøvrere inn på en trang parkeringsplass med fotgjengere rundt, og øve på full nødbrems på bane. Hvordan kontrollerer du clutch og gass, og hvordan reagerer bilen ved maksimal nedbremsing?",
+        "content_th": "คุณต้องควบคุมรถอย่างช้า ๆ เข้าซองจอดรถที่แคบโดยมีคนเดินถนนอยู่รอบ ๆ และฝึกเบรกฉุกเฉินเต็มแรงบนสนาม คุณจะควบคุมคลัตช์และคันเร่งอย่างไร และรถจะมีอาการอย่างไรเมื่อเบรกแรงสุด?",
+        "content_en": "You need to manoeuvre into a tight parking spot with pedestrians nearby, and practice full emergency braking. How do you control clutch and throttle, and how does the car respond during maximum braking?"
+      },
+      {
+        "section_type": "theory",
+        "title_no": "Michaels manøvreringsregel: Følsomhet ved lav fart, bestemt kraft ved nødbrems",
+        "title_th": "กฎการควบคุมของ Michael: นุ่มนวลละเอียดอ่อนที่ความเร็วต่ำ หนักแน่นเด็ดขาดเมื่อเบรกฉุกเฉิน",
+        "title_en": "Michael's handling rule: Sensitivity at low speeds, decisive firmness during emergency braking",
+        "content_no": "Grunnleggende kjøretøybehandling handler om å automatisere betjeningen. Ved krypkjøring kontrolleres farten utelukkende med clutchens gripepunkt. Ved nødbremsing i moderne bil trås bremsen i bånn umiddelbart for å aktivere ABS, mens clutchen trykkes inn samtidig for å hindre motorstopp. Hold rattet med hendene i posisjon kvart på tre (9 og 3) for maksimal kontroll.",
+        "content_th": "การควบคุมรถขั้นพื้นฐานมุ่งเน้นการสร้างความคุ้นเคยจนเป็นไปโดยอัตโนมัติ ในการเคลื่อนที่อย่างช้ามาก ให้ควบคุมความเร็วด้วยจุดแตะคลัตช์เพียงอย่างเดียว ในการเบรกฉุกเฉิน ให้เหยียบแป้นเบรกมิดในทันทีเพื่อเปิดระบบ ABS พร้อมเหยียบคลัตช์เพื่อกันเครื่องดับ และจับพวงมาลัยที่ตำแหน่ง 9 และ 3 นาฬิกาเพื่อการควบคุมสูงสุด",
+        "content_en": "Basic vehicle handling focuses on automating vehicle controls. For creeping at low speed, speed is controlled via the clutch bite point. In emergency braking, depress the brake fully to engage ABS, and press the clutch to avoid stalling. Hold the steering wheel at quarter to three (9 and 3) for maximum control."
+      },
+      {
+        "section_type": "practice",
+        "title_no": "Praktisk tips: Svingteknikk og sentrifugalkraft",
+        "title_th": "คำแนะนำภาคปฏิบัติ: เทคนิคการเข้าโค้งและแรงเหวี่ยงหนีศูนย์กลาง",
+        "title_en": "Practical tips: Turning technique and centrifugal force",
+        "content_no": "Brems alltid ned FØR svingen mens forhjulene peker rett fram. Sentrifugalkraften firedobles om farten dobles (F ~ v²). Å bremse hardt i sving kan overbelaste dekkets veigrep og føre til skrens.",
+        "content_th": "ให้ชะลอความเร็วก่อนเข้าโค้งเสมอในขณะที่ล้อยังตรงอยู่ แรงเหวี่ยงหนีศูนย์กลางจะเพิ่มเป็นสี่เท่าเมื่อความเร็วเพิ่มเป็นสองเท่า การเบรกแรงในโค้งจะทำให้ยางสูญเสียการยึดเกาะและรถลื่นไถลได้",
+        "content_en": "Always brake before the turn while wheels are straight. Centrifugal force quadruples when speed doubles. Heavy braking mid-curve risks breaking tire traction and skidding."
+      }
+    ],
+    "screens": [
+      {
+        "screen_id": "CH16-001",
+        "screen_type": "intro",
+        "title_no": "Pedalfølsomhet og krypkjøring",
+        "title_th": "ความละเอียดอ่อนของแป้นเหยียบและการขับเคลื่อนช้า ๆ",
+        "asset_id": "CH16-MANO-001",
+        "pair_asset_id": null,
+        "content_th": "การควบคุมรถขั้นพื้นฐานเริ่มต้นจากการฝึกคันเร่งและคลัตช์อย่างแม่นยำ การควบคุมความเร็วต่ำมากทำได้ด้วยการจับจุดแตะคลัตช์อย่างมั่นคง",
+        "glossary_terms": [
+          "Pedalfølsomhet",
+          "Krypkjøring",
+          "Gripepunkt"
+        ]
+      },
+      {
+        "screen_id": "CH16-002",
+        "screen_type": "choice",
+        "title_no": "Riktig sittestilling og rattgrep (9 og 3)",
+        "title_th": "ท่านั่งขับขี่ที่ถูกต้องและการจับพวงมาลัย (9 และ 3)",
+        "asset_id": "CH16-MANO-002",
+        "pair_asset_id": "CH16-PAR-001",
+        "content_th": "การจับพวงมาลัยที่ตำแหน่ง 9 และ 3 นาฬิกาช่วยให้หมุนเลี้ยวได้กว้างที่สุดโดยไม่ต้องปล่อยมือ และปลอดภัยที่สุดเมื่อถุงลมนิรภัยทำงาน",
+        "glossary_terms": [
+          "Rattgrep 9 og 3",
+          "Sittestilling",
+          "Kollisjonspute"
+        ]
+      },
+      {
+        "screen_id": "CH16-003",
+        "screen_type": "sequence",
+        "title_no": "Nødbremsing og ABS-systemet",
+        "title_th": "การเบรกฉุกเฉินและระบบป้องกันล้อล็อก (ABS)",
+        "asset_id": "CH16-MANO-003",
+        "pair_asset_id": null,
+        "content_th": "ในสถานการณ์คับขัน ให้เหยียบแป้นเบรกและคลัตช์จนสุดในทันที ระบบป้องกันล้อล็อก (ABS) จะทำงานด้วยการส่งแรงสั่นสะเทือนที่แป้นเบรกและช่วยให้ยังสามารถบังคับทิศทางรถได้",
+        "glossary_terms": [
+          "Nødbremsing",
+          "ABS",
+          "Styreevne under bremsing"
+        ]
+      },
+      {
+        "screen_id": "CH16-004",
+        "screen_type": "road_check",
+        "title_no": "Road Check ⚡ Kjøretøybehandling",
+        "title_th": "Road Check ⚡ ทดสอบความเข้าใจ: การควบคุมรถ",
+        "road_check_id": "CH16-RC-001",
+        "asset_id": "CH16-MANO-004",
+        "pair_asset_id": null,
+        "content_th": "สามคำถามสั้นเพื่อทดสอบความแม่นยำเรื่องการเบรกฉุกเฉินด้วยระบบป้องกันล้อล็อก (ABS) การเคลื่อนที่ช้า และแรงเหวี่ยงหนีศูนย์กลาง",
+        "glossary_terms": [
+          "ABS-aktivering",
+          "Sentrifugalkraft",
+          "Gripepunktkontroll"
+        ]
+      },
+      {
+        "screen_id": "CH16-005",
+        "screen_type": "choice",
+        "title_no": "Svingteknikk og sentrifugalkraft",
+        "title_th": "เทคนิคการเข้าโค้งและแรงเหวี่ยงหนีศูนย์กลาง",
+        "asset_id": "CH16-MANO-005",
+        "pair_asset_id": "CH16-PAR-002",
+        "content_th": "การชะลอความเร็วให้เหมาะสมก่อนถึงทางโค้งช่วยให้รถเกาะถนนได้อย่างสมดุล แรงเหวี่ยงหนีศูนย์กลางจะเพิ่มขึ้นเป็นสี่เท่าเมื่อความเร็วเพิ่มขึ้นสองเท่า",
+        "glossary_terms": [
+          "Sentrifugalkraft (F ~ v²)",
+          "Kurveteknikk",
+          "Friksjon"
+        ]
+      },
+      {
+        "screen_id": "CH16-006",
+        "screen_type": "summary",
+        "title_no": "Oppsummering kjøretøybehandling og manøvrering",
+        "title_th": "สรุป: การควบคุมรถขั้นพื้นฐานและการเคลื่อนที่",
+        "asset_id": "CH16-MANO-006",
+        "pair_asset_id": null,
+        "content_th": "คุณเข้าใจการควบคุมแป้นเหยียบอย่างละเอียด รู้วิธีเบรกฉุกเฉินเต็มแรง และเข้าใจหลักฟิสิกส์ในการเข้าโค้งเพื่อเตรียมความพร้อมสู่บทต่อไปได้อย่างมั่นใจ!",
+        "glossary_terms": [
+          "Automatisert betjening",
+          "Kjøretøykontroll"
+        ]
+      }
+    ]
+  },
+  {
+    "chapter_id": "ch_miljovennlig_okonomisk_kjoring",
+    "chapter_code": "CH17",
+    "title_no": "Kapittel 17 — Miljøvennlig og økonomisk kjøring",
+    "title_th": "บทที่ 17 — การขับขี่ที่เป็นมิตรต่อสิ่งแวดล้อมและประหยัดพลังงาน (Økokjøring)",
+    "title_en": "Chapter 17 — Eco-friendly and Economical Driving",
+    "difficulty": "intermediate",
+    "podcast_reference": "Michaels råd: Økokjøring, planlegging og motorbrems",
+    "order": 19,
+    "section_tags": [
+      "miljovennlig",
+      "okokjoring",
+      "drivstoff",
+      "dekktrykk",
+      "motorbrems",
+      "luftmotstand",
+      "tomgangskjoring"
+    ],
+    "sections": [
+      {
+        "section_type": "situation",
+        "title_no": "Situasjonen: Daglige turer og unødvendig energiforbruk",
+        "title_th": "สถานการณ์: การเดินทางประจำวันและการสูญเสียพลังงานโดยไม่จำเป็น",
+        "title_en": "The situation: Daily driving and unnecessary fuel consumption",
+        "content_no": "Drivstoff- og strømprisene er høye, og miljøet belastes unødvendig. Hvordan kan en sjåfør redusere energiforbruket med opptil 15-20 % kun ved hjelp av kjørestil og vedlikehold?",
+        "content_th": "ค่าน้ำมันและค่าไฟฟ้ามีราคาสูง ทั้งยังสร้างภาระให้สิ่งแวดล้อม ผู้ขับขี่จะสามารถลดการใช้พลังงานลงได้ถึง 15-20 % ได้อย่างไร เพียงแค่ปรับพฤติกรรมการขับขี่และการดูแลรถ?",
+        "content_en": "Fuel and power costs are high. How can a driver reduce consumption by up to 15-20% simply by modifying driving style and vehicle upkeep?"
+      },
+      {
+        "section_type": "theory",
+        "title_no": "Michaels økoregel: Rull med gir, skift tidlig og hold jevn flyt",
+        "title_th": "กฎการประหยัดของ Michael: ปล่อยรถไหลในตำแหน่งเกียร์ เปลี่ยนเกียร์เร็ว และรักษาความเร็วให้สม่ำเสมอ",
+        "title_en": "Michael's eco rule: Coast in gear, shift up early, maintain steady flow",
+        "content_no": "Økokjøring handler om forutseende planlegging. Skift opp til høyt gir tidlig (rundt 2000 omdreininger). Bruk motorbremsen ved å slippe gassen i gir fram mot rødt lys — moderne motorer kutter da drivstofftilførselen helt (0,0 l/mil). Riktig dekktrykk og fjerning av unødvendig takboks reduserer luftmotstanden markant.",
+        "content_th": "การขับขี่ประหยัดพลังงานต้องอาศัยการมองการณ์ไกล เปลี่ยนเป็นเกียร์สูงอย่างรวดเร็ว (ประมาณ 2000 รอบต่อนาที) ใช้การเบรกด้วยเครื่องยนต์โดยการปล่อยคันเร่งขณะเข้าเกียร์ไว้เมื่อเห็นสัญญาณไฟแดง เครื่องยนต์จะตัดน้ำมันสนิทเป็นศูนย์ และการเติมลมยางที่ถูกต้องพร้อมถอดกล่องบรรทุกสัมภาระบนหลังคาเมื่อไม่ใช้งานจะช่วยลดแรงต้านอากาศได้อย่างมาก",
+        "content_en": "Eco-driving relies on forward planning. Shift to higher gear early (~2000 RPM). Utilize engine braking by releasing throttle in gear towards red lights — modern engines cut fuel completely (0.0). Proper tyre pressure and removing roof boxes drastically cut aerodynamic drag."
+      },
+      {
+        "section_type": "practice",
+        "title_no": "Praktisk tips: Tomgangskjøring og luftmotstand i motorveifart",
+        "title_th": "คำแนะนำภาคปฏิบัติ: การติดเครื่องยนต์ทิ้งไว้และแรงต้านอากาศที่ความเร็วสูง",
+        "title_en": "Practical tips: Engine idling and drag at highway speeds",
+        "content_no": "Unødvendig tomgangskjøring er forbudt og forurenser luften lokalt. Luftmotstanden øker med kvadratet av hastigheten: Å øke farten fra 80 til 100 km/t øker forbruket drastisk.",
+        "content_th": "การติดเครื่องยนต์ทิ้งไว้โดยไม่จำเป็นเป็นสิ่งผิดกฎหมายและก่อให้เกิดมลพิษ แรงต้านอากาศจะเพิ่มขึ้นเป็นสัดส่วนยกกำลังสองของความเร็ว การเร่งความเร็วจาก 80 เป็น 100 กม./ชม. จึงกินน้ำมันเพิ่มขึ้นอย่างเห็นได้ชัด",
+        "content_en": "Unnecessary idling is prohibited and pollutes local air. Aerodynamic drag increases with speed squared: increasing speed from 80 to 100 km/h heavily increases energy use."
+      }
+    ],
+    "screens": [
+      {
+        "screen_id": "CH17-001",
+        "screen_type": "intro",
+        "title_no": "Hva er økokjøring?",
+        "title_th": "การขับขี่ประหยัดพลังงานคืออะไร?",
+        "asset_id": "CH17-OKO-001",
+        "pair_asset_id": null,
+        "content_th": "การขับขี่แบบประหยัดพลังงานคือการขับรถอย่างชาญฉลาดและมองการณ์ไกลเพื่อลดการใช้น้ำมันหรือพลังงานไฟฟ้า พร้อมทั้งลดมลพิษและการสึกหรอของชิ้นส่วนรถยนต์",
+        "glossary_terms": [
+          "Økokjøring",
+          "Forutseende kjøring",
+          "Utslippsreduksjon"
+        ]
+      },
+      {
+        "screen_id": "CH17-002",
+        "screen_type": "choice",
+        "title_no": "Tidlig oppgiring og turtall",
+        "title_th": "การเปลี่ยนเกียร์สูงเร็วและรอบเครื่องยนต์",
+        "asset_id": "CH17-OKO-002",
+        "pair_asset_id": "CH17-PAR-001",
+        "content_th": "การเปลี่ยนขึ้นสู่เกียร์ที่สูงขึ้นอย่างรวดเร็ว (ประมาณ 2,000 รอบต่อนาที) และขับขี่ด้วยเกียร์สูงสุดเท่าที่ทำได้ช่วยประหยัดพลังงานได้อย่างชัดเจน",
+        "glossary_terms": [
+          "Tidlig oppgiring",
+          "Turtall (RPM)",
+          "Høyt gir"
+        ]
+      },
+      {
+        "screen_id": "CH17-003",
+        "screen_type": "sequence",
+        "title_no": "Motorbremsing og nullforbruk",
+        "title_th": "การเบรกด้วยเครื่องยนต์และการหยุดจ่ายน้ำมัน",
+        "asset_id": "CH17-OKO-003",
+        "pair_asset_id": null,
+        "content_th": "การปล่อยคันเร่งล่วงหน้าโดยคงตำแหน่งเกียร์ไว้ขณะเข้าใกล้สัญญาณไฟแดงหรือทางร่วม เครื่องยนต์จะตัดการฉีดจ่ายน้ำมันเป็นศูนย์ทันที",
+        "glossary_terms": [
+          "Motorbrems",
+          "Drivstoffkutt (0,0)",
+          "Rulling i gir"
+        ]
+      },
+      {
+        "screen_id": "CH17-004",
+        "screen_type": "road_check",
+        "title_no": "Road Check ⚡ Økokjøring",
+        "title_th": "Road Check ⚡ ทดสอบความเข้าใจ: การขับขี่ประหยัดพลังงาน",
+        "road_check_id": "CH17-RC-001",
+        "asset_id": "CH17-OKO-004",
+        "pair_asset_id": null,
+        "content_th": "สามคำถามสั้นเพื่อทดสอบความแม่นยำเรื่องการเบรกด้วยเครื่องยนต์ ลมยาง และแรงต้านอากาศจากอุปกรณ์เสริมบนหลังคารถ",
+        "glossary_terms": [
+          "Motorbremsing",
+          "Dekktrykk",
+          "Luftmotstand (takboks)"
+        ]
+      },
+      {
+        "screen_id": "CH17-005",
+        "screen_type": "choice",
+        "title_no": "Luftmotstand og takboks",
+        "title_th": "แรงต้านอากาศและกล่องบรรทุกสัมภาระบนหลังคา",
+        "asset_id": "CH17-OKO-005",
+        "pair_asset_id": "CH17-PAR-002",
+        "content_th": "แรงต้านอากาศจะเพิ่มขึ้นตามสัดส่วนกำลังสองของความเร็ว การติดตั้งกล่องสัมภาระบนหลังคารถโดยไม่จำเป็นจะเพิ่มแรงต้านและการสิ้นเปลืองน้ำมันขึ้นอย่างมาก",
+        "glossary_terms": [
+          "Luftmotstand",
+          "Takboks",
+          "Kvadratisk økning"
+        ]
+      },
+      {
+        "screen_id": "CH17-006",
+        "screen_type": "summary",
+        "title_no": "Oppsummering miljøvennlig kjøring",
+        "title_th": "สรุป: การขับขี่ที่เป็นมิตรต่อสิ่งแวดล้อม",
+        "asset_id": "CH17-OKO-006",
+        "pair_asset_id": null,
+        "content_th": "คุณเข้าใจเทคนิคการขับขี่ประหยัดพลังงาน รู้วิธีใช้ประโยชน์จากการเบรกด้วยเครื่องยนต์ และเข้าใจการลดแรงต้านเพื่อดูแลสิ่งแวดล้อมและประหยัดค่าใช้จ่าย!",
+        "glossary_terms": [
+          "Økonomisk kjøring",
+          "Miljøbevissthet"
+        ]
+      }
+    ]
+  },
+  {
+    "chapter_id": "ch_trinnvurdering_trinn2",
+    "chapter_code": "CH18",
+    "title_no": "Kapittel 18 — Trinnvurdering Trinn 2 og veien til Trinn 3",
+    "title_th": "บทที่ 18 — การประเมินผลขั้นตอนที่ 2 และการก้าวสู่ขั้นตอนที่ 3 (Trinnvurdering)",
+    "title_en": "Chapter 18 — Step Assessment Step 2 and Transition to Step 3",
+    "difficulty": "intermediate",
+    "podcast_reference": "Michaels råd: Mestring av trinn 2 og forberedelse til trinn 3",
+    "order": 20,
+    "section_tags": [
+      "trinnvurdering",
+      "trinn2",
+      "trinn3",
+      "selvevaluering",
+      "automatisering",
+      "sikkerhetskursbane",
+      "del3slutt"
+    ],
+    "sections": [
+      {
+        "section_type": "situation",
+        "title_no": "Situasjonen: Gjennomføring av trinnvurderingstime trinn 2",
+        "title_th": "สถานการณ์: การเข้าประเมินผลการเรียนขั้นตอนที่ 2",
+        "title_en": "The situation: Conducting the Stage 2 assessment lesson",
+        "content_no": "Du har øvd grundig på gir, pedaler, rygging og nødbremsing. Nå skal du ha en obligatorisk trinnvurderingstime med trafikklæreren. Hva forventes av deg før du får lov til å kjøre i tett trafikk på Trinn 3?",
+        "content_th": "คุณได้ฝึกการเปลี่ยนเกียร์ แป้นเหยียบ การถอยรถ และการเบรกฉุกเฉินมาอย่างละเอียดแล้ว ตอนนี้คุณต้องเข้าชั่วโมงประเมินผลภาคบังคับกับครูฝึก สิ่งใดที่คาดหวังจากตัวคุณก่อนได้รับอนุญาตให้ก้าวสู่ขั้นตอนที่ 3?",
+        "content_en": "You have thoroughly practiced gears, pedals, reversing, and emergency braking. Now you have the mandatory Stage 2 assessment. What is required before proceeding to dense traffic in Stage 3?"
+      },
+      {
+        "section_type": "theory",
+        "title_no": "Michaels vurderingsregel: Betjeningen må være automatisert så blikket kan løftes",
+        "title_th": "กฎการประเมินของ Michael: การควบคุมรถต้องเป็นไปโดยอัตโนมัติเพื่อให้สายตามองการจราจรได้อย่างเต็มที่",
+        "title_en": "Michael's assessment rule: Vehicle handling must be automated so attention focuses on traffic",
+        "content_no": "Målet for Trinn 2 er at du mestrer kjøretøyet rent teknisk. Du skal ikke trenge å se ned på pedalene eller giret. Trinnvurderingen er en felles samtale der du og læreren vurderer om ferdighetene er gode nok. Dette danner grunnlaget for Sikkerhetskurs på bane (glattkjøring) og videre opplæring i variert trafikk på Trinn 3.",
+        "content_th": "เป้าหมายของขั้นตอนที่ 2 คือการควบคุมตัวรถได้อย่างชำนาญในทางเทคนิค คุณจะต้องไม่ก้มมองแป้นเหยียบหรือคันเกียร์ขณะขับ การประเมินผลเป็นการพูดคุยร่วมกันระหว่างคุณกับครูฝึกเพื่อประเมินความพร้อม ซึ่งเป็นรากฐานสำคัญสำหรับการฝึกบนสนามลื่นและก้าวสู่ขั้นตอนที่ 3 ในสภาพการจราจรจริง",
+        "content_en": "The goal for Stage 2 is pure technical mastery of the vehicle. You must never look down at pedals or gears. The assessment evaluates whether your skills suffice. This forms the foundation for the skid pan course and Stage 3 traffic training."
+      },
+      {
+        "section_type": "practice",
+        "title_no": "Praktisk tips: Selvevaluering og ærlig refleksjon",
+        "title_th": "คำแนะนำภาคปฏิบัติ: การประเมินตนเองและการทบทวนอย่างซื่อสัตย์",
+        "title_en": "Practical tips: Self-evaluation and honest reflection",
+        "content_no": "I trinnvurderingen har eleven en aktiv rolle. Du må kunne sette ord på hva du mestrer, og hva du trenger å øve mer på før du skal ut i komplisert trafikk.",
+        "content_th": "ในการประเมินผล ผู้เรียนต้องมีส่วนร่วมอย่างแข็งขัน คุณต้องสามารถอธิบายจุดเด่นของตัวเองและสิ่งที่ยังต้องฝึกฝนเพิ่มเติมก่อนออกสู่สภาพการจราจรที่ซับซ้อน",
+        "content_en": "In the stage assessment, the student takes an active role. You must articulate your strengths and what needs further practice before entering complex traffic."
+      }
+    ],
+    "screens": [
+      {
+        "screen_id": "CH18-001",
+        "screen_type": "intro",
+        "title_no": "Målet for opplæringen på Trinn 2",
+        "title_th": "เป้าหมายของการเรียนในขั้นตอนที่ 2",
+        "asset_id": "CH18-TR2-001",
+        "pair_asset_id": null,
+        "content_th": "เป้าหมายของขั้นตอนที่ 2 คือการมีความรู้เรื่องรถยนต์และการควบคุมรถในเชิงเทคนิคอย่างเป็นระบบ เพื่อให้สามารถมุ่งความสนใจไปยังการจราจรรอบข้างได้อย่างปลอดภัย",
+        "glossary_terms": [
+          "Trinn 2",
+          "Teknisk kjøreferdighet",
+          "Fokus på trafikk"
+        ]
+      },
+      {
+        "screen_id": "CH18-002",
+        "screen_type": "choice",
+        "title_no": "Automatisering av kjøretøybehandling",
+        "title_th": "การควบคุมรถอย่างเป็นไปโดยอัตโนมัติ",
+        "asset_id": "CH18-TR2-002",
+        "pair_asset_id": "CH18-PAR-001",
+        "content_th": "การควบคุมแป้นเหยียบ พวงมาลัย และการเข้าเกียร์จะต้องมีความคล่องแคล่วเป็นไปโดยอัตโนมัติ โดยไม่ต้องละสายตาจากสภาพการจราจรบนถนน",
+        "glossary_terms": [
+          "Automatisering",
+          "Rattbetjening",
+          "Oppmerksomhet"
+        ]
+      },
+      {
+        "screen_id": "CH18-003",
+        "screen_type": "sequence",
+        "title_no": "Trinnvurderingstimen i praksis",
+        "title_th": "ชั่วโมงการประเมินผลขั้นตอนที่ 2 ในทางปฏิบัติ",
+        "asset_id": "CH18-TR2-003",
+        "pair_asset_id": null,
+        "content_th": "ในชั่วโมงประเมินผล ครูฝึกและผู้เรียนจะร่วมกันพิจารณาความพร้อมด้านการควบคุมรถและการประเมินตนเองอย่างซื่อสัตย์ เพื่อตัดสินว่าพร้อมก้าวสู่ขั้นตอนต่อไปหรือไม่",
+        "glossary_terms": [
+          "Trinnvurdering time",
+          "Samtale og refleksjon",
+          "Godkjenning"
+        ]
+      },
+      {
+        "screen_id": "CH18-004",
+        "screen_type": "road_check",
+        "title_no": "Road Check ⚡ Trinnvurdering Trinn 2",
+        "title_th": "Road Check ⚡ ทดสอบความเข้าใจ: การประเมินผลขั้นตอนที่ 2",
+        "road_check_id": "CH18-RC-001",
+        "asset_id": "CH18-TR2-004",
+        "pair_asset_id": null,
+        "content_th": "สามคำถามสั้นเพื่อทดสอบความแม่นยำเรื่องเป้าหมายของขั้นตอนที่ 2 เกณฑ์การประเมินผล และการเตรียมพร้อมสู่ขั้นตอนที่ 3",
+        "glossary_terms": [
+          "Trinnmål",
+          "Selvevaluering",
+          "Sikkerhetskurs på bane"
+        ]
+      },
+      {
+        "screen_id": "CH18-005",
+        "screen_type": "choice",
+        "title_no": "Overgangen til Trinn 3 og glattkjøring",
+        "title_th": "การก้าวสู่ขั้นตอนที่ 3 และการฝึกขับขี่บนสนามลื่น",
+        "asset_id": "CH18-TR2-005",
+        "pair_asset_id": "CH18-PAR-002",
+        "content_th": "เมื่อผ่านการประเมินผลขั้นตอนที่ 2 แล้ว คุณจะมีความพร้อมในการเข้ารับการฝึกบนสนามลื่น (Sikkerhetskurs på bane) และฝึกขับขี่ในสภาพการจราจรจริงของขั้นตอนที่ 3",
+        "glossary_terms": [
+          "Trinn 3 trafikal del",
+          "Sikkerhetskurs på bane",
+          "Videregående opplæring"
+        ]
+      },
+      {
+        "screen_id": "CH18-006",
+        "screen_type": "summary",
+        "title_no": "Oppsummering av hele Del III (Trinn 2 fullført)",
+        "title_th": "สรุป: จบเนื้อหาขั้นตอนที่ 2 อย่างสมบูรณ์",
+        "asset_id": "CH18-TR2-006",
+        "pair_asset_id": null,
+        "content_th": "ยินดีด้วย! คุณได้ผ่านเนื้อหาทั้งหมดของขั้นตอนที่ 2 เรียบร้อยแล้ว ทั้งการควบคุมรถ การประหยัดพลังงาน และพร้อมเข้าสู่การเรียนรู้ในสภาพการจราจรจริง!",
+        "glossary_terms": [
+          "Trinn 2 fullført",
+          "Klar for Trinn 3"
+        ]
+      }
+    ]
   }
 ]
