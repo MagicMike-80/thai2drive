@@ -13,7 +13,15 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 import json
 
-from studybook_web import ASSETS, COPY, CSS, LESSONS, SCREEN, SCRIPT, install, CH04_ASSETS, CH04_LESSONS, CHAPTERS
+from studybook_web import (
+    ASSETS, COPY, CSS, LESSONS, SCREEN, SCRIPT, install,
+    CH03_ASSETS, CH03_LESSONS,
+    CH04_ASSETS, CH04_LESSONS,
+    CH05_ASSETS, CH05_LESSONS,
+    CH06_ASSETS, CH06_LESSONS,
+    CH07_ASSETS, CH07_LESSONS,
+    CHAPTERS,
+)
 from webapp import WEBAPP_HTML, webapp_router
 
 
@@ -306,4 +314,241 @@ def test_chapter_4_in_studybook_chapters_v5_json():
     assert ch04_doc["screens"][1]["pair_asset_id"] == "CH04-PAR-001"
     assert ch04_doc["screens"][4]["pair_asset_id"] == "CH04-PAR-002"
     assert ch04_doc["screens"][3]["road_check_id"] == "CH04-RC-001"
+
+
+def test_chapter_3_structure_and_screen_ids():
+    assert len(CH03_LESSONS) == 6
+    assert [lesson["id"] for lesson in CH03_LESSONS] == [
+        "CH03-001", "CH03-002", "CH03-003", "CH03-004", "CH03-005", "CH03-006"
+    ]
+    assert {lesson["type"] for lesson in CH03_LESSONS} == {
+        "intro", "choice", "sequence", "roadCheck", "chapterComplete"
+    }
+    rc = next(lesson for lesson in CH03_LESSONS if lesson["type"] == "roadCheck")
+    assert rc["id"] == "CH03-004"
+    assert rc["road_check_id"] == "CH03-RC-001"
+    assert len(rc["questions"]) == 3
+    assert len({lesson["id"] for lesson in CH03_LESSONS}) == 6
+
+
+def test_chapter_3_asset_manifest_and_pairs():
+    required = {
+        "asset_id", "page", "scene", "pedagogical_purpose", "camera_angle",
+        "risk_source", "risikokilde", "vehicles_road_users", "road_type", "signs_markings",
+        "learner_discovery", "hotspots", "pair_asset", "status", "src", "alt",
+    }
+    assert len(CH03_ASSETS) == 8
+    expected_ids = {
+        "CH03-FART-001", "CH03-FART-002", "CH03-PAR-001", "CH03-FART-003",
+        "CH03-FART-004", "CH03-FART-005", "CH03-PAR-002", "CH03-FART-006",
+    }
+    actual_ids = {asset["asset_id"] for asset in CH03_ASSETS.values()}
+    assert actual_ids == expected_ids
+    for asset in CH03_ASSETS.values():
+        assert set(asset) == required
+        assert asset["status"] == "placeholder"
+        assert all(asset[key] for key in required - {"hotspots", "pair_asset"})
+
+    # Pair 1: Våken vs distrahert fører
+    assert CH03_ASSETS["ch03_fart_002"]["pair_asset"] == "ch03_par_001"
+    assert CH03_ASSETS["ch03_par_001"]["pair_asset"] == "ch03_fart_002"
+    assert CH03_ASSETS["ch03_fart_002"]["asset_id"] == "CH03-FART-002"
+    assert CH03_ASSETS["ch03_par_001"]["asset_id"] == "CH03-PAR-001"
+
+    # Pair 2: 3-sekundersregelen vs kort avstand
+    assert CH03_ASSETS["ch03_fart_005"]["pair_asset"] == "ch03_par_002"
+    assert CH03_ASSETS["ch03_par_002"]["pair_asset"] == "ch03_fart_005"
+    assert CH03_ASSETS["ch03_fart_005"]["asset_id"] == "CH03-FART-005"
+    assert CH03_ASSETS["ch03_par_002"]["asset_id"] == "CH03-PAR-002"
+
+
+def test_chapter_5_structure_and_screen_ids():
+    assert len(CH05_LESSONS) == 6
+    assert [lesson["id"] for lesson in CH05_LESSONS] == [
+        "CH05-001", "CH05-002", "CH05-003", "CH05-004", "CH05-005", "CH05-006"
+    ]
+    assert {lesson["type"] for lesson in CH05_LESSONS} == {
+        "sequence", "choice", "roadCheck", "chapterComplete"
+    }
+    rc = next(lesson for lesson in CH05_LESSONS if lesson["type"] == "roadCheck")
+    assert rc["id"] == "CH05-004"
+    assert rc["road_check_id"] == "CH05-RC-001"
+    assert len(rc["questions"]) == 3
+    assert len({lesson["id"] for lesson in CH05_LESSONS}) == 6
+
+
+def test_chapter_5_asset_manifest_and_pairs():
+    required = {
+        "asset_id", "page", "scene", "pedagogical_purpose", "camera_angle",
+        "risk_source", "risikokilde", "vehicles_road_users", "road_type", "signs_markings",
+        "learner_discovery", "hotspots", "pair_asset", "status", "src", "alt",
+    }
+    assert len(CH05_ASSETS) == 8
+    expected_ids = {
+        "CH05-TR1-001", "CH05-TR1-002", "CH05-PAR-001", "CH05-TR1-003",
+        "CH05-TR1-004", "CH05-TR1-005", "CH05-PAR-002", "CH05-TR1-006",
+    }
+    actual_ids = {asset["asset_id"] for asset in CH05_ASSETS.values()}
+    assert actual_ids == expected_ids
+    for asset in CH05_ASSETS.values():
+        assert set(asset) == required
+        assert asset["status"] == "placeholder"
+        assert all(asset[key] for key in required - {"hotspots", "pair_asset"})
+
+    # Pair 1: Under 25 vs Over 25 år
+    assert CH05_ASSETS["ch05_tr1_002"]["pair_asset"] == "ch05_par_001"
+    assert CH05_ASSETS["ch05_par_001"]["pair_asset"] == "ch05_tr1_002"
+    assert CH05_ASSETS["ch05_tr1_002"]["asset_id"] == "CH05-TR1-002"
+    assert CH05_ASSETS["ch05_par_001"]["asset_id"] == "CH05-PAR-001"
+
+    # Pair 2: Rød L / speil vs Bevis / ledsager
+    assert CH05_ASSETS["ch05_tr1_005"]["pair_asset"] == "ch05_par_002"
+    assert CH05_ASSETS["ch05_par_002"]["pair_asset"] == "ch05_tr1_005"
+    assert CH05_ASSETS["ch05_tr1_005"]["asset_id"] == "CH05-TR1-005"
+    assert CH05_ASSETS["ch05_par_002"]["asset_id"] == "CH05-PAR-002"
+
+
+def test_chapter_6_structure_and_screen_ids():
+    assert len(CH06_LESSONS) == 6
+    assert [lesson["id"] for lesson in CH06_LESSONS] == [
+        "CH06-001", "CH06-002", "CH06-003", "CH06-004", "CH06-005", "CH06-006"
+    ]
+    assert {lesson["type"] for lesson in CH06_LESSONS} == {
+        "intro", "choice", "sequence", "roadCheck", "chapterComplete"
+    }
+    rc = next(lesson for lesson in CH06_LESSONS if lesson["type"] == "roadCheck")
+    assert rc["id"] == "CH06-004"
+    assert rc["road_check_id"] == "CH06-RC-001"
+    assert len(rc["questions"]) == 3
+    assert len({lesson["id"] for lesson in CH06_LESSONS}) == 6
+
+
+def test_chapter_6_asset_manifest_and_pairs():
+    required = {
+        "asset_id", "page", "scene", "pedagogical_purpose", "camera_angle",
+        "risk_source", "risikokilde", "vehicles_road_users", "road_type", "signs_markings",
+        "learner_discovery", "hotspots", "pair_asset", "status", "src", "alt",
+    }
+    assert len(CH06_ASSETS) == 8
+    expected_ids = {
+        "CH06-FORB-001", "CH06-FORB-002", "CH06-PAR-001", "CH06-FORB-003",
+        "CH06-FORB-004", "CH06-FORB-005", "CH06-PAR-002", "CH06-FORB-006",
+    }
+    actual_ids = {asset["asset_id"] for asset in CH06_ASSETS.values()}
+    assert actual_ids == expected_ids
+    for asset in CH06_ASSETS.values():
+        assert set(asset) == required
+        assert asset["status"] == "placeholder"
+        assert all(asset[key] for key in required - {"hotspots", "pair_asset"})
+
+    # Pair 1: Forbudt sone vs Fri sikt
+    assert CH06_ASSETS["ch06_forb_002"]["pair_asset"] == "ch06_par_001"
+    assert CH06_ASSETS["ch06_par_001"]["pair_asset"] == "ch06_forb_002"
+    assert CH06_ASSETS["ch06_forb_002"]["asset_id"] == "CH06-FORB-002"
+    assert CH06_ASSETS["ch06_par_001"]["asset_id"] == "CH06-PAR-001"
+
+    # Pair 2: Rygging vikeplikt vs Medhjelper i blindsone
+    assert CH06_ASSETS["ch06_forb_005"]["pair_asset"] == "ch06_par_002"
+    assert CH06_ASSETS["ch06_par_002"]["pair_asset"] == "ch06_forb_005"
+    assert CH06_ASSETS["ch06_forb_005"]["asset_id"] == "CH06-FORB-005"
+    assert CH06_ASSETS["ch06_par_002"]["asset_id"] == "CH06-PAR-002"
+
+
+def test_chapter_7_structure_and_screen_ids():
+    assert len(CH07_LESSONS) == 6
+    assert [lesson["id"] for lesson in CH07_LESSONS] == [
+        "CH07-001", "CH07-002", "CH07-003", "CH07-004", "CH07-005", "CH07-006"
+    ]
+    assert {lesson["type"] for lesson in CH07_LESSONS} == {
+        "intro", "choice", "sequence", "roadCheck", "chapterComplete"
+    }
+    rc = next(lesson for lesson in CH07_LESSONS if lesson["type"] == "roadCheck")
+    assert rc["id"] == "CH07-004"
+    assert rc["road_check_id"] == "CH07-RC-001"
+    assert len(rc["questions"]) == 3
+    assert len({lesson["id"] for lesson in CH07_LESSONS}) == 6
+
+
+def test_chapter_7_asset_manifest_and_pairs():
+    required = {
+        "asset_id", "page", "scene", "pedagogical_purpose", "camera_angle",
+        "risk_source", "risikokilde", "vehicles_road_users", "road_type", "signs_markings",
+        "learner_discovery", "hotspots", "pair_asset", "status", "src", "alt",
+    }
+    assert len(CH07_ASSETS) == 8
+    expected_ids = {
+        "CH07-PARK-001", "CH07-PARK-002", "CH07-PAR-001", "CH07-PARK-003",
+        "CH07-PARK-004", "CH07-PARK-005", "CH07-PAR-002", "CH07-PARK-006",
+    }
+    actual_ids = {asset["asset_id"] for asset in CH07_ASSETS.values()}
+    assert actual_ids == expected_ids
+    for asset in CH07_ASSETS.values():
+        assert set(asset) == required
+        assert asset["status"] == "placeholder"
+        assert all(asset[key] for key in required - {"hotspots", "pair_asset"})
+
+    # Pair 1: Skilt 370 stans forbudt vs Skilt 372 parkering forbudt
+    assert CH07_ASSETS["ch07_park_002"]["pair_asset"] == "ch07_par_001"
+    assert CH07_ASSETS["ch07_par_001"]["pair_asset"] == "ch07_park_002"
+    assert CH07_ASSETS["ch07_park_002"]["asset_id"] == "CH07-PARK-002"
+    assert CH07_ASSETS["ch07_par_001"]["asset_id"] == "CH07-PAR-001"
+
+    # Pair 2: 5-metersregelen ved kryss vs Målepunkt fra kurve
+    assert CH07_ASSETS["ch07_park_005"]["pair_asset"] == "ch07_par_002"
+    assert CH07_ASSETS["ch07_par_002"]["pair_asset"] == "ch07_park_005"
+    assert CH07_ASSETS["ch07_park_005"]["asset_id"] == "CH07-PARK-005"
+    assert CH07_ASSETS["ch07_par_002"]["asset_id"] == "CH07-PAR-002"
+
+
+def test_chapters_3_5_6_7_assets_exist_on_disk():
+    assets_root = Path(__file__).resolve().parents[1] / "public_assets"
+    for group in (CH03_ASSETS, CH05_ASSETS, CH06_ASSETS, CH07_ASSETS):
+        for asset in group.values():
+            prefix = "/api/assets/"
+            assert asset["src"].startswith(prefix)
+            assert (assets_root / asset["src"][len(prefix):]).is_file(), asset["src"]
+
+
+def test_chapters_3_5_6_7_thai_language_isolation():
+    for name, assets, lessons in [
+        ("CH03", CH03_ASSETS, CH03_LESSONS),
+        ("CH05", CH05_ASSETS, CH05_LESSONS),
+        ("CH06", CH06_ASSETS, CH06_LESSONS),
+        ("CH07", CH07_ASSETS, CH07_LESSONS),
+    ]:
+        _walk_i18n(assets, f"{name}_assets")
+        _walk_i18n(lessons, f"{name}_lessons")
+
+        thai = "\n".join(_language_values({"assets": assets, "lessons": lessons}, "th"))
+        assert re.search(r"[\u0E00-\u0E7F]", thai), f"{name} missing Thai script"
+        allowed_brands_removed = thai.replace("THAI2DRIVE", "").replace("ROAD CHECK", "").replace("POU", "")
+        forbidden = re.compile(
+            r"\b(?:forrige|fortsett|oversikt|kapittel|fører|fare|bil|buss|"
+            r"previous|continue|chapter|driver|hazard|traffic|learn|next)\b",
+            re.IGNORECASE,
+        )
+        assert not forbidden.search(allowed_brands_removed), f"{name} contains forbidden leak"
+
+
+def test_chapters_3_5_6_7_in_studybook_chapters_v5_json():
+    json_path = Path(__file__).resolve().parents[2] / "content" / "studybook_chapters_v5.json"
+    with open(json_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    for code, cid, rc_id, p1, p2 in [
+        ("CH03", "ch_speed_braking", "CH03-RC-001", "CH03-PAR-001", "CH03-PAR-002"),
+        ("CH05", "ch_trinn1_grunnkurs", "CH05-RC-001", "CH05-PAR-001", "CH05-PAR-002"),
+        ("CH06", "ch_forbikjoring_rygging", "CH06-RC-001", "CH06-PAR-001", "CH06-PAR-002"),
+        ("CH07", "ch_stans_parkering", "CH07-RC-001", "CH07-PAR-001", "CH07-PAR-002"),
+    ]:
+        ch = next((c for c in data if c.get("chapter_code") == code or c.get("chapter_id") == cid), None)
+        assert ch is not None, f"Missing {code} in v5 json"
+        assert len(ch["screens"]) == 6, f"{code} screens != 6"
+        assert [s["screen_id"] for s in ch["screens"]] == [f"{code}-{i:03d}" for i in range(1, 7)]
+        assert ch["screens"][3]["road_check_id"] == rc_id
+        assert ch["screens"][1]["pair_asset_id"] == p1
+        assert ch["screens"][4]["pair_asset_id"] == p2
+        for s in ch["screens"]:
+            assert s.get("glossary_terms") and len(s["glossary_terms"]) > 0
+
 

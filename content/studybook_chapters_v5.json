@@ -85,46 +85,128 @@
   },
   {
     "chapter_id": "ch_speed_braking",
-    "title_no": "Fart og bremselengde – Hvorfor 50 km/t kan være livsfarlig",
-    "title_th": "ความเร็วและระยะการหยุด — ทำไม 50 กม./ชม. ถึงอันตราย",
-    "title_en": "Speed and braking distance – Why 50 km/h can kill",
+    "chapter_code": "CH03",
+    "title_no": "Kapittel 3 — Fart, reaksjon og bremselengde",
+    "title_th": "บทที่ 3 — ความเร็ว ระยะการตอบสนอง และระยะเบรก (Fart og stopplengde)",
+    "title_en": "Chapter 3 — Speed, Reaction, and Stopping Distance",
+    "difficulty": "intermediate",
+    "podcast_reference": "Michaels råd: Fart, bremselengde og 3-sekundersregelen",
+    "order": 3,
+    "section_tags": [
+      "fart",
+      "reaksjonslengde",
+      "bremselengde",
+      "stopplengde",
+      "tresekundersregelen"
+    ],
     "sections": [
       {
         "section_type": "situation",
         "title_no": "Situasjonen: Et barn løper ut i veien",
-        "title_th": "สถานการณ์: เด็กวิ่งออกมาบนถนน",
-        "title_en": "The situation: A child runs onto the road",
-        "content_no": "Du kjører i et boligområde i 50 km/t. Plutselig løper et barn ut i veien 30 meter foran deg. Klarer du å stoppe i tide?",
-        "content_th": "คุณขับรถในเมือง ความเร็วคือ 50 กม./ชม. จู่ๆ เด็กวิ่งออกมาบนถนนห่างจากคุณ 30 เมตร คุณสามารถหยุดได้ทันเวลาหรือไม่?",
-        "content_en": "You're driving in a city at 50 km/h. Suddenly a child runs onto the road 30 meters ahead. Can you stop in time?"
+        "title_th": "สถานการณ์: เด็กวิ่งออกสู่ถนนกะทันหัน",
+        "title_en": "The situation: A child runs into the road",
+        "content_no": "Du kjører i et boligområde. Plutselig spretter en ball ut mellom to biler, og et barn følger etter. Du må stoppe umiddelbart. Rekker du det?",
+        "content_th": "คุณกำลังขับรถในย่านที่พักอาศัย จู่ๆ ลูกบอลก็กระดอนออกมาจากระหว่างรถสองคัน และมีเด็กวิ่งตามออกมา คุณต้องหยุดรถทันที คุณจะเบรกทันหรือไม่?",
+        "content_en": "You are driving in a residential area. Suddenly a ball bounces out between parked cars, followed by a child. You must stop immediately. Can you do it in time?"
       },
       {
         "section_type": "theory",
-        "title_no": "Michaels formel: Stopplengde = reaksjonslengde + bremselengde",
-        "title_th": "สูตรของไมเคิล: ระยะหยุดรวม = ระยะตอบสนอง + ระยะการหยุด",
-        "title_en": "Michael's formula: Stopping distance = reaction distance + braking distance",
-        "content_no": "Ved 50 km/t:\n- Reaksjonslengde: ca. 14 meter (basert på 1 sekunds reaksjonstid)\n- Bremselengde: ca. 27 meter\n- TOTAL STOPPLENGDE: 41 meter\n\nBarnet er 30 meter unna, og bilen bruker 41 meter på å stoppe. Du vil ende opp med å treffe barnet. Husk HAV-regelen: Vær varsom og avpass farten etter forholdene.",
-        "content_th": "ที่ 50 กม./ชม.:\n- ระยะตอบสนอง: ประมาณ 14 เมตร (1 วินาที)\n- ระยะการหยุด: ประมาณ 27 เมตร\n- ระยะหยุดรวม: 41 เมตร\n\nเด็กอยู่ห่าง 30 เมตร คุณชนเด็ก นี่คือเหตุผลที่ความเร็วสำคัญ",
-        "content_en": "At 50 km/h:\n- Reaction distance: about 14 meters (1 second)\n- Braking distance: about 27 meters\n- TOTAL STOPPING DISTANCE: 41 meters\n\nThe child is 30 meters away. You hit the child. This is why speed matters."
+        "title_no": "Michaels formel: Stopplengde = Reaksjonslengde + Bremselengde",
+        "title_th": "สูตรของ Michael: ระยะหยุดรถ = ระยะคิดตอบสนอง + ระยะเบรกจริง",
+        "title_en": "Michael's formula: Stopping distance = Reaction distance + Braking distance",
+        "content_no": "Stopplengden består av to deler: 1. Reaksjonslengde: Hvor langt bilen ruller mens du oppdager faren og flytter foten (ca. 1 sekund). 2. Bremselengde: Hvor langt bilen sklir etter at bremsen er trykket inn. Husk at bremselengden fire-dobles når du dobler farten!",
+        "content_th": "ระยะหยุดรถทั้งหมดประกอบด้วย 2 ส่วน: 1. ระยะคิดตอบสนอง: ระยะที่รถยังแล่นต่อไปในขณะที่คุณมองเห็นเหตุการณ์และยกเท้าไปเหยียบเบรก (ประมาณ 1 วินาที) 2. ระยะเบรกจริง: ระยะที่ล้อและเบรกหยุดรถหลังจากเหยียบเบรกแล้ว จำไว้ว่า: หากเพิ่มความเร็วเป็น 2 เท่า ระยะเบรกจะเพิ่มขึ้นถึง 4 เท่า!",
+        "content_en": "Stopping distance consists of two parts: 1. Reaction distance: The distance traveled while recognizing danger and hitting the brakes. 2. Braking distance: The distance traveled while brakes are engaged. Braking distance quadruples when speed doubles!"
       },
       {
         "section_type": "practice",
-        "title_no": "Praktisk tips",
-        "title_th": "เคล็ดลับปฏิบัติ",
-        "title_en": "Practical tips",
-        "content_no": "1. I trange gater og boligområder: Hold 30 km/t eller lavere. 2. På landeveien: Vær oppmerksom på total stopplengde. 3. På våt eller glatt veibane øker bremselengden dramatisk – senk farten!",
-        "content_th": "1. ในเมือง: ขับรถ 30 กม./ชม. หรือน้อยกว่า 2. บนถนนชนบท: คำนวณระยะหยุด 3. ในฝนหรือหิมะ: ระยะหยุดเพิ่มขึ้น ขับรถช้าลง",
-        "content_en": "1. In cities: Drive 30 km/h or less. 2. On rural roads: Calculate stopping distance. 3. In rain/snow: Stopping distance increases. Drive slower."
+        "title_no": "Praktisk tips: 3-sekundersregelen",
+        "title_th": "คำแนะนำภาคปฏิบัติ: กฎ 3 วินาที",
+        "title_en": "Practical tips: The 3-second rule",
+        "content_no": "Velg et fast merke foran bilen du følger (et skilt, lyktestolpe). Når bilen foran passerer merket, teller du rolig: '1001, 1002, 1003'. Passerer du merket før du har talt ferdig, kjører du for tett!",
+        "content_th": "เลือกจุดสังเกตข้างหน้า เช่น เสาไฟหรือป้ายจราจร เมื่อรถคันหน้าแล่นผ่านจุดนั้น ให้เริ่มนับในใจอย่างใจเย็น: '1001, 1002, 1003' หากรถของคุณแล่นถึงจุดสังเกตก่อนนับเสร็จ แสดงว่าคุณขับชิดคันหน้าเกินไป!",
+        "content_en": "Pick a fixed marker ahead. When the vehicle in front passes it, count calmly: '1001, 1002, 1003'. If you reach the marker before finishing, you are following too closely!"
       }
     ],
-    "section_tags": [
-      "fart",
-      "bremselengde",
-      "sikkerhet"
-    ],
-    "difficulty": "hard",
-    "podcast_reference": "Fart og bremselengde",
-    "order": 3
+    "screens": [
+      {
+        "screen_id": "CH03-001",
+        "screen_type": "intro",
+        "title_no": "Fartens fysikk og stopplengde",
+        "title_th": "ฟิสิกส์ของความเร็วและระยะหยุดรถ",
+        "asset_id": "CH03-FART-001",
+        "pair_asset_id": null,
+        "content_th": "ความเร็วคือตัวแปรที่เปลี่ยนทุกอย่างบนถนน เมื่อคุณเพิ่มความเร็วเป็นสองเท่า ระยะเบรกจะเพิ่มขึ้นถึงสี่เท่าตามหลักฟิสิกส์ การควบคุมความเร็วคือรากฐานความปลอดภัยที่สำคัญที่สุดครับ",
+        "glossary_terms": [
+          "Stopplengde",
+          "Fartsgrense"
+        ]
+      },
+      {
+        "screen_id": "CH03-002",
+        "screen_type": "choice",
+        "title_no": "Reaksjonslengde: Hvor langt ruller bilen?",
+        "title_th": "ระยะคิดตอบสนอง: รถแล่นไปไกลแค่ไหนก่อนแตะเบรก?",
+        "asset_id": "CH03-FART-002",
+        "pair_asset_id": "CH03-PAR-001",
+        "content_th": "ก่อนที่คุณจะเหยียบเบรก สมองต้องใช้เวลาสังเกตและตัดสินใจประมาณ 1 วินาที ที่ความเร็ว 80 กม./ชม. รถจะแล่นไปไกลถึง 24 เมตรโดยที่คุณยังไม่ได้เริ่มเบรกเลยแม้แต่น้อย!",
+        "glossary_terms": [
+          "Reaksjonslengde",
+          "Reaksjonstid"
+        ]
+      },
+      {
+        "screen_id": "CH03-003",
+        "screen_type": "sequence",
+        "title_no": "Bremselengde på tørt og vått føre",
+        "title_th": "ระยะเบรกจริงบนถนนแห้งและถนนเปียก",
+        "asset_id": "CH03-FART-003",
+        "pair_asset_id": null,
+        "content_th": "ระยะเบรกขึ้นอยู่กับสภาพผิวถนนโดยตรง บนถนนเปียกหรือถนนลื่นในนอร์เวย์ ระยะเบรกจะเพิ่มขึ้นเป็นสองเท่าหรือมากกว่าเมื่อเทียบกับถนนแห้ง",
+        "glossary_terms": [
+          "Bremselengde",
+          "Veggrep"
+        ]
+      },
+      {
+        "screen_id": "CH03-004",
+        "screen_type": "road_check",
+        "title_no": "Road Check ⚡ Fart og stopplengde",
+        "title_th": "Road Check ⚡ ทดสอบความเข้าใจ: ความเร็วและระยะหยุดรถ",
+        "road_check_id": "CH03-RC-001",
+        "asset_id": "CH03-FART-004",
+        "pair_asset_id": null,
+        "content_th": "สามคำถามสั้นเพื่อทดสอบความแม่นยำเรื่องการคำนวณและระยะหยุดรถ",
+        "glossary_terms": [
+          "Følgeavstand"
+        ]
+      },
+      {
+        "screen_id": "CH03-005",
+        "screen_type": "choice",
+        "title_no": "3-sekundersregelen for trygg avstand",
+        "title_th": "กฎ 3 วินาทีเพื่อสร้างระยะห่างที่ปลอดภัย",
+        "asset_id": "CH03-FART-005",
+        "pair_asset_id": "CH03-PAR-002",
+        "content_th": "การเว้นระยะห่าง 3 วินาทีช่วยให้คุณมีเวลาเพียงพอในการเบรกอย่างนุ่มนวลและป้องกันการชนท้ายเมื่อรถคันหน้าเบรกกะทันหัน",
+        "glossary_terms": [
+          "Tresekundersregelen",
+          "Sikkerhetsmargin"
+        ]
+      },
+      {
+        "screen_id": "CH03-006",
+        "screen_type": "summary",
+        "title_no": "Oppsummering: Fart, reaksjon og stopp",
+        "title_th": "สรุป: ความเร็ว ระยะตอบสนอง และการหยุดรถ",
+        "asset_id": "CH03-FART-006",
+        "pair_asset_id": null,
+        "content_th": "คุณเข้าใจหลักการคำนวณระยะหยุดรถเรียบร้อยแล้ว จำไว้เสมอ: ปรับความเร็วตามสภาพถนนและเว้นระยะห่างอย่างน้อย 3 วินาทีเสมอครับ!",
+        "glossary_terms": [
+          "Vegtrafikkloven § 6"
+        ]
+      }
+    ]
   },
   {
     "chapter_id": "ch_didaktikk_laering",
@@ -337,5 +419,384 @@
     "difficulty": "intermediate",
     "podcast_reference": "Thailand-norsk trafikk-sammenligning",
     "order": 6
+  },
+  {
+    "chapter_id": "ch_trinn1_grunnkurs",
+    "chapter_code": "CH05",
+    "title_no": "Kapittel 5 — Mål og rammer for Trinn 1 (Trafikalt grunnkurs)",
+    "title_th": "บทที่ 5 — เป้าหมายและกรอบของขั้นที่ 1 (หลักสูตรพื้นฐานจราจร)",
+    "title_en": "Chapter 5 — Goals and Framework for Step 1 (Traffic Basic Course)",
+    "difficulty": "beginner",
+    "podcast_reference": "Michaels råd: Veien til førerkortet i Norge",
+    "order": 7,
+    "section_tags": [
+      "trinn1",
+      "trafikalt_grunnkurs",
+      "forstehjelp",
+      "morkekjoring",
+      "ovingskjoring",
+      "ledsager"
+    ],
+    "sections": [
+      {
+        "section_type": "situation",
+        "title_no": "Situasjonen: Drømmen om førerkort i Norge",
+        "title_th": "สถานการณ์: การเริ่มต้นทำใบขับขี่ในนอร์เวย์",
+        "title_en": "The situation: Starting your driving license in Norway",
+        "content_no": "Du ønsker å ta førerkort i Norge. Hva er det aller første steget du må gjennomføre før du har lov til å sette deg bak rattet for å øve?",
+        "content_th": "คุณต้องการทำใบขับขี่ในนอร์เวย์ ขั้นตอนแรกสุดที่คุณต้องผ่านก่อนที่จะมีสิทธิ์นั่งหลังพวงมาลัยเพื่อฝึกขับรถคืออะไร?",
+        "content_en": "You want to get a driver's license in Norway. What is the very first step you must complete before you are allowed to practice driving?"
+      },
+      {
+        "section_type": "theory",
+        "title_no": "Michaels opplæringsmodell: De 4 trinnene",
+        "title_th": "รูปแบบการสอนของ Michael: 4 ขั้นตอนสู่ใบขับขี่",
+        "title_en": "Michael's training model: The 4 steps",
+        "content_no": "I Norge er opplæringen delt inn i 4 trinn: Trinn 1 (Trafikalt grunnkurs på 17 timer), Trinn 2 (Grunnleggende kjøretøybehandling), Trinn 3 (Trafikal del og glattkjøring), og Trinn 4 (Avsluttende opplæring og sikkerhetskurs på vei).",
+        "content_th": "ในนอร์เวย์ การเรียนขับรถแบ่งเป็น 4 ขั้นตอน: ขั้นที่ 1 (หลักสูตรพื้นฐานจราจร 17 ชม.) ขั้นที่ 2 (การควบคุมรถขั้นพื้นฐาน) ขั้นที่ 3 (การขับในจราจรจริงและสนามลื่น) และขั้นที่ 4 (การขับขี่ขั้นสมบูรณ์และการขับทางไกล)",
+        "content_en": "Driver training in Norway has 4 steps: Step 1 (Traffic basic course, 17 hours), Step 2 (Basic vehicle control), Step 3 (Traffic skills and skid pan), and Step 4 (Final training and road safety course)."
+      },
+      {
+        "section_type": "practice",
+        "title_no": "Praktisk tips: Regler for øvingskjøring",
+        "title_th": "คำแนะนำภาคปฏิบัติ: กฎสำหรับการฝึกขับรถส่วนบุคคล",
+        "title_en": "Practical tips: Rules for private practice driving",
+        "content_no": "Når Trinn 1 er fullført og du har fylt 16 år, har du rett til å øvingskjøre. Bilen må ha rød L bak og ekstra innvendig speil. Ledsager må være fylt 25 år og ha hatt førerkort sammenhengende i minst 5 år. Husk alltid bevis og legitimasjon!",
+        "content_th": "เมื่อจบขั้นที่ 1 และอายุครบ 16 ปี คุณมีสิทธิ์ฝึกขับรถส่วนบุคคลได้ ตัวรถต้องติดป้ายตัวแอลสีแดง (Rød L) ด้านหลัง และมีกระจกมองหลังเสริมด้านใน ผู้ร่วมฝึกต้องอายุ 25 ปีขึ้นไปและถือใบขับขี่ติดต่อกันอย่างน้อย 5 ปี และต้องพกบัตร Bevis พร้อมบัตรประชาชนเสมอ!",
+        "content_en": "When Step 1 is done and you are 16, you can practice drive. The car must have a red L plate on the back and an extra mirror inside. Accompanying driver must be at least 25 with 5 years continuous license. Always bring permit and photo ID!"
+      }
+    ],
+    "screens": [
+      {
+        "screen_id": "CH05-001",
+        "screen_type": "sequence",
+        "title_no": "De 4 opplæringstrinnene i Norge",
+        "title_th": "4 ขั้นตอนการเรียนขับรถในนอร์เวย์",
+        "asset_id": "CH05-TR1-001",
+        "pair_asset_id": null,
+        "content_th": "ในนอร์เวย์ การเรียนขับรถแบ่งเป็น 4 ขั้นตอนที่ชัดเจน เพื่อให้คุณปลอดภัยที่สุด ทุกคนต้องเริ่มจากขั้นที่ 1 ก่อน จึงจะก้าวต่อไปได้ครับ",
+        "glossary_terms": [
+          "Opplæringsmodell",
+          "Trinn 1"
+        ]
+      },
+      {
+        "screen_id": "CH05-002",
+        "screen_type": "choice",
+        "title_no": "Hvem må ta Trinn 1? (Under vs. over 25 år)",
+        "title_th": "ใครบ้างที่ต้องเรียนขั้นที่ 1? (อายุต่ำกว่า vs เกิน 25 ปี)",
+        "asset_id": "CH05-TR1-002",
+        "pair_asset_id": "CH05-PAR-001",
+        "content_th": "หากอายุต่ำกว่า 25 ปีต้องเรียนครบ 17 ชม. หากอายุ 25 ปีขึ้นไปได้รับการยกเว้นทฤษฎีทั่วไป แต่บังคับต้องผ่านการปฐมพยาบาลและการขับในความมืดครับ",
+        "glossary_terms": [
+          "Trafikalt grunnkurs",
+          "Fritak"
+        ]
+      },
+      {
+        "screen_id": "CH05-003",
+        "screen_type": "sequence",
+        "title_no": "Hva inneholder Trinn 1? (17 timer)",
+        "title_th": "หลักสูตรขั้นที่ 1 เรียนอะไรบ้าง? (รวม 17 ชั่วโมง)",
+        "asset_id": "CH05-TR1-003",
+        "pair_asset_id": null,
+        "content_th": "หลักสูตร Trinn 1 ประกอบด้วย: ทฤษฎีความปลอดภัย 10 ชม. การปฐมพยาบาล 4 ชม. และการสาธิตการขับขี่ในความมืด 3 ชม.",
+        "glossary_terms": [
+          "Førstehjelp",
+          "Mørkekjøringsdemonstrasjon"
+        ]
+      },
+      {
+        "screen_id": "CH05-004",
+        "screen_type": "road_check",
+        "title_no": "Road Check ⚡ Mål og rammer for Trinn 1",
+        "title_th": "Road Check ⚡ ทดสอบความเข้าใจ: กฎเกณฑ์ของขั้นที่ 1",
+        "road_check_id": "CH05-RC-001",
+        "asset_id": "CH05-TR1-004",
+        "pair_asset_id": null,
+        "content_th": "สามคำถามสั้นเพื่อยืนยันว่าคุณเข้าใจสิทธิ์และข้อบังคับของ Trinn 1 อย่างถูกต้อง",
+        "glossary_terms": [
+          "Trafikksikkerhet"
+        ]
+      },
+      {
+        "screen_id": "CH05-005",
+        "screen_type": "choice",
+        "title_no": "Rettigheter og regler for privat øvingskjøring",
+        "title_th": "สิทธิ์และกฎสำคัญในการฝึกขับรถส่วนบุคคล",
+        "asset_id": "CH05-TR1-005",
+        "pair_asset_id": "CH05-PAR-002",
+        "content_th": "เมื่อผ่านขั้นที่ 1 และอายุครบ 16 ปี คุณเริ่มฝึกขับรถได้ โดยต้องมีป้าย L กระจกเสริม ผู้ร่วมฝึกอายุ 25 ปีขึ้นไป และพกบัตร Bevis คู่กับบัตรประจำตัวเสมอ",
+        "glossary_terms": [
+          "Øvingskjøring",
+          "Ledsager",
+          "Bevis"
+        ]
+      },
+      {
+        "screen_id": "CH05-006",
+        "screen_type": "summary",
+        "title_no": "Oppsummering og veien videre til Trinn 2",
+        "title_th": "สรุปเนื้อหาและก้าวต่อไปสู่ขั้นที่ 2",
+        "asset_id": "CH05-TR1-006",
+        "pair_asset_id": null,
+        "content_th": "คุณเข้าใจเป้าหมายของขั้นที่ 1 เรียบร้อยแล้ว พร้อมก้าวต่อไปสู่ขั้นที่ 2 เพื่อฝึกฝนการควบคุมรถอย่างมั่นใจ!",
+        "glossary_terms": [
+          "Trinnvurdering",
+          "Legitimasjon"
+        ]
+      }
+    ]
+  },
+  {
+    "chapter_id": "ch_forbikjoring_rygging",
+    "chapter_code": "CH06",
+    "title_no": "Kapittel 6 — Forbikjøring, rygging og vending",
+    "title_th": "บทที่ 6 — การแซง การถอยหลัง และการกลับรถ (Forbikjøring og rygging)",
+    "title_en": "Chapter 6 — Overtaking, Reversing, and Turning",
+    "difficulty": "intermediate",
+    "podcast_reference": "Michaels råd: Sikker forbikjøring og rygging",
+    "order": 8,
+    "section_tags": [
+      "forbikjoring",
+      "rygging",
+      "vending",
+      "sikkerhetsmargin",
+      "glidelasprinsippet"
+    ],
+    "sections": [
+      {
+        "section_type": "situation",
+        "title_no": "Situasjonen: En traktor kjører sakte på landeveien",
+        "title_th": "สถานการณ์: รถแทรกเตอร์แล่นช้าบนถนนนอกเมือง",
+        "title_en": "The situation: A slow tractor on a rural road",
+        "content_no": "Du ligger bak en traktor i 30 km/t på en svingete landevei. Bak deg danner det seg kø. Du vil forbi, men sikten er begrenset. Hva gjør du?",
+        "content_th": "คุณขับตามหลังรถแทรกเตอร์ที่วิ่งช้า 30 กม./ชม. บนถนนนอกเมืองที่มีทางโค้ง ข้างหลังเริ่มมีรถติดสะสม คุณอยากแซงแต่ทัศนวิสัยจำกัด คุณควรทำอย่างไร?",
+        "content_en": "You are following a slow tractor on a winding rural road. A queue is forming behind you. You want to overtake, but sight is limited. What do you do?"
+      },
+      {
+        "section_type": "theory",
+        "title_no": "Michaels regel for forbikjøring: Alltid til venstre med stor margin",
+        "title_th": "กฎการแซงของ Michael: แซงทางซ้ายเสมอและเผื่อระยะปลอดภัยสูง",
+        "title_en": "Michael's rule: Always overtake on the left with large safety margin",
+        "content_no": "Forbikjøring skal som hovedregel skje til venstre. Du må ha fri sikt på lang nok strekning og være sikker på at du kan svinge inn igjen uten å hindre den du kjører forbi. Forbikjøring er strengt forbudt foran bakketopp, i uoversiktlige svinger og foran gangfelt!",
+        "content_th": "ตามกฎทั่วไปการแซงต้องแซงทางซ้ายเสมอ คุณต้องมีทัศนวิสัยชัดเจนเป็นระยะทางยาวพอ และมั่นใจว่ากลับเข้าช่องทางเดิมได้โดยไม่รบกวนรถคันที่ถูกแซง ห้ามแซงเด็ดขาดบริเวณก่อนถึงยอดเนิน ทางโค้งที่มองไม่เห็น และก่อนถึงทางม้าลาย!",
+        "content_en": "Overtaking must normally be on the left. You must have clear sight for a sufficient distance and be sure you can return safely. Overtaking is strictly prohibited before crests, blind curves, and pedestrian crossings!"
+      },
+      {
+        "section_type": "practice",
+        "title_no": "Praktisk tips: Rygging og glidelåsprinsippet",
+        "title_th": "คำแนะนำภาคปฏิบัติ: การถอยหลังและหลักการสลับฟันปลา",
+        "title_en": "Practical tips: Reversing and the zipper principle",
+        "content_no": "Ved rygging har du ALLTID full vikeplikt for all annen trafikk. Er du i tvil om sikten, må du ha en person utenfor som passer på. Ved reduksjon av kjørefelt bruker vi glidelåsprinsippet: én og én bil flettes rolig inn.",
+        "content_th": "เมื่อถอยหลัง คุณมีหน้าที่ให้ทางแก่การจราจรอื่นทั้งหมด 100% หากมองไม่เห็น ให้มีผู้ช่วยดูท้ายรถเสมอ เมื่อช่องทางลดลงให้ใช้หลักการสลับฟันปลา (Glidelås) สลับกันเข้าทีละคันอย่างสุภาพ",
+        "content_en": "When reversing you ALWAYS have full duty to yield to all traffic. Use a helper if sight is limited. When lanes merge, use the zipper principle smoothly."
+      }
+    ],
+    "screens": [
+      {
+        "screen_id": "CH06-001",
+        "screen_type": "intro",
+        "title_no": "Forbikjøring: Hovedregler og unntak",
+        "title_th": "การแซงรถ: กฎหลักและข้อยกเว้น",
+        "asset_id": "CH06-FORB-001",
+        "pair_asset_id": null,
+        "content_th": "การแซงเป็นหนึ่งในสถานการณ์ที่อันตรายที่สุดในนอร์เวย์ กฎหลักคือแซงทางซ้ายเสมอ ยกเว้นเมื่อรถคันหน้ากำลังเลี้ยวซ้ายหรือในการจราจรติดขัดที่มีหลายช่องทางครับ",
+        "glossary_terms": [
+          "Forbikjøring",
+          "Kjørefelt"
+        ]
+      },
+      {
+        "screen_id": "CH06-002",
+        "screen_type": "choice",
+        "title_no": "Hvor er forbikjøring strengt forbudt?",
+        "title_th": "จุดใดที่ห้ามแซงรถอย่างเด็ดขาด?",
+        "asset_id": "CH06-FORB-002",
+        "pair_asset_id": "CH06-PAR-001",
+        "content_th": "ห้ามแซงบริเวณก่อนถึงยอดเนิน ทางโค้งแคบ ทางแยกที่ไม่มีป้ายชัดเจน และบริเวณใกล้ทางม้าลาย เพราะอาจมีคนเดินข้ามถนนถูกบังอยู่ครับ",
+        "glossary_terms": [
+          "Uoversiktlig kurve",
+          "Sperrelinje"
+        ]
+      },
+      {
+        "screen_id": "CH06-003",
+        "screen_type": "sequence",
+        "title_no": "Forbikjøringens fire faser",
+        "title_th": "สี่ขั้นตอนของการแซงรถอย่างปลอดภัย",
+        "asset_id": "CH06-FORB-003",
+        "pair_asset_id": null,
+        "content_th": "การแซงที่ปลอดภัยมี 4 ขั้น: 1. ตรวจสอบทัศนวิสัย 2. เปิดไฟเลี้ยวซ้ายและเร่งความเร็ว 3. แซงโดยเว้นระยะห่างด้านข้าง 4. เห็นรถคันที่ถูกแซงในกระจกมองหลังก่อนเปิดไฟเลี้ยวขวากลับเข้าเลน",
+        "glossary_terms": [
+          "Sikkerhetsmargin",
+          "Blindsoner"
+        ]
+      },
+      {
+        "screen_id": "CH06-004",
+        "screen_type": "road_check",
+        "title_no": "Road Check ⚡ Forbikjøring og rygging",
+        "title_th": "Road Check ⚡ ทดสอบความเข้าใจ: การแซงและการถอยหลัง",
+        "road_check_id": "CH06-RC-001",
+        "asset_id": "CH06-FORB-004",
+        "pair_asset_id": null,
+        "content_th": "สามคำถามสั้นเพื่อทดสอบการตัดสินใจแซงและกฎการถอยหลังอย่างปลอดภัย",
+        "glossary_terms": [
+          "Vikeplikt"
+        ]
+      },
+      {
+        "screen_id": "CH06-005",
+        "screen_type": "choice",
+        "title_no": "Rygging og vending: Full vikeplikt",
+        "title_th": "การถอยหลังและการกลับรถ: ให้ทางทุกกรณี",
+        "asset_id": "CH06-FORB-005",
+        "pair_asset_id": "CH06-PAR-002",
+        "content_th": "เมื่อคุณถอยหลังหรือกลับรถ คุณต้องให้ทางแก่ทุกคน ทั้งรถ คนเดินเท้า และจักรยาน ห้ามถอยหลังหรือกลับรถบนทางด่วนเด็ดขาดครับ",
+        "glossary_terms": [
+          "Rygging",
+          "Vending"
+        ]
+      },
+      {
+        "screen_id": "CH06-006",
+        "screen_type": "summary",
+        "title_no": "Oppsummering og glidelåsprinsippet",
+        "title_th": "สรุปและการผสานเลนแบบสลับฟันปลา",
+        "asset_id": "CH06-FORB-006",
+        "pair_asset_id": null,
+        "content_th": "หากไม่มั่นใจ 100% อย่าแซงเด็ดขาด! และเมื่อช่องทางลดลง จงใช้หลักการสลับฟันปลาเพื่อความคล่องตัวและสุภาพบนท้องถนนครับ",
+        "glossary_terms": [
+          "Glidelåsprinsippet"
+        ]
+      }
+    ]
+  },
+  {
+    "chapter_id": "ch_stans_parkering",
+    "chapter_code": "CH07",
+    "title_no": "Kapittel 7 — Stans og parkering",
+    "title_th": "บทที่ 7 — การหยุดรถและการจอดรถ (Stans og parkering)",
+    "title_en": "Chapter 7 — Stopping and Parking",
+    "difficulty": "beginner",
+    "podcast_reference": "Michaels råd: Slik unngår du parkeringsbøter",
+    "order": 9,
+    "section_tags": [
+      "stans",
+      "parkering",
+      "femmetersregelen",
+      "parkeringsforbud",
+      "stansforbud"
+    ],
+    "sections": [
+      {
+        "section_type": "situation",
+        "title_no": "Situasjonen: Raskt ærend ved butikken",
+        "title_th": "สถานการณ์: จอดส่งของหน้าร้านค้าแป๊บเดียว",
+        "title_en": "The situation: A quick errand by the shop",
+        "content_no": "Du skal bare hente en pakke og blir stående med motoren i gang og varselblink på i et kryss. Er dette lovlig stans eller ulovlig parkering?",
+        "content_th": "คุณต้องการแวะรับพัสดุเพียงครู่เดียว จึงจอดติดเครื่องยนต์และเปิดไฟฉุกเฉินไว้ใกล้ทางแยก การกระทำนี้ถือเป็นการหยุดรถที่ถูกกฎหมายหรือการจอดที่ผิดกฎหมาย?",
+        "content_en": "You only need to pick up a parcel and stop with engine running near an intersection. Is this legal stopping or illegal parking?"
+      },
+      {
+        "section_type": "theory",
+        "title_no": "Forskjellen på stans og parkering",
+        "title_th": "ความแตกต่างระหว่างการหยุดรถ (Stans) และการจอดรถ (Parkering)",
+        "title_en": "The difference between stopping and parking",
+        "content_no": "Stans er kortest mulig stopp for av- eller påstigning, eller av- og pålessing. Enhver annen hensetting regnes som parkering – selv om føreren ikke forlater bilen! Skilt 370 (rødt kryss) forbyr all stans. Skilt 372 (én rød strek) forbyr bare parkering.",
+        "content_th": "การหยุดรถ (Stans) คือการหยุดชั่วคราวเพื่อส่งคนหรือขนถ่ายสิ่งของเท่าที่จำเป็นเท่านั้น การหยุดนิ่งนอกเหนือจากนี้ถือเป็นการจอดรถ (Parkering) ทั้งสิ้น แม้จะนั่งอยู่ในรถก็ตาม! ป้ายกากบาทสีแดง (370) ห้ามหยุดรถเด็ดขาด ส่วนป้ายขีดเดียว (372) ห้ามจอดรถแต่หยุดส่งคนได้",
+        "content_en": "Stopping is the briefest pause for boarding or unloading. Any other placement is parking – even if you stay in the car! Sign 370 (red cross) forbids all stopping. Sign 372 (single slash) forbids parking only."
+      },
+      {
+        "section_type": "practice",
+        "title_no": "Praktisk tips: 5-metersregelen",
+        "title_th": "คำแนะนำภาคปฏิบัติ: กฎระยะห่าง 5 เมตร",
+        "title_en": "Practical tips: The 5-meter rule",
+        "content_no": "Det er forbudt å stanse eller parkere nærmere enn 5 meter fra et vegkryss (målt fra der fortauskanten begynner å runde) eller foran et gangfelt. Dette sikrer at myke trafikanter og kryssende biler har full sikt.",
+        "content_th": "ห้ามหยุดหรือจอดรถในระยะน้อยกว่า 5 เมตรจากทางแยก (วัดจากจุดที่ขอบทางเริ่มโค้ง) หรือก่อนถึงทางม้าลาย เพื่อเปิดทัศนวิสัยให้คนเดินถนนและรถคันอื่นมองเห็นกันได้อย่างชัดเจน",
+        "content_en": "It is illegal to stop or park closer than 5 meters from an intersection (from where the curb rounds) or in front of a crossing, ensuring clear sight for all."
+      }
+    ],
+    "screens": [
+      {
+        "screen_id": "CH07-001",
+        "screen_type": "intro",
+        "title_no": "Forskjellen på stans og parkering",
+        "title_th": "ความแตกต่างระหว่างการหยุดรถและการจอดรถ",
+        "asset_id": "CH07-PARK-001",
+        "pair_asset_id": null,
+        "content_th": "การหยุดรถ (Stans) คือการส่งคนหรือขนของชั่วคราว ส่วนการจอดรถ (Parkering) คือการจอดนิ่งนอกเหนือจากนั้น แม้คุณจะติดเครื่องยนต์หรือนั่งอยู่ในรถก็ตามครับ",
+        "glossary_terms": [
+          "Stans",
+          "Parkering"
+        ]
+      },
+      {
+        "screen_id": "CH07-002",
+        "screen_type": "choice",
+        "title_no": "Skilt 370 (Stans forbudt) vs. Skilt 372 (Parkering forbudt)",
+        "title_th": "ป้ายห้ามหยุดรถ (370) vs ป้ายห้ามจอดรถ (372)",
+        "asset_id": "CH07-PARK-002",
+        "pair_asset_id": "CH07-PAR-001",
+        "content_th": "ป้ายกากบาทสีแดง (370) ห้ามหยุดรถเด็ดขาดแม้แต่วินาทีเดียว ส่วนป้ายขีดเดี่ยวสีแดง (372) ห้ามจอดรถ แต่อนุญาตให้หยุดส่งคนหรือยกของสั้นๆ ได้ครับ",
+        "glossary_terms": [
+          "Stans forbudt",
+          "Parkering forbudt"
+        ]
+      },
+      {
+        "screen_id": "CH07-003",
+        "screen_type": "sequence",
+        "title_no": "Hvor er det alltid forbudt å stanse?",
+        "title_th": "จุดใดบ้างที่ห้ามหยุดรถตลอดเวลา?",
+        "asset_id": "CH07-PARK-003",
+        "pair_asset_id": null,
+        "content_th": "ห้ามหยุดรถบนทางเท้า ทางจักรยาน ทางม้าลาย ในอุโมงค์ บนยอดเนิน และบนทางด่วน เพราะจะกีดขวางและก่อให้เกิดอุบัติเหตุร้ายแรงได้ครับ",
+        "glossary_terms": [
+          "Fortau",
+          "Gangfelt"
+        ]
+      },
+      {
+        "screen_id": "CH07-004",
+        "screen_type": "road_check",
+        "title_no": "Road Check ⚡ Stans og parkering",
+        "title_th": "Road Check ⚡ ทดสอบความเข้าใจ: การหยุดและจอดรถ",
+        "road_check_id": "CH07-RC-001",
+        "asset_id": "CH07-PARK-004",
+        "pair_asset_id": null,
+        "content_th": "สามคำถามสั้นเพื่อทดสอบความแม่นยำเรื่องกฎระยะห่าง 5 เมตรและป้ายจราจร",
+        "glossary_terms": [
+          "Parkeringsbot"
+        ]
+      },
+      {
+        "screen_id": "CH07-005",
+        "screen_type": "choice",
+        "title_no": "5-metersregelen ved kryss og gangfelt",
+        "title_th": "กฎระยะห่าง 5 เมตรจากทางแยกและทางม้าลาย",
+        "asset_id": "CH07-PARK-005",
+        "pair_asset_id": "CH07-PAR-002",
+        "content_th": "ต้องเว้นระยะห่างอย่างน้อย 5 เมตรจากทางแยกและก่อนถึงทางม้าลายเสมอ เพื่อเปิดแนวสายตาให้ผู้ขับขี่และคนข้ามถนนมองเห็นกันอย่างปลอดภัยครับ",
+        "glossary_terms": [
+          "Femmetersregelen",
+          "Kantstein"
+        ]
+      },
+      {
+        "screen_id": "CH07-006",
+        "screen_type": "summary",
+        "title_no": "Oppsummering: Regler for trygg parkering",
+        "title_th": "สรุป: กฎทองเพื่อการจอดรถอย่างปลอดภัย",
+        "asset_id": "CH07-PARK-006",
+        "pair_asset_id": null,
+        "content_th": "คุณเข้าใจกฎการหยุดและการจอดรถครบถ้วนแล้ว จำกฎ 5 เมตรให้ขึ้นใจ และสังเกตป้ายจราจรเสมอเพื่อความปลอดภัยและไม่โดนใบสั่งครับ!",
+        "glossary_terms": [
+          "Bussholdeplass",
+          "Parkeringslys"
+        ]
+      }
+    ]
   }
 ]
