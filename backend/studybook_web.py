@@ -2069,6 +2069,1613 @@ CH18_LESSONS = [
      "nextChapter": i18n("NESTE: 🚦 DEL IV: TRAFIKKREGLER, VIKEPLIKT OG SAMHANDLING", "ถัดไป: 🚦 ส่วนที่ 4: กฎจราจร การให้ทาง และการขับขี่ร่วมกัน", "NEXT: 🚦 PART IV: TRAFFIC RULES, PRIORITY AND INTERACTION")}
 ]
 
+# KAPITTEL 19: MÅL OG RAMMER FOR TRINN 3 (CH19)
+# ─────────────────────────────────────────────────────────────────────────────
+_CH19_PLACEHOLDERS = [
+    ("ch19_tr3_001", "1", "CH19-TR3-001", "Målet for Trinn 3 trafikal opplæring", "Forstå overgangen fra teknisk bilkontroll til selvstendig og sikker trafikkadferd", "oversiktsperspektiv", "Usikkerhet om hva som kreves for å kjøre i variert trafikk", "fører i bil i bygate", "by og tettsted", "veimerking og fotgjengerfelt", "selvstendig kjøring", "/api/assets/thumbs/thumb_michaels_gatelogikk.jpg", ""),
+    ("ch19_tr3_002", "2", "CH19-TR3-002", "Selvstendig observasjon og samhandling", "Lære å oppdage andre trafikanter tidlig og samhandle uten nøling", "førerperspektiv", "Overraskende situasjoner pga manglende oppmerksomhet", "bil foran fotgjengerfelt", "boliggate", "gangfelt og skilt", "samhandling og flyt", "/api/assets/thumbs/thumb_vegtrafikkloven_3.jpg", "ch19_par_001"),
+    ("ch19_par_001", "2p", "CH19-PAR-001", "Lærerstøtte vs selvstendig vurdering", "Se forskjellen mellom å vente på lærerens instruks og å handle selvstendig", "kupeperspektiv", "Passivitet og avhengighet av ledsagers råd i kritiske situasjoner", "lærer og elev i samtale", "bilkupé", "instrumentpanel", "selvstendighet", "/api/assets/thumbs/thumb_th_pichit_khan_1.jpg", "ch19_tr3_002"),
+    ("ch19_tr3_003", "3", "CH19-TR3-003", "Obligatoriske moduler på Trinn 3", "Ha oversikt over sikkerhetskurs på bane og trinnvurdering", "infoperspektiv", "Uvitenhet om kurskrav før overgang til Trinn 4", "elev ved glattkjøringsbane", "øvingsbane", "baneoppmerking og kjegler", "obligatoriske kurs", "/api/assets/thumbs/thumb_tesla_bremsing_40_a.jpg", ""),
+    ("ch19_tr3_004", "4", "CH19-TR3-004", "Road Check mål og rammer Trinn 3", "Teste forståelse for selvstendighet og sikkerhetskurs på bane", "testperspektiv", "Feilvurdering av egne ferdigheter før variert trafikk", "bil ved startpunkt for test", "landevei", "fartsskilt", "trinnmålskontroll", "/api/assets/thumbs/thumb_vegtrafikkloven_3.jpg", ""),
+    ("ch19_tr3_005", "5", "CH19-TR3-005", "Sikkerhetskurs på bane og veigrep", "Erfare friksjonstap og økt bremselengde på glatt underlag", "baneperspektiv", "Utforkjøring eller kollisjon pga overvurdert veigrep på glatt føre", "bil som bremser på glatt underlag", "glattkjøringsbane", "vann og isflate", "fysikkens lover", "/api/assets/thumbs/thumb_tesla_bremsing_80.jpg", "ch19_par_002"),
+    ("ch19_par_002", "5p", "CH19-PAR-002", "Bremselengde tørr asfalt vs glatt isdekke", "Forstå hvor dramatisk stopplengden øker ved glatt føre", "måleperspektiv", "For høy fart inn mot kurver og hindringer vinterstid", "to biler med stoppmarkering", "testbane", "metermarkeringer", "forskjell i bremselengde", "/api/assets/thumbs/thumb_tesla_bremsing_40_b.jpg", "ch19_tr3_005"),
+    ("ch19_tr3_006", "6", "CH19-TR3-006", "Oppsummering Trinn 3 introduksjon", "Bli motivert for trafikal opplæring og selvstendig kjøring", "mestringsperspektiv", "Mangel på helhetsforståelse for Trinn 3", "bil på åpen landevei mot kysten", "landevei", "midtlinje og fri sikt", "klar for Trinn 3", "/api/assets/thumbs/thumb_hav_regelen_reflekser.jpg", ""),
+]
+
+CH19_ASSETS = {
+    key: {"asset_id": asset_id, "page": page, "scene": scene,
+          "pedagogical_purpose": purpose, "camera_angle": camera,
+          "risk_source": risk, "risikokilde": risk,
+          "vehicles_road_users": actors, "road_type": road,
+          "signs_markings": markings, "learner_discovery": discovery,
+          "hotspots": [], "pair_asset": pair_key, "status": "placeholder", "src": src,
+          "alt": i18n("Illustrasjon av mål og rammer for Trinn 3", "ภาพประกอบเรื่องเป้าหมายและกรอบการเรียนรู้ขั้นตอนที่ 3", "Illustration of goals and framework for Stage 3")}
+    for key, page, asset_id, scene, purpose, camera, risk, actors, road, markings, discovery, src, pair_key in _CH19_PLACEHOLDERS
+}
+
+CH19_LESSONS = [
+    info("CH19-001", "intro", "ch19_tr3_001",
+         "Målet for opplæringen på Trinn 3",
+         "เป้าหมายของการเรียนในขั้นตอนที่ 3",
+         "The Goal for Stage 3 Driver Training",
+         ("På Trinn 3 flyttes fokuset fra pedalene til trafikken rundt deg. Målet er at du skal kjøre sikkert og selvstendig i variert miljø, samhandle med andre og forutse potensielle farer tidlig.",
+          "ในขั้นตอนที่ 3 จุดสนใจจะเปลี่ยนจากการควบคุมแป้นเหยียบไปสู่สภาพการจราจรรอบตัวคุณ เป้าหมายคือการขับขี่ได้อย่างปลอดภัยและมั่นใจด้วยตนเองในสภาพแวดล้อมที่หลากหลาย อยู่ร่วมกับผู้อื่นได้อย่างราบรื่น และคาดการณ์อันตรายล่วงหน้าได้อย่างแม่นยำ",
+          "In Stage 3 the focus shifts from controls to traffic around you. The goal is to drive safely and independently in varied environments, interact with others, and anticipate hazards early.")),
+    info("CH19-002", "choice", "ch19_tr3_002",
+         "Selvstendig observasjon og samhandling",
+         "การสังเกตและอยู่ร่วมกันบนท้องถนนอย่างมั่นใจ",
+         "Independent Observation and Interaction",
+         ("Du må ta egne valg uten å vente på lærerens instruksjoner. Les trafikkskilt, se etter fotgjengere og tilpass farten mykt før veikryss slik at trafikkflyten opprettholdes.",
+          "คุณต้องตัดสินใจด้วยตนเองโดยไม่ต้องรอคำสั่งจากครูฝึก อ่านป้ายจราจร มองหาคนข้ามถนน และปรับลดความเร็วอย่างนุ่มนวลก่อนถึงทางแยกเพื่อให้การจราจรไหลเวียนได้ดี",
+          "Make independent choices without waiting for instructor prompts. Read signs, watch for pedestrians, and adjust speed smoothly before junctions."),
+         pair_asset="ch19_par_001",
+         question=question(
+             ("KONTROLLSPØRSMÅL", "คำถามตรวจสอบ", "CHECK QUESTION"),
+             ("Hva kjennetegner en selvstendig sjåfør på Trinn 3?",
+              "สิ่งใดบ่งบอกถึงผู้ขับขี่ที่มีความมั่นใจและพึ่งพาตนเองได้ในขั้นตอนที่ 3?",
+              "What characterizes an independent driver in Stage 3?"),
+             [
+                 opt("a", "Venter alltid på at ledsageren sier når man skal bremse", "รอให้คนข้างๆ บอกเสมอว่าจะต้องเบรกเมื่อใด", "Always waits for passenger to say when to brake"),
+                 opt("b", "Observerer aktivt, forutser hendelser og tar trygge valg selv", "สังเกตอย่างกระตือรือร้น คาดการณ์เหตุการณ์ และตัดสินใจเลือกทางที่ปลอดภัยด้วยตนเอง", "Actively observes, anticipates events, and makes safe choices independently"),
+                 opt("c", "Kjører fortest mulig gjennom kryss for å spare tid", "รีบขับผ่านทางแยกให้เร็วที่สุดเพื่อประหยัดเวลา", "Drives as fast as possible through junctions to save time"),
+             ],
+             "b",
+             ("En selvstendig sjåfør innhenter informasjon tidlig og handler proaktivt.",
+              "ผู้ขับขี่ที่พึ่งพาตนเองได้จะมองหาข้อมูลล่วงหน้าและลงมือปฏิบัติอย่างปลอดภัยโดยไม่ต้องรอสั่ง",
+              "An independent driver gathers info early and acts proactively.")
+         )),
+    info("CH19-003", "sequence", "ch19_tr3_003",
+         "De obligatoriske delene på Trinn 3",
+         "หลักสูตรภาคบังคับในขั้นตอนที่ 3",
+         "Mandatory Elements in Stage 3",
+         ("Trinn 3 inneholder to sentrale obligatoriske krav: Sikkerhetskurs på bane (4 timer glattkjøring for å oppleve friksjon og bremselengder) og en avsluttende trinnvurderingstime med læreren.",
+          "ขั้นตอนที่ 3 มีสองสิ่งที่กฎหมายกำหนดให้ต้องผ่าน: หลักสูตรความปลอดภัยบนสนามลื่น 4 ชั่วโมงเพื่อเรียนรู้แรงเสียดทานและระยะเบรก และชั่วโมงประเมินผลขั้นตอนที่ 3 ร่วมกับครูฝึก",
+          "Stage 3 includes two mandatory requirements: Safety course on track (4 hours skid pan training) and the final Stage 3 assessment lesson.")),
+    {
+        "id": "CH19-004", "type": "roadCheck", "asset": "ch19_tr3_004", "road_check_id": "CH19-RC-001",
+        "eyebrow": i18n("ROAD CHECK ⚡ TRINN 3", "ROAD CHECK ⚡ ขั้นตอนที่ 3", "ROAD CHECK ⚡ STAGE 3"),
+        "title": i18n("Road Check ⚡ Mål og rammer for Trinn 3", "Road Check ⚡ เป้าหมายและกรอบของขั้นตอนที่ 3", "Road Check ⚡ Stage 3 Goals and Framework"),
+        "questions": [
+            question(
+                ("SPØRSMÅL 1", "คำถามที่ 1", "QUESTION 1"),
+                ("Hva er hovedfokuset for opplæringen på Trinn 3?",
+                 "เป้าหมายหลักในการเรียนรู้ของขั้นตอนที่ 3 คืออะไร?",
+                 "What is the main focus of Stage 3 training?"),
+                [
+                    opt("a", "Å lære hvor pedalene og instrumentene er plassert", "การเรียนรู้ตำแหน่งของแป้นเหยียบและหน้าปัดรถ", "Learning location of pedals and instruments"),
+                    opt("b", "Selvstendig kjøring, samhandling og risikoforståelse i trafikk", "การขับขี่อย่างมั่นใจ การอยู่ร่วมกับผู้อื่น และความเข้าใจเรื่องความเสี่ยง", "Independent driving, interaction, and risk awareness in traffic"),
+                    opt("c", "Å kjøre opp til førerprøven uten ledsager", "การไปสอบปฏิบัติโดยไม่ต้องมีผู้ดูแล", "Taking the practical test without companion"),
+                ],
+                "b",
+                ("På Trinn 3 utvikles trafikal kompetanse og selvstendighet.",
+                 "ขั้นตอนที่ 3 มุ่งเน้นการสร้างความชำนาญในการใช้ถนนร่วมกับผู้อื่นอย่างปลอดภัย",
+                 "Stage 3 develops traffic competence and driver independence.")
+            ),
+            question(
+                ("SPØRSMÅL 2", "คำถามที่ 2", "QUESTION 2"),
+                ("Hva opplever du under Sikkerhetskurs på bane?",
+                 "คุณจะได้เรียนรู้อะไรในหลักสูตรความปลอดภัยบนสนามลื่น?",
+                 "What do you experience during the safety course on track?"),
+                [
+                    opt("a", "Hvordan bilen mister veigrepet og hvor mye bremselengden øker på glatt føre", "การสูญเสียการยึดเกาะถนนและระยะเบรกที่เพิ่มขึ้นอย่างมากบนทางลื่น", "How vehicle loses grip and braking distance increases on slick surfaces"),
+                    opt("b", "Hvordan man kjører fortest mulig i skarpe svinger", "วิธีการขับรถเข้าโค้งให้เร็วที่สุด", "How to drive as fast as possible through corners"),
+                    opt("c", "Hvordan man overstyrer bilens elektroniske hjelpesystemer permanent", "วิธีการปิดระบบช่วยเหลือไฟฟ้าของรถอย่างถาวร", "How to permanently override electronic safety aids"),
+                ],
+                "a",
+                ("Formålet er å innse hvor lite veigrep du har på glatt føre og avpasse farten.",
+                 "เป้าหมายคือให้ตระหนักถึงแรงยึดเกาะที่ลดลงอย่างมากและปรับความเร็วให้เหมาะสม",
+                 "The purpose is realizing limited grip on slippery surfaces and adapting speed.")
+            ),
+            question(
+                ("SPØRSMÅL 3", "คำถามที่ 3", "QUESTION 3"),
+                ("Hva kreves i trinnvurderingstimen på Trinn 3?",
+                 "สิ่งใดที่ต้องแสดงออกในชั่วโมงประเมินผลขั้นตอนที่ 3?",
+                 "What is required in the Stage 3 assessment lesson?"),
+                [
+                    opt("a", "At læreren styrer og eleven kun ser på", "ครูฝึกเป็นคนขับและผู้เรียนแค่นั่งดู", "Instructor steers while student only watches"),
+                    opt("b", "At eleven viser selvstendig kjøring og ærlig selvevaluering", "ผู้เรียนต้องแสดงการขับขี่ได้อย่างมั่นใจและประเมินตนเองอย่างตรงไปตรงมา", "Student demonstrates independent driving and honest self-evaluation"),
+                    opt("c", "At eleven har kjørt minst 5000 kilometer på motorvei", "ผู้เรียนต้องขับบนทางหลวงมาแล้วอย่างน้อย 5000 กิโลเมตร", "Student must have driven 5000 km on motorway"),
+                ],
+                "b",
+                ("Lærer og elev vurderer sammen om målene er nådd før overgang til Trinn 4.",
+                 "ครูและผู้เรียนจะร่วมกันประเมินความพร้อมก่อนที่จะก้าวสู่ขั้นตอนที่ 4",
+                 "Instructor and student jointly assess readiness before moving to Stage 4.")
+            ),
+        ],
+    },
+    info("CH19-005", "choice", "ch19_tr3_005",
+         "Fart, friksjon og bremselengde på glatt underlag",
+         "ความเร็ว แรงเสียดทาน และระยะเบรกบนพื้นผิวที่ลื่น",
+         "Speed, Friction, and Braking Distance on Slippery Road",
+         ("På is eller våt snø kan bremselengden bli fire til åtte ganger lengre enn på tørr asfalt. Lave hastigheter og lang sikkerhetsavstand er den eneste måten å unngå påkjørsler på glatt underlag.",
+          "บนพื้นน้ำแข็งหรือหิมะเปียก ระยะเบรกอาจยาวขึ้นถึง 4 ถึง 8 เท่าเมื่อเทียบกับถนนแห้ง การลดความเร็วและเว้นระยะห่างให้มากจึงเป็นวิธีเดียวที่จะช่วยให้หยุดรถได้ทันท่วงที",
+          "On ice or wet snow braking distance can become 4 to 8 times longer than on dry asphalt. Low speed and large following distance are vital."),
+         pair_asset="ch19_par_002",
+         question=question(
+             ("KONTROLLSPØRSMÅL", "คำถามตรวจสอบ", "CHECK QUESTION"),
+             ("Hvorfor øker bremselengden så drastisk på glatt vei?",
+              "เหตุใดระยะเบรกจึงยาวขึ้นอย่างมากบนถนนลื่น?",
+              "Why does braking distance increase so drastically on slick roads?"),
+             [
+                 opt("a", "Fordi friksjonstallet mellom dekk og veibane synker kraftig", "เพราะค่าแรงเสียดทานระหว่างยางกับพื้นถนนลดลงอย่างมาก", "Because friction between tires and road drops severely"),
+                 opt("b", "Fordi bilens bremseklosser slutter å klemme", "เพราะผ้าเบรกของรถหยุดทำงาน", "Because brake pads stop clamping"),
+                 opt("c", "Fordi luftmotstanden blir mye lavere i kulde", "เพราะแรงต้านอากาศลดลงเมื่ออากาศหนาว", "Because air resistance drops in the cold"),
+             ],
+             "a",
+             ("Glatt underlag gir minimal friksjon uansett biltype.",
+              "พื้นผิวที่ลื่นทำให้มีแรงเสียดทานน้อยมากไม่ว่าจะเป็นรถรุ่นใดก็ตาม",
+              "Slick surfaces offer minimal friction regardless of car model.")
+         )),
+    info("CH19-006", "chapterComplete", "ch19_tr3_006",
+         "Fullført: Mål og rammer for Trinn 3",
+         "จบเนื้อหา: เป้าหมายและกรอบของขั้นตอนที่ 3",
+         "Completed: Goals and Framework for Stage 3",
+         ("Gratulerer med fullført kapittel 19! Du vet nå hva som forventes i trafikal opplæring: selvstendig planlegging, trygg samhandling og dyp respekt for fysikkens lover på glatt underlag.",
+          "ยินดีด้วยที่เรียนจบบทที่ 19 คุณทราบแล้วว่าสิ่งสำคัญในภาคการจราจรคือการตัดสินใจเอง การอยู่ร่วมกับผู้อื่นอย่างปลอดภัย และการเข้าใจกฎของแรงเสียดทานบนถนนลื่น",
+          "Congratulations on completing Chapter 19! You now know what is expected: independent planning, safe interaction, and respect for physics."),
+         takeaways=[
+             i18n("Trinn 3 krever automatisert betjening og fullt fokus på trafikkbildet.",
+                  "ขั้นตอนที่ 3 ต้องควบคุมรถได้อย่างคล่องแคล่วและมีสมาธิเต็มที่กับสภาพการจราจร",
+                  "Stage 3 requires automated handling and full attention on traffic."),
+             i18n("Sikkerhetskurs på bane gir uvurderlig erfaring med tapt veigrep.",
+                  "การฝึกบนสนามลื่นให้ประสบการณ์ล้ำค่าเรื่องการลื่นไถลและการควบคุมรถ",
+                  "Track safety training provides invaluable experience with lost grip."),
+             i18n("Selvevaluering er nøkkelen til å bli en ansvarsfull sjåfør.",
+                  "การประเมินตนเองอย่างตรงไปตรงมาคือกุญแจสำคัญสู่การเป็นผู้ขับขี่ที่ดี",
+                  "Honest self-evaluation is key to becoming a responsible driver."),
+         ],
+         nextChapter=i18n("NESTE: KAPITTEL 20 — TRAFIKKSTYSTEMET OG TRAFIKANTGRUPPER",
+                          "ถัดไป: บทที่ 20 — ระบบการจราจรและกลุ่มผู้ใช้ถนน",
+                          "NEXT: CHAPTER 20 — TRAFFIC SYSTEM AND ROAD USER GROUPS")),
+]
+
+# ─────────────────────────────────────────────────────────────────────────────
+# KAPITTEL 20: TRAFIKKSYSTEMET OG TRAFIKANTGRUPPER (CH20)
+# ─────────────────────────────────────────────────────────────────────────────
+_CH20_PLACEHOLDERS = [
+    ("ch20_sys_001", "1", "CH20-SYS-001", "Trafikksystemets tre komponenter", "Forstå samspillet mellom mennesket, kjøretøyet og veien", "systemperspektiv", "Systemsvikt ved manglende samhandling mellom trafikant og vei", "mennesker og biler i bykryss", "bygate", "skilt og fotgjengerfelt", "menneske-bil-vei", "/api/assets/thumbs/thumb_trafikk_okosystem_norge.jpg", ""),
+    ("ch20_sys_002", "2", "CH20-SYS-002", "Beskyttelse av myke trafikanter", "Lære 1,5 meters avstand ved forbikjøring av syklister og gående", "avstandsperspektiv", "Påkjørselsfare ved for tett passering av syklende eller gående", "bil som passerer syklist", "landevei", "hvit kantlinje", "trygg sideavstand", "/api/assets/thumbs/thumb_vegtrafikkloven_3.jpg", "ch20_par_001"),
+    ("ch20_par_001", "2p", "CH20-PAR-001", "1,5 meters sideavstand vs farlig nærpassering", "Se forskjellen på trygg margin og farefull forbikjøring av syklist", "sammenligning", "Syklist som mister balansen ved lufttrykk fra for tett passering", "bil og syklist i veibane", "asfaltert vei", "kantlinje", "god margin", "/api/assets/thumbs/thumb_michaels_gatelogikk.jpg", "ch20_sys_002"),
+    ("ch20_sys_003", "3", "CH20-SYS-003", "Interessemotsetninger og sårbare grupper", "Forstå interessemotsetninger mellom framkommelighet og trygghet", "gateperspektiv", "Konflikter mellom hastverkskjøring og barns sikkerhet nær skole", "skolebuss og barn ved vei", "boligområde", "fartsgrense 30", "hensyn til sårbare", "/api/assets/thumbs/thumb_vegtrafikkloven_3.jpg", ""),
+    ("ch20_sys_004", "4", "CH20-SYS-004", "Road Check trafikksystemet og trafikantgrupper", "Teste kunnskap om vikeplikt for myke trafikanter og blindsoner", "testperspektiv", "Feiloppfatning av vikeplikt og sikt rundt tunge kjøretøy", "bil i trafikkbilde", "bygate", "fotgjengerskilt", "systemkontroll", "/api/assets/thumbs/thumb_offisielle_trafikkskilt.jpg", ""),
+    ("ch20_sys_005", "5", "CH20-SYS-005", "Tunge kjøretøy og store blindsoner", "Lære hvor lastebilens blindsoner befinner seg for å unngå klemming", "blindsoneperspektiv", "Å havne i lastebilens blindsone i kryss eller rundkjøring", "personbil bak stor lastebil", "flerfeltsvei", "kjørefeltlinjer", "forstå blindsoner", "/api/assets/thumbs/thumb_tesla_bremsing_40_a.jpg", "ch20_par_002"),
+    ("ch20_par_002", "5p", "CH20-PAR-002", "God avstand bak lastebil vs ligge i blindsonen", "Se at god avstand gir sikt til sidespeilene og trygg margin", "siktperspektiv", "Underkjøring eller påkjørsel ved bråstans bak tungtransport", "bil med god avstand til vogntog", "motorvei", "oppmerking", "synlig i speil", "/api/assets/thumbs/thumb_tesla_bremsing_80.jpg", "ch20_sys_005"),
+    ("ch20_sys_006", "6", "CH20-SYS-006", "Oppsummering trafikksystemet", "Reflektere over sjåførens ansvar for å beskytte de svakeste i trafikken", "mestringsperspektiv", "Egoistisk kjørestil som skaper frykt hos andre", "rolig kveldskjøring i sentrum", "tettbygd strøk", "veglys og gangfelt", "ansvarlig samhandling", "/api/assets/thumbs/thumb_hav_regelen_reflekser.jpg", ""),
+]
+
+CH20_ASSETS = {
+    key: {"asset_id": asset_id, "page": page, "scene": scene,
+          "pedagogical_purpose": purpose, "camera_angle": camera,
+          "risk_source": risk, "risikokilde": risk,
+          "vehicles_road_users": actors, "road_type": road,
+          "signs_markings": markings, "learner_discovery": discovery,
+          "hotspots": [], "pair_asset": pair_key, "status": "placeholder", "src": src,
+          "alt": i18n("Illustrasjon av trafikksystemet og trafikantgrupper", "ภาพประกอบเรื่องระบบจราจรและกลุ่มผู้ใช้ถนน", "Illustration of traffic system and road users")}
+    for key, page, asset_id, scene, purpose, camera, risk, actors, road, markings, discovery, src, pair_key in _CH20_PLACEHOLDERS
+}
+
+CH20_LESSONS = [
+    info("CH20-001", "intro", "ch20_sys_001",
+         "Trafikksystemet: Mennesket, kjøretøyet og veien",
+         "ระบบการจราจร: คน ยานพาหนะ และถนน",
+         "The Traffic System: Human, Vehicle, and Road",
+         ("Trafikken er et komplekst system der tre elementer må fungere sammen: Mennesket med sine sanser og begrensninger, kjøretøyet med sin teknologi og tyngde, og veien med skilting og værforhold.",
+          "การจราจรเป็นระบบที่ประกอบด้วย 3 ส่วนสำคัญที่ต้องทำงานร่วมกัน: มนุษย์ที่มีอารมณ์และขีดจำกัด ยานพาหนะที่มีน้ำหนักและระบบเบรก และถนนที่มีป้ายบอกทางและสภาพอากาศที่เปลี่ยนแปลงได้เสมอ",
+          "Traffic is a system where three elements interact: The human with limits, the vehicle with tech and weight, and the road environment.")),
+    info("CH20-002", "choice", "ch20_sys_002",
+         "Myke trafikanter og sikkerhetsavstand",
+         "ผู้ใช้ถนนที่เปราะบางและระยะห่างที่ปลอดภัย",
+         "Vulnerable Road Users and Safety Distance",
+         ("Gående og syklende har ikke stålkarosseri rundt seg. Ved forbikjøring av syklister skal du holde minst 1,5 meters sideavstand slik at vindtrykk eller ubalanse ikke fører til velt.",
+          "คนเดินถนนและคนขี่จักรยานไม่มีเกราะเหล็กป้องกันตัว เมื่อคุณต้องขับแซงจักรยานในนอร์เวย์ ต้องเว้นระยะห่างด้านข้างอย่างน้อย 1.5 เมตรเสมอ เพื่อป้องกันไม่ให้แรงลมหรือการเสียหลักทำให้เกิดอุบัติเหตุ",
+          "Pedestrians and cyclists lack protective chassis. When overtaking cyclists, keep at least 1.5 meters side clearance to avoid turbulence risks."),
+         pair_asset="ch20_par_001",
+         question=question(
+             ("KONTROLLSPØRSMÅL", "คำถามตรวจสอบ", "CHECK QUESTION"),
+             ("Hvor stor sideavstand anbefales ved forbikjøring av syklist?",
+              "ระยะห่างด้านข้างที่แนะนำเมื่อขับแซงคนขี่จักรยานคือเท่าใด?",
+              "What side distance is recommended when overtaking a cyclist?"),
+             [
+                 opt("a", "Minst 0,5 meter", "อย่างน้อย 0.5 เมตร", "At least 0.5 meters"),
+                 opt("b", "Minst 1,5 meter", "อย่างน้อย 1.5 เมตร", "At least 1.5 meters"),
+                 opt("c", "Det er ingen minsteavstand så lenge du tuter", "ไม่มีระยะกำหนดตราบใดที่บีบแตรเตือน", "No minimum distance as long as you honk"),
+             ],
+             "b",
+             ("1,5 meters margin gir god sikkerhet mot brå svinger fra syklisten.",
+              "ระยะ 1.5 เมตรช่วยป้องกันอันตรายหากจักรยานเซหรือหลบหลุมกะทันหัน",
+              "A 1.5 meter buffer protects against sudden swerving by the cyclist.")
+         )),
+    info("CH20-003", "sequence", "ch20_sys_003",
+         "Interessemotsetninger i trafikken",
+         "ความขัดแย้งของเป้าหมายบนท้องถนน",
+         "Conflicting Interests in Traffic",
+         ("I trafikken oppstår ofte interessemotsetninger: Noen vil kjøre fort for å rekke en avtale, mens andre trenger ekstra tid, som barn og eldre. Sikkerhet må alltid gå foran framkommelighet.",
+          "บนท้องถนนมักมีความต้องการที่ขัดแย้งกัน: บางคนรีบเดินทางเพื่อไปให้ทันเวลา ในขณะที่เด็กหรือคนชราต้องการเวลาและความปลอดภัย ความปลอดภัยจึงต้องมาก่อนความรวดเร็วเสมอ",
+          "Conflicting interests often arise: Some want speed, others need extra time and protection. Safety must always trump transit speed.")),
+    {
+        "id": "CH20-004", "type": "roadCheck", "asset": "ch20_sys_004", "road_check_id": "CH20-RC-001",
+        "eyebrow": i18n("ROAD CHECK ⚡ TRAFIKKSYSTEMET", "ROAD CHECK ⚡ ระบบจราจร", "ROAD CHECK ⚡ TRAFFIC SYSTEM"),
+        "title": i18n("Road Check ⚡ Trafikksystemet og trafikantgrupper", "Road Check ⚡ ระบบจราจรและกลุ่มผู้ใช้ถนน", "Road Check ⚡ Traffic System and Road User Groups"),
+        "questions": [
+            question(
+                ("SPØRSMÅL 1", "คำถามที่ 1", "QUESTION 1"),
+                ("Hvem regnes som myke trafikanter?",
+                 "ใครบ้างที่จัดเป็นผู้ใช้ถนนที่เปราะบาง (Myke trafikanter)?",
+                 "Who are classified as vulnerable road users?"),
+                [
+                    opt("a", "Gående, syklende, rullestolbrukere og småbarn", "คนเดินเท้า คนขี่จักรยาน ผู้ใช้วีลแชร์ และเด็กเล็ก", "Pedestrians, cyclists, wheelchair users, and small children"),
+                    opt("b", "Førere av tunge lastebiler og busser", "ผู้ขับรถบรรทุกหนักและรถบัส", "Drivers of heavy trucks and buses"),
+                    opt("c", "Trikker og tog i bystrøk", "รถรางและรถไฟในเมือง", "Trams and trains in urban zones"),
+                ],
+                "a",
+                ("Myke trafikanter har ingen fysisk beskyttelse ved påkjørsel.",
+                 "ผู้ใช้ถนนที่เปราะบางไม่มีเกราะป้องกันตัวเมื่อเกิดการชน",
+                 "Vulnerable road users have no physical protection in a collision.")
+            ),
+            question(
+                ("SPØRSMÅL 2", "คำถามที่ 2", "QUESTION 2"),
+                ("Hvorfor har store vogntog farlige blindsoner foran og på sidene?",
+                 "ทำไมรถบรรทุกขนาดใหญ่จึงมีจุดบอดที่อันตรายทั้งด้านหน้าและด้านข้าง?",
+                 "Why do large trucks have dangerous blind spots in front and on sides?"),
+                [
+                    opt("a", "Førerhuset sitter høyt og speilene dekker ikke områdene helt inntil bilen", "ห้องโดยสารอยู่สูงและกระจกมองข้างไม่สามารถครอบคลุมบริเวณชิดตัวรถได้ทั้งหมด", "Cab is high and mirrors cannot cover areas immediately adjacent"),
+                    opt("b", "Sjåføren har ikke lov til å se i speilene", "คนขับไม่ได้รับอนุญาตให้ดูกระจก", "Driver is not allowed to check mirrors"),
+                    opt("c", "Tunge biler mangler vinduer på passasjersiden", "รถบรรทุกไม่มีหน้าต่างด้านข้าง", "Heavy vehicles lack passenger side windows"),
+                ],
+                "a",
+                ("Hold god avstand til tunge kjøretøy slik at føreren kan se deg i speilet.",
+                 "เว้นระยะห่างจากรถใหญ่เพื่อให้คนขับสามารถมองเห็นคุณในกระจกส่องข้างได้",
+                 "Keep distance from heavy vehicles so the driver sees you in mirrors.")
+            ),
+            question(
+                ("SPØRSMÅL 3", "คำถามที่ 3", "QUESTION 3"),
+                ("Hva er regelen når du nærmer deg et ubevoktet gangfelt der noen venter?",
+                 "กฎหมายกำหนดอย่างไรเมื่อคุณขับเข้าใกล้ทางม้าลายที่มีคนยืนรอข้าม?",
+                 "What is the rule when approaching an uncontrolled crosswalk where someone waits?"),
+                [
+                    opt("a", "Tute og kjøre forbi hvis du har grønt lys bak deg", "บีบแตรแล้วขับผ่านไปได้หากไม่มีไฟแดง", "Honk and drive through if no red light behind"),
+                    opt("b", "Bremse ned i god tid og stanse for å gi fri vei til fotgjengeren", "ชะลอความเร็วล่วงหน้าและหยุดรถเพื่อให้คนเดินถนนข้ามได้อย่างปลอดภัย", "Slow down well ahead and stop to give way to the pedestrian"),
+                    opt("c", "Blinke med fjernlys for å be fotgjengeren vente", "กะพริบไฟสูงเพื่อบอกให้คนเดินเท้ารอก่อน", "Flash high beams to ask pedestrian to wait"),
+                ],
+                "b",
+                ("Vegtrafikkloven pålegger bilførere ubetinget vikeplikt for fotgjengere i gangfelt.",
+                 "กฎหมายกำหนดให้รถยนต์ต้องหยุดให้คนเดินข้ามทางม้าลายเสมอ",
+                 "Traffic laws mandate unconditional give-way to pedestrians at crosswalks.")
+            ),
+        ],
+    },
+    info("CH20-005", "choice", "ch20_sys_005",
+         "Store kjøretøy og blindsoner",
+         "รถบรรทุกขนาดใหญ่และจุดบอด",
+         "Heavy Vehicles and Blind Spots",
+         ("Et vogntog har store blindsoner rett bak, foran og langs høyre side. Hvis du ikke kan se sjåførens speilbilde i sidespeilet, kan heller ikke sjåføren se deg. Unngå å legge deg tett inntil i kryss.",
+          "รถบรรทุกขนาดใหญ่มีจุดบอดกว้างมากบริเวณด้านหลัง ด้านหน้า และด้านข้าง หากคุณมองไม่เห็นใบหน้าคนขับในกระจกส่องข้าง แสดงว่าคนขับก็มองไม่เห็นคุณเช่นกัน อย่าเข้าไปจอดชิดด้านข้างในทางแยก",
+          "Large trucks have extensive blind spots behind, in front, and along sides. If you cannot see driver's mirror reflection, they cannot see you."),
+         pair_asset="ch20_par_002",
+         question=question(
+             ("KONTROLLSPØRSMÅL", "คำถามตรวจสอบ", "CHECK QUESTION"),
+             ("Hvordan vet du at du er synlig for føreren av en lastebil foran deg?",
+              "คุณจะรู้ได้อย่างไรว่าคนขับรถบรรทุกคันหน้ามองเห็นรถของคุณ?",
+              "How do you know you are visible to the driver of a truck ahead?"),
+             [
+                 opt("a", "Når du ligger under 2 meter fra bakluken", "เมื่อจอดชิดท้ายรถไม่เกิน 2 เมตร", "When driving under 2 meters from rear"),
+                 opt("b", "Når du kan se lastebilens sidespeil med god avstand", "เมื่อคุณมองเห็นกระจกส่องข้างของรถบรรทุกในระยะห่างที่ปลอดภัย", "When you can see the truck's side mirrors from a safe distance"),
+                 opt("c", "Lastebilsjåfører ser alltid alt bak seg", "คนขับรถบรรทุกมองเห็นด้านหลังชัดเจนเสมอ", "Truck drivers always see everything behind"),
+             ],
+             "b",
+             ("God avstand sikrer at du fanges opp i speilene.",
+              "การเว้นระยะห่างช่วยให้ภาพของคุณสะท้อนเข้าไปในกระจกมองข้าง",
+              "Good distance ensures you are captured in their mirrors.")
+         )),
+    info("CH20-006", "chapterComplete", "ch20_sys_006",
+         "Fullført: Trafikksystemet og trafikantgrupper",
+         "จบเนื้อหา: ระบบการจราจรและกลุ่มผู้ใช้ถนน",
+         "Completed: Traffic System and Road User Groups",
+         ("Flott jobbet med kapittel 20! Du forstår nå hvordan bilister, syklister og fotgjengere må spille på lag, og hvorfor sikkerheten til myke trafikanter alltid veier tyngst.",
+          "ยอดเยี่ยมมากที่จบบทที่ 20! คุณเข้าใจแล้วว่าผู้ใช้รถ คนขี่จักรยาน และคนเดินถนนต้องร่วมมือกันอย่างไร และทำไมความปลอดภัยของคนที่เปราะบางจึงสำคัญที่สุดเสมอ",
+          "Great job finishing Chapter 20! You now understand how road users must cooperate and why vulnerable road safety weighs highest."),
+         takeaways=[
+             i18n("Hold alltid minst 1,5 meters avstand til syklister ved forbikjøring.",
+                  "เว้นระยะห่างอย่างน้อย 1.5 เมตรเมื่อแซงคนขี่จักรยานเสมอ",
+                  "Always keep at least 1.5m clearance when overtaking cyclists."),
+             i18n("Vikeplikt for fotgjengere i gangfelt er ufravikelig og krever tidlig nedbremsing.",
+                  "การหยุดให้คนเดินข้ามทางม้าลายต้องชะลอรถแต่เนิ่นๆ อย่างชัดเจน",
+                  "Yielding to pedestrians in crosswalks requires early deceleration."),
+             i18n("Hold god avstand bak tunge kjøretøy for å unngå blindsoner.",
+                  "เว้นระยะห่างจากรถใหญ่เพื่อไม่ให้ตกไปอยู่ในจุดบอดของคนขับ",
+                  "Keep safe distance behind heavy trucks to stay out of blind spots."),
+         ],
+         nextChapter=i18n("NESTE: KAPITTEL 21 — VEG, VEGOPPMERKING, SKILT OG ATFERD",
+                          "ถัดไป: บทที่ 21 — ถนน การตีเส้น ป้ายจราจร และพฤติกรรม",
+                          "NEXT: CHAPTER 21 — ROAD, ROAD MARKINGS, SIGNS, AND BEHAVIOUR")),
+]
+
+# ─────────────────────────────────────────────────────────────────────────────
+# KAPITTEL 21: VEG, VEGOPPMERKING, SKILT OG ATFERD (CH21)
+# ─────────────────────────────────────────────────────────────────────────────
+_CH21_PLACEHOLDERS = [
+    ("ch21_veg_001", "1", "CH21-VEG-001", "Myndighetspyramiden i praksis", "Lære rekkefølgen mellom politi, lys, skilt, oppmerking og trafikkregler", "pyramideperspektiv", "Tvil om hvem som bestemmer ved kryss med både skilt og lys", "veikryss med politi og trafikklys", "bymiljø", "lys og skilt", "myndighetspyramiden", "/api/assets/thumbs/thumb_th_kot_thanon_vs_kotmai.jpg", ""),
+    ("ch21_veg_002", "2", "CH21-VEG-002", "Hvit sperrelinje og varsellinje", "Forstå forbudet mot å krysse hel sperrelinje", "veimerkingperspektiv", "Farlig forbikjøring over hel sperrelinje med motgående kollisjonsfare", "tofeltvei med hvit sperrelinje", "kupert landevei", "sperrelinje og varsellinje", "respektere veimerking", "/api/assets/thumbs/thumb_vegtrafikkloven_3.jpg", "ch21_par_001"),
+    ("ch21_par_001", "2p", "CH21-PAR-001", "Hel sperrelinje vs stiplet linje", "Se forskjellen på strengt forbudt feltkryssing og tillatt forbikjøring", "linjesammenligning", "Kryssing av sperrelinje som fører til førerkortbeslag og ulykke", "veibane med hel linje og stiplet linje", "landevei", "sperrelinje", "forbud mot kryssing", "/api/assets/thumbs/thumb_michaels_gatelogikk.jpg", "ch21_veg_002"),
+    ("ch21_veg_003", "3", "CH21-VEG-003", "Fartstilpasning etter forholdene", "Lære at fartsgrensen er en maksimumsgrense, ikke et påbud", "førerperspektiv", "For høy fart i tåke, regn eller mørke tross skiltet grense", "bil som kjører i tett regnvær", "landevei", "fartsskilt 80", "fartstilpasning", "/api/assets/thumbs/thumb_tesla_bremsing_80.jpg", ""),
+    ("ch21_veg_004", "4", "CH21-VEG-004", "Road Check skilt, oppmerking og vikeplikt", "Teste forståelse av sperrelinjer, vikepliktsskilt og politiets tegn", "testperspektiv", "Brudd på skiltede påbud eller feiltolking av veimerking", "bil foran skiltet kryss", "veikryss", "vikepliktskilt og oppmerking", "regelkontroll", "/api/assets/thumbs/thumb_offisielle_trafikkskilt.jpg", ""),
+    ("ch21_veg_005", "5", "CH21-VEG-005", "Plassering ved svinging og feltskifte", "Mestre riktig plassering i god tid før sving mot høyre eller venstre", "plasseringsperspektiv", "Feilplassering som blokkerer trafikk eller skaper kollisjonsfare", "bil som plasserer seg mot midten før venstresving", "bygate", "piler i veibanen", "presis plassering", "/api/assets/thumbs/thumb_vikeplikt_oversikt.jpg", "ch21_par_002"),
+    ("ch21_par_002", "5p", "CH21-PAR-002", "Korrekt venstreplassering vs feilaktig høyrekant", "Vise at venstresving krever plassering inntil midtlinjen", "kontrastperspektiv", "Påkjøring bakfra ved sving fra feil side av kjørefeltet", "to situasjoner i samme kryss", "veikryss", "midtlinje og svingepil", "tydelig plassering", "/api/assets/thumbs/thumb_vikeplikt_7_4a_utkjoring.jpg", "ch21_veg_005"),
+    ("ch21_veg_006", "6", "CH21-VEG-006", "Oppsummering vegoppmerking og atferd", "Feire solid beherskelse av vegens språk og tegn", "mestringsperspektiv", "Usikkerhet rundt skilt og linjer i krevende trafikkmiljø", "bil som kjører inn i velorganisert rundkjøring", "rundkjøring", "oppmerking og skilt", "trygg trafikkadferd", "/api/assets/thumbs/thumb_hav_regelen_reflekser.jpg", ""),
+]
+
+CH21_ASSETS = {
+    key: {"asset_id": asset_id, "page": page, "scene": scene,
+          "pedagogical_purpose": purpose, "camera_angle": camera,
+          "risk_source": risk, "risikokilde": risk,
+          "vehicles_road_users": actors, "road_type": road,
+          "signs_markings": markings, "learner_discovery": discovery,
+          "hotspots": [], "pair_asset": pair_key, "status": "placeholder", "src": src,
+          "alt": i18n("Illustrasjon av veg, vegoppmerking, skilt og atferd", "ภาพประกอบเรื่องถนน การตีเส้น ป้ายจราจร และพฤติกรรม", "Illustration of road, markings, signs, and behaviour")}
+    for key, page, asset_id, scene, purpose, camera, risk, actors, road, markings, discovery, src, pair_key in _CH21_PLACEHOLDERS
+}
+
+CH21_LESSONS = [
+    info("CH21-001", "intro", "ch21_veg_001",
+         "Myndighetspyramiden: Hvem bestemmer i trafikken?",
+         "ลำดับชั้นแห่งอำนาจ: ใครเป็นผู้มีอำนาจสั่งการบนท้องถนน?",
+         "Authority Pyramid: Who Decides in Traffic?",
+         ("Trafikkregler følger et strengt hierarki: 1. Politi og trafikkdirigenter trumfer alt. 2. Trafikklyssignaler. 3. Trafikkskilt. 4. Vegoppmerking. 5. De generelle trafikkreglene (som høyreregelen).",
+          "กฎจราจรมีลำดับชั้นความสำคัญที่แน่นอน: 1. คำสั่งของตำรวจจราจรสำคัญที่สุด 2. สัญญาณไฟจราจร 3. ป้ายจราจร 4. เส้นบนพื้นถนน 5. กฎจราจรทั่วไป (เช่น กฎให้ทางรถทางขวา)",
+          "Traffic hierarchy: 1. Police signals override all. 2. Traffic lights. 3. Road signs. 4. Road markings. 5. General road rules.")),
+    info("CH21-002", "choice", "ch21_veg_002",
+         "Hvit sperrelinje og varsellinje",
+         "เส้นทึบห้ามข้ามและเส้นเตือนบนถนน",
+         "Solid Barrier Line and Warning Line",
+         ("En hel hvit sperrelinje betyr strengt forbudt å krysse eller kjøre på. Den brukes der sikten er begrenset eller faren er stor. En varsellinje (lange linjer med korte opphold) varsler om at sperrelinje kommer.",
+          "เส้นทึบสีขาวเดี่ยวหรือคู่ หมายถึง ห้ามขับข้ามหรือทับเส้นโดยเด็ดขาด ใช้ในจุดที่ทัศนวิสัยจำกัดหรือมีความเสี่ยงสูง ส่วนเส้นเตือน (ขีดทึบยาว ช่องว่างสั้น) เตือนว่ากำลังจะเข้าสู่เขตเส้นทึบ",
+          "A solid white line means crossing or straddling is strictly prohibited. A warning line indicates a solid barrier line is approaching."),
+         pair_asset="ch21_par_001",
+         question=question(
+             ("KONTROLLSPØRSMÅL", "คำถามตรวจสอบ", "CHECK QUESTION"),
+             ("Er det tillatt å krysse en hel hvit sperrelinje for å kjøre forbi en traktor?",
+              "อนุญาตให้ขับข้ามเส้นทึบสีขาวเพื่อแซงรถแทรกเตอร์ที่วิ่งช้าได้หรือไม่?",
+              "Are you allowed to cross a solid white line to overtake a tractor?"),
+             [
+                 opt("a", "Ja, hvis traktoren kjører under 20 km/t", "ได้ หากแทรกเตอร์วิ่งช้ากว่า 20 กม./ชม.", "Yes, if the tractor drives under 20 km/h"),
+                 opt("b", "Nei, en hel sperrelinje er et absolutt forbud uansett kjøretøy foran", "ไม่ได้ เส้นทึบเป็นข้อห้ามเด็ดขาดไม่ว่ารถคันหน้าจะเป็นรถประเภทใด", "No, a solid barrier line is strictly prohibited regardless of vehicle ahead"),
+                 opt("c", "Ja, hvis du bruker hornet først", "ได้ หากบีบแตรก่อนข้าม", "Yes, if you honk first"),
+             ],
+             "b",
+             ("Sperrelinjen representerer en usynlig mur og skal aldri krysses.",
+              "เส้นทึบเปรียบเสมือนกำแพงที่มองไม่เห็น ห้ามขับข้ามโดยเด็ดขาด",
+              "A solid barrier line represents an impassable boundary and must never be crossed.")
+         )),
+    info("CH21-003", "sequence", "ch21_veg_003",
+         "Fartstilpasning og siktforhold",
+         "การปรับความเร็วให้เข้ากับสภาพแวดล้อม",
+         "Speed Adaptation and Visibility Conditions",
+         ("Skiltet fartsgrense angir den maksimale tillatte farten under optimale forhold. Er veibanen våt, snødekt eller sikten redusert av mørke eller tåke, pålegger vegtrafikkloven deg å senke farten tilsvarende.",
+          "ป้ายจำกัดความเร็วระบุความเร็วสูงสุดที่อนุญาตในสภาพถนนที่สมบูรณ์เท่านั้น หากถนนเปียก มีหิมะ หรือทัศนวิสัยมืดมัว กฎหมายกำหนดให้คุณต้องลดความเร็วลงเพื่อความปลอดภัย",
+          "Posted speed limits indicate maximum allowed speed under optimal conditions. In rain, snow, or darkness, reduce speed accordingly.")),
+    {
+        "id": "CH21-004", "type": "roadCheck", "asset": "ch21_veg_004", "road_check_id": "CH21-RC-001",
+        "eyebrow": i18n("ROAD CHECK ⚡ SKILT OG VEGOPPMERKING", "ROAD CHECK ⚡ ป้ายและการตีเส้น", "ROAD CHECK ⚡ SIGNS AND MARKINGS"),
+        "title": i18n("Road Check ⚡ Veg, vegoppmerking, skilt og atferd", "Road Check ⚡ ถนน การตีเส้น ป้ายจราจร และพฤติกรรม", "Road Check ⚡ Road, Markings, Signs, and Behaviour"),
+        "questions": [
+            question(
+                ("SPØRSMÅL 1", "คำถามที่ 1", "QUESTION 1"),
+                ("Trafikklyset viser grønt lys, men en politimann signaliserer at du må stanse. Hva gjør du?",
+                 "สัญญาณไฟจราจรเป็นสีเขียว แต่ตำรวจจราจรส่งสัญญาณมือให้คุณหยุด คุณต้องทำอย่างไร?",
+                 "Traffic light is green, but a police officer signals you to stop. What do you do?"),
+                [
+                    opt("a", "Kjøre videre fordi grønt lys har høyere prioritet enn politi", "ขับต่อไปเพราะสัญญาณไฟเขียวสำคัญกว่าคำสั่งตำรวจ", "Drive on because green light has higher priority than police"),
+                    opt("b", "Stanse umiddelbart fordi politiets anvisninger står øverst i myndighetspyramiden", "หยุดรถทันทีเพราะคำสั่งตำรวจอยู่สูงสุดในลำดับชั้นแห่งอำนาจ", "Stop immediately because police signals rank highest in the authority pyramid"),
+                    opt("c", "Tute og vente på at politimannen flytter seg", "บีบแตรและรอให้ตำรวจหลบทางไป", "Honk and wait for the officer to move away"),
+                ],
+                "b",
+                ("Personlige anvisninger fra politi eller vegvesen overstyrer trafikklys og skilt.",
+                 "คำสั่งของเจ้าหน้าที่ตำรวจมีผลบังคับใช้เหนือสัญญาณไฟและป้ายจราจรทุกชนิด",
+                 "Direct signals from police officers override traffic lights and signs.")
+            ),
+            question(
+                ("SPØRSMÅL 2", "คำถามที่ 2", "QUESTION 2"),
+                ("Hva betyr en gul midtlinje på en norsk vei?",
+                 "เส้นแบ่งกึ่งกลางถนนสีเหลืองในนอร์เวย์หมายถึงอะไร?",
+                 "What does a yellow center line on a Norwegian road signify?"),
+                [
+                    opt("a", "Den skiller kjørefelt med trafikk i motsatte retninger", "เป็นเส้นแบ่งทิศทางการจราจรของรถที่วิ่งสวนทางกัน", "It separates traffic travelling in opposing directions"),
+                    opt("b", "Den markerer at veien er reservert for kollektivtransport", "แสดงว่าเป็นช่องทางเฉพาะสำหรับรถโดยสารสาธารณะ", "It marks lane reserved for public transport"),
+                    opt("c", "Den angir at parkering er gratis på søndager", "แสดงว่าจอดรถฟรีในวันอาทิตย์", "It indicates free parking on Sundays"),
+                ],
+                "a",
+                ("Gul farge brukes i Norge utelukkende for å skille motgående kjøreretninger.",
+                 "เส้นสีเหลืองในนอร์เวย์ใช้สำหรับแบ่งทิศทางรถวิ่งสวนกันเท่านั้น",
+                 "Yellow colour is used in Norway strictly to divide opposing directions.")
+            ),
+            question(
+                ("SPØRSMÅL 3", "คำถามที่ 3", "QUESTION 3"),
+                ("Hvor skal du plassere bilen før en venstresving på toveiskjørt vei?",
+                 "คุณควรวางตำแหน่งรถอย่างไรก่อนเลี้ยวซ้ายบนถนนที่รถวิ่งสวนกัน?",
+                 "Where should you position your car before turning left on a two-way road?"),
+                [
+                    opt("a", "Helt ut på høyre veiskulder for å slippe forbi alle", "ชิดไหล่ทางด้านขวาสุดเพื่อหลบทางให้คันอื่น", "All the way on right shoulder to let everyone pass"),
+                    opt("b", "Inntil midtlinjen i god tid før krysset, uten å krysse den", "ชิดเส้นกึ่งกลางถนนแต่เนิ่นๆ โดยไม่ล้ำข้ามเส้น", "Close to center line well ahead of junction, without crossing it"),
+                    opt("c", "Midt i veibanen på tvers av begge felt", "จอดขวางกลางถนนทั้งสองเลน", "In the middle of the road across both lanes"),
+                ],
+                "b",
+                ("Plassering inntil midtlinjen viser tydelig hensikt og lar biler passere på høyre side.",
+                 "การชิดเส้นกลางแสดงความตั้งใจเลี้ยวอย่างชัดเจนและช่วยให้รถคันหลังแซงผ่านด้านขวาได้",
+                 "Positioning close to the center line signals clear intent and lets traffic pass on the right.")
+            ),
+        ],
+    },
+    info("CH21-005", "choice", "ch21_veg_005",
+         "Plassering og feltskifte i god tid",
+         "การวางตำแหน่งรถและการเปลี่ยนเลนแต่เนิ่นๆ",
+         "Positioning and Lane Changes Well in Advance",
+         ("Riktig plassering er språket du snakker med andre sjåfører. Skal du svinge til venstre, plasser bilen inntil midtlinjen i god tid. Skal du til høyre, hold deg godt til høyre i kjørefeltet.",
+          "การวางตำแหน่งรถคือภาษาที่คุณสื่อสารกับเพื่อนร่วมทาง หากต้องการเลี้ยวซ้าย ให้ขยับชิดเส้นแบ่งเลนกลางแต่เนิ่นๆ หากต้องการเลี้ยวขวา ให้ชิดขอบทางด้านขวาของช่องทางเดินรถ",
+          "Correct positioning communicates intent. Move toward center line early for left turns; keep right for right turns."),
+         pair_asset="ch21_par_002",
+         question=question(
+             ("KONTROLLSPØRSMÅL", "คำถามตรวจสอบ", "CHECK QUESTION"),
+             ("Hvorfor er tidlig plassering i kjørefeltet så viktig?",
+              "ทำไมการวางตำแหน่งรถล่วงหน้าจึงมีความสำคัญอย่างยิ่ง?",
+              "Why is early positioning in the lane so important?"),
+             [
+                 opt("a", "Det sparer drivstoff på motoren", "ช่วยประหยัดน้ำมันเชื้อเพลิงของเครื่องยนต์", "It saves engine fuel"),
+                 opt("b", "Det informerer andre trafikanter tidlig og hindrer misforståelser og påkjørsler", "ช่วยแจ้งเจตนาให้ผู้อื่นทราบล่วงหน้า ป้องกันความเข้าใจผิดและการชนท้าย", "It informs others early and prevents misunderstandings and collisions"),
+                 opt("c", "Det gjør at man slipper å bruke blinklys", "ทำให้ไม่จำเป็นต้องเปิดไฟเลี้ยว", "It eliminates the need to use turn signals"),
+             ],
+             "b",
+             ("Tydelig plassering gir trygg forutsigbarhet i trafikken.",
+              "การวางตำแหน่งที่ชัดเจนช่วยสร้างความคาดหมายที่ปลอดภัยบนท้องถนน",
+              "Clear positioning provides safe predictability in traffic.")
+         )),
+    info("CH21-006", "chapterComplete", "ch21_veg_006",
+         "Fullført: Veg, vegoppmerking, skilt og atferd",
+         "จบเนื้อหา: ถนน การตีเส้น ป้ายจราจร และพฤติกรรม",
+         "Completed: Road, Road Markings, Signs, and Behaviour",
+         ("Gratulerer med fullført kapittel 21! Du mestrer nå myndighetspyramiden, forstår alvoret i sperrelinjer og vet hvordan nøyaktig plassering skaper ro og trygghet i trafikken.",
+          "ยินดีด้วยที่จบบทที่ 21! ตอนนี้คุณเข้าใจลำดับความสำคัญของกฎหมายจราจร เข้าใจความสำคัญของเส้นทึบ และรู้วิธีวางตำแหน่งรถเพื่อความปลอดภัยสูงสุดแล้ว",
+          "Congratulations on completing Chapter 21! You master the authority pyramid, respect solid barrier lines, and understand how positioning creates safety."),
+         takeaways=[
+             i18n("Myndighetspyramiden: Politi overstyrer lys, lys overstyrer skilt, skilt overstyrer oppmerking.",
+                  "ลำดับอำนาจ: ตำรวจอยู่เหนือสัญญาณไฟ ไฟอยู่เหนือป้าย ป้ายอยู่เหนือเส้นบนถนน",
+                  "Authority pyramid: Police overrides lights, lights override signs, signs override markings."),
+             i18n("En hel hvit sperrelinje må aldri krysses eller berøres.",
+                  "เส้นทึบสีขาวห้ามขับทับหรือขับข้ามโดยเด็ดขาด",
+                  "A solid white line must never be crossed or straddled."),
+             i18n("Plasser bilen tydelig i god tid før enhver sving.",
+                  "จัดตำแหน่งรถในเลนให้ชัดเจนล่วงหน้าก่อนเลี้ยวเสมอ",
+                  "Position the car clearly and early before any turn."),
+         ],
+         nextChapter=i18n("NESTE: KAPITTEL 22 — SYSTEMATISK INFORMASJONSINNHENTING",
+                          "ถัดไป: บทที่ 22 — การรับข้อมูลอย่างเป็นระบบและเทคนิคการมอง",
+                          "NEXT: CHAPTER 22 — SYSTEMATIC INFORMATION GATHERING")),
+]
+
+# KAPITTEL 22: SYSTEMATISK INFORMASJONSINNHENTING (CH22)
+# ─────────────────────────────────────────────────────────────────────────────
+_CH22_PLACEHOLDERS = [
+    ("ch22_se_001", "1", "CH22-SE-001", "Systematisk blikkbruk og informasjonsinnhenting", "Forstå at blikket må bevege seg kontinuerlig for å oppfatte farer", "førerperspektiv", "Tunnelsyn og oversett fare ved å stirre på ett punkt", "fører med aktivt blikk bak rattet", "bygate", "veikryss og skilt", "systematisk blikk", "/api/assets/thumbs/thumb_michaels_gatelogikk.jpg", ""),
+    ("ch22_se_002", "2", "CH22-SE-002", "De fem se-reglene (S-O-A-H)", "Mestre se langt fram, skaff overblikk, hold blikket i bevegelse", "oversiktsperspektiv", "For sent oppdaget hindring pga kort synsfelt", "bil som nærmer seg kryss", "tettbygd strøk", "gangfelt og skilt", "fem se-regler", "/api/assets/thumbs/thumb_hav_regelen_reflekser.jpg", "ch22_par_001"),
+    ("ch22_par_001", "2p", "CH22-PAR-001", "Aktivt sidesyn vs stivt tunnelsyn", "Vise fordelen med å skanne hele trafikkrommet", "blikksammenligning", "Påkjøring av fotgjenger fra siden ved fiksert blikk framover", "synsfeltillustrasjon fra førerplass", "gate", "fotgjengere på fortau", "vidt overblikk", "/api/assets/thumbs/thumb_vegtrafikkloven_3.jpg", "ch22_se_002"),
+    ("ch22_se_003", "3", "CH22-SE-003", "Blikkbruk i kurver og over bakketopper", "Lære å søke blikket gjennom svingen mot forsvinningspunktet", "kurveperspektiv", "Feilplassering eller panikkbremsing i sving pga feil blikkretning", "bil gjennom skarp kurve", "landevei", "autovern og skilt", "blikk gjennom kurven", "/api/assets/thumbs/thumb_tesla_bremsing_80.jpg", ""),
+    ("ch22_se_004", "4", "CH22-SE-004", "Road Check systematisk informasjonsinnhenting", "Teste kunnskap om se-teknikk, speilrutiner og blindsonekontroll", "testperspektiv", "Manglende skuldersjekk ved feltskifte som fører til kollisjon", "bil i testsituasjon", "veikryss", "skilt og linjer", "se-teknikk test", "/api/assets/thumbs/thumb_offisielle_trafikkskilt.jpg", ""),
+    ("ch22_se_005", "5", "CH22-SE-005", "Speilrutiner og blindsonesjekk", "Lære fast rekkefølge: innespeil, utespeil, dødvinkel (skuldersjekk)", "speilperspektiv", "Kollisjon med forbikjørende motorsykkel eller bil i blindsonen", "sidespeil med bil i blindsone", "flerfeltsvei", "kjørefeltlinjer", "skuldersjekk", "/api/assets/thumbs/thumb_michaels_gatelogikk.jpg", "ch22_par_002"),
+    ("ch22_par_002", "5p", "CH22-PAR-002", "Skuldersjekk vs stole blindt på speilene", "Se at speilet alene ikke fanger opp kjøretøy ved siden av bilen", "blindsonesammenligning", "Feltskifte rett inn i bil som ligger parallelt", "to biler ved siden av hverandre", "motorvei", "feltlinjer", "dødvinkelkontroll", "/api/assets/thumbs/thumb_tesla_bremsing_40_a.jpg", "ch22_se_005"),
+    ("ch22_se_006", "6", "CH22-SE-006", "Oppsummering informasjonsinnhenting", "Feire full kontroll over SE-FORSTÅ-VELGE-prosessen", "mestringsperspektiv", "Treg reaksjon i komplekse situasjoner", "rolig og fokusert fører i kveldssol", "landevei", "god sikt fremover", "mestring av se-teknikk", "/api/assets/thumbs/thumb_hav_regelen_reflekser.jpg", ""),
+]
+
+CH22_ASSETS = {
+    key: {"asset_id": asset_id, "page": page, "scene": scene,
+          "pedagogical_purpose": purpose, "camera_angle": camera,
+          "risk_source": risk, "risikokilde": risk,
+          "vehicles_road_users": actors, "road_type": road,
+          "signs_markings": markings, "learner_discovery": discovery,
+          "hotspots": [], "pair_asset": pair_key, "status": "placeholder", "src": src,
+          "alt": i18n("Illustrasjon av systematisk informasjonsinnhenting", "ภาพประกอบเรื่องการรวบรวมข้อมูลอย่างเป็นระบบ", "Illustration of systematic visual search")}
+    for key, page, asset_id, scene, purpose, camera, risk, actors, road, markings, discovery, src, pair_key in _CH22_PLACEHOLDERS
+}
+
+CH22_LESSONS = [
+    info("CH22-001", "intro", "ch22_se_001",
+         "Systematisk blikkbruk – hjertet av sikkerhet",
+         "การมองอย่างเป็นระบบ – หัวใจของความปลอดภัย",
+         "Systematic Visual Search – Heart of Safety",
+         ("Over 90 prosent av all informasjon du mottar som sjåfør kommer gjennom øynene. Riktig blikkbruk handler om å flytte blikket aktivt og aldri stirre stivt på ett enkelt punkt.",
+          "ข้อมูลมากกว่า 90 เปอร์เซ็นต์ที่ผู้ขับขี่ได้รับเข้ามาทางสายตา การมองอย่างถูกต้องคือการกวาดสายตาอย่างกระตือรือร้นและไม่จ้องเขม็งอยู่ที่จุดใดจุดหนึ่งเพียงจุดเดียว",
+          "Over 90 percent of driving info comes through your eyes. Proper visual search means moving your gaze actively, never staring fixedly at one spot.")),
+    info("CH22-002", "choice", "ch22_se_002",
+         "De fem se-reglene (S-O-A-H)",
+         "กฎการมอง 5 ประการ (S-O-A-H)",
+         "The Five Visual Rules (S-O-A-H)",
+         ("Huskereglene for godt synsfelt: 1. Se langt fram. 2. Skaff overblikk. 3. Beveg blikket. 4. Bli sett (bruk lys og tegn). 5. Ha alltid en utvei. Dette gir deg handlingsrom hvis noe uventet skjer.",
+          "หลักการมองให้เห็นรอบด้าน: 1. มองไกลไปข้างหน้า 2. สร้างมุมมองรอบทิศทาง 3. กวาดสายตาเคลื่อนไหวตลอดเวลา 4. ให้ผู้อื่นมองเห็นเราได้ชัดเจน 5. มองหาทางรอดเสมอ สิ่งเหล่านี้ช่วยให้คุณมีเวลาตัดสินใจเมื่อเกิดเหตุฉุกเฉิน",
+          "Visual search rules: 1. Look far ahead. 2. Get the big picture. 3. Keep eyes moving. 4. Be seen. 5. Always have an escape route."),
+         pair_asset="ch22_par_001",
+         question=question(
+             ("KONTROLLSPØRSMÅL", "คำถามตรวจสอบ", "CHECK QUESTION"),
+             ("Hva betyr den første se-regelen: 'Se langt fram'?",
+              "กฎการมองข้อแรก 'มองไกลไปข้างหน้า' มีความหมายอย่างไร?",
+              "What does the first visual rule 'Look far ahead' mean?"),
+             [
+                 opt("a", "Å se kun på støtfangeren til bilen foran", "มองเฉพาะกันชนท้ายรถคันหน้า", "Looking only at bumper of car ahead"),
+                 opt("b", "Å rette blikket 15-20 sekunder framover i veibanen for å oppdage hendelser tidlig", "กวาดสายตามองล่วงหน้าไป 15-20 วินาทีบนเส้นทางเพื่อรับรู้สถานการณ์แต่เนิ่นๆ", "Directing gaze 15-20 seconds ahead along the road to spot events early"),
+                 opt("c", "Å lukke øynene i mørket", "การหลับตาลงเมื่อทางมืด", "Closing eyes in darkness"),
+             ],
+             "b",
+             ("Å se langt fram gir deg tid til å planlegge og senke farten kontrollert.",
+              "การมองไกลช่วยให้คุณมีเวลาวางแผนและลดความเร็วได้อย่างนุ่มนวล",
+              "Looking far ahead buys time to plan and decelerate smoothly.")
+         )),
+    info("CH22-003", "sequence", "ch22_se_003",
+         "Blikkbruk i kurver og over bakketopper",
+         "การใช้สายตาในทางโค้งและยอดเนิน",
+         "Eye Lead in Curves and Over Crests",
+         ("I en kurve skal blikket søke mot det innerste punktet du kan se (forsvinningspunktet). Bilen styres automatisk dit du ser. Løft blikket over bakketopper og forbered deg på at veien kan svinge bak toppen.",
+          "ในทางโค้ง สายตาจะต้องมองไปยังจุดไกลที่สุดที่ยังพอมองเห็นได้ (จุดลับตา) รถยนต์จะเลี้ยวไปตามทิศทางที่สายตาจับจ้อง และเมื่อถึงยอดเนินให้มองไกลเพื่อพร้อมรับมือหากถนนมีทางโค้งซ่อนอยู่ด้านหลัง",
+          "In curves direct eyes toward the vanishing point. The car steers where you look. Over crests raise gaze and anticipate road direction changes.")),
+    {
+        "id": "CH22-004", "type": "roadCheck", "asset": "ch22_se_004", "road_check_id": "CH22-RC-001",
+        "eyebrow": i18n("ROAD CHECK ⚡ SE-TEKNIKK", "ROAD CHECK ⚡ เทคนิคการมอง", "ROAD CHECK ⚡ VISUAL TECHNIQUE"),
+        "title": i18n("Road Check ⚡ Systematisk informasjonsinnhenting", "Road Check ⚡ การรวบรวมข้อมูลอย่างเป็นระบบ", "Road Check ⚡ Systematic Visual Search"),
+        "questions": [
+            question(
+                ("SPØRSMÅL 1", "คำถามที่ 1", "QUESTION 1"),
+                ("Hva er formålet med å sjekke dødvinkelen (skuldersjekk) før feltskifte?",
+                 "จุดประสงค์ของการหันมองมุมอับสายตา (Skuldersjekk) ก่อนเปลี่ยนเลนคืออะไร?",
+                 "What is the purpose of checking blind spots (shoulder check) before changing lanes?"),
+                [
+                    opt("a", "Å se kjøretøy eller syklister som ligger parallelt og er usynlige i speilene", "มองดูรถหรือจักรยานที่แล่นขนานอยู่ข้างตัวรถซึ่งกระจกมองข้างมองไม่เห็น", "Spotting vehicles or cyclists alongside that are hidden from mirrors"),
+                    opt("b", "Å kontrollere om baksetepassasjerene sover", "ตรวจดูว่าผู้โดยสารด้านหลังหลับหรือไม่", "Checking if rear passengers are asleep"),
+                    opt("c", "Det er kun nødvendig ved rygging på parkeringsplass", "จำเป็นเฉพาะตอนถอยหลังเข้าที่จอดเท่านั้น", "Only needed when reversing in parking lot"),
+                ],
+                "a",
+                ("Skuldersjekk redder liv ved å avdekke det speilene ikke viser.",
+                 "การหันมองข้ามไหล่ช่วยชีวิตได้เสมอเพราะเผยให้เห็นจุดบอดที่กระจกมองไม่เห็น",
+                 "Shoulder checks save lives by revealing what mirrors miss.")
+            ),
+            question(
+                ("SPØRSMÅL 2", "คำถามที่ 2", "QUESTION 2"),
+                ("Hva er riktig rekkefølge ved speilbruk før en fartsreduksjon?",
+                 "ลำดับการมองกระจกที่ถูกต้องก่อนการชะลอความเร็วคืออะไร?",
+                 "What is the correct mirror sequence before decelerating?"),
+                [
+                    opt("a", "Kun se ned på speedometeret", "มองดูเฉพาะหน้าปัดความเร็ว", "Only looking at speedometer"),
+                    opt("b", "Innespeil for å se trafikk bak, vurdere avstand, og deretter bremse kontrollert", "ดูกระจกมองหลังในห้องโดยสารเพื่อเช็กคันหลัง ประเมินระยะห่าง แล้วจึงแตะเบรกอย่างนุ่มนวล", "Interior mirror to check rear traffic, assess distance, then brake smoothly"),
+                    opt("c", "Bråbremse først og sjekke speilet etterpå", "เบรกแรงๆ ก่อนแล้วค่อยดูกระจกทีหลัง", "Braking hard first then checking mirrors afterward"),
+                ],
+                "b",
+                ("Sjekk alltid bakover før du bremser så du unngår å bli påkjørt bakfra.",
+                 "ตรวจดูกระจกหลังเสมอก่อนเบรกเพื่อป้องกันไม่ให้รถคันหลังชนท้าย",
+                 "Always check behind before braking to prevent rear-end collisions.")
+            ),
+            question(
+                ("SPØRSMÅL 3", "คำถามที่ 3", "QUESTION 3"),
+                ("Hva skjer med synsfeltet når hastigheten øker kraftig?",
+                 "เกิดอะไรขึ้นกับลานสายตาเมื่อคุณขับรถด้วยความเร็วสูงมาก?",
+                 "What happens to your field of vision as speed increases significantly?"),
+                [
+                    opt("a", "Synsfeltet blir bredere og skarpere", "ลานสายตาจะกว้างขึ้นและชัดเจนขึ้น", "Vision field becomes wider and sharper"),
+                    opt("b", "Synsfeltet smalner inn (tunnelsyn) og detaljer i periferien blir vanskeligere å oppfatte", "ลานสายตาจะแคบลงเหมือนมองผ่านอุโมงค์ และมองเห็นสิ่งรอบข้างได้ยากขึ้น", "Vision narrows into tunnel vision and peripheral details fade"),
+                    opt("c", "Farten påvirker ikke synsfeltet i det hele tatt", "ความเร็วไม่มีผลต่อการมองเห็นใดๆ ทั้งสิ้น", "Speed has no effect on vision whatsoever"),
+                ],
+                "b",
+                ("Høy fart innsnevrer synsfeltet dramatisk og øker risikoen for å overse farer.",
+                 "ความเร็วสูงทำให้สายตามองเห็นแคบลงมากและเสี่ยงต่อการมองไม่เห็นอันตรายด้านข้าง",
+                 "High speed narrows vision drastically and increases risk of missing hazards.")
+            ),
+        ],
+    },
+    info("CH22-005", "choice", "ch22_se_005",
+         "Speilrutiner og blindsoner",
+         "ขั้นตอนการใช้กระจกและมุมอับสายตา",
+         "Mirror Routines and Blind Spots",
+         ("Før enhver sving, feltskifte eller igangkjøring skal du følge den faste rutinen: Innespeil, utespeil og en rask skuldersjekk til siden. Dette eliminerer blindsonen og sikrer at ingen syklist blir klemt.",
+          "ก่อนเลี้ยว เปลี่ยนเลน หรือออกรถทุกครั้ง ต้องทำตามขั้นตอนอย่างเคร่งครัด: ดูกระจกมองหลังในรถ ดูกระจกมองข้าง และหันศีรษะมองข้ามไหล่ไปด้านข้างอย่างรวดเร็ว เพื่อปิดจุดบอดและมั่นใจว่าไม่มีจักรยานอยู่ข้างตัวรถ",
+          "Before turning, changing lanes, or moving off follow the routine: Interior mirror, side mirror, and quick shoulder check."),
+         pair_asset="ch22_par_002",
+         question=question(
+             ("KONTROLLSPØRSMÅL", "คำถามตรวจสอบ", "CHECK QUESTION"),
+             ("Kan moderne bilsensorer erstatte en fysisk skuldersjekk?",
+              "ระบบเซนเซอร์แจ้งเตือนของรถสมัยใหม่สามารถทดแทนการหันมองข้ามไหล่ได้หรือไม่?",
+              "Can modern car blind-spot sensors replace a physical shoulder check?"),
+             [
+                 opt("a", "Ja, sjåføren trenger aldri å snu hodet lenger", "ได้ ผู้ขับขี่ไม่ต้องหันศีรษะมองอีกต่อไป", "Yes, drivers never need to turn head anymore"),
+                 opt("b", "Nei, tekniske systemer er kun hjelpemidler; sjåføren har det fulle ansvaret", "ไม่ได้ ระบบไฟฟ้าเป็นเพียงตัวช่วยเสริมเท่านั้น ผู้ขับขี่ยังคงต้องรับผิดชอบเต็มที่", "No, tech systems are only aids; the driver retains full responsibility"),
+                 opt("c", "Ja, hvis bilen koster over en million kroner", "ได้ หากรถมีราคาแพงมาก", "Yes, if the car is very expensive"),
+             ],
+             "b",
+             ("Teknologi kan svikte eller overse raske syklister; sjekk alltid med egne øyne.",
+              "เทคโนโลยีอาจขัดข้องหรือตรวจไม่พบจักรยานที่วิ่งเร็ว ต้องมองด้วยตาตนเองเสมอ",
+              "Technology can fail or miss fast cyclists; always verify with your own eyes.")
+         )),
+    info("CH22-006", "chapterComplete", "ch22_se_006",
+         "Fullført: Systematisk informasjonsinnhenting",
+         "จบเนื้อหา: การรวบรวมข้อมูลอย่างเป็นระบบ",
+         "Completed: Systematic Visual Search",
+         ("Gratulerer med fullført kapittel 22! Med aktive speilrutiner, god blikkføring og rutinemessig skuldersjekk kjører du nå med et komplett sikkerhetsskjold rundt bilen.",
+          "ยินดีด้วยที่จบบทที่ 22! การใช้กระจกอย่างถูกขั้นตอน การมองไกล และการหันมองมุมอับอย่างสม่ำเสมอ ทำให้คุณมีเกราะป้องกันความปลอดภัยที่สมบูรณ์แบบรอบคันรถ",
+          "Congratulations on completing Chapter 22! With active mirror routines, good eye lead, and shoulder checks you have a full shield around your car."),
+         takeaways=[
+             i18n("Bruk S-O-A-H: Se langt fram og hold blikket i kontinuerlig bevegelse.",
+                  "ใช้หลัก S-O-A-H: มองไกลไปข้างหน้าและกวาดสายตาเคลื่อนไหวตลอดเวลา",
+                  "Use visual rules: Look far ahead and keep eyes moving continuously."),
+             i18n("Gjør alltid skuldersjekk før feltskifte eller sving.",
+                  "หันมองข้ามไหล่เช็กมุมอับก่อนเปลี่ยนเลนหรือเลี้ยวเสมอ",
+                  "Always do a shoulder check before lane changes or turns."),
+             i18n("Sjekk innespeilet før du bremser ned foran kryss.",
+                  "ดูกระจกมองหลังในรถก่อนชะลอความเร็วหน้าทางแยกเสมอ",
+                  "Check interior mirror before braking ahead of junctions."),
+         ],
+         nextChapter=i18n("NESTE: KAPITTEL 23 — KJØRING I BY OG PÅ LANDEVEG",
+                          "ถัดไป: บทที่ 23 — การขับขี่ในเมืองและบนทางหลวงชนบท",
+                          "NEXT: CHAPTER 23 — DRIVING IN CITY AND RURAL ROADS")),
+]
+
+# ─────────────────────────────────────────────────────────────────────────────
+# KAPITTEL 23: KJØRING I BY OG PÅ LANDEVEG (CH23)
+# ─────────────────────────────────────────────────────────────────────────────
+_CH23_PLACEHOLDERS = [
+    ("ch23_by_001", "1", "CH23-BY-001", "Kjøring i komplekst bymiljø", "Mestre høyt tempo, mange fotgjengere og kollektivfelt i byen", "bygateperspektiv", "Overraskende hendelse med sparkesykkel eller fotgjenger i blindgate", "tett bytrafikk med trikk og buss", "sentrumsgate", "kollektivfelt og gangfelt", "bymestring", "/api/assets/thumbs/thumb_michaels_gatelogikk.jpg", ""),
+    ("ch23_by_002", "2", "CH23-BY-002", "Vikeplikt i bygater og boligfelt", "Skille mellom vanlig høyreregel i boligfelt og forkjørsvei i by", "kryssoperspektiv", "Kollisjon i boligfeltkryss pga manglende overholdelse av høyreregel", "bil som nærmer seg kryss fra høyre", "boliggate", "ingen skilting (høyreregel)", "vikeplikt fra høyre", "/api/assets/thumbs/thumb_vikeplikt_oversikt.jpg", "ch23_par_001"),
+    ("ch23_par_001", "2p", "CH23-PAR-001", "Høyreregel i boligfelt vs forkjørsvei med skilt 206", "Se forskjellen på forkjørsvei og ukulskiltet boliggate", "skiltsammenligning", "Trodde man var på forkjørsvei i umerket kryss og kjørte på bil", "to ulike kryss i bymiljø", "gate", "forkjørsskilt 206", "riktig vikeplikt", "/api/assets/thumbs/thumb_vikeplikt_7_1a.jpg", "ch23_by_002"),
+    ("ch23_by_003", "3", "CH23-BY-003", "Kjøring på høyhastighetsvei og motorvei", "Lære trygg påkjøring, fartsøkning i akselerasjonsfelt og avstand", "motorveiperspektiv", "Bråstans i påkjøringsfelt eller for kort avstand i 110 km/t", "bil i akselerasjonsfelt inn på motorvei", "motorvei", "skilt motorvei og oppmerking", "innfletting", "/api/assets/thumbs/thumb_tesla_bremsing_80.jpg", ""),
+    ("ch23_by_004", "4", "CH23-BY-004", "Road Check kjøring i by og på landevei", "Teste kunnskap om innfletting, bussregler i 60-sone og forbikjøring", "testperspektiv", "Feilvurdering av bussens forkjørsrett ved holdeplass i 60-sone", "bil foran bussholdeplass", "vei med fartsgrense 60", "busslomme", "by- og landeveiskontroll", "/api/assets/thumbs/thumb_vikeplikt_7_5a_buss.jpg", ""),
+    ("ch23_by_005", "5", "CH23-BY-005", "Venstresving på landevei (den store faren)", "Unngå påkjøring bakfra ved venstresving fra landevei", "landeveiperspektiv", "Alvorlig påkjørselsulykke bakfra ved stans i kjørefelt før sving", "bil som forbereder venstresving på landevei", "landevei med fartsgrense 80", "svingepunkt og veiskulder", "sikker venstresving", "/api/assets/thumbs/thumb_tesla_bremsing_40_a.jpg", "ch23_par_002"),
+    ("ch23_par_002", "5p", "CH23-PAR-002", "Svinge til høyre og snu vs risikabel stans på landevei", "Se sikker metode: kjør til høyre og kryss trygt når veien er tom", "sikkerhetsalternativ", "Underkjøring av bil bak som holder 80 km/t ved stans i feltet", "bil som svinger inn til høyre busslomme for å vente", "landevei", "oversikt", "unngå kollisjon", "/api/assets/thumbs/thumb_vikeplikt_7_4a_utkjoring.jpg", "ch23_by_005"),
+    ("ch23_by_006", "6", "CH23-BY-006", "Oppsummering kjøring i by og på landevei", "Ha full kontroll på hastighet, plassering og samhandling i alle miljøer", "mestringsperspektiv", "Feilvurdering av fart og avstand i vekslende trafikkmiljø", "bil som kjører harmonisk i norsk landskap", "landevei og fjord", "god veimerking", "komplett trafikant", "/api/assets/thumbs/thumb_hav_regelen_reflekser.jpg", ""),
+]
+
+CH23_ASSETS = {
+    key: {"asset_id": asset_id, "page": page, "scene": scene,
+          "pedagogical_purpose": purpose, "camera_angle": camera,
+          "risk_source": risk, "risikokilde": risk,
+          "vehicles_road_users": actors, "road_type": road,
+          "signs_markings": markings, "learner_discovery": discovery,
+          "hotspots": [], "pair_asset": pair_key, "status": "placeholder", "src": src,
+          "alt": i18n("Illustrasjon av kjøring i by og på landeveg", "ภาพประกอบเรื่องการขับขี่ในเมืองและนอกเมือง", "Illustration of driving in city and rural road")}
+    for key, page, asset_id, scene, purpose, camera, risk, actors, road, markings, discovery, src, pair_key in _CH23_PLACEHOLDERS
+}
+
+CH23_LESSONS = [
+    info("CH23-001", "intro", "ch23_by_001",
+         "Kjøring i bymiljø – tempo og mangfold",
+         "การขับขี่ในเมือง – จังหวะที่รวดเร็วและความหลากหลาย",
+         "City Driving – Tempo and Diversity",
+         ("Bykjøring krever rask informasjonsbehandling. Du deler veien med trikker, bybusser, syklister og fotgjengere. Hold lav fart og ha foten klar over bremsepedalen i uoversiktlige gater.",
+          "การขับรถในเมืองต้องประมวลผลข้อมูลอย่างรวดเร็ว คุณใช้ถนนร่วมกับรถราง รถบัส จักรยาน และคนเดินถนน ควรใช้ความเร็วต่ำและวางเท้าเตรียมพร้อมแตะเบรกเสมอในซอยที่มองเห็นได้ไม่ชัดเจน",
+          "City driving requires fast information processing. You share the road with trams, buses, cyclists, and pedestrians. Keep low speed and cover the brake.")),
+    info("CH23-002", "choice", "ch23_by_002",
+         "Kryss og vikeplikt i by og boligområder",
+         "ทางแยกและการให้ทางในเมืองและเขตชุมชน",
+         "Junctions and Right-of-Way in Urban Zones",
+         ("I boliggater uten skilting gjelder den vanlige høyreregelen. På forkjørsvei (gult kvadrat, skilt 206) har du forkjørsrett gjennom kryssene, men må likevel følge med på kryssende trafikk.",
+          "ในซอยที่พักอาศัยที่ไม่มีป้ายจราจร ให้ใช้กฎให้ทางรถทางขวาเสมอ ส่วนบนถนนหลัก (ป้ายสี่เหลี่ยมข้าวหลามตัดสีเหลือง ป้าย 206) คุณมีสิทธิไปก่อนในทางแยก แต่ยังคงต้องสังเกตทางแยกอย่างระมัดระวัง",
+          "In residential streets without signs, general right-hand rule applies. On priority roads (sign 206) you have priority through junctions but must stay alert."),
+         pair_asset="ch23_par_001",
+         question=question(
+             ("KONTROLLSPØRSMÅL", "คำถามตรวจสอบ", "CHECK QUESTION"),
+             ("Hvilken regel gjelder i et boligstrøk der det ikke finnes vikepliktskilt?",
+              "กฎข้อใดใช้บังคับในเขตที่พักอาศัยที่ไม่มีป้ายบอกสิทธิการให้ทาง?",
+              "What rule applies in a residential area where no priority signs exist?"),
+             [
+                 opt("a", "Bilen som kjører fortest har forkjørsrett", "รถคันที่ขับเร็วกว่ามีสิทธิไปก่อน", "The car driving fastest has right of way"),
+                 opt("b", "Vanlig høyreregel gjelder ubetinget overfor all kryssende trafikk", "กฎให้ทางรถที่มาจากทางขวามือใช้บังคับเสมอ", "General right-hand rule applies unconditionally to all crossing traffic"),
+                 opt("c", "Bilen som er størst kjører først", "รถคันที่ใหญ่กว่าได้ไปก่อน", "The largest car goes first"),
+             ],
+             "b",
+             ("Uten skilt gjelder alltid høyreregelen; brems ned og sjekk høyre side grundig.",
+              "หากไม่มีป้าย ให้ใช้กฎรถทางขวาเสมอ ชะลอความเร็วและมองทางขวาให้ชัดเจน",
+              "Without signs right-hand rule always applies; slow down and check right side thoroughly.")
+         )),
+    info("CH23-003", "sequence", "ch23_by_003",
+         "Høyhastighetsvei og motorvei",
+         "ทางหลวงความเร็วสูงและมอเตอร์เวย์",
+         "High-Speed Roads and Motorways",
+         ("På motorvei skal du bruke akselerasjonsfeltet til å tilpasse farten nøyaktig til trafikkstrømmen før du fletter inn. Hold alltid minst 3 sekunders avstand til forankjørende i høy fart.",
+          "บนทางหลวงมอเตอร์เวย์ ให้ใช้ช่องทางเร่งความเร็วเพื่อปรับความเร็วรถให้เท่ากับกระแสการจราจรก่อนที่จะแทรกตัวเข้าเลนอย่างนุ่มนวล และเว้นระยะห่างจากคันหน้าอย่างน้อย 3 วินาทีเสมอ",
+          "On motorways use the acceleration lane to match traffic speed before merging. Always keep at least 3 seconds following distance at speed.")),
+    {
+        "id": "CH23-004", "type": "roadCheck", "asset": "ch23_by_004", "road_check_id": "CH23-RC-001",
+        "eyebrow": i18n("ROAD CHECK ⚡ BY OG LANDEVEI", "ROAD CHECK ⚡ ในเมืองและนอกเมือง", "ROAD CHECK ⚡ CITY AND RURAL ROADS"),
+        "title": i18n("Road Check ⚡ Kjøring i by og på landeveg", "Road Check ⚡ การขับขี่ในเมืองและบนทางหลวงชนบท", "Road Check ⚡ Driving in City and Rural Roads"),
+        "questions": [
+            question(
+                ("SPØRSMÅL 1", "คำถามที่ 1", "QUESTION 1"),
+                ("Når har du plikt til å vike for en buss som blinker ut fra holdeplass?",
+                 "เมื่อใดที่คุณมีหน้าที่ต้องหยุดให้ทางแก่รถบัสที่เปิดไฟเลี้ยวเพื่อออกจากป้าย?",
+                 "When are you obliged to give way to a bus signalling out from a bus stop?"),
+                [
+                    opt("a", "Når fartsgrensen på stedet er 60 km/t eller lavere", "เมื่อถนนบริเวณนั้นมีป้ายจำกัดความเร็วไม่เกิน 60 กม./ชม.", "When posted speed limit is 60 km/h or lower"),
+                    opt("b", "Kun på motorvei med 110 km/t", "เฉพาะบนทางหลวงความเร็ว 110 กม./ชม.", "Only on motorways at 110 km/h"),
+                    opt("c", "Aldri; bussen har alltid ubetinget vikeplikt", "ไม่เคยเลย รถบัสต้องรอให้รถว่างเสมอ", "Never; the bus always has absolute yield duty"),
+                ],
+                "a",
+                ("I 60-sone eller lavere må bilister vike for buss som skal ut fra holdeplass.",
+                 "ในเขตจำกัดความเร็ว 60 หรือต่ำกว่า รถยนต์ต้องชะลอและให้ทางแก่รถบัสออกจากป้าย",
+                 "In 60 km/h zones or below drivers must yield to buses pulling out from stops.")
+            ),
+            question(
+                ("SPØRSMÅL 2", "คำถามที่ 2", "QUESTION 2"),
+                ("Hvorfor er venstresving fra landevei i 80 km/t regnet som en risikosituasjon?",
+                 "ทำไมการเลี้ยวซ้ายออกจากทางหลวงความเร็ว 80 กม./ชม. จึงถือเป็นจุดที่เสี่ยงอันตรายอย่างยิ่ง?",
+                 "Why is turning left from an 80 km/h rural road considered a high-risk situation?"),
+                [
+                    opt("a", "Fordi bilen bak kan kjøre inn i deg i høy fart hvis du stanser i kjørefeltet", "เพราะรถที่ตามหลังมาด้วยความเร็วสูงอาจชนท้ายหากคุณหยุดรถค้างอยู่กลางเลน", "Because following cars at high speed may rear-end you if you stop in lane"),
+                    opt("b", "Fordi det er forbudt å svinge til venstre i Norge", "เพราะการเลี้ยวซ้ายในนอร์เวย์เป็นสิ่งผิดกฎหมาย", "Because turning left is illegal in Norway"),
+                    opt("c", "Fordi forhjulene slites ekstra mye ved svinging", "เพราะยางล้อหน้าจะสึกหรอเร็วกว่าปกติ", "Because front tires wear extra fast during turning"),
+                ],
+                "a",
+                ("På landevei er stans i kjørefeltet livsfarlig; sving heller av til høyre og snu trygt.",
+                 "การหยุดค้างอยู่กลางเลนบนทางหลวงอันตรายมาก หากมีรถตามมา ให้เลี้ยวเข้าขวาแล้วค่อยกลับรถ",
+                 "Stopping in lane on rural roads is dangerous; turn right into a side area and cross safely.")
+            ),
+            question(
+                ("SPØRSMÅL 3", "คำถามที่ 3", "QUESTION 3"),
+                ("Hva kjennetegner en god og sikker innfletting i akselerasjonsfelt på motorvei?",
+                 "ลักษณะของการแทรกตัวเข้าทางหลวงอย่างปลอดภัยและนุ่มนวลคืออะไร?",
+                 "What characterizes safe and smooth merging from motorway acceleration lanes?"),
+                [
+                    opt("a", "Bremse ned til full stans ved starten av akselerasjonsfeltet", "เบรกจนหยุดสนิทตั้งแต่ต้นช่องทางเร่งความเร็ว", "Braking to a full stop at beginning of acceleration lane"),
+                    opt("b", "Akselerere bestemt til samme fart som motorveitrafikken og flette smidig inn i en luke", "เร่งความเร็วให้เท่ากับกระแสรถบนทางหลวงแล้วแทรกตัวเข้าในช่องว่างอย่างนุ่มนวล", "Accelerate decisively to match motorway traffic and merge smoothly into gap"),
+                    opt("c", "Kjøre rett over sperrelinjen for å komme inn raskest mulig", "ขับทับเส้นทึบเพื่อรีบเข้าเลนให้เร็วที่สุด", "Driving straight over solid barrier line to get in fast"),
+                ],
+                "b",
+                ("Fartstilpasning i akselerasjonsfeltet sikrer sømløs trafikkavvikling.",
+                 "การปรับความเร็วให้เท่ากับคันอื่นในช่องเร่งเครื่องช่วยให้การสัญจรปลอดภัยและไม่ติดขัด",
+                 "Matching speed in the acceleration lane ensures seamless traffic flow.")
+            ),
+        ],
+    },
+    info("CH23-005", "choice", "ch23_by_005",
+         "Sikker venstresving på landevei",
+         "การเลี้ยวซ้ายอย่างปลอดภัยบนถนนนอกเมือง",
+         "Safe Left Turns on Rural Roads",
+         ("Dersom du har biler tett bak deg på en 80-sone vei og må svinge til venstre, er det ofte sikrest å svinge inn på en busslomme til høyre, slippe trafikken forbi, og krysse veien når det er helt klart.",
+          "หากมีรถตามหลังมาติดๆ บนถนนนอกเมืองที่มีความเร็ว 80 แล้วคุณจำเป็นต้องเลี้ยวซ้าย วิธีที่ปลอดภัยที่สุดคือการเลี้ยวแวะเข้าจุดพักรถหรือป้ายรถบัสทางขวามือ เพื่อปล่อยให้รถหลังแซงผ่านไปก่อน แล้วค่อยข้ามถนนเมื่อปลอดภัย",
+          "If cars follow closely on an 80 km/h road when turning left, it is safest to pull into a bus stop on the right, let traffic pass, and cross safely."),
+         pair_asset="ch23_par_002",
+         question=question(
+             ("KONTROLLSPØRSMÅL", "คำถามตรวจสอบ", "CHECK QUESTION"),
+             ("Hva bør du gjøre hvis du skal svinge til venstre på landevei og har et vogntog rett bak deg?",
+              "คุณควรทำอย่างไรหากต้องการเลี้ยวซ้ายบนถนนนอกเมืองแต่มีรถบรรทุกใหญ่ตามหลังมาติดๆ?",
+              "What should you do if turning left on a rural road with a heavy truck right behind you?"),
+             [
+                 opt("a", "Stanse midt i feltet og håpe at lastebilen rekker å bremse", "หยุดรถกลางเลนแล้วหวังว่ารถบรรทุกจะเบรกทัน", "Stop mid-lane and hope the truck manages to stop"),
+                 opt("b", "Kjøre forbi krysset eller svinge av til høyre for å snu trygt", "ขับเลยทางแยกไปก่อนหรือเลี้ยวแวะเข้าข้างทางด้านขวาเพื่อกลับรถอย่างปลอดภัย", "Drive past junction or turn off right to turn around safely"),
+                 opt("c", "Bråbremse og svinge uten å bruke blinklys", "เบรกกะทันหันแล้วเลี้ยวโดยไม่เปิดไฟเลี้ยว", "Brake sharply and turn without signalling"),
+             ],
+             "b",
+             ("Unngå alltid å bli påkjørt bakfra på raske landeveier.",
+              "หลีกเลี่ยงการตกเป็นเป้าถูกชนท้ายบนทางหลวงความเร็วสูงเสมอ",
+              "Always avoid placing yourself at risk of rear-end impacts on high-speed roads.")
+         )),
+    info("CH23-006", "chapterComplete", "ch23_by_006",
+         "Fullført: Kjøring i by og på landeveg",
+         "จบเนื้อหา: การขับขี่ในเมืองและบนทางหลวงชนบท",
+         "Completed: Driving in City and Rural Roads",
+         ("Gratulerer med fullført kapittel 23! Du har nå kunnskap om å takle både tett bymiljø med myke trafikanter og krevende landeveier med høye hastigheter.",
+          "ยินดีด้วยที่จบบทที่ 23! คุณมีความรู้พร้อมรับมือทั้งการจราจรที่หนาแน่นในเมืองที่มีคนเดินถนน และทางหลวงนอกเมืองที่ใช้ความเร็วสูงได้อย่างปลอดภัย",
+          "Congratulations on completing Chapter 23! You now master dense urban environments and high-speed rural roads."),
+         takeaways=[
+             i18n("Vikeplikt for buss gjelder i 60 km/t-sone og lavere når bussen blinker ut.",
+                  "ต้องให้ทางแก่รถบัสที่เปิดไฟเลี้ยวออกจากป้ายในเขตจำกัดความเร็ว 60 หรือต่ำกว่า",
+                  "Yield to buses indicating out from stops in 60 km/h zones or lower."),
+             i18n("Bruk akselerasjonsfeltet til å oppnå full trafikkhastighet før fletting.",
+                  "ใช้ช่องทางเร่งความเร็วให้ได้ความเร็วเท่ากับรถบนทางหลวงก่อนแทรกตัวเข้าเลน",
+                  "Use acceleration lane to match full traffic speed before merging."),
+             i18n("Venstresving på landevei krever ekstrem oppmerksomhet bakover.",
+                  "การเลี้ยวซ้ายบนถนนนอกเมืองต้องระมัดระวังรถที่ตามมาด้านหลังอย่างยิ่งยวด",
+                  "Left turns on rural roads require extreme awareness of traffic behind."),
+         ],
+         nextChapter=i18n("NESTE: KAPITTEL 24 — EFFEKTIV KJØRING OG SIKKERHETSKURS PÅ BANE",
+                          "ถัดไป: บทที่ 24 — การขับขี่อย่างมีประสิทธิภาพและการฝึกบนสนามลื่น",
+                          "NEXT: CHAPTER 24 — EFFICIENT DRIVING AND TRACK SAFETY")),
+]
+
+# ─────────────────────────────────────────────────────────────────────────────
+# KAPITTEL 24: EFFEKTIV KJØRING OG SIKKERHETSKURS PÅ BANE (CH24)
+# ─────────────────────────────────────────────────────────────────────────────
+_CH24_PLACEHOLDERS = [
+    ("ch24_bane_001", "1", "CH24-BANE-001", "Effektiv og miljøvennlig trafikkavvikling", "Lære flyt og samhandling som sparer energi og hindrer kødannelse", "oversiktsperspektiv", "Unødvendig rykkete kjøring som skaper kø og økt utslipp", "jevn trafikkstrøm på flerfeltsvei", "hovedvei", "veimerking og skilting", "jevn flyt", "/api/assets/thumbs/thumb_trafikk_okosystem_norge.jpg", ""),
+    ("ch24_bane_002", "2", "CH24-BANE-002", "Flyt og lukeutnyttelse i rundkjøringer", "Mestre sikker plassering, fart og tegn i og ut av rundkjøring", "rundkjøringperspektiv", "Nøling i rundkjøring som fører til kollisjon eller blokkering", "biler i tofelts rundkjøring", "rundkjøring", "vikepliktskilt og piler", "rundkjøringsflyt", "/api/assets/thumbs/thumb_vikeplikt_oversikt.jpg", "ch24_par_001"),
+    ("ch24_par_001", "2p", "CH24-PAR-001", "Dynamisk innkjøring i rundkjøring vs nølende stans", "Se at riktig fartstilpasning lar deg gli inn i ledig luke uten stans", "sammenligning", "Påkjøring bakfra ved unødig full stans foran tom rundkjøring", "bil som tilpasser farten mot ledig luke", "rundkjøring", "vikeplikt", "riktig fart", "/api/assets/thumbs/thumb_michaels_gatelogikk.jpg", "ch24_bane_002"),
+    ("ch24_bane_003", "3", "CH24-BANE-003", "Sikkerhetskurs på bane – innhold og mål", "Kjenne formålet med glattkjøringskurset for å motvirke ulykker", "infoperspektiv", "Overmot og uvitenhet om fysikkens krefter på glatt vinterføre", "biler på glattkjøringsbane", "NAF bane", "kjegler og vannsprut", "sikkerhetskurs på bane", "/api/assets/thumbs/thumb_tesla_bremsing_80.jpg", ""),
+    ("ch24_bane_004", "4", "CH24-BANE-004", "Road Check effektiv kjøring og bane", "Teste kunnskap om ABS-bremsing, rundkjøringstegn og trinnvurdering", "testperspektiv", "Feil tegnbruk i rundkjøring eller manglende ABS-forståelse", "bil ved teststasjon på bane", "øvingsområde", "kjegler og målemerker", "banekontroll", "/api/assets/thumbs/thumb_tesla_bremsing_40_a.jpg", ""),
+    ("ch24_bane_005", "5", "CH24-BANE-005", "Nødbremsing og unnamanøver i sving på glatt føre", "Erfare bilens styreevne med ABS og farene ved sentrifugalkraft", "styreperspektiv", "Retningsvill sladd ved for brå rattbevegelse på glatt føre", "bil i sving på våt plastbane", "glattkjøringsbane", "skliflate", "styring under brems", "/api/assets/thumbs/thumb_tesla_bremsing_40_b.jpg", "ch24_par_002"),
+    ("ch24_par_002", "5p", "CH24-PAR-002", "Full ABS-brems med unnamanøver vs hjullås", "Se at moderne ABS lar bilen svinge unna hindring under full oppbremsing", "kontrollperspektiv", "Kollisjon rett fram i hindring ved manglende styring", "bil som svinger trygt utenom skumgummifigur på bane", "testbane", "hindring", "ABS-styring", "/api/assets/thumbs/thumb_tesla_bremsing_80.jpg", "ch24_bane_005"),
+    ("ch24_bane_006", "6", "CH24-BANE-006", "Trinnvurderingstime Trinn 3 – klar for Trinn 4", "Bekrefte godkjenning på Trinn 3 og gå videre til avsluttende kurs", "feiringsperspektiv", "Ikke nådd selvstendighetskrav før landeveiskjøring i Trinn 4", "lærer og elev som håndhilser etter vellykket kjøring", "trafikkstasjon", "bil i bakgrunnen", "klar for Trinn 4", "/api/assets/thumbs/thumb_hav_regelen_reflekser.jpg", ""),
+]
+
+CH24_ASSETS = {
+    key: {"asset_id": asset_id, "page": page, "scene": scene,
+          "pedagogical_purpose": purpose, "camera_angle": camera,
+          "risk_source": risk, "risikokilde": risk,
+          "vehicles_road_users": actors, "road_type": road,
+          "signs_markings": markings, "learner_discovery": discovery,
+          "hotspots": [], "pair_asset": pair_key, "status": "placeholder", "src": src,
+          "alt": i18n("Illustrasjon av effektiv kjøring og sikkerhetskurs på bane", "ภาพประกอบเรื่องการขับขี่อย่างมีประสิทธิภาพและการฝึกบนสนามลื่น", "Illustration of efficient driving and track safety course")}
+    for key, page, asset_id, scene, purpose, camera, risk, actors, road, markings, discovery, src, pair_key in _CH24_PLACEHOLDERS
+}
+
+CH24_LESSONS = [
+    info("CH24-001", "intro", "ch24_bane_001",
+         "Effektiv og flytende trafikkavvikling",
+         "การขับขี่อย่างมีประสิทธิภาพและไหลลื่น",
+         "Efficient Driving and Smooth Traffic Flow",
+         ("Effektiv kjøring betyr ikke å kjøre fortest mulig, men å holde jevn flyt, unngå unødvendige stans og tilpasse farten tidlig slik at du slipper å bremse hardt foran røde lys.",
+          "การขับขี่อย่างมีประสิทธิภาพไม่ได้หมายถึงการขับให้เร็วที่สุด แต่คือการรักษาความเร็วให้สม่ำเสมอ หลีกเลี่ยงการหยุดรถโดยไม่จำเป็น และชะลอความเร็วแต่เนิ่นๆ เพื่อให้ผ่านสัญญาณไฟได้โดยไม่ต้องเบรกกระชาก",
+          "Efficient driving means maintaining smooth flow, avoiding unnecessary stops, and timing arrivals to avoid harsh braking.")),
+    info("CH24-002", "choice", "ch24_bane_002",
+         "Plassering og flyt i rundkjøringer",
+         "การวางตำแหน่งรถและความไหลลื่นในวงเวียน",
+         "Positioning and Flow in Roundabouts",
+         ("I en tofelts rundkjøring: Skal du til høyre eller rett fram, velger du normalt høyre felt inn. Skal du til venstre, velger du venstre felt. Husk alltid å blinke til høyre i god tid før du forlater rundkjøringen.",
+          "ในวงเวียนสองเลน: หากต้องการเลี้ยวขวาหรือตรงไป โดยทั่วไปให้เข้าเลนขวา หากต้องการเลี้ยวซ้าย ให้เลือกเข้าเลนซ้าย และอย่าลืมเปิดไฟเลี้ยวขวาเสมอเมื่อกำลังจะออกจากวงเวียน",
+          "In two-lane roundabouts: Use right lane for turning right or straight; use left lane for left turns. Always signal right before exiting."),
+         pair_asset="ch24_par_001",
+         question=question(
+             ("KONTROLLSPØRSMÅL", "คำถามตรวจสอบ", "CHECK QUESTION"),
+             ("Når må du gi tegn med blinklys ut av en rundkjøring?",
+              "เมื่อใดที่คุณต้องเปิดไฟเลี้ยวขวาเพื่อออกจากวงเวียน?",
+              "When must you indicate right when exiting a roundabout?"),
+             [
+                 opt("a", "Først etter at du har kommet helt ut på den nye veien", "หลังจากที่ขับออกสู่ถนนใหม่เรียบร้อยแล้ว", "Only after completely exiting onto the new road"),
+                 opt("b", "I god tid idet du passerer siste utkjøring før den du skal ta", "เปิดล่วงหน้าทันทีที่ขับผ่านทางออกสุดท้ายก่อนถึงทางออกของคุณ", "In good time as you pass the last exit before your intended one"),
+                 opt("c", "Blinklys er valgfritt i små rundkjøringer", "การเปิดไฟเลี้ยวในวงเวียนเล็กเป็นเรื่องตามใจชอบ", "Indicators are optional in mini roundabouts"),
+             ],
+             "b",
+             ("Tidlig blinklys ut av rundkjøring hjelper ventende biler med å kjøre inn.",
+              "การเปิดไฟเลี้ยวล่วงหน้าช่วยให้รถที่รอเข้าวงเวียนทราบเจตนาและออกรถได้ทันที",
+              "Signalling early before exit helps waiting drivers enter smoothly.")
+         )),
+    info("CH24-003", "sequence", "ch24_bane_003",
+         "Sikkerhetskurs på bane (glattkjøring)",
+         "หลักสูตรความปลอดภัยบนสนามลื่น (Glattkjøring)",
+         "Safety Course on Track (Skid Pan)",
+         ("Kurset på 4 timer på lukket bane gir deg praktisk erfaring med nødbremsing, svingteknikk på glatt føre og å oppleve hvordan bilens stabilitetssystemer (ESP/ABS) reagerer ved skrens.",
+          "หลักสูตร 4 ชั่วโมงบนสนามฝึกปิดจะช่วยให้คุณได้ฝึกเบรกฉุกเฉิน เทคนิคการเข้าโค้งบนพื้นลื่น และสัมผัสการทำงานของระบบควบคุมการทรงตัวอัตโนมัติ (ESP/ABS) เมื่อรถเสียหลัก",
+          "The 4-hour closed-track course gives hands-on experience in emergency stops, cornering on slick surfaces, and vehicle stability aids (ESP/ABS).")),
+    {
+        "id": "CH24-004", "type": "roadCheck", "asset": "ch24_bane_004", "road_check_id": "CH24-RC-001",
+        "eyebrow": i18n("ROAD CHECK ⚡ BANE OG FLYT", "ROAD CHECK ⚡ สนามลื่นและความไหลลื่น", "ROAD CHECK ⚡ TRACK AND FLOW"),
+        "title": i18n("Road Check ⚡ Effektiv kjøring og glattkjøring", "Road Check ⚡ การขับขี่อย่างมีประสิทธิภาพและการฝึกบนสนามลื่น", "Road Check ⚡ Efficient Driving and Track Training"),
+        "questions": [
+            question(
+                ("SPØRSMÅL 1", "คำถามที่ 1", "QUESTION 1"),
+                ("Hva er den største fordelen med ABS-bremser under en nødbremsing?",
+                 "ประโยชน์ที่สำคัญที่สุดของระบบเบรก ABS ในขณะเบรกฉุกเฉินคืออะไร?",
+                 "What is the greatest advantage of ABS brakes during an emergency stop?"),
+                [
+                    opt("a", "At bremselengden alltid blir halvert på ren is", "ระยะเบรกลดลงครึ่งหนึ่งเสมอบนพื้นน้ำแข็ง", "Braking distance is always halved on pure ice"),
+                    opt("b", "At hjulene ikke låser seg, slik at du beholder styreevnen og kan styre unna hindringer", "ล้อไม่ล็อกตาย ทำให้ยังคงสามารถหมุนพวงมาลัยหักหลบสิ่งกีดขวางได้", "Wheels do not lock, preserving steering ability so you can steer around obstacles"),
+                    opt("c", "At bilen stopper automatisk uten at du trykker på pedalen", "รถจะหยุดเองโดยอัตโนมัติโดยที่คุณไม่ต้องเหยียบแป้นเบรก", "Car stops automatically without depressing pedal"),
+                ],
+                "b",
+                ("ABS hindrer hjullås og gjør at bilen kan styres mens du bremser maksimalt.",
+                 "ระบบ ABS ช่วยไม่ให้ล้อล็อก ทำให้คุณยังสามารถหักเลี้ยวรถได้ในขณะที่เหยียบเบรกเต็มแรง",
+                 "ABS prevents wheel lockup, allowing steering while braking at maximum threshold.")
+            ),
+            question(
+                ("SPØRSMÅL 2", "คำถามที่ 2", "QUESTION 2"),
+                ("Hva vurderes under den obligatoriske trinnvurderingstimen på Trinn 3?",
+                 "สิ่งใดที่ถูกนำมาประเมินในชั่วโมงประเมินผลขั้นตอนที่ 3?",
+                 "What is evaluated during the mandatory Stage 3 assessment lesson?"),
+                [
+                    opt("a", "Om eleven kjører selvstendig og har god nok risikoforståelse til å gå videre til Trinn 4", "ผู้เรียนขับขี่อย่างมั่นใจด้วยตนเองและมีความเข้าใจเรื่องความเสี่ยงเพียงพอที่จะก้าวสู่ขั้นตอนที่ 4 หรือไม่", "Whether student drives independently and has sufficient risk awareness for Stage 4"),
+                    opt("b", "Om eleven kan skifte dekk på under 5 minutter", "ผู้เรียนสามารถเปลี่ยนยางได้ภายในเวลา 5 นาทีหรือไม่", "Whether student can change tires in under 5 minutes"),
+                    opt("c", "Kun elevens teoretiske puggekunnskaper om veitrafikkloven", "ประเมินเฉพาะการท่องจำทฤษฎีกฎหมายจราจรเท่านั้น", "Only student's rote theoretical knowledge of traffic law"),
+                ],
+                "a",
+                ("Trinnvurderingen bekrefter om du er moden for avsluttende opplæring på Trinn 4.",
+                 "การประเมินผลจะยืนยันว่าคุณมีความพร้อมสำหรับการฝึกขั้นสุดท้ายในขั้นตอนที่ 4 แล้วหรือไม่",
+                 "The assessment confirms readiness for final training in Stage 4.")
+            ),
+            question(
+                ("SPØRSMÅL 3", "คำถามที่ 3", "QUESTION 3"),
+                ("Hva er riktig fremgangsmåte hvis bakenden på bilen begynner å skli ut (sladd) i en sving?",
+                 "วิธีการที่ถูกต้องเมื่อท้ายรถเริ่มลื่นไถล (Sladd) ในทางโค้งคืออะไร?",
+                 "What is the correct action if the rear of the car starts skidding in a turn?"),
+                [
+                    opt("a", "Lukke øynene og dra i håndbrekket", "หลับตาลงแล้วดึงเบรกมือขึ้นทันที", "Close eyes and pull handbrake"),
+                    opt("b", "Styre rolig i den retningen bakenden sklir (kontrastyring) og se dit du vil kjøre", "หมุนพวงมาลัยไปในทิศทางที่ท้ายรถสไลด์ออกอย่างนุ่มนวล และมองไปยังทิศทางที่ต้องการไป", "Steer smoothly in the direction the rear is skidding (countersteer) and look where you want to go"),
+                    opt("c", "Gi full gass og vri rattet helt over", "เหยียบคันเร่งมิดแล้วหมุนพวงมาลัยจนสุด", "Floor the throttle and turn wheel fully"),
+                ],
+                "b",
+                ("Kontrastyring og blikkfokus på utveien henter inn igjen bilens retning.",
+                 "การหมุนพวงมาลัยแก้ทางและการมองไปยังทางออกช่วยดึงให้รถกลับมาตั้งลำตรงได้",
+                 "Countersteering and focusing gaze on your escape path recovers vehicle alignment.")
+            ),
+        ],
+    },
+    info("CH24-005", "choice", "ch24_bane_005",
+         "Nødbrems og unnamanøver på glatt underlag",
+         "การเบรกฉุกเฉินและหักหลบสิ่งกีดขวางบนถนนลื่น",
+         "Emergency Braking and Evasive Swerve on Slick Surface",
+         ("På glatt føre må du trå bremsepedalen i bunn umiddelbart og styre bestemt, men mykt rundt hindringen. Brå rattbevegelser river løs dekkene fra underlaget og gjør at bilen sklir rett fram.",
+          "บนทางลื่น ให้เหยียบแป้นเบรกจนสุดในทันทีและหมุนพวงมาลัยอย่างมั่นคงแต่นุ่มนวลเพื่อหลบสิ่งกีดขวาง การหักพวงมาลัยกระชากแรงเกินไปจะทำให้ยางสูญเสียการยึดเกาะและรถจะไถลตรงไปข้างหน้า",
+          "On slick roads depress brake fully and steer smoothly around hazard. Abrupt steering breaks tire grip causing car to plow straight ahead."),
+         pair_asset="ch24_par_002",
+         question=question(
+             ("KONTROLLSPØRSMÅL", "คำถามตรวจสอบ", "CHECK QUESTION"),
+             ("Hvorfor bør du se på åpningen der du vil kjøre, og ikke på hindringen du vil unngå?",
+              "ทำไมคุณจึงควรมองไปยังช่องว่างที่ต้องการให้รถผ่านไป ไม่ใช่มองที่สิ่งกีดขวางที่ต้องการหลบ?",
+              "Why should you look at the opening you want to reach, and not at the hazard you want to avoid?"),
+             [
+                 opt("a", "Bilen styres automatisk dit førerens blikk er rettet (blikkstyring)", "มือจะหมุนพวงมาลัยพาตัวรถไปยังทิศทางที่สายตามองไปโดยอัตโนมัติ", "The car naturally steers toward where your gaze is focused"),
+                 opt("b", "Det har ingen betydning hvor man ser", "การมองไปทางไหนไม่มีความสำคัญใดๆ", "It makes no difference where you look"),
+                 opt("c", "For å unngå å bli blendet av lys", "เพื่อไม่ให้แสงไฟแยงตา", "To avoid glare from lights"),
+             ],
+             "a",
+             ("Fikserer du på hindringen, kjører du rett inn i den; se alltid etter utveien.",
+              "หากคุณจ้องไปที่สิ่งกีดขวาง รถจะพุ่งชนสิ่งนั้นเสมอ จงมองหาช่องทางรอดเสมอ",
+              "If you fixate on the obstacle you steer into it; always look at the escape path.")
+         )),
+    info("CH24-006", "chapterComplete", "ch24_bane_006",
+         "Fullført: Effektiv kjøring og Trinn 3 bestått",
+         "จบเนื้อหา: การขับขี่อย่างมีประสิทธิภาพและผ่านขั้นตอนที่ 3",
+         "Completed: Efficient Driving and Stage 3 Complete",
+         ("Gratulerer! Du har fullført hele Trinn 3: Trafikal opplæring. Du behersker flyt, rundkjøringer, glattkjøring og selvstendig risikoforståelse. Nå er du klar for avsluttende opplæring på Trinn 4!",
+          "ยินดีด้วย! คุณผ่านเนื้อหาทั้งหมดของขั้นตอนที่ 3 เรียบร้อยแล้ว ทั้งการไหลลื่น การใช้วงเวียน การฝึกบนสนามลื่น และความเข้าใจความเสี่ยง ตอนนี้คุณพร้อมเข้าสู่การฝึกขั้นสุดท้ายในขั้นตอนที่ 4 แล้วครับ!",
+          "Congratulations! You completed Stage 3: Traffic Training. You master flow, roundabouts, track safety, and independent risk awareness. Ready for Stage 4!"),
+         takeaways=[
+             i18n("ABS lar deg styre unna hindringer under maksimal nedbremsing.",
+                  "ระบบ ABS ช่วยให้คุณยังคงบังคับเลี้ยวหลบสิ่งกีดขวางได้ในขณะเบรกเต็มแรง",
+                  "ABS lets you steer around obstacles while braking at full force."),
+             i18n("God flyt i rundkjøring krever tidlig tegn og nøyaktig fartstilpasning.",
+                  "การผ่านวงเวียนอย่างราบรื่นต้องเปิดไฟเลี้ยวล่วงหน้าและปรับความเร็วอย่างพอดี",
+                  "Good roundabout flow requires early signalling and precise speed control."),
+             i18n("Trinn 3 er fullført; du er klar for Sikkerhetskurs på veg (Trinn 4).",
+                  "จบขั้นตอนที่ 3 เรียบร้อยแล้ว พร้อมก้าวสู่หลักสูตรความปลอดภัยบนถนนจริง (ขั้นตอนที่ 4)",
+                  "Stage 3 is complete; you are ready for Stage 4 road safety training."),
+         ],
+         nextChapter=i18n("NESTE: DEL V – TRINN 4: SIKKERHETSKURS PÅ VEG (KAPITTEL 25)",
+                          "ถัดไป: ส่วนที่ 5 – ขั้นตอนที่ 4: ความปลอดภัยบนถนนจริง (บทที่ 25)",
+                          "NEXT: PART V – STAGE 4: ROAD SAFETY COURSE (CHAPTER 25)")),
+]
+
+# KAPITTEL 25: BILKJØRINGENS RISIKO (CH25)
+# ─────────────────────────────────────────────────────────────────────────────
+_CH25_PLACEHOLDERS = [
+    ("ch25_risk_001", "1", "CH25-RISK-001", "Bilkjøringens risiko og konsekvenser", "Innse at en bilfører kontrollerer enorme krefter med liv og helse som innsats", "alvorsperspektiv", "Likegyldighet eller benekting av risiko ved bilkjøring", "bil på mørk landevei", "norsk landevei", "varselskilt", "risikoinnsikt", "/api/assets/thumbs/thumb_vegtrafikkloven_3.jpg", ""),
+    ("ch25_risk_002", "2", "CH25-RISK-002", "Kjøredyktighet og menneskelig kapasitet", "Lære hva som påvirker førerens evne: tretthet, stress og rusmidler", "førerperspektiv", "Kjøre i trett tilstand med nedsatt reaksjonsevne tilsvarende promille", "ung fører med fokus bak rattet", "kveldslys", "dashbord", "kjøredyktighet", "/api/assets/thumbs/thumb_michaels_gatelogikk.jpg", "ch25_par_001"),
+    ("ch25_par_001", "2p", "CH25-PAR-001", "Trygg uthvilt sjåfør vs kjøring med søvnmangel", "Vise at tretthet svekker reaksjonen like mye som alkohol", "tretthetssammenligning", "Mikrosøvn og utforkjøring i høy fart på rett strekning", "bil som svinger inn til rasteplass for høneblund", "rasteplass", "veikant", "ta pause ved tretthet", "/api/assets/thumbs/thumb_hav_regelen_reflekser.jpg", "ch25_risk_002"),
+    ("ch25_risk_003", "3", "CH25-RISK-003", "Hvorfor unge førere har høyest ulykkesrisiko", "Forstå sammenhengen mellom manglende erfaring, fart og overmot", "statistikkperspektiv", "Gruppepress fra venner i bilen som oppfordrer til råkjøring", "ungdommer i bil som ler og prater", "nattkjøring i by", "gatelys", "stå imot gruppepress", "/api/assets/thumbs/thumb_vegtrafikkloven_3.jpg", ""),
+    ("ch25_risk_004", "4", "CH25-RISK-004", "Road Check bilkjøringens risiko", "Teste forståelse av mobilforbud, reaksjonstid og risikovurdering", "testperspektiv", "Uoppmerksomhet ved teksting bak rattet som mangedobler ulykkesfaren", "bil ved kontrollpost", "veikant", "varselskilt", "risikokontroll", "/api/assets/thumbs/thumb_offisielle_trafikkskilt.jpg", ""),
+    ("ch25_risk_005", "5", "CH25-RISK-005", "Førerstøttesystemer og falsk trygghet", "Forstå at radar, autopilot og filholder kun er hjelpemidler", "teknologiperspektiv", "Overlate ansvaret til bilens sensorer og miste oppmerksomheten", "bilskjerm med aktive førerstøttesystemer", "motorvei", "kjørefelt", "aktivt førereierskap", "/api/assets/thumbs/thumb_ai_trafikkopplaering.jpg", "ch25_par_002"),
+    ("ch25_par_002", "5p", "CH25-PAR-002", "Fokusert sjåfør med hendene på rattet vs distraksjon", "Se at sjåføren alltid har det fulle juridiske ansvaret", "kontrollperspektiv", "Ulykke ved sensorsvikt under snødrev eller regn", "fører med hendene på rattet i 9 og 3", "snøvær", "frontrute", "menneskelig kontroll", "/api/assets/thumbs/thumb_tesla_bremsing_40_a.jpg", "ch25_risk_005"),
+    ("ch25_risk_006", "6", "CH25-RISK-006", "Oppsummering bilkjøringens risiko", "Tilegne seg en ydmyk, moden og defensiv holdning som bilfører", "mestringsperspektiv", "Overvurdering av egne kjøreferdigheter som fersk sjåfør", "bil på vakker norsk fjordvei i dagslys", "landevei", "trygg avstand", "moden sjåfør", "/api/assets/thumbs/thumb_hav_regelen_reflekser.jpg", ""),
+]
+
+CH25_ASSETS = {
+    key: {"asset_id": asset_id, "page": page, "scene": scene,
+          "pedagogical_purpose": purpose, "camera_angle": camera,
+          "risk_source": risk, "risikokilde": risk,
+          "vehicles_road_users": actors, "road_type": road,
+          "signs_markings": markings, "learner_discovery": discovery,
+          "hotspots": [], "pair_asset": pair_key, "status": "placeholder", "src": src,
+          "alt": i18n("Illustrasjon av bilkjøringens risiko", "ภาพประกอบเรื่องความเสี่ยงในการขับขี่", "Illustration of driving risks")}
+    for key, page, asset_id, scene, purpose, camera, risk, actors, road, markings, discovery, src, pair_key in _CH25_PLACEHOLDERS
+}
+
+CH25_LESSONS = [
+    info("CH25-001", "intro", "ch25_risk_001",
+         "Bilkjøringens risiko – fakta du må kjenne",
+         "ความเสี่ยงในการขับรถ – ข้อเท็จจริงที่คุณต้องรู้",
+         "Driving Risks – Facts You Must Know",
+         ("Bilkjøring gir stor frihet, men innebærer også et enormt ansvar. En bil i 80 km/t bærer på så mye bevegelsesenergi at et sammenstøt tilsvarer et fall fra nesten 25 meters høyde.",
+          "การขับรถมอบอิสระอย่างยิ่ง แต่ก็มาพร้อมกับความรับผิดชอบอันยิ่งใหญ่ รถยนต์ที่วิ่งด้วยความเร็ว 80 กม./ชม. มีพลังงานการเคลื่อนที่มหาศาลซึ่งหากเกิดการชนจะรุนแรงเทียบเท่ากับการตกจากตึกสูงเกือบ 25 เมตร",
+          "Driving offers great freedom but immense responsibility. A car at 80 km/h carries kinetic energy equivalent to falling from nearly 25 meters.")),
+    info("CH25-002", "choice", "ch25_risk_002",
+         "Kjøredyktighet og menneskelige begrensninger",
+         "ความพร้อมในการขับขี่และขีดจำกัดของมนุษย์",
+         "Driver Fitness and Human Limitations",
+         ("Du må være i forsvarlig stand før du kjører. Søvnmangel etter 17 timer våkentid reduserer reaksjonsevnen like mye som 0,5 promille alkohol i blodet. Kaffe eller musikk hjelper ikke; kun søvn fungerer.",
+          "คุณต้องมีความพร้อมอย่างสมบูรณ์ก่อนสตาร์ทรถ การอดนอนต่อเนื่องเกิน 17 ชั่วโมงทำให้การตอบสนองช้าลงเทียบเท่ากับการมีแอลกอฮอล์ 0.5 ในเลือด ทั้งกาแฟและเสียงเพลงดังไม่สามารถช่วยได้ มีเพียงการนอนหลับเท่านั้นที่ฟื้นฟูได้",
+          "You must be fit to drive. 17 hours awake reduces reaction time like 0.5 per mille alcohol. Neither coffee nor loud music cures fatigue; only sleep does."),
+         pair_asset="ch25_par_001",
+         question=question(
+             ("KONTROLLSPØRSMÅL", "คำถามตรวจสอบ", "CHECK QUESTION"),
+             ("Hva er det eneste som faktisk hjelper når du kjenner deg søvnig bak rattet?",
+              "สิ่งเดียวที่ช่วยฟื้นฟูความตื่นตัวได้อย่างแท้จริงเมื่อเริ่มง่วงนอนขณะขับรถคืออะไร?",
+              "What is the only thing that actually cures drowsiness behind the wheel?"),
+             [
+                 opt("a", "Å åpne vinduet og skru opp musikklyden på maks", "เปิดหน้าต่างรับลมและเปิดเพลงเสียงดังสุด", "Opening window and cranking music to maximum"),
+                 opt("b", "Å svinge inn på en rasteplass og ta en 15 minutters høneblund", "แวะจอดที่จุดพักรถและนอนงีบหลับสั้นๆ 15 นาที", "Pulling into a rest area and taking a 15-minute power nap"),
+                 opt("c", "Å drikke to energidrikker og kjøre fortere", "ดื่มเครื่องดื่มชูกำลังสองกระป๋องแล้วเร่งความเร็ว", "Drinking two energy drinks and driving faster"),
+             ],
+             "b",
+             ("En kort 15-minutters høneblund tilbakestiller hjernens reaksjonsevne trygt.",
+              "การงีบหลับสั้นๆ 15 นาทีช่วยรีเซ็ตการทำงานของสมองและลดความเสี่ยงหลับในได้จริง",
+              "A 15-minute power nap resets brain responsiveness safely.")
+         )),
+    info("CH25-003", "sequence", "ch25_risk_003",
+         "Hvorfor unge sjåfører rammes oftere av ulykker",
+         "ทำไมผู้ขับขี่รุ่นเยาว์จึงประสบอุบัติเหตุบ่อยกว่า",
+         "Why Young Drivers Face Higher Accident Rates",
+         ("Ferske førere har opptil 40 ganger høyere risiko for utforkjøring de første 9 månedene. Hovedårsakene er overvurdering av egne ferdigheter, for høy fart inn mot svinger og gruppepress fra passasjerer.",
+          "ผู้ขับขี่ใหม่มีความเสี่ยงขับรถตกข้างทางสูงกว่าถึง 40 เท่าในช่วง 9 เดือนแรก สาเหตุหลักมาจากความมั่นใจในฝีมือตัวเองเกินไป การเข้าโค้งเร็วเกินกำหนด และแรงกดดันจากเพื่อนร่วมทางในรถ",
+          "Novice drivers face up to 40x higher risk of running off the road in first 9 months due to overconfidence, curve speeding, and peer pressure.")),
+    {
+        "id": "CH25-004", "type": "roadCheck", "asset": "ch25_risk_004", "road_check_id": "CH25-RC-001",
+        "eyebrow": i18n("ROAD CHECK ⚡ RISIKO", "ROAD CHECK ⚡ ความเสี่ยง", "ROAD CHECK ⚡ RISK"),
+        "title": i18n("Road Check ⚡ Bilkjøringens risiko", "Road Check ⚡ ความเสี่ยงในการขับรถ", "Road Check ⚡ The Risks of Driving"),
+        "questions": [
+            question(
+                ("SPØRSMÅL 1", "คำถามที่ 1", "QUESTION 1"),
+                ("Hvor mye øker ulykkesrisikoen når du bruker håndholdt mobiltelefon under kjøring?",
+                 "ความเสี่ยงต่อการเกิดอุบัติเหตุเพิ่มขึ้นกี่เท่าเมื่อใช้โทรศัพท์มือถือขณะขับรถ?",
+                 "How much does crash risk increase when using a handheld phone while driving?"),
+                [
+                    opt("a", "Den øker ikke i det hele tatt", "ไม่เพิ่มขึ้นเลย", "It does not increase at all"),
+                    opt("b", "Ulykkesrisikoen mangedobles med 4 til 8 ganger", "ความเสี่ยงเพิ่มสูงขึ้นถึง 4 ถึง 8 เท่า", "Crash risk multiplies by 4 to 8 times"),
+                    opt("c", "Den øker bare hvis du snakker mer enn 10 minutter", "เพิ่มขึ้นเฉพาะเมื่อคุยสายนานเกิน 10 นาที", "Only increases if talking over 10 minutes"),
+                ],
+                "b",
+                ("Å sende tekstmeldinger eller fikle med mobilen tar blikket bort fra veien i livsviktige sekunder.",
+                 "การพิมพ์ข้อความหรือกดโทรศัพท์ทำให้ละสายตาจากถนนไปหลายวินาทีซึ่งอันตรายถึงชีวิต",
+                 "Texting or handling phones pulls eyes off the road for critical seconds.")
+            ),
+            question(
+                ("SPØRSMÅL 2", "คำถามที่ 2", "QUESTION 2"),
+                ("Hva kjennetegner en defensiv og moden sjåfør?",
+                 "ลักษณะของผู้ขับขี่เชิงป้องกันที่มีวุฒิภาวะคืออะไร?",
+                 "What characterizes a defensive and mature driver?"),
+                [
+                    opt("a", "Kjører forutseende, holder god sikkerhetsavstand og lar seg ikke stresse av andre", "ขับรถอย่างมองการณ์ไกล เว้นระยะห่างปลอดภัย และไม่ปล่อยให้อารมณ์ของคนอื่นมากระทบ", "Drives predictably, maintains safe distance, and stays calm despite others"),
+                    opt("b", "Ligger helt kloss inntil bilen foran for å markere misnøye", "ขับจี้ท้ายรถคันหน้าเพื่อแสดงความไม่พอใจ", "Tailgates vehicle ahead to show dissatisfaction"),
+                    opt("c", "Kjører alltid på fartsgrensens absolutte maksimum uansett sikt", "ขับความเร็วสูงสุดตามป้ายเสมอไม่ว่าทัศนวิสัยจะเป็นอย่างไร", "Always drives at absolute max speed limit regardless of visibility"),
+                ],
+                "a",
+                ("Defensiv kjørestil beskytter deg og passasjerene dine mot andres feil.",
+                 "การขับขี่เชิงป้องกันช่วยปกป้องคุณและผู้โดยสารจากความผิดพลาดของคนอื่น",
+                 "Defensive driving shields you and your passengers against errors by others.")
+            ),
+            question(
+                ("SPØRSMÅL 3", "คำถามที่ 3", "QUESTION 3"),
+                ("Hvem har det juridiske ansvaret dersom bilens automatiske nødbrems eller autopilot feiler og forårsaker en kollisjon?",
+                 "ใครคือผู้รับผิดชอบทางกฎหมายหากระบบเบรกอัตโนมัติหรือระบบขับเคลื่อนอัตโนมัติของรถทำงานผิดพลาดจนเกิดการชน?",
+                 "Who bears legal responsibility if car automated emergency braking fails and causes a crash?"),
+                [
+                    opt("a", "Bilprodusenten alene", "ผู้ผลิตรถยนต์แต่เพียงผู้เดียว", "The car manufacturer alone"),
+                    opt("b", "Føreren bak rattet har alltid det fulle og hele ansvaret", "ผู้ขับขี่หลังพวงมาลัยต้องรับผิดชอบเต็มร้อยเปอร์เซ็นต์เสมอ", "The driver behind the wheel always bears full responsibility"),
+                    opt("c", "Statens vegvesen", "กรมการขนส่งทางบกนอร์เวย์", "The Norwegian Public Roads Administration"),
+                ],
+                "b",
+                ("Vegtrafikkloven pålegger alltid føreren ansvaret; elektronikk er kun hjelpemidler.",
+                 "กฎหมายกำหนดให้ผู้ขับขี่เป็นผู้รับผิดชอบเสมอ ระบบไฟฟ้าเป็นเพียงเครื่องทุ่นแรง",
+                 "Traffic laws always hold the driver responsible; electronics are merely aids.")
+            ),
+        ],
+    },
+    info("CH25-005", "choice", "ch25_risk_005",
+         "Førerstøttesystemer og aktiv oppmerksomhet",
+         "ระบบช่วยเหลือผู้ขับขี่และการมีสมาธิตื่นตัว",
+         "Driver Assistance Systems and Active Attention",
+         ("Moderne biler har avanserte førerassistenter (adaptiv cruisekontroll, nødbrems, filholder). Disse redder liv ved et uhell, men kan svikte i kraftig snøvær eller regn. Du må alltid holde i rattet og ha fullt fokus.",
+          "รถยนต์สมัยใหม่มีระบบช่วยขับขี่ขั้นสูง (ควบคุมความเร็วแปรผัน เบรกฉุกเฉิน และช่วยประคองเลน) สิ่งเหล่านี้ช่วยชีวิตได้แต่ก็อาจทำงานผิดพลาดเมื่อมีหิมะหรือฝนตกหนัก คุณจึงต้องจับพวงมาลัยและมีสมาธิเต็มที่เสมอ",
+          "Modern cars feature driver aids (adaptive cruise, emergency braking, lane assist). They save lives but can fail in snow. Keep hands on wheel."),
+         pair_asset="ch25_par_002",
+         question=question(
+             ("KONTROLLSPØRSMÅL", "คำถามตรวจสอบ", "CHECK QUESTION"),
+             ("Kan du se på mobilen eller ta blikket bort fra veien når adaptiv cruisekontroll er aktiv?",
+              "คุณสามารถก้มดูโทรศัพท์มือถือหรือละสายตาจากถนนได้หรือไม่เมื่อเปิดระบบควบคุมความเร็วอัตโนมัติแบบแปรผัน?",
+              "Can you look at your phone or glance away from the road when adaptive cruise control is active?"),
+             [
+                 opt("a", "Ja, bilen styrer og bremser helt av seg selv", "ได้ เพราะรถควบคุมพวงมาลัยและเบรกเองทั้งหมด", "Yes, the car steers and brakes completely on its own"),
+                 opt("b", "Nei, absolutt ikke; du må overvåke veibanen kontinuerlig og være klar til å gripe inn på brøkdelen av et sekund", "ไม่ได้โดยเด็ดขาด คุณต้องเฝ้ามองสภาพถนนตลอดเวลาและพร้อมเข้าควบคุมรถในเสี้ยววินาที", "No, absolutely not; monitor road continuously and be ready to intervene instantly"),
+                 opt("c", "Ja, hvis du kun kjører på rette strekninger", "ได้ หากขับบนทางตรงเท่านั้น", "Yes, if driving on straight roads only"),
+             ],
+             "b",
+             ("Føreren må alltid ha uavbrutt situasjonsforståelse uansett bilens utstyrsnivå.",
+              "ผู้ขับขี่ต้องตื่นตัวและควบคุมสถานการณ์ตลอดเวลาไม่ว่ารถจะมีระบบทันสมัยเพียงใด",
+              "Drivers must maintain situational awareness regardless of tech equipment level.")
+         )),
+    info("CH25-006", "chapterComplete", "ch25_risk_006",
+         "Fullført: Bilkjøringens risiko",
+         "จบเนื้อหา: ความเสี่ยงในการขับขี่",
+         "Completed: The Risks of Driving",
+         ("Gratulerer med fullført kapittel 25! Du har nå en moden og realistisk forståelse av risiko, søvnmangel og føreransvar – selve fundamentet for trygg ferdsel på Trinn 4.",
+          "ยินดีด้วยที่จบบทที่ 25! คุณมีความเข้าใจที่เป็นผู้ใหญ่และตรงตามความจริงเรื่องความเสี่ยง การอดนอน และความรับผิดชอบของผู้ขับขี่ ซึ่งเป็นรากฐานสำคัญของขั้นตอนที่ 4",
+          "Congratulations on completing Chapter 25! You now have a mature understanding of risk, sleep deprivation, and driver responsibility on Stage 4."),
+         takeaways=[
+             i18n("17 timer uten søvn gir reaksjonsevne tilsvarende 0,5 promille.",
+                  "การตื่นนาน 17 ชั่วโมงทำให้การตอบสนองแย่ลงเทียบเท่าแอลกอฮอล์ 0.5 ในเลือด",
+                  "17 hours awake impairs reaction time like 0.5 per mille alcohol."),
+             i18n("Mobilbruk under kjøring er strengt forbudt og mangedobler ulykkesfaren.",
+                  "การใช้โทรศัพท์ขณะขับรถผิดกฎหมายและเพิ่มความเสี่ยงอุบัติเหตุหลายเท่า",
+                  "Handheld phone use while driving is strictly banned and multiplies crash risk."),
+             i18n("Føreren har alltid det fulle juridiske ansvaret, selv med autopilot aktivert.",
+                  "ผู้ขับขี่ต้องรับผิดชอบทางกฎหมายเสมอแม้จะเปิดระบบขับขี่อัตโนมัติ",
+                  "The driver always retains full legal liability, even with driving aids on."),
+         ],
+         nextChapter=i18n("NESTE: KAPITTEL 26 — KJØREKOMPETANSE I LANDEVEGSMILJØ",
+                          "ถัดไป: บทที่ 26 — ทักษะการขับขี่บนถนนนอกเมือง",
+                          "NEXT: CHAPTER 26 — DRIVING COMPETENCE IN RURAL ROADS")),
+]
+
+# ─────────────────────────────────────────────────────────────────────────────
+# KAPITTEL 26: KJØREKOMPETANSE I LANDEVEGSMILJØ (CH26)
+# ─────────────────────────────────────────────────────────────────────────────
+_CH26_PLACEHOLDERS = [
+    ("ch26_land_001", "1", "CH26-LAND-001", "Landevegens utfordringer og farer", "Mestre høye hastigheter, manglende midtdeler og uforutsigbart dyreliv", "landeveiperspektiv", "Front mot front-kollisjon ved uoppmerksomhet i 80 km/t", "norsk landevei omgitt av skog", "tofeltsvei", "gul midtlinje", "landevegsrisiko", "/api/assets/thumbs/thumb_michaels_gatelogikk.jpg", ""),
+    ("ch26_land_002", "2", "CH26-LAND-002", "Forbikjøring på tofelts landevei", "Lære at forbikjøring er den farligste manøveren du gjør som bilfører", "forbikjøringsperspektiv", "Feilberegning av motgående bils fart som fører til frontkollisjon", "bil bak traktor på landevei", "landevei med sikt", "hvit stiplet linje", "trygg forbikjøring", "/api/assets/thumbs/thumb_tesla_bremsing_80.jpg", "ch26_par_001"),
+    ("ch26_par_001", "2p", "CH26-PAR-001", "Forbikjøring med lang fri sikt vs forbikjøring før bakketopp", "Se at forbikjøring krever hundrevis av meter fri veibane", "siktlinjesammenligning", "Forbikjøring blindt før bakketopp eller kurve med dødelig utfall", "to situasjoner på samme vei", "landevei", "bakketopp og skilt", "forbikjøringsforbud", "/api/assets/thumbs/thumb_tesla_bremsing_40_a.jpg", "ch26_land_002"),
+    ("ch26_land_003", "3", "CH26-LAND-003", "Møtesituasjoner på smal vei og møteplass", "Lære å vike ved møteplass (skilt 526) og tilpasse farten tidlig", "møteplassperspektiv", "Utfell eller skraping mot bergvegg ved feil møteteknikk", "smal vestlandsvei med møteplass", "smal landevei", "skilt 526 hvit M på blå bunn", "bruk av møteplass", "/api/assets/thumbs/thumb_offisielle_trafikkskilt.jpg", ""),
+    ("ch26_land_004", "4", "CH26-LAND-004", "Road Check kjørekompetanse i landevegsmiljø", "Teste kunnskap om viltfare, møteplasser og forbikjøringsregler", "testperspektiv", "Påkjøring av elg i skumringen pga for høy fart", "bil ved varselskilt for elgfare", "landevei i skumring", "fareskilt elg", "landevegskontroll", "/api/assets/thumbs/thumb_vegtrafikkloven_3.jpg", ""),
+    ("ch26_land_005", "5", "CH26-LAND-005", "Viltfare og kjøring i mørke og skumring", "Forstå hvorfor elg og rådyr trekker ut i veibanen ved soloppgang og solnedgang", "dyreperspektiv", "Kraftig kollisjon med 500 kg elg som knuser frontruten", "elg i veikanten i kveldslys", "skogskant ved landevei", "elgskilt og refleksstolper", "oppdage vilt tidlig", "/api/assets/thumbs/thumb_hav_regelen_reflekser.jpg", "ch26_par_002"),
+    ("ch26_par_002", "5p", "CH26-PAR-002", "Aktiv skanning av grøftekant vs kun stirre på asfalten", "Vise at blikket må sveipe grøftekantene for å oppdage øyerefleks fra dyr", "synsvinkelsammenligning", "Elg som hopper ut i veibanen få meter foran bilen", "frontlykter som lyser opp veikant", "nattemiljø", "reflekterende dyreøyne", "grøftekantskanning", "/api/assets/thumbs/thumb_tesla_bremsing_40_b.jpg", "ch26_land_005"),
+    ("ch26_land_006", "6", "CH26-LAND-006", "Oppsummering landevegskompetanse", "Feire trygg og selvsikker adferd på krevende norske landeveier", "mestringsperspektiv", "Utrygghet og anspenthet på svingete veier", "bil som kjører stødig langs norsk fjord og fjell", "høyfjellsvei", "god veimerking og fri sikt", "trygg landevegssjåfør", "/api/assets/thumbs/thumb_hav_regelen_reflekser.jpg", ""),
+]
+
+CH26_ASSETS = {
+    key: {"asset_id": asset_id, "page": page, "scene": scene,
+          "pedagogical_purpose": purpose, "camera_angle": camera,
+          "risk_source": risk, "risikokilde": risk,
+          "vehicles_road_users": actors, "road_type": road,
+          "signs_markings": markings, "learner_discovery": discovery,
+          "hotspots": [], "pair_asset": pair_key, "status": "placeholder", "src": src,
+          "alt": i18n("Illustrasjon av kjørekompetanse i landevegsmiljø", "ภาพประกอบเรื่องทักษะการขับขี่บนถนนนอกเมือง", "Illustration of rural road competence")}
+    for key, page, asset_id, scene, purpose, camera, risk, actors, road, markings, discovery, src, pair_key in _CH26_PLACEHOLDERS
+}
+
+CH26_LESSONS = [
+    info("CH26-001", "intro", "ch26_land_001",
+         "Landevegens utfordringer – høye hastigheter",
+         "ความท้าทายของถนนนอกเมือง – ความเร็วสูงและเส้นทางคดเคี้ยว",
+         "Rural Road Challenges – High Speeds",
+         ("Landeveier i Norge mangler ofte midtdelere, har varierende veibredde og kan være uoversiktlige. En kollisjon i 80 km/t mot et motgående kjøretøy gir en relativ kollisjonsfart på 160 km/t.",
+          "ถนนนอกเมืองในนอร์เวย์ส่วนใหญ่มักไม่มีแบริเออร์กั้นกลางถนน มีความกว้างที่ไม่สม่ำเสมอและมีโค้งลับตา การชนประสานงาที่ความเร็ว 80 กม./ชม. จะมีแรงปะทะรุนแรงเทียบเท่ากับความเร็ว 160 กม./ชม.",
+          "Norwegian rural roads often lack median barriers and feature sharp curves. A head-on collision at 80 km/h produces an impact speed of 160 km/h.")),
+    info("CH26-002", "choice", "ch26_land_002",
+         "Forbikjøring på tofeltsvei",
+         "การแซงบนถนนสองเลนสวนกัน",
+         "Overtaking on Two-Lane Roads",
+         ("Forbikjøring er en av de farligste manøvrene du kan utføre. Du må ha minst 800-1000 meter fri sikt, ingen sperrelinje, og være sikker på at forankjørende ikke skal svinge til venstre.",
+          "การแซงเป็นหนึ่งในการกระทำที่เสี่ยงที่สุดบนท้องถนน คุณต้องมีทัศนวิสัยโล่งโปร่งอย่างน้อย 800-1000 เมตร ไม่มีเส้นทึบห้ามแซง และมั่นใจว่ารถคันหน้าจะไม่เลี้ยวซ้ายกะทันหัน",
+          "Overtaking is among the most hazardous maneuvers. You need 800-1000 meters of clear view, no barrier line, and certainty that car ahead won't turn left."),
+         pair_asset="ch26_par_001",
+         question=question(
+             ("KONTROLLSPØRSMÅL", "คำถามตรวจสอบ", "CHECK QUESTION"),
+             ("Når er det strengt forbudt å starte en forbikjøring på landevei?",
+              "เมื่อใดที่กฎหมายสั่งห้ามเริ่มการแซงบนถนนนอกเมืองอย่างเด็ดขาด?",
+              "When is starting an overtake strictly prohibited on a rural road?"),
+             [
+                 opt("a", "Rett foran en bakketopp, i en uoversiktlig sving eller ved hel sperrelinje", "ก่อนถึงยอดเนิน ทางโค้งลับตา หรือในจุดที่มีเส้นทึบ", "Right before crests, blind curves, or across solid barrier lines"),
+                 opt("b", "Når solen skinner fra skyfri himmel", "เมื่อท้องฟ้าแจ่มใสมีแดดส่อง", "When sun shines from cloudless sky"),
+                 opt("c", "Hvis bilen foran kjører nøyaktig i 79 km/t", "หากรถคันหน้าขับที่ความเร็ว 79 กม./ชม.", "If the car ahead drives at exactly 79 km/h"),
+             ],
+             "a",
+             ("Gjennomfør aldri forbikjøring uten komplett og ubrutt oversikt over motgående felt.",
+              "อย่าเริ่มแซงเด็ดขาดหากมองไม่เห็นเลนสวนทางได้อย่างโปร่งโล่งและปลอดภัย",
+              "Never overtake without complete and unbroken sight of the oncoming lane.")
+         )),
+    info("CH26-003", "sequence", "ch26_land_003",
+         "Møtesituasjoner og møteplasser",
+         "การขับสวนทางและจุดจอดหลบรถ (Møteplass)",
+         "Passing Oncoming Traffic and Passing Places",
+         ("På smale landeveier finnes egne møteplasser markert med skilt 526 (hvit M på blå bunn). Den som har møteplassen på sin høyre side skal vike. Er veien blokkert på din side, må du stanse og vente.",
+          "บนถนนแคบจะมีจุดจอดหลบรถที่ระบุด้วยป้าย 526 (ตัวอักษร M สีขาวบนพื้นน้ำเงิน) รถคันที่มีจุดหลบอยู่ทางด้านขวาของตนเองจะต้องจอดรอ หากมีสิ่งกีดขวางในเลนของคุณ คุณต้องหยุดให้รถที่สวนมาไปก่อน",
+          "On narrow roads passing places are marked with sign 526 (white M on blue). Driver with passing place on right must yield.")),
+    {
+        "id": "CH26-004", "type": "roadCheck", "asset": "ch26_land_004", "road_check_id": "CH26-RC-001",
+        "eyebrow": i18n("ROAD CHECK ⚡ LANDEVEG", "ROAD CHECK ⚡ ถนนนอกเมือง", "ROAD CHECK ⚡ RURAL ROADS"),
+        "title": i18n("Road Check ⚡ Kjørekompetanse i landevegsmiljø", "Road Check ⚡ ทักษะการขับขี่บนถนนนอกเมือง", "Road Check ⚡ Rural Road Competence"),
+        "questions": [
+            question(
+                ("SPØRSMÅL 1", "คำถามที่ 1", "QUESTION 1"),
+                ("Når på døgnet er faren for å kollidere med elg eller hjort aller størst?",
+                 "ช่วงเวลาใดของวันที่มีความเสี่ยงสูงสุดที่จะชนกวางมูสหรือสัตว์ป่าบนถนน?",
+                 "What time of day carries highest risk of colliding with moose or deer?"),
+                [
+                    opt("a", "Midt på dagen når solen står høyest", "ช่วงเที่ยงวันขณะที่แดดจัดที่สุด", "Midday when sun is at its highest"),
+                    opt("b", "I skumringen og grålysningen (ved soloppgang og solnedgang)", "ช่วงพลบค่ำและรุ่งสาง (ช่วงพระอาทิตย์ตกดินและพระอาทิตย์ขึ้น)", "At dusk and dawn (during sunrise and sunset)"),
+                    opt("c", "Kun om sommeren i fellesferien", "เฉพาะช่วงฤดูร้อนในวันหยุดยาวเท่านั้น", "Only in summer during collective holidays"),
+                ],
+                "b",
+                ("Viltet trekker for å beite i skumring og grålysning; senk farten ved varselskilt.",
+                 "สัตว์ป่าจะออกหากินช่วงพลบค่ำและเช้ามืด ควรชะลอความเร็วเมื่อเห็นป้ายเตือนสัตว์ป่า",
+                 "Wildlife moves to graze at dawn and dusk; slow down at wildlife signs.")
+            ),
+            question(
+                ("SPØRSMÅL 2", "คำถามที่ 2", "QUESTION 2"),
+                ("Hva skal du gjøre dersom du kjører på et større dyr (elg, rådyr, rein)?",
+                 "คุณต้องทำอย่างไรหากขับรถชนสัตว์ป่าขนาดใหญ่ (กวางมูส กวางเรนเดียร์)?",
+                 "What must you do if you hit a large animal (moose, deer, reindeer)?"),
+                [
+                    opt("a", "Kjøre rett videre uten å si ifra hvis bilen ikke har skader", "ขับต่อไปทันทีหากรถไม่เสียหาย", "Drive straight on without reporting if car is undamaged"),
+                    opt("b", "Sikre skadestedet, varsle politiet på telefon 02800 og merke påkjørselsstedet", "ป้องกันสถานที่เกิดเหตุ โทรแจ้งตำรวจที่หมายเลข 02800 และทำเครื่องหมายจุดที่ชน", "Secure scene, alert police on 02800, and mark collision spot"),
+                    opt("c", "Ta med dyret hjem i bagasjerommet", "นำสัตว์กลับบ้านในกระโปรงท้ายรถ", "Bring animal home in the trunk"),
+                ],
+                "b",
+                ("Du har lovpålagt plikt til å varsle politiet slik at viltnemnda kan spore skadede dyr.",
+                 "กฎหมายกำหนดให้ต้องแจ้งตำรวจเพื่อประสานเจ้าหน้าที่ป่าไม้ติดตามสัตว์ที่บาดเจ็บ",
+                 "You are legally required to alert police so wildlife trackers can assist injured animals.")
+            ),
+            question(
+                ("SPØRSMÅL 3", "คำถามที่ 3", "QUESTION 3"),
+                ("Hva bør du gjøre hvis en bil bak deg ønsker å kjøre forbi på smal vei?",
+                 "คุณควรทำอย่างไรหากรถคันหลังต้องการขับแซงบนถนนนอกเมืองที่ค่อนข้างแคบ?",
+                 "What should you do if a car behind wishes to overtake on a narrow road?"),
+                [
+                    opt("a", "Øke farten for å hindre at de kommer forbi", "เร่งความเร็วเพื่อไม่ให้รถหลังแซงได้", "Increase speed to prevent them passing"),
+                    opt("b", "Holde godt til høyre i feltet, unngå å øke farten, og eventuelt blinke til høyre når veien er fri", "ชิดขอบทางด้านขวา รักษาความเร็วให้คงที่ และอาจเปิดไฟเลี้ยวขวาบอกเมื่อทางข้างหน้าโล่ง", "Keep well to right, maintain steady speed, and optionally signal right when clear"),
+                    opt("c", "Bråbremse for å tvinge dem til å stanse", "เบรกกะทันหันเพื่อบังคับให้คันหลังหยุด", "Brake abruptly to force them to stop"),
+                ],
+                "b",
+                ("Vegtrafikkloven pålegger den som blir forbikjørt å legge seg til høyre og ikke øke farten.",
+                 "กฎหมายกำหนดให้รถคันที่กำลังถูกแซงต้องชิดขวาและห้ามเร่งความเร็วเด็ดขาด",
+                 "Traffic laws mandate vehicles being overtaken to stay right and not speed up.")
+            ),
+        ],
+    },
+    info("CH26-005", "choice", "ch26_land_005",
+         "Viltfare og grøftekantskanning",
+         "อันตรายจากสัตว์ป่าและการกวาดสายตามองริมทาง",
+         "Wildlife Hazards and Roadside Scanning",
+         ("På skogsveier i Norge må du aktivt skanne grøftekantene. Se etter reflekser fra dyrenes øyne i billyset. Dukker et dyr opp, husk at det ofte kommer et til like bak.",
+          "บนถนนที่ตัดผ่านป่าในนอร์เวย์ คุณต้องกวาดสายตามองริมทางอย่างสม่ำเสมอ คอยสังเกตแสงสะท้อนจากดวงตาของสัตว์ในความมืด หากมีสัตว์ตัวหนึ่งวิ่งข้ามถนน มักจะมีตัวที่สองวิ่งตามมาติดๆ เสมอ",
+          "On forest roads scan roadsides actively. Look for eye reflections in headlights. If one animal crosses, another often follows."),
+         pair_asset="ch26_par_002",
+         question=question(
+             ("KONTROLLSPØRSMÅL", "คำถามตรวจสอบ", "CHECK QUESTION"),
+             ("Hva er den tryggeste handlingen når du ser et fareskilt for elg?",
+              "การปฏิบัติที่ปลอดภัยที่สุดเมื่อเห็นป้ายเตือนระวังตัวมูสคืออะไร?",
+              "What is the safest action upon seeing a moose warning sign?"),
+             [
+                 opt("a", "Senke hastigheten og skanne aktivt langs begge sider av veibanen", "ลดความเร็วลงและกวาดสายตามองริมทางทั้งสองฝั่งอย่างละเอียด", "Reduce speed and actively scan both sides of the roadway"),
+                 opt("b", "Gi full gass for å komme raskt forbi skogsområdet", "เหยียบคันเร่งให้เร็วที่สุดเพื่อรีบผ่านเขตป่าไป", "Floor the throttle to pass the forested area fast"),
+                 opt("c", "Skru av frontlysene for ikke å skremme dyrene", "ปิดไฟหน้ารถเพื่อไม่ให้สัตว์ตกใจ", "Turn off headlights so as not to startle animals"),
+             ],
+             "a",
+             ("Lavere fart gir kortere stopplengde og redder liv ved brå viltpåkjørsel.",
+              "ความเร็วที่ลดลงช่วยให้ระยะเบรกสั้นลงและช่วยให้หยุดรถได้ทันเมื่อสัตว์กระโดดออกมา",
+              "Lower speed shortens stopping distance and saves lives during wildlife encounters.")
+         )),
+    info("CH26-006", "chapterComplete", "ch26_land_006",
+         "Fullført: Kjørekompetanse i landevegsmiljø",
+         "จบเนื้อหา: ทักษะการขับขี่บนถนนนอกเมือง",
+         "Completed: Rural Road Competence",
+         ("Gratulerer med fullført kapittel 26! Du mestrer nå landevegens krevende fysikk, forstår farene ved forbikjøring og vet hvordan du samhandler trygt på smale norske veier.",
+          "ยินดีด้วยที่จบบทที่ 26! คุณเข้าใจฟิสิกส์ของการใช้ความเร็วบนทางหลวงนอกเมือง ความเสี่ยงของการแซง และรู้วิธีหลบหลีกรถอย่างปลอดภัยบนถนนแคบในนอร์เวย์แล้วครับ",
+          "Congratulations on completing Chapter 26! You understand rural road physics, overtaking risks, and how to pass oncoming traffic on narrow roads."),
+         takeaways=[
+             i18n("Forbikjøring krever lang ubrutt sikt og er forbudt før bakketopper og svinger.",
+                  "การแซงต้องมองเห็นทางโล่งไกลและห้ามแซงเด็ดขาดก่อนถึงเนินหรือโค้ง",
+                  "Overtaking requires long unbroken sight and is banned before crests and curves."),
+             i18n("Bruk møteplasser riktig: vikeplikt gjelder for den som har hindring eller møteplass på sin side.",
+                  "ใช้จุดจอดหลบรถอย่างถูกต้อง: ผู้ที่มีจุดหลบหรือสิ่งกีดขวางฝั่งตนเองต้องหยุดให้ทาง",
+                  "Use passing places properly: yield if obstruction or passing place is on your side."),
+             i18n("Varsle politiet på 02800 ved påkjørsel av større vilt.",
+                  "โทรแจ้งตำรวจที่ 02800 ทันทีหากขับรถชนสัตว์ป่าขนาดใหญ่",
+                  "Alert police on 02800 immediately upon hitting larger wildlife."),
+         ],
+         nextChapter=i18n("NESTE: KAPITTEL 27 — PLANLEGGING, REFLEKSJON OG TILSTREKKELIG ØVING",
+                          "ถัดไป: บทที่ 27 — การวางแผน การสะท้อนคิด และการฝึกฝนอย่างเพียงพอ",
+                          "NEXT: CHAPTER 27 — PLANNING, REFLECTION, AND SUFFICIENT PRACTICE")),
+]
+
+# ─────────────────────────────────────────────────────────────────────────────
+# KAPITTEL 27: PLANLEGGING, REFLEKSJON OG TILSTREKKELIG ØVING (CH27)
+# ─────────────────────────────────────────────────────────────────────────────
+_CH27_PLACEHOLDERS = [
+    ("ch27_ref_001", "1", "CH27-REF-001", "Planlegging av den trygge kjøreturen", "Lære systematisk ruteplanlegging, værvarsling og tidsberegning før avreise", "kartperspektiv", "Tidsklemme og stress som fører til råkjøring og farlige forbikjøringer", "fører som studerer rute på navigasjonsskjerm", "stille morgen", "bilinteriør", "ruteplanlegging", "/api/assets/thumbs/thumb_ai_trafikkopplaering.jpg", ""),
+    ("ch27_ref_002", "2", "CH27-REF-002", "Kjøring i krevende og variert trafikkmiljø", "Mestre overganger mellom tett bykjerne, motorvei og snødekt fjellovergang", "miljøperspektiv", "Manglende tilpasning når veiforholdene endrer seg fra tørt til glatt", "bil som kjører fra by mot fjellvei", "variert landskap", "veimerking og skilting", "variert miljø", "/api/assets/thumbs/thumb_trafikk_okosystem_norge.jpg", "ch27_par_001"),
+    ("ch27_par_001", "2p", "CH27-PAR-001", "Planlagt tur med innlagte pauser vs uavbrutt stresskjøring", "Se at planlagte pauser holder reaksjonsevnen og humøret på topp", "pausesammenligning", "Tretthetsulykke etter 4 timers sammenhengende kjøring uten stopp", "bil parkert ved vakker utsiktspost med kaffekopp", "fjellovergang", "rasteplass", "trygg pause", "/api/assets/thumbs/thumb_hav_regelen_reflekser.jpg", "ch27_ref_002"),
+    ("ch27_ref_003", "3", "CH27-REF-003", "Refleksjon og ærlig selvevaluering", "Lære å analysere egne nestenulykker og feilvurderinger for å lære", "refleksjonsperspektiv", "Bortforklaring av egne feil og fraleggelse av ansvar", "fører som reflekterer etter endt tur", "parkert bil", "notatblokk eller app", "selvinnsikt", "/api/assets/thumbs/thumb_michaels_gatelogikk.jpg", ""),
+    ("ch27_ref_004", "4", "CH27-REF-004", "Road Check planlegging og refleksjon", "Teste forståelse av rutevalg, 2-års prøvetid og egentrening", "testperspektiv", "Uvitenhet om prikkbelastning i prøveperioden for ferske sjåfører", "bil ved startpunkt for langtur", "veistasjon", "skilt og kart", "refleksjonskontroll", "/api/assets/thumbs/thumb_vegtrafikkloven_3.jpg", ""),
+    ("ch27_ref_005", "5", "CH27-REF-005", "Tilstrekkelig øving – mengdetrening etter lappen", "Forstå at førerkortet kun markerer starten på sjåførlæringen", "erfaringsperspektiv", "Falsk trygghet som leder til utforkjøring få måneder etter oppkjøring", "bil med L-skilt og familie på øvingstur", "landevei", "fri sikt", "mengdetrening", "/api/assets/thumbs/thumb_th_pichit_khan_1.jpg", "ch27_par_002"),
+    ("ch27_par_002", "5p", "CH27-PAR-002", "Kontinuerlig læring og forsiktighet vs overmot etter bestått prøve", "Se at de beste sjåførene aldri slutter å evaluere sin egen kjøring", "holdningssammenligning", "Førerkortbeslag etter råkjøring i 2-års prøveperiode", "rolig og hensynsfull sjåfør i trafikk", "bymiljø", "gangfelt og skilt", "ansvarlig bilfører", "/api/assets/thumbs/thumb_hav_regelen_reflekser.jpg", "ch27_ref_005"),
+    ("ch27_ref_006", "6", "CH27-REF-006", "Oppsummering Trinn 4 og fullført føreropplæring", "Bli rustet til å bestå førerprøven og ferdes trygt resten av livet", "mestringsperspektiv", "Tvil om egne evner som selvstendig bilfører", "stolt fører med bestått prøve", "trafikkstasjon", "norsk flagg og bil", "klar for veien", "/api/assets/thumbs/thumb_th_pichit_khan_1.jpg", ""),
+]
+
+CH27_ASSETS = {
+    key: {"asset_id": asset_id, "page": page, "scene": scene,
+          "pedagogical_purpose": purpose, "camera_angle": camera,
+          "risk_source": risk, "risikokilde": risk,
+          "vehicles_road_users": actors, "road_type": road,
+          "signs_markings": markings, "learner_discovery": discovery,
+          "hotspots": [], "pair_asset": pair_key, "status": "placeholder", "src": src,
+          "alt": i18n("Illustrasjon av planlegging, refleksjon og tilstrekkelig øving", "ภาพประกอบเรื่องการวางแผน การสะท้อนคิด และการฝึกฝนอย่างเพียงพอ", "Illustration of planning, reflection, and practice")}
+    for key, page, asset_id, scene, purpose, camera, risk, actors, road, markings, discovery, src, pair_key in _CH27_PLACEHOLDERS
+}
+
+CH27_LESSONS = [
+    info("CH27-001", "intro", "ch27_ref_001",
+         "Planlegging av kjøreturen – forutseende trygghet",
+         "การวางแผนการเดินทาง – ความปลอดภัยที่มองการณ์ไกล",
+         "Trip Planning – Proactive Safety",
+         ("En god sjåfør starter turen før motoren slås på. Sjekk værmelding, føreforhold og planlegg pauser. God tidsmargin fjerner stress og gjør at du aldri trenger å ta farlige sjanser.",
+          "ผู้ขับขี่ที่ดีจะเริ่มต้นวางแผนตั้งแต่ก่อนสตาร์ทรถ ตรวจสอบพยากรณ์อากาศ สภาพผิวถนน และกำหนดจุดแวะพัก การเผื่อเวลาเดินทางช่วยขจัดความเครียดและทำให้คุณไม่ต้องขับรถเสี่ยงอันตราย",
+          "A good driver plans before turning the key. Check weather, road conditions, and schedule breaks. Ample time margins eliminate stress and risky driving.")),
+    info("CH27-002", "choice", "ch27_ref_002",
+         "Kjøring i variert og skiftende miljø",
+         "การขับขี่ในสภาพแวดล้อมที่หลากหลายและเปลี่ยนแปลง",
+         "Driving in Varied and Changing Environments",
+         ("På langtur kan været skifte fra mildt regn i lavlandet til is og snøstorm over fjellet. Tilpass farten etter føret og sjekk dekktrykk og vindusviskere før du legger ut på krevende strekninger.",
+          "ในการเดินทางไกล สภาพอากาศอาจเปลี่ยนจากฝนตกในที่ราบไปเป็นพายุหิมะบนยอดเขา ควรปรับความเร็วตามสภาพถนน ตรวจสอบลมยางและใบปัดน้ำฝนก่อนออกเดินทางเสมอ",
+          "On long trips weather can shift from mild rain to mountain blizzards. Adapt speed and verify tyre pressures and wipers beforehand."),
+         pair_asset="ch27_par_001",
+         question=question(
+             ("KONTROLLSPØRSMÅL", "คำถามตรวจสอบ", "CHECK QUESTION"),
+             ("Hvor ofte bør du legge inn en pause ved langkjøring?",
+              "คุณควรแวะพักบ่อยแค่ไหนเมื่อต้องขับรถทางไกลต่อเนื่อง?",
+              "How often should you take a break on long-distance drives?"),
+             [
+                 opt("a", "Minst én gang hver andre time for å strekke på beina og lufte hodet", "อย่างน้อยทุกๆ 2 ชั่วโมงเพื่อยืดเส้นยืดสายและพักสายตา", "At least once every 2 hours to stretch and refresh"),
+                 opt("b", "Kun hvis bensintanken går helt tom", "เฉพาะตอนที่น้ำมันหมดถังเท่านั้น", "Only when the fuel tank is empty"),
+                 opt("c", "Man bør kjøre 8 timer i strekk for å komme raskest frem", "ควรขับรวดเดียว 8 ชั่วโมงเพื่อไปให้ถึงเร็วที่สุด", "One should drive 8 hours straight to arrive fastest"),
+             ],
+             "a",
+             ("En pause hver 2. time motvirker tretthet og opprettholder full reaksjonsevne.",
+              "การพักทุก 2 ชั่วโมงช่วยป้องกันความเหนื่อยล้าและฟื้นฟูสมาธิในการตอบสนองได้อย่างดี",
+              "A break every 2 hours counters fatigue and maintains sharp reactions.")
+         )),
+    info("CH27-003", "sequence", "ch27_ref_003",
+         "Refleksjon og læring av egne erfaringer",
+         "การสะท้อนคิดและการเรียนรู้จากประสบการณ์ตนเอง",
+         "Reflection and Learning from Own Experiences",
+         ("Etter hver kjøretur bør du reflektere over situasjonene du møtte: Oppstod det en nestenulykke? Hvorfor skjedde det, og hva kunne du gjort annerledes? Selvinnsikt er kjennetegnet på en mestersjåfør.",
+          "หลังขับรถทุกครั้ง ควรทบทวนเหตุการณ์ที่พบเจอ: มีจังหวะเกือบเกิดอุบัติเหตุหรือไม่? เกิดจากอะไร และเราสามารถแก้ไขล่วงหน้าได้อย่างไร? ความเข้าใจตนเองคือสัญลักษณ์ของผู้ขับขี่ชั้นยอด",
+          "After each drive reflect on situations met: Did a near-miss happen? Why, and how could you anticipate better? Self-awareness marks a master driver.")),
+    {
+        "id": "CH27-004", "type": "roadCheck", "asset": "ch27_ref_004", "road_check_id": "CH27-RC-001",
+        "eyebrow": i18n("ROAD CHECK ⚡ PLANLEGGING OG REFLEKSJON", "ROAD CHECK ⚡ การวางแผนและการทบทวน", "ROAD CHECK ⚡ PLANNING AND REFLECTION"),
+        "title": i18n("Road Check ⚡ Planlegging, refleksjon og tilstrekkelig øving", "Road Check ⚡ การวางแผน การสะท้อนคิด และการฝึกฝน", "Road Check ⚡ Planning, Reflection, and Practice"),
+        "questions": [
+            question(
+                ("SPØRSMÅL 1", "คำถามที่ 1", "QUESTION 1"),
+                ("Hva innebærer den 2-årige prøveperioden for nye sjåfører i Norge?",
+                 "ระยะทดลองขับขี่ 2 ปีแรกสำหรับผู้ได้ใบขับขี่ใหม่ในนอร์เวย์มีผลอย่างไร?",
+                 "What does the 2-year probationary period entail for new drivers in Norway?"),
+                [
+                    opt("a", "At man får dobbelt antall prikker (dobbel straff) ved trafikkovertredelser", "จะถูกหักคะแนนความประพฤติเป็น 2 เท่าเมื่อทำผิดกฎจราจร", "You receive double demerit points for traffic violations"),
+                    opt("b", "At man kun har lov til å kjøre i dagslys", "อนุญาตให้ขับขี่ได้เฉพาะช่วงกลางวันเท่านั้น", "Only allowed to drive in daylight"),
+                    opt("c", "At man må ha en ledsager over 25 år i bilen hele tiden", "ต้องมีผู้ร่วมเดินทางอายุ 25 ปีขึ้นไปนั่งไปด้วยตลอดเวลา", "Must have a companion over 25 in the car at all times"),
+                ],
+                "a",
+                ("Nye førere får doble prikker; 8 prikker innen 3 år betyr tap av førerkort.",
+                 "ผู้ขับขี่ใหม่จะถูกลงโทษหักคะแนน 2 เท่า หากสะสมครบ 8 คะแนนใน 3 ปีจะถูกยึดใบขับขี่",
+                 "New drivers receive double penalty points; 8 points within 3 years forfeits the license.")
+            ),
+            question(
+                ("SPØRSMÅL 2", "คำถามที่ 2", "QUESTION 2"),
+                ("Hvor mange timer privat øvingskjøring anbefaler Statens vegvesen før førerprøven?",
+                 "กรมการขนส่งนอร์เวย์แนะนำให้ฝึกขับรถส่วนตัวสะสมอย่างน้อยกี่ชั่วโมงก่อนสอบใบขับขี่?",
+                 "How many hours of private practice driving does the NPRA recommend before the test?"),
+                [
+                    opt("a", "Minst 100-140 timer for å oppnå tilstrekkelig mengdetrening", "อย่างน้อย 100-140 ชั่วโมงเพื่อสะสมประสบการณ์อย่างเพียงพอ", "At least 100-140 hours to gain adequate experience"),
+                    opt("b", "Maksimalt 5 timer", "ไม่เกิน 5 ชั่วโมง", "A maximum of 5 hours"),
+                    opt("c", "Det holder å lese teoriboken", "แค่อ่านหนังสือทฤษฎีก็เพียงพอแล้ว", "Reading the theory book is sufficient"),
+                ],
+                "a",
+                ("Omfattende mengdetrening gir automatisert adferd og halverer ulykkesrisikoen etter førerprøven.",
+                 "การฝึกฝนหลายชั่วโมงช่วยให้การควบคุมรถเป็นไปโดยอัตโนมัติและลดอุบัติเหตุลงได้ถึงครึ่งหนึ่ง",
+                 "Extensive practice automates handling and halves crash risk after obtaining licence.")
+            ),
+            question(
+                ("SPØRSMÅL 3", "คำถามที่ 3", "QUESTION 3"),
+                ("Hva er formålet med Sikkerhetskurs på veg (Trinn 4)?",
+                 "จุดประสงค์ของหลักสูตรความปลอดภัยบนถนนจริง (Trinn 4) คืออะไร?",
+                 "What is the purpose of the Safety Course on Road (Stage 4)?"),
+                [
+                    opt("a", "Å utvikle selvinnsikt, risikoforståelse og evne til å motvirke ulykker i variert miljø", "พัฒนาความเข้าใจตนเอง ตระหนักรู้ความเสี่ยง และป้องกันอุบัติเหตุในสภาพแวดล้อมที่หลากหลาย", "Developing self-awareness, risk perception, and preventing crashes in varied conditions"),
+                    opt("b", "Å lære å kjøre fortest mulig mellom to byer", "เรียนรู้วิธีขับรถให้เร็วที่สุดระหว่างสองเมือง", "Learning to drive fastest between two cities"),
+                    opt("c", "Å pugge paragrafene i vegtrafikkloven utenat", "ท่องจำมาตรากฎหมายจราจรให้ขึ้นใจ", "Memorizing traffic law paragraphs by heart"),
+                ],
+                "a",
+                ("Trinn 4 knytter all tidligere læring sammen til moden og trygg føreregenskap.",
+                 "ขั้นตอนที่ 4 ผสมผสานความรู้ทั้งหมดเพื่อหล่อหลอมเป็นผู้ขับขี่ที่มีวุฒิภาวะและความปลอดภัย",
+                 "Stage 4 ties all prior training together into mature and safe driver competence.")
+            ),
+        ],
+    },
+    info("CH27-005", "choice", "ch27_ref_005",
+         "Mengdetrening og veien videre etter lappen",
+         "การฝึกฝนอย่างต่อเนื่องหลังได้รับใบขับขี่",
+         "Volume Practice and the Road Ahead",
+         ("Bestått førerprøve betyr at du har lov til å øve videre alene. De første 9 månedene alene bak rattet krever ekstra ydmykhet. Fortsett å kjøre defensivt, ta ingen unødige sjanser og husk § 3.",
+          "การสอบผ่านใบขับขี่หมายถึงคุณได้รับอนุญาตให้ฝึกฝนต่อด้วยตัวเองตามลำพัง ช่วง 9 เดือนแรกต้องมีความอ่อนน้อมถ่อมตนเป็นพิเศษ ขับขี่เชิงป้องกัน ไม่เสี่ยงโดยไม่จำเป็น และยึดมั่นในกฎหมายมาตรา 3 เสมอ",
+          "Passing the driving test means you are licensed to practice alone. The first 9 months require extra humility. Drive defensively and remember § 3."),
+         pair_asset="ch27_par_002",
+         question=question(
+             ("KONTROLLSPØRSMÅL", "คำถามตรวจสอบ", "CHECK QUESTION"),
+             ("Når er risikoen for alvorlige ulykker høyest i en sjåførs karriere?",
+              "ช่วงเวลาใดในชีวิตของผู้ขับขี่ที่มีความเสี่ยงต่อการเกิดอุบัติเหตุรุนแรงสูงที่สุด?",
+              "When is the risk of serious crashes highest in a driver's career?"),
+             [
+                 opt("a", "De første månedene etter bestått førerprøve når man kjører alene", "ช่วงเดือนแรกๆ หลังสอบผ่านใบขับขี่เมื่อต้องขับรถคนเดียว", "The first months after passing the test when driving alone"),
+                 opt("b", "Etter 25 års skadefri kjøring", "หลังจากขับรถมานาน 25 ปีโดยไม่มีอุบัติเหตุ", "After 25 years of claim-free driving"),
+                 opt("c", "Under øvelseskjøring med godkjent trafikklærer", "ระหว่างฝึกขับรถกับครูฝึกที่ได้รับใบอนุญาต", "During lessons with a certified instructor"),
+             ],
+             "a",
+             ("Uerfarenhet alene bak rattet gir høyest risiko; kjør forsiktig og defensivt.",
+              "การขาดประสบการณ์เมื่อต้องขับรถลำพังมีความเสี่ยงสูงสุด ต้องขับอย่างระมัดระวังเสมอ",
+              "Lack of experience alone carries highest risk; drive conservatively and defensively.")
+         )),
+    info("CH27-006", "chapterComplete", "ch27_ref_006",
+         "Fullført: Planlegging, refleksjon og Trinn 4",
+         "จบเนื้อหา: การวางแผน การสะท้อนคิด และขั้นตอนที่ 4",
+         "Completed: Planning, Reflection, and Stage 4",
+         ("Gratulerer! Du har fullført hele Trinn 4: Sikkerhetskurs på veg. Du er nå en reflektert, trygg og ansvarsbevisst sjåfør som setter sikkerhet og omtanke for andre først.",
+          "ยินดีด้วย! คุณผ่านเนื้อหาทั้งหมดของขั้นตอนที่ 4 เรียบร้อยแล้ว ตอนนี้คุณเป็นผู้ขับขี่ที่มีสติ มีความรับผิดชอบ และให้ความสำคัญกับความปลอดภัยและเพื่อนร่วมทางเป็นอันดับแรก",
+          "Congratulations! You completed all of Stage 4. You are now a reflective, safe, and responsible driver who puts safety and consideration for others first."),
+         takeaways=[
+             i18n("Planlegg turen med gode tidsmarginer og ta pause minst hver 2. time.",
+                  "วางแผนการเดินทางพร้อมเผื่อเวลาและหยุดพักทุกๆ 2 ชั่วโมงเสมอ",
+                  "Plan trips with ample time margins and break at least every 2 hours."),
+             i18n("Nye førere har 2 års prøveperiode med doble prikker ved overtredelser.",
+                  "ผู้ขับขี่ใหม่มีระยะทดลอง 2 ปีโดยจะถูกหักคะแนนความประพฤติเพิ่มเป็น 2 เท่า",
+                  "New drivers have 2 years probation with double penalty points."),
+             i18n("Egentrening og refleksjon fortsetter hele livet bak rattet.",
+                  "การทบทวนตนเองและการเรียนรู้จะดำเนินต่อไปตลอดชีวิตการขับขี่",
+                  "Self-training and reflection continue for life behind the wheel."),
+         ],
+         nextChapter=i18n("NESTE: DEL VI – KAPITTEL 28: LOVER, REGLER OG OPPSLAGSVERK",
+                          "ถัดไป: ส่วนที่ 6 – บทที่ 28: กฎหมาย กฎจราจร และคู่มืออ้างอิง",
+                          "NEXT: PART VI – CHAPTER 28: LAWS, REGULATIONS, AND REFERENCE GUIDE")),
+]
+
+# ─────────────────────────────────────────────────────────────────────────────
+# KAPITTEL 28: LOVER, REGLER OG OPPSLAGSVERK (CH28)
+# ─────────────────────────────────────────────────────────────────────────────
+_CH28_PLACEHOLDERS = [
+    ("ch28_lov_001", "1", "CH28-LOV-001", "Vegtrafikkloven § 3 – Grunnregelen", "Forstå den ufravikelige HAV-regelen: Hensynsfull, Aktpågivende og Varsom", "lovperspektiv", "Brudd på § 3 som fører til straffeansvar, bot og førerkortinndragelse", "vegtrafikklovens tekstbok og bil", "stille veimiljø", "lovbøker", "grunnregelen HAV", "/api/assets/thumbs/thumb_vegtrafikkloven_3.jpg", ""),
+    ("ch28_lov_002", "2", "CH28-LOV-002", "Trafikkreglenes detaljerte bestemmelser", "Kjenne trafikkreglenes krav til vikeplikt, feltskifte og signalbruk", "detaljperspektiv", "Misforståelse av trafikkregler i komplekse flersporsløsninger", "veikryss med vikepliktskilt og piler", "bykryss", "skilt og veimerking", "trafikkreglene", "/api/assets/thumbs/thumb_vikeplikt_oversikt.jpg", "ch28_par_001"),
+    ("ch28_par_001", "2p", "CH28-PAR-001", "Hensynsfull og varsom kjøring vs aggressiv adferd", "Se at § 3 forbyr all adferd som volder fare eller skade", "atferdssammenligning", "Aggressiv tuting og kasting av bil inn foran andre", "rolig bilfører som slipper forbi gående", "boliggate", "gangfelt", "hensynsfull adferd", "/api/assets/thumbs/thumb_michaels_gatelogikk.jpg", "ch28_lov_002"),
+    ("ch28_lov_003", "3", "CH28-LOV-003", "Førerkortklasser og hengerregler (Klasse B)", "Ha full oversikt over 3500 kg totalvekt og hengerbegrensninger", "regelperspektiv", "Kjøre ulovlig med for tung tilhenger og miste førerkortet", "personbil med tilhenger", "veistasjon", "tilhengerskilt", "klasse B tilhengerregler", "/api/assets/thumbs/thumb_veien_norsk_forerkort.jpg", ""),
+    ("ch28_lov_004", "4", "CH28-LOV-004", "Road Check lover, regler og oppslagsverk", "Teste kunnskap om Vegtrafikkloven, skiltkategorier og stoppformler", "testperspektiv", "Feilberegning av tillatt totalvekt eller stopplengde på teorieksamen", "bil ved Statens vegvesen kontrollstasjon", "kontrollplass", "vekt og målestasjon", "oppslagsverkskontroll", "/api/assets/thumbs/thumb_offisielle_trafikkskilt.jpg", ""),
+    ("ch28_lov_005", "5", "CH28-LOV-005", "Formler og tall: Stopplengde og reaksjonslengde", "Mestre formlene for reaksjonslengde og bremselengde på rams", "formelperspektiv", "Feilbedømming av bremselengde som fører til kollisjon i høy fart", "illustrasjon av stopplengde = reaksjon + brems", "testbane", "metermarkeringer", "stoppformler", "/api/assets/thumbs/thumb_stoppelengde_80.jpg", "ch28_par_002"),
+    ("ch28_par_002", "5p", "CH28-PAR-002", "Stopplengde i 40 km/t vs 80 km/t", "Forstå at firedobling av bremselengden krever ekstrem forsiktighet", "stoppsammenligning", "Bråstans der bremselengden ikke strekker til i 80 km/t", "to biler med stoppdistanse på asfalt", "teststrekning", "avstandsmarkører", "firedoblet bremselengde", "/api/assets/thumbs/thumb_bremselengde_80.jpg", "ch28_lov_005"),
+    ("ch28_lov_006", "6", "CH28-LOV-006", "Gratulerer – Hele Læreboken fullført!", "Feire gjennomføringen av alle 28 kapitler i Thai2Drive Læreboken", "feiringsperspektiv", "Uvitenhet om at veien som sjåfør har åpnet seg med full kompetanse", "stolt sjåfør bak rattet under åpen norsk himmel", "utsiktsvei over fjorden", "veimerking og fjell", "fullført lærebok", "/api/assets/thumbs/thumb_mestre_hav_regelen.jpg", ""),
+]
+
+CH28_ASSETS = {
+    key: {"asset_id": asset_id, "page": page, "scene": scene,
+          "pedagogical_purpose": purpose, "camera_angle": camera,
+          "risk_source": risk, "risikokilde": risk,
+          "vehicles_road_users": actors, "road_type": road,
+          "signs_markings": markings, "learner_discovery": discovery,
+          "hotspots": [], "pair_asset": pair_key, "status": "placeholder", "src": src,
+          "alt": i18n("Illustrasjon av lover, regler og oppslagsverk", "ภาพประกอบเรื่องกฎหมาย กฎจราจร และคู่มืออ้างอิง", "Illustration of laws, rules, and reference guide")}
+    for key, page, asset_id, scene, purpose, camera, risk, actors, road, markings, discovery, src, pair_key in _CH28_PLACEHOLDERS
+}
+
+CH28_LESSONS = [
+    info("CH28-001", "intro", "ch28_lov_001",
+         "Vegtrafikkloven § 3 – Grunnregelen for all trafikk",
+         "กฎหมายจราจรมาตรา 3 – หัวใจสำคัญของกฎจราจรทั้งหมด",
+         "Traffic Law § 3 – The Core Rule for All Traffic",
+         ("Enhver skal ferdes hensynsfullt, aktpågivende og varsom så det ikke kan oppstå fare eller voldes skade, og slik at annen trafikk ikke unødig hindres eller forstyrres. Dette kalles HAV-regelen og står over alle andre regler.",
+          "ทุกคนต้องใช้ถนนด้วยความเห็นอกเห็นใจ มีสติระแวดระวัง และรอบคอบระมัดระวัง เพื่อไม่ให้เกิดอันตรายหรือสร้างความเสียหาย และไม่กีดขวางหรือรบกวนการจราจรของผู้อื่นโดยไม่จำเป็น นี่คือกฎ HAV ที่อยู่เหนือกฎหมายจราจรทั้งหมด",
+          "Everyone must travel considerately, alertly, and cautiously so no danger or harm arises, and traffic is not unnecessarily impeded. This HAV rule overrides all.")),
+    info("CH28-002", "choice", "ch28_lov_002",
+         "Trafikkreglene og samhandlingsplikten",
+         "กฎจราจรโดยละเอียดและหน้าที่ในการอยู่ร่วมกัน",
+         "Traffic Regulations and Mutual Consideration Duty",
+         ("Trafikkreglene gir de konkrete bestemmelsene for vikeplikt (§ 7), fart (§ 13), tegn (§ 14) og stans/parkering (§ 17). Selv om du har forkjørsrett etter skilt eller regler, har du plikt til å avverge ulykker hvis andre gjør feil.",
+          "กฎจราจรกำหนดระเบียบปฏิบัติที่ชัดเจนสำหรับการให้ทาง (มาตรา 7) ความเร็ว (มาตรา 13) การส่งสัญญาณ (มาตรา 14) และการจอด (มาตรา 17) แม้คุณจะเป็นฝ่ายมีสิทธิไปก่อนตามกฎ แต่คุณก็มีหน้าที่ต้องป้องกันอุบัติเหตุเสมอหากผู้อื่นทำผิดพลาด",
+          "Traffic rules specify give-way (§ 7), speed (§ 13), signals (§ 14), and parking (§ 17). Even with priority you must avert crashes if others err."),
+         pair_asset="ch28_par_001",
+         question=question(
+             ("KONTROLLSPØRSMÅL", "คำถามตรวจสอบ", "CHECK QUESTION"),
+             ("Har du rett til å kreve forkjørsretten din hvis det betyr fare for kollisjon?",
+              "คุณมีสิทธิที่จะยืนกรานใช้สิทธิไปก่อนหรือไม่หากการกระทำนั้นเสี่ยงต่อการเกิดอุบัติเหตุ?",
+              "Do you have the right to enforce priority if it risks a collision?"),
+             [
+                 opt("a", "Ja, forkjørsretten gjelder foran alt", "มี เพราะสิทธิไปก่อนสำคัญที่สุด", "Yes, priority overrides everything"),
+                 opt("b", "Nei, ifølge § 3 har alle førere plikt til å avverge ulykker uansett hvem som har vikeplikt", "ไม่มี ตามมาตรา 3 ผู้ขับขี่ทุกคนมีหน้าที่ต้องป้องกันอุบัติเหตุไม่ว่าใครจะเป็นฝ่ายให้ทางก็ตาม", "No, under § 3 all drivers must avert accidents regardless of priority"),
+                 opt("c", "Ja, hvis du har kamera i bilen", "มี หากคุณติดกล้องหน้ารถ", "Yes, if you have a dashcam"),
+             ],
+             "b",
+             ("I norsk trafikkrett har ingen absolutt forkjørsrett; alle har en avvergingsplikt.",
+              "ในกฎหมายนอร์เวย์ ไม่มีใครมีสิทธิไปก่อนแบบเด็ดขาด ทุกคนมีหน้าที่หลีกเลี่ยงอุบัติเหตุร่วมกัน",
+              "In Norwegian law no one has absolute priority; everyone has a duty to avoid collisions.")
+         )),
+    info("CH28-003", "sequence", "ch28_lov_003",
+         "Førerkort klasse B og tilhengerregler",
+         "ใบขับขี่คลาส B และข้อกำหนดเรื่องรถพ่วง",
+         "Driving Licence Class B and Trailer Rules",
+         ("Med førerkort klasse B kan du føre personbil med tillatt totalvekt inntil 3 500 kg og maksimalt 8 passasjerplasser. Du kan alltid trekke tilhenger med tillatt totalvekt inntil 750 kg, eller tyngre henger så lenge bil + henger ikke overstiger 3 500 kg totalt.",
+          "ใบขับขี่คลาส B อนุญาตให้คุณขับรถยนต์นั่งส่วนบุคคลที่มีน้ำหนักรวมไม่เกิน 3,500 กก. และมีที่นั่งผู้โดยสารไม่เกิน 8 ที่นั่ง คุณสามารถลากรถพ่วงที่มีน้ำหนักรวมไม่เกิน 750 กก. ได้เสมอ หรือลากพ่วงที่หนักกว่านั้นได้หากน้ำหนักรวมของรถและพ่วงไม่เกิน 3,500 กก.",
+          "Class B permits driving cars up to 3500 kg max weight with max 8 passenger seats. You can tow a trailer up to 750 kg, or heavier if car + trailer <= 3500 kg.")),
+    {
+        "id": "CH28-004", "type": "roadCheck", "asset": "ch28_lov_004", "road_check_id": "CH28-RC-001",
+        "eyebrow": i18n("ROAD CHECK ⚡ LOVER OG OPPSLAG", "ROAD CHECK ⚡ กฎหมายและคู่มือ", "ROAD CHECK ⚡ LAWS AND REFERENCE"),
+        "title": i18n("Road Check ⚡ Lover, regler og oppslagsverk", "Road Check ⚡ กฎหมาย กฎจราจร และคู่มืออ้างอิง", "Road Check ⚡ Laws, Rules, and Reference Guide"),
+        "questions": [
+            question(
+                ("SPØRSMÅL 1", "คำถามที่ 1", "QUESTION 1"),
+                ("Hva er formelen for å beregne reaksjonslengde ved 1 sekunds reaksjonstid?",
+                 "สูตรคำนวณระยะคิดตอบสนอง (Reaksjonslengde) โดยประมาณในเวลา 1 วินาทีคืออะไร?",
+                 "What is the formula to approximate reaction distance for 1 second reaction time?"),
+                [
+                    opt("a", "(Fart / 10) * 3 meter", "(ความเร็ว / 10) * 3 เมตร", "(Speed / 10) * 3 meters"),
+                    opt("b", "(Fart * Fart) / 2 meter", "(ความเร็ว * ความเร็ว) / 2 เมตร", "(Speed * Speed) / 2 meters"),
+                    opt("c", "Reaksjonslengden er alltid nøyaktig 5 meter", "ระยะคิดมีค่า 5 เมตรคงที่เสมอ", "Reaction distance is always exactly 5 meters"),
+                ],
+                "a",
+                ("Ved 50 km/t tilbakelegges ca 15 meter på 1 sekund: (50/10) * 3 = 15 meter.",
+                 "ที่ความเร็ว 50 กม./ชม. ใน 1 วินาทีรถจะวิ่งไปประมาณ 15 เมตร: (50/10) * 3 = 15 เมตร",
+                 "At 50 km/h the car travels approx 15 meters in 1 second: (50/10) * 3 = 15m.")
+            ),
+            question(
+                ("SPØRSMÅL 2", "คำถามที่ 2", "QUESTION 2"),
+                ("Hva skjer med bilens bremselengde når hastigheten dobles fra 40 til 80 km/t?",
+                 "จะเกิดอะไรขึ้นกับระยะเบรกเมื่อความเร็วรถเพิ่มขึ้นเป็นสองเท่าจาก 40 เป็น 80 กม./ชม.?",
+                 "What happens to braking distance when speed doubles from 40 to 80 km/h?"),
+                [
+                    opt("a", "Den dobles til det dobbelte", "เพิ่มขึ้นเป็นสองเท่า", "It doubles"),
+                    opt("b", "Den firedobles (øker med kvadratet av hastigheten: 2² = 4)", "เพิ่มขึ้นเป็น 4 เท่า (เป็นสัดส่วนยกกำลังสองของความเร็ว: 2² = 4)", "It quadruples (increases by speed squared: 2² = 4)"),
+                    opt("c", "Den forblir uendret takket være ABS-bremser", "ระยะเบรกเท่าเดิมเพราะมีระบบ ABS", "It remains unchanged thanks to ABS"),
+                ],
+                "b",
+                ("Bremselengden øker kvadratisk: Dobbel fart krever fire ganger så lang bremselengde.",
+                 "ระยะเบรกเพิ่มขึ้นตามสัดส่วนยกกำลังสอง ความเร็วสองเท่าต้องใช้ระยะเบรกยาวขึ้นสี่เท่า",
+                 "Braking distance increases quadratically: Double speed requires 4x braking distance.")
+            ),
+            question(
+                ("SPØRSMÅL 3", "คำถามที่ 3", "QUESTION 3"),
+                ("Hva er promillegrensen for bilkjøring i Norge?",
+                 "เกณฑ์ปริมาณแอลกอฮอล์ในเลือดสูงสุดที่อนุญาตให้ขับขี่รถยนต์ในนอร์เวย์คือเท่าใด?",
+                 "What is the legal blood alcohol limit for driving in Norway?"),
+                [
+                    opt("a", "0,2 promille", "0.2 มิลลิกรัมเปอร์เซ็นต์ (0.2 promille)", "0.2 per mille"),
+                    opt("b", "0,5 promille", "0.5 มิลลิกรัมเปอร์เซ็นต์", "0.5 per mille"),
+                    opt("c", "0,8 promille", "0.8 มิลลิกรัมเปอร์เซ็นต์", "0.8 per mille"),
+                ],
+                "a",
+                ("Norge har en av verdens strengeste promillegrenser på 0,2 for å sikre nullvisjonen.",
+                 "นอร์เวย์มีเกณฑ์แอลกอฮอล์ที่เข้มงวดมากที่สุดในโลกคือ 0.2 เพื่อความปลอดภัยสูงสุด",
+                 "Norway has one of the world's strictest alcohol limits at 0.2 per mille.")
+            ),
+        ],
+    },
+    info("CH28-005", "choice", "ch28_lov_005",
+         "Oppslagsverk: Stopplengder og nøkkeltall",
+         "คู่มืออ้างอิง: ตัวเลขสำคัญและระยะหยุดรถ",
+         "Reference Guide: Stopping Distances and Key Numbers",
+         ("Stopplengde er lik reaksjonslengde pluss bremselengde. I 80 km/t på tørr asfalt bruker du ca 24 meter på å reagere og ca 32 meter på å bremse – totalt 56 meter. På glatt føre kan dette bli over 150 meter!",
+          "ระยะหยุดรถทั้งหมดเท่ากับระยะคิดตอบสนองบวกกับระยะเบรก ที่ความเร็ว 80 กม./ชม. บนถนนแห้ง รถจะวิ่งไป 24 เมตรระหว่างที่คุณคิด และอีก 32 เมตรจนกว่ารถจะหยุด รวมเป็น 56 เมตร แต่บนถนนลื่นอาจยาวเกิน 150 เมตร!",
+          "Stopping distance equals reaction distance plus braking distance. At 80 km/h dry road total is ~56m. On slick roads this exceeds 150m!"),
+         pair_asset="ch28_par_002",
+         question=question(
+             ("KONTROLLSPØRSMÅL", "คำถามตรวจสอบ", "CHECK QUESTION"),
+             ("Hvor mange meter tilbakelegger en bil i 50 km/t på bare ett enkelt sekund?",
+              "รถที่วิ่งด้วยความเร็ว 50 กม./ชม. จะเคลื่อนที่ไปไกลกี่เมตรในเวลาเพียง 1 วินาที?",
+              "How many meters does a car at 50 km/h cover in just a single second?"),
+             [
+                 opt("a", "Omtrent 14 til 15 meter", "ประมาณ 14 ถึง 15 เมตร", "Approximately 14 to 15 meters"),
+                 opt("b", "Omtrent 2 meter", "ประมาณ 2 เมตร", "Approximately 2 meters"),
+                 opt("c", "Omtrent 50 meter", "ประมาณ 50 เมตร", "Approximately 50 meters"),
+             ],
+             "a",
+             ("Huskeregel: Del farten på 10 og gang med 3: (50/10)*3 = 15 meter.",
+              "สูตรคิดลัด: นำความเร็วหาร 10 แล้วคูณ 3: (50/10)*3 = 15 เมตร",
+              "Rule of thumb: Divide speed by 10 and multiply by 3: (50/10)*3 = 15 meters.")
+         )),
+    info("CH28-006", "chapterComplete", "ch28_lov_006",
+         "Gratulerer – Hele Thai2Drive Læreboken er fullført!",
+         "ยินดีด้วย – คุณได้เรียนจบหลักสูตรหนังสือเรียน Thai2Drive ทั้งหมดแล้ว!",
+         "Congratulations – The Complete Thai2Drive Study Book Finished!",
+         ("Fantastisk prestasjon! Du har nå fullført samtlige 28 kapitler i Thai2Drive Læreboken. Du har tilegnet deg dybdekunnskap om trafikkregler, vikeplikt, bilkontroll, risikoforståelse og samhandling. Du er nå fullt rustet til å bestå teoriprøven hos Statens vegvesen på første forsøk!",
+          "ความสำเร็จที่ยิ่งใหญ่มาก! ตอนนี้คุณได้เรียนจบเนื้อหาครบทั้ง 28 บทของหนังสือเรียน Thai2Drive เรียบร้อยแล้ว คุณมีความรู้ที่ลึกซึ้งเรื่องกฎจราจร การให้ทาง การควบคุมรถ ความเสี่ยง และการอยู่ร่วมกับผู้อื่น คุณมีความพร้อมเต็มเปี่ยมที่จะไปสอบทฤษฎีใบขับขี่นอร์เวย์ให้ผ่านฉลุยในรอบแรกครับ!",
+          "Fantastic achievement! You completed all 28 chapters of the Thai2Drive Study Book. You have deep knowledge of traffic rules, priority, vehicle control, risk awareness, and consideration. You are fully equipped to pass the theory exam on your first attempt!"),
+         takeaways=[
+             i18n("Vegtrafikkloven § 3 (HAV) er grunnsteinen for all trygg bilkjøring.",
+                  "กฎหมายจราจรมาตรา 3 (HAV) คือศิลาฤกษ์ของความปลอดภัยในการขับขี่ตลอดชีวิต",
+                  "Traffic Law § 3 (HAV) is the bedrock of all safe driving for life."),
+             i18n("Stopplengden øker dramatisk med farten; tilpass alltid hastigheten etter føret.",
+                  "ระยะหยุดรถเพิ่มขึ้นอย่างรวดเร็วตามความเร็ว จงปรับความเร็วให้เข้ากับสภาพถนนเสมอ",
+                  "Stopping distance increases dramatically with speed; adapt to conditions."),
+             i18n("Du har fullført alle 28 kapitler og er klar til å bestå teoriprøven!",
+                  "คุณเรียนจบครบทั้ง 28 บทแล้ว พร้อมพิชิตข้อสอบทฤษฎีใบขับขี่นอร์เวย์!",
+                  "You completed all 28 chapters and are ready to ace the theory exam!"),
+         ],
+         nextChapter=i18n("🎉 FULLFØRT: DU HAR MESTRET HELE LÆREBOKEN (28 AV 28 KAPITLER)",
+                          "🎉 สำเร็จ: คุณผ่านหนังสือเรียนครบทั้ง 28 บทเรียนเรียบร้อยแล้ว",
+                          "🎉 COMPLETE: YOU HAVE MASTERED ALL 28 CHAPTERS")),
+]
+
 # Validation
 
 CHAPTERS = {
@@ -2089,6 +3696,16 @@ CHAPTERS = {
     "CH16": {"code": "CH16", "title": i18n("Kapittel 16 · Grunnleggende kjøretøybehandling og manøvrering", "บทที่ 16 · การควบคุมรถขั้นพื้นฐานและการเคลื่อนที่", "Chapter 16 · Basic Vehicle Handling and Manoeuvring"), "lessons": CH16_LESSONS, "assets": CH16_ASSETS},
     "CH17": {"code": "CH17", "title": i18n("Kapittel 17 · Miljøvennlig og økonomisk kjøring", "บทที่ 17 · การขับขี่ที่เป็นมิตรต่อสิ่งแวดล้อมและประหยัดพลังงาน", "Chapter 17 · Eco-friendly and Economical Driving"), "lessons": CH17_LESSONS, "assets": CH17_ASSETS},
     "CH18": {"code": "CH18", "title": i18n("Kapittel 18 · Trinnvurdering Trinn 2 og veien til Trinn 3", "บทที่ 18 · การประเมินผลขั้นตอนที่ 2 และการก้าวสู่ขั้นตอนที่ 3", "Chapter 18 · Step Assessment Step 2 and Transition to Step 3"), "lessons": CH18_LESSONS, "assets": CH18_ASSETS},
+    "CH19": {"code": "CH19", "title": i18n("Kapittel 19 · Mål og rammer for Trinn 3", "บทที่ 19 · เป้าหมายและกรอบการเรียนรู้ขั้นตอนที่ 3", "Chapter 19 · Goals and Framework for Stage 3"), "lessons": CH19_LESSONS, "assets": CH19_ASSETS},
+    "CH20": {"code": "CH20", "title": i18n("Kapittel 20 · Trafikksystemet og trafikantgrupper", "บทที่ 20 · ระบบการจราจรและกลุ่มผู้ใช้ถนน", "Chapter 20 · Traffic System and Road User Groups"), "lessons": CH20_LESSONS, "assets": CH20_ASSETS},
+    "CH21": {"code": "CH21", "title": i18n("Kapittel 21 · Veg, vegoppmerking, skilt og atferd", "บทที่ 21 · ถนน การตีเส้น ป้ายจราจร และพฤติกรรม", "Chapter 21 · Road, Road Markings, Signs, and Behaviour"), "lessons": CH21_LESSONS, "assets": CH21_ASSETS},
+    "CH22": {"code": "CH22", "title": i18n("Kapittel 22 · Systematisk informasjonsinnhenting og se-teknikk", "บทที่ 22 · การรวบรวมข้อมูลอย่างเป็นระบบและเทคนิคการมอง", "Chapter 22 · Systematic Visual Search and Eye Lead"), "lessons": CH22_LESSONS, "assets": CH22_ASSETS},
+    "CH23": {"code": "CH23", "title": i18n("Kapittel 23 · Kjøring i by og på landeveg", "บทที่ 23 · การขับขี่ในเมืองและบนทางหลวงชนบท", "Chapter 23 · Driving in City and Rural Road Environments"), "lessons": CH23_LESSONS, "assets": CH23_ASSETS},
+    "CH24": {"code": "CH24", "title": i18n("Kapittel 24 · Effektiv kjøring og sikkerhetskurs på bane", "บทที่ 24 · การขับขี่อย่างมีประสิทธิภาพและการฝึกบนสนามลื่น", "Chapter 24 · Efficient Driving and Safety Course on Track"), "lessons": CH24_LESSONS, "assets": CH24_ASSETS},
+    "CH25": {"code": "CH25", "title": i18n("Kapittel 25 · Bilkjøringens risiko", "บทที่ 25 · ความเสี่ยงในการขับขี่รถยนต์", "Chapter 25 · The Risks of Driving"), "lessons": CH25_LESSONS, "assets": CH25_ASSETS},
+    "CH26": {"code": "CH26", "title": i18n("Kapittel 26 · Kjørekompetanse i landevegsmiljø", "บทที่ 26 · ทักษะการขับขี่บนถนนนอกเมือง", "Chapter 26 · Driving Competence in Rural Road Environments"), "lessons": CH26_LESSONS, "assets": CH26_ASSETS},
+    "CH27": {"code": "CH27", "title": i18n("Kapittel 27 · Planlegging, refleksjon og tilstrekkelig øving", "บทที่ 27 · การวางแผน การสะท้อนคิด และการฝึกฝนอย่างเพียงพอ", "Chapter 27 · Planning, Reflection, and Sufficient Practice"), "lessons": CH27_LESSONS, "assets": CH27_ASSETS},
+    "CH28": {"code": "CH28", "title": i18n("Kapittel 28 · Lover, regler og oppslagsverk", "บทที่ 28 · กฎหมาย กฎจราจร และคู่มืออ้างอิง", "Chapter 28 · Laws, Regulations, and Reference Guide"), "lessons": CH28_LESSONS, "assets": CH28_ASSETS},
 }
 
 ALL_ASSETS = {
@@ -2109,6 +3726,16 @@ ALL_ASSETS = {
     **CH16_ASSETS,
     **CH17_ASSETS,
     **CH18_ASSETS,
+    **CH19_ASSETS,
+    **CH20_ASSETS,
+    **CH21_ASSETS,
+    **CH22_ASSETS,
+    **CH23_ASSETS,
+    **CH24_ASSETS,
+    **CH25_ASSETS,
+    **CH26_ASSETS,
+    **CH27_ASSETS,
+    **CH28_ASSETS,
 }
 
 COPY = {k: i18n(*v) for k, v in {"brand":("THAI2DRIVE STUDIEBOKEN","หนังสือเรียน THAI2DRIVE","THAI2DRIVE STUDY BOOK"),"chapters":("Kapittel 1 · Blikket","บทที่ 1 · การมอง","Chapter 1 · Vision"),"continue":("Fortsett der du slapp","เรียนต่อจากจุดเดิม","Continue where you left off"),"start":("START →","เริ่ม →","START →"),"progress":("Progresjon","ความคืบหน้า","Progress"),"completed":("fullført","เสร็จแล้ว","completed"),"backHome":("Oversikt","ภาพรวม","Overview"),"previous":("Forrige","ก่อนหน้า","Previous"),"next":("Fortsett","เรียนต่อ","Continue"),"understood":("Jeg forstår","ฉันเข้าใจ","I understand"),"remember":("HUSK","จำไว้","REMEMBER"),"roadCleared":("ROAD CHECK CLEARED ⚡","ผ่าน ROAD CHECK ⚡","ROAD CHECK CLEARED ⚡"),"roadRetry":("Rolig repetisjon","ทบทวนอย่างสงบ","Calm review"),"review":("Repeter","ทบทวน","Review"),"finish":("Fortsett","เรียนต่อ","Continue"),"imageMissing":("THAI2DRIVE-bildet kommer snart","ภาพ THAI2DRIVE จะมาเร็ว ๆ นี้","THAI2DRIVE image coming soon"),"storageError":("Progresjonen kunne ikke lagres.","ไม่สามารถบันทึกความคืบหน้าได้","Progress could not be saved."),"contentError":("Siden kan ikke vises nå.","ไม่สามารถแสดงหน้านี้ได้","This page cannot be displayed."),"whatChanged":("WHAT CHANGED? 🧠","อะไรเปลี่ยนไป? 🧠","WHAT CHANGED? 🧠"),"originalView":("Opprinnelig bilde","ภาพเดิม","Original image")}.items()}
@@ -2154,6 +3781,26 @@ _DATA = json.dumps({
     "ch17_assets": CH17_ASSETS,
     "ch18_lessons": CH18_LESSONS,
     "ch18_assets": CH18_ASSETS,
+    "ch19_lessons": CH19_LESSONS,
+    "ch19_assets": CH19_ASSETS,
+    "ch20_lessons": CH20_LESSONS,
+    "ch20_assets": CH20_ASSETS,
+    "ch21_lessons": CH21_LESSONS,
+    "ch21_assets": CH21_ASSETS,
+    "ch22_lessons": CH22_LESSONS,
+    "ch22_assets": CH22_ASSETS,
+    "ch23_lessons": CH23_LESSONS,
+    "ch23_assets": CH23_ASSETS,
+    "ch24_lessons": CH24_LESSONS,
+    "ch24_assets": CH24_ASSETS,
+    "ch25_lessons": CH25_LESSONS,
+    "ch25_assets": CH25_ASSETS,
+    "ch26_lessons": CH26_LESSONS,
+    "ch26_assets": CH26_ASSETS,
+    "ch27_lessons": CH27_LESSONS,
+    "ch27_assets": CH27_ASSETS,
+    "ch28_lessons": CH28_LESSONS,
+    "ch28_assets": CH28_ASSETS,
 }, ensure_ascii=False, separators=(",", ":"))
 
 SCRIPT = r"""

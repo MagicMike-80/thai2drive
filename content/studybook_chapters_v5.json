@@ -2255,5 +2255,1336 @@
         ]
       }
     ]
+  },
+  {
+    "chapter_id": "ch_trinn3_maal_rammer",
+    "chapter_code": "CH19",
+    "title_no": "Kapittel 19 — Mål og rammer for Trinn 3",
+    "title_th": "บทที่ 19 — เป้าหมายและกรอบการเรียนรู้ขั้นตอนที่ 3 (Trinn 3)",
+    "title_en": "Chapter 19 — Goals and Framework for Stage 3",
+    "difficulty": "advanced",
+    "podcast_reference": "Michaels råd: Selvstendighet, trafikal kompetanse og glattkjøringsbane",
+    "section_tags": [
+      "trinn3",
+      "trafikal",
+      "selvstendighet",
+      "sikkerhetskursbane",
+      "trinnvurdering",
+      "friksjon"
+    ],
+    "sections": [
+      {
+        "section_type": "situation",
+        "title_no": "Situasjonen: Overgangen til krevende og variert trafikk",
+        "title_th": "สถานการณ์: การก้าวสู่สภาพการจราจรจริงที่ซับซ้อน",
+        "title_en": "The situation: Transition to complex and varied traffic",
+        "content_no": "Du mestrer bilens pedaler og gir rent teknisk. Nå skal du ut i tett trafikk, rundkjøringer og landevei. Hva kreves for å kjøre selvstendig?",
+        "content_th": "คุณควบคุมแป้นเหยียบและเกียร์ได้อย่างคล่องแคล่วแล้ว ตอนนี้คุณต้องออกสู่การจราจรที่หนาแน่น วงเวียน และทางหลวง สิ่งใดที่จำเป็นสำหรับการขับขี่อย่างมั่นใจด้วยตนเอง?",
+        "content_en": "You master controls technically. Now you enter dense traffic and rural roads. What is required to drive independently?"
+      },
+      {
+        "section_type": "theory",
+        "title_no": "Michaels trinn 3-regel: Løft blikket, forutse farer og samhandle",
+        "title_th": "กฎขั้นตอนที่ 3 ของ Michael: มองไกล คาดการณ์อันตราย และร่วมทางอย่างราบรื่น",
+        "title_en": "Michael's Stage 3 rule: Look up, anticipate hazards, and cooperate",
+        "content_no": "På Trinn 3 er målet at du skal kjøre sikkert i variert trafikk og samhandle godt med andre trafikanter. Opplæringen inkluderer Sikkerhetskurs på bane (4 timer) og trinnvurdering.",
+        "content_th": "เป้าหมายของขั้นตอนที่ 3 คือการขับขี่อย่างปลอดภัยในสภาพการจราจรที่หลากหลายและการร่วมทางกับผู้อื่น หลักสูตรประกอบด้วยการฝึกบนสนามลื่น 4 ชั่วโมงและการประเมินผล",
+        "content_en": "Stage 3 develops safe driving in varied traffic and sound road interaction. Training includes track safety course (4 hours) and stage assessment."
+      },
+      {
+        "section_type": "practice",
+        "title_no": "Praktisk tips: Selvevaluering og handlingsrom på glatt føre",
+        "title_th": "คำแนะนำภาคปฏิบัติ: การประเมินตนเองและระยะปลอดภัยบนทางลื่น",
+        "title_en": "Practical tips: Self-evaluation and margins on slick surfaces",
+        "content_no": "På glatt underlag firedobles eller åttedobles bremselengden. Hold alltid stor sikkerhetsavstand og tilpass farten før svingen.",
+        "content_th": "บนถนนลื่นระยะเบรกจะยาวขึ้น 4 ถึง 8 เท่า เว้นระยะห่างให้มากเสมอและชะลอความเร็วก่อนเข้าโค้ง",
+        "content_en": "On slick surfaces braking distance multiplies 4 to 8 times. Keep wide margins and adjust speed before turns."
+      }
+    ],
+    "screens": [
+      {
+        "screen_id": "CH19-001",
+        "screen_type": "intro",
+        "title_no": "Målet for opplæringen på Trinn 3",
+        "title_th": "เป้าหมายของการเรียนในขั้นตอนที่ 3",
+        "asset_id": "CH19-TR3-001",
+        "pair_asset_id": null,
+        "content_th": "ในขั้นตอนที่ 3 จุดสนใจจะเปลี่ยนจากการควบคุมรถไปสู่การมองถนนและสังเกตสิ่งรอบตัวเพื่อขับขี่อย่างปลอดภัยและมั่นใจด้วยตนเอง",
+        "glossary_terms": [
+          "Trinn 3",
+          "Trafikal kompetanse",
+          "Selvstendig kjøring"
+        ]
+      },
+      {
+        "screen_id": "CH19-002",
+        "screen_type": "choice",
+        "title_no": "Selvstendig observasjon og samhandling",
+        "title_th": "การสังเกตและอยู่ร่วมกันบนท้องถนนอย่างมั่นใจ",
+        "asset_id": "CH19-TR3-002",
+        "pair_asset_id": "CH19-PAR-001",
+        "content_th": "ตัดสินใจด้วยตนเองโดยไม่ต้องรอคำสั่งจากครูฝึก อ่านป้ายจราจร สังเกตคนเดินถนน และปรับความเร็วอย่างนุ่มนวลก่อนถึงทางแยก",
+        "glossary_terms": [
+          "Samhandling",
+          "Observasjon",
+          "Trafikkflyt"
+        ]
+      },
+      {
+        "screen_id": "CH19-003",
+        "screen_type": "sequence",
+        "title_no": "De obligatoriske delene på Trinn 3",
+        "title_th": "หลักสูตรภาคบังคับในขั้นตอนที่ 3",
+        "asset_id": "CH19-TR3-003",
+        "pair_asset_id": null,
+        "content_th": "ขั้นตอนที่ 3 มีสองสิ่งที่ต้องผ่านตามกฎหมาย: หลักสูตรความปลอดภัยบนสนามลื่น 4 ชั่วโมง และชั่วโมงประเมินผลขั้นตอนที่ 3 ร่วมกับครูฝึก",
+        "glossary_terms": [
+          "Sikkerhetskurs på bane",
+          "Trinnvurdering time",
+          "Glattkjøring"
+        ]
+      },
+      {
+        "screen_id": "CH19-004",
+        "screen_type": "road_check",
+        "title_no": "Road Check ⚡ Mål og rammer for Trinn 3",
+        "title_th": "Road Check ⚡ เป้าหมายและกรอบของขั้นตอนที่ 3",
+        "road_check_id": "CH19-RC-001",
+        "asset_id": "CH19-TR3-004",
+        "pair_asset_id": null,
+        "content_th": "สามคำถามสั้นเพื่อทดสอบความเข้าใจเรื่องเป้าหมายขั้นตอนที่ 3 หลักสูตรบนสนามลื่น และการประเมินตนเอง",
+        "glossary_terms": [
+          "Trinnmål",
+          "Risikoforståelse",
+          "Selvevaluering"
+        ]
+      },
+      {
+        "screen_id": "CH19-005",
+        "screen_type": "choice",
+        "title_no": "Fart, friksjon og bremselengde på glatt underlag",
+        "title_th": "ความเร็ว แรงเสียดทาน และระยะเบรกบนพื้นผิวที่ลื่น",
+        "asset_id": "CH19-TR3-005",
+        "pair_asset_id": "CH19-PAR-002",
+        "content_th": "บนพื้นน้ำแข็งระยะเบรกจะยาวขึ้นหลายเท่าเมื่อเทียบกับถนนแห้ง การลดความเร็วและเว้นระยะห่างจึงเป็นหัวใจสำคัญในการหยุดรถได้ทันท่วงที",
+        "glossary_terms": [
+          "Friksjon",
+          "Bremselengde på is",
+          "Sikkerhetsmargin"
+        ]
+      },
+      {
+        "screen_id": "CH19-006",
+        "screen_type": "summary",
+        "title_no": "Oppsummering Trinn 3 mål og rammer",
+        "title_th": "สรุป: เป้าหมายและกรอบของขั้นตอนที่ 3",
+        "asset_id": "CH19-TR3-006",
+        "pair_asset_id": null,
+        "content_th": "คุณเข้าใจเป้าหมายของขั้นตอนที่ 3 รู้วิธีสังเกตและตัดสินใจด้วยตนเอง และพร้อมเรียนรู้เรื่องระบบการจราจรในบทต่อไปแล้ว!",
+        "glossary_terms": [
+          "Trinn 3 mestret",
+          "Trafikal modenhet"
+        ]
+      }
+    ],
+    "order": 21
+  },
+  {
+    "chapter_id": "ch_trafikksystemet_trafikantgrupper",
+    "chapter_code": "CH20",
+    "title_no": "Kapittel 20 — Trafikksystemet og trafikantgrupper",
+    "title_th": "บทที่ 20 — ระบบการจราจรและกลุ่มผู้ใช้ถนน (Trafikksystemet)",
+    "title_en": "Chapter 20 — Traffic System and Road User Groups",
+    "difficulty": "advanced",
+    "podcast_reference": "Michaels råd: Beskytt myke trafikanter og forstå tunge kjøretøy",
+    "section_tags": [
+      "trafikksystemet",
+      "myketrafikanter",
+      "syklister",
+      "fotgjengere",
+      "blindsoner",
+      "tungekjøretøy"
+    ],
+    "sections": [
+      {
+        "section_type": "situation",
+        "title_no": "Situasjonen: Komplekst samspill mellom biler, syklister og vogntog",
+        "title_th": "สถานการณ์: การร่วมทางระหว่างรถยนต์ จักรยาน และรถบรรทุกใหญ่",
+        "title_en": "The situation: Complex interaction between cars, cyclists, and trucks",
+        "content_no": "I byer og tettsteder møtes mange ulike trafikanter med ulike behov. Hvordan beskytter du myke trafikanter og unngår lastebilers blindsoner?",
+        "content_th": "ในเมืองมีผู้ใช้ถนนหลายประเภทที่มีความต้องการต่างกัน คุณจะปกป้องคนเดินเท้าและหลีกเลี่ยงจุดบอดของรถบรรทุกได้อย่างไร?",
+        "content_en": "In urban zones varied road users interact. How do you protect pedestrians and stay clear of truck blind spots?"
+      },
+      {
+        "section_type": "theory",
+        "title_no": "Michaels systemregel: Trafikant, kjøretøy og vei i samspill",
+        "title_th": "กฎระบบจราจรของ Michael: คน รถ และถนนต้องร่วมมือกัน",
+        "title_en": "Michael's system rule: Human, vehicle, and road cooperating",
+        "content_no": "Trafikksystemet består av mennesket, kjøretøyet og veien. Myke trafikanter har forkjørsrett i gangfelt og krever minst 1,5 meters avstand ved forbikjøring.",
+        "content_th": "ระบบจราจรประกอบด้วย คน รถ และถนน ผู้ใช้ถนนที่เปราะบางมีสิทธิในทางม้าลายและต้องเว้นห่างอย่างน้อย 1.5 เมตรเมื่อขับแซง",
+        "content_en": "Traffic system consists of human, vehicle, and road. Vulnerable users have right of way at crosswalks and need 1.5m clearance when passed."
+      },
+      {
+        "section_type": "practice",
+        "title_no": "Praktisk tips: Unngå lastebilens blindsoner i kryss",
+        "title_th": "คำแนะนำภาคปฏิบัติ: หลีกเลี่ยงจุดบอดของรถใหญ่ในทางแยก",
+        "title_en": "Practical tips: Avoid truck blind spots in junctions",
+        "content_no": "Hvis du ikke kan se lastebilsjåførens speilbilde i sidespeilet, kan ikke sjåføren se deg. Hold god avstand bakfra.",
+        "content_th": "หากคุณมองไม่เห็นกระจกมองข้างของรถบรรทุก คนขับก็มองไม่เห็นคุณเช่นกัน จงเว้นระยะห่างด้านหลังให้เหมาะสม",
+        "content_en": "If you cannot see the truck driver in their side mirror, they cannot see you. Keep safe distance behind."
+      }
+    ],
+    "screens": [
+      {
+        "screen_id": "CH20-001",
+        "screen_type": "intro",
+        "title_no": "Trafikksystemet: Mennesket, kjøretøyet og veien",
+        "title_th": "ระบบการจราจร: คน ยานพาหนะ และถนน",
+        "asset_id": "CH20-SYS-001",
+        "pair_asset_id": null,
+        "content_th": "ระบบจราจรประกอบด้วยสามส่วนสำคัญ: มนุษย์ ยานพาหนะ และสภาพแวดล้อมถนน ซึ่งต้องทำงานร่วมกันอย่างปลอดภัยและมีความรับผิดชอบ",
+        "glossary_terms": [
+          "Trafikksystemet",
+          "Menneske-kjøretøy-vei",
+          "Samspill"
+        ]
+      },
+      {
+        "screen_id": "CH20-002",
+        "screen_type": "choice",
+        "title_no": "Myke trafikanter og sikkerhetsavstand",
+        "title_th": "ผู้ใช้ถนนที่เปราะบางและระยะห่างที่ปลอดภัย",
+        "asset_id": "CH20-SYS-002",
+        "pair_asset_id": "CH20-PAR-001",
+        "content_th": "คนเดินเท้าและจักรยานไม่มีเกราะกำบัง เมื่อขับแซงจักรยานในนอร์เวย์ต้องเว้นระยะห่างด้านข้างอย่างน้อย 1.5 เมตรเสมอ",
+        "glossary_terms": [
+          "Myke trafikanter",
+          "1,5 meters avstand",
+          "Syklisthensyn"
+        ]
+      },
+      {
+        "screen_id": "CH20-003",
+        "screen_type": "sequence",
+        "title_no": "Interessemotsetninger i trafikken",
+        "title_th": "ความขัดแย้งของเป้าหมายบนท้องถนน",
+        "asset_id": "CH20-SYS-003",
+        "pair_asset_id": null,
+        "content_th": "บนท้องถนนมักมีความต้องการที่ต่างกันระหว่างความรวดเร็วและความปลอดภัย แต่กฎหมายกำหนดให้ความปลอดภัยต้องมาก่อนเสมอ",
+        "glossary_terms": [
+          "Interessemotsetninger",
+          "Framkommelighet",
+          "Sikkerhet først"
+        ]
+      },
+      {
+        "screen_id": "CH20-004",
+        "screen_type": "road_check",
+        "title_no": "Road Check ⚡ Trafikksystemet og trafikantgrupper",
+        "title_th": "Road Check ⚡ ระบบจราจรและกลุ่มผู้ใช้ถนน",
+        "road_check_id": "CH20-RC-001",
+        "asset_id": "CH20-SYS-004",
+        "pair_asset_id": null,
+        "content_th": "สามคำถามสั้นเพื่อทดสอบความแม่นยำเรื่องผู้ใช้ถนนที่เปราะบาง ทางม้าลาย และจุดบอดของรถบรรทุก",
+        "glossary_terms": [
+          "Vikeplikt gangfelt",
+          "Blindsoner",
+          "Sårbare trafikanter"
+        ]
+      },
+      {
+        "screen_id": "CH20-005",
+        "screen_type": "choice",
+        "title_no": "Store kjøretøy og blindsoner",
+        "title_th": "รถบรรทุกขนาดใหญ่และจุดบอด",
+        "asset_id": "CH20-SYS-005",
+        "pair_asset_id": "CH20-PAR-002",
+        "content_th": "รถบรรทุกขนาดใหญ่มีจุดบอดกว้างทั้งด้านหน้า ด้านข้าง และด้านหลัง ควรเว้นระยะห่างให้สามารถมองเห็นกระจกส่องข้างของรถใหญ่ได้เสมอ",
+        "glossary_terms": [
+          "Store kjøretøy",
+          "Blindsoner",
+          "Sikt i speil"
+        ]
+      },
+      {
+        "screen_id": "CH20-006",
+        "screen_type": "summary",
+        "title_no": "Oppsummering trafikksystemet og trafikantgrupper",
+        "title_th": "สรุป: ระบบการจราจรและกลุ่มผู้ใช้ถนน",
+        "asset_id": "CH20-SYS-006",
+        "pair_asset_id": null,
+        "content_th": "คุณเข้าใจระบบจราจร รู้วิธีปกป้องคนเดินเท้าและจักรยาน และเข้าใจจุดบอดของรถใหญ่เพื่อการขับขี่ที่ปลอดภัยแล้ว!",
+        "glossary_terms": [
+          "Trafikksystemet fullført",
+          "Trafikksikkerhet"
+        ]
+      }
+    ],
+    "order": 22
+  },
+  {
+    "chapter_id": "ch_veg_oppmerking_skilt_atferd",
+    "chapter_code": "CH21",
+    "title_no": "Kapittel 21 — Veg, vegoppmerking, skilt og atferd",
+    "title_th": "บทที่ 21 — ถนน การตีเส้น ป้ายจราจร และพฤติกรรม (Veg og skilt)",
+    "title_en": "Chapter 21 — Road, Road Markings, Signs, and Behaviour",
+    "difficulty": "advanced",
+    "podcast_reference": "Michaels råd: Myndighetspyramiden, sperrelinjer og presis plassering",
+    "section_tags": [
+      "vegoppmerking",
+      "skilt",
+      "myndighetspyramiden",
+      "sperrelinje",
+      "fartstilpasning",
+      "plassering"
+    ],
+    "sections": [
+      {
+        "section_type": "situation",
+        "title_no": "Situasjonen: Komplekst veikryss med både politi, lys og skilt",
+        "title_th": "สถานการณ์: ทางแยกที่มีทั้งตำรวจ ไฟจราจร และป้าย",
+        "title_en": "The situation: Complex junction with police, lights, and signs",
+        "content_no": "Du kommer til et stort veikryss der trafikklyset viser grønt, men politiet dirigerer deg til å stanse. Hvem har forrang?",
+        "content_th": "คุณมาถึงทางแยกใหญ่ที่มีไฟเขียว แต่ตำรวจส่งสัญญาณมือให้หยุด ใครมีอำนาจสั่งการสูงสุด?",
+        "content_en": "You arrive at a junction with green light, but police signal to stop. Who has precedence?"
+      },
+      {
+        "section_type": "theory",
+        "title_no": "Michaels hierarkiregel: Myndighetspyramiden styrer alt",
+        "title_th": "กฎลำดับอำนาจของ Michael: ลำดับชั้นแห่งอำนาจกำหนดทุกสิ่ง",
+        "title_en": "Michael's hierarchy rule: Authority pyramid dictates all",
+        "content_no": "Myndighetspyramiden: 1. Politi. 2. Trafikklys. 3. Trafikkskilt. 4. Vegoppmerking. 5. Trafikkreglene. Hel sperrelinje må aldri krysses.",
+        "content_th": "ลำดับชั้นอำนาจ: 1. ตำรวจ 2. ไฟจราจร 3. ป้าย 4. เส้นบนถนน 5. กฎจราจรทั่วไป เส้นทึบห้ามขับข้ามโดยเด็ดขาด",
+        "content_en": "Authority pyramid: 1. Police. 2. Traffic lights. 3. Signs. 4. Road markings. 5. Road rules. Solid lines must never be crossed."
+      },
+      {
+        "section_type": "practice",
+        "title_no": "Praktisk tips: Plasser bilen tydelig i god tid",
+        "title_th": "คำแนะนำภาคปฏิบัติ: จัดตำแหน่งรถล่วงหน้าอย่างชัดเจน",
+        "title_en": "Practical tips: Position clearly well in advance",
+        "content_no": "Skal du svinge til venstre, legg bilen inntil midtlinjen i god tid. Skal du til høyre, hold godt til høyre i kjørefeltet.",
+        "content_th": "หากต้องการเลี้ยวซ้ายให้ชิดเส้นแบ่งเลนกลางแต่เนิ่นๆ หากเลี้ยวขวาให้ชิดขอบทางด้านขวาของเลน",
+        "content_en": "For left turns move close to center line early. For right turns keep well to the right."
+      }
+    ],
+    "screens": [
+      {
+        "screen_id": "CH21-001",
+        "screen_type": "intro",
+        "title_no": "Myndighetspyramiden: Hvem bestemmer i trafikken?",
+        "title_th": "ลำดับชั้นแห่งอำนาจ: ใครเป็นผู้มีอำนาจสั่งการบนท้องถนน?",
+        "asset_id": "CH21-VEG-001",
+        "pair_asset_id": null,
+        "content_th": "กฎจราจรมีลำดับชั้นความสำคัญที่ชัดเจน: คำสั่งตำรวจอยู่สูงสุด ตามด้วยสัญญาณไฟจราจร ป้ายจราจร เส้นบนถนน และกฎทั่วไป",
+        "glossary_terms": [
+          "Myndighetspyramiden",
+          "Politianvisning",
+          "Trafikklyssignal"
+        ]
+      },
+      {
+        "screen_id": "CH21-002",
+        "screen_type": "choice",
+        "title_no": "Hvit sperrelinje og varsellinje",
+        "title_th": "เส้นทึบห้ามข้ามและเส้นเตือนบนถนน",
+        "asset_id": "CH21-VEG-002",
+        "pair_asset_id": "CH21-PAR-001",
+        "content_th": "เส้นทึบสีขาวเป็นข้อห้ามเด็ดขาดในการขับข้ามหรือทับเส้น ส่วนเส้นเตือนใช้เตือนล่วงหน้าก่อนเข้าสู่เขตเส้นทึบ",
+        "glossary_terms": [
+          "Sperrelinje",
+          "Varsellinje",
+          "Forbud mot kryssing"
+        ]
+      },
+      {
+        "screen_id": "CH21-003",
+        "screen_type": "sequence",
+        "title_no": "Fartstilpasning og siktforhold",
+        "title_th": "การปรับความเร็วให้เข้ากับสภาพแวดล้อม",
+        "asset_id": "CH21-VEG-003",
+        "pair_asset_id": null,
+        "content_th": "ป้ายจำกัดความเร็วคือความเร็วสูงสุดในสภาพถนนปกติ หากถนนลื่น มืด หรือมีฝนตก คุณต้องลดความเร็วลงให้เหมาะสมกับสภาพจริง",
+        "glossary_terms": [
+          "Fartstilpasning",
+          "Siktforhold",
+          "Maksimalfart"
+        ]
+      },
+      {
+        "screen_id": "CH21-004",
+        "screen_type": "road_check",
+        "title_no": "Road Check ⚡ Veg, vegoppmerking, skilt og atferd",
+        "title_th": "Road Check ⚡ ถนน การตีเส้น ป้ายจราจร และพฤติกรรม",
+        "road_check_id": "CH21-RC-001",
+        "asset_id": "CH21-VEG-004",
+        "pair_asset_id": null,
+        "content_th": "สามคำถามสั้นเพื่อทดสอบความแม่นยำเรื่องลำดับอำนาจ เส้นแบ่งทิศทางสีเหลือง และการวางตำแหน่งรถก่อนเลี้ยว",
+        "glossary_terms": [
+          "Hierarki",
+          "Gul midtlinje",
+          "Svingeplassering"
+        ]
+      },
+      {
+        "screen_id": "CH21-005",
+        "screen_type": "choice",
+        "title_no": "Plassering og feltskifte i god tid",
+        "title_th": "การวางตำแหน่งรถและการเปลี่ยนเลนแต่เนิ่นๆ",
+        "asset_id": "CH21-VEG-005",
+        "pair_asset_id": "CH21-PAR-002",
+        "content_th": "การวางตำแหน่งรถล่วงหน้าช่วยสื่อสารความตั้งใจให้ผู้อื่นทราบ ชิดเส้นกลางเมื่อจะเลี้ยวซ้าย และชิดขวาเมื่อจะเลี้ยวขวา",
+        "glossary_terms": [
+          "Plassering i felt",
+          "Venstresving",
+          "Kommunikasjon"
+        ]
+      },
+      {
+        "screen_id": "CH21-006",
+        "screen_type": "summary",
+        "title_no": "Oppsummering veg, vegoppmerking og skilt",
+        "title_th": "สรุป: ถนน การตีเส้น ป้ายจราจร และพฤติกรรม",
+        "asset_id": "CH21-VEG-006",
+        "pair_asset_id": null,
+        "content_th": "คุณเข้าใจลำดับอำนาจกฎหมายจราจร เคารพเส้นทึบ และรู้วิธีวางตำแหน่งรถอย่างถูกต้องเพื่อความปลอดภัยสูงสุดแล้ว!",
+        "glossary_terms": [
+          "Skilt og linjer fullført",
+          "Trafikkregler"
+        ]
+      }
+    ],
+    "order": 23
+  },
+  {
+    "chapter_id": "ch_systematisk_informasjonsinnhenting",
+    "chapter_code": "CH22",
+    "title_no": "Kapittel 22 — Systematisk informasjonsinnhenting og se-teknikk",
+    "title_th": "บทที่ 22 — การรวบรวมข้อมูลอย่างเป็นระบบและเทคนิคการมอง (Se-teknikk)",
+    "title_en": "Chapter 22 — Systematic Information Gathering and Visual Search",
+    "difficulty": "advanced",
+    "podcast_reference": "Michaels råd: S-O-A-H reglene, speilrutiner og blindsonesjekk",
+    "section_tags": [
+      "informasjonsinnhenting",
+      "seteknikk",
+      "soah",
+      "speilrutiner",
+      "dødvinkel",
+      "skuldersjekk"
+    ],
+    "sections": [
+      {
+        "section_type": "situation",
+        "title_no": "Situasjonen: Uoversiktlige kryss og raske syklister fra siden",
+        "title_th": "สถานการณ์: ทางแยกที่มองเห็นยากและมีจักรยานโผล่มาด้านข้าง",
+        "title_en": "The situation: Blind intersections and fast cyclists from sides",
+        "content_no": "I trafikken skjer ting på brøkdelen av et sekund. Hvordan bruker du blikket og speilene for å oppdage farer før de oppstår?",
+        "content_th": "บนท้องถนนทุกสิ่งเกิดขึ้นในเสี้ยววินาที คุณจะใช้สายตาและกระจกอย่างไรเพื่อตรวจจับอันตรายก่อนที่จะเกิดขึ้น?",
+        "content_en": "In traffic things unfold in fractions of a second. How do you scan eyes and mirrors to spot hazards early?"
+      },
+      {
+        "section_type": "theory",
+        "title_no": "Michaels synsregel: S-O-A-H og kontinuerlig blikkbevegelse",
+        "title_th": "กฎการมองของ Michael: หลัก S-O-A-H และการกวาดสายตาต่อเนื่อง",
+        "title_en": "Michael's visual rule: S-O-A-H and continuous eye scanning",
+        "content_no": "Over 90 % av sanseinntrykkene er visuelle. Følg reglene: Se langt fram, skaff overblikk, beveg blikket, bli sett, og ha alltid en utvei. Gjør alltid skuldersjekk.",
+        "content_th": "ข้อมูลกว่า 90% รับรู้ผ่านสายตา: มองไกล สร้างมุมมองรอบด้าน กวาดสายตาต่อเนื่อง ให้คนอื่นเห็นเรา และหาทางรอดเสมอ พร้อมหันมองมุมอับทุกครั้ง",
+        "content_en": "Over 90% of sensory input is visual. Look far ahead, get big picture, keep eyes moving, be seen, have an escape route. Always check blind spots."
+      },
+      {
+        "section_type": "practice",
+        "title_no": "Praktisk tips: Speilrutine før bremsing og feltskifte",
+        "title_th": "คำแนะนำภาคปฏิบัติ: ขั้นตอนดูกระจกก่อนเบรกและเปลี่ยนเลน",
+        "title_en": "Practical tips: Mirror routines before braking and lane change",
+        "content_no": "Før du bremser: Sjekk innespeilet. Før feltskifte: Innespeil, utespeil og en rask skuldersjekk for å dekke dødvinkelen.",
+        "content_th": "ก่อนแตะเบรกให้ดูกระจกหลังในรถ ก่อนเปลี่ยนเลนให้ดูกระจกหลัง กระจกข้าง และหันมองข้ามไหล่เพื่อปิดจุดบอด",
+        "content_en": "Before braking check interior mirror. Before lane changes: interior, side mirror, and quick shoulder check."
+      }
+    ],
+    "screens": [
+      {
+        "screen_id": "CH22-001",
+        "screen_type": "intro",
+        "title_no": "Systematisk blikkbruk – hjertet av sikkerhet",
+        "title_th": "การมองอย่างเป็นระบบ – หัวใจของความปลอดภัย",
+        "asset_id": "CH22-SE-001",
+        "pair_asset_id": null,
+        "content_th": "ข้อมูลส่วนใหญ่เข้ามาทางสายตา การมองอย่างถูกต้องคือการกวาดสายตาอย่างกระตือรือร้นและไม่จ้องนิ่งอยู่ที่จุดใดจุดหนึ่ง",
+        "glossary_terms": [
+          "Systematisk blikkbruk",
+          "Synsfelt",
+          "Oppmerksomhet"
+        ]
+      },
+      {
+        "screen_id": "CH22-002",
+        "screen_type": "choice",
+        "title_no": "De fem se-reglene (S-O-A-H)",
+        "title_th": "กฎการมอง 5 ประการ (S-O-A-H)",
+        "asset_id": "CH22-SE-002",
+        "pair_asset_id": "CH22-PAR-001",
+        "content_th": "หลักการมองรอบด้าน: มองไกลไปข้างหน้า สร้างมุมมองรอบทิศทาง กวาดสายตาตลอดเวลา ให้คนอื่นเห็นเรา และหาทางรอดเสมอ",
+        "glossary_terms": [
+          "S-O-A-H",
+          "Se langt fram",
+          "Handlingsrom"
+        ]
+      },
+      {
+        "screen_id": "CH22-003",
+        "screen_type": "sequence",
+        "title_no": "Blikkbruk i kurver og over bakketopper",
+        "title_th": "การใช้สายตาในทางโค้งและยอดเนิน",
+        "asset_id": "CH22-SE-003",
+        "pair_asset_id": null,
+        "content_th": "ในทางโค้งให้มองไปยังจุดไกลสุดที่มองเห็นได้ รถจะเลี้ยวไปตามสายตา และเมื่อถึงยอดเนินให้มองไกลเพื่อพร้อมรับมือทางโค้งด้านหลัง",
+        "glossary_terms": [
+          "Forsvinningspunkt",
+          "Kurveblikk",
+          "Bakketopp"
+        ]
+      },
+      {
+        "screen_id": "CH22-004",
+        "screen_type": "road_check",
+        "title_no": "Road Check ⚡ Systematisk informasjonsinnhenting",
+        "title_th": "Road Check ⚡ การรวบรวมข้อมูลอย่างเป็นระบบ",
+        "road_check_id": "CH22-RC-001",
+        "asset_id": "CH22-SE-004",
+        "pair_asset_id": null,
+        "content_th": "สามคำถามสั้นเพื่อทดสอบความแม่นยำเรื่องการหันมองมุมอับสายตา การเช็กกระจกก่อนเบรก และผลของความเร็วต่อลานสายตา",
+        "glossary_terms": [
+          "Skuldersjekk",
+          "Innespeil",
+          "Tunnelsyn"
+        ]
+      },
+      {
+        "screen_id": "CH22-005",
+        "screen_type": "choice",
+        "title_no": "Speilrutiner og blindsoner",
+        "title_th": "ขั้นตอนการใช้กระจกและมุมอับสายตา",
+        "asset_id": "CH22-SE-005",
+        "pair_asset_id": "CH22-PAR-002",
+        "content_th": "ก่อนเลี้ยวหรือเปลี่ยนเลนให้ปฏิบัติตามขั้นตอนเสมอ: ดูกระจกหลังในรถ กระจกมองข้าง และหันมองข้ามไหล่เพื่อปิดจุดบอดอย่างสมบูรณ์",
+        "glossary_terms": [
+          "Speilrutiner",
+          "Dødvinkel",
+          "Føreransvar"
+        ]
+      },
+      {
+        "screen_id": "CH22-006",
+        "screen_type": "summary",
+        "title_no": "Oppsummering systematisk informasjonsinnhenting",
+        "title_th": "สรุป: การรวบรวมข้อมูลอย่างเป็นระบบ",
+        "asset_id": "CH22-SE-006",
+        "pair_asset_id": null,
+        "content_th": "คุณเข้าใจหลักการมอง S-O-A-H ขั้นตอนดูกระจก และการหันมองมุมอับเพื่อสร้างเกราะความปลอดภัยรอบตัวรถแล้ว!",
+        "glossary_terms": [
+          "Se-teknikk fullført",
+          "Trafikksikkerhet"
+        ]
+      }
+    ],
+    "order": 24
+  },
+  {
+    "chapter_id": "ch_kjoring_by_landeveg",
+    "chapter_code": "CH23",
+    "title_no": "Kapittel 23 — Kjøring i by og på landeveg",
+    "title_th": "บทที่ 23 — การขับขี่ในเมืองและบนทางหลวงชนบท (By og landeveg)",
+    "title_en": "Chapter 23 — Driving in City and Rural Road Environments",
+    "difficulty": "advanced",
+    "podcast_reference": "Michaels råd: Fart, bussregler i 60-sone og sikker venstresving på landevei",
+    "section_tags": [
+      "bykjøring",
+      "landeveg",
+      "høyreregel",
+      "bussvikeplikt",
+      "motorvei",
+      "venstresving"
+    ],
+    "sections": [
+      {
+        "section_type": "situation",
+        "title_no": "Situasjonen: Fra tett sentrumstrafikk til rask landevei",
+        "title_th": "สถานการณ์: จากการจราจรในเมืองสู่ทางหลวงชนบทความเร็วสูง",
+        "title_en": "The situation: From dense city traffic to fast rural roads",
+        "content_no": "Kjøringen skifter brått fra tett bymiljø med busser og fotgjengere til landevei i 80 km/t. Hvordan tilpasser du atferd og fart?",
+        "content_th": "สภาพการขับขี่เปลี่ยนจากการจราจรในเมืองที่มีรถบัสและคนเดินเท้าไปสู่ถนนนอกเมืองความเร็ว 80 กม./ชม. คุณจะปรับความเร็วและพฤติกรรมอย่างไร?",
+        "content_en": "Driving shifts from dense urban environments to 80 km/h rural roads. How do you adjust behavior and speed?"
+      },
+      {
+        "section_type": "theory",
+        "title_no": "Michaels miljøregel: Høyreregel i boligfelt, vikeplikt for buss i 60-sone",
+        "title_th": "กฎสภาพแวดล้อมของ Michael: กฎรถทางขวาในซอย และให้ทางรถบัสในเขต 60",
+        "title_en": "Michael's environment rule: Right-hand rule in residential, yield to bus in 60 zones",
+        "content_no": "I uskilte boliggater gjelder høyreregelen. I 60-sone eller lavere må du vike for buss som blinker ut fra holdeplass. Venstresving fra landevei krever ekstrem varsomhet bakover.",
+        "content_th": "ในซอยที่ไม่มีป้ายให้ใช้กฎรถทางขวา ในเขตความเร็ว 60 หรือต่ำกว่าต้องหยุดให้รถบัสออกจากป้าย การเลี้ยวซ้ายบนถนนนอกเมืองต้องระวังรถหลังอย่างยิ่ง",
+        "content_en": "In unsignposted streets right-hand rule applies. In 60 km/h zones or lower yield to buses indicating out. Left turns on rural roads require extreme rear vigilance."
+      },
+      {
+        "section_type": "practice",
+        "title_no": "Praktisk tips: Snu via busslomme ved risikabel venstresving",
+        "title_th": "คำแนะนำภาคปฏิบัติ: หลบเข้าป้ายรถบัสเพื่อกลับรถเมื่อเลี้ยวซ้ายอันตราย",
+        "title_en": "Practical tips: Turn via bus stop when left turns are risky",
+        "content_no": "Har du biler tett bak deg på landevei i 80-sone, kjør inn til høyre på en busslomme for å slippe trafikken forbi, og kryss veien når den er tom.",
+        "content_th": "หากมีรถตามมาติดๆ บนถนนความเร็ว 80 ให้เลี้ยวแวะเข้าป้ายรถบัสทางขวามือเพื่อปล่อยให้รถหลังผ่านไปก่อน แล้วจึงข้ามถนนเมื่อปลอดภัย",
+        "content_en": "If cars tailgate on an 80 km/h road when turning left, pull into a right bus stop to let traffic pass before crossing."
+      }
+    ],
+    "screens": [
+      {
+        "screen_id": "CH23-001",
+        "screen_type": "intro",
+        "title_no": "Kjøring i bymiljø – tempo og mangfold",
+        "title_th": "การขับขี่ในเมือง – จังหวะที่รวดเร็วและความหลากหลาย",
+        "asset_id": "CH23-BY-001",
+        "pair_asset_id": null,
+        "content_th": "การขับรถในเมืองต้องประมวลผลข้อมูลเร็ว ใช้ถนนร่วมกับรถราง รถบัส จักรยาน และคนเดินเท้า ควรใช้ความเร็วต่ำและพร้อมแตะเบรกเสมอ",
+        "glossary_terms": [
+          "Bykjøring",
+          "Bymiljø",
+          "Handlingsberedskap"
+        ]
+      },
+      {
+        "screen_id": "CH23-002",
+        "screen_type": "choice",
+        "title_no": "Kryss og vikeplikt i by og boligområder",
+        "title_th": "ทางแยกและการให้ทางในเมืองและเขตชุมชน",
+        "asset_id": "CH23-BY-002",
+        "pair_asset_id": "CH23-PAR-001",
+        "content_th": "ในซอยที่ไม่มีป้ายจราจรให้ใช้กฎให้ทางรถทางขวาเสมอ ส่วนบนถนนหลักที่มีป้ายข้าวหลามตัดสีเหลือง คุณมีสิทธิไปก่อนในทางแยก",
+        "glossary_terms": [
+          "Høyreregel",
+          "Forkjørsvei",
+          "Skilt 206"
+        ]
+      },
+      {
+        "screen_id": "CH23-003",
+        "screen_type": "sequence",
+        "title_no": "Høyhastighetsvei og motorvei",
+        "title_th": "ทางหลวงความเร็วสูงและมอเตอร์เวย์",
+        "asset_id": "CH23-BY-003",
+        "pair_asset_id": null,
+        "content_th": "บนทางหลวงมอเตอร์เวย์ ให้ใช้ช่องเร่งความเร็วปรับความเร็วให้เท่ากับกระแสรถก่อนแทรกตัวเข้าเลน และเว้นระยะห่างอย่างน้อย 3 วินาที",
+        "glossary_terms": [
+          "Motorvei",
+          "Akselerasjonsfelt",
+          "3-sekundersregel"
+        ]
+      },
+      {
+        "screen_id": "CH23-004",
+        "screen_type": "road_check",
+        "title_no": "Road Check ⚡ Kjøring i by og på landeveg",
+        "title_th": "Road Check ⚡ การขับขี่ในเมืองและบนทางหลวงชนบท",
+        "road_check_id": "CH23-RC-001",
+        "asset_id": "CH23-BY-004",
+        "pair_asset_id": null,
+        "content_th": "สามคำถามสั้นเพื่อทดสอบความแม่นยำเรื่องการให้ทางรถบัสในเขต 60 อันตรายจากการเลี้ยวซ้ายบนทางหลวง และการแทรกตัวเข้ามอเตอร์เวย์",
+        "glossary_terms": [
+          "Bussvikeplikt (60 km/t)",
+          "Venstresving risiko",
+          "Innfletting"
+        ]
+      },
+      {
+        "screen_id": "CH23-005",
+        "screen_type": "choice",
+        "title_no": "Sikker venstresving på landevei",
+        "title_th": "การเลี้ยวซ้ายอย่างปลอดภัยบนถนนนอกเมือง",
+        "asset_id": "CH23-BY-005",
+        "pair_asset_id": "CH23-PAR-002",
+        "content_th": "หากมีรถตามหลังมาติดๆ บนถนนความเร็ว 80 การเลี้ยวแวะเข้าจุดพักรถทางขวาเพื่อปล่อยให้รถหลังผ่านไปก่อนเป็นวิธีที่ปลอดภัยที่สุด",
+        "glossary_terms": [
+          "Landevegsstans",
+          "Påkjøring bakfra",
+          "Sikker sving"
+        ]
+      },
+      {
+        "screen_id": "CH23-006",
+        "screen_type": "summary",
+        "title_no": "Oppsummering kjøring i by og på landeveg",
+        "title_th": "สรุป: การขับขี่ในเมืองและบนทางหลวงชนบท",
+        "asset_id": "CH23-BY-006",
+        "pair_asset_id": null,
+        "content_th": "คุณเข้าใจกฎการให้ทางรถบัส การขับขี่บนมอเตอร์เวย์ และวิธีเลี้ยวซ้ายอย่างปลอดภัยบนถนนนอกเมืองเรียบร้อยแล้ว!",
+        "glossary_terms": [
+          "By og land fullført",
+          "Trafikal kompetanse"
+        ]
+      }
+    ],
+    "order": 25
+  },
+  {
+    "chapter_id": "ch_effektiv_kjoring_sikkerhetskurs_bane",
+    "chapter_code": "CH24",
+    "title_no": "Kapittel 24 — Effektiv kjøring og sikkerhetskurs på bane",
+    "title_th": "บทที่ 24 — การขับขี่อย่างมีประสิทธิภาพและการฝึกบนสนามลื่น (Trinn 3 fullført)",
+    "title_en": "Chapter 24 — Efficient Driving and Safety Course on Track",
+    "difficulty": "advanced",
+    "podcast_reference": "Michaels råd: Rundkjøringsflyt, ABS-unnamanøver og trinnvurdering Trinn 3",
+    "section_tags": [
+      "effektivkjøring",
+      "rundkjøring",
+      "sikkerhetskursbane",
+      "glattkjøring",
+      "abs",
+      "trinnvurdering3"
+    ],
+    "sections": [
+      {
+        "section_type": "situation",
+        "title_no": "Situasjonen: Avsluttende del av Trinn 3 før Trinn 4",
+        "title_th": "สถานการณ์: การฝึกช่วงสุดท้ายของขั้นตอนที่ 3 ก่อนก้าวสู่ขั้นตอนที่ 4",
+        "title_en": "The situation: Final phase of Stage 3 before moving to Stage 4",
+        "content_no": "Du skal mestre rundkjøringsflyt, gjennomføre 4 timer på glattkjøringsbane og ha trinnvurdering. Er du klar for selvstendig kjøring?",
+        "content_th": "คุณต้องผ่านการฝึกความไหลลื่นในวงเวียน การฝึกบนสนามลื่น 4 ชั่วโมง และการประเมินผล คุณพร้อมสำหรับการขับขี่อย่างมั่นใจหรือยัง?",
+        "content_en": "You need to master roundabout flow, 4 hours on the skid track, and stage assessment. Ready for independent driving?"
+      },
+      {
+        "section_type": "theory",
+        "title_no": "Michaels baneregel: ABS bevarer styreevnen, unngå brå rattbevegelser",
+        "title_th": "กฎสนามลื่นของ Michael: ABS ช่วยให้เลี้ยวได้ และห้ามหักพวงมาลัยกระชาก",
+        "title_en": "Michael's track rule: ABS preserves steering, avoid abrupt wheel inputs",
+        "content_no": "Effektiv kjøring handler om jevn flyt og tidlig tegn i rundkjøringer. På banen lærer du at ABS lar deg styre unna hindringer mens du bremser i bånn.",
+        "content_th": "การขับขี่ที่มีประสิทธิภาพคือความไหลลื่นสม่ำเสมอ ในสนามลื่นคุณจะได้เรียนรู้ว่า ABS ช่วยให้หักเลี้ยวหลบสิ่งกีดขวางได้ในขณะเบรกเต็มแรง",
+        "content_en": "Efficient driving is smooth flow and early signals in roundabouts. On track ABS lets you steer around hazards during full braking."
+      },
+      {
+        "section_type": "practice",
+        "title_no": "Praktisk tips: Se mot åpningen, aldri på hindringen",
+        "title_th": "คำแนะนำภาคปฏิบัติ: มองไปที่ช่องว่าง ห้ามจ้องสิ่งกีดขวาง",
+        "title_en": "Practical tips: Look at the opening, never at the obstacle",
+        "content_no": "Bilen styres automatisk dit du ser. Løft blikket mot utveien når du svinger unna en hindring på glatt føre.",
+        "content_th": "รถจะเลี้ยวไปตามทิศทางที่สายตามองไป เมื่อต้องหักหลบสิ่งกีดขวางบนทางลื่น จงมองหาทางรอดเสมอ",
+        "content_en": "The car steers where you look. Raise gaze toward the escape route when swerving around obstacles on slick surfaces."
+      }
+    ],
+    "screens": [
+      {
+        "screen_id": "CH24-001",
+        "screen_type": "intro",
+        "title_no": "Effektiv og flytende trafikkavvikling",
+        "title_th": "การขับขี่อย่างมีประสิทธิภาพและไหลลื่น",
+        "asset_id": "CH24-BANE-001",
+        "pair_asset_id": null,
+        "content_th": "การขับขี่อย่างมีประสิทธิภาพคือการรักษาความเร็วให้สม่ำเสมอ หลีกเลี่ยงการหยุดรถโดยไม่จำเป็น และชะลอความเร็วแต่เนิ่นๆ",
+        "glossary_terms": [
+          "Effektiv kjøring",
+          "Trafikkavvikling",
+          "Jevn flyt"
+        ]
+      },
+      {
+        "screen_id": "CH24-002",
+        "screen_type": "choice",
+        "title_no": "Plassering og flyt i rundkjøringer",
+        "title_th": "การวางตำแหน่งรถและความไหลลื่นในวงเวียน",
+        "asset_id": "CH24-BANE-002",
+        "pair_asset_id": "CH24-PAR-001",
+        "content_th": "ในวงเวียนสองเลน: ตรงไปหรือเลี้ยวขวาให้เข้าเลนขวา เลี้ยวซ้ายให้เข้าเลนซ้าย และเปิดไฟเลี้ยวขวาล่วงหน้าเสมอเมื่อจะออกจากวงเวียน",
+        "glossary_terms": [
+          "Rundkjøring",
+          "Feltvalg",
+          "Blinklys ut"
+        ]
+      },
+      {
+        "screen_id": "CH24-003",
+        "screen_type": "sequence",
+        "title_no": "Sikkerhetskurs på bane (glattkjøring)",
+        "title_th": "หลักสูตรความปลอดภัยบนสนามลื่น (Glattkjøring)",
+        "asset_id": "CH24-BANE-003",
+        "pair_asset_id": null,
+        "content_th": "หลักสูตร 4 ชั่วโมงบนสนามฝึกปิดจะช่วยให้ได้ฝึกเบรกฉุกเฉิน การเข้าโค้งบนพื้นลื่น และสัมผัสการทำงานของระบบควบคุมการทรงตัว ESP/ABS",
+        "glossary_terms": [
+          "Sikkerhetskurs på bane",
+          "Glattkjøring",
+          "ESP og ABS"
+        ]
+      },
+      {
+        "screen_id": "CH24-004",
+        "screen_type": "road_check",
+        "title_no": "Road Check ⚡ Effektiv kjøring og glattkjøring",
+        "title_th": "Road Check ⚡ การขับขี่อย่างมีประสิทธิภาพและการฝึกบนสนามลื่น",
+        "road_check_id": "CH24-RC-001",
+        "asset_id": "CH24-BANE-004",
+        "pair_asset_id": null,
+        "content_th": "สามคำถามสั้นเพื่อทดสอบความแม่นยำเรื่องระบบ ABS การประเมินผลขั้นตอนที่ 3 และวิธีแก้การลื่นไถลในทางโค้ง",
+        "glossary_terms": [
+          "ABS-fordel",
+          "Trinnvurdering 3",
+          "Kontrastyring"
+        ]
+      },
+      {
+        "screen_id": "CH24-005",
+        "screen_type": "choice",
+        "title_no": "Nødbrems og unnamanøver på glatt underlag",
+        "title_th": "การเบรกฉุกเฉินและหักหลบสิ่งกีดขวางบนถนนลื่น",
+        "asset_id": "CH24-BANE-005",
+        "pair_asset_id": "CH24-PAR-002",
+        "content_th": "บนทางลื่นให้เหยียบเบรกจนสุดในทันทีและหมุนพวงมาลัยอย่างนุ่มนวลเพื่อหลบสิ่งกีดขวาง พร้อมมองไปยังช่องทางออกที่ต้องการไป",
+        "glossary_terms": [
+          "Nødbremsing glatt",
+          "Unnamanøver",
+          "Blikkstyring"
+        ]
+      },
+      {
+        "screen_id": "CH24-006",
+        "screen_type": "summary",
+        "title_no": "Oppsummering effektiv kjøring og Trinn 3 bestått",
+        "title_th": "สรุป: การขับขี่อย่างมีประสิทธิภาพและผ่านขั้นตอนที่ 3",
+        "asset_id": "CH24-BANE-006",
+        "pair_asset_id": null,
+        "content_th": "ยินดีด้วย! คุณผ่านเนื้อหาทั้งหมดของขั้นตอนที่ 3 เรียบร้อยแล้ว ทั้งการใช้วงเวียน การฝึกบนสนามลื่น และพร้อมก้าวสู่ขั้นตอนที่ 4!",
+        "glossary_terms": [
+          "Trinn 3 fullført",
+          "Klar for Trinn 4"
+        ]
+      }
+    ],
+    "order": 26
+  },
+  {
+    "chapter_id": "ch_bilkjoringens_risiko",
+    "chapter_code": "CH25",
+    "title_no": "Kapittel 25 — Bilkjøringens risiko",
+    "title_th": "บทที่ 25 — ความเสี่ยงในการขับขี่รถยนต์ (Trinn 4)",
+    "title_en": "Chapter 25 — The Risks of Driving",
+    "difficulty": "advanced",
+    "podcast_reference": "Michaels råd: Kjøredyktighet, tretthet bak rattet og mobilforbud",
+    "section_tags": [
+      "risiko",
+      "trinn4",
+      "tretthet",
+      "ungesjåfører",
+      "mobilforbud",
+      "førerstøttesystemer"
+    ],
+    "sections": [
+      {
+        "section_type": "situation",
+        "title_no": "Situasjonen: Nattkjøring etter lang dag på jobb eller fest",
+        "title_th": "สถานการณ์: การขับรถกลางดึกหลังเหน็ดเหนื่อยจากการทำงานหรือสังสรรค์",
+        "title_en": "The situation: Night driving after a long day of work or party",
+        "content_no": "Du har vært våken i 17 timer og skal kjøre hjem sent på kvelden. Hva skjer med reaksjonsevnen din?",
+        "content_th": "คุณตื่นมานานกว่า 17 ชั่วโมงและต้องขับรถกลับบ้านดึก เกิดอะไรขึ้นกับความสามารถในการตอบสนองของคุณ?",
+        "content_en": "You have been awake for 17 hours driving home late at night. What happens to your reactions?"
+      },
+      {
+        "section_type": "theory",
+        "title_no": "Michaels risikoregel: 17 timer uten søvn tilsvarer 0,5 promille",
+        "title_th": "กฎความเสี่ยงของ Michael: การตื่น 17 ชม. เทียบเท่าแอลกอฮอล์ 0.5",
+        "title_en": "Michael's risk rule: 17 hours awake equals 0.5 alcohol level",
+        "content_no": "Søvnmangel svekker hjernens reaksjon dramatisk. Håndholdt mobiltelefon øker ulykkesfaren 4-8 ganger. Føreren har alltid det fulle ansvaret selv med autopilot.",
+        "content_th": "การอดนอนทำให้สมองตอบสนองช้าลง การใช้โทรศัพท์เพิ่มความเสี่ยงอุบัติเหตุ 4-8 เท่า ผู้ขับขี่ต้องรับผิดชอบเสมอแม้เปิดระบบช่วยขับ",
+        "content_en": "Sleep deprivation severely slows brain reactions. Mobile phones multiply risk 4-8x. The driver retains full liability even with autopilot."
+      },
+      {
+        "section_type": "practice",
+        "title_no": "Praktisk tips: Ta en 15-minutters høneblund ved tretthet",
+        "title_th": "คำแนะนำภาคปฏิบัติ: งีบหลับ 15 นาทีเมื่อเริ่มง่วง",
+        "title_en": "Practical tips: Take a 15-minute power nap when sleepy",
+        "content_no": "Kjenn etter kroppens signaler. Ved gjesping og tunge øyelokk: sving inn på en rasteplass og ta en 15 minutters blund.",
+        "content_th": "สังเกตสัญญาณร่างกาย หากหาวหรือเปลือกตาหนัก ให้แวะจอดพักและงีบหลับสั้นๆ 15 นาทีทันที",
+        "content_en": "Recognize body cues. When yawning or heavy eyelids: pull into a rest area and sleep for 15 minutes."
+      }
+    ],
+    "screens": [
+      {
+        "screen_id": "CH25-001",
+        "screen_type": "intro",
+        "title_no": "Bilkjøringens risiko – fakta du må kjenne",
+        "title_th": "ความเสี่ยงในการขับรถ – ข้อเท็จจริงที่คุณต้องรู้",
+        "asset_id": "CH25-RISK-001",
+        "pair_asset_id": null,
+        "content_th": "การขับรถมาพร้อมกับความรับผิดชอบอันยิ่งใหญ่ รถยนต์ที่วิ่ง 80 กม./ชม. มีพลังงานการชนเทียบเท่ากับการตกจากตึกสูงเกือบ 25 เมตร",
+        "glossary_terms": [
+          "Bilkjøringens risiko",
+          "Bevegelsesenergi",
+          "Konsekvenser"
+        ]
+      },
+      {
+        "screen_id": "CH25-002",
+        "screen_type": "choice",
+        "title_no": "Kjøredyktighet og menneskelige begrensninger",
+        "title_th": "ความพร้อมในการขับขี่และขีดจำกัดของมนุษย์",
+        "asset_id": "CH25-RISK-002",
+        "pair_asset_id": "CH25-PAR-001",
+        "content_th": "การอดนอนเกิน 17 ชั่วโมงทำให้การตอบสนองช้าลงเทียบเท่ามีแอลกอฮอล์ 0.5 ในเลือด มีเพียงการนอนหลับเท่านั้นที่ฟื้นฟูร่างกายได้จริง",
+        "glossary_terms": [
+          "Kjøredyktighet",
+          "Tretthet bak rattet",
+          "Promilleekvivalent"
+        ]
+      },
+      {
+        "screen_id": "CH25-003",
+        "screen_type": "sequence",
+        "title_no": "Hvorfor unge sjåfører rammes oftere av ulykker",
+        "title_th": "ทำไมผู้ขับขี่รุ่นเยาว์จึงประสบอุบัติเหตุบ่อยกว่า",
+        "asset_id": "CH25-RISK-003",
+        "pair_asset_id": null,
+        "content_th": "ผู้ขับขี่ใหม่เสี่ยงตกข้างทางสูงกว่า 40 เท่าในช่วง 9 เดือนแรกเนื่องจากความมั่นใจในฝีมือเกินไป การเข้าโค้งเร็วเกินไป และแรงกดดันจากเพื่อน",
+        "glossary_terms": [
+          "Ulykkesstatistikk",
+          "Unge sjåfører",
+          "Gruppepress"
+        ]
+      },
+      {
+        "screen_id": "CH25-004",
+        "screen_type": "road_check",
+        "title_no": "Road Check ⚡ Bilkjøringens risiko",
+        "title_th": "Road Check ⚡ ความเสี่ยงในการขับรถ",
+        "road_check_id": "CH25-RC-001",
+        "asset_id": "CH25-RISK-004",
+        "pair_asset_id": null,
+        "content_th": "สามคำถามสั้นเพื่อทดสอบความแม่นยำเรื่องการใช้โทรศัพท์มือถือ ลักษณะของผู้ขับขี่เชิงป้องกัน และความรับผิดชอบทางกฎหมาย",
+        "glossary_terms": [
+          "Mobilforbud",
+          "Defensiv kjørestil",
+          "Føreransvar"
+        ]
+      },
+      {
+        "screen_id": "CH25-005",
+        "screen_type": "choice",
+        "title_no": "Førerstøttesystemer og aktiv oppmerksomhet",
+        "title_th": "ระบบช่วยเหลือผู้ขับขี่และการมีสมาธิตื่นตัว",
+        "asset_id": "CH25-RISK-005",
+        "pair_asset_id": "CH25-PAR-002",
+        "content_th": "ระบบช่วยขับขี่สมัยใหม่ช่วยป้องกันอุบัติเหตุได้แต่ก็อาจขัดข้องเมื่อมีหิมะหรือฝนตกหนัก คุณจึงต้องจับพวงมาลัยและมีสมาธิเต็มที่เสมอ",
+        "glossary_terms": [
+          "Førerstøtte",
+          "Autopilot begrensning",
+          "Aktivt fokus"
+        ]
+      },
+      {
+        "screen_id": "CH25-006",
+        "screen_type": "summary",
+        "title_no": "Oppsummering bilkjøringens risiko",
+        "title_th": "สรุป: ความเสี่ยงในการขับขี่",
+        "asset_id": "CH25-RISK-006",
+        "pair_asset_id": null,
+        "content_th": "คุณเข้าใจความเสี่ยงในการขับขี่ การรับมือความง่วง และความรับผิดชอบตามกฎหมายเพื่อเป็นผู้ขับขี่ที่มีวุฒิภาวะแล้ว!",
+        "glossary_terms": [
+          "Risikoforståelse fullført",
+          "Trinn 4 fundament"
+        ]
+      }
+    ],
+    "order": 27
+  },
+  {
+    "chapter_id": "ch_kjorekompetanse_landevegsmiljo",
+    "chapter_code": "CH26",
+    "title_no": "Kapittel 26 — Kjørekompetanse i landevegsmiljø",
+    "title_th": "บทที่ 26 — ทักษะการขับขี่บนถนนนอกเมือง (Landevegsmiljø)",
+    "title_en": "Chapter 26 — Driving Competence in Rural Road Environments",
+    "difficulty": "advanced",
+    "podcast_reference": "Michaels råd: Sikker forbikjøring, møteplasser og viltfare i skumringen",
+    "section_tags": [
+      "landeveg",
+      "forbikjøring",
+      "møteplass",
+      "viltfare",
+      "elgpåkjørsel",
+      "frontkollisjon"
+    ],
+    "sections": [
+      {
+        "section_type": "situation",
+        "title_no": "Situasjonen: Forbikjøring av saktegående kjøretøy før kurve",
+        "title_th": "สถานการณ์: การแซงรถช้าก่อนเข้าทางโค้งบนทางหลวง",
+        "title_en": "The situation: Overtaking a slow vehicle before a curve",
+        "content_no": "Du ligger bak en traktor i 80-sone. Det er stiplet linje, men en sving nærmer seg 300 meter fremme. Skal du kjøre forbi?",
+        "content_th": "คุณขับตามรถแทรกเตอร์ในเขตความเร็ว 80 แม้เส้นจะเป็นเส้นประแต่มีทางโค้งอยู่ข้างหน้า 300 เมตร คุณควรแซงหรือไม่?",
+        "content_en": "You follow a tractor in an 80 zone. Dashed line exists, but a curve is 300m ahead. Do you overtake?"
+      },
+      {
+        "section_type": "theory",
+        "title_no": "Michaels landevegsregel: Forbikjøring krever fri sikt og ingen tvil",
+        "title_th": "กฎทางหลวงของ Michael: การแซงต้องมีทัศนวิสัยโล่งและไร้ข้อสงสัย",
+        "title_en": "Michael's rural road rule: Overtaking requires clear sight and zero doubt",
+        "content_no": "Forbikjøring er den farligste manøveren på landevei. Krev minst 800-1000 meter fri sikt. Bruk møteplass (skilt 526) på smal vei og pass opp for elg i skumringen.",
+        "content_th": "การแซงอันตรายที่สุดบนถนนนอกเมือง ต้องมีทัศนวิสัยโล่ง 800-1000 เมตร ใช้จุดจอดหลบรถเมื่อทางแคบ และระวังตัวมูสช่วงพลบค่ำ",
+        "content_en": "Overtaking is most dangerous on rural roads. Require 800-1000m clear sight. Use passing places (sign 526) and beware moose at dusk."
+      },
+      {
+        "section_type": "practice",
+        "title_no": "Praktisk tips: Varsle politiet på 02800 ved viltpåkjørsel",
+        "title_th": "คำแนะนำภาคปฏิบัติ: แจ้งตำรวจที่ 02800 เมื่อชนสัตว์ป่า",
+        "title_en": "Practical tips: Report wildlife collisions to police on 02800",
+        "content_no": "Ved påkjørsel av elg, hjort eller rådyr: sikre skadestedet, merk stedet og ring politiet på 02800 umiddelbart.",
+        "content_th": "หากขับรถชนกวางมูสหรือสัตว์ป่าขนาดใหญ่ ให้ป้องกันสถานที่ ทำเครื่องหมายจุดเกิดเหตุ และโทรแจ้งตำรวจที่ 02800 ทันที",
+        "content_en": "When hitting moose or deer: secure the scene, mark location, and call police on 02800 immediately."
+      }
+    ],
+    "screens": [
+      {
+        "screen_id": "CH26-001",
+        "screen_type": "intro",
+        "title_no": "Landevegens utfordringer – høye hastigheter",
+        "title_th": "ความท้าทายของถนนนอกเมือง – ความเร็วสูงและเส้นทางคดเคี้ยว",
+        "asset_id": "CH26-LAND-001",
+        "pair_asset_id": null,
+        "content_th": "ถนนนอกเมืองในนอร์เวย์มักไม่มีแบริเออร์กั้นกลางถนน การชนประสานงาที่ความเร็ว 80 กม./ชม. มีแรงปะทะรุนแรงเทียบเท่ากับความเร็ว 160 กม./ชม.",
+        "glossary_terms": [
+          "Landeveg",
+          "Høy hastighet",
+          "Frontkollisjon"
+        ]
+      },
+      {
+        "screen_id": "CH26-002",
+        "screen_type": "choice",
+        "title_no": "Forbikjøring på tofeltsvei",
+        "title_th": "การแซงบนถนนสองเลนสวนกัน",
+        "asset_id": "CH26-LAND-002",
+        "pair_asset_id": "CH26-PAR-001",
+        "content_th": "การแซงเป็นหนึ่งในการกระทำที่เสี่ยงที่สุด ต้องมีทัศนวิสัยโล่งอย่างน้อย 800-1000 เมตร ไม่มีเส้นทึบ และมั่นใจว่ารถคันหน้าจะไม่เลี้ยวซ้าย",
+        "glossary_terms": [
+          "Forbikjøring",
+          "Fri sikt (800-1000m)",
+          "Risikovurdering"
+        ]
+      },
+      {
+        "screen_id": "CH26-003",
+        "screen_type": "sequence",
+        "title_no": "Møtesituasjoner og møteplasser",
+        "title_th": "การขับสวนทางและจุดจอดหลบรถ (Møteplass)",
+        "asset_id": "CH26-LAND-003",
+        "pair_asset_id": null,
+        "content_th": "บนถนนแคบจะมีจุดจอดหลบรถที่มีป้ายตัว M สีขาวบนพื้นน้ำเงิน รถคันที่มีจุดหลบอยู่ฝั่งขวาของตนเองจะต้องหยุดรอให้รถที่สวนมาไปก่อน",
+        "glossary_terms": [
+          "Møteplass",
+          "Skilt 526",
+          "Vikeplikt ved hindring"
+        ]
+      },
+      {
+        "screen_id": "CH26-004",
+        "screen_type": "road_check",
+        "title_no": "Road Check ⚡ Kjørekompetanse i landevegsmiljø",
+        "title_th": "Road Check ⚡ ทักษะการขับขี่บนถนนนอกเมือง",
+        "road_check_id": "CH26-RC-001",
+        "asset_id": "CH26-LAND-004",
+        "pair_asset_id": null,
+        "content_th": "สามคำถามสั้นเพื่อทดสอบความแม่นยำเรื่องช่วงเวลาเสี่ยงชนสัตว์ป่า หน้าที่แจ้งตำรวจเมื่อชนสัตว์ และกฎเมื่อมีรถต้องการแซง",
+        "glossary_terms": [
+          "Viltfare i skumring",
+          "Varsling 02800",
+          "Plikt ved forbikjøring"
+        ]
+      },
+      {
+        "screen_id": "CH26-005",
+        "screen_type": "choice",
+        "title_no": "Viltfare og grøftekantskanning",
+        "title_th": "อันตรายจากสัตว์ป่าและการกวาดสายตามองริมทาง",
+        "asset_id": "CH26-LAND-005",
+        "pair_asset_id": "CH26-PAR-002",
+        "content_th": "บนถนนในป่าต้องกวาดสายตามองริมทางอย่างสม่ำเสมอเพื่อสังเกตแสงสะท้อนจากดวงตาของสัตว์ และพึงระลึกว่ามักมีตัวที่สองวิ่งตามมาติดๆ",
+        "glossary_terms": [
+          "Viltfare",
+          "Grøftekantskanning",
+          "Fareskilt elg"
+        ]
+      },
+      {
+        "screen_id": "CH26-006",
+        "screen_type": "summary",
+        "title_no": "Oppsummering landevegskompetanse",
+        "title_th": "สรุป: ทักษะการขับขี่บนถนนนอกเมือง",
+        "asset_id": "CH26-LAND-006",
+        "pair_asset_id": null,
+        "content_th": "คุณเข้าใจฟิสิกส์ของการใช้ความเร็วบนทางหลวงนอกเมือง ความเสี่ยงของการแซง และการใช้จุดจอดหลบรถอย่างปลอดภัยแล้ว!",
+        "glossary_terms": [
+          "Landeveg fullført",
+          "Trafikksikkerhet"
+        ]
+      }
+    ],
+    "order": 28
+  },
+  {
+    "chapter_id": "ch_planlegging_refleksjon_oving",
+    "chapter_code": "CH27",
+    "title_no": "Kapittel 27 — Planlegging, refleksjon og tilstrekkelig øving",
+    "title_th": "บทที่ 27 — การวางแผน การสะท้อนคิด และการฝึกฝนอย่างเพียงพอ (Trinn 4 fullført)",
+    "title_en": "Chapter 27 — Planning, Reflection, and Sufficient Practice",
+    "difficulty": "advanced",
+    "podcast_reference": "Michaels råd: Ruteplanlegging, 2-års prøvetid og egentrening etter lappen",
+    "section_tags": [
+      "planlegging",
+      "refleksjon",
+      "trinn4",
+      "prøveperiode",
+      "prikkbelastning",
+      "mengdetrening"
+    ],
+    "sections": [
+      {
+        "section_type": "situation",
+        "title_no": "Situasjonen: Planlegging av langtur over krevende fjelloverganger",
+        "title_th": "สถานการณ์: การวางแผนขับรถทางไกลข้ามภูเขาในฤดูหนาว",
+        "title_en": "The situation: Planning a long trip across mountain passes",
+        "content_no": "Du skal kjøre en 6-timers tur over fjellet der været skifter brått. Hvordan planlegger du turen for å unngå stress og farlige situasjoner?",
+        "content_th": "คุณต้องขับรถข้ามภูเขาเป็นเวลา 6 ชั่วโมงในสภาพอากาศที่เปลี่ยนแปลงรวดเร็ว คุณจะวางแผนอย่างไรเพื่อไม่ให้เกิดความเครียดและอันตราย?",
+        "content_en": "You face a 6-hour mountain drive with shifting weather. How do you plan to eliminate stress and risk?"
+      },
+      {
+        "section_type": "theory",
+        "title_no": "Michaels planleggingsregel: Start turen før nøkkelen vris om",
+        "title_th": "กฎการวางแผนของ Michael: เริ่มต้นวางแผนตั้งแต่ก่อนสตาร์ทรถ",
+        "title_en": "Michael's planning rule: Start the trip before turning the key",
+        "content_no": "God planlegging inkluderer rutevalg, værsjekk og pauser hver 2. time. Ferske sjåfører har 2 års prøveperiode med doble prikker ved overtredelser.",
+        "content_th": "การวางแผนที่ดีต้องตรวจพยากรณ์อากาศและแวะพักทุก 2 ชั่วโมง ผู้ขับขี่ใหม่มีระยะทดลอง 2 ปีโดยจะถูกหักคะแนนเพิ่ม 2 เท่า",
+        "content_en": "Sound planning involves routes, weather checks, and breaks every 2 hours. Novice drivers face 2-year probation with double points."
+      },
+      {
+        "section_type": "practice",
+        "title_no": "Praktisk tips: Egentrening og refleksjon etter hver tur",
+        "title_th": "คำแนะนำภาคปฏิบัติ: การทบทวนตนเองหลังการเดินทางทุกครั้ง",
+        "title_en": "Practical tips: Self-training and reflection after every drive",
+        "content_no": "Førerkortet er bare begynnelsen på læringen. Reflekter over egne nestenulykker og oppretthold defensiv kjørestil.",
+        "content_th": "ใบขับขี่เป็นเพียงจุดเริ่มต้นของการเรียนรู้ จงทบทวนข้อผิดพลาดของตนเองและรักษาการขับขี่เชิงป้องกันเสมอ",
+        "content_en": "The licence is only the start of learning. Reflect on near-misses and maintain a defensive mindset."
+      }
+    ],
+    "screens": [
+      {
+        "screen_id": "CH27-001",
+        "screen_type": "intro",
+        "title_no": "Planlegging av kjøreturen – forutseende trygghet",
+        "title_th": "การวางแผนการเดินทาง – ความปลอดภัยที่มองการณ์ไกล",
+        "asset_id": "CH27-REF-001",
+        "pair_asset_id": null,
+        "content_th": "ผู้ขับขี่ที่ดีจะเริ่มวางแผนตั้งแต่ก่อนสตาร์ทรถ ตรวจสอบสภาพอากาศ ผิวถนน และเผื่อเวลาเดินทางเพื่อขจัดความเครียดในการขับขี่",
+        "glossary_terms": [
+          "Ruteplanlegging",
+          "Forutseende trygghet",
+          "Tidsmargin"
+        ]
+      },
+      {
+        "screen_id": "CH27-002",
+        "screen_type": "choice",
+        "title_no": "Kjøring i variert og skiftende miljø",
+        "title_th": "การขับขี่ในสภาพแวดล้อมที่หลากหลายและเปลี่ยนแปลง",
+        "asset_id": "CH27-REF-002",
+        "pair_asset_id": "CH27-PAR-001",
+        "content_th": "ในการเดินทางไกลสภาพอากาศอาจเปลี่ยนจากฝนตกไปเป็นพายุหิมะบนเขา ควรปรับความเร็วและพักผ่อนอย่างน้อยทุกๆ 2 ชั่วโมง",
+        "glossary_terms": [
+          "Variert miljø",
+          "Pausehåndtering",
+          "Væromslag"
+        ]
+      },
+      {
+        "screen_id": "CH27-003",
+        "screen_type": "sequence",
+        "title_no": "Refleksjon og læring av egne erfaringer",
+        "title_th": "การสะท้อนคิดและการเรียนรู้จากประสบการณ์ตนเอง",
+        "asset_id": "CH27-REF-003",
+        "pair_asset_id": null,
+        "content_th": "หลังขับรถทุกครั้งควรทบทวนเหตุการณ์ที่พบเจอเพื่อวิเคราะห์ข้อผิดพลาด การเข้าใจตนเองคือสัญลักษณ์ของผู้ขับขี่ชั้นยอด",
+        "glossary_terms": [
+          "Refleksjon",
+          "Selvinnsikt",
+          "Læringseffekt"
+        ]
+      },
+      {
+        "screen_id": "CH27-004",
+        "screen_type": "road_check",
+        "title_no": "Road Check ⚡ Planlegging, refleksjon og tilstrekkelig øving",
+        "title_th": "Road Check ⚡ การวางแผน การสะท้อนคิด และการฝึกฝน",
+        "road_check_id": "CH27-RC-001",
+        "asset_id": "CH27-REF-004",
+        "pair_asset_id": null,
+        "content_th": "สามคำถามสั้นเพื่อทดสอบความแม่นยำเรื่องการถูกหักคะแนน 2 เท่าในระยะทดลอง จำนวนชั่วโมงฝึกที่แนะนำ และเป้าหมายขั้นตอนที่ 4",
+        "glossary_terms": [
+          "Prøveperiode (2 år)",
+          "Doble prikker",
+          "Mengdetrening"
+        ]
+      },
+      {
+        "screen_id": "CH27-005",
+        "screen_type": "choice",
+        "title_no": "Mengdetrening og veien videre etter lappen",
+        "title_th": "การฝึกฝนอย่างต่อเนื่องหลังได้รับใบขับขี่",
+        "asset_id": "CH27-REF-005",
+        "pair_asset_id": "CH27-PAR-002",
+        "content_th": "การสอบผ่านใบขับขี่หมายถึงคุณได้รับอนุญาตให้ฝึกต่อด้วยตัวเอง ช่วง 9 เดือนแรกเสี่ยงอุบัติเหตุสูงสุดจึงต้องขับขี่เชิงป้องกันเสมอ",
+        "glossary_terms": [
+          "Mengdetrening",
+          "Fersk sjåfør",
+          "Ulykkesrisiko 9 mnd"
+        ]
+      },
+      {
+        "screen_id": "CH27-006",
+        "screen_type": "summary",
+        "title_no": "Oppsummering planlegging, refleksjon og Trinn 4",
+        "title_th": "สรุป: การวางแผน การสะท้อนคิด และขั้นตอนที่ 4",
+        "asset_id": "CH27-REF-006",
+        "pair_asset_id": null,
+        "content_th": "ยินดีด้วย! คุณผ่านเนื้อหาของขั้นตอนที่ 4 เรียบร้อยแล้ว ตอนนี้คุณเป็นผู้ขับขี่ที่มีสติ รับผิดชอบ และพร้อมเข้าสู่บทสุดท้าย!",
+        "glossary_terms": [
+          "Trinn 4 fullført",
+          "Ansvarlig sjåfør"
+        ]
+      }
+    ],
+    "order": 29
+  },
+  {
+    "chapter_id": "ch_lover_regler_oppslagsverk",
+    "chapter_code": "CH28",
+    "title_no": "Kapittel 28 — Lover, regler og oppslagsverk",
+    "title_th": "บทที่ 28 — กฎหมาย กฎจราจร และคู่มืออ้างอิง (Lover og oppslagsverk)",
+    "title_en": "Chapter 28 — Laws, Regulations, and Reference Guide",
+    "difficulty": "advanced",
+    "podcast_reference": "Michaels råd: Vegtrafikkloven § 3 (HAV), formler for stopplengde og førerkortregler",
+    "section_tags": [
+      "vegtrafikkloven",
+      "paragraf3",
+      "havregelen",
+      "stopplengde",
+      "promille",
+      "tilhengerregler",
+      "laerebokfullført"
+    ],
+    "sections": [
+      {
+        "section_type": "situation",
+        "title_no": "Situasjonen: Hele pensum samlet før den store teoriprøven",
+        "title_th": "สถานการณ์: การรวบรวมความรู้ทั้งหมดก่อนเข้าสอบทฤษฎีจริง",
+        "title_en": "The situation: Entire syllabus consolidated before theory exam",
+        "content_no": "Du skal avlegge teoriprøven hos Statens vegvesen. Har du full kontroll på Vegtrafikkloven § 3, stoppformler og tilhengergrenser?",
+        "content_th": "คุณกำลังจะไปสอบทฤษฎีที่กรมการขนส่ง คุณแม่นยำกฎหมายจราจรมาตรา 3 สูตรระยะหยุดรถ และเกณฑ์น้ำหนักรถพ่วงแล้วหรือยัง?",
+        "content_en": "You face the NPRA theory test. Do you have full grasp of Traffic Law § 3, stopping formulas, and trailer rules?"
+      },
+      {
+        "section_type": "theory",
+        "title_no": "Michaels grunnlov: Vegtrafikkloven § 3 (HAV) overstyrer alt",
+        "title_th": "กฎหมายแม่บทของ Michael: มาตรา 3 (HAV) อยู่เหนือทุกสิ่ง",
+        "title_en": "Michael's supreme rule: Traffic Law § 3 (HAV) overrides everything",
+        "content_no": "Vegtrafikkloven § 3 krever at enhver ferdes Hensynsfullt, Aktpågivende og Varsom. Promillegrensen i Norge er 0,2. Bremselengden firedobles når farten dobles.",
+        "content_th": "มาตรา 3 กำหนดให้ทุกคนเดินทางด้วยความเห็นอกเห็นใจ มีสติระแวดระวัง และรอบคอบ เกณฑ์แอลกอฮอล์คือ 0.2 ระยะเบรกเพิ่ม 4 เท่าเมื่อความเร็วเพิ่ม 2 เท่า",
+        "content_en": "Traffic Law § 3 mandates travelling Considerately, Alertly, and Cautiously (HAV). Alcohol limit is 0.2. Braking distance quadruples when speed doubles."
+      },
+      {
+        "section_type": "practice",
+        "title_no": "Praktisk tips: Tommelfingerregler for fart og bremsing",
+        "title_th": "คำแนะนำภาคปฏิบัติ: สูตรคิดลัดสำหรับความเร็วและระยะเบรก",
+        "title_en": "Practical tips: Rule of thumb formulas for speed and braking",
+        "content_no": "Reaksjonslengde på 1 sekund: Del farten på 10 og gang med 3 (ved 50 km/t = 15 meter). Stopplengde = reaksjonslengde + bremselengde.",
+        "content_th": "ระยะคิดใน 1 วินาที: นำความเร็วหาร 10 คูณ 3 (ที่ 50 กม./ชม. = 15 เมตร) ระยะหยุดรถทั้งหมด = ระยะคิด + ระยะเบรก",
+        "content_en": "Reaction distance in 1s: speed/10 * 3 (at 50 km/h = 15m). Total stopping distance = reaction distance + braking distance."
+      }
+    ],
+    "screens": [
+      {
+        "screen_id": "CH28-001",
+        "screen_type": "intro",
+        "title_no": "Vegtrafikkloven § 3 – Grunnregelen for all trafikk",
+        "title_th": "กฎหมายจราจรมาตรา 3 – หัวใจสำคัญของกฎจราจรทั้งหมด",
+        "asset_id": "CH28-LOV-001",
+        "pair_asset_id": null,
+        "content_th": "ทุกคนต้องใช้ถนนด้วยความเห็นอกเห็นใจ มีสติระแวดระวัง และรอบคอบระมัดระวัง เพื่อไม่ให้เกิดอันตรายหรือสร้างความเสียหายแก่ผู้อื่น",
+        "glossary_terms": [
+          "Vegtrafikkloven § 3",
+          "HAV-regelen",
+          "Grunnregel"
+        ]
+      },
+      {
+        "screen_id": "CH28-002",
+        "screen_type": "choice",
+        "title_no": "Trafikkreglene og samhandlingsplikten",
+        "title_th": "กฎจราจรโดยละเอียดและหน้าที่ในการอยู่ร่วมกัน",
+        "asset_id": "CH28-LOV-002",
+        "pair_asset_id": "CH28-PAR-001",
+        "content_th": "แม้คุณจะเป็นฝ่ายมีสิทธิไปก่อนตามกฎหมาย แต่ตามมาตรา 3 คุณมีหน้าที่ต้องหลีกเลี่ยงอุบัติเหตุเสมอหากผู้อื่นทำผิดพลาด",
+        "glossary_terms": [
+          "Trafikkreglene",
+          "Avvergingsplikt",
+          "Samhandling"
+        ]
+      },
+      {
+        "screen_id": "CH28-003",
+        "screen_type": "sequence",
+        "title_no": "Førerkort klasse B og tilhengerregler",
+        "title_th": "ใบขับขี่คลาส B และข้อกำหนดเรื่องรถพ่วง",
+        "asset_id": "CH28-LOV-003",
+        "pair_asset_id": null,
+        "content_th": "ใบขับขี่คลาส B ใช้ขับรถที่มีน้ำหนักรวมไม่เกิน 3500 กก. และมีที่นั่งผู้โดยสารไม่เกิน 8 ที่นั่ง สามารถลากพ่วงไม่เกิน 750 กก. ได้เสมอ",
+        "glossary_terms": [
+          "Klasse B",
+          "Totalvekt 3500 kg",
+          "Tilhengerregler"
+        ]
+      },
+      {
+        "screen_id": "CH28-004",
+        "screen_type": "road_check",
+        "title_no": "Road Check ⚡ Lover, regler og oppslagsverk",
+        "title_th": "Road Check ⚡ กฎหมาย กฎจราจร และคู่มืออ้างอิง",
+        "road_check_id": "CH28-RC-001",
+        "asset_id": "CH28-LOV-004",
+        "pair_asset_id": null,
+        "content_th": "สามคำถามสั้นเพื่อทดสอบความแม่นยำเรื่องสูตรคำนวณระยะคิดตอบสนอง ระยะเบรกเมื่อเพิ่มความเร็วสองเท่า และเกณฑ์แอลกอฮอล์ 0.2",
+        "glossary_terms": [
+          "Reaksjonsformel",
+          "Kvadratisk bremsing",
+          "Promille 0,2"
+        ]
+      },
+      {
+        "screen_id": "CH28-005",
+        "screen_type": "choice",
+        "title_no": "Oppslagsverk: Stopplengder og nøkkeltall",
+        "title_th": "คู่มืออ้างอิง: ตัวเลขสำคัญและระยะหยุดรถ",
+        "asset_id": "CH28-LOV-005",
+        "pair_asset_id": "CH28-PAR-002",
+        "content_th": "ระยะหยุดรถทั้งหมดเท่ากับระยะคิดบวกกับระยะเบรก ที่ความเร็ว 50 กม./ชม. ใน 1 วินาทีรถจะวิ่งไปประมาณ 15 เมตรก่อนที่เบรกจะทำงาน",
+        "glossary_terms": [
+          "Stopplengde",
+          "Reaksjonslengde",
+          "Nøkkeltall"
+        ]
+      },
+      {
+        "screen_id": "CH28-006",
+        "screen_type": "summary",
+        "title_no": "Gratulerer – Hele Læreboken fullført!",
+        "title_th": "ยินดีด้วย – คุณได้เรียนจบหลักสูตรหนังสือเรียนทั้งหมดแล้ว!",
+        "asset_id": "CH28-LOV-006",
+        "pair_asset_id": null,
+        "content_th": "ความสำเร็จอันยิ่งใหญ่! คุณเรียนจบเนื้อหาครบทั้ง 28 บทเรียนของ Thai2Drive แล้ว คุณพร้อมเต็มที่ในการพิชิตข้อสอบทฤษฎีใบขับขี่นอร์เวย์!",
+        "glossary_terms": [
+          "28 kapitler fullført",
+          "Klar for teoriprøven"
+        ]
+      }
+    ],
+    "order": 30
   }
 ]
