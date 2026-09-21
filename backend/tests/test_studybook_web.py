@@ -20,6 +20,9 @@ from studybook_web import (
     CH05_ASSETS, CH05_LESSONS,
     CH06_ASSETS, CH06_LESSONS,
     CH07_ASSETS, CH07_LESSONS,
+    CH08_ASSETS, CH08_LESSONS,
+    CH09_ASSETS, CH09_LESSONS,
+    CH10_ASSETS, CH10_LESSONS,
     CHAPTERS,
 )
 from webapp import WEBAPP_HTML, webapp_router
@@ -500,21 +503,24 @@ def test_chapter_7_asset_manifest_and_pairs():
     assert CH07_ASSETS["ch07_par_002"]["asset_id"] == "CH07-PAR-002"
 
 
-def test_chapters_3_5_6_7_assets_exist_on_disk():
+def test_chapters_3_5_6_7_8_9_10_assets_exist_on_disk():
     assets_root = Path(__file__).resolve().parents[1] / "public_assets"
-    for group in (CH03_ASSETS, CH05_ASSETS, CH06_ASSETS, CH07_ASSETS):
+    for group in (CH03_ASSETS, CH05_ASSETS, CH06_ASSETS, CH07_ASSETS, CH08_ASSETS, CH09_ASSETS, CH10_ASSETS):
         for asset in group.values():
             prefix = "/api/assets/"
             assert asset["src"].startswith(prefix)
             assert (assets_root / asset["src"][len(prefix):]).is_file(), asset["src"]
 
 
-def test_chapters_3_5_6_7_thai_language_isolation():
+def test_chapters_3_5_6_7_8_9_10_thai_language_isolation():
     for name, assets, lessons in [
         ("CH03", CH03_ASSETS, CH03_LESSONS),
         ("CH05", CH05_ASSETS, CH05_LESSONS),
         ("CH06", CH06_ASSETS, CH06_LESSONS),
         ("CH07", CH07_ASSETS, CH07_LESSONS),
+        ("CH08", CH08_ASSETS, CH08_LESSONS),
+        ("CH09", CH09_ASSETS, CH09_LESSONS),
+        ("CH10", CH10_ASSETS, CH10_LESSONS),
     ]:
         _walk_i18n(assets, f"{name}_assets")
         _walk_i18n(lessons, f"{name}_lessons")
@@ -530,7 +536,145 @@ def test_chapters_3_5_6_7_thai_language_isolation():
         assert not forbidden.search(allowed_brands_removed), f"{name} contains forbidden leak"
 
 
-def test_chapters_3_5_6_7_in_studybook_chapters_v5_json():
+def test_chapter_8_structure_and_screen_ids():
+    assert len(CH08_LESSONS) == 6
+    assert [lesson["id"] for lesson in CH08_LESSONS] == [
+        "CH08-001", "CH08-002", "CH08-003", "CH08-004", "CH08-005", "CH08-006"
+    ]
+    assert {lesson["type"] for lesson in CH08_LESSONS} == {
+        "intro", "choice", "sequence", "roadCheck", "chapterComplete"
+    }
+    rc = next(lesson for lesson in CH08_LESSONS if lesson["type"] == "roadCheck")
+    assert rc["id"] == "CH08-004"
+    assert rc["road_check_id"] == "CH08-RC-001"
+    assert len(rc["questions"]) == 3
+    assert len({lesson["id"] for lesson in CH08_LESSONS}) == 6
+
+
+def test_chapter_8_asset_manifest_and_pairs():
+    required = {
+        "asset_id", "page", "scene", "pedagogical_purpose", "camera_angle",
+        "risk_source", "risikokilde", "vehicles_road_users", "road_type", "signs_markings",
+        "learner_discovery", "hotspots", "pair_asset", "status", "src", "alt",
+    }
+    assert len(CH08_ASSETS) == 8
+    expected_ids = {
+        "CH08-SKILT-001", "CH08-SKILT-002", "CH08-PAR-001", "CH08-SKILT-003",
+        "CH08-SKILT-004", "CH08-SKILT-005", "CH08-PAR-002", "CH08-SKILT-006",
+    }
+    actual_ids = {asset["asset_id"] for asset in CH08_ASSETS.values()}
+    assert actual_ids == expected_ids
+    for asset in CH08_ASSETS.values():
+        assert set(asset) == required
+        assert asset["status"] == "placeholder"
+        assert all(asset[key] for key in required - {"hotspots", "pair_asset"})
+
+    # Pair 1: Fareskilt vs Underskilt
+    assert CH08_ASSETS["ch08_skilt_002"]["pair_asset"] == "ch08_par_001"
+    assert CH08_ASSETS["ch08_par_001"]["pair_asset"] == "ch08_skilt_002"
+    assert CH08_ASSETS["ch08_skilt_002"]["asset_id"] == "CH08-SKILT-002"
+    assert CH08_ASSETS["ch08_par_001"]["asset_id"] == "CH08-PAR-001"
+
+    # Pair 2: Påbudsskilt vs Opplysningsskilt
+    assert CH08_ASSETS["ch08_skilt_005"]["pair_asset"] == "ch08_par_002"
+    assert CH08_ASSETS["ch08_par_002"]["pair_asset"] == "ch08_skilt_005"
+    assert CH08_ASSETS["ch08_skilt_005"]["asset_id"] == "CH08-SKILT-005"
+    assert CH08_ASSETS["ch08_par_002"]["asset_id"] == "CH08-PAR-002"
+
+
+def test_chapter_9_structure_and_screen_ids():
+    assert len(CH09_LESSONS) == 6
+    assert [lesson["id"] for lesson in CH09_LESSONS] == [
+        "CH09-001", "CH09-002", "CH09-003", "CH09-004", "CH09-005", "CH09-006"
+    ]
+    assert {lesson["type"] for lesson in CH09_LESSONS} == {
+        "intro", "choice", "sequence", "roadCheck", "chapterComplete"
+    }
+    rc = next(lesson for lesson in CH09_LESSONS if lesson["type"] == "roadCheck")
+    assert rc["id"] == "CH09-004"
+    assert rc["road_check_id"] == "CH09-RC-001"
+    assert len(rc["questions"]) == 3
+    assert len({lesson["id"] for lesson in CH09_LESSONS}) == 6
+
+
+def test_chapter_9_asset_manifest_and_pairs():
+    required = {
+        "asset_id", "page", "scene", "pedagogical_purpose", "camera_angle",
+        "risk_source", "risikokilde", "vehicles_road_users", "road_type", "signs_markings",
+        "learner_discovery", "hotspots", "pair_asset", "status", "src", "alt",
+    }
+    assert len(CH09_ASSETS) == 8
+    expected_ids = {
+        "CH09-LYS-001", "CH09-LYS-002", "CH09-PAR-001", "CH09-LYS-003",
+        "CH09-LYS-004", "CH09-LYS-005", "CH09-PAR-002", "CH09-LYS-006",
+    }
+    actual_ids = {asset["asset_id"] for asset in CH09_ASSETS.values()}
+    assert actual_ids == expected_ids
+    for asset in CH09_ASSETS.values():
+        assert set(asset) == required
+        assert asset["status"] == "placeholder"
+        assert all(asset[key] for key in required - {"hotspots", "pair_asset"})
+
+    # Pair 1: Fjernlys vs Blending
+    assert CH09_ASSETS["ch09_lys_002"]["pair_asset"] == "ch09_par_001"
+    assert CH09_ASSETS["ch09_par_001"]["pair_asset"] == "ch09_lys_002"
+    assert CH09_ASSETS["ch09_lys_002"]["asset_id"] == "CH09-LYS-002"
+    assert CH09_ASSETS["ch09_par_001"]["asset_id"] == "CH09-PAR-001"
+
+    # Pair 2: Tåkelys forbudt kombinasjon
+    assert CH09_ASSETS["ch09_lys_005"]["pair_asset"] == "ch09_par_002"
+    assert CH09_ASSETS["ch09_par_002"]["pair_asset"] == "ch09_lys_005"
+    assert CH09_ASSETS["ch09_lys_005"]["asset_id"] == "CH09-LYS-005"
+    assert CH09_ASSETS["ch09_par_002"]["asset_id"] == "CH09-PAR-002"
+
+
+def test_chapter_10_structure_and_screen_ids():
+    assert len(CH10_LESSONS) == 6
+    assert [lesson["id"] for lesson in CH10_LESSONS] == [
+        "CH10-001", "CH10-002", "CH10-003", "CH10-004", "CH10-005", "CH10-006"
+    ]
+    assert {lesson["type"] for lesson in CH10_LESSONS} == {
+        "intro", "choice", "sequence", "roadCheck", "chapterComplete"
+    }
+    rc = next(lesson for lesson in CH10_LESSONS if lesson["type"] == "roadCheck")
+    assert rc["id"] == "CH10-004"
+    assert rc["road_check_id"] == "CH10-RC-001"
+    assert len(rc["questions"]) == 3
+    assert len({lesson["id"] for lesson in CH10_LESSONS}) == 6
+
+
+def test_chapter_10_asset_manifest_and_pairs():
+    required = {
+        "asset_id", "page", "scene", "pedagogical_purpose", "camera_angle",
+        "risk_source", "risikokilde", "vehicles_road_users", "road_type", "signs_markings",
+        "learner_discovery", "hotspots", "pair_asset", "status", "src", "alt",
+    }
+    assert len(CH10_ASSETS) == 8
+    expected_ids = {
+        "CH10-RUS-001", "CH10-RUS-002", "CH10-PAR-001", "CH10-RUS-003",
+        "CH10-RUS-004", "CH10-RUS-005", "CH10-PAR-002", "CH10-RUS-006",
+    }
+    actual_ids = {asset["asset_id"] for asset in CH10_ASSETS.values()}
+    assert actual_ids == expected_ids
+    for asset in CH10_ASSETS.values():
+        assert set(asset) == required
+        assert asset["status"] == "placeholder"
+        assert all(asset[key] for key in required - {"hotspots", "pair_asset"})
+
+    # Pair 1: Reaksjon vs Tunnelsyn
+    assert CH10_ASSETS["ch10_rus_002"]["pair_asset"] == "ch10_par_001"
+    assert CH10_ASSETS["ch10_par_001"]["pair_asset"] == "ch10_rus_002"
+    assert CH10_ASSETS["ch10_rus_002"]["asset_id"] == "CH10-RUS-002"
+    assert CH10_ASSETS["ch10_par_001"]["asset_id"] == "CH10-PAR-001"
+
+    # Pair 2: Straff vs Ulykke
+    assert CH10_ASSETS["ch10_rus_005"]["pair_asset"] == "ch10_par_002"
+    assert CH10_ASSETS["ch10_par_002"]["pair_asset"] == "ch10_rus_005"
+    assert CH10_ASSETS["ch10_rus_005"]["asset_id"] == "CH10-RUS-005"
+    assert CH10_ASSETS["ch10_par_002"]["asset_id"] == "CH10-PAR-002"
+
+
+def test_chapters_3_5_6_7_8_9_10_in_studybook_chapters_v5_json():
     json_path = Path(__file__).resolve().parents[2] / "content" / "studybook_chapters_v5.json"
     with open(json_path, "r", encoding="utf-8") as f:
         data = json.load(f)
@@ -540,6 +684,9 @@ def test_chapters_3_5_6_7_in_studybook_chapters_v5_json():
         ("CH05", "ch_trinn1_grunnkurs", "CH05-RC-001", "CH05-PAR-001", "CH05-PAR-002"),
         ("CH06", "ch_forbikjoring_rygging", "CH06-RC-001", "CH06-PAR-001", "CH06-PAR-002"),
         ("CH07", "ch_stans_parkering", "CH07-RC-001", "CH07-PAR-001", "CH07-PAR-002"),
+        ("CH08", "ch_trafikkskilt_vegmerking", "CH08-RC-001", "CH08-PAR-001", "CH08-PAR-002"),
+        ("CH09", "ch_lys_signal_tegn", "CH09-RC-001", "CH09-PAR-001", "CH09-PAR-002"),
+        ("CH10", "ch_alkohol_rus_kjoring", "CH10-RC-001", "CH10-PAR-001", "CH10-PAR-002"),
     ]:
         ch = next((c for c in data if c.get("chapter_code") == code or c.get("chapter_id") == cid), None)
         assert ch is not None, f"Missing {code} in v5 json"
@@ -550,5 +697,6 @@ def test_chapters_3_5_6_7_in_studybook_chapters_v5_json():
         assert ch["screens"][4]["pair_asset_id"] == p2
         for s in ch["screens"]:
             assert s.get("glossary_terms") and len(s["glossary_terms"]) > 0
+
 
 

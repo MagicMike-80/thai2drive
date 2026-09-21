@@ -798,5 +798,392 @@
         ]
       }
     ]
+  },
+  {
+    "chapter_id": "ch_trafikkskilt_vegmerking",
+    "chapter_code": "CH08",
+    "title_no": "Kapittel 8 — Trafikkskilt og vegmerking",
+    "title_th": "บทที่ 8 — ป้ายจราจรและเครื่องหมายบนผิวทาง (Trafikkskilt og vegmerking)",
+    "title_en": "Chapter 8 — Traffic Signs and Road Markings",
+    "difficulty": "beginner",
+    "podcast_reference": "Michaels råd: Forstå de offisielle trafikkskiltene",
+    "order": 10,
+    "section_tags": [
+      "trafikkskilt",
+      "fareskilt",
+      "forbudsskilt",
+      "pabudsskilt",
+      "vegmerking",
+      "sperrelinje"
+    ],
+    "sections": [
+      {
+        "section_type": "situation",
+        "title_no": "Situasjonen: Ukjent kryss med mange skilt",
+        "title_th": "สถานการณ์: ทางแยกที่ไม่คุ้นเคยและมีป้ายหลายแบบ",
+        "title_en": "The situation: Unfamiliar intersection with multiple signs",
+        "content_no": "Du kommer mot et uoversiktlig vegkryss i en ukjent by. Det står både trekantede fareskilt, runde forbudsskilt og blå påbudsskilt. Hvilket skilt skal du se på først?",
+        "content_th": "คุณกำลังขับเข้าสู่ทางแยกที่ไม่คุ้นเคยในตัวเมือง มีทั้งป้ายเตือนสามเหลี่ยม ป้ายห้ามวงกลมขอบแดง และป้ายบังคับสีน้ำเงิน คุณควรสังเกตและให้ความสำคัญกับป้ายใดก่อน?",
+        "content_en": "You approach an unfamiliar intersection with multiple signs: warning triangles, prohibitory circles, and mandatory blue circles. Which sign should you process first?"
+      },
+      {
+        "section_type": "theory",
+        "title_no": "Michaels skiltregel: Form og farge avslører betydningen",
+        "title_th": "หลักการดูป้ายของ Michael: รูปทรงและสีบอกความหมาย",
+        "title_en": "Michael's sign rule: Shape and color reveal meaning",
+        "content_no": "Trafikkskilt har et fast formspråk: Trekant med rød kant = Fare forut (senk farten og vær varsom). Rundt skilt med rød kant = Forbud (gjelder fram til neste kryss). Rundt skilt med blå bunn = Påbud (du må følge pilens retning). Firkantet skilt = Opplysning.",
+        "content_th": "ป้ายจราจรมีรหัสรูปทรงที่แน่นอน: สามเหลี่ยมขอบแดง = อันตรายข้างหน้า (ชะลอความเร็วและระวัง) วงกลมขอบแดง = ป้ายห้าม (มีผลบังคับจนถึงทางแยกถัดไป) วงกลมพื้นสีน้ำเงิน = ป้ายบังคับ (ต้องทำตามทิศทางลูกศร) สี่เหลี่ยม = ป้ายให้ข้อมูล",
+        "content_en": "Traffic signs use consistent geometry: Triangle with red border = Danger ahead. Circle with red border = Prohibition (until next junction). Blue circle = Mandatory command. Rectangle = Information."
+      },
+      {
+        "section_type": "practice",
+        "title_no": "Praktisk tips: Sperrelinjer i veibanen",
+        "title_th": "คำแนะนำภาคปฏิบัติ: เส้นทึบบนผิวทาง",
+        "title_en": "Practical tips: Solid lines on the road",
+        "content_no": "En heltrukken sperrelinje må aldri krysses under kjøring eller forbikjøring. Hvis linjen på din side er stiplet, har du lov til å krysse ved fri sikt.",
+        "content_th": "เส้นทึบแบ่งช่องทางห้ามขับทับหรือข้ามเด็ดขาดไม่ว่ากรณีใด ๆ หากเส้นฝั่งที่คุณขับเป็นเส้นประ คุณจึงมีสิทธิ์ข้ามเพื่อแซงได้เมื่อมีทัศนวิสัยปลอดภัย",
+        "content_en": "A solid barrier line must never be crossed while driving or overtaking. If the line on your side is broken, you may cross when sight is clear."
+      }
+    ],
+    "screens": [
+      {
+        "screen_id": "CH08-001",
+        "screen_type": "intro",
+        "title_no": "Skiltenes form og fargekoder",
+        "title_th": "รูปทรงและรหัสสีของป้ายจราจร",
+        "asset_id": "CH08-SKILT-001",
+        "pair_asset_id": null,
+        "content_th": "ป้ายจราจรในนอร์เวย์แบ่งตามรูปทรงและสี: สามเหลี่ยมเตือนอันตราย วงกลมขอบแดงสั่งห้าม และวงกลมสีน้ำเงินสั่งให้ปฏิบัติตามอย่างเคร่งครัด",
+        "glossary_terms": [
+          "Fareskilt",
+          "Forbudsskilt",
+          "Påbudsskilt"
+        ]
+      },
+      {
+        "screen_id": "CH08-002",
+        "screen_type": "choice",
+        "title_no": "Fareskilt vs. Forbudsskilt (Form og virkning)",
+        "title_th": "ป้ายเตือนอันตราย vs ป้ายห้าม (รูปทรงและความหมาย)",
+        "asset_id": "CH08-SKILT-002",
+        "pair_asset_id": "CH08-PAR-001",
+        "content_th": "ป้ายสามเหลี่ยมเตือนให้ระวังอันตรายข้างหน้า ส่วนป้ายวงกลมขอบแดงสั่งห้ามปฏิบัติทันที โดยมีผลตั้งแต่จุดที่ตั้งป้ายจนถึงทางแยกถัดไป",
+        "glossary_terms": [
+          "Virkefelt",
+          "Underskilt"
+        ]
+      },
+      {
+        "screen_id": "CH08-003",
+        "screen_type": "sequence",
+        "title_no": "Vegmerking: Heltrukken vs. stiplet linje",
+        "title_th": "เส้นบนผิวทาง: เส้นทึบ vs เส้นประ",
+        "asset_id": "CH08-SKILT-003",
+        "pair_asset_id": null,
+        "content_th": "เส้นแบ่งช่องทางบนถนนนอร์เวย์มีความหมายชัดเจน: เส้นทึบห้ามข้ามเด็ดขาด เส้นประเตือนระวัง และเส้นประยาวอนุญาตให้ข้ามหรือแซงได้เมื่อปลอดภัย",
+        "glossary_terms": [
+          "Sperrelinje",
+          "Varsellinje",
+          "Kjørefeltlinje"
+        ]
+      },
+      {
+        "screen_id": "CH08-004",
+        "screen_type": "road_check",
+        "title_no": "Road Check ⚡ Trafikkskilt og merking",
+        "title_th": "Road Check ⚡ ทดสอบความเข้าใจ: ป้ายจราจรและเส้นบนทาง",
+        "road_check_id": "CH08-RC-001",
+        "asset_id": "CH08-SKILT-004",
+        "pair_asset_id": null,
+        "content_th": "สามคำถามสั้นเพื่อทดสอบความแม่นยำเรื่องป้ายจราจรและเส้นแบ่งทาง",
+        "glossary_terms": [
+          "Vegkryss"
+        ]
+      },
+      {
+        "screen_id": "CH08-005",
+        "screen_type": "choice",
+        "title_no": "Påbudsskilt (Blå sirkel) og kjøreretning",
+        "title_th": "ป้ายบังคับ (วงกลมสีน้ำเงิน) และทิศทางเดินรถ",
+        "asset_id": "CH08-SKILT-005",
+        "pair_asset_id": "CH08-PAR-002",
+        "content_th": "ป้ายวงกลมพื้นสีน้ำเงินคือป้ายบังคับ คุณต้องปฏิบัติตามทิศทางของลูกศรอย่างเคร่งครัด เช่น ป้ายบังคับเลี้ยวขวา หรือป้ายวงเวียน",
+        "glossary_terms": [
+          "Påbudt kjøreretning",
+          "Opplysningsskilt"
+        ]
+      },
+      {
+        "screen_id": "CH08-006",
+        "screen_type": "summary",
+        "title_no": "Oppsummering av skilt og vegmerking",
+        "title_th": "สรุป: ป้ายจราจรและเครื่องหมายทาง",
+        "asset_id": "CH08-SKILT-006",
+        "pair_asset_id": null,
+        "content_th": "คุณเข้าใจกลุ่มป้ายจราจรทางการ ป้ายเสริม และความหมายของเส้นบนทางในนอร์เวย์อย่างมั่นใจแล้ว!",
+        "glossary_terms": [
+          "Statens vegvesen",
+          "Skiltforskrift"
+        ]
+      }
+    ]
+  },
+  {
+    "chapter_id": "ch_lys_signal_tegn",
+    "chapter_code": "CH09",
+    "title_no": "Kapittel 9 — Lys, signal og tegn",
+    "title_th": "บทที่ 9 — การใช้ไฟ สัญญาณ และการส่งสัญญาณ (Lys, signal og tegn)",
+    "title_en": "Chapter 9 — Lights, Signals, and Indicators",
+    "difficulty": "intermediate",
+    "podcast_reference": "Michaels råd: Rett bruk av lys og tegn i mørket",
+    "order": 11,
+    "section_tags": [
+      "lys",
+      "kjorelys",
+      "narlys",
+      "fjernlys",
+      "takelys",
+      "blending",
+      "blinklys"
+    ],
+    "sections": [
+      {
+        "section_type": "situation",
+        "title_no": "Situasjonen: Mørkekjøring og møtende bil",
+        "title_th": "สถานการณ์: ขับรถในความมืดและมีรถแล่นสวนมา",
+        "title_en": "The situation: Night driving and oncoming traffic",
+        "content_no": "Du kjører på en mørk landevei med fjernlys. Langt foran deg dukker det opp lys fra en møtende bil. Når skal du blende ned til nærlys for å unngå å blende føreren?",
+        "content_th": "คุณกำลังขับรถบนถนนมืดนอกเมืองด้วยไฟสูง มองเห็นแสงไฟจากรถที่กำลังแล่นสวนมาแต่ไกล คุณต้องปรับลดเป็นไฟต่ำเมื่อใดเพื่อไม่ให้แยงตาผู้ขับขี่คันนั้น?",
+        "content_en": "You drive on a dark rural road with high beams. Ahead you see lights from an oncoming car. When do you dim to low beam to avoid blinding the driver?"
+      },
+      {
+        "section_type": "theory",
+        "title_no": "Michaels lysregel: Se og bli sett uten å blende",
+        "title_th": "กฎการใช้ไฟของ Michael: มองเห็นและให้ผู้อื่นมองเห็นโดยไม่แยงตา",
+        "title_en": "Michael's light rule: See and be seen without glare",
+        "content_no": "Kjørelys er påbudt hele døgnet i Norge. I mørket bruker vi fjernlys for å se langt. Når lyskjeglene møtes, blender vi ned til nærlys. Husk: Tåkelys (kurvelys) og nærlys er strengt forbudt å kombinere!",
+        "content_th": "ในนอร์เวย์ต้องเปิดไฟหน้ารถตลอด 24 ชม. ในที่มืดให้เปิดไฟสูงเพื่อให้มองเห็นไกลที่สุด เมื่อลำแสงเริ่มบรรจบกันให้ลดเป็นไฟต่ำ และจำไว้ว่า: ห้ามเปิดไฟตัดหมอกคู่กับไฟต่ำเด็ดขาด!",
+        "content_en": "Daytime running lights are mandatory 24/7 in Norway. In darkness use high beams for distance. When beams meet, dim to low beam. Never combine fog lights with low beams!"
+      },
+      {
+        "section_type": "practice",
+        "title_no": "Praktisk tips: Tegngiving før sving og feltbytte",
+        "title_th": "คำแนะนำภาคปฏิบัติ: การส่งสัญญาณไฟเลี้ยวก่อนเลี้ยว",
+        "title_en": "Practical tips: Indicating before turns and lane changes",
+        "content_no": "Gi tegn med blinklys i god tid før enhver sving, rundkjøring eller feltbytte. Følg rekkefølgen: Speil → Blindsone → Blinklys → Handling.",
+        "content_th": "เปิดไฟเลี้ยวล่วงหน้าก่อนเลี้ยว เข้าวงเวียน หรือเปลี่ยนเลนเสมอ โดยปฏิบัติตามลำดับ: ดูกระจก → เช็กจุดบอด → เปิดไฟเลี้ยว → บังคับรถ",
+        "content_en": "Indicate in good time before any turn, roundabout, or lane change. Follow the order: Mirrors → Blind spot → Indicate → Manoeuvre."
+      }
+    ],
+    "screens": [
+      {
+        "screen_id": "CH09-001",
+        "screen_type": "intro",
+        "title_no": "Påbudt lysbruk under kjøring",
+        "title_th": "ข้อบังคับการใช้ไฟขณะขับรถ",
+        "asset_id": "CH09-LYS-001",
+        "pair_asset_id": null,
+        "content_th": "ในนอร์เวย์ มีกฎหมายบังคับให้เปิดไฟหน้ารถตลอดเวลาขณะขับขี่ ตลอด 24 ชั่วโมงและทุกฤดูกาล เพื่อให้ผู้อื่นมองเห็นคุณได้แต่เนิ่น ๆ",
+        "glossary_terms": [
+          "Kjørelys",
+          "Nærlys"
+        ]
+      },
+      {
+        "screen_id": "CH09-002",
+        "screen_type": "choice",
+        "title_no": "Fjernlys vs. Nærlys i mørket",
+        "title_th": "ไฟสูง vs ไฟต่ำในการขับขี่กลางคืน",
+        "asset_id": "CH09-LYS-002",
+        "pair_asset_id": "CH09-PAR-001",
+        "content_th": "เปิดไฟสูงเมื่อขับในที่มืดเพื่อให้มองเห็นได้ไกลที่สุด แต่ต้องลดเป็นไฟต่ำทันทีเมื่อมีรถสวนมาเพื่อไม่ให้แสงไฟแยงตารถคันอื่น",
+        "glossary_terms": [
+          "Fjernlys",
+          "Blending"
+        ]
+      },
+      {
+        "screen_id": "CH09-003",
+        "screen_type": "sequence",
+        "title_no": "Tegn og blinklys før manøver",
+        "title_th": "การเปิดไฟเลี้ยวและส่งสัญญาณก่อนเลี้ยว",
+        "asset_id": "CH09-LYS-003",
+        "pair_asset_id": null,
+        "content_th": "ต้องเปิดไฟเลี้ยวล่วงหน้าก่อนเปลี่ยนทิศทาง เพื่อสื่อสารให้คนอื่นทราบเจตนาของคุณอย่างชัดเจนและปลอดภัย",
+        "glossary_terms": [
+          "Tegn",
+          "Blinklys",
+          "Blindsone"
+        ]
+      },
+      {
+        "screen_id": "CH09-004",
+        "screen_type": "road_check",
+        "title_no": "Road Check ⚡ Lys og signaler",
+        "title_th": "Road Check ⚡ ทดสอบความเข้าใจ: การใช้ไฟและสัญญาณ",
+        "road_check_id": "CH09-RC-001",
+        "asset_id": "CH09-LYS-004",
+        "pair_asset_id": null,
+        "content_th": "สามคำถามสั้นเพื่อทดสอบความแม่นยำเรื่องการใช้ไฟรถและไฟฉุกเฉิน",
+        "glossary_terms": [
+          "Tåkelys",
+          "Nødblink"
+        ]
+      },
+      {
+        "screen_id": "CH09-005",
+        "screen_type": "choice",
+        "title_no": "Tåkelys (Kurvelys): Regler og forbud",
+        "title_th": "ไฟตัดหมอก: กฎระเบียบและข้อห้าม",
+        "asset_id": "CH09-LYS-005",
+        "pair_asset_id": "CH09-PAR-002",
+        "content_th": "ไฟตัดหมอกด้านหน้าใช้ได้เฉพาะในสภาพหมอกหนาจัดหรือฝนตกหนักมาก ห้ามเปิดคู่กับไฟต่ำในสภาพปกติเพราะจะทำให้แสงสะท้อนตาผู้อื่น",
+        "glossary_terms": [
+          "Siktforhold",
+          "Kurvelys"
+        ]
+      },
+      {
+        "screen_id": "CH09-006",
+        "screen_type": "summary",
+        "title_no": "Oppsummering av lys og kommunikasjon",
+        "title_th": "สรุป: การใช้ไฟและสัญญาณในจราจร",
+        "asset_id": "CH09-LYS-006",
+        "pair_asset_id": null,
+        "content_th": "คุณเข้าใจกฎหมายการเปิดไฟรถ การใช้ไฟสูงและไฟต่ำอย่างถูกต้อง การเลี่ยงแสงไฟแยงตา และการเปิดไฟเลี้ยวล่วงหน้าเรียบร้อยแล้ว!",
+        "glossary_terms": [
+          "Varsellys",
+          "Retningsviser"
+        ]
+      }
+    ]
+  },
+  {
+    "chapter_id": "ch_alkohol_rus_kjoring",
+    "chapter_code": "CH10",
+    "title_no": "Kapittel 10 — Alkohol, rus og kjøring",
+    "title_th": "บทที่ 10 — แอลกอฮอล์ สารเสพติด และการขับขี่ (Alkohol, rus og kjøring)",
+    "title_en": "Chapter 10 — Alcohol, Drugs, and Driving",
+    "difficulty": "beginner",
+    "podcast_reference": "Michaels råd: Nulltoleranse for rus i trafikken",
+    "order": 12,
+    "section_tags": [
+      "alkohol",
+      "promille",
+      "vegtrafikkloven22",
+      "sekstimerregelen",
+      "rusmidler",
+      "reaksjonsevne"
+    ],
+    "sections": [
+      {
+        "section_type": "situation",
+        "title_no": "Situasjonen: En øl til middag og uhell på hjemveien",
+        "title_th": "สถานการณ์: ดื่มเบียร์แก้วเดียวตอนอาหารค่ำและเกิดเฉี่ยวชนขากลับ",
+        "title_en": "The situation: One beer at dinner and an accident on the way home",
+        "content_no": "Du drakk en øl til maten for to timer siden og føler deg helt edru. På hjemveien rygger noen inn i bilen din. Politiet kommer og tar promilletest. Hva risikerer du?",
+        "content_th": "คุณดื่มเบียร์ไปหนึ่งแก้วเมื่อ 2 ชั่วโมงก่อนและรู้สึกมีสติดีทุกอย่าง ขากลับมีรถถอยมาชนรถของคุณ ตำรวจมาถึงและขอตรวจวัดแอลกอฮอล์ คุณมีความเสี่ยงอย่างไร?",
+        "content_en": "You had a beer two hours ago and feel completely sober. On the way home someone backs into your car. Police arrive and conduct a breathalyzer test. What do you risk?"
+      },
+      {
+        "section_type": "theory",
+        "title_no": "Norges strenge promillegrense: 0,2 promille",
+        "title_th": "เกณฑ์แอลกอฮอล์ที่เข้มงวดของนอร์เวย์: 0.2",
+        "title_en": "Norway's strict alcohol limit: 0.2 per mille",
+        "content_no": "I Norge gjelder en absolutt promillegrense på 0,2 promille i blodet (0,1 mg/l i utåndingsluft). Vegtrafikkloven § 22 forbyr enhver føring av motorvogn under påvirkning. Sekstimersregelen forbyr alkohol de første 6 timene etter kjøring dersom det kan bli etterforskning.",
+        "content_th": "นอร์เวย์กำหนดเกณฑ์แอลกอฮอล์เด็ดขาดที่ 0.2 ในเลือด (หรือ 0.1 มิลลิกรัมต่อลิตรลมหายใจ) กฎหมายจราจรมาตรา 22 ห้ามขับขี่โดยมีสารมึนเมา และกฎ 6 ชั่วโมงห้ามดื่มหลังขับขี่หากมีเหตุที่ตำรวจอาจเข้ามาสอบสวน",
+        "content_en": "Norway has a strict limit of 0.2 per mille (0.1 mg/l breath). Section 22 prohibits operating vehicles under the influence. The 6-hour rule bans drinking for 6 hours post-drive if investigation is possible."
+      },
+      {
+        "section_type": "practice",
+        "title_no": "Praktisk tips: Straff og konsekvenser",
+        "title_th": "คำแนะนำภาคปฏิบัติ: บทลงโทษและผลทางกฎหมาย",
+        "title_en": "Practical tips: Penalties and consequences",
+        "content_no": "Promillekjøring straffes med bot (rundt 1,5 månedslønn), ubetinget eller betinget fengsel, og inndragning av førerkort i minst 1-2 år. Planlegg alltid alternativ transport før festen begynner.",
+        "content_th": "การเมาแล้วขับมีโทษปรับสูงมาก (ประมาณ 1.5 เท่าของเงินเดือน) จำคุก และเพิกถอนใบขับขี่อย่างน้อย 1-2 ปี ควรวางแผนการเดินทางล่วงหน้า เช่น นั่งแท็กซี่หรือรถสาธารณะเสมอ",
+        "content_en": "Drink-driving is penalized with heavy fines (~1.5 monthly salary), imprisonment, and license loss for 1-2 years. Always arrange alternative transport in advance."
+      }
+    ],
+    "screens": [
+      {
+        "screen_id": "CH10-001",
+        "screen_type": "intro",
+        "title_no": "Norges strenge promillegrense (0,2 promille)",
+        "title_th": "เกณฑ์แอลกอฮอล์ที่เข้มงวดของนอร์เวย์ (0.2)",
+        "asset_id": "CH10-RUS-001",
+        "pair_asset_id": null,
+        "content_th": "นอร์เวย์มีกฎหมายแอลกอฮอล์ที่เข้มงวดมาก: ขีดจำกัดคือ 0.2 ในเลือด หรือ 0.1 มิลลิกรัมต่อลิตรลมหายใจ หากเกินกว่านี้ถือว่ามีความผิดทางอาญาทันที",
+        "glossary_terms": [
+          "Promillegrense",
+          "Vegtrafikkloven § 22"
+        ]
+      },
+      {
+        "screen_id": "CH10-002",
+        "screen_type": "choice",
+        "title_no": "Hva skjer med kroppen ved ruspåvirkning?",
+        "title_th": "เกิดอะไรขึ้นกับร่างกายเมื่อมีแอลกอฮอล์?",
+        "asset_id": "CH10-RUS-002",
+        "pair_asset_id": "CH10-PAR-001",
+        "content_th": "แม้ดื่มเพียงเล็กน้อย สายตาจะมองเห็นได้แคบลง (ลานสายตาลดลง) การประเมินความเร็วคลาดเคลื่อน และระยะเวลาตอบสนองช้าลงอย่างเห็นได้ชัด",
+        "glossary_terms": [
+          "Tunnelsyn",
+          "Reaksjonsevne"
+        ]
+      },
+      {
+        "screen_id": "CH10-003",
+        "screen_type": "sequence",
+        "title_no": "Sekstimersregelen etter kjøring (§ 22)",
+        "title_th": "กฎ 6 ชั่วโมงหลังขับขี่ (§ 22)",
+        "asset_id": "CH10-RUS-003",
+        "pair_asset_id": null,
+        "content_th": "กฎหมายห้ามดื่มแอลกอฮอล์ภายใน 6 ชั่วโมงหลังหยุดขับรถ หากคุณรู้หรือสงสัยว่าอาจมีการสอบสวนจากเจ้าหน้าที่ เช่น หลังเกิดอุบัติเหตุหรือเฉี่ยวชน",
+        "glossary_terms": [
+          "Sekstimersregelen",
+          "Etterforskning"
+        ]
+      },
+      {
+        "screen_id": "CH10-004",
+        "screen_type": "road_check",
+        "title_no": "Road Check ⚡ Alkohol og rus",
+        "title_th": "Road Check ⚡ ทดสอบความเข้าใจ: แอลกอฮอล์และสารเสพติด",
+        "road_check_id": "CH10-RC-001",
+        "asset_id": "CH10-RUS-004",
+        "pair_asset_id": null,
+        "content_th": "สามคำถามสั้นเพื่อทดสอบความแม่นยำเรื่องกฎหมายแอลกอฮอล์และสิ่งเสพติด",
+        "glossary_terms": [
+          "Forbrenning",
+          "Alkotest"
+        ]
+      },
+      {
+        "screen_id": "CH10-005",
+        "screen_type": "choice",
+        "title_no": "Straff og konsekvenser ved promillekjøring",
+        "title_th": "บทลงโทษและผลทางกฎหมายจากการเมาแล้วขับ",
+        "asset_id": "CH10-RUS-005",
+        "pair_asset_id": "CH10-PAR-002",
+        "content_th": "การเมาแล้วขับมีโทษรุนแรง: ปรับเงินสูงมาก (ประมาณ 1.5 เท่าของเงินเดือน), ถูกเพิกถอนใบขับขี่ขั้นต่ำ 1-2 ปี และอาจจำคุกจริงหากมีปริมาณแอลกอฮอล์สูง",
+        "glossary_terms": [
+          "Førerkortbeslag",
+          "Fengselsstraff"
+        ]
+      },
+      {
+        "screen_id": "CH10-006",
+        "screen_type": "summary",
+        "title_no": "Oppsummering og trygge holdninger",
+        "title_th": "สรุป: แอลกอฮอล์และสิ่งเสพติดในการขับขี่",
+        "asset_id": "CH10-RUS-006",
+        "pair_asset_id": null,
+        "content_th": "คุณเข้าใจเกณฑ์แอลกอฮอล์ 0.2 กฎ 6 ชั่วโมง และตระหนักว่าการขับรถกับสิ่งมึนเมาต้องไม่เกิดขึ้นร่วมกันอย่างเด็ดขาด!",
+        "glossary_terms": [
+          "Nulltoleranse",
+          "Ansvarlig sjåfør"
+        ]
+      }
+    ]
   }
 ]
