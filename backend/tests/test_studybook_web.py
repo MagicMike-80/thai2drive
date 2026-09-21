@@ -11,7 +11,9 @@ from fastapi.testclient import TestClient
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from studybook_web import ASSETS, COPY, CSS, LESSONS, SCREEN, SCRIPT, install
+import json
+
+from studybook_web import ASSETS, COPY, CSS, LESSONS, SCREEN, SCRIPT, install, CH04_ASSETS, CH04_LESSONS, CHAPTERS
 from webapp import WEBAPP_HTML, webapp_router
 
 
@@ -220,3 +222,88 @@ def test_generated_javascript_parses_in_node():
         timeout=20,
     )
     assert result.returncode == 0, result.stdout + result.stderr
+
+
+def test_chapter_4_structure_and_screen_ids():
+    assert len(CH04_LESSONS) == 6
+    assert [lesson["id"] for lesson in CH04_LESSONS] == [
+        "CH04-001", "CH04-002", "CH04-003", "CH04-004", "CH04-005", "CH04-006"
+    ]
+    assert {lesson["type"] for lesson in CH04_LESSONS} == {
+        "intro", "choice", "sequence", "roadCheck", "chapterComplete"
+    }
+    rc = next(lesson for lesson in CH04_LESSONS if lesson["type"] == "roadCheck")
+    assert rc["id"] == "CH04-004"
+    assert rc["road_check_id"] == "CH04-RC-001"
+    assert len(rc["questions"]) == 3
+    assert len({lesson["id"] for lesson in CH04_LESSONS}) == 6
+
+
+def test_chapter_4_asset_manifest_and_pairs():
+    required = {
+        "asset_id", "page", "scene", "pedagogical_purpose", "camera_angle",
+        "risk_source", "risikokilde", "vehicles_road_users", "road_type", "signs_markings",
+        "learner_discovery", "hotspots", "pair_asset", "status", "src", "alt",
+    }
+    assert len(CH04_ASSETS) == 8
+    expected_ids = {
+        "CH04-DID-001", "CH04-DID-002", "CH04-PAR-001", "CH04-DID-003",
+        "CH04-DID-004", "CH04-DID-005", "CH04-PAR-002", "CH04-DID-006",
+    }
+    actual_ids = {asset["asset_id"] for asset in CH04_ASSETS.values()}
+    assert actual_ids == expected_ids
+    for asset in CH04_ASSETS.values():
+        assert set(asset) == required
+        assert asset["status"] == "placeholder"
+        assert all(asset[key] for key in required - {"hotspots", "pair_asset"})
+
+    # Pair 1: Pugging vs POU
+    assert CH04_ASSETS["ch04_did_002"]["pair_asset"] == "ch04_par_001"
+    assert CH04_ASSETS["ch04_par_001"]["pair_asset"] == "ch04_did_002"
+    assert CH04_ASSETS["ch04_did_002"]["asset_id"] == "CH04-DID-002"
+    assert CH04_ASSETS["ch04_par_001"]["asset_id"] == "CH04-PAR-001"
+
+    # Pair 2: Fast mal vs Tilpasset opplæring
+    assert CH04_ASSETS["ch04_did_005"]["pair_asset"] == "ch04_par_002"
+    assert CH04_ASSETS["ch04_par_002"]["pair_asset"] == "ch04_did_005"
+    assert CH04_ASSETS["ch04_did_005"]["asset_id"] == "CH04-DID-005"
+    assert CH04_ASSETS["ch04_par_002"]["asset_id"] == "CH04-PAR-002"
+
+
+def test_chapter_4_assets_exist_on_disk():
+    assets_root = Path(__file__).resolve().parents[1] / "public_assets"
+    for asset in CH04_ASSETS.values():
+        prefix = "/api/assets/"
+        assert asset["src"].startswith(prefix)
+        assert (assets_root / asset["src"][len(prefix):]).is_file(), asset["src"]
+
+
+def test_chapter_4_i18n_and_thai_language_isolation():
+    _walk_i18n(CH04_ASSETS, "ch04_assets")
+    _walk_i18n(CH04_LESSONS, "ch04_lessons")
+
+    thai = "\n".join(_language_values({"assets": CH04_ASSETS, "lessons": CH04_LESSONS}, "th"))
+    assert re.search(r"[\u0E00-\u0E7F]", thai)
+    allowed_brands_removed = thai.replace("THAI2DRIVE", "").replace("ROAD CHECK", "").replace("POU", "")
+    forbidden = re.compile(
+        r"\b(?:forrige|fortsett|oversikt|kapittel|fører|fare|bil|buss|"
+        r"previous|continue|chapter|driver|hazard|traffic|learn|next)\b",
+        re.IGNORECASE,
+    )
+    assert not forbidden.search(allowed_brands_removed)
+
+
+def test_chapter_4_in_studybook_chapters_v5_json():
+    json_path = Path(__file__).resolve().parents[2] / "content" / "studybook_chapters_v5.json"
+    with open(json_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    ch04_doc = next((ch for ch in data if ch.get("chapter_code") == "CH04" or ch.get("chapter_id") == "ch_didaktikk_laering"), None)
+    assert ch04_doc is not None
+    assert len(ch04_doc["screens"]) == 6
+    assert [s["screen_id"] for s in ch04_doc["screens"]] == [
+        "CH04-001", "CH04-002", "CH04-003", "CH04-004", "CH04-005", "CH04-006"
+    ]
+    assert ch04_doc["screens"][1]["pair_asset_id"] == "CH04-PAR-001"
+    assert ch04_doc["screens"][4]["pair_asset_id"] == "CH04-PAR-002"
+    assert ch04_doc["screens"][3]["road_check_id"] == "CH04-RC-001"
+

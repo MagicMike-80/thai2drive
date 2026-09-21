@@ -76,6 +76,112 @@ LESSONS = [
     {"id":"chapter-complete","type":"chapterComplete","eyebrow":i18n("KAPITTEL FULLFØRT","เรียนจบบทแล้ว","CHAPTER COMPLETE"),"title":i18n("BLIKKET · 15 / 15","การมอง · 15 / 15","VISION · 15 / 15"),"body":i18n("Du har lært å se før det skjer.","คุณได้เรียนรู้ที่จะมองเห็นก่อนเกิดเหตุ","You learned to see before it happens."),"skills":[i18n("👀 Oppdage","👀 สังเกต","👀 Notice"),i18n("🧠 Forstå","🧠 เข้าใจ","🧠 Understand"),i18n("🔮 Forutse","🔮 คาดการณ์","🔮 Predict"),i18n("🚗 Skape sikkerhetsmargin","🚗 สร้างระยะปลอดภัย","🚗 Create a safety margin")],"nextChapter":i18n("NESTE: 🚗 PLASSERING","ถัดไป: 🚗 ตำแหน่งรถ","NEXT: 🚗 POSITIONING")},
 ]
 
+# ─── KAPITTEL 4: DIDAKTIKK OG LÆRING (CH04) ──────────────────────────────────
+_CH04_PLACEHOLDERS = [
+    ("ch04_did_001", "1", "CH04-DID-001", "Moderne klasserom for pedagogisk trafikkopplæring", "Vise verdien av dyp forståelse fremfor overfladisk pugging", "klasseromsperspektiv", "Overfladisk kunnskap som svikter i uventede trafikksituasjoner", "biler og fotgjengere", "klasserom og byvei", "læringsmål", "forståelse foran pugging", "/api/assets/thumbs/thumb_vikeplikt_7_4.jpg", ""),
+    ("ch04_did_002", "2", "CH04-DID-002", "Pugging vs POU sammenligning", "Demonstrere forskjellen på mekanisk pugging og situasjonsforståelse", "delt sammenligningsperspektiv", "Puggede svar som ikke kan anvendes når situasjonen endrer seg", "to situasjonsbilder", "bygate og landevei", "faresignaler", "årsak og virkning", "/api/assets/stopping-distance-road-v1.png", "ch04_par_001"),
+    ("ch04_par_001", "2p", "CH04-PAR-001", "Problemorientert undervisning (POU) i praksis", "Vise hvordan eleven analyserer farene i en ekte situasjon", "førerperspektiv i trafikk", "Kryssende trafikanter og uoversiktlige blindsoner", "bil, sykkel og fotgjenger", "bygate", "gangfelt og vikeplikt", "aktiv fareanalyse", "/api/assets/thumbs/thumb_vikeplikt_7_4.jpg", "ch04_did_002"),
+    ("ch04_did_003", "3", "CH04-DID-003", "Læringssirkelen og refleksjon ved feilsvar", "Lære eleven å analysere feil og bygge varig mestring", "nært fører- og instruktørperspektiv", "Gjentakelse av feil uten systematisk refleksjon", "elev og instruktør Michael", "skolebil", "dashbord og vei", "feilanalyse og mestring", "/api/assets/thumbs/thumb_vikeplikt_7_2a.jpg", ""),
+    ("ch04_did_004", "4", "CH04-DID-004", "Road Check førerplass", "Teste elevens bevissthet rundt læringsstrategi", "førerperspektiv", "Feilaktige antakelser om at pugging er tilstrekkelig", "bil foran og skilt", "landevei", "skilt og merking", "reflektert valg", "/api/assets/stopping-distance-road-v1.png", ""),
+    ("ch04_did_005", "5", "CH04-DID-005", "Fast mal vs Tilpasset opplæring", "Vise hvordan tilpasset opplæring på thai fjerner språkbarrieren", "delt visning", "Språkbarrierer som forårsaker misforståelser av norske trafikkregler", "skolebil og elev", "trafikkstasjon", "skilt og læremateriell", "språkuavhengig forståelse", "/api/assets/thumbs/thumb_vikeplikt_7_5a_buss.jpg", "ch04_par_002"),
+    ("ch04_par_002", "5p", "CH04-PAR-002", "Tilpasset opplæring og trygg veiledning med Michael", "Fremheve trygg mestring uten språkbarrierer", "rolig passasjersete-perspektiv", "Usikkerhet som fører til panikkhandlinger i trafikken", "Michael og elev", "skolebil", "rolig gatebilde", "trygg veiledning", "/api/assets/thumbs/thumb_vikeplikt_7_4.jpg", "ch04_did_005"),
+    ("ch04_did_006", "6", "CH04-DID-006", "Mestring og klar for teoriprøven", "Bekrefte fullført modul og bygge selvtillit til prøven", "inspirerende utendørsperspektiv", "Mangel på selvtillit før teoriprøven", "elev ved bil", "Statens vegvesen", "skilt og førerprøve", "mestring og bestått", "/api/assets/thumbs/thumb_vikeplikt_7_4.jpg", ""),
+]
+
+CH04_ASSETS = {
+    key: {"asset_id": asset_id, "page": page, "scene": scene,
+          "pedagogical_purpose": purpose, "camera_angle": camera,
+          "risk_source": risk, "risikokilde": risk,
+          "vehicles_road_users": actors, "road_type": road,
+          "signs_markings": markings, "learner_discovery": discovery,
+          "hotspots": [], "pair_asset": pair_key, "status": "placeholder", "src": src,
+          "alt": i18n("Illustrasjon for didaktikk og læring", "ภาพประกอบการเรียนรู้และการสอนที่มีประสิทธิภาพ", "Illustration of didactics and learning")}
+    for key, page, asset_id, scene, purpose, camera, risk, actors, road, markings, discovery, src, pair_key in _CH04_PLACEHOLDERS
+}
+
+CH04_LESSONS = [
+    info("CH04-001", "intro", "ch04_did_001", "Læring for livet, ikke bare til prøven", "เรียนรู้เพื่อชีวิตจริง ไม่ใช่แค่เพื่อสอบผ่าน", "Learning for life, not just for the exam",
+         ("I Norge handler føreropplæring om å forstå trafikken, ikke bare pugge spørsmål. Når du forstår hvorfor en regel finnes, husker du den automatisk i en farlig situasjon.",
+          "ในนอร์เวย์ การเรียนขับรถคือการเข้าใจการจราจร ไม่ใช่แค่การท่องจำข้อสอบ เมื่อคุณเข้าใจเหตุผลเบื้องหลังของกฎ คุณจะตอบสนองได้อย่างถูกต้องและปลอดภัยโดยอัตโนมัติ",
+          "In Norway, driver training is about understanding traffic, not just cramming questions. When you understand why a rule exists, you remember it automatically in dangerous situations.")),
+    info("CH04-002", "choice", "ch04_did_002", "Pugging vs. Problemorientert undervisning (POU)", "การท่องจำ vs การเรียนรู้จากสถานการณ์จริง (POU)", "Rote learning vs. Problem-oriented learning (POU)",
+         ("Hva gir best resultat: Å pugge tilfeldige fasitsvar, eller å forstå problemet i trafikksituasjonen?",
+          "วิธีใดให้ผลลัพธ์ที่ดีที่สุด: การท่องจำคำตอบ หรือการทำความเข้าใจปัญหาในสถานการณ์จราจรจริง?",
+          "Which gives the best result: Memorising answers, or understanding the problem in the traffic situation?"),
+         options=[opt("pugging", "Pugge fasitsvar utenat", "ท่องจำคำตอบโดยไม่คิด", "Memorise answers blindly"),
+                  opt("pou", "Problemorientert læring (POU)", "เรียนรู้จากปัญหาจริง (POU)", "Problem-oriented learning (POU)")],
+         correct="pou",
+         correctFeedback=i18n("Riktig! POU lærer deg å gjenkjenne risiko og ta trygge valg.",
+                              "ถูกต้อง! การเรียนรู้จากปัญหาจริง (POU) ช่วยให้คุณวิเคราะห์ความเสี่ยงและตัดสินใจได้อย่างปลอดภัย",
+                              "Correct! POU teaches you to recognise risk and make safe choices."),
+         wrongFeedback=i18n("Pugging svikter når spørsmålet omformuleres. Forstå situasjonen.",
+                            "การท่องจำจะใช้ไม่ได้ผลเมื่อข้อสอบเปลี่ยนคำถาม จงเข้าใจสถานการณ์จริง",
+                            "Cramming fails when wording changes. Understand the situation.")),
+    info("CH04-003", "sequence", "ch04_did_003", "Læringssirkelen: Se → Forstå → Velge → Handle", "วงจรการเรียนรู้: มองเห็น → เข้าใจ → เลือก → ลงมือทำ", "Learning loop: See → Understand → Choose → Act",
+         ("Når du svarer feil i quizen, er det ikke et nederlag. Det er starten på ekte mestring gjennom refleksjon.",
+          "เมื่อคุณตอบผิดในแบบฝึกหัด นั่นไม่ใช่ความล้มเหลว แต่เป็นจุดเริ่มต้นของการเรียนรู้ที่แท้จริงผ่านการทบทวน",
+          "When you answer incorrectly, it is not a defeat. It is the beginning of true mastery through reflection."),
+         steps=[i18n("👀 1. OBSERVASJON (Se)", "👀 1. การสังเกต (มองเห็น)", "👀 1. OBSERVATION (See)"),
+                i18n("🧠 2. REFLEKSJON (Forstå)", "🧠 2. การคิดทบทวน (เข้าใจ)", "🧠 2. REFLECTION (Understand)"),
+                i18n("⚡ 3. BESLUTNING (Velge)", "⚡ 3. การตัดสินใจ (เลือก)", "⚡ 3. DECISION (Choose)"),
+                i18n("🚗 4. MESTRING (Handle)", "🚗 4. ความเชี่ยวชาญ (ลงมือทำ)", "🚗 4. MASTERY (Act)")]),
+    {"id": "CH04-004", "type": "roadCheck", "road_check_id": "CH04-RC-001",
+     "eyebrow": i18n("ROAD CHECK ⚡", "ROAD CHECK ⚡", "ROAD CHECK ⚡"),
+     "title": i18n("Road Check ⚡ Didaktikk og læring", "Road Check ⚡ ทดสอบความเข้าใจ: การเรียนรู้และวิธีสอน", "Road Check ⚡ Didactics and Learning"),
+     "body": i18n("Tre korte spørsmål for å sjekke din læringsstrategi.", "สามคำถามสั้นเพื่อทดสอบกลยุทธ์การเรียนรู้ของคุณ", "Three short questions to verify your learning strategy."),
+     "questions": [
+         question(("LÆRINGSSTRATEGI", "กลยุทธ์การเรียนรู้", "STRATEGY"),
+                  ("Hva er den største faren med ren pugging av teorispørsmål?", "อันตรายที่สุดของการท่องจำข้อสอบโดยไม่เข้าใจคืออะไร?", "What is the biggest risk of pure rote memorisation?"),
+                  [opt("fail_change", "Du blir usikker når Vegvesenet omformulerer spørsmålet", "คุณจะสับสนทันทีเมื่อข้อสอบจริงเปลี่ยนคำพูด", "You become unsure when phrasing changes"),
+                   opt("no_danger", "Ingen fare, pugging er alltid best", "ไม่มีอันตราย การท่องจำดีที่สุดเสมอ", "No risk, memorisation is always best")],
+                  "fail_change",
+                  ("Statens vegvesen tester forståelse, ikke ordrett hukommelse.", "กรมการขนส่งนอร์เวย์เน้นทดสอบความเข้าใจ ไม่ใช่การท่องจำคำต่อคำ", "Statens vegvesen tests understanding, not verbatim memory.")),
+         question(("POU-METODEN", "วิธีการแบบ POU", "POU METHOD"),
+                  ("Hva kjennetegner Problemorientert undervisning (POU)?", "ลักษณะสำคัญของการเรียนรู้แบบ POU คืออะไร?", "What characterises Problem-Oriented Teaching (POU)?"),
+                  [opt("real_cases", "Å løse reelle trafikksituasjoner med årsak og virkning", "การฝึกแก้สถานการณ์จริงบนถนนโดยเข้าใจเหตุและผล", "Solving real traffic situations with cause and effect"),
+                   opt("law_only", "Å lese lovboken fra perm til perm uten bilder", "การอ่านตัวบทกฎหมายโดยไม่มีภาพประกอบ", "Reading the law book without pictures")],
+                  "real_cases",
+                  ("POU gjør deg til en aktiv og reflektert sjåfør.", "POU ช่วยให้คุณเป็นผู้ขับขี่ที่ตื่นรู้และคิดวิเคราะห์เป็น", "POU makes you an active and reflective driver.")),
+         question(("TRYGG VEILEDNING", "การสอนอย่างปลอดภัย", "SAFE GUIDANCE"),
+                  ("Hvorfor forklarer lærer Michael reglene som en rolig passasjer?", "ทำไมครู Michael จึงอธิบายกฎอย่างใจเย็นเหมือนนั่งข้างๆ คุณ?", "Why does instructor Michael explain rules calmly as a passenger?"),
+                  [opt("remove_stress", "For å fjerne stress og bygge trygghet og mestring", "เพื่อลดความกังวลและสร้างความมั่นใจที่แท้จริง", "To remove stress and build genuine confidence"),
+                   opt("no_read", "Fordi han ikke vil at du skal lese", "เพราะเขาไม่อยากให้คุณอ่านหนังสือ", "Because he does not want you to read")],
+                  "remove_stress",
+                  ("Trygghet og ro er forutsetningen for god læring.", "ความสบายใจและความสงบคือหัวใจสำคัญของการเรียนรู้ที่มีประสิทธิภาพ", "Calm and confidence are prerequisites for good learning."))
+     ]},
+    info("CH04-005", "choice", "ch04_did_005", "Fast pensum vs. Tilpasset opplæring", "หลักสูตรแบบตายตัว vs การเรียนรู้ที่ปรับตามตัวบุคคล", "Fixed curriculum vs. Adapted learning",
+         ("Elever lærer i ulikt tempo. Hvorfor er tilpasset opplæring på thailandsk så viktig?",
+          "ผู้เรียนแต่ละคนมีจังหวะการเรียนรู้ไม่เหมือนกัน ทำไมการปรับการสอนเป็นภาษาไทยจึงสำคัญมาก?",
+          "Learners advance at different paces. Why is adapted teaching in Thai so vital?"),
+         options=[opt("remove_barrier", "Det fjerner språkbarrieren så du kan fokusere 100 % på reglene", "ช่วยขจัดอุปสรรคทางภาษา ทำให้โฟกัสกับกฎและความปลอดภัยได้ 100%", "It removes the language barrier so you can focus 100% on rules"),
+                  opt("same_for_all", "Alle må tvinges gjennom nøyaktig samme norske mal", "ทุกคนควรถูกบังคับให้เรียนแบบเดียวกันทั้งหมด", "Everyone should be forced through the same template")],
+         correct="remove_barrier",
+         correctFeedback=i18n("Helt riktig! Når språket er klart, forsvinner usikkerheten.",
+                              "ถูกต้องที่สุด! เมื่อภาษาชัดเจน ความกังวลก็หมดไปและเข้าใจกฎได้อย่างแท้จริง",
+                              "Exactly right! When language is clear, doubt disappears."),
+         wrongFeedback=i18n("Uten morsmålsstøtte tar språket for mye oppmerksomhet fra trafikksikkerheten.",
+                            "หากไม่มีภาษาแม่ช่วย ภาษาจะแย่งความสนใจไปจากความปลอดภัยทางถนน",
+                            "Without native language support, language takes attention away from safety.")),
+    {"id": "CH04-006", "type": "chapterComplete",
+     "eyebrow": i18n("KAPITTEL FULLFØRT", "เรียนจบบทแล้ว", "CHAPTER COMPLETE"),
+     "title": i18n("DIDAKTIKK OG LÆRING · 6 / 6", "การเรียนรู้และการสอน · 6 / 6", "DIDACTICS AND LEARNING · 6 / 6"),
+     "body": i18n("Du har nå fullført modulen om didaktikk og læring. Du vet hvordan du skal studere smart, forstå situasjonene og bestå teoriprøven på første forsøk!",
+                  "คุณเรียนจบหัวข้อการเรียนรู้อย่างมีประสิทธิภาพแล้ว คุณรู้วิธีการเรียนอย่างฉลาด เข้าใจสถานการณ์จริง และพร้อมสอบผ่านในรอบแรกอย่างมั่นใจ!",
+                  "You have completed the module on didactics and learning. You know how to study smartly, understand situations, and pass the theory test on your first try!"),
+     "skills": [i18n("🧠 Forståelse foran pugging", "🧠 เข้าใจมากกว่าท่องจำ", "🧠 Understanding over rote"),
+                i18n("🎯 Problemorientert læring (POU)", "🎯 การเรียนรู้จากปัญหาจริง (POU)", "🎯 Problem-oriented learning"),
+                i18n("💡 Aktiv refleksjon", "💡 การคิดทบทวนอย่างมีสติ", "💡 Active reflection"),
+                i18n("🏆 Bestått på første forsøk", "🏆 สอบผ่านในรอบแรก", "🏆 First-time pass")],
+     "nextChapter": i18n("NESTE: 🚦 TRAFIKKREGLER", "ถัดไป: 🚦 กฎจราจร", "NEXT: 🚦 TRAFFIC RULES")}
+]
+
+CHAPTERS = {
+    "CH01": {"code": "CH01", "title": i18n("Kapittel 1 · Blikket", "บทที่ 1 · การมอง", "Chapter 1 · Vision"), "lessons": LESSONS, "assets": ASSETS},
+    "CH04": {"code": "CH04", "title": i18n("Kapittel 4 · Didaktikk og læring", "บทที่ 4 · การเรียนรู้และการสอนที่มีประสิทธิภาพ", "Chapter 4 · Didactics and Learning"), "lessons": CH04_LESSONS, "assets": CH04_ASSETS}
+}
+
+ALL_ASSETS = {**ASSETS, **CH04_ASSETS}
+
 COPY = {k: i18n(*v) for k, v in {
     "brand":("THAI2DRIVE STUDIEBOKEN","หนังสือเรียน THAI2DRIVE","THAI2DRIVE STUDY BOOK"),"chapters":("Kapittel 1 · Blikket","บทที่ 1 · การมอง","Chapter 1 · Vision"),"continue":("Fortsett der du slapp","เรียนต่อจากจุดเดิม","Continue where you left off"),"start":("START →","เริ่ม →","START →"),"progress":("Progresjon","ความคืบหน้า","Progress"),"completed":("fullført","เสร็จแล้ว","completed"),"backHome":("Oversikt","ภาพรวม","Overview"),"previous":("Forrige","ก่อนหน้า","Previous"),"next":("Fortsett","เรียนต่อ","Continue"),"understood":("Jeg forstår","ฉันเข้าใจ","I understand"),"remember":("HUSK","จำไว้","REMEMBER"),"roadCleared":("ROAD CHECK CLEARED ⚡","ผ่าน ROAD CHECK ⚡","ROAD CHECK CLEARED ⚡"),"roadRetry":("Rolig repetisjon","ทบทวนอย่างสงบ","Calm review"),"review":("Repeter","ทบทวน","Review"),"finish":("Fortsett","เรียนต่อ","Continue"),"imageMissing":("THAI2DRIVE-bildet kommer snart","ภาพ THAI2DRIVE จะมาเร็ว ๆ นี้","THAI2DRIVE image coming soon"),"storageError":("Progresjonen kunne ikke lagres.","ไม่สามารถบันทึกความคืบหน้าได้","Progress could not be saved."),"contentError":("Siden kan ikke vises nå.","ไม่สามารถแสดงหน้านี้ได้","This page cannot be displayed."),"whatChanged":("WHAT CHANGED? 🧠","อะไรเปลี่ยนไป? 🧠","WHAT CHANGED? 🧠"),"originalView":("Opprinnelig bilde","ภาพเดิม","Original image")}.items()}
 
@@ -83,7 +189,7 @@ CSS = r"""
 #screenStudybook{padding:0;background:#071225;overflow-y:auto;color:var(--text)}.sbx-shell{width:min(760px,100%);min-height:100%;margin:auto;padding:18px 16px 96px}.sbx-top,.sbx-row,.sbx-road-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.sbx-top{margin-bottom:18px}.sbx-logo,.sbx-eyebrow{font-size:.72rem;font-weight:900;letter-spacing:.13em;color:#60e6ff}.sbx-hero,.sbx-card{padding:24px;border-radius:24px;background:linear-gradient(145deg,#102b4b,#101a36);border:1px solid #2c6383;box-shadow:0 18px 45px #0006}.sbx-card{padding:0;overflow:hidden}.sbx-copy{padding:20px}.sbx-track{height:8px;background:#ffffff16;border-radius:99px;overflow:hidden}.sbx-fill{height:100%;background:linear-gradient(90deg,#00d9ff,#a637ff)}.sbx-primary,.sbx-choice,.sbx-secondary{border:0;border-radius:14px;min-height:48px;padding:12px 18px;font:inherit;font-weight:850;cursor:pointer}.sbx-primary{background:#ff8a1f;color:#111}.sbx-secondary,.sbx-choice{background:#142844;color:#eaf7ff;border:1px solid #3a5c7d}.sbx-primary:focus-visible,.sbx-secondary:focus-visible,.sbx-choice:focus-visible,.sbx-hotspot:focus-visible{outline:3px solid #62e8ff}.sbx-map{display:grid;gap:9px;margin-top:18px}.sbx-map-card{display:grid;grid-template-columns:40px 1fr auto;gap:12px;padding:12px;border-radius:14px;background:#101d34}.sbx-map-card small,.sbx-map-card strong{display:block}.sbx-image{position:relative;min-height:230px;background:#0b1728}.sbx-image img{width:100%;min-height:230px;max-height:420px;object-fit:cover;transition:opacity .15s ease}.sbx-pair-toggle{position:absolute;top:12px;left:12px;display:inline-flex;gap:4px;background:#071225ee;padding:4px;border-radius:99px;border:1px solid #2c6383;box-shadow:0 6px 18px #0009;z-index:10;backdrop-filter:blur(8px)}.sbx-pair-btn{background:transparent;border:0;color:#8ab4d5;font-size:.72rem;font-weight:850;letter-spacing:.04em;padding:6px 14px;border-radius:99px;cursor:pointer;transition:all .2s ease}.sbx-pair-btn.active{background:linear-gradient(90deg,#0066ff,#00d9ff);color:#fff;box-shadow:0 0 12px #00d9ff66}.sbx-pair-btn:focus-visible{outline:2px solid #65eaff}.sbx-hotspot{position:absolute;width:58px;height:58px;border:3px solid #65eaff;border-radius:50%;background:#00d9ff30;transform:translate(-50%,-50%)}.sbx-hotspot.found{background:#ff8a1f88}.sbx-counter{position:absolute;top:12px;right:12px;background:#071225dd;padding:8px;border-radius:20px}.sbx-flow,.sbx-actions,.sbx-skills{display:grid;grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:9px;margin-top:18px}.sbx-flow span,.sbx-skills span{padding:12px;border-radius:10px;background:#142b47;text-align:center}.sbx-choice.correct{border-color:#65eaff}.sbx-choice.wrong{border-color:#ff648c}.sbx-feedback,.sbx-remember{margin-top:16px;padding:14px;border-radius:10px;background:#0b1728;border-left:4px solid #ff8a1f}.sbx-footer{display:flex;justify-content:space-between;margin-top:16px}.sbx-footer button:disabled{opacity:.38}.sbx-result{text-align:center;padding:36px}.sbx-score{font-size:3rem;font-weight:950;color:#65eaff}.sbx-status{color:#ffb4c7}@media(min-width:900px){#app.studybook-mode{width:min(980px,96vw);max-width:none;margin:auto}.sbx-shell{width:min(840px,100%)}.sbx-image,.sbx-image img{min-height:360px}}@media(max-width:420px){.sbx-actions{grid-template-columns:1fr}.sbx-footer{position:sticky;bottom:72px;background:#071225e8;padding:10px 0}}@media(prefers-reduced-motion:reduce){.sbx-fill{transition:none}}
 """
 SCREEN = '<div class="screen" id="screenStudybook"><main class="sbx-shell" id="sbxRoot" aria-live="polite"></main></div>'
-_DATA = json.dumps({"assets": ASSETS, "lessons": LESSONS, "copy": COPY}, ensure_ascii=False, separators=(",", ":"))
+_DATA = json.dumps({"assets": ALL_ASSETS, "lessons": LESSONS, "copy": COPY, "chapters": CHAPTERS, "ch04_lessons": CH04_LESSONS, "ch04_assets": CH04_ASSETS}, ensure_ascii=False, separators=(",", ":"))
 
 SCRIPT = r"""
 var SBX_DATA=__SBX_DATA__,SBX_KEY='t2d_studybook_progress_v1',sbxState={view:'home',index:0,answered:false,roadIndex:0,roadAnswers:[],found:[],storageFailed:false};

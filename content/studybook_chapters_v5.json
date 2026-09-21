@@ -33,7 +33,10 @@
         "content_en": "1. Look in all directions before entering the intersection. 2. If unsure, be defensive. 3. Remember: from the right = they have priority, not you."
       }
     ],
-    "section_tags": ["vikeplikt", "kryss"],
+    "section_tags": [
+      "vikeplikt",
+      "kryss"
+    ],
     "difficulty": "intermediate",
     "podcast_reference": "Michaels 6 vikepliktregler – Del 1",
     "order": 1
@@ -72,7 +75,10 @@
         "content_en": "1. Plan your turn before the intersection. 2. If you must turn and see a car driving straight, wait. 3. Doubt = wait. Safety first."
       }
     ],
-    "section_tags": ["vikeplikt", "sving"],
+    "section_tags": [
+      "vikeplikt",
+      "sving"
+    ],
     "difficulty": "easy",
     "podcast_reference": "Michaels 6 vikepliktregler – Del 1",
     "order": 2
@@ -111,10 +117,140 @@
         "content_en": "1. In cities: Drive 30 km/h or less. 2. On rural roads: Calculate stopping distance. 3. In rain/snow: Stopping distance increases. Drive slower."
       }
     ],
-    "section_tags": ["fart", "bremselengde", "sikkerhet"],
+    "section_tags": [
+      "fart",
+      "bremselengde",
+      "sikkerhet"
+    ],
     "difficulty": "hard",
     "podcast_reference": "Fart og bremselengde",
     "order": 3
+  },
+  {
+    "chapter_id": "ch_didaktikk_laering",
+    "chapter_code": "CH04",
+    "title_no": "Kapittel 4 — Didaktikk og læring",
+    "title_th": "บทที่ 4 — การเรียนรู้และการสอนที่มีประสิทธิภาพ (Didaktikk og læring)",
+    "title_en": "Chapter 4 — Didactics and Learning",
+    "difficulty": "beginner",
+    "podcast_reference": "Michaels råd: Slik lærer du norsk trafikkteori",
+    "order": 4,
+    "section_tags": [
+      "didaktikk",
+      "laering",
+      "pou",
+      "tilpasset_opplaering",
+      "refleksjon"
+    ],
+    "sections": [
+      {
+        "section_type": "situation",
+        "title_no": "Situasjonen: Pugging vs. Forståelse",
+        "title_th": "สถานการณ์: การท่องจำแบบนกแก้ว vs ความเข้าใจที่แท้จริง",
+        "title_en": "The situation: Cramming vs. Understanding",
+        "content_no": "Mange elever prøver å pugge fasitsvar utenat. På prøven hos Statens vegvesen endres formuleringene, og eleven blir usikker. Hvordan lærer du mest effektivt?",
+        "content_th": "นักเรียนหลายคนพยายามท่องจำเฉลยข้อสอบโดยไม่เข้าใจหลักการ เมื่อไปสอบจริงที่ Statens vegvesen ข้อสอบเปลี่ยนคำถามเล็กน้อย ทำให้เกิดความสับสน วิธีการเรียนรู้ที่มีประสิทธิภาพที่สุดคืออะไร?",
+        "content_en": "Many students try to memorise test answers without understanding. On the official exam, the phrasing changes and the student gets confused. What is the most effective way to learn?"
+      },
+      {
+        "section_type": "theory",
+        "title_no": "Michaels pedagogiske prinsipp: POU og refleksjon",
+        "title_th": "หลักการสอนของ Michael: POU และการคิดทบทวน",
+        "title_en": "Michael's pedagogical principle: POU and reflection",
+        "content_no": "Problemorientert undervisning (POU) tar utgangspunkt i ekte trafikksituasjoner. Du lærer hvorfor en regel finnes, koblet til Kongen og tjeneren og HAV-regelen.",
+        "content_th": "การเรียนรู้จากปัญหาจริง (POU) นำสถานการณ์จราจรจริงมาเป็นบทเรียน คุณจะเข้าใจว่าทำไมกฎนี้จึงถูกสร้างขึ้น ผ่านกฎราชาและคนรับใช้ และกฎ HAV เพื่อความปลอดภัยสูงสุด",
+        "content_en": "Problem-Oriented Teaching (POU) uses real traffic situations. You learn why a rule exists, connected to the King and Servant and the HAV principle."
+      },
+      {
+        "section_type": "practice",
+        "title_no": "Praktisk tips",
+        "title_th": "คำแนะนำภาคปฏิบัติ",
+        "title_en": "Practical tips",
+        "content_no": "Når du svarer feil i quizen: Ikke hopp videre! Les forklaringen på thai, analyser bildet og reflekter over hvorfor situasjonen krever defensiv kjøring.",
+        "content_th": "เมื่อตอบผิดในแบบฝึกหัด: อย่าเพิ่งกดข้าม! อ่านคำอธิบายภาษาไทย วิเคราะห์ภาพสถานการณ์ และคิดทบทวนว่าทำไมต้องขับขี่อย่างระมัดระวัง",
+        "content_en": "When you answer wrong in a quiz: Do not skip! Read the Thai explanation, inspect the image, and reflect on why the situation requires defensive driving."
+      }
+    ],
+    "screens": [
+      {
+        "screen_id": "CH04-001",
+        "screen_type": "intro",
+        "title_no": "Læring for livet, ikke bare til prøven",
+        "title_th": "เรียนรู้เพื่อชีวิตจริง ไม่ใช่แค่เพื่อสอบผ่าน",
+        "asset_id": "CH04-DID-001",
+        "pair_asset_id": null,
+        "content_th": "ในนอร์เวย์ การเรียนขับรถคือการเข้าใจการจราจร ไม่ใช่แค่การท่องจำข้อสอบ เมื่อคุณเข้าใจเหตุผลเบื้องหลังของกฎ คุณจะตอบสนองได้อย่างถูกต้องและปลอดภัยโดยอัตโนมัติ",
+        "glossary_terms": [
+          "Didaktikk",
+          "Læringsmål"
+        ]
+      },
+      {
+        "screen_id": "CH04-002",
+        "screen_type": "choice",
+        "title_no": "Pugging vs. Problemorientert undervisning (POU)",
+        "title_th": "การท่องจำ vs การเรียนรู้จากสถานการณ์จริง (POU)",
+        "asset_id": "CH04-DID-002",
+        "pair_asset_id": "CH04-PAR-001",
+        "content_th": "วิธีใดให้ผลลัพธ์ที่ดีที่สุด: การท่องจำคำตอบ หรือการทำความเข้าใจปัญหาในสถานการณ์จราจรจริง?",
+        "glossary_terms": [
+          "Pugging",
+          "Problemorientert undervisning (POU)"
+        ]
+      },
+      {
+        "screen_id": "CH04-003",
+        "screen_type": "sequence",
+        "title_no": "Læringssirkelen: Se → Forstå → Velge → Handle",
+        "title_th": "วงจรการเรียนรู้: มองเห็น → เข้าใจ → เลือก → ลงมือทำ",
+        "asset_id": "CH04-DID-003",
+        "pair_asset_id": null,
+        "content_th": "เมื่อคุณตอบผิดในแบบฝึกหัด นั่นไม่ใช่ความล้มเหลว แต่เป็นจุดเริ่มต้นของการเรียนรู้ที่แท้จริงผ่านการทบทวน",
+        "glossary_terms": [
+          "Refleksjon",
+          "Mestring"
+        ]
+      },
+      {
+        "screen_id": "CH04-004",
+        "screen_type": "road_check",
+        "title_no": "Road Check ⚡ Didaktikk og læring",
+        "title_th": "Road Check ⚡ ทดสอบความเข้าใจ: การเรียนรู้และวิธีสอน",
+        "road_check_id": "CH04-RC-001",
+        "asset_id": "CH04-DID-004",
+        "pair_asset_id": null,
+        "content_th": "สามคำถามสั้นเพื่อทดสอบกลยุทธ์การเรียนรู้ของคุณ",
+        "glossary_terms": [
+          "Egenvurdering"
+        ]
+      },
+      {
+        "screen_id": "CH04-005",
+        "screen_type": "choice",
+        "title_no": "Fast pensum vs. Tilpasset opplæring",
+        "title_th": "หลักสูตรแบบตายตัว vs การเรียนรู้ที่ปรับตามตัวบุคคล",
+        "asset_id": "CH04-DID-005",
+        "pair_asset_id": "CH04-PAR-002",
+        "content_th": "ผู้เรียนแต่ละคนมีจังหวะการเรียนรู้ไม่เหมือนกัน ทำไมการปรับการสอนเป็นภาษาไทยจึงสำคัญมาก?",
+        "glossary_terms": [
+          "Tilpasset opplæring",
+          "Språkbarriere"
+        ]
+      },
+      {
+        "screen_id": "CH04-006",
+        "screen_type": "summary",
+        "title_no": "Oppsummering: Didaktikk og læring",
+        "title_th": "สรุป: กุญแจสำคัญสู่การสอบผ่านในครั้งแรก",
+        "asset_id": "CH04-DID-006",
+        "pair_asset_id": null,
+        "content_th": "คุณเรียนจบหัวข้อการเรียนรู้อย่างมีประสิทธิภาพแล้ว คุณรู้วิธีการเรียนอย่างฉลาด เข้าใจสถานการณ์จริง และพร้อมสอบผ่านในรอบแรกอย่างมั่นใจ!",
+        "glossary_terms": [
+          "Førstegangsbestått",
+          "Trafikksikkerhet"
+        ]
+      }
+    ]
   },
   {
     "chapter_id": "ch_authority_pyramid",
@@ -150,10 +286,14 @@
         "content_en": "1. Respect the police. 2. If police instruct, follow them. 3. Signs can change. Police are always highest. 4. In Norway: order = freedom."
       }
     ],
-    "section_tags": ["myndighet", "politi", "regler"],
+    "section_tags": [
+      "myndighet",
+      "politi",
+      "regler"
+    ],
     "difficulty": "easy",
     "podcast_reference": "Myndighetspyramiden",
-    "order": 4
+    "order": 5
   },
   {
     "chapter_id": "ch_thailand_norway_culture",
@@ -189,9 +329,13 @@
         "content_en": "1. Shift from Thai mentality to Norwegian mentality. 2. In Norway: Rules = safety = freedom. 3. Respect the system. The system respects you."
       }
     ],
-    "section_tags": ["kultur", "sammenligning", "sikkerhet"],
+    "section_tags": [
+      "kultur",
+      "sammenligning",
+      "sikkerhet"
+    ],
     "difficulty": "intermediate",
     "podcast_reference": "Thailand-norsk trafikk-sammenligning",
-    "order": 5
+    "order": 6
   }
 ]
