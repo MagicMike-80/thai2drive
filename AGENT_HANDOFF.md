@@ -66,7 +66,7 @@ pytest -v
 
 ## 🎯 NÅVÆRENDE STATE (Live tracking)
 
-**Last oppdatert:** 2026-09-16 12:45 UTC
+**Last oppdatert:** 2026-09-22 (Claude Code)
 
 ### Branch Status
 
@@ -77,8 +77,12 @@ pytest -v
 | `fix/michael-media-streaming` | **Anti** | 🔴 Blocked (unverified — not touched this session) | 2026-09-13 17:00 | Task 3 |
 | `feat/glossary-clean` | **Claude Code** | ✅ Merged to main (commit `0b5e398`) and live in prod | — | Task 4 (Ordre 4 — Fagordkortet + chat widget language fix) |
 | `codex/stopplengde-web` | **Codex** | ✅ Merged to main (commit `1fe5688`, `--no-ff`) and live in prod | — | Task 5 (Stopplengde-kalkulator v0.2.0.0) |
+| `feat/michael-memory-motivation` | **Claude Code** | ✅ Merged to main (merge commit, in `51df0ce`) — Railway deploy not verified by Claude Code (no Railway access) | — | TASK-017 (student learning memory + motivational coaching) |
+| `feat/etappe1-lang-exam-identity` | **Claude Code** | 🟡 Pushed to origin, awaiting Codex/Anti merge + Railway verification. 20/20 new unit tests green; full local suite 506 passed / 190 subtests, no regressions (one unrelated pre-existing local Windows temp-dir permission error in `tests/test_range_response.py`, not caused by this branch) | — | Etappe 1 (clean `/web/no`, `/web/th`, `/web/en` entry points; exam mode forces Norwegian question/option text; chat header discloses "Michael AI" per language + new "send message to real Michael" button via `POST /teacher/contact-human`) |
 
 **Merkelig:** Tasks 2 og 3 sin status er ikke verifisert i denne sesjonen — ingen har rapportert fremdrift her, så de står som sist kjent. Ikke anta at hele veikartet er ferdig; kun Task 1, 4 og 5 er bekreftet live i produksjon per 2026-09-16.
+
+**Notat fra Claude Code (2026-09-22):** `feat/etappe1-lang-exam-identity` er **kun pushet**, ikke merget og ikke bekreftet deployet. Claude Code har ingen Railway-tilgang og pusher aldri direkte til `main` (se Stop-regelen i `AGENTS.md`) — merge til main og verifisering av Railway-deploy er Codex/Anti sin del. Diff er begrenset til `backend/webapp.py` og `backend/teacher_chat.py` pluss to nye testfiler; se commit-meldingen på branchen for full beskrivelse.
 
 ---
 
