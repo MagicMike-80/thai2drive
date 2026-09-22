@@ -29,7 +29,7 @@ SIGNS = [
     {"num": "166", "type": "fare",
      "name": {"no": "Elg", "th": "ระวังกวางมูส", "en": "Moose"},
      "desc": {"no": "Område med hyppige elgkryssinger. Kjør sakte og vær årvåken.", "th": "พื้นที่ที่กวางมูสมักข้ามถนน ขับช้าๆ", "en": "Area with frequent moose crossings. Drive slowly and stay alert."}},
-    {"num": "202", "type": "fare",
+    {"num": "201", "type": "fare",
      "name": {"no": "Fartshump", "th": "ระวังเนินชะลอความเร็ว", "en": "Speed bump"},
      "desc": {"no": "Fartshump i vegen. Reduser farten i god tid.", "th": "มีเนินชะลอความเร็ว ลดความเร็วล่วงหน้า", "en": "Speed bump ahead. Reduce speed well in advance."}},
 

@@ -6565,8 +6565,16 @@ app.include_router(readiness_router)
 from billing import router as billing_router  # noqa: E402
 app.include_router(billing_router)
 
-# ==================== SERVICE WORKER (Offline mode) ====================
+# ==================== MAINTENANCE PAGE (always accessible) ====================
 from fastapi.responses import HTMLResponse, FileResponse, Response, StreamingResponse  # noqa: E402
+from webapp import MAINTENANCE_HTML  # noqa: E402
+
+@app.get("/maintenance", response_class=HTMLResponse)
+async def maintenance_page():
+    """Vedlikeholdsside — alltid tilgjengelig (uavhengig av MAINTENANCE_MODE).
+    Codex: Aktiver vedlikeholdsmodus i produksjon ved aa sette env-var MAINTENANCE_MODE=true paa Railway.
+    """
+    return HTMLResponse(content=MAINTENANCE_HTML, status_code=200)
 
 _SW_PATH = Path(__file__).resolve().parent / "service-worker.js"
 
