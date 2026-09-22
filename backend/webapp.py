@@ -16,6 +16,178 @@ def _deploy_version() -> str:
 
 DEPLOY_VERSION = _deploy_version()
 
+# ==================== MAINTENANCE MODE ====================
+# Set env var MAINTENANCE_MODE=true on Railway to activate.
+MAINTENANCE_MODE = _os.environ.get("MAINTENANCE_MODE", "").lower() in ("1", "true", "yes")
+
+MAINTENANCE_HTML = """<!DOCTYPE html>
+<html lang="no" translate="no" class="notranslate">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google" content="notranslate">
+<title>Thai2Drive — Vedlikehold</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --cyan:    #00F5FF;
+    --magenta: #FF00E5;
+    --blue:    #0066FF;
+    --amber:   #FF9933;
+    --bg:      #060912;
+    --card-bg: rgba(10, 16, 35, 0.92);
+  }
+  html, body {
+    min-height: 100vh;
+    background: var(--bg);
+    font-family: 'Inter', system-ui, sans-serif;
+    color: #e8eaf6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 70% 50% at 20% 30%, rgba(0,102,255,0.18) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 40% at 80% 70%, rgba(0,245,255,0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 50% at 50% 100%, rgba(255,0,229,0.08) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .card {
+    position: relative;
+    z-index: 1;
+    background: var(--card-bg);
+    border: 1px solid rgba(0,245,255,0.25);
+    border-radius: 24px;
+    padding: 56px 48px 48px;
+    max-width: 520px;
+    width: calc(100% - 32px);
+    text-align: center;
+    box-shadow:
+      0 0 40px rgba(0,245,255,0.08),
+      0 0 80px rgba(0,102,255,0.06),
+      0 24px 48px rgba(0,0,0,0.5);
+    --neon-angle: 0deg;
+    animation: neonFlow 4s linear infinite;
+    background-clip: padding-box;
+  }
+  @property --neon-angle {
+    syntax: '<angle>';
+    inherits: false;
+    initial-value: 0deg;
+  }
+  @keyframes neonFlow { to { --neon-angle: 360deg; } }
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 26px;
+    background: conic-gradient(
+      from var(--neon-angle),
+      var(--blue), var(--cyan), var(--magenta), var(--amber), var(--blue)
+    );
+    z-index: -1;
+    opacity: 0.7;
+    filter: blur(6px);
+    animation: neonFlow 4s linear infinite;
+  }
+  .logo {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 32px;
+    text-shadow: 0 0 20px rgba(0,245,255,0.6);
+  }
+  .icon {
+    font-size: 64px;
+    margin-bottom: 24px;
+    display: block;
+    animation: pulse 2.5s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { filter: drop-shadow(0 0 8px var(--cyan)); transform: scale(1); }
+    50%       { filter: drop-shadow(0 0 20px var(--cyan)); transform: scale(1.06); }
+  }
+  h1 {
+    font-size: clamp(20px, 4vw, 26px);
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 12px;
+    color: #ffffff;
+  }
+  .thai-text {
+    font-size: clamp(16px, 3vw, 20px);
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 36px;
+    line-height: 1.6;
+  }
+  .divider {
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--blue), var(--cyan), var(--magenta));
+    border-radius: 2px;
+    margin: 0 auto 36px;
+    animation: neonFlow 4s linear infinite;
+    background-size: 200%;
+  }
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,245,255,0.08);
+    border: 1px solid rgba(0,245,255,0.3);
+    border-radius: 100px;
+    padding: 8px 20px;
+    font-size: 13px;
+    color: var(--cyan);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--amber);
+    box-shadow: 0 0 8px var(--amber);
+    animation: blink 1.2s ease-in-out infinite;
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.2; }
+  }
+  .footer {
+    margin-top: 32px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.3);
+  }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">Thai2Drive</div>
+    <span class="icon">🔧</span>
+    <h1>Vi oppdaterer Michael AI<br>med de nyeste skiltreglene.</h1>
+    <p class="thai-text">เรากำลังอัปเดตระบบ<br>ครู AI จะกลับมาให้บริการเร็วๆ นี้</p>
+    <div class="divider"></div>
+    <div class="status-badge">
+      <div class="dot"></div>
+      Tilbake om kort tid! / เร็วๆ นี้
+    </div>
+    <div class="footer">Thai2Drive &copy; 2026 &mdash; thai2drive.no</div>
+  </div>
+</body>
+</html>"""
+# ===== END MAINTENANCE MODE ============================================
+
 WEBAPP_HTML = r"""<!DOCTYPE html>
 <html lang="th" data-theme="dark" translate="no" class="notranslate">
 <head>
@@ -11812,6 +11984,7 @@ async function teacherSend(overrideMsg, customDisplayMsg, customMode) {
   var msg = (overrideMsg || (input && input.value) || '').trim();
   if (!msg && _teacherUploadedImage) msg = t('teacher_image_prompt');
   if (!msg || _teacherTyping) return;
+  stopAllSpeech();   // T2D-AUDIO-FIX: kill previous sign/TTS audio
 
   // Intercept in-app navigation chips
   var clean = msg.replace(/^[\S]{1,2}\s+/, '').trim().toLowerCase();
@@ -12556,6 +12729,8 @@ if ('serviceWorker' in navigator) {
 
 @webapp_router.get("/web", response_class=HTMLResponse)
 async def web_app():
+    if MAINTENANCE_MODE:
+        return HTMLResponse(content=MAINTENANCE_HTML, status_code=503)
     from stopping_distance_web import install as install_stopping_distance
     from studybook_web import install as install_studybook
     html = install_studybook(install_stopping_distance(WEBAPP_HTML)).replace('__DEPLOY_VERSION__', DEPLOY_VERSION)
