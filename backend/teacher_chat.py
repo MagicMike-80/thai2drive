@@ -14,6 +14,7 @@ from __future__ import annotations
 import os
 import re
 import uuid
+import asyncio
 import logging
 import base64
 import binascii
@@ -51,19 +52,19 @@ _mongo = AsyncIOMotorClient(_mongo_url)
 _db = _mongo[os.environ.get("DB_NAME") or "thai2drive"]
 _chat_col = _db["teacher_chats"]
 
-def send_admin_alert_email(subject: str, body: str):
+def send_admin_alert_email(subject: str, body: str) -> tuple[bool, str]:
     import smtplib
     from email.mime.text import MIMEText
-    
+
     smtp_host = os.environ.get("SUPPORT_SMTP_HOST")
     smtp_port = int(os.environ.get("SUPPORT_SMTP_PORT", 587))
     smtp_user = os.environ.get("SUPPORT_SMTP_USER")
     smtp_pass = os.environ.get("SUPPORT_SMTP_PASS")
     email_to = os.environ.get("SUPPORT_EMAIL_TO", "lexuz.zxc@gmail.com")
-    
+
     if not (smtp_host and smtp_user and smtp_pass):
         logger.error("SMTP alert failed: configuration missing.")
-        return
+        return False, "SMTP not configured — logged only"
 
     try:
         msg = MIMEText(body, 'plain', 'utf-8')
@@ -76,8 +77,10 @@ def send_admin_alert_email(subject: str, body: str):
             server.login(smtp_user, smtp_pass)
             server.sendmail(smtp_user, [email_to], msg.as_string())
         logger.info("Admin alert email sent successfully to %s", email_to)
+        return True, f"sent to {email_to}"
     except Exception as e:
         logger.error("Failed to send admin alert email: %s", e)
+        return False, str(e)
 
 # ─── LLM (same litellm pattern as support_chat.py) ───────────────────────────
 
@@ -3116,6 +3119,50 @@ async def teacher_topics(lang: str = Query(default="no")):
     if lang not in MICHAEL_TOPICS:
         raise HTTPException(status_code=422, detail="Unsupported or missing language.")
     return {"lang": lang, "topics": MICHAEL_TOPICS[lang]}
+
+
+class ContactHumanRequest(BaseModel):
+    session_id: Optional[str] = Field(default=None)
+    message: str = Field(min_length=1, max_length=2000)
+    language: Literal["no", "th", "en"]
+    device_id: Optional[str] = Field(default=None)
+    user_id: Optional[str] = Field(default=None)
+
+
+class ContactHumanResponse(BaseModel):
+    ok: bool
+    sent: bool
+    info: str
+
+
+@teacher_router.post("/teacher/contact-human", response_model=ContactHumanResponse)
+async def teacher_contact_human(req: ContactHumanRequest) -> ContactHumanResponse:
+    """A student asked to talk to the real Michael instead of the AI. Emails the
+    admin alert address (same SMTP path already used elsewhere in this file) and
+    logs the request so it can be followed up even if delivery fails."""
+    session_id = req.session_id or f"human_{uuid.uuid4().hex[:12]}"
+    subject = f"[Ekte Michael] Elev ber om kontakt ({req.language})"
+    body = (
+        f"Session: {session_id}\n"
+        f"Language: {req.language}\n"
+        f"User ID: {req.user_id or '-'}\n"
+        f"Device ID: {req.device_id or '-'}\n\n"
+        f"Message:\n{req.message}"
+    )
+    sent, info = await asyncio.to_thread(send_admin_alert_email, subject, body)
+
+    await _db["teacher_human_requests"].insert_one({
+        "session_id": session_id,
+        "message": req.message,
+        "language": req.language,
+        "device_id": req.device_id,
+        "user_id": req.user_id,
+        "email_sent": sent,
+        "email_info": info,
+        "ts": datetime.now(timezone.utc),
+    })
+
+    return ContactHumanResponse(ok=True, sent=sent, info=info)
 
 
 class TeacherChatRequest(BaseModel):

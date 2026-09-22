@@ -3481,7 +3481,7 @@ a { color:inherit; text-decoration:none; }
   flex-shrink:0; overflow:hidden; position:relative;
 }
 .teacher-sidebar-toggle {
-  width:44px; height:44px; min-width:44px; margin-left:auto;
+  width:44px; height:44px; min-width:44px;
   display:inline-flex; align-items:center; justify-content:center;
   border:1px solid rgba(96,165,250,.45); border-radius:12px;
   background:#13223A; color:#E2E8F0; cursor:pointer;
@@ -3490,6 +3490,16 @@ a { color:inherit; text-decoration:none; }
 .teacher-sidebar-toggle:hover { background:#1E3A5F; border-color:#67E8F9; }
 .teacher-sidebar-toggle:active { transform:scale(.96); }
 .teacher-sidebar-toggle svg { width:22px; height:22px; }
+.teacher-contact-human-btn {
+  margin-left:auto; height:36px; padding:0 12px; max-width:150px;
+  display:inline-flex; align-items:center; justify-content:center;
+  border:1px solid rgba(255,153,51,.5); border-radius:10px;
+  background:#241708; color:#FF9933; cursor:pointer;
+  font-size:.72rem; font-weight:700; line-height:1.2; text-align:center;
+  white-space:normal; transition:background .15s,border-color .15s,transform .12s;
+}
+.teacher-contact-human-btn:hover { background:#33200C; border-color:#FFAA00; }
+.teacher-contact-human-btn:active { transform:scale(.96); }
 .teacher-avatar {
   width:48px; height:48px; border-radius:50%;
   object-fit:cover; object-position:center 14%; flex-shrink:0;
@@ -4963,6 +4973,7 @@ a { color:inherit; text-decoration:none; }
               <div class="teacher-online-badge" data-key="teacher_online_badge">ONLINE</div>
             </div>
           </div>
+          <button class="teacher-contact-human-btn" id="contactHumanBtn" type="button" onclick="contactHumanMichael()">Send melding til Ekte Michael</button>
           <button class="teacher-sidebar-toggle" id="teacherSidebarToggle" type="button" onclick="toggleTeacherSidebar()" aria-controls="teacherSidePanel" aria-expanded="false" aria-label="Vis emner" title="Vis emner">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/></svg>
           </button>
@@ -5335,11 +5346,15 @@ var UI = {
   acct:        {th:'บัญชี',             no:'Konto',            en:'Account'},
   language:    {th:'ภาษา',              no:'Språk',            en:'Language'},
   teacher:     {th:'Michael',            no:'Michael',          en:'Michael'},
-  teacher_name:{th:'ครูสอนขับรถ Michael', no:'Michael Trafikklærer', en:'Michael Driving Teacher'},
+  teacher_name:{th:'Michael AI (ครู AI • 24 ชม.)', no:'Michael AI (AI-lærer • 24/7)', en:'Michael AI (AI Teacher • 24/7)'},
   teacher_role:{th:'ครูสอนขับรถ', no:'Trafikklærer', en:'Driving teacher'},
   teacher_experience:{th:'ประสบการณ์ 16 ปี', no:'16 års erfaring', en:'16 years of experience'},
   teacher_meta:{th:'เข้าสู่ระบบ • ครู AI • ประสบการณ์ 16 ปี', no:'Pålogget • AI-lærer • 16 års erfaring', en:'Signed in • AI teacher • 16 years experience'},
   teacher_online_badge:{th:'ออนไลน์', no:'ONLINE', en:'ONLINE'},
+  contact_human_btn:{th:'ส่งข้อความถึง Michael ตัวจริง', no:'Send melding til Ekte Michael', en:'Send message to Real Michael'},
+  contact_human_sent:{th:'ส่งข้อความถึง Michael ตัวจริงแล้ว เขาจะติดต่อกลับเร็ว ๆ นี้', no:'Meldingen er sendt til Ekte Michael. Han svarer deg snart.', en:'Your message was sent to the real Michael. He will get back to you soon.'},
+  contact_human_failed:{th:'ส่งข้อความไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', no:'Klarte ikke å sende meldingen. Prøv igjen.', en:'Could not send the message. Please try again.'},
+  contact_human_empty:{th:'พิมพ์ข้อความก่อนส่งถึง Michael ตัวจริง', no:'Skriv en melding før du sender til Ekte Michael.', en:'Write a message before sending it to the real Michael.'},
   teacher_send:{th:'ส่ง', no:'Send', en:'Send'},
   teacher_upload_doc:{th:'แนบเอกสาร PDF หรือรูปภาพ', no:'Last opp PDF eller bilde', en:'Upload PDF or image'},
   teacher_doc_chars:{th:'ตัวอักษร', no:'tegn', en:'characters'},
@@ -5796,6 +5811,8 @@ function applyUILang() {
   // Update teacher UI if visible
   var tNameEl = document.getElementById('teacherNameLbl');
   if (tNameEl) tNameEl.textContent = t('teacher_name');
+  var tContactBtn = document.getElementById('contactHumanBtn');
+  if (tContactBtn) tContactBtn.textContent = t('contact_human_btn');
   var tInput = document.getElementById('teacherInput');
   if (tInput) tInput.placeholder = t('teacher_placeholder');
   if (typeof _teacherUploadedDoc !== 'undefined' && _teacherUploadedDoc) {
@@ -8059,6 +8076,23 @@ function pickField(q, base) {
   return q[base + '_' + appLang] || '';
 }
 
+// Exam content must always be pure Norwegian (Statens vegvesen format),
+// regardless of the student's selected UI language. UI chrome (buttons,
+// timer, labels) keeps following appLang via pickLang/pickField as normal.
+function pickQuestionLang(obj) {
+  if (isExamMode) {
+    if (!obj) return '';
+    if (typeof obj === 'string') return obj;
+    return (typeof obj.no === 'string' && obj.no.trim() !== '') ? obj.no : pickStrict(obj);
+  }
+  return pickLang(obj);
+}
+
+function pickFieldForQuestion(q, base) {
+  var suffix = isExamMode ? 'no' : appLang;
+  return q[base + '_' + suffix] || '';
+}
+
 function renderQuestion() {
   if (qIdx >= questions.length) { showEnd(); return; }
   if (_aiPanelTimer) { clearTimeout(_aiPanelTimer); _aiPanelTimer = null; } // cancel delayed panel from prev Q
@@ -8077,7 +8111,7 @@ function renderQuestion() {
 
   var imgUrl  = q.bildeUrl || q.image_url || '';
   if (imgUrl && !imgUrl.match(/^(https?:\/\/|\/|data:)/)) { imgUrl = '/api/assets/' + imgUrl; }
-  var qText   = pickLang(q.question) || pickField(q, 'question_text') || '';
+  var qText   = pickQuestionLang(q.question) || pickFieldForQuestion(q, 'question_text') || '';
   currentCorrect = (q.correctOptionId || q.correct_answer || '').toUpperCase();
   currentExpl    = pickLang(q.explanation) || pickField(q, 'explanation') || '';
   var qId     = q._id || q.id || q.question_id || '';
@@ -8091,12 +8125,12 @@ function renderQuestion() {
   } else {
     if (q.options && Array.isArray(q.options) && q.options.length) {
       opts = q.options.map(function(o) {
-        return { id: String(o.id || o.key || '').toUpperCase(), text: pickLang(o.text) || pickLang(o) || String(o.text || '') };
+        return { id: String(o.id || o.key || '').toUpperCase(), text: pickQuestionLang(o.text) || pickQuestionLang(o) || String(o.text || '') };
       });
     } else {
       ['A','B','C','D'].forEach(function(l) {
         var base = 'answer_' + l.toLowerCase();
-        var val = pickField(q, base);
+        var val = pickFieldForQuestion(q, base);
         if (val) opts.push({ id: l, text: val });
       });
     }
@@ -8112,7 +8146,7 @@ function renderQuestion() {
   var chosenOption = isExamMode ? (examAnswers[qIdx] || '') : '';
   var qCard = document.getElementById('qCard');
   var ansHtml = opts.map(function(o) {
-    var txt = typeof o.text === 'object' ? pickLang(o.text) : o.text;
+    var txt = typeof o.text === 'object' ? pickQuestionLang(o.text) : o.text;
     var isSelected = (isExamMode && chosenOption && o.id.toUpperCase() === chosenOption.toUpperCase());
     return '<button class="ans-btn' + (isSelected ? ' selected' : '') + '" data-id="' + escH(o.id) + '" onclick="selectAns(this,\'' + escH(o.id) + '\')">'
       + '<span class="ans-letter">' + escH(o.id) + '</span>'
@@ -11037,6 +11071,8 @@ function _buildAssistantContent(text, container) {
 async function loadTeacher() {
   var tNameEl = document.getElementById('teacherNameLbl');
   if (tNameEl) tNameEl.textContent = t('teacher_name');
+  var tContactBtn = document.getElementById('contactHumanBtn');
+  if (tContactBtn) tContactBtn.textContent = t('contact_human_btn');
   var tInput = document.getElementById('teacherInput');
   if (tInput) tInput.placeholder = t('teacher_placeholder');
 
@@ -11807,6 +11843,35 @@ function _teacherClearDoc() {
   if (inputEl) inputEl.value = '';
 }
 
+async function contactHumanMichael() {
+  var input = document.getElementById('teacherInput');
+  var msg = ((input && input.value) || '').trim();
+  if (!msg) {
+    toast(t('contact_human_empty'));
+    return;
+  }
+  var btn = document.getElementById('contactHumanBtn');
+  if (btn) btn.disabled = true;
+  try {
+    var resp = await api('POST', '/api/teacher/contact-human', {
+      message: msg,
+      language: appLang,
+      device_id: (typeof deviceId !== 'undefined' ? deviceId : null),
+      user_id: (typeof user !== 'undefined' && user && user.id ? user.id : null)
+    });
+    if (resp && resp.ok) {
+      toast(t('contact_human_sent'));
+      if (input) input.value = '';
+    } else {
+      toast(t('contact_human_failed'));
+    }
+  } catch (e) {
+    toast(t('contact_human_failed'));
+  } finally {
+    if (btn) btn.disabled = false;
+  }
+}
+
 async function teacherSend(overrideMsg, customDisplayMsg, customMode) {
   var input = document.getElementById('teacherInput');
   var msg = (overrideMsg || (input && input.value) || '').trim();
@@ -12554,12 +12619,36 @@ if ('serviceWorker' in navigator) {
 """
 
 
-@webapp_router.get("/web", response_class=HTMLResponse)
-async def web_app():
+def _webapp_html(default_lang: str = "th") -> str:
     from stopping_distance_web import install as install_stopping_distance
     from studybook_web import install as install_studybook
     html = install_studybook(install_stopping_distance(WEBAPP_HTML)).replace('__DEPLOY_VERSION__', DEPLOY_VERSION)
-    return HTMLResponse(content=html)
+    if default_lang != "th":
+        html = html.replace("_ls.get('t2d_lang') || 'th'", f"_ls.get('t2d_lang') || '{default_lang}'")
+    return html
+
+
+@webapp_router.get("/web", response_class=HTMLResponse)
+async def web_app():
+    return HTMLResponse(content=_webapp_html("th"))
+
+
+@webapp_router.get("/web/no", response_class=HTMLResponse)
+async def web_app_no():
+    """Clean Norwegian entry point — same SPA as /web, defaults to Norwegian."""
+    return HTMLResponse(content=_webapp_html("no"))
+
+
+@webapp_router.get("/web/th", response_class=HTMLResponse)
+async def web_app_th():
+    """Clean Thai entry point — same SPA as /web, defaults to Thai (same as /web)."""
+    return HTMLResponse(content=_webapp_html("th"))
+
+
+@webapp_router.get("/web/en", response_class=HTMLResponse)
+async def web_app_en():
+    """Clean English entry point — same SPA as /web, defaults to English."""
+    return HTMLResponse(content=_webapp_html("en"))
 
 @webapp_router.get("/web/version")
 async def web_version():
