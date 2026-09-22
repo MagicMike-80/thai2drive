@@ -1584,3 +1584,40 @@ def test_chapter_28_asset_manifest_and_pairs():
     assert CH28_ASSETS["ch28_par_002"]["pair_asset"] == "ch28_lov_005"
     assert CH28_ASSETS["ch28_lov_005"]["asset_id"] == "CH28-LOV-005"
     assert CH28_ASSETS["ch28_par_002"]["asset_id"] == "CH28-PAR-002"
+
+
+def test_student_renderer_wires_every_chapter_from_1_to_28():
+    expected_codes = [f"CH{number:02d}" for number in range(1, 29)]
+
+    assert list(CHAPTERS) == expected_codes
+    assert "Object.keys(SBX_DATA.chapters)" in SCRIPT
+    assert "function sbxOpenChapter" in SCRIPT
+    assert "function sbxLessons" in SCRIPT
+    assert "currentChapter" in SCRIPT
+    assert "chapterPositions" in SCRIPT
+
+
+def test_student_renderer_has_safe_image_and_render_fallbacks():
+    assert "function sbxImageFallback" in SCRIPT
+    assert "if(!a){sbxImageFallback(w);return w}" in SCRIPT
+    assert "i.onerror=function(){sbxImageFallback(w,i)}" in SCRIPT
+    assert "try{" in SCRIPT
+    assert "sbxCopy('contentError')" in SCRIPT
+
+
+def test_student_renderer_exposes_norwegian_term_cards_without_language_fallbacks():
+    assert "function sbxGlossary" in SCRIPT
+    assert "appLang!=='th'" in SCRIPT
+    assert "glossary_terms" in SCRIPT
+    assert "showNorwegianTerms" in COPY
+    assert COPY["showNorwegianTerms"]["th"]
+    assert COPY["showNorwegianTerms"]["no"]
+    assert COPY["showNorwegianTerms"]["en"]
+
+
+def test_every_chapter_has_road_check_and_completion_screen():
+    _walk_i18n(CHAPTERS, "chapters")
+    for code, chapter in CHAPTERS.items():
+        types = {lesson["type"] for lesson in chapter["lessons"]}
+        assert "roadCheck" in types, code
+        assert "chapterComplete" in types, code

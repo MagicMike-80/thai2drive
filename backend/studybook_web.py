@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+from pathlib import Path
 
 
 def i18n(no: str, th: str, en: str) -> dict[str, str]:
@@ -74,6 +75,121 @@ LESSONS = [
         question(("WHAT CHANGED? 🧠","อะไรเปลี่ยนไป? 🧠","WHAT CHANGED? 🧠"),("Hvilken detalj betyr noe?","รายละเอียดใดสำคัญ?","Which detail matters?"),[opt("wheels","Hjulenes retning","ทิศทางของล้อ","Wheel direction"),opt("colour","Bilens farge","สีของรถ","Car colour")],"wheels",("Retningen kan varsle bevegelse.","ทิศทางอาจเตือนถึงการเคลื่อนที่","Direction can warn of movement.")),
         question(("PREDICT 🔮","คาดการณ์ 🔮","PREDICT 🔮"),("Bussen blinker. Hva kan skje?","รถโดยสารเปิดไฟเลี้ยว อาจเกิดอะไร?","The bus indicates. What may happen?"),[opt("out","Bussen kjører ut","รถโดยสารเคลื่อนออกมา","The bus pulls out"),opt("vanish","Bussen forsvinner","รถโดยสารหายไป","The bus disappears")],"out",("Forutse og lag plass.","คาดการณ์และสร้างพื้นที่","Predict and make room."))]},
     {"id":"chapter-complete","type":"chapterComplete","eyebrow":i18n("KAPITTEL FULLFØRT","เรียนจบบทแล้ว","CHAPTER COMPLETE"),"title":i18n("BLIKKET · 15 / 15","การมอง · 15 / 15","VISION · 15 / 15"),"body":i18n("Du har lært å se før det skjer.","คุณได้เรียนรู้ที่จะมองเห็นก่อนเกิดเหตุ","You learned to see before it happens."),"skills":[i18n("👀 Oppdage","👀 สังเกต","👀 Notice"),i18n("🧠 Forstå","🧠 เข้าใจ","🧠 Understand"),i18n("🔮 Forutse","🔮 คาดการณ์","🔮 Predict"),i18n("🚗 Skape sikkerhetsmargin","🚗 สร้างระยะปลอดภัย","🚗 Create a safety margin")],"nextChapter":i18n("NESTE: 🚗 PLASSERING","ถัดไป: 🚗 ตำแหน่งรถ","NEXT: 🚗 POSITIONING")},
+]
+
+
+CH02_ASSETS = {
+    "ch02_vike_001": {
+        "asset_id": "CH02-VIKE-001",
+        "page": "1",
+        "scene": "To biler møtes i et norsk veikryss",
+        "pedagogical_purpose": "Forklare vikeplikt når én bil kjører rett fram og én svinger",
+        "camera_angle": "førerperspektiv",
+        "risk_if_misunderstood": "Venstresving foran møtende trafikk",
+        "vehicles_road_users": "to personbiler",
+        "road_type": "veikryss",
+        "signs_markings": "midtlinje",
+        "learner_discovery": "rett-fram-trafikk passerer før svingende trafikk",
+        "hotspots": [],
+        "pair_asset": "",
+        "status": "placeholder",
+        "src": "/api/assets/thumbs/thumb_vikeplikt_oversikt.jpg",
+        "alt": i18n(
+            "Illustrasjon av møtende biler i veikryss",
+            "ภาพประกอบรถสองคันที่สวนกันในทางแยก",
+            "Illustration of two oncoming cars at an intersection",
+        ),
+    }
+}
+
+CH02_LESSONS = [
+    info(
+        "CH02-001", "intro", "ch02_vike_001",
+        "Regel 2: Rett fram slår alltid sving",
+        "กฎที่ 2: ตรงไปจะชนะการเลี้ยวเสมอ",
+        "Rule 2: Straight always beats turn",
+        (
+            "Bil A kjører rett fram. Bil B kommer imot og vil svinge til venstre. De ankommer samtidig. Hvem må gi vikeplikt?",
+            "รถ A ขับตรง รถ B สวนมาและต้องการเลี้ยวซ้าย ทั้งสองมาถึงพร้อมกัน ใครต้องให้ทาง?",
+            "Car A drives straight. Car B approaches and wants to turn left. They arrive together. Who must yield?",
+        ),
+        glossary_terms=["Vikeplikt", "Venstresving"],
+    ),
+    info(
+        "CH02-002", "intro", "ch02_vike_001",
+        "Michaels regel 2: Rett fram slår sving",
+        "กฎของไมเคิล 2: ตรงไป > เลี้ยว",
+        "Michael's rule 2: Straight > turn",
+        (
+            "Et kjøretøy som kjører rett fram har prioritet foran et møtende kjøretøy som svinger til venstre. Bil A kjører først. Bil B må vente.",
+            "รถที่ขับตรงมีสิทธิ์ก่อนรถที่สวนมาและเลี้ยวซ้าย รถ A ไปก่อน รถ B ต้องรอ",
+            "A vehicle driving straight has priority over an oncoming vehicle turning left. Car A goes first. Car B must wait.",
+        ),
+        glossary_terms=["Rett fram", "Møtende trafikk"],
+    ),
+    info(
+        "CH02-003", "intro", "ch02_vike_001",
+        "Praktisk tips",
+        "เคล็ดลับปฏิบัติ",
+        "Practical tips",
+        (
+            "Planlegg svingen før krysset. Skal du svinge til venstre foran møtende trafikk som kjører rett fram, må du vente. Er du i tvil, vent.",
+            "วางแผนเลี้ยวก่อนถึงทางแยก หากจะเลี้ยวซ้ายตัดหน้ารถสวนที่ขับตรง คุณต้องรอ หากไม่แน่ใจให้รอ",
+            "Plan your turn before the intersection. If you turn left across oncoming traffic going straight, you must wait. If in doubt, wait.",
+        ),
+        glossary_terms=["Kryss", "Sving"],
+    ),
+    {
+        "id": "CH02-004", "type": "roadCheck", "road_check_id": "CH02-RC-001",
+        "eyebrow": i18n("ROAD CHECK ⚡", "ROAD CHECK ⚡", "ROAD CHECK ⚡"),
+        "title": i18n("Road Check ⚡ Rett fram og sving", "Road Check ⚡ ตรงไปและการเลี้ยว", "Road Check ⚡ Straight and turning"),
+        "body": i18n(
+            "Ett kontrollspørsmål om møtende trafikk.",
+            "คำถามตรวจสอบหนึ่งข้อเกี่ยวกับรถที่สวนมา",
+            "One check question about oncoming traffic.",
+        ),
+        "questions": [
+            question(
+                ("VIKEPLIKT", "การให้ทาง", "RIGHT OF WAY"),
+                (
+                    "Bil A kjører rett fram. Bil B kommer imot og vil svinge til venstre. Hvem må vente?",
+                    "รถ A ขับตรง รถ B สวนมาและจะเลี้ยวซ้าย ใครต้องรอ?",
+                    "Car A drives straight. Car B approaches and turns left. Who must wait?",
+                ),
+                [
+                    opt("a", "Bil A", "รถ A", "Car A"),
+                    opt("b", "Bil B", "รถ B", "Car B"),
+                ],
+                "b",
+                (
+                    "Bil B må vente fordi møtende trafikk som kjører rett fram går først.",
+                    "รถ B ต้องรอ เพราะรถที่สวนมาและขับตรงไปก่อน",
+                    "Car B must wait because oncoming traffic going straight goes first.",
+                ),
+            )
+        ],
+        "glossary_terms": ["Vikeplikt", "Møtende trafikk"],
+    },
+    {
+        "id": "CH02-005", "type": "chapterComplete", "asset": "ch02_vike_001",
+        "eyebrow": i18n("KAPITTEL FULLFØRT", "เรียนจบบทแล้ว", "CHAPTER COMPLETE"),
+        "title": i18n("RETT FRAM OG SVING", "การขับตรงและการเลี้ยว", "STRAIGHT AND TURNING"),
+        "body": i18n(
+            "Du vet nå hvem som kjører først når møtende trafikk kjører rett fram eller svinger.",
+            "ตอนนี้คุณรู้แล้วว่าใครไปก่อนเมื่อรถสวนขับตรงหรือเลี้ยว",
+            "You now know who goes first when oncoming traffic drives straight or turns.",
+        ),
+        "skills": [
+            i18n("🚗 Se kjøreretning", "🚗 ดูทิศทางการขับ", "🚗 Read direction"),
+            i18n("🤝 Gi riktig vikeplikt", "🤝 ให้ทางอย่างถูกต้อง", "🤝 Yield correctly"),
+        ],
+        "nextChapter": i18n(
+            "NESTE: KAPITTEL 3 · FART OG STOPPLENGDE",
+            "ถัดไป: บทที่ 3 · ความเร็วและระยะหยุดรถ",
+            "NEXT: CHAPTER 3 · SPEED AND STOPPING DISTANCE",
+        ),
+        "glossary_terms": ["Vikeplikt", "Møtende trafikk"],
+    },
 ]
 
 # ─── KAPITTEL 3: FART, REAKSJON OG STOPPLENGDE (CH03) ────────────────────────
@@ -3680,6 +3796,7 @@ CH28_LESSONS = [
 
 CHAPTERS = {
     "CH01": {"code": "CH01", "title": i18n("Kapittel 1 · Blikket", "บทที่ 1 · การมอง", "Chapter 1 · Vision"), "lessons": LESSONS, "assets": ASSETS},
+    "CH02": {"code": "CH02", "title": i18n("Kapittel 2 · Rett fram og sving", "บทที่ 2 · การขับตรงและการเลี้ยว", "Chapter 2 · Straight and Turning"), "lessons": CH02_LESSONS, "assets": CH02_ASSETS},
     "CH03": {"code": "CH03", "title": i18n("Kapittel 3 · Fart og stopplengde", "บทที่ 3 · ความเร็วและระยะหยุดรถ", "Chapter 3 · Speed and Stopping Distance"), "lessons": CH03_LESSONS, "assets": CH03_ASSETS},
     "CH04": {"code": "CH04", "title": i18n("Kapittel 4 · Didaktikk og læring", "บทที่ 4 · การเรียนรู้และการสอนที่มีประสิทธิภาพ", "Chapter 4 · Didactics and Learning"), "lessons": CH04_LESSONS, "assets": CH04_ASSETS},
     "CH05": {"code": "CH05", "title": i18n("Kapittel 5 · Mål og rammer for Trinn 1", "บทที่ 5 · เป้าหมายและกรอบของขั้นที่ 1", "Chapter 5 · Goals and Framework for Step 1"), "lessons": CH05_LESSONS, "assets": CH05_ASSETS},
@@ -3710,6 +3827,7 @@ CHAPTERS = {
 
 ALL_ASSETS = {
     **ASSETS,
+    **CH02_ASSETS,
     **CH03_ASSETS,
     **CH04_ASSETS,
     **CH05_ASSETS,
@@ -3738,9 +3856,33 @@ ALL_ASSETS = {
     **CH28_ASSETS,
 }
 
-COPY = {k: i18n(*v) for k, v in {"brand":("THAI2DRIVE STUDIEBOKEN","หนังสือเรียน THAI2DRIVE","THAI2DRIVE STUDY BOOK"),"chapters":("Kapittel 1 · Blikket","บทที่ 1 · การมอง","Chapter 1 · Vision"),"continue":("Fortsett der du slapp","เรียนต่อจากจุดเดิม","Continue where you left off"),"start":("START →","เริ่ม →","START →"),"progress":("Progresjon","ความคืบหน้า","Progress"),"completed":("fullført","เสร็จแล้ว","completed"),"backHome":("Oversikt","ภาพรวม","Overview"),"previous":("Forrige","ก่อนหน้า","Previous"),"next":("Fortsett","เรียนต่อ","Continue"),"understood":("Jeg forstår","ฉันเข้าใจ","I understand"),"remember":("HUSK","จำไว้","REMEMBER"),"roadCleared":("ROAD CHECK CLEARED ⚡","ผ่าน ROAD CHECK ⚡","ROAD CHECK CLEARED ⚡"),"roadRetry":("Rolig repetisjon","ทบทวนอย่างสงบ","Calm review"),"review":("Repeter","ทบทวน","Review"),"finish":("Fortsett","เรียนต่อ","Continue"),"imageMissing":("THAI2DRIVE-bildet kommer snart","ภาพ THAI2DRIVE จะมาเร็ว ๆ นี้","THAI2DRIVE image coming soon"),"storageError":("Progresjonen kunne ikke lagres.","ไม่สามารถบันทึกความคืบหน้าได้","Progress could not be saved."),"contentError":("Siden kan ikke vises nå.","ไม่สามารถแสดงหน้านี้ได้","This page cannot be displayed."),"whatChanged":("WHAT CHANGED? 🧠","อะไรเปลี่ยนไป? 🧠","WHAT CHANGED? 🧠"),"originalView":("Opprinnelig bilde","ภาพเดิม","Original image")}.items()}
 
-CSS = r"""#screenStudybook{padding:0;background:#071225;overflow-y:auto;color:var(--text)}.sbx-shell{width:min(760px,100%);min-height:100%;margin:auto;padding:18px 16px 96px}.sbx-top,.sbx-row,.sbx-road-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.sbx-top{margin-bottom:18px}.sbx-logo,.sbx-eyebrow{font-size:.72rem;font-weight:900;letter-spacing:.13em;color:#60e6ff}.sbx-hero,.sbx-card{padding:24px;border-radius:24px;background:linear-gradient(145deg,#102b4b,#101a36);border:1px solid #2c6383;box-shadow:0 18px 45px #0006}.sbx-card{padding:0;overflow:hidden}.sbx-copy{padding:20px}.sbx-track{height:8px;background:#ffffff16;border-radius:99px;overflow:hidden}.sbx-fill{height:100%;background:linear-gradient(90deg,#00d9ff,#a637ff)}.sbx-primary,.sbx-choice,.sbx-secondary{border:0;border-radius:14px;min-height:48px;padding:12px 18px;font:inherit;font-weight:850;cursor:pointer}.sbx-primary{background:#ff8a1f;color:#111}.sbx-secondary,.sbx-choice{background:#142844;color:#eaf7ff;border:1px solid #3a5c7d}.sbx-primary:focus-visible,.sbx-secondary:focus-visible,.sbx-choice:focus-visible,.sbx-hotspot:focus-visible{outline:3px solid #62e8ff}.sbx-map{display:grid;gap:9px;margin-top:18px}.sbx-map-card{display:grid;grid-template-columns:40px 1fr auto;gap:12px;padding:12px;border-radius:14px;background:#101d34}.sbx-map-card small,.sbx-map-card strong{display:block}.sbx-image{position:relative;min-height:230px;background:#0b1728}.sbx-image img{width:100%;min-height:230px;max-height:420px;object-fit:cover;transition:opacity .15s ease}.sbx-pair-toggle{position:absolute;top:12px;left:12px;display:inline-flex;gap:4px;background:#071225ee;padding:4px;border-radius:99px;border:1px solid #2c6383;box-shadow:0 6px 18px #0009;z-index:10;backdrop-filter:blur(8px)}.sbx-pair-btn{background:transparent;border:0;color:#8ab4d5;font-size:.72rem;font-weight:850;letter-spacing:.04em;padding:6px 14px;border-radius:99px;cursor:pointer;transition:all .2s ease}.sbx-pair-btn.active{background:linear-gradient(90deg,#0066ff,#00d9ff);color:#fff;box-shadow:0 0 12px #00d9ff66}.sbx-pair-btn:focus-visible{outline:2px solid #65eaff}.sbx-hotspot{position:absolute;width:58px;height:58px;border:3px solid #65eaff;border-radius:50%;background:#00d9ff30;transform:translate(-50%,-50%)}.sbx-hotspot.found{background:#ff8a1f88}.sbx-counter{position:absolute;top:12px;right:12px;background:#071225dd;padding:8px;border-radius:20px}.sbx-flow,.sbx-actions,.sbx-skills{display:grid;grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:9px;margin-top:18px}.sbx-flow span,.sbx-skills span{padding:12px;border-radius:10px;background:#142b47;text-align:center}.sbx-choice.correct{border-color:#65eaff}.sbx-choice.wrong{border-color:#ff648c}.sbx-feedback,.sbx-remember{margin-top:16px;padding:14px;border-radius:10px;background:#0b1728;border-left:4px solid #ff8a1f}.sbx-footer{display:flex;justify-content:space-between;margin-top:16px}.sbx-footer button:disabled{opacity:.38}.sbx-result{text-align:center;padding:36px}.sbx-score{font-size:3rem;font-weight:950;color:#65eaff}.sbx-status{color:#ffb4c7}@media(min-width:900px){#app.studybook-mode{width:min(980px,96vw);max-width:none;margin:auto}.sbx-shell{width:min(840px,100%)}.sbx-image,.sbx-image img{min-height:360px}}@media(max-width:420px){.sbx-actions{grid-template-columns:1fr}.sbx-footer{position:sticky;bottom:72px;background:#071225e8;padding:10px 0}}@media(prefers-reduced-motion:reduce){.sbx-fill{transition:none}}
+def _attach_glossary_terms() -> None:
+    """Attach approved Norwegian terms from the V5 content source without making rendering depend on it."""
+    source = Path(__file__).resolve().parents[1] / "content" / "studybook_chapters_v5.json"
+    try:
+        documents = json.loads(source.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return
+
+    terms_by_screen = {
+        screen.get("screen_id"): screen.get("glossary_terms")
+        for document in documents
+        for screen in document.get("screens", [])
+        if screen.get("screen_id") and screen.get("glossary_terms")
+    }
+    for chapter in CHAPTERS.values():
+        for lesson in chapter["lessons"]:
+            terms = terms_by_screen.get(lesson["id"])
+            if terms:
+                lesson.setdefault("glossary_terms", terms)
+
+
+_attach_glossary_terms()
+
+COPY = {k: i18n(*v) for k, v in {"brand":("THAI2DRIVE STUDIEBOKEN","หนังสือเรียน THAI2DRIVE","THAI2DRIVE STUDY BOOK"),"chapters":("28 kapitler","หนังสือเรียน 28 บท","28 chapters"),"continue":("Fortsett der du slapp","เรียนต่อจากจุดเดิม","Continue where you left off"),"start":("START →","เริ่ม →","START →"),"progress":("Progresjon","ความคืบหน้า","Progress"),"completed":("fullført","เสร็จแล้ว","completed"),"lessonCount":("leksjoner","บทเรียน","lessons"),"backHome":("Oversikt","ภาพรวม","Overview"),"previous":("Forrige","ก่อนหน้า","Previous"),"next":("Fortsett","เรียนต่อ","Continue"),"understood":("Jeg forstår","ฉันเข้าใจ","I understand"),"remember":("HUSK","จำไว้","REMEMBER"),"roadCleared":("ROAD CHECK CLEARED ⚡","ผ่าน ROAD CHECK ⚡","ROAD CHECK CLEARED ⚡"),"roadRetry":("Rolig repetisjon","ทบทวนอย่างสงบ","Calm review"),"review":("Repeter","ทบทวน","Review"),"finish":("Fortsett","เรียนต่อ","Continue"),"imageMissing":("THAI2DRIVE-bildet kommer snart","ภาพ THAI2DRIVE จะมาเร็ว ๆ นี้","THAI2DRIVE image coming soon"),"storageError":("Progresjonen kunne ikke lagres.","ไม่สามารถบันทึกความคืบหน้าได้","Progress could not be saved."),"contentError":("Siden kan ikke vises nå.","ไม่สามารถแสดงหน้านี้ได้","This page cannot be displayed."),"whatChanged":("WHAT CHANGED? 🧠","อะไรเปลี่ยนไป? 🧠","WHAT CHANGED? 🧠"),"originalView":("Opprinnelig bilde","ภาพเดิม","Original image"),"showNorwegianTerms":("Vis norske fagord","ดูคำศัพท์นอร์เวย์","Show Norwegian terms")}.items()}
+
+CSS = r"""#screenStudybook{padding:0;background:#071225;overflow-y:auto;color:var(--text)}.sbx-shell{width:min(760px,100%);min-height:100%;margin:auto;padding:18px 16px 96px}.sbx-top,.sbx-row,.sbx-road-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.sbx-top{margin-bottom:18px}.sbx-logo,.sbx-eyebrow{font-size:.72rem;font-weight:900;letter-spacing:.13em;color:#60e6ff}.sbx-hero,.sbx-card{padding:24px;border-radius:24px;background:linear-gradient(145deg,#102b4b,#101a36);border:1px solid #2c6383;box-shadow:0 18px 45px #0006}.sbx-card{padding:0;overflow:hidden}.sbx-copy{padding:20px}.sbx-track{height:8px;background:#ffffff16;border-radius:99px;overflow:hidden}.sbx-fill{height:100%;background:linear-gradient(90deg,#00d9ff,#a637ff)}.sbx-primary,.sbx-choice,.sbx-secondary{border:0;border-radius:14px;min-height:48px;padding:12px 18px;font:inherit;font-weight:850;cursor:pointer}.sbx-primary{background:#ff8a1f;color:#111}.sbx-secondary,.sbx-choice{background:#142844;color:#eaf7ff;border:1px solid #3a5c7d}.sbx-primary:focus-visible,.sbx-secondary:focus-visible,.sbx-choice:focus-visible,.sbx-hotspot:focus-visible,.sbx-map-card:focus-visible{outline:3px solid #62e8ff}.sbx-map{display:grid;gap:9px;margin-top:18px}.sbx-map-card{display:grid;grid-template-columns:40px 1fr auto;gap:12px;width:100%;padding:12px;border-radius:14px;background:#101d34;color:#eaf7ff;border:1px solid #274d70;text-align:left;font:inherit;cursor:pointer}.sbx-map-card small,.sbx-map-card strong{display:block}.sbx-image{position:relative;min-height:230px;background:#0b1728}.sbx-image img{width:100%;min-height:230px;max-height:420px;object-fit:cover;transition:opacity .15s ease}.sbx-image-fallback{min-height:230px;display:grid;place-items:center;padding:28px;text-align:center;color:#b9d7ed;background:linear-gradient(145deg,#0b1728,#132b47)}.sbx-pair-toggle{position:absolute;top:12px;left:12px;display:inline-flex;gap:4px;background:#071225ee;padding:4px;border-radius:99px;border:1px solid #2c6383;box-shadow:0 6px 18px #0009;z-index:10;backdrop-filter:blur(8px)}.sbx-pair-btn{background:transparent;border:0;color:#8ab4d5;font-size:.72rem;font-weight:850;letter-spacing:.04em;padding:6px 14px;border-radius:99px;cursor:pointer;transition:all .2s ease}.sbx-pair-btn.active{background:linear-gradient(90deg,#0066ff,#00d9ff);color:#fff;box-shadow:0 0 12px #00d9ff66}.sbx-pair-btn:focus-visible{outline:2px solid #65eaff}.sbx-hotspot{position:absolute;width:58px;height:58px;border:3px solid #65eaff;border-radius:50%;background:#00d9ff30;transform:translate(-50%,-50%)}.sbx-hotspot.found{background:#ff8a1f88}.sbx-counter{position:absolute;top:12px;right:12px;background:#071225dd;padding:8px;border-radius:20px}.sbx-flow,.sbx-actions,.sbx-skills,.sbx-glossary{display:grid;grid-template-columns:repeat(auto-fit,minmax(125px,1fr));gap:9px;margin-top:18px}.sbx-flow span,.sbx-skills span,.sbx-term{padding:12px;border-radius:10px;background:#142b47;text-align:center}.sbx-term{color:#60e6ff;font-weight:850}.sbx-choice.correct{border-color:#65eaff}.sbx-choice.wrong{border-color:#ff648c}.sbx-feedback,.sbx-remember{margin-top:16px;padding:14px;border-radius:10px;background:#0b1728;border-left:4px solid #ff8a1f}.sbx-footer{display:flex;justify-content:space-between;margin-top:16px}.sbx-footer button:disabled{opacity:.38}.sbx-result{text-align:center;padding:36px}.sbx-score{font-size:3rem;font-weight:950;color:#65eaff}.sbx-status{color:#ffb4c7}@media(min-width:900px){#app.studybook-mode{width:min(980px,96vw);max-width:none;margin:auto}.sbx-shell{width:min(840px,100%)}.sbx-image,.sbx-image img,.sbx-image-fallback{min-height:360px}}@media(max-width:420px){.sbx-actions{grid-template-columns:1fr}.sbx-footer{position:sticky;bottom:72px;background:#071225e8;padding:10px 0}}@media(prefers-reduced-motion:reduce){.sbx-fill{transition:none}}
 """
 SCREEN = '<div class="screen" id="screenStudybook"><main class="sbx-shell" id="sbxRoot" aria-live="polite"></main></div>'
 
@@ -3804,12 +3946,12 @@ _DATA = json.dumps({
 }, ensure_ascii=False, separators=(",", ":"))
 
 SCRIPT = r"""
-var SBX_DATA=__SBX_DATA__,SBX_KEY='t2d_studybook_progress_v1',sbxState={view:'home',index:0,answered:false,roadIndex:0,roadAnswers:[],found:[],storageFailed:false};
-function sbxEl(t,c,x){var e=document.createElement(t);if(t==='button')e.type='button';if(c)e.className=c;if(typeof x==='string')e.textContent=x;return e}function sbxL(value){if(!value||typeof value!=='object')return '';var text=value[appLang];return typeof text==='string'?text:''}function sbxCopy(k){return sbxL(SBX_DATA.copy[k])}function sbxDefaultProgress(){return{version:2,currentLesson:0,completedLessons:[],roadChecks:{},updatedAt:null}}function sbxReadProgress(){try{var r=_ls.get(SBX_KEY),p=r?JSON.parse(r):sbxDefaultProgress();if(!p||!Array.isArray(p.completedLessons))return sbxDefaultProgress();if(!p.roadChecks)p.roadChecks={};return p}catch(e){return sbxDefaultProgress()}}function sbxSaveProgress(p){try{p.version=2;p.updatedAt=new Date().toISOString();_ls.set(SBX_KEY,JSON.stringify(p));sbxState.storageFailed=false}catch(e){sbxState.storageFailed=true}}function sbxComplete(id){var p=sbxReadProgress();if(p.completedLessons.indexOf(id)<0)p.completedLessons.push(id);p.currentLesson=Math.min(sbxState.index+1,SBX_DATA.lessons.length-1);sbxSaveProgress(p);sbxState.answered=true}function sbxImage(k){var a=SBX_DATA.assets[k],w=sbxEl('div','sbx-image');if(!a)return w;var i=document.createElement('img');i.src=a.src;i.alt=sbxL(a.alt);i.onerror=function(){w.replaceChildren(sbxEl('div','sbx-feedback',sbxCopy('imageMissing')))};w.appendChild(i);if(a.pair_asset&&SBX_DATA.assets[a.pair_asset]){var p=SBX_DATA.assets[a.pair_asset],nav=sbxEl('div','sbx-pair-toggle');var b1=sbxEl('button','sbx-pair-btn active',sbxCopy('originalView'));b1.type='button';var b2=sbxEl('button','sbx-pair-btn',sbxCopy('whatChanged'));b2.type='button';b1.onclick=function(){b1.classList.add('active');b2.classList.remove('active');i.src=a.src;i.alt=sbxL(a.alt)};b2.onclick=function(){b2.classList.add('active');b1.classList.remove('active');i.src=p.src;i.alt=sbxL(p.alt)};nav.append(b1,b2);w.appendChild(nav)}return w}function sbxFeedback(c,x,ok){var o=c.querySelector('.sbx-feedback');if(o)o.remove();var f=sbxEl('div','sbx-feedback',x);f.role='status';f.dataset.result=ok?'correct':'wrong';c.querySelector('.sbx-copy').appendChild(f)}
-function sbxHome(){sbxState.view='home';var r=document.getElementById('sbxRoot'),p=sbxReadProgress(),pc=Math.round(p.completedLessons.length/SBX_DATA.lessons.length*100),h=sbxEl('section','sbx-hero');r.replaceChildren();h.append(sbxEl('div','sbx-logo',sbxCopy('brand')),sbxEl('h1','',sbxCopy('chapters')),sbxEl('p','',sbxCopy('continue')));var row=sbxEl('div','sbx-row');row.append(sbxEl('span','',sbxCopy('progress')),sbxEl('strong','',pc+' %'));var tr=sbxEl('div','sbx-track'),fi=sbxEl('div','sbx-fill');fi.style.width=pc+'%';tr.appendChild(fi);var b=sbxEl('button','sbx-primary',sbxCopy('start'));b.type='button';b.onclick=function(){sbxOpen(Math.min(Number(p.currentLesson)||0,SBX_DATA.lessons.length-1))};h.append(row,tr,b);r.appendChild(h);var m=sbxEl('div','sbx-map');SBX_DATA.lessons.forEach(function(l,n){var c=sbxEl('div','sbx-map-card'),z=sbxEl('span','');z.append(sbxEl('strong','',sbxL(l.title)),sbxEl('small','',sbxL(l.eyebrow)));c.append(sbxEl('span','',String(n+1)),z,sbxEl('span','',p.completedLessons.includes(l.id)?sbxCopy('completed'):''));m.appendChild(c)});r.appendChild(m)}function sbxHeader(r){var t=sbxEl('div','sbx-top'),b=sbxEl('button','sbx-secondary',sbxCopy('backHome'));b.type='button';b.onclick=sbxHome;t.append(b,sbxEl('span','sbx-logo',sbxCopy('brand')),sbxEl('span','',appLang.toUpperCase()));r.appendChild(t)}function sbxFrame(r,l){var c=sbxEl('article','sbx-card'),x=sbxEl('div','sbx-copy');x.append(sbxEl('div','sbx-eyebrow',sbxL(l.eyebrow)),sbxEl('h1','',sbxL(l.title)),sbxEl('p','',sbxL(l.body)));c.appendChild(x);r.appendChild(c);return c}function sbxFooter(r){var f=sbxEl('div','sbx-footer'),p=sbxEl('button','sbx-secondary',sbxCopy('previous')),n=sbxEl('button','sbx-primary',sbxCopy('next'));p.disabled=sbxState.index===0;p.onclick=function(){sbxOpen(sbxState.index-1)};n.disabled=!sbxState.answered;n.onclick=function(){sbxOpen(Math.min(sbxState.index+1,SBX_DATA.lessons.length-1))};f.append(p,n);r.appendChild(f)}function sbxNext(){var n=document.querySelector('#sbxRoot .sbx-footer .sbx-primary');if(n)n.disabled=!sbxState.answered}
+var SBX_DATA=__SBX_DATA__,SBX_KEY='t2d_studybook_progress_v1',sbxState={view:'home',currentChapter:'CH01',index:0,answered:false,roadIndex:0,roadAnswers:[],found:[],storageFailed:false};
+function sbxEl(t,c,x){var e=document.createElement(t);if(t==='button')e.type='button';if(c)e.className=c;if(typeof x==='string')e.textContent=x;return e}function sbxL(value){if(!value||typeof value!=='object')return '';var text=value[appLang];return typeof text==='string'?text:''}function sbxCopy(k){return sbxL(SBX_DATA.copy[k])}function sbxDefaultProgress(){return{version:2,currentChapter:'CH01',currentLesson:0,chapterPositions:{},completedLessons:[],roadChecks:{},updatedAt:null}}function sbxReadProgress(){try{var r=_ls.get(SBX_KEY),p=r?JSON.parse(r):sbxDefaultProgress();if(!p||!Array.isArray(p.completedLessons))return sbxDefaultProgress();if(!p.roadChecks)p.roadChecks={};if(!p.chapterPositions)p.chapterPositions={};if(!p.currentChapter)p.currentChapter='CH01';return p}catch(e){return sbxDefaultProgress()}}function sbxSaveProgress(p){try{p.version=2;p.updatedAt=new Date().toISOString();_ls.set(SBX_KEY,JSON.stringify(p));sbxState.storageFailed=false}catch(e){sbxState.storageFailed=true}}function sbxChapterCodes(){return Object.keys(SBX_DATA.chapters)}function sbxLessons(ch){var c=ch||sbxState.currentChapter||'CH01',chapter=SBX_DATA.chapters&&SBX_DATA.chapters[c];return chapter&&Array.isArray(chapter.lessons)?chapter.lessons:[]}function sbxComplete(id){var p=sbxReadProgress(),lessons=sbxLessons();if(p.completedLessons.indexOf(id)<0)p.completedLessons.push(id);var nextIndex=Math.min(sbxState.index+1,Math.max(lessons.length-1,0));p.currentChapter=sbxState.currentChapter;p.currentLesson=nextIndex;p.chapterPositions[sbxState.currentChapter]=nextIndex;sbxSaveProgress(p);sbxState.answered=true}function sbxImageFallback(w,img){if(img)img.remove();if(!w.querySelector('.sbx-image-fallback'))w.insertBefore(sbxEl('div','sbx-image-fallback',sbxCopy('imageMissing')),w.firstChild)}function sbxImage(k){var a=SBX_DATA.assets[k],w=sbxEl('div','sbx-image');if(!a){sbxImageFallback(w);return w}var i=document.createElement('img');i.src=a.src;i.alt=sbxL(a.alt);i.onerror=function(){sbxImageFallback(w,i)};w.appendChild(i);if(a.pair_asset&&SBX_DATA.assets[a.pair_asset]){var p=SBX_DATA.assets[a.pair_asset],nav=sbxEl('div','sbx-pair-toggle');var b1=sbxEl('button','sbx-pair-btn active',sbxCopy('originalView'));var b2=sbxEl('button','sbx-pair-btn',sbxCopy('whatChanged'));b1.onclick=function(){b1.classList.add('active');b2.classList.remove('active');i.src=a.src;i.alt=sbxL(a.alt)};b2.onclick=function(){b2.classList.add('active');b1.classList.remove('active');i.src=p.src;i.alt=sbxL(p.alt)};nav.append(b1,b2);w.appendChild(nav)}return w}function sbxGlossary(c,l){if(appLang!=='th'||!Array.isArray(l.glossary_terms)||!l.glossary_terms.length)return;var x=c.querySelector('.sbx-copy'),box=sbxEl('div','sbx-glossary-section'),terms=sbxEl('div','sbx-glossary');box.appendChild(sbxEl('div','sbx-eyebrow',sbxCopy('showNorwegianTerms')));l.glossary_terms.forEach(function(term){terms.appendChild(sbxEl('span','sbx-term',term))});box.appendChild(terms);x.appendChild(box)}function sbxFeedback(c,x,ok){var o=c.querySelector('.sbx-feedback');if(o)o.remove();var f=sbxEl('div','sbx-feedback',x);f.role='status';f.dataset.result=ok?'correct':'wrong';c.querySelector('.sbx-copy').appendChild(f)}
+function sbxHome(){sbxState.view='home';var r=document.getElementById('sbxRoot'),p=sbxReadProgress(),codes=sbxChapterCodes(),total=0;codes.forEach(function(code){total+=sbxLessons(code).length});var pc=total?Math.round(p.completedLessons.length/total*100):0,h=sbxEl('section','sbx-hero');r.replaceChildren();h.append(sbxEl('div','sbx-logo',sbxCopy('brand')),sbxEl('h1','',sbxCopy('chapters')),sbxEl('p','',sbxCopy('continue')));var row=sbxEl('div','sbx-row');row.append(sbxEl('span','',sbxCopy('progress')),sbxEl('strong','',pc+' %'));var tr=sbxEl('div','sbx-track'),fi=sbxEl('div','sbx-fill');fi.style.width=pc+'%';tr.appendChild(fi);var b=sbxEl('button','sbx-primary',sbxCopy('start'));b.onclick=function(){var code=p.currentChapter||'CH01';sbxOpenChapter(code,p.chapterPositions[code]||0)};h.append(row,tr,b);r.appendChild(h);var m=sbxEl('div','sbx-map');codes.forEach(function(code,n){var chapter=SBX_DATA.chapters[code],lessons=sbxLessons(code),done=lessons.length&&lessons.every(function(l){return p.completedLessons.includes(l.id)}),c=sbxEl('button','sbx-map-card'),z=sbxEl('span','');z.append(sbxEl('strong','',sbxL(chapter.title)),sbxEl('small','',lessons.length+' '+sbxCopy('lessonCount')));c.append(sbxEl('span','',String(n+1)),z,sbxEl('span','',done?sbxCopy('completed'):''));c.onclick=function(){sbxOpenChapter(code,p.chapterPositions[code]||0)};m.appendChild(c)});r.appendChild(m)}function sbxHeader(r){var t=sbxEl('div','sbx-top'),b=sbxEl('button','sbx-secondary',sbxCopy('backHome')),chapter=SBX_DATA.chapters[sbxState.currentChapter];b.onclick=sbxHome;t.append(b,sbxEl('span','sbx-logo',chapter?sbxL(chapter.title):sbxCopy('brand')),sbxEl('span','',appLang.toUpperCase()));r.appendChild(t)}function sbxFrame(r,l){var c=sbxEl('article','sbx-card'),x=sbxEl('div','sbx-copy');x.append(sbxEl('div','sbx-eyebrow',sbxL(l.eyebrow)),sbxEl('h1','',sbxL(l.title)),sbxEl('p','',sbxL(l.body)));c.appendChild(x);r.appendChild(c);return c}function sbxFooter(r){var f=sbxEl('div','sbx-footer'),p=sbxEl('button','sbx-secondary',sbxCopy('previous')),n=sbxEl('button','sbx-primary',sbxCopy('next')),lessons=sbxLessons();p.disabled=sbxState.index===0;p.onclick=function(){sbxOpen(sbxState.index-1)};n.disabled=!sbxState.answered;n.onclick=function(){sbxOpen(Math.min(sbxState.index+1,lessons.length-1))};f.append(p,n);r.appendChild(f)}function sbxNext(){var n=document.querySelector('#sbxRoot .sbx-footer .sbx-primary');if(n)n.disabled=!sbxState.answered}
 function sbxIntro(c,l){c.insertBefore(sbxImage(l.asset),c.firstChild);var b=sbxEl('button','sbx-primary',sbxCopy('start'));b.onclick=function(){sbxComplete(l.id);sbxNext()};c.querySelector('.sbx-copy').appendChild(b)}function sbxSequence(c,l){c.insertBefore(sbxImage(l.asset),c.firstChild);var f=sbxEl('div','sbx-flow');l.steps.forEach(function(s){f.appendChild(sbxEl('span','',sbxL(s)))});var b=sbxEl('button','sbx-primary',sbxCopy('understood'));b.onclick=function(){sbxComplete(l.id);sbxFeedback(c,sbxL(l.remember||l.body),true);sbxNext()};c.querySelector('.sbx-copy').append(f,b)}function sbxChoice(c,l){c.insertBefore(sbxImage(l.asset),c.firstChild);var a=sbxEl('div','sbx-actions');l.options.forEach(function(o){var b=sbxEl('button','sbx-choice',sbxL(o.label));b.onclick=function(){var ok=o.id===l.correct;a.querySelectorAll('button').forEach(function(q){q.classList.remove('correct','wrong')});b.classList.add(ok?'correct':'wrong');sbxFeedback(c,sbxL(ok?l.correctFeedback:l.wrongFeedback),ok);if(ok){sbxComplete(l.id);sbxNext()}};a.appendChild(b)});c.querySelector('.sbx-copy').appendChild(a)}function sbxSpot(c,l){var v=sbxImage(l.asset),n=sbxEl('span','sbx-counter','0 / '+l.hazards.length);v.appendChild(n);sbxState.found=[];l.hazards.forEach(function(h,i){var b=sbxEl('button','sbx-hotspot');b.style.left=h.x+'%';b.style.top=h.y+'%';b.setAttribute('aria-label',sbxL(h.label));b.onclick=function(){if(sbxState.found.includes(i))return;sbxState.found.push(i);b.classList.add('found');n.textContent=sbxState.found.length+' / '+l.hazards.length;var done=sbxState.found.length===l.hazards.length;sbxFeedback(c,sbxL(done?l.completeFeedback:l.feedback),true);if(done){sbxComplete(l.id);sbxNext()}};v.appendChild(b)});c.insertBefore(v,c.firstChild)}
-function sbxRoad(c,l){var q=l.questions[sbxState.roadIndex],x=c.querySelector('.sbx-copy');x.replaceChildren();var h=sbxEl('div','sbx-road-head');h.append(sbxEl('div','sbx-eyebrow',sbxL(q.label)),sbxEl('span','',(sbxState.roadIndex+1)+' / '+l.questions.length));x.append(h,sbxEl('h1','',sbxL(q.prompt)));var a=sbxEl('div','sbx-actions');q.options.forEach(function(o){var b=sbxEl('button','sbx-choice',sbxL(o.label));b.onclick=function(){var ok=o.id===q.correct;a.querySelectorAll('button').forEach(function(z){z.disabled=true});sbxState.roadAnswers.push(ok);sbxFeedback(c,sbxL(q.explanation),ok);var n=sbxEl('button','sbx-primary',sbxState.roadIndex+1<l.questions.length?sbxCopy('next'):sbxCopy('finish'));n.onclick=function(){if(++sbxState.roadIndex<l.questions.length)sbxRoad(c,l);else sbxRoadResult(l)};x.appendChild(n)};a.appendChild(b)});x.appendChild(a)}function sbxRoadResult(l){var r=document.getElementById('sbxRoot'),s=sbxState.roadAnswers.filter(Boolean).length,t=l.questions.length,ok=s===t,c=sbxEl('section','sbx-card sbx-result');r.replaceChildren();c.append(sbxEl('div','sbx-eyebrow',sbxCopy(ok?'roadCleared':'roadRetry')),sbxEl('div','sbx-score',s+' / '+t));var p=sbxReadProgress();p.roadChecks[l.id]={score:s,total:t};if(ok){if(!p.completedLessons.includes(l.id))p.completedLessons.push(l.id);p.currentLesson=Math.min(sbxState.index+1,SBX_DATA.lessons.length-1)}sbxSaveProgress(p);var b=sbxEl('button','sbx-primary',sbxCopy(ok?'finish':'review'));b.onclick=ok?function(){sbxOpen(Math.min(sbxState.index+1,SBX_DATA.lessons.length-1))}:function(){sbxState.roadIndex=0;sbxState.roadAnswers=[];sbxOpen(sbxState.index)};c.appendChild(b);r.appendChild(c)}function sbxCompleteScreen(c,l){var x=c.querySelector('.sbx-copy'),s=sbxEl('div','sbx-skills');l.skills.forEach(function(v){s.appendChild(sbxEl('span','',sbxL(v)))});x.append(s,sbxEl('div','sbx-eyebrow',sbxL(l.nextChapter)));var b=sbxEl('button','sbx-primary',sbxCopy('finish'));b.onclick=function(){sbxComplete(l.id);sbxHome()};x.appendChild(b)}
-function sbxOpen(i){var l=SBX_DATA.lessons[i],r=document.getElementById('sbxRoot');if(!l){r.replaceChildren(sbxEl('div','sbx-feedback',sbxCopy('contentError')));return}sbxState.view='lesson';sbxState.index=i;sbxState.answered=sbxReadProgress().completedLessons.includes(l.id);if(l.type==='roadCheck'){sbxState.roadIndex=0;sbxState.roadAnswers=[]}r.replaceChildren();sbxHeader(r);var c=sbxFrame(r,l);if(l.type==='intro')sbxIntro(c,l);else if(l.type==='sequence')sbxSequence(c,l);else if(l.type==='choice')sbxChoice(c,l);else if(l.type==='spotHazard')sbxSpot(c,l);else if(l.type==='roadCheck')sbxRoad(c,l);else if(l.type==='chapterComplete')sbxCompleteScreen(c,l);else sbxFeedback(c,sbxCopy('contentError'),false);if(l.type!=='roadCheck'&&l.type!=='chapterComplete')sbxFooter(r);var p=sbxReadProgress();p.currentLesson=i;sbxSaveProgress(p)}function loadStudiebok(){var r=document.getElementById('sbxRoot');if(!r)return;document.getElementById('app').classList.add('studybook-mode');sbxState.view==='lesson'?sbxOpen(sbxState.index):sbxHome()}function renderStudybook(){var s=document.getElementById('screenStudybook');if(s&&s.classList.contains('active'))loadStudiebok()}
+function sbxRoad(c,l){var q=l.questions[sbxState.roadIndex],x=c.querySelector('.sbx-copy');x.replaceChildren();var h=sbxEl('div','sbx-road-head');h.append(sbxEl('div','sbx-eyebrow',sbxL(q.label)),sbxEl('span','',(sbxState.roadIndex+1)+' / '+l.questions.length));x.append(h,sbxEl('h1','',sbxL(q.prompt)));var a=sbxEl('div','sbx-actions');q.options.forEach(function(o){var b=sbxEl('button','sbx-choice',sbxL(o.label));b.onclick=function(){var ok=o.id===q.correct;a.querySelectorAll('button').forEach(function(z){z.disabled=true});sbxState.roadAnswers.push(ok);sbxFeedback(c,sbxL(q.explanation),ok);var n=sbxEl('button','sbx-primary',sbxState.roadIndex+1<l.questions.length?sbxCopy('next'):sbxCopy('finish'));n.onclick=function(){if(++sbxState.roadIndex<l.questions.length)sbxRoad(c,l);else sbxRoadResult(l)};x.appendChild(n)};a.appendChild(b)});x.appendChild(a)}function sbxRoadResult(l){var r=document.getElementById('sbxRoot'),s=sbxState.roadAnswers.filter(Boolean).length,t=l.questions.length,ok=s===t,c=sbxEl('section','sbx-card sbx-result'),lessons=sbxLessons();r.replaceChildren();c.append(sbxEl('div','sbx-eyebrow',sbxCopy(ok?'roadCleared':'roadRetry')),sbxEl('div','sbx-score',s+' / '+t));var p=sbxReadProgress();p.roadChecks[l.id]={score:s,total:t};if(ok){if(!p.completedLessons.includes(l.id))p.completedLessons.push(l.id);var nextIndex=Math.min(sbxState.index+1,lessons.length-1);p.currentChapter=sbxState.currentChapter;p.currentLesson=nextIndex;p.chapterPositions[sbxState.currentChapter]=nextIndex}sbxSaveProgress(p);var b=sbxEl('button','sbx-primary',sbxCopy(ok?'finish':'review'));b.onclick=ok?function(){sbxOpen(Math.min(sbxState.index+1,lessons.length-1))}:function(){sbxState.roadIndex=0;sbxState.roadAnswers=[];sbxOpen(sbxState.index)};c.appendChild(b);r.appendChild(c)}function sbxCompleteScreen(c,l){var x=c.querySelector('.sbx-copy'),s=sbxEl('div','sbx-skills');(l.skills||[]).forEach(function(v){s.appendChild(sbxEl('span','',sbxL(v)))});x.append(s,sbxEl('div','sbx-eyebrow',sbxL(l.nextChapter)));var b=sbxEl('button','sbx-primary',sbxCopy('finish'));b.onclick=function(){sbxComplete(l.id);sbxHome()};x.appendChild(b)}
+function sbxOpenChapter(code,index){var chapter=SBX_DATA.chapters[code],r=document.getElementById('sbxRoot');if(!chapter){if(r)r.replaceChildren(sbxEl('div','sbx-feedback',sbxCopy('contentError')));return}sbxState.currentChapter=code;var lessons=sbxLessons(code),safeIndex=Math.max(0,Math.min(Number(index)||0,Math.max(lessons.length-1,0))),p=sbxReadProgress();p.currentChapter=code;p.currentLesson=safeIndex;p.chapterPositions[code]=safeIndex;sbxSaveProgress(p);sbxOpen(safeIndex)}function sbxOpen(i){try{var lessons=sbxLessons(),l=lessons[i],r=document.getElementById('sbxRoot');if(!r)return;if(!l){r.replaceChildren(sbxEl('div','sbx-feedback',sbxCopy('contentError')));return}sbxState.view='lesson';sbxState.index=i;sbxState.answered=sbxReadProgress().completedLessons.includes(l.id);if(l.type==='roadCheck'){sbxState.roadIndex=0;sbxState.roadAnswers=[]}r.replaceChildren();sbxHeader(r);var c=sbxFrame(r,l);if(l.type==='intro')sbxIntro(c,l);else if(l.type==='sequence')sbxSequence(c,l);else if(l.type==='choice')sbxChoice(c,l);else if(l.type==='spotHazard')sbxSpot(c,l);else if(l.type==='roadCheck')sbxRoad(c,l);else if(l.type==='chapterComplete')sbxCompleteScreen(c,l);else sbxFeedback(c,sbxCopy('contentError'),false);if(l.type!=='roadCheck')sbxGlossary(c,l);if(l.type!=='roadCheck'&&l.type!=='chapterComplete')sbxFooter(r);var p=sbxReadProgress();p.currentChapter=sbxState.currentChapter;p.currentLesson=i;p.chapterPositions[sbxState.currentChapter]=i;sbxSaveProgress(p)}catch(e){var root=document.getElementById('sbxRoot');if(root)root.replaceChildren(sbxEl('div','sbx-feedback',sbxCopy('contentError')))}}function loadStudiebok(){var r=document.getElementById('sbxRoot');if(!r)return;document.getElementById('app').classList.add('studybook-mode');var p=sbxReadProgress();if(!SBX_DATA.chapters[sbxState.currentChapter])sbxState.currentChapter=p.currentChapter||'CH01';sbxState.view==='lesson'?sbxOpen(sbxState.index):sbxHome()}function renderStudybook(){var s=document.getElementById('screenStudybook');if(s&&s.classList.contains('active'))loadStudiebok()}
 
 """.replace("__SBX_DATA__", _DATA)
 
