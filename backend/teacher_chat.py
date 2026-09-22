@@ -935,7 +935,20 @@ def _is_clarifying_question(content: str) -> bool:
     return has_question and (has_options or has_emojis or has_clarifying_keywords)
 
 
-def _build_system_prompt(lang: str) -> str:
+def _describe_memory_for_prompt(memory: dict) -> str:
+    """Neutral, factual bullet list of the given memory signal — no invented data."""
+    lines = []
+    if memory.get("current_streak"):
+        lines.append(f"- Current correct-answer streak: {memory['current_streak']}")
+    weak_topic = memory.get("weak_topic")
+    if weak_topic and weak_topic.get("name"):
+        lines.append(f"- Weakest topic recently: {weak_topic['name']}")
+    if memory.get("is_returning"):
+        lines.append("- This is a returning student, not their first session.")
+    return "\n".join(lines) if lines else "- No specific signal available."
+
+
+def _build_system_prompt(lang: str, memory: Optional[dict] = None) -> str:
     """Assemble language-aware system prompt — critical language rule injected FIRST.
 
     Putting the [LANGUAGE] header at the very top of the system prompt gives the model
@@ -985,7 +998,21 @@ def _build_system_prompt(lang: str) -> str:
         "   - The entire response, including titles and captions inside the tags, must be translated to the student's chosen language. Never use Norwegian fallback names or text when speaking to Thai or English students.\n"
         "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     )
-    
+
+    memory_instructions = ""
+    has_signal = memory and (
+        memory.get("current_streak") or (memory.get("weak_topic") or {}).get("name") or memory.get("is_returning")
+    )
+    if has_signal:
+        memory_instructions = (
+            "\n\n━━━ STUDENT LEARNING MEMORY (internal, do not quote verbatim) ━━━\n"
+            f"{_describe_memory_for_prompt(memory)}\n"
+            "Use this only to warmly personalize your greeting or encouragement once per "
+            "conversation. Never invent numbers or topics beyond what is given here. "
+            "Respond only in the student's selected language shown in [LANGUAGE] above.\n"
+            "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        )
+
     return (
         _LANG_CRITICAL[l]
         + _SECTION_7_2_PROMPT[l]
@@ -995,6 +1022,7 @@ def _build_system_prompt(lang: str) -> str:
         .replace("<<COACHING>>", _COACHING[l])
         + rag_instructions
         + multimedia_instructions
+        + memory_instructions
         + (
             "\n\nCONVERSATION STYLE: Answer the student's actual question directly. "
             "Vary your wording naturally. Do not repeat a fixed introduction such as "
@@ -2955,6 +2983,76 @@ async def _get_student_weakness(device_id: Optional[str] = None, user_id: Option
 
     return None
 
+
+def _safe_student_memory() -> dict:
+    """Empty-signal memory — returned when there's nothing to report or the DB errors out."""
+    return {
+        "weak_topic": None,
+        "current_streak": 0,
+        "best_streak": 0,
+        "total_attempts": 0,
+        "accuracy_pct": None,
+        "last_session_at": None,
+        "is_returning": False,
+    }
+
+
+async def fetch_student_learning_memory(
+    device_id: Optional[str] = None, user_id: Optional[str] = None, lang: str = "no"
+) -> Optional[dict]:
+    """Aggregate a student's weak topic, streak and accuracy for a personalized greeting.
+
+    Defensive by design: any DB failure returns a safe empty-signal memory instead of
+    raising, so a Mongo hiccup can never break the welcome greeting or the chat prompt.
+    """
+    if not device_id and not user_id:
+        return None
+
+    memory = _safe_student_memory()
+
+    try:
+        memory["weak_topic"] = await _get_student_weakness(device_id, user_id, lang)
+    except Exception as e:
+        logger.warning("Error fetching weak topic for student memory: %s", e)
+
+    try:
+        match_filter = {"id": user_id} if user_id else {"device_id": device_id}
+        user_doc = await _db["users"].find_one(match_filter)
+        if user_doc:
+            memory["current_streak"] = user_doc.get("current_streak", 0)
+            memory["best_streak"] = user_doc.get("best_streak", 0)
+    except Exception as e:
+        logger.warning("Error fetching streak for student memory: %s", e)
+
+    try:
+        match_conds = []
+        if user_id:
+            match_conds.append({"user_id": user_id})
+        if device_id:
+            match_conds.append({"device_id": device_id})
+        match_filter = {"$or": match_conds} if len(match_conds) > 1 else match_conds[0]
+
+        pipeline = [
+            {"$match": match_filter},
+            {"$group": {
+                "_id": None,
+                "total": {"$sum": 1},
+                "correct": {"$sum": {"$cond": ["$correct", 1, 0]}},
+                "last_session_at": {"$max": "$ts"},
+            }},
+        ]
+        stats_results = await _db["quiz_attempts"].aggregate(pipeline).to_list(length=1)
+        stats = stats_results[0] if stats_results else {}
+        total_attempts = stats.get("total", 0) or 0
+        memory["total_attempts"] = total_attempts
+        memory["accuracy_pct"] = round(stats.get("correct", 0) / total_attempts * 100) if total_attempts else None
+        memory["last_session_at"] = stats.get("last_session_at")
+        memory["is_returning"] = total_attempts > 0
+    except Exception as e:
+        logger.warning("Error fetching quiz stats for student memory: %s", e)
+
+    return memory
+
 @teacher_router.get("/teacher/welcome")
 async def teacher_welcome(
     lang: str = Query(default="no"),
@@ -2963,7 +3061,40 @@ async def teacher_welcome(
 ):
     if lang not in ("no", "th", "en"):
         raise HTTPException(status_code=422, detail="Unsupported or missing language.")
-    weakness = await _get_student_weakness(device_id, user_id, lang)
+    memory = await fetch_student_learning_memory(device_id, user_id, lang)
+    weakness = memory.get("weak_topic") if memory else None
+    streak = memory.get("current_streak", 0) if memory else 0
+
+    if streak and streak >= 1:
+        topic_name = weakness["name"] if weakness and weakness.get("name") else None
+        streak_greetings = {
+            "no": (
+                f"Bra jobbet! Du har {streak} riktige svar på rad akkurat nå 🎉 "
+                + (
+                    f"Jeg ser at {topic_name} har vært litt vrient i det siste — skal vi ta en kjapp prat om det, eller vil du fortsette streaken din på noe annet?"
+                    if topic_name
+                    else "Hva har du lyst til å øve på i dag?"
+                )
+            ),
+            "th": (
+                f"เก่งมากครับ! ตอนนี้คุณตอบถูกติดต่อกัน {streak} ข้อแล้ว 🎉 "
+                + (
+                    f"ผมเห็นว่าเรื่อง{topic_name}ยังเป็นจุดที่ยากอยู่บ้าง อยากคุยเรื่องนี้กันสักนิดไหมครับ หรืออยากฝึกต่อเรื่องอื่นเพื่อรักษาสถิติไว้ครับ?"
+                    if topic_name
+                    else "วันนี้อยากฝึกเรื่องอะไรต่อดีครับ?"
+                )
+            ),
+            "en": (
+                f"Great work! You're on a {streak}-answer correct streak right now 🎉 "
+                + (
+                    f"I noticed {topic_name} has been a bit tricky lately — want a quick chat about that, or keep your streak going with something else?"
+                    if topic_name
+                    else "What would you like to practice today?"
+                )
+            ),
+        }
+        return {"lang": lang, "welcome": streak_greetings[lang], "weakness": weakness, "streak": streak}
+
     if weakness and weakness.get("name"):
         topic_name = weakness["name"]
         greetings = {
@@ -3168,7 +3299,8 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             raise RuntimeError("DEEPSEEK_API_KEY not configured")
 
         # _build_system_prompt injects [LANGUAGE] header FIRST, then language-specific examples
-        system_prompt = _build_system_prompt(lang)
+        student_memory = await fetch_student_learning_memory(req.device_id, req.user_id, lang)
+        system_prompt = _build_system_prompt(lang, memory=student_memory)
         system_prompt += (
             "\n\nLEGAL SOURCE RULE: Ground legal explanations only in Vegtrafikkloven § 3 "
             "(HAV: hensynsfull, aktpågivende, varsom), Vegtrafikkloven § 7 on right-of-way, "
