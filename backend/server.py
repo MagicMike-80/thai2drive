@@ -7140,6 +7140,12 @@ _ELEVENLABS_VOICE_ENV = {
 # den dekker norsk og engelsk like godt. Modellen inngår i cache-nøkkelen, så et
 # modellbytte gir nye filer i stedet for gammel, feiluttalt lyd.
 _DEFAULT_ELEVENLABS_MODEL_ID = "eleven_v3"
+_ELEVENLABS_LANGUAGE_CODES = {"th-TH": "th", "nb-NO": "no", "en-US": "en"}
+_ELEVENLABS_VOICE_SETTINGS = {
+    "th-TH": {"stability": 0.5, "similarity_boost": 0.75, "style": 1.0},
+    "nb-NO": {"stability": 0.5, "similarity_boost": 0.75},
+    "en-US": {"stability": 0.5, "similarity_boost": 0.75},
+}
 _TTS_BREAKER_FAILURE_LIMIT = int(os.environ.get("TTS_BREAKER_FAILURE_LIMIT", "3"))
 _TTS_BREAKER_COOLDOWN_SECONDS = int(os.environ.get("TTS_BREAKER_COOLDOWN_SECONDS", "300"))
 _TTS_PROVIDER_STATE: Dict[str, Dict[str, Any]] = {}
@@ -7333,9 +7339,15 @@ async def text_to_speech(request: Request, text: Optional[str] = None, lang: Opt
     # ── Alle språk → Michaels språkspesifikke ElevenLabs-klonestemme ─────
     voice_id = _elevenlabs_voice_id(lang)
     model_id = _elevenlabs_model_id()
+    voice_settings = _ELEVENLABS_VOICE_SETTINGS[lang]
     # Modellen er en del av leverandør-nøkkelen: bytter vi modell for å fikse
     # thai-uttale, får vi nye filer i stedet for gammel, feiluttalt cache.
-    cloned_cache_path = _tts_cache_path(f"elevenlabs:{model_id}", voice_id, lang, text)
+    # Bare thai får endret stil. Skill den cachen fra eldre thai-opptak,
+    # samtidig som norsk og engelsk kan gjenbruke eksisterende MP3-er.
+    cache_provider = f"elevenlabs:{model_id}"
+    if lang == "th-TH":
+        cache_provider += f":style={voice_settings['style']}"
+    cloned_cache_path = _tts_cache_path(cache_provider, voice_id, lang, text)
 
     if os.path.exists(cloned_cache_path):
         return _stream_mp3_file(
@@ -7365,10 +7377,8 @@ async def text_to_speech(request: Request, text: Optional[str] = None, lang: Opt
             payload = {
                 "text": text,
                 "model_id": model_id,
-                "voice_settings": {
-                    "stability": 0.5,
-                    "similarity_boost": 0.75,
-                },
+                "language_code": _ELEVENLABS_LANGUAGE_CODES[lang],
+                "voice_settings": voice_settings,
             }
             client = httpx.AsyncClient(timeout=60.0)
             request_to_eleven = client.build_request("POST", url, json=payload, headers=headers)
