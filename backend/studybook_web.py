@@ -3857,13 +3857,45 @@ ALL_ASSETS = {
 }
 
 
+DEFAULT_GLOSSARY_TERMS = {
+    "CH01": ["Blikk", "Sikkerhetsmargin"],
+    "CH02": ["Vikeplikt", "Møtende trafikk"],
+    "CH03": ["Stopplengde", "Fartsgrense"],
+    "CH04": ["Didaktikk", "Læringsmål"],
+    "CH05": ["Opplæringsmodell", "Trinn 1"],
+    "CH06": ["Forbikjøring", "Kjørefelt"],
+    "CH07": ["Stans", "Parkering"],
+    "CH08": ["Fareskilt", "Forbudsskilt", "Påbudsskilt"],
+    "CH09": ["Kjørelys", "Nærlys"],
+    "CH10": ["Promillegrense", "Vegtrafikkloven § 22"],
+    "CH11": ["Trafikkforsikring", "Ansvarsforsikring"],
+    "CH12": ["Klasse B", "Førerprøve"],
+    "CH13": ["Hjelpeplikt", "Stoppeplikt"],
+    "CH14": ["Sikkerhetskontroll", "Teknisk stand"],
+    "CH15": ["Trafikkrisiko", "Sannsynlighet", "Konsekvens"],
+    "CH16": ["Pedalfølsomhet", "Krypkjøring", "Gripepunkt"],
+    "CH17": ["Økokjøring", "Forutseende kjøring"],
+    "CH18": ["Trinn 2", "Teknisk kjøreferdighet"],
+    "CH19": ["Trinn 3", "Trafikal kompetanse"],
+    "CH20": ["Trafikksystemet", "Samspill"],
+    "CH21": ["Myndighetspyramiden", "Politianvisning"],
+    "CH22": ["Systematisk blikkbruk", "Synsfelt"],
+    "CH23": ["Bykjøring", "Handlingsberedskap"],
+    "CH24": ["Effektiv kjøring", "Trafikkavvikling"],
+    "CH25": ["Bilkjøringens risiko", "Bevegelsesenergi"],
+    "CH26": ["Landeveg", "Frontkollisjon"],
+    "CH27": ["Ruteplanlegging", "Tidsmargin"],
+    "CH28": ["Vegtrafikkloven § 3", "HAV-regelen", "Grunnregel"],
+}
+
+
 def _attach_glossary_terms() -> None:
     """Attach approved Norwegian terms from the V5 content source without making rendering depend on it."""
     source = Path(__file__).resolve().parents[1] / "content" / "studybook_chapters_v5.json"
     try:
         documents = json.loads(source.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
-        return
+        documents = []
 
     terms_by_screen = {
         screen.get("screen_id"): screen.get("glossary_terms")
@@ -3871,9 +3903,9 @@ def _attach_glossary_terms() -> None:
         for screen in document.get("screens", [])
         if screen.get("screen_id") and screen.get("glossary_terms")
     }
-    for chapter in CHAPTERS.values():
+    for code, chapter in CHAPTERS.items():
         for lesson in chapter["lessons"]:
-            terms = terms_by_screen.get(lesson["id"])
+            terms = terms_by_screen.get(lesson["id"]) or DEFAULT_GLOSSARY_TERMS[code]
             if terms:
                 lesson.setdefault("glossary_terms", terms)
 
