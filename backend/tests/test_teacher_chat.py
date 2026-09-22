@@ -342,7 +342,7 @@ class TestWrongQuizAnswerReplyIsThaiOnly(unittest.TestCase):
         self.assertIn("Correct answer: Vikeplikt", prompt)
         self.assertIn("why that choice does not apply", prompt)
         self.assertIn("at most one targeted", prompt)
-        self.assertIn("Situasjon / Kongen og tjeneren eller HAV-regelen", prompt)
+        self.assertIn("without fixed section headings", prompt)
         self.assertNotIn("Theory-test angle", prompt)
         self.assertNotIn("สถานการณ์", prompt)
         self.assertEqual(response.mode, "quiz_coach")

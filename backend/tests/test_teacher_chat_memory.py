@@ -142,6 +142,31 @@ class FetchStudentLearningMemoryTests(unittest.TestCase):
 
 
 class SystemPromptMemoryInjectionTests(unittest.TestCase):
+    def test_master_documents_are_loaded_into_prompt(self):
+        for lang in ("no", "th", "en"):
+            prompt = tc._build_system_prompt(lang)
+            for name in tc._MASTER_DOCS:
+                self.assertIn(f'<master_document name="{name}">', prompt)
+            self.assertIn("HAV = Hensynsfull", prompt)
+            self.assertIn("การให้ทาง (vikeplikt)", prompt)
+
+    def test_final_contract_overrides_legacy_formatting(self):
+        for lang in ("no", "th", "en"):
+            prompt = tc._build_system_prompt(lang)
+            contract = prompt.rsplit("FINAL MASTER OUTPUT RULES", 1)[1]
+            self.assertIn("2–4 sentences", contract)
+            self.assertIn("no fixed section headings", contract)
+            self.assertIn("no emoji", contract)
+            self.assertIn("No false praise", contract)
+            self.assertNotIn("🚗 Situasjon", prompt)
+        self.assertIn("Norwegian technical term", tc._build_system_prompt("th"))
+
+    def test_disputed_legal_claims_are_not_injected(self):
+        prompt = tc._build_system_prompt("no").lower()
+        self.assertNotIn("§7 nr. 4", prompt)
+        self.assertNotIn("nordens strengeste", prompt)
+        self.assertNotIn("1. november til 1. april", prompt)
+
     def test_no_memory_block_when_memory_is_none(self):
         prompt = tc._build_system_prompt("no", memory=None)
         self.assertNotIn("STUDENT LEARNING MEMORY", prompt)
