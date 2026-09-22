@@ -1613,6 +1613,8 @@ def test_student_renderer_exposes_norwegian_term_cards_without_language_fallback
     assert COPY["showNorwegianTerms"]["th"]
     assert COPY["showNorwegianTerms"]["no"]
     assert COPY["showNorwegianTerms"]["en"]
+    dockerignore = (Path(__file__).resolve().parents[2] / ".dockerignore").read_text(encoding="utf-8")
+    assert "!content/studybook_chapters_v5.json" in dockerignore
 
 
 def test_every_chapter_has_road_check_and_completion_screen():
