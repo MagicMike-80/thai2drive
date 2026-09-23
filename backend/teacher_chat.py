@@ -1496,8 +1496,15 @@ def _tone_instruction(tone: Optional[str], lang: str) -> str:
 _EXPLICIT_ANSWER_TERMS = (
     "fasit", "vis svaret", "gi meg svaret", "hva er svaret", "forklar", "hvorfor",
     "บอกคำตอบ", "เฉลย", "อธิบาย", "ทำไม", "คำตอบที่ถูก",
-    "answer", "explain", "why", "solution",
+    "the answer", "explain", "why",
 )
+_HINT_REQUEST_TERMS = ("hint", "คำใบ้")
+
+
+def _is_hint_request(message: str) -> bool:
+    """A hint click skips step 1: the student has already answered and cannot retry in chat."""
+    text = (message or "").casefold()
+    return any(term in text for term in _HINT_REQUEST_TERMS)
 
 
 def _quiz_key(quiz_context: str) -> str:
@@ -3702,7 +3709,8 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
 
         if is_quiz_help and quiz_context_str and req.mode != "quiz_coach":
             system_prompt += _scaffolding_instruction(
-                _quiz_attempt_number(prior, current_quiz_key),
+                _quiz_attempt_number(prior, current_quiz_key)
+                + (1 if _is_hint_request(user_msg) else 0),
                 any(term in user_msg.casefold() for term in _EXPLICIT_ANSWER_TERMS),
                 lang,
             )

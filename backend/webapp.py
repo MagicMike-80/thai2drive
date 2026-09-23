@@ -8346,6 +8346,7 @@ function renderQuestion() {
   if (_aiPanelTimer) { clearTimeout(_aiPanelTimer); _aiPanelTimer = null; } // cancel delayed panel from prev Q
   var q     = questions[qIdx];
   qAnswered = false;
+  _msResetHint();
   var accessLimit = accessState && accessState.limit ? accessState.limit : FREE_LIMIT;
   var displayTotal = isPremium() ? questions.length : Math.min(accessLimit, questions.length);
   var total = questions.length;
@@ -10864,6 +10865,7 @@ function setLang(lang) {
     if (authBtn) authBtn.classList.toggle('active', lang === l.toLowerCase());
   });
   applyUILang();
+  _msOnLangChange();
   // Reset signs cache so it reloads in new language
   signsLoaded = false;
   var signsScreen = document.getElementById('screenSigns');
@@ -11070,6 +11072,7 @@ function _displayedAnswerText(answerId) {
 
 function askMichaelAboutThis(mode) {
   var isHint = (mode === 'hint');
+  if (!isHint) _msResetHint();
   var q = questions[qIdx];
   if (!q) return;
 
@@ -11146,7 +11149,7 @@ function askMichaelAboutThis(mode) {
 
   var hiddenPayload = userDisplayMsg + '\n\n'
     + '<quiz_context>\n'
-    + (isHint ? 'STUDENT ANSWERED INCORRECTLY. GIVE A HINT ONLY. DO NOT REVEAL THE ANSWER.\n'
+    + (isHint ? 'STUDENT ANSWERED INCORRECTLY. THE STUDENT ASKED FOR A HINT.\n'
               : 'STUDENT ANSWERED INCORRECTLY. EXPLAIN WHY IT IS WRONG.\n')
     + 'is_correct: false\n'
     + 'Question: ' + qText + '\n'
@@ -11275,7 +11278,18 @@ var _msTab = 0, _msWordIdx = -1, _msGazeTimer = null, _msGazeStep = 0, _msGazeRo
 var _msHint = { qId: null, count: 0, sid: null };
 
 function _msL() { return _MS[appLang] || _MS.no; }
-function _msSyncLabel() { var e = document.getElementById('msOpenLbl'); if (e) e.textContent = _msL().open; }
+function _msSyncLabel() {
+  var L = _msL();
+  var e = document.getElementById('msOpenLbl'); if (e) e.textContent = L.open;
+  var c = document.querySelector('.ms-close'); if (c) c.setAttribute('aria-label', L.close);
+  var t = document.getElementById('msTitle'); if (t) t.textContent = L.open;
+}
+function _msResetHint() { _msHint = { qId: null, count: 0, sid: null }; }
+function _msOnLangChange() {
+  _msSyncLabel(); _msResetHint(); _msWordIdx = -1;
+  var ov = document.getElementById('msOverlay');
+  if (ov && ov.classList.contains('open')) { _msGazeStop(); _msRender(); }
+}
 
 // ── Konge/tjener-chip på vikepliktspørsmål ─────────────────────────
 function buildKingServantChip(qText) {
@@ -11319,6 +11333,8 @@ function _msBumpHintDots() {
 }
 
 // ── Michael-skolen (modal) ─────────────────────────────────────────
+setTimeout(_msSyncLabel, 0);
+
 function openMichaelSchool() {
   _msSyncLabel();
   var ov = document.getElementById('msOverlay');

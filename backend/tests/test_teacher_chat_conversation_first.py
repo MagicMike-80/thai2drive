@@ -146,3 +146,25 @@ class ScaffoldingLadderTests(unittest.TestCase):
         self.assertIn("ONE sharp hint", two)
         self.assertIn("STEP 3", three)
         self.assertIn("STEP 3", asked)
+
+
+class HintClickTests(unittest.TestCase):
+    def test_hint_request_detection(self):
+        for msg in ("Gi meg et hint", "Give me a hint", "ขอคำใบ้หน่อยครับ"):
+            self.assertTrue(tc._is_hint_request(msg), msg)
+        self.assertFalse(tc._is_hint_request("Kan du forklare dette spørsmålet for meg?"))
+
+    def test_three_hint_clicks_give_hint_then_answer(self):
+        key = tc._quiz_key("Q1 fart 50")
+        prior = []
+        steps = []
+        for _ in range(3):
+            attempt = tc._quiz_attempt_number(prior, key) + 1  # hint click bumps the ladder
+            text = tc._scaffolding_instruction(attempt, False, "no")
+            steps.append("STEP 3" if "STEP 3" in text else "STEP 2" if "STEP 2" in text else "STEP 1")
+            prior.append({"role": "user", "quiz_key": key})
+        self.assertEqual(steps, ["STEP 2", "STEP 3", "STEP 3"])
+
+    def test_explain_message_jumps_to_answer(self):
+        self.assertTrue(any(t in "Kan du forklare dette?".casefold() for t in tc._EXPLICIT_ANSWER_TERMS))
+        self.assertFalse(any(t in "Gi meg et hint".casefold() for t in tc._EXPLICIT_ANSWER_TERMS))

@@ -35,10 +35,15 @@ class MichaelSchoolUiContract(unittest.TestCase):
         self.assertIn("html += buildHavLamps(expl);", HTML)
         self.assertIn("html += buildHintButton();", HTML)
 
-    def test_hint_mode_keeps_session_and_never_asks_for_explanation(self):
+    def test_hint_mode_keeps_session_and_marks_hint_request(self):
         self.assertIn("function askMichaelAboutThis(mode)", HTML)
         self.assertIn("reuseHintSession", HTML)
-        self.assertIn("GIVE A HINT ONLY. DO NOT REVEAL THE ANSWER.", HTML)
+        self.assertIn("THE STUDENT ASKED FOR A HINT.", HTML)
+
+    def test_language_change_resyncs_label_and_clears_hint_state(self):
+        self.assertIn("_msOnLangChange();", HTML)
+        self.assertIn("function _msResetHint()", HTML)
+        self.assertIn("if (!isHint) _msResetHint();", HTML)
 
     def test_unverified_claims_removed(self):
         self.assertNotIn("anbefalt 4 mm", HTML)
