@@ -1,0 +1,2530 @@
+[
+  {
+    "id": "202_0",
+    "name": {
+      "no": "Vikeplikt",
+      "th": "ให้ทาง",
+      "en": "Give way"
+    }
+  },
+  {
+    "id": "204_0",
+    "name": {
+      "no": "Stopp",
+      "th": "หยุด",
+      "en": "Stop"
+    }
+  },
+  {
+    "id": "206_0",
+    "name": {
+      "no": "Forkjørsveg",
+      "th": "ทางเอก",
+      "en": "Priority road"
+    }
+  },
+  {
+    "id": "208_0",
+    "name": {
+      "no": "Slutt på forkjørsveg",
+      "th": "สิ้นสุดทางเอก",
+      "en": "End of priority road"
+    }
+  },
+  {
+    "id": "210_0",
+    "name": {
+      "no": "Forkjørskryss",
+      "th": "ทางแยกบนทางเอก",
+      "en": "Junction on a priority road"
+    }
+  },
+  {
+    "id": "212_0",
+    "name": {
+      "no": "Vikeplikt overfor møtende kjørende",
+      "th": "ให้ทางแก่รถที่สวนมา",
+      "en": "Give way to oncoming traffic"
+    }
+  },
+  {
+    "id": "214_0",
+    "name": {
+      "no": "Møtende kjørende har vikeplikt",
+      "th": "รถที่สวนมาต้องให้ทาง",
+      "en": "Oncoming traffic must give way"
+    }
+  },
+  {
+    "id": "100_1",
+    "name": {
+      "no": "Farlig sving",
+      "th": "ทางโค้งอันตราย",
+      "en": "Dangerous bend"
+    }
+  },
+  {
+    "id": "100_2",
+    "name": {
+      "no": "Farlig sving",
+      "th": "ทางโค้งอันตราย",
+      "en": "Dangerous bend"
+    }
+  },
+  {
+    "id": "102_1",
+    "name": {
+      "no": "Farlige svinger",
+      "th": "ทางโค้งอันตรายหลายโค้ง",
+      "en": "Dangerous bends"
+    }
+  },
+  {
+    "id": "102_2",
+    "name": {
+      "no": "Farlige svinger",
+      "th": "ทางโค้งอันตรายหลายโค้ง",
+      "en": "Dangerous bends"
+    }
+  },
+  {
+    "id": "104_1",
+    "name": {
+      "no": "Bratt bakke",
+      "th": "ทางลาดชัน",
+      "en": "Steep hill"
+    }
+  },
+  {
+    "id": "104_2",
+    "name": {
+      "no": "Bratt bakke",
+      "th": "ทางลาดชัน",
+      "en": "Steep hill"
+    }
+  },
+  {
+    "id": "106_1",
+    "name": {
+      "no": "Smalere veg",
+      "th": "ถนนแคบลง",
+      "en": "Road narrows"
+    }
+  },
+  {
+    "id": "106_2",
+    "name": {
+      "no": "Smalere veg",
+      "th": "ถนนแคบลง",
+      "en": "Road narrows"
+    }
+  },
+  {
+    "id": "106_3",
+    "name": {
+      "no": "Smalere veg",
+      "th": "ถนนแคบลง",
+      "en": "Road narrows"
+    }
+  },
+  {
+    "id": "108_0",
+    "name": {
+      "no": "Ujevn veg",
+      "th": "ผิวทางขรุขระ",
+      "en": "Uneven road"
+    }
+  },
+  {
+    "id": "109_0",
+    "name": {
+      "no": "Fartshump",
+      "th": "เนินชะลอความเร็ว",
+      "en": "Speed hump"
+    }
+  },
+  {
+    "id": "110_0",
+    "name": {
+      "no": "Vegarbeid",
+      "th": "งานซ่อมสร้างถนน",
+      "en": "Road works"
+    }
+  },
+  {
+    "id": "112_0",
+    "name": {
+      "no": "Steinsprut",
+      "th": "หินกระเด็น",
+      "en": "Loose chippings"
+    }
+  },
+  {
+    "id": "114_1",
+    "name": {
+      "no": "Rasfare",
+      "th": "เสี่ยงดินหรือหินถล่ม",
+      "en": "Risk of landslide or rockfall"
+    }
+  },
+  {
+    "id": "114_2",
+    "name": {
+      "no": "Rasfare",
+      "th": "เสี่ยงดินหรือหินถล่ม",
+      "en": "Risk of landslide or rockfall"
+    }
+  },
+  {
+    "id": "116_0",
+    "name": {
+      "no": "Glatt kjørebane",
+      "th": "ผิวทางลื่น",
+      "en": "Slippery road"
+    }
+  },
+  {
+    "id": "117_0",
+    "name": {
+      "no": "Farlig vegskulder",
+      "th": "ไหล่ทางอันตราย",
+      "en": "Dangerous road shoulder"
+    }
+  },
+  {
+    "id": "118_0",
+    "name": {
+      "no": "Bevegelig bru",
+      "th": "สะพานเปิดปิดได้",
+      "en": "Opening bridge"
+    }
+  },
+  {
+    "id": "120_0",
+    "name": {
+      "no": "Kai, strand eller ferjeleie",
+      "th": "ท่าเทียบเรือ ชายหาด หรือท่าเรือข้ามฟาก",
+      "en": "Quay, beach or ferry berth"
+    }
+  },
+  {
+    "id": "122_0",
+    "name": {
+      "no": "Tunnel",
+      "th": "อุโมงค์",
+      "en": "Tunnel"
+    }
+  },
+  {
+    "id": "124_0",
+    "name": {
+      "no": "Farlig vegkryss",
+      "th": "ทางแยกอันตราย",
+      "en": "Dangerous junction"
+    }
+  },
+  {
+    "id": "126_0",
+    "name": {
+      "no": "Rundkjøring",
+      "th": "วงเวียน",
+      "en": "Roundabout"
+    }
+  },
+  {
+    "id": "132_0",
+    "name": {
+      "no": "Trafikklyssignal",
+      "th": "สัญญาณไฟจราจร",
+      "en": "Traffic light signal"
+    }
+  },
+  {
+    "id": "134_0",
+    "name": {
+      "no": "Planovergang med bom",
+      "th": "จุดตัดทางรถไฟที่มีเครื่องกั้น",
+      "en": "Level crossing with barrier"
+    }
+  },
+  {
+    "id": "135_0",
+    "name": {
+      "no": "Planovergang uten bom",
+      "th": "จุดตัดทางรถไฟที่ไม่มีเครื่องกั้น",
+      "en": "Level crossing without barrier"
+    }
+  },
+  {
+    "id": "136_1",
+    "name": {
+      "no": "Avstandsskilt",
+      "th": "ป้ายบอกระยะทาง",
+      "en": "Distance marker"
+    }
+  },
+  {
+    "id": "136_2",
+    "name": {
+      "no": "Avstandsskilt",
+      "th": "ป้ายบอกระยะทาง",
+      "en": "Distance marker"
+    }
+  },
+  {
+    "id": "136_3",
+    "name": {
+      "no": "Avstandsskilt",
+      "th": "ป้ายบอกระยะทาง",
+      "en": "Distance marker"
+    }
+  },
+  {
+    "id": "138_1",
+    "name": {
+      "no": "Jernbanespor – enkeltsporet",
+      "th": "ทางรถไฟ – รางเดี่ยว",
+      "en": "Railway track – single track"
+    }
+  },
+  {
+    "id": "138_2",
+    "name": {
+      "no": "Jernbanespor – flersporet",
+      "th": "ทางรถไฟ – หลายราง",
+      "en": "Railway track – multiple tracks"
+    }
+  },
+  {
+    "id": "139_0",
+    "name": {
+      "no": "Sporvogn",
+      "th": "รถราง",
+      "en": "Tram"
+    }
+  },
+  {
+    "id": "140_0",
+    "name": {
+      "no": "Avstand til gangfelt",
+      "th": "ระยะทางถึงทางม้าลาย",
+      "en": "Distance to pedestrian crossing"
+    }
+  },
+  {
+    "id": "142_0",
+    "name": {
+      "no": "Barn",
+      "th": "เด็ก",
+      "en": "Children"
+    }
+  },
+  {
+    "id": "144_0",
+    "name": {
+      "no": "Syklende",
+      "th": "ผู้ขี่จักรยาน",
+      "en": "Cyclists"
+    }
+  },
+  {
+    "id": "146_1",
+    "name": {
+      "no": "Dyr",
+      "th": "สัตว์",
+      "en": "Animals"
+    }
+  },
+  {
+    "id": "146_2",
+    "name": {
+      "no": "Dyr",
+      "th": "สัตว์",
+      "en": "Animals"
+    }
+  },
+  {
+    "id": "146_3",
+    "name": {
+      "no": "Dyr",
+      "th": "สัตว์",
+      "en": "Animals"
+    }
+  },
+  {
+    "id": "146_4",
+    "name": {
+      "no": "Dyr",
+      "th": "สัตว์",
+      "en": "Animals"
+    }
+  },
+  {
+    "id": "146_5",
+    "name": {
+      "no": "Dyr",
+      "th": "สัตว์",
+      "en": "Animals"
+    }
+  },
+  {
+    "id": "148_0",
+    "name": {
+      "no": "Møtende trafikk",
+      "th": "รถสวนทาง",
+      "en": "Oncoming traffic"
+    }
+  },
+  {
+    "id": "149_0",
+    "name": {
+      "no": "Kø",
+      "th": "การจราจรติดขัด",
+      "en": "Traffic queues"
+    }
+  },
+  {
+    "id": "150_0",
+    "name": {
+      "no": "Fly",
+      "th": "เครื่องบิน",
+      "en": "Aircraft"
+    }
+  },
+  {
+    "id": "152_0",
+    "name": {
+      "no": "Sidevind",
+      "th": "ลมพัดด้านข้าง",
+      "en": "Side wind"
+    }
+  },
+  {
+    "id": "154_0",
+    "name": {
+      "no": "Skiløpere",
+      "th": "ผู้เล่นสกี",
+      "en": "Skiers"
+    }
+  },
+  {
+    "id": "155_0",
+    "name": {
+      "no": "Ridende",
+      "th": "ผู้ขี่ม้า",
+      "en": "Horse riders"
+    }
+  },
+  {
+    "id": "156_0",
+    "name": {
+      "no": "Annen fare",
+      "th": "อันตรายอื่น ๆ",
+      "en": "Other danger"
+    }
+  },
+  {
+    "id": "302_0",
+    "name": {
+      "no": "Innkjøring forbudt",
+      "th": "ห้ามเข้า",
+      "en": "No entry"
+    }
+  },
+  {
+    "id": "306_0",
+    "name": {
+      "no": "Forbudt for alle kjøretøy",
+      "th": "ห้ามยานพาหนะทุกชนิดผ่าน",
+      "en": "No vehicles"
+    }
+  },
+  {
+    "id": "306_1",
+    "name": {
+      "no": "Forbudt for motorvogn med unntak av liten elektrisk motorvogn",
+      "th": "ห้ามยานยนต์ผ่าน ยกเว้นยานยนต์ไฟฟ้าขนาดเล็ก",
+      "en": "No motor vehicles except small electric motor vehicles"
+    }
+  },
+  {
+    "id": "306_10",
+    "name": {
+      "no": "Forbudt for liten elektrisk motorvogn",
+      "th": "ห้ามยานยนต์ไฟฟ้าขนาดเล็กผ่าน",
+      "en": "No small electric motor vehicles"
+    }
+  },
+  {
+    "id": "306_3",
+    "name": {
+      "no": "Forbudt for alle traktorer og for motorredskap konstruert for fart mindre enn 40 km/t",
+      "th": "ห้ามรถแทรกเตอร์ทุกชนิดและเครื่องจักรกลที่สร้างให้วิ่งได้ต่ำกว่า 40 กม./ชม. ผ่าน",
+      "en": "No tractors or motorised equipment designed for speeds below 40 km/h"
+    }
+  },
+  {
+    "id": "306_4",
+    "name": {
+      "no": "Forbudt for motorsykkel og moped",
+      "th": "ห้ามรถจักรยานยนต์และโมเพ็ดผ่าน",
+      "en": "No motorcycles or mopeds"
+    }
+  },
+  {
+    "id": "306_5",
+    "name": {
+      "no": "Forbudt for lastebil og trekkbil",
+      "th": "ห้ามรถบรรทุกและรถลากจูงผ่าน",
+      "en": "No lorries or tractor units"
+    }
+  },
+  {
+    "id": "306_6",
+    "name": {
+      "no": "Forbudt for syklende og fører av liten elektrisk motorvogn",
+      "th": "ห้ามผู้ขี่จักรยานและผู้ขับยานยนต์ไฟฟ้าขนาดเล็กผ่าน",
+      "en": "No cyclists or drivers of small electric motor vehicles"
+    }
+  },
+  {
+    "id": "306_7",
+    "name": {
+      "no": "Forbudt for gående",
+      "th": "ห้ามคนเดินเท้าผ่าน",
+      "en": "No pedestrians"
+    }
+  },
+  {
+    "id": "306_8",
+    "name": {
+      "no": "Forbudt for gående, syklende og fører av liten elektrisk motorvogn",
+      "th": "ห้ามคนเดินเท้า ผู้ขี่จักรยาน และผู้ขับยานยนต์ไฟฟ้าขนาดเล็กผ่าน",
+      "en": "No pedestrians, cyclists or drivers of small electric motor vehicles"
+    }
+  },
+  {
+    "id": "306_9",
+    "name": {
+      "no": "Forbudt for ridende",
+      "th": "ห้ามผู้ขี่ม้าผ่าน",
+      "en": "No horse riders"
+    }
+  },
+  {
+    "id": "308_0",
+    "name": {
+      "no": "Forbudt for transport av farlig gods",
+      "th": "ห้ามรถขนส่งวัตถุอันตรายผ่าน",
+      "en": "No vehicles carrying dangerous goods"
+    }
+  },
+  {
+    "id": "310_0",
+    "name": {
+      "no": "Forbudt for motorvogn med flere enn to hjul og med tillatt totalvekt høyere enn angitt",
+      "th": "ห้ามยานยนต์ที่มีล้อมากกว่าสองล้อและมีน้ำหนักรวมที่อนุญาตสูงกว่าที่ระบุผ่าน",
+      "en": "No motor vehicles with more than two wheels and a permitted total weight higher than indicated"
+    }
+  },
+  {
+    "id": "312_0",
+    "name": {
+      "no": "Breddegrense",
+      "th": "จำกัดความกว้าง",
+      "en": "Width limit"
+    }
+  },
+  {
+    "id": "314_0",
+    "name": {
+      "no": "Høydegrense",
+      "th": "จำกัดความสูง",
+      "en": "Height limit"
+    }
+  },
+  {
+    "id": "316_0",
+    "name": {
+      "no": "Lengdegrense",
+      "th": "จำกัดความยาว",
+      "en": "Length limit"
+    }
+  },
+  {
+    "id": "318_1",
+    "name": {
+      "no": "Totalvektgrense for kjøretøy",
+      "th": "จำกัดน้ำหนักรวมของรถ",
+      "en": "Total weight limit for a vehicle"
+    }
+  },
+  {
+    "id": "318_2",
+    "name": {
+      "no": "Totalvektgrense for vogntog",
+      "th": "จำกัดน้ำหนักรวมของรถลากจูงพร้อมรถพ่วง",
+      "en": "Total weight limit for a vehicle combination"
+    }
+  },
+  {
+    "id": "320_0",
+    "name": {
+      "no": "Aksellastgrense",
+      "th": "จำกัดน้ำหนักลงเพลา",
+      "en": "Axle load limit"
+    }
+  },
+  {
+    "id": "322_0",
+    "name": {
+      "no": "Boggilastgrense",
+      "th": "จำกัดน้ำหนักลงชุดเพลาคู่",
+      "en": "Bogie load limit"
+    }
+  },
+  {
+    "id": "324_1",
+    "name": {
+      "no": "Stopp for angitt formål",
+      "th": "หยุดรถตามวัตถุประสงค์ที่ระบุ",
+      "en": "Stop for the stated purpose"
+    }
+  },
+  {
+    "id": "324_2",
+    "name": {
+      "no": "Stopp for angitt formål",
+      "th": "หยุดรถตามวัตถุประสงค์ที่ระบุ",
+      "en": "Stop for the stated purpose"
+    }
+  },
+  {
+    "id": "326_0",
+    "name": {
+      "no": "Stopp for toll",
+      "th": "หยุดรถเพื่อตรวจศุลกากร",
+      "en": "Stop for customs"
+    }
+  },
+  {
+    "id": "330_1",
+    "name": {
+      "no": "Svingeforbud",
+      "th": "ห้ามเลี้ยว",
+      "en": "No turning"
+    }
+  },
+  {
+    "id": "330_2",
+    "name": {
+      "no": "Svingeforbud",
+      "th": "ห้ามเลี้ยว",
+      "en": "No turning"
+    }
+  },
+  {
+    "id": "332_0",
+    "name": {
+      "no": "Vendingsforbud",
+      "th": "ห้ามกลับรถ",
+      "en": "No U-turn"
+    }
+  },
+  {
+    "id": "334_0",
+    "name": {
+      "no": "Forbikjøringsforbud",
+      "th": "ห้ามแซง",
+      "en": "No overtaking"
+    }
+  },
+  {
+    "id": "335_0",
+    "name": {
+      "no": "Forbikjøringsforbud for lastebil",
+      "th": "ห้ามรถบรรทุกแซง",
+      "en": "No overtaking for lorries"
+    }
+  },
+  {
+    "id": "336_0",
+    "name": {
+      "no": "Slutt på forbikjøringsforbud",
+      "th": "สิ้นสุดเขตห้ามแซง",
+      "en": "End of no overtaking"
+    }
+  },
+  {
+    "id": "337_0",
+    "name": {
+      "no": "Slutt på forbikjøringsforbud for lastebil",
+      "th": "สิ้นสุดเขตห้ามแซงสำหรับรถบรรทุก",
+      "en": "End of no overtaking for lorries"
+    }
+  },
+  {
+    "id": "362_100",
+    "name": {
+      "no": "Fartsgrense 100 km/t",
+      "th": "จำกัดความเร็ว 100 กม./ชม.",
+      "en": "Speed limit 100 km/h"
+    }
+  },
+  {
+    "id": "362_110",
+    "name": {
+      "no": "Fartsgrense 110 km/t",
+      "th": "จำกัดความเร็ว 110 กม./ชม.",
+      "en": "Speed limit 110 km/h"
+    }
+  },
+  {
+    "id": "362_30",
+    "name": {
+      "no": "Fartsgrense 30 km/t",
+      "th": "จำกัดความเร็ว 30 กม./ชม.",
+      "en": "Speed limit 30 km/h"
+    }
+  },
+  {
+    "id": "362_40",
+    "name": {
+      "no": "Fartsgrense 40 km/t",
+      "th": "จำกัดความเร็ว 40 กม./ชม.",
+      "en": "Speed limit 40 km/h"
+    }
+  },
+  {
+    "id": "362_50",
+    "name": {
+      "no": "Fartsgrense 50 km/t",
+      "th": "จำกัดความเร็ว 50 กม./ชม.",
+      "en": "Speed limit 50 km/h"
+    }
+  },
+  {
+    "id": "362_60",
+    "name": {
+      "no": "Fartsgrense 60 km/t",
+      "th": "จำกัดความเร็ว 60 กม./ชม.",
+      "en": "Speed limit 60 km/h"
+    }
+  },
+  {
+    "id": "362_70",
+    "name": {
+      "no": "Fartsgrense 70 km/t",
+      "th": "จำกัดความเร็ว 70 กม./ชม.",
+      "en": "Speed limit 70 km/h"
+    }
+  },
+  {
+    "id": "362_80",
+    "name": {
+      "no": "Fartsgrense 80 km/t",
+      "th": "จำกัดความเร็ว 80 กม./ชม.",
+      "en": "Speed limit 80 km/h"
+    }
+  },
+  {
+    "id": "362_90",
+    "name": {
+      "no": "Fartsgrense 90 km/t",
+      "th": "จำกัดความเร็ว 90 กม./ชม.",
+      "en": "Speed limit 90 km/h"
+    }
+  },
+  {
+    "id": "364_30",
+    "name": {
+      "no": "Slutt på særskilt fartsgrense 30 km/t",
+      "th": "สิ้นสุดเขตจำกัดความเร็วพิเศษ 30 กม./ชม.",
+      "en": "End of special speed limit 30 km/h"
+    }
+  },
+  {
+    "id": "364_40",
+    "name": {
+      "no": "Slutt på særskilt fartsgrense 40 km/t",
+      "th": "สิ้นสุดเขตจำกัดความเร็วพิเศษ 40 กม./ชม.",
+      "en": "End of special speed limit 40 km/h"
+    }
+  },
+  {
+    "id": "364_50",
+    "name": {
+      "no": "Slutt på særskilt fartsgrense 50 km/t",
+      "th": "สิ้นสุดเขตจำกัดความเร็วพิเศษ 50 กม./ชม.",
+      "en": "End of special speed limit 50 km/h"
+    }
+  },
+  {
+    "id": "364_60",
+    "name": {
+      "no": "Slutt på særskilt fartsgrense 60 km/t",
+      "th": "สิ้นสุดเขตจำกัดความเร็วพิเศษ 60 กม./ชม.",
+      "en": "End of special speed limit 60 km/h"
+    }
+  },
+  {
+    "id": "364_70",
+    "name": {
+      "no": "Slutt på særskilt fartsgrense 70 km/t",
+      "th": "สิ้นสุดเขตจำกัดความเร็วพิเศษ 70 กม./ชม.",
+      "en": "End of special speed limit 70 km/h"
+    }
+  },
+  {
+    "id": "366_0",
+    "name": {
+      "no": "Fartsgrensesone",
+      "th": "เขตจำกัดความเร็ว",
+      "en": "Speed limit zone"
+    }
+  },
+  {
+    "id": "368_0",
+    "name": {
+      "no": "Slutt på fartsgrensesone",
+      "th": "สิ้นสุดเขตจำกัดความเร็ว",
+      "en": "End of speed limit zone"
+    }
+  },
+  {
+    "id": "370_0",
+    "name": {
+      "no": "Stans forbudt",
+      "th": "ห้ามหยุดรถ",
+      "en": "No stopping"
+    }
+  },
+  {
+    "id": "372_0",
+    "name": {
+      "no": "Parkering forbudt",
+      "th": "ห้ามจอดรถ",
+      "en": "No parking"
+    }
+  },
+  {
+    "id": "376_1",
+    "name": {
+      "no": "Parkeringssone",
+      "th": "เขตควบคุมการจอดรถ",
+      "en": "Parking zone"
+    }
+  },
+  {
+    "id": "376_2",
+    "name": {
+      "no": "Parkeringssone",
+      "th": "เขตควบคุมการจอดรถ",
+      "en": "Parking zone"
+    }
+  },
+  {
+    "id": "378_1",
+    "name": {
+      "no": "Slutt på parkeringssone",
+      "th": "สิ้นสุดเขตควบคุมการจอดรถ",
+      "en": "End of parking zone"
+    }
+  },
+  {
+    "id": "378_2",
+    "name": {
+      "no": "Slutt på parkeringssone",
+      "th": "สิ้นสุดเขตควบคุมการจอดรถ",
+      "en": "End of parking zone"
+    }
+  },
+  {
+    "id": "723_11",
+    "name": {
+      "no": "Vegnummer for europaveg",
+      "th": "หมายเลขทางสายยุโรป",
+      "en": "Route number for a European road"
+    }
+  },
+  {
+    "id": "723_12",
+    "name": {
+      "no": "Vegnummer for europaveg",
+      "th": "หมายเลขทางสายยุโรป",
+      "en": "Route number for a European road"
+    }
+  },
+  {
+    "id": "723_13",
+    "name": {
+      "no": "Vegnummer for riksveg som ikke er europaveg",
+      "th": "หมายเลขทางหลวงแผ่นดินที่ไม่ใช่ทางสายยุโรป",
+      "en": "Route number for a national road that is not a European road"
+    }
+  },
+  {
+    "id": "723_14",
+    "name": {
+      "no": "Vegnummer for riksveg som ikke er europaveg",
+      "th": "หมายเลขทางหลวงแผ่นดินที่ไม่ใช่ทางสายยุโรป",
+      "en": "Route number for a national road that is not a European road"
+    }
+  },
+  {
+    "id": "723_15",
+    "name": {
+      "no": "Vegnummer for nummerert fylkesveg",
+      "th": "หมายเลขทางหลวงจังหวัดที่มีหมายเลขกำกับ",
+      "en": "Route number for a numbered county road"
+    }
+  },
+  {
+    "id": "723_16",
+    "name": {
+      "no": "Vegnummer for nummerert fylkesveg",
+      "th": "หมายเลขทางหลวงจังหวัดที่มีหมายเลขกำกับ",
+      "en": "Route number for a numbered county road"
+    }
+  },
+  {
+    "id": "723_21",
+    "name": {
+      "no": "Ringveg/ringrute",
+      "th": "ถนนวงแหวนหรือเส้นทางวงแหวน",
+      "en": "Ring road or ring route"
+    }
+  },
+  {
+    "id": "723_22",
+    "name": {
+      "no": "Ringveg/ringrute",
+      "th": "ถนนวงแหวนหรือเส้นทางวงแหวน",
+      "en": "Ring road or ring route"
+    }
+  },
+  {
+    "id": "723_31",
+    "name": {
+      "no": "Nasjonal turistveg",
+      "th": "เส้นทางท่องเที่ยวแห่งชาติ",
+      "en": "National tourist route"
+    }
+  },
+  {
+    "id": "723_41",
+    "name": {
+      "no": "Omkjøringsrute for store kjøretøy",
+      "th": "เส้นทางเลี่ยงสำหรับรถขนาดใหญ่",
+      "en": "Diversion route for large vehicles"
+    }
+  },
+  {
+    "id": "723_51",
+    "name": {
+      "no": "Rute for transport av farlig gods",
+      "th": "เส้นทางสำหรับการขนส่งวัตถุอันตราย",
+      "en": "Route for transport of dangerous goods"
+    }
+  },
+  {
+    "id": "723_61",
+    "name": {
+      "no": "Andre omkjøringsruter",
+      "th": "เส้นทางเลี่ยงอื่น ๆ",
+      "en": "Other diversion routes"
+    }
+  },
+  {
+    "id": "723_62",
+    "name": {
+      "no": "Andre omkjøringsruter",
+      "th": "เส้นทางเลี่ยงอื่น ๆ",
+      "en": "Other diversion routes"
+    }
+  },
+  {
+    "id": "723_63",
+    "name": {
+      "no": "Andre omkjøringsruter",
+      "th": "เส้นทางเลี่ยงอื่น ๆ",
+      "en": "Other diversion routes"
+    }
+  },
+  {
+    "id": "723_64",
+    "name": {
+      "no": "Andre omkjøringsruter",
+      "th": "เส้นทางเลี่ยงอื่น ๆ",
+      "en": "Other diversion routes"
+    }
+  },
+  {
+    "id": "723_65",
+    "name": {
+      "no": "Andre omkjøringsruter",
+      "th": "เส้นทางเลี่ยงอื่น ๆ",
+      "en": "Other diversion routes"
+    }
+  },
+  {
+    "id": "723_66",
+    "name": {
+      "no": "Andre omkjøringsruter",
+      "th": "เส้นทางเลี่ยงอื่น ๆ",
+      "en": "Other diversion routes"
+    }
+  },
+  {
+    "id": "723_71",
+    "name": {
+      "no": "Kryssnummer på flerfeltsveg",
+      "th": "หมายเลขทางแยกบนถนนหลายช่องจราจร",
+      "en": "Junction number on a multi-lane road"
+    }
+  },
+  {
+    "id": "723_72",
+    "name": {
+      "no": "Kryssnummer på flerfeltsveg",
+      "th": "หมายเลขทางแยกบนถนนหลายช่องจราจร",
+      "en": "Junction number on a multi-lane road"
+    }
+  },
+  {
+    "id": "723_73",
+    "name": {
+      "no": "Kryssnummer på tofeltsveg",
+      "th": "หมายเลขทางแยกบนถนนสองช่องจราจร",
+      "en": "Junction number on a two-lane road"
+    }
+  },
+  {
+    "id": "729_0",
+    "name": {
+      "no": "Gate-/vegnavnskilt",
+      "th": "ป้ายชื่อถนน",
+      "en": "Street or road name sign"
+    }
+  },
+  {
+    "id": "743_1",
+    "name": {
+      "no": "Midlertidig omkjøring",
+      "th": "ทางเลี่ยงชั่วคราว",
+      "en": "Temporary diversion"
+    }
+  },
+  {
+    "id": "743_2",
+    "name": {
+      "no": "Midlertidig omkjøring",
+      "th": "ทางเลี่ยงชั่วคราว",
+      "en": "Temporary diversion"
+    }
+  },
+  {
+    "id": "761_0",
+    "name": {
+      "no": "Motorveg",
+      "th": "ทางหลวงพิเศษ",
+      "en": "Motorway"
+    }
+  },
+  {
+    "id": "763_0",
+    "name": {
+      "no": "Motortrafikkveg",
+      "th": "ทางเฉพาะยานยนต์",
+      "en": "Road for motor vehicles"
+    }
+  },
+  {
+    "id": "765_0",
+    "name": {
+      "no": "Bomveg/brukerbetaling på veg",
+      "th": "ทางที่มีการเก็บค่าผ่านทาง",
+      "en": "Toll road or road user charging"
+    }
+  },
+  {
+    "id": "767_0",
+    "name": {
+      "no": "Parkering",
+      "th": "ที่จอดรถ",
+      "en": "Parking"
+    }
+  },
+  {
+    "id": "769_0",
+    "name": {
+      "no": "Parkeringshus",
+      "th": "อาคารจอดรถ",
+      "en": "Multi-storey car park"
+    }
+  },
+  {
+    "id": "771_0",
+    "name": {
+      "no": "Lufthavn/flyplass",
+      "th": "ท่าอากาศยานหรือสนามบิน",
+      "en": "Airport or airfield"
+    }
+  },
+  {
+    "id": "772_0",
+    "name": {
+      "no": "Helikopterplass",
+      "th": "ลานจอดเฮลิคอปเตอร์",
+      "en": "Heliport"
+    }
+  },
+  {
+    "id": "773_0",
+    "name": {
+      "no": "Busstasjon/bussterminal",
+      "th": "สถานีขนส่งผู้โดยสาร",
+      "en": "Bus station or bus terminal"
+    }
+  },
+  {
+    "id": "774_0",
+    "name": {
+      "no": "Jernbanestasjon/togterminal",
+      "th": "สถานีรถไฟ",
+      "en": "Railway station or train terminal"
+    }
+  },
+  {
+    "id": "775_0",
+    "name": {
+      "no": "Bilferje",
+      "th": "เรือข้ามฟากสำหรับรถยนต์",
+      "en": "Car ferry"
+    }
+  },
+  {
+    "id": "790_10",
+    "name": {
+      "no": "Kirke",
+      "th": "โบสถ์",
+      "en": "Church"
+    }
+  },
+  {
+    "id": "790_15",
+    "name": {
+      "no": "Næringsområde",
+      "th": "เขตประกอบธุรกิจและอุตสาหกรรม",
+      "en": "Business and industrial area"
+    }
+  },
+  {
+    "id": "790_16",
+    "name": {
+      "no": "Kjøpesenter",
+      "th": "ศูนย์การค้า",
+      "en": "Shopping centre"
+    }
+  },
+  {
+    "id": "790_20",
+    "name": {
+      "no": "Svømmehall",
+      "th": "สระว่ายน้ำในร่ม",
+      "en": "Indoor swimming pool"
+    }
+  },
+  {
+    "id": "790_30",
+    "name": {
+      "no": "Alpinanlegg",
+      "th": "ลานสกีลงเขา",
+      "en": "Alpine ski resort"
+    }
+  },
+  {
+    "id": "790_31",
+    "name": {
+      "no": "Hoppbakke",
+      "th": "เนินกระโดดสกี",
+      "en": "Ski jumping hill"
+    }
+  },
+  {
+    "id": "790_32",
+    "name": {
+      "no": "Skistadion",
+      "th": "สนามกีฬาสกี",
+      "en": "Ski stadium"
+    }
+  },
+  {
+    "id": "792_11",
+    "name": {
+      "no": "Betaling med elektronisk brikke",
+      "th": "ชำระเงินด้วยอุปกรณ์อิเล็กทรอนิกส์ติดรถ",
+      "en": "Payment with an electronic tag"
+    }
+  },
+  {
+    "id": "792_12",
+    "name": {
+      "no": "Betaling til betjent",
+      "th": "ชำระเงินกับพนักงาน",
+      "en": "Payment to an attendant"
+    }
+  },
+  {
+    "id": "792_13",
+    "name": {
+      "no": "Betaling med mynter til automat",
+      "th": "ชำระเงินด้วยเหรียญที่ตู้อัตโนมัติ",
+      "en": "Payment with coins at a machine"
+    }
+  },
+  {
+    "id": "792_14",
+    "name": {
+      "no": "Betaling med kort til automat",
+      "th": "ชำระเงินด้วยบัตรที่ตู้อัตโนมัติ",
+      "en": "Payment with a card at a machine"
+    }
+  },
+  {
+    "id": "792_15",
+    "name": {
+      "no": "Betaling med sedler til automat",
+      "th": "ชำระเงินด้วยธนบัตรที่ตู้อัตโนมัติ",
+      "en": "Payment with banknotes at a machine"
+    }
+  },
+  {
+    "id": "792_16",
+    "name": {
+      "no": "Ta billett i et lukket betalingssystem",
+      "th": "รับบัตรผ่านทางในระบบเก็บเงินแบบปิด",
+      "en": "Take a ticket in a closed payment system"
+    }
+  },
+  {
+    "id": "792_17",
+    "name": {
+      "no": "Lever billett i et lukket betalingssystem",
+      "th": "คืนบัตรผ่านทางในระบบเก็บเงินแบบปิด",
+      "en": "Hand in the ticket in a closed payment system"
+    }
+  },
+  {
+    "id": "792_30",
+    "name": {
+      "no": "Helautomatisk bomstasjon som passeres uten å stanse",
+      "th": "ด่านเก็บค่าผ่านทางอัตโนมัติเต็มรูปแบบที่ผ่านได้โดยไม่ต้องหยุดรถ",
+      "en": "Fully automatic toll station passed without stopping"
+    }
+  },
+  {
+    "id": "802_0",
+    "name": {
+      "no": "Avstand",
+      "th": "ระยะทาง",
+      "en": "Distance"
+    }
+  },
+  {
+    "id": "804_0",
+    "name": {
+      "no": "Utstrekning",
+      "th": "ระยะที่มีผลบังคับ",
+      "en": "Extent"
+    }
+  },
+  {
+    "id": "806_0",
+    "name": {
+      "no": "Tid",
+      "th": "ช่วงเวลา",
+      "en": "Time"
+    }
+  },
+  {
+    "id": "807_1",
+    "name": {
+      "no": "Personbil",
+      "th": "รถยนต์นั่งส่วนบุคคล",
+      "en": "Passenger car"
+    }
+  },
+  {
+    "id": "807_2",
+    "name": {
+      "no": "Varebil, lastebil og trekkbil",
+      "th": "รถตู้บรรทุก รถบรรทุก และรถลากจูง",
+      "en": "Van, lorry and tractor unit"
+    }
+  },
+  {
+    "id": "807_3",
+    "name": {
+      "no": "Buss",
+      "th": "รถโดยสาร",
+      "en": "Bus"
+    }
+  },
+  {
+    "id": "807_4",
+    "name": {
+      "no": "Vogntog",
+      "th": "รถลากจูงพร้อมรถพ่วง",
+      "en": "Vehicle combination"
+    }
+  },
+  {
+    "id": "807_5",
+    "name": {
+      "no": "Tilhenger særskilt innredet til campingbruk, samt eventuell trekkvogn",
+      "th": "รถพ่วงที่จัดทำขึ้นเฉพาะสำหรับการตั้งแคมป์ รวมถึงรถลากจูงถ้ามี",
+      "en": "Trailer specially fitted for camping use, plus any towing vehicle"
+    }
+  },
+  {
+    "id": "807_6",
+    "name": {
+      "no": "Sykkel og liten elektrisk motorvogn",
+      "th": "จักรยานและยานยนต์ไฟฟ้าขนาดเล็ก",
+      "en": "Bicycle and small electric motor vehicle"
+    }
+  },
+  {
+    "id": "807_7",
+    "name": {
+      "no": "Tohjuls motorsykkel med og uten sidevogn og tohjuls moped",
+      "th": "รถจักรยานยนต์สองล้อทั้งที่มีและไม่มีรถพ่วงข้าง และโมเพ็ดสองล้อ",
+      "en": "Two-wheeled motorcycle with or without sidecar, and two-wheeled moped"
+    }
+  },
+  {
+    "id": "807_8",
+    "name": {
+      "no": "Forflytningshemmede med parkeringstillatelse",
+      "th": "ผู้พิการทางการเคลื่อนไหวที่มีใบอนุญาตจอดรถ",
+      "en": "Persons with reduced mobility holding a parking permit"
+    }
+  },
+  {
+    "id": "807_9",
+    "name": {
+      "no": "Kjøretøy særskilt innredet til campingbruk (bobil)",
+      "th": "รถที่จัดทำขึ้นเฉพาะสำหรับการตั้งแคมป์ (รถบ้าน)",
+      "en": "Vehicle specially fitted for camping use (motorhome)"
+    }
+  },
+  {
+    "id": "808_42",
+    "name": {
+      "no": "Tekst",
+      "th": "ข้อความ",
+      "en": "Text"
+    }
+  },
+  {
+    "id": "812_0",
+    "name": {
+      "no": "Anbefalt fart",
+      "th": "ความเร็วที่แนะนำ",
+      "en": "Recommended speed"
+    }
+  },
+  {
+    "id": "813_1",
+    "name": {
+      "no": "Stigningsgrad",
+      "th": "ความชันของทาง",
+      "en": "Gradient"
+    }
+  },
+  {
+    "id": "813_2",
+    "name": {
+      "no": "Stigningsgrad",
+      "th": "ความชันของทาง",
+      "en": "Gradient"
+    }
+  },
+  {
+    "id": "814_0",
+    "name": {
+      "no": "Virkelig fri vegbredde",
+      "th": "ความกว้างของทางที่ใช้ได้จริง",
+      "en": "Actual free road width"
+    }
+  },
+  {
+    "id": "816_0",
+    "name": {
+      "no": "Kryssende tømmertransport",
+      "th": "รถขนส่งไม้ซุงตัดผ่าน",
+      "en": "Crossing timber transport"
+    }
+  },
+  {
+    "id": "817_1",
+    "name": {
+      "no": "Særlig ulykkesfare",
+      "th": "จุดเสี่ยงเกิดอุบัติเหตุเป็นพิเศษ",
+      "en": "Particular accident risk"
+    }
+  },
+  {
+    "id": "817_2",
+    "name": {
+      "no": "Særlig ulykkesfare",
+      "th": "จุดเสี่ยงเกิดอุบัติเหตุเป็นพิเศษ",
+      "en": "Particular accident risk"
+    }
+  },
+  {
+    "id": "817_3",
+    "name": {
+      "no": "Særlig ulykkesfare",
+      "th": "จุดเสี่ยงเกิดอุบัติเหตุเป็นพิเศษ",
+      "en": "Particular accident risk"
+    }
+  },
+  {
+    "id": "817_4",
+    "name": {
+      "no": "Særlig ulykkesfare",
+      "th": "จุดเสี่ยงเกิดอุบัติเหตุเป็นพิเศษ",
+      "en": "Particular accident risk"
+    }
+  },
+  {
+    "id": "817_5",
+    "name": {
+      "no": "Særlig ulykkesfare",
+      "th": "จุดเสี่ยงเกิดอุบัติเหตุเป็นพิเศษ",
+      "en": "Particular accident risk"
+    }
+  },
+  {
+    "id": "822_1",
+    "name": {
+      "no": "Forløp av forkjørsveg",
+      "th": "แนวของทางเอก",
+      "en": "Course of the priority road"
+    }
+  },
+  {
+    "id": "822_2",
+    "name": {
+      "no": "Forløp av forkjørsveg",
+      "th": "แนวของทางเอก",
+      "en": "Course of the priority road"
+    }
+  },
+  {
+    "id": "822_3",
+    "name": {
+      "no": "Forløp av forkjørsveg",
+      "th": "แนวของทางเอก",
+      "en": "Course of the priority road"
+    }
+  },
+  {
+    "id": "822_4",
+    "name": {
+      "no": "Forløp av forkjørsveg",
+      "th": "แนวของทางเอก",
+      "en": "Course of the priority road"
+    }
+  },
+  {
+    "id": "822_5",
+    "name": {
+      "no": "Forløp av forkjørsveg",
+      "th": "แนวของทางเอก",
+      "en": "Course of the priority road"
+    }
+  },
+  {
+    "id": "822_6",
+    "name": {
+      "no": "Forløp av forkjørsveg",
+      "th": "แนวของทางเอก",
+      "en": "Course of the priority road"
+    }
+  },
+  {
+    "id": "822_7",
+    "name": {
+      "no": "Forløp av forkjørsveg",
+      "th": "แนวของทางเอก",
+      "en": "Course of the priority road"
+    }
+  },
+  {
+    "id": "824_0",
+    "name": {
+      "no": "Forvarsling av stopp",
+      "th": "เตือนล่วงหน้าว่ามีป้ายหยุด",
+      "en": "Advance warning of a stop sign"
+    }
+  },
+  {
+    "id": "826_0",
+    "name": {
+      "no": "Sykkeltrafikk i begge kjøreretninger",
+      "th": "จักรยานสัญจรได้ทั้งสองทิศทาง",
+      "en": "Cycle traffic in both directions"
+    }
+  },
+  {
+    "id": "828_1",
+    "name": {
+      "no": "Gjelder i begge kjøreretninger",
+      "th": "มีผลบังคับทั้งสองทิศทาง",
+      "en": "Applies in both directions of travel"
+    }
+  },
+  {
+    "id": "828_2",
+    "name": {
+      "no": "Gjelder mot kjøreretningen",
+      "th": "มีผลบังคับในทิศสวนทางเดินรถ",
+      "en": "Applies against the direction of travel"
+    }
+  },
+  {
+    "id": "828_3",
+    "name": {
+      "no": "Gjelder i kjøreretningen",
+      "th": "มีผลบังคับในทิศทางเดินรถ",
+      "en": "Applies in the direction of travel"
+    }
+  },
+  {
+    "id": "829_0",
+    "name": {
+      "no": "Oppstilling av parkert kjøretøy",
+      "th": "ลักษณะการจอดรถ",
+      "en": "Positioning of a parked vehicle"
+    }
+  },
+  {
+    "id": "831_0",
+    "name": {
+      "no": "Parkeringsskive/gratisbillett",
+      "th": "แผ่นแสดงเวลาจอดรถหรือบัตรจอดฟรี",
+      "en": "Parking disc or free ticket"
+    }
+  },
+  {
+    "id": "834_0",
+    "name": {
+      "no": "Kombinert regulering",
+      "th": "การกำกับหลายอย่างรวมกัน",
+      "en": "Combined regulation"
+    }
+  },
+  {
+    "id": "902_0",
+    "name": {
+      "no": "Bakgrunnsmarkering",
+      "th": "แผ่นสะท้อนแสงเป็นฉากหลัง",
+      "en": "Background marker"
+    }
+  },
+  {
+    "id": "904_0",
+    "name": {
+      "no": "Retningsmarkering",
+      "th": "เครื่องหมายบอกทิศทาง",
+      "en": "Direction marker"
+    }
+  },
+  {
+    "id": "906_0",
+    "name": {
+      "no": "Hindermarkering",
+      "th": "เครื่องหมายแสดงสิ่งกีดขวาง",
+      "en": "Obstacle marker"
+    }
+  },
+  {
+    "id": "908_0",
+    "name": {
+      "no": "Hindermarkering",
+      "th": "เครื่องหมายแสดงสิ่งกีดขวาง",
+      "en": "Obstacle marker"
+    }
+  },
+  {
+    "id": "912_0",
+    "name": {
+      "no": "Avkjøringsmarkering",
+      "th": "เครื่องหมายแสดงทางออก",
+      "en": "Exit marker"
+    }
+  },
+  {
+    "id": "916_0",
+    "name": {
+      "no": "Avstandsmarkering i tunnel",
+      "th": "เครื่องหมายบอกระยะทางในอุโมงค์",
+      "en": "Distance marker in a tunnel"
+    }
+  },
+  {
+    "id": "151",
+    "name": {
+      "no": "Militær aktivitet",
+      "th": "กิจกรรมทางทหาร",
+      "en": "Military activity"
+    }
+  },
+  {
+    "id": "153",
+    "name": {
+      "no": "Trafikkulykke",
+      "th": "อุบัติเหตุจราจร",
+      "en": "Traffic accident"
+    }
+  },
+  {
+    "id": "367",
+    "name": {
+      "no": "Fartsgrensesone for liten elektrisk motorvogn",
+      "th": "เขตจำกัดความเร็วสำหรับยานยนต์ไฟฟ้าขนาดเล็ก",
+      "en": "Speed limit zone for small electric motor vehicles"
+    }
+  },
+  {
+    "id": "369",
+    "name": {
+      "no": "Slutt på fartsgrensesone for liten elektrisk motorvogn",
+      "th": "สิ้นสุดเขตจำกัดความเร็วสำหรับยานยนต์ไฟฟ้าขนาดเล็ก",
+      "en": "End of speed limit zone for small electric motor vehicles"
+    }
+  },
+  {
+    "id": "376_2a",
+    "name": {
+      "no": "Parkeringssone",
+      "th": "เขตควบคุมการจอดรถ",
+      "en": "Parking zone"
+    }
+  },
+  {
+    "id": "377",
+    "name": {
+      "no": "Sone med parkeringsforbud for liten elektrisk motorvogn",
+      "th": "เขตห้ามจอดยานยนต์ไฟฟ้าขนาดเล็ก",
+      "en": "Zone with a parking ban for small electric motor vehicles"
+    }
+  },
+  {
+    "id": "379",
+    "name": {
+      "no": "Slutt på sone med parkeringsforbud for liten elektrisk motorvogn",
+      "th": "สิ้นสุดเขตห้ามจอดยานยนต์ไฟฟ้าขนาดเล็ก",
+      "en": "End of zone with a parking ban for small electric motor vehicles"
+    }
+  },
+  {
+    "id": "380",
+    "name": {
+      "no": "Sone med bruksforbud for liten elektrisk motorvogn",
+      "th": "เขตห้ามใช้ยานยนต์ไฟฟ้าขนาดเล็ก",
+      "en": "Zone with a use ban for small electric motor vehicles"
+    }
+  },
+  {
+    "id": "382",
+    "name": {
+      "no": "Slutt på sone med bruksforbud for liten elektrisk motorvogn",
+      "th": "สิ้นสุดเขตห้ามใช้ยานยนต์ไฟฟ้าขนาดเล็ก",
+      "en": "End of zone with a use ban for small electric motor vehicles"
+    }
+  },
+  {
+    "id": "402_1",
+    "name": {
+      "no": "Påbudt kjøreretning",
+      "th": "บังคับทิศทางเดินรถ",
+      "en": "Mandatory direction of travel"
+    }
+  },
+  {
+    "id": "402_2",
+    "name": {
+      "no": "Påbudt kjøreretning",
+      "th": "บังคับทิศทางเดินรถ",
+      "en": "Mandatory direction of travel"
+    }
+  },
+  {
+    "id": "402_3",
+    "name": {
+      "no": "Påbudt kjøreretning",
+      "th": "บังคับทิศทางเดินรถ",
+      "en": "Mandatory direction of travel"
+    }
+  },
+  {
+    "id": "402_4",
+    "name": {
+      "no": "Påbudt kjøreretning",
+      "th": "บังคับทิศทางเดินรถ",
+      "en": "Mandatory direction of travel"
+    }
+  },
+  {
+    "id": "402_5",
+    "name": {
+      "no": "Påbudt kjøreretning",
+      "th": "บังคับทิศทางเดินรถ",
+      "en": "Mandatory direction of travel"
+    }
+  },
+  {
+    "id": "402_6",
+    "name": {
+      "no": "Påbudt kjøreretning",
+      "th": "บังคับทิศทางเดินรถ",
+      "en": "Mandatory direction of travel"
+    }
+  },
+  {
+    "id": "402_7",
+    "name": {
+      "no": "Påbudt kjøreretning",
+      "th": "บังคับทิศทางเดินรถ",
+      "en": "Mandatory direction of travel"
+    }
+  },
+  {
+    "id": "402_8",
+    "name": {
+      "no": "Påbudt kjøreretning",
+      "th": "บังคับทิศทางเดินรถ",
+      "en": "Mandatory direction of travel"
+    }
+  },
+  {
+    "id": "404_1",
+    "name": {
+      "no": "Påbudt kjørefelt",
+      "th": "บังคับช่องเดินรถ",
+      "en": "Mandatory lane"
+    }
+  },
+  {
+    "id": "404_2",
+    "name": {
+      "no": "Påbudt kjørefelt",
+      "th": "บังคับช่องเดินรถ",
+      "en": "Mandatory lane"
+    }
+  },
+  {
+    "id": "406_0",
+    "name": {
+      "no": "Påbudt rundkjøring",
+      "th": "บังคับให้เดินรถวนในวงเวียน",
+      "en": "Mandatory roundabout"
+    }
+  },
+  {
+    "id": "408",
+    "name": {
+      "no": "Påbudt kjøreretning i rundkjøring",
+      "th": "บังคับทิศทางเดินรถในวงเวียน",
+      "en": "Mandatory direction of travel in a roundabout"
+    }
+  },
+  {
+    "id": "502_0",
+    "name": {
+      "no": "Motorveg",
+      "th": "ทางหลวงพิเศษ",
+      "en": "Motorway"
+    }
+  },
+  {
+    "id": "503_0",
+    "name": {
+      "no": "Motortrafikkveg",
+      "th": "ทางเฉพาะยานยนต์",
+      "en": "Road for motor vehicles"
+    }
+  },
+  {
+    "id": "504_0",
+    "name": {
+      "no": "Slutt på motorveg",
+      "th": "สิ้นสุดทางหลวงพิเศษ",
+      "en": "End of motorway"
+    }
+  },
+  {
+    "id": "505_0",
+    "name": {
+      "no": "Slutt på motortrafikkveg",
+      "th": "สิ้นสุดทางเฉพาะยานยนต์",
+      "en": "End of road for motor vehicles"
+    }
+  },
+  {
+    "id": "506",
+    "name": {
+      "no": "Tungtrafikkfelt",
+      "th": "ช่องเดินรถสำหรับรถบรรทุกหนัก",
+      "en": "Heavy vehicle lane"
+    }
+  },
+  {
+    "id": "507",
+    "name": {
+      "no": "Slutt på tungtrafikkfelt",
+      "th": "สิ้นสุดช่องเดินรถสำหรับรถบรรทุกหนัก",
+      "en": "End of heavy vehicle lane"
+    }
+  },
+  {
+    "id": "508_1",
+    "name": {
+      "no": "Kollektivfelt for buss",
+      "th": "ช่องเดินรถสาธารณะสำหรับรถโดยสาร",
+      "en": "Public transport lane for buses"
+    }
+  },
+  {
+    "id": "508_2",
+    "name": {
+      "no": "Kollektivfelt for buss og drosje",
+      "th": "ช่องเดินรถสาธารณะสำหรับรถโดยสารและรถแท็กซี่",
+      "en": "Public transport lane for buses and taxis"
+    }
+  },
+  {
+    "id": "509_0",
+    "name": {
+      "no": "Sambruksfelt",
+      "th": "ช่องเดินรถร่วมสำหรับรถที่มีผู้โดยสารหลายคน",
+      "en": "Shared lane for high-occupancy vehicles"
+    }
+  },
+  {
+    "id": "510_1",
+    "name": {
+      "no": "Slutt på kollektivfelt",
+      "th": "สิ้นสุดช่องเดินรถสาธารณะ",
+      "en": "End of public transport lane"
+    }
+  },
+  {
+    "id": "510_2",
+    "name": {
+      "no": "Slutt på kollektivfelt",
+      "th": "สิ้นสุดช่องเดินรถสาธารณะ",
+      "en": "End of public transport lane"
+    }
+  },
+  {
+    "id": "511_0",
+    "name": {
+      "no": "Slutt på sambruksfelt",
+      "th": "สิ้นสุดช่องเดินรถร่วม",
+      "en": "End of shared lane"
+    }
+  },
+  {
+    "id": "512_0",
+    "name": {
+      "no": "Holdeplass for buss",
+      "th": "ป้ายหยุดรถโดยสาร",
+      "en": "Bus stop"
+    }
+  },
+  {
+    "id": "513_0",
+    "name": {
+      "no": "Holdeplass for sporvogn",
+      "th": "ป้ายหยุดรถราง",
+      "en": "Tram stop"
+    }
+  },
+  {
+    "id": "514_0",
+    "name": {
+      "no": "Holdeplass for drosje",
+      "th": "จุดจอดรถแท็กซี่",
+      "en": "Taxi rank"
+    }
+  },
+  {
+    "id": "516_H",
+    "name": {
+      "no": "Gangfelt",
+      "th": "ทางม้าลาย",
+      "en": "Pedestrian crossing"
+    }
+  },
+  {
+    "id": "516_V",
+    "name": {
+      "no": "Gangfelt",
+      "th": "ทางม้าลาย",
+      "en": "Pedestrian crossing"
+    }
+  },
+  {
+    "id": "518_0",
+    "name": {
+      "no": "Gangveg",
+      "th": "ทางเดินเท้า",
+      "en": "Footpath"
+    }
+  },
+  {
+    "id": "520_0",
+    "name": {
+      "no": "Sykkelveg",
+      "th": "ทางจักรยาน",
+      "en": "Cycle track"
+    }
+  },
+  {
+    "id": "521.1",
+    "name": {
+      "no": "Sykkelfelt – midtstilt",
+      "th": "ช่องจักรยาน – อยู่กลางถนน",
+      "en": "Cycle lane – centrally placed"
+    }
+  },
+  {
+    "id": "521_0",
+    "name": {
+      "no": "Sykkelfelt – sideplassert",
+      "th": "ช่องจักรยาน – อยู่ริมทาง",
+      "en": "Cycle lane – placed at the side"
+    }
+  },
+  {
+    "id": "522_0",
+    "name": {
+      "no": "Gang- og sykkelveg",
+      "th": "ทางเดินเท้าและทางจักรยาน",
+      "en": "Shared foot and cycle path"
+    }
+  },
+  {
+    "id": "524_0",
+    "name": {
+      "no": "Møteplass",
+      "th": "จุดหลีกรถสวน",
+      "en": "Passing place"
+    }
+  },
+  {
+    "id": "526_1",
+    "name": {
+      "no": "Envegskjøring",
+      "th": "เดินรถทางเดียว",
+      "en": "One-way traffic"
+    }
+  },
+  {
+    "id": "526_2",
+    "name": {
+      "no": "Envegskjøring",
+      "th": "เดินรถทางเดียว",
+      "en": "One-way traffic"
+    }
+  },
+  {
+    "id": "527_1",
+    "name": {
+      "no": "Blindveg",
+      "th": "ทางตัน",
+      "en": "Dead end"
+    }
+  },
+  {
+    "id": "527_2",
+    "name": {
+      "no": "Blindveg",
+      "th": "ทางตัน",
+      "en": "Dead end"
+    }
+  },
+  {
+    "id": "527_3",
+    "name": {
+      "no": "Blindveg",
+      "th": "ทางตัน",
+      "en": "Dead end"
+    }
+  },
+  {
+    "id": "527_4",
+    "name": {
+      "no": "Blindveg",
+      "th": "ทางตัน",
+      "en": "Dead end"
+    }
+  },
+  {
+    "id": "528_0",
+    "name": {
+      "no": "Valgfritt kjørefelt",
+      "th": "เลือกช่องเดินรถได้",
+      "en": "Optional lane"
+    }
+  },
+  {
+    "id": "530_01",
+    "name": {
+      "no": "Sammenfletting",
+      "th": "การรวมช่องเดินรถ",
+      "en": "Merging lanes"
+    }
+  },
+  {
+    "id": "530_11",
+    "name": {
+      "no": "Sammenfletting",
+      "th": "การรวมช่องเดินรถ",
+      "en": "Merging lanes"
+    }
+  },
+  {
+    "id": "531_102",
+    "name": {
+      "no": "Felt for fartsøkning",
+      "th": "ช่องเร่งความเร็ว",
+      "en": "Acceleration lane"
+    }
+  },
+  {
+    "id": "531_202",
+    "name": {
+      "no": "Felt for fartsøkning",
+      "th": "ช่องเร่งความเร็ว",
+      "en": "Acceleration lane"
+    }
+  },
+  {
+    "id": "532_H02",
+    "name": {
+      "no": "Kjørefelt slutter",
+      "th": "ช่องเดินรถสิ้นสุด",
+      "en": "Lane ends"
+    }
+  },
+  {
+    "id": "534_H02",
+    "name": {
+      "no": "Kjørefelt begynner",
+      "th": "ช่องเดินรถเริ่มต้น",
+      "en": "Lane begins"
+    }
+  },
+  {
+    "id": "536_101",
+    "name": {
+      "no": "Påkjøring fortsetter i eget kjørefelt",
+      "th": "ทางเข้าต่อเนื่องเป็นช่องเดินรถของตนเอง",
+      "en": "Entry continues in its own lane"
+    }
+  },
+  {
+    "id": "536_201",
+    "name": {
+      "no": "Påkjøring fortsetter i eget kjørefelt",
+      "th": "ทางเข้าต่อเนื่องเป็นช่องเดินรถของตนเอง",
+      "en": "Entry continues in its own lane"
+    }
+  },
+  {
+    "id": "538_12",
+    "name": {
+      "no": "Kjørefeltinndeling",
+      "th": "การแบ่งช่องเดินรถ",
+      "en": "Lane division"
+    }
+  },
+  {
+    "id": "539",
+    "name": {
+      "no": "Endret kjøremønster",
+      "th": "รูปแบบการเดินรถเปลี่ยนไป",
+      "en": "Changed traffic pattern"
+    }
+  },
+  {
+    "id": "540_0",
+    "name": {
+      "no": "Gatetun",
+      "th": "ถนนชุมชนที่คนเดินเท้ามีสิทธิ์ก่อน",
+      "en": "Residential home zone"
+    }
+  },
+  {
+    "id": "542_0",
+    "name": {
+      "no": "Slutt på gatetun",
+      "th": "สิ้นสุดถนนชุมชนที่คนเดินเท้ามีสิทธิ์ก่อน",
+      "en": "End of residential home zone"
+    }
+  },
+  {
+    "id": "548_0",
+    "name": {
+      "no": "Gågate",
+      "th": "ถนนคนเดิน",
+      "en": "Pedestrian street"
+    }
+  },
+  {
+    "id": "550_0",
+    "name": {
+      "no": "Slutt på gågate",
+      "th": "สิ้นสุดถนนคนเดิน",
+      "en": "End of pedestrian street"
+    }
+  },
+  {
+    "id": "552_0",
+    "name": {
+      "no": "Parkering",
+      "th": "ที่จอดรถ",
+      "en": "Parking"
+    }
+  },
+  {
+    "id": "556.2",
+    "name": {
+      "no": "Automatisk trafikkontroll – strekningsmåling",
+      "th": "การตรวจจับจราจรอัตโนมัติ – วัดความเร็วเฉลี่ยตลอดช่วงทาง",
+      "en": "Automatic traffic enforcement – average speed over a section"
+    }
+  },
+  {
+    "id": "556_0",
+    "name": {
+      "no": "Automatisk trafikkontroll – punktmåling",
+      "th": "การตรวจจับจราจรอัตโนมัติ – วัดความเร็ว ณ จุดเดียว",
+      "en": "Automatic traffic enforcement – spot speed measurement"
+    }
+  },
+  {
+    "id": "558_0",
+    "name": {
+      "no": "Videokontroll/-overvåking",
+      "th": "การตรวจสอบและเฝ้าระวังด้วยกล้องวิดีโอ",
+      "en": "Video monitoring and surveillance"
+    }
+  },
+  {
+    "id": "560_2",
+    "name": {
+      "no": "Opplysningstavle",
+      "th": "ป้ายให้ข้อมูล",
+      "en": "Information board"
+    }
+  },
+  {
+    "id": "565",
+    "name": {
+      "no": "Feil kjøreretning",
+      "th": "ขับผิดทิศทาง",
+      "en": "Wrong direction of travel"
+    }
+  },
+  {
+    "id": "570_1H",
+    "name": {
+      "no": "Nødutgang",
+      "th": "ทางออกฉุกเฉิน",
+      "en": "Emergency exit"
+    }
+  },
+  {
+    "id": "570_1V",
+    "name": {
+      "no": "Nødutgang",
+      "th": "ทางออกฉุกเฉิน",
+      "en": "Emergency exit"
+    }
+  },
+  {
+    "id": "570_2H",
+    "name": {
+      "no": "Retning og avstand til nødutgang",
+      "th": "ทิศทางและระยะทางไปยังทางออกฉุกเฉิน",
+      "en": "Direction and distance to the emergency exit"
+    }
+  },
+  {
+    "id": "570_2V",
+    "name": {
+      "no": "Retning og avstand til nødutgang",
+      "th": "ทิศทางและระยะทางไปยังทางออกฉุกเฉิน",
+      "en": "Direction and distance to the emergency exit"
+    }
+  },
+  {
+    "id": "701",
+    "name": {
+      "no": "Tabellorienteringstavle",
+      "th": "ป้ายแนะนำล่วงหน้าแบบตาราง",
+      "en": "Table-type advance direction sign"
+    }
+  },
+  {
+    "id": "703",
+    "name": {
+      "no": "Diagramorienteringstavle",
+      "th": "ป้ายแนะนำล่วงหน้าแบบแผนผัง",
+      "en": "Diagram-type advance direction sign"
+    }
+  },
+  {
+    "id": "705",
+    "name": {
+      "no": "Avkjøringstavle",
+      "th": "ป้ายแนะนำทางออก",
+      "en": "Exit direction board"
+    }
+  },
+  {
+    "id": "707",
+    "name": {
+      "no": "Kjørefeltorienteringstavle",
+      "th": "ป้ายแนะนำล่วงหน้าประจำช่องเดินรถ",
+      "en": "Lane advance direction sign"
+    }
+  },
+  {
+    "id": "709",
+    "name": {
+      "no": "Portalorienteringstavle",
+      "th": "ป้ายแนะนำล่วงหน้าแบบคร่อมถนน",
+      "en": "Gantry advance direction sign"
+    }
+  },
+  {
+    "id": "711",
+    "name": {
+      "no": "Tabellvegviser",
+      "th": "ป้ายชี้ทางแบบตาราง",
+      "en": "Table-type direction sign"
+    }
+  },
+  {
+    "id": "713",
+    "name": {
+      "no": "Vanlig vegviser",
+      "th": "ป้ายชี้ทางแบบธรรมดา",
+      "en": "Ordinary direction sign"
+    }
+  },
+  {
+    "id": "717",
+    "name": {
+      "no": "Kjørefeltvegviser",
+      "th": "ป้ายชี้ทางประจำช่องเดินรถ",
+      "en": "Lane direction sign"
+    }
+  },
+  {
+    "id": "719",
+    "name": {
+      "no": "Portalvegviser",
+      "th": "ป้ายชี้ทางแบบคร่อมถนน",
+      "en": "Gantry direction sign"
+    }
+  },
+  {
+    "id": "727",
+    "name": {
+      "no": "Stedsnavnskilt",
+      "th": "ป้ายชื่อสถานที่",
+      "en": "Place name sign"
+    }
+  },
+  {
+    "id": "731",
+    "name": {
+      "no": "Samleskilt for vegvisning",
+      "th": "ป้ายรวมการชี้ทาง",
+      "en": "Collective direction sign"
+    }
+  },
+  {
+    "id": "741",
+    "name": {
+      "no": "Omkjøring for bestemte kjøretøygrupper",
+      "th": "ทางเลี่ยงสำหรับรถบางประเภท",
+      "en": "Diversion for certain vehicle groups"
+    }
+  },
+  {
+    "id": "745",
+    "name": {
+      "no": "Slutt på midlertidig omkjøring",
+      "th": "สิ้นสุดทางเลี่ยงชั่วคราว",
+      "en": "End of temporary diversion"
+    }
+  },
+  {
+    "id": "749",
+    "name": {
+      "no": "Vegviser for gangtrafikk",
+      "th": "ป้ายชี้ทางสำหรับคนเดินเท้า",
+      "en": "Direction sign for pedestrians"
+    }
+  },
+  {
+    "id": "751",
+    "name": {
+      "no": "Vegviser for sykkelrute",
+      "th": "ป้ายชี้ทางสำหรับเส้นทางจักรยาน",
+      "en": "Direction sign for a cycle route"
+    }
+  },
+  {
+    "id": "753",
+    "name": {
+      "no": "Tabellvegviser for sykkelrute",
+      "th": "ป้ายชี้ทางแบบตารางสำหรับเส้นทางจักรยาน",
+      "en": "Table-type direction sign for a cycle route"
+    }
+  },
+  {
+    "id": "755",
+    "name": {
+      "no": "Sykkelruteskilt",
+      "th": "ป้ายเส้นทางจักรยาน",
+      "en": "Cycle route sign"
+    }
+  },
+  {
+    "id": "757",
+    "name": {
+      "no": "Avstandsskilt for sykkelrute",
+      "th": "ป้ายบอกระยะทางสำหรับเส้นทางจักรยาน",
+      "en": "Distance sign for a cycle route"
+    }
+  },
+  {
+    "id": "776",
+    "name": {
+      "no": "Godshavn",
+      "th": "ท่าเรือขนส่งสินค้า",
+      "en": "Freight port"
+    }
+  },
+  {
+    "id": "780",
+    "name": {
+      "no": "Kjetting",
+      "th": "โซ่พันล้อ",
+      "en": "Snow chains"
+    }
+  },
+  {
+    "id": "807-10",
+    "name": {
+      "no": "Liten elektrisk motorvogn",
+      "th": "ยานยนต์ไฟฟ้าขนาดเล็ก",
+      "en": "Small electric motor vehicle"
+    }
+  },
+  {
+    "id": "808_42b",
+    "name": {
+      "no": "Tekst",
+      "th": "ข้อความ",
+      "en": "Text"
+    }
+  },
+  {
+    "id": "810_H135",
+    "name": {
+      "no": "Svingpil",
+      "th": "ลูกศรบอกทิศทางเลี้ยว",
+      "en": "Turn arrow"
+    }
+  },
+  {
+    "id": "810_H45",
+    "name": {
+      "no": "Svingpil",
+      "th": "ลูกศรบอกทิศทางเลี้ยว",
+      "en": "Turn arrow"
+    }
+  },
+  {
+    "id": "810_H90",
+    "name": {
+      "no": "Svingpil",
+      "th": "ลูกศรบอกทิศทางเลี้ยว",
+      "en": "Turn arrow"
+    }
+  },
+  {
+    "id": "810_R",
+    "name": {
+      "no": "Svingpil",
+      "th": "ลูกศรบอกทิศทางเลี้ยว",
+      "en": "Turn arrow"
+    }
+  },
+  {
+    "id": "810_V135",
+    "name": {
+      "no": "Svingpil",
+      "th": "ลูกศรบอกทิศทางเลี้ยว",
+      "en": "Turn arrow"
+    }
+  },
+  {
+    "id": "810_V45",
+    "name": {
+      "no": "Svingpil",
+      "th": "ลูกศรบอกทิศทางเลี้ยว",
+      "en": "Turn arrow"
+    }
+  },
+  {
+    "id": "810_V90",
+    "name": {
+      "no": "Svingpil",
+      "th": "ลูกศรบอกทิศทางเลี้ยว",
+      "en": "Turn arrow"
+    }
+  },
+  {
+    "id": "902_0H",
+    "name": {
+      "no": "Bakgrunnsmarkering",
+      "th": "แผ่นสะท้อนแสงเป็นฉากหลัง",
+      "en": "Background marker"
+    }
+  },
+  {
+    "id": "902_0V",
+    "name": {
+      "no": "Bakgrunnsmarkering",
+      "th": "แผ่นสะท้อนแสงเป็นฉากหลัง",
+      "en": "Background marker"
+    }
+  },
+  {
+    "id": "904_0H",
+    "name": {
+      "no": "Retningsmarkering",
+      "th": "เครื่องหมายบอกทิศทาง",
+      "en": "Direction marker"
+    }
+  },
+  {
+    "id": "904_0V",
+    "name": {
+      "no": "Retningsmarkering",
+      "th": "เครื่องหมายบอกทิศทาง",
+      "en": "Direction marker"
+    }
+  },
+  {
+    "id": "906_0H",
+    "name": {
+      "no": "Hindermarkering",
+      "th": "เครื่องหมายแสดงสิ่งกีดขวาง",
+      "en": "Obstacle marker"
+    }
+  },
+  {
+    "id": "906_0V",
+    "name": {
+      "no": "Hindermarkering",
+      "th": "เครื่องหมายแสดงสิ่งกีดขวาง",
+      "en": "Obstacle marker"
+    }
+  },
+  {
+    "id": "906_0VH",
+    "name": {
+      "no": "Hindermarkering",
+      "th": "เครื่องหมายแสดงสิ่งกีดขวาง",
+      "en": "Obstacle marker"
+    }
+  },
+  {
+    "id": "914_H",
+    "name": {
+      "no": "Tunnelmarkering",
+      "th": "เครื่องหมายนำทางในอุโมงค์",
+      "en": "Tunnel marker"
+    }
+  },
+  {
+    "id": "914_V",
+    "name": {
+      "no": "Tunnelmarkering",
+      "th": "เครื่องหมายนำทางในอุโมงค์",
+      "en": "Tunnel marker"
+    }
+  },
+  {
+    "id": "920_H",
+    "name": {
+      "no": "Kantstolpe",
+      "th": "หลักนำทางริมถนน",
+      "en": "Edge marker post"
+    }
+  },
+  {
+    "id": "920_VE",
+    "name": {
+      "no": "Kantstolpe",
+      "th": "หลักนำทางริมถนน",
+      "en": "Edge marker post"
+    }
+  },
+  {
+    "id": "920_VM",
+    "name": {
+      "no": "Kantstolpe",
+      "th": "หลักนำทางริมถนน",
+      "en": "Edge marker post"
+    }
+  },
+  {
+    "id": "930",
+    "name": {
+      "no": "Sperremateriell",
+      "th": "อุปกรณ์ปิดกั้นการจราจร",
+      "en": "Traffic barrier material"
+    }
+  },
+  {
+    "id": "940",
+    "name": {
+      "no": "Trafikkjegle",
+      "th": "กรวยจราจร",
+      "en": "Traffic cone"
+    }
+  },
+  {
+    "id": "942",
+    "name": {
+      "no": "Trafikksylinder",
+      "th": "เสาทรงกระบอกจราจร",
+      "en": "Traffic cylinder"
+    }
+  }
+]
