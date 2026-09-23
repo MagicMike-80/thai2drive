@@ -3902,9 +3902,15 @@ a { color:inherit; text-decoration:none; }
 .teacher-mic-btn {
   width:42px; min-width:42px; height:42px; border:0; border-radius:50%;
   display:flex; align-items:center; justify-content:center; cursor:pointer;
-  background:transparent; color:#CBD5E1; font-size:1.25rem;
+  background:transparent; color:var(--orange); font-size:1.25rem;
 }
-.teacher-mic-btn.listening { color:#FF4FA3; background:rgba(255,79,163,.12); }
+.teacher-mic-btn.listening { color:var(--orange); background:rgba(255,153,51,.14); }
+.teacher-mic-btn svg, .tm-bubble-tts svg { width:21px; height:21px; stroke:currentColor; }
+.tm-bubble-tts {
+  align-self:flex-end; border:0; background:transparent; color:var(--orange);
+  font-size:1.05rem; line-height:1; padding:8px; cursor:pointer;
+}
+.tm-bubble-tts:hover { background:rgba(255,153,51,.10); border-radius:50%; }
 .teacher-doc-btn:hover {
   background:rgba(37,99,235,0.3); border-color:#00F5FF; color:#00F5FF;
   box-shadow:0 0 10px rgba(0,245,255,0.25);
@@ -5192,7 +5198,7 @@ a { color:inherit; text-decoration:none; }
             <input type="file" id="teacherDocInput" accept=".pdf,application/pdf,image/png,image/jpeg,image/webp" style="display:none" onchange="_teacherUploadDoc(this)">
             <button type="button" class="teacher-doc-btn" id="teacherDocBtn" onclick="document.getElementById('teacherDocInput').click()" title="Last opp PDF eller bilde" aria-label="Last opp PDF eller bilde" data-label-key="teacher_upload_doc">＋</button>
             <textarea class="teacher-input" id="teacherInput" rows="1" placeholder="..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();teacherSend();}"></textarea>
-            <button type="button" class="teacher-mic-btn" id="teacherMicBtn" onclick="toggleTeacherVoiceInput()" aria-label="Snakk med Michael" title="Snakk med Michael">🎙</button>
+            <button type="button" class="teacher-mic-btn" id="teacherMicBtn" onclick="toggleTeacherVoiceInput()" aria-label="Snakk med Michael" title="Snakk med Michael"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v5M8 22h8"/></svg></button>
             <button class="teacher-send-btn" id="teacherSendBtn" onclick="teacherSend()" aria-label="Send"><span aria-hidden="true">↑</span></button>
           </div>
         </div>
@@ -11408,7 +11414,7 @@ function _teacherAppendBubble(role, text) {
     // Append TTS Speaker button
     var ttsBtn = document.createElement('button');
     ttsBtn.className = 'tm-bubble-tts';
-    ttsBtn.innerHTML = '🔊';
+    ttsBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5Z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18 6a8.5 8.5 0 0 1 0 12"/></svg>';
     ttsBtn.title = t('read_aloud');
     ttsBtn.onclick = function() {
       speakText(text);

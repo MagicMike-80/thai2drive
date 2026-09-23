@@ -5,7 +5,7 @@ import sys
 import unittest
 from pathlib import Path
 from types import SimpleNamespace
-from unittest.mock import patch
+from unittest.mock import AsyncMock, patch
 
 ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
@@ -58,6 +58,11 @@ class _Collection:
 
     async def insert_many(self, *args, **kwargs):
         return None
+
+
+class _WriteFailingCollection(_Collection):
+    async def insert_many(self, *args, **kwargs):
+        raise RuntimeError("MongoDB storage quota exceeded")
 
 
 class _Database:
@@ -207,6 +212,40 @@ class TestTeacherChatConsolidatedResolver(unittest.TestCase):
         self.assertIn("📏 Stoppelengde", res.suggestions)
         # Verify formula in reply
         self.assertIn("(fart ÷ 10) × 3", res.reply.lower())
+
+    def test_completed_reply_survives_chat_history_write_failure(self):
+        tc._chat_col = _WriteFailingCollection()
+        req = TeacherChatRequest(
+            session_id="test_session_read_only_db",
+            message="Hva er formelen for reaksjonslengde?",
+            language="no",
+        )
+
+        with self.assertLogs("teacher_chat", level="ERROR") as logs:
+            res = asyncio.run(teacher_chat(req))
+
+        self.assertIn("(fart ÷ 10) × 3", res.reply.lower())
+        self.assertEqual(res.session_id, req.session_id)
+        self.assertTrue(any("Failed to persist teacher chat history" in line for line in logs.output))
+
+    def test_weak_topic_reply_survives_chat_history_write_failure(self):
+        tc._chat_col = _WriteFailingCollection()
+        req = TeacherChatRequest(
+            session_id="test_weak_topic_read_only_db",
+            message="Hva bør jeg øve på?",
+            language="no",
+            device_id="test-device",
+        )
+
+        for weakness in ({"name": "vikeplikt"}, None):
+            with self.subTest(weakness=weakness), patch.object(
+                tc, "_get_student_weakness", new=AsyncMock(return_value=weakness)
+            ), self.assertLogs("teacher_chat", level="ERROR") as logs:
+                res = asyncio.run(teacher_chat(req))
+
+            self.assertTrue(res.reply)
+            self.assertEqual(res.session_id, req.session_id)
+            self.assertTrue(any("Failed to persist teacher chat history" in line for line in logs.output))
 
 
 class TestWrongQuizAnswerReplyIsThaiOnly(unittest.TestCase):

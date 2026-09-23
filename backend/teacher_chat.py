@@ -3384,8 +3384,13 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             }
             reply_text = _strict_lang_map(replies, lang) or ""
             sug_list = _strict_lang_map(suggestions, lang) or []
-            await _chat_col.insert_one({"session_id": session_id, "role": "user", "content": user_msg, "language": lang, "ts": datetime.now(timezone.utc)})
-            await _chat_col.insert_one({"session_id": session_id, "role": "assistant", "content": reply_text, "language": lang, "ts": datetime.now(timezone.utc)})
+            try:
+                await _chat_col.insert_many([
+                    {"session_id": session_id, "role": "user", "content": user_msg, "language": lang, "ts": datetime.now(timezone.utc)},
+                    {"session_id": session_id, "role": "assistant", "content": reply_text, "language": lang, "ts": datetime.now(timezone.utc)},
+                ])
+            except Exception as history_ex:
+                logger.error("Failed to persist teacher chat history: %s", history_ex)
             return TeacherChatResponse(session_id=session_id, conversation_id=conversation_id, mode=req.mode, reply=reply_text, suggestions=sug_list)
         else:
             open_replies = {
@@ -3400,8 +3405,13 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             }
             reply_text = _strict_lang_map(open_replies, lang) or ""
             sug_list = _strict_lang_map(open_suggestions, lang) or []
-            await _chat_col.insert_one({"session_id": session_id, "role": "user", "content": user_msg, "language": lang, "ts": datetime.now(timezone.utc)})
-            await _chat_col.insert_one({"session_id": session_id, "role": "assistant", "content": reply_text, "language": lang, "ts": datetime.now(timezone.utc)})
+            try:
+                await _chat_col.insert_many([
+                    {"session_id": session_id, "role": "user", "content": user_msg, "language": lang, "ts": datetime.now(timezone.utc)},
+                    {"session_id": session_id, "role": "assistant", "content": reply_text, "language": lang, "ts": datetime.now(timezone.utc)},
+                ])
+            except Exception as history_ex:
+                logger.error("Failed to persist teacher chat history: %s", history_ex)
             return TeacherChatResponse(session_id=session_id, conversation_id=conversation_id, mode=req.mode, reply=reply_text, suggestions=sug_list)
 
     # Load prior conversation (the most recent messages in this session, same language
@@ -3687,25 +3697,29 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
     media = _reconcile_teacher_media(media, sign_ids, exact_response_media)
     media = await _validate_teacher_response_media(media, lang)
 
-    # Persist both messages
+    # Persist both messages. Chat history is helpful, but it must never block a
+    # completed teacher response when MongoDB is temporarily read-only/full.
     now = datetime.now(timezone.utc)
-    await _chat_col.insert_many([
-        {
-            "session_id": session_id,
-            "role": "user",
-            "content": user_msg,
-            "language": lang,
-            "ts": now,
-        },
-        {
-            "session_id": session_id,
-            "role": "assistant",
-            "content": reply_text,
-            "language": lang,
-            "sign_ids": sign_ids,
-            "ts": now,
-        },
-    ])
+    try:
+        await _chat_col.insert_many([
+            {
+                "session_id": session_id,
+                "role": "user",
+                "content": user_msg,
+                "language": lang,
+                "ts": now,
+            },
+            {
+                "session_id": session_id,
+                "role": "assistant",
+                "content": reply_text,
+                "language": lang,
+                "sign_ids": sign_ids,
+                "ts": now,
+            },
+        ])
+    except Exception as history_ex:
+        logger.error("Failed to persist teacher chat history: %s", history_ex)
 
     duration = time.time() - start_time
     try:

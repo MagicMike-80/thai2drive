@@ -2,6 +2,25 @@
 
 All notable changes to Thai2Drive are documented in this file.
 
+## [0.2.0.3] - 2026-09-23
+
+### Fixed
+
+- Weak and strong topic guidance also returns its answer when chat history storage is full.
+
+## [0.2.0.2] - 2026-09-23
+
+### Fixed
+
+- Michael returns completed chat replies even when conversation history cannot be written to MongoDB.
+
+## [0.2.0.1] - 2026-09-23
+
+### Changed
+
+- Michael now uses a calm, single-field chat composer with image/document upload, voice input and a circular send action.
+- Permanent suggestion buttons are removed from the conversation; five localized learning paths are available in an optional neon sidebar.
+
 ## [0.2.0.0] - 2026-09-16
 
 ### Added
