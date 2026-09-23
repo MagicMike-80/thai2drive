@@ -91,9 +91,8 @@ class AIIdentityAndHumanHandoffTests(unittest.TestCase):
     def test_contact_human_button_translations_are_language_isolated(self):
         self.assertIn("contact_human_btn:{th:'ส่งข้อความถึง Michael ตัวจริง', no:'Send melding til Ekte Michael', en:'Send message to Real Michael'}", WEBAPP_HTML)
 
-    def test_contact_human_button_exists_and_calls_the_handler(self):
-        self.assertIn('id="contactHumanBtn"', WEBAPP_HTML)
-        self.assertIn('onclick="contactHumanMichael()"', WEBAPP_HTML)
+    def test_contact_human_button_is_not_persistent_in_clean_chat_header(self):
+        self.assertNotIn('id="contactHumanBtn"', WEBAPP_HTML)
 
     def test_contact_human_handler_posts_to_the_new_endpoint(self):
         self.assertIn("function contactHumanMichael()", WEBAPP_HTML)

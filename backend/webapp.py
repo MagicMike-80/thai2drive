@@ -3653,10 +3653,11 @@ a { color:inherit; text-decoration:none; }
   flex-shrink:0; overflow:hidden; position:relative;
 }
 .teacher-sidebar-toggle {
-  width:44px; height:44px; min-width:44px;
+  width:52px; height:52px; min-width:52px;
   display:inline-flex; align-items:center; justify-content:center;
-  border:1px solid rgba(96,165,250,.45); border-radius:12px;
-  background:#13223A; color:#E2E8F0; cursor:pointer;
+  border:2px solid #00F5FF; border-radius:12px;
+  background:#091A34; color:#F8FAFC; cursor:pointer;
+  box-shadow:0 0 14px rgba(0,245,255,.32), inset 0 0 12px rgba(255,0,229,.08);
   transition:background .15s,border-color .15s,transform .12s;
 }
 .teacher-sidebar-toggle:hover { background:#1E3A5F; border-color:#67E8F9; }
@@ -3708,6 +3709,10 @@ a { color:inherit; text-decoration:none; }
   transform:translateX(0); visibility:visible; pointer-events:auto;
 }
 .teacher-side-panel .tsp-btn { color:#F8FAFC !important; }
+.teacher-side-panel .tsp-btn {
+  min-height:58px; padding:14px 16px; border-radius:14px;
+  font-size:1rem; font-weight:850; line-height:1.3; text-align:left;
+}
 .teacher-sidebar-backdrop {
   display:block; position:absolute; z-index:11; inset:72px 0 0;
   border:0; padding:0; background:rgba(2,8,23,.66);
@@ -3863,17 +3868,22 @@ a { color:inherit; text-decoration:none; }
   border-top:1px solid var(--border);
   background:var(--bg2); flex-shrink:0;
 }
+.teacher-composer {
+  display:flex; align-items:center; gap:8px; width:100%; min-height:60px;
+  padding:6px; border:1px solid rgba(96,165,250,.38); border-radius:24px;
+  background:#071326; box-shadow:0 8px 30px rgba(0,0,0,.28);
+}
 .teacher-input {
-  flex:1; background:var(--bg); border:1px solid var(--border);
+  flex:1; background:transparent; border:0;
   color:var(--text); border-radius:16px;
-  padding:16px 18px; min-height:56px; font-size:1rem; font-family:inherit;
+  padding:12px 8px; min-height:48px; font-size:1rem; font-family:inherit;
   resize:none; max-height:112px; line-height:1.4;
   outline:none;
 }
-.teacher-input:focus { border-color:var(--orange); }
+.teacher-input:focus { border-color:transparent; }
 .teacher-input::placeholder { color:var(--muted); }
 .teacher-send-btn {
-  min-width:104px; height:56px; border-radius:16px;
+  width:48px; min-width:48px; height:48px; border-radius:50%;
   background:#2563EB !important; border:1px solid #60A5FA !important; color:#fff;
   font-size:.9rem; font-weight:900; cursor:pointer; flex-shrink:0; animation:none !important;
   transition:background .15s; display:flex;
@@ -3883,12 +3893,18 @@ a { color:inherit; text-decoration:none; }
 .teacher-send-btn:disabled { background:var(--border); cursor:default; }
 
 .teacher-doc-btn {
-  width:48px; min-width:48px; height:56px; border-radius:16px;
-  background:rgba(37,99,235,0.15); border:1px solid rgba(96,165,250,0.4);
+  width:46px; min-width:46px; height:46px; border-radius:50%;
+  background:transparent; border:0;
   color:#60A5FA; font-size:1.25rem; cursor:pointer; flex-shrink:0;
   display:flex; align-items:center; justify-content:center;
   transition:all .15s ease; outline:none;
 }
+.teacher-mic-btn {
+  width:42px; min-width:42px; height:42px; border:0; border-radius:50%;
+  display:flex; align-items:center; justify-content:center; cursor:pointer;
+  background:transparent; color:#CBD5E1; font-size:1.25rem;
+}
+.teacher-mic-btn.listening { color:#FF4FA3; background:rgba(255,79,163,.12); }
 .teacher-doc-btn:hover {
   background:rgba(37,99,235,0.3); border-color:#00F5FF; color:#00F5FF;
   box-shadow:0 0 10px rgba(0,245,255,0.25);
@@ -4040,7 +4056,7 @@ a { color:inherit; text-decoration:none; }
   .tm-chips-toggle { display:none !important; }
   .teacher-inputbar { width:100%; padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px)); background:#071326; position:relative; z-index:2; }
   .teacher-input { min-height:56px; font-size:1rem; }
-  .teacher-send-btn { min-width:86px; height:56px; }
+  .teacher-send-btn { width:48px; min-width:48px; height:48px; }
   .tm-sign-card { grid-template-columns:90px minmax(0,1fr); gap:12px; padding:12px; }
   .tm-sign-image-wrap { min-height:48px; }
   .tm-sign-image { width:90px; max-width:90px; height:90px; max-height:90px; }
@@ -4158,6 +4174,14 @@ a { color:inherit; text-decoration:none; }
 #endCoachMichaelPriBtn:active {
   transform: translateY(0) scale(0.98) !important;
 }
+
+/* The chat composer uses one calm blue circular send action. */
+#teacherSendBtn {
+  width:48px; min-width:48px; height:48px; border-radius:50%;
+  border:1px solid #60A5FA !important; background:#2563EB !important;
+  box-shadow:0 0 14px rgba(37,99,235,.38) !important; animation:none !important;
+}
+#teacherSendBtn:hover { background:#1D4ED8 !important; }
 
 .card-neon {
   position: relative;
@@ -5137,6 +5161,9 @@ a { color:inherit; text-decoration:none; }
 
         <!-- Chat header -->
         <div class="teacher-header">
+          <button class="teacher-sidebar-toggle" id="teacherSidebarToggle" type="button" onclick="toggleTeacherSidebar()" aria-controls="teacherSidePanel" aria-expanded="false" aria-label="Vis sidefelt" title="Vis sidefelt">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/></svg>
+          </button>
           <img class="teacher-avatar" src="/api/assets/michael_profile.jpg" alt="Michael">
           <div class="teacher-header-info">
             <div class="teacher-name" id="teacherNameLbl">Michael Trafikklærer</div>
@@ -5145,46 +5172,11 @@ a { color:inherit; text-decoration:none; }
               <div class="teacher-online-badge" data-key="teacher_online_badge">ONLINE</div>
             </div>
           </div>
-          <button class="teacher-contact-human-btn" id="contactHumanBtn" type="button" onclick="contactHumanMichael()">Send melding til Ekte Michael</button>
-          <button class="teacher-sidebar-toggle" id="teacherSidebarToggle" type="button" onclick="toggleTeacherSidebar()" aria-controls="teacherSidePanel" aria-expanded="false" aria-label="Vis emner" title="Vis emner">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/></svg>
-          </button>
         </div>
 
         <!-- Message list -->
         <div class="teacher-messages" id="teacherMessages">
           <!-- Welcome bubble injected by JS -->
-        </div>
-
-        <!-- Suggestion chips — shown only before first user message -->
-        <div class="teacher-suggestions" id="teacherSuggestions" aria-hidden="true">
-          <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="🪧 Forklar et skilt" data-msg-th="🪧 อธิบายป้ายจราจร" data-msg-en="🪧 Explain a sign">🪧 <span class="chip-lbl"></span></button>
-          <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="⚠️ Hjelp med vikeplikt" data-msg-th="⚠️ ช่วยเรื่องการให้ทาง" data-msg-en="⚠️ Help with right-of-way">⚠️ <span class="chip-lbl"></span></button>
-          <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="📖 Forklar en trafikkregel" data-msg-th="📖 อธิบายกฎจราจร" data-msg-en="📖 Explain a traffic rule">📖 <span class="chip-lbl"></span></button>
-          <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="📝 Hjelp med teoriprøven" data-msg-th="📝 ช่วยเรื่องข้อสอบทฤษฎี" data-msg-en="📝 Help with the theory test">📝 <span class="chip-lbl"></span></button>
-          <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="📊 Hva bør jeg øve på?" data-msg-th="📊 ฉันควรฝึกเรื่องอะไร?" data-msg-en="📊 What should I practise?">📊 <span class="chip-lbl"></span></button>
-          <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="❓ Spør om Thai2Drive" data-msg-th="❓ ถามเกี่ยวกับ Thai2Drive" data-msg-en="❓ Ask about Thai2Drive">❓ <span class="chip-lbl"></span></button>
-          <!-- Math shortcuts section -->
-          <div class="teacher-chip-hdr" id="tcMathHdr" data-hdr-no="🧮 Regnestykker" data-hdr-th="🧮 โจทย์คำนวณ" data-hdr-en="🧮 Calculations"></div>
-          <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)"
-            data-label-no="🧮 Regnestykker" data-label-th="🧮 โจทย์คำนวณ" data-label-en="🧮 Calculations"
-            data-msg-no="🧮 Vis meg alle formler: reaksjonslengde, bremselengde og stoppelengde" data-msg-th="🧮 แสดงสูตรทั้งหมด: ระยะปฏิกิริยา ระยะเบรก และระยะหยุดรถ" data-msg-en="🧮 Show me all formulas: reaction distance, braking distance and stopping distance">🧮 <span class="chip-lbl"></span></button>
-          <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)"
-            data-label-no="🚗 Reaksjonslengde" data-label-th="🚗 ระยะตอบสนอง" data-label-en="🚗 Reaction distance"
-            data-msg-no="🚗 Reaksjonslengde — gi meg formelen og regn ut ved 50 km/t" data-msg-th="🚗 ระยะตอบสนอง — ให้สูตรและคำนวณที่ 50 กม./ชม." data-msg-en="🚗 Reaction distance — give me the formula and work out an example at 50 km/h">🚗 <span class="chip-lbl"></span></button>
-          <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)"
-            data-label-no="🛑 Bremselengde" data-label-th="🛑 ระยะเบรก" data-label-en="🛑 Braking distance"
-            data-msg-no="🛑 Bremselengde — gi meg formelen og regn ut ved 50 km/t" data-msg-th="🛑 ระยะเบรก — ให้สูตรและคำนวณที่ 50 กม./ชม." data-msg-en="🛑 Braking distance — give me the formula and work out an example at 50 km/h">🛑 <span class="chip-lbl"></span></button>
-          <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)"
-            data-label-no="📏 Stoppelengde" data-label-th="📏 ระยะหยุดรถ" data-label-en="📏 Stopping distance"
-            data-msg-no="📏 Stoppelengde — gi meg formelen og regn ut ved 50 km/t" data-msg-th="📏 ระยะหยุดรถ — ให้สูตรและคำนวณที่ 50 กม./ชม." data-msg-en="📏 Stopping distance — give me the formula and work out an example at 50 km/h">📏 <span class="chip-lbl"></span></button>
-          <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)"
-            data-label-no="⚡ Dobbel fart" data-label-th="⚡ ความเร็วเพิ่มเป็นสองเท่า" data-label-en="⚡ Double speed"
-            data-msg-no="⚡ Dobbel fart — hva skjer med bremselengden? Gi eksempel" data-msg-th="⚡ ความเร็วเพิ่มเป็นสองเท่า — เกิดอะไรขึ้นกับระยะเบรก? ให้ตัวอย่าง" data-msg-en="⚡ Double speed — what happens to braking distance? Give an example">⚡ <span class="chip-lbl"></span></button>
-          <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)"
-            data-label-no="🌧️ Våt/glatt vei" data-label-th="🌧️ ถนนเปียก/ลื่น" data-label-en="🌧️ Wet/slippery road"
-            data-msg-no="🌧️ Våt og glatt vei — hvordan påvirker det bremselengden?" data-msg-th="🌧️ ถนนเปียก/ลื่น — ส่งผลต่อระยะเบรกอย่างไร?" data-msg-en="🌧️ Wet/slippery road — how does it affect braking distance?">🌧️ <span class="chip-lbl"></span></button>
-          <button class="teacher-topics-toggle" id="teacherMoreBtn" type="button" aria-expanded="false" onclick="toggleTeacherTopics()" data-key="teacher_more_topics">Flere emner</button>
         </div>
 
         <!-- Uploaded Document Badge -->
@@ -5196,10 +5188,13 @@ a { color:inherit; text-decoration:none; }
 
         <!-- Input bar -->
         <div class="teacher-inputbar">
-          <input type="file" id="teacherDocInput" accept=".pdf,application/pdf,image/png,image/jpeg,image/webp" style="display:none" onchange="_teacherUploadDoc(this)">
-          <button type="button" class="teacher-doc-btn" id="teacherDocBtn" onclick="document.getElementById('teacherDocInput').click()" title="Last opp PDF" aria-label="Last opp PDF" data-label-key="teacher_upload_doc">📎</button>
-          <textarea class="teacher-input" id="teacherInput" rows="1" placeholder="..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();teacherSend();}"></textarea>
-          <button class="teacher-send-btn btn-neon" id="teacherSendBtn" onclick="teacherSend()"><span data-key="teacher_send">Send</span>&nbsp;➤</button>
+          <div class="teacher-composer">
+            <input type="file" id="teacherDocInput" accept=".pdf,application/pdf,image/png,image/jpeg,image/webp" style="display:none" onchange="_teacherUploadDoc(this)">
+            <button type="button" class="teacher-doc-btn" id="teacherDocBtn" onclick="document.getElementById('teacherDocInput').click()" title="Last opp PDF eller bilde" aria-label="Last opp PDF eller bilde" data-label-key="teacher_upload_doc">＋</button>
+            <textarea class="teacher-input" id="teacherInput" rows="1" placeholder="..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();teacherSend();}"></textarea>
+            <button type="button" class="teacher-mic-btn" id="teacherMicBtn" onclick="toggleTeacherVoiceInput()" aria-label="Snakk med Michael" title="Snakk med Michael">🎙</button>
+            <button class="teacher-send-btn" id="teacherSendBtn" onclick="teacherSend()" aria-label="Send"><span aria-hidden="true">↑</span></button>
+          </div>
         </div>
 
       </div><!-- /teacher-chat-col -->
@@ -5208,13 +5203,12 @@ a { color:inherit; text-decoration:none; }
 
       <!-- Topic drawer — opened on demand on mobile and desktop -->
       <div class="teacher-side-panel" id="teacherSidePanel" aria-hidden="true">
-        <div class="tsp-title" id="tspTitle" data-key="tsp_title">Emner</div>
-        <button class="tsp-btn" data-tsp-btn="sign">🪧 <span data-tsp="sign"></span></button>
-        <button class="tsp-btn" data-tsp-btn="vikeplikt">⚠️ <span data-tsp="vikeplikt"></span></button>
-        <button class="tsp-btn" data-tsp-btn="rule">📖 <span data-tsp="rule"></span></button>
-        <button class="tsp-btn" data-tsp-btn="practice">📊 <span data-tsp="practice"></span></button>
-        <button class="tsp-btn" data-tsp-btn="theory">📝 <span data-tsp="theory"></span></button>
-        <button class="tsp-btn" data-tsp-btn="app">❓ <span data-tsp="app"></span></button>
+        <div class="tsp-title" id="tspTitle" data-key="tsp_title">Lær med Michael</div>
+        <button class="tsp-btn" onclick="teacherSidebarAction('strengths')">📊 <span data-tsp="strengths"></span></button>
+        <button class="tsp-btn" onclick="teacherSidebarAction('signs')">🪧 <span data-tsp="signs"></span></button>
+        <button class="tsp-btn" onclick="teacherSidebarAction('rules')">📏 <span data-tsp="rules"></span></button>
+        <button class="tsp-btn" onclick="teacherSidebarAction('position')">🚗 <span data-tsp="position"></span></button>
+        <button class="tsp-btn" onclick="teacherSidebarAction('dictionary')">🇳🇴 <span data-tsp="dictionary"></span></button>
       </div><!-- /teacher-side-panel -->
 
     </div><!-- /screenTeacher -->
@@ -5544,11 +5538,19 @@ var UI = {
   teacher_show_example_prompt:{th:'แสดงตัวอย่างสถานการณ์จริงที่สั้นและเข้าใจง่ายสำหรับป้ายนี้', no:'Vis meg et kort, praktisk eksempel med dette skiltet.', en:'Show me a short practical example using this sign.'},
   teacher_test_me:{th:'ทดสอบฉัน', no:'Test meg', en:'Test me'},
   teacher_show_norwegian_term:{th:'ดูคำศัพท์นอร์เวย์', no:'Se norsk fagord', en:'Show Norwegian term'},
-  teacher_topics_open:{th:'แสดงหัวข้อ', no:'Vis emner', en:'Show topics'},
-  teacher_topics_close:{th:'ปิดหัวข้อ', no:'Lukk emner', en:'Close topics'},
+  teacher_topics_open:{th:'แสดงแถบด้านข้าง', no:'Vis sidefelt', en:'Show sidebar'},
+  teacher_topics_close:{th:'ซ่อนแถบด้านข้าง', no:'Skjul sidefelt', en:'Hide sidebar'},
+  teacher_voice_start:{th:'พูดกับไมเคิล', no:'Snakk med Michael', en:'Talk to Michael'},
+  teacher_voice_stop:{th:'หยุดฟัง', no:'Stopp lytting', en:'Stop listening'},
+  teacher_voice_unsupported:{th:'เบราว์เซอร์นี้ไม่รองรับการพิมพ์ด้วยเสียง', no:'Nettleseren støtter ikke taleinntasting.', en:'This browser does not support voice input.'},
   teacher_error: {th:'ขอโทษ เกิดข้อผิดพลาด ลองใหม่อีกครั้ง', no:'Beklager, noe gikk galt. Prøv igjen.', en:'Sorry, something went wrong. Please try again.'},
   teacher_online:{th:'● ออนไลน์', no:'● Pålogget', en:'● Online'},
-  tsp_title:   {th:'หัวข้อ',           no:'Emner',               en:'Topics'},
+  tsp_title:   {th:'เรียนกับไมเคิล', no:'Lær med Michael', en:'Learn with Michael'},
+  tsp_strengths:{th:'จุดอ่อนและจุดแข็งของคุณ', no:'Dine svake/sterke sider', en:'Your weak/strong areas'},
+  tsp_signs:{th:'ป้ายจราจร', no:'Skilt', en:'Road signs'},
+  tsp_rules:{th:'กฎและระยะหยุดรถ', no:'Regler / stopplengde', en:'Rules / stopping distance'},
+  tsp_position:{th:'ตำแหน่งรถบนถนน', no:'Plassering', en:'Road positioning'},
+  tsp_dictionary:{th:'พจนานุกรมคำศัพท์จราจรนอร์เวย์', no:'Norsk trafikkordbok', en:'Norwegian traffic dictionary'},
   tsp_sign:    {th:'อธิบายป้ายจราจร',  no:'Forklar et skilt',    en:'Explain a sign'},
   tsp_vikeplikt:{th:'ช่วยเรื่องการให้ทาง', no:'Hjelp med vikeplikt', en:'Help with right-of-way'},
   tsp_rule:    {th:'อธิบายกฎจราจร',   no:'Forklar en trafikkregel', en:'Explain a traffic rule'},
@@ -5987,6 +5989,13 @@ function applyUILang() {
   if (tContactBtn) tContactBtn.textContent = t('contact_human_btn');
   var tInput = document.getElementById('teacherInput');
   if (tInput) tInput.placeholder = t('teacher_placeholder');
+  var tMicBtn = document.getElementById('teacherMicBtn');
+  if (tMicBtn && !tMicBtn.classList.contains('listening')) {
+    tMicBtn.setAttribute('aria-label', t('teacher_voice_start'));
+    tMicBtn.title = t('teacher_voice_start');
+  }
+  var tSendBtn = document.getElementById('teacherSendBtn');
+  if (tSendBtn) tSendBtn.setAttribute('aria-label', t('teacher_send'));
   if (typeof _teacherUploadedDoc !== 'undefined' && _teacherUploadedDoc) {
     var docBadge = document.getElementById('teacherDocBadge');
     var docName = document.getElementById('teacherDocName');
@@ -6012,7 +6021,7 @@ function applyUILang() {
   // Side panel labels
   var tspTitle = document.getElementById('tspTitle');
   if (tspTitle) tspTitle.textContent = t('tsp_title');
-  var tspMap = { sign:'tsp_sign', vikeplikt:'tsp_vikeplikt', rule:'tsp_rule', practice:'tsp_practice', theory:'tsp_theory', app:'tsp_app' };
+  var tspMap = { strengths:'tsp_strengths', signs:'tsp_signs', rules:'tsp_rules', position:'tsp_position', dictionary:'tsp_dictionary' };
   document.querySelectorAll('[data-tsp]').forEach(function(el) {
     var key = tspMap[el.getAttribute('data-tsp')];
     if (key) el.textContent = t(key);
@@ -11273,43 +11282,11 @@ async function loadTeacher() {
     }
   }
 
-  // Fetch topics from backend (single source of truth) and populate chips + side panel
-  try {
-    var tRes = await fetch('/api/teacher/topics?lang=' + appLang);
-    var tData = await tRes.json();
-    var topics = tData.topics || [];
-
-    // Update initial suggestion chips
-    var chipEls = document.querySelectorAll('#teacherSuggestions .teacher-chip');
-    topics.forEach(function(topic, i) {
-      var chip = chipEls[i];
-      if (!chip) return;
-      var label = chip.querySelector('.chip-lbl');
-      if (label) label.textContent = topic.text;
-      chip.dataset.msg = topic.icon + ' ' + topic.text;
-      chip.onclick = (function(msg){ return function(){ teacherSend(msg); }; })(topic.icon + ' ' + topic.text);
-    });
-
-    // Update side panel buttons
-    var tspBtns = document.querySelectorAll('.tsp-btn');
-    topics.forEach(function(topic, i) {
-      var btn = tspBtns[i];
-      if (!btn) return;
-      btn.innerHTML = topic.icon + ' <span>' + topic.text + '</span>';
-      btn.onclick = (function(msg){ return function(){ closeTeacherSidebar(); teacherSend(msg); }; })(topic.icon + ' ' + topic.text);
-    });
-  } catch(e) {
-    // Fallback: keep existing hardcoded chips
-    _teacherUpdateChips();
-    var tspMap2 = { sign:'tsp_sign', vikeplikt:'tsp_vikeplikt', rule:'tsp_rule', practice:'tsp_practice', theory:'tsp_theory', app:'tsp_app' };
-    document.querySelectorAll('[data-tsp]').forEach(function(el) {
-      var key = tspMap2[el.getAttribute('data-tsp')];
-      if (!key) return;
-      el.textContent = t(key);
-      var btn = el.closest('.tsp-btn');
-      if (btn) { var label = t(key); btn.onclick = (function(lbl){ return function(){ closeTeacherSidebar(); teacherSend(lbl); }; })(label); }
-    });
-  }
+  var tspMap2 = { strengths:'tsp_strengths', signs:'tsp_signs', rules:'tsp_rules', position:'tsp_position', dictionary:'tsp_dictionary' };
+  document.querySelectorAll('[data-tsp]').forEach(function(el) {
+    var key = tspMap2[el.getAttribute('data-tsp')];
+    if (key) el.textContent = t(key);
+  });
 }
 
 function _teacherUpdateChips() {
@@ -11353,6 +11330,54 @@ function toggleTeacherSidebar() {
 
 function closeTeacherSidebar() {
   setTeacherSidebar(false);
+}
+
+function teacherSidebarAction(kind) {
+  var prompts = {
+    strengths:{no:'Hva bør jeg øve på?',th:'ฉันควรฝึกเรื่องอะไร?',en:'What should I practise?'},
+    signs:{no:'Hjelp meg å lære trafikkskilt.',th:'ช่วยฉันเรียนรู้ป้ายจราจร',en:'Help me learn road signs.'},
+    rules:{no:'Hjelp meg med trafikkregler og stopplengde.',th:'ช่วยฉันเรื่องกฎจราจรและระยะหยุดรถ',en:'Help me with traffic rules and stopping distance.'},
+    position:{no:'Lær meg riktig plassering på veien.',th:'สอนฉันเรื่องตำแหน่งรถที่ถูกต้องบนถนน',en:'Teach me correct road positioning.'},
+    dictionary:{no:'Hjelp meg med norske trafikkord og uttrykk.',th:'ช่วยฉันเรียนรู้คำศัพท์จราจรภาษานอร์เวย์',en:'Help me learn Norwegian traffic words and expressions.'}
+  };
+  var item = prompts[kind] || {};
+  var prompt = item[appLang] || '';
+  if (!prompt) return;
+  closeTeacherSidebar();
+  teacherSend(prompt, t('tsp_' + kind));
+}
+
+var _teacherVoiceRecognition = null;
+function toggleTeacherVoiceInput() {
+  var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  var button = document.getElementById('teacherMicBtn');
+  if (!SpeechRecognition) { toast(t('teacher_voice_unsupported')); return; }
+  if (_teacherVoiceRecognition) { _teacherVoiceRecognition.stop(); return; }
+  var recognition = new SpeechRecognition();
+  _teacherVoiceRecognition = recognition;
+  recognition.lang = appLang === 'th' ? 'th-TH' : (appLang === 'no' ? 'nb-NO' : 'en-US');
+  recognition.interimResults = false;
+  recognition.continuous = false;
+  if (button) {
+    button.classList.add('listening');
+    button.setAttribute('aria-label', t('teacher_voice_stop'));
+    button.title = t('teacher_voice_stop');
+  }
+  recognition.onresult = function(event) {
+    var input = document.getElementById('teacherInput');
+    var transcript = event.results && event.results[0] && event.results[0][0] ? event.results[0][0].transcript : '';
+    if (input && transcript) input.value = ((input.value || '') + ' ' + transcript).trim();
+  };
+  recognition.onerror = function() {};
+  recognition.onend = function() {
+    _teacherVoiceRecognition = null;
+    if (button) {
+      button.classList.remove('listening');
+      button.setAttribute('aria-label', t('teacher_voice_start'));
+      button.title = t('teacher_voice_start');
+    }
+  };
+  recognition.start();
 }
 
 document.addEventListener('keydown', function(event) {
@@ -12166,7 +12191,7 @@ async function teacherSend(overrideMsg, customDisplayMsg, customMode) {
       return mediaSignIds.indexOf(signId) === -1;
     });
     await _teacherAppendSignCards(fallbackSignIds, assistantBubble);
-    _teacherAppendChips(data.suggestions || []);
+    // Keep the chat calm: backend suggestions are intentionally not rendered.
     _teacherScrollToAnswerStart(assistantBubble);
     if (_teacherUploadedImage) _teacherClearDoc();
   } catch(e) {
