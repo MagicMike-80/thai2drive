@@ -3911,6 +3911,57 @@ a { color:inherit; text-decoration:none; }
   font-size:1.05rem; line-height:1; padding:8px; cursor:pointer;
 }
 .tm-bubble-tts:hover { background:rgba(255,153,51,.10); border-radius:50%; }
+/* ═══ Michael-skolen, konge/tjener-chip, HAV-lys, hint ═══ */
+.ms-open-btn {
+  margin-left:auto; border:1px solid rgba(0,245,255,.4); background:rgba(0,245,255,.08); color:#00F5FF;
+  border-radius:999px; padding:6px 12px; font-size:.78rem; font-weight:700; cursor:pointer; white-space:nowrap;
+}
+.ms-open-btn:hover { background:rgba(0,245,255,.18); }
+.ms-overlay {
+  position:fixed; inset:0; z-index:9000; background:rgba(5,8,20,.82); display:none;
+  align-items:flex-start; justify-content:center; padding:16px; overflow-y:auto;
+}
+.ms-overlay.open { display:flex; }
+.ms-panel {
+  width:100%; max-width:640px; background:#0d1226; border:1px solid rgba(0,245,255,.25);
+  border-radius:16px; padding:16px; color:#E2E8F0; box-shadow:0 0 30px rgba(0,245,255,.12);
+}
+.ms-head { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+.ms-head h2 { margin:0; font-size:1.05rem; flex:1; color:#00F5FF; }
+.ms-close { border:0; background:transparent; color:#CBD5E1; font-size:1.2rem; cursor:pointer; padding:6px 10px; }
+.ms-tabs { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px; }
+.ms-tab { border:1px solid rgba(255,255,255,.15); background:transparent; color:#CBD5E1; border-radius:999px; padding:7px 12px; font-size:.78rem; cursor:pointer; }
+.ms-tab.active { border-color:#00F5FF; color:#00F5FF; background:rgba(0,245,255,.1); }
+.ms-card { background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08); border-radius:12px; padding:14px; margin-bottom:12px; }
+.ms-card-title { font-weight:800; margin-bottom:8px; }
+.ms-side { display:flex; flex-direction:column; gap:2px; padding:8px 10px; border-radius:8px; margin-bottom:6px; font-size:.86rem; line-height:1.45; }
+.ms-side.th { background:rgba(255,153,51,.08); }
+.ms-side.no { background:rgba(0,245,255,.08); }
+.ms-q { font-size:.86rem; font-weight:700; margin:10px 0 6px; }
+.ms-opts { display:flex; flex-direction:column; gap:6px; }
+.ms-opt, .ms-btn { border:1px solid rgba(255,255,255,.18); background:rgba(255,255,255,.05); color:#E2E8F0; border-radius:10px; padding:10px 12px; font-size:.85rem; text-align:left; cursor:pointer; }
+.ms-btn { text-align:center; margin-top:10px; border-color:#00F5FF; color:#00F5FF; font-weight:700; }
+.ms-opt.ok { border-color:#22C55E; background:rgba(34,197,94,.15); }
+.ms-opt.bad { border-color:#EF4444; background:rgba(239,68,68,.15); }
+.ms-result { font-size:.8rem; font-weight:800; margin-top:4px; }
+.ms-result.ok { color:#22C55E; } .ms-result.bad { color:#EF4444; }
+.ms-word-lbl { font-size:.72rem; color:#94A3B8; margin-bottom:6px; }
+.ms-word-term { font-size:1.6rem; font-weight:800; color:#00F5FF; }
+.ms-word-term small { display:block; font-size:.68rem; font-weight:600; color:#94A3B8; }
+.ms-word-def { margin-top:8px; font-size:.92rem; line-height:1.5; }
+.ms-gaze { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:10px 0; }
+.ms-gaze-step { padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,.12); font-size:.86rem; transition:all .2s; }
+.ms-gaze-step b { color:#FF9933; margin-right:4px; }
+.ms-gaze-step.lit { background:rgba(0,245,255,.2); border-color:#00F5FF; box-shadow:0 0 12px rgba(0,245,255,.4); transform:scale(1.03); }
+.ms-gaze-round { font-size:.78rem; color:#94A3B8; min-height:1.2em; }
+.ks-chip { margin:8px 0; padding:8px 12px; border-radius:10px; font-size:.8rem; font-weight:700; background:rgba(255,215,0,.1); border:1px solid rgba(255,215,0,.35); color:#FDE68A; }
+.hav-lamps { display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin:10px 0; }
+.hav-title { width:100%; font-size:.7rem; color:#94A3B8; font-weight:700; }
+.hav-lamp { padding:5px 10px; border-radius:999px; font-size:.75rem; border:1px solid rgba(255,255,255,.15); color:#64748B; }
+.hav-lamp b { margin-right:3px; }
+.hav-lamp.on { color:#0b1020; background:#FF9933; border-color:#FF9933; box-shadow:0 0 10px rgba(255,153,51,.6); font-weight:800; }
+.ask-hint-btn { width:100%; display:flex; align-items:center; justify-content:center; gap:8px; padding:12px; border-radius:10px; border:1px solid rgba(0,245,255,.4); background:rgba(0,245,255,.08); color:#00F5FF; font-weight:700; cursor:pointer; font-size:.85rem; margin-top:8px; }
+.hint-dots { letter-spacing:2px; }
 .teacher-doc-btn:hover {
   background:rgba(37,99,235,0.3); border-color:#00F5FF; color:#00F5FF;
   box-shadow:0 0 10px rgba(0,245,255,0.25);
@@ -5177,6 +5228,16 @@ a { color:inherit; text-decoration:none; }
               <div class="teacher-meta-line" data-key="teacher_meta">Pålogget • AI-lærer • 16 års erfaring</div>
               <div class="teacher-online-badge" data-key="teacher_online_badge">ONLINE</div>
             </div>
+          </div>
+          <button type="button" class="ms-open-btn" id="msOpenBtn" onclick="openMichaelSchool()">🎓 <span id="msOpenLbl">Michael-skolen</span></button>
+        </div>
+
+        <!-- Michael-skolen overlay -->
+        <div class="ms-overlay" id="msOverlay" onclick="if(event.target===this)closeMichaelSchool()">
+          <div class="ms-panel" role="dialog" aria-modal="true" aria-labelledby="msTitle">
+            <div class="ms-head"><h2 id="msTitle">Michael-skolen</h2><button type="button" class="ms-close" onclick="closeMichaelSchool()" aria-label="Close">✕</button></div>
+            <div class="ms-tabs" id="msTabs"></div>
+            <div id="msBody"></div>
           </div>
         </div>
 
@@ -8390,6 +8451,7 @@ function renderQuestion() {
     + '</div>'
     + '<div class="q-mid">'
       + buildSituationLensHtml(qText, currentExpl)
+      + buildKingServantChip(qText)
       + '<div class="q-answers" id="qAnswers">' + ansHtml + '</div>'
       + '<div class="glossary-btn-wrap" id="glossaryBtnWrap"></div>'
       + '<div class="q-feedback" id="qFeedback"></div>'
@@ -9573,6 +9635,8 @@ function buildAiHtml(isOk, expl) {
     html += '<button class="ask-michael-btn ai-block" style="--i:' + (i++) + '; width:100%; display:flex; align-items:center; justify-content:center; gap:8px; padding:12px; border-radius:10px; border:none; background:rgba(255,107,0,.15); color:var(--orange); font-weight:700; cursor:pointer; font-size:.85rem; margin-top:10px; transition:background .2s;" onmouseover="this.style.background=\'rgba(255,107,0,.25)\'" onmouseout="this.style.background=\'rgba(255,107,0,.15)\'" onclick="askMichaelAboutThis()">'
       + '<span>🚗</span> ' + escH(t('ask_michael'))
       + '</button>';
+    html += buildHavLamps(expl);
+    html += buildHintButton();
 
   } else if (isOk && expl) {
     // 3 ── Correct: depth + confidence adaptive explanation
@@ -11004,7 +11068,8 @@ function _displayedAnswerText(answerId) {
   return txt ? txt.textContent.trim() : '';
 }
 
-function askMichaelAboutThis() {
+function askMichaelAboutThis(mode) {
+  var isHint = (mode === 'hint');
   var q = questions[qIdx];
   if (!q) return;
 
@@ -11041,20 +11106,32 @@ function askMichaelAboutThis() {
   var explText = currentExpl || '';
   var qId = String(q._id || q.id || q.question_id || 'question').replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 32);
 
-  // Switch to quiz teacher session
-  _teacherQuizHtml = '';
-  _teacherQuizHasUserMsg = false;
+  // Hint clicks on the same question keep one session so the backend can count attempts.
+  var rawQid = String(q._id || q.id || q.question_id || '');
+  var reuseHintSession = isHint && _msHint.qId === rawQid && !!_msHint.sid;
+  if (!reuseHintSession) {
+    _teacherQuizHtml = '';
+    _teacherQuizHasUserMsg = false;
+  }
   switchTeacherSession('quiz');
 
   // Generate a fresh language-scoped session ID for this question.
   // Normal Michael chat history uses _teacherSessionId and is not touched.
-  _teacherQuizSessionId = 'quiz_help_' + appLang + '_' + qId + '_' + Date.now().toString(36);
+  _teacherQuizSessionId = reuseHintSession
+    ? _msHint.sid
+    : 'quiz_help_' + appLang + '_' + qId + '_' + Date.now().toString(36);
   _teacherQuizConversationId = _teacherQuizSessionId;
+  if (isHint) {
+    if (_msHint.qId !== rawQid) _msHint = { qId: rawQid, count: 0, sid: null };
+    _msHint.count++;
+    _msHint.sid = _teacherQuizSessionId;
+    _msBumpHintDots();
+  }
   _teacherHasUserMsg = false;
   _teacherWelcomeLang = null;
 
   var msgs = document.getElementById('teacherMessages');
-  if (msgs) msgs.innerHTML = '';
+  if (msgs && !reuseHintSession) msgs.innerHTML = '';
 
   var userDisplayMsg = '';
   if (appLang === 'th') {
@@ -11065,9 +11142,12 @@ function askMichaelAboutThis() {
     userDisplayMsg = 'Kan du forklare dette spørsmålet for meg?';
   }
 
+  if (isHint) userDisplayMsg = _msL().hintMsg;
+
   var hiddenPayload = userDisplayMsg + '\n\n'
     + '<quiz_context>\n'
-    + 'STUDENT ANSWERED INCORRECTLY. EXPLAIN WHY IT IS WRONG.\n'
+    + (isHint ? 'STUDENT ANSWERED INCORRECTLY. GIVE A HINT ONLY. DO NOT REVEAL THE ANSWER.\n'
+              : 'STUDENT ANSWERED INCORRECTLY. EXPLAIN WHY IT IS WRONG.\n')
     + 'is_correct: false\n'
     + 'Question: ' + qText + '\n'
     + '[ELEVENS FAKTISKE SVAR] (' + userAnsId + '): ' + userAnsText + '\n'
@@ -11080,6 +11160,281 @@ function askMichaelAboutThis() {
 
   // Trigger send using the hidden payload, but display the clean message in the bubble!
   teacherSend(hiddenPayload, userDisplayMsg);
+}
+
+// ═══ Michael-skolen: konge/tjener-chip, HAV-lys, hint-trapp, kultur, ord for dagen, blikkrutine ═══
+var _MS = {
+  th: {
+    open: 'ห้องเรียนไมเคิล', close: 'ปิด', tabs: ['ไทยกับนอร์เวย์', 'คำศัพท์ประจำวัน', 'ฝึกสายตา'],
+    inTh: 'ในประเทศไทย', inNo: 'ในนอร์เวย์', tryIt: 'ลองตอบดู', right: 'ถูกต้อง', wrong: 'ยังไม่ใช่',
+    word: 'คำศัพท์ประจำวัน', next: 'คำถัดไป', termLbl: 'คำนอร์เวย์ที่ต้องรู้',
+    gazeIntro: 'สายตาต้องไม่หยุดนิ่ง ทำตามลำดับนี้ซ้ำเรื่อย ๆ', start: 'เริ่ม', stop: 'หยุด', round: 'รอบ',
+    ksChip: 'เรื่องการให้ทาง ถามตัวเองก่อน: ฉันเป็นราชา หรือผู้รับใช้?',
+    hint: 'ขอคำใบ้', hintMsg: 'ขอคำใบ้หน่อยครับ', hintLbl: 'คำใบ้',
+    havTitle: 'กฎ HAV (มาตรา 3)', H: 'มีน้ำใจ', A: 'ระวังรอบด้าน', V: 'รอบคอบ'
+  },
+  no: {
+    open: 'Michael-skolen', close: 'Lukk', tabs: ['Thailand mot Norge', 'Ord for dagen', 'Blikkrutine'],
+    inTh: 'I Thailand', inNo: 'I Norge', tryIt: 'Prøv selv', right: 'Riktig', wrong: 'Ikke helt',
+    word: 'Ord for dagen', next: 'Neste ord', termLbl: 'Fagord',
+    gazeIntro: 'Blikket skal aldri stå stille. Gå gjennom rutinen om og om igjen.', start: 'Start', stop: 'Stopp', round: 'Runde',
+    ksChip: 'Vikeplikt? Spør deg selv: er jeg kongen eller tjeneren?',
+    hint: 'Gi meg et hint', hintMsg: 'Gi meg et hint', hintLbl: 'Hint',
+    havTitle: 'HAV-regelen', H: 'Hensynsfull', A: 'Aktpågivende', V: 'Varsom'
+  },
+  en: {
+    open: "Michael's School", close: 'Close', tabs: ['Thailand vs Norway', 'Word of the day', 'Gaze routine'],
+    inTh: 'In Thailand', inNo: 'In Norway', tryIt: 'Try it', right: 'Correct', wrong: 'Not quite',
+    word: 'Word of the day', next: 'Next word', termLbl: 'Norwegian term',
+    gazeIntro: 'Your eyes must never stand still. Run through this routine again and again.', start: 'Start', stop: 'Stop', round: 'Round',
+    ksChip: 'Give way? Ask yourself: am I the king or the servant?',
+    hint: 'Give me a hint', hintMsg: 'Give me a hint', hintLbl: 'Hint',
+    havTitle: 'The HAV rule (section 3)', H: 'Hensynsfull (considerate)', A: 'Aktpågivende (attentive)', V: 'Varsom (careful)'
+  }
+};
+
+var _MS_CULTURE = {
+  th: [
+    { t: 'การให้ทางรถจากทางขวา', a: 'ถนนสายหลักมักได้สิทธิ์ก่อนโดยปริยาย การให้ทางรถจากทางขวาแทบไม่มี', b: 'ทุกสี่แยกที่ไม่มีป้ายหรือสัญญาณไฟ ต้องให้ทางรถที่กำลังขับมาจากทางขวา แม้ถนนของคุณจะดูใหญ่กว่า',
+      q: 'สี่แยกไม่มีป้าย มีรถมาจากทางขวา คุณทำอย่างไร?', o: ['ให้ทางรถจากขวา', 'ขับผ่านเพราะถนนฉันใหญ่กว่า', 'บีบแตรเตือน'], c: 0 },
+    { t: 'ขับรถหน้าหนาว', a: 'อากาศร้อนชื้น ถนนแห้งหรือเปียก ไม่มีน้ำแข็ง', b: 'หน้าหนาวต้องใช้ยางหน้าหนาวที่ดอกยางลึกอย่างน้อย 3 มม. และบนน้ำแข็งหรือหิมะ ต้องเว้นระยะห่างและระยะเบรกมากขึ้นหลายเท่า',
+      q: 'บนน้ำแข็งหรือหิมะ ระยะเบรกเป็นอย่างไร?', o: ['ยาวขึ้นมาก', 'เท่าเดิม', 'สั้นลง'], c: 0 },
+    { t: 'ปริมาณแอลกอฮอล์ในเลือด', a: 'เกณฑ์ที่ 0.5 พรอมิลล์', b: 'เกณฑ์เพียง 0.2 พรอมิลล์ โทษรุนแรงมาก อาจถูกปรับตามรายได้ ถูกยึดใบขับขี่ และในกรณีร้ายแรงถึงจำคุก',
+      q: 'เกณฑ์แอลกอฮอล์สำหรับรถยนต์ในนอร์เวย์คือเท่าไร?', o: ['0.2 พรอมิลล์', '0.5 พรอมิลล์', '0.8 พรอมิลล์'], c: 0 },
+    { t: 'คนเดินเท้า', a: 'รถมักได้สิทธิ์ก่อนคนเดินเท้าในทางปฏิบัติ', b: 'คุณต้องให้ทางคนเดินเท้าที่อยู่บนทางม้าลายหรือกำลังจะก้าวลงไปเสมอ และหยุดรถล่วงหน้า',
+      q: 'มีคนต้องการข้ามทางม้าลาย คุณทำอย่างไร?', o: ['หยุดรถล่วงหน้า', 'บีบแตรให้เร็ว ๆ', 'ขับต่อถ้าคนอยู่ไกล'], c: 0 }
+  ],
+  no: [
+    { t: 'Vikeplikt fra høyre', a: 'Hovedvei har nesten alltid forkjørsrett i praksis, og vikeplikt fra høyre finnes knapt.', b: 'I alle kryss uten skilt eller lys har du vikeplikt for kjørende fra høyre, selv om din vei føles større.',
+      q: 'Kryss uten skilt, bil fra høyre. Hva gjør du?', o: ['Viker for bilen fra høyre', 'Kjører fordi veien min er størst', 'Tuter for å varsle'], c: 0 },
+    { t: 'Vinterkjøring', a: 'Tropisk klima og asfalt uten is.', b: 'Vinterdekk med minst 3 mm mønsterdybde, og på is og snø må du holde mye mer avstand fordi bremselengden blir flere ganger lengre.',
+      q: 'Hva skjer med bremselengden på is og snø?', o: ['Den blir mye lengre', 'Den er uendret', 'Den blir kortere'], c: 0 },
+    { t: 'Promillegrense', a: 'Grensen er 0,5 promille.', b: 'Grensen er 0,2 promille for motorvogn. Straffene er svært strenge: bot etter inntekt, tap av førerkort og i alvorlige tilfeller fengsel.',
+      q: 'Hva er promillegrensen for motorvogn i Norge?', o: ['0,2 promille', '0,5 promille', '0,8 promille'], c: 0 },
+    { t: 'Gående', a: 'Biler har i praksis forkjørsrett foran gående.', b: 'Du må alltid vike for gående som er i gangfeltet eller på vei ut i det, og stanse i god tid.',
+      q: 'En gående vil over i gangfeltet. Hva gjør du?', o: ['Stanser i god tid', 'Tuter så hun skynder seg', 'Kjører videre hvis hun er langt unna'], c: 0 }
+  ],
+  en: [
+    { t: 'Giving way to the right', a: 'The main road almost always has priority in practice, and giving way to the right barely exists.', b: 'At every junction without signs or lights you give way to vehicles coming from the right, even if your road feels bigger.',
+      q: 'A junction with no signs and a car from the right. What do you do?', o: ['Give way to the car from the right', 'Drive on because my road is bigger', 'Honk to warn them'], c: 0 },
+    { t: 'Winter driving', a: 'Tropical climate and asphalt without ice.', b: 'Winter tyres with at least 3 mm tread depth, and on ice and snow you need much more distance because braking distance becomes several times longer.',
+      q: 'What happens to braking distance on ice and snow?', o: ['It becomes much longer', 'It stays the same', 'It becomes shorter'], c: 0 },
+    { t: 'Alcohol limit', a: 'The limit is 0.5 per mille.', b: 'The limit is 0.2 per mille for a motor vehicle. Penalties are very strict: income-based fines, loss of licence and, in serious cases, prison.',
+      q: 'What is the alcohol limit for a motor vehicle in Norway?', o: ['0.2 per mille', '0.5 per mille', '0.8 per mille'], c: 0 },
+    { t: 'Pedestrians', a: 'In practice cars have priority over pedestrians.', b: 'You must always give way to pedestrians on the crossing or about to step onto it, and stop in good time.',
+      q: 'A pedestrian wants to cross at a zebra crossing. What do you do?', o: ['Stop in good time', 'Honk so they hurry', 'Keep going if they are far away'], c: 0 }
+  ]
+};
+
+var _MS_WORDS = {
+  th: [
+    ['Vikeplikt', 'การให้ทาง — คุณมีหน้าที่ปล่อยให้คนอื่นไปก่อน และห้ามขวางหรือทำให้เขาไม่แน่ใจ'],
+    ['Forkjørsvei', 'ทางเอก — ถนนที่มีป้ายสี่เหลี่ยมข้าวหลามตัดสีเหลือง รถจากทางแยกต้องให้ทางคุณ'],
+    ['Uoversiktlig', 'มองเห็นไม่ชัดเจน — สายตาถูกบังด้วยโค้ง เนินเขา กองหิมะ หรือพุ่มไม้และต้นไม้ ต้องลดความเร็วทันที'],
+    ['Tilstrekkelig', 'เพียงพอ — "พอดีและปลอดภัย" เช่น เว้นระยะห่างจากรถคันหน้าให้เพียงพอ (กฎ 3 วินาที)'],
+    ['Vognkort', 'เอกสารจดทะเบียนรถ — ระบุข้อมูลของรถ เช่น น้ำหนักรวมที่อนุญาต'],
+    ['Bør / Skal / Må', 'ควร / ต้อง / จำเป็นต้อง — "ควร" คือคำแนะนำ ส่วน "ต้อง" และ "จำเป็นต้อง" คือกฎหมาย ฝ่าฝืนแล้วผิด'],
+    ['Stoppelengde', 'ระยะหยุดรถ — ระยะที่รถวิ่งขณะตอบสนอง (ประมาณ 1 วินาที) รวมกับระยะเบรก'],
+    ['Vegskulder', 'ไหล่ทาง — พื้นที่นอกเส้นขอบทางสีขาวประ ไม่ได้ไว้สำหรับขับปกติ'],
+    ['Kjørefelt', 'ช่องทางจราจร — ส่วนของถนนที่กว้างพอสำหรับรถหนึ่งแถว'],
+    ['Sperrelinje', 'เส้นห้ามข้าม — เส้นทึบ (สีเหลืองเมื่อมีรถสวนทาง สีขาวระหว่างช่องทางที่ไปทางเดียวกัน) ห้ามข้ามหรือขับทับ']
+  ],
+  no: [
+    ['Vikeplikt', 'Du har plikt til å slippe andre frem. Du må ikke hindre eller forstyrre den du viker for.'],
+    ['Forkjørsvei', 'Vei med gult diamantskilt. Trafikk fra sideveier har vikeplikt for deg.'],
+    ['Uoversiktlig', 'Du ser ikke langt nok fordi sving, bakketopp, snøfonn eller busker og trær skjuler veien. Sett ned farten med en gang.'],
+    ['Tilstrekkelig', '«Nok» eller «forsvarlig». Eksempel: tilstrekkelig avstand til bilen foran (3-sekundersregelen).'],
+    ['Vognkort', 'Bilens registreringsdokument. Det viser blant annet tillatt totalvekt.'],
+    ['Bør / Skal / Må', '«Bør» er en anbefaling. «Skal» og «må» er juridiske krav, og å bryte dem er lovbrudd.'],
+    ['Stoppelengde', 'Reaksjonslengden (ca. 1 sekund) pluss bremselengden.'],
+    ['Vegskulder', 'Området utenfor den hvitstiplede kantlinjen. Ikke beregnet for vanlig kjøring.'],
+    ['Kjørefelt', 'Delen av veien som er bred nok for én rekke med biler.'],
+    ['Sperrelinje', 'Heltrukken linje (gul mot møtende trafikk, hvit mellom felt i samme retning). Du må ikke kjøre over eller på den.']
+  ],
+  en: [
+    ['Vikeplikt', 'Duty to give way. You must not hinder or disturb the road user you give way to.'],
+    ['Forkjørsvei', 'A priority road, marked with the yellow diamond sign. Traffic from side roads gives way to you.'],
+    ['Uoversiktlig', 'Poor visibility: the line of sight is blocked by a bend, hilltop, snowbank or vegetation. Slow down at once.'],
+    ['Tilstrekkelig', '"Enough" or "adequate". Example: adequate distance to the car ahead (the 3-second rule).'],
+    ['Vognkort', 'The vehicle registration document. It shows, among other things, the permitted total weight.'],
+    ['Bør / Skal / Må', '"Bør" is a recommendation. "Skal" and "må" are legal requirements, and breaking them is an offence.'],
+    ['Stoppelengde', 'Stopping distance: reaction distance (about 1 second) plus braking distance.'],
+    ['Vegskulder', 'The road shoulder, outside the dashed white edge line. Not meant for normal driving.'],
+    ['Kjørefelt', 'A lane: the part of the road wide enough for one row of cars.'],
+    ['Sperrelinje', 'A solid line (yellow against oncoming traffic, white between lanes in the same direction). You must not cross or drive on it.']
+  ]
+};
+
+var _MS_GAZE = {
+  th: ['กระจกมองหลัง', 'มองไกลไปข้างหน้า', 'ด้านขวา', 'ด้านซ้าย', 'กระจกมองข้างขวา', 'กระจกมองข้างซ้าย', 'จุดบอด'],
+  no: ['Innvendig speil', 'Langt frem', 'Høyre side', 'Venstre side', 'Høyre sidespeil', 'Venstre sidespeil', 'Blindsone'],
+  en: ['Rear-view mirror', 'Far ahead', 'Right side', 'Left side', 'Right side mirror', 'Left side mirror', 'Blind spot']
+};
+
+var _msTab = 0, _msWordIdx = -1, _msGazeTimer = null, _msGazeStep = 0, _msGazeRound = 0;
+var _msHint = { qId: null, count: 0, sid: null };
+
+function _msL() { return _MS[appLang] || _MS.no; }
+function _msSyncLabel() { var e = document.getElementById('msOpenLbl'); if (e) e.textContent = _msL().open; }
+
+// ── Konge/tjener-chip på vikepliktspørsmål ─────────────────────────
+function buildKingServantChip(qText) {
+  if (!/vikeplikt|forkjørs|høyreregel|vike for|ให้ทาง|ทางเอก|give way|right of way|priority/i.test(qText || '')) return '';
+  return '<div class="ks-chip"><span aria-hidden="true">👑 🙇</span> ' + escH(_msL().ksChip) + '</div>';
+}
+
+// ── HAV-lys: hvilken del av § 3 handler feilen om? ─────────────────
+function buildHavLamps(text) {
+  var s = String(text || '');
+  var on = {
+    H: /vikeplikt|hindre|forstyrre|fotgjenger|gående|syklist|buss|hensyn|ให้ทาง|คนเดินเท้า|จักรยาน|give way|pedestrian|cyclist|yield/i.test(s),
+    A: /speil|blindsone|sikt|uoversiktlig|oppmerksom|mobil|กระจก|มองเห็น|จุดบอด|มือถือ|mirror|visibility|blind spot|phone/i.test(s),
+    V: /fart|bremse|avstand|føre|hastighet|ความเร็ว|เบรก|ระยะ|speed|brake|distance|slippery/i.test(s)
+  };
+  if (!on.H && !on.A && !on.V) return '';
+  var L = _msL();
+  var lamp = function(k) {
+    return '<span class="hav-lamp' + (on[k] ? ' on' : '') + '"><b>' + k + '</b> ' + escH(L[k]) + '</span>';
+  };
+  return '<div class="hav-lamps ai-block" aria-label="' + escH(L.havTitle) + '">'
+    + '<div class="hav-title">' + escH(L.havTitle) + '</div>' + lamp('H') + lamp('A') + lamp('V') + '</div>';
+}
+
+// ── Hint-knapp med tre prikker (backend teller forsøkene) ──────────
+function _msDots(n) { return new Array(n + 1).join('●') + new Array(4 - n).join('○'); }
+
+function buildHintButton() {
+  var q = questions[qIdx];
+  var qId = q ? String(q._id || q.id || q.question_id || '') : '';
+  var n = (_msHint.qId === qId) ? Math.min(3, _msHint.count) : 0;
+  return '<button class="ask-hint-btn ai-block" type="button" onclick="askMichaelAboutThis(\'hint\')">'
+    + '<span aria-hidden="true">💡</span> ' + escH(_msL().hint)
+    + ' <span class="hint-dots" aria-hidden="true">' + _msDots(n) + '</span></button>';
+}
+
+function _msBumpHintDots() {
+  var n = Math.min(3, _msHint.count);
+  var els = document.querySelectorAll('.hint-dots');
+  for (var i = 0; i < els.length; i++) els[i].textContent = _msDots(n);
+}
+
+// ── Michael-skolen (modal) ─────────────────────────────────────────
+function openMichaelSchool() {
+  _msSyncLabel();
+  var ov = document.getElementById('msOverlay');
+  if (!ov) return;
+  ov.classList.add('open');
+  _msTab = 0;
+  _msRender();
+}
+
+function closeMichaelSchool() {
+  _msGazeStop();
+  var ov = document.getElementById('msOverlay');
+  if (ov) ov.classList.remove('open');
+}
+
+function _msSetTab(i) { _msGazeStop(); _msTab = i; _msRender(); }
+
+function _msRender() {
+  var L = _msL();
+  var tabs = document.getElementById('msTabs');
+  var body = document.getElementById('msBody');
+  var title = document.getElementById('msTitle');
+  if (!tabs || !body) return;
+  if (title) title.textContent = L.open;
+  tabs.innerHTML = L.tabs.map(function(name, i) {
+    return '<button type="button" class="ms-tab' + (i === _msTab ? ' active' : '') + '" onclick="_msSetTab(' + i + ')">' + escH(name) + '</button>';
+  }).join('');
+  if (_msTab === 0) body.innerHTML = _msCultureHtml();
+  else if (_msTab === 1) body.innerHTML = _msWordHtml();
+  else body.innerHTML = _msGazeHtml();
+}
+
+function _msCultureHtml() {
+  var L = _msL();
+  var cards = _MS_CULTURE[appLang] || _MS_CULTURE.no;
+  return cards.map(function(c, ci) {
+    var opts = c.o.map(function(o, oi) {
+      return '<button type="button" class="ms-opt" onclick="_msAnswer(this,' + ci + ',' + oi + ')">' + escH(o) + '</button>';
+    }).join('');
+    return '<div class="ms-card"><div class="ms-card-title">' + escH(c.t) + '</div>'
+      + '<div class="ms-side th"><b>🇹🇭 ' + escH(L.inTh) + '</b><span>' + escH(c.a) + '</span></div>'
+      + '<div class="ms-side no"><b>🇳🇴 ' + escH(L.inNo) + '</b><span>' + escH(c.b) + '</span></div>'
+      + '<div class="ms-q">' + escH(L.tryIt) + ': ' + escH(c.q) + '</div><div class="ms-opts">' + opts + '</div></div>';
+  }).join('');
+}
+
+function _msAnswer(btn, ci, oi) {
+  var cards = _MS_CULTURE[appLang] || _MS_CULTURE.no;
+  var ok = cards[ci].c === oi;
+  var wrap = btn.parentElement;
+  var all = wrap.querySelectorAll('.ms-opt');
+  for (var i = 0; i < all.length; i++) { all[i].disabled = true; }
+  btn.classList.add(ok ? 'ok' : 'bad');
+  if (!ok) all[cards[ci].c].classList.add('ok');
+  var msg = document.createElement('div');
+  msg.className = 'ms-result ' + (ok ? 'ok' : 'bad');
+  msg.textContent = (ok ? _msL().right : _msL().wrong);
+  wrap.appendChild(msg);
+}
+
+function _msWordHtml() {
+  var L = _msL();
+  var words = _MS_WORDS[appLang] || _MS_WORDS.no;
+  if (_msWordIdx < 0) {
+    var d = new Date();
+    var doy = Math.floor((d - new Date(d.getFullYear(), 0, 0)) / 86400000);
+    _msWordIdx = doy % words.length;
+  }
+  var w = words[_msWordIdx % words.length];
+  return '<div class="ms-card ms-word"><div class="ms-word-lbl">' + escH(L.word) + ' · ' + (_msWordIdx % words.length + 1) + '/' + words.length + '</div>'
+    + '<div class="ms-word-term"><small>' + escH(L.termLbl) + '</small>' + escH(w[0]) + '</div>'
+    + '<div class="ms-word-def">' + escH(w[1]) + '</div>'
+    + '<button type="button" class="ms-btn" onclick="_msNextWord()">' + escH(L.next) + ' →</button></div>';
+}
+
+function _msNextWord() {
+  var words = _MS_WORDS[appLang] || _MS_WORDS.no;
+  _msWordIdx = (_msWordIdx + 1) % words.length;
+  _msRender();
+}
+
+function _msGazeHtml() {
+  var L = _msL();
+  var steps = _MS_GAZE[appLang] || _MS_GAZE.no;
+  return '<div class="ms-card"><div class="ms-q">' + escH(L.gazeIntro) + '</div>'
+    + '<div class="ms-gaze" id="msGaze">' + steps.map(function(s, i) {
+        return '<div class="ms-gaze-step" data-i="' + i + '"><b>' + (i + 1) + '</b> ' + escH(s) + '</div>';
+      }).join('') + '</div>'
+    + '<div class="ms-gaze-round" id="msGazeRound"></div>'
+    + '<button type="button" class="ms-btn" id="msGazeBtn" onclick="_msGazeToggle()">' + escH(L.start) + '</button></div>';
+}
+
+function _msGazeToggle() {
+  if (_msGazeTimer) { _msGazeStop(); return; }
+  var steps = _MS_GAZE[appLang] || _MS_GAZE.no;
+  _msGazeStep = 0; _msGazeRound = 1;
+  var btn = document.getElementById('msGazeBtn');
+  if (btn) btn.textContent = _msL().stop;
+  var tick = function() {
+    var els = document.querySelectorAll('.ms-gaze-step');
+    for (var i = 0; i < els.length; i++) els[i].classList.toggle('lit', i === _msGazeStep);
+    var r = document.getElementById('msGazeRound');
+    if (r) r.textContent = _msL().round + ' ' + _msGazeRound;
+    _msGazeStep++;
+    if (_msGazeStep >= steps.length) { _msGazeStep = 0; _msGazeRound++; }
+  };
+  tick();
+  _msGazeTimer = setInterval(tick, 1800);
+}
+
+function _msGazeStop() {
+  if (_msGazeTimer) { clearInterval(_msGazeTimer); _msGazeTimer = null; }
+  var btn = document.getElementById('msGazeBtn');
+  if (btn) btn.textContent = _msL().start;
+  var els = document.querySelectorAll('.ms-gaze-step');
+  for (var i = 0; i < els.length; i++) els[i].classList.remove('lit');
 }
 
 function resetTeacherForLanguage() {
