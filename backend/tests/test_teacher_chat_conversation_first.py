@@ -285,3 +285,17 @@ class PolishReplyTests(unittest.TestCase):
 
     def test_empty_input_safe(self):
         self.assertEqual(tc._polish_teacher_reply(""), "")
+
+
+class VikepliktRuleTests(unittest.TestCase):
+    def test_rule_present_in_every_language_prompt(self):
+        for lang in ("no", "th", "en"):
+            prompt = tc._build_system_prompt(lang)
+            self.assertIn("VIKEPLIKT", prompt)
+        self.assertIn("ไม่กีดขวางและไม่รบกวน", tc._build_system_prompt("th"))
+        self.assertIn("always must stop", tc._build_system_prompt("no"))
+        self.assertIn("not hinder or disturb", tc._build_system_prompt("en"))
+
+    def test_rule_reaches_live_chat_prompt(self):
+        _, system, _ = _run_chat("การให้ทางคืออะไร", "th")
+        self.assertIn("ไม่กีดขวางและไม่รบกวน", system)

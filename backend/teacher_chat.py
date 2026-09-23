@@ -1072,6 +1072,29 @@ def _build_system_prompt(lang: str, memory: Optional[dict] = None) -> str:
     )
 
 
+_VIKEPLIKT_RULE = {
+    "no": (
+        "8. VIKEPLIKT: Never say that you 'always must stop' for vikeplikt. Vikeplikt means that "
+        "you must not hinder or disturb the road user you give way to: slow down in good time so "
+        "they do not have to brake or change course. Stopping is only needed when necessary "
+        "(for example at a stop sign, or when it is the only way not to hinder them).\n"
+    ),
+    "th": (
+        "8. การให้ทาง (VIKEPLIKT): ห้ามบอกว่า \"ต้องหยุดเสมอ\" (หยุดเสมอ) การให้ทางคือ "
+        "ไม่กีดขวางและไม่รบกวน (ไม่กีดขวางและไม่รบกวน) ผู้ใช้ถนนที่คุณต้องให้ทาง: ชะลอความเร็วตั้งแต่เนิ่น ๆ "
+        "เพื่อไม่ให้เขาต้องเบรกหรือเปลี่ยนเส้นทาง จะหยุดรถเฉพาะเมื่อจำเป็น "
+        "(เช่น ป้ายหยุด หรือเมื่อเป็นวิธีเดียวที่จะไม่กีดขวางเขา) "
+        "Write the answer in Thai only; do not add Norwegian or English words.\n"
+    ),
+    "en": (
+        "8. VIKEPLIKT (give way): Never say that you 'always must stop'. Giving way means you must "
+        "not hinder or disturb the road user you give way to: slow down in good time so they do "
+        "not have to brake or change course. Stopping is only needed when necessary (for example "
+        "at a stop sign, or when it is the only way not to hinder them).\n"
+    ),
+}
+
+
 def _conversation_first_rules(lang: str) -> str:
     """Conversation-first behaviour: answer directly, use context, never invent facts."""
     language = {"no": "Norwegian", "th": "Thai", "en": "English"}.get(lang, "Norwegian")
@@ -1095,7 +1118,8 @@ def _conversation_first_rules(lang: str) -> str:
         "context, say honestly that you cannot show one here. Do not describe an image "
         "as if it were shown.\n"
         "7. Always finish your last sentence.\n"
-        "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        + _VIKEPLIKT_RULE.get(lang, _VIKEPLIKT_RULE["no"])
+        + "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     )
 
 
