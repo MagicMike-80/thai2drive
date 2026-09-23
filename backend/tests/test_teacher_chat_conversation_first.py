@@ -95,11 +95,13 @@ class ActiveSignTests(unittest.TestCase):
 
 
 class ThaiQuizPurityTests(unittest.TestCase):
-    def test_purity_block_bans_latin_and_overrides_parentheses_rule(self):
+    def test_purity_block_enforces_norwegian_in_parentheses_and_bans_english(self):
         block = tc._thai_quiz_purity_block()
         self.assertIn("Thai script only", block)
-        self.assertIn("even in parentheses", block)
+        self.assertIn("thai-forklaring (norsk fagord)", block)
         self.assertIn("OVERRIDES", block)
+        self.assertIn("ZERO ENGLISH", block)
+        self.assertIn("NO LATIN LETTERS OUTSIDE PARENTHESES", block)
 
 
 if __name__ == "__main__":
@@ -299,3 +301,39 @@ class VikepliktRuleTests(unittest.TestCase):
     def test_rule_reaches_live_chat_prompt(self):
         _, system, _ = _run_chat("การให้ทางคืออะไร", "th")
         self.assertIn("ไม่กีดขวางและไม่รบกวน", system)
+
+
+class SentenceIntegrityTests(unittest.TestCase):
+    def test_direct_lookup_never_cuts_mid_sentence(self):
+        long_first = ("Vikeplikt betyr at du må gi fri passasje til annen trafikk uten å hindre eller forstyrre dem "
+                      "og du skal senke farten i god tid og planlegge tidlig slik at andre ikke må endre kurs.")
+        out = tc._concise_teacher_reply(long_first + " Det er viktig.", "no")
+        self.assertTrue(out.endswith(("kurs.", "viktig.")), out)
+        self.assertNotIn("slik at andre.", out)
+
+    def test_thai_lookup_is_not_ellipsised(self):
+        text = "การให้ทาง คือ " + "ต้องลดความเร็วและรอให้รถอื่นผ่านก่อน " * 20
+        out = tc._concise_teacher_reply(text, "th")
+        self.assertFalse(out.endswith("…"))
+        self.assertLessEqual(len(out), 320)
+
+    def test_normal_reply_capped_to_four_whole_sentences(self):
+        reply = "Ett. To. Tre. Fire. Fem. Seks?"
+        out = tc._polish_teacher_reply(reply, 4)
+        self.assertEqual(out, "Ett. To. Tre. Fire.")
+
+    def test_cap_keeps_image_tag_and_drops_trailing_paragraphs(self):
+        reply = "A one. A two. A three. A four.\n\nFor example, more.\n\nWould you like more?\n\n[image: /api/x.jpg | a | b | c]"
+        out = tc._polish_teacher_reply(reply, 4)
+        self.assertIn("[image: /api/x.jpg | a | b | c]", out)
+        self.assertNotIn("Would you like", out)
+        self.assertNotIn("For example", out)
+
+    def test_explanation_requests_get_a_longer_budget(self):
+        self.assertTrue(tc._wants_explanation("Forklar hvorfor"))
+        self.assertTrue(tc._wants_explanation("ทำไมต้องให้ทาง"))
+        self.assertFalse(tc._wants_explanation("hva er vikeplikt?"))
+
+    def test_no_cap_when_zero(self):
+        reply = "Ett. To. Tre. Fire. Fem. Seks."
+        self.assertEqual(tc._polish_teacher_reply(reply, 0), reply)

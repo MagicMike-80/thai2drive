@@ -1325,10 +1325,13 @@ def _concise_teacher_reply(reply_text: str, lang: str) -> str:
         }.get(lang, "Michael kan ikke gi et kort og presist svar akkurat nå. Prøv igjen.")
 
     if lang == "th":
-        return concise if len(concise) <= 180 else concise[:179].rstrip() + "…"
-    words = concise.split()
-    if len(words) > 30:
-        concise = " ".join(words[:30]).rstrip(" ,;:") + "."
+        if len(concise) <= 320:
+            return concise
+        cut = concise[:320]
+        return cut[:cut.rfind(" ")].rstrip() if " " in cut else cut
+    # Never cut inside a sentence: if two sentences are too long, keep the first whole one.
+    if len(concise.split()) > 45 and len(allowed) > 1:
+        concise = allowed[0].strip()
     return concise
 
 
@@ -1356,7 +1359,35 @@ _LEAKED_MEDIA_PAREN = re.compile(r"\((?:podcast|video|image)\s*:[^)]*\)", re.IGN
 _LEAKED_ASSET_PATH = re.compile(r"(?<![\w\[/])/public_assets/\S+")
 
 
-def _polish_teacher_reply(text: str) -> str:
+_SENTENCE_SPLIT = re.compile(r"(?<=[.!?])\s+")
+_EXPLAIN_REQUEST_TERMS = ("hvorfor", "forklar", "why", "explain", "ทำไม", "อธิบาย")
+
+
+def _wants_explanation(user_msg: str) -> bool:
+    text = (user_msg or "").casefold()
+    return any(term in text for term in _EXPLAIN_REQUEST_TERMS)
+
+
+def _cap_sentences(paragraphs: list, max_sentences: int) -> list:
+    """Keep at most max_sentences whole sentences; bracket tags and later paragraphs of tags survive."""
+    kept, budget = [], max_sentences
+    for paragraph in paragraphs:
+        if paragraph.startswith("["):
+            kept.append(paragraph)
+            continue
+        if budget <= 0:
+            continue
+        sentences = [s for s in _SENTENCE_SPLIT.split(paragraph) if s.strip()]
+        if len(sentences) <= budget:
+            kept.append(paragraph)
+            budget -= len(sentences)
+        else:
+            kept.append(" ".join(sentences[:budget]))
+            budget = 0
+    return kept
+
+
+def _polish_teacher_reply(text: str, max_sentences: int = 0) -> str:
     """Humanize a normal chat reply: no leaked media syntax, no bold markup, no tacked-on menu question.
 
     Media is delivered through the separate `media` field, so a parenthesised tag or a raw asset
@@ -1379,6 +1410,8 @@ def _polish_teacher_reply(text: str) -> str:
             continue
         if paragraph:
             cleaned.append(paragraph.replace("**", ""))
+    if max_sentences:
+        cleaned = _cap_sentences(cleaned, max_sentences)
     # A closing question after a finished answer reads like a menu prompt; drop it.
     if len(cleaned) > 1:
         last = cleaned[-1]
@@ -3849,7 +3882,10 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             if is_direct_lookup:
                 reply_text = _concise_teacher_reply(reply_text, lang)
             elif not is_quiz_help and req.mode not in ("quiz_coach", "simplify"):
-                reply_text = _polish_teacher_reply(reply_text)
+                reply_text = _polish_teacher_reply(
+                    reply_text,
+                    0 if lang == "th" else (7 if _wants_explanation(user_msg) else 4),
+                )
     except Exception as e:
         logger.error("LiteLLM call failed [%s]: %s", type(e).__name__, e)
 
