@@ -1435,6 +1435,111 @@ def _thai_quiz_purity_block() -> str:
     )
 
 
+_TONE_KEYWORDS = {
+    "warm": (
+        "gruer", "nervøs", "nervos", "redd for", "stresset", "bommer på alt", "gir opp",
+        "klarer ikke", "engstelig", "panikk",
+        "กังวล", "กลัว", "เครียด", "ประหม่า", "ไม่ไหว", "ท้อ", "หมดกำลังใจ",
+        "nervous", "anxious", "scared", "stressed", "give up", "afraid", "panic",
+    ),
+    "strict": (
+        "50 i 30", "kjører 50 i 30", "trenger ikke sjekke blindsone", "uten å se meg for", "kjøre på rødt",
+        "drikke og kjøre", "tar en øl", "kjøre i rus", "sender melding mens jeg kjører",
+        "ขับเร็วเกิน", "ไม่ต้องดูกระจก", "ดื่มแล้วขับ", "ฝ่าไฟแดง", "เล่นมือถือขณะขับ",
+        "drink and drive", "skip the mirror", "run a red", "text while driving",
+    ),
+    "dry": (
+        "haha", "hehe", "lol", "555", "😂", "🤣", "hjernen min består", "hjernen min er",
+        "my brain is just",
+    ),
+}
+
+
+def _detect_tone(message: str) -> Optional[str]:
+    """Pick Michael's tone register from the student's message. Safety beats warmth beats humour."""
+    text = (message or "").casefold()
+    for tone in ("strict", "warm", "dry"):
+        if any(term in text for term in _TONE_KEYWORDS[tone]):
+            return tone
+    return None
+
+
+def _tone_instruction(tone: Optional[str], lang: str) -> str:
+    """Prompt block for the detected tone register (master document 2, section 4)."""
+    if not tone:
+        return ""
+    language = {"no": "Norwegian", "th": "Thai", "en": "English"}.get(lang, "Norwegian")
+    rules = {
+        "strict": (
+            "The student describes or asks about something dangerous. Be STRICT and blunt: "
+            "no wiggle room, no softening, go straight to the professional consequence and the "
+            "correct rule. Do not lecture at length."
+        ),
+        "warm": (
+            "The student is anxious or discouraged. Be WARM and calm: slow the pace, take away "
+            "pressure, acknowledge the feeling in one short human sentence, then take ONE rule "
+            "at a time. No lists, no long explanations, no false praise."
+        ),
+        "dry": (
+            "The student made a light joke. Reply with ONE short dry, friendly remark, then "
+            "continue helping in a sentence or two. Do not lecture about the joke."
+        ),
+    }[tone]
+    return (
+        f"\n\n━━━ TONE REGISTER ({tone.upper()}) ━━━\n"
+        f"Reply in {language}. {rules}\n"
+        "Sound like a real instructor sitting in the passenger seat, not like a template.\n"
+        "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    )
+
+
+_EXPLICIT_ANSWER_TERMS = (
+    "fasit", "vis svaret", "gi meg svaret", "hva er svaret", "forklar", "hvorfor",
+    "บอกคำตอบ", "เฉลย", "อธิบาย", "ทำไม", "คำตอบที่ถูก",
+    "answer", "explain", "why", "solution",
+)
+
+
+def _quiz_key(quiz_context: str) -> str:
+    """Stable short id for one quiz question, used to count attempts across chat turns."""
+    import hashlib
+    return hashlib.sha1((quiz_context or "").strip()[:300].encode("utf-8")).hexdigest()[:12]
+
+
+def _quiz_attempt_number(prior: list[dict], quiz_key: str) -> int:
+    """1 for the first wrong answer on this question, 2 for the second, and so on."""
+    earlier = sum(
+        1 for turn in (prior or [])
+        if turn.get("role") == "user" and turn.get("quiz_key") == quiz_key
+    )
+    return earlier + 1
+
+
+def _scaffolding_instruction(attempt: int, explicit_request: bool, lang: str) -> str:
+    """Three-step hint ladder (master document 2, section 3). Overrides the reveal-everything flow."""
+    language = {"no": "Norwegian", "th": "Thai", "en": "English"}.get(lang, "Norwegian")
+    if explicit_request or attempt >= 3:
+        step = (
+            "STEP 3: Give the correct answer now with a short, precise explanation of 2–3 sentences."
+        )
+    elif attempt == 2:
+        step = (
+            "STEP 2: Give exactly ONE sharp hint (for example point to the sign, the give-way "
+            "rule from the right, or the position in the lane). Do NOT give the full answer yet."
+        )
+    else:
+        step = (
+            "STEP 1: Say plainly that the answer is wrong and ask the student to try again with "
+            "a fresh look at the situation. Do NOT reveal the correct answer or the rule yet."
+        )
+    return (
+        "\n\n━━━ SCAFFOLDING LADDER — OVERRIDES THE QUIZ HELP RULES ABOVE ━━━\n"
+        f"Reply in {language}. This is wrong attempt number {attempt} on this question. {step} "
+        "Keep it to 2–4 sentences, no section headings, no mini-practice question.\n"
+        "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    )
+
+
 def _format_student_document_context(document_context: Optional[str]) -> str:
     """Format sanitized student-uploaded document context into an isolated prompt block."""
     if not document_context or not document_context.strip():
@@ -3346,6 +3451,8 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         except Exception as e:
             logger.error("Failed to parse quiz context payload: %s", e)
 
+    current_quiz_key = _quiz_key(quiz_context_str) if is_quiz_help else None
+
     # Extract stats context if passed in the user message
     stats_context_str = ""
     is_weak_topics = False
@@ -3492,6 +3599,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             "and Skiltforskriften for signs and road markings. Name the relevant source, "
             "but never invent subsection wording or claim that an unseen fact is present."
         )
+        system_prompt += _tone_instruction(_detect_tone(user_msg), lang)
         if req.mode == "quiz_coach":
             system_prompt += "\n\nCHAT MODE: Coach the student through the current quiz question. Explain the rule without guessing an unseen answer."
         elif req.mode == "simplify":
@@ -3590,6 +3698,13 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
                 "   EN: 🚗 Situation / 💡 Explanation / ⚠️ Common mistake / 🔧 Practical advice / 📖 Theory / ❓ Follow-up question\n"
                 "5. Write the ENTIRE response in the language declared by [LANGUAGE] header. Zero exceptions.\n"
                 "━━━━━━━━━━━━━━━━━━━━━━━"
+            )
+
+        if is_quiz_help and quiz_context_str and req.mode != "quiz_coach":
+            system_prompt += _scaffolding_instruction(
+                _quiz_attempt_number(prior, current_quiz_key),
+                any(term in user_msg.casefold() for term in _EXPLICIT_ANSWER_TERMS),
+                lang,
             )
 
         if is_weak_topics and stats_context_str:
@@ -3707,6 +3822,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
                 "role": "user",
                 "content": user_msg,
                 "language": lang,
+                "quiz_key": current_quiz_key,
                 "ts": now,
             },
             {

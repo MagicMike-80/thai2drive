@@ -104,3 +104,45 @@ class ThaiQuizPurityTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ToneRegisterTests(unittest.TestCase):
+    def test_detects_each_register(self):
+        self.assertEqual(tc._detect_tone("Jeg gruer meg til oppkjøring, bommer på alt"), "warm")
+        self.assertEqual(tc._detect_tone("Kan jeg kjøre 50 i 30 sone?"), "strict")
+        self.assertEqual(tc._detect_tone("haha hjernen min består bare av skilter nå"), "dry")
+        self.assertEqual(tc._detect_tone("ฉันกังวลเรื่องสอบมาก"), "warm")
+        self.assertIsNone(tc._detect_tone("Hva er vikeplikt?"))
+
+    def test_safety_beats_warmth_and_humour(self):
+        self.assertEqual(tc._detect_tone("haha jeg kan drikke og kjøre, gruer meg"), "strict")
+
+    def test_instruction_only_when_tone_found(self):
+        self.assertEqual(tc._tone_instruction(None, "no"), "")
+        self.assertIn("WARM", tc._tone_instruction("warm", "en"))
+        self.assertIn("STRICT", tc._tone_instruction("strict", "th"))
+
+
+class ScaffoldingLadderTests(unittest.TestCase):
+    def test_attempt_count_uses_same_question_only(self):
+        key = tc._quiz_key("Q1 fart 50")
+        other = tc._quiz_key("Q2 promille")
+        prior = [
+            {"role": "user", "quiz_key": key},
+            {"role": "assistant"},
+            {"role": "user", "quiz_key": other},
+        ]
+        self.assertEqual(tc._quiz_attempt_number(prior, key), 2)
+        self.assertEqual(tc._quiz_attempt_number([], key), 1)
+
+    def test_ladder_steps(self):
+        one = tc._scaffolding_instruction(1, False, "no")
+        two = tc._scaffolding_instruction(2, False, "no")
+        three = tc._scaffolding_instruction(3, False, "no")
+        asked = tc._scaffolding_instruction(1, True, "no")
+        self.assertIn("STEP 1", one)
+        self.assertIn("Do NOT reveal", one)
+        self.assertIn("STEP 2", two)
+        self.assertIn("ONE sharp hint", two)
+        self.assertIn("STEP 3", three)
+        self.assertIn("STEP 3", asked)
