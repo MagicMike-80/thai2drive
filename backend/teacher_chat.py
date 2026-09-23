@@ -135,6 +135,10 @@ _OPENROUTER_FALLBACK_MODELS = (
 )
 _TEACHER_LLM_TIMEOUT_SECONDS = float(os.environ.get("TEACHER_LLM_TIMEOUT_SECONDS", "10"))
 _TEACHER_LLM_TEMPERATURE = float(os.environ.get("TEACHER_LLM_TEMPERATURE", "0.3"))
+# Normal replies must finish their sentences; Thai needs more tokens than Norwegian.
+_TEACHER_CHAT_MAX_TOKENS = int(os.environ.get("TEACHER_CHAT_MAX_TOKENS", "450"))
+# Prior turns replayed to the model (most recent), so long sessions keep their latest context.
+_TEACHER_HISTORY_LIMIT = 10
 
 
 def _build_llm_attempts() -> List[dict]:
@@ -188,7 +192,7 @@ async def _completion_with_fallback(messages: List[dict], require_vision: bool =
     if require_vision and not attempts:
         raise RuntimeError("Teacher chat has no vision-capable model configured")
     system_text = str(messages[0].get("content", "")) if messages else ""
-    max_tokens = 500 if require_vision or "FINAL QUIZ COACH CONTRACT" in system_text else 120
+    max_tokens = 500 if require_vision or "FINAL QUIZ COACH CONTRACT" in system_text else _TEACHER_CHAT_MAX_TOKENS
     for index, attempt in enumerate(attempts, start=1):
         model = attempt["model"]
         provider = attempt["provider"]
@@ -1001,7 +1005,7 @@ def _build_system_prompt(lang: str, memory: Optional[dict] = None) -> str:
         "Når du får servert fakta i seksjonen 'APPROVED THAI2DRIVE CURRICULUM CONTEXT', må du følge disse reglene:\n"
         "1. Bruk den oppgitte informasjonen fra databasen som din absolutte fasit. Du skal aldri gjette eller finne på egne regler.\n"
         "2. Du skal ALDRI bare ramse opp den tørre lovteksten eller faktaene du får servert. Du skal oversette og forklare dem på en pedagogisk måte.\n"
-        "3. Du MÅ fortsette å undervise med dine egne pedagogiske metoder (Situasjon før teori, 7-års regelen, 'Kongen og tjeneren', etc.).\n"
+        "3. Bruk dine pedagogiske metoder (7-års regelen, konkrete situasjoner) når eleven ber om en forklaring. Svar først på selve spørsmålet, uten fast mal.\n"
         "4. Spesielt for Vegtrafikkloven § 3 (H-A-V regelen):\n"
         "   Hvis du får servert databasetekst om Vegtrafikkloven § 3, eller hvis studenten spør om å være hensynsfull, aktpågivende eller varsom, skal du alltid:\n"
         "   - Bryte det ned slik: H = Hensynsfull, A = Aktpågivende, V = Varsom.\n"
@@ -1023,10 +1027,10 @@ def _build_system_prompt(lang: str, memory: Optional[dict] = None) -> str:
         "     Only use an exact Approved Image Tag supplied in APPROVED THAI2DRIVE CURRICULUM CONTEXT. Never invent, rewrite, or guess an image URL.\n"
         "     If no Approved Image Tag is supplied, explain with text only.\n"
         "2. PEDAGOGICAL PACKAGING (Never just throw a link):\n"
-        "   - Set up the driving situation first: 'Se for deg at du nærmer deg krysset...' / 'Imagine you are approaching the intersection...'\n"
+        "   - Only when it helps, set up a short driving situation first.\n"
         "   - Introduce the video/audio: 'Ta en titt på denne korte videoen som viser nøyaktig hvordan vi gjør dette i praksis:' or 'Hør på denne podcasten der vi snakker om dette:'\n"
         "   - Insert the tag on its own blank line.\n"
-        "   - End with a single follow-up check question (Mini-practice) to check their understanding: e.g., 'Når du har sett videoen, hva tenker du er den største faren her?'\n"
+        "   - Do not add a follow-up question unless the student clearly wants to practise.\n"
         "3. LANGUAGE PURITY (Critical):\n"
         "   - The entire response, including titles and captions inside the tags, must be translated to the student's chosen language. Never use Norwegian fallback names or text when speaking to Thai or English students.\n"
         "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -1063,7 +1067,35 @@ def _build_system_prompt(lang: str, memory: Optional[dict] = None) -> str:
             "Do not claim to feel emotions or describe your own feelings. "
             "Keep every learner-facing word in the selected language."
         )
+        + _conversation_first_rules(l)
         + _master_output_contract(l)
+    )
+
+
+def _conversation_first_rules(lang: str) -> str:
+    """Conversation-first behaviour: answer directly, use context, never invent facts."""
+    language = {"no": "Norwegian", "th": "Thai", "en": "English"}.get(lang, "Norwegian")
+    return (
+        "\n\n━━━ CONVERSATION-FIRST RULES (highest priority for format and honesty) ━━━\n"
+        f"Reply only in {language}, as a calm, warm driving instructor.\n"
+        "1. Answer the student's actual question in the first sentence. Do not use a fixed "
+        "template or section headings, and do not invent a driving scenario unless the "
+        "student asks for an example.\n"
+        "2. Use the conversation so far and the ACTIVE SIGN CONTEXT (if present). If the "
+        "student says 'this sign', 'it' or 'the sign', it means that active sign. Do not "
+        "ask which sign they mean when one is already known.\n"
+        "3. If the student corrects you, say plainly that they are right and give the "
+        "corrected answer. Do not defend a mistake.\n"
+        "4. NEVER invent or guess sign numbers, section numbers, or wording. Mention a "
+        "sign number only if it appears in the approved context or the student's own "
+        "message. If you are not sure, say so and answer only what you know.\n"
+        "5. No follow-up question unless it is needed to answer. Never offer a menu of "
+        "options or a list of emoji choices.\n"
+        "6. If the student asks to see a picture and none is provided in the approved "
+        "context, say honestly that you cannot show one here. Do not describe an image "
+        "as if it were shown.\n"
+        "7. Always finish your last sentence.\n"
+        "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     )
 
 
@@ -1389,6 +1421,20 @@ def _coaching_output_instruction(lang: str, mode: str, quiz_context: str = "") -
     )
 
 
+def _thai_quiz_purity_block() -> str:
+    """Final Thai-only rule for quiz explanations; overrides the glossary-parentheses habit."""
+    return (
+        "\n\n━━━ THAI PURITY FOR QUIZ EXPLANATIONS — LAST AND HIGHEST PRIORITY ━━━\n"
+        "Write the ENTIRE reply in Thai script only. Do NOT write any Norwegian or English "
+        "word or letter (A–Z, æ, ø, å): no Norwegian technical terms, not even in parentheses, "
+        "no glossary terms, no abbreviations such as HAV, km/t or km/h, and no English words. "
+        "Translate every term and unit into Thai (for example กม./ชม.). This rule OVERRIDES "
+        "any earlier instruction to add Norwegian terms in parentheses. Before answering, "
+        "check that your reply contains no Latin letters.\n"
+        "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    )
+
+
 def _format_student_document_context(document_context: Optional[str]) -> str:
     """Format sanitized student-uploaded document context into an isolated prompt block."""
     if not document_context or not document_context.strip():
@@ -1487,6 +1533,38 @@ def _merge_sign_ids(*groups: list[str], limit: int = 2) -> list[str]:
                 if len(merged) >= limit:
                     return merged
     return merged
+
+
+def _active_sign_ids_from_history(prior: list[dict], explicit_sign_ids: list[str], limit: int = 2) -> list[str]:
+    """Signs still 'on screen': this message's explicit signs, else the latest turn's signs."""
+    if explicit_sign_ids:
+        return _merge_sign_ids(explicit_sign_ids, limit=limit)
+    for turn in reversed(prior or []):
+        turn_ids = [str(s) for s in (turn.get("sign_ids") or []) if s]
+        if turn_ids:
+            return _merge_sign_ids(turn_ids, limit=limit)
+    return []
+
+
+async def _active_sign_context(sign_ids: list[str], lang: str) -> str:
+    """Approved facts for the signs the student is currently looking at."""
+    entries = []
+    for sign_id in sign_ids:
+        try:
+            sign = await _db["traffic_signs"].find_one({"id": sign_id})
+        except Exception as err:
+            logger.warning("Active sign lookup failed for %s: %s", sign_id, err)
+            continue
+        entry = _format_sign_context(sign, lang) if sign else ""
+        if entry:
+            entries.append(entry)
+    if not entries:
+        return ""
+    return (
+        "\n\n━━━ ACTIVE SIGN CONTEXT (the sign the student is looking at now) ━━━\n"
+        + "\n".join(entries)
+        + "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    )
 
 
 def _is_right_hand_rule_query(user_msg: str) -> bool:
@@ -3326,11 +3404,13 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             await _chat_col.insert_one({"session_id": session_id, "role": "assistant", "content": reply_text, "language": lang, "ts": datetime.now(timezone.utc)})
             return TeacherChatResponse(session_id=session_id, conversation_id=conversation_id, mode=req.mode, reply=reply_text, suggestions=sug_list)
 
-    # Load prior conversation (last 20 messages in this session, same language only —
-    # a language switch must not replay the old language's turns into the new prompt).
+    # Load prior conversation (the most recent messages in this session, same language
+    # only — a language switch must not replay the old language's turns into the new
+    # prompt). user/assistant rows share a ts, so _id keeps each pair in order.
     prior = await _chat_col.find(
         {"session_id": session_id, "language": lang}
-    ).sort("ts", 1).to_list(length=20)
+    ).sort([("ts", -1), ("_id", -1)]).to_list(length=_TEACHER_HISTORY_LIMIT)
+    prior.reverse()
     conversation: List[dict] = [{"role": m["role"], "content": m["content"]} for m in prior]
 
     # Primer: for brand-new sessions, inject a silent assistant turn so the model
@@ -3453,6 +3533,10 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         if multimedia_str:
             system_prompt += multimedia_str
 
+        system_prompt += await _active_sign_context(
+            _active_sign_ids_from_history(prior, explicit_sign_ids), lang
+        )
+
         if req.document_context:
             system_prompt += _format_student_document_context(req.document_context)
 
@@ -3467,7 +3551,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             system_prompt += (
                 "\n\nCRITICAL: The user has responded to your clarifying question. "
                 "Do NOT ask another clarifying question or present options. "
-                "You MUST answer the question directly and start teaching now using the structured 5-step driving instructor flow (in the output language specified by [LANGUAGE])."
+                "You MUST answer the question directly now, following the FINAL MASTER OUTPUT RULES and the language specified by [LANGUAGE]."
             )
 
         if is_quiz_help and quiz_context_str and req.mode != "quiz_coach":
@@ -3525,6 +3609,8 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         elif is_direct_lookup:
             system_prompt += _concise_output_instruction(lang)
         system_prompt += _master_output_contract(lang)
+        if lang == "th" and (is_quiz_help or req.mode in ("quiz_coach", "simplify")):
+            system_prompt += _thai_quiz_purity_block()
         messages = [{"role": "system", "content": system_prompt}]
         messages.extend(conversation)
         if is_vision:
@@ -3616,6 +3702,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             "role": "assistant",
             "content": reply_text,
             "language": lang,
+            "sign_ids": sign_ids,
             "ts": now,
         },
     ])
