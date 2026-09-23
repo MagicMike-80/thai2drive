@@ -1315,6 +1315,41 @@ _DIRECT_LOOKUP_PATTERNS = (
 )
 
 
+_LEAKED_MEDIA_PAREN = re.compile(r"\((?:podcast|video|image)\s*:[^)]*\)", re.IGNORECASE)
+_LEAKED_ASSET_PATH = re.compile(r"(?<![\w\[/])/public_assets/\S+")
+
+
+def _polish_teacher_reply(text: str) -> str:
+    """Humanize a normal chat reply: no leaked media syntax, no bold markup, no tacked-on menu question.
+
+    Media is delivered through the separate `media` field, so a parenthesised tag or a raw asset
+    path in the visible text is always a leak. Quiz and direct-lookup replies are handled elsewhere.
+    """
+    if not text:
+        return text
+    paragraphs = re.split(r"\n\s*\n", text.strip())
+    cleaned = []
+    drop_next = False
+    for paragraph in paragraphs:
+        had_leak = bool(_LEAKED_MEDIA_PAREN.search(paragraph) or _LEAKED_ASSET_PATH.search(paragraph))
+        paragraph = _LEAKED_MEDIA_PAREN.sub("", paragraph)
+        paragraph = _LEAKED_ASSET_PATH.sub("", paragraph).strip()
+        if drop_next:
+            drop_next = False
+            continue  # the sentence that introduced the removed media would now dangle
+        if had_leak and not paragraph:
+            drop_next = True
+            continue
+        if paragraph:
+            cleaned.append(paragraph.replace("**", ""))
+    # A closing question after a finished answer reads like a menu prompt; drop it.
+    if len(cleaned) > 1:
+        last = cleaned[-1]
+        if last.endswith(("?", "？")) and "\n" not in last and "[image:" not in last:
+            cleaned.pop()
+    return "\n\n".join(cleaned).strip() or text.strip()
+
+
 def _is_direct_lookup(message: str) -> bool:
     text = (message or "").strip().casefold()
     return bool(text) and any(re.search(pattern, text) for pattern in _DIRECT_LOOKUP_PATTERNS)
@@ -3765,6 +3800,8 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             reply_text = _enforce_approved_image_tags(reply_text, context_str)
             if is_direct_lookup:
                 reply_text = _concise_teacher_reply(reply_text, lang)
+            elif not is_quiz_help and req.mode not in ("quiz_coach", "simplify"):
+                reply_text = _polish_teacher_reply(reply_text)
     except Exception as e:
         logger.error("LiteLLM call failed [%s]: %s", type(e).__name__, e)
 

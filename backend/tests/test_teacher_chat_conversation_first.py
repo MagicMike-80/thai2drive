@@ -257,3 +257,31 @@ class DeterministicPromptTests(unittest.TestCase):
     def test_warm_tone_reaches_prompt(self):
         _, system, _ = _run_chat("Jeg gruer meg til oppkjøring", "no")
         self.assertIn("TONE REGISTER (WARM)", system)
+
+
+class PolishReplyTests(unittest.TestCase):
+    LEAKED = (
+        "Det er helt normalt å føle seg slik.\n\n"
+        "(podcast: /public_assets/podcast_ferske_sjaforer.m4a | A | B | C)\n\n"
+        "Hør gjerne på denne podcasten.\n\n"
+        "Hva er det første du vil øve på?"
+    )
+
+    def test_leaked_media_syntax_and_menu_question_removed(self):
+        out = tc._polish_teacher_reply(self.LEAKED)
+        self.assertNotIn("podcast", out.lower())
+        self.assertNotIn("/public_assets/", out)
+        self.assertNotIn("Hør gjerne", out)
+        self.assertFalse(out.rstrip().endswith("?"))
+        self.assertIn("helt normalt", out)
+
+    def test_bold_markup_removed_and_bracket_tags_kept(self):
+        out = tc._polish_teacher_reply("A **give way** sign.\n\n[image: https://x/y.jpg | A | B | C]")
+        self.assertNotIn("**", out)
+        self.assertIn("[image: https://x/y.jpg | A | B | C]", out)
+
+    def test_single_paragraph_question_is_kept(self):
+        self.assertEqual(tc._polish_teacher_reply("Hva mener du med det?"), "Hva mener du med det?")
+
+    def test_empty_input_safe(self):
+        self.assertEqual(tc._polish_teacher_reply(""), "")

@@ -45,6 +45,10 @@ class MichaelSchoolUiContract(unittest.TestCase):
         self.assertIn("function _msResetHint()", HTML)
         self.assertIn("if (!isHint) _msResetHint();", HTML)
 
+    def test_word_of_the_day_has_40_words_from_the_source_document(self):
+        for term in ("Reaksjonslengde", "Fjernlys", "Bilbelte", "Rundkjøring", "Mobiltelefon"):
+            self.assertGreaterEqual(HTML.count("'" + term + "'"), 3, term)
+
     def test_unverified_claims_removed(self):
         self.assertNotIn("anbefalt 4 mm", HTML)
         self.assertNotIn("opptil 10 ganger lengre på ren is", HTML)
