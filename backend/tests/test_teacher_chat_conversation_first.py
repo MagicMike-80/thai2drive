@@ -168,3 +168,92 @@ class HintClickTests(unittest.TestCase):
     def test_explain_message_jumps_to_answer(self):
         self.assertTrue(any(t in "Kan du forklare dette?".casefold() for t in tc._EXPLICIT_ANSWER_TERMS))
         self.assertFalse(any(t in "Gi meg et hint".casefold() for t in tc._EXPLICIT_ANSWER_TERMS))
+
+
+# ── Deterministic end-to-end prompt checks (stub LLM, fake Mongo, no network) ──
+import types
+from unittest.mock import patch
+
+
+class _Cursor:
+    def __init__(self, items=None):
+        self.items = items or []
+
+    def sort(self, *args, **kwargs):
+        return self
+
+    async def to_list(self, length=None):
+        return list(self.items[:length]) if length else list(self.items)
+
+
+class _Col:
+    def __init__(self):
+        self.inserted = []
+
+    def aggregate(self, pipeline):
+        return _Cursor()
+
+    def find(self, *args, **kwargs):
+        return _Cursor()
+
+    async def find_one(self, *args, **kwargs):
+        return None
+
+    async def insert_one(self, doc):
+        self.inserted.append(doc)
+
+    async def insert_many(self, docs):
+        self.inserted.extend(docs)
+
+
+class _Db(dict):
+    def __getitem__(self, key):
+        return dict.get(self, key) or _Col()
+
+
+def _run_chat(message, language, mode="normal_chat"):
+    """Run teacher_chat with a stub LLM; return (response, system_prompt_sent, chat_col)."""
+    captured = {}
+    chat_col = _Col()
+
+    async def fake_completion(messages, require_vision=False):
+        captured["system"] = messages[0]["content"]
+        reply = "โอเคครับ" if language == "th" else "Greit."
+        return types.SimpleNamespace(
+            choices=[types.SimpleNamespace(message=types.SimpleNamespace(content=reply))]
+        )
+
+    request = tc.TeacherChatRequest(message=message, language=language, mode=mode)
+    with patch.object(tc, "_db", _Db()), patch.object(tc, "_chat_col", chat_col), patch.object(
+        tc, "LLM_KEY", "test"
+    ), patch.object(tc, "_completion_with_fallback", new=fake_completion):
+        response = asyncio.run(tc.teacher_chat(request))
+    return response, captured.get("system", ""), chat_col
+
+
+class DeterministicPromptTests(unittest.TestCase):
+    QUIZ = "<quiz_context>Question: fart i tettbygd strøk? Student answer: 60 Correct answer: 50</quiz_context>"
+
+    def test_thai_quiz_help_ends_with_purity_block(self):
+        _, system, _ = _run_chat("ช่วยอธิบายว่าทำไมคำตอบนี้ผิด\n" + self.QUIZ, "th")
+        self.assertIn("THAI PURITY FOR QUIZ EXPLANATIONS", system)
+        self.assertLess(system.index("FINAL MASTER OUTPUT RULES"), system.index("THAI PURITY FOR QUIZ EXPLANATIONS"))
+
+    def test_norwegian_quiz_help_has_no_thai_purity_block(self):
+        _, system, _ = _run_chat("Kan du forklare dette?\n" + self.QUIZ, "no")
+        self.assertNotIn("THAI PURITY FOR QUIZ EXPLANATIONS", system)
+
+    def test_hint_request_starts_ladder_at_step_2_and_stores_quiz_key(self):
+        _, system, col = _run_chat("Gi meg et hint\n" + self.QUIZ, "no")
+        self.assertIn("SCAFFOLDING LADDER", system)
+        self.assertIn("STEP 2", system)
+        user_docs = [d for d in col.inserted if d.get("role") == "user"]
+        self.assertTrue(user_docs and user_docs[0].get("quiz_key"))
+
+    def test_explain_request_goes_straight_to_step_3(self):
+        _, system, _ = _run_chat("Kan du forklare dette?\n" + self.QUIZ, "no")
+        self.assertIn("STEP 3", system)
+
+    def test_warm_tone_reaches_prompt(self):
+        _, system, _ = _run_chat("Jeg gruer meg til oppkjøring", "no")
+        self.assertIn("TONE REGISTER (WARM)", system)
