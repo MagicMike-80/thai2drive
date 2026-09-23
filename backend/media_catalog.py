@@ -34,9 +34,11 @@ def normalize_catalog_text(value: Any) -> str:
 
 def is_safe_catalog_url(value: Any) -> bool:
     url = str(value or "").strip()
-    if not url or any(char.isspace() for char in url):
+    if not url:
         return False
-    if url.startswith(("/api/assets/", "/api/media/files/", "/api/audio/")):
+    if any(char.isspace() for char in url):
+        url = url.replace(" ", "%20")
+    if url.startswith(("/api/assets/", "/api/media/files/", "/api/audio/", "/public_assets/", "/static/")):
         path = urlsplit(url).path
         return (
             not path.startswith("//")
@@ -89,8 +91,8 @@ def validate_catalog_document(document: dict[str, Any]) -> dict[str, Any]:
             raise MediaCatalogValidationError("tags must be unique after normalization")
         tags.append(tag)
 
-    media_url = _required_text(document.get("media_url"), "media_url")
-    thumbnail_url = _required_text(document.get("thumbnail_url"), "thumbnail_url")
+    media_url = _required_text(document.get("media_url"), "media_url").replace(" ", "%20")
+    thumbnail_url = _required_text(document.get("thumbnail_url"), "thumbnail_url").replace(" ", "%20")
     if not is_safe_catalog_url(media_url):
         raise MediaCatalogValidationError("media_url is not an approved URL")
     if not is_safe_catalog_url(thumbnail_url):

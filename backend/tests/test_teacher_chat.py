@@ -314,8 +314,10 @@ class TestWrongQuizAnswerReplyIsThaiOnly(unittest.TestCase):
             )
 
         self.assertTrue(response.reply.strip())
-        latin_words = re.findall(r"[A-Za-zÆØÅæøå]{3,}", response.reply)
-        self.assertEqual(latin_words, [], f"Fant norske/engelske ord i thai-svaret: {latin_words}")
+        # Godkjente norske fagord i parentes er tillatt (f.eks. (fartsgrense)); ord utenfor parentes er forbudt
+        text_without_glossary = re.sub(r"\([A-Za-zÆØÅæøå\s-]+\)", "", response.reply)
+        latin_words = re.findall(r"[A-Za-zÆØÅæøå]{3,}", text_without_glossary)
+        self.assertEqual(latin_words, [], f"Fant uautoriserte norske/engelske ord utenfor parentes i thai-svaret: {latin_words}")
 
     def _chat_with_mock_model(self, request, model_reply):
         captured = {}
