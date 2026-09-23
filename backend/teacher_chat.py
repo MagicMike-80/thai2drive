@@ -3552,24 +3552,28 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
     media = _reconcile_teacher_media(media, sign_ids, exact_response_media)
     media = await _validate_teacher_response_media(media, lang)
 
-    # Persist both messages
+    # Persist both messages. Chat history is helpful, but it must never block a
+    # completed teacher response when MongoDB is temporarily read-only/full.
     now = datetime.now(timezone.utc)
-    await _chat_col.insert_many([
-        {
-            "session_id": session_id,
-            "role": "user",
-            "content": user_msg,
-            "language": lang,
-            "ts": now,
-        },
-        {
-            "session_id": session_id,
-            "role": "assistant",
-            "content": reply_text,
-            "language": lang,
-            "ts": now,
-        },
-    ])
+    try:
+        await _chat_col.insert_many([
+            {
+                "session_id": session_id,
+                "role": "user",
+                "content": user_msg,
+                "language": lang,
+                "ts": now,
+            },
+            {
+                "session_id": session_id,
+                "role": "assistant",
+                "content": reply_text,
+                "language": lang,
+                "ts": now,
+            },
+        ])
+    except Exception as history_ex:
+        logger.error("Failed to persist teacher chat history: %s", history_ex)
 
     duration = time.time() - start_time
     try:

@@ -2,6 +2,12 @@
 
 All notable changes to Thai2Drive are documented in this file.
 
+## [0.2.0.2] - 2026-09-23
+
+### Fixed
+
+- Michael returns completed chat replies even when conversation history cannot be written to MongoDB.
+
 ## [0.2.0.1] - 2026-09-23
 
 ### Changed

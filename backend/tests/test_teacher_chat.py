@@ -60,6 +60,11 @@ class _Collection:
         return None
 
 
+class _WriteFailingCollection(_Collection):
+    async def insert_many(self, *args, **kwargs):
+        raise RuntimeError("MongoDB storage quota exceeded")
+
+
 class _Database:
     def __init__(self, collections=None):
         self.collections = collections or {}
@@ -207,6 +212,21 @@ class TestTeacherChatConsolidatedResolver(unittest.TestCase):
         self.assertIn("📏 Stoppelengde", res.suggestions)
         # Verify formula in reply
         self.assertIn("(fart ÷ 10) × 3", res.reply.lower())
+
+    def test_completed_reply_survives_chat_history_write_failure(self):
+        tc._chat_col = _WriteFailingCollection()
+        req = TeacherChatRequest(
+            session_id="test_session_read_only_db",
+            message="Hva er formelen for reaksjonslengde?",
+            language="no",
+        )
+
+        with self.assertLogs("teacher_chat", level="ERROR") as logs:
+            res = asyncio.run(teacher_chat(req))
+
+        self.assertIn("(fart ÷ 10) × 3", res.reply.lower())
+        self.assertEqual(res.session_id, req.session_id)
+        self.assertTrue(any("Failed to persist teacher chat history" in line for line in logs.output))
 
 
 class TestWrongQuizAnswerReplyIsThaiOnly(unittest.TestCase):
