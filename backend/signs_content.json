@@ -5,7 +5,7 @@
     "name": {
       "no": "Vikeplikt",
       "th": "ให้ทาง",
-      "en": "Give Way"
+      "en": "Give way"
     },
     "explanation": {
       "no": "Du skal vike for trafikk i krysset.",
@@ -41,9 +41,9 @@
     "id": "206_0",
     "group": 1,
     "name": {
-      "no": "Jernbanekryssing uten bom",
-      "th": "ทางรถไฟไม่มีไม้กั้น",
-      "en": "Level Crossing Without Barrier"
+      "no": "Forkjørsveg",
+      "th": "ทางเอก",
+      "en": "Priority road"
     },
     "explanation": {
       "no": "Stopp og se etter tog før du krysser sporet.",
@@ -60,9 +60,9 @@
     "id": "208_0",
     "group": 1,
     "name": {
-      "no": "Forkjørsrett",
-      "th": "ถนนสายหลัก (มีสิทธิ์ก่อน)",
-      "en": "Priority Road"
+      "no": "Slutt på forkjørsveg",
+      "th": "สิ้นสุดทางเอก",
+      "en": "End of priority road"
     },
     "explanation": {
       "no": "Du har forkjørsrett og kjøretøy fra sideveiene skal vike for deg.",
@@ -79,9 +79,9 @@
     "id": "210_0",
     "group": 1,
     "name": {
-      "no": "Møtende kjøretøy har vikeplikt",
-      "th": "รถสวนทางต้องให้ทาง",
-      "en": "Oncoming Traffic Must Yield"
+      "no": "Forkjørskryss",
+      "th": "ทางแยกบนทางเอก",
+      "en": "Junction on a priority road"
     },
     "explanation": {
       "no": "Møtende kjøretøy skal vike for deg på smal veg.",
@@ -98,9 +98,9 @@
     "id": "212_0",
     "group": 1,
     "name": {
-      "no": "Vikeplikt oppheves",
-      "th": "สิ้นสุดการให้สิทธิ์รถสวนทาง",
-      "en": "End of Oncoming Priority"
+      "no": "Vikeplikt overfor møtende kjørende",
+      "th": "ให้ทางแก่รถที่สวนมา",
+      "en": "Give way to oncoming traffic"
     },
     "explanation": {
       "no": "Retten til forkjørsrett for møtende kjøretøy er avsluttet.",
@@ -117,9 +117,9 @@
     "id": "214_0",
     "group": 1,
     "name": {
-      "no": "Forkjørsrett opphører",
-      "th": "สิ้นสุดถนนสายหลัก",
-      "en": "End of Priority Road"
+      "no": "Møtende kjørende har vikeplikt",
+      "th": "รถที่สวนมาต้องให้ทาง",
+      "en": "Oncoming traffic must give way"
     },
     "explanation": {
       "no": "Forkjørsretten opphører. Du må nå vike for trafikk i kryss.",
@@ -136,9 +136,9 @@
     "id": "100_1",
     "group": 2,
     "name": {
-      "no": "Farlig sving til venstre",
-      "th": "โค้งอันตรายทางซ้าย",
-      "en": "Dangerous Left Bend"
+      "no": "Farlig sving",
+      "th": "ทางโค้งอันตราย",
+      "en": "Dangerous bend"
     },
     "explanation": {
       "no": "Skarp sving til venstre. Reduser fart.",
@@ -155,9 +155,9 @@
     "id": "100_2",
     "group": 2,
     "name": {
-      "no": "Farlig sving til høyre",
-      "th": "โค้งอันตรายทางขวา",
-      "en": "Dangerous Right Bend"
+      "no": "Farlig sving",
+      "th": "ทางโค้งอันตราย",
+      "en": "Dangerous bend"
     },
     "explanation": {
       "no": "Skarp sving til høyre. Reduser fart.",
@@ -174,9 +174,9 @@
     "id": "102_1",
     "group": 2,
     "name": {
-      "no": "Svinger, venstre først",
-      "th": "ถนนคดเคี้ยว ซ้ายก่อน",
-      "en": "Series of Bends, Left First"
+      "no": "Farlige svinger",
+      "th": "ทางโค้งอันตรายหลายโค้ง",
+      "en": "Dangerous bends"
     },
     "explanation": {
       "no": "Flere svinger fremover, første til venstre. Kjør forsiktig.",
@@ -193,9 +193,9 @@
     "id": "102_2",
     "group": 2,
     "name": {
-      "no": "Svinger, høyre først",
-      "th": "ถนนคดเคี้ยว ขวาก่อน",
-      "en": "Series of Bends, Right First"
+      "no": "Farlige svinger",
+      "th": "ทางโค้งอันตรายหลายโค้ง",
+      "en": "Dangerous bends"
     },
     "explanation": {
       "no": "Flere svinger fremover, første til høyre. Kjør forsiktig.",
@@ -212,9 +212,9 @@
     "id": "104_1",
     "group": 2,
     "name": {
-      "no": "Bratt stigning",
-      "th": "ทางชันขึ้นเขา",
-      "en": "Steep Uphill"
+      "no": "Bratt bakke",
+      "th": "ทางลาดชัน",
+      "en": "Steep hill"
     },
     "explanation": {
       "no": "Bratt oppoverbakke. Vær klar for lavere fart og høyere gir.",
@@ -231,9 +231,9 @@
     "id": "104_2",
     "group": 2,
     "name": {
-      "no": "Bratt nedkjøring",
-      "th": "ทางชันลงเขา",
-      "en": "Steep Downhill"
+      "no": "Bratt bakke",
+      "th": "ทางลาดชัน",
+      "en": "Steep hill"
     },
     "explanation": {
       "no": "Bratt nedoverbakke. Bruk lavere gir og reduser fart.",
@@ -250,9 +250,9 @@
     "id": "106_1",
     "group": 2,
     "name": {
-      "no": "Vegarbeid",
-      "th": "มีการก่อสร้างถนน",
-      "en": "Road Works"
+      "no": "Smalere veg",
+      "th": "ถนนแคบลง",
+      "en": "Road narrows"
     },
     "explanation": {
       "no": "Vegarbeid pågår. Kjør sakte og vær oppmerksom på arbeidere.",
@@ -269,9 +269,9 @@
     "id": "106_2",
     "group": 2,
     "name": {
-      "no": "Vegarbeid",
-      "th": "มีการก่อสร้างถนน",
-      "en": "Road Works"
+      "no": "Smalere veg",
+      "th": "ถนนแคบลง",
+      "en": "Road narrows"
     },
     "explanation": {
       "no": "Vegarbeid pågår. Kjør sakte og følg anvisninger.",
@@ -288,9 +288,9 @@
     "id": "106_3",
     "group": 2,
     "name": {
-      "no": "Vegarbeid",
-      "th": "มีการก่อสร้างถนน",
-      "en": "Road Works"
+      "no": "Smalere veg",
+      "th": "ถนนแคบลง",
+      "en": "Road narrows"
     },
     "explanation": {
       "no": "Vegarbeid pågår. Reduser fart og vær forsiktig.",
@@ -307,9 +307,9 @@
     "id": "108_0",
     "group": 2,
     "name": {
-      "no": "Glatt vegbane",
-      "th": "ถนนลื่น",
-      "en": "Slippery Road"
+      "no": "Ujevn veg",
+      "th": "ผิวทางขรุขระ",
+      "en": "Uneven road"
     },
     "explanation": {
       "no": "Vegen kan være glatt. Reduser fart og hold avstand.",
@@ -326,9 +326,9 @@
     "id": "109_0",
     "group": 2,
     "name": {
-      "no": "Løs grus",
-      "th": "กรวดหลวม",
-      "en": "Loose Gravel"
+      "no": "Fartshump",
+      "th": "เนินชะลอความเร็ว",
+      "en": "Speed hump"
     },
     "explanation": {
       "no": "Løs grus på vegen. Reduser fart for å unngå steinsprut.",
@@ -345,9 +345,9 @@
     "id": "110_0",
     "group": 2,
     "name": {
-      "no": "Smal veg",
-      "th": "ถนนแคบ",
-      "en": "Narrow Road"
+      "no": "Vegarbeid",
+      "th": "งานซ่อมสร้างถนน",
+      "en": "Road works"
     },
     "explanation": {
       "no": "Vegen er smal fremover. Kjør forsiktig og gi plass til møtende.",
@@ -364,9 +364,9 @@
     "id": "112_0",
     "group": 2,
     "name": {
-      "no": "Veg innsnevres",
-      "th": "ถนนแคบลง",
-      "en": "Road Narrows"
+      "no": "Steinsprut",
+      "th": "หินกระเด็น",
+      "en": "Loose chippings"
     },
     "explanation": {
       "no": "Vegen blir smalere. Reduser fart og hold til høyre.",
@@ -383,9 +383,9 @@
     "id": "114_1",
     "group": 2,
     "name": {
-      "no": "Ustabil vegkant høyre",
-      "th": "ไหล่ทางขวาไม่มั่นคง",
-      "en": "Unstable Right Road Edge"
+      "no": "Rasfare",
+      "th": "เสี่ยงดินหรือหินถล่ม",
+      "en": "Risk of landslide or rockfall"
     },
     "explanation": {
       "no": "Vegkanten til høyre er ustabil. Unngå å kjøre ut på kanten.",
@@ -402,9 +402,9 @@
     "id": "114_2",
     "group": 2,
     "name": {
-      "no": "Ustabil vegkant venstre",
-      "th": "ไหล่ทางซ้ายไม่มั่นคง",
-      "en": "Unstable Left Road Edge"
+      "no": "Rasfare",
+      "th": "เสี่ยงดินหรือหินถล่ม",
+      "en": "Risk of landslide or rockfall"
     },
     "explanation": {
       "no": "Vegkanten til venstre er ustabil. Unngå å kjøre ut på kanten.",
@@ -421,9 +421,9 @@
     "id": "116_0",
     "group": 2,
     "name": {
-      "no": "Fartshump",
-      "th": "เนินชะลอความเร็ว",
-      "en": "Speed Bump"
+      "no": "Glatt kjørebane",
+      "th": "ผิวทางลื่น",
+      "en": "Slippery road"
     },
     "explanation": {
       "no": "Fartshump fremover. Reduser farten betraktelig.",
@@ -440,9 +440,9 @@
     "id": "117_0",
     "group": 2,
     "name": {
-      "no": "Ujamn veg",
-      "th": "ถนนขรุขระ",
-      "en": "Uneven Road"
+      "no": "Farlig vegskulder",
+      "th": "ไหล่ทางอันตราย",
+      "en": "Dangerous road shoulder"
     },
     "explanation": {
       "no": "Ujamn vegbane fremover. Kjør sakte og hold godt i rattet.",
@@ -459,9 +459,9 @@
     "id": "118_0",
     "group": 2,
     "name": {
-      "no": "Veg slutter",
-      "th": "ถนนสิ้นสุด",
-      "en": "Road Ends"
+      "no": "Bevegelig bru",
+      "th": "สะพานเปิดปิดได้",
+      "en": "Opening bridge"
     },
     "explanation": {
       "no": "Vegen slutter fremover. Snu eller finn alternativ rute.",
@@ -478,9 +478,9 @@
     "id": "120_0",
     "group": 2,
     "name": {
-      "no": "Kryss",
-      "th": "ทางแยก",
-      "en": "Junction Ahead"
+      "no": "Kai, strand eller ferjeleie",
+      "th": "ท่าเทียบเรือ ชายหาด หรือท่าเรือข้ามฟาก",
+      "en": "Quay, beach or ferry berth"
     },
     "explanation": {
       "no": "Kryss fremover. Vær oppmerksom og reduser fart.",
@@ -497,9 +497,9 @@
     "id": "122_0",
     "group": 2,
     "name": {
-      "no": "Rundkjøring",
-      "th": "วงเวียนอยู่ข้างหน้า",
-      "en": "Roundabout Ahead"
+      "no": "Tunnel",
+      "th": "อุโมงค์",
+      "en": "Tunnel"
     },
     "explanation": {
       "no": "Rundkjøring fremover. Gi vikeplikt for trafikk i rundkjøringen.",
@@ -516,9 +516,9 @@
     "id": "124_0",
     "group": 2,
     "name": {
-      "no": "Jernbanekryssing med bom",
-      "th": "ทางรถไฟมีไม้กั้น",
-      "en": "Level Crossing With Barrier"
+      "no": "Farlig vegkryss",
+      "th": "ทางแยกอันตราย",
+      "en": "Dangerous junction"
     },
     "explanation": {
       "no": "Jernbanekryssing med automatisk bom fremover. Stopp når bommen er nede.",
@@ -535,9 +535,9 @@
     "id": "126_0",
     "group": 2,
     "name": {
-      "no": "Jernbanekryssing uten bom",
-      "th": "ทางรถไฟไม่มีไม้กั้น",
-      "en": "Level Crossing Without Barrier"
+      "no": "Rundkjøring",
+      "th": "วงเวียน",
+      "en": "Roundabout"
     },
     "explanation": {
       "no": "Jernbanekryssing uten bom. Stopp og se etter tog i begge retninger.",
@@ -554,9 +554,9 @@
     "id": "132_0",
     "group": 2,
     "name": {
-      "no": "Gangfelt",
-      "th": "ทางข้ามสำหรับคนเดินเท้า",
-      "en": "Pedestrian Crossing"
+      "no": "Trafikklyssignal",
+      "th": "สัญญาณไฟจราจร",
+      "en": "Traffic light signal"
     },
     "explanation": {
       "no": "Gangfelt fremover. Gi fotgjengere vikeplikt.",
@@ -573,9 +573,9 @@
     "id": "134_0",
     "group": 2,
     "name": {
-      "no": "Barn",
-      "th": "เด็กอาจวิ่งออกมา",
-      "en": "Children"
+      "no": "Planovergang med bom",
+      "th": "จุดตัดทางรถไฟที่มีเครื่องกั้น",
+      "en": "Level crossing with barrier"
     },
     "explanation": {
       "no": "Barn kan komme ut i vegen. Reduser fart og vær svært forsiktig.",
@@ -592,9 +592,9 @@
     "id": "135_0",
     "group": 2,
     "name": {
-      "no": "Sykkel",
-      "th": "ระวังนักปั่นจักรยาน",
-      "en": "Cyclists"
+      "no": "Planovergang uten bom",
+      "th": "จุดตัดทางรถไฟที่ไม่มีเครื่องกั้น",
+      "en": "Level crossing without barrier"
     },
     "explanation": {
       "no": "Syklister kan krysse eller kjøre på vegen. Vær forsiktig.",
@@ -611,9 +611,9 @@
     "id": "136_1",
     "group": 2,
     "name": {
-      "no": "Elg",
-      "th": "ระวังกวางมูส",
-      "en": "Moose"
+      "no": "Avstandsskilt",
+      "th": "ป้ายบอกระยะทาง",
+      "en": "Distance marker"
     },
     "explanation": {
       "no": "Elg kan krysse vegen. Reduser fart og vær beredt til å bremse.",
@@ -630,9 +630,9 @@
     "id": "136_2",
     "group": 2,
     "name": {
-      "no": "Hjort",
-      "th": "ระวังกวาง",
-      "en": "Deer"
+      "no": "Avstandsskilt",
+      "th": "ป้ายบอกระยะทาง",
+      "en": "Distance marker"
     },
     "explanation": {
       "no": "Hjort kan krysse vegen. Reduser fart og vær forsiktig.",
@@ -649,9 +649,9 @@
     "id": "136_3",
     "group": 2,
     "name": {
-      "no": "Husdyr",
-      "th": "ระวังสัตว์เลี้ยง",
-      "en": "Domestic Animals"
+      "no": "Avstandsskilt",
+      "th": "ป้ายบอกระยะทาง",
+      "en": "Distance marker"
     },
     "explanation": {
       "no": "Husdyr kan befinne seg på vegen. Kjør sakte og varsamt.",
@@ -668,9 +668,9 @@
     "id": "138_1",
     "group": 2,
     "name": {
-      "no": "Steinsprang høyre",
-      "th": "ระวังหินร่วงจากขวา",
-      "en": "Falling Rocks from Right"
+      "no": "Jernbanespor – enkeltsporet",
+      "th": "ทางรถไฟ – รางเดี่ยว",
+      "en": "Railway track – single track"
     },
     "explanation": {
       "no": "Stein kan falle fra høyre side. Vær forsiktig og hold god avstand.",
@@ -687,9 +687,9 @@
     "id": "138_2",
     "group": 2,
     "name": {
-      "no": "Steinsprang venstre",
-      "th": "ระวังหินร่วงจากซ้าย",
-      "en": "Falling Rocks from Left"
+      "no": "Jernbanespor – flersporet",
+      "th": "ทางรถไฟ – หลายราง",
+      "en": "Railway track – multiple tracks"
     },
     "explanation": {
       "no": "Stein kan falle fra venstre side. Vær forsiktig og hold god avstand.",
@@ -706,9 +706,9 @@
     "id": "139_0",
     "group": 2,
     "name": {
-      "no": "Flom",
-      "th": "ระวังน้ำท่วม",
-      "en": "Flooding"
+      "no": "Sporvogn",
+      "th": "รถราง",
+      "en": "Tram"
     },
     "explanation": {
       "no": "Fare for flom på vegen. Kjør sakte og vurder om vegen er trygg.",
@@ -725,9 +725,9 @@
     "id": "140_0",
     "group": 2,
     "name": {
-      "no": "Sidevind",
-      "th": "ระวังลมข้าง",
-      "en": "Cross Wind"
+      "no": "Avstand til gangfelt",
+      "th": "ระยะทางถึงทางม้าลาย",
+      "en": "Distance to pedestrian crossing"
     },
     "explanation": {
       "no": "Fare for sterk sidevind. Hold godt i rattet og reduser fart.",
@@ -744,9 +744,9 @@
     "id": "142_0",
     "group": 2,
     "name": {
-      "no": "Nedsatt frihøyde",
-      "th": "ความสูงจำกัด",
-      "en": "Low Clearance"
+      "no": "Barn",
+      "th": "เด็ก",
+      "en": "Children"
     },
     "explanation": {
       "no": "Begrenset høyde fremover. Sjekk om kjøretøyet ditt er lavt nok.",
@@ -763,9 +763,9 @@
     "id": "144_0",
     "group": 2,
     "name": {
-      "no": "Bevegelig bro",
-      "th": "สะพานที่เปิด-ปิดได้",
-      "en": "Movable Bridge"
+      "no": "Syklende",
+      "th": "ผู้ขี่จักรยาน",
+      "en": "Cyclists"
     },
     "explanation": {
       "no": "Bevegelig bro fremover. Stopp om broen er åpen.",
@@ -782,9 +782,9 @@
     "id": "146_1",
     "group": 2,
     "name": {
-      "no": "Trafikklys",
-      "th": "สัญญาณไฟจราจร",
-      "en": "Traffic Signals"
+      "no": "Dyr",
+      "th": "สัตว์",
+      "en": "Animals"
     },
     "explanation": {
       "no": "Trafikklys fremover. Vær klar til å stoppe for rødt.",
@@ -801,9 +801,9 @@
     "id": "146_2",
     "group": 2,
     "name": {
-      "no": "Trafikklys",
-      "th": "สัญญาณไฟจราจร",
-      "en": "Traffic Signals"
+      "no": "Dyr",
+      "th": "สัตว์",
+      "en": "Animals"
     },
     "explanation": {
       "no": "Trafikklys fremover. Vær klar til å stoppe for rødt.",
@@ -820,9 +820,9 @@
     "id": "146_3",
     "group": 2,
     "name": {
-      "no": "Trafikklys",
-      "th": "สัญญาณไฟจราจร",
-      "en": "Traffic Signals"
+      "no": "Dyr",
+      "th": "สัตว์",
+      "en": "Animals"
     },
     "explanation": {
       "no": "Trafikklys fremover. Vær klar til å stoppe for rødt.",
@@ -839,9 +839,9 @@
     "id": "146_4",
     "group": 2,
     "name": {
-      "no": "Trafikklys",
-      "th": "สัญญาณไฟจราจร",
-      "en": "Traffic Signals"
+      "no": "Dyr",
+      "th": "สัตว์",
+      "en": "Animals"
     },
     "explanation": {
       "no": "Trafikklys fremover. Vær klar til å stoppe for rødt.",
@@ -858,9 +858,9 @@
     "id": "146_5",
     "group": 2,
     "name": {
-      "no": "Trafikklys",
-      "th": "สัญญาณไฟจราจร",
-      "en": "Traffic Signals"
+      "no": "Dyr",
+      "th": "สัตว์",
+      "en": "Animals"
     },
     "explanation": {
       "no": "Trafikklys fremover. Vær klar til å stoppe for rødt.",
@@ -877,9 +877,9 @@
     "id": "148_0",
     "group": 2,
     "name": {
-      "no": "Farlig sidegate",
-      "th": "ทางแยกอันตราย",
-      "en": "Dangerous Side Road"
+      "no": "Møtende trafikk",
+      "th": "รถสวนทาง",
+      "en": "Oncoming traffic"
     },
     "explanation": {
       "no": "Farlig sidegate. Vær oppmerksom på kjøretøy som kjører inn.",
@@ -896,9 +896,9 @@
     "id": "149_0",
     "group": 2,
     "name": {
-      "no": "Skoleveg",
-      "th": "เขตโรงเรียน",
-      "en": "School Zone"
+      "no": "Kø",
+      "th": "การจราจรติดขัด",
+      "en": "Traffic queues"
     },
     "explanation": {
       "no": "Skoleveg. Reduser fart og vær svært forsiktig.",
@@ -915,9 +915,9 @@
     "id": "150_0",
     "group": 2,
     "name": {
-      "no": "Lavtflygende fly",
-      "th": "เครื่องบินบินต่ำ",
-      "en": "Low-Flying Aircraft"
+      "no": "Fly",
+      "th": "เครื่องบิน",
+      "en": "Aircraft"
     },
     "explanation": {
       "no": "Lavtflygende fly i området. Ikke forveksle lys med trafikklys.",
@@ -934,9 +934,9 @@
     "id": "152_0",
     "group": 2,
     "name": {
-      "no": "Slak stigning",
-      "th": "ทางลาดชัน",
-      "en": "Gradient"
+      "no": "Sidevind",
+      "th": "ลมพัดด้านข้าง",
+      "en": "Side wind"
     },
     "explanation": {
       "no": "Stigning i vegen fremover. Tilpass farten.",
@@ -953,9 +953,9 @@
     "id": "154_0",
     "group": 2,
     "name": {
-      "no": "Tunnel",
-      "th": "อุโมงค์",
-      "en": "Tunnel"
+      "no": "Skiløpere",
+      "th": "ผู้เล่นสกี",
+      "en": "Skiers"
     },
     "explanation": {
       "no": "Tunnel fremover. Slå på lyset og hold avstand til forankjørende.",
@@ -972,9 +972,9 @@
     "id": "155_0",
     "group": 2,
     "name": {
-      "no": "Bro",
-      "th": "สะพาน",
-      "en": "Bridge"
+      "no": "Ridende",
+      "th": "ผู้ขี่ม้า",
+      "en": "Horse riders"
     },
     "explanation": {
       "no": "Bro fremover. Vær forsiktig, særlig i glatt vær.",
@@ -991,9 +991,9 @@
     "id": "156_0",
     "group": 2,
     "name": {
-      "no": "Kai eller elvekant",
-      "th": "ท่าเรือหรือริมแม่น้ำ",
-      "en": "Quay or Riverbank"
+      "no": "Annen fare",
+      "th": "อันตรายอื่น ๆ",
+      "en": "Other danger"
     },
     "explanation": {
       "no": "Vegen er nær en kai eller elvekant. Vær forsiktig.",
@@ -1012,7 +1012,7 @@
     "name": {
       "no": "Innkjøring forbudt",
       "th": "ห้ามเข้า",
-      "en": "No Entry"
+      "en": "No entry"
     },
     "explanation": {
       "no": "Du har ikke lov til å kjøre inn her.",
@@ -1030,8 +1030,8 @@
     "group": 3,
     "name": {
       "no": "Forbudt for alle kjøretøy",
-      "th": "ห้ามยานพาหนะทุกชนิด",
-      "en": "No Vehicles"
+      "th": "ห้ามยานพาหนะทุกชนิดผ่าน",
+      "en": "No vehicles"
     },
     "explanation": {
       "no": "Ingen kjøretøy har lov til å kjøre her.",
@@ -1048,9 +1048,9 @@
     "id": "306_1",
     "group": 3,
     "name": {
-      "no": "Forbudt for motorkjøretøy",
-      "th": "ห้ามรถยนต์",
-      "en": "No Motor Vehicles"
+      "no": "Forbudt for motorvogn med unntak av liten elektrisk motorvogn",
+      "th": "ห้ามยานยนต์ผ่าน ยกเว้นยานยนต์ไฟฟ้าขนาดเล็ก",
+      "en": "No motor vehicles except small electric motor vehicles"
     },
     "explanation": {
       "no": "Motorkjøretøy har ikke adgang her.",
@@ -1067,9 +1067,9 @@
     "id": "306_10",
     "group": 3,
     "name": {
-      "no": "Forbudt for hest og vogn",
-      "th": "ห้ามรถม้า",
-      "en": "No Horse-Drawn Vehicles"
+      "no": "Forbudt for liten elektrisk motorvogn",
+      "th": "ห้ามยานยนต์ไฟฟ้าขนาดเล็กผ่าน",
+      "en": "No small electric motor vehicles"
     },
     "explanation": {
       "no": "Hest og vogn har ikke adgang her.",
@@ -1086,9 +1086,9 @@
     "id": "306_3",
     "group": 3,
     "name": {
-      "no": "Forbudt for lastebil",
-      "th": "ห้ามรถบรรทุก",
-      "en": "No Heavy Vehicles"
+      "no": "Forbudt for alle traktorer og for motorredskap konstruert for fart mindre enn 40 km/t",
+      "th": "ห้ามรถแทรกเตอร์ทุกชนิดและเครื่องจักรกลที่สร้างให้วิ่งได้ต่ำกว่า 40 กม./ชม. ผ่าน",
+      "en": "No tractors or motorised equipment designed for speeds below 40 km/h"
     },
     "explanation": {
       "no": "Lastebiler og tunge kjøretøy har ikke adgang.",
@@ -1105,9 +1105,9 @@
     "id": "306_4",
     "group": 3,
     "name": {
-      "no": "Forbudt for buss",
-      "th": "ห้ามรถบัส",
-      "en": "No Buses"
+      "no": "Forbudt for motorsykkel og moped",
+      "th": "ห้ามรถจักรยานยนต์และโมเพ็ดผ่าน",
+      "en": "No motorcycles or mopeds"
     },
     "explanation": {
       "no": "Busser har ikke adgang her.",
@@ -1124,9 +1124,9 @@
     "id": "306_5",
     "group": 3,
     "name": {
-      "no": "Forbudt for motorsykkel",
-      "th": "ห้ามรถจักรยานยนต์",
-      "en": "No Motorcycles"
+      "no": "Forbudt for lastebil og trekkbil",
+      "th": "ห้ามรถบรรทุกและรถลากจูงผ่าน",
+      "en": "No lorries or tractor units"
     },
     "explanation": {
       "no": "Motorsykler har ikke adgang her.",
@@ -1143,9 +1143,9 @@
     "id": "306_6",
     "group": 3,
     "name": {
-      "no": "Forbudt for moped",
-      "th": "ห้ามมอเตอร์ไซค์เล็ก",
-      "en": "No Mopeds"
+      "no": "Forbudt for syklende og fører av liten elektrisk motorvogn",
+      "th": "ห้ามผู้ขี่จักรยานและผู้ขับยานยนต์ไฟฟ้าขนาดเล็กผ่าน",
+      "en": "No cyclists or drivers of small electric motor vehicles"
     },
     "explanation": {
       "no": "Mopeder har ikke adgang her.",
@@ -1162,9 +1162,9 @@
     "id": "306_7",
     "group": 3,
     "name": {
-      "no": "Forbudt for sykkel",
-      "th": "ห้ามจักรยาน",
-      "en": "No Bicycles"
+      "no": "Forbudt for gående",
+      "th": "ห้ามคนเดินเท้าผ่าน",
+      "en": "No pedestrians"
     },
     "explanation": {
       "no": "Sykler har ikke adgang her.",
@@ -1181,9 +1181,9 @@
     "id": "306_8",
     "group": 3,
     "name": {
-      "no": "Forbudt for gående",
-      "th": "ห้ามคนเดินเท้า",
-      "en": "No Pedestrians"
+      "no": "Forbudt for gående, syklende og fører av liten elektrisk motorvogn",
+      "th": "ห้ามคนเดินเท้า ผู้ขี่จักรยาน และผู้ขับยานยนต์ไฟฟ้าขนาดเล็กผ่าน",
+      "en": "No pedestrians, cyclists or drivers of small electric motor vehicles"
     },
     "explanation": {
       "no": "Gående har ikke adgang her.",
@@ -1201,8 +1201,8 @@
     "group": 3,
     "name": {
       "no": "Forbudt for ridende",
-      "th": "ห้ามขี่ม้า",
-      "en": "No Horse Riders"
+      "th": "ห้ามผู้ขี่ม้าผ่าน",
+      "en": "No horse riders"
     },
     "explanation": {
       "no": "Ridning er forbudt her.",
@@ -1219,9 +1219,9 @@
     "id": "308_0",
     "group": 3,
     "name": {
-      "no": "Forbudt for kjøretøy over lengden",
-      "th": "ห้ามรถที่ยาวเกินกำหนด",
-      "en": "No Vehicles Exceeding Length"
+      "no": "Forbudt for transport av farlig gods",
+      "th": "ห้ามรถขนส่งวัตถุอันตรายผ่าน",
+      "en": "No vehicles carrying dangerous goods"
     },
     "explanation": {
       "no": "Forbudt for kjøretøy lengre enn det som er angitt.",
@@ -1238,9 +1238,9 @@
     "id": "310_0",
     "group": 3,
     "name": {
-      "no": "Forbudt for kjøretøy over høyden",
-      "th": "ห้ามรถที่สูงเกินกำหนด",
-      "en": "No Vehicles Exceeding Height"
+      "no": "Forbudt for motorvogn med flere enn to hjul og med tillatt totalvekt høyere enn angitt",
+      "th": "ห้ามยานยนต์ที่มีล้อมากกว่าสองล้อและมีน้ำหนักรวมที่อนุญาตสูงกว่าที่ระบุผ่าน",
+      "en": "No motor vehicles with more than two wheels and a permitted total weight higher than indicated"
     },
     "explanation": {
       "no": "Forbudt for kjøretøy høyere enn det som er angitt.",
@@ -1257,9 +1257,9 @@
     "id": "312_0",
     "group": 3,
     "name": {
-      "no": "Vegbom",
-      "th": "ถนนปิด",
-      "en": "Road Closed"
+      "no": "Breddegrense",
+      "th": "จำกัดความกว้าง",
+      "en": "Width limit"
     },
     "explanation": {
       "no": "Veien er stengt for gjennomkjøring.",
@@ -1276,9 +1276,9 @@
     "id": "314_0",
     "group": 3,
     "name": {
-      "no": "Forbikjøring forbudt",
-      "th": "ห้ามแซง",
-      "en": "No Overtaking"
+      "no": "Høydegrense",
+      "th": "จำกัดความสูง",
+      "en": "Height limit"
     },
     "explanation": {
       "no": "Du har ikke lov til å kjøre forbi andre kjøretøy.",
@@ -1295,9 +1295,9 @@
     "id": "316_0",
     "group": 3,
     "name": {
-      "no": "Forbikjøring forbudt for lastebil",
-      "th": "ห้ามรถบรรทุกแซง",
-      "en": "No Overtaking for Trucks"
+      "no": "Lengdegrense",
+      "th": "จำกัดความยาว",
+      "en": "Length limit"
     },
     "explanation": {
       "no": "Lastebiler har ikke lov til å kjøre forbi andre kjøretøy.",
@@ -1314,9 +1314,9 @@
     "id": "318_1",
     "group": 3,
     "name": {
-      "no": "Stopp forbudt",
-      "th": "ห้ามหยุดรถ",
-      "en": "No Stopping"
+      "no": "Totalvektgrense for kjøretøy",
+      "th": "จำกัดน้ำหนักรวมของรถ",
+      "en": "Total weight limit for a vehicle"
     },
     "explanation": {
       "no": "Stopp er ikke tillatt her, verken for parkering eller av- og påstigning.",
@@ -1333,9 +1333,9 @@
     "id": "318_2",
     "group": 3,
     "name": {
-      "no": "Stopp forbudt",
-      "th": "ห้ามหยุดรถ",
-      "en": "No Stopping"
+      "no": "Totalvektgrense for vogntog",
+      "th": "จำกัดน้ำหนักรวมของรถลากจูงพร้อมรถพ่วง",
+      "en": "Total weight limit for a vehicle combination"
     },
     "explanation": {
       "no": "Stopp er ikke tillatt her.",
@@ -1352,9 +1352,9 @@
     "id": "320_0",
     "group": 3,
     "name": {
-      "no": "Parkering forbudt",
-      "th": "ห้ามจอดรถ",
-      "en": "No Parking"
+      "no": "Aksellastgrense",
+      "th": "จำกัดน้ำหนักลงเพลา",
+      "en": "Axle load limit"
     },
     "explanation": {
       "no": "Parkering er forbudt her. Du kan stoppe kort for av- og påstigning.",
@@ -1371,9 +1371,9 @@
     "id": "322_0",
     "group": 3,
     "name": {
-      "no": "All stans forbudt",
-      "th": "ห้ามหยุดและจอดรถทุกกรณี",
-      "en": "No Stopping or Parking"
+      "no": "Boggilastgrense",
+      "th": "จำกัดน้ำหนักลงชุดเพลาคู่",
+      "en": "Bogie load limit"
     },
     "explanation": {
       "no": "Verken stopp eller parkering er tillatt her.",
@@ -1390,9 +1390,9 @@
     "id": "324_1",
     "group": 3,
     "name": {
-      "no": "Parkering forbudt på oddetallsdager",
-      "th": "ห้ามจอดวันคี่",
-      "en": "No Parking on Odd Days"
+      "no": "Stopp for angitt formål",
+      "th": "หยุดรถตามวัตถุประสงค์ที่ระบุ",
+      "en": "Stop for the stated purpose"
     },
     "explanation": {
       "no": "Parkering er forbudt på oddetallsdager i måneden.",
@@ -1409,9 +1409,9 @@
     "id": "324_2",
     "group": 3,
     "name": {
-      "no": "Parkering forbudt på partallsdager",
-      "th": "ห้ามจอดวันคู่",
-      "en": "No Parking on Even Days"
+      "no": "Stopp for angitt formål",
+      "th": "หยุดรถตามวัตถุประสงค์ที่ระบุ",
+      "en": "Stop for the stated purpose"
     },
     "explanation": {
       "no": "Parkering er forbudt på partallsdager i måneden.",
@@ -1428,9 +1428,9 @@
     "id": "326_0",
     "group": 3,
     "name": {
-      "no": "Innkjøring forbudt for kjøretøy med farlig gods",
-      "th": "ห้ามรถบรรทุกสารอันตราย",
-      "en": "No Vehicles with Dangerous Goods"
+      "no": "Stopp for toll",
+      "th": "หยุดรถเพื่อตรวจศุลกากร",
+      "en": "Stop for customs"
     },
     "explanation": {
       "no": "Kjøretøy med farlig gods har ikke adgang.",
@@ -1447,9 +1447,9 @@
     "id": "330_1",
     "group": 3,
     "name": {
-      "no": "Slutt på særskilt fartsgrense",
-      "th": "สิ้นสุดความเร็วพิเศษ",
-      "en": "End of Special Speed Limit"
+      "no": "Svingeforbud",
+      "th": "ห้ามเลี้ยว",
+      "en": "No turning"
     },
     "explanation": {
       "no": "Den spesielle fartsgrensen opphører. Vanlig fartsgrense gjelder igjen.",
@@ -1466,9 +1466,9 @@
     "id": "330_2",
     "group": 3,
     "name": {
-      "no": "Slutt på særskilt fartsgrense",
-      "th": "สิ้นสุดความเร็วพิเศษ",
-      "en": "End of Special Speed Limit"
+      "no": "Svingeforbud",
+      "th": "ห้ามเลี้ยว",
+      "en": "No turning"
     },
     "explanation": {
       "no": "Den spesielle fartsgrensen opphører.",
@@ -1485,9 +1485,9 @@
     "id": "332_0",
     "group": 3,
     "name": {
-      "no": "Slutt på fartsgrense",
-      "th": "สิ้นสุดเขตจำกัดความเร็ว",
-      "en": "End of Speed Limit"
+      "no": "Vendingsforbud",
+      "th": "ห้ามกลับรถ",
+      "en": "No U-turn"
     },
     "explanation": {
       "no": "Fartsgrensesonen opphører. Vanlig fartsgrense gjelder.",
@@ -1504,9 +1504,9 @@
     "id": "334_0",
     "group": 3,
     "name": {
-      "no": "Slutt på forbikjøringsforbud",
-      "th": "สิ้นสุดห้ามแซง",
-      "en": "End of No Overtaking"
+      "no": "Forbikjøringsforbud",
+      "th": "ห้ามแซง",
+      "en": "No overtaking"
     },
     "explanation": {
       "no": "Forbudet mot forbikjøring er opphevet.",
@@ -1523,9 +1523,9 @@
     "id": "335_0",
     "group": 3,
     "name": {
-      "no": "Slutt på alle forbud",
-      "th": "สิ้นสุดข้อห้ามทั้งหมด",
-      "en": "End of All Prohibitions"
+      "no": "Forbikjøringsforbud for lastebil",
+      "th": "ห้ามรถบรรทุกแซง",
+      "en": "No overtaking for lorries"
     },
     "explanation": {
       "no": "Alle forbud oppheves her.",
@@ -1542,9 +1542,9 @@
     "id": "336_0",
     "group": 3,
     "name": {
-      "no": "Tidsbegrenset parkering",
-      "th": "จอดได้ตามเวลาที่กำหนด",
-      "en": "Time-Limited Parking"
+      "no": "Slutt på forbikjøringsforbud",
+      "th": "สิ้นสุดเขตห้ามแซง",
+      "en": "End of no overtaking"
     },
     "explanation": {
       "no": "Parkering er tillatt men begrenset til den angitte tiden.",
@@ -1561,9 +1561,9 @@
     "id": "337_0",
     "group": 3,
     "name": {
-      "no": "Forbudt svingebevegelse",
-      "th": "ห้ามเลี้ยว",
-      "en": "Prohibited Turn"
+      "no": "Slutt på forbikjøringsforbud for lastebil",
+      "th": "สิ้นสุดเขตห้ามแซงสำหรับรถบรรทุก",
+      "en": "End of no overtaking for lorries"
     },
     "explanation": {
       "no": "Angitt svingebevegelse er forbudt i krysset.",
@@ -1582,7 +1582,7 @@
     "name": {
       "no": "Fartsgrense 100 km/t",
       "th": "จำกัดความเร็ว 100 กม./ชม.",
-      "en": "Speed Limit 100 km/h"
+      "en": "Speed limit 100 km/h"
     },
     "explanation": {
       "no": "Maksimal tillatt hastighet er 100 km/t.",
@@ -1601,7 +1601,7 @@
     "name": {
       "no": "Fartsgrense 110 km/t",
       "th": "จำกัดความเร็ว 110 กม./ชม.",
-      "en": "Speed Limit 110 km/h"
+      "en": "Speed limit 110 km/h"
     },
     "explanation": {
       "no": "Maksimal tillatt hastighet er 110 km/t.",
@@ -1620,7 +1620,7 @@
     "name": {
       "no": "Fartsgrense 30 km/t",
       "th": "จำกัดความเร็ว 30 กม./ชม.",
-      "en": "Speed Limit 30 km/h"
+      "en": "Speed limit 30 km/h"
     },
     "explanation": {
       "no": "Maksimal tillatt hastighet er 30 km/t.",
@@ -1639,7 +1639,7 @@
     "name": {
       "no": "Fartsgrense 40 km/t",
       "th": "จำกัดความเร็ว 40 กม./ชม.",
-      "en": "Speed Limit 40 km/h"
+      "en": "Speed limit 40 km/h"
     },
     "explanation": {
       "no": "Maksimal tillatt hastighet er 40 km/t.",
@@ -1658,7 +1658,7 @@
     "name": {
       "no": "Fartsgrense 50 km/t",
       "th": "จำกัดความเร็ว 50 กม./ชม.",
-      "en": "Speed Limit 50 km/h"
+      "en": "Speed limit 50 km/h"
     },
     "explanation": {
       "no": "Maksimal tillatt hastighet er 50 km/t.",
@@ -1677,7 +1677,7 @@
     "name": {
       "no": "Fartsgrense 60 km/t",
       "th": "จำกัดความเร็ว 60 กม./ชม.",
-      "en": "Speed Limit 60 km/h"
+      "en": "Speed limit 60 km/h"
     },
     "explanation": {
       "no": "Maksimal tillatt hastighet er 60 km/t.",
@@ -1696,7 +1696,7 @@
     "name": {
       "no": "Fartsgrense 70 km/t",
       "th": "จำกัดความเร็ว 70 กม./ชม.",
-      "en": "Speed Limit 70 km/h"
+      "en": "Speed limit 70 km/h"
     },
     "explanation": {
       "no": "Maksimal tillatt hastighet er 70 km/t.",
@@ -1715,7 +1715,7 @@
     "name": {
       "no": "Fartsgrense 80 km/t",
       "th": "จำกัดความเร็ว 80 กม./ชม.",
-      "en": "Speed Limit 80 km/h"
+      "en": "Speed limit 80 km/h"
     },
     "explanation": {
       "no": "Maksimal tillatt hastighet er 80 km/t.",
@@ -1734,7 +1734,7 @@
     "name": {
       "no": "Fartsgrense 90 km/t",
       "th": "จำกัดความเร็ว 90 กม./ชม.",
-      "en": "Speed Limit 90 km/h"
+      "en": "Speed limit 90 km/h"
     },
     "explanation": {
       "no": "Maksimal tillatt hastighet er 90 km/t.",
@@ -1751,9 +1751,9 @@
     "id": "364_30",
     "group": 3,
     "name": {
-      "no": "Minstehastighet 30 km/t",
-      "th": "ความเร็วขั้นต่ำ 30 กม./ชม.",
-      "en": "Minimum Speed 30 km/h"
+      "no": "Slutt på særskilt fartsgrense 30 km/t",
+      "th": "สิ้นสุดเขตจำกัดความเร็วพิเศษ 30 กม./ชม.",
+      "en": "End of special speed limit 30 km/h"
     },
     "explanation": {
       "no": "Du må kjøre minst 30 km/t her.",
@@ -1770,9 +1770,9 @@
     "id": "364_40",
     "group": 3,
     "name": {
-      "no": "Minstehastighet 40 km/t",
-      "th": "ความเร็วขั้นต่ำ 40 กม./ชม.",
-      "en": "Minimum Speed 40 km/h"
+      "no": "Slutt på særskilt fartsgrense 40 km/t",
+      "th": "สิ้นสุดเขตจำกัดความเร็วพิเศษ 40 กม./ชม.",
+      "en": "End of special speed limit 40 km/h"
     },
     "explanation": {
       "no": "Du må kjøre minst 40 km/t her.",
@@ -1789,9 +1789,9 @@
     "id": "364_50",
     "group": 3,
     "name": {
-      "no": "Minstehastighet 50 km/t",
-      "th": "ความเร็วขั้นต่ำ 50 กม./ชม.",
-      "en": "Minimum Speed 50 km/h"
+      "no": "Slutt på særskilt fartsgrense 50 km/t",
+      "th": "สิ้นสุดเขตจำกัดความเร็วพิเศษ 50 กม./ชม.",
+      "en": "End of special speed limit 50 km/h"
     },
     "explanation": {
       "no": "Du må kjøre minst 50 km/t her.",
@@ -1808,9 +1808,9 @@
     "id": "364_60",
     "group": 3,
     "name": {
-      "no": "Minstehastighet 60 km/t",
-      "th": "ความเร็วขั้นต่ำ 60 กม./ชม.",
-      "en": "Minimum Speed 60 km/h"
+      "no": "Slutt på særskilt fartsgrense 60 km/t",
+      "th": "สิ้นสุดเขตจำกัดความเร็วพิเศษ 60 กม./ชม.",
+      "en": "End of special speed limit 60 km/h"
     },
     "explanation": {
       "no": "Du må kjøre minst 60 km/t her.",
@@ -1827,9 +1827,9 @@
     "id": "364_70",
     "group": 3,
     "name": {
-      "no": "Minstehastighet 70 km/t",
-      "th": "ความเร็วขั้นต่ำ 70 กม./ชม.",
-      "en": "Minimum Speed 70 km/h"
+      "no": "Slutt på særskilt fartsgrense 70 km/t",
+      "th": "สิ้นสุดเขตจำกัดความเร็วพิเศษ 70 กม./ชม.",
+      "en": "End of special speed limit 70 km/h"
     },
     "explanation": {
       "no": "Du må kjøre minst 70 km/t her.",
@@ -1846,9 +1846,9 @@
     "id": "366_0",
     "group": 3,
     "name": {
-      "no": "Slutt på minstehastighet",
-      "th": "สิ้นสุดความเร็วขั้นต่ำ",
-      "en": "End of Minimum Speed"
+      "no": "Fartsgrensesone",
+      "th": "เขตจำกัดความเร็ว",
+      "en": "Speed limit zone"
     },
     "explanation": {
       "no": "Kravet om minstehastighet er opphevet.",
@@ -1865,9 +1865,9 @@
     "id": "368_0",
     "group": 3,
     "name": {
-      "no": "Forbudt å bruke lys",
-      "th": "ห้ามใช้ไฟสูง",
-      "en": "No High Beams"
+      "no": "Slutt på fartsgrensesone",
+      "th": "สิ้นสุดเขตจำกัดความเร็ว",
+      "en": "End of speed limit zone"
     },
     "explanation": {
       "no": "Bruk av fjernlys er forbudt her.",
@@ -1884,9 +1884,9 @@
     "id": "370_0",
     "group": 3,
     "name": {
-      "no": "Møteforbud",
-      "th": "ห้ามสวนทางกัน",
-      "en": "No Meeting"
+      "no": "Stans forbudt",
+      "th": "ห้ามหยุดรถ",
+      "en": "No stopping"
     },
     "explanation": {
       "no": "Møtende trafikk er ikke tillatt. Vent til veien er klar.",
@@ -1903,9 +1903,9 @@
     "id": "372_0",
     "group": 3,
     "name": {
-      "no": "Forbudt å kaste søppel",
-      "th": "ห้ามทิ้งขยะ",
-      "en": "No Littering"
+      "no": "Parkering forbudt",
+      "th": "ห้ามจอดรถ",
+      "en": "No parking"
     },
     "explanation": {
       "no": "Søppelkasting er forbudt i dette området.",
@@ -1922,9 +1922,9 @@
     "id": "376_1",
     "group": 3,
     "name": {
-      "no": "Forbudt å parkere kjøretøy med tilhenger",
-      "th": "ห้ามจอดรถพ่วง",
-      "en": "No Parking with Trailer"
+      "no": "Parkeringssone",
+      "th": "เขตควบคุมการจอดรถ",
+      "en": "Parking zone"
     },
     "explanation": {
       "no": "Kjøretøy med tilhenger har ikke lov til å parkere her.",
@@ -1941,9 +1941,9 @@
     "id": "376_2",
     "group": 3,
     "name": {
-      "no": "Forbudt å parkere kjøretøy med tilhenger",
-      "th": "ห้ามจอดรถพ่วง",
-      "en": "No Parking with Trailer"
+      "no": "Parkeringssone",
+      "th": "เขตควบคุมการจอดรถ",
+      "en": "Parking zone"
     },
     "explanation": {
       "no": "Kjøretøy med tilhenger har ikke lov til å parkere her.",
@@ -1960,9 +1960,9 @@
     "id": "378_1",
     "group": 3,
     "name": {
-      "no": "Forbudt å snu",
-      "th": "ห้ามกลับรถ",
-      "en": "No U-Turn"
+      "no": "Slutt på parkeringssone",
+      "th": "สิ้นสุดเขตควบคุมการจอดรถ",
+      "en": "End of parking zone"
     },
     "explanation": {
       "no": "Det er forbudt å snu kjøretøyet her.",
@@ -1979,9 +1979,9 @@
     "id": "378_2",
     "group": 3,
     "name": {
-      "no": "Forbudt å svinge",
-      "th": "ห้ามเลี้ยว",
-      "en": "No Turn"
+      "no": "Slutt på parkeringssone",
+      "th": "สิ้นสุดเขตควบคุมการจอดรถ",
+      "en": "End of parking zone"
     },
     "explanation": {
       "no": "Angitt svingning er forbudt i dette krysset.",
@@ -1998,9 +1998,9 @@
     "id": "723_11",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 723_11",
-      "th": "ป้ายนำทาง 723_11",
-      "en": "Direction sign 723_11"
+      "no": "Vegnummer for europaveg",
+      "th": "หมายเลขทางสายยุโรป",
+      "en": "Route number for a European road"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2017,9 +2017,9 @@
     "id": "723_12",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 723_12",
-      "th": "ป้ายนำทาง 723_12",
-      "en": "Direction sign 723_12"
+      "no": "Vegnummer for europaveg",
+      "th": "หมายเลขทางสายยุโรป",
+      "en": "Route number for a European road"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2036,9 +2036,9 @@
     "id": "723_13",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 723_13",
-      "th": "ป้ายนำทาง 723_13",
-      "en": "Direction sign 723_13"
+      "no": "Vegnummer for riksveg som ikke er europaveg",
+      "th": "หมายเลขทางหลวงแผ่นดินที่ไม่ใช่ทางสายยุโรป",
+      "en": "Route number for a national road that is not a European road"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2055,9 +2055,9 @@
     "id": "723_14",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 723_14",
-      "th": "ป้ายนำทาง 723_14",
-      "en": "Direction sign 723_14"
+      "no": "Vegnummer for riksveg som ikke er europaveg",
+      "th": "หมายเลขทางหลวงแผ่นดินที่ไม่ใช่ทางสายยุโรป",
+      "en": "Route number for a national road that is not a European road"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2074,9 +2074,9 @@
     "id": "723_15",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 723_15",
-      "th": "ป้ายนำทาง 723_15",
-      "en": "Direction sign 723_15"
+      "no": "Vegnummer for nummerert fylkesveg",
+      "th": "หมายเลขทางหลวงจังหวัดที่มีหมายเลขกำกับ",
+      "en": "Route number for a numbered county road"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2093,9 +2093,9 @@
     "id": "723_16",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 723_16",
-      "th": "ป้ายนำทาง 723_16",
-      "en": "Direction sign 723_16"
+      "no": "Vegnummer for nummerert fylkesveg",
+      "th": "หมายเลขทางหลวงจังหวัดที่มีหมายเลขกำกับ",
+      "en": "Route number for a numbered county road"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2112,9 +2112,9 @@
     "id": "723_21",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 723_21",
-      "th": "ป้ายนำทาง 723_21",
-      "en": "Direction sign 723_21"
+      "no": "Ringveg/ringrute",
+      "th": "ถนนวงแหวนหรือเส้นทางวงแหวน",
+      "en": "Ring road or ring route"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2131,9 +2131,9 @@
     "id": "723_22",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 723_22",
-      "th": "ป้ายนำทาง 723_22",
-      "en": "Direction sign 723_22"
+      "no": "Ringveg/ringrute",
+      "th": "ถนนวงแหวนหรือเส้นทางวงแหวน",
+      "en": "Ring road or ring route"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2150,9 +2150,9 @@
     "id": "723_31",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 723_31",
-      "th": "ป้ายนำทาง 723_31",
-      "en": "Direction sign 723_31"
+      "no": "Nasjonal turistveg",
+      "th": "เส้นทางท่องเที่ยวแห่งชาติ",
+      "en": "National tourist route"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2169,9 +2169,9 @@
     "id": "723_41",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 723_41",
-      "th": "ป้ายนำทาง 723_41",
-      "en": "Direction sign 723_41"
+      "no": "Omkjøringsrute for store kjøretøy",
+      "th": "เส้นทางเลี่ยงสำหรับรถขนาดใหญ่",
+      "en": "Diversion route for large vehicles"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2188,9 +2188,9 @@
     "id": "723_51",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 723_51",
-      "th": "ป้ายนำทาง 723_51",
-      "en": "Direction sign 723_51"
+      "no": "Rute for transport av farlig gods",
+      "th": "เส้นทางสำหรับการขนส่งวัตถุอันตราย",
+      "en": "Route for transport of dangerous goods"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2207,9 +2207,9 @@
     "id": "723_61",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 723_61",
-      "th": "ป้ายนำทาง 723_61",
-      "en": "Direction sign 723_61"
+      "no": "Andre omkjøringsruter",
+      "th": "เส้นทางเลี่ยงอื่น ๆ",
+      "en": "Other diversion routes"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2226,9 +2226,9 @@
     "id": "723_62",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 723_62",
-      "th": "ป้ายนำทาง 723_62",
-      "en": "Direction sign 723_62"
+      "no": "Andre omkjøringsruter",
+      "th": "เส้นทางเลี่ยงอื่น ๆ",
+      "en": "Other diversion routes"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2245,9 +2245,9 @@
     "id": "723_63",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 723_63",
-      "th": "ป้ายนำทาง 723_63",
-      "en": "Direction sign 723_63"
+      "no": "Andre omkjøringsruter",
+      "th": "เส้นทางเลี่ยงอื่น ๆ",
+      "en": "Other diversion routes"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2264,9 +2264,9 @@
     "id": "723_64",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 723_64",
-      "th": "ป้ายนำทาง 723_64",
-      "en": "Direction sign 723_64"
+      "no": "Andre omkjøringsruter",
+      "th": "เส้นทางเลี่ยงอื่น ๆ",
+      "en": "Other diversion routes"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2283,9 +2283,9 @@
     "id": "723_65",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 723_65",
-      "th": "ป้ายนำทาง 723_65",
-      "en": "Direction sign 723_65"
+      "no": "Andre omkjøringsruter",
+      "th": "เส้นทางเลี่ยงอื่น ๆ",
+      "en": "Other diversion routes"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2302,9 +2302,9 @@
     "id": "723_66",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 723_66",
-      "th": "ป้ายนำทาง 723_66",
-      "en": "Direction sign 723_66"
+      "no": "Andre omkjøringsruter",
+      "th": "เส้นทางเลี่ยงอื่น ๆ",
+      "en": "Other diversion routes"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2321,9 +2321,9 @@
     "id": "723_71",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 723_71",
-      "th": "ป้ายนำทาง 723_71",
-      "en": "Direction sign 723_71"
+      "no": "Kryssnummer på flerfeltsveg",
+      "th": "หมายเลขทางแยกบนถนนหลายช่องจราจร",
+      "en": "Junction number on a multi-lane road"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2340,9 +2340,9 @@
     "id": "723_72",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 723_72",
-      "th": "ป้ายนำทาง 723_72",
-      "en": "Direction sign 723_72"
+      "no": "Kryssnummer på flerfeltsveg",
+      "th": "หมายเลขทางแยกบนถนนหลายช่องจราจร",
+      "en": "Junction number on a multi-lane road"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2359,9 +2359,9 @@
     "id": "723_73",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 723_73",
-      "th": "ป้ายนำทาง 723_73",
-      "en": "Direction sign 723_73"
+      "no": "Kryssnummer på tofeltsveg",
+      "th": "หมายเลขทางแยกบนถนนสองช่องจราจร",
+      "en": "Junction number on a two-lane road"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2378,9 +2378,9 @@
     "id": "729_0",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 729_0",
-      "th": "ป้ายนำทาง 729_0",
-      "en": "Direction sign 729_0"
+      "no": "Gate-/vegnavnskilt",
+      "th": "ป้ายชื่อถนน",
+      "en": "Street or road name sign"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2397,9 +2397,9 @@
     "id": "743_1",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 743_1",
-      "th": "ป้ายนำทาง 743_1",
-      "en": "Direction sign 743_1"
+      "no": "Midlertidig omkjøring",
+      "th": "ทางเลี่ยงชั่วคราว",
+      "en": "Temporary diversion"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2416,9 +2416,9 @@
     "id": "743_2",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 743_2",
-      "th": "ป้ายนำทาง 743_2",
-      "en": "Direction sign 743_2"
+      "no": "Midlertidig omkjøring",
+      "th": "ทางเลี่ยงชั่วคราว",
+      "en": "Temporary diversion"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2435,9 +2435,9 @@
     "id": "761_0",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 761_0",
-      "th": "ป้ายนำทาง 761_0",
-      "en": "Direction sign 761_0"
+      "no": "Motorveg",
+      "th": "ทางหลวงพิเศษ",
+      "en": "Motorway"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2454,9 +2454,9 @@
     "id": "763_0",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 763_0",
-      "th": "ป้ายนำทาง 763_0",
-      "en": "Direction sign 763_0"
+      "no": "Motortrafikkveg",
+      "th": "ทางเฉพาะยานยนต์",
+      "en": "Road for motor vehicles"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2473,9 +2473,9 @@
     "id": "765_0",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 765_0",
-      "th": "ป้ายนำทาง 765_0",
-      "en": "Direction sign 765_0"
+      "no": "Bomveg/brukerbetaling på veg",
+      "th": "ทางที่มีการเก็บค่าผ่านทาง",
+      "en": "Toll road or road user charging"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2492,9 +2492,9 @@
     "id": "767_0",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 767_0",
-      "th": "ป้ายนำทาง 767_0",
-      "en": "Direction sign 767_0"
+      "no": "Parkering",
+      "th": "ที่จอดรถ",
+      "en": "Parking"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2511,9 +2511,9 @@
     "id": "769_0",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 769_0",
-      "th": "ป้ายนำทาง 769_0",
-      "en": "Direction sign 769_0"
+      "no": "Parkeringshus",
+      "th": "อาคารจอดรถ",
+      "en": "Multi-storey car park"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2530,9 +2530,9 @@
     "id": "771_0",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 771_0",
-      "th": "ป้ายนำทาง 771_0",
-      "en": "Direction sign 771_0"
+      "no": "Lufthavn/flyplass",
+      "th": "ท่าอากาศยานหรือสนามบิน",
+      "en": "Airport or airfield"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2549,9 +2549,9 @@
     "id": "772_0",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 772_0",
-      "th": "ป้ายนำทาง 772_0",
-      "en": "Direction sign 772_0"
+      "no": "Helikopterplass",
+      "th": "ลานจอดเฮลิคอปเตอร์",
+      "en": "Heliport"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2568,9 +2568,9 @@
     "id": "773_0",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 773_0",
-      "th": "ป้ายนำทาง 773_0",
-      "en": "Direction sign 773_0"
+      "no": "Busstasjon/bussterminal",
+      "th": "สถานีขนส่งผู้โดยสาร",
+      "en": "Bus station or bus terminal"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2587,9 +2587,9 @@
     "id": "774_0",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 774_0",
-      "th": "ป้ายนำทาง 774_0",
-      "en": "Direction sign 774_0"
+      "no": "Jernbanestasjon/togterminal",
+      "th": "สถานีรถไฟ",
+      "en": "Railway station or train terminal"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2606,9 +2606,9 @@
     "id": "775_0",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 775_0",
-      "th": "ป้ายนำทาง 775_0",
-      "en": "Direction sign 775_0"
+      "no": "Bilferje",
+      "th": "เรือข้ามฟากสำหรับรถยนต์",
+      "en": "Car ferry"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2625,9 +2625,9 @@
     "id": "790_10",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 790_10",
-      "th": "ป้ายนำทาง 790_10",
-      "en": "Direction sign 790_10"
+      "no": "Kirke",
+      "th": "โบสถ์",
+      "en": "Church"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2644,9 +2644,9 @@
     "id": "790_15",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 790_15",
-      "th": "ป้ายนำทาง 790_15",
-      "en": "Direction sign 790_15"
+      "no": "Næringsområde",
+      "th": "เขตประกอบธุรกิจและอุตสาหกรรม",
+      "en": "Business and industrial area"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2663,9 +2663,9 @@
     "id": "790_16",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 790_16",
-      "th": "ป้ายนำทาง 790_16",
-      "en": "Direction sign 790_16"
+      "no": "Kjøpesenter",
+      "th": "ศูนย์การค้า",
+      "en": "Shopping centre"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2682,9 +2682,9 @@
     "id": "790_20",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 790_20",
-      "th": "ป้ายนำทาง 790_20",
-      "en": "Direction sign 790_20"
+      "no": "Svømmehall",
+      "th": "สระว่ายน้ำในร่ม",
+      "en": "Indoor swimming pool"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2701,9 +2701,9 @@
     "id": "790_30",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 790_30",
-      "th": "ป้ายนำทาง 790_30",
-      "en": "Direction sign 790_30"
+      "no": "Alpinanlegg",
+      "th": "ลานสกีลงเขา",
+      "en": "Alpine ski resort"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2720,9 +2720,9 @@
     "id": "790_31",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 790_31",
-      "th": "ป้ายนำทาง 790_31",
-      "en": "Direction sign 790_31"
+      "no": "Hoppbakke",
+      "th": "เนินกระโดดสกี",
+      "en": "Ski jumping hill"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2739,9 +2739,9 @@
     "id": "790_32",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 790_32",
-      "th": "ป้ายนำทาง 790_32",
-      "en": "Direction sign 790_32"
+      "no": "Skistadion",
+      "th": "สนามกีฬาสกี",
+      "en": "Ski stadium"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2758,9 +2758,9 @@
     "id": "792_11",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 792_11",
-      "th": "ป้ายนำทาง 792_11",
-      "en": "Direction sign 792_11"
+      "no": "Betaling med elektronisk brikke",
+      "th": "ชำระเงินด้วยอุปกรณ์อิเล็กทรอนิกส์ติดรถ",
+      "en": "Payment with an electronic tag"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2777,9 +2777,9 @@
     "id": "792_12",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 792_12",
-      "th": "ป้ายนำทาง 792_12",
-      "en": "Direction sign 792_12"
+      "no": "Betaling til betjent",
+      "th": "ชำระเงินกับพนักงาน",
+      "en": "Payment to an attendant"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2796,9 +2796,9 @@
     "id": "792_13",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 792_13",
-      "th": "ป้ายนำทาง 792_13",
-      "en": "Direction sign 792_13"
+      "no": "Betaling med mynter til automat",
+      "th": "ชำระเงินด้วยเหรียญที่ตู้อัตโนมัติ",
+      "en": "Payment with coins at a machine"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2815,9 +2815,9 @@
     "id": "792_14",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 792_14",
-      "th": "ป้ายนำทาง 792_14",
-      "en": "Direction sign 792_14"
+      "no": "Betaling med kort til automat",
+      "th": "ชำระเงินด้วยบัตรที่ตู้อัตโนมัติ",
+      "en": "Payment with a card at a machine"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2834,9 +2834,9 @@
     "id": "792_15",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 792_15",
-      "th": "ป้ายนำทาง 792_15",
-      "en": "Direction sign 792_15"
+      "no": "Betaling med sedler til automat",
+      "th": "ชำระเงินด้วยธนบัตรที่ตู้อัตโนมัติ",
+      "en": "Payment with banknotes at a machine"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2853,9 +2853,9 @@
     "id": "792_16",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 792_16",
-      "th": "ป้ายนำทาง 792_16",
-      "en": "Direction sign 792_16"
+      "no": "Ta billett i et lukket betalingssystem",
+      "th": "รับบัตรผ่านทางในระบบเก็บเงินแบบปิด",
+      "en": "Take a ticket in a closed payment system"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2872,9 +2872,9 @@
     "id": "792_17",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 792_17",
-      "th": "ป้ายนำทาง 792_17",
-      "en": "Direction sign 792_17"
+      "no": "Lever billett i et lukket betalingssystem",
+      "th": "คืนบัตรผ่านทางในระบบเก็บเงินแบบปิด",
+      "en": "Hand in the ticket in a closed payment system"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2891,9 +2891,9 @@
     "id": "792_30",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 792_30",
-      "th": "ป้ายนำทาง 792_30",
-      "en": "Direction sign 792_30"
+      "no": "Helautomatisk bomstasjon som passeres uten å stanse",
+      "th": "ด่านเก็บค่าผ่านทางอัตโนมัติเต็มรูปแบบที่ผ่านได้โดยไม่ต้องหยุดรถ",
+      "en": "Fully automatic toll station passed without stopping"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -2910,9 +2910,9 @@
     "id": "802_0",
     "group": 8,
     "name": {
-      "no": "Avstandsskilt",
-      "th": "ป้ายระยะทาง",
-      "en": "Distance plate"
+      "no": "Avstand",
+      "th": "ระยะทาง",
+      "en": "Distance"
     },
     "explanation": {
       "no": "Viser avstand til skiltet foran.",
@@ -2929,9 +2929,9 @@
     "id": "804_0",
     "group": 8,
     "name": {
-      "no": "Tidsrom",
-      "th": "ป้ายช่วงเวลา",
-      "en": "Time period plate"
+      "no": "Utstrekning",
+      "th": "ระยะที่มีผลบังคับ",
+      "en": "Extent"
     },
     "explanation": {
       "no": "Angir tidsperiode da skiltet over gjelder.",
@@ -2948,9 +2948,9 @@
     "id": "806_0",
     "group": 8,
     "name": {
-      "no": "Underskilt 806_0",
-      "th": "ป้ายเสริม 806_0",
-      "en": "Supplementary sign 806_0"
+      "no": "Tid",
+      "th": "ช่วงเวลา",
+      "en": "Time"
     },
     "explanation": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
@@ -2967,9 +2967,9 @@
     "id": "807_1",
     "group": 8,
     "name": {
-      "no": "Underskilt 807_1",
-      "th": "ป้ายเสริม 807_1",
-      "en": "Supplementary sign 807_1"
+      "no": "Personbil",
+      "th": "รถยนต์นั่งส่วนบุคคล",
+      "en": "Passenger car"
     },
     "explanation": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
@@ -2986,9 +2986,9 @@
     "id": "807_2",
     "group": 8,
     "name": {
-      "no": "Underskilt 807_2",
-      "th": "ป้ายเสริม 807_2",
-      "en": "Supplementary sign 807_2"
+      "no": "Varebil, lastebil og trekkbil",
+      "th": "รถตู้บรรทุก รถบรรทุก และรถลากจูง",
+      "en": "Van, lorry and tractor unit"
     },
     "explanation": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
@@ -3005,9 +3005,9 @@
     "id": "807_3",
     "group": 8,
     "name": {
-      "no": "Underskilt 807_3",
-      "th": "ป้ายเสริม 807_3",
-      "en": "Supplementary sign 807_3"
+      "no": "Buss",
+      "th": "รถโดยสาร",
+      "en": "Bus"
     },
     "explanation": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
@@ -3024,9 +3024,9 @@
     "id": "807_4",
     "group": 8,
     "name": {
-      "no": "Underskilt 807_4",
-      "th": "ป้ายเสริม 807_4",
-      "en": "Supplementary sign 807_4"
+      "no": "Vogntog",
+      "th": "รถลากจูงพร้อมรถพ่วง",
+      "en": "Vehicle combination"
     },
     "explanation": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
@@ -3043,9 +3043,9 @@
     "id": "807_5",
     "group": 8,
     "name": {
-      "no": "Underskilt 807_5",
-      "th": "ป้ายเสริม 807_5",
-      "en": "Supplementary sign 807_5"
+      "no": "Tilhenger særskilt innredet til campingbruk, samt eventuell trekkvogn",
+      "th": "รถพ่วงที่จัดทำขึ้นเฉพาะสำหรับการตั้งแคมป์ รวมถึงรถลากจูงถ้ามี",
+      "en": "Trailer specially fitted for camping use, plus any towing vehicle"
     },
     "explanation": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
@@ -3062,9 +3062,9 @@
     "id": "807_6",
     "group": 8,
     "name": {
-      "no": "Underskilt 807_6",
-      "th": "ป้ายเสริม 807_6",
-      "en": "Supplementary sign 807_6"
+      "no": "Sykkel og liten elektrisk motorvogn",
+      "th": "จักรยานและยานยนต์ไฟฟ้าขนาดเล็ก",
+      "en": "Bicycle and small electric motor vehicle"
     },
     "explanation": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
@@ -3081,9 +3081,9 @@
     "id": "807_7",
     "group": 8,
     "name": {
-      "no": "Underskilt 807_7",
-      "th": "ป้ายเสริม 807_7",
-      "en": "Supplementary sign 807_7"
+      "no": "Tohjuls motorsykkel med og uten sidevogn og tohjuls moped",
+      "th": "รถจักรยานยนต์สองล้อทั้งที่มีและไม่มีรถพ่วงข้าง และโมเพ็ดสองล้อ",
+      "en": "Two-wheeled motorcycle with or without sidecar, and two-wheeled moped"
     },
     "explanation": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
@@ -3100,9 +3100,9 @@
     "id": "807_8",
     "group": 8,
     "name": {
-      "no": "Underskilt 807_8",
-      "th": "ป้ายเสริม 807_8",
-      "en": "Supplementary sign 807_8"
+      "no": "Forflytningshemmede med parkeringstillatelse",
+      "th": "ผู้พิการทางการเคลื่อนไหวที่มีใบอนุญาตจอดรถ",
+      "en": "Persons with reduced mobility holding a parking permit"
     },
     "explanation": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
@@ -3119,28 +3119,9 @@
     "id": "807_9",
     "group": 8,
     "name": {
-      "no": "Underskilt 807_9",
-      "th": "ป้ายเสริม 807_9",
-      "en": "Supplementary sign 807_9"
-    },
-    "explanation": {
-      "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
-      "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
-      "en": "Provides additional information for the sign above."
-    },
-    "driver_action": {
-      "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
-      "th": "ให้ข้อมูลเพิ่มเติมสำหรับป้ายด้านบน",
-      "en": "Provides additional information for the sign above."
-    }
-  },
-  {
-    "id": "808_42",
-    "group": 8,
-    "name": {
-      "no": "Underskilt 808_42",
-      "th": "ป้ายเสริม 808_42",
-      "en": "Supplementary sign 808_42"
+      "no": "Kjøretøy særskilt innredet til campingbruk (bobil)",
+      "th": "รถที่จัดทำขึ้นเฉพาะสำหรับการตั้งแคมป์ (รถบ้าน)",
+      "en": "Vehicle specially fitted for camping use (motorhome)"
     },
     "explanation": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
@@ -3157,9 +3138,9 @@
     "id": "812_0",
     "group": 8,
     "name": {
-      "no": "Underskilt 812_0",
-      "th": "ป้ายเสริม 812_0",
-      "en": "Supplementary sign 812_0"
+      "no": "Anbefalt fart",
+      "th": "ความเร็วที่แนะนำ",
+      "en": "Recommended speed"
     },
     "explanation": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
@@ -3176,9 +3157,9 @@
     "id": "813_1",
     "group": 8,
     "name": {
-      "no": "Underskilt 813_1",
-      "th": "ป้ายเสริม 813_1",
-      "en": "Supplementary sign 813_1"
+      "no": "Stigningsgrad",
+      "th": "ความชันของทาง",
+      "en": "Gradient"
     },
     "explanation": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
@@ -3195,9 +3176,9 @@
     "id": "813_2",
     "group": 8,
     "name": {
-      "no": "Underskilt 813_2",
-      "th": "ป้ายเสริม 813_2",
-      "en": "Supplementary sign 813_2"
+      "no": "Stigningsgrad",
+      "th": "ความชันของทาง",
+      "en": "Gradient"
     },
     "explanation": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
@@ -3214,9 +3195,9 @@
     "id": "814_0",
     "group": 8,
     "name": {
-      "no": "Underskilt 814_0",
-      "th": "ป้ายเสริม 814_0",
-      "en": "Supplementary sign 814_0"
+      "no": "Virkelig fri vegbredde",
+      "th": "ความกว้างของทางที่ใช้ได้จริง",
+      "en": "Actual free road width"
     },
     "explanation": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
@@ -3233,9 +3214,9 @@
     "id": "816_0",
     "group": 8,
     "name": {
-      "no": "Strekningsskilt",
-      "th": "ป้ายระยะทาง",
-      "en": "Route distance sign"
+      "no": "Kryssende tømmertransport",
+      "th": "รถขนส่งไม้ซุงตัดผ่าน",
+      "en": "Crossing timber transport"
     },
     "explanation": {
       "no": "Angir distansen der skiltet gjelder.",
@@ -3252,9 +3233,9 @@
     "id": "817_1",
     "group": 8,
     "name": {
-      "no": "Underskilt 817_1",
-      "th": "ป้ายเสริม 817_1",
-      "en": "Supplementary sign 817_1"
+      "no": "Særlig ulykkesfare",
+      "th": "จุดเสี่ยงเกิดอุบัติเหตุเป็นพิเศษ",
+      "en": "Particular accident risk"
     },
     "explanation": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
@@ -3271,9 +3252,9 @@
     "id": "817_2",
     "group": 8,
     "name": {
-      "no": "Underskilt 817_2",
-      "th": "ป้ายเสริม 817_2",
-      "en": "Supplementary sign 817_2"
+      "no": "Særlig ulykkesfare",
+      "th": "จุดเสี่ยงเกิดอุบัติเหตุเป็นพิเศษ",
+      "en": "Particular accident risk"
     },
     "explanation": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
@@ -3290,9 +3271,9 @@
     "id": "817_3",
     "group": 8,
     "name": {
-      "no": "Underskilt 817_3",
-      "th": "ป้ายเสริม 817_3",
-      "en": "Supplementary sign 817_3"
+      "no": "Særlig ulykkesfare",
+      "th": "จุดเสี่ยงเกิดอุบัติเหตุเป็นพิเศษ",
+      "en": "Particular accident risk"
     },
     "explanation": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
@@ -3309,9 +3290,9 @@
     "id": "817_4",
     "group": 8,
     "name": {
-      "no": "Underskilt 817_4",
-      "th": "ป้ายเสริม 817_4",
-      "en": "Supplementary sign 817_4"
+      "no": "Særlig ulykkesfare",
+      "th": "จุดเสี่ยงเกิดอุบัติเหตุเป็นพิเศษ",
+      "en": "Particular accident risk"
     },
     "explanation": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
@@ -3328,9 +3309,9 @@
     "id": "817_5",
     "group": 8,
     "name": {
-      "no": "Underskilt 817_5",
-      "th": "ป้ายเสริม 817_5",
-      "en": "Supplementary sign 817_5"
+      "no": "Særlig ulykkesfare",
+      "th": "จุดเสี่ยงเกิดอุบัติเหตุเป็นพิเศษ",
+      "en": "Particular accident risk"
     },
     "explanation": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
@@ -3347,9 +3328,9 @@
     "id": "822_1",
     "group": 8,
     "name": {
-      "no": "Underskilt 822_1",
-      "th": "ป้ายเสริม 822_1",
-      "en": "Supplementary sign 822_1"
+      "no": "Forløp av forkjørsveg",
+      "th": "แนวของทางเอก",
+      "en": "Course of the priority road"
     },
     "explanation": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
@@ -3366,9 +3347,9 @@
     "id": "822_2",
     "group": 8,
     "name": {
-      "no": "Underskilt 822_2",
-      "th": "ป้ายเสริม 822_2",
-      "en": "Supplementary sign 822_2"
+      "no": "Forløp av forkjørsveg",
+      "th": "แนวของทางเอก",
+      "en": "Course of the priority road"
     },
     "explanation": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
@@ -3385,9 +3366,9 @@
     "id": "822_3",
     "group": 8,
     "name": {
-      "no": "Underskilt 822_3",
-      "th": "ป้ายเสริม 822_3",
-      "en": "Supplementary sign 822_3"
+      "no": "Forløp av forkjørsveg",
+      "th": "แนวของทางเอก",
+      "en": "Course of the priority road"
     },
     "explanation": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
@@ -3404,9 +3385,9 @@
     "id": "822_4",
     "group": 8,
     "name": {
-      "no": "Underskilt 822_4",
-      "th": "ป้ายเสริม 822_4",
-      "en": "Supplementary sign 822_4"
+      "no": "Forløp av forkjørsveg",
+      "th": "แนวของทางเอก",
+      "en": "Course of the priority road"
     },
     "explanation": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
@@ -3423,9 +3404,9 @@
     "id": "822_5",
     "group": 8,
     "name": {
-      "no": "Underskilt 822_5",
-      "th": "ป้ายเสริม 822_5",
-      "en": "Supplementary sign 822_5"
+      "no": "Forløp av forkjørsveg",
+      "th": "แนวของทางเอก",
+      "en": "Course of the priority road"
     },
     "explanation": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
@@ -3442,9 +3423,9 @@
     "id": "822_6",
     "group": 8,
     "name": {
-      "no": "Underskilt 822_6",
-      "th": "ป้ายเสริม 822_6",
-      "en": "Supplementary sign 822_6"
+      "no": "Forløp av forkjørsveg",
+      "th": "แนวของทางเอก",
+      "en": "Course of the priority road"
     },
     "explanation": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
@@ -3461,9 +3442,9 @@
     "id": "822_7",
     "group": 8,
     "name": {
-      "no": "Underskilt 822_7",
-      "th": "ป้ายเสริม 822_7",
-      "en": "Supplementary sign 822_7"
+      "no": "Forløp av forkjørsveg",
+      "th": "แนวของทางเอก",
+      "en": "Course of the priority road"
     },
     "explanation": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
@@ -3480,9 +3461,9 @@
     "id": "824_0",
     "group": 8,
     "name": {
-      "no": "Pilskilt",
-      "th": "ป้ายลูกศร",
-      "en": "Arrow supplement"
+      "no": "Forvarsling av stopp",
+      "th": "เตือนล่วงหน้าว่ามีป้ายหยุด",
+      "en": "Advance warning of a stop sign"
     },
     "explanation": {
       "no": "Viser retning for skiltet ovenfor.",
@@ -3499,9 +3480,9 @@
     "id": "826_0",
     "group": 8,
     "name": {
-      "no": "Gjelder begge sider",
-      "th": "ใช้ทั้งสองด้าน",
-      "en": "Applies both sides"
+      "no": "Sykkeltrafikk i begge kjøreretninger",
+      "th": "จักรยานสัญจรได้ทั้งสองทิศทาง",
+      "en": "Cycle traffic in both directions"
     },
     "explanation": {
       "no": "Skiltet ovenfor gjelder for begge sider av vegen.",
@@ -3518,9 +3499,9 @@
     "id": "828_1",
     "group": 8,
     "name": {
-      "no": "Underskilt 828_1",
-      "th": "ป้ายเสริม 828_1",
-      "en": "Supplementary sign 828_1"
+      "no": "Gjelder i begge kjøreretninger",
+      "th": "มีผลบังคับทั้งสองทิศทาง",
+      "en": "Applies in both directions of travel"
     },
     "explanation": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
@@ -3537,9 +3518,9 @@
     "id": "828_2",
     "group": 8,
     "name": {
-      "no": "Underskilt 828_2",
-      "th": "ป้ายเสริม 828_2",
-      "en": "Supplementary sign 828_2"
+      "no": "Gjelder mot kjøreretningen",
+      "th": "มีผลบังคับในทิศสวนทางเดินรถ",
+      "en": "Applies against the direction of travel"
     },
     "explanation": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
@@ -3556,9 +3537,9 @@
     "id": "828_3",
     "group": 8,
     "name": {
-      "no": "Underskilt 828_3",
-      "th": "ป้ายเสริม 828_3",
-      "en": "Supplementary sign 828_3"
+      "no": "Gjelder i kjøreretningen",
+      "th": "มีผลบังคับในทิศทางเดินรถ",
+      "en": "Applies in the direction of travel"
     },
     "explanation": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
@@ -3575,9 +3556,9 @@
     "id": "829_0",
     "group": 8,
     "name": {
-      "no": "Underskilt 829_0",
-      "th": "ป้ายเสริม 829_0",
-      "en": "Supplementary sign 829_0"
+      "no": "Oppstilling av parkert kjøretøy",
+      "th": "ลักษณะการจอดรถ",
+      "en": "Positioning of a parked vehicle"
     },
     "explanation": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
@@ -3594,9 +3575,9 @@
     "id": "831_0",
     "group": 8,
     "name": {
-      "no": "Beboerparkering",
-      "th": "ที่จอดสำหรับผู้อยู่อาศัย",
-      "en": "Residents parking"
+      "no": "Parkeringsskive/gratisbillett",
+      "th": "แผ่นแสดงเวลาจอดรถหรือบัตรจอดฟรี",
+      "en": "Parking disc or free ticket"
     },
     "explanation": {
       "no": "Parkering forbeholdt beboere med tillatt skilt.",
@@ -3613,9 +3594,9 @@
     "id": "834_0",
     "group": 8,
     "name": {
-      "no": "El-bil parkering",
-      "th": "ที่จอดรถยนต์ไฟฟ้า",
-      "en": "Electric vehicle parking"
+      "no": "Kombinert regulering",
+      "th": "การกำกับหลายอย่างรวมกัน",
+      "en": "Combined regulation"
     },
     "explanation": {
       "no": "Parkering forbeholdt elektriske kjøretøy.",
@@ -3626,72 +3607,15 @@
       "no": "Parkering forbeholdt elektriske kjøretøy.",
       "th": "ที่จอดรถสำหรับยานพาหนะไฟฟ้าเท่านั้น",
       "en": "Parking reserved for electric vehicles."
-    }
-  },
-  {
-    "id": "902_0",
-    "group": 9,
-    "name": {
-      "no": "Vegkantmarkering",
-      "th": "เครื่องหมายขอบทาง",
-      "en": "Road edge marker"
-    },
-    "explanation": {
-      "no": "Markerer vegkanten. Hvit = høyre side.",
-      "th": "ทำเครื่องหมายขอบถนน สีขาว = ด้านขวา",
-      "en": "Marks the road edge. White = right side."
-    },
-    "driver_action": {
-      "no": "Markerer vegkanten. Hvit = høyre side.",
-      "th": "ทำเครื่องหมายขอบถนน สีขาว = ด้านขวา",
-      "en": "Marks the road edge. White = right side."
-    }
-  },
-  {
-    "id": "904_0",
-    "group": 9,
-    "name": {
-      "no": "Vegkantmarkering med refleks",
-      "th": "เครื่องหมายขอบทางสะท้อนแสง",
-      "en": "Reflective edge marker"
-    },
-    "explanation": {
-      "no": "Reflekterende vegkantmarkering.",
-      "th": "เครื่องหมายขอบถนนที่สะท้อนแสง ช่วยในการมองเห็นตอนกลางคืน",
-      "en": "Reflective road edge marker for night visibility."
-    },
-    "driver_action": {
-      "no": "Reflekterende vegkantmarkering.",
-      "th": "เครื่องหมายขอบถนนที่สะท้อนแสง ช่วยในการมองเห็นตอนกลางคืน",
-      "en": "Reflective road edge marker for night visibility."
-    }
-  },
-  {
-    "id": "906_0",
-    "group": 9,
-    "name": {
-      "no": "Siktforsterker",
-      "th": "ป้ายเพิ่มทัศนวิสัย",
-      "en": "Visibility enhancer"
-    },
-    "explanation": {
-      "no": "Øker sikten i kurver og farlige punkter.",
-      "th": "เพิ่มการมองเห็นในโค้งและจุดอันตราย",
-      "en": "Improves visibility at bends and hazardous points."
-    },
-    "driver_action": {
-      "no": "Øker sikten i kurver og farlige punkter.",
-      "th": "เพิ่มการมองเห็นในโค้งและจุดอันตราย",
-      "en": "Improves visibility at bends and hazardous points."
     }
   },
   {
     "id": "908_0",
     "group": 9,
     "name": {
-      "no": "Faremarker",
-      "th": "เครื่องหมายอันตราย",
-      "en": "Hazard marker"
+      "no": "Hindermarkering",
+      "th": "เครื่องหมายแสดงสิ่งกีดขวาง",
+      "en": "Obstacle marker"
     },
     "explanation": {
       "no": "Markerer farlig hinder eller punkt.",
@@ -3708,9 +3632,9 @@
     "id": "912_0",
     "group": 9,
     "name": {
-      "no": "Midtrekkverk",
-      "th": "ราวกั้นกลางถนน",
-      "en": "Central barrier marker"
+      "no": "Avkjøringsmarkering",
+      "th": "เครื่องหมายแสดงทางออก",
+      "en": "Exit marker"
     },
     "explanation": {
       "no": "Markerer midtrekkverk.",
@@ -3727,9 +3651,9 @@
     "id": "916_0",
     "group": 9,
     "name": {
-      "no": "Kantstein/fortauskant",
-      "th": "ขอบทางเท้า",
-      "en": "Kerb marker"
+      "no": "Avstandsmarkering i tunnel",
+      "th": "เครื่องหมายบอกระยะทางในอุโมงค์",
+      "en": "Distance marker in a tunnel"
     },
     "explanation": {
       "no": "Markerer kantstein eller fortauskant.",
@@ -3746,9 +3670,9 @@
     "id": "151",
     "group": 2,
     "name": {
-      "no": "Annen fare",
-      "th": "อันตรายอื่นๆ",
-      "en": "Other Hazard"
+      "no": "Militær aktivitet",
+      "th": "กิจกรรมทางทหาร",
+      "en": "Military activity"
     },
     "explanation": {
       "no": "Uventet fare fremover. Vær ekstra oppmerksom.",
@@ -3765,9 +3689,9 @@
     "id": "153",
     "group": 2,
     "name": {
-      "no": "Kø",
-      "th": "รถติด",
-      "en": "Queue"
+      "no": "Trafikkulykke",
+      "th": "อุบัติเหตุจราจร",
+      "en": "Traffic accident"
     },
     "explanation": {
       "no": "Kø fremover. Reduser fart og hold avstand.",
@@ -3784,9 +3708,9 @@
     "id": "367",
     "group": 3,
     "name": {
-      "no": "Forbudt å bruke horn",
-      "th": "ห้ามบีบแตร",
-      "en": "No Horn"
+      "no": "Fartsgrensesone for liten elektrisk motorvogn",
+      "th": "เขตจำกัดความเร็วสำหรับยานยนต์ไฟฟ้าขนาดเล็ก",
+      "en": "Speed limit zone for small electric motor vehicles"
     },
     "explanation": {
       "no": "Det er forbudt å bruke horn her.",
@@ -3803,9 +3727,9 @@
     "id": "369",
     "group": 3,
     "name": {
-      "no": "Forbudt for farlig gods",
-      "th": "ห้ามขนส่งสินค้าอันตราย",
-      "en": "No Dangerous Goods"
+      "no": "Slutt på fartsgrensesone for liten elektrisk motorvogn",
+      "th": "สิ้นสุดเขตจำกัดความเร็วสำหรับยานยนต์ไฟฟ้าขนาดเล็ก",
+      "en": "End of speed limit zone for small electric motor vehicles"
     },
     "explanation": {
       "no": "Transport av farlig gods er forbudt her.",
@@ -3822,9 +3746,9 @@
     "id": "376_2a",
     "group": 3,
     "name": {
-      "no": "Forbudt å parkere kjøretøy med tilhenger",
-      "th": "ห้ามจอดรถพ่วง",
-      "en": "No Parking with Trailer"
+      "no": "Parkeringssone",
+      "th": "เขตควบคุมการจอดรถ",
+      "en": "Parking zone"
     },
     "explanation": {
       "no": "Parkering med tilhenger er forbudt.",
@@ -3841,9 +3765,9 @@
     "id": "377",
     "group": 3,
     "name": {
-      "no": "Forbudt å kjøre med last",
-      "th": "ห้ามบรรทุก",
-      "en": "No Load Carrying"
+      "no": "Sone med parkeringsforbud for liten elektrisk motorvogn",
+      "th": "เขตห้ามจอดยานยนต์ไฟฟ้าขนาดเล็ก",
+      "en": "Zone with a parking ban for small electric motor vehicles"
     },
     "explanation": {
       "no": "Kjøretøy med last er forbudt her.",
@@ -3860,9 +3784,9 @@
     "id": "379",
     "group": 3,
     "name": {
-      "no": "Forbudt å stanse for trafikklys",
-      "th": "ห้ามจอดรอไฟแดง",
-      "en": "No Stopping at Signals"
+      "no": "Slutt på sone med parkeringsforbud for liten elektrisk motorvogn",
+      "th": "สิ้นสุดเขตห้ามจอดยานยนต์ไฟฟ้าขนาดเล็ก",
+      "en": "End of zone with a parking ban for small electric motor vehicles"
     },
     "explanation": {
       "no": "Du skal ikke stoppe for trafikklys her.",
@@ -3879,9 +3803,9 @@
     "id": "380",
     "group": 3,
     "name": {
-      "no": "Forbudt sone",
-      "th": "เขตห้าม",
-      "en": "Forbidden Zone"
+      "no": "Sone med bruksforbud for liten elektrisk motorvogn",
+      "th": "เขตห้ามใช้ยานยนต์ไฟฟ้าขนาดเล็ก",
+      "en": "Zone with a use ban for small electric motor vehicles"
     },
     "explanation": {
       "no": "Kjøring er forbudt i denne sonen.",
@@ -3898,9 +3822,9 @@
     "id": "382",
     "group": 3,
     "name": {
-      "no": "Slutt på forbudt sone",
-      "th": "สิ้นสุดเขตห้าม",
-      "en": "End of Forbidden Zone"
+      "no": "Slutt på sone med bruksforbud for liten elektrisk motorvogn",
+      "th": "สิ้นสุดเขตห้ามใช้ยานยนต์ไฟฟ้าขนาดเล็ก",
+      "en": "End of zone with a use ban for small electric motor vehicles"
     },
     "explanation": {
       "no": "Den forbudte sonen er over.",
@@ -3917,9 +3841,9 @@
     "id": "402_1",
     "group": 4,
     "name": {
-      "no": "Påbudt kjøreretning rett frem",
-      "th": "บังคับตรงไป",
-      "en": "Mandatory Straight Ahead"
+      "no": "Påbudt kjøreretning",
+      "th": "บังคับทิศทางเดินรถ",
+      "en": "Mandatory direction of travel"
     },
     "explanation": {
       "no": "Du må kjøre rett frem.",
@@ -3936,9 +3860,9 @@
     "id": "402_2",
     "group": 4,
     "name": {
-      "no": "Påbudt kjøreretning til høyre",
-      "th": "บังคับเลี้ยวขวา",
-      "en": "Mandatory Right Turn"
+      "no": "Påbudt kjøreretning",
+      "th": "บังคับทิศทางเดินรถ",
+      "en": "Mandatory direction of travel"
     },
     "explanation": {
       "no": "Du må svinge til høyre.",
@@ -3955,9 +3879,9 @@
     "id": "402_3",
     "group": 4,
     "name": {
-      "no": "Påbudt kjøreretning til venstre",
-      "th": "บังคับเลี้ยวซ้าย",
-      "en": "Mandatory Left Turn"
+      "no": "Påbudt kjøreretning",
+      "th": "บังคับทิศทางเดินรถ",
+      "en": "Mandatory direction of travel"
     },
     "explanation": {
       "no": "Du må svinge til venstre.",
@@ -3974,9 +3898,9 @@
     "id": "402_4",
     "group": 4,
     "name": {
-      "no": "Påbudt rett frem eller til høyre",
-      "th": "บังคับตรงหรือขวา",
-      "en": "Mandatory Straight or Right"
+      "no": "Påbudt kjøreretning",
+      "th": "บังคับทิศทางเดินรถ",
+      "en": "Mandatory direction of travel"
     },
     "explanation": {
       "no": "Du må kjøre rett frem eller svinge til høyre.",
@@ -3993,9 +3917,9 @@
     "id": "402_5",
     "group": 4,
     "name": {
-      "no": "Påbudt rett frem eller til venstre",
-      "th": "บังคับตรงหรือซ้าย",
-      "en": "Mandatory Straight or Left"
+      "no": "Påbudt kjøreretning",
+      "th": "บังคับทิศทางเดินรถ",
+      "en": "Mandatory direction of travel"
     },
     "explanation": {
       "no": "Du må kjøre rett frem eller svinge til venstre.",
@@ -4012,9 +3936,9 @@
     "id": "402_6",
     "group": 4,
     "name": {
-      "no": "Påbudt til høyre eller til venstre",
-      "th": "บังคับเลี้ยวขวาหรือซ้าย",
-      "en": "Mandatory Right or Left"
+      "no": "Påbudt kjøreretning",
+      "th": "บังคับทิศทางเดินรถ",
+      "en": "Mandatory direction of travel"
     },
     "explanation": {
       "no": "Du må svinge enten til høyre eller til venstre.",
@@ -4031,9 +3955,9 @@
     "id": "402_7",
     "group": 4,
     "name": {
-      "no": "Påbudt å holde til høyre",
-      "th": "บังคับชิดขวา",
-      "en": "Keep Right"
+      "no": "Påbudt kjøreretning",
+      "th": "บังคับทิศทางเดินรถ",
+      "en": "Mandatory direction of travel"
     },
     "explanation": {
       "no": "Du skal holde til høyre for hinderet.",
@@ -4050,9 +3974,9 @@
     "id": "402_8",
     "group": 4,
     "name": {
-      "no": "Påbudt å holde til venstre",
-      "th": "บังคับชิดซ้าย",
-      "en": "Keep Left"
+      "no": "Påbudt kjøreretning",
+      "th": "บังคับทิศทางเดินรถ",
+      "en": "Mandatory direction of travel"
     },
     "explanation": {
       "no": "Du skal holde til venstre for hinderet.",
@@ -4069,9 +3993,9 @@
     "id": "404_1",
     "group": 4,
     "name": {
-      "no": "Påbudt kjøreretning i rundkjøring",
-      "th": "บังคับทิศทางในวงเวียน",
-      "en": "Mandatory Roundabout Direction"
+      "no": "Påbudt kjørefelt",
+      "th": "บังคับช่องเดินรถ",
+      "en": "Mandatory lane"
     },
     "explanation": {
       "no": "Kjør i pilens retning i rundkjøringen.",
@@ -4088,9 +4012,9 @@
     "id": "404_2",
     "group": 4,
     "name": {
-      "no": "Påbudt kjøreretning i rundkjøring",
-      "th": "บังคับทิศทางในวงเวียน",
-      "en": "Mandatory Roundabout Direction"
+      "no": "Påbudt kjørefelt",
+      "th": "บังคับช่องเดินรถ",
+      "en": "Mandatory lane"
     },
     "explanation": {
       "no": "Kjør i pilens retning i rundkjøringen.",
@@ -4107,9 +4031,9 @@
     "id": "406_0",
     "group": 4,
     "name": {
-      "no": "Påbudt sykkelfelt",
-      "th": "บังคับใช้ช่องจักรยาน",
-      "en": "Mandatory Cycle Lane"
+      "no": "Påbudt rundkjøring",
+      "th": "บังคับให้เดินรถวนในวงเวียน",
+      "en": "Mandatory roundabout"
     },
     "explanation": {
       "no": "Syklister skal bruke sykkelfelt.",
@@ -4126,9 +4050,9 @@
     "id": "408",
     "group": 4,
     "name": {
-      "no": "Påbudt å bruke kjetting",
-      "th": "บังคับใส่โซ่ล้อ",
-      "en": "Snow Chains Required"
+      "no": "Påbudt kjøreretning i rundkjøring",
+      "th": "บังคับทิศทางเดินรถในวงเวียน",
+      "en": "Mandatory direction of travel in a roundabout"
     },
     "explanation": {
       "no": "Det er påbudt å bruke kjetting på kjøretøyet her.",
@@ -4146,7 +4070,7 @@
     "group": 5,
     "name": {
       "no": "Motorveg",
-      "th": "ทางมอเตอร์เวย์",
+      "th": "ทางหลวงพิเศษ",
       "en": "Motorway"
     },
     "explanation": {
@@ -4164,9 +4088,9 @@
     "id": "503_0",
     "group": 5,
     "name": {
-      "no": "Slutt på motorveg",
-      "th": "สิ้นสุดมอเตอร์เวย์",
-      "en": "End of Motorway"
+      "no": "Motortrafikkveg",
+      "th": "ทางเฉพาะยานยนต์",
+      "en": "Road for motor vehicles"
     },
     "explanation": {
       "no": "Motorvegen slutter her. Vanlige regler gjelder igjen.",
@@ -4183,9 +4107,9 @@
     "id": "504_0",
     "group": 5,
     "name": {
-      "no": "Motortrafikkveg",
-      "th": "ถนนสำหรับยานยนต์",
-      "en": "Expressway"
+      "no": "Slutt på motorveg",
+      "th": "สิ้นสุดทางหลวงพิเศษ",
+      "en": "End of motorway"
     },
     "explanation": {
       "no": "Her begynner motortrafikkvegen. Kun motorkjøretøy tillatt.",
@@ -4203,8 +4127,8 @@
     "group": 5,
     "name": {
       "no": "Slutt på motortrafikkveg",
-      "th": "สิ้นสุดถนนสำหรับยานยนต์",
-      "en": "End of Expressway"
+      "th": "สิ้นสุดทางเฉพาะยานยนต์",
+      "en": "End of road for motor vehicles"
     },
     "explanation": {
       "no": "Motortrafikkvegen slutter her.",
@@ -4221,9 +4145,9 @@
     "id": "506",
     "group": 5,
     "name": {
-      "no": "Tettsted",
-      "th": "เขตชุมชน",
-      "en": "Built-Up Area"
+      "no": "Tungtrafikkfelt",
+      "th": "ช่องเดินรถสำหรับรถบรรทุกหนัก",
+      "en": "Heavy vehicle lane"
     },
     "explanation": {
       "no": "Du kjører inn i et tettsted. Fartsgrense 50 km/t gjelder om ikke annet er skiltet.",
@@ -4240,9 +4164,9 @@
     "id": "507",
     "group": 5,
     "name": {
-      "no": "Slutt på tettsted",
-      "th": "สิ้นสุดเขตชุมชน",
-      "en": "End of Built-Up Area"
+      "no": "Slutt på tungtrafikkfelt",
+      "th": "สิ้นสุดช่องเดินรถสำหรับรถบรรทุกหนัก",
+      "en": "End of heavy vehicle lane"
     },
     "explanation": {
       "no": "Tettstedet er over. Ny fartsgrense gjelder.",
@@ -4259,9 +4183,9 @@
     "id": "508_1",
     "group": 5,
     "name": {
-      "no": "Tunnel",
-      "th": "อุโมงค์",
-      "en": "Tunnel"
+      "no": "Kollektivfelt for buss",
+      "th": "ช่องเดินรถสาธารณะสำหรับรถโดยสาร",
+      "en": "Public transport lane for buses"
     },
     "explanation": {
       "no": "Tunnel fremover. Slå på lyset.",
@@ -4278,9 +4202,9 @@
     "id": "508_2",
     "group": 5,
     "name": {
-      "no": "Slutt på tunnel",
-      "th": "สิ้นสุดอุโมงค์",
-      "en": "End of Tunnel"
+      "no": "Kollektivfelt for buss og drosje",
+      "th": "ช่องเดินรถสาธารณะสำหรับรถโดยสารและรถแท็กซี่",
+      "en": "Public transport lane for buses and taxis"
     },
     "explanation": {
       "no": "Tunnelen slutter. Du kjører ut i dagslys.",
@@ -4297,9 +4221,9 @@
     "id": "509_0",
     "group": 5,
     "name": {
-      "no": "Gangveg",
-      "th": "ทางเดินเท้า",
-      "en": "Pedestrian Path"
+      "no": "Sambruksfelt",
+      "th": "ช่องเดินรถร่วมสำหรับรถที่มีผู้โดยสารหลายคน",
+      "en": "Shared lane for high-occupancy vehicles"
     },
     "explanation": {
       "no": "Kun for gående. Kjøretøy er ikke tillatt.",
@@ -4316,9 +4240,9 @@
     "id": "510_1",
     "group": 5,
     "name": {
-      "no": "Sykkelveg",
-      "th": "ทางจักรยาน",
-      "en": "Cycle Path"
+      "no": "Slutt på kollektivfelt",
+      "th": "สิ้นสุดช่องเดินรถสาธารณะ",
+      "en": "End of public transport lane"
     },
     "explanation": {
       "no": "Kun for syklister. Andre kjøretøy er ikke tillatt.",
@@ -4335,9 +4259,9 @@
     "id": "510_2",
     "group": 5,
     "name": {
-      "no": "Slutt på sykkelveg",
-      "th": "สิ้นสุดทางจักรยาน",
-      "en": "End of Cycle Path"
+      "no": "Slutt på kollektivfelt",
+      "th": "สิ้นสุดช่องเดินรถสาธารณะ",
+      "en": "End of public transport lane"
     },
     "explanation": {
       "no": "Sykkelvegen slutter her.",
@@ -4354,9 +4278,9 @@
     "id": "511_0",
     "group": 5,
     "name": {
-      "no": "Gang- og sykkelveg",
-      "th": "ทางรวมสำหรับคนเดินและจักรยาน",
-      "en": "Combined Pedestrian and Cycle Path"
+      "no": "Slutt på sambruksfelt",
+      "th": "สิ้นสุดช่องเดินรถร่วม",
+      "en": "End of shared lane"
     },
     "explanation": {
       "no": "Delt veg for gående og syklister. Vis hensyn.",
@@ -4373,9 +4297,9 @@
     "id": "512_0",
     "group": 5,
     "name": {
-      "no": "Parkering",
-      "th": "ที่จอดรถ",
-      "en": "Parking"
+      "no": "Holdeplass for buss",
+      "th": "ป้ายหยุดรถโดยสาร",
+      "en": "Bus stop"
     },
     "explanation": {
       "no": "Parkering er tillatt her.",
@@ -4392,9 +4316,9 @@
     "id": "513_0",
     "group": 5,
     "name": {
-      "no": "Envegskjøring",
-      "th": "ถนนทางเดียว",
-      "en": "One-Way Road"
+      "no": "Holdeplass for sporvogn",
+      "th": "ป้ายหยุดรถราง",
+      "en": "Tram stop"
     },
     "explanation": {
       "no": "Vegen er envegskjørt. Kjør kun i pilens retning.",
@@ -4411,9 +4335,9 @@
     "id": "514_0",
     "group": 5,
     "name": {
-      "no": "Motorvegkryss",
-      "th": "ทางแยกมอเตอร์เวย์",
-      "en": "Motorway Junction"
+      "no": "Holdeplass for drosje",
+      "th": "จุดจอดรถแท็กซี่",
+      "en": "Taxi rank"
     },
     "explanation": {
       "no": "Motorvegkryss fremover. Forbered deg på avkjøring.",
@@ -4430,9 +4354,9 @@
     "id": "516_H",
     "group": 5,
     "name": {
-      "no": "Avkjøring høyre",
-      "th": "ทางออกขวา",
-      "en": "Exit Right"
+      "no": "Gangfelt",
+      "th": "ทางม้าลาย",
+      "en": "Pedestrian crossing"
     },
     "explanation": {
       "no": "Avkjøring til høyre fremover.",
@@ -4449,9 +4373,9 @@
     "id": "516_V",
     "group": 5,
     "name": {
-      "no": "Avkjøring venstre",
-      "th": "ทางออกซ้าย",
-      "en": "Exit Left"
+      "no": "Gangfelt",
+      "th": "ทางม้าลาย",
+      "en": "Pedestrian crossing"
     },
     "explanation": {
       "no": "Avkjøring til venstre fremover.",
@@ -4468,9 +4392,9 @@
     "id": "518_0",
     "group": 5,
     "name": {
-      "no": "Rasteplass",
-      "th": "ที่พักริมทาง",
-      "en": "Rest Area"
+      "no": "Gangveg",
+      "th": "ทางเดินเท้า",
+      "en": "Footpath"
     },
     "explanation": {
       "no": "Rasteplass tilgjengelig. Du kan stoppe og hvile her.",
@@ -4487,9 +4411,9 @@
     "id": "520_0",
     "group": 5,
     "name": {
-      "no": "Bensinstasjon",
-      "th": "ปั๊มน้ำมัน",
-      "en": "Fuel Station"
+      "no": "Sykkelveg",
+      "th": "ทางจักรยาน",
+      "en": "Cycle track"
     },
     "explanation": {
       "no": "Bensinstasjon tilgjengelig.",
@@ -4503,12 +4427,12 @@
     }
   },
   {
-    "id": "521.1",
+    "id": "521_2",
     "group": 5,
     "name": {
-      "no": "Førstehjelp",
-      "th": "ปฐมพยาบาล",
-      "en": "First Aid"
+      "no": "Sykkelfelt – midtstilt",
+      "th": "ช่องจักรยาน – อยู่กลางถนน",
+      "en": "Cycle lane – centrally placed"
     },
     "explanation": {
       "no": "Førstehjelp er tilgjengelig her.",
@@ -4522,12 +4446,12 @@
     }
   },
   {
-    "id": "521_0",
+    "id": "521_1",
     "group": 5,
     "name": {
-      "no": "Sykehus",
-      "th": "โรงพยาบาล",
-      "en": "Hospital"
+      "no": "Sykkelfelt – sideplassert",
+      "th": "ช่องจักรยาน – อยู่ริมทาง",
+      "en": "Cycle lane – placed at the side"
     },
     "explanation": {
       "no": "Sykehus i nærheten.",
@@ -4544,9 +4468,9 @@
     "id": "522_0",
     "group": 5,
     "name": {
-      "no": "Ferge",
-      "th": "เรือข้ามฟาก",
-      "en": "Ferry"
+      "no": "Gang- og sykkelveg",
+      "th": "ทางเดินเท้าและทางจักรยาน",
+      "en": "Shared foot and cycle path"
     },
     "explanation": {
       "no": "Fergekai i nærheten.",
@@ -4563,9 +4487,9 @@
     "id": "524_0",
     "group": 5,
     "name": {
-      "no": "Flyplass",
-      "th": "สนามบิน",
-      "en": "Airport"
+      "no": "Møteplass",
+      "th": "จุดหลีกรถสวน",
+      "en": "Passing place"
     },
     "explanation": {
       "no": "Flyplass i nærheten.",
@@ -4582,9 +4506,9 @@
     "id": "526_1",
     "group": 5,
     "name": {
-      "no": "Kjørefelt",
-      "th": "ช่องทางเดินรถ",
-      "en": "Lane Indicator"
+      "no": "Envegskjøring",
+      "th": "เดินรถทางเดียว",
+      "en": "One-way traffic"
     },
     "explanation": {
       "no": "Angir kjørefelt og kjøreretning.",
@@ -4601,9 +4525,9 @@
     "id": "526_2",
     "group": 5,
     "name": {
-      "no": "Kjørefelt",
-      "th": "ช่องทางเดินรถ",
-      "en": "Lane Indicator"
+      "no": "Envegskjøring",
+      "th": "เดินรถทางเดียว",
+      "en": "One-way traffic"
     },
     "explanation": {
       "no": "Angir kjørefelt og kjøreretning.",
@@ -4620,9 +4544,9 @@
     "id": "527_1",
     "group": 5,
     "name": {
-      "no": "Kjørefeltpil",
-      "th": "ลูกศรช่องทาง",
-      "en": "Lane Arrow"
+      "no": "Blindveg",
+      "th": "ทางตัน",
+      "en": "Dead end"
     },
     "explanation": {
       "no": "Pilen viser tillatt kjøreretning i dette feltet.",
@@ -4639,9 +4563,9 @@
     "id": "527_2",
     "group": 5,
     "name": {
-      "no": "Kjørefeltpil",
-      "th": "ลูกศรช่องทาง",
-      "en": "Lane Arrow"
+      "no": "Blindveg",
+      "th": "ทางตัน",
+      "en": "Dead end"
     },
     "explanation": {
       "no": "Pilen viser tillatt kjøreretning i dette feltet.",
@@ -4658,9 +4582,9 @@
     "id": "527_3",
     "group": 5,
     "name": {
-      "no": "Kjørefeltpil",
-      "th": "ลูกศรช่องทาง",
-      "en": "Lane Arrow"
+      "no": "Blindveg",
+      "th": "ทางตัน",
+      "en": "Dead end"
     },
     "explanation": {
       "no": "Pilen viser tillatt kjøreretning i dette feltet.",
@@ -4677,9 +4601,9 @@
     "id": "527_4",
     "group": 5,
     "name": {
-      "no": "Kjørefeltpil",
-      "th": "ลูกศรช่องทาง",
-      "en": "Lane Arrow"
+      "no": "Blindveg",
+      "th": "ทางตัน",
+      "en": "Dead end"
     },
     "explanation": {
       "no": "Pilen viser tillatt kjøreretning i dette feltet.",
@@ -4696,9 +4620,9 @@
     "id": "528_0",
     "group": 5,
     "name": {
-      "no": "Kjørefelt slutter",
-      "th": "ช่องทางสิ้นสุด",
-      "en": "Lane Ends"
+      "no": "Valgfritt kjørefelt",
+      "th": "เลือกช่องเดินรถได้",
+      "en": "Optional lane"
     },
     "explanation": {
       "no": "Kjørefeltet slutter. Flett deg inn i neste felt.",
@@ -4715,9 +4639,9 @@
     "id": "530_01",
     "group": 5,
     "name": {
-      "no": "Avstandsskilt",
-      "th": "ป้ายระยะทาง",
-      "en": "Distance Sign"
+      "no": "Sammenfletting",
+      "th": "การรวมช่องเดินรถ",
+      "en": "Merging lanes"
     },
     "explanation": {
       "no": "Viser avstand til destinasjon.",
@@ -4734,9 +4658,9 @@
     "id": "530_11",
     "group": 5,
     "name": {
-      "no": "Avstandsskilt",
-      "th": "ป้ายระยะทาง",
-      "en": "Distance Sign"
+      "no": "Sammenfletting",
+      "th": "การรวมช่องเดินรถ",
+      "en": "Merging lanes"
     },
     "explanation": {
       "no": "Viser avstand til destinasjon.",
@@ -4753,9 +4677,9 @@
     "id": "531_102",
     "group": 5,
     "name": {
-      "no": "Vegviserskilt",
-      "th": "ป้ายบอกทาง",
-      "en": "Directional Sign"
+      "no": "Felt for fartsøkning",
+      "th": "ช่องเร่งความเร็ว",
+      "en": "Acceleration lane"
     },
     "explanation": {
       "no": "Viser vei til angitt destinasjon.",
@@ -4772,9 +4696,9 @@
     "id": "531_202",
     "group": 5,
     "name": {
-      "no": "Vegviserskilt",
-      "th": "ป้ายบอกทาง",
-      "en": "Directional Sign"
+      "no": "Felt for fartsøkning",
+      "th": "ช่องเร่งความเร็ว",
+      "en": "Acceleration lane"
     },
     "explanation": {
       "no": "Viser vei til angitt destinasjon.",
@@ -4791,9 +4715,9 @@
     "id": "532_H02",
     "group": 5,
     "name": {
-      "no": "Avkjøringsskilt høyre",
-      "th": "ป้ายทางออกขวา",
-      "en": "Exit Sign Right"
+      "no": "Kjørefelt slutter",
+      "th": "ช่องเดินรถสิ้นสุด",
+      "en": "Lane ends"
     },
     "explanation": {
       "no": "Angir avkjøring til høyre.",
@@ -4810,9 +4734,9 @@
     "id": "534_H02",
     "group": 5,
     "name": {
-      "no": "Avkjøringsskilt",
-      "th": "ป้ายทางออก",
-      "en": "Exit Sign"
+      "no": "Kjørefelt begynner",
+      "th": "ช่องเดินรถเริ่มต้น",
+      "en": "Lane begins"
     },
     "explanation": {
       "no": "Angir avkjøring fra motorvegen.",
@@ -4829,9 +4753,9 @@
     "id": "536_101",
     "group": 5,
     "name": {
-      "no": "Forhåndsskilt",
-      "th": "ป้ายแจ้งล่วงหน้า",
-      "en": "Advance Sign"
+      "no": "Påkjøring fortsetter i eget kjørefelt",
+      "th": "ทางเข้าต่อเนื่องเป็นช่องเดินรถของตนเอง",
+      "en": "Entry continues in its own lane"
     },
     "explanation": {
       "no": "Forhåndsvarsler om kryss eller avkjøring.",
@@ -4848,9 +4772,9 @@
     "id": "536_201",
     "group": 5,
     "name": {
-      "no": "Forhåndsskilt",
-      "th": "ป้ายแจ้งล่วงหน้า",
-      "en": "Advance Sign"
+      "no": "Påkjøring fortsetter i eget kjørefelt",
+      "th": "ทางเข้าต่อเนื่องเป็นช่องเดินรถของตนเอง",
+      "en": "Entry continues in its own lane"
     },
     "explanation": {
       "no": "Forhåndsvarsler om kryss eller avkjøring.",
@@ -4867,9 +4791,9 @@
     "id": "538_12",
     "group": 5,
     "name": {
-      "no": "Vegtabell",
-      "th": "ตารางเส้นทาง",
-      "en": "Route Table"
+      "no": "Kjørefeltinndeling",
+      "th": "การแบ่งช่องเดินรถ",
+      "en": "Lane division"
     },
     "explanation": {
       "no": "Viser destinasjoner og avstander.",
@@ -4886,9 +4810,9 @@
     "id": "539",
     "group": 5,
     "name": {
-      "no": "Vegviserskilt",
-      "th": "ป้ายนำทาง",
-      "en": "Route Sign"
+      "no": "Endret kjøremønster",
+      "th": "รูปแบบการเดินรถเปลี่ยนไป",
+      "en": "Changed traffic pattern"
     },
     "explanation": {
       "no": "Viser vei til angitt sted.",
@@ -4905,9 +4829,9 @@
     "id": "540_0",
     "group": 5,
     "name": {
-      "no": "Omkjøring",
-      "th": "ทางอ้อม",
-      "en": "Detour"
+      "no": "Gatetun",
+      "th": "ถนนชุมชนที่คนเดินเท้ามีสิทธิ์ก่อน",
+      "en": "Residential home zone"
     },
     "explanation": {
       "no": "Følg omvei på grunn av stengt veg.",
@@ -4924,9 +4848,9 @@
     "id": "542_0",
     "group": 5,
     "name": {
-      "no": "Slutt på omkjøring",
-      "th": "สิ้นสุดทางอ้อม",
-      "en": "End of Detour"
+      "no": "Slutt på gatetun",
+      "th": "สิ้นสุดถนนชุมชนที่คนเดินเท้ามีสิทธิ์ก่อน",
+      "en": "End of residential home zone"
     },
     "explanation": {
       "no": "Omveien er ferdig. Du er tilbake på normal veg.",
@@ -4943,9 +4867,9 @@
     "id": "548_0",
     "group": 5,
     "name": {
-      "no": "Samleveg",
-      "th": "ถนนรวม",
-      "en": "Collector Road"
+      "no": "Gågate",
+      "th": "ถนนคนเดิน",
+      "en": "Pedestrian street"
     },
     "explanation": {
       "no": "Du er på en samleveg som leder til motorveg.",
@@ -4962,9 +4886,9 @@
     "id": "550_0",
     "group": 5,
     "name": {
-      "no": "Nødstopp/beredskapslomme",
-      "th": "ช่องจอดฉุกเฉิน",
-      "en": "Emergency Bay"
+      "no": "Slutt på gågate",
+      "th": "สิ้นสุดถนนคนเดิน",
+      "en": "End of pedestrian street"
     },
     "explanation": {
       "no": "Nødstopplass for kjøretøy med problemer.",
@@ -4981,9 +4905,9 @@
     "id": "552_0",
     "group": 5,
     "name": {
-      "no": "Tunnelnavn",
-      "th": "ชื่ออุโมงค์",
-      "en": "Tunnel Name"
+      "no": "Parkering",
+      "th": "ที่จอดรถ",
+      "en": "Parking"
     },
     "explanation": {
       "no": "Angir navnet på tunnelen.",
@@ -4997,12 +4921,12 @@
     }
   },
   {
-    "id": "556.2",
+    "id": "556_2",
     "group": 5,
     "name": {
-      "no": "Vegsperring",
-      "th": "ถนนปิดกั้น",
-      "en": "Road Barrier"
+      "no": "Automatisk trafikkontroll – strekningsmåling",
+      "th": "การตรวจจับจราจรอัตโนมัติ – วัดความเร็วเฉลี่ยตลอดช่วงทาง",
+      "en": "Automatic traffic enforcement – average speed over a section"
     },
     "explanation": {
       "no": "Vegen er sperret. Kjør ikke videre.",
@@ -5016,12 +4940,12 @@
     }
   },
   {
-    "id": "556_0",
+    "id": "556_1",
     "group": 5,
     "name": {
-      "no": "Informasjonsskilt",
-      "th": "ป้ายข้อมูล",
-      "en": "Information Sign"
+      "no": "Automatisk trafikkontroll – punktmåling",
+      "th": "การตรวจจับจราจรอัตโนมัติ – วัดความเร็ว ณ จุดเดียว",
+      "en": "Automatic traffic enforcement – spot speed measurement"
     },
     "explanation": {
       "no": "Gir vegfarende nyttig informasjon.",
@@ -5038,9 +4962,9 @@
     "id": "558_0",
     "group": 5,
     "name": {
-      "no": "Turistveg",
-      "th": "เส้นทางท่องเที่ยว",
-      "en": "Tourist Route"
+      "no": "Videokontroll/-overvåking",
+      "th": "การตรวจสอบและเฝ้าระวังด้วยกล้องวิดีโอ",
+      "en": "Video monitoring and surveillance"
     },
     "explanation": {
       "no": "Nasjonal turistveg med naturopplevelser.",
@@ -5057,9 +4981,9 @@
     "id": "560_2",
     "group": 5,
     "name": {
-      "no": "Miljøgate",
-      "th": "ถนนสิ่งแวดล้อม",
-      "en": "Environmental Zone"
+      "no": "Opplysningstavle",
+      "th": "ป้ายให้ข้อมูล",
+      "en": "Information board"
     },
     "explanation": {
       "no": "Miljøgate med lavere fart og hensyn til myke trafikanter.",
@@ -5076,9 +5000,9 @@
     "id": "565",
     "group": 5,
     "name": {
-      "no": "Planovergang",
-      "th": "ทางรถไฟตัดถนน",
-      "en": "Level Crossing"
+      "no": "Feil kjøreretning",
+      "th": "ขับผิดทิศทาง",
+      "en": "Wrong direction of travel"
     },
     "explanation": {
       "no": "Planovergang for jernbane fremover.",
@@ -5095,9 +5019,9 @@
     "id": "570_1H",
     "group": 5,
     "name": {
-      "no": "Kjørefeltskift høyre",
-      "th": "เปลี่ยนช่องทางขวา",
-      "en": "Lane Change Right"
+      "no": "Nødutgang",
+      "th": "ทางออกฉุกเฉิน",
+      "en": "Emergency exit"
     },
     "explanation": {
       "no": "Kjørefeltet flyttes mot høyre fremover.",
@@ -5114,9 +5038,9 @@
     "id": "570_1V",
     "group": 5,
     "name": {
-      "no": "Kjørefeltskift venstre",
-      "th": "เปลี่ยนช่องทางซ้าย",
-      "en": "Lane Change Left"
+      "no": "Nødutgang",
+      "th": "ทางออกฉุกเฉิน",
+      "en": "Emergency exit"
     },
     "explanation": {
       "no": "Kjørefeltet flyttes mot venstre fremover.",
@@ -5133,9 +5057,9 @@
     "id": "570_2H",
     "group": 5,
     "name": {
-      "no": "Kjørefeltskift høyre",
-      "th": "เปลี่ยนช่องทางขวา",
-      "en": "Lane Change Right"
+      "no": "Retning og avstand til nødutgang",
+      "th": "ทิศทางและระยะทางไปยังทางออกฉุกเฉิน",
+      "en": "Direction and distance to the emergency exit"
     },
     "explanation": {
       "no": "Kjørefeltet flyttes mot høyre.",
@@ -5152,9 +5076,9 @@
     "id": "570_2V",
     "group": 5,
     "name": {
-      "no": "Kjørefeltskift venstre",
-      "th": "เปลี่ยนช่องทางซ้าย",
-      "en": "Lane Change Left"
+      "no": "Retning og avstand til nødutgang",
+      "th": "ทิศทางและระยะทางไปยังทางออกฉุกเฉิน",
+      "en": "Direction and distance to the emergency exit"
     },
     "explanation": {
       "no": "Kjørefeltet flyttes mot venstre.",
@@ -5171,9 +5095,9 @@
     "id": "701",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 701",
-      "th": "ป้ายนำทาง 701",
-      "en": "Direction sign 701"
+      "no": "Tabellorienteringstavle",
+      "th": "ป้ายแนะนำล่วงหน้าแบบตาราง",
+      "en": "Table-type advance direction sign"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -5190,9 +5114,9 @@
     "id": "703",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 703",
-      "th": "ป้ายนำทาง 703",
-      "en": "Direction sign 703"
+      "no": "Diagramorienteringstavle",
+      "th": "ป้ายแนะนำล่วงหน้าแบบแผนผัง",
+      "en": "Diagram-type advance direction sign"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -5209,9 +5133,9 @@
     "id": "705",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 705",
-      "th": "ป้ายนำทาง 705",
-      "en": "Direction sign 705"
+      "no": "Avkjøringstavle",
+      "th": "ป้ายแนะนำทางออก",
+      "en": "Exit direction board"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -5228,9 +5152,9 @@
     "id": "707",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 707",
-      "th": "ป้ายนำทาง 707",
-      "en": "Direction sign 707"
+      "no": "Kjørefeltorienteringstavle",
+      "th": "ป้ายแนะนำล่วงหน้าประจำช่องเดินรถ",
+      "en": "Lane advance direction sign"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -5247,9 +5171,9 @@
     "id": "709",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 709",
-      "th": "ป้ายนำทาง 709",
-      "en": "Direction sign 709"
+      "no": "Portalorienteringstavle",
+      "th": "ป้ายแนะนำล่วงหน้าแบบคร่อมถนน",
+      "en": "Gantry advance direction sign"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -5266,9 +5190,9 @@
     "id": "711",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 711",
-      "th": "ป้ายนำทาง 711",
-      "en": "Direction sign 711"
+      "no": "Tabellvegviser",
+      "th": "ป้ายชี้ทางแบบตาราง",
+      "en": "Table-type direction sign"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -5285,9 +5209,9 @@
     "id": "713",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 713",
-      "th": "ป้ายนำทาง 713",
-      "en": "Direction sign 713"
+      "no": "Vanlig vegviser",
+      "th": "ป้ายชี้ทางแบบธรรมดา",
+      "en": "Ordinary direction sign"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -5304,9 +5228,9 @@
     "id": "717",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 717",
-      "th": "ป้ายนำทาง 717",
-      "en": "Direction sign 717"
+      "no": "Kjørefeltvegviser",
+      "th": "ป้ายชี้ทางประจำช่องเดินรถ",
+      "en": "Lane direction sign"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -5323,9 +5247,9 @@
     "id": "719",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 719",
-      "th": "ป้ายนำทาง 719",
-      "en": "Direction sign 719"
+      "no": "Portalvegviser",
+      "th": "ป้ายชี้ทางแบบคร่อมถนน",
+      "en": "Gantry direction sign"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -5342,9 +5266,9 @@
     "id": "727",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 727",
-      "th": "ป้ายนำทาง 727",
-      "en": "Direction sign 727"
+      "no": "Stedsnavnskilt",
+      "th": "ป้ายชื่อสถานที่",
+      "en": "Place name sign"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -5361,9 +5285,9 @@
     "id": "731",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 731",
-      "th": "ป้ายนำทาง 731",
-      "en": "Direction sign 731"
+      "no": "Samleskilt for vegvisning",
+      "th": "ป้ายรวมการชี้ทาง",
+      "en": "Collective direction sign"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -5380,9 +5304,9 @@
     "id": "741",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 741",
-      "th": "ป้ายนำทาง 741",
-      "en": "Direction sign 741"
+      "no": "Omkjøring for bestemte kjøretøygrupper",
+      "th": "ทางเลี่ยงสำหรับรถบางประเภท",
+      "en": "Diversion for certain vehicle groups"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -5399,9 +5323,9 @@
     "id": "745",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 745",
-      "th": "ป้ายนำทาง 745",
-      "en": "Direction sign 745"
+      "no": "Slutt på midlertidig omkjøring",
+      "th": "สิ้นสุดทางเลี่ยงชั่วคราว",
+      "en": "End of temporary diversion"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -5418,9 +5342,9 @@
     "id": "749",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 749",
-      "th": "ป้ายนำทาง 749",
-      "en": "Direction sign 749"
+      "no": "Vegviser for gangtrafikk",
+      "th": "ป้ายชี้ทางสำหรับคนเดินเท้า",
+      "en": "Direction sign for pedestrians"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -5437,9 +5361,9 @@
     "id": "751",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 751",
-      "th": "ป้ายนำทาง 751",
-      "en": "Direction sign 751"
+      "no": "Vegviser for sykkelrute",
+      "th": "ป้ายชี้ทางสำหรับเส้นทางจักรยาน",
+      "en": "Direction sign for a cycle route"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -5456,9 +5380,9 @@
     "id": "753",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 753",
-      "th": "ป้ายนำทาง 753",
-      "en": "Direction sign 753"
+      "no": "Tabellvegviser for sykkelrute",
+      "th": "ป้ายชี้ทางแบบตารางสำหรับเส้นทางจักรยาน",
+      "en": "Table-type direction sign for a cycle route"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -5475,9 +5399,9 @@
     "id": "755",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 755",
-      "th": "ป้ายนำทาง 755",
-      "en": "Direction sign 755"
+      "no": "Sykkelruteskilt",
+      "th": "ป้ายเส้นทางจักรยาน",
+      "en": "Cycle route sign"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -5494,9 +5418,9 @@
     "id": "757",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 757",
-      "th": "ป้ายนำทาง 757",
-      "en": "Direction sign 757"
+      "no": "Avstandsskilt for sykkelrute",
+      "th": "ป้ายบอกระยะทางสำหรับเส้นทางจักรยาน",
+      "en": "Distance sign for a cycle route"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -5513,9 +5437,9 @@
     "id": "776",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 776",
-      "th": "ป้ายนำทาง 776",
-      "en": "Direction sign 776"
+      "no": "Godshavn",
+      "th": "ท่าเรือขนส่งสินค้า",
+      "en": "Freight port"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -5532,9 +5456,9 @@
     "id": "780",
     "group": 7,
     "name": {
-      "no": "Veivisningsskilt 780",
-      "th": "ป้ายนำทาง 780",
-      "en": "Direction sign 780"
+      "no": "Kjetting",
+      "th": "โซ่พันล้อ",
+      "en": "Snow chains"
     },
     "explanation": {
       "no": "Viser vei til destinasjon eller interessepunkt.",
@@ -5548,12 +5472,12 @@
     }
   },
   {
-    "id": "807-10",
+    "id": "807_10",
     "group": 8,
     "name": {
-      "no": "Underskilt 807-10",
-      "th": "ป้ายเสริม 807-10",
-      "en": "Supplementary sign 807-10"
+      "no": "Liten elektrisk motorvogn",
+      "th": "ยานยนต์ไฟฟ้าขนาดเล็ก",
+      "en": "Small electric motor vehicle"
     },
     "explanation": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
@@ -5570,9 +5494,9 @@
     "id": "808_42b",
     "group": 8,
     "name": {
-      "no": "Underskilt 808_42b",
-      "th": "ป้ายเสริม 808_42b",
-      "en": "Supplementary sign 808_42b"
+      "no": "Tekst",
+      "th": "ข้อความ",
+      "en": "Text"
     },
     "explanation": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
@@ -5589,9 +5513,9 @@
     "id": "810_H135",
     "group": 8,
     "name": {
-      "no": "Underskilt 810_H135",
-      "th": "ป้ายเสริม 810_H135",
-      "en": "Supplementary sign 810_H135"
+      "no": "Svingpil",
+      "th": "ลูกศรบอกทิศทางเลี้ยว",
+      "en": "Turn arrow"
     },
     "explanation": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
@@ -5608,9 +5532,9 @@
     "id": "810_H45",
     "group": 8,
     "name": {
-      "no": "Underskilt 810_H45",
-      "th": "ป้ายเสริม 810_H45",
-      "en": "Supplementary sign 810_H45"
+      "no": "Svingpil",
+      "th": "ลูกศรบอกทิศทางเลี้ยว",
+      "en": "Turn arrow"
     },
     "explanation": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
@@ -5627,9 +5551,9 @@
     "id": "810_H90",
     "group": 8,
     "name": {
-      "no": "Underskilt 810_H90",
-      "th": "ป้ายเสริม 810_H90",
-      "en": "Supplementary sign 810_H90"
+      "no": "Svingpil",
+      "th": "ลูกศรบอกทิศทางเลี้ยว",
+      "en": "Turn arrow"
     },
     "explanation": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
@@ -5646,9 +5570,9 @@
     "id": "810_R",
     "group": 8,
     "name": {
-      "no": "Underskilt 810_R",
-      "th": "ป้ายเสริม 810_R",
-      "en": "Supplementary sign 810_R"
+      "no": "Svingpil",
+      "th": "ลูกศรบอกทิศทางเลี้ยว",
+      "en": "Turn arrow"
     },
     "explanation": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
@@ -5665,9 +5589,9 @@
     "id": "810_V135",
     "group": 8,
     "name": {
-      "no": "Underskilt 810_V135",
-      "th": "ป้ายเสริม 810_V135",
-      "en": "Supplementary sign 810_V135"
+      "no": "Svingpil",
+      "th": "ลูกศรบอกทิศทางเลี้ยว",
+      "en": "Turn arrow"
     },
     "explanation": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
@@ -5684,9 +5608,9 @@
     "id": "810_V45",
     "group": 8,
     "name": {
-      "no": "Underskilt 810_V45",
-      "th": "ป้ายเสริม 810_V45",
-      "en": "Supplementary sign 810_V45"
+      "no": "Svingpil",
+      "th": "ลูกศรบอกทิศทางเลี้ยว",
+      "en": "Turn arrow"
     },
     "explanation": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
@@ -5703,9 +5627,9 @@
     "id": "810_V90",
     "group": 8,
     "name": {
-      "no": "Underskilt 810_V90",
-      "th": "ป้ายเสริม 810_V90",
-      "en": "Supplementary sign 810_V90"
+      "no": "Svingpil",
+      "th": "ลูกศรบอกทิศทางเลี้ยว",
+      "en": "Turn arrow"
     },
     "explanation": {
       "no": "Gir tilleggsinformasjon til skiltet ovenfor.",
@@ -5722,9 +5646,9 @@
     "id": "902_0H",
     "group": 9,
     "name": {
-      "no": "Vegkantmarkering høyre",
-      "th": "เครื่องหมายขอบทางขวา",
-      "en": "Right edge marker"
+      "no": "Bakgrunnsmarkering",
+      "th": "แผ่นสะท้อนแสงเป็นฉากหลัง",
+      "en": "Background marker"
     },
     "explanation": {
       "no": "Markerer vegkanten på høyre side.",
@@ -5741,9 +5665,9 @@
     "id": "902_0V",
     "group": 9,
     "name": {
-      "no": "Vegkantmarkering venstre",
-      "th": "เครื่องหมายขอบทางซ้าย",
-      "en": "Left edge marker"
+      "no": "Bakgrunnsmarkering",
+      "th": "แผ่นสะท้อนแสงเป็นฉากหลัง",
+      "en": "Background marker"
     },
     "explanation": {
       "no": "Markerer vegkanten på venstre side.",
@@ -5760,9 +5684,9 @@
     "id": "904_0H",
     "group": 9,
     "name": {
-      "no": "Vegkantmarkering høyre",
-      "th": "เครื่องหมายขอบทางขวา",
-      "en": "Right edge marker"
+      "no": "Retningsmarkering",
+      "th": "เครื่องหมายบอกทิศทาง",
+      "en": "Direction marker"
     },
     "explanation": {
       "no": "Reflekterende markering på høyre side.",
@@ -5779,9 +5703,9 @@
     "id": "904_0V",
     "group": 9,
     "name": {
-      "no": "Vegkantmarkering venstre",
-      "th": "เครื่องหมายขอบทางซ้าย",
-      "en": "Left edge marker"
+      "no": "Retningsmarkering",
+      "th": "เครื่องหมายบอกทิศทาง",
+      "en": "Direction marker"
     },
     "explanation": {
       "no": "Reflekterende markering på venstre side.",
@@ -5798,9 +5722,9 @@
     "id": "906_0H",
     "group": 9,
     "name": {
-      "no": "Siktforsterker høyre",
-      "th": "ป้ายเพิ่มทัศนวิสัยขวา",
-      "en": "Visibility enhancer right"
+      "no": "Hindermarkering",
+      "th": "เครื่องหมายแสดงสิ่งกีดขวาง",
+      "en": "Obstacle marker"
     },
     "explanation": {
       "no": "Siktforsterker på høyre side.",
@@ -5817,9 +5741,9 @@
     "id": "906_0V",
     "group": 9,
     "name": {
-      "no": "Siktforsterker venstre",
-      "th": "ป้ายเพิ่มทัศนวิสัยซ้าย",
-      "en": "Visibility enhancer left"
+      "no": "Hindermarkering",
+      "th": "เครื่องหมายแสดงสิ่งกีดขวาง",
+      "en": "Obstacle marker"
     },
     "explanation": {
       "no": "Siktforsterker på venstre side.",
@@ -5836,9 +5760,9 @@
     "id": "906_0VH",
     "group": 9,
     "name": {
-      "no": "Siktforsterker begge sider",
-      "th": "ป้ายเพิ่มทัศนวิสัยทั้งสองด้าน",
-      "en": "Visibility enhancer both sides"
+      "no": "Hindermarkering",
+      "th": "เครื่องหมายแสดงสิ่งกีดขวาง",
+      "en": "Obstacle marker"
     },
     "explanation": {
       "no": "Siktforsterker på begge sider.",
@@ -5855,9 +5779,9 @@
     "id": "914_H",
     "group": 9,
     "name": {
-      "no": "Sperremarkering høyre",
-      "th": "เครื่องหมายกั้นขวา",
-      "en": "Barrier marker right"
+      "no": "Tunnelmarkering",
+      "th": "เครื่องหมายนำทางในอุโมงค์",
+      "en": "Tunnel marker"
     },
     "explanation": {
       "no": "Sperring til høyre.",
@@ -5874,9 +5798,9 @@
     "id": "914_V",
     "group": 9,
     "name": {
-      "no": "Sperremarkering venstre",
-      "th": "เครื่องหมายกั้นซ้าย",
-      "en": "Barrier marker left"
+      "no": "Tunnelmarkering",
+      "th": "เครื่องหมายนำทางในอุโมงค์",
+      "en": "Tunnel marker"
     },
     "explanation": {
       "no": "Sperring til venstre.",
@@ -5893,9 +5817,9 @@
     "id": "920_H",
     "group": 9,
     "name": {
-      "no": "Pilmarkering høyre",
-      "th": "ลูกศรชี้ขวา",
-      "en": "Right arrow marker"
+      "no": "Kantstolpe",
+      "th": "หลักนำทางริมถนน",
+      "en": "Edge marker post"
     },
     "explanation": {
       "no": "Piler leder trafikk mot høyre.",
@@ -5912,9 +5836,9 @@
     "id": "920_VE",
     "group": 9,
     "name": {
-      "no": "Pilmarkering venstre",
-      "th": "ลูกศรชี้ซ้าย",
-      "en": "Left arrow marker"
+      "no": "Kantstolpe",
+      "th": "หลักนำทางริมถนน",
+      "en": "Edge marker post"
     },
     "explanation": {
       "no": "Piler leder trafikk mot venstre.",
@@ -5931,9 +5855,9 @@
     "id": "920_VM",
     "group": 9,
     "name": {
-      "no": "Pilmarkering midtre",
-      "th": "ลูกศรกลาง",
-      "en": "Centre arrow marker"
+      "no": "Kantstolpe",
+      "th": "หลักนำทางริมถนน",
+      "en": "Edge marker post"
     },
     "explanation": {
       "no": "Piler leder trafikk rett frem.",
@@ -5944,34 +5868,15 @@
       "no": "Piler leder trafikk rett frem.",
       "th": "ลูกศรนำทางการจราจรตรงไป",
       "en": "Arrows guide traffic straight ahead."
-    }
-  },
-  {
-    "id": "930",
-    "group": 9,
-    "name": {
-      "no": "Kilometermarkering",
-      "th": "หลักกิโลเมตร",
-      "en": "Kilometre marker"
-    },
-    "explanation": {
-      "no": "Viser kilometerpunkt langs vegen.",
-      "th": "แสดงจุดกิโลเมตรตามแนวถนน",
-      "en": "Shows the kilometre point along the road."
-    },
-    "driver_action": {
-      "no": "Viser kilometerpunkt langs vegen.",
-      "th": "แสดงจุดกิโลเมตรตามแนวถนน",
-      "en": "Shows the kilometre point along the road."
     }
   },
   {
     "id": "940",
     "group": 9,
     "name": {
-      "no": "Vegmarkering",
-      "th": "เครื่องหมายบนถนน",
-      "en": "Road marking"
+      "no": "Trafikkjegle",
+      "th": "กรวยจราจร",
+      "en": "Traffic cone"
     },
     "explanation": {
       "no": "Merking av vegbanen.",
@@ -5988,9 +5893,9 @@
     "id": "942",
     "group": 9,
     "name": {
-      "no": "Senterlinjemarkering",
-      "th": "เส้นกลางถนน",
-      "en": "Centre line marker"
+      "no": "Trafikksylinder",
+      "th": "เสาทรงกระบอกจราจร",
+      "en": "Traffic cylinder"
     },
     "explanation": {
       "no": "Markerer midtlinjen på vegen.",
