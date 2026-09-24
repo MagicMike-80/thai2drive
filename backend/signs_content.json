@@ -46,14 +46,14 @@
       "en": "Priority road"
     },
     "explanation": {
-      "no": "Stopp og se etter tog før du krysser sporet.",
-      "th": "หยุดและมองหารถไฟก่อนข้ามทางรถไฟ ไม่มีไม้กั้น",
-      "en": "Stop and look for trains before crossing the tracks."
+      "no": "Du har forkjørsrett og kjøretøy fra sideveiene skal vike for deg.",
+      "th": "คุณมีสิทธิ์ขับผ่านก่อน รถจากถนนสายรองต้องหยุดให้คุณ",
+      "en": "You have priority and vehicles from side roads must yield to you."
     },
     "driver_action": {
-      "no": "Stopp og se etter tog før du krysser sporet.",
-      "th": "หยุดและมองหารถไฟก่อนข้ามทางรถไฟ ไม่มีไม้กั้น",
-      "en": "Stop and look for trains before crossing the tracks."
+      "no": "Du har forkjørsrett og kjøretøy fra sideveiene skal vike for deg.",
+      "th": "คุณมีสิทธิ์ขับผ่านก่อน รถจากถนนสายรองต้องหยุดให้คุณ",
+      "en": "You have priority and vehicles from side roads must yield to you."
     }
   },
   {
@@ -65,14 +65,14 @@
       "en": "End of priority road"
     },
     "explanation": {
-      "no": "Du har forkjørsrett og kjøretøy fra sideveiene skal vike for deg.",
-      "th": "คุณมีสิทธิ์ขับผ่านก่อน รถจากถนนสายรองต้องหยุดให้คุณ",
-      "en": "You have priority and vehicles from side roads must yield to you."
+      "no": "Forkjørsretten slutter her. Fra nå gjelder vanlige regler, også vikeplikt for trafikk fra høyre.",
+      "th": "สิทธิ์ทางเอกสิ้นสุดที่นี่ จากนี้ใช้กฎปกติ รวมถึงต้องให้ทางรถที่มาจากทางขวา",
+      "en": "Priority ends here. Normal rules apply from now on, including yielding to traffic from the right."
     },
     "driver_action": {
-      "no": "Du har forkjørsrett og kjøretøy fra sideveiene skal vike for deg.",
-      "th": "คุณมีสิทธิ์ขับผ่านก่อน รถจากถนนสายรองต้องหยุดให้คุณ",
-      "en": "You have priority and vehicles from side roads must yield to you."
+      "no": "Forkjørsretten slutter her. Fra nå gjelder vanlige regler, også vikeplikt for trafikk fra høyre.",
+      "th": "สิทธิ์ทางเอกสิ้นสุดที่นี่ จากนี้ใช้กฎปกติ รวมถึงต้องให้ทางรถที่มาจากทางขวา",
+      "en": "Priority ends here. Normal rules apply from now on, including yielding to traffic from the right."
     }
   },
   {
