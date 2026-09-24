@@ -66,7 +66,7 @@ pytest -v
 
 ## 🎯 NÅVÆRENDE STATE (Live tracking)
 
-**Last oppdatert:** 2026-09-23 (Claude Code)
+**Last oppdatert:** 2026-09-24 (Claude Code)
 
 ### Branch Status
 
@@ -79,11 +79,21 @@ pytest -v
 | `codex/stopplengde-web` | **Codex** | ✅ Merged to main (commit `1fe5688`, `--no-ff`) and live in prod | — | Task 5 (Stopplengde-kalkulator v0.2.0.0) |
 | `feat/michael-memory-motivation` | **Claude Code** | ✅ Merged to main (merge commit, in `51df0ce`) — Railway deploy not verified by Claude Code (no Railway access) | — | TASK-017 (student learning memory + motivational coaching) |
 | `feat/connect-master-docs` | **Claude Code** | ✅ Merged to main 2026-09-23 — conversation-first Michael, 450-token replies, 10-turn memory + active sign, Thai quiz no-Latin fix. Railway deploy not verified by Claude Code (no Railway access) | — | Michael chat quality |
-| `feat/etappe1-lang-exam-identity` | **Claude Code** | 🟡 Pushed to origin, awaiting Codex/Anti merge + Railway verification. 20/20 new unit tests green; full local suite 506 passed / 190 subtests, no regressions (one unrelated pre-existing local Windows temp-dir permission error in `tests/test_range_response.py`, not caused by this branch) | — | Etappe 1 (clean `/web/no`, `/web/th`, `/web/en` entry points; exam mode forces Norwegian question/option text; chat header discloses "Michael AI" per language + new "send message to real Michael" button via `POST /teacher/contact-human`) |
+| `feat/etappe1-lang-exam-identity` | **Claude Code** | ✅ Already in `main` (merge `5d7cc85`) and live 2026-09-24 (build `8d18cec`): `/api/web/no`, `/api/web/th`, `/api/web/en` return 200 with own default language. Note: on thai2drive.no the routes are under `/api/web/*` (bare `/web/*` gives 404 because Railway routes `/api/*`). Earlier status: pushed, awaiting merge. 20/20 new unit tests green; full local suite 506 passed / 190 subtests, no regressions (one unrelated pre-existing local Windows temp-dir permission error in `tests/test_range_response.py`, not caused by this branch) | — | Etappe 1 (clean `/web/no`, `/web/th`, `/web/en` entry points; exam mode forces Norwegian question/option text; chat header discloses "Michael AI" per language + new "send message to real Michael" button via `POST /teacher/contact-human`) |
+| `codex/sign-catalog-correction` | **Codex + Claude Code** | ✅ Merged to main (`cdd1292`, `8d18cec`) and live in prod 2026-09-24 | — | Sign catalog correction: 311 signs, 206/208 images and names corrected, 206/208 explanations fixed (206 previously showed a level-crossing text), renamed 521/556/807 variants |
 
 **Merkelig:** Tasks 2 og 3 sin status er ikke verifisert i denne sesjonen — ingen har rapportert fremdrift her, så de står som sist kjent. Ikke anta at hele veikartet er ferdig; kun Task 1, 4 og 5 er bekreftet live i produksjon per 2026-09-16.
 
 **Notat fra Claude Code (2026-09-22):** `feat/etappe1-lang-exam-identity` er **kun pushet**, ikke merget og ikke bekreftet deployet. Claude Code har ingen Railway-tilgang og pusher aldri direkte til `main` (se Stop-regelen i `AGENTS.md`) — merge til main og verifisering av Railway-deploy er Codex/Anti sin del. Diff er begrenset til `backend/webapp.py` og `backend/teacher_chat.py` pluss to nye testfiler; se commit-meldingen på branchen for full beskrivelse.
+
+
+### Skiltkatalog, MongoDB-lagring og 206/208 — 100 % korrigert og live-verifisert (2026-09-24)
+
+- **Skiltkatalog:** live `GET /api/traffic-signs` sammenlignet mot `backend/signs_content.json` for alle 311 skilt (navn, `image_url`, `explanation`, `driver_action`): 0 avvik. Skilt 206 = «Forkjørsveg», 208 = «Slutt på forkjørsveg»; bildene er byte-identiske med `backend/sign_images/206_0.jpg` og `208_0.jpg`.
+- **206/208-forklaringer:** `206_0` viste tidligere jernbaneteksten («Stopp og se etter tog…»). Rettet i kode (`cdd1292`) og i produksjons-MongoDB med `backend/scripts/fix_sign_explanations.py --apply`. Snapshot av de gamle dokumentene ligger i `traffic_signs_migration_snapshots` (run_id `sign-explanations-20260924T182356Z`). `/api/signs/206_0` har 0 treff på tog/spor/jernbane.
+- **Atlas M0-lagring:** klyngen var full (514 av 512 MB) og all skriving var blokkert. Foreldreløse GridFS-blokker ble slettet (423 den 2026-09-23, 420 den 2026-09-24; siste sett er eksportert til `scratch/mongo_snapshots/orphan-chunks-20260924.bson`, lokalt, ikke i git). Etterpå: 0 foreldreløse blokker, `dataSize` 291 MB, testskriving OK. `storageSize` er fortsatt ~722 MB — følg med på Atlas-tallet.
+- **Åpent:** de 420 blokkene tilhørte en mislykket opplasting fra 2026-09-23 ca. 22:00 norsk tid (trolig en video, fil-dokumentet ble aldri skrevet fordi klyngen var full). Hvis den skulle vært lagret, må den lastes opp på nytt.
+- **Mikroleksjoner og Exam Mode:** `feat/micro-lessons` (`309e6f2`) og Exam Mode-commitene ligger allerede i `main`. `backend/tests` (uten `test_thai2drive_api.py`, som kjører mot produksjon): 488 passed, inkludert språkisolasjon; `test_tts_chat.py` trenger skrivbar `--basetemp` på denne Windows-maskinen.
 
 ---
 
