@@ -5306,7 +5306,8 @@ class LearningVideoCreate(BaseModel):
     title_no: str = ""
     title_th: str = ""
     title_en: str = ""
-    youtube_url: str
+    youtube_url: str = ""
+    file_path: str = ""
     thumbnail_url: str = ""          # auto-derived from youtube_url if empty
     duration_seconds: int = 0
     language: str = "no"             # primary language: no, th, en
@@ -5332,19 +5333,23 @@ class LearningVideoCreate(BaseModel):
 
 def _serialize_video(v: dict) -> dict:
     """Normalize a MongoDB video document for the API response."""
-    v = {k: val for k, val in v.items() if k != '_id'}
+    doc = dict(v)
+    doc_id = str(doc.get('id') or doc.get('_id') or '')
+    doc = {k: val for k, val in doc.items() if k != '_id'}
+    if doc_id:
+        doc['id'] = doc_id
     normalized_thumbnail = normalize_video_thumbnail_url(
-        v.get('thumbnail_url', ''),
-        v.get('file_path', ''),
+        doc.get('thumbnail_url', ''),
+        doc.get('file_path', ''),
     )
     if normalized_thumbnail:
-        v['thumbnail_url'] = normalized_thumbnail
+        doc['thumbnail_url'] = normalized_thumbnail
     else:
-        if v.get('youtube_url'):
-            yt_id = _extract_youtube_id(v['youtube_url'])
+        if doc.get('youtube_url'):
+            yt_id = _extract_youtube_id(doc['youtube_url'])
             if yt_id:
-                v['thumbnail_url'] = f"https://img.youtube.com/vi/{yt_id}/mqdefault.jpg"
-    return v
+                doc['thumbnail_url'] = f"https://img.youtube.com/vi/{yt_id}/mqdefault.jpg"
+    return doc
 
 
 # ── Public read endpoints ──────────────────────────────────────────────────────
@@ -5395,23 +5400,36 @@ async def admin_list_videos(_: dict = Depends(require_admin)):
 @api_router.post("/admin/videos")
 async def admin_create_video(data: dict, _: dict = Depends(require_admin)):
     """Create a new learning video. thumbnail_url is auto-derived if omitted."""
+    title_no = str(data.get("title_no") or "").strip()
+    youtube_url = str(data.get("youtube_url") or "").strip()
+    file_path = str(data.get("file_path") or "").strip()
+    if not title_no:
+        raise HTTPException(status_code=400, detail="Norsk tittel er påkrevd")
+    if not youtube_url and not file_path:
+        raise HTTPException(status_code=400, detail="Enten YouTube-URL eller videofil/MP4 må oppgis")
+
     video = {
         "id": str(uuid.uuid4()),
         "created_at": datetime.now(timezone.utc).isoformat(),
         "active": True,
         # defaults
         "title_no": "", "title_th": "", "title_en": "",
-        "youtube_url": "", "thumbnail_url": "", "duration_seconds": 0,
+        "youtube_url": "", "file_path": "", "thumbnail_url": "", "duration_seconds": 0,
         "language": "no",
         "topic_tags": [], "sign_ids": [], "sign_groups": [], "studybook_section_ids": [],
         "see_context": "", "understand_context": "", "choose_context": "",
         "instructor_summary_no": "", "instructor_summary_th": "", "instructor_summary_en": "",
         **data,
     }
-    if not video.get('thumbnail_url') and video.get('youtube_url'):
-        yt_id = _extract_youtube_id(video['youtube_url'])
-        if yt_id:
-            video['thumbnail_url'] = f"https://img.youtube.com/vi/{yt_id}/mqdefault.jpg"
+    if not video.get('thumbnail_url'):
+        if video.get('youtube_url'):
+            yt_id = _extract_youtube_id(video['youtube_url'])
+            if yt_id:
+                video['thumbnail_url'] = f"https://img.youtube.com/vi/{yt_id}/mqdefault.jpg"
+        elif video.get('file_path'):
+            derived = normalize_video_thumbnail_url("", video['file_path'])
+            if derived:
+                video['thumbnail_url'] = derived
     await db.learning_videos.insert_one(video)
     return _serialize_video(video)
 
@@ -5421,12 +5439,25 @@ async def admin_update_video(video_id: str, data: dict, _: dict = Depends(requir
     """Update fields on a learning video."""
     if not data:
         raise HTTPException(status_code=400, detail="No fields to update")
-    # Auto-update thumbnail if youtube_url changed and thumbnail not provided
+    # Auto-update thumbnail if youtube_url or file_path changed and thumbnail not provided
     if 'youtube_url' in data and not data.get('thumbnail_url'):
         yt_id = _extract_youtube_id(data['youtube_url'])
         if yt_id:
             data['thumbnail_url'] = f"https://img.youtube.com/vi/{yt_id}/mqdefault.jpg"
-    result = await db.learning_videos.update_one({"id": video_id}, {"$set": data})
+    elif 'file_path' in data and not data.get('thumbnail_url'):
+        derived = normalize_video_thumbnail_url("", data['file_path'])
+        if derived:
+            data['thumbnail_url'] = derived
+
+    query: Dict[str, Any] = {"id": video_id}
+    try:
+        from bson import ObjectId
+        if ObjectId.is_valid(video_id):
+            query = {"$or": [{"id": video_id}, {"_id": ObjectId(video_id)}]}
+    except Exception:
+        pass
+
+    result = await db.learning_videos.update_one(query, {"$set": data})
     if result.matched_count == 0:
         raise HTTPException(status_code=404, detail="Video not found")
     return {"message": "Updated", "id": video_id}
@@ -5435,7 +5466,15 @@ async def admin_update_video(video_id: str, data: dict, _: dict = Depends(requir
 @api_router.delete("/admin/videos/{video_id}")
 async def admin_delete_video(video_id: str, _: dict = Depends(require_admin)):
     """Permanently delete a learning video."""
-    result = await db.learning_videos.delete_one({"id": video_id})
+    query: Dict[str, Any] = {"id": video_id}
+    try:
+        from bson import ObjectId
+        if ObjectId.is_valid(video_id):
+            query = {"$or": [{"id": video_id}, {"_id": ObjectId(video_id)}]}
+    except Exception:
+        pass
+
+    result = await db.learning_videos.delete_one(query)
     if result.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Video not found")
     return {"message": "Deleted", "id": video_id}

@@ -3912,6 +3912,11 @@ a { color:inherit; text-decoration:none; }
 }
 .tm-bubble-tts:hover { background:rgba(255,153,51,.10); border-radius:50%; }
 /* ═══ Michael-skolen, konge/tjener-chip, HAV-lys, hint ═══ */
+.teacher-ai-badge {
+  display:inline-flex; align-items:center; padding:2px 8px; border-radius:999px; font-size:.68rem;
+  font-weight:800; letter-spacing:.06em; color:#FFB366; border:1px solid rgba(255,153,51,.5);
+  background:rgba(255,153,51,.1); margin-left:6px;
+}
 .ms-open-btn {
   margin-left:auto; border:1px solid rgba(0,245,255,.4); background:rgba(0,245,255,.08); color:#00F5FF;
   border-radius:999px; padding:6px 12px; font-size:.78rem; font-weight:700; cursor:pointer; white-space:nowrap;
@@ -5227,6 +5232,7 @@ a { color:inherit; text-decoration:none; }
             <div class="teacher-meta-wrap">
               <div class="teacher-meta-line" data-key="teacher_meta">Pålogget • AI-lærer • 16 års erfaring</div>
               <div class="teacher-online-badge" data-key="teacher_online_badge">ONLINE</div>
+              <div class="teacher-ai-badge" id="teacherAiBadge" role="note">AI</div>
             </div>
           </div>
           <button type="button" class="ms-open-btn" id="msOpenBtn" onclick="openMichaelSchool()">🎓 <span id="msOpenLbl">Michael-skolen</span></button>
@@ -10555,6 +10561,7 @@ function consultMichaelFromExamQuestion(errorIdx) {
     display = 'ช่วยอธิบายข้อนี้ให้หน่อยครับ: "' + err.question_text.slice(0, 80) + '..."';
     prompt = 'ฉันตอบผิดในข้อสอบจำลอง ช่วยอธิบายข้อนี้ให้เข้าใจง่าย ๆ หน่อยครับ\n\n'
       + '<quiz_context>\n'
+      + 'attempt_count: 3\n'
       + 'Question: ' + err.question_text + '\n'
       + 'Student answer: ' + userAnsDisplay + '\n'
       + 'Correct answer: ' + correctAnsDisplay + '\n'
@@ -10565,6 +10572,7 @@ function consultMichaelFromExamQuestion(errorIdx) {
     display = 'Could you explain this question: "' + err.question_text.slice(0, 80) + '..."?';
     prompt = 'I got this question wrong on my exam simulation. Could you explain the principle calmly?\n\n'
       + '<quiz_context>\n'
+      + 'attempt_count: 3\n'
       + 'Question: ' + err.question_text + '\n'
       + 'Student answer: ' + userAnsDisplay + '\n'
       + 'Correct answer: ' + correctAnsDisplay + '\n'
@@ -10575,6 +10583,7 @@ function consultMichaelFromExamQuestion(errorIdx) {
     display = 'Kan du forklare dette spørsmålet: "' + err.question_text.slice(0, 80) + '..."?';
     prompt = 'Jeg svarte feil på dette spørsmålet under eksamenssimulatoren. Kan du forklare det pedagogisk for meg?\n\n'
       + '<quiz_context>\n'
+      + 'attempt_count: 3\n'
       + 'Question: ' + err.question_text + '\n'
       + 'Student answer: ' + userAnsDisplay + '\n'
       + 'Correct answer: ' + correctAnsDisplay + '\n'
@@ -10995,7 +11004,7 @@ async function openMichaelQuizCoach() {
   var prompt = 'You are Michael, a calm Norwegian driving instructor. Answer only in ' + languageName + '. '
     + 'Never mix languages. Keep the answer short enough for a mobile panel. Explain why the student answer is wrong, why the correct answer is right, and give one practical traffic example. '
     + 'Use the mental model "Kongen og tjeneren" or "HAV-regelen" only when it fits naturally; never force either model.\n\n'
-    + '<quiz_context>\nQuestion: ' + ctx.question
+    + '<quiz_context>\nattempt_count: 3\nQuestion: ' + ctx.question
     + '\nStudent answer (' + ctx.userAnswerId + '): ' + ctx.userAnswer
     + '\nCorrect answer (' + ctx.correctAnswerId + '): ' + ctx.correctAnswer
     + '\nExisting explanation: ' + ctx.explanation + '\n</quiz_context>';
@@ -11147,10 +11156,13 @@ function askMichaelAboutThis(mode) {
 
   if (isHint) userDisplayMsg = _msL().hintMsg;
 
+  var attemptCount = isHint ? Math.min(3, Math.max(1, _msHint.count)) : 3;
+
   var hiddenPayload = userDisplayMsg + '\n\n'
     + '<quiz_context>\n'
     + (isHint ? 'STUDENT ANSWERED INCORRECTLY. THE STUDENT ASKED FOR A HINT.\n'
               : 'STUDENT ANSWERED INCORRECTLY. EXPLAIN WHY IT IS WRONG.\n')
+    + 'attempt_count: ' + attemptCount + '\n'
     + 'is_correct: false\n'
     + 'Question: ' + qText + '\n'
     + '[ELEVENS FAKTISKE SVAR] (' + userAnsId + '): ' + userAnsText + '\n'
@@ -11174,7 +11186,8 @@ var _MS = {
     gazeIntro: 'สายตาต้องไม่หยุดนิ่ง ทำตามลำดับนี้ซ้ำเรื่อย ๆ', start: 'เริ่ม', stop: 'หยุด', round: 'รอบ',
     ksChip: 'เรื่องการให้ทาง ถามตัวเองก่อน: ฉันเป็นราชา หรือผู้รับใช้?',
     hint: 'ขอคำใบ้', hintMsg: 'ขอคำใบ้หน่อยครับ', hintLbl: 'คำใบ้',
-    havTitle: 'กฎ HAV (มาตรา 3)', H: 'มีน้ำใจ', A: 'ระวังรอบด้าน', V: 'รอบคอบ'
+    havTitle: 'กฎ HAV (มาตรา 3)', H: 'มีน้ำใจ', A: 'ระวังรอบด้าน', V: 'รอบคอบ',
+    aiBadge: 'เอไอ', aiTitle: 'ไมเคิลเป็นครูที่เป็นปัญญาประดิษฐ์ (เอไอ)'
   },
   no: {
     open: 'Michael-skolen', close: 'Lukk', tabs: ['Thailand mot Norge', 'Ord for dagen', 'Blikkrutine'],
@@ -11183,7 +11196,8 @@ var _MS = {
     gazeIntro: 'Blikket skal aldri stå stille. Gå gjennom rutinen om og om igjen.', start: 'Start', stop: 'Stopp', round: 'Runde',
     ksChip: 'Vikeplikt? Spør deg selv: er jeg kongen eller tjeneren?',
     hint: 'Gi meg et hint', hintMsg: 'Gi meg et hint', hintLbl: 'Hint',
-    havTitle: 'HAV-regelen', H: 'Hensynsfull', A: 'Aktpågivende', V: 'Varsom'
+    havTitle: 'HAV-regelen', H: 'Hensynsfull', A: 'Aktpågivende', V: 'Varsom',
+    aiBadge: 'AI', aiTitle: 'Michael er en AI-lærer'
   },
   en: {
     open: "Michael's School", close: 'Close', tabs: ['Thailand vs Norway', 'Word of the day', 'Gaze routine'],
@@ -11192,7 +11206,8 @@ var _MS = {
     gazeIntro: 'Your eyes must never stand still. Run through this routine again and again.', start: 'Start', stop: 'Stop', round: 'Round',
     ksChip: 'Give way? Ask yourself: am I the king or the servant?',
     hint: 'Give me a hint', hintMsg: 'Give me a hint', hintLbl: 'Hint',
-    havTitle: 'The HAV rule (section 3)', H: 'Hensynsfull (considerate)', A: 'Aktpågivende (attentive)', V: 'Varsom (careful)'
+    havTitle: 'The HAV rule (section 3)', H: 'Hensynsfull (considerate)', A: 'Aktpågivende (attentive)', V: 'Varsom (careful)',
+    aiBadge: 'AI', aiTitle: 'Michael is an AI teacher'
   }
 };
 
@@ -11381,6 +11396,8 @@ function _msSyncLabel() {
   var e = document.getElementById('msOpenLbl'); if (e) e.textContent = L.open;
   var c = document.querySelector('.ms-close'); if (c) c.setAttribute('aria-label', L.close);
   var t = document.getElementById('msTitle'); if (t) t.textContent = L.open;
+  var b = document.getElementById('teacherAiBadge');
+  if (b) { b.textContent = L.aiBadge; b.title = L.aiTitle; b.setAttribute('aria-label', L.aiTitle); }
 }
 function _msResetHint() { _msHint = { qId: null, count: 0, sid: null }; }
 function _msOnLangChange() {
@@ -11748,9 +11765,9 @@ async function loadTeacher() {
       } catch(e) {
         // Fallback if API unreachable
         var fallback = {
-          no: 'Sawatdee 😊\n\nJeg er Michael.\n\nTrafikklærer med 16 års erfaring i Oslo.',
-          th: 'สวัสดีครับ 😊\n\nผมชื่อไมเคิล\n\nครูสอนขับรถที่มีประสบการณ์ 16 ปีในออสโล',
-          en: 'Sawatdee 😊\n\nI\'m Michael.\n\nDriving instructor with 16 years of experience in Oslo.'
+          no: 'Hei. Jeg er Michaels AI-trafikklærer, bygget på hans 16 år med undervisning i Oslo.',
+          th: 'สวัสดีครับ ผมเป็นผู้ช่วยครูสอนขับรถที่เป็นปัญญาประดิษฐ์ของไมเคิล สร้างจากประสบการณ์สอน 16 ปีในออสโลของเขา',
+          en: "Hi. I'm Michael's AI driving teacher, built on his 16 years of teaching in Oslo."
         };
         _teacherAppendBubble('assistant', fallback[appLang] || '');
       }

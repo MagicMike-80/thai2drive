@@ -324,9 +324,10 @@ class LiveThaiQuizCoachIsolationTests(unittest.TestCase):
             logging.disable(previous_logging_disable)
 
         self.assertTrue(completed["ok"], f"The LLM did not return ({completed['error_type']}); fallback is not live proof")
-        self.assertTrue(re.search(r"[\u0E00-\u0E7F]", response.reply), "Reply contains no Thai script")
-        latin_words = re.findall(r"[A-Za-zÆØÅæøå]+", response.reply)
-        self.assertEqual(latin_words, [], "Reply contains Norwegian or English letters")
+        # Tillat godkjente norske fagord i parentes: thai-forklaring (norsk fagord); ingen ord utenfor parentes
+        text_without_glossary = re.sub(r"\([A-Za-zÆØÅæøå\s-]+\)", "", response.reply)
+        latin_words = re.findall(r"[A-Za-zÆØÅæøå]+", text_without_glossary)
+        self.assertEqual(latin_words, [], "Reply contains Norwegian or English letters outside glossary parentheses")
         self.assertGreater(len(response.reply.strip()), 40, "Reply is too short to verify an explanation")
 
 

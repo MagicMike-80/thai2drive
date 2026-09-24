@@ -1904,15 +1904,19 @@ async function loadVideos() {
             <tr style="border-bottom:1px solid #1e293b">
               <td style="padding:8px 10px;color:var(--text)">${escapeHtml(v.title_no || '—')}</td>
               <td style="padding:8px 10px;color:var(--muted)">
-                <a href="${escapeHtml(v.youtube_url)}" target="_blank" style="color:var(--accent);text-decoration:none">
-                  ${escapeHtml(v.youtube_url || '—')}
-                </a>
+                ${v.youtube_url ? `
+                  <a href="${escapeHtml(v.youtube_url)}" target="_blank" style="color:var(--accent);text-decoration:none">
+                    ${escapeHtml(v.youtube_url)}
+                  </a>
+                ` : `
+                  <span style="color:var(--text);font-family:monospace;font-size:12px">${escapeHtml(v.file_path || '—')}</span>
+                `}
               </td>
               <td style="padding:8px 10px;color:var(--muted)">${escapeHtml((v.topic_tags || []).join(', '))}</td>
               <td style="padding:8px 10px">${v.active ? '✅' : '❌'}</td>
               <td style="padding:8px 10px;display:flex;gap:6px">
-                <button class="btn-edit" onclick="openVideoModal('${v.id}')">✏️ Rediger</button>
-                <button class="btn-del"  onclick="deleteVideo('${v.id}')">🗑</button>
+                <button class="btn-edit" onclick="openVideoModal('${v.id || v._id}')">✏️ Rediger</button>
+                <button class="btn-del"  onclick="deleteVideo('${v.id || v._id}')">🗑</button>
               </td>
             </tr>
           `).join('')}
@@ -1924,9 +1928,13 @@ async function loadVideos() {
 }
 
 async function deleteVideo(id) {
+  if (!id || id === 'undefined' || id === 'null') {
+    toast('Ugyldig video-ID', false);
+    return;
+  }
   if (!confirm('Slette denne videoen? Dette kan ikke angres.')) return;
   try {
-    const r = await fetch(API + '/admin/videos/' + id, {
+    const r = await fetch(API + '/admin/videos/' + encodeURIComponent(id), {
       method: 'DELETE',
       headers: { Authorization: 'Bearer ' + token },
     });
@@ -1934,28 +1942,132 @@ async function deleteVideo(id) {
       toast('🗑 Video slettet');
       loadVideos();
     } else {
-      const e = await r.json().catch(() => ({ detail: 'Ukjent feil' }));
-      toast('Feil ved sletting: ' + (e.detail || 'ukjent'), false);
+      let errDetail = 'Feil (' + r.status + ')';
+      try {
+        const e = await r.json();
+        errDetail = typeof e.detail === 'string' ? e.detail : JSON.stringify(e.detail || '');
+      } catch (_) {}
+      toast('Feil ved sletting: ' + errDetail, false);
     }
   } catch(e) {
     toast('Feil: ' + e.message, false);
   }
 }
 
+function updateVideoPreview() {
+  const box = document.getElementById('vd-preview-box');
+  if (!box) return;
+  const filePath = (document.getElementById('vd-file-path')?.value || '').trim();
+  const ytUrl = (document.getElementById('vd-url')?.value || '').trim();
+  if (filePath) {
+    if (filePath.toLowerCase().endsWith('.pdf')) {
+      box.style.display = 'block';
+      box.innerHTML = `<div style="padding:10px"><a href="${escapeHtml(filePath)}" target="_blank" style="color:var(--accent);font-weight:600">📄 Åpne PDF-forhåndsvisning</a></div>`;
+    } else if (filePath.match(/\.(jpg|jpeg|png|webp)$/i)) {
+      box.style.display = 'block';
+      box.innerHTML = `<img src="${escapeHtml(filePath)}" style="max-height:160px;max-width:100%;border-radius:6px" alt="Forhåndsvisning"/>`;
+    } else {
+      box.style.display = 'block';
+      box.innerHTML = `<video src="${escapeHtml(filePath)}" controls style="max-height:180px;max-width:100%;border-radius:6px;background:#000"></video>`;
+    }
+  } else if (ytUrl) {
+    box.style.display = 'block';
+    const m = ytUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([a-zA-Z0-9_-]{11})/);
+    if (m && m[1]) {
+      box.innerHTML = `<iframe width="100%" height="180" src="https://www.youtube-nocookie.com/embed/${m[1]}" frameborder="0" allowfullscreen style="border-radius:6px"></iframe>`;
+    } else {
+      box.innerHTML = `<div style="color:var(--muted);font-size:12px">YouTube: ${escapeHtml(ytUrl)}</div>`;
+    }
+  } else {
+    box.style.display = 'none';
+    box.innerHTML = '';
+  }
+}
+
+async function uploadVideoModalFile(input) {
+  const file = input.files && input.files[0];
+  if (!file) return;
+  const status = document.getElementById('vd-upload-status');
+  const zone = document.getElementById('vd-upload-zone');
+  status.textContent = 'Laster opp ' + file.name + '…';
+  zone.style.borderColor = 'var(--accent)';
+  const form = new FormData();
+  form.append('file', file);
+  try {
+    const res = await fetch(API + '/admin/media/upload', {
+      method: 'POST',
+      headers: { Authorization: 'Bearer ' + token },
+      body: form,
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.detail || 'Opplastingen feilet');
+    document.getElementById('vd-file-path').value = data.url;
+    if (!document.getElementById('vd-title-no').value.trim()) {
+      document.getElementById('vd-title-no').value = file.name.replace(/\.[^/.]+$/, "");
+    }
+    status.textContent = `✅ Lastet opp: ${data.filename} (${Math.ceil((data.bytes || file.size)/1024)} KB)`;
+    zone.style.borderColor = '#10b981';
+    updateVideoPreview();
+  } catch (err) {
+    status.textContent = '❌ Feil: ' + err.message;
+    zone.style.borderColor = 'var(--bad)';
+  }
+}
+
+function dropVideoModalFile(event) {
+  event.preventDefault();
+  event.stopPropagation();
+  const file = event.dataTransfer && event.dataTransfer.files && event.dataTransfer.files[0];
+  if (file) uploadVideoModalFile({ files: [file] });
+}
+
 function openVideoModal(id) {
-  const v = id ? _videosData.find(x => x.id === id) : null;
+  const v = id ? _videosData.find(x => (x.id === id || x._id === id)) : null;
   const tags = (v?.topic_tags || []).join(', ');
   const signIds = (v?.sign_ids || []).join(', ');
   const signGroups = (v?.sign_groups || []).join(', ');
+  const filePath = v?.file_path || '';
+  const youtubeUrl = v?.youtube_url || '';
 
   document.getElementById('modal-body').innerHTML = `
     <button class="close" onclick="closeModal()">✕</button>
     <h2>${id ? '✏️ Rediger video' : '➕ Legg til video'}</h2>
 
+    <div style="margin-bottom:14px;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:12px">
+      <div class="lbl" style="margin-bottom:6px">📁 Videofil (MP4, PDF eller bilde)</div>
+      <div id="vd-upload-zone" onclick="document.getElementById('vd-file').click()"
+        ondragover="event.preventDefault()" ondrop="dropVideoModalFile(event)"
+        style="border:2px dashed #475569;border-radius:8px;padding:14px;text-align:center;cursor:pointer;background:var(--card);margin-bottom:8px">
+        <strong>📤 Dra fil hit eller klikk for å laste opp</strong>
+        <div style="font-size:12px;color:var(--muted);margin-top:3px">MP4, WebM, PDF, JPG, PNG eller WebP</div>
+        <div id="vd-upload-status" style="font-size:12px;color:var(--accent);margin-top:4px">${filePath ? 'Gjeldende fil: ' + escapeHtml(filePath) : ''}</div>
+      </div>
+      <input id="vd-file" type="file" style="display:none"
+        accept="video/mp4,video/webm,application/pdf,image/jpeg,image/png,image/webp"
+        onchange="uploadVideoModalFile(this)">
+      <div style="display:flex;gap:8px">
+        <input id="vd-file-path" type="text" oninput="updateVideoPreview()" style="flex:1;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:13px;box-sizing:border-box"
+          placeholder="f.eks. /public_assets/video_stoppelengde_80.mp4 eller /api/media/files/..." value="${escapeHtml(filePath)}"/>
+        <select onchange="if(this.value){document.getElementById('vd-file-path').value=this.value;updateVideoPreview();}" style="background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:12px;max-width:180px">
+          <option value="">⚡ Velg eksisterende...</option>
+          <option value="/public_assets/video_stoppelengde_80.mp4">Stoppelengde 80 km/t</option>
+          <option value="/public_assets/video_stoppelengde_50.mp4">Stoppelengde 50 km/t</option>
+          <option value="/public_assets/video_michaels_gatelogikk.mp4">Michaels gatelogikk</option>
+          <option value="/public_assets/video_vikeplikt_hoyre.mp4">Vikeplikt høyreregel</option>
+          <option value="/public_assets/video_vikeplikt_skilt.mp4">Vikeplikt skilt</option>
+          <option value="/public_assets/video_rundkjoring.mp4">Rundkjøring</option>
+          <option value="/public_assets/video_morkekjoring.mp4">Mørkekjøring</option>
+        </select>
+      </div>
+    </div>
+
     <div style="margin-bottom:12px">
-      <div class="lbl">YouTube-URL</div>
-      <input id="vd-url" type="text" style="width:100%;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:14px;box-sizing:border-box"
-        placeholder="https://www.youtube.com/watch?v=..." value="${escapeHtml(v?.youtube_url || '')}"/>
+      <div class="lbl">YouTube-URL (valgfritt hvis videofil er oppgitt)</div>
+      <input id="vd-url" type="text" oninput="updateVideoPreview()" style="width:100%;background:var(--card);color:var(--text);border:1px solid #475569;border-radius:6px;padding:8px;font-size:14px;box-sizing:border-box"
+        placeholder="https://www.youtube.com/watch?v=..." value="${escapeHtml(youtubeUrl)}"/>
+    </div>
+
+    <div id="vd-preview-box" style="margin-bottom:14px;background:#0b0f19;border:1px solid #334155;border-radius:8px;padding:10px;text-align:center;display:none">
     </div>
 
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px">
@@ -2018,11 +2130,13 @@ function openVideoModal(id) {
       </button>
     </div>`;
   document.getElementById('modal').classList.add('show');
+  updateVideoPreview();
 }
 
 async function saveVideo(id) {
   const body = {
     youtube_url:            document.getElementById('vd-url').value.trim(),
+    file_path:              document.getElementById('vd-file-path').value.trim(),
     title_no:               document.getElementById('vd-title-no').value.trim(),
     title_th:               document.getElementById('vd-title-th').value.trim(),
     title_en:               document.getElementById('vd-title-en').value.trim(),
@@ -2036,9 +2150,11 @@ async function saveVideo(id) {
     duration_seconds:       parseInt(document.getElementById('vd-dur').value)||0,
     active:                 document.getElementById('vd-active').checked,
   };
-  if (!body.youtube_url || !body.title_no) { toast('YouTube-URL og norsk tittel er påkrevd', false); return; }
-  const url  = id ? API + '/admin/videos/' + id : API + '/admin/videos';
-  const method = id ? 'PATCH' : 'POST';
+  if (!body.title_no) { toast('Norsk tittel er påkrevd', false); return; }
+  if (!body.youtube_url && !body.file_path) { toast('Enten videofil/MP4 eller YouTube-URL må oppgis', false); return; }
+  const isExisting = Boolean(id && id !== 'undefined' && id !== 'null');
+  const url  = isExisting ? API + '/admin/videos/' + encodeURIComponent(id) : API + '/admin/videos';
+  const method = isExisting ? 'PATCH' : 'POST';
   try {
     const r = await fetch(url, {
       method,
@@ -2049,12 +2165,22 @@ async function saveVideo(id) {
       body: JSON.stringify(body)
     });
     if (r.ok) {
-      toast(id ? '✅ Video oppdatert!' : '✅ Video lagt til!');
+      toast(isExisting ? '✅ Video oppdatert!' : '✅ Video lagt til!');
       closeModal();
       loadVideos();
     } else {
-      const e = await r.json().catch(() => ({ detail: 'Ukjent feil' }));
-      toast('Feil: ' + (e.detail || 'ukjent'), false);
+      let errDetail = 'Feil (' + r.status + ')';
+      try {
+        const e = await r.json();
+        if (typeof e.detail === 'string') {
+          errDetail = e.detail;
+        } else if (Array.isArray(e.detail)) {
+          errDetail = e.detail.map(x => x.msg || JSON.stringify(x)).join(', ');
+        } else if (e.detail) {
+          errDetail = JSON.stringify(e.detail);
+        }
+      } catch (_) {}
+      toast('Feil: ' + errDetail, false);
     }
   } catch(e) {
     toast('Feil: ' + e.message, false);

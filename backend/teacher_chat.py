@@ -28,6 +28,10 @@ from typing import Optional, List, Literal
 from fastapi import APIRouter, Query, HTTPException
 from pydantic import BaseModel, Field
 from motor.motor_asyncio import AsyncIOMotorClient
+try:
+    import michael_greetings as _greetings
+except ImportError:  # imported as backend.teacher_chat
+    from backend import michael_greetings as _greetings
 from dotenv import load_dotenv
 try:
     from media_catalog import SUPPORTED_LANGUAGES, expand_law_synonyms, rank_catalog_media, serialize_catalog_document
@@ -1072,6 +1076,12 @@ def _build_system_prompt(lang: str, memory: Optional[dict] = None) -> str:
     )
 
 
+_AI_HONESTY_RULE = (
+    "9. AI HONESTY: If the student asks whether you are a real person or an AI, say plainly that you are "
+    "Michael's AI teaching assistant, built on his 16 years of teaching in Oslo. Never claim to be human, "
+    "never claim to have driven or met the student, and never say you have feelings.\n"
+)
+
 _VIKEPLIKT_RULE = {
     "no": (
         "8. VIKEPLIKT: Never say that you 'always must stop' for vikeplikt. Vikeplikt means that "
@@ -1119,6 +1129,7 @@ def _conversation_first_rules(lang: str) -> str:
         "as if it were shown.\n"
         "7. Always finish your last sentence.\n"
         + _VIKEPLIKT_RULE.get(lang, _VIKEPLIKT_RULE["no"])
+        + _AI_HONESTY_RULE
         + "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     )
 
@@ -1127,7 +1138,9 @@ def _master_output_contract(lang: str) -> str:
     language = {"no": "Norwegian", "th": "Thai", "en": "English"}[lang]
     thai_terms = (
         " When explaining a Thai traffic term, always write the Norwegian technical term "
-        "immediately afterward in parentheses, using the approved glossary in master document 3."
+        "immediately afterward in parentheses, using the approved glossary format: thai-forklaring (norsk fagord) "
+        "(for example การให้ทาง (vikeplikt), ทางเอก (forkjørsvei), ป้ายหยุด (stoppskilt)). "
+        "Zero English allowed: do NOT use any English words or Latin letters outside of these Norwegian glossary parentheses."
         if lang == "th" else " Do not use Thai in learner-facing text."
     )
     return (
@@ -1147,9 +1160,9 @@ MICHAEL_SYSTEM_PROMPT = _build_system_prompt("no")
 
 # ─── Single source of truth: welcome + topics ────────────────────────────────
 MICHAEL_WELCOME = {
-    "no": "Sawatdee 😊\n\nJeg er Michael.\n\nTrafikklærer med 16 års erfaring i Oslo.\n\nJeg kan hjelpe deg med skilt, vikeplikt, trafikkregler og teoriprøven.",
-    "th": "สวัสดีครับ 😊\n\nผมชื่อไมเคิล\n\nครูสอนขับรถที่มีประสบการณ์ 16 ปีในออสโล\n\nผมสามารถช่วยคุณเรื่องป้ายจราจร การให้ทาง กฎจราจร และการสอบทฤษฎีได้ครับ",
-    "en": "Sawatdee 😊\n\nI'm Michael.\n\nDriving instructor with 16 years of experience in Oslo.\n\nI can help you with signs, right-of-way, traffic rules and the theory test.",
+    "no": "Hei.\n\nJeg er Michaels AI-trafikklærer, bygget på hans 16 år med undervisning i Oslo.\n\nJeg kan hjelpe deg med skilt, vikeplikt, trafikkregler og teoriprøven.",
+    "th": "สวัสดีครับ\n\nผมเป็นผู้ช่วยครูสอนขับรถที่เป็นปัญญาประดิษฐ์ของไมเคิล สร้างจากประสบการณ์สอน 16 ปีในออสโลของเขา\n\nผมสามารถช่วยคุณเรื่องป้ายจราจร การให้ทาง กฎจราจร และการสอบทฤษฎีได้ครับ",
+    "en": "Hi.\n\nI'm Michael's AI driving teacher, built on his 16 years of teaching in Oslo.\n\nI can help you with signs, right-of-way, traffic rules and the theory test.",
 }
 
 MICHAEL_TOPICS = {
@@ -1312,10 +1325,13 @@ def _concise_teacher_reply(reply_text: str, lang: str) -> str:
         }.get(lang, "Michael kan ikke gi et kort og presist svar akkurat nå. Prøv igjen.")
 
     if lang == "th":
-        return concise if len(concise) <= 180 else concise[:179].rstrip() + "…"
-    words = concise.split()
-    if len(words) > 30:
-        concise = " ".join(words[:30]).rstrip(" ,;:") + "."
+        if len(concise) <= 320:
+            return concise
+        cut = concise[:320]
+        return cut[:cut.rfind(" ")].rstrip() if " " in cut else cut
+    # Never cut inside a sentence: if two sentences are too long, keep the first whole one.
+    if len(concise.split()) > 45 and len(allowed) > 1:
+        concise = allowed[0].strip()
     return concise
 
 
@@ -1343,7 +1359,35 @@ _LEAKED_MEDIA_PAREN = re.compile(r"\((?:podcast|video|image)\s*:[^)]*\)", re.IGN
 _LEAKED_ASSET_PATH = re.compile(r"(?<![\w\[/])/public_assets/\S+")
 
 
-def _polish_teacher_reply(text: str) -> str:
+_SENTENCE_SPLIT = re.compile(r"(?<=[.!?])\s+")
+_EXPLAIN_REQUEST_TERMS = ("hvorfor", "forklar", "why", "explain", "ทำไม", "อธิบาย")
+
+
+def _wants_explanation(user_msg: str) -> bool:
+    text = (user_msg or "").casefold()
+    return any(term in text for term in _EXPLAIN_REQUEST_TERMS)
+
+
+def _cap_sentences(paragraphs: list, max_sentences: int) -> list:
+    """Keep at most max_sentences whole sentences; bracket tags and later paragraphs of tags survive."""
+    kept, budget = [], max_sentences
+    for paragraph in paragraphs:
+        if paragraph.startswith("["):
+            kept.append(paragraph)
+            continue
+        if budget <= 0:
+            continue
+        sentences = [s for s in _SENTENCE_SPLIT.split(paragraph) if s.strip()]
+        if len(sentences) <= budget:
+            kept.append(paragraph)
+            budget -= len(sentences)
+        else:
+            kept.append(" ".join(sentences[:budget]))
+            budget = 0
+    return kept
+
+
+def _polish_teacher_reply(text: str, max_sentences: int = 0) -> str:
     """Humanize a normal chat reply: no leaked media syntax, no bold markup, no tacked-on menu question.
 
     Media is delivered through the separate `media` field, so a parenthesised tag or a raw asset
@@ -1366,6 +1410,8 @@ def _polish_teacher_reply(text: str) -> str:
             continue
         if paragraph:
             cleaned.append(paragraph.replace("**", ""))
+    if max_sentences:
+        cleaned = _cap_sentences(cleaned, max_sentences)
     # A closing question after a finished answer reads like a menu prompt; drop it.
     if len(cleaned) > 1:
         last = cleaned[-1]
@@ -1481,31 +1527,38 @@ def _coaching_output_instruction(lang: str, mode: str, quiz_context: str = "") -
 
 
 def _thai_quiz_purity_block() -> str:
-    """Final Thai-only rule for quiz explanations; overrides the glossary-parentheses habit."""
+    """Final Thai purity rule for quiz explanations with approved Norwegian technical terms in parentheses."""
     return (
         "\n\n━━━ THAI PURITY FOR QUIZ EXPLANATIONS — LAST AND HIGHEST PRIORITY ━━━\n"
-        "Write the ENTIRE reply in Thai script only. Do NOT write any Norwegian or English "
-        "word or letter (A–Z, æ, ø, å): no Norwegian technical terms, not even in parentheses, "
-        "no glossary terms, no abbreviations such as HAV, km/t or km/h, and no English words. "
-        "Translate every term and unit into Thai (for example กม./ชม.). This rule OVERRIDES "
-        "any earlier instruction to add Norwegian terms in parentheses. Before answering, "
-        "check that your reply contains no Latin letters.\n"
-        "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        "1. Write the explanation in Thai script only.\n"
+        "2. When introducing or mentioning a traffic term, ALWAYS write the Norwegian technical term "
+        "immediately afterward in parentheses: thai-forklaring (norsk fagord), for example "
+        "การให้ทาง (vikeplikt), ป้ายหยุด (stoppskilt), ทางเอก (forkjørsvei), ทางม้าลาย (gangfelt).\n"
+        "3. ZERO ENGLISH: Do NOT write any English words or phrases (such as 'give way', 'stop', 'car', 'priority').\n"
+        "4. NO LATIN LETTERS OUTSIDE PARENTHESES: Any Latin letters must strictly be inside parentheses "
+        "naming the Norwegian technical term (A–Z, æ, ø, å). Translate all units into Thai (for example กม./ชม.). "
+        "This rule OVERRIDES any contrary instruction. Before answering, verify that no English is used "
+        "and that no Latin letters exist outside parentheses.\n"
+        "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     )
 
 
 _TONE_KEYWORDS = {
     "warm": (
         "gruer", "nervøs", "nervos", "redd for", "stresset", "bommer på alt", "gir opp",
-        "klarer ikke", "engstelig", "panikk",
-        "กังวล", "กลัว", "เครียด", "ประหม่า", "ไม่ไหว", "ท้อ", "หมดกำลังใจ",
-        "nervous", "anxious", "scared", "stressed", "give up", "afraid", "panic",
+        "klarer ikke", "engstelig", "panikk", "usikker", "hjelp",
+        "กังวล", "กลัว", "เครียด", "ประหม่า", "ไม่ไหว", "ท้อ", "หมดกำลังใจ", "ไม่มั่นใจ",
+        "nervous", "anxious", "scared", "stressed", "give up", "afraid", "panic", "insecure",
     ),
     "strict": (
-        "50 i 30", "kjører 50 i 30", "trenger ikke sjekke blindsone", "uten å se meg for", "kjøre på rødt",
-        "drikke og kjøre", "tar en øl", "kjøre i rus", "sender melding mens jeg kjører",
-        "ขับเร็วเกิน", "ไม่ต้องดูกระจก", "ดื่มแล้วขับ", "ฝ่าไฟแดง", "เล่นมือถือขณะขับ",
-        "drink and drive", "skip the mirror", "run a red", "text while driving",
+        "50 i 30", "kjører 50 i 30", "blindsone", "trenger ikke sjekke blindsone", "uten å se meg for", "kjøre på rødt",
+        "rødt lys", "rodt lys", "stoppskilt", "ikke stoppe på stoppskilt", "drikke og kjøre", "tar en øl",
+        "kjøre i rus", "promille", "sender melding mens jeg kjører", "tekste mens jeg kjører", "mobil",
+        "bryte vikeplikt", "høyreregel brudd", "uten bilbelte", "farlig forbikjøring", "kjøre forbi i sving",
+        "ขับเร็วเกิน", "ไม่ต้องดูกระจก", "ดื่มแล้วขับ", "ฝ่าไฟแดง", "ไฟแดง", "เล่นมือถือขณะขับ",
+        "ไม่หยุด", "เมาขับ", "ไม่คาดเข็มขัด", "แซงทางโค้ง", "ไม่ให้ทาง",
+        "drink and drive", "skip the mirror", "run a red", "red light", "stop sign", "text while driving",
+        "drunk driving", "no seatbelt", "speeding",
     ),
     "dry": (
         "haha", "hehe", "lol", "555", "😂", "🤣", "hjernen min består", "hjernen min er",
@@ -1514,9 +1567,9 @@ _TONE_KEYWORDS = {
 }
 
 
-def _detect_tone(message: str) -> Optional[str]:
-    """Pick Michael's tone register from the student's message. Safety beats warmth beats humour."""
-    text = (message or "").casefold()
+def _detect_tone(message: str, quiz_context: str = "") -> Optional[str]:
+    """Pick Michael's tone register. Safety beats warmth beats humour."""
+    text = f"{message or ''} {quiz_context or ''}".casefold()
     for tone in ("strict", "warm", "dry"):
         if any(term in text for term in _TONE_KEYWORDS[tone]):
             return tone
@@ -1530,18 +1583,22 @@ def _tone_instruction(tone: Optional[str], lang: str) -> str:
     language = {"no": "Norwegian", "th": "Thai", "en": "English"}.get(lang, "Norwegian")
     rules = {
         "strict": (
-            "The student describes or asks about something dangerous. Be STRICT and blunt: "
-            "no wiggle room, no softening, go straight to the professional consequence and the "
-            "correct rule. Do not lecture at length."
+            "The student describes or commits a dangerous or safety-critical traffic error. Be STRICT, authoritative, and direct: "
+            "no softening, no sugarcoating. Point out the severe safety risk and the non-negotiable rule immediately. "
+            "Do not lecture at length."
         ),
         "warm": (
-            "The student is anxious or discouraged. Be WARM and calm: slow the pace, take away "
+            "The student is anxious, nervous, or discouraged. Be WARM, reassuring, and calm: slow the pace, take away "
             "pressure, acknowledge the feeling in one short human sentence, then take ONE rule "
             "at a time. No lists, no long explanations, no false praise."
         ),
         "dry": (
-            "The student made a light joke. Reply with ONE short dry, friendly remark, then "
+            "The student made a light-hearted or humorous remark. Reply with ONE short dry, friendly remark, then "
             "continue helping in a sentence or two. Do not lecture about the joke."
+        ),
+        "calm": (
+            "Standard tone: Be CALM, concise, objective, and supportive. Explain like an experienced instructor "
+            "sitting in the passenger seat. Clear and pedagogical without unnecessary fluff."
         ),
     }[tone]
     return (
@@ -1581,26 +1638,46 @@ def _quiz_attempt_number(prior: list[dict], quiz_key: str) -> int:
     return earlier + 1
 
 
+def _extract_attempt_count(quiz_context: str) -> Optional[int]:
+    """Parse attempt_count (1, 2, or 3) from <quiz_context> if present."""
+    if not quiz_context:
+        return None
+    m = re.search(r"attempt_count:\s*(\d+)", quiz_context, re.IGNORECASE)
+    if m:
+        try:
+            return max(1, min(3, int(m.group(1))))
+        except ValueError:
+            pass
+    return None
+
+
 def _scaffolding_instruction(attempt: int, explicit_request: bool, lang: str) -> str:
     """Three-step hint ladder (master document 2, section 3). Overrides the reveal-everything flow."""
     language = {"no": "Norwegian", "th": "Thai", "en": "English"}.get(lang, "Norwegian")
     if explicit_request or attempt >= 3:
         step = (
-            "STEP 3: Give the correct answer now with a short, precise explanation of 2–3 sentences."
+            "STEP 3 (FULL EXPLANATION & FASIT): Reveal the correct answer now with a short, precise explanation. "
+            "Explain specifically why the student's chosen answer was wrong and why the correct answer is right. "
+            "Include the approved mnemonic (Kongen og tjeneren for right-of-way/vikeplikt, or HAV-regelen for § 3) when relevant."
         )
     elif attempt == 2:
         step = (
-            "STEP 2: Give exactly ONE sharp hint (for example point to the sign, the give-way "
-            "rule from the right, or the position in the lane). Do NOT give the full answer yet."
+            "STEP 2 (PEDAGOGICAL HINT): Give exactly ONE sharp hint or guiding question "
+            "(for example point to the sign, the give-way rule from the right, or the position in the lane). "
+            "Do NOT give the full answer yet. "
+            "CRITICAL NEGATIVE CONSTRAINT: DO NOT reveal the correct answer, do NOT state which option letter/text is correct, "
+            "and do NOT give the full explanation yet. The student must try to figure it out."
         )
     else:
         step = (
-            "STEP 1: Say plainly that the answer is wrong and ask the student to try again with "
-            "a fresh look at the situation. Do NOT reveal the correct answer or the rule yet."
+            "STEP 1 (ENCOURAGEMENT & RETRY): Say plainly that the answer is wrong and ask the student to try again with "
+            "a fresh look at the situation, the road, or the signs. "
+            "CRITICAL NEGATIVE CONSTRAINT: Do NOT reveal the correct answer or the rule yet. "
+            "Keep it to a brief encouragement to rethink."
         )
     return (
         "\n\n━━━ SCAFFOLDING LADDER — OVERRIDES THE QUIZ HELP RULES ABOVE ━━━\n"
-        f"Reply in {language}. This is wrong attempt number {attempt} on this question. {step} "
+        f"Reply in {language}. This is wrong attempt number {attempt} on this question. {step}\n"
         "Keep it to 2–4 sentences, no section headings, no mini-practice question.\n"
         "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     )
@@ -3321,6 +3398,9 @@ async def fetch_student_learning_memory(
         if user_doc:
             memory["current_streak"] = user_doc.get("current_streak", 0)
             memory["best_streak"] = user_doc.get("best_streak", 0)
+            first_name = _greetings.safe_first_name(user_doc)
+            if first_name:
+                memory["first_name"] = first_name
     except Exception as e:
         logger.warning("Error fetching streak for student memory: %s", e)
 
@@ -3364,52 +3444,25 @@ async def teacher_welcome(
     memory = await fetch_student_learning_memory(device_id, user_id, lang)
     weakness = memory.get("weak_topic") if memory else None
     streak = memory.get("current_streak", 0) if memory else 0
+    topic = weakness["name"] if weakness and weakness.get("name") else None
 
+    now_utc = datetime.now(timezone.utc)
+    oslo = _greetings.oslo_now(now_utc)
+    welcome = _greetings.pick_welcome(
+        lang,
+        first_name=memory.get("first_name") if memory else None,
+        is_returning=bool(memory and memory.get("is_returning")),
+        days_since_last=_greetings.days_since(memory.get("last_session_at") if memory else None, now_utc),
+        hour=oslo.hour,
+        streak=streak or 0,
+        topic=topic,
+        seed=f"{oslo.date()}:{user_id or device_id or ''}",
+    )
+    result = {"lang": lang, "welcome": welcome, "weakness": weakness}
     if streak and streak >= 1:
-        topic_name = weakness["name"] if weakness and weakness.get("name") else None
-        streak_greetings = {
-            "no": (
-                f"Bra jobbet! Du har {streak} riktige svar på rad akkurat nå 🎉 "
-                + (
-                    f"Jeg ser at {topic_name} har vært litt vrient i det siste — skal vi ta en kjapp prat om det, eller vil du fortsette streaken din på noe annet?"
-                    if topic_name
-                    else "Hva har du lyst til å øve på i dag?"
-                )
-            ),
-            "th": (
-                f"เก่งมากครับ! ตอนนี้คุณตอบถูกติดต่อกัน {streak} ข้อแล้ว 🎉 "
-                + (
-                    f"ผมเห็นว่าเรื่อง{topic_name}ยังเป็นจุดที่ยากอยู่บ้าง อยากคุยเรื่องนี้กันสักนิดไหมครับ หรืออยากฝึกต่อเรื่องอื่นเพื่อรักษาสถิติไว้ครับ?"
-                    if topic_name
-                    else "วันนี้อยากฝึกเรื่องอะไรต่อดีครับ?"
-                )
-            ),
-            "en": (
-                f"Great work! You're on a {streak}-answer correct streak right now 🎉 "
-                + (
-                    f"I noticed {topic_name} has been a bit tricky lately — want a quick chat about that, or keep your streak going with something else?"
-                    if topic_name
-                    else "What would you like to practice today?"
-                )
-            ),
-        }
-        return {"lang": lang, "welcome": streak_greetings[lang], "weakness": weakness, "streak": streak}
+        result["streak"] = streak
+    return result
 
-    if weakness and weakness.get("name"):
-        topic_name = weakness["name"]
-        greetings = {
-            "no": f"Hei! Jeg ser i historikken din at du har hatt noen feil på {topic_name} i det siste. Skal vi ta en kjapp prat om det, eller har du noe annet du vil spørre meg om i dag? 😊",
-            "th": f"สวัสดีครับ! ผมเห็นในประวัติของคุณว่ามีข้อผิดพลาดเรื่อง{topic_name}อยู่บ้างเมื่อเร็วๆ นี้ เรามาคุยเรื่องนี้กันสักนิดไหมครับ หรือวันนี้มีเรื่องอื่นที่อยากถามผมก่อนไหมครับ? 😊",
-            "en": f"Hi! I noticed in your history that you've had a few mistakes on {topic_name} lately. Shall we have a quick chat about that, or is there something else you'd like to ask me today? 😊",
-        }
-        return {"lang": lang, "welcome": greetings[lang], "weakness": weakness}
-
-    open_greetings = {
-        "no": "Hei! Hva vil du at vi skal øve på i dag? Spør meg om hva som helst innen trafikk, så forklarer jeg det enkelt! 🚗",
-        "th": "สวัสดีครับ! วันนี้อยากให้เราฝึกเรื่องอะไรดีครับ? ถามผมได้ทุกเรื่องเกี่ยวกับการจราจรเลย ผมจะอธิบายให้เข้าใจง่ายๆ ครับ! 🚗",
-        "en": "Hi! What would you like us to practice today? Ask me anything about driving theory, and I'll explain it simply! 🚗",
-    }
-    return {"lang": lang, "welcome": open_greetings[lang], "weakness": None}
 
 @teacher_router.get("/teacher/topics")
 async def teacher_topics(lang: str = Query(default="no")):
@@ -3665,7 +3718,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             "and Skiltforskriften for signs and road markings. Name the relevant source, "
             "but never invent subsection wording or claim that an unseen fact is present."
         )
-        system_prompt += _tone_instruction(_detect_tone(user_msg), lang)
+        system_prompt += _tone_instruction(_detect_tone(user_msg, quiz_context_str) or "calm", lang)
         if req.mode == "quiz_coach":
             system_prompt += "\n\nCHAT MODE: Coach the student through the current quiz question. Explain the rule without guessing an unseen answer."
         elif req.mode == "simplify":
@@ -3766,10 +3819,14 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
                 "━━━━━━━━━━━━━━━━━━━━━━━"
             )
 
-        if is_quiz_help and quiz_context_str and req.mode != "quiz_coach":
-            system_prompt += _scaffolding_instruction(
+        if (is_quiz_help or req.mode == "quiz_coach") and quiz_context_str:
+            parsed_attempt = _extract_attempt_count(quiz_context_str)
+            attempt_num = parsed_attempt if parsed_attempt is not None else (
                 _quiz_attempt_number(prior, current_quiz_key)
-                + (1 if _is_hint_request(user_msg) else 0),
+                + (1 if _is_hint_request(user_msg) else 0)
+            )
+            system_prompt += _scaffolding_instruction(
+                attempt_num,
                 any(term in user_msg.casefold() for term in _EXPLICIT_ANSWER_TERMS),
                 lang,
             )
@@ -3825,7 +3882,10 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             if is_direct_lookup:
                 reply_text = _concise_teacher_reply(reply_text, lang)
             elif not is_quiz_help and req.mode not in ("quiz_coach", "simplify"):
-                reply_text = _polish_teacher_reply(reply_text)
+                reply_text = _polish_teacher_reply(
+                    reply_text,
+                    0 if lang == "th" else (7 if _wants_explanation(user_msg) else 4),
+                )
     except Exception as e:
         logger.error("LiteLLM call failed [%s]: %s", type(e).__name__, e)
 
