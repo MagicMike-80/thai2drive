@@ -300,8 +300,8 @@
        "label_th": "เส้นขอบทาง (kantlinje)"
       },
       {
-       "x": 88,
-       "y": 70,
+       "x": 86,
+       "y": 80,
        "label_no": "Skulderen utenfor kantlinjen",
        "label_th": "ไหล่ทางนอกเส้นขอบ (skulder)"
       }
