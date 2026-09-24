@@ -19,15 +19,16 @@
   {"type": "what_changed",
    "title_no": "Forbud eller påbud?",
    "title_th": "ห้ามหรือบังคับ?",
-   "image_brief_no": "Bildepar av to skilt side om side. Før: et rundt skilt med rød kant. Etter: et rundt skilt med blå bunn og hvit pil.",
-   "image_before": null,
-   "image_after": null,
+   "image_brief_no": "Koblet til skiltkatalogen: før = 306_0 (rød ring, forbud), etter = 402_1 (blått påbudsskilt med hvit pil).",
+   "image_before": "/api/sign-images/306_0.jpg",
+   "image_after": "/api/sign-images/402_1.jpg",
+   "image_layout": "square",
    "body_no": "Før: et rundt skilt med rød kant forbyr noe. Etter: et rundt skilt med blå bunn påbyr noe, for eksempel en kjøreretning.",
    "body_th": "ก่อน: ป้ายกลมขอบสีแดงห้ามบางอย่าง หลัง: ป้ายกลมพื้นสีน้ำเงินบังคับบางอย่าง เช่น ทิศทางการขับ",
    "hotspots": [
-    {"x": 30, "y": 50, "label_no": "Rød kant betyr forbud", "label_th": "ขอบสีแดงหมายถึงห้าม (forbud)"},
-    {"x": 70, "y": 50, "label_no": "Blå bunn betyr påbud", "label_th": "พื้นสีน้ำเงินหมายถึงบังคับ (påbud)"},
-    {"x": 70, "y": 35, "label_no": "Hvit pil som viser påbudt kjøreretning", "label_th": "ลูกศรสีขาวที่บอกทิศทางบังคับ (kjøreretning)"}
+    {"on": "before", "x": 7, "y": 50, "label_no": "Rød kant betyr forbud", "label_th": "ขอบสีแดงหมายถึงห้าม (forbud)"},
+    {"on": "after", "x": 24, "y": 24, "label_no": "Blå bunn betyr påbud", "label_th": "พื้นสีน้ำเงินหมายถึงบังคับ (påbud)"},
+    {"on": "after", "x": 72, "y": 50, "label_no": "Hvit pil som viser påbudt kjøreretning", "label_th": "ลูกศรสีขาวที่บอกทิศทางบังคับ (kjøreretning)"}
    ]},
   {"type": "road_check",
    "title_no": "Blått og rundt",

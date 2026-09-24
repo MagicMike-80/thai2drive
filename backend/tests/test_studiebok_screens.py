@@ -163,6 +163,91 @@ class ValidatorCatchesErrors(unittest.TestCase):
         self.assertTrue(any("duplisert id" in e for e in errs))
 
 
+class LinkedImages(unittest.TestCase):
+    """Bilder som er koblet til what_changed-skjermer må finnes og være mobilvennlige."""
+
+    @staticmethod
+    def _refs():
+        for c in PACK["chapters"]:
+            for s in c["screens"]:
+                if s["type"] == "what_changed":
+                    for k in ("image_before", "image_after"):
+                        if s.get(k):
+                            yield c["order"], s["id"], k, s[k]
+
+    def test_every_linked_image_exists_on_disk(self):
+        refs = list(self._refs())
+        self.assertGreaterEqual(len(refs), 3)  # kap 8 (før+etter) og kap 4 (etter)
+        for order, sid, key, url in refs:
+            f = ss.image_file(url)
+            self.assertIsNotNone(f, f"{sid}.{key}: ukjent bilderot {url}")
+            self.assertTrue(f.is_file(), f"{sid}.{key}: mangler fil {url}")
+
+    def test_linked_images_are_light_enough_for_mobile(self):
+        for order, sid, key, url in self._refs():
+            self.assertLess(ss.image_file(url).stat().st_size, 300 * 1024, f"{sid}.{key}: {url} er for stor")
+
+    def test_pack_validates_with_file_check(self):
+        self.assertEqual(ss.validate_pack(PACK, check_files=True), [])
+
+    def test_hotspot_side_matches_an_existing_image(self):
+        for c in PACK["chapters"]:
+            for s in c["screens"]:
+                if s["type"] != "what_changed":
+                    continue
+                for h in s["hotspots"]:
+                    side = h.get("on", "after")
+                    if s.get("image_before") or s.get("image_after"):
+                        self.assertTrue(s.get("image_" + side), f"{s['id']}: hotspot på {side}-bilde som ikke finnes")
+
+    def test_layout_values_are_known(self):
+        for c in PACK["chapters"]:
+            for s in c["screens"]:
+                self.assertIn(s.get("image_layout"), (None, "square", "wide"), s["id"])
+
+    def test_rejects_path_outside_known_roots(self):
+        def bad(ch):
+            next(s for s in ch["screens"] if s["type"] == "what_changed")["image_after"] = "/etc/passwd"
+        self.assertTrue(any("image_after" in e for e in _errors_after(bad)))
+
+    def test_rejects_external_url(self):
+        def bad(ch):
+            next(s for s in ch["screens"] if s["type"] == "what_changed")["image_before"] = "https://example.com/x.jpg"
+        self.assertTrue(any("image_before" in e for e in _errors_after(bad)))
+
+    def test_rejects_missing_file_when_checking_files(self):
+        ch = _chapter(1)
+        next(s for s in ch["screens"] if s["type"] == "what_changed")["image_after"] = "/api/assets/studiebok/finnes-ikke.jpg"
+        self.assertEqual(ss.validate_chapter(ch), [])  # uten filsjekk er stien gyldig
+        self.assertTrue(any("ikke finnes" in e for e in ss.validate_chapter(ch, check_files=True)))
+
+    def test_rejects_unknown_layout_and_bad_hotspot_side(self):
+        def bad_layout(ch):
+            next(s for s in ch["screens"] if s["type"] == "what_changed")["image_layout"] = "tall"
+        self.assertTrue(any("image_layout" in e for e in _errors_after(bad_layout)))
+
+        def bad_side(ch):
+            next(s for s in ch["screens"] if s["type"] == "what_changed")["hotspots"][0]["on"] = "middle"
+        self.assertTrue(any("hotspot 0 ugyldig" in e for e in _errors_after(bad_side)))
+
+
+class NoPlaceholders(unittest.TestCase):
+    """Skjermlesertilstander uten bilde skal være tekstkort, aldri en «Bilde kommer»-plassholder."""
+
+    def test_webapp_source_has_no_image_placeholder_text(self):
+        from pathlib import Path
+        src = (Path(__file__).parent.parent / "webapp.py").read_text(encoding="utf-8")
+        for needle in ("Bilde kommer", "sbs_image_soon", "sbs-img-ph", "รูปภาพจะมาเร็ว", "Image coming soon"):
+            self.assertNotIn(needle, src)
+
+    def test_screens_without_images_have_points_to_show_as_text(self):
+        for c in PACK["chapters"]:
+            for s in c["screens"]:
+                if s["type"] == "what_changed" and not (s.get("image_before") or s.get("image_after")):
+                    self.assertTrue(s["body_th"] and s["body_no"], s["id"])
+                    self.assertGreaterEqual(len(s["hotspots"]), 2, s["id"])
+
+
 def _seed(db, orders=range(1, 16)):
     for o in orders:
         db.studiebok_chapters.insert_one({

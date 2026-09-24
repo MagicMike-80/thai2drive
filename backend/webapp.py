@@ -2827,18 +2827,16 @@ a { color:inherit; text-decoration:none; }
   position:relative; width:100%; aspect-ratio:4/3; margin-bottom:10px;
   border-radius:14px; overflow:hidden; border:1px solid var(--border); background:rgba(255,255,255,.05);
 }
+.sbs-img.square { aspect-ratio:1/1; max-width:340px; margin-left:auto; margin-right:auto; background:#fff; }
+.sbs-img.wide { aspect-ratio:16/9; }
 .sbs-img-el { width:100%; height:100%; object-fit:cover; display:block; }
-.sbs-img-ph {
-  position:absolute; inset:0; display:flex; align-items:flex-start; justify-content:flex-start;
-  padding:4px 6px; color:var(--muted); font-size:.7rem; line-height:1.3;
-  background:repeating-linear-gradient(45deg, rgba(255,255,255,.03) 0 12px, rgba(255,255,255,.06) 12px 24px);
-}
-.sbs-img-ph span { padding:1px 8px; border-radius:999px; background:rgba(0,0,0,.35); }
+.sbs-img.square .sbs-img-el { object-fit:contain; }
+.sbs-body + .sbs-hot-title { margin-top:14px; }
+.sbs-leg.static { cursor:default; }
 @media (max-width:360px) {
-  .sbs-img { aspect-ratio:1/1; }
+  .sbs-img:not(.square):not(.wide) { aspect-ratio:1/1; }
   .sbs-pin { width:24px; height:24px; margin:-12px 0 0 -12px; font-size:.75rem; }
 }
-[data-theme="light"] .sbs-img-ph span { background:rgba(255,255,255,.7); }
 .sbs-pin {
   position:absolute; width:32px; height:32px; margin:-16px 0 0 -16px; padding:0;
   display:flex; align-items:center; justify-content:center;
@@ -5257,7 +5255,7 @@ var UI = {
   sbs_type_summary:{th:'สรุป', no:'Oppsummering', en:'Summary'},
   sbs_before:{th:'ก่อน', no:'Før', en:'Before'},
   sbs_after:{th:'หลัง', no:'Etter', en:'After'},
-  sbs_image_soon:{th:'รูปภาพจะมาเร็ว ๆ นี้', no:'Bilde kommer', en:'Image coming soon'},
+  sbs_points:{th:'จุดสำคัญ', no:'Viktige punkter', en:'Key points'},
   sbs_hotspots:{th:'แตะตัวเลขเพื่อดูจุดสำคัญ', no:'Trykk på et tall for å se punktet', en:'Tap a number to see the point'},
   sbs_correct:{th:'ถูกต้อง!', no:'Riktig!', en:'Correct!'},
   sbs_wrong:{th:'ยังไม่ถูก', no:'Ikke riktig', en:'Not quite'},
@@ -6479,25 +6477,37 @@ function sbsRoadCheck(s) {
   return html;
 }
 function sbsWhatChanged(s) {
-  var view = _sbsWc[s.id] || 'after';
   var hot = Array.isArray(s.hotspots) ? s.hotspots : [];
   var active = _sbsHot[s.id];
+  var hasB = !!s.image_before, hasA = !!s.image_after;
+  if (!hasB && !hasA) {
+    // Ingen bilder koblet ennå: tekstkort med forklaring og nummerert punktliste (ingen plassholder)
+    var txt = '<p class="sbs-body">' + sbsFmt(sbsL(s, 'body')) + '</p>';
+    if (hot.length) {
+      txt += '<div class="sbs-hot-title">' + escH(t('sbs_points')) + '</div><div class="sbs-leg-list">';
+      hot.forEach(function(h, i) {
+        txt += '<div class="sbs-leg static"><span class="sbs-leg-n">' + (i + 1) + '</span><span>' + sbsFmt(sbsL(h, 'label')) + '</span></div>';
+      });
+      txt += '</div>';
+    }
+    return txt;
+  }
+  var single = (hasB !== hasA);   // bare ett bilde finnes: ingen Før/Etter-veksler
+  var view = single ? (hasA ? 'after' : 'before') : (_sbsWc[s.id] || 'after');
   var src = (view === 'after') ? s.image_after : s.image_before;
+  var layout = (s.image_layout === 'square' || s.image_layout === 'wide') ? ' ' + s.image_layout : '';
   var id = escH(s.id);
-  var html = '<div class="sbs-seg-wrap">' +
+  var html = single ? '' : '<div class="sbs-seg-wrap">' +
     '<button class="sbs-seg' + (view === 'before' ? ' active' : '') + '" onclick="sbsView(\'' + id + '\',\'before\')">' + escH(t('sbs_before')) + '</button>' +
     '<button class="sbs-seg' + (view === 'after' ? ' active' : '') + '" onclick="sbsView(\'' + id + '\',\'after\')">' + escH(t('sbs_after')) + '</button>' +
   '</div>';
-  html += '<div class="sbs-img">' + (src
-    ? '<img class="sbs-img-el" src="' + escH(src) + '" alt="' + escH(sbsL(s, 'title')) + '">'
-    : '<div class="sbs-img-ph"><span>' + escH(t('sbs_image_soon')) + '</span></div>');
-  if (view === 'after') {
-    hot.forEach(function(h, i) {
-      html += '<button class="sbs-pin' + (active === i ? ' active' : '') + '" style="left:' + Number(h.x) + '%;top:' + Number(h.y) + '%"' +
-        ' aria-label="' + escH(sbsL(h, 'label')) + '" aria-pressed="' + (active === i ? 'true' : 'false') + '"' +
-        ' onclick="sbsHotspot(\'' + id + '\',' + i + ')">' + (i + 1) + '</button>';
-    });
-  }
+  html += '<div class="sbs-img' + layout + '"><img class="sbs-img-el" src="' + escH(src) + '" alt="' + escH(sbsL(s, 'title')) + '">';
+  hot.forEach(function(h, i) {
+    if ((h.on || 'after') !== view) return;   // hver hotspot hører til ett av bildene
+    html += '<button class="sbs-pin' + (active === i ? ' active' : '') + '" style="left:' + Number(h.x) + '%;top:' + Number(h.y) + '%"' +
+      ' aria-label="' + escH(sbsL(h, 'label')) + '" aria-pressed="' + (active === i ? 'true' : 'false') + '"' +
+      ' onclick="sbsHotspot(\'' + id + '\',' + i + ')">' + (i + 1) + '</button>';
+  });
   html += '</div>';
   if (hot.length) {
     html += '<div class="sbs-hot-title">' + escH(t('sbs_hotspots')) + '</div><div class="sbs-leg-list">';
@@ -6524,7 +6534,14 @@ function sbsSetMode(m) { _sbsMode = m; sbRender(); sbsTop(); }
 function sbsAnswer(id, i) { _sbsAns[id] = i; sbRender(); }
 function sbsRetry(id) { delete _sbsAns[id]; sbRender(); }
 function sbsView(id, v) { _sbsWc[id] = v; sbRender(); }
-function sbsHotspot(id, i) { _sbsWc[id] = 'after'; _sbsHot[id] = (_sbsHot[id] === i) ? null : i; sbRender(); }
+function sbsHotspot(id, i) {
+  var ch = _sbChapters[_sbCurrent];
+  var s = (ch && Array.isArray(ch.screens)) ? ch.screens.filter(function(x) { return x.id === id; })[0] : null;
+  var h = (s && Array.isArray(s.hotspots)) ? s.hotspots[i] : null;
+  _sbsWc[id] = (h && h.on) || 'after';   // bytt til bildet hotspoten hører til
+  _sbsHot[id] = (_sbsHot[id] === i) ? null : i;
+  sbRender();
+}
 
 // Search
 function sbSearch(q) {

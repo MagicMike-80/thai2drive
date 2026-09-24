@@ -37,6 +37,14 @@ ENGLISH_RE = re.compile(
     re.I,
 )
 
+# Bilder må ligge i en av katalogene appen allerede serverer (server.py)
+IMAGE_ROOTS = {
+    "/api/assets/": Path(__file__).parent / "public_assets",
+    "/api/sign-images/": Path(__file__).parent / "sign_images",
+}
+IMAGE_RE = re.compile(r"^/api/(assets|sign-images)/[A-Za-z0-9_./-]+\.(jpg|jpeg|png|webp|svg)$")
+IMAGE_LAYOUTS = {"square", "wide"}  # utelatt = 4:3
+
 BADGES = {
     "road_check": {"badge_no": "Veisjekk ⚡", "badge_th": "ตรวจถนน ⚡"},
     "what_changed": {"badge_no": "Hva er endret?", "badge_th": "อะไรเปลี่ยนไป?"},
@@ -59,6 +67,14 @@ def _strings(screen):
                 for i, item in enumerate(val):
                     if isinstance(item, str):
                         yield f"{key}[{i}]", item
+
+
+def image_file(url):
+    """Map a served image URL to its file on disk (None if the URL is not from a known root)."""
+    for prefix, root in IMAGE_ROOTS.items():
+        if url.startswith(prefix):
+            return root / url[len(prefix):]
+    return None
 
 
 def check_no(text):
@@ -96,7 +112,7 @@ def check_th(text):
     return errs
 
 
-def validate_chapter(ch):
+def validate_chapter(ch, check_files=False):
     """Return a list of error strings (empty = valid)."""
     errors = []
     order = ch.get("order")
@@ -156,17 +172,25 @@ def validate_chapter(ch):
             for k in ("image_before", "image_after"):
                 if k not in s:
                     errors.append(f"{stag}: mangler {k}")
+                elif s[k] is not None:
+                    if not (isinstance(s[k], str) and IMAGE_RE.match(s[k])):
+                        errors.append(f"{stag}: {k} må være null eller en sti under /api/assets/ eller /api/sign-images/")
+                    elif check_files and not (image_file(s[k]) and image_file(s[k]).is_file()):
+                        errors.append(f"{stag}: {k} peker på en fil som ikke finnes: {s[k]}")
+            if s.get("image_layout") not in (None, *IMAGE_LAYOUTS):
+                errors.append(f"{stag}: image_layout må være {sorted(IMAGE_LAYOUTS)} eller utelatt")
             hs = s.get("hotspots")
             if not (isinstance(hs, list) and 2 <= len(hs) <= 4):
                 errors.append(f"{stag}: hotspots må ha 2–4 punkter")
             else:
                 for i, h in enumerate(hs):
                     ok = (isinstance(h, dict)
+                          and h.get("on") in (None, "before", "after")
                           and all(isinstance(h.get(a), int) and 0 <= h[a] <= 100 for a in ("x", "y"))
                           and isinstance(h.get("label_no"), str) and h["label_no"].strip()
                           and isinstance(h.get("label_th"), str) and h["label_th"].strip())
                     if not ok:
-                        errors.append(f"{stag}: hotspot {i} ugyldig (x,y 0–100 + label_no/label_th)")
+                        errors.append(f"{stag}: hotspot {i} ugyldig (x,y 0–100, on=before/after, label_no/label_th)")
 
         for key, text in _strings(s):
             if key.startswith("badge_"):
@@ -189,13 +213,13 @@ def load_pack(path=PACK_PATH):
     return json.loads(Path(path).read_text(encoding="utf-8"))
 
 
-def validate_pack(pack):
+def validate_pack(pack, check_files=False):
     errors = []
     orders = [c.get("order") for c in pack.get("chapters", [])]
     if len(orders) != len(set(orders)):
         errors.append("duplisert kapittel-order i pakken")
     for ch in pack.get("chapters", []):
-        errors.extend(validate_chapter(ch))
+        errors.extend(validate_chapter(ch, check_files=check_files))
     return errors
 
 
@@ -203,13 +227,13 @@ def total_screens(pack):
     return sum(len(c["screens"]) for c in pack["chapters"])
 
 
-def apply_pack(db, pack, commit=False):
+def apply_pack(db, pack, commit=False, check_files=False):
     """
     Sett `screens` + `screen_count` på eksisterende kapitler i db.studiebok_chapters (match på order).
     Alt-eller-ingenting: ved valideringsfeil skrives ingenting. Uten commit skrives heller ingenting.
     Returnerer dict med errors/updated/missing.
     """
-    errors = validate_pack(pack)
+    errors = validate_pack(pack, check_files=check_files)
     report = {"errors": errors, "updated": [], "missing": []}
     if errors:
         return report
@@ -236,7 +260,7 @@ def main(argv=None):
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
     pack = load_pack(args.pack)
-    errors = validate_pack(pack)
+    errors = validate_pack(pack, check_files=True)  # bildefiler må finnes før noe skrives
     print(f"Kapitler: {len(pack['chapters'])}, skjermer totalt: {total_screens(pack)}")
     if errors:
         print(f"{len(errors)} valideringsfeil — ingenting skrevet:")
@@ -251,7 +275,7 @@ def main(argv=None):
     from pymongo import MongoClient
     load_dotenv(Path(__file__).parent / ".env")
     db = MongoClient(os.environ["MONGO_URL"])[os.environ["DB_NAME"]]
-    report = apply_pack(db, pack, commit=True)
+    report = apply_pack(db, pack, commit=True, check_files=True)
     print(f"Oppdatert: {report['updated']}  Mangler i DB: {report['missing']}")
     return 0
 

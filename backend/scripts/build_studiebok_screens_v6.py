@@ -38,7 +38,7 @@ def main():
         "description": "Læringsskjermer per Studiebok-kapittel (thai + norsk). Setter kun screens/screen_count.",
         "chapters": chapters,
     }
-    errors = validate_pack(pack)
+    errors = validate_pack(pack, check_files=True)
     print(f"Kapitler: {len(chapters)}, skjermer: {total_screens(pack)}")
     if errors:
         for e in errors:

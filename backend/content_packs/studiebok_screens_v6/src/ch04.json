@@ -82,15 +82,16 @@
   {"type": "what_changed",
    "title_no": "Barn på vegen",
    "title_th": "เด็กบนถนน",
-   "image_brief_no": "Bildepar av en boliggate ved en skole. Før: tom gate. Etter: en skolepatrulje og flere barn ved gangfeltet, en ball ruller ut i gaten.",
+   "image_brief_no": "Etter-bildet er koblet (boliggate med ball og gangfeltskilt, fra stoppelengde-pakken). Mangler: før-bilde av samme gate uten ball.",
    "image_before": null,
-   "image_after": null,
-   "body_no": "Før: gaten er tom. Etter: barn og en skolepatrulje står ved gangfeltet, og en ball ruller ut. Nå må du kjøre sakte og være klar til å stanse.",
-   "body_th": "ก่อน: ถนนว่างเปล่า หลัง: เด็ก ๆ และเจ้าหน้าที่ดูแลเด็กข้ามถนน (skolepatrulje) ยืนอยู่ที่ทางม้าลาย และลูกบอลกลิ้งออกมาบนถนน ตอนนี้คุณต้องขับช้าและพร้อมหยุดรถ",
+   "image_after": "/api/assets/studiebok/ch04-barn-paa-vegen.jpg",
+   "image_layout": "wide",
+   "body_no": "Før: gaten er tom. Etter: en ball ruller ut i gaten ved et gangfelt, og et barn kan komme løpende etter. Nå må du kjøre sakte og være klar til å stanse.",
+   "body_th": "ก่อน: ถนนว่างเปล่า หลัง: ลูกบอลกลิ้งออกมาบนถนนใกล้ทางม้าลาย และอาจมีเด็กวิ่งตามมา ตอนนี้คุณต้องขับช้าและพร้อมหยุดรถ",
    "hotspots": [
-    {"x": 30, "y": 60, "label_no": "Barna ved gangfeltet", "label_th": "เด็ก ๆ ที่ทางม้าลาย (gangfelt)"},
-    {"x": 50, "y": 50, "label_no": "Skolepatruljen", "label_th": "เจ้าหน้าที่ดูแลเด็กข้ามถนน (skolepatrulje)"},
-    {"x": 70, "y": 75, "label_no": "Ballen som ruller ut i vegen", "label_th": "ลูกบอลที่กลิ้งออกมาบนถนน (ball)"}
+    {"x": 74, "y": 54, "label_no": "Ballen som ruller ut i vegen", "label_th": "ลูกบอลที่กลิ้งออกมาบนถนน (ball)"},
+    {"x": 92, "y": 30, "label_no": "Skiltet som varsler om gangfelt", "label_th": "ป้ายเตือนทางม้าลาย (gangfeltskilt)"},
+    {"x": 30, "y": 57, "label_no": "Bilen som må kunne stanse i tide", "label_th": "รถที่ต้องหยุดให้ทัน (bil)"}
    ]},
   {"type": "road_check",
    "title_no": "Skolepatruljen",
