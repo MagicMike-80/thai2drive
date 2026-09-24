@@ -102,3 +102,6 @@ context/transcripts/
 
 # Agent pact - mellom meg og Stein
 context/agent-pact.md
+
+# temporary scratch files
+scratch/
