@@ -1,0 +1,3667 @@
+{
+ "pack": "studiebok_screens_v6",
+ "collection": "studiebok_chapters",
+ "description": "Læringsskjermer per Studiebok-kapittel (thai + norsk). Setter kun screens/screen_count.",
+ "chapters": [
+  {
+   "order": 1,
+   "screens": [
+    {
+     "type": "theory",
+     "title_no": "Vegtrafikkloven — loven for all trafikk",
+     "title_th": "กฎหมายจราจรทางถนน (Vegtrafikkloven) — กฎหมายหลักของการจราจรทั้งหมด",
+     "body_no": "Vegtrafikkloven er den viktigste loven for trafikk i Norge. Den gjelder all trafikk med motorvogn. Trafikkreglene og skiltene bygger på denne loven.",
+     "body_th": "กฎหมายจราจรทางถนน (Vegtrafikkloven) เป็นกฎหมายที่สำคัญที่สุดเกี่ยวกับการจราจรในนอร์เวย์ ใช้กับการจราจรทุกอย่างที่ใช้ยานยนต์ (motorvogn) กฎจราจรและป้ายจราจรทั้งหมดสร้างขึ้นจากกฎหมายฉบับนี้",
+     "id": "ch01-s01",
+     "n": 1
+    },
+    {
+     "type": "rule",
+     "title_no": "Grunnregelen: vis hensyn og vær varsom",
+     "title_th": "กฎพื้นฐาน (grunnregelen): ใส่ใจผู้อื่นและระมัดระวังเสมอ",
+     "body_no": "Alle skal ferdes hensynsfullt, aktpågivende og varsomt. Da oppstår det ikke fare eller skade, og andre blir ikke unødig hindret. Denne regelen gjelder alltid.",
+     "body_th": "ทุกคนต้องใช้ถนนด้วยความเกรงใจ (hensynsfull) ใส่ใจสิ่งรอบตัว (aktpågivende) และระมัดระวัง (varsom) เพื่อไม่ให้เกิดอันตรายหรือความเสียหาย และไม่ขัดขวางผู้อื่นโดยไม่จำเป็น กฎข้อนี้ใช้ได้ตลอดเวลา",
+     "id": "ch01-s02",
+     "n": 2
+    },
+    {
+     "type": "trap",
+     "title_no": "Felle: loven gjelder bare på vanlige veier",
+     "title_th": "กับดักข้อสอบ: กฎใช้เฉพาะบนถนนทั่วไป",
+     "body_no": "Mange tror at reglene bare gjelder på vanlig veg. Det er feil. Med veg menes også gate, plass, parkeringsplass, bru og ferjekai. Reglene gjelder også der.",
+     "body_th": "หลายคนคิดว่ากฎใช้เฉพาะบนถนนทั่วไป ซึ่งไม่ถูกต้อง คำว่าถนน (veg) ยังรวมถึงถนนในเมือง (gate) ลานกว้าง (plass) ลานจอดรถ (parkeringsplass) สะพาน (bru) และท่าเรือเฟอร์รี่ (ferjekai) กฎจราจรใช้ที่เหล่านั้นด้วย",
+     "id": "ch01-s03",
+     "n": 3
+    },
+    {
+     "type": "what_changed",
+     "title_no": "Politiet tar over",
+     "title_th": "ตำรวจเข้ามาควบคุมการจราจร",
+     "image_brief_no": "Bildepar av samme kryss. Før: trafikklys grønt og et vikepliktskilt synlig. Etter: en politimann midt i krysset viser stopp mot bilen, lyset er fortsatt grønt.",
+     "image_before": null,
+     "image_after": null,
+     "body_no": "Før: lyset er grønt, og du kan kjøre. Etter: en politimann viser at du skal stoppe. Nå må du stoppe, selv om lyset er grønt. Politiets tegn gjelder foran alt annet.",
+     "body_th": "ก่อน: ไฟเป็นสีเขียว คุณขับต่อได้ หลัง: ตำรวจสั่งให้หยุด คุณต้องหยุดแม้ไฟจะเป็นสีเขียว คำสั่งของตำรวจ (politiets anvisninger) มีอำนาจเหนือสิ่งอื่นทั้งหมด",
+     "hotspots": [
+      {
+       "x": 50,
+       "y": 55,
+       "label_no": "Politimannen som viser stopp",
+       "label_th": "ตำรวจที่สั่งให้หยุด (politi)"
+      },
+      {
+       "x": 80,
+       "y": 20,
+       "label_no": "Trafikklyset er fortsatt grønt",
+       "label_th": "ไฟจราจรที่ยังเป็นสีเขียว (trafikklys)"
+      },
+      {
+       "x": 20,
+       "y": 30,
+       "label_no": "Vikepliktskiltet",
+       "label_th": "ป้ายให้ทาง (vikepliktskilt)"
+      }
+     ],
+     "id": "ch01-s04",
+     "n": 4,
+     "badge_no": "Hva er endret?",
+     "badge_th": "อะไรเปลี่ยนไป?"
+    },
+    {
+     "type": "road_check",
+     "title_no": "Hvem gjelder først?",
+     "title_th": "ใครมีอำนาจก่อน?",
+     "question_no": "Lyset er grønt, men politiet viser at du skal stoppe. Hva gjør du?",
+     "question_th": "ไฟเป็นสีเขียว แต่ตำรวจสั่งให้คุณหยุด คุณทำอย่างไร?",
+     "options_no": [
+      "Jeg kjører, for lyset er grønt",
+      "Jeg stopper, for politiet gjelder foran lyset",
+      "Jeg venter til bilen bak meg tuter"
+     ],
+     "options_th": [
+      "ขับต่อ เพราะไฟเป็นสีเขียว",
+      "หยุด เพราะคำสั่งตำรวจมีอำนาจเหนือสัญญาณไฟ",
+      "รอจนรถคันหลังบีบแตร"
+     ],
+     "correct_index": 1,
+     "explanation_no": "Politiets tegn gjelder foran trafikklys, skilt og alle andre regler.",
+     "explanation_th": "คำสั่งของตำรวจมีอำนาจเหนือสัญญาณไฟ (trafikklys) ป้าย และกฎอื่นทั้งหมด",
+     "id": "ch01-s05",
+     "n": 5,
+     "badge_no": "Veisjekk ⚡",
+     "badge_th": "ตรวจถนน ⚡"
+    },
+    {
+     "type": "theory",
+     "title_no": "Rekkefølgen: hvem bestemmer?",
+     "title_th": "ลำดับความสำคัญ: ใครเป็นผู้ตัดสิน?",
+     "body_no": "Når reglene sier ulike ting, gjelder denne rekkefølgen: først politiets tegn, så lyssignal, så skilt og vegoppmerking, og til slutt trafikkreglene, for eksempel høyreregelen.",
+     "body_th": "เมื่อกฎขัดแย้งกัน ให้ทำตามลำดับนี้ อันดับแรกคือสัญญาณจากตำรวจ อันดับสองคือสัญญาณไฟจราจร (lyssignal) อันดับสามคือป้ายและเครื่องหมายบนถนน (skilt og vegoppmerking) และสุดท้ายคือกฎจราจรทั่วไป เช่น กฎให้ทางรถจากขวา (høyreregelen)",
+     "id": "ch01-s06",
+     "n": 6
+    },
+    {
+     "type": "rule",
+     "title_no": "Du må følge skilt, signal og oppmerking",
+     "title_th": "คุณต้องทำตามป้าย สัญญาณ และเครื่องหมายบนถนน",
+     "body_no": "Alle må følge offentlige trafikkskilt, signaler og oppmerking. Skiltene gir forbud og påbud, og de gjelder på samme måte som loven.",
+     "body_th": "ทุกคนต้องปฏิบัติตามป้ายจราจรของทางการ สัญญาณ และเครื่องหมายบนถนน ป้ายเหล่านี้ให้ข้อห้าม (forbud) และข้อบังคับ (påbud) และมีผลเหมือนกฎหมาย",
+     "id": "ch01-s07",
+     "n": 7
+    },
+    {
+     "type": "trap",
+     "title_no": "Felle: skiltet om vikeplikt vinner alltid",
+     "title_th": "กับดักข้อสอบ: ป้ายให้ทางชนะเสมอ",
+     "body_no": "Mange tror at vikepliktskiltet alltid bestemmer. Men når trafikklyset virker, gjelder lyset foran skiltet om vikeplikt. Følg lyset.",
+     "body_th": "หลายคนคิดว่าป้ายให้ทางชนะเสมอ แต่เมื่อสัญญาณไฟจราจรทำงานอยู่ ให้ทำตามไฟก่อนป้ายให้ทาง (vikeplikt) ทำตามสัญญาณไฟ",
+     "id": "ch01-s08",
+     "n": 8
+    },
+    {
+     "type": "theory",
+     "title_no": "Du må være skikket til å kjøre",
+     "title_th": "คุณต้องพร้อมที่จะขับรถ",
+     "body_no": "Du kan ikke kjøre hvis du ikke er skikket til det. Det gjelder alkohol, sykdom, svekkelse og tretthet. Er du usikker på om du er skikket, skal du ikke kjøre.",
+     "body_th": "คุณห้ามขับรถหากไม่พร้อมที่จะขับอย่างปลอดภัย ไม่ว่าจะเพราะแอลกอฮอล์ ความเจ็บป่วย ร่างกายอ่อนแอ หรือความเหนื่อยล้า ถ้าไม่แน่ใจว่าพร้อมหรือไม่ ก็อย่าขับ",
+     "id": "ch01-s09",
+     "n": 9
+    },
+    {
+     "type": "road_check",
+     "title_no": "Er du skikket?",
+     "title_th": "คุณพร้อมขับหรือไม่?",
+     "question_no": "Du har ikke drukket alkohol, men du er veldig trett. Kan du kjøre?",
+     "question_th": "คุณไม่ได้ดื่มแอลกอฮอล์ แต่เหนื่อยมาก คุณขับได้ไหม?",
+     "options_no": [
+      "Ja, bare alkohol er forbudt",
+      "Nei, tretthet kan også gjøre deg uskikket",
+      "Ja, hvis jeg åpner vinduet"
+     ],
+     "options_th": [
+      "ได้ เพราะห้ามแค่แอลกอฮอล์",
+      "ไม่ได้ เพราะความเหนื่อยล้าก็ทำให้คุณไม่พร้อมขับได้เช่นกัน",
+      "ได้ ถ้าเปิดหน้าต่าง"
+     ],
+     "correct_index": 1,
+     "explanation_no": "Loven nevner tretthet som en grunn til at du ikke er skikket til å kjøre.",
+     "explanation_th": "กฎหมายระบุว่าความเหนื่อยล้า (tretthet) เป็นเหตุให้คุณไม่พร้อมขับรถ",
+     "id": "ch01-s10",
+     "n": 10,
+     "badge_no": "Veisjekk ⚡",
+     "badge_th": "ตรวจถนน ⚡"
+    },
+    {
+     "type": "rule",
+     "title_no": "Kjøretøy og motorvogn",
+     "title_th": "ยานพาหนะและยานยนต์",
+     "body_no": "Et kjøretøy kjører på bakken uten skinner. En motorvogn er et kjøretøy som drives av motor. En personbil er en motorvogn.",
+     "body_th": "ยานพาหนะ (kjøretøy) คือสิ่งที่วิ่งบนพื้นโดยไม่ใช้ราง ส่วนยานยนต์ (motorvogn) คือยานพาหนะที่ขับเคลื่อนด้วยเครื่องยนต์ รถยนต์นั่งส่วนบุคคลเป็นยานยนต์",
+     "id": "ch01-s11",
+     "n": 11
+    },
+    {
+     "type": "trap",
+     "title_no": "Felle: grunnregelen gjelder bare uten andre regler",
+     "title_th": "กับดักข้อสอบ: กฎพื้นฐานใช้เมื่อไม่มีกฎอื่นเท่านั้น",
+     "body_no": "Noen tror at grunnregelen bare gjelder når ingen annen regel passer. Det er feil. Du kan følge en regel og likevel være uaktsom. Grunnregelen gjelder alltid.",
+     "body_th": "บางคนคิดว่ากฎพื้นฐานใช้เมื่อไม่มีกฎอื่นเท่านั้น ซึ่งไม่ถูกต้อง คุณอาจทำตามกฎข้ออื่นแล้วแต่ยังประมาทได้ กฎพื้นฐาน (grunnregelen) ใช้ตลอดเวลา",
+     "id": "ch01-s12",
+     "n": 12
+    },
+    {
+     "type": "what_changed",
+     "title_no": "Parkeringsplassen",
+     "title_th": "ลานจอดรถ",
+     "image_brief_no": "Bildepar av en parkeringsplass. Før: tom parkeringsplass. Etter: samme plass med en bil som rygger og et barn som går bak bilen.",
+     "image_before": null,
+     "image_after": null,
+     "body_no": "Før: parkeringsplassen er tom. Etter: en bil rygger, og et barn går bak bilen. Parkeringsplassen er også veg. Du må være ekstra varsom og vise hensyn.",
+     "body_th": "ก่อน: ลานจอดรถว่างเปล่า หลัง: รถคันหนึ่งกำลังถอย และเด็กเดินอยู่ด้านหลังรถ ลานจอดรถก็เป็นถนน (veg) เช่นกัน คุณต้องระวังเป็นพิเศษและใส่ใจผู้อื่น",
+     "hotspots": [
+      {
+       "x": 40,
+       "y": 60,
+       "label_no": "Bilen som rygger",
+       "label_th": "รถที่กำลังถอย (rygging)"
+      },
+      {
+       "x": 60,
+       "y": 70,
+       "label_no": "Barnet bak bilen",
+       "label_th": "เด็กที่เดินอยู่หลังรถ (barn)"
+      },
+      {
+       "x": 20,
+       "y": 25,
+       "label_no": "Parkeringsplassen regnes som veg",
+       "label_th": "ลานจอดรถถือเป็นถนน (parkeringsplass)"
+      }
+     ],
+     "id": "ch01-s13",
+     "n": 13,
+     "badge_no": "Hva er endret?",
+     "badge_th": "อะไรเปลี่ยนไป?"
+    },
+    {
+     "type": "road_check",
+     "title_no": "Gjelder reglene her?",
+     "title_th": "กฎใช้ที่นี่หรือไม่?",
+     "question_no": "Du kjører på en parkeringsplass. Gjelder trafikkreglene der?",
+     "question_th": "คุณขับรถในลานจอดรถ กฎจราจรใช้ที่นั่นหรือไม่?",
+     "options_no": [
+      "Nei, bare på vanlige veier",
+      "Ja, parkeringsplass regnes som veg",
+      "Bare hvis det står et skilt"
+     ],
+     "options_th": [
+      "ไม่ใช้ ใช้เฉพาะบนถนนทั่วไป",
+      "ใช้ เพราะลานจอดรถถือเป็นถนน",
+      "ใช้เฉพาะเมื่อมีป้าย"
+     ],
+     "correct_index": 1,
+     "explanation_no": "Loven sier at veg også er plass og parkeringsplass.",
+     "explanation_th": "กฎหมายระบุว่าถนน (veg) รวมถึงลานกว้างและลานจอดรถ (parkeringsplass)",
+     "id": "ch01-s14",
+     "n": 14,
+     "badge_no": "Veisjekk ⚡",
+     "badge_th": "ตรวจถนน ⚡"
+    },
+    {
+     "type": "theory",
+     "title_no": "Hensyn til dem som bor ved vegen",
+     "title_th": "เกรงใจผู้ที่อาศัยอยู่ริมถนน",
+     "body_no": "Du skal også vise hensyn til dem som bor eller oppholder seg ved vegen. Unngå unødig støy og unødig kjøring i boligområder.",
+     "body_th": "คุณต้องเกรงใจผู้ที่อาศัยหรืออยู่ริมถนนด้วย หลีกเลี่ยงเสียงดังและการขับรถวนไปมาโดยไม่จำเป็นในย่านที่อยู่อาศัย (boligområde)",
+     "id": "ch01-s15",
+     "n": 15
+    },
+    {
+     "type": "summary",
+     "title_no": "Husk fra dette kapittelet",
+     "title_th": "สิ่งที่ต้องจำจากบทนี้",
+     "body_no": "Tre ting å huske: Grunnregelen gjelder alltid. Politiet gjelder foran lyset, og lyset gjelder foran skiltet. Du må være skikket til å kjøre.",
+     "body_th": "จำไว้สามข้อ: กฎพื้นฐาน (grunnregelen) ใช้ตลอดเวลา ตำรวจมีอำนาจเหนือสัญญาณไฟ และสัญญาณไฟมีอำนาจเหนือป้ายให้ทาง และคุณต้องพร้อมที่จะขับ (skikket)",
+     "id": "ch01-s16",
+     "n": 16
+    }
+   ]
+  },
+  {
+   "order": 2,
+   "screens": [
+    {
+     "type": "theory",
+     "title_no": "Hva er en veg?",
+     "title_th": "ถนน (veg) คืออะไร?",
+     "body_no": "En veg er en gate eller plass som er åpen for alminnelig ferdsel. Den kan være offentlig eller privat. Også parkeringsplass, bru og ferjekai regnes som veg.",
+     "body_th": "ถนน (veg) คือถนนในเมืองหรือลานกว้างที่เปิดให้คนทั่วไปสัญจร จะเป็นของรัฐหรือของเอกชนก็ได้ ลานจอดรถ สะพาน และท่าเรือเฟอร์รี่ก็ถือเป็นถนนเช่นกัน",
+     "id": "ch02-s01",
+     "n": 1
+    },
+    {
+     "type": "rule",
+     "title_no": "Vegkryss",
+     "title_th": "ทางแยก",
+     "body_no": "Et vegkryss er et sted der en veg krysser en annen veg, eller munner ut i en annen veg. Reglene om vikeplikt og stans gjelder i og nær vegkryss.",
+     "body_th": "ทางแยก (vegkryss) คือจุดที่ถนนตัดกับถนนอีกสายหนึ่ง หรือไหลไปบรรจบกับถนนอีกสาย กฎการให้ทางและการหยุดรถใช้ในทางแยกและบริเวณใกล้ทางแยก",
+     "id": "ch02-s02",
+     "n": 2
+    },
+    {
+     "type": "trap",
+     "title_no": "Felle: kjørebane og veg er det samme",
+     "title_th": "กับดักข้อสอบ: ผิวจราจรกับถนนคือสิ่งเดียวกัน",
+     "body_no": "Mange blander sammen veg og kjørebane. Kjørebanen er bare den delen av vegen som er bestemt for vanlig kjøring. Skulder, fortau og grøft er også en del av vegen, men ikke av kjørebanen.",
+     "body_th": "หลายคนสับสนระหว่างถนนกับผิวจราจร ผิวจราจร (kjørebane) คือเฉพาะส่วนของถนนที่ไว้สำหรับขับรถตามปกติ ไหล่ทาง ทางเท้า และคูข้างทางเป็นส่วนของถนน แต่ไม่ใช่ส่วนของผิวจราจร",
+     "id": "ch02-s03",
+     "n": 3
+    },
+    {
+     "type": "what_changed",
+     "title_no": "Kjørebane eller skulder?",
+     "title_th": "ผิวจราจรหรือไหล่ทาง?",
+     "image_brief_no": "Bildepar av samme landevei. Før: en bil kjører innenfor den hvite kantlinjen. Etter: bilen har kjørt utenfor kantlinjen og står på skulderen.",
+     "image_before": null,
+     "image_after": null,
+     "body_no": "Før: bilen kjører innenfor kantlinjen, altså på kjørebanen. Etter: bilen har kjørt utenfor kantlinjen. Da er den på skulderen, ikke på kjørebanen.",
+     "body_th": "ก่อน: รถขับอยู่ภายในเส้นขอบทาง (kantlinje) คือบนผิวจราจร หลัง: รถขับออกนอกเส้นขอบทาง ตอนนี้รถอยู่บนไหล่ทาง (skulder) ไม่ใช่บนผิวจราจร",
+     "hotspots": [
+      {
+       "x": 50,
+       "y": 50,
+       "label_no": "Kjørebanen",
+       "label_th": "ผิวจราจร (kjørebane)"
+      },
+      {
+       "x": 75,
+       "y": 60,
+       "label_no": "Kantlinjen",
+       "label_th": "เส้นขอบทาง (kantlinje)"
+      },
+      {
+       "x": 88,
+       "y": 70,
+       "label_no": "Skulderen utenfor kantlinjen",
+       "label_th": "ไหล่ทางนอกเส้นขอบ (skulder)"
+      }
+     ],
+     "id": "ch02-s04",
+     "n": 4,
+     "badge_no": "Hva er endret?",
+     "badge_th": "อะไรเปลี่ยนไป?"
+    },
+    {
+     "type": "road_check",
+     "title_no": "Hva heter denne delen?",
+     "title_th": "ส่วนนี้เรียกว่าอะไร?",
+     "question_no": "Hva kalles den delen av vegen som ligger utenfor kantlinjen?",
+     "question_th": "ส่วนของถนนที่อยู่นอกเส้นขอบทางเรียกว่าอะไร?",
+     "options_no": [
+      "Kjørebane",
+      "Skulder",
+      "Fortau"
+     ],
+     "options_th": [
+      "ผิวจราจร",
+      "ไหล่ทาง",
+      "ทางเท้า"
+     ],
+     "correct_index": 1,
+     "explanation_no": "Skulderen er den delen av vegen som ligger utenfor kantlinjen.",
+     "explanation_th": "ไหล่ทาง (skulder) คือส่วนของถนนที่อยู่นอกเส้นขอบทาง (kantlinje)",
+     "id": "ch02-s05",
+     "n": 5,
+     "badge_no": "Veisjekk ⚡",
+     "badge_th": "ตรวจถนน ⚡"
+    },
+    {
+     "type": "theory",
+     "title_no": "Kjørefelt",
+     "title_th": "ช่องจราจร",
+     "body_no": "Et kjørefelt er et langsgående felt på kjørebanen. Feltene er delt av oppmerking, eller er bredt nok til en rekke med biler.",
+     "body_th": "ช่องจราจร (kjørefelt) คือช่องยาวไปตามทิศทางการขับบนผิวจราจร แบ่งด้วยเครื่องหมายบนถนน หรือกว้างพอสำหรับรถหนึ่งแถว",
+     "id": "ch02-s06",
+     "n": 6
+    },
+    {
+     "type": "rule",
+     "title_no": "Fortau",
+     "title_th": "ทางเท้า",
+     "body_no": "Et fortau er et område for gående som er skilt fra kjørebanen med kantstein. Du må ikke kjøre eller stanse på fortauet.",
+     "body_th": "ทางเท้า (fortau) คือพื้นที่สำหรับคนเดินที่แยกจากผิวจราจรด้วยขอบคันหิน (kantstein) ห้ามขับรถหรือหยุดรถบนทางเท้า",
+     "id": "ch02-s07",
+     "n": 7
+    },
+    {
+     "type": "trap",
+     "title_no": "Felle: fortau og gangveg er det samme",
+     "title_th": "กับดักข้อสอบ: ทางเท้ากับทางเดินเท้าแยกคือสิ่งเดียวกัน",
+     "body_no": "Et fortau ligger langs kjørebanen og er skilt med kantstein. En gangveg er en egen veg for gående, med offentlig trafikkskilt. Den er skilt fra annen veg med for eksempel gress, grøft eller gjerde.",
+     "body_th": "ทางเท้า (fortau) อยู่ติดกับผิวจราจรและกั้นด้วยขอบคันหิน ส่วนทางเดินเท้า (gangveg) คือถนนแยกต่างหากสำหรับคนเดิน มีป้ายจราจรของทางการกำกับ และแยกออกจากถนนอื่นด้วยสนามหญ้า คูข้างทาง หรือรั้ว",
+     "id": "ch02-s08",
+     "n": 8
+    },
+    {
+     "type": "theory",
+     "title_no": "Sykkelfelt",
+     "title_th": "ช่องทางจักรยาน",
+     "body_no": "Et sykkelfelt er et kjørefelt som er bestemt for syklende. Det er merket med offentlig skilt og oppmerking. Andre kjøretøy enn sykler skal ikke kjøre der.",
+     "body_th": "ช่องทางจักรยาน (sykkelfelt) คือช่องจราจรที่กำหนดไว้สำหรับคนขี่จักรยาน มีป้ายและเครื่องหมายบนถนนของทางการกำกับ ยานพาหนะอื่นที่ไม่ใช่จักรยานต้องไม่ขับในช่องนี้",
+     "id": "ch02-s09",
+     "n": 9
+    },
+    {
+     "type": "road_check",
+     "title_no": "Hvilket anlegg er dette?",
+     "title_th": "นี่คือสิ่งใด?",
+     "question_no": "Et anlegg for gående er skilt fra kjørebanen med kantstein. Hva heter det?",
+     "question_th": "พื้นที่สำหรับคนเดินที่แยกจากผิวจราจรด้วยขอบคันหินเรียกว่าอะไร?",
+     "options_no": [
+      "Fortau",
+      "Sykkelfelt",
+      "Skulder"
+     ],
+     "options_th": [
+      "ทางเท้า",
+      "ช่องทางจักรยาน",
+      "ไหล่ทาง"
+     ],
+     "correct_index": 0,
+     "explanation_no": "Fortau er anlegget for gående som er skilt fra kjørebanen med kantstein.",
+     "explanation_th": "ทางเท้า (fortau) คือพื้นที่สำหรับคนเดินที่แยกจากผิวจราจรด้วยขอบคันหิน",
+     "id": "ch02-s10",
+     "n": 10,
+     "badge_no": "Veisjekk ⚡",
+     "badge_th": "ตรวจถนน ⚡"
+    },
+    {
+     "type": "rule",
+     "title_no": "Planovergang",
+     "title_th": "ทางข้ามทางรถไฟ",
+     "body_no": "En planovergang er et sted der vegen krysser jernbane eller sporvei i samme plan. Vær ekstra varsom her, og følg alle skilt og signaler.",
+     "body_th": "ทางข้ามทางรถไฟ (planovergang) คือจุดที่ถนนตัดกับทางรถไฟหรือรถราง (sporveg) ในระดับเดียวกัน ให้ระวังเป็นพิเศษ และทำตามป้ายและสัญญาณทั้งหมด",
+     "id": "ch02-s11",
+     "n": 11
+    },
+    {
+     "type": "trap",
+     "title_no": "Felle: «Jeg sitter jo i bilen, så det er ikke parkering»",
+     "title_th": "กับดักข้อสอบ: ฉันนั่งอยู่ในรถ ก็เลยไม่ใช่การจอดรถ",
+     "body_no": "Dette er feil. Parkering er enhver hensetting av kjøretøy, også når du blir sittende i bilen. Bare kortest mulig stans for å slippe av eller ta imot passasjerer, eller for å laste av og på, er ikke parkering.",
+     "body_th": "ข้อนี้ผิด การจอดรถ (parkering) คือการจอดรถทุกรูปแบบ แม้คุณจะนั่งอยู่ในรถก็ตาม ที่ไม่นับว่าเป็นการจอดรถคือการหยุดสั้นที่สุดเท่าที่เป็นไปได้ เพื่อรับหรือส่งผู้โดยสาร หรือขนของขึ้นลงเท่านั้น",
+     "id": "ch02-s12",
+     "n": 12
+    },
+    {
+     "type": "what_changed",
+     "title_no": "Stans eller parkering?",
+     "title_th": "หยุดรถหรือจอดรถ?",
+     "image_brief_no": "Bildepar av en bil ved fortauskanten. Før: en passasjer stiger ut av bilen, føreren sitter klar. Etter: passasjeren er borte, føreren har slått av motoren og sitter og leser på mobilen.",
+     "image_before": null,
+     "image_after": null,
+     "body_no": "Før: en passasjer går ut av bilen. Det er kort stans. Etter: passasjeren er gått, men føreren blir stående og vente. Nå er det parkering.",
+     "body_th": "ก่อน: ผู้โดยสารกำลังลงจากรถ นี่คือการหยุดรถสั้น ๆ (stans) หลัง: ผู้โดยสารลงไปแล้ว แต่คนขับยังจอดรออยู่ ตอนนี้เป็นการจอดรถ (parkering)",
+     "hotspots": [
+      {
+       "x": 35,
+       "y": 55,
+       "label_no": "Passasjeren som går ut",
+       "label_th": "ผู้โดยสารที่กำลังลงจากรถ (passasjer)"
+      },
+      {
+       "x": 60,
+       "y": 45,
+       "label_no": "Føreren som blir sittende",
+       "label_th": "คนขับที่นั่งรออยู่ (fører)"
+      },
+      {
+       "x": 80,
+       "y": 80,
+       "label_no": "Fortauskanten",
+       "label_th": "ขอบทางเท้า (kantstein)"
+      }
+     ],
+     "id": "ch02-s13",
+     "n": 13,
+     "badge_no": "Hva er endret?",
+     "badge_th": "อะไรเปลี่ยนไป?"
+    },
+    {
+     "type": "road_check",
+     "title_no": "Er dette parkering?",
+     "title_th": "นี่คือการจอดรถหรือไม่?",
+     "question_no": "Du står i bilen i ti minutter og venter på en venn. Er det parkering?",
+     "question_th": "คุณนั่งรออยู่ในรถสิบนาทีเพื่อรอเพื่อน นี่คือการจอดรถหรือไม่?",
+     "options_no": [
+      "Nei, jeg sitter jo i bilen",
+      "Ja, det er parkering selv om jeg blir sittende",
+      "Bare hvis jeg slår av motoren"
+     ],
+     "options_th": [
+      "ไม่ใช่ เพราะฉันนั่งอยู่ในรถ",
+      "ใช่ เป็นการจอดรถแม้จะนั่งอยู่ในรถ",
+      "ใช่เฉพาะเมื่อดับเครื่องยนต์"
+     ],
+     "correct_index": 1,
+     "explanation_no": "Parkering er enhver hensetting av kjøretøy, også når føreren blir sittende.",
+     "explanation_th": "การจอดรถ (parkering) คือการจอดรถทุกรูปแบบ แม้คนขับจะนั่งอยู่ในรถก็ตาม",
+     "id": "ch02-s14",
+     "n": 14,
+     "badge_no": "Veisjekk ⚡",
+     "badge_th": "ตรวจถนน ⚡"
+    },
+    {
+     "type": "theory",
+     "title_no": "Hvem regnes som gående?",
+     "title_th": "ใครถือว่าเป็นคนเดินเท้า?",
+     "body_no": "Som gående regnes også den som går på ski, kjører rullestol, leier en sykkel, triller en barnevogn eller bruker et lekekjøretøy. Trafikkreglene beskytter alle disse.",
+     "body_th": "ผู้ที่ถือว่าเป็นคนเดินเท้า (gående) ยังรวมถึงคนที่เดินสกี ใช้รถเข็นผู้พิการ จูงจักรยาน เข็นรถเข็นเด็ก หรือเล่นของเล่นที่มีล้อ กฎจราจรคุ้มครองคนเหล่านี้ทั้งหมด",
+     "id": "ch02-s15",
+     "n": 15
+    },
+    {
+     "type": "summary",
+     "title_no": "Husk fra dette kapittelet",
+     "title_th": "สิ่งที่ต้องจำจากบทนี้",
+     "body_no": "Kjørebanen er bare en del av vegen. Utenfor kantlinjen er skulderen. Fortau har kantstein. Parkering gjelder også når du blir sittende i bilen.",
+     "body_th": "ผิวจราจร (kjørebane) เป็นเพียงส่วนหนึ่งของถนน นอกเส้นขอบทางคือไหล่ทาง (skulder) ทางเท้า (fortau) มีขอบคันหิน และการจอดรถ (parkering) นับรวมถึงตอนที่คุณนั่งอยู่ในรถด้วย",
+     "id": "ch02-s16",
+     "n": 16
+    }
+   ]
+  },
+  {
+   "order": 3,
+   "screens": [
+    {
+     "type": "theory",
+     "title_no": "Hold til høyre",
+     "title_th": "ขับชิดขวา",
+     "body_no": "I Norge kjører vi på høyre side av vegen. Du skal holde til høyre så langt forholdene tillater. Kjøretøyet må holdes godt innenfor kjørefeltet.",
+     "body_th": "ในนอร์เวย์เราขับรถชิดด้านขวาของถนน คุณต้องขับชิดขวาเท่าที่สภาพถนนเอื้ออำนวย และต้องขับให้อยู่ภายในช่องจราจร (kjørefelt) อย่างมั่นคง",
+     "id": "ch03-s01",
+     "n": 1
+    },
+    {
+     "type": "rule",
+     "title_no": "Bruk kjørebanen",
+     "title_th": "ใช้ผิวจราจร",
+     "body_no": "Du skal kjøre på kjørebanen. Det er forbudt å kjøre på fortau og gangveg. Sykkelveg og sykkelfelt er bare for syklende.",
+     "body_th": "คุณต้องขับบนผิวจราจร (kjørebane) ห้ามขับบนทางเท้า (fortau) และทางเดินเท้า (gangveg) ทางจักรยาน (sykkelveg) และช่องทางจักรยาน (sykkelfelt) เป็นของคนขี่จักรยานเท่านั้น",
+     "id": "ch03-s02",
+     "n": 2
+    },
+    {
+     "type": "trap",
+     "title_no": "Felle: venstre felt er for de raske",
+     "title_th": "กับดักข้อสอบ: ช่องซ้ายสำหรับคนขับเร็ว",
+     "body_no": "Mange tror at venstre felt er for dem som kjører fort. Det er feil. Når vegen har to eller flere felt i din retning, skal du bruke høyre felt. Venstre felt bruker du bare når reglene tillater det, for eksempel ved forbikjøring.",
+     "body_th": "หลายคนคิดว่าช่องซ้ายมือสุดไว้สำหรับคนขับเร็ว ซึ่งไม่ถูกต้อง เมื่อถนนมีสองช่องจราจรขึ้นไปในทิศทางของคุณ ให้ใช้ช่องขวา (høyre felt) คุณใช้ช่องซ้ายเฉพาะเมื่อกฎอนุญาต เช่น เมื่อแซง (forbikjøring)",
+     "id": "ch03-s03",
+     "n": 3
+    },
+    {
+     "type": "what_changed",
+     "title_no": "Riktig felt",
+     "title_th": "ช่องจราจรที่ถูกต้อง",
+     "image_brief_no": "Bildepar av en veg med to felt i samme retning. Før: en bil kjører i venstre felt uten å forbikjøre noen. Etter: samme bil har flyttet seg til høyre felt.",
+     "image_before": null,
+     "image_after": null,
+     "body_no": "Før: bilen kjører i venstre felt, selv om den ikke skal forbi noen. Etter: bilen har flyttet seg til høyre felt. Slik skal det være.",
+     "body_th": "ก่อน: รถขับอยู่ช่องซ้าย ทั้งที่ไม่ได้กำลังแซงใคร หลัง: รถย้ายไปช่องขวา (høyre felt) แล้ว แบบนี้ถูกต้อง",
+     "hotspots": [
+      {
+       "x": 30,
+       "y": 55,
+       "label_no": "Venstre felt",
+       "label_th": "ช่องซ้าย (venstre felt)"
+      },
+      {
+       "x": 70,
+       "y": 55,
+       "label_no": "Høyre felt",
+       "label_th": "ช่องขวา (høyre felt)"
+      },
+      {
+       "x": 50,
+       "y": 45,
+       "label_no": "Kjørefeltlinjen mellom feltene",
+       "label_th": "เส้นแบ่งช่องจราจร (kjørefeltlinje)"
+      }
+     ],
+     "id": "ch03-s04",
+     "n": 4,
+     "badge_no": "Hva er endret?",
+     "badge_th": "อะไรเปลี่ยนไป?"
+    },
+    {
+     "type": "road_check",
+     "title_no": "Hvilket felt?",
+     "title_th": "ช่องไหน?",
+     "question_no": "Vegen har to felt i din retning, og du skal ikke forbi noen. Hvilket felt bruker du?",
+     "question_th": "ถนนมีสองช่องจราจรในทิศทางของคุณ และคุณไม่ได้แซงใคร คุณใช้ช่องไหน?",
+     "options_no": [
+      "Høyre felt",
+      "Venstre felt",
+      "Det feltet som er raskest"
+     ],
+     "options_th": [
+      "ช่องขวา",
+      "ช่องซ้าย",
+      "ช่องที่เร็วที่สุด"
+     ],
+     "correct_index": 0,
+     "explanation_no": "Høyre felt skal brukes når reglene ikke sier at du kan bruke feltet til venstre.",
+     "explanation_th": "ให้ใช้ช่องขวา (høyre felt) เว้นแต่กฎอนุญาตให้ใช้ช่องซ้าย",
+     "id": "ch03-s05",
+     "n": 5,
+     "badge_no": "Veisjekk ⚡",
+     "badge_th": "ตรวจถนน ⚡"
+    },
+    {
+     "type": "theory",
+     "title_no": "Sving til høyre og venstre",
+     "title_th": "การเลี้ยวขวาและเลี้ยวซ้าย",
+     "body_no": "Når du svinger til høyre, kjører du så nær høyre kant av kjørebanen som mulig. Når du svinger til venstre, kjører du så nær midten som mulig. Velg riktig felt i god tid.",
+     "body_th": "เมื่อเลี้ยวขวา ให้ขับชิดขอบขวาของผิวจราจรให้มากที่สุด เมื่อเลี้ยวซ้าย ให้ขับชิดกึ่งกลางถนนให้มากที่สุด และเลือกช่องจราจรให้ถูกต้องล่วงหน้า",
+     "id": "ch03-s06",
+     "n": 6
+    },
+    {
+     "type": "rule",
+     "title_no": "Syklister på skulderen",
+     "title_th": "คนขี่จักรยานบนไหล่ทาง",
+     "body_no": "Sykkel kan kjøres på vegens høyre skulder. Når du kjører forbi en syklist, må du holde god avstand og ikke skremme eller hindre den som sykler.",
+     "body_th": "จักรยานขี่บนไหล่ทางด้านขวาของถนน (skulder) ได้ เมื่อคุณขับผ่านคนขี่จักรยาน ต้องเว้นระยะห่างให้พอ และอย่าทำให้คนขี่ตกใจหรือขัดขวางเขา",
+     "id": "ch03-s07",
+     "n": 7
+    },
+    {
+     "type": "trap",
+     "title_no": "Felle: du kan velge felt i siste sekund",
+     "title_th": "กับดักข้อสอบ: เลือกช่องจราจรตอนสุดท้ายก็ได้",
+     "body_no": "Det er feil. På vegen med to eller flere felt skal du i god tid kjøre inn i riktig felt før du svinger. Du må ikke bytte felt rett foran krysset.",
+     "body_th": "ข้อนี้ผิด บนถนนที่มีสองช่องจราจรขึ้นไป คุณต้องเข้าช่องที่ถูกต้องล่วงหน้าก่อนเลี้ยว ห้ามเปลี่ยนช่องจราจรตรงหน้าทางแยกอย่างกะทันหัน",
+     "id": "ch03-s08",
+     "n": 8
+    },
+    {
+     "type": "theory",
+     "title_no": "Kjørefeltskifte",
+     "title_th": "การเปลี่ยนช่องจราจร",
+     "body_no": "Du som skal skifte felt, har vikeplikt for dem som allerede er i feltet du skal inn i. Bruk blinklys i god tid, se deg godt for, og skift felt først når det er trygt.",
+     "body_th": "คนที่จะเปลี่ยนช่องต้องให้ทาง (vikeplikt) แก่รถที่อยู่ในช่องที่คุณจะเข้าไปแล้ว ให้เปิดไฟเลี้ยวล่วงหน้า มองให้ดี และเปลี่ยนช่องเมื่อปลอดภัยแล้วเท่านั้น",
+     "id": "ch03-s09",
+     "n": 9
+    },
+    {
+     "type": "road_check",
+     "title_no": "Hvem har vikeplikt?",
+     "title_th": "ใครต้องให้ทาง?",
+     "question_no": "Du skal skifte felt. Hvem har vikeplikt?",
+     "question_th": "คุณจะเปลี่ยนช่องจราจร ใครต้องให้ทาง?",
+     "options_no": [
+      "Jeg som skifter felt",
+      "Den som er i feltet jeg skal inn i",
+      "Den som kjører raskest"
+     ],
+     "options_th": [
+      "ฉันที่จะเปลี่ยนช่อง",
+      "คนที่อยู่ในช่องที่ฉันจะเข้าไป",
+      "คนที่ขับเร็วที่สุด"
+     ],
+     "correct_index": 0,
+     "explanation_no": "Den som skifter felt, har vikeplikt for dem som er i feltet det skal kjøres inn i.",
+     "explanation_th": "คนที่เปลี่ยนช่องต้องให้ทาง (vikeplikt) แก่รถที่อยู่ในช่องที่จะเข้าไป",
+     "id": "ch03-s10",
+     "n": 10,
+     "badge_no": "Veisjekk ⚡",
+     "badge_th": "ตรวจถนน ⚡"
+    },
+    {
+     "type": "rule",
+     "title_no": "Avstand til bilen foran",
+     "title_th": "ระยะห่างจากรถคันหน้า",
+     "body_no": "Avstanden til bilen foran må være så stor at du ikke kjører på den hvis den bremser eller stanser. Jo fortere du kjører, jo større avstand må du ha.",
+     "body_th": "ระยะห่างจากรถคันหน้าต้องมากพอที่คุณจะไม่ชนท้ายเมื่อรถคันหน้าชะลอหรือหยุด ยิ่งขับเร็วก็ยิ่งต้องเว้นระยะห่างมากขึ้น",
+     "id": "ch03-s11",
+     "n": 11
+    },
+    {
+     "type": "trap",
+     "title_no": "Felle: den som er først foran har forkjørsrett",
+     "title_th": "กับดักข้อสอบ: ใครถึงก่อนได้ไปก่อนตอนช่องจราจรลดลง",
+     "body_no": "Når to felt blir til ett, har ingen forkjørsrett. Alle skal tilpasse farten, og bilene fletter seg inn vekselvis. Dette kalles glidelås-prinsippet.",
+     "body_th": "เมื่อสองช่องจราจรรวมเป็นหนึ่งช่อง ไม่มีใครมีสิทธิ์ได้ไปก่อน ทุกคนต้องปรับความเร็ว และรถจะสลับกันเข้าไปทีละคัน หลักการนี้เรียกว่าหลักซิปติดกัน (glidelås-prinsippet)",
+     "id": "ch03-s12",
+     "n": 12
+    },
+    {
+     "type": "what_changed",
+     "title_no": "Glidelås-prinsippet",
+     "title_th": "หลักซิปติดกัน",
+     "image_brief_no": "Bildepar av en veg der to felt blir til ett. Før: to rekker med biler nærmer seg innsnevringen. Etter: bilene fletter seg vekselvis inn i ett felt, som en glidelås.",
+     "image_before": null,
+     "image_after": null,
+     "body_no": "Før: to rekker med biler nærmer seg der vegen blir smalere. Etter: bilene kjører inn i ett felt, en om gangen, vekselvis fra hver side.",
+     "body_th": "ก่อน: รถสองแถวกำลังเข้าใกล้จุดที่ถนนแคบลง หลัง: รถเข้าสู่ช่องเดียวทีละคัน สลับกันจากแต่ละฝั่ง",
+     "hotspots": [
+      {
+       "x": 30,
+       "y": 40,
+       "label_no": "Bilen fra venstre felt",
+       "label_th": "รถจากช่องซ้าย (venstre felt)"
+      },
+      {
+       "x": 30,
+       "y": 65,
+       "label_no": "Bilen fra høyre felt",
+       "label_th": "รถจากช่องขวา (høyre felt)"
+      },
+      {
+       "x": 75,
+       "y": 52,
+       "label_no": "Stedet der feltene slås sammen",
+       "label_th": "จุดที่ช่องจราจรรวมกัน (innsnevring)"
+      }
+     ],
+     "id": "ch03-s13",
+     "n": 13,
+     "badge_no": "Hva er endret?",
+     "badge_th": "อะไรเปลี่ยนไป?"
+    },
+    {
+     "type": "road_check",
+     "title_no": "To felt blir til ett",
+     "title_th": "สองช่องรวมเป็นหนึ่ง",
+     "question_no": "To felt blir til ett, og køen beveger seg sakte. Hva gjør du?",
+     "question_th": "สองช่องจราจรรวมเป็นช่องเดียว และรถติดเคลื่อนตัวช้า คุณทำอย่างไร?",
+     "options_no": [
+      "Kjører raskt fram for å komme først",
+      "Slipper inn én bil om gangen, vekselvis",
+      "Stopper og venter til alle andre har kjørt"
+     ],
+     "options_th": [
+      "ขับเร็วขึ้นไปข้างหน้าเพื่อให้ได้ไปก่อน",
+      "ให้รถสลับเข้าไปทีละคัน",
+      "หยุดรอจนรถทุกคันผ่านไปหมด"
+     ],
+     "correct_index": 1,
+     "explanation_no": "Glidelås-prinsippet betyr at bilene fletter seg inn vekselvis, og at alle tilpasser farten.",
+     "explanation_th": "หลักซิปติดกัน (glidelås-prinsippet) หมายถึงรถสลับกันเข้าไปทีละคัน และทุกคนปรับความเร็วให้เหมาะสม",
+     "id": "ch03-s14",
+     "n": 14,
+     "badge_no": "Veisjekk ⚡",
+     "badge_th": "ตรวจถนน ⚡"
+    },
+    {
+     "type": "theory",
+     "title_no": "Motorveg og motortrafikkveg",
+     "title_th": "ทางด่วนและถนนสำหรับยานยนต์เท่านั้น",
+     "body_no": "På motorveg og motortrafikkveg er det bare lov med motorvogn som lovlig kan kjøre minst 40 km/t. Moped er ikke lov på motorveg.",
+     "body_th": "บนทางด่วน (motorveg) และถนนสำหรับยานยนต์เท่านั้น (motortrafikkveg) อนุญาตเฉพาะยานยนต์ที่ขับได้ตามกฎหมายอย่างน้อย 40 กม./ชม. ห้ามใช้มอเตอร์ไซค์เครื่องเล็ก (moped) บนทางด่วน",
+     "id": "ch03-s15",
+     "n": 15
+    },
+    {
+     "type": "summary",
+     "title_no": "Husk fra dette kapittelet",
+     "title_th": "สิ่งที่ต้องจำจากบทนี้",
+     "body_no": "Hold til høyre og bruk høyre felt. Velg riktig felt i god tid. Den som skifter felt, har vikeplikt. Når feltene slås sammen, fletter bilene seg inn vekselvis.",
+     "body_th": "ขับชิดขวาและใช้ช่องขวา เลือกช่องจราจรล่วงหน้า คนที่เปลี่ยนช่องต้องให้ทาง (vikeplikt) และเมื่อช่องจราจรรวมกัน รถจะสลับกันเข้าไปทีละคัน",
+     "id": "ch03-s16",
+     "n": 16
+    }
+   ]
+  },
+  {
+   "order": 4,
+   "screens": [
+    {
+     "type": "theory",
+     "title_no": "Tilpass farten til forholdene",
+     "title_th": "ปรับความเร็วให้เหมาะกับสภาพการณ์",
+     "body_no": "Du skal tilpasse farten etter stedet, føret, sikten og trafikken. Da oppstår det ikke fare for andre. Du skal alltid ha full kontroll over kjøretøyet.",
+     "body_th": "คุณต้องปรับความเร็วให้เหมาะกับสถานที่ สภาพพื้นผิวถนน (føre) ทัศนวิสัย (sikt) และการจราจร เพื่อไม่ให้เกิดอันตรายต่อผู้อื่น และคุณต้องควบคุมรถได้อย่างเต็มที่ตลอดเวลา",
+     "id": "ch04-s01",
+     "n": 1
+    },
+    {
+     "type": "rule",
+     "title_no": "Fartsgrenser uten skilt",
+     "title_th": "ขีดจำกัดความเร็วเมื่อไม่มีป้าย",
+     "body_no": "Der det ikke står skilt, er fartsgrensen 50 km/t i tettbygd strøk. Utenfor tettbygd strøk er den 80 km/t.",
+     "body_th": "ที่ไหนไม่มีป้าย ขีดจำกัดความเร็ว (fartsgrense) ในเขตชุมชน (tettbygd strøk) คือ 50 กม./ชม. นอกเขตชุมชนคือ 80 กม./ชม.",
+     "id": "ch04-s02",
+     "n": 2
+    },
+    {
+     "type": "trap",
+     "title_no": "Felle: fartsgrensen er den riktige farten",
+     "title_th": "กับดักข้อสอบ: ขีดจำกัดความเร็วคือความเร็วที่ถูกต้อง",
+     "body_no": "Fartsgrensen er en øvre grense, ikke en anbefaling. Når det er tåke, is eller mørkt, må du kjøre saktere enn skiltet sier.",
+     "body_th": "ขีดจำกัดความเร็วคือเพดานสูงสุด ไม่ใช่ความเร็วที่แนะนำ เมื่อมีหมอก น้ำแข็ง หรือมืด คุณต้องขับช้ากว่าที่ป้ายบอก",
+     "id": "ch04-s03",
+     "n": 3
+    },
+    {
+     "type": "what_changed",
+     "title_no": "Samme veg, andre forhold",
+     "title_th": "ถนนเดิม สภาพต่างไป",
+     "image_brief_no": "Bildepar av samme landevei med fartsgrenseskilt 80. Før: tørr asfalt og klar sikt. Etter: tett tåke og våt asfalt.",
+     "image_before": null,
+     "image_after": null,
+     "body_no": "Før: tørr veg og god sikt, og du kan kjøre opptil 80 km/t. Etter: tåke og våt veg. Skiltet sier fortsatt 80, men du må kjøre saktere.",
+     "body_th": "ก่อน: ถนนแห้งและมองเห็นชัด ขับได้สูงสุด 80 กม./ชม. หลัง: มีหมอกและถนนเปียก ป้ายยังคงบอก 80 แต่คุณต้องขับช้าลง",
+     "hotspots": [
+      {
+       "x": 20,
+       "y": 25,
+       "label_no": "Skilt med fartsgrense 80",
+       "label_th": "ป้ายขีดจำกัดความเร็ว (fartsgrense) 80"
+      },
+      {
+       "x": 55,
+       "y": 35,
+       "label_no": "Tett tåke som gir dårlig sikt",
+       "label_th": "หมอกหนาที่ทำให้มองไม่ชัด (tåke)"
+      },
+      {
+       "x": 55,
+       "y": 75,
+       "label_no": "Våt asfalt som gir lengre bremselengde",
+       "label_th": "ถนนเปียกที่ทำให้ระยะเบรกยาวขึ้น (våt asfalt)"
+      }
+     ],
+     "id": "ch04-s04",
+     "n": 4,
+     "badge_no": "Hva er endret?",
+     "badge_th": "อะไรเปลี่ยนไป?"
+    },
+    {
+     "type": "road_check",
+     "title_no": "Skiltet sier 80",
+     "title_th": "ป้ายบอก 80",
+     "question_no": "Skiltet sier 80 km/t, men det er tett tåke. Hva gjør du?",
+     "question_th": "ป้ายบอก 80 กม./ชม. แต่มีหมอกหนา คุณทำอย่างไร?",
+     "options_no": [
+      "Kjører 80, for det er lovlig",
+      "Senker farten etter sikten",
+      "Kjører 80 og bruker fjernlys"
+     ],
+     "options_th": [
+      "ขับ 80 เพราะถูกกฎหมาย",
+      "ลดความเร็วตามทัศนวิสัย",
+      "ขับ 80 และเปิดไฟสูง"
+     ],
+     "correct_index": 1,
+     "explanation_no": "Fartsgrensen er en øvre grense. Du må tilpasse farten til sikten og føret.",
+     "explanation_th": "ขีดจำกัดความเร็วเป็นเพดานสูงสุด คุณต้องปรับความเร็วให้เหมาะกับทัศนวิสัย (sikt) และสภาพถนน (føre)",
+     "id": "ch04-s05",
+     "n": 5,
+     "badge_no": "Veisjekk ⚡",
+     "badge_th": "ตรวจถนน ⚡"
+    },
+    {
+     "type": "theory",
+     "title_no": "Stopplengde",
+     "title_th": "ระยะหยุดรถรวม",
+     "body_no": "Stopplengden er reaksjonslengden pluss bremselengden. Reaksjonslengden er strekningen bilen kjører før du rekker å bremse. Reaksjonstiden er omtrent ett sekund.",
+     "body_th": "ระยะหยุดรถรวม (stopplengde) คือระยะตอบสนอง (reaksjonslengde) บวกระยะเบรก (bremselengde) ระยะตอบสนองคือระยะที่รถวิ่งไปก่อนที่คุณจะเหยียบเบรกทัน เวลาตอบสนองประมาณหนึ่งวินาที",
+     "id": "ch04-s06",
+     "n": 6
+    },
+    {
+     "type": "rule",
+     "title_no": "Stopplengde i tall",
+     "title_th": "ระยะหยุดรถรวมเป็นตัวเลข",
+     "body_no": "Ved 50 km/t er stopplengden cirka 26,5 meter. Ved 80 km/t er den cirka 54 meter. Jo fortere du kjører, jo lenger trenger du for å stanse.",
+     "body_th": "ที่ความเร็ว 50 กม./ชม. ระยะหยุดรถรวมประมาณ 26,5 เมตร ที่ความเร็ว 80 กม./ชม. ประมาณ 54 เมตร ยิ่งขับเร็วก็ยิ่งต้องใช้ระยะมากขึ้นเพื่อหยุดรถ",
+     "id": "ch04-s07",
+     "n": 7
+    },
+    {
+     "type": "trap",
+     "title_no": "Felle: dobbel fart gir dobbel bremselengde",
+     "title_th": "กับดักข้อสอบ: ความเร็วเป็นสองเท่า ระยะเบรกก็สองเท่า",
+     "body_no": "Det er feil. Bremselengden øker med kvadratet av farten. Dobler du farten, blir bremselengden fire ganger så lang.",
+     "body_th": "ข้อนี้ผิด ระยะเบรก (bremselengde) เพิ่มขึ้นตามกำลังสองของความเร็ว ถ้าคุณเพิ่มความเร็วเป็นสองเท่า ระยะเบรกจะยาวขึ้นสี่เท่า",
+     "id": "ch04-s08",
+     "n": 8
+    },
+    {
+     "type": "theory",
+     "title_no": "Hva påvirker riktig fart?",
+     "title_th": "อะไรมีผลต่อความเร็วที่เหมาะสม?",
+     "body_no": "Riktig fart avhenger av sikten, føret, mengden trafikk, hvem som er i trafikken, og hvordan vegen er bygd med kurver, bakketopper og kryss.",
+     "body_th": "ความเร็วที่เหมาะสมขึ้นอยู่กับทัศนวิสัย สภาพถนน ปริมาณรถ ผู้ใช้ถนนที่อยู่รอบตัว และรูปแบบของถนน เช่น ทางโค้ง ยอดเนิน และทางแยก",
+     "id": "ch04-s09",
+     "n": 9
+    },
+    {
+     "type": "road_check",
+     "title_no": "Dobbel fart",
+     "title_th": "ความเร็วสองเท่า",
+     "question_no": "Du dobler farten. Hva skjer med bremselengden?",
+     "question_th": "คุณเพิ่มความเร็วเป็นสองเท่า ระยะเบรกจะเป็นอย่างไร?",
+     "options_no": [
+      "Den blir dobbelt så lang",
+      "Den blir fire ganger så lang",
+      "Den endrer seg ikke"
+     ],
+     "options_th": [
+      "ยาวขึ้นสองเท่า",
+      "ยาวขึ้นสี่เท่า",
+      "ไม่เปลี่ยน"
+     ],
+     "correct_index": 1,
+     "explanation_no": "Bremselengden øker med kvadratet av farten, så dobbel fart gir fire ganger så lang bremselengde.",
+     "explanation_th": "ระยะเบรก (bremselengde) เพิ่มตามกำลังสองของความเร็ว ความเร็วสองเท่าจึงทำให้ระยะเบรกยาวขึ้นสี่เท่า",
+     "id": "ch04-s10",
+     "n": 10,
+     "badge_no": "Veisjekk ⚡",
+     "badge_th": "ตรวจถนน ⚡"
+    },
+    {
+     "type": "rule",
+     "title_no": "Kjør sakte og vær klar til å stanse",
+     "title_th": "ขับช้าและพร้อมหยุดรถ",
+     "body_no": "Du må kjøre sakte og være klar til å stanse når du passerer barn på vegen, en skolepatrulje, en person med hvit stokk eller førerhund, eller en buss ved holdeplass.",
+     "body_th": "คุณต้องขับช้าและพร้อมหยุดรถเมื่อผ่านเด็กบนถนน เจ้าหน้าที่อาสาดูแลเด็กข้ามถนน (skolepatrulje) คนถือไม้เท้าขาว หรือสุนัขนำทาง หรือรถบัสที่จอดป้าย",
+     "id": "ch04-s11",
+     "n": 11
+    },
+    {
+     "type": "trap",
+     "title_no": "Felle: i gågate kan jeg kjøre 30",
+     "title_th": "กับดักข้อสอบ: ในถนนคนเดินขับ 30 ได้",
+     "body_no": "Det er feil. I gågate og gatetun kan du ikke kjøre fortere enn i gangfart. Da kan du stanse når som helst.",
+     "body_th": "ข้อนี้ผิด ในถนนคนเดิน (gågate) และลานหน้าบ้าน (gatetun) คุณขับเร็วกว่าความเร็วเดินไม่ได้ เพื่อให้หยุดได้ทุกเมื่อ",
+     "id": "ch04-s12",
+     "n": 12
+    },
+    {
+     "type": "what_changed",
+     "title_no": "Barn på vegen",
+     "title_th": "เด็กบนถนน",
+     "image_brief_no": "Bildepar av en boliggate ved en skole. Før: tom gate. Etter: en skolepatrulje og flere barn ved gangfeltet, en ball ruller ut i gaten.",
+     "image_before": null,
+     "image_after": null,
+     "body_no": "Før: gaten er tom. Etter: barn og en skolepatrulje står ved gangfeltet, og en ball ruller ut. Nå må du kjøre sakte og være klar til å stanse.",
+     "body_th": "ก่อน: ถนนว่างเปล่า หลัง: เด็ก ๆ และเจ้าหน้าที่ดูแลเด็กข้ามถนน (skolepatrulje) ยืนอยู่ที่ทางม้าลาย และลูกบอลกลิ้งออกมาบนถนน ตอนนี้คุณต้องขับช้าและพร้อมหยุดรถ",
+     "hotspots": [
+      {
+       "x": 30,
+       "y": 60,
+       "label_no": "Barna ved gangfeltet",
+       "label_th": "เด็ก ๆ ที่ทางม้าลาย (gangfelt)"
+      },
+      {
+       "x": 50,
+       "y": 50,
+       "label_no": "Skolepatruljen",
+       "label_th": "เจ้าหน้าที่ดูแลเด็กข้ามถนน (skolepatrulje)"
+      },
+      {
+       "x": 70,
+       "y": 75,
+       "label_no": "Ballen som ruller ut i vegen",
+       "label_th": "ลูกบอลที่กลิ้งออกมาบนถนน (ball)"
+      }
+     ],
+     "id": "ch04-s13",
+     "n": 13,
+     "badge_no": "Hva er endret?",
+     "badge_th": "อะไรเปลี่ยนไป?"
+    },
+    {
+     "type": "road_check",
+     "title_no": "Skolepatruljen",
+     "title_th": "เจ้าหน้าที่ดูแลเด็กข้ามถนน",
+     "question_no": "Du kjører forbi en skolepatrulje med barn ved vegen. Hva gjør du?",
+     "question_th": "คุณขับผ่านเจ้าหน้าที่ดูแลเด็กข้ามถนนที่มีเด็กอยู่ริมถนน คุณทำอย่างไร?",
+     "options_no": [
+      "Holder farten",
+      "Senker farten og er klar til å stanse",
+      "Tuter for å varsle barna"
+     ],
+     "options_th": [
+      "ขับความเร็วเท่าเดิม",
+      "ชะลอความเร็วและพร้อมหยุดรถ",
+      "บีบแตรเตือนเด็ก ๆ"
+     ],
+     "correct_index": 1,
+     "explanation_no": "Loven krever lav fart og at du er klar til å stanse ved skolepatrulje og barn på vegen.",
+     "explanation_th": "กฎหมายกำหนดให้ขับช้าและพร้อมหยุดรถเมื่อมีเจ้าหน้าที่ดูแลเด็กข้ามถนน (skolepatrulje) และเด็กบนถนน",
+     "id": "ch04-s14",
+     "n": 14,
+     "badge_no": "Veisjekk ⚡",
+     "badge_th": "ตรวจถนน ⚡"
+    },
+    {
+     "type": "theory",
+     "title_no": "Du må kunne stanse på det du ser",
+     "title_th": "คุณต้องหยุดรถได้ในระยะที่มองเห็น",
+     "body_no": "Du må kunne stanse på den strekningen du har oversikt over, og foran enhver hindring du må regne med. I en kurve eller bak en bakketopp er oversikten kort, så farten må ned.",
+     "body_th": "คุณต้องหยุดรถได้ภายในระยะทางที่คุณมองเห็น และก่อนถึงสิ่งกีดขวางทุกอย่างที่คาดการณ์ได้ ในทางโค้งหรือหลังยอดเนินมองเห็นได้ใกล้ ดังนั้นต้องลดความเร็ว",
+     "id": "ch04-s15",
+     "n": 15
+    },
+    {
+     "type": "summary",
+     "title_no": "Husk fra dette kapittelet",
+     "title_th": "สิ่งที่ต้องจำจากบทนี้",
+     "body_no": "50 km/t i tettbygd strøk og 80 km/t utenfor. Fartsgrensen er en øvre grense. Dobbel fart gir fire ganger så lang bremselengde. Du må alltid kunne stanse på det du ser.",
+     "body_th": "50 กม./ชม. ในเขตชุมชน และ 80 กม./ชม. นอกเขตชุมชน ขีดจำกัดความเร็วเป็นเพดานสูงสุด ความเร็วสองเท่าทำให้ระยะเบรกยาวขึ้นสี่เท่า และคุณต้องหยุดรถได้ในระยะที่มองเห็นเสมอ",
+     "id": "ch04-s16",
+     "n": 16
+    }
+   ]
+  },
+  {
+   "order": 5,
+   "screens": [
+    {
+     "type": "theory",
+     "title_no": "Hva er vikeplikt?",
+     "title_th": "การให้ทาง (vikeplikt) คืออะไร?",
+     "body_no": "Vikeplikt betyr at du skal la andre kjøre først. Den som har vikeplikt, må vise det tydelig ved å sette ned farten eller stanse i god tid. Den du viker for, skal ikke hindres eller forstyrres.",
+     "body_th": "การให้ทาง (vikeplikt) หมายถึงคุณต้องให้ผู้อื่นไปก่อน คนที่ต้องให้ทางต้องแสดงให้เห็นชัดเจนโดยลดความเร็วหรือหยุดรถล่วงหน้า และต้องไม่ขัดขวางหรือรบกวนคนที่คุณให้ทาง",
+     "id": "ch05-s01",
+     "n": 1
+    },
+    {
+     "type": "rule",
+     "title_no": "Høyreregelen",
+     "title_th": "กฎให้ทางรถจากขวา",
+     "body_no": "Når det ikke er skilt eller lys, har du vikeplikt for trafikk som kommer fra høyre. Dette kalles høyreregelen.",
+     "body_th": "เมื่อไม่มีป้ายหรือสัญญาณไฟ คุณต้องให้ทาง (vikeplikt) แก่รถที่มาจากทางขวา นี่คือกฎให้ทางรถจากขวา (høyreregelen)",
+     "id": "ch05-s02",
+     "n": 2
+    },
+    {
+     "type": "trap",
+     "title_no": "Felle: den som kom først har forkjørsrett",
+     "title_th": "กับดักข้อสอบ: ใครมาถึงก่อนได้ไปก่อน",
+     "body_no": "Det er feil. Det spiller ingen rolle hvem som kom først til krysset. Uten skilt eller lys gjelder høyreregelen, og du viker for bilen fra høyre.",
+     "body_th": "ข้อนี้ผิด ไม่สำคัญว่าใครมาถึงทางแยกก่อน เมื่อไม่มีป้ายหรือสัญญาณไฟ ให้ใช้กฎให้ทางรถจากขวา (høyreregelen) และคุณต้องให้ทางรถที่มาจากขวา",
+     "id": "ch05-s03",
+     "n": 3
+    },
+    {
+     "type": "what_changed",
+     "title_no": "Kryss uten skilt",
+     "title_th": "ทางแยกที่ไม่มีป้าย",
+     "image_brief_no": "Bildepar av et 4-armet kryss uten skilt og lys, sett ovenfra. Før: bare din bil nærmer seg krysset. Etter: en bil kommer fra høyre side.",
+     "image_before": null,
+     "image_after": null,
+     "body_no": "Før: du er alene ved krysset og kan kjøre. Etter: en bil kommer fra høyre. Nå har du vikeplikt og må vike for den.",
+     "body_th": "ก่อน: คุณอยู่ที่ทางแยกคนเดียวและขับต่อได้ หลัง: มีรถมาจากทางขวา ตอนนี้คุณต้องให้ทาง (vikeplikt) แก่รถคันนั้น",
+     "hotspots": [
+      {
+       "x": 50,
+       "y": 75,
+       "label_no": "Din bil",
+       "label_th": "รถของคุณ (din bil)"
+      },
+      {
+       "x": 80,
+       "y": 50,
+       "label_no": "Bilen fra høyre",
+       "label_th": "รถที่มาจากทางขวา (bil fra høyre)"
+      },
+      {
+       "x": 50,
+       "y": 50,
+       "label_no": "Krysset uten skilt",
+       "label_th": "ทางแยกที่ไม่มีป้าย (vegkryss)"
+      }
+     ],
+     "id": "ch05-s04",
+     "n": 4,
+     "badge_no": "Hva er endret?",
+     "badge_th": "อะไรเปลี่ยนไป?"
+    },
+    {
+     "type": "road_check",
+     "title_no": "Bil fra høyre",
+     "title_th": "รถจากทางขวา",
+     "question_no": "Du kommer til et kryss uten skilt. En bil kommer fra høyre. Hva gjør du?",
+     "question_th": "คุณมาถึงทางแยกที่ไม่มีป้าย มีรถมาจากทางขวา คุณทำอย่างไร?",
+     "options_no": [
+      "Jeg kjører, for jeg var først",
+      "Jeg venter og lar bilen fra høyre kjøre først",
+      "Jeg tuter og kjører"
+     ],
+     "options_th": [
+      "ขับต่อ เพราะฉันมาถึงก่อน",
+      "รอและให้รถจากทางขวาไปก่อน",
+      "บีบแตรแล้วขับต่อ"
+     ],
+     "correct_index": 1,
+     "explanation_no": "Uten skilt eller lys har du vikeplikt for trafikk fra høyre.",
+     "explanation_th": "เมื่อไม่มีป้ายหรือสัญญาณไฟ คุณต้องให้ทาง (vikeplikt) แก่รถที่มาจากทางขวา",
+     "id": "ch05-s05",
+     "n": 5,
+     "badge_no": "Veisjekk ⚡",
+     "badge_th": "ตรวจถนน ⚡"
+    },
+    {
+     "type": "theory",
+     "title_no": "Rekkefølgen i kryss",
+     "title_th": "ลำดับความสำคัญในทางแยก",
+     "body_no": "I et kryss gjelder først politiets tegn, så lyssignal, så vikepliktskilt og forkjørsskilt. Hvis ingenting av dette finnes, gjelder høyreregelen.",
+     "body_th": "ในทางแยก ให้ทำตามสัญญาณของตำรวจก่อน แล้วตามด้วยสัญญาณไฟจราจร (lyssignal) ต่อด้วยป้ายให้ทางและป้ายทางเอก (vikepliktskilt og forkjørsskilt) ถ้าไม่มีสิ่งใดเลย ให้ใช้กฎให้ทางรถจากขวา (høyreregelen)",
+     "id": "ch05-s06",
+     "n": 6
+    },
+    {
+     "type": "rule",
+     "title_no": "Når du skal svinge",
+     "title_th": "เมื่อคุณจะเลี้ยว",
+     "body_no": "Du som skal svinge, har vikeplikt for gående og syklende der du skal kjøre inn. Når du skal svinge til venstre, må du også vike for møtende biler.",
+     "body_th": "คนที่จะเลี้ยวต้องให้ทาง (vikeplikt) แก่คนเดินเท้าและคนขี่จักรยานที่อยู่ตรงถนนที่คุณจะเลี้ยวเข้าไป และเมื่อจะเลี้ยวซ้าย ต้องให้ทางแก่รถที่สวนมาด้วย",
+     "id": "ch05-s07",
+     "n": 7
+    },
+    {
+     "type": "trap",
+     "title_no": "Felle: gangfelt gjelder bare når noen går i det",
+     "title_th": "กับดักข้อสอบ: ทางม้าลายใช้เมื่อมีคนกำลังเดินอยู่เท่านั้น",
+     "body_no": "Det er feil. Du har vikeplikt både for de som går i gangfeltet, og for de som er på vei ut i det. Du må stanse i tide.",
+     "body_th": "ข้อนี้ผิด คุณต้องให้ทางทั้งคนที่กำลังเดินอยู่บนทางม้าลาย (gangfelt) และคนที่กำลังจะก้าวลงไป คุณต้องหยุดรถให้ทัน",
+     "id": "ch05-s08",
+     "n": 8
+    },
+    {
+     "type": "theory",
+     "title_no": "Gangfelt",
+     "title_th": "ทางม้าลาย",
+     "body_no": "Ved gangfelt uten lys eller politi har du vikeplikt for gående. Du skal unngå å stanse på selve gangfeltet, og du skal ikke kjøre forbi en bil som stanser for gående.",
+     "body_th": "ที่ทางม้าลาย (gangfelt) ที่ไม่มีสัญญาณไฟหรือตำรวจ คุณต้องให้ทาง (vikeplikt) แก่คนเดินเท้า ให้หลีกเลี่ยงการจอดบนทางม้าลายเอง และห้ามแซงรถที่หยุดให้คนข้าม",
+     "id": "ch05-s09",
+     "n": 9
+    },
+    {
+     "type": "road_check",
+     "title_no": "Fotgjenger ved gangfelt",
+     "title_th": "คนเดินเท้าที่ทางม้าลาย",
+     "question_no": "En fotgjenger står ved gangfeltet og skal gå ut i det. Hva gjør du?",
+     "question_th": "คนเดินเท้ายืนอยู่ที่ทางม้าลายและกำลังจะข้าม คุณทำอย่างไร?",
+     "options_no": [
+      "Kjører forbi raskt",
+      "Stanser og lar fotgjengeren gå",
+      "Tuter så fotgjengeren venter"
+     ],
+     "options_th": [
+      "ขับผ่านไปเร็ว ๆ",
+      "หยุดรถและให้คนเดินข้าม",
+      "บีบแตรให้คนเดินรอ"
+     ],
+     "correct_index": 1,
+     "explanation_no": "Du har vikeplikt for gående som er i gangfeltet eller er på vei ut i det.",
+     "explanation_th": "คุณต้องให้ทาง (vikeplikt) แก่คนเดินที่อยู่บนทางม้าลายหรือกำลังจะก้าวลงไป",
+     "id": "ch05-s10",
+     "n": 10,
+     "badge_no": "Veisjekk ⚡",
+     "badge_th": "ตรวจถนน ⚡"
+    },
+    {
+     "type": "rule",
+     "title_no": "Når du kjører ut fra et område",
+     "title_th": "เมื่อคุณขับออกจากพื้นที่",
+     "body_no": "Kommer du fra en parkeringsplass, en bensinstasjon, en eiendom, en gågate eller et gatetun, har du vikeplikt for all annen trafikk. Det samme gjelder når du svinger inn fra skulder, fortau eller sykkelveg.",
+     "body_th": "ถ้าคุณขับออกมาจากลานจอดรถ ปั๊มน้ำมัน (bensinstasjon) ที่ดิน (eiendom) ถนนคนเดิน หรือลานหน้าบ้าน คุณต้องให้ทาง (vikeplikt) แก่การจราจรอื่นทั้งหมด เช่นเดียวกันเมื่อเลี้ยวเข้ามาจากไหล่ทาง ทางเท้า หรือทางจักรยาน",
+     "id": "ch05-s11",
+     "n": 11
+    },
+    {
+     "type": "trap",
+     "title_no": "Felle: fra bensinstasjonen har jeg høyreregelen",
+     "title_th": "กับดักข้อสอบ: ขับออกจากปั๊มน้ำมันแล้วใช้กฎรถจากขวาได้",
+     "body_no": "Det er feil. Når du kjører ut fra en bensinstasjon eller en parkeringsplass, har du alltid vikeplikt for trafikken på vegen. Høyreregelen gjelder ikke da.",
+     "body_th": "ข้อนี้ผิด เมื่อคุณขับออกจากปั๊มน้ำมัน (bensinstasjon) หรือลานจอดรถ คุณต้องให้ทาง (vikeplikt) แก่รถบนถนนเสมอ กฎให้ทางรถจากขวาไม่ใช้ในกรณีนี้",
+     "id": "ch05-s12",
+     "n": 12
+    },
+    {
+     "type": "what_changed",
+     "title_no": "Utrykningskjøretøy",
+     "title_th": "รถฉุกเฉิน",
+     "image_brief_no": "Bildepar av en bytrafikk-situasjon sett bakfra. Før: vanlig trafikk. Etter: en ambulanse med blinkende blått lys kommer bakfra, og bilene flytter seg til siden.",
+     "image_before": null,
+     "image_after": null,
+     "body_no": "Før: vanlig trafikk. Etter: en ambulanse med blinkende blått lys kommer bak deg. Du må gi fri veg og flytte deg til siden, men bare der det er trygt.",
+     "body_th": "ก่อน: การจราจรปกติ หลัง: รถพยาบาลที่เปิดไฟสีน้ำเงินกะพริบ (blinkende blått lys) มาจากด้านหลังคุณ คุณต้องหลีกทางให้และเคลื่อนไปข้างทาง แต่เฉพาะเมื่อปลอดภัย",
+     "hotspots": [
+      {
+       "x": 25,
+       "y": 70,
+       "label_no": "Ambulansen bakfra",
+       "label_th": "รถพยาบาลจากด้านหลัง (ambulanse)"
+      },
+      {
+       "x": 25,
+       "y": 55,
+       "label_no": "Det blinkende blå lyset",
+       "label_th": "ไฟสีน้ำเงินกะพริบ (blinkende blått lys)"
+      },
+      {
+       "x": 65,
+       "y": 60,
+       "label_no": "Din bil som flytter seg til siden",
+       "label_th": "รถของคุณที่หลีกไปข้างทาง (din bil)"
+      }
+     ],
+     "id": "ch05-s13",
+     "n": 13,
+     "badge_no": "Hva er endret?",
+     "badge_th": "อะไรเปลี่ยนไป?"
+    },
+    {
+     "type": "road_check",
+     "title_no": "Blått lys bak deg",
+     "title_th": "ไฟสีน้ำเงินด้านหลัง",
+     "question_no": "En ambulanse med blinkende blått lys kommer bak deg. Hva gjør du?",
+     "question_th": "รถพยาบาลที่เปิดไฟสีน้ำเงินกะพริบมาจากด้านหลังคุณ คุณทำอย่างไร?",
+     "options_no": [
+      "Gir fri veg",
+      "Øker farten for å komme unna",
+      "Kjører som før"
+     ],
+     "options_th": [
+      "หลีกทางให้",
+      "เร่งความเร็วเพื่อหนีไป",
+      "ขับต่อไปตามปกติ"
+     ],
+     "correct_index": 0,
+     "explanation_no": "Alle skal gi fri veg for utrykningskjøretøy med blinkende blått lys.",
+     "explanation_th": "ทุกคนต้องหลีกทางให้รถฉุกเฉิน (utrykningskjøretøy) ที่เปิดไฟสีน้ำเงินกะพริบ",
+     "id": "ch05-s14",
+     "n": 14,
+     "badge_no": "Veisjekk ⚡",
+     "badge_th": "ตรวจถนน ⚡"
+    },
+    {
+     "type": "theory",
+     "title_no": "Møtende trafikk og sperring",
+     "title_th": "รถสวนกันและทางถูกปิดกั้น",
+     "body_no": "Når du møter andre, skal du i god tid vike til høyre og kjøre sakte. Er en del av vegen sperret, har den vikeplikt som har sperringen på sin side.",
+     "body_th": "เมื่อรถสวนกัน คุณต้องหลบไปทางขวาล่วงหน้าและขับช้า ถ้าส่วนหนึ่งของถนนถูกปิดกั้น ฝ่ายที่มีสิ่งกีดขวางอยู่ด้านของตนต้องให้ทาง (vikeplikt)",
+     "id": "ch05-s15",
+     "n": 15
+    },
+    {
+     "type": "summary",
+     "title_no": "Husk fra dette kapittelet",
+     "title_th": "สิ่งที่ต้องจำจากบทนี้",
+     "body_no": "Uten skilt eller lys gjelder høyreregelen. Ved gangfelt viker du for gående. Fra parkeringsplass og bensinstasjon viker du for alle. Du gir alltid fri veg for utrykning.",
+     "body_th": "เมื่อไม่มีป้ายหรือสัญญาณไฟ ให้ใช้กฎให้ทางรถจากขวา (høyreregelen) ที่ทางม้าลายคุณให้ทางคนเดิน ออกจากลานจอดรถและปั๊มน้ำมันคุณให้ทางทุกคน และคุณหลีกทางให้รถฉุกเฉินเสมอ",
+     "id": "ch05-s16",
+     "n": 16
+    }
+   ]
+  },
+  {
+   "order": 6,
+   "screens": [
+    {
+     "type": "theory",
+     "title_no": "Forbikjøring er farlig",
+     "title_th": "การแซงเป็นเรื่องอันตราย",
+     "body_no": "Forbikjøring er en av de farligste tingene du gjør i trafikken. Du trenger stor sikkerhetsmargin, for motgående trafikk kan komme fort. Er du i tvil, skal du vente.",
+     "body_th": "การแซง (forbikjøring) เป็นหนึ่งในสิ่งที่อันตรายที่สุดที่คุณทำบนท้องถนน คุณต้องเผื่อความปลอดภัยให้มาก เพราะรถที่สวนมาอาจมาเร็ว ถ้าไม่แน่ใจ ให้รอ",
+     "id": "ch06-s01",
+     "n": 1
+    },
+    {
+     "type": "rule",
+     "title_no": "Forbikjøring skjer til venstre",
+     "title_th": "แซงทางด้านซ้าย",
+     "body_no": "Du skal kjøre forbi på venstre side. Unntak er når bilen foran skal svinge til venstre, ved sporvogn, og i tett kø der alle felt er fulle.",
+     "body_th": "คุณต้องแซงทางด้านซ้าย ข้อยกเว้นคือเมื่อรถคันหน้ากำลังจะเลี้ยวซ้าย เมื่อแซงรถราง (sporvogn) และในรถติดหนาแน่นที่ทุกช่องจราจรเต็ม",
+     "id": "ch06-s02",
+     "n": 2
+    },
+    {
+     "type": "trap",
+     "title_no": "Felle: jeg kan kjøre forbi til høyre når jeg vil",
+     "title_th": "กับดักข้อสอบ: จะแซงทางขวาเมื่อไหร่ก็ได้",
+     "body_no": "Det er feil. Hovedregelen er forbikjøring til venstre. Bare i få tilfeller kan du kjøre forbi til høyre, for eksempel når bilen foran svinger til venstre.",
+     "body_th": "ข้อนี้ผิด กฎหลักคือแซงทางซ้าย คุณแซงทางขวาได้เพียงไม่กี่กรณี เช่น เมื่อรถคันหน้าเลี้ยวซ้าย",
+     "id": "ch06-s03",
+     "n": 3
+    },
+    {
+     "type": "what_changed",
+     "title_no": "Er vegen fri?",
+     "title_th": "ถนนโล่งหรือไม่?",
+     "image_brief_no": "Bildepar av en rett landevei sett bakfra. Før: en bil ligger bak en langsom traktor, og en motgående bil nærmer seg. Etter: samme veg uten motgående bil, fri sikt langt fram.",
+     "image_before": null,
+     "image_after": null,
+     "body_no": "Før: en bil kommer mot deg, så du kan ikke kjøre forbi. Etter: vegen er fri på en lang strekning. Nå kan du kjøre forbi hvis alt annet også er trygt.",
+     "body_th": "ก่อน: มีรถสวนมา คุณจึงแซงไม่ได้ หลัง: ถนนโล่งไปไกล ตอนนี้คุณแซงได้ถ้าทุกอย่างอื่นปลอดภัยด้วย",
+     "hotspots": [
+      {
+       "x": 30,
+       "y": 70,
+       "label_no": "Din bil bak traktoren",
+       "label_th": "รถของคุณที่ตามหลังรถแทรกเตอร์ (traktor)"
+      },
+      {
+       "x": 70,
+       "y": 35,
+       "label_no": "Motgående bil som du må vente på",
+       "label_th": "รถที่สวนมาซึ่งคุณต้องรอ (møtende bil)"
+      },
+      {
+       "x": 55,
+       "y": 20,
+       "label_no": "Fri veg langt fram",
+       "label_th": "ถนนโล่งไปไกล (fri veg)"
+      }
+     ],
+     "id": "ch06-s04",
+     "n": 4,
+     "badge_no": "Hva er endret?",
+     "badge_th": "อะไรเปลี่ยนไป?"
+    },
+    {
+     "type": "road_check",
+     "title_no": "Bil i mot",
+     "title_th": "รถสวนมา",
+     "question_no": "Du vil kjøre forbi, men det kommer en bil mot deg. Hva gjør du?",
+     "question_th": "คุณอยากแซง แต่มีรถสวนมา คุณทำอย่างไร?",
+     "options_no": [
+      "Kjører forbi raskt",
+      "Venter til vegen er fri",
+      "Blinker og håper at den andre bremser"
+     ],
+     "options_th": [
+      "แซงไปอย่างรวดเร็ว",
+      "รอจนถนนโล่ง",
+      "เปิดไฟเลี้ยวและหวังว่าอีกคันจะเบรก"
+     ],
+     "correct_index": 1,
+     "explanation_no": "Før du kjører forbi, må vegen være fri for hindringer på en lang nok strekning.",
+     "explanation_th": "ก่อนแซง ถนนต้องปลอดสิ่งกีดขวางในระยะทางที่ไกลพอ",
+     "id": "ch06-s05",
+     "n": 5,
+     "badge_no": "Veisjekk ⚡",
+     "badge_th": "ตรวจถนน ⚡"
+    },
+    {
+     "type": "theory",
+     "title_no": "Sjekk dette før du kjører forbi",
+     "title_th": "ตรวจสิ่งเหล่านี้ก่อนแซง",
+     "body_no": "Før du kjører forbi, må du forsikre deg om fire ting. Vegen er fri langt nok fram. Bilen foran har ikke gitt tegn om å svinge. Ingen bak deg har begynt å kjøre forbi. Du kommer trygt inn i trafikken igjen.",
+     "body_th": "ก่อนแซง คุณต้องแน่ใจสี่อย่าง ถนนโล่งไปไกลพอ รถคันหน้าไม่ได้ให้สัญญาณว่าจะเลี้ยว ไม่มีรถคันหลังคันใดเริ่มแซงคุณอยู่ และคุณกลับเข้าเลนได้อย่างปลอดภัย",
+     "id": "ch06-s06",
+     "n": 6
+    },
+    {
+     "type": "rule",
+     "title_no": "Etter forbikjøringen",
+     "title_th": "หลังแซงเสร็จ",
+     "body_no": "Etter forbikjøringen skal du svinge til høyre igjen. Du må ikke stenge for bilen du kjørte forbi. Gi god plass før du svinger inn.",
+     "body_th": "หลังแซงเสร็จ ให้ย้ายกลับเข้าทางขวา อย่าปาดหน้ารถที่คุณเพิ่งแซง ให้เว้นระยะพอก่อนเลี้ยวกลับเข้ามา",
+     "id": "ch06-s07",
+     "n": 7
+    },
+    {
+     "type": "trap",
+     "title_no": "Felle: bilen som blir forbikjørt kan gi gass",
+     "title_th": "กับดักข้อสอบ: รถที่ถูกแซงเร่งเครื่องได้",
+     "body_no": "Det er feil. Den som blir forbikjørt, skal holde til høyre og ikke øke farten. Da blir forbikjøringen kortere og tryggere for alle.",
+     "body_th": "ข้อนี้ผิด คนที่ถูกแซงต้องขับชิดขวาและห้ามเร่งความเร็ว เพื่อให้การแซงสั้นลงและปลอดภัยสำหรับทุกคน",
+     "id": "ch06-s08",
+     "n": 8
+    },
+    {
+     "type": "theory",
+     "title_no": "Der forbikjøring er forbudt",
+     "title_th": "ที่ที่ห้ามแซง",
+     "body_no": "Du må ikke kjøre forbi like foran eller i et vegkryss, og ikke der sikten er hindret, for eksempel i en kurve eller ved en bakketopp. Du skal heller ikke kjøre forbi nær et gangfelt.",
+     "body_th": "ห้ามแซงตรงหน้าหรือในทางแยก (vegkryss) และห้ามแซงในที่ที่มองไม่เห็น เช่น ในทางโค้งหรือใกล้ยอดเนิน และห้ามแซงใกล้ทางม้าลาย (gangfelt) ด้วย",
+     "id": "ch06-s09",
+     "n": 9
+    },
+    {
+     "type": "road_check",
+     "title_no": "Bakketopp",
+     "title_th": "ยอดเนิน",
+     "question_no": "Du nærmer deg en bakketopp og ser ikke om det kommer trafikk mot deg. Kan du kjøre forbi?",
+     "question_th": "คุณกำลังเข้าใกล้ยอดเนินและมองไม่เห็นว่ามีรถสวนมาหรือไม่ คุณแซงได้ไหม?",
+     "options_no": [
+      "Ja, hvis jeg kjører fort",
+      "Nei, sikten er hindret",
+      "Ja, hvis jeg blinker"
+     ],
+     "options_th": [
+      "ได้ ถ้าขับเร็ว",
+      "ไม่ได้ เพราะทัศนวิสัยถูกบัง",
+      "ได้ ถ้าเปิดไฟเลี้ยว"
+     ],
+     "correct_index": 1,
+     "explanation_no": "Forbikjøring er forbudt der sikten er hindret, for eksempel ved en bakketopp.",
+     "explanation_th": "ห้ามแซงในที่ที่ทัศนวิสัยถูกบัง เช่น ใกล้ยอดเนิน (bakketopp)",
+     "id": "ch06-s10",
+     "n": 10,
+     "badge_no": "Veisjekk ⚡",
+     "badge_th": "ตรวจถนน ⚡"
+    },
+    {
+     "type": "rule",
+     "title_no": "Rygging og vending",
+     "title_th": "การถอยรถและการกลับรถ",
+     "body_no": "Du som rygger eller vender, har vikeplikt for all annen trafikk. Er utsikten dårlig, må du la en annen person passe på mens du rygger eller vender.",
+     "body_th": "คนที่ถอยรถหรือกลับรถต้องให้ทาง (vikeplikt) แก่การจราจรอื่นทั้งหมด ถ้ามองไม่ชัด คุณต้องให้อีกคนช่วยดูขณะถอยหรือกลับรถ",
+     "id": "ch06-s11",
+     "n": 11
+    },
+    {
+     "type": "trap",
+     "title_no": "Felle: jeg kan rygge på motorveg hvis jeg har kjørt forbi avkjørselen",
+     "title_th": "กับดักข้อสอบ: ถอยรถบนทางด่วนได้ถ้าขับเลยทางออกมา",
+     "body_no": "Det er feil. Rygging og vending er forbudt på motorveg og motortrafikkveg. Kjør videre til neste avkjørsel.",
+     "body_th": "ข้อนี้ผิด ห้ามถอยรถและกลับรถบนทางด่วน (motorveg) และถนนสำหรับยานยนต์เท่านั้น (motortrafikkveg) ให้ขับต่อไปจนถึงทางออกถัดไป",
+     "id": "ch06-s12",
+     "n": 12
+    },
+    {
+     "type": "what_changed",
+     "title_no": "Rygging med dårlig sikt",
+     "title_th": "ถอยรถเมื่อมองไม่เห็น",
+     "image_brief_no": "Bildepar av en bil som rygger på en trang plass. Før: føreren rygger alene og ser ikke godt bakover. Etter: en person står bak bilen og viser føreren at det er trygt.",
+     "image_before": null,
+     "image_after": null,
+     "body_no": "Før: føreren rygger alene og ser dårlig. Etter: en annen person passer på og viser at det er trygt. Slik skal du gjøre når du ikke ser nok.",
+     "body_th": "ก่อน: คนขับถอยรถคนเดียวและมองไม่ชัด หลัง: มีอีกคนคอยดูและส่งสัญญาณว่าปลอดภัย ทำแบบนี้เมื่อคุณมองเห็นไม่พอ",
+     "hotspots": [
+      {
+       "x": 40,
+       "y": 55,
+       "label_no": "Bilen som rygger",
+       "label_th": "รถที่กำลังถอย (rygging)"
+      },
+      {
+       "x": 70,
+       "y": 60,
+       "label_no": "Personen som passer på",
+       "label_th": "คนที่คอยดูให้ (person som passer på)"
+      },
+      {
+       "x": 55,
+       "y": 80,
+       "label_no": "Området bak bilen som føreren ikke ser",
+       "label_th": "พื้นที่หลังรถที่คนขับมองไม่เห็น (dødvinkel)"
+      }
+     ],
+     "id": "ch06-s13",
+     "n": 13,
+     "badge_no": "Hva er endret?",
+     "badge_th": "อะไรเปลี่ยนไป?"
+    },
+    {
+     "type": "road_check",
+     "title_no": "Du skal rygge",
+     "title_th": "คุณจะถอยรถ",
+     "question_no": "Du skal rygge, men du ser dårlig bakover. Hva gjør du?",
+     "question_th": "คุณจะถอยรถ แต่มองไปด้านหลังไม่ชัด คุณทำอย่างไร?",
+     "options_no": [
+      "Rygger sakte og håper det går bra",
+      "Ber en annen person passe på mens jeg rygger",
+      "Tuter og rygger"
+     ],
+     "options_th": [
+      "ถอยช้า ๆ และหวังว่าจะไม่เป็นอะไร",
+      "ขอให้อีกคนช่วยดูขณะถอย",
+      "บีบแตรแล้วถอย"
+     ],
+     "correct_index": 1,
+     "explanation_no": "Er utsikten ikke god nok, må en annen passe på før du rygger eller vender.",
+     "explanation_th": "ถ้ามองเห็นไม่พอ ต้องมีอีกคนช่วยดูก่อนถอยหรือกลับรถ",
+     "id": "ch06-s14",
+     "n": 14,
+     "badge_no": "Veisjekk ⚡",
+     "badge_th": "ตรวจถนน ⚡"
+    },
+    {
+     "type": "theory",
+     "title_no": "Vent hvis du er i tvil",
+     "title_th": "ถ้าไม่แน่ใจ ให้รอ",
+     "body_no": "Du trenger plass til å øke farten, kjøre forbi og svinge inn igjen. Motgående trafikk kan komme fort. Tenk alltid: det er bedre å komme litt senere enn å ta en risiko.",
+     "body_th": "คุณต้องมีที่ว่างพอที่จะเร่งความเร็ว แซง และย้ายกลับเข้าเลน รถที่สวนมาอาจมาเร็ว จำไว้เสมอว่าการไปถึงช้าลงนิดหน่อยดีกว่าเสี่ยงอันตราย",
+     "id": "ch06-s15",
+     "n": 15
+    },
+    {
+     "type": "summary",
+     "title_no": "Husk fra dette kapittelet",
+     "title_th": "สิ่งที่ต้องจำจากบทนี้",
+     "body_no": "Forbikjør til venstre, og bare når vegen er fri. Ikke forbikjør i kryss, kurver, bakketopper eller nær gangfelt. Rygg aldri på motorveg. Er du i tvil, så vent.",
+     "body_th": "แซงทางซ้ายและเฉพาะเมื่อถนนโล่ง ห้ามแซงในทางแยก ทางโค้ง ยอดเนิน หรือใกล้ทางม้าลาย ห้ามถอยรถบนทางด่วนเด็ดขาด และถ้าไม่แน่ใจ ให้รอ",
+     "id": "ch06-s16",
+     "n": 16
+    }
+   ]
+  },
+  {
+   "order": 7,
+   "screens": [
+    {
+     "type": "theory",
+     "title_no": "Stans og parkering",
+     "title_th": "การหยุดรถและการจอดรถ",
+     "body_no": "Reglene om stans og parkering gjør at trafikken går trygt og at alle kommer fram. Noen steder er stans forbudt, og andre steder er bare parkering forbudt.",
+     "body_th": "กฎการหยุดรถ (stans) และการจอดรถ (parkering) ช่วยให้การจราจรปลอดภัยและทุกคนไปต่อได้ บางที่ห้ามหยุดรถ และบางที่ห้ามเฉพาะการจอดรถ",
+     "id": "ch07-s01",
+     "n": 1
+    },
+    {
+     "type": "rule",
+     "title_no": "Ikke stans i og nær kryss",
+     "title_th": "ห้ามหยุดรถในและใกล้ทางแยก",
+     "body_no": "Det er forbudt å stanse i et vegkryss, og nærmere enn 5 meter fra krysset. Da kan andre ikke se eller svinge trygt.",
+     "body_th": "ห้ามหยุดรถในทางแยก (vegkryss) และห้ามหยุดใกล้ทางแยกกว่า 5 เมตร เพราะจะทำให้คนอื่นมองไม่เห็นหรือเลี้ยวไม่ปลอดภัย",
+     "id": "ch07-s02",
+     "n": 2
+    },
+    {
+     "type": "trap",
+     "title_no": "Felle: kort stans ved gangfelt er lov",
+     "title_th": "กับดักข้อสอบ: หยุดรถสั้น ๆ ที่ทางม้าลายทำได้",
+     "body_no": "Det er feil. Det er forbudt å stanse på et gangfelt og nærmere enn 5 meter foran det. Det gjelder også kort stans.",
+     "body_th": "ข้อนี้ผิด ห้ามหยุดรถบนทางม้าลาย (gangfelt) และห้ามหยุดใกล้ก่อนถึงทางม้าลายกว่า 5 เมตร ข้อนี้ใช้กับการหยุดสั้น ๆ ด้วย",
+     "id": "ch07-s03",
+     "n": 3
+    },
+    {
+     "type": "what_changed",
+     "title_no": "5-metersregelen",
+     "title_th": "กฎ 5 เมตร",
+     "image_brief_no": "Bildepar av en bil ved et kryss, sett fra siden. Før: bilen står tydelig mer enn 5 meter fra krysset, med en målestokk. Etter: bilen står 2–3 meter fra krysset.",
+     "image_before": null,
+     "image_after": null,
+     "body_no": "Før: bilen står mer enn 5 meter fra krysset, og det er lov. Etter: bilen står bare 3 meter fra krysset, og det er forbudt.",
+     "body_th": "ก่อน: รถจอดห่างจากทางแยกมากกว่า 5 เมตร ซึ่งทำได้ หลัง: รถจอดห่างจากทางแยกเพียง 3 เมตร ซึ่งเป็นสิ่งต้องห้าม",
+     "hotspots": [
+      {
+       "x": 30,
+       "y": 60,
+       "label_no": "Bilen som står ved krysset",
+       "label_th": "รถที่จอดใกล้ทางแยก (bil)"
+      },
+      {
+       "x": 65,
+       "y": 40,
+       "label_no": "Krysset",
+       "label_th": "ทางแยก (vegkryss)"
+      },
+      {
+       "x": 48,
+       "y": 60,
+       "label_no": "Avstanden på 5 meter",
+       "label_th": "ระยะ 5 เมตร (5-metersregelen)"
+      }
+     ],
+     "id": "ch07-s04",
+     "n": 4,
+     "badge_no": "Hva er endret?",
+     "badge_th": "อะไรเปลี่ยนไป?"
+    },
+    {
+     "type": "road_check",
+     "title_no": "Nær kryss",
+     "title_th": "ใกล้ทางแยก",
+     "question_no": "Hvor nær et vegkryss kan du stanse?",
+     "question_th": "คุณหยุดรถใกล้ทางแยกได้แค่ไหน?",
+     "options_no": [
+      "Ikke nærmere enn 5 meter",
+      "Rett i krysset hvis det er kort",
+      "Helt ned til 1 meter"
+     ],
+     "options_th": [
+      "ไม่ใกล้กว่า 5 เมตร",
+      "ในทางแยกได้ถ้าหยุดสั้น ๆ",
+      "ได้ถึงระยะ 1 เมตร"
+     ],
+     "correct_index": 0,
+     "explanation_no": "Det er forbudt å stanse i krysset og nærmere enn 5 meter fra det.",
+     "explanation_th": "ห้ามหยุดรถในทางแยกและห้ามใกล้ทางแยกกว่า 5 เมตร",
+     "id": "ch07-s05",
+     "n": 5,
+     "badge_no": "Veisjekk ⚡",
+     "badge_th": "ตรวจถนน ⚡"
+    },
+    {
+     "type": "theory",
+     "title_no": "Ikke stans på fortau og gangveg",
+     "title_th": "ห้ามหยุดรถบนทางเท้าและทางเดินเท้า",
+     "body_no": "Det er forbudt å stanse helt eller delvis på fortau, gangveg eller sykkelveg. Gående og syklende trenger plass, og de skal ikke tvinges ut i kjørebanen.",
+     "body_th": "ห้ามหยุดรถเต็มคันหรือบางส่วนบนทางเท้า (fortau) ทางเดินเท้า (gangveg) หรือทางจักรยาน (sykkelveg) คนเดินและคนขี่จักรยานต้องการพื้นที่ และไม่ควรถูกบังคับให้ลงไปเดินบนผิวจราจร",
+     "id": "ch07-s06",
+     "n": 6
+    },
+    {
+     "type": "rule",
+     "title_no": "Ikke stans der du ikke ser",
+     "title_th": "ห้ามหยุดรถในที่ที่มองไม่เห็น",
+     "body_no": "Du må ikke stanse i en uoversiktlig kurve, i en tunnel, på en bakketopp eller andre steder med dårlig oversikt. Andre trafikanter ser deg for sent. Du må heller ikke stanse på motorveg eller motortrafikkveg.",
+     "body_th": "ห้ามหยุดรถในทางโค้งที่มองไม่เห็นข้างหน้า (uoversiktlig kurve) ในอุโมงค์ (tunnel) บนยอดเนิน (bakketopp) หรือที่อื่นที่ทัศนวิสัยไม่ดี เพราะคนอื่นจะเห็นคุณช้าเกินไป และห้ามหยุดบนทางด่วนหรือถนนสำหรับยานยนต์เท่านั้นด้วย",
+     "id": "ch07-s07",
+     "n": 7
+    },
+    {
+     "type": "trap",
+     "title_no": "Felle: det holder at bare noen hjul står på fortauet",
+     "title_th": "กับดักข้อสอบ: ล้อแค่ไม่กี่ล้อขึ้นทางเท้าก็ไม่เป็นไร",
+     "body_no": "Det er feil. Loven sier helt eller delvis på fortau. Selv om bare ett hjul står på fortauet, er det forbudt.",
+     "body_th": "ข้อนี้ผิด กฎหมายระบุว่าเต็มคันหรือบางส่วนบนทางเท้า แม้จะมีล้อเดียวอยู่บนทางเท้า ก็ผิดกฎ",
+     "id": "ch07-s08",
+     "n": 8
+    },
+    {
+     "type": "theory",
+     "title_no": "Kollektivfelt og holdeplass",
+     "title_th": "ช่องทางรถโดยสารและป้ายรถประจำทาง",
+     "body_no": "Du må ikke stanse i kollektivfelt, sambruksfelt eller sykkelfelt. Buss og sporvogn kan stanse ved holdeplass. Du må ikke stanse nærmere enn 20 meter fra et skilt for holdeplass, hvis du hindrer bussen.",
+     "body_th": "ห้ามหยุดรถในช่องทางรถโดยสารสาธารณะ (kollektivfelt) ช่องทางสำหรับรถที่ใช้ร่วมกัน (sambruksfelt) หรือช่องทางจักรยาน (sykkelfelt) รถบัสและรถรางหยุดที่ป้ายได้ และห้ามหยุดใกล้ป้ายรถประจำทาง (holdeplass) กว่า 20 เมตร ถ้าทำให้รถบัสถูกขัดขวาง",
+     "id": "ch07-s09",
+     "n": 9
+    },
+    {
+     "type": "road_check",
+     "title_no": "Kollektivfelt",
+     "title_th": "ช่องทางรถโดยสาร",
+     "question_no": "Du vil hente en venn og tenker på å stanse noen sekunder i et kollektivfelt. Kan du det?",
+     "question_th": "คุณอยากรับเพื่อนและคิดจะหยุดรถสองสามวินาทีในช่องทางรถโดยสาร ทำได้ไหม?",
+     "options_no": [
+      "Ja, bare noen sekunder",
+      "Nei, stans er forbudt i kollektivfelt",
+      "Ja, hvis jeg bruker nødblinken"
+     ],
+     "options_th": [
+      "ได้ แค่ไม่กี่วินาที",
+      "ไม่ได้ ห้ามหยุดรถในช่องทางรถโดยสาร",
+      "ได้ ถ้าเปิดไฟฉุกเฉิน"
+     ],
+     "correct_index": 1,
+     "explanation_no": "Det er forbudt å stanse i kollektivfelt. Finn et annet sted.",
+     "explanation_th": "ห้ามหยุดรถในช่องทางรถโดยสาร (kollektivfelt) ให้หาที่อื่น",
+     "id": "ch07-s10",
+     "n": 10,
+     "badge_no": "Veisjekk ⚡",
+     "badge_th": "ตรวจถนน ⚡"
+    },
+    {
+     "type": "rule",
+     "title_no": "Der parkering er forbudt",
+     "title_th": "ที่ที่ห้ามจอดรถ",
+     "body_no": "Det er forbudt å parkere foran en inn- eller utkjørsel, på en møteplass og i en gågate. På et gatetun kan du bare parkere på plasser som er anvist.",
+     "body_th": "ห้ามจอดรถหน้าทางเข้าหรือทางออก (inn- eller utkjørsel) บนจุดหลีกทาง (møteplass) และในถนนคนเดิน (gågate) ในลานหน้าบ้าน (gatetun) จอดได้เฉพาะที่ที่กำหนดไว้",
+     "id": "ch07-s11",
+     "n": 11
+    },
+    {
+     "type": "trap",
+     "title_no": "Felle: jeg kan parkere foran en innkjørsel hvis jeg er borte kort",
+     "title_th": "กับดักข้อสอบ: จอดหน้าทางเข้าได้ถ้าไปแป๊บเดียว",
+     "body_no": "Det er feil. Parkering er forbudt foran inn- og utkjørsler. Det gjelder uansett hvor kort du er borte fra bilen.",
+     "body_th": "ข้อนี้ผิด ห้ามจอดรถหน้าทางเข้าและทางออก (inn- og utkjørsler) ไม่ว่าคุณจะไปจากรถสั้นแค่ไหนก็ตาม",
+     "id": "ch07-s12",
+     "n": 12
+    },
+    {
+     "type": "what_changed",
+     "title_no": "Innkjørselen",
+     "title_th": "ทางเข้าบ้าน",
+     "image_brief_no": "Bildepar av en villagate. Før: en bil parkert ved siden av en innkjørsel. Etter: bilen står rett foran innkjørselen og sperrer for en annen bil som vil ut.",
+     "image_before": null,
+     "image_after": null,
+     "body_no": "Før: bilen står ved siden av innkjørselen, og det er lov. Etter: bilen står rett foran innkjørselen og sperrer for andre. Det er forbudt.",
+     "body_th": "ก่อน: รถจอดข้างทางเข้าบ้าน ซึ่งทำได้ หลัง: รถจอดตรงหน้าทางเข้าบ้านและขวางคนอื่น ซึ่งเป็นสิ่งต้องห้าม",
+     "hotspots": [
+      {
+       "x": 35,
+       "y": 60,
+       "label_no": "Bilen som står foran innkjørselen",
+       "label_th": "รถที่จอดหน้าทางเข้า (bil)"
+      },
+      {
+       "x": 65,
+       "y": 45,
+       "label_no": "Innkjørselen",
+       "label_th": "ทางเข้าบ้าน (innkjørsel)"
+      },
+      {
+       "x": 80,
+       "y": 70,
+       "label_no": "Bilen som ikke kommer ut",
+       "label_th": "รถที่ออกไปไม่ได้ (bil som sperres inne)"
+      }
+     ],
+     "id": "ch07-s13",
+     "n": 13,
+     "badge_no": "Hva er endret?",
+     "badge_th": "อะไรเปลี่ยนไป?"
+    },
+    {
+     "type": "road_check",
+     "title_no": "Foran innkjørselen",
+     "title_th": "หน้าทางเข้า",
+     "question_no": "Du vil parkere rett foran en innkjørsel i fem minutter. Er det lov?",
+     "question_th": "คุณอยากจอดรถตรงหน้าทางเข้าห้านาที ทำได้ไหม?",
+     "options_no": [
+      "Ja, fem minutter er kort",
+      "Nei, parkering er forbudt foran innkjørsler",
+      "Ja, hvis ingen bor der"
+     ],
+     "options_th": [
+      "ได้ ห้านาทีสั้นมาก",
+      "ไม่ได้ ห้ามจอดหน้าทางเข้า",
+      "ได้ ถ้าไม่มีคนอยู่"
+     ],
+     "correct_index": 1,
+     "explanation_no": "Det er forbudt å parkere foran inn- og utkjørsler.",
+     "explanation_th": "ห้ามจอดรถหน้าทางเข้าและทางออก (inn- og utkjørsler)",
+     "id": "ch07-s14",
+     "n": 14,
+     "badge_no": "Veisjekk ⚡",
+     "badge_th": "ตรวจถนน ⚡"
+    },
+    {
+     "type": "theory",
+     "title_no": "Parkeringslys i mørket",
+     "title_th": "ไฟจอดรถในที่มืด",
+     "body_no": "Når du stanser eller parkerer på vegen og det er mørkt eller dårlig sikt, skal parkeringslysene være tent. Da ser andre bilen din. Fjernlys og nærlys skal ikke være tent når du står parkert.",
+     "body_th": "เมื่อคุณหยุดหรือจอดรถบนถนนและมืดหรือทัศนวิสัยไม่ดี ต้องเปิดไฟจอด (parkeringslys) เพื่อให้คนอื่นเห็นรถของคุณ และต้องไม่เปิดไฟสูง (fjernlys) หรือไฟต่ำ (nærlys) ขณะจอด",
+     "id": "ch07-s15",
+     "n": 15
+    },
+    {
+     "type": "summary",
+     "title_no": "Husk fra dette kapittelet",
+     "title_th": "สิ่งที่ต้องจำจากบทนี้",
+     "body_no": "Ikke stans i kryss eller nærmere enn 5 meter, ikke ved gangfelt, ikke på fortau og ikke i kollektivfelt. Ikke parker foran innkjørsler. Bruk parkeringslys i mørket.",
+     "body_th": "ห้ามหยุดในทางแยกหรือใกล้กว่า 5 เมตร ห้ามหยุดที่ทางม้าลาย ห้ามหยุดบนทางเท้า และห้ามหยุดในช่องทางรถโดยสาร ห้ามจอดหน้าทางเข้า และเปิดไฟจอด (parkeringslys) ในที่มืด",
+     "id": "ch07-s16",
+     "n": 16
+    }
+   ]
+  },
+  {
+   "order": 8,
+   "screens": [
+    {
+     "type": "theory",
+     "title_no": "Skiltene er delt i grupper",
+     "title_th": "ป้ายจราจรแบ่งเป็นกลุ่ม",
+     "body_no": "Trafikkskilt deles inn i grupper etter form, farge og oppgave. Når du kjenner gruppen, forstår du ofte hva skiltet betyr, selv om du ikke husker det nøyaktig.",
+     "body_th": "ป้ายจราจรแบ่งเป็นกลุ่มตามรูปทรง สี และหน้าที่ เมื่อคุณรู้ว่าป้ายอยู่กลุ่มไหน ก็มักจะเข้าใจความหมายได้ แม้จะจำป้ายนั้นไม่ได้ทุกรายละเอียด",
+     "id": "ch08-s01",
+     "n": 1
+    },
+    {
+     "type": "rule",
+     "title_no": "Fareskilt",
+     "title_th": "ป้ายเตือนอันตราย",
+     "body_no": "Fareskiltene varsler om spesiell fare. De er trekantede med rød kant. Ved vegarbeid kan skiltet ha gul bunn. Når du ser et fareskilt, skal du redusere farten og være forberedt.",
+     "body_th": "ป้ายเตือนอันตราย (fareskilt) บอกล่วงหน้าถึงอันตรายพิเศษ เป็นรูปสามเหลี่ยมมีขอบสีแดง ตอนมีงานก่อสร้างถนนป้ายอาจมีพื้นสีเหลือง เมื่อเห็นป้ายเตือน ให้ลดความเร็วและเตรียมพร้อม",
+     "id": "ch08-s02",
+     "n": 2
+    },
+    {
+     "type": "trap",
+     "title_no": "Felle: blå runde skilt forbyr noe",
+     "title_th": "กับดักข้อสอบ: ป้ายกลมสีน้ำเงินคือป้ายห้าม",
+     "body_no": "Det er feil. Forbudsskilt er runde med rød kant. Påbudsskilt er runde med blå bunn, og de forteller hva du må gjøre.",
+     "body_th": "ข้อนี้ผิด ป้ายห้าม (forbudsskilt) เป็นรูปกลมขอบสีแดง ส่วนป้ายบังคับ (påbudsskilt) เป็นรูปกลมพื้นสีน้ำเงิน และบอกว่าคุณต้องทำอะไร",
+     "id": "ch08-s03",
+     "n": 3
+    },
+    {
+     "type": "what_changed",
+     "title_no": "Forbud eller påbud?",
+     "title_th": "ห้ามหรือบังคับ?",
+     "image_brief_no": "Bildepar av to skilt side om side. Før: et rundt skilt med rød kant. Etter: et rundt skilt med blå bunn og hvit pil.",
+     "image_before": null,
+     "image_after": null,
+     "body_no": "Før: et rundt skilt med rød kant forbyr noe. Etter: et rundt skilt med blå bunn påbyr noe, for eksempel en kjøreretning.",
+     "body_th": "ก่อน: ป้ายกลมขอบสีแดงห้ามบางอย่าง หลัง: ป้ายกลมพื้นสีน้ำเงินบังคับบางอย่าง เช่น ทิศทางการขับ",
+     "hotspots": [
+      {
+       "x": 30,
+       "y": 50,
+       "label_no": "Rød kant betyr forbud",
+       "label_th": "ขอบสีแดงหมายถึงห้าม (forbud)"
+      },
+      {
+       "x": 70,
+       "y": 50,
+       "label_no": "Blå bunn betyr påbud",
+       "label_th": "พื้นสีน้ำเงินหมายถึงบังคับ (påbud)"
+      },
+      {
+       "x": 70,
+       "y": 35,
+       "label_no": "Hvit pil som viser påbudt kjøreretning",
+       "label_th": "ลูกศรสีขาวที่บอกทิศทางบังคับ (kjøreretning)"
+      }
+     ],
+     "id": "ch08-s04",
+     "n": 4,
+     "badge_no": "Hva er endret?",
+     "badge_th": "อะไรเปลี่ยนไป?"
+    },
+    {
+     "type": "road_check",
+     "title_no": "Blått og rundt",
+     "title_th": "สีน้ำเงินและรูปกลม",
+     "question_no": "Hva betyr et rundt skilt med blå bunn?",
+     "question_th": "ป้ายกลมพื้นสีน้ำเงินมีความหมายว่าอะไร?",
+     "options_no": [
+      "Forbud",
+      "Påbud",
+      "Advarsel"
+     ],
+     "options_th": [
+      "ห้าม",
+      "บังคับ",
+      "เตือน"
+     ],
+     "correct_index": 1,
+     "explanation_no": "Runde skilt med blå bunn er påbudsskilt. De forteller hva du må gjøre.",
+     "explanation_th": "ป้ายกลมพื้นสีน้ำเงินคือป้ายบังคับ (påbudsskilt) บอกว่าคุณต้องทำอะไร",
+     "id": "ch08-s05",
+     "n": 5,
+     "badge_no": "Veisjekk ⚡",
+     "badge_th": "ตรวจถนน ⚡"
+    },
+    {
+     "type": "theory",
+     "title_no": "Hvor langt gjelder et forbudsskilt?",
+     "title_th": "ป้ายห้ามมีผลไปไกลแค่ไหน?",
+     "body_no": "Et forbudsskilt gjelder i kjøreretningen fra der skiltet står og fram til nærmeste vegkryss. Et nytt kryss gjør at forbudet slutter, med mindre skiltet står igjen der.",
+     "body_th": "ป้ายห้าม (forbudsskilt) มีผลตามทิศทางที่คุณขับ ตั้งแต่จุดที่ป้ายตั้งอยู่ไปจนถึงทางแยกถัดไป (vegkryss) เมื่อผ่านทางแยกแล้วข้อห้ามจะสิ้นสุด เว้นแต่จะมีป้ายเดิมตั้งอยู่อีก",
+     "id": "ch08-s06",
+     "n": 6
+    },
+    {
+     "type": "rule",
+     "title_no": "Vikeplikt- og forkjørsskilt",
+     "title_th": "ป้ายให้ทางและป้ายทางเอก",
+     "body_no": "Vikeplikt- og forkjørsskilt bestemmer hvem som skal vike på akkurat dette stedet. De gjelder foran høyreregelen.",
+     "body_th": "ป้ายให้ทางและป้ายทางเอก (vikeplikt- og forkjørsskilt) กำหนดว่าใครต้องให้ทางที่จุดนั้น ป้ายเหล่านี้มีอำนาจเหนือกฎให้ทางรถจากขวา (høyreregelen)",
+     "id": "ch08-s07",
+     "n": 7
+    },
+    {
+     "type": "trap",
+     "title_no": "Felle: et underskilt gjelder alene",
+     "title_th": "กับดักข้อสอบ: ป้ายรองใช้ได้ด้วยตัวเอง",
+     "body_no": "Det er feil. Et underskilt er bare gyldig sammen med et hovedskilt. Det forklarer hovedskiltet nærmere, for eksempel når eller for hvem det gjelder.",
+     "body_th": "ข้อนี้ผิด ป้ายรอง (underskilt) ใช้ได้เฉพาะเมื่ออยู่กับป้ายหลัก (hovedskilt) เท่านั้น ป้ายรองอธิบายป้ายหลักเพิ่มเติม เช่น ใช้เมื่อไหร่หรือใช้กับใคร",
+     "id": "ch08-s08",
+     "n": 8
+    },
+    {
+     "type": "theory",
+     "title_no": "Farger på vegvisningsskilt",
+     "title_th": "สีของป้ายบอกทาง",
+     "body_no": "Blå bunn og hvit tekst er for motorveger. Gul bunn og sort tekst er for andre veger. Hvit bunn og sort tekst er for andre mål. Oransje bunn er midlertidig vegvisning. Brun bunn og hvit tekst er for turister.",
+     "body_th": "พื้นสีน้ำเงินตัวอักษรสีขาวใช้กับทางด่วน (motorveger) พื้นสีเหลืองตัวอักษรสีดำใช้กับถนนอื่น พื้นสีขาวตัวอักษรสีดำใช้กับจุดหมายอื่น พื้นสีส้มคือป้ายบอกทางชั่วคราว และพื้นสีน้ำตาลตัวอักษรสีขาวใช้กับการท่องเที่ยว (turisttrafikk)",
+     "id": "ch08-s09",
+     "n": 9
+    },
+    {
+     "type": "road_check",
+     "title_no": "Brun bunn",
+     "title_th": "พื้นสีน้ำตาล",
+     "question_no": "Hva betyr brun bunn på et vegvisningsskilt?",
+     "question_th": "พื้นสีน้ำตาลบนป้ายบอกทางหมายถึงอะไร?",
+     "options_no": [
+      "Turistmål",
+      "Motorveg",
+      "Omkjøring"
+     ],
+     "options_th": [
+      "แหล่งท่องเที่ยว",
+      "ทางด่วน",
+      "ทางอ้อม"
+     ],
+     "correct_index": 0,
+     "explanation_no": "Brun bunn med hvit tekst viser veien til turistmål.",
+     "explanation_th": "พื้นสีน้ำตาลตัวอักษรสีขาวบอกทางไปยังแหล่งท่องเที่ยว (turistmål)",
+     "id": "ch08-s10",
+     "n": 10,
+     "badge_no": "Veisjekk ⚡",
+     "badge_th": "ตรวจถนน ⚡"
+    },
+    {
+     "type": "rule",
+     "title_no": "Linjer i vegen",
+     "title_th": "เส้นบนถนน",
+     "body_no": "En gul midtlinje skiller mot motsatt kjøreretning. En sperrelinje er en hel linje som du ikke må krysse eller kjøre på. En kjørefeltlinje skiller felt i samme retning.",
+     "body_th": "เส้นกึ่งกลางสีเหลือง (midtlinje) แยกทิศทางตรงข้ามออกจากกัน เส้นห้ามข้าม (sperrelinje) เป็นเส้นทึบที่คุณห้ามข้ามหรือขับทับ เส้นแบ่งช่องจราจร (kjørefeltlinje) แยกช่องที่ไปทิศทางเดียวกัน",
+     "id": "ch08-s11",
+     "n": 11
+    },
+    {
+     "type": "trap",
+     "title_no": "Felle: varsellinjen er en sperrelinje",
+     "title_th": "กับดักข้อสอบ: เส้นเตือนคือเส้นห้ามข้าม",
+     "body_no": "Det er feil. En varsellinje er stiplet, og strekene blir tettere og tettere. Den varsler at en sperrelinje kommer. Forbikjøring er ikke forbudt på varsellinjen, men du må være ekstra forsiktig.",
+     "body_th": "ข้อนี้ผิด เส้นเตือน (varsellinje) เป็นเส้นประที่ถี่ขึ้นเรื่อย ๆ เพื่อเตือนว่าข้างหน้าจะมีเส้นห้ามข้าม (sperrelinje) บนเส้นเตือนไม่ได้ห้ามแซง แต่คุณต้องระวังเป็นพิเศษ",
+     "id": "ch08-s12",
+     "n": 12
+    },
+    {
+     "type": "what_changed",
+     "title_no": "Fra stiplet til hel linje",
+     "title_th": "จากเส้นประเป็นเส้นทึบ",
+     "image_brief_no": "Bildepar av en landevei sett bakfra. Før: stiplet gul midtlinje som blir tettere (varsellinje). Etter: samme veg med hel, gul sperrelinje foran bilen.",
+     "image_before": null,
+     "image_after": null,
+     "body_no": "Før: en stiplet linje blir tettere, og du får varsel. Etter: linjen er hel, og du må ikke krysse den. Ikke start en forbikjøring der linjen er hel.",
+     "body_th": "ก่อน: เส้นประถี่ขึ้น เป็นการเตือน หลัง: เส้นกลายเป็นเส้นทึบ และคุณห้ามข้าม อย่าเริ่มแซงเมื่อเส้นเป็นเส้นทึบ",
+     "hotspots": [
+      {
+       "x": 40,
+       "y": 65,
+       "label_no": "Varsellinjen som blir tettere",
+       "label_th": "เส้นเตือนที่ถี่ขึ้น (varsellinje)"
+      },
+      {
+       "x": 65,
+       "y": 50,
+       "label_no": "Den hele sperrelinjen",
+       "label_th": "เส้นทึบห้ามข้าม (sperrelinje)"
+      },
+      {
+       "x": 50,
+       "y": 85,
+       "label_no": "Bilen som må holde seg på sin side",
+       "label_th": "รถที่ต้องอยู่ในช่องของตัวเอง (din bil)"
+      }
+     ],
+     "id": "ch08-s13",
+     "n": 13,
+     "badge_no": "Hva er endret?",
+     "badge_th": "อะไรเปลี่ยนไป?"
+    },
+    {
+     "type": "road_check",
+     "title_no": "Hel linje",
+     "title_th": "เส้นทึบ",
+     "question_no": "Linjen midt i vegen er hel. Hva betyr det?",
+     "question_th": "เส้นกลางถนนเป็นเส้นทึบ หมายความว่าอะไร?",
+     "options_no": [
+      "Forbikjøring er tillatt",
+      "Du må ikke krysse linjen",
+      "Det er bare en veiledning"
+     ],
+     "options_th": [
+      "แซงได้",
+      "คุณห้ามข้ามเส้น",
+      "เป็นแค่คำแนะนำ"
+     ],
+     "correct_index": 1,
+     "explanation_no": "En hel linje er en sperrelinje. Du må ikke krysse den eller kjøre på den.",
+     "explanation_th": "เส้นทึบคือเส้นห้ามข้าม (sperrelinje) คุณห้ามข้ามหรือขับทับ",
+     "id": "ch08-s14",
+     "n": 14,
+     "badge_no": "Veisjekk ⚡",
+     "badge_th": "ตรวจถนน ⚡"
+    },
+    {
+     "type": "theory",
+     "title_no": "Opplysnings-, service- og markeringsskilt",
+     "title_th": "ป้ายข้อมูล ป้ายบริการ และป้ายแสดงตำแหน่ง",
+     "body_no": "Opplysningsskilt sier at særlige regler gjelder eller slutter. Serviceskilt gir opplysninger om nødhjelp og vegservice. Markeringsskilt viser hvordan vegen går videre eller at det er en hindring.",
+     "body_th": "ป้ายข้อมูล (opplysningsskilt) บอกว่ามีกฎพิเศษเริ่มหรือสิ้นสุด ป้ายบริการ (serviceskilt) ให้ข้อมูลเรื่องความช่วยเหลือฉุกเฉินและบริการริมทาง ป้ายแสดงตำแหน่ง (markeringsskilt) บอกว่าถนนไปต่ออย่างไรหรือมีสิ่งกีดขวาง",
+     "id": "ch08-s15",
+     "n": 15
+    },
+    {
+     "type": "summary",
+     "title_no": "Husk fra dette kapittelet",
+     "title_th": "สิ่งที่ต้องจำจากบทนี้",
+     "body_no": "Rød kant betyr forbud, blå bunn betyr påbud, og trekant betyr fare. Et underskilt gjelder bare sammen med hovedskiltet. Hel linje er sperrelinje, og du må ikke krysse den.",
+     "body_th": "ขอบสีแดงคือห้าม พื้นสีน้ำเงินคือบังคับ และรูปสามเหลี่ยมคืออันตราย ป้ายรอง (underskilt) ใช้ได้เฉพาะกับป้ายหลัก เส้นทึบคือเส้นห้ามข้าม (sperrelinje) และคุณห้ามข้าม",
+     "id": "ch08-s16",
+     "n": 16
+    }
+   ]
+  },
+  {
+   "order": 9,
+   "screens": [
+    {
+     "type": "theory",
+     "title_no": "Signal og tegn",
+     "title_th": "สัญญาณและการให้สัญญาณ",
+     "body_no": "Med lys og lyd forteller du andre hva du gjør. Bruk signalene riktig. Unødig eller hensynsløs bruk av lyd- eller lyssignal er forbudt.",
+     "body_th": "คุณบอกผู้อื่นว่ากำลังทำอะไรด้วยไฟและเสียง ใช้สัญญาณให้ถูกต้อง การใช้สัญญาณเสียงหรือสัญญาณไฟโดยไม่จำเป็นหรือโดยไม่เกรงใจผู้อื่น (hensynsløs bruk) เป็นสิ่งต้องห้าม",
+     "id": "ch09-s01",
+     "n": 1
+    },
+    {
+     "type": "rule",
+     "title_no": "Gi tegn i god tid",
+     "title_th": "ให้สัญญาณล่วงหน้า",
+     "body_no": "Når du skal svinge eller endre plass i sideretning, skal du gi tegn med blinklys. Gi tegnet i god tid, slik at andre får tid til å reagere.",
+     "body_th": "เมื่อคุณจะเลี้ยวหรือเปลี่ยนตำแหน่งไปทางด้านข้าง ต้องให้สัญญาณด้วยไฟเลี้ยว (blinklys) ให้สัญญาณล่วงหน้าเพื่อให้คนอื่นมีเวลาตอบสนอง",
+     "id": "ch09-s02",
+     "n": 2
+    },
+    {
+     "type": "trap",
+     "title_no": "Felle: jeg trenger ikke blinke når ingen er i nærheten",
+     "title_th": "กับดักข้อสอบ: ไม่ต้องเปิดไฟเลี้ยวถ้าไม่มีใครอยู่ใกล้",
+     "body_no": "Det er feil. Du skal alltid gi tegn når du svinger eller skifter felt. Du kan ikke alltid se alle, for eksempel en syklist i den blinde vinkelen.",
+     "body_th": "ข้อนี้ผิด คุณต้องให้สัญญาณทุกครั้งที่เลี้ยวหรือเปลี่ยนช่องจราจร คุณอาจมองไม่เห็นทุกคนเสมอไป เช่น คนขี่จักรยานที่อยู่ในจุดอับสายตา (blind vinkel)",
+     "id": "ch09-s03",
+     "n": 3
+    },
+    {
+     "type": "what_changed",
+     "title_no": "Blinklys",
+     "title_th": "ไฟเลี้ยว",
+     "image_brief_no": "Bildepar av en bil som skifter felt på en veg med to felt, sett bakfra. Før: bilen flytter seg uten blinklys. Etter: bilen har blinklyset tent i god tid før den flytter seg.",
+     "image_before": null,
+     "image_after": null,
+     "body_no": "Før: bilen skifter felt uten å blinke, og de bak blir overrasket. Etter: bilen blinker i god tid, og de bak forstår hva den skal gjøre.",
+     "body_th": "ก่อน: รถเปลี่ยนช่องโดยไม่เปิดไฟเลี้ยว และรถคันหลังตกใจ หลัง: รถเปิดไฟเลี้ยวล่วงหน้า และรถคันหลังเข้าใจว่าจะทำอะไร",
+     "hotspots": [
+      {
+       "x": 45,
+       "y": 60,
+       "label_no": "Blinklyset",
+       "label_th": "ไฟเลี้ยว (blinklys)"
+      },
+      {
+       "x": 25,
+       "y": 80,
+       "label_no": "Bilen bak som må reagere",
+       "label_th": "รถคันหลังที่ต้องตอบสนอง (bil bak)"
+      },
+      {
+       "x": 65,
+       "y": 45,
+       "label_no": "Feltet bilen skal inn i",
+       "label_th": "ช่องที่รถจะเข้าไป (kjørefelt)"
+      }
+     ],
+     "id": "ch09-s04",
+     "n": 4,
+     "badge_no": "Hva er endret?",
+     "badge_th": "อะไรเปลี่ยนไป?"
+    },
+    {
+     "type": "road_check",
+     "title_no": "Når skal du blinke?",
+     "title_th": "เมื่อไหร่ต้องเปิดไฟเลี้ยว?",
+     "question_no": "Når skal du gi tegn med blinklys?",
+     "question_th": "เมื่อไหร่ที่คุณต้องให้สัญญาณด้วยไฟเลี้ยว?",
+     "options_no": [
+      "Bare når jeg ser andre biler",
+      "Når jeg svinger eller endrer plass i sideretning",
+      "Bare i kryss"
+     ],
+     "options_th": [
+      "เฉพาะเมื่อเห็นรถคันอื่น",
+      "เมื่อเลี้ยวหรือเปลี่ยนตำแหน่งไปทางด้านข้าง",
+      "เฉพาะในทางแยก"
+     ],
+     "correct_index": 1,
+     "explanation_no": "Du skal gi tegn ved svinging og ved vesentlig endring av plassering i sideretning.",
+     "explanation_th": "คุณต้องให้สัญญาณเมื่อเลี้ยวและเมื่อเปลี่ยนตำแหน่งไปทางด้านข้างอย่างมีนัยสำคัญ",
+     "id": "ch09-s05",
+     "n": 5,
+     "badge_no": "Veisjekk ⚡",
+     "badge_th": "ตรวจถนน ⚡"
+    },
+    {
+     "type": "theory",
+     "title_no": "Kjørelys, nærlys og fjernlys",
+     "title_th": "ไฟกลางวัน ไฟต่ำ และไฟสูง",
+     "body_no": "Kjørelys, nærlys eller fjernlys skal alltid være tent når du kjører. Nærlys er vanlig lys i mørket. Fjernlys gir lengre rekkevidde. Parkeringslys brukes når du står parkert i mørket.",
+     "body_th": "ไฟกลางวัน (kjørelys) ไฟต่ำ (nærlys) หรือไฟสูง (fjernlys) ต้องเปิดตลอดเวลาที่ขับรถ ไฟต่ำเป็นไฟปกติในที่มืด ไฟสูงส่องได้ไกลกว่า ไฟจอด (parkeringslys) ใช้เมื่อจอดรถในที่มืด",
+     "id": "ch09-s06",
+     "n": 6
+    },
+    {
+     "type": "rule",
+     "title_no": "Fjernlys skal ikke blende",
+     "title_th": "ไฟสูงต้องไม่แยงตา",
+     "body_no": "Du må ikke bruke fjernlys slik at andre blir blendet. Slå ned til nærlys når du møter andre biler. Bruk nærlys også når fjernlys ikke er nødvendig.",
+     "body_th": "คุณต้องไม่ใช้ไฟสูงจนทำให้คนอื่นถูกแสงแยงตา เปลี่ยนเป็นไฟต่ำเมื่อรถสวนมา และใช้ไฟต่ำเมื่อไม่จำเป็นต้องใช้ไฟสูง",
+     "id": "ch09-s07",
+     "n": 7
+    },
+    {
+     "type": "trap",
+     "title_no": "Felle: fjernlys er alltid best i mørket",
+     "title_th": "กับดักข้อสอบ: ไฟสูงดีที่สุดในที่มืดเสมอ",
+     "body_no": "Det er feil. Fjernlys gir lengre sikt, men det kan blende andre og gjøre dem usikre. Når du møter en bil, eller kjører rett bak en annen bil, skal du bruke nærlys.",
+     "body_th": "ข้อนี้ผิด ไฟสูงช่วยให้มองเห็นไกลขึ้น แต่อาจแยงตาผู้อื่นจนขับไม่มั่นใจ เมื่อรถสวนมาหรือขับตามรถอีกคันใกล้ ๆ ให้ใช้ไฟต่ำ",
+     "id": "ch09-s08",
+     "n": 8
+    },
+    {
+     "type": "theory",
+     "title_no": "Blått og gult lys",
+     "title_th": "ไฟสีน้ำเงินและไฟสีเหลือง",
+     "body_no": "Utrykningskjøretøy varsler med blinkende blått lys. De kan bruke lydsignal i tillegg, men bare når det er nødvendig. Kjøretøy ved vegarbeid varsler med blinkende gult lys.",
+     "body_th": "รถฉุกเฉิน (utrykningskjøretøy) แจ้งเตือนด้วยไฟสีน้ำเงินกะพริบ และอาจใช้สัญญาณเสียงเพิ่มได้ แต่เฉพาะเมื่อจำเป็น รถที่ทำงานบนถนนแจ้งเตือนด้วยไฟสีเหลืองกะพริบ",
+     "id": "ch09-s09",
+     "n": 9
+    },
+    {
+     "type": "road_check",
+     "title_no": "Hvilket lys?",
+     "title_th": "ไฟสีอะไร?",
+     "question_no": "Hvilket blinkende lys bruker et utrykningskjøretøy?",
+     "question_th": "รถฉุกเฉินใช้ไฟกะพริบสีอะไร?",
+     "options_no": [
+      "Gult",
+      "Blått",
+      "Rødt"
+     ],
+     "options_th": [
+      "สีเหลือง",
+      "สีน้ำเงิน",
+      "สีแดง"
+     ],
+     "correct_index": 1,
+     "explanation_no": "Utrykningskjøretøy varsler med blinkende blått lys.",
+     "explanation_th": "รถฉุกเฉิน (utrykningskjøretøy) แจ้งเตือนด้วยไฟสีน้ำเงินกะพริบ",
+     "id": "ch09-s10",
+     "n": 10,
+     "badge_no": "Veisjekk ⚡",
+     "badge_th": "ตรวจถนน ⚡"
+    },
+    {
+     "type": "rule",
+     "title_no": "Ikke forstyrrende kjøring",
+     "title_th": "ห้ามขับรถรบกวนผู้อื่น",
+     "body_no": "I eller ved bebyggelse må du ikke kjøre unødvendig og forstyrrende. Du må heller ikke la motoren gå på tomgang eller lage unødig støy og utslipp.",
+     "body_th": "ในหรือใกล้ย่านที่อยู่อาศัย ห้ามขับรถวนไปมารบกวนผู้อื่นโดยไม่จำเป็น และห้ามปล่อยเครื่องยนต์เดินเบา (tomgang) หรือก่อเสียงดังและควันโดยไม่จำเป็น",
+     "id": "ch09-s11",
+     "n": 11
+    },
+    {
+     "type": "trap",
+     "title_no": "Felle: jeg kan la motoren gå for å varme bilen",
+     "title_th": "กับดักข้อสอบ: ติดเครื่องรอให้รถอุ่นได้เสมอ",
+     "body_no": "Det er feil. I og ved bebyggelse er unødvendig tomgang forbudt. Det lager støy og utslipp for dem som bor der.",
+     "body_th": "ข้อนี้ผิด ในหรือใกล้ย่านที่อยู่อาศัยห้ามปล่อยเครื่องเดินเบา (tomgang) โดยไม่จำเป็น เพราะทำให้เกิดเสียงและไอเสียรบกวนผู้ที่อาศัยอยู่ที่นั่น",
+     "id": "ch09-s12",
+     "n": 12
+    },
+    {
+     "type": "what_changed",
+     "title_no": "Møtende bil om natten",
+     "title_th": "รถสวนมาตอนกลางคืน",
+     "image_brief_no": "Bildepar av en mørk landevei sett fra førersetet. Før: bilen har fjernlys på, og en møtende bil blir blendet. Etter: bilen har slått ned til nærlys, og den møtende bilen ser tydelig.",
+     "image_before": null,
+     "image_after": null,
+     "body_no": "Før: du har fjernlys, og føreren som møter deg blir blendet. Etter: du har slått ned til nærlys, og begge ser veien bedre.",
+     "body_th": "ก่อน: คุณเปิดไฟสูง และคนขับที่สวนมาถูกแสงแยงตา หลัง: คุณเปลี่ยนเป็นไฟต่ำ และทั้งสองฝ่ายมองเห็นถนนได้ดีขึ้น",
+     "hotspots": [
+      {
+       "x": 30,
+       "y": 55,
+       "label_no": "Fjernlyset som blender",
+       "label_th": "ไฟสูงที่แยงตา (fjernlys)"
+      },
+      {
+       "x": 70,
+       "y": 50,
+       "label_no": "Den møtende bilen",
+       "label_th": "รถที่สวนมา (møtende bil)"
+      },
+      {
+       "x": 50,
+       "y": 75,
+       "label_no": "Nærlyset som lyser veien",
+       "label_th": "ไฟต่ำที่ส่องถนน (nærlys)"
+      }
+     ],
+     "id": "ch09-s13",
+     "n": 13,
+     "badge_no": "Hva er endret?",
+     "badge_th": "อะไรเปลี่ยนไป?"
+    },
+    {
+     "type": "road_check",
+     "title_no": "Møtende i mørket",
+     "title_th": "รถสวนในที่มืด",
+     "question_no": "Du kjører i mørket med fjernlys og møter en bil. Hva gjør du?",
+     "question_th": "คุณขับในที่มืดโดยเปิดไฟสูงและมีรถสวนมา คุณทำอย่างไร?",
+     "options_no": [
+      "Slår ned til nærlys",
+      "Beholder fjernlyset for å se bedre",
+      "Blinker med fjernlys til den andre"
+     ],
+     "options_th": [
+      "เปลี่ยนเป็นไฟต่ำ",
+      "เปิดไฟสูงต่อเพื่อให้เห็นชัดขึ้น",
+      "กะพริบไฟสูงใส่อีกคัน"
+     ],
+     "correct_index": 0,
+     "explanation_no": "Fjernlys må ikke brukes slik at andre blir blendet. Slå ned til nærlys.",
+     "explanation_th": "ต้องไม่ใช้ไฟสูงจนแยงตาผู้อื่น ให้เปลี่ยนเป็นไฟต่ำ (nærlys)",
+     "id": "ch09-s14",
+     "n": 14,
+     "badge_no": "Veisjekk ⚡",
+     "badge_th": "ตรวจถนน ⚡"
+    },
+    {
+     "type": "theory",
+     "title_no": "Lydsignal",
+     "title_th": "สัญญาณเสียง",
+     "body_no": "Lydsignal, det vil si å tute, skal du bare bruke når det er nødvendig for å advare. Du skal ikke tute for å skjelle ut andre eller av utålmodighet.",
+     "body_th": "สัญญาณเสียง (lydsignal) คือการบีบแตร ให้ใช้เฉพาะเมื่อจำเป็นต้องเตือนภัยเท่านั้น อย่าบีบแตรเพื่อต่อว่าผู้อื่นหรือเพราะใจร้อน",
+     "id": "ch09-s15",
+     "n": 15
+    },
+    {
+     "type": "summary",
+     "title_no": "Husk fra dette kapittelet",
+     "title_th": "สิ่งที่ต้องจำจากบทนี้",
+     "body_no": "Gi tegn i god tid. Slå ned fjernlyset når du møter andre. Blått blinkende lys betyr utrykning. Ikke la motoren gå på tomgang unødig, og ikke tut uten grunn.",
+     "body_th": "ให้สัญญาณล่วงหน้า เปลี่ยนเป็นไฟต่ำเมื่อรถสวนมา ไฟสีน้ำเงินกะพริบหมายถึงรถฉุกเฉิน อย่าปล่อยเครื่องเดินเบาโดยไม่จำเป็น และอย่าบีบแตรโดยไม่มีเหตุ",
+     "id": "ch09-s16",
+     "n": 16
+    }
+   ]
+  },
+  {
+   "order": 10,
+   "screens": [
+    {
+     "type": "theory",
+     "title_no": "Rus og kjøring",
+     "title_th": "การขับรถขณะมึนเมา",
+     "body_no": "Å kjøre påvirket av alkohol eller andre rusmidler er en av de alvorligste lovbruddene i trafikken. Det er også en av de vanligste årsakene til alvorlige ulykker.",
+     "body_th": "การขับรถขณะได้รับผลจากแอลกอฮอล์หรือสารเสพติดอื่นเป็นหนึ่งในความผิดร้ายแรงที่สุดในการจราจร และเป็นหนึ่งในสาเหตุที่พบบ่อยของอุบัติเหตุร้ายแรง",
+     "id": "ch10-s01",
+     "n": 1
+    },
+    {
+     "type": "rule",
+     "title_no": "Promillegrensen er 0,2",
+     "title_th": "เกณฑ์แอลกอฮอล์ในเลือดคือ 0,2",
+     "body_no": "Du regnes alltid som påvirket når du har mer enn 0,2 promille alkohol i blodet. I utåndingsluften er grensen 0,1 milligram alkohol per liter luft.",
+     "body_th": "คุณถือว่าได้รับผลจากแอลกอฮอล์เสมอ เมื่อมีแอลกอฮอล์ในเลือดมากกว่า 0,2 พรอมิลล์ (promille) ส่วนในลมหายใจ เกณฑ์คือ 0,1 มิลลิกรัมต่อลิตรของอากาศ",
+     "id": "ch10-s02",
+     "n": 2
+    },
+    {
+     "type": "trap",
+     "title_no": "Felle: 0,5 er grensen i Norge",
+     "title_th": "กับดักข้อสอบ: เกณฑ์ในนอร์เวย์คือ 0,5",
+     "body_no": "Det er feil. Grensen i Norge er 0,2 promille. Det er veldig lavt, og det kan tilsvare én liten øl for en gjennomsnittlig person. Det sikreste er aldri å drikke alkohol før du kjører.",
+     "body_th": "ข้อนี้ผิด เกณฑ์ในนอร์เวย์คือ 0,2 พรอมิลล์ (promille) ซึ่งต่ำมาก อาจเท่ากับเบียร์ขวดเล็กหนึ่งขวดสำหรับคนทั่วไป วิธีที่ปลอดภัยที่สุดคืออย่าดื่มแอลกอฮอล์เลยก่อนขับรถ",
+     "id": "ch10-s03",
+     "n": 3
+    },
+    {
+     "type": "what_changed",
+     "title_no": "Kvelden etter",
+     "title_th": "เช้าวันถัดมา",
+     "image_brief_no": "Bildepar av samme mann. Før: en middag med et glass vin på bordet ved kveldstid. Etter: samme mann ved bilnøklene neste morgen, med en klokke som viser tidlig morgen.",
+     "image_before": null,
+     "image_after": null,
+     "body_no": "Før: du drikker om kvelden. Etter: neste morgen skal du kjøre. Kroppen bruker lang tid på å bryte ned alkohol. Du kan fortsatt ha alkohol i blodet, selv om du føler deg fin.",
+     "body_th": "ก่อน: คุณดื่มตอนกลางคืน หลัง: เช้าวันถัดมาคุณต้องขับรถ ร่างกายใช้เวลานานในการกำจัดแอลกอฮอล์ คุณอาจยังมีแอลกอฮอล์ในเลือดอยู่ แม้จะรู้สึกดีแล้ว",
+     "hotspots": [
+      {
+       "x": 30,
+       "y": 55,
+       "label_no": "Vinglasset om kvelden",
+       "label_th": "แก้วไวน์ตอนกลางคืน (vinglass)"
+      },
+      {
+       "x": 70,
+       "y": 40,
+       "label_no": "Klokken som viser tidlig morgen",
+       "label_th": "นาฬิกาที่บอกเวลาเช้า (klokke)"
+      },
+      {
+       "x": 75,
+       "y": 70,
+       "label_no": "Bilnøklene",
+       "label_th": "กุญแจรถ (bilnøkler)"
+      }
+     ],
+     "id": "ch10-s04",
+     "n": 4,
+     "badge_no": "Hva er endret?",
+     "badge_th": "อะไรเปลี่ยนไป?"
+    },
+    {
+     "type": "road_check",
+     "title_no": "Hvor går grensen?",
+     "title_th": "เกณฑ์อยู่ที่เท่าไร?",
+     "question_no": "Hva er promillegrensen for å regnes som påvirket i Norge?",
+     "question_th": "เกณฑ์แอลกอฮอล์ในเลือดที่ถือว่าได้รับผลจากแอลกอฮอล์ในนอร์เวย์คือเท่าไร?",
+     "options_no": [
+      "0,2 promille",
+      "0,5 promille",
+      "0,8 promille"
+     ],
+     "options_th": [
+      "0,2 พรอมิลล์",
+      "0,5 พรอมิลล์",
+      "0,8 พรอมิลล์"
+     ],
+     "correct_index": 0,
+     "explanation_no": "Over 0,2 promille regnes du alltid som påvirket.",
+     "explanation_th": "เมื่อเกิน 0,2 พรอมิลล์ (promille) คุณถือว่าได้รับผลจากแอลกอฮอล์เสมอ",
+     "id": "ch10-s05",
+     "n": 5,
+     "badge_no": "Veisjekk ⚡",
+     "badge_th": "ตรวจถนน ⚡"
+    },
+    {
+     "type": "theory",
+     "title_no": "Straffen blir strengere jo høyere promille",
+     "title_th": "ยิ่งระดับแอลกอฮอล์สูง โทษยิ่งหนัก",
+     "body_no": "Straffen for promillekjøring kan være bot, fengsel og tap av førerkortet. Jo høyere promille du har, jo strengere blir straffen. Du kan miste retten til å kjøre i lang tid, og ved gjentakelse kan du miste den for alltid.",
+     "body_th": "โทษของการขับรถขณะมีแอลกอฮอล์อาจเป็นค่าปรับ จำคุก และการเพิกถอนใบขับขี่ (førerkort) ยิ่งระดับแอลกอฮอล์สูงโทษยิ่งหนัก คุณอาจเสียสิทธิ์ขับรถเป็นเวลานาน และถ้ากระทำซ้ำอาจเสียสิทธิ์ตลอดไป",
+     "id": "ch10-s06",
+     "n": 6
+    },
+    {
+     "type": "rule",
+     "title_no": "Politiet kan ta alkotest",
+     "title_th": "ตำรวจตรวจวัดแอลกอฮอล์ได้",
+     "body_no": "Politiet kan ta alkotest når det er grunn til å tro at du har drukket, når du er innblandet i et uhell, og når du blir stanset i en trafikkontroll.",
+     "body_th": "ตำรวจตรวจวัดแอลกอฮอล์ (alkotest) ได้ เมื่อมีเหตุให้เชื่อว่าคุณดื่มมา เมื่อคุณเกี่ยวข้องกับอุบัติเหตุ และเมื่อถูกเรียกตรวจในด่านตรวจการจราจร",
+     "id": "ch10-s07",
+     "n": 7
+    },
+    {
+     "type": "trap",
+     "title_no": "Felle: politiet trenger en grunn for å ta alkotest",
+     "title_th": "กับดักข้อสอบ: ตำรวจต้องมีเหตุผลก่อนจึงจะตรวจวัดแอลกอฮอล์ได้",
+     "body_no": "Ikke alltid. I en trafikkontroll kan politiet ta alkotest uten at de mistenker deg for noe. Du må da la deg teste.",
+     "body_th": "ไม่เสมอไป ในด่านตรวจการจราจร ตำรวจตรวจวัดแอลกอฮอล์ได้โดยไม่ต้องสงสัยคุณเป็นพิเศษ และคุณต้องยอมให้ตรวจ",
+     "id": "ch10-s08",
+     "n": 8
+    },
+    {
+     "type": "theory",
+     "title_no": "Du kan også være påvirket dagen etter",
+     "title_th": "คุณอาจยังได้รับผลจากแอลกอฮอล์ในวันถัดมา",
+     "body_no": "Kroppen bryter ned alkohol sakte. Etter en kveld med mye alkohol kan du fortsatt ha alkohol i blodet neste morgen. Er du i tvil, skal du ikke kjøre.",
+     "body_th": "ร่างกายกำจัดแอลกอฮอล์ช้า หลังจากดื่มหนักมาทั้งคืน คุณอาจยังมีแอลกอฮอล์ในเลือดในเช้าวันถัดมา ถ้าไม่แน่ใจ ก็อย่าขับ",
+     "id": "ch10-s09",
+     "n": 9
+    },
+    {
+     "type": "road_check",
+     "title_no": "Morgenen etter",
+     "title_th": "เช้าวันถัดมา",
+     "question_no": "Du drakk mye i går kveld og skal kjøre i dag tidlig. Hva bør du gjøre?",
+     "question_th": "คุณดื่มหนักเมื่อคืนและต้องขับรถเช้านี้ คุณควรทำอย่างไร?",
+     "options_no": [
+      "Kjøre, for jeg har sovet",
+      "La være å kjøre hvis jeg er i tvil",
+      "Drikke kaffe og kjøre"
+     ],
+     "options_th": [
+      "ขับได้ เพราะฉันนอนแล้ว",
+      "ไม่ขับถ้าไม่แน่ใจ",
+      "ดื่มกาแฟแล้วขับ"
+     ],
+     "correct_index": 1,
+     "explanation_no": "Søvn og kaffe fjerner ikke alkohol fra blodet. Bare tid gjør det.",
+     "explanation_th": "การนอนหลับและกาแฟไม่ได้ทำให้แอลกอฮอล์ในเลือดหายไป มีเพียงเวลาเท่านั้นที่ทำได้",
+     "id": "ch10-s10",
+     "n": 10,
+     "badge_no": "Veisjekk ⚡",
+     "badge_th": "ตรวจถนน ⚡"
+    },
+    {
+     "type": "rule",
+     "title_no": "Ikke drikk etter en ulykke",
+     "title_th": "อย่าดื่มหลังเกิดอุบัติเหตุ",
+     "body_no": "Har du vært innblandet i et uhell og forstår at politiet kan etterforske, må du ikke drikke alkohol de første seks timene etter at kjøringen er slutt.",
+     "body_th": "ถ้าคุณเกี่ยวข้องกับอุบัติเหตุและรู้ว่าตำรวจอาจสืบสวน คุณต้องไม่ดื่มแอลกอฮอล์ภายในหกชั่วโมงแรกหลังหยุดขับรถ",
+     "id": "ch10-s11",
+     "n": 11
+    },
+    {
+     "type": "trap",
+     "title_no": "Felle: bare alkohol gir kjøreforbud",
+     "title_th": "กับดักข้อสอบ: เฉพาะแอลกอฮอล์เท่านั้นที่ห้ามขับ",
+     "body_no": "Det er feil. Narkotika og noen medisiner kan også gjøre deg uskikket til å kjøre. Spør lege eller apotek hvis du bruker medisiner.",
+     "body_th": "ข้อนี้ผิด ยาเสพติดและยาบางชนิดก็ทำให้คุณไม่พร้อมขับรถได้เช่นกัน ถ้าคุณใช้ยา ให้ถามแพทย์หรือเภสัชกรก่อน",
+     "id": "ch10-s12",
+     "n": 12
+    },
+    {
+     "type": "what_changed",
+     "title_no": "Medisiner og kjøring",
+     "title_th": "ยากับการขับรถ",
+     "image_brief_no": "Bildepar av en medisinpakning med advarselstrekant. Før: en pakning uten merking. Etter: pakningen har en rød trekant som advarer mot kjøring.",
+     "image_before": null,
+     "image_after": null,
+     "body_no": "Før: du tenker at en medisin er ufarlig. Etter: du ser den røde advarselstrekanten på pakningen. Da kan medisinen påvirke kjøreevnen, og du må spørre lege eller apotek.",
+     "body_th": "ก่อน: คุณคิดว่ายาไม่เป็นอันตราย หลัง: คุณเห็นสามเหลี่ยมสีแดงเตือนบนกล่องยา ยานั้นอาจกระทบความสามารถในการขับรถ และคุณต้องถามแพทย์หรือเภสัชกร (apotek)",
+     "hotspots": [
+      {
+       "x": 50,
+       "y": 50,
+       "label_no": "Medisinpakningen",
+       "label_th": "กล่องยา (medisinpakning)"
+      },
+      {
+       "x": 70,
+       "y": 30,
+       "label_no": "Den røde advarselstrekanten",
+       "label_th": "สามเหลี่ยมสีแดงเตือน (advarselstrekant)"
+      },
+      {
+       "x": 30,
+       "y": 75,
+       "label_no": "Teksten som advarer mot kjøring",
+       "label_th": "ข้อความเตือนเรื่องการขับรถ (advarsel)"
+      }
+     ],
+     "id": "ch10-s13",
+     "n": 13,
+     "badge_no": "Hva er endret?",
+     "badge_th": "อะไรเปลี่ยนไป?"
+    },
+    {
+     "type": "road_check",
+     "title_no": "Medisiner",
+     "title_th": "ยาที่คุณใช้",
+     "question_no": "Du har fått en ny medisin. Kan du kjøre som vanlig?",
+     "question_th": "คุณได้รับยาตัวใหม่ คุณขับรถได้ตามปกติไหม?",
+     "options_no": [
+      "Ja, medisiner påvirker ikke kjøring",
+      "Ikke nødvendigvis, sjekk med lege eller apotek",
+      "Ja, hvis jeg tar dem før jeg kjører"
+     ],
+     "options_th": [
+      "ได้ ยาไม่กระทบการขับรถ",
+      "ไม่จำเป็น ให้ตรวจสอบกับแพทย์หรือเภสัชกร",
+      "ได้ ถ้ากินยาก่อนขับ"
+     ],
+     "correct_index": 1,
+     "explanation_no": "Mange vanlige medisiner kan påvirke kjøreevnen. Spør alltid lege eller apotek.",
+     "explanation_th": "ยาทั่วไปหลายชนิดอาจกระทบความสามารถในการขับรถ ให้ถามแพทย์หรือเภสัชกร (apotek) เสมอ",
+     "id": "ch10-s14",
+     "n": 14,
+     "badge_no": "Veisjekk ⚡",
+     "badge_th": "ตรวจถนน ⚡"
+    },
+    {
+     "type": "theory",
+     "title_no": "Syk, svak eller trett",
+     "title_th": "ป่วย อ่อนแรง หรือเหนื่อย",
+     "body_no": "Loven forbyr deg også å kjøre når du er syk, svekket eller trett, slik at du ikke kan kjøre trygt. Ikke bare alkohol og rus gjør deg uskikket.",
+     "body_th": "กฎหมายห้ามคุณขับรถเมื่อป่วย อ่อนแอ หรือเหนื่อยจนขับไม่ปลอดภัย ไม่ใช่แค่แอลกอฮอล์และยาเสพติดที่ทำให้คุณไม่พร้อมขับ",
+     "id": "ch10-s15",
+     "n": 15
+    },
+    {
+     "type": "summary",
+     "title_no": "Husk fra dette kapittelet",
+     "title_th": "สิ่งที่ต้องจำจากบทนี้",
+     "body_no": "Promillegrensen er 0,2. Politiet kan ta alkotest i en kontroll. Du kan være påvirket dagen etter. Medisiner, sykdom og tretthet kan også gjøre deg uskikket til å kjøre.",
+     "body_th": "เกณฑ์คือ 0,2 พรอมิลล์ (promille) ตำรวจตรวจวัดแอลกอฮอล์ในด่านตรวจได้ คุณอาจยังได้รับผลจากแอลกอฮอล์ในวันถัดมา และยา ความเจ็บป่วย และความเหนื่อยล้าก็ทำให้คุณไม่พร้อมขับได้เช่นกัน",
+     "id": "ch10-s16",
+     "n": 16
+    }
+   ]
+  },
+  {
+   "order": 11,
+   "screens": [
+    {
+     "type": "theory",
+     "title_no": "Ansvar som eier og fører",
+     "title_th": "ความรับผิดชอบของเจ้าของและผู้ขับ",
+     "body_no": "Som bileier og fører har du et juridisk og økonomisk ansvar. Loven bestemmer hvem som skal betale erstatning når en motorvogn er med i en ulykke.",
+     "body_th": "ในฐานะเจ้าของรถและผู้ขับ คุณมีความรับผิดชอบทั้งทางกฎหมายและทางการเงิน กฎหมายกำหนดว่าใครต้องจ่ายค่าชดเชยเมื่อยานยนต์ (motorvogn) เกี่ยวข้องกับอุบัติเหตุ",
+     "id": "ch11-s01",
+     "n": 1
+    },
+    {
+     "type": "rule",
+     "title_no": "Trafikkforsikring er lovpålagt",
+     "title_th": "ประกันภัยจราจรเป็นข้อบังคับตามกฎหมาย",
+     "body_no": "Trafikkforsikring, som også kalles ansvarsforsikring, må du ha. Den dekker skade på andre personer og andre kjøretøy. Du kan ikke registrere eller kjøre bilen uten den.",
+     "body_th": "คุณต้องมีประกันภัยจราจร (trafikkforsikring) หรือที่เรียกว่าประกันความรับผิด (ansvarsforsikring) ประกันนี้คุ้มครองความเสียหายต่อบุคคลอื่นและยานพาหนะอื่น และคุณจดทะเบียนหรือขับรถไม่ได้ถ้าไม่มี",
+     "id": "ch11-s02",
+     "n": 2
+    },
+    {
+     "type": "trap",
+     "title_no": "Felle: kaskoforsikring er påbudt",
+     "title_th": "กับดักข้อสอบ: ประกันความเสียหายรถตัวเองเป็นข้อบังคับ",
+     "body_no": "Det er feil. Kaskoforsikring er frivillig. Den dekker skade på din egen bil. Det er bare trafikkforsikringen som er påbudt.",
+     "body_th": "ข้อนี้ผิด ประกันความเสียหายรถตัวเอง (kaskoforsikring) เป็นแบบสมัครใจ ประกันนี้คุ้มครองความเสียหายต่อรถของคุณเอง มีเพียงประกันภัยจราจร (trafikkforsikring) เท่านั้นที่เป็นข้อบังคับ",
+     "id": "ch11-s03",
+     "n": 3
+    },
+    {
+     "type": "what_changed",
+     "title_no": "Hvem dekker skaden?",
+     "title_th": "ใครจ่ายค่าเสียหาย?",
+     "image_brief_no": "Bildepar av en parkeringsplass. Før: to biler står ved siden av hverandre uten skader. Etter: den ene bilen har rygget inn i den andre, og begge har bulker.",
+     "image_before": null,
+     "image_after": null,
+     "body_no": "Før: to biler står uten skader. Etter: du rygger inn i en annen bil. Din trafikkforsikring dekker skaden på den andre bilen. Skaden på din egen bil dekkes bare hvis du har kasko.",
+     "body_th": "ก่อน: รถสองคันจอดโดยไม่มีความเสียหาย หลัง: คุณถอยชนรถอีกคัน ประกันภัยจราจร (trafikkforsikring) ของคุณจ่ายความเสียหายของรถอีกคัน ส่วนความเสียหายของรถคุณเองจะได้รับความคุ้มครองเฉพาะเมื่อคุณมีประกันชั้นสมัครใจ (kasko)",
+     "hotspots": [
+      {
+       "x": 35,
+       "y": 60,
+       "label_no": "Din bil som rygget",
+       "label_th": "รถของคุณที่ถอยชน (din bil)"
+      },
+      {
+       "x": 65,
+       "y": 60,
+       "label_no": "Den andre bilen som er skadet",
+       "label_th": "รถอีกคันที่เสียหาย (den andre bilen)"
+      },
+      {
+       "x": 50,
+       "y": 30,
+       "label_no": "Skade på andre dekkes av trafikkforsikringen",
+       "label_th": "ความเสียหายต่อผู้อื่นจ่ายโดยประกันจราจร (trafikkforsikring)"
+      }
+     ],
+     "id": "ch11-s04",
+     "n": 4,
+     "badge_no": "Hva er endret?",
+     "badge_th": "อะไรเปลี่ยนไป?"
+    },
+    {
+     "type": "road_check",
+     "title_no": "Den andre bilen",
+     "title_th": "รถอีกคัน",
+     "question_no": "Du kjører på en annen bil. Hvilken forsikring dekker skaden på den andre bilen?",
+     "question_th": "คุณขับชนรถอีกคัน ประกันใดจ่ายความเสียหายของรถอีกคัน?",
+     "options_no": [
+      "Trafikkforsikringen",
+      "Kaskoforsikringen",
+      "Ingen av dem"
+     ],
+     "options_th": [
+      "ประกันภัยจราจร",
+      "ประกันความเสียหายรถตัวเอง",
+      "ไม่มีประกันใดเลย"
+     ],
+     "correct_index": 0,
+     "explanation_no": "Trafikkforsikringen dekker skade du volder på andre personer og andre kjøretøy.",
+     "explanation_th": "ประกันภัยจราจร (trafikkforsikring) คุ้มครองความเสียหายที่คุณก่อต่อบุคคลอื่นและยานพาหนะอื่น",
+     "id": "ch11-s05",
+     "n": 5,
+     "badge_no": "Veisjekk ⚡",
+     "badge_th": "ตรวจถนน ⚡"
+    },
+    {
+     "type": "theory",
+     "title_no": "Registrering av bilen",
+     "title_th": "การจดทะเบียนรถ",
+     "body_no": "Motorvogner skal registreres. Du kan ikke bruke bilen på vegen før den er meldt til registrering og har lovlige kjennemerker. Uten forsikring kan du ikke registrere bilen.",
+     "body_th": "ยานยนต์ต้องจดทะเบียน คุณใช้รถบนถนนไม่ได้จนกว่าจะแจ้งจดทะเบียนและมีป้ายทะเบียน (kjennemerker) ที่ถูกต้อง และคุณจดทะเบียนรถไม่ได้ถ้าไม่มีประกัน",
+     "id": "ch11-s06",
+     "n": 6
+    },
+    {
+     "type": "rule",
+     "title_no": "Eierskifte og ny adresse",
+     "title_th": "การเปลี่ยนเจ้าของและที่อยู่ใหม่",
+     "body_no": "Når bilen skifter eier, skal både selger og kjøper melde fra. Eieren må også melde fra når han eller hun flytter til en ny adresse.",
+     "body_th": "เมื่อรถเปลี่ยนเจ้าของ ทั้งผู้ขายและผู้ซื้อต้องแจ้งเจ้าหน้าที่ และเจ้าของรถต้องแจ้งด้วยเมื่อย้ายไปที่อยู่ใหม่",
+     "id": "ch11-s07",
+     "n": 7
+    },
+    {
+     "type": "trap",
+     "title_no": "Felle: bare kjøperen må melde eierskifte",
+     "title_th": "กับดักข้อสอบ: เฉพาะผู้ซื้อที่ต้องแจ้งการเปลี่ยนเจ้าของ",
+     "body_no": "Det er feil. Begge parter skal melde fra skriftlig når en bil skifter eier. Selgeren er ikke ferdig bare fordi bilen er solgt.",
+     "body_th": "ข้อนี้ผิด ทั้งสองฝ่ายต้องแจ้งเป็นลายลักษณ์อักษรเมื่อรถเปลี่ยนเจ้าของ ผู้ขายไม่ได้จบหน้าที่เพียงเพราะขายรถไปแล้ว",
+     "id": "ch11-s08",
+     "n": 8
+    },
+    {
+     "type": "theory",
+     "title_no": "Når du låner ut bilen",
+     "title_th": "เมื่อคุณให้ยืมรถ",
+     "body_no": "Eieren skal forsikre seg om at den som får låne bilen, har lov til å kjøre den. Låner du bort bilen til noen uten førerkort, har du selv et ansvar.",
+     "body_th": "เจ้าของรถต้องแน่ใจว่าผู้ที่ยืมรถมีสิทธิ์ขับรถคันนั้น ถ้าคุณให้คนที่ไม่มีใบขับขี่ (førerkort) ยืมรถ คุณเองก็มีส่วนรับผิดชอบ",
+     "id": "ch11-s09",
+     "n": 9
+    },
+    {
+     "type": "road_check",
+     "title_no": "Du låner ut bilen",
+     "title_th": "คุณให้ยืมรถ",
+     "question_no": "Du låner ut bilen til en venn. Hva må du forsikre deg om?",
+     "question_th": "คุณให้เพื่อนยืมรถ คุณต้องแน่ใจเรื่องอะไร?",
+     "options_no": [
+      "At vennen har lov til å kjøre bilen",
+      "At tanken er full",
+      "Ingenting, det er vennens ansvar"
+     ],
+     "options_th": [
+      "เพื่อนมีสิทธิ์ขับรถคันนี้",
+      "ถังน้ำมันเต็ม",
+      "ไม่ต้อง เพราะเป็นความรับผิดชอบของเพื่อน"
+     ],
+     "correct_index": 0,
+     "explanation_no": "Eieren plikter å forsikre seg om at den som bruker bilen, fyller vilkårene for å kjøre.",
+     "explanation_th": "เจ้าของรถมีหน้าที่ต้องแน่ใจว่าผู้ที่ใช้รถมีคุณสมบัติที่จะขับได้",
+     "id": "ch11-s10",
+     "n": 10,
+     "badge_no": "Veisjekk ⚡",
+     "badge_th": "ตรวจถนน ⚡"
+    },
+    {
+     "type": "rule",
+     "title_no": "Bilen må være i forsvarlig stand",
+     "title_th": "รถต้องอยู่ในสภาพที่ปลอดภัย",
+     "body_no": "Før du kjører, må du forsikre deg om at bilen er i forsvarlig stand, og at den er forsvarlig lastet. Eieren må ikke la bilen brukes hvis den ikke er i forsvarlig stand.",
+     "body_th": "ก่อนขับรถ คุณต้องแน่ใจว่ารถอยู่ในสภาพที่ปลอดภัยและบรรทุกของอย่างถูกต้อง เจ้าของรถต้องไม่ปล่อยให้ใช้รถถ้ารถอยู่ในสภาพที่ไม่ปลอดภัย",
+     "id": "ch11-s11",
+     "n": 11
+    },
+    {
+     "type": "trap",
+     "title_no": "Felle: bare eieren har ansvar for bilens stand",
+     "title_th": "กับดักข้อสอบ: เจ้าของรถคนเดียวที่รับผิดชอบสภาพรถ",
+     "body_no": "Det er feil. Føreren må også forsikre seg om at bilen er i orden før kjøringen begynner. Både eier og fører har ansvar.",
+     "body_th": "ข้อนี้ผิด ผู้ขับก็ต้องแน่ใจว่ารถอยู่ในสภาพดีก่อนออกขับด้วย ทั้งเจ้าของและผู้ขับมีความรับผิดชอบ",
+     "id": "ch11-s12",
+     "n": 12
+    },
+    {
+     "type": "what_changed",
+     "title_no": "Lasten",
+     "title_th": "สัมภาระที่บรรทุก",
+     "image_brief_no": "Bildepar av en stasjonsvogn bakfra. Før: lasten står trygt og er sikret med stropper. Etter: lasten er løs og stikker ut av bakluken.",
+     "image_before": null,
+     "image_after": null,
+     "body_no": "Før: lasten er sikret og står trygt. Etter: lasten er løs og stikker ut. Da er bilen ikke forsvarlig lastet, og du må ikke kjøre.",
+     "body_th": "ก่อน: ของที่บรรทุกถูกมัดไว้อย่างแน่นหนา หลัง: ของหลุดหลวมและยื่นออกมา รถบรรทุกของอย่างไม่ถูกต้อง (ikke forsvarlig lastet) และคุณห้ามขับ",
+     "hotspots": [
+      {
+       "x": 50,
+       "y": 45,
+       "label_no": "Lasten som stikker ut",
+       "label_th": "ของที่ยื่นออกมา (last)"
+      },
+      {
+       "x": 30,
+       "y": 65,
+       "label_no": "Stroppene som ikke er strammet",
+       "label_th": "สายรัดที่ไม่ได้ขันให้แน่น (stropper)"
+      },
+      {
+       "x": 75,
+       "y": 60,
+       "label_no": "Bakluken",
+       "label_th": "ฝาท้ายรถ (bakluke)"
+      }
+     ],
+     "id": "ch11-s13",
+     "n": 13,
+     "badge_no": "Hva er endret?",
+     "badge_th": "อะไรเปลี่ยนไป?"
+    },
+    {
+     "type": "road_check",
+     "title_no": "Før du kjører",
+     "title_th": "ก่อนออกขับ",
+     "question_no": "Hva må gjelde for lasten før du kjører?",
+     "question_th": "สัมภาระที่บรรทุกต้องเป็นอย่างไรก่อนคุณออกขับ?",
+     "options_no": [
+      "Den må være forsvarlig og forskriftsmessig lastet",
+      "Den må være så tung som mulig",
+      "Det spiller ingen rolle"
+     ],
+     "options_th": [
+      "ต้องบรรทุกอย่างปลอดภัยและถูกต้องตามข้อกำหนด",
+      "ต้องหนักที่สุดเท่าที่จะทำได้",
+      "ไม่สำคัญ"
+     ],
+     "correct_index": 0,
+     "explanation_no": "Føreren må forsikre seg om at bilen er forsvarlig og forskriftsmessig lastet.",
+     "explanation_th": "ผู้ขับต้องแน่ใจว่ารถบรรทุกของอย่างปลอดภัยและถูกต้องตามข้อกำหนด",
+     "id": "ch11-s14",
+     "n": 14,
+     "badge_no": "Veisjekk ⚡",
+     "badge_th": "ตรวจถนน ⚡"
+    },
+    {
+     "type": "theory",
+     "title_no": "Plikter etter et uhell",
+     "title_th": "หน้าที่หลังเกิดอุบัติเหตุ",
+     "body_no": "Er du innblandet i et uhell, skal du straks stanse og hjelpe skadde. Dere som er innblandet, skal gi hverandre navn og adresse. Du skal ikke fjerne spor som er viktige for etterforskningen.",
+     "body_th": "ถ้าคุณเกี่ยวข้องกับอุบัติเหตุ ต้องหยุดรถทันทีและช่วยผู้บาดเจ็บ ผู้ที่เกี่ยวข้องต้องแจ้งชื่อและที่อยู่แก่กัน และคุณต้องไม่ลบร่องรอยที่สำคัญต่อการสืบสวน",
+     "id": "ch11-s15",
+     "n": 15
+    },
+    {
+     "type": "summary",
+     "title_no": "Husk fra dette kapittelet",
+     "title_th": "สิ่งที่ต้องจำจากบทนี้",
+     "body_no": "Trafikkforsikring er påbudt, og kasko er frivillig. Bilen må registreres, og eierskifte må meldes av begge parter. Både eier og fører har ansvar for at bilen er i orden og forsvarlig lastet.",
+     "body_th": "ประกันภัยจราจร (trafikkforsikring) เป็นข้อบังคับ และประกันชั้นสมัครใจ (kasko) เป็นทางเลือก รถต้องจดทะเบียน และทั้งสองฝ่ายต้องแจ้งเมื่อเปลี่ยนเจ้าของ ทั้งเจ้าของและผู้ขับต้องดูแลให้รถอยู่ในสภาพดีและบรรทุกอย่างปลอดภัย",
+     "id": "ch11-s16",
+     "n": 16
+    }
+   ]
+  },
+  {
+   "order": 12,
+   "screens": [
+    {
+     "type": "theory",
+     "title_no": "Førerkort klasse B",
+     "title_th": "ใบขับขี่ประเภทบี",
+     "body_no": "For å kjøre personbil i Norge trenger du førerkort klasse B. Det er flere krav, og du må oppfylle alle. Opplæringen er delt i flere trinn.",
+     "body_th": "การขับรถยนต์นั่งส่วนบุคคลในนอร์เวย์ต้องมีใบขับขี่ประเภทบี (førerkort klasse B) มีหลายเงื่อนไข และคุณต้องผ่านทั้งหมด การเรียนแบ่งเป็นหลายขั้นตอน",
+     "id": "ch12-s01",
+     "n": 1
+    },
+    {
+     "type": "rule",
+     "title_no": "Krav til eleven ved privat øvelseskjøring",
+     "title_th": "เงื่อนไขสำหรับผู้เรียนที่ฝึกขับส่วนตัว",
+     "body_no": "Du må ha fylt 16 år og ikke ha sperrefrist. Du må være skikket som sjåfør og ha gjennomført trafikalt grunnkurs, før du kan øvelseskjøre privat.",
+     "body_th": "คุณต้องมีอายุครบ 16 ปี และไม่อยู่ในช่วงห้ามสมัคร (sperrefrist) ต้องเหมาะสมที่จะเป็นผู้ขับ และต้องเรียนหลักสูตรพื้นฐานการจราจร (trafikalt grunnkurs) แล้ว จึงจะฝึกขับส่วนตัวได้",
+     "id": "ch12-s02",
+     "n": 2
+    },
+    {
+     "type": "trap",
+     "title_no": "Felle: alle med førerkort kan være ledsager",
+     "title_th": "กับดักข้อสอบ: ทุกคนที่มีใบขับขี่เป็นผู้ควบคุมการฝึกขับได้",
+     "body_no": "Det er feil. Ledsageren må ha fylt 25 år og ha hatt gyldig førerkort sammenhengende de siste 5 årene. Ledsageren må også være skikket til oppgaven.",
+     "body_th": "ข้อนี้ผิด ผู้ควบคุมการฝึกขับ (ledsager) ต้องมีอายุครบ 25 ปี และถือใบขับขี่ที่ใช้ได้ต่อเนื่องมาตลอด 5 ปีล่าสุด และต้องเหมาะสมกับหน้าที่นี้ด้วย",
+     "id": "ch12-s03",
+     "n": 3
+    },
+    {
+     "type": "what_changed",
+     "title_no": "Hvem kan være ledsager?",
+     "title_th": "ใครเป็นผู้ควบคุมการฝึกขับได้?",
+     "image_brief_no": "Bildepar av to mulige ledsagere ved siden av en elev. Før: en ung mann på 22 år med førerkort i 3 år. Etter: en kvinne på 26 år med førerkort i 6 år.",
+     "image_before": null,
+     "image_after": null,
+     "body_no": "Før: en ledsager på 22 år som har hatt førerkort i 3 år. Han kan ikke være ledsager. Etter: en ledsager på 26 år med førerkort i 6 år. Hun kan være ledsager.",
+     "body_th": "ก่อน: ผู้ควบคุมอายุ 22 ปีที่มีใบขับขี่มา 3 ปี เขาเป็นผู้ควบคุมการฝึกขับไม่ได้ หลัง: ผู้ควบคุมอายุ 26 ปีที่มีใบขับขี่มา 6 ปี เธอเป็นผู้ควบคุมการฝึกขับได้",
+     "hotspots": [
+      {
+       "x": 30,
+       "y": 45,
+       "label_no": "Ledsageren",
+       "label_th": "ผู้ควบคุมการฝึกขับ (ledsager)"
+      },
+      {
+       "x": 65,
+       "y": 45,
+       "label_no": "Eleven",
+       "label_th": "ผู้เรียน (elev)"
+      },
+      {
+       "x": 50,
+       "y": 80,
+       "label_no": "Førerkortet som må ha vært gyldig i 5 år",
+       "label_th": "ใบขับขี่ (førerkort) ที่ต้องใช้ได้ 5 ปี"
+      }
+     ],
+     "id": "ch12-s04",
+     "n": 4,
+     "badge_no": "Hva er endret?",
+     "badge_th": "อะไรเปลี่ยนไป?"
+    },
+    {
+     "type": "road_check",
+     "title_no": "Alder for ledsager",
+     "title_th": "อายุของผู้ควบคุมการฝึกขับ",
+     "question_no": "Hva er minimumsalderen for en ledsager ved privat øvelseskjøring?",
+     "question_th": "อายุขั้นต่ำของผู้ควบคุมการฝึกขับส่วนตัวคือเท่าไร?",
+     "options_no": [
+      "21 år",
+      "25 år",
+      "18 år"
+     ],
+     "options_th": [
+      "21 ปีบริบูรณ์",
+      "25 ปีบริบูรณ์",
+      "18 ปีบริบูรณ์"
+     ],
+     "correct_index": 1,
+     "explanation_no": "Ledsageren må ha fylt 25 år og ha hatt førerkort de siste 5 årene.",
+     "explanation_th": "ผู้ควบคุมการฝึกขับ (ledsager) ต้องอายุครบ 25 ปีและมีใบขับขี่มาตลอด 5 ปีล่าสุด",
+     "id": "ch12-s05",
+     "n": 5,
+     "badge_no": "Veisjekk ⚡",
+     "badge_th": "ตรวจถนน ⚡"
+    },
+    {
+     "type": "theory",
+     "title_no": "Ledsagerens ansvar",
+     "title_th": "ความรับผิดชอบของผู้ควบคุมการฝึกขับ",
+     "body_no": "Under øvelseskjøring regnes ledsageren som fører av bilen. Ledsageren må være skikket, edruelig og våken, og skal hjelpe eleven til å kjøre trygt.",
+     "body_th": "ระหว่างการฝึกขับ ผู้ควบคุมถือเป็นผู้ขับรถ (fører) ผู้ควบคุมต้องพร้อม ไม่มึนเมา และตื่นตัว และต้องช่วยให้ผู้เรียนขับได้อย่างปลอดภัย",
+     "id": "ch12-s06",
+     "n": 6
+    },
+    {
+     "type": "rule",
+     "title_no": "Øvingskjøring må ikke skape fare",
+     "title_th": "การฝึกขับต้องไม่สร้างอันตราย",
+     "body_no": "Øvingskjøring må ikke være til fare eller unødig ulempe for annen trafikk. Den kan starte tidligst to år før du er gammel nok til å få førerkort.",
+     "body_th": "การฝึกขับต้องไม่เป็นอันตรายหรือสร้างความไม่สะดวกโดยไม่จำเป็นต่อการจราจรอื่น และเริ่มได้เร็วที่สุดสองปีก่อนที่คุณจะอายุถึงเกณฑ์รับใบขับขี่",
+     "id": "ch12-s07",
+     "n": 7
+    },
+    {
+     "type": "trap",
+     "title_no": "Felle: eleven kan drikke alkohol, for ledsageren er føreren",
+     "title_th": "กับดักข้อสอบ: ผู้เรียนดื่มแอลกอฮอล์ได้ เพราะผู้ควบคุมคือคนขับ",
+     "body_no": "Det er feil. Reglene om alkohol og rusmidler gjelder også for eleven. Eleven må ikke være påvirket under øvelseskjøring.",
+     "body_th": "ข้อนี้ผิด กฎเรื่องแอลกอฮอล์และสารเสพติดใช้กับผู้เรียนด้วย ผู้เรียนต้องไม่ได้รับผลจากแอลกอฮอล์ระหว่างฝึกขับ",
+     "id": "ch12-s08",
+     "n": 8
+    },
+    {
+     "type": "theory",
+     "title_no": "Fire trinn i opplæringen",
+     "title_th": "การเรียนสี่ขั้นตอน",
+     "body_no": "Trinn 1 er trafikalt grunnkurs. Trinn 2 er grunnleggende kjøretøykunnskap og kjøreferdighet. Trinn 3 er trafikal opplæring i variert trafikk og sikkerhetskurs på bane. Trinn 4 er avsluttende opplæring med landeveiskjøring og sikkerhetskurs i trafikk.",
+     "body_th": "ขั้นที่ 1 คือหลักสูตรพื้นฐานการจราจร (trafikalt grunnkurs) ขั้นที่ 2 คือความรู้พื้นฐานเรื่องรถและทักษะการขับ ขั้นที่ 3 คือการเรียนการจราจรในสถานการณ์ที่หลากหลายและหลักสูตรความปลอดภัยในลานฝึก ขั้นที่ 4 คือการเรียนขั้นสุดท้ายที่มีการขับบนถนนนอกเมืองและหลักสูตรความปลอดภัยบนถนนจริง",
+     "id": "ch12-s09",
+     "n": 9
+    },
+    {
+     "type": "road_check",
+     "title_no": "Første trinn",
+     "title_th": "ขั้นแรก",
+     "question_no": "Hva er trinn 1 i opplæringen for klasse B?",
+     "question_th": "ขั้นที่ 1 ของการเรียนใบขับขี่ประเภทบี คืออะไร?",
+     "options_no": [
+      "Trafikalt grunnkurs",
+      "Førerprøven",
+      "Sikkerhetskurs på bane"
+     ],
+     "options_th": [
+      "หลักสูตรพื้นฐานการจราจร",
+      "การสอบขับรถ",
+      "หลักสูตรความปลอดภัยในลานฝึก"
+     ],
+     "correct_index": 0,
+     "explanation_no": "Trinn 1 er trafikalt grunnkurs, der du lærer grunnleggende trafikkforståelse.",
+     "explanation_th": "ขั้นที่ 1 คือหลักสูตรพื้นฐานการจราจร (trafikalt grunnkurs) ที่คุณเรียนความเข้าใจพื้นฐานเรื่องการจราจร",
+     "id": "ch12-s10",
+     "n": 10,
+     "badge_no": "Veisjekk ⚡",
+     "badge_th": "ตรวจถนน ⚡"
+    },
+    {
+     "type": "rule",
+     "title_no": "Krav for å få førerkort klasse B",
+     "title_th": "เงื่อนไขการรับใบขับขี่ประเภทบี",
+     "body_no": "Du må ha fylt 18 år og bestå både teoriprøve og praktisk førerprøve. Du må ha gode nok helse, syn og hørsel, være edruelig og ha god vandel, og du må ha gjennomført den obligatoriske opplæringen.",
+     "body_th": "คุณต้องอายุครบ 18 ปี สอบผ่านทั้งข้อสอบทฤษฎี (teoriprøve) และการสอบขับรถ (praktisk førerprøve) ต้องมีสุขภาพ สายตา และการได้ยินที่เพียงพอ ไม่มึนเมา มีความประพฤติดี และต้องเรียนหลักสูตรบังคับครบแล้ว",
+     "id": "ch12-s11",
+     "n": 11
+    },
+    {
+     "type": "trap",
+     "title_no": "Felle: bestått teoriprøve er nok for å kjøre alene",
+     "title_th": "กับดักข้อสอบ: สอบทฤษฎีผ่านแล้วขับคนเดียวได้",
+     "body_no": "Det er feil. Teoriprøven er bare én av flere deler. Du må også bestå den praktiske førerprøven og ha gjennomført opplæringen før du får førerkort.",
+     "body_th": "ข้อนี้ผิด ข้อสอบทฤษฎีเป็นเพียงส่วนหนึ่ง คุณต้องสอบขับรถผ่านและเรียนหลักสูตรครบแล้วจึงจะได้ใบขับขี่",
+     "id": "ch12-s12",
+     "n": 12
+    },
+    {
+     "type": "what_changed",
+     "title_no": "Fra teori til førerkort",
+     "title_th": "จากทฤษฎีสู่ใบขับขี่",
+     "image_brief_no": "Bildepar av en tidslinje med tre steg. Før: bare et bestått teoriprøvebevis. Etter: teoriprøve, gjennomført opplæring og bestått praktisk prøve, og til slutt et førerkort.",
+     "image_before": null,
+     "image_after": null,
+     "body_no": "Før: du har bare bestått teoriprøven. Etter: du har også gjennomført opplæringen og bestått den praktiske prøven. Da får du førerkortet.",
+     "body_th": "ก่อน: คุณสอบทฤษฎีผ่านเท่านั้น หลัง: คุณเรียนหลักสูตรครบและสอบขับรถผ่านด้วย ตอนนั้นคุณจึงจะได้ใบขับขี่",
+     "hotspots": [
+      {
+       "x": 20,
+       "y": 50,
+       "label_no": "Bestått teoriprøve",
+       "label_th": "สอบทฤษฎีผ่าน (teoriprøve)"
+      },
+      {
+       "x": 50,
+       "y": 50,
+       "label_no": "Gjennomført opplæring",
+       "label_th": "เรียนหลักสูตรครบ (opplæring)"
+      },
+      {
+       "x": 80,
+       "y": 50,
+       "label_no": "Førerkortet",
+       "label_th": "ใบขับขี่ (førerkort)"
+      }
+     ],
+     "id": "ch12-s13",
+     "n": 13,
+     "badge_no": "Hva er endret?",
+     "badge_th": "อะไรเปลี่ยนไป?"
+    },
+    {
+     "type": "road_check",
+     "title_no": "Bare teori",
+     "title_th": "ผ่านเฉพาะทฤษฎี",
+     "question_no": "Du har bestått teoriprøven. Kan du nå kjøre alene?",
+     "question_th": "คุณสอบทฤษฎีผ่านแล้ว ตอนนี้ขับรถคนเดียวได้ไหม?",
+     "options_no": [
+      "Ja, teoriprøven er nok",
+      "Nei, jeg må også ha opplæring og bestå den praktiske prøven",
+      "Ja, hvis jeg er over 18 år"
+     ],
+     "options_th": [
+      "ได้ เพราะสอบทฤษฎีก็พอ",
+      "ไม่ได้ ต้องเรียนหลักสูตรและสอบขับรถผ่านด้วย",
+      "ได้ ถ้าอายุเกิน 18 ปี"
+     ],
+     "correct_index": 1,
+     "explanation_no": "Du må ha førerkort for å kjøre alene, og det krever også opplæring og bestått praktisk prøve.",
+     "explanation_th": "คุณต้องมีใบขับขี่จึงจะขับคนเดียวได้ และต้องเรียนหลักสูตรครบและสอบขับรถผ่านด้วย",
+     "id": "ch12-s14",
+     "n": 14,
+     "badge_no": "Veisjekk ⚡",
+     "badge_th": "ตรวจถนน ⚡"
+    },
+    {
+     "type": "theory",
+     "title_no": "Målet med opplæringen",
+     "title_th": "เป้าหมายของการเรียน",
+     "body_no": "Målet er at du blir bevisst på å ferdes hensynsfullt, aktpågivende og varsomt. Nye sjåfører har høyere risiko de første månedene. Ta det rolig, og øk vanskelighetsgraden litt etter litt.",
+     "body_th": "เป้าหมายคือให้คุณตระหนักว่าต้องใช้ถนนด้วยความเกรงใจ ใส่ใจ และระมัดระวัง ผู้ขับหน้าใหม่มีความเสี่ยงสูงกว่าในเดือนแรก ๆ ให้ค่อย ๆ ขับ และเพิ่มความยากทีละน้อย",
+     "id": "ch12-s15",
+     "n": 15
+    },
+    {
+     "type": "summary",
+     "title_no": "Husk fra dette kapittelet",
+     "title_th": "สิ่งที่ต้องจำจากบทนี้",
+     "body_no": "Førerkort klasse B krever 18 år, teori, praktisk prøve og opplæring. Eleven må være 16 år ved privat øving. Ledsageren må være 25 år og ha hatt førerkort i 5 år.",
+     "body_th": "ใบขับขี่ประเภทบี ต้องมีอายุ 18 ปี ผ่านทฤษฎี สอบขับรถ และเรียนหลักสูตรครบ ผู้เรียนต้องอายุ 16 ปีสำหรับการฝึกขับส่วนตัว และผู้ควบคุม (ledsager) ต้องอายุ 25 ปีและมีใบขับขี่มา 5 ปี",
+     "id": "ch12-s16",
+     "n": 16
+    }
+   ]
+  },
+  {
+   "order": 13,
+   "screens": [
+    {
+     "type": "theory",
+     "title_no": "Dine plikter ved et uhell",
+     "title_th": "หน้าที่ของคุณเมื่อเกิดอุบัติเหตุ",
+     "body_no": "Er du innblandet i et trafikkuhell, har du fem plikter. Stans straks. Hjelp skadde. Gi navn og adresse til de andre. Varsle politiet ved død eller alvorlig skade. Sikre stedet uten å fjerne spor.",
+     "body_th": "ถ้าคุณเกี่ยวข้องกับอุบัติเหตุจราจร คุณมีห้าหน้าที่ หยุดรถทันที ช่วยผู้บาดเจ็บ แจ้งชื่อและที่อยู่แก่ผู้อื่น แจ้งตำรวจเมื่อมีผู้เสียชีวิตหรือบาดเจ็บสาหัส และทำให้จุดเกิดเหตุปลอดภัยโดยไม่ลบร่องรอย",
+     "id": "ch13-s01",
+     "n": 1
+    },
+    {
+     "type": "rule",
+     "title_no": "Stans straks",
+     "title_th": "หยุดรถทันที",
+     "body_no": "Du må stanse straks, uansett om du er skyldig eller ikke. Å kjøre fra et uhell er en alvorlig forbrytelse.",
+     "body_th": "คุณต้องหยุดรถทันที ไม่ว่าคุณจะเป็นฝ่ายผิดหรือไม่ การขับหนีจากอุบัติเหตุเป็นความผิดร้ายแรง",
+     "id": "ch13-s02",
+     "n": 2
+    },
+    {
+     "type": "trap",
+     "title_no": "Felle: det er bare en liten skramme, så jeg kan kjøre videre",
+     "title_th": "กับดักข้อสอบ: แค่รอยขีดข่วนเล็กน้อย ขับต่อได้",
+     "body_no": "Det er feil. Du må stanse og gi navn og adresse, også ved små skader og når ingen ser deg. Da slipper den andre å lete etter deg.",
+     "body_th": "ข้อนี้ผิด คุณต้องหยุดรถและแจ้งชื่อกับที่อยู่ แม้ความเสียหายจะน้อยและไม่มีใครเห็นก็ตาม เพื่อไม่ให้อีกฝ่ายต้องตามหาคุณ",
+     "id": "ch13-s03",
+     "n": 3
+    },
+    {
+     "type": "what_changed",
+     "title_no": "Sikre ulykkesstedet",
+     "title_th": "ทำให้จุดเกิดเหตุปลอดภัย",
+     "image_brief_no": "Bildepar av en bil som står i vegkanten etter en påkjørsel. Før: bilen står uten lys og uten varsel. Etter: varselblinken er på, varseltrekanten står bak bilen, og føreren bruker refleksvest.",
+     "image_before": null,
+     "image_after": null,
+     "body_no": "Før: bilen står uten varsel, og andre ser den for sent. Etter: varselblinken er på, varseltrekanten står bak bilen, og føreren bruker refleksvest. Slik varsler du andre og sikrer stedet.",
+     "body_th": "ก่อน: รถจอดโดยไม่มีสัญญาณเตือน และคนอื่นเห็นช้าเกินไป หลัง: เปิดไฟฉุกเฉินแล้ว วางสามเหลี่ยมเตือน (varseltrekant) ไว้หลังรถ และผู้ขับสวมเสื้อสะท้อนแสง (refleksvest) แบบนี้คือการเตือนผู้อื่นและทำให้จุดเกิดเหตุปลอดภัย",
+     "hotspots": [
+      {
+       "x": 40,
+       "y": 55,
+       "label_no": "Varselblinken",
+       "label_th": "ไฟฉุกเฉิน (varselblink)"
+      },
+      {
+       "x": 15,
+       "y": 70,
+       "label_no": "Varseltrekanten bak bilen",
+       "label_th": "สามเหลี่ยมเตือนหลังรถ (varseltrekant)"
+      },
+      {
+       "x": 65,
+       "y": 50,
+       "label_no": "Refleksvesten",
+       "label_th": "เสื้อสะท้อนแสง (refleksvest)"
+      }
+     ],
+     "id": "ch13-s04",
+     "n": 4,
+     "badge_no": "Hva er endret?",
+     "badge_th": "อะไรเปลี่ยนไป?"
+    },
+    {
+     "type": "road_check",
+     "title_no": "Først på stedet",
+     "title_th": "ถึงที่เกิดเหตุก่อนใคร",
+     "question_no": "Du er først på et ulykkessted. Hva gjør du først?",
+     "question_th": "คุณมาถึงที่เกิดอุบัติเหตุก่อนใคร คุณทำอะไรก่อน?",
+     "options_no": [
+      "Stanser trygt og slår på varselblinken",
+      "Løper rett til den skadde uten å se deg for",
+      "Kjører videre"
+     ],
+     "options_th": [
+      "หยุดรถอย่างปลอดภัยและเปิดไฟฉุกเฉิน",
+      "วิ่งไปหาผู้บาดเจ็บทันทีโดยไม่ดูรอบตัว",
+      "ขับต่อไป"
+     ],
+     "correct_index": 0,
+     "explanation_no": "Du må sikre deg selv og stedet først, så andre ikke blir skadet i tillegg.",
+     "explanation_th": "คุณต้องทำให้ตัวเองและจุดเกิดเหตุปลอดภัยก่อน เพื่อไม่ให้คนอื่นได้รับบาดเจ็บเพิ่ม",
+     "id": "ch13-s05",
+     "n": 5,
+     "badge_no": "Veisjekk ⚡",
+     "badge_th": "ตรวจถนน ⚡"
+    },
+    {
+     "type": "theory",
+     "title_no": "Varsle, sikre, hjelpe",
+     "title_th": "แจ้ง ทำให้ปลอดภัย ช่วยเหลือ",
+     "body_no": "Husk rekkefølgen varsle, sikre og hjelpe. Vurder alltid faren for deg selv og andre før du går bort til ulykken. Din egen sikkerhet er også viktig.",
+     "body_th": "จำลำดับ แจ้ง ทำให้ปลอดภัย และช่วยเหลือ ประเมินอันตรายต่อตัวคุณเองและผู้อื่นเสมอก่อนเข้าไปที่เกิดเหตุ ความปลอดภัยของคุณเองก็สำคัญ",
+     "id": "ch13-s06",
+     "n": 6
+    },
+    {
+     "type": "rule",
+     "title_no": "Ring 113",
+     "title_th": "โทร 113",
+     "body_no": "Ring 113 for ambulanse. Si nøyaktig hvor du er, og hvor mange som er skadet. Politiet har nummer 112, og brannvesenet har nummer 110.",
+     "body_th": "โทร 113 เพื่อเรียกรถพยาบาล (ambulanse) บอกตำแหน่งที่แน่นอนและจำนวนผู้บาดเจ็บ ตำรวจคือเบอร์ 112 และหน่วยดับเพลิงคือเบอร์ 110",
+     "id": "ch13-s07",
+     "n": 7
+    },
+    {
+     "type": "trap",
+     "title_no": "Felle: jeg må flytte de skadde ut av bilen med en gang",
+     "title_th": "กับดักข้อสอบ: ต้องรีบย้ายผู้บาดเจ็บออกจากรถทันที",
+     "body_no": "Det er feil. Ikke flytt skadde unødvendig. De kan ha skader i nakken eller ryggen, og flytting kan gjøre det verre. Flytt bare hvis det er umiddelbar fare.",
+     "body_th": "ข้อนี้ผิด อย่าย้ายผู้บาดเจ็บโดยไม่จำเป็น เขาอาจบาดเจ็บที่คอหรือหลัง และการเคลื่อนย้ายอาจทำให้แย่ลง ให้ย้ายเฉพาะเมื่อมีอันตรายเฉียบพลัน",
+     "id": "ch13-s08",
+     "n": 8
+    },
+    {
+     "type": "theory",
+     "title_no": "Sjekk bevissthet og pust",
+     "title_th": "ตรวจการรู้สึกตัวและการหายใจ",
+     "body_no": "Snakk til den skadde og rist forsiktig i skuldrene. Åpne luftveien ved å legge hodet forsiktig bakover og løfte haken. Se, hør og kjenn etter pust i maksimalt 10 sekunder.",
+     "body_th": "พูดกับผู้บาดเจ็บและเขย่าไหล่เบา ๆ เปิดทางเดินหายใจโดยเอียงศีรษะไปด้านหลังเบา ๆ และยกคาง มอง ฟัง และสัมผัสการหายใจไม่เกิน 10 วินาที",
+     "id": "ch13-s09",
+     "n": 9
+    },
+    {
+     "type": "road_check",
+     "title_no": "Sjekk pusten",
+     "title_th": "ตรวจการหายใจ",
+     "question_no": "Hvor lenge sjekker du om den skadde puster?",
+     "question_th": "คุณตรวจว่าผู้บาดเจ็บหายใจหรือไม่นานแค่ไหน?",
+     "options_no": [
+      "Maksimalt 10 sekunder",
+      "Ett helt minutt",
+      "Det er ikke nødvendig"
+     ],
+     "options_th": [
+      "ไม่เกิน 10 วินาที",
+      "หนึ่งนาทีเต็ม",
+      "ไม่จำเป็น"
+     ],
+     "correct_index": 0,
+     "explanation_no": "Se, hør og kjenn etter pust i maksimalt 10 sekunder, og handle deretter.",
+     "explanation_th": "มอง ฟัง และสัมผัสการหายใจไม่เกิน 10 วินาที แล้วลงมือทำตามสถานการณ์",
+     "id": "ch13-s10",
+     "n": 10,
+     "badge_no": "Veisjekk ⚡",
+     "badge_th": "ตรวจถนน ⚡"
+    },
+    {
+     "type": "rule",
+     "title_no": "Hjerte-lungeredning",
+     "title_th": "การช่วยชีวิตด้วยการปั๊มหัวใจ",
+     "body_no": "Puster den skadde ikke normalt, starter du hjerte-lungeredning, forkortet HLR. Du gir 30 brystkompresjoner og deretter 2 innblåsinger. Fortsett til hjelpen kommer.",
+     "body_th": "ถ้าผู้บาดเจ็บไม่หายใจตามปกติ ให้เริ่มการช่วยชีวิตด้วยการปั๊มหัวใจและช่วยหายใจ (HLR) โดยกดหน้าอก 30 ครั้ง แล้วเป่าปาก 2 ครั้ง ทำต่อจนกว่าความช่วยเหลือจะมาถึง",
+     "id": "ch13-s11",
+     "n": 11
+    },
+    {
+     "type": "trap",
+     "title_no": "Felle: en bevisstløs person som puster skal ha HLR",
+     "title_th": "กับดักข้อสอบ: คนหมดสติแต่ยังหายใจต้องปั๊มหัวใจ",
+     "body_no": "Det er feil. Er personen bevisstløs, men puster normalt, skal du ikke gi HLR. Legg personen i stabilt sideleie, og følg med på pusten.",
+     "body_th": "ข้อนี้ผิด ถ้าคนหมดสติแต่ยังหายใจตามปกติ ไม่ต้องปั๊มหัวใจ ให้จัดท่านอนตะแคงที่มั่นคง (stabilt sideleie) และคอยสังเกตการหายใจ",
+     "id": "ch13-s12",
+     "n": 12
+    },
+    {
+     "type": "what_changed",
+     "title_no": "Stabilt sideleie",
+     "title_th": "ท่านอนตะแคงที่มั่นคง",
+     "image_brief_no": "Bildepar av en bevisstløs person. Før: personen ligger på ryggen med hodet rett. Etter: personen ligger i stabilt sideleie med hodet lett bakoverbøyd og øverste ben bøyd.",
+     "image_before": null,
+     "image_after": null,
+     "body_no": "Før: personen ligger på ryggen. Etter: personen ligger i stabilt sideleie. Da holder luftveien seg åpen, og personen kan ikke kveles av egen tunge eller oppkast.",
+     "body_th": "ก่อน: คนนอนหงาย หลัง: คนนอนตะแคงที่มั่นคง (stabilt sideleie) ทางเดินหายใจจะเปิดอยู่ และเขาจะไม่สำลักลิ้นหรืออาเจียนของตัวเอง",
+     "hotspots": [
+      {
+       "x": 35,
+       "y": 40,
+       "label_no": "Hodet som er lett bøyd bakover",
+       "label_th": "ศีรษะที่เอียงไปด้านหลังเล็กน้อย (hode)"
+      },
+      {
+       "x": 55,
+       "y": 55,
+       "label_no": "Armen som støtter kroppen",
+       "label_th": "แขนที่รองรับลำตัว (arm)"
+      },
+      {
+       "x": 70,
+       "y": 75,
+       "label_no": "Det øverste benet som er bøyd",
+       "label_th": "ขาข้างบนที่งอ (ben)"
+      }
+     ],
+     "id": "ch13-s13",
+     "n": 13,
+     "badge_no": "Hva er endret?",
+     "badge_th": "อะไรเปลี่ยนไป?"
+    },
+    {
+     "type": "road_check",
+     "title_no": "Bevisstløs, men puster",
+     "title_th": "หมดสติแต่ยังหายใจ",
+     "question_no": "Personen er bevisstløs, men puster normalt. Hva gjør du?",
+     "question_th": "คนนั้นหมดสติแต่ยังหายใจตามปกติ คุณทำอย่างไร?",
+     "options_no": [
+      "Legger personen i stabilt sideleie",
+      "Gir HLR",
+      "Setter personen opp"
+     ],
+     "options_th": [
+      "จัดท่านอนตะแคงที่มั่นคง",
+      "ปั๊มหัวใจ",
+      "พยุงให้นั่ง"
+     ],
+     "correct_index": 0,
+     "explanation_no": "En bevisstløs person som puster normalt, skal ligge i stabilt sideleie.",
+     "explanation_th": "คนที่หมดสติแต่หายใจตามปกติควรนอนตะแคงที่มั่นคง (stabilt sideleie)",
+     "id": "ch13-s14",
+     "n": 14,
+     "badge_no": "Veisjekk ⚡",
+     "badge_th": "ตรวจถนน ⚡"
+    },
+    {
+     "type": "theory",
+     "title_no": "Ikke fjern spor",
+     "title_th": "อย่าลบร่องรอย",
+     "body_no": "Kjøretøy som er til fare for trafikken, skal flyttes straks. Du skal ikke fjerne spor eller endre andre forhold som er viktige for etterforskningen, hvis du ikke må.",
+     "body_th": "ยานพาหนะที่เป็นอันตรายต่อการจราจรต้องย้ายทันที คุณต้องไม่ลบร่องรอยหรือเปลี่ยนสภาพอื่นที่สำคัญต่อการสืบสวนถ้าไม่จำเป็น",
+     "id": "ch13-s15",
+     "n": 15
+    },
+    {
+     "type": "summary",
+     "title_no": "Husk fra dette kapittelet",
+     "title_th": "สิ่งที่ต้องจำจากบทนี้",
+     "body_no": "Stans alltid, og gi navn og adresse. Varsle, sikre og hjelp, i den rekkefølgen. Ring 113. Ikke flytt skadde unødvendig. Bevisstløs som puster normalt skal i stabilt sideleie.",
+     "body_th": "หยุดรถเสมอและแจ้งชื่อกับที่อยู่ แจ้ง ทำให้ปลอดภัย และช่วยเหลือตามลำดับนี้ โทร 113 อย่าย้ายผู้บาดเจ็บโดยไม่จำเป็น และคนที่หมดสติแต่หายใจปกติให้จัดท่านอนตะแคงที่มั่นคง (stabilt sideleie)",
+     "id": "ch13-s16",
+     "n": 16
+    }
+   ]
+  },
+  {
+   "order": 14,
+   "screens": [
+    {
+     "type": "theory",
+     "title_no": "Bilen må være i god stand",
+     "title_th": "รถต้องอยู่ในสภาพดี",
+     "body_no": "Et kjøretøy skal være bygd, utstyrt og vedlikeholdt slik at det ikke skaper unødig fare eller ulempe, og slik at det ikke skader vegen. En bil i god teknisk stand er grunnlaget for trafikksikkerhet.",
+     "body_th": "ยานพาหนะต้องสร้าง ติดตั้งอุปกรณ์ และบำรุงรักษาให้ไม่ก่อให้เกิดอันตรายหรือความไม่สะดวกโดยไม่จำเป็น และไม่ทำลายถนน รถที่อยู่ในสภาพทางเทคนิคดีเป็นพื้นฐานของความปลอดภัยในการจราจร",
+     "id": "ch14-s01",
+     "n": 1
+    },
+    {
+     "type": "rule",
+     "title_no": "Sikkerhetskontroll før turen",
+     "title_th": "ตรวจความปลอดภัยก่อนออกเดินทาง",
+     "body_no": "Sjekk bremser, dekk, lys, sikt, styring og sikkerhetsutstyr før du kjører. Gjør kontrollen før turen, ikke mens du kjører. En rask sjekk kan forhindre ulykker.",
+     "body_th": "ตรวจเบรก ยาง ไฟ ทัศนวิสัย พวงมาลัย และอุปกรณ์ความปลอดภัยก่อนขับรถ ตรวจก่อนออกเดินทาง ไม่ใช่ระหว่างขับ การตรวจอย่างรวดเร็วช่วยป้องกันอุบัติเหตุได้",
+     "id": "ch14-s02",
+     "n": 2
+    },
+    {
+     "type": "trap",
+     "title_no": "Felle: dekkene er lovlige så lenge de har mønster",
+     "title_th": "กับดักข้อสอบ: ยางถูกกฎหมายตราบใดที่ยังมีดอกยาง",
+     "body_no": "Det er feil. Mønsterdybden må være minst 1,6 millimeter, og tre millimeter anbefales. Riktig lufttrykk og skader på dekkene må du også sjekke.",
+     "body_th": "ข้อนี้ผิด ความลึกของดอกยาง (mønsterdybde) ต้องไม่น้อยกว่า 1,6 มิลลิเมตร และแนะนำที่สามมิลลิเมตร คุณต้องตรวจแรงดันลมยางและความเสียหายของยางด้วย",
+     "id": "ch14-s03",
+     "n": 3
+    },
+    {
+     "type": "what_changed",
+     "title_no": "Mønsterdybde",
+     "title_th": "ความลึกของดอกยาง",
+     "image_brief_no": "Bildepar av samme dekk i nærbilde med en målestokk. Før: nytt dekk med dyp mønsterdybde. Etter: slitt dekk der mønsteret bare er 1 millimeter.",
+     "image_before": null,
+     "image_after": null,
+     "body_no": "Før: dekket har dypt mønster og god veggrep. Etter: dekket er slitt og har bare 1 millimeter mønster. Det er under kravet på 1,6 millimeter, og du må bytte dekk.",
+     "body_th": "ก่อน: ยางมีดอกลึกและยึดเกาะถนนดี หลัง: ยางสึกและเหลือดอกยางเพียง 1 มิลลิเมตร ซึ่งต่ำกว่าเกณฑ์ 1,6 มิลลิเมตร และคุณต้องเปลี่ยนยาง",
+     "hotspots": [
+      {
+       "x": 30,
+       "y": 50,
+       "label_no": "Dypt mønster i nytt dekk",
+       "label_th": "ดอกยางลึกในยางใหม่ (mønsterdybde)"
+      },
+      {
+       "x": 70,
+       "y": 50,
+       "label_no": "Slitt mønster som bare er 1 millimeter",
+       "label_th": "ดอกยางสึกเหลือ 1 มิลลิเมตร (slitt mønster)"
+      },
+      {
+       "x": 50,
+       "y": 80,
+       "label_no": "Målestokken",
+       "label_th": "ไม้วัด (målestokk)"
+      }
+     ],
+     "id": "ch14-s04",
+     "n": 4,
+     "badge_no": "Hva er endret?",
+     "badge_th": "อะไรเปลี่ยนไป?"
+    },
+    {
+     "type": "road_check",
+     "title_no": "Minste mønsterdybde",
+     "title_th": "ดอกยางขั้นต่ำ",
+     "question_no": "Hva er minste lovlige mønsterdybde på dekkene?",
+     "question_th": "ความลึกของดอกยางขั้นต่ำที่ถูกกฎหมายคือเท่าไร?",
+     "options_no": [
+      "0,5 millimeter",
+      "1,6 millimeter",
+      "3 millimeter"
+     ],
+     "options_th": [
+      "0,5 มิลลิเมตร",
+      "1,6 มิลลิเมตร",
+      "3 มิลลิเมตร"
+     ],
+     "correct_index": 1,
+     "explanation_no": "Mønsterdybden må være minst 1,6 millimeter. Tre millimeter anbefales.",
+     "explanation_th": "ความลึกของดอกยาง (mønsterdybde) ต้องไม่น้อยกว่า 1,6 มิลลิเมตร และแนะนำที่สามมิลลิเมตร",
+     "id": "ch14-s05",
+     "n": 5,
+     "badge_no": "Veisjekk ⚡",
+     "badge_th": "ตรวจถนน ⚡"
+    },
+    {
+     "type": "theory",
+     "title_no": "Aktiv og passiv sikkerhet",
+     "title_th": "ความปลอดภัยเชิงรุกและเชิงรับ",
+     "body_no": "Aktiv sikkerhet er utstyr som hjelper deg å unngå ulykker, for eksempel ABS-bremser og antiskrens. Passiv sikkerhet er utstyr som beskytter deg når ulykken har skjedd, for eksempel bilbelte, kollisjonsputer og hodestøtte.",
+     "body_th": "ความปลอดภัยเชิงรุก (aktiv sikkerhet) คืออุปกรณ์ที่ช่วยให้คุณหลีกเลี่ยงอุบัติเหตุ เช่น ระบบเบรกป้องกันล้อล็อก (ABS-bremser) และระบบควบคุมการทรงตัว (antiskrens) ความปลอดภัยเชิงรับ (passiv sikkerhet) คืออุปกรณ์ที่ปกป้องคุณเมื่อเกิดอุบัติเหตุแล้ว เช่น เข็มขัดนิรภัย (bilbelte) ถุงลมนิรภัย (kollisjonsputer) และที่พิงศีรษะ (hodestøtte)",
+     "id": "ch14-s06",
+     "n": 6
+    },
+    {
+     "type": "rule",
+     "title_no": "Bruk alltid bilbelte",
+     "title_th": "คาดเข็มขัดนิรภัยเสมอ",
+     "body_no": "Bilbelte skal alltid brukes. Det skal sitte over skulderen og over hoftene, ikke bak ryggen og ikke under armen. Føreren er ansvarlig for at passasjerer under 15 år bruker belte.",
+     "body_th": "ต้องคาดเข็มขัดนิรภัย (bilbelte) เสมอ สายต้องพาดผ่านไหล่และสะโพก ไม่ใช่ไว้ข้างหลังลำตัวหรือใต้แขน ผู้ขับต้องรับผิดชอบให้ผู้โดยสารอายุต่ำกว่า 15 ปีคาดเข็มขัด",
+     "id": "ch14-s07",
+     "n": 7
+    },
+    {
+     "type": "trap",
+     "title_no": "Felle: beltet kan ligge under armen hvis det er ubehagelig",
+     "title_th": "กับดักข้อสอบ: สอดเข็มขัดไว้ใต้แขนได้ถ้าอึดอัด",
+     "body_no": "Det er feil. Beltet må ligge over skulderen og hoftene. Ligger det under armen eller bak ryggen, beskytter det deg ikke riktig ved en ulykke.",
+     "body_th": "ข้อนี้ผิด สายเข็มขัดต้องพาดผ่านไหล่และสะโพก ถ้าสอดไว้ใต้แขนหรือข้างหลังลำตัว เข็มขัดจะไม่ปกป้องคุณอย่างถูกต้องเมื่อเกิดอุบัติเหตุ",
+     "id": "ch14-s08",
+     "n": 8
+    },
+    {
+     "type": "theory",
+     "title_no": "Hodestøtte",
+     "title_th": "ที่พิงศีรษะ",
+     "body_no": "Hodestøtten skal stilles inn slik at øverste kant er i høyde med toppen av hodet. Da beskytter den nakken din mot nakkesleng.",
+     "body_th": "ต้องปรับที่พิงศีรษะ (hodestøtte) ให้ขอบบนอยู่ระดับเดียวกับกระหม่อม เพื่อปกป้องคอจากการบาดเจ็บแบบคอเคล็ดเมื่อถูกชนจากด้านหลัง (nakkesleng)",
+     "id": "ch14-s09",
+     "n": 9
+    },
+    {
+     "type": "road_check",
+     "title_no": "Riktig hodestøtte",
+     "title_th": "ที่พิงศีรษะที่ถูกต้อง",
+     "question_no": "Hvordan skal hodestøtten stilles inn?",
+     "question_th": "ต้องปรับที่พิงศีรษะอย่างไร?",
+     "options_no": [
+      "Nederst, så den ikke er i veien",
+      "Med øverste kant i høyde med toppen av hodet",
+      "Så høyt den går"
+     ],
+     "options_th": [
+      "ต่ำสุดเพื่อไม่ให้กีดขวาง",
+      "ให้ขอบบนอยู่ระดับกระหม่อม",
+      "สูงที่สุดเท่าที่ปรับได้"
+     ],
+     "correct_index": 1,
+     "explanation_no": "Øverste kant skal være i høyde med toppen av hodet.",
+     "explanation_th": "ขอบบนของที่พิงศีรษะต้องอยู่ระดับกระหม่อม",
+     "id": "ch14-s10",
+     "n": 10,
+     "badge_no": "Veisjekk ⚡",
+     "badge_th": "ตรวจถนน ⚡"
+    },
+    {
+     "type": "rule",
+     "title_no": "Barn i bilen",
+     "title_th": "เด็กในรถ",
+     "body_no": "Barn under 135 centimeter skal sitte i godkjent barnesete. Har bilen kollisjonspute foran, må den slås av når et barn sitter i barnestol i forsetet.",
+     "body_th": "เด็กที่ตัวสูงต่ำกว่า 135 เซนติเมตรต้องนั่งในเบาะนั่งสำหรับเด็ก (barnesete) ที่ได้รับการรับรอง ถ้ารถมีถุงลมนิรภัยด้านหน้า ต้องปิดถุงลมเมื่อเด็กนั่งในเบาะเด็กที่เบาะหน้า",
+     "id": "ch14-s11",
+     "n": 11
+    },
+    {
+     "type": "trap",
+     "title_no": "Felle: barnesetet kan stå foran med kollisjonsputen på",
+     "title_th": "กับดักข้อสอบ: วางเบาะเด็กที่เบาะหน้าโดยเปิดถุงลมได้",
+     "body_no": "Det er feil. Kollisjonsputen foran kan skade et barn i barnestol når den løses ut. Den må slås av.",
+     "body_th": "ข้อนี้ผิด ถุงลมนิรภัยด้านหน้าอาจทำอันตรายเด็กในเบาะเด็กเมื่อทำงาน ต้องปิดถุงลม",
+     "id": "ch14-s12",
+     "n": 12
+    },
+    {
+     "type": "what_changed",
+     "title_no": "Barnestol foran",
+     "title_th": "เบาะเด็กที่เบาะหน้า",
+     "image_brief_no": "Bildepar av forsetet i en bil. Før: et barn i barnestol i forsetet, og kollisjonsputen er på. Etter: samme oppsett, men kollisjonsputen er slått av, og en varsellampe viser at den er av.",
+     "image_before": null,
+     "image_after": null,
+     "body_no": "Før: barnet sitter i forsetet, og kollisjonsputen er på. Det er farlig. Etter: kollisjonsputen er slått av, og en lampe viser det.",
+     "body_th": "ก่อน: เด็กนั่งที่เบาะหน้าโดยเปิดถุงลมนิรภัยไว้ ซึ่งอันตราย หลัง: ปิดถุงลมนิรภัยแล้ว และมีไฟแสดงสถานะ",
+     "hotspots": [
+      {
+       "x": 40,
+       "y": 55,
+       "label_no": "Barnet i barnestol",
+       "label_th": "เด็กในเบาะเด็ก (barnestol)"
+      },
+      {
+       "x": 65,
+       "y": 35,
+       "label_no": "Kollisjonsputen i dashbordet",
+       "label_th": "ถุงลมนิรภัยที่แผงหน้าปัด (kollisjonspute)"
+      },
+      {
+       "x": 80,
+       "y": 55,
+       "label_no": "Lampen som viser at putene er av",
+       "label_th": "ไฟที่แสดงว่าปิดถุงลม (varsellampe)"
+      }
+     ],
+     "id": "ch14-s13",
+     "n": 13,
+     "badge_no": "Hva er endret?",
+     "badge_th": "อะไรเปลี่ยนไป?"
+    },
+    {
+     "type": "road_check",
+     "title_no": "Kollisjonspute og barnestol",
+     "title_th": "ถุงลมนิรภัยและเบาะเด็ก",
+     "question_no": "Et barn i barnestol skal sitte i forsetet. Hva må du gjøre med kollisjonsputen foran?",
+     "question_th": "เด็กในเบาะเด็กต้องนั่งที่เบาะหน้า คุณต้องทำอย่างไรกับถุงลมนิรภัยด้านหน้า?",
+     "options_no": [
+      "La den være på",
+      "Slå den av",
+      "Det spiller ingen rolle"
+     ],
+     "options_th": [
+      "ปล่อยไว้ตามเดิม",
+      "ปิดถุงลม",
+      "ไม่สำคัญ"
+     ],
+     "correct_index": 1,
+     "explanation_no": "Kollisjonsputen foran må slås av når et barn sitter i barnestol i forsetet.",
+     "explanation_th": "ต้องปิดถุงลมนิรภัยด้านหน้าเมื่อเด็กนั่งในเบาะเด็กที่เบาะหน้า",
+     "id": "ch14-s14",
+     "n": 14,
+     "badge_no": "Veisjekk ⚡",
+     "badge_th": "ตรวจถนน ⚡"
+    },
+    {
+     "type": "theory",
+     "title_no": "Radarvarsler er forbudt",
+     "title_th": "ห้ามใช้เครื่องเตือนเรดาร์",
+     "body_no": "Du må ikke ha eller bruke utstyr som varsler om eller forstyrrer trafikkontroller, for eksempel en radarvarsler. Det er forbudt i motorvogn.",
+     "body_th": "คุณต้องไม่มีหรือใช้อุปกรณ์ที่เตือนหรือรบกวนการตรวจของตำรวจจราจร เช่น เครื่องเตือนเรดาร์ (radarvarsler) ซึ่งเป็นสิ่งต้องห้ามในยานยนต์",
+     "id": "ch14-s15",
+     "n": 15
+    },
+    {
+     "type": "summary",
+     "title_no": "Husk fra dette kapittelet",
+     "title_th": "สิ่งที่ต้องจำจากบทนี้",
+     "body_no": "Sjekk bilen før turen. Mønsterdybden må være minst 1,6 millimeter. Bruk alltid bilbelte, og still inn hodestøtten riktig. Slå av kollisjonsputen foran ved barnestol. Radarvarsler er forbudt.",
+     "body_th": "ตรวจรถก่อนออกเดินทาง ดอกยางต้องลึกอย่างน้อย 1,6 มิลลิเมตร คาดเข็มขัดนิรภัยเสมอและปรับที่พิงศีรษะให้ถูกต้อง ปิดถุงลมด้านหน้าเมื่อมีเบาะเด็ก และห้ามใช้เครื่องเตือนเรดาร์ (radarvarsler)",
+     "id": "ch14-s16",
+     "n": 16
+    }
+   ]
+  },
+  {
+   "order": 15,
+   "screens": [
+    {
+     "type": "theory",
+     "title_no": "Hva er risiko?",
+     "title_th": "ความเสี่ยง (risiko) คืออะไร?",
+     "body_no": "Risiko er sannsynligheten for at noe skjer, sammen med hvor alvorlige følgene er. En hendelse kan ha stor risiko fordi den er svært sannsynlig, eller fordi følgene blir katastrofale selv om den er lite sannsynlig.",
+     "body_th": "ความเสี่ยง (risiko) คือความน่าจะเป็นที่บางอย่างจะเกิดขึ้นรวมกับความร้ายแรงของผลที่ตามมา เหตุการณ์หนึ่งอาจมีความเสี่ยงสูงเพราะมีโอกาสเกิดมาก หรือเพราะผลที่ตามมาร้ายแรงมากแม้จะเกิดขึ้นไม่บ่อย",
+     "id": "ch15-s01",
+     "n": 1
+    },
+    {
+     "type": "rule",
+     "title_no": "Se, forstå, velge",
+     "title_th": "มอง เข้าใจ เลือก",
+     "body_no": "God kjøring har tre steg. SE: hent aktivt inn informasjon med speil og blikk langt fram. FORSTÅ: tolk det du ser, og tenk på hva som kan skje. VELG: velg riktig fart, plassering og tegn.",
+     "body_th": "การขับรถที่ดีมีสามขั้น มอง (SE): รวบรวมข้อมูลอย่างตั้งใจด้วยกระจกและการมองไปไกล เข้าใจ (FORSTÅ): ตีความสิ่งที่เห็นและคิดว่าอาจเกิดอะไรขึ้น เลือก (VELG): เลือกความเร็ว ตำแหน่ง และสัญญาณที่เหมาะสม",
+     "id": "ch15-s02",
+     "n": 2
+    },
+    {
+     "type": "trap",
+     "title_no": "Felle: den beste sjåføren er den raskeste",
+     "title_th": "กับดักข้อสอบ: คนขับที่ดีที่สุดคือคนที่ขับเร็วที่สุด",
+     "body_no": "Det er feil. En god sjåfør er forutseende og defensiv. Hensyn og hjelpsomhet betyr ofte mer for sikkerheten enn god kjøreteknikk.",
+     "body_th": "ข้อนี้ผิด คนขับที่ดีคือคนที่มองการณ์ไกลและขับเชิงป้องกัน (defensiv) ความเกรงใจและน้ำใจมักมีผลต่อความปลอดภัยมากกว่าเทคนิคการขับขี่",
+     "id": "ch15-s03",
+     "n": 3
+    },
+    {
+     "type": "what_changed",
+     "title_no": "Se langt fram",
+     "title_th": "มองไปไกล ๆ",
+     "image_brief_no": "Bildepar sett fra førersetet i en bytrafikk-situasjon. Før: førerens blikk er bare på bilen rett foran. Etter: blikket går langt fram, og speilene og en fotgjenger i sidegaten blir oppdaget.",
+     "image_before": null,
+     "image_after": null,
+     "body_no": "Før: du ser bare på bilen rett foran. Etter: du ser langt fram, sjekker speilene og oppdager fotgjengeren ved sidegaten i tide.",
+     "body_th": "ก่อน: คุณมองแต่รถคันตรงหน้า หลัง: คุณมองไปไกล ตรวจกระจก และเห็นคนเดินเท้าที่ปากซอยได้ทันเวลา",
+     "hotspots": [
+      {
+       "x": 50,
+       "y": 30,
+       "label_no": "Blikket langt fram",
+       "label_th": "การมองไปไกล (langt fram)"
+      },
+      {
+       "x": 20,
+       "y": 45,
+       "label_no": "Speilet",
+       "label_th": "กระจก (speil)"
+      },
+      {
+       "x": 80,
+       "y": 55,
+       "label_no": "Fotgjengeren ved sidegaten",
+       "label_th": "คนเดินเท้าที่ปากซอย (fotgjenger)"
+      }
+     ],
+     "id": "ch15-s04",
+     "n": 4,
+     "badge_no": "Hva er endret?",
+     "badge_th": "อะไรเปลี่ยนไป?"
+    },
+    {
+     "type": "road_check",
+     "title_no": "Hva er FORSTÅ?",
+     "title_th": "เข้าใจ (FORSTÅ) คืออะไร?",
+     "question_no": "Hva betyr FORSTÅ i kjøreprosessen SE, FORSTÅ, VELGE?",
+     "question_th": "คำว่า เข้าใจ (FORSTÅ) ในกระบวนการขับรถ มอง เข้าใจ เลือก หมายถึงอะไร?",
+     "options_no": [
+      "Å tolke det du ser og tenke på hva som kan skje",
+      "Å velge fart",
+      "Å bruke speilene"
+     ],
+     "options_th": [
+      "การตีความสิ่งที่เห็นและคิดว่าอาจเกิดอะไรขึ้น",
+      "การเลือกความเร็ว",
+      "การใช้กระจก"
+     ],
+     "correct_index": 0,
+     "explanation_no": "FORSTÅ betyr å tolke det du ser og vurdere faren. Å velge kommer etterpå.",
+     "explanation_th": "เข้าใจ (FORSTÅ) หมายถึงการตีความสิ่งที่เห็นและประเมินอันตราย การเลือกมาหลังจากนั้น",
+     "id": "ch15-s05",
+     "n": 5,
+     "badge_no": "Veisjekk ⚡",
+     "badge_th": "ตรวจถนน ⚡"
+    },
+    {
+     "type": "theory",
+     "title_no": "Unge sjåfører",
+     "title_th": "ผู้ขับหน้าใหม่",
+     "body_no": "Unge er overrepresentert i trafikkulykker. Nye sjåfører har mye høyere risiko de første månedene med førerkort, spesielt for å kjøre av vegen. Når kjøringen blir automatisk, synker risikoen kraftig.",
+     "body_th": "คนหนุ่มสาวประสบอุบัติเหตุจราจรมากกว่าสัดส่วนของตน ผู้ขับหน้าใหม่มีความเสี่ยงสูงกว่ามากในเดือนแรก ๆ ที่มีใบขับขี่ โดยเฉพาะการขับตกถนน เมื่อการขับกลายเป็นความเคยชิน ความเสี่ยงจะลดลงมาก",
+     "id": "ch15-s06",
+     "n": 6
+    },
+    {
+     "type": "rule",
+     "title_no": "Vanlige årsaker til ulykker",
+     "title_th": "สาเหตุอุบัติเหตุที่พบบ่อย",
+     "body_no": "De vanligste årsakene er for høy fart, tretthet, alkohol og rusmidler, uoppmerksomhet, dårlig føre og forbikjøring på feil sted.",
+     "body_th": "สาเหตุที่พบบ่อยที่สุดคือขับเร็วเกินไป ความเหนื่อยล้า แอลกอฮอล์และสารเสพติด ขาดสมาธิ สภาพถนนไม่ดี และการแซงในที่ที่ไม่ควรแซง",
+     "id": "ch15-s07",
+     "n": 7
+    },
+    {
+     "type": "trap",
+     "title_no": "Felle: jeg kjører godt, så jeg kan kjøre litt fortere",
+     "title_th": "กับดักข้อสอบ: ฉันขับเก่ง เลยขับเร็วขึ้นได้อีกนิด",
+     "body_no": "Det er feil. Mange nye sjåfører overvurderer seg selv og undervurderer faren. Manglende erfaring og feil fart er en av de vanligste årsakene til at unge kjører av vegen.",
+     "body_th": "ข้อนี้ผิด ผู้ขับหน้าใหม่หลายคนประเมินตัวเองสูงเกินไปและประเมินอันตรายต่ำเกินไป การขาดประสบการณ์และการใช้ความเร็วไม่เหมาะสมเป็นสาเหตุหนึ่งที่พบบ่อยที่ทำให้คนหนุ่มสาวขับตกถนน",
+     "id": "ch15-s08",
+     "n": 8
+    },
+    {
+     "type": "theory",
+     "title_no": "Tretthet",
+     "title_th": "ความเหนื่อยล้า",
+     "body_no": "Tretthet og søvnmangel svekker kjøreevnen din mye, på samme måte som alkohol. Du reagerer saktere, og du kan sovne bak rattet uten å være forberedt.",
+     "body_th": "ความเหนื่อยล้าและการอดนอน (søvnmangel) ทำให้ความสามารถในการขับลดลงมาก เหมือนกับแอลกอฮอล์ คุณตอบสนองช้าลง และอาจหลับในโดยไม่ทันตั้งตัว",
+     "id": "ch15-s09",
+     "n": 9
+    },
+    {
+     "type": "road_check",
+     "title_no": "Veldig trett",
+     "title_th": "เหนื่อยมาก",
+     "question_no": "Du er veldig trett og har lang veg igjen. Hva er tryggest?",
+     "question_th": "คุณเหนื่อยมากและยังเหลือทางอีกไกล อะไรปลอดภัยที่สุด?",
+     "options_no": [
+      "Ta en pause eller sove før jeg kjører videre",
+      "Åpne vinduet",
+      "Skru opp musikken"
+     ],
+     "options_th": [
+      "พักหรือนอนก่อนขับต่อ",
+      "เปิดหน้าต่าง",
+      "เร่งเสียงเพลง"
+     ],
+     "correct_index": 0,
+     "explanation_no": "Bare hvile hjelper mot tretthet. Vindu og musikk hjelper bare litt, og bare en kort stund.",
+     "explanation_th": "มีเพียงการพักผ่อนเท่านั้นที่ช่วยแก้ความเหนื่อยล้า หน้าต่างและเพลงช่วยได้เพียงเล็กน้อยและชั่วครู่",
+     "id": "ch15-s10",
+     "n": 10,
+     "badge_no": "Veisjekk ⚡",
+     "badge_th": "ตรวจถนน ⚡"
+    },
+    {
+     "type": "rule",
+     "title_no": "Mobil og uoppmerksomhet",
+     "title_th": "โทรศัพท์และการขาดสมาธิ",
+     "body_no": "Mobilbruk og andre forstyrrelser øker risikoen for ulykke mye. Du må ikke holde mobilen i hånden mens du kjører. Hold oppmerksomheten på vegen.",
+     "body_th": "การใช้โทรศัพท์และสิ่งรบกวนอื่นทำให้ความเสี่ยงของอุบัติเหตุเพิ่มขึ้นมาก คุณห้ามถือโทรศัพท์ไว้ในมือขณะขับรถ ให้จดจ่อกับถนน",
+     "id": "ch15-s11",
+     "n": 11
+    },
+    {
+     "type": "trap",
+     "title_no": "Felle: håndfri samtale er like trygt som å ikke snakke",
+     "title_th": "กับดักข้อสอบ: คุยแบบแฮนด์ฟรีปลอดภัยเท่ากับไม่พูดเลย",
+     "body_no": "Det er feil. Selv om du har begge hendene på rattet, tar en samtale oppmerksomheten din. Hjernen din er opptatt, og du ser og reagerer dårligere.",
+     "body_th": "ข้อนี้ผิด แม้คุณจะใช้มือทั้งสองจับพวงมาลัย แต่การสนทนาก็ดึงความสนใจของคุณ สมองของคุณไม่ว่าง และคุณจะมองและตอบสนองแย่ลง",
+     "id": "ch15-s12",
+     "n": 12
+    },
+    {
+     "type": "what_changed",
+     "title_no": "Sårbare trafikanter",
+     "title_th": "ผู้ใช้ถนนที่เปราะบาง",
+     "image_brief_no": "Bildepar av en boliggate. Før: tomt fortau og tom sykkelfelt. Etter: et barn med ball, en eldre person med rullator og en syklist er ute i gaten.",
+     "image_before": null,
+     "image_after": null,
+     "body_no": "Før: gaten er tom. Etter: et barn, en eldre person og en syklist er ute. De har lite beskyttelse, og du må kjøre saktere og passe ekstra godt på.",
+     "body_th": "ก่อน: ถนนว่างเปล่า หลัง: มีเด็ก ผู้สูงอายุ และคนขี่จักรยานอยู่บนถนน พวกเขาแทบไม่มีอะไรปกป้อง คุณต้องขับช้าลงและระวังเป็นพิเศษ",
+     "hotspots": [
+      {
+       "x": 25,
+       "y": 60,
+       "label_no": "Barnet som er uforutsigbart",
+       "label_th": "เด็กที่คาดเดาไม่ได้ (barn)"
+      },
+      {
+       "x": 55,
+       "y": 50,
+       "label_no": "Den eldre personen med redusert syn og hørsel",
+       "label_th": "ผู้สูงอายุที่สายตาและการได้ยินลดลง (eldre)"
+      },
+      {
+       "x": 80,
+       "y": 65,
+       "label_no": "Syklisten som har lite beskyttelse",
+       "label_th": "คนขี่จักรยานที่มีสิ่งป้องกันน้อย (syklist)"
+      }
+     ],
+     "id": "ch15-s13",
+     "n": 13,
+     "badge_no": "Hva er endret?",
+     "badge_th": "อะไรเปลี่ยนไป?"
+    },
+    {
+     "type": "road_check",
+     "title_no": "Hvem er sårbar?",
+     "title_th": "ใครเปราะบาง?",
+     "question_no": "Hvem er ekstra sårbare i trafikken?",
+     "question_th": "ใครเปราะบางเป็นพิเศษในการจราจร?",
+     "options_no": [
+      "Barn, eldre, syklister, fotgjengere og motorsyklister",
+      "Bare lastebilsjåfører",
+      "Alle som kjører nye biler"
+     ],
+     "options_th": [
+      "เด็ก ผู้สูงอายุ คนขี่จักรยาน คนเดินเท้า และคนขี่มอเตอร์ไซค์",
+      "เฉพาะคนขับรถบรรทุก",
+      "ทุกคนที่ขับรถใหม่"
+     ],
+     "correct_index": 0,
+     "explanation_no": "Disse har lite eller ingen beskyttelse ved en kollisjon, og de er ofte vanskeligere å se eller forutse.",
+     "explanation_th": "คนเหล่านี้แทบไม่มีสิ่งปกป้องเมื่อเกิดการชน และมักเห็นหรือคาดเดาได้ยากกว่า",
+     "id": "ch15-s14",
+     "n": 14,
+     "badge_no": "Veisjekk ⚡",
+     "badge_th": "ตรวจถนน ⚡"
+    },
+    {
+     "type": "theory",
+     "title_no": "Følelser, sykdom og medisiner",
+     "title_th": "อารมณ์ ความเจ็บป่วย และยา",
+     "body_no": "Sterke følelser som sinne, sorg og stress kan svekke kjøreevnen din. Det samme gjør sykdom og noen medisiner. Er du ikke i form, bør du ikke kjøre.",
+     "body_th": "อารมณ์รุนแรง เช่น ความโกรธ ความเศร้า และความเครียด อาจทำให้ความสามารถในการขับลดลง ความเจ็บป่วยและยาบางชนิดก็เช่นกัน ถ้าคุณไม่พร้อม ก็ไม่ควรขับ",
+     "id": "ch15-s15",
+     "n": 15
+    },
+    {
+     "type": "summary",
+     "title_no": "Husk fra dette kapittelet",
+     "title_th": "สิ่งที่ต้องจำจากบทนี้",
+     "body_no": "Se, forstå og velg. Vær defensiv, ikke rask. Tretthet, alkohol og mobil svekker deg. Vær ekstra varsom overfor barn, eldre, syklister og fotgjengere.",
+     "body_th": "มอง เข้าใจ และเลือก ขับเชิงป้องกัน (defensiv) ไม่ใช่ขับเร็ว ความเหนื่อยล้า แอลกอฮอล์ และโทรศัพท์ทำให้คุณด้อยลง ระวังเป็นพิเศษต่อเด็ก ผู้สูงอายุ คนขี่จักรยาน และคนเดินเท้า",
+     "id": "ch15-s16",
+     "n": 16
+    }
+   ]
+  }
+ ]
+}
