@@ -1597,6 +1597,21 @@ def test_student_renderer_wires_every_chapter_from_1_to_28():
     assert "chapterPositions" in SCRIPT
 
 
+def test_every_chapter_first_screen_has_its_own_shipped_main_image():
+    assets_dir = Path(__file__).resolve().parents[1] / "public_assets" / "studybook"
+    expected_files = {f"ch{number:02d}-main.png" for number in range(1, 29)}
+    assert {path.name for path in assets_dir.glob("*-main.png")} == expected_files
+
+    for number, (code, chapter) in enumerate(CHAPTERS.items(), start=1):
+        assert code == f"CH{number:02d}"
+        first_screen = chapter["lessons"][0]
+        assert first_screen["type"] in {"intro", "sequence"}, code
+        main_asset = chapter["assets"][first_screen["asset"]]
+        filename = f"ch{number:02d}-main.png"
+        assert main_asset["src"] == f"/api/assets/studybook/{filename}"
+        assert (assets_dir / filename).read_bytes()[:8] == b"\x89PNG\r\n\x1a\n"
+
+
 def test_student_renderer_has_safe_image_and_render_fallbacks():
     assert "function sbxImageFallback" in SCRIPT
     assert "if(!a){sbxImageFallback(w);return w}" in SCRIPT

@@ -3825,6 +3825,10 @@ CHAPTERS = {
     "CH28": {"code": "CH28", "title": i18n("Kapittel 28 · Lover, regler og oppslagsverk", "บทที่ 28 · กฎหมาย กฎจราจร และคู่มืออ้างอิง", "Chapter 28 · Laws, Regulations, and Reference Guide"), "lessons": CH28_LESSONS, "assets": CH28_ASSETS},
 }
 
+for chapter_number, chapter in enumerate(CHAPTERS.values(), start=1):
+    main_asset = chapter["assets"][chapter["lessons"][0]["asset"]]
+    main_asset["src"] = f"/api/assets/studybook/ch{chapter_number:02d}-main.png"
+
 ALL_ASSETS = {
     **ASSETS,
     **CH02_ASSETS,
