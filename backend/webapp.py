@@ -2796,6 +2796,93 @@ a { color:inherit; text-decoration:none; }
 }
 .sb-video-btn:hover { background:rgba(220,38,38,.20); }
 
+/* ══ STUDIEBOK — SKJERMLESER (chapter.screens) ══ */
+.sbs-seg-wrap {
+  display:flex; gap:6px; margin:0 0 14px; padding:4px;
+  border-radius:12px; background:rgba(255,255,255,.06); border:1px solid var(--border);
+}
+[data-theme="light"] .sbs-seg-wrap { background:rgba(0,0,0,.05); }
+.sbs-seg {
+  flex:1; min-height:40px; padding:8px 10px; border:none; border-radius:9px;
+  background:transparent; color:var(--muted); font-size:.8rem; font-weight:700; cursor:pointer;
+}
+.sbs-seg.active { background:var(--orange); color:#0B1226; }
+.sbs-prog { height:5px; border-radius:3px; background:rgba(255,255,255,.1); overflow:hidden; }
+[data-theme="light"] .sbs-prog { background:rgba(0,0,0,.1); }
+.sbs-prog-bar { height:100%; background:var(--orange); transition:width .25s; }
+.sbs-count { margin:6px 0 12px; font-size:.72rem; color:var(--muted); text-align:right; }
+.sbs-tag {
+  display:inline-block; padding:3px 10px; margin-bottom:8px; border-radius:999px;
+  font-size:.72rem; font-weight:800; line-height:1.5;
+  background:rgba(255,153,51,.13); color:var(--orange); border:1px solid rgba(255,153,51,.3);
+}
+.sbs-trap .sbs-tag { background:rgba(239,68,68,.12); color:#F87171; border-color:rgba(239,68,68,.3); }
+.sbs-road_check .sbs-tag { background:rgba(59,130,246,.14); color:#60A5FA; border-color:rgba(59,130,246,.35); }
+.sbs-what_changed .sbs-tag { background:rgba(16,185,129,.13); color:#34D399; border-color:rgba(16,185,129,.32); }
+.sbs-title { font-size:1rem; font-weight:900; line-height:1.5; margin-bottom:10px; color:var(--text); overflow-wrap:anywhere; }
+.sbs-body, .sbs-q, .sbs-fb { font-size:.9rem; line-height:1.9; color:var(--text); overflow-wrap:anywhere; }
+.sbs-body { margin-top:12px; }
+.sbs-term { color:var(--orange); font-weight:700; }
+.sbs-img {
+  position:relative; width:100%; aspect-ratio:4/3; margin-bottom:10px;
+  border-radius:14px; overflow:hidden; border:1px solid var(--border); background:rgba(255,255,255,.05);
+}
+.sbs-img-el { width:100%; height:100%; object-fit:cover; display:block; }
+.sbs-img-ph {
+  position:absolute; inset:0; display:flex; align-items:flex-start; justify-content:flex-start;
+  padding:4px 6px; color:var(--muted); font-size:.7rem; line-height:1.3;
+  background:repeating-linear-gradient(45deg, rgba(255,255,255,.03) 0 12px, rgba(255,255,255,.06) 12px 24px);
+}
+.sbs-img-ph span { padding:1px 8px; border-radius:999px; background:rgba(0,0,0,.35); }
+@media (max-width:360px) {
+  .sbs-img { aspect-ratio:1/1; }
+  .sbs-pin { width:24px; height:24px; margin:-12px 0 0 -12px; font-size:.75rem; }
+}
+[data-theme="light"] .sbs-img-ph span { background:rgba(255,255,255,.7); }
+.sbs-pin {
+  position:absolute; width:32px; height:32px; margin:-16px 0 0 -16px; padding:0;
+  display:flex; align-items:center; justify-content:center;
+  border-radius:50%; border:2px solid #fff; background:var(--orange); color:#0B1226;
+  font-weight:900; font-size:.85rem; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,.4);
+}
+.sbs-pin.active { background:#fff; color:var(--orange-dk); box-shadow:0 0 0 4px rgba(255,153,51,.55); transform:scale(1.12); }
+.sbs-hot-title { margin:4px 0 6px; font-size:.75rem; font-weight:800; color:var(--muted); }
+.sbs-leg-list { display:flex; flex-direction:column; gap:6px; }
+.sbs-leg {
+  display:flex; align-items:flex-start; gap:10px; width:100%; text-align:left;
+  padding:8px 10px; border-radius:10px; border:1px solid var(--border);
+  background:rgba(255,255,255,.04); color:var(--text); font-size:.82rem; line-height:1.6; cursor:pointer;
+  overflow-wrap:anywhere;
+}
+[data-theme="light"] .sbs-leg { background:rgba(0,0,0,.04); }
+.sbs-leg.active { border-color:var(--orange); background:rgba(255,153,51,.12); }
+.sbs-leg-n {
+  flex-shrink:0; width:22px; height:22px; border-radius:50%; background:var(--orange); color:#0B1226;
+  font-weight:900; font-size:.75rem; display:flex; align-items:center; justify-content:center;
+}
+.sbs-opts { display:flex; flex-direction:column; gap:8px; margin:12px 0; }
+.sbs-opt {
+  display:flex; align-items:flex-start; gap:10px; width:100%; min-height:48px; text-align:left;
+  padding:10px 12px; border-radius:12px; border:1.5px solid var(--border);
+  background:rgba(255,255,255,.05); color:var(--text); font-size:.86rem; line-height:1.6; cursor:pointer;
+  overflow-wrap:anywhere;
+}
+[data-theme="light"] .sbs-opt { background:rgba(0,0,0,.04); }
+.sbs-opt:disabled { cursor:default; }
+.sbs-opt-n {
+  flex-shrink:0; width:24px; height:24px; border-radius:50%; background:rgba(255,153,51,.15); color:var(--orange);
+  font-weight:800; font-size:.78rem; display:flex; align-items:center; justify-content:center;
+}
+.sbs-opt.correct { border-color:var(--green); background:rgba(16,185,129,.16); }
+.sbs-opt.wrong { border-color:var(--red); background:rgba(239,68,68,.16); }
+.sbs-opt.dim { opacity:.55; }
+.sbs-fb { margin:4px 0 12px; padding:10px 12px; border-radius:12px; font-size:.84rem; line-height:1.75; }
+.sbs-fb.ok { background:rgba(16,185,129,.12); border:1px solid rgba(16,185,129,.35); }
+.sbs-fb.no { background:rgba(239,68,68,.10); border:1px solid rgba(239,68,68,.32); }
+.sbs-nav { display:flex; gap:10px; margin-top:16px; }
+.sbs-btn { flex:1; min-height:44px; padding:10px 12px; border-radius:12px; font-weight:700; font-size:.85rem; cursor:pointer; }
+.sbs-btn:disabled { opacity:.4; cursor:default; }
+
 /* Nav bar */
 .sb-nav {
   flex-shrink:0; display:flex; align-items:center; justify-content:space-between;
@@ -3595,7 +3682,7 @@ a { color:inherit; text-decoration:none; }
 .hp-btn-pri, .hp-btn-sec, .ask-michael-btn, .hist-btn-pri, .hist-btn-sec,
 .back-btn, .logout-btn, .lang-btn, .seg-btn, .spd-btn, .vol-btn, .rv-done-btn,
 .lib-back-btn, .teacher-send-btn, .tm-chip-btn, .sb-edit-btn, .ai-expand-btn,
-.q-bookmark-btn, .sp-ai-tts-btn, .rv-next {
+.q-bookmark-btn, .sp-ai-tts-btn, .rv-next, .sbs-btn {
   border: 1.5px solid transparent !important;
   background: linear-gradient(var(--btn-bg, rgba(17,24,39,0.95)), var(--btn-bg, rgba(17,24,39,0.95))) padding-box,
               conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #00F5FF) border-box !important;
@@ -5159,6 +5246,22 @@ var UI = {
   sb_cancel:       {th:'ยกเลิก',         no:'Avbryt',        en:'Cancel'},
   sb_save:         {th:'บันทึก',         no:'Lagre',         en:'Save'},
   sb_not_available:{th:'เนื้อหานี้ยังไม่มีในภาษาของคุณ', no:'Dette innholdet er ikke tilgjengelig på ditt språk ennå.', en:'This content is not available in your language yet.'},
+  sbs_mode_screens:{th:'ทีละหน้า', no:'Skjermer', en:'Screens'},
+  sbs_mode_full:{th:'ทั้งบท', no:'Hele kapittelet', en:'Full chapter'},
+  sbs_prev:{th:'‹ ย้อนกลับ', no:'‹ Tilbake', en:'‹ Back'},
+  sbs_next:{th:'ต่อไป ›', no:'Neste ›', en:'Next ›'},
+  sbs_next_chapter:{th:'บทถัดไป ›', no:'Neste kapittel ›', en:'Next chapter ›'},
+  sbs_type_theory:{th:'ทฤษฎี', no:'Teori', en:'Theory'},
+  sbs_type_rule:{th:'กฎ', no:'Regel', en:'Rule'},
+  sbs_type_trap:{th:'กับดักข้อสอบ', no:'Felle', en:'Exam trap'},
+  sbs_type_summary:{th:'สรุป', no:'Oppsummering', en:'Summary'},
+  sbs_before:{th:'ก่อน', no:'Før', en:'Before'},
+  sbs_after:{th:'หลัง', no:'Etter', en:'After'},
+  sbs_image_soon:{th:'รูปภาพจะมาเร็ว ๆ นี้', no:'Bilde kommer', en:'Image coming soon'},
+  sbs_hotspots:{th:'แตะตัวเลขเพื่อดูจุดสำคัญ', no:'Trykk på et tall for å se punktet', en:'Tap a number to see the point'},
+  sbs_correct:{th:'ถูกต้อง!', no:'Riktig!', en:'Correct!'},
+  sbs_wrong:{th:'ยังไม่ถูก', no:'Ikke riktig', en:'Not quite'},
+  sbs_try_again:{th:'ลองใหม่', no:'Prøv igjen', en:'Try again'},
   tts_tempo:       {th:'ความเร็วในการอ่านออกเสียง', no:'Opplesing – Tempo', en:'Read aloud – Tempo'},
   tts_tempo_sub:   {th:'ความเร็วของระบบสังเคราะห์เสียง', no:'Hastighet på talesyntese', en:'Text-to-speech speed'},
   tts_volum:       {th:'ระดับเสียงของการอ่านออกเสียง', no:'Opplesing – Volum', en:'Read aloud – Volume'},
@@ -6232,6 +6335,8 @@ function sbGoTo(idx) {
   if (idx < 0 || idx >= _sbChapters.length) return;
   _sbCurrent = idx;
   _sbVisited[idx] = true;
+  _sbsIdx = 0;
+  _sbsMode = 'screens';
   sbRender();
   sbCloseSuggest();
   // scroll reader to top
@@ -6280,15 +6385,146 @@ function sbRender() {
     : '';
 
   var reader = document.getElementById('sbReader');
+  var bodyHtml = sbsActive() ? sbsRender(ch) : (imgHtml + content);
   reader.innerHTML =
     '<div class="sb-page">' +
       editBtn +
       '<div class="sb-page-icon">' + ch.icon + '</div>' +
       '<div class="sb-page-title">' + title + '</div>' +
-      '<div class="sb-page-body">' + imgHtml + content + '</div>' +
+      (sbsAvailable(ch) ? sbsModeBar() : '') +
+      '<div class="sb-page-body">' + bodyHtml + '</div>' +
       vidHtml +
     '</div>';
 }
+
+// ── Skjermleser: viser chapter.screens (kun thai/norsk; engelsk faller tilbake til content_en) ──
+var _sbsIdx  = 0;          // gjeldende skjerm i kapittelet
+var _sbsMode = 'screens';  // 'screens' | 'full'
+var _sbsAns  = {};         // skjerm-id -> valgt svar (Veisjekk)
+var _sbsWc   = {};         // skjerm-id -> 'before' | 'after'
+var _sbsHot  = {};         // skjerm-id -> aktivt hotspot-indeks
+
+function sbsAvailable(ch) {
+  return !!(ch && Array.isArray(ch.screens) && ch.screens.length && (appLang === 'th' || appLang === 'no'));
+}
+function sbsActive() {
+  return _sbsMode === 'screens' && sbsAvailable(_sbChapters[_sbCurrent]);
+}
+// Tekst i valgt språk, aldri fallback til et annet språk
+function sbsL(o, base) { return (o && typeof o[base + '_' + appLang] === 'string') ? o[base + '_' + appLang] : ''; }
+// Norsk fagord i parentes i thai-tekst vises som egen markering
+function sbsFmt(s) {
+  var h = escH(s);
+  if (appLang === 'th') h = h.replace(/\(([^()]*)\)/g, '<span class="sbs-term" lang="nb">($1)</span>');
+  return h;
+}
+function sbsModeBar() {
+  return '<div class="sbs-seg-wrap">' +
+    '<button class="sbs-seg' + (_sbsMode === 'screens' ? ' active' : '') + '" onclick="sbsSetMode(\'screens\')">' + escH(t('sbs_mode_screens')) + '</button>' +
+    '<button class="sbs-seg' + (_sbsMode === 'full' ? ' active' : '') + '" onclick="sbsSetMode(\'full\')">' + escH(t('sbs_mode_full')) + '</button>' +
+  '</div>';
+}
+function sbsRender(ch) {
+  var screens = ch.screens;
+  var n = screens.length;
+  if (_sbsIdx < 0) _sbsIdx = 0;
+  if (_sbsIdx > n - 1) _sbsIdx = n - 1;
+  var s = screens[_sbsIdx];
+  var pct = Math.round(((_sbsIdx + 1) / n) * 100);
+
+  var tag = (s.type === 'road_check' || s.type === 'what_changed') ? sbsL(s, 'badge') : t('sbs_type_' + s.type);
+  var inner;
+  if (s.type === 'road_check') inner = sbsRoadCheck(s);
+  else if (s.type === 'what_changed') inner = sbsWhatChanged(s);
+  else inner = '<p class="sbs-body">' + sbsFmt(sbsL(s, 'body')) + '</p>';
+  var imgHtml = s.image ? '<img class="study-img" src="' + escH(s.image) + '" alt="' + escH(sbsL(s, 'title')) + '">' : '';
+
+  var last = (_sbsIdx === n - 1);
+  var nextBtn;
+  if (!last) nextBtn = '<button class="sbs-btn" onclick="sbsStep(1)">' + escH(t('sbs_next')) + '</button>';
+  else if (_sbCurrent < _sbChapters.length - 1) nextBtn = '<button class="sbs-btn" onclick="sbGoTo(_sbCurrent + 1)">' + escH(t('sbs_next_chapter')) + '</button>';
+  else nextBtn = '<button class="sbs-btn" disabled>' + escH(t('sbs_next')) + '</button>';
+
+  return '<div class="sbs">' +
+    '<div class="sbs-prog"><div class="sbs-prog-bar" style="width:' + pct + '%"></div></div>' +
+    '<div class="sbs-count">' + (_sbsIdx + 1) + ' / ' + n + '</div>' +
+    '<div class="sbs-card sbs-' + escH(s.type) + '">' +
+      '<span class="sbs-tag">' + escH(tag) + '</span>' +
+      '<div class="sbs-title">' + sbsFmt(sbsL(s, 'title')) + '</div>' +
+      imgHtml + inner +
+    '</div>' +
+    '<div class="sbs-nav">' +
+      '<button class="sbs-btn"' + (_sbsIdx === 0 ? ' disabled' : '') + ' onclick="sbsStep(-1)">' + escH(t('sbs_prev')) + '</button>' +
+      nextBtn +
+    '</div>' +
+  '</div>';
+}
+function sbsRoadCheck(s) {
+  var chosen = _sbsAns[s.id];
+  var answered = (typeof chosen === 'number');
+  var opts = s['options_' + appLang] || [];
+  var html = '<p class="sbs-q">' + sbsFmt(sbsL(s, 'question')) + '</p><div class="sbs-opts">';
+  opts.forEach(function(o, i) {
+    var cls = 'sbs-opt';
+    if (answered) cls += (i === s.correct_index) ? ' correct' : (i === chosen ? ' wrong' : ' dim');
+    html += '<button class="' + cls + '"' + (answered ? ' disabled' : '') +
+      ' onclick="sbsAnswer(\'' + escH(s.id) + '\',' + i + ')"><span class="sbs-opt-n">' + (i + 1) + '</span><span>' + sbsFmt(o) + '</span></button>';
+  });
+  html += '</div>';
+  if (answered) {
+    var ok = (chosen === s.correct_index);
+    html += '<div class="sbs-fb ' + (ok ? 'ok' : 'no') + '"><strong>' + escH(ok ? t('sbs_correct') : t('sbs_wrong')) + '</strong> ' + sbsFmt(sbsL(s, 'explanation')) + '</div>';
+    if (!ok) html += '<button class="sbs-btn" style="width:100%;flex:none" onclick="sbsRetry(\'' + escH(s.id) + '\')">' + escH(t('sbs_try_again')) + '</button>';
+  }
+  return html;
+}
+function sbsWhatChanged(s) {
+  var view = _sbsWc[s.id] || 'after';
+  var hot = Array.isArray(s.hotspots) ? s.hotspots : [];
+  var active = _sbsHot[s.id];
+  var src = (view === 'after') ? s.image_after : s.image_before;
+  var id = escH(s.id);
+  var html = '<div class="sbs-seg-wrap">' +
+    '<button class="sbs-seg' + (view === 'before' ? ' active' : '') + '" onclick="sbsView(\'' + id + '\',\'before\')">' + escH(t('sbs_before')) + '</button>' +
+    '<button class="sbs-seg' + (view === 'after' ? ' active' : '') + '" onclick="sbsView(\'' + id + '\',\'after\')">' + escH(t('sbs_after')) + '</button>' +
+  '</div>';
+  html += '<div class="sbs-img">' + (src
+    ? '<img class="sbs-img-el" src="' + escH(src) + '" alt="' + escH(sbsL(s, 'title')) + '">'
+    : '<div class="sbs-img-ph"><span>' + escH(t('sbs_image_soon')) + '</span></div>');
+  if (view === 'after') {
+    hot.forEach(function(h, i) {
+      html += '<button class="sbs-pin' + (active === i ? ' active' : '') + '" style="left:' + Number(h.x) + '%;top:' + Number(h.y) + '%"' +
+        ' aria-label="' + escH(sbsL(h, 'label')) + '" aria-pressed="' + (active === i ? 'true' : 'false') + '"' +
+        ' onclick="sbsHotspot(\'' + id + '\',' + i + ')">' + (i + 1) + '</button>';
+    });
+  }
+  html += '</div>';
+  if (hot.length) {
+    html += '<div class="sbs-hot-title">' + escH(t('sbs_hotspots')) + '</div><div class="sbs-leg-list">';
+    hot.forEach(function(h, i) {
+      html += '<button class="sbs-leg' + (active === i ? ' active' : '') + '" onclick="sbsHotspot(\'' + id + '\',' + i + ')">' +
+        '<span class="sbs-leg-n">' + (i + 1) + '</span><span>' + sbsFmt(sbsL(h, 'label')) + '</span></button>';
+    });
+    html += '</div>';
+  }
+  html += '<p class="sbs-body">' + sbsFmt(sbsL(s, 'body')) + '</p>';
+  return html;
+}
+function sbsTop() { var r = document.getElementById('sbReader'); if (r) r.scrollTop = 0; }
+function sbsStep(d) {
+  var ch = _sbChapters[_sbCurrent];
+  if (!ch || !Array.isArray(ch.screens)) return;
+  var ni = _sbsIdx + d;
+  if (ni < 0 || ni >= ch.screens.length) return;
+  _sbsIdx = ni;
+  sbRender();
+  sbsTop();
+}
+function sbsSetMode(m) { _sbsMode = m; sbRender(); sbsTop(); }
+function sbsAnswer(id, i) { _sbsAns[id] = i; sbRender(); }
+function sbsRetry(id) { delete _sbsAns[id]; sbRender(); }
+function sbsView(id, v) { _sbsWc[id] = v; sbRender(); }
+function sbsHotspot(id, i) { _sbsWc[id] = 'after'; _sbsHot[id] = (_sbsHot[id] === i) ? null : i; sbRender(); }
 
 // Search
 function sbSearch(q) {
@@ -6430,7 +6666,10 @@ document.addEventListener('visibilitychange', function() {
     var r = document.getElementById('sbReader');
     if (!r || !r.contains(e.target)) return;
     var dx = e.changedTouches[0].clientX - sx;
-    if (Math.abs(dx) > 50) { if (dx < 0) sbGoTo(_sbCurrent + 1); else sbGoTo(_sbCurrent - 1); }
+    if (Math.abs(dx) > 50) {
+      if (sbsActive()) sbsStep(dx < 0 ? 1 : -1);   // skjermmodus: bla mellom skjermer
+      else if (dx < 0) sbGoTo(_sbCurrent + 1); else sbGoTo(_sbCurrent - 1);
+    }
   }, {passive:true});
 })();
 
