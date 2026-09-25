@@ -247,7 +247,7 @@ class AiRoutesPaywall(SecurityBase):
     def test_gate_is_declared_on_exactly_the_intended_routes(self):
         gated = set()
         for route in server.app.routes:
-            deps = [d.call.__name__ for d in getattr(route, "dependant", None).dependencies] if getattr(route, "dependant", None) else []
+            deps = [getattr(d.call, "__name__", type(d.call).__name__) for d in getattr(route, "dependant", None).dependencies] if getattr(route, "dependant", None) else []
             if "require_active_premium" in deps:
                 gated.add((sorted(route.methods)[0], route.path))
         self.assertEqual(gated, {("GET", "/api/ai/explanation/{question_id}"),

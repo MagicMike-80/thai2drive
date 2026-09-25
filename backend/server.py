@@ -16,6 +16,8 @@ from email.mime.text import MIMEText
 from pydantic import BaseModel, Field, validator
 from typing import List, Optional, Dict, Any
 import uuid
+import glob
+import quiz_language
 import re
 import jwt
 import time
@@ -1058,9 +1060,19 @@ async def get_random_questions(
     count: int = Query(default=10, le=200),
     has_image: Optional[bool] = None,
     mode: Optional[str] = Query(default=None),   # "exam" → hard-weighted selection
+    lang: Optional[str] = Query(default=None, pattern="^(th|no|en)$"),  # only questions 100 % isolated in this language
     x_device_id: str = Header(default="", alias="X-Device-ID"),
     user: Optional[dict] = Depends(optional_auth),
+    credentials: Optional[HTTPAuthorizationCredentials] = Depends(security),
 ):
+    # ── Exam gate: the full test (mode=exam) is a paid feature ─────────────
+    # Database is the source of truth (refunded/expired users lose access at once,
+    # even with a token that is still valid). Same 402 contract as the AI routes.
+    if mode == "exam":
+        from premium_gate import require_active_premium
+        await require_active_premium(credentials)
+
+
     # ── Usage gate ─────────────────────────────────────────────────────────
     track = x_device_id or user is not None
     if track:
@@ -1069,9 +1081,13 @@ async def get_random_questions(
         approved = count  # legacy: no device_id and no auth → serve freely
 
     # ── Exam mode: hard-weighted, wrong-question-prioritised ───────────────
+    # With ?lang= we over-sample, drop questions that break language isolation
+    # (see quiz_language.py) and trim back to what the caller is entitled to.
+    fetch = min(approved + approved // 2 + 5, 300) if lang else approved
+
     if mode == "exam" and not category:
-        questions = await _get_exam_questions(approved, x_device_id, user)
-        return [normalize_question(q) for q in questions]
+        questions = await _get_exam_questions(fetch, x_device_id, user)
+        return quiz_language.filter_isolated([normalize_question(q) for q in questions], lang)[:approved]
 
     # ── Normal / category practice: existing random behaviour ─────────────
     pipeline = []
@@ -1092,19 +1108,19 @@ async def get_random_questions(
         match_stage["bildeUrl"] = {"$exists": True, "$nin": [None, ""]}
     if match_stage:
         pipeline.append({"$match": match_stage})
-    pipeline.append({"$sample": {"size": approved}})
+    pipeline.append({"$sample": {"size": fetch}})
     pipeline.append({"$project": {"_id": 0}})
-    questions = await db.questions.aggregate(pipeline).to_list(approved)
+    questions = await db.questions.aggregate(pipeline).to_list(fetch)
     # Category practice may fall back to a mixed image set. Sign-specific practice
     # must never silently pretend that an unrelated question belongs to the sign.
     if not questions and category and has_image and not sign_id:
         pipeline2 = [
             {"$match": {"bildeUrl": {"$exists": True, "$nin": [None, ""]}}},
-            {"$sample": {"size": approved}},
+            {"$sample": {"size": fetch}},
             {"$project": {"_id": 0}}
         ]
-        questions = await db.questions.aggregate(pipeline2).to_list(approved)
-    return [normalize_question(q) for q in questions]
+        questions = await db.questions.aggregate(pipeline2).to_list(fetch)
+    return quiz_language.filter_isolated([normalize_question(q) for q in questions], lang)[:approved]
 
 @api_router.get("/questions/{question_id}")
 async def get_question(question_id: str):
@@ -2142,14 +2158,43 @@ def _sign_search_text(sign: dict) -> str:
     return " ".join(str(value or "") for value in fields).casefold()
 
 
+def resolve_sign_image(filename: str) -> Optional[Path]:
+    """Find the file behind /api/sign-images/<filename> inside backend/sign_images/.
+
+    Exact name first. The catalog id `100_1` may be stored under a descriptive name
+    (`100_1_Skarp_sving_til_hoyre.jpg`), so `<id>.jpg` falls back to `<id>_*.jpg`.
+    Never leaves the directory; returns None when nothing matches.
+    """
+    root = (ROOT_DIR / "sign_images").resolve()
+    name = (filename or "").replace("\\", "/").lstrip("/")
+    if not name or ".." in name.split("/"):
+        return None
+    if Path(name).suffix.lower() not in (".jpg", ".jpeg", ".png"):
+        return None  # only images are served (never .gitkeep or anything else in the folder)
+    candidate = (root / name).resolve()
+    try:
+        candidate.relative_to(root)
+    except ValueError:
+        return None
+    if candidate.is_file():
+        return candidate
+    stem, dot, ext = name.rpartition(".")
+    if not dot or "/" in name or not stem or not ext:
+        return None
+    matches = sorted(
+        m for m in root.glob(f"{glob.escape(stem)}_*.{glob.escape(ext)}")
+        if m.is_file() and m.resolve().parent == root
+    )
+    return matches[0] if matches else None
+
+
 def _normalize_sign_for_api(sign: dict) -> dict:
     sign_id = str(sign.get("id") or "").strip()
     group = sign.get("group")
     group_name = sign.get("group_name") or SIGN_GROUPS.get(group, {})
     image_url = str(sign.get("image_url") or "").strip()
     if not image_url and sign_id:
-        local_image = ROOT_DIR / "sign_images" / f"{sign_id}.jpg"
-        if local_image.is_file():
+        if resolve_sign_image(f"{sign_id}.jpg"):
             image_url = f"/api/sign-images/{sign_id}.jpg"
     return {
         "id": sign_id,
@@ -5952,13 +5997,8 @@ _SIGN_IMAGES_DIR = Path(__file__).parent / "sign_images"
 async def sign_image(filename: str):
     """Serve traffic sign images from backend/sign_images/. Images are committed
     to the repo after running scripts/import_sign_images.py locally."""
-    safe_name = filename.replace("..", "").lstrip("/")
-    file_path = (_SIGN_IMAGES_DIR / safe_name).resolve()
-    try:
-        file_path.relative_to(_SIGN_IMAGES_DIR.resolve())
-    except ValueError:
-        return HTMLResponse("Not found", status_code=404)
-    if not file_path.exists() or not file_path.is_file():
+    file_path = resolve_sign_image(filename)
+    if file_path is None:
         return HTMLResponse("Not found", status_code=404)
     ext = file_path.suffix.lower()
     media_type = {".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png"}.get(ext, "image/jpeg")

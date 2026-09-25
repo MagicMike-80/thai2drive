@@ -7655,6 +7655,10 @@ async function startQuiz(catId) {
 }
 
 async function loadQuiz(url) {
+  // Language isolation: the server only returns questions that are clean in the chosen language.
+  if (url.indexOf('/api/questions/random') === 0 && url.indexOf('lang=') < 0) {
+    url += (url.indexOf('?') < 0 ? '?' : '&') + 'lang=' + encodeURIComponent(appLang);
+  }
   showScreen('screenQuiz');
   await loadAccessStatus();
   var qCard = document.getElementById('qCard');
