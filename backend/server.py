@@ -6355,6 +6355,68 @@ async def _google_tts(text: str, lang: str, google_key: str, cache_path: str, re
         raise HTTPException(status_code=500, detail=f"TTS synthesis failed: {str(e)}")
 
 
+# ==================== TTS: betalingsmur ====================
+# ElevenLabs koster penger per tegn, så /api/tts og /api/tts/stream krever innlogging og aktiv
+# tilgang: 401 uten innlogging, 402 uten aktiv tilgang (admin, betalt, gratisuke, kampanje).
+# <audio src> kan ikke sende Authorization-header, så klientene henter et kortlevd TTS-token fra
+# /api/tts/token og legger det på URL-en som ?tt=... Tokenet er signert med en AVLEDET nøkkel og
+# gjelder kun TTS: verify_token() avviser det, så det kan aldri brukes som vanlig innlogging, og en
+# lekket URL gir høyst to timer med opplesing. Header-innlogging (Bearer) virker også.
+TTS_TOKEN_TTL_SECONDS = 2 * 60 * 60
+
+
+def _tts_token_key() -> bytes:
+    return hashlib.sha256(f"{JWT_SECRET}:tts-token".encode("utf-8")).digest()
+
+
+def create_tts_token(user_id: str) -> str:
+    now = datetime.now(timezone.utc)
+    return jwt.encode(
+        {"sub": user_id, "scope": "tts", "iat": now, "exp": now + timedelta(seconds=TTS_TOKEN_TTL_SECONDS)},
+        _tts_token_key(),
+        algorithm=JWT_ALGORITHM,
+    )
+
+
+def verify_tts_token(token: str) -> Optional[str]:
+    """Bruker-id fra et gyldig, ikke utløpt TTS-token, ellers None."""
+    try:
+        payload = jwt.decode(token, _tts_token_key(), algorithms=[JWT_ALGORITHM])
+    except jwt.InvalidTokenError:  # inkluderer utløpt token
+        return None
+    return payload.get("sub") if payload.get("scope") == "tts" else None
+
+
+async def _require_tts_access(request: Request) -> dict:
+    user_id = None
+    auth = request.headers.get("authorization", "")
+    if auth[:7].lower() == "bearer ":
+        payload = verify_token(auth[7:].strip())
+        user_id = payload.get("sub") if payload else None
+    if not user_id:
+        tt = request.query_params.get("tt")
+        if tt:
+            user_id = verify_tts_token(tt)
+    if not user_id:
+        raise HTTPException(status_code=401, detail={"error": "auth_required", "gate": "register"})
+    # Databasen er fasit: refundert/utløpt bruker mister opplesing med en gang.
+    user = await db.users.find_one({"id": user_id}, {"_id": 0, "password_hash": 0})
+    if not user:
+        raise HTTPException(status_code=401, detail={"error": "auth_required", "gate": "register"})
+    if not _user_has_active_premium(user):
+        raise HTTPException(status_code=402, detail={"error": "premium_required", "gate": "upgrade", "tier": "registered"})
+    return user
+
+
+from premium_gate import require_active_premium  # noqa: E402
+
+
+# Registrert direkte på app (api_router er allerede inkludert før dette punktet i filen).
+@app.get("/api/tts/token")
+async def tts_token(user: dict = Depends(require_active_premium)):
+    return {"token": create_tts_token(user["id"]), "expires_in": TTS_TOKEN_TTL_SECONDS}
+
+
 @app.get("/api/tts/stream")
 @app.post("/api/tts/stream")
 @app.get("/api/tts")
@@ -6364,6 +6426,7 @@ async def _google_tts(text: str, lang: str, google_key: str, cache_path: str, re
 @api_router.get("/tts")
 @api_router.post("/tts")
 async def text_to_speech(request: Request, text: Optional[str] = None, lang: Optional[str] = None):
+    await _require_tts_access(request)  # betalingsmur: 401 uten innlogging, 402 uten aktiv tilgang
     import httpx
     from fastapi import HTTPException
 

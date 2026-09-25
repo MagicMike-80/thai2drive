@@ -5344,9 +5344,28 @@ function localeForLangKey(lang) {
 function localeForLang() {
   return localeForLangKey(appLang);
 }
+// Opplesing er en premium-funksjon: serveren krever innlogging + aktiv tilgang (401/402).
+// <audio src> kan ikke sende Authorization, så URL-en får et kortlevd TTS-token (?tt=) fra /api/tts/token.
+var ttsToken = '';
+var _ttsTokenRefreshAt = 0;
+var _ttsTokenTriedAt = 0;
+async function refreshTtsToken() {
+  _ttsTokenTriedAt = Date.now();
+  if (!token) { ttsToken = ''; return; }
+  try {
+    var r = await api('GET', '/api/tts/token');
+    ttsToken = (r && r.token) || '';
+    _ttsTokenRefreshAt = Date.now() + Math.max(60, ((r && r.expires_in) || 7200) - 300) * 1000;
+  } catch(e) {
+    ttsToken = '';   // ingen aktiv tilgang (402) eller ikke innlogget
+  }
+}
 function ttsStreamUrl(text, lang) {
   var locale = lang ? localeForLangKey(lang) : localeForLang();
-  return '/api/tts/stream?lang=' + encodeURIComponent(locale) + '&text=' + encodeURIComponent(text || '');
+  // Forny i bakgrunnen når tokenet mangler eller snart utløper (maks ett forsøk per minutt)
+  if (token && (!ttsToken || Date.now() > _ttsTokenRefreshAt) && Date.now() - _ttsTokenTriedAt > 60000) refreshTtsToken();
+  return '/api/tts/stream?lang=' + encodeURIComponent(locale) + '&text=' + encodeURIComponent(text || '') +
+    (ttsToken ? '&tt=' + encodeURIComponent(ttsToken) : '');
 }
 
 function applyUILang() {
@@ -5690,6 +5709,7 @@ function enterApp() {
   document.getElementById('bottomNav').style.display = 'flex';
   document.getElementById('topSettingsBtn').style.display = 'flex';
   loadAccessStatus();
+  refreshTtsToken();
   var requestedSign = new URLSearchParams(window.location.search).get('sign');
   if (requestedSign) {
     showTab('signs');
@@ -6797,6 +6817,7 @@ async function refreshCurrentUser() {
   if (!token) return null;
   user = await api('GET', '/api/auth/me');
   await loadAccessStatus();
+  refreshTtsToken();
   return user;
 }
 
@@ -6999,7 +7020,7 @@ async function doResetPassword() {
 function logout() {
   if (!confirm(t('logout_confirm'))) return;
   _ls.remove('t2d_token');
-  token = null; user = null; deviceId = null;
+  token = null; user = null; deviceId = null; ttsToken = '';
   document.getElementById('topBar').style.display = 'flex';
   document.getElementById('bottomNav').style.display = 'none';
   document.getElementById('topSettingsBtn').style.display = 'none';

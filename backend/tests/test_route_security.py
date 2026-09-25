@@ -13,6 +13,7 @@ import json
 import os
 import re
 import subprocess
+import time
 import unittest
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -252,7 +253,220 @@ class AiRoutesPaywall(SecurityBase):
         self.assertEqual(gated, {("GET", "/api/ai/explanation/{question_id}"),
                                  ("GET", "/api/ai/smart-practice/{device_id}"),
                                  ("GET", "/api/ai/dashboard/{device_id}"),
-                                 ("POST", "/api/teacher/chat")})
+                                 ("POST", "/api/teacher/chat"),
+                                 ("GET", "/api/tts/token")})
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+class TtsPaywall(SecurityBase):
+    """ElevenLabs TTS costs money: 401 without login, 402 without active access."""
+
+    URLS = [("GET", "/api/tts?lang=th-TH&text=hei"), ("GET", "/api/tts/stream?lang=th-TH&text=hei"),
+            ("POST", "/api/tts"), ("POST", "/api/tts/stream")]
+
+    def call(self, method, url, headers=None, body=None):
+        return self.client.request(method, url, headers=headers or {}, json=body)
+
+    @staticmethod
+    def with_query(url, suffix):
+        """Append '&tt=...' to a URL that already has a query, or '?tt=...' to one that has none."""
+        if not suffix:
+            return url
+        return url + (suffix if "?" in url else "?" + suffix.lstrip("&"))
+
+    def assert_all(self, status, headers=None, suffix=""):
+        for method, url in self.URLS:
+            u = self.with_query(url, suffix)
+            r = self.call(method, u, headers)
+            self.assertEqual(r.status_code, status, f"{method} {u[:60]}: {r.status_code} {r.text[:100]}")
+
+    def gate_passed(self, url_suffix, headers=None):
+        """No text -> the handler answers 400 AFTER the gate, so no paid provider is ever called."""
+        for method, url in (("GET", "/api/tts?lang=th-TH"), ("GET", "/api/tts/stream?lang=th-TH"),
+                            ("POST", "/api/tts"), ("POST", "/api/tts/stream")):
+            r = self.call(method, self.with_query(url, url_suffix), headers)
+            self.assertEqual(r.status_code, 400, f"{method} {url}: {r.status_code} {r.text[:100]}")
+
+    def tts_token(self, uid="u1", **payload):
+        return server.jwt.encode({"sub": uid, "scope": "tts",
+                                  "exp": datetime.now(timezone.utc) + timedelta(hours=1), **payload},
+                                 server._tts_token_key(), algorithm=server.JWT_ALGORITHM)
+
+    # -- 401: no valid identity ------------------------------------------------
+    def test_unauthenticated_requests_are_rejected_with_401(self):
+        self.assert_all(401)
+
+    def test_garbage_bearer_and_garbage_tt_are_rejected(self):
+        self.assert_all(401, {"Authorization": "Bearer garbage"})
+        self.assert_all(401, suffix="&tt=garbage")
+
+    def test_forged_tokens_are_rejected(self):
+        self.add_user(is_premium=True)
+        forged_session = server.jwt.encode({"sub": "u1", "exp": datetime.now(timezone.utc) + timedelta(hours=1)},
+                                           "not-the-real-secret", algorithm=server.JWT_ALGORITHM)
+        self.assert_all(401, {"Authorization": f"Bearer {forged_session}"})
+        forged_tts = server.jwt.encode({"sub": "u1", "scope": "tts", "exp": datetime.now(timezone.utc) + timedelta(hours=1)},
+                                       "not-the-real-secret", algorithm=server.JWT_ALGORITHM)
+        self.assert_all(401, suffix=f"&tt={forged_tts}")
+
+    def test_expired_tts_token_is_rejected(self):
+        self.add_user(is_premium=True)
+        old = self.tts_token(exp=datetime.now(timezone.utc) - timedelta(minutes=1))
+        self.assert_all(401, suffix=f"&tt={old}")
+
+    def test_tts_token_with_wrong_scope_is_rejected(self):
+        self.add_user(is_premium=True)
+        wrong = self.tts_token(scope="other")
+        self.assert_all(401, suffix=f"&tt={wrong}")
+
+    def test_a_normal_session_token_is_not_accepted_in_the_tt_slot(self):
+        self.add_user(is_premium=True)
+        session = server.create_token("u1", "u1@example.com", is_premium=True)
+        self.assert_all(401, suffix=f"&tt={session}")
+
+    def test_token_for_a_deleted_user_is_rejected(self):
+        self.assert_all(401, suffix=f"&tt={self.tts_token('ghost')}")
+        self.assert_all(401, self.auth("ghost", is_premium=True))
+
+    # -- 402: identity ok, no active access ---------------------------------------
+    def test_free_user_gets_402_with_bearer_and_with_tt(self):
+        self.add_user()
+        self.assert_all(402, self.auth())
+        self.assert_all(402, suffix=f"&tt={self.tts_token()}")
+
+    def test_expired_subscription_and_expired_trial_get_402(self):
+        self.add_user("sub", is_premium=True, premium_expires_at=_iso(-2))
+        self.add_user("trial", trial_expires_at=_iso(-1))
+        for uid in ("sub", "trial"):
+            self.assert_all(402, suffix=f"&tt={self.tts_token(uid)}")
+
+    def test_database_revocation_beats_a_still_valid_tts_token(self):
+        self.add_user(is_premium=False)  # refunded after the token was issued
+        self.assert_all(402, suffix=f"&tt={self.tts_token()}")
+
+    def test_rejection_detail_matches_the_apps_gate_contract(self):
+        self.add_user()
+        d = self.call("GET", "/api/tts?text=hei", self.auth()).json()["detail"]
+        self.assertEqual((d["error"], d["gate"], d["tier"]), ("premium_required", "upgrade", "registered"))
+        d = self.call("GET", "/api/tts?text=hei").json()["detail"]
+        self.assertEqual((d["error"], d["gate"]), ("auth_required", "register"))
+
+    # -- allowed --------------------------------------------------------------
+    def test_paid_lifetime_trial_and_admin_pass_the_gate(self):
+        self.add_user("paid", is_premium=True, premium_expires_at=_iso(20))
+        self.add_user("life", is_premium=True, premium_lifetime=True)
+        self.add_user("trial", trial_expires_at=_iso(3))
+        self.add_user("adm", is_admin=True)
+        for uid in ("paid", "life", "trial", "adm"):
+            self.gate_passed("", self.auth(uid, is_premium=True))
+            self.gate_passed(f"&tt={self.tts_token(uid)}")
+
+    # -- the token route ------------------------------------------------------------
+    def test_token_route_is_paywalled(self):
+        self.assertEqual(self.client.get("/api/tts/token").status_code, 402)
+        self.add_user()
+        self.assertEqual(self.client.get("/api/tts/token", headers=self.auth()).status_code, 402)
+        self.assertEqual(self.client.get("/api/tts/token", headers={"Authorization": "Bearer garbage"}).status_code, 402)
+
+    def test_issued_token_is_short_lived_bound_to_the_user_and_tts_only(self):
+        self.add_user(is_premium=True, premium_lifetime=True)
+        r = self.client.get("/api/tts/token", headers=self.auth(is_premium=True))
+        self.assertEqual(r.status_code, 200)
+        tok = r.json()["token"]
+        self.assertEqual(r.json()["expires_in"], 7200)
+        self.assertEqual(server.verify_tts_token(tok), "u1")
+        exp = server.jwt.decode(tok, server._tts_token_key(), algorithms=[server.JWT_ALGORITHM])["exp"]
+        self.assertLessEqual(exp - time.time(), 7200 + 5)
+        # can never act as a login
+        self.assertIsNone(server.verify_token(tok))
+        self.assertEqual(self.client.get("/api/auth/me", headers={"Authorization": f"Bearer {tok}"}).status_code, 401)
+        # and never opens the AI paywall
+        r = self.client.post("/api/teacher/chat", json={}, headers={"Authorization": f"Bearer {tok}"})
+        self.assertEqual(r.status_code, 402)
+        # ... while it does open TTS
+        self.gate_passed(f"&tt={tok}")
+
+    def test_tts_status_route_stays_open(self):
+        self.assertNotIn(self.client.get("/api/tts/status").status_code, (401, 402))
+
+    def test_no_paid_provider_is_called_before_the_gate(self):
+        import httpx
+        with patch.object(httpx, "AsyncClient", side_effect=AssertionError("provider called")):
+            self.assert_all(401)
+            self.add_user()
+            self.assert_all(402, self.auth())
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+class TtsClientsUseTheToken(unittest.TestCase):
+    WEBAPP = (BACKEND / "webapp.py").read_text(encoding="utf-8")
+    WEBSITE = (BACKEND / "website.py").read_text(encoding="utf-8")
+
+    def test_webapp_appends_the_tts_token_to_every_audio_url(self):
+        i = self.WEBAPP.index("function ttsStreamUrl(text, lang) {")
+        body = self.WEBAPP[i:i + 700]
+        self.assertIn("'&tt=' + encodeURIComponent(ttsToken)", body)
+        self.assertIn("refreshTtsToken()", body)
+        # all four audio call sites go through the one builder
+        self.assertEqual(self.WEBAPP.count("audio.src = ttsStreamUrl("), 4)
+        self.assertNotIn("audio.src = '/api/tts", self.WEBAPP)
+
+    def test_webapp_fetches_the_token_on_entry_and_user_refresh_and_clears_it_on_logout(self):
+        self.assertIn("/api/tts/token", self.WEBAPP)
+        j = self.WEBAPP.index("function enterApp() {")
+        self.assertIn("refreshTtsToken();", self.WEBAPP[j:j + 700])
+        k = self.WEBAPP.index("async function refreshCurrentUser() {")
+        self.assertIn("refreshTtsToken();", self.WEBAPP[k:k + 400])
+        m = self.WEBAPP.index("function logout() {")
+        self.assertIn("ttsToken = ''", self.WEBAPP[m:m + 400])
+
+    def test_book_page_uses_the_token(self):
+        self.assertIn("'/api/tts?lang=' + langParam + '&text=' + encodeURIComponent(text) + (ttsTok ? '&tt=' + encodeURIComponent(ttsTok) : '')", self.WEBSITE)
+        self.assertIn("API+'/tts/token'", self.WEBSITE)
+
+    def test_the_token_route_is_registered_on_app_not_the_already_included_router(self):
+        src = (BACKEND / "server.py").read_text(encoding="utf-8")
+        self.assertIn('@app.get("/api/tts/token")', src)
+        self.assertLess(src.index("app.include_router(api_router)"), src.index('@app.get("/api/tts/token")'))
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+class MobileStartupNoLongerSeeds(unittest.TestCase):
+    INDEX = (REPO / "frontend" / "app" / "index.tsx").read_text(encoding="utf-8")
+
+    def test_startup_does_not_call_the_locked_seed_route(self):
+        self.assertIsNone(re.search(r"api\.seedDatabase\(", self.INDEX))
+        for path in list((REPO / "frontend" / "app").rglob("*.tsx")):
+            self.assertIsNone(re.search(r"api\.seedDatabase\(", path.read_text(encoding="utf-8")), str(path))
+
+    def test_progress_loads_first_in_the_try_block_so_nothing_can_stop_it(self):
+        i = self.INDEX.index("const loadData = async () => {")
+        block = self.INDEX[i:i + 700]
+        self.assertLess(block.index("try {"), block.index("await api.getProgress(deviceId)"))
+        between = block[block.index("try {"):block.index("await api.getProgress(deviceId)")]
+        self.assertNotIn("await ", between)  # no awaited call (like a 401 seed) before getProgress
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+class BackendTestScriptUsesTokens(unittest.TestCase):
+    SRC = (REPO / "backend_test.py").read_text(encoding="utf-8")
+
+    def test_no_hardcoded_admin_password_and_no_production_default(self):
+        self.assertNotIn("admin123", self.SRC)
+        self.assertIn('os.environ.get("T2D_ADMIN_PASSWORD", "")', self.SRC)
+        self.assertIn('os.environ.get("T2D_BASE_URL", "http://127.0.0.1:8000/api")', self.SRC)
+        self.assertIn('os.environ.get("T2D_ALLOW_PROD") != "1"', self.SRC)
+
+    def test_script_acquires_jwt_tokens_and_sends_them_to_the_locked_routes(self):
+        for needle in ("def acquire_tokens", "self.admin_token = self.login_token", "def admin_auth",
+                       "test_locked_routes_reject_unauthenticated", "test_locked_routes_with_valid_token",
+                       "test_ai_routes_paywall", "test_tts_paywall", '"X-Admin-Secret": ADMIN_SECRET'):
+            self.assertIn(needle, self.SRC, needle)
+        self.assertNotIn('("POST", "/seed", "Seed endpoint")', self.SRC)  # /seed is no longer tested open
+
+    def test_script_is_valid_python(self):
+        import ast
+        ast.parse(self.SRC)
 
 
 # ══════════════════════════════════════════════════════════════════════════════
