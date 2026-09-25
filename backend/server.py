@@ -2745,6 +2745,33 @@ async def link_device(
 
 # ==================== ADMIN ROUTES ====================
 
+def _bootstrap_secret_ok(provided: str) -> bool:
+    """Konstant-tid-sjekk av X-Admin-Secret mot ADMIN_BOOTSTRAP_SECRET (alltid False hvis ikke satt)."""
+    if not ADMIN_BOOTSTRAP_SECRET or not provided:
+        return False
+    return hmac.compare_digest(provided.encode("utf-8"), ADMIN_BOOTSTRAP_SECRET.encode("utf-8"))
+
+
+async def require_admin_or_bootstrap(
+    credentials: HTTPAuthorizationCredentials = Depends(security),
+    x_admin_secret: str = Header(default=''),
+):
+    """Streng admin-port: gyldig X-Admin-Secret ELLER innlogget bruker som står i admin_users.
+
+    Ingen legitimasjon -> 401. Feil hemmelighet eller ikke-admin -> 403.
+    """
+    if _bootstrap_secret_ok(x_admin_secret):
+        return {"via": "bootstrap_secret"}
+    if not credentials:
+        raise HTTPException(status_code=401, detail="Admin authentication required")
+    payload = verify_token(credentials.credentials)
+    if not payload:
+        raise HTTPException(status_code=401, detail="Invalid or expired token")
+    if not await db.admin_users.find_one({"email": (payload.get("email") or "").strip().lower()}):
+        raise HTTPException(status_code=403, detail="Admin access required")
+    return {"via": "admin_token", **payload}
+
+
 @api_router.get("/admin-setup-t2d")
 async def admin_setup(x_admin_secret: str = Header(default='')):
     """Bootstrap/reset admin@thai2drive.com. Requires X-Admin-Secret (ADMIN_BOOTSTRAP_SECRET).
@@ -2753,9 +2780,7 @@ async def admin_setup(x_admin_secret: str = Header(default='')):
     bootstrap-hemmeligheten (uten den er ruten alltid 403), og passordet genereres
     tilfeldig og vises kun i dette svaret.
     """
-    if not ADMIN_BOOTSTRAP_SECRET or not hmac.compare_digest(
-        x_admin_secret.encode("utf-8"), ADMIN_BOOTSTRAP_SECRET.encode("utf-8")
-    ):
+    if not _bootstrap_secret_ok(x_admin_secret):
         raise HTTPException(status_code=403, detail="Admin bootstrap secret required")
     import secrets as _secrets
     email = "admin@thai2drive.com"
@@ -2792,7 +2817,8 @@ async def admin_setup(x_admin_secret: str = Header(default='')):
 
 
 @api_router.post("/admin/check")
-async def check_admin(data: AdminCheckRequest):
+async def check_admin(data: AdminCheckRequest, _admin: dict = Depends(require_admin_or_bootstrap)):
+    """Låst: tidligere kunne hvem som helst spørre om en e-post var admin (kartlegging av admin-kontoer)."""
     admin = await db.admin_users.find_one({"email": data.email.strip().lower()})
     return {"is_admin": admin is not None}
 
@@ -2805,7 +2831,7 @@ async def add_admin(
     Requires X-Admin-Secret header matching ADMIN_BOOTSTRAP_SECRET env var.
     If env var is not set the endpoint always returns 403.
     """
-    if not ADMIN_BOOTSTRAP_SECRET or x_admin_secret != ADMIN_BOOTSTRAP_SECRET:
+    if not _bootstrap_secret_ok(x_admin_secret):
         raise HTTPException(status_code=403, detail="Admin bootstrap secret required")
     email = data.email.strip().lower()
     existing = await db.admin_users.find_one({"email": email})
@@ -2818,7 +2844,8 @@ async def add_admin(
     return {"message": "Admin added", "email": email}
 
 @api_router.post("/seed")
-async def seed_database():
+async def seed_database(_admin: dict = Depends(require_admin_or_bootstrap)):
+    """Låst: skriver til databasen, så den krever admin-nøkkel eller admin-innlogging."""
     count = await db.questions.count_documents({})
     if count > 0:
         return {"message": f"Database already has {count} questions", "seeded": False}

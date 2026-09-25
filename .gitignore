@@ -88,6 +88,10 @@ android-sdk/
 .env
 .env.*
 *.env
+frontend/.env
+# Eksempelfiler (uten hemmeligheter) skal spores
+!.env.example
+!**/.env.example
 credentials.json
 *.pem
 *.key
