@@ -1431,6 +1431,21 @@ async def revenuecat_webhook(request: Request):
     logger.info("rc_webhook received event_type=%s event_id=%s app_user_id=%s",
                 event_type, event_id, app_user_id)
 
+    # ── Sandbox guard ─────────────────────────────────────────────────────────
+    # RevenueCat merker hver hendelse med environment=SANDBOX|PRODUCTION. En
+    # sandbox-kjøp (testbruker/Test Store) skal aldri gi ekte Premium i produksjon.
+    from billing_guard import is_production_env
+    if str(event_body.get("environment") or "").upper() == "SANDBOX" and is_production_env():
+        logger.warning("rc_webhook: ignored SANDBOX event %s in production", event_id)
+        await db.rc_events.update_one(
+            {"event_id": event_id},
+            {"$set": {"event_id": event_id, "type": event_type, "handled": False,
+                      "ignored": True, "reason": "sandbox_event_in_production",
+                      "processed_at": datetime.now(timezone.utc).isoformat()}},
+            upsert=True,
+        )
+        return {"received": True, "handled": False, "reason": "sandbox_event_in_production"}
+
     # ── Idempotency guard ─────────────────────────────────────────────────────
     already = await db.rc_events.find_one({"event_id": event_id, "handled": True})
     if already:
@@ -1872,7 +1887,10 @@ async def stripe_webhook(request: Request):
     event_type = event.get("type") or "unknown"
     is_live = event.get("livemode") is True
     if not is_live:
-        logger.warning("Processing test-mode Stripe event %s type=%s", event_id, event_type)
+        # Fail closed: produksjon skal aldri gi Premium på grunnlag av test-modus-data.
+        # (Live-nøkkelen er allerede påkrevd av _stripe_module(); dette er andre lag.)
+        logger.warning("Ignoring test-mode Stripe event %s type=%s", event_id, event_type)
+        return {"received": True, "handled": False, "reason": "test_mode_event"}
 
     # Idempotency guard: skip events already successfully handled to protect against
     # Stripe retries and duplicate deliveries without re-running side effects.
@@ -2728,10 +2746,20 @@ async def link_device(
 # ==================== ADMIN ROUTES ====================
 
 @api_router.get("/admin-setup-t2d")
-async def admin_setup():
-    """One-time setup: create/reset admin@thai2drive.com with password admin123."""
+async def admin_setup(x_admin_secret: str = Header(default='')):
+    """Bootstrap/reset admin@thai2drive.com. Requires X-Admin-Secret (ADMIN_BOOTSTRAP_SECRET).
+
+    Tidligere var denne ruten åpen og satte et kjent passord («admin123»). Nå kreves
+    bootstrap-hemmeligheten (uten den er ruten alltid 403), og passordet genereres
+    tilfeldig og vises kun i dette svaret.
+    """
+    if not ADMIN_BOOTSTRAP_SECRET or not hmac.compare_digest(
+        x_admin_secret.encode("utf-8"), ADMIN_BOOTSTRAP_SECRET.encode("utf-8")
+    ):
+        raise HTTPException(status_code=403, detail="Admin bootstrap secret required")
+    import secrets as _secrets
     email = "admin@thai2drive.com"
-    password = "admin123"
+    password = _secrets.token_urlsafe(18)
     password_hash = pwd_context.hash(password)
     import uuid as _uuid
     from datetime import datetime, timezone as _tz
@@ -2755,7 +2783,12 @@ async def admin_setup():
             "is_premium": True,
             "created_at": datetime.now(_tz.utc).isoformat(),
         })
-    return {"ok": True, "message": "Admin user ready. Login: admin@thai2drive.com / admin123"}
+    return {
+        "ok": True,
+        "email": email,
+        "password": password,
+        "message": "Admin user ready. Save this password now; it is not shown again.",
+    }
 
 
 @api_router.post("/admin/check")
@@ -6022,24 +6055,35 @@ async def seed_studiebok():
                 })
             await col2.insert_many(admin_docs)
 
-        # Always ensure admin user exists with correct password
+        # Admin-bruker. TIDLIGERE ble passordet «admin123» satt ved HVER oppstart (åpen
+        # bakdør med admin + premium). Nå: (1) en ny admin opprettes kun hvis
+        # ADMIN_INITIAL_PASSWORD er satt (minst 12 tegn), (2) passordet til en
+        # eksisterende bruker overskrives aldri, og (3) et gjenværende standardpassord
+        # deaktiveres. Ny admin-tilgang: /api/admin-setup-t2d med X-Admin-Secret.
+        import secrets as _secrets
         admin_email = "admin@thai2drive.com"
-        admin_password = "admin123"
-        if not await db.admin_users.find_one({"email": admin_email}):
-            await db.admin_users.insert_one({"email": admin_email})
-        admin_hash = pwd_context.hash(admin_password)
+        initial_pw = os.environ.get("ADMIN_INITIAL_PASSWORD", "").strip()
         existing_admin_user = await db.users.find_one({"email": admin_email})
         if existing_admin_user:
-            await db.users.update_one({"email": admin_email}, {"$set": {
-                "password_hash": admin_hash,
-                "is_admin": True,
-                "is_premium": True,
-            }})
-        else:
+            stored_hash = existing_admin_user.get("password_hash") or ""
+            try:
+                default_pw_active = bool(stored_hash) and pwd_context.verify("admin123", stored_hash)
+            except Exception:
+                default_pw_active = False
+            if default_pw_active:
+                await db.users.update_one({"email": admin_email}, {"$set": {
+                    "password_hash": pwd_context.hash(_secrets.token_urlsafe(32)),
+                }})
+                logging.getLogger("boot").critical(
+                    "SIKKERHET: %s hadde standardpassordet 'admin123'. Passordet er deaktivert. "
+                    "Sett nytt passord via /api/admin-setup-t2d (X-Admin-Secret).", admin_email)
+        elif len(initial_pw) >= 12:
+            if not await db.admin_users.find_one({"email": admin_email}):
+                await db.admin_users.insert_one({"email": admin_email})
             await db.users.insert_one({
                 "id": str(uuid.uuid4()),
                 "email": admin_email,
-                "password_hash": admin_hash,
+                "password_hash": pwd_context.hash(initial_pw),
                 "is_admin": True,
                 "is_premium": True,
                 "created_at": now,

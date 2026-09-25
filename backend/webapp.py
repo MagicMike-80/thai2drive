@@ -3175,6 +3175,9 @@ a { color:inherit; text-decoration:none; }
   font-size:.72rem; color:var(--muted); font-weight:700;
   margin-bottom:4px; text-transform:uppercase; letter-spacing:.4px;
 }
+.paywall-price-card .ppc-term { display:block; text-transform:none; letter-spacing:0; font-size:.9em; font-weight:600; opacity:.85; overflow-wrap:anywhere; }
+.paywall-price-card .ppc-per, .paywall-price-card .ppc-period { overflow-wrap:anywhere; }
+.paywall-price-card .ppc-cur { display:block; font-size:.55em; font-weight:700; color:var(--muted); margin-top:2px; }
 .paywall-price-card .ppc-price {
   font-size:1.4rem; font-weight:900; color:var(--text);
 }
@@ -4574,18 +4577,18 @@ a { color:inherit; text-decoration:none; }
         <div class="paywall-price-row" id="paywallPriceRow">
           <div class="paywall-price-card selected" onclick="buyPremium('monthly',this)" data-plan="monthly">
             <div class="ppc-period" data-key="pw_month"></div>
-            <div class="ppc-price" data-price-plan="monthly">199 NOK</div>
+            <div class="ppc-price" data-price-plan="monthly">199 kr</div>
             <div class="ppc-per" data-key="pw_per_month"></div>
           </div>
           <div class="paywall-price-card" onclick="buyPremium('three_months',this)" data-plan="three_months" style="position:relative">
             <div class="ppc-badge" data-key="pw_best_value"></div>
             <div class="ppc-period" data-key="pw_three_months"></div>
-            <div class="ppc-price" data-price-plan="three_months">399 NOK</div>
+            <div class="ppc-price" data-price-plan="three_months">399 kr</div>
             <div class="ppc-per" data-key="pw_per_three_months"></div>
           </div>
           <div class="paywall-price-card" onclick="buyPremium('lifetime',this)" data-plan="lifetime">
             <div class="ppc-period" data-key="pw_lifetime"></div>
-            <div class="ppc-price" data-price-plan="lifetime">699 NOK</div>
+            <div class="ppc-price" data-price-plan="lifetime">699 kr</div>
             <div class="ppc-per" data-key="pw_lifetime_note"></div>
           </div>
         </div>
@@ -5200,23 +5203,24 @@ var UI = {
   promo_cta:   {th:'สร้างบัญชีฟรี', no:'Opprett gratis konto', en:'Create free account'},
   promo_active:{th:'คุณมีสิทธิ์เข้าถึงเต็มรูปแบบจากแคมเปญเปิดตัว', no:'Du har full tilgang gjennom lanseringskampanjen', en:'You have full access through the launch campaign'},
   pw_title:    {th:'ปลดล็อกการเข้าถึงทั้งหมด', no:'Lås opp full tilgang', en:'Unlock full access'},
-  pw_sub:      {th:'คุณได้ใช้สิทธิ์ทดลองเรียนฟรีครบแล้ว', no:'Du har brukt gratisprøven', en:'You have used your free trial'},
+  pw_sub:      {th:'คุณได้ใช้สิทธิ์ทดลองเรียนฟรีครบแล้ว (gratisprøven)', no:'Du har brukt gratisprøven', en:'You have used your free trial'},
   pw_f1:       {th:'คำถามและหมวดหมู่ไม่จำกัด', no:'Ubegrenset spørsmål og kategorier', en:'Unlimited questions and categories'},
-  pw_f2:       {th:'โหมดสอบเต็มรูปแบบ (45 ข้อ)', no:'Fullstendig eksamensmode (45 spørsmål)', en:'Full exam mode (45 questions)'},
+  pw_f2:       {th:'โหมดสอบเต็มรูปแบบ (eksamensmodus) 45 ข้อ', no:'Fullstendig eksamensmode (45 spørsmål)', en:'Full exam mode (45 questions)'},
   pw_f3:       {th:'ทดสอบรายวันและโหมดฝึกซ้อม', no:'Daglig test og øvingsmodus', en:'Daily test and practice mode'},
   pw_f4:       {th:'ประวัติและสถิติความก้าวหน้า', no:'Historikk og fremgangsstatistikk', en:'History and progress statistics'},
-  pw_f5:       {th:'แกลเลอรีป้ายจราจร', no:'Trafikkskilt-galleri', en:'Traffic signs gallery'},
-  pw_month:    {th:'รายเดือน', no:'Månedlig', en:'Monthly'},
-  pw_three_months:{th:'3 เดือน', no:'3 måneder', en:'3 months'},
-  pw_lifetime: {th:'ตลอดชีพ', no:'Livstid', en:'Lifetime'},
+  pw_f5:       {th:'แกลเลอรีป้ายจราจร (trafikkskilt)', no:'Trafikkskilt-galleri', en:'Traffic signs gallery'},
+  pw_month:    {th:'รายเดือน (månedlig)', no:'Månedlig', en:'Monthly'},
+  pw_three_months:{th:'3 เดือน (3 måneder)', no:'3 måneder', en:'3 months'},
+  pw_lifetime: {th:'ตลอดชีพ (livstid)', no:'Livstid', en:'Lifetime'},
   pw_per_month:{th:'ต่อเดือน', no:'per måned', en:'per month'},
   pw_per_three_months:{th:'ต่อ 3 เดือน', no:'per 3 måneder', en:'per 3 months'},
-  pw_per_lifetime:{th:'จ่ายครั้งเดียว', no:'engangsbetaling', en:'one-time payment'},
-  pw_best_value:{th:'คุ้มค่าที่สุด – ประหยัด 34%', no:'Best verdi – spar 34%', en:'Best value – save 34%'},
-  pw_lifetime_note:{th:'จ่ายครั้งเดียว – ใช้งานได้ตลอดไป', no:'Betal én gang – bruk for alltid', en:'Pay once – use forever'},
+  pw_per_lifetime:{th:'จ่ายครั้งเดียว (engangsbetaling)', no:'engangsbetaling', en:'one-time payment'},
+  pw_best_value:{th:'คุ้มค่าที่สุด – ประหยัด {pct}%', no:'Best verdi – spar {pct}%', en:'Best value – save {pct}%'},
+  pw_currency:{th:'โครน (kr)', no:'kr', en:'NOK'},
+  pw_lifetime_note:{th:'จ่ายครั้งเดียว ใช้ได้ตลอดไป (engangsbetaling)', no:'Betal én gang – bruk for alltid', en:'Pay once – use forever'},
   pw_buy:      {th:'ปลดล็อกพรีเมียมเพื่อเข้าถึงแบบไม่จำกัด', no:'Lås opp Premium for ubegrenset tilgang', en:'Unlock Premium for unlimited access'},
-  pw_restore_purchase:{th:'กู้คืนการซื้อ', no:'Gjenopprett kjøp', en:'Restore purchase'},
-  pw_cancel_anytime:{th:'ยกเลิกเมื่อไหร่ก็ได้', no:'Avslutt når som helst', en:'Cancel anytime'},
+  pw_restore_purchase:{th:'กู้คืนการซื้อ (gjenopprett kjøp)', no:'Gjenopprett kjøp', en:'Restore purchase'},
+  pw_cancel_anytime:{th:'ยกเลิกเมื่อไหร่ก็ได้ (avslutt når som helst)', no:'Avslutt når som helst', en:'Cancel anytime'},
   pw_skip:     {th:'ใช้ต่อแบบฟรี', no:'Fortsett gratis', en:'Continue free'},
   // Auth
   auth_login_tab:  {th:'เข้าสู่ระบบ',    no:'Logg inn',      en:'Log in'},
@@ -5290,7 +5294,7 @@ var UI = {
   trial_ended:     {th:'สัปดาห์ทดลองใช้ฟรีของคุณสิ้นสุดแล้ว เลือกแพ็กเกจเพื่อฝึกต่อ', no:'Gratisuken din er over. Velg et abonnement for å fortsette å øve.', en:'Your free week has ended. Choose a plan to keep practising.'},
 
   // ── Retur fra Stripe-checkout ──────────────────────────────────────────────
-  premium_activated_toast:  {th:'เปิดใช้ Premium แล้ว', no:'Premium er aktivert', en:'Premium activated'},
+  premium_activated_toast:  {th:'เปิดใช้งานพรีเมียม (Premium) แล้ว', no:'Premium er aktivert', en:'Premium activated'},
   payment_unconfirmed_toast:{th:'ยังยืนยันการชำระเงินไม่ได้', no:'Betalingen kunne ikke bekreftes ennå', en:'Payment could not be confirmed yet'},
   checkout_unavailable_toast:{th:'ไม่สามารถเปิดการชำระเงินได้ในตอนนี้', no:'Betaling er ikke tilgjengelig akkurat nå', en:'Payment is not available right now'},
   free_questions_left:      {th:'เหลือ {count} คำถามฟรี', no:'{count} gratis spørsmål igjen', en:'{count} free questions left'},
@@ -5631,9 +5635,9 @@ function catName(raw) {
 }
 
 var PREMIUM_PRICING = {
-  monthly: { display:'199 NOK', period:{no:'per måned', th:'ต่อเดือน', en:'per month'} },
-  three_months: { display:'399 NOK', period:{no:'per 3 måneder', th:'ต่อ 3 เดือน', en:'per 3 months'} },
-  lifetime: { display:'699 NOK', period:{no:'engangsbetaling', th:'จ่ายครั้งเดียว', en:'one-time payment'} }
+  monthly: { amount:199, period:{no:'per måned', th:'ต่อเดือน', en:'per month'} },
+  three_months: { amount:399, period:{no:'per 3 måneder', th:'ต่อ 3 เดือน', en:'per 3 months'} },
+  lifetime: { amount:699, period:{no:'engangsbetaling', th:'จ่ายครั้งเดียว', en:'one-time payment'} }
 };
 
 // ════════════════════════════════════════════
@@ -6813,20 +6817,39 @@ async function handleCheckoutReturn() {
   return true;
 }
 
+// Pris i valgt språk: thai «199 โครน (kr)», norsk «199 kr». Aldri «NOK» eller serverens
+// ferdigformaterte streng, som kan inneholde latinske tegn i thai-modus.
+function formatPlanPrice(plan) {
+  var amount = Number(plan && plan.amount);
+  if (!(amount > 0)) return '';
+  return escH(String(Math.round(amount))) + '<span class="ppc-cur">' + pwTerm(t('pw_currency')) + '</span>';
+}
+// Norsk fagord i parentes vises som egen, mindre linje under den thai forklaringen.
+function pwTerm(s) {
+  return escH(s).replace(/\(([^()]*)\)/g, '<span class="ppc-term">($1)</span>');
+}
+
 function renderPremiumPricing() {
   Object.keys(PREMIUM_PRICING || {}).forEach(function(planId) {
     var plan = PREMIUM_PRICING[planId] || {};
     var priceEl = document.querySelector('[data-price-plan="' + planId + '"]');
-    if (priceEl) priceEl.textContent = plan.display || priceEl.textContent;
+    if (priceEl) { var priceHtml = formatPlanPrice(plan); if (priceHtml) priceEl.innerHTML = priceHtml; }
     var card = document.querySelector('[data-plan="' + planId + '"]');
     if (!card) return;
     var labelEl = card.querySelector('.ppc-period');
-    if (labelEl) labelEl.textContent = pickStrict(plan.label) || t(labelEl.getAttribute('data-key'));
+    if (labelEl) labelEl.innerHTML = pwTerm(t(labelEl.getAttribute('data-key')));
     var periodEl = card.querySelector('.ppc-per');
-    if (periodEl) periodEl.textContent = t(periodEl.getAttribute('data-key')) || pickStrict(plan.period) || periodEl.textContent;
-    var badgeEl = card.querySelector('.ppc-badge');
-    if (badgeEl) badgeEl.textContent = t(badgeEl.getAttribute('data-key'));
+    if (periodEl) periodEl.innerHTML = pwTerm(t(periodEl.getAttribute('data-key')) || pickStrict(plan.period) || periodEl.textContent);
   });
+  // «Spar X %» regnes ut fra faktiske priser, ikke et hardkodet tall.
+  var m1 = Number((PREMIUM_PRICING.monthly || {}).amount);
+  var m3 = Number((PREMIUM_PRICING.three_months || {}).amount);
+  var pct = (m1 > 0 && m3 > 0) ? Math.round((1 - m3 / (3 * m1)) * 100) : 0;
+  var badgeEl = document.querySelector('[data-plan="three_months"] .ppc-badge');
+  if (badgeEl) {
+    badgeEl.style.display = pct > 0 ? '' : 'none';
+    if (pct > 0) badgeEl.textContent = tf('pw_best_value', { pct: pct });
+  }
 }
 
 // ════════════════════════════════════════════
