@@ -737,7 +737,7 @@ def _try_html() -> str:
       </div>
       <div class="try-foot">
         <div class="tts-row">
-          <button class="tts-play" id="tqTtsBtn" title="Les høyt">▶</button>
+          <button class="tts-play" id="tqTtsBtn" title="Hør Michael">▶</button>
           <button class="tts-speed" data-rate="0.5">0.5x</button>
           <button class="tts-speed" data-rate="0.75">0.75x</button>
           <button class="tts-speed active" data-rate="1">1x</button>
@@ -1289,9 +1289,12 @@ LANDING_JS = r"""
   }
 
   let _landingAudio = null;
+  let _demoSlot = 0;
 
-  // ── TTS ──
-  function speakText(text) {
+  // ── TTS: lydprøve av Michael ──
+  // Besøkere er ikke innlogget, så vi spiller tre faste thai-setninger fra /api/tts/demo
+  // (serveren velger teksten; ingen fri tekst, maks 6 avspillinger per IP per time).
+  function speakDemo() {
     var wasPlaying = ttsPlaying;
     stopAllSpeech();
     if (wasPlaying) return;
@@ -1302,8 +1305,8 @@ LANDING_JS = r"""
       _landingAudio.onerror = () => { ttsPlaying = false; updateTtsBtn(); };
     }
     
-    // Always Thai on landing page try-quiz
-    _landingAudio.src = '/api/tts?lang=th-TH&text=' + encodeURIComponent(text);
+    _demoSlot = (_demoSlot % 3) + 1;
+    _landingAudio.src = '/api/tts/demo?slot=' + _demoSlot;
     _landingAudio.playbackRate = ttsRate || 1.0;
     
     ttsPlaying = true;
@@ -1350,10 +1353,7 @@ LANDING_JS = r"""
   // ── TTS play button ──
   const ttsBtn = document.getElementById('tqTtsBtn');
   if (ttsBtn) ttsBtn.addEventListener('click', () => {
-    const q = questions[idx];
-    if (!q) return;
-    const text = pick(q.question, 'th');
-    speakText(text);
+    speakDemo();  // lydprøven trenger ikke spørsmålet, så den virker også om spørsmålene ikke lastet
   });
 
   function currentLang(){

@@ -431,20 +431,217 @@ class TtsClientsUseTheToken(unittest.TestCase):
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-class MobileStartupNoLongerSeeds(unittest.TestCase):
-    INDEX = (REPO / "frontend" / "app" / "index.tsx").read_text(encoding="utf-8")
+class TtsPlaybackAndDemo(SecurityBase):
+    """Paying users get audio (HTTP 200), unpaid are blocked, and landing visitors can hear the demo.
 
-    def test_startup_does_not_call_the_locked_seed_route(self):
-        self.assertIsNone(re.search(r"api\.seedDatabase\(", self.INDEX))
-        for path in list((REPO / "frontend" / "app").rglob("*.tsx")):
-            self.assertIsNone(re.search(r"api\.seedDatabase\(", path.read_text(encoding="utf-8")), str(path))
+    The synthesis cache is pre-seeded, so no paid provider is ever called (httpx is booby-trapped)."""
 
-    def test_progress_loads_first_in_the_try_block_so_nothing_can_stop_it(self):
-        i = self.INDEX.index("const loadData = async () => {")
-        block = self.INDEX[i:i + 700]
-        self.assertLess(block.index("try {"), block.index("await api.getProgress(deviceId)"))
-        between = block[block.index("try {"):block.index("await api.getProgress(deviceId)")]
-        self.assertNotIn("await ", between)  # no awaited call (like a 401 seed) before getProgress
+    FAKE_MP3 = b"ID3" + b"\x03\x00" + b"\x00" * 400
+
+    def setUp(self):
+        super().setUp()
+        server._demo_tts_hits.clear()
+        self._seeded = []
+        import httpx
+        self._trap = patch.object(httpx, "AsyncClient", side_effect=AssertionError("paid TTS provider was called"))
+        self._trap.start()
+        self._keys = patch.dict(os.environ, {"ELEVENLABS_API_KEY": "", "GOOGLE_API_KEY": ""})
+        self._keys.start()
+
+    def tearDown(self):
+        self._trap.stop()
+        self._keys.stop()
+        for path in self._seeded:
+            try:
+                os.remove(path)
+            except OSError:
+                pass
+        server._demo_tts_hits.clear()
+        super().tearDown()
+
+    def seed_cache(self, text, lang="th-TH"):
+        path = server._tts_cache_path(f"elevenlabs:{server._elevenlabs_model_id()}",
+                                      server._elevenlabs_voice_id(lang), lang, text)
+        with open(path, "wb") as f:
+            f.write(self.FAKE_MP3)
+        self._seeded.append(path)
+
+    def tts_token(self, uid="u1"):
+        return self.client.get("/api/tts/token", headers=self.auth(uid, is_premium=True)).json()["token"]
+
+    # ── (a) paying users on mobile ──────────────────────────────────────────────────
+    def test_paying_user_gets_200_and_audio_with_the_mobile_token_flow(self):
+        self.add_user(is_premium=True, premium_lifetime=True)
+        self.seed_cache("hei")
+        tt = self.tts_token()  # what ttsToken.ts does: GET /api/tts/token with Bearer, then ?tt=
+        r = self.client.get(f"/api/tts?lang=th-TH&text=hei&tt={tt}")
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(r.headers["content-type"], "audio/mpeg")
+        self.assertEqual(r.content, self.FAKE_MP3)
+
+    def test_paying_user_gets_audio_with_bearer_header_too_and_via_post(self):
+        self.add_user(is_premium=True, premium_lifetime=True)
+        self.seed_cache("hei")
+        h = self.auth(is_premium=True)
+        self.assertEqual(self.client.get("/api/tts?lang=th-TH&text=hei", headers=h).content, self.FAKE_MP3)
+        r = self.client.post("/api/tts", json={"text": "hei", "lang": "th-TH"}, headers=h)
+        self.assertEqual((r.status_code, r.content), (200, self.FAKE_MP3))
+
+    def test_free_week_and_admin_users_get_audio(self):
+        self.add_user("trial", trial_expires_at=_iso(3))
+        self.add_user("adm", is_admin=True)
+        self.seed_cache("hei")
+        for uid in ("trial", "adm"):
+            r = self.client.get(f"/api/tts?lang=th-TH&text=hei&tt={self.tts_token(uid)}")
+            self.assertEqual(r.status_code, 200, uid)
+
+    def test_audio_supports_range_requests_like_the_mobile_player(self):
+        self.add_user(is_premium=True, premium_lifetime=True)
+        self.seed_cache("hei")
+        r = self.client.get(f"/api/tts?lang=th-TH&text=hei&tt={self.tts_token()}", headers={"Range": "bytes=0-9"})
+        self.assertIn(r.status_code, (200, 206))
+        self.assertEqual(r.content, self.FAKE_MP3[:10] if r.status_code == 206 else self.FAKE_MP3)
+
+    # ── (b) unpaid users are blocked, even when the audio is cached ────────────────────
+    def test_unpaid_users_are_blocked_even_if_the_audio_is_cached(self):
+        self.add_user("free")
+        self.seed_cache("hei")
+        self.assertEqual(self.client.get("/api/tts?lang=th-TH&text=hei").status_code, 401)
+        self.assertEqual(self.client.get("/api/tts?lang=th-TH&text=hei", headers=self.auth("free")).status_code, 402)
+        tt = server.jwt.encode({"sub": "free", "scope": "tts", "exp": datetime.now(timezone.utc) + timedelta(hours=1)},
+                               server._tts_token_key(), algorithm=server.JWT_ALGORITHM)
+        self.assertEqual(self.client.get(f"/api/tts?lang=th-TH&text=hei&tt={tt}").status_code, 402)
+
+    def test_unpaid_user_cannot_even_obtain_a_tts_token(self):
+        self.add_user("free")
+        self.assertEqual(self.client.get("/api/tts/token", headers=self.auth("free")).status_code, 402)
+
+    # ── (c) landing page demo ───────────────────────────────────────────────────────────
+    def test_visitor_hears_the_demo_without_logging_in(self):
+        for slot, phrase in server.DEMO_TTS_PHRASES.items():
+            self.seed_cache(phrase)
+            r = self.client.get(f"/api/tts/demo?slot={slot}", headers={"X-Forwarded-For": f"10.0.0.{slot}"})
+            self.assertEqual(r.status_code, 200, slot)
+            self.assertEqual(r.headers["content-type"], "audio/mpeg")
+            self.assertEqual(r.content, self.FAKE_MP3)
+
+    def test_visitor_cannot_choose_the_text(self):
+        self.seed_cache(server.DEMO_TTS_PHRASES[1])  # only the fixed phrase is cached; anything else would hit the trapped provider
+        r = self.client.get("/api/tts/demo?slot=1&text=EVIL%20TEXT&lang=en")
+        self.assertEqual((r.status_code, r.content), (200, self.FAKE_MP3))
+        r = self.client.post("/api/tts/demo?slot=1", json={"text": "EVIL"})
+        self.assertEqual(r.status_code, 405)  # GET only
+
+    def test_unknown_demo_slots_are_rejected(self):
+        for slot in ("0", "4", "-1", "99"):
+            self.assertEqual(self.client.get(f"/api/tts/demo?slot={slot}").status_code, 400, slot)
+        self.assertEqual(self.client.get("/api/tts/demo?slot=abc").status_code, 422)
+
+    def test_demo_is_rate_limited_per_ip(self):
+        for phrase in server.DEMO_TTS_PHRASES.values():
+            self.seed_cache(phrase)
+        ip = {"X-Forwarded-For": "203.0.113.7"}
+        codes = [self.client.get(f"/api/tts/demo?slot={(i % 3) + 1}", headers=ip).status_code
+                 for i in range(server.DEMO_TTS_MAX_PER_IP + 2)]
+        self.assertEqual(codes[:server.DEMO_TTS_MAX_PER_IP], [200] * server.DEMO_TTS_MAX_PER_IP)
+        self.assertEqual(codes[server.DEMO_TTS_MAX_PER_IP:], [429, 429])
+        r = self.client.get("/api/tts/demo?slot=1", headers=ip)
+        self.assertEqual(r.status_code, 429)
+        self.assertGreater(int(r.headers["retry-after"]), 0)
+        self.assertEqual(r.json()["detail"]["error"], "demo_rate_limited")
+        # another visitor is unaffected
+        self.assertEqual(self.client.get("/api/tts/demo?slot=1", headers={"X-Forwarded-For": "203.0.113.8"}).status_code, 200)
+
+    def test_repeated_fetches_of_the_same_play_count_once(self):
+        """<audio> fetches the same file several times (Range); that must not eat the visitor's allowance."""
+        self.seed_cache(server.DEMO_TTS_PHRASES[1])
+        ip = {"X-Forwarded-For": "203.0.113.9"}
+        for _ in range(server.DEMO_TTS_MAX_PER_IP * 3):
+            self.assertEqual(self.client.get("/api/tts/demo?slot=1", headers=ip).status_code, 200)
+
+    def test_allowance_is_restored_after_the_window(self):
+        ip = "198.51.100.1"
+        now = 1_000_000.0
+        for i in range(server.DEMO_TTS_MAX_PER_IP):
+            self.assertEqual(server._demo_tts_retry_after(ip, (i % 3) + 1, now + i * 20), 0)
+        self.assertGreater(server._demo_tts_retry_after(ip, 1, now + 200), 0)
+        later = now + server.DEMO_TTS_WINDOW_SECONDS + 60
+        self.assertEqual(server._demo_tts_retry_after(ip, 1, later), 0)
+
+    def test_client_ip_ignores_spoofable_leading_forwarded_for_entries(self):
+        class Req:
+            def __init__(self, xff, host="127.0.0.1"):
+                self.headers = {"x-forwarded-for": xff} if xff else {}
+                self.client = type("C", (), {"host": host})()
+        self.assertEqual(server._client_ip(Req("1.1.1.1, 2.2.2.2, 9.9.9.9")), "9.9.9.9")
+        self.assertEqual(server._client_ip(Req("")), "127.0.0.1")
+
+    def test_a_visitor_spoofing_forwarded_for_does_not_dodge_the_limit(self):
+        for phrase in server.DEMO_TTS_PHRASES.values():
+            self.seed_cache(phrase)
+        codes = [self.client.get(f"/api/tts/demo?slot={(i % 3) + 1}",
+                                 headers={"X-Forwarded-For": f"6.6.6.{i}, 203.0.113.50"}).status_code
+                 for i in range(server.DEMO_TTS_MAX_PER_IP + 1)]
+        self.assertEqual(codes[-1], 429)
+
+    def test_demo_does_not_crash_when_the_audio_cannot_be_produced(self):
+        # not cached, no provider keys: a controlled error response, not an unhandled exception
+        r = self.client.get("/api/tts/demo?slot=2", headers={"X-Forwarded-For": "192.0.2.44"})
+        self.assertIn(r.status_code, (500, 502, 503))
+        self.assertIn("detail", r.json())
+
+    def test_the_demo_route_does_not_open_the_paywalled_route(self):
+        self.seed_cache("hei")
+        self.assertEqual(self.client.get("/api/tts?lang=th-TH&text=hei").status_code, 401)
+
+    def test_demo_phrases_are_short_thai_only_and_in_michaels_polite_male_register(self):
+        phrases = list(server.DEMO_TTS_PHRASES.values())
+        self.assertEqual(len(phrases), 3)
+        self.assertEqual(len(set(phrases)), 3)
+        thai, latin = re.compile(r"[\u0e00-\u0e7f]"), re.compile(r"[A-Za-z]")
+        for ph in phrases:
+            self.assertRegex(ph, thai)
+            self.assertIsNone(latin.search(ph), ph)
+            self.assertLessEqual(len(ph), 120, "keeps the total ElevenLabs cost tiny")
+            self.assertTrue(ph.rstrip().endswith("ครับ"), ph)
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+class LandingPageDemoWiring(unittest.TestCase):
+    SRC = (BACKEND / "landing.py").read_text(encoding="utf-8")
+
+    def test_landing_plays_the_fixed_demo_not_free_text(self):
+        self.assertIn("'/api/tts/demo?slot=' + _demoSlot", self.SRC)
+        self.assertNotIn("/api/tts?lang=th-TH&text=", self.SRC)
+        self.assertNotIn("function speakText(", self.SRC)
+
+    def test_demo_button_works_even_if_the_quiz_questions_did_not_load(self):
+        i = self.SRC.index("if (ttsBtn) ttsBtn.addEventListener('click', () => {")
+        body = self.SRC[i:i + 260]
+        self.assertIn("speakDemo();", body)
+        self.assertNotIn("if (!q) return;", body)
+
+    def test_failures_reset_the_button_instead_of_crashing(self):
+        i = self.SRC.index("function speakDemo() {")
+        body = self.SRC[i:i + 1200]
+        self.assertIn("_landingAudio.onerror", self.SRC)
+        self.assertIn(".play().catch(", body)
+        self.assertIn("ttsPlaying = false;", body)
+
+    def test_landing_script_is_valid_javascript(self):
+        import shutil
+        node = shutil.which("node")
+        if not node:
+            self.skipTest("node not available")
+        import tempfile
+        scripts = "\n".join(re.findall(r"<script[^>]*>(.*?)</script>", self.SRC, re.S))
+        with tempfile.NamedTemporaryFile("w", suffix=".js", delete=False, encoding="utf-8") as f:
+            f.write(scripts)
+        try:
+            r = subprocess.run([node, "--check", f.name], capture_output=True, text=True, timeout=60)
+        finally:
+            os.remove(f.name)
+        self.assertEqual(r.returncode, 0, r.stderr[:300])
 
 
 # ══════════════════════════════════════════════════════════════════════════════

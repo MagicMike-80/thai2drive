@@ -6411,6 +6411,65 @@ async def _require_tts_access(request: Request) -> dict:
 from premium_gate import require_active_premium  # noqa: E402
 
 
+# ── Landingsside-demo ──────────────────────────────────────────────────────────
+# Besøkere må kunne høre en lydprøve av Michael uten innlogging, men uten å åpne en
+# ElevenLabs-kran. Derfor kan de IKKE velge tekst: ruten spiller bare tre faste thai-setninger
+# (definert her på serveren). Hver setning syntetiseres én gang og ligger så i cachen, så
+# kostnaden er begrenset til tre kall totalt, uansett trafikk. I tillegg får hver IP maks
+# DEMO_TTS_MAX_PER_IP avspillinger per time (429 ellers).
+DEMO_TTS_PHRASES = {
+    1: "สวัสดีครับ ผมไมเคิล ครูสอนขับรถของคุณ วันนี้เรามาเรียนกฎจราจรของนอร์เวย์ด้วยกันแบบง่าย ๆ ครับ",
+    2: "ไม่ต้องกังวลนะครับ ทุกกฎมีเหตุผล ผมจะอธิบายให้เป็นภาษาไทยทีละขั้นตอน จนคุณสอบผ่านครับ",
+    3: "จำง่าย ๆ นะครับ ถ้าไม่มีป้ายและไม่มีสัญญาณไฟ ให้ทางรถที่มาจากทางขวาเสมอครับ",
+}
+DEMO_TTS_MAX_PER_IP = 6
+DEMO_TTS_WINDOW_SECONDS = 3600
+DEMO_TTS_DEDUPE_SECONDS = 10   # <audio> kan hente samme fil flere ganger (Range); telles som én avspilling
+_DEMO_TTS_MAX_TRACKED_IPS = 10000
+_demo_tts_hits: Dict[str, list] = {}
+
+
+def _client_ip(request: Request) -> str:
+    """Klientens IP. Bak Railways proxy er SISTE X-Forwarded-For-ledd det proxyen faktisk så;
+    tidligere ledd kan klienten selv sette, så de brukes ikke."""
+    xff = request.headers.get("x-forwarded-for", "")
+    if xff:
+        last = xff.split(",")[-1].strip()
+        if last:
+            return last
+    return request.client.host if request.client else "unknown"
+
+
+def _demo_tts_retry_after(ip: str, slot: int, now: Optional[float] = None) -> int:
+    """0 = tillatt (og registrert). Ellers antall sekunder til neste avspilling er tillatt."""
+    now = time.time() if now is None else now
+    hits = [h for h in _demo_tts_hits.get(ip, []) if now - h[0] < DEMO_TTS_WINDOW_SECONDS]
+    if hits and hits[-1][1] == slot and now - hits[-1][0] < DEMO_TTS_DEDUPE_SECONDS:
+        _demo_tts_hits[ip] = hits
+        return 0
+    if len(hits) >= DEMO_TTS_MAX_PER_IP:
+        _demo_tts_hits[ip] = hits
+        return max(1, int(DEMO_TTS_WINDOW_SECONDS - (now - hits[0][0])))
+    hits.append((now, slot))
+    _demo_tts_hits[ip] = hits
+    if len(_demo_tts_hits) > _DEMO_TTS_MAX_TRACKED_IPS:  # hold minnet begrenset
+        for key in [k for k, v in _demo_tts_hits.items() if not v or now - v[-1][0] >= DEMO_TTS_WINDOW_SECONDS]:
+            _demo_tts_hits.pop(key, None)
+    return 0
+
+
+@app.get("/api/tts/demo")
+async def tts_demo(request: Request, slot: int = 1):
+    phrase = DEMO_TTS_PHRASES.get(slot)
+    if phrase is None:
+        raise HTTPException(status_code=400, detail="Unknown demo slot")
+    retry_after = _demo_tts_retry_after(_client_ip(request), slot)
+    if retry_after:
+        raise HTTPException(status_code=429, detail={"error": "demo_rate_limited", "retry_after": retry_after},
+                            headers={"Retry-After": str(retry_after)})
+    return await _tts_respond(request, phrase, "th")
+
+
 # Registrert direkte på app (api_router er allerede inkludert før dette punktet i filen).
 @app.get("/api/tts/token")
 async def tts_token(user: dict = Depends(require_active_premium)):
@@ -6427,6 +6486,12 @@ async def tts_token(user: dict = Depends(require_active_premium)):
 @api_router.post("/tts")
 async def text_to_speech(request: Request, text: Optional[str] = None, lang: Optional[str] = None):
     await _require_tts_access(request)  # betalingsmur: 401 uten innlogging, 402 uten aktiv tilgang
+    return await _tts_respond(request, text, lang)
+
+
+async def _tts_respond(request: Request, text: Optional[str] = None, lang: Optional[str] = None):
+    """Selve talesyntesen (cache -> ElevenLabs -> Google). Kalles KUN etter en tilgangssjekk
+    (text_to_speech) eller for de faste demosetningene (tts_demo)."""
     import httpx
     from fastapi import HTTPException
 
