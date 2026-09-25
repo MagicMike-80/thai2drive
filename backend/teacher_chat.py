@@ -16,7 +16,11 @@ import logging
 from datetime import datetime, timezone
 from typing import Optional, List
 
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, Depends, Query
+try:
+    from premium_gate import require_active_premium
+except ImportError:  # package-style imports used by isolated tests
+    from backend.premium_gate import require_active_premium
 from pydantic import BaseModel, Field
 from motor.motor_asyncio import AsyncIOMotorClient
 from dotenv import load_dotenv
@@ -2133,7 +2137,7 @@ async def teacher_status():
     }
 
 
-@teacher_router.post("/teacher/chat", response_model=TeacherChatResponse)
+@teacher_router.post("/teacher/chat", response_model=TeacherChatResponse, dependencies=[Depends(require_active_premium)])
 async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
     import time
     start_time = time.time()

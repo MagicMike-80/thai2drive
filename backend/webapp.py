@@ -9985,6 +9985,7 @@ async function _quizCoachRequest(message) {
       method:'POST', headers:headers, signal:controller.signal,
       body:JSON.stringify({session_id:_quizCoachSessionId, message:message, language:appLang})
     });
+    if (res.status === 402) { showPaywall(); throw new Error('HTTP 402'); }  // AI-læreren er bak betalingsmuren
     if (!res.ok) throw new Error('HTTP ' + res.status);
     var data = await res.json();
     if (data.session_id) _quizCoachSessionId = data.session_id;
@@ -11072,9 +11073,11 @@ async function teacherSend(overrideMsg, customDisplayMsg) {
 
   try {
     var activeSessionId = _teacherActiveSessionType === 'quiz' ? _teacherQuizSessionId : _teacherSessionId;
+    var chatHeaders = { 'Content-Type': 'application/json' };
+    if (token) chatHeaders.Authorization = 'Bearer ' + token;   // serveren krever aktiv tilgang (402 ellers)
     var res = await fetch('/api/teacher/chat', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: chatHeaders,
       body: JSON.stringify({
         session_id: activeSessionId,
         message: payloadMsg,
@@ -11083,6 +11086,12 @@ async function teacherSend(overrideMsg, customDisplayMsg) {
         user_id: (typeof user !== 'undefined' && user && user.id ? user.id : null)
       })
     });
+    if (res.status === 402) {
+      _teacherHideTyping();
+      await loadAccessStatus();
+      showPaywall();
+      return;
+    }
     if (!res.ok) throw new Error('HTTP ' + res.status);
     var data = await res.json();
     if (data.session_id) {

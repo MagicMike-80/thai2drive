@@ -17,7 +17,7 @@ import logging
 import os
 from typing import Optional
 
-from fastapi import APIRouter, Query, HTTPException
+from fastapi import APIRouter, Depends, Query, HTTPException
 from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseModel
 from dotenv import load_dotenv
@@ -26,6 +26,10 @@ load_dotenv()
 
 import ai_learning
 import ai_explanations
+try:
+    from premium_gate import require_active_premium
+except ImportError:  # package-style imports used by isolated tests
+    from backend.premium_gate import require_active_premium
 
 logger = logging.getLogger("ai_routes")
 
@@ -39,6 +43,10 @@ _mongo = AsyncIOMotorClient(_mongo_url)
 _db    = _mongo[os.environ.get("DB_NAME") or "thai2drive"]
 
 ai_router = APIRouter()
+
+# Betalingsmur: forklaringer, smart øving og dashboard er premium-funksjoner (se
+# /access/status -> features) og krever aktiv tilgang (HTTP 402 ellers).
+# Åpne med vilje: /ai/attempt (sporing for alle) og /ai/coaching (gratis coach-banner).
 
 
 # ─── Models ───────────────────────────────────────────────────────────────────
@@ -79,7 +87,7 @@ async def record_attempt(req: AttemptRequest):
         return {"ok": False, "error": str(e)[:120]}
 
 
-@ai_router.get("/ai/dashboard/{device_id}")
+@ai_router.get("/ai/dashboard/{device_id}", dependencies=[Depends(require_active_premium)])
 async def get_dashboard(
     device_id: str,
     lang:   str = Query(default="no"),
@@ -97,7 +105,7 @@ async def get_dashboard(
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@ai_router.get("/ai/explanation/{question_id}")
+@ai_router.get("/ai/explanation/{question_id}", dependencies=[Depends(require_active_premium)])
 async def get_explanation(
     question_id: str,
     lang: str = Query(default="no"),
@@ -133,7 +141,7 @@ async def get_explanation(
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@ai_router.get("/ai/smart-practice/{device_id}")
+@ai_router.get("/ai/smart-practice/{device_id}", dependencies=[Depends(require_active_premium)])
 async def get_smart_practice(
     device_id: str,
     count: int = Query(default=10, le=30),

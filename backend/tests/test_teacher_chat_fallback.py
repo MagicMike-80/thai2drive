@@ -24,6 +24,11 @@ def _load_teacher_chat():
     fastapi = types.ModuleType("fastapi")
     fastapi.APIRouter = lambda *args, **kwargs: _Router()
     fastapi.Query = lambda default=None, **kwargs: default
+    fastapi.Depends = lambda dependency=None, **kwargs: dependency
+
+    # premium_gate (betalingsmur) trenger ekte fastapi; her stubbes den bort.
+    premium_gate = types.ModuleType("premium_gate")
+    premium_gate.require_active_premium = lambda: None
 
     pydantic = types.ModuleType("pydantic")
     pydantic.BaseModel = object
@@ -41,6 +46,7 @@ def _load_teacher_chat():
     litellm.suppress_debug_info = True
 
     stubs = {
+        "premium_gate": premium_gate,
         "fastapi": fastapi,
         "pydantic": pydantic,
         "motor": motor,
