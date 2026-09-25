@@ -85,7 +85,8 @@ export default function HomeScreen() {
 
   const loadData = async () => {
     try {
-      await api.seedDatabase();
+      // seedDatabase() er fjernet: /api/seed er nå admin-låst (401 for vanlige brukere) og skal ikke
+      // kalles av appen. Databasen seedes av admin/skript, ikke ved hver oppstart.
       const p = await api.getProgress(deviceId);
       setProgress(p);
       await updateStreak();
