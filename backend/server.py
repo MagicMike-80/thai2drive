@@ -2641,6 +2641,9 @@ def resolve_sign_image(filename: str) -> Optional[Path]:
     stem, dot, ext = name.rpartition(".")
     if not dot or "/" in name or not stem or not ext:
         return None
+    # Legacy catalog ID for the mid-road cycle lane was renamed to 521_2.
+    # Do not map it to 521_1: that is the different side-placed sign.
+    stem = {"521.1": "521_2", "807-10": "807_10"}.get(stem, stem)
     matches = sorted(
         m for m in root.glob(f"{glob.escape(stem)}_*.{glob.escape(ext)}")
         if m.is_file() and m.resolve().parent == root

@@ -343,7 +343,7 @@ def _catalog():
 
 # Signs in signs_content.json that have NO image file at all (neither <id>.jpg nor <id>_*.jpg).
 # The list may only shrink: add the missing images and delete the id here.
-KNOWN_SIGNS_WITHOUT_IMAGE = {"902_0", "904_0", "906_0", "808_42"}
+KNOWN_SIGNS_WITHOUT_IMAGE = set()
 
 
 @unittest.skipIf(server is None, f"server.py not importable here: {_IMPORT_ERROR!r}")
@@ -391,6 +391,10 @@ class SignImagesServe(unittest.TestCase):
             r = self.client.get(f"/api/sign-images/{sign_id}.jpg")
             self.assertEqual(r.status_code, 200, sign_id)
             self.assertEqual(r.content[:3], b"\xff\xd8\xff", sign_id)
+        self.assertEqual(
+            self.client.get("/api/sign-images/521.1.jpg").content,
+            self.client.get("/api/sign-images/521_2.jpg").content,
+        )
 
     def test_exact_files_still_win_over_the_prefix_fallback(self):
         r = self.client.get("/api/sign-images/202_0.jpg")

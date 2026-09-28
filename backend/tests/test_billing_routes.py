@@ -121,13 +121,13 @@ class StripeKeyIsolation(BillingBase):
 
     def test_checkout_fails_closed_without_live_key(self):
         self.add_user()
-        r = self.client.post("/api/create-checkout-session", json={"plan_id": "monthly"}, headers=self.auth())
+        r = self.client.post("/api/create-checkout-session", json={"plan_id": "monthly", "language": "no"}, headers=self.auth())
         self.assertEqual(r.status_code, 503)
 
     def test_checkout_fails_closed_with_test_key(self):
         self.add_user()
         with patch.dict(os.environ, {"STRIPE_SECRET_KEY": "sk_test_abc123"}):
-            r = self.client.post("/api/create-checkout-session", json={"plan_id": "monthly"}, headers=self.auth())
+            r = self.client.post("/api/create-checkout-session", json={"plan_id": "monthly", "language": "no"}, headers=self.auth())
         self.assertEqual(r.status_code, 503)
 
     def test_checkout_status_requires_login(self):
@@ -159,6 +159,7 @@ class CheckoutFlow(BillingBase):
 
     def _post(self, body, **kw):
         stripe, pricing = self._fake_stripe(**kw)
+        body = {"language": "no", **body}
         with patch.object(server, "_stripe_module", return_value=stripe), \
              patch.object(server, "_get_live_stripe_plan_prices_sync", return_value=pricing):
             return self.client.post("/api/create-checkout-session", json=body, headers=self.auth())

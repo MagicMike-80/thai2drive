@@ -460,8 +460,11 @@ class TtsPlaybackAndDemo(SecurityBase):
         super().tearDown()
 
     def seed_cache(self, text, lang="th-TH"):
-        path = server._tts_cache_path(f"elevenlabs:{server._elevenlabs_model_id()}",
-                                      server._elevenlabs_voice_id(lang), lang, text)
+        provider = f"elevenlabs:{server._elevenlabs_model_id()}"
+        if lang == "th-TH":
+            provider += f":style={server._ELEVENLABS_VOICE_SETTINGS[lang]['style']}"
+        path = server._tts_cache_path(provider,
+                                       server._elevenlabs_voice_id(lang), lang, text)
         with open(path, "wb") as f:
             f.write(self.FAKE_MP3)
         self._seeded.append(path)
