@@ -42,3 +42,65 @@ Patchen er 100 % godkjent (`PASS`) og klar for commit og push til Railway.
   deploy; lokal QA kan ikke bevise fysisk berøring på sjefens telefon.
 
 PASS — klar for commit, push og fersk live-verifisering.
+
+---
+
+# QA GATE: Michael høyreregelbilde og komplett svar
+
+- PASS: rotårsaken er bevist. Det gamle manifestet pekte på 404-filer, og
+  høyreregelbildet fantes ikke i den aktive samlingen Michael søker i.
+- PASS: den nye illustrasjonen er språkneutral; title og caption er komplette
+  og isolerte for norsk, thai og engelsk.
+- PASS: direkte Michael-oppslag returnerer samme bilde i alle tre språk.
+- PASS: produksjonsskriptet nekter å koble bildet dersom bussvideo,
+  thai-undertekst, riktig koblet § 7 nr. 5-materiale eller trafikkskilt 202
+  ikke allerede er aktivt og komplett; snapshotet kan rulles tilbake.
+- PASS: direkte høyreregelspørsmål får en fullført forklaring i NO/TH/EN uten
+  å overstyre den særskilte venstresving-flyten.
+- PASS: 40/40 relevante tester, inkludert komplett API-respons med bildekort,
+  kompilering, dry-run og diffkontroll.
+- PASS: ingen endring i tilgang, betaling, premium, kvoter eller hemmeligheter.
+- GJENSTÅR: deploy, kontrollert databasekjøring og ferske kundespørsmål i live
+  app for høyreregelbilde, buss og skilt.
+
+PASS — klar for commit og produksjonsverifisering; ikke ferdigmeldt.
+
+## Thai bussvideo-ruting
+
+- PASS: produksjonsproben viste at naturlig `กฎรถบัส` ga tekst uten video;
+  lovkartet manglet thai-synonymer for § 7 nr. 5.
+- PASS: tre eksplisitte thai-uttrykk gir bare de kontrollerte `7_5`-taggene.
+- PASS: Michael-testen krever thai metadata og bussmaterialet rangert først.
+- PASS: relevant samlet suite er **86/86**.
+- GJENSTÅR: samme naturlige thai-spørsmål må returnere video live etter deploy.
+
+---
+
+# QA GATE: Michael MP4 Range-hotfix
+
+- PASS: produksjonsproben beviste rotårsaken: Range-forespørsler på MP4 ga
+  HTTP 200 og hele filen fordi `.mp4` manglet i Range-betingelsen.
+- PASS: patchen gjenbruker eksisterende `_range_file_response`; ingen ny
+  streamingimplementasjon eller refaktorering.
+- PASS: **85/85** relevante Michael-, skilt- og medietester.
+- PASS: diffen er avgrenset til én serverbetingelse, én test og rapportering.
+- PASS: ingen learner-facing tekst, tilgang, betaling, database eller
+  leverandørkonfigurasjon er berørt.
+- GJENSTÅR: 25/25 MP4 må gi HTTP 206 og korrekt byteantall live.
+
+PASS — klar for commit, push og fersk live-verifisering.
+
+---
+
+# QA GATE: Michael WebVTT MIME-hotfix
+
+- PASS: rotårsaken er direkte adressert; `.vtt` får eksplisitt `text/vtt`
+  i den samme asset-ruten som leverer de 25 thai-sporene.
+- PASS: kontrakttesten feiler dersom MIME-mappingen senere fjernes.
+- PASS: relevant Michael-, skilt- og medieregresjon er **84/84**.
+- PASS: diffen er avgrenset til én serverlinje, én test og dokumentasjon.
+- PASS: ingen learner-facing språk, tilgang, betaling, database eller
+  leverandørhemmelighet er endret.
+- GJENSTÅR: alle 25 VTT-responser må vise HTTP 200 og `text/vtt` etter deploy.
+
+PASS — klar for commit, push og fersk live-verifisering.

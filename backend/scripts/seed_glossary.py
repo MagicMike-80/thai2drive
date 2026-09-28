@@ -50,14 +50,14 @@ TERMS = [
     },
     {
         "term_no": "Forkjørsvei",
-        "term_th": "ถนนหลัก",
+        "term_th": "ถนนหลัก (ถนนที่มีสิทธิ์ก่อน)",
         "term_en": "Priority road",
-        "definition_no": "Vei merket med skilt 220 der du har forkjørsrett over all trafikk fra kryssende veier.",
-        "definition_th": "ถนนที่ติดป้าย 220 ซึ่งคุณมีสิทธิ์ก่อนรถทุกคันจากถนนที่ตัดกัน",
-        "definition_en": "Road marked with sign 220 where you have right of way over all traffic from crossing roads.",
-        "example_no": "Skilt 220 er gul rombe — du er på prioritert vei.",
-        "example_th": "ป้าย 220 คือรูปสี่เหลี่ยมเหลือง — คุณอยู่บนถนนหลัก",
-        "example_en": "Sign 220 is a yellow diamond — you are on a priority road.",
+        "definition_no": "Vei merket med skilt 206 der du har forkjørsrett over all trafikk fra kryssende veier.",
+        "definition_th": "ถนนที่ติดป้าย 206 ซึ่งคุณมีสิทธิ์ก่อนรถทุกคันจากถนนที่ตัดกัน",
+        "definition_en": "Road marked with sign 206 where you have right of way over all traffic from crossing roads.",
+        "example_no": "Skilt 206 er gul rombe — du er på forkjørsvei.",
+        "example_th": "ป้าย 206 คือรูปสี่เหลี่ยมเหลือง — คุณอยู่บนถนนหลัก",
+        "example_en": "Sign 206 is a yellow diamond — you are on a priority road.",
         "topic_tags": ["Vikeplikt", "Skilt", "Kryss"],
     },
     {
@@ -134,13 +134,13 @@ TERMS = [
     },
     {
         "term_no": "Stoppelengde",
-        "term_th": "ระยะหยุดรวม",
+        "term_th": "ระยะหยุดรถ",
         "term_en": "Stopping distance",
         "definition_no": "Den totale distansen fra du oppdager fare til bilen stopper. Stoppelengde = reaksjonsavstand + bremselengde.",
-        "definition_th": "ระยะทางรวมตั้งแต่คุณพบอันตรายจนรถหยุดสนิท ระยะหยุด = ระยะตอบสนอง + ระยะเบรก",
+        "definition_th": "ระยะทางรวมตั้งแต่คุณพบอันตรายจนรถหยุดสนิท ระยะหยุดรถ = ระยะตอบสนอง + ระยะเบรก",
         "definition_en": "Total distance from hazard detection to full stop. Stopping distance = reaction distance + braking distance.",
         "example_no": "80 km/t: ca. 22 m reaksjon + 32 m bremsing = 54 m total stoppelengde.",
-        "example_th": "80 กม./ชม.: ประมาณ 22 ม. ตอบสนอง + 32 ม. เบรก = 54 ม. ระยะหยุดรวม",
+        "example_th": "80 กม./ชม.: ประมาณ 22 ม. ตอบสนอง + 32 ม. เบรก = 54 ม. ระยะหยุดรถ",
         "example_en": "80 km/h: approx. 22 m reaction + 32 m braking = 54 m total stopping distance.",
         "topic_tags": ["Fart", "Sikkerhet", "Bremselengde"],
     },
@@ -256,9 +256,9 @@ TERMS = [
         "term_no": "Stopp-skilt",
         "term_th": "ป้ายหยุด",
         "term_en": "Stop sign (octagon)",
-        "definition_no": "Rødt åttekant-skilt (128) — du MÅ stanse helt og gi vikeplikt før du kan fortsette.",
-        "definition_th": "ป้ายแปดเหลี่ยมสีแดง (128) — คุณต้องหยุดสนิทและให้ทางก่อนจะขับต่อ",
-        "definition_en": "Red octagonal sign (128) — you MUST stop completely and yield before continuing.",
+        "definition_no": "Rødt åttekant-skilt (skilt 204) — du må stanse helt og gi vikeplikt før du kan fortsette.",
+        "definition_th": "ป้ายแปดเหลี่ยมสีแดง (ป้าย 204) — คุณต้องหยุดสนิทและให้ทางก่อนจะขับต่อ",
+        "definition_en": "Red octagonal sign (sign 204) — you must stop completely and yield before continuing.",
         "example_no": "Kjører du uten å stoppe forbi stopp-skilt, er det straffbart.",
         "example_th": "การขับผ่านป้ายหยุดโดยไม่หยุดสนิทมีโทษ",
         "example_en": "Driving past a stop sign without stopping is a punishable offence.",
@@ -294,6 +294,22 @@ TERMS = [
 async def main():
     client = AsyncIOMotorClient(MONGO_URL)
     db = client[DB_NAME]
+
+    # Migration: "Prioritert vei" was never official Norwegian traffic terminology —
+    # "Forkjørsvei" is the term Statens vegvesen and Michael's own rules use.
+    # Idempotent: re-running gives matched=0 once the rename has landed.
+    res = await db.learning_glossary.update_one(
+        {"term_no": "Prioritert vei"},
+        {"$set": {
+            "term_no": "Forkjørsvei",
+            "example_no": "Skilt 206 er gul rombe — du er på forkjørsvei.",
+            "definition_no": "Vei merket med skilt 206 der du har forkjørsrett over all "
+                             "trafikk fra kryssende veier.",
+            "updated_at": datetime.now(timezone.utc).isoformat(),
+        }},
+    )
+    print(f"  MIGRATE Prioritert vei -> Forkjørsvei: matched={res.matched_count}")
+
     inserted = skipped = 0
     for t in TERMS:
         existing = await db.learning_glossary.find_one({"term_no": t["term_no"]})

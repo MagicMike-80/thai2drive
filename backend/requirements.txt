@@ -80,6 +80,7 @@ pyflakes==3.4.0
 Pygments==2.20.0
 PyJWT==2.12.1
 pymongo==4.5.0
+pypdf>=4.0.0
 pyparsing==3.3.2
 pytest==9.0.3
 python-dateutil==2.9.0.post0

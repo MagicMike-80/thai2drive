@@ -5,8 +5,12 @@ import unittest
 from datetime import datetime, timezone
 from pathlib import Path
 
-from backend.seed_media_catalog import EXPECTED_MEDIA, load_manifest, seed_collection
-from backend.media_catalog import MediaCatalogValidationError
+from backend.seed_media_catalog import (
+    EXPECTED_MEDIA,
+    MediaCatalogValidationError,
+    load_manifest,
+    seed_collection,
+)
 
 
 def _manifest_item(media_id, media_type, category):

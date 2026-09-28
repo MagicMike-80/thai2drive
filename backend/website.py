@@ -416,14 +416,30 @@ _CHAT_JS = r"""
         localStorage.setItem('t2d_chat_session', sessionId);
         localStorage.setItem('t2d_chat_lang', lang);
       }
-      addMsg('bot', data.reply || 'Beklager, ingen svar akkurat nå. Prøv igjen om litt.');
+      const noReplyMsgs = {
+        th: 'ขออภัย ระบบยังไม่มีคำตอบตอนนี้ ลองใหม่อีกครั้งนะครับ',
+        no: 'Beklager, ingen svar akkurat nå. Prøv igjen om litt.',
+        en: 'Sorry, no response right now. Please try again shortly.',
+      };
+      addMsg('bot', data.reply || (noReplyMsgs[lang] || noReplyMsgs.no));
 
       if(data.escalated){
-        addMsg('system', '✓ Meldingen din er videresendt til supportteamet');
+        const escalatedMsgs = {
+          th: '✓ ข้อความของคุณถูกส่งต่อไปยังทีมซัพพอร์ตแล้ว',
+          no: '✓ Meldingen din er videresendt til supportteamet',
+          en: '✓ Your message has been forwarded to the support team',
+        };
+        addMsg('system', escalatedMsgs[lang] || escalatedMsgs.no);
       }
     }catch(err){
       hideTyping();
-      addMsg('bot', 'Beklager, nettverksfeil. Send e-post til lexuz.zxc@gmail.com hvis det haster.');
+      const lang = getLang();
+      const networkErrMsgs = {
+        th: 'ขออภัย เกิดปัญหาเครือข่าย กรุณาส่งอีเมลถึง lexuz.zxc@gmail.com หากเร่งด่วน',
+        no: 'Beklager, nettverksfeil. Send e-post til lexuz.zxc@gmail.com hvis det haster.',
+        en: 'Sorry, network error. Please email lexuz.zxc@gmail.com if urgent.',
+      };
+      addMsg('bot', networkErrMsgs[lang] || networkErrMsgs.no);
     }finally{
       send.disabled = false;
     }

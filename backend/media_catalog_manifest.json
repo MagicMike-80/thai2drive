@@ -37,7 +37,7 @@
     {
       "id": "sit_kryss_hoyreregel_7",
       "type": "intersection_image",
-      "url": "/api/assets/kryss_hoyreregel.png",
+      "url": "/api/assets/michael_hoyreregel.svg",
       "tags": ["#7", "#7_2", "#hoyreregel", "#vikeplikt"],
       "title": {
         "no": "Høyreregelen i likeverdig kryss (§ 7 nr. 2)",
@@ -51,14 +51,14 @@
       }
     },
     {
-      "id": "sit_buss_7_4",
+      "id": "sit_buss_7_5",
       "type": "situation_image",
-      "url": "/api/assets/buss_holdeplass.png",
-      "tags": ["#7", "#7_4", "#bussregelen", "#vikeplikt_buss"],
+      "url": "/api/assets/thumbs/thumb_vikeplikt_7_5a_buss.jpg",
+      "tags": ["#7", "#7_5", "#bussregelen", "#vikeplikt_buss"],
       "title": {
-        "no": "Trafikkreglene § 7 nr. 4 — Bussregelen",
-        "th": "กฎจราจรมาตรา 7 ข้อ 4 — กฎการให้ทางรถเมล์ออกจากป้าย",
-        "en": "Traffic Rules § 7(4) — Bus yield rule"
+        "no": "Trafikkreglene § 7 nr. 5 — Bussregelen",
+        "th": "กฎจราจรมาตรา 7 ข้อ 5 — กฎการให้ทางรถเมล์ออกจากป้าย",
+        "en": "Traffic Rules § 7(5) — Bus yield rule"
       },
       "caption": {
         "no": "På vei med fartsgrense 60 km/t eller lavere skal du gi vikeplikt for buss som blinker ut fra holdeplass.",
@@ -69,7 +69,7 @@
     {
       "id": "sign_202_vikeplikt",
       "type": "sign",
-      "url": "/api/sign-images/202_0.svg",
+      "url": "/api/sign-images/202_0.jpg",
       "tags": ["#202", "#vikeplikt", "#vikepliktskilt"],
       "sign_ids": ["202_0"],
       "title": {

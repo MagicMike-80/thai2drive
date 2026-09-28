@@ -21,7 +21,10 @@ Utdypning av disse: [`docs/claude_context/workflow.md`](docs/claude_context/work
 
 ## Session Start
 
-Les `context/MEMORY.md` og `context/USER.md` ved starten av hver sesjon.
+Les `context/MEMORY.md` og `context/USER.md` ved starten av hver sesjon. Les også
+[`AGENT_HANDOFF.md`](AGENT_HANDOFF.md) (agent-rotasjonsprotokoll — commit/pull-sjekkliste
+og hvilken branch/deadline som gjelder, se også [`DEADLINE.md`](DEADLINE.md)) før du
+skriver kode.
 
 ## Quick Reference
 
@@ -64,14 +67,14 @@ Repoet har to separate web-apper. Sjekk hvilken du er i før du endrer noe:
 
 | Flate | Kilde | URL | Status |
 |-------|-------|-----|--------|
-| **Webapp** | `backend/webapp.py` — én ~9 500-linjers Python-streng `WEBAPP_HTML` med all HTML/CSS/JS inline | `/api/web` | **Produksjon.** Stripe-checkout returnerer hit. |
+| **Webapp** | `backend/webapp.py` — én ~11 700-linjers fil, i hovedsak Python-strengen `WEBAPP_HTML` med all HTML/CSS/JS inline | `/api/web` | **Produksjon.** Stripe-checkout returnerer hit. |
 | Expo web | `frontend/` bygget til `backend/webapp/` (statisk eksport) | `/quiz-app` | Sekundær, servert av `server.py`-mount |
 
 Endringer i webappen gjøres i `WEBAPP_HTML`-strengen i `backend/webapp.py` — ikke i
 `backend/webapp/`, som er et byggeartefakt og overskrives. `/api/web/version` returnerer
 deploy-versjonen; bruk den for å bekrefte hvilken build som faktisk er live.
 
-Alle routere monteres under `/api` i `server.py` (~linje 4716–4745). `website_router`
+Alle routere monteres under `/api` i `server.py` (~linje 5830–5880). `website_router`
 monteres to ganger — både på `""` og `/api` — fordi Railway ruter på `/api/*`.
 
 ## Dokumentasjonsindeks (Just-In-Time)

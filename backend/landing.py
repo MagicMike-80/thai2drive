@@ -24,6 +24,17 @@ SCREENSHOTS = [
 
 
 LANDING_CSS = """
+@property --neon-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes neonFlow {
+  from { --neon-angle: 0deg; }
+  to   { --neon-angle: 360deg; }
+}
+
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{
@@ -99,7 +110,13 @@ html[data-current-lang="en"] [data-lang="en"].block{display:block}
 .lang-row .lang-btn:nth-child(1){ animation:flagpulse 6s ease-in-out infinite 0s; }
 .lang-row .lang-btn:nth-child(2){ animation:flagpulse 6s ease-in-out infinite 2s; }
 .lang-row .lang-btn:nth-child(3){ animation:flagpulse 6s ease-in-out infinite 4s; }
-.lang-row .lang-btn.active{ animation:none!important; transform:scale(1.15)!important; border-color:#FF9933!important; box-shadow:0 0 0 3px rgba(255,153,51,.4)!important; }
+.lang-row .lang-btn.active{
+  animation:none!important; transform:scale(1.15)!important;
+  border:2px solid transparent !important;
+  background:linear-gradient(rgba(15,23,42,0.9), rgba(15,23,42,0.9)) padding-box,
+             conic-gradient(from var(--neon-angle, 0deg), #00F5FF 0%, #0066FF 25%, #FF00E5 50%, #FF9933 75%, #00F5FF 100%) border-box !important;
+  box-shadow:0 0 12px rgba(255,153,51,.5), 0 0 20px rgba(0,245,255,.3)!important;
+}
 .landing-onboard-target{position:relative;border-radius:20px}
 .landing-onboard-label{display:none;position:absolute;z-index:80;align-items:center;gap:10px;padding:12px 18px;border-radius:999px;background:#fff;border:3px solid rgba(255,153,51,.55);box-shadow:0 16px 34px rgba(0,0,0,.34),0 0 0 5px rgba(255,153,51,.16);color:#0F172A;font-size:20px;font-weight:950;line-height:1;letter-spacing:.01em;white-space:nowrap;pointer-events:auto;animation:landingLabelBlink 5s ease-in-out infinite}
 .landing-onboard-label-lang{left:34%;top:-54px;transform:translateX(-50%) rotate(-5deg)}
@@ -475,11 +492,30 @@ footer p{color:#64748B;font-size:13px}
 
 /* Primary CTA button — cyan glow */
 .cta-primary{
-  background:linear-gradient(135deg,var(--neon-cyan),#00C8E8)!important;
+  border:2px solid transparent !important;
+  background:linear-gradient(135deg,#00F5FF,#0066FF) padding-box,
+             conic-gradient(from var(--neon-angle, 0deg), #00F5FF 0%, #0066FF 25%, #FF00E5 50%, #FF9933 75%, #00F5FF 100%) border-box !important;
+  animation:neonFlow 3.5s linear infinite !important;
   color:#0B1226!important;
-  box-shadow:0 0 32px var(--neon-cyan-glow),0 16px 40px rgba(0,245,255,.25)!important;
+  box-shadow:0 0 32px rgba(0,245,255,.5), 0 0 20px rgba(255,0,229,.35) !important;
 }
-.cta-primary:hover{box-shadow:0 0 48px var(--neon-cyan-glow),0 20px 48px rgba(0,245,255,.35)!important}
+.cta-primary:hover{
+  transform:translateY(-2px) scale(1.02);
+  box-shadow:0 0 48px rgba(0,245,255,.7), 0 0 32px rgba(255,0,229,.5) !important;
+}
+.cta-secondary{
+  border:1.5px solid transparent !important;
+  background:linear-gradient(rgba(17,24,39,0.95), rgba(17,24,39,0.95)) padding-box,
+             conic-gradient(from var(--neon-angle, 0deg), #00F5FF 0%, #0066FF 25%, #FF00E5 50%, #FF9933 75%, #00F5FF 100%) border-box !important;
+  animation:neonFlow 3.5s linear infinite !important;
+  color:#F1F5F9!important;
+  box-shadow:0 0 14px rgba(0,245,255,.35), 0 0 10px rgba(255,0,229,.25) !important;
+}
+.cta-secondary:hover{
+  border-color:transparent !important;
+  box-shadow:0 0 24px rgba(0,245,255,.55), 0 0 32px rgba(255,0,229,.45) !important;
+  transform:translateY(-2px);
+}
 
 /* Try panel — next buttons */
 .try-next-big{background:linear-gradient(180deg,var(--neon-cyan),#00C8E8)!important;color:#0B1226!important;box-shadow:0 0 20px var(--neon-cyan-glow)}

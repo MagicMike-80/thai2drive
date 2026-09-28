@@ -22,8 +22,9 @@ class MichaelMobileUiContractTests(unittest.TestCase):
         self.assertIn(".teacher-suggestions {", WEBAPP)
         self.assertIn("display:none !important", WEBAPP)
         self.assertIn(".teacher-side-panel .tsp-btn { color:#F8FAFC !important; }", WEBAPP)
-        self.assertEqual(WEBAPP.count('data-tsp-btn="'), 6)
-        self.assertIn("closeTeacherSidebar(); teacherSend(msg);", WEBAPP)
+        self.assertEqual(WEBAPP.count('onclick="teacherSidebarAction('), 5)
+        for topic in ("strengths", "signs", "rules", "position", "dictionary"):
+            self.assertIn(f'data-tsp="{topic}"', WEBAPP)
         self.assertIn("#app.teacher-mode .flag-bg { display:none; }", WEBAPP)
 
     def test_new_learner_text_has_all_three_languages(self):
@@ -36,6 +37,14 @@ class MichaelMobileUiContractTests(unittest.TestCase):
             "teacher_placeholder",
             "teacher_topics_open",
             "teacher_topics_close",
+            "teacher_voice_start",
+            "teacher_voice_stop",
+            "teacher_voice_unsupported",
+            "tsp_strengths",
+            "tsp_signs",
+            "tsp_rules",
+            "tsp_position",
+            "tsp_dictionary",
             "practice_similar",
             "teacher_more_topics",
             "teacher_fewer_topics",
@@ -59,12 +68,9 @@ class MichaelMobileUiContractTests(unittest.TestCase):
         self.assertIn("var playToken = ++_teacherAudioToken;", WEBAPP)
         self.assertIn("playToken === _teacherAudioToken", WEBAPP)
 
-    def test_contextual_mobile_topics_use_stable_horizontal_carousel(self):
-        self.assertIn("index >= 3 ? ' mobile-extra' : ''", WEBAPP)
-        self.assertIn("chips.length > 3", WEBAPP)
-        self.assertIn(".tm-chips .tm-chip-btn.mobile-extra { display:inline-flex !important; }", WEBAPP)
-        self.assertIn(".tm-chips-toggle { display:none !important; }", WEBAPP)
-        self.assertIn("toggle.setAttribute('aria-expanded'", WEBAPP)
+    def test_contextual_reply_options_are_not_rendered(self):
+        self.assertNotIn("_teacherAppendChips(data.suggestions || [])", WEBAPP)
+        self.assertNotIn('id="teacherSuggestions"', WEBAPP)
 
     def test_mobile_teacher_header_is_compact(self):
         self.assertIn("height:72px; max-height:72px; min-height:72px", WEBAPP)
@@ -86,10 +92,11 @@ class MichaelMobileUiContractTests(unittest.TestCase):
         self.assertNotIn("position:fixed", inputbar)
 
     def test_teacher_actions_and_input_have_clear_hierarchy(self):
-        self.assertIn("grid-template-columns:repeat(2,minmax(0,1fr))", WEBAPP)
-        self.assertIn(".tm-chips .tm-chip-btn:first-of-type", WEBAPP)
-        self.assertIn("min-height:56px", WEBAPP)
-        self.assertIn('data-key="teacher_send"', WEBAPP)
+        self.assertIn('class="teacher-composer"', WEBAPP)
+        self.assertIn('id="teacherDocBtn"', WEBAPP)
+        self.assertIn('id="teacherMicBtn"', WEBAPP)
+        self.assertIn('id="teacherSendBtn"', WEBAPP)
+        self.assertIn("function toggleTeacherVoiceInput()", WEBAPP)
 
     def test_sign_cards_use_structured_sign_ids_and_selected_language(self):
         self.assertIn("function _buildTeacherSignCard(sign)", WEBAPP)

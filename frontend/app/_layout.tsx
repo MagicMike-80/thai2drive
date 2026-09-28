@@ -26,10 +26,12 @@ import { IS_PREVIEW_BUILD } from '../src/buildFlags';
  *   430 px – any width → frame is centred with dark ambient on both sides
  */
 function WebAppShell({ children }: { children: React.ReactNode }) {
+  const segments = useSegments();
   if (Platform.OS !== 'web') return <>{children}</>;
+  const isTrafficMathPage = segments[0] === 'traffic-math';
   return (
     <View style={_webOuter as any}>
-      <View style={_webFrame as any}>
+      <View style={(isTrafficMathPage ? _webWideFrame : _webFrame) as any}>
         {children}
       </View>
     </View>
@@ -84,6 +86,17 @@ const _webFrame = {
     '0 40px 90px rgba(0,0,0,0.80)',
     '0 90px 200px rgba(0,0,0,0.55)',
   ].join(', '),
+};
+
+// Traffic Math is a visual learning surface, not a phone preview. Give this
+// route enough horizontal room for controls and the road diagram side by side.
+const _webWideFrame = {
+  ..._webFrame,
+  maxWidth: 1180,
+  borderTopLeftRadius: 28,
+  borderTopRightRadius: 28,
+  borderBottomLeftRadius: 32,
+  borderBottomRightRadius: 32,
 };
 
 const AUTH_SCREENS = ['login', 'signup', 'forgot-password'];

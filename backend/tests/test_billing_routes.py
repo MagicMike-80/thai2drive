@@ -616,17 +616,16 @@ class PaywallLanguage(unittest.TestCase):
             self.assertEqual(sets["th"], sets["no"], k)
             self.assertEqual(sets["th"], sets["en"], k)
 
-    def test_key_purchase_terms_carry_norwegian_term_in_parentheses(self):
+    def test_key_purchase_terms_do_not_leak_norwegian_into_thai(self):
         e = self.entries()
-        expected = {"pw_month": "månedlig", "pw_three_months": "3 måneder", "pw_lifetime": "livstid",
-                    "pw_lifetime_note": "engangsbetaling", "pw_restore_purchase": "gjenopprett kjøp",
-                    "pw_cancel_anytime": "avslutt når som helst", "pw_f5": "trafikkskilt", "pw_f2": "eksamensmodus"}
-        for k, term in expected.items():
-            self.assertIn(f"({term})", e[k]["th"], k)
+        keys = ("pw_month", "pw_three_months", "pw_lifetime", "pw_lifetime_note",
+                "pw_restore_purchase", "pw_cancel_anytime", "pw_f5", "pw_f2")
+        for key in keys:
+            self.assertIsNone(self.ENGLISH.search(e[key]["th"]), key)
 
     def test_price_is_formatted_per_language_without_nok_or_english(self):
         p = self.entries()["pw_currency"]
-        self.assertEqual(p["th"], "โครน (kr)")
+        self.assertEqual(p["th"], "โครน")
         self.assertEqual(p["no"], "kr")
         self.assertIn("pwTerm(t('pw_currency'))", WEBAPP_SRC)
         start = WEBAPP_SRC.index('id="screenPaywall"')

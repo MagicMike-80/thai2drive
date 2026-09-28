@@ -20,8 +20,8 @@ except ImportError:  # package-style imports used by isolated tests
 logger = logging.getLogger("billing")
 router = APIRouter(tags=["billing"])
 
-# Hent produksjonsnøkkel fra miljøvariabel med sandkasse-fallback for testing
-REVENUECAT_API_KEY = os.getenv("REVENUECAT_API_KEY", "goog_sandbox_testkey_123456").strip()
+# Hent produksjonsnøkkel utelukkende fra miljøvariabel — ingen hardkodet fallback-nøkkel
+REVENUECAT_API_KEY = os.getenv("REVENUECAT_API_KEY", "").strip()
 REVENUECAT_API_URL = "https://api.revenuecat.com/v1"
 
 # Er nøkkelen en sandkasse-/placeholder-nøkkel? Da hopper vi over alle kall mot

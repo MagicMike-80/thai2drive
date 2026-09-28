@@ -31,13 +31,12 @@ class MichaelUnifiedArchitectureTests(unittest.TestCase):
     def test_law_mapping_contains_critical_legal_anchors(self):
         """Verify § 3 HAV, § 7 nr. 2 Left Turn, and Signs are defined in LAW_MAPPING."""
         self.assertIn("LAW_MAPPING", self.media_catalog_code)
-        self.assertIn("Vegtrafikkloven § 3", self.media_catalog_code)
-        self.assertIn("HAV", self.media_catalog_code)
-        self.assertIn("Trafikkreglene § 7 nr. 2", self.media_catalog_code)
-        self.assertIn("Trafikkreglene § 7 nr. 4", self.media_catalog_code)
-        self.assertIn("kryss", self.media_catalog_code)
-        self.assertIn("202", self.media_catalog_code)
-        self.assertIn("204", self.media_catalog_code)
+        self.assertIn('"3": {', self.media_catalog_code)
+        self.assertIn('"hav"', self.media_catalog_code)
+        self.assertIn('"7_2": {', self.media_catalog_code)
+        self.assertIn('"7_5": {', self.media_catalog_code)
+        self.assertIn('"høyreregel"', self.media_catalog_code)
+        self.assertIn('"bussregelen"', self.media_catalog_code)
 
     def test_media_catalog_manifest_valid_schema(self):
         """Ensure all items in media manifest contain required multilingual fields."""
@@ -53,16 +52,19 @@ class MichaelUnifiedArchitectureTests(unittest.TestCase):
             self.assertIsInstance(item.get("tags"), list)
 
     def test_noise_filter_excludes_irrelevant_signs_for_yield(self):
-        """Ensure sign noise filter correctly identifies noisy signs."""
-        self.assertIn("is_noise_sign_for_topic", self.media_catalog_code)
-        self.assertIn("is_noise_sign_for_topic", self.teacher_code)
+        """Only explicitly requested signs may reserve response media slots."""
+        self.assertIn("_explicit_sign_ids_for_message", self.teacher_code)
+        self.assertIn("_compose_teacher_media", self.teacher_code)
+        self.assertIn("Only explicit sign requests may reserve", self.teacher_code)
 
     def test_teacher_chat_legal_instructions_and_media_return(self):
-        """Verify teacher_chat system prompt enforces § 7 nr. 2, has no video excuse, and returns media."""
+        """Verify teacher_chat enforces § 7 nr. 2 and uses the shared media pipeline."""
         self.assertIn("Trafikkreglene § 7 nr. 2", self.teacher_code)
         self.assertIn("media: list[dict]", self.teacher_code)
-        self.assertIn("resolve_media_for_query", self.teacher_code)
-        self.assertNotIn("Jeg har dessverre ikke en video av akkurat denne situasjonen", self.teacher_code)
+        self.assertIn("_get_relevant_michael_materials", self.teacher_code)
+        self.assertIn("_get_relevant_catalog_media", self.teacher_code)
+        self.assertIn("_compose_teacher_media", self.teacher_code)
+        self.assertIn("Du skal ALDRI si at du er en tekstbasert AI", self.teacher_code)
 
     def test_admin_analytics_router_mounted_in_server(self):
         """Verify admin analytics router is mounted in server.py."""
@@ -80,7 +82,7 @@ class MichaelUnifiedArchitectureTests(unittest.TestCase):
         # 80px Thumbnail styles
         self.assertIn("width:80px; height:80px", self.webapp_code)
         self.assertIn(".tm-sign-image", self.webapp_code)
-        self.assertIn(".tm-media-asset", self.webapp_code)
+        self.assertIn(".tm-media-visual", self.webapp_code)
         
         # Lightbox modal elements & methods
         self.assertIn('id="t2dLightbox"', self.webapp_code)

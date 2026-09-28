@@ -31,6 +31,25 @@ async def create_all_indexes(db) -> dict[str, list[str]]:
     """
     created: dict[str, list[str]] = {}
 
+    # ── users ──────────────────────────────────────────────────────────────────
+    # Håndhever på DB-nivå det signup() i server.py allerede sjekker i
+    # applikasjonskode (find_one før insert_one), slik at to samtidige signups
+    # med samme e-post/telefon ikke lenger kan smette forbi race-conditionen.
+    await db.users.create_index(
+        [("email", ASCENDING)],
+        unique=True,
+        background=True,
+        name="email_unique",
+    )
+    await db.users.create_index(
+        [("phone", ASCENDING)],
+        unique=True,
+        sparse=True,   # eksisterende brukere mangler phone-feltet helt
+        background=True,
+        name="phone_unique",
+    )
+    created["users"] = ["email_unique", "phone_unique"]
+
     # ── ai_attempts ────────────────────────────────────────────────────────────
     # Queries:
     #   get_total_attempts  → count_documents({device_id})

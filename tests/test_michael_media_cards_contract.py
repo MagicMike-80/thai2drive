@@ -4,6 +4,7 @@ from pathlib import Path
 
 
 WEBAPP = (Path(__file__).resolve().parents[1] / "backend" / "webapp.py").read_text(encoding="utf-8")
+SERVER = (Path(__file__).resolve().parents[1] / "backend" / "server.py").read_text(encoding="utf-8")
 
 
 class MichaelMediaCardsContractTests(unittest.TestCase):
@@ -39,11 +40,28 @@ class MichaelMediaCardsContractTests(unittest.TestCase):
         self.assertIn('id="vpYoutube"', WEBAPP)
         self.assertIn("youtubeFrame.src = 'https://www.youtube.com/embed/'", WEBAPP)
         self.assertIn(".vp-player-wrap iframe[hidden] { display:none; }", WEBAPP)
+        self.assertIn("track.kind = 'subtitles'", WEBAPP)
+        self.assertIn("track.default = item.lang === appLang", WEBAPP)
+        self.assertIn("vid.muted = !!(v.audio_language && v.audio_language !== appLang)", WEBAPP)
+        self.assertIn("subtitle_tracks:Array.isArray(media.subtitle_tracks)", WEBAPP)
+
+    def test_public_asset_route_serves_webvtt_with_browser_safe_mime(self):
+        self.assertIn('\".vtt\": \"text/vtt\"', SERVER)
+
+    def test_public_asset_route_uses_byte_ranges_for_mp4(self):
+        self.assertIn('if ext in {\".mp3\", \".mp4\",', SERVER)
+        self.assertIn("return _range_file_response(file_path, request, media_type, asset_headers)", SERVER)
+
+    def test_tts_has_selected_language_browser_fallback(self):
+        self.assertIn("function _consumeTtsFallback()", WEBAPP)
+        self.assertIn("utterance.lang = localeForLangKey(pending.lang)", WEBAPP)
+        self.assertIn("window.speechSynthesis.speak(utterance)", WEBAPP)
+        self.assertIn("if (_consumeTtsFallback()) return", WEBAPP)
 
     def test_media_is_bounded_validated_and_does_not_duplicate_sign_card(self):
         self.assertIn("mediaItems.slice(0, 2)", WEBAPP)
         self.assertIn("_teacherMediaSafeUrl(media.url)", WEBAPP)
-        self.assertIn("['sign','intersection_image','video','podcast'].indexOf(media.type)", WEBAPP)
+        self.assertIn("['sign','intersection_image','image','video','podcast','audio','document'].indexOf(media.type)", WEBAPP)
         self.assertIn("mediaSignIds.indexOf(signId) === -1", WEBAPP)
 
     def test_sign_media_is_compact_and_opens_authoritative_sign_detail(self):
@@ -65,7 +83,8 @@ class MichaelMediaCardsContractTests(unittest.TestCase):
 
     def test_podcast_card_uses_safe_dom_and_localized_payload(self):
         card = WEBAPP[WEBAPP.index("function _buildTeacherMediaCard(media)"):WEBAPP.index("function _teacherAppendMediaCards")]
-        self.assertIn("if (media.type === 'podcast')", card)
+        self.assertIn("if (media.type === 'podcast' || media.type === 'audio')", card)
+        self.assertIn("if (media.type === 'document')", card)
         self.assertIn("audio.controls = true", card)
         self.assertIn("audio.preload = 'none'", card)
         self.assertIn("audio.src = media.url", card)
@@ -107,5 +126,109 @@ class MichaelMediaCardsContractTests(unittest.TestCase):
         self.assertNotIn("msgs.scrollTop = msgs.scrollHeight", chips)
 
 
+    def test_teacher_chat_ui_contract_sends_conversation_id_and_quiz_coach_mode(self):
+        self.assertIn("mode:'quiz_coach'", WEBAPP)
+        self.assertIn("conversation_id:_quizCoachConversationId || _quizCoachSessionId", WEBAPP)
+        self.assertIn("conversation_id: activeConversationId || activeSessionId", WEBAPP)
+
+    def test_exam_mode_ui_contract_hides_instant_feedback_and_allows_navigation(self):
+        # 1. Verification of selectAns in exam mode
+        select_ans_start = WEBAPP.index("async function selectAns(")
+        select_ans_end = WEBAPP.index("var correct = currentCorrect;", select_ans_start)
+        select_ans_body = WEBAPP[select_ans_start:select_ans_end]
+
+        self.assertIn("if (isExamMode) {", select_ans_body)
+        self.assertIn("examAnswers[qIdx] = picked.toUpperCase();", select_ans_body)
+        self.assertIn("b.classList.add('selected');", select_ans_body)
+        # Ensure that immediate feedback, correct/wrong classes and sounds are after the exam mode return
+        exam_block = select_ans_body[select_ans_body.index("if (isExamMode) {"):]
+        self.assertIn("return;", exam_block)
+        self.assertNotIn("b.classList.add('correct')", exam_block)
+        self.assertNotIn("b.classList.add('wrong')", exam_block)
+        self.assertNotIn("playSound", exam_block)
+
+        # 2. Score badge is hidden during exam
+        self.assertIn("scoreBadge.style.display = isExamMode ? 'none' : 'flex'", WEBAPP)
+
+        # 3. Navigation controls and options preserved across questions
+        self.assertIn("function prevQ()", WEBAPP)
+        self.assertIn("q._shuffledOpts", WEBAPP)
+        self.assertIn("exam-nav-row", WEBAPP)
+        self.assertIn("q-prev-mobile", WEBAPP)
+
+    def test_exam_end_screen_debrief_and_michael_quiz_coach_links(self):
+        # 1. Debrief generation on end screen
+        self.assertIn("function showEnd()", WEBAPP)
+        self.assertIn("endExamErrorsContainer", WEBAPP)
+        self.assertIn("exam-error-card", WEBAPP)
+        self.assertIn("consultMichaelFromExamQuestion", WEBAPP)
+        self.assertIn("consultMichaelFromExam()", WEBAPP)
+
+        # 2. Both exam debrief entrypoints trigger Michael with mode 'quiz_coach'
+        self.assertIn("teacherSend(prompt, display, 'quiz_coach')", WEBAPP)
+        self.assertIn("<quiz_context>", WEBAPP)
+        self.assertIn("Student answer:", WEBAPP)
+        self.assertIn("Correct answer:", WEBAPP)
+
+        # 3. teacherSend attaches customMode to chatPayload.mode
+        send_start = WEBAPP.index("async function teacherSend(")
+        send_end = WEBAPP.index("function toggleSound", send_start)
+        send_body = WEBAPP[send_start:send_end]
+        self.assertIn("chatPayload.mode = customMode;", send_body)
+
+    def test_exam_ui_translations_100_percent_isolated(self):
+        self.assertIn("var TR = UI;", WEBAPP)
+        for key in [
+            'prev', 'exam_finish', 'exam_errors_heading', 'exam_all_correct',
+            'exam_your_answer', 'exam_correct_answer', 'exam_unanswered', 'ask_michael_ai'
+        ]:
+            pattern = rf"{key}\s*:\s*\{{([^\r\n]+)\}}"
+            match = re.search(pattern, WEBAPP)
+            self.assertIsNotNone(match, f"Translation key '{key}' missing from UI/TR")
+            val_str = match.group(1)
+            self.assertIn("th:", val_str, f"Thai translation missing for '{key}'")
+            self.assertIn("no:", val_str, f"Norwegian translation missing for '{key}'")
+            self.assertIn("en:", val_str, f"English translation missing for '{key}'")
+
+    def test_neon_ui_classes_and_palette_compliance(self):
+        """TASK-013: Verify .btn-neon, .card-neon, .panel-neon, perimeter rotation and 100% color-palette compliance."""
+        # 1. Classes and keyframes exist in webapp.py
+        self.assertIn(".btn-neon", WEBAPP)
+        self.assertIn(".card-neon", WEBAPP)
+        self.assertIn(".panel-neon", WEBAPP)
+        self.assertIn("@keyframes neonFlow", WEBAPP)
+
+        # 2. Keyframes use perimeter angle rotation (0deg to 360deg)
+        self.assertIn("--neon-angle: 360deg", WEBAPP)
+
+        # 3. Main buttons and UI elements have neon styling applied
+        self.assertIn('id="teacherSendBtn"', WEBAPP)
+        # The chat composer deliberately uses a calmer non-animated send button.
+        self.assertIn('class="teacher-send-btn" id="teacherSendBtn"', WEBAPP)
+        self.assertIn("#teacherSendBtn:hover { background:#1D4ED8", WEBAPP)
+        self.assertIn('id="endCoachMichaelPriBtn"', WEBAPP)
+        self.assertIn('btn-neon', WEBAPP[WEBAPP.index('id="endCoachMichaelPriBtn"')-60:WEBAPP.index('id="endCoachMichaelPriBtn"')+60])
+        self.assertIn('id="startExamBtn"', WEBAPP)
+        self.assertIn("#startExamBtn", WEBAPP)
+
+        # 4. Strict color-palette compliance: zero forbidden yellow or green in neon definitions
+        start_idx = WEBAPP.find("TASK-013: DEDICATED NEON UI CLASSES")
+        self.assertNotEqual(start_idx, -1, "TASK-013 neon UI classes block must exist")
+        end_idx = WEBAPP.find("/* ⚡ Universal neon border", start_idx)
+        neon_css = WEBAPP[start_idx:end_idx if end_idx != -1 else start_idx + 2500]
+
+        # Allowed colors present
+        self.assertIn("#00f0ff", neon_css)  # Cyan
+        self.assertIn("#0055ff", neon_css)  # Deep Blue
+        self.assertIn("#ff007f", neon_css)  # Magenta
+        self.assertIn("#ffaa00", neon_css)  # Amber/Orange
+
+        # Forbidden yellow and green strictly absent
+        forbidden_hex = ["#ffff00", "#ffd700", "#ffe033", "#ffff33", "#00ff00", "#00ff80", "#00e676", "#10b981", "#00ff6a", "#aaff00"]
+        for forbidden in forbidden_hex:
+            self.assertNotIn(forbidden, neon_css.lower(), f"Forbidden color {forbidden} found in neon UI classes")
+
+
 if __name__ == "__main__":
     unittest.main()
+

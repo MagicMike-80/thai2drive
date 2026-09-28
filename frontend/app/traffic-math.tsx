@@ -9,7 +9,7 @@
 import React, { useEffect, useState } from 'react';
 import {
   View, Text, StyleSheet, TextInput, Pressable, ScrollView,
-  ActivityIndicator, Platform, Dimensions,
+  ActivityIndicator, Platform, useWindowDimensions,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
@@ -19,6 +19,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useAppStore } from '../src/store/appStore';
 import { useTrafficMath, prewarmTrafficMath } from '../src/hooks/useTrafficMath';
 import { StepCard, DangerBar, ConditionChips } from '../src/components/traffic';
+import { StoppingDistanceViz } from '../src/components/traffic/TrafficMathDesktopPanel';
 import {
   CONDITIONS,
   SPEED_PRESETS,
@@ -46,6 +47,11 @@ const TR: Record<string, Record<string, string>> = {
     follow3s:    '3 sek',
     emptyHint:   'Skriv inn en fart for å starte',
     offline:     'Beregning utilgjengelig — sjekk tilkobling',
+    reaction:    'Reaksjonstid',
+    braking:     'Bremselengde',
+    vizTitle:    'Stoppeavstand',
+    carLen:      'bilers lengde',
+    condition:   'Kjøreforhold',
   },
   th: {
     title:       'คณิตศาสตร์จราจร',
@@ -61,6 +67,11 @@ const TR: Record<string, Record<string, string>> = {
     follow3s:    '3 วิ',
     emptyHint:   'พิมพ์ความเร็วเพื่อเริ่มคำนวณ',
     offline:     'คำนวณไม่ได้ — ตรวจสอบการเชื่อมต่อ',
+    reaction:    'ปฏิกิริยา',
+    braking:     'เบรก',
+    vizTitle:    'ระยะหยุดรวม',
+    carLen:      'คัน',
+    condition:   'สภาพถนน',
   },
   en: {
     title:       'Traffic Math',
@@ -76,6 +87,11 @@ const TR: Record<string, Record<string, string>> = {
     follow3s:    '3 sec',
     emptyHint:   'Enter a speed to begin',
     offline:     'Calculation unavailable — check connection',
+    reaction:    'Reaction',
+    braking:     'Braking',
+    vizTitle:    'Stopping distance',
+    carLen:      'car lengths',
+    condition:   'Road condition',
   },
 };
 
@@ -83,11 +99,17 @@ const TR: Record<string, Record<string, string>> = {
 
 export default function TrafficMathScreen() {
   const router = useRouter();
+  const { width: viewportWidth } = useWindowDimensions();
   const { language, colors } = useAppStore();
   const c   = colors;
   const t   = TR[language] ?? {};
   const lang = (['no', 'th', 'en'].includes(language) ? language : 'en') as Lang;
   const isDark = c.bg === '#0F172A' || c.bg === '#0B1222';
+  const isWideWeb = Platform.OS === 'web' && viewportWidth >= 900;
+  const contentWidth = Math.min(
+    Math.max(viewportWidth - (isWideWeb ? 64 : 32), 0),
+    isWideWeb ? 1100 : CONTENT_MAX_W,
+  );
 
   // ── Input state ──────────────────────────────────────────────────────────────
   const [speedText,  setSpeedText]  = useState('80');
@@ -150,7 +172,10 @@ export default function TrafficMathScreen() {
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        <View style={{ width: Math.min(Dimensions.get('window').width, CONTENT_MAX_W), gap: 12 }}>
+        <View style={{ width: contentWidth, gap: 16 }}>
+
+          <View style={[st.heroGrid, isWideWeb && st.heroGridWide]}>
+            <View style={[st.controlsColumn, isWideWeb && st.controlsColumnWide]}>
 
           {/* Speed input card */}
           <View style={[st.card, { backgroundColor: c.card, borderColor: c.cardBorder }]}>
@@ -229,6 +254,26 @@ export default function TrafficMathScreen() {
           {error && !result && speedNum > 0 && (
             <Text style={[st.emptyHint, { color: c.textMuted }]}>{t.offline}</Text>
           )}
+
+            </View>
+
+            {/* Web visual lesson: large on desktop, stacked below controls on narrow web. */}
+            {Platform.OS === 'web' && result && (
+              <View style={[st.card, st.visualColumn, { backgroundColor: c.card, borderColor: c.cardBorder }]}>
+                <StoppingDistanceViz
+                  result={result}
+                  accentColor={accentColor}
+                  textColor={c.text}
+                  textMuted={c.textMuted}
+                  textSec={c.textSecondary}
+                  isDark={isDark}
+                  lang={lang}
+                  t={t}
+                  large={isWideWeb}
+                />
+              </View>
+            )}
+          </View>
 
           {/* Results — stay visible while isStale (new result loading) */}
           {result && (
@@ -342,6 +387,11 @@ const st = StyleSheet.create({
   },
 
   scroll:       { padding: 16, paddingBottom: 32 },
+  heroGrid:     { gap: 16 },
+  heroGridWide: { flexDirection: 'row', alignItems: 'stretch' },
+  controlsColumn: { gap: 12 },
+  controlsColumnWide: { width: 350, flexShrink: 0 },
+  visualColumn: { flex: 1, justifyContent: 'center', minWidth: 0 },
   card:         { borderRadius: 16, borderWidth: 1, padding: 16, gap: 10 },
   sectionLabel: { fontSize: 11, fontWeight: '600', textTransform: 'uppercase', letterSpacing: 0.8 },
 

@@ -9,8 +9,9 @@ from urllib.parse import urlsplit
 
 SUPPORTED_LANGUAGES = ("no", "th", "en")
 CONTENT_LANGUAGES = (*SUPPORTED_LANGUAGES, "neutral")
-MEDIA_TYPES = ("video", "podcast")
+MEDIA_TYPES = ("video", "podcast", "image", "audio", "sign", "document")
 CATEGORIES = (
+    "generelt",
     "vikeplikt",
     "stoppelengde",
     "skilt",
@@ -18,7 +19,7 @@ CATEGORIES = (
     "hav_regelen",
 )
 CATEGORY_ORDER = {category: index for index, category in enumerate(CATEGORIES)}
-TYPE_ORDER = {"video": 0, "podcast": 1}
+TYPE_ORDER = {media_type: index for index, media_type in enumerate(MEDIA_TYPES)}
 
 
 class MediaCatalogValidationError(ValueError):
@@ -33,12 +34,14 @@ def normalize_catalog_text(value: Any) -> str:
 
 def is_safe_catalog_url(value: Any) -> bool:
     url = str(value or "").strip()
-    if not url or any(char.isspace() for char in url):
+    if not url:
         return False
-    if url.startswith("/api/assets/"):
+    if any(char.isspace() for char in url):
+        url = url.replace(" ", "%20")
+    if url.startswith(("/api/assets/", "/api/media/files/", "/api/audio/", "/public_assets/", "/static/")):
         path = urlsplit(url).path
         return (
-            not url.startswith("/api/assets//")
+            not path.startswith("//")
             and ".." not in path.split("/")
             and not urlsplit(url).query
             and not urlsplit(url).fragment
@@ -70,7 +73,7 @@ def validate_catalog_document(document: dict[str, Any]) -> dict[str, Any]:
         document.get("content_language"), "content_language"
     )
     if media_type not in MEDIA_TYPES:
-        raise MediaCatalogValidationError("type must be video or podcast")
+        raise MediaCatalogValidationError("unsupported media type")
     if category not in CATEGORIES:
         raise MediaCatalogValidationError("unsupported category")
     if content_language not in CONTENT_LANGUAGES:
@@ -88,8 +91,8 @@ def validate_catalog_document(document: dict[str, Any]) -> dict[str, Any]:
             raise MediaCatalogValidationError("tags must be unique after normalization")
         tags.append(tag)
 
-    media_url = _required_text(document.get("media_url"), "media_url")
-    thumbnail_url = _required_text(document.get("thumbnail_url"), "thumbnail_url")
+    media_url = _required_text(document.get("media_url"), "media_url").replace(" ", "%20")
+    thumbnail_url = _required_text(document.get("thumbnail_url"), "thumbnail_url").replace(" ", "%20")
     if not is_safe_catalog_url(media_url):
         raise MediaCatalogValidationError("media_url is not an approved URL")
     if not is_safe_catalog_url(thumbnail_url):
@@ -125,6 +128,8 @@ def validate_catalog_document(document: dict[str, Any]) -> dict[str, Any]:
         "content_language": content_language,
         "i18n": i18n,
     }
+    if "approved_for_michael" in document:
+        normalized["approved_for_michael"] = bool(document["approved_for_michael"])
     for timestamp_field in ("created_at", "updated_at"):
         if timestamp_field in document:
             normalized[timestamp_field] = document[timestamp_field]
@@ -156,7 +161,7 @@ def serialize_catalog_document(document: dict[str, Any], language: str) -> Optio
     if item["content_language"] not in (language, "neutral"):
         return None
     localized = item["i18n"][language]
-    return {
+    payload = {
         "id": item["media_id"],
         "media_id": item["media_id"],
         "type": item["type"],
@@ -168,6 +173,10 @@ def serialize_catalog_document(document: dict[str, Any], language: str) -> Optio
         "description": localized["description"],
         "caption": localized["description"],
     }
+    source_id = str(document.get("source_id", "")).strip()
+    if item["type"] == "sign" and source_id:
+        payload["sign_id"] = source_id
+    return payload
 
 
 def catalog_sort_key(item: dict[str, Any]) -> tuple[Any, ...]:
@@ -213,9 +222,16 @@ LAW_MAPPING: dict[str, dict[str, list[str]]] = {
             "møtende trafikk",
         ],
     },
-    "7_4": {
-        "tags": ["7", "7_4", "bussregelen", "vikeplikt_buss"],
-        "synonyms": ["paragraf 7 nr 4", "bussregelen", "vikeplikt buss"],
+    "7_5": {
+        "tags": ["7", "7_5", "bussregelen", "vikeplikt_buss"],
+        "synonyms": [
+            "paragraf 7 nr 5",
+            "bussregelen",
+            "vikeplikt buss",
+            "กฎรถบัส",
+            "รถบัสออกจากป้าย",
+            "การให้ทางรถบัส",
+        ],
     },
 }
 
@@ -228,7 +244,7 @@ def expand_law_synonyms(text: str) -> set[str]:
     containing that digit, so section-sign forms are intentionally excluded.
 
     Longer synonyms are matched first and consumed from the text before
-    shorter ones are checked, so a narrow phrase like "paragraf 7 nr 4"
+    shorter ones are checked, so a narrow phrase like "paragraf 7 nr 5"
     (bussregelen) is not also read as the broader "paragraf 7" (§7 nr 2) —
     the broader synonym is literally a substring of the narrower one.
     """

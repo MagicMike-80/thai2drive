@@ -213,6 +213,65 @@ class MichaelMaterialRetrievalTests(unittest.TestCase):
         result = self.retrieve([material], "Vis stoppelengde", videos=videos)
         self.assertEqual(result[0]["url"], "https://youtu.be/abcdefghijk")
 
+    def test_uploaded_video_uses_shared_media_url_without_legacy_video_record(self):
+        material = _material(
+            "uploaded-video",
+            "video",
+            source_id="reaksjonslengde_40",
+            source_url="/api/media/files/64b64c000000000000000001",
+            topic_tags=["reaksjonslengde"],
+        )
+        result = self.retrieve([material], "Forklar reaksjonslengde", videos=[])
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result[0]["url"], "/api/media/files/64b64c000000000000000001")
+
+    def test_video_uses_safe_local_asset_and_honours_learner_language(self):
+        material = _material(
+            "video-local",
+            "video",
+            source_id="video-local-1",
+            source_url="/api/assets/thumbs/thumb_local.jpg",
+            topic_tags=["vikeplikt"],
+        )
+        videos = [{
+            "id": "video-local-1",
+            "active": True,
+            "youtube_url": "",
+            "file_path": "/public_assets/video_local.mp4",
+            "learner_languages": ["no"],
+        }]
+        norwegian = self.retrieve([material], "Forklar vikeplikt", videos=videos)
+        thai = self.retrieve([material], "อธิบายการให้ทาง", lang="th", videos=videos)
+        self.assertEqual(norwegian[0]["url"], "/api/assets/video_local.mp4")
+        self.assertEqual(thai, [])
+
+    def test_video_returns_only_safe_subtitle_tracks_and_audio_language(self):
+        material = _material(
+            "video-subtitles",
+            "video",
+            source_id="video-subtitles-1",
+            topic_tags=["vikeplikt"],
+        )
+        videos = [{
+            "id": "video-subtitles-1",
+            "active": True,
+            "file_path": "/public_assets/video_subtitles.mp4",
+            "audio_language": "no",
+            "learner_languages": ["no", "th"],
+            "subtitle_tracks": [
+                {"lang": "th", "label": "ไทย", "url": "/api/assets/subtitles/video.th.vtt"},
+                {"lang": "xx", "label": "Bad", "url": "/api/assets/subtitles/bad.vtt"},
+                {"lang": "en", "label": "Bad URL", "url": "javascript:alert(1)"},
+            ],
+        }]
+        result = self.retrieve([material], "อธิบายการให้ทาง", lang="th", videos=videos)
+        self.assertEqual(result[0]["audio_language"], "no")
+        self.assertEqual(result[0]["subtitle_tracks"], [{
+            "lang": "th",
+            "label": "ไทย",
+            "url": "/api/assets/subtitles/video.th.vtt",
+        }])
+
     def test_empty_library_is_text_only_and_response_contract_is_additive(self):
         self.assertEqual(self.retrieve([], "vikeplikt"), [])
         source = (Path(__file__).resolve().parents[1] / "teacher_chat.py").read_text(encoding="utf-8")
@@ -232,6 +291,21 @@ class MichaelMaterialRetrievalTests(unittest.TestCase):
             approved,
         )
 
+    def test_final_response_keeps_approved_video_and_prefers_exact_sign(self):
+        video = {"id": "video", "type": "video"}
+        correct_sign = {"id": "sign", "type": "sign", "sign_id": "202_0"}
+        unrelated_sign = {"id": "other", "type": "sign", "sign_id": "204_0"}
+        self.assertEqual(
+            self.module._reconcile_teacher_media([video], [], []),
+            [video],
+        )
+        self.assertEqual(
+            self.module._reconcile_teacher_media(
+                [video, unrelated_sign], ["202_0"], [correct_sign]
+            ),
+            [correct_sign, video],
+        )
+
     def test_invalid_language_never_queries_catalog(self):
         self.assertEqual(
             asyncio.run(self.module._get_relevant_catalog_media("stoppelengde", "nb")),
@@ -249,17 +323,21 @@ class MichaelMaterialRetrievalTests(unittest.TestCase):
                 result = self.retrieve([unrelated, target], query)
                 self.assertEqual([item["id"] for item in result], ["sit_vike_venstre_01"])
 
-    def test_bussregelen_query_matches_7_4_not_generic_7_2_image(self):
+    def test_bussregelen_query_matches_7_5_not_generic_7_2_image(self):
         bus_rule = _material(
             "sit_buss_regel_01",
-            topic_tags=["7", "7_4", "bussregelen", "vikeplikt_buss"],
+            topic_tags=["7", "7_5", "bussregelen", "vikeplikt_buss"],
         )
         venstresving = _material(
             "sit_vike_venstre_01",
             topic_tags=["7", "7_2", "vikeplikt", "høyreregel", "venstresving"],
         )
-        result = self.retrieve([venstresving, bus_rule], "paragraf 7 nr 4 om bussregelen")
+        result = self.retrieve([venstresving, bus_rule], "paragraf 7 nr 5 om bussregelen")
         self.assertEqual([item["id"] for item in result], ["sit_buss_regel_01", "sit_vike_venstre_01"])
+
+        thai = self.retrieve([venstresving, bus_rule], "อธิบายกฎรถบัส", lang="th")
+        self.assertEqual(thai[0]["id"], "sit_buss_regel_01")
+        self.assertEqual(thai[0]["title"], "ชื่อภาษาไทย")
 
     def test_catalog_lookup_returns_one_language_pure_exact_tag_match(self):
         catalog = []
@@ -275,6 +353,7 @@ class MichaelMaterialRetrievalTests(unittest.TestCase):
                 "media_url": "https://media.example/video.mp4",
                 "thumbnail_url": "https://media.example/thumb.jpg",
                 "is_active": True,
+                "approved_for_michael": True,
                 "content_language": language,
                 "i18n": {
                     "no": {"title": "Norsk", "description": "Norsk beskrivelse"},
@@ -290,6 +369,38 @@ class MichaelMaterialRetrievalTests(unittest.TestCase):
         self.assertEqual(result[0]["id"], "no-item")
         self.assertEqual(result[0]["title"], "Norsk")
         self.assertNotIn("i18n", result[0])
+
+    def test_final_catalog_cards_require_record_and_selected_language(self):
+        document = {
+            "media_id": "catalog-1", "type": "video", "category": "stoppelengde",
+            "tags": ["stoppelengde"], "media_url": "https://media.example/video.mp4",
+            "thumbnail_url": "https://media.example/thumb.jpg", "is_active": True,
+            "approved_for_michael": True, "content_language": "neutral",
+            "i18n": {
+                "no": {"title": "Norsk", "description": "Norsk tekst"},
+                "th": {"title": "ภาษาไทย", "description": "คำอธิบายไทย"},
+                "en": {"title": "English", "description": "English text"},
+            },
+        }
+        self.module._db = _Database([], catalog=[document])
+        candidates = [
+            {"id": "catalog-1", "media_id": "catalog-1", "type": "video",
+             "url": "https://media.example/video.mp4", "title": "Norsk", "caption": "Norsk tekst"},
+            {"id": "missing", "media_id": "missing", "type": "video",
+             "url": "https://media.example/missing.mp4", "title": "Missing", "caption": "Missing"},
+            {"id": "catalog-1", "media_id": "catalog-1", "type": "video",
+             "url": "javascript:alert(1)", "title": "Wrong", "caption": "Wrong"},
+        ]
+        for lang, title, caption in (
+            ("no", "Norsk", "Norsk tekst"),
+            ("th", "ภาษาไทย", "คำอธิบายไทย"),
+            ("en", "English", "English text"),
+        ):
+            with self.subTest(lang=lang):
+                result = asyncio.run(self.module._validate_teacher_response_media(candidates, lang))
+                self.assertEqual(len(result), 1)
+                self.assertEqual(result[0]["title"], title)
+                self.assertEqual(result[0]["caption"], caption)
 
 
 if __name__ == "__main__":

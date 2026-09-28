@@ -16,6 +16,178 @@ def _deploy_version() -> str:
 
 DEPLOY_VERSION = _deploy_version()
 
+# ==================== MAINTENANCE MODE ====================
+# Set env var MAINTENANCE_MODE=true on Railway to activate.
+MAINTENANCE_MODE = _os.environ.get("MAINTENANCE_MODE", "").lower() in ("1", "true", "yes")
+
+MAINTENANCE_HTML = """<!DOCTYPE html>
+<html lang="no" translate="no" class="notranslate">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google" content="notranslate">
+<title>Thai2Drive — Vedlikehold</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --cyan:    #00F5FF;
+    --magenta: #FF00E5;
+    --blue:    #0066FF;
+    --amber:   #FF9933;
+    --bg:      #060912;
+    --card-bg: rgba(10, 16, 35, 0.92);
+  }
+  html, body {
+    min-height: 100vh;
+    background: var(--bg);
+    font-family: 'Inter', system-ui, sans-serif;
+    color: #e8eaf6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 70% 50% at 20% 30%, rgba(0,102,255,0.18) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 40% at 80% 70%, rgba(0,245,255,0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 50% at 50% 100%, rgba(255,0,229,0.08) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .card {
+    position: relative;
+    z-index: 1;
+    background: var(--card-bg);
+    border: 1px solid rgba(0,245,255,0.25);
+    border-radius: 24px;
+    padding: 56px 48px 48px;
+    max-width: 520px;
+    width: calc(100% - 32px);
+    text-align: center;
+    box-shadow:
+      0 0 40px rgba(0,245,255,0.08),
+      0 0 80px rgba(0,102,255,0.06),
+      0 24px 48px rgba(0,0,0,0.5);
+    --neon-angle: 0deg;
+    animation: neonFlow 4s linear infinite;
+    background-clip: padding-box;
+  }
+  @property --neon-angle {
+    syntax: '<angle>';
+    inherits: false;
+    initial-value: 0deg;
+  }
+  @keyframes neonFlow { to { --neon-angle: 360deg; } }
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 26px;
+    background: conic-gradient(
+      from var(--neon-angle),
+      var(--blue), var(--cyan), var(--magenta), var(--amber), var(--blue)
+    );
+    z-index: -1;
+    opacity: 0.7;
+    filter: blur(6px);
+    animation: neonFlow 4s linear infinite;
+  }
+  .logo {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 32px;
+    text-shadow: 0 0 20px rgba(0,245,255,0.6);
+  }
+  .icon {
+    font-size: 64px;
+    margin-bottom: 24px;
+    display: block;
+    animation: pulse 2.5s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { filter: drop-shadow(0 0 8px var(--cyan)); transform: scale(1); }
+    50%       { filter: drop-shadow(0 0 20px var(--cyan)); transform: scale(1.06); }
+  }
+  h1 {
+    font-size: clamp(20px, 4vw, 26px);
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 12px;
+    color: #ffffff;
+  }
+  .thai-text {
+    font-size: clamp(16px, 3vw, 20px);
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 36px;
+    line-height: 1.6;
+  }
+  .divider {
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--blue), var(--cyan), var(--magenta));
+    border-radius: 2px;
+    margin: 0 auto 36px;
+    animation: neonFlow 4s linear infinite;
+    background-size: 200%;
+  }
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,245,255,0.08);
+    border: 1px solid rgba(0,245,255,0.3);
+    border-radius: 100px;
+    padding: 8px 20px;
+    font-size: 13px;
+    color: var(--cyan);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--amber);
+    box-shadow: 0 0 8px var(--amber);
+    animation: blink 1.2s ease-in-out infinite;
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.2; }
+  }
+  .footer {
+    margin-top: 32px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.3);
+  }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">Thai2Drive</div>
+    <span class="icon">🔧</span>
+    <h1>Vi oppdaterer Michael AI<br>med de nyeste skiltreglene.</h1>
+    <p class="thai-text">เรากำลังอัปเดตระบบ<br>ครู AI จะกลับมาให้บริการเร็วๆ นี้</p>
+    <div class="divider"></div>
+    <div class="status-badge">
+      <div class="dot"></div>
+      Tilbake om kort tid! / เร็วๆ นี้
+    </div>
+    <div class="footer">Thai2Drive &copy; 2026 &mdash; thai2drive.no</div>
+  </div>
+</body>
+</html>"""
+# ===== END MAINTENANCE MODE ============================================
+
 WEBAPP_HTML = r"""<!DOCTYPE html>
 <html lang="th" data-theme="dark" translate="no" class="notranslate">
 <head>
@@ -33,6 +205,18 @@ WEBAPP_HTML = r"""<!DOCTYPE html>
    CSS VARIABLES & RESET
 ══════════════════════════════════════════ */
 :root {
+  --neon-angle: 0deg;
+  --neon-cyan: #00F5FF;
+  --neon-blue: #0066FF;
+  --neon-magenta: #FF00E5;
+  --neon-amber: #FF9933;
+  --neon-blue-base: #0055ff;
+  --neon-cyan-base: #00f0ff;
+  --neon-magenta-base: #ff007f;
+  --neon-amber-base: #ffaa00;
+  --neon-pulse-glow: 0 0 16px rgba(0, 240, 255, 0.45), 0 0 26px rgba(255, 0, 127, 0.28);
+  --neon-flow-gradient: conic-gradient(from var(--neon-angle, 0deg), #00F5FF 0%, #0066FF 25%, #FF00E5 50%, #FF9933 75%, #00F5FF 100%);
+  --neon-flow-gradient-soft: conic-gradient(from var(--neon-angle, 0deg), rgba(0,245,255,0.8) 0%, rgba(0,102,255,0.8) 25%, rgba(255,0,229,0.8) 50%, rgba(255,153,51,0.8) 75%, rgba(0,245,255,0.8) 100%);
   --bg: #0B1226;
   --bg2: #111827;
   --card: rgba(255,255,255,.05);
@@ -105,7 +289,7 @@ a { color:inherit; text-decoration:none; }
     border-left: 2px solid transparent;
     border-right: 2px solid transparent;
     background: linear-gradient(var(--bg), var(--bg)) padding-box,
-                conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #00F5FF) border-box;
+                conic-gradient(from var(--neon-angle, 0deg), #00F5FF 0%, #0066FF 25%, #FF00E5 50%, #FF9933 75%, #00F5FF 100%) border-box;
     animation: neonFlow 5s linear infinite;
     box-shadow:
       -8px 0 40px rgba(0,0,0,.60),
@@ -180,7 +364,7 @@ a { color:inherit; text-decoration:none; }
 #bottomNav::-webkit-scrollbar { display: none; width: 0; height: 0; }
 [data-theme="light"] #bottomNav {
   background: linear-gradient(rgba(241, 245, 249, 0.95), rgba(241, 245, 249, 0.95)) padding-box,
-              conic-gradient(from var(--neon-angle, 0deg), #FF9933, #FF00E5, #00F5FF, #FF9933) border-box !important;
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF 0%, #0066FF 25%, #FF00E5 50%, #FF9933 75%, #00F5FF 100%) border-box !important;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 0 16px rgba(255, 153, 51, 0.2);
 }
 .bn-tab {
@@ -251,7 +435,7 @@ a { color:inherit; text-decoration:none; }
   color: #00F5FF;
   border: 1.5px solid transparent !important;
   background: linear-gradient(rgba(11, 18, 38, 0.90), rgba(11, 18, 38, 0.90)) padding-box,
-              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #00F5FF) border-box !important;
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF 0%, #0066FF 25%, #FF00E5 50%, #FF9933 75%, #00F5FF 100%) border-box !important;
   animation: neonFlow 4s linear infinite;
   box-shadow: 0 0 16px rgba(0, 245, 255, 0.3), inset 0 1px 2px rgba(255,255,255,0.12);
   transform: translateY(-2px);
@@ -259,7 +443,7 @@ a { color:inherit; text-decoration:none; }
 [data-theme="light"] .bn-tab.active {
   color: var(--orange);
   background: linear-gradient(#FFFFFF, #FFFFFF) padding-box,
-              conic-gradient(from var(--neon-angle, 0deg), #FF9933, #FF00E5, #00F5FF, #FF9933) border-box !important;
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF 0%, #0066FF 25%, #FF00E5 50%, #FF9933 75%, #00F5FF 100%) border-box !important;
   box-shadow: 0 0 14px rgba(255, 153, 51, 0.22), inset 0 1px 2px rgba(255,255,255,0.9);
 }
 .bn-tab.active .bn-icon {
@@ -408,6 +592,27 @@ a { color:inherit; text-decoration:none; }
 .auth-btn:active { transform:translateY(0); }
 .auth-btn:disabled { opacity:.5; cursor:not-allowed; transform:none; }
 
+.auth-guest {
+  margin-top:18px; padding-top:16px;
+  border-top:1px solid var(--border); text-align:center;
+}
+.auth-guest-btn {
+  width:100%; padding:12px;
+  border:1px solid rgba(0,245,255,.35); border-radius:11px;
+  background:rgba(0,245,255,.06); color:var(--text);
+  font-size:.9rem; font-weight:750; cursor:pointer;
+  transition:border-color .2s, background .2s, transform .15s;
+}
+.auth-guest-btn:hover {
+  border-color:rgba(0,245,255,.65);
+  background:rgba(0,245,255,.11); transform:translateY(-1px);
+}
+.auth-guest-btn:active { transform:translateY(0); }
+.auth-guest-hint {
+  margin:8px 4px 0; color:var(--muted);
+  font-size:.72rem; line-height:1.45;
+}
+
 .auth-error {
   background:rgba(239,68,68,.1); border:1px solid rgba(239,68,68,.3);
   border-radius:9px; padding:10px 13px;
@@ -467,7 +672,7 @@ a { color:inherit; text-decoration:none; }
   width:100%; padding:16px;
   border:2px solid transparent !important;
   background:linear-gradient(135deg,#FF9933,#e6891f) padding-box,
-              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #00F5FF) border-box !important;
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF 0%, #0066FF 25%, #FF00E5 50%, #FF9933 75%, #00F5FF 100%) border-box !important;
   animation:neonFlow 3s linear infinite;
   color:#0F172A; font-weight:900; font-size:1rem;
   border-radius:14px; cursor:pointer;
@@ -477,6 +682,17 @@ a { color:inherit; text-decoration:none; }
 }
 .home-cta:hover { transform:translateY(-2px); box-shadow:0 0 24px rgba(0,245,255,.5), 0 0 8px rgba(255,153,51,.4); }
 .home-cta:active { transform:translateY(0) scale(0.97); box-shadow:0 0 32px rgba(0,245,255,.7), 0 0 12px rgba(255,153,51,.6); }
+.home-cta-exam {
+  margin-top:10px;
+  background:linear-gradient(135deg,#162447,#0F172A) padding-box,
+             conic-gradient(from var(--neon-angle, 0deg), #00F5FF 0%, #0066FF 25%, #FF00E5 50%, #FF9933 75%, #00F5FF 100%) border-box !important;
+  color:#E2E8F0 !important;
+  box-shadow:0 4px 20px rgba(0,245,255,.25);
+}
+.home-cta-exam:hover {
+  color:#FFFFFF !important;
+  box-shadow:0 0 24px rgba(0,245,255,.5), 0 0 12px rgba(255,153,51,.3);
+}
 
 .home-main-label { font-size:.72rem; font-weight:800; letter-spacing:.09em; text-transform:uppercase; color:var(--muted); }
 .home-main-actions { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
@@ -508,7 +724,7 @@ a { color:inherit; text-decoration:none; }
   padding:13px 10px;
   border:1.5px solid transparent !important;
   background:linear-gradient(rgba(255,255,255,.05), rgba(255,255,255,.05)) padding-box,
-              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #00F5FF) border-box !important;
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF 0%, #0066FF 25%, #FF00E5 50%, #FF9933 75%, #00F5FF 100%) border-box !important;
   animation:neonFlow 4s linear infinite;
   backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
   border-radius:14px; color:var(--text); font-weight:700;
@@ -519,7 +735,7 @@ a { color:inherit; text-decoration:none; }
 }
 .home-sec-btn:hover {
   background:linear-gradient(rgba(255,255,255,.08), rgba(255,255,255,.08)) padding-box,
-              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #00F5FF) border-box !important;
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF 0%, #0066FF 25%, #FF00E5 50%, #FF9933 75%, #00F5FF 100%) border-box !important;
   box-shadow:0 0 16px rgba(0, 245, 255, 0.3);
 }
 .home-sec-btn:active {
@@ -665,7 +881,7 @@ a { color:inherit; text-decoration:none; }
   gap:0;
   border:1.5px solid transparent !important;
   background:linear-gradient(rgba(255,255,255,.05), rgba(255,255,255,.05)) padding-box,
-              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #00F5FF) border-box !important;
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF 0%, #0066FF 25%, #FF00E5 50%, #FF9933 75%, #00F5FF 100%) border-box !important;
   animation:neonFlow 5s linear infinite;
   border-radius:16px; overflow:hidden;
   box-shadow:0 0 8px rgba(0, 245, 255, 0.08);
@@ -704,6 +920,208 @@ a { color:inherit; text-decoration:none; }
   background:rgba(16,185,129,.15); border:1px solid rgba(16,185,129,.3);
   border-radius:20px; padding:3px 9px;
   font-size:.68rem; font-weight:800; color:var(--green);
+}
+
+/* ═══ 50-USER CAMPAIGN BANNER & MODAL ═══ */
+.campaign-banner {
+  margin: 12px 0 6px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1.5px solid transparent !important;
+  background: linear-gradient(rgba(10, 16, 32, .92), rgba(10, 16, 32, .92)) padding-box,
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF 0%, #0066FF 25%, #FF00E5 50%, #FF9933 75%, #00F5FF 100%) border-box !important;
+  animation: neonFlow 4s linear infinite;
+  box-shadow: 0 0 16px rgba(0, 245, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.campaign-banner:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(0, 245, 255, 0.22);
+}
+.cb-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.cb-icon {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+.cb-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.cb-badge {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  color: #00F5FF;
+  background: rgba(0, 245, 255, 0.12);
+  padding: 2px 8px;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 245, 255, 0.3);
+}
+.cb-title {
+  margin: 2px 0 0;
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #fff;
+}
+.cb-desc {
+  margin: 0;
+  font-size: 0.76rem;
+  color: #FF9933;
+  font-weight: 700;
+}
+.cb-btn {
+  border: 1.5px solid transparent !important;
+  background: linear-gradient(#0066FF, #0055dd) padding-box,
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #FF9933, #00F5FF) border-box !important;
+  animation: neonFlow 3s linear infinite;
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.78rem;
+  padding: 8px 14px;
+  border-radius: 10px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+/* Campaign Modal */
+.campaign-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 4, 15, 0.82);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.campaign-modal-card {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  border-radius: 18px;
+  padding: 24px;
+  border: 1.5px solid transparent !important;
+  background: linear-gradient(rgba(12, 18, 36, .98), rgba(12, 18, 36, .98)) padding-box,
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF 0%, #0066FF 25%, #FF00E5 50%, #FF9933 75%, #00F5FF 100%) border-box !important;
+  animation: neonFlow 5s linear infinite;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(0, 245, 255, 0.15);
+  color: #fff;
+}
+.campaign-modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-size: 1.2rem;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cm-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.cm-badge {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #FF00E5;
+  background: rgba(255, 0, 229, 0.12);
+  border: 1px solid rgba(255, 0, 229, 0.3);
+  padding: 3px 10px;
+  border-radius: 20px;
+  margin-bottom: 8px;
+}
+.cm-title {
+  margin: 0 0 6px;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #fff;
+}
+.cm-sub {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.cm-field {
+  margin-bottom: 14px;
+  text-align: left;
+}
+.cm-field label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #00F5FF;
+  margin-bottom: 5px;
+}
+.cm-field input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  color: #fff;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color .2s ease;
+}
+.cm-field input:focus {
+  border-color: #00F5FF;
+  box-shadow: 0 0 8px rgba(0, 245, 255, 0.3);
+}
+.cm-feedback {
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  margin-bottom: 14px;
+  text-align: center;
+  font-weight: 700;
+}
+.cm-feedback.error {
+  background: rgba(255, 50, 50, 0.15);
+  border: 1px solid rgba(255, 50, 50, 0.3);
+  color: #ff6b6b;
+}
+.cm-feedback.success {
+  background: rgba(0, 245, 255, 0.15);
+  border: 1px solid rgba(0, 245, 255, 0.3);
+  color: #00F5FF;
+}
+.cm-submit-btn {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 0.92rem;
+  font-weight: 800;
+  cursor: pointer;
+  border: 1.5px solid transparent !important;
+  background: linear-gradient(135deg, #0066FF, #FF00E5) padding-box,
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #FF9933, #00F5FF) border-box !important;
+  animation: neonFlow 3s linear infinite;
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(0, 102, 255, 0.4);
 }
 
 /* ══════════════════════════════════════════
@@ -791,7 +1209,8 @@ a { color:inherit; text-decoration:none; }
   inherits: false;
 }
 @keyframes neonFlow {
-  to { --neon-angle: 360deg; }
+  from { --neon-angle: 0deg; }
+  to   { --neon-angle: 360deg; }
 }
 @keyframes neonFlowFallback {
   0%   { transform:rotate(0deg); }
@@ -828,11 +1247,11 @@ a { color:inherit; text-decoration:none; }
   transition:opacity .45s;
   padding:3px;
   background:conic-gradient(from var(--neon-angle, 0deg),
-    transparent 0%,
-    var(--cat-color, #FF9933) 18%,
-    rgba(255,255,255,.95) 24%,
-    var(--cat-color, #FF9933) 30%,
-    transparent 48%
+    #00F5FF 0%,
+    #0066FF 25%,
+    #FF00E5 50%,
+    #FF9933 75%,
+    #00F5FF 100%
   );
   -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite:xor;
@@ -842,7 +1261,7 @@ a { color:inherit; text-decoration:none; }
 }
 .carousel-3d-active-ring.visible {
   opacity:1;
-  filter:drop-shadow(0 0 6px var(--cat-color, #FF9933)) drop-shadow(0 0 14px var(--cat-glow, rgba(255,153,51,.5)));
+  filter:drop-shadow(0 0 8px rgba(0,245,255,.7)) drop-shadow(0 0 16px rgba(255,0,229,.5));
 }
 
 /* ── Carousel dots ── */
@@ -1093,6 +1512,24 @@ a { color:inherit; text-decoration:none; }
 .q-answers {
   display:flex; flex-direction:column; gap:8px; flex-shrink:0;
 }
+.glossary-btn-wrap { flex-shrink:0; }
+.glossary-term-btn {
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  width:100%; padding:11px 14px;
+  background:rgba(0,245,255,.06);
+  border:1px solid rgba(0,245,255,.35); border-radius:12px;
+  color:#00F5FF; font-size:.84rem; font-weight:700;
+  cursor:pointer; transition:background .18s, border-color .18s;
+}
+.glossary-term-btn:hover { background:rgba(0,245,255,.12); border-color:rgba(0,245,255,.55); }
+.glossary-panel {
+  margin-top:8px; padding:12px 14px;
+  background:var(--card); border:1px solid rgba(0,245,255,.25); border-radius:12px;
+  display:flex; flex-direction:column; gap:12px;
+}
+.glossary-term-item { display:flex; flex-direction:column; gap:4px; }
+.glossary-term-heading { font-size:.88rem; font-weight:800; color:#00F5FF; }
+.glossary-term-def { font-size:.84rem; line-height:1.6; color:var(--text); }
 .ans-btn {
   display:flex; align-items:center; gap:14px;
   padding:15px 16px;
@@ -1112,6 +1549,16 @@ a { color:inherit; text-decoration:none; }
 .ans-btn.correct { border-color:rgba(16,185,129,.45); background:rgba(16,185,129,.10); }
 .ans-btn.wrong   { border-color:rgba(239,68,68,.40);  background:rgba(239,68,68,.09);  }
 .ans-btn.reveal  { border-color:rgba(16,185,129,.45); background:rgba(16,185,129,.07); }
+.ans-btn.selected {
+  border-color: rgba(0, 245, 255, 0.70);
+  background: rgba(0, 245, 255, 0.12);
+  box-shadow: 0 0 12px rgba(0, 245, 255, 0.22);
+}
+.ans-btn.selected .ans-letter {
+  background: rgba(0, 245, 255, 0.25);
+  color: #00F5FF;
+  border-color: rgba(0, 245, 255, 0.60);
+}
 .ans-letter {
   width:32px; height:32px; border-radius:50%;
   background:rgba(255,153,51,.12); color:var(--orange);
@@ -1153,6 +1600,38 @@ a { color:inherit; text-decoration:none; }
 }
 .q-next-mobile:disabled { display:none; opacity:.30; cursor:not-allowed; }
 .q-next-mobile:not(:disabled):active { opacity:.85; }
+
+.exam-nav-row {
+  display:flex;
+  gap:10px;
+  width:100%;
+  margin-top:4px;
+}
+.q-prev-mobile {
+  display:block;
+  flex:1;
+  padding:14px;
+  background:rgba(255,255,255,.07);
+  color:var(--text);
+  font-weight:700;
+  font-size:.9rem;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:12px;
+  cursor:pointer;
+  transition:all .18s;
+}
+.q-prev-mobile:hover:not(:disabled) {
+  background:rgba(255,255,255,.12);
+  border-color:rgba(0,245,255,.40);
+}
+.q-prev-mobile:disabled {
+  opacity:.35;
+  cursor:not-allowed;
+}
+.exam-nav-row .q-next-mobile {
+  flex:1;
+  margin-top:0;
+}
 
 /* Desktop side column — permanently hidden (we use q-next-mobile everywhere) */
 .q-next-col { display:none !important; }
@@ -2654,12 +3133,37 @@ a { color:inherit; text-decoration:none; }
   border-left:3px solid rgba(255,153,51,.40);
   border-radius:0 10px 10px 0;
   margin-bottom:24px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
 }
 .end-focus-label {
   font-size:.60rem; font-weight:900; text-transform:uppercase;
   letter-spacing:1px; color:var(--orange); margin-bottom:5px;
 }
 .end-focus-topic { font-size:.86rem; color:var(--text); font-weight:700; }
+.end-focus-btn {
+  background:rgba(0,245,255,0.12);
+  border:1px solid #00F5FF;
+  color:#00F5FF;
+  padding:8px 14px;
+  border-radius:10px;
+  font-weight:700;
+  font-size:.82rem;
+  cursor:pointer;
+  white-space:nowrap;
+  transition:all .15s ease;
+}
+.end-focus-btn:hover {
+  background:rgba(0,245,255,0.22);
+  box-shadow:0 0 12px rgba(0,245,255,0.35);
+}
+.end-btn-coach {
+  background:linear-gradient(135deg, #00F5FF 0%, #0088ff 100%);
+  color:#0B1226;
+  box-shadow:0 0 16px rgba(0,245,255,0.35);
+}
 .end-btns  { display:flex; flex-direction:column; gap:9px; }
 .end-btn-pri {
   padding:13px;
@@ -2675,6 +3179,34 @@ a { color:inherit; text-decoration:none; }
   border-radius:12px; cursor:pointer;
 }
 .end-btn-sec:hover { border-color:rgba(255,255,255,.22); color:var(--text); }
+
+#screenEnd.has-errors .end-wrap { max-width:540px; }
+.end-exam-errors { width:100%; margin-bottom:24px; text-align:left; }
+.end-exam-errors-title { font-size:1.02rem; font-weight:800; color:var(--text); margin-bottom:12px; }
+.end-exam-errors-list { display:flex; flex-direction:column; gap:12px; max-height:460px; overflow-y:auto; padding-right:4px; }
+.exam-error-card {
+  background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08);
+  border-radius:12px; padding:14px; display:flex; flex-direction:column; gap:8px;
+}
+.exam-error-header { display:flex; align-items:flex-start; gap:8px; }
+.exam-error-num {
+  background:rgba(239,68,68,.2); color:#FCA5A5; font-size:.75rem; font-weight:800;
+  border-radius:6px; padding:2px 7px; flex-shrink:0; margin-top:2px;
+}
+.exam-error-qtext { font-size:.88rem; font-weight:700; color:var(--text); line-height:1.45; }
+.exam-error-ans-row { display:flex; flex-direction:column; gap:4px; font-size:.84rem; }
+.exam-error-user { color:#FCA5A5; }
+.exam-error-correct { color:#6EE7B7; }
+.exam-error-expl { font-size:.80rem; color:var(--muted); line-height:1.5; border-top:1px solid rgba(255,255,255,.06); padding-top:6px; }
+.exam-error-btn {
+  align-self:flex-start; margin-top:4px;
+  background:rgba(0, 245, 255, 0.08); border:1px solid rgba(0, 245, 255, 0.35);
+  color:#00F5FF; font-size:.82rem; font-weight:700; border-radius:8px;
+  padding:7px 12px; cursor:pointer; transition:all .18s; display:inline-flex; align-items:center; gap:6px;
+}
+.exam-error-btn:hover {
+  background:rgba(0, 245, 255, 0.18); border-color:#00F5FF; box-shadow:0 0 10px rgba(0,245,255,0.25);
+}
 
 /* ══════════════════════════════════════════
    LOADING & UTILS
@@ -3213,7 +3745,7 @@ a { color:inherit; text-decoration:none; }
   width:100%; padding:14px 16px;
   border:1.5px solid transparent !important;
   background:linear-gradient(135deg, rgba(30,58,95,.55) 0%, rgba(37,99,235,.20) 100%) padding-box,
-              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #00F5FF) border-box !important;
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF 0%, #0066FF 25%, #FF00E5 50%, #FF9933 75%, #00F5FF 100%) border-box !important;
   animation:neonFlow 4s linear infinite;
   border-radius:16px; cursor:pointer;
   transition:background .15s, border-color .15s, box-shadow 0.3s;
@@ -3222,7 +3754,7 @@ a { color:inherit; text-decoration:none; }
 }
 .michael-card:hover {
   background:linear-gradient(135deg,rgba(30,58,95,.7) 0%,rgba(37,99,235,.30) 100%) padding-box,
-              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #00F5FF) border-box !important;
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF 0%, #0066FF 25%, #FF00E5 50%, #FF9933 75%, #00F5FF 100%) border-box !important;
   box-shadow:0 0 16px rgba(0, 245, 255, 0.3);
 }
 .michael-card-left  { display:flex; align-items:center; gap:12px; }
@@ -3252,15 +3784,26 @@ a { color:inherit; text-decoration:none; }
   flex-shrink:0; overflow:hidden; position:relative;
 }
 .teacher-sidebar-toggle {
-  width:44px; height:44px; min-width:44px; margin-left:auto;
+  width:52px; height:52px; min-width:52px;
   display:inline-flex; align-items:center; justify-content:center;
-  border:1px solid rgba(96,165,250,.45); border-radius:12px;
-  background:#13223A; color:#E2E8F0; cursor:pointer;
+  border:2px solid #00F5FF; border-radius:12px;
+  background:#091A34; color:#F8FAFC; cursor:pointer;
+  box-shadow:0 0 14px rgba(0,245,255,.32), inset 0 0 12px rgba(255,0,229,.08);
   transition:background .15s,border-color .15s,transform .12s;
 }
 .teacher-sidebar-toggle:hover { background:#1E3A5F; border-color:#67E8F9; }
 .teacher-sidebar-toggle:active { transform:scale(.96); }
 .teacher-sidebar-toggle svg { width:22px; height:22px; }
+.teacher-contact-human-btn {
+  margin-left:auto; height:36px; padding:0 12px; max-width:150px;
+  display:inline-flex; align-items:center; justify-content:center;
+  border:1px solid rgba(255,153,51,.5); border-radius:10px;
+  background:#241708; color:#FF9933; cursor:pointer;
+  font-size:.72rem; font-weight:700; line-height:1.2; text-align:center;
+  white-space:normal; transition:background .15s,border-color .15s,transform .12s;
+}
+.teacher-contact-human-btn:hover { background:#33200C; border-color:#FFAA00; }
+.teacher-contact-human-btn:active { transform:scale(.96); }
 .teacher-avatar {
   width:48px; height:48px; border-radius:50%;
   object-fit:cover; object-position:center 14%; flex-shrink:0;
@@ -3297,6 +3840,10 @@ a { color:inherit; text-decoration:none; }
   transform:translateX(0); visibility:visible; pointer-events:auto;
 }
 .teacher-side-panel .tsp-btn { color:#F8FAFC !important; }
+.teacher-side-panel .tsp-btn {
+  min-height:58px; padding:14px 16px; border-radius:14px;
+  font-size:1rem; font-weight:850; line-height:1.3; text-align:left;
+}
 .teacher-sidebar-backdrop {
   display:block; position:absolute; z-index:11; inset:72px 0 0;
   border:0; padding:0; background:rgba(2,8,23,.66);
@@ -3452,17 +3999,22 @@ a { color:inherit; text-decoration:none; }
   border-top:1px solid var(--border);
   background:var(--bg2); flex-shrink:0;
 }
+.teacher-composer {
+  display:flex; align-items:center; gap:8px; width:100%; min-height:60px;
+  padding:6px; border:1px solid rgba(96,165,250,.38); border-radius:24px;
+  background:#071326; box-shadow:0 8px 30px rgba(0,0,0,.28);
+}
 .teacher-input {
-  flex:1; background:var(--bg); border:1px solid var(--border);
+  flex:1; background:transparent; border:0;
   color:var(--text); border-radius:16px;
-  padding:16px 18px; min-height:56px; font-size:1rem; font-family:inherit;
+  padding:12px 8px; min-height:48px; font-size:1rem; font-family:inherit;
   resize:none; max-height:112px; line-height:1.4;
   outline:none;
 }
-.teacher-input:focus { border-color:var(--orange); }
+.teacher-input:focus { border-color:transparent; }
 .teacher-input::placeholder { color:var(--muted); }
 .teacher-send-btn {
-  min-width:104px; height:56px; border-radius:16px;
+  width:48px; min-width:48px; height:48px; border-radius:50%;
   background:#2563EB !important; border:1px solid #60A5FA !important; color:#fff;
   font-size:.9rem; font-weight:900; cursor:pointer; flex-shrink:0; animation:none !important;
   transition:background .15s; display:flex;
@@ -3470,6 +4022,112 @@ a { color:inherit; text-decoration:none; }
 }
 .teacher-send-btn:hover { background:#1D4ED8 !important; }
 .teacher-send-btn:disabled { background:var(--border); cursor:default; }
+
+.teacher-doc-btn {
+  width:46px; min-width:46px; height:46px; border-radius:50%;
+  background:transparent; border:0;
+  color:#60A5FA; font-size:1.25rem; cursor:pointer; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  transition:all .15s ease; outline:none;
+}
+.teacher-mic-btn {
+  width:42px; min-width:42px; height:42px; border:0; border-radius:50%;
+  display:flex; align-items:center; justify-content:center; cursor:pointer;
+  background:transparent; color:var(--orange); font-size:1.25rem;
+}
+.teacher-mic-btn.listening { color:var(--orange); background:rgba(255,153,51,.14); }
+.teacher-mic-btn svg, .tm-bubble-tts svg { width:21px; height:21px; stroke:currentColor; }
+.tm-bubble-tts {
+  align-self:flex-end; border:0; background:transparent; color:var(--orange);
+  font-size:1.05rem; line-height:1; padding:8px; cursor:pointer;
+}
+.tm-bubble-tts:hover { background:rgba(255,153,51,.10); border-radius:50%; }
+/* ═══ Michael-skolen, konge/tjener-chip, HAV-lys, hint ═══ */
+.teacher-ai-badge {
+  display:inline-flex; align-items:center; padding:2px 8px; border-radius:999px; font-size:.68rem;
+  font-weight:800; letter-spacing:.06em; color:#FFB366; border:1px solid rgba(255,153,51,.5);
+  background:rgba(255,153,51,.1); margin-left:6px;
+}
+.ms-open-btn {
+  margin-left:auto; border:1px solid rgba(0,245,255,.4); background:rgba(0,245,255,.08); color:#00F5FF;
+  border-radius:999px; padding:6px 12px; font-size:.78rem; font-weight:700; cursor:pointer; white-space:nowrap;
+}
+.ms-open-btn:hover { background:rgba(0,245,255,.18); }
+.ms-overlay {
+  position:fixed; inset:0; z-index:9000; background:rgba(5,8,20,.82); display:none;
+  align-items:flex-start; justify-content:center; padding:16px; overflow-y:auto;
+}
+.ms-overlay.open { display:flex; }
+.ms-panel {
+  width:100%; max-width:640px; background:#0d1226; border:1px solid rgba(0,245,255,.25);
+  border-radius:16px; padding:16px; color:#E2E8F0; box-shadow:0 0 30px rgba(0,245,255,.12);
+}
+.ms-head { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+.ms-head h2 { margin:0; font-size:1.05rem; flex:1; color:#00F5FF; }
+.ms-close { border:0; background:transparent; color:#CBD5E1; font-size:1.2rem; cursor:pointer; padding:6px 10px; }
+.ms-tabs { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px; }
+.ms-tab { border:1px solid rgba(255,255,255,.15); background:transparent; color:#CBD5E1; border-radius:999px; padding:7px 12px; font-size:.78rem; cursor:pointer; }
+.ms-tab.active { border-color:#00F5FF; color:#00F5FF; background:rgba(0,245,255,.1); }
+.ms-card { background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08); border-radius:12px; padding:14px; margin-bottom:12px; }
+.ms-card-title { font-weight:800; margin-bottom:8px; }
+.ms-side { display:flex; flex-direction:column; gap:2px; padding:8px 10px; border-radius:8px; margin-bottom:6px; font-size:.86rem; line-height:1.45; }
+.ms-side.th { background:rgba(255,153,51,.08); }
+.ms-side.no { background:rgba(0,245,255,.08); }
+.ms-q { font-size:.86rem; font-weight:700; margin:10px 0 6px; }
+.ms-opts { display:flex; flex-direction:column; gap:6px; }
+.ms-opt, .ms-btn { border:1px solid rgba(255,255,255,.18); background:rgba(255,255,255,.05); color:#E2E8F0; border-radius:10px; padding:10px 12px; font-size:.85rem; text-align:left; cursor:pointer; }
+.ms-btn { text-align:center; margin-top:10px; border-color:#00F5FF; color:#00F5FF; font-weight:700; }
+.ms-opt.ok { border-color:#22C55E; background:rgba(34,197,94,.15); }
+.ms-opt.bad { border-color:#EF4444; background:rgba(239,68,68,.15); }
+.ms-result { font-size:.8rem; font-weight:800; margin-top:4px; }
+.ms-result.ok { color:#22C55E; } .ms-result.bad { color:#EF4444; }
+.ms-word-lbl { font-size:.72rem; color:#94A3B8; margin-bottom:6px; }
+.ms-word-term { font-size:1.6rem; font-weight:800; color:#00F5FF; }
+.ms-word-term small { display:block; font-size:.68rem; font-weight:600; color:#94A3B8; }
+.ms-word-def { margin-top:8px; font-size:.92rem; line-height:1.5; }
+.ms-gaze { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:10px 0; }
+.ms-gaze-step { padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,.12); font-size:.86rem; transition:all .2s; }
+.ms-gaze-step b { color:#FF9933; margin-right:4px; }
+.ms-gaze-step.lit { background:rgba(0,245,255,.2); border-color:#00F5FF; box-shadow:0 0 12px rgba(0,245,255,.4); transform:scale(1.03); }
+.ms-gaze-round { font-size:.78rem; color:#94A3B8; min-height:1.2em; }
+.ks-chip { margin:8px 0; padding:8px 12px; border-radius:10px; font-size:.8rem; font-weight:700; background:rgba(255,215,0,.1); border:1px solid rgba(255,215,0,.35); color:#FDE68A; }
+.hav-lamps { display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin:10px 0; }
+.hav-title { width:100%; font-size:.7rem; color:#94A3B8; font-weight:700; }
+.hav-lamp { padding:5px 10px; border-radius:999px; font-size:.75rem; border:1px solid rgba(255,255,255,.15); color:#64748B; }
+.hav-lamp b { margin-right:3px; }
+.hav-lamp.on { color:#0b1020; background:#FF9933; border-color:#FF9933; box-shadow:0 0 10px rgba(255,153,51,.6); font-weight:800; }
+.ask-hint-btn { width:100%; display:flex; align-items:center; justify-content:center; gap:8px; padding:12px; border-radius:10px; border:1px solid rgba(0,245,255,.4); background:rgba(0,245,255,.08); color:#00F5FF; font-weight:700; cursor:pointer; font-size:.85rem; margin-top:8px; }
+.hint-dots { letter-spacing:2px; }
+.teacher-doc-btn:hover {
+  background:rgba(37,99,235,0.3); border-color:#00F5FF; color:#00F5FF;
+  box-shadow:0 0 10px rgba(0,245,255,0.25);
+}
+.teacher-doc-btn:disabled {
+  opacity:.4; cursor:not-allowed;
+}
+
+.teacher-doc-badge {
+  display:none; align-items:center; gap:8px;
+  width:min(760px,100%); max-width:100%; margin-inline:auto;
+  padding:8px 14px; background:#0B1E3B;
+  border-top:1px solid rgba(96,165,250,0.35);
+  border-left:1px solid rgba(96,165,250,0.35);
+  border-right:1px solid rgba(96,165,250,0.35);
+  border-radius:12px 12px 0 0;
+  color:#93C5FD; font-size:.85rem; box-sizing:border-box; flex-shrink:0;
+}
+.teacher-doc-badge .teacher-doc-icon { font-size:1rem; flex-shrink:0; }
+.teacher-doc-badge .teacher-doc-name {
+  flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:600;
+}
+.teacher-doc-badge .teacher-doc-close {
+  background:none; border:none; color:#F87171; cursor:pointer;
+  font-size:1rem; padding:2px 8px; border-radius:6px; font-weight:900;
+  transition:all .15s ease;
+}
+.teacher-doc-badge .teacher-doc-close:hover {
+  color:#EF4444; background:rgba(239,68,68,0.18);
+}
 
 /* Teacher mode bottomNav keeps full carousel navigation */
 #app.teacher-mode #bottomNav .bn-tab { display:flex; }
@@ -3591,7 +4249,7 @@ a { color:inherit; text-decoration:none; }
   .tm-chips-toggle { display:none !important; }
   .teacher-inputbar { width:100%; padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px)); background:#071326; position:relative; z-index:2; }
   .teacher-input { min-height:56px; font-size:1rem; }
-  .teacher-send-btn { min-width:86px; height:56px; }
+  .teacher-send-btn { width:48px; min-width:48px; height:48px; }
   .tm-sign-card { grid-template-columns:90px minmax(0,1fr); gap:12px; padding:12px; }
   .tm-sign-image-wrap { min-height:48px; }
   .tm-sign-image { width:90px; max-width:90px; height:90px; max-height:90px; }
@@ -3676,18 +4334,89 @@ a { color:inherit; text-decoration:none; }
   z-index: 2 !important;
 }
 
-/* ── Universal neon border — ALL buttons, always rotating ── */
-.auth-btn, .home-sec-btn, .sb-tool-btn, .sb-nav-btn, .sb-video-btn,
-.fk-sc-btn, .end-btn-pri, .end-btn-sec, .paywall-buy-btn,
-.tsp-btn, .sp-btn-primary, .sp-btn-sm, .sp-btn-sm-ai, .sp-btn-sm-audio, .sp-btn-sm-bm,
-.hp-btn-pri, .hp-btn-sec, .ask-michael-btn, .hist-btn-pri, .hist-btn-sec,
-.back-btn, .logout-btn, .lang-btn, .seg-btn, .spd-btn, .vol-btn, .rv-done-btn,
-.lib-back-btn, .teacher-send-btn, .tm-chip-btn, .sb-edit-btn, .ai-expand-btn,
-.q-bookmark-btn, .sp-ai-tts-btn, .rv-next, .sbs-btn {
+/* ══════════════════════════════════════════
+   TASK-013: DEDICATED NEON UI CLASSES
+   Color palette: Deep Blue (#0055ff), Cyan (#00f0ff), Magenta (#ff007f), Amber (#ffaa00)
+   Strictly forbidden: Yellow and Green neon accents
+══════════════════════════════════════════ */
+.btn-neon,
+#startExamBtn,
+#teacherSendBtn,
+#endCoachMichaelPriBtn {
+  position: relative;
+  border: 2px solid transparent !important;
+  background: linear-gradient(var(--btn-bg, rgba(15, 23, 42, 0.95)), var(--btn-bg, rgba(15, 23, 42, 0.95))) padding-box,
+              conic-gradient(from var(--neon-angle, 0deg), #00f0ff 0%, #0055ff 25%, #ff007f 50%, #ffaa00 75%, #00f0ff 100%) border-box !important;
+  animation: neonFlow 3s linear infinite !important;
+  box-shadow: 0 0 14px rgba(0, 240, 255, 0.42), 0 0 24px rgba(255, 0, 127, 0.26) !important;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease !important;
+  cursor: pointer;
+}
+
+.btn-neon:hover,
+#startExamBtn:hover,
+#teacherSendBtn:hover,
+#endCoachMichaelPriBtn:hover {
+  transform: translateY(-2px) scale(1.02) !important;
+  box-shadow: 0 0 22px rgba(0, 240, 255, 0.65), 0 0 34px rgba(255, 0, 127, 0.45) !important;
+}
+
+.btn-neon:active,
+#startExamBtn:active,
+#teacherSendBtn:active,
+#endCoachMichaelPriBtn:active {
+  transform: translateY(0) scale(0.98) !important;
+}
+
+/* The chat composer uses one calm blue circular send action. */
+#teacherSendBtn {
+  width:48px; min-width:48px; height:48px; border-radius:50%;
+  border:1px solid #60A5FA !important; background:#2563EB !important;
+  box-shadow:0 0 14px rgba(37,99,235,.38) !important; animation:none !important;
+}
+#teacherSendBtn:hover { background:#1D4ED8 !important; }
+
+.card-neon {
+  position: relative;
+  border: 1.5px solid transparent !important;
+  background: linear-gradient(var(--card-bg, rgba(17, 24, 39, 0.96)), var(--card-bg, rgba(17, 24, 39, 0.96))) padding-box,
+              conic-gradient(from var(--neon-angle, 0deg), #00f0ff 0%, #0055ff 25%, #ff007f 50%, #ffaa00 75%, #00f0ff 100%) border-box !important;
+  animation: neonFlow 4s linear infinite !important;
+  box-shadow: 0 0 14px rgba(0, 240, 255, 0.26), 0 0 22px rgba(0, 85, 255, 0.18) !important;
+  transition: transform 0.2s ease, box-shadow 0.25s ease !important;
+}
+
+.card-neon:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.45), 0 0 30px rgba(255, 0, 127, 0.3) !important;
+}
+
+.panel-neon {
+  position: relative;
+  border: 1.5px solid transparent !important;
+  background: linear-gradient(var(--panel-bg, rgba(11, 18, 38, 0.96)), var(--panel-bg, rgba(11, 18, 38, 0.96))) padding-box,
+              conic-gradient(from var(--neon-angle, 0deg), #00f0ff 0%, #0055ff 25%, #ff007f 50%, #ffaa00 75%, #00f0ff 100%) border-box !important;
+  animation: neonFlow 6s linear infinite !important;
+  box-shadow: 0 0 16px rgba(0, 240, 255, 0.22), 0 0 28px rgba(255, 0, 127, 0.16) !important;
+}
+
+/* ⚡ Universal neon border — ALL buttons, always rotating ⚡ */
+.auth-btn, .auth-guest-btn, .home-cta, .home-cta-exam, .home-sec-btn,
+.sb-tool-btn, .sb-nav-btn, .sb-video-btn, .sb-edit-btn,
+.fk-sc-btn, .end-btn-pri, .end-btn-sec, .end-btn-coach, .end-focus-btn,
+.paywall-buy-btn, .tsp-btn, .sp-btn-primary, .sp-btn-sm, .sp-btn-sm-ai,
+.sp-btn-sm-audio, .sp-btn-sm-bm, .hp-btn-pri, .hp-btn-sec, .ask-michael-btn,
+.hist-btn-pri, .hist-btn-sec, .back-btn, .lib-back-btn, .logout-btn,
+.lang-btn, .seg-btn, .spd-btn, .vol-btn, .rv-done-btn, .rv-next,
+.teacher-send-btn, .tm-chip-btn, .tm-no-term-btn, .teacher-doc-btn,
+.ai-expand-btn, .q-bookmark-btn, .sp-ai-tts-btn, .exam-error-btn,
+.glossary-term-btn, .micro-lesson-btn, .target-practice-option,
+.vp-back-btn, .vp-mc-btn, .quiz-coach-trigger-btn, .sbs-btn, .btn {
   border: 1.5px solid transparent !important;
   background: linear-gradient(var(--btn-bg, rgba(17,24,39,0.95)), var(--btn-bg, rgba(17,24,39,0.95))) padding-box,
-              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #00F5FF) border-box !important;
-  animation: neonFlow 3s linear infinite !important;
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF 0%, #0066FF 25%, #FF00E5 50%, #FF9933 75%, #00F5FF 100%) border-box !important;
+  animation: neonFlow 3.5s linear infinite !important;
+  box-shadow: 0 0 10px rgba(0, 245, 255, 0.4), 0 0 18px rgba(255, 0, 229, 0.25) !important;
   color: #FFFFFF !important;
 }
 
@@ -3718,7 +4447,7 @@ a { color:inherit; text-decoration:none; }
 .rv-next {
   border: 1.5px solid transparent !important;
   background: linear-gradient(rgba(17, 24, 39, 0.95), rgba(17, 24, 39, 0.95)) padding-box,
-              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #00F5FF) border-box !important;
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF 0%, #0066FF 25%, #FF00E5 50%, #FF9933 75%, #00F5FF 100%) border-box !important;
   animation: neonFlow 4s linear infinite !important;
   box-shadow: 0 0 10px rgba(0, 245, 255, 0.25) !important;
   color: #FFFFFF !important;
@@ -3754,7 +4483,7 @@ a { color:inherit; text-decoration:none; }
 .logout-btn:hover {
   border: 1.5px solid transparent !important;
   background: linear-gradient(rgba(17, 24, 39, 0.95), rgba(17, 24, 39, 0.95)) padding-box,
-              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #00F5FF) border-box !important;
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF 0%, #0066FF 25%, #FF00E5 50%, #FF9933 75%, #00F5FF 100%) border-box !important;
   animation: neonFlow 4s linear infinite !important;
   box-shadow: 0 0 12px rgba(255, 0, 229, 0.3) !important;
   transform: scale(1.03) !important;
@@ -3768,7 +4497,7 @@ a { color:inherit; text-decoration:none; }
 .bm-card:hover {
   border: 1.5px solid transparent !important;
   background: linear-gradient(rgba(19, 27, 46, 0.96), rgba(11, 18, 38, 0.98)) padding-box,
-              conic-gradient(from var(--neon-angle, 0deg), #00F5FF, #FF00E5, #00F5FF) border-box !important;
+              conic-gradient(from var(--neon-angle, 0deg), #00F5FF 0%, #0066FF 25%, #FF00E5 50%, #FF9933 75%, #00F5FF 100%) border-box !important;
   animation: neonFlow 5s linear infinite !important;
   box-shadow: 0 0 15px rgba(0, 245, 255, 0.22) !important;
 }
@@ -4033,6 +4762,10 @@ a { color:inherit; text-decoration:none; }
             <input type="email" id="regEmail" placeholder="din@epost.com" data-placeholder-key="auth_email_placeholder" autocomplete="email">
           </div>
           <div class="form-group">
+            <label data-key="auth_phone">Mobilnummer</label>
+            <input type="tel" id="regPhone" placeholder="Ditt mobilnummer" data-placeholder-key="auth_phone_placeholder" autocomplete="tel" inputmode="tel">
+          </div>
+          <div class="form-group">
             <label data-key="auth_password">Passord</label>
             <div class="pw-wrap">
               <input type="password" id="regPass" placeholder="Minst 6 tegn" data-placeholder-key="auth_password_min_placeholder" autocomplete="new-password">
@@ -4073,6 +4806,11 @@ a { color:inherit; text-decoration:none; }
             <a href="#forgot" style="font-size:.78rem;color:var(--muted);cursor:pointer" onclick="switchTab('forgot'); return false;" data-key="back">← Tilbake</a>
           </div>
         </div>
+
+        <div class="auth-guest">
+          <button type="button" class="auth-guest-btn" onclick="enterGuest()" data-key="auth_guest_btn">Fortsett som gjest</button>
+          <p class="auth-guest-hint" data-key="auth_guest_hint">Prøv fem spørsmål uten konto</p>
+        </div>
       </div>
     </div>
 
@@ -4096,6 +4834,9 @@ a { color:inherit; text-decoration:none; }
       <button class="home-cta" onclick="startRandomQuiz()">
         <span data-key="home_primary_action">▶ Start quiz / daglig test</span>
       </button>
+      <button class="home-cta home-cta-exam" id="startExamBtn" onclick="startExam()">
+        <span data-key="home_exam_action"></span>
+      </button>
 
       <div class="home-main-actions">
         <button class="home-main-choice" onclick="showTab('teacher')">
@@ -4108,8 +4849,7 @@ a { color:inherit; text-decoration:none; }
         <button class="home-main-choice" onclick="showTab('library')">
           <span class="home-main-choice-icon">🎬</span>
           <span class="home-main-choice-copy">
-            <span class="home-main-choice-title" data-key="home_open_library">Videokurs & Podkaster</span>
-            <span class="home-main-choice-sub" data-key="library_sub">Se leksjoner og hør forklaringer</span>
+            <span class="home-main-choice-title" data-key="lib_videos">Videoer</span>
           </span>
         </button>
         <button class="home-main-choice" onclick="toggleTargetPracticeMenu()" aria-controls="targetPracticeMenu" aria-expanded="false" id="targetPracticeToggle">
@@ -4123,6 +4863,13 @@ a { color:inherit; text-decoration:none; }
           <button class="target-practice-option" id="mistakesHomeBtn" onclick="startMistakeQuiz()" data-key="mistakes_short">Øv på mine feil</button>
           <button class="target-practice-option" onclick="showTab('signs')" data-key="home_open_signs">Åpne skiltkatalog</button>
         </div>
+        <button class="home-main-choice" onclick="showTab('dashboard')">
+          <span class="home-main-choice-icon">📊</span>
+          <span class="home-main-choice-copy">
+            <span class="home-main-choice-title" data-key="readiness_title">Klar for prøven</span>
+            <span class="home-main-choice-sub" data-key="history">Historikk</span>
+          </span>
+        </button>
       </div>
 
       <div class="home-stats">
@@ -4141,7 +4888,7 @@ a { color:inherit; text-decoration:none; }
       </div>
 
       <!-- Readiness card — populated by loadHome() from last quiz attempt -->
-      <div class="home-readiness" id="homeReadiness" style="display:none" onclick="showTab('history')">
+      <div class="home-readiness" id="homeReadiness" style="display:none" onclick="showTab('dashboard')">
         <div class="hr-dot" id="hrDot"></div>
         <div class="hr-main">
           <div class="hr-label" data-key="readiness_title">ความพร้อมสำหรับการสอบ</div>
@@ -4158,6 +4905,19 @@ a { color:inherit; text-decoration:none; }
           <h4 class="pb-title" data-key="premium_on">⭐ Premium</h4>
           <p class="pb-sub" data-key="premium_sub">Du har tilgang til alle funksjoner</p>
         </div>
+      </div>
+
+      <!-- 50-Brukers Kampanje Banner -->
+      <div class="campaign-banner" id="homeCampaignBanner" style="display:none" onclick="openCampaignModal()">
+        <div class="cb-left">
+          <span class="cb-icon">🎁</span>
+          <div class="cb-info">
+            <div class="cb-badge" data-key="campaign_badge">⚡ Begrenset tilbud</div>
+            <h4 class="cb-title" data-key="campaign_title">🎁 30 dagers gratis Premium!</h4>
+            <p class="cb-desc" id="cbRemainingText">Kun 50 av 50 plasser igjen!</p>
+          </div>
+        </div>
+        <button class="cb-btn" onclick="event.stopPropagation();openCampaignModal()" data-key="campaign_claim_btn">Sikre din plass</button>
       </div>
     </div>
 
@@ -4209,6 +4969,7 @@ a { color:inherit; text-decoration:none; }
           </div>
           <div class="quiz-score-badge">✓ <span id="qScoreNum">0</span></div>
           <div id="examTimerBadge" style="display:none;background:rgba(239,68,68,.18);border:1px solid rgba(239,68,68,.4);color:#EF4444;border-radius:20px;padding:4px 12px;font-size:.85rem;font-weight:700;margin-left:8px;">⏱ <span id="examTimerLbl">90:00</span></div>
+          <button id="examSubmitBtn" class="exam-submit-btn" style="display:none;background:rgba(239,68,68,.25);border:1px solid #EF4444;color:#FCA5A5;border-radius:12px;padding:5px 12px;font-size:.8rem;font-weight:700;cursor:pointer;margin-left:8px;" onclick="confirmSubmitExam()" data-key="exam_submit"></button>
         </div>
         <div class="quiz-body">
           <div class="quiz-card" id="qCard">
@@ -4437,6 +5198,15 @@ a { color:inherit; text-decoration:none; }
       </div>
     </div>
 
+    <!-- Dashboard uses localized labels and API-provided learner text. -->
+    <div class="screen" id="screenDashboard">
+      <div class="hist-header">
+        <button class="back-btn" onclick="showTab('home')" data-key="backhome">Hjem</button>
+        <div class="screen-title" data-key="readiness_title">Klar for prøven</div>
+      </div>
+      <div class="hist-scroll" id="dashboardContent" aria-live="polite"></div>
+    </div>
+
     <!-- ═══ STUDIEBOK SCREEN ═══ -->
     <div class="screen" id="screenStudybook">
       <!-- Top bar: back + search -->
@@ -4537,18 +5307,24 @@ a { color:inherit; text-decoration:none; }
 
     <!-- ═══ END SCREEN ═══ -->
     <div class="screen" id="screenEnd">
-      <div class="end-wrap">
+      <div class="end-wrap panel-neon">
         <div class="end-score-quiet" id="endScoreQuiet"></div>
         <div class="end-heading" id="endHeading" data-key="result_done">Øvelsen er ferdig.</div>
         <p class="end-body" id="endBody"></p>
-        <div class="end-focus" id="endFocus" style="display:none">
-          <div>
+        <div class="end-focus card-neon" id="endFocus" style="display:none">
+          <div style="flex:1;">
             <div class="end-focus-label" data-key="result_focus">Anbefalt øvelse</div>
             <div class="end-focus-topic" id="endFocusTopic"></div>
           </div>
+          <button class="end-focus-btn" id="endFocusCoachBtn" onclick="consultMichaelFromExam()" data-key="result_coach_topic">Øv med Michael</button>
+        </div>
+        <div class="end-exam-errors" id="endExamErrorsContainer" style="display:none;">
+          <div class="end-exam-errors-title" id="endExamErrorsTitle"></div>
+          <div class="end-exam-errors-list" id="endExamErrorsList"></div>
         </div>
         <div class="end-btns">
-          <button class="end-btn-pri" onclick="retryQuiz()" data-key="result_retry">Prøv igjen</button>
+          <button class="end-btn-pri end-btn-coach btn-neon" id="endCoachMichaelPriBtn" onclick="consultMichaelFromExam()" data-key="result_michael_coach" style="display:none;">💬 Gå gjennom med Michael AI</button>
+          <button class="end-btn-pri" id="endRetryBtn" onclick="retryQuiz()" data-key="result_retry">Prøv igjen</button>
           <button class="end-btn-sec" onclick="showTab('teacher')" data-key="result_michael">Gå til Michael</button>
           <button class="end-btn-sec" onclick="showTab('home')" data-key="home">Hjem</button>
           <button class="end-btn-sec" onclick="showTab('cats')" data-key="pickcat">Velg kategori</button>
@@ -4607,17 +5383,28 @@ a { color:inherit; text-decoration:none; }
 
         <!-- Chat header -->
         <div class="teacher-header">
+          <button class="teacher-sidebar-toggle" id="teacherSidebarToggle" type="button" onclick="toggleTeacherSidebar()" aria-controls="teacherSidePanel" aria-expanded="false" aria-label="Vis sidefelt" title="Vis sidefelt">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/></svg>
+          </button>
           <img class="teacher-avatar" src="/api/assets/michael_profile.jpg" alt="Michael">
           <div class="teacher-header-info">
             <div class="teacher-name" id="teacherNameLbl">Michael Trafikklærer</div>
             <div class="teacher-meta-wrap">
               <div class="teacher-meta-line" data-key="teacher_meta">Pålogget • AI-lærer • 16 års erfaring</div>
               <div class="teacher-online-badge" data-key="teacher_online_badge">ONLINE</div>
+              <div class="teacher-ai-badge" id="teacherAiBadge" role="note">AI</div>
             </div>
           </div>
-          <button class="teacher-sidebar-toggle" id="teacherSidebarToggle" type="button" onclick="toggleTeacherSidebar()" aria-controls="teacherSidePanel" aria-expanded="false" aria-label="Vis emner" title="Vis emner">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/></svg>
-          </button>
+          <button type="button" class="ms-open-btn" id="msOpenBtn" onclick="openMichaelSchool()">🎓 <span id="msOpenLbl">Michael-skolen</span></button>
+        </div>
+
+        <!-- Michael-skolen overlay -->
+        <div class="ms-overlay" id="msOverlay" onclick="if(event.target===this)closeMichaelSchool()">
+          <div class="ms-panel" role="dialog" aria-modal="true" aria-labelledby="msTitle">
+            <div class="ms-head"><h2 id="msTitle">Michael-skolen</h2><button type="button" class="ms-close" onclick="closeMichaelSchool()" aria-label="Close">✕</button></div>
+            <div class="ms-tabs" id="msTabs"></div>
+            <div id="msBody"></div>
+          </div>
         </div>
 
         <!-- Message list -->
@@ -4625,41 +5412,22 @@ a { color:inherit; text-decoration:none; }
           <!-- Welcome bubble injected by JS -->
         </div>
 
-        <!-- Suggestion chips — shown only before first user message -->
-        <div class="teacher-suggestions" id="teacherSuggestions" aria-hidden="true">
-          <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="🪧 Forklar et skilt" data-msg-th="🪧 อธิบายป้ายจราจร" data-msg-en="🪧 Explain a sign">🪧 <span class="chip-lbl"></span></button>
-          <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="⚠️ Hjelp med vikeplikt" data-msg-th="⚠️ ช่วยเรื่องการให้ทาง" data-msg-en="⚠️ Help with right-of-way">⚠️ <span class="chip-lbl"></span></button>
-          <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="📖 Forklar en trafikkregel" data-msg-th="📖 อธิบายกฎจราจร" data-msg-en="📖 Explain a traffic rule">📖 <span class="chip-lbl"></span></button>
-          <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="📝 Hjelp med teoriprøven" data-msg-th="📝 ช่วยเรื่องข้อสอบทฤษฎี" data-msg-en="📝 Help with the theory test">📝 <span class="chip-lbl"></span></button>
-          <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="📊 Hva bør jeg øve på?" data-msg-th="📊 ฉันควรฝึกเรื่องอะไร?" data-msg-en="📊 What should I practise?">📊 <span class="chip-lbl"></span></button>
-          <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)" data-msg-no="❓ Spør om Thai2Drive" data-msg-th="❓ ถามเกี่ยวกับ Thai2Drive" data-msg-en="❓ Ask about Thai2Drive">❓ <span class="chip-lbl"></span></button>
-          <!-- Math shortcuts section -->
-          <div class="teacher-chip-hdr" id="tcMathHdr" data-hdr-no="🧮 Regnestykker" data-hdr-th="🧮 โจทย์คำนวณ" data-hdr-en="🧮 Calculations"></div>
-          <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)"
-            data-label-no="🧮 Regnestykker" data-label-th="🧮 โจทย์คำนวณ" data-label-en="🧮 Calculations"
-            data-msg-no="🧮 Vis meg alle formler: reaksjonslengde, bremselengde og stoppelengde" data-msg-th="🧮 แสดงสูตรทั้งหมด: ระยะปฏิกิริยา ระยะเบรก และระยะหยุดรถ" data-msg-en="🧮 Show me all formulas: reaction distance, braking distance and stopping distance">🧮 <span class="chip-lbl"></span></button>
-          <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)"
-            data-label-no="🚗 Reaksjonslengde" data-label-th="🚗 ระยะตอบสนอง" data-label-en="🚗 Reaction distance"
-            data-msg-no="🚗 Reaksjonslengde — gi meg formelen og regn ut ved 50 km/t" data-msg-th="🚗 ระยะตอบสนอง — ให้สูตรและคำนวณที่ 50 กม./ชม." data-msg-en="🚗 Reaction distance — give me the formula and work out an example at 50 km/h">🚗 <span class="chip-lbl"></span></button>
-          <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)"
-            data-label-no="🛑 Bremselengde" data-label-th="🛑 ระยะเบรก" data-label-en="🛑 Braking distance"
-            data-msg-no="🛑 Bremselengde — gi meg formelen og regn ut ved 50 km/t" data-msg-th="🛑 ระยะเบรก — ให้สูตรและคำนวณที่ 50 กม./ชม." data-msg-en="🛑 Braking distance — give me the formula and work out an example at 50 km/h">🛑 <span class="chip-lbl"></span></button>
-          <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)"
-            data-label-no="📏 Stoppelengde" data-label-th="📏 ระยะหยุดรถ" data-label-en="📏 Stopping distance"
-            data-msg-no="📏 Stoppelengde — gi meg formelen og regn ut ved 50 km/t" data-msg-th="📏 ระยะหยุดรถ — ให้สูตรและคำนวณที่ 50 กม./ชม." data-msg-en="📏 Stopping distance — give me the formula and work out an example at 50 km/h">📏 <span class="chip-lbl"></span></button>
-          <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)"
-            data-label-no="⚡ Dobbel fart" data-label-th="⚡ ความเร็วเพิ่มเป็นสองเท่า" data-label-en="⚡ Double speed"
-            data-msg-no="⚡ Dobbel fart — hva skjer med bremselengden? Gi eksempel" data-msg-th="⚡ ความเร็วเพิ่มเป็นสองเท่า — เกิดอะไรขึ้นกับระยะเบรก? ให้ตัวอย่าง" data-msg-en="⚡ Double speed — what happens to braking distance? Give an example">⚡ <span class="chip-lbl"></span></button>
-          <button class="teacher-chip" onclick="teacherSend(this.dataset.msg)"
-            data-label-no="🌧️ Våt/glatt vei" data-label-th="🌧️ ถนนเปียก/ลื่น" data-label-en="🌧️ Wet/slippery road"
-            data-msg-no="🌧️ Våt og glatt vei — hvordan påvirker det bremselengden?" data-msg-th="🌧️ ถนนเปียก/ลื่น — ส่งผลต่อระยะเบรกอย่างไร?" data-msg-en="🌧️ Wet/slippery road — how does it affect braking distance?">🌧️ <span class="chip-lbl"></span></button>
-          <button class="teacher-topics-toggle" id="teacherMoreBtn" type="button" aria-expanded="false" onclick="toggleTeacherTopics()" data-key="teacher_more_topics">Flere emner</button>
+        <!-- Uploaded Document Badge -->
+        <div class="teacher-doc-badge" id="teacherDocBadge">
+          <span class="teacher-doc-icon">📄</span>
+          <span class="teacher-doc-name" id="teacherDocName"></span>
+          <button type="button" class="teacher-doc-close" id="teacherDocClose" onclick="_teacherClearDoc()" aria-label="Fjern dokument" data-label-key="teacher_doc_remove">✕</button>
         </div>
 
         <!-- Input bar -->
         <div class="teacher-inputbar">
-          <textarea class="teacher-input" id="teacherInput" rows="1" placeholder="..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();teacherSend();}"></textarea>
-          <button class="teacher-send-btn" id="teacherSendBtn" onclick="teacherSend()"><span data-key="teacher_send">Send</span>&nbsp;➤</button>
+          <div class="teacher-composer">
+            <input type="file" id="teacherDocInput" accept=".pdf,application/pdf,image/png,image/jpeg,image/webp" style="display:none" onchange="_teacherUploadDoc(this)">
+            <button type="button" class="teacher-doc-btn" id="teacherDocBtn" onclick="document.getElementById('teacherDocInput').click()" title="Last opp PDF eller bilde" aria-label="Last opp PDF eller bilde" data-label-key="teacher_upload_doc">＋</button>
+            <textarea class="teacher-input" id="teacherInput" rows="1" placeholder="..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();teacherSend();}"></textarea>
+            <button type="button" class="teacher-mic-btn" id="teacherMicBtn" onclick="toggleTeacherVoiceInput()" aria-label="Snakk med Michael" title="Snakk med Michael"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v5M8 22h8"/></svg></button>
+            <button class="teacher-send-btn" id="teacherSendBtn" onclick="teacherSend()" aria-label="Send"><span aria-hidden="true">↑</span></button>
+          </div>
         </div>
 
       </div><!-- /teacher-chat-col -->
@@ -4668,13 +5436,12 @@ a { color:inherit; text-decoration:none; }
 
       <!-- Topic drawer — opened on demand on mobile and desktop -->
       <div class="teacher-side-panel" id="teacherSidePanel" aria-hidden="true">
-        <div class="tsp-title" id="tspTitle" data-key="tsp_title">Emner</div>
-        <button class="tsp-btn" data-tsp-btn="sign">🪧 <span data-tsp="sign"></span></button>
-        <button class="tsp-btn" data-tsp-btn="vikeplikt">⚠️ <span data-tsp="vikeplikt"></span></button>
-        <button class="tsp-btn" data-tsp-btn="rule">📖 <span data-tsp="rule"></span></button>
-        <button class="tsp-btn" data-tsp-btn="practice">📊 <span data-tsp="practice"></span></button>
-        <button class="tsp-btn" data-tsp-btn="theory">📝 <span data-tsp="theory"></span></button>
-        <button class="tsp-btn" data-tsp-btn="app">❓ <span data-tsp="app"></span></button>
+        <div class="tsp-title" id="tspTitle" data-key="tsp_title">Lær med Michael</div>
+        <button class="tsp-btn" onclick="teacherSidebarAction('strengths')">📊 <span data-tsp="strengths"></span></button>
+        <button class="tsp-btn" onclick="teacherSidebarAction('signs')">🪧 <span data-tsp="signs"></span></button>
+        <button class="tsp-btn" onclick="teacherSidebarAction('rules')">📏 <span data-tsp="rules"></span></button>
+        <button class="tsp-btn" onclick="teacherSidebarAction('position')">🚗 <span data-tsp="position"></span></button>
+        <button class="tsp-btn" onclick="teacherSidebarAction('dictionary')">🇳🇴 <span data-tsp="dictionary"></span></button>
       </div><!-- /teacher-side-panel -->
 
     </div><!-- /screenTeacher -->
@@ -4701,7 +5468,7 @@ a { color:inherit; text-decoration:none; }
     <button class="bn-tab" id="bnSigns" onclick="showTab('signs')">
       <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 22 2 22"/><line x1="12" y1="9" x2="12" y2="15"/><circle cx="12" cy="18" r="0.5" fill="currentColor"/></svg></span><span class="bn-label" data-key="signs">Skilt</span>
     </button>
-    <button class="bn-tab" id="bnStudybook" onclick="showTab('studybook')">
+    <button class="bn-tab" id="bnStudybook" onclick="openStudybookChapter()">
       <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span><span class="bn-label" data-key="sb_nav">Studiebok</span>
     </button>
     <button class="bn-tab" id="bnBookmarks" onclick="showTab('bookmarks')">
@@ -4713,6 +5480,36 @@ a { color:inherit; text-decoration:none; }
   </div>
 
 </div><!-- /app -->
+
+<!-- ═══ 50-USER CAMPAIGN MODAL ═══ -->
+<div class="campaign-modal-backdrop" id="campaignModal" style="display:none" onclick="if(event.target===this)closeCampaignModal()">
+  <div class="campaign-modal-card">
+    <button class="campaign-modal-close" onclick="closeCampaignModal()">&times;</button>
+    <div class="cm-header">
+      <div class="cm-badge">🎁 30 DAGER PREMIUM</div>
+      <h3 class="cm-title" data-key="campaign_modal_title">Registrer deg for 30 dagers gratis Premium</h3>
+      <p class="cm-sub" id="cmModalSubText" data-key="campaign_modal_sub">For de 50 første elevene — sikre deg plass nå!</p>
+    </div>
+    <form id="campaignForm" onsubmit="submitCampaignRegistration(event)">
+      <div class="cm-field">
+        <label data-key="campaign_name_label">Fullt navn</label>
+        <input type="text" id="campName" required placeholder="" autocomplete="name" />
+      </div>
+      <div class="cm-field">
+        <label data-key="campaign_email_label">E-postadresse</label>
+        <input type="email" id="campEmail" required placeholder="navn@epost.no" autocomplete="email" />
+      </div>
+      <div class="cm-field">
+        <label data-key="campaign_phone_label">Telefonnummer</label>
+        <input type="tel" id="campPhone" required placeholder="+47 000 00 000" autocomplete="tel" />
+      </div>
+      <div class="cm-feedback" id="campFeedback" style="display:none"></div>
+      <button type="submit" class="cm-submit-btn" id="campSubmitBtn" data-key="campaign_submit_btn">
+        ✨ Få 30 dager gratis Premium
+      </button>
+    </form>
+  </div>
+</div>
 
 <!-- ═══ LIGHTBOX MODAL (Image Enlarge) ═══ -->
 <div class="t2d-lightbox" id="t2dLightbox" onclick="closeLightbox(event)" aria-hidden="true" role="dialog">
@@ -4877,6 +5674,19 @@ function _mergeAttempts(remote, local) {
 
 // ── UI string translations ──────────────────────────────────
 var UI = {
+  // ── 50-Brukers Kampanje (30 dager gratis Premium) ─────────────────────────
+  campaign_badge:        {th:'⚡ จำกัด 50 ท่านแรก', no:'⚡ Begrenset tilbud', en:'⚡ Limited Offer'},
+  campaign_title:        {th:'🎁 รับสิทธิ์ Premium ฟรี 30 วัน!', no:'🎁 30 dagers gratis Premium!', en:'🎁 30 Days Free Premium!'},
+  campaign_desc:         {th:'เหลืออีก {remaining} จาก 50 ที่นั่ง', no:'Kun {remaining} av 50 plasser igjen!', en:'Only {remaining} of 50 spots left!'},
+  campaign_claim_btn:    {th:'รับสิทธิ์ทันที', no:'Sikre din plass', en:'Claim Your Spot'},
+  campaign_modal_title:  {th:'ลงทะเบียนรับสิทธิ์ Premium ฟรี 30 วัน', no:'Registrer deg for 30 dagers gratis Premium', en:'Register for 30 Days Free Premium'},
+  campaign_modal_sub:    {th:'สำหรับนักเรียน 50 ท่านแรก — รีบรับสิทธิ์ก่อนเต็ม!', no:'For de 50 første elevene — sikre deg plass nå!', en:'For the first 50 students — claim your spot now!'},
+  campaign_name_label:   {th:'ชื่อ - นามสกุล', no:'Fullt navn', en:'Full Name'},
+  campaign_email_label:  {th:'อีเมล', no:'E-postadresse', en:'Email Address'},
+  campaign_phone_label:  {th:'เบอร์โทรศัพท์', no:'Telefonnummer', en:'Phone Number'},
+  campaign_submit_btn:   {th:'✨ ยืนยันรับสิทธิ์ฟรี 30 วัน', no:'✨ Få 30 dager gratis Premium', en:'✨ Get 30 Days Free Premium'},
+  campaign_sold_out:     {th:'แคมเปญนี้เต็มแล้วครับ (ครบ 50 ที่นั่งแล้ว)', no:'Kampanjen er nå fulltegnet (50 av 50 plasser er tatt)', en:'Campaign is now fully booked (50 of 50 spots taken)'},
+
   meta_description:{th:'ฝึกข้อสอบทฤษฎีใบขับขี่นอร์เวย์ด้วยภาษาไทย นอร์เวย์ และอังกฤษกับ Thai2Drive', no:'Øv til norsk teoriprøve på thai, norsk og engelsk med Thai2Drive.', en:'Practise for the Norwegian driving theory test in Thai, Norwegian and English with Thai2Drive.'},
   toggle_password:{th:'แสดงหรือซ่อนรหัสผ่าน', no:'Vis eller skjul passord', en:'Show or hide password'},
   back:        {th:'← กลับ',          no:'← Tilbake',      en:'← Back'},
@@ -4895,6 +5705,18 @@ var UI = {
   startquiz:   {th:'▶  เริ่มควิซ',      no:'▶  Start quiz',   en:'▶  Start quiz'},
   home_choose_action:{th:'เลือกสิ่งที่คุณต้องการฝึก', no:'Velg hva du vil gjøre', en:'Choose what you want to do'},
   home_primary_action:{th:'▶ เริ่มควิซ / แบบทดสอบประจำวัน', no:'▶ Start quiz / daglig test', en:'▶ Start quiz / daily test'},
+  home_exam_action:{th:'📝 เริ่มทำข้อสอบทฤษฎีเสมือนจริง (45 ข้อ – 90 นาที)', no:'📝 Start Offisiell Teoriprøve (45 spørsmål – 90 min)', en:'📝 Start Official Theory Exam (45 questions – 90 min)'},
+  home_exam_sub:   {th:'รูปแบบ Statens vegvesen • ผิดได้ไม่เกิน 7 ข้อ', no:'Statens vegvesen-format • Maks 7 feil', en:'Official test format • Max 7 mistakes'},
+  exam_submit:     {th:'ส่งข้อสอบ', no:'Lever prøve', en:'Submit exam'},
+  exam_submit_confirm:{th:'คุณแน่ใจหรือไม่ว่าต้องการส่งข้อสอบตอนนี้?', no:'Er du sikker på at du vil levere teoriprøven nå?', en:'Are you sure you want to submit the exam now?'},
+  prev:            {th:'‹ ก่อนหน้า', no:'‹ Forrige', en:'‹ Previous'},
+  exam_finish:     {th:'ส่งข้อสอบ', no:'Fullfør', en:'Finish'},
+  exam_errors_heading:{th:'ทบทวนข้อที่ตอบผิด ({count} ข้อ)', no:'Gjennomgang av feil ({count})', en:'Review of mistakes ({count})'},
+  exam_all_correct:{th:'ยอดเยี่ยมมาก! ไม่มีข้อผิดเลย (45/45)', no:'Fantastisk! Ingen feil (45/45)', en:'Fantastic! Zero errors (45/45)'},
+  exam_your_answer:{th:'คำตอบของคุณ', no:'Ditt svar', en:'Your answer'},
+  exam_correct_answer:{th:'คำตอบที่ถูกต้อง', no:'Riktig svar', en:'Correct answer'},
+  exam_unanswered: {th:'ไม่ได้ตอบ', no:'Ikke besvart', en:'Not answered'},
+  ask_michael_ai:  {th:'💬 ถาม Michael AI', no:'💬 Spør Michael AI', en:'💬 Ask Michael AI'},
   home_ask_michael:{th:'ถาม Michael AI', no:'Spør Michael AI', en:'Ask Michael AI'},
   home_targeted:{th:'ฝึกข้อที่ตอบผิดและคลังป้ายจราจร', no:'Øv på mine feil & skiltkatalog', en:'Practise my mistakes & road signs'},
   home_open_signs:{th:'เปิดคลังป้ายจราจร', no:'Åpne skiltkatalog', en:'Open road sign catalogue'},
@@ -4923,12 +5745,24 @@ var UI = {
   acct:        {th:'บัญชี',             no:'Konto',            en:'Account'},
   language:    {th:'ภาษา',              no:'Språk',            en:'Language'},
   teacher:     {th:'Michael',            no:'Michael',          en:'Michael'},
-  teacher_name:{th:'ครูสอนขับรถ Michael', no:'Michael Trafikklærer', en:'Michael Driving Teacher'},
+  teacher_name:{th:'Michael AI (ครู AI • 24 ชม.)', no:'Michael AI (AI-lærer • 24/7)', en:'Michael AI (AI Teacher • 24/7)'},
   teacher_role:{th:'ครูสอนขับรถ', no:'Trafikklærer', en:'Driving teacher'},
   teacher_experience:{th:'ประสบการณ์ 16 ปี', no:'16 års erfaring', en:'16 years of experience'},
   teacher_meta:{th:'เข้าสู่ระบบ • ครู AI • ประสบการณ์ 16 ปี', no:'Pålogget • AI-lærer • 16 års erfaring', en:'Signed in • AI teacher • 16 years experience'},
   teacher_online_badge:{th:'ออนไลน์', no:'ONLINE', en:'ONLINE'},
+  contact_human_btn:{th:'ส่งข้อความถึง Michael ตัวจริง', no:'Send melding til Ekte Michael', en:'Send message to Real Michael'},
+  contact_human_sent:{th:'ส่งข้อความถึง Michael ตัวจริงแล้ว เขาจะติดต่อกลับเร็ว ๆ นี้', no:'Meldingen er sendt til Ekte Michael. Han svarer deg snart.', en:'Your message was sent to the real Michael. He will get back to you soon.'},
+  contact_human_failed:{th:'ส่งข้อความไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', no:'Klarte ikke å sende meldingen. Prøv igjen.', en:'Could not send the message. Please try again.'},
+  contact_human_empty:{th:'พิมพ์ข้อความก่อนส่งถึง Michael ตัวจริง', no:'Skriv en melding før du sender til Ekte Michael.', en:'Write a message before sending it to the real Michael.'},
   teacher_send:{th:'ส่ง', no:'Send', en:'Send'},
+  teacher_upload_doc:{th:'แนบเอกสาร PDF หรือรูปภาพ', no:'Last opp PDF eller bilde', en:'Upload PDF or image'},
+  teacher_doc_chars:{th:'ตัวอักษร', no:'tegn', en:'characters'},
+  teacher_doc_uploading:{th:'กำลังอัปโหลด...', no:'Laster opp...', en:'Uploading...'},
+  teacher_doc_error:{th:'ไม่สามารถอัปโหลด PDF ได้', no:'Kunne ikke laste opp PDF', en:'Could not upload PDF'},
+  teacher_doc_remove:{th:'ลบเอกสาร', no:'Fjern dokument', en:'Remove document'},
+  teacher_image_ready:{th:'รูปภาพพร้อมวิเคราะห์', no:'Bildet er klart for analyse', en:'Image ready for analysis'},
+  teacher_image_error:{th:'ใช้ได้เฉพาะไฟล์ JPG, PNG หรือ WebP ขนาดไม่เกิน 4 MB', no:'Bruk JPG, PNG eller WebP på maksimalt 4 MB', en:'Use a JPG, PNG or WebP image no larger than 4 MB'},
+  teacher_image_prompt:{th:'ช่วยวิเคราะห์สถานการณ์จราจรในภาพนี้ครับ', no:'Analyser trafikksituasjonen i dette bildet.', en:'Analyse the traffic situation in this image.'},
   teacher_more_topics:{th:'หัวข้อเพิ่มเติม', no:'Flere emner', en:'More topics'},
   teacher_fewer_topics:{th:'แสดงน้อยลง', no:'Vis færre', en:'Show fewer'},
   teacher_sub: {th:'ถามคำถามเกี่ยวกับการจราจร', no:'Still et spørsmål om trafikk', en:'Ask a question about traffic'},
@@ -4937,11 +5771,19 @@ var UI = {
   teacher_show_example_prompt:{th:'แสดงตัวอย่างสถานการณ์จริงที่สั้นและเข้าใจง่ายสำหรับป้ายนี้', no:'Vis meg et kort, praktisk eksempel med dette skiltet.', en:'Show me a short practical example using this sign.'},
   teacher_test_me:{th:'ทดสอบฉัน', no:'Test meg', en:'Test me'},
   teacher_show_norwegian_term:{th:'ดูคำศัพท์นอร์เวย์', no:'Se norsk fagord', en:'Show Norwegian term'},
-  teacher_topics_open:{th:'แสดงหัวข้อ', no:'Vis emner', en:'Show topics'},
-  teacher_topics_close:{th:'ปิดหัวข้อ', no:'Lukk emner', en:'Close topics'},
+  teacher_topics_open:{th:'แสดงแถบด้านข้าง', no:'Vis sidefelt', en:'Show sidebar'},
+  teacher_topics_close:{th:'ซ่อนแถบด้านข้าง', no:'Skjul sidefelt', en:'Hide sidebar'},
+  teacher_voice_start:{th:'พูดกับไมเคิล', no:'Snakk med Michael', en:'Talk to Michael'},
+  teacher_voice_stop:{th:'หยุดฟัง', no:'Stopp lytting', en:'Stop listening'},
+  teacher_voice_unsupported:{th:'เบราว์เซอร์นี้ไม่รองรับการพิมพ์ด้วยเสียง', no:'Nettleseren støtter ikke taleinntasting.', en:'This browser does not support voice input.'},
   teacher_error: {th:'ขอโทษ เกิดข้อผิดพลาด ลองใหม่อีกครั้ง', no:'Beklager, noe gikk galt. Prøv igjen.', en:'Sorry, something went wrong. Please try again.'},
   teacher_online:{th:'● ออนไลน์', no:'● Pålogget', en:'● Online'},
-  tsp_title:   {th:'หัวข้อ',           no:'Emner',               en:'Topics'},
+  tsp_title:   {th:'เรียนกับไมเคิล', no:'Lær med Michael', en:'Learn with Michael'},
+  tsp_strengths:{th:'จุดอ่อนและจุดแข็งของคุณ', no:'Dine svake/sterke sider', en:'Your weak/strong areas'},
+  tsp_signs:{th:'ป้ายจราจร', no:'Skilt', en:'Road signs'},
+  tsp_rules:{th:'กฎและระยะหยุดรถ', no:'Regler / stopplengde', en:'Rules / stopping distance'},
+  tsp_position:{th:'ตำแหน่งรถบนถนน', no:'Plassering', en:'Road positioning'},
+  tsp_dictionary:{th:'พจนานุกรมคำศัพท์จราจรนอร์เวย์', no:'Norsk trafikkordbok', en:'Norwegian traffic dictionary'},
   tsp_sign:    {th:'อธิบายป้ายจราจร',  no:'Forklar et skilt',    en:'Explain a sign'},
   tsp_vikeplikt:{th:'ช่วยเรื่องการให้ทาง', no:'Hjelp med vikeplikt', en:'Help with right-of-way'},
   tsp_rule:    {th:'อธิบายกฎจราจร',   no:'Forklar en trafikkregel', en:'Explain a traffic rule'},
@@ -5061,6 +5903,8 @@ var UI = {
   result_done:{th:'ทำแบบฝึกเสร็จแล้ว',       no:'Øvelsen er ferdig.', en:'Practice finished.'},
   result_retry:{th:'ลองอีกครั้ง',             no:'Prøv igjen',        en:'Try again'},
   result_michael:{th:'ไปหา Michael เพื่อทบทวนข้อผิดพลาด', no:'Gå til Michael for feilretting', en:'Go to Michael to review mistakes'},
+  result_coach_topic:{th:'ฝึกกับไมเคิล', no:'Øv med Michael', en:'Practice with Michael'},
+  result_michael_coach:{th:'💬 วิเคราะห์ข้อผิดพลาดกับไมเคิล AI', no:'💬 Gå gjennom med Michael AI', en:'💬 Review mistakes with Michael AI'},
   result_exam_pass_head:{th:'ผ่าน',          no:'Bestått.',         en:'Passed.'},
   result_exam_pass_body:{th:'คุณพร้อมสำหรับการสอบทฤษฎีแล้ว ลองทำอีกหนึ่งรอบเพื่อเพิ่มความมั่นใจ', no:'Du er klar for teoriprøven. Gjennomfør gjerne enda en runde for å bygge selvtillit.', en:'You are ready for the theory test. Do one more round to build confidence.'},
   result_exam_fail_head:{th:'ครั้งนี้ยังไม่ผ่าน', no:'Ikke bestått denne gangen.', en:'Not passed this time.'},
@@ -5088,6 +5932,10 @@ var UI = {
   auth_email:  {th:'อีเมล', no:'E-post', en:'Email'},
   auth_password:{th:'รหัสผ่าน', no:'Passord', en:'Password'},
   auth_name:   {th:'ชื่อ', no:'Navn', en:'Name'},
+  auth_phone:  {th:'เบอร์โทรศัพท์มือถือ', no:'Mobilnummer', en:'Mobile number'},
+  auth_phone_placeholder:{th:'เบอร์โทรศัพท์มือถือของคุณ', no:'Ditt mobilnummer', en:'Your mobile number'},
+  phone_already_registered:{th:'เบอร์โทรศัพท์นี้ลงทะเบียนแล้ว กรุณาเข้าสู่ระบบหรือติดต่อฝ่ายสนับสนุน', no:'Dette telefonnummeret er allerede registrert. Logg inn eller kontakt support.', en:'This phone number is already registered. Log in or contact support.'},
+  auth_invalid_signup:{th:'ตรวจสอบชื่อ อีเมล เบอร์โทรศัพท์ และรหัสผ่าน แล้วลองอีกครั้ง', no:'Kontroller navn, e-post, mobilnummer og passord, og prøv igjen.', en:'Check your name, email, mobile number and password, then try again.'},
   auth_email_placeholder:{th:'อีเมลของคุณ', no:'din@epost.com', en:'your@email.com'},
   auth_password_placeholder:{th:'รหัสผ่าน', no:'Passord', en:'Password'},
   auth_password_min_placeholder:{th:'อย่างน้อย 6 ตัวอักษร', no:'Minst 6 tegn', en:'At least 6 characters'},
@@ -5203,24 +6051,24 @@ var UI = {
   promo_cta:   {th:'สร้างบัญชีฟรี', no:'Opprett gratis konto', en:'Create free account'},
   promo_active:{th:'คุณมีสิทธิ์เข้าถึงเต็มรูปแบบจากแคมเปญเปิดตัว', no:'Du har full tilgang gjennom lanseringskampanjen', en:'You have full access through the launch campaign'},
   pw_title:    {th:'ปลดล็อกการเข้าถึงทั้งหมด', no:'Lås opp full tilgang', en:'Unlock full access'},
-  pw_sub:      {th:'คุณได้ใช้สิทธิ์ทดลองเรียนฟรีครบแล้ว (gratisprøven)', no:'Du har brukt gratisprøven', en:'You have used your free trial'},
+  pw_sub:      {th:'คุณได้ใช้สิทธิ์ทดลองเรียนฟรีครบแล้ว', no:'Du har brukt gratisprøven', en:'You have used your free trial'},
   pw_f1:       {th:'คำถามและหมวดหมู่ไม่จำกัด', no:'Ubegrenset spørsmål og kategorier', en:'Unlimited questions and categories'},
-  pw_f2:       {th:'โหมดสอบเต็มรูปแบบ (eksamensmodus) 45 ข้อ', no:'Fullstendig eksamensmode (45 spørsmål)', en:'Full exam mode (45 questions)'},
+  pw_f2:       {th:'โหมดสอบเต็มรูปแบบ 45 ข้อ', no:'Fullstendig eksamensmode (45 spørsmål)', en:'Full exam mode (45 questions)'},
   pw_f3:       {th:'ทดสอบรายวันและโหมดฝึกซ้อม', no:'Daglig test og øvingsmodus', en:'Daily test and practice mode'},
   pw_f4:       {th:'ประวัติและสถิติความก้าวหน้า', no:'Historikk og fremgangsstatistikk', en:'History and progress statistics'},
-  pw_f5:       {th:'แกลเลอรีป้ายจราจร (trafikkskilt)', no:'Trafikkskilt-galleri', en:'Traffic signs gallery'},
-  pw_month:    {th:'รายเดือน (månedlig)', no:'Månedlig', en:'Monthly'},
-  pw_three_months:{th:'3 เดือน (3 måneder)', no:'3 måneder', en:'3 months'},
-  pw_lifetime: {th:'ตลอดชีพ (livstid)', no:'Livstid', en:'Lifetime'},
+  pw_f5:       {th:'แกลเลอรีป้ายจราจร', no:'Trafikkskilt-galleri', en:'Traffic signs gallery'},
+  pw_month:    {th:'รายเดือน', no:'Månedlig', en:'Monthly'},
+  pw_three_months:{th:'3 เดือน', no:'3 måneder', en:'3 months'},
+  pw_lifetime: {th:'ตลอดชีพ', no:'Livstid', en:'Lifetime'},
   pw_per_month:{th:'ต่อเดือน', no:'per måned', en:'per month'},
   pw_per_three_months:{th:'ต่อ 3 เดือน', no:'per 3 måneder', en:'per 3 months'},
-  pw_per_lifetime:{th:'จ่ายครั้งเดียว (engangsbetaling)', no:'engangsbetaling', en:'one-time payment'},
+  pw_per_lifetime:{th:'จ่ายครั้งเดียว', no:'engangsbetaling', en:'one-time payment'},
   pw_best_value:{th:'คุ้มค่าที่สุด – ประหยัด {pct}%', no:'Best verdi – spar {pct}%', en:'Best value – save {pct}%'},
-  pw_currency:{th:'โครน (kr)', no:'kr', en:'NOK'},
-  pw_lifetime_note:{th:'จ่ายครั้งเดียว ใช้ได้ตลอดไป (engangsbetaling)', no:'Betal én gang – bruk for alltid', en:'Pay once – use forever'},
+  pw_currency:{th:'โครน', no:'kr', en:'NOK'},
+  pw_lifetime_note:{th:'จ่ายครั้งเดียว ใช้ได้ตลอดไป', no:'Betal én gang – bruk for alltid', en:'Pay once – use forever'},
   pw_buy:      {th:'ปลดล็อกพรีเมียมเพื่อเข้าถึงแบบไม่จำกัด', no:'Lås opp Premium for ubegrenset tilgang', en:'Unlock Premium for unlimited access'},
-  pw_restore_purchase:{th:'กู้คืนการซื้อ (gjenopprett kjøp)', no:'Gjenopprett kjøp', en:'Restore purchase'},
-  pw_cancel_anytime:{th:'ยกเลิกเมื่อไหร่ก็ได้ (avslutt når som helst)', no:'Avslutt når som helst', en:'Cancel anytime'},
+  pw_restore_purchase:{th:'กู้คืนการซื้อ', no:'Gjenopprett kjøp', en:'Restore purchase'},
+  pw_cancel_anytime:{th:'ยกเลิกเมื่อไหร่ก็ได้', no:'Avslutt når som helst', en:'Cancel anytime'},
   pw_skip:     {th:'ใช้ต่อแบบฟรี', no:'Fortsett gratis', en:'Continue free'},
   // Auth
   auth_login_tab:  {th:'เข้าสู่ระบบ',    no:'Logg inn',      en:'Log in'},
@@ -5235,6 +6083,8 @@ var UI = {
   auth_back:       {th:'← กลับ',        no:'← Tilbake',     en:'← Back'},
   auth_login_btn:  {th:'เข้าสู่ระบบ',    no:'Logg inn',      en:'Log in'},
   auth_reg_btn:    {th:'สร้างบัญชี',     no:'Opprett konto', en:'Create account'},
+  auth_guest_btn:  {th:'ใช้งานต่อในฐานะผู้เยี่ยมชม', no:'Fortsett som gjest', en:'Continue as guest'},
+  auth_guest_hint: {th:'ทดลองทำข้อสอบ 5 ข้อโดยไม่ต้องสร้างบัญชี', no:'Prøv fem spørsmål uten konto', en:'Try five questions without an account'},
   auth_sending:    {th:'กำลังส่ง…',      no:'Sender…',       en:'Sending…'},
   auth_email_sent: {th:'ส่งอีเมลแล้ว! ตรวจสอบกล่องขาเข้า 📧', no:'E-post sendt! Sjekk innboksen din 📧', en:'Email sent! Check your inbox 📧'},
   auth_fill_email: {th:'กรุณากรอกอีเมล', no:'Fyll inn e-postadressen din', en:'Please enter your email address'},
@@ -5299,6 +6149,7 @@ var UI = {
   checkout_unavailable_toast:{th:'ไม่สามารถเปิดการชำระเงินได้ในตอนนี้', no:'Betaling er ikke tilgjengelig akkurat nå', en:'Payment is not available right now'},
   free_questions_left:      {th:'เหลือ {count} คำถามฟรี', no:'{count} gratis spørsmål igjen', en:'{count} free questions left'},
 };
+var TR = UI;
 
 function t(key) {
   var entry = UI[key];
@@ -5369,6 +6220,7 @@ function ttsStreamUrl(text, lang) {
 }
 
 function applyUILang() {
+  if (typeof renderStopping === 'function' && document.getElementById('stopSpeed')) renderStopping();
   document.documentElement.lang = appLang === 'no' ? 'nb' : appLang;
   var metaDescription = document.getElementById('metaDescription');
   if (metaDescription) metaDescription.setAttribute('content', t('meta_description'));
@@ -5409,8 +6261,25 @@ function applyUILang() {
   // Update teacher UI if visible
   var tNameEl = document.getElementById('teacherNameLbl');
   if (tNameEl) tNameEl.textContent = t('teacher_name');
+  var tContactBtn = document.getElementById('contactHumanBtn');
+  if (tContactBtn) tContactBtn.textContent = t('contact_human_btn');
   var tInput = document.getElementById('teacherInput');
   if (tInput) tInput.placeholder = t('teacher_placeholder');
+  var tMicBtn = document.getElementById('teacherMicBtn');
+  if (tMicBtn && !tMicBtn.classList.contains('listening')) {
+    tMicBtn.setAttribute('aria-label', t('teacher_voice_start'));
+    tMicBtn.title = t('teacher_voice_start');
+  }
+  var tSendBtn = document.getElementById('teacherSendBtn');
+  if (tSendBtn) tSendBtn.setAttribute('aria-label', t('teacher_send'));
+  if (typeof _teacherUploadedDoc !== 'undefined' && _teacherUploadedDoc) {
+    var docBadge = document.getElementById('teacherDocBadge');
+    var docName = document.getElementById('teacherDocName');
+    if (docBadge && docName && docBadge.style.display !== 'none') {
+      var charsLbl = t('teacher_doc_chars');
+      docName.textContent = '📄 ' + (_teacherUploadedDoc.filename || '') + ' (' + (_teacherUploadedDoc.character_count || 0) + ' ' + charsLbl + ')';
+    }
+  }
   var tSidebarToggle = document.getElementById('teacherSidebarToggle');
   if (tSidebarToggle) {
     var sidebarOpen = tSidebarToggle.getAttribute('aria-expanded') === 'true';
@@ -5428,7 +6297,7 @@ function applyUILang() {
   // Side panel labels
   var tspTitle = document.getElementById('tspTitle');
   if (tspTitle) tspTitle.textContent = t('tsp_title');
-  var tspMap = { sign:'tsp_sign', vikeplikt:'tsp_vikeplikt', rule:'tsp_rule', practice:'tsp_practice', theory:'tsp_theory', app:'tsp_app' };
+  var tspMap = { strengths:'tsp_strengths', signs:'tsp_signs', rules:'tsp_rules', position:'tsp_position', dictionary:'tsp_dictionary' };
   document.querySelectorAll('[data-tsp]').forEach(function(el) {
     var key = tspMap[el.getAttribute('data-tsp')];
     if (key) el.textContent = t(key);
@@ -5465,7 +6334,9 @@ function applyUILang() {
     catsTitleEl.innerHTML = '📚 <span data-key="cats">' + t('cats') + '</span> <span id="catCount">' + catsCountText + '</span>';
   }
   // home buttons
-  document.querySelectorAll('.home-cta').forEach(function(b){ b.innerHTML = '<span data-key="home_primary_action">' + t('home_primary_action') + '</span>'; });
+  document.querySelectorAll('.home-cta:not(.home-cta-exam)').forEach(function(b){ b.innerHTML = '<span data-key="home_primary_action">' + t('home_primary_action') + '</span>'; });
+  var examBtn = document.getElementById('startExamBtn');
+  if (examBtn) examBtn.innerHTML = '<span data-key="home_exam_action">' + t('home_exam_action') + '</span>';
   // Oppdater horisontal scrollmeny-labels
   document.querySelectorAll('.hsm-label[data-hsm-key]').forEach(function(el) {
     var key = el.getAttribute('data-hsm-key');
@@ -5693,6 +6564,7 @@ var PREMIUM_PRICING = {
 //  SCREEN & TAB MANAGEMENT
 // ════════════════════════════════════════════
 function showScreen(id) {
+  if (id !== 'screenStopping' && document.getElementById('screenStopping') && document.getElementById('screenStopping').classList.contains('active')) { deactivateStopping(); clearStoppingUrl(); }
   if (id !== 'screenQuiz') closeMichaelQuizCoach();
   document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
   var el = document.getElementById(id);
@@ -5702,6 +6574,7 @@ function showScreen(id) {
   app.classList.toggle('quiz-mode', id === 'screenQuiz');
   app.classList.toggle('teacher-mode', id === 'screenTeacher');
   app.classList.toggle('fk-mode', id === 'screenForbikjoring');
+  app.classList.toggle('stopping-mode', id === 'screenStopping');
 }
 
 function enterApp() {
@@ -5711,7 +6584,9 @@ function enterApp() {
   loadAccessStatus();
   refreshTtsToken();
   var requestedSign = new URLSearchParams(window.location.search).get('sign');
-  if (requestedSign) {
+  if (new URLSearchParams(window.location.search).get('tool') === 'stopping-distance') {
+    showTab('stopping');
+  } else if (requestedSign) {
     showTab('signs');
     loadSigns().then(function() { openSignDetailById(requestedSign); });
   } else {
@@ -5782,6 +6657,10 @@ function bindBottomNavCarousel() {
   });
 }
 
+function openStudybookChapter() {
+  showTab('studybook');
+}
+
 function showTab(tab, forceType) {
   // Close video player if active
   var vpScreen = document.getElementById('screenVideoPlayer');
@@ -5822,9 +6701,9 @@ function showTab(tab, forceType) {
   bindBottomNavCarousel();
   var screenMap = {
     home:'screenHome', cats:'screenCats',
-    history:'screenHistory', signs:'screenSigns', bookmarks:'screenBookmarks',
+    history:'screenHistory', dashboard:'screenDashboard', signs:'screenSigns', bookmarks:'screenBookmarks',
     settings:'screenSettings', studybook:'screenStudybook', teacher:'screenTeacher',
-    library:'screenLibrary'
+    library:'screenLibrary', stopping:'screenStopping'
   };
   if (screenMap[tab]) {
     // Premium-only tabs
@@ -5837,11 +6716,13 @@ function showTab(tab, forceType) {
     if (tab === 'home')      loadHome();
     if (tab === 'cats')      loadCategories();
     if (tab === 'history')   loadHistory();
+    if (tab === 'dashboard') loadDashboard();
     if (tab === 'signs')     loadSigns();
     if (tab === 'bookmarks') loadBookmarks();
     if (tab === 'settings')  loadSettings();
     if (tab === 'studybook') loadStudiebok();
     if (tab === 'library')   loadLibrary();
+    if (tab === 'stopping')  loadStopping(false);
     if (tab === 'teacher') {
       if (forceType) {
         switchTeacherSession(forceType);
@@ -6077,9 +6958,24 @@ function openVideoPlayer(filePath) {
   // Build Glow Road
   buildGlowRoad();
 
-  // Set video source
+  // Set video source and rebuild language tracks for this exact lesson.
   var vid = document.getElementById('vpVideo');
   var youtubeFrame = document.getElementById('vpYoutube');
+  Array.from(vid.querySelectorAll('track')).forEach(function(track) { track.remove(); });
+  var subtitleTracks = Array.isArray(v.subtitle_tracks) ? v.subtitle_tracks : [];
+  subtitleTracks.forEach(function(item) {
+    if (!item || !item.lang || !_teacherMediaSafeUrl(item.url)) return;
+    var track = document.createElement('track');
+    track.kind = 'subtitles';
+    track.srclang = item.lang;
+    track.label = item.label || item.lang;
+    track.src = item.url;
+    track.default = item.lang === appLang;
+    vid.appendChild(track);
+  });
+  // Norwegian source audio must not leak into Thai mode. Thai learners get
+  // the selected-language subtitle track instead.
+  vid.muted = !!(v.audio_language && v.audio_language !== appLang);
   var rawPath = v.file_path || '';
   if (rawPath && rawPath.indexOf('/public_assets/') === 0) {
     rawPath = '/api/assets/' + rawPath.substring('/public_assets/'.length);
@@ -6625,24 +7521,54 @@ var _audioUnlocked = false;
 var _teacherActiveText = '';
 var _teacherAudioToken = 0;
 var _teacherWatchdog = null;
+var _pendingTtsFallback = null;
+
+function _finishSpeechPlayback() {
+  _teacherTtsPlaying = false;
+  _teacherActiveText = '';
+  ttsPlaying = false;
+  updateTtsBtn(false);
+}
+
+function _armTtsFallback(text, lang) {
+  _pendingTtsFallback = { text:String(text || '').trim(), lang:lang || appLang };
+}
+
+function _consumeTtsFallback() {
+  var pending = _pendingTtsFallback;
+  _pendingTtsFallback = null;
+  if (!pending || !pending.text || !('speechSynthesis' in window) || !window.SpeechSynthesisUtterance) {
+    return false;
+  }
+  try {
+    window.speechSynthesis.cancel();
+    var utterance = new SpeechSynthesisUtterance(pending.text);
+    utterance.lang = localeForLangKey(pending.lang);
+    utterance.rate = ttsRate || 1.0;
+    utterance.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
+    utterance.onend = _finishSpeechPlayback;
+    utterance.onerror = _finishSpeechPlayback;
+    window.speechSynthesis.speak(utterance);
+    return true;
+  } catch (error) {
+    console.warn('Browser speech fallback unavailable:', error);
+    return false;
+  }
+}
 
 function _getGlobalAudio() {
   if (!_globalAudio) {
     _globalAudio = new Audio();
     _globalAudio.preload = 'auto';
     _globalAudio.onended = function() {
+      _pendingTtsFallback = null;
       if (_teacherWatchdog) clearTimeout(_teacherWatchdog);
-      _teacherTtsPlaying = false;
-      _teacherActiveText = '';
-      ttsPlaying = false;
-      updateTtsBtn(false);
+      _finishSpeechPlayback();
     };
     _globalAudio.onerror = function() {
       if (_teacherWatchdog) clearTimeout(_teacherWatchdog);
-      _teacherTtsPlaying = false;
-      _teacherActiveText = '';
-      ttsPlaying = false;
-      updateTtsBtn(false);
+      if (_consumeTtsFallback()) return;
+      _finishSpeechPlayback();
     };
   }
   return _globalAudio;
@@ -6672,6 +7598,10 @@ function _unlockAudioPlayback(activeEl) {
 
 function stopAllSpeech() {
   _teacherAudioToken += 1;
+  _pendingTtsFallback = null;
+  if ('speechSynthesis' in window) {
+    try { window.speechSynthesis.cancel(); } catch (e) {}
+  }
   var a = _getGlobalAudio();
   if (a) {
     try {
@@ -6935,6 +7865,36 @@ function clearAuthMessages() {
   document.getElementById('authError').classList.remove('show');
   document.getElementById('authSuccess').classList.remove('show');
 }
+function ensureGuestDeviceId() {
+  var stored = _ls.get('t2d_guest_device_id');
+  if (stored && /^web_guest_[a-z0-9-]{16,}$/i.test(stored)) return stored;
+
+  var randomPart = '';
+  if (window.crypto && typeof window.crypto.randomUUID === 'function') {
+    randomPart = window.crypto.randomUUID();
+  } else if (window.crypto && typeof window.crypto.getRandomValues === 'function') {
+    var bytes = new Uint8Array(16);
+    window.crypto.getRandomValues(bytes);
+    randomPart = Array.prototype.map.call(bytes, function(value) {
+      return value.toString(16).padStart(2, '0');
+    }).join('');
+  } else {
+    randomPart = Date.now().toString(36) + Math.random().toString(36).slice(2);
+  }
+
+  var guestId = 'web_guest_' + randomPart;
+  _ls.set('t2d_guest_device_id', guestId);
+  return guestId;
+}
+
+function enterGuest() {
+  _ls.remove('t2d_token');
+  token = null;
+  user = null;
+  deviceId = ensureGuestDeviceId();
+  enterApp();
+}
+
 
 async function doLogin() {
   clearAuthMessages();
@@ -6959,13 +7919,14 @@ async function doRegister() {
   clearAuthMessages();
   var name  = document.getElementById('regName').value.trim();
   var email = document.getElementById('regEmail').value.trim();
+  var phone = document.getElementById('regPhone').value.trim();
   var pass  = document.getElementById('regPass').value;
-  if (!name || !email || !pass) return showAuthError(t('auth_missing_all'));
+  if (!name || !email || !phone || !pass) return showAuthError(t('auth_missing_all'));
   if (pass.length < 6) return showAuthError(t('auth_password_short'));
   var btn = document.querySelector('#formRegister .auth-btn');
   btn.disabled = true; btn.textContent = t('register_loading');
   try {
-    var r = await api('POST', '/api/auth/signup', { name: name, email: email, password: pass });
+    var r = await api('POST', '/api/auth/signup', { full_name: name, email: email, phone: phone, password: pass });
     token = r.token; user = r.user;
     deviceId = user._id || user.id || null;
     _ls.set('t2d_token', token);
@@ -7101,6 +8062,121 @@ async function loadHome() {
 
   // Premium badge — viser nedtelling når gratisuken er aktiv
   renderPremiumBanner();
+  checkCampaignStatus();
+}
+
+// ═══ 50-USER CAMPAIGN LOGIC ═══
+var campaignSeatsRemaining = 50;
+
+async function checkCampaignStatus() {
+  var banner = document.getElementById('homeCampaignBanner');
+  if (!banner) return;
+  // If user is already active premium, hide campaign banner
+  if (user && user.is_premium) {
+    banner.style.display = 'none';
+    return;
+  }
+  try {
+    var res = await api('GET', '/api/campaign/status');
+    if (res && res.success) {
+      campaignSeatsRemaining = res.remaining != null ? res.remaining : 0;
+      var remEl = document.getElementById('cbRemainingText');
+      if (remEl) {
+        remEl.textContent = tf('campaign_desc', { remaining: campaignSeatsRemaining });
+      }
+      if (res.is_active && campaignSeatsRemaining > 0) {
+        banner.style.display = 'flex';
+      } else {
+        banner.style.display = 'none';
+      }
+    }
+  } catch (e) {
+    console.debug('Campaign status check error:', e);
+  }
+}
+
+function openCampaignModal() {
+  var modal = document.getElementById('campaignModal');
+  if (!modal) return;
+  var nameEl = document.getElementById('campName');
+  var emailEl = document.getElementById('campEmail');
+  var phoneEl = document.getElementById('campPhone');
+  var feedback = document.getElementById('campFeedback');
+  if (feedback) { feedback.style.display = 'none'; feedback.textContent = ''; feedback.className = 'cm-feedback'; }
+  if (user) {
+    if (nameEl && !nameEl.value) nameEl.value = user.name || user.full_name || '';
+    if (emailEl && !emailEl.value) emailEl.value = user.email || '';
+    if (phoneEl && !phoneEl.value) phoneEl.value = user.phone || '';
+  }
+  modal.style.display = 'flex';
+}
+
+function closeCampaignModal() {
+  var modal = document.getElementById('campaignModal');
+  if (modal) modal.style.display = 'none';
+}
+
+async function submitCampaignRegistration(event) {
+  if (event) event.preventDefault();
+  var nameEl = document.getElementById('campName');
+  var emailEl = document.getElementById('campEmail');
+  var phoneEl = document.getElementById('campPhone');
+  var feedback = document.getElementById('campFeedback');
+  var submitBtn = document.getElementById('campSubmitBtn');
+
+  var name = nameEl ? nameEl.value.trim() : '';
+  var email = emailEl ? emailEl.value.trim() : '';
+  var phone = phoneEl ? phoneEl.value.trim() : '';
+
+  if (!name || !email || !phone) return;
+
+  if (submitBtn) { submitBtn.disabled = true; submitBtn.style.opacity = '0.7'; }
+  if (feedback) { feedback.style.display = 'none'; }
+
+  try {
+    var response = await fetch('/api/campaign/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: name,
+        email: email,
+        phone: phone,
+        language: appLang || 'th'
+      })
+    });
+    var data = await response.json();
+    if (response.ok && data.success) {
+      if (feedback) {
+        feedback.className = 'cm-feedback success';
+        feedback.textContent = data.message || 'Gratulerer! Du har fått 30 dagers gratis Premium.';
+        feedback.style.display = 'block';
+      }
+      if (user) {
+        user.is_premium = true;
+        user.has_premium = true;
+        user.premium_until = data.premium_until;
+      }
+      setTimeout(function() {
+        closeCampaignModal();
+        checkCampaignStatus();
+        renderPremiumBanner();
+      }, 2200);
+    } else {
+      if (feedback) {
+        feedback.className = 'cm-feedback error';
+        feedback.textContent = data.detail || data.message || 'Feil ved registrering. Prøv igjen.';
+        feedback.style.display = 'block';
+      }
+    }
+  } catch (err) {
+    if (feedback) {
+      feedback.className = 'cm-feedback error';
+      feedback.textContent = err.message || 'Nettverksfeil. Prøv igjen.';
+      feedback.style.display = 'block';
+    }
+  } finally {
+    if (submitBtn) { submitBtn.disabled = false; submitBtn.style.opacity = '1'; }
+  }
 }
 
 function _getMediaLangBadge(item) {
@@ -7174,8 +8250,8 @@ async function loadCategories() {
         title: { no: "Trafikkregler", th: "กฎจราจร", en: "Traffic Rules" },
         icon: "file-text",
         dbName: "Road Rules",
-        color: "#FFD700",
-        glow: "rgba(255,215,0,.45)",
+        color: "#FF9933",
+        glow: "rgba(255,153,51,.45)",
         count: countMap["Road Rules"] || 0
       },
       {
@@ -7183,8 +8259,8 @@ async function loadCategories() {
         title: { no: "Kjøreforhold", th: "สภาพการขับขี่", en: "Driving Conditions" },
         icon: "cloud-rain",
         dbName: "Driving Conditions",
-        color: "#10B981",
-        glow: "rgba(16,185,129,.45)",
+        color: "#00F5FF",
+        glow: "rgba(0,245,255,.45)",
         count: countMap["Driving Conditions"] || 0
       },
       {
@@ -7364,6 +8440,8 @@ async function startMistakeQuiz() {
 }
 
 var isExamMode = false;
+var examAnswers = {};
+var _examErrors = [];
 var examTimerInterval = null;
 var examSecondsLeft = 0;
 
@@ -7566,6 +8644,7 @@ async function buyPremium(plan, el) {
     var base = window.location.origin + window.location.pathname;
     var session = await api('POST', '/api/create-checkout-session', {
       plan_id: selectedPlan,
+      language: appLang,
       device_id: deviceId || '',
       success_url: base + '?checkout=success&session_id={CHECKOUT_SESSION_ID}',
       cancel_url: base + '?checkout=cancel'
@@ -7607,7 +8686,16 @@ async function startExam() {
   isMistakeMode = false;
   currentCat = null;
   isExamMode = true;
+  examAnswers = {};
+  _examErrors = [];
   await loadQuiz('/api/questions/random?count=45&has_image=true&mode=exam');
+}
+
+function confirmSubmitExam() {
+  var msg = t('exam_submit_confirm');
+  if (confirm(msg)) {
+    showEnd();
+  }
 }
 
 function startExamTimer() {
@@ -7615,7 +8703,9 @@ function startExamTimer() {
   examSecondsLeft = 90 * 60; // 90 minutes
   var badge = document.getElementById('examTimerBadge');
   var lbl   = document.getElementById('examTimerLbl');
+  var submitBtn = document.getElementById('examSubmitBtn');
   if (badge) badge.style.display = 'flex';
+  if (submitBtn) submitBtn.style.display = 'inline-flex';
   updateTimerLabel(lbl, examSecondsLeft);
   examTimerInterval = setInterval(function() {
     examSecondsLeft--;
@@ -7636,6 +8726,8 @@ function stopExamTimer() {
   if (examTimerInterval) { clearInterval(examTimerInterval); examTimerInterval = null; }
   var badge = document.getElementById('examTimerBadge');
   if (badge) badge.style.display = 'none';
+  var submitBtn = document.getElementById('examSubmitBtn');
+  if (submitBtn) submitBtn.style.display = 'none';
 }
 
 function updateTimerLabel(lbl, secs) {
@@ -7649,6 +8741,8 @@ async function startQuiz(catId) {
   var key = catKey(catId);
   currentCat = key ? { id: key, key: key } : null;
   isExamMode = false;
+  examAnswers = {};
+  _examErrors = [];
   var url = '/api/questions/random?count=' + QUIZ_SESSION_SIZE + '&has_image=true';
   if (key) url += '&category=' + encodeURIComponent(key);
   await loadQuiz(url);
@@ -7684,6 +8778,8 @@ async function loadQuiz(url) {
       return;
     }
     qIdx = 0; qScore = 0; qAnswered = false;
+    examAnswers = {};
+    _examErrors = [];
     _wrongStreak = 0; _correctStreak = 0; _correctPhraseIdx = 0;
     _sessionAnswered = 0; _sessionWrongTotal = 0; _recentTopics = []; _topicErrors = {}; _sessionAnswers = [];
     quizStartedAt = new Date().toISOString();
@@ -7708,11 +8804,29 @@ function pickField(q, base) {
   return q[base + '_' + appLang] || '';
 }
 
+// Exam content must always be pure Norwegian (Statens vegvesen format),
+// regardless of the student's selected UI language. UI chrome (buttons,
+// timer, labels) keeps following appLang via pickLang/pickField as normal.
+function pickQuestionLang(obj) {
+  if (isExamMode) {
+    if (!obj) return '';
+    if (typeof obj === 'string') return obj;
+    return (typeof obj.no === 'string' && obj.no.trim() !== '') ? obj.no : pickStrict(obj);
+  }
+  return pickLang(obj);
+}
+
+function pickFieldForQuestion(q, base) {
+  var suffix = isExamMode ? 'no' : appLang;
+  return q[base + '_' + suffix] || '';
+}
+
 function renderQuestion() {
   if (qIdx >= questions.length) { showEnd(); return; }
   if (_aiPanelTimer) { clearTimeout(_aiPanelTimer); _aiPanelTimer = null; } // cancel delayed panel from prev Q
   var q     = questions[qIdx];
   qAnswered = false;
+  _msResetHint();
   var accessLimit = accessState && accessState.limit ? accessState.limit : FREE_LIMIT;
   var displayTotal = isPremium() ? questions.length : Math.min(accessLimit, questions.length);
   var total = questions.length;
@@ -7720,42 +8834,50 @@ function renderQuestion() {
 
   document.getElementById('qProgLbl').textContent  = t('question') + ' ' + (qIdx + 1) + ' ' + t('of') + ' ' + displayTotal;
   document.getElementById('qProgFill').style.width = pct + '%';
+  var scoreBadge = document.querySelector('.quiz-score-badge');
+  if (scoreBadge) scoreBadge.style.display = isExamMode ? 'none' : 'flex';
   document.getElementById('qScoreNum').textContent = qScore;
 
   var imgUrl  = q.bildeUrl || q.image_url || '';
   if (imgUrl && !imgUrl.match(/^(https?:\/\/|\/|data:)/)) { imgUrl = '/api/assets/' + imgUrl; }
-  var qText   = pickLang(q.question) || pickField(q, 'question_text') || '';
+  var qText   = pickQuestionLang(q.question) || pickFieldForQuestion(q, 'question_text') || '';
   currentCorrect = (q.correctOptionId || q.correct_answer || '').toUpperCase();
   currentExpl    = pickLang(q.explanation) || pickField(q, 'explanation') || '';
   var qId     = q._id || q.id || q.question_id || '';
   var isBm    = bookmarkedIds[qId] ? true : false;
+  resetGlossaryTerms();
 
   var opts = [];
-  if (q.options && Array.isArray(q.options) && q.options.length) {
-    opts = q.options.map(function(o) {
-      return { id: String(o.id || o.key || '').toUpperCase(), text: pickLang(o.text) || pickLang(o) || String(o.text || '') };
-    });
+  if (q._shuffledOpts) {
+    opts = q._shuffledOpts.opts;
+    currentCorrect = q._shuffledOpts.correct;
   } else {
-    ['A','B','C','D'].forEach(function(l) {
-      var base = 'answer_' + l.toLowerCase();
-      var val = pickField(q, base);
-      if (val) opts.push({ id: l, text: val });
-    });
+    if (q.options && Array.isArray(q.options) && q.options.length) {
+      opts = q.options.map(function(o) {
+        return { id: String(o.id || o.key || '').toUpperCase(), text: pickQuestionLang(o.text) || pickQuestionLang(o) || String(o.text || '') };
+      });
+    } else {
+      ['A','B','C','D'].forEach(function(l) {
+        var base = 'answer_' + l.toLowerCase();
+        var val = pickFieldForQuestion(q, base);
+        if (val) opts.push({ id: l, text: val });
+      });
+    }
+    opts = opts.filter(function(o) { return o.text; });
+    if (opts.length > 1) {
+      var shuffled = shuffleOpts(opts, currentCorrect);
+      opts = shuffled.opts;
+      currentCorrect = shuffled.correct;
+    }
+    q._shuffledOpts = { opts: opts, correct: currentCorrect };
   }
-  opts = opts.filter(function(o) { return o.text; });
 
-  // Shuffle answer options so the correct answer isn't always in the same position.
-  // currentCorrect is updated to the new display letter of the correct option.
-  if (opts.length > 1) {
-    var shuffled = shuffleOpts(opts, currentCorrect);
-    opts = shuffled.opts;
-    currentCorrect = shuffled.correct;
-  }
-
+  var chosenOption = isExamMode ? (examAnswers[qIdx] || '') : '';
   var qCard = document.getElementById('qCard');
   var ansHtml = opts.map(function(o) {
-    var txt = typeof o.text === 'object' ? pickLang(o.text) : o.text;
-    return '<button class="ans-btn" data-id="' + escH(o.id) + '" onclick="selectAns(this,\'' + escH(o.id) + '\')">'
+    var txt = typeof o.text === 'object' ? pickQuestionLang(o.text) : o.text;
+    var isSelected = (isExamMode && chosenOption && o.id.toUpperCase() === chosenOption.toUpperCase());
+    return '<button class="ans-btn' + (isSelected ? ' selected' : '') + '" data-id="' + escH(o.id) + '" onclick="selectAns(this,\'' + escH(o.id) + '\')">'
       + '<span class="ans-letter">' + escH(o.id) + '</span>'
       + '<span class="ans-text">' + escH(txt) + '</span>'
       + '</button>';
@@ -7784,6 +8906,22 @@ function renderQuestion() {
       + '</div>';
   }
 
+  var navButtonsHtml = '';
+  if (isExamMode) {
+    var isLastQ = (qIdx >= questions.length - 1);
+    var nextLbl = isLastQ ? t('exam_finish') : t('next');
+    navButtonsHtml = '<div class="exam-nav-row">'
+      + '<button class="q-prev-mobile" id="qPrevMobile"' + (qIdx === 0 ? ' disabled' : '') + ' onclick="prevQ()">' + t('prev') + '</button>'
+      + '<button class="q-next-mobile" id="qNextMobile" onclick="nextQ()">' + escH(nextLbl) + '</button>'
+      + '</div>';
+  } else {
+    navButtonsHtml = '<button class="q-next-mobile" id="qNextMobile" disabled onclick="nextQ()">' + t('next') + '</button>';
+  }
+
+  var nextBigHtml = isExamMode
+    ? ('<button class="q-next-big" id="qNextBig" onclick="nextQ()">' + (qIdx >= questions.length - 1 ? t('exam_finish') : t('next')) + '</button>')
+    : ('<button class="q-next-big" id="qNextBig" disabled onclick="nextQ()">' + t('next') + '</button>');
+
   qCard.innerHTML =
     '<div class="q-left">'
       + '<div class="q-img-wrap" id="qImgWrap">'
@@ -7795,19 +8933,23 @@ function renderQuestion() {
     + '</div>'
     + '<div class="q-mid">'
       + buildSituationLensHtml(qText, currentExpl)
+      + buildKingServantChip(qText)
       + '<div class="q-answers" id="qAnswers">' + ansHtml + '</div>'
+      + '<div class="glossary-btn-wrap" id="glossaryBtnWrap"></div>'
       + '<div class="q-feedback" id="qFeedback"></div>'
       // Mobile AI section — empty until answered (:empty hides it), then expands in-flow
       + '<div class="quiz-ai-mobile" id="quizAiMobile"></div>'
-      + '<button class="q-next-mobile" id="qNextMobile" disabled onclick="nextQ()">' + t('next') + '</button>'
+      + navButtonsHtml
     + '</div>'
     + '<div class="q-next-col">'
-      + '<button class="q-next-big" id="qNextBig" disabled onclick="nextQ()">' + t('next') + '</button>'
+      + nextBigHtml
       + '<button class="q-bookmark-btn' + (isBm ? ' bookmarked' : '') + '" id="qBmBtn" onclick="toggleBookmark(\'' + escH(qId) + '\')" title="' + escH(t('bookmark')) + '">'
         + (isBm ? '🔖' : '🔖')
       + '</button>'
     + '</div>'
     + (freeBanner ? freeBanner : '');
+
+  if (qId) loadGlossaryTerms(qId);
 
   // ── Reset AI right panel for new question ─────────────────────────
   var aiImgbox = document.querySelector('.quiz-ai-imgbox');
@@ -7817,14 +8959,14 @@ function renderQuestion() {
   var aiOverlay = document.getElementById('quizAiOverlay');
   if (aiOverlay) aiOverlay.className = 'quiz-ai-img-overlay';
   var aiStatus = document.getElementById('quizAiStatus');
-  if (aiStatus) { aiStatus.textContent = t('ai_waiting'); aiStatus.className = 'quiz-ai-status idle'; }
+  if (aiStatus) { aiStatus.textContent = isExamMode ? t('home_exam_sub') : t('ai_waiting'); aiStatus.className = 'quiz-ai-status idle'; }
   var aiImgBadge = document.getElementById('quizAiImgBadge');
   if (aiImgBadge) aiImgBadge.textContent = t('traffic_situation');
   var aiBody = document.getElementById('quizAiBody');
   if (aiBody) {
     aiBody.innerHTML = '<div class="quiz-ai-idle">'
-      + '<div class="quiz-ai-idle-icon">👆</div>'
-      + '<div class="quiz-ai-idle-text">' + escH(t('ai_idle')) + '</div>'
+      + '<div class="quiz-ai-idle-icon">' + (isExamMode ? '📝' : '👆') + '</div>'
+      + '<div class="quiz-ai-idle-text">' + escH(isExamMode ? t('home_exam_sub') : t('ai_idle')) + '</div>'
       + '</div>';
   }
 
@@ -7872,6 +9014,68 @@ async function renderFagordkort(qId) {
 
 var currentCorrect = '';
 var currentExpl = '';
+
+// ── Fagordkortet (glossary term card) — Thai UI only, see renderQuestion() ──
+var currentTerms = [];
+
+function resetGlossaryTerms() {
+  currentTerms = [];
+  var wrap = document.getElementById('glossaryBtnWrap');
+  if (wrap) wrap.innerHTML = '';
+}
+
+function renderGlossaryButton() {
+  var wrap = document.getElementById('glossaryBtnWrap');
+  if (!wrap) return;
+  if (appLang === 'th' && currentTerms.length > 0) {
+    wrap.innerHTML = '<button class="glossary-term-btn" id="glossaryTermBtn" aria-expanded="false" onclick="toggleGlossaryPanel()">📖 ดูคำศัพท์นอร์เวย์</button>';
+  } else {
+    wrap.innerHTML = '';
+  }
+}
+
+function loadGlossaryTerms(qId) {
+  if (appLang !== 'th') {
+    currentTerms = [];
+    renderGlossaryButton();
+    return;
+  }
+  fetch('/api/quiz/terms?question_id=' + encodeURIComponent(qId) + '&lang=' + encodeURIComponent(appLang))
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      currentTerms = (data && data.terms) || [];
+      renderGlossaryButton();
+    })
+    .catch(function() { currentTerms = []; renderGlossaryButton(); });
+}
+
+function toggleGlossaryPanel() {
+  var wrap = document.getElementById('glossaryBtnWrap');
+  if (!wrap) return;
+  var existing = document.getElementById('glossaryPanel');
+  var btn = document.getElementById('glossaryTermBtn');
+  if (existing) {
+    existing.remove();
+    if (btn) btn.setAttribute('aria-expanded', 'false');
+    return;
+  }
+
+  var itemsHtml = currentTerms.map(function(term) {
+    if (!term.definition_th) return ''; // defensive — API already filters this
+    return '<div class="glossary-term-item">'
+      + '<div class="glossary-term-heading">' + escH(term.term_th) + ' ➔ ' + escH(term.term_no) + '</div>'
+      + '<div class="glossary-term-def">' + escH(term.definition_th) + '</div>'
+      + '</div>';
+  }).join('');
+  if (!itemsHtml) return;
+
+  var panel = document.createElement('div');
+  panel.id = 'glossaryPanel';
+  panel.className = 'glossary-panel';
+  panel.innerHTML = itemsHtml;
+  wrap.appendChild(panel);
+  if (btn) btn.setAttribute('aria-expanded', 'true');
+}
 
 /**
  * Shuffle answer options and rebind display letters A/B/C/D.
@@ -7991,10 +9195,27 @@ function topicLabel(label) {
 }
 
 async function selectAns(btn, picked) {
-  if (qAnswered) return;
+  if (!isExamMode && qAnswered) return;
   var _curQ = questions[qIdx];
-  qAnswered = true;
-  if (!(await consumeQuestionAccess(_curQ))) { qAnswered = false; return; }
+  if (!isExamMode) {
+    qAnswered = true;
+    if (!(await consumeQuestionAccess(_curQ))) { qAnswered = false; return; }
+  }
+
+  if (isExamMode) {
+    examAnswers[qIdx] = picked.toUpperCase();
+    document.querySelectorAll('.ans-btn').forEach(function(b) {
+      var id = (b.dataset.id || '').toUpperCase();
+      if (id === picked.toUpperCase()) b.classList.add('selected');
+      else b.classList.remove('selected');
+    });
+    var nb = document.getElementById('qNextBig');
+    var nm = document.getElementById('qNextMobile');
+    if (nb) nb.disabled = false;
+    if (nm) nm.disabled = false;
+    return;
+  }
+
   var correct = currentCorrect;
   var isOk = picked.toUpperCase() === correct.toUpperCase();
   if (isOk) qScore++;
@@ -8937,6 +10158,8 @@ function buildAiHtml(isOk, expl) {
     html += '<button class="ask-michael-btn ai-block" style="--i:' + (i++) + '; width:100%; display:flex; align-items:center; justify-content:center; gap:8px; padding:12px; border-radius:10px; border:none; background:rgba(255,107,0,.15); color:var(--orange); font-weight:700; cursor:pointer; font-size:.85rem; margin-top:10px; transition:background .2s;" onmouseover="this.style.background=\'rgba(255,107,0,.25)\'" onmouseout="this.style.background=\'rgba(255,107,0,.15)\'" onclick="askMichaelAboutThis()">'
       + '<span>🚗</span> ' + escH(t('ask_michael'))
       + '</button>';
+    html += buildHavLamps(expl);
+    html += buildHintButton();
 
   } else if (isOk && expl) {
     // 3 ── Correct: depth + confidence adaptive explanation
@@ -9080,13 +10303,28 @@ function updateAiPanel(isOk, expl) {
   }
 }
 
+function prevQ() {
+  if (!isExamMode || qIdx <= 0) return;
+  stopAllSpeech();
+  closeMichaelQuizCoach();
+  if (_aiPanelTimer) { clearTimeout(_aiPanelTimer); _aiPanelTimer = null; }
+  qIdx--;
+  renderQuestion();
+  var qb = document.querySelector('.quiz-body');
+  if (qb) qb.scrollTop = 0;
+}
+
 function nextQ() {
   stopAllSpeech();
   closeMichaelQuizCoach();
   if (_aiPanelTimer) { clearTimeout(_aiPanelTimer); _aiPanelTimer = null; } // never let a delayed panel land on the next question
   // Review mode uses its own card renderer — skip normal quiz flow
   if (_reviewMode) { reviewNext(); return; }
-  if (!qAnswered) return;
+  if (!isExamMode && !qAnswered) return;
+  if (isExamMode && qIdx >= questions.length - 1) {
+    confirmSubmitExam();
+    return;
+  }
   qIdx++;
   if (qIdx >= questions.length) { showEnd(); return; }
   if (!checkPaywall()) return;
@@ -9100,6 +10338,10 @@ function goBack() {
   stopAllSpeech();
   stopExamTimer();
   isExamMode = false;
+  examAnswers = {};
+  _examErrors = [];
+  var sb = document.querySelector('.quiz-score-badge');
+  if (sb) sb.style.display = 'flex';
   if (_reviewMode) endReview();
   showTab(activeTab && activeTab !== 'quiz' ? activeTab : 'home');
 }
@@ -9298,6 +10540,60 @@ async function loadSigns() {
     signsLoaded = true;
   } catch(e) {
     scroll.innerHTML = '<div class="empty-state"><div class="es-icon">⚠️</div><p>' + escH(e.message || t('load_error')) + '</p></div>';
+  }
+}
+
+// ════════════════════════════════════════════
+//  STUDENT DASHBOARD
+// ════════════════════════════════════════════
+async function loadDashboard() {
+  var panel = document.getElementById('dashboardContent');
+  if (!panel) return;
+  panel.innerHTML = '<div class="loading-wrap"><div class="spinner"></div></div>';
+  try {
+    var url = '/api/user/dashboard?lang=' + encodeURIComponent(appLang);
+    if (deviceId) url += '&device_id=' + encodeURIComponent(deviceId);
+    var data = await api('GET', url);
+    if (!data || data.lang !== appLang || !data.readiness || !data.stats) throw new Error(t('generic_error'));
+    var score = Math.max(0, Math.min(100, Number(data.readiness.score) || 0));
+    var stats = data.stats;
+    var weak = Array.isArray(data.weak_topics) ? data.weak_topics : [];
+    var sessions = Array.isArray(data.completed_sessions) ? data.completed_sessions : [];
+    var streak = data.streak || {};
+    var statCard = function(value, label) {
+      return '<div class="home-stat"><div class="home-stat-num">' + escH(String(value))
+        + '</div><div class="home-stat-lbl">' + escH(label) + '</div></div>';
+    };
+    var html = '<div class="home-readiness" style="display:flex;cursor:default;margin:16px 0">'
+      + '<div class="hr-main"><div class="hr-label">' + escH(t('readiness_title')) + '</div>'
+      + '<div class="hr-status">' + escH(data.readiness.status || '') + '</div>'
+      + '<div class="readiness-meter"><div class="readiness-meter-fill" style="width:' + score + '%;background:var(--orange)"></div></div></div>'
+      + '<div class="hr-pct">' + score + '%</div></div>'
+      + '<div class="home-stats">'
+      + statCard(Number(stats.total_questions) || 0, t('answered'))
+      + statCard(Number(stats.total_correct) || 0, t('correct_stat'))
+      + statCard((Number(stats.overall_accuracy) || 0) + '%', t('accuracy'))
+      + statCard(Number(streak.current_streak) || 0, t('streak')) + '</div>';
+    if (weak.length) {
+      html += '<div class="screen-title" style="margin:18px 0 8px">' + escH(t('result_focus')) + '</div>';
+      weak.forEach(function(topic) {
+        html += '<div class="hist-card"><div class="hist-mode">' + escH(topic.name || '') + '</div>'
+          + (topic.advice ? '<div class="hist-mode-sub">' + escH(topic.advice) + '</div>' : '') + '</div>';
+      });
+    }
+    html += '<div class="screen-title" style="margin:18px 0 8px">' + escH(t('history')) + '</div>';
+    if (!sessions.length) html += '<div class="empty-state"><p>' + t('history_empty') + '</p></div>';
+    sessions.forEach(function(session) {
+      var percent = Math.max(0, Math.min(100, Number(session.score_percentage) || 0));
+      html += '<div class="hist-card"><div class="hist-card-top"><div><div class="hist-mode">'
+        + escH(session.mode_label || '') + '</div><div class="hist-mode-sub">'
+        + escH(session.category_name || '') + '</div></div><div class="hist-pct">'
+        + percent + '%</div></div></div>';
+    });
+    panel.innerHTML = html;
+  } catch (error) {
+    panel.innerHTML = '<div class="empty-state"><div class="es-icon">⚠️</div><p>'
+      + escH(t('history_load_error')) + '</p></div>';
   }
 }
 
@@ -9530,7 +10826,9 @@ function _buildDebrief(pct, total) {
   var heading, body;
 
   if (isExamMode) {
-    if (pct >= 85) {
+    var examErrors = Math.max(0, total - qScore);
+    var examPassed = examErrors <= 7;
+    if (examPassed) {
       heading = t('result_exam_pass_head');
       body = t('result_exam_pass_body');
     } else {
@@ -9567,6 +10865,67 @@ function showEnd() {
   stopExamTimer();
   showScreen('screenEnd');
   var total  = questions.length;
+
+  if (isExamMode) {
+    qScore = 0;
+    _sessionAnswers = [];
+    _examErrors = [];
+    _topicErrors = {};
+    questions.forEach(function(q, idx) {
+      var userPick = (examAnswers[idx] || '').toUpperCase();
+      var correct = (q.correctOptionId || q.correct_answer || '').toUpperCase();
+      var isOk = (userPick !== '' && userPick === correct);
+      if (isOk) qScore++;
+
+      var qId = String(q._id || q.id || q.question_id || '');
+      var qText = pickLang(q.question) || pickField(q, 'question_text') || '';
+      var expl = pickLang(q.explanation) || pickField(q, 'explanation') || '';
+
+      var userPickText = '';
+      var correctPickText = '';
+      var opts = [];
+      if (q._shuffledOpts && q._shuffledOpts.opts) {
+        opts = q._shuffledOpts.opts;
+      } else if (q.options && Array.isArray(q.options) && q.options.length) {
+        opts = q.options.map(function(o) {
+          return { id: String(o.id || o.key || '').toUpperCase(), text: pickLang(o.text) || pickLang(o) || String(o.text || '') };
+        });
+      } else {
+        ['A','B','C','D'].forEach(function(l) {
+          var base = 'answer_' + l.toLowerCase();
+          var val = pickField(q, base);
+          if (val) opts.push({ id: l, text: val });
+        });
+      }
+      opts.forEach(function(o) {
+        var oid = String(o.id || '').toUpperCase();
+        if (oid === userPick) userPickText = (typeof o.text === 'object' ? pickLang(o.text) : o.text);
+        if (oid === correct) correctPickText = (typeof o.text === 'object' ? pickLang(o.text) : o.text);
+      });
+
+      var ansRecord = {
+        question_id: qId,
+        question_text: qText.slice(0, 200),
+        user_answer: userPick,
+        user_answer_text: userPickText,
+        correct_answer: correct,
+        correct_answer_text: correctPickText,
+        is_correct: isOk,
+        explanation: expl.slice(0, 400),
+        question_index: idx + 1,
+        question_obj: q
+      };
+      _sessionAnswers.push(ansRecord);
+      if (!isOk) {
+        _examErrors.push(ansRecord);
+        var _tLabel = _dangerLabel(expl);
+        if (_tLabel && _tLabel !== 'Forstå situasjonen') {
+          _topicErrors[_tLabel] = (_topicErrors[_tLabel] || 0) + 1;
+        }
+      }
+    });
+  }
+
   var pct    = total > 0 ? Math.round(qScore / total * 100) : 0;
 
   // ── Display (wrapped in try so a DOM error never blocks the save) ──
@@ -9584,6 +10943,51 @@ function showEnd() {
     } else if (focusEl) {
       focusEl.style.display = 'none';
     }
+    var coachPriBtn = document.getElementById('endCoachMichaelPriBtn');
+    if (coachPriBtn) {
+      coachPriBtn.style.display = isExamMode ? 'inline-flex' : 'none';
+    }
+
+    var errContainer = document.getElementById('endExamErrorsContainer');
+    var errTitle = document.getElementById('endExamErrorsTitle');
+    var errList = document.getElementById('endExamErrorsList');
+    var endScreenEl = document.getElementById('screenEnd');
+
+    if (isExamMode && errContainer && errTitle && errList) {
+      if (_examErrors.length === 0) {
+        errTitle.textContent = t('exam_all_correct');
+        errList.innerHTML = '';
+        errContainer.style.display = 'block';
+        if (endScreenEl) endScreenEl.classList.remove('has-errors');
+      } else {
+        errTitle.textContent = tf('exam_errors_heading', {count: _examErrors.length});
+        if (endScreenEl) endScreenEl.classList.add('has-errors');
+        var errHtml = _examErrors.map(function(err, errIdx) {
+          var userStr = err.user_answer ? ('[' + escH(err.user_answer) + '] ' + escH(err.user_answer_text || '')) : escH(t('exam_unanswered'));
+          var correctStr = '[' + escH(err.correct_answer) + '] ' + escH(err.correct_answer_text || '');
+          var explHtml = err.explanation ? ('<div class="exam-error-expl">' + escH(err.explanation) + '</div>') : '';
+          return '<div class="exam-error-card">'
+            + '<div class="exam-error-header">'
+              + '<span class="exam-error-num">#' + err.question_index + '</span>'
+              + '<span class="exam-error-qtext">' + escH(err.question_text) + '</span>'
+            + '</div>'
+            + '<div class="exam-error-ans-row">'
+              + '<div class="exam-error-user">❌ ' + escH(t('exam_your_answer')) + ': ' + userStr + '</div>'
+              + '<div class="exam-error-correct">✓ ' + escH(t('exam_correct_answer')) + ': ' + correctStr + '</div>'
+            + '</div>'
+            + explHtml
+            + '<button class="exam-error-btn" onclick="consultMichaelFromExamQuestion(' + errIdx + ')">'
+              + t('ask_michael_ai')
+            + '</button>'
+            + '</div>';
+        }).join('');
+        errList.innerHTML = errHtml;
+        errContainer.style.display = 'block';
+      }
+    } else if (errContainer) {
+      errContainer.style.display = 'none';
+      if (endScreenEl) endScreenEl.classList.remove('has-errors');
+    }
   } catch(displayErr) { console.warn('showEnd display error:', displayErr); }
 
   // ── Save attempt — always runs, even if display above failed ──
@@ -9599,7 +11003,7 @@ function showEnd() {
       total_questions: total,
       correct_answers: qScore,
       score_percentage: pct,
-      passed: isExamMode ? pct >= 85 : null,
+      passed: isExamMode ? ((total - qScore) <= 7) : null,
       questions_answered: _sessionAnswers.length ? _sessionAnswers : questions.map(function(q, i) {
         return { question_id: String(q._id || q.id || q.question_id || ''), index: i };
       }),
@@ -9638,8 +11042,136 @@ function showEnd() {
   }
 }
 
+function consultMichaelFromExam() {
+  var total = (questions && questions.length) ? questions.length : 45;
+  var score = qScore || 0;
+  var errors = Math.max(0, total - score);
+  var passed = isExamMode ? (errors <= 7) : (score / total >= 0.85);
+
+  var topTopic = null, topCount = 0;
+  Object.keys(_topicErrors || {}).forEach(function(lbl) {
+    if (_topicErrors[lbl] > topCount) { topCount = _topicErrors[lbl]; topTopic = lbl; }
+  });
+  var topicTxt = topTopic ? topicLabel(topTopic) : '';
+
+  var prompt = '', display = '';
+
+  if (appLang === 'th') {
+    if (passed) {
+      if (topicTxt) {
+        display = 'ฉันสอบจำลองผ่านแล้ว (' + score + '/' + total + ') แต่ยังมีข้อสงสัยในหัวข้อ ' + topicTxt + ' ช่วยแนะนำหน่อยครับ';
+        prompt = 'ฉันเพิ่งทำข้อสอบจำลองผ่านได้คะแนน ' + score + ' จาก ' + total + ' ข้อ แต่ยังมีข้อผิดพลาดในหัวข้อ ' + topicTxt + ' ช่วยอธิบายหลักการและแนะนำวิธีจำหน่อย';
+      } else {
+        display = 'ฉันสอบจำลองผ่านแล้ว (' + score + '/' + total + ')! มีคำแนะนำเพิ่มเติมก่อนสอบจริงไหมครับ';
+        prompt = 'ฉันเพิ่งทำข้อสอบจำลองผ่านได้คะแนน ' + score + ' จาก ' + total + ' ข้อ ช่วยให้คำแนะนำสำคัญก่อนไปสอบจริงที่ Statens vegvesen หน่อย';
+      }
+    } else {
+      if (topicTxt) {
+        display = 'ฉันสอบจำลองยังไม่ผ่าน (' + score + '/' + total + ') และผิดบ่อยในหัวข้อ ' + topicTxt + ' ช่วยสอนหน่อยครับ';
+        prompt = 'ฉันเพิ่งทำข้อสอบจำลองได้คะแนน ' + score + ' จาก ' + total + ' ข้อ (ยังไม่ผ่าน) และพบว่าทำผิดบ่อยที่สุดในหมวด ' + topicTxt + ' ช่วยอธิบายหลักการจำง่าย ๆ และตั้งคำถามฝึกปฏิบัติให้ฉันลองตอบหน่อย';
+      } else {
+        display = 'ฉันสอบจำลองยังไม่ผ่าน (' + score + '/' + total + ') ควรเริ่มฝึกจากตรงไหนดีครับ';
+        prompt = 'ฉันเพิ่งทำข้อสอบจำลองได้คะแนน ' + score + ' จาก ' + total + ' ข้อ ซึ่งยังไม่ผ่านเกณฑ์ ช่วยวิเคราะห์และแนะนำวิธีฝึกฝนเพื่อเตรียมสอบรอบถัดไปหน่อย';
+      }
+    }
+  } else if (appLang === 'en') {
+    if (passed) {
+      if (topicTxt) {
+        display = 'I passed the mock exam (' + score + '/' + total + '), but need advice on ' + topicTxt + '.';
+        prompt = 'I just passed the exam simulation with a score of ' + score + '/' + total + '. However, I had some mistakes in the topic ' + topicTxt + '. Could you explain the core rule and give me a mini-practice question?';
+      } else {
+        display = 'I passed the mock exam (' + score + '/' + total + ')! Any advice before the official test?';
+        prompt = 'I just passed the exam simulation with a score of ' + score + '/' + total + '. What key tips should I keep in mind before taking the official theory exam at Statens vegvesen?';
+      }
+    } else {
+      if (topicTxt) {
+        display = 'I did not pass the mock exam (' + score + '/' + total + ') with mistakes in ' + topicTxt + '. Please help!';
+        prompt = 'I did not pass the exam simulation this time, scoring ' + score + '/' + total + '. My weakest topic was ' + topicTxt + '. Can you explain the rules in simple terms and challenge me with a practice situation?';
+      } else {
+        display = 'I did not pass the mock exam (' + score + '/' + total + '). Where should I focus?';
+        prompt = 'I did not pass the exam simulation (' + score + '/' + total + ' correct, max 7 errors allowed). Can you give me a structured plan on what to practice next?';
+      }
+    }
+  } else { // Norwegian (no)
+    if (passed) {
+      if (topicTxt) {
+        display = 'Jeg besto prøven (' + score + '/' + total + '), men trenger litt råd om ' + topicTxt + '.';
+        prompt = 'Jeg fullførte nettopp eksamenssimulatoren med ' + score + '/' + total + ' riktige (bestått). Jeg fikk likevel noen feil på ' + topicTxt + '. Kan du forklare hovedregelen enkelt og gi meg et lite oppfølgingsspørsmål?';
+      } else {
+        display = 'Jeg besto prøven (' + score + '/' + total + ')! Har du noen tips før den virkelige teoriprøven?';
+        prompt = 'Jeg fullførte nettopp eksamenssimulatoren med ' + score + '/' + total + ' riktige (bestått). Hva er de viktigste rådene dine før jeg drar til Statens vegvesen for den ekte prøven?';
+      }
+    } else {
+      if (topicTxt) {
+        display = 'Jeg besto ikke prøven (' + score + '/' + total + ') og slet med ' + topicTxt + '. Kan du hjelpe meg?';
+        prompt = 'Jeg besto dessverre ikke eksamenssimulatoren denne gangen (' + score + '/' + total + ' riktige). Jeg hadde flest feil på ' + topicTxt + '. Kan du forklare trafikkreglene for dette og gi meg en praktisk situasjon jeg kan prøve meg på?';
+      } else {
+        display = 'Jeg besto ikke prøven (' + score + '/' + total + '). Hva bør jeg øve mest på nå?';
+        prompt = 'Jeg besto dessverre ikke eksamenssimulatoren denne gangen (' + score + '/' + total + ' riktige, kravet er minst 38). Kan du hjelpe meg å legge opp en plan for hva jeg bør fokusere på?';
+      }
+    }
+  }
+
+  showTab('teacher');
+  switchTeacherSession('normal');
+  setTimeout(function() {
+    teacherSend(prompt, display, 'quiz_coach');
+  }, 120);
+}
+
+function consultMichaelFromExamQuestion(errorIdx) {
+  var err = _examErrors[errorIdx];
+  if (!err) return;
+  var userAnsDisplay = err.user_answer ? ('(' + err.user_answer + ') ' + err.user_answer_text) : t('exam_unanswered');
+  var correctAnsDisplay = '(' + err.correct_answer + ') ' + err.correct_answer_text;
+
+  var display = '';
+  var prompt = '';
+  if (appLang === 'th') {
+    display = 'ช่วยอธิบายข้อนี้ให้หน่อยครับ: "' + err.question_text.slice(0, 80) + '..."';
+    prompt = 'ฉันตอบผิดในข้อสอบจำลอง ช่วยอธิบายข้อนี้ให้เข้าใจง่าย ๆ หน่อยครับ\n\n'
+      + '<quiz_context>\n'
+      + 'attempt_count: 3\n'
+      + 'Question: ' + err.question_text + '\n'
+      + 'Student answer: ' + userAnsDisplay + '\n'
+      + 'Correct answer: ' + correctAnsDisplay + '\n'
+      + 'Explanation: ' + err.explanation + '\n'
+      + '</quiz_context>\n'
+      + 'ช่วยอธิบายว่าทำไมคำตอบของฉันถึงไม่ถูกต้อง ทำไมคำตอบที่ถูกถึงถูกต้อง และให้หลักการจำสั้น ๆ สำหรับสถานการณ์นี้';
+  } else if (appLang === 'en') {
+    display = 'Could you explain this question: "' + err.question_text.slice(0, 80) + '..."?';
+    prompt = 'I got this question wrong on my exam simulation. Could you explain the principle calmly?\n\n'
+      + '<quiz_context>\n'
+      + 'attempt_count: 3\n'
+      + 'Question: ' + err.question_text + '\n'
+      + 'Student answer: ' + userAnsDisplay + '\n'
+      + 'Correct answer: ' + correctAnsDisplay + '\n'
+      + 'Explanation: ' + err.explanation + '\n'
+      + '</quiz_context>\n'
+      + 'Please explain why my pick is incorrect, why the correct answer is right, and give a practical tip.';
+  } else { // Norwegian (no)
+    display = 'Kan du forklare dette spørsmålet: "' + err.question_text.slice(0, 80) + '..."?';
+    prompt = 'Jeg svarte feil på dette spørsmålet under eksamenssimulatoren. Kan du forklare det pedagogisk for meg?\n\n'
+      + '<quiz_context>\n'
+      + 'attempt_count: 3\n'
+      + 'Question: ' + err.question_text + '\n'
+      + 'Student answer: ' + userAnsDisplay + '\n'
+      + 'Correct answer: ' + correctAnsDisplay + '\n'
+      + 'Explanation: ' + err.explanation + '\n'
+      + '</quiz_context>\n'
+      + 'Forklar hvorfor mitt svar ble feil, hvorfor fasiten er riktig, og gi meg en enkel huskeregel.';
+  }
+
+  showTab('teacher');
+  switchTeacherSession('normal');
+  setTimeout(function() {
+    teacherSend(prompt, display, 'quiz_coach');
+  }, 120);
+}
+
 function retryQuiz() {
-  if (isMistakeMode) startMistakeQuiz();
+  if (isExamMode) startExam();
+  else if (isMistakeMode) startMistakeQuiz();
   else if (currentCat) startQuiz(currentCat.id);
   else startRandomQuiz();
 }
@@ -9674,6 +11206,7 @@ function speakQ() {
     return;
   }
   var audio = _ensureBackendAudio();
+  _armTtsFallback(text, appLang);
   audio.src = ttsStreamUrl(text, appLang);
   audio.playbackRate = ttsRate || 1.0;
   audio.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
@@ -9685,6 +11218,7 @@ function speakQ() {
   if (playPromise !== undefined) {
     playPromise.catch(function(err) {
       _ttsPlaybackFailed(err, audio);
+      if (_consumeTtsFallback()) return;
       ttsPlaying = false;
       updateTtsBtn(false);
     });
@@ -9743,6 +11277,7 @@ function speakText(text) {
   var audio = _ensureTeacherAudio();
   var playToken = ++_teacherAudioToken;
   _teacherActiveText = clean;
+  _armTtsFallback(clean, appLang);
   audio.src = ttsStreamUrl(clean, appLang);
   audio.playbackRate = ttsRate || 1.0;
   audio.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
@@ -9753,6 +11288,7 @@ function speakText(text) {
   if (playPromise !== undefined) {
     playPromise.catch(function(err) {
       _ttsPlaybackFailed(err, audio);
+      if (_consumeTtsFallback()) return;
       if (playToken === _teacherAudioToken) {
         _teacherTtsPlaying = false;
         _teacherActiveText = '';
@@ -9920,6 +11456,7 @@ function setLang(lang) {
     if (authBtn) authBtn.classList.toggle('active', lang === l.toLowerCase());
   });
   applyUILang();
+  _msOnLangChange();
   // Reset signs cache so it reloads in new language
   signsLoaded = false;
   var signsScreen = document.getElementById('screenSigns');
@@ -9966,6 +11503,7 @@ function setLang(lang) {
 //  MICHAEL TRAFIKKLÆRER — CHAT
 // ════════════════════════════════════════════
 var _teacherSessionId    = null;
+var _teacherConversationId = null;
 var _teacherHasUserMsg   = false;   // true once user sends first message
 var _teacherTyping       = false;
 var _teacherWelcomeLang  = null;    // tracks which language the welcome was rendered in
@@ -9973,11 +11511,13 @@ var _teacherWelcomeLang  = null;    // tracks which language the welcome was ren
 // Quiz-specific teacher session variables
 var _teacherActiveSessionType = 'normal';
 var _teacherQuizSessionId     = null;
+var _teacherQuizConversationId = null;
 var _teacherNormalHtml        = '';
 var _teacherQuizHtml          = '';
 var _teacherNormalHasUserMsg  = false;
 var _teacherQuizHasUserMsg    = false;
 var _quizCoachSessionId       = null;
+var _quizCoachConversationId  = null;
 var _quizCoachAbort           = null;
 
 function _quizCoachContext() {
@@ -10008,12 +11548,19 @@ async function _quizCoachRequest(message) {
     if (token) headers.Authorization = 'Bearer ' + token;
     var res = await fetch('/api/teacher/chat', {
       method:'POST', headers:headers, signal:controller.signal,
-      body:JSON.stringify({session_id:_quizCoachSessionId, message:message, language:appLang})
+      body:JSON.stringify({
+        session_id:_quizCoachSessionId,
+        conversation_id:_quizCoachConversationId || _quizCoachSessionId,
+        message:message,
+        language:appLang,
+        mode:'quiz_coach'
+      })
     });
     if (res.status === 402) { showPaywall(); throw new Error('HTTP 402'); }  // AI-læreren er bak betalingsmuren
     if (!res.ok) throw new Error('HTTP ' + res.status);
     var data = await res.json();
     if (data.session_id) _quizCoachSessionId = data.session_id;
+    if (data.conversation_id || data.session_id) _quizCoachConversationId = data.conversation_id || data.session_id;
     return data;
   } finally {
     clearTimeout(timeoutId);
@@ -10030,6 +11577,7 @@ async function openMichaelQuizCoach() {
   if (!panel || !body || !action) return;
 
   _quizCoachSessionId = 'quiz_coach_' + appLang + '_' + ctx.questionId.replace(/[^a-zA-Z0-9_-]/g,'').slice(0,32) + '_' + Date.now().toString(36);
+  _quizCoachConversationId = _quizCoachSessionId;
   body.textContent = t('coach_loading');
   action.classList.remove('show');
   action.disabled = false;
@@ -10039,7 +11587,7 @@ async function openMichaelQuizCoach() {
   var prompt = 'You are Michael, a calm Norwegian driving instructor. Answer only in ' + languageName + '. '
     + 'Never mix languages. Keep the answer short enough for a mobile panel. Explain why the student answer is wrong, why the correct answer is right, and give one practical traffic example. '
     + 'Use the mental model "Kongen og tjeneren" or "HAV-regelen" only when it fits naturally; never force either model.\n\n'
-    + '<quiz_context>\nQuestion: ' + ctx.question
+    + '<quiz_context>\nattempt_count: 3\nQuestion: ' + ctx.question
     + '\nStudent answer (' + ctx.userAnswerId + '): ' + ctx.userAnswer
     + '\nCorrect answer (' + ctx.correctAnswerId + '): ' + ctx.correctAnswer
     + '\nExisting explanation: ' + ctx.explanation + '\n</quiz_context>';
@@ -10114,7 +11662,9 @@ function _displayedAnswerText(answerId) {
   return txt ? txt.textContent.trim() : '';
 }
 
-function askMichaelAboutThis() {
+function askMichaelAboutThis(mode) {
+  var isHint = (mode === 'hint');
+  if (!isHint) _msResetHint();
   var q = questions[qIdx];
   if (!q) return;
 
@@ -10151,19 +11701,32 @@ function askMichaelAboutThis() {
   var explText = currentExpl || '';
   var qId = String(q._id || q.id || q.question_id || 'question').replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 32);
 
-  // Switch to quiz teacher session
-  _teacherQuizHtml = '';
-  _teacherQuizHasUserMsg = false;
+  // Hint clicks on the same question keep one session so the backend can count attempts.
+  var rawQid = String(q._id || q.id || q.question_id || '');
+  var reuseHintSession = isHint && _msHint.qId === rawQid && !!_msHint.sid;
+  if (!reuseHintSession) {
+    _teacherQuizHtml = '';
+    _teacherQuizHasUserMsg = false;
+  }
   switchTeacherSession('quiz');
 
   // Generate a fresh language-scoped session ID for this question.
   // Normal Michael chat history uses _teacherSessionId and is not touched.
-  _teacherQuizSessionId = 'quiz_help_' + appLang + '_' + qId + '_' + Date.now().toString(36);
+  _teacherQuizSessionId = reuseHintSession
+    ? _msHint.sid
+    : 'quiz_help_' + appLang + '_' + qId + '_' + Date.now().toString(36);
+  _teacherQuizConversationId = _teacherQuizSessionId;
+  if (isHint) {
+    if (_msHint.qId !== rawQid) _msHint = { qId: rawQid, count: 0, sid: null };
+    _msHint.count++;
+    _msHint.sid = _teacherQuizSessionId;
+    _msBumpHintDots();
+  }
   _teacherHasUserMsg = false;
   _teacherWelcomeLang = null;
 
   var msgs = document.getElementById('teacherMessages');
-  if (msgs) msgs.innerHTML = '';
+  if (msgs && !reuseHintSession) msgs.innerHTML = '';
 
   var userDisplayMsg = '';
   if (appLang === 'th') {
@@ -10174,9 +11737,15 @@ function askMichaelAboutThis() {
     userDisplayMsg = 'Kan du forklare dette spørsmålet for meg?';
   }
 
+  if (isHint) userDisplayMsg = _msL().hintMsg;
+
+  var attemptCount = isHint ? Math.min(3, Math.max(1, _msHint.count)) : 3;
+
   var hiddenPayload = userDisplayMsg + '\n\n'
     + '<quiz_context>\n'
-    + 'STUDENT ANSWERED INCORRECTLY. EXPLAIN WHY IT IS WRONG.\n'
+    + (isHint ? 'STUDENT ANSWERED INCORRECTLY. THE STUDENT ASKED FOR A HINT.\n'
+              : 'STUDENT ANSWERED INCORRECTLY. EXPLAIN WHY IT IS WRONG.\n')
+    + 'attempt_count: ' + attemptCount + '\n'
     + 'is_correct: false\n'
     + 'Question: ' + qText + '\n'
     + '[ELEVENS FAKTISKE SVAR] (' + userAnsId + '): ' + userAnsText + '\n'
@@ -10191,13 +11760,406 @@ function askMichaelAboutThis() {
   teacherSend(hiddenPayload, userDisplayMsg);
 }
 
+// ═══ Michael-skolen: konge/tjener-chip, HAV-lys, hint-trapp, kultur, ord for dagen, blikkrutine ═══
+var _MS = {
+  th: {
+    open: 'ห้องเรียนไมเคิล', close: 'ปิด', tabs: ['ไทยกับนอร์เวย์', 'คำศัพท์ประจำวัน', 'ฝึกสายตา'],
+    inTh: 'ในประเทศไทย', inNo: 'ในนอร์เวย์', tryIt: 'ลองตอบดู', right: 'ถูกต้อง', wrong: 'ยังไม่ใช่',
+    word: 'คำศัพท์ประจำวัน', next: 'คำถัดไป', termLbl: 'คำนอร์เวย์ที่ต้องรู้',
+    gazeIntro: 'สายตาต้องไม่หยุดนิ่ง ทำตามลำดับนี้ซ้ำเรื่อย ๆ', start: 'เริ่ม', stop: 'หยุด', round: 'รอบ',
+    ksChip: 'เรื่องการให้ทาง ถามตัวเองก่อน: ฉันเป็นราชา หรือผู้รับใช้?',
+    hint: 'ขอคำใบ้', hintMsg: 'ขอคำใบ้หน่อยครับ', hintLbl: 'คำใบ้',
+    havTitle: 'กฎ HAV (มาตรา 3)', H: 'มีน้ำใจ', A: 'ระวังรอบด้าน', V: 'รอบคอบ',
+    aiBadge: 'เอไอ', aiTitle: 'ไมเคิลเป็นครูที่เป็นปัญญาประดิษฐ์ (เอไอ)'
+  },
+  no: {
+    open: 'Michael-skolen', close: 'Lukk', tabs: ['Thailand mot Norge', 'Ord for dagen', 'Blikkrutine'],
+    inTh: 'I Thailand', inNo: 'I Norge', tryIt: 'Prøv selv', right: 'Riktig', wrong: 'Ikke helt',
+    word: 'Ord for dagen', next: 'Neste ord', termLbl: 'Fagord',
+    gazeIntro: 'Blikket skal aldri stå stille. Gå gjennom rutinen om og om igjen.', start: 'Start', stop: 'Stopp', round: 'Runde',
+    ksChip: 'Vikeplikt? Spør deg selv: er jeg kongen eller tjeneren?',
+    hint: 'Gi meg et hint', hintMsg: 'Gi meg et hint', hintLbl: 'Hint',
+    havTitle: 'HAV-regelen', H: 'Hensynsfull', A: 'Aktpågivende', V: 'Varsom',
+    aiBadge: 'AI', aiTitle: 'Michael er en AI-lærer'
+  },
+  en: {
+    open: "Michael's School", close: 'Close', tabs: ['Thailand vs Norway', 'Word of the day', 'Gaze routine'],
+    inTh: 'In Thailand', inNo: 'In Norway', tryIt: 'Try it', right: 'Correct', wrong: 'Not quite',
+    word: 'Word of the day', next: 'Next word', termLbl: 'Norwegian term',
+    gazeIntro: 'Your eyes must never stand still. Run through this routine again and again.', start: 'Start', stop: 'Stop', round: 'Round',
+    ksChip: 'Give way? Ask yourself: am I the king or the servant?',
+    hint: 'Give me a hint', hintMsg: 'Give me a hint', hintLbl: 'Hint',
+    havTitle: 'The HAV rule (section 3)', H: 'Hensynsfull (considerate)', A: 'Aktpågivende (attentive)', V: 'Varsom (careful)',
+    aiBadge: 'AI', aiTitle: 'Michael is an AI teacher'
+  }
+};
+
+var _MS_CULTURE = {
+  th: [
+    { t: 'การให้ทางรถจากทางขวา', a: 'ถนนสายหลักมักได้สิทธิ์ก่อนโดยปริยาย การให้ทางรถจากทางขวาแทบไม่มี', b: 'ทุกสี่แยกที่ไม่มีป้ายหรือสัญญาณไฟ ต้องให้ทางรถที่กำลังขับมาจากทางขวา แม้ถนนของคุณจะดูใหญ่กว่า',
+      q: 'สี่แยกไม่มีป้าย มีรถมาจากทางขวา คุณทำอย่างไร?', o: ['ให้ทางรถจากขวา', 'ขับผ่านเพราะถนนฉันใหญ่กว่า', 'บีบแตรเตือน'], c: 0 },
+    { t: 'ขับรถหน้าหนาว', a: 'อากาศร้อนชื้น ถนนแห้งหรือเปียก ไม่มีน้ำแข็ง', b: 'หน้าหนาวต้องใช้ยางหน้าหนาวที่ดอกยางลึกอย่างน้อย 3 มม. และบนน้ำแข็งหรือหิมะ ต้องเว้นระยะห่างมากขึ้น 3–4 เท่า',
+      q: 'บนน้ำแข็งหรือหิมะ ระยะเบรกเป็นอย่างไร?', o: ['ยาวขึ้นมาก', 'เท่าเดิม', 'สั้นลง'], c: 0 },
+    { t: 'ปริมาณแอลกอฮอล์ในเลือด', a: 'เกณฑ์ที่ 0.5 พรอมิลล์', b: 'เกณฑ์เพียง 0.2 พรอมิลล์ โทษรุนแรงมาก อาจถูกปรับตามรายได้ ถูกยึดใบขับขี่ และในกรณีร้ายแรงถึงจำคุก',
+      q: 'เกณฑ์แอลกอฮอล์สำหรับรถยนต์ในนอร์เวย์คือเท่าไร?', o: ['0.2 พรอมิลล์', '0.5 พรอมิลล์', '0.8 พรอมิลล์'], c: 0 },
+    { t: 'คนเดินเท้า', a: 'รถมักได้สิทธิ์ก่อนคนเดินเท้าในทางปฏิบัติ', b: 'คุณต้องให้ทางคนเดินเท้าที่อยู่บนทางม้าลายหรือกำลังจะก้าวลงไปเสมอ และหยุดรถล่วงหน้า',
+      q: 'มีคนต้องการข้ามทางม้าลาย คุณทำอย่างไร?', o: ['หยุดรถล่วงหน้า', 'บีบแตรให้เร็ว ๆ', 'ขับต่อถ้าคนอยู่ไกล'], c: 0 }
+  ],
+  no: [
+    { t: 'Vikeplikt fra høyre', a: 'Hovedvei har nesten alltid forkjørsrett i praksis, og vikeplikt fra høyre finnes knapt.', b: 'I alle kryss uten skilt eller lys har du vikeplikt for kjørende fra høyre, selv om din vei føles større.',
+      q: 'Kryss uten skilt, bil fra høyre. Hva gjør du?', o: ['Viker for bilen fra høyre', 'Kjører fordi veien min er størst', 'Tuter for å varsle'], c: 0 },
+    { t: 'Vinterkjøring', a: 'Tropisk klima og asfalt uten is.', b: 'Vinterdekk med minst 3 mm mønsterdybde, og på is og snø må du holde 3–4 ganger mer avstand.',
+      q: 'Hva skjer med bremselengden på is og snø?', o: ['Den blir mye lengre', 'Den er uendret', 'Den blir kortere'], c: 0 },
+    { t: 'Promillegrense', a: 'Grensen er 0,5 promille.', b: 'Grensen er 0,2 promille for motorvogn. Straffene er svært strenge: bot etter inntekt, tap av førerkort og i alvorlige tilfeller fengsel.',
+      q: 'Hva er promillegrensen for motorvogn i Norge?', o: ['0,2 promille', '0,5 promille', '0,8 promille'], c: 0 },
+    { t: 'Gående', a: 'Biler har i praksis forkjørsrett foran gående.', b: 'Du må alltid vike for gående som er i gangfeltet eller på vei ut i det, og stanse i god tid.',
+      q: 'En gående vil over i gangfeltet. Hva gjør du?', o: ['Stanser i god tid', 'Tuter så hun skynder seg', 'Kjører videre hvis hun er langt unna'], c: 0 }
+  ],
+  en: [
+    { t: 'Giving way to the right', a: 'The main road almost always has priority in practice, and giving way to the right barely exists.', b: 'At every junction without signs or lights you give way to vehicles coming from the right, even if your road feels bigger.',
+      q: 'A junction with no signs and a car from the right. What do you do?', o: ['Give way to the car from the right', 'Drive on because my road is bigger', 'Honk to warn them'], c: 0 },
+    { t: 'Winter driving', a: 'Tropical climate and asphalt without ice.', b: 'Winter tyres with at least 3 mm tread depth, and on ice and snow you need 3–4 times more distance.',
+      q: 'What happens to braking distance on ice and snow?', o: ['It becomes much longer', 'It stays the same', 'It becomes shorter'], c: 0 },
+    { t: 'Alcohol limit', a: 'The limit is 0.5 per mille.', b: 'The limit is 0.2 per mille for a motor vehicle. Penalties are very strict: income-based fines, loss of licence and, in serious cases, prison.',
+      q: 'What is the alcohol limit for a motor vehicle in Norway?', o: ['0.2 per mille', '0.5 per mille', '0.8 per mille'], c: 0 },
+    { t: 'Pedestrians', a: 'In practice cars have priority over pedestrians.', b: 'You must always give way to pedestrians on the crossing or about to step onto it, and stop in good time.',
+      q: 'A pedestrian wants to cross at a zebra crossing. What do you do?', o: ['Stop in good time', 'Honk so they hurry', 'Keep going if they are far away'], c: 0 }
+  ]
+};
+
+var _MS_WORDS = {
+  th: [
+    ['Vikeplikt', 'การให้ทาง — คุณมีหน้าที่ปล่อยให้คนอื่นไปก่อน และห้ามขวางหรือทำให้เขาไม่แน่ใจ'],
+    ['Forkjørsvei', 'ทางเอก — ถนนที่มีป้ายสี่เหลี่ยมข้าวหลามตัดสีเหลือง รถจากทางแยกต้องให้ทางคุณ'],
+    ['Uoversiktlig', 'มองเห็นไม่ชัดเจน — สายตาถูกบังด้วยโค้ง เนินเขา กองหิมะ หรือพุ่มไม้และต้นไม้ ต้องลดความเร็วทันที'],
+    ['Tilstrekkelig', 'เพียงพอ — "พอดีและปลอดภัย" เช่น เว้นระยะห่างจากรถคันหน้าให้เพียงพอ (กฎ 3 วินาที)'],
+    ['Vognkort', 'เอกสารจดทะเบียนรถ — ส่วนที่ 1 ต้องอยู่ในรถเสมอ ระบุน้ำหนักรวมที่อนุญาต'],
+    ['Bør / Skal / Må', 'ควร / ต้อง / จำเป็นต้อง — "ควร" คือคำแนะนำ ส่วน "ต้อง" และ "จำเป็นต้อง" คือกฎหมาย ฝ่าฝืนแล้วผิด'],
+    ['Stoppelengde', 'ระยะหยุดรถ — ระยะที่รถวิ่งขณะตอบสนอง (ประมาณ 1 วินาที) รวมกับระยะเบรก'],
+    ['Vegskulder', 'ไหล่ทาง — พื้นที่นอกเส้นขอบทางสีขาวประ ไม่ได้ไว้สำหรับขับปกติ'],
+    ['Kjørefelt', 'ช่องทางจราจร — ส่วนของถนนที่กว้างพอสำหรับรถหนึ่งแถว'],
+    ['Sperrelinje', 'เส้นห้ามข้าม — เส้นทึบ (สีเหลืองเมื่อมีรถสวนทาง สีขาวระหว่างช่องทางที่ไปทางเดียวกัน) ห้ามข้ามหรือขับทับ']
+  ],
+  no: [
+    ['Vikeplikt', 'Du har plikt til å slippe andre frem. Du må ikke hindre eller forstyrre den du viker for.'],
+    ['Forkjørsvei', 'Vei med gult diamantskilt. Trafikk fra sideveier har vikeplikt for deg.'],
+    ['Uoversiktlig', 'Du ser ikke langt nok fordi sving, bakketopp, snøfonn eller busker og trær skjuler veien. Sett ned farten med en gang.'],
+    ['Tilstrekkelig', '«Nok» eller «forsvarlig». Eksempel: tilstrekkelig avstand til bilen foran (3-sekundersregelen).'],
+    ['Vognkort', 'Bilens registreringsdokument. Del 1 skal alltid ligge i bilen og viser tillatt totalvekt.'],
+    ['Bør / Skal / Må', '«Bør» er en anbefaling. «Skal» og «må» er juridiske krav, og å bryte dem er lovbrudd.'],
+    ['Stoppelengde', 'Reaksjonslengden (ca. 1 sekund) pluss bremselengden.'],
+    ['Vegskulder', 'Området utenfor den hvitstiplede kantlinjen. Ikke beregnet for vanlig kjøring.'],
+    ['Kjørefelt', 'Delen av veien som er bred nok for én rekke med biler.'],
+    ['Sperrelinje', 'Heltrukken linje (gul mot møtende trafikk, hvit mellom felt i samme retning). Du må ikke kjøre over eller på den.']
+  ],
+  en: [
+    ['Vikeplikt', 'Duty to give way. You must not hinder or disturb the road user you give way to.'],
+    ['Forkjørsvei', 'A priority road, marked with the yellow diamond sign. Traffic from side roads gives way to you.'],
+    ['Uoversiktlig', 'Poor visibility: the line of sight is blocked by a bend, hilltop, snowbank or vegetation. Slow down at once.'],
+    ['Tilstrekkelig', '"Enough" or "adequate". Example: adequate distance to the car ahead (the 3-second rule).'],
+    ['Vognkort', 'The vehicle registration document. Part 1 must always be in the car and shows the permitted total weight.'],
+    ['Bør / Skal / Må', '"Bør" is a recommendation. "Skal" and "må" are legal requirements, and breaking them is an offence.'],
+    ['Stoppelengde', 'Stopping distance: reaction distance (about 1 second) plus braking distance.'],
+    ['Vegskulder', 'The road shoulder, outside the dashed white edge line. Not meant for normal driving.'],
+    ['Kjørefelt', 'A lane: the part of the road wide enough for one row of cars.'],
+    ['Sperrelinje', 'A solid line (yellow against oncoming traffic, white between lanes in the same direction). You must not cross or drive on it.']
+  ]
+};
+
+// Ekstra fagord fra backend/docs/3_NORSK_THAI_FELLEORD_OG_KULTUR_2026.md (samme rekkefølge i th/no/en)
+_MS_WORDS.th = _MS_WORDS.th.concat([
+  ['Forkjørsrett', 'สิทธิ์ผ่านก่อน — สิทธิ์ไปก่อนในสี่แยกใดสี่แยกหนึ่ง'],
+  ['Vikepliktskilt', 'ป้ายให้ทาง — สามเหลี่ยมขอบแดง คุณต้องให้ทางรถที่มีสิทธิ์ไปก่อน'],
+  ['Stoppskilt', 'ป้ายหยุด — ป้ายแปดเหลี่ยมสีแดง คุณต้องหยุดรถให้สนิททุกครั้ง'],
+  ['Fareskilt', 'ป้ายเตือน — สามเหลี่ยม เตือนว่าข้างหน้ามีอันตราย'],
+  ['Forbudsskilt', 'ป้ายห้าม — วงกลมสีแดง ห้ามทำบางอย่าง'],
+  ['Påbudsskilt', 'ป้ายบังคับ — วงกลมสีน้ำเงิน สั่งให้ทำบางอย่าง'],
+  ['Opplysningsskilt', 'ป้ายข้อมูล — สี่เหลี่ยม ให้ข้อมูล'],
+  ['Reaksjonslengde', 'ระยะตอบสนอง — ระยะที่รถวิ่งไปในระหว่างที่คุณตอบสนอง'],
+  ['Bremselengde', 'ระยะเบรก — ระยะจากตอนที่เหยียบเบรกจนรถหยุดสนิท'],
+  ['Reaksjonstid', 'เวลาตอบสนอง — เวลาจากเห็นอันตรายจนถึงตอนที่คุณตอบสนอง โดยปกติ 0,8–1,5 วินาที'],
+  ['Fartsgrense', 'ความเร็วสูงสุด — ความเร็วสูงสุดที่อนุญาตในช่วงถนนนั้น'],
+  ['Forbikjøring', 'การแซง — การขับแซงรถอีกคัน'],
+  ['Envegskjøring', 'ทางเดียว — รถวิ่งได้ทิศทางเดียวเท่านั้น'],
+  ['Rundkjøring', 'วงเวียน — ในนอร์เวย์วนทวนเข็มนาฬิกาเสมอ'],
+  ['Vegkryss', 'ทางแยก — จุดที่ถนนสองสายขึ้นไปตัดกัน'],
+  ['Venstresving', 'เลี้ยวซ้าย — ต้องให้ทางรถที่สวนมา'],
+  ['Høyresving', 'เลี้ยวขวา — การเลี้ยวไปทางขวา'],
+  ['Gangfelt', 'ทางม้าลาย — เส้นสีขาว คุณต้องให้ทางคนที่อยู่บนทางม้าลายหรือกำลังจะข้าม'],
+  ['Trafikklys', 'ไฟจราจร — แดงคือหยุด เหลืองคือเตรียมหยุด เขียวคือไปได้'],
+  ['Blinklys', 'ไฟเลี้ยว — สัญญาณบอกว่าจะเปลี่ยนทิศทาง'],
+  ['Frontlys', 'ไฟหน้า — ในนอร์เวย์ต้องเปิดตลอดเวลา ไม่ว่าอากาศจะเป็นอย่างไร'],
+  ['Fjernlys', 'ไฟสูง — ใช้นอกเขตชุมชนเท่านั้น และต้องหรี่เมื่อมีรถสวนมา'],
+  ['Parkeringsplass', 'ที่จอดรถ — เมื่อขับออกจากที่นี่ ต้องให้ทางเสมอ'],
+  ['Bussholdeplass', 'ป้ายรถประจำทาง — กฎรถบัสใช้เมื่อจำกัดความเร็ว 60 กม./ชม. หรือต่ำกว่า'],
+  ['Motorvei', 'ทางด่วน — มีกฎพิเศษ และเข้าออกทางทางลาด'],
+  ['Midtlinje', 'เส้นกลางถนน — แบ่งถนนเป็นช่องทางจราจร'],
+  ['Promille', 'แอลกอฮอล์ในเลือด — ในนอร์เวย์สูงสุด 0,2 พรอมิลล์'],
+  ['Bilbelte', 'เข็มขัดนิรภัย — ผู้โดยสารทุกคนทุกที่นั่งต้องคาด'],
+  ['Mobiltelefon', 'โทรศัพท์มือถือ — ห้ามถือด้วยมือขณะขับรถ'],
+  ['Veilys', 'แสงไฟถนน — ไม่เหมือนไฟหน้ารถ ไฟหน้าต้องเปิดเสมอ']
+]);
+_MS_WORDS.no = _MS_WORDS.no.concat([
+  ['Forkjørsrett', 'Prioritet i et bestemt kryss.'],
+  ['Vikepliktskilt', 'Trekant med rød kant. Du skal vike for trafikk som har forkjørsrett.'],
+  ['Stoppskilt', 'Rødt åttekantet skilt. Du må stanse helt hver gang.'],
+  ['Fareskilt', 'Trekantskilt som advarer om fare foran deg.'],
+  ['Forbudsskilt', 'Rød sirkel. Forbyr noe.'],
+  ['Påbudsskilt', 'Blå sirkel. Påbyr noe.'],
+  ['Opplysningsskilt', 'Rektangel som gir informasjon.'],
+  ['Reaksjonslengde', 'Avstanden bilen kjører mens du reagerer.'],
+  ['Bremselengde', 'Avstanden fra du trykker på bremsen til bilen står stille.'],
+  ['Reaksjonstid', 'Tiden fra du ser faren til du reagerer, vanligvis 0,8–1,5 sekunder.'],
+  ['Fartsgrense', 'Høyeste tillatte fart på strekningen.'],
+  ['Forbikjøring', 'Å kjøre forbi et annet kjøretøy.'],
+  ['Envegskjøring', 'Trafikk kun i én retning.'],
+  ['Rundkjøring', 'I Norge kjører du alltid mot klokken.'],
+  ['Vegkryss', 'Sted der to eller flere veier møtes.'],
+  ['Venstresving', 'Du har vikeplikt for møtende trafikk.'],
+  ['Høyresving', 'Å svinge til høyre.'],
+  ['Gangfelt', 'Hvite striper. Du må vike for gående i gangfeltet eller på vei ut i det.'],
+  ['Trafikklys', 'Rødt er stopp, gult er klar til stopp, grønt er kjør.'],
+  ['Blinklys', 'Signal om at du skifter retning.'],
+  ['Frontlys', 'I Norge er frontlys påbudt hele tiden, uansett vær.'],
+  ['Fjernlys', 'Bare utenfor tettbygd strøk. Blend ned når det kommer møtende trafikk.'],
+  ['Parkeringsplass', 'Når du kjører ut herfra, har du alltid vikeplikt.'],
+  ['Bussholdeplass', 'Bussregelen gjelder når fartsgrensen er 60 km/t eller lavere.'],
+  ['Motorvei', 'Egne regler, og inn- og utkjøring skjer via rampe.'],
+  ['Midtlinje', 'Linjen som deler veien i kjørefelt.'],
+  ['Promille', 'I Norge er grensen 0,2 promille.'],
+  ['Bilbelte', 'Påbudt for alle passasjerer i alle seter.'],
+  ['Mobiltelefon', 'Forbudt å holde i hånden mens du kjører.'],
+  ['Veilys', 'Ikke det samme som frontlys. Frontlys er alltid påbudt.']
+]);
+_MS_WORDS.en = _MS_WORDS.en.concat([
+  ['Forkjørsrett', 'Right of way at one specific junction.'],
+  ['Vikepliktskilt', 'A triangle with a red border. You give way to traffic that has right of way.'],
+  ['Stoppskilt', 'A red octagonal sign. You must come to a full stop every time.'],
+  ['Fareskilt', 'A warning sign (triangle) that tells you about danger ahead.'],
+  ['Forbudsskilt', 'A prohibition sign (red circle). It forbids something.'],
+  ['Påbudsskilt', 'A mandatory sign (blue circle). It orders you to do something.'],
+  ['Opplysningsskilt', 'An information sign (rectangle).'],
+  ['Reaksjonslengde', 'Reaction distance: how far the car travels while you react.'],
+  ['Bremselengde', 'Braking distance: from pressing the brake until the car stops.'],
+  ['Reaksjonstid', 'Reaction time: from seeing danger to reacting, usually 0.8–1.5 seconds.'],
+  ['Fartsgrense', 'Speed limit: the highest speed allowed on that stretch.'],
+  ['Forbikjøring', 'Overtaking another vehicle.'],
+  ['Envegskjøring', 'One-way traffic: only one direction is allowed.'],
+  ['Rundkjøring', 'Roundabout: in Norway you always go anticlockwise.'],
+  ['Vegkryss', 'A junction where two or more roads meet.'],
+  ['Venstresving', 'Left turn: you give way to oncoming traffic.'],
+  ['Høyresving', 'Right turn.'],
+  ['Gangfelt', 'Pedestrian crossing (white stripes). You must give way to pedestrians on it or about to step onto it.'],
+  ['Trafikklys', 'Traffic lights: red is stop, amber is get ready to stop, green is go.'],
+  ['Blinklys', 'Indicator: a signal that you are changing direction.'],
+  ['Frontlys', 'Headlights: in Norway they are required at all times, whatever the weather.'],
+  ['Fjernlys', 'Main beam: only outside built-up areas, and dip it for oncoming traffic.'],
+  ['Parkeringsplass', 'Car park: when you drive out of one, you always give way.'],
+  ['Bussholdeplass', 'Bus stop: the bus rule applies when the speed limit is 60 km/h or lower.'],
+  ['Motorvei', 'Motorway: special rules, and you enter and exit via a slip road.'],
+  ['Midtlinje', 'Centre line: it divides the road into lanes.'],
+  ['Promille', 'Blood alcohol: in Norway the limit is 0.2 per mille.'],
+  ['Bilbelte', 'Seat belt: required for all passengers in all seats.'],
+  ['Mobiltelefon', 'Mobile phone: it is forbidden to hold it in your hand while driving.'],
+  ['Veilys', 'Street lighting: not the same as headlights. Headlights are always required.']
+]);
+
+var _MS_GAZE = {
+  th: ['กระจกมองหลัง', 'มองไกลไปข้างหน้า', 'ด้านขวา', 'ด้านซ้าย', 'กระจกมองข้างขวา', 'กระจกมองข้างซ้าย', 'จุดบอด'],
+  no: ['Innvendig speil', 'Langt frem', 'Høyre side', 'Venstre side', 'Høyre sidespeil', 'Venstre sidespeil', 'Blindsone'],
+  en: ['Rear-view mirror', 'Far ahead', 'Right side', 'Left side', 'Right side mirror', 'Left side mirror', 'Blind spot']
+};
+
+var _msTab = 0, _msWordIdx = -1, _msGazeTimer = null, _msGazeStep = 0, _msGazeRound = 0;
+var _msHint = { qId: null, count: 0, sid: null };
+
+function _msL() { return _MS[appLang] || _MS.no; }
+function _msSyncLabel() {
+  var L = _msL();
+  var e = document.getElementById('msOpenLbl'); if (e) e.textContent = L.open;
+  var c = document.querySelector('.ms-close'); if (c) c.setAttribute('aria-label', L.close);
+  var t = document.getElementById('msTitle'); if (t) t.textContent = L.open;
+  var b = document.getElementById('teacherAiBadge');
+  if (b) { b.textContent = L.aiBadge; b.title = L.aiTitle; b.setAttribute('aria-label', L.aiTitle); }
+}
+function _msResetHint() { _msHint = { qId: null, count: 0, sid: null }; }
+function _msOnLangChange() {
+  _msSyncLabel(); _msResetHint(); _msWordIdx = -1;
+  var ov = document.getElementById('msOverlay');
+  if (ov && ov.classList.contains('open')) { _msGazeStop(); _msRender(); }
+}
+
+// ── Konge/tjener-chip på vikepliktspørsmål ─────────────────────────
+function buildKingServantChip(qText) {
+  if (!/vikeplikt|forkjørs|høyreregel|vike for|ให้ทาง|ทางเอก|give way|right of way|priority/i.test(qText || '')) return '';
+  return '<div class="ks-chip"><span aria-hidden="true">👑 🙇</span> ' + escH(_msL().ksChip) + '</div>';
+}
+
+// ── HAV-lys: hvilken del av § 3 handler feilen om? ─────────────────
+function buildHavLamps(text) {
+  var s = String(text || '');
+  var on = {
+    H: /vikeplikt|hindre|forstyrre|fotgjenger|gående|syklist|buss|hensyn|ให้ทาง|คนเดินเท้า|จักรยาน|give way|pedestrian|cyclist|yield/i.test(s),
+    A: /speil|blindsone|sikt|uoversiktlig|oppmerksom|mobil|กระจก|มองเห็น|จุดบอด|มือถือ|mirror|visibility|blind spot|phone/i.test(s),
+    V: /fart|bremse|avstand|føre|hastighet|ความเร็ว|เบรก|ระยะ|speed|brake|distance|slippery/i.test(s)
+  };
+  if (!on.H && !on.A && !on.V) return '';
+  var L = _msL();
+  var lamp = function(k) {
+    return '<span class="hav-lamp' + (on[k] ? ' on' : '') + '"><b>' + k + '</b> ' + escH(L[k]) + '</span>';
+  };
+  return '<div class="hav-lamps ai-block" aria-label="' + escH(L.havTitle) + '">'
+    + '<div class="hav-title">' + escH(L.havTitle) + '</div>' + lamp('H') + lamp('A') + lamp('V') + '</div>';
+}
+
+// ── Hint-knapp med tre prikker (backend teller forsøkene) ──────────
+function _msDots(n) { return new Array(n + 1).join('●') + new Array(4 - n).join('○'); }
+
+function buildHintButton() {
+  var q = questions[qIdx];
+  var qId = q ? String(q._id || q.id || q.question_id || '') : '';
+  var n = (_msHint.qId === qId) ? Math.min(3, _msHint.count) : 0;
+  return '<button class="ask-hint-btn ai-block" type="button" onclick="askMichaelAboutThis(\'hint\')">'
+    + '<span aria-hidden="true">💡</span> ' + escH(_msL().hint)
+    + ' <span class="hint-dots" aria-hidden="true">' + _msDots(n) + '</span></button>';
+}
+
+function _msBumpHintDots() {
+  var n = Math.min(3, _msHint.count);
+  var els = document.querySelectorAll('.hint-dots');
+  for (var i = 0; i < els.length; i++) els[i].textContent = _msDots(n);
+}
+
+// ── Michael-skolen (modal) ─────────────────────────────────────────
+setTimeout(_msSyncLabel, 0);
+
+function openMichaelSchool() {
+  _msSyncLabel();
+  var ov = document.getElementById('msOverlay');
+  if (!ov) return;
+  ov.classList.add('open');
+  _msTab = 0;
+  _msRender();
+}
+
+function closeMichaelSchool() {
+  _msGazeStop();
+  var ov = document.getElementById('msOverlay');
+  if (ov) ov.classList.remove('open');
+}
+
+function _msSetTab(i) { _msGazeStop(); _msTab = i; _msRender(); }
+
+function _msRender() {
+  var L = _msL();
+  var tabs = document.getElementById('msTabs');
+  var body = document.getElementById('msBody');
+  var title = document.getElementById('msTitle');
+  if (!tabs || !body) return;
+  if (title) title.textContent = L.open;
+  tabs.innerHTML = L.tabs.map(function(name, i) {
+    return '<button type="button" class="ms-tab' + (i === _msTab ? ' active' : '') + '" onclick="_msSetTab(' + i + ')">' + escH(name) + '</button>';
+  }).join('');
+  if (_msTab === 0) body.innerHTML = _msCultureHtml();
+  else if (_msTab === 1) body.innerHTML = _msWordHtml();
+  else body.innerHTML = _msGazeHtml();
+}
+
+function _msCultureHtml() {
+  var L = _msL();
+  var cards = _MS_CULTURE[appLang] || _MS_CULTURE.no;
+  return cards.map(function(c, ci) {
+    var opts = c.o.map(function(o, oi) {
+      return '<button type="button" class="ms-opt" onclick="_msAnswer(this,' + ci + ',' + oi + ')">' + escH(o) + '</button>';
+    }).join('');
+    return '<div class="ms-card"><div class="ms-card-title">' + escH(c.t) + '</div>'
+      + '<div class="ms-side th"><b>🇹🇭 ' + escH(L.inTh) + '</b><span>' + escH(c.a) + '</span></div>'
+      + '<div class="ms-side no"><b>🇳🇴 ' + escH(L.inNo) + '</b><span>' + escH(c.b) + '</span></div>'
+      + '<div class="ms-q">' + escH(L.tryIt) + ': ' + escH(c.q) + '</div><div class="ms-opts">' + opts + '</div></div>';
+  }).join('');
+}
+
+function _msAnswer(btn, ci, oi) {
+  var cards = _MS_CULTURE[appLang] || _MS_CULTURE.no;
+  var ok = cards[ci].c === oi;
+  var wrap = btn.parentElement;
+  var all = wrap.querySelectorAll('.ms-opt');
+  for (var i = 0; i < all.length; i++) { all[i].disabled = true; }
+  btn.classList.add(ok ? 'ok' : 'bad');
+  if (!ok) all[cards[ci].c].classList.add('ok');
+  var msg = document.createElement('div');
+  msg.className = 'ms-result ' + (ok ? 'ok' : 'bad');
+  msg.textContent = (ok ? _msL().right : _msL().wrong);
+  wrap.appendChild(msg);
+}
+
+function _msWordHtml() {
+  var L = _msL();
+  var words = _MS_WORDS[appLang] || _MS_WORDS.no;
+  if (_msWordIdx < 0) {
+    var d = new Date();
+    var doy = Math.floor((d - new Date(d.getFullYear(), 0, 0)) / 86400000);
+    _msWordIdx = doy % words.length;
+  }
+  var w = words[_msWordIdx % words.length];
+  return '<div class="ms-card ms-word"><div class="ms-word-lbl">' + escH(L.word) + ' · ' + (_msWordIdx % words.length + 1) + '/' + words.length + '</div>'
+    + '<div class="ms-word-term"><small>' + escH(L.termLbl) + '</small>' + escH(w[0]) + '</div>'
+    + '<div class="ms-word-def">' + escH(w[1]) + '</div>'
+    + '<button type="button" class="ms-btn" onclick="_msNextWord()">' + escH(L.next) + ' →</button></div>';
+}
+
+function _msNextWord() {
+  var words = _MS_WORDS[appLang] || _MS_WORDS.no;
+  _msWordIdx = (_msWordIdx + 1) % words.length;
+  _msRender();
+}
+
+function _msGazeHtml() {
+  var L = _msL();
+  var steps = _MS_GAZE[appLang] || _MS_GAZE.no;
+  return '<div class="ms-card"><div class="ms-q">' + escH(L.gazeIntro) + '</div>'
+    + '<div class="ms-gaze" id="msGaze">' + steps.map(function(s, i) {
+        return '<div class="ms-gaze-step" data-i="' + i + '"><b>' + (i + 1) + '</b> ' + escH(s) + '</div>';
+      }).join('') + '</div>'
+    + '<div class="ms-gaze-round" id="msGazeRound"></div>'
+    + '<button type="button" class="ms-btn" id="msGazeBtn" onclick="_msGazeToggle()">' + escH(L.start) + '</button></div>';
+}
+
+function _msGazeToggle() {
+  if (_msGazeTimer) { _msGazeStop(); return; }
+  var steps = _MS_GAZE[appLang] || _MS_GAZE.no;
+  _msGazeStep = 0; _msGazeRound = 1;
+  var btn = document.getElementById('msGazeBtn');
+  if (btn) btn.textContent = _msL().stop;
+  var tick = function() {
+    var els = document.querySelectorAll('.ms-gaze-step');
+    for (var i = 0; i < els.length; i++) els[i].classList.toggle('lit', i === _msGazeStep);
+    var r = document.getElementById('msGazeRound');
+    if (r) r.textContent = _msL().round + ' ' + _msGazeRound;
+    _msGazeStep++;
+    if (_msGazeStep >= steps.length) { _msGazeStep = 0; _msGazeRound++; }
+  };
+  tick();
+  _msGazeTimer = setInterval(tick, 1800);
+}
+
+function _msGazeStop() {
+  if (_msGazeTimer) { clearInterval(_msGazeTimer); _msGazeTimer = null; }
+  var btn = document.getElementById('msGazeBtn');
+  if (btn) btn.textContent = _msL().start;
+  var els = document.querySelectorAll('.ms-gaze-step');
+  for (var i = 0; i < els.length; i++) els[i].classList.remove('lit');
+}
+
 function resetTeacherForLanguage() {
   _teacherSessionId = null;
+  _teacherConversationId = null;
   _teacherHasUserMsg = false;
   _teacherWelcomeLang = null;
   _teacherTyping = false;
   _teacherActiveSessionType = 'normal';
   _teacherQuizSessionId = null;
+  _teacherQuizConversationId = null;
   _teacherNormalHtml = '';
   _teacherQuizHtml = '';
   _teacherNormalHasUserMsg = false;
@@ -10365,6 +12327,8 @@ function _buildAssistantContent(text, container) {
 async function loadTeacher() {
   var tNameEl = document.getElementById('teacherNameLbl');
   if (tNameEl) tNameEl.textContent = t('teacher_name');
+  var tContactBtn = document.getElementById('contactHumanBtn');
+  if (tContactBtn) tContactBtn.textContent = t('contact_human_btn');
   var tInput = document.getElementById('teacherInput');
   if (tInput) tInput.placeholder = t('teacher_placeholder');
 
@@ -10384,52 +12348,20 @@ async function loadTeacher() {
       } catch(e) {
         // Fallback if API unreachable
         var fallback = {
-          no: 'Sawatdee 😊\n\nJeg er Michael.\n\nTrafikklærer med 16 års erfaring i Oslo.',
-          th: 'สวัสดีครับ 😊\n\nผมชื่อไมเคิล\n\nครูสอนขับรถที่มีประสบการณ์ 16 ปีในออสโล',
-          en: 'Sawatdee 😊\n\nI\'m Michael.\n\nDriving instructor with 16 years of experience in Oslo.'
+          no: 'Hei. Jeg er Michaels AI-trafikklærer, bygget på hans 16 år med undervisning i Oslo.',
+          th: 'สวัสดีครับ ผมเป็นผู้ช่วยครูสอนขับรถที่เป็นปัญญาประดิษฐ์ของไมเคิล สร้างจากประสบการณ์สอน 16 ปีในออสโลของเขา',
+          en: "Hi. I'm Michael's AI driving teacher, built on his 16 years of teaching in Oslo."
         };
         _teacherAppendBubble('assistant', fallback[appLang] || '');
       }
     }
   }
 
-  // Fetch topics from backend (single source of truth) and populate chips + side panel
-  try {
-    var tRes = await fetch('/api/teacher/topics?lang=' + appLang);
-    var tData = await tRes.json();
-    var topics = tData.topics || [];
-
-    // Update initial suggestion chips
-    var chipEls = document.querySelectorAll('#teacherSuggestions .teacher-chip');
-    topics.forEach(function(topic, i) {
-      var chip = chipEls[i];
-      if (!chip) return;
-      var label = chip.querySelector('.chip-lbl');
-      if (label) label.textContent = topic.text;
-      chip.dataset.msg = topic.icon + ' ' + topic.text;
-      chip.onclick = (function(msg){ return function(){ teacherSend(msg); }; })(topic.icon + ' ' + topic.text);
-    });
-
-    // Update side panel buttons
-    var tspBtns = document.querySelectorAll('.tsp-btn');
-    topics.forEach(function(topic, i) {
-      var btn = tspBtns[i];
-      if (!btn) return;
-      btn.innerHTML = topic.icon + ' <span>' + topic.text + '</span>';
-      btn.onclick = (function(msg){ return function(){ closeTeacherSidebar(); teacherSend(msg); }; })(topic.icon + ' ' + topic.text);
-    });
-  } catch(e) {
-    // Fallback: keep existing hardcoded chips
-    _teacherUpdateChips();
-    var tspMap2 = { sign:'tsp_sign', vikeplikt:'tsp_vikeplikt', rule:'tsp_rule', practice:'tsp_practice', theory:'tsp_theory', app:'tsp_app' };
-    document.querySelectorAll('[data-tsp]').forEach(function(el) {
-      var key = tspMap2[el.getAttribute('data-tsp')];
-      if (!key) return;
-      el.textContent = t(key);
-      var btn = el.closest('.tsp-btn');
-      if (btn) { var label = t(key); btn.onclick = (function(lbl){ return function(){ closeTeacherSidebar(); teacherSend(lbl); }; })(label); }
-    });
-  }
+  var tspMap2 = { strengths:'tsp_strengths', signs:'tsp_signs', rules:'tsp_rules', position:'tsp_position', dictionary:'tsp_dictionary' };
+  document.querySelectorAll('[data-tsp]').forEach(function(el) {
+    var key = tspMap2[el.getAttribute('data-tsp')];
+    if (key) el.textContent = t(key);
+  });
 }
 
 function _teacherUpdateChips() {
@@ -10475,6 +12407,54 @@ function closeTeacherSidebar() {
   setTeacherSidebar(false);
 }
 
+function teacherSidebarAction(kind) {
+  var prompts = {
+    strengths:{no:'Hva bør jeg øve på?',th:'ฉันควรฝึกเรื่องอะไร?',en:'What should I practise?'},
+    signs:{no:'Hjelp meg å lære trafikkskilt.',th:'ช่วยฉันเรียนรู้ป้ายจราจร',en:'Help me learn road signs.'},
+    rules:{no:'Hjelp meg med trafikkregler og stopplengde.',th:'ช่วยฉันเรื่องกฎจราจรและระยะหยุดรถ',en:'Help me with traffic rules and stopping distance.'},
+    position:{no:'Lær meg riktig plassering på veien.',th:'สอนฉันเรื่องตำแหน่งรถที่ถูกต้องบนถนน',en:'Teach me correct road positioning.'},
+    dictionary:{no:'Hjelp meg med norske trafikkord og uttrykk.',th:'ช่วยฉันเรียนรู้คำศัพท์จราจรภาษานอร์เวย์',en:'Help me learn Norwegian traffic words and expressions.'}
+  };
+  var item = prompts[kind] || {};
+  var prompt = item[appLang] || '';
+  if (!prompt) return;
+  closeTeacherSidebar();
+  teacherSend(prompt, t('tsp_' + kind));
+}
+
+var _teacherVoiceRecognition = null;
+function toggleTeacherVoiceInput() {
+  var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  var button = document.getElementById('teacherMicBtn');
+  if (!SpeechRecognition) { toast(t('teacher_voice_unsupported')); return; }
+  if (_teacherVoiceRecognition) { _teacherVoiceRecognition.stop(); return; }
+  var recognition = new SpeechRecognition();
+  _teacherVoiceRecognition = recognition;
+  recognition.lang = appLang === 'th' ? 'th-TH' : (appLang === 'no' ? 'nb-NO' : 'en-US');
+  recognition.interimResults = false;
+  recognition.continuous = false;
+  if (button) {
+    button.classList.add('listening');
+    button.setAttribute('aria-label', t('teacher_voice_stop'));
+    button.title = t('teacher_voice_stop');
+  }
+  recognition.onresult = function(event) {
+    var input = document.getElementById('teacherInput');
+    var transcript = event.results && event.results[0] && event.results[0][0] ? event.results[0][0].transcript : '';
+    if (input && transcript) input.value = ((input.value || '') + ' ' + transcript).trim();
+  };
+  recognition.onerror = function() {};
+  recognition.onend = function() {
+    _teacherVoiceRecognition = null;
+    if (button) {
+      button.classList.remove('listening');
+      button.setAttribute('aria-label', t('teacher_voice_start'));
+      button.title = t('teacher_voice_start');
+    }
+  };
+  recognition.start();
+}
+
 document.addEventListener('keydown', function(event) {
   if (event.key === 'Escape') closeTeacherSidebar();
 });
@@ -10503,7 +12483,7 @@ function _teacherAppendBubble(role, text) {
     // Append TTS Speaker button
     var ttsBtn = document.createElement('button');
     ttsBtn.className = 'tm-bubble-tts';
-    ttsBtn.innerHTML = '🔊';
+    ttsBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5Z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18 6a8.5 8.5 0 0 1 0 12"/></svg>';
     ttsBtn.title = t('read_aloud');
     ttsBtn.onclick = function() {
       speakText(text);
@@ -10686,7 +12666,9 @@ function _openTeacherMediaVideo(media) {
     title_th:appLang === 'th' ? media.title : '',
     title_en:appLang === 'en' ? media.title : '',
     topic_tags:[],
-    duration_seconds:0
+    duration_seconds:0,
+    audio_language:media.audio_language || '',
+    subtitle_tracks:Array.isArray(media.subtitle_tracks) ? media.subtitle_tracks : []
   };
   if (!_videosCached) _videosCached = [];
   var source = video.file_path || video.youtube_url;
@@ -10699,11 +12681,11 @@ function _openTeacherMediaVideo(media) {
 
 function _buildTeacherMediaCard(media) {
   if (!media || !media.id || !_teacherMediaSafeUrl(media.url)) return null;
-  if (['sign','intersection_image','video','podcast'].indexOf(media.type) === -1) return null;
+  if (['sign','intersection_image','image','video','podcast','audio','document'].indexOf(media.type) === -1) return null;
   if (!media.title || !media.caption) return null;
 
   var card = document.createElement(media.type === 'sign' ? 'button' : 'article');
-  card.className = 'tm-media-card ' + media.type;
+  card.className = 'tm-media-card card-neon ' + media.type;
   card.dataset.materialId = media.id;
   if (media.type === 'sign') {
     if (!media.sign_id) return null;
@@ -10744,7 +12726,7 @@ function _buildTeacherMediaCard(media) {
     return card;
   }
 
-  if (media.type === 'podcast') {
+  if (media.type === 'podcast' || media.type === 'audio') {
     var podcastWrap = document.createElement('div');
     podcastWrap.className = 'tm-media-podcast';
     var podcastLabel = document.createElement('div');
@@ -10766,6 +12748,25 @@ function _buildTeacherMediaCard(media) {
     podcastWrap.appendChild(podcastCaption);
     podcastWrap.appendChild(audio);
     card.appendChild(podcastWrap);
+    return card;
+  }
+
+  if (media.type === 'document') {
+    var documentLink = document.createElement('a');
+    documentLink.className = 'tm-media-podcast';
+    documentLink.href = media.url;
+    documentLink.target = '_blank';
+    documentLink.rel = 'noopener noreferrer';
+    documentLink.setAttribute('aria-label', media.title);
+    var documentTitle = document.createElement('div');
+    documentTitle.className = 'tm-media-title';
+    documentTitle.textContent = '📄 ' + media.title;
+    var documentCaption = document.createElement('div');
+    documentCaption.className = 'tm-media-caption';
+    documentCaption.textContent = media.caption;
+    documentLink.appendChild(documentTitle);
+    documentLink.appendChild(documentCaption);
+    card.appendChild(documentLink);
     return card;
   }
 
@@ -11029,10 +13030,126 @@ function _teacherAppendChips(chips) {
   msgs.appendChild(row);
 }
 
-async function teacherSend(overrideMsg, customDisplayMsg) {
+var _teacherUploadedDoc = null;
+var _teacherUploadedImage = null;
+
+async function _teacherUploadDoc(inputEl) {
+  if (!inputEl || !inputEl.files || !inputEl.files[0]) return;
+  var file = inputEl.files[0];
+  var badge = document.getElementById('teacherDocBadge');
+  var nameEl = document.getElementById('teacherDocName');
+  var docBtn = document.getElementById('teacherDocBtn');
+
+  if (file.type && file.type.indexOf('image/') === 0) {
+    var allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+    if (allowedTypes.indexOf(file.type) === -1 || file.size > 4 * 1024 * 1024) {
+      alert(t('teacher_image_error'));
+      inputEl.value = '';
+      return;
+    }
+    try {
+      var imageData = await new Promise(function(resolve, reject) {
+        var reader = new FileReader();
+        reader.onload = function() { resolve(reader.result); };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+      _teacherUploadedImage = {name:file.name, data:imageData};
+      _teacherUploadedDoc = null;
+      if (badge && nameEl) {
+        badge.style.display = 'flex';
+        nameEl.textContent = '🖼️ ' + file.name + ' — ' + t('teacher_image_ready');
+      }
+    } catch(e) {
+      _teacherUploadedImage = null;
+      if (badge) badge.style.display = 'none';
+      alert(t('teacher_image_error'));
+    } finally {
+      inputEl.value = '';
+    }
+    return;
+  }
+
+  if (badge && nameEl) {
+    badge.style.display = 'flex';
+    nameEl.textContent = '⏳ ' + t('teacher_doc_uploading');
+  }
+  if (docBtn) docBtn.disabled = true;
+
+  try {
+    var fd = new FormData();
+    fd.append('file', file);
+    var res = await fetch('/api/documents/upload', {
+      method: 'POST',
+      body: fd
+    });
+    if (!res.ok) {
+      var errData = await res.json().catch(function(){ return {}; });
+      throw new Error(errData.detail || t('teacher_doc_error'));
+    }
+    var data = await res.json();
+    _teacherUploadedDoc = data;
+    if (badge && nameEl) {
+      badge.style.display = 'flex';
+      var charsLbl = t('teacher_doc_chars');
+      var icon = (data.file_type === 'image') ? '🖼️ ' : '📄 '; nameEl.textContent = icon + (data.filename || file.name) + ' (' + (data.character_count || 0) + ' ' + charsLbl + ')';
+    }
+  } catch(e) {
+    _teacherUploadedDoc = null;
+    if (badge) badge.style.display = 'none';
+    alert(e.message || t('teacher_doc_error'));
+  } finally {
+    if (docBtn) docBtn.disabled = false;
+    inputEl.value = '';
+  }
+}
+
+function _teacherClearDoc() {
+  _teacherUploadedDoc = null;
+  _teacherUploadedImage = null;
+  var badge = document.getElementById('teacherDocBadge');
+  if (badge) badge.style.display = 'none';
+  var nameEl = document.getElementById('teacherDocName');
+  if (nameEl) nameEl.textContent = '';
+  var inputEl = document.getElementById('teacherDocInput');
+  if (inputEl) inputEl.value = '';
+}
+
+async function contactHumanMichael() {
+  var input = document.getElementById('teacherInput');
+  var msg = ((input && input.value) || '').trim();
+  if (!msg) {
+    toast(t('contact_human_empty'));
+    return;
+  }
+  var btn = document.getElementById('contactHumanBtn');
+  if (btn) btn.disabled = true;
+  try {
+    var resp = await api('POST', '/api/teacher/contact-human', {
+      message: msg,
+      language: appLang,
+      device_id: (typeof deviceId !== 'undefined' ? deviceId : null),
+      user_id: (typeof user !== 'undefined' && user && user.id ? user.id : null)
+    });
+    if (resp && resp.ok) {
+      toast(t('contact_human_sent'));
+      if (input) input.value = '';
+    } else {
+      toast(t('contact_human_failed'));
+    }
+  } catch (e) {
+    toast(t('contact_human_failed'));
+  } finally {
+    if (btn) btn.disabled = false;
+  }
+}
+
+async function teacherSend(overrideMsg, customDisplayMsg, customMode) {
   var input = document.getElementById('teacherInput');
   var msg = (overrideMsg || (input && input.value) || '').trim();
+  if (!msg && _teacherUploadedImage) msg = t('teacher_image_prompt');
   if (!msg || _teacherTyping) return;
+  stopAllSpeech();   // T2D-AUDIO-FIX: kill previous sign/TTS audio
 
   // Intercept in-app navigation chips
   var clean = msg.replace(/^[\S]{1,2}\s+/, '').trim().toLowerCase();
@@ -11098,18 +13215,31 @@ async function teacherSend(overrideMsg, customDisplayMsg) {
 
   try {
     var activeSessionId = _teacherActiveSessionType === 'quiz' ? _teacherQuizSessionId : _teacherSessionId;
+    var activeConversationId = _teacherActiveSessionType === 'quiz' ? _teacherQuizConversationId : _teacherConversationId;
+    var chatPayload = {
+      session_id: activeSessionId,
+      conversation_id: activeConversationId || activeSessionId,
+      message: payloadMsg,
+      language: appLang,
+      device_id: (typeof deviceId !== 'undefined' ? deviceId : null),
+      user_id: (typeof user !== 'undefined' && user && user.id ? user.id : null)
+    };
+    if (customMode) {
+      chatPayload.mode = customMode;
+    }
+    if (_teacherUploadedDoc && _teacherUploadedDoc.document_id) {
+      chatPayload.document_id = _teacherUploadedDoc.document_id;
+      chatPayload.document_context = _teacherUploadedDoc.extracted_text;
+    }
+    if (_teacherUploadedImage && _teacherUploadedImage.data) {
+      chatPayload.image_data = _teacherUploadedImage.data;
+    }
     var chatHeaders = { 'Content-Type': 'application/json' };
     if (token) chatHeaders.Authorization = 'Bearer ' + token;   // serveren krever aktiv tilgang (402 ellers)
     var res = await fetch('/api/teacher/chat', {
       method: 'POST',
       headers: chatHeaders,
-      body: JSON.stringify({
-        session_id: activeSessionId,
-        message: payloadMsg,
-        language: appLang,
-        device_id: (typeof deviceId !== 'undefined' ? deviceId : null),
-        user_id: (typeof user !== 'undefined' && user && user.id ? user.id : null)
-      })
+      body: JSON.stringify(chatPayload)
     });
     if (res.status === 402) {
       _teacherHideTyping();
@@ -11119,11 +13249,19 @@ async function teacherSend(overrideMsg, customDisplayMsg) {
     }
     if (!res.ok) throw new Error('HTTP ' + res.status);
     var data = await res.json();
+    var convId = data.conversation_id || data.session_id;
     if (data.session_id) {
       if (_teacherActiveSessionType === 'quiz') {
         _teacherQuizSessionId = data.session_id;
       } else {
         _teacherSessionId = data.session_id;
+      }
+    }
+    if (convId) {
+      if (_teacherActiveSessionType === 'quiz') {
+        _teacherQuizConversationId = convId;
+      } else {
+        _teacherConversationId = convId;
       }
     }
     _teacherHideTyping();
@@ -11136,7 +13274,9 @@ async function teacherSend(overrideMsg, customDisplayMsg) {
       return mediaSignIds.indexOf(signId) === -1;
     });
     await _teacherAppendSignCards(fallbackSignIds, assistantBubble);
+    // Keep the chat calm: backend suggestions are intentionally not rendered.
     _teacherScrollToAnswerStart(assistantBubble);
+    if (_teacherUploadedImage) _teacherClearDoc();
   } catch(e) {
     _teacherHideTyping();
     var errorBubble = _teacherAppendBubble('assistant', t('teacher_error'));
@@ -11693,13 +13833,17 @@ function speakSignAiText() {
   if (!text) return;
   stopAllSpeech();
   var audio = _ensureTeacherAudio();
+  _armTtsFallback(text, window._spAiLang || appLang);
   audio.src = ttsStreamUrl(text, window._spAiLang || appLang);
   audio.playbackRate = ttsRate || 1.0;
   audio.volume = ttsVolume !== undefined ? ttsVolume : 1.0;
   try { audio.load(); } catch (e) {}
   var playPromise = audio.play();
   if (playPromise !== undefined) {
-    playPromise.catch(function(err){ _ttsPlaybackFailed(err, audio); });
+    playPromise.catch(function(err){
+      _ttsPlaybackFailed(err, audio);
+      if (!_consumeTtsFallback()) _finishSpeechPlayback();
+    });
   }
 }
 
@@ -11756,10 +13900,44 @@ if ('serviceWorker' in navigator) {
 """
 
 
+def _webapp_html(default_lang: str = "th") -> str:
+    from stopping_distance_web import install as install_stopping_distance
+    from studybook_web import install as install_studybook
+    html = install_studybook(install_stopping_distance(WEBAPP_HTML)).replace('__DEPLOY_VERSION__', DEPLOY_VERSION)
+    if default_lang != "th":
+        html = html.replace("_ls.get('t2d_lang') || 'th'", f"_ls.get('t2d_lang') || '{default_lang}'")
+    return html
+
+
 @webapp_router.get("/web", response_class=HTMLResponse)
 async def web_app():
-    html = WEBAPP_HTML.replace('__DEPLOY_VERSION__', DEPLOY_VERSION)
-    return HTMLResponse(content=html)
+    if MAINTENANCE_MODE:
+        return HTMLResponse(content=MAINTENANCE_HTML, status_code=503)
+    return HTMLResponse(content=_webapp_html("th"))
+
+
+@webapp_router.get("/web/no", response_class=HTMLResponse)
+async def web_app_no():
+    """Clean Norwegian entry point - same SPA as /web, defaults to Norwegian."""
+    if MAINTENANCE_MODE:
+        return HTMLResponse(content=MAINTENANCE_HTML, status_code=503)
+    return HTMLResponse(content=_webapp_html("no"))
+
+
+@webapp_router.get("/web/th", response_class=HTMLResponse)
+async def web_app_th():
+    """Clean Thai entry point - same SPA as /web, defaults to Thai."""
+    if MAINTENANCE_MODE:
+        return HTMLResponse(content=MAINTENANCE_HTML, status_code=503)
+    return HTMLResponse(content=_webapp_html("th"))
+
+
+@webapp_router.get("/web/en", response_class=HTMLResponse)
+async def web_app_en():
+    """Clean English entry point - same SPA as /web, defaults to English."""
+    if MAINTENANCE_MODE:
+        return HTMLResponse(content=MAINTENANCE_HTML, status_code=503)
+    return HTMLResponse(content=_webapp_html("en"))
 
 @webapp_router.get("/web/version")
 async def web_version():

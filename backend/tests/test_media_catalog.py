@@ -61,7 +61,7 @@ class MediaCatalogTests(unittest.TestCase):
 
     def test_schema_rejects_invalid_enums_urls_duplicate_tags_and_ids(self):
         cases = [
-            _item(type="image"),
+            _item(type="binary"),
             _item(category="annet"),
             _item(content_language="nb"),
             _item(media_url="http://media.example/video.mp4"),
@@ -110,8 +110,16 @@ class MediaCatalogTests(unittest.TestCase):
         self.assertEqual(expand_law_synonyms("Spørsmål 3 av 10 i teoriprøven"), set())
 
     def test_law_synonyms_narrow_bus_rule_does_not_leak_generic_paragraf_7(self):
-        resolved = expand_law_synonyms("paragraf 7 nr 4 om bussregelen")
-        self.assertTrue(set(LAW_MAPPING["7_4"]["tags"]).issubset(resolved))
+        resolved = expand_law_synonyms("paragraf 7 nr 5 om bussregelen")
+        self.assertTrue(set(LAW_MAPPING["7_5"]["tags"]).issubset(resolved))
+
+    def test_law_synonyms_resolve_natural_thai_bus_rule_phrases(self):
+        for query in ("กฎรถบัส", "รถบัสออกจากป้าย", "การให้ทางรถบัส"):
+            with self.subTest(query=query):
+                self.assertEqual(
+                    expand_law_synonyms(query),
+                    set(LAW_MAPPING["7_5"]["tags"]),
+                )
 
     def test_ranker_uses_whole_tags_and_deterministic_order_with_max_one(self):
         unrelated = _item("unrelated", tags=["stopp"])

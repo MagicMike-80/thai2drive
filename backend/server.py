@@ -1,10 +1,12 @@
 from fastapi import FastAPI, APIRouter, HTTPException, Query, Depends, UploadFile, File, Header, Request, Body
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse as FastAPIFileResponse
+from fastapi.responses import FileResponse as FastAPIFileResponse, JSONResponse
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorGridFSBucket
+from pymongo import ReturnDocument
+from pymongo.errors import DuplicateKeyError
 import os
 import logging
 import hashlib
@@ -13,8 +15,8 @@ import urllib.parse
 import smtplib
 from pathlib import Path
 from email.mime.text import MIMEText
-from pydantic import BaseModel, Field, validator
-from typing import List, Optional, Dict, Any
+from pydantic import BaseModel, Field, validator, ValidationError
+from typing import List, Optional, Dict, Any, Literal
 import uuid
 import glob
 import quiz_language
@@ -28,9 +30,11 @@ from passlib.context import CryptContext
 import usage as usage_mod
 from ai_learning import compute_user_readiness, get_active_user_mistakes, record_user_mistake
 try:
-    from media_catalog import SUPPORTED_LANGUAGES, list_localized_catalog_media
+    from streaming_helpers import RangeNotSatisfiable, gridfs_content_type, gridfs_file_length, parse_byte_range
+    from video_thumbnails import normalize_video_thumbnail_url
 except ImportError:  # package-style imports used by isolated tests
-    from backend.media_catalog import SUPPORTED_LANGUAGES, list_localized_catalog_media
+    from backend.streaming_helpers import RangeNotSatisfiable, gridfs_content_type, gridfs_file_length, parse_byte_range
+    from backend.video_thumbnails import normalize_video_thumbnail_url
 try:
     from glossary_match import match_glossary_terms, terms_for_lang
 except ImportError:  # package-style imports used by isolated tests
@@ -43,6 +47,18 @@ try:
     from quiz_readiness import compute_quiz_readiness
 except ImportError:  # package-style imports used by isolated tests
     from backend.quiz_readiness import compute_quiz_readiness
+try:
+    from media_catalog import MediaCatalogValidationError, SUPPORTED_LANGUAGES, list_localized_catalog_media, validate_catalog_document
+except ImportError:  # package-style imports used by isolated tests
+    from backend.media_catalog import MediaCatalogValidationError, SUPPORTED_LANGUAGES, list_localized_catalog_media, validate_catalog_document
+try:
+    from media_storage import MediaUploadError, prepare_media_upload
+except ImportError:  # package-style imports used by isolated tests
+    from backend.media_storage import MediaUploadError, prepare_media_upload
+try:
+    from exam_logic import evaluate_exam_attempt, EXAM_TOTAL_QUESTIONS, EXAM_MAX_ERRORS, EXAM_PASS_THRESHOLD
+except ImportError:  # package-style imports used by isolated tests
+    from backend.exam_logic import evaluate_exam_attempt, EXAM_TOTAL_QUESTIONS, EXAM_MAX_ERRORS, EXAM_PASS_THRESHOLD
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -288,6 +304,7 @@ class QuizAttempt(BaseModel):
 class QuizAttemptCreate(BaseModel):
     client_attempt_id: Optional[str] = None
     device_id: str
+    user_id: Optional[str] = None
     mode: str
     category: Optional[str] = None
     total_questions: int
@@ -319,17 +336,34 @@ class AdminCheckRequest(BaseModel):
 # ==================== AUTH MODELS ====================
 
 class AuthSignup(BaseModel):
-    name: Optional[str] = None        # display name (optional)
+    full_name: Optional[str] = None
+    name: Optional[str] = None        # fallback/display name
     email: str
+    phone: str
     password: str
     device_id: Optional[str] = None   # carry over guest history
 
+    @validator('full_name', pre=True, always=True)
+    def validate_full_name(cls, v, values):
+        val = (v or values.get('name') or '').strip()
+        if not val:
+            raise ValueError('Fullt navn er påkrevd')
+        return val
+
     @validator('email')
     def validate_email(cls, v):
-        v = v.strip().lower()
+        v = (v or '').strip().lower()
         if not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', v):
             raise ValueError('Invalid email format')
         return v
+
+    @validator('phone')
+    def validate_phone(cls, v):
+        v = (v or '').strip()
+        cleaned = re.sub(r'[\s\-\(\)\.]', '', v)
+        if len(cleaned) < 5 or not re.match(r'^\+?[0-9]{5,15}$', cleaned):
+            raise ValueError('Ugyldig telefonnummer')
+        return cleaned
 
     @validator('password')
     def validate_password(cls, v):
@@ -379,6 +413,7 @@ class AccessConsumeRequest(BaseModel):
 
 class CheckoutSessionRequest(BaseModel):
     plan_id: str
+    language: Literal["no", "th", "en"]
     success_url: Optional[str] = None
     cancel_url: Optional[str] = None
     device_id: Optional[str] = None
@@ -781,12 +816,16 @@ def _auth_user_payload(user: dict) -> dict:
     De fire prøveuke-feltene er kontrakten webappen leser (se GRATISUKE i webapp.py):
     premium_status, premium_expires_at, trial_days_left, trial_used.
     """
+    has_prem = _user_has_active_premium(user)
     return {
         "id": user["id"],
-        "name": user.get("name") or "",
+        "name": user.get("name") or user.get("full_name") or "",
+        "full_name": user.get("full_name") or user.get("name") or "",
         "email": user["email"],
+        "phone": user.get("phone") or "",
         "is_admin": user.get("is_admin", False),
-        "is_premium": _user_has_active_premium(user),
+        "is_premium": has_prem,
+        "has_premium": has_prem,
         "premium_status": _user_premium_status(user),
         "premium_expires_at": _access_expires_at(user),
         "trial_days_left": _user_trial_days_left(user),
@@ -1192,6 +1231,426 @@ async def get_user_readiness(current_user: dict = Depends(get_current_user)):
         mastered_mistakes=mastered_count,
         active_mistakes=active_count,
     )
+
+
+# ==================== ELEVFREMDIRFT & DASHBOARD ====================
+
+DASHBOARD_CATEGORY_NAMES: Dict[str, Dict[str, str]] = {
+    "traffic signs": {"no": "Trafikkskilt og vegmerking", "th": "ป้ายจราจรและเครื่องหมายจราจร", "en": "Traffic signs and road markings"},
+    "skilt": {"no": "Trafikkskilt og vegmerking", "th": "ป้ายจราจรและเครื่องหมายจราจร", "en": "Traffic signs and road markings"},
+    "trafikkskilt": {"no": "Trafikkskilt og vegmerking", "th": "ป้ายจราจรและเครื่องหมายจราจร", "en": "Traffic signs and road markings"},
+    "road rules": {"no": "Trafikkregler og grunnregler", "th": "กฎจราจรและข้อบังคับพื้นฐาน", "en": "Road rules and general regulations"},
+    "traffic rules": {"no": "Trafikkregler og grunnregler", "th": "กฎจราจรและข้อบังคับพื้นฐาน", "en": "Road rules and general regulations"},
+    "trafikkregler": {"no": "Trafikkregler og grunnregler", "th": "กฎจราจรและข้อบังคับพื้นฐาน", "en": "Road rules and general regulations"},
+    "right of way": {"no": "Vikeplikt og forkjørsrett", "th": "การให้ทางและกฎสิทธิ์ผ่าน", "en": "Right of way and priority"},
+    "vikeplikt": {"no": "Vikeplikt og forkjørsrett", "th": "การให้ทางและกฎสิทธิ์ผ่าน", "en": "Right of way and priority"},
+    "speed limits": {"no": "Fartsgrenser og avpasning av fart", "th": "ขีดจำกัดความเร็วและการควบคุมความเร็ว", "en": "Speed limits and speed adaptation"},
+    "fartsgrenser": {"no": "Fartsgrenser og avpasning av fart", "th": "ขีดจำกัดความเร็วและการควบคุมความเร็ว", "en": "Speed limits and speed adaptation"},
+    "fart": {"no": "Fartsgrenser og avpasning av fart", "th": "ขีดจำกัดความเร็วและการควบคุมความเร็ว", "en": "Speed limits and speed adaptation"},
+    "safety": {"no": "Sikkerhet og sikring", "th": "ความปลอดภัยและการป้องกัน", "en": "Safety and protection"},
+    "sikkerhet": {"no": "Sikkerhet og sikring", "th": "ความปลอดภัยและการป้องกัน", "en": "Safety and protection"},
+    "driving conditions": {"no": "Kjøreforhold og føreforhold", "th": "สภาพการขับขี่และสภาพถนน", "en": "Driving and road conditions"},
+    "kjøreforhold": {"no": "Kjøreforhold og føreforhold", "th": "สภาพการขับขี่และสภาพถนน", "en": "Driving and road conditions"},
+    "road conditions": {"no": "Veiforhold og føreforhold", "th": "สภาพถนนและการยึดเกาะ", "en": "Road conditions and grip"},
+    "veiforhold": {"no": "Veiforhold og føreforhold", "th": "สภาพถนนและการยึดเกาะ", "en": "Road conditions and grip"},
+    "situations": {"no": "Trafikksituasjoner og samhandling", "th": "สถานการณ์จราจรและการมีปฏิสัมพันธ์", "en": "Traffic situations and interaction"},
+    "situasjoner": {"no": "Trafikksituasjoner og samhandling", "th": "สถานการณ์จราจรและการมีปฏิสัมพันธ์", "en": "Traffic situations and interaction"},
+    "stopping distance": {"no": "Reaksjonstid og stoppelengde", "th": "ระยะตอบสนองและระยะหยุดรถ", "en": "Reaction time and stopping distance"},
+    "stoppelengde": {"no": "Reaksjonstid og stoppelengde", "th": "ระยะตอบสนองและระยะหยุดรถ", "en": "Reaction time and stopping distance"},
+    "roundabouts": {"no": "Kjøring i rundkjøring", "th": "การขับขี่ในวงเวียน", "en": "Roundabouts"},
+    "rundkjoring": {"no": "Kjøring i rundkjøring", "th": "การขับขี่ในวงเวียน", "en": "Roundabouts"},
+    "night driving": {"no": "Mørkekjøring og lysbruk", "th": "การขับรถเวลากลางคืนและการใช้ไฟ", "en": "Night driving and light usage"},
+    "morkekjoring": {"no": "Mørkekjøring og lysbruk", "th": "การขับรถเวลากลางคืนและการใช้ไฟ", "en": "Night driving and light usage"},
+    "level crossings": {"no": "Planoverganger og jernbane", "th": "ทางข้ามทางรถไฟ", "en": "Railway level crossings"},
+    "planovergang": {"no": "Planoverganger og jernbane", "th": "ทางข้ามทางรถไฟ", "en": "Railway level crossings"},
+    "parking": {"no": "Parkering og stans", "th": "การจอดรถและการหยุดรถ", "en": "Parking and stopping"},
+    "parkering": {"no": "Parkering og stans", "th": "การจอดรถและการหยุดรถ", "en": "Parking and stopping"},
+    "vehicle": {"no": "Kjøretøyet og teknisk kontroll", "th": "ยานพาหนะและการตรวจสภาพ", "en": "Vehicle and technical control"},
+    "kjøretøy": {"no": "Kjøretøyet og teknisk kontroll", "th": "ยานพาหนะและการตรวจสภาพ", "en": "Vehicle and technical control"},
+    "overtaking": {"no": "Forbikjøring", "th": "การแซง", "en": "Overtaking"},
+    "forbikjøring": {"no": "Forbikjøring", "th": "การแซง", "en": "Overtaking"},
+    "alcohol": {"no": "Alkohol og rusmidler", "th": "แอลกอฮอล์และสารเสพติด", "en": "Alcohol and intoxicants"},
+    "alkohol": {"no": "Alkohol og rusmidler", "th": "แอลกอฮอล์และสารเสพติด", "en": "Alcohol and intoxicants"},
+    "environment": {"no": "Miljø og økonomisk kjøring", "th": "สิ่งแวดล้อมและการขับขี่ประหยัดพลังงาน", "en": "Environment and eco-driving"},
+    "miljø": {"no": "Miljø og økonomisk kjøring", "th": "สิ่งแวดล้อมและการขับขี่ประหยัดพลังงาน", "en": "Environment and eco-driving"},
+    "accidents": {"no": "Ulykker og førstehjelp", "th": "อุบัติเหตุและการปฐมพยาบาล", "en": "Accidents and first aid"},
+    "ulykker": {"no": "Ulykker og førstehjelp", "th": "อุบัติเหตุและการปฐมพยาบาล", "en": "Accidents and first aid"},
+    "pedestrians": {"no": "Myke trafikanter og gangfelt", "th": "คนเดินเท้าและทางม้าลาย", "en": "Pedestrians and crosswalks"},
+    "gangfelt": {"no": "Myke trafikanter og gangfelt", "th": "คนเดินเท้าและทางม้าลาย", "en": "Pedestrians and crosswalks"},
+    "intersections": {"no": "Kryss og vikeplikt", "th": "ทางแยกและการให้ทาง", "en": "Intersections and priority"},
+    "kryss": {"no": "Kryss og vikeplikt", "th": "ทางแยกและการให้ทาง", "en": "Intersections and priority"},
+    "all": {"no": "Alle emner (blandet prøve)", "th": "ทุกหมวดหมู่ (ข้อสอบรวม)", "en": "All topics (full exam)"},
+    "all categories": {"no": "Alle emner (blandet prøve)", "th": "ทุกหมวดหมู่ (ข้อสอบรวม)", "en": "All topics (full exam)"},
+}
+
+DASHBOARD_MODE_LABELS: Dict[str, Dict[str, str]] = {
+    "practice": {"no": "Øving", "th": "ฝึกซ้อม", "en": "Practice"},
+    "exam": {"no": "Offisiell teoriprøve", "th": "สอบจำลองเสมือนจริง", "en": "Official theory exam"},
+    "daily": {"no": "Daglig test", "th": "แบบทดสอบประจำวัน", "en": "Daily test"},
+    "mistakes": {"no": "Feilsvar (repetisjon)", "th": "ทบทวนข้อที่ตอบผิด", "en": "Mistake review"},
+    "category": {"no": "Kategoriøving", "th": "ฝึกเฉพาะหมวดหมู่", "en": "Category practice"},
+}
+
+
+def _localize_category(cat: Optional[str], lang: str) -> str:
+    lang = lang if lang in ("no", "th", "en") else "no"
+    if not cat:
+        neutral = {"no": "Alle emner", "th": "ทุกหมวดหมู่", "en": "All categories"}
+        return neutral[lang]
+    raw = str(cat).strip()
+    clean = raw.lower()
+    if clean in DASHBOARD_CATEGORY_NAMES and lang in DASHBOARD_CATEGORY_NAMES[clean]:
+        return DASHBOARD_CATEGORY_NAMES[clean][lang]
+    for key, dict_trans in DASHBOARD_CATEGORY_NAMES.items():
+        if key in clean or clean in key:
+            if lang in dict_trans and dict_trans[lang]:
+                return dict_trans[lang]
+    fallback = {
+        "no": "Generell teori",
+        "th": "ทฤษฎีทั่วไป",
+        "en": "General theory",
+    }
+    return fallback[lang]
+
+
+def _localize_mode(mode: Optional[str], lang: str) -> str:
+    lang = lang if lang in ("no", "th", "en") else "no"
+    clean = str(mode or "practice").strip().lower()
+    if clean in DASHBOARD_MODE_LABELS and lang in DASHBOARD_MODE_LABELS[clean]:
+        return DASHBOARD_MODE_LABELS[clean][lang]
+    fallback = {
+        "no": "Quiz",
+        "th": "แบบทดสอบ",
+        "en": "Quiz",
+    }
+    return fallback[lang]
+
+
+def _get_topic_advice(category_key: str, lang: str) -> str:
+    lang = lang if lang in ("no", "th", "en") else "no"
+    clean = str(category_key or "").lower()
+
+    advice_map = {
+        "vikeplikt": {
+            "no": "Trafikklærer Michael råder: Husk 'Kongen og tjeneren'. Den som har vikeplikt må vise det tydelig i god tid.",
+            "th": "ครูไมเคิลแนะนำ: จำกฎ 'ราชาและผู้รับใช้' ผู้ที่มีหน้าที่ให้ทางต้องชะลอรถอย่างชัดเจนตั้งแต่เนิ่นๆ ครับผม",
+            "en": "Driving instructor Michael advises: Remember 'King and servant'. Whoever yields must show it clearly in good time.",
+        },
+        "skilt": {
+            "no": "Trafikklærer Michael råder: Lær fareskilt og vikepliktskilt godt. Fareskilt har rød kant og trekantform.",
+            "th": "ครูไมเคิลแนะนำ: ทำความเข้าใจป้ายเตือนและป้ายให้ทางให้แม่นยำ ป้ายเตือนเป็นรูปสามเหลี่ยมขอบสีแดงครับผม",
+            "en": "Driving instructor Michael advises: Learn warning signs and yield signs thoroughly.",
+        },
+        "stoppelengde": {
+            "no": "Trafikklærer Michael råder: Dobbel fart gir fire ganger så lang bremselengde! Husk 3-sekundersregelen.",
+            "th": "ครูไมเคิลแนะนำ: ความเร็วเพิ่มขึ้นสองเท่า ระยะเบรกจะเพิ่มขึ้นถึงสี่เท่า! อย่าลืมกฎ 3 วินาทีครับผม",
+            "en": "Driving instructor Michael advises: Doubling your speed quadruples braking distance! Remember the 3-second rule.",
+        },
+        "fart": {
+            "no": "Trafikklærer Michael råder: Avpass alltid farten etter sikt og føreforhold, ikke bare fartsgrenseskiltet.",
+            "th": "ครูไมเคิลแนะนำ: ปรับความเร็วตามทัศนวิสัยและสภาพถนนเสมอ ไม่ใช่แค่ตามป้ายจำกัดความเร็วครับผม",
+            "en": "Driving instructor Michael advises: Always adjust speed to visibility and road conditions.",
+        },
+        "safety": {
+            "no": "Trafikklærer Michael råder: Husk HAV-regelen (§ 3) – vis alltid hensyn, aktpågivenhet og varsomhet.",
+            "th": "ครูไมเคิลแนะนำ: จำกฎ HAV (§ 3) – มีน้ำใจ ระมัดระวัง และรอบคอบในทุกการขับขี่ครับผม",
+            "en": "Driving instructor Michael advises: Remember the HAV rule (§ 3) – always drive with care and consideration.",
+        },
+    }
+    for key, trans in advice_map.items():
+        if key in clean:
+            return trans.get(lang, "")
+
+    general_advice = {
+        "no": "Trafikklærer Michael råder: Ta noen ekstra øvingsoppgaver på dette temaet, så sitter teorien!",
+        "th": "ครูไมเคิลแนะนำ: ฝึกทำข้อสอบเพิ่มเติมในหมวดนี้อีกสักนิด แล้วจะมั่นใจและจำแม่นยำขึ้นครับผม",
+        "en": "Driving instructor Michael advises: Practice a few extra questions on this topic to master the theory!",
+    }
+    return general_advice[lang]
+
+
+async def compute_student_weak_topics(
+    db,
+    user_id: Optional[str] = None,
+    device_id: Optional[str] = None,
+    lang: str = "no",
+    limit: int = 5,
+) -> List[Dict[str, Any]]:
+    """Compute weakest categories/topics for student with 100% language isolation."""
+    identities = []
+    if user_id:
+        identities.append({"user_id": user_id})
+    if device_id:
+        identities.append({"device_id": device_id})
+    if not identities:
+        return []
+
+    match_filter = {"$or": identities} if len(identities) > 1 else identities[0]
+
+    pipeline = [
+        {"$match": {
+            **match_filter,
+            "total_questions": {"$gt": 0},
+            "category": {"$nin": [None, "", "None", "all", "All Categories", "alle"]},
+        }},
+        {"$group": {
+            "_id": "$category",
+            "attempts": {"$sum": 1},
+            "total_q": {"$sum": "$total_questions"},
+            "total_correct": {"$sum": "$correct_answers"},
+        }},
+        {"$project": {
+            "_id": 0,
+            "category": "$_id",
+            "attempts": 1,
+            "total_q": 1,
+            "total_correct": 1,
+            "wrong_count": {"$subtract": ["$total_q", "$total_correct"]},
+            "accuracy": {"$cond": [
+                {"$gt": ["$total_q", 0]},
+                {"$round": [{"$multiply": [{"$divide": ["$total_correct", "$total_q"]}, 100]}, 1]},
+                0.0
+            ]},
+        }},
+        {"$sort": {"accuracy": 1, "wrong_count": -1}},
+        {"$limit": limit},
+    ]
+
+    try:
+        rows = await db.quiz_attempts.aggregate(pipeline).to_list(limit)
+    except Exception as exc:
+        logging.getLogger("dashboard").warning("Weak topics aggregation failed: %s", exc)
+        rows = []
+
+    active_mistakes = []
+    if user_id:
+        try:
+            m_cursor = db.user_mistakes.find({"user_id": user_id, "active": True}).limit(20)
+            active_mistakes = await m_cursor.to_list(20)
+        except Exception:
+            active_mistakes = []
+
+    results = []
+    seen_categories = set()
+
+    for r in rows:
+        cat = r["category"]
+        if not cat or cat in seen_categories:
+            continue
+        seen_categories.add(cat)
+        acc = float(r.get("accuracy", 0.0))
+        wrong = int(r.get("wrong_count", 0))
+        total = int(r.get("total_q", 0))
+
+        if acc < 85.0 or wrong > 0:
+            results.append({
+                "category": cat,
+                "name": _localize_category(cat, lang),
+                "accuracy": acc,
+                "total_questions": total,
+                "wrong_count": wrong,
+                "mastered": acc >= 85.0 and wrong == 0,
+                "advice": _get_topic_advice(cat, lang),
+            })
+
+    if not results and active_mistakes:
+        q_ids = [m.get("question_id") for m in active_mistakes if m.get("question_id")]
+        if q_ids:
+            try:
+                q_docs = await db.questions.find({"id": {"$in": q_ids}}, {"_id": 0, "category": 1}).to_list(len(q_ids))
+                cat_counts: Dict[str, int] = {}
+                for q in q_docs:
+                    c = q.get("category")
+                    if c and c not in ("all", "All Categories"):
+                        cat_counts[c] = cat_counts.get(c, 0) + 1
+                for c, fails in sorted(cat_counts.items(), key=lambda x: x[1], reverse=True)[:limit]:
+                    if c not in seen_categories:
+                        seen_categories.add(c)
+                        results.append({
+                            "category": c,
+                            "name": _localize_category(c, lang),
+                            "accuracy": 0.0,
+                            "total_questions": fails,
+                            "wrong_count": fails,
+                            "mastered": False,
+                            "advice": _get_topic_advice(c, lang),
+                        })
+            except Exception:
+                pass
+
+    return results[:limit]
+
+
+async def get_user_completed_sessions(
+    db,
+    user_id: Optional[str] = None,
+    device_id: Optional[str] = None,
+    lang: str = "no",
+    limit: int = 20,
+) -> List[Dict[str, Any]]:
+    """Retrieve and localize completed sessions/attempts with 100% language isolation."""
+    identities = []
+    if user_id:
+        identities.append({"user_id": user_id})
+    if device_id:
+        identities.append({"device_id": device_id})
+    if not identities:
+        return []
+
+    match_filter = {"$or": identities} if len(identities) > 1 else identities[0]
+    safe_limit = max(1, min(int(limit), 50))
+
+    try:
+        attempts = await db.quiz_attempts.find(
+            match_filter, {"_id": 0}
+        ).sort("completed_at", -1).limit(safe_limit).to_list(safe_limit)
+    except Exception as exc:
+        logging.getLogger("dashboard").warning("Completed sessions query failed: %s", exc)
+        return []
+
+    sessions = []
+    for att in attempts:
+        mode = att.get("mode") or "practice"
+        cat = att.get("category")
+        sessions.append({
+            "id": att.get("id", ""),
+            "mode": mode,
+            "mode_label": _localize_mode(mode, lang),
+            "category": cat or "all",
+            "category_name": _localize_category(cat, lang),
+            "score_percentage": round(float(att.get("score_percentage", 0.0)), 1),
+            "correct_answers": int(att.get("correct_answers", 0)),
+            "total_questions": int(att.get("total_questions", 0)),
+            "passed": att.get("passed"),
+            "completed_at": att.get("completed_at", ""),
+            "duration_seconds": att.get("duration_seconds"),
+        })
+    return sessions
+
+
+@api_router.get("/user/dashboard")
+@app.get("/user/dashboard")
+async def get_user_dashboard(
+    request: Request,
+    device_id: Optional[str] = Query(None),
+    user_id: Optional[str] = Query(None),
+    lang: str = Query(default="no"),
+    limit: int = Query(default=20, ge=1, le=50),
+    current_user: Optional[dict] = Depends(optional_auth),
+):
+    """
+    Return comprehensive student progress dashboard:
+    - User profile and premium status
+    - Weak topics with 100% language isolation and Michael AI advice
+    - Completed sessions with localized mode and category labels
+    - Exam readiness score, streak, and overall learning stats
+    """
+    if lang not in ("no", "th", "en"):
+        raise HTTPException(
+            status_code=400,
+            detail={"key": "invalid_language", "message": f"Unsupported language '{lang}'. Must be 'no', 'th', or 'en'."}
+        )
+
+    auth_user_id = current_user.get("sub") if current_user else None
+    target_user_id = auth_user_id or user_id
+    dev_id = device_id
+
+    user_doc = None
+    if target_user_id:
+        user_doc = await db.users.find_one({"id": target_user_id}, {"_id": 0, "password_hash": 0})
+        if user_doc and not dev_id:
+            dev_id = user_doc.get("device_id")
+    elif dev_id:
+        user_doc = await db.users.find_one({"device_id": dev_id}, {"_id": 0, "password_hash": 0})
+        if user_doc:
+            target_user_id = user_doc.get("id")
+
+    weak_topics, completed_sessions = await asyncio.gather(
+        compute_student_weak_topics(db, user_id=target_user_id, device_id=dev_id, lang=lang, limit=5),
+        get_user_completed_sessions(db, user_id=target_user_id, device_id=dev_id, lang=lang, limit=limit),
+    )
+
+    active_mistakes_count = 0
+    mastered_mistakes_count = 0
+    if target_user_id:
+        try:
+            active_mistakes_count, mastered_mistakes_count = await asyncio.gather(
+                db.user_mistakes.count_documents({"user_id": target_user_id, "active": True}),
+                db.user_mistakes.count_documents({"user_id": target_user_id, "mastered": True}),
+            )
+        except Exception:
+            pass
+
+    total_sessions = len(completed_sessions)
+    total_questions = sum(s["total_questions"] for s in completed_sessions)
+    total_correct = sum(s["correct_answers"] for s in completed_sessions)
+    overall_accuracy = round((total_correct / total_questions * 100), 1) if total_questions > 0 else 0.0
+
+    readiness_data = compute_user_readiness(
+        recent_correct=total_correct,
+        recent_total=total_questions,
+        mastered_mistakes=mastered_mistakes_count,
+        active_mistakes=active_mistakes_count,
+    )
+
+    score = readiness_data.get("score", 0)
+    if score < 50:
+        status_msg = {
+            "no": "Vi er i startfasen! Øv jevnt for å bygge et solid grunnlag.",
+            "th": "กำลังเริ่มต้นได้ดีครับ! ฝึกทำข้อสอบอย่างสม่ำเสมอเพื่อสร้างพื้นฐานที่มั่นคงครับผม",
+            "en": "We are in the early stages! Practice steadily to build a solid foundation.",
+        }
+    elif score < 85:
+        status_msg = {
+            "no": "God fremgang! Ta noen fullskala eksamener for å bli helt trygg.",
+            "th": "พัฒนาการดีมากครับ! ฝึกทำข้อสอบจำลองเต็มชุดเพื่อเพิ่มความมั่นใจครับผม",
+            "en": "Great progress! Take some full practice exams to become completely confident.",
+        }
+    else:
+        status_msg = {
+            "no": "Eksamensklar! Kunnskapen din sitter trygt i ryggmargen.",
+            "th": "พร้อมสอบแล้วครับ! ความรู้แน่นและพร้อมสอบผ่านฉลุยแน่นอนครับผม",
+            "en": "Exam ready! Your knowledge is solid and ready for test day.",
+        }
+
+    streak_info = {"current_streak": 0, "best_streak": 0}
+    if user_doc:
+        streak_info = {
+            "current_streak": user_doc.get("current_streak", 0),
+            "best_streak": user_doc.get("best_streak", 0),
+        }
+
+    is_prem = _user_has_active_premium(user_doc) if user_doc else False
+
+    return {
+        "ok": True,
+        "lang": lang,
+        "user": {
+            "id": target_user_id or dev_id or "anonymous",
+            "email": user_doc.get("email") if user_doc else None,
+            "name": (user_doc.get("full_name") or user_doc.get("name")) if user_doc else None,
+            "is_premium": is_prem,
+            "has_premium": is_prem,
+            "is_authenticated": bool(target_user_id and user_doc),
+        },
+        "readiness": {
+            "score": score,
+            "accuracy": readiness_data.get("recent_accuracy", 0.0),
+            "mistake_mastery": readiness_data.get("mistake_mastery", 0.0),
+            "status": status_msg[lang],
+        },
+        "streak": streak_info,
+        "stats": {
+            "total_sessions": total_sessions,
+            "total_questions": total_questions,
+            "total_correct": total_correct,
+            "overall_accuracy": overall_accuracy,
+            "active_mistakes_count": active_mistakes_count,
+            "mastered_mistakes_count": mastered_mistakes_count,
+        },
+        "weak_topics": weak_topics,
+        "completed_sessions": completed_sessions,
+    }
 
 @api_router.post("/questions", response_model=Question)
 async def create_question(question_data: QuestionCreate):
@@ -1820,6 +2279,7 @@ async def create_checkout_session(data: CheckoutSessionRequest, current_user: di
     session_kwargs = {
         "mode": mode,
         "line_items": [{"price": price.id, "quantity": 1}],
+        "locale": {"no": "nb", "th": "th", "en": "en"}[data.language],
         "success_url": success_url,
         "cancel_url": cancel_url,
         "client_reference_id": user["id"],
@@ -2407,30 +2867,118 @@ async def save_quiz_attempt(
     doc["id"] = doc.pop("client_attempt_id", None) or str(uuid.uuid4())
     if "completed_at" not in doc:
         doc["completed_at"] = datetime.now(timezone.utc).isoformat()
-    if current_user and current_user.get("id"):
-        doc["user_id"] = current_user["id"]
+    target_user_id = (current_user.get("id") if current_user else None) or (current_user.get("sub") if current_user else None) or doc.get("user_id")
+    if target_user_id:
+        doc["user_id"] = target_user_id
+
+    # Official exam rule enforcement (Statens vegvesen standard: 45 questions, <= 7 errors)
+    if doc.get("mode") == "exam":
+        duration = None
+        if "started_at" in doc and "completed_at" in doc:
+            try:
+                t0 = datetime.fromisoformat(str(doc["started_at"]).replace("Z", "+00:00"))
+                t1 = datetime.fromisoformat(str(doc["completed_at"]).replace("Z", "+00:00"))
+                duration = int((t1 - t0).total_seconds())
+            except Exception:
+                pass
+        exam_eval = evaluate_exam_attempt(
+            total_questions=doc.get("total_questions", EXAM_TOTAL_QUESTIONS),
+            correct_answers=doc.get("correct_answers", 0),
+            duration_seconds=duration,
+        )
+        doc["passed"] = exam_eval["passed"]
+        doc["score_percentage"] = exam_eval["score_percentage"]
+        if duration is not None:
+            doc["duration_seconds"] = duration
+            doc["timed_out"] = exam_eval["timed_out"]
+
     await db.quiz_attempts.insert_one(doc)
     doc.pop("_id", None)
 
     # Registered-user mistake bank. This is deliberately fail-soft: analytics
     # must never prevent a completed quiz from being saved.
-    if current_user and current_user.get("id"):
+    if target_user_id:
+        def _get_ans_correct(a: dict) -> Optional[bool]:
+            if isinstance(a.get("is_correct"), bool):
+                return a["is_correct"]
+            if isinstance(a.get("correct"), bool):
+                return a["correct"]
+            return None
+
         try:
             await asyncio.gather(*(
                 record_user_mistake(
                     db=db,
-                    user_id=current_user["id"],
+                    user_id=target_user_id,
                     question_id=answer.get("question_id"),
-                    is_correct=bool(answer.get("is_correct")),
+                    is_correct=_get_ans_correct(answer),
                     mode=doc.get("mode", ""),
                 )
                 for answer in doc.get("questions_answered", [])
-                if answer.get("question_id") and isinstance(answer.get("is_correct"), bool)
+                if answer.get("question_id") and _get_ans_correct(answer) is not None
             ))
         except Exception as exc:
             logging.getLogger("quiz_attempts").warning(
                 "Mistake-bank update failed for saved attempt %s: %s", doc["id"], exc
             )
+
+        # Update user profile in MongoDB with quiz/exam progress, activity timestamp, streak and weak topics
+        try:
+            update_data = {
+                "last_activity_date": _oslo_day_key(),
+                "last_quiz_completed_at": doc["completed_at"],
+                "latest_attempt_id": doc["id"],
+            }
+            weak_topics_list = await compute_student_weak_topics(db, user_id=target_user_id, lang="no")
+            if weak_topics_list:
+                update_data["weak_topics"] = [w["category"] for w in weak_topics_list]
+                update_data["weak_topic_details"] = weak_topics_list[:5]
+
+            await db.users.update_one(
+                {"id": target_user_id},
+                {
+                    "$set": update_data,
+                    "$inc": {
+                        "total_quizzes_completed": 1 if doc.get("mode") != "exam" else 0,
+                        "total_exams_completed": 1 if doc.get("mode") == "exam" else 0,
+                        "total_questions_answered": int(doc.get("total_questions") or 0),
+                        "total_correct_answers": int(doc.get("correct_answers") or 0),
+                    },
+                },
+            )
+            try:
+                await usage_mod.record_daily_activity(db, target_user_id)
+            except Exception:
+                pass
+        except Exception as exc:
+            logging.getLogger("quiz_attempts").warning(
+                "User profile update failed for saved attempt %s: %s", doc["id"], exc
+            )
+
+    # Also update user_progress collection for aggregate progress tracking
+    try:
+        dev_id = doc.get("device_id")
+        prog_filter = [{"user_id": target_user_id}] if target_user_id else []
+        if dev_id:
+            prog_filter.append({"device_id": dev_id})
+        if prog_filter:
+            await db.user_progress.update_one(
+                {"$or": prog_filter} if len(prog_filter) > 1 else prog_filter[0],
+                {
+                    "$set": {
+                        "last_activity": doc["completed_at"],
+                        **({"user_id": target_user_id} if target_user_id else {}),
+                        **({"device_id": dev_id} if dev_id else {}),
+                    },
+                    "$inc": {
+                        "total_questions_answered": int(doc.get("total_questions") or 0),
+                        "correct_answers": int(doc.get("correct_answers") or 0),
+                    }
+                },
+                upsert=True
+            )
+    except Exception:
+        pass
 
     # ── Segment track ──
     if SEGMENT_WRITE_KEY:
@@ -2506,42 +3054,100 @@ async def get_bookmarked_questions(device_id: str):
 # ==================== AUTH ROUTES ====================
 
 @api_router.post("/auth/signup")
-async def signup(data: AuthSignup):
-    existing = await _find_user_by_email(data.email)
+async def signup(payload: dict = Body(...)):
+    try:
+        data = AuthSignup.parse_obj(payload)
+    except ValidationError:
+        raise _auth_error_key(
+            "auth_invalid_signup",
+            "Kontroller navn, e-post, mobilnummer og passord, og prøv igjen.",
+            "ตรวจสอบชื่อ อีเมล เบอร์โทรศัพท์ และรหัสผ่าน แล้วลองอีกครั้ง",
+            "Check your name, email, mobile number and password, then try again.",
+            status_code=400,
+        )
+    full_name = (data.full_name or data.name or "").strip()
+    email = data.email.strip().lower()
+    phone = data.phone.strip()
+
+    # Sjekk mot MongoDB: hvis email finnes fra før -> status 400
+    existing = await _find_user_by_email(email)
     if existing:
         raise _auth_error_key(
             "email_already_registered",
             "Denne e-posten er allerede registrert. Logg inn eller tilbakestill passordet.",
             "อีเมลนี้ลงทะเบียนแล้ว กรุณาเข้าสู่ระบบหรือรีเซ็ตรหัสผ่าน",
             "This email is already registered. Log in or reset password.",
-            status_code=409,
+            status_code=400,
+        )
+
+    # Sjekk mot MongoDB: hvis phone finnes fra før -> status 400
+    existing_phone = await db.users.find_one({"phone": phone})
+    if existing_phone:
+        raise _auth_error_key(
+            "phone_already_registered",
+            "Dette telefonnummeret er allerede registrert. Logg inn eller kontakt support.",
+            "เบอร์โทรศัพท์นี้ลงทะเบียนแล้ว กรุณาเข้าสู่ระบบหรือติดต่อฝ่ายสนับสนุน",
+            "This phone number is already registered. Log in or contact support.",
+            status_code=400,
         )
 
     password_hash = pwd_context.hash(data.password)
     user_id = str(uuid.uuid4())
 
     # Check admin whitelist
-    admin_entry = await db.admin_users.find_one({"email": data.email})
+    admin_entry = await db.admin_users.find_one({"email": email})
     is_admin = admin_entry is not None
-    is_premium = is_admin  # Admins get auto premium
 
-    # Gratisuken: verdi før betaling. Gis kun til nye registreringer, og kun én gang
-    # per e-post/device_id — ellers kan man lage uendelig mange gratiskontoer og
-    # tømme AI-læreren for penger.
-    trial_expires_at = await _grant_trial_if_eligible(data.email, data.device_id, user_id)
-    now_iso = datetime.now(timezone.utc).isoformat()
+    # Reserve each position atomically. Initialize from the existing user count
+    # so accounts created before this campaign also consume a position.
+    user_count = await db.users.count_documents({})
+    try:
+        await db.campaign_counters.update_one(
+            {"_id": "signup_50"}, {"$setOnInsert": {"sequence": user_count}}, upsert=True
+        )
+    except DuplicateKeyError:
+        pass  # Another request initialized the counter first.
+    position_doc = await db.campaign_counters.find_one_and_update(
+        {"_id": "signup_50"}, {"$inc": {"sequence": 1}},
+        return_document=ReturnDocument.AFTER,
+    )
+    campaign_position = position_doc["sequence"]
+    now = datetime.now(timezone.utc)
+    now_iso = now.isoformat()
+
+    if is_admin:
+        is_premium = True
+        has_premium = True
+        premium_expires_at = None
+        trial_expires_at = None
+    elif campaign_position <= 50:
+        is_premium = False
+        has_premium = True
+        expires_30d = (now + timedelta(days=30)).isoformat()
+        premium_expires_at = None
+        trial_expires_at = expires_30d
+    else:
+        is_premium = False
+        has_premium = False
+        premium_expires_at = None
+        trial_expires_at = None
 
     user_doc = {
         "id": user_id,
-        "email": data.email,
-        "name": (data.name or "").strip() or None,
+        "email": email,
+        "name": full_name,
+        "full_name": full_name,
+        "phone": phone,
         "password_hash": password_hash,
         "is_admin": is_admin,
         "is_premium": is_premium,
+        "has_premium": has_premium,
+        "premium_expires_at": premium_expires_at,
         "device_id": data.device_id or None,
-        "trial_started_at": now_iso if trial_expires_at else None,
+        "trial_started_at": now_iso if (campaign_position <= 50 and not is_admin) else None,
         "trial_expires_at": trial_expires_at,
-        "trial_used": True,
+        "trial_used": (campaign_position <= 50 and not is_admin),
+        "campaign_index": campaign_position,
         "created_at": now_iso,
     }
     await db.users.insert_one(user_doc)
@@ -2556,13 +3162,13 @@ async def signup(data: AuthSignup):
 
     # ── Segment track ──
     if SEGMENT_WRITE_KEY:
-        segment_analytics.identify(user_id, {"email": data.email, "name": data.name, "is_premium": is_premium, "is_admin": is_admin})
-        segment_analytics.track(user_id, "User Signed Up", {"email": data.email, "method": "email", "is_premium": is_premium})
+        segment_analytics.identify(user_id, {"email": email, "name": full_name, "phone": phone, "is_premium": is_premium, "is_admin": is_admin})
+        segment_analytics.track(user_id, "User Signed Up", {"email": email, "method": "email", "is_premium": is_premium, "campaign_eligible": (campaign_position <= 50)})
 
     has_access = _user_has_active_premium(user_doc)
     token = create_token(
         user_id,
-        data.email,
+        email,
         is_premium=has_access,
         premium_until=_access_expires_at(user_doc),
         premium_status=_user_premium_status(user_doc),
@@ -2786,6 +3392,171 @@ async def link_device(
     )
 
     return {"ok": True, "linked": result.modified_count > 0}
+
+
+# ==================== 50-USER CAMPAIGN (30 DAYS FREE PREMIUM) ====================
+
+class CampaignRegisterRequest(BaseModel):
+    name: str
+    email: str
+    phone: str
+    language: Optional[str] = "th"
+
+CAMPAIGN_SOLD_OUT_MSG = {
+    "th": "แคมเปญนี้เต็มแล้วครับ (ครบ 50 ที่นั่งแล้ว) โปรดติดตามข้อเสนอใหม่เร็วๆ นี้ครับผม",
+    "no": "Kampanjen er nå fulltegnet (50 av 50 plasser er tatt). Følg med for nye tilbud!",
+    "en": "This campaign is now fully booked (50 of 50 spots taken). Stay tuned for new offers!"
+}
+
+CAMPAIGN_DUPLICATE_MSG = {
+    "th": "อีเมลหรือเบอร์โทรศัพท์นี้ลงทะเบียนในแคมเปญแล้วครับ",
+    "no": "Denne e-postadressen eller telefonnummeret er allerede registrert i kampanjen.",
+    "en": "This email or phone number is already registered for the campaign."
+}
+
+CAMPAIGN_SUCCESS_MSG = {
+    "th": "ยินดีด้วยครับ! คุณได้รับสิทธิ์ Premium ฟรี 30 วันเรียบร้อยแล้ว (ลำดับที่ {idx} จาก 50)",
+    "no": "Gratulerer! Du har sikret deg 30 dagers gratis Premium (plass {idx} av 50).",
+    "en": "Congratulations! You have secured 30 days of free Premium (spot {idx} of 50)."
+}
+
+CAMPAIGN_INVALID_MSG = {
+    "th": "กรุณากรอกชื่อ อีเมล และเบอร์โทรศัพท์ให้ครบถ้วนครับ",
+    "no": "Vennligst fyll ut navn, e-post og telefonnummer.",
+    "en": "Please fill in your name, email and phone number."
+}
+
+def _normalize_campaign_lang(lang: Optional[str]) -> str:
+    clean = (lang or "th").strip().lower()
+    if clean in ("th", "thai"):
+        return "th"
+    if clean in ("no", "nb", "norwegian", "norsk"):
+        return "no"
+    if clean in ("en", "english"):
+        return "en"
+    return "th"
+
+
+@api_router.get("/campaign/status")
+@app.get("/api/campaign/status")
+async def get_campaign_status():
+    """Return live campaign capacity and remaining spots."""
+    count = await db.campaign_users.count_documents({})
+    remaining = max(0, 50 - count)
+    return JSONResponse({
+        "success": True,
+        "total_seats": 50,
+        "registered": count,
+        "remaining": remaining,
+        "is_active": remaining > 0,
+    })
+
+
+@api_router.post("/campaign/register")
+@app.post("/api/campaign/register")
+async def register_campaign_user(req: CampaignRegisterRequest):
+    """
+    Register user for the 50-user campaign with 30 days free Premium.
+    Enforces maximum 50 users, checks duplicates, and ensures 100% language isolation.
+    """
+    lang = _normalize_campaign_lang(req.language)
+
+    clean_name = (req.name or "").strip()
+    clean_email = (req.email or "").strip().lower()
+    clean_phone = re.sub(r'[\s\-\(\)]', '', (req.phone or "").strip())
+
+    if not clean_name or not clean_email or not clean_phone or "@" not in clean_email:
+        msg = CAMPAIGN_INVALID_MSG[lang]
+        return JSONResponse(
+            status_code=400,
+            content={
+                "success": False,
+                "error": "invalid_input",
+                "detail": msg,
+                "message": msg,
+            }
+        )
+
+    # Check for duplicate registration in db.campaign_users
+    existing = await db.campaign_users.find_one({
+        "$or": [
+            {"email": clean_email},
+            {"phone": clean_phone}
+        ]
+    })
+    if existing:
+        msg = CAMPAIGN_DUPLICATE_MSG[lang]
+        return JSONResponse(
+            status_code=400,
+            content={
+                "success": False,
+                "error": "already_registered",
+                "detail": msg,
+                "message": msg,
+            }
+        )
+
+    # Check capacity limit (max 50 users)
+    current_count = await db.campaign_users.count_documents({})
+    if current_count >= 50:
+        msg = CAMPAIGN_SOLD_OUT_MSG[lang]
+        return JSONResponse(
+            status_code=400,
+            content={
+                "success": False,
+                "error": "campaign_sold_out",
+                "detail": msg,
+                "message": msg,
+                "total_seats": 50,
+                "registered": current_count,
+                "remaining": 0,
+            }
+        )
+
+    campaign_index = current_count + 1
+    now = datetime.now(timezone.utc)
+    expires_at = now + timedelta(days=30)
+    premium_until = expires_at.isoformat()
+
+    campaign_doc = {
+        "name": clean_name,
+        "email": clean_email,
+        "phone": clean_phone,
+        "language": lang,
+        "is_premium": True,
+        "has_premium": True,
+        "premium_until": premium_until,
+        "campaign_index": campaign_index,
+        "created_at": now.isoformat(),
+    }
+    await db.campaign_users.insert_one(campaign_doc)
+
+    # If this user also has an existing account in db.users, grant Premium immediately
+    await db.users.update_many(
+        {"$or": [{"email": clean_email}, {"phone": clean_phone}]},
+        {"$set": {
+            "is_premium": True,
+            "has_premium": True,
+            "premium_expires_at": premium_until,
+            "trial_expires_at": premium_until,
+            "campaign_index": campaign_index,
+        }}
+    )
+
+    success_msg = CAMPAIGN_SUCCESS_MSG[lang].format(idx=campaign_index)
+    return JSONResponse(
+        status_code=200,
+        content={
+            "success": True,
+            "message": success_msg,
+            "detail": success_msg,
+            "campaign_index": campaign_index,
+            "is_premium": True,
+            "has_premium": True,
+            "premium_until": premium_until,
+            "remaining_seats": max(0, 50 - campaign_index),
+        }
+    )
 
 
 # ==================== ADMIN ROUTES ====================
@@ -4168,56 +4939,48 @@ async def admin_upload_image(
     file: UploadFile = File(...),
     _: dict = Depends(require_admin),
 ):
-    """Admin: upload a new image for a question (stored as Base64 data URI in bildeUrl).
-    Resizes to max 600px, JPEG quality 82, to keep DB payload small."""
-    import base64
-    import io
-    try:
-        from PIL import Image
-    except ImportError:
-        raise HTTPException(status_code=500, detail="Pillow not installed on server")
-
-    # Size check (max 10 MB raw)
-    raw = await file.read()
-    if len(raw) > 10 * 1024 * 1024:
-        raise HTTPException(status_code=413, detail="Image too large (max 10 MB)")
-    if len(raw) == 0:
-        raise HTTPException(status_code=400, detail="Empty file")
-
-    try:
-        img = Image.open(io.BytesIO(raw))
-        img.load()
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=f"Could not decode image: {e}")
-
-    if max(img.size) > 600:
-        ratio = 600 / max(img.size)
-        img = img.resize((int(img.size[0] * ratio), int(img.size[1] * ratio)), Image.LANCZOS)
-    if img.mode != "RGB":
-        img = img.convert("RGB")
-    buf = io.BytesIO()
-    img.save(buf, format="JPEG", quality=82, optimize=True)
-    b64 = base64.b64encode(buf.getvalue()).decode()
-    data_uri = "data:image/jpeg;base64," + b64
-
+    """Admin: store a question image through the shared persistent media workflow."""
     q = await db.questions.find_one({"id": question_id})
     if not q:
         raise HTTPException(status_code=404, detail="Question not found")
     prev = q.get("bildeUrl", "")
+    previous_match = re.fullmatch(r"/api/media/files/([a-fA-F0-9]{24})", str(prev))
+    upload = await admin_upload_media_file(
+        file=file,
+        replace_file_id=previous_match.group(1) if previous_match else None,
+        _=_,
+    )
+    if upload["media_type"] != "image":
+        await admin_delete_media_file(upload["file_id"], _=_)
+        raise HTTPException(status_code=400, detail="Questions accept image files only")
     await db.questions.update_one(
         {"id": question_id},
         {"$set": {
-            "bildeUrl": data_uri,
+            "bildeUrl": upload["url"],
             "bildeUrl_original_backup": prev if prev else q.get("bildeUrl_original_backup"),
         }},
     )
     return {
         "ok": True,
         "id": question_id,
-        "bildeUrl": data_uri,
-        "size_kb": round(len(buf.getvalue()) / 1024, 1),
-        "dimensions": list(img.size),
+        "bildeUrl": upload["url"],
+        "file_id": upload["file_id"],
+        "link_name": upload["link_name"],
+        "size_kb": round(upload["bytes"] / 1024, 1),
+        "transformed": upload["transformed"],
     }
+
+
+@api_router.get("/admin/questions/{question_id}")
+async def admin_get_question(question_id: str, _: dict = Depends(require_admin)):
+    """Admin: fetch one complete question, including its media URL."""
+    question = await db.questions.find_one(
+        {"id": question_id},
+        {"_id": 0, "bildeUrl_original_backup": 0},
+    )
+    if not question:
+        raise HTTPException(status_code=404, detail="Question not found")
+    return question
 
 
 @api_router.get("/admin/questions/{question_id}/thumbnail")
@@ -4235,6 +4998,8 @@ async def admin_question_thumbnail(question_id: str, token: Optional[str] = None
     bilde = q.get("bildeUrl", "")
     if not bilde or len(bilde) < 10:
         raise HTTPException(status_code=404, detail="No image")
+    if bilde.startswith(("/api/", "https://", "http://")):
+        return RedirectResponse(url=bilde, status_code=307)
     # Strip data URI prefix
     if "," in bilde:
         bilde = bilde.split(",", 1)[1]
@@ -4802,7 +5567,8 @@ class LearningVideoCreate(BaseModel):
     title_no: str = ""
     title_th: str = ""
     title_en: str = ""
-    youtube_url: str
+    youtube_url: str = ""
+    file_path: str = ""
     thumbnail_url: str = ""          # auto-derived from youtube_url if empty
     duration_seconds: int = 0
     language: str = "no"             # primary language: no, th, en
@@ -4828,18 +5594,23 @@ class LearningVideoCreate(BaseModel):
 
 def _serialize_video(v: dict) -> dict:
     """Normalize a MongoDB video document for the API response."""
-    v = {k: val for k, val in v.items() if k != '_id'}
-    if not v.get('thumbnail_url'):
-        if v.get('youtube_url'):
-            yt_id = _extract_youtube_id(v['youtube_url'])
+    doc = dict(v)
+    doc_id = str(doc.get('id') or doc.get('_id') or '')
+    doc = {k: val for k, val in doc.items() if k != '_id'}
+    if doc_id:
+        doc['id'] = doc_id
+    normalized_thumbnail = normalize_video_thumbnail_url(
+        doc.get('thumbnail_url', ''),
+        doc.get('file_path', ''),
+    )
+    if normalized_thumbnail:
+        doc['thumbnail_url'] = normalized_thumbnail
+    else:
+        if doc.get('youtube_url'):
+            yt_id = _extract_youtube_id(doc['youtube_url'])
             if yt_id:
-                v['thumbnail_url'] = f"https://img.youtube.com/vi/{yt_id}/mqdefault.jpg"
-        elif v.get('file_path'):
-            # Derive a local thumbnail from the video filename
-            fname = v['file_path'].rsplit('/', 1)[-1]  # video_xxx.mp4
-            stem = fname.rsplit('.', 1)[0]  # video_xxx
-            v['thumbnail_url'] = f"/api/assets/thumbs/thumb_{stem}.jpg"
-    return v
+                doc['thumbnail_url'] = f"https://img.youtube.com/vi/{yt_id}/mqdefault.jpg"
+    return doc
 
 
 # ── Public read endpoints ──────────────────────────────────────────────────────
@@ -4890,23 +5661,36 @@ async def admin_list_videos(_: dict = Depends(require_admin)):
 @api_router.post("/admin/videos")
 async def admin_create_video(data: dict, _: dict = Depends(require_admin)):
     """Create a new learning video. thumbnail_url is auto-derived if omitted."""
+    title_no = str(data.get("title_no") or "").strip()
+    youtube_url = str(data.get("youtube_url") or "").strip()
+    file_path = str(data.get("file_path") or "").strip()
+    if not title_no:
+        raise HTTPException(status_code=400, detail="Norsk tittel er påkrevd")
+    if not youtube_url and not file_path:
+        raise HTTPException(status_code=400, detail="Enten YouTube-URL eller videofil/MP4 må oppgis")
+
     video = {
         "id": str(uuid.uuid4()),
         "created_at": datetime.now(timezone.utc).isoformat(),
         "active": True,
         # defaults
         "title_no": "", "title_th": "", "title_en": "",
-        "youtube_url": "", "thumbnail_url": "", "duration_seconds": 0,
+        "youtube_url": "", "file_path": "", "thumbnail_url": "", "duration_seconds": 0,
         "language": "no",
         "topic_tags": [], "sign_ids": [], "sign_groups": [], "studybook_section_ids": [],
         "see_context": "", "understand_context": "", "choose_context": "",
         "instructor_summary_no": "", "instructor_summary_th": "", "instructor_summary_en": "",
         **data,
     }
-    if not video.get('thumbnail_url') and video.get('youtube_url'):
-        yt_id = _extract_youtube_id(video['youtube_url'])
-        if yt_id:
-            video['thumbnail_url'] = f"https://img.youtube.com/vi/{yt_id}/mqdefault.jpg"
+    if not video.get('thumbnail_url'):
+        if video.get('youtube_url'):
+            yt_id = _extract_youtube_id(video['youtube_url'])
+            if yt_id:
+                video['thumbnail_url'] = f"https://img.youtube.com/vi/{yt_id}/mqdefault.jpg"
+        elif video.get('file_path'):
+            derived = normalize_video_thumbnail_url("", video['file_path'])
+            if derived:
+                video['thumbnail_url'] = derived
     await db.learning_videos.insert_one(video)
     return _serialize_video(video)
 
@@ -4916,12 +5700,25 @@ async def admin_update_video(video_id: str, data: dict, _: dict = Depends(requir
     """Update fields on a learning video."""
     if not data:
         raise HTTPException(status_code=400, detail="No fields to update")
-    # Auto-update thumbnail if youtube_url changed and thumbnail not provided
+    # Auto-update thumbnail if youtube_url or file_path changed and thumbnail not provided
     if 'youtube_url' in data and not data.get('thumbnail_url'):
         yt_id = _extract_youtube_id(data['youtube_url'])
         if yt_id:
             data['thumbnail_url'] = f"https://img.youtube.com/vi/{yt_id}/mqdefault.jpg"
-    result = await db.learning_videos.update_one({"id": video_id}, {"$set": data})
+    elif 'file_path' in data and not data.get('thumbnail_url'):
+        derived = normalize_video_thumbnail_url("", data['file_path'])
+        if derived:
+            data['thumbnail_url'] = derived
+
+    query: Dict[str, Any] = {"id": video_id}
+    try:
+        from bson import ObjectId
+        if ObjectId.is_valid(video_id):
+            query = {"$or": [{"id": video_id}, {"_id": ObjectId(video_id)}]}
+    except Exception:
+        pass
+
+    result = await db.learning_videos.update_one(query, {"$set": data})
     if result.matched_count == 0:
         raise HTTPException(status_code=404, detail="Video not found")
     return {"message": "Updated", "id": video_id}
@@ -4930,7 +5727,15 @@ async def admin_update_video(video_id: str, data: dict, _: dict = Depends(requir
 @api_router.delete("/admin/videos/{video_id}")
 async def admin_delete_video(video_id: str, _: dict = Depends(require_admin)):
     """Permanently delete a learning video."""
-    result = await db.learning_videos.delete_one({"id": video_id})
+    query: Dict[str, Any] = {"id": video_id}
+    try:
+        from bson import ObjectId
+        if ObjectId.is_valid(video_id):
+            query = {"$or": [{"id": video_id}, {"_id": ObjectId(video_id)}]}
+    except Exception:
+        pass
+
+    result = await db.learning_videos.delete_one(query)
     if result.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Video not found")
     return {"message": "Deleted", "id": video_id}
@@ -4938,7 +5743,7 @@ async def admin_delete_video(video_id: str, _: dict = Depends(require_admin)):
 
 # ── Michael material library ─────────────────────────────────────────────────
 
-MICHAEL_MATERIAL_TYPES = {"sign", "intersection_image", "video"}
+MICHAEL_MATERIAL_TYPES = {"sign", "intersection_image", "image", "video", "podcast", "audio", "document"}
 MICHAEL_MATERIAL_FIELDS = {
     "type", "source_id", "source_url", "title", "caption", "topic_tags",
     "sign_ids", "situation_tags", "active", "approved_for_michael", "priority",
@@ -4982,7 +5787,7 @@ def _normalize_michael_material_payload(data: dict, *, partial: bool = False) ->
     if "type" in data or not partial:
         material_type = str(data.get("type", "")).strip()
         if material_type not in MICHAEL_MATERIAL_TYPES:
-            raise HTTPException(status_code=400, detail="Type must be sign, intersection_image, or video")
+            raise HTTPException(status_code=400, detail="Unsupported Michael material type")
         normalized["type"] = material_type
     for field in ("source_id", "source_url"):
         if field in data or not partial:
@@ -5007,11 +5812,13 @@ def _normalize_michael_material_payload(data: dict, *, partial: bool = False) ->
 def _validate_ready_michael_material(material: dict) -> None:
     """Approved active references must be complete and safe for learner use."""
     material_type = material.get("type", "")
-    if material_type in {"sign", "video"} and not material.get("source_id"):
-        raise HTTPException(status_code=400, detail="Existing source ID is required for sign and video")
-    if material_type == "intersection_image":
+    if material_type == "sign" and not material.get("source_id"):
+        raise HTTPException(status_code=400, detail="Existing source ID is required for a sign")
+    if material_type == "video" and not material.get("source_id") and not material.get("source_url"):
+        raise HTTPException(status_code=400, detail="A video source ID or uploaded URL is required")
+    if material_type in {"intersection_image", "image", "podcast", "audio", "document"}:
         if not material.get("source_url") or not _is_safe_michael_material_url(material["source_url"]):
-            raise HTTPException(status_code=400, detail="A safe image URL is required for an intersection image")
+            raise HTTPException(status_code=400, detail="A safe uploaded or external source URL is required")
     if material.get("active") and material.get("approved_for_michael"):
         for field in ("title", "caption"):
             missing = [lang for lang in ("no", "th", "en") if not material.get(field, {}).get(lang)]
@@ -5030,7 +5837,7 @@ async def _resolve_michael_material_source(material: dict) -> dict:
         preview_url = source.get("image_url", "")
         if preview_url:
             material["source_url"] = preview_url
-    elif material_type == "video":
+    elif material_type == "video" and not str(material.get("source_url", "")).startswith("/api/media/files/"):
         source = await db.learning_videos.find_one({"id": source_id}, {"_id": 0})
         if not source:
             raise HTTPException(status_code=404, detail="Video source not found")
@@ -5231,7 +6038,437 @@ async def list_media_catalog(
     return {"language": language, "media": media}
 
 
+# ── Admin Media & Skilt CMS (CRUD) ──────────────────────────────────────────
+
+try:
+    from backend.scripts.import_michael_videos import validate_video_spec
+except ImportError:
+    try:
+        from scripts.import_michael_videos import validate_video_spec
+    except ImportError:
+        try:
+            from import_michael_videos import validate_video_spec
+        except ImportError:
+            def validate_video_spec(spec):
+                if isinstance(spec, dict):
+                    m_id = spec.get('media_id', 'unknown')
+                    t_no = spec.get('title_no')
+                    t_th = spec.get('title_th')
+                    t_en = spec.get('title_en')
+                else:
+                    m_id = getattr(spec, 'media_id', 'unknown')
+                    t_no = getattr(spec, 'title_no', None)
+                    t_th = getattr(spec, 'title_th', None)
+                    t_en = getattr(spec, 'title_en', None)
+                if t_no == "NEEDS_TRANSLATION":
+                    raise ValueError(f"NO translation incomplete: {m_id}")
+                if t_th == "NEEDS_TRANSLATION":
+                    raise ValueError(f"TH translation required: {m_id}")
+                if t_en == "NEEDS_TRANSLATION":
+                    raise ValueError(f"EN translation required: {m_id}")
+
+
+def _validate_media_i18n(media_id: str, i18n: dict) -> None:
+    """Validate that i18n contains required titles and rejects NEEDS_TRANSLATION placeholders."""
+    if not isinstance(i18n, dict):
+        raise HTTPException(status_code=400, detail="i18n must be an object")
+    for lang in ("no", "th", "en"):
+        if lang not in i18n or not isinstance(i18n[lang], dict) or not str(i18n[lang].get("title", "")).strip():
+            raise HTTPException(status_code=400, detail=f"Missing required title for language '{lang}' in i18n")
+        for field, val in i18n[lang].items():
+            if str(val).strip() == "NEEDS_TRANSLATION":
+                raise HTTPException(status_code=422, detail=f"{lang.upper()} translation required: {media_id} ({field} is incomplete)")
+
+    spec = {
+        "media_id": media_id,
+        "title_no": i18n.get("no", {}).get("title"),
+        "title_th": i18n.get("th", {}).get("title"),
+        "title_en": i18n.get("en", {}).get("title"),
+    }
+    try:
+        validate_video_spec(spec)
+    except ValueError as err:
+        raise HTTPException(status_code=422, detail=str(err))
+
+
+def _validate_admin_media_document(document: dict) -> dict:
+    """Apply the same catalog contract to admin writes and Michael reads."""
+    try:
+        return validate_catalog_document(document)
+    except MediaCatalogValidationError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+
+
+class AdminMediaCreate(BaseModel):
+    media_id: str
+    type: str = "video"  # video, podcast, image, audio, sign
+    category: str = "generelt"
+    tags: List[str] = []
+    media_url: str
+    thumbnail_url: Optional[str] = ""
+    audio_url: Optional[str] = None
+    content_language: str = "neutral"
+    is_active: bool = True
+    approved_for_michael: bool = False
+    i18n: Dict[str, Dict[str, str]]
+
+
+class AdminMediaUpdate(BaseModel):
+    type: Optional[str] = None
+    category: Optional[str] = None
+    tags: Optional[List[str]] = None
+    media_url: Optional[str] = None
+    thumbnail_url: Optional[str] = None
+    audio_url: Optional[str] = None
+    content_language: Optional[str] = None
+    is_active: Optional[bool] = None
+    approved_for_michael: Optional[bool] = None
+    i18n: Optional[Dict[str, Dict[str, str]]] = None
+
+
+ADMIN_MEDIA_OWNERS = {
+    "question": ("questions", "id", str),
+    "book_section": ("chapters", "id", str),
+    "studybook": ("studiebok_chapters", "order", int),
+    "traffic_sign": ("traffic_signs", "id", str),
+    "video": ("learning_videos", "id", str),
+    "podcast": ("learning_podcasts", "id", str),
+    "glossary": ("learning_glossary", "id", str),
+    "michael_material": ("michael_materials", "id", str),
+}
+
+
+def _admin_media_owner(owner_type: str, owner_id: str):
+    config = ADMIN_MEDIA_OWNERS.get(owner_type)
+    if not config:
+        raise HTTPException(status_code=400, detail="Unsupported media owner type")
+    collection_name, id_field, converter = config
+    try:
+        normalized_id = converter(owner_id)
+    except (TypeError, ValueError):
+        raise HTTPException(status_code=400, detail="Invalid media owner ID")
+    return db[collection_name], {id_field: normalized_id}
+
+
+@api_router.get("/admin/media-links/{owner_type}/{owner_id}")
+async def admin_list_media_links(owner_type: str, owner_id: str, _: dict = Depends(require_admin)):
+    """Return all shared-file links attached to one admin content record."""
+    collection, query = _admin_media_owner(owner_type, owner_id)
+    owner = await collection.find_one(query, {"_id": 0, "media_refs": 1})
+    if not owner:
+        raise HTTPException(status_code=404, detail="Content record not found")
+    return {"items": owner.get("media_refs", [])}
+
+
+@api_router.post("/admin/media-links/{owner_type}/{owner_id}")
+async def admin_upload_media_link(
+    owner_type: str,
+    owner_id: str,
+    file: UploadFile = File(...),
+    _: dict = Depends(require_admin),
+):
+    """Upload one shared file and attach it to any supported admin record."""
+    collection, query = _admin_media_owner(owner_type, owner_id)
+    if not await collection.find_one(query, {"_id": 1}):
+        raise HTTPException(status_code=404, detail="Content record not found")
+
+    uploaded = await admin_upload_media_file(file=file, replace_file_id=None, _=_)
+    base_id = uploaded["link_name"]
+    media_id = base_id
+    counter = 2
+    while await db.media_catalog.find_one({"media_id": media_id}, {"_id": 1}):
+        media_id = f"{base_id}_{counter}"
+        counter += 1
+
+    now = datetime.now(timezone.utc).isoformat()
+    media_ref = {
+        "media_id": media_id,
+        "link_name": media_id,
+        "url": uploaded["url"],
+        "file_id": uploaded["file_id"],
+        "type": uploaded["media_type"],
+        "filename": uploaded["filename"],
+        "created_at": now,
+    }
+    await collection.update_one(query, {"$push": {"media_refs": media_ref}})
+    await db.media_catalog.insert_one({
+        "media_id": media_id,
+        "type": uploaded["media_type"],
+        "category": "generelt",
+        "tags": [owner_type.replace("_", " ")],
+        "media_url": uploaded["url"],
+        "thumbnail_url": uploaded["url"],
+        "content_language": "neutral",
+        "is_active": False,
+        "approved_for_michael": False,
+        "archived": False,
+        "draft": True,
+        "i18n": {lang: {"title": "", "description": ""} for lang in SUPPORTED_LANGUAGES},
+        "created_at": now,
+        "updated_at": now,
+    })
+    return {"ok": True, "media_ref": media_ref, "catalog_status": "draft"}
+
+
+@api_router.delete("/admin/media-links/{owner_type}/{owner_id}/{media_id}")
+async def admin_remove_media_link(
+    owner_type: str,
+    owner_id: str,
+    media_id: str,
+    _: dict = Depends(require_admin),
+):
+    """Detach a shared file without deleting the catalog item or physical file."""
+    collection, query = _admin_media_owner(owner_type, owner_id)
+    result = await collection.update_one(query, {"$pull": {"media_refs": {"media_id": media_id}}})
+    if not result.matched_count:
+        raise HTTPException(status_code=404, detail="Content record not found")
+    return {"ok": True, "detached": media_id}
+
+
+@api_router.get("/admin/media")
+async def admin_list_media(
+    type: Optional[str] = None,
+    category: Optional[str] = None,
+    status: Optional[str] = None,
+    approved_for_michael: Optional[bool] = None,
+    search: Optional[str] = None,
+    _: dict = Depends(require_admin),
+):
+    """List all media catalog documents for the Admin CMS."""
+    query: dict = {}
+    if type:
+        query["type"] = type.strip().lower()
+    if category:
+        query["category"] = category.strip().lower()
+    if status == "active":
+        query["is_active"] = True
+        query["archived"] = {"$ne": True}
+    elif status == "inactive":
+        query["is_active"] = False
+        query["archived"] = {"$ne": True}
+    elif status == "archived":
+        query["archived"] = True
+    else:
+        query["archived"] = {"$ne": True}
+
+    if approved_for_michael is not None:
+        query["approved_for_michael"] = approved_for_michael
+
+    if search:
+        s = re.escape(search.strip())
+        query["$or"] = [
+            {"media_id": {"$regex": s, "$options": "i"}},
+            {"tags": {"$regex": s, "$options": "i"}},
+            {"i18n.no.title": {"$regex": s, "$options": "i"}},
+            {"i18n.th.title": {"$regex": s, "$options": "i"}},
+            {"i18n.en.title": {"$regex": s, "$options": "i"}},
+        ]
+
+    cursor = db.media_catalog.find(query, {"_id": 0}).sort("media_id", 1)
+    items = await cursor.to_list(length=1000)
+    return {"items": items, "total": len(items)}
+
+
+@api_router.post("/admin/media")
+async def admin_create_media(
+    data: AdminMediaCreate,
+    _: dict = Depends(require_admin),
+):
+    """Create a new media/sign document in the curated media catalog."""
+    clean_id = data.media_id.strip()
+    if not clean_id:
+        raise HTTPException(status_code=400, detail="media_id cannot be empty")
+
+    existing = await db.media_catalog.find_one({"media_id": clean_id})
+    if existing:
+        raise HTTPException(status_code=400, detail=f"Media with id '{clean_id}' already exists")
+
+    # Validate that i18n is complete and contains NO "NEEDS_TRANSLATION"
+    _validate_media_i18n(clean_id, data.i18n)
+
+    now = datetime.now(timezone.utc).isoformat()
+    doc = {
+        "media_id": clean_id,
+        "type": data.type.strip().lower(),
+        "category": data.category.strip().lower(),
+        "tags": [t.strip().lower() for t in data.tags if t.strip()],
+        "media_url": data.media_url.strip(),
+        "thumbnail_url": (data.thumbnail_url or data.media_url).strip(),
+        "audio_url": data.audio_url.strip() if data.audio_url else None,
+        "content_language": data.content_language.strip().lower(),
+        "is_active": data.is_active,
+        "approved_for_michael": bool(data.approved_for_michael),
+        "archived": False,
+        "i18n": data.i18n,
+        "created_at": now,
+        "updated_at": now,
+    }
+    _validate_admin_media_document(doc)
+    await db.media_catalog.insert_one(doc)
+    doc.pop("_id", None)
+    return {"ok": True, "media": doc}
+
+
+@api_router.put("/admin/media/{media_id}")
+async def admin_update_media(
+    media_id: str,
+    data: AdminMediaUpdate,
+    _: dict = Depends(require_admin),
+):
+    """Update an existing media catalog item."""
+    clean_id = media_id.strip()
+    existing = await db.media_catalog.find_one({"media_id": clean_id})
+    if not existing:
+        raise HTTPException(status_code=404, detail=f"Media item '{clean_id}' not found")
+
+    update_fields: dict = {"updated_at": datetime.now(timezone.utc).isoformat()}
+    if data.type is not None:
+        update_fields["type"] = data.type.strip().lower()
+    if data.category is not None:
+        update_fields["category"] = data.category.strip().lower()
+    if data.tags is not None:
+        update_fields["tags"] = [t.strip().lower() for t in data.tags if t.strip()]
+    if data.media_url is not None:
+        update_fields["media_url"] = data.media_url.strip()
+    if data.thumbnail_url is not None:
+        update_fields["thumbnail_url"] = data.thumbnail_url.strip()
+    if data.audio_url is not None:
+        update_fields["audio_url"] = data.audio_url.strip() if data.audio_url else None
+    if data.content_language is not None:
+        update_fields["content_language"] = data.content_language.strip().lower()
+    if data.is_active is not None:
+        update_fields["is_active"] = data.is_active
+    if data.approved_for_michael is not None:
+        update_fields["approved_for_michael"] = bool(data.approved_for_michael)
+    if data.i18n is not None:
+        current_i18n = existing.get("i18n", {})
+        for lang, trans in data.i18n.items():
+            if isinstance(trans, dict):
+                if lang not in current_i18n:
+                    current_i18n[lang] = {}
+                current_i18n[lang].update(trans)
+        _validate_media_i18n(clean_id, current_i18n)
+        update_fields["i18n"] = current_i18n
+
+    candidate = {key: value for key, value in existing.items() if key != "_id"}
+    candidate.update(update_fields)
+    if not candidate.get("thumbnail_url"):
+        candidate["thumbnail_url"] = candidate.get("media_url", "")
+        update_fields["thumbnail_url"] = candidate["thumbnail_url"]
+    _validate_admin_media_document(candidate)
+
+    await db.media_catalog.update_one({"media_id": clean_id}, {"$set": update_fields})
+    updated_doc = await db.media_catalog.find_one({"media_id": clean_id}, {"_id": 0})
+    return {"ok": True, "media": updated_doc}
+
+
+@api_router.delete("/admin/media/{media_id}")
+async def admin_delete_media(
+    media_id: str,
+    archive: bool = False,
+    confirm: bool = False,
+    _: dict = Depends(require_admin),
+):
+    """Safely delete or archive a media catalog item with confirmation validation."""
+    clean_id = media_id.strip()
+    existing = await db.media_catalog.find_one({"media_id": clean_id})
+    if not existing:
+        raise HTTPException(status_code=404, detail=f"Media item '{clean_id}' not found")
+
+    if archive:
+        now = datetime.now(timezone.utc).isoformat()
+        await db.media_catalog.update_one(
+            {"media_id": clean_id},
+            {"$set": {"archived": True, "is_active": False, "archived_at": now, "updated_at": now}}
+        )
+        return {"ok": True, "archived": clean_id, "is_active": False}
+
+    if not confirm:
+        raise HTTPException(
+            status_code=400,
+            detail="Permanent deletion requires confirmation (?confirm=true). Or use ?archive=true for safe archiving."
+        )
+
+    res = await db.media_catalog.delete_one({"media_id": clean_id})
+    if res.deleted_count == 0:
+        raise HTTPException(status_code=404, detail=f"Media item '{clean_id}' not found")
+    return {"ok": True, "deleted": clean_id}
+
+
 # ── GridFS audio upload / stream ─────────────────────────────────────────────
+
+@api_router.post("/admin/media/upload")
+async def admin_upload_media_file(
+    file: UploadFile = File(...),
+    replace_file_id: Optional[str] = None,
+    _: dict = Depends(require_admin),
+):
+    """Validate and persist a reusable image, audio, video, or document in GridFS."""
+    raw = await file.read()
+    try:
+        prepared = prepare_media_upload(raw, file.filename or "materiale", file.content_type or "")
+    except MediaUploadError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+
+    import io as _io
+    bucket = AsyncIOMotorGridFSBucket(db)
+    file_id = await bucket.upload_from_stream(
+        prepared.filename,
+        _io.BytesIO(prepared.data),
+        metadata={
+            "content_type": prepared.content_type,
+            "media_type": prepared.media_type,
+            "original_filename": prepared.original_filename,
+            "transformed": prepared.transformed,
+        },
+    )
+
+    if replace_file_id:
+        from bson import ObjectId
+        try:
+            ObjectId(replace_file_id)
+        except Exception:
+            await bucket.delete(file_id)
+            raise HTTPException(status_code=400, detail="Invalid replace_file_id")
+
+    string_id = str(file_id)
+    return {
+        "file_id": string_id,
+        "url": f"/api/media/files/{string_id}",
+        "link_name": Path(prepared.filename).stem,
+        "filename": prepared.filename,
+        "media_type": prepared.media_type,
+        "content_type": prepared.content_type,
+        "bytes": len(prepared.data),
+        "transformed": prepared.transformed,
+        "replaced_file_id": replace_file_id,
+    }
+
+
+@api_router.delete("/admin/media/files/{file_id}")
+async def admin_delete_media_file(file_id: str, _: dict = Depends(require_admin)):
+    """Permanently delete one uploaded media blob after its catalog record is removed."""
+    from bson import ObjectId
+    try:
+        oid = ObjectId(file_id)
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid file_id")
+    file_url = f"/api/media/files/{file_id}"
+    references = 0
+    for collection, fields in (
+        (db.media_catalog, ("media_url", "thumbnail_url", "audio_url")),
+        (db.questions, ("bildeUrl",)),
+        (db.michael_materials, ("source_url",)),
+    ):
+        references += await collection.count_documents({"$or": [{field: file_url} for field in fields]})
+    if references:
+        raise HTTPException(status_code=409, detail=f"Media file is still referenced by {references} record(s)")
+    bucket = AsyncIOMotorGridFSBucket(db)
+    try:
+        await bucket.delete(oid)
+    except Exception:
+        raise HTTPException(status_code=404, detail="Media file not found")
+    return {"ok": True, "deleted": file_id}
 
 @api_router.post("/admin/audio/upload")
 async def admin_upload_audio(
@@ -5283,18 +6520,31 @@ async def stream_audio(file_id: str, request: Request):
         raise HTTPException(status_code=404, detail="Audio not found")
 
     doc = docs[0]
-    total = doc.length
-    ct = (doc.metadata or {}).get("content_type", "audio/mpeg")
+    try:
+        total = gridfs_file_length(doc)
+    except ValueError:
+        logger.error("GridFS audio document has invalid length: %s", file_id)
+        raise HTTPException(status_code=500, detail="Audio metadata is invalid")
+    # Older GridFS uploads have no metadata attribute. Direct ``doc.metadata``
+    # raises AttributeError for those files and previously surfaced as HTTP 500.
+    ct = gridfs_content_type(doc)
 
-    range_hdr = request.headers.get("Range", "")
-    m = re.match(r"bytes=(\d+)-(\d*)", range_hdr)
-    if m:
-        start = int(m.group(1))
-        end = int(m.group(2)) if m.group(2) else total - 1
-        end = min(end, total - 1)
+    range_hdr = request.headers.get("Range")
+    byte_range = None
+    if range_hdr is not None:
+        try:
+            byte_range = parse_byte_range(range_hdr, total)
+        except RangeNotSatisfiable:
+            raise HTTPException(
+                status_code=416,
+                detail="Requested range not satisfiable",
+                headers={"Content-Range": f"bytes */{total}"},
+            )
+    if byte_range:
+        start, end = byte_range
         length = end - start + 1
         grid_out = await bucket.open_download_stream(oid)
-        await grid_out.seek(start)
+        grid_out.seek(start)
         async def _range_gen():
             remaining = length
             while remaining > 0:
@@ -5325,6 +6575,12 @@ async def stream_audio(file_id: str, request: Request):
         _full_gen(), media_type=ct,
         headers={"Content-Length": str(total), "Accept-Ranges": "bytes"},
     )
+
+
+@api_router.get("/media/files/{file_id}")
+async def stream_media_file(file_id: str, request: Request):
+    """Serve shared media using the established range-capable GridFS streamer."""
+    return await stream_audio(file_id, request)
 
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -5494,7 +6750,7 @@ async def _warm_culture_cache():
 
 @api_router.get("/lessons/culture")
 async def get_culture_lessons(
-    lang: str = Query(default="th"),
+    lang: Optional[str] = Query(default=None),
     category: Optional[str] = None,
     id: Optional[str] = Query(default=None, min_length=1, max_length=120),
     x_device_id: str = Header(default="", alias="X-Device-ID"),
@@ -5506,6 +6762,11 @@ async def get_culture_lessons(
     taught) — never a Norwegian or English prose fallback. A lesson missing a
     required Thai field is omitted entirely.
     """
+    if lang is None and id is None:
+        # Preserve the pre-existing no-query endpoint for older clients.
+        from micro_lessons import get_legacy_culture_lessons
+        return await get_legacy_culture_lessons()
+    lang = lang or "th"
     if not _CULTURE_CACHE:
         await _load_culture_cache()
 
@@ -5727,6 +6988,13 @@ app.include_router(support_chat_router, prefix="/api")
 from teacher_chat import teacher_router  # noqa: E402
 app.include_router(teacher_router, prefix="/api")
 
+# ==================== STUDENT DOCUMENT UPLOAD ====================
+try:
+    from document_routes import document_router  # noqa: E402
+except ImportError:
+    from backend.document_routes import document_router  # noqa: E402
+app.include_router(document_router, prefix="/api")
+
 # ==================== AI LEARNING ENGINE ====================
 from ai_routes import ai_router  # noqa: E402
 app.include_router(ai_router, prefix="/api")
@@ -5738,6 +7006,11 @@ app.include_router(math_router, prefix="/api")
 # ==================== QUIZ PAGE ====================
 from quiz_web import quiz_web_router  # noqa: E402
 app.include_router(quiz_web_router, prefix="/api")
+
+# ==================== QUIZ GLOSSARY TERMS (Fagordkortet) ====================
+from quiz_terms import quiz_terms_router  # noqa: E402
+app.include_router(quiz_terms_router, prefix="/api")
+app.include_router(quiz_terms_router)
 
 # ==================== WEB APP ====================
 from webapp import webapp_router  # noqa: E402
@@ -5756,8 +7029,16 @@ app.include_router(readiness_router)
 from billing import router as billing_router  # noqa: E402
 app.include_router(billing_router)
 
-# ==================== SERVICE WORKER (Offline mode) ====================
+# ==================== MAINTENANCE PAGE (always accessible) ====================
 from fastapi.responses import HTMLResponse, FileResponse, Response, StreamingResponse  # noqa: E402
+from webapp import MAINTENANCE_HTML  # noqa: E402
+
+@app.get("/maintenance", response_class=HTMLResponse)
+async def maintenance_page():
+    """Vedlikeholdsside — alltid tilgjengelig (uavhengig av MAINTENANCE_MODE).
+    Codex: Aktiver vedlikeholdsmodus i produksjon ved aa sette env-var MAINTENANCE_MODE=true paa Railway.
+    """
+    return HTMLResponse(content=MAINTENANCE_HTML, status_code=200)
 
 _SW_PATH = Path(__file__).resolve().parent / "service-worker.js"
 
@@ -5874,6 +7155,7 @@ async def admin_page_catchall(rest: str):
 
 # ─── Static public assets (icons, screenshots etc. for Play Store / press use) ───
 _PUBLIC_ASSETS_DIR = Path(__file__).parent / "public_assets"
+_STATIC_MEDIA_DIR = Path(__file__).parent / "static"
 
 
 def _range_file_response(
@@ -5979,15 +7261,60 @@ async def public_asset(filename: str, request: Request):
         ".pdf": "application/pdf",
         ".mp3": "audio/mpeg",
         ".mp4": "video/mp4",
+        ".vtt": "text/vtt",
         ".m4a": "audio/mp4",
         ".wav": "audio/wav",
         ".ogg": "audio/ogg",
     }.get(ext, "application/octet-stream")
 
     asset_headers = {"Cache-Control": "public, max-age=86400"}
-    if ext in {".mp3", ".m4a", ".wav", ".ogg"}:
+    if ext in {".mp3", ".mp4", ".m4a", ".wav", ".ogg"}:
         return _range_file_response(file_path, request, media_type, asset_headers)
     return FileResponse(str(file_path), media_type=media_type, headers=asset_headers)
+
+
+@app.get("/static/videos/{filename:path}")
+async def static_video(filename: str, request: Request):
+    """Serve imported lesson videos with browser byte-range support."""
+    if ".." in filename.replace("\\", "/").split("/"):
+        return HTMLResponse("Not found", status_code=404)
+    safe_name = filename.replace("..", "").lstrip("/")
+    root = (_STATIC_MEDIA_DIR / "videos").resolve()
+    file_path = (root / safe_name).resolve()
+    try:
+        file_path.relative_to(root)
+    except ValueError:
+        return HTMLResponse("Not found", status_code=404)
+    if not file_path.is_file() or file_path.suffix.lower() != ".mp4":
+        return HTMLResponse("Not found", status_code=404)
+    return _range_file_response(
+        file_path,
+        request,
+        "video/mp4",
+        {"Cache-Control": "public, max-age=86400"},
+    )
+
+
+@app.get("/static/images/{filename:path}")
+async def static_image(filename: str):
+    """Serve generated lesson thumbnails from backend/static/images."""
+    if ".." in filename.replace("\\", "/").split("/"):
+        return HTMLResponse("Not found", status_code=404)
+    safe_name = filename.replace("..", "").lstrip("/")
+    root = (_STATIC_MEDIA_DIR / "images").resolve()
+    file_path = (root / safe_name).resolve()
+    try:
+        file_path.relative_to(root)
+    except ValueError:
+        return HTMLResponse("Not found", status_code=404)
+    media_type = {".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png"}.get(file_path.suffix.lower())
+    if not file_path.is_file() or media_type is None:
+        return HTMLResponse("Not found", status_code=404)
+    return FileResponse(
+        str(file_path),
+        media_type=media_type,
+        headers={"Cache-Control": "public, max-age=86400"},
+    )
 
 
 # ── Sign images — served from backend/sign_images/ ────────────────────────────
@@ -6191,6 +7518,37 @@ async def log_smtp_config():
 
 
 @app.on_event("startup")
+async def publish_michael_video_catalog():
+    """Run the guarded, one-time MP4 catalog migration after deployment."""
+    try:
+        from michael_video_seed import seed_michael_video_catalog
+
+        result = await seed_michael_video_catalog(db)
+        logging.getLogger("michael_video_seed").info(
+            "Michael video catalog status=%s videos=%s",
+            result.get("status"),
+            result.get("videos"),
+        )
+    except Exception as exc:
+        # Media publication must not make the entire app unavailable. The
+        # migration remains incomplete and retries on the next restart.
+        logging.getLogger("michael_video_seed").error(
+            "Michael video catalog publication failed: %s", exc
+        )
+
+
+@app.on_event("startup")
+async def load_quiz_glossary_cache():
+    """Load the Fagordkortet glossary cache. Fail-soft — the endpoint answers
+    {"terms": []} rather than 500 if this fails or hasn't run yet."""
+    try:
+        from quiz_terms import load_glossary_cache
+        await load_glossary_cache(db)
+    except Exception as exc:
+        logging.getLogger("quiz_terms").error("Glossary cache startup load failed: %s", exc)
+
+
+@app.on_event("startup")
 async def ensure_indexes():
     """
     Create / verify all MongoDB indexes on every deploy.
@@ -6252,6 +7610,12 @@ _ELEVENLABS_VOICE_ENV = {
 # den dekker norsk og engelsk like godt. Modellen inngår i cache-nøkkelen, så et
 # modellbytte gir nye filer i stedet for gammel, feiluttalt lyd.
 _DEFAULT_ELEVENLABS_MODEL_ID = "eleven_v3"
+_ELEVENLABS_LANGUAGE_CODES = {"th-TH": "th", "nb-NO": "no", "en-US": "en"}
+_ELEVENLABS_VOICE_SETTINGS = {
+    "th-TH": {"stability": 0.5, "similarity_boost": 0.75, "style": 1.0},
+    "nb-NO": {"stability": 0.5, "similarity_boost": 0.75},
+    "en-US": {"stability": 0.5, "similarity_boost": 0.75},
+}
 _TTS_BREAKER_FAILURE_LIMIT = int(os.environ.get("TTS_BREAKER_FAILURE_LIMIT", "3"))
 _TTS_BREAKER_COOLDOWN_SECONDS = int(os.environ.get("TTS_BREAKER_COOLDOWN_SECONDS", "300"))
 _TTS_PROVIDER_STATE: Dict[str, Dict[str, Any]] = {}
@@ -6573,9 +7937,15 @@ async def _tts_respond(request: Request, text: Optional[str] = None, lang: Optio
     # ── Alle språk → Michaels språkspesifikke ElevenLabs-klonestemme ─────
     voice_id = _elevenlabs_voice_id(lang)
     model_id = _elevenlabs_model_id()
+    voice_settings = _ELEVENLABS_VOICE_SETTINGS[lang]
     # Modellen er en del av leverandør-nøkkelen: bytter vi modell for å fikse
     # thai-uttale, får vi nye filer i stedet for gammel, feiluttalt cache.
-    cloned_cache_path = _tts_cache_path(f"elevenlabs:{model_id}", voice_id, lang, text)
+    # Bare thai får endret stil. Skill den cachen fra eldre thai-opptak,
+    # samtidig som norsk og engelsk kan gjenbruke eksisterende MP3-er.
+    cache_provider = f"elevenlabs:{model_id}"
+    if lang == "th-TH":
+        cache_provider += f":style={voice_settings['style']}"
+    cloned_cache_path = _tts_cache_path(cache_provider, voice_id, lang, text)
 
     if os.path.exists(cloned_cache_path):
         return _stream_mp3_file(
@@ -6605,10 +7975,8 @@ async def _tts_respond(request: Request, text: Optional[str] = None, lang: Optio
             payload = {
                 "text": text,
                 "model_id": model_id,
-                "voice_settings": {
-                    "stability": 0.5,
-                    "similarity_boost": 0.75,
-                },
+                "language_code": _ELEVENLABS_LANGUAGE_CODES[lang],
+                "voice_settings": voice_settings,
             }
             client = httpx.AsyncClient(timeout=60.0)
             request_to_eleven = client.build_request("POST", url, json=payload, headers=headers)
