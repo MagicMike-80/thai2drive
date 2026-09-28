@@ -2974,6 +2974,15 @@ a { color:inherit; text-decoration:none; }
   cursor:pointer; transition:border-color .18s; flex-shrink:0;
 }
 .hist-card:hover  { border-color:rgba(255,153,51,.30); }
+/* Dashboard: elevfremdrift over historikken */
+.dash-sec-title { font-size:.78rem; font-weight:700; margin-bottom:6px; }
+.dash-row { display:flex; align-items:center; gap:8px; font-size:.74rem; margin:4px 0; }
+.dash-row-name { flex:0 0 42%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.dash-bar { flex:1; height:7px; border-radius:99px; background:rgba(255,255,255,.08); overflow:hidden; }
+.dash-bar-fill { height:100%; border-radius:99px; background:var(--green); }
+.dash-row-val { flex:0 0 38px; text-align:right; color:var(--muted); }
+.dash-locked { display:flex; align-items:center; gap:8px; padding:10px; border-radius:12px; background:rgba(255,255,255,.03); color:var(--muted); font-size:.74rem; }
+.dash-upgrade { border:0; border-radius:12px; padding:12px; font-weight:800; cursor:pointer; background:linear-gradient(135deg,#FF9933,#FF6B00); color:#0B1020; }
 .hist-card:active { opacity:.88; }
 
 .hist-card-top {
@@ -5894,6 +5903,19 @@ var UI = {
   bookmark_add_failed:{th:'เพิ่มที่คั่นหน้าไม่ได้', no:'Kunne ikke legge til bokmerke', en:'Could not add bookmark'},
   history_login:{th:'เข้าสู่ระบบเพื่อดูประวัติ', no:'Logg inn for å se historikk', en:'Log in to see history'},
   history_empty:{th:'ยังไม่มีประวัติควิซ<br>ทำควิซให้เสร็จ แล้วผลลัพธ์จะแสดงที่นี่', no:'Ingen quiz-historikk ennå.<br>Fullfør en quiz for å se resultatene her.', en:'No quiz history yet.<br>Finish a quiz to see results here.'},
+  dash_title:{th:'ความคืบหน้าของฉัน', no:'Min fremgang', en:'My progress'},
+  dash_tier_premium:{th:'สมาชิกพรีเมียม', no:'Premium', en:'Premium'},
+  dash_tier_free:{th:'แบบจำกัด (gratis)', no:'Begrenset (gratis)', en:'Limited (free)'},
+  dash_quiz:{th:'คะแนนควิซ', no:'Quiz-score', en:'Quiz score'},
+  dash_by_cat:{th:'คะแนนตามหมวด', no:'Score per kategori', en:'Score by category'},
+  dash_studybook:{th:'ความคืบหน้าในการอ่านคู่มือ (Studiebok)', no:'Lesefremdrift i Studiebok', en:'Study book reading progress'},
+  dash_studybook_val:{th:'อ่านแล้ว {read} จาก {total} ขั้นตอน', no:'Lest {read} av {total} steg', en:'Read {read} of {total} steps'},
+  dash_signs:{th:'ความชำนาญด้านป้ายจราจร (skiltmestring)', no:'Skiltmestring', en:'Sign mastery'},
+  dash_signs_val:{th:'เชี่ยวชาญแล้ว {mastered} จาก {total} ป้าย', no:'Mestret {mastered} av {total} skilt', en:'Mastered {mastered} of {total} signs'},
+  dash_locked:{th:'ปลดล็อกได้ด้วยการสมัครสมาชิก (abonnement)', no:'Låses opp med abonnement', en:'Unlocked with a subscription'},
+  dash_free_note:{th:'คุณกำลังดูความคืบหน้าแบบจำกัด', no:'Du ser en begrenset fremdrift', en:'You are seeing limited progress'},
+  dash_upgrade_btn:{th:'อัปเกรดเพื่อดูความคืบหน้าทั้งหมด', no:'Oppgrader for full fremdrift', en:'Upgrade for full progress'},
+  dash_load_error:{th:'โหลดความคืบหน้าไม่สำเร็จ', no:'Kunne ikke laste fremdriften', en:'Could not load progress'},
   history_load_error:{th:'โหลดประวัติไม่ได้', no:'Kunne ikke laste historikk.', en:'Could not load history.'},
   retry_category_unavailable:{th:'ไม่พบหมวดหมู่นี้แล้ว', no:'Fant ikke denne kategorien lenger.', en:'Could not find this category anymore.'},
   result_saved:{th:'บันทึกผลแล้ว ✓',        no:'Resultat lagret ✓', en:'Result saved ✓'},
@@ -7302,6 +7324,7 @@ function sbRender() {
     ? '<div><a class="sb-video-btn" href="' + escH(ch.video_url) + '" target="_blank" rel="noopener">🎬 ' + escH(t('sb_watch_video')) + '</a></div>'
     : '';
 
+  sbTrackRead(ch, sbsActive() ? (ch.screens[Math.min(Math.max(_sbsIdx, 0), ch.screens.length - 1)] || {}).id : null);
   var reader = document.getElementById('sbReader');
   var bodyHtml = sbsActive() ? sbsRender(ch) : (imgHtml + content);
   reader.innerHTML =
@@ -10679,6 +10702,16 @@ async function loadHistory() {
   } catch(e) {
     scroll.innerHTML = '<div class="empty-state"><div class="es-icon">⚠️</div><p>' + t('history_load_error') + '<br>' + escH(e.message) + '</p></div>';
   }
+}
+
+// Studiebok: husk hva den innloggede eleven har lest (én gang per kapittel/skjerm per økt)
+var _sbTracked = {};
+function sbTrackRead(ch, screenId) {
+  if (!token || !ch || typeof ch.order !== 'number') return;
+  var key = ch.order + ':' + (screenId || '');
+  if (_sbTracked[key]) return;
+  _sbTracked[key] = true;
+  api('PUT', '/api/progress/studybook', {chapter: ch.order, screen_id: screenId || null}).catch(function() { delete _sbTracked[key]; });
 }
 
 function openHistDetail(idx) {

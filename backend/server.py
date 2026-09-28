@@ -19,7 +19,9 @@ from pydantic import BaseModel, Field, validator, ValidationError
 from typing import List, Optional, Dict, Any, Literal
 import uuid
 import glob
+import json
 import quiz_language
+import dashboard as dashboard_mod
 import re
 import jwt
 import time
@@ -1531,19 +1533,22 @@ async def get_user_completed_sessions(
 @api_router.get("/user/dashboard")
 @app.get("/user/dashboard")
 async def get_user_dashboard(
-    request: Request,
-    device_id: Optional[str] = Query(None),
-    user_id: Optional[str] = Query(None),
     lang: str = Query(default="no"),
     limit: int = Query(default=20, ge=1, le=50),
-    current_user: Optional[dict] = Depends(optional_auth),
+    current_user: dict = Depends(get_current_user),
 ):
     """
     Return comprehensive student progress dashboard:
     - User profile and premium status
-    - Weak topics with 100% language isolation and Michael AI advice
-    - Completed sessions with localized mode and category labels
+    - Weak topics with 100% language isolation and Michael AI advice (paying users)
+    - Completed sessions with localized mode and category labels (paying users)
+    - Studiebok reading progress and sign mastery (paying users)
     - Exam readiness score, streak, and overall learning stats
+
+    Security (closed 2026-09-29): identity comes ONLY from the JWT (`current_user["sub"]`).
+    There used to be a `user_id`/`device_id` query override that let anyone read another
+    learner's email, name, premium status and quiz history without logging in — removed.
+    Free users get a summary only; the detailed breakdown is a paid feature (see build below).
     """
     if lang not in ("no", "th", "en"):
         raise HTTPException(
@@ -1551,19 +1556,12 @@ async def get_user_dashboard(
             detail={"key": "invalid_language", "message": f"Unsupported language '{lang}'. Must be 'no', 'th', or 'en'."}
         )
 
-    auth_user_id = current_user.get("sub") if current_user else None
-    target_user_id = auth_user_id or user_id
-    dev_id = device_id
-
-    user_doc = None
-    if target_user_id:
-        user_doc = await db.users.find_one({"id": target_user_id}, {"_id": 0, "password_hash": 0})
-        if user_doc and not dev_id:
-            dev_id = user_doc.get("device_id")
-    elif dev_id:
-        user_doc = await db.users.find_one({"device_id": dev_id}, {"_id": 0, "password_hash": 0})
-        if user_doc:
-            target_user_id = user_doc.get("id")
+    target_user_id = current_user["sub"]
+    user_doc = await db.users.find_one({"id": target_user_id}, {"_id": 0, "password_hash": 0})
+    if not user_doc:
+        raise HTTPException(status_code=401, detail="Invalid or expired token")
+    dev_id = user_doc.get("device_id")
+    is_prem = _user_has_active_premium(user_doc)
 
     weak_topics, completed_sessions = await asyncio.gather(
         compute_student_weak_topics(db, user_id=target_user_id, device_id=dev_id, lang=lang, limit=5),
@@ -1620,18 +1618,16 @@ async def get_user_dashboard(
             "best_streak": user_doc.get("best_streak", 0),
         }
 
-    is_prem = _user_has_active_premium(user_doc) if user_doc else False
-
-    return {
+    result = {
         "ok": True,
         "lang": lang,
         "user": {
-            "id": target_user_id or dev_id or "anonymous",
-            "email": user_doc.get("email") if user_doc else None,
-            "name": (user_doc.get("full_name") or user_doc.get("name")) if user_doc else None,
+            "id": target_user_id,
+            "email": user_doc.get("email"),
+            "name": (user_doc.get("full_name") or user_doc.get("name")),
             "is_premium": is_prem,
             "has_premium": is_prem,
-            "is_authenticated": bool(target_user_id and user_doc),
+            "is_authenticated": True,
         },
         "readiness": {
             "score": score,
@@ -1648,9 +1644,26 @@ async def get_user_dashboard(
             "active_mistakes_count": active_mistakes_count,
             "mastered_mistakes_count": mastered_mistakes_count,
         },
-        "weak_topics": weak_topics,
-        "completed_sessions": completed_sessions,
     }
+    # Paying users get the full breakdown (weak topics, session list, Studiebok chapters,
+    # sign mastery). Free users get the summary above plus an upgrade prompt — never the detail.
+    if is_prem:
+        identities = [{"user_id": target_user_id}] + ([{"device_id": dev_id}] if dev_id else [])
+        raw_attempts = await dashboard_mod.recent_attempts(db, identities)
+        result["weak_topics"] = weak_topics
+        result["completed_sessions"] = completed_sessions
+        result["studybook"] = await dashboard_mod.studybook_progress(db, target_user_id, detailed=True)
+        result["signs"] = await dashboard_mod.sign_mastery(db, raw_attempts, _sign_catalog_ids())
+        result["locked"] = []
+        result["upgrade"] = {"show_button": False}
+    else:
+        result["weak_topics"] = []
+        result["completed_sessions"] = []
+        result["studybook"] = await dashboard_mod.studybook_progress(db, target_user_id, detailed=False)
+        result["signs"] = None
+        result["locked"] = list(dashboard_mod.LOCKED_FOR_FREE)
+        result["upgrade"] = {"show_button": True, "gate": "upgrade"}
+    return result
 
 @api_router.post("/questions", response_model=Question)
 async def create_question(question_data: QuestionCreate):
@@ -2823,11 +2836,58 @@ async def access_consume(data: AccessConsumeRequest, user: Optional[dict] = Depe
 async def get_user_progress(device_id: str):
     progress = await db.user_progress.find_one({"device_id": device_id}, {"_id": 0})
     if not progress:
-        new_progress = UserProgress(device_id=device_id).dict()
-        await db.user_progress.insert_one(new_progress)
-        new_progress.pop("_id", None)
-        return new_progress
+        # Reading must not write: an unknown id used to create a document per request.
+        progress = UserProgress(device_id=device_id).dict()
+    # `streak` is what the home screen shows; it used to be missing, so it always read 0.
+    days = [a.get("completed_at") async for a in db.quiz_attempts.find(
+        {"device_id": device_id}, {"_id": 0, "completed_at": 1}).sort("completed_at", -1).limit(400)]
+    progress["streak"] = dashboard_mod.compute_streak(days)
     return progress
+
+
+def _sign_catalog_ids() -> set:
+    global _SIGN_CATALOG_IDS
+    if _SIGN_CATALOG_IDS is None:
+        try:
+            data = json.loads((ROOT_DIR / "signs_content.json").read_text(encoding="utf-8"))
+            _SIGN_CATALOG_IDS = {str(x["id"]) for x in data if isinstance(x, dict) and x.get("id")}
+        except Exception as exc:  # fail-soft: the dashboard still works without sign mastery
+            logger.warning("signs_content.json not readable for dashboard: %s", exc)
+            _SIGN_CATALOG_IDS = set()
+    return _SIGN_CATALOG_IDS
+
+
+_SIGN_CATALOG_IDS: Optional[set] = None
+
+
+@api_router.get("/dashboard/progress")
+async def dashboard_progress(current_user: dict = Depends(get_current_user)):
+    """Learner dashboard for the web app: full for paying users, limited (+ upgrade button)
+    for free users. Identity comes from the JWT only, the response is a whitelist of numbers/keys.
+    """
+    user = await db.users.find_one({"id": current_user["sub"]}, {"_id": 0, "password_hash": 0})
+    if not user:
+        raise HTTPException(status_code=401, detail="Invalid or expired token")
+    return await dashboard_mod.build_dashboard(db, user, _user_has_active_premium(user), _sign_catalog_ids())
+
+
+class StudybookProgressIn(BaseModel):
+    chapter: int = Field(ge=0, le=10000)
+    screen_id: Optional[str] = Field(default=None, max_length=120)
+
+
+@api_router.put("/progress/studybook")
+async def track_studybook_progress(data: StudybookProgressIn, current_user: dict = Depends(get_current_user)):
+    """Remember that the signed-in learner has read a Studiebok chapter/screen."""
+    add: Dict[str, Any] = {"chapters": data.chapter}
+    if data.screen_id:
+        add["screens"] = data.screen_id
+    await db.user_studybook_progress.update_one(
+        {"user_id": current_user["sub"]},
+        {"$addToSet": add, "$set": {"updated_at": datetime.now(timezone.utc).isoformat()}},
+        upsert=True,
+    )
+    return {"success": True}
 
 @api_router.put("/progress/{device_id}")
 async def update_user_progress(device_id: str, answered_correct: bool, category: str):
