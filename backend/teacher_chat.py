@@ -142,7 +142,7 @@ _TEACHER_LLM_TEMPERATURE = float(os.environ.get("TEACHER_LLM_TEMPERATURE", "0.3"
 # Normal replies must finish their sentences; Thai needs more tokens than Norwegian.
 _TEACHER_CHAT_MAX_TOKENS = int(os.environ.get("TEACHER_CHAT_MAX_TOKENS", "450"))
 # Prior turns replayed to the model (most recent), so long sessions keep their latest context.
-_TEACHER_HISTORY_LIMIT = 10
+_TEACHER_HISTORY_LIMIT = 5
 
 
 def _build_llm_attempts() -> List[dict]:
@@ -3811,10 +3811,10 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
                 "in a concrete driving situation. E.g., 'Se for deg at du sitter i bilen og nærmer deg dette krysset...'\n"
                 "3. MINI-PRACTICE CHALLENGE: You must end the explanation with a new short practical follow-up question "
                 "(a small new scenario testing the same rule) to check if they have understood the logic. Let them try themselves!\n"
-                "4. Use the exact 5-step headers in the declared language:\n"
-                "   NO: 🚗 Situasjon / 💡 Forklaring / ⚠️ Vanlig feil / 🔧 Praktisk råd / 📖 Teori / ❓ Oppfølgingsspørsmål\n"
-                "   TH: 🚗 สถานการณ์ / 💡 คำอธิบาย / ⚠️ ข้อผิดพลาดที่พบบ่อย / 🔧 คำแนะนำในทางปฏิบัติ / 📖 ทฤษฎีและกฎหมาย / ❓ คำถามชวนคิด\n"
-                "   EN: 🚗 Situation / 💡 Explanation / ⚠️ Common mistake / 🔧 Practical advice / 📖 Theory / ❓ Follow-up question\n"
+                "4. NO EMOJI, NO FIXED SECTION HEADERS: Weave situation, explanation, common mistake, "
+                "practical advice and the follow-up question into natural, flowing prose — never as "
+                "labeled sections or bullet points. This overrides any older example that used emoji "
+                "headers (🚗/💡/⚠️/🔧/📖/❓); those are formatting artifacts, not a required structure.\n"
                 "5. Write the ENTIRE response in the language declared by [LANGUAGE] header. Zero exceptions.\n"
                 "━━━━━━━━━━━━━━━━━━━━━━━"
             )
@@ -3843,10 +3843,10 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
                 "   - 7-YEARS RULE: Use short, simple sentences.\n"
                 "   - SITUATION: Place the student in a concrete driving situation before explaining theory (e.g. 'Se for deg at du...').\n"
                 "   - MINI-PRACTICE CHALLENGE: End the response by asking a single new follow-up question to test their understanding.\n"
-                "4. Use the exact 5-step headers in the declared language:\n"
-                "   NO: 🚗 Situasjon / 💡 Forklaring / ⚠️ Vanlig feil / 🔧 Praktisk råd / 📖 Teori / ❓ Oppfølgingsspørsmål\n"
-                "   TH: 🚗 สถานการณ์ / 💡 คำอธิบาย / ⚠️ ข้อผิดพลาดที่พบบ่อย / 🔧 คำแนะนำในทางปฏิบัติ / 📖 ทฤษฎีและกฎหมาย / ❓ คำถามชวนคิด\n"
-                "   EN: 🚗 Situation / 💡 Explanation / ⚠️ Common mistake / 🔧 Practical advice / 📖 Theory / ❓ Follow-up question\n"
+                "4. NO EMOJI, NO FIXED SECTION HEADERS: Weave situation, explanation, common mistake, "
+                "practical advice and the follow-up question into natural, flowing prose — never as "
+                "labeled sections or bullet points. This overrides any older example that used emoji "
+                "headers (🚗/💡/⚠️/🔧/📖/❓); those are formatting artifacts, not a required structure.\n"
                 "5. Write the ENTIRE response in the language declared by [LANGUAGE] header. Translate category names (e.g., 'Right of Way', 'vikeplikt', 'fart_og_bremsing') into the active conversation language. Zero exceptions.\n"
                 "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
             )
