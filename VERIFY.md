@@ -101,6 +101,19 @@ med cache-bryter (`-H "Cache-Control: no-cache"` og `?t=$(date +%s)`), og bruk e
 nettleserprofil for rendret DOM. Hashen fra `/api/web/version` er fasiten for hva
 serveren kjører, ikke hva en gammel fane viser.
 
+**En gjentatt lesing er ikke en verifisert lesing.** Får du samme respons to ganger, er
+det et signal om å bytte metode, ikke om at svaret er stabilt. En cachet eller utdatert
+lesing ser ut som en stabil sannhet. Krysssjekk hashen fra domenet mot Railway sin
+deployment-liste (`railway deployment list`); domenet kan svare en eldre hash mens
+bygget fortsatt kjører.
+
+**Hver hash-lesing oppgir tidspunkt og kommando.** Uten det kan to rapporter se ut til å
+motsi hverandre når de bare leste til ulike tider. Skriv f.eks. «15:18Z, `curl -s -H
+"Cache-Control: no-cache" .../api/web/version?t=…` → `0543dd27`».
+
+**Hash-krav etter en deploy:** live-hashen skal være lik den pushede commiten, eller en
+nyere commit på `main`. En eldre hash, selv en nyere enn forrige runde, er utilstrekkelig.
+
 **Push til main er ikke deploy.** En commit på `origin/main` betyr at koden er
 versjonert, ikke at den kjører. Kun produksjonsdomenet avgjør.
 
