@@ -550,9 +550,11 @@ def build_guide_page(lang: str = "no") -> str:
         </div>
         <div style="background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.3);border-radius:8px;padding:10px 12px;font-size:13px;color:#C4B5FD">
           🏎️ <strong><span class="tl tl-th">Sikkerhetskurs på bane — SKB (5 ชั่วโมง บังคับ)</span><span class="tl tl-no">Sikkerhetskurs på bane — SKB (5 timer, obligatorisk)</span><span class="tl tl-en">Track safety course — SKB (5 hours, mandatory)</span></strong><br/>
-          <span class="tl tl-th" style="display:block;margin-top:4px">ฝึกบนสนามพิเศษ: ทดสอบการเบรก, ขับบนถนนลื่น (glattkjøring), ทดสอบระบบ ABS, ฝึกควบคุมรถในสถานการณ์ฉุกเฉิน</span>
-          <span class="tl tl-no" style="display:block;margin-top:4px">Øver på bane: nødbremsing, kjøring på glatt underlag, ABS-test, kontroll ved krisesituasjoner</span>
-          <span class="tl tl-en" style="display:block;margin-top:4px">On-track practice: emergency braking, driving on slippery surface, ABS test, vehicle control in crisis situations</span>
+          <div style="display:block;margin-top:4px">
+            <span class="tl tl-th">ฝึกบนสนามพิเศษ: ทดสอบการเบรก, ขับบนถนนลื่น (glattkjøring), ทดสอบระบบ ABS, ฝึกควบคุมรถในสถานการณ์ฉุกเฉิน</span>
+            <span class="tl tl-no">Øver på bane: nødbremsing, kjøring på glatt underlag, ABS-test, kontroll ved krisesituasjoner</span>
+            <span class="tl tl-en">On-track practice: emergency braking, driving on slippery surface, ABS test, vehicle control in crisis situations</span>
+          </div>
         </div>
       </div>
     </div>
