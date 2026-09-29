@@ -102,3 +102,5 @@ Available skills: /office-hours, /plan-ceo-review, /plan-eng-review, /plan-desig
 /setup-browser-cookies, /setup-deploy, /setup-gbrain, /sync-gbrain, /retro, /investigate,
 /document-release, /document-generate, /codex, /cso, /autoplan, /pair-agent, /careful, /freeze,
 /guard, /unfreeze, /gstack-upgrade, /learn.
+
+> Ved tvil om «Argus»: se /ARGUS-SKILLE.md. Produksjonsverifisering følger /VERIFY.md.

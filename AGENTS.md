@@ -104,3 +104,5 @@ For å forhindre at språklekkasje, krasj ved seeding, og uønsket deaktivering 
 * **Regel:** Unngå å deaktivere kjernefunksjoner helt på web/mobil via brede plattformsperrer (f.eks. `Platform.OS === 'web'`) dersom deler av funksjonen (f.eks. lyd/TTS) kan fungere.
 * **Formål:** Pakk plattformspesifikke deler av koden (som haptiske vibrasjoner) inn i lokale `try-catch`-blokker slik at de feiler lydløst på plattformer uten støtte, mens hovedfunksjonen (f.eks. lydavspilling) forblir funksjonell.
 
+
+> Ved tvil om «Argus»: se /ARGUS-SKILLE.md. Produksjonsverifisering følger /VERIFY.md.

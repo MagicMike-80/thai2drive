@@ -549,3 +549,5 @@ En task er **FERDIG** når:
 **Last updated:** 2026-09-16 12:45 UTC  
 **Updated by:** Claude Code (as Anti)  
 **Next review:** After each agent rotation
+
+> Ved tvil om «Argus»: se /ARGUS-SKILLE.md. Produksjonsverifisering følger /VERIFY.md.
