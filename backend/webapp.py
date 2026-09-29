@@ -2045,6 +2045,39 @@ a { color:inherit; text-decoration:none; }
   flex-shrink:0; min-width:52px;
 }
 
+/* ── Quiz Explanation Accordion (Ren manuell on-demand) ── */
+.q-expl-accordion { margin-top:10px; margin-bottom:8px; width:100%; }
+.q-expl-toggle-btn {
+  width:100%; display:flex; align-items:center; justify-content:space-between;
+  padding:12px 16px; border-radius:12px;
+  background:rgba(255,153,51,.08);
+  border:1.5px solid rgba(255,153,51,.35);
+  color:var(--orange); font-size:.88rem; font-weight:700;
+  cursor:pointer; transition:background .18s, border-color .18s;
+}
+.q-expl-toggle-btn:hover {
+  background:rgba(255,153,51,.16); border-color:rgba(255,153,51,.60);
+}
+.q-expl-toggle-btn.open {
+  background:rgba(255,153,51,.14); border-color:var(--orange);
+}
+.q-expl-btn-left { display:flex; align-items:center; gap:8px; }
+.q-expl-arrow { font-size:.78rem; transition:transform .2s ease; }
+.q-expl-toggle-btn.open .q-expl-arrow { transform:rotate(180deg); }
+.q-expl-drawer {
+  margin-top:10px; display:flex; flex-direction:column; gap:12px;
+  padding:14px; border-radius:14px;
+  background:rgba(10,16,35,.75);
+  border:1px solid rgba(255,255,255,.08);
+  animation:aiBlockIn .25s ease both;
+}
+.q-expl-drawer .q-observe {
+  max-height:none; opacity:1; padding:10px 12px; margin-bottom:8px;
+}
+.q-expl-content {
+  display:flex; flex-direction:column; gap:10px;
+}
+
 /* ══════════════════════════════════════════
    REVIEW MODE — Øv på feil
    Shows wrong questions one by one after a quiz.
@@ -4804,7 +4837,7 @@ a { color:inherit; text-decoration:none; }
             </div>
           </div>
           <div class="carousel-3d-dots" id="carouselDots"></div>
-          <div class="carousel-3d-hint" id="carouselHint">← Sveip for å bla →</div>
+          <div class="carousel-3d-hint" id="carouselHint" data-key="swipe_hint"></div>
         </div>
       </div>
     </div>
@@ -4815,9 +4848,9 @@ a { color:inherit; text-decoration:none; }
       <!-- LEFT COLUMN — question, answers, controls (full-width on mobile) -->
       <div class="quiz-left-col">
         <div class="quiz-top">
-          <button class="back-btn" onclick="goBack()">← Tilbake</button>
+          <button class="back-btn" onclick="goBack()" data-key="back"></button>
           <div class="quiz-prog-wrap">
-            <div class="quiz-prog-lbl" id="qProgLbl">Spørsmål 1 av 10</div>
+            <div class="quiz-prog-lbl" id="qProgLbl"></div>
             <div class="quiz-prog-bar">
               <div class="quiz-prog-fill" id="qProgFill" style="width:0%"></div>
             </div>
@@ -4852,7 +4885,7 @@ a { color:inherit; text-decoration:none; }
                 <div class="quiz-ai-panel-sub" data-key="traffic_understanding">Trafikkforståelse</div>
               </div>
             </div>
-            <div class="quiz-ai-status" id="quizAiStatus">Venter på svar…</div>
+            <div class="quiz-ai-status" id="quizAiStatus" data-key="ai_waiting"></div>
           </div>
           <div class="quiz-ai-body" id="quizAiBody">
             <div class="quiz-ai-idle">
@@ -5064,7 +5097,7 @@ a { color:inherit; text-decoration:none; }
       </div>
       <!-- Tool strip — quick tools accessible from Studiebok -->
       <div class="sb-tools">
-        <button class="sb-tool-btn" onclick="showForbikjoring()"><span id="sbToolFkLabel">🚗 Forbikjøring</span></button>
+        <button class="sb-tool-btn" onclick="showForbikjoring()"><span id="sbToolFkLabel" data-key="forbikjoring_label"></span></button>
       </div>
       <!-- Search results dropdown -->
       <div id="sbSearchResults" class="sb-search-results" style="display:none;"></div>
@@ -5083,8 +5116,8 @@ a { color:inherit; text-decoration:none; }
     <!-- ═══ FORBIKJØRING SCREEN ═══ -->
     <div class="screen" id="screenForbikjoring">
       <div class="fk-topbar">
-        <button class="back-btn" onclick="showTab('studybook')">← Tilbake</button>
-        <div class="fk-title" id="fkTitle">🚗 Forbikjøring</div>
+        <button class="back-btn" onclick="showTab('studybook')" data-key="back"></button>
+        <div class="fk-title" id="fkTitle" data-key="fk_title"></div>
       </div>
       <div class="fk-scenarios">
         <button class="fk-sc-btn active" id="fkBtnEasy"  onclick="fkSelect(0)"></button>
@@ -5530,6 +5563,7 @@ var UI = {
   meta_description:{th:'ฝึกข้อสอบทฤษฎีใบขับขี่นอร์เวย์ด้วยภาษาไทย นอร์เวย์ และอังกฤษกับ Thai2Drive', no:'Øv til norsk teoriprøve på thai, norsk og engelsk med Thai2Drive.', en:'Practise for the Norwegian driving theory test in Thai, Norwegian and English with Thai2Drive.'},
   toggle_password:{th:'แสดงหรือซ่อนรหัสผ่าน', no:'Vis eller skjul passord', en:'Show or hide password'},
   back:        {th:'← กลับ',          no:'← Tilbake',      en:'← Back'},
+  swipe_hint:  {th:'← ปัดเพื่อเลื่อน →', no:'← Sveip for å bla →', en:'← Swipe to browse →'},
   question:    {th:'คำถามที่',          no:'Spørsmål',        en:'Question'},
   of:          {th:'จาก',              no:'av',              en:'of'},
   next:        {th:'ถัดไป →',          no:'Neste →',         en:'Next →'},
@@ -5706,6 +5740,8 @@ var UI = {
   you_answered:{th:'คุณตอบ',               no:'Du svarte',        en:'You answered'},
   correct_answer:{th:'คำตอบที่ถูก',        no:'Riktig svar',      en:'Correct answer'},
   explanation:{th:'คำอธิบาย',              no:'Forklaring',       en:'Explanation'},
+  show_explanation:{th:'💡 ดูคำอธิบาย',    no:'💡 Vis forklaring', en:'💡 Show explanation'},
+  hide_explanation:{th:'💡 ซ่อนคำอธิบาย',   no:'💡 Skjul forklaring', en:'💡 Hide explanation'},
   more_details:{th:'รายละเอียดเพิ่ม',       no:'Mer detaljer',     en:'More details'},
   ask_michael: {th:'ถาม Michael เรื่องข้อนี้', no:'Spør Michael om dette', en:'Ask Michael about this'},
   show_more:   {th:'ดูเพิ่ม',              no:'Vis mer',          en:'Show more'},
@@ -8367,6 +8403,7 @@ function renderQuestion() {
   var imgUrl  = q.bildeUrl || q.image_url || '';
   if (imgUrl && !imgUrl.match(/^(https?:\/\/|\/|data:)/)) { imgUrl = '/api/assets/' + imgUrl; }
   var qText   = pickQuestionLang(q.question) || pickFieldForQuestion(q, 'question_text') || '';
+  currentQText   = qText;
   currentCorrect = (q.correctOptionId || q.correct_answer || '').toUpperCase();
   currentExpl    = pickLang(q.explanation) || pickField(q, 'explanation') || '';
   var qId     = q._id || q.id || q.question_id || '';
@@ -8457,13 +8494,20 @@ function renderQuestion() {
       + '<div style="flex-shrink:0;"><button class="tts-play" id="qTtsBtn" title="' + escH(t('read_aloud')) + '" onclick="speakQ()">▶</button></div>'
     + '</div>'
     + '<div class="q-mid">'
-      + buildSituationLensHtml(qText, currentExpl)
-      + buildKingServantChip(qText)
       + '<div class="q-answers" id="qAnswers">' + ansHtml + '</div>'
       + '<div class="glossary-btn-wrap" id="glossaryBtnWrap"></div>'
       + '<div class="q-feedback" id="qFeedback"></div>'
-      // Mobile AI section — empty until answered (:empty hides it), then expands in-flow
-      + '<div class="quiz-ai-mobile" id="quizAiMobile"></div>'
+      + '<div class="q-expl-accordion" id="qExplAccordion" style="display:none;">'
+        + '<button type="button" class="q-expl-toggle-btn" id="qExplToggleBtn" onclick="toggleExplanationAccordion()" aria-expanded="false">'
+          + '<span class="q-expl-btn-left">💡 <span id="qExplToggleTxt">' + escH(t('show_explanation')) + '</span></span>'
+          + '<span class="q-expl-arrow" id="qExplArrow">▼</span>'
+        + '</button>'
+        + '<div class="q-expl-drawer" id="qExplDrawer" style="display:none;">'
+          + '<div class="q-expl-lens" id="qExplLens"></div>'
+          + '<div class="q-expl-content" id="qExplContent"></div>'
+        + '</div>'
+      + '</div>'
+      + '<div class="quiz-ai-mobile" id="quizAiMobile" style="display:none;"></div>'
       + navButtonsHtml
     + '</div>'
     + '<div class="q-next-col">'
@@ -8498,6 +8542,7 @@ function renderQuestion() {
 
 var currentCorrect = '';
 var currentExpl = '';
+var currentQText = '';
 
 // ── Fagordkortet (glossary term card) — Thai UI only, see renderQuestion() ──
 var currentTerms = [];
@@ -8755,9 +8800,20 @@ async function selectAns(btn, picked) {
   playSound(isOk ? 'correct' : 'wrong');
   stopAllSpeech();
 
-  // Collapse Se→Forstå→Velg lens — feedback takes over, no need for both
-  var _lens = document.querySelector('.q-observe');
-  if (_lens) _lens.classList.add('answered');
+  // Show explanation accordion button (collapsed by default, Alternativ C)
+  var acc = document.getElementById('qExplAccordion');
+  if (acc) acc.style.display = 'block';
+  var drawer = document.getElementById('qExplDrawer');
+  if (drawer) drawer.style.display = 'none';
+  var toggleTxt = document.getElementById('qExplToggleTxt');
+  if (toggleTxt) toggleTxt.textContent = t('show_explanation');
+  var toggleArrow = document.getElementById('qExplArrow');
+  if (toggleArrow) toggleArrow.textContent = '▼';
+  var toggleBtn = document.getElementById('qExplToggleBtn');
+  if (toggleBtn) {
+    toggleBtn.classList.remove('open');
+    toggleBtn.setAttribute('aria-expanded', 'false');
+  }
 
   // AI panel: brief pause before instructor speaks — feels more deliberate
   if (_aiPanelTimer) { clearTimeout(_aiPanelTimer); _aiPanelTimer = null; }
@@ -9757,6 +9813,16 @@ function updateAiPanel(isOk, expl) {
   var mobile = document.getElementById('quizAiMobile');
   if (mobile) mobile.innerHTML = html;
 
+  // ── Populate Accordion drawer content (Se - Forstå - Velg + forklaring) ──
+  var explLens = document.getElementById('qExplLens');
+  if (explLens) {
+    explLens.innerHTML = buildSituationLensHtml(currentQText, expl) + buildKingServantChip(currentQText);
+  }
+  var explContent = document.getElementById('qExplContent');
+  if (explContent) {
+    explContent.innerHTML = html;
+  }
+
   // ── Contextual video suggestion (wrong answers only — one card, async) ────
   // Fires after panel renders so it never blocks the primary feedback.
   if (!isOk && expl) {
@@ -9764,6 +9830,7 @@ function updateAiPanel(isOk, expl) {
     fetchVideoForTopic(_vidTag).then(function(v) {
       _injectVideo('quizAiBody',   'vidSlot_aiDesktop', v);
       _injectVideo('quizAiMobile', 'vidSlot_aiMobile',  v);
+      _injectVideo('qExplContent', 'vidSlot_aiAccordion', v);
     });
   }
 
@@ -9776,6 +9843,7 @@ function updateAiPanel(isOk, expl) {
       + '</div>';
     if (body) body.insertAdjacentHTML('beforeend', askBtnHtml);
     if (mobile) mobile.insertAdjacentHTML('beforeend', askBtnHtml);
+    if (explContent) explContent.insertAdjacentHTML('beforeend', askBtnHtml);
   }
 
   // Mobile question image tint
@@ -9784,6 +9852,31 @@ function updateAiPanel(isOk, expl) {
     imgWrap.style.outline   = isOk ? '2.5px solid rgba(16,185,129,.55)' : '2.5px solid rgba(239,68,68,.50)';
     imgWrap.style.boxShadow = isOk ? '0 0 18px rgba(16,185,129,.22)'    : '0 0 18px rgba(239,68,68,.20)';
     imgWrap.style.transition = 'outline .3s ease, box-shadow .3s ease';
+  }
+}
+
+function toggleExplanationAccordion() {
+  var drawer = document.getElementById('qExplDrawer');
+  var btn = document.getElementById('qExplToggleBtn');
+  var txt = document.getElementById('qExplToggleTxt');
+  var arrow = document.getElementById('qExplArrow');
+  if (!drawer || !btn) return;
+  var isOpen = drawer.style.display !== 'none';
+  if (isOpen) {
+    drawer.style.display = 'none';
+    btn.classList.remove('open');
+    btn.setAttribute('aria-expanded', 'false');
+    if (txt) txt.textContent = t('show_explanation');
+    if (arrow) arrow.textContent = '▼';
+  } else {
+    drawer.style.display = 'block';
+    btn.classList.add('open');
+    btn.setAttribute('aria-expanded', 'true');
+    if (txt) txt.textContent = t('hide_explanation');
+    if (arrow) arrow.textContent = '▲';
+    setTimeout(function() {
+      drawer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 60);
   }
 }
 
