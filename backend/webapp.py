@@ -488,6 +488,12 @@ a { color:inherit; text-decoration:none; }
 }
 .flag-bg::after { display:none; }
 
+/* Michael chat (teacher-mode) never shows the flag background, at any width —
+   without this, .teacher-messages has no opaque background of its own and the
+   flag stripes show through between the welcome bubble and the input bar. */
+#app.teacher-mode .flag-bg { display:none; }
+#screenTeacher { background:#071326; }
+
 /* ══════════════════════════════════════════
    AUTH SCREEN
 ══════════════════════════════════════════ */
@@ -4077,8 +4083,6 @@ a { color:inherit; text-decoration:none; }
 .mqc-body .tm-media-strip { grid-template-columns:1fr; margin-top:12px; }
 .mqc-body .tm-media-visual { height:150px; }
 @media (max-width:767px) {
-  #app.teacher-mode .flag-bg { display:none; }
-  #screenTeacher { background:#071326; }
   .teacher-header { width:100%; height:72px; max-height:72px; min-height:72px; padding:10px 12px; }
   .teacher-avatar { width:48px; height:48px; border-radius:50%; }
   .teacher-name { font-size:1rem; }
