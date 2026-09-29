@@ -273,7 +273,7 @@ def test_paywall_screen_translations_no_language_bleed():
     ]
 
     for key in paywall_keys:
-        match = re.search(rf"\b{key}\s*:\s*\{{([^}}]+)\}}", webapp_code)
+        match = re.search(rf"\b{key}\s*:\s*\{{([^\n]+)\}},", webapp_code)
         assert match is not None, f"Paywall translation key {key} not found in webapp.py"
         block = match.group(1)
 
@@ -287,6 +287,6 @@ def test_paywall_screen_translations_no_language_bleed():
 
         th_text = th_match.group(1)
         # Brand names allowed: Premium
-        th_sanitized = th_text.replace("Premium", "").replace("NOK", "")
+        th_sanitized = re.sub(r"\{[a-z_]+\}", "", th_text.replace("Premium", "").replace("NOK", ""))
         latin_words_in_th = re.findall(r"[A-Za-zÆØÅæøå]{2,}", th_sanitized)
         assert latin_words_in_th == [], f"Language bleed in {key} (Thai): {latin_words_in_th}"

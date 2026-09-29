@@ -27,7 +27,9 @@ APPROVED_NEON_HEX = [
 
 
 def extract_webapp_css(code: str) -> str:
-    start = code.find("<style")
+    # webapp.py also embeds a maintenance page before the learner app.
+    app_start = code.find('WEBAPP_HTML = r"""')
+    start = code.find("<style", app_start if app_start != -1 else 0)
     if start == -1:
         return ""
     open_tag = code.find(">", start)

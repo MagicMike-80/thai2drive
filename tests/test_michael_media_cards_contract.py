@@ -103,11 +103,9 @@ class MichaelMediaCardsContractTests(unittest.TestCase):
         send_end = WEBAPP.index("function toggleSound", send_start)
         send = WEBAPP[send_start:send_end]
         cards = send.index("await _teacherAppendSignCards(fallbackSignIds, assistantBubble)")
-        chips = send.index("_teacherAppendChips(data.suggestions || [])")
         scroll = send.index("_teacherScrollToAnswerStart(assistantBubble)")
-        self.assertLess(cards, chips)
-        self.assertLess(chips, scroll)
-        self.assertIn("_teacherAppendChips(data.suggestions || [])", send)
+        self.assertLess(cards, scroll)
+        self.assertNotIn("_teacherAppendChips(data.suggestions || [])", send)
         self.assertNotIn("_teacherAppendSignActions(signForActions)", send)
         self.assertNotIn("fetchVideoForTopic('Bremsing')", send)
         self.assertIn("_teacherScrollToAnswerStart(assistantBubble)", send)
@@ -205,7 +203,9 @@ class MichaelMediaCardsContractTests(unittest.TestCase):
 
         # 3. Main buttons and UI elements have neon styling applied
         self.assertIn('id="teacherSendBtn"', WEBAPP)
-        self.assertIn('class="teacher-send-btn btn-neon"', WEBAPP)
+        # The chat composer deliberately uses a calmer non-animated send button.
+        self.assertIn('class="teacher-send-btn" id="teacherSendBtn"', WEBAPP)
+        self.assertIn("#teacherSendBtn:hover { background:#1D4ED8", WEBAPP)
         self.assertIn('id="endCoachMichaelPriBtn"', WEBAPP)
         self.assertIn('btn-neon', WEBAPP[WEBAPP.index('id="endCoachMichaelPriBtn"')-60:WEBAPP.index('id="endCoachMichaelPriBtn"')+60])
         self.assertIn('id="startExamBtn"', WEBAPP)

@@ -10,12 +10,18 @@ from pymongo.errors import DuplicateKeyError
 import os
 import logging
 import hashlib
+import hmac
+import urllib.parse
 import smtplib
 from pathlib import Path
 from email.mime.text import MIMEText
 from pydantic import BaseModel, Field, validator, ValidationError
 from typing import List, Optional, Dict, Any, Literal
 import uuid
+import glob
+import json
+import quiz_language
+import dashboard as dashboard_mod
 import re
 import jwt
 import time
@@ -31,6 +37,18 @@ try:
 except ImportError:  # package-style imports used by isolated tests
     from backend.streaming_helpers import RangeNotSatisfiable, gridfs_content_type, gridfs_file_length, parse_byte_range
     from backend.video_thumbnails import normalize_video_thumbnail_url
+try:
+    from glossary_match import match_glossary_terms, terms_for_lang
+except ImportError:  # package-style imports used by isolated tests
+    from backend.glossary_match import match_glossary_terms, terms_for_lang
+try:
+    from culture_lessons import serialize_lesson as _serialize_culture_lesson, lessons_for_lang
+except ImportError:  # package-style imports used by isolated tests
+    from backend.culture_lessons import serialize_lesson as _serialize_culture_lesson, lessons_for_lang
+try:
+    from quiz_readiness import compute_quiz_readiness
+except ImportError:  # package-style imports used by isolated tests
+    from backend.quiz_readiness import compute_quiz_readiness
 try:
     from media_catalog import MediaCatalogValidationError, SUPPORTED_LANGUAGES, list_localized_catalog_media, validate_catalog_document
 except ImportError:  # package-style imports used by isolated tests
@@ -67,6 +85,8 @@ db = client[_db_name]
 JWT_SECRET = os.environ.get('JWT_SECRET', 'fallback-secret-change-me')
 JWT_ALGORITHM = "HS256"
 JWT_EXPIRE_HOURS = 168  # 7 days
+
+from promo_config import FREE_PROMO_DAYS, free_promo_active  # noqa: E402
 
 # ── Gratisuken («Value before payment») ────────────────────────────────────────
 # Prøveperioden styres 100 % i vår egen MongoDB. Stripe/betalingsmuren slår først
@@ -195,6 +215,14 @@ PUBLIC_PRICING_FALLBACK = {
         "period": {"no": "engangsbetaling", "th": "จ่ายครั้งเดียว", "en": "one-time payment"},
     },
 }
+# ─── Lanseringskampanje: 7 dagers gratis prøvetid til de 50 første ───────────
+# En Stripe-kupong (max_redemptions) gir rabatt, ikke prøvetid, så antallet må
+# telles her. Reservasjonen er atomisk ($lt-filter + $inc i én operasjon), slik at
+# to samtidige kjøp ikke kan dele samme plass.
+LAUNCH_TRIAL_PLAN_ID = "three_months"
+LAUNCH_TRIAL_DAYS = 7
+LAUNCH_TRIAL_MAX_REDEMPTIONS = 50
+
 _pricing_cache = {"ts": 0.0, "data": None}
 
 ACCESS_GUEST_TOTAL_LIMIT = 5
@@ -733,11 +761,15 @@ def _user_trial_days_left(user: Optional[dict]) -> int:
 
 
 def _user_premium_status(user: Optional[dict]) -> str:
-    """Statusen webappen leser: trialing | active | expired | none."""
+    """Statusen webappen leser: trialing | active | promo | expired | none."""
     if not user:
         return "none"
     if user.get("is_admin") or _paid_premium_active(user):
         return "active"
+    if free_promo_active() and not _user_has_active_trial(user):
+        # Kampanjetilgang uten egen proveperiode — egen verdi, ikke «trialing»,
+        # slik at UI kan si sannheten om hvorfor brukeren har tilgang.
+        return "promo"
     if _user_has_active_trial(user):
         return "trialing"
     if user.get("trial_used") or user.get("is_premium") or user.get("premium_expires_at"):
@@ -765,10 +797,17 @@ def _access_expires_at(user: Optional[dict]) -> Optional[str]:
 
 
 def _user_has_active_premium(user: Optional[dict]) -> bool:
-    """Full tilgang: admin, betalende kunde ELLER bruker med aktiv gratisuke."""
+    """Full tilgang: admin, betalende kunde, aktiv gratisuke ELLER lanseringskampanje.
+
+    Under kampanjen (FREE_PROMO_MODE) far enhver INNLOGGET bruker full tilgang.
+    Gjester far det aldri — `if not user` over stopper dem, og det er bevisst:
+    registreringsveggen er hele poenget med kampanjen.
+    """
     if not user:
         return False
     if user.get("is_admin"):
+        return True
+    if free_promo_active():
         return True
     return _paid_premium_active(user) or _user_has_active_trial(user)
 
@@ -811,8 +850,15 @@ async def _grant_trial_if_eligible(email: str, device_id: Optional[str], user_id
         return None
 
     now = datetime.now(timezone.utc)
-    expires = now + timedelta(days=TRIAL_DAYS)
+    # Under lanseringskampanjen gis 30 dager i stedet for 7. Dette lagres som en
+    # ekte proveperiode, slik at brukeren beholder resten av perioden hvis
+    # kampanjen skrus av — i stedet for a miste tilgangen midt i lopet.
+    promo = free_promo_active()
+    days = FREE_PROMO_DAYS if promo else TRIAL_DAYS
+    expires = now + timedelta(days=days)
     await db.trial_grants.insert_one({
+        "granted_under_promo": promo,
+        "granted_days": days,
         "email": email_key,
         "device_id": device_id or None,
         "user_id": user_id,
@@ -862,6 +908,10 @@ def _access_policy_payload(user: Optional[dict], usage: Optional[dict]) -> dict:
         "tier": tier,
         "is_authenticated": is_registered,
         "is_premium": is_premium,
+        "promo": {
+            "active": free_promo_active(),
+            "days": FREE_PROMO_DAYS,
+        },
         "can_answer": can_answer,
         "limit": limit,
         "used": used,
@@ -1051,9 +1101,19 @@ async def get_random_questions(
     count: int = Query(default=10, le=200),
     has_image: Optional[bool] = None,
     mode: Optional[str] = Query(default=None),   # "exam" → hard-weighted selection
+    lang: Optional[str] = Query(default=None, pattern="^(th|no|en)$"),  # only questions 100 % isolated in this language
     x_device_id: str = Header(default="", alias="X-Device-ID"),
     user: Optional[dict] = Depends(optional_auth),
+    credentials: Optional[HTTPAuthorizationCredentials] = Depends(security),
 ):
+    # ── Exam gate: the full test (mode=exam) is a paid feature ─────────────
+    # Database is the source of truth (refunded/expired users lose access at once,
+    # even with a token that is still valid). Same 402 contract as the AI routes.
+    if mode == "exam":
+        from premium_gate import require_active_premium
+        await require_active_premium(credentials)
+
+
     # ── Usage gate ─────────────────────────────────────────────────────────
     track = x_device_id or user is not None
     if track:
@@ -1062,9 +1122,13 @@ async def get_random_questions(
         approved = count  # legacy: no device_id and no auth → serve freely
 
     # ── Exam mode: hard-weighted, wrong-question-prioritised ───────────────
+    # With ?lang= we over-sample, drop questions that break language isolation
+    # (see quiz_language.py) and trim back to what the caller is entitled to.
+    fetch = min(approved + approved // 2 + 5, 300) if lang else approved
+
     if mode == "exam" and not category:
-        questions = await _get_exam_questions(approved, x_device_id, user)
-        return [normalize_question(q) for q in questions]
+        questions = await _get_exam_questions(fetch, x_device_id, user)
+        return quiz_language.filter_isolated([normalize_question(q) for q in questions], lang)[:approved]
 
     # ── Normal / category practice: existing random behaviour ─────────────
     pipeline = []
@@ -1085,19 +1149,19 @@ async def get_random_questions(
         match_stage["bildeUrl"] = {"$exists": True, "$nin": [None, ""]}
     if match_stage:
         pipeline.append({"$match": match_stage})
-    pipeline.append({"$sample": {"size": approved}})
+    pipeline.append({"$sample": {"size": fetch}})
     pipeline.append({"$project": {"_id": 0}})
-    questions = await db.questions.aggregate(pipeline).to_list(approved)
+    questions = await db.questions.aggregate(pipeline).to_list(fetch)
     # Category practice may fall back to a mixed image set. Sign-specific practice
     # must never silently pretend that an unrelated question belongs to the sign.
     if not questions and category and has_image and not sign_id:
         pipeline2 = [
             {"$match": {"bildeUrl": {"$exists": True, "$nin": [None, ""]}}},
-            {"$sample": {"size": approved}},
+            {"$sample": {"size": fetch}},
             {"$project": {"_id": 0}}
         ]
-        questions = await db.questions.aggregate(pipeline2).to_list(approved)
-    return [normalize_question(q) for q in questions]
+        questions = await db.questions.aggregate(pipeline2).to_list(fetch)
+    return quiz_language.filter_isolated([normalize_question(q) for q in questions], lang)[:approved]
 
 @api_router.get("/questions/{question_id}")
 async def get_question(question_id: str):
@@ -1469,19 +1533,22 @@ async def get_user_completed_sessions(
 @api_router.get("/user/dashboard")
 @app.get("/user/dashboard")
 async def get_user_dashboard(
-    request: Request,
-    device_id: Optional[str] = Query(None),
-    user_id: Optional[str] = Query(None),
     lang: str = Query(default="no"),
     limit: int = Query(default=20, ge=1, le=50),
-    current_user: Optional[dict] = Depends(optional_auth),
+    current_user: dict = Depends(get_current_user),
 ):
     """
     Return comprehensive student progress dashboard:
     - User profile and premium status
-    - Weak topics with 100% language isolation and Michael AI advice
-    - Completed sessions with localized mode and category labels
+    - Weak topics with 100% language isolation and Michael AI advice (paying users)
+    - Completed sessions with localized mode and category labels (paying users)
+    - Studiebok reading progress and sign mastery (paying users)
     - Exam readiness score, streak, and overall learning stats
+
+    Security (closed 2026-09-29): identity comes ONLY from the JWT (`current_user["sub"]`).
+    There used to be a `user_id`/`device_id` query override that let anyone read another
+    learner's email, name, premium status and quiz history without logging in — removed.
+    Free users get a summary only; the detailed breakdown is a paid feature (see build below).
     """
     if lang not in ("no", "th", "en"):
         raise HTTPException(
@@ -1489,19 +1556,12 @@ async def get_user_dashboard(
             detail={"key": "invalid_language", "message": f"Unsupported language '{lang}'. Must be 'no', 'th', or 'en'."}
         )
 
-    auth_user_id = current_user.get("sub") if current_user else None
-    target_user_id = auth_user_id or user_id
-    dev_id = device_id
-
-    user_doc = None
-    if target_user_id:
-        user_doc = await db.users.find_one({"id": target_user_id}, {"_id": 0, "password_hash": 0})
-        if user_doc and not dev_id:
-            dev_id = user_doc.get("device_id")
-    elif dev_id:
-        user_doc = await db.users.find_one({"device_id": dev_id}, {"_id": 0, "password_hash": 0})
-        if user_doc:
-            target_user_id = user_doc.get("id")
+    target_user_id = current_user["sub"]
+    user_doc = await db.users.find_one({"id": target_user_id}, {"_id": 0, "password_hash": 0})
+    if not user_doc:
+        raise HTTPException(status_code=401, detail="Invalid or expired token")
+    dev_id = user_doc.get("device_id")
+    is_prem = _user_has_active_premium(user_doc)
 
     weak_topics, completed_sessions = await asyncio.gather(
         compute_student_weak_topics(db, user_id=target_user_id, device_id=dev_id, lang=lang, limit=5),
@@ -1558,18 +1618,16 @@ async def get_user_dashboard(
             "best_streak": user_doc.get("best_streak", 0),
         }
 
-    is_prem = _user_has_active_premium(user_doc) if user_doc else False
-
-    return {
+    result = {
         "ok": True,
         "lang": lang,
         "user": {
-            "id": target_user_id or dev_id or "anonymous",
-            "email": user_doc.get("email") if user_doc else None,
-            "name": (user_doc.get("full_name") or user_doc.get("name")) if user_doc else None,
+            "id": target_user_id,
+            "email": user_doc.get("email"),
+            "name": (user_doc.get("full_name") or user_doc.get("name")),
             "is_premium": is_prem,
             "has_premium": is_prem,
-            "is_authenticated": bool(target_user_id and user_doc),
+            "is_authenticated": True,
         },
         "readiness": {
             "score": score,
@@ -1586,9 +1644,26 @@ async def get_user_dashboard(
             "active_mistakes_count": active_mistakes_count,
             "mastered_mistakes_count": mastered_mistakes_count,
         },
-        "weak_topics": weak_topics,
-        "completed_sessions": completed_sessions,
     }
+    # Paying users get the full breakdown (weak topics, session list, Studiebok chapters,
+    # sign mastery). Free users get the summary above plus an upgrade prompt — never the detail.
+    if is_prem:
+        identities = [{"user_id": target_user_id}] + ([{"device_id": dev_id}] if dev_id else [])
+        raw_attempts = await dashboard_mod.recent_attempts(db, identities)
+        result["weak_topics"] = weak_topics
+        result["completed_sessions"] = completed_sessions
+        result["studybook"] = await dashboard_mod.studybook_progress(db, target_user_id, detailed=True)
+        result["signs"] = await dashboard_mod.sign_mastery(db, raw_attempts, _sign_catalog_ids())
+        result["locked"] = []
+        result["upgrade"] = {"show_button": False}
+    else:
+        result["weak_topics"] = []
+        result["completed_sessions"] = []
+        result["studybook"] = await dashboard_mod.studybook_progress(db, target_user_id, detailed=False)
+        result["signs"] = None
+        result["locked"] = list(dashboard_mod.LOCKED_FOR_FREE)
+        result["upgrade"] = {"show_button": True, "gate": "upgrade"}
+    return result
 
 @api_router.post("/questions", response_model=Question)
 async def create_question(question_data: QuestionCreate):
@@ -1843,6 +1918,21 @@ async def revenuecat_webhook(request: Request):
 
     logger.info("rc_webhook received event_type=%s event_id=%s app_user_id=%s",
                 event_type, event_id, app_user_id)
+
+    # ── Sandbox guard ─────────────────────────────────────────────────────────
+    # RevenueCat merker hver hendelse med environment=SANDBOX|PRODUCTION. En
+    # sandbox-kjøp (testbruker/Test Store) skal aldri gi ekte Premium i produksjon.
+    from billing_guard import is_production_env
+    if str(event_body.get("environment") or "").upper() == "SANDBOX" and is_production_env():
+        logger.warning("rc_webhook: ignored SANDBOX event %s in production", event_id)
+        await db.rc_events.update_one(
+            {"event_id": event_id},
+            {"$set": {"event_id": event_id, "type": event_type, "handled": False,
+                      "ignored": True, "reason": "sandbox_event_in_production",
+                      "processed_at": datetime.now(timezone.utc).isoformat()}},
+            upsert=True,
+        )
+        return {"received": True, "handled": False, "reason": "sandbox_event_in_production"}
 
     # ── Idempotency guard ─────────────────────────────────────────────────────
     already = await db.rc_events.find_one({"event_id": event_id, "handled": True})
@@ -2135,6 +2225,37 @@ async def _activate_from_checkout_session(session: dict) -> bool:
     return True
 
 
+async def _reserve_launch_trial(user_id: str) -> bool:
+    """Reserver én av de 50 prøveperiodene. Returnerer True hvis brukeren skal få trial.
+
+    Fail-soft: enhver DB-feil gir False, altså checkout uten prøvetid. Kampanjen skal
+    aldri kunne blokkere et kjøp.
+    """
+    try:
+        # Samme bruker som starter checkout på nytt beholder plassen sin — et avbrutt
+        # kjøp skal ikke brenne en plass, og et nytt forsøk skal ikke brenne to.
+        if await db.campaign_trial_grants.find_one({"_id": user_id}):
+            return True
+        await db.campaign_counters.update_one(
+            {"_id": "launch_trial"}, {"$setOnInsert": {"count": 0}}, upsert=True
+        )
+        res = await db.campaign_counters.update_one(
+            {"_id": "launch_trial", "count": {"$lt": LAUNCH_TRIAL_MAX_REDEMPTIONS}},
+            {"$inc": {"count": 1}},
+        )
+        if res.modified_count != 1:
+            return False  # alle 50 plassene er brukt
+        await db.campaign_trial_grants.update_one(
+            {"_id": user_id},
+            {"$setOnInsert": {"granted_at": datetime.now(timezone.utc).isoformat()}},
+            upsert=True,
+        )
+        return True
+    except Exception as exc:
+        logger.warning("launch trial reservation failed, selling without trial: %s", exc)
+        return False
+
+
 @api_router.post("/create-checkout-session")
 async def create_checkout_session(data: CheckoutSessionRequest, current_user: dict = Depends(get_current_user)):
     user = await db.users.find_one({"id": current_user["sub"]}, {"_id": 0, "password_hash": 0})
@@ -2183,7 +2304,11 @@ async def create_checkout_session(data: CheckoutSessionRequest, current_user: di
     else:
         session_kwargs["customer_email"] = user.get("email")
     if mode == "subscription":
-        session_kwargs["subscription_data"] = {"metadata": metadata}
+        subscription_data = {"metadata": metadata}
+        if data.plan_id == LAUNCH_TRIAL_PLAN_ID and await _reserve_launch_trial(user["id"]):
+            subscription_data["trial_period_days"] = LAUNCH_TRIAL_DAYS
+            metadata["launch_trial_days"] = str(LAUNCH_TRIAL_DAYS)
+        session_kwargs["subscription_data"] = subscription_data
     else:
         session_kwargs["payment_intent_data"] = {"metadata": metadata}
 
@@ -2251,7 +2376,10 @@ async def stripe_webhook(request: Request):
     event_type = event.get("type") or "unknown"
     is_live = event.get("livemode") is True
     if not is_live:
-        logger.warning("Processing test-mode Stripe event %s type=%s", event_id, event_type)
+        # Fail closed: produksjon skal aldri gi Premium på grunnlag av test-modus-data.
+        # (Live-nøkkelen er allerede påkrevd av _stripe_module(); dette er andre lag.)
+        logger.warning("Ignoring test-mode Stripe event %s type=%s", event_id, event_type)
+        return {"received": True, "handled": False, "reason": "test_mode_event"}
 
     # Idempotency guard: skip events already successfully handled to protect against
     # Stripe retries and duplicate deliveries without re-running side effects.
@@ -2375,6 +2503,81 @@ async def get_my_stats(device_id: str):
     ]
     rows = await db.quiz_attempts.aggregate(pipeline).to_list(100)
 
+    # Eksamensmodus lagres med category=null og falt derfor helt ut av svakhetsanalysen
+    # over. Selve forsøket har ingen kategori — den ligger på hvert enkelt spørsmål — så
+    # kategorien må slås opp i db.questions per besvart spørsmål.
+    # Fail-soft: slår oppslaget feil, returnerer vi kategoritallene vi allerede har.
+    try:
+        exam_pipeline = [
+            {"$match": {
+                "$or": [{"device_id": device_id}, {"user_id": device_id}],
+                "category": {"$in": [None, "", "None"]},
+            }},
+            {"$unwind": "$questions_answered"},
+            # Bare svar der fasit faktisk kan avgjøres — ellers blåser total_q opp og
+            # trekker prosenten kunstig ned.
+            {"$match": {
+                "questions_answered.question_id": {"$nin": [None, ""]},
+                "$or": [
+                    {"questions_answered.is_correct": {"$type": "bool"}},
+                    {"questions_answered.user_answer": {"$exists": True, "$nin": [None, ""]}},
+                ],
+            }},
+            {"$lookup": {
+                "from": "questions",
+                "localField": "questions_answered.question_id",
+                "foreignField": "id",
+                "as": "q",
+            }},
+            {"$unwind": "$q"},
+            {"$match": {"q.category": {"$nin": [None, "", "None"]}}},
+            {"$group": {
+                "_id": "$q.category",
+                "attempt_ids": {"$addToSet": "$_id"},
+                "total_q": {"$sum": 1},
+                "total_correct": {"$sum": {"$cond": [
+                    {"$or": [
+                        {"$eq": ["$questions_answered.is_correct", True]},
+                        # Eldre forsøk mangler is_correct — fall tilbake på svarteksten.
+                        {"$and": [
+                            {"$ne": [{"$type": "$questions_answered.is_correct"}, "bool"]},
+                            {"$eq": [
+                                {"$toUpper": {"$ifNull": ["$questions_answered.user_answer", ""]}},
+                                {"$toUpper": {"$ifNull": ["$questions_answered.correct_answer", "__NO_ANSWER__"]}},
+                            ]},
+                        ]},
+                    ]},
+                    1, 0,
+                ]}},
+            }},
+            {"$project": {
+                "_id": 0,
+                "category": "$_id",
+                "attempts": {"$size": "$attempt_ids"},
+                "total_q": 1,
+                "total_correct": 1,
+            }},
+        ]
+        exam_rows = await db.quiz_attempts.aggregate(exam_pipeline).to_list(100)
+    except Exception as exc:
+        logger.warning("stats/me: exam-mode category lookup failed: %s", exc)
+        exam_rows = []
+
+    if exam_rows:
+        merged: dict = {r["category"]: dict(r) for r in rows}
+        for r in exam_rows:
+            cur = merged.setdefault(
+                r["category"],
+                {"category": r["category"], "attempts": 0, "total_q": 0, "total_correct": 0},
+            )
+            cur["attempts"] += r["attempts"]
+            cur["total_q"] += r["total_q"]
+            cur["total_correct"] += r["total_correct"]
+        rows = list(merged.values())
+        for r in rows:
+            r["pct"] = (r["total_correct"] / r["total_q"] * 100) if r["total_q"] else 0
+        rows.sort(key=lambda r: r["pct"])
+
     # Overall totals
     totals = await db.quiz_attempts.aggregate([
         {"$match": {"$or": [{"device_id": device_id}, {"user_id": device_id}]}},
@@ -2428,14 +2631,46 @@ def _sign_search_text(sign: dict) -> str:
     return " ".join(str(value or "") for value in fields).casefold()
 
 
+def resolve_sign_image(filename: str) -> Optional[Path]:
+    """Find the file behind /api/sign-images/<filename> inside backend/sign_images/.
+
+    Exact name first. The catalog id `100_1` may be stored under a descriptive name
+    (`100_1_Skarp_sving_til_hoyre.jpg`), so `<id>.jpg` falls back to `<id>_*.jpg`.
+    Never leaves the directory; returns None when nothing matches.
+    """
+    root = (ROOT_DIR / "sign_images").resolve()
+    name = (filename or "").replace("\\", "/").lstrip("/")
+    if not name or ".." in name.split("/"):
+        return None
+    if Path(name).suffix.lower() not in (".jpg", ".jpeg", ".png"):
+        return None  # only images are served (never .gitkeep or anything else in the folder)
+    candidate = (root / name).resolve()
+    try:
+        candidate.relative_to(root)
+    except ValueError:
+        return None
+    if candidate.is_file():
+        return candidate
+    stem, dot, ext = name.rpartition(".")
+    if not dot or "/" in name or not stem or not ext:
+        return None
+    # Legacy catalog ID for the mid-road cycle lane was renamed to 521_2.
+    # Do not map it to 521_1: that is the different side-placed sign.
+    stem = {"521.1": "521_2", "807-10": "807_10"}.get(stem, stem)
+    matches = sorted(
+        m for m in root.glob(f"{glob.escape(stem)}_*.{glob.escape(ext)}")
+        if m.is_file() and m.resolve().parent == root
+    )
+    return matches[0] if matches else None
+
+
 def _normalize_sign_for_api(sign: dict) -> dict:
     sign_id = str(sign.get("id") or "").strip()
     group = sign.get("group")
     group_name = sign.get("group_name") or SIGN_GROUPS.get(group, {})
     image_url = str(sign.get("image_url") or "").strip()
     if not image_url and sign_id:
-        local_image = ROOT_DIR / "sign_images" / f"{sign_id}.jpg"
-        if local_image.is_file():
+        if resolve_sign_image(f"{sign_id}.jpg"):
             image_url = f"/api/sign-images/{sign_id}.jpg"
     return {
         "id": sign_id,
@@ -2601,11 +2836,58 @@ async def access_consume(data: AccessConsumeRequest, user: Optional[dict] = Depe
 async def get_user_progress(device_id: str):
     progress = await db.user_progress.find_one({"device_id": device_id}, {"_id": 0})
     if not progress:
-        new_progress = UserProgress(device_id=device_id).dict()
-        await db.user_progress.insert_one(new_progress)
-        new_progress.pop("_id", None)
-        return new_progress
+        # Reading must not write: an unknown id used to create a document per request.
+        progress = UserProgress(device_id=device_id).dict()
+    # `streak` is what the home screen shows; it used to be missing, so it always read 0.
+    days = [a.get("completed_at") async for a in db.quiz_attempts.find(
+        {"device_id": device_id}, {"_id": 0, "completed_at": 1}).sort("completed_at", -1).limit(400)]
+    progress["streak"] = dashboard_mod.compute_streak(days)
     return progress
+
+
+def _sign_catalog_ids() -> set:
+    global _SIGN_CATALOG_IDS
+    if _SIGN_CATALOG_IDS is None:
+        try:
+            data = json.loads((ROOT_DIR / "signs_content.json").read_text(encoding="utf-8"))
+            _SIGN_CATALOG_IDS = {str(x["id"]) for x in data if isinstance(x, dict) and x.get("id")}
+        except Exception as exc:  # fail-soft: the dashboard still works without sign mastery
+            logger.warning("signs_content.json not readable for dashboard: %s", exc)
+            _SIGN_CATALOG_IDS = set()
+    return _SIGN_CATALOG_IDS
+
+
+_SIGN_CATALOG_IDS: Optional[set] = None
+
+
+@api_router.get("/dashboard/progress")
+async def dashboard_progress(current_user: dict = Depends(get_current_user)):
+    """Learner dashboard for the web app: full for paying users, limited (+ upgrade button)
+    for free users. Identity comes from the JWT only, the response is a whitelist of numbers/keys.
+    """
+    user = await db.users.find_one({"id": current_user["sub"]}, {"_id": 0, "password_hash": 0})
+    if not user:
+        raise HTTPException(status_code=401, detail="Invalid or expired token")
+    return await dashboard_mod.build_dashboard(db, user, _user_has_active_premium(user), _sign_catalog_ids())
+
+
+class StudybookProgressIn(BaseModel):
+    chapter: int = Field(ge=0, le=10000)
+    screen_id: Optional[str] = Field(default=None, max_length=120)
+
+
+@api_router.put("/progress/studybook")
+async def track_studybook_progress(data: StudybookProgressIn, current_user: dict = Depends(get_current_user)):
+    """Remember that the signed-in learner has read a Studiebok chapter/screen."""
+    add: Dict[str, Any] = {"chapters": data.chapter}
+    if data.screen_id:
+        add["screens"] = data.screen_id
+    await db.user_studybook_progress.update_one(
+        {"user_id": current_user["sub"]},
+        {"$addToSet": add, "$set": {"updated_at": datetime.now(timezone.utc).isoformat()}},
+        upsert=True,
+    )
+    return {"success": True}
 
 @api_router.put("/progress/{device_id}")
 async def update_user_progress(device_id: str, answered_correct: bool, category: str):
@@ -3342,11 +3624,46 @@ async def register_campaign_user(req: CampaignRegisterRequest):
 
 # ==================== ADMIN ROUTES ====================
 
+def _bootstrap_secret_ok(provided: str) -> bool:
+    """Konstant-tid-sjekk av X-Admin-Secret mot ADMIN_BOOTSTRAP_SECRET (alltid False hvis ikke satt)."""
+    if not ADMIN_BOOTSTRAP_SECRET or not provided:
+        return False
+    return hmac.compare_digest(provided.encode("utf-8"), ADMIN_BOOTSTRAP_SECRET.encode("utf-8"))
+
+
+async def require_admin_or_bootstrap(
+    credentials: HTTPAuthorizationCredentials = Depends(security),
+    x_admin_secret: str = Header(default=''),
+):
+    """Streng admin-port: gyldig X-Admin-Secret ELLER innlogget bruker som står i admin_users.
+
+    Ingen legitimasjon -> 401. Feil hemmelighet eller ikke-admin -> 403.
+    """
+    if _bootstrap_secret_ok(x_admin_secret):
+        return {"via": "bootstrap_secret"}
+    if not credentials:
+        raise HTTPException(status_code=401, detail="Admin authentication required")
+    payload = verify_token(credentials.credentials)
+    if not payload:
+        raise HTTPException(status_code=401, detail="Invalid or expired token")
+    if not await db.admin_users.find_one({"email": (payload.get("email") or "").strip().lower()}):
+        raise HTTPException(status_code=403, detail="Admin access required")
+    return {"via": "admin_token", **payload}
+
+
 @api_router.get("/admin-setup-t2d")
-async def admin_setup():
-    """One-time setup: create/reset admin@thai2drive.com with password admin123."""
+async def admin_setup(x_admin_secret: str = Header(default='')):
+    """Bootstrap/reset admin@thai2drive.com. Requires X-Admin-Secret (ADMIN_BOOTSTRAP_SECRET).
+
+    Tidligere var denne ruten åpen og satte et kjent passord («admin123»). Nå kreves
+    bootstrap-hemmeligheten (uten den er ruten alltid 403), og passordet genereres
+    tilfeldig og vises kun i dette svaret.
+    """
+    if not _bootstrap_secret_ok(x_admin_secret):
+        raise HTTPException(status_code=403, detail="Admin bootstrap secret required")
+    import secrets as _secrets
     email = "admin@thai2drive.com"
-    password = "admin123"
+    password = _secrets.token_urlsafe(18)
     password_hash = pwd_context.hash(password)
     import uuid as _uuid
     from datetime import datetime, timezone as _tz
@@ -3370,11 +3687,17 @@ async def admin_setup():
             "is_premium": True,
             "created_at": datetime.now(_tz.utc).isoformat(),
         })
-    return {"ok": True, "message": "Admin user ready. Login: admin@thai2drive.com / admin123"}
+    return {
+        "ok": True,
+        "email": email,
+        "password": password,
+        "message": "Admin user ready. Save this password now; it is not shown again.",
+    }
 
 
 @api_router.post("/admin/check")
-async def check_admin(data: AdminCheckRequest):
+async def check_admin(data: AdminCheckRequest, _admin: dict = Depends(require_admin_or_bootstrap)):
+    """Låst: tidligere kunne hvem som helst spørre om en e-post var admin (kartlegging av admin-kontoer)."""
     admin = await db.admin_users.find_one({"email": data.email.strip().lower()})
     return {"is_admin": admin is not None}
 
@@ -3387,7 +3710,7 @@ async def add_admin(
     Requires X-Admin-Secret header matching ADMIN_BOOTSTRAP_SECRET env var.
     If env var is not set the endpoint always returns 403.
     """
-    if not ADMIN_BOOTSTRAP_SECRET or x_admin_secret != ADMIN_BOOTSTRAP_SECRET:
+    if not _bootstrap_secret_ok(x_admin_secret):
         raise HTTPException(status_code=403, detail="Admin bootstrap secret required")
     email = data.email.strip().lower()
     existing = await db.admin_users.find_one({"email": email})
@@ -3400,7 +3723,8 @@ async def add_admin(
     return {"message": "Admin added", "email": email}
 
 @api_router.post("/seed")
-async def seed_database():
+async def seed_database(_admin: dict = Depends(require_admin_or_bootstrap)):
+    """Låst: skriver til databasen, så den krever admin-nøkkel eller admin-innlogging."""
     count = await db.questions.count_documents({})
     if count > 0:
         return {"message": f"Database already has {count} questions", "seeded": False}
@@ -6394,6 +6718,170 @@ async def admin_delete_glossary_term(term_id: str, _: dict = Depends(require_adm
     return {"message": "Deleted", "id": term_id}
 
 
+# ── Fagordkort — "Se norsk fagord" per quiz question ──────────────────────
+# The ~22 glossary terms are tiny and change only via the admin CRUD above, so
+# they are cached in-process and refreshed on startup. Matching + language
+# projection live in glossary_match.py (pure, offline-testable).
+
+_GLOSSARY_CACHE: List[dict] = []
+
+
+async def _load_glossary_cache() -> None:
+    global _GLOSSARY_CACHE
+    try:
+        rows = await db.learning_glossary.find({"active": True}).to_list(500)
+        for r in rows:
+            r.pop("_id", None)
+        _GLOSSARY_CACHE = rows
+        logging.getLogger("glossary").info("glossary cache loaded: %d terms", len(rows))
+    except Exception as exc:
+        logging.getLogger("glossary").warning("glossary cache load failed: %s", exc)
+
+
+@app.on_event("startup")
+async def _warm_glossary_cache():
+    await _load_glossary_cache()
+
+
+@api_router.get("/quiz/terms")
+async def get_quiz_terms(
+    question_id: str = Query(..., min_length=1, max_length=120),
+    lang: str = Query(default="th"),
+    x_device_id: str = Header(default="", alias="X-Device-ID"),
+):
+    """Norwegian traffic terms that apply to a given quiz question.
+
+    Language-pure: for ``lang=th`` the response carries only Thai fields (plus
+    ``term_no``, the term being taught). A term without a Thai definition is
+    omitted entirely — never backfilled with Norwegian or English.
+    Returns ``{"terms": []}`` when nothing matches.
+    """
+    question = await db.questions.find_one({"id": question_id}, {"_id": 0})
+    if not question:
+        return {"terms": []}
+
+    if not _GLOSSARY_CACHE:
+        await _load_glossary_cache()
+
+    category = question.get("category", "") or ""
+    matched = match_glossary_terms(
+        question.get("question_text_no", "") or "",
+        category,
+        _GLOSSARY_CACHE,
+    )
+    terms = terms_for_lang(matched, lang)
+
+    # Anonymous, best-effort lookup log — never blocks the response.
+    try:
+        await db.glossary_lookup_logs.insert_one({
+            "device_id": x_device_id or None,
+            "question_id": question_id,
+            "category": category,
+            "terms_shown": [t.get("term_no", "") for t in terms],
+            "lang": lang,
+            "created_at": datetime.now(timezone.utc).isoformat(),
+        })
+    except Exception as exc:
+        logging.getLogger("glossary").warning("glossary_lookup_logs insert failed: %s", exc)
+
+    return {"terms": terms}
+
+
+# ── "Thailand vs Norge"-mikroleksjoner (culture_lessons) ──────────────────
+# Small, admin-curated deck. Cached in-process, warmed on startup. Projection +
+# fail-stop live in culture_lessons.py (pure, offline-testable).
+
+_CULTURE_CACHE: List[dict] = []
+
+
+async def _load_culture_cache() -> None:
+    global _CULTURE_CACHE
+    try:
+        rows = await db.culture_lessons.find({"active": True}).to_list(200)
+        for r in rows:
+            r.pop("_id", None)
+        _CULTURE_CACHE = rows
+        logging.getLogger("culture").info("culture_lessons cache loaded: %d", len(rows))
+    except Exception as exc:
+        logging.getLogger("culture").warning("culture_lessons cache load failed: %s", exc)
+
+
+@app.on_event("startup")
+async def _warm_culture_cache():
+    await _load_culture_cache()
+
+
+@api_router.get("/lessons/culture")
+async def get_culture_lessons(
+    lang: Optional[str] = Query(default=None),
+    category: Optional[str] = None,
+    id: Optional[str] = Query(default=None, min_length=1, max_length=120),
+    x_device_id: str = Header(default="", alias="X-Device-ID"),
+):
+    """The "Thailand vs Norge" micro-lesson deck.
+
+    Thai-first: ``lang != "th"`` returns ``{"lessons": []}``. Each lesson carries
+    only Thai fields plus ``title_no`` / ``norway_term_no`` (the terms being
+    taught) — never a Norwegian or English prose fallback. A lesson missing a
+    required Thai field is omitted entirely.
+    """
+    if lang is None and id is None:
+        # Preserve the pre-existing no-query endpoint for older clients.
+        from micro_lessons import get_legacy_culture_lessons
+        return await get_legacy_culture_lessons()
+    lang = lang or "th"
+    if not _CULTURE_CACHE:
+        await _load_culture_cache()
+
+    if id is not None:
+        doc = next((d for d in _CULTURE_CACHE if d.get("id") == id), None)
+        row = _serialize_culture_lesson(doc, lang) if doc else None
+        if row is None:
+            raise HTTPException(status_code=404, detail="Lesson not found")
+        lessons = [row]
+    else:
+        lessons = lessons_for_lang(_CULTURE_CACHE, lang, category)
+
+    try:
+        await db.culture_lesson_views.insert_one({
+            "device_id": x_device_id or None,
+            "lesson_ids": [x.get("id", "") for x in lessons],
+            "category": category or None,
+            "lang": lang,
+            "created_at": datetime.now(timezone.utc).isoformat(),
+        })
+    except Exception as exc:
+        logging.getLogger("culture").warning("culture_lesson_views insert failed: %s", exc)
+
+    return {"lessons": lessons}
+
+
+# ── Michaels Exam Mode — klar-score (feilsvar-trend + vikeplikt + tempo) ──
+# Ny, isolert beregning i quiz_readiness.py. De eksisterende
+# /api/user/readiness-implementasjonene er bevisst latt urørt.
+
+@api_router.get("/quiz/readiness")
+async def get_quiz_readiness(
+    device_id: Optional[str] = None,
+    x_device_id: str = Header(default="", alias="X-Device-ID"),
+):
+    """Exam-mode readiness for a device: recency-weighted error trend (45%),
+    vikeplikt-category mastery (30%), and answer-pace (25%). Falls back to a
+    cold-start payload on any lookup failure."""
+    dev_id = (x_device_id or device_id or "").strip()
+    attempts: list[dict] = []
+    if dev_id:
+        try:
+            attempts = await db.ai_attempts.find(
+                {"device_id": dev_id},
+                {"_id": 0, "is_correct": 1, "category": 1, "time_taken_ms": 1, "timestamp": 1},
+            ).sort("timestamp", -1).to_list(120)
+        except Exception as exc:
+            logging.getLogger("readiness").warning("quiz/readiness lookup failed: %s", exc)
+            attempts = []
+    return compute_quiz_readiness(attempts, now=datetime.now(timezone.utc))
+
+
 class TrafficSignCreate(BaseModel):
     group: int
     name: Dict[str, str]           # {no, th, en}
@@ -6899,13 +7387,8 @@ _SIGN_IMAGES_DIR = Path(__file__).parent / "sign_images"
 async def sign_image(filename: str):
     """Serve traffic sign images from backend/sign_images/. Images are committed
     to the repo after running scripts/import_sign_images.py locally."""
-    safe_name = filename.replace("..", "").lstrip("/")
-    file_path = (_SIGN_IMAGES_DIR / safe_name).resolve()
-    try:
-        file_path.relative_to(_SIGN_IMAGES_DIR.resolve())
-    except ValueError:
-        return HTMLResponse("Not found", status_code=404)
-    if not file_path.exists() or not file_path.is_file():
+    file_path = resolve_sign_image(filename)
+    if file_path is None:
         return HTMLResponse("Not found", status_code=404)
     ext = file_path.suffix.lower()
     media_type = {".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png"}.get(ext, "image/jpeg")
@@ -7029,24 +7512,35 @@ async def seed_studiebok():
                 })
             await col2.insert_many(admin_docs)
 
-        # Always ensure admin user exists with correct password
+        # Admin-bruker. TIDLIGERE ble passordet «admin123» satt ved HVER oppstart (åpen
+        # bakdør med admin + premium). Nå: (1) en ny admin opprettes kun hvis
+        # ADMIN_INITIAL_PASSWORD er satt (minst 12 tegn), (2) passordet til en
+        # eksisterende bruker overskrives aldri, og (3) et gjenværende standardpassord
+        # deaktiveres. Ny admin-tilgang: /api/admin-setup-t2d med X-Admin-Secret.
+        import secrets as _secrets
         admin_email = "admin@thai2drive.com"
-        admin_password = "admin123"
-        if not await db.admin_users.find_one({"email": admin_email}):
-            await db.admin_users.insert_one({"email": admin_email})
-        admin_hash = pwd_context.hash(admin_password)
+        initial_pw = os.environ.get("ADMIN_INITIAL_PASSWORD", "").strip()
         existing_admin_user = await db.users.find_one({"email": admin_email})
         if existing_admin_user:
-            await db.users.update_one({"email": admin_email}, {"$set": {
-                "password_hash": admin_hash,
-                "is_admin": True,
-                "is_premium": True,
-            }})
-        else:
+            stored_hash = existing_admin_user.get("password_hash") or ""
+            try:
+                default_pw_active = bool(stored_hash) and pwd_context.verify("admin123", stored_hash)
+            except Exception:
+                default_pw_active = False
+            if default_pw_active:
+                await db.users.update_one({"email": admin_email}, {"$set": {
+                    "password_hash": pwd_context.hash(_secrets.token_urlsafe(32)),
+                }})
+                logging.getLogger("boot").critical(
+                    "SIKKERHET: %s hadde standardpassordet 'admin123'. Passordet er deaktivert. "
+                    "Sett nytt passord via /api/admin-setup-t2d (X-Admin-Secret).", admin_email)
+        elif len(initial_pw) >= 12:
+            if not await db.admin_users.find_one({"email": admin_email}):
+                await db.admin_users.insert_one({"email": admin_email})
             await db.users.insert_one({
                 "id": str(uuid.uuid4()),
                 "email": admin_email,
-                "password_hash": admin_hash,
+                "password_hash": pwd_context.hash(initial_pw),
                 "is_admin": True,
                 "is_premium": True,
                 "created_at": now,
@@ -7328,6 +7822,127 @@ async def _google_tts(text: str, lang: str, google_key: str, cache_path: str, re
         raise HTTPException(status_code=500, detail=f"TTS synthesis failed: {str(e)}")
 
 
+# ==================== TTS: betalingsmur ====================
+# ElevenLabs koster penger per tegn, så /api/tts og /api/tts/stream krever innlogging og aktiv
+# tilgang: 401 uten innlogging, 402 uten aktiv tilgang (admin, betalt, gratisuke, kampanje).
+# <audio src> kan ikke sende Authorization-header, så klientene henter et kortlevd TTS-token fra
+# /api/tts/token og legger det på URL-en som ?tt=... Tokenet er signert med en AVLEDET nøkkel og
+# gjelder kun TTS: verify_token() avviser det, så det kan aldri brukes som vanlig innlogging, og en
+# lekket URL gir høyst to timer med opplesing. Header-innlogging (Bearer) virker også.
+TTS_TOKEN_TTL_SECONDS = 2 * 60 * 60
+
+
+def _tts_token_key() -> bytes:
+    return hashlib.sha256(f"{JWT_SECRET}:tts-token".encode("utf-8")).digest()
+
+
+def create_tts_token(user_id: str) -> str:
+    now = datetime.now(timezone.utc)
+    return jwt.encode(
+        {"sub": user_id, "scope": "tts", "iat": now, "exp": now + timedelta(seconds=TTS_TOKEN_TTL_SECONDS)},
+        _tts_token_key(),
+        algorithm=JWT_ALGORITHM,
+    )
+
+
+def verify_tts_token(token: str) -> Optional[str]:
+    """Bruker-id fra et gyldig, ikke utløpt TTS-token, ellers None."""
+    try:
+        payload = jwt.decode(token, _tts_token_key(), algorithms=[JWT_ALGORITHM])
+    except jwt.InvalidTokenError:  # inkluderer utløpt token
+        return None
+    return payload.get("sub") if payload.get("scope") == "tts" else None
+
+
+async def _require_tts_access(request: Request) -> dict:
+    user_id = None
+    auth = request.headers.get("authorization", "")
+    if auth[:7].lower() == "bearer ":
+        payload = verify_token(auth[7:].strip())
+        user_id = payload.get("sub") if payload else None
+    if not user_id:
+        tt = request.query_params.get("tt")
+        if tt:
+            user_id = verify_tts_token(tt)
+    if not user_id:
+        raise HTTPException(status_code=401, detail={"error": "auth_required", "gate": "register"})
+    # Databasen er fasit: refundert/utløpt bruker mister opplesing med en gang.
+    user = await db.users.find_one({"id": user_id}, {"_id": 0, "password_hash": 0})
+    if not user:
+        raise HTTPException(status_code=401, detail={"error": "auth_required", "gate": "register"})
+    if not _user_has_active_premium(user):
+        raise HTTPException(status_code=402, detail={"error": "premium_required", "gate": "upgrade", "tier": "registered"})
+    return user
+
+
+from premium_gate import require_active_premium  # noqa: E402
+
+
+# ── Landingsside-demo ──────────────────────────────────────────────────────────
+# Besøkere må kunne høre en lydprøve av Michael uten innlogging, men uten å åpne en
+# ElevenLabs-kran. Derfor kan de IKKE velge tekst: ruten spiller bare tre faste thai-setninger
+# (definert her på serveren). Hver setning syntetiseres én gang og ligger så i cachen, så
+# kostnaden er begrenset til tre kall totalt, uansett trafikk. I tillegg får hver IP maks
+# DEMO_TTS_MAX_PER_IP avspillinger per time (429 ellers).
+DEMO_TTS_PHRASES = {
+    1: "สวัสดีครับ ผมไมเคิล ครูสอนขับรถของคุณ วันนี้เรามาเรียนกฎจราจรของนอร์เวย์ด้วยกันแบบง่าย ๆ ครับ",
+    2: "ไม่ต้องกังวลนะครับ ทุกกฎมีเหตุผล ผมจะอธิบายให้เป็นภาษาไทยทีละขั้นตอน จนคุณสอบผ่านครับ",
+    3: "จำง่าย ๆ นะครับ ถ้าไม่มีป้ายและไม่มีสัญญาณไฟ ให้ทางรถที่มาจากทางขวาเสมอครับ",
+}
+DEMO_TTS_MAX_PER_IP = 6
+DEMO_TTS_WINDOW_SECONDS = 3600
+DEMO_TTS_DEDUPE_SECONDS = 10   # <audio> kan hente samme fil flere ganger (Range); telles som én avspilling
+_DEMO_TTS_MAX_TRACKED_IPS = 10000
+_demo_tts_hits: Dict[str, list] = {}
+
+
+def _client_ip(request: Request) -> str:
+    """Klientens IP. Bak Railways proxy er SISTE X-Forwarded-For-ledd det proxyen faktisk så;
+    tidligere ledd kan klienten selv sette, så de brukes ikke."""
+    xff = request.headers.get("x-forwarded-for", "")
+    if xff:
+        last = xff.split(",")[-1].strip()
+        if last:
+            return last
+    return request.client.host if request.client else "unknown"
+
+
+def _demo_tts_retry_after(ip: str, slot: int, now: Optional[float] = None) -> int:
+    """0 = tillatt (og registrert). Ellers antall sekunder til neste avspilling er tillatt."""
+    now = time.time() if now is None else now
+    hits = [h for h in _demo_tts_hits.get(ip, []) if now - h[0] < DEMO_TTS_WINDOW_SECONDS]
+    if hits and hits[-1][1] == slot and now - hits[-1][0] < DEMO_TTS_DEDUPE_SECONDS:
+        _demo_tts_hits[ip] = hits
+        return 0
+    if len(hits) >= DEMO_TTS_MAX_PER_IP:
+        _demo_tts_hits[ip] = hits
+        return max(1, int(DEMO_TTS_WINDOW_SECONDS - (now - hits[0][0])))
+    hits.append((now, slot))
+    _demo_tts_hits[ip] = hits
+    if len(_demo_tts_hits) > _DEMO_TTS_MAX_TRACKED_IPS:  # hold minnet begrenset
+        for key in [k for k, v in _demo_tts_hits.items() if not v or now - v[-1][0] >= DEMO_TTS_WINDOW_SECONDS]:
+            _demo_tts_hits.pop(key, None)
+    return 0
+
+
+@app.get("/api/tts/demo")
+async def tts_demo(request: Request, slot: int = 1):
+    phrase = DEMO_TTS_PHRASES.get(slot)
+    if phrase is None:
+        raise HTTPException(status_code=400, detail="Unknown demo slot")
+    retry_after = _demo_tts_retry_after(_client_ip(request), slot)
+    if retry_after:
+        raise HTTPException(status_code=429, detail={"error": "demo_rate_limited", "retry_after": retry_after},
+                            headers={"Retry-After": str(retry_after)})
+    return await _tts_respond(request, phrase, "th")
+
+
+# Registrert direkte på app (api_router er allerede inkludert før dette punktet i filen).
+@app.get("/api/tts/token")
+async def tts_token(user: dict = Depends(require_active_premium)):
+    return {"token": create_tts_token(user["id"]), "expires_in": TTS_TOKEN_TTL_SECONDS}
+
+
 @app.get("/api/tts/stream")
 @app.post("/api/tts/stream")
 @app.get("/api/tts")
@@ -7337,6 +7952,13 @@ async def _google_tts(text: str, lang: str, google_key: str, cache_path: str, re
 @api_router.get("/tts")
 @api_router.post("/tts")
 async def text_to_speech(request: Request, text: Optional[str] = None, lang: Optional[str] = None):
+    await _require_tts_access(request)  # betalingsmur: 401 uten innlogging, 402 uten aktiv tilgang
+    return await _tts_respond(request, text, lang)
+
+
+async def _tts_respond(request: Request, text: Optional[str] = None, lang: Optional[str] = None):
+    """Selve talesyntesen (cache -> ElevenLabs -> Google). Kalles KUN etter en tilgangssjekk
+    (text_to_speech) eller for de faste demosetningene (tts_demo)."""
     import httpx
     from fastapi import HTTPException
 
@@ -7502,6 +8124,105 @@ async def text_to_speech(request: Request, text: Optional[str] = None, lang: Opt
     if not _tts_provider_available("google", lang):
         raise HTTPException(status_code=503, detail="Google TTS er midlertidig utilgjengelig; prøv igjen om litt.")
     return await _google_tts(text, lang, google_key, google_cache_path, request)
+
+
+# ── GDPR: avmelding fra e-post ────────────────────────────────────────────────
+# Avmeldingslenken ma virke uten innlogging (folk klikker den fra innboksen,
+# ofte pa en annen enhet). Da kan den ikke ta imot en naken e-postadresse —
+# hvem som helst kunne meldt av hvem som helst. Lenken signeres derfor med
+# HMAC over JWT_SECRET. Ingen database-oppslag kreves for a validere.
+
+def _unsubscribe_token(email: str) -> str:
+    """Signatur som knytter en avmeldingslenke til én bestemt e-postadresse."""
+    msg = (email or "").strip().lower().encode("utf-8")
+    return hmac.new(JWT_SECRET.encode("utf-8"), msg, hashlib.sha256).hexdigest()[:32]
+
+
+def unsubscribe_link(email: str, base_url: str = "https://www.thai2drive.no") -> str:
+    """Bygg en ferdig avmeldingslenke. Brukes av e-postutsendere."""
+    addr = (email or "").strip().lower()
+    return (
+        f"{base_url}/api/unsubscribe"
+        f"?email={urllib.parse.quote(addr)}&token={_unsubscribe_token(addr)}"
+    )
+
+
+async def _record_optout(email: str, source: str) -> None:
+    addr = (email or "").strip().lower()
+    await db.email_optouts.update_one(
+        {"email": addr},
+        {"$set": {"email": addr, "opted_out_at": datetime.now(timezone.utc).isoformat(),
+                  "source": source}},
+        upsert=True,
+    )
+
+
+async def is_email_opted_out(email: str) -> bool:
+    """Sjekkes FOR hver utsending. Ingen e-post skal sendes til en avmeldt adresse."""
+    addr = (email or "").strip().lower()
+    if not addr:
+        return True
+    return await db.email_optouts.find_one({"email": addr}) is not None
+
+
+_UNSUB_PAGE = """<!DOCTYPE html><html lang="{lang}"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{title}</title><style>
+body{{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
+background:#0F172A;color:#F8FAFC;font-family:system-ui,-apple-system,'Segoe UI',sans-serif;padding:24px}}
+.c{{background:#1E293B;border:1px solid rgba(51,65,85,.6);border-radius:16px;padding:32px;max-width:440px;text-align:center}}
+h1{{font-size:1.25rem;margin:0 0 12px}} p{{color:#94A3B8;line-height:1.6;margin:0}}
+.i{{font-size:40px;margin-bottom:12px}}</style></head>
+<body><div class="c"><div class="i">{icon}</div><h1>{title}</h1><p>{body}</p></div></body></html>"""
+
+_UNSUB_TEXT = {
+    "no": ("Du er meldt av", "Vi sender deg ikke flere e-poster. Du kan fortsatt bruke Thai2Drive som vanlig."),
+    "th": ("ยกเลิกการรับอีเมลแล้ว", "เราจะไม่ส่งอีเมลถึงคุณอีก คุณยังใช้ Thai2Drive ได้ตามปกติ"),
+    "en": ("You are unsubscribed", "We will not send you any more emails. You can keep using Thai2Drive as usual."),
+}
+_UNSUB_BAD = {
+    "no": ("Lenken er ugyldig", "Denne avmeldingslenken er ikke gyldig. Kontakt oss, sa ordner vi det manuelt."),
+    "th": ("ลิงก์ไม่ถูกต้อง", "ลิงก์ยกเลิกนี้ไม่ถูกต้อง กรุณาติดต่อเรา แล้วเราจะจัดการให้"),
+    "en": ("Invalid link", "This unsubscribe link is not valid. Contact us and we will handle it manually."),
+}
+
+
+@app.get("/api/unsubscribe", response_class=HTMLResponse)
+@api_router.get("/unsubscribe", response_class=HTMLResponse)
+async def unsubscribe_via_link(email: str = "", token: str = "", lang: str = "no"):
+    """Klikkbar avmelding fra e-post. Signaturen ma stemme."""
+    lang = lang if lang in _UNSUB_TEXT else "no"
+    addr = (email or "").strip().lower()
+    if not addr or not hmac.compare_digest(token or "", _unsubscribe_token(addr)):
+        title, body = _UNSUB_BAD[lang]
+        return HTMLResponse(
+            _UNSUB_PAGE.format(lang=lang, title=title, body=body, icon="\u26a0\ufe0f"),
+            status_code=400,
+        )
+    await _record_optout(addr, "link")
+    title, body = _UNSUB_TEXT[lang]
+    return HTMLResponse(_UNSUB_PAGE.format(lang=lang, title=title, body=body, icon="\u2709\ufe0f"))
+
+
+@app.post("/api/unsubscribe")
+@api_router.post("/unsubscribe")
+async def unsubscribe_via_api(payload: dict = Body(...)):
+    """Avmelding for innlogget bruker eller intern bruk. Krever gyldig signatur."""
+    addr = (payload.get("email") or "").strip().lower()
+    token = payload.get("token") or ""
+    if not addr:
+        raise HTTPException(status_code=400, detail="email mangler")
+    if not hmac.compare_digest(token, _unsubscribe_token(addr)):
+        raise HTTPException(status_code=403, detail="ugyldig token")
+    await _record_optout(addr, "api")
+    return {"ok": True, "email": addr, "opted_out": True}
+
+
+@app.get("/api/unsubscribe/status")
+@api_router.get("/unsubscribe/status")
+async def unsubscribe_status(email: str = ""):
+    """Sjekk om en adresse er avmeldt. Brukes av utsenderne for hver e-post."""
+    return {"email": (email or "").strip().lower(), "opted_out": await is_email_opted_out(email)}
 
 
 @app.get("/api/tts/status")

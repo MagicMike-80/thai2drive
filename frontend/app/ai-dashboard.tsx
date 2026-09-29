@@ -21,9 +21,13 @@ import { Ionicons } from '@expo/vector-icons';
 import { useAppStore } from '../src/store/appStore';
 import { aiLearningApi, AIDashboard, CategoryStat } from '../src/services/aiLearning';
 import { AppBrand } from '../src/components/AppBrand';
+import { Lang, asLang, tr, missingNotice } from '../src/constants/i18n';
+import { categoryLabel, localizeCategoryMentions } from '../src/constants/categoryLabels';
 
 // ─── Translations ─────────────────────────────────────────────────────────────
-const TR: Record<string, Record<string, string>> = {
+// Fail-Stop: mangler en nøkkel på elevens språk, skjules elementet (eller vi
+// viser `missingNotice`). Ingen fallback til norsk/engelsk. Se src/constants/i18n.ts.
+const TR: Record<Lang, Record<string, string>> = {
   no: {
     title:          'AI Læringsanalyse',
     back:           'Tilbake',
@@ -37,7 +41,7 @@ const TR: Record<string, Record<string, string>> = {
     weakCategory:   'Svakest',
     strongCategory: 'Sterkest',
     coaching:       'AI Lærer',
-    srsSection:     'Spaced Repetition',
+    srsSection:     'Planlagt repetisjon',
     srsReady:       'spørsmål klare for repetisjon',
     srsNone:        'Ingen spørsmål klare for repetisjon nå.',
     smartPractice:  'Start Smart Øving',
@@ -64,7 +68,7 @@ const TR: Record<string, Record<string, string>> = {
     weakCategory:   'อ่อนที่สุด',
     strongCategory: 'แข็งที่สุด',
     coaching:       'AI ครู',
-    srsSection:     'Spaced Repetition',
+    srsSection:     'การทบทวนแบบเว้นระยะ',
     srsReady:       'คำถามรอทบทวน',
     srsNone:        'ยังไม่มีคำถามรอทบทวนตอนนี้',
     smartPractice:  'เริ่มการฝึกอัจฉริยะ',
@@ -108,11 +112,11 @@ const TR: Record<string, Record<string, string>> = {
 };
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
-function readinessLabel(score: number, t: Record<string, string>): string {
-  if (score >= 85) return t.excellent;
-  if (score >= 70) return t.good;
-  if (score >= 55) return t.fair;
-  return t.needsWork;
+function readinessLabel(score: number, t: Record<string, string>): string | null {
+  if (score >= 85) return tr(t, 'excellent');
+  if (score >= 70) return tr(t, 'good');
+  if (score >= 55) return tr(t, 'fair');
+  return tr(t, 'needsWork');
 }
 
 function readinessColor(score: number): string {
@@ -136,8 +140,8 @@ function trendColor(trend: string, c: any): string {
 
 // ─── Category Bar ─────────────────────────────────────────────────────────────
 function CategoryBar({
-  stat, t, colors: c
-}: { stat: CategoryStat; t: Record<string, string>; colors: any }) {
+  stat, lang, colors: c
+}: { stat: CategoryStat; lang: Lang; colors: any }) {
   const barAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -148,6 +152,11 @@ function CategoryBar({
     }).start();
   }, [stat.accuracy]);
 
+  // Fail-Stop: har vi ikke kategorinavnet på elevens språk, viser vi ingenting
+  // heller enn den rå databasenøkkelen ('Right of Way', 'fart_og_bremsing').
+  const name = categoryLabel(stat.category, lang);
+  if (!name) return null;
+
   const barColor =
     stat.accuracy >= 80 ? '#10B981' :
     stat.accuracy >= 60 ? '#F59E0B' : '#EF4444';
@@ -155,7 +164,7 @@ function CategoryBar({
   return (
     <View style={catStyles.row}>
       <Text style={[catStyles.name, { color: c.text }]} numberOfLines={1}>
-        {stat.category}
+        {name}
       </Text>
       <View style={[catStyles.track, { backgroundColor: c.progressBg }]}>
         <Animated.View
@@ -187,8 +196,15 @@ const catStyles = StyleSheet.create({
 export default function AIDashboardScreen() {
   const router = useRouter();
   const { language, colors: c, deviceId, streak } = useAppStore();
-  const t = TR[language] || {};
+  const lang = asLang(language);
+  const t = TR[lang];
   const isDark = c.bg === '#0F172A' || c.bg === '#0B1222';
+
+  // Thai skrives ikke med versaler, og letterSpacing river fra hverandre
+  // kombinerende tegn — derfor kun på latinsk skrift.
+  const capStyle = lang === 'th'
+    ? { textTransform: 'none' as const, letterSpacing: 0 }
+    : null;
 
   const [loading, setLoading]   = useState(true);
   const [data, setData]         = useState<AIDashboard | null>(null);
@@ -204,6 +220,17 @@ export default function AIDashboardScreen() {
       }).start();
     })();
   }, [deviceId, language, streak]);
+
+  // Rå kategorinøkler fra databasen oversettes her — aldri i JSX.
+  const strongestLabel = categoryLabel(data?.strongest_category, lang);
+  const weakestLabel   = categoryLabel(data?.weakest_category, lang);
+
+  // Backend interpolerer rå kategorinavn inn i coaching-setningene
+  // ('คุณยังอ่อนในหมวด: Right of Way'). Vi bytter dem ut lokalt og forkaster
+  // meldinger som fortsatt ikke er rene på elevens språk.
+  const coachingMessages = (data?.coaching_messages ?? [])
+    .map((msg) => localizeCategoryMentions(msg, lang, data?.all_categories ?? []))
+    .filter((msg): msg is string => msg !== null);
 
   return (
     <SafeAreaView style={[st.container, { backgroundColor: c.bg }]}>
@@ -233,7 +260,9 @@ export default function AIDashboardScreen() {
         /* No data yet */
         <View style={st.center}>
           <Ionicons name="analytics-outline" size={48} color={c.textMuted} />
-          <Text style={[st.noDataTxt, { color: c.textMuted }]}>{t.noData}</Text>
+          <Text style={[st.noDataTxt, { color: c.textMuted }]}>
+            {tr(t, 'noData') ?? missingNotice(lang)}
+          </Text>
         </View>
       ) : (
         <ScrollView contentContainerStyle={st.scroll} showsVerticalScrollIndicator={false}>
@@ -249,61 +278,87 @@ export default function AIDashboardScreen() {
               </Text>
             </View>
             <Text style={[st.readinessLabel, { color: c.text }]}>
-              {t.readiness}
+              {tr(t, 'readiness') ?? missingNotice(lang)}
             </Text>
-            <Text style={[st.readinessDesc, { color: readinessColor(data.exam_readiness) }]}>
-              {readinessLabel(data.exam_readiness, t)}
-            </Text>
-            <Text style={[st.readinessHint, { color: c.textMuted }]}>
-              {t.readinessHint}
-            </Text>
+            {readinessLabel(data.exam_readiness, t) && (
+              <Text style={[st.readinessDesc, { color: readinessColor(data.exam_readiness) }]}>
+                {readinessLabel(data.exam_readiness, t)}
+              </Text>
+            )}
+            {tr(t, 'readinessHint') && (
+              <Text style={[st.readinessHint, { color: c.textMuted }]}>
+                {tr(t, 'readinessHint')}
+              </Text>
+            )}
           </Animated.View>
 
           {/* ── Quick Stats Row ── */}
+          {/* Hver kolonne skjules i sin helhet hvis tittelen mangler på elevens
+              språk — et tall uten forståelig etikett hjelper ingen. */}
           <View style={[st.statsRow, { backgroundColor: c.card, borderColor: c.cardBorder }]}>
-            <View style={st.statCol}>
-              <Text style={[st.statVal, { color: c.text }]}>{data.total_attempts}</Text>
-              <Text style={[st.statLbl, { color: c.textMuted }]}>{t.totalAnswered}</Text>
-            </View>
-            <View style={[st.statDiv, { backgroundColor: c.divider }]} />
-            <View style={st.statCol}>
-              <Text style={[st.statVal, { color: c.accent }]}>{data.recent_accuracy}%</Text>
-              <Text style={[st.statLbl, { color: c.textMuted }]}>{t.recentAccuracy}</Text>
-            </View>
-            <View style={[st.statDiv, { backgroundColor: c.divider }]} />
-            <View style={st.statCol}>
-              <View style={st.trendRow}>
-                <Ionicons
-                  name={trendIcon(data.trend)}
-                  size={18}
-                  color={trendColor(data.trend, c)}
-                />
+            {tr(t, 'totalAnswered') && (
+              <View style={st.statCol}>
+                <Text style={[st.statVal, { color: c.text }]}>{data.total_attempts}</Text>
+                <Text style={[st.statLbl, capStyle, { color: c.textMuted }]}>
+                  {tr(t, 'totalAnswered')}
+                </Text>
               </View>
-              <Text style={[st.statLbl, { color: c.textMuted }]}>{t.trend}</Text>
-              <Text style={[st.trendTxt, { color: trendColor(data.trend, c) }]}>
-                {t[data.trend]}
-              </Text>
-            </View>
+            )}
+            <View style={[st.statDiv, { backgroundColor: c.divider }]} />
+            {tr(t, 'recentAccuracy') && (
+              <View style={st.statCol}>
+                <Text style={[st.statVal, { color: c.accent }]}>{data.recent_accuracy}%</Text>
+                <Text style={[st.statLbl, capStyle, { color: c.textMuted }]}>
+                  {tr(t, 'recentAccuracy')}
+                </Text>
+              </View>
+            )}
+            <View style={[st.statDiv, { backgroundColor: c.divider }]} />
+            {tr(t, 'trend') && (
+              <View style={st.statCol}>
+                <View style={st.trendRow}>
+                  <Ionicons
+                    name={trendIcon(data.trend)}
+                    size={18}
+                    color={trendColor(data.trend, c)}
+                  />
+                </View>
+                <Text style={[st.statLbl, capStyle, { color: c.textMuted }]}>
+                  {tr(t, 'trend')}
+                </Text>
+                {tr(t, data.trend) && (
+                  <Text style={[st.trendTxt, { color: trendColor(data.trend, c) }]}>
+                    {tr(t, data.trend)}
+                  </Text>
+                )}
+              </View>
+            )}
           </View>
 
           {/* ── Strongest / Weakest ── */}
-          {(data.weakest_category || data.strongest_category) && (
+          {/* Vises kun når både overskriften og kategorinavnet finnes på
+              elevens språk. Ellers skjules raden (Fail-Stop). */}
+          {((strongestLabel && tr(t, 'strongCategory')) || (weakestLabel && tr(t, 'weakCategory'))) && (
             <View style={[st.section, { backgroundColor: c.card, borderColor: c.cardBorder }]}>
-              {data.strongest_category && (
+              {strongestLabel && tr(t, 'strongCategory') && (
                 <View style={st.keyRow}>
                   <Ionicons name="trophy-outline" size={18} color="#10B981" />
                   <View style={{ flex: 1 }}>
-                    <Text style={[st.keyLabel, { color: c.textMuted }]}>{t.strongCategory}</Text>
-                    <Text style={[st.keyVal, { color: c.text }]}>{data.strongest_category}</Text>
+                    <Text style={[st.keyLabel, capStyle, { color: c.textMuted }]}>
+                      {tr(t, 'strongCategory')}
+                    </Text>
+                    <Text style={[st.keyVal, { color: c.text }]}>{strongestLabel}</Text>
                   </View>
                 </View>
               )}
-              {data.weakest_category && (
-                <View style={[st.keyRow, { marginTop: data.strongest_category ? 10 : 0 }]}>
+              {weakestLabel && tr(t, 'weakCategory') && (
+                <View style={[st.keyRow, { marginTop: strongestLabel ? 10 : 0 }]}>
                   <Ionicons name="alert-circle-outline" size={18} color="#EF4444" />
                   <View style={{ flex: 1 }}>
-                    <Text style={[st.keyLabel, { color: c.textMuted }]}>{t.weakCategory}</Text>
-                    <Text style={[st.keyVal, { color: c.text }]}>{data.weakest_category}</Text>
+                    <Text style={[st.keyLabel, capStyle, { color: c.textMuted }]}>
+                      {tr(t, 'weakCategory')}
+                    </Text>
+                    <Text style={[st.keyVal, { color: c.text }]}>{weakestLabel}</Text>
                   </View>
                 </View>
               )}
@@ -311,26 +366,26 @@ export default function AIDashboardScreen() {
           )}
 
           {/* ── Category Breakdown ── */}
-          {data.category_stats.length > 0 && (
+          {data.category_stats.length > 0 && tr(t, 'categories') && (
             <View style={[st.section, { backgroundColor: c.card, borderColor: c.cardBorder }]}>
               <View style={st.sectionHeader}>
                 <Ionicons name="bar-chart-outline" size={18} color={c.accent} />
-                <Text style={[st.sectionTitle, { color: c.text }]}>{t.categories}</Text>
+                <Text style={[st.sectionTitle, { color: c.text }]}>{tr(t, 'categories')}</Text>
               </View>
               {data.category_stats.map((stat) => (
-                <CategoryBar key={stat.category} stat={stat} t={t} colors={c} />
+                <CategoryBar key={stat.category} stat={stat} lang={lang} colors={c} />
               ))}
             </View>
           )}
 
           {/* ── AI Coaching Messages ── */}
-          {data.coaching_messages.length > 0 && (
+          {coachingMessages.length > 0 && tr(t, 'coaching') && (
             <View style={[st.section, { backgroundColor: c.card, borderColor: c.cardBorder }]}>
               <View style={st.sectionHeader}>
                 <Ionicons name="sparkles" size={18} color={c.accent} />
-                <Text style={[st.sectionTitle, { color: c.text }]}>{t.coaching}</Text>
+                <Text style={[st.sectionTitle, { color: c.text }]}>{tr(t, 'coaching')}</Text>
               </View>
-              {data.coaching_messages.map((msg, i) => (
+              {coachingMessages.map((msg, i) => (
                 <View key={i} style={[st.coachRow, { borderLeftColor: c.accent }]}>
                   <Text style={[st.coachMsg, { color: c.textSecondary }]}>{msg}</Text>
                 </View>
@@ -339,32 +394,41 @@ export default function AIDashboardScreen() {
           )}
 
           {/* ── SRS Queue ── */}
-          <View style={[st.section, { backgroundColor: c.card, borderColor: c.cardBorder }]}>
-            <View style={st.sectionHeader}>
-              <Ionicons name="repeat-outline" size={18} color={c.accent} />
-              <Text style={[st.sectionTitle, { color: c.text }]}>{t.srsSection}</Text>
-            </View>
-            {data.srs_due_count > 0 ? (
-              <View style={st.srsRow}>
-                <View style={[st.srsBadge, { backgroundColor: `${c.accent}18` }]}>
-                  <Text style={[st.srsBadgeNum, { color: c.accent }]}>{data.srs_due_count}</Text>
-                </View>
-                <Text style={[st.srsTxt, { color: c.textSecondary }]}>{t.srsReady}</Text>
+          {tr(t, 'srsSection') && (
+            <View style={[st.section, { backgroundColor: c.card, borderColor: c.cardBorder }]}>
+              <View style={st.sectionHeader}>
+                <Ionicons name="repeat-outline" size={18} color={c.accent} />
+                <Text style={[st.sectionTitle, { color: c.text }]}>{tr(t, 'srsSection')}</Text>
               </View>
-            ) : (
-              <Text style={[st.srsNone, { color: c.textMuted }]}>{t.srsNone}</Text>
-            )}
-          </View>
+              {data.srs_due_count > 0 ? (
+                <View style={st.srsRow}>
+                  <View style={[st.srsBadge, { backgroundColor: `${c.accent}18` }]}>
+                    <Text style={[st.srsBadgeNum, { color: c.accent }]}>{data.srs_due_count}</Text>
+                  </View>
+                  <Text style={[st.srsTxt, { color: c.textSecondary }]}>
+                    {tr(t, 'srsReady') ?? missingNotice(lang)}
+                  </Text>
+                </View>
+              ) : (
+                <Text style={[st.srsNone, { color: c.textMuted }]}>
+                  {tr(t, 'srsNone') ?? missingNotice(lang)}
+                </Text>
+              )}
+            </View>
+          )}
 
           {/* ── Smart Practice CTA ── */}
-          <TouchableOpacity
-            style={[st.ctaBtn, { backgroundColor: c.accent }]}
-            onPress={() => router.push({ pathname: '/quiz', params: { mode: 'smart', category: 'all' } })}
-            activeOpacity={0.85}
-          >
-            <Ionicons name="flash" size={20} color="#0F172A" />
-            <Text style={st.ctaTxt}>{t.smartPractice}</Text>
-          </TouchableOpacity>
+          {/* En knapp uten forståelig tekst er verre enn ingen knapp. */}
+          {tr(t, 'smartPractice') && (
+            <TouchableOpacity
+              style={[st.ctaBtn, { backgroundColor: c.accent }]}
+              onPress={() => router.push({ pathname: '/quiz', params: { mode: 'smart', category: 'all' } })}
+              activeOpacity={0.85}
+            >
+              <Ionicons name="flash" size={20} color="#0F172A" />
+              <Text style={st.ctaTxt}>{tr(t, 'smartPractice')}</Text>
+            </TouchableOpacity>
+          )}
 
         </ScrollView>
       )}

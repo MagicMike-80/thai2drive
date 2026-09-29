@@ -242,7 +242,7 @@ TERMS = [
     },
     {
         "term_no": "Vikepliktskilt",
-        "term_th": "ป้ายให้ทาง (สามเหลี่ยม)",
+        "term_th": "ป้ายให้ทาง",
         "term_en": "Yield sign (triangle)",
         "definition_no": "Rød trekant (skilt 202) — du plikter å gi fri bane for all kryssende trafikk.",
         "definition_th": "สามเหลี่ยมสีแดง (ป้าย 202) — คุณต้องเปิดทางให้รถที่ตัดผ่านทุกคัน",
@@ -254,7 +254,7 @@ TERMS = [
     },
     {
         "term_no": "Stopp-skilt",
-        "term_th": "ป้ายหยุด (แปดเหลี่ยม)",
+        "term_th": "ป้ายหยุด",
         "term_en": "Stop sign (octagon)",
         "definition_no": "Rødt åttekant-skilt (skilt 204) — du må stanse helt og gi vikeplikt før du kan fortsette.",
         "definition_th": "ป้ายแปดเหลี่ยมสีแดง (ป้าย 204) — คุณต้องหยุดสนิทและให้ทางก่อนจะขับต่อ",

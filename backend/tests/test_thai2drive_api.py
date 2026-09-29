@@ -6,6 +6,13 @@ import pytest
 import requests
 import os
 
+# LIVE tests: they call the PRODUCTION site (incl. POST /api/seed). Never run by default;
+# only when T2D_LIVE_TESTS=1 is set explicitly.
+pytestmark = pytest.mark.skipif(
+    os.environ.get("T2D_LIVE_TESTS") != "1",
+    reason="live tests against thai2drive.no are opt-in: set T2D_LIVE_TESTS=1",
+)
+
 # Use public URL for testing
 BASE_URL = "https://www.thai2drive.no"
 API_BASE = f"{BASE_URL}/api"

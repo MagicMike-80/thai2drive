@@ -1442,6 +1442,28 @@ a { color:inherit; text-decoration:none; }
 .q-text {
   font-size:.95rem; font-weight:700; line-height:1.68;
 }
+
+/* Fagordkort — Thai-only "see Norwegian term" helper */
+.fagordkort {
+  border:1px solid rgba(255,153,51,.28);
+  background:rgba(255,153,51,.06);
+  border-radius:12px; padding:2px 12px; width:100%;
+}
+.fgk-summary {
+  cursor:pointer; list-style:none; padding:9px 2px;
+  font-size:.82rem; font-weight:800; color:var(--orange);
+  user-select:none;
+}
+.fgk-summary::-webkit-details-marker { display:none; }
+.fgk-body { display:flex; flex-direction:column; gap:10px; padding:4px 2px 12px; }
+.fgk-row { border-top:1px solid rgba(255,255,255,.08); padding-top:9px; }
+.fgk-row:first-child { border-top:none; padding-top:0; }
+.fgk-pair { display:flex; align-items:baseline; gap:7px; flex-wrap:wrap; }
+.fgk-th { font-size:.9rem; font-weight:700; color:var(--text); }
+.fgk-arrow { color:var(--muted); font-size:.8rem; }
+.fgk-no { font-size:.9rem; font-weight:800; color:var(--orange); }
+.fgk-def { font-size:.8rem; line-height:1.6; color:var(--muted); margin-top:3px; }
+
 .q-settings-bar {
   display:flex; align-items:center; gap:12px;
   background:rgba(255,255,255,.03);
@@ -2250,6 +2272,19 @@ a { color:inherit; text-decoration:none; }
 .micro-lesson-body { display:none; padding:0 14px 15px 68px; color:var(--muted); font-size:.8rem; line-height:1.55; }
 .micro-lesson.open .micro-lesson-body { display:block; }
 .micro-lesson-action { margin-top:8px; color:var(--orange); font-weight:750; }
+
+/* Thailand vs Norge — backend-drevet kortstokk (kun thai) */
+.culture-deck { display:flex; flex-direction:column; gap:12px; margin-top:18px; }
+.culture-deck-head { font-size:.82rem; font-weight:850; color:var(--cyan); letter-spacing:.02em; }
+.culture-note { padding:14px; border:1px dashed rgba(255,255,255,.14); border-radius:14px; color:var(--muted); font-size:.8rem; text-align:center; margin-top:18px; }
+.culture-card { border:1px solid rgba(0,245,255,.18); border-radius:15px; padding:14px; background:linear-gradient(145deg,rgba(17,32,64,.9),rgba(11,18,38,.96)); display:flex; flex-direction:column; gap:10px; }
+.cc-title { font-size:.92rem; font-weight:850; line-height:1.4; }
+.cc-title-no { display:block; margin-top:2px; font-size:.72rem; font-weight:700; color:var(--muted); }
+.cc-row { display:flex; flex-direction:column; gap:3px; border-top:1px solid rgba(255,255,255,.07); padding-top:9px; }
+.cc-row:first-of-type { border-top:none; padding-top:0; }
+.cc-label { font-size:.68rem; font-weight:850; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); }
+.cc-text { font-size:.82rem; line-height:1.6; color:var(--text); }
+.cc-term { font-size:.82rem; line-height:1.55; font-weight:750; color:var(--orange); }
 .lib-scroll::-webkit-scrollbar-track { background:transparent; }
 .lib-scroll::-webkit-scrollbar-thumb { background:rgba(255,255,255,.12); border-radius:2px; }
 .library-grid {
@@ -2939,6 +2974,15 @@ a { color:inherit; text-decoration:none; }
   cursor:pointer; transition:border-color .18s; flex-shrink:0;
 }
 .hist-card:hover  { border-color:rgba(255,153,51,.30); }
+/* Dashboard: elevfremdrift over historikken */
+.dash-sec-title { font-size:.78rem; font-weight:700; margin-bottom:6px; }
+.dash-row { display:flex; align-items:center; gap:8px; font-size:.74rem; margin:4px 0; }
+.dash-row-name { flex:0 0 42%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.dash-bar { flex:1; height:7px; border-radius:99px; background:rgba(255,255,255,.08); overflow:hidden; }
+.dash-bar-fill { height:100%; border-radius:99px; background:var(--green); }
+.dash-row-val { flex:0 0 38px; text-align:right; color:var(--muted); }
+.dash-locked { display:flex; align-items:center; gap:8px; padding:10px; border-radius:12px; background:rgba(255,255,255,.03); color:var(--muted); font-size:.74rem; }
+.dash-upgrade { border:0; border-radius:12px; padding:12px; font-weight:800; cursor:pointer; background:linear-gradient(135deg,#FF9933,#FF6B00); color:#0B1020; }
 .hist-card:active { opacity:.88; }
 
 .hist-card-top {
@@ -3293,6 +3337,91 @@ a { color:inherit; text-decoration:none; }
 }
 .sb-video-btn:hover { background:rgba(220,38,38,.20); }
 
+/* ══ STUDIEBOK — SKJERMLESER (chapter.screens) ══ */
+.sbs-seg-wrap {
+  display:flex; gap:6px; margin:0 0 14px; padding:4px;
+  border-radius:12px; background:rgba(255,255,255,.06); border:1px solid var(--border);
+}
+[data-theme="light"] .sbs-seg-wrap { background:rgba(0,0,0,.05); }
+.sbs-seg {
+  flex:1; min-height:40px; padding:8px 10px; border:none; border-radius:9px;
+  background:transparent; color:var(--muted); font-size:.8rem; font-weight:700; cursor:pointer;
+}
+.sbs-seg.active { background:var(--orange); color:#0B1226; }
+.sbs-prog { height:5px; border-radius:3px; background:rgba(255,255,255,.1); overflow:hidden; }
+[data-theme="light"] .sbs-prog { background:rgba(0,0,0,.1); }
+.sbs-prog-bar { height:100%; background:var(--orange); transition:width .25s; }
+.sbs-count { margin:6px 0 12px; font-size:.72rem; color:var(--muted); text-align:right; }
+.sbs-tag {
+  display:inline-block; padding:3px 10px; margin-bottom:8px; border-radius:999px;
+  font-size:.72rem; font-weight:800; line-height:1.5;
+  background:rgba(255,153,51,.13); color:var(--orange); border:1px solid rgba(255,153,51,.3);
+}
+.sbs-trap .sbs-tag { background:rgba(239,68,68,.12); color:#F87171; border-color:rgba(239,68,68,.3); }
+.sbs-road_check .sbs-tag { background:rgba(59,130,246,.14); color:#60A5FA; border-color:rgba(59,130,246,.35); }
+.sbs-what_changed .sbs-tag { background:rgba(16,185,129,.13); color:#34D399; border-color:rgba(16,185,129,.32); }
+.sbs-title { font-size:1rem; font-weight:900; line-height:1.5; margin-bottom:10px; color:var(--text); overflow-wrap:anywhere; }
+.sbs-body, .sbs-q, .sbs-fb { font-size:.9rem; line-height:1.9; color:var(--text); overflow-wrap:anywhere; }
+.sbs-body { margin-top:12px; }
+.sbs-term { color:var(--orange); font-weight:700; }
+.sbs-img {
+  position:relative; width:100%; aspect-ratio:4/3; margin-bottom:10px;
+  border-radius:14px; overflow:hidden; border:1px solid var(--border); background:rgba(255,255,255,.05);
+}
+.sbs-img.square { aspect-ratio:1/1; max-width:340px; margin-left:auto; margin-right:auto; background:#fff; }
+.sbs-img.wide { aspect-ratio:16/9; }
+.sbs-img-el { width:100%; height:100%; object-fit:cover; display:block; }
+.sbs-img.square .sbs-img-el { object-fit:contain; }
+.sbs-body + .sbs-hot-title { margin-top:14px; }
+.sbs-leg.static { cursor:default; }
+@media (max-width:360px) {
+  .sbs-img:not(.square):not(.wide) { aspect-ratio:1/1; }
+  .sbs-pin { width:24px; height:24px; margin:-12px 0 0 -12px; font-size:.75rem; }
+}
+.sbs-pin {
+  position:absolute; width:32px; height:32px; margin:-16px 0 0 -16px; padding:0;
+  display:flex; align-items:center; justify-content:center;
+  border-radius:50%; border:2px solid #fff; background:var(--orange); color:#0B1226;
+  font-weight:900; font-size:.85rem; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,.4);
+}
+.sbs-pin.active { background:#fff; color:var(--orange-dk); box-shadow:0 0 0 4px rgba(255,153,51,.55); transform:scale(1.12); }
+.sbs-hot-title { margin:4px 0 6px; font-size:.75rem; font-weight:800; color:var(--muted); }
+.sbs-leg-list { display:flex; flex-direction:column; gap:6px; }
+.sbs-leg {
+  display:flex; align-items:flex-start; gap:10px; width:100%; text-align:left;
+  padding:8px 10px; border-radius:10px; border:1px solid var(--border);
+  background:rgba(255,255,255,.04); color:var(--text); font-size:.82rem; line-height:1.6; cursor:pointer;
+  overflow-wrap:anywhere;
+}
+[data-theme="light"] .sbs-leg { background:rgba(0,0,0,.04); }
+.sbs-leg.active { border-color:var(--orange); background:rgba(255,153,51,.12); }
+.sbs-leg-n {
+  flex-shrink:0; width:22px; height:22px; border-radius:50%; background:var(--orange); color:#0B1226;
+  font-weight:900; font-size:.75rem; display:flex; align-items:center; justify-content:center;
+}
+.sbs-opts { display:flex; flex-direction:column; gap:8px; margin:12px 0; }
+.sbs-opt {
+  display:flex; align-items:flex-start; gap:10px; width:100%; min-height:48px; text-align:left;
+  padding:10px 12px; border-radius:12px; border:1.5px solid var(--border);
+  background:rgba(255,255,255,.05); color:var(--text); font-size:.86rem; line-height:1.6; cursor:pointer;
+  overflow-wrap:anywhere;
+}
+[data-theme="light"] .sbs-opt { background:rgba(0,0,0,.04); }
+.sbs-opt:disabled { cursor:default; }
+.sbs-opt-n {
+  flex-shrink:0; width:24px; height:24px; border-radius:50%; background:rgba(255,153,51,.15); color:var(--orange);
+  font-weight:800; font-size:.78rem; display:flex; align-items:center; justify-content:center;
+}
+.sbs-opt.correct { border-color:var(--green); background:rgba(16,185,129,.16); }
+.sbs-opt.wrong { border-color:var(--red); background:rgba(239,68,68,.16); }
+.sbs-opt.dim { opacity:.55; }
+.sbs-fb { margin:4px 0 12px; padding:10px 12px; border-radius:12px; font-size:.84rem; line-height:1.75; }
+.sbs-fb.ok { background:rgba(16,185,129,.12); border:1px solid rgba(16,185,129,.35); }
+.sbs-fb.no { background:rgba(239,68,68,.10); border:1px solid rgba(239,68,68,.32); }
+.sbs-nav { display:flex; gap:10px; margin-top:16px; }
+.sbs-btn { flex:1; min-height:44px; padding:10px 12px; border-radius:12px; font-weight:700; font-size:.85rem; cursor:pointer; }
+.sbs-btn:disabled { opacity:.4; cursor:default; }
+
 /* Nav bar */
 .sb-nav {
   flex-shrink:0; display:flex; align-items:center; justify-content:space-between;
@@ -3556,6 +3685,14 @@ a { color:inherit; text-decoration:none; }
   display:flex; align-items:center; justify-content:center;
   color:#10B981; font-size:13px; flex-shrink:0;
 }
+.promo-banner {
+  background:linear-gradient(135deg,rgba(255,153,51,.16),rgba(255,153,51,.05));
+  border:1px solid rgba(255,153,51,.45);
+  border-radius:16px; padding:22px 20px; margin:18px 0 6px; text-align:center;
+}
+.promo-spark { font-size:34px; line-height:1; margin-bottom:8px; }
+.promo-head { font-size:1.18rem; font-weight:800; color:var(--orange); margin-bottom:6px; }
+.promo-body { font-size:.95rem; line-height:1.6; opacity:.92; }
 .paywall-price-row {
   display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:8px;
   margin-bottom:18px;
@@ -3579,6 +3716,9 @@ a { color:inherit; text-decoration:none; }
   font-size:.72rem; color:var(--muted); font-weight:700;
   margin-bottom:4px; text-transform:uppercase; letter-spacing:.4px;
 }
+.paywall-price-card .ppc-term { display:block; text-transform:none; letter-spacing:0; font-size:.9em; font-weight:600; opacity:.85; overflow-wrap:anywhere; }
+.paywall-price-card .ppc-per, .paywall-price-card .ppc-period { overflow-wrap:anywhere; }
+.paywall-price-card .ppc-cur { display:block; font-size:.55em; font-weight:700; color:var(--muted); margin-top:2px; }
 .paywall-price-card .ppc-price {
   font-size:1.4rem; font-weight:900; color:var(--text);
 }
@@ -4280,7 +4420,7 @@ a { color:inherit; text-decoration:none; }
 .teacher-send-btn, .tm-chip-btn, .tm-no-term-btn, .teacher-doc-btn,
 .ai-expand-btn, .q-bookmark-btn, .sp-ai-tts-btn, .exam-error-btn,
 .glossary-term-btn, .micro-lesson-btn, .target-practice-option,
-.vp-back-btn, .vp-mc-btn, .quiz-coach-trigger-btn, .btn {
+.vp-back-btn, .vp-mc-btn, .quiz-coach-trigger-btn, .sbs-btn, .btn {
   border: 1.5px solid transparent !important;
   background: linear-gradient(var(--btn-bg, rgba(17,24,39,0.95)), var(--btn-bg, rgba(17,24,39,0.95))) padding-box,
               conic-gradient(from var(--neon-angle, 0deg), #00F5FF 0%, #0066FF 25%, #FF00E5 50%, #FF9933 75%, #00F5FF 100%) border-box !important;
@@ -4291,6 +4431,14 @@ a { color:inherit; text-decoration:none; }
 
 .lang-btn {
   background: transparent !important;
+}
+
+/* ── Lesbarhetsfiks: neon-regelen under setter mørk bakgrunn på primærknappene
+   med !important, men tekstfargen var laget for den gamle lyse bakgrunnen.
+   Målt kontrast 1,01 på «Logg inn» og «Kjøp Premium» — usynlig tekst.
+   Kun tekstfargen settes her. Bakgrunn, form og neon-animasjon røres ikke. ── */
+.auth-btn, .end-btn-pri, .paywall-buy-btn, .sp-btn-primary, .hp-btn-pri, .lang-btn {
+  color: #F8FAFC !important;
 }
 
 /* Global rotating neon borders for active/primary buttons and active flags */
@@ -4710,8 +4858,7 @@ a { color:inherit; text-decoration:none; }
         <button class="home-main-choice" onclick="showTab('library')">
           <span class="home-main-choice-icon">🎬</span>
           <span class="home-main-choice-copy">
-            <span class="home-main-choice-title" data-key="home_open_library">Videokurs & Podkaster</span>
-            <span class="home-main-choice-sub" data-key="library_sub">Se leksjoner og hør forklaringer</span>
+            <span class="home-main-choice-title" data-key="lib_videos">Videoer</span>
           </span>
         </button>
         <button class="home-main-choice" onclick="toggleTargetPracticeMenu()" aria-controls="targetPracticeMenu" aria-expanded="false" id="targetPracticeToggle">
@@ -4725,6 +4872,13 @@ a { color:inherit; text-decoration:none; }
           <button class="target-practice-option" id="mistakesHomeBtn" onclick="startMistakeQuiz()" data-key="mistakes_short">Øv på mine feil</button>
           <button class="target-practice-option" onclick="showTab('signs')" data-key="home_open_signs">Åpne skiltkatalog</button>
         </div>
+        <button class="home-main-choice" onclick="showTab('dashboard')">
+          <span class="home-main-choice-icon">📊</span>
+          <span class="home-main-choice-copy">
+            <span class="home-main-choice-title" data-key="readiness_title">Klar for prøven</span>
+            <span class="home-main-choice-sub" data-key="history">Historikk</span>
+          </span>
+        </button>
       </div>
 
       <div class="home-stats">
@@ -4743,7 +4897,7 @@ a { color:inherit; text-decoration:none; }
       </div>
 
       <!-- Readiness card — populated by loadHome() from last quiz attempt -->
-      <div class="home-readiness" id="homeReadiness" style="display:none" onclick="showTab('history')">
+      <div class="home-readiness" id="homeReadiness" style="display:none" onclick="showTab('dashboard')">
         <div class="hr-dot" id="hrDot"></div>
         <div class="hr-main">
           <div class="hr-label" data-key="readiness_title">ความพร้อมสำหรับการสอบ</div>
@@ -5053,6 +5207,15 @@ a { color:inherit; text-decoration:none; }
       </div>
     </div>
 
+    <!-- Dashboard uses localized labels and API-provided learner text. -->
+    <div class="screen" id="screenDashboard">
+      <div class="hist-header">
+        <button class="back-btn" onclick="showTab('home')" data-key="backhome">Hjem</button>
+        <div class="screen-title" data-key="readiness_title">Klar for prøven</div>
+      </div>
+      <div class="hist-scroll" id="dashboardContent" aria-live="polite"></div>
+    </div>
+
     <!-- ═══ STUDIEBOK SCREEN ═══ -->
     <div class="screen" id="screenStudybook">
       <!-- Top bar: back + search -->
@@ -5191,25 +5354,31 @@ a { color:inherit; text-decoration:none; }
           <li><span class="pf-check">✓</span><span data-key="pw_f4"></span></li>
           <li><span class="pf-check">✓</span><span data-key="pw_f5"></span></li>
         </ul>
-        <div class="paywall-price-row">
+        <div class="promo-banner" id="promoBanner" style="display:none">
+          <div class="promo-spark">🎉</div>
+          <div class="promo-head" data-key="promo_title"></div>
+          <div class="promo-body" data-key="promo_body"></div>
+        </div>
+        <div class="paywall-price-row" id="paywallPriceRow">
           <div class="paywall-price-card selected" onclick="buyPremium('monthly',this)" data-plan="monthly">
             <div class="ppc-period" data-key="pw_month"></div>
-            <div class="ppc-price" data-price-plan="monthly">199 NOK</div>
+            <div class="ppc-price" data-price-plan="monthly">199 kr</div>
             <div class="ppc-per" data-key="pw_per_month"></div>
           </div>
           <div class="paywall-price-card" onclick="buyPremium('three_months',this)" data-plan="three_months" style="position:relative">
             <div class="ppc-badge" data-key="pw_best_value"></div>
             <div class="ppc-period" data-key="pw_three_months"></div>
-            <div class="ppc-price" data-price-plan="three_months">399 NOK</div>
+            <div class="ppc-price" data-price-plan="three_months">399 kr</div>
             <div class="ppc-per" data-key="pw_per_three_months"></div>
           </div>
           <div class="paywall-price-card" onclick="buyPremium('lifetime',this)" data-plan="lifetime">
             <div class="ppc-period" data-key="pw_lifetime"></div>
-            <div class="ppc-price" data-price-plan="lifetime">699 NOK</div>
+            <div class="ppc-price" data-price-plan="lifetime">699 kr</div>
             <div class="ppc-per" data-key="pw_lifetime_note"></div>
           </div>
         </div>
-        <button class="paywall-buy-btn" onclick="buyPremium()">⭐ <span data-key="pw_buy"></span></button>
+        <button class="paywall-buy-btn" id="paywallBuyBtn" onclick="buyPremium()">⭐ <span data-key="pw_buy"></span></button>
+        <button class="paywall-buy-btn" id="promoSignupBtn" style="display:none" onclick="promoSignup()">✨ <span data-key="promo_cta"></span></button>
         <button class="paywall-skip" onclick="restorePurchase()" data-key="pw_restore_purchase"></button>
         <div class="paywall-skip" style="border:none;background:transparent;cursor:default" data-key="pw_cancel_anytime"></div>
       </div>
@@ -5734,6 +5903,19 @@ var UI = {
   bookmark_add_failed:{th:'เพิ่มที่คั่นหน้าไม่ได้', no:'Kunne ikke legge til bokmerke', en:'Could not add bookmark'},
   history_login:{th:'เข้าสู่ระบบเพื่อดูประวัติ', no:'Logg inn for å se historikk', en:'Log in to see history'},
   history_empty:{th:'ยังไม่มีประวัติควิซ<br>ทำควิซให้เสร็จ แล้วผลลัพธ์จะแสดงที่นี่', no:'Ingen quiz-historikk ennå.<br>Fullfør en quiz for å se resultatene her.', en:'No quiz history yet.<br>Finish a quiz to see results here.'},
+  dash_title:{th:'ความคืบหน้าของฉัน', no:'Min fremgang', en:'My progress'},
+  dash_tier_premium:{th:'สมาชิกพรีเมียม', no:'Premium', en:'Premium'},
+  dash_tier_free:{th:'แบบจำกัด (gratis)', no:'Begrenset (gratis)', en:'Limited (free)'},
+  dash_quiz:{th:'คะแนนควิซ', no:'Quiz-score', en:'Quiz score'},
+  dash_by_cat:{th:'คะแนนตามหมวด', no:'Score per kategori', en:'Score by category'},
+  dash_studybook:{th:'ความคืบหน้าในการอ่านคู่มือ (Studiebok)', no:'Lesefremdrift i Studiebok', en:'Study book reading progress'},
+  dash_studybook_val:{th:'อ่านแล้ว {read} จาก {total} ขั้นตอน', no:'Lest {read} av {total} steg', en:'Read {read} of {total} steps'},
+  dash_signs:{th:'ความชำนาญด้านป้ายจราจร (skiltmestring)', no:'Skiltmestring', en:'Sign mastery'},
+  dash_signs_val:{th:'เชี่ยวชาญแล้ว {mastered} จาก {total} ป้าย', no:'Mestret {mastered} av {total} skilt', en:'Mastered {mastered} of {total} signs'},
+  dash_locked:{th:'ปลดล็อกได้ด้วยการสมัครสมาชิก (abonnement)', no:'Låses opp med abonnement', en:'Unlocked with a subscription'},
+  dash_free_note:{th:'คุณกำลังดูความคืบหน้าแบบจำกัด', no:'Du ser en begrenset fremdrift', en:'You are seeing limited progress'},
+  dash_upgrade_btn:{th:'อัปเกรดเพื่อดูความคืบหน้าทั้งหมด', no:'Oppgrader for full fremdrift', en:'Upgrade for full progress'},
+  dash_load_error:{th:'โหลดความคืบหน้าไม่สำเร็จ', no:'Kunne ikke laste fremdriften', en:'Could not load progress'},
   history_load_error:{th:'โหลดประวัติไม่ได้', no:'Kunne ikke laste historikk.', en:'Could not load history.'},
   retry_category_unavailable:{th:'ไม่พบหมวดหมู่นี้แล้ว', no:'Fant ikke denne kategorien lenger.', en:'Could not find this category anymore.'},
   result_saved:{th:'บันทึกผลแล้ว ✓',        no:'Resultat lagret ✓', en:'Result saved ✓'},
@@ -5883,10 +6065,17 @@ var UI = {
   sign_fallback_exam:{th:'ในข้อสอบ ให้ถามว่า: ป้ายนี้เปลี่ยนการกระทำของฉันตรงนี้อย่างไร?', no:'På prøven: spør hva skiltet endrer for handlingen din akkurat her.', en:'In the exam, ask what this sign changes about your action right here.'},
   sign_fallback_memory:{th:'จำเป็นลำดับ: รูปทรง → สี → สัญลักษณ์ → สิ่งที่ต้องทำ', no:'Husk rekkefølgen: form → farge → symbol → handling.', en:'Remember the order: shape → colour → symbol → action.'},
   // Paywall
+  tts_tap_first:{th:'แตะหน้าจอหนึ่งครั้งก่อน แล้วกดฟังอีกที', no:'Trykk én gang på skjermen, og prøv å spille av igjen.', en:'Tap the screen once, then press play again.'},
+  tts_failed:  {th:'ขออภัยครับ ตอนนี้เล่นเสียงไม่ได้ กรุณาลองใหม่อีกครั้ง', no:'Lyden kunne ikke spilles av nå. Prøv igjen.', en:'The audio could not be played. Please try again.'},
+  promo_head:  {th:'ทุกอย่างฟรีในช่วงเปิดตัว', no:'Alt er gratis under lanseringen', en:'Everything is free during launch'},
+  promo_title: {th:'แคมเปญเปิดตัว!', no:'Lanseringskampanje!', en:'Launch campaign!'},
+  promo_body:  {th:'สมัครบัญชีฟรีวันนี้ รับสิทธิ์เข้าถึงเนื้อหาทั้งหมดเต็มรูปแบบ 30 วัน!', no:'Opprett en gratis konto i dag og få 30 dagers full tilgang til alt innhold!', en:'Create a free account today and get 30 days of full access to everything!'},
+  promo_cta:   {th:'สร้างบัญชีฟรี', no:'Opprett gratis konto', en:'Create free account'},
+  promo_active:{th:'คุณมีสิทธิ์เข้าถึงเต็มรูปแบบจากแคมเปญเปิดตัว', no:'Du har full tilgang gjennom lanseringskampanjen', en:'You have full access through the launch campaign'},
   pw_title:    {th:'ปลดล็อกการเข้าถึงทั้งหมด', no:'Lås opp full tilgang', en:'Unlock full access'},
   pw_sub:      {th:'คุณได้ใช้สิทธิ์ทดลองเรียนฟรีครบแล้ว', no:'Du har brukt gratisprøven', en:'You have used your free trial'},
   pw_f1:       {th:'คำถามและหมวดหมู่ไม่จำกัด', no:'Ubegrenset spørsmål og kategorier', en:'Unlimited questions and categories'},
-  pw_f2:       {th:'โหมดสอบเต็มรูปแบบ (45 ข้อ)', no:'Fullstendig eksamensmode (45 spørsmål)', en:'Full exam mode (45 questions)'},
+  pw_f2:       {th:'โหมดสอบเต็มรูปแบบ 45 ข้อ', no:'Fullstendig eksamensmode (45 spørsmål)', en:'Full exam mode (45 questions)'},
   pw_f3:       {th:'ทดสอบรายวันและโหมดฝึกซ้อม', no:'Daglig test og øvingsmodus', en:'Daily test and practice mode'},
   pw_f4:       {th:'ประวัติและสถิติความก้าวหน้า', no:'Historikk og fremgangsstatistikk', en:'History and progress statistics'},
   pw_f5:       {th:'แกลเลอรีป้ายจราจร', no:'Trafikkskilt-galleri', en:'Traffic signs gallery'},
@@ -5896,8 +6085,9 @@ var UI = {
   pw_per_month:{th:'ต่อเดือน', no:'per måned', en:'per month'},
   pw_per_three_months:{th:'ต่อ 3 เดือน', no:'per 3 måneder', en:'per 3 months'},
   pw_per_lifetime:{th:'จ่ายครั้งเดียว', no:'engangsbetaling', en:'one-time payment'},
-  pw_best_value:{th:'คุ้มค่าที่สุด – ประหยัด 34%', no:'Best verdi – spar 34%', en:'Best value – save 34%'},
-  pw_lifetime_note:{th:'จ่ายครั้งเดียว – ใช้งานได้ตลอดไป', no:'Betal én gang – bruk for alltid', en:'Pay once – use forever'},
+  pw_best_value:{th:'คุ้มค่าที่สุด – ประหยัด {pct}%', no:'Best verdi – spar {pct}%', en:'Best value – save {pct}%'},
+  pw_currency:{th:'โครน', no:'kr', en:'NOK'},
+  pw_lifetime_note:{th:'จ่ายครั้งเดียว ใช้ได้ตลอดไป', no:'Betal én gang – bruk for alltid', en:'Pay once – use forever'},
   pw_buy:      {th:'ปลดล็อกพรีเมียมเพื่อเข้าถึงแบบไม่จำกัด', no:'Lås opp Premium for ubegrenset tilgang', en:'Unlock Premium for unlimited access'},
   pw_restore_purchase:{th:'กู้คืนการซื้อ', no:'Gjenopprett kjøp', en:'Restore purchase'},
   pw_cancel_anytime:{th:'ยกเลิกเมื่อไหร่ก็ได้', no:'Avslutt når som helst', en:'Cancel anytime'},
@@ -5930,6 +6120,22 @@ var UI = {
   sb_cancel:       {th:'ยกเลิก',         no:'Avbryt',        en:'Cancel'},
   sb_save:         {th:'บันทึก',         no:'Lagre',         en:'Save'},
   sb_not_available:{th:'เนื้อหานี้ยังไม่มีในภาษาของคุณ', no:'Dette innholdet er ikke tilgjengelig på ditt språk ennå.', en:'This content is not available in your language yet.'},
+  sbs_mode_screens:{th:'ทีละหน้า', no:'Skjermer', en:'Screens'},
+  sbs_mode_full:{th:'ทั้งบท', no:'Hele kapittelet', en:'Full chapter'},
+  sbs_prev:{th:'‹ ย้อนกลับ', no:'‹ Tilbake', en:'‹ Back'},
+  sbs_next:{th:'ต่อไป ›', no:'Neste ›', en:'Next ›'},
+  sbs_next_chapter:{th:'บทถัดไป ›', no:'Neste kapittel ›', en:'Next chapter ›'},
+  sbs_type_theory:{th:'ทฤษฎี', no:'Teori', en:'Theory'},
+  sbs_type_rule:{th:'กฎ', no:'Regel', en:'Rule'},
+  sbs_type_trap:{th:'กับดักข้อสอบ', no:'Felle', en:'Exam trap'},
+  sbs_type_summary:{th:'สรุป', no:'Oppsummering', en:'Summary'},
+  sbs_before:{th:'ก่อน', no:'Før', en:'Before'},
+  sbs_after:{th:'หลัง', no:'Etter', en:'After'},
+  sbs_points:{th:'จุดสำคัญ', no:'Viktige punkter', en:'Key points'},
+  sbs_hotspots:{th:'แตะตัวเลขเพื่อดูจุดสำคัญ', no:'Trykk på et tall for å se punktet', en:'Tap a number to see the point'},
+  sbs_correct:{th:'ถูกต้อง!', no:'Riktig!', en:'Correct!'},
+  sbs_wrong:{th:'ยังไม่ถูก', no:'Ikke riktig', en:'Not quite'},
+  sbs_try_again:{th:'ลองใหม่', no:'Prøv igjen', en:'Try again'},
   tts_tempo:       {th:'ความเร็วในการอ่านออกเสียง', no:'Opplesing – Tempo', en:'Read aloud – Tempo'},
   tts_tempo_sub:   {th:'ความเร็วของระบบสังเคราะห์เสียง', no:'Hastighet på talesyntese', en:'Text-to-speech speed'},
   tts_volum:       {th:'ระดับเสียงของการอ่านออกเสียง', no:'Opplesing – Volum', en:'Read aloud – Volume'},
@@ -5960,7 +6166,7 @@ var UI = {
   trial_ended:     {th:'สัปดาห์ทดลองใช้ฟรีของคุณสิ้นสุดแล้ว เลือกแพ็กเกจเพื่อฝึกต่อ', no:'Gratisuken din er over. Velg et abonnement for å fortsette å øve.', en:'Your free week has ended. Choose a plan to keep practising.'},
 
   // ── Retur fra Stripe-checkout ──────────────────────────────────────────────
-  premium_activated_toast:  {th:'เปิดใช้ Premium แล้ว', no:'Premium er aktivert', en:'Premium activated'},
+  premium_activated_toast:  {th:'เปิดใช้งานพรีเมียม (Premium) แล้ว', no:'Premium er aktivert', en:'Premium activated'},
   payment_unconfirmed_toast:{th:'ยังยืนยันการชำระเงินไม่ได้', no:'Betalingen kunne ikke bekreftes ennå', en:'Payment could not be confirmed yet'},
   checkout_unavailable_toast:{th:'ไม่สามารถเปิดการชำระเงินได้ในตอนนี้', no:'Betaling er ikke tilgjengelig akkurat nå', en:'Payment is not available right now'},
   free_questions_left:      {th:'เหลือ {count} คำถามฟรี', no:'{count} gratis spørsmål igjen', en:'{count} free questions left'},
@@ -6011,9 +6217,28 @@ function localeForLangKey(lang) {
 function localeForLang() {
   return localeForLangKey(appLang);
 }
+// Opplesing er en premium-funksjon: serveren krever innlogging + aktiv tilgang (401/402).
+// <audio src> kan ikke sende Authorization, så URL-en får et kortlevd TTS-token (?tt=) fra /api/tts/token.
+var ttsToken = '';
+var _ttsTokenRefreshAt = 0;
+var _ttsTokenTriedAt = 0;
+async function refreshTtsToken() {
+  _ttsTokenTriedAt = Date.now();
+  if (!token) { ttsToken = ''; return; }
+  try {
+    var r = await api('GET', '/api/tts/token');
+    ttsToken = (r && r.token) || '';
+    _ttsTokenRefreshAt = Date.now() + Math.max(60, ((r && r.expires_in) || 7200) - 300) * 1000;
+  } catch(e) {
+    ttsToken = '';   // ingen aktiv tilgang (402) eller ikke innlogget
+  }
+}
 function ttsStreamUrl(text, lang) {
   var locale = lang ? localeForLangKey(lang) : localeForLang();
-  return '/api/tts/stream?lang=' + encodeURIComponent(locale) + '&text=' + encodeURIComponent(text || '');
+  // Forny i bakgrunnen når tokenet mangler eller snart utløper (maks ett forsøk per minutt)
+  if (token && (!ttsToken || Date.now() > _ttsTokenRefreshAt) && Date.now() - _ttsTokenTriedAt > 60000) refreshTtsToken();
+  return '/api/tts/stream?lang=' + encodeURIComponent(locale) + '&text=' + encodeURIComponent(text || '') +
+    (ttsToken ? '&tt=' + encodeURIComponent(ttsToken) : '');
 }
 
 function applyUILang() {
@@ -6322,9 +6547,9 @@ function catName(raw) {
 }
 
 var PREMIUM_PRICING = {
-  monthly: { display:'199 NOK', period:{no:'per måned', th:'ต่อเดือน', en:'per month'} },
-  three_months: { display:'399 NOK', period:{no:'per 3 måneder', th:'ต่อ 3 เดือน', en:'per 3 months'} },
-  lifetime: { display:'699 NOK', period:{no:'engangsbetaling', th:'จ่ายครั้งเดียว', en:'one-time payment'} }
+  monthly: { amount:199, period:{no:'per måned', th:'ต่อเดือน', en:'per month'} },
+  three_months: { amount:399, period:{no:'per 3 måneder', th:'ต่อ 3 เดือน', en:'per 3 months'} },
+  lifetime: { amount:699, period:{no:'engangsbetaling', th:'จ่ายครั้งเดียว', en:'one-time payment'} }
 };
 
 // ════════════════════════════════════════════
@@ -6379,6 +6604,7 @@ function enterApp() {
   document.getElementById('bottomNav').style.display = 'flex';
   document.getElementById('topSettingsBtn').style.display = 'flex';
   loadAccessStatus();
+  refreshTtsToken();
   var requestedSign = new URLSearchParams(window.location.search).get('sign');
   if (new URLSearchParams(window.location.search).get('tool') === 'stopping-distance') {
     showTab('stopping');
@@ -6497,7 +6723,7 @@ function showTab(tab, forceType) {
   bindBottomNavCarousel();
   var screenMap = {
     home:'screenHome', cats:'screenCats',
-    history:'screenHistory', signs:'screenSigns', bookmarks:'screenBookmarks',
+    history:'screenHistory', dashboard:'screenDashboard', signs:'screenSigns', bookmarks:'screenBookmarks',
     settings:'screenSettings', studybook:'screenStudybook', teacher:'screenTeacher',
     library:'screenLibrary', stopping:'screenStopping'
   };
@@ -6512,6 +6738,7 @@ function showTab(tab, forceType) {
     if (tab === 'home')      loadHome();
     if (tab === 'cats')      loadCategories();
     if (tab === 'history')   loadHistory();
+    if (tab === 'dashboard') loadDashboard();
     if (tab === 'signs')     loadSigns();
     if (tab === 'bookmarks') loadBookmarks();
     if (tab === 'settings')  loadSettings();
@@ -6641,7 +6868,54 @@ function renderMicroLessons(container) {
       '<div class="micro-lesson-body"><div>' + escH(t(lesson.body)) + '</div>' +
       '<div class="micro-lesson-action">✓ ' + escH(t(lesson.action)) + '</div></div></article>';
   });
-  container.innerHTML = html + '</div>';
+  container.innerHTML = html + '</div><div id="cultureLessonsMount"></div>';
+  renderCultureLessons();
+}
+
+// ── Thailand vs Norge — backend-drevet kortstokk (kun thai) ──────────────
+// Ligger under de statiske mikroleksjonene. Rendres kun i thai-modus; andre
+// språk får en kort notis, aldri norsk/engelsk innholds-fallback.
+async function renderCultureLessons() {
+  var mount = document.getElementById('cultureLessonsMount');
+  if (!mount) return;
+  mount.innerHTML = '';
+  if (appLang !== 'th') {
+    mount.innerHTML = '<div class="culture-note">'
+      + (appLang === 'no' ? 'Denne kortstokken finnes bare på thai.'
+                          : 'This deck is only available in Thai.')
+      + '</div>';
+    return;
+  }
+  var lessons = [];
+  try {
+    var data = await api('GET', '/api/lessons/culture?lang=th');
+    lessons = (data && data.lessons) || [];
+  } catch (e) {
+    return; // valgfri hjelp — skjul ved feil
+  }
+  if (!lessons.length) return;
+
+  var LBL = { th: 'ที่ไทย', no: 'ที่นอร์เวย์', term: 'คำศัพท์นอร์เวย์', tip: 'เคล็ดลับจากไมเคิล' };
+  function row(icon, label, cls, val) {
+    if (!val) return '';
+    return '<div class="cc-row"><span class="cc-label">' + icon + ' ' + escH(label) + '</span>'
+      + '<span class="' + cls + '">' + escH(val) + '</span></div>';
+  }
+  var cards = lessons.map(function(l) {
+    return '<article class="culture-card">'
+      + '<div class="cc-title">' + escH(l.title_th || '')
+      + (l.title_no ? '<span class="cc-title-no">' + escH(l.title_no) + '</span>' : '')
+      + '</div>'
+      + row('🇹🇭', LBL.th, 'cc-text', l.thailand_practice_th)
+      + row('🇳🇴', LBL.no, 'cc-text', l.norway_rule_th)
+      + row('📘', LBL.term, 'cc-term', l.norway_term_no)
+      + row('💡', LBL.tip, 'cc-text', l.michaels_tip_th)
+      + '</article>';
+  }).join('');
+
+  mount.innerHTML = '<div class="culture-deck">'
+    + '<div class="culture-deck-head">🇹🇭 ไทย vs 🇳🇴 นอร์เวย์</div>'
+    + cards + '</div>';
 }
 
 function toggleMicroLesson(id) {
@@ -7001,6 +7275,8 @@ function sbGoTo(idx) {
   if (idx < 0 || idx >= _sbChapters.length) return;
   _sbCurrent = idx;
   _sbVisited[idx] = true;
+  _sbsIdx = 0;
+  _sbsMode = 'screens';
   sbRender();
   sbCloseSuggest();
   // scroll reader to top
@@ -7048,15 +7324,166 @@ function sbRender() {
     ? '<div><a class="sb-video-btn" href="' + escH(ch.video_url) + '" target="_blank" rel="noopener">🎬 ' + escH(t('sb_watch_video')) + '</a></div>'
     : '';
 
+  sbTrackRead(ch, sbsActive() ? (ch.screens[Math.min(Math.max(_sbsIdx, 0), ch.screens.length - 1)] || {}).id : null);
   var reader = document.getElementById('sbReader');
+  var bodyHtml = sbsActive() ? sbsRender(ch) : (imgHtml + content);
   reader.innerHTML =
     '<div class="sb-page">' +
       editBtn +
       '<div class="sb-page-icon">' + ch.icon + '</div>' +
       '<div class="sb-page-title">' + title + '</div>' +
-      '<div class="sb-page-body">' + imgHtml + content + '</div>' +
+      (sbsAvailable(ch) ? sbsModeBar() : '') +
+      '<div class="sb-page-body">' + bodyHtml + '</div>' +
       vidHtml +
     '</div>';
+}
+
+// ── Skjermleser: viser chapter.screens (kun thai/norsk; engelsk faller tilbake til content_en) ──
+var _sbsIdx  = 0;          // gjeldende skjerm i kapittelet
+var _sbsMode = 'screens';  // 'screens' | 'full'
+var _sbsAns  = {};         // skjerm-id -> valgt svar (Veisjekk)
+var _sbsWc   = {};         // skjerm-id -> 'before' | 'after'
+var _sbsHot  = {};         // skjerm-id -> aktivt hotspot-indeks
+
+function sbsAvailable(ch) {
+  return !!(ch && Array.isArray(ch.screens) && ch.screens.length && (appLang === 'th' || appLang === 'no'));
+}
+function sbsActive() {
+  return _sbsMode === 'screens' && sbsAvailable(_sbChapters[_sbCurrent]);
+}
+// Tekst i valgt språk, aldri fallback til et annet språk
+function sbsL(o, base) { return (o && typeof o[base + '_' + appLang] === 'string') ? o[base + '_' + appLang] : ''; }
+// Norsk fagord i parentes i thai-tekst vises som egen markering
+function sbsFmt(s) {
+  var h = escH(s);
+  if (appLang === 'th') h = h.replace(/\(([^()]*)\)/g, '<span class="sbs-term" lang="nb">($1)</span>');
+  return h;
+}
+function sbsModeBar() {
+  return '<div class="sbs-seg-wrap">' +
+    '<button class="sbs-seg' + (_sbsMode === 'screens' ? ' active' : '') + '" onclick="sbsSetMode(\'screens\')">' + escH(t('sbs_mode_screens')) + '</button>' +
+    '<button class="sbs-seg' + (_sbsMode === 'full' ? ' active' : '') + '" onclick="sbsSetMode(\'full\')">' + escH(t('sbs_mode_full')) + '</button>' +
+  '</div>';
+}
+function sbsRender(ch) {
+  var screens = ch.screens;
+  var n = screens.length;
+  if (_sbsIdx < 0) _sbsIdx = 0;
+  if (_sbsIdx > n - 1) _sbsIdx = n - 1;
+  var s = screens[_sbsIdx];
+  var pct = Math.round(((_sbsIdx + 1) / n) * 100);
+
+  var tag = (s.type === 'road_check' || s.type === 'what_changed') ? sbsL(s, 'badge') : t('sbs_type_' + s.type);
+  var inner;
+  if (s.type === 'road_check') inner = sbsRoadCheck(s);
+  else if (s.type === 'what_changed') inner = sbsWhatChanged(s);
+  else inner = '<p class="sbs-body">' + sbsFmt(sbsL(s, 'body')) + '</p>';
+  var imgHtml = s.image ? '<img class="study-img" src="' + escH(s.image) + '" alt="' + escH(sbsL(s, 'title')) + '">' : '';
+
+  var last = (_sbsIdx === n - 1);
+  var nextBtn;
+  if (!last) nextBtn = '<button class="sbs-btn" onclick="sbsStep(1)">' + escH(t('sbs_next')) + '</button>';
+  else if (_sbCurrent < _sbChapters.length - 1) nextBtn = '<button class="sbs-btn" onclick="sbGoTo(_sbCurrent + 1)">' + escH(t('sbs_next_chapter')) + '</button>';
+  else nextBtn = '<button class="sbs-btn" disabled>' + escH(t('sbs_next')) + '</button>';
+
+  return '<div class="sbs">' +
+    '<div class="sbs-prog"><div class="sbs-prog-bar" style="width:' + pct + '%"></div></div>' +
+    '<div class="sbs-count">' + (_sbsIdx + 1) + ' / ' + n + '</div>' +
+    '<div class="sbs-card sbs-' + escH(s.type) + '">' +
+      '<span class="sbs-tag">' + escH(tag) + '</span>' +
+      '<div class="sbs-title">' + sbsFmt(sbsL(s, 'title')) + '</div>' +
+      imgHtml + inner +
+    '</div>' +
+    '<div class="sbs-nav">' +
+      '<button class="sbs-btn"' + (_sbsIdx === 0 ? ' disabled' : '') + ' onclick="sbsStep(-1)">' + escH(t('sbs_prev')) + '</button>' +
+      nextBtn +
+    '</div>' +
+  '</div>';
+}
+function sbsRoadCheck(s) {
+  var chosen = _sbsAns[s.id];
+  var answered = (typeof chosen === 'number');
+  var opts = s['options_' + appLang] || [];
+  var html = '<p class="sbs-q">' + sbsFmt(sbsL(s, 'question')) + '</p><div class="sbs-opts">';
+  opts.forEach(function(o, i) {
+    var cls = 'sbs-opt';
+    if (answered) cls += (i === s.correct_index) ? ' correct' : (i === chosen ? ' wrong' : ' dim');
+    html += '<button class="' + cls + '"' + (answered ? ' disabled' : '') +
+      ' onclick="sbsAnswer(\'' + escH(s.id) + '\',' + i + ')"><span class="sbs-opt-n">' + (i + 1) + '</span><span>' + sbsFmt(o) + '</span></button>';
+  });
+  html += '</div>';
+  if (answered) {
+    var ok = (chosen === s.correct_index);
+    html += '<div class="sbs-fb ' + (ok ? 'ok' : 'no') + '"><strong>' + escH(ok ? t('sbs_correct') : t('sbs_wrong')) + '</strong> ' + sbsFmt(sbsL(s, 'explanation')) + '</div>';
+    if (!ok) html += '<button class="sbs-btn" style="width:100%;flex:none" onclick="sbsRetry(\'' + escH(s.id) + '\')">' + escH(t('sbs_try_again')) + '</button>';
+  }
+  return html;
+}
+function sbsWhatChanged(s) {
+  var hot = Array.isArray(s.hotspots) ? s.hotspots : [];
+  var active = _sbsHot[s.id];
+  var hasB = !!s.image_before, hasA = !!s.image_after;
+  if (!hasB && !hasA) {
+    // Ingen bilder koblet ennå: tekstkort med forklaring og nummerert punktliste (ingen plassholder)
+    var txt = '<p class="sbs-body">' + sbsFmt(sbsL(s, 'body')) + '</p>';
+    if (hot.length) {
+      txt += '<div class="sbs-hot-title">' + escH(t('sbs_points')) + '</div><div class="sbs-leg-list">';
+      hot.forEach(function(h, i) {
+        txt += '<div class="sbs-leg static"><span class="sbs-leg-n">' + (i + 1) + '</span><span>' + sbsFmt(sbsL(h, 'label')) + '</span></div>';
+      });
+      txt += '</div>';
+    }
+    return txt;
+  }
+  var single = (hasB !== hasA);   // bare ett bilde finnes: ingen Før/Etter-veksler
+  var view = single ? (hasA ? 'after' : 'before') : (_sbsWc[s.id] || 'after');
+  var src = (view === 'after') ? s.image_after : s.image_before;
+  var layout = (s.image_layout === 'square' || s.image_layout === 'wide') ? ' ' + s.image_layout : '';
+  var id = escH(s.id);
+  var html = single ? '' : '<div class="sbs-seg-wrap">' +
+    '<button class="sbs-seg' + (view === 'before' ? ' active' : '') + '" onclick="sbsView(\'' + id + '\',\'before\')">' + escH(t('sbs_before')) + '</button>' +
+    '<button class="sbs-seg' + (view === 'after' ? ' active' : '') + '" onclick="sbsView(\'' + id + '\',\'after\')">' + escH(t('sbs_after')) + '</button>' +
+  '</div>';
+  html += '<div class="sbs-img' + layout + '"><img class="sbs-img-el" src="' + escH(src) + '" alt="' + escH(sbsL(s, 'title')) + '">';
+  hot.forEach(function(h, i) {
+    if ((h.on || 'after') !== view) return;   // hver hotspot hører til ett av bildene
+    html += '<button class="sbs-pin' + (active === i ? ' active' : '') + '" style="left:' + Number(h.x) + '%;top:' + Number(h.y) + '%"' +
+      ' aria-label="' + escH(sbsL(h, 'label')) + '" aria-pressed="' + (active === i ? 'true' : 'false') + '"' +
+      ' onclick="sbsHotspot(\'' + id + '\',' + i + ')">' + (i + 1) + '</button>';
+  });
+  html += '</div>';
+  if (hot.length) {
+    html += '<div class="sbs-hot-title">' + escH(t('sbs_hotspots')) + '</div><div class="sbs-leg-list">';
+    hot.forEach(function(h, i) {
+      html += '<button class="sbs-leg' + (active === i ? ' active' : '') + '" onclick="sbsHotspot(\'' + id + '\',' + i + ')">' +
+        '<span class="sbs-leg-n">' + (i + 1) + '</span><span>' + sbsFmt(sbsL(h, 'label')) + '</span></button>';
+    });
+    html += '</div>';
+  }
+  html += '<p class="sbs-body">' + sbsFmt(sbsL(s, 'body')) + '</p>';
+  return html;
+}
+function sbsTop() { var r = document.getElementById('sbReader'); if (r) r.scrollTop = 0; }
+function sbsStep(d) {
+  var ch = _sbChapters[_sbCurrent];
+  if (!ch || !Array.isArray(ch.screens)) return;
+  var ni = _sbsIdx + d;
+  if (ni < 0 || ni >= ch.screens.length) return;
+  _sbsIdx = ni;
+  sbRender();
+  sbsTop();
+}
+function sbsSetMode(m) { _sbsMode = m; sbRender(); sbsTop(); }
+function sbsAnswer(id, i) { _sbsAns[id] = i; sbRender(); }
+function sbsRetry(id) { delete _sbsAns[id]; sbRender(); }
+function sbsView(id, v) { _sbsWc[id] = v; sbRender(); }
+function sbsHotspot(id, i) {
+  var ch = _sbChapters[_sbCurrent];
+  var s = (ch && Array.isArray(ch.screens)) ? ch.screens.filter(function(x) { return x.id === id; })[0] : null;
+  var h = (s && Array.isArray(s.hotspots)) ? s.hotspots[i] : null;
+  _sbsWc[id] = (h && h.on) || 'after';   // bytt til bildet hotspoten hører til
+  _sbsHot[id] = (_sbsHot[id] === i) ? null : i;
+  sbRender();
 }
 
 // Search
@@ -7233,7 +7660,10 @@ document.addEventListener('visibilitychange', function() {
     var r = document.getElementById('sbReader');
     if (!r || !r.contains(e.target)) return;
     var dx = e.changedTouches[0].clientX - sx;
-    if (Math.abs(dx) > 50) { if (dx < 0) sbGoTo(_sbCurrent + 1); else sbGoTo(_sbCurrent - 1); }
+    if (Math.abs(dx) > 50) {
+      if (sbsActive()) sbsStep(dx < 0 ? 1 : -1);   // skjermmodus: bla mellom skjermer
+      else if (dx < 0) sbGoTo(_sbCurrent + 1); else sbGoTo(_sbCurrent - 1);
+    }
   }, {passive:true});
 })();
 
@@ -7340,6 +7770,7 @@ async function refreshCurrentUser() {
   if (!token) return null;
   user = await api('GET', '/api/auth/me');
   await loadAccessStatus();
+  refreshTtsToken();
   return user;
 }
 
@@ -7360,20 +7791,39 @@ async function handleCheckoutReturn() {
   return true;
 }
 
+// Pris i valgt språk: thai «199 โครน (kr)», norsk «199 kr». Aldri «NOK» eller serverens
+// ferdigformaterte streng, som kan inneholde latinske tegn i thai-modus.
+function formatPlanPrice(plan) {
+  var amount = Number(plan && plan.amount);
+  if (!(amount > 0)) return '';
+  return escH(String(Math.round(amount))) + '<span class="ppc-cur">' + pwTerm(t('pw_currency')) + '</span>';
+}
+// Norsk fagord i parentes vises som egen, mindre linje under den thai forklaringen.
+function pwTerm(s) {
+  return escH(s).replace(/\(([^()]*)\)/g, '<span class="ppc-term">($1)</span>');
+}
+
 function renderPremiumPricing() {
   Object.keys(PREMIUM_PRICING || {}).forEach(function(planId) {
     var plan = PREMIUM_PRICING[planId] || {};
     var priceEl = document.querySelector('[data-price-plan="' + planId + '"]');
-    if (priceEl) priceEl.textContent = plan.display || priceEl.textContent;
+    if (priceEl) { var priceHtml = formatPlanPrice(plan); if (priceHtml) priceEl.innerHTML = priceHtml; }
     var card = document.querySelector('[data-plan="' + planId + '"]');
     if (!card) return;
     var labelEl = card.querySelector('.ppc-period');
-    if (labelEl) labelEl.textContent = pickStrict(plan.label) || t(labelEl.getAttribute('data-key'));
+    if (labelEl) labelEl.innerHTML = pwTerm(t(labelEl.getAttribute('data-key')));
     var periodEl = card.querySelector('.ppc-per');
-    if (periodEl) periodEl.textContent = t(periodEl.getAttribute('data-key')) || pickStrict(plan.period) || periodEl.textContent;
-    var badgeEl = card.querySelector('.ppc-badge');
-    if (badgeEl) badgeEl.textContent = t(badgeEl.getAttribute('data-key'));
+    if (periodEl) periodEl.innerHTML = pwTerm(t(periodEl.getAttribute('data-key')) || pickStrict(plan.period) || periodEl.textContent);
   });
+  // «Spar X %» regnes ut fra faktiske priser, ikke et hardkodet tall.
+  var m1 = Number((PREMIUM_PRICING.monthly || {}).amount);
+  var m3 = Number((PREMIUM_PRICING.three_months || {}).amount);
+  var pct = (m1 > 0 && m3 > 0) ? Math.round((1 - m3 / (3 * m1)) * 100) : 0;
+  var badgeEl = document.querySelector('[data-plan="three_months"] .ppc-badge');
+  if (badgeEl) {
+    badgeEl.style.display = pct > 0 ? '' : 'none';
+    if (pct > 0) badgeEl.textContent = tf('pw_best_value', { pct: pct });
+  }
 }
 
 // ════════════════════════════════════════════
@@ -7554,7 +8004,7 @@ async function doResetPassword() {
 function logout() {
   if (!confirm(t('logout_confirm'))) return;
   _ls.remove('t2d_token');
-  token = null; user = null; deviceId = null;
+  token = null; user = null; deviceId = null; ttsToken = '';
   document.getElementById('topBar').style.display = 'flex';
   document.getElementById('bottomNav').style.display = 'none';
   document.getElementById('topSettingsBtn').style.display = 'none';
@@ -8077,10 +8527,52 @@ function renderPremiumBanner() {
 }
 
 // Betalingsmuren skal forklare hvorfor den dukket opp når gratisuken er brukt opp.
+// ── Lanseringskampanje ────────────────────────────────────────────────────
+// Leses fra accessState.promo, som serveren setter ved hver forespørsel.
+// Skrus FREE_PROMO_MODE av, er prisene tilbake ved neste kall — uten deploy.
+function promoActive() {
+  return !!(accessState && accessState.promo && accessState.promo.active);
+}
+
+function renderPromoState() {
+  var on = promoActive();
+  var banner = document.getElementById('promoBanner');
+  var prices = document.getElementById('paywallPriceRow');
+  var buyBtn = document.getElementById('paywallBuyBtn');
+  var promoBtn = document.getElementById('promoSignupBtn');
+  var loggedIn = !!(user && user.email);
+
+  if (banner) banner.style.display = on ? 'block' : 'none';
+  if (prices) prices.style.display = on ? 'none'  : '';
+  if (buyBtn) buyBtn.style.display = on ? 'none'  : '';
+  // Innlogget bruker har allerede tilgang under kampanjen.
+  if (promoBtn) promoBtn.style.display = (on && !loggedIn) ? '' : 'none';
+
+  var title = document.querySelector('#screenPaywall .paywall-title');
+  if (title) {
+    if (title.getAttribute('data-orig') === null) {
+      title.setAttribute('data-orig', title.innerHTML);
+    }
+    if (on) { title.textContent = t('promo_head'); }
+    else { title.innerHTML = title.getAttribute('data-orig'); }
+  }
+  // Undertittelen ville gjentatt bannerteksten ordrett for en gjest.
+  var sub = document.querySelector('#screenPaywall .paywall-sub');
+  if (sub && on) {
+    sub.textContent = loggedIn ? t('promo_active') : '';
+    sub.style.display = loggedIn ? '' : 'none';
+  } else if (sub) { sub.style.display = ''; }
+}
+
+function promoSignup() {
+  showScreen('screenAuth');
+  if (typeof switchTab === 'function') switchTab('register');
+}
+
 function renderPaywallSub() {
+  if (promoActive()) { renderPromoState(); return; }
   var el = document.querySelector('#screenPaywall .paywall-sub');
   if (!el) return;
-  var spent = !!(user && user.trial_used === true) && !isTrialActive();
   el.textContent = t('pw_sub');
 }
 
@@ -8144,6 +8636,7 @@ function showPaywall() {
   stopAllSpeech();
   stopExamTimer();
   applyUILang();
+  renderPromoState();
   showScreen('screenPaywall');
   // Hide bottom nav while paywall is shown
   document.getElementById('topBar').style.display = 'flex';
@@ -8279,6 +8772,10 @@ async function startQuiz(catId) {
 }
 
 async function loadQuiz(url) {
+  // Language isolation: the server only returns questions that are clean in the chosen language.
+  if (url.indexOf('/api/questions/random') === 0 && url.indexOf('lang=') < 0) {
+    url += (url.indexOf('?') < 0 ? '?' : '&') + 'lang=' + encodeURIComponent(appLang);
+  }
   showScreen('screenQuiz');
   await loadAccessStatus();
   var qCard = document.getElementById('qCard');
@@ -8454,6 +8951,7 @@ function renderQuestion() {
         + '<img class="q-img" src="' + escH(imgUrl) + '" alt="' + escH(qText) + '" onerror="this.parentElement.style.display=\'none\'" loading="lazy">'
       + '</div>'
       + '<div class="q-text">' + escH(qText) + '</div>'
+      + '<div id="fagordkortMount"></div>'
       + '<div style="flex-shrink:0;"><button class="tts-play" id="qTtsBtn" title="' + escH(t('read_aloud')) + '" onclick="speakQ()">▶</button></div>'
     + '</div>'
     + '<div class="q-mid">'
@@ -8494,6 +8992,47 @@ function renderQuestion() {
       + '<div class="quiz-ai-idle-text">' + escH(isExamMode ? t('home_exam_sub') : t('ai_idle')) + '</div>'
       + '</div>';
   }
+
+  renderFagordkort(qId);
+}
+
+// ── Fagordkort ("📖 ดูคำศัพท์นอร์เวย์") ────────────────────────────────────
+// Thai-only helper: shows the Norwegian traffic terms behind a question so a
+// Thai learner can map term → meaning. Rendered only in Thai mode and only
+// when the backend returns at least one term with a Thai definition.
+async function renderFagordkort(qId) {
+  var mount = document.getElementById('fagordkortMount');
+  if (!mount) return;
+  mount.innerHTML = '';
+  if (appLang !== 'th' || !qId) return;
+
+  var terms = [];
+  try {
+    var data = await api('GET', '/api/quiz/terms?lang=th&question_id=' + encodeURIComponent(qId));
+    terms = (data && data.terms) || [];
+  } catch (e) {
+    return; // silent — the card is an optional aid
+  }
+  if (!terms.length) return;
+  // A later question may have resolved before this fetch — bail if qId moved on.
+  var qNow = questions[qIdx];
+  var qIdNow = qNow && (qNow._id || qNow.id || qNow.question_id);
+  if (String(qIdNow || '') !== String(qId)) return;
+
+  var rows = terms.map(function(tm) {
+    return '<div class="fgk-row">'
+      + '<div class="fgk-pair"><span class="fgk-th">' + escH(tm.term_th || '') + '</span>'
+      + '<span class="fgk-arrow">➔</span>'
+      + '<span class="fgk-no">' + escH(tm.term_no || '') + '</span></div>'
+      + (tm.definition_th ? '<div class="fgk-def">' + escH(tm.definition_th) + '</div>' : '')
+      + '</div>';
+  }).join('');
+
+  mount.innerHTML =
+    '<details class="fagordkort">'
+    + '<summary class="fgk-summary">📖 ดูคำศัพท์นอร์เวย์</summary>'
+    + '<div class="fgk-body">' + rows + '</div>'
+    + '</details>';
 }
 
 var currentCorrect = '';
@@ -10028,6 +10567,60 @@ async function loadSigns() {
 }
 
 // ════════════════════════════════════════════
+//  STUDENT DASHBOARD
+// ════════════════════════════════════════════
+async function loadDashboard() {
+  var panel = document.getElementById('dashboardContent');
+  if (!panel) return;
+  panel.innerHTML = '<div class="loading-wrap"><div class="spinner"></div></div>';
+  try {
+    var url = '/api/user/dashboard?lang=' + encodeURIComponent(appLang);
+    if (deviceId) url += '&device_id=' + encodeURIComponent(deviceId);
+    var data = await api('GET', url);
+    if (!data || data.lang !== appLang || !data.readiness || !data.stats) throw new Error(t('generic_error'));
+    var score = Math.max(0, Math.min(100, Number(data.readiness.score) || 0));
+    var stats = data.stats;
+    var weak = Array.isArray(data.weak_topics) ? data.weak_topics : [];
+    var sessions = Array.isArray(data.completed_sessions) ? data.completed_sessions : [];
+    var streak = data.streak || {};
+    var statCard = function(value, label) {
+      return '<div class="home-stat"><div class="home-stat-num">' + escH(String(value))
+        + '</div><div class="home-stat-lbl">' + escH(label) + '</div></div>';
+    };
+    var html = '<div class="home-readiness" style="display:flex;cursor:default;margin:16px 0">'
+      + '<div class="hr-main"><div class="hr-label">' + escH(t('readiness_title')) + '</div>'
+      + '<div class="hr-status">' + escH(data.readiness.status || '') + '</div>'
+      + '<div class="readiness-meter"><div class="readiness-meter-fill" style="width:' + score + '%;background:var(--orange)"></div></div></div>'
+      + '<div class="hr-pct">' + score + '%</div></div>'
+      + '<div class="home-stats">'
+      + statCard(Number(stats.total_questions) || 0, t('answered'))
+      + statCard(Number(stats.total_correct) || 0, t('correct_stat'))
+      + statCard((Number(stats.overall_accuracy) || 0) + '%', t('accuracy'))
+      + statCard(Number(streak.current_streak) || 0, t('streak')) + '</div>';
+    if (weak.length) {
+      html += '<div class="screen-title" style="margin:18px 0 8px">' + escH(t('result_focus')) + '</div>';
+      weak.forEach(function(topic) {
+        html += '<div class="hist-card"><div class="hist-mode">' + escH(topic.name || '') + '</div>'
+          + (topic.advice ? '<div class="hist-mode-sub">' + escH(topic.advice) + '</div>' : '') + '</div>';
+      });
+    }
+    html += '<div class="screen-title" style="margin:18px 0 8px">' + escH(t('history')) + '</div>';
+    if (!sessions.length) html += '<div class="empty-state"><p>' + t('history_empty') + '</p></div>';
+    sessions.forEach(function(session) {
+      var percent = Math.max(0, Math.min(100, Number(session.score_percentage) || 0));
+      html += '<div class="hist-card"><div class="hist-card-top"><div><div class="hist-mode">'
+        + escH(session.mode_label || '') + '</div><div class="hist-mode-sub">'
+        + escH(session.category_name || '') + '</div></div><div class="hist-pct">'
+        + percent + '%</div></div></div>';
+    });
+    panel.innerHTML = html;
+  } catch (error) {
+    panel.innerHTML = '<div class="empty-state"><div class="es-icon">⚠️</div><p>'
+      + escH(t('history_load_error')) + '</p></div>';
+  }
+}
+
+// ════════════════════════════════════════════
 //  HISTORY
 // ════════════════════════════════════════════
 async function loadHistory() {
@@ -10109,6 +10702,16 @@ async function loadHistory() {
   } catch(e) {
     scroll.innerHTML = '<div class="empty-state"><div class="es-icon">⚠️</div><p>' + t('history_load_error') + '<br>' + escH(e.message) + '</p></div>';
   }
+}
+
+// Studiebok: husk hva den innloggede eleven har lest (én gang per kapittel/skjerm per økt)
+var _sbTracked = {};
+function sbTrackRead(ch, screenId) {
+  if (!token || !ch || typeof ch.order !== 'number') return;
+  var key = ch.order + ':' + (screenId || '');
+  if (_sbTracked[key]) return;
+  _sbTracked[key] = true;
+  api('PUT', '/api/progress/studybook', {chapter: ch.order, screen_id: screenId || null}).catch(function() { delete _sbTracked[key]; });
 }
 
 function openHistDetail(idx) {
@@ -10613,6 +11216,18 @@ function retryQuiz() {
 // sammen med lyd-globalene lenger oppe — ikke dupliser dem her. Funksjonsdeklarasjoner
 // heises, så en kopi lenger ned i filen ville stille overskrevet originalen.
 
+// Én felles feilhåndtering for all TTS-avspilling. Uten dette feiler lyden stille:
+// brukeren ser bare at ingenting skjer, og vi får aldri vite hvorfor.
+function _ttsPlaybackFailed(err, el) {
+  var name = (err && err.name) || 'Error';
+  console.error('TTS-avspilling feilet:', name, err);
+  // AbortError er forventet når brukeren trykker på en ny boble. Ikke skrem.
+  if (name === 'AbortError') return;
+  if (name === 'NotAllowedError') { toast(t('tts_tap_first'), 5000); return; }
+  var code = el && el.error ? (' (kode ' + el.error.code + ')') : '';
+  toast(t('tts_failed') + code, 5000);
+}
+
 function speakQ() {
   var q = questions[qIdx];
   if (!q) return;
@@ -10635,7 +11250,7 @@ function speakQ() {
   var playPromise = audio.play();
   if (playPromise !== undefined) {
     playPromise.catch(function(err) {
-      console.error('Audio playback failed on iOS:', err);
+      _ttsPlaybackFailed(err, audio);
       if (_consumeTtsFallback()) return;
       ttsPlaying = false;
       updateTtsBtn(false);
@@ -10705,7 +11320,7 @@ function speakText(text) {
   var playPromise = audio.play();
   if (playPromise !== undefined) {
     playPromise.catch(function(err) {
-      console.error('Teacher audio playback failed on iOS:', err);
+      _ttsPlaybackFailed(err, audio);
       if (_consumeTtsFallback()) return;
       if (playToken === _teacherAudioToken) {
         _teacherTtsPlaying = false;
@@ -10974,6 +11589,7 @@ async function _quizCoachRequest(message) {
         mode:'quiz_coach'
       })
     });
+    if (res.status === 402) { showPaywall(); throw new Error('HTTP 402'); }  // AI-læreren er bak betalingsmuren
     if (!res.ok) throw new Error('HTTP ' + res.status);
     var data = await res.json();
     if (data.session_id) _quizCoachSessionId = data.session_id;
@@ -12651,11 +13267,19 @@ async function teacherSend(overrideMsg, customDisplayMsg, customMode) {
     if (_teacherUploadedImage && _teacherUploadedImage.data) {
       chatPayload.image_data = _teacherUploadedImage.data;
     }
+    var chatHeaders = { 'Content-Type': 'application/json' };
+    if (token) chatHeaders.Authorization = 'Bearer ' + token;   // serveren krever aktiv tilgang (402 ellers)
     var res = await fetch('/api/teacher/chat', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: chatHeaders,
       body: JSON.stringify(chatPayload)
     });
+    if (res.status === 402) {
+      _teacherHideTyping();
+      await loadAccessStatus();
+      showPaywall();
+      return;
+    }
     if (!res.ok) throw new Error('HTTP ' + res.status);
     var data = await res.json();
     var convId = data.conversation_id || data.session_id;
@@ -13158,7 +13782,7 @@ function speakSign() {
   try { audio.load(); } catch (e) {}
   var playPromise = audio.play();
   if (playPromise !== undefined) {
-    playPromise.catch(function(err){ console.error('Sign TTS error on iOS:', err); });
+    playPromise.catch(function(err){ _ttsPlaybackFailed(err, audio); });
   }
 }
 
@@ -13250,7 +13874,7 @@ function speakSignAiText() {
   var playPromise = audio.play();
   if (playPromise !== undefined) {
     playPromise.catch(function(err){
-      console.error('Sign AI TTS error on iOS:', err);
+      _ttsPlaybackFailed(err, audio);
       if (!_consumeTtsFallback()) _finishSpeechPlayback();
     });
   }

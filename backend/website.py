@@ -1066,6 +1066,17 @@ def laeringsbok():
     }
   });
 
+  // ── TTS-token: opplesing krever aktiv tilgang; <audio src> kan ikke sende Authorization,
+  //    så URL-en får et kortlevd token (?tt=) fra /api/tts/token ──
+  let ttsTok = '';
+  async function refreshTtsTok(){
+    try{
+      const r = await fetch(API+'/tts/token', {headers:{'Authorization':'Bearer '+token}});
+      ttsTok = r.ok ? ((await r.json()).token || '') : '';
+    }catch(e){ ttsTok = ''; }
+    setTimeout(refreshTtsTok, 90*60*1000);
+  }
+
   // ── Auth ──────────────────────────────────────────────────────────
   async function checkAuth(){
     if(!token){ show('bok-login'); return; }
@@ -1075,6 +1086,7 @@ def laeringsbok():
       if(!res.ok){ token=null; localStorage.removeItem('authToken'); show('bok-login'); return; }
       const me = await res.json();
       if(!me.is_premium && !me.is_admin){ show('bok-nopremium'); return; }
+      refreshTtsTok();
       loadChapters();
     }catch(e){ show('bok-login'); }
   }
@@ -1205,7 +1217,7 @@ def laeringsbok():
       bokAudio.onended = () => stopTTS();
       bokAudio.onerror = () => stopTTS();
     }
-    bokAudio.src = '/api/tts?lang=' + langParam + '&text=' + encodeURIComponent(text);
+    bokAudio.src = '/api/tts?lang=' + langParam + '&text=' + encodeURIComponent(text) + (ttsTok ? '&tt=' + encodeURIComponent(ttsTok) : '');
     bokAudio.play().catch(e => {
        console.error("Audio playback failed", e);
        stopTTS();

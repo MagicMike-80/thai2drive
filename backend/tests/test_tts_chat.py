@@ -5,6 +5,7 @@ import hashlib
 import json
 import sys
 from pathlib import Path
+from unittest.mock import AsyncMock
 
 import httpx
 import pytest
@@ -16,6 +17,8 @@ import server  # noqa: E402
 
 @pytest.fixture
 def tts_client(monkeypatch, tmp_path):
+    # Provider contract tests bypass only access control; separate tests guard it.
+    monkeypatch.setattr(server, "_require_tts_access", AsyncMock(return_value={"id": "tts-test"}))
     monkeypatch.setenv("ELEVENLABS_API_KEY", "test-elevenlabs-key")
     monkeypatch.setenv("GOOGLE_API_KEY", "test-google-key")
     for name in (

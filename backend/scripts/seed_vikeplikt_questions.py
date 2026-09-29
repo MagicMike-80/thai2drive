@@ -200,7 +200,7 @@ QUESTIONS = [
         "answer_c_en": "The fastest driver has right of way",
         "answer_d_en": "The right-hand rule fully applies in the roundabout",
         "correct_answer": "B",
-        "explanation_no": "I norske rundkjøringer er det vikeplykt ved innkjøring. Trafikk som allerede er inne i sirkelen har alltid forkjørsrett. Skilt 204 og eventuelle vikepliktskilt bekrefter dette.",
+        "explanation_no": "I norske rundkjøringer er det vikeplikt ved innkjøring. Trafikk som allerede er inne i sirkelen har alltid forkjørsrett. Skilt 204 og eventuelle vikepliktskilt bekrefter dette.",
         "explanation_th": "ในวงเวียนของนอร์เวย์ ผู้ที่เข้าวงเวียนต้องให้ทาง รถที่อยู่ในวงเวียนแล้วมีสิทธิ์ก่อนเสมอ ป้าย 204 และป้ายให้ทางยืนยันสิ่งนี้",
         "explanation_en": "In Norwegian roundabouts, entering traffic must yield. Traffic already in the circle always has right of way. Sign 204 and any yield signs confirm this.",
         "category": "Vikeplikt",

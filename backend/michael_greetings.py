@@ -142,11 +142,11 @@ GREETINGS = {
         ],
         "streak": [
             "You're on a {streak}-answer correct streak{navn}. What would you like to continue with?",
-            "{streak} correct in a row{navn}. What next?",
+            "{streak}-answer correct streak{navn}. What next?",
         ],
         "streak_topic": [
             "You're on a {streak}-answer correct streak{navn}. {topic} has been a bit tricky lately. Shall we take it, or continue with something else?",
-            "{streak} correct in a row{navn}. {topic} has been slow. Do it now, or something else?",
+            "{streak}-answer correct streak{navn}. {topic} has been slow. Do it now, or something else?",
         ],
         "weak_topic": [
             "Hi{navn}. I see you've had a few mistakes on {topic} lately. Shall we go through it together, or is there something else today?",

@@ -375,6 +375,11 @@ class TestDocumentUploadChatIntegration(unittest.TestCase):
         app = FastAPI()
         app.include_router(document_router, prefix="/api")
         app.include_router(teacher_router, prefix="/api")
+        # These tests exercise document/chat integration, not the separately
+        # tested premium gate. Keep the gate enabled in production.
+        async def active_test_user():
+            return {"id": "document-integration-test", "is_premium": True}
+        app.dependency_overrides[tc.require_active_premium] = active_test_user
         self.client = TestClient(app)
 
     def tearDown(self):

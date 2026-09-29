@@ -25,7 +25,11 @@ from pathlib import Path
 from difflib import get_close_matches
 from typing import Optional, List, Literal
 
-from fastapi import APIRouter, Query, HTTPException
+from fastapi import APIRouter, Depends, Query, HTTPException
+try:
+    from premium_gate import require_active_premium
+except ImportError:  # package-style imports used by isolated tests
+    from backend.premium_gate import require_active_premium
 from pydantic import BaseModel, Field
 from motor.motor_asyncio import AsyncIOMotorClient
 try:
@@ -649,6 +653,8 @@ Teaching goal: student identifies FIRST — "Er jeg kongen eller tjeneren?" — 
 thinking about the specific rule. Simplifies complex situations.
 
 Adapt the King/Servant metaphor naturally to the declared language when teaching.
+NOTE: this Norwegian core is used for [LANGUAGE: no] only. The Thai core uses a
+host/guest metaphor instead — see _PROMPT_CORE_TH. Do not mix the two.
 
 ══════════════════════════════════════════
 REGEL 3 — 🚗 Michaels rundkjøringsregel
@@ -786,9 +792,31 @@ Thai vocabulary to use:
 - ระยะตอบสนอง, ระยะเบรก, ระยะหยุดรถ
 - การให้ทาง, วงเวียน, ป้ายหยุด, ป้ายให้ทาง, ทางม้าลาย, ถนนที่มีสิทธิ์ก่อน
 
-RIGHT-OF-WAY (การให้ทาง / vikeplikt):
-First ask: "คุณเป็นคนมีสิทธิ์ก่อน หรือคนต้องให้ทาง?"
+RIGHT-OF-WAY (การให้ทาง / vikeplikt) — 🏠 HOST OR GUEST:
+Use this as the mental first step whenever the student asks about การให้ทาง, วงเวียน,
+ป้ายหยุด, ป้ายให้ทาง, or "ใครต้องให้ทาง?".
+
+First ask: "คุณเป็นเจ้าของบ้าน หรือเป็นแขก?"
+
+Explanation:
+- 🏠 เจ้าของบ้าน (host) — you have right of way. This is your road.
+- 🚶 แขก (guest) — you must yield. You are entering someone else's road.
+
+Michael quote (deliver in Thai): "ถ้าคุณเป็นแขก ให้ขับแบบที่เจ้าของบ้านไม่ต้องลังเล ไม่ต้องชะลอ และไม่ต้องเบรกในบ้านของเขาเอง"
+
+Examples where the student is แขก (guest):
+- ป้ายให้ทาง → แขก
+- ป้ายหยุด → แขก (ต้องหยุดสนิทก่อนไปต่อ)
+- ออกจากที่จอดรถ → แขก
+- ข้ามทางเท้าเข้าถนน → แขก
+- เข้าวงเวียน → แขก
+- กฎรถทางขวา: รถที่มาจากทางขวาคือเจ้าของบ้าน
+
 Teach: การให้ทาง = วางแผนล่วงหน้า ไม่กีดขวาง ไม่รบกวน
+
+IMPORTANT — this metaphor is deliberately domestic, never hierarchical. A guest is
+welcome, not lesser. Never frame the student as a servant or as subordinate to another
+driver, and never use king/servant wording in Thai under any circumstance.
 
 ข้อเท็จจริงสำคัญ — วงเวียน: ในนอร์เวย์ วงเวียนทุกแห่งรถวิ่งทวนเข็มนาฬิกา (ซ้ายมือ) เสมอ ห้ามบอกว่าตามเข็มนาฬิกา — ผิดและอันตราย
 
@@ -1319,7 +1347,7 @@ def _concise_teacher_reply(reply_text: str, lang: str) -> str:
     concise = " ".join(allowed).strip()
     if not concise:
         return {
-            "th": "ตอนนี้ Michael ยังตอบให้สั้นและชัดเจนไม่ได้ กรุณาลองถามอีกครั้งครับ",
+            "th": "ตอนนี้ไมเคิลยังตอบให้สั้นและชัดเจนไม่ได้ กรุณาลองถามอีกครั้งครับ",
             "en": "Michael cannot give a short, precise answer right now. Please try again.",
             "no": "Michael kan ikke gi et kort og presist svar akkurat nå. Prøv igjen.",
         }.get(lang, "Michael kan ikke gi et kort og presist svar akkurat nå. Prøv igjen.")
@@ -1742,6 +1770,15 @@ def _explicit_sign_ids_for_message(user_msg: str) -> list[str]:
             "ถนนสายหลัก",
             "ป้ายทางเอก",
         ),
+        "332_0": (
+            "vendingsforbud",
+            "skilt 332",
+            "sign 332",
+            "traffic sign 332",
+            "no u-turn",
+            "u-turn sign",
+            "ห้ามกลับรถ",
+        ),
     }
 
     def matches(term: str) -> bool:
@@ -1758,6 +1795,7 @@ def _sign_ids_from_reply(reply_text: str) -> list[str]:
     standalone_labels = {
         "202_0": {"vikeplikt", "give way", "yield", "ป้ายให้ทาง", "การให้ทาง"},
         "204_0": {"stopp", "stop", "ป้ายหยุด", "หยุด"},
+        "332_0": {"vendingsforbud", "no u-turn", "ห้ามกลับรถ"},
     }
     segments = re.split(r"(?:\r?\n)+|[|•]|(?=[🛑🔴])", reply_text or "")
     normalized_segments = {
@@ -1783,10 +1821,59 @@ def _merge_sign_ids(*groups: list[str], limit: int = 2) -> list[str]:
     return merged
 
 
-def _active_sign_ids_from_history(prior: list[dict], explicit_sign_ids: list[str], limit: int = 2) -> list[str]:
-    """Signs still 'on screen': this message's explicit signs, else the latest turn's signs."""
+# Image Context Pollution fix (2026-09-29): a sign card shown two turns ago must not keep
+# haunting the system prompt (or the response) once the student has moved to a different
+# topic or said the picture was wrong. Both checks look only at the student's OWN current
+# message — no state to track, no memory of "was this corrected earlier".
+_TOPIC_SHIFT_TERMS = (
+    # Norwegian — calculation topics and "the rules" in general
+    "stoppelengde", "bremselengde", "reaksjonslengde", "beregn", "kalkuler", "formel",
+    "regelen", "reglene", "regler", "paragraf",
+    # Thai
+    "ระยะหยุดรถ", "ระยะเบรก", "ระยะตอบสนอง", "คำนวณ", "สูตรคำนวณ", "กฎ", "กฎหมาย",
+    # English
+    "stopping distance", "braking distance", "reaction distance", "calculate", "calculation",
+    "formula", "the rule", "the rules",
+)
+
+_IMAGE_CORRECTION_TERMS = (
+    # Norwegian — the student says the shown sign/image is not the right one
+    "feil bilde", "feil skilt", "det er feil", "det stemmer ikke", "ikke riktig skilt",
+    "ikke riktig bilde", "det er ikke riktig", "galt bilde", "galt skilt",
+    # Thai
+    "รูปผิด", "ป้ายผิด", "ไม่ใช่ป้ายนี้", "ไม่ใช่รูปนี้", "ผิดครับ", "ผิดค่ะ", "ผิดนะ",
+    # English
+    "wrong picture", "wrong image", "wrong sign", "that's wrong", "thats wrong",
+    "not the right sign", "not the correct sign", "not correct",
+)
+
+
+def _is_topic_shift_message(user_msg: str) -> bool:
+    """The student moved on to a calculation/rule topic — any sign still 'on screen' must be dropped."""
+    text = (user_msg or "").casefold()
+    return any(term in text for term in _TOPIC_SHIFT_TERMS)
+
+
+def _is_image_correction_message(user_msg: str) -> bool:
+    """The student says the sign/image shown was wrong — never keep showing it."""
+    text = (user_msg or "").casefold()
+    return any(term in text for term in _IMAGE_CORRECTION_TERMS)
+
+
+def _breaks_sign_context(user_msg: str) -> bool:
+    return _is_topic_shift_message(user_msg) or _is_image_correction_message(user_msg)
+
+
+def _active_sign_ids_from_history(
+    prior: list[dict], explicit_sign_ids: list[str], user_msg: str = "", limit: int = 2
+) -> list[str]:
+    """Signs still 'on screen': this message's explicit signs, else the latest turn's signs —
+    unless the student switched to a calculation/rule topic or corrected a wrong image, in
+    which case the old sign is dropped from the active context entirely."""
     if explicit_sign_ids:
         return _merge_sign_ids(explicit_sign_ids, limit=limit)
+    if _breaks_sign_context(user_msg):
+        return []
     for turn in reversed(prior or []):
         turn_ids = [str(s) for s in (turn.get("sign_ids") or []) if s]
         if turn_ids:
@@ -3539,7 +3626,48 @@ class TeacherChatResponse(BaseModel):
     media: list[dict] = Field(default_factory=list)
 
 
-@teacher_router.post("/teacher/chat", response_model=TeacherChatResponse)
+@teacher_router.get("/teacher/status")
+async def teacher_status():
+    """
+    Diagnostikk for Michael-chatten. Returnerer ingen hemmeligheter — kun hvilken
+    leverandor som er aktiv, hvilken modell som kalles, og om en nokkel finnes.
+
+    Hvorfor dette trengs: /teacher/chat kaster ALDRI 500. Feiler LLM-kallet,
+    fanges det og brukeren far _fallback_reply() med HTTP 200. Det er riktig for
+    eleven, men det gjor at feilen er usynlig utenfra — den finnes kun i
+    Railway-loggen. Dette endepunktet gjor arsaken lesbar pa ti sekunder.
+    """
+    keys_present = {
+        "DEEPSEEK_API_KEY": bool(os.environ.get("DEEPSEEK_API_KEY", "").strip()),
+        "OPENROUTER_API_KEY": bool(os.environ.get("OPENROUTER_API_KEY", "").strip()),
+        "OPENAI_API_KEY": bool(os.environ.get("OPENAI_API_KEY", "").strip()),
+    }
+    # Rekkefolgen her MA speile if/elif-kjeden ved modulimport, ellers lyver svaret.
+    if keys_present["DEEPSEEK_API_KEY"]:
+        needed = None
+    elif keys_present["OPENROUTER_API_KEY"]:
+        needed = None
+    elif keys_present["OPENAI_API_KEY"]:
+        needed = None
+    else:
+        needed = "DEEPSEEK_API_KEY"
+
+    return {
+        "ok": bool(LLM_KEY),
+        "provider": LLM_PROVIDER,
+        "model": LLM_MODEL,
+        "keys_configured": keys_present,
+        "missing_key_to_set": needed,
+        # Konfigurasjonen leses ved modulimport, ikke per forespoersel. Legger du
+        # inn nokkelen i Railway, ma tjenesten restarte for den tas i bruk.
+        "note": (
+            "Konfigurasjon leses ved oppstart. Ny miljovariabel krever restart. "
+            "ANTHROPIC_API_KEY brukes ikke av denne modulen."
+        ),
+    }
+
+
+@teacher_router.post("/teacher/chat", response_model=TeacherChatResponse, dependencies=[Depends(require_active_premium)])
 async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
     import time
     start_time = time.time()
@@ -3705,6 +3833,10 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             except Exception as ml_media_err:
                 logger.debug("Micro-lesson media card error: %s", ml_media_err)
         media = await _validate_teacher_response_media(media, lang)
+        if not explicit_sign_ids and _breaks_sign_context(user_msg):
+            # Image Context Pollution fix: a topic switch or "that image is wrong" must
+            # never carry the previous sign card (or any other auto-attached media) forward.
+            media = []
 
         if not LLM_KEY:
             raise RuntimeError("DEEPSEEK_API_KEY not configured")
@@ -3771,7 +3903,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             system_prompt += multimedia_str
 
         system_prompt += await _active_sign_context(
-            _active_sign_ids_from_history(prior, explicit_sign_ids), lang
+            _active_sign_ids_from_history(prior, explicit_sign_ids, user_msg), lang
         )
 
         if req.document_context:
@@ -3919,6 +4051,8 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             except Exception as mail_err:
                 logger.error("Failed to spawn alert email thread: %s", mail_err)
 
+        # error_str persisteres i teacher_chat_logs og logges — den er kildene
+        # til hvorfor eleven fikk fallback. Ma settes her.
         error_str = f"LiteLLM: {type(e).__name__}({e})"
         reply_text = _fallback_reply(lang)
 
@@ -3931,6 +4065,8 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         reply_text = _sanitize_gender_particles(reply_text)
     reply_sign_ids = _sign_ids_from_reply(reply_text)
     sign_ids = _strict_response_sign_ids(explicit_sign_ids, reply_sign_ids)
+    if not explicit_sign_ids and _breaks_sign_context(user_msg):
+        sign_ids = []  # Image Context Pollution fix: see _breaks_sign_context()
 
     exact_response_media = []
     if sign_ids:
@@ -3940,6 +4076,8 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             logger.error("Failed to resolve exact response sign media: %s", media_ex)
     media = _reconcile_teacher_media(media, sign_ids, exact_response_media)
     media = await _validate_teacher_response_media(media, lang)
+    if not explicit_sign_ids and _breaks_sign_context(user_msg):
+        media = []  # Image Context Pollution fix: see _breaks_sign_context()
 
     # Persist both messages. Chat history is helpful, but it must never block a
     # completed teacher response when MongoDB is temporarily read-only/full.
@@ -4013,7 +4151,12 @@ def _sanitize_gender_particles(text: str) -> str:
 
 def _fallback_reply(lang: str) -> str:
     if lang == "th":
-        return "ขออภัยครับ ขณะนี้ครูไมเคิลไม่สามารถให้บริการได้ชั่วคราว กรุณาลองใหม่อีกครั้งในภายหลังครับผม"
+        # Michael er mann. ครับ er den mannlige hoflighetspartikkelen.
+        # Endelsen นะครับ (ikke ครับผม) er valgt bevisst: begge er mannlige,
+        # men ครับผม er mer underdanig — det klinger som en ekspeditor.
+        # Michael er trafikklaerer med 16 ars erfaring og skal vaere trygg
+        # og rolig, ikke servil. Michael kan overprove pa to sekunder.
+        return "ขออภัยครับ ขณะนี้ครูไมเคิลไม่สามารถให้บริการได้ชั่วคราว กรุณาลองใหม่อีกครั้งในภายหลังนะครับ"
     if lang == "en":
         return "Sorry, Michael is not available right now. Please try again in a moment."
     return "Beklager, Michael er ikke tilgjengelig akkurat nå. Prøv igjen om litt."
