@@ -221,6 +221,26 @@ class LanguageLessRedirectTests(unittest.TestCase):
         self.assertEqual(r.status_code, 302)
         self.assertEqual(r.headers["location"], "/th")
 
+    def test_root_head_defaults_to_thai_when_no_headers(self):
+        r = client.head("/")
+        self.assertEqual(r.status_code, 302)
+        self.assertEqual(r.headers["location"], "/th")
+
+    def test_root_head_redirects_to_norwegian_with_nb_no(self):
+        r = client.head("/", headers={"accept-language": "nb-NO"})
+        self.assertEqual(r.status_code, 302)
+        self.assertEqual(r.headers["location"], "/no")
+
+    def test_root_redirects_to_thai_when_thai_present_in_accept_language(self):
+        r = client.get("/", headers={"accept-language": "nb-NO,th;q=0.8,en;q=0.7"})
+        self.assertEqual(r.status_code, 302)
+        self.assertEqual(r.headers["location"], "/th")
+
+    def test_root_redirects_to_thai_for_unknown_language(self):
+        r = client.get("/", headers={"accept-language": "da-DK,da;q=0.9,sv;q=0.8"})
+        self.assertEqual(r.status_code, 302)
+        self.assertEqual(r.headers["location"], "/th")
+
     def test_root_respects_saved_cookie_over_browser_language(self):
         r = client.get("/", cookies={"t2d_site_lang": "no"}, headers={"accept-language": "en-US"})
         self.assertEqual(r.status_code, 302)

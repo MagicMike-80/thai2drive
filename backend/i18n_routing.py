@@ -79,17 +79,41 @@ def normalize_lang(lang: Optional[str]) -> str:
 
 
 def detect_lang(request: Request) -> str:
-    """Cookie first (explicit prior choice), then Accept-Language, then Thai."""
+    """
+    Language detection priority for root URL redirect:
+    1. Saved cookie (t2d_site_lang) from prior explicit user selection.
+    2. Accept-Language on first visit:
+       - Thai ('th') prioritized if present anywhere in Accept-Language
+         (Thai users in Norway often have Norwegian primary system locale on their phone).
+       - Norwegian ('nb', 'nn', 'no') -> 'no'.
+       - English ('en') -> 'en'.
+    3. Fallback: 'th' (Thai2Drive primary target audience is Thai in Norway).
+    """
     cookie = request.cookies.get(LANG_COOKIE)
     if cookie in LANGS:
         return cookie
-    accept = request.headers.get("accept-language", "")
-    for part in accept.split(","):
-        code = part.split(";")[0].strip().lower()[:2]
-        if code in ("nb", "nn"):
-            code = "no"
-        if code in LANGS:
-            return code
+
+    accept = request.headers.get("accept-language", "").lower()
+    if not accept:
+        return "th"
+
+    parts = [p.strip() for p in accept.split(",") if p.strip()]
+
+    # Priority 2a: If Thai is anywhere in Accept-Language, prioritize Thai
+    for p in parts:
+        code = p.split(";")[0].strip()[:2]
+        if code == "th":
+            return "th"
+
+    # Priority 2b: Norwegian or English
+    for p in parts:
+        code = p.split(";")[0].strip()[:2]
+        if code in ("nb", "nn", "no"):
+            return "no"
+        if code == "en":
+            return "en"
+
+    # Priority 3: Fallback is Thai
     return "th"
 
 

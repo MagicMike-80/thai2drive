@@ -9,9 +9,8 @@
  * til nettverket slik at audio/video streaming fungerer 100% på iPhone/Safari.
  */
 
-const CACHE_NAME = 'thai2drive-offline-v1.0.6';
+const CACHE_NAME = 'thai2drive-offline-v1.0.7';
 const OFFLINE_URLS = [
-  '/',
   '/api/assets/favicon.ico'
 ];
 
@@ -45,6 +44,11 @@ self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
   const url = new URL(event.request.url);
+
+  // ALDRI avskjær rot-URL eller språkstiene (/th, /no, /en) — disse skal alltid til server
+  if (url.pathname === '/' || url.pathname === '/th' || url.pathname === '/no' || url.pathname === '/en') {
+    return;
+  }
 
   // 1. KRITISK FORBUD: Avbryt umiddelbart for alle /api/ endepunkter
   if (url.pathname.startsWith('/api/') || url.pathname.includes('/api/')) {
