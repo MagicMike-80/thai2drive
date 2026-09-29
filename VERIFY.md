@@ -95,6 +95,12 @@ rapporten før du konkluderer.
 som jobber samtidig. Funksjonalitet kan ligge ferdig under et branchnavn du ikke
 letet etter. List brancher før du konkluderer med at noe mangler.
 
+**Nettlesercache og service worker.** En service worker kan servere gammel side fra
+nettleserens cache uavhengig av serveren, også etter en vellykket deploy. Sjekk alltid
+med cache-bryter (`-H "Cache-Control: no-cache"` og `?t=$(date +%s)`), og bruk en ny
+nettleserprofil for rendret DOM. Hashen fra `/api/web/version` er fasiten for hva
+serveren kjører, ikke hva en gammel fane viser.
+
 **Push til main er ikke deploy.** En commit på `origin/main` betyr at koden er
 versjonert, ikke at den kjører. Kun produksjonsdomenet avgjør.
 
