@@ -4,9 +4,10 @@ All pages are styled in a unified dark theme matching the mobile app.
 Mounted under /api/* so the k8s ingress routes them to the backend.
 """
 from fastapi import APIRouter, Request
-from fastapi.responses import HTMLResponse, PlainTextResponse, Response
+from fastapi.responses import HTMLResponse, PlainTextResponse, Response, RedirectResponse
 
 from site_config import public_site_url, site_url, canonical_url
+from i18n_routing import LANGS, detect_lang, set_lang_cookie, api_prefix_redirect
 
 website_router = APIRouter()
 
@@ -541,166 +542,52 @@ def _page(title: str, body: str, description: str = "", path: str = "/"):
 </html>"""
 
 
-# ─────────────────────────── LANDING PAGE ───────────────────────────
+# ─────────────────────────── LANDING PAGE (language-less entry) ───────────────────────────
 @website_router.get("/website", response_class=HTMLResponse)
 @website_router.get("/", response_class=HTMLResponse)  # fallback inside /api
-def landing():
-    # Delegate to the new high-conversion landing page module.
-    from landing import build_landing_page  # local import to keep server import-time cheap
-    html = build_landing_page(
-        chat_css=_CHAT_CSS,
-        chat_widget_html=_CHAT_WIDGET_HTML,
-        chat_js=_CHAT_JS,
-    )
-    return HTMLResponse(html)
-    body = f"""
-<!-- HERO -->
-<section class="hero container">
-  <img src="{ICON_URL}" alt="{BRAND} app icon" class="hero-icon" loading="lazy"/>
-  <h1>Bestå norsk teoriprøve<br/>på <span>ditt språk</span></h1>
-  <p>Over 1000 spørsmål på thai, norsk og engelsk med forklaringer – laget for thai-folk som bor i Norge.</p>
-
-  <div class="flags" aria-label="Språk">
-    <div class="flag flag-th"><div></div><div></div><div></div><div></div><div></div></div>
-    <div class="flag flag-no"><div class="blue"></div><div class="bluev"></div></div>
-    <div class="flag flag-gb"><div class="r1"></div><div class="r2"></div></div>
-  </div>
-
-  <div class="hero-badges">
-    <span class="badge"><span class="dot"></span> 1000+ spørsmål</span>
-    <span class="badge">🇹🇭 Thai · 🇳🇴 Norsk · 🇬🇧 Engelsk</span>
-    <span class="badge">🎯 Ekte eksamensformat</span>
-  </div>
-
-  <div class="hero-btns">
-    <a href="/quiz-app/" class="hero-cta">▶ Test appen nå</a>
-    <a href="/api/guide" class="hero-cta-secondary">📖 Guide: Fra Thailand til norsk førerkort</a>
-    <span class="hero-cta-secondary" style="cursor:default;opacity:.7">📱 Google Play — kommer snart</span>
-  </div>
-</section>
-
-<!-- FEATURES -->
-<section id="features" class="container">
-  <div class="section-head">
-    <span class="eyebrow">Hvorfor Thai2Drive</span>
-    <h2>Alt du trenger for å bestå</h2>
-    <p>Bygd sammen med thai-folk som har gjennomført den norske teoriprøven.</p>
-  </div>
-  <div class="features">
-    <div class="feature">
-      <div class="feature-icon">🌐</div>
-      <h3>Tre språk samtidig</h3>
-      <p>Les spørsmål og forklaringer på thai, norsk eller engelsk – bytt når som helst.</p>
-    </div>
-    <div class="feature">
-      <div class="feature-icon">📚</div>
-      <h3>1000+ ekte spørsmål</h3>
-      <p>Dekker alle kategoriene: vikeplikt, fartsgrenser, trafikkskilt, sikkerhet og mer.</p>
-    </div>
-    <div class="feature">
-      <div class="feature-icon">🎯</div>
-      <h3>Eksamensmodus</h3>
-      <p>Øv med 45 spørsmål på 90 minutter – akkurat som den ekte teoriprøven.</p>
-    </div>
-    <div class="feature">
-      <div class="feature-icon">💡</div>
-      <h3>Forklaringer på alle svar</h3>
-      <p>Forstå hvorfor et svar er riktig – ikke bare pugg.</p>
-    </div>
-    <div class="feature">
-      <div class="feature-icon">🔁</div>
-      <h3>Gjennomgang av feil</h3>
-      <p>Øv ekstra på spørsmålene du svarte feil på.</p>
-    </div>
-    <div class="feature">
-      <div class="feature-icon">🔥</div>
-      <h3>Daglig rutine</h3>
-      <p>Hold streak-en gående med 10 gratis spørsmål hver dag.</p>
-    </div>
-  </div>
-</section>
-
-<!-- PRICING -->
-<section id="pricing" class="container">
-  <div class="section-head">
-    <span class="eyebrow">Priser</span>
-    <h2>Start gratis – oppgrader når du er klar</h2>
-    <p>Alle planer gir ubegrenset tilgang til hele spørsmåldatabasen og eksamen.</p>
-  </div>
-  <div class="pricing">
-    <div class="plan">
-      <h3>Gratis</h3>
-      <div class="price">0 kr<small> / for alltid</small></div>
-      <ul>
-        <li>10 spørsmål per dag</li>
-        <li>Dagens test</li>
-        <li>Alle tre språk</li>
-        <li>Fullt norsk grensesnitt</li>
-      </ul>
-    </div>
-    <div class="plan">
-      <h3>Månedlig</h3>
-      <div class="price">99 kr<small> / mnd</small></div>
-      <ul>
-        <li>Ubegrenset spørsmål</li>
-        <li>Full eksamensmodus</li>
-        <li>Gjennomgang av feil</li>
-        <li>Ingen annonser</li>
-      </ul>
-    </div>
-    <div class="plan popular">
-      <span class="ribbon">Beste verdi</span>
-      <h3>3 måneder</h3>
-      <div class="price">299 kr<small> / 3 mnd</small></div>
-      <ul>
-        <li>Alt i Månedlig</li>
-        <li>Rolig 3-måneders tilgang</li>
-        <li>Perfekt frem til prøven</li>
-        <li>Ingen annonser</li>
-      </ul>
-    </div>
-    <div class="plan">
-      <span class="ribbon" style="background:#6366F1;color:#fff">Livstid</span>
-      <h3>Livstid</h3>
-      <div class="price">699 kr<small> / engangsbetaling</small></div>
-      <ul>
-        <li>Betal én gang, bruk for alltid</li>
-        <li>Alle fremtidige oppdateringer</li>
-        <li>Perfekt hvis du skal kjøre flere prøver</li>
-        <li>Ingen annonser</li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<!-- CTA band -->
-<section class="cta-band">
-  <div class="container">
-    <h2>Klar til å bestå?</h2>
-    <p>Last ned {BRAND} og kom i gang på under ett minutt.</p>
-    <div class="hero-btns" style="justify-content:flex-start">
-      <a href="/quiz-app/" class="hero-cta">▶ Test i nettleseren</a>
-      <span class="hero-cta-secondary" style="cursor:default;opacity:.7">📱 Google Play — kommer snart</span>
-    </div>
-  </div>
-</section>
-"""
-    return HTMLResponse(_page(
-        f"{BRAND} – Norsk teoriprøve på thai, norsk og engelsk",
-        body,
-        description="Bestå den norske teoriprøven lettere – 1000+ spørsmål med forklaringer på thai, norsk og engelsk. Laget for thai-folk i Norge.",
-    ))
+def landing(request: Request):
+    api_redirect = api_prefix_redirect(request)
+    if api_redirect:
+        return api_redirect
+    # No language in the URL: pick one safely (saved cookie > browser language
+    # > Thai) and send the visitor to the real, language-pure URL. Temporary
+    # redirect so search engines keep crawling / and discover all variants.
+    lang = detect_lang(request)
+    qs = f"?{request.url.query}" if request.url.query else ""
+    response = RedirectResponse(url=f"/{lang}{qs}", status_code=302)
+    set_lang_cookie(response, lang)
+    return response
 
 
 # ─────────────────────────── GUIDE PAGE ───────────────────────────
-@website_router.get("/guide", response_class=HTMLResponse)
-def guide_page():
+@website_router.get("/th/guide", response_class=HTMLResponse)
+@website_router.get("/no/guide", response_class=HTMLResponse)
+@website_router.get("/en/guide", response_class=HTMLResponse)
+def guide_page_lang(request: Request):
+    api_redirect = api_prefix_redirect(request)
+    if api_redirect:
+        return api_redirect
+    lang = request.url.path.split("/")[1]  # "th" | "no" | "en"
     try:
         from guide import build_guide_page
-        return HTMLResponse(build_guide_page())
+        response = HTMLResponse(build_guide_page(lang))
+        set_lang_cookie(response, lang)
+        return response
     except Exception as e:
         import traceback
         return HTMLResponse(f"<html><body style='background:#0B1226;color:#fff;padding:40px;font-family:sans-serif'><h2>Feil: {e}</h2><pre>{traceback.format_exc()}</pre></body></html>")
+
+
+@website_router.get("/guide", response_class=HTMLResponse)
+def guide_page(request: Request):
+    # Legacy language-less URL: redirect to the language-pure version.
+    api_redirect = api_prefix_redirect(request)
+    if api_redirect:
+        return api_redirect
+    lang = detect_lang(request)
+    response = RedirectResponse(url=f"/{lang}/guide", status_code=302)
+    set_lang_cookie(response, lang)
+    return response
 
 
 # ─────────────────────────── PRIVACY POLICY ───────────────────────────
@@ -1236,18 +1123,24 @@ def laeringsbok():
 @website_router.get("/sitemap.xml")
 def sitemap_xml():
     """XML sitemap using the current public site URL (env-configurable)."""
-    # Build the routable paths the same way the HTML pages do
-    pages = [
-        ("/",            "1.0", "weekly"),
+    from i18n_routing import LANGS
+
+    # Legacy, single-language pages (unchanged this round).
+    plain_pages = [
         ("/privacy",     "0.5", "yearly"),
         ("/terms",       "0.5", "yearly"),
         ("/support",     "0.6", "monthly"),
     ]
+    # Language-grouped pages: each group gets one <url> entry per language,
+    # cross-linked via xhtml:link hreflang alternates.
+    lang_groups = [
+        ("",       "1.0", "weekly"),   # home: /th /no /en
+        ("/guide", "0.8", "monthly"),  # /th/guide /no/guide /en/guide
+        ("/app",   "0.9", "weekly"),   # /th/app /no/app /en/app
+    ]
+
     urls = ""
-    for path, prio, freq in pages:
-        # When served under /api/ prefix on the preview we expose canonical
-        # without the prefix so search engines see clean URLs once a custom
-        # domain is configured. canonical_url() handles this via SITE_ROUTING_MODE.
+    for path, prio, freq in plain_pages:
         loc = canonical_url(path)
         urls += (
             "  <url>\n"
@@ -1256,9 +1149,36 @@ def sitemap_xml():
             f"    <priority>{prio}</priority>\n"
             "  </url>\n"
         )
+
+    def _lang_group_xml(suffix: str, prio: str, freq: str) -> str:
+        base = public_site_url()
+        block = ""
+        for lang in LANGS:
+            loc = f"{base}/{lang}{suffix}"
+            alts = (
+                f'    <xhtml:link rel="alternate" hreflang="th" href="{base}/th{suffix}"/>\n'
+                f'    <xhtml:link rel="alternate" hreflang="nb" href="{base}/no{suffix}"/>\n'
+                f'    <xhtml:link rel="alternate" hreflang="no" href="{base}/no{suffix}"/>\n'
+                f'    <xhtml:link rel="alternate" hreflang="en" href="{base}/en{suffix}"/>\n'
+                f'    <xhtml:link rel="alternate" hreflang="x-default" href="{base}/th{suffix}"/>\n'
+            )
+            block += (
+                "  <url>\n"
+                f"    <loc>{loc}</loc>\n"
+                f"{alts}"
+                f"    <changefreq>{freq}</changefreq>\n"
+                f"    <priority>{prio}</priority>\n"
+                "  </url>\n"
+            )
+        return block
+
+    for suffix, prio, freq in lang_groups:
+        urls += _lang_group_xml(suffix, prio, freq)
+
     xml = (
         '<?xml version="1.0" encoding="UTF-8"?>\n'
-        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" '
+        'xmlns:xhtml="http://www.w3.org/1999/xhtml">\n'
         f"{urls}"
         "</urlset>\n"
     )
@@ -1295,3 +1215,29 @@ def whoami(request: Request):
         "base_url": str(request.base_url),
         "public_site_url_env": public_site_url(),
     }
+
+
+# ─────────────────────────── LANGUAGE-PREFIXED LANDING PAGE ───────────────────────────
+# Registered explicitly for /th, /no, /en so they do not shadow /web, /app, or other routes
+@website_router.get("/th", response_class=HTMLResponse)
+@website_router.get("/no", response_class=HTMLResponse)
+@website_router.get("/en", response_class=HTMLResponse)
+def landing_lang(request: Request):
+    api_redirect = api_prefix_redirect(request)
+    if api_redirect:
+        return api_redirect
+    # Extract language from path: /th -> "th", /api/th -> "th"
+    parts = request.url.path.strip("/").split("/")
+    lang = parts[1] if parts[0] == "api" and len(parts) > 1 else parts[0]
+    from i18n_routing import normalize_lang
+    lang = normalize_lang(lang)
+    from landing import build_landing_page
+    html = build_landing_page(
+        chat_css=_CHAT_CSS,
+        chat_widget_html=_CHAT_WIDGET_HTML,
+        chat_js=_CHAT_JS,
+        lang=lang,
+    )
+    response = HTMLResponse(html)
+    set_lang_cookie(response, lang)
+    return response

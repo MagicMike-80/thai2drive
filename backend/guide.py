@@ -1,7 +1,7 @@
 """
 Guide page: Fra Thailand til norsk førerkort
 Trilingual: Thai / Norwegian / English
-Route: /api/guide
+Routes: /th/guide, /no/guide, /en/guide (legacy /guide and /api/guide redirect here)
 """
 
 ICON_URL = "/api/assets/developer-icon-512.png"
@@ -130,18 +130,17 @@ footer a{color:#64748B}
 
 _JS = r"""
 (function(){
-  const langs = ['th','no','en'];
-  const saved = localStorage.getItem('t2d_guide_lang') || 'no';
-  function setLang(code){
-    langs.forEach(l => document.body.classList.remove('lang-'+l));
-    document.body.classList.add('lang-'+code);
-    localStorage.setItem('t2d_guide_lang', code);
-    document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active', b.dataset.lang===code));
-  }
+  // The server already rendered this exact URL (/th/guide, /no/guide or
+  // /en/guide) in the right language, so we just sync storage to match it —
+  // no client-side override of body.lang-* here. Clicking a flag navigates
+  // to the sibling-language guide URL (t2dSwitchLang, injected in <head>).
+  const current = (document.body.className.match(/lang-(th|no|en)/) || [,'no'])[1];
+  localStorage.setItem('t2d_guide_lang', current);
+  document.cookie = 't2d_site_lang=' + current + ';path=/;max-age=31536000;SameSite=Lax';
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active', b.dataset.lang===current));
   document.querySelectorAll('.lang-btn').forEach(btn=>{
-    btn.addEventListener('click',()=>setLang(btn.dataset.lang));
+    btn.addEventListener('click',()=>t2dSwitchLang(btn.dataset.lang));
   });
-  setLang(saved);
 
   // Show PDF banner only for logged-in members
   const token = localStorage.getItem('t2d_token');
@@ -158,30 +157,40 @@ _JS = r"""
 """
 
 
-def build_guide_page() -> str:
-    return f"""<!DOCTYPE html>
-<html lang="no">
+def build_guide_page(lang: str = "no") -> str:
+    from i18n_routing import (
+        normalize_lang, HTML_LANG, seo_meta, hreflang_tags, canonical_for, LANG_SWITCH_JS,
+        filter_guide_html,
+    )
+    lang = normalize_lang(lang)
+    meta = seo_meta("guide", lang)
+    canon = canonical_for(lang, "/guide")
+    raw_html = f"""<!DOCTYPE html>
+<html lang="{HTML_LANG[lang]}">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Fra Thailand til norsk førerkort | Thai2Drive</title>
-<meta name="description" content="Komplett guide for thai-folk i Norge: Trinn for trinn til norsk førerkort. Krav, kostnader, teoriprøve og kjøreprøve forklart på thai og norsk."/>
+<title>{meta['title']}</title>
+<meta name="description" content="{meta['description']}"/>
+<link rel="canonical" href="{canon}"/>
+{hreflang_tags("/guide")}
 <link rel="icon" href="{ICON_URL}"/>
 <style>{_CSS}</style>
+<script>{LANG_SWITCH_JS}</script>
 </head>
-<body class="lang-no">
+<body class="lang-{lang}">
 
 <!-- NAV -->
 <nav class="nav">
   <div class="nav-inner">
-    <a href="/api/website" class="brand">
+    <a href="/{lang}" class="brand">
       <img src="{ICON_URL}" alt="T2D"/>
       <span>Thai<span class="t2d">2</span>Drive</span>
     </a>
     <div class="lang-row">
-      <button class="lang-btn active" data-lang="th">TH</button>
-      <button class="lang-btn" data-lang="no">NO</button>
-      <button class="lang-btn" data-lang="en">EN</button>
+      <button class="lang-btn{' active' if lang == 'th' else ''}" data-lang="th">TH</button>
+      <button class="lang-btn{' active' if lang == 'no' else ''}" data-lang="no">NO</button>
+      <button class="lang-btn{' active' if lang == 'en' else ''}" data-lang="en">EN</button>
     </div>
   </div>
 </nav>
@@ -633,15 +642,16 @@ def build_guide_page() -> str:
   <div class="cta-box">
     <h2><span class="tl tl-th">พร้อมสอบทฤษฎีแล้วหรือยัง?</span><span class="tl tl-no">Klar til å øve på teoriprøven?</span><span class="tl tl-en">Ready to practice the theory test?</span></h2>
     <p><span class="tl tl-th">ฝึกกับคำถาม 700+ ข้อ บน Thai2Drive — เป็นภาษาไทย นอร์เวย์ และอังกฤษ</span><span class="tl tl-no">Øv med 700+ spørsmål på Thai2Drive — på thai, norsk og engelsk</span><span class="tl tl-en">Practice with 700+ questions on Thai2Drive — in Thai, Norwegian and English</span></p>
-    <a href="/api/website" class="cta-btn">🚀 <span class="tl tl-th">ฝึกฟรี</span><span class="tl tl-no">Prøv gratis</span><span class="tl tl-en">Try free</span></a>
+    <a href="/{lang}/app" class="cta-btn">🚀 <span class="tl tl-th">ฝึกฟรี</span><span class="tl tl-no">Prøv gratis</span><span class="tl tl-en">Try free</span></a>
   </div>
 
 </div><!-- /container -->
 
 <footer>
-  <p>© 2025 Thai2Drive · <a href="/api/privacy">Personvern</a> · <a href="/api/terms">Vilkår</a></p>
+  <p>© 2025 Thai2Drive · <a href="/privacy">Personvern</a> · <a href="/terms">Vilkår</a></p>
 </footer>
 
 <script>{_JS}</script>
 </body>
 </html>"""
+    return filter_guide_html(raw_html, lang)

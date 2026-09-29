@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse
 import os as _os
 import datetime as _dt
@@ -10865,6 +10865,7 @@ function setLang(lang) {
   var previousLang = appLang;
   appLang = lang;
   _ls.set('t2d_lang', lang);
+  try { document.cookie = 't2d_site_lang=' + lang + ';path=/;max-age=31536000;SameSite=Lax'; } catch(e) {}
   ['TH','NO','EN'].forEach(function(l) {
     var btn = document.getElementById('lang' + l);
     if (btn) btn.classList.toggle('active', lang === l.toLowerCase());
@@ -13312,46 +13313,123 @@ if ('serviceWorker' in navigator) {
 def _webapp_html(default_lang: str = "th") -> str:
     from stopping_distance_web import install as install_stopping_distance
     from studybook_web import install as install_studybook
+    from i18n_routing import (
+        normalize_lang, HTML_LANG, seo_meta, app_hreflang_tags, app_canonical_for,
+    )
+    lang = normalize_lang(default_lang)
     html = install_studybook(install_stopping_distance(WEBAPP_HTML)).replace('__DEPLOY_VERSION__', DEPLOY_VERSION)
-    if default_lang != "th":
-        html = html.replace("_ls.get('t2d_lang') || 'th'", f"_ls.get('t2d_lang') || '{default_lang}'")
+    if lang != "th":
+        html = html.replace("_ls.get('t2d_lang') || 'th'", f"_ls.get('t2d_lang') || '{lang}'")
+
+    meta = seo_meta("app", lang)
+    html = html.replace(
+        '<html lang="th" data-theme="dark" translate="no" class="notranslate">',
+        f'<html lang="{HTML_LANG[lang]}" data-theme="dark" translate="no" class="notranslate">',
+        1,
+    )
+    html = html.replace("<title>Thai2Drive</title>", f"<title>{meta['title']}</title>", 1)
+    html = html.replace(
+        '<meta id="metaDescription" name="description" content="ฝึกข้อสอบทฤษฎีใบขับขี่นอร์เวย์ด้วยภาษาไทย นอร์เวย์ และอังกฤษกับ Thai2Drive">',
+        f'<meta id="metaDescription" name="description" content="{meta["description"]}">',
+        1,
+    )
+    html = html.replace(
+        '<meta name="deploy-version" content="__DEPLOY_VERSION__">'.replace('__DEPLOY_VERSION__', DEPLOY_VERSION),
+        (
+            f'<meta name="deploy-version" content="{DEPLOY_VERSION}">\n'
+            f'<link rel="canonical" href="{app_canonical_for(lang)}"/>\n'
+            f'{app_hreflang_tags()}'
+        ),
+        1,
+    )
     return html
 
 
-@webapp_router.get("/web", response_class=HTMLResponse)
-async def web_app():
+def _redirect_web_to_app(request: Request, lang_suffix: str):
+    from fastapi.responses import RedirectResponse
+    qs = f"?{request.url.query}" if request.url.query else ""
+    return RedirectResponse(url=f"/app{lang_suffix}{qs}", status_code=301)
+
+
+@webapp_router.get("/web")
+async def web_app(request: Request):
+    """Legacy entry point — permanently redirects to /app (query preserved)."""
+    return _redirect_web_to_app(request, "")
+
+
+@webapp_router.get("/web/no")
+async def web_app_no(request: Request):
+    return _redirect_web_to_app(request, "/no")
+
+
+@webapp_router.get("/web/th")
+async def web_app_th(request: Request):
+    return _redirect_web_to_app(request, "/th")
+
+
+@webapp_router.get("/web/en")
+async def web_app_en(request: Request):
+    return _redirect_web_to_app(request, "/en")
+
+
+def _serve_app(request: Request, lang: str):
+    from i18n_routing import api_prefix_redirect, set_lang_cookie
+    api_redirect = api_prefix_redirect(request)
+    if api_redirect:
+        return api_redirect
     if MAINTENANCE_MODE:
         return HTMLResponse(content=MAINTENANCE_HTML, status_code=503)
-    return HTMLResponse(content=_webapp_html("th"))
+    response = HTMLResponse(content=_webapp_html(lang))
+    set_lang_cookie(response, lang)
+    return response
 
 
-@webapp_router.get("/web/no", response_class=HTMLResponse)
-async def web_app_no():
-    """Clean Norwegian entry point - same SPA as /web, defaults to Norwegian."""
-    if MAINTENANCE_MODE:
-        return HTMLResponse(content=MAINTENANCE_HTML, status_code=503)
-    return HTMLResponse(content=_webapp_html("no"))
+@webapp_router.get("/th/app", response_class=HTMLResponse)
+async def app_th_prefix(request: Request):
+    """Clean language-first Thai app entry point."""
+    return _serve_app(request, "th")
 
 
-@webapp_router.get("/web/th", response_class=HTMLResponse)
-async def web_app_th():
-    """Clean Thai entry point - same SPA as /web, defaults to Thai."""
-    if MAINTENANCE_MODE:
-        return HTMLResponse(content=MAINTENANCE_HTML, status_code=503)
-    return HTMLResponse(content=_webapp_html("th"))
+@webapp_router.get("/no/app", response_class=HTMLResponse)
+async def app_no_prefix(request: Request):
+    """Clean language-first Norwegian app entry point."""
+    return _serve_app(request, "no")
 
 
-@webapp_router.get("/web/en", response_class=HTMLResponse)
-async def web_app_en():
-    """Clean English entry point - same SPA as /web, defaults to English."""
-    if MAINTENANCE_MODE:
-        return HTMLResponse(content=MAINTENANCE_HTML, status_code=503)
-    return HTMLResponse(content=_webapp_html("en"))
+@webapp_router.get("/en/app", response_class=HTMLResponse)
+async def app_en_prefix(request: Request):
+    """Clean language-first English app entry point."""
+    return _serve_app(request, "en")
+
+
+@webapp_router.get("/app", response_class=HTMLResponse)
+async def app_root(request: Request):
+    """Clean entry point — defaults to Thai (same SPA as /th/app)."""
+    return _serve_app(request, "th")
+
+
+@webapp_router.get("/app/no", response_class=HTMLResponse)
+async def app_no(request: Request):
+    """Clean Norwegian entry point - same SPA as /no/app."""
+    return _serve_app(request, "no")
+
+
+@webapp_router.get("/app/th", response_class=HTMLResponse)
+async def app_th(request: Request):
+    """Clean Thai entry point - same SPA as /th/app."""
+    return _serve_app(request, "th")
+
+
+@webapp_router.get("/app/en", response_class=HTMLResponse)
+async def app_en(request: Request):
+    """Clean English entry point - same SPA as /en/app."""
+    return _serve_app(request, "en")
+
 
 @webapp_router.get("/web/version")
 async def web_version():
     """Returns the current deploy version. Use this to confirm what build is live."""
-    return {"version": DEPLOY_VERSION, "endpoint": "/api/web"}
+    return {"version": DEPLOY_VERSION, "endpoint": "/app"}
 
 VOICE_TESTER_HTML = """<!DOCTYPE html>
 <html lang="no">

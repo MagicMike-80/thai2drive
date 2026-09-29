@@ -6589,7 +6589,8 @@ app.include_router(quiz_terms_router)
 
 # ==================== WEB APP ====================
 from webapp import webapp_router  # noqa: E402
-app.include_router(webapp_router, prefix="/api")
+app.include_router(webapp_router, prefix="")
+app.include_router(webapp_router, prefix="/api")  # also serve under /api/* for Railway routing
 app.include_router(admin_analytics_router, prefix="/api")
 
 # ==================== MICRO LESSONS (Thailand vs Norge) ====================

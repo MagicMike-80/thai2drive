@@ -555,7 +555,7 @@ footer p{color:#64748B;font-size:13px}
 .cta-band{background:linear-gradient(180deg,rgba(0,245,255,.05) 0%,rgba(11,18,38,.80) 100%)!important}
 
 /* Nav web-app button */
-.nav-links a[href="/api/web"]{
+.nav-links a[href^="/app/"]{
   background:linear-gradient(135deg,var(--neon-cyan),#00C8E8)!important;
   color:#0B1226!important;
   box-shadow:0 0 16px rgba(0,245,255,.3)!important;
@@ -575,11 +575,11 @@ footer p{color:#64748B;font-size:13px}
 """
 
 
-def _nav_html() -> str:
+def _nav_html(lang: str = "th") -> str:
     return f"""
 <nav class="nav">
   <div class="nav-inner">
-    <a href="/api/website" class="brand">
+    <a href="/{lang}" class="brand">
       <img src="{ICON_URL}" alt="T2D"/>
       <span>Thai<span class="t2d">2</span>Drive</span>
     </a>
@@ -594,21 +594,21 @@ def _nav_html() -> str:
         <span data-lang="no">Priser</span>
         <span data-lang="en">Pricing</span>
       </a></li>
-      <li><a href="/api/guide" class="guide-blink">📖 Guide</a></li>
-      <li><a href="/api/web" style="display:inline-flex;align-items:center;gap:6px;background:#FF9933;color:#0F172A;font-weight:800;font-size:13px;padding:7px 14px;border-radius:8px;transition:opacity .15s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">🚀 <span data-lang="th">เปิดเว็บแอป</span><span data-lang="no">Åpne web-appen</span><span data-lang="en">Open web app</span></a></li>
+      <li><a href="/{lang}/guide" class="guide-blink">📖 Guide</a></li>
+      <li><a href="/{lang}/app" style="display:inline-flex;align-items:center;gap:6px;background:#FF9933;color:#0F172A;font-weight:800;font-size:13px;padding:7px 14px;border-radius:8px;transition:opacity .15s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">🚀 <span data-lang="th">เปิดเว็บแอป</span><span data-lang="no">Åpne web-appen</span><span data-lang="en">Open web app</span></a></li>
       <li><a href="https://www.facebook.com/profile.php?id=61565991554372" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:6px;color:#CBD5E1">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.267h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
         Facebook
       </a></li>
     </ul>
     <div class="lang-row" role="group" aria-label="Language">
-      <button class="lang-btn active" data-set-lang="th" title="ภาษาไทย">
+      <button class="lang-btn{' active' if lang == 'th' else ''}" data-set-lang="th" title="ภาษาไทย">
         <span class="cflag"><svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg"><rect width="900" height="600" fill="#A51931"/><rect width="900" height="480" y="60" fill="#F4F5F8"/><rect width="900" height="320" y="140" fill="#241D4F"/></svg></span>
       </button>
-      <button class="lang-btn" data-set-lang="no" title="Norsk">
+      <button class="lang-btn{' active' if lang == 'no' else ''}" data-set-lang="no" title="Norsk">
         <span class="cflag"><svg viewBox="0 0 22 16" xmlns="http://www.w3.org/2000/svg"><rect width="22" height="16" fill="#EF2B2D"/><rect x="6" width="4" height="16" fill="#fff"/><rect y="6" width="22" height="4" fill="#fff"/><rect x="7" width="2" height="16" fill="#002868"/><rect y="7" width="22" height="2" fill="#002868"/></svg></span>
       </button>
-      <button class="lang-btn" data-set-lang="en" title="English">
+      <button class="lang-btn{' active' if lang == 'en' else ''}" data-set-lang="en" title="English">
         <span class="cflag"><svg viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg"><rect width="60" height="30" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#C8102E" stroke-width="4"/><rect y="11" width="60" height="8" fill="#fff"/><rect x="26" width="8" height="30" fill="#fff"/><rect y="12" width="60" height="6" fill="#C8102E"/><rect x="27" width="6" height="30" fill="#C8102E"/></svg></span>
       </button>
     </div>
@@ -617,28 +617,28 @@ def _nav_html() -> str:
 """
 
 
-def _footer_html() -> str:
-    return """
+def _footer_html(lang: str = "th") -> str:
+    return f"""
 <footer>
   <div class="container">
     <div class="footer-inner">
       <p>© 2025 Thai2Drive</p>
       <div class="lang-row" role="group" aria-label="Language" style="justify-content:center;margin:12px 0">
-        <button class="lang-btn" data-set-lang="th" title="ภาษาไทย">
+        <button class="lang-btn{' active' if lang == 'th' else ''}" data-set-lang="th" title="ภาษาไทย">
           <span class="cflag cflag-th"></span>
         </button>
-        <button class="lang-btn" data-set-lang="no" title="Norsk">
+        <button class="lang-btn{' active' if lang == 'no' else ''}" data-set-lang="no" title="Norsk">
           <span class="cflag cflag-no"><span class="nb nb1"></span><span class="nb nb2"></span></span>
         </button>
-        <button class="lang-btn" data-set-lang="en" title="English">
+        <button class="lang-btn{' active' if lang == 'en' else ''}" data-set-lang="en" title="English">
           <span class="cflag cflag-gb"><span class="gb1"></span><span class="gb2"></span></span>
         </button>
       </div>
       <div class="footer-links">
-        <a href="/api/website"><span data-lang="th">หน้าแรก</span><span data-lang="no">Hjem</span><span data-lang="en">Home</span></a>
-        <a href="/api/privacy"><span data-lang="th">ความเป็นส่วนตัว</span><span data-lang="no">Personvern</span><span data-lang="en">Privacy</span></a>
-        <a href="/api/terms"><span data-lang="th">เงื่อนไข</span><span data-lang="no">Vilkår</span><span data-lang="en">Terms</span></a>
-        <a href="/api/support"><span data-lang="th">ช่วยเหลือ</span><span data-lang="no">Support</span><span data-lang="en">Support</span></a>
+        <a href="/{lang}"><span data-lang="th">หน้าแรก</span><span data-lang="no">Hjem</span><span data-lang="en">Home</span></a>
+        <a href="/privacy"><span data-lang="th">ความเป็นส่วนตัว</span><span data-lang="no">Personvern</span><span data-lang="en">Privacy</span></a>
+        <a href="/terms"><span data-lang="th">เงื่อนไข</span><span data-lang="no">Vilkår</span><span data-lang="en">Terms</span></a>
+        <a href="/support"><span data-lang="th">ช่วยเหลือ</span><span data-lang="no">Support</span><span data-lang="en">Support</span></a>
       </div>
     </div>
   </div>
@@ -646,7 +646,7 @@ def _footer_html() -> str:
 """
 
 
-def _hero_html() -> str:
+def _hero_html(lang: str = "th") -> str:
     return f"""
 <section class="hero">
   <div class="container">
@@ -664,13 +664,13 @@ def _hero_html() -> str:
         <path d="M12 10 C 50 14, 76 36, 86 64" fill="none" stroke="#fff" stroke-width="16" stroke-linecap="round"/>
         <path d="M99 104 L109 56 L62 73 Z" fill="#fff"/>
       </svg>
-      <button class="lang-btn active" data-set-lang="th" title="ภาษาไทย">
+      <button class="lang-btn{' active' if lang == 'th' else ''}" data-set-lang="th" title="ภาษาไทย">
         <span class="cflag"><svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg"><rect width="900" height="600" fill="#A51931"/><rect width="900" height="480" y="60" fill="#F4F5F8"/><rect width="900" height="320" y="140" fill="#241D4F"/></svg></span>
       </button>
-      <button class="lang-btn" data-set-lang="no" title="Norsk">
+      <button class="lang-btn{' active' if lang == 'no' else ''}" data-set-lang="no" title="Norsk">
         <span class="cflag"><svg viewBox="0 0 22 16" xmlns="http://www.w3.org/2000/svg"><rect width="22" height="16" fill="#EF2B2D"/><rect x="6" width="4" height="16" fill="#fff"/><rect y="6" width="22" height="4" fill="#fff"/><rect x="7" width="2" height="16" fill="#002868"/><rect y="7" width="22" height="2" fill="#002868"/></svg></span>
       </button>
-      <button class="lang-btn" data-set-lang="en" title="English">
+      <button class="lang-btn{' active' if lang == 'en' else ''}" data-set-lang="en" title="English">
         <span class="cflag"><svg viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg"><rect width="60" height="30" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#C8102E" stroke-width="4"/><rect y="11" width="60" height="8" fill="#fff"/><rect x="26" width="8" height="30" fill="#fff"/><rect y="12" width="60" height="6" fill="#C8102E"/><rect x="27" width="6" height="30" fill="#C8102E"/></svg></span>
       </button>
     </div>
@@ -693,7 +693,7 @@ def _hero_html() -> str:
         <span data-lang="no">🚀 Prøv gratis</span>
         <span data-lang="en">🚀 Try free</span>
       </a>
-      <a href="/api/web" class="cta-btn cta-primary landing-onboard-target landing-onboard-web" style="background:#fff;color:#0F172A;box-shadow:0 16px 40px rgba(255,255,255,.15)">
+      <a href="/{lang}/app" class="cta-btn cta-primary landing-onboard-target landing-onboard-web" style="background:#fff;color:#0F172A;box-shadow:0 16px 40px rgba(255,255,255,.15)">
         <span class="landing-onboard-label landing-onboard-label-web">
           <span data-lang="th">2. เปิดเว็บแอป</span>
           <span data-lang="no">2. Åpne web-appen</span>
@@ -1192,7 +1192,7 @@ def _road_photos_html() -> str:
 """
 
 
-def _bottom_cta_html() -> str:
+def _bottom_cta_html(lang: str = "th") -> str:
     return f"""
 <section class="cta-band">
   <div class="container">
@@ -1212,7 +1212,7 @@ def _bottom_cta_html() -> str:
         <span data-lang="no">🚀 Prøv gratis</span>
         <span data-lang="en">🚀 Try free</span>
       </a>
-      <a href="/api/web" class="cta-btn cta-secondary">
+      <a href="/{lang}/app" class="cta-btn cta-secondary">
         💻 <span data-lang="th">เปิดเว็บแอป</span><span data-lang="no">Åpne web-appen</span><span data-lang="en">Open web app</span>
       </a>
     </div>
@@ -1251,23 +1251,19 @@ LANDING_JS = r"""
 })();
 
 // ─── Language switcher ───
+// The server already rendered this exact URL (/th, /no or /en) in the right
+// language, so on load we just sync storage to match it — no client-side
+// override of data-current-lang here. Clicking a flag navigates to the
+// sibling-language URL for the CURRENT page (t2dSwitchLang, see <head>).
 (function(){
-  const supported = ['th','no','en'];
-  const saved = localStorage.getItem('t2d_landing_lang');
-  const initial = supported.includes(saved) ? saved : 'th';
-  document.documentElement.setAttribute('data-current-lang', initial);
-
-  function applyLang(code){
-    document.documentElement.setAttribute('data-current-lang', code);
-    localStorage.setItem('t2d_landing_lang', code);
-    document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active', b.dataset.setLang===code));
-    document.querySelectorAll('.lang-wrap').forEach(w=>w.classList.toggle('active', w.dataset.wrapLang===code));
-  }
-
-  applyLang(initial);
+  const current = document.documentElement.getAttribute('data-current-lang') || 'th';
+  localStorage.setItem('t2d_landing_lang', current);
+  document.cookie = 't2d_site_lang=' + current + ';path=/;max-age=31536000;SameSite=Lax';
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active', b.dataset.setLang===current));
+  document.querySelectorAll('.lang-wrap').forEach(w=>w.classList.toggle('active', w.dataset.wrapLang===current));
 
   document.querySelectorAll('.lang-btn').forEach(btn=>{
-    btn.addEventListener('click', ()=> applyLang(btn.dataset.setLang));
+    btn.addEventListener('click', ()=> t2dSwitchLang(btn.dataset.setLang));
   });
 })();
 
@@ -1438,6 +1434,7 @@ LANDING_JS = r"""
     }));
     const expl = pick(q.explanation, lang);
 
+    const nextLbl = { th: 'ต่อไป →', no: 'Neste →', en: 'Next →' }[lang] || 'Next →';
     body.innerHTML =
       `<div class="try-left">` +
       (img ? `<img class="try-image" src="${img}" alt="" onerror="this.style.display='none'"/>` : '') +
@@ -1450,7 +1447,7 @@ LANDING_JS = r"""
       `<div class="try-hint" id="tqHint" style="display:none"></div>` +
       `<div class="try-explain" id="tqExpl" style="display:none"></div>` +
       `</div>` +
-      `<div class="try-next-col"><button class="try-next-big" id="tqNextBig" disabled>Neste →</button></div>`;
+      `<div class="try-next-col"><button class="try-next-big" id="tqNextBig" disabled>${nextLbl}</button></div>`;
 
     document.querySelectorAll('#tqOpts .try-opt').forEach(btn=>{
       btn.addEventListener('click', ()=>selectAnswer(btn, q, expl));
@@ -1539,7 +1536,7 @@ LANDING_JS = r"""
           <div class="plan-mini best"><h4>${threeLbl}</h4><div class="p">299 kr<small> / 3 ${perMo}</small></div></div>
           <div class="plan-mini"><h4>${lifeLbl}</h4><div class="p">699 kr<small> / ${once}</small></div></div>
         </div>
-        <a href="/api/web" class="cta-btn cta-primary" style="margin-top:8px">${ctas[lang]} →</a>
+        <a href="/${lang}/app" class="cta-btn cta-primary" style="margin-top:8px">${ctas[lang]} →</a>
         <p style="margin-top:14px;font-size:13px;color:#94A3B8">${scoreLbl}: <strong style="color:#FF9933">${score} / ${TOTAL}</strong></p>
       </div>`;
     nextBtn.disabled = true;
@@ -1562,43 +1559,57 @@ LANDING_JS = r"""
 """
 
 
-def build_landing_page(chat_css: str, chat_widget_html: str, chat_js: str) -> str:
-    """Build the full landing HTML including the existing chat bubble."""
+def build_landing_page(chat_css: str, chat_widget_html: str, chat_js: str, lang: str = "th") -> str:
+    """Build the full landing HTML including the existing chat bubble.
+
+    `lang` is the language this specific URL (/th, /no, /en) serves — it drives
+    the server-rendered <html lang>, title, meta description, hreflang tags, and
+    server-side language filtering so search crawlers never see mixed language.
+    """
     # Local import to avoid circular + keep module import cheap.
-    from site_config import public_site_url, canonical_url
-    canon = canonical_url("/")
+    from site_config import public_site_url
+    from i18n_routing import (
+        normalize_lang, HTML_LANG, OG_LOCALE, seo_meta, hreflang_tags, canonical_for, LANG_SWITCH_JS,
+        filter_landing_html,
+    )
+    lang = normalize_lang(lang)
+    meta = seo_meta("home", lang)
+    canon = canonical_for(lang, "")
     og_image = public_site_url() + HEADER_URL  # absolute URL for social previews
-    desc = "Bestå den norske teoriprøven – 1000+ spørsmål på thai, norsk og engelsk. Laget for thai-folk i Norge."
-    return f"""<!doctype html>
-<html lang="th" data-current-lang="th">
+    alt_locales = "".join(
+        f'<meta property="og:locale:alternate" content="{OG_LOCALE[l]}"/>\n'
+        for l in ("th", "no", "en") if l != lang
+    )
+    raw_html = f"""<!doctype html>
+<html lang="{HTML_LANG[lang]}" data-current-lang="{lang}">
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Thai2Drive – สอบใบขับขี่นอร์เวย์ · Teoriprøve · Norwegian theory test</title>
-<meta name="description" content="{desc}"/>
+<title>{meta['title']}</title>
+<meta name="description" content="{meta['description']}"/>
 <link rel="canonical" href="{canon}"/>
-<meta property="og:title" content="Thai2Drive"/>
-<meta property="og:description" content="Norsk teoriprøve på thai, norsk og engelsk"/>
+{hreflang_tags("")}
+<meta property="og:title" content="{meta['title']}"/>
+<meta property="og:description" content="{meta['description']}"/>
 <meta property="og:image" content="{og_image}"/>
 <meta property="og:url" content="{canon}"/>
 <meta property="og:type" content="website"/>
 <meta property="og:site_name" content="Thai2Drive"/>
-<meta property="og:locale" content="nb_NO"/>
+<meta property="og:locale" content="{OG_LOCALE[lang]}"/>
 <meta name="google" content="notranslate"/>
-<meta http-equiv="Content-Language" content="th,no,en"/>
-<meta property="og:locale:alternate" content="th_TH"/>
-<meta property="og:locale:alternate" content="en_US"/>
-<meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:title" content="Thai2Drive – Norsk teoriprøve"/>
-<meta name="twitter:description" content="{desc}"/>
+<meta http-equiv="Content-Language" content="{lang}"/>
+{alt_locales}<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="{meta['title']}"/>
+<meta name="twitter:description" content="{meta['description']}"/>
 <meta name="twitter:image" content="{og_image}"/>
 <link rel="icon" type="image/png" href="{ICON_URL}"/>
 <link rel="apple-touch-icon" href="{ICON_URL}"/>
 <style>{LANDING_CSS}{chat_css}</style>
+<script>{LANG_SWITCH_JS}</script>
 </head>
 <body>
-{_nav_html()}
-{_hero_html()}
+{_nav_html(lang)}
+{_hero_html(lang)}
 {_stats_html()}
 {_try_html()}
 {_video_html()}
@@ -1607,11 +1618,12 @@ def build_landing_page(chat_css: str, chat_widget_html: str, chat_js: str) -> st
 {_screenshots_html()}
 {_road_photos_html()}
 {_trust_html()}
-{_bottom_cta_html()}
-{_footer_html()}
+{_bottom_cta_html(lang)}
+{_footer_html(lang)}
 {chat_widget_html}
 <script>{LANDING_JS}</script>
 <script>{chat_js}</script>
 </body>
 </html>"""
+    return filter_landing_html(raw_html, lang)
 
