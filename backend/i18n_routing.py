@@ -154,46 +154,105 @@ def filter_landing_html(html: str, target_lang: str) -> str:
     """
     Filter landing page HTML server-side:
     Removes <span ... data-lang="other">...</span> for all languages other than target_lang.
-    Preserves target_lang content, preserving classes like .block.
+    Preserves target_lang content, preserving classes like .block and handling nested spans.
     """
     target = normalize_lang(target_lang)
+    pattern = re.compile(r'<span\s+([^>]*data-lang=["\']([a-z]+)["\'][^>]*)>')
+    tag_pattern = re.compile(r'<\s*(/)?\s*span(?:\s+[^>]*)?>', re.IGNORECASE)
 
-    def repl(m: re.Match) -> str:
-        tag_attrs = m.group(1)
-        content = m.group(2)
-        lang_match = re.search(r'data-lang=["\']([a-z]+)["\']', tag_attrs)
-        if not lang_match:
-            return m.group(0)
-        tag_lang = lang_match.group(1)
-        if tag_lang != target:
-            return ""
-        class_match = re.search(r'class=["\']([^"\']+)["\']', tag_attrs)
-        cls = class_match.group(1) if class_match else ""
-        if "block" in cls:
-            return f'<span class="block">{content}</span>'
-        return content
+    pos = 0
+    result = []
+    while pos < len(html):
+        m = pattern.search(html, pos)
+        if not m:
+            result.append(html[pos:])
+            break
 
-    filtered = re.sub(r'<span\s+([^>]*data-lang=[^>]+)>([\s\S]*?)</span>', repl, html)
-    return filtered
+        result.append(html[pos:m.start()])
+        attrs = m.group(1)
+        lang = m.group(2)
+
+        content_start = m.end()
+        idx = content_start
+        depth = 1
+
+        while idx < len(html) and depth > 0:
+            tm = tag_pattern.search(html, idx)
+            if not tm:
+                break
+            if tm.group(1):  # closing </span
+                depth -= 1
+                if depth == 0:
+                    content_end = tm.start()
+                    full_end = tm.end()
+                    break
+            else:  # opening <span
+                depth += 1
+            idx = tm.end()
+
+        if depth == 0:
+            if lang == target:
+                inner = html[content_start:content_end]
+                if 'class="block"' in attrs or "class='block'" in attrs or 'block' in attrs:
+                    result.append(f'<span class="block">{inner}</span>')
+                else:
+                    result.append(inner)
+            pos = full_end
+        else:
+            result.append(html[m.start():m.end()])
+            pos = m.end()
+
+    return "".join(result)
 
 
 def filter_guide_html(html: str, target_lang: str) -> str:
     """
     Filter guide page HTML server-side:
     Removes <span class="tl tl-other">...</span> for all languages other than target_lang.
-    Unwraps <span class="tl tl-target">...</span> so only the target text remains.
+    Unwraps <span class="tl tl-target">...</span> and handles nested spans like <span class="highlight">.
     """
     target = normalize_lang(target_lang)
+    pattern = re.compile(r'<span\s+class=["\']tl\s+tl-([a-z]+)["\']>')
+    tag_pattern = re.compile(r'<\s*(/)?\s*span(?:\s+[^>]*)?>', re.IGNORECASE)
 
-    def repl(m: re.Match) -> str:
-        tag_lang = m.group(1)
-        content = m.group(2)
-        if tag_lang != target:
-            return ""
-        return content
+    pos = 0
+    result = []
+    while pos < len(html):
+        m = pattern.search(html, pos)
+        if not m:
+            result.append(html[pos:])
+            break
 
-    filtered = re.sub(r'<span\s+class=["\']tl\s+tl-([a-z]+)["\']>([\s\S]*?)</span>', repl, html)
-    return filtered
+        result.append(html[pos:m.start()])
+        lang = m.group(1)
+
+        content_start = m.end()
+        idx = content_start
+        depth = 1
+
+        while idx < len(html) and depth > 0:
+            tm = tag_pattern.search(html, idx)
+            if not tm:
+                break
+            if tm.group(1):  # closing </span
+                depth -= 1
+                if depth == 0:
+                    content_end = tm.start()
+                    full_end = tm.end()
+                    break
+            else:  # opening <span
+                depth += 1
+            idx = tm.end()
+
+        if depth == 0:
+            if lang == target:
+                result.append(html[content_start:content_end])
+            pos = full_end
+        else:
+            result.append(html[m.start():m.end()])
+            pos = m.end()
+
+    return "".join(result)
 
 
 # Shared client-side language-switch helper: navigates to the sibling-language

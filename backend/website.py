@@ -543,8 +543,8 @@ def _page(title: str, body: str, description: str = "", path: str = "/"):
 
 
 # ─────────────────────────── LANDING PAGE (language-less entry) ───────────────────────────
-@website_router.get("/website", response_class=HTMLResponse)
-@website_router.get("/", response_class=HTMLResponse)  # fallback inside /api
+@website_router.api_route("/website", methods=["GET", "HEAD"], response_class=HTMLResponse)
+@website_router.api_route("/", methods=["GET", "HEAD"], response_class=HTMLResponse)  # fallback inside /api
 def landing(request: Request):
     api_redirect = api_prefix_redirect(request)
     if api_redirect:
@@ -560,9 +560,9 @@ def landing(request: Request):
 
 
 # ─────────────────────────── GUIDE PAGE ───────────────────────────
-@website_router.get("/th/guide", response_class=HTMLResponse)
-@website_router.get("/no/guide", response_class=HTMLResponse)
-@website_router.get("/en/guide", response_class=HTMLResponse)
+@website_router.api_route("/th/guide", methods=["GET", "HEAD"], response_class=HTMLResponse)
+@website_router.api_route("/no/guide", methods=["GET", "HEAD"], response_class=HTMLResponse)
+@website_router.api_route("/en/guide", methods=["GET", "HEAD"], response_class=HTMLResponse)
 def guide_page_lang(request: Request):
     api_redirect = api_prefix_redirect(request)
     if api_redirect:
@@ -578,7 +578,7 @@ def guide_page_lang(request: Request):
         return HTMLResponse(f"<html><body style='background:#0B1226;color:#fff;padding:40px;font-family:sans-serif'><h2>Feil: {e}</h2><pre>{traceback.format_exc()}</pre></body></html>")
 
 
-@website_router.get("/guide", response_class=HTMLResponse)
+@website_router.api_route("/guide", methods=["GET", "HEAD"], response_class=HTMLResponse)
 def guide_page(request: Request):
     # Legacy language-less URL: redirect to the language-pure version.
     api_redirect = api_prefix_redirect(request)
@@ -1219,9 +1219,9 @@ def whoami(request: Request):
 
 # ─────────────────────────── LANGUAGE-PREFIXED LANDING PAGE ───────────────────────────
 # Registered explicitly for /th, /no, /en so they do not shadow /web, /app, or other routes
-@website_router.get("/th", response_class=HTMLResponse)
-@website_router.get("/no", response_class=HTMLResponse)
-@website_router.get("/en", response_class=HTMLResponse)
+@website_router.api_route("/th", methods=["GET", "HEAD"], response_class=HTMLResponse)
+@website_router.api_route("/no", methods=["GET", "HEAD"], response_class=HTMLResponse)
+@website_router.api_route("/en", methods=["GET", "HEAD"], response_class=HTMLResponse)
 def landing_lang(request: Request):
     api_redirect = api_prefix_redirect(request)
     if api_redirect:

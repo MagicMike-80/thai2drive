@@ -47,6 +47,7 @@ from webapp import WEBAPP_HTML, webapp_router
 
 
 app = FastAPI()
+app.include_router(webapp_router, prefix="")
 app.include_router(webapp_router, prefix="/api")
 client = TestClient(app)
 

@@ -16,6 +16,7 @@ from traffic_math_routes import math_router
 import traffic_math
 
 app = FastAPI()
+app.include_router(webapp_router, prefix="")
 app.include_router(webapp_router, prefix='/api')
 app.include_router(math_router, prefix='/api')
 client = TestClient(app)

@@ -13351,23 +13351,23 @@ def _redirect_web_to_app(request: Request, lang_suffix: str):
     return RedirectResponse(url=f"/app{lang_suffix}{qs}", status_code=301)
 
 
-@webapp_router.get("/web")
+@webapp_router.api_route("/web", methods=["GET", "HEAD"])
 async def web_app(request: Request):
     """Legacy entry point — permanently redirects to /app (query preserved)."""
     return _redirect_web_to_app(request, "")
 
 
-@webapp_router.get("/web/no")
+@webapp_router.api_route("/web/no", methods=["GET", "HEAD"])
 async def web_app_no(request: Request):
     return _redirect_web_to_app(request, "/no")
 
 
-@webapp_router.get("/web/th")
+@webapp_router.api_route("/web/th", methods=["GET", "HEAD"])
 async def web_app_th(request: Request):
     return _redirect_web_to_app(request, "/th")
 
 
-@webapp_router.get("/web/en")
+@webapp_router.api_route("/web/en", methods=["GET", "HEAD"])
 async def web_app_en(request: Request):
     return _redirect_web_to_app(request, "/en")
 
@@ -13384,49 +13384,49 @@ def _serve_app(request: Request, lang: str):
     return response
 
 
-@webapp_router.get("/th/app", response_class=HTMLResponse)
+@webapp_router.api_route("/th/app", methods=["GET", "HEAD"], response_class=HTMLResponse)
 async def app_th_prefix(request: Request):
     """Clean language-first Thai app entry point."""
     return _serve_app(request, "th")
 
 
-@webapp_router.get("/no/app", response_class=HTMLResponse)
+@webapp_router.api_route("/no/app", methods=["GET", "HEAD"], response_class=HTMLResponse)
 async def app_no_prefix(request: Request):
     """Clean language-first Norwegian app entry point."""
     return _serve_app(request, "no")
 
 
-@webapp_router.get("/en/app", response_class=HTMLResponse)
+@webapp_router.api_route("/en/app", methods=["GET", "HEAD"], response_class=HTMLResponse)
 async def app_en_prefix(request: Request):
     """Clean language-first English app entry point."""
     return _serve_app(request, "en")
 
 
-@webapp_router.get("/app", response_class=HTMLResponse)
+@webapp_router.api_route("/app", methods=["GET", "HEAD"], response_class=HTMLResponse)
 async def app_root(request: Request):
     """Clean entry point — defaults to Thai (same SPA as /th/app)."""
     return _serve_app(request, "th")
 
 
-@webapp_router.get("/app/no", response_class=HTMLResponse)
+@webapp_router.api_route("/app/no", methods=["GET", "HEAD"], response_class=HTMLResponse)
 async def app_no(request: Request):
     """Clean Norwegian entry point - same SPA as /no/app."""
     return _serve_app(request, "no")
 
 
-@webapp_router.get("/app/th", response_class=HTMLResponse)
+@webapp_router.api_route("/app/th", methods=["GET", "HEAD"], response_class=HTMLResponse)
 async def app_th(request: Request):
     """Clean Thai entry point - same SPA as /th/app."""
     return _serve_app(request, "th")
 
 
-@webapp_router.get("/app/en", response_class=HTMLResponse)
+@webapp_router.api_route("/app/en", methods=["GET", "HEAD"], response_class=HTMLResponse)
 async def app_en(request: Request):
     """Clean English entry point - same SPA as /en/app."""
     return _serve_app(request, "en")
 
 
-@webapp_router.get("/web/version")
+@webapp_router.api_route("/web/version", methods=["GET", "HEAD"])
 async def web_version():
     """Returns the current deploy version. Use this to confirm what build is live."""
     return {"version": DEPLOY_VERSION, "endpoint": "/app"}

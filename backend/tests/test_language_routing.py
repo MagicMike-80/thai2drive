@@ -103,6 +103,22 @@ class HomeLanguageRouteTests(unittest.TestCase):
         r = client.get("/xx")
         self.assertEqual(r.status_code, 404)
 
+    def test_th_home_has_zero_norwegian_leak_strings(self):
+        html = client.get("/th").text
+        leaks = [
+            w for w in [
+                "Høyreregelen",
+                "skiltgrupper",
+                "Historien",
+                "Bremselengde",
+                "Trafikklys",
+                "Venstresving",
+                "Buss fra",
+                "Rundkjøring Norge",
+            ] if w in html
+        ]
+        self.assertEqual(leaks, [], f"Found Norwegian leaks in /th: {leaks}")
+
 
 class GuideLanguageRouteTests(unittest.TestCase):
     def test_th_guide_has_correct_html_lang(self):
@@ -148,6 +164,18 @@ class GuideLanguageRouteTests(unittest.TestCase):
     def test_guide_cta_links_to_clean_language_app(self):
         html = client.get("/no/guide").text
         self.assertIn('href="/no/app"', html)
+
+    def test_th_guide_has_zero_parallel_sentences(self):
+        html = client.get("/th/guide").text
+        leaks = [
+            w for w in [
+                "Norge godkjenner ikke",
+                "Norway does not",
+                "utenlandsk førerkort",
+                "foreign driving license",
+            ] if w in html
+        ]
+        self.assertEqual(leaks, [], f"Found leaks in /th/guide: {leaks}")
 
 
 class AppLanguageRouteTests(unittest.TestCase):
@@ -207,6 +235,9 @@ class LanguageLessRedirectTests(unittest.TestCase):
 class ApiPrefixLegacyRedirectTests(unittest.TestCase):
     """Old /api/-prefixed URLs permanently redirect (301) to the clean equivalent."""
 
+    def setUp(self):
+        client.cookies.clear()
+
     def test_api_website_redirects_to_bare_root(self):
         r = client.get("/api/website")
         self.assertEqual(r.status_code, 301)
@@ -235,6 +266,31 @@ class ApiPrefixLegacyRedirectTests(unittest.TestCase):
     def test_api_th_guide_redirects_to_bare_th_guide(self):
         r = client.get("/api/th/guide")
         self.assertEqual(r.status_code, 301)
+        self.assertEqual(r.headers["location"], "/th/guide")
+
+    def test_api_web_head_request_redirects_with_301(self):
+        r = client.head("/api/web")
+        self.assertEqual(r.status_code, 301)
+        self.assertEqual(r.headers["location"], "/app")
+
+    def test_api_web_head_preserves_query_string(self):
+        r = client.head("/api/web?checkout=success&session_id=cs_test_123")
+        self.assertEqual(r.status_code, 301)
+        self.assertEqual(r.headers["location"], "/app?checkout=success&session_id=cs_test_123")
+
+    def test_api_guide_head_request_redirects_with_301(self):
+        r = client.head("/api/guide")
+        self.assertEqual(r.status_code, 301)
+        self.assertEqual(r.headers["location"], "/guide")
+
+    def test_web_bare_head_request_redirects_with_301(self):
+        r = client.head("/web")
+        self.assertEqual(r.status_code, 301)
+        self.assertEqual(r.headers["location"], "/app")
+
+    def test_guide_bare_head_request_redirects_with_302(self):
+        r = client.head("/guide")
+        self.assertEqual(r.status_code, 302)
         self.assertEqual(r.headers["location"], "/th/guide")
 
 

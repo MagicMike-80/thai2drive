@@ -836,7 +836,7 @@ def _stats_html() -> str:
 """
 
 
-def _video_html() -> str:
+def _video_html(lang: str = "th") -> str:
     # 3 free public videos — build trust, show value
     FREE_VIDEOS = [
         {
@@ -866,10 +866,11 @@ def _video_html() -> str:
     for v in FREE_VIDEOS:
         thumb = f"https://img.youtube.com/vi/{v['id']}/hqdefault.jpg"
         dur_html = f'<span>▶ {v["dur"]}</span>' if v["dur"] else ""
+        alt_text = v.get(lang, v.get("no", ""))
         cards_html += f"""
       <div class="vid-card" onclick="openVidLightbox('{v['id']}')">
         <div class="vid-thumb">
-          <img src="{thumb}" alt="{v['no']}" loading="lazy">
+          <img src="{thumb}" alt="{alt_text}" loading="lazy">
           <div class="vid-play"><div class="vid-play-btn">▶</div></div>
           <div class="vid-badge">
             <span data-lang="th">ฟรี</span>
@@ -889,15 +890,35 @@ def _video_html() -> str:
 
     # Premium course list (locked — not public)
     premium_courses = [
-        ("🛑", "no", "Bremselengde og reaksjonstid"),
-        ("🚦", "no", "Trafikklys og vikeplikt"),
-        ("↙️", "no", "Venstresving og rundkjøring"),
-        ("🚌", "no", "Buss fra holdeplass"),
-        ("🧠", "no", "AI-undervising"),
+        ("🛑", {
+            "th": "ระยะเบรกและเวลาตอบสนอง",
+            "no": "Bremselengde og reaksjonstid",
+            "en": "Braking distance and reaction time",
+        }),
+        ("🚦", {
+            "th": "สัญญาณไฟจราจรและกฎการให้ทาง",
+            "no": "Trafikklys og vikeplikt",
+            "en": "Traffic lights and right of way",
+        }),
+        ("↙️", {
+            "th": "การเลี้ยวซ้ายและวงเวียน",
+            "no": "Venstresving og rundkjøring",
+            "en": "Left turns and roundabouts",
+        }),
+        ("🚌", {
+            "th": "รถบัสออกจากป้าย",
+            "no": "Buss fra holdeplass",
+            "en": "Bus leaving a bus stop",
+        }),
+        ("🧠", {
+            "th": "การสอนด้วย AI",
+            "no": "AI-undervising",
+            "en": "AI tutoring",
+        }),
     ]
     feat_html = ""
-    for icon, _lang, text in premium_courses:
-        feat_html += f'<div class="vpt-feat"><span>{icon}</span><span>{text}</span></div>'
+    for icon, texts in premium_courses:
+        feat_html += f'<div class="vpt-feat"><span>{icon}</span><span><span data-lang="th">{texts["th"]}</span><span data-lang="no">{texts["no"]}</span><span data-lang="en">{texts["en"]}</span></span></div>'
 
     return f"""
 <section>
@@ -1162,12 +1183,22 @@ def _screenshots_html() -> str:
 """
 
 
-def _road_photos_html() -> str:
-    return """
+def _road_photos_html(lang: str = "th") -> str:
+    alts = {
+        "th": "วงเวียนในนอร์เวย์",
+        "no": "Rundkjøring Norge",
+        "en": "Roundabout in Norway",
+    }
+    alt_text = alts.get(lang, "วงเวียนในนอร์เวย์")
+    return f"""
 <section class="road-section">
   <div class="container">
     <div class="sec-head">
-      <span class="eyebrow">🇳🇴 Norske veier</span>
+      <span class="eyebrow">
+        <span data-lang="th">🇳🇴 ถนนในนอร์เวย์</span>
+        <span data-lang="no">🇳🇴 Norske veier</span>
+        <span data-lang="en">🇳🇴 Norwegian roads</span>
+      </span>
       <h2>
         <span data-lang="th" class="block">เรียนรู้เส้นทางจริงในนอร์เวย์</span>
         <span data-lang="no" class="block">Lær deg norske veier og rundkjøringer</span>
@@ -1181,10 +1212,10 @@ def _road_photos_html() -> str:
     </div>
     <div class="road-grid">
       <div class="road-frame">
-        <img src="/api/assets/rundkjoring1.jpg" alt="Rundkjøring Norge" class="road-img" loading="lazy"/>
+        <img src="/api/assets/rundkjoring1.jpg" alt="{alt_text}" class="road-img" loading="lazy"/>
       </div>
       <div class="road-frame">
-        <img src="/api/assets/rundkjoring2.jpg" alt="Rundkjøring Norge" class="road-img" loading="lazy"/>
+        <img src="/api/assets/rundkjoring2.jpg" alt="{alt_text}" class="road-img" loading="lazy"/>
       </div>
     </div>
   </div>
@@ -1612,11 +1643,11 @@ def build_landing_page(chat_css: str, chat_widget_html: str, chat_js: str, lang:
 {_hero_html(lang)}
 {_stats_html()}
 {_try_html()}
-{_video_html()}
+{_video_html(lang)}
 {_why_html()}
 {_features_html()}
 {_screenshots_html()}
-{_road_photos_html()}
+{_road_photos_html(lang)}
 {_trust_html()}
 {_bottom_cta_html(lang)}
 {_footer_html(lang)}
