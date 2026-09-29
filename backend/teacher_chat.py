@@ -1770,6 +1770,15 @@ def _explicit_sign_ids_for_message(user_msg: str) -> list[str]:
             "ถนนสายหลัก",
             "ป้ายทางเอก",
         ),
+        "332_0": (
+            "vendingsforbud",
+            "skilt 332",
+            "sign 332",
+            "traffic sign 332",
+            "no u-turn",
+            "u-turn sign",
+            "ห้ามกลับรถ",
+        ),
     }
 
     def matches(term: str) -> bool:
@@ -1786,6 +1795,7 @@ def _sign_ids_from_reply(reply_text: str) -> list[str]:
     standalone_labels = {
         "202_0": {"vikeplikt", "give way", "yield", "ป้ายให้ทาง", "การให้ทาง"},
         "204_0": {"stopp", "stop", "ป้ายหยุด", "หยุด"},
+        "332_0": {"vendingsforbud", "no u-turn", "ห้ามกลับรถ"},
     }
     segments = re.split(r"(?:\r?\n)+|[|•]|(?=[🛑🔴])", reply_text or "")
     normalized_segments = {
@@ -1811,10 +1821,59 @@ def _merge_sign_ids(*groups: list[str], limit: int = 2) -> list[str]:
     return merged
 
 
-def _active_sign_ids_from_history(prior: list[dict], explicit_sign_ids: list[str], limit: int = 2) -> list[str]:
-    """Signs still 'on screen': this message's explicit signs, else the latest turn's signs."""
+# Image Context Pollution fix (2026-09-29): a sign card shown two turns ago must not keep
+# haunting the system prompt (or the response) once the student has moved to a different
+# topic or said the picture was wrong. Both checks look only at the student's OWN current
+# message — no state to track, no memory of "was this corrected earlier".
+_TOPIC_SHIFT_TERMS = (
+    # Norwegian — calculation topics and "the rules" in general
+    "stoppelengde", "bremselengde", "reaksjonslengde", "beregn", "kalkuler", "formel",
+    "regelen", "reglene", "regler", "paragraf",
+    # Thai
+    "ระยะหยุดรถ", "ระยะเบรก", "ระยะตอบสนอง", "คำนวณ", "สูตรคำนวณ", "กฎ", "กฎหมาย",
+    # English
+    "stopping distance", "braking distance", "reaction distance", "calculate", "calculation",
+    "formula", "the rule", "the rules",
+)
+
+_IMAGE_CORRECTION_TERMS = (
+    # Norwegian — the student says the shown sign/image is not the right one
+    "feil bilde", "feil skilt", "det er feil", "det stemmer ikke", "ikke riktig skilt",
+    "ikke riktig bilde", "det er ikke riktig", "galt bilde", "galt skilt",
+    # Thai
+    "รูปผิด", "ป้ายผิด", "ไม่ใช่ป้ายนี้", "ไม่ใช่รูปนี้", "ผิดครับ", "ผิดค่ะ", "ผิดนะ",
+    # English
+    "wrong picture", "wrong image", "wrong sign", "that's wrong", "thats wrong",
+    "not the right sign", "not the correct sign", "not correct",
+)
+
+
+def _is_topic_shift_message(user_msg: str) -> bool:
+    """The student moved on to a calculation/rule topic — any sign still 'on screen' must be dropped."""
+    text = (user_msg or "").casefold()
+    return any(term in text for term in _TOPIC_SHIFT_TERMS)
+
+
+def _is_image_correction_message(user_msg: str) -> bool:
+    """The student says the sign/image shown was wrong — never keep showing it."""
+    text = (user_msg or "").casefold()
+    return any(term in text for term in _IMAGE_CORRECTION_TERMS)
+
+
+def _breaks_sign_context(user_msg: str) -> bool:
+    return _is_topic_shift_message(user_msg) or _is_image_correction_message(user_msg)
+
+
+def _active_sign_ids_from_history(
+    prior: list[dict], explicit_sign_ids: list[str], user_msg: str = "", limit: int = 2
+) -> list[str]:
+    """Signs still 'on screen': this message's explicit signs, else the latest turn's signs —
+    unless the student switched to a calculation/rule topic or corrected a wrong image, in
+    which case the old sign is dropped from the active context entirely."""
     if explicit_sign_ids:
         return _merge_sign_ids(explicit_sign_ids, limit=limit)
+    if _breaks_sign_context(user_msg):
+        return []
     for turn in reversed(prior or []):
         turn_ids = [str(s) for s in (turn.get("sign_ids") or []) if s]
         if turn_ids:
@@ -3774,6 +3833,10 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             except Exception as ml_media_err:
                 logger.debug("Micro-lesson media card error: %s", ml_media_err)
         media = await _validate_teacher_response_media(media, lang)
+        if not explicit_sign_ids and _breaks_sign_context(user_msg):
+            # Image Context Pollution fix: a topic switch or "that image is wrong" must
+            # never carry the previous sign card (or any other auto-attached media) forward.
+            media = []
 
         if not LLM_KEY:
             raise RuntimeError("DEEPSEEK_API_KEY not configured")
@@ -3840,7 +3903,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             system_prompt += multimedia_str
 
         system_prompt += await _active_sign_context(
-            _active_sign_ids_from_history(prior, explicit_sign_ids), lang
+            _active_sign_ids_from_history(prior, explicit_sign_ids, user_msg), lang
         )
 
         if req.document_context:
@@ -4002,6 +4065,8 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         reply_text = _sanitize_gender_particles(reply_text)
     reply_sign_ids = _sign_ids_from_reply(reply_text)
     sign_ids = _strict_response_sign_ids(explicit_sign_ids, reply_sign_ids)
+    if not explicit_sign_ids and _breaks_sign_context(user_msg):
+        sign_ids = []  # Image Context Pollution fix: see _breaks_sign_context()
 
     exact_response_media = []
     if sign_ids:
@@ -4011,6 +4076,8 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             logger.error("Failed to resolve exact response sign media: %s", media_ex)
     media = _reconcile_teacher_media(media, sign_ids, exact_response_media)
     media = await _validate_teacher_response_media(media, lang)
+    if not explicit_sign_ids and _breaks_sign_context(user_msg):
+        media = []  # Image Context Pollution fix: see _breaks_sign_context()
 
     # Persist both messages. Chat history is helpful, but it must never block a
     # completed teacher response when MongoDB is temporarily read-only/full.

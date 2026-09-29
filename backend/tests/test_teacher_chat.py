@@ -433,5 +433,118 @@ class TestWrongQuizAnswerReplyIsThaiOnly(unittest.TestCase):
         self.assertEqual(response.reply, model_reply)
 
 
+class _HistoryCursor:
+    def __init__(self, items):
+        self.items = list(items)
+
+    def sort(self, *args, **kwargs):
+        # Real query is ("ts", -1): newest first. teacher_chat() reverses this back
+        # to chronological order itself, so a plain reverse reproduces it faithfully.
+        self.items = list(reversed(self.items))
+        return self
+
+    async def to_list(self, length=None):
+        return self.items[:length] if length else self.items
+
+
+class _HistoryCollection(_Collection):
+    """Like _Collection, but find() actually replays what was inserted — needed to
+    simulate a real multi-turn session. The base _Collection.find() always returns an
+    empty cursor, which hides any cross-turn state (exactly the bug class this covers)."""
+
+    def find(self, query=None, *args, **kwargs):
+        query = query or {}
+        matched = [item for item in self.items if all(item.get(k) == v for k, v in query.items())]
+        return _HistoryCursor(matched)
+
+    async def insert_many(self, docs, *args, **kwargs):
+        self.items.extend(docs)
+        return None
+
+
+class ImageContextPollutionTests(unittest.TestCase):
+    """Regression test for the RAG image-injection loop: a sign card attached for an
+    earlier question must not keep leaking into the system prompt or the API response
+    once the student corrects it or moves on to an unrelated calculation topic."""
+
+    SIGN_332 = {
+        "id": "332_0",
+        "image_url": "/api/sign-images/332_0.jpg",
+        "name": {"no": "Vendingsforbud", "th": "ห้ามกลับรถ", "en": "No U-turn"},
+        "explanation": {"no": "Det er forbudt å snu her.", "th": "ห้ามกลับรถบริเวณนี้", "en": "U-turns are forbidden here."},
+        "driver_action": {"no": "Ikke snu i dette området.", "th": "ห้ามกลับรถในบริเวณนี้", "en": "Do not turn around here."},
+    }
+
+    def setUp(self):
+        self._orig_db = tc._db
+        self._orig_chat_col = tc._chat_col
+        tc._db = _Database({"traffic_signs": _Collection([self.SIGN_332])})
+        tc._chat_col = _HistoryCollection()
+        self._last_prompt = ""
+
+    def tearDown(self):
+        tc._db = self._orig_db
+        tc._chat_col = self._orig_chat_col
+
+    def _turn(self, message, model_reply, session_id="pollution-test"):
+        async def no_media(*args, **kwargs):
+            return []
+
+        async def complete(messages, **kwargs):
+            self._last_prompt = messages[0]["content"]
+            return SimpleNamespace(choices=[SimpleNamespace(message=SimpleNamespace(content=model_reply))])
+
+        req = TeacherChatRequest(session_id=session_id, message=message, language="no")
+        with patch.object(tc, "LLM_KEY", "test-key"), \
+             patch.object(tc, "_completion_with_fallback", new=complete), \
+             patch.object(tc, "_get_relevant_michael_materials", new=no_media), \
+             patch.object(tc, "_get_relevant_catalog_media", new=no_media):
+            return asyncio.run(teacher_chat(req))
+
+    def test_topic_switch_after_correction_purges_the_old_sign(self):
+        # Turn 1: student asks about vendingsforbud — the sign card is correctly attached.
+        r1 = self._turn("Hva betyr vendingsforbud?", "Vendingsforbud betyr at du ikke kan snu her.")
+        self.assertEqual(r1.sign_ids, ["332_0"])
+        self.assertEqual([m["sign_id"] for m in r1.media], ["332_0"])
+
+        # Turn 2: student says the shown sign/image was wrong (a correction).
+        r2 = self._turn(
+            "Nei, det bildet er feil, det er ikke riktig skilt.",
+            "Beklager forvirringen, hvilket skilt mente du?",
+        )
+        self.assertNotIn("332_0", self._last_prompt)
+        self.assertNotIn("the sign the student is looking at now", self._last_prompt)
+        self.assertEqual(r2.sign_ids, [])
+        self.assertEqual(r2.media, [])
+
+        # Turn 3: student switches to an unrelated calculation topic (stoppelengde).
+        r3 = self._turn(
+            "Kan du forklare stoppelengde for meg?",
+            "Stoppelengde er reaksjonslengde pluss bremselengde.",
+        )
+        self.assertNotIn("332_0", self._last_prompt)
+        self.assertNotIn("the sign the student is looking at now", self._last_prompt)
+        self.assertEqual(r3.sign_ids, [], "stoppelengde response must carry ZERO sign attachments")
+        self.assertEqual(r3.media, [], "stoppelengde response must carry ZERO media attachments")
+
+    def test_topic_switch_alone_without_a_prior_correction_also_purges_the_sign(self):
+        """Each message is judged on its own — a topic switch resets the context even
+        without an explicit 'that's wrong' first."""
+        self._turn("Hva betyr vendingsforbud?", "Vendingsforbud betyr at du ikke kan snu her.")
+        r2 = self._turn("Hvordan beregner jeg bremselengde?", "Bremselengde regnes ut med (Fart ÷ 10) i annen.")
+        self.assertNotIn("332_0", self._last_prompt)
+        self.assertEqual(r2.sign_ids, [])
+        self.assertEqual(r2.media, [])
+
+    def test_unrelated_follow_up_still_carries_the_active_sign_forward(self):
+        """Sanity check: the fix must not break the existing 'still on screen' behaviour
+        for a genuine follow-up that neither corrects nor changes topic."""
+        r1 = self._turn("Hva betyr vendingsforbud?", "Vendingsforbud betyr at du ikke kan snu her.")
+        self.assertEqual(r1.sign_ids, ["332_0"])
+        self._turn("Kan du forklare det på en annen måte?", "Klart, la meg forklare det enklere.")
+        self.assertIn("332_0", self._last_prompt)
+        self.assertIn("the sign the student is looking at now", self._last_prompt)
+
+
 if __name__ == "__main__":
     unittest.main()
