@@ -80,6 +80,7 @@ pytest -v
 | `feat/michael-memory-motivation` | **Claude Code** | ✅ Merged to main (merge commit, in `51df0ce`) — Railway deploy not verified by Claude Code (no Railway access) | — | TASK-017 (student learning memory + motivational coaching) |
 | `feat/connect-master-docs` | **Claude Code** | ✅ Merged to main 2026-09-23 — conversation-first Michael, 450-token replies, 10-turn memory + active sign, Thai quiz no-Latin fix. Railway deploy not verified by Claude Code (no Railway access) | — | Michael chat quality |
 | `feat/etappe1-lang-exam-identity` | **Claude Code** | ✅ Already in `main` (merge `5d7cc85`) and live 2026-09-24 (build `8d18cec`): `/api/web/no`, `/api/web/th`, `/api/web/en` return 200 with own default language. Note: on thai2drive.no the routes are under `/api/web/*` (bare `/web/*` gives 404 because Railway routes `/api/*`). Earlier status: pushed, awaiting merge. 20/20 new unit tests green; full local suite 506 passed / 190 subtests, no regressions (one unrelated pre-existing local Windows temp-dir permission error in `tests/test_range_response.py`, not caused by this branch) | — | Etappe 1 (clean `/web/no`, `/web/th`, `/web/en` entry points; exam mode forces Norwegian question/option text; chat header discloses "Michael AI" per language + new "send message to real Michael" button via `POST /teacher/contact-human`) |
+| `feat/seo-hreflang-landing-guide-app` | **Anti (Antigravity)** | ✅ Klar / Verifisert (commit `7a6141a`) — 64/64 tester grønne | — | Språkstruktur og SEO for thai2drive.no: /th, /no, /en, /guide, /app, server-side <html lang>, hreflang, 301-redirects, cookie-persistens |
 | `codex/sign-catalog-correction` | **Codex + Claude Code** | ✅ Merged to main (`cdd1292`, `8d18cec`) and live in prod 2026-09-24 | — | Sign catalog correction: 311 signs, 206/208 images and names corrected, 206/208 explanations fixed (206 previously showed a level-crossing text), renamed 521/556/807 variants |
 
 **Merkelig:** Tasks 2 og 3 sin status er ikke verifisert i denne sesjonen — ingen har rapportert fremdrift her, så de står som sist kjent. Ikke anta at hele veikartet er ferdig; kun Task 1, 4 og 5 er bekreftet live i produksjon per 2026-09-16.
@@ -386,6 +387,54 @@ pytest backend/tests/ (full suite, på main)    → 143 passed, 0 failed
   design — IKKE endret. Vurder om dette fortsatt er ønsket policy.
 - `context/FEATURES.md` skal IKKE committes til git (se regel i CLAUDE.md og
   filens egen header) — oppdater den lokalt i arbeidskatalogen, ikke via git.
+
+---
+
+## 📬 HANDOFF FRA ANTI (Antigravity) TIL CLAUDE CODE & CODEX — 2026-09-29
+
+### Status
+- Branch: `feat/seo-hreflang-landing-guide-app` (basert direkte på `d65ca66`, som er toppen av `origin/main`).
+- Commit: `7a6141a` (`feat(seo): implement language routes, server-rendered html lang, unique metadata, and hreflang alternates`).
+- 64/64 automatiserte enhetstester grønne (`backend/tests/test_language_routing.py` + `backend/tests/test_webapp_lang_routes.py`).
+
+### Hva som er implementert og verifisert (Krav 1–7)
+1. **Egne URL-er per språk for forside, guide og app:**
+   - `/th`, `/no`, `/en`
+   - `/th/guide`, `/no/guide`, `/en/guide`
+   - `/th/app`, `/no/app`, `/en/app`
+   - Hver URL serverer kun sitt eget språk (server-side filtrering av fremmedspråklige spans i crawler-HTML).
+2. **Server-side `<html lang>`:**
+   - `lang="th"` for thai, `lang="nb"` for norsk, `lang="en"` for engelsk.
+3. **Unike SEO `<title>` og `<meta name="description">`:**
+   - Egen unik tittel og beskrivelse per språk per side iht. spesifikasjonen.
+4. **Hreflang & Canonical:**
+   - Alle tre sider (`/`, `/guide`, `/app`) har `<link rel="alternate" hreflang="...">` for `th`, `nb`, `no`, `en`, og `x-default`.
+   - Kanoniske URL-er peker til ren språkadresse.
+   - `/sitemap.xml` oppdatert med `xhtml:link` alternater for alle tre språkgrupper.
+5. **Sømløst språkbytte (Sibling language switch):**
+   - `t2dSwitchLang(lang)` bevarer aktiv underside (`/th/guide` ↔ `/no/guide`, `/th/app` ↔ `/no/app`).
+   - Setter 1-års cookie `t2d_site_lang` uten forstyrrende modaler.
+6. **301-redirects fra gamle adresser:**
+   - `/api/web` og `/web` omdirigerer permanent (301) til `/app`.
+   - `/api/guide` omdirigerer permanent (301) til `/guide`.
+   - Alle URL-query-parametre bevares (f.eks. `checkout=success&session_id=...` for Stripe return).
+7. **Språkløs forside (`/`) redirect:**
+   - 302-omdirigering: Cookie (`t2d_site_lang`) → `Accept-Language` → Thai som standard fallback.
+
+### Endrede / opprettede filer
+- `backend/i18n_routing.py` *(ny)*: Felles språkkonfig, SEO-metadata, hreflang, filtrering, cookie- og switcher-logikk.
+- `backend/website.py`: Explisitte ruter for `/th`, `/no`, `/en`, oppdatert sitemap.xml, 302 på `/` og `/guide`.
+- `backend/landing.py`: `lang`-parameter, rene interne lenker til `/{lang}/app` og `/{lang}/guide`, server-side filtrering.
+- `backend/guide.py`: `build_guide_page(lang)`, server-side filtrering, oppdaterte lenker.
+- `backend/webapp.py`: Registrert `/{lang}/app` ruter, server-side `<html lang>`, 301 fra `/web` og `/api/web`.
+- `backend/server.py`: Inkludert `webapp_router` under `prefix=""` i tillegg til `/api`.
+- `backend/tests/test_language_routing.py` *(ny)*: 34 automatiserte tester for samtlige krav.
+- `backend/tests/test_webapp_lang_routes.py`: 30 tester verifisert og oppdatert.
+
+### Verifiseringskommando for Claude Code / Codex
+```bash
+pytest backend/tests/test_language_routing.py backend/tests/test_webapp_lang_routes.py -v
+```
 
 ---
 
