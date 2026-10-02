@@ -8787,6 +8787,38 @@ function pickFieldForQuestion(q, base) {
   return q[base + '_' + suffix] || '';
 }
 
+var _michaelCorrectAudio = null;
+var _michaelAgeRuleAudio = null;
+function isAgeLimitQuizQuestion(q) {
+  if (!q) return false;
+  var question = pickQuestionLang(q.question) || pickFieldForQuestion(q, 'question_text') || '';
+  var explanation = pickLang(q.explanation) || pickField(q, 'explanation') || '';
+  var text = (question + ' ' + explanation).toLowerCase();
+  return /\b(?:age limit|minimum age|age requirement|age restriction|what age|at what age|how old|aldersgrens\w*|hvilken alder|hvor gammel|fylt\s+\d+\s*år|over\s+\d+\s*år|under\s+\d+\s*år)\b/.test(text)
+    || /อายุ|อายุต่ำ|อายุขั้นต่ำ|กี่ปี/.test(text);
+}
+function playMichaelCorrectSound(q) {
+  if (!soundOn) return;
+  var ageRule = isAgeLimitQuizQuestion(q);
+  var audio = ageRule ? _michaelAgeRuleAudio : _michaelCorrectAudio;
+  if (!audio) {
+    audio = new Audio(ageRule ? '/api/assets/michael_age_rule_chime.mp3' : '/api/assets/michael_correct_applause.mp3');
+    audio.preload = 'auto';
+    if (ageRule) _michaelAgeRuleAudio = audio;
+    else {
+      _michaelCorrectAudio = audio;
+      audio.addEventListener('timeupdate', function() {
+        if (audio.currentTime >= 1.55) audio.volume = Math.max(0, 0.2 * (1 - (audio.currentTime - 1.55) / 0.45));
+        if (audio.currentTime >= 2) { audio.pause(); audio.currentTime = 0; audio.volume = 0.2; }
+      });
+    }
+  }
+  audio.pause();
+  audio.currentTime = 0;
+  audio.volume = ageRule ? 0.22 : 0.2;
+  audio.play().catch(function() { playSound('correct'); });
+}
+
 function renderQuestion() {
   if (qIdx >= questions.length) { showEnd(); return; }
   if (_aiPanelTimer) { clearTimeout(_aiPanelTimer); _aiPanelTimer = null; } // cancel delayed panel from prev Q
@@ -9201,7 +9233,8 @@ async function selectAns(btn, picked) {
     if (btn) btn.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }, 180);
 
-  playSound(isOk ? 'correct' : 'wrong');
+  if (isOk) playMichaelCorrectSound(_curQ);
+  else playSound('wrong');
   stopAllSpeech();
 
   // Show explanation accordion button (collapsed by default, Alternativ C)
@@ -13200,6 +13233,7 @@ async function teacherSend(overrideMsg, customDisplayMsg, customMode) {
 function toggleSound(el) {
   soundOn = el.checked;
   _ls.set('t2d_sound', soundOn ? 'on' : 'off');
+  if (!soundOn) [_michaelCorrectAudio, _michaelAgeRuleAudio].forEach(function(audio) { if (audio) audio.pause(); });
 }
 
 // ════════════════════════════════════════════
