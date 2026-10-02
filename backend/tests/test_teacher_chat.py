@@ -196,7 +196,7 @@ class TestTeacherChatConsolidatedResolver(unittest.TestCase):
         self.assertNotIn("🚗 Norsk chip", chips)
         self.assertEqual(chips, ["❓ ถามต่อ", "📖 เปิดหนังสือเรียน", "📊 สถิติของฉัน"])
 
-    def test_teacher_chat_with_typo_returns_formula_media_and_chips(self):
+    def test_teacher_chat_with_typo_starts_with_guiding_question(self):
         req = TeacherChatRequest(
             session_id="test_session_typo_1",
             message="Hva er formelen for raksjonslengder?",
@@ -207,11 +207,9 @@ class TestTeacherChatConsolidatedResolver(unittest.TestCase):
         self.assertEqual(res.conversation_id, req.session_id)
         # The offline placeholder has no catalog record or asset and must be hidden.
         self.assertEqual(res.media, [])
-        # Verify suggestions
-        self.assertIn("🚗 Bremselengde", res.suggestions)
-        self.assertIn("📏 Stoppelengde", res.suggestions)
-        # Verify formula in reply
-        self.assertIn("(fart ÷ 10) × 3", res.reply.lower())
+        self.assertEqual(res.suggestions, [])
+        self.assertTrue(res.reply.strip().endswith("?") or "?" in res.reply)
+        self.assertNotIn("(fart ÷ 10) × 3", res.reply.lower())
 
     def test_completed_reply_survives_chat_history_write_failure(self):
         tc._chat_col = _WriteFailingCollection()
@@ -224,7 +222,7 @@ class TestTeacherChatConsolidatedResolver(unittest.TestCase):
         with self.assertLogs("teacher_chat", level="ERROR") as logs:
             res = asyncio.run(teacher_chat(req))
 
-        self.assertIn("(fart ÷ 10) × 3", res.reply.lower())
+        self.assertTrue(res.reply.strip().endswith("?") or "?" in res.reply)
         self.assertEqual(res.session_id, req.session_id)
         self.assertTrue(any("Failed to persist teacher chat history" in line for line in logs.output))
 
@@ -355,6 +353,7 @@ class TestWrongQuizAnswerReplyIsThaiOnly(unittest.TestCase):
 
         with patch.object(tc, "_get_relevant_michael_materials", new=materials), patch.object(
             tc, "_get_relevant_catalog_media", new=no_catalog
+        ), patch.object(tc, "_v4_next_stage", return_value="5"
         ):
             response, _ = self._chat_with_mock_model(
                 TeacherChatRequest(message="อธิบายภาพนี้", language="th"), "คำอธิบายสั้น ๆ"
@@ -363,7 +362,7 @@ class TestWrongQuizAnswerReplyIsThaiOnly(unittest.TestCase):
         self.assertEqual(response.media[0]["title"], "ชื่อภาษาไทย")
         self.assertEqual(response.media[0]["caption"], "คำอธิบายภาษาไทย")
 
-    def test_quiz_coach_uses_wrong_answer_context_and_keeps_explanation(self):
+    def test_quiz_coach_hides_correct_answer_on_first_turn(self):
         request = TeacherChatRequest(
             message=(
                 "Hvorfor var svaret mitt feil? <quiz_context>"
@@ -380,15 +379,11 @@ class TestWrongQuizAnswerReplyIsThaiOnly(unittest.TestCase):
         )
         response, prompt = self._chat_with_mock_model(request, model_reply)
         self.assertIn("Student answer: Kjør først", prompt)
-        self.assertIn("Correct answer: Vikeplikt", prompt)
-        self.assertIn("why that choice does not apply", prompt)
-        self.assertIn("at most one targeted", prompt)
-        self.assertIn("without fixed section headings", prompt)
-        self.assertNotIn("Theory-test angle", prompt)
-        self.assertNotIn("สถานการณ์", prompt)
+        self.assertNotIn("Correct answer: Vikeplikt", prompt)
+        self.assertIn("STAGE 1", prompt)
         self.assertEqual(response.mode, "quiz_coach")
-        self.assertEqual(response.reply, model_reply)
-        self.assertNotIn("FINAL OUTPUT CONTRACT", prompt)
+        self.assertEqual(response.reply, "Hvem ville du sluppet fram i dette krysset?")
+        self.assertEqual(response.media, [])
 
     def test_direct_legal_lookup_is_detected_and_limited_to_three_sentences(self):
         self.assertTrue(_is_direct_lookup("Hva sier § 7 annet ledd?"))
@@ -413,24 +408,17 @@ class TestWrongQuizAnswerReplyIsThaiOnly(unittest.TestCase):
         self.assertIn("Sign 202 does NOT require a stop every time", prompts["en"])
         self.assertIn("must always come to a complete stop", prompts["en"])
 
-    def test_simplify_uses_simple_junction_example_and_keeps_follow_up(self):
+    def test_simplify_still_starts_with_topic_clarification(self):
         request = TeacherChatRequest(message="Forklar vikeplikt enklere", language="th", mode="simplify")
-        model_reply = "ที่ทางแยกในนอร์เวย์ ให้ดูรถทางขวา. คุณควรหยุดให้รถคันไหนไปก่อน?"
-        response, prompt = self._chat_with_mock_model(request, model_reply)
-        self.assertIn("seven-year-old rule", prompt)
-        self.assertIn("Norwegian road junction", prompt)
-        self.assertIn("only in Thai", prompt)
-        self.assertEqual(response.reply, model_reply)
-        self.assertNotIn("FINAL OUTPUT CONTRACT", prompt)
+        response = asyncio.run(teacher_chat(request))
+        self.assertTrue(response.reply.strip().endswith("?") or "?" in response.reply)
+        self.assertEqual(response.media, [])
 
     def test_quiz_coach_without_answer_details_does_not_assume_wrong_answer(self):
         request = TeacherChatRequest(message="Can you help with this question?", language="en", mode="quiz_coach")
-        model_reply = "Which answer did you choose, and what was the correct answer?"
-        response, prompt = self._chat_with_mock_model(request, model_reply)
-        self.assertIn("only in English", prompt)
-        self.assertIn("If the answer details are missing", prompt)
-        self.assertIn("(none supplied)", prompt)
-        self.assertEqual(response.reply, model_reply)
+        response = asyncio.run(teacher_chat(request))
+        self.assertEqual(response.reply, tc._V4_COPY["en"]["quiz_missing"])
+        self.assertEqual(response.media, [])
 
 
 if __name__ == "__main__":
