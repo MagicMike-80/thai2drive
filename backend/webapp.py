@@ -4811,7 +4811,7 @@ a { color:inherit; text-decoration:none; }
           <div class="cb-info">
             <div class="cb-badge" data-key="campaign_badge">⚡ Begrenset tilbud</div>
             <h4 class="cb-title" data-key="campaign_title">🎁 30 dagers gratis Premium!</h4>
-            <p class="cb-desc" id="cbRemainingText">Kun 50 av 50 plasser igjen!</p>
+            <p class="cb-desc" id="cbRemainingText" data-key="campaign_desc_init">Kun 50 av 50 plasser igjen!</p>
           </div>
         </div>
         <button class="cb-btn" onclick="event.stopPropagation();openCampaignModal()" data-key="campaign_claim_btn">Sikre din plass</button>
@@ -5548,6 +5548,7 @@ var UI = {
   video_title:           {th:'วิดีโอ', no:'Video', en:'Video'},
   campaign_badge:        {th:'🎁 สิทธิ์ใช้งาน พรีเมียม 30 วัน', no:'🎁 30 DAGER PREMIUM', en:'🎁 30 DAYS PREMIUM'},
   campaign_title:        {th:'🎁 รับสิทธิ์ Premium ฟรี 30 วัน!', no:'🎁 30 dagers gratis Premium!', en:'🎁 30 Days Free Premium!'},
+  campaign_desc_init:    {th:'เหลือเพียง 50 จาก 50 ที่นั่ง!', no:'Kun 50 av 50 plasser igjen!', en:'Only 50 of 50 spots left!'},
   campaign_desc:         {th:'เหลือเพียง {remaining} จาก 50 ที่นั่ง!', no:'Kun {remaining} av 50 plasser igjen!', en:'Only {remaining} of 50 spots left!'},
   campaign_claim_btn:    {th:'รับสิทธิ์ทันที', no:'Sikre din plass', en:'Claim Your Spot'},
   campaign_modal_title:  {th:'ลงทะเบียนรับสิทธิ์ Premium ฟรี 30 วัน', no:'Registrer deg for 30 dagers gratis Premium', en:'Register for 30 Days Free Premium'},

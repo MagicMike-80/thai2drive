@@ -109,6 +109,9 @@ class _RecordingCollection:
 class _Database(dict):
     def __getitem__(self, key):
         return dict.get(self, key) or _RecordingCollection()
+        
+    def __getattr__(self, name):
+        return self[name]
 
 
 class StrictLangHelperTests(unittest.TestCase):
