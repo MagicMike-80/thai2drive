@@ -4780,7 +4780,7 @@ a { color:inherit; text-decoration:none; }
         <img src="/api/assets/michael_profile.jpg" alt="Michael" style="width:48px;height:48px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid rgba(255,153,51,.5);">
         <div style="flex:1;min-width:0;">
           <div style="font-weight:700;font-size:.95rem;color:#F8FAFC;margin-bottom:4px;">Michael</div>
-          <div id="michaelBioHome" data-key="michael_bio" style="font-size:.82rem;color:rgba(248,250,252,.7);line-height:1.55;">Michael brenner for trygg trafikk og gode læringsopplevelser. Med 16 års erfaring som trafikklærer bygger han Thai2Drive for å hjelpe thai-talende med å finne trygghet bak rattet i Norge.</div>
+          <div id="michaelBioHome" data-key="michael_bio" style="font-size:.82rem;color:rgba(248,250,252,.7);line-height:1.55;"></div>
         </div>
       </div>
 
@@ -5079,7 +5079,7 @@ a { color:inherit; text-decoration:none; }
               <img src="/api/assets/michael_profile.jpg" alt="Michael" style="width:44px;height:44px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid rgba(255,153,51,.45);">
               <div class="sr-label">
                 <div class="sr-title">Michael</div>
-                <div class="sr-sub" id="michaelBioSettings" data-key="michael_bio" style="white-space:normal;line-height:1.55;">Michael brenner for trygg trafikk og gode læringsopplevelser. Med 16 års erfaring som trafikklærer bygger han Thai2Drive for å hjelpe thai-talende med å finne trygghet bak rattet i Norge.</div>
+                <div class="sr-sub" id="michaelBioSettings" data-key="michael_bio" style="white-space:normal;line-height:1.55;"></div>
               </div>
             </div>
           </div>
