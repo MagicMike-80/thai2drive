@@ -58,6 +58,22 @@ class TestChatWidgetLanguageIsolation(unittest.TestCase):
         catch_body = match.group(1)
         self.assertIn("const lang = getLang();", catch_body)
 
+    def test_landing_widget_labels_and_quick_questions_are_localized(self):
+        from backend.website import _localized_chat_widget_html
+
+        thai = _localized_chat_widget_html("th")
+        english = _localized_chat_widget_html("en")
+        for html, expected in [
+            (thai, ["ยกเลิกการสมัครสมาชิก", "ลืมรหัสผ่าน", "aria-label=\"เปิดแชตช่วยเหลือ\"", "placeholder=\"ถามเกี่ยวกับ Thai2Drive...\""]),
+            (english, ["Cancel subscription", "Forgot password", "aria-label=\"Open support chat\"", "placeholder=\"Ask about Thai2Drive...\""]),
+        ]:
+            for text in expected:
+                self.assertIn(text, html)
+        self.assertIn('data-q="ฉันจะยกเลิกการสมัครสมาชิกได้อย่างไร"', thai)
+        self.assertIn('data-q="How do I cancel my subscription?"', english)
+        self.assertNotIn("data-q=\"Hvordan", thai + english)
+        self.assertNotIn("__", thai + english)
+
 
 if __name__ == "__main__":
     unittest.main()

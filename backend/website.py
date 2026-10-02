@@ -275,42 +275,70 @@ _CHAT_CSS = """
 }
 """
 
+_CHAT_WIDGET_TEXT = {
+  "th": {
+    "fab": "เปิดแชตช่วยเหลือ", "dialog": "แชตช่วยเหลือ", "close": "ปิด", "assistant": "ผู้ช่วย AI · ตอบทันที",
+    "cancel": "ยกเลิกการสมัครสมาชิก", "premium": "พรีเมียมไม่ทำงาน", "password": "ลืมรหัสผ่าน", "delete": "ลบบัญชี",
+    "q_cancel": "ฉันจะยกเลิกการสมัครสมาชิกได้อย่างไร", "q_premium": "ซื้อแล้วแต่พรีเมียมยังไม่เปิดใช้งาน", "q_password": "ฉันจะรีเซ็ตรหัสผ่านได้อย่างไร", "q_delete": "ฉันจะลบบัญชีได้อย่างไร",
+    "placeholder": "ถามเกี่ยวกับ Thai2Drive...", "send": "ส่ง", "disclaimer": "คำตอบจาก AI เรื่องสำคัญจะถูกส่งต่อไปยังฝ่ายสนับสนุนโดยอัตโนมัติ",
+  },
+  "no": {
+    "fab": "Åpne supportchat", "dialog": "Supportchat", "close": "Lukk", "assistant": "AI-assistent · svarer direkte",
+    "cancel": "Avslutt abonnement", "premium": "Premium virker ikke", "password": "Glemt passord", "delete": "Slett konto",
+    "q_cancel": "Hvordan kansellerer jeg abonnementet?", "q_premium": "Premium ble ikke aktivert etter kjøp", "q_password": "Hvordan tilbakestiller jeg passordet?", "q_delete": "Hvordan sletter jeg kontoen min?",
+    "placeholder": "Spør om Thai2Drive...", "send": "Send", "disclaimer": "AI-svar. Viktige saker videresendes automatisk til support.",
+  },
+  "en": {
+    "fab": "Open support chat", "dialog": "Support chat", "close": "Close", "assistant": "AI assistant · replies instantly",
+    "cancel": "Cancel subscription", "premium": "Premium not working", "password": "Forgot password", "delete": "Delete account",
+    "q_cancel": "How do I cancel my subscription?", "q_premium": "Premium was not activated after purchase", "q_password": "How do I reset my password?", "q_delete": "How do I delete my account?",
+    "placeholder": "Ask about Thai2Drive...", "send": "Send", "disclaimer": "AI responses. Important matters are automatically forwarded to support.",
+  },
+}
+
 _CHAT_WIDGET_HTML = """
 <!-- Support Chat Bubble -->
-<button class="t2d-chat-fab" id="t2dChatFab" aria-label="Support chat" title="Spør support">
+<button class="t2d-chat-fab" id="t2dChatFab" aria-label="__FAB__" title="__FAB__">
   <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.48 3 2 6.58 2 11c0 2.03.94 3.87 2.47 5.27L3 21l4.93-1.61c1.24.38 2.62.61 4.07.61 5.52 0 10-3.58 10-8S17.52 3 12 3z"/></svg>
   <span class="t2d-chat-badge" id="t2dChatBadge" style="display:none">1</span>
 </button>
 
-<div class="t2d-chat-panel" id="t2dChatPanel" role="dialog" aria-label="Support chat">
+<div class="t2d-chat-panel" id="t2dChatPanel" role="dialog" aria-label="__DIALOG__">
   <div class="t2d-chat-head">
     <img src="/api/assets/developer-icon-512.png" alt=""/>
     <div class="t2d-chat-head-info">
       <strong>Thai2Drive Support</strong>
-      <span>AI-assistent · svarer direkte</span>
+      <span>__ASSISTANT__</span>
     </div>
-    <button class="t2d-chat-close" id="t2dChatClose" aria-label="Lukk">✕</button>
+    <button class="t2d-chat-close" id="t2dChatClose" aria-label="__CLOSE__">✕</button>
   </div>
 
   <div class="t2d-chat-body" id="t2dChatBody"></div>
 
   <div class="t2d-quick-chips" id="t2dQuickChips">
-    <button data-q="Hvordan kansellerer jeg abonnementet?">🛑 Avslutt abonnement</button>
-    <button data-q="Premium ble ikke aktivert etter kjøp">⚠️ Premium virker ikke</button>
-    <button data-q="Hvordan tilbakestiller jeg passordet?">🔑 Glemt passord</button>
-    <button data-q="Hvordan sletter jeg kontoen min?">🗑 Slett konto</button>
+    <button data-q="__Q_CANCEL__">🛑 __CANCEL__</button>
+    <button data-q="__Q_PREMIUM__">⚠️ __PREMIUM__</button>
+    <button data-q="__Q_PASSWORD__">🔑 __PASSWORD__</button>
+    <button data-q="__Q_DELETE__">🗑 __DELETE__</button>
   </div>
 
   <form class="t2d-chat-foot" id="t2dChatForm">
-    <input class="t2d-chat-input" id="t2dChatInput" placeholder="Spør om Thai2Drive..." autocomplete="off" maxlength="500"/>
-    <button type="submit" class="t2d-chat-send" id="t2dChatSend">Send</button>
+    <input class="t2d-chat-input" id="t2dChatInput" aria-label="__PLACEHOLDER__" placeholder="__PLACEHOLDER__" autocomplete="off" maxlength="500"/>
+    <button type="submit" class="t2d-chat-send" id="t2dChatSend">__SEND__</button>
   </form>
 
   <div class="t2d-chat-disclaimer">
-    AI-svar. Viktige saker videresendes automatisk til support.
+    __DISCLAIMER__
   </div>
 </div>
 """
+
+def _localized_chat_widget_html(lang: str) -> str:
+  labels = _CHAT_WIDGET_TEXT.get(lang, _CHAT_WIDGET_TEXT["no"])
+  html = _CHAT_WIDGET_HTML
+  for key, value in labels.items():
+    html = html.replace(f"__{key.upper()}__", value)
+  return html
 
 _CHAT_JS = r"""
 (function(){
@@ -1234,7 +1262,7 @@ def landing_lang(request: Request):
     from landing import build_landing_page
     html = build_landing_page(
         chat_css=_CHAT_CSS,
-        chat_widget_html=_CHAT_WIDGET_HTML,
+        chat_widget_html=_localized_chat_widget_html(lang),
         chat_js=_CHAT_JS,
         lang=lang,
     )

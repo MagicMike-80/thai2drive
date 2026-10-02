@@ -219,16 +219,16 @@ def build_guide_page(lang: str = "no") -> str:
       <span class="tl tl-th">ลงทะเบียน</span><span class="tl tl-no">Registrer</span><span class="tl tl-en">Register</span>
     </div>
     <div class="step-chip"><span class="num">2</span>
-      <span class="tl tl-th">Trinn 1 (TGK)</span><span class="tl tl-no">Trinn 1 (TGK)</span><span class="tl tl-en">Trinn 1 (TGK)</span>
+      <span class="tl tl-th">ขั้นตอนที่ 1 (TGK)</span><span class="tl tl-no">Trinn 1 (TGK)</span><span class="tl tl-en">Step 1 (TGK)</span>
     </div>
     <div class="step-chip"><span class="num">3</span>
-      <span class="tl tl-th">Trinn 2 (45 min)</span><span class="tl tl-no">Trinn 2 (45 min)</span><span class="tl tl-en">Trinn 2 (45 min)</span>
+      <span class="tl tl-th">ขั้นตอนที่ 2 (45 นาที)</span><span class="tl tl-no">Trinn 2 (45 min)</span><span class="tl tl-en">Step 2 (45 min)</span>
     </div>
     <div class="step-chip"><span class="num">4</span>
-      <span class="tl tl-th">Trinn 3 + bane</span><span class="tl tl-no">Trinn 3 + bane</span><span class="tl tl-en">Trinn 3 + track</span>
+      <span class="tl tl-th">ขั้นตอนที่ 3 + สนามฝึก</span><span class="tl tl-no">Trinn 3 + bane</span><span class="tl tl-en">Step 3 + track</span>
     </div>
     <div class="step-chip"><span class="num">5</span>
-      <span class="tl tl-th">Trinn 4 (vei 6t)</span><span class="tl tl-no">Trinn 4 (vei 6t)</span><span class="tl tl-en">Trinn 4 (road 6h)</span>
+      <span class="tl tl-th">ขั้นตอนที่ 4 (ถนน 6 ชม.)</span><span class="tl tl-no">Trinn 4 (vei 6t)</span><span class="tl tl-en">Step 4 (road 6h)</span>
     </div>
     <div class="step-chip"><span class="num">6</span>
       <span class="tl tl-th">ทฤษฎี</span><span class="tl tl-no">Teoriprøve</span><span class="tl tl-en">Theory test</span>
@@ -375,14 +375,14 @@ def build_guide_page(lang: str = "no") -> str:
       <div class="step-item">
         <div class="step-num">3</div>
         <div class="step-body">
-          <h4><span class="tl tl-th">Trinn 2 — Veiledningstime (45 min)</span><span class="tl tl-no">Trinn 2 — Veiledningstime (45 min)</span><span class="tl tl-en">Step 2 — Guidance session (45 min)</span></h4>
+          <h4><span class="tl tl-th">ขั้นตอนที่ 2 — บทเรียนขับรถกับครู (45 นาที)</span><span class="tl tl-no">Trinn 2 — Veiledningstime (45 min)</span><span class="tl tl-en">Step 2 — Guidance session (45 min)</span></h4>
           <p><span class="tl tl-th">ฝึกขับรถกับครูสอน เซสชัน 45 นาที เพื่อพัฒนาทักษะพื้นฐานบนถนน</span><span class="tl tl-no">Kjøring med trafikklærer. Veiledningstime på 45 minutter for grunnleggende kjøreferdigheter.</span><span class="tl tl-en">Driving with instructor. 45-minute guidance session for basic driving skills.</span></p>
         </div>
       </div>
       <div class="step-item">
         <div class="step-num">4</div>
         <div class="step-body">
-          <h4><span class="tl tl-th">Trinn 3 — Veiledningstime (60 min) + Sikkerhetskurs på bane (5 timer)</span><span class="tl tl-no">Trinn 3 — Veiledningstime (60 min) + Sikkerhetskurs på bane (5 timer)</span><span class="tl tl-en">Step 3 — Guidance (60 min) + Track safety course (5 hours)</span></h4>
+          <h4><span class="tl tl-th">ขั้นตอนที่ 3 — บทเรียนขับรถกับครู (60 นาที) + หลักสูตรความปลอดภัยในสนามฝึก (5 ชั่วโมง)</span><span class="tl tl-no">Trinn 3 — Veiledningstime (60 min) + Sikkerhetskurs på bane (5 timer)</span><span class="tl tl-en">Step 3 — Guidance (60 min) + Track safety course (5 hours)</span></h4>
           <p><span class="tl tl-th">ฝึกขับ 60 นาทีกับครู + หลักสูตรความปลอดภัยบนสนาม 5 ชั่วโมง (Glattkjøring — ขับบนถนนลื่น/น้ำแข็ง)</span><span class="tl tl-no">Veiledningstime på 60 minutter + Sikkerhetskurs på bane på 5 timer (Glattkjøring — kjøring på glatt underlag).</span><span class="tl tl-en">60-min guidance session + 5-hour track safety course (Glattkjøring — driving on slippery/icy surface).</span></p>
           <span class="warn"><span class="tl tl-th">ต้องผ่าน Trinn 2 ก่อน!</span><span class="tl tl-no">Må ha fullført Trinn 2 først!</span><span class="tl tl-en">Must complete Step 2 first!</span></span>
         </div>
@@ -390,7 +390,7 @@ def build_guide_page(lang: str = "no") -> str:
       <div class="step-item">
         <div class="step-num">5</div>
         <div class="step-body">
-          <h4><span class="tl tl-th">Trinn 4 — Sikkerhetskurs på vei (5+4 timer)</span><span class="tl tl-no">Trinn 4 — Sikkerhetskurs på vei (5+4 timer)</span><span class="tl tl-en">Step 4 — Road safety course (5+4 hours)</span></h4>
+          <h4><span class="tl tl-th">ขั้นตอนที่ 4 — หลักสูตรความปลอดภัยบนถนน (5+4 ชั่วโมง)</span><span class="tl tl-no">Trinn 4 — Sikkerhetskurs på vei (5+4 timer)</span><span class="tl tl-en">Step 4 — Road safety course (5+4 hours)</span></h4>
           <p><span class="tl tl-th">🚗 <strong>5 ชั่วโมงแรก:</strong> ขับทางไกลบนถนนนอกเมืองพร้อมครูผู้สอนช่วยเหลือ<br/>🎓 <strong>4 ชั่วโมงสุดท้าย:</strong> ผู้เรียนต้องขับอย่างอิสระ 100% — ครูไม่ช่วย ต้องผ่านด้วยตัวเอง</span><span class="tl tl-no">🚗 <strong>Første 5 timer:</strong> Langkjøring på landevei med hjelp fra trafikklærer<br/>🎓 <strong>Siste 4 timer:</strong> Eleven kjører 100% selvstendig — må klare seg helt på egen hånd</span><span class="tl tl-en">🚗 <strong>First 5 hours:</strong> Long-distance driving on country roads with instructor assistance<br/>🎓 <strong>Last 4 hours:</strong> Student drives completely independently — must manage entirely on their own</span></p>
           <span class="note"><span class="tl tl-th">สุดท้ายก่อนสอบ — ที่โรงเรียนสอนขับ</span><span class="tl tl-no">Siste obligatoriske hos trafikklærer</span><span class="tl tl-en">Last mandatory step at driving school</span></span>
         </div>
@@ -549,7 +549,7 @@ def build_guide_page(lang: str = "no") -> str:
           <span class="tl tl-en"> — student and instructor assess readiness for step 4</span>
         </div>
         <div style="background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.3);border-radius:8px;padding:10px 12px;font-size:13px;color:#C4B5FD">
-          🏎️ <strong><span class="tl tl-th">Sikkerhetskurs på bane — SKB (5 ชั่วโมง บังคับ)</span><span class="tl tl-no">Sikkerhetskurs på bane — SKB (5 timer, obligatorisk)</span><span class="tl tl-en">Track safety course — SKB (5 hours, mandatory)</span></strong><br/>
+          🏎️ <strong><span class="tl tl-th">หลักสูตรความปลอดภัยในสนามฝึก — SKB (5 ชั่วโมง บังคับ)</span><span class="tl tl-no">Sikkerhetskurs på bane — SKB (5 timer, obligatorisk)</span><span class="tl tl-en">Track safety course — SKB (5 hours, mandatory)</span></strong><br/>
           <div style="display:block;margin-top:4px">
             <span class="tl tl-th">ฝึกบนสนามพิเศษ: ทดสอบการเบรก, ขับบนถนนลื่น (glattkjøring), ทดสอบระบบ ABS, ฝึกควบคุมรถในสถานการณ์ฉุกเฉิน</span>
             <span class="tl tl-no">Øver på bane: nødbremsing, kjøring på glatt underlag, ABS-test, kontroll ved krisesituasjoner</span>
@@ -563,7 +563,7 @@ def build_guide_page(lang: str = "no") -> str:
     <div class="card" style="margin-bottom:14px;border-left:3px solid #10B981">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
         <div class="step-num" style="width:32px;height:32px;border-radius:50%;background:#10B981;color:#fff;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0">4</div>
-        <h3 style="font-size:16px"><span class="tl tl-th">Trinn 4 — Sikkerhetskurs på vei (5+4 ชั่วโมง)</span><span class="tl tl-no">Trinn 4 — Sikkerhetskurs på vei (5+4 timer)</span><span class="tl tl-en">Step 4 — Road safety course (5+4 hours)</span></h3>
+        <h3 style="font-size:16px"><span class="tl tl-th">ขั้นตอนที่ 4 — หลักสูตรความปลอดภัยบนถนน (5+4 ชั่วโมง)</span><span class="tl tl-no">Trinn 4 — Sikkerhetskurs på vei (5+4 timer)</span><span class="tl tl-en">Step 4 — Road safety course (5+4 hours)</span></h3>
       </div>
       <p style="font-size:13px;color:#10B981;font-weight:700;margin-bottom:8px">
         <span class="tl tl-th">🎯 เป้าหมาย: ขับอิสระ 100% ระบุความเสี่ยง และเลือกวิธีขับที่ปลอดภัยที่สุด</span>
@@ -650,7 +650,7 @@ def build_guide_page(lang: str = "no") -> str:
 </div><!-- /container -->
 
 <footer>
-  <p>© 2025 Thai2Drive · <a href="/privacy">Personvern</a> · <a href="/terms">Vilkår</a></p>
+  <p>© 2025 Thai2Drive · <a href="/privacy"><span class="tl tl-th">นโยบายความเป็นส่วนตัว</span><span class="tl tl-no">Personvern</span><span class="tl tl-en">Privacy</span></a> · <a href="/terms"><span class="tl tl-th">ข้อกำหนดการใช้งาน</span><span class="tl tl-no">Vilkår</span><span class="tl tl-en">Terms</span></a></p>
 </footer>
 
 <script>{_JS}</script>
