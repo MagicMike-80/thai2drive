@@ -5409,7 +5409,7 @@ a { color:inherit; text-decoration:none; }
     <button class="flashcard-demo-close" type="button" onclick="closeSituationFlashcard()" data-label-key="fc_close" aria-label="ปิด">✕</button>
     <h2 class="flashcard-demo-title" id="flashcardDemoTitle" data-key="fc_title">Fagordkort</h2>
     <p class="flashcard-demo-count" id="flashcardDemoCount" aria-live="polite"></p>
-    <button class="flashcard-sfx-toggle" id="flashcardSfxMuteBtn" type="button" onclick="toggleFlashcardSfxMute()" data-label-key="fc_sfx_on" aria-label="SFX på" aria-pressed="false"><span id="flashcardSfxIcon" aria-hidden="true">🔊</span><span id="flashcardSfxLabel">SFX på</span></button>
+    <button class="flashcard-sfx-toggle" id="flashcardSfxMuteBtn" type="button" onclick="toggleFlashcardSfxMute()" data-label-key="fc_sound_on" aria-label="Lyd på" aria-pressed="false"><span id="flashcardSfxIcon" aria-hidden="true">🔊</span><span id="flashcardSfxLabel">Lyd på</span></button>
     <div class="flashcard-demo-scene">
       <div class="flashcard-demo-card" id="flashcardDemoCard" aria-live="polite">
         <article class="flashcard-demo-face" id="flashcardFront" aria-hidden="false">
@@ -5610,8 +5610,8 @@ var UI = {
   fc_next:               {th:'ถัดไป', no:'Neste', en:'Next'},
   fc_norwegian_term:     {th:'คำศัพท์นอร์เวย์', no:'Norsk fagord', en:'Norwegian term'},
   fc_counter:            {th:'การ์ด {current} จาก {total}', no:'Kort {current} av {total}', en:'Card {current} of {total}'},
-  fc_sfx_on:             {th:'เปิดเสียงเอฟเฟกต์', no:'SFX på', en:'SFX on'},
-  fc_sfx_off:            {th:'ปิดเสียงเอฟเฟกต์', no:'SFX av', en:'SFX off'},
+  fc_sound_on:           {th:'เปิดเสียง', no:'Lyd på', en:'Sound on'},
+  fc_sound_off:          {th:'ปิดเสียง', no:'Lyd av', en:'Sound off'},
   fc_rating_prompt:      {th:'คุณรู้เรื่องนี้แค่ไหน?', no:'Hvor godt kan du dette?', en:'How well do you know this?'},
   fc_rating_group:       {th:'ประเมินความเข้าใจของคุณ', no:'Vurder hvor godt du kan dette', en:'Rate your confidence'},
   fc_know:               {th:'รู้แล้ว', no:'Kan det', en:'I know it'},
@@ -6807,6 +6807,24 @@ var _flashcardSfxMuted = false;
 var _flashcardSfxContext = null;
 var _flashcardSfxMaster = null;
 var _flashcardPendingSfx = '';
+var _flashcardIntroAudio = null;
+var _flashcardFlipAudio = null;
+function flashcardPlayTrack(kind) {
+  if (_flashcardSfxMuted) return;
+  if (_flashcardNarrationAudio && !_flashcardNarrationAudio.paused && !_flashcardNarrationAudio.ended) {
+    _flashcardPendingSfx = kind;
+    return;
+  }
+  var audio = kind === 'intro' ? _flashcardIntroAudio : _flashcardFlipAudio;
+  if (!audio) {
+    audio = new Audio('/api/assets/flashcard_' + kind + '.mp3');
+    audio.preload = 'auto';
+    if (kind === 'intro') _flashcardIntroAudio = audio;
+    else _flashcardFlipAudio = audio;
+  }
+  audio.currentTime = 0;
+  audio.play().catch(function() {});
+}
 function flashcardValue(term, field) {
   var value = term && term[field + '_' + appLang];
   return typeof value === 'string' ? value.trim() : '';
@@ -6814,7 +6832,7 @@ function flashcardValue(term, field) {
 function flashcardUpdateSfxMuteButton() {
   var button = document.getElementById('flashcardSfxMuteBtn');
   if (!button) return;
-  var key = _flashcardSfxMuted ? 'fc_sfx_off' : 'fc_sfx_on';
+  var key = _flashcardSfxMuted ? 'fc_sound_off' : 'fc_sound_on';
   button.setAttribute('data-label-key', key);
   button.setAttribute('aria-label', t(key));
   button.setAttribute('aria-pressed', _flashcardSfxMuted ? 'true' : 'false');
@@ -6824,6 +6842,10 @@ function flashcardUpdateSfxMuteButton() {
 function toggleFlashcardSfxMute() {
   _flashcardSfxMuted = !_flashcardSfxMuted;
   flashcardUpdateSfxMuteButton();
+  [_flashcardIntroAudio, _flashcardFlipAudio].forEach(function(audio) {
+    if (!audio) return;
+    if (_flashcardSfxMuted) audio.pause();
+  });
   if (_flashcardSfxMaster && _flashcardSfxContext) {
     var now = _flashcardSfxContext.currentTime;
     _flashcardSfxMaster.gain.cancelScheduledValues(now);
@@ -6851,7 +6873,8 @@ function flashcardAfterNarration(labelKey) {
   if (_flashcardPendingSfx && !_flashcardSfxMuted) {
     var pending = _flashcardPendingSfx;
     _flashcardPendingSfx = '';
-    flashcardPlaySfx(pending);
+    if (pending === 'intro' || pending === 'flip') flashcardPlayTrack(pending);
+    else flashcardPlaySfx(pending);
   } else {
     _flashcardPendingSfx = '';
     if (_flashcardSfxContext && !_flashcardSfxMuted) _flashcardSfxContext.resume().catch(function() {});
@@ -6979,6 +7002,7 @@ async function openSituationFlashcard() {
   overlay.hidden = false;
   overlay.setAttribute('aria-hidden', 'false');
   flashcardUpdateSfxMuteButton();
+  flashcardPlayTrack('intro');
   var close = overlay.querySelector('.flashcard-demo-close');
   if (close) close.focus();
   if (_flashcardTerms.length) { renderSituationFlashcard(); return; }
@@ -7016,6 +7040,8 @@ function closeSituationFlashcard(event) {
   overlay.setAttribute('aria-hidden', 'true');
   _flashcardLoadToken++;
   _flashcardPendingSfx = '';
+  if (_flashcardIntroAudio) _flashcardIntroAudio.pause();
+  if (_flashcardFlipAudio) _flashcardFlipAudio.pause();
   if (_flashcardNarrationAudio) _flashcardNarrationAudio.pause();
   flashcardSetAudioLabel('fc_audio_play');
   _flashcardAudioButton = null;
@@ -7023,7 +7049,7 @@ function closeSituationFlashcard(event) {
 }
 function flipSituationFlashcard() {
   if (!_flashcardTerms.length) return;
-  flashcardPlaySfx('flip');
+  flashcardPlayTrack('flip');
   _flashcardFlipped = !_flashcardFlipped;
   renderSituationFlashcard();
 }

@@ -44,7 +44,7 @@ def test_card_content_is_inserted_as_text_and_keeps_norwegian_term_on_back():
     assert "flashcardNorwegianTerm').textContent = t('fc_norwegian_term') + ': ' + wordNo" in source
 
 
-def test_flashcard_sfx_are_synthesized_with_web_audio_and_can_be_muted():
+def test_flashcard_sounds_use_local_assets_and_can_be_muted():
     source = WEBAPP.read_text(encoding="utf-8")
 
     assert "window.AudioContext || window.webkitAudioContext" in source
@@ -53,6 +53,8 @@ def test_flashcard_sfx_are_synthesized_with_web_audio_and_can_be_muted():
     assert "function toggleFlashcardSfxMute()" in source
     assert "aria-pressed', _flashcardSfxMuted ? 'true' : 'false'" in source
     assert "if (_flashcardSfxMuted) return;" in source
+    assert "new Audio('/api/assets/flashcard_' + kind + '.mp3')" in source
+    assert "flashcardPlayTrack('intro')" in source
     assert "var _flashcardPendingSfx = '';" in source
     assert "_flashcardPendingSfx = kind;" in source
     assert "function flashcardAfterNarration(labelKey)" in source
@@ -61,7 +63,7 @@ def test_flashcard_sfx_are_synthesized_with_web_audio_and_can_be_muted():
 def test_flashcard_flip_and_confidence_choices_trigger_their_own_sfx():
     source = WEBAPP.read_text(encoding="utf-8")
 
-    assert "flashcardPlaySfx('flip')" in source
+    assert "flashcardPlayTrack('flip')" in source
     assert "flashcardPlaySfx(choice)" in source
     assert "if (kind === 'know')" in source
     assert "kind === 'unsure' ? 430 : 330" in source
@@ -74,4 +76,4 @@ def test_flashcard_confidence_choices_and_mute_are_localized():
     assert "fc_know:" in source and "no:'Kan det'" in source and "en:'I know it'" in source
     assert "fc_unsure:" in source and "no:'Usikker'" in source and "en:'Not sure'" in source
     assert "fc_cant:" in source and "no:'Kan ikke'" in source and "en:'Not yet'" in source
-    assert "fc_sfx_on:" in source and "fc_sfx_off:" in source
+    assert "fc_sound_on:" in source and "fc_sound_off:" in source
