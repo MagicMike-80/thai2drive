@@ -182,6 +182,10 @@ class GuideLanguageRouteTests(unittest.TestCase):
         english = client.get("/en/guide").text
         for text in ["ขั้นตอนที่ 1 (TGK)", "ขั้นตอนที่ 3 + สนามฝึก", "หลักสูตรความปลอดภัยบนถนน", "การประเมินขั้นตอน", "พร้อมเรียนขั้นตอนที่ 3", "พร้อมสำหรับขั้นตอนที่ 4", "นโยบายความเป็นส่วนตัว", "ข้อกำหนดการใช้งาน"]:
             self.assertIn(text, thai)
+        for text in ["หลักสูตรพื้นฐานด้านการจราจร (TG)", "หลักสูตรพื้นฐานด้านการจราจร (TGK)", "การสอบภาคทฤษฎี", "การสอบขับรถ"]:
+            self.assertIn(text, thai)
+        for text in ["<span class=\"tl tl-th\">Trafikalt grunnkurs", "<span class=\"tl tl-th\">Teoriprøve", "<span class=\"tl tl-th\">Førerprøve"]:
+            self.assertNotIn(text, thai)
         for text in ["Step 1 (TGK)", "Step 3 + track", "Road safety course", "Privacy", "Terms"]:
             self.assertIn(text, english)
         self.assertNotIn("Trinn 1 (TGK)", english)

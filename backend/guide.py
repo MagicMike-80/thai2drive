@@ -355,7 +355,7 @@ def build_guide_page(lang: str = "no") -> str:
       <div class="step-item">
         <div class="step-num">2</div>
         <div class="step-body">
-          <h4><span class="tl tl-th">Trafikalt grunnkurs (TG)</span><span class="tl tl-no">Trafikalt grunnkurs (TG)</span><span class="tl tl-en">Basic traffic course (TG)</span></h4>
+          <h4><span class="tl tl-th">หลักสูตรพื้นฐานด้านการจราจร (TG)</span><span class="tl tl-no">Trafikalt grunnkurs (TG)</span><span class="tl tl-en">Basic traffic course (TG)</span></h4>
           <p><span class="tl tl-th">หลักสูตรพื้นฐาน 17 ชั่วโมง ครอบคลุมทฤษฎีพื้นฐาน การปฐมพยาบาล และการขับขี่อย่างปลอดภัย</span><span class="tl tl-no">17-timers grunnkurs. Dekker grunnleggende teori, førstehjelp og trygg kjøring.</span><span class="tl tl-en">17-hour basic course. Covers basic theory, first aid and safe driving.</span></p>
           <div style="margin-top:10px;background:rgba(255,153,51,.08);border:1px solid rgba(255,153,51,.2);border-radius:10px;padding:12px 14px">
             <p style="font-size:13px;font-weight:700;color:#FF9933;margin-bottom:6px">
@@ -404,7 +404,7 @@ def build_guide_page(lang: str = "no") -> str:
       <div class="step-item">
         <div class="step-num">6</div>
         <div class="step-body">
-          <h4><span class="tl tl-th">Teoriprøve — สอบทฤษฎี</span><span class="tl tl-no">Teoriprøven</span><span class="tl tl-en">Theory test</span></h4>
+          <h4><span class="tl tl-th">การสอบภาคทฤษฎี</span><span class="tl tl-no">Teoriprøven</span><span class="tl tl-en">Theory test</span></h4>
           <p><span class="tl tl-th">45 ข้อ — ต้องได้ 85% (ผิดได้ไม่เกิน 7 ข้อ) เวลา 90 นาที ค่าสอบ ~300 kr<br/>⏰ สอบได้ตั้งแต่อายุ <strong>16 ปีครึ่ง</strong> — ผลสอบใช้ได้ <strong>3 ปี</strong></span><span class="tl tl-no">45 spørsmål — minst 85% riktig (maks 7 feil). 90 min. ~300 kr.<br/>⏰ Kan tas fra <strong>16,5 år</strong> — gyldig i <strong>3 år</strong></span><span class="tl tl-en">45 questions — at least 85% correct (max 7 wrong). 90 min. ~300 kr.<br/>⏰ Can be taken from <strong>16.5 years</strong> — valid for <strong>3 years</strong></span></p>
           <span class="note"><span class="tl tl-th">ฝึกกับ Thai2Drive! 📱</span><span class="tl tl-no">Øv med Thai2Drive! 📱</span><span class="tl tl-en">Practice with Thai2Drive! 📱</span></span>
         </div>
@@ -412,7 +412,7 @@ def build_guide_page(lang: str = "no") -> str:
       <div class="step-item">
         <div class="step-num">7</div>
         <div class="step-body">
-          <h4><span class="tl tl-th">Førerprøve — สอบขับ</span><span class="tl tl-no">Førerprøven (kjøreprøven)</span><span class="tl tl-en">Driving test</span></h4>
+          <h4><span class="tl tl-th">การสอบขับรถ</span><span class="tl tl-no">Førerprøven (kjøreprøven)</span><span class="tl tl-en">Driving test</span></h4>
           <p><span class="tl tl-th">ขับรถกับผู้ตรวจสอบจาก Statens Vegvesen 60 นาที ค่าสอบ ~1 000 kr<br/>ต้องผ่านทุกขั้นตอนก่อนนี้แล้ว!</span><span class="tl tl-no">Kjøring med sensor fra Statens Vegvesen. 60 min. ~1 000 kr.<br/>Alle obligatoriske trinn MÅ være fullført!</span><span class="tl tl-en">Drive with an examiner from Statens Vegvesen. 60 min. ~1 000 kr.<br/>All mandatory steps must be completed first!</span></p>
         </div>
       </div>
@@ -433,7 +433,7 @@ def build_guide_page(lang: str = "no") -> str:
     <div class="card" style="margin-bottom:14px;border-left:3px solid #FF9933">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
         <div class="step-num" style="width:32px;height:32px;border-radius:50%;background:#FF9933;color:#0F172A;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0">1</div>
-        <h3 style="font-size:16px"><span class="tl tl-th">Trafikalt grunnkurs (TGK)</span><span class="tl tl-no">Trafikalt grunnkurs (TGK)</span><span class="tl tl-en">Basic Traffic Course (TGK)</span></h3>
+        <h3 style="font-size:16px"><span class="tl tl-th">หลักสูตรพื้นฐานด้านการจราจร (TGK)</span><span class="tl tl-no">Trafikalt grunnkurs (TGK)</span><span class="tl tl-en">Basic Traffic Course (TGK)</span></h3>
       </div>
       <p style="font-size:13px;color:#FF9933;font-weight:700;margin-bottom:8px">
         <span class="tl tl-th">🎯 เป้าหมาย: เข้าใจความรับผิดชอบของผู้ขับขี่และความปลอดภัยบนถนน</span>
