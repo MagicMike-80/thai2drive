@@ -23,7 +23,7 @@ class _Cursor:
         return self
 
     async def to_list(self, length=None):
-        return []
+        return [{"role": "assistant", "v4_stage": "3", "content": "What do you think?"}]
 
 
 class _Collection:

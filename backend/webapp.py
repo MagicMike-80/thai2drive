@@ -13453,53 +13453,54 @@ def _webapp_html(default_lang: str = "th") -> str:
         1,
     )
 
-    if lang != "no":
-        import re
-        if not hasattr(_webapp_html, "_ui_dict"):
-            _ui_dict = {}
-            ui_str_match = re.search(r'var UI = \{(.*?)\n\};', WEBAPP_HTML, re.DOTALL)
-            if ui_str_match:
-                for line in ui_str_match.group(1).split('\n'):
-                    line = line.split('//')[0].strip()
-                    if not line: continue
-                    m = re.match(r'([a-zA-Z0-9_]+)\s*:\s*\{(.*?)\}', line)
-                    if m:
-                        key = m.group(1)
-                        langs_str = m.group(2)
-                        th_m = re.search(r'th\s*:\s*\'((?:\\\'|[^\'])*?)\'', langs_str)
-                        en_m = re.search(r'en\s*:\s*\'((?:\\\'|[^\'])*?)\'', langs_str)
-                        _ui_dict[key] = {
-                            'th': th_m.group(1).replace("\\'", "'") if th_m else '',
-                            'en': en_m.group(1).replace("\\'", "'") if en_m else ''
-                        }
-            _webapp_html._ui_dict = _ui_dict
+    import re
+    if not hasattr(_webapp_html, "_ui_dict"):
+        _ui_dict = {}
+        ui_str_match = re.search(r'var UI = \{(.*?)\n\};', WEBAPP_HTML, re.DOTALL)
+        if ui_str_match:
+            for line in ui_str_match.group(1).split('\n'):
+                line = line.split('//')[0].strip()
+                if not line: continue
+                m = re.match(r'([a-zA-Z0-9_]+)\s*:\s*\{(.*?)\}', line)
+                if m:
+                    key = m.group(1)
+                    langs_str = m.group(2)
+                    th_m = re.search(r'th\s*:\s*\'((?:\\\'|[^\'])*?)\'', langs_str)
+                    no_m = re.search(r'no\s*:\s*\'((?:\\\'|[^\'])*?)\'', langs_str)
+                    en_m = re.search(r'en\s*:\s*\'((?:\\\'|[^\'])*?)\'', langs_str)
+                    _ui_dict[key] = {
+                        'th': th_m.group(1).replace("\\'", "'") if th_m else '',
+                        'no': no_m.group(1).replace("\\'", "'") if no_m else '',
+                        'en': en_m.group(1).replace("\\'", "'") if en_m else ''
+                    }
+        _webapp_html._ui_dict = _ui_dict
 
-        def _repl(m):
-            key = m.group(2)
+    def _repl(m):
+        key = m.group(2)
+        val = _webapp_html._ui_dict.get(key, {}).get(lang, '')
+        if val:
+            return f'{m.group(1)}{val}{m.group(4)}'
+        return m.group(0)
+
+    html = re.sub(r'(<[^>]+data-key="([^"]+)"[^>]*>)([^<]*)(</[^>]+>)', _repl, html)
+
+    def _repl_attr(m):
+        tag_str = m.group(0)
+        for attr_match in re.finditer(r'data-(placeholder|label|title)-key="([^"]+)"', tag_str):
+            attr_type = attr_match.group(1)
+            key = attr_match.group(2)
             val = _webapp_html._ui_dict.get(key, {}).get(lang, '')
-            if val:
-                return f'{m.group(1)}{val}{m.group(4)}'
-            return m.group(0)
+            if not val: continue
+            if attr_type == 'placeholder':
+                tag_str = re.sub(r'placeholder="[^"]*"', f'placeholder="{val}"', tag_str)
+            elif attr_type == 'title':
+                tag_str = re.sub(r'title="[^"]*"', f'title="{val}"', tag_str)
+            elif attr_type == 'label':
+                tag_str = re.sub(r'aria-label="[^"]*"', f'aria-label="{val}"', tag_str)
+                tag_str = re.sub(r'title="[^"]*"', f'title="{val}"', tag_str)
+        return tag_str
 
-        html = re.sub(r'(<[^>]+data-key="([^"]+)"[^>]*>)([^<]*)(</[^>]+>)', _repl, html)
-
-        def _repl_attr(m):
-            tag_str = m.group(0)
-            for attr_match in re.finditer(r'data-(placeholder|label|title)-key="([^"]+)"', tag_str):
-                attr_type = attr_match.group(1)
-                key = attr_match.group(2)
-                val = _webapp_html._ui_dict.get(key, {}).get(lang, '')
-                if not val: continue
-                if attr_type == 'placeholder':
-                    tag_str = re.sub(r'placeholder="[^"]*"', f'placeholder="{val}"', tag_str)
-                elif attr_type == 'title':
-                    tag_str = re.sub(r'title="[^"]*"', f'title="{val}"', tag_str)
-                elif attr_type == 'label':
-                    tag_str = re.sub(r'aria-label="[^"]*"', f'aria-label="{val}"', tag_str)
-                    tag_str = re.sub(r'title="[^"]*"', f'title="{val}"', tag_str)
-            return tag_str
-
-        html = re.sub(r'<[^>]+data-(?:placeholder|label|title)-key="[^"]+"[^>]*>', _repl_attr, html)
+    html = re.sub(r'<[^>]+data-(?:placeholder|label|title)-key="[^"]+"[^>]*>', _repl_attr, html)
 
     return html
 

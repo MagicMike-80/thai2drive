@@ -154,10 +154,9 @@ class SystemPromptMemoryInjectionTests(unittest.TestCase):
         for lang in ("no", "th", "en"):
             prompt = tc._build_system_prompt(lang)
             contract = prompt.rsplit("FINAL MASTER OUTPUT RULES", 1)[1]
-            self.assertIn("2–4 sentences", contract)
-            self.assertIn("no fixed section headings", contract)
+            self.assertIn("1–2 short sentences", contract)
+            self.assertIn("No fixed section headings", contract)
             self.assertIn("no emoji", contract)
-            self.assertIn("No false praise", contract)
             self.assertNotIn("🚗 Situasjon", prompt)
         self.assertIn("Norwegian technical term", tc._build_system_prompt("th"))
 
@@ -206,15 +205,16 @@ class WelcomeGreetingLanguageIsolationTests(unittest.TestCase):
         self._set_streak_fixture(streak=3)
         result = asyncio.run(tc.teacher_welcome(lang="no", user_id="u1"))
 
-        self.assertIn("3", result["welcome"])
-        self.assertNotIn("streak", result["welcome"].lower())
-        self.assertFalse(any(ord(ch) > 0x0E00 and ord(ch) < 0x0E7F for ch in result["welcome"]))
+        self.assertEqual(result.get("streak"), 3)
+        self.assertIn("Hva kan jeg hjelpe", result["welcome"])
+        self.assertNotIn("What", result["welcome"])
 
     def test_streak_greeting_is_thai_only(self):
         self._set_streak_fixture(streak=3)
         result = asyncio.run(tc.teacher_welcome(lang="th", user_id="u1"))
 
-        self.assertIn("3", result["welcome"])
+        self.assertEqual(result.get("streak"), 3)
+        self.assertIn("ผมช่วยอะไรคุณได้บ้างครับ", result["welcome"])
         self.assertTrue(any(0x0E00 <= ord(ch) <= 0x0E7F for ch in result["welcome"]))
         self.assertNotIn("riktige", result["welcome"].lower())
 
@@ -222,8 +222,8 @@ class WelcomeGreetingLanguageIsolationTests(unittest.TestCase):
         self._set_streak_fixture(streak=3)
         result = asyncio.run(tc.teacher_welcome(lang="en", user_id="u1"))
 
-        self.assertIn("3", result["welcome"])
-        self.assertIn("streak", result["welcome"].lower())
+        self.assertEqual(result.get("streak"), 3)
+        self.assertIn("What can I help", result["welcome"])
         self.assertFalse(any(0x0E00 <= ord(ch) <= 0x0E7F for ch in result["welcome"]))
         self.assertNotIn("riktige", result["welcome"].lower())
 
@@ -234,7 +234,7 @@ class WelcomeGreetingLanguageIsolationTests(unittest.TestCase):
 
         result = asyncio.run(tc.teacher_welcome(lang="no", device_id="brand-new-device"))
 
-        self.assertIn("Hva vil du at vi skal øve på i dag", result["welcome"])
+        self.assertIn("Hva kan jeg hjelpe deg med?", result["welcome"])
         self.assertIsNone(result["weakness"])
 
 

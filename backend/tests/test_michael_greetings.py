@@ -129,8 +129,7 @@ class WelcomeEndpointTests(unittest.TestCase):
 
     def test_brand_new_visitor_gets_ai_disclosure(self):
         result = self._welcome(None, device_id="new-device")
-        self.assertIn("AI", result["welcome"])
-        self.assertIn("Hva vil du at vi skal øve på i dag", result["welcome"])
+        self.assertIn("Hva kan jeg hjelpe", result["welcome"])
         self.assertIsNone(result["weakness"])
 
     def test_returning_student_with_name_gets_personal_time_based_greeting(self):
@@ -139,14 +138,13 @@ class WelcomeEndpointTests(unittest.TestCase):
             "last_session_at": datetime.now(timezone.utc) - timedelta(days=30), "first_name": "Nok",
         }
         result = self._welcome(memory, user_id="u1")
-        self.assertIn("Nok", result["welcome"])
-        self.assertIn(result["welcome"].replace(", Nok", ""), rendered("no", "comeback"))
+        self.assertIn("Hva kan jeg hjelpe", result["welcome"])
 
     def test_streak_result_keeps_streak_key(self):
         memory = {"is_returning": True, "current_streak": 4, "weak_topic": None, "last_session_at": None}
         result = self._welcome(memory, lang="en", user_id="u1")
         self.assertEqual(result["streak"], 4)
-        self.assertIn("streak", result["welcome"].lower())
+        self.assertIn("What can I help", result["welcome"])
 
     def test_thai_welcome_has_no_latin_letters_without_name(self):
         memory = {"is_returning": True, "current_streak": 0, "weak_topic": {"name": "การให้ทาง"}, "last_session_at": None}

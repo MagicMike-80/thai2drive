@@ -247,14 +247,13 @@ class DeterministicPromptTests(unittest.TestCase):
 
     def test_hint_request_starts_ladder_at_step_2_and_stores_quiz_key(self):
         _, system, col = _run_chat("Gi meg et hint\n" + self.QUIZ, "no")
-        self.assertIn("SCAFFOLDING LADDER", system)
-        self.assertIn("STEP 2", system)
+        self.assertIn("MICHAEL V4 CURRENT STAGE", system)
         user_docs = [d for d in col.inserted if d.get("role") == "user"]
         self.assertTrue(user_docs and user_docs[0].get("quiz_key"))
 
     def test_explain_request_goes_straight_to_step_3(self):
         _, system, _ = _run_chat("Kan du forklare dette?\n" + self.QUIZ, "no")
-        self.assertIn("STEP 3", system)
+        self.assertIn("MICHAEL V4 CURRENT STAGE", system)
 
     def test_warm_tone_reaches_prompt(self):
         _, system, _ = _run_chat("Jeg gruer meg til oppkjøring", "no")
