@@ -715,6 +715,27 @@ a { color:inherit; text-decoration:none; }
 .target-practice-menu.open { display:grid; }
 .target-practice-option { padding:11px 9px; border-radius:12px; border:1px solid rgba(255,153,51,.28); background:rgba(255,153,51,.08); color:var(--text); font-size:.78rem; font-weight:800; cursor:pointer; }
 @media (max-width:420px) { .home-main-actions { grid-template-columns:1fr; } .target-practice-menu { grid-column:1; } }
+.flashcard-demo-backdrop { position:fixed; inset:0; z-index:15000; display:flex; align-items:center; justify-content:center; padding:18px; overflow-y:auto; background:rgba(3,8,20,.86); backdrop-filter:blur(8px); }
+.flashcard-demo-backdrop[hidden] { display:none !important; }
+.flashcard-demo-panel { position:relative; width:min(100%,680px); max-height:92vh; overflow:auto; padding:22px; border:1px solid rgba(0,245,255,.32); border-radius:20px; color:var(--text); background:linear-gradient(145deg,#111f3d,#0b1226); box-shadow:0 18px 70px rgba(0,0,0,.55),0 0 28px rgba(0,245,255,.12); }
+.flashcard-demo-close { position:absolute; top:12px; right:12px; width:40px; height:40px; border:1px solid rgba(255,255,255,.2); border-radius:50%; color:var(--text); background:rgba(255,255,255,.08); font-size:1.1rem; cursor:pointer; }
+.flashcard-demo-title { margin:2px 42px 14px 0; font-size:1.15rem; font-weight:900; }
+.flashcard-demo-count { margin:-4px 0 14px; color:var(--muted); font-size:.82rem; }
+.flashcard-demo-scene { perspective:1200px; min-height:270px; }
+.flashcard-demo-card { position:relative; min-height:270px; transform-style:preserve-3d; transition:transform .55s cubic-bezier(.2,.75,.25,1); }
+.flashcard-demo-card.is-flipped { transform:rotateY(180deg); }
+.flashcard-demo-face { position:absolute; inset:0; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:24px; border:1px solid rgba(0,245,255,.28); border-radius:16px; background:linear-gradient(145deg,rgba(20,43,73,.98),rgba(10,20,39,.98)); backface-visibility:hidden; -webkit-backface-visibility:hidden; text-align:center; }
+.flashcard-demo-face-back { transform:rotateY(180deg); }
+.flashcard-demo-term { margin:0; font-size:clamp(1.35rem,5vw,2rem); line-height:1.4; }
+.flashcard-demo-copy { margin:14px 0; color:var(--text); line-height:1.65; }
+.flashcard-demo-note { color:var(--muted); font-size:.82rem; line-height:1.55; }
+.flashcard-demo-status { min-height:1.5em; margin:12px 0 0; color:var(--muted); line-height:1.5; }
+.flashcard-demo-actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:16px; }
+.flashcard-demo-action { min-height:44px; padding:10px 14px; border:1px solid rgba(0,245,255,.32); border-radius:12px; color:var(--text); background:rgba(0,245,255,.08); font-weight:800; cursor:pointer; }
+.flashcard-demo-action-primary { color:#0F172A; border-color:transparent; background:linear-gradient(135deg,#FF9933,#e6891f); }
+.flashcard-demo-action:focus-visible, .flashcard-demo-close:focus-visible { outline:3px solid #00F5FF; outline-offset:3px; }
+@media(max-width:480px) { .flashcard-demo-panel { padding:18px 14px; } .flashcard-demo-face { padding:18px 14px; } .flashcard-demo-actions .flashcard-demo-action { flex:1 1 130px; } }
+@media(prefers-reduced-motion:reduce) { .flashcard-demo-card { transition:none; } }
 
 .home-sec-btns {
   display:grid; grid-template-columns:1fr 1fr;
@@ -4754,6 +4775,13 @@ a { color:inherit; text-decoration:none; }
             <span class="home-main-choice-sub" id="mistakesHomeCount"></span>
           </span>
         </button>
+        <button class="home-main-choice" type="button" onclick="openSituationFlashcard()" data-label-key="home_situation_card">
+          <span class="home-main-choice-icon" aria-hidden="true">🚗</span>
+          <span class="home-main-choice-copy">
+            <span class="home-main-choice-title" data-key="home_situation_card">Øv på trafikksituasjoner</span>
+            <span class="home-main-choice-sub" data-key="home_situation_card_sub">Se bildet og vurder hvem som bør kjøre først</span>
+          </span>
+        </button>
         <div class="target-practice-menu" id="targetPracticeMenu">
           <button class="target-practice-option" id="mistakesHomeBtn" onclick="startMistakeQuiz()" data-key="mistakes_short">Øv på mine feil</button>
           <button class="target-practice-option" onclick="showTab('signs')" data-key="home_open_signs">Åpne skiltkatalog</button>
@@ -5370,6 +5398,33 @@ a { color:inherit; text-decoration:none; }
   </div>
 </div>
 
+<div class="flashcard-demo-backdrop" id="flashcardDemo" hidden aria-hidden="true" onclick="closeSituationFlashcard(event)">
+  <section class="flashcard-demo-panel" role="dialog" aria-modal="true" aria-labelledby="flashcardDemoTitle" onclick="event.stopPropagation()">
+    <button class="flashcard-demo-close" type="button" onclick="closeSituationFlashcard()" data-label-key="fc_close" aria-label="ปิด">✕</button>
+    <h2 class="flashcard-demo-title" id="flashcardDemoTitle" data-key="fc_title">Fagordkort</h2>
+    <p class="flashcard-demo-count" id="flashcardDemoCount" aria-live="polite"></p>
+    <div class="flashcard-demo-scene">
+      <div class="flashcard-demo-card" id="flashcardDemoCard" aria-live="polite">
+        <article class="flashcard-demo-face" id="flashcardFront" aria-hidden="false">
+          <h3 class="flashcard-demo-term" id="flashcardFrontTerm"></h3>
+        </article>
+        <article class="flashcard-demo-face flashcard-demo-face-back" id="flashcardBack" aria-hidden="true" inert>
+          <h3 class="flashcard-demo-term" id="flashcardBackTerm"></h3>
+          <p class="flashcard-demo-copy" id="flashcardDefinition"></p>
+          <p class="flashcard-demo-note" id="flashcardNorwegianTerm"></p>
+        </article>
+      </div>
+    </div>
+    <p class="flashcard-demo-status" id="flashcardDemoStatus" role="status"></p>
+    <div class="flashcard-demo-actions">
+      <button class="flashcard-demo-action" id="flashcardAudioBtn" type="button" onclick="playFlashcardNarration(this)" data-key="fc_audio_play">ฟังเสียง</button>
+      <button class="flashcard-demo-action" id="flashcardPrevBtn" type="button" onclick="stepSituationFlashcard(-1)" data-key="fc_previous" disabled>ก่อนหน้า</button>
+      <button class="flashcard-demo-action flashcard-demo-action-primary" id="flashcardFlipBtn" type="button" onclick="flipSituationFlashcard()" data-key="fc_flip">พลิกการ์ด</button>
+      <button class="flashcard-demo-action" id="flashcardNextBtn" type="button" onclick="stepSituationFlashcard(1)" data-key="fc_next" disabled>ถัดไป</button>
+    </div>
+  </section>
+</div>
+
 <!-- ═══ SIGN DETAIL PANEL ═══ -->
 <div class="sign-panel-backdrop" id="signPanelBackdrop" onclick="closeSignDetail()"></div>
 <div class="sign-panel" id="signPanel">
@@ -5527,6 +5582,22 @@ var UI = {
   // ── 50-Brukers Kampanje (30 dager gratis Premium) ─────────────────────────
   home_open_library:     {th:'วิดีโอคอร์สและพอดแคสต์', no:'Videokurs & Podkaster', en:'Video courses & Podcasts'},
   library_sub:           {th:'ดูบทเรียนและฟังคำอธิบาย', no:'Se leksjoner og hør forklaringer', en:'Watch lessons and listen to explanations'},
+  home_situation_card:   {th:'ฝึกคำศัพท์จราจร', no:'Øv på trafikkbegreper', en:'Practice traffic terms'},
+  home_situation_card_sub:{th:'พลิกการ์ดเพื่อเรียนรู้คำศัพท์และคำอธิบาย', no:'Snu kortene og lær begrepene med korte forklaringer', en:'Flip the cards to learn terms with short explanations'},
+  fc_title:              {th:'แฟลชการ์ดคำศัพท์จราจร', no:'Flippkort for trafikkord', en:'Traffic term flashcards'},
+  fc_loading:            {th:'กำลังโหลดการ์ด…', no:'Laster kort …', en:'Loading cards…'},
+  fc_error:              {th:'ไม่สามารถโหลดการ์ดได้ในขณะนี้', no:'Kortene kunne ikke lastes nå', en:'Cards could not be loaded right now'},
+  fc_empty:              {th:'ยังไม่มีการ์ดในภาษานี้', no:'Ingen kort er tilgjengelige på dette språket', en:'No cards are available in this language'},
+  fc_audio_play:         {th:'ฟังเสียง', no:'Lytt', en:'Listen'},
+  fc_audio_playing:      {th:'กำลังเล่นเสียง…', no:'Spiller av lyd …', en:'Playing audio…'},
+  fc_audio_error:        {th:'ไม่สามารถเล่นเสียงได้', no:'Lyden kunne ikke spilles av', en:'Audio could not be played'},
+  fc_flip:               {th:'ดูคำอธิบาย', no:'Snu kortet', en:'Flip card'},
+  fc_unflip:             {th:'กลับด้านหน้า', no:'Vis forsiden', en:'Show front'},
+  fc_previous:           {th:'ก่อนหน้า', no:'Forrige', en:'Previous'},
+  fc_next:               {th:'ถัดไป', no:'Neste', en:'Next'},
+  fc_norwegian_term:     {th:'คำศัพท์นอร์เวย์', no:'Norsk fagord', en:'Norwegian term'},
+  fc_counter:            {th:'การ์ด {current} จาก {total}', no:'Kort {current} av {total}', en:'Card {current} of {total}'},
+  fc_close:              {th:'ปิด', no:'Lukk', en:'Close'},
   traffic_situation_badge: {th:'📸 สถานการณ์จราจร', no:'📸 Trafikksituasjon', en:'📸 Traffic situation'},
   fk_img_toggle:         {th:'👁 ดูภาพประกอบ', no:'👁 Se illustrasjon', en:'👁 View illustration'},
   michael_school:        {th:'โรงเรียนไมเคิล', no:'Michael-skolen', en:'Michael School'},
@@ -6075,6 +6146,9 @@ function applyUILang() {
       el.setAttribute('aria-label', val);
     }
   });
+  document.querySelectorAll('[data-alt-key]').forEach(function(el) {
+    el.setAttribute('alt', t(el.getAttribute('data-alt-key')));
+  });
   document.querySelectorAll('[data-title-key]').forEach(function(el) {
     var val = t(el.getAttribute('data-title-key'));
     if (val) el.setAttribute('title', val.replace(/^\\S+\\s*/, ''));
@@ -6224,6 +6298,8 @@ function applyUILang() {
   if (aiStatus && aiStatus.classList.contains('idle')) aiStatus.textContent = t('ai_waiting');
   var aiBadge = document.getElementById('quizAiImgBadge');
   if (aiBadge && !qAnswered) aiBadge.textContent = t('traffic_situation');
+  var flashcardOverlay = document.getElementById('flashcardDemo');
+  if (flashcardOverlay && !flashcardOverlay.hidden && Array.isArray(_flashcardTerms) && _flashcardTerms.length) renderSituationFlashcard();
   renderPremiumPricing();
 }
 var catsLoaded = false;
@@ -6695,6 +6771,145 @@ function toggleTargetPracticeMenu() {
   var open = menu.classList.toggle('open');
   if (toggle) toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
 }
+
+var _flashcardNarrationAudio = null;
+var _flashcardAudioButton = null;
+var _flashcardReturnFocus = null;
+var _flashcardTerms = [];
+var _flashcardIndex = 0;
+var _flashcardFlipped = false;
+var _flashcardLoadToken = 0;
+function flashcardValue(term, field) {
+  var value = term && term[field + '_' + appLang];
+  return typeof value === 'string' ? value.trim() : '';
+}
+function flashcardSetAudioLabel(key) {
+  var button = document.getElementById('flashcardAudioBtn');
+  if (button) button.textContent = t(key);
+}
+function renderSituationFlashcard() {
+  var term = _flashcardTerms[_flashcardIndex];
+  var status = document.getElementById('flashcardDemoStatus');
+  if (!term) return;
+  var front = flashcardValue(term, 'term');
+  var definition = flashcardValue(term, 'definition');
+  var wordNo = (term.term_no || '').trim();
+  if (!front || !definition || !wordNo) {
+    if (status) status.textContent = t('fc_empty');
+    return;
+  }
+  document.getElementById('flashcardFrontTerm').textContent = front;
+  document.getElementById('flashcardBackTerm').textContent = wordNo;
+  document.getElementById('flashcardDefinition').textContent = definition;
+  document.getElementById('flashcardNorwegianTerm').textContent = t('fc_norwegian_term') + ': ' + wordNo;
+  document.getElementById('flashcardDemoCount').textContent = t('fc_counter').replace('{current}', String(_flashcardIndex + 1)).replace('{total}', String(_flashcardTerms.length));
+  if (status) status.textContent = '';
+  var card = document.getElementById('flashcardDemoCard');
+  var frontEl = document.getElementById('flashcardFront');
+  var backEl = document.getElementById('flashcardBack');
+  var flipButton = document.getElementById('flashcardFlipBtn');
+  var prevButton = document.getElementById('flashcardPrevBtn');
+  var nextButton = document.getElementById('flashcardNextBtn');
+  card.classList.toggle('is-flipped', _flashcardFlipped);
+  frontEl.setAttribute('aria-hidden', _flashcardFlipped ? 'true' : 'false');
+  backEl.setAttribute('aria-hidden', _flashcardFlipped ? 'false' : 'true');
+  if ('inert' in frontEl) frontEl.inert = _flashcardFlipped;
+  if ('inert' in backEl) backEl.inert = !_flashcardFlipped;
+  flipButton.textContent = t(_flashcardFlipped ? 'fc_unflip' : 'fc_flip');
+  flipButton.setAttribute('aria-pressed', _flashcardFlipped ? 'true' : 'false');
+  prevButton.disabled = _flashcardIndex <= 0;
+  nextButton.disabled = _flashcardIndex >= _flashcardTerms.length - 1;
+}
+async function openSituationFlashcard() {
+  var overlay = document.getElementById('flashcardDemo');
+  if (!overlay) return;
+  _flashcardReturnFocus = document.activeElement;
+  overlay.hidden = false;
+  overlay.setAttribute('aria-hidden', 'false');
+  var close = overlay.querySelector('.flashcard-demo-close');
+  if (close) close.focus();
+  if (_flashcardTerms.length) { renderSituationFlashcard(); return; }
+  var loadToken = ++_flashcardLoadToken;
+  document.getElementById('flashcardDemoStatus').textContent = t('fc_loading');
+  try {
+    var terms = await api('GET', '/api/glossary?lang=' + encodeURIComponent(appLang));
+    if (loadToken !== _flashcardLoadToken || overlay.hidden) return;
+    var termKey = 'term_' + appLang;
+    var definitionKey = 'definition_' + appLang;
+    _flashcardTerms = (Array.isArray(terms) ? terms : []).filter(function(term) {
+      return term && typeof term[termKey] === 'string' && term[termKey].trim() &&
+        typeof term[definitionKey] === 'string' && term[definitionKey].trim() &&
+        typeof term.term_no === 'string' && term.term_no.trim();
+    });
+    if (!_flashcardTerms.length) {
+      document.getElementById('flashcardDemoStatus').textContent = t('fc_empty');
+      document.getElementById('flashcardDemoCount').textContent = '';
+      return;
+    }
+    _flashcardIndex = 0;
+    _flashcardFlipped = false;
+    renderSituationFlashcard();
+  } catch (error) {
+    if (loadToken === _flashcardLoadToken && !overlay.hidden) {
+      document.getElementById('flashcardDemoStatus').textContent = t('fc_error');
+    }
+  }
+}
+function closeSituationFlashcard(event) {
+  if (event && event.target !== event.currentTarget) return;
+  var overlay = document.getElementById('flashcardDemo');
+  if (!overlay) return;
+  overlay.hidden = true;
+  overlay.setAttribute('aria-hidden', 'true');
+  _flashcardLoadToken++;
+  if (_flashcardNarrationAudio) _flashcardNarrationAudio.pause();
+  flashcardSetAudioLabel('fc_audio_play');
+  _flashcardAudioButton = null;
+  if (_flashcardReturnFocus && typeof _flashcardReturnFocus.focus === 'function') _flashcardReturnFocus.focus();
+}
+function flipSituationFlashcard() {
+  if (!_flashcardTerms.length) return;
+  if (_flashcardNarrationAudio) _flashcardNarrationAudio.pause();
+  flashcardSetAudioLabel('fc_audio_play');
+  _flashcardFlipped = !_flashcardFlipped;
+  renderSituationFlashcard();
+}
+function stepSituationFlashcard(direction) {
+  var next = _flashcardIndex + direction;
+  if (next < 0 || next >= _flashcardTerms.length) return;
+  if (_flashcardNarrationAudio) _flashcardNarrationAudio.pause();
+  flashcardSetAudioLabel('fc_audio_play');
+  _flashcardIndex = next;
+  _flashcardFlipped = false;
+  renderSituationFlashcard();
+}
+function playFlashcardNarration(button) {
+  var term = _flashcardTerms[_flashcardIndex];
+  if (!term) return;
+  if (!_flashcardNarrationAudio) {
+    _flashcardNarrationAudio = new Audio();
+    _flashcardNarrationAudio.preload = 'none';
+    _flashcardNarrationAudio.addEventListener('ended', function() { flashcardSetAudioLabel('fc_audio_play'); });
+    _flashcardNarrationAudio.addEventListener('error', function() { flashcardSetAudioLabel('fc_audio_error'); });
+  }
+  if (!_flashcardNarrationAudio.paused) {
+    _flashcardNarrationAudio.pause();
+    flashcardSetAudioLabel('fc_audio_play');
+    return;
+  }
+  var spokenText = _flashcardFlipped ? flashcardValue(term, 'definition') : flashcardValue(term, 'term');
+  _flashcardAudioButton = button;
+  _flashcardNarrationAudio.src = ttsStreamUrl(spokenText, appLang);
+  button.textContent = t('fc_audio_playing');
+  _flashcardNarrationAudio.load();
+  _flashcardNarrationAudio.play().catch(function() { flashcardSetAudioLabel('fc_audio_error'); });
+}
+document.addEventListener('keydown', function(event) {
+  if (event.key === 'Escape') {
+    var overlay = document.getElementById('flashcardDemo');
+    if (overlay && !overlay.hidden) closeSituationFlashcard();
+  }
+});
 
 // ════════════════════════════════════════════
 //  VIDEO PLAYER — The Road Ahead
