@@ -55,6 +55,7 @@ def test_flashcard_sounds_use_local_assets_and_can_be_muted():
     assert "if (_flashcardSfxMuted) return;" in source
     assert "new Audio('/api/assets/flashcard_' + kind + '.mp3')" in source
     assert "flashcardPlayTrack('intro')" in source
+    assert "flashcardPlayTrack('next')" in source
     assert "var _flashcardPendingSfx = '';" in source
     assert "_flashcardPendingSfx = kind;" in source
     assert "function flashcardAfterNarration(labelKey)" in source
@@ -64,6 +65,7 @@ def test_flashcard_flip_and_confidence_choices_trigger_their_own_sfx():
     source = WEBAPP.read_text(encoding="utf-8")
 
     assert "flashcardPlayTrack('flip')" in source
+    assert "if (direction > 0) flashcardPlayTrack('next')" in source
     assert "flashcardPlaySfx(choice)" in source
     assert "if (kind === 'know')" in source
     assert "kind === 'unsure' ? 430 : 330" in source

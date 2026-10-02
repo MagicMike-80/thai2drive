@@ -6809,18 +6809,20 @@ var _flashcardSfxMaster = null;
 var _flashcardPendingSfx = '';
 var _flashcardIntroAudio = null;
 var _flashcardFlipAudio = null;
+var _flashcardNextAudio = null;
 function flashcardPlayTrack(kind) {
   if (_flashcardSfxMuted) return;
   if (_flashcardNarrationAudio && !_flashcardNarrationAudio.paused && !_flashcardNarrationAudio.ended) {
     _flashcardPendingSfx = kind;
     return;
   }
-  var audio = kind === 'intro' ? _flashcardIntroAudio : _flashcardFlipAudio;
+  var audio = kind === 'intro' ? _flashcardIntroAudio : (kind === 'flip' ? _flashcardFlipAudio : _flashcardNextAudio);
   if (!audio) {
     audio = new Audio('/api/assets/flashcard_' + kind + '.mp3');
     audio.preload = 'auto';
     if (kind === 'intro') _flashcardIntroAudio = audio;
-    else _flashcardFlipAudio = audio;
+    else if (kind === 'flip') _flashcardFlipAudio = audio;
+    else _flashcardNextAudio = audio;
   }
   audio.currentTime = 0;
   audio.play().catch(function() {});
@@ -6842,7 +6844,7 @@ function flashcardUpdateSfxMuteButton() {
 function toggleFlashcardSfxMute() {
   _flashcardSfxMuted = !_flashcardSfxMuted;
   flashcardUpdateSfxMuteButton();
-  [_flashcardIntroAudio, _flashcardFlipAudio].forEach(function(audio) {
+  [_flashcardIntroAudio, _flashcardFlipAudio, _flashcardNextAudio].forEach(function(audio) {
     if (!audio) return;
     if (_flashcardSfxMuted) audio.pause();
   });
@@ -7042,6 +7044,7 @@ function closeSituationFlashcard(event) {
   _flashcardPendingSfx = '';
   if (_flashcardIntroAudio) _flashcardIntroAudio.pause();
   if (_flashcardFlipAudio) _flashcardFlipAudio.pause();
+  if (_flashcardNextAudio) _flashcardNextAudio.pause();
   if (_flashcardNarrationAudio) _flashcardNarrationAudio.pause();
   flashcardSetAudioLabel('fc_audio_play');
   _flashcardAudioButton = null;
@@ -7058,6 +7061,7 @@ function stepSituationFlashcard(direction) {
   if (next < 0 || next >= _flashcardTerms.length) return;
   _flashcardPendingSfx = '';
   if (_flashcardNarrationAudio) _flashcardNarrationAudio.pause();
+  if (direction > 0) flashcardPlayTrack('next');
   flashcardSetAudioLabel('fc_audio_play');
   _flashcardIndex = next;
   _flashcardFlipped = false;
@@ -7080,6 +7084,9 @@ function playFlashcardNarration(button) {
   }
   var spokenText = _flashcardFlipped ? flashcardValue(term, 'definition') : flashcardValue(term, 'term');
   _flashcardAudioButton = button;
+  [_flashcardIntroAudio, _flashcardFlipAudio, _flashcardNextAudio].forEach(function(audio) {
+    if (audio) audio.pause();
+  });
   if (_flashcardSfxContext && _flashcardSfxContext.state === 'running') _flashcardSfxContext.suspend().catch(function() {});
   _flashcardNarrationAudio.src = ttsStreamUrl(spokenText, appLang);
   button.textContent = t('fc_audio_playing');
