@@ -1,5 +1,4 @@
 import asyncio
-import os
 import re
 import sys
 import unittest
@@ -89,6 +88,10 @@ class TestTeacherChatConsolidatedResolver(unittest.TestCase):
     def tearDown(self):
         tc._db = self._orig_db
         tc._chat_col = self._orig_chat_col
+
+    def _mock_completion(self, reply):
+        result = SimpleNamespace(choices=[SimpleNamespace(message=SimpleNamespace(content=reply))])
+        return patch.object(tc, "_completion_with_fallback", new=AsyncMock(return_value=result))
 
     def test_fuzzy_matching_typos_resolve_canonical(self):
         cases = [
@@ -202,7 +205,8 @@ class TestTeacherChatConsolidatedResolver(unittest.TestCase):
             message="Hva er formelen for raksjonslengder?",
             language="no",
         )
-        res = asyncio.run(teacher_chat(req))
+        with self._mock_completion("Hva i situasjonen får deg til å tenke på reaksjonslengde?"):
+            res = asyncio.run(teacher_chat(req))
         self.assertIsNotNone(res)
         self.assertEqual(res.conversation_id, req.session_id)
         # The offline placeholder has no catalog record or asset and must be hidden.
@@ -219,7 +223,9 @@ class TestTeacherChatConsolidatedResolver(unittest.TestCase):
             language="no",
         )
 
-        with self.assertLogs("teacher_chat", level="ERROR") as logs:
+        with self.assertLogs("teacher_chat", level="ERROR") as logs, self._mock_completion(
+            "Hva tenker du påvirker reaksjonslengden mest?"
+        ):
             res = asyncio.run(teacher_chat(req))
 
         self.assertTrue(res.reply.strip().endswith("?") or "?" in res.reply)
@@ -238,7 +244,9 @@ class TestTeacherChatConsolidatedResolver(unittest.TestCase):
         for weakness in ({"name": "vikeplikt"}, None):
             with self.subTest(weakness=weakness), patch.object(
                 tc, "_get_student_weakness", new=AsyncMock(return_value=weakness)
-            ), self.assertLogs("teacher_chat", level="ERROR") as logs:
+            ), self.assertLogs("teacher_chat", level="ERROR") as logs, self._mock_completion(
+                "Hvilket trafikktema vil du øve på først?"
+            ):
                 res = asyncio.run(teacher_chat(req))
 
             self.assertTrue(res.reply)
@@ -247,15 +255,7 @@ class TestTeacherChatConsolidatedResolver(unittest.TestCase):
 
 
 class TestWrongQuizAnswerReplyIsThaiOnly(unittest.TestCase):
-    """Simulates a student answering a quiz question wrong in Thai mode and
-    prints Michael's full reply so it can be eyeballed for language purity.
-
-    This calls the real /api/teacher/chat endpoint (real LLM call via
-    litellm) — it is NOT mocked, since the whole point is to see what the
-    model actually says. It requires a working DEEPSEEK_API_KEY /
-    OPENROUTER_API_KEY / OPENAI_API_KEY in the environment; without one,
-    teacher_chat() falls back to its canned "Michael is unavailable"
-    message instead of a real explanation (see assertion below)."""
+    """Check Thai quiz-coaching language behavior with an offline model mock."""
 
     def setUp(self):
         self._orig_db = tc._db
@@ -283,33 +283,10 @@ class TestWrongQuizAnswerReplyIsThaiOnly(unittest.TestCase):
             "</quiz_context>"
         )
         req = TeacherChatRequest(message=message, language="th", device_id="thai-purity-test")
-        response = asyncio.run(teacher_chat(req))
-
-        # Windows terminals often default to a cp1252 codepage that cannot encode
-        # Thai script; reconfigure stdout to UTF-8 so the reply actually prints
-        # instead of crashing with UnicodeEncodeError.
-        try:
-            sys.stdout.reconfigure(encoding="utf-8", errors="replace")
-        except AttributeError:
-            pass
-
-        banner = "=" * 70
-        print(f"\n{banner}\nMICHAELS FULLE SVAR (language=th):\n{banner}")
-        print(response.reply)
-        print(banner)
-
-        has_live_key = bool(
-            os.environ.get("DEEPSEEK_API_KEY")
-            or os.environ.get("OPENROUTER_API_KEY")
-            or os.environ.get("OPENAI_API_KEY")
-        )
-        if not has_live_key:
-            self.skipTest(
-                "No DEEPSEEK_API_KEY/OPENROUTER_API_KEY/OPENAI_API_KEY in the "
-                "environment — teacher_chat() returned its canned fallback "
-                "reply above instead of a real model answer. Set one of "
-                "those env vars to actually exercise the LLM."
-            )
+        reply = "คุณเห็นอะไรบนป้ายจำกัดความเร็วในสถานการณ์นี้ครับ?"
+        mock_result = SimpleNamespace(choices=[SimpleNamespace(message=SimpleNamespace(content=reply))])
+        with patch.object(tc, "_completion_with_fallback", new=AsyncMock(return_value=mock_result)):
+            response = asyncio.run(teacher_chat(req))
 
         self.assertTrue(response.reply.strip())
         # Godkjente norske fagord i parentes er tillatt (f.eks. (fartsgrense)); ord utenfor parentes er forbudt
@@ -410,7 +387,10 @@ class TestWrongQuizAnswerReplyIsThaiOnly(unittest.TestCase):
 
     def test_simplify_still_starts_with_topic_clarification(self):
         request = TeacherChatRequest(message="Forklar vikeplikt enklere", language="th", mode="simplify")
-        response = asyncio.run(teacher_chat(request))
+        reply = "คุณเห็นอะไรเกี่ยวกับการให้ทางในสถานการณ์นี้ครับ?"
+        mock_result = SimpleNamespace(choices=[SimpleNamespace(message=SimpleNamespace(content=reply))])
+        with patch.object(tc, "_completion_with_fallback", new=AsyncMock(return_value=mock_result)):
+            response = asyncio.run(teacher_chat(request))
         self.assertTrue(response.reply.strip().endswith("?") or "?" in response.reply)
         self.assertEqual(response.media, [])
 

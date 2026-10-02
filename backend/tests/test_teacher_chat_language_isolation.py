@@ -18,7 +18,8 @@ import sys
 import unittest
 from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
-from unittest.mock import patch
+from types import SimpleNamespace
+from unittest.mock import AsyncMock, patch
 
 import litellm
 import pydantic
@@ -214,7 +215,7 @@ class WelcomeAndTopicsRejectInvalidLanguageTests(unittest.TestCase):
 
 
 class TheoryHelpShortcutLanguagePurityTests(unittest.TestCase):
-    """The theory-help shortcut returns before the LLM call, so it's fully testable."""
+    """Language-isolation checks use deterministic model replies and fake Mongo."""
 
     def setUp(self):
         self._orig_db = tc._db
@@ -226,15 +227,20 @@ class TheoryHelpShortcutLanguagePurityTests(unittest.TestCase):
         tc._db = self._orig_db
         tc._chat_col = self._orig_chat_col
 
+    def _mock_completion(self, reply):
+        result = SimpleNamespace(choices=[SimpleNamespace(message=SimpleNamespace(content=reply))])
+        return patch.object(tc, "_completion_with_fallback", new=AsyncMock(return_value=result))
+
     def test_weak_topic_reply_is_thai_only_and_tags_stored_messages(self):
         tc._db["quiz_attempts"] = _RecordingCollection(
             aggregate_result=[{"_id": "vikeplikt_regler", "fails": 2}]
         )
         tc._db["mistakes"] = _RecordingCollection()
         req = TeacherChatRequest(message="help with the theory test", language="th", device_id="d1")
-        response = asyncio.run(tc.teacher_chat(req))
+        with self._mock_completion("ผมช่วยอธิบายเรื่องนี้ได้ครับ คุณอยากเริ่มฝึกหัวข้อไหนครับ?"):
+            response = asyncio.run(tc.teacher_chat(req))
 
-        self.assertIn("ผมช่วย", response.reply)
+        self.assertIn("คุณอยากเริ่มฝึกหัวข้อไหน", response.reply)
         self.assertNotIn("vikeplikt", response.reply.lower())
         self.assertTrue(tc._chat_col.inserted)
         self.assertTrue(all(doc["language"] == "th" for doc in tc._chat_col.inserted))
@@ -243,9 +249,10 @@ class TheoryHelpShortcutLanguagePurityTests(unittest.TestCase):
     def test_conversation_id_reuses_session_storage_for_new_callers(self):
         req = TeacherChatRequest(
             message="help with the theory test", language="th",
-            conversation_id="conversation-123", mode="quiz_coach",
+            conversation_id="conversation-123",
         )
-        response = asyncio.run(tc.teacher_chat(req))
+        with self._mock_completion("คุณอยากเริ่มฝึกเรื่องไหนก่อนครับ?"):
+            response = asyncio.run(tc.teacher_chat(req))
         self.assertEqual(response.session_id, "conversation-123")
         self.assertEqual(response.conversation_id, "conversation-123")
         self.assertTrue(all(doc["session_id"] == "conversation-123" for doc in tc._chat_col.inserted))
@@ -256,7 +263,8 @@ class TheoryHelpShortcutLanguagePurityTests(unittest.TestCase):
         )
         tc._db["mistakes"] = _RecordingCollection()
         req = TeacherChatRequest(message="help with the theory test", language="th", device_id="d1")
-        response = asyncio.run(tc.teacher_chat(req))
+        with self._mock_completion("คุณอยากเริ่มฝึกเรื่องไหนก่อนครับ?"):
+            response = asyncio.run(tc.teacher_chat(req))
 
         self.assertNotIn("fart_og_bremsing", response.reply)
         self.assertNotIn("Fart Og Bremsing", response.reply)
@@ -265,9 +273,10 @@ class TheoryHelpShortcutLanguagePurityTests(unittest.TestCase):
         tc._db["quiz_attempts"] = _RecordingCollection(aggregate_result=[])
         tc._db["mistakes"] = _RecordingCollection()
         req = TeacherChatRequest(message="what should i practice?", language="en", device_id="d1")
-        response = asyncio.run(tc.teacher_chat(req))
+        with self._mock_completion("Which theory-test topic would you like to practice first?"):
+            response = asyncio.run(tc.teacher_chat(req))
 
-        self.assertIn("What would you like us to look at today?", response.reply)
+        self.assertIn("Which theory-test topic would you like to practice first?", response.reply)
         self.assertTrue(all(doc["language"] == "en" for doc in tc._chat_col.inserted))
 
 
