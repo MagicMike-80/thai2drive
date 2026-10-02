@@ -384,7 +384,7 @@ def build_guide_page(lang: str = "no") -> str:
         <div class="step-body">
           <h4><span class="tl tl-th">ขั้นตอนที่ 3 — บทเรียนขับรถกับครู (60 นาที) + หลักสูตรความปลอดภัยในสนามฝึก (5 ชั่วโมง)</span><span class="tl tl-no">Trinn 3 — Veiledningstime (60 min) + Sikkerhetskurs på bane (5 timer)</span><span class="tl tl-en">Step 3 — Guidance (60 min) + Track safety course (5 hours)</span></h4>
           <p><span class="tl tl-th">ฝึกขับ 60 นาทีกับครู + หลักสูตรความปลอดภัยบนสนาม 5 ชั่วโมง (Glattkjøring — ขับบนถนนลื่น/น้ำแข็ง)</span><span class="tl tl-no">Veiledningstime på 60 minutter + Sikkerhetskurs på bane på 5 timer (Glattkjøring — kjøring på glatt underlag).</span><span class="tl tl-en">60-min guidance session + 5-hour track safety course (Glattkjøring — driving on slippery/icy surface).</span></p>
-          <span class="warn"><span class="tl tl-th">ต้องผ่าน Trinn 2 ก่อน!</span><span class="tl tl-no">Må ha fullført Trinn 2 først!</span><span class="tl tl-en">Must complete Step 2 first!</span></span>
+          <span class="warn"><span class="tl tl-th">ต้องผ่านขั้นตอนที่ 2 ก่อน!</span><span class="tl tl-no">Må ha fullført Trinn 2 først!</span><span class="tl tl-en">Must complete Step 2 first!</span></span>
         </div>
       </div>
       <div class="step-item">
@@ -477,7 +477,7 @@ def build_guide_page(lang: str = "no") -> str:
     <div class="card" style="margin-bottom:14px;border-left:3px solid #3B82F6">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
         <div class="step-num" style="width:32px;height:32px;border-radius:50%;background:#3B82F6;color:#fff;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0">2</div>
-        <h3 style="font-size:16px"><span class="tl tl-th">Trinn 2 — ทักษะพื้นฐานการขับขี่ (Veiledningstime 45 min)</span><span class="tl tl-no">Trinn 2 — Grunnleggende kjøreteknikk (Veiledningstime 45 min)</span><span class="tl tl-en">Step 2 — Basic driving skills (Guidance 45 min)</span></h3>
+        <h3 style="font-size:16px"><span class="tl tl-th">ขั้นตอนที่ 2 — ทักษะพื้นฐานการขับขี่ (45 นาที)</span><span class="tl tl-no">Trinn 2 — Grunnleggende kjøreteknikk (Veiledningstime 45 min)</span><span class="tl tl-en">Step 2 — Basic driving skills (Guidance 45 min)</span></h3>
       </div>
       <p style="font-size:13px;color:#3B82F6;font-weight:700;margin-bottom:8px">
         <span class="tl tl-th">🎯 เป้าหมาย: ควบคุมรถได้ดีพอที่จะเริ่มฝึกในสภาพจราจรจริง</span>
@@ -504,8 +504,8 @@ def build_guide_page(lang: str = "no") -> str:
           <span class="tl tl-en"> — practise normal acceleration to 60 km/h and hard braking before obstacle</span>
         </div>
         <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:10px 12px;font-size:13px;color:#CBD5E1">
-          📋 <strong><span class="tl tl-th">Trinnvurdering (45 นาที — บังคับ)</span><span class="tl tl-no">Trinnvurdering (45 min — obligatorisk)</span><span class="tl tl-en">Step assessment (45 min — mandatory)</span></strong>
-          <span class="tl tl-th"> — ครูและนักเรียนประเมินร่วมกันว่าผ่านเกณฑ์พร้อมเรียน Trinn 3 หรือยัง</span>
+          📋 <strong><span class="tl tl-th">การประเมินขั้นตอน (45 นาที — บังคับ)</span><span class="tl tl-no">Trinnvurdering (45 min — obligatorisk)</span><span class="tl tl-en">Step assessment (45 min — mandatory)</span></strong>
+          <span class="tl tl-th"> — ครูและนักเรียนประเมินร่วมกันว่าผ่านเกณฑ์พร้อมเรียนขั้นตอนที่ 3 หรือยัง</span>
           <span class="tl tl-no"> — elev og lærer vurderer sammen om grunnlaget for trinn 3 er tilstrekkelig</span>
           <span class="tl tl-en"> — student and instructor jointly assess readiness for step 3</span>
         </div>
@@ -516,7 +516,7 @@ def build_guide_page(lang: str = "no") -> str:
     <div class="card" style="margin-bottom:14px;border-left:3px solid #8B5CF6">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
         <div class="step-num" style="width:32px;height:32px;border-radius:50%;background:#8B5CF6;color:#fff;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0">3</div>
-        <h3 style="font-size:16px"><span class="tl tl-th">Trinn 3 — การฝึกในสภาพจราจร (Veiledningstime 60 min + Bane 5 timer)</span><span class="tl tl-no">Trinn 3 — Trafikal opplæring (Veiledningstime 60 min + Bane 5 timer)</span><span class="tl tl-en">Step 3 — Traffic training (Guidance 60 min + Track 5 hours)</span></h3>
+        <h3 style="font-size:16px"><span class="tl tl-th">ขั้นตอนที่ 3 — การฝึกในสภาพจราจร (บทเรียน 60 นาที + สนามฝึก 5 ชั่วโมง)</span><span class="tl tl-no">Trinn 3 — Trafikal opplæring (Veiledningstime 60 min + Bane 5 timer)</span><span class="tl tl-en">Step 3 — Traffic training (Guidance 60 min + Track 5 hours)</span></h3>
       </div>
       <p style="font-size:13px;color:#8B5CF6;font-weight:700;margin-bottom:8px">
         <span class="tl tl-th">🎯 เป้าหมาย: ขับอย่างชัดเจน ปลอดภัย และอิสระในสภาพจราจรหลากหลาย</span>
@@ -543,8 +543,8 @@ def build_guide_page(lang: str = "no") -> str:
           <span class="tl tl-en"> — pedestrians, cyclists, trucks, motorcycles — communication and co-operation</span>
         </div>
         <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:10px 12px;font-size:13px;color:#CBD5E1">
-          📋 <strong><span class="tl tl-th">Trinnvurdering (45 นาที — บังคับ)</span><span class="tl tl-no">Trinnvurdering (45 min — obligatorisk)</span><span class="tl tl-en">Step assessment (45 min — mandatory)</span></strong>
-          <span class="tl tl-th"> — ครูและนักเรียนประเมินร่วมกันว่าพร้อมสำหรับ Trinn 4 หรือยัง</span>
+          📋 <strong><span class="tl tl-th">การประเมินขั้นตอน (45 นาที — บังคับ)</span><span class="tl tl-no">Trinnvurdering (45 min — obligatorisk)</span><span class="tl tl-en">Step assessment (45 min — mandatory)</span></strong>
+          <span class="tl tl-th"> — ครูและนักเรียนประเมินร่วมกันว่าพร้อมสำหรับขั้นตอนที่ 4 หรือยัง</span>
           <span class="tl tl-no"> — elev og lærer vurderer sammen om eleven er klar for trinn 4</span>
           <span class="tl tl-en"> — student and instructor assess readiness for step 4</span>
         </div>

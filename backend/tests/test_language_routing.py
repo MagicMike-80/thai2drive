@@ -180,7 +180,7 @@ class GuideLanguageRouteTests(unittest.TestCase):
     def test_th_and_en_guide_steps_and_footer_are_localized(self):
         thai = client.get("/th/guide").text
         english = client.get("/en/guide").text
-        for text in ["ขั้นตอนที่ 1 (TGK)", "ขั้นตอนที่ 3 + สนามฝึก", "หลักสูตรความปลอดภัยบนถนน", "นโยบายความเป็นส่วนตัว", "ข้อกำหนดการใช้งาน"]:
+        for text in ["ขั้นตอนที่ 1 (TGK)", "ขั้นตอนที่ 3 + สนามฝึก", "หลักสูตรความปลอดภัยบนถนน", "การประเมินขั้นตอน", "พร้อมเรียนขั้นตอนที่ 3", "พร้อมสำหรับขั้นตอนที่ 4", "นโยบายความเป็นส่วนตัว", "ข้อกำหนดการใช้งาน"]:
             self.assertIn(text, thai)
         for text in ["Step 1 (TGK)", "Step 3 + track", "Road safety course", "Privacy", "Terms"]:
             self.assertIn(text, english)
