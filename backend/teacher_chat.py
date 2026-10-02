@@ -3806,7 +3806,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
     vision_image = _validate_vision_image(
         getattr(req, "image_url", None), getattr(req, "image_data", None)
     )
-    is_vision = vision_image is not None
+    is_vision = vision_image is not None or bool(req.document_context)
     is_direct_lookup = _is_direct_lookup(user_msg) and not is_vision
 
     # Extract quiz context if passed in the user message

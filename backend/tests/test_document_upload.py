@@ -278,13 +278,15 @@ class TestDocumentUploadEndpoint(unittest.TestCase):
             self.assertEqual(len(extracted), 4003)  # 4000 + "..."
             self.assertTrue(extracted.endswith("..."))
 
-    @patch("backend.document_routes._call_michael_llm", new_callable=AsyncMock)
+    @patch("backend.teacher_chat._completion_with_fallback", new_callable=AsyncMock)
     def test_upload_with_immediate_analysis_th(self, mock_llm):
         """Uploading with analyze=true&language=th returns immediate Thai pedagogical analysis."""
-        mock_llm.return_value = (
+        mock_choice = AsyncMock()
+        mock_choice.message.content = (
             "ครูไมเคิลได้ตรวจสอบเอกสารเรียบร้อยแล้วครับ: สิ่งสำคัญคือการปฏิบัติตามกฎการให้ทางอย่างเคร่งครัด "
             "จำกฎราชาและคนรับใช้ไว้นะครับ มีตรงไหนอยากให้ครูช่วยอธิบายเพิ่มไหมครับ?"
         )
+        mock_llm.return_value = AsyncMock(choices=[mock_choice])
         files = {"file": ("notat.pdf", io.BytesIO(VALID_SAMPLE_PDF), "application/pdf")}
         res = self.client.post("/api/documents/upload?analyze=true&language=th", files=files)
 
@@ -296,7 +298,7 @@ class TestDocumentUploadEndpoint(unittest.TestCase):
         self.assertTrue(has_thai_chars, "Analysis must contain Thai characters")
         self.assertNotIn("vikeplikt", data["ai_analysis"].lower())
 
-    @patch("backend.document_routes._call_michael_llm", new_callable=AsyncMock)
+    @patch("backend.teacher_chat._completion_with_fallback", new_callable=AsyncMock)
     def test_upload_with_immediate_analysis_fallback(self, mock_llm):
         """When LLM is unavailable, fallback guarantees 100% Thai isolation."""
         mock_llm.return_value = None
@@ -310,13 +312,15 @@ class TestDocumentUploadEndpoint(unittest.TestCase):
         self.assertTrue(has_thai_chars)
         self.assertNotIn("vikeplikt", data["ai_analysis"].lower())
 
-    @patch("backend.document_routes._call_michael_llm", new_callable=AsyncMock)
+    @patch("backend.teacher_chat._completion_with_fallback", new_callable=AsyncMock)
     def test_direct_analyze_endpoint_for_image_no(self, mock_llm):
         """POST /api/documents/analyze with image returns structured analysis in Norwegian."""
-        mock_llm.return_value = (
+        mock_choice = AsyncMock()
+        mock_choice.message.content = (
             "Jeg har analysert bildet ditt: Husk 'Kongen og tjeneren' ved vikeplikt. "
             "Kjør alltid etter HAV-regelen (Hensynsfull, Aktpågivende, Varsom)."
         )
+        mock_llm.return_value = AsyncMock(choices=[mock_choice])
         png_bytes = _create_sample_png_bytes(100, 100)
         files = {"file": ("kryss_situasjon.png", io.BytesIO(png_bytes), "image/png")}
         data = {"language": "no"}
@@ -328,13 +332,15 @@ class TestDocumentUploadEndpoint(unittest.TestCase):
         self.assertEqual(resp_data["language"], "no")
         self.assertIn("Kongen og tjeneren", resp_data["analysis"])
 
-    @patch("backend.document_routes._call_michael_llm", new_callable=AsyncMock)
+    @patch("backend.teacher_chat._completion_with_fallback", new_callable=AsyncMock)
     def test_direct_analyze_text_endpoint_en(self, mock_llm):
         """POST /api/documents/analyze-text with notes returns structured analysis in English."""
-        mock_llm.return_value = (
+        mock_choice = AsyncMock()
+        mock_choice.message.content = (
             "Based on your notes: Remember the King and Servant rule for priority. "
             "Traffic approaching from the right has right-of-way."
         )
+        mock_llm.return_value = AsyncMock(choices=[mock_choice])
         payload = {
             "extracted_text": "Priority rules when entering roundabout and yielding to traffic from left.",
             "filename": "roundabout_notes.txt",
@@ -398,8 +404,8 @@ class TestDocumentUploadChatIntegration(unittest.TestCase):
         # 2. Mock LLM completion
         mock_choice = AsyncMock()
         mock_choice.message.content = (
-            "Jeg ser i notatet ditt at du har skrevet at 'Vikeplikt gjelder fra hoeyre'. "
-            "Det stemmer! Husk 'Kongen og tjeneren': bilen som kommer fra høyre er kongen du må vike for."
+            "Jeg ser en bil i notatet ditt om vikeplikt. "
+            "Forstår du hva kongen og tjeneren betyr her?"
         )
         mock_resp = AsyncMock()
         mock_resp.choices = [mock_choice]
@@ -553,8 +559,8 @@ class TestDocumentUploadChatIntegration(unittest.TestCase):
         # 2. Mock LLM completion with English pedagogical response
         mock_choice = AsyncMock()
         mock_choice.message.content = (
-            "Based on your uploaded notes, drivers must yield to traffic approaching from the right. "
-            "This priority rule applies at all unregulated intersections."
+            "I see a car in your uploaded notes about how to yield to traffic. "
+            "Do you know who has the right of way here?"
         )
         mock_resp = AsyncMock()
         mock_resp.choices = [mock_choice]
