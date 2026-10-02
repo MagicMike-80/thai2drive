@@ -4775,6 +4775,15 @@ a { color:inherit; text-decoration:none; }
         </div>
       </div>
 
+      <!-- Michael bio card -->
+      <div class="home-michael-bio" id="homeMichaelBio" style="display:flex;align-items:flex-start;gap:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,153,51,.18);border-radius:16px;padding:14px 16px;margin:12px 0;">
+        <img src="/api/assets/michael_profile.jpg" alt="Michael" style="width:48px;height:48px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid rgba(255,153,51,.5);">
+        <div style="flex:1;min-width:0;">
+          <div style="font-weight:700;font-size:.95rem;color:#F8FAFC;margin-bottom:4px;">Michael</div>
+          <div id="michaelBioHome" data-key="michael_bio" style="font-size:.82rem;color:rgba(248,250,252,.7);line-height:1.55;">Michael brenner for trygg trafikk og gode læringsopplevelser. Med 16 års erfaring som trafikklærer bygger han Thai2Drive for å hjelpe thai-talende med å finne trygghet bak rattet i Norge.</div>
+        </div>
+      </div>
+
       <!-- Readiness card — populated by loadHome() from last quiz attempt -->
       <div class="home-readiness" id="homeReadiness" style="display:none" onclick="showTab('history')">
         <div class="hr-dot" id="hrDot"></div>
@@ -5066,6 +5075,13 @@ a { color:inherit; text-decoration:none; }
               </div>
               <div style="color:var(--muted);font-size:.78rem;font-weight:700;background:rgba(255,255,255,.07);padding:3px 9px;border-radius:20px;">v2.0</div>
             </div>
+            <div class="settings-row" style="align-items:flex-start;gap:12px;">
+              <img src="/api/assets/michael_profile.jpg" alt="Michael" style="width:44px;height:44px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid rgba(255,153,51,.45);">
+              <div class="sr-label">
+                <div class="sr-title">Michael</div>
+                <div class="sr-sub" id="michaelBioSettings" data-key="michael_bio" style="white-space:normal;line-height:1.55;">Michael brenner for trygg trafikk og gode læringsopplevelser. Med 16 års erfaring som trafikklærer bygger han Thai2Drive for å hjelpe thai-talende med å finne trygghet bak rattet i Norge.</div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -5256,7 +5272,7 @@ a { color:inherit; text-decoration:none; }
 
         <!-- Chat header -->
         <div class="teacher-header">
-          <button class="teacher-sidebar-toggle" id="teacherSidebarToggle" type="button" onclick="toggleTeacherSidebar()" aria-controls="teacherSidePanel" aria-expanded="false" aria-label="Vis sidefelt" title="Vis sidefelt">
+          <button class="teacher-sidebar-toggle" id="teacherSidebarToggle" type="button" onclick="toggleTeacherSidebar()" aria-controls="teacherSidePanel" aria-expanded="false" data-label-key="teacher_topics_open" aria-label="Vis sidefelt" title="Vis sidefelt">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/></svg>
           </button>
           <img class="teacher-avatar" src="/api/assets/michael_profile.jpg" alt="Michael">
@@ -5298,14 +5314,14 @@ a { color:inherit; text-decoration:none; }
             <input type="file" id="teacherDocInput" accept=".pdf,application/pdf,image/png,image/jpeg,image/webp" style="display:none" onchange="_teacherUploadDoc(this)">
             <button type="button" class="teacher-doc-btn" id="teacherDocBtn" onclick="document.getElementById('teacherDocInput').click()" title="Last opp PDF eller bilde" aria-label="Last opp PDF eller bilde" data-label-key="teacher_upload_doc">＋</button>
             <textarea class="teacher-input" id="teacherInput" rows="1" placeholder="..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();teacherSend();}"></textarea>
-            <button type="button" class="teacher-mic-btn" id="teacherMicBtn" onclick="toggleTeacherVoiceInput()" aria-label="Snakk med Michael" title="Snakk med Michael"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v5M8 22h8"/></svg></button>
+            <button type="button" class="teacher-mic-btn" id="teacherMicBtn" onclick="toggleTeacherVoiceInput()" data-label-key="teacher_voice_start" aria-label="Snakk med Michael" title="Snakk med Michael"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v5M8 22h8"/></svg></button>
             <button class="teacher-send-btn" id="teacherSendBtn" onclick="teacherSend()" aria-label="Send"><span aria-hidden="true">↑</span></button>
           </div>
         </div>
 
       </div><!-- /teacher-chat-col -->
 
-      <button class="teacher-sidebar-backdrop" id="teacherSidebarBackdrop" type="button" onclick="closeTeacherSidebar()" aria-label="Lukk emner"></button>
+      <button class="teacher-sidebar-backdrop" id="teacherSidebarBackdrop" type="button" onclick="closeTeacherSidebar()" data-label-key="teacher_topics_close" aria-label="Lukk emner"></button>
 
       <!-- Topic drawer — opened on demand on mobile and desktop -->
       <div class="teacher-side-panel" id="teacherSidePanel" aria-hidden="true">
@@ -5387,7 +5403,7 @@ a { color:inherit; text-decoration:none; }
 <!-- ═══ LIGHTBOX MODAL (Image Enlarge) ═══ -->
 <div class="t2d-lightbox" id="t2dLightbox" onclick="closeLightbox(event)" aria-hidden="true" role="dialog">
   <div class="t2d-lightbox-content" onclick="event.stopPropagation()">
-    <button class="t2d-lightbox-close" onclick="closeLightbox(event)" aria-label="Lukk">✕</button>
+    <button class="t2d-lightbox-close" onclick="closeLightbox(event)" data-label-key="close" aria-label="Lukk">✕</button>
     <img id="t2dLightboxImg" src="" alt="">
     <div class="t2d-lightbox-caption" id="t2dLightboxCaption"></div>
   </div>
@@ -5681,6 +5697,7 @@ var UI = {
   auto:        {th:'ตามระบบ',            no:'Auto',             en:'Auto'},
   about_app:   {th:'เกี่ยวกับแอป',       no:'Om appen',         en:'About the app'},
   about_app_sub:{th:'แบบทดสอบข้อเขียนใบขับขี่นอร์เวย์เป็นภาษาไทย', no:'Teoriprøven på thai for Norge', en:'Norwegian driving theory test in Thai'},
+  michael_bio:  {th:'ไมเคิลมุ่งมั่นเพื่อความปลอดภัยในการจราจรและประสบการณ์การเรียนรู้ที่ดี ด้วยประสบการณ์การเป็นครูสอนขับรถ 16 ปี เขาได้พัฒนา Thai2Drive เพื่อช่วยให้ผู้ใช้ภาษาไทยมีความมั่นใจหลังพวงมาลัยในนอร์เวย์', no:'Michael brenner for trygg trafikk og gode læringsopplevelser. Med 16 års erfaring som trafikklærer bygger han Thai2Drive for å hjelpe thai-talende med å finne trygghet bak rattet i Norge.', en:'Michael is passionate about traffic safety and positive learning experiences. With 16 years of experience as a driving instructor, he created Thai2Drive to help Thai speakers gain confidence behind the wheel in Norway.'},
   logout:      {th:'ออกจากระบบ',         no:'Logg ut',          en:'Log out'},
   history:     {th:'ประวัติ',            no:'Historikk',        en:'History'},
   signs:       {th:'ป้ายจราจร',          no:'Trafikkskilt',     en:'Traffic Signs'},
