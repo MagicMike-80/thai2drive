@@ -180,9 +180,9 @@ PUBLIC_PRICING_FALLBACK = {
         "id": "three_months",
         "stripe_product_name": "Thai2Drive 3 Months",
         "label": {"no": "3 måneder", "th": "3 เดือน", "en": "3 months"},
-        "amount": 399,
+        "amount": 299,
         "currency": "NOK",
-        "display": "399 kr",
+        "display": "299 kr",
         "period": {"no": "per 3 måneder", "th": "ต่อ 3 เดือน", "en": "per 3 months"},
     },
     "lifetime": {

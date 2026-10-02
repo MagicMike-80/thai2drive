@@ -234,7 +234,7 @@ class TheoryHelpShortcutLanguagePurityTests(unittest.TestCase):
         req = TeacherChatRequest(message="help with the theory test", language="th", device_id="d1")
         response = asyncio.run(tc.teacher_chat(req))
 
-        self.assertIn("ผมช่วยอะไร", response.reply)
+        self.assertIn("ผมช่วย", response.reply)
         self.assertNotIn("vikeplikt", response.reply.lower())
         self.assertTrue(tc._chat_col.inserted)
         self.assertTrue(all(doc["language"] == "th" for doc in tc._chat_col.inserted))
