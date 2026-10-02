@@ -57,8 +57,8 @@ thai2drive/
 │  API: frontend/src/services/api.ts  │  ← Typed fetch wrapper, all endpoints
 ├─────────────────────────────────────┤
 │  Backend: FastAPI (Python 3.12)     │  ← uvicorn server:app
-│  Database: MongoDB (motor) — eneste │  ← server.py:29-31, os.environ['MONGO_URL']
-│    DB. Ingen SQLite-kodesti finnes. │     + os.environ['DB_NAME'], kreves ved import
+│  Database: MongoDB (motor) — eneste │  ← server.py:56-64, os.environ.get('MONGO_URL')
+│    DB. Ingen SQLite-kodesti finnes. │     + os.environ.get('DB_NAME'), fail-soft ved import
 │  AI: Gemini + OpenAI + LiteLLM      │  ← ai_explanations.py, teacher_chat.py
 │  Auth: JWT (python-jose + passlib)  │  ← server.py
 │  Payments: Stripe                   │  ← server.py /api/pricing, /api/create-checkout-session
@@ -81,7 +81,7 @@ thai2drive/
 | `backend/signs_data.py` | Traffic signs data management |
 | `backend/traffic_math.py` | Overtaking/stopping distance calculator |
 | `backend/site_config.py` | Site configuration |
-| `backend/webapp.py` | **Hele produksjons-webappen** — se seksjonen under. ~9 500 linjer, nesten alt er én rå Python-streng. Kun 3 ruter. |
+| `backend/webapp.py` | **Hele produksjons-webappen** — se seksjonen under. ~13 750 linjer, nesten alt er én rå Python-streng (`WEBAPP_HTML`). 13 ruter (`/web`, `/web/no|th|en`, `/{no|th|en}/app`, `/app`, `/app/no|th|en`, `/web/version`, `/web/voice-tester`). |
 | `backend/landing.py` | **Ikke ruter.** HTML/CSS/JS-byggeklosser (`LANDING_CSS`, `_hero_html()`, `_features_html()` osv.) satt sammen av `build_landing_page()`, kalt fra `website.py:533` |
 | `backend/website.py` | Offentlig nettsted: `/website`, `/guide`, `/privacy`, `/terms`, `/support`, `/bok`, `sitemap.xml`, `robots.txt` |
 | `backend/support_chat.py` | Support chat |
@@ -93,14 +93,14 @@ thai2drive/
 
 | Flate | Kilde | URL | Status |
 |-------|-------|-----|--------|
-| **Webapp** | `backend/webapp.py` — én rå Python-streng `WEBAPP_HTML` med all HTML/CSS/vanilje-JS inline | `/api/web` | **Produksjon.** Stripe-checkout returnerer hit (`server.py:1402`). |
-| Expo web | `frontend/` bygget til `backend/webapp/` | `/quiz-app` | Sekundær. Statisk mount i `server.py:5350+`, fallback exact → `{navn}.html` → `index.html` |
+| **Webapp** | `backend/webapp.py` — én rå Python-streng `WEBAPP_HTML` med all HTML/CSS/vanilje-JS inline | `/api/web` | **Produksjon.** Stripe-checkout returnerer hit (`server.py:2138`). |
+| Expo web | `frontend/` bygget til `backend/webapp/` | `/quiz-app` | Sekundær. Statisk mount i `server.py:~7579`, fallback exact → `{navn}.html` → `index.html` |
 
 Endringer i webappen gjøres i `WEBAPP_HTML`-strengen — **ikke** i `backend/webapp/`, som er et
 byggeartefakt og overskrives ved neste Expo-eksport. `/api/web/version` returnerer en
 `RAILWAY_GIT_COMMIT_SHA`-basert versjon; bruk den til å bekrefte hvilken build som er live.
 
-Alle routere monteres under `/api` i `server.py` (~4716–4745). `website_router` monteres
+Alle routere monteres under `/api` i `server.py` (~6551–6606). `website_router` monteres
 **to ganger** — både på `""` og `/api` — fordi Railway ruter på `/api/*`.
 
 ---

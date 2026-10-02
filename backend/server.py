@@ -171,9 +171,9 @@ PUBLIC_PRICING_FALLBACK = {
         "id": "monthly",
         "stripe_product_name": "Thai2Drive Premium",
         "label": {"no": "Månedlig", "th": "รายเดือน", "en": "Monthly"},
-        "amount": 199,
+        "amount": 99,
         "currency": "NOK",
-        "display": "199 kr",
+        "display": "99 kr",
         "period": {"no": "per måned", "th": "ต่อเดือน", "en": "per month"},
     },
     "three_months": {

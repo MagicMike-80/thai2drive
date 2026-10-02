@@ -4593,7 +4593,7 @@ a { color:inherit; text-decoration:none; }
       <button class="lang-btn" id="topLangEN" onclick="setLang('en')" title="English" style="width:36px;height:36px">
         <span class="cflag"><svg viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg"><rect width="60" height="30" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#C8102E" stroke-width="4"/><rect y="11" width="60" height="8" fill="#fff"/><rect x="26" width="8" height="30" fill="#fff"/><rect y="12" width="60" height="6" fill="#C8102E"/><rect x="27" width="6" height="30" fill="#C8102E"/></svg></span>
       </button>
-      <button id="topSettingsBtn" onclick="showTab('settings')" title="Innstillinger" style="display:none;width:34px;height:34px;border-radius:50%;border:none;background:rgba(255,255,255,.06);color:var(--muted);font-size:16px;cursor:pointer;align-items:center;justify-content:center;transition:background .2s,color .2s;flex-shrink:0;" onmouseover="this.style.background='rgba(255,255,255,.12)';this.style.color='var(--text)'" onmouseout="this.style.background='rgba(255,255,255,.06)';this.style.color='var(--muted)'">⚙️</button>
+      <button id="topSettingsBtn" onclick="showTab('settings')" title="Innstillinger" data-title-key="settings_title" style="display:none;width:34px;height:34px;border-radius:50%;border:none;background:rgba(255,255,255,.06);color:var(--muted);font-size:16px;cursor:pointer;align-items:center;justify-content:center;transition:background .2s,color .2s;flex-shrink:0;" onmouseover="this.style.background='rgba(255,255,255,.12)';this.style.color='var(--text)'" onmouseout="this.style.background='rgba(255,255,255,.06)';this.style.color='var(--muted)'">⚙️</button>
     </div>
   </div>
 
@@ -4882,7 +4882,7 @@ a { color:inherit; text-decoration:none; }
           <img id="quizAiImg" class="quiz-ai-img" src="" alt="">
           <div class="quiz-ai-img-overlay" id="quizAiOverlay"></div>
           <!-- Image label overlay -->
-          <div class="quiz-ai-img-badge" id="quizAiImgBadge">📸 Trafikksituasjon</div>
+          <div class="quiz-ai-img-badge" id="quizAiImgBadge" data-key="traffic_situation_badge">📸 Trafikksituasjon</div>
         </div>
         <!-- AI instructor panel -->
         <div class="quiz-ai-panel">
@@ -4954,7 +4954,7 @@ a { color:inherit; text-decoration:none; }
       </div>
       <div class="vp-player-wrap">
         <video id="vpVideo" controls preload="metadata" playsinline></video>
-        <iframe id="vpYoutube" title="Video" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen hidden></iframe>
+        <iframe id="vpYoutube" title="Video" data-title-key="video_title" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen hidden></iframe>
       </div>
       <div class="vp-glow-road" id="vpGlowRoad"></div>
       <div class="vp-scroll">
@@ -5093,7 +5093,7 @@ a { color:inherit; text-decoration:none; }
     <!-- ═══ HISTORY SCREEN ═══ -->
     <div class="screen" id="screenHistory">
       <div class="hist-header">
-        <div class="screen-title" style="display:flex;align-items:center;gap:10px;">📊 <span data-key="history">Historikk</span> <span id="histCount"></span><button onclick="loadHistory()" style="background:none;border:none;cursor:pointer;padding:4px 8px;border-radius:8px;color:#8899aa;font-size:20px;line-height:1;" title="Oppdater">↻</button></div>
+        <div class="screen-title" style="display:flex;align-items:center;gap:10px;">📊 <span data-key="history">Historikk</span> <span id="histCount"></span><button onclick="loadHistory()" style="background:none;border:none;cursor:pointer;padding:4px 8px;border-radius:8px;color:#8899aa;font-size:20px;line-height:1;" title="Oppdater" data-title-key="update_title">↻</button></div>
       </div>
       <div class="hist-scroll" id="histScroll">
         <div class="loading-wrap">
@@ -5141,9 +5141,9 @@ a { color:inherit; text-decoration:none; }
         <button class="fk-sc-btn"        id="fkBtnHard"  onclick="fkSelect(2)"></button>
       </div>
       <!-- Mobile: toggle button + collapsible image panel -->
-      <button class="fk-img-toggle" id="fkImgToggle" onclick="fkToggleImg()">👁 Se illustrasjon</button>
+      <button class="fk-img-toggle" id="fkImgToggle" onclick="fkToggleImg()" data-key="fk_img_toggle">👁 Se illustrasjon</button>
       <div class="fk-img-mobile" id="fkImgMobile">
-        <img src="/api/assets/forbikjoring.jpg" alt="Forbikjøring illustrasjon"
+        <img src="/api/assets/forbikjoring.jpg" alt="Forbikjøring illustrasjon" data-alt-key="fk_img_alt"
              onerror="this.parentElement.style.display='none'">
       </div>
       <!-- Two-column layout -->
@@ -5154,51 +5154,12 @@ a { color:inherit; text-decoration:none; }
         </div>
         <!-- Desktop-only image column -->
         <div class="fk-img-col">
-          <img src="/api/assets/forbikjoring.jpg" alt="Forbikjøring illustrasjon"
+          <img src="/api/assets/forbikjoring.jpg" alt="Forbikjøring illustrasjon" data-alt-key="fk_img_alt"
                onerror="this.style.display='none'">
         </div>
       </div>
     </div>
 
-    <!-- ═══ STUDIEBOK ADMIN EDIT MODAL ═══ -->
-    <div id="studiebokEditModal" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.6);align-items:center;justify-content:center;">
-      <div style="background:var(--card);border-radius:16px;padding:24px;width:min(92vw,520px);max-height:80vh;overflow-y:auto;display:flex;flex-direction:column;gap:12px;">
-        <div style="font-weight:700;font-size:1.05rem;" data-key="studybook_edit_chapter">✏️ Rediger kapittel</div>
-
-        <div style="border:1px solid var(--border);border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:8px;">
-          <div style="font-weight:600;font-size:.9rem;color:var(--orange);">🇳🇴 Norsk (NO)</div>
-          <label style="font-size:.8rem;color:var(--muted);">Tittel (NO)</label>
-          <input id="sbEditTitle" style="padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.95rem;width:100%;box-sizing:border-box;" />
-          <label style="font-size:.8rem;color:var(--muted);">Innhold (NO - HTML)</label>
-          <textarea id="sbEditContent" rows="5" style="padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.85rem;width:100%;box-sizing:border-box;resize:vertical;font-family:monospace;"></textarea>
-        </div>
-
-        <div style="border:1px solid var(--border);border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:8px;">
-          <div style="font-weight:600;font-size:.9rem;color:var(--orange);">🇹🇭 Thai (TH)</div>
-          <label style="font-size:.8rem;color:var(--muted);">Tittel (TH)</label>
-          <input id="sbEditTitleTh" style="padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.95rem;width:100%;box-sizing:border-box;" />
-          <label style="font-size:.8rem;color:var(--muted);">Innhold (TH - HTML)</label>
-          <textarea id="sbEditContentTh" rows="5" style="padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.85rem;width:100%;box-sizing:border-box;resize:vertical;font-family:monospace;"></textarea>
-        </div>
-
-        <div style="border:1px solid var(--border);border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:8px;">
-          <div style="font-weight:600;font-size:.9rem;color:var(--orange);">🇬🇧 Engelsk (EN)</div>
-          <label style="font-size:.8rem;color:var(--muted);">Tittel (EN)</label>
-          <input id="sbEditTitleEn" style="padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.95rem;width:100%;box-sizing:border-box;" />
-          <label style="font-size:.8rem;color:var(--muted);">Innhold (EN - HTML)</label>
-          <textarea id="sbEditContentEn" rows="5" style="padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.85rem;width:100%;box-sizing:border-box;resize:vertical;font-family:monospace;"></textarea>
-        </div>
-
-        <label style="font-size:.85rem;color:var(--muted);" data-key="studybook_image_url">🖼️ Bilde URL</label>
-        <input id="sbEditImageUrl" type="text" style="padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.95rem;width:100%;box-sizing:border-box;" placeholder="https://..." />
-        <label style="font-size:.85rem;color:var(--muted);" data-key="studybook_video_url">🎥 Video URL (fremtidig)</label>
-        <input id="sbEditVideoUrl" type="text" style="padding:8px 12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.95rem;width:100%;box-sizing:border-box;" placeholder="https://..." />
-        <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:4px;">
-          <button onclick="closeStudiebokModal()" data-key="cancel" style="padding:8px 18px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text);cursor:pointer;">Avbryt</button>
-          <button onclick="saveStudiebokChapter()" data-key="save" style="padding:8px 18px;border-radius:8px;border:none;background:var(--orange);color:#0F172A;font-weight:600;cursor:pointer;">Lagre</button>
-        </div>
-      </div>
-    </div>
 
     <!-- ═══ END SCREEN ═══ -->
     <div class="screen" id="screenEnd">
@@ -5243,7 +5204,7 @@ a { color:inherit; text-decoration:none; }
         <div class="paywall-price-row">
           <div class="paywall-price-card selected" onclick="buyPremium('monthly',this)" data-plan="monthly">
             <div class="ppc-period" data-key="pw_month"></div>
-            <div class="ppc-price" data-price-plan="monthly">199 NOK</div>
+            <div class="ppc-price" data-price-plan="monthly">99 NOK</div>
             <div class="ppc-per" data-key="pw_per_month"></div>
           </div>
           <div class="paywall-price-card" onclick="buyPremium('three_months',this)" data-plan="three_months" style="position:relative">
@@ -5277,20 +5238,20 @@ a { color:inherit; text-decoration:none; }
           </button>
           <img class="teacher-avatar" src="/api/assets/michael_profile.jpg" alt="Michael">
           <div class="teacher-header-info">
-            <div class="teacher-name" id="teacherNameLbl">Michael Trafikklærer</div>
+            <div class="teacher-name" id="teacherNameLbl" data-key="teacher_name">Michael Trafikklærer</div>
             <div class="teacher-meta-wrap">
               <div class="teacher-meta-line" data-key="teacher_meta">Pålogget • AI-lærer • 16 års erfaring</div>
               <div class="teacher-online-badge" data-key="teacher_online_badge">ONLINE</div>
               <div class="teacher-ai-badge" id="teacherAiBadge" role="note">AI</div>
             </div>
           </div>
-          <button type="button" class="ms-open-btn" id="msOpenBtn" onclick="openMichaelSchool()">🎓 <span id="msOpenLbl">Michael-skolen</span></button>
+          <button type="button" class="ms-open-btn" id="msOpenBtn" onclick="openMichaelSchool()">🎓 <span id="msOpenLbl" data-key="michael_school">Michael-skolen</span></button>
         </div>
 
         <!-- Michael-skolen overlay -->
         <div class="ms-overlay" id="msOverlay" onclick="if(event.target===this)closeMichaelSchool()">
           <div class="ms-panel" role="dialog" aria-modal="true" aria-labelledby="msTitle">
-            <div class="ms-head"><h2 id="msTitle">Michael-skolen</h2><button type="button" class="ms-close" onclick="closeMichaelSchool()" aria-label="Close">✕</button></div>
+            <div class="ms-head"><h2 id="msTitle" data-key="michael_school">Michael-skolen</h2><button type="button" class="ms-close" onclick="closeMichaelSchool()" aria-label="Close" data-label-key="close_aria">✕</button></div>
             <div class="ms-tabs" id="msTabs"></div>
             <div id="msBody"></div>
           </div>
@@ -5315,7 +5276,7 @@ a { color:inherit; text-decoration:none; }
             <button type="button" class="teacher-doc-btn" id="teacherDocBtn" onclick="document.getElementById('teacherDocInput').click()" title="Last opp PDF eller bilde" aria-label="Last opp PDF eller bilde" data-label-key="teacher_upload_doc">＋</button>
             <textarea class="teacher-input" id="teacherInput" rows="1" placeholder="..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();teacherSend();}"></textarea>
             <button type="button" class="teacher-mic-btn" id="teacherMicBtn" onclick="toggleTeacherVoiceInput()" data-label-key="teacher_voice_start" aria-label="Snakk med Michael" title="Snakk med Michael"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v5M8 22h8"/></svg></button>
-            <button class="teacher-send-btn" id="teacherSendBtn" onclick="teacherSend()" aria-label="Send"><span aria-hidden="true">↑</span></button>
+            <button class="teacher-send-btn" id="teacherSendBtn" onclick="teacherSend()" aria-label="Send" data-label-key="send_aria"><span aria-hidden="true">↑</span></button>
           </div>
         </div>
 
@@ -5375,7 +5336,7 @@ a { color:inherit; text-decoration:none; }
   <div class="campaign-modal-card">
     <button class="campaign-modal-close" onclick="closeCampaignModal()">&times;</button>
     <div class="cm-header">
-      <div class="cm-badge">🎁 30 DAGER PREMIUM</div>
+      <div class="cm-badge" data-key="campaign_badge">🎁 30 DAGER PREMIUM</div>
       <h3 class="cm-title" data-key="campaign_modal_title">Registrer deg for 30 dagers gratis Premium</h3>
       <p class="cm-sub" id="cmModalSubText" data-key="campaign_modal_sub">For de 50 første elevene — sikre deg plass nå!</p>
     </div>
@@ -5386,7 +5347,7 @@ a { color:inherit; text-decoration:none; }
       </div>
       <div class="cm-field">
         <label data-key="campaign_email_label">E-postadresse</label>
-        <input type="email" id="campEmail" required placeholder="navn@epost.no" autocomplete="email" />
+        <input type="email" id="campEmail" required placeholder="navn@epost.no" data-placeholder-key="email_placeholder" autocomplete="email" />
       </div>
       <div class="cm-field">
         <label data-key="campaign_phone_label">Telefonnummer</label>
@@ -5564,9 +5525,30 @@ function _mergeAttempts(remote, local) {
 // ── UI string translations ──────────────────────────────────
 var UI = {
   // ── 50-Brukers Kampanje (30 dager gratis Premium) ─────────────────────────
-  campaign_badge:        {th:'⚡ จำกัด 50 ท่านแรก', no:'⚡ Begrenset tilbud', en:'⚡ Limited Offer'},
+  home_open_library:     {th:'วิดีโอคอร์สและพอดแคสต์', no:'Videokurs & Podkaster', en:'Video courses & Podcasts'},
+  library_sub:           {th:'ดูบทเรียนและฟังคำอธิบาย', no:'Se leksjoner og hør forklaringer', en:'Watch lessons and listen to explanations'},
+  traffic_situation_badge: {th:'📸 สถานการณ์จราจร', no:'📸 Trafikksituasjon', en:'📸 Traffic situation'},
+  fk_img_toggle:         {th:'👁 ดูภาพประกอบ', no:'👁 Se illustrasjon', en:'👁 View illustration'},
+  michael_school:        {th:'โรงเรียนไมเคิล', no:'Michael-skolen', en:'Michael School'},
+  studybook_edit_no:     {th:'🇳🇴 นอร์เวย์ (NO)', no:'🇳🇴 Norsk (NO)', en:'🇳🇴 Norwegian (NO)'},
+  studybook_edit_title_no: {th:'ชื่อเรื่อง (NO)', no:'Tittel (NO)', en:'Title (NO)'},
+  studybook_edit_content_no: {th:'เนื้อหา (NO - HTML)', no:'Innhold (NO - HTML)', en:'Content (NO - HTML)'},
+  studybook_edit_th:     {th:'🇹🇭 ไทย (TH)', no:'🇹🇭 Thai (TH)', en:'🇹🇭 Thai (TH)'},
+  studybook_edit_title_th: {th:'ชื่อเรื่อง (TH)', no:'Tittel (TH)', en:'Title (TH)'},
+  studybook_edit_content_th: {th:'เนื้อหา (TH - HTML)', no:'Innhold (TH - HTML)', en:'Content (TH - HTML)'},
+  studybook_edit_en:     {th:'🇬🇧 อังกฤษ (EN)', no:'🇬🇧 Engelsk (EN)', en:'🇬🇧 English (EN)'},
+  studybook_edit_title_en: {th:'ชื่อเรื่อง (EN)', no:'Tittel (EN)', en:'Title (EN)'},
+  studybook_edit_content_en: {th:'เนื้อหา (EN - HTML)', no:'Innhold (EN - HTML)', en:'Content (EN - HTML)'},
+  settings_title:        {th:'การตั้งค่า', no:'Innstillinger', en:'Settings'},
+  update_title:          {th:'อัปเดต', no:'Oppdater', en:'Update'},
+  fk_img_alt:            {th:'ภาพประกอบการแซง', no:'Forbikjøring illustrasjon', en:'Overtaking illustration'},
+  email_placeholder:     {th:'ชื่อ@อีเมล.com', no:'navn@epost.no', en:'name@email.com'},
+  close_aria:            {th:'ปิด', no:'Lukk', en:'Close'},
+  send_aria:             {th:'ส่ง', no:'Send', en:'Send'},
+  video_title:           {th:'วิดีโอ', no:'Video', en:'Video'},
+  campaign_badge:        {th:'🎁 สิทธิ์ใช้งาน พรีเมียม 30 วัน', no:'🎁 30 DAGER PREMIUM', en:'🎁 30 DAYS PREMIUM'},
   campaign_title:        {th:'🎁 รับสิทธิ์ Premium ฟรี 30 วัน!', no:'🎁 30 dagers gratis Premium!', en:'🎁 30 Days Free Premium!'},
-  campaign_desc:         {th:'เหลืออีก {remaining} จาก 50 ที่นั่ง', no:'Kun {remaining} av 50 plasser igjen!', en:'Only {remaining} of 50 spots left!'},
+  campaign_desc:         {th:'เหลือเพียง {remaining} จาก 50 ที่นั่ง!', no:'Kun {remaining} av 50 plasser igjen!', en:'Only {remaining} of 50 spots left!'},
   campaign_claim_btn:    {th:'รับสิทธิ์ทันที', no:'Sikre din plass', en:'Claim Your Spot'},
   campaign_modal_title:  {th:'ลงทะเบียนรับสิทธิ์ Premium ฟรี 30 วัน', no:'Registrer deg for 30 dagers gratis Premium', en:'Register for 30 Days Free Premium'},
   campaign_modal_sub:    {th:'สำหรับนักเรียน 50 ท่านแรก — รีบรับสิทธิ์ก่อนเต็ม!', no:'For de 50 første elevene — sikre deg plass nå!', en:'For the first 50 students — claim your spot now!'},
@@ -5639,7 +5621,7 @@ var UI = {
   teacher_role:{th:'ครูสอนขับรถ', no:'Trafikklærer', en:'Driving teacher'},
   teacher_experience:{th:'ประสบการณ์ 16 ปี', no:'16 års erfaring', en:'16 years of experience'},
   teacher_meta:{th:'เข้าสู่ระบบ • ครู AI • ประสบการณ์ 16 ปี', no:'Pålogget • AI-lærer • 16 års erfaring', en:'Signed in • AI teacher • 16 years experience'},
-  teacher_online_badge:{th:'ออนไลน์', no:'ONLINE', en:'ONLINE'},
+  teacher_online_badge:{th:'ออนไลน์', no:'PÅLOGGET', en:'ONLINE'},
   contact_human_btn:{th:'ส่งข้อความถึง Michael ตัวจริง', no:'Send melding til Ekte Michael', en:'Send message to Real Michael'},
   contact_human_sent:{th:'ส่งข้อความถึง Michael ตัวจริงแล้ว เขาจะติดต่อกลับเร็ว ๆ นี้', no:'Meldingen er sendt til Ekte Michael. Han svarer deg snart.', en:'Your message was sent to the real Michael. He will get back to you soon.'},
   contact_human_failed:{th:'ส่งข้อความไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', no:'Klarte ikke å sende meldingen. Prøv igjen.', en:'Could not send the message. Please try again.'},
@@ -13431,6 +13413,9 @@ def _webapp_html(default_lang: str = "th") -> str:
     if lang != "th":
         html = html.replace("_ls.get('t2d_lang') || 'th'", f"_ls.get('t2d_lang') || '{lang}'")
 
+    html = html.replace('class="sp-lang-tab active"', 'class="sp-lang-tab"')
+    html = html.replace(f'class="sp-lang-tab" data-lang="{lang}"', f'class="sp-lang-tab active" data-lang="{lang}"')
+
     meta = seo_meta("app", lang)
     html = html.replace(
         '<html lang="th" data-theme="dark" translate="no" class="notranslate">',
@@ -13486,7 +13471,7 @@ def _webapp_html(default_lang: str = "th") -> str:
 
     def _repl_attr(m):
         tag_str = m.group(0)
-        for attr_match in re.finditer(r'data-(placeholder|label|title)-key="([^"]+)"', tag_str):
+        for attr_match in re.finditer(r'data-(placeholder|label|title|alt)-key="([^"]+)"', tag_str):
             attr_type = attr_match.group(1)
             key = attr_match.group(2)
             val = _webapp_html._ui_dict.get(key, {}).get(lang, '')
@@ -13498,9 +13483,11 @@ def _webapp_html(default_lang: str = "th") -> str:
             elif attr_type == 'label':
                 tag_str = re.sub(r'aria-label="[^"]*"', f'aria-label="{val}"', tag_str)
                 tag_str = re.sub(r'title="[^"]*"', f'title="{val}"', tag_str)
+            elif attr_type == 'alt':
+                tag_str = re.sub(r'alt="[^"]*"', f'alt="{val}"', tag_str)
         return tag_str
 
-    html = re.sub(r'<[^>]+data-(?:placeholder|label|title)-key="[^"]+"[^>]*>', _repl_attr, html)
+    html = re.sub(r'<[^>]+data-(?:placeholder|label|title|alt)-key="[^"]+"[^>]*>', _repl_attr, html)
 
     return html
 

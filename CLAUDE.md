@@ -41,9 +41,11 @@ skriver kode.
 
 **Package manager:** `yarn` (pinnet til v1.22.22) — bruk aldri `npm` for frontend.
 
-**`uvicorn server:app` krever `MONGO_URL` og `DB_NAME`** — `server.py` leser dem med
-`os.environ[...]` på importtidspunktet og kræsjer uten dem. Det finnes ingen SQLite-fallback;
-`backend/thai2drive.db` er en levning og brukes ikke av serveren.
+**`uvicorn server:app` forventer `MONGO_URL` og `DB_NAME`** — `server.py` leser dem med
+`os.environ.get(...)` (fail-soft siden commit 2365d1f, aug 2026) og booter videre uten dem;
+mangler en av dem logges `CRITICAL` og `/api/health` svarer 200 med `db=disconnected` i stedet
+for at prosessen dør. Det finnes ingen SQLite-fallback; `backend/thai2drive.db` er en levning
+og brukes ikke av serveren.
 
 ## Testing — les dette før du kjører pytest
 
@@ -74,7 +76,7 @@ Endringer i webappen gjøres i `WEBAPP_HTML`-strengen i `backend/webapp.py` — 
 `backend/webapp/`, som er et byggeartefakt og overskrives. `/api/web/version` returnerer
 deploy-versjonen; bruk den for å bekrefte hvilken build som faktisk er live.
 
-Alle routere monteres under `/api` i `server.py` (~linje 5830–5880). `website_router`
+Alle routere monteres under `/api` i `server.py` (~linje 6551–6606). `website_router`
 monteres to ganger — både på `""` og `/api` — fordi Railway ruter på `/api/*`.
 
 ## Dokumentasjonsindeks (Just-In-Time)
