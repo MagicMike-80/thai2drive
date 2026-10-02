@@ -738,8 +738,9 @@ def _hero_html(lang: str = "th") -> str:
 """
 
 
-def _try_html() -> str:
-    return """
+def _try_html(lang: str) -> str:
+    les_hoyt = {"no": "Les høyt", "th": "อ่านออกเสียง", "en": "Read aloud"}.get(lang, "Les høyt")
+    return f"""
 <section id="try">
   <div class="container">
     <div class="sec-head">
@@ -773,7 +774,7 @@ def _try_html() -> str:
       </div>
       <div class="try-foot">
         <div class="tts-row">
-          <button class="tts-play" id="tqTtsBtn" title="Les høyt">▶</button>
+          <button class="tts-play" id="tqTtsBtn" title="{les_hoyt}">▶</button>
           <button class="tts-speed" data-rate="0.5">0.5x</button>
           <button class="tts-speed" data-rate="0.75">0.75x</button>
           <button class="tts-speed active" data-rate="1">1x</button>
@@ -1642,7 +1643,7 @@ def build_landing_page(chat_css: str, chat_widget_html: str, chat_js: str, lang:
 {_nav_html(lang)}
 {_hero_html(lang)}
 {_stats_html()}
-{_try_html()}
+{_try_html(lang)}
 {_video_html(lang)}
 {_why_html()}
 {_features_html()}
