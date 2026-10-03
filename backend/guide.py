@@ -219,7 +219,7 @@ def build_guide_page(lang: str = "no") -> str:
       <span class="tl tl-th">ลงทะเบียน</span><span class="tl tl-no">Registrer</span><span class="tl tl-en">Register</span>
     </div>
     <div class="step-chip"><span class="num">2</span>
-      <span class="tl tl-th">ขั้นตอนที่ 1 (TGK)</span><span class="tl tl-no">Trinn 1 (TGK)</span><span class="tl tl-en">Step 1 (TGK)</span>
+      <span class="tl tl-th">ขั้นตอนที่ 1</span><span class="tl tl-no">Trinn 1 (TGK)</span><span class="tl tl-en">Step 1</span>
     </div>
     <div class="step-chip"><span class="num">3</span>
       <span class="tl tl-th">ขั้นตอนที่ 2 (45 นาที)</span><span class="tl tl-no">Trinn 2 (45 min)</span><span class="tl tl-en">Step 2 (45 min)</span>
@@ -252,7 +252,7 @@ def build_guide_page(lang: str = "no") -> str:
         <div class="card-icon">🛂</div>
         <h3><span class="tl tl-th">สถานะในนอร์เวย์</span><span class="tl tl-no">Oppholdsstatus</span><span class="tl tl-en">Residence status</span></h3>
         <p>
-          <span class="tl tl-th">คุณต้องมีใบอนุญาตพำนักที่ถูกต้องในนอร์เวย์ (oppholdstillatelse) และต้องมีอายุอย่างน้อย <span class="highlight">18 ปี</span></span>
+          <span class="tl tl-th">คุณต้องมีใบอนุญาตพำนักที่ถูกต้องในนอร์เวย์ และต้องมีอายุอย่างน้อย <span class="highlight">18 ปี</span></span>
           <span class="tl tl-no">Du må ha gyldig <span class="highlight">oppholdstillatelse</span> i Norge og være minst <span class="highlight">18 år</span></span>
           <span class="tl tl-en">You must have a valid <span class="highlight">residence permit</span> in Norway and be at least <span class="highlight">18 years old</span></span>
         </p>
@@ -261,7 +261,7 @@ def build_guide_page(lang: str = "no") -> str:
         <div class="card-icon">📋</div>
         <h3><span class="tl tl-th">เอกสารที่ต้องใช้</span><span class="tl tl-no">Dokumenter du trenger</span><span class="tl tl-en">Documents needed</span></h3>
         <p>
-          <span class="tl tl-th">✅ หนังสือเดินทาง (Pass)<br/>✅ ใบอนุญาตพำนัก (Oppholdstillatelse)<br/>✅ ใบขับขี่ไทย (ถ้ามี — ใช้ยืนยันประสบการณ์ได้)<br/>✅ รูปถ่าย</span>
+          <span class="tl tl-th">✅ หนังสือเดินทาง<br/>✅ ใบอนุญาตพำนัก<br/>✅ ใบขับขี่ไทย (ถ้ามี — ใช้ยืนยันประสบการณ์ได้)<br/>✅ รูปถ่าย</span>
           <span class="tl tl-no">✅ Pass<br/>✅ Oppholdstillatelse<br/>✅ Thailandsk førerkort (hvis du har — kan brukes som erfaring)<br/>✅ Passbilde</span>
           <span class="tl tl-en">✅ Passport<br/>✅ Residence permit<br/>✅ Thai driving licence (if you have one — counts as experience)<br/>✅ Passport photo</span>
         </p>
@@ -281,7 +281,7 @@ def build_guide_page(lang: str = "no") -> str:
   <!-- SECTION 2: THAI VS NORWEGIAN TRAFFIC -->
   <div class="section">
     <div class="section-num">2</div>
-    <h2><span class="tl tl-th">ความแตกต่าง: ไทย vs. นอร์เวย์</span><span class="tl tl-no">Forskjeller: Thailand vs. Norge</span><span class="tl tl-en">Differences: Thailand vs. Norway</span></h2>
+    <h2><span class="tl tl-th">ความแตกต่างระหว่างไทยกับนอร์เวย์</span><span class="tl tl-no">Forskjeller: Thailand vs. Norge</span><span class="tl tl-en">Differences: Thailand vs. Norway</span></h2>
     <p class="lead">
       <span class="tl tl-th">สิ่งสำคัญที่ต้องรู้ก่อนขับรถในนอร์เวย์</span>
       <span class="tl tl-no">Viktige forskjeller du må kjenne til</span>
@@ -309,7 +309,7 @@ def build_guide_page(lang: str = "no") -> str:
         <td>80 km/h</td>
       </tr>
       <tr>
-        <td><span class="tl tl-th">วงเวียน (vikeplikt)</span><span class="tl tl-no">Rundkjøring</span><span class="tl tl-en">Roundabout</span></td>
+        <td><span class="tl tl-th">วงเวียน (ต้องให้ทาง)</span><span class="tl tl-no">Rundkjøring</span><span class="tl tl-en">Roundabout</span></td>
         <td><span class="tl tl-th">ผู้เข้าวงเวียนมีสิทธิ์ก่อน</span><span class="tl tl-no">Innkjørende har forkjørsrett</span><span class="tl tl-en">Entering traffic has priority</span></td>
         <td><span class="tag-yes"><span class="tl tl-th">รถในวงเวียนมีสิทธิ์ก่อน!</span><span class="tl tl-no">I rundkjøringen har forkjørsrett!</span><span class="tl tl-en">Traffic inside has priority!</span></span></td>
       </tr>
@@ -336,13 +336,13 @@ def build_guide_page(lang: str = "no") -> str:
     <div class="section-num">3</div>
     <h2><span class="tl tl-th">ขั้นตอนบังคับ — ตามลำดับ</span><span class="tl tl-no">Obligatorisk rekkefølge</span><span class="tl tl-en">Mandatory steps — in order</span></h2>
     <p class="lead">
-      <span class="tl tl-th">6 ขั้นตอนแรกที่โรงเรียนสอนขับ + 2 ขั้นสุดท้ายที่ Statens Vegvesen</span>
+      <span class="tl tl-th">6 ขั้นตอนแรกที่โรงเรียนสอนขับ + 2 ขั้นสุดท้ายที่หน่วยงานขนส่งของนอร์เวย์</span>
       <span class="tl tl-no">6 første hos trafikklærer + 2 siste hos Statens Vegvesen — i denne rekkefølgen</span>
       <span class="tl tl-en">First 6 steps at driving school + last 2 at Statens Vegvesen — in this exact order</span>
     </p>
 
     <p style="font-size:13px;font-weight:700;color:#FF9933;margin-bottom:12px;margin-top:4px">
-      🏫 <span class="tl tl-th">ที่โรงเรียนสอนขับ (Trafikklærer)</span><span class="tl tl-no">Hos trafikklærer</span><span class="tl tl-en">At driving school</span>
+      🏫 <span class="tl tl-th">ที่โรงเรียนสอนขับ (ครูสอนขับรถ)</span><span class="tl tl-no">Hos trafikklærer</span><span class="tl tl-en">At driving school</span>
     </p>
     <div class="steps-list">
       <div class="step-item">
@@ -355,7 +355,7 @@ def build_guide_page(lang: str = "no") -> str:
       <div class="step-item">
         <div class="step-num">2</div>
         <div class="step-body">
-          <h4><span class="tl tl-th">หลักสูตรพื้นฐานด้านการจราจร (TG)</span><span class="tl tl-no">Trafikalt grunnkurs (TG)</span><span class="tl tl-en">Basic traffic course (TG)</span></h4>
+          <h4><span class="tl tl-th">หลักสูตรพื้นฐานด้านการจราจร</span><span class="tl tl-no">Trafikalt grunnkurs (TG)</span><span class="tl tl-en">Basic traffic course (TG)</span></h4>
           <p><span class="tl tl-th">หลักสูตรพื้นฐาน 17 ชั่วโมง ครอบคลุมทฤษฎีพื้นฐาน การปฐมพยาบาล และการขับขี่อย่างปลอดภัย</span><span class="tl tl-no">17-timers grunnkurs. Dekker grunnleggende teori, førstehjelp og trygg kjøring.</span><span class="tl tl-en">17-hour basic course. Covers basic theory, first aid and safe driving.</span></p>
           <div style="margin-top:10px;background:rgba(255,153,51,.08);border:1px solid rgba(255,153,51,.2);border-radius:10px;padding:12px 14px">
             <p style="font-size:13px;font-weight:700;color:#FF9933;margin-bottom:6px">
@@ -364,7 +364,7 @@ def build_guide_page(lang: str = "no") -> str:
               <span class="tl tl-en">⚠️ Over 25 years — you do NOT need the full TGK!</span>
             </p>
             <p style="font-size:13px;color:#CBD5E1">
-              <span class="tl tl-th">ถ้าอายุเกิน 25 ปี คุณต้องแค่:<br/>✅ <strong>Førstehjelp</strong> — หลักสูตรปฐมพยาบาล<br/>✅ <strong>MørkeDemo</strong> — ทดสอบขับในที่มืด<br/>ไม่ต้องเรียน TGK ทั้งหมด 17 ชั่วโมง</span>
+              <span class="tl tl-th">ถ้าอายุเกิน 25 ปี คุณต้องเรียนเพียง:<br/>✅ <strong>หลักสูตรปฐมพยาบาล</strong><br/>✅ <strong>การสาธิตขับรถในที่มืด</strong><br/>ไม่ต้องเรียนหลักสูตรพื้นฐานครบ 17 ชั่วโมง</span>
               <span class="tl tl-no">Hvis du er over 25 år trenger du kun:<br/>✅ <strong>Førstehjelp</strong> — førstehjelpskurs<br/>✅ <strong>MørkeDemo</strong> — demonstrasjon i mørkekjøring<br/>Du slipper hele 17-timers TGK-kurset!</span>
               <span class="tl tl-en">If you are over 25 years old you only need:<br/>✅ <strong>First aid course</strong><br/>✅ <strong>Dark driving demo (MørkeDemo)</strong><br/>You skip the full 17-hour TGK course!</span>
             </p>
@@ -383,7 +383,7 @@ def build_guide_page(lang: str = "no") -> str:
         <div class="step-num">4</div>
         <div class="step-body">
           <h4><span class="tl tl-th">ขั้นตอนที่ 3 — บทเรียนขับรถกับครู (60 นาที) + หลักสูตรความปลอดภัยในสนามฝึก (5 ชั่วโมง)</span><span class="tl tl-no">Trinn 3 — Veiledningstime (60 min) + Sikkerhetskurs på bane (5 timer)</span><span class="tl tl-en">Step 3 — Guidance (60 min) + Track safety course (5 hours)</span></h4>
-          <p><span class="tl tl-th">ฝึกขับ 60 นาทีกับครู + หลักสูตรความปลอดภัยบนสนาม 5 ชั่วโมง (Glattkjøring — ขับบนถนนลื่น/น้ำแข็ง)</span><span class="tl tl-no">Veiledningstime på 60 minutter + Sikkerhetskurs på bane på 5 timer (Glattkjøring — kjøring på glatt underlag).</span><span class="tl tl-en">60-min guidance session + 5-hour track safety course (Glattkjøring — driving on slippery/icy surface).</span></p>
+          <p><span class="tl tl-th">ฝึกขับ 60 นาทีกับครู + หลักสูตรความปลอดภัยบนสนาม 5 ชั่วโมง (ฝึกควบคุมรถบนถนนลื่นหรือมีน้ำแข็ง)</span><span class="tl tl-no">Veiledningstime på 60 minutter + Sikkerhetskurs på bane på 5 timer (Glattkjøring — kjøring på glatt underlag).</span><span class="tl tl-en">60-min guidance session + 5-hour track safety course (Glattkjøring — driving on slippery/icy surface).</span></p>
           <span class="warn"><span class="tl tl-th">ต้องผ่านขั้นตอนที่ 2 ก่อน!</span><span class="tl tl-no">Må ha fullført Trinn 2 først!</span><span class="tl tl-en">Must complete Step 2 first!</span></span>
         </div>
       </div>
@@ -398,14 +398,14 @@ def build_guide_page(lang: str = "no") -> str:
     </div>
 
     <p style="font-size:13px;font-weight:700;color:#10B981;margin-top:24px;margin-bottom:12px">
-      🏛️ <span class="tl tl-th">ที่ Statens Vegvesen (2 ขั้นสุดท้าย)</span><span class="tl tl-no">Hos Statens Vegvesen (2 siste)</span><span class="tl tl-en">At Statens Vegvesen (last 2 steps)</span>
+      🏛️ <span class="tl tl-th">ที่หน่วยงานขนส่งของนอร์เวย์ (2 ขั้นตอนสุดท้าย)</span><span class="tl tl-no">Hos Statens Vegvesen (2 siste)</span><span class="tl tl-en">At Statens Vegvesen (last 2 steps)</span>
     </p>
     <div class="steps-list">
       <div class="step-item">
         <div class="step-num">6</div>
         <div class="step-body">
           <h4><span class="tl tl-th">การสอบภาคทฤษฎี</span><span class="tl tl-no">Teoriprøven</span><span class="tl tl-en">Theory test</span></h4>
-          <p><span class="tl tl-th">45 ข้อ — ต้องได้ 85% (ผิดได้ไม่เกิน 7 ข้อ) เวลา 90 นาที ค่าสอบ ~300 kr<br/>⏰ สอบได้ตั้งแต่อายุ <strong>16 ปีครึ่ง</strong> — ผลสอบใช้ได้ <strong>3 ปี</strong></span><span class="tl tl-no">45 spørsmål — minst 85% riktig (maks 7 feil). 90 min. ~300 kr.<br/>⏰ Kan tas fra <strong>16,5 år</strong> — gyldig i <strong>3 år</strong></span><span class="tl tl-en">45 questions — at least 85% correct (max 7 wrong). 90 min. ~300 kr.<br/>⏰ Can be taken from <strong>16.5 years</strong> — valid for <strong>3 years</strong></span></p>
+          <p><span class="tl tl-th">45 ข้อ — ต้องได้ 85% (ผิดได้ไม่เกิน 7 ข้อ) เวลา 90 นาที ค่าสอบประมาณ 300 โครนนอร์เวย์<br/>⏰ สอบได้ตั้งแต่อายุ <strong>16 ปีครึ่ง</strong> — ผลสอบใช้ได้ <strong>3 ปี</strong></span><span class="tl tl-no">45 spørsmål — minst 85% riktig (maks 7 feil). 90 min. ~300 kr.<br/>⏰ Kan tas fra <strong>16,5 år</strong> — gyldig i <strong>3 år</strong></span><span class="tl tl-en">45 questions — at least 85% correct (max 7 wrong). 90 min. ~300 NOK.<br/>⏰ Can be taken from <strong>16.5 years</strong> — valid for <strong>3 years</strong></span></p>
           <span class="note"><span class="tl tl-th">ฝึกกับ Thai2Drive! 📱</span><span class="tl tl-no">Øv med Thai2Drive! 📱</span><span class="tl tl-en">Practice with Thai2Drive! 📱</span></span>
         </div>
       </div>
@@ -413,7 +413,7 @@ def build_guide_page(lang: str = "no") -> str:
         <div class="step-num">7</div>
         <div class="step-body">
           <h4><span class="tl tl-th">การสอบขับรถ</span><span class="tl tl-no">Førerprøven (kjøreprøven)</span><span class="tl tl-en">Driving test</span></h4>
-          <p><span class="tl tl-th">ขับรถกับผู้ตรวจสอบจาก Statens Vegvesen 60 นาที ค่าสอบ ~1 000 kr<br/>ต้องผ่านทุกขั้นตอนก่อนนี้แล้ว!</span><span class="tl tl-no">Kjøring med sensor fra Statens Vegvesen. 60 min. ~1 000 kr.<br/>Alle obligatoriske trinn MÅ være fullført!</span><span class="tl tl-en">Drive with an examiner from Statens Vegvesen. 60 min. ~1 000 kr.<br/>All mandatory steps must be completed first!</span></p>
+          <p><span class="tl tl-th">ขับรถกับผู้ตรวจสอบจากหน่วยงานขนส่งของนอร์เวย์ 60 นาที ค่าสอบประมาณ 1 000 โครนนอร์เวย์<br/>ต้องผ่านทุกขั้นตอนก่อนหน้านี้!</span><span class="tl tl-no">Kjøring med sensor fra Statens Vegvesen. 60 min. ~1 000 kr.<br/>Alle obligatoriske trinn MÅ være fullført!</span><span class="tl tl-en">Drive with an examiner from Statens Vegvesen. 60 min. ~1,000 NOK.<br/>All mandatory steps must be completed first!</span></p>
         </div>
       </div>
     </div>
@@ -424,7 +424,7 @@ def build_guide_page(lang: str = "no") -> str:
     <div class="section-num">4</div>
     <h2><span class="tl tl-th">สิ่งที่คุณต้องเรียนรู้ในแต่ละขั้น</span><span class="tl tl-no">Hva du lærer i hvert trinn</span><span class="tl tl-en">What you learn in each step</span></h2>
     <p class="lead">
-      <span class="tl tl-th">เนื้อหาหลักสูตรอย่างเป็นทางการตาม Trafikkopplæringsforskriften</span>
+      <span class="tl tl-th">เนื้อหาตามข้อบังคับการฝึกขับรถอย่างเป็นทางการของนอร์เวย์</span>
       <span class="tl tl-no">Offisiell læreplan iht. Trafikkopplæringsforskriften (§ 11)</span>
       <span class="tl tl-en">Official curriculum according to Trafikkopplæringsforskriften (§ 11)</span>
     </p>
@@ -433,7 +433,7 @@ def build_guide_page(lang: str = "no") -> str:
     <div class="card" style="margin-bottom:14px;border-left:3px solid #FF9933">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
         <div class="step-num" style="width:32px;height:32px;border-radius:50%;background:#FF9933;color:#0F172A;font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0">1</div>
-        <h3 style="font-size:16px"><span class="tl tl-th">หลักสูตรพื้นฐานด้านการจราจร (TGK)</span><span class="tl tl-no">Trafikalt grunnkurs (TGK)</span><span class="tl tl-en">Basic Traffic Course (TGK)</span></h3>
+        <h3 style="font-size:16px"><span class="tl tl-th">หลักสูตรพื้นฐานด้านการจราจร</span><span class="tl tl-no">Trafikalt grunnkurs (TGK)</span><span class="tl tl-en">Basic Traffic Course (TGK)</span></h3>
       </div>
       <p style="font-size:13px;color:#FF9933;font-weight:700;margin-bottom:8px">
         <span class="tl tl-th">🎯 เป้าหมาย: เข้าใจความรับผิดชอบของผู้ขับขี่และความปลอดภัยบนถนน</span>
@@ -455,19 +455,19 @@ def build_guide_page(lang: str = "no") -> str:
         </div>
         <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:10px 12px;font-size:13px;color:#CBD5E1">
           🚑 <strong><span class="tl tl-th">การปฐมพยาบาล (ภาคปฏิบัติ)</span><span class="tl tl-no">Førstehjelp (praktisk øvelse)</span><span class="tl tl-en">First aid (practical exercise)</span></strong>
-          <span class="tl tl-th"> — ฝึกจริงในสถานการณ์อุบัติเหตุจำลอง: HLKR, การโทรแจ้งเหตุ, การช่วยเหลือเบื้องต้น</span>
+          <span class="tl tl-th"> — ฝึกจริงในสถานการณ์อุบัติเหตุจำลอง: การโทรแจ้งเหตุและการช่วยฟื้นคืนชีพ</span>
           <span class="tl tl-no"> — øver på arrangert ulykke: varsling, sikring av skadested, HLR</span>
           <span class="tl tl-en"> — practice on staged accident: calling for help, securing scene, CPR</span>
         </div>
         <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:10px 12px;font-size:13px;color:#CBD5E1">
-          🌙 <strong><span class="tl tl-th">การขับในความมืด (MørkeDemo)</span><span class="tl tl-no">Kjøring i mørket (MørkeDemo)</span><span class="tl tl-en">Night driving (MørkeDemo)</span></strong>
+          🌙 <strong><span class="tl tl-th">การสาธิตขับรถในความมืด</span><span class="tl tl-no">Kjøring i mørket (MørkeDemo)</span><span class="tl tl-en">Night driving (MørkeDemo)</span></strong>
           <span class="tl tl-th"> — สาธิตสด ≥1 ชม. กลางแจ้ง + ≥1 ชม. บนถนนจริง เพื่อเข้าใจอันตรายในยามค่ำคืน</span>
           <span class="tl tl-no"> — min. 1 t utendørs demo + min. 1 t på veg i mørket — forstå risiko og riktig lysbruk</span>
           <span class="tl tl-en"> — min. 1 hr outdoor demo + min. 1 hr on real road — understand risk and correct light use</span>
         </div>
       </div>
       <div style="margin-top:10px;background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);border-radius:8px;padding:8px 12px;font-size:12px;color:#10B981;font-weight:600">
-        ⚠️ <span class="tl tl-th">อายุ 25+ ปี: ทำแค่ Førstehjelp + MørkeDemo เท่านั้น — ไม่ต้องเรียนครบทั้งหมด!</span>
+        ⚠️ <span class="tl tl-th">อายุ 25 ปีขึ้นไป: เรียนเฉพาะปฐมพยาบาลและการสาธิตขับรถในความมืด — ไม่ต้องเรียนครบหลักสูตร!</span>
         <span class="tl tl-no">Over 25 år: Kun Førstehjelp + MørkeDemo — slipper resten av TGK!</span>
         <span class="tl tl-en">Over 25: Only First aid + Night demo required — skip the rest of TGK!</span>
       </div>
@@ -549,9 +549,9 @@ def build_guide_page(lang: str = "no") -> str:
           <span class="tl tl-en"> — student and instructor assess readiness for step 4</span>
         </div>
         <div style="background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.3);border-radius:8px;padding:10px 12px;font-size:13px;color:#C4B5FD">
-          🏎️ <strong><span class="tl tl-th">หลักสูตรความปลอดภัยในสนามฝึก — SKB (5 ชั่วโมง บังคับ)</span><span class="tl tl-no">Sikkerhetskurs på bane — SKB (5 timer, obligatorisk)</span><span class="tl tl-en">Track safety course — SKB (5 hours, mandatory)</span></strong><br/>
+          🏎️ <strong><span class="tl tl-th">หลักสูตรความปลอดภัยในสนามฝึก (5 ชั่วโมง บังคับ)</span><span class="tl tl-no">Sikkerhetskurs på bane — SKB (5 timer, obligatorisk)</span><span class="tl tl-en">Track safety course — SKB (5 hours, mandatory)</span></strong><br/>
           <div style="display:block;margin-top:4px">
-            <span class="tl tl-th">ฝึกบนสนามพิเศษ: ทดสอบการเบรก, ขับบนถนนลื่น (glattkjøring), ทดสอบระบบ ABS, ฝึกควบคุมรถในสถานการณ์ฉุกเฉิน</span>
+            <span class="tl tl-th">ฝึกบนสนามพิเศษ: ทดสอบการเบรก ขับบนถนนลื่น ทดสอบระบบเบรก และฝึกควบคุมรถในสถานการณ์ฉุกเฉิน</span>
             <span class="tl tl-no">Øver på bane: nødbremsing, kjøring på glatt underlag, ABS-test, kontroll ved krisesituasjoner</span>
             <span class="tl tl-en">On-track practice: emergency braking, driving on slippery surface, ABS test, vehicle control in crisis situations</span>
           </div>
@@ -579,7 +579,7 @@ def build_guide_page(lang: str = "no") -> str:
         </div>
         <div style="background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);border-radius:8px;padding:10px 12px;font-size:13px;color:#CBD5E1">
           🎓 <strong><span class="tl tl-th">4 ชั่วโมงสุดท้าย — ขับอิสระ 100%</span><span class="tl tl-no">Siste 4 timer — 100% selvstendig kjøring</span><span class="tl tl-en">Last 4 hours — 100% independent driving</span></strong>
-          <span class="tl tl-th"><br/>ขับคนเดียวในสภาพแวดล้อมหลากหลาย (ทางหลวง เมือง) ครูไม่ช่วยเหลือ เขียนบันทึก (logg)</span>
+          <span class="tl tl-th"><br/>ขับคนเดียวในสภาพแวดล้อมหลากหลาย (ทางหลวง เมือง) ครูไม่ช่วยเหลือ และเขียนบันทึกการขับขี่</span>
           <span class="tl tl-no"><br/>Kjøring alene i skiftende miljø (landeveg + by), lærer griper ikke inn, skriv logg</span>
           <span class="tl tl-en"><br/>Drive alone in varying environment (highway + city), no instructor help, write driving log</span>
         </div>
@@ -604,28 +604,28 @@ def build_guide_page(lang: str = "no") -> str:
     </p>
     <table class="cost-table">
       <tr>
-        <td><span class="tl tl-th">หลักสูตรพื้นฐาน (TG)</span><span class="tl tl-no">Trafikalt grunnkurs</span><span class="tl tl-en">Basic traffic course</span></td>
-        <td>~3 500 kr</td>
+        <td><span class="tl tl-th">หลักสูตรพื้นฐานด้านการจราจร</span><span class="tl tl-no">Trafikalt grunnkurs</span><span class="tl tl-en">Basic traffic course</span></td>
+        <td><span class="tl tl-th">ประมาณ 3 500 โครนนอร์เวย์</span><span class="tl tl-no">~3 500 kr</span><span class="tl tl-en">~3,500 NOK</span></td>
       </tr>
       <tr>
         <td><span class="tl tl-th">ชั่วโมงฝึกขับ (25 ชม.)</span><span class="tl tl-no">Kjøretimer (25 t.)</span><span class="tl tl-en">Driving lessons (25 hrs)</span></td>
-        <td>~17 500 kr</td>
+        <td><span class="tl tl-th">ประมาณ 17 500 โครนนอร์เวย์</span><span class="tl tl-no">~17 500 kr</span><span class="tl tl-en">~17,500 NOK</span></td>
       </tr>
       <tr>
         <td><span class="tl tl-th">หลักสูตรบังคับ 3 วิชา</span><span class="tl tl-no">Obligatoriske kurs</span><span class="tl tl-en">Mandatory courses</span></td>
-        <td>~6 000 kr</td>
+        <td><span class="tl tl-th">ประมาณ 6 000 โครนนอร์เวย์</span><span class="tl tl-no">~6 000 kr</span><span class="tl tl-en">~6,000 NOK</span></td>
       </tr>
       <tr>
         <td><span class="tl tl-th">ค่าสอบทฤษฎี</span><span class="tl tl-no">Teoriprøve</span><span class="tl tl-en">Theory test</span></td>
-        <td>~300 kr</td>
+        <td><span class="tl tl-th">ประมาณ 300 โครนนอร์เวย์</span><span class="tl tl-no">~300 kr</span><span class="tl tl-en">~300 NOK</span></td>
       </tr>
       <tr>
         <td><span class="tl tl-th">ค่าสอบขับ</span><span class="tl tl-no">Kjøreprøve</span><span class="tl tl-en">Driving test</span></td>
-        <td>~1 000 kr</td>
+        <td><span class="tl tl-th">ประมาณ 1 000 โครนนอร์เวย์</span><span class="tl tl-no">~1 000 kr</span><span class="tl tl-en">~1,000 NOK</span></td>
       </tr>
       <tr>
         <td><strong><span class="tl tl-th">รวมทั้งหมด (โดยประมาณ)</span><span class="tl tl-no">Totalt (estimert)</span><span class="tl tl-en">Total (estimated)</span></strong></td>
-        <td>~28 000 – 40 000 kr</td>
+        <td><span class="tl tl-th">ประมาณ 28 000 – 40 000 โครนนอร์เวย์</span><span class="tl tl-no">~28 000 – 40 000 kr</span><span class="tl tl-en">~28,000 – 40,000 NOK</span></td>
       </tr>
     </table>
   </div>

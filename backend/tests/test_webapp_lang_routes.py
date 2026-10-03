@@ -145,6 +145,50 @@ class LanguageEntryPointRouteTests(unittest.TestCase):
         r = client.get("/app/en")
         self.assertIn("t2d_site_lang=en", r.headers.get("set-cookie", ""))
 
+    def test_app_static_chrome_uses_translation_keys_without_norwegian_initial_labels(self):
+        html = WEBAPP_HTML
+        contracts = [
+            'data-key="cats"></span>',
+            'data-key="traffic_situation_badge"></div>',
+            'data-key="ai_teacher"></div>',
+            'data-key="traffic_understanding"></div>',
+            'data-key="fk_img_toggle"></button>',
+            'data-key="result_done"></div>',
+            'data-label-key="close" aria-label=""',
+            'data-alt-key="fk_img_alt"',
+            'data-label-key="lang_label_no"',
+            'data-key="about_app_web"></div>',
+            "lang_label_th:",
+            "lang_label_no:",
+            "lang_label_en:",
+            "about_app_web:",
+        ]
+        missing = [contract for contract in contracts if contract not in html]
+        self.assertEqual(missing, [], f"Missing static i18n markup: {missing}")
+
+        thai = client.get("/th/app").text
+        english = client.get("/en/app").text
+        self.assertTrue('data-label-key="close" aria-label="ปิด"' in thai, "Thai close label must be localized")
+        self.assertTrue('data-label-key="close" aria-label="Close"' in english, "English close label must be localized")
+        import re
+        thai_flag = re.search(r'<button[^>]*data-label-key="lang_label_no"[^>]*>', thai)
+        english_flag = re.search(r'<button[^>]*data-label-key="lang_label_no"[^>]*>', english)
+        self.assertIsNotNone(thai_flag, "Thai page must include the localized Norwegian flag control")
+        self.assertIsNotNone(english_flag, "English page must include the localized Norwegian flag control")
+        self.assertIn('title="ภาษานอร์เวย์" aria-label="ภาษานอร์เวย์"', thai_flag.group(0))
+        self.assertIn('title="Norwegian" aria-label="Norwegian"', english_flag.group(0))
+
+    def test_video_and_podcast_cards_select_only_the_active_language_title(self):
+        import re
+        video_card = re.search(r"function buildVideoCard\(v\)\s*\{(.*?)\n\}", WEBAPP_HTML, re.S)
+        podcast_card = re.search(r"function buildPodcastCard\(p\)\s*\{(.*?)\n\}", WEBAPP_HTML, re.S)
+        self.assertIsNotNone(video_card, "Video card renderer is missing")
+        self.assertIsNotNone(podcast_card, "Podcast card renderer is missing")
+        self.assertIn("pickStrict(v['title_' + appLang])", video_card.group(1))
+        self.assertIn("pickStrict(p['title_' + appLang])", podcast_card.group(1))
+        self.assertIsNone(re.search(r"title_(?:th|en|no)\s*\|\|", video_card.group(1)), "Video title fallback leaks other languages")
+        self.assertIsNone(re.search(r"title_(?:th|en|no)\s*\|\|", podcast_card.group(1)), "Podcast title fallback leaks other languages")
+
 
 class ExamModeForcesNorwegianContentTests(unittest.TestCase):
     def test_question_text_picker_is_exam_aware(self):

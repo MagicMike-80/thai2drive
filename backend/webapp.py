@@ -4611,13 +4611,13 @@ a { color:inherit; text-decoration:none; }
     <div class="top-spacer"></div>
     <div id="topStreak">🔥 <span id="topStreakNum">0</span> <span data-key="streak">dagers rekke</span></div>
     <div style="display:flex;gap:8px;align-items:center;margin-left:12px">
-      <button class="lang-btn active" id="topLangTH" onclick="setLang('th')" title="ภาษาไทย" style="width:36px;height:36px">
+      <button class="lang-btn active" id="topLangTH" onclick="setLang('th')" data-label-key="lang_label_th" title="" aria-label="" style="width:36px;height:36px">
         <span class="cflag"><svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg"><rect width="900" height="600" fill="#A51931"/><rect width="900" height="480" y="60" fill="#F4F5F8"/><rect width="900" height="320" y="140" fill="#241D4F"/></svg></span>
       </button>
-      <button class="lang-btn" id="topLangNO" onclick="setLang('no')" title="Norsk" style="width:36px;height:36px">
+      <button class="lang-btn" id="topLangNO" onclick="setLang('no')" data-label-key="lang_label_no" title="" aria-label="" style="width:36px;height:36px">
         <span class="cflag"><svg viewBox="0 0 22 16" xmlns="http://www.w3.org/2000/svg"><rect width="22" height="16" fill="#EF2B2D"/><rect x="6" width="4" height="16" fill="#fff"/><rect y="6" width="22" height="4" fill="#fff"/><rect x="7" width="2" height="16" fill="#002868"/><rect y="7" width="22" height="2" fill="#002868"/></svg></span>
       </button>
-      <button class="lang-btn" id="topLangEN" onclick="setLang('en')" title="English" style="width:36px;height:36px">
+      <button class="lang-btn" id="topLangEN" onclick="setLang('en')" data-label-key="lang_label_en" title="" aria-label="" style="width:36px;height:36px">
         <span class="cflag"><svg viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg"><rect width="60" height="30" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#C8102E" stroke-width="4"/><rect y="11" width="60" height="8" fill="#fff"/><rect x="26" width="8" height="30" fill="#fff"/><rect y="12" width="60" height="6" fill="#C8102E"/><rect x="27" width="6" height="30" fill="#C8102E"/></svg></span>
       </button>
       <button id="topSettingsBtn" onclick="showTab('settings')" title="Innstillinger" data-title-key="settings_title" style="display:none;width:34px;height:34px;border-radius:50%;border:none;background:rgba(255,255,255,.06);color:var(--muted);font-size:16px;cursor:pointer;align-items:center;justify-content:center;transition:background .2s,color .2s;flex-shrink:0;" onmouseover="this.style.background='rgba(255,255,255,.12)';this.style.color='var(--text)'" onmouseout="this.style.background='rgba(255,255,255,.06)';this.style.color='var(--muted)'">⚙️</button>
@@ -4635,13 +4635,13 @@ a { color:inherit; text-decoration:none; }
           <h1>Thai<span>2Drive</span></h1>
           <p data-key="auth_tagline">Teoriprøven på thai</p>
           <div class="auth-flags">
-            <button type="button" class="auth-flag" id="authLangTH" onclick="setLang('th')" title="ภาษาไทย" aria-label="ภาษาไทย">
+            <button type="button" class="auth-flag" id="authLangTH" onclick="setLang('th')" data-label-key="lang_label_th" title="" aria-label="">
               <svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg"><rect width="900" height="600" fill="#A51931"/><rect width="900" height="480" y="60" fill="#F4F5F8"/><rect width="900" height="320" y="140" fill="#241D4F"/></svg>
             </button>
-            <button type="button" class="auth-flag" id="authLangNO" onclick="setLang('no')" title="Norsk" aria-label="Norsk">
+            <button type="button" class="auth-flag" id="authLangNO" onclick="setLang('no')" data-label-key="lang_label_no" title="" aria-label="">
               <svg viewBox="0 0 22 16" xmlns="http://www.w3.org/2000/svg"><rect width="22" height="16" fill="#EF2B2D"/><rect x="6" width="4" height="16" fill="#fff"/><rect y="6" width="22" height="4" fill="#fff"/><rect x="7" width="2" height="16" fill="#002868"/><rect y="7" width="22" height="2" fill="#002868"/></svg>
             </button>
-            <button type="button" class="auth-flag" id="authLangEN" onclick="setLang('en')" title="English" aria-label="English">
+            <button type="button" class="auth-flag" id="authLangEN" onclick="setLang('en')" data-label-key="lang_label_en" title="" aria-label="">
               <svg viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg"><rect width="60" height="30" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#C8102E" stroke-width="4"/><rect y="11" width="60" height="8" fill="#fff"/><rect x="26" width="8" height="30" fill="#fff"/><rect y="12" width="60" height="6" fill="#C8102E"/><rect x="27" width="6" height="30" fill="#C8102E"/></svg>
             </button>
           </div>
@@ -4865,7 +4865,7 @@ a { color:inherit; text-decoration:none; }
     <!-- ═══ CATEGORIES SCREEN ═══ -->
     <div class="screen" id="screenCats">
       <div class="carousel-3d-header">
-        <div class="screen-title">📚 <span data-key="cats">Kategorier</span> <span id="catCount"></span></div>
+        <div class="screen-title">📚 <span data-key="cats"></span> <span id="catCount"></span></div>
       </div>
       <!-- 3D Cylinder Carousel -->
       <div class="carousel-3d-scroll">
@@ -4916,7 +4916,7 @@ a { color:inherit; text-decoration:none; }
           <img id="quizAiImg" class="quiz-ai-img" src="" alt="">
           <div class="quiz-ai-img-overlay" id="quizAiOverlay"></div>
           <!-- Image label overlay -->
-          <div class="quiz-ai-img-badge" id="quizAiImgBadge" data-key="traffic_situation_badge">📸 Trafikksituasjon</div>
+          <div class="quiz-ai-img-badge" id="quizAiImgBadge" data-key="traffic_situation_badge"></div>
         </div>
         <!-- AI instructor panel -->
         <div class="quiz-ai-panel">
@@ -4924,8 +4924,8 @@ a { color:inherit; text-decoration:none; }
             <div class="quiz-ai-panel-title">
               <span class="quiz-ai-robot">🤖</span>
               <div>
-                <div class="quiz-ai-panel-name" data-key="ai_teacher">AI Kjørelærer</div>
-                <div class="quiz-ai-panel-sub" data-key="traffic_understanding">Trafikkforståelse</div>
+                <div class="quiz-ai-panel-name" data-key="ai_teacher"></div>
+                <div class="quiz-ai-panel-sub" data-key="traffic_understanding"></div>
               </div>
             </div>
             <div class="quiz-ai-status" id="quizAiStatus" data-key="ai_waiting"></div>
@@ -5002,7 +5002,7 @@ a { color:inherit; text-decoration:none; }
       <div class="settings-inner">
 
         <div class="settings-section">
-          <div class="settings-label" data-key="acct">Konto</div>
+          <div class="settings-label" data-key="acct"></div>
           <div class="settings-profile-hero">
             <div class="settings-avatar" id="settAvatar">👤</div>
             <div class="settings-profile-name" id="settName">–</div>
@@ -5013,22 +5013,22 @@ a { color:inherit; text-decoration:none; }
 
         <!-- Språk -->
         <div class="settings-section">
-          <div class="settings-label" data-key="language">Språk</div>
+          <div class="settings-label" data-key="language"></div>
           <div class="settings-card">
             <div class="settings-row">
               <div class="sr-icon blue">🌐</div>
               <div class="sr-label">
-                <div class="sr-title" data-key="q_lang">Spørsmålsspråk</div>
-                <div class="sr-sub" data-key="q_lang_sub">Velg språk for spørsmål og svar</div>
+                <div class="sr-title" data-key="q_lang"></div>
+                <div class="sr-sub" data-key="q_lang_sub"></div>
               </div>
               <div class="lang-btns">
-                <button class="lang-btn active" id="langTH" onclick="setLang('th')" title="ภาษาไทย">
+                <button class="lang-btn active" id="langTH" onclick="setLang('th')" data-label-key="lang_label_th" title="" aria-label="">
                   <span class="cflag"><svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg"><rect width="900" height="600" fill="#A51931"/><rect width="900" height="480" y="60" fill="#F4F5F8"/><rect width="900" height="320" y="140" fill="#241D4F"/></svg></span>
                 </button>
-                <button class="lang-btn" id="langNO" onclick="setLang('no')" title="Norsk">
+                <button class="lang-btn" id="langNO" onclick="setLang('no')" data-label-key="lang_label_no" title="" aria-label="">
                   <span class="cflag"><svg viewBox="0 0 22 16" xmlns="http://www.w3.org/2000/svg"><rect width="22" height="16" fill="#EF2B2D"/><rect x="6" width="4" height="16" fill="#fff"/><rect y="6" width="22" height="4" fill="#fff"/><rect x="7" width="2" height="16" fill="#002868"/><rect y="7" width="22" height="2" fill="#002868"/></svg></span>
                 </button>
-                <button class="lang-btn" id="langEN" onclick="setLang('en')" title="English">
+                <button class="lang-btn" id="langEN" onclick="setLang('en')" data-label-key="lang_label_en" title="" aria-label="">
                   <span class="cflag"><svg viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg"><rect width="60" height="30" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#C8102E" stroke-width="4"/><rect y="11" width="60" height="8" fill="#fff"/><rect x="26" width="8" height="30" fill="#fff"/><rect y="12" width="60" height="6" fill="#C8102E"/><rect x="27" width="6" height="30" fill="#C8102E"/></svg></span>
                 </button>
               </div>
@@ -5038,13 +5038,13 @@ a { color:inherit; text-decoration:none; }
 
         <!-- Lyd -->
         <div class="settings-section">
-          <div class="settings-label" data-key="sound">Lyd og vibrasjon</div>
+          <div class="settings-label" data-key="sound"></div>
           <div class="settings-card">
             <div class="settings-row">
               <div class="sr-icon green">🔊</div>
               <div class="sr-label">
-                <div class="sr-title" data-key="sfx">Lydeffekter</div>
-                <div class="sr-sub" data-key="sfx_sub">Pling ved riktig, buzz ved feil</div>
+                <div class="sr-title" data-key="sfx"></div>
+                <div class="sr-sub" data-key="sfx_sub"></div>
               </div>
               <label class="toggle">
                 <input type="checkbox" id="soundToggle" checked onchange="toggleSound(this)">
@@ -5054,27 +5054,27 @@ a { color:inherit; text-decoration:none; }
             <div class="settings-row">
               <div class="sr-icon green">📳</div>
               <div class="sr-label">
-                <div class="sr-title" data-key="style">Stil</div>
-                <div class="sr-sub" data-key="style_sub">Tilbakemelding når du svarer</div>
+                <div class="sr-title" data-key="style"></div>
+                <div class="sr-sub" data-key="style_sub"></div>
               </div>
               <div class="seg-ctrl">
-                <button class="seg-btn active" data-key="soft" onclick="setFeedback('soft',this)">Myk</button>
-                <button class="seg-btn" data-key="strong" onclick="setFeedback('strong',this)">Sterk</button>
+                <button class="seg-btn active" data-key="soft" onclick="setFeedback('soft',this)"></button>
+                <button class="seg-btn" data-key="strong" onclick="setFeedback('strong',this)"></button>
               </div>
             </div>
             <div class="settings-row" style="flex-wrap:wrap; gap:8px;">
               <div class="sr-icon green">🎙️</div>
               <div class="sr-label" style="flex:1; min-width:80px;">
-                <div class="sr-title" data-key="tts_tempo">Opplesing – Tempo</div>
-                <div class="sr-sub" data-key="tts_tempo_sub">Hastighet på talesyntese</div>
+                <div class="sr-title" data-key="tts_tempo"></div>
+                <div class="sr-sub" data-key="tts_tempo_sub"></div>
               </div>
               <div id="settSpdBtns" style="display:flex;gap:5px;flex-wrap:wrap;"></div>
             </div>
             <div class="settings-row" style="flex-wrap:wrap; gap:8px;">
               <div class="sr-icon green">🔈</div>
               <div class="sr-label" style="flex:1; min-width:80px;">
-                <div class="sr-title" data-key="tts_volum">Opplesing – Volum</div>
-                <div class="sr-sub" data-key="tts_volum_sub">Lydstyrke på talesyntese</div>
+                <div class="sr-title" data-key="tts_volum"></div>
+                <div class="sr-sub" data-key="tts_volum_sub"></div>
               </div>
               <div id="settVolBtns" style="display:flex;gap:5px;flex-wrap:wrap;"></div>
             </div>
@@ -5083,15 +5083,15 @@ a { color:inherit; text-decoration:none; }
 
         <!-- Tema -->
         <div class="settings-section">
-          <div class="settings-label" data-key="appearance">Utseende</div>
+          <div class="settings-label" data-key="appearance"></div>
           <div class="settings-card">
             <div class="settings-row">
               <div class="sr-icon purple">🎨</div>
-              <div class="sr-label"><div class="sr-title" data-key="theme">Tema</div></div>
+              <div class="sr-label"><div class="sr-title" data-key="theme"></div></div>
               <div class="seg-ctrl">
-                <button class="seg-btn" id="themeBtnLight" data-key="light" onclick="setTheme('light',this)">Lys</button>
-                <button class="seg-btn active" id="themeBtnDark" data-key="dark" onclick="setTheme('dark',this)">Mørk</button>
-                <button class="seg-btn" id="themeBtnSystem" data-key="auto" onclick="setTheme('system',this)">Auto</button>
+                <button class="seg-btn" id="themeBtnLight" data-key="light" onclick="setTheme('light',this)"></button>
+                <button class="seg-btn active" id="themeBtnDark" data-key="dark" onclick="setTheme('dark',this)"></button>
+                <button class="seg-btn" id="themeBtnSystem" data-key="auto" onclick="setTheme('system',this)"></button>
               </div>
             </div>
           </div>
@@ -5099,13 +5099,13 @@ a { color:inherit; text-decoration:none; }
 
         <!-- Om appen -->
         <div class="settings-section">
-          <div class="settings-label" data-key="about_app">Om appen</div>
+          <div class="settings-label" data-key="about_app"></div>
           <div class="settings-card">
             <div class="settings-row">
               <div class="sr-icon gray">📱</div>
               <div class="sr-label">
-                <div class="sr-title">Thai2Drive Web</div>
-                <div class="sr-sub" data-key="about_app_sub">Teoriprøven på thai for Norge</div>
+                <div class="sr-title" data-key="about_app_web"></div>
+                <div class="sr-sub" data-key="about_app_sub"></div>
               </div>
               <div style="color:var(--muted);font-size:.78rem;font-weight:700;background:rgba(255,255,255,.07);padding:3px 9px;border-radius:20px;">v2.0</div>
             </div>
@@ -5119,7 +5119,7 @@ a { color:inherit; text-decoration:none; }
           </div>
         </div>
 
-        <button class="logout-btn" onclick="logout()">🚪 &nbsp;<span data-key="logout">Logg ut</span></button>
+        <button class="logout-btn" onclick="logout()">🚪 &nbsp;<span data-key="logout"></span></button>
 
       </div>
     </div>
@@ -5175,9 +5175,9 @@ a { color:inherit; text-decoration:none; }
         <button class="fk-sc-btn"        id="fkBtnHard"  onclick="fkSelect(2)"></button>
       </div>
       <!-- Mobile: toggle button + collapsible image panel -->
-      <button class="fk-img-toggle" id="fkImgToggle" onclick="fkToggleImg()" data-key="fk_img_toggle">👁 Se illustrasjon</button>
+      <button class="fk-img-toggle" id="fkImgToggle" onclick="fkToggleImg()" data-key="fk_img_toggle"></button>
       <div class="fk-img-mobile" id="fkImgMobile">
-        <img src="/api/assets/forbikjoring.jpg" alt="Forbikjøring illustrasjon" data-alt-key="fk_img_alt"
+        <img src="/api/assets/forbikjoring.jpg" alt="" data-alt-key="fk_img_alt"
              onerror="this.parentElement.style.display='none'">
       </div>
       <!-- Two-column layout -->
@@ -5188,7 +5188,7 @@ a { color:inherit; text-decoration:none; }
         </div>
         <!-- Desktop-only image column -->
         <div class="fk-img-col">
-          <img src="/api/assets/forbikjoring.jpg" alt="Forbikjøring illustrasjon" data-alt-key="fk_img_alt"
+          <img src="/api/assets/forbikjoring.jpg" alt="" data-alt-key="fk_img_alt"
                onerror="this.style.display='none'">
         </div>
       </div>
@@ -5199,7 +5199,7 @@ a { color:inherit; text-decoration:none; }
     <div class="screen" id="screenEnd">
       <div class="end-wrap panel-neon">
         <div class="end-score-quiet" id="endScoreQuiet"></div>
-        <div class="end-heading" id="endHeading" data-key="result_done">Øvelsen er ferdig.</div>
+        <div class="end-heading" id="endHeading" data-key="result_done"></div>
         <p class="end-body" id="endBody"></p>
         <div class="end-focus card-neon" id="endFocus" style="display:none">
           <div style="flex:1;">
@@ -5338,7 +5338,7 @@ a { color:inherit; text-decoration:none; }
       <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span><span class="bn-label" data-key="home">Hjem</span>
     </button>
     <button class="bn-tab" id="bnCats" onclick="showTab('cats')">
-      <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span><span class="bn-label" data-key="cats">Kategorier</span>
+      <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span><span class="bn-label" data-key="cats"></span>
     </button>
     <button class="bn-tab" id="bnHistory" onclick="showTab('history')">
       <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span><span class="bn-label" data-key="history">Historikk</span>
@@ -5398,7 +5398,7 @@ a { color:inherit; text-decoration:none; }
 <!-- ═══ LIGHTBOX MODAL (Image Enlarge) ═══ -->
 <div class="t2d-lightbox" id="t2dLightbox" onclick="closeLightbox(event)" aria-hidden="true" role="dialog">
   <div class="t2d-lightbox-content" onclick="event.stopPropagation()">
-    <button class="t2d-lightbox-close" onclick="closeLightbox(event)" data-label-key="close" aria-label="Lukk">✕</button>
+    <button class="t2d-lightbox-close" onclick="closeLightbox(event)" data-label-key="close" aria-label="">✕</button>
     <img id="t2dLightboxImg" src="" alt="">
     <div class="t2d-lightbox-caption" id="t2dLightboxCaption"></div>
   </div>
@@ -5634,6 +5634,9 @@ var UI = {
   update_title:          {th:'อัปเดต', no:'Oppdater', en:'Update'},
   fk_img_alt:            {th:'ภาพประกอบการแซง', no:'Forbikjøring illustrasjon', en:'Overtaking illustration'},
   email_placeholder:     {th:'ชื่อ@อีเมล.com', no:'navn@epost.no', en:'name@email.com'},
+  lang_label_th:         {th:'ภาษาไทย', no:'Thai', en:'Thai'},
+  lang_label_no:         {th:'ภาษานอร์เวย์', no:'Norsk', en:'Norwegian'},
+  lang_label_en:         {th:'ภาษาอังกฤษ', no:'Engelsk', en:'English'},
   close_aria:            {th:'ปิด', no:'Lukk', en:'Close'},
   send_aria:             {th:'ส่ง', no:'Send', en:'Send'},
   video_title:           {th:'วิดีโอ', no:'Video', en:'Video'},
@@ -5770,6 +5773,7 @@ var UI = {
   dark:        {th:'มืด',               no:'Mørk',             en:'Dark'},
   auto:        {th:'ตามระบบ',            no:'Auto',             en:'Auto'},
   about_app:   {th:'เกี่ยวกับแอป',       no:'Om appen',         en:'About the app'},
+  about_app_web:{th:'Thai2Drive เวอร์ชันเว็บ', no:'Thai2Drive Web', en:'Thai2Drive Web'},
   about_app_sub:{th:'แบบทดสอบข้อเขียนใบขับขี่นอร์เวย์เป็นภาษาไทย', no:'Teoriprøven på thai for Norge', en:'Norwegian driving theory test in Thai'},
   michael_bio:  {th:'ไมเคิลมุ่งมั่นเพื่อความปลอดภัยในการจราจรและประสบการณ์การเรียนรู้ที่ดี ด้วยประสบการณ์การเป็นครูสอนขับรถ 16 ปี เขาได้พัฒนา Thai2Drive เพื่อช่วยให้ผู้ใช้ภาษาไทยมีความมั่นใจหลังพวงมาลัยในนอร์เวย์', no:'Michael brenner for trygg trafikk og gode læringsopplevelser. Med 16 års erfaring som trafikklærer bygger han Thai2Drive for å hjelpe thai-talende med å finne trygghet bak rattet i Norge.', en:'Michael is passionate about traffic safety and positive learning experiences. With 16 years of experience as a driving instructor, he created Thai2Drive to help Thai speakers gain confidence behind the wheel in Norway.'},
   logout:      {th:'ออกจากระบบ',         no:'Logg ut',          en:'Log out'},
@@ -9991,7 +9995,7 @@ function _fmtDur(secs) {
 
 function buildVideoCard(v) {
   if (!v) return '';
-  var title = escH(v['title_' + appLang] || v.title_no || v.title_th || v.title_en || '');
+  var title = escH(pickStrict(v['title_' + appLang]));
   if (!title) return '';
   var dur = _fmtDur(v.duration_seconds);
 
@@ -11255,11 +11259,7 @@ function speakText(text) {
 
 function buildPodcastCard(p) {
   if (!p) return '';
-  var title = escH(
-    appLang === 'th' ? (p.title_th || p.title_no || p.title_en || '') :
-    appLang === 'en' ? (p.title_en || p.title_no || p.title_th || '') :
-    (p.title_no || p.title_th || p.title_en || '')
-  );
+  var title = escH(pickStrict(p['title_' + appLang]));
   if (!title) return '';
   var rawUrl = p.file_path || p.audio_url || '';
   // Convert file_path (e.g. /public_assets/podcast.mp3) to proper API URL
