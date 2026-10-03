@@ -2,6 +2,7 @@ from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse
 import os as _os
 import datetime as _dt
+from pathlib import Path as _Path
 
 webapp_router = APIRouter()
 
@@ -4788,6 +4789,13 @@ a { color:inherit; text-decoration:none; }
             <span class="home-main-choice-sub" data-key="home_situation_card_sub">Se bildet og vurder hvem som bør kjøre først</span>
           </span>
         </button>
+        <button class="home-main-choice" type="button" onclick="location.href='/' + location.pathname.split('/')[1] + '/flipp-flopp'" data-label-key="flipp_flopp_home">
+          <span class="home-main-choice-icon" aria-hidden="true">🃏</span>
+          <span class="home-main-choice-copy">
+            <span class="home-main-choice-title" data-key="flipp_flopp_home">Flipp Flopp</span>
+            <span class="home-main-choice-sub" data-key="flipp_flopp_home_sub">Korte trafikkspill med skilt og situasjoner</span>
+          </span>
+        </button>
         <div class="target-practice-menu" id="targetPracticeMenu">
           <button class="target-practice-option" id="mistakesHomeBtn" onclick="startMistakeQuiz()" data-key="mistakes_short">Øv på mine feil</button>
           <button class="target-practice-option" onclick="showTab('signs')" data-key="home_open_signs">Åpne skiltkatalog</button>
@@ -5596,6 +5604,8 @@ var UI = {
   home_open_library:     {th:'วิดีโอคอร์สและพอดแคสต์', no:'Videokurs & Podkaster', en:'Video courses & Podcasts'},
   library_sub:           {th:'ดูบทเรียนและฟังคำอธิบาย', no:'Se leksjoner og hør forklaringer', en:'Watch lessons and listen to explanations'},
   home_situation_card:   {th:'ฝึกคำศัพท์จราจร', no:'Øv på trafikkbegreper', en:'Practice traffic terms'},
+  flipp_flopp_home: {th:'เกมการ์ด Flipp Flopp', no:'Flipp Flopp', en:'Flipp Flopp'},
+  flipp_flopp_home_sub: {th:'เล่นเกมสั้น ๆ กับป้ายและสถานการณ์จราจร', no:'Korte trafikkspill med skilt og situasjoner', en:'Quick traffic games with signs and scenarios'},
   home_situation_card_sub:{th:'พลิกการ์ดเพื่อเรียนรู้คำศัพท์และคำอธิบาย', no:'Snu kortene og lær begrepene med korte forklaringer', en:'Flip the cards to learn terms with short explanations'},
   fc_title:              {th:'แฟลชการ์ดคำศัพท์จราจร', no:'Flippkort for trafikkord', en:'Traffic term flashcards'},
   fc_loading:            {th:'กำลังโหลดการ์ด…', no:'Laster kort …', en:'Loading cards…'},
@@ -14178,3 +14188,14 @@ function showStatus(type, msg) {
 @webapp_router.get("/web/voice-tester", response_class=HTMLResponse)
 async def voice_tester():
     return HTMLResponse(content=VOICE_TESTER_HTML)
+
+
+@webapp_router.get("/{lang}/flipp-flopp", response_class=HTMLResponse)
+async def flipp_flopp_page(lang: str):
+    if lang not in {"no", "th", "en"}:
+        return HTMLResponse(status_code=404, content="Not found")
+    page = _Path(__file__).with_name("flipp_flopp.html")
+    if not page.is_file():
+        return HTMLResponse(status_code=404, content="Not found")
+    content = page.read_text(encoding="utf-8").replace("__FLIPP_FLOPP_LANG__", lang).replace("__FLIPP_FLOPP_HTML_LANG__", "nb" if lang == "no" else lang)
+    return HTMLResponse(content=content, headers={"Cache-Control": "no-store"})

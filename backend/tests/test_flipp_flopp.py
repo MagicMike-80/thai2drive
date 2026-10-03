@@ -1,0 +1,66 @@
+import json
+import sys
+import unittest
+from pathlib import Path
+
+from fastapi import FastAPI
+from fastapi.testclient import TestClient
+
+BACKEND = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(BACKEND))
+from webapp import webapp_router  # noqa: E402
+
+app = FastAPI()
+app.include_router(webapp_router)
+client = TestClient(app)
+
+
+class FlippFloppPageTests(unittest.TestCase):
+    def test_page_is_rendered_in_requested_language(self):
+        for lang, html_lang in (("no", "nb"), ("th", "th"), ("en", "en")):
+            with self.subTest(lang=lang):
+                response = client.get(f"/{lang}/flipp-flopp")
+                self.assertEqual(response.status_code, 200)
+                self.assertIn(f'<html lang="{html_lang}"', response.text)
+                self.assertNotIn("__FLIPP_FLOPP_LANG__", response.text)
+                self.assertIn("flipp_flopp_training_loop.mp3", response.text)
+                self.assertIn("flipp_flopp_test_loop.mp3", response.text)
+
+    def test_unknown_language_fails_closed(self):
+        self.assertEqual(client.get("/fr/flipp-flopp").status_code, 404)
+
+    def test_all_scenario_cards_have_complete_no_th_en_copy_and_images(self):
+        cards = json.loads((BACKEND / "public_assets" / "flipp_flopp_cards.json").read_text(encoding="utf-8"))
+        self.assertEqual(len(cards), 10)
+        self.assertEqual(sum(card["truth"] for card in cards), 5)
+        for card in cards:
+            for key in ("statement", "answer", "explanation", "alt"):
+                for lang in ("no", "th", "en"):
+                    self.assertTrue(card[key][lang].strip(), (card["id"], key, lang))
+            self.assertTrue((BACKEND / "public_assets" / card["image"]).is_file())
+
+    def test_each_mapped_audio_asset_exists(self):
+        assets = BACKEND / "public_assets"
+        for name in (
+            "flashcard_intro.mp3", "flashcard_flip.mp3", "flashcard_sonar.mp3",
+            "michael_correct_applause.mp3", "michael_round_complete.mp3",
+            "michael_age_rule_chime.mp3", "flipp_flopp_clock.mp3", "flipp_flopp_wrong_fallback.mp3", "flipp_flopp_training_loop.mp3",
+            "flipp_flopp_test_loop.mp3",
+        ):
+            self.assertTrue((assets / name).is_file(), name)
+
+    def test_answer_feedback_has_distinct_visual_and_wrong_answer_audio(self):
+        html = (BACKEND / "flipp_flopp.html").read_text(encoding="utf-8")
+        self.assertIn("answer-correct", html)
+        self.assertIn("answer-wrong", html)
+        self.assertIn("function wrongHorn()", html)
+        self.assertIn("wrongHorn();feedback(S.answers[S.index]);", html)
+        self.assertIn("classList.remove(\u0027urgent\u0027)", html)
+        self.assertIn("S.clock=new Audio(SOUND.clock)", html)
+        self.assertIn("ageRule:s.ageRule===true||s.age_rule===true", html)
+        self.assertIn("intro.addEventListener(\u0027error\u0027,startAudio", html)
+        self.assertIn("fmt(t('result'),{score:String(score),total:String(S.deck.length)})", html)
+
+
+if __name__ == "__main__":
+    unittest.main()
