@@ -22,6 +22,8 @@ class FlippFloppPageTests(unittest.TestCase):
                 response = client.get(f"/{lang}/flipp-flopp")
                 self.assertEqual(response.status_code, 200)
                 self.assertIn(f'<html lang="{html_lang}"', response.text)
+                self.assertIn('hreflang="th" href="/th/flipp-flopp"', response.text)
+                self.assertIn('hreflang="en" href="/en/flipp-flopp"', response.text)
                 self.assertNotIn("__FLIPP_FLOPP_LANG__", response.text)
                 self.assertIn("flipp_flopp_training_loop.mp3", response.text)
                 self.assertIn("flipp_flopp_test_loop.mp3", response.text)

@@ -14198,4 +14198,12 @@ async def flipp_flopp_page(lang: str):
     if not page.is_file():
         return HTMLResponse(status_code=404, content="Not found")
     content = page.read_text(encoding="utf-8").replace("__FLIPP_FLOPP_LANG__", lang).replace("__FLIPP_FLOPP_HTML_LANG__", "nb" if lang == "no" else lang)
+    content = content.replace(
+        "<meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">",
+        "<meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">"
+        "<link rel=\"alternate\" hreflang=\"nb\" href=\"/no/flipp-flopp\">"
+        "<link rel=\"alternate\" hreflang=\"th\" href=\"/th/flipp-flopp\">"
+        "<link rel=\"alternate\" hreflang=\"en\" href=\"/en/flipp-flopp\">"
+        "<link rel=\"alternate\" hreflang=\"x-default\" href=\"/no/flipp-flopp\">",
+    )
     return HTMLResponse(content=content, headers={"Cache-Control": "no-store"})

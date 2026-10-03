@@ -91,7 +91,7 @@ class TestTeacherChatConsolidatedResolver(unittest.TestCase):
 
     def _mock_completion(self, reply):
         result = SimpleNamespace(choices=[SimpleNamespace(message=SimpleNamespace(content=reply))])
-        return patch.object(tc, "_completion_with_fallback", new=AsyncMock(return_value=result))
+        return patch.multiple(tc, LLM_KEY="test-key", _completion_with_fallback=AsyncMock(return_value=result))
 
     def test_fuzzy_matching_typos_resolve_canonical(self):
         cases = [
@@ -285,7 +285,7 @@ class TestWrongQuizAnswerReplyIsThaiOnly(unittest.TestCase):
         req = TeacherChatRequest(message=message, language="th", device_id="thai-purity-test")
         reply = "คุณเห็นอะไรบนป้ายจำกัดความเร็วในสถานการณ์นี้ครับ?"
         mock_result = SimpleNamespace(choices=[SimpleNamespace(message=SimpleNamespace(content=reply))])
-        with patch.object(tc, "_completion_with_fallback", new=AsyncMock(return_value=mock_result)):
+        with patch.object(tc, "LLM_KEY", "test-key"), patch.object(tc, "_completion_with_fallback", new=AsyncMock(return_value=mock_result)):
             response = asyncio.run(teacher_chat(req))
 
         self.assertTrue(response.reply.strip())
@@ -389,7 +389,7 @@ class TestWrongQuizAnswerReplyIsThaiOnly(unittest.TestCase):
         request = TeacherChatRequest(message="Forklar vikeplikt enklere", language="th", mode="simplify")
         reply = "คุณเห็นอะไรเกี่ยวกับการให้ทางในสถานการณ์นี้ครับ?"
         mock_result = SimpleNamespace(choices=[SimpleNamespace(message=SimpleNamespace(content=reply))])
-        with patch.object(tc, "_completion_with_fallback", new=AsyncMock(return_value=mock_result)):
+        with patch.object(tc, "LLM_KEY", "test-key"), patch.object(tc, "_completion_with_fallback", new=AsyncMock(return_value=mock_result)):
             response = asyncio.run(teacher_chat(request))
         self.assertTrue(response.reply.strip().endswith("?") or "?" in response.reply)
         self.assertEqual(response.media, [])

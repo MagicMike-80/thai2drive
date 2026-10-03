@@ -229,7 +229,7 @@ class TheoryHelpShortcutLanguagePurityTests(unittest.TestCase):
 
     def _mock_completion(self, reply):
         result = SimpleNamespace(choices=[SimpleNamespace(message=SimpleNamespace(content=reply))])
-        return patch.object(tc, "_completion_with_fallback", new=AsyncMock(return_value=result))
+        return patch.multiple(tc, LLM_KEY="test-key", _completion_with_fallback=AsyncMock(return_value=result))
 
     def test_weak_topic_reply_is_thai_only_and_tags_stored_messages(self):
         tc._db["quiz_attempts"] = _RecordingCollection(
