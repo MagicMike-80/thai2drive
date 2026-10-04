@@ -6168,6 +6168,13 @@ function applyUILang() {
     var val = t(key);
     if (val) el.textContent = val;
   });
+  var flippFloppChoice = document.querySelector('.home-main-choice[data-label-key="flipp_flopp_home"]');
+  if (flippFloppChoice) {
+    var flippFloppTitle = flippFloppChoice.querySelector('.home-main-choice-title');
+    var flippFloppSub = flippFloppChoice.querySelector('.home-main-choice-sub');
+    if (flippFloppTitle) flippFloppTitle.textContent = t('flipp_flopp_home');
+    if (flippFloppSub) flippFloppSub.textContent = t('flipp_flopp_home_sub');
+  }
   document.querySelectorAll('[data-placeholder-key]').forEach(function(el) {
     var key = el.getAttribute('data-placeholder-key');
     var val = t(key);
