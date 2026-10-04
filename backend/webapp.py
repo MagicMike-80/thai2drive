@@ -4789,7 +4789,7 @@ a { color:inherit; text-decoration:none; }
             <span class="home-main-choice-sub" data-key="home_situation_card_sub">Se bildet og vurder hvem som bør kjøre først</span>
           </span>
         </button>
-        <button class="home-main-choice" type="button" onclick="location.href='/' + location.pathname.split('/')[1] + '/flipp-flopp'" data-label-key="flipp_flopp_home">
+        <button class="home-main-choice" type="button" onclick="location.href='/' + appLang + '/flipp-flopp'" data-label-key="flipp_flopp_home">
           <span class="home-main-choice-icon" aria-hidden="true">🃏</span>
           <span class="home-main-choice-copy">
             <span class="home-main-choice-title" data-key="flipp_flopp_home">Flipp Flopp</span>

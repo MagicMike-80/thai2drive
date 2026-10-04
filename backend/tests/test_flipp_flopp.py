@@ -63,6 +63,11 @@ class FlippFloppPageTests(unittest.TestCase):
         self.assertIn("intro.addEventListener(\u0027error\u0027,startAudio", html)
         self.assertIn("fmt(t('result'),{score:String(score),total:String(S.deck.length)})", html)
 
+    def test_home_entry_uses_the_selected_app_language(self):
+        webapp = (BACKEND / "webapp.py").read_text(encoding="utf-8")
+        self.assertIn("location.href='/' + appLang + '/flipp-flopp'", webapp)
+        self.assertNotIn("location.pathname.split('/')[1] + '/flipp-flopp'", webapp)
+
 
 if __name__ == "__main__":
     unittest.main()
