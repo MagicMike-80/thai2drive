@@ -68,6 +68,11 @@ class FlippFloppPageTests(unittest.TestCase):
         self.assertIn("location.href='/' + appLang + '/flipp-flopp'", webapp)
         self.assertNotIn("location.pathname.split('/')[1] + '/flipp-flopp'", webapp)
 
+    def test_service_worker_does_not_cache_app_or_game_routes(self):
+        service_worker = (BACKEND / "service-worker.js").read_text(encoding="utf-8")
+        self.assertIn("thai2drive-offline-v1.0.8", service_worker)
+        self.assertIn(r"/^\/(?:no|th|en)\/(?:app|flipp-flopp)\/?$/", service_worker)
+
 
 if __name__ == "__main__":
     unittest.main()
