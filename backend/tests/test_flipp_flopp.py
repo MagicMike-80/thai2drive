@@ -86,6 +86,22 @@ class FlippFloppPageTests(unittest.TestCase):
         self.assertNotIn("location.pathname.split('/')[1] + '/flipp-flopp'", webapp)
         self.assertIn("location.href='/' + appLang + '/flipp-flopp?pack=signs'", webapp)
 
+    def test_home_and_sign_entries_have_separate_card_sources(self):
+        html = (BACKEND / "flipp_flopp.html").read_text(encoding="utf-8")
+        self.assertIn("var SIGN_GAME=new URLSearchParams(location.search).get('pack')==='signs'", html)
+        self.assertIn('<div class="field" hidden><label for="packSelect"', html)
+        self.assertNotIn('<option value=\\"mixed\\">', html)
+        self.assertNotIn('<option value=\\"scenes\\">', html)
+        self.assertIn("S.signs=SIGN_GAME?buildSigns(x[1]):[]", html)
+        self.assertIn("S.master=SIGN_GAME?[]:validatedMaster(x[2])", html)
+        self.assertIn("SIGN_GAME?S.signs:(S.master.length>=50?S.master:S.scenes)", html)
+
+    def test_non_norwegian_legal_references_omit_norwegian_number_label(self):
+        html = (BACKEND / "flipp_flopp.html").read_text(encoding="utf-8")
+        self.assertIn("LANG==='no'?rawRef:'§ '+citation[1]", html)
+        self.assertIn("(citation[2]?' ('+citation[2]+')':'')", html)
+        self.assertNotIn("LANG==='no'?rawRef:citation[0]", html)
+
     def test_service_worker_does_not_cache_app_or_game_routes(self):
         service_worker = (BACKEND / "service-worker.js").read_text(encoding="utf-8")
         self.assertIn("thai2drive-offline-v1.0.8", service_worker)
