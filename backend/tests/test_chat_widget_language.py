@@ -72,10 +72,42 @@ class TestChatWidgetLanguageIsolation(unittest.TestCase):
         ]:
             for text in expected:
                 self.assertIn(text, html)
-        self.assertIn('data-q="ฉันจะยกเลิกการสมัครสมาชิกได้อย่างไร"', thai)
+        self.assertIn('data-q="ช่วยยกเลิกสมาชิก Premium ให้หน่อย"', thai)
         self.assertIn('data-q="How do I cancel my subscription?"', english)
         self.assertNotIn("data-q=\"Hvordan", thai + english)
         self.assertNotIn("__", thai + english)
+
+    def test_thai_quick_questions_use_escalating_complaint_payloads(self):
+        from backend.website import _localized_chat_widget_html
+
+        thai = _localized_chat_widget_html("th")
+        for payload in [
+            "ฉันจ่าย Premium แล้วแต่ยังใช้งานไม่ได้",
+            "ช่วยยกเลิกสมาชิก Premium ให้หน่อย",
+            "ฉันต้องการลบบัญชีและข้อมูลทั้งหมด",
+        ]:
+            self.assertIn(f'data-q="{payload}"', thai)
+
+    def test_thai_complaints_escalate_even_when_keywords_touch_thai_text(self):
+        from backend.support_chat import _quick_escalation_check
+
+        complaints = [
+            "ฉันจ่าย Premium แล้วแต่ยังใช้งานไม่ได้",
+            "ช่วยยกเลิกสมาชิก Premium ให้หน่อย",
+            "ฉันต้องการลบบัญชีและข้อมูลทั้งหมด",
+        ]
+        for message in complaints:
+            with self.subTest(message=message):
+                escalated, _, _ = _quick_escalation_check(message)
+                self.assertTrue(escalated)
+
+    def test_ordinary_thai_message_does_not_escalate(self):
+        from backend.support_chat import _quick_escalation_check
+
+        self.assertEqual(
+            _quick_escalation_check("วันนี้อากาศดี ฉันกำลังฝึกขับรถ"),
+            (False, "general", "low"),
+        )
 
 
 if __name__ == "__main__":

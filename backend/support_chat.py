@@ -133,7 +133,7 @@ _ESCALATION_KEYWORDS = {
     # Premium activation
     'premium ikke aktivert', 'premium not working', 'premium not activated',
     'premium doesn\'t work', 'ไม่ได้พรีเมียม', 'พรีเมียมไม่ทำงาน', 'betalte men',
-    'premium virker ikke',
+    'premium virker ikke', 'จ่าย premium', 'ยกเลิกสมาชิก',
     # Bugs — serious
     'crash', 'krasjer', 'kræsjer', 'broken', 'ødelagt', 'virker ikke', 'doesn\'t work',
     'can\'t open', 'kommer ikke inn', 'แอปพัง', 'เปิดไม่ได้',
@@ -148,8 +148,14 @@ _ESCALATION_KEYWORDS = {
     'complaint', 'klage', 'klager', 'ร้องเรียน',
 }
 
+_THAI_KEYWORDS = {
+    keyword for keyword in _ESCALATION_KEYWORDS
+    if any('\u0e00' <= char <= '\u0e7f' for char in keyword)
+}
+_WORD_KEYWORDS = _ESCALATION_KEYWORDS - _THAI_KEYWORDS
 _COMPLAINT_RE = re.compile(
-    r'\b(' + '|'.join(re.escape(k) for k in _ESCALATION_KEYWORDS) + r')\b',
+    r'(?<!\w)(' + '|'.join(re.escape(k) for k in sorted(_WORD_KEYWORDS, key=len, reverse=True)) + r')(?!\w)'
+    + (r'|(' + '|'.join(re.escape(k) for k in sorted(_THAI_KEYWORDS, key=len, reverse=True)) + r')' if _THAI_KEYWORDS else ''),
     re.IGNORECASE
 )
 
@@ -160,15 +166,19 @@ def _quick_escalation_check(msg: str) -> tuple[bool, str, str]:
     match = _COMPLAINT_RE.search(low)
     if not match:
         return False, 'general', 'low'
-    hit = match.group(1).lower()
+    hit = next(group for group in match.groups() if group).lower()
     # Categorise
     if any(k in hit for k in ('refund', 'money', 'charged', 'pengene', 'คืนเงิน', 'dobbelt')):
+        return True, 'billing', 'high'
+    if 'จ่าย premium' in hit:
+        return True, 'premium_activation', 'high'
+    if 'ยกเลิกสมาชิก' in hit:
         return True, 'billing', 'high'
     if any(k in hit for k in ('premium',)):
         return True, 'premium_activation', 'high'
     if any(k in hit for k in ('crash', 'broken', 'doesn\'t work', 'ødelagt', 'virker ikke', 'krasjer')):
         return True, 'bug_report', 'medium'
-    if any(k in hit for k in ('gdpr', 'delete', 'slett', 'privacy', 'lawsuit', 'saksøke')):
+    if any(k in hit for k in ('gdpr', 'delete', 'slett', 'privacy', 'lawsuit', 'saksøke', 'ลบบัญชี', 'ลบข้อมูล')):
         return True, 'legal_privacy', 'high'
     if any(k in hit for k in ('scam', 'fraud', 'svindel', 'angry', 'furious')):
         return True, 'angry_user', 'high'
