@@ -18,7 +18,7 @@ class FlippFloppMasterBuildTests(unittest.TestCase):
                 {
                     "id": i,
                     "source_card_id": i,
-                    "category": categories[(i - 1) // 10],
+                    "category": "skilt" if i == 1 else categories[(i - 1) // 10],
                     "answer": i % 2 == 1,
                     "no": {"statement": f"Påstand {i}", "explanation": f"Forklaring {i}"},
                     "th": {"statement": f"คำถาม {i}", "explanation": f"คำอธิบาย {i}"},
@@ -44,6 +44,11 @@ class FlippFloppMasterBuildTests(unittest.TestCase):
     def test_unapproved_card_rejects_entire_pack(self):
         self.source["cards"][0]["fasit_godkjent_av_michael"] = False
         with self.assertRaisesRegex(ValueError, "ikke godkjent"):
+            build_cards(self.source, BACKEND / "public_assets")
+
+    def test_pack_without_sign_card_is_rejected(self):
+        self.source["cards"][0]["category"] = "vikeplikt"
+        with self.assertRaisesRegex(ValueError, "inkludert skilt"):
             build_cards(self.source, BACKEND / "public_assets")
 
     def test_missing_translation_or_image_rejects_entire_pack(self):

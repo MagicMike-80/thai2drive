@@ -9,7 +9,7 @@ from pathlib import Path
 
 
 LANGUAGES = ("no", "th", "en")
-CATEGORIES = {"vikeplikt", "plassering", "se", "stopp", "myndighet"}
+CATEGORIES = {"vikeplikt", "plassering", "se", "stopp", "myndighet", "skilt"}
 ANSWERS = {
     True: {"no": "Ja", "th": "ใช่", "en": "Yes"},
     False: {"no": "Nei", "th": "ไม่ใช่", "en": "No"},
@@ -99,8 +99,8 @@ def build_cards(document, asset_dir):
             "approved_by_michael": True,
         })
 
-    if ids != set(range(1, 51)) or any(count != 10 for count in counts.values()):
-        raise ValueError("Kortene må dekke ID 1–50 og fem kategorier med ti kort hver")
+    if ids != set(range(1, 51)) or any(count == 0 for count in counts.values()):
+        raise ValueError("Kortene må dekke ID 1–50 og alle seks kategorier, inkludert skilt")
     return sorted(result, key=lambda card: card["source_id"])
 
 
