@@ -67,6 +67,7 @@ class FlippFloppPageTests(unittest.TestCase):
         self.assertIn("ageRule:s.ageRule===true||s.age_rule===true", html)
         self.assertIn("intro.addEventListener(\u0027error\u0027,startAudio", html)
         self.assertIn("fmt(t('result'),{score:String(score),total:String(S.deck.length)})", html)
+        self.assertIn("var button=e.target.closest('button');if(button&&button.id!=='imageButton')return", html)
         self.assertIn("sound(S.mode==='test'?'testEntry':'entry')", html)
         self.assertIn("flipp_flopp_master.json", html)
         master = json.loads((BACKEND / "public_assets" / "flipp_flopp_master.json").read_text(encoding="utf-8"))
