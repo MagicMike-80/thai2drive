@@ -1,0 +1,3102 @@
+[
+  {
+    "id": "master-1",
+    "source_id": 1,
+    "category": "vikeplikt",
+    "statement": {
+      "no": "Du kjører 50 km/t. En buss blinker ut fra holdeplassen. Da har du vikeplikt for bussen.",
+      "th": "คุณขับรถ 50 กม./ชม. รถบัสเปิดไฟเลี้ยวออกจากป้ายรถประจำทาง คุณต้องให้ทางรถบัส",
+      "en": "You are driving at 50 km/h. A bus signals to pull out from a bus stop. You must give way to the bus."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "På veg med fartsgrense 60 km/t eller lavere har du vikeplikt for en buss som gir tegn om å kjøre ut fra holdeplass.",
+      "th": "บนถนนที่จำกัดความเร็ว 60 กม./ชม. หรือต่ำกว่า คุณต้องให้ทางรถบัสที่ให้สัญญาณออกจากป้ายรถประจำทาง",
+      "en": "On roads with a speed limit of 60 km/h or lower, you must give way to a bus that signals it is leaving a bus stop."
+    },
+    "alt": {
+      "no": "To biler i et norsk veikryss",
+      "th": "รถสองคันที่ทางแยกในนอร์เวย์",
+      "en": "Two cars at a Norwegian intersection"
+    },
+    "image": "flipp_flopp_theme_vikeplikt.png",
+    "fagord": "Bussregelen",
+    "ref": "Trafikkreglene § 7 nr. 5",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-2",
+    "source_id": 2,
+    "category": "vikeplikt",
+    "statement": {
+      "no": "Du kjører i en 70-sone. En buss blinker ut fra holdeplassen. Da har du vikeplikt for bussen.",
+      "th": "คุณขับในเขตจำกัดความเร็ว 70 กม./ชม. รถบัสเปิดไฟเลี้ยวออกจากป้ายรถประจำทาง คุณต้องให้ทางรถบัส",
+      "en": "You are driving in a 70 zone. A bus signals to pull out from a bus stop. You must give way to the bus."
+    },
+    "truth": false,
+    "answer": {
+      "no": "Nei",
+      "th": "ไม่ใช่",
+      "en": "No"
+    },
+    "explanation": {
+      "no": "Bussregelen gjelder bare ved fartsgrense 60 km/t eller lavere. I 70-sone må bussen vike for deg, fordi den kommer fra en holdeplass (§ 7 nr. 4).",
+      "th": "กฎรถบัสใช้เฉพาะถนนที่จำกัด 60 กม./ชม. หรือต่ำกว่า ในเขต 70 รถบัสต้องให้ทางคุณ เพราะออกมาจากป้ายรถประจำทาง",
+      "en": "The bus rule only applies at 60 km/h or lower. In a 70 zone the bus must give way to you, because it comes from a bus stop."
+    },
+    "alt": {
+      "no": "To biler i et norsk veikryss",
+      "th": "รถสองคันที่ทางแยกในนอร์เวย์",
+      "en": "Two cars at a Norwegian intersection"
+    },
+    "image": "flipp_flopp_theme_vikeplikt.png",
+    "fagord": "Bussregelen",
+    "ref": "Trafikkreglene § 7 nr. 4 og nr. 5",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-3",
+    "source_id": 3,
+    "category": "vikeplikt",
+    "statement": {
+      "no": "Du skal svinge til venstre i et kryss uten skilt. Da må du vike både for biler fra høyre og for møtende biler som skal rett fram.",
+      "th": "คุณจะเลี้ยวซ้ายที่ทางแยกที่ไม่มีป้าย คุณต้องให้ทางทั้งรถที่มาจากทางขวาและรถที่สวนมาและจะตรงไป",
+      "en": "You are turning left at an unsigned junction. You must give way both to vehicles from the right and to oncoming vehicles going straight ahead."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Høyreregelen gjelder også når du svinger til venstre og får et kjøretøy på din høyre side. Det gjelder blant annet den møtende bilen.",
+      "th": "กฎให้ทางรถจากขวาใช้ด้วยเมื่อคุณเลี้ยวซ้ายและมีรถอยู่ทางขวาของคุณ ซึ่งรวมถึงรถที่สวนมา",
+      "en": "The give-way-to-the-right rule also applies when turning left and getting a vehicle on your right side. That includes the oncoming vehicle."
+    },
+    "alt": {
+      "no": "To biler i et norsk veikryss",
+      "th": "รถสองคันที่ทางแยกในนอร์เวย์",
+      "en": "Two cars at a Norwegian intersection"
+    },
+    "image": "flipp_flopp_theme_vikeplikt.png",
+    "fagord": "Venstresving (§ 7 nr. 2)",
+    "ref": "Trafikkreglene § 7 nr. 2",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-4",
+    "source_id": 4,
+    "category": "vikeplikt",
+    "statement": {
+      "no": "Du kjører ut fra en bensinstasjon over fortauet. Da har du vikeplikt for trafikken på veien.",
+      "th": "คุณขับออกจากปั๊มน้ำมันข้ามทางเท้า คุณต้องให้ทางรถบนถนน",
+      "en": "You drive out from a petrol station across the pavement. You must give way to traffic on the road."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Den som kommer fra bensinstasjon, parkeringsplass, holdeplass, torg eller eiendom har vikeplikt for annen trafikant.",
+      "th": "ผู้ที่ขับออกมาจากปั๊มน้ำมัน ที่จอดรถ ป้ายรถประจำทาง ตลาด หรือที่ดิน ต้องให้ทางผู้ใช้ถนนคนอื่น",
+      "en": "Anyone coming from a petrol station, car park, bus stop, square or property must give way to other road users."
+    },
+    "alt": {
+      "no": "To biler i et norsk veikryss",
+      "th": "รถสองคันที่ทางแยกในนอร์เวย์",
+      "en": "Two cars at a Norwegian intersection"
+    },
+    "image": "flipp_flopp_theme_vikeplikt.png",
+    "fagord": "Utkjøring fra eiendom",
+    "ref": "Trafikkreglene § 7 nr. 4",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-5",
+    "source_id": 5,
+    "category": "vikeplikt",
+    "statement": {
+      "no": "En parkert bil står på din side av veien, og en bil kommer mot deg. Da er det du som må vike.",
+      "th": "มีรถจอดอยู่ฝั่งของคุณ และมีรถสวนมา คุณต้องเป็นฝ่ายให้ทาง",
+      "en": "A parked car is on your side of the road and a car is coming towards you. You are the one who must give way."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Er en del av vegen sperret, har den vikeplikt som har sperringen på sin side.",
+      "th": "ถ้าบางส่วนของถนนถูกกีดขวาง ฝ่ายที่มีสิ่งกีดขวางอยู่ฝั่งตัวเองต้องให้ทาง",
+      "en": "If part of the road is blocked, the road user with the obstruction on their side must give way."
+    },
+    "alt": {
+      "no": "To biler i et norsk veikryss",
+      "th": "รถสองคันที่ทางแยกในนอร์เวย์",
+      "en": "Two cars at a Norwegian intersection"
+    },
+    "image": "flipp_flopp_theme_vikeplikt.png",
+    "fagord": "Hindring i kjørefeltet",
+    "ref": "Trafikkreglene § 7 nr. 6",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-6",
+    "source_id": 6,
+    "category": "vikeplikt",
+    "statement": {
+      "no": "Vikeplikt betyr at du alltid må stoppe helt.",
+      "th": "การให้ทางหมายความว่าคุณต้องหยุดรถสนิทเสมอ",
+      "en": "Giving way means you must always come to a complete stop."
+    },
+    "truth": false,
+    "answer": {
+      "no": "Nei",
+      "th": "ไม่ใช่",
+      "en": "No"
+    },
+    "explanation": {
+      "no": "Du skal ikke hindre eller forstyrre den du skal vike for. Du viser det i god tid, for eksempel ved å senke farten, og stopper bare når det er nødvendig.",
+      "th": "คุณต้องไม่กีดขวางหรือรบกวนผู้ที่คุณต้องให้ทาง แสดงให้เห็นล่วงหน้า เช่น ลดความเร็ว และหยุดเฉพาะเมื่อจำเป็น",
+      "en": "You must not obstruct or disturb the person you give way to. Show it in good time, for example by slowing down, and stop only when necessary."
+    },
+    "alt": {
+      "no": "To biler i et norsk veikryss",
+      "th": "รถสองคันที่ทางแยกในนอร์เวย์",
+      "en": "Two cars at a Norwegian intersection"
+    },
+    "image": "flipp_flopp_theme_vikeplikt.png",
+    "fagord": "Ikke hindre eller forstyrre",
+    "ref": "Trafikkreglene § 7 nr. 1",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-7",
+    "source_id": 7,
+    "category": "vikeplikt",
+    "statement": {
+      "no": "Når du kjører inn i en rundkjøring, har trafikken som allerede er i rundkjøringen vikeplikt for deg.",
+      "th": "เมื่อคุณขับเข้าวงเวียน รถที่อยู่ในวงเวียนอยู่แล้วต้องให้ทางคุณ",
+      "en": "When you enter a roundabout, traffic already in the roundabout must give way to you."
+    },
+    "truth": false,
+    "answer": {
+      "no": "Nei",
+      "th": "ไม่ใช่",
+      "en": "No"
+    },
+    "explanation": {
+      "no": "Du har vikeplikt for trafikken som allerede er i rundkjøringen.",
+      "th": "คุณต้องให้ทางรถที่อยู่ในวงเวียนอยู่แล้ว",
+      "en": "You must give way to traffic that is already in the roundabout."
+    },
+    "alt": {
+      "no": "To biler i et norsk veikryss",
+      "th": "รถสองคันที่ทางแยกในนอร์เวย์",
+      "en": "Two cars at a Norwegian intersection"
+    },
+    "image": "flipp_flopp_theme_vikeplikt.png",
+    "fagord": "Rundkjøring",
+    "ref": "Vikepliktskilt (202) ved innkjøring",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-8",
+    "source_id": 8,
+    "category": "vikeplikt",
+    "statement": {
+      "no": "Du skal svinge til høyre, og en syklist kommer rett fram på høyre side. Da har syklisten vikeplikt for deg.",
+      "th": "คุณจะเลี้ยวขวา และมีผู้ขี่จักรยานตรงไปทางขวาของคุณ ผู้ขี่จักรยานต้องให้ทางคุณ",
+      "en": "You are turning right and a cyclist is going straight ahead on your right. The cyclist must give way to you."
+    },
+    "truth": false,
+    "answer": {
+      "no": "Nei",
+      "th": "ไม่ใช่",
+      "en": "No"
+    },
+    "explanation": {
+      "no": "Den som skal svinge har vikeplikt for gående og syklende som skal rett fram. Sjekk blindsonen før du svinger.",
+      "th": "ผู้ที่จะเลี้ยวต้องให้ทางคนเดินและผู้ขี่จักรยานที่ตรงไป ตรวจจุดบอดก่อนเลี้ยว",
+      "en": "The driver who turns must give way to pedestrians and cyclists going straight ahead. Check your blind spot before turning."
+    },
+    "alt": {
+      "no": "To biler i et norsk veikryss",
+      "th": "รถสองคันที่ทางแยกในนอร์เวย์",
+      "en": "Two cars at a Norwegian intersection"
+    },
+    "image": "flipp_flopp_theme_vikeplikt.png",
+    "fagord": "Vikeplikt for syklende",
+    "ref": "Trafikkreglene § 7 nr. 3",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-9",
+    "source_id": 9,
+    "category": "vikeplikt",
+    "statement": {
+      "no": "Står det et vikepliktskilt i krysset, gjelder skiltet foran høyreregelen.",
+      "th": "ถ้ามีป้ายให้ทางที่ทางแยก ป้ายนั้นมีผลก่อนกฎให้ทางรถจากขวา",
+      "en": "If there is a give-way sign at the junction, the sign applies before the give-way-to-the-right rule."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Skilt, trafikklys og oppmerking gjelder foran de vanlige trafikkreglene, blant annet høyreregelen.",
+      "th": "ป้าย ไฟจราจร และเครื่องหมายบนถนนมีผลก่อนกฎจราจรทั่วไป เช่น กฎให้ทางรถจากขวา",
+      "en": "Signs, traffic lights and road markings apply before the general traffic rules, including the give-way-to-the-right rule."
+    },
+    "alt": {
+      "no": "To biler i et norsk veikryss",
+      "th": "รถสองคันที่ทางแยกในนอร์เวย์",
+      "en": "Two cars at a Norwegian intersection"
+    },
+    "image": "flipp_flopp_theme_vikeplikt.png",
+    "fagord": "Myndighetspyramiden",
+    "ref": "Trafikkreglene § 3 nr. 1",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-10",
+    "source_id": 10,
+    "category": "vikeplikt",
+    "statement": {
+      "no": "Du kjører på en forkjørsvei. Da har du vikeplikt for biler som kommer fra høyre sidevei.",
+      "th": "คุณขับบนถนนทางหลัก คุณต้องให้ทางรถที่มาจากซอยทางขวา",
+      "en": "You are driving on a priority road. You must give way to cars coming from a side road on the right."
+    },
+    "truth": false,
+    "answer": {
+      "no": "Nei",
+      "th": "ไม่ใช่",
+      "en": "No"
+    },
+    "explanation": {
+      "no": "På forkjørsvei er det sideveiene som har vikeplikt mot deg.",
+      "th": "บนถนนทางหลัก รถจากซอยข้างทางต้องให้ทางคุณ",
+      "en": "On a priority road it is the side roads that must give way to you."
+    },
+    "alt": {
+      "no": "To biler i et norsk veikryss",
+      "th": "รถสองคันที่ทางแยกในนอร์เวย์",
+      "en": "Two cars at a Norwegian intersection"
+    },
+    "image": "flipp_flopp_theme_vikeplikt.png",
+    "fagord": "Forkjørsvei",
+    "ref": "Skilt for forkjørsvei (206)",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-11",
+    "source_id": 11,
+    "category": "plassering",
+    "statement": {
+      "no": "Du skal normalt kjøre på høyre side av veien og godt innenfor kjørefeltet.",
+      "th": "โดยปกติคุณต้องขับชิดทางด้านขวาของถนนและอยู่ภายในเลนอย่างเหมาะสม",
+      "en": "You should normally drive on the right side of the road and well inside your lane."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Kjøretøy skal føres på høyre side av vegen og godt innenfor kjørefeltet, med sikkerhetsmargin til møtende trafikk.",
+      "th": "ต้องขับรถทางด้านขวาของถนนและอยู่ภายในเลน เพื่อให้มีระยะปลอดภัยกับรถที่สวนมา",
+      "en": "Vehicles must be driven on the right side of the road and well inside the lane, with a safety margin to oncoming traffic."
+    },
+    "alt": {
+      "no": "Bil på en norsk vei med kjørefelt",
+      "th": "รถบนถนนที่มีช่องจราจรในนอร์เวย์",
+      "en": "Car on a Norwegian road with marked lanes"
+    },
+    "image": "flipp_flopp_theme_plassering.png",
+    "fagord": "Kjøretøys plass på vegen (§ 5)",
+    "ref": "Trafikkreglene § 5 nr. 1",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-12",
+    "source_id": 12,
+    "category": "plassering",
+    "statement": {
+      "no": "Før du svinger til venstre på en toveis vei, skal du kjøre så nær høyre kant som mulig.",
+      "th": "ก่อนเลี้ยวซ้ายบนถนนสองทิศทาง คุณต้องขับชิดขอบถนนด้านขวาให้มากที่สุด",
+      "en": "Before turning left on a two-way road, you must drive as close to the right edge as possible."
+    },
+    "truth": false,
+    "answer": {
+      "no": "Nei",
+      "th": "ไม่ใช่",
+      "en": "No"
+    },
+    "explanation": {
+      "no": "På toveis vei skal du i god tid kjøre så nær midten av kjørebanen som mulig før venstresving.",
+      "th": "บนถนนสองทิศทาง คุณต้องขับเข้าใกล้กึ่งกลางถนนให้มากที่สุดล่วงหน้าก่อนเลี้ยวซ้าย",
+      "en": "On a two-way road you must drive as close to the middle of the carriageway as possible well before turning left."
+    },
+    "alt": {
+      "no": "Bil på en norsk vei med kjørefelt",
+      "th": "รถบนถนนที่มีช่องจราจรในนอร์เวย์",
+      "en": "Car on a Norwegian road with marked lanes"
+    },
+    "image": "flipp_flopp_theme_plassering.png",
+    "fagord": "Plassering ved venstresving",
+    "ref": "Trafikkreglene § 6 nr. 2",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-13",
+    "source_id": 13,
+    "category": "plassering",
+    "statement": {
+      "no": "Du skal svinge til venstre fra en enveiskjørt gate. Da kan du plassere bilen helt til venstre i kjørebanen.",
+      "th": "คุณจะเลี้ยวซ้ายจากถนนวันเวย์ คุณวางรถชิดซ้ายสุดของผิวถนนได้",
+      "en": "You are turning left from a one-way street. You can position the car at the far left of the carriageway."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "I en enveiskjørt gate er det ingen møtende trafikk, og venstresving kan gjøres fra venstre kant.",
+      "th": "ในถนนวันเวย์ไม่มีรถสวน การเลี้ยวซ้ายทำได้จากขอบซ้าย",
+      "en": "In a one-way street there is no oncoming traffic, and a left turn can be made from the left edge."
+    },
+    "alt": {
+      "no": "Bil på en norsk vei med kjørefelt",
+      "th": "รถบนถนนที่มีช่องจราจรในนอร์เวย์",
+      "en": "Car on a Norwegian road with marked lanes"
+    },
+    "image": "flipp_flopp_theme_plassering.png",
+    "fagord": "Venstresving fra enveiskjørt gate",
+    "ref": "Trafikkreglene § 6 (nr. 1 og 2)",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-14",
+    "source_id": 14,
+    "category": "plassering",
+    "statement": {
+      "no": "Når du skal svinge til høyre, bør du først kjøre mot midten av veien.",
+      "th": "เมื่อจะเลี้ยวขวา คุณควรขับเข้าไปกลางถนนก่อน",
+      "en": "When you are going to turn right, you should first move towards the middle of the road."
+    },
+    "truth": false,
+    "answer": {
+      "no": "Nei",
+      "th": "ไม่ใช่",
+      "en": "No"
+    },
+    "explanation": {
+      "no": "Ved sving til høyre skal du kjøre så nær høyre kant av kjørebanen som mulig.",
+      "th": "เมื่อเลี้ยวขวา ต้องขับชิดขอบขวาของถนนให้มากที่สุด",
+      "en": "When turning right you must drive as close to the right edge of the carriageway as possible."
+    },
+    "alt": {
+      "no": "Bil på en norsk vei med kjørefelt",
+      "th": "รถบนถนนที่มีช่องจราจรในนอร์เวย์",
+      "en": "Car on a Norwegian road with marked lanes"
+    },
+    "image": "flipp_flopp_theme_plassering.png",
+    "fagord": "Plassering ved høyresving",
+    "ref": "Trafikkreglene § 6 nr. 2",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-15",
+    "source_id": 15,
+    "category": "plassering",
+    "statement": {
+      "no": "På en vei med to felt i din retning skal du normalt bruke venstre felt.",
+      "th": "บนถนนที่มีสองเลนในทิศทางของคุณ โดยปกติคุณต้องใช้เลนซ้าย",
+      "en": "On a road with two lanes in your direction, you should normally use the left lane."
+    },
+    "truth": false,
+    "answer": {
+      "no": "Nei",
+      "th": "ไม่ใช่",
+      "en": "No"
+    },
+    "explanation": {
+      "no": "På kjørebane med to eller flere felt skal du normalt bruke høyre felt. Venstre felt brukes blant annet til forbikjøring.",
+      "th": "บนถนนที่มีสองเลนขึ้นไป โดยปกติต้องใช้เลนขวา เลนซ้ายใช้สำหรับแซงเป็นต้น",
+      "en": "On a carriageway with two or more lanes you should normally use the right lane. The left lane is used for overtaking, among other things."
+    },
+    "alt": {
+      "no": "Bil på en norsk vei med kjørefelt",
+      "th": "รถบนถนนที่มีช่องจราจรในนอร์เวย์",
+      "en": "Car on a Norwegian road with marked lanes"
+    },
+    "image": "flipp_flopp_theme_plassering.png",
+    "fagord": "Feltvalg på flerfeltsvei",
+    "ref": "Trafikkreglene § 5 nr. 1",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-16",
+    "source_id": 16,
+    "category": "plassering",
+    "statement": {
+      "no": "En hel gul linje midt i veien kan du krysse når det er trygt.",
+      "th": "เส้นทึบสีเหลืองกลางถนน คุณข้ามได้เมื่อปลอดภัย",
+      "en": "You may cross a solid yellow line in the middle of the road when it is safe."
+    },
+    "truth": false,
+    "answer": {
+      "no": "Nei",
+      "th": "ไม่ใช่",
+      "en": "No"
+    },
+    "explanation": {
+      "no": "En sperrelinje skal ikke krysses eller kjøres på. Midtlinjer er gule, og unntak gjelder bare for innkjøring til eiendom når det kan skje uten fare.",
+      "th": "เส้นห้ามห้ามข้ามหรือขับทับ เส้นกลางถนนเป็นสีเหลือง ข้อยกเว้นมีเฉพาะการขับเข้าที่ดินเมื่อทำได้โดยไม่เป็นอันตราย",
+      "en": "A barrier line must not be crossed or driven on. Centre lines are yellow, and the exception applies only to entering a property when it can be done without danger."
+    },
+    "alt": {
+      "no": "Bil på en norsk vei med kjørefelt",
+      "th": "รถบนถนนที่มีช่องจราจรในนอร์เวย์",
+      "en": "Car on a Norwegian road with marked lanes"
+    },
+    "image": "flipp_flopp_theme_plassering.png",
+    "fagord": "Sperrelinje",
+    "ref": "Skiltforskriften og Vegvesenets håndbok N302",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-17",
+    "source_id": 17,
+    "category": "plassering",
+    "statement": {
+      "no": "Når du kjører inn på motorvei fra et fartsøkningsfelt, skal du tilpasse farten til trafikken på motorveien.",
+      "th": "เมื่อขับเข้าทางด่วนจากเลนเร่งความเร็ว คุณต้องปรับความเร็วให้เข้ากับการจราจรบนทางด่วน",
+      "en": "When you join a motorway from an acceleration lane, you must adjust your speed to the traffic on the motorway."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Kjørende i fartsøkningsfelt skal tilpasse farten til trafikken på motorveien, og trafikken på motorveien skal lette innkjøringen.",
+      "th": "ผู้ขับในเลนเร่งความเร็วต้องปรับความเร็วให้เข้ากับการจราจรบนทางด่วน และรถบนทางด่วนต้องช่วยให้เข้าได้ง่ายขึ้น",
+      "en": "Drivers in an acceleration lane must adjust to the speed of the motorway traffic, and traffic on the motorway should make joining easier."
+    },
+    "alt": {
+      "no": "Bil på en norsk vei med kjørefelt",
+      "th": "รถบนถนนที่มีช่องจราจรในนอร์เวย์",
+      "en": "Car on a Norwegian road with marked lanes"
+    },
+    "image": "flipp_flopp_theme_plassering.png",
+    "fagord": "Fartsøkningsfelt og fletting",
+    "ref": "Trafikkreglene § 8 (fartsøkningsfelt)",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-18",
+    "source_id": 18,
+    "category": "plassering",
+    "statement": {
+      "no": "En vanlig bensinbil kan ikke kjøre i kollektivfelt.",
+      "th": "รถเบนซินทั่วไปไม่สามารถใช้เลนรถประจำทางได้",
+      "en": "An ordinary petrol car cannot use a bus lane."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Kollektivfelt er for buss og andre som skiltet tillater, for eksempel elbil, to-hjulinger og sykkel. En vanlig bensinbil har ikke tilgang.",
+      "th": "เลนรถประจำทางมีไว้สำหรับรถบัสและรถอื่นที่ป้ายอนุญาต เช่น รถไฟฟ้า รถสองล้อ และจักรยาน รถเบนซินทั่วไปไม่มีสิทธิ์",
+      "en": "Bus lanes are for buses and others the sign allows, for example electric vehicles, two-wheelers and bicycles. An ordinary petrol car has no access."
+    },
+    "alt": {
+      "no": "Bil på en norsk vei med kjørefelt",
+      "th": "รถบนถนนที่มีช่องจราจรในนอร์เวย์",
+      "en": "Car on a Norwegian road with marked lanes"
+    },
+    "image": "flipp_flopp_theme_plassering.png",
+    "fagord": "Kollektivfelt",
+    "ref": "Statens vegvesen: Hvem kan kjøre i kollektivfelt",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-19",
+    "source_id": 19,
+    "category": "plassering",
+    "statement": {
+      "no": "Når du svinger inn på en vei med to felt i din retning, må du alltid velge høyre felt.",
+      "th": "เมื่อเลี้ยวเข้าถนนที่มีสองเลนในทิศทางของคุณ คุณต้องเลือกเลนขวาเสมอ",
+      "en": "When you turn onto a road with two lanes in your direction, you must always choose the right lane."
+    },
+    "truth": false,
+    "answer": {
+      "no": "Nei",
+      "th": "ไม่ใช่",
+      "en": "No"
+    },
+    "explanation": {
+      "no": "Ved sving inn på kjørebane med to eller flere felt kan du kjøre inn i det feltet som passer best.",
+      "th": "เมื่อเลี้ยวเข้าถนนที่มีสองเลนขึ้นไป คุณเลือกเลนที่เหมาะสมที่สุดได้",
+      "en": "When turning onto a carriageway with two or more lanes, you may enter whichever lane suits best."
+    },
+    "alt": {
+      "no": "Bil på en norsk vei med kjørefelt",
+      "th": "รถบนถนนที่มีช่องจราจรในนอร์เวย์",
+      "en": "Car on a Norwegian road with marked lanes"
+    },
+    "image": "flipp_flopp_theme_plassering.png",
+    "fagord": "Feltvalg etter sving",
+    "ref": "Trafikkreglene § 6 nr. 3",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-20",
+    "source_id": 20,
+    "category": "plassering",
+    "statement": {
+      "no": "Når to biler møtes på en smal vei, skal begge i god tid vike til høyre og kjøre sakte eller stanse om nødvendig.",
+      "th": "เมื่อรถสองคันสวนกันบนถนนแคบ ทั้งสองฝ่ายต้องหลบไปทางขวาล่วงหน้าและขับช้าหรือหยุดถ้าจำเป็น",
+      "en": "When two cars meet on a narrow road, both must move to the right in good time and drive slowly or stop if necessary."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Kjørende som møtes skal om nødvendig i god tid vike tilstrekkelig til høyre og kjøre sakte eller stanse.",
+      "th": "ผู้ที่สวนกันต้องหลบไปทางขวาอย่างเพียงพอล่วงหน้า และขับช้าหรือหยุดถ้าจำเป็น",
+      "en": "Drivers who meet must, if necessary, move sufficiently to the right in good time and drive slowly or stop."
+    },
+    "alt": {
+      "no": "Bil på en norsk vei med kjørefelt",
+      "th": "รถบนถนนที่มีช่องจราจรในนอร์เวย์",
+      "en": "Car on a Norwegian road with marked lanes"
+    },
+    "image": "flipp_flopp_theme_plassering.png",
+    "fagord": "Møte på smal vei",
+    "ref": "Trafikkreglene § 7 nr. 6",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-21",
+    "source_id": 21,
+    "category": "se",
+    "statement": {
+      "no": "Det er lurt å se langt fram og flytte blikket aktivt når du kjører.",
+      "th": "การมองไกลไปข้างหน้าและเคลื่อนสายตาอย่างต่อเนื่องขณะขับรถเป็นสิ่งที่ดี",
+      "en": "It is smart to look far ahead and move your eyes actively while driving."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "God blikkbruk gir deg tid til å planlegge og oppdage farer tidlig.",
+      "th": "การใช้สายตาที่ดีทำให้คุณมีเวลาวางแผนและมองเห็นอันตรายได้เร็ว",
+      "en": "Good use of your eyes gives you time to plan and to spot hazards early."
+    },
+    "alt": {
+      "no": "Utsikt fra førerplassen på en norsk vei",
+      "th": "มุมมองจากที่นั่งคนขับบนถนนในนอร์เวย์",
+      "en": "Driver's view on a Norwegian road"
+    },
+    "image": "flipp_flopp_theme_se.png",
+    "fagord": "S-O-A-H",
+    "ref": "Michaels se-teknikk",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-22",
+    "source_id": 22,
+    "category": "se",
+    "statement": {
+      "no": "Når du kjører 80 km/t på landeveien, bør du se omtrent 15–20 sekunder fremover.",
+      "th": "เมื่อขับ 80 กม./ชม. บนถนนนอกเมือง คุณควรมองไปข้างหน้าประมาณ 15–20 วินาที",
+      "en": "When driving at 80 km/h on a country road, you should look about 15–20 seconds ahead."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Ved å se langt fram oppdager du svinger, dyr og møtende biler i god tid.",
+      "th": "การมองไกลทำให้คุณเห็นทางโค้ง สัตว์ และรถที่สวนมาได้ล่วงหน้า",
+      "en": "By looking far ahead you notice bends, animals and oncoming cars in good time."
+    },
+    "alt": {
+      "no": "Utsikt fra førerplassen på en norsk vei",
+      "th": "มุมมองจากที่นั่งคนขับบนถนนในนอร์เวย์",
+      "en": "Driver's view on a Norwegian road"
+    },
+    "image": "flipp_flopp_theme_se.png",
+    "fagord": "Se langt fram",
+    "ref": "Header / Michaels se-teknikk",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-23",
+    "source_id": 23,
+    "category": "se",
+    "statement": {
+      "no": "Blindsonen er områdene rundt bilen som du ikke ser i speilene.",
+      "th": "จุดบอดคือบริเวณรอบรถที่คุณมองไม่เห็นในกระจก",
+      "en": "The blind spot is the area around the car that you cannot see in the mirrors."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Du må snu på hodet for å sjekke blindsonen, spesielt ved siden av og bak skuldrene.",
+      "th": "คุณต้องหันศีรษะเพื่อตรวจจุดบอด โดยเฉพาะบริเวณข้างและหลังไหล่",
+      "en": "You must turn your head to check the blind spot, especially beside and behind your shoulders."
+    },
+    "alt": {
+      "no": "Utsikt fra førerplassen på en norsk vei",
+      "th": "มุมมองจากที่นั่งคนขับบนถนนในนอร์เวย์",
+      "en": "Driver's view on a Norwegian road"
+    },
+    "image": "flipp_flopp_theme_se.png",
+    "fagord": "Blindsone",
+    "ref": "Kjent trafikkteori",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-24",
+    "source_id": 24,
+    "category": "se",
+    "statement": {
+      "no": "Når du stirrer på en fare, har du lett for å styre bilen rett mot den.",
+      "th": "เมื่อคุณจ้องมองอันตราย คุณมักจะเผลอบังคับรถไปทางนั้น",
+      "en": "When you stare at a hazard, you easily steer the car straight towards it."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Hendene følger ofte øynene. Se heller etter utveien enn på faren.",
+      "th": "มือมักตามสายตา ให้มองหาทางออกแทนการมองอันตราย",
+      "en": "Your hands tend to follow your eyes. Look for the way out instead of at the hazard."
+    },
+    "alt": {
+      "no": "Utsikt fra førerplassen på en norsk vei",
+      "th": "มุมมองจากที่นั่งคนขับบนถนนในนอร์เวย์",
+      "en": "Driver's view on a Norwegian road"
+    },
+    "image": "flipp_flopp_theme_se.png",
+    "fagord": "Målfiksering",
+    "ref": "Kjent trafikkteori",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-25",
+    "source_id": 25,
+    "category": "se",
+    "statement": {
+      "no": "Når du møter en bil med sterke lys i mørket, bør du se rett på lysene for å se hva bilen gjør.",
+      "th": "เมื่อเจอรถไฟสว่างจ้าในที่มืด คุณควรมองตรงไปที่ไฟเพื่อดูว่ารถทำอะไร",
+      "en": "When you meet a car with bright lights in the dark, you should look straight at the lights to see what the car does."
+    },
+    "truth": false,
+    "answer": {
+      "no": "Nei",
+      "th": "ไม่ใช่",
+      "en": "No"
+    },
+    "explanation": {
+      "no": "Se i stedet ned mot den hvite kantlinjen på høyre side, så blir du ikke blendet.",
+      "th": "ให้มองลงไปที่เส้นขอบถนนสีขาวทางขวาแทน เพื่อไม่ให้ตาพร่า",
+      "en": "Look down towards the white edge line on the right instead, so you are not dazzled."
+    },
+    "alt": {
+      "no": "Utsikt fra førerplassen på en norsk vei",
+      "th": "มุมมองจากที่นั่งคนขับบนถนนในนอร์เวย์",
+      "en": "Driver's view on a Norwegian road"
+    },
+    "image": "flipp_flopp_theme_se.png",
+    "fagord": "Blikkbruk i mørke",
+    "ref": "Kjent trafikkråd",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-26",
+    "source_id": 26,
+    "category": "se",
+    "statement": {
+      "no": "Du bør sjekke bakspeilet omtrent hvert 5.–10. sekund under vanlig kjøring.",
+      "th": "คุณควรตรวจกระจกมองหลังประมาณทุก 5–10 วินาทีขณะขับตามปกติ",
+      "en": "You should check the rear-view mirror about every 5–10 seconds during normal driving."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Jevnlig speilsjekk gir deg oversikt over trafikken bak deg før du bremser eller bytter felt.",
+      "th": "การตรวจกระจกสม่ำเสมอทำให้คุณรู้สถานการณ์ด้านหลังก่อนเบรกหรือเปลี่ยนเลน",
+      "en": "Regular mirror checks give you an overview of the traffic behind you before you brake or change lanes."
+    },
+    "alt": {
+      "no": "Utsikt fra førerplassen på en norsk vei",
+      "th": "มุมมองจากที่นั่งคนขับบนถนนในนอร์เวย์",
+      "en": "Driver's view on a Norwegian road"
+    },
+    "image": "flipp_flopp_theme_se.png",
+    "fagord": "Speilbruk",
+    "ref": "Header / Michaels se-teknikk",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-27",
+    "source_id": 27,
+    "category": "se",
+    "statement": {
+      "no": "Før du bytter felt, bør du sjekke speilene og blindsonen og gi blinklys.",
+      "th": "ก่อนเปลี่ยนเลน คุณควรตรวจกระจก ตรวจจุดบอด และเปิดไฟเลี้ยว",
+      "en": "Before changing lanes, you should check your mirrors and blind spot and signal."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Feltskifte skal skje uten fare for bakenforkjørende eller møtende trafikk.",
+      "th": "การเปลี่ยนเลนต้องทำโดยไม่เป็นอันตรายต่อรถด้านหลังหรือรถที่สวนมา",
+      "en": "Changing lanes must be done without danger to following or oncoming traffic."
+    },
+    "alt": {
+      "no": "Utsikt fra førerplassen på en norsk vei",
+      "th": "มุมมองจากที่นั่งคนขับบนถนนในนอร์เวย์",
+      "en": "Driver's view on a Norwegian road"
+    },
+    "image": "flipp_flopp_theme_se.png",
+    "fagord": "Kjørefeltskifterutine",
+    "ref": "Trafikkreglene § 8 og § 12 (ifølge Header)",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-28",
+    "source_id": 28,
+    "category": "se",
+    "statement": {
+      "no": "I en uoversiktlig kurve bør du se på kanten rett foran bilen.",
+      "th": "ในทางโค้งที่มองไม่เห็นทางข้างหน้า คุณควรมองที่ขอบถนนตรงหน้ารถ",
+      "en": "In a blind bend, you should look at the edge of the road right in front of the car."
+    },
+    "truth": false,
+    "answer": {
+      "no": "Nei",
+      "th": "ไม่ใช่",
+      "en": "No"
+    },
+    "explanation": {
+      "no": "Se så langt inn i kurven som sikten tillater, så oppdager du møtende biler og hindringer tidlig.",
+      "th": "ให้มองเข้าไปในทางโค้งให้ไกลที่สุดเท่าที่ทัศนวิสัยอำนวย เพื่อเห็นรถสวนและสิ่งกีดขวางได้เร็ว",
+      "en": "Look as far into the bend as visibility allows, so you notice oncoming cars and obstacles early."
+    },
+    "alt": {
+      "no": "Utsikt fra førerplassen på en norsk vei",
+      "th": "มุมมองจากที่นั่งคนขับบนถนนในนอร์เวย์",
+      "en": "Driver's view on a Norwegian road"
+    },
+    "image": "flipp_flopp_theme_se.png",
+    "fagord": "Kurvekjøring",
+    "ref": "Kjent trafikkråd",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-29",
+    "source_id": 29,
+    "category": "se",
+    "statement": {
+      "no": "Sidesynet er best til å oppdage bevegelse, mens skarpsynet ser detaljer.",
+      "th": "การมองด้านข้างเหมาะกับการสังเกตการเคลื่อนไหว ส่วนการมองตรงเห็นรายละเอียดได้ดี",
+      "en": "Peripheral vision is best at noticing movement, while sharp central vision sees details."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Bruk sidesynet til å fange bevegelser, og flytt blikket for å se hva det er.",
+      "th": "ใช้การมองด้านข้างจับการเคลื่อนไหว แล้วเลื่อนสายตาไปดูว่าคืออะไร",
+      "en": "Use your side vision to catch movement, and move your eyes to see what it is."
+    },
+    "alt": {
+      "no": "Utsikt fra førerplassen på en norsk vei",
+      "th": "มุมมองจากที่นั่งคนขับบนถนนในนอร์เวย์",
+      "en": "Driver's view on a Norwegian road"
+    },
+    "image": "flipp_flopp_theme_se.png",
+    "fagord": "Skarpsyn og sidesyn",
+    "ref": "Kjent trafikkteori",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-30",
+    "source_id": 30,
+    "category": "se",
+    "statement": {
+      "no": "Hvis du føler deg overveldet i et travelt kryss, bør du øke farten for å komme raskt ut.",
+      "th": "ถ้ารู้สึกสับสนที่ทางแยกที่วุ่นวาย คุณควรเพิ่มความเร็วเพื่อออกไปให้เร็ว",
+      "en": "If you feel overwhelmed at a busy junction, you should speed up to get out quickly."
+    },
+    "truth": false,
+    "answer": {
+      "no": "Nei",
+      "th": "ไม่ใช่",
+      "en": "No"
+    },
+    "explanation": {
+      "no": "Senk farten i stedet. Lavere fart gir hjernen mer tid til å ta inn skilt, fotgjengere og biler.",
+      "th": "ให้ลดความเร็วแทน ความเร็วที่ต่ำลงทำให้สมองมีเวลารับรู้ป้าย คนเดินเท้า และรถมากขึ้น",
+      "en": "Slow down instead. Lower speed gives your brain more time to take in signs, pedestrians and cars."
+    },
+    "alt": {
+      "no": "Utsikt fra førerplassen på en norsk vei",
+      "th": "มุมมองจากที่นั่งคนขับบนถนนในนอร์เวย์",
+      "en": "Driver's view on a Norwegian road"
+    },
+    "image": "flipp_flopp_theme_se.png",
+    "fagord": "Kognitiv avlastning",
+    "ref": "Kjent trafikkråd",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-31",
+    "source_id": 31,
+    "category": "stopp",
+    "statement": {
+      "no": "Reaksjonslengden i meter kan du regne ut ved å ta (fart delt på 10) ganger 3.",
+      "th": "ระยะตอบสนองเป็นเมตร คำนวณได้จาก (ความเร็ว หาร 10) คูณ 3",
+      "en": "You can calculate the reaction distance in metres as (speed divided by 10) times 3."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Bilen ruller omtrent ett sekund før du reagerer. I 50 km/t blir det 5 × 3 = 15 meter.",
+      "th": "รถยังเคลื่อนที่ต่อไปประมาณหนึ่งวินาทีก่อนที่คุณจะตอบสนอง ที่ 50 กม./ชม. จะได้ 5 × 3 = 15 เมตร",
+      "en": "The car keeps rolling for about one second before you react. At 50 km/h that is 5 × 3 = 15 metres."
+    },
+    "alt": {
+      "no": "Biler med avstand på en våt norsk vei",
+      "th": "รถสองคันเว้นระยะบนถนนเปียกในนอร์เวย์",
+      "en": "Cars spaced apart on a wet Norwegian road"
+    },
+    "image": "flipp_flopp_theme_stopp.png",
+    "fagord": "Reaksjonslengde",
+    "ref": "Kjent regneregel (Vegvesenets teori)",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-32",
+    "source_id": 32,
+    "category": "stopp",
+    "statement": {
+      "no": "Dobler du farten fra 40 til 80 km/t, dobles også bremselengden.",
+      "th": "ถ้าเพิ่มความเร็วเป็นสองเท่าจาก 40 เป็น 80 กม./ชม. ระยะเบรกก็เพิ่มเป็นสองเท่าด้วย",
+      "en": "If you double your speed from 40 to 80 km/h, the braking distance also doubles."
+    },
+    "truth": false,
+    "answer": {
+      "no": "Nei",
+      "th": "ไม่ใช่",
+      "en": "No"
+    },
+    "explanation": {
+      "no": "Bremselengden øker kvadratisk, så den blir omtrent fire ganger så lang. Fra ca. 8 meter til ca. 32 meter.",
+      "th": "ระยะเบรกเพิ่มแบบยกกำลังสอง จึงยาวขึ้นประมาณสี่เท่า จากประมาณ 8 เมตรเป็นประมาณ 32 เมตร",
+      "en": "Braking distance grows with the square of speed, so it becomes about four times as long: from about 8 to about 32 metres."
+    },
+    "alt": {
+      "no": "Biler med avstand på en våt norsk vei",
+      "th": "รถสองคันเว้นระยะบนถนนเปียกในนอร์เวย์",
+      "en": "Cars spaced apart on a wet Norwegian road"
+    },
+    "image": "flipp_flopp_theme_stopp.png",
+    "fagord": "Kvadratisk fartsøkning",
+    "ref": "Kjent regneregel (fysikk)",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-33",
+    "source_id": 33,
+    "category": "stopp",
+    "statement": {
+      "no": "I 50 km/t på tørr asfalt er stopplengden omtrent 27,5 meter.",
+      "th": "ที่ 50 กม./ชม. บนถนนแอสฟัลต์แห้ง ระยะหยุดรถประมาณ 27.5 เมตร",
+      "en": "At 50 km/h on dry asphalt the stopping distance is about 27.5 metres."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Stopplengde = reaksjonslengde (15 m) + bremselengde (12,5 m) = 27,5 meter.",
+      "th": "ระยะหยุดรถ = ระยะตอบสนอง (15 ม.) + ระยะเบรก (12.5 ม.) = 27.5 เมตร",
+      "en": "Stopping distance = reaction distance (15 m) + braking distance (12.5 m) = 27.5 metres."
+    },
+    "alt": {
+      "no": "Biler med avstand på en våt norsk vei",
+      "th": "รถสองคันเว้นระยะบนถนนเปียกในนอร์เวย์",
+      "en": "Cars spaced apart on a wet Norwegian road"
+    },
+    "image": "flipp_flopp_theme_stopp.png",
+    "fagord": "Stopplengde",
+    "ref": "Kjent regneregel",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-34",
+    "source_id": 34,
+    "category": "stopp",
+    "statement": {
+      "no": "På is kan bremselengden bli mange ganger så lang som på tørr asfalt.",
+      "th": "บนน้ำแข็ง ระยะเบรกอาจยาวกว่าบนถนนแอสฟัลต์แห้งหลายเท่า",
+      "en": "On ice, the braking distance can be many times longer than on dry asphalt."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Friksjonen blir sterkt redusert på is. Senk farten og øk avstanden til bilen foran.",
+      "th": "แรงเสียดทานลดลงมากบนน้ำแข็ง ให้ลดความเร็วและเว้นระยะจากรถคันหน้าให้มากขึ้น",
+      "en": "Friction is greatly reduced on ice. Slow down and increase the distance to the car ahead."
+    },
+    "alt": {
+      "no": "Biler med avstand på en våt norsk vei",
+      "th": "รถสองคันเว้นระยะบนถนนเปียกในนอร์เวย์",
+      "en": "Cars spaced apart on a wet Norwegian road"
+    },
+    "image": "flipp_flopp_theme_stopp.png",
+    "fagord": "Bremselengde på is",
+    "ref": "Kjent trafikkteori",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-35",
+    "source_id": 35,
+    "category": "stopp",
+    "statement": {
+      "no": "Tre-sekundersregelen betyr at det bør gå minst 3 sekunder fra bilen foran passerer et punkt til du passerer det samme punktet.",
+      "th": "กฎสามวินาทีหมายความว่า ควรผ่านไปอย่างน้อย 3 วินาทีจากที่รถคันหน้าผ่านจุดหนึ่ง จนถึงที่คุณผ่านจุดเดียวกัน",
+      "en": "The three-second rule means at least 3 seconds should pass from the car ahead passing a point until you pass the same point."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Avstanden til bilen foran må være så stor at det ikke blir fare for påkjøring hvis den bremser. Tre sekunder er en tommelregel.",
+      "th": "ระยะห่างจากรถคันหน้าต้องมากพอที่จะไม่เกิดอันตรายหากรถคันหน้าเบรก สามวินาทีเป็นหลักคร่าว ๆ",
+      "en": "The distance to the car ahead must be large enough to avoid a collision if it brakes. Three seconds is a rule of thumb."
+    },
+    "alt": {
+      "no": "Biler med avstand på en våt norsk vei",
+      "th": "รถสองคันเว้นระยะบนถนนเปียกในนอร์เวย์",
+      "en": "Cars spaced apart on a wet Norwegian road"
+    },
+    "image": "flipp_flopp_theme_stopp.png",
+    "fagord": "3-sekundersregelen",
+    "ref": "Trafikkreglene § 5 nr. 3 (avstand) og tommelregel",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-36",
+    "source_id": 36,
+    "category": "stopp",
+    "statement": {
+      "no": "På mørk eller glatt vei bør du øke avstanden til bilen foran til mer enn tre sekunder.",
+      "th": "บนถนนมืดหรือลื่น คุณควรเว้นระยะจากรถคันหน้ามากกว่าสามวินาที",
+      "en": "On a dark or slippery road, you should increase the distance to the car ahead to more than three seconds."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Dårlig sikt og føre krever lengre avstand fordi bremselengden blir lengre og observasjonen tregere.",
+      "th": "ทัศนวิสัยและสภาพถนนที่แย่ต้องการระยะห่างมากขึ้น เพราะระยะเบรกยาวขึ้นและการสังเกตช้าลง",
+      "en": "Poor visibility and road conditions require a longer distance, because braking distance grows and observation is slower."
+    },
+    "alt": {
+      "no": "Biler med avstand på en våt norsk vei",
+      "th": "รถสองคันเว้นระยะบนถนนเปียกในนอร์เวย์",
+      "en": "Cars spaced apart on a wet Norwegian road"
+    },
+    "image": "flipp_flopp_theme_stopp.png",
+    "fagord": "Sikkerhetsavstand på glatta",
+    "ref": "Trafikkreglene § 5 nr. 3 og kjent råd",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-37",
+    "source_id": 37,
+    "category": "stopp",
+    "statement": {
+      "no": "I 80 km/t på tørr asfalt er stopplengden omtrent 30 meter.",
+      "th": "ที่ 80 กม./ชม. บนถนนแอสฟัลต์แห้ง ระยะหยุดรถประมาณ 30 เมตร",
+      "en": "At 80 km/h on dry asphalt the stopping distance is about 30 metres."
+    },
+    "truth": false,
+    "answer": {
+      "no": "Nei",
+      "th": "ไม่ใช่",
+      "en": "No"
+    },
+    "explanation": {
+      "no": "Reaksjonslengden er 24 m og bremselengden 32 m, til sammen omtrent 56 meter.",
+      "th": "ระยะตอบสนอง 24 ม. และระยะเบรก 32 ม. รวมประมาณ 56 เมตร",
+      "en": "The reaction distance is 24 m and the braking distance 32 m, about 56 metres in total."
+    },
+    "alt": {
+      "no": "Biler med avstand på en våt norsk vei",
+      "th": "รถสองคันเว้นระยะบนถนนเปียกในนอร์เวย์",
+      "en": "Cars spaced apart on a wet Norwegian road"
+    },
+    "image": "flipp_flopp_theme_stopp.png",
+    "fagord": "Stopplengde",
+    "ref": "Kjent regneregel",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-38",
+    "source_id": 38,
+    "category": "stopp",
+    "statement": {
+      "no": "Mange undervurderer bremselengden i høy fart, fordi den øker mer enn farten.",
+      "th": "หลายคนประเมินระยะเบรกที่ความเร็วสูงต่ำเกินไป เพราะระยะเบรกเพิ่มขึ้นมากกว่าความเร็ว",
+      "en": "Many people underestimate braking distance at high speed, because it increases more than the speed itself."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Vi tror dobbel fart gir dobbel bremselengde, men den blir omtrent fire ganger så lang.",
+      "th": "เรามักคิดว่าความเร็วสองเท่าให้ระยะเบรกสองเท่า แต่จริง ๆ ยาวขึ้นประมาณสี่เท่า",
+      "en": "We think double speed gives double braking distance, but it becomes about four times as long."
+    },
+    "alt": {
+      "no": "Biler med avstand på en våt norsk vei",
+      "th": "รถสองคันเว้นระยะบนถนนเปียกในนอร์เวย์",
+      "en": "Cars spaced apart on a wet Norwegian road"
+    },
+    "image": "flipp_flopp_theme_stopp.png",
+    "fagord": "Fartsforståelse",
+    "ref": "Kjent trafikkteori",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-39",
+    "source_id": 39,
+    "category": "stopp",
+    "statement": {
+      "no": "Står det ingen fartsskilt, er fartsgrensen i tettbygd strøk 50 km/t.",
+      "th": "ถ้าไม่มีป้ายความเร็ว เขตชุมชนมีขีดจำกัดความเร็ว 50 กม./ชม.",
+      "en": "If there is no speed sign, the speed limit in a built-up area is 50 km/h."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Den generelle fartsgrensen er 50 km/t i tettbygd strøk når ikke annet er skiltet.",
+      "th": "ขีดจำกัดความเร็วทั่วไปในเขตชุมชนคือ 50 กม./ชม. เมื่อไม่มีป้ายระบุอย่างอื่น",
+      "en": "The general speed limit is 50 km/h in built-up areas unless otherwise signed."
+    },
+    "alt": {
+      "no": "Biler med avstand på en våt norsk vei",
+      "th": "รถสองคันเว้นระยะบนถนนเปียกในนอร์เวย์",
+      "en": "Cars spaced apart on a wet Norwegian road"
+    },
+    "image": "flipp_flopp_theme_stopp.png",
+    "fagord": "Generelle fartsgrenser",
+    "ref": "Fartsgrenseforskriften (alminnelig fartsgrense)",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-40",
+    "source_id": 40,
+    "category": "stopp",
+    "statement": {
+      "no": "Står det ingen fartsskilt, er fartsgrensen utenfor tettbygd strøk 90 km/t.",
+      "th": "ถ้าไม่มีป้ายความเร็ว นอกเขตชุมชนมีขีดจำกัดความเร็ว 90 กม./ชม.",
+      "en": "If there is no speed sign, the speed limit outside built-up areas is 90 km/h."
+    },
+    "truth": false,
+    "answer": {
+      "no": "Nei",
+      "th": "ไม่ใช่",
+      "en": "No"
+    },
+    "explanation": {
+      "no": "Den generelle fartsgrensen utenfor tettbygd strøk er 80 km/t.",
+      "th": "ขีดจำกัดความเร็วทั่วไปนอกเขตชุมชนคือ 80 กม./ชม.",
+      "en": "The general speed limit outside built-up areas is 80 km/h."
+    },
+    "alt": {
+      "no": "Biler med avstand på en våt norsk vei",
+      "th": "รถสองคันเว้นระยะบนถนนเปียกในนอร์เวย์",
+      "en": "Cars spaced apart on a wet Norwegian road"
+    },
+    "image": "flipp_flopp_theme_stopp.png",
+    "fagord": "Generell fartsgrense 80",
+    "ref": "Fartsgrenseforskriften (alminnelig fartsgrense)",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-41",
+    "source_id": 41,
+    "category": "myndighet",
+    "statement": {
+      "no": "Myndighetspyramiden viser hva som gjelder først når politi, lys, skilt og regler sier noe ulikt.",
+      "th": "ปิรามิดอำนาจแสดงว่าอะไรมีผลก่อนเมื่อตำรวจ ไฟจราจร ป้าย และกฎบอกต่างกัน",
+      "en": "The authority pyramid shows what applies first when police, lights, signs and rules say different things."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Politiets tegn gjelder først, så trafikklys, så skilt og oppmerking, og til slutt de vanlige trafikkreglene.",
+      "th": "สัญญาณตำรวจมีผลก่อน ตามด้วยไฟจราจร ป้ายและเครื่องหมายบนถนน และสุดท้ายคือกฎจราจรทั่วไป",
+      "en": "Police signals come first, then traffic lights, then signs and markings, and finally the general traffic rules."
+    },
+    "alt": {
+      "no": "Politi og trafikklys i et norsk bykryss",
+      "th": "ตำรวจและสัญญาณไฟที่ทางแยกในเมืองนอร์เวย์",
+      "en": "Police officer and traffic light at a Norwegian junction"
+    },
+    "image": "flipp_flopp_theme_myndighet.png",
+    "fagord": "Myndighetspyramiden",
+    "ref": "Trafikkreglene § 3",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-42",
+    "source_id": 42,
+    "category": "myndighet",
+    "statement": {
+      "no": "Politiets tegn gjelder foran trafikklys og skilt.",
+      "th": "สัญญาณของตำรวจมีผลก่อนไฟจราจรและป้าย",
+      "en": "Police signals apply before traffic lights and signs."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Anvisning gitt av politiet gjelder foran anvisning gitt på annen måte, også rødt lys og stoppskilt.",
+      "th": "คำสั่งของตำรวจมีผลก่อนคำสั่งรูปแบบอื่น รวมถึงไฟแดงและป้ายหยุด",
+      "en": "Instructions from the police apply before instructions given in any other way, including red lights and stop signs."
+    },
+    "alt": {
+      "no": "Politi og trafikklys i et norsk bykryss",
+      "th": "ตำรวจและสัญญาณไฟที่ทางแยกในเมืองนอร์เวย์",
+      "en": "Police officer and traffic light at a Norwegian junction"
+    },
+    "image": "flipp_flopp_theme_myndighet.png",
+    "fagord": "Politi og anvisning",
+    "ref": "Trafikkreglene § 3 nr. 2",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-43",
+    "source_id": 43,
+    "category": "myndighet",
+    "statement": {
+      "no": "Lyset er rødt, men en politibetjent vinker deg fram. Da skal du stoppe.",
+      "th": "ไฟแดง แต่ตำรวจโบกให้คุณไปต่อ คุณต้องหยุด",
+      "en": "The light is red, but a police officer waves you through. You must stop."
+    },
+    "truth": false,
+    "answer": {
+      "no": "Nei",
+      "th": "ไม่ใช่",
+      "en": "No"
+    },
+    "explanation": {
+      "no": "Politiets tegn gjelder foran det røde lyset. Følg betjentens anvisning og kjør når han eller hun viser det.",
+      "th": "สัญญาณตำรวจมีผลก่อนไฟแดง ให้ทำตามที่ตำรวจสั่งและขับต่อเมื่อตำรวจให้ไป",
+      "en": "The police signal applies before the red light. Follow the officer's instruction and drive when shown."
+    },
+    "alt": {
+      "no": "Politi og trafikklys i et norsk bykryss",
+      "th": "ตำรวจและสัญญาณไฟที่ทางแยกในเมืองนอร์เวย์",
+      "en": "Police officer and traffic light at a Norwegian junction"
+    },
+    "image": "flipp_flopp_theme_myndighet.png",
+    "fagord": "Politi overstyrer trafikklys",
+    "ref": "Trafikkreglene § 3 nr. 2",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-44",
+    "source_id": 44,
+    "category": "myndighet",
+    "statement": {
+      "no": "Trafikklyset viser grønt, men det står et stoppskilt på samme stolpe. Da må du stoppe.",
+      "th": "ไฟจราจรเป็นสีเขียว แต่มีป้ายหยุดอยู่บนเสาเดียวกัน คุณต้องหยุด",
+      "en": "The traffic light shows green, but there is a stop sign on the same post. You must stop."
+    },
+    "truth": false,
+    "answer": {
+      "no": "Nei",
+      "th": "ไม่ใช่",
+      "en": "No"
+    },
+    "explanation": {
+      "no": "Når lyset fungerer, gjelder lyset foran skiltet. Skiltet gjelder først hvis lyset er slokket eller ute av drift.",
+      "th": "เมื่อไฟทำงาน ไฟมีผลก่อนป้าย ป้ายจะมีผลเมื่อไฟดับหรือเสียเท่านั้น",
+      "en": "When the light works, the light applies before the sign. The sign applies only if the light is off or out of order."
+    },
+    "alt": {
+      "no": "Politi og trafikklys i et norsk bykryss",
+      "th": "ตำรวจและสัญญาณไฟที่ทางแยกในเมืองนอร์เวย์",
+      "en": "Police officer and traffic light at a Norwegian junction"
+    },
+    "image": "flipp_flopp_theme_myndighet.png",
+    "fagord": "Trafikklys overstyrer skilt",
+    "ref": "Myndighetspyramiden (Michaels rangering)",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-45",
+    "source_id": 45,
+    "category": "myndighet",
+    "statement": {
+      "no": "Et blinkende gult trafikklys betyr at du alltid må stoppe.",
+      "th": "ไฟจราจรสีเหลืองกะพริบหมายความว่าคุณต้องหยุดเสมอ",
+      "en": "A flashing yellow traffic light means you must always stop."
+    },
+    "truth": false,
+    "answer": {
+      "no": "Nei",
+      "th": "ไม่ใช่",
+      "en": "No"
+    },
+    "explanation": {
+      "no": "Blinkende gult betyr at du må vise særlig aktpågivenhet. Lyset regulerer ikke krysset, så følg skilt og vanlige trafikkregler.",
+      "th": "ไฟเหลืองกะพริบหมายความว่าต้องระมัดระวังเป็นพิเศษ ไฟไม่ได้ควบคุมทางแยก ให้ทำตามป้ายและกฎจราจรทั่วไป",
+      "en": "Flashing yellow means you must take particular care. The light does not regulate the junction, so follow signs and the normal traffic rules."
+    },
+    "alt": {
+      "no": "Politi og trafikklys i et norsk bykryss",
+      "th": "ตำรวจและสัญญาณไฟที่ทางแยกในเมืองนอร์เวย์",
+      "en": "Police officer and traffic light at a Norwegian junction"
+    },
+    "image": "flipp_flopp_theme_myndighet.png",
+    "fagord": "Blinkende gult lys",
+    "ref": "Statens vegvesen (trafikksignalanlegg)",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-46",
+    "source_id": 46,
+    "category": "myndighet",
+    "statement": {
+      "no": "HAV står for hensynsfull, aktpågivende og varsom.",
+      "th": "HAV ย่อมาจาก ใส่ใจผู้อื่น ระมัดระวัง และรอบคอบ",
+      "en": "HAV stands for considerate, attentive and careful."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Vegtrafikkloven § 3: Alle skal ferdes hensynsfullt og være aktpågivende og varsomme, så det ikke skapes fare eller skade.",
+      "th": "พระราชบัญญัติการจราจรทางบก มาตรา 3: ทุกคนต้องใช้ถนนด้วยความเกรงใจ ระมัดระวัง และรอบคอบ ไม่ให้เกิดอันตรายหรือความเสียหาย",
+      "en": "Road Traffic Act section 3: Everyone must travel considerately and be attentive and careful, so that no danger or damage arises."
+    },
+    "alt": {
+      "no": "Politi og trafikklys i et norsk bykryss",
+      "th": "ตำรวจและสัญญาณไฟที่ทางแยกในเมืองนอร์เวย์",
+      "en": "Police officer and traffic light at a Norwegian junction"
+    },
+    "image": "flipp_flopp_theme_myndighet.png",
+    "fagord": "HAV-regelen",
+    "ref": "Vegtrafikkloven § 3",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-47",
+    "source_id": 47,
+    "category": "myndighet",
+    "statement": {
+      "no": "Du trenger ikke gi fri vei for et utrykningskjøretøy så lenge du holder fartsgrensen.",
+      "th": "คุณไม่จำเป็นต้องหลีกทางให้รถฉุกเฉินตราบใดที่คุณขับไม่เกินกำหนดความเร็ว",
+      "en": "You do not have to give way to an emergency vehicle as long as you keep to the speed limit."
+    },
+    "truth": false,
+    "answer": {
+      "no": "Nei",
+      "th": "ไม่ใช่",
+      "en": "No"
+    },
+    "explanation": {
+      "no": "Du skal gi fri vei når utrykningskjøretøyet varsler med blinkende blått lys, og stanse om nødvendig.",
+      "th": "คุณต้องหลีกทางเมื่อรถฉุกเฉินให้สัญญาณไฟสีน้ำเงินกะพริบ และหยุดถ้าจำเป็น",
+      "en": "You must give way when the emergency vehicle signals with flashing blue lights, and stop if necessary."
+    },
+    "alt": {
+      "no": "Politi og trafikklys i et norsk bykryss",
+      "th": "ตำรวจและสัญญาณไฟที่ทางแยกในเมืองนอร์เวย์",
+      "en": "Police officer and traffic light at a Norwegian junction"
+    },
+    "image": "flipp_flopp_theme_myndighet.png",
+    "fagord": "Fri vei for utrykning",
+    "ref": "Trafikkreglene § 10 nr. 1",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-48",
+    "source_id": 48,
+    "category": "myndighet",
+    "statement": {
+      "no": "Du har ikke vikeplikt for gående som er i et ubemannet gangfelt hvis du kjører sakte.",
+      "th": "คุณไม่ต้องให้ทางคนเดินที่อยู่ในทางม้าลายที่ไม่มีเจ้าหน้าที่ ถ้าคุณขับช้า",
+      "en": "You do not have to give way to pedestrians in an unmanned pedestrian crossing if you drive slowly."
+    },
+    "truth": false,
+    "answer": {
+      "no": "Nei",
+      "th": "ไม่ใช่",
+      "en": "No"
+    },
+    "explanation": {
+      "no": "Du har vikeplikt for gående som er i gangfeltet eller på vei ut i det, uansett hvor sakte du kjører.",
+      "th": "คุณต้องให้ทางคนเดินที่อยู่ในทางม้าลายหรือกำลังจะลงไป ไม่ว่าคุณจะขับช้าแค่ไหน",
+      "en": "You must give way to pedestrians in the crossing or about to step into it, however slowly you drive."
+    },
+    "alt": {
+      "no": "Politi og trafikklys i et norsk bykryss",
+      "th": "ตำรวจและสัญญาณไฟที่ทางแยกในเมืองนอร์เวย์",
+      "en": "Police officer and traffic light at a Norwegian junction"
+    },
+    "image": "flipp_flopp_theme_myndighet.png",
+    "fagord": "Vikeplikt ved gangfelt",
+    "ref": "Trafikkreglene § 9",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-49",
+    "source_id": 49,
+    "category": "myndighet",
+    "statement": {
+      "no": "Promillegrensen for å kjøre bil i Norge er 0,5.",
+      "th": "ค่าแอลกอฮอล์ในเลือดที่อนุญาตเมื่อขับรถในนอร์เวย์คือ 0.5 พรอมมิล",
+      "en": "The legal blood alcohol limit for driving in Norway is 0.5."
+    },
+    "truth": false,
+    "answer": {
+      "no": "Nei",
+      "th": "ไม่ใช่",
+      "en": "No"
+    },
+    "explanation": {
+      "no": "Promillegrensen er 0,2. Norge har en av verdens strengeste grenser.",
+      "th": "ค่าที่อนุญาตคือ 0.2 พรอมมิล นอร์เวย์มีเกณฑ์ที่เข้มงวดที่สุดแห่งหนึ่งของโลก",
+      "en": "The limit is 0.2 per mille. Norway has one of the strictest limits in the world."
+    },
+    "alt": {
+      "no": "Politi og trafikklys i et norsk bykryss",
+      "th": "ตำรวจและสัญญาณไฟที่ทางแยกในเมืองนอร์เวย์",
+      "en": "Police officer and traffic light at a Norwegian junction"
+    },
+    "image": "flipp_flopp_theme_myndighet.png",
+    "fagord": "Promillegrense",
+    "ref": "Vegtrafikkloven § 22",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-50",
+    "source_id": 50,
+    "category": "myndighet",
+    "statement": {
+      "no": "«Bør» betyr det samme som «skal» og «må» i spørsmålene på teoriprøven.",
+      "th": "คำว่า «bør» มีความหมายเหมือน «skal» และ «må» ในข้อสอบทฤษฎี",
+      "en": "\"Bør\" means the same as \"skal\" and \"må\" in questions on the theory test."
+    },
+    "truth": false,
+    "answer": {
+      "no": "Nei",
+      "th": "ไม่ใช่",
+      "en": "No"
+    },
+    "explanation": {
+      "no": "«Bør» er en anbefaling, mens «skal» og «må» er en plikt. Pass på ordlyden i spørsmålet.",
+      "th": "«bør» เป็นคำแนะนำ ส่วน «skal» และ «må» เป็นหน้าที่ที่ต้องทำ ให้ดูถ้อยคำในคำถามให้ดี",
+      "en": "\"Bør\" is a recommendation, while \"skal\" and \"må\" are a duty. Watch the wording of the question."
+    },
+    "alt": {
+      "no": "Politi og trafikklys i et norsk bykryss",
+      "th": "ตำรวจและสัญญาณไฟที่ทางแยกในเมืองนอร์เวย์",
+      "en": "Police officer and traffic light at a Norwegian junction"
+    },
+    "image": "flipp_flopp_theme_myndighet.png",
+    "fagord": "Bør, skal og må",
+    "ref": "Teoriprøvens språk (Michaels forklaring)",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-51",
+    "source_id": 51,
+    "category": "forbikjoring",
+    "statement": {
+      "no": "Når du skal skifte felt, har du vikeplikt for kjørende i feltet du skal inn i.",
+      "th": "เมื่อคุณจะเปลี่ยนเลน คุณต้องให้ทางรถที่อยู่ในเลนที่คุณจะเข้าไป",
+      "en": "When you change lanes, you must give way to traffic in the lane you are moving into."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Den som vil skifte kjørefelt har vikeplikt for kjørende i feltet det skal kjøres inn i, eller som først må krysses.",
+      "th": "ผู้ที่จะเปลี่ยนเลนต้องให้ทางรถที่อยู่ในเลนที่จะเข้าไป หรือเลนที่ต้องข้ามก่อน",
+      "en": "Anyone changing lanes must give way to vehicles in the lane they move into, or in a lane they must cross first."
+    },
+    "alt": {
+      "no": "Flere biler på en norsk landevei",
+      "th": "รถหลายคันบนถนนชนบทในนอร์เวย์",
+      "en": "Several cars on a Norwegian country road"
+    },
+    "image": "flipp_flopp_theme_forbikjoring.png",
+    "fagord": "Vikeplikt ved feltskifte",
+    "ref": "Trafikkreglene § 8",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-52",
+    "source_id": 52,
+    "category": "forbikjoring",
+    "statement": {
+      "no": "Når to felt blir til ett, har den som skifter felt alltid vikeplikt.",
+      "th": "เมื่อสองเลนรวมเป็นหนึ่งเลน ผู้ที่เปลี่ยนเลนต้องให้ทางเสมอ",
+      "en": "When two lanes merge into one, the driver changing lanes always has to give way."
+    },
+    "truth": false,
+    "answer": {
+      "no": "Nei",
+      "th": "ไม่ใช่",
+      "en": "No"
+    },
+    "explanation": {
+      "no": "Når antall felt i samme retning blir færre, gjelder ikke vanlig vikeplikt ved feltskifte. Farten tilpasses slik at bilene kan fortsette vekselvis.",
+      "th": "เมื่อจำนวนเลนในทิศทางเดียวกันลดลง กฎให้ทางตอนเปลี่ยนเลนปกติไม่ใช้ ให้ปรับความเร็วเพื่อให้รถผลัดกันไปได้",
+      "en": "When the number of lanes in the same direction is reduced, the usual give-way rule for lane changes does not apply. Speeds are adjusted so cars can continue in turn."
+    },
+    "alt": {
+      "no": "Flere biler på en norsk landevei",
+      "th": "รถหลายคันบนถนนชนบทในนอร์เวย์",
+      "en": "Several cars on a Norwegian country road"
+    },
+    "image": "flipp_flopp_theme_forbikjoring.png",
+    "fagord": "Fletting",
+    "ref": "Trafikkreglene § 8",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-53",
+    "source_id": 53,
+    "category": "forbikjoring",
+    "statement": {
+      "no": "Forbikjøring skal som hovedregel skje til venstre.",
+      "th": "โดยหลักแล้ว การแซงต้องแซงทางซ้าย",
+      "en": "As a main rule, overtaking must be done on the left."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Forbikjøring skal skje til venstre, med noen få unntak der man kan kjøre forbi til høyre.",
+      "th": "ต้องแซงทางซ้าย โดยมีข้อยกเว้นเพียงไม่กี่กรณีที่แซงทางขวาได้",
+      "en": "Overtaking must be done on the left, with a few exceptions where you may pass on the right."
+    },
+    "alt": {
+      "no": "Flere biler på en norsk landevei",
+      "th": "รถหลายคันบนถนนชนบทในนอร์เวย์",
+      "en": "Several cars on a Norwegian country road"
+    },
+    "image": "flipp_flopp_theme_forbikjoring.png",
+    "fagord": "Forbikjøring til venstre",
+    "ref": "Trafikkreglene § 12 nr. 1",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-54",
+    "source_id": 54,
+    "category": "forbikjoring",
+    "statement": {
+      "no": "Før du kjører forbi, må du forsikre deg om at ingen bak deg har startet forbikjøring.",
+      "th": "ก่อนแซง คุณต้องแน่ใจว่าไม่มีรถข้างหลังที่เริ่มแซงอยู่แล้ว",
+      "en": "Before you overtake, you must make sure nobody behind you has started overtaking."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Du må kontrollere at veien er fri framover, at forankjørende ikke gir tegn om venstresving, at ingen bak deg har begynt å kjøre forbi, og at du kan svinge inn igjen.",
+      "th": "คุณต้องตรวจว่าทางข้างหน้าว่าง รถคันหน้าไม่ได้ให้สัญญาณ ไม่มีรถข้างหลังเริ่มแซง และคุณกลับเข้าเลนได้",
+      "en": "You must check that the road ahead is clear, that the vehicle in front gives no signal, that nobody behind has started to overtake, and that you can pull back in."
+    },
+    "alt": {
+      "no": "Flere biler på en norsk landevei",
+      "th": "รถหลายคันบนถนนชนบทในนอร์เวย์",
+      "en": "Several cars on a Norwegian country road"
+    },
+    "image": "flipp_flopp_theme_forbikjoring.png",
+    "fagord": "Kontroll før forbikjøring",
+    "ref": "Trafikkreglene § 12 nr. 2",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-55",
+    "source_id": 55,
+    "category": "forbikjoring",
+    "statement": {
+      "no": "Når noen kjører forbi deg, skal du holde så langt til høyre som mulig og ikke øke farten.",
+      "th": "เมื่อมีรถแซงคุณ คุณต้องชิดขวาให้มากที่สุดและไม่เร่งความเร็ว",
+      "en": "When someone overtakes you, you must keep as far to the right as possible and not increase your speed."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Den forbikjørte skal holde seg til høyre og ikke øke farten, slik at forbikjøringen blir kort og trygg.",
+      "th": "ผู้ถูกแซงต้องชิดขวาและไม่เร่งความเร็ว เพื่อให้การแซงสั้นและปลอดภัย",
+      "en": "The driver being overtaken must keep right and not speed up, so the overtaking is short and safe."
+    },
+    "alt": {
+      "no": "Flere biler på en norsk landevei",
+      "th": "รถหลายคันบนถนนชนบทในนอร์เวย์",
+      "en": "Several cars on a Norwegian country road"
+    },
+    "image": "flipp_flopp_theme_forbikjoring.png",
+    "fagord": "Den som blir forbikjørt",
+    "ref": "Trafikkreglene § 12 nr. 4",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-56",
+    "source_id": 56,
+    "category": "forbikjoring",
+    "statement": {
+      "no": "Når noen kjører forbi deg, bør du øke farten litt så forbikjøringen går fortere.",
+      "th": "เมื่อมีรถแซงคุณ คุณควรเร่งความเร็วเล็กน้อยเพื่อให้แซงเสร็จเร็วขึ้น",
+      "en": "When someone overtakes you, you should speed up a little so the overtaking goes faster."
+    },
+    "truth": false,
+    "answer": {
+      "no": "Nei",
+      "th": "ไม่ใช่",
+      "en": "No"
+    },
+    "explanation": {
+      "no": "Du skal ikke øke farten når du blir forbikjørt. Hold til høyre så forbikjøringen kan skje trygt.",
+      "th": "คุณต้องไม่เร่งความเร็วเมื่อถูกแซง ให้ชิดขวาเพื่อให้แซงได้อย่างปลอดภัย",
+      "en": "You must not increase your speed when being overtaken. Keep to the right so it can be done safely."
+    },
+    "alt": {
+      "no": "Flere biler på en norsk landevei",
+      "th": "รถหลายคันบนถนนชนบทในนอร์เวย์",
+      "en": "Several cars on a Norwegian country road"
+    },
+    "image": "flipp_flopp_theme_forbikjoring.png",
+    "fagord": "Den som blir forbikjørt",
+    "ref": "Trafikkreglene § 12 nr. 4",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-57",
+    "source_id": 57,
+    "category": "forbikjoring",
+    "statement": {
+      "no": "Du kan alltid kjøre forbi rett før et vegkryss hvis du har god sikt.",
+      "th": "คุณแซงก่อนถึงทางแยกได้เสมอถ้ามองเห็นชัด",
+      "en": "You can always overtake just before a junction if you have good visibility."
+    },
+    "truth": false,
+    "answer": {
+      "no": "Nei",
+      "th": "ไม่ใช่",
+      "en": "No"
+    },
+    "explanation": {
+      "no": "Forbikjøring er forbudt nær vegkryss. Det finnes bare noen få unntak.",
+      "th": "ห้ามแซงใกล้ทางแยก มีข้อยกเว้นเพียงไม่กี่กรณี",
+      "en": "Overtaking is prohibited near junctions. There are only a few exceptions."
+    },
+    "alt": {
+      "no": "Flere biler på en norsk landevei",
+      "th": "รถหลายคันบนถนนชนบทในนอร์เวย์",
+      "en": "Several cars on a Norwegian country road"
+    },
+    "image": "flipp_flopp_theme_forbikjoring.png",
+    "fagord": "Forbikjøring nær kryss",
+    "ref": "Trafikkreglene § 12 nr. 5",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-58",
+    "source_id": 58,
+    "category": "forbikjoring",
+    "statement": {
+      "no": "Du må ikke kjøre forbi et kjøretøy som tar bort sikten til et gangfelt.",
+      "th": "คุณต้องไม่แซงรถที่บังการมองเห็นทางม้าลาย",
+      "en": "You must not overtake a vehicle that blocks your view of a pedestrian crossing."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Nær et gangfelt må du ikke kjøre forbi et kjøretøy som hindrer noen del av sikten til gangfeltet.",
+      "th": "ใกล้ทางม้าลาย ห้ามแซงรถที่บังการมองเห็นทางม้าลายบางส่วน",
+      "en": "Near a pedestrian crossing you must not overtake a vehicle that blocks any part of the view of the crossing."
+    },
+    "alt": {
+      "no": "Flere biler på en norsk landevei",
+      "th": "รถหลายคันบนถนนชนบทในนอร์เวย์",
+      "en": "Several cars on a Norwegian country road"
+    },
+    "image": "flipp_flopp_theme_forbikjoring.png",
+    "fagord": "Gangfelt og sikt",
+    "ref": "Trafikkreglene § 12 nr. 6",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-59",
+    "source_id": 59,
+    "category": "forbikjoring",
+    "statement": {
+      "no": "Etter at du har kjørt forbi til venstre, skal du svinge til høyre igjen når forbikjøringen er avsluttet.",
+      "th": "หลังแซงทางซ้าย คุณต้องกลับเข้าเลนขวาเมื่อแซงเสร็จ",
+      "en": "After overtaking on the left, you must move back to the right when the overtaking is finished."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Du skal svinge til høyre igjen uten å skade eller hindre andre trafikanter.",
+      "th": "คุณต้องกลับเข้าเลนขวาโดยไม่ทำให้ผู้ใช้ถนนคนอื่นเสียหายหรือถูกกีดขวาง",
+      "en": "You must move back to the right without harming or obstructing other road users."
+    },
+    "alt": {
+      "no": "Flere biler på en norsk landevei",
+      "th": "รถหลายคันบนถนนชนบทในนอร์เวย์",
+      "en": "Several cars on a Norwegian country road"
+    },
+    "image": "flipp_flopp_theme_forbikjoring.png",
+    "fagord": "Tilbake i feltet",
+    "ref": "Trafikkreglene § 12 nr. 3",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-60",
+    "source_id": 60,
+    "category": "signal_lys",
+    "statement": {
+      "no": "Den som rygger eller vender, har vikeplikt for annen trafikant.",
+      "th": "ผู้ที่ถอยหรือกลับรถต้องให้ทางผู้ใช้ถนนคนอื่น",
+      "en": "A driver who reverses or turns around must give way to other road users."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Når du rygger eller vender må du vike for alle andre på veien.",
+      "th": "เมื่อถอยหรือกลับรถ คุณต้องให้ทางทุกคนบนถนน",
+      "en": "When you reverse or turn around you must give way to everyone else on the road."
+    },
+    "alt": {
+      "no": "Biler og lys i en norsk bygate",
+      "th": "รถและแสงไฟบนถนนในเมืองนอร์เวย์",
+      "en": "Cars and lights on a Norwegian city street"
+    },
+    "image": "flipp_flopp_theme_signal_lys.png",
+    "fagord": "Rygging og vending",
+    "ref": "Trafikkreglene § 11 nr. 1",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-61",
+    "source_id": 61,
+    "category": "signal_lys",
+    "statement": {
+      "no": "Det er lov å rygge på motorvei hvis det er trygt.",
+      "th": "การถอยรถบนมอเตอร์เวย์ทำได้ถ้าปลอดภัย",
+      "en": "It is allowed to reverse on a motorway if it is safe."
+    },
+    "truth": false,
+    "answer": {
+      "no": "Nei",
+      "th": "ไม่ใช่",
+      "en": "No"
+    },
+    "explanation": {
+      "no": "Rygging og vending er forbudt på motorvei og motortrafikkvei, og på inn- og utkjøringsveier til dem.",
+      "th": "ห้ามถอยและกลับรถบนมอเตอร์เวย์ ทางด่วนมอเตอร์ และทางเข้าออกของถนนเหล่านั้น",
+      "en": "Reversing and turning around is prohibited on motorways and motor traffic roads, and on their entry and exit roads."
+    },
+    "alt": {
+      "no": "Biler og lys i en norsk bygate",
+      "th": "รถและแสงไฟบนถนนในเมืองนอร์เวย์",
+      "en": "Cars and lights on a Norwegian city street"
+    },
+    "image": "flipp_flopp_theme_signal_lys.png",
+    "fagord": "Rygging og vending",
+    "ref": "Trafikkreglene § 11 nr. 2",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-62",
+    "source_id": 62,
+    "category": "signal_lys",
+    "statement": {
+      "no": "Når du ikke ser nok bakover, må noen passe på for deg, eller du må gå ut og forsikre deg om at det er trygt.",
+      "th": "เมื่อคุณมองด้านหลังไม่พอ ต้องมีคนช่วยดูให้ หรือคุณต้องลงไปดูให้แน่ใจว่าปลอดภัย",
+      "en": "When you cannot see enough behind you, someone must watch for you, or you must check yourself that it is safe."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Er utsikten ikke god nok, kan du ikke rygge uten at en annen passer på, eller at du selv har sett etter at det ikke kan oppstå fare.",
+      "th": "ถ้าทัศนวิสัยไม่พอ คุณห้ามถอยโดยไม่มีคนช่วยดู หรือไม่ได้ตรวจดูด้วยตัวเองว่าไม่มีอันตราย",
+      "en": "If your view is not good enough, you must not reverse unless someone else is watching, or you have seen for yourself that no danger can arise."
+    },
+    "alt": {
+      "no": "Biler og lys i en norsk bygate",
+      "th": "รถและแสงไฟบนถนนในเมืองนอร์เวย์",
+      "en": "Cars and lights on a Norwegian city street"
+    },
+    "image": "flipp_flopp_theme_signal_lys.png",
+    "fagord": "Rygging og vending",
+    "ref": "Trafikkreglene § 11 nr. 1",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-63",
+    "source_id": 63,
+    "category": "stans",
+    "statement": {
+      "no": "Du kan stoppe midt i et vegkryss hvis du bare skal stå et øyeblikk.",
+      "th": "คุณหยุดรถกลางทางแยกได้ ถ้าจะหยุดแค่ชั่วครู่",
+      "en": "You can stop in the middle of a junction if you are only there for a moment."
+    },
+    "truth": false,
+    "answer": {
+      "no": "Nei",
+      "th": "ไม่ใช่",
+      "en": "No"
+    },
+    "explanation": {
+      "no": "Det er forbudt å stanse i et vegkryss og nærmere enn 5 meter fra det.",
+      "th": "ห้ามหยุดรถในทางแยกและห้ามหยุดใกล้ทางแยกน้อยกว่า 5 เมตร",
+      "en": "It is prohibited to stop in a junction or closer than 5 metres from it."
+    },
+    "alt": {
+      "no": "Bil ved fortau i en norsk by",
+      "th": "รถริมทางเท้าในเมืองนอร์เวย์",
+      "en": "Car by a pavement in a Norwegian town"
+    },
+    "image": "flipp_flopp_theme_stans.png",
+    "fagord": "Stansforbud",
+    "ref": "Trafikkreglene § 17 nr. 1",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-64",
+    "source_id": 64,
+    "category": "stans",
+    "statement": {
+      "no": "Du må ikke stanse nærmere enn 5 meter fra et vegkryss.",
+      "th": "คุณต้องไม่หยุดรถใกล้ทางแยกน้อยกว่า 5 เมตร",
+      "en": "You must not stop closer than 5 metres from a junction."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Stansforbudet gjelder i vegkryss og de første 5 meterne før det.",
+      "th": "ข้อห้ามหยุดรถใช้ในทางแยกและ 5 เมตรแรกก่อนถึงทางแยก",
+      "en": "The stopping ban applies in the junction and the first 5 metres before it."
+    },
+    "alt": {
+      "no": "Bil ved fortau i en norsk by",
+      "th": "รถริมทางเท้าในเมืองนอร์เวย์",
+      "en": "Car by a pavement in a Norwegian town"
+    },
+    "image": "flipp_flopp_theme_stans.png",
+    "fagord": "Stansforbud",
+    "ref": "Trafikkreglene § 17 nr. 1",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-65",
+    "source_id": 65,
+    "category": "stans",
+    "statement": {
+      "no": "Du må ikke stanse på et gangfelt eller nærmere enn 5 meter foran det.",
+      "th": "คุณต้องไม่หยุดรถบนทางม้าลายหรือก่อนถึงทางม้าลายน้อยกว่า 5 เมตร",
+      "en": "You must not stop on a pedestrian crossing or closer than 5 metres in front of it."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Stansforbud gjelder på gangfelt og sykkelkryssing og 5 meter foran slike steder.",
+      "th": "ห้ามหยุดรถบนทางม้าลายและทางข้ามจักรยาน และ 5 เมตรก่อนถึงจุดนั้น",
+      "en": "The stopping ban applies on pedestrian and cycle crossings and 5 metres before such places."
+    },
+    "alt": {
+      "no": "Bil ved fortau i en norsk by",
+      "th": "รถริมทางเท้าในเมืองนอร์เวย์",
+      "en": "Car by a pavement in a Norwegian town"
+    },
+    "image": "flipp_flopp_theme_stans.png",
+    "fagord": "Stansforbud",
+    "ref": "Trafikkreglene § 17 nr. 1",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-66",
+    "source_id": 66,
+    "category": "stans",
+    "statement": {
+      "no": "Du kan stanse helt eller delvis på fortauet hvis det bare tar et øyeblikk.",
+      "th": "คุณหยุดรถบนทางเท้าทั้งคันหรือบางส่วนได้ ถ้าใช้เวลาแค่ครู่เดียว",
+      "en": "You can stop fully or partly on the pavement if it only takes a moment."
+    },
+    "truth": false,
+    "answer": {
+      "no": "Nei",
+      "th": "ไม่ใช่",
+      "en": "No"
+    },
+    "explanation": {
+      "no": "Det er forbudt å stanse helt eller delvis på fortau, gangvei eller sykkelvei.",
+      "th": "ห้ามหยุดรถบนทางเท้า ทางเดิน หรือทางจักรยาน ไม่ว่าทั้งคันหรือบางส่วน",
+      "en": "It is prohibited to stop fully or partly on a pavement, footpath or cycle path."
+    },
+    "alt": {
+      "no": "Bil ved fortau i en norsk by",
+      "th": "รถริมทางเท้าในเมืองนอร์เวย์",
+      "en": "Car by a pavement in a Norwegian town"
+    },
+    "image": "flipp_flopp_theme_stans.png",
+    "fagord": "Stansforbud",
+    "ref": "Trafikkreglene § 17 nr. 1",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-67",
+    "source_id": 67,
+    "category": "stans",
+    "statement": {
+      "no": "Det er forbudt å stanse i en uoversiktlig kurve, på en bakketopp eller i en tunnel.",
+      "th": "ห้ามหยุดรถในทางโค้งที่มองไม่เห็น บนยอดเนิน หรือในอุโมงค์",
+      "en": "It is prohibited to stop in a blind bend, on the crest of a hill or in a tunnel."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Stansforbudet gjelder på steder der andre ikke kan se deg i tide.",
+      "th": "ข้อห้ามหยุดรถใช้กับจุดที่ผู้อื่นมองไม่เห็นคุณทันเวลา",
+      "en": "The ban applies in places where others cannot see you in time."
+    },
+    "alt": {
+      "no": "Bil ved fortau i en norsk by",
+      "th": "รถริมทางเท้าในเมืองนอร์เวย์",
+      "en": "Car by a pavement in a Norwegian town"
+    },
+    "image": "flipp_flopp_theme_stans.png",
+    "fagord": "Stansforbud",
+    "ref": "Trafikkreglene § 17 nr. 1",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-68",
+    "source_id": 68,
+    "category": "stans",
+    "statement": {
+      "no": "Du kan stanse i kollektivfeltet for å slippe av en passasjer.",
+      "th": "คุณหยุดรถในเลนรถประจำทางเพื่อส่งผู้โดยสารลงได้",
+      "en": "You can stop in the bus lane to drop off a passenger."
+    },
+    "truth": false,
+    "answer": {
+      "no": "Nei",
+      "th": "ไม่ใช่",
+      "en": "No"
+    },
+    "explanation": {
+      "no": "Det er forbudt å stanse i kollektivfelt. Unntaket gjelder buss og sporvogn på holdeplass.",
+      "th": "ห้ามหยุดรถในเลนรถประจำทาง ข้อยกเว้นมีเฉพาะรถบัสและรถรางที่ป้ายหยุดรถ",
+      "en": "It is prohibited to stop in a bus lane. The exception is buses and trams at a stop."
+    },
+    "alt": {
+      "no": "Bil ved fortau i en norsk by",
+      "th": "รถริมทางเท้าในเมืองนอร์เวย์",
+      "en": "Car by a pavement in a Norwegian town"
+    },
+    "image": "flipp_flopp_theme_stans.png",
+    "fagord": "Kollektivfelt",
+    "ref": "Trafikkreglene § 17 nr. 1",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-69",
+    "source_id": 69,
+    "category": "stans",
+    "statement": {
+      "no": "Du må ikke stanse nærmere enn 5 meter fra en planovergang.",
+      "th": "คุณต้องไม่หยุดรถใกล้ทางตัดรถไฟน้อยกว่า 5 เมตร",
+      "en": "You must not stop closer than 5 metres from a level crossing."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Stansforbud gjelder nærmere enn 5 meter fra planovergang.",
+      "th": "ห้ามหยุดรถใกล้ทางตัดรถไฟน้อยกว่า 5 เมตร",
+      "en": "The stopping ban applies closer than 5 metres from a level crossing."
+    },
+    "alt": {
+      "no": "Bil ved fortau i en norsk by",
+      "th": "รถริมทางเท้าในเมืองนอร์เวย์",
+      "en": "Car by a pavement in a Norwegian town"
+    },
+    "image": "flipp_flopp_theme_stans.png",
+    "fagord": "Planovergang",
+    "ref": "Trafikkreglene § 17 nr. 1",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-70",
+    "source_id": 70,
+    "category": "stans",
+    "statement": {
+      "no": "Det er forbudt å stanse på motorvei og på inn- og utkjøringsveiene til den.",
+      "th": "ห้ามหยุดรถบนมอเตอร์เวย์และทางเข้าออกของมอเตอร์เวย์",
+      "en": "It is prohibited to stop on a motorway and on its entry and exit roads."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Stansforbudet gjelder motorvei, motortrafikkvei og inn- og utkjøringsveier.",
+      "th": "ข้อห้ามหยุดรถใช้บนมอเตอร์เวย์ ทางด่วนมอเตอร์ และทางเข้าออก",
+      "en": "The stopping ban applies to motorways, motor traffic roads and their entry and exit roads."
+    },
+    "alt": {
+      "no": "Bil ved fortau i en norsk by",
+      "th": "รถริมทางเท้าในเมืองนอร์เวย์",
+      "en": "Car by a pavement in a Norwegian town"
+    },
+    "image": "flipp_flopp_theme_stans.png",
+    "fagord": "Motorvei",
+    "ref": "Trafikkreglene § 17 nr. 1",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-71",
+    "source_id": 71,
+    "category": "stans",
+    "statement": {
+      "no": "Du må ikke stanse nærmere enn 20 meter fra skiltet for en holdeplass for buss, drosje eller sporvogn.",
+      "th": "คุณต้องไม่หยุดรถใกล้ป้ายหยุดรถประจำทาง แท็กซี่ หรือรถรางน้อยกว่า 20 เมตร",
+      "en": "You must not stop closer than 20 metres from the sign for a bus, taxi or tram stop."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Stansforbudet gjelder også på vegutvidelsen for holdeplassen og nærmere enn 20 meter fra skiltet.",
+      "th": "ข้อห้ามใช้กับช่องจอดของป้ายและระยะน้อยกว่า 20 เมตรจากป้ายเช่นกัน",
+      "en": "The ban also applies on the widened part of the road at the stop and closer than 20 metres from the sign."
+    },
+    "alt": {
+      "no": "Bil ved fortau i en norsk by",
+      "th": "รถริมทางเท้าในเมืองนอร์เวย์",
+      "en": "Car by a pavement in a Norwegian town"
+    },
+    "image": "flipp_flopp_theme_stans.png",
+    "fagord": "Holdeplass",
+    "ref": "Trafikkreglene § 17 nr. 1",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-72",
+    "source_id": 72,
+    "category": "signal_lys",
+    "statement": {
+      "no": "Før du svinger eller endrer plassering i sideretning, skal du gi tegn.",
+      "th": "ก่อนเลี้ยวหรือเปลี่ยนตำแหน่งไปด้านข้าง คุณต้องให้สัญญาณ",
+      "en": "Before you turn or move sideways, you must signal."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Du skal gi tegn med blinklys når du svinger eller på annen måte flytter bilen til siden.",
+      "th": "คุณต้องเปิดไฟเลี้ยวเมื่อเลี้ยวหรือเคลื่อนรถไปด้านข้าง",
+      "en": "You must use your indicator when you turn or otherwise move the car sideways."
+    },
+    "alt": {
+      "no": "Biler og lys i en norsk bygate",
+      "th": "รถและแสงไฟบนถนนในเมืองนอร์เวย์",
+      "en": "Cars and lights on a Norwegian city street"
+    },
+    "image": "flipp_flopp_theme_signal_lys.png",
+    "fagord": "Tegn ved svinging",
+    "ref": "Trafikkreglene § 14 nr. 2",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-73",
+    "source_id": 73,
+    "category": "signal_lys",
+    "statement": {
+      "no": "Det er lov å tute for å si hei til en venn som står ved veien.",
+      "th": "การบีบแตรทักทายเพื่อนที่ยืนข้างถนนทำได้",
+      "en": "It is allowed to honk to say hello to a friend standing by the road."
+    },
+    "truth": false,
+    "answer": {
+      "no": "Nei",
+      "th": "ไม่ใช่",
+      "en": "No"
+    },
+    "explanation": {
+      "no": "Unødig eller hensynsløs bruk av lyd- og lyssignal er forbudt.",
+      "th": "ห้ามใช้สัญญาณเสียงหรือสัญญาณไฟโดยไม่จำเป็นหรือโดยไม่เกรงใจผู้อื่น",
+      "en": "Unnecessary or inconsiderate use of sound and light signals is prohibited."
+    },
+    "alt": {
+      "no": "Biler og lys i en norsk bygate",
+      "th": "รถและแสงไฟบนถนนในเมืองนอร์เวย์",
+      "en": "Cars and lights on a Norwegian city street"
+    },
+    "image": "flipp_flopp_theme_signal_lys.png",
+    "fagord": "Unødig bruk av horn",
+    "ref": "Trafikkreglene § 14 nr. 1",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-74",
+    "source_id": 74,
+    "category": "signal_lys",
+    "statement": {
+      "no": "Utrykningskjøretøy varsler med blinkende blått lys, og kjøretøy ved vegarbeid kan varsle med blinkende gult lys.",
+      "th": "รถฉุกเฉินแจ้งด้วยไฟสีน้ำเงินกะพริบ และรถที่ทำงานบนถนนอาจแจ้งด้วยไฟสีเหลืองกะพริบ",
+      "en": "Emergency vehicles warn with flashing blue lights, and vehicles at roadworks may warn with flashing yellow lights."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Blått blink betyr utrykning. Gult blink brukes ved vegarbeid når det er nødvendig for å hindre fare.",
+      "th": "ไฟน้ำเงินกะพริบหมายถึงรถฉุกเฉิน ไฟเหลืองกะพริบใช้ตอนทำงานบนถนนเมื่อจำเป็นเพื่อป้องกันอันตราย",
+      "en": "Blue flashing means an emergency. Yellow flashing is used at roadworks when needed to prevent danger."
+    },
+    "alt": {
+      "no": "Biler og lys i en norsk bygate",
+      "th": "รถและแสงไฟบนถนนในเมืองนอร์เวย์",
+      "en": "Cars and lights on a Norwegian city street"
+    },
+    "image": "flipp_flopp_theme_signal_lys.png",
+    "fagord": "Blinkende lys",
+    "ref": "Trafikkreglene § 14 nr. 3",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-75",
+    "source_id": 75,
+    "category": "signal_lys",
+    "statement": {
+      "no": "Du må ikke bruke fjernlys slik at andre blir blendet.",
+      "th": "คุณต้องไม่ใช้ไฟสูงจนทำให้ผู้อื่นตาพร่า",
+      "en": "You must not use full beam in a way that dazzles others."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Fjernlys skal ikke blende møtende trafikanter, og du bruker nærlys når fjernlys ikke er påkrevd eller tillatt.",
+      "th": "ไฟสูงต้องไม่ทำให้ผู้ใช้ถนนที่สวนมาตาพร่า และให้ใช้ไฟต่ำเมื่อไม่จำเป็นหรือไม่อนุญาตให้ใช้ไฟสูง",
+      "en": "Full beam must not dazzle oncoming road users, and you use dipped beam when full beam is not needed or allowed."
+    },
+    "alt": {
+      "no": "Biler og lys i en norsk bygate",
+      "th": "รถและแสงไฟบนถนนในเมืองนอร์เวย์",
+      "en": "Cars and lights on a Norwegian city street"
+    },
+    "image": "flipp_flopp_theme_signal_lys.png",
+    "fagord": "Fjernlys",
+    "ref": "Trafikkreglene § 15 nr. 2 og 3",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-76",
+    "source_id": 76,
+    "category": "signal_lys",
+    "statement": {
+      "no": "Du kan la nærlyset stå på når du parkerer, så bilen synes i mørket.",
+      "th": "คุณเปิดไฟต่ำค้างไว้ตอนจอดรถได้ เพื่อให้รถมองเห็นในที่มืด",
+      "en": "You can leave your dipped beam on when you park, so the car is visible in the dark."
+    },
+    "truth": false,
+    "answer": {
+      "no": "Nei",
+      "th": "ไม่ใช่",
+      "en": "No"
+    },
+    "explanation": {
+      "no": "Fjernlys og nærlys må ikke være på under stans eller parkering. Bruk parkeringslys når det er påkrevd.",
+      "th": "ห้ามเปิดไฟสูงและไฟต่ำขณะหยุดหรือจอดรถ ให้ใช้ไฟจอดเมื่อจำเป็น",
+      "en": "Full beam and dipped beam must not be on while stopped or parked. Use parking lights when needed."
+    },
+    "alt": {
+      "no": "Biler og lys i en norsk bygate",
+      "th": "รถและแสงไฟบนถนนในเมืองนอร์เวย์",
+      "en": "Cars and lights on a Norwegian city street"
+    },
+    "image": "flipp_flopp_theme_signal_lys.png",
+    "fagord": "Parkeringslys",
+    "ref": "Trafikkreglene § 15 nr. 4",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-77",
+    "source_id": 77,
+    "category": "signal_lys",
+    "statement": {
+      "no": "Når du kjører, må du alltid ha påbudt fjernlys, nærlys eller godkjent kjørelys på.",
+      "th": "ขณะขับรถ คุณต้องเปิดไฟสูง ไฟต่ำ หรือไฟวิ่งกลางวันที่ได้รับอนุมัติเสมอ",
+      "en": "When driving, you must always have full beam, dipped beam or approved daytime running lights on."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Det gjelder også på lyse dager. Er det mørkt eller dårlig sikt, skal påbudt lys være tent.",
+      "th": "ใช้ในตอนกลางวันด้วย และเมื่อมืดหรือทัศนวิสัยไม่ดี ต้องเปิดไฟที่กฎหมายกำหนด",
+      "en": "This also applies in daylight. In the dark or poor visibility, the required lights must be on."
+    },
+    "alt": {
+      "no": "Biler og lys i en norsk bygate",
+      "th": "รถและแสงไฟบนถนนในเมืองนอร์เวย์",
+      "en": "Cars and lights on a Norwegian city street"
+    },
+    "image": "flipp_flopp_theme_signal_lys.png",
+    "fagord": "Kjørelys",
+    "ref": "Trafikkreglene § 15 nr. 1",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-78",
+    "source_id": 78,
+    "category": "fart_hensyn",
+    "statement": {
+      "no": "Du kan la motoren gå på tomgang så lenge du vil utenfor boligene.",
+      "th": "คุณปล่อยให้เครื่องยนต์เดินเบาหน้าบ้านได้นานเท่าที่ต้องการ",
+      "en": "You can let the engine idle for as long as you want outside homes."
+    },
+    "truth": false,
+    "answer": {
+      "no": "Nei",
+      "th": "ไม่ใช่",
+      "en": "No"
+    },
+    "explanation": {
+      "no": "I eller ved bebyggelse må det ikke være unødvendig tomgang, støy eller utslipp.",
+      "th": "ในหรือใกล้ที่อยู่อาศัย ห้ามเดินเบา ส่งเสียงดัง หรือปล่อยควันโดยไม่จำเป็น",
+      "en": "In or near built-up areas there must be no unnecessary idling, noise or emissions."
+    },
+    "alt": {
+      "no": "Bil og fotgjengere i et norsk boligområde",
+      "th": "รถและคนเดินเท้าในย่านที่อยู่อาศัยของนอร์เวย์",
+      "en": "Car and pedestrians in a Norwegian neighbourhood"
+    },
+    "image": "flipp_flopp_theme_fart_hensyn.png",
+    "fagord": "Tomgang og støy",
+    "ref": "Trafikkreglene § 16 nr. 1",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-79",
+    "source_id": 79,
+    "category": "fart_hensyn",
+    "statement": {
+      "no": "Du må kunne stanse på den strekningen du har oversikt over, og foran enhver påregnelig hindring.",
+      "th": "คุณต้องหยุดรถได้ภายในช่วงถนนที่มองเห็น และก่อนถึงสิ่งกีดขวางที่คาดการณ์ได้",
+      "en": "You must be able to stop within the stretch of road you can see, and before any foreseeable obstacle."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Farten skal tilpasses sikten, slik at du alltid rekker å stoppe.",
+      "th": "ต้องปรับความเร็วให้เหมาะกับทัศนวิสัย เพื่อให้หยุดทันเสมอ",
+      "en": "Adjust your speed to visibility so you can always stop in time."
+    },
+    "alt": {
+      "no": "Bil og fotgjengere i et norsk boligområde",
+      "th": "รถและคนเดินเท้าในย่านที่อยู่อาศัยของนอร์เวย์",
+      "en": "Car and pedestrians in a Norwegian neighbourhood"
+    },
+    "image": "flipp_flopp_theme_fart_hensyn.png",
+    "fagord": "Stanse på oversiktlig strekning",
+    "ref": "Trafikkreglene § 13 nr. 1",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-80",
+    "source_id": 80,
+    "category": "fart_hensyn",
+    "statement": {
+      "no": "Når det er barn på eller ved veien, skal du kjøre med særlig liten fart.",
+      "th": "เมื่อมีเด็กอยู่บนหรือข้างถนน คุณต้องขับด้วยความเร็วต่ำเป็นพิเศษ",
+      "en": "When there are children on or by the road, you must drive very slowly."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Det gjelder også ved skolepatrulje, personer med hvit stokk eller førerhund, og stoppet buss ved holdeplass.",
+      "th": "ใช้เหมือนกันกับเด็กนักเรียนที่ทำหน้าที่ดูแลทางข้าม ผู้ถือไม้เท้าขาวหรือมีสุนัขนำทาง และรถบัสที่หยุดอยู่ที่ป้าย",
+      "en": "The same applies near school patrols, people with a white cane or guide dog, and a stopped bus at a stop."
+    },
+    "alt": {
+      "no": "Bil og fotgjengere i et norsk boligområde",
+      "th": "รถและคนเดินเท้าในย่านที่อยู่อาศัยของนอร์เวย์",
+      "en": "Car and pedestrians in a Norwegian neighbourhood"
+    },
+    "image": "flipp_flopp_theme_fart_hensyn.png",
+    "fagord": "Særlig liten fart",
+    "ref": "Trafikkreglene § 13 nr. 2",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-81",
+    "source_id": 81,
+    "category": "fart_hensyn",
+    "statement": {
+      "no": "Når en buss står stille ved en holdeplass, skal du kjøre med særlig liten fart forbi den.",
+      "th": "เมื่อรถบัสจอดอยู่ที่ป้าย คุณต้องขับผ่านด้วยความเร็วต่ำเป็นพิเศษ",
+      "en": "When a bus is standing at a bus stop, you must pass it at very low speed."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Passasjerer kan gå av og på, og noen kan løpe ut foran eller bak bussen.",
+      "th": "ผู้โดยสารอาจขึ้นลงรถ และบางคนอาจวิ่งออกมาจากด้านหน้าหรือด้านหลังรถบัส",
+      "en": "Passengers may get on and off, and someone may run out in front of or behind the bus."
+    },
+    "alt": {
+      "no": "Bil og fotgjengere i et norsk boligområde",
+      "th": "รถและคนเดินเท้าในย่านที่อยู่อาศัยของนอร์เวย์",
+      "en": "Car and pedestrians in a Norwegian neighbourhood"
+    },
+    "image": "flipp_flopp_theme_fart_hensyn.png",
+    "fagord": "Stoppet buss",
+    "ref": "Trafikkreglene § 13 nr. 2",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-82",
+    "source_id": 82,
+    "category": "fart_hensyn",
+    "statement": {
+      "no": "På en gågate kan du kjøre 30 km/t.",
+      "th": "บนถนนคนเดิน คุณขับได้ 30 กม./ชม.",
+      "en": "On a pedestrian street you can drive 30 km/h."
+    },
+    "truth": false,
+    "answer": {
+      "no": "Nei",
+      "th": "ไม่ใช่",
+      "en": "No"
+    },
+    "explanation": {
+      "no": "På gågate og gatetun må du ikke kjøre fortere enn gangfart.",
+      "th": "บนถนนคนเดินและพื้นที่ใกล้เคียง ห้ามขับเร็วกว่าความเร็วการเดิน",
+      "en": "On pedestrian streets and shared yards you must not drive faster than walking speed."
+    },
+    "alt": {
+      "no": "Bil og fotgjengere i et norsk boligområde",
+      "th": "รถและคนเดินเท้าในย่านที่อยู่อาศัยของนอร์เวย์",
+      "en": "Car and pedestrians in a Norwegian neighbourhood"
+    },
+    "image": "flipp_flopp_theme_fart_hensyn.png",
+    "fagord": "Gågate",
+    "ref": "Trafikkreglene § 13 nr. 3",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-83",
+    "source_id": 83,
+    "category": "fart_hensyn",
+    "statement": {
+      "no": "Når du ser en person med hvit stokk eller førerhund, skal du kjøre med særlig liten fart.",
+      "th": "เมื่อเห็นผู้ถือไม้เท้าขาวหรือมีสุนัขนำทาง คุณต้องขับด้วยความเร็วต่ำเป็นพิเศษ",
+      "en": "When you see a person with a white cane or guide dog, you must drive very slowly."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Slike personer kan ha vansker med å se eller høre trafikken.",
+      "th": "คนเหล่านี้อาจมองเห็นหรือได้ยินการจราจรได้ยาก",
+      "en": "These people may have difficulty seeing or hearing the traffic."
+    },
+    "alt": {
+      "no": "Bil og fotgjengere i et norsk boligområde",
+      "th": "รถและคนเดินเท้าในย่านที่อยู่อาศัยของนอร์เวย์",
+      "en": "Car and pedestrians in a Norwegian neighbourhood"
+    },
+    "image": "flipp_flopp_theme_fart_hensyn.png",
+    "fagord": "Hvit stokk",
+    "ref": "Trafikkreglene § 13 nr. 2",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-84",
+    "source_id": 84,
+    "category": "fart_hensyn",
+    "statement": {
+      "no": "Et kjøretøy over 3500 kg totalvekt kan som hovedregel ikke kjøre fortere enn 80 km/t, selv der fartsgrensen er høyere.",
+      "th": "รถที่มีน้ำหนักรวมเกิน 3,500 กก. โดยหลักแล้วขับเร็วกว่า 80 กม./ชม. ไม่ได้ แม้ถนนจะอนุญาตสูงกว่า",
+      "en": "A vehicle over 3,500 kg total weight can, as a main rule, not drive faster than 80 km/h, even where the limit is higher."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Det gjelder også kjøretøy med tilhenger. Noen kjøretøy har unntak.",
+      "th": "ใช้กับรถที่ลากพ่วงด้วย รถบางประเภทมีข้อยกเว้น",
+      "en": "This also applies to vehicles with a trailer. Some vehicles have exceptions."
+    },
+    "alt": {
+      "no": "Bil og fotgjengere i et norsk boligområde",
+      "th": "รถและคนเดินเท้าในย่านที่อยู่อาศัยของนอร์เวย์",
+      "en": "Car and pedestrians in a Norwegian neighbourhood"
+    },
+    "image": "flipp_flopp_theme_fart_hensyn.png",
+    "fagord": "Tunge kjøretøy",
+    "ref": "Trafikkreglene § 13 nr. 4",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-85",
+    "source_id": 85,
+    "category": "syklende_gaende",
+    "statement": {
+      "no": "Syklende kan kjøre forbi til høyre for andre kjøretøy enn sykkel og liten elektrisk motorvogn.",
+      "th": "ผู้ขี่จักรยานสามารถแซงทางขวารถอื่นที่ไม่ใช่จักรยานและรถไฟฟ้าขนาดเล็กได้",
+      "en": "Cyclists may pass on the right of vehicles other than bicycles and small electric vehicles."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Det er et unntak fra hovedregelen om forbikjøring til venstre.",
+      "th": "นี่เป็นข้อยกเว้นของหลักการแซงทางซ้าย",
+      "en": "This is an exception to the main rule of overtaking on the left."
+    },
+    "alt": {
+      "no": "Syklist og fotgjenger i en norsk bygate",
+      "th": "คนขี่จักรยานและคนเดินเท้าบนถนนในเมืองนอร์เวย์",
+      "en": "Cyclist and pedestrian on a Norwegian city street"
+    },
+    "image": "flipp_flopp_theme_syklende_gaende.png",
+    "fagord": "Syklende forbi til høyre",
+    "ref": "Trafikkreglene § 18 nr. 1",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-86",
+    "source_id": 86,
+    "category": "syklende_gaende",
+    "statement": {
+      "no": "En syklist som skal svinge til venstre, kan holde seg til høyre på veien og svinge der det passer, men har vikeplikt for andre.",
+      "th": "ผู้ขี่จักรยานที่จะเลี้ยวซ้ายอาจชิดขวาไว้และเลี้ยวตรงจุดที่เหมาะสม แต่ต้องให้ทางผู้อื่น",
+      "en": "A cyclist who wants to turn left may stay on the right and turn where it suits, but must give way to others."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Syklisten svinger ikke fra midten, men må vike for annen trafikk.",
+      "th": "ผู้ขี่จักรยานไม่ได้เลี้ยวจากกลางถนน แต่ต้องให้ทางการจราจรอื่น",
+      "en": "The cyclist does not turn from the middle, but must give way to other traffic."
+    },
+    "alt": {
+      "no": "Syklist og fotgjenger i en norsk bygate",
+      "th": "คนขี่จักรยานและคนเดินเท้าบนถนนในเมืองนอร์เวย์",
+      "en": "Cyclist and pedestrian on a Norwegian city street"
+    },
+    "image": "flipp_flopp_theme_syklende_gaende.png",
+    "fagord": "Syklende og venstresving",
+    "ref": "Trafikkreglene § 18 nr. 2",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-87",
+    "source_id": 87,
+    "category": "syklende_gaende",
+    "statement": {
+      "no": "Det er alltid forbudt å sykle på fortau.",
+      "th": "ห้ามขี่จักรยานบนทางเท้าเสมอ",
+      "en": "Cycling on the pavement is always prohibited."
+    },
+    "truth": false,
+    "answer": {
+      "no": "Nei",
+      "th": "ไม่ใช่",
+      "en": "No"
+    },
+    "explanation": {
+      "no": "Sykling på fortau er tillatt når det er lite gangtrafikk og syklingen ikke er farlig eller til hinder for gående.",
+      "th": "ขี่จักรยานบนทางเท้าได้เมื่อมีคนเดินน้อยและไม่เป็นอันตรายหรือกีดขวางคนเดิน",
+      "en": "Cycling on the pavement is allowed when pedestrian traffic is light and the cycling is not dangerous or in the way of pedestrians."
+    },
+    "alt": {
+      "no": "Syklist og fotgjenger i en norsk bygate",
+      "th": "คนขี่จักรยานและคนเดินเท้าบนถนนในเมืองนอร์เวย์",
+      "en": "Cyclist and pedestrian on a Norwegian city street"
+    },
+    "image": "flipp_flopp_theme_syklende_gaende.png",
+    "fagord": "Sykling på fortau",
+    "ref": "Trafikkreglene § 18 nr. 3",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-88",
+    "source_id": 88,
+    "category": "syklende_gaende",
+    "statement": {
+      "no": "En sykkel kan parkeres på fortauet hvis den ikke er til unødig hinder.",
+      "th": "จอดจักรยานบนทางเท้าได้ ถ้าไม่กีดขวางเกินความจำเป็น",
+      "en": "A bicycle may be parked on the pavement if it is not an unnecessary obstacle."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Sykkel kan stanses eller parkeres på sykkelvei, gangvei, fortau, gågate eller gatetun hvis den ikke er til unødig hinder eller ulempe.",
+      "th": "หยุดหรือจอดจักรยานบนทางจักรยาน ทางเดิน ทางเท้า หรือถนนคนเดินได้ ถ้าไม่เป็นอุปสรรคเกินควร",
+      "en": "A bicycle may be stopped or parked on a cycle path, footpath, pavement or pedestrian street if it is not an unnecessary hindrance."
+    },
+    "alt": {
+      "no": "Syklist og fotgjenger i en norsk bygate",
+      "th": "คนขี่จักรยานและคนเดินเท้าบนถนนในเมืองนอร์เวย์",
+      "en": "Cyclist and pedestrian on a Norwegian city street"
+    },
+    "image": "flipp_flopp_theme_syklende_gaende.png",
+    "fagord": "Parkering av sykkel",
+    "ref": "Trafikkreglene § 18 nr. 4",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-89",
+    "source_id": 89,
+    "category": "syklende_gaende",
+    "statement": {
+      "no": "Du må ikke kjøre bil på fortau eller gangvei.",
+      "th": "คุณต้องไม่ขับรถบนทางเท้าหรือทางเดิน",
+      "en": "You must not drive a car on a pavement or footpath."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Kjørende skal bruke kjørebanen. Det er forbudt å kjøre på fortau eller gangvei.",
+      "th": "ผู้ขับขี่ต้องใช้ผิวถนน ห้ามขับบนทางเท้าหรือทางเดิน",
+      "en": "Drivers must use the carriageway. Driving on pavements or footpaths is prohibited."
+    },
+    "alt": {
+      "no": "Syklist og fotgjenger i en norsk bygate",
+      "th": "คนขี่จักรยานและคนเดินเท้าบนถนนในเมืองนอร์เวย์",
+      "en": "Cyclist and pedestrian on a Norwegian city street"
+    },
+    "image": "flipp_flopp_theme_syklende_gaende.png",
+    "fagord": "Bruk av kjørebane",
+    "ref": "Trafikkreglene § 4 nr. 1",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-90",
+    "source_id": 90,
+    "category": "syklende_gaende",
+    "statement": {
+      "no": "Mopeder får kjøre på motorvei.",
+      "th": "มอเตอร์ไซค์ขนาดเล็กขับบนมอเตอร์เวย์ได้",
+      "en": "Mopeds are allowed on motorways."
+    },
+    "truth": false,
+    "answer": {
+      "no": "Nei",
+      "th": "ไม่ใช่",
+      "en": "No"
+    },
+    "explanation": {
+      "no": "Moped må ikke kjøres på motorvei eller motortrafikkvei.",
+      "th": "ห้ามขับมอเตอร์ไซค์ขนาดเล็กบนมอเตอร์เวย์หรือทางด่วนมอเตอร์",
+      "en": "Mopeds must not be driven on a motorway or motor traffic road."
+    },
+    "alt": {
+      "no": "Syklist og fotgjenger i en norsk bygate",
+      "th": "คนขี่จักรยานและคนเดินเท้าบนถนนในเมืองนอร์เวย์",
+      "en": "Cyclist and pedestrian on a Norwegian city street"
+    },
+    "image": "flipp_flopp_theme_syklende_gaende.png",
+    "fagord": "Moped på motorvei",
+    "ref": "Trafikkreglene § 4 nr. 2",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-91",
+    "source_id": 91,
+    "category": "syklende_gaende",
+    "statement": {
+      "no": "På motorvei er det bare tillatt med motorvogner som lovlig kan kjøre minst 40 km/t på flat vei.",
+      "th": "บนมอเตอร์เวย์ อนุญาตเฉพาะยานยนต์ที่ขับได้อย่างถูกกฎหมายอย่างน้อย 40 กม./ชม. บนทางราบ",
+      "en": "On a motorway only motor vehicles that can legally drive at least 40 km/h on level ground are allowed."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Langsomme kjøretøy hører ikke hjemme på motorvei.",
+      "th": "ยานพาหนะที่ช้าไม่ควรอยู่บนมอเตอร์เวย์",
+      "en": "Slow vehicles do not belong on a motorway."
+    },
+    "alt": {
+      "no": "Syklist og fotgjenger i en norsk bygate",
+      "th": "คนขี่จักรยานและคนเดินเท้าบนถนนในเมืองนอร์เวย์",
+      "en": "Cyclist and pedestrian on a Norwegian city street"
+    },
+    "image": "flipp_flopp_theme_syklende_gaende.png",
+    "fagord": "Motorvei",
+    "ref": "Trafikkreglene § 4 nr. 2",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-92",
+    "source_id": 92,
+    "category": "syklende_gaende",
+    "statement": {
+      "no": "Gående skal krysse kjørebanen i gangfelt når det finnes i nærheten.",
+      "th": "คนเดินเท้าต้องข้ามถนนที่ทางม้าลายเมื่อมีอยู่ใกล้ ๆ",
+      "en": "Pedestrians must cross the road at a pedestrian crossing when there is one nearby."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Krysser de andre steder, må de sørge for at det ikke blir fare eller hindring for trafikken.",
+      "th": "ถ้าข้ามที่อื่น ต้องแน่ใจว่าไม่เกิดอันตรายหรือกีดขวางการจราจร",
+      "en": "If they cross elsewhere, they must make sure it does not cause danger or obstruction."
+    },
+    "alt": {
+      "no": "Syklist og fotgjenger i en norsk bygate",
+      "th": "คนขี่จักรยานและคนเดินเท้าบนถนนในเมืองนอร์เวย์",
+      "en": "Cyclist and pedestrian on a Norwegian city street"
+    },
+    "image": "flipp_flopp_theme_syklende_gaende.png",
+    "fagord": "Gående og gangfelt",
+    "ref": "Trafikkreglene § 19 nr. 2",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-93",
+    "source_id": 93,
+    "category": "syklende_gaende",
+    "statement": {
+      "no": "Gående skal bruke gangvei, fortau eller veiskulder når det er mulig.",
+      "th": "คนเดินเท้าต้องใช้ทางเดิน ทางเท้า หรือไหล่ทางเมื่อทำได้",
+      "en": "Pedestrians must use footpaths, pavements or the road shoulder when possible."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Bare når det ikke er mulig eller rimelig, kan de gå på sykkelvei, sykkelfelt eller kjørebane.",
+      "th": "ต่อเมื่อทำไม่ได้หรือไม่สมเหตุสมผลเท่านั้น จึงเดินบนทางจักรยานหรือผิวถนนได้",
+      "en": "Only when that is not possible or reasonable may they use a cycle path, cycle lane or the carriageway."
+    },
+    "alt": {
+      "no": "Syklist og fotgjenger i en norsk bygate",
+      "th": "คนขี่จักรยานและคนเดินเท้าบนถนนในเมืองนอร์เวย์",
+      "en": "Cyclist and pedestrian on a Norwegian city street"
+    },
+    "image": "flipp_flopp_theme_syklende_gaende.png",
+    "fagord": "Gående og fortau",
+    "ref": "Trafikkreglene § 19 nr. 1",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-94",
+    "source_id": 94,
+    "category": "vikeplikt",
+    "statement": {
+      "no": "Når du svinger inn over et fortau, har du vikeplikt for gående som går på fortauet.",
+      "th": "เมื่อคุณเลี้ยวข้ามทางเท้า คุณต้องให้ทางคนเดินที่อยู่บนทางเท้า",
+      "en": "When you turn in across a pavement, you must give way to pedestrians on the pavement."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Den som svinger inn over fortau har vikeplikt for gående, syklende og fører av liten elektrisk motorvogn på fortauet.",
+      "th": "ผู้ที่เลี้ยวข้ามทางเท้าต้องให้ทางคนเดิน ผู้ขี่จักรยาน และผู้ใช้รถไฟฟ้าขนาดเล็กบนทางเท้า",
+      "en": "Anyone turning in across a pavement must give way to pedestrians, cyclists and small electric vehicles on the pavement."
+    },
+    "alt": {
+      "no": "To biler i et norsk veikryss",
+      "th": "รถสองคันที่ทางแยกในนอร์เวย์",
+      "en": "Two cars at a Norwegian intersection"
+    },
+    "image": "flipp_flopp_theme_vikeplikt.png",
+    "fagord": "Svinging over fortau",
+    "ref": "Trafikkreglene § 7 nr. 3",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-95",
+    "source_id": 95,
+    "category": "vikeplikt",
+    "statement": {
+      "no": "Du kommer fra høyre i et kryss uten skilt. Da har du vikeplikt for biler fra venstre.",
+      "th": "คุณมาจากทางขวาในทางแยกที่ไม่มีป้าย คุณต้องให้ทางรถที่มาจากทางซ้าย",
+      "en": "You come from the right at an unsigned junction. You must give way to cars from the left."
+    },
+    "truth": false,
+    "answer": {
+      "no": "Nei",
+      "th": "ไม่ใช่",
+      "en": "No"
+    },
+    "explanation": {
+      "no": "Du har ikke vikeplikt for biler fra venstre. De har deg på sin høyre side og må vike for deg.",
+      "th": "คุณไม่ต้องให้ทางรถจากทางซ้าย เพราะคุณอยู่ทางขวาของพวกเขา พวกเขาต้องให้ทางคุณ",
+      "en": "You do not have to give way to cars from the left. You are on their right and they must give way to you."
+    },
+    "alt": {
+      "no": "To biler i et norsk veikryss",
+      "th": "รถสองคันที่ทางแยกในนอร์เวย์",
+      "en": "Two cars at a Norwegian intersection"
+    },
+    "image": "flipp_flopp_theme_vikeplikt.png",
+    "fagord": "Høyreregelen",
+    "ref": "Trafikkreglene § 7 nr. 2",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-96",
+    "source_id": 96,
+    "category": "vikeplikt",
+    "statement": {
+      "no": "Du må ikke hindre eller forstyrre en begravelsesfølge eller en militær kjøretøykolonne.",
+      "th": "คุณต้องไม่กีดขวางหรือรบกวนขบวนศพหรือขบวนยานพาหนะทหาร",
+      "en": "You must not obstruct or disturb a funeral procession or a military vehicle column."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Det gjelder også prosesjoner og gående grupper under tilsyn av leder.",
+      "th": "ใช้กับขบวนแห่และกลุ่มคนเดินที่มีผู้นำดูแลด้วย",
+      "en": "This also applies to processions and groups of pedestrians under the supervision of a leader."
+    },
+    "alt": {
+      "no": "To biler i et norsk veikryss",
+      "th": "รถสองคันที่ทางแยกในนอร์เวย์",
+      "en": "Two cars at a Norwegian intersection"
+    },
+    "image": "flipp_flopp_theme_vikeplikt.png",
+    "fagord": "Prosesjon og kolonne",
+    "ref": "Trafikkreglene § 10 nr. 3",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-97",
+    "source_id": 97,
+    "category": "forbikjoring",
+    "statement": {
+      "no": "Når du skal kjøre ut fra vegkanten, har du samme vikeplikt som ved feltskifte.",
+      "th": "เมื่อคุณจะขับออกจากข้างทาง คุณมีหน้าที่ให้ทางเช่นเดียวกับตอนเปลี่ยนเลน",
+      "en": "When you pull out from the roadside, you have the same duty to give way as when changing lanes."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Den som kjører ut fra vegkant eller på annen måte flytter bilen til siden må vike for trafikken i veien.",
+      "th": "ผู้ที่ขับออกจากข้างทางหรือเคลื่อนรถไปด้านข้างต้องให้ทางการจราจรบนถนน",
+      "en": "Anyone pulling out from the roadside or otherwise moving sideways must give way to traffic on the road."
+    },
+    "alt": {
+      "no": "Flere biler på en norsk landevei",
+      "th": "รถหลายคันบนถนนชนบทในนอร์เวย์",
+      "en": "Several cars on a Norwegian country road"
+    },
+    "image": "flipp_flopp_theme_forbikjoring.png",
+    "fagord": "Utkjøring fra vegkant",
+    "ref": "Trafikkreglene § 8",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-98",
+    "source_id": 98,
+    "category": "forbikjoring",
+    "statement": {
+      "no": "Skal du forlate veien, skal du så snart som mulig kjøre inn i felt for fartsreduksjon der det finnes.",
+      "th": "ถ้าคุณจะออกจากถนน ต้องเข้าเลนลดความเร็วโดยเร็วที่สุดเมื่อมีเลนนั้น",
+      "en": "If you are leaving the road, you must move into the deceleration lane as soon as possible where there is one."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Da bremser du i det egne feltet og forstyrrer ikke trafikken som fortsetter rett fram.",
+      "th": "คุณจะได้ชะลอในเลนของตัวเอง และไม่รบกวนรถที่ตรงไปต่อ",
+      "en": "Then you slow down in your own lane and do not disturb the traffic continuing straight on."
+    },
+    "alt": {
+      "no": "Flere biler på en norsk landevei",
+      "th": "รถหลายคันบนถนนชนบทในนอร์เวย์",
+      "en": "Several cars on a Norwegian country road"
+    },
+    "image": "flipp_flopp_theme_forbikjoring.png",
+    "fagord": "Fartsreduksjonsfelt",
+    "ref": "Trafikkreglene § 8",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-99",
+    "source_id": 99,
+    "category": "stans",
+    "statement": {
+      "no": "Det er forbudt å stanse i et sykkelfelt.",
+      "th": "ห้ามหยุดรถในเลนจักรยาน",
+      "en": "It is prohibited to stop in a cycle lane."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Stansforbudet gjelder i kollektivfelt, sambruksfelt og sykkelfelt.",
+      "th": "ข้อห้ามหยุดรถใช้ในเลนรถประจำทาง เลนใช้ร่วม และเลนจักรยาน",
+      "en": "The stopping ban applies in bus lanes, shared lanes and cycle lanes."
+    },
+    "alt": {
+      "no": "Bil ved fortau i en norsk by",
+      "th": "รถริมทางเท้าในเมืองนอร์เวย์",
+      "en": "Car by a pavement in a Norwegian town"
+    },
+    "image": "flipp_flopp_theme_stans.png",
+    "fagord": "Sykkelfelt",
+    "ref": "Trafikkreglene § 17 nr. 1",
+    "approved_by_michael": false,
+    "preview": true
+  },
+  {
+    "id": "master-100",
+    "source_id": 100,
+    "category": "syklende_gaende",
+    "statement": {
+      "no": "Fører av liten elektrisk motorvogn kan bruke sykkelvei og sykkelfelt.",
+      "th": "ผู้ขับรถไฟฟ้าขนาดเล็กใช้ทางจักรยานและเลนจักรยานได้",
+      "en": "The driver of a small electric vehicle may use cycle paths and cycle lanes."
+    },
+    "truth": true,
+    "answer": {
+      "no": "Ja",
+      "th": "ใช่",
+      "en": "Yes"
+    },
+    "explanation": {
+      "no": "Liten elektrisk motorvogn kan bruke sykkelvei og sykkelfelt, men bare sykkelfelt på høyre side av veien.",
+      "th": "รถไฟฟ้าขนาดเล็กใช้ทางจักรยานและเลนจักรยานได้ แต่ใช้เฉพาะเลนจักรยานด้านขวาของถนน",
+      "en": "A small electric vehicle may use cycle paths and cycle lanes, but only cycle lanes on the right side of the road."
+    },
+    "alt": {
+      "no": "Syklist og fotgjenger i en norsk bygate",
+      "th": "คนขี่จักรยานและคนเดินเท้าบนถนนในเมืองนอร์เวย์",
+      "en": "Cyclist and pedestrian on a Norwegian city street"
+    },
+    "image": "flipp_flopp_theme_syklende_gaende.png",
+    "fagord": "Liten elektrisk motorvogn",
+    "ref": "Trafikkreglene § 4 nr. 1",
+    "approved_by_michael": false,
+    "preview": true
+  }
+]

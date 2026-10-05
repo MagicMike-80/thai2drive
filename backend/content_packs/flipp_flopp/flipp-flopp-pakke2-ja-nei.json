@@ -1,0 +1,1247 @@
+{
+  "meta": {
+    "title": "Flipp Flopp pakke 2: Ja/Nei-påstander 51–100",
+    "version": "utkast-1",
+    "date": "2026-10-05",
+    "answer_semantics": "answer=true betyr at påstanden er riktig (Ja). answer=false betyr at den er feil (Nei).",
+    "unanswered_rule": "Ubesvart eller timeout lagres som feil i gjennomgangen.",
+    "language_rule": "Hvert språk har egne felt. Ingen fallback mellom språk. Bare norwegian_fagord kan stå norsk i thai- og engelsk visning.",
+    "fasit_status": "Ingen fasit er godkjent av Michael ennå. Alle kort har fasit_godkjent_av_michael=false. Alle kort har th_reviewed=false.",
+    "source_note": "Alle kort er laget fra Trafikkreglene (Lovdata) § 4, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18 og 19. Teksten er gjengitt og omskrevet med enkle ord. Paragrafnummer og punktnummer bør kontrolleres av Michael i testmåneden.",
+    "categories": {
+      "forbikjoring": {
+        "no": "Forbikjøring og feltskifte",
+        "th": "การแซงและการเปลี่ยนเลน",
+        "en": "Overtaking and changing lanes"
+      },
+      "stans": {
+        "no": "Stans og parkering",
+        "th": "การหยุดรถและการจอดรถ",
+        "en": "Stopping and parking"
+      },
+      "signal_lys": {
+        "no": "Signal, lys og rygging",
+        "th": "สัญญาณ ไฟ และการถอยรถ",
+        "en": "Signals, lights and reversing"
+      },
+      "fart_hensyn": {
+        "no": "Fart og hensyn",
+        "th": "ความเร็วและความเกรงใจ",
+        "en": "Speed and consideration"
+      },
+      "syklende_gaende": {
+        "no": "Syklende, gående og kjørebane",
+        "th": "ผู้ขี่จักรยาน คนเดินเท้า และผิวถนน",
+        "en": "Cyclists, pedestrians and the carriageway"
+      },
+      "vikeplikt": {
+        "no": "Vikeplikt og lure spørsmål",
+        "th": "การให้ทางและคำถามหลอก",
+        "en": "Right of way and trick questions"
+      }
+    }
+  },
+  "total_cards": 50,
+  "cards": [
+    {
+      "id": 51,
+      "category": "forbikjoring",
+      "tone": "game",
+      "norwegian_fagord": "Vikeplikt ved feltskifte",
+      "answer": true,
+      "no": {
+        "statement": "Når du skal skifte felt, har du vikeplikt for kjørende i feltet du skal inn i.",
+        "explanation": "Den som vil skifte kjørefelt har vikeplikt for kjørende i feltet det skal kjøres inn i, eller som først må krysses."
+      },
+      "th": {
+        "statement": "เมื่อคุณจะเปลี่ยนเลน คุณต้องให้ทางรถที่อยู่ในเลนที่คุณจะเข้าไป",
+        "explanation": "ผู้ที่จะเปลี่ยนเลนต้องให้ทางรถที่อยู่ในเลนที่จะเข้าไป หรือเลนที่ต้องข้ามก่อน"
+      },
+      "en": {
+        "statement": "When you change lanes, you must give way to traffic in the lane you are moving into.",
+        "explanation": "Anyone changing lanes must give way to vehicles in the lane they move into, or in a lane they must cross first."
+      },
+      "source": "Trafikkreglene § 8",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 52,
+      "category": "forbikjoring",
+      "tone": "game",
+      "norwegian_fagord": "Fletting",
+      "answer": false,
+      "no": {
+        "statement": "Når to felt blir til ett, har den som skifter felt alltid vikeplikt.",
+        "explanation": "Når antall felt i samme retning blir færre, gjelder ikke vanlig vikeplikt ved feltskifte. Farten tilpasses slik at bilene kan fortsette vekselvis."
+      },
+      "th": {
+        "statement": "เมื่อสองเลนรวมเป็นหนึ่งเลน ผู้ที่เปลี่ยนเลนต้องให้ทางเสมอ",
+        "explanation": "เมื่อจำนวนเลนในทิศทางเดียวกันลดลง กฎให้ทางตอนเปลี่ยนเลนปกติไม่ใช้ ให้ปรับความเร็วเพื่อให้รถผลัดกันไปได้"
+      },
+      "en": {
+        "statement": "When two lanes merge into one, the driver changing lanes always has to give way.",
+        "explanation": "When the number of lanes in the same direction is reduced, the usual give-way rule for lane changes does not apply. Speeds are adjusted so cars can continue in turn."
+      },
+      "source": "Trafikkreglene § 8",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 53,
+      "category": "forbikjoring",
+      "tone": "game",
+      "norwegian_fagord": "Forbikjøring til venstre",
+      "answer": true,
+      "no": {
+        "statement": "Forbikjøring skal som hovedregel skje til venstre.",
+        "explanation": "Forbikjøring skal skje til venstre, med noen få unntak der man kan kjøre forbi til høyre."
+      },
+      "th": {
+        "statement": "โดยหลักแล้ว การแซงต้องแซงทางซ้าย",
+        "explanation": "ต้องแซงทางซ้าย โดยมีข้อยกเว้นเพียงไม่กี่กรณีที่แซงทางขวาได้"
+      },
+      "en": {
+        "statement": "As a main rule, overtaking must be done on the left.",
+        "explanation": "Overtaking must be done on the left, with a few exceptions where you may pass on the right."
+      },
+      "source": "Trafikkreglene § 12 nr. 1",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 54,
+      "category": "forbikjoring",
+      "tone": "game",
+      "norwegian_fagord": "Kontroll før forbikjøring",
+      "answer": true,
+      "no": {
+        "statement": "Før du kjører forbi, må du forsikre deg om at ingen bak deg har startet forbikjøring.",
+        "explanation": "Du må kontrollere at veien er fri framover, at forankjørende ikke gir tegn om venstresving, at ingen bak deg har begynt å kjøre forbi, og at du kan svinge inn igjen."
+      },
+      "th": {
+        "statement": "ก่อนแซง คุณต้องแน่ใจว่าไม่มีรถข้างหลังที่เริ่มแซงอยู่แล้ว",
+        "explanation": "คุณต้องตรวจว่าทางข้างหน้าว่าง รถคันหน้าไม่ได้ให้สัญญาณ ไม่มีรถข้างหลังเริ่มแซง และคุณกลับเข้าเลนได้"
+      },
+      "en": {
+        "statement": "Before you overtake, you must make sure nobody behind you has started overtaking.",
+        "explanation": "You must check that the road ahead is clear, that the vehicle in front gives no signal, that nobody behind has started to overtake, and that you can pull back in."
+      },
+      "source": "Trafikkreglene § 12 nr. 2",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 55,
+      "category": "forbikjoring",
+      "tone": "game",
+      "norwegian_fagord": "Den som blir forbikjørt",
+      "answer": true,
+      "no": {
+        "statement": "Når noen kjører forbi deg, skal du holde så langt til høyre som mulig og ikke øke farten.",
+        "explanation": "Den forbikjørte skal holde seg til høyre og ikke øke farten, slik at forbikjøringen blir kort og trygg."
+      },
+      "th": {
+        "statement": "เมื่อมีรถแซงคุณ คุณต้องชิดขวาให้มากที่สุดและไม่เร่งความเร็ว",
+        "explanation": "ผู้ถูกแซงต้องชิดขวาและไม่เร่งความเร็ว เพื่อให้การแซงสั้นและปลอดภัย"
+      },
+      "en": {
+        "statement": "When someone overtakes you, you must keep as far to the right as possible and not increase your speed.",
+        "explanation": "The driver being overtaken must keep right and not speed up, so the overtaking is short and safe."
+      },
+      "source": "Trafikkreglene § 12 nr. 4",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 56,
+      "category": "forbikjoring",
+      "tone": "game",
+      "norwegian_fagord": "Den som blir forbikjørt",
+      "answer": false,
+      "no": {
+        "statement": "Når noen kjører forbi deg, bør du øke farten litt så forbikjøringen går fortere.",
+        "explanation": "Du skal ikke øke farten når du blir forbikjørt. Hold til høyre så forbikjøringen kan skje trygt."
+      },
+      "th": {
+        "statement": "เมื่อมีรถแซงคุณ คุณควรเร่งความเร็วเล็กน้อยเพื่อให้แซงเสร็จเร็วขึ้น",
+        "explanation": "คุณต้องไม่เร่งความเร็วเมื่อถูกแซง ให้ชิดขวาเพื่อให้แซงได้อย่างปลอดภัย"
+      },
+      "en": {
+        "statement": "When someone overtakes you, you should speed up a little so the overtaking goes faster.",
+        "explanation": "You must not increase your speed when being overtaken. Keep to the right so it can be done safely."
+      },
+      "source": "Trafikkreglene § 12 nr. 4",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 57,
+      "category": "forbikjoring",
+      "tone": "game",
+      "norwegian_fagord": "Forbikjøring nær kryss",
+      "answer": false,
+      "no": {
+        "statement": "Du kan alltid kjøre forbi rett før et vegkryss hvis du har god sikt.",
+        "explanation": "Forbikjøring er forbudt nær vegkryss. Det finnes bare noen få unntak."
+      },
+      "th": {
+        "statement": "คุณแซงก่อนถึงทางแยกได้เสมอถ้ามองเห็นชัด",
+        "explanation": "ห้ามแซงใกล้ทางแยก มีข้อยกเว้นเพียงไม่กี่กรณี"
+      },
+      "en": {
+        "statement": "You can always overtake just before a junction if you have good visibility.",
+        "explanation": "Overtaking is prohibited near junctions. There are only a few exceptions."
+      },
+      "source": "Trafikkreglene § 12 nr. 5",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 58,
+      "category": "forbikjoring",
+      "tone": "game",
+      "norwegian_fagord": "Gangfelt og sikt",
+      "answer": true,
+      "no": {
+        "statement": "Du må ikke kjøre forbi et kjøretøy som tar bort sikten til et gangfelt.",
+        "explanation": "Nær et gangfelt må du ikke kjøre forbi et kjøretøy som hindrer noen del av sikten til gangfeltet."
+      },
+      "th": {
+        "statement": "คุณต้องไม่แซงรถที่บังการมองเห็นทางม้าลาย",
+        "explanation": "ใกล้ทางม้าลาย ห้ามแซงรถที่บังการมองเห็นทางม้าลายบางส่วน"
+      },
+      "en": {
+        "statement": "You must not overtake a vehicle that blocks your view of a pedestrian crossing.",
+        "explanation": "Near a pedestrian crossing you must not overtake a vehicle that blocks any part of the view of the crossing."
+      },
+      "source": "Trafikkreglene § 12 nr. 6",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 59,
+      "category": "forbikjoring",
+      "tone": "game",
+      "norwegian_fagord": "Tilbake i feltet",
+      "answer": true,
+      "no": {
+        "statement": "Etter at du har kjørt forbi til venstre, skal du svinge til høyre igjen når forbikjøringen er avsluttet.",
+        "explanation": "Du skal svinge til høyre igjen uten å skade eller hindre andre trafikanter."
+      },
+      "th": {
+        "statement": "หลังแซงทางซ้าย คุณต้องกลับเข้าเลนขวาเมื่อแซงเสร็จ",
+        "explanation": "คุณต้องกลับเข้าเลนขวาโดยไม่ทำให้ผู้ใช้ถนนคนอื่นเสียหายหรือถูกกีดขวาง"
+      },
+      "en": {
+        "statement": "After overtaking on the left, you must move back to the right when the overtaking is finished.",
+        "explanation": "You must move back to the right without harming or obstructing other road users."
+      },
+      "source": "Trafikkreglene § 12 nr. 3",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 60,
+      "category": "signal_lys",
+      "tone": "rolig",
+      "norwegian_fagord": "Rygging og vending",
+      "answer": true,
+      "no": {
+        "statement": "Den som rygger eller vender, har vikeplikt for annen trafikant.",
+        "explanation": "Når du rygger eller vender må du vike for alle andre på veien."
+      },
+      "th": {
+        "statement": "ผู้ที่ถอยหรือกลับรถต้องให้ทางผู้ใช้ถนนคนอื่น",
+        "explanation": "เมื่อถอยหรือกลับรถ คุณต้องให้ทางทุกคนบนถนน"
+      },
+      "en": {
+        "statement": "A driver who reverses or turns around must give way to other road users.",
+        "explanation": "When you reverse or turn around you must give way to everyone else on the road."
+      },
+      "source": "Trafikkreglene § 11 nr. 1",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 61,
+      "category": "signal_lys",
+      "tone": "rolig",
+      "norwegian_fagord": "Rygging og vending",
+      "answer": false,
+      "no": {
+        "statement": "Det er lov å rygge på motorvei hvis det er trygt.",
+        "explanation": "Rygging og vending er forbudt på motorvei og motortrafikkvei, og på inn- og utkjøringsveier til dem."
+      },
+      "th": {
+        "statement": "การถอยรถบนมอเตอร์เวย์ทำได้ถ้าปลอดภัย",
+        "explanation": "ห้ามถอยและกลับรถบนมอเตอร์เวย์ ทางด่วนมอเตอร์ และทางเข้าออกของถนนเหล่านั้น"
+      },
+      "en": {
+        "statement": "It is allowed to reverse on a motorway if it is safe.",
+        "explanation": "Reversing and turning around is prohibited on motorways and motor traffic roads, and on their entry and exit roads."
+      },
+      "source": "Trafikkreglene § 11 nr. 2",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 62,
+      "category": "signal_lys",
+      "tone": "rolig",
+      "norwegian_fagord": "Rygging og vending",
+      "answer": true,
+      "no": {
+        "statement": "Når du ikke ser nok bakover, må noen passe på for deg, eller du må gå ut og forsikre deg om at det er trygt.",
+        "explanation": "Er utsikten ikke god nok, kan du ikke rygge uten at en annen passer på, eller at du selv har sett etter at det ikke kan oppstå fare."
+      },
+      "th": {
+        "statement": "เมื่อคุณมองด้านหลังไม่พอ ต้องมีคนช่วยดูให้ หรือคุณต้องลงไปดูให้แน่ใจว่าปลอดภัย",
+        "explanation": "ถ้าทัศนวิสัยไม่พอ คุณห้ามถอยโดยไม่มีคนช่วยดู หรือไม่ได้ตรวจดูด้วยตัวเองว่าไม่มีอันตราย"
+      },
+      "en": {
+        "statement": "When you cannot see enough behind you, someone must watch for you, or you must check yourself that it is safe.",
+        "explanation": "If your view is not good enough, you must not reverse unless someone else is watching, or you have seen for yourself that no danger can arise."
+      },
+      "source": "Trafikkreglene § 11 nr. 1",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 63,
+      "category": "stans",
+      "tone": "rolig",
+      "norwegian_fagord": "Stansforbud",
+      "answer": false,
+      "no": {
+        "statement": "Du kan stoppe midt i et vegkryss hvis du bare skal stå et øyeblikk.",
+        "explanation": "Det er forbudt å stanse i et vegkryss og nærmere enn 5 meter fra det."
+      },
+      "th": {
+        "statement": "คุณหยุดรถกลางทางแยกได้ ถ้าจะหยุดแค่ชั่วครู่",
+        "explanation": "ห้ามหยุดรถในทางแยกและห้ามหยุดใกล้ทางแยกน้อยกว่า 5 เมตร"
+      },
+      "en": {
+        "statement": "You can stop in the middle of a junction if you are only there for a moment.",
+        "explanation": "It is prohibited to stop in a junction or closer than 5 metres from it."
+      },
+      "source": "Trafikkreglene § 17 nr. 1",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 64,
+      "category": "stans",
+      "tone": "rolig",
+      "norwegian_fagord": "Stansforbud",
+      "answer": true,
+      "no": {
+        "statement": "Du må ikke stanse nærmere enn 5 meter fra et vegkryss.",
+        "explanation": "Stansforbudet gjelder i vegkryss og de første 5 meterne før det."
+      },
+      "th": {
+        "statement": "คุณต้องไม่หยุดรถใกล้ทางแยกน้อยกว่า 5 เมตร",
+        "explanation": "ข้อห้ามหยุดรถใช้ในทางแยกและ 5 เมตรแรกก่อนถึงทางแยก"
+      },
+      "en": {
+        "statement": "You must not stop closer than 5 metres from a junction.",
+        "explanation": "The stopping ban applies in the junction and the first 5 metres before it."
+      },
+      "source": "Trafikkreglene § 17 nr. 1",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 65,
+      "category": "stans",
+      "tone": "rolig",
+      "norwegian_fagord": "Stansforbud",
+      "answer": true,
+      "no": {
+        "statement": "Du må ikke stanse på et gangfelt eller nærmere enn 5 meter foran det.",
+        "explanation": "Stansforbud gjelder på gangfelt og sykkelkryssing og 5 meter foran slike steder."
+      },
+      "th": {
+        "statement": "คุณต้องไม่หยุดรถบนทางม้าลายหรือก่อนถึงทางม้าลายน้อยกว่า 5 เมตร",
+        "explanation": "ห้ามหยุดรถบนทางม้าลายและทางข้ามจักรยาน และ 5 เมตรก่อนถึงจุดนั้น"
+      },
+      "en": {
+        "statement": "You must not stop on a pedestrian crossing or closer than 5 metres in front of it.",
+        "explanation": "The stopping ban applies on pedestrian and cycle crossings and 5 metres before such places."
+      },
+      "source": "Trafikkreglene § 17 nr. 1",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 66,
+      "category": "stans",
+      "tone": "rolig",
+      "norwegian_fagord": "Stansforbud",
+      "answer": false,
+      "no": {
+        "statement": "Du kan stanse helt eller delvis på fortauet hvis det bare tar et øyeblikk.",
+        "explanation": "Det er forbudt å stanse helt eller delvis på fortau, gangvei eller sykkelvei."
+      },
+      "th": {
+        "statement": "คุณหยุดรถบนทางเท้าทั้งคันหรือบางส่วนได้ ถ้าใช้เวลาแค่ครู่เดียว",
+        "explanation": "ห้ามหยุดรถบนทางเท้า ทางเดิน หรือทางจักรยาน ไม่ว่าทั้งคันหรือบางส่วน"
+      },
+      "en": {
+        "statement": "You can stop fully or partly on the pavement if it only takes a moment.",
+        "explanation": "It is prohibited to stop fully or partly on a pavement, footpath or cycle path."
+      },
+      "source": "Trafikkreglene § 17 nr. 1",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 67,
+      "category": "stans",
+      "tone": "rolig",
+      "norwegian_fagord": "Stansforbud",
+      "answer": true,
+      "no": {
+        "statement": "Det er forbudt å stanse i en uoversiktlig kurve, på en bakketopp eller i en tunnel.",
+        "explanation": "Stansforbudet gjelder på steder der andre ikke kan se deg i tide."
+      },
+      "th": {
+        "statement": "ห้ามหยุดรถในทางโค้งที่มองไม่เห็น บนยอดเนิน หรือในอุโมงค์",
+        "explanation": "ข้อห้ามหยุดรถใช้กับจุดที่ผู้อื่นมองไม่เห็นคุณทันเวลา"
+      },
+      "en": {
+        "statement": "It is prohibited to stop in a blind bend, on the crest of a hill or in a tunnel.",
+        "explanation": "The ban applies in places where others cannot see you in time."
+      },
+      "source": "Trafikkreglene § 17 nr. 1",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 68,
+      "category": "stans",
+      "tone": "rolig",
+      "norwegian_fagord": "Kollektivfelt",
+      "answer": false,
+      "no": {
+        "statement": "Du kan stanse i kollektivfeltet for å slippe av en passasjer.",
+        "explanation": "Det er forbudt å stanse i kollektivfelt. Unntaket gjelder buss og sporvogn på holdeplass."
+      },
+      "th": {
+        "statement": "คุณหยุดรถในเลนรถประจำทางเพื่อส่งผู้โดยสารลงได้",
+        "explanation": "ห้ามหยุดรถในเลนรถประจำทาง ข้อยกเว้นมีเฉพาะรถบัสและรถรางที่ป้ายหยุดรถ"
+      },
+      "en": {
+        "statement": "You can stop in the bus lane to drop off a passenger.",
+        "explanation": "It is prohibited to stop in a bus lane. The exception is buses and trams at a stop."
+      },
+      "source": "Trafikkreglene § 17 nr. 1",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 69,
+      "category": "stans",
+      "tone": "rolig",
+      "norwegian_fagord": "Planovergang",
+      "answer": true,
+      "no": {
+        "statement": "Du må ikke stanse nærmere enn 5 meter fra en planovergang.",
+        "explanation": "Stansforbud gjelder nærmere enn 5 meter fra planovergang."
+      },
+      "th": {
+        "statement": "คุณต้องไม่หยุดรถใกล้ทางตัดรถไฟน้อยกว่า 5 เมตร",
+        "explanation": "ห้ามหยุดรถใกล้ทางตัดรถไฟน้อยกว่า 5 เมตร"
+      },
+      "en": {
+        "statement": "You must not stop closer than 5 metres from a level crossing.",
+        "explanation": "The stopping ban applies closer than 5 metres from a level crossing."
+      },
+      "source": "Trafikkreglene § 17 nr. 1",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 70,
+      "category": "stans",
+      "tone": "rolig",
+      "norwegian_fagord": "Motorvei",
+      "answer": true,
+      "no": {
+        "statement": "Det er forbudt å stanse på motorvei og på inn- og utkjøringsveiene til den.",
+        "explanation": "Stansforbudet gjelder motorvei, motortrafikkvei og inn- og utkjøringsveier."
+      },
+      "th": {
+        "statement": "ห้ามหยุดรถบนมอเตอร์เวย์และทางเข้าออกของมอเตอร์เวย์",
+        "explanation": "ข้อห้ามหยุดรถใช้บนมอเตอร์เวย์ ทางด่วนมอเตอร์ และทางเข้าออก"
+      },
+      "en": {
+        "statement": "It is prohibited to stop on a motorway and on its entry and exit roads.",
+        "explanation": "The stopping ban applies to motorways, motor traffic roads and their entry and exit roads."
+      },
+      "source": "Trafikkreglene § 17 nr. 1",
+      "check": "kontrollert_mot_kilde",
+      "note": "Unntak ved nødsituasjoner og havari er ikke vurdert i teksten.",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 71,
+      "category": "stans",
+      "tone": "rolig",
+      "norwegian_fagord": "Holdeplass",
+      "answer": true,
+      "no": {
+        "statement": "Du må ikke stanse nærmere enn 20 meter fra skiltet for en holdeplass for buss, drosje eller sporvogn.",
+        "explanation": "Stansforbudet gjelder også på vegutvidelsen for holdeplassen og nærmere enn 20 meter fra skiltet."
+      },
+      "th": {
+        "statement": "คุณต้องไม่หยุดรถใกล้ป้ายหยุดรถประจำทาง แท็กซี่ หรือรถรางน้อยกว่า 20 เมตร",
+        "explanation": "ข้อห้ามใช้กับช่องจอดของป้ายและระยะน้อยกว่า 20 เมตรจากป้ายเช่นกัน"
+      },
+      "en": {
+        "statement": "You must not stop closer than 20 metres from the sign for a bus, taxi or tram stop.",
+        "explanation": "The ban also applies on the widened part of the road at the stop and closer than 20 metres from the sign."
+      },
+      "source": "Trafikkreglene § 17 nr. 1",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 72,
+      "category": "signal_lys",
+      "tone": "rolig",
+      "norwegian_fagord": "Tegn ved svinging",
+      "answer": true,
+      "no": {
+        "statement": "Før du svinger eller endrer plassering i sideretning, skal du gi tegn.",
+        "explanation": "Du skal gi tegn med blinklys når du svinger eller på annen måte flytter bilen til siden."
+      },
+      "th": {
+        "statement": "ก่อนเลี้ยวหรือเปลี่ยนตำแหน่งไปด้านข้าง คุณต้องให้สัญญาณ",
+        "explanation": "คุณต้องเปิดไฟเลี้ยวเมื่อเลี้ยวหรือเคลื่อนรถไปด้านข้าง"
+      },
+      "en": {
+        "statement": "Before you turn or move sideways, you must signal.",
+        "explanation": "You must use your indicator when you turn or otherwise move the car sideways."
+      },
+      "source": "Trafikkreglene § 14 nr. 2",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 73,
+      "category": "signal_lys",
+      "tone": "rolig",
+      "norwegian_fagord": "Unødig bruk av horn",
+      "answer": false,
+      "no": {
+        "statement": "Det er lov å tute for å si hei til en venn som står ved veien.",
+        "explanation": "Unødig eller hensynsløs bruk av lyd- og lyssignal er forbudt."
+      },
+      "th": {
+        "statement": "การบีบแตรทักทายเพื่อนที่ยืนข้างถนนทำได้",
+        "explanation": "ห้ามใช้สัญญาณเสียงหรือสัญญาณไฟโดยไม่จำเป็นหรือโดยไม่เกรงใจผู้อื่น"
+      },
+      "en": {
+        "statement": "It is allowed to honk to say hello to a friend standing by the road.",
+        "explanation": "Unnecessary or inconsiderate use of sound and light signals is prohibited."
+      },
+      "source": "Trafikkreglene § 14 nr. 1",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 74,
+      "category": "signal_lys",
+      "tone": "rolig",
+      "norwegian_fagord": "Blinkende lys",
+      "answer": true,
+      "no": {
+        "statement": "Utrykningskjøretøy varsler med blinkende blått lys, og kjøretøy ved vegarbeid kan varsle med blinkende gult lys.",
+        "explanation": "Blått blink betyr utrykning. Gult blink brukes ved vegarbeid når det er nødvendig for å hindre fare."
+      },
+      "th": {
+        "statement": "รถฉุกเฉินแจ้งด้วยไฟสีน้ำเงินกะพริบ และรถที่ทำงานบนถนนอาจแจ้งด้วยไฟสีเหลืองกะพริบ",
+        "explanation": "ไฟน้ำเงินกะพริบหมายถึงรถฉุกเฉิน ไฟเหลืองกะพริบใช้ตอนทำงานบนถนนเมื่อจำเป็นเพื่อป้องกันอันตราย"
+      },
+      "en": {
+        "statement": "Emergency vehicles warn with flashing blue lights, and vehicles at roadworks may warn with flashing yellow lights.",
+        "explanation": "Blue flashing means an emergency. Yellow flashing is used at roadworks when needed to prevent danger."
+      },
+      "source": "Trafikkreglene § 14 nr. 3",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 75,
+      "category": "signal_lys",
+      "tone": "rolig",
+      "norwegian_fagord": "Fjernlys",
+      "answer": true,
+      "no": {
+        "statement": "Du må ikke bruke fjernlys slik at andre blir blendet.",
+        "explanation": "Fjernlys skal ikke blende møtende trafikanter, og du bruker nærlys når fjernlys ikke er påkrevd eller tillatt."
+      },
+      "th": {
+        "statement": "คุณต้องไม่ใช้ไฟสูงจนทำให้ผู้อื่นตาพร่า",
+        "explanation": "ไฟสูงต้องไม่ทำให้ผู้ใช้ถนนที่สวนมาตาพร่า และให้ใช้ไฟต่ำเมื่อไม่จำเป็นหรือไม่อนุญาตให้ใช้ไฟสูง"
+      },
+      "en": {
+        "statement": "You must not use full beam in a way that dazzles others.",
+        "explanation": "Full beam must not dazzle oncoming road users, and you use dipped beam when full beam is not needed or allowed."
+      },
+      "source": "Trafikkreglene § 15 nr. 2 og 3",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 76,
+      "category": "signal_lys",
+      "tone": "rolig",
+      "norwegian_fagord": "Parkeringslys",
+      "answer": false,
+      "no": {
+        "statement": "Du kan la nærlyset stå på når du parkerer, så bilen synes i mørket.",
+        "explanation": "Fjernlys og nærlys må ikke være på under stans eller parkering. Bruk parkeringslys når det er påkrevd."
+      },
+      "th": {
+        "statement": "คุณเปิดไฟต่ำค้างไว้ตอนจอดรถได้ เพื่อให้รถมองเห็นในที่มืด",
+        "explanation": "ห้ามเปิดไฟสูงและไฟต่ำขณะหยุดหรือจอดรถ ให้ใช้ไฟจอดเมื่อจำเป็น"
+      },
+      "en": {
+        "statement": "You can leave your dipped beam on when you park, so the car is visible in the dark.",
+        "explanation": "Full beam and dipped beam must not be on while stopped or parked. Use parking lights when needed."
+      },
+      "source": "Trafikkreglene § 15 nr. 4",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 77,
+      "category": "signal_lys",
+      "tone": "rolig",
+      "norwegian_fagord": "Kjørelys",
+      "answer": true,
+      "no": {
+        "statement": "Når du kjører, må du alltid ha påbudt fjernlys, nærlys eller godkjent kjørelys på.",
+        "explanation": "Det gjelder også på lyse dager. Er det mørkt eller dårlig sikt, skal påbudt lys være tent."
+      },
+      "th": {
+        "statement": "ขณะขับรถ คุณต้องเปิดไฟสูง ไฟต่ำ หรือไฟวิ่งกลางวันที่ได้รับอนุมัติเสมอ",
+        "explanation": "ใช้ในตอนกลางวันด้วย และเมื่อมืดหรือทัศนวิสัยไม่ดี ต้องเปิดไฟที่กฎหมายกำหนด"
+      },
+      "en": {
+        "statement": "When driving, you must always have full beam, dipped beam or approved daytime running lights on.",
+        "explanation": "This also applies in daylight. In the dark or poor visibility, the required lights must be on."
+      },
+      "source": "Trafikkreglene § 15 nr. 1",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 78,
+      "category": "fart_hensyn",
+      "tone": "rolig",
+      "norwegian_fagord": "Tomgang og støy",
+      "answer": false,
+      "no": {
+        "statement": "Du kan la motoren gå på tomgang så lenge du vil utenfor boligene.",
+        "explanation": "I eller ved bebyggelse må det ikke være unødvendig tomgang, støy eller utslipp."
+      },
+      "th": {
+        "statement": "คุณปล่อยให้เครื่องยนต์เดินเบาหน้าบ้านได้นานเท่าที่ต้องการ",
+        "explanation": "ในหรือใกล้ที่อยู่อาศัย ห้ามเดินเบา ส่งเสียงดัง หรือปล่อยควันโดยไม่จำเป็น"
+      },
+      "en": {
+        "statement": "You can let the engine idle for as long as you want outside homes.",
+        "explanation": "In or near built-up areas there must be no unnecessary idling, noise or emissions."
+      },
+      "source": "Trafikkreglene § 16 nr. 1",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 79,
+      "category": "fart_hensyn",
+      "tone": "game",
+      "norwegian_fagord": "Stanse på oversiktlig strekning",
+      "answer": true,
+      "no": {
+        "statement": "Du må kunne stanse på den strekningen du har oversikt over, og foran enhver påregnelig hindring.",
+        "explanation": "Farten skal tilpasses sikten, slik at du alltid rekker å stoppe."
+      },
+      "th": {
+        "statement": "คุณต้องหยุดรถได้ภายในช่วงถนนที่มองเห็น และก่อนถึงสิ่งกีดขวางที่คาดการณ์ได้",
+        "explanation": "ต้องปรับความเร็วให้เหมาะกับทัศนวิสัย เพื่อให้หยุดทันเสมอ"
+      },
+      "en": {
+        "statement": "You must be able to stop within the stretch of road you can see, and before any foreseeable obstacle.",
+        "explanation": "Adjust your speed to visibility so you can always stop in time."
+      },
+      "source": "Trafikkreglene § 13 nr. 1",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 80,
+      "category": "fart_hensyn",
+      "tone": "game",
+      "norwegian_fagord": "Særlig liten fart",
+      "answer": true,
+      "no": {
+        "statement": "Når det er barn på eller ved veien, skal du kjøre med særlig liten fart.",
+        "explanation": "Det gjelder også ved skolepatrulje, personer med hvit stokk eller førerhund, og stoppet buss ved holdeplass."
+      },
+      "th": {
+        "statement": "เมื่อมีเด็กอยู่บนหรือข้างถนน คุณต้องขับด้วยความเร็วต่ำเป็นพิเศษ",
+        "explanation": "ใช้เหมือนกันกับเด็กนักเรียนที่ทำหน้าที่ดูแลทางข้าม ผู้ถือไม้เท้าขาวหรือมีสุนัขนำทาง และรถบัสที่หยุดอยู่ที่ป้าย"
+      },
+      "en": {
+        "statement": "When there are children on or by the road, you must drive very slowly.",
+        "explanation": "The same applies near school patrols, people with a white cane or guide dog, and a stopped bus at a stop."
+      },
+      "source": "Trafikkreglene § 13 nr. 2",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 81,
+      "category": "fart_hensyn",
+      "tone": "game",
+      "norwegian_fagord": "Stoppet buss",
+      "answer": true,
+      "no": {
+        "statement": "Når en buss står stille ved en holdeplass, skal du kjøre med særlig liten fart forbi den.",
+        "explanation": "Passasjerer kan gå av og på, og noen kan løpe ut foran eller bak bussen."
+      },
+      "th": {
+        "statement": "เมื่อรถบัสจอดอยู่ที่ป้าย คุณต้องขับผ่านด้วยความเร็วต่ำเป็นพิเศษ",
+        "explanation": "ผู้โดยสารอาจขึ้นลงรถ และบางคนอาจวิ่งออกมาจากด้านหน้าหรือด้านหลังรถบัส"
+      },
+      "en": {
+        "statement": "When a bus is standing at a bus stop, you must pass it at very low speed.",
+        "explanation": "Passengers may get on and off, and someone may run out in front of or behind the bus."
+      },
+      "source": "Trafikkreglene § 13 nr. 2",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 82,
+      "category": "fart_hensyn",
+      "tone": "game",
+      "norwegian_fagord": "Gågate",
+      "answer": false,
+      "no": {
+        "statement": "På en gågate kan du kjøre 30 km/t.",
+        "explanation": "På gågate og gatetun må du ikke kjøre fortere enn gangfart."
+      },
+      "th": {
+        "statement": "บนถนนคนเดิน คุณขับได้ 30 กม./ชม.",
+        "explanation": "บนถนนคนเดินและพื้นที่ใกล้เคียง ห้ามขับเร็วกว่าความเร็วการเดิน"
+      },
+      "en": {
+        "statement": "On a pedestrian street you can drive 30 km/h.",
+        "explanation": "On pedestrian streets and shared yards you must not drive faster than walking speed."
+      },
+      "source": "Trafikkreglene § 13 nr. 3",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 83,
+      "category": "fart_hensyn",
+      "tone": "game",
+      "norwegian_fagord": "Hvit stokk",
+      "answer": true,
+      "no": {
+        "statement": "Når du ser en person med hvit stokk eller førerhund, skal du kjøre med særlig liten fart.",
+        "explanation": "Slike personer kan ha vansker med å se eller høre trafikken."
+      },
+      "th": {
+        "statement": "เมื่อเห็นผู้ถือไม้เท้าขาวหรือมีสุนัขนำทาง คุณต้องขับด้วยความเร็วต่ำเป็นพิเศษ",
+        "explanation": "คนเหล่านี้อาจมองเห็นหรือได้ยินการจราจรได้ยาก"
+      },
+      "en": {
+        "statement": "When you see a person with a white cane or guide dog, you must drive very slowly.",
+        "explanation": "These people may have difficulty seeing or hearing the traffic."
+      },
+      "source": "Trafikkreglene § 13 nr. 2",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 84,
+      "category": "fart_hensyn",
+      "tone": "game",
+      "norwegian_fagord": "Tunge kjøretøy",
+      "answer": true,
+      "no": {
+        "statement": "Et kjøretøy over 3500 kg totalvekt kan som hovedregel ikke kjøre fortere enn 80 km/t, selv der fartsgrensen er høyere.",
+        "explanation": "Det gjelder også kjøretøy med tilhenger. Noen kjøretøy har unntak."
+      },
+      "th": {
+        "statement": "รถที่มีน้ำหนักรวมเกิน 3,500 กก. โดยหลักแล้วขับเร็วกว่า 80 กม./ชม. ไม่ได้ แม้ถนนจะอนุญาตสูงกว่า",
+        "explanation": "ใช้กับรถที่ลากพ่วงด้วย รถบางประเภทมีข้อยกเว้น"
+      },
+      "en": {
+        "statement": "A vehicle over 3,500 kg total weight can, as a main rule, not drive faster than 80 km/h, even where the limit is higher.",
+        "explanation": "This also applies to vehicles with a trailer. Some vehicles have exceptions."
+      },
+      "source": "Trafikkreglene § 13 nr. 4",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 85,
+      "category": "syklende_gaende",
+      "tone": "rolig",
+      "norwegian_fagord": "Syklende forbi til høyre",
+      "answer": true,
+      "no": {
+        "statement": "Syklende kan kjøre forbi til høyre for andre kjøretøy enn sykkel og liten elektrisk motorvogn.",
+        "explanation": "Det er et unntak fra hovedregelen om forbikjøring til venstre."
+      },
+      "th": {
+        "statement": "ผู้ขี่จักรยานสามารถแซงทางขวารถอื่นที่ไม่ใช่จักรยานและรถไฟฟ้าขนาดเล็กได้",
+        "explanation": "นี่เป็นข้อยกเว้นของหลักการแซงทางซ้าย"
+      },
+      "en": {
+        "statement": "Cyclists may pass on the right of vehicles other than bicycles and small electric vehicles.",
+        "explanation": "This is an exception to the main rule of overtaking on the left."
+      },
+      "source": "Trafikkreglene § 18 nr. 1",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 86,
+      "category": "syklende_gaende",
+      "tone": "rolig",
+      "norwegian_fagord": "Syklende og venstresving",
+      "answer": true,
+      "no": {
+        "statement": "En syklist som skal svinge til venstre, kan holde seg til høyre på veien og svinge der det passer, men har vikeplikt for andre.",
+        "explanation": "Syklisten svinger ikke fra midten, men må vike for annen trafikk."
+      },
+      "th": {
+        "statement": "ผู้ขี่จักรยานที่จะเลี้ยวซ้ายอาจชิดขวาไว้และเลี้ยวตรงจุดที่เหมาะสม แต่ต้องให้ทางผู้อื่น",
+        "explanation": "ผู้ขี่จักรยานไม่ได้เลี้ยวจากกลางถนน แต่ต้องให้ทางการจราจรอื่น"
+      },
+      "en": {
+        "statement": "A cyclist who wants to turn left may stay on the right and turn where it suits, but must give way to others.",
+        "explanation": "The cyclist does not turn from the middle, but must give way to other traffic."
+      },
+      "source": "Trafikkreglene § 18 nr. 2",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 87,
+      "category": "syklende_gaende",
+      "tone": "rolig",
+      "norwegian_fagord": "Sykling på fortau",
+      "answer": false,
+      "no": {
+        "statement": "Det er alltid forbudt å sykle på fortau.",
+        "explanation": "Sykling på fortau er tillatt når det er lite gangtrafikk og syklingen ikke er farlig eller til hinder for gående."
+      },
+      "th": {
+        "statement": "ห้ามขี่จักรยานบนทางเท้าเสมอ",
+        "explanation": "ขี่จักรยานบนทางเท้าได้เมื่อมีคนเดินน้อยและไม่เป็นอันตรายหรือกีดขวางคนเดิน"
+      },
+      "en": {
+        "statement": "Cycling on the pavement is always prohibited.",
+        "explanation": "Cycling on the pavement is allowed when pedestrian traffic is light and the cycling is not dangerous or in the way of pedestrians."
+      },
+      "source": "Trafikkreglene § 18 nr. 3",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 88,
+      "category": "syklende_gaende",
+      "tone": "rolig",
+      "norwegian_fagord": "Parkering av sykkel",
+      "answer": true,
+      "no": {
+        "statement": "En sykkel kan parkeres på fortauet hvis den ikke er til unødig hinder.",
+        "explanation": "Sykkel kan stanses eller parkeres på sykkelvei, gangvei, fortau, gågate eller gatetun hvis den ikke er til unødig hinder eller ulempe."
+      },
+      "th": {
+        "statement": "จอดจักรยานบนทางเท้าได้ ถ้าไม่กีดขวางเกินความจำเป็น",
+        "explanation": "หยุดหรือจอดจักรยานบนทางจักรยาน ทางเดิน ทางเท้า หรือถนนคนเดินได้ ถ้าไม่เป็นอุปสรรคเกินควร"
+      },
+      "en": {
+        "statement": "A bicycle may be parked on the pavement if it is not an unnecessary obstacle.",
+        "explanation": "A bicycle may be stopped or parked on a cycle path, footpath, pavement or pedestrian street if it is not an unnecessary hindrance."
+      },
+      "source": "Trafikkreglene § 18 nr. 4",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 89,
+      "category": "syklende_gaende",
+      "tone": "rolig",
+      "norwegian_fagord": "Bruk av kjørebane",
+      "answer": true,
+      "no": {
+        "statement": "Du må ikke kjøre bil på fortau eller gangvei.",
+        "explanation": "Kjørende skal bruke kjørebanen. Det er forbudt å kjøre på fortau eller gangvei."
+      },
+      "th": {
+        "statement": "คุณต้องไม่ขับรถบนทางเท้าหรือทางเดิน",
+        "explanation": "ผู้ขับขี่ต้องใช้ผิวถนน ห้ามขับบนทางเท้าหรือทางเดิน"
+      },
+      "en": {
+        "statement": "You must not drive a car on a pavement or footpath.",
+        "explanation": "Drivers must use the carriageway. Driving on pavements or footpaths is prohibited."
+      },
+      "source": "Trafikkreglene § 4 nr. 1",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 90,
+      "category": "syklende_gaende",
+      "tone": "rolig",
+      "norwegian_fagord": "Moped på motorvei",
+      "answer": false,
+      "no": {
+        "statement": "Mopeder får kjøre på motorvei.",
+        "explanation": "Moped må ikke kjøres på motorvei eller motortrafikkvei."
+      },
+      "th": {
+        "statement": "มอเตอร์ไซค์ขนาดเล็กขับบนมอเตอร์เวย์ได้",
+        "explanation": "ห้ามขับมอเตอร์ไซค์ขนาดเล็กบนมอเตอร์เวย์หรือทางด่วนมอเตอร์"
+      },
+      "en": {
+        "statement": "Mopeds are allowed on motorways.",
+        "explanation": "Mopeds must not be driven on a motorway or motor traffic road."
+      },
+      "source": "Trafikkreglene § 4 nr. 2",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 91,
+      "category": "syklende_gaende",
+      "tone": "rolig",
+      "norwegian_fagord": "Motorvei",
+      "answer": true,
+      "no": {
+        "statement": "På motorvei er det bare tillatt med motorvogner som lovlig kan kjøre minst 40 km/t på flat vei.",
+        "explanation": "Langsomme kjøretøy hører ikke hjemme på motorvei."
+      },
+      "th": {
+        "statement": "บนมอเตอร์เวย์ อนุญาตเฉพาะยานยนต์ที่ขับได้อย่างถูกกฎหมายอย่างน้อย 40 กม./ชม. บนทางราบ",
+        "explanation": "ยานพาหนะที่ช้าไม่ควรอยู่บนมอเตอร์เวย์"
+      },
+      "en": {
+        "statement": "On a motorway only motor vehicles that can legally drive at least 40 km/h on level ground are allowed.",
+        "explanation": "Slow vehicles do not belong on a motorway."
+      },
+      "source": "Trafikkreglene § 4 nr. 2",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 92,
+      "category": "syklende_gaende",
+      "tone": "rolig",
+      "norwegian_fagord": "Gående og gangfelt",
+      "answer": true,
+      "no": {
+        "statement": "Gående skal krysse kjørebanen i gangfelt når det finnes i nærheten.",
+        "explanation": "Krysser de andre steder, må de sørge for at det ikke blir fare eller hindring for trafikken."
+      },
+      "th": {
+        "statement": "คนเดินเท้าต้องข้ามถนนที่ทางม้าลายเมื่อมีอยู่ใกล้ ๆ",
+        "explanation": "ถ้าข้ามที่อื่น ต้องแน่ใจว่าไม่เกิดอันตรายหรือกีดขวางการจราจร"
+      },
+      "en": {
+        "statement": "Pedestrians must cross the road at a pedestrian crossing when there is one nearby.",
+        "explanation": "If they cross elsewhere, they must make sure it does not cause danger or obstruction."
+      },
+      "source": "Trafikkreglene § 19 nr. 2",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 93,
+      "category": "syklende_gaende",
+      "tone": "rolig",
+      "norwegian_fagord": "Gående og fortau",
+      "answer": true,
+      "no": {
+        "statement": "Gående skal bruke gangvei, fortau eller veiskulder når det er mulig.",
+        "explanation": "Bare når det ikke er mulig eller rimelig, kan de gå på sykkelvei, sykkelfelt eller kjørebane."
+      },
+      "th": {
+        "statement": "คนเดินเท้าต้องใช้ทางเดิน ทางเท้า หรือไหล่ทางเมื่อทำได้",
+        "explanation": "ต่อเมื่อทำไม่ได้หรือไม่สมเหตุสมผลเท่านั้น จึงเดินบนทางจักรยานหรือผิวถนนได้"
+      },
+      "en": {
+        "statement": "Pedestrians must use footpaths, pavements or the road shoulder when possible.",
+        "explanation": "Only when that is not possible or reasonable may they use a cycle path, cycle lane or the carriageway."
+      },
+      "source": "Trafikkreglene § 19 nr. 1",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 94,
+      "category": "vikeplikt",
+      "tone": "game",
+      "norwegian_fagord": "Svinging over fortau",
+      "answer": true,
+      "no": {
+        "statement": "Når du svinger inn over et fortau, har du vikeplikt for gående som går på fortauet.",
+        "explanation": "Den som svinger inn over fortau har vikeplikt for gående, syklende og fører av liten elektrisk motorvogn på fortauet."
+      },
+      "th": {
+        "statement": "เมื่อคุณเลี้ยวข้ามทางเท้า คุณต้องให้ทางคนเดินที่อยู่บนทางเท้า",
+        "explanation": "ผู้ที่เลี้ยวข้ามทางเท้าต้องให้ทางคนเดิน ผู้ขี่จักรยาน และผู้ใช้รถไฟฟ้าขนาดเล็กบนทางเท้า"
+      },
+      "en": {
+        "statement": "When you turn in across a pavement, you must give way to pedestrians on the pavement.",
+        "explanation": "Anyone turning in across a pavement must give way to pedestrians, cyclists and small electric vehicles on the pavement."
+      },
+      "source": "Trafikkreglene § 7 nr. 3",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 95,
+      "category": "vikeplikt",
+      "tone": "game",
+      "norwegian_fagord": "Høyreregelen",
+      "answer": false,
+      "no": {
+        "statement": "Du kommer fra høyre i et kryss uten skilt. Da har du vikeplikt for biler fra venstre.",
+        "explanation": "Du har ikke vikeplikt for biler fra venstre. De har deg på sin høyre side og må vike for deg."
+      },
+      "th": {
+        "statement": "คุณมาจากทางขวาในทางแยกที่ไม่มีป้าย คุณต้องให้ทางรถที่มาจากทางซ้าย",
+        "explanation": "คุณไม่ต้องให้ทางรถจากทางซ้าย เพราะคุณอยู่ทางขวาของพวกเขา พวกเขาต้องให้ทางคุณ"
+      },
+      "en": {
+        "statement": "You come from the right at an unsigned junction. You must give way to cars from the left.",
+        "explanation": "You do not have to give way to cars from the left. You are on their right and they must give way to you."
+      },
+      "source": "Trafikkreglene § 7 nr. 2",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 96,
+      "category": "vikeplikt",
+      "tone": "game",
+      "norwegian_fagord": "Prosesjon og kolonne",
+      "answer": true,
+      "no": {
+        "statement": "Du må ikke hindre eller forstyrre en begravelsesfølge eller en militær kjøretøykolonne.",
+        "explanation": "Det gjelder også prosesjoner og gående grupper under tilsyn av leder."
+      },
+      "th": {
+        "statement": "คุณต้องไม่กีดขวางหรือรบกวนขบวนศพหรือขบวนยานพาหนะทหาร",
+        "explanation": "ใช้กับขบวนแห่และกลุ่มคนเดินที่มีผู้นำดูแลด้วย"
+      },
+      "en": {
+        "statement": "You must not obstruct or disturb a funeral procession or a military vehicle column.",
+        "explanation": "This also applies to processions and groups of pedestrians under the supervision of a leader."
+      },
+      "source": "Trafikkreglene § 10 nr. 3",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 97,
+      "category": "forbikjoring",
+      "tone": "game",
+      "norwegian_fagord": "Utkjøring fra vegkant",
+      "answer": true,
+      "no": {
+        "statement": "Når du skal kjøre ut fra vegkanten, har du samme vikeplikt som ved feltskifte.",
+        "explanation": "Den som kjører ut fra vegkant eller på annen måte flytter bilen til siden må vike for trafikken i veien."
+      },
+      "th": {
+        "statement": "เมื่อคุณจะขับออกจากข้างทาง คุณมีหน้าที่ให้ทางเช่นเดียวกับตอนเปลี่ยนเลน",
+        "explanation": "ผู้ที่ขับออกจากข้างทางหรือเคลื่อนรถไปด้านข้างต้องให้ทางการจราจรบนถนน"
+      },
+      "en": {
+        "statement": "When you pull out from the roadside, you have the same duty to give way as when changing lanes.",
+        "explanation": "Anyone pulling out from the roadside or otherwise moving sideways must give way to traffic on the road."
+      },
+      "source": "Trafikkreglene § 8",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 98,
+      "category": "forbikjoring",
+      "tone": "game",
+      "norwegian_fagord": "Fartsreduksjonsfelt",
+      "answer": true,
+      "no": {
+        "statement": "Skal du forlate veien, skal du så snart som mulig kjøre inn i felt for fartsreduksjon der det finnes.",
+        "explanation": "Da bremser du i det egne feltet og forstyrrer ikke trafikken som fortsetter rett fram."
+      },
+      "th": {
+        "statement": "ถ้าคุณจะออกจากถนน ต้องเข้าเลนลดความเร็วโดยเร็วที่สุดเมื่อมีเลนนั้น",
+        "explanation": "คุณจะได้ชะลอในเลนของตัวเอง และไม่รบกวนรถที่ตรงไปต่อ"
+      },
+      "en": {
+        "statement": "If you are leaving the road, you must move into the deceleration lane as soon as possible where there is one.",
+        "explanation": "Then you slow down in your own lane and do not disturb the traffic continuing straight on."
+      },
+      "source": "Trafikkreglene § 8",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 99,
+      "category": "stans",
+      "tone": "rolig",
+      "norwegian_fagord": "Sykkelfelt",
+      "answer": true,
+      "no": {
+        "statement": "Det er forbudt å stanse i et sykkelfelt.",
+        "explanation": "Stansforbudet gjelder i kollektivfelt, sambruksfelt og sykkelfelt."
+      },
+      "th": {
+        "statement": "ห้ามหยุดรถในเลนจักรยาน",
+        "explanation": "ข้อห้ามหยุดรถใช้ในเลนรถประจำทาง เลนใช้ร่วม และเลนจักรยาน"
+      },
+      "en": {
+        "statement": "It is prohibited to stop in a cycle lane.",
+        "explanation": "The stopping ban applies in bus lanes, shared lanes and cycle lanes."
+      },
+      "source": "Trafikkreglene § 17 nr. 1",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 100,
+      "category": "syklende_gaende",
+      "tone": "rolig",
+      "norwegian_fagord": "Liten elektrisk motorvogn",
+      "answer": true,
+      "no": {
+        "statement": "Fører av liten elektrisk motorvogn kan bruke sykkelvei og sykkelfelt.",
+        "explanation": "Liten elektrisk motorvogn kan bruke sykkelvei og sykkelfelt, men bare sykkelfelt på høyre side av veien."
+      },
+      "th": {
+        "statement": "ผู้ขับรถไฟฟ้าขนาดเล็กใช้ทางจักรยานและเลนจักรยานได้",
+        "explanation": "รถไฟฟ้าขนาดเล็กใช้ทางจักรยานและเลนจักรยานได้ แต่ใช้เฉพาะเลนจักรยานด้านขวาของถนน"
+      },
+      "en": {
+        "statement": "The driver of a small electric vehicle may use cycle paths and cycle lanes.",
+        "explanation": "A small electric vehicle may use cycle paths and cycle lanes, but only cycle lanes on the right side of the road."
+      },
+      "source": "Trafikkreglene § 4 nr. 1",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    }
+  ]
+}

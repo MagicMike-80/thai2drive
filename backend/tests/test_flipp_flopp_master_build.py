@@ -18,7 +18,7 @@ class FlippFloppMasterBuildTests(unittest.TestCase):
                 {
                     "id": i,
                     "source_card_id": i,
-                    "category": "skilt" if i == 1 else categories[(i - 1) // 10],
+                    "category": categories[(i - 1) // 10],
                     "answer": i % 2 == 1,
                     "no": {"statement": f"Påstand {i}", "explanation": f"Forklaring {i}"},
                     "th": {"statement": f"คำถาม {i}", "explanation": f"คำอธิบาย {i}"},
@@ -28,6 +28,7 @@ class FlippFloppMasterBuildTests(unittest.TestCase):
                     "norwegian_fagord": "Vikeplikt",
                     "source": "Trafikkreglene § 7",
                     "fasit_godkjent_av_michael": True,
+                    "th_reviewed": True,
                 }
                 for i in range(1, 51)
             ],
@@ -46,10 +47,39 @@ class FlippFloppMasterBuildTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "ikke godkjent"):
             build_cards(self.source, BACKEND / "public_assets")
 
-    def test_pack_without_sign_card_is_rejected(self):
-        self.source["cards"][0]["category"] = "vikeplikt"
-        with self.assertRaisesRegex(ValueError, "inkludert skilt"):
+    def test_dedicated_sign_category_is_rejected(self):
+        self.source["cards"][0]["category"] = "skilt"
+        with self.assertRaisesRegex(ValueError, "kategori"):
             build_cards(self.source, BACKEND / "public_assets")
+
+    def test_second_pack_extends_master_to_one_hundred(self):
+        second = copy.deepcopy(self.source)
+        for card in second["cards"]:
+            card["id"] += 50
+            card["source_card_id"] += 50
+        cards = build_cards([self.source, second], BACKEND / "public_assets")
+        self.assertEqual(len(cards), 100)
+        self.assertEqual(cards[-1]["id"], "master-100")
+
+    def test_thai_review_is_required(self):
+        self.source["cards"][0]["th_reviewed"] = False
+        with self.assertRaisesRegex(ValueError, "ikke gjennomgått"):
+            build_cards(self.source, BACKEND / "public_assets")
+
+    def test_test_month_keeps_approval_flag_and_uses_category_image(self):
+        self.source["cards"][0]["fasit_godkjent_av_michael"] = False
+        self.source["cards"][0]["th_reviewed"] = False
+        self.source["cards"][0].pop("image")
+        self.source["cards"][0].pop("alt")
+        card = build_cards(
+            self.source,
+            BACKEND / "public_assets",
+            {"vikeplikt": {"image": "flipp_flopp_theme_vikeplikt.png", "alt": {"no": "Kryss", "th": "ทางแยก", "en": "Junction"}}},
+            test_month=True,
+        )[0]
+        self.assertFalse(card["approved_by_michael"])
+        self.assertTrue(card["preview"])
+        self.assertEqual(card["image"], "flipp_flopp_theme_vikeplikt.png")
 
     def test_missing_translation_or_image_rejects_entire_pack(self):
         missing_translation = copy.deepcopy(self.source)

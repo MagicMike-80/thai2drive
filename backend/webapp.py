@@ -2456,6 +2456,11 @@ a { color:inherit; text-decoration:none; }
 .signs-count {
   font-size:.78rem; color:var(--muted); font-weight:600;
 }
+.signs-game-button {
+  margin-left:auto; min-height:38px; padding:7px 12px;
+  border:1px solid var(--orange); border-radius:11px;
+  background:#33251d; color:#ffe0b9; font-weight:750;
+}
 .signs-scroll {
   flex:1; overflow-y:auto; overflow-x:hidden;
   padding:0 12px 16px;
@@ -4793,7 +4798,7 @@ a { color:inherit; text-decoration:none; }
           <span class="home-main-choice-icon" aria-hidden="true">🃏</span>
           <span class="home-main-choice-copy">
             <span class="home-main-choice-title" data-key="flipp_flopp_home">Flipp Flopp</span>
-            <span class="home-main-choice-sub" data-key="flipp_flopp_home_sub">Korte trafikkspill med skilt og situasjoner</span>
+            <span class="home-main-choice-sub" data-key="flipp_flopp_home_sub">Korte trafikkspill med situasjoner</span>
           </span>
         </button>
         <div class="target-practice-menu" id="targetPracticeMenu">
@@ -4966,6 +4971,7 @@ a { color:inherit; text-decoration:none; }
       <div class="signs-header">
         <div class="screen-title">🪧 <span data-key="signs">Trafikkskilt</span></div>
         <div class="signs-count" id="signsCount"></div>
+        <button class="signs-game-button" type="button" onclick="location.href='/' + appLang + '/flipp-flopp?pack=signs'" data-key="signs_game" data-label-key="signs_game">Spill med skilt</button>
       </div>
       <div class="signs-scroll" id="signsScroll">
         <div class="loading-wrap"><div class="spinner"></div></div>
@@ -5605,7 +5611,8 @@ var UI = {
   library_sub:           {th:'ดูบทเรียนและฟังคำอธิบาย', no:'Se leksjoner og hør forklaringer', en:'Watch lessons and listen to explanations'},
   home_situation_card:   {th:'ฝึกคำศัพท์จราจร', no:'Øv på trafikkbegreper', en:'Practice traffic terms'},
   flipp_flopp_home: {th:'เกมการ์ด Flipp Flopp', no:'Flipp Flopp', en:'Flipp Flopp'},
-  flipp_flopp_home_sub: {th:'เล่นเกมสั้น ๆ กับป้ายและสถานการณ์จราจร', no:'Korte trafikkspill med skilt og situasjoner', en:'Quick traffic games with signs and scenarios'},
+  flipp_flopp_home_sub: {th:'เล่นเกมสั้น ๆ กับสถานการณ์จราจร', no:'Korte trafikkspill med situasjoner', en:'Quick games with traffic situations'},
+  signs_game: {th:'เล่นเกมป้ายจราจร', no:'Spill med skilt', en:'Play with signs'},
   home_situation_card_sub:{th:'พลิกการ์ดเพื่อเรียนรู้คำศัพท์และคำอธิบาย', no:'Snu kortene og lær begrepene med korte forklaringer', en:'Flip the cards to learn terms with short explanations'},
   fc_title:              {th:'แฟลชการ์ดคำศัพท์จราจร', no:'Flippkort for trafikkord', en:'Traffic term flashcards'},
   fc_loading:            {th:'กำลังโหลดการ์ด…', no:'Laster kort …', en:'Loading cards…'},

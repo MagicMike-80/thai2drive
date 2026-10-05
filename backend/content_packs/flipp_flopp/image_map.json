@@ -1,0 +1,42 @@
+{
+  "vikeplikt": {
+    "image": "flipp_flopp_theme_vikeplikt.png",
+    "alt": {"no": "To biler i et norsk veikryss", "th": "รถสองคันที่ทางแยกในนอร์เวย์", "en": "Two cars at a Norwegian intersection"}
+  },
+  "plassering": {
+    "image": "flipp_flopp_theme_plassering.png",
+    "alt": {"no": "Bil på en norsk vei med kjørefelt", "th": "รถบนถนนที่มีช่องจราจรในนอร์เวย์", "en": "Car on a Norwegian road with marked lanes"}
+  },
+  "se": {
+    "image": "flipp_flopp_theme_se.png",
+    "alt": {"no": "Utsikt fra førerplassen på en norsk vei", "th": "มุมมองจากที่นั่งคนขับบนถนนในนอร์เวย์", "en": "Driver's view on a Norwegian road"}
+  },
+  "stopp": {
+    "image": "flipp_flopp_theme_stopp.png",
+    "alt": {"no": "Biler med avstand på en våt norsk vei", "th": "รถสองคันเว้นระยะบนถนนเปียกในนอร์เวย์", "en": "Cars spaced apart on a wet Norwegian road"}
+  },
+  "myndighet": {
+    "image": "flipp_flopp_theme_myndighet.png",
+    "alt": {"no": "Politi og trafikklys i et norsk bykryss", "th": "ตำรวจและสัญญาณไฟที่ทางแยกในเมืองนอร์เวย์", "en": "Police officer and traffic light at a Norwegian junction"}
+  },
+  "forbikjoring": {
+    "image": "flipp_flopp_theme_forbikjoring.png",
+    "alt": {"no": "Flere biler på en norsk landevei", "th": "รถหลายคันบนถนนชนบทในนอร์เวย์", "en": "Several cars on a Norwegian country road"}
+  },
+  "signal_lys": {
+    "image": "flipp_flopp_theme_signal_lys.png",
+    "alt": {"no": "Biler og lys i en norsk bygate", "th": "รถและแสงไฟบนถนนในเมืองนอร์เวย์", "en": "Cars and lights on a Norwegian city street"}
+  },
+  "stans": {
+    "image": "flipp_flopp_theme_stans.png",
+    "alt": {"no": "Bil ved fortau i en norsk by", "th": "รถริมทางเท้าในเมืองนอร์เวย์", "en": "Car by a pavement in a Norwegian town"}
+  },
+  "fart_hensyn": {
+    "image": "flipp_flopp_theme_fart_hensyn.png",
+    "alt": {"no": "Bil og fotgjengere i et norsk boligområde", "th": "รถและคนเดินเท้าในย่านที่อยู่อาศัยของนอร์เวย์", "en": "Car and pedestrians in a Norwegian neighbourhood"}
+  },
+  "syklende_gaende": {
+    "image": "flipp_flopp_theme_syklende_gaende.png",
+    "alt": {"no": "Syklist og fotgjenger i en norsk bygate", "th": "คนขี่จักรยานและคนเดินเท้าบนถนนในเมืองนอร์เวย์", "en": "Cyclist and pedestrian on a Norwegian city street"}
+  }
+}

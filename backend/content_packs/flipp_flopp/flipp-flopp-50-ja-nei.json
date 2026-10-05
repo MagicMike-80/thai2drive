@@ -1,0 +1,1299 @@
+{
+  "meta": {
+    "title": "Flipp Flopp: 50 Ja/Nei-påstander fra Headers 50 kort",
+    "version": "utkast-1",
+    "date": "2026-10-05",
+    "answer_semantics": "answer=true betyr at påstanden er riktig (Ja). answer=false betyr at den er feil (Nei).",
+    "unanswered_rule": "Ubesvart eller timeout lagres som feil i gjennomgangen.",
+    "language_rule": "Hvert språk har egne felt. Ingen fallback mellom språk. Bare norwegian_fagord kan stå norsk i thai- og engelsk visning. Mangler et felt, skjules kortet i det språket.",
+    "fasit_status": "Ingen fasit er godkjent av Michael ennå. Alle kort har fasit_godkjent_av_michael=false.",
+    "check_legend": {
+      "kontrollert_mot_kilde": "Regel slått opp i forskrift eller kilde fra Statens vegvesen i denne kontrollen.",
+      "kjent_teori_krever_michael": "Kjent teori, huskeregel eller Michaels metode. Ikke en lovtekst. Michael må godkjenne.",
+      "ikke_kontrollert_krever_michael": "Ikke slått opp i denne kontrollen. Michael må bekrefte før kortet brukes."
+    },
+    "thai_and_english_review": "Thai og engelsk er skrevet av Claude og må leses gjennom (thai av Michael). Ikke publiser før det er gjort.",
+    "categories": {
+      "vikeplikt": {
+        "no": "Vikeplikt og lure spørsmål",
+        "th": "การให้ทางและคำถามหลอก",
+        "en": "Right of way and trick questions"
+      },
+      "plassering": {
+        "no": "Plassering i veibanen",
+        "th": "ตำแหน่งรถบนถนน",
+        "en": "Position on the road"
+      },
+      "se": {
+        "no": "Se-teknikk og observasjon",
+        "th": "เทคนิคการมองและการสังเกต",
+        "en": "Looking and observation"
+      },
+      "stopp": {
+        "no": "Stopplengde og fart",
+        "th": "ระยะหยุดรถและความเร็ว",
+        "en": "Stopping distance and speed"
+      },
+      "myndighet": {
+        "no": "Myndighetspyramiden og spesialregler",
+        "th": "ลำดับอำนาจและกฎพิเศษ",
+        "en": "Authority pyramid and special rules"
+      }
+    },
+    "skilt_note": "Skilt får en egen side senere, med samme stil som Flipp Flopp. Kort 10, 16 og 18 blir stående i denne bunken som de er. Skilt-siden er en egen oppgave.",
+    "michaels_logic_note": "Feltet michaels_logic i Headers fil er ikke brukt (bare norsk, har emoji). Det må ha egen thai- og engelsk versjon før det kan vises."
+  },
+  "total_cards": 50,
+  "cards": [
+    {
+      "id": 1,
+      "source_card_id": 1,
+      "category": "vikeplikt",
+      "tone": "game",
+      "norwegian_fagord": "Bussregelen",
+      "answer": true,
+      "no": {
+        "statement": "Du kjører 50 km/t. En buss blinker ut fra holdeplassen. Da har du vikeplikt for bussen.",
+        "explanation": "På veg med fartsgrense 60 km/t eller lavere har du vikeplikt for en buss som gir tegn om å kjøre ut fra holdeplass."
+      },
+      "th": {
+        "statement": "คุณขับรถ 50 กม./ชม. รถบัสเปิดไฟเลี้ยวออกจากป้ายรถประจำทาง คุณต้องให้ทางรถบัส",
+        "explanation": "บนถนนที่จำกัดความเร็ว 60 กม./ชม. หรือต่ำกว่า คุณต้องให้ทางรถบัสที่ให้สัญญาณออกจากป้ายรถประจำทาง"
+      },
+      "en": {
+        "statement": "You are driving at 50 km/h. A bus signals to pull out from a bus stop. You must give way to the bus.",
+        "explanation": "On roads with a speed limit of 60 km/h or lower, you must give way to a bus that signals it is leaving a bus stop."
+      },
+      "source": "Trafikkreglene § 7 nr. 5",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 2,
+      "source_card_id": 2,
+      "category": "vikeplikt",
+      "tone": "game",
+      "norwegian_fagord": "Bussregelen",
+      "answer": false,
+      "no": {
+        "statement": "Du kjører i en 70-sone. En buss blinker ut fra holdeplassen. Da har du vikeplikt for bussen.",
+        "explanation": "Bussregelen gjelder bare ved fartsgrense 60 km/t eller lavere. I 70-sone må bussen vike for deg, fordi den kommer fra en holdeplass (§ 7 nr. 4)."
+      },
+      "th": {
+        "statement": "คุณขับในเขตจำกัดความเร็ว 70 กม./ชม. รถบัสเปิดไฟเลี้ยวออกจากป้ายรถประจำทาง คุณต้องให้ทางรถบัส",
+        "explanation": "กฎรถบัสใช้เฉพาะถนนที่จำกัด 60 กม./ชม. หรือต่ำกว่า ในเขต 70 รถบัสต้องให้ทางคุณ เพราะออกมาจากป้ายรถประจำทาง"
+      },
+      "en": {
+        "statement": "You are driving in a 70 zone. A bus signals to pull out from a bus stop. You must give way to the bus.",
+        "explanation": "The bus rule only applies at 60 km/h or lower. In a 70 zone the bus must give way to you, because it comes from a bus stop."
+      },
+      "source": "Trafikkreglene § 7 nr. 4 og nr. 5",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 3,
+      "source_card_id": 3,
+      "category": "vikeplikt",
+      "tone": "game",
+      "norwegian_fagord": "Venstresving (§ 7 nr. 2)",
+      "answer": true,
+      "no": {
+        "statement": "Du skal svinge til venstre i et kryss uten skilt. Da må du vike både for biler fra høyre og for møtende biler som skal rett fram.",
+        "explanation": "Høyreregelen gjelder også når du svinger til venstre og får et kjøretøy på din høyre side. Det gjelder blant annet den møtende bilen."
+      },
+      "th": {
+        "statement": "คุณจะเลี้ยวซ้ายที่ทางแยกที่ไม่มีป้าย คุณต้องให้ทางทั้งรถที่มาจากทางขวาและรถที่สวนมาและจะตรงไป",
+        "explanation": "กฎให้ทางรถจากขวาใช้ด้วยเมื่อคุณเลี้ยวซ้ายและมีรถอยู่ทางขวาของคุณ ซึ่งรวมถึงรถที่สวนมา"
+      },
+      "en": {
+        "statement": "You are turning left at an unsigned junction. You must give way both to vehicles from the right and to oncoming vehicles going straight ahead.",
+        "explanation": "The give-way-to-the-right rule also applies when turning left and getting a vehicle on your right side. That includes the oncoming vehicle."
+      },
+      "source": "Trafikkreglene § 7 nr. 2",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 4,
+      "source_card_id": 4,
+      "category": "vikeplikt",
+      "tone": "game",
+      "norwegian_fagord": "Utkjøring fra eiendom",
+      "answer": true,
+      "no": {
+        "statement": "Du kjører ut fra en bensinstasjon over fortauet. Da har du vikeplikt for trafikken på veien.",
+        "explanation": "Den som kommer fra bensinstasjon, parkeringsplass, holdeplass, torg eller eiendom har vikeplikt for annen trafikant."
+      },
+      "th": {
+        "statement": "คุณขับออกจากปั๊มน้ำมันข้ามทางเท้า คุณต้องให้ทางรถบนถนน",
+        "explanation": "ผู้ที่ขับออกมาจากปั๊มน้ำมัน ที่จอดรถ ป้ายรถประจำทาง ตลาด หรือที่ดิน ต้องให้ทางผู้ใช้ถนนคนอื่น"
+      },
+      "en": {
+        "statement": "You drive out from a petrol station across the pavement. You must give way to traffic on the road.",
+        "explanation": "Anyone coming from a petrol station, car park, bus stop, square or property must give way to other road users."
+      },
+      "source": "Trafikkreglene § 7 nr. 4",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 5,
+      "source_card_id": 5,
+      "category": "vikeplikt",
+      "tone": "game",
+      "norwegian_fagord": "Hindring i kjørefeltet",
+      "answer": true,
+      "no": {
+        "statement": "En parkert bil står på din side av veien, og en bil kommer mot deg. Da er det du som må vike.",
+        "explanation": "Er en del av vegen sperret, har den vikeplikt som har sperringen på sin side."
+      },
+      "th": {
+        "statement": "มีรถจอดอยู่ฝั่งของคุณ และมีรถสวนมา คุณต้องเป็นฝ่ายให้ทาง",
+        "explanation": "ถ้าบางส่วนของถนนถูกกีดขวาง ฝ่ายที่มีสิ่งกีดขวางอยู่ฝั่งตัวเองต้องให้ทาง"
+      },
+      "en": {
+        "statement": "A parked car is on your side of the road and a car is coming towards you. You are the one who must give way.",
+        "explanation": "If part of the road is blocked, the road user with the obstruction on their side must give way."
+      },
+      "source": "Trafikkreglene § 7 nr. 6",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 6,
+      "source_card_id": 6,
+      "category": "vikeplikt",
+      "tone": "game",
+      "norwegian_fagord": "Ikke hindre eller forstyrre",
+      "answer": false,
+      "no": {
+        "statement": "Vikeplikt betyr at du alltid må stoppe helt.",
+        "explanation": "Du skal ikke hindre eller forstyrre den du skal vike for. Du viser det i god tid, for eksempel ved å senke farten, og stopper bare når det er nødvendig."
+      },
+      "th": {
+        "statement": "การให้ทางหมายความว่าคุณต้องหยุดรถสนิทเสมอ",
+        "explanation": "คุณต้องไม่กีดขวางหรือรบกวนผู้ที่คุณต้องให้ทาง แสดงให้เห็นล่วงหน้า เช่น ลดความเร็ว และหยุดเฉพาะเมื่อจำเป็น"
+      },
+      "en": {
+        "statement": "Giving way means you must always come to a complete stop.",
+        "explanation": "You must not obstruct or disturb the person you give way to. Show it in good time, for example by slowing down, and stop only when necessary."
+      },
+      "source": "Trafikkreglene § 7 nr. 1",
+      "check": "kontrollert_mot_kilde",
+      "note": "Forklaringen om å senke farten er pedagogisk tolkning; loven sier bare at den som det vikes for ikke må hindres eller forstyrres.",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 7,
+      "source_card_id": 7,
+      "category": "vikeplikt",
+      "tone": "game",
+      "norwegian_fagord": "Rundkjøring",
+      "answer": false,
+      "no": {
+        "statement": "Når du kjører inn i en rundkjøring, har trafikken som allerede er i rundkjøringen vikeplikt for deg.",
+        "explanation": "Du har vikeplikt for trafikken som allerede er i rundkjøringen."
+      },
+      "th": {
+        "statement": "เมื่อคุณขับเข้าวงเวียน รถที่อยู่ในวงเวียนอยู่แล้วต้องให้ทางคุณ",
+        "explanation": "คุณต้องให้ทางรถที่อยู่ในวงเวียนอยู่แล้ว"
+      },
+      "en": {
+        "statement": "When you enter a roundabout, traffic already in the roundabout must give way to you.",
+        "explanation": "You must give way to traffic that is already in the roundabout."
+      },
+      "source": "Vikepliktskilt (202) ved innkjøring",
+      "check": "ikke_kontrollert_krever_michael",
+      "note": "Rundkjøringens skilting (202) er ikke slått opp i denne kontrollen.",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 8,
+      "source_card_id": 8,
+      "category": "vikeplikt",
+      "tone": "game",
+      "norwegian_fagord": "Vikeplikt for syklende",
+      "answer": false,
+      "no": {
+        "statement": "Du skal svinge til høyre, og en syklist kommer rett fram på høyre side. Da har syklisten vikeplikt for deg.",
+        "explanation": "Den som skal svinge har vikeplikt for gående og syklende som skal rett fram. Sjekk blindsonen før du svinger."
+      },
+      "th": {
+        "statement": "คุณจะเลี้ยวขวา และมีผู้ขี่จักรยานตรงไปทางขวาของคุณ ผู้ขี่จักรยานต้องให้ทางคุณ",
+        "explanation": "ผู้ที่จะเลี้ยวต้องให้ทางคนเดินและผู้ขี่จักรยานที่ตรงไป ตรวจจุดบอดก่อนเลี้ยว"
+      },
+      "en": {
+        "statement": "You are turning right and a cyclist is going straight ahead on your right. The cyclist must give way to you.",
+        "explanation": "The driver who turns must give way to pedestrians and cyclists going straight ahead. Check your blind spot before turning."
+      },
+      "source": "Trafikkreglene § 7 nr. 3",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 9,
+      "source_card_id": 9,
+      "category": "vikeplikt",
+      "tone": "game",
+      "norwegian_fagord": "Myndighetspyramiden",
+      "answer": true,
+      "no": {
+        "statement": "Står det et vikepliktskilt i krysset, gjelder skiltet foran høyreregelen.",
+        "explanation": "Skilt, trafikklys og oppmerking gjelder foran de vanlige trafikkreglene, blant annet høyreregelen."
+      },
+      "th": {
+        "statement": "ถ้ามีป้ายให้ทางที่ทางแยก ป้ายนั้นมีผลก่อนกฎให้ทางรถจากขวา",
+        "explanation": "ป้าย ไฟจราจร และเครื่องหมายบนถนนมีผลก่อนกฎจราจรทั่วไป เช่น กฎให้ทางรถจากขวา"
+      },
+      "en": {
+        "statement": "If there is a give-way sign at the junction, the sign applies before the give-way-to-the-right rule.",
+        "explanation": "Signs, traffic lights and road markings apply before the general traffic rules, including the give-way-to-the-right rule."
+      },
+      "source": "Trafikkreglene § 3 nr. 1",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 10,
+      "source_card_id": 10,
+      "category": "vikeplikt",
+      "tone": "game",
+      "norwegian_fagord": "Forkjørsvei",
+      "answer": false,
+      "no": {
+        "statement": "Du kjører på en forkjørsvei. Da har du vikeplikt for biler som kommer fra høyre sidevei.",
+        "explanation": "På forkjørsvei er det sideveiene som har vikeplikt mot deg."
+      },
+      "th": {
+        "statement": "คุณขับบนถนนทางหลัก คุณต้องให้ทางรถที่มาจากซอยทางขวา",
+        "explanation": "บนถนนทางหลัก รถจากซอยข้างทางต้องให้ทางคุณ"
+      },
+      "en": {
+        "statement": "You are driving on a priority road. You must give way to cars coming from a side road on the right.",
+        "explanation": "On a priority road it is the side roads that must give way to you."
+      },
+      "source": "Skilt for forkjørsvei (206)",
+      "check": "ikke_kontrollert_krever_michael",
+      "note": "Skiltnummeret 206 er ikke slått opp i denne kontrollen.",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 11,
+      "source_card_id": 11,
+      "category": "plassering",
+      "tone": "rolig",
+      "norwegian_fagord": "Kjøretøys plass på vegen (§ 5)",
+      "answer": true,
+      "no": {
+        "statement": "Du skal normalt kjøre på høyre side av veien og godt innenfor kjørefeltet.",
+        "explanation": "Kjøretøy skal føres på høyre side av vegen og godt innenfor kjørefeltet, med sikkerhetsmargin til møtende trafikk."
+      },
+      "th": {
+        "statement": "โดยปกติคุณต้องขับชิดทางด้านขวาของถนนและอยู่ภายในเลนอย่างเหมาะสม",
+        "explanation": "ต้องขับรถทางด้านขวาของถนนและอยู่ภายในเลน เพื่อให้มีระยะปลอดภัยกับรถที่สวนมา"
+      },
+      "en": {
+        "statement": "You should normally drive on the right side of the road and well inside your lane.",
+        "explanation": "Vehicles must be driven on the right side of the road and well inside the lane, with a safety margin to oncoming traffic."
+      },
+      "source": "Trafikkreglene § 5 nr. 1",
+      "check": "kontrollert_mot_kilde",
+      "note": "Header skrev «godt til høyre i feltet». Loven sier «godt innenfor kjørefeltet», så påstanden er justert.",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 12,
+      "source_card_id": 12,
+      "category": "plassering",
+      "tone": "rolig",
+      "norwegian_fagord": "Plassering ved venstresving",
+      "answer": false,
+      "no": {
+        "statement": "Før du svinger til venstre på en toveis vei, skal du kjøre så nær høyre kant som mulig.",
+        "explanation": "På toveis vei skal du i god tid kjøre så nær midten av kjørebanen som mulig før venstresving."
+      },
+      "th": {
+        "statement": "ก่อนเลี้ยวซ้ายบนถนนสองทิศทาง คุณต้องขับชิดขอบถนนด้านขวาให้มากที่สุด",
+        "explanation": "บนถนนสองทิศทาง คุณต้องขับเข้าใกล้กึ่งกลางถนนให้มากที่สุดล่วงหน้าก่อนเลี้ยวซ้าย"
+      },
+      "en": {
+        "statement": "Before turning left on a two-way road, you must drive as close to the right edge as possible.",
+        "explanation": "On a two-way road you must drive as close to the middle of the carriageway as possible well before turning left."
+      },
+      "source": "Trafikkreglene § 6 nr. 2",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 13,
+      "source_card_id": 13,
+      "category": "plassering",
+      "tone": "rolig",
+      "norwegian_fagord": "Venstresving fra enveiskjørt gate",
+      "answer": true,
+      "no": {
+        "statement": "Du skal svinge til venstre fra en enveiskjørt gate. Da kan du plassere bilen helt til venstre i kjørebanen.",
+        "explanation": "I en enveiskjørt gate er det ingen møtende trafikk, og venstresving kan gjøres fra venstre kant."
+      },
+      "th": {
+        "statement": "คุณจะเลี้ยวซ้ายจากถนนวันเวย์ คุณวางรถชิดซ้ายสุดของผิวถนนได้",
+        "explanation": "ในถนนวันเวย์ไม่มีรถสวน การเลี้ยวซ้ายทำได้จากขอบซ้าย"
+      },
+      "en": {
+        "statement": "You are turning left from a one-way street. You can position the car at the far left of the carriageway.",
+        "explanation": "In a one-way street there is no oncoming traffic, and a left turn can be made from the left edge."
+      },
+      "source": "Trafikkreglene § 6 (nr. 1 og 2)",
+      "check": "ikke_kontrollert_krever_michael",
+      "note": "§ 6 nr. 2 sier bare «så nær midten som mulig» for toveis vei, og kontrollen fant ingen eksplisitt regel for enveis. Header henviser til nr. 1, som gjelder felt på flerfeltsvei. Michael må bekrefte regel og henvisning.",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 14,
+      "source_card_id": 14,
+      "category": "plassering",
+      "tone": "rolig",
+      "norwegian_fagord": "Plassering ved høyresving",
+      "answer": false,
+      "no": {
+        "statement": "Når du skal svinge til høyre, bør du først kjøre mot midten av veien.",
+        "explanation": "Ved sving til høyre skal du kjøre så nær høyre kant av kjørebanen som mulig."
+      },
+      "th": {
+        "statement": "เมื่อจะเลี้ยวขวา คุณควรขับเข้าไปกลางถนนก่อน",
+        "explanation": "เมื่อเลี้ยวขวา ต้องขับชิดขอบขวาของถนนให้มากที่สุด"
+      },
+      "en": {
+        "statement": "When you are going to turn right, you should first move towards the middle of the road.",
+        "explanation": "When turning right you must drive as close to the right edge of the carriageway as possible."
+      },
+      "source": "Trafikkreglene § 6 nr. 2",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 15,
+      "source_card_id": 15,
+      "category": "plassering",
+      "tone": "rolig",
+      "norwegian_fagord": "Feltvalg på flerfeltsvei",
+      "answer": false,
+      "no": {
+        "statement": "På en vei med to felt i din retning skal du normalt bruke venstre felt.",
+        "explanation": "På kjørebane med to eller flere felt skal du normalt bruke høyre felt. Venstre felt brukes blant annet til forbikjøring."
+      },
+      "th": {
+        "statement": "บนถนนที่มีสองเลนในทิศทางของคุณ โดยปกติคุณต้องใช้เลนซ้าย",
+        "explanation": "บนถนนที่มีสองเลนขึ้นไป โดยปกติต้องใช้เลนขวา เลนซ้ายใช้สำหรับแซงเป็นต้น"
+      },
+      "en": {
+        "statement": "On a road with two lanes in your direction, you should normally use the left lane.",
+        "explanation": "On a carriageway with two or more lanes you should normally use the right lane. The left lane is used for overtaking, among other things."
+      },
+      "source": "Trafikkreglene § 5 nr. 1",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 16,
+      "source_card_id": 16,
+      "category": "plassering",
+      "tone": "rolig",
+      "norwegian_fagord": "Sperrelinje",
+      "answer": false,
+      "no": {
+        "statement": "En hel gul linje midt i veien kan du krysse når det er trygt.",
+        "explanation": "En sperrelinje skal ikke krysses eller kjøres på. Midtlinjer er gule, og unntak gjelder bare for innkjøring til eiendom når det kan skje uten fare."
+      },
+      "th": {
+        "statement": "เส้นทึบสีเหลืองกลางถนน คุณข้ามได้เมื่อปลอดภัย",
+        "explanation": "เส้นห้ามห้ามข้ามหรือขับทับ เส้นกลางถนนเป็นสีเหลือง ข้อยกเว้นมีเฉพาะการขับเข้าที่ดินเมื่อทำได้โดยไม่เป็นอันตราย"
+      },
+      "en": {
+        "statement": "You may cross a solid yellow line in the middle of the road when it is safe.",
+        "explanation": "A barrier line must not be crossed or driven on. Centre lines are yellow, and the exception applies only to entering a property when it can be done without danger."
+      },
+      "source": "Skiltforskriften og Vegvesenets håndbok N302",
+      "check": "kontrollert_mot_kilde",
+      "note": "Header skrev «hel hvit linje» i midten. Midtlinjer er gule, og sperrelinjer kan være gule eller hvite, så teksten er rettet.",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 17,
+      "source_card_id": 17,
+      "category": "plassering",
+      "tone": "rolig",
+      "norwegian_fagord": "Fartsøkningsfelt og fletting",
+      "answer": true,
+      "no": {
+        "statement": "Når du kjører inn på motorvei fra et fartsøkningsfelt, skal du tilpasse farten til trafikken på motorveien.",
+        "explanation": "Kjørende i fartsøkningsfelt skal tilpasse farten til trafikken på motorveien, og trafikken på motorveien skal lette innkjøringen."
+      },
+      "th": {
+        "statement": "เมื่อขับเข้าทางด่วนจากเลนเร่งความเร็ว คุณต้องปรับความเร็วให้เข้ากับการจราจรบนทางด่วน",
+        "explanation": "ผู้ขับในเลนเร่งความเร็วต้องปรับความเร็วให้เข้ากับการจราจรบนทางด่วน และรถบนทางด่วนต้องช่วยให้เข้าได้ง่ายขึ้น"
+      },
+      "en": {
+        "statement": "When you join a motorway from an acceleration lane, you must adjust your speed to the traffic on the motorway.",
+        "explanation": "Drivers in an acceleration lane must adjust to the speed of the motorway traffic, and traffic on the motorway should make joining easier."
+      },
+      "source": "Trafikkreglene § 8 (fartsøkningsfelt)",
+      "check": "kontrollert_mot_kilde",
+      "note": "Regelen er bekreftet i Trafikkreglene § 8. Punktnummeret (Header oppgir nr. 2) er ikke bekreftet.",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 18,
+      "source_card_id": 18,
+      "category": "plassering",
+      "tone": "rolig",
+      "norwegian_fagord": "Kollektivfelt",
+      "answer": true,
+      "no": {
+        "statement": "En vanlig bensinbil kan ikke kjøre i kollektivfelt.",
+        "explanation": "Kollektivfelt er for buss og andre som skiltet tillater, for eksempel elbil, to-hjulinger og sykkel. En vanlig bensinbil har ikke tilgang."
+      },
+      "th": {
+        "statement": "รถเบนซินทั่วไปไม่สามารถใช้เลนรถประจำทางได้",
+        "explanation": "เลนรถประจำทางมีไว้สำหรับรถบัสและรถอื่นที่ป้ายอนุญาต เช่น รถไฟฟ้า รถสองล้อ และจักรยาน รถเบนซินทั่วไปไม่มีสิทธิ์"
+      },
+      "en": {
+        "statement": "An ordinary petrol car cannot use a bus lane.",
+        "explanation": "Bus lanes are for buses and others the sign allows, for example electric vehicles, two-wheelers and bicycles. An ordinary petrol car has no access."
+      },
+      "source": "Statens vegvesen: Hvem kan kjøre i kollektivfelt",
+      "check": "kontrollert_mot_kilde",
+      "note": "Header skrev «drosje i rute». Drosje får bare bruke feltet der skilt 508.2 tillater det, og underskilt kan begrense elbil.",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 19,
+      "source_card_id": 19,
+      "category": "plassering",
+      "tone": "rolig",
+      "norwegian_fagord": "Feltvalg etter sving",
+      "answer": false,
+      "no": {
+        "statement": "Når du svinger inn på en vei med to felt i din retning, må du alltid velge høyre felt.",
+        "explanation": "Ved sving inn på kjørebane med to eller flere felt kan du kjøre inn i det feltet som passer best."
+      },
+      "th": {
+        "statement": "เมื่อเลี้ยวเข้าถนนที่มีสองเลนในทิศทางของคุณ คุณต้องเลือกเลนขวาเสมอ",
+        "explanation": "เมื่อเลี้ยวเข้าถนนที่มีสองเลนขึ้นไป คุณเลือกเลนที่เหมาะสมที่สุดได้"
+      },
+      "en": {
+        "statement": "When you turn onto a road with two lanes in your direction, you must always choose the right lane.",
+        "explanation": "When turning onto a carriageway with two or more lanes, you may enter whichever lane suits best."
+      },
+      "source": "Trafikkreglene § 6 nr. 3",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 20,
+      "source_card_id": 20,
+      "category": "plassering",
+      "tone": "rolig",
+      "norwegian_fagord": "Møte på smal vei",
+      "answer": true,
+      "no": {
+        "statement": "Når to biler møtes på en smal vei, skal begge i god tid vike til høyre og kjøre sakte eller stanse om nødvendig.",
+        "explanation": "Kjørende som møtes skal om nødvendig i god tid vike tilstrekkelig til høyre og kjøre sakte eller stanse."
+      },
+      "th": {
+        "statement": "เมื่อรถสองคันสวนกันบนถนนแคบ ทั้งสองฝ่ายต้องหลบไปทางขวาล่วงหน้าและขับช้าหรือหยุดถ้าจำเป็น",
+        "explanation": "ผู้ที่สวนกันต้องหลบไปทางขวาอย่างเพียงพอล่วงหน้า และขับช้าหรือหยุดถ้าจำเป็น"
+      },
+      "en": {
+        "statement": "When two cars meet on a narrow road, both must move to the right in good time and drive slowly or stop if necessary.",
+        "explanation": "Drivers who meet must, if necessary, move sufficiently to the right in good time and drive slowly or stop."
+      },
+      "source": "Trafikkreglene § 7 nr. 6",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 21,
+      "source_card_id": 21,
+      "category": "se",
+      "tone": "rolig",
+      "norwegian_fagord": "S-O-A-H",
+      "answer": true,
+      "no": {
+        "statement": "Det er lurt å se langt fram og flytte blikket aktivt når du kjører.",
+        "explanation": "God blikkbruk gir deg tid til å planlegge og oppdage farer tidlig."
+      },
+      "th": {
+        "statement": "การมองไกลไปข้างหน้าและเคลื่อนสายตาอย่างต่อเนื่องขณะขับรถเป็นสิ่งที่ดี",
+        "explanation": "การใช้สายตาที่ดีทำให้คุณมีเวลาวางแผนและมองเห็นอันตรายได้เร็ว"
+      },
+      "en": {
+        "statement": "It is smart to look far ahead and move your eyes actively while driving.",
+        "explanation": "Good use of your eyes gives you time to plan and to spot hazards early."
+      },
+      "source": "Michaels se-teknikk",
+      "check": "kjent_teori_krever_michael",
+      "note": "Headers utvidelse av S-O-A-H («Se langt fram, Beveg blikket, Få oversikt, Se og bli sett») må bekreftes av Michael før den vises som spørsmål.",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 22,
+      "source_card_id": 22,
+      "category": "se",
+      "tone": "rolig",
+      "norwegian_fagord": "Se langt fram",
+      "answer": true,
+      "no": {
+        "statement": "Når du kjører 80 km/t på landeveien, bør du se omtrent 15–20 sekunder fremover.",
+        "explanation": "Ved å se langt fram oppdager du svinger, dyr og møtende biler i god tid."
+      },
+      "th": {
+        "statement": "เมื่อขับ 80 กม./ชม. บนถนนนอกเมือง คุณควรมองไปข้างหน้าประมาณ 15–20 วินาที",
+        "explanation": "การมองไกลทำให้คุณเห็นทางโค้ง สัตว์ และรถที่สวนมาได้ล่วงหน้า"
+      },
+      "en": {
+        "statement": "When driving at 80 km/h on a country road, you should look about 15–20 seconds ahead.",
+        "explanation": "By looking far ahead you notice bends, animals and oncoming cars in good time."
+      },
+      "source": "Header / Michaels se-teknikk",
+      "check": "ikke_kontrollert_krever_michael",
+      "note": "Tallet 15–20 sekunder er ikke bekreftet i en offentlig kilde i denne kontrollen.",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 23,
+      "source_card_id": 23,
+      "category": "se",
+      "tone": "rolig",
+      "norwegian_fagord": "Blindsone",
+      "answer": true,
+      "no": {
+        "statement": "Blindsonen er områdene rundt bilen som du ikke ser i speilene.",
+        "explanation": "Du må snu på hodet for å sjekke blindsonen, spesielt ved siden av og bak skuldrene."
+      },
+      "th": {
+        "statement": "จุดบอดคือบริเวณรอบรถที่คุณมองไม่เห็นในกระจก",
+        "explanation": "คุณต้องหันศีรษะเพื่อตรวจจุดบอด โดยเฉพาะบริเวณข้างและหลังไหล่"
+      },
+      "en": {
+        "statement": "The blind spot is the area around the car that you cannot see in the mirrors.",
+        "explanation": "You must turn your head to check the blind spot, especially beside and behind your shoulders."
+      },
+      "source": "Kjent trafikkteori",
+      "check": "kjent_teori_krever_michael",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 24,
+      "source_card_id": 24,
+      "category": "se",
+      "tone": "rolig",
+      "norwegian_fagord": "Målfiksering",
+      "answer": true,
+      "no": {
+        "statement": "Når du stirrer på en fare, har du lett for å styre bilen rett mot den.",
+        "explanation": "Hendene følger ofte øynene. Se heller etter utveien enn på faren."
+      },
+      "th": {
+        "statement": "เมื่อคุณจ้องมองอันตราย คุณมักจะเผลอบังคับรถไปทางนั้น",
+        "explanation": "มือมักตามสายตา ให้มองหาทางออกแทนการมองอันตราย"
+      },
+      "en": {
+        "statement": "When you stare at a hazard, you easily steer the car straight towards it.",
+        "explanation": "Your hands tend to follow your eyes. Look for the way out instead of at the hazard."
+      },
+      "source": "Kjent trafikkteori",
+      "check": "kjent_teori_krever_michael",
+      "note": "Headers tekst har skrivefeil: «BATTET» skal være bilen, og «UTVEN» skal være utveien.",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 25,
+      "source_card_id": 25,
+      "category": "se",
+      "tone": "rolig",
+      "norwegian_fagord": "Blikkbruk i mørke",
+      "answer": false,
+      "no": {
+        "statement": "Når du møter en bil med sterke lys i mørket, bør du se rett på lysene for å se hva bilen gjør.",
+        "explanation": "Se i stedet ned mot den hvite kantlinjen på høyre side, så blir du ikke blendet."
+      },
+      "th": {
+        "statement": "เมื่อเจอรถไฟสว่างจ้าในที่มืด คุณควรมองตรงไปที่ไฟเพื่อดูว่ารถทำอะไร",
+        "explanation": "ให้มองลงไปที่เส้นขอบถนนสีขาวทางขวาแทน เพื่อไม่ให้ตาพร่า"
+      },
+      "en": {
+        "statement": "When you meet a car with bright lights in the dark, you should look straight at the lights to see what the car does.",
+        "explanation": "Look down towards the white edge line on the right instead, so you are not dazzled."
+      },
+      "source": "Kjent trafikkråd",
+      "check": "kjent_teori_krever_michael",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 26,
+      "source_card_id": 26,
+      "category": "se",
+      "tone": "rolig",
+      "norwegian_fagord": "Speilbruk",
+      "answer": true,
+      "no": {
+        "statement": "Du bør sjekke bakspeilet omtrent hvert 5.–10. sekund under vanlig kjøring.",
+        "explanation": "Jevnlig speilsjekk gir deg oversikt over trafikken bak deg før du bremser eller bytter felt."
+      },
+      "th": {
+        "statement": "คุณควรตรวจกระจกมองหลังประมาณทุก 5–10 วินาทีขณะขับตามปกติ",
+        "explanation": "การตรวจกระจกสม่ำเสมอทำให้คุณรู้สถานการณ์ด้านหลังก่อนเบรกหรือเปลี่ยนเลน"
+      },
+      "en": {
+        "statement": "You should check the rear-view mirror about every 5–10 seconds during normal driving.",
+        "explanation": "Regular mirror checks give you an overview of the traffic behind you before you brake or change lanes."
+      },
+      "source": "Header / Michaels se-teknikk",
+      "check": "ikke_kontrollert_krever_michael",
+      "note": "Tallet 5–10 sekunder er ikke bekreftet i en offentlig kilde i denne kontrollen.",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 27,
+      "source_card_id": 27,
+      "category": "se",
+      "tone": "rolig",
+      "norwegian_fagord": "Kjørefeltskifterutine",
+      "answer": true,
+      "no": {
+        "statement": "Før du bytter felt, bør du sjekke speilene og blindsonen og gi blinklys.",
+        "explanation": "Feltskifte skal skje uten fare for bakenforkjørende eller møtende trafikk."
+      },
+      "th": {
+        "statement": "ก่อนเปลี่ยนเลน คุณควรตรวจกระจก ตรวจจุดบอด และเปิดไฟเลี้ยว",
+        "explanation": "การเปลี่ยนเลนต้องทำโดยไม่เป็นอันตรายต่อรถด้านหลังหรือรถที่สวนมา"
+      },
+      "en": {
+        "statement": "Before changing lanes, you should check your mirrors and blind spot and signal.",
+        "explanation": "Changing lanes must be done without danger to following or oncoming traffic."
+      },
+      "source": "Trafikkreglene § 8 og § 12 (ifølge Header)",
+      "check": "kjent_teori_krever_michael",
+      "note": "Header skriver at rutinen «MÅ» gjøres i en bestemt rekkefølge. Rekkefølgen er Michaels metode og er ikke funnet i loven, så påstanden er skrevet som «bør».",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 28,
+      "source_card_id": 28,
+      "category": "se",
+      "tone": "rolig",
+      "norwegian_fagord": "Kurvekjøring",
+      "answer": false,
+      "no": {
+        "statement": "I en uoversiktlig kurve bør du se på kanten rett foran bilen.",
+        "explanation": "Se så langt inn i kurven som sikten tillater, så oppdager du møtende biler og hindringer tidlig."
+      },
+      "th": {
+        "statement": "ในทางโค้งที่มองไม่เห็นทางข้างหน้า คุณควรมองที่ขอบถนนตรงหน้ารถ",
+        "explanation": "ให้มองเข้าไปในทางโค้งให้ไกลที่สุดเท่าที่ทัศนวิสัยอำนวย เพื่อเห็นรถสวนและสิ่งกีดขวางได้เร็ว"
+      },
+      "en": {
+        "statement": "In a blind bend, you should look at the edge of the road right in front of the car.",
+        "explanation": "Look as far into the bend as visibility allows, so you notice oncoming cars and obstacles early."
+      },
+      "source": "Kjent trafikkråd",
+      "check": "kjent_teori_krever_michael",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 29,
+      "source_card_id": 29,
+      "category": "se",
+      "tone": "rolig",
+      "norwegian_fagord": "Skarpsyn og sidesyn",
+      "answer": true,
+      "no": {
+        "statement": "Sidesynet er best til å oppdage bevegelse, mens skarpsynet ser detaljer.",
+        "explanation": "Bruk sidesynet til å fange bevegelser, og flytt blikket for å se hva det er."
+      },
+      "th": {
+        "statement": "การมองด้านข้างเหมาะกับการสังเกตการเคลื่อนไหว ส่วนการมองตรงเห็นรายละเอียดได้ดี",
+        "explanation": "ใช้การมองด้านข้างจับการเคลื่อนไหว แล้วเลื่อนสายตาไปดูว่าคืออะไร"
+      },
+      "en": {
+        "statement": "Peripheral vision is best at noticing movement, while sharp central vision sees details.",
+        "explanation": "Use your side vision to catch movement, and move your eyes to see what it is."
+      },
+      "source": "Kjent trafikkteori",
+      "check": "kjent_teori_krever_michael",
+      "note": "Header oppgir tall (3–5° og 180°). De er tatt ut av påstanden fordi de ikke er bekreftet.",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 30,
+      "source_card_id": 30,
+      "category": "se",
+      "tone": "rolig",
+      "norwegian_fagord": "Kognitiv avlastning",
+      "answer": false,
+      "no": {
+        "statement": "Hvis du føler deg overveldet i et travelt kryss, bør du øke farten for å komme raskt ut.",
+        "explanation": "Senk farten i stedet. Lavere fart gir hjernen mer tid til å ta inn skilt, fotgjengere og biler."
+      },
+      "th": {
+        "statement": "ถ้ารู้สึกสับสนที่ทางแยกที่วุ่นวาย คุณควรเพิ่มความเร็วเพื่อออกไปให้เร็ว",
+        "explanation": "ให้ลดความเร็วแทน ความเร็วที่ต่ำลงทำให้สมองมีเวลารับรู้ป้าย คนเดินเท้า และรถมากขึ้น"
+      },
+      "en": {
+        "statement": "If you feel overwhelmed at a busy junction, you should speed up to get out quickly.",
+        "explanation": "Slow down instead. Lower speed gives your brain more time to take in signs, pedestrians and cars."
+      },
+      "source": "Kjent trafikkråd",
+      "check": "kjent_teori_krever_michael",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 31,
+      "source_card_id": 31,
+      "category": "stopp",
+      "tone": "rolig",
+      "norwegian_fagord": "Reaksjonslengde",
+      "answer": true,
+      "no": {
+        "statement": "Reaksjonslengden i meter kan du regne ut ved å ta (fart delt på 10) ganger 3.",
+        "explanation": "Bilen ruller omtrent ett sekund før du reagerer. I 50 km/t blir det 5 × 3 = 15 meter."
+      },
+      "th": {
+        "statement": "ระยะตอบสนองเป็นเมตร คำนวณได้จาก (ความเร็ว หาร 10) คูณ 3",
+        "explanation": "รถยังเคลื่อนที่ต่อไปประมาณหนึ่งวินาทีก่อนที่คุณจะตอบสนอง ที่ 50 กม./ชม. จะได้ 5 × 3 = 15 เมตร"
+      },
+      "en": {
+        "statement": "You can calculate the reaction distance in metres as (speed divided by 10) times 3.",
+        "explanation": "The car keeps rolling for about one second before you react. At 50 km/h that is 5 × 3 = 15 metres."
+      },
+      "source": "Kjent regneregel (Vegvesenets teori)",
+      "check": "kjent_teori_krever_michael",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 32,
+      "source_card_id": 32,
+      "category": "stopp",
+      "tone": "game",
+      "norwegian_fagord": "Kvadratisk fartsøkning",
+      "answer": false,
+      "no": {
+        "statement": "Dobler du farten fra 40 til 80 km/t, dobles også bremselengden.",
+        "explanation": "Bremselengden øker kvadratisk, så den blir omtrent fire ganger så lang. Fra ca. 8 meter til ca. 32 meter."
+      },
+      "th": {
+        "statement": "ถ้าเพิ่มความเร็วเป็นสองเท่าจาก 40 เป็น 80 กม./ชม. ระยะเบรกก็เพิ่มเป็นสองเท่าด้วย",
+        "explanation": "ระยะเบรกเพิ่มแบบยกกำลังสอง จึงยาวขึ้นประมาณสี่เท่า จากประมาณ 8 เมตรเป็นประมาณ 32 เมตร"
+      },
+      "en": {
+        "statement": "If you double your speed from 40 to 80 km/h, the braking distance also doubles.",
+        "explanation": "Braking distance grows with the square of speed, so it becomes about four times as long: from about 8 to about 32 metres."
+      },
+      "source": "Kjent regneregel (fysikk)",
+      "check": "kjent_teori_krever_michael",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 33,
+      "source_card_id": 33,
+      "category": "stopp",
+      "tone": "game",
+      "norwegian_fagord": "Stopplengde",
+      "answer": true,
+      "no": {
+        "statement": "I 50 km/t på tørr asfalt er stopplengden omtrent 27,5 meter.",
+        "explanation": "Stopplengde = reaksjonslengde (15 m) + bremselengde (12,5 m) = 27,5 meter."
+      },
+      "th": {
+        "statement": "ที่ 50 กม./ชม. บนถนนแอสฟัลต์แห้ง ระยะหยุดรถประมาณ 27.5 เมตร",
+        "explanation": "ระยะหยุดรถ = ระยะตอบสนอง (15 ม.) + ระยะเบรก (12.5 ม.) = 27.5 เมตร"
+      },
+      "en": {
+        "statement": "At 50 km/h on dry asphalt the stopping distance is about 27.5 metres.",
+        "explanation": "Stopping distance = reaction distance (15 m) + braking distance (12.5 m) = 27.5 metres."
+      },
+      "source": "Kjent regneregel",
+      "check": "kjent_teori_krever_michael",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 34,
+      "source_card_id": 34,
+      "category": "stopp",
+      "tone": "game",
+      "norwegian_fagord": "Bremselengde på is",
+      "answer": true,
+      "no": {
+        "statement": "På is kan bremselengden bli mange ganger så lang som på tørr asfalt.",
+        "explanation": "Friksjonen blir sterkt redusert på is. Senk farten og øk avstanden til bilen foran."
+      },
+      "th": {
+        "statement": "บนน้ำแข็ง ระยะเบรกอาจยาวกว่าบนถนนแอสฟัลต์แห้งหลายเท่า",
+        "explanation": "แรงเสียดทานลดลงมากบนน้ำแข็ง ให้ลดความเร็วและเว้นระยะจากรถคันหน้าให้มากขึ้น"
+      },
+      "en": {
+        "statement": "On ice, the braking distance can be many times longer than on dry asphalt.",
+        "explanation": "Friction is greatly reduced on ice. Slow down and increase the distance to the car ahead."
+      },
+      "source": "Kjent trafikkteori",
+      "check": "kjent_teori_krever_michael",
+      "note": "Header oppgir «minst 4 til 10 ganger». Tallet er ikke bekreftet, så påstanden bruker «mange ganger».",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 35,
+      "source_card_id": 35,
+      "category": "stopp",
+      "tone": "game",
+      "norwegian_fagord": "3-sekundersregelen",
+      "answer": true,
+      "no": {
+        "statement": "Tre-sekundersregelen betyr at det bør gå minst 3 sekunder fra bilen foran passerer et punkt til du passerer det samme punktet.",
+        "explanation": "Avstanden til bilen foran må være så stor at det ikke blir fare for påkjøring hvis den bremser. Tre sekunder er en tommelregel."
+      },
+      "th": {
+        "statement": "กฎสามวินาทีหมายความว่า ควรผ่านไปอย่างน้อย 3 วินาทีจากที่รถคันหน้าผ่านจุดหนึ่ง จนถึงที่คุณผ่านจุดเดียวกัน",
+        "explanation": "ระยะห่างจากรถคันหน้าต้องมากพอที่จะไม่เกิดอันตรายหากรถคันหน้าเบรก สามวินาทีเป็นหลักคร่าว ๆ"
+      },
+      "en": {
+        "statement": "The three-second rule means at least 3 seconds should pass from the car ahead passing a point until you pass the same point.",
+        "explanation": "The distance to the car ahead must be large enough to avoid a collision if it brakes. Three seconds is a rule of thumb."
+      },
+      "source": "Trafikkreglene § 5 nr. 3 (avstand) og tommelregel",
+      "check": "kontrollert_mot_kilde",
+      "note": "Loven krever tilstrekkelig avstand, ikke akkurat 3 sekunder. Derfor skrevet som «bør».",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 36,
+      "source_card_id": 36,
+      "category": "stopp",
+      "tone": "game",
+      "norwegian_fagord": "Sikkerhetsavstand på glatta",
+      "answer": true,
+      "no": {
+        "statement": "På mørk eller glatt vei bør du øke avstanden til bilen foran til mer enn tre sekunder.",
+        "explanation": "Dårlig sikt og føre krever lengre avstand fordi bremselengden blir lengre og observasjonen tregere."
+      },
+      "th": {
+        "statement": "บนถนนมืดหรือลื่น คุณควรเว้นระยะจากรถคันหน้ามากกว่าสามวินาที",
+        "explanation": "ทัศนวิสัยและสภาพถนนที่แย่ต้องการระยะห่างมากขึ้น เพราะระยะเบรกยาวขึ้นและการสังเกตช้าลง"
+      },
+      "en": {
+        "statement": "On a dark or slippery road, you should increase the distance to the car ahead to more than three seconds.",
+        "explanation": "Poor visibility and road conditions require a longer distance, because braking distance grows and observation is slower."
+      },
+      "source": "Trafikkreglene § 5 nr. 3 og kjent råd",
+      "check": "kjent_teori_krever_michael",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 37,
+      "source_card_id": 37,
+      "category": "stopp",
+      "tone": "game",
+      "norwegian_fagord": "Stopplengde",
+      "answer": false,
+      "no": {
+        "statement": "I 80 km/t på tørr asfalt er stopplengden omtrent 30 meter.",
+        "explanation": "Reaksjonslengden er 24 m og bremselengden 32 m, til sammen omtrent 56 meter."
+      },
+      "th": {
+        "statement": "ที่ 80 กม./ชม. บนถนนแอสฟัลต์แห้ง ระยะหยุดรถประมาณ 30 เมตร",
+        "explanation": "ระยะตอบสนอง 24 ม. และระยะเบรก 32 ม. รวมประมาณ 56 เมตร"
+      },
+      "en": {
+        "statement": "At 80 km/h on dry asphalt the stopping distance is about 30 metres.",
+        "explanation": "The reaction distance is 24 m and the braking distance 32 m, about 56 metres in total."
+      },
+      "source": "Kjent regneregel",
+      "check": "kjent_teori_krever_michael",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 38,
+      "source_card_id": 38,
+      "category": "stopp",
+      "tone": "game",
+      "norwegian_fagord": "Fartsforståelse",
+      "answer": true,
+      "no": {
+        "statement": "Mange undervurderer bremselengden i høy fart, fordi den øker mer enn farten.",
+        "explanation": "Vi tror dobbel fart gir dobbel bremselengde, men den blir omtrent fire ganger så lang."
+      },
+      "th": {
+        "statement": "หลายคนประเมินระยะเบรกที่ความเร็วสูงต่ำเกินไป เพราะระยะเบรกเพิ่มขึ้นมากกว่าความเร็ว",
+        "explanation": "เรามักคิดว่าความเร็วสองเท่าให้ระยะเบรกสองเท่า แต่จริง ๆ ยาวขึ้นประมาณสี่เท่า"
+      },
+      "en": {
+        "statement": "Many people underestimate braking distance at high speed, because it increases more than the speed itself.",
+        "explanation": "We think double speed gives double braking distance, but it becomes about four times as long."
+      },
+      "source": "Kjent trafikkteori",
+      "check": "kjent_teori_krever_michael",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 39,
+      "source_card_id": 39,
+      "category": "stopp",
+      "tone": "game",
+      "norwegian_fagord": "Generelle fartsgrenser",
+      "answer": true,
+      "no": {
+        "statement": "Står det ingen fartsskilt, er fartsgrensen i tettbygd strøk 50 km/t.",
+        "explanation": "Den generelle fartsgrensen er 50 km/t i tettbygd strøk når ikke annet er skiltet."
+      },
+      "th": {
+        "statement": "ถ้าไม่มีป้ายความเร็ว เขตชุมชนมีขีดจำกัดความเร็ว 50 กม./ชม.",
+        "explanation": "ขีดจำกัดความเร็วทั่วไปในเขตชุมชนคือ 50 กม./ชม. เมื่อไม่มีป้ายระบุอย่างอื่น"
+      },
+      "en": {
+        "statement": "If there is no speed sign, the speed limit in a built-up area is 50 km/h.",
+        "explanation": "The general speed limit is 50 km/h in built-up areas unless otherwise signed."
+      },
+      "source": "Fartsgrenseforskriften (alminnelig fartsgrense)",
+      "check": "kontrollert_mot_kilde",
+      "note": "Verdien 50 og 80 er bekreftet i flere kilder. Header henviser til vegtrafikkloven § 6, og den henvisningen er ikke bekreftet. Rett kilde før den vises.",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 40,
+      "source_card_id": 40,
+      "category": "stopp",
+      "tone": "game",
+      "norwegian_fagord": "Generell fartsgrense 80",
+      "answer": false,
+      "no": {
+        "statement": "Står det ingen fartsskilt, er fartsgrensen utenfor tettbygd strøk 90 km/t.",
+        "explanation": "Den generelle fartsgrensen utenfor tettbygd strøk er 80 km/t."
+      },
+      "th": {
+        "statement": "ถ้าไม่มีป้ายความเร็ว นอกเขตชุมชนมีขีดจำกัดความเร็ว 90 กม./ชม.",
+        "explanation": "ขีดจำกัดความเร็วทั่วไปนอกเขตชุมชนคือ 80 กม./ชม."
+      },
+      "en": {
+        "statement": "If there is no speed sign, the speed limit outside built-up areas is 90 km/h.",
+        "explanation": "The general speed limit outside built-up areas is 80 km/h."
+      },
+      "source": "Fartsgrenseforskriften (alminnelig fartsgrense)",
+      "check": "kontrollert_mot_kilde",
+      "note": "Se merknad på kort 39 om kildehenvisningen.",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 41,
+      "source_card_id": 41,
+      "category": "myndighet",
+      "tone": "game",
+      "norwegian_fagord": "Myndighetspyramiden",
+      "answer": true,
+      "no": {
+        "statement": "Myndighetspyramiden viser hva som gjelder først når politi, lys, skilt og regler sier noe ulikt.",
+        "explanation": "Politiets tegn gjelder først, så trafikklys, så skilt og oppmerking, og til slutt de vanlige trafikkreglene."
+      },
+      "th": {
+        "statement": "ปิรามิดอำนาจแสดงว่าอะไรมีผลก่อนเมื่อตำรวจ ไฟจราจร ป้าย และกฎบอกต่างกัน",
+        "explanation": "สัญญาณตำรวจมีผลก่อน ตามด้วยไฟจราจร ป้ายและเครื่องหมายบนถนน และสุดท้ายคือกฎจราจรทั่วไป"
+      },
+      "en": {
+        "statement": "The authority pyramid shows what applies first when police, lights, signs and rules say different things.",
+        "explanation": "Police signals come first, then traffic lights, then signs and markings, and finally the general traffic rules."
+      },
+      "source": "Trafikkreglene § 3",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 42,
+      "source_card_id": 42,
+      "category": "myndighet",
+      "tone": "game",
+      "norwegian_fagord": "Politi og anvisning",
+      "answer": true,
+      "no": {
+        "statement": "Politiets tegn gjelder foran trafikklys og skilt.",
+        "explanation": "Anvisning gitt av politiet gjelder foran anvisning gitt på annen måte, også rødt lys og stoppskilt."
+      },
+      "th": {
+        "statement": "สัญญาณของตำรวจมีผลก่อนไฟจราจรและป้าย",
+        "explanation": "คำสั่งของตำรวจมีผลก่อนคำสั่งรูปแบบอื่น รวมถึงไฟแดงและป้ายหยุด"
+      },
+      "en": {
+        "statement": "Police signals apply before traffic lights and signs.",
+        "explanation": "Instructions from the police apply before instructions given in any other way, including red lights and stop signs."
+      },
+      "source": "Trafikkreglene § 3 nr. 2",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 43,
+      "source_card_id": 43,
+      "category": "myndighet",
+      "tone": "game",
+      "norwegian_fagord": "Politi overstyrer trafikklys",
+      "answer": false,
+      "no": {
+        "statement": "Lyset er rødt, men en politibetjent vinker deg fram. Da skal du stoppe.",
+        "explanation": "Politiets tegn gjelder foran det røde lyset. Følg betjentens anvisning og kjør når han eller hun viser det."
+      },
+      "th": {
+        "statement": "ไฟแดง แต่ตำรวจโบกให้คุณไปต่อ คุณต้องหยุด",
+        "explanation": "สัญญาณตำรวจมีผลก่อนไฟแดง ให้ทำตามที่ตำรวจสั่งและขับต่อเมื่อตำรวจให้ไป"
+      },
+      "en": {
+        "statement": "The light is red, but a police officer waves you through. You must stop.",
+        "explanation": "The police signal applies before the red light. Follow the officer's instruction and drive when shown."
+      },
+      "source": "Trafikkreglene § 3 nr. 2",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 44,
+      "source_card_id": 44,
+      "category": "myndighet",
+      "tone": "game",
+      "norwegian_fagord": "Trafikklys overstyrer skilt",
+      "answer": false,
+      "no": {
+        "statement": "Trafikklyset viser grønt, men det står et stoppskilt på samme stolpe. Da må du stoppe.",
+        "explanation": "Når lyset fungerer, gjelder lyset foran skiltet. Skiltet gjelder først hvis lyset er slokket eller ute av drift."
+      },
+      "th": {
+        "statement": "ไฟจราจรเป็นสีเขียว แต่มีป้ายหยุดอยู่บนเสาเดียวกัน คุณต้องหยุด",
+        "explanation": "เมื่อไฟทำงาน ไฟมีผลก่อนป้าย ป้ายจะมีผลเมื่อไฟดับหรือเสียเท่านั้น"
+      },
+      "en": {
+        "statement": "The traffic light shows green, but there is a stop sign on the same post. You must stop.",
+        "explanation": "When the light works, the light applies before the sign. The sign applies only if the light is off or out of order."
+      },
+      "source": "Myndighetspyramiden (Michaels rangering)",
+      "check": "ikke_kontrollert_krever_michael",
+      "note": "Rangering lys over skilt er ikke slått opp i selve forskriftsteksten i denne kontrollen, kun at lys, skilt og oppmerking gjelder foran de vanlige reglene (§ 3 nr. 1).",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 45,
+      "source_card_id": 45,
+      "category": "myndighet",
+      "tone": "game",
+      "norwegian_fagord": "Blinkende gult lys",
+      "answer": false,
+      "no": {
+        "statement": "Et blinkende gult trafikklys betyr at du alltid må stoppe.",
+        "explanation": "Blinkende gult betyr at du må vise særlig aktpågivenhet. Lyset regulerer ikke krysset, så følg skilt og vanlige trafikkregler."
+      },
+      "th": {
+        "statement": "ไฟจราจรสีเหลืองกะพริบหมายความว่าคุณต้องหยุดเสมอ",
+        "explanation": "ไฟเหลืองกะพริบหมายความว่าต้องระมัดระวังเป็นพิเศษ ไฟไม่ได้ควบคุมทางแยก ให้ทำตามป้ายและกฎจราจรทั่วไป"
+      },
+      "en": {
+        "statement": "A flashing yellow traffic light means you must always stop.",
+        "explanation": "Flashing yellow means you must take particular care. The light does not regulate the junction, so follow signs and the normal traffic rules."
+      },
+      "source": "Statens vegvesen (trafikksignalanlegg)",
+      "check": "kontrollert_mot_kilde",
+      "note": "Header skrev «ute av drift». Gult blink kan også være en vanlig driftsform ved lite trafikk, så teksten er justert.",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 46,
+      "source_card_id": 46,
+      "category": "myndighet",
+      "tone": "game",
+      "norwegian_fagord": "HAV-regelen",
+      "answer": true,
+      "no": {
+        "statement": "HAV står for hensynsfull, aktpågivende og varsom.",
+        "explanation": "Vegtrafikkloven § 3: Alle skal ferdes hensynsfullt og være aktpågivende og varsomme, så det ikke skapes fare eller skade."
+      },
+      "th": {
+        "statement": "HAV ย่อมาจาก ใส่ใจผู้อื่น ระมัดระวัง และรอบคอบ",
+        "explanation": "พระราชบัญญัติการจราจรทางบก มาตรา 3: ทุกคนต้องใช้ถนนด้วยความเกรงใจ ระมัดระวัง และรอบคอบ ไม่ให้เกิดอันตรายหรือความเสียหาย"
+      },
+      "en": {
+        "statement": "HAV stands for considerate, attentive and careful.",
+        "explanation": "Road Traffic Act section 3: Everyone must travel considerately and be attentive and careful, so that no danger or damage arises."
+      },
+      "source": "Vegtrafikkloven § 3",
+      "check": "kontrollert_mot_kilde",
+      "note": "HAV er Michaels huskeregel for innholdet i § 3. Kontroller at thai-oversettelsen av hensynsfull, aktpågivende og varsom er den Michael vil bruke.",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 47,
+      "source_card_id": 47,
+      "category": "myndighet",
+      "tone": "game",
+      "norwegian_fagord": "Fri vei for utrykning",
+      "answer": false,
+      "no": {
+        "statement": "Du trenger ikke gi fri vei for et utrykningskjøretøy så lenge du holder fartsgrensen.",
+        "explanation": "Du skal gi fri vei når utrykningskjøretøyet varsler med blinkende blått lys, og stanse om nødvendig."
+      },
+      "th": {
+        "statement": "คุณไม่จำเป็นต้องหลีกทางให้รถฉุกเฉินตราบใดที่คุณขับไม่เกินกำหนดความเร็ว",
+        "explanation": "คุณต้องหลีกทางเมื่อรถฉุกเฉินให้สัญญาณไฟสีน้ำเงินกะพริบ และหยุดถ้าจำเป็น"
+      },
+      "en": {
+        "statement": "You do not have to give way to an emergency vehicle as long as you keep to the speed limit.",
+        "explanation": "You must give way when the emergency vehicle signals with flashing blue lights, and stop if necessary."
+      },
+      "source": "Trafikkreglene § 10 nr. 1",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 48,
+      "source_card_id": 48,
+      "category": "myndighet",
+      "tone": "game",
+      "norwegian_fagord": "Vikeplikt ved gangfelt",
+      "answer": false,
+      "no": {
+        "statement": "Du har ikke vikeplikt for gående som er i et ubemannet gangfelt hvis du kjører sakte.",
+        "explanation": "Du har vikeplikt for gående som er i gangfeltet eller på vei ut i det, uansett hvor sakte du kjører."
+      },
+      "th": {
+        "statement": "คุณไม่ต้องให้ทางคนเดินที่อยู่ในทางม้าลายที่ไม่มีเจ้าหน้าที่ ถ้าคุณขับช้า",
+        "explanation": "คุณต้องให้ทางคนเดินที่อยู่ในทางม้าลายหรือกำลังจะลงไป ไม่ว่าคุณจะขับช้าแค่ไหน"
+      },
+      "en": {
+        "statement": "You do not have to give way to pedestrians in an unmanned pedestrian crossing if you drive slowly.",
+        "explanation": "You must give way to pedestrians in the crossing or about to step into it, however slowly you drive."
+      },
+      "source": "Trafikkreglene § 9",
+      "check": "kontrollert_mot_kilde",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 49,
+      "source_card_id": 49,
+      "category": "myndighet",
+      "tone": "game",
+      "norwegian_fagord": "Promillegrense",
+      "answer": false,
+      "no": {
+        "statement": "Promillegrensen for å kjøre bil i Norge er 0,5.",
+        "explanation": "Promillegrensen er 0,2. Norge har en av verdens strengeste grenser."
+      },
+      "th": {
+        "statement": "ค่าแอลกอฮอล์ในเลือดที่อนุญาตเมื่อขับรถในนอร์เวย์คือ 0.5 พรอมมิล",
+        "explanation": "ค่าที่อนุญาตคือ 0.2 พรอมมิล นอร์เวย์มีเกณฑ์ที่เข้มงวดที่สุดแห่งหนึ่งของโลก"
+      },
+      "en": {
+        "statement": "The legal blood alcohol limit for driving in Norway is 0.5.",
+        "explanation": "The limit is 0.2 per mille. Norway has one of the strictest limits in the world."
+      },
+      "source": "Vegtrafikkloven § 22",
+      "check": "ikke_kontrollert_krever_michael",
+      "note": "Grensen 0,2 og paragrafen er ikke slått opp i denne kontrollen. «En av verdens strengeste» er Headers formulering.",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    },
+    {
+      "id": 50,
+      "source_card_id": 50,
+      "category": "myndighet",
+      "tone": "game",
+      "norwegian_fagord": "Bør, skal og må",
+      "answer": false,
+      "no": {
+        "statement": "«Bør» betyr det samme som «skal» og «må» i spørsmålene på teoriprøven.",
+        "explanation": "«Bør» er en anbefaling, mens «skal» og «må» er en plikt. Pass på ordlyden i spørsmålet."
+      },
+      "th": {
+        "statement": "คำว่า «bør» มีความหมายเหมือน «skal» และ «må» ในข้อสอบทฤษฎี",
+        "explanation": "«bør» เป็นคำแนะนำ ส่วน «skal» และ «må» เป็นหน้าที่ที่ต้องทำ ให้ดูถ้อยคำในคำถามให้ดี"
+      },
+      "en": {
+        "statement": "\"Bør\" means the same as \"skal\" and \"må\" in questions on the theory test.",
+        "explanation": "\"Bør\" is a recommendation, while \"skal\" and \"må\" are a duty. Watch the wording of the question."
+      },
+      "source": "Teoriprøvens språk (Michaels forklaring)",
+      "check": "kjent_teori_krever_michael",
+      "note": "",
+      "fasit_godkjent_av_michael": false,
+      "th_reviewed": false
+    }
+  ]
+}

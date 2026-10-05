@@ -47,7 +47,7 @@ class FlippFloppPageTests(unittest.TestCase):
             "flashcard_intro.mp3", "flashcard_flip.mp3", "flashcard_sonar.mp3",
             "michael_correct_applause.mp3", "michael_round_complete.mp3",
             "michael_age_rule_chime.mp3", "flipp_flopp_clock.mp3", "flipp_flopp_wrong_fallback.mp3", "flipp_flopp_training_loop.mp3",
-            "flipp_flopp_test_loop.mp3",
+            "flipp_flopp_test_loop.mp3", "flipp_flopp_test_siren.mp3",
         ):
             self.assertTrue((assets / name).is_file(), name)
 
@@ -67,11 +67,23 @@ class FlippFloppPageTests(unittest.TestCase):
         self.assertIn("ageRule:s.ageRule===true||s.age_rule===true", html)
         self.assertIn("intro.addEventListener(\u0027error\u0027,startAudio", html)
         self.assertIn("fmt(t('result'),{score:String(score),total:String(S.deck.length)})", html)
+        self.assertIn("sound(S.mode==='test'?'testEntry':'entry')", html)
+        self.assertIn("flipp_flopp_master.json", html)
+        master = json.loads((BACKEND / "public_assets" / "flipp_flopp_master.json").read_text(encoding="utf-8"))
+        self.assertEqual(len(master), 100)
+        self.assertEqual([card["source_id"] for card in master], list(range(1, 101)))
+        self.assertTrue(all(card["preview"] for card in master))
+        for card in master:
+            self.assertTrue((BACKEND / "public_assets" / card["image"]).is_file())
+            for key in ("statement", "answer", "explanation", "alt"):
+                for lang in ("no", "th", "en"):
+                    self.assertTrue(card[key][lang].strip(), (card["id"], key, lang))
 
     def test_home_entry_uses_the_selected_app_language(self):
         webapp = (BACKEND / "webapp.py").read_text(encoding="utf-8")
         self.assertIn("location.href='/' + appLang + '/flipp-flopp'", webapp)
         self.assertNotIn("location.pathname.split('/')[1] + '/flipp-flopp'", webapp)
+        self.assertIn("location.href='/' + appLang + '/flipp-flopp?pack=signs'", webapp)
 
     def test_service_worker_does_not_cache_app_or_game_routes(self):
         service_worker = (BACKEND / "service-worker.js").read_text(encoding="utf-8")
