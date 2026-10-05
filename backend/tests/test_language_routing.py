@@ -119,6 +119,63 @@ class HomeLanguageRouteTests(unittest.TestCase):
         ]
         self.assertEqual(leaks, [], f"Found Norwegian leaks in /th: {leaks}")
 
+    def test_home_has_no_unsourced_first_try_pass_rate(self):
+        for lang in ("th", "no", "en"):
+            with self.subTest(lang=lang):
+                html = client.get(f"/{lang}").text
+                self.assertNotIn('<div class="stat-num">90%</div>', html)
+                self.assertNotIn("består på første", html)
+                self.assertNotIn("pass first try", html)
+
+    def test_video_and_premium_course_cards_are_localized(self):
+        expected = {
+            "th": [
+                "กฎทางขวาและลำดับชั้นสัญญาณจราจร",
+                "9 กลุ่มป้ายจราจรสำคัญในนอร์เวย์",
+                "เรื่องราวเบื้องหลัง Thai2Drive",
+                "ระยะเบรกและเวลาตอบสนอง",
+                "สัญญาณไฟจราจรและกฎการให้ทาง",
+                "การเลี้ยวซ้ายและวงเวียน",
+                "รถบัสออกจากป้าย",
+                "การสอนด้วย AI",
+            ],
+            "no": [
+                "Høyreregelen og myndighetspyramiden",
+                "9 viktige skiltgrupper i Norge",
+                "Historien bak Thai2Drive",
+                "Bremselengde og reaksjonstid",
+                "Trafikklys og vikeplikt",
+                "Venstresving og rundkjøring",
+                "Buss fra holdeplass",
+                "AI-undervising",
+            ],
+            "en": [
+                "Right-Hand Rule & Authority Hierarchy",
+                "9 Important Sign Groups in Norway",
+                "The Story Behind Thai2Drive",
+                "Braking distance and reaction time",
+                "Traffic lights and right of way",
+                "Left turns and roundabouts",
+                "Bus leaving a bus stop",
+                "AI tutoring",
+            ],
+        }
+        foreign = {
+            "th": ["Høyreregelen", "myndighetspyramiden", "Bremselengde", "Buss fra holdeplass", "AI-undervising"],
+            "no": ["กฎทางขวา", "ระยะเบรก", "Right-Hand Rule", "AI tutoring"],
+            "en": ["Høyreregelen", "เรื่องราวเบื้องหลัง", "Bremselengde", "การสอนด้วย AI"],
+        }
+        for lang in ("th", "no", "en"):
+            with self.subTest(lang=lang):
+                html = client.get(f"/{lang}").text
+                for title in expected[lang][:3]:
+                    self.assertIn(f'alt="{title}"', html)
+                    self.assertIn(title, html)
+                for label in expected[lang][3:]:
+                    self.assertIn(label, html)
+                for text in foreign[lang]:
+                    self.assertNotIn(text, html)
+
 
 class GuideLanguageRouteTests(unittest.TestCase):
     def test_th_guide_has_correct_html_lang(self):
@@ -186,6 +243,35 @@ class GuideLanguageRouteTests(unittest.TestCase):
             ] if w in html
         ]
         self.assertEqual(leaks, [], f"Found leaks in /th/guide: {leaks}")
+
+    def test_guide_requirements_and_step_chips_are_single_language(self):
+        thai = client.get("/th/guide").text
+        norwegian = client.get("/no/guide").text
+        english = client.get("/en/guide").text
+
+        for text in [
+            "คุณต้องมีใบอนุญาตพำนักที่ถูกต้องในนอร์เวย์",
+            "ไม่ได้</span> — นอร์เวย์ไม่ยอมรับใบขับขี่ไทยโดยตรง",
+            "ขั้นตอนที่ 1",
+            "ขั้นตอนที่ 4 (ถนน 6 ชม.)",
+        ]:
+            self.assertIn(text, thai)
+        for text in ["i Norge og være minst", "Norge godkjenner ikke", "Norway does not", "Trinn 1 (TGK)", "Trinn 4 (vei 6t)"]:
+            self.assertNotIn(text, thai)
+
+        self.assertIn("Du må ha gyldig", norwegian)
+        self.assertIn("Norge godkjenner ikke thailandsk førerkort direkte", norwegian)
+        self.assertIn("Trinn 1 (TGK)", norwegian)
+        self.assertIn("Trinn 4 (vei 6t)", norwegian)
+        for text in ["Norway does not", "Step 1", "Step 4 (road 6h)", "คุณต้องมีใบอนุญาต"]:
+            self.assertNotIn(text, norwegian)
+
+        self.assertIn("You must have a valid", english)
+        self.assertIn("Norway does not directly accept Thai licences", english)
+        self.assertIn("Step 1", english)
+        self.assertIn("Step 4 (road 6h)", english)
+        for text in ["Norge godkjenner ikke", "Trinn 1 (TGK)", "Trinn 4 (vei 6t)", "คุณต้องมีใบอนุญาต"]:
+            self.assertNotIn(text, english)
 
     def test_th_and_en_guide_steps_and_footer_are_localized(self):
         thai = client.get("/th/guide").text

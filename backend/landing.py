@@ -823,14 +823,6 @@ def _stats_html() -> str:
           <span data-lang="en">exam questions</span>
         </div>
       </div>
-      <div class="stat">
-        <div class="stat-num">90%</div>
-        <div class="stat-label">
-          <span data-lang="th">ผ่านครั้งแรก</span>
-          <span data-lang="no">består på første</span>
-          <span data-lang="en">pass first try</span>
-        </div>
-      </div>
     </div>
   </div>
 </section>
