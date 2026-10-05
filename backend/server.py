@@ -162,7 +162,10 @@ async def redirect_www_to_apex(request: Request, call_next):
     externally configured payment webhooks are not broken by redirect handling.
     """
     host = (request.url.hostname or "").lower().rstrip(".")
-    if host == "www.thai2drive.no" and request.method in {"GET", "HEAD"}:
+    # /api/* is served directly on both hosts (no 301) so mobile clients keep
+    # their Authorization header.
+    is_api = request.url.path == "/api" or request.url.path.startswith("/api/")
+    if host == "www.thai2drive.no" and not is_api and request.method in {"GET", "HEAD"}:
         target = request.url.replace(scheme="https", netloc="thai2drive.no")
         return RedirectResponse(url=str(target), status_code=301)
 
@@ -1759,9 +1762,11 @@ def _public_site_url() -> str:
         os.environ.get("PUBLIC_SITE_URL")
         or os.environ.get("APP_URL")
         or os.environ.get("FRONTEND_URL")
-        or "https://www.thai2drive.no"
+        or "https://thai2drive.no"
     ).strip().rstrip("/")
-    return raw or "https://www.thai2drive.no"
+    if raw.lower().startswith("https://www.thai2drive.no"):
+        raw = "https://thai2drive.no"
+    return raw or "https://thai2drive.no"
 
 
 def _safe_return_url(url: Optional[str], fallback_path: str) -> str:
@@ -1781,6 +1786,8 @@ def _safe_return_url(url: Optional[str], fallback_path: str) -> str:
         return fallback
     if parsed.scheme != "https" and parsed.hostname not in ("localhost", "127.0.0.1"):
         return fallback
+    if parsed.hostname == "www.thai2drive.no":
+        return parsed._replace(scheme="https", netloc="thai2drive.no").geturl().replace("%7BCHECKOUT_SESSION_ID%7D", "{CHECKOUT_SESSION_ID}")
     return url
 
 
