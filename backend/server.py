@@ -1,7 +1,7 @@
 from fastapi import FastAPI, APIRouter, HTTPException, Query, Depends, UploadFile, File, Header, Request, Body
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse as FastAPIFileResponse, JSONResponse
+from fastapi.responses import FileResponse as FastAPIFileResponse, JSONResponse, RedirectResponse
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorGridFSBucket
@@ -152,6 +152,21 @@ def normalize_question(q: dict) -> dict:
 from admin_analytics import admin_analytics_router
 
 app = FastAPI()
+
+
+@app.middleware("http")
+async def redirect_www_to_apex(request: Request, call_next):
+    """Keep browser GET/HEAD traffic on the apex origin for shared auth state.
+
+    Non-idempotent requests remain on the requested host so API clients and
+    externally configured payment webhooks are not broken by redirect handling.
+    """
+    host = (request.url.hostname or "").lower().rstrip(".")
+    if host == "www.thai2drive.no" and request.method in {"GET", "HEAD"}:
+        target = request.url.replace(scheme="https", netloc="thai2drive.no")
+        return RedirectResponse(url=str(target), status_code=301)
+
+    return await call_next(request)
 api_router = APIRouter(prefix="/api")
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
