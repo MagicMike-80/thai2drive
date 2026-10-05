@@ -11481,6 +11481,16 @@ var _teacherHasUserMsg   = false;   // true once user sends first message
 var _teacherTyping       = false;
 var _teacherWelcomeLang  = null;    // tracks which language the welcome was rendered in
 
+function _teacherDeviceId() {
+  if (deviceId) return deviceId;
+  if (user && (user._id || user.id)) {
+    deviceId = user._id || user.id;
+    return deviceId;
+  }
+  deviceId = ensureGuestDeviceId();
+  return deviceId;
+}
+
 // Quiz-specific teacher session variables
 var _teacherActiveSessionType = 'normal';
 var _teacherQuizSessionId     = null;
@@ -11526,6 +11536,7 @@ async function _quizCoachRequest(message) {
         conversation_id:_quizCoachConversationId || _quizCoachSessionId,
         message:message,
         language:appLang,
+        device_id:_teacherDeviceId(),
         mode:'quiz_coach'
       })
     });
@@ -12312,7 +12323,7 @@ async function loadTeacher() {
       msgs.innerHTML = '';
       try {
         var wUrl = '/api/teacher/welcome?lang=' + encodeURIComponent(appLang);
-        if (typeof deviceId !== 'undefined' && deviceId) wUrl += '&device_id=' + encodeURIComponent(deviceId);
+        wUrl += '&device_id=' + encodeURIComponent(_teacherDeviceId());
         if (typeof user !== 'undefined' && user && user.id) wUrl += '&user_id=' + encodeURIComponent(user.id);
         var wRes = await fetch(wUrl);
         var wData = await wRes.json();
@@ -12391,7 +12402,7 @@ function teacherSidebarAction(kind) {
   var prompt = item[appLang] || '';
   if (!prompt) return;
   closeTeacherSidebar();
-  teacherSend(prompt, t('tsp_' + kind));
+  teacherSend(prompt, t('tsp_' + kind), kind === 'strengths' ? 'weak_topics' : null);
 }
 
 var _teacherVoiceRecognition = null;
@@ -13143,37 +13154,6 @@ async function teacherSend(overrideMsg, customDisplayMsg, customMode) {
     clean === 'what should i practice?' || clean === 'what should i practice'
   );
 
-  var payloadMsg = msg;
-  if (isWeakTopic) {
-    var statsText = "No quiz attempts recorded yet.";
-    if (deviceId) {
-      try {
-        var stats = await api('GET', '/api/stats/me?device_id=' + encodeURIComponent(deviceId));
-        if (stats && stats.overall && stats.overall.total_q > 0) {
-          var lines = [];
-          lines.push("Overall Accuracy: " + Math.round(stats.overall.pct) + "% (" + stats.overall.total_correct + "/" + stats.overall.total_q + " correct across " + stats.overall.attempts + " attempts)");
-          lines.push("\nAccuracy by category (sorted from lowest to highest):");
-          if (Array.isArray(stats.by_category)) {
-            stats.by_category.forEach(function(c) {
-              var catDisplayName = catName(c.category);
-              // AI context may keep the raw stats key as fallback; this is not visible UI text.
-              var catContextName = catDisplayName || c.category || 'unknown category';
-              lines.push("- " + catContextName + " (" + c.category + "): " + Math.round(c.pct) + "% accuracy (" + c.total_correct + "/" + c.total_q + " correct, " + c.attempts + " attempts)");
-            });
-          }
-          statsText = lines.join("\n");
-        }
-      } catch(e) {
-        console.error("Failed to fetch stats for Michael context:", e);
-      }
-    }
-    payloadMsg = msg + '\n\n'
-      + '<stats_context>\n'
-      + 'STUDENT QUIZ PERFORMANCE AND STATISTICS:\n'
-      + statsText + '\n'
-      + '</stats_context>';
-  }
-
   if (input && !overrideMsg) input.value = '';
   _teacherTyping = true;
   _teacherHideSuggestions();
@@ -13191,13 +13171,13 @@ async function teacherSend(overrideMsg, customDisplayMsg, customMode) {
     var chatPayload = {
       session_id: activeSessionId,
       conversation_id: activeConversationId || activeSessionId,
-      message: payloadMsg,
+      message: msg,
       language: appLang,
-      device_id: (typeof deviceId !== 'undefined' ? deviceId : null),
+      device_id: _teacherDeviceId(),
       user_id: (typeof user !== 'undefined' && user && user.id ? user.id : null)
     };
-    if (customMode) {
-      chatPayload.mode = customMode;
+    if (customMode || isWeakTopic) {
+      chatPayload.mode = customMode || 'weak_topics';
     }
     if (_teacherUploadedDoc && _teacherUploadedDoc.document_id) {
       chatPayload.document_id = _teacherUploadedDoc.document_id;

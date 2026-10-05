@@ -339,6 +339,179 @@ async def get_category_stats(db, device_id: str) -> list[dict]:
     return await db.ai_attempts.aggregate(pipeline).to_list(50)
 
 
+def _teacher_category_key(value) -> str:
+    """Unify the category names used by web exams and individual AI answers."""
+    raw = str(value or "").strip().casefold().replace("_", " ")
+    if raw in ("", "all", "all categories", "alle", "none"):
+        return ""
+    aliases = {
+        "trafikkregler": ("trafikkregler", "traffic rules", "road rules"),
+        "skilt": ("skilt", "traffic signs", "road signs"),
+        "vikeplikt": ("vikeplikt", "right of way", "right-of-way"),
+        "fartsgrense": ("fartsgrense", "speed limits"),
+        "stoppelengde": ("stoppelengde", "stopping distance"),
+        "planovergang": ("planovergang", "railway crossing", "level crossing"),
+        "rundkjoring": ("rundkjøring", "rundkjoring", "roundabout"),
+        "morkekjoring": ("mørkekjøring", "morkekjoring", "night driving", "lysbruk"),
+        "hav": ("hav-regelen", "hav regelen", "grunnregelen", "basic traffic rule"),
+    }
+    for key, names in aliases.items():
+        if any(name in raw for name in names):
+            return key
+    return raw
+
+
+def _teacher_result_categories(result: dict) -> list[tuple[str, float, float]]:
+    """Read category evidence from an exam summary or saved web quiz attempt."""
+    def counts(row):
+        total = row.get("total_questions", row.get("total", row.get("total_q")))
+        correct = row.get("correct_answers", row.get("correct", row.get("total_correct")))
+        try:
+            total = float(total)
+            if total <= 0:
+                return None
+            if correct is None:
+                pct = float(row.get("score_percentage", row.get("accuracy", row.get("pct", row.get("score")))))
+                correct = total * pct / 100
+            correct = float(correct)
+            return total, max(0.0, min(correct, total))
+        except (TypeError, ValueError):
+            try:
+                pct = float(row.get("score_percentage", row.get("accuracy", row.get("pct", row.get("score")))))
+                return 1.0, max(0.0, min(pct, 100.0)) / 100
+            except (TypeError, ValueError):
+                return None
+
+    for field in ("category_stats", "category_scores", "by_category", "results_by_category"):
+        breakdown = result.get(field)
+        if isinstance(breakdown, dict):
+            breakdown = [dict(value, category=key) if isinstance(value, dict)
+                         else {"category": key, "accuracy": value}
+                         for key, value in breakdown.items()]
+        if isinstance(breakdown, list):
+            rows = []
+            for row in breakdown:
+                if not isinstance(row, dict):
+                    continue
+                category = _teacher_category_key(row.get("category") or row.get("name"))
+                score = counts(row)
+                if category and score:
+                    rows.append((category, *score))
+            if rows:
+                return rows
+
+    answers = result.get("questions_answered")
+    if isinstance(answers, list):
+        rows = []
+        for answer in answers:
+            if not isinstance(answer, dict):
+                continue
+            question = answer.get("question_obj") or answer.get("question") or {}
+            category = _teacher_category_key(answer.get("category") or
+                                             (question.get("category") if isinstance(question, dict) else None))
+            correct = answer.get("is_correct", answer.get("correct"))
+            if category and isinstance(correct, bool):
+                rows.append((category, 1.0, float(correct)))
+        if rows:
+            return rows
+
+    category = _teacher_category_key(result.get("category"))
+    score = counts(result)
+    return [(category, *score)] if category and score else []
+
+
+async def get_teacher_category_stats(db, device_id: Optional[str] = None,
+                                     user_id: Optional[str] = None) -> list[dict]:
+    """Merge ordinary answers and completed exam history for Michael, fail-soft.
+
+    Full web exams live in quiz_attempts (mode=exam); exam_results is also read
+    for deployments that have a separate exam summary collection. Source-level
+    accuracy is kept separate so a weak exam is not hidden by older quiz volume.
+    """
+    identities = ([{"device_id": device_id}] if device_id else [])
+    if user_id:
+        identities.append({"user_id": user_id})
+    if not identities:
+        return []
+    match = {"$or": identities} if len(identities) > 1 else identities[0]
+    totals: dict[str, dict[str, list[float]]] = {}
+    failed_exam_categories: set[str] = set()
+
+    def add(source, category, total, correct):
+        key = _teacher_category_key(category)
+        if not key or total <= 0:
+            return
+        score = totals.setdefault(key, {}).setdefault(source, [0.0, 0.0])
+        score[0] += total
+        score[1] += correct
+
+    try:
+        rows = await db["ai_attempts"].aggregate([
+            {"$match": match},
+            {"$group": {"_id": "$category", "total": {"$sum": 1},
+                        "correct": {"$sum": {"$cond": ["$is_correct", 1, 0]}}}},
+        ]).to_list(100)
+        for row in rows:
+            add("ai_attempts", row.get("_id"), float(row.get("total") or 0),
+                float(row.get("correct") or 0))
+    except Exception as exc:
+        logger.warning("Teacher AI-attempt stats unavailable: %s", exc)
+
+    projection = {
+        "_id": 0, "id": 1, "client_attempt_id": 1, "mode": 1,
+        "category": 1, "passed": 1, "total_questions": 1, "correct_answers": 1,
+        "score_percentage": 1, "score": 1, "category_stats": 1,
+        "category_scores": 1, "by_category": 1, "results_by_category": 1,
+        "questions_answered.category": 1, "questions_answered.is_correct": 1,
+        "questions_answered.correct": 1, "questions_answered.question_obj.category": 1,
+        "questions_answered.question.category": 1,
+    }
+    seen_exams = set()
+    sources = (
+        ("quiz_attempts", {"$and": [match, {"mode": "exam"}]}, "exam"),
+        ("exam_results", match, "exam"),
+        ("quiz_attempts", {"$and": [match, {"mode": {"$ne": "exam"}}]}, "quiz_attempts"),
+    )
+    for collection, query, source in sources:
+        try:
+            docs = await db[collection].find(query, projection).sort("completed_at", -1).limit(50).to_list(50)
+        except Exception as exc:
+            logger.warning("Teacher %s stats unavailable: %s", collection, exc)
+            continue
+        for doc in docs:
+            if collection == "quiz_attempts" and (doc.get("mode") == "exam") != (source == "exam"):
+                continue
+            if source == "exam":
+                exam_id = doc.get("client_attempt_id") or doc.get("id")
+                if exam_id and exam_id in seen_exams:
+                    continue
+                if exam_id:
+                    seen_exams.add(exam_id)
+            categories = _teacher_result_categories(doc)
+            if source == "exam" and not categories:
+                # An older exam may contain only its overall score. Use the broad
+                # theory category for a failed/weak result; do not invent a narrow topic.
+                broad_result = _teacher_result_categories({**doc, "category": "trafikkregler"})
+                if broad_result and (doc.get("passed") is False or
+                                     broad_result[0][2] / broad_result[0][1] < .60):
+                    categories = broad_result
+            for category, total, correct in categories:
+                add(source, category, total, correct)
+                if source == "exam" and doc.get("passed") is False:
+                    failed_exam_categories.add(_teacher_category_key(category))
+
+    result = []
+    for category, sources in totals.items():
+        source, (total, correct) = min(
+            sources.items(), key=lambda item: item[1][1] / item[1][0]
+        )
+        result.append({"category": category, "accuracy": round(correct / total * 100, 1),
+                       "total": round(total, 1), "source": source,
+                       "failed_exam": category in failed_exam_categories,
+                       "has_failed_exam": bool(failed_exam_categories)})
+    return sorted(result, key=lambda row: (row["accuracy"], -row["total"]))
+
+
 async def get_recent_accuracy(db, device_id: str, n: int = 30) -> float:
     """Accuracy over the last n attempts."""
     docs = await db.ai_attempts.find(

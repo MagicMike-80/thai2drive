@@ -32,6 +32,10 @@ try:
     import michael_greetings as _greetings
 except ImportError:  # imported as backend.teacher_chat
     from backend import michael_greetings as _greetings
+try:
+    import ai_learning as _ai_learning
+except ImportError:
+    from backend import ai_learning as _ai_learning
 from dotenv import load_dotenv
 try:
     from media_catalog import SUPPORTED_LANGUAGES, expand_law_synonyms, rank_catalog_media, serialize_catalog_document
@@ -1072,7 +1076,7 @@ def _build_system_prompt(lang: str, memory: Optional[dict] = None) -> str:
 
     # ── Ny bruker (0 quiz-forsøk): pedagogisk respons uten AI-fraskrivelse ──
     _new_user_fence = ""
-    if memory and memory.get("total_attempts", 1) == 0:
+    if memory and memory.get("total_attempts", 1) == 0 and not memory.get("weak_topic"):
         _new_user_fence_map = {
             "no": (
                 "\n\n━━━ NY ELEV — INGEN QUIZ-HISTORIKK ENNÅ ━━━\n"
@@ -1363,6 +1367,67 @@ def _v4_guiding_reply(reply: str, lang: str, stage: str) -> str:
         if clean.startswith(acknowledgment):
             return f"{acknowledgment} {question}"
     return question
+
+
+_WEAK_TOPIC_START = {
+    "no": "Resultatene dine peker på {name}. La oss starte der. {question}",
+    "th": "ผลการฝึกของคุณชี้ว่าควรฝึกเรื่อง{name}ครับ มาเริ่มที่เรื่องนี้กัน {question}",
+    "en": "Your results point to {name}. Let's start there. {question}",
+}
+
+_WEAK_TOPIC_QUESTIONS = {
+    "trafikkregler": {"no": "Hva ser du etter når du nærmer deg et kryss?", "th": "เมื่อเข้าใกล้ทางแยก คุณสังเกตอะไรบ้างครับ?", "en": "What do you look for as you approach a junction?"},
+    "vikeplikt": {"no": "Hvem kan komme fra sidene i et kryss uten skilt?", "th": "ที่ทางแยกไม่มีป้าย อาจมีรถมาจากด้านไหนบ้างครับ?", "en": "Where might other vehicles come from at an unsigned junction?"},
+    "planovergang": {"no": "Hva ser du etter før du krysser jernbanesporet?", "th": "ก่อนข้ามทางรถไฟ คุณสังเกตอะไรบ้างครับ?", "en": "What do you look for before crossing railway tracks?"},
+    "stoppelengde": {"no": "Hva skjer med stoppelengden når farten øker?", "th": "เมื่อขับเร็วขึ้น ระยะหยุดรถเปลี่ยนอย่างไรครับ?", "en": "What happens to stopping distance as speed increases?"},
+    "fartsgrense": {"no": "Hva sjekker du før du velger fart på en ny vei?", "th": "ก่อนเลือกความเร็วบนถนนสายใหม่ คุณตรวจอะไรครับ?", "en": "What do you check before choosing your speed on a new road?"},
+    "skilt": {"no": "Hva legger du merke til først når du ser et nytt skilt?", "th": "เมื่อเห็นป้ายจราจรใหม่ คุณสังเกตอะไรเป็นอย่างแรกครับ?", "en": "What do you notice first when you see an unfamiliar sign?"},
+    "rundkjoring": {"no": "Hva ser du etter før du kjører inn i en rundkjøring?", "th": "ก่อนเข้าวงเวียน คุณสังเกตอะไรบ้างครับ?", "en": "What do you look for before entering a roundabout?"},
+    "morkekjoring": {"no": "Hva sjekker du om sikten før du velger fart i mørket?", "th": "ก่อนเลือกความเร็วตอนมืด คุณตรวจทัศนวิสัยอย่างไรครับ?", "en": "What do you check about visibility before choosing your speed in the dark?"},
+    "hav": {"no": "Hva gjør du for å være oppmerksom i en ny trafikksituasjon?", "th": "เมื่อเจอสถานการณ์จราจรใหม่ คุณทำอย่างไรให้สังเกตได้รอบด้านครับ?", "en": "How do you stay alert in a new traffic situation?"},
+}
+
+
+def _weak_topic_start(topic: dict, lang: str) -> str:
+    question = _WEAK_TOPIC_QUESTIONS.get(topic.get("key"), _WEAK_TOPIC_QUESTIONS["trafikkregler"])[lang]
+    return _WEAK_TOPIC_START[lang].format(name=topic["name"], question=question)
+
+
+def _needs_topic_focus(topic: Optional[dict]) -> bool:
+    return bool(topic and (
+        topic.get("has_failed_exam") or
+        isinstance(topic.get("accuracy"), (int, float)) and topic["accuracy"] < 60
+    ))
+
+
+_BROAD_TOPIC_PROMPTS = (
+    "hva føler", "hva synes", "hva er vanskelig", "hva sliter du med",
+    "hvilket tema", "hva vil du øve", "hva bør vi se på",
+    "what do you feel", "what is difficult", "what do you struggle with",
+    "which topic", "what topic", "what would you like to practice",
+    "what would you like to practise", "หัวข้อไหน", "เรื่องไหนยาก",
+    "อยากฝึกเรื่องอะไร", "เรื่องอะไรยาก", "อยากเรียนเรื่องไหน",
+)
+
+
+def _asks_for_topic_selection(reply: str) -> bool:
+    text = reply.casefold()
+    return any(phrase in text for phrase in _BROAD_TOPIC_PROMPTS)
+
+
+def _weak_topic_guiding_reply(reply: str, topic: dict, lang: str) -> str:
+    """Keep the first weak-topic turn anchored to the verified category."""
+    scene_markers = (
+        "kryss", "skilt", "vei", "bil", "trafikk", "junction", "sign", "road",
+        "car", "traffic", "ทางแยก", "ป้าย", "ถนน", "รถ",
+    )
+    reply_lower = reply.casefold()
+    scene_text = reply_lower.replace(topic["name"].casefold(), "")
+    if topic["name"].casefold() in reply_lower and not _asks_for_topic_selection(reply) and any(
+        marker in scene_text for marker in scene_markers
+    ):
+        return reply
+    return _weak_topic_start(topic, lang)
 
 
 # Backwards-compat alias — kept in case any code imports MICHAEL_SYSTEM_PROMPT directly
@@ -3533,7 +3598,7 @@ teacher_router = APIRouter()
 
 
 async def _get_student_weakness(device_id: Optional[str] = None, user_id: Optional[str] = None, lang: str = "no") -> Optional[dict]:
-    """Find the student's weakest topic from quiz attempts or mistake bank."""
+    """Find the weakest localized topic from answers, exams or old mistakes."""
     match_conds = []
     if user_id:
         match_conds.append({"user_id": user_id})
@@ -3545,6 +3610,7 @@ async def _get_student_weakness(device_id: Optional[str] = None, user_id: Option
     match_filter = {"$or": match_conds} if len(match_conds) > 1 else match_conds[0]
 
     topic_labels = {
+        "trafikkregler": {"no": "trafikkregler og grunnregler", "th": "กฎจราจรและข้อบังคับพื้นฐาน", "en": "traffic rules"},
         "vikeplikt": {"no": "vikeplikt og høyreregelen", "th": "การให้ทางและกฎจากขวา", "en": "right-of-way rules"},
         "planovergang": {"no": "planoverganger og jernbane", "th": "ทางข้ามทางรถไฟ", "en": "railway level crossings"},
         "stoppelengde": {"no": "reaksjonstid og stoppelengde", "th": "ระยะตอบสนองและระยะหยุดรถ", "en": "stopping distance and reaction time"},
@@ -3556,6 +3622,17 @@ async def _get_student_weakness(device_id: Optional[str] = None, user_id: Option
     }
 
     try:
+        category_stats = await _ai_learning.get_teacher_category_stats(_db, device_id, user_id)
+        for stat in category_stats:
+            raw_cat = str(stat.get("category") or "").lower()
+            for key, trans in topic_labels.items():
+                if key in raw_cat:
+                    name = _strict_lang_map(trans, lang)
+                    if name:
+                        return {"key": key, "name": name, "accuracy": stat["accuracy"],
+                                "total": stat["total"], "source": stat["source"],
+                                "has_failed_exam": stat.get("has_failed_exam", False)}
+
         # Check failed attempts in quiz_attempts
         pipeline = [
             {"$match": {**match_filter, "correct": False}},
@@ -3674,9 +3751,9 @@ async def fetch_student_learning_memory(
             {"$match": match_filter},
             {"$group": {
                 "_id": None,
-                "total": {"$sum": 1},
-                "correct": {"$sum": {"$cond": ["$correct", 1, 0]}},
-                "last_session_at": {"$max": "$ts"},
+                "total": {"$sum": "$total_questions"},
+                "correct": {"$sum": "$correct_answers"},
+                "last_session_at": {"$max": "$completed_at"},
             }},
         ]
         stats_results = await _db["quiz_attempts"].aggregate(pipeline).to_list(length=1)
@@ -3688,6 +3765,11 @@ async def fetch_student_learning_memory(
         memory["is_returning"] = total_attempts > 0
     except Exception as e:
         logger.warning("Error fetching quiz stats for student memory: %s", e)
+
+    if memory["weak_topic"]:
+        # Exam-only histories may exist in exam_results without quiz_attempts.
+        memory["total_attempts"] = max(memory["total_attempts"], 1)
+        memory["is_returning"] = True
 
     return memory
 
@@ -3703,6 +3785,12 @@ async def teacher_welcome(
     weakness = memory.get("weak_topic") if memory else None
     streak = memory.get("current_streak", 0) if memory else 0
     welcome = _V4_COPY[lang]["0"]
+    if _needs_topic_focus(weakness):
+        welcome = {
+            "no": "Resultatene dine peker på {name}. La oss starte der.",
+            "th": "ผลการฝึกของคุณชี้ว่าควรฝึกเรื่อง{name}ครับ มาเริ่มที่เรื่องนี้กัน",
+            "en": "Your results point to {name}. Let's start there.",
+        }[lang].format(name=weakness["name"])
     result = {"lang": lang, "welcome": welcome, "weakness": weakness}
     if streak and streak >= 1:
         result["streak"] = streak
@@ -3826,7 +3914,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
 
     # Extract stats context if passed in the user message
     stats_context_str = ""
-    is_weak_topics = False
+    is_weak_topics = req.mode == "weak_topics"
     if "<stats_context>" in user_msg and "</stats_context>" in user_msg:
         is_weak_topics = True
         try:
@@ -3887,6 +3975,15 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             session_id=session_id, conversation_id=conversation_id,
             mode=req.mode, reply=reply_text, suggestions=[], sign_ids=[], media=[],
         )
+    student_memory = await fetch_student_learning_memory(req.device_id, req.user_id, lang)
+    weak_topic = student_memory.get("weak_topic") if student_memory else None
+    weak_result = _needs_topic_focus(weak_topic)
+    focus_weak_topic = bool(weak_topic and (
+        is_weak_topics or (weak_result and not prior and not is_vision and req.mode == "normal_chat")
+    ))
+    if focus_weak_topic:
+        # A failed exam or weak result starts with the subject, not topic selection.
+        v4_stage = "1"
     conversation: List[dict] = [{"role": m["role"], "content": m["content"]} for m in prior]
 
     # Primer: for brand-new sessions, inject a silent assistant turn so the model
@@ -3960,7 +4057,6 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             raise RuntimeError("DEEPSEEK_API_KEY not configured")
 
         # _build_system_prompt injects [LANGUAGE] header FIRST, then language-specific examples
-        student_memory = await fetch_student_learning_memory(req.device_id, req.user_id, lang)
         system_prompt = _build_system_prompt(lang, memory=student_memory)
         system_prompt += (
             "\n\nLEGAL SOURCE RULE: Ground legal explanations only in Vegtrafikkloven § 3 "
@@ -4072,7 +4168,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
                 "━━━━━━━━━━━━━━━━━━━━━━━"
             )
 
-        if v4_stage == "5" and is_weak_topics and stats_context_str:
+        if v4_stage == "5" and is_weak_topics and stats_context_str and not weak_topic:
             system_prompt += (
                 "\n\n━━━ WEAK TOPIC ANALYSIS MODE ━━━\n"
                 "The student has asked what they should practice. The hidden context block below contains their actual quiz performance and category statistics. This is for YOUR eyes only — the student cannot see it:\n\n"
@@ -4102,6 +4198,18 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         if lang == "th" and (is_quiz_help or req.mode in ("quiz_coach", "simplify")):
             system_prompt += _thai_quiz_purity_block()
         system_prompt += _v4_stage_instruction(v4_stage, lang)
+        if focus_weak_topic:
+            accuracy = weak_topic.get("accuracy")
+            score_hint = f" ({accuracy}% accuracy)" if accuracy is not None else ""
+            system_prompt += (
+                "\n\nVERIFIED STUDENT WEAKNESS (database, not a guess): "
+                f"{weak_topic['name']}{score_hint}. "
+                "Name this exact category in the selected language and begin a short, concrete "
+                "micro-lesson about it immediately. Never ask what the learner feels is hardest, "
+                "which topic they want, or another open topic-selection question. "
+                "At V4 stages 1-4 use only 1-2 short sentences and one focused observation "
+                "question; do not reveal a quiz answer or attach media until stage 5."
+            )
         messages = [{"role": "system", "content": system_prompt}]
         messages.extend(conversation)
         if is_vision:
@@ -4165,6 +4273,9 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         error_str = f"LiteLLM: {type(e).__name__}({e})"
         reply_text = _fallback_reply(lang)
 
+    if focus_weak_topic and error_str:
+        reply_text = _weak_topic_start(weak_topic, lang)
+
     if v4_stage == "5":
         reply_text = _apply_section_7_2_fail_safe(user_msg, reply_text, lang)
         reply_text = _apply_right_rule_definition_fail_safe(user_msg, reply_text, lang)
@@ -4175,6 +4286,10 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             reply_text = f"{_V4_COPY[lang]['5_ack']} {reply_text}"
     elif not error_str:
         reply_text = _v4_guiding_reply(reply_text, lang, v4_stage)
+        if focus_weak_topic:
+            reply_text = _weak_topic_guiding_reply(reply_text, weak_topic, lang)
+    if weak_result and _asks_for_topic_selection(reply_text):
+        reply_text = _weak_topic_start(weak_topic, lang)
     if lang == "th":
         reply_text = _sanitize_gender_particles(reply_text)
     reply_sign_ids = _sign_ids_from_reply(reply_text) if v4_stage == "5" else []
