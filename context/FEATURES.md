@@ -23,6 +23,8 @@ Michael trenger bare si hva han ønsker — resten skjer av seg selv.
   - Logger språk, spørsmål, svartid og feil til `teacher_chat_logs`.
 - ✅ **Smart Øving (Spaced Repetition / Adaptivt læringsløp)**
   - Analyserer svakeste temaer per elev via `ai_learning.py` og bygger adaptiv queue i quizzen.
+- ✅ **Michael V4 bruker eksamenshistorikk**
+  - `fetch_student_learning_memory` henter svakeste tema via `_get_student_weakness` (`backend/teacher_chat.py:3723-3726`), som bruker `ai_learning.get_teacher_category_stats` (`backend/teacher_chat.py:3625`). Denne leser `exam_results` sammen med `ai_attempts` og `quiz_attempts` (`backend/ai_learning.py:423-477`). `_build_system_prompt` (`backend/teacher_chat.py:1006`) leser ikke tabellene selv; den bruker læringsminnet som sendes inn. Dermed er Argus-forbeholdet om eksamenshistorikk lukket på kodenivå.
 - ✅ **Neon design — markedsføringssiden (landing.py)**
   - Cyan #00F5FF hero-knapper, aurora bakgrunn, magenta #FF00E5 eyebrows, gull #FFD700 stats og hero-highlight. Commit 7f2e747.
 

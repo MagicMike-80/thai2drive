@@ -105,4 +105,4 @@ Available skills: /office-hours, /plan-ceo-review, /plan-eng-review, /plan-desig
 /document-release, /document-generate, /codex, /cso, /autoplan, /pair-agent, /careful, /freeze,
 /guard, /unfreeze, /gstack-upgrade, /learn.
 
-> Ved tvil om «Argus»: se /ARGUS-SKILLE.md. Produksjonsverifisering følger /VERIFY.md.
+> Ved tvil om «Argus»: se /ARGUS-SKILLE.md. Produksjonsverifisering følger /VERIFY.md. Mobilappen er fryst — se /FROSSET-MOBILAPP.md.
