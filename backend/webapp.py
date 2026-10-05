@@ -5535,7 +5535,7 @@ var ttsPlaying = false;
 var currentCat = null;
 var soundOn = _ls.get('t2d_sound') !== 'off';
 var feedbackStyle = _ls.get('t2d_feedback') || 'soft';
-var appLang = _ls.get('t2d_lang') || 'th';
+var appLang = '__APP_LANG__';
 var activeTab = 'home';
 
 // Hoisted variables for applyUILang
@@ -11414,12 +11414,26 @@ function loadSettings() {
   });
 }
 
+function syncAppLanguagePath(lang) {
+  var path = window.location.pathname;
+  var targetPath = null;
+  if (/^\/(?:th|no|en)\/app$/.test(path)) {
+    targetPath = '/' + lang + '/app';
+  } else if (path === '/app' || /^\/app\/(?:th|no|en)$/.test(path)) {
+    targetPath = '/app/' + lang;
+  }
+  if (targetPath && targetPath !== path) {
+    window.history.replaceState(window.history.state, '', targetPath + window.location.search + window.location.hash);
+  }
+}
+
 function setLang(lang) {
   stopAllSpeech();
   var previousLang = appLang;
   appLang = lang;
   _ls.set('t2d_lang', lang);
   try { document.cookie = 't2d_site_lang=' + lang + ';path=/;max-age=31536000;SameSite=Lax'; } catch(e) {}
+  if (previousLang !== lang) syncAppLanguagePath(lang);
   ['TH','NO','EN'].forEach(function(l) {
     var btn = document.getElementById('lang' + l);
     if (btn) btn.classList.toggle('active', lang === l.toLowerCase());
@@ -13853,8 +13867,7 @@ def _webapp_html(default_lang: str = "th") -> str:
     )
     lang = normalize_lang(default_lang)
     html = install_studybook(install_stopping_distance(WEBAPP_HTML)).replace('__DEPLOY_VERSION__', DEPLOY_VERSION)
-    if lang != "th":
-        html = html.replace("_ls.get('t2d_lang') || 'th'", f"_ls.get('t2d_lang') || '{lang}'")
+    html = html.replace("var appLang = '__APP_LANG__';", f"var appLang = '{lang}';", 1)
 
     html = html.replace('class="sp-lang-tab active"', 'class="sp-lang-tab"')
     html = html.replace(f'class="sp-lang-tab" data-lang="{lang}"', f'class="sp-lang-tab active" data-lang="{lang}"')

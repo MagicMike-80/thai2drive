@@ -3,9 +3,9 @@ Etappe 1 — clean per-language entry points and exam-mode language forcing.
 Etappe 2 (language cleanup) — /web* now redirects to /app*; /app* serves the
 content and gets server-side <html lang>/<title>/meta/hreflang per language.
 ----------------------------------------------------------------------------
-- /app, /app/no, /app/th, /app/en: same SPA, each with a different default
-  initial language (still fully overridable by the student's stored
-  preference and the flag buttons).
+- /app, /app/no, /app/th, /app/en: same SPA, each bootstraps the language
+  specified by its URL. The flag buttons still let students switch languages
+  and persist that explicit choice during the session.
 - /web, /web/no, /web/th, /web/en: legacy URLs, now 301 redirects to the
   matching /app* URL with the query string preserved (critical for the
   Stripe checkout return query params).
@@ -92,19 +92,40 @@ class ApiPrefixRedirectsToCleanAppUrlTests(unittest.TestCase):
 class LanguageEntryPointRouteTests(unittest.TestCase):
     def test_app_default_route_defaults_to_thai(self):
         html = client.get("/app").text
-        self.assertIn("_ls.get('t2d_lang') || 'th'", html)
+        self.assertIn("var appLang = 'th';", html)
 
     def test_app_no_route_defaults_to_norwegian(self):
         html = client.get("/app/no").text
-        self.assertIn("_ls.get('t2d_lang') || 'no'", html)
+        self.assertIn("var appLang = 'no';", html)
 
     def test_app_th_route_defaults_to_thai(self):
         html = client.get("/app/th").text
-        self.assertIn("_ls.get('t2d_lang') || 'th'", html)
+        self.assertIn("var appLang = 'th';", html)
 
     def test_app_en_route_defaults_to_english(self):
         html = client.get("/app/en").text
-        self.assertIn("_ls.get('t2d_lang') || 'en'", html)
+        self.assertIn("var appLang = 'en';", html)
+
+    def test_entry_point_language_does_not_use_saved_language_before_ui_render(self):
+        for path in ("/app", "/app/th", "/app/no", "/app/en"):
+            with self.subTest(path=path):
+                html = client.get(path).text
+                self.assertNotIn("var appLang = _ls.get('t2d_lang')", html)
+
+    def test_language_switch_still_persists_explicit_user_choice(self):
+        self.assertIn("_ls.set('t2d_lang', lang);", WEBAPP_HTML)
+
+    def test_language_switch_updates_only_localized_app_paths_and_preserves_url_suffix(self):
+        import re
+        helper = re.search(r"function syncAppLanguagePath\(lang\)\s*\{(.*?)\n\}", WEBAPP_HTML, re.S)
+        setter = re.search(r"function setLang\(lang\)\s*\{(.*?)\n\}", WEBAPP_HTML, re.S)
+        self.assertIsNotNone(helper, "App language route synchronizer is missing")
+        self.assertIsNotNone(setter, "Language selector is missing")
+        self.assertIn("/^\\/(?:th|no|en)\\/app$/", helper.group(1))
+        self.assertIn("/^\\/app\\/(?:th|no|en)$/", helper.group(1))
+        self.assertIn("path === '/app'", helper.group(1))
+        self.assertIn("targetPath + window.location.search + window.location.hash", helper.group(1))
+        self.assertIn("if (previousLang !== lang) syncAppLanguagePath(lang);", setter.group(1))
 
     def test_app_no_route_goes_through_same_install_pipeline_as_app(self):
         # Regression guard: the new routes must not be a stripped-down copy —
