@@ -12831,11 +12831,9 @@ function _teacherResponseMedia(data) {
   if (!data || !Array.isArray(data.media)) return [];
   return data.media.filter(function(media) {
     if (!media || typeof media !== 'object') return false;
-    var id = String(media.media_id || media.id || '').trim();
-    var legacyId = String(media.id || '').trim();
-    return !!id && (!legacyId || legacyId === id);
+    return !!String(media.media_id || '').trim();
   }).map(function(media) {
-    var id = String(media.media_id || media.id).trim();
+    var id = String(media.media_id).trim();
     return Object.assign({}, media, { id:id });
   });
 }
@@ -13249,11 +13247,7 @@ async function teacherSend(overrideMsg, customDisplayMsg, customMode) {
     var visibleText = (data.sign_ids && data.sign_ids.length) ? _teacherTextOnlyReply(responseText) : responseText;
     var assistantBubble = _teacherAppendBubble('assistant', visibleText);
     await _teacherLinkSignReferences(assistantBubble, data.sign_ids || []);
-    var mediaSignIds = _teacherAppendMediaCards(_teacherResponseMedia(data), assistantBubble);
-    var fallbackSignIds = (data.sign_ids || []).filter(function(signId) {
-      return mediaSignIds.indexOf(signId) === -1;
-    });
-    await _teacherAppendSignCards(fallbackSignIds, assistantBubble);
+    _teacherAppendMediaCards(_teacherResponseMedia(data), assistantBubble);
     // Keep the chat calm: backend suggestions are intentionally not rendered.
     _teacherScrollToAnswerStart(assistantBubble);
     if (_teacherUploadedImage) _teacherClearDoc();
