@@ -10,10 +10,32 @@ SERVER = (Path(__file__).resolve().parents[1] / "backend" / "server.py").read_te
 class MichaelMediaCardsContractTests(unittest.TestCase):
     def test_media_cards_render_in_chat_and_quiz_coach(self):
         self.assertIn("function _teacherAppendMediaCards(mediaItems, container)", WEBAPP)
-        self.assertIn("_teacherAppendMediaCards(data.media || [], assistantBubble)", WEBAPP)
+        self.assertIn("_teacherAppendMediaCards(_teacherResponseMedia(data), assistantBubble)", WEBAPP)
         self.assertIn("_teacherAppendMediaCards((data && data.media) || [], container)", WEBAPP)
         self.assertIn("function _renderQuizCoachResponse(container, data)", WEBAPP)
         self.assertIn("return data;", WEBAPP)
+
+    def test_each_new_teacher_message_clears_old_media_and_requires_response_id(self):
+        clear_start = WEBAPP.index("function _teacherClearMediaCards()")
+        clear_end = WEBAPP.index("function _teacherResponseMedia(data)", clear_start)
+        clear_body = WEBAPP[clear_start:clear_end]
+        self.assertIn("document.getElementById('teacherMessages')", clear_body)
+        self.assertIn("querySelectorAll('.tm-media-strip, .tm-sign-strip')", clear_body)
+        self.assertIn("strip.remove()", clear_body)
+
+        response_start = WEBAPP.index("function _teacherResponseMedia(data)")
+        response_end = WEBAPP.index("function _renderQuizCoachResponse", response_start)
+        response_body = WEBAPP[response_start:response_end]
+        self.assertIn("if (!data || !Array.isArray(data.media)) return []", response_body)
+        self.assertIn("media.media_id || media.id", response_body)
+        self.assertIn("legacyId === id", response_body)
+
+        send_start = WEBAPP.index("async function teacherSend(")
+        send_end = WEBAPP.index("function toggleSound", send_start)
+        send_body = WEBAPP[send_start:send_end]
+        self.assertLess(send_body.index("_teacherClearMediaCards()"), send_body.index("_teacherAppendBubble('user'"))
+        self.assertIn("_teacherAppendMediaCards(_teacherResponseMedia(data), assistantBubble)", send_body)
+        self.assertNotIn("_teacherAppendMediaCards(data.media || [], assistantBubble)", send_body)
 
     def test_image_cards_use_safe_dom_and_mobile_layout(self):
         start = WEBAPP.index("function _buildTeacherMediaCard(media)")
