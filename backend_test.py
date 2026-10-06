@@ -17,7 +17,6 @@ BASE_URL = "https://www.thai2drive.no/api"
 TEST_USER_EMAIL = "test@thai2drive.com"
 TEST_USER_PASSWORD = "test123"
 ADMIN_USER_EMAIL = "admin@thai2drive.com"
-ADMIN_USER_PASSWORD = "admin123"
 
 class AuthTester:
     def __init__(self):

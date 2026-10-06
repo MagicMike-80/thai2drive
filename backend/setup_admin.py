@@ -3,6 +3,7 @@ setup_admin.py — Opprett eller reparer admin-bruker i MongoDB.
 Kjør: python setup_admin.py
 """
 import asyncio
+import getpass
 from pathlib import Path
 from dotenv import load_dotenv
 import os
@@ -17,9 +18,11 @@ db_name   = os.environ["DB_NAME"]
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 ADMIN_EMAIL    = "admin@thai2drive.com"
-ADMIN_PASSWORD = "admin123"
 
 async def main():
+    admin_password = getpass.getpass("New admin password: ")
+    if len(admin_password) < 12:
+        raise ValueError("Admin password must be at least 12 characters")
     client = AsyncIOMotorClient(mongo_url)
     db = client[db_name]
 
@@ -33,7 +36,7 @@ async def main():
 
     # 2. Opprett eller oppdater bruker i users
     user = await db.users.find_one({"email": ADMIN_EMAIL})
-    password_hash = pwd_context.hash(ADMIN_PASSWORD)
+    password_hash = pwd_context.hash(admin_password)
 
     if not user:
         import uuid
@@ -46,7 +49,6 @@ async def main():
             "is_premium": True,
             "created_at": datetime.now(timezone.utc).isoformat(),
         })
-        print(f"OK Opprettet bruker {ADMIN_EMAIL} med passord '{ADMIN_PASSWORD}'")
     else:
         await db.users.update_one(
             {"email": ADMIN_EMAIL},
@@ -63,7 +65,6 @@ async def main():
     print(f"\n-- Resultat: {user_check}")
     print(f"\n-- Logg inn med:")
     print(f"   E-post:  {ADMIN_EMAIL}")
-    print(f"   Passord: {ADMIN_PASSWORD}")
     print(f"   URL:     https://www.thai2drive.no/api/admin-panel")
 
     client.close()

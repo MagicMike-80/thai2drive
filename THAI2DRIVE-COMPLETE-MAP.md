@@ -291,7 +291,6 @@ C:\Users\Stein Hoang\Desktop\Thai2Drive App\thai2drive\
 | POST | `/api/admin/questions/{id}/audit` | AI Vision audit |
 | GET/PATCH | `/api/admin/book/sections` | Book sections CRUD |
 | POST | `/api/admin/book/sections/{id}/image` | Upload section image |
-| GET | `/api/admin-setup-t2d` | Create initial admin user |
 | POST | `/api/admin/check` | Check admin status |
 | POST | `/api/admin/add` | Add admin privileges |
 | POST | `/api/seed` | Seed 45 questions (6 categories) |
@@ -630,7 +629,6 @@ Expo web build → `frontend/dist/` → manually copied to `backend/webapp/`
 | 🚦 Trafikkskilt | Sign database CRUD |
 | 🔊 Voice Tester | ElevenLabs TTS test |
 
-**Default admin credentials:** admin@thai2drive.com / admin123 (seeded at startup)
 
 ---
 
