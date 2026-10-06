@@ -20,7 +20,7 @@ class MichaelMediaCardsContractTests(unittest.TestCase):
         clear_end = WEBAPP.index("function _teacherResponseMedia(data)", clear_start)
         clear_body = WEBAPP[clear_start:clear_end]
         self.assertIn("document.getElementById('teacherMessages')", clear_body)
-        self.assertIn("querySelectorAll('.tm-media-strip')", clear_body)
+        self.assertIn("querySelectorAll('.tm-media-strip, .tm-sign-strip')", clear_body)
         self.assertIn("strip.remove()", clear_body)
 
         response_start = WEBAPP.index("function _teacherResponseMedia(data)")

@@ -12822,7 +12822,7 @@ function _teacherAppendMediaCards(mediaItems, container) {
 function _teacherClearMediaCards() {
   var messages = document.getElementById('teacherMessages');
   if (!messages) return;
-  messages.querySelectorAll('.tm-media-strip').forEach(function(strip) {
+  messages.querySelectorAll('.tm-media-strip, .tm-sign-strip').forEach(function(strip) {
     strip.remove();
   });
 }
