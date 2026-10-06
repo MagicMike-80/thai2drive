@@ -5258,7 +5258,7 @@ a { color:inherit; text-decoration:none; }
           <div class="paywall-price-card" onclick="buyPremium('three_months',this)" data-plan="three_months" style="position:relative">
             <div class="ppc-badge" data-key="pw_best_value"></div>
             <div class="ppc-period" data-key="pw_three_months"></div>
-            <div class="ppc-price" data-price-plan="three_months">399 NOK</div>
+            <div class="ppc-price" data-price-plan="three_months">299 NOK</div>
             <div class="ppc-per" data-key="pw_per_three_months"></div>
           </div>
           <div class="paywall-price-card" onclick="buyPremium('lifetime',this)" data-plan="lifetime">
@@ -6485,8 +6485,8 @@ function catName(raw) {
 }
 
 var PREMIUM_PRICING = {
-  monthly: { display:'199 NOK', period:{no:'per måned', th:'ต่อเดือน', en:'per month'} },
-  three_months: { display:'399 NOK', period:{no:'per 3 måneder', th:'ต่อ 3 เดือน', en:'per 3 months'} },
+  monthly: { display:'99 NOK', period:{no:'per måned', th:'ต่อเดือน', en:'per month'} },
+  three_months: { display:'299 NOK', period:{no:'per 3 måneder', th:'ต่อ 3 เดือน', en:'per 3 months'} },
   lifetime: { display:'699 NOK', period:{no:'engangsbetaling', th:'จ่ายครั้งเดียว', en:'one-time payment'} }
 };
 

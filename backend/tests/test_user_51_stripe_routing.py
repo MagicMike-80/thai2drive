@@ -290,3 +290,16 @@ def test_paywall_screen_translations_no_language_bleed():
         th_sanitized = th_text.replace("Premium", "").replace("NOK", "")
         latin_words_in_th = re.findall(r"[A-Za-zÆØÅæøå]{2,}", th_sanitized)
         assert latin_words_in_th == [], f"Language bleed in {key} (Thai): {latin_words_in_th}"
+
+
+def test_paywall_initial_and_fallback_prices_match_backend():
+    """The paywall must not show stale prices while /api/pricing loads or fails."""
+    webapp_code = (BACKEND_DIR / "webapp.py").read_text(encoding="utf-8")
+
+    for plan_id, plan in server.PUBLIC_PRICING_FALLBACK.items():
+        amount = plan["amount"]
+        assert f'data-price-plan="{plan_id}">{amount} NOK' in webapp_code
+        assert re.search(
+            rf"(?m)^\s*{plan_id}: \{{ display:'{amount} NOK'",
+            webapp_code,
+        )
