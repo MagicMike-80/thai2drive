@@ -240,6 +240,19 @@ class QuizTermsTests(unittest.TestCase):
         result = self.module._build_terms_response("q9", question, cache, "th")
         self.assertEqual(result["terms"], [])
 
+    def test_fareskilt_alias_matches_varselskilt_card(self):
+        cache = [{
+            "id": "warning",
+            "term_no": "Varselskilt",
+            "aliases_no": ["Fareskilt"],
+            "term_th": "ป้ายเตือน",
+            "definition_th": "ป้ายที่เตือนผู้ขับขี่ให้ทราบถึงอันตราย",
+            "topic_tags": [],
+        }]
+        question = {"question_text_no": "Hva betyr dette fareskilt?", "category": "Skilt"}
+        result = self.module._build_terms_response("warning", question, cache, "th")
+        self.assertEqual([term["term_no"] for term in result["terms"]], ["Varselskilt"])
+
 
 class WebappQuizGlossaryContractTests(unittest.TestCase):
     @classmethod

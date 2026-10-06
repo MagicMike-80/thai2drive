@@ -6330,6 +6330,7 @@ async def get_glossary(lang: str = "no", search: str = ""):
         search_clean = search.strip()
         query["$or"] = [
             {"term_no": {"$regex": search_clean, "$options": "i"}},
+            {"aliases_no": {"$regex": search_clean, "$options": "i"}},
             {"term_th": {"$regex": search_clean, "$options": "i"}},
             {"term_en": {"$regex": search_clean, "$options": "i"}},
         ]

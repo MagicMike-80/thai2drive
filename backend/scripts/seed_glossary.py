@@ -1,9 +1,10 @@
-"""
-seed_glossary.py — fyller learning_glossary med 22 norske trafikkuttrykk
-Trygt å kjøre på nytt — hopper over eksisterende (by term_no).
-Kjør: cd thai2drive/backend && python scripts/seed_glossary.py
+"""Seed glossary and apply Michael's approved Norwegian–Thai term master.
+
+Only the approved fields are updated on existing documents. Run explicitly;
+deploying the code does not write to MongoDB.
 """
 
+import argparse
 import asyncio, os, uuid
 from datetime import datetime, timezone
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -21,7 +22,7 @@ if not MONGO_URL:
 if not MONGO_URL:
     raise RuntimeError("MONGO_URL not found in environment or .env")
 
-DB_NAME = "thai2drive"
+DB_NAME = os.environ.get("DB_NAME") or "thai2drive"
 
 TERMS = [
     {
@@ -291,9 +292,108 @@ TERMS = [
 ]
 
 
-async def main():
+# Approved by Michael: one canonical record per concept. Keep the live Thai
+# variants for Fartsgrense and Trafikklys. Other-language copy on existing
+# documents is deliberately untouched; new Thai-only entries remain hidden
+# in no/en modes until their wording is approved.
+LOCKED_MASTER = (
+    ("Vikeplikt", "การให้ทาง", {}),
+    ("Forkjørsvei", "ถนนที่มีสิทธิ์ผ่านก่อน", {}),
+    ("Forkjørsrett", "สิทธิ์ในการผ่านก่อน", {
+        "definition_th": "สิทธิ์ของผู้ใช้ทางในการผ่านหรือเคลื่อนที่ไปก่อนผู้ใช้ทางคนอื่นตามกฎจราจร",
+        "example_th": "รถที่มีสิทธิ์ผ่านก่อนสามารถขับผ่านไปได้ แต่ยังต้องระมัดระวังและปฏิบัติตามกฎจราจร",
+    }),
+    ("Vikepliktskilt", "ป้ายให้ทาง", {}),
+    ("Stoppskilt", "ป้ายหยุด", {
+        "definition_th": "ป้ายที่กำหนดให้ผู้ขับขี่ต้องหยุดรถให้สนิทก่อนขับต่อไป",
+        "example_th": "เมื่อเจอป้ายหยุด คุณต้องหยุดรถให้สนิทและตรวจดูการจราจรก่อนขับต่อ",
+    }),
+    ("Varselskilt", "ป้ายเตือน", {
+        "aliases_no": ["Fareskilt"],
+        "definition_th": "ป้ายที่เตือนผู้ขับขี่ให้ทราบถึงอันตรายหรือสภาพถนนที่ต้องระมัดระวังข้างหน้า",
+        "example_th": "เมื่อเห็นป้ายเตือน ผู้ขับขี่ควรลดความเร็วและเตรียมพร้อมรับอันตรายข้างหน้า",
+    }),
+    ("Forbudsskilt", "ป้ายห้าม", {
+        "definition_th": "ป้ายที่แสดงข้อห้ามหรือข้อจำกัดที่ผู้ใช้ทางต้องปฏิบัติตาม",
+        "example_th": "ป้ายห้ามอาจกำหนดว่าห้ามเข้า ห้ามจอด หรือห้ามใช้ความเร็วเกินที่กำหนด",
+    }),
+    ("Påbudsskilt", "ป้ายบังคับ", {
+        "definition_th": "ป้ายที่กำหนดว่าผู้ใช้ทางต้องปฏิบัติหรือขับไปในทิศทางที่ระบุ",
+        "example_th": "หากป้ายบังคับให้ขับตรงไป ผู้ขับขี่ต้องขับไปตามทิศทางที่ป้ายกำหนด",
+    }),
+    ("Stopplengde", "ระยะทางในการหยุดรถ", {}),
+    ("Reaksjonslengde", "ระยะทางในการตอบสนอง", {
+        "definition_th": "ระยะทางที่รถเคลื่อนที่ตั้งแต่ผู้ขับขี่รับรู้ถึงอันตรายจนเริ่มเบรก",
+        "example_th": "เมื่อความเร็วเพิ่มขึ้น ระยะทางในการตอบสนองก็จะเพิ่มขึ้นด้วย",
+    }),
+    ("Bremselengde", "ระยะทางในการเบรก", {}),
+    ("Fartsgrense", "ขีดจำกัดความเร็ว", {}),
+    ("Rundkjøring", "วงเวียน", {}),
+    ("Gangfelt", "ทางม้าลาย", {}),
+    ("Trafikklys", "สัญญาณไฟจราจร", {}),
+)
+
+LEGACY_NAMES = {
+    "Forkjørsvei": ("Prioritert vei",),
+    "Stoppskilt": ("Stopp-skilt",),
+    "Varselskilt": ("Fareskilt",),
+}
+
+
+async def sync_locked_master(db):
+    """Insert missing approved terms and update only their approved fields."""
+    templates = {term["term_no"]: term for term in TERMS}
+    inserted = updated = 0
+    for term_no, term_th, extra in LOCKED_MASTER:
+        existing = await db.learning_glossary.find_one({"term_no": term_no})
+        if existing is None:
+            for old_name in LEGACY_NAMES.get(term_no, ()):
+                existing = await db.learning_glossary.find_one({"term_no": old_name})
+                if existing is not None:
+                    break
+        approved = {"term_no": term_no, "term_th": term_th, **extra}
+        if existing is not None:
+            if any(existing.get(field) != value for field, value in approved.items()):
+                await db.learning_glossary.update_one(
+                    {"_id": existing["_id"]},
+                    {"$set": {**approved, "updated_at": datetime.now(timezone.utc).isoformat()}},
+                )
+                updated += 1
+            continue
+        template = templates.get(term_no) or next(
+            (templates[old] for old in LEGACY_NAMES.get(term_no, ()) if old in templates), None
+        )
+        doc = {
+            "id": str(uuid.uuid4()),
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "active": True,
+            "term_no": term_no,
+            "term_th": term_th,
+            "term_en": "",
+            "definition_no": "",
+            "definition_th": "",
+            "definition_en": "",
+            "example_no": "",
+            "example_th": "",
+            "example_en": "",
+            "topic_tags": [],
+            **(template or {}),
+            **approved,
+        }
+        await db.learning_glossary.insert_one(doc)
+        inserted += 1
+    return inserted, updated
+
+
+async def main(locked_master_only=False):
     client = AsyncIOMotorClient(MONGO_URL)
     db = client[DB_NAME]
+
+    if locked_master_only:
+        inserted, updated = await sync_locked_master(db)
+        print(f"Locked master — {inserted} inserted, {updated} updated.")
+        client.close()
+        return
 
     # Migration: "Prioritert vei" was never official Norwegian traffic terminology —
     # "Forkjørsvei" is the term Statens vegvesen and Michael's own rules use.
@@ -326,9 +426,14 @@ async def main():
         await db.learning_glossary.insert_one(doc)
         print(f"  INSERT: {t['term_no']} / {t['term_th']}")
         inserted += 1
-    print(f"\nDone — {inserted} inserted, {skipped} skipped.")
+    master_inserted, master_updated = await sync_locked_master(db)
+    print(f"\nDone — {inserted} seeded, {skipped} skipped; "
+          f"locked master: {master_inserted} inserted, {master_updated} updated.")
     client.close()
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--locked-master-only", action="store_true")
+    args = parser.parse_args()
+    asyncio.run(main(locked_master_only=args.locked_master_only))

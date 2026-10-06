@@ -50,7 +50,11 @@ _LANG_DEFINITION_FIELD = {"no": "definition_no", "th": "definition_th", "en": "d
 
 def _term_match_keys(doc: dict) -> dict:
     return {
-        "term_key": (doc.get("term_no") or "").strip().lower(),
+        "term_keys": tuple(
+            value.strip().lower()
+            for value in [doc.get("term_no"), *doc.get("aliases_no", [])]
+            if isinstance(value, str) and value.strip()
+        ),
         "tag_keys": {t.strip().lower() for t in doc.get("topic_tags", []) if t},
     }
 
@@ -83,14 +87,12 @@ def _match_terms(question: dict, cache: list[dict]) -> list[dict]:
     scored = []
     for doc in cache:
         match = doc.get("_match") or _term_match_keys(doc)
-        term_key = match.get("term_key", "")
+        term_keys = match.get("term_keys", ())
         tag_keys = match.get("tag_keys", set())
 
         weight = 0
-        if term_key:
-            pattern = r"(?<!\w)" + re.escape(term_key) + r"(?!\w)"
-            if re.search(pattern, text):
-                weight += 2
+        if any(re.search(r"(?<!\w)" + re.escape(key) + r"(?!\w)", text) for key in term_keys):
+            weight += 2
         if cat and cat in tag_keys:
             weight += 1
 
