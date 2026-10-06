@@ -91,6 +91,14 @@ styres mot et bestemt svar.
 commits umiddelbart. Null treff er ikke bevis på fravær — si det eksplisitt i
 rapporten før du konkluderer.
 
+**Hemmeligheter i kodehistorikk.**
+Et passord, en API-nøkkel eller et token som har stått i repoet,
+er kompromittert selv om det fjernes i nyeste commit.
+Git-historikken beholder verdien.
+Fjerning er ikke nok — hemmeligheten må byttes.
+Sjekk alltid: har denne verdien vært committet noen gang?
+Er svaret ja, skal den roteres, ikke bare slettes.
+
 **Mange parallelle spor.** Prosjektet har flere titalls brancher og flere agenter
 som jobber samtidig. Funksjonalitet kan ligge ferdig under et branchnavn du ikke
 letet etter. List brancher før du konkluderer med at noe mangler.
