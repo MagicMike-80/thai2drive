@@ -202,9 +202,9 @@ class TeacherChatFallbackTests(unittest.TestCase):
             "Forklaring",
         )
 
-    def test_text_matched_sign_is_prioritized_before_general_resources(self):
+    def test_generic_sign_search_does_not_insert_unrequested_sign(self):
         source = (Path(__file__).resolve().parents[1] / "teacher_chat.py").read_text(encoding="utf-8")
-        self.assertIn("context_parts.insert(0, _format_sign_context(sign, lang))", source)
+        self.assertNotIn("context_parts.insert(0, _format_sign_context(sign, lang))", source)
 
     def test_explicit_sign_aliases_resolve_in_each_supported_language(self):
         cases = {
@@ -364,9 +364,10 @@ class TeacherChatFallbackTests(unittest.TestCase):
             with self.subTest(message=message):
                 self.assertFalse(self.module._is_right_hand_rule_query(message))
 
-    def test_explicit_sign_skips_broader_sign_search(self):
+    def test_only_explicit_signs_are_loaded_into_curriculum(self):
         source = (Path(__file__).resolve().parents[1] / "teacher_chat.py").read_text(encoding="utf-8")
-        self.assertIn("if len(matched_sign_ids) < 2 and not explicit_sign_ids:", source)
+        self.assertIn("for sign_id in explicit_sign_ids:", source)
+        self.assertNotIn("if len(matched_sign_ids) < 2 and not explicit_sign_ids:", source)
 
     def test_sign_ids_are_extracted_in_context_order_without_duplicates(self):
         context = (

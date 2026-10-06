@@ -1170,7 +1170,8 @@ def _conversation_first_rules(lang: str) -> str:
         "\n\n━━━ CONVERSATION-FIRST RULES (highest priority for format and honesty) ━━━\n"
         f"Reply only in {language}, as a playful, warm, and cheering driving instructor.\n"
         "1. MICHAEL V4: Follow the current dialogue stage supplied at the end of this prompt. "
-        "Ask one guiding question before explaining; reveal the answer only at stage 5.\n"
+        "Ask one guiding question before explaining only for guided practice. For a direct "
+        "fact or definition request, answer in the first sentence without a leading question.\n"
         "2. Keep stages 0–4 to one or two short sentences, without lists or answer dumps.\n"
         "3. Never show an image or other media before stage 5, even when the learner asks for it.\n"
         "4. Use the conversation so far and the ACTIVE SIGN CONTEXT (if present). If the "
@@ -1591,6 +1592,10 @@ def _concise_teacher_reply(reply_text: str, lang: str) -> str:
         and not sentence.endswith(("?", "？"))
         and not any(term in sentence.casefold() for term in _CONCISE_FORBIDDEN_TERMS)
     ][:2]
+    if len(allowed) > 1 and allowed[0].casefold().strip(" .!。！") in {
+        "klart", "greit", "selvsagt", "sure", "okay", "of course", "โอเคครับ", "ได้ครับ"
+    }:
+        allowed.pop(0)
     concise = " ".join(allowed).strip()
     if not concise:
         return {
@@ -1625,9 +1630,41 @@ def _concise_output_instruction(lang: str) -> str:
 
 _DIRECT_LOOKUP_PATTERNS = (
     r"\b(?:hva|what)\s+(?:sier|betyr|er)\b",
+    r"\b(?:fortell\s+(?:meg\s+)?om|tell\s+me\s+about|what\s+is|define)\b",
     r"\b(?:paragraf|section|§)\s*\d+",
-    r"(?:คืออะไร|หมายความว่า|มาตรา\s*\d+)",
+    r"(?:คืออะไร|หมายความว่า|อธิบาย(?:เกี่ยวกับ)?|มาตรา\s*\d+)",
 )
+
+_FRUSTRATION_TERMS = (
+    "dårlig kommunikasjon", "du svarer ikke", "svarer ikke på det jeg spør",
+    "lyden virker ikke", "du forstår ikke", "not answering", "you don't answer",
+    "sound does not work", "audio doesn't work", "ไม่ตอบคำถาม", "เสียงไม่ทำงาน",
+    "ไม่เข้าใจคำถาม",
+)
+_SIGN_REFERENCE = re.compile(
+    r"\b(?:dette|det|this|that)\s+(?:skiltet|skilt|sign)\b|(?:ป้ายนี้|ป้ายนั้น)", re.I,
+)
+
+
+def _is_frustrated(message: str) -> bool:
+    return any(term in (message or "").casefold() for term in _FRUSTRATION_TERMS)
+
+
+def _asks_about_sign(message: str) -> bool:
+    text = (message or "").casefold()
+    return bool(_explicit_sign_ids_for_message(text) or _SIGN_REFERENCE.search(text) or
+                re.search(r"\b(?:skilt|skiltet|trafikkskilt|sign|signs|road sign|forbudsskilt)\b|ป้าย", text))
+
+
+def _frustration_instruction(lang: str) -> str:
+    language = {"no": "Norwegian", "th": "Thai", "en": "English"}[lang]
+    return (
+        "\n\nFRUSTRATION BRAKE — OVERRIDES V4 GUIDED PRACTICE: The learner is frustrated. "
+        "Acknowledge the problem briefly and warmly, then give the concrete answer or practical "
+        "help immediately. No leading or follow-up question, no fixed coaching phrases. "
+        "If they report an app fault, do not claim it has been fixed. "
+        f"Use only {language}."
+    )
 
 
 _LEAKED_MEDIA_PAREN = re.compile(r"\((?:podcast|video|image)\s*:[^)]*\)", re.IGNORECASE)
@@ -3283,7 +3320,8 @@ async def _get_curriculum_context(user_msg: str, lang: str) -> str:
         if concept_data:
             matched_categories.add(concept_data["category"])
         for cat, kws in keywords_map.items():
-            if any(kw in clean_msg for kw in kws):
+            if any((bool(re.search(rf"(?<!\w){re.escape(kw)}(?!\w)", clean_msg)) if kw == "stop"
+                    else kw in clean_msg) for kw in kws):
                 matched_categories.add(cat)
                 
         terms_to_search = []
@@ -3380,45 +3418,6 @@ async def _get_curriculum_context(user_msg: str, lang: str) -> str:
                     )
                     context_parts.append(vid_desc)
                     
-            if len(matched_sign_ids) < 2 and not explicit_sign_ids:
-                sign_or_clauses = []
-                for term in terms_to_search[:3]:
-                    sign_or_clauses.extend([
-                        {f"name.{lang}": {"$regex": term, "$options": "i"}},
-                        {f"explanation.{lang}": {"$regex": term, "$options": "i"}},
-                        {"name.no": {"$regex": term, "$options": "i"}},
-                        {"explanation.no": {"$regex": term, "$options": "i"}}
-                    ])
-                if sign_or_clauses:
-                    cursor = _db.traffic_signs.find({"$or": sign_or_clauses})
-                    all_text_signs = await cursor.to_list(length=40)
-                    
-                    scored_signs = []
-                    for sign in all_text_signs:
-                        if sign["id"] in matched_sign_ids:
-                            continue
-                        score = 0
-                        name_no = sign.get("name", {}).get("no", "").lower()
-                        name_lang = sign.get("name", {}).get(lang, "").lower() if lang else ""
-                        exp_no = sign.get("explanation", {}).get("no", "").lower()
-                        exp_lang = sign.get("explanation", {}).get(lang, "").lower() if lang else ""
-                        
-                        for term in terms_to_search:
-                            term_lower = term.lower()
-                            if term_lower in name_lang: score += 10
-                            if term_lower in name_no: score += 5
-                            if term_lower in exp_lang: score += 2
-                            if term_lower in exp_no: score += 1
-                        scored_signs.append((score, sign))
-                        
-                    scored_signs.sort(key=lambda x: x[0], reverse=True)
-                    for score, sign in scored_signs[:2]:
-                        if sign["id"] not in matched_sign_ids:
-                            matched_sign_ids.add(sign["id"])
-                            # A concrete sign must survive the final context_parts[:3]
-                            # limit ahead of broader studybook/video resources.
-                            context_parts.insert(0, _format_sign_context(sign, lang))
-
         if context_parts:
             return "\n\n".join(context_parts[:3])
     except Exception as e:
@@ -3984,6 +3983,10 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
     if focus_weak_topic:
         # A failed exam or weak result starts with the subject, not topic selection.
         v4_stage = "1"
+    is_frustrated = _is_frustrated(user_msg)
+    direct_answer = (is_direct_lookup or is_frustrated) and not is_quiz_help and not is_vision and req.mode == "normal_chat"
+    if direct_answer:
+        v4_stage = "5"
     conversation: List[dict] = [{"role": m["role"], "content": m["content"]} for m in prior]
 
     # Primer: for brand-new sessions, inject a silent assistant turn so the model
@@ -3996,23 +3999,23 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
     # Call LLM
     context_str = ""
     media = []
-    last_reveal = max(
-        (index for index, turn in enumerate(prior)
-         if turn.get("role") == "assistant" and turn.get("v4_stage") == "5"),
-        default=-1,
-    )
-    topic_query = " ".join(
-        [turn.get("content", "") for turn in prior[last_reveal + 1:]
-         if turn.get("role") == "user"][-5:]
-        + [user_msg]
-    ).strip()
-    explicit_sign_ids = _explicit_sign_ids_for_message(topic_query)
+    # Retrieve for the current request, not every topic discussed since the last reveal.
+    topic_query = user_msg
+    if is_frustrated and not is_direct_lookup:
+        last_question = next((turn.get("content", "") for turn in reversed(prior)
+                              if turn.get("role") == "user" and not _is_frustrated(turn.get("content", ""))), "")
+        if last_question:
+            topic_query = last_question
+    explicit_sign_ids = _explicit_sign_ids_for_message(user_msg)
+    if _SIGN_REFERENCE.search(user_msg) and not explicit_sign_ids:
+        explicit_sign_ids = _active_sign_ids_from_history(prior, [])
+    sign_requested = _asks_about_sign(user_msg)
     try:
         resolved_concept = await resolve_traffic_concept(topic_query, lang, _db)
 
         # Retrieve curriculum context from database (RAG)
         context_str = await _get_curriculum_context(topic_query, lang)
-        context_sign_ids = _sign_ids_from_context(context_str)
+        context_sign_ids = _sign_ids_from_context(context_str) if sign_requested else []
         # Only explicit sign requests may reserve the limited response media slots.
         # RAG context can mention several related signs; preloading those cards can
         # otherwise crowd out the lesson image/video the learner actually requested.
@@ -4129,13 +4132,14 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
                 )
             system_prompt += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
-        multimedia_str = await _get_available_multimedia(lang) if v4_stage == "5" else ""
+        multimedia_str = await _get_available_multimedia(lang) if v4_stage == "5" and re.search(
+            r"\b(?:video|podcast|lyd|audio|film)\b|(?:วิดีโอ|เสียง)", user_msg, re.I
+        ) else ""
         if multimedia_str:
             system_prompt += multimedia_str
 
-        system_prompt += await _active_sign_context(
-            _active_sign_ids_from_history(prior, explicit_sign_ids), lang
-        )
+        if sign_requested and explicit_sign_ids:
+            system_prompt += await _active_sign_context(explicit_sign_ids, lang)
 
         if req.document_context:
             system_prompt += _format_student_document_context(req.document_context)
@@ -4210,6 +4214,17 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
                 "At V4 stages 1-4 use only 1-2 short sentences and one focused observation "
                 "question; do not reveal a quiz answer or attach media until stage 5."
             )
+        if direct_answer:
+            system_prompt += _frustration_instruction(lang) if is_frustrated else _concise_output_instruction(lang)
+            if is_frustrated and topic_query != user_msg:
+                system_prompt += f"\nLAST CONCRETE LEARNER REQUEST TO ANSWER: {topic_query}"
+            system_prompt += (
+                "\nDIRECT ANSWER OVERRIDE: "
+                + ("After one short apology, answer the last concrete request immediately. " if is_frustrated
+                   else "State the requested fact or definition in sentence one. ")
+                + "Do not use a leading question or a coaching prompt. "
+                "Ignore unrelated earlier topics and screen elements. No follow-up question."
+            )
         messages = [{"role": "system", "content": system_prompt}]
         messages.extend(conversation)
         if is_vision:
@@ -4230,8 +4245,17 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             reply_text = _fallback_reply(lang)
         else:
             reply_text = _enforce_approved_image_tags(reply_text, context_str)
-            if v4_stage == "5" and is_direct_lookup:
+            if direct_answer:
                 reply_text = _concise_teacher_reply(reply_text, lang)
+                if is_direct_lookup and resolved_concept and reply_text == _concise_teacher_reply("?", lang):
+                    reply_text = resolved_concept.get("definition") or reply_text
+                if is_frustrated and not re.match(
+                    r"^(?:beklager|unnskyld|uff|sorry|i'm sorry|ขอโทษ|ขออภัย)", reply_text, re.I
+                ):
+                    apology = {"no": "Beklager, jeg rotet det til.",
+                               "th": "ขอโทษครับ ผมอธิบายไม่ชัดเจน",
+                               "en": "Sorry, I got that wrong."}[lang]
+                    reply_text = f"{apology} {reply_text}"
             elif v4_stage == "5" and not is_quiz_help and req.mode not in ("quiz_coach", "simplify"):
                 reply_text = _polish_teacher_reply(
                     reply_text,
@@ -4282,7 +4306,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         reply_text = _apply_bus_rule_definition_fail_safe(user_msg, reply_text, lang)
         if req.mode not in ("quiz_coach", "simplify"):
             reply_text = _apply_formula_fail_safe(user_msg, reply_text, lang)
-        if not error_str:
+        if not error_str and not direct_answer:
             reply_text = f"{_V4_COPY[lang]['5_ack']} {reply_text}"
     elif not error_str:
         reply_text = _v4_guiding_reply(reply_text, lang, v4_stage)
@@ -4292,8 +4316,8 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         reply_text = _weak_topic_start(weak_topic, lang)
     if lang == "th":
         reply_text = _sanitize_gender_particles(reply_text)
-    reply_sign_ids = _sign_ids_from_reply(reply_text) if v4_stage == "5" else []
-    sign_ids = _strict_response_sign_ids(explicit_sign_ids, reply_sign_ids) if v4_stage == "5" else []
+    reply_sign_ids = _sign_ids_from_reply(reply_text) if v4_stage == "5" and explicit_sign_ids else []
+    sign_ids = _strict_response_sign_ids(explicit_sign_ids, reply_sign_ids) if v4_stage == "5" and sign_requested else []
 
     exact_response_media = []
     if sign_ids:

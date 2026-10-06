@@ -259,6 +259,26 @@ class DeterministicPromptTests(unittest.TestCase):
         _, system, _ = _run_chat("Jeg gruer meg til oppkjøring", "no")
         self.assertIn("TONE REGISTER (WARM)", system)
 
+    def test_definition_bypasses_guided_stage_in_all_languages(self):
+        for message, lang in (("Hva er stoppelengde?", "no"),
+                              ("What is stopping distance?", "en"),
+                              ("ระยะหยุดรถคืออะไร", "th")):
+            with self.subTest(lang=lang):
+                _, system, col = _run_chat(message, lang)
+                self.assertIn("DIRECT ANSWER OVERRIDE", system)
+                self.assertEqual([d for d in col.inserted if d.get("role") == "assistant"][0]["v4_stage"], "5")
+
+    def test_frustration_has_apology_and_no_interrogation(self):
+        response, system, _ = _run_chat("Du svarer ikke på det jeg spør om", "no")
+        self.assertIn("FRUSTRATION BRAKE", system)
+        self.assertTrue(response.reply.startswith("Beklager"))
+        self.assertNotIn("?", response.reply)
+
+    def test_fact_request_does_not_attach_old_sign_context(self):
+        response, system, _ = _run_chat("Hva er stoppelengde?", "no")
+        self.assertNotIn("ACTIVE SIGN CONTEXT (approved", system)
+        self.assertEqual(response.sign_ids, [])
+
 
 class PolishReplyTests(unittest.TestCase):
     LEAKED = (
@@ -303,6 +323,12 @@ class VikepliktRuleTests(unittest.TestCase):
 
 
 class SentenceIntegrityTests(unittest.TestCase):
+    def test_direct_answer_drops_empty_acknowledgment(self):
+        self.assertEqual(
+            tc._concise_teacher_reply("Klart. Stoppelengde er reaksjonslengde pluss bremselengde.", "no"),
+            "Stoppelengde er reaksjonslengde pluss bremselengde.",
+        )
+
     def test_direct_lookup_never_cuts_mid_sentence(self):
         long_first = ("Vikeplikt betyr at du må gi fri passasje til annen trafikk uten å hindre eller forstyrre dem "
                       "og du skal senke farten i god tid og planlegge tidlig slik at andre ikke må endre kurs.")

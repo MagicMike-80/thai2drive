@@ -199,7 +199,7 @@ class TestTeacherChatConsolidatedResolver(unittest.TestCase):
         self.assertNotIn("🚗 Norsk chip", chips)
         self.assertEqual(chips, ["❓ ถามต่อ", "📖 เปิดหนังสือเรียน", "📊 สถิติของฉัน"])
 
-    def test_teacher_chat_with_typo_starts_with_guiding_question(self):
+    def test_teacher_chat_with_typo_answers_direct_formula_request(self):
         req = TeacherChatRequest(
             session_id="test_session_typo_1",
             message="Hva er formelen for raksjonslengder?",
@@ -212,8 +212,8 @@ class TestTeacherChatConsolidatedResolver(unittest.TestCase):
         # The offline placeholder has no catalog record or asset and must be hidden.
         self.assertEqual(res.media, [])
         self.assertEqual(res.suggestions, [])
-        self.assertTrue(res.reply.strip().endswith("?") or "?" in res.reply)
-        self.assertNotIn("(fart ÷ 10) × 3", res.reply.lower())
+        self.assertFalse(res.reply.strip().endswith("?"))
+        self.assertIn("(fart ÷ 10) × 3", res.reply.lower())
 
     def test_completed_reply_survives_chat_history_write_failure(self):
         tc._chat_col = _WriteFailingCollection()
