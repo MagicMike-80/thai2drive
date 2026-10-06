@@ -12819,6 +12819,27 @@ function _teacherAppendMediaCards(mediaItems, container) {
   return renderedSignIds;
 }
 
+function _teacherClearMediaCards() {
+  var messages = document.getElementById('teacherMessages');
+  if (!messages) return;
+  messages.querySelectorAll('.tm-media-strip').forEach(function(strip) {
+    strip.remove();
+  });
+}
+
+function _teacherResponseMedia(data) {
+  if (!data || !Array.isArray(data.media)) return [];
+  return data.media.filter(function(media) {
+    if (!media || typeof media !== 'object') return false;
+    var id = String(media.media_id || media.id || '').trim();
+    var legacyId = String(media.id || '').trim();
+    return !!id && (!legacyId || legacyId === id);
+  }).map(function(media) {
+    var id = String(media.media_id || media.id).trim();
+    return Object.assign({}, media, { id:id });
+  });
+}
+
 function _renderQuizCoachResponse(container, data) {
   if (!container) return false;
   var reply = data && data.reply ? data.reply : '';
@@ -13146,6 +13167,7 @@ async function teacherSend(overrideMsg, customDisplayMsg, customMode) {
   var msg = (overrideMsg || (input && input.value) || '').trim();
   if (!msg && _teacherUploadedImage) msg = t('teacher_image_prompt');
   if (!msg || _teacherTyping) return;
+  _teacherClearMediaCards();
   stopAllSpeech();   // T2D-AUDIO-FIX: kill previous sign/TTS audio
 
   // Intercept in-app navigation chips
@@ -13227,7 +13249,7 @@ async function teacherSend(overrideMsg, customDisplayMsg, customMode) {
     var visibleText = (data.sign_ids && data.sign_ids.length) ? _teacherTextOnlyReply(responseText) : responseText;
     var assistantBubble = _teacherAppendBubble('assistant', visibleText);
     await _teacherLinkSignReferences(assistantBubble, data.sign_ids || []);
-    var mediaSignIds = _teacherAppendMediaCards(data.media || [], assistantBubble);
+    var mediaSignIds = _teacherAppendMediaCards(_teacherResponseMedia(data), assistantBubble);
     var fallbackSignIds = (data.sign_ids || []).filter(function(signId) {
       return mediaSignIds.indexOf(signId) === -1;
     });
