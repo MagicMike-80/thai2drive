@@ -10,7 +10,7 @@ Den eksisterende velkomsten kommer fra `GET /api/teacher/welcome` (`backend/teac
 
 ## Hvem som teller som pilotdeltaker
 
-Lag først en entydig liste over kontoer med reell pilotstart og bruker-ID. Vanlig registrering bruker `users.campaign_index` og `trial_started_at` (`backend/server.py:2903-2958`). Den separate kampanjeruten bruker `campaign_users` (`backend/server.py:3243-3361`); en rad der er ikke alene bevis for en aktiv elev. Rapporter derfor antall inviterte, registrerte og aktiverte hver for seg, og hold administratorer utenfor.
+Lag først en entydig liste over kontoer med reell pilotstart og bruker-ID. Vanlig registrering bruker `users.campaign_index` og `trial_started_at` (`backend/server.py:2903-2958`). Den separate kampanjeruten er stengt i A1; `campaign_users` beholdes som historiske data (se [sikring og tilbakeføring](CAMPAIGN-CONTAINMENT.md)); en rad der er ikke alene bevis for en aktiv elev. Rapporter derfor antall inviterte, registrerte og aktiverte hver for seg, og hold administratorer utenfor.
 
 ## Hva som kan måles nå
 
