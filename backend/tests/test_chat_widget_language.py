@@ -22,19 +22,19 @@ class TestChatWidgetLanguageIsolation(unittest.TestCase):
         body = self._lang_object_body("noReplyMsgs")
         for lang in ["th", "no", "en"]:
             self.assertIn(f"{lang}:", body, f"noReplyMsgs missing '{lang}' translation")
-        self.assertIn("data.reply || (noReplyMsgs[lang] || noReplyMsgs.no)", self.content)
+        self.assertIn("data.reply || (noReplyMsgs[lang] || '')", self.content)
 
     def test_escalated_message_has_all_three_languages(self):
         body = self._lang_object_body("escalatedMsgs")
         for lang in ["th", "no", "en"]:
             self.assertIn(f"{lang}:", body, f"escalatedMsgs missing '{lang}' translation")
-        self.assertIn("escalatedMsgs[lang] || escalatedMsgs.no", self.content)
+        self.assertIn("escalatedMsgs[lang] || ''", self.content)
 
     def test_network_error_message_has_all_three_languages(self):
         body = self._lang_object_body("networkErrMsgs")
         for lang in ["th", "no", "en"]:
             self.assertIn(f"{lang}:", body, f"networkErrMsgs missing '{lang}' translation")
-        self.assertIn("networkErrMsgs[lang] || networkErrMsgs.no", self.content)
+        self.assertIn("networkErrMsgs[lang] || ''", self.content)
 
     def test_no_bare_hardcoded_fallback_strings_remain(self):
         """The three previously-leaking strings must only appear inside a lang object, never as a bare fallback."""
@@ -87,6 +87,21 @@ class TestChatWidgetLanguageIsolation(unittest.TestCase):
             "ฉันต้องการลบบัญชีและข้อมูลทั้งหมด",
         ]:
             self.assertIn(f'data-q="{payload}"', thai)
+
+    def test_legacy_pages_render_widget_labels_instead_of_template_tokens(self):
+        from backend.website import _page
+
+        html = _page("Support", "<main>Support</main>")
+        self.assertIn('aria-label="Åpne supportchat"', html)
+        self.assertIn('placeholder="Spør om Thai2Drive..."', html)
+        self.assertNotRegex(html, r"__[A-Z_]+__")
+
+    def test_unknown_language_hides_widget_and_never_borrows_norwegian(self):
+        from backend.website import _localized_chat_widget_html
+
+        self.assertEqual(_localized_chat_widget_html("unknown"), "")
+        for mapping in ("greetings", "noReplyMsgs", "escalatedMsgs", "networkErrMsgs"):
+            self.assertNotIn(f"|| {mapping}.no", self.content)
 
     def test_thai_complaints_escalate_even_when_keywords_touch_thai_text(self):
         from backend.support_chat import _quick_escalation_check

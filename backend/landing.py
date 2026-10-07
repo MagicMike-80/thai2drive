@@ -998,6 +998,56 @@ document.addEventListener('keydown', function(e) {{
 """
 
 
+def _pricing_html(lang: str) -> str:
+    # Labels already used by the landing page. Prices come from the public
+    # pricing endpoint; no duplicated amounts or checkout logic live here.
+    heading = {"th": "ราคา", "no": "Priser", "en": "Pricing"}[lang]
+    cta = {"th": "เปิดเว็บแอป", "no": "Åpne webappen", "en": "Open web app"}[lang]
+    return f"""
+<section id="pricing" style="scroll-margin-top:90px">
+  <div class="container" style="text-align:center">
+    <div class="sec-head"><h2>{heading}</h2></div>
+    <div class="plans-row" id="publicPricingPlans" aria-live="polite"></div>
+    <a href="/{lang}/app" class="cta-btn cta-primary">{cta} →</a>
+  </div>
+</section>
+"""
+
+
+PUBLIC_PRICING_JS = r"""
+(function(){
+  const container = document.getElementById('publicPricingPlans');
+  if (!container) return;
+  const lang = document.documentElement.getAttribute('data-current-lang');
+  fetch('/api/pricing', {cache:'no-store'})
+    .then(response => { if (!response.ok) throw new Error('pricing'); return response.json(); })
+    .then(data => {
+      const plans = Array.isArray(data.plans) ? data.plans : [];
+      ['monthly', 'three_months', 'lifetime'].forEach(id => {
+        const plan = plans.find(item => item && item.id === id);
+        const label = plan && plan.label && plan.label[lang];
+        const period = plan && plan.period && plan.period[lang];
+        if (!plan || typeof label !== 'string' || !label ||
+            typeof period !== 'string' || !period || typeof plan.display !== 'string' || !plan.display) return;
+        const card = document.createElement('div');
+        card.className = 'plan-mini';
+        const title = document.createElement('h4');
+        title.textContent = label;
+        const price = document.createElement('div');
+        price.className = 'p';
+        price.textContent = plan.display;
+        const duration = document.createElement('small');
+        duration.textContent = ' / ' + period;
+        price.appendChild(duration);
+        card.appendChild(title);
+        card.appendChild(price);
+        container.appendChild(card);
+      });
+    }).catch(() => { container.replaceChildren(); });
+})();
+"""
+
+
 def _why_html() -> str:
     return """
 <section>
@@ -1416,6 +1466,16 @@ LANDING_JS = r"""
     return document.documentElement.getAttribute('data-current-lang') || 'th';
   }
 
+  function showLoadError(){
+    // Reuse the approved webapp load_error labels, without a language fallback.
+    const labels = {th:'โหลดไม่สำเร็จ', no:'Feil ved lasting', en:'Loading failed'};
+    const message = document.createElement('p');
+    message.style.cssText = 'text-align:center;color:#94A3B8;padding:30px';
+    message.setAttribute('role', 'status');
+    message.textContent = labels[currentLang()] || '';
+    body.replaceChildren(message);
+  }
+
   async function load(){
     try{
       // Image questions ONLY — filter out any without a valid base64/url image
@@ -1423,13 +1483,13 @@ LANDING_JS = r"""
       const raw = await res.json();
       questions = (raw || []).filter(q => q.bildeUrl && (typeof q.bildeUrl === 'string' || Object.keys(q.bildeUrl).length)).slice(0, TOTAL + 2);
       if(questions.length === 0){
-        body.innerHTML = '<p style="text-align:center;color:#94A3B8;padding:30px">No image questions available right now.</p>';
+        showLoadError();
         return;
       }
       totalEl.textContent = TOTAL;
       render();
     }catch(e){
-      body.innerHTML = '<p style="text-align:center;color:#94A3B8;padding:30px">Could not load questions.</p>';
+      showLoadError();
     }
   }
 
@@ -1637,6 +1697,7 @@ def build_landing_page(chat_css: str, chat_widget_html: str, chat_js: str, lang:
 {_stats_html()}
 {_try_html(lang)}
 {_video_html(lang)}
+{_pricing_html(lang)}
 {_why_html()}
 {_features_html()}
 {_screenshots_html()}
@@ -1646,6 +1707,7 @@ def build_landing_page(chat_css: str, chat_widget_html: str, chat_js: str, lang:
 {_footer_html(lang)}
 {chat_widget_html}
 <script>{LANDING_JS}</script>
+<script>{PUBLIC_PRICING_JS}</script>
 <script>{chat_js}</script>
 </body>
 </html>"""

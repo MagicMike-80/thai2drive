@@ -307,7 +307,7 @@ _CHAT_WIDGET_HTML = """
   <div class="t2d-chat-head">
     <img src="/api/assets/developer-icon-512.png" alt=""/>
     <div class="t2d-chat-head-info">
-      <strong>Thai2Drive Support</strong>
+      <strong>Thai2Drive · __DIALOG__</strong>
       <span>__ASSISTANT__</span>
     </div>
     <button class="t2d-chat-close" id="t2dChatClose" aria-label="__CLOSE__">✕</button>
@@ -334,7 +334,9 @@ _CHAT_WIDGET_HTML = """
 """
 
 def _localized_chat_widget_html(lang: str) -> str:
-  labels = _CHAT_WIDGET_TEXT.get(lang, _CHAT_WIDGET_TEXT["no"])
+  labels = _CHAT_WIDGET_TEXT.get(lang)
+  if not labels:
+    return ""
   html = _CHAT_WIDGET_HTML
   for key, value in labels.items():
     html = html.replace(f"__{key.upper()}__", value)
@@ -358,7 +360,8 @@ _CHAT_JS = r"""
   let greeted = false;
 
   function getLang(){
-    return document.documentElement.getAttribute('data-current-lang') || document.documentElement.lang || 'no';
+    const lang = document.documentElement.getAttribute('data-current-lang') || document.documentElement.lang || '';
+    return lang === 'nb' ? 'no' : lang;
   }
 
   // Reset session if user changed language since last visit
@@ -403,7 +406,7 @@ _CHAT_JS = r"""
         no: 'Trenger du hjelp med teoriprøven? Spør meg om Thai2Drive 👋',
         en: 'Need help passing the theory test? Ask me anything about Thai2Drive 👋',
       };
-      addMsg('bot', greetings[lang] || greetings.no);
+      addMsg('bot', greetings[lang] || '');
     }
     setTimeout(()=>input.focus(), 200);
   }
@@ -450,7 +453,7 @@ _CHAT_JS = r"""
         no: 'Beklager, ingen svar akkurat nå. Prøv igjen om litt.',
         en: 'Sorry, no response right now. Please try again shortly.',
       };
-      addMsg('bot', data.reply || (noReplyMsgs[lang] || noReplyMsgs.no));
+      addMsg('bot', data.reply || (noReplyMsgs[lang] || ''));
 
       if(data.escalated){
         const escalatedMsgs = {
@@ -458,7 +461,7 @@ _CHAT_JS = r"""
           no: '✓ Meldingen din er videresendt til supportteamet',
           en: '✓ Your message has been forwarded to the support team',
         };
-        addMsg('system', escalatedMsgs[lang] || escalatedMsgs.no);
+        addMsg('system', escalatedMsgs[lang] || '');
       }
     }catch(err){
       hideTyping();
@@ -468,7 +471,7 @@ _CHAT_JS = r"""
         no: 'Beklager, nettverksfeil. Send e-post til lexuz.zxc@gmail.com hvis det haster.',
         en: 'Sorry, network error. Please email lexuz.zxc@gmail.com if urgent.',
       };
-      addMsg('bot', networkErrMsgs[lang] || networkErrMsgs.no);
+      addMsg('bot', networkErrMsgs[lang] || '');
     }finally{
       send.disabled = false;
     }
@@ -564,7 +567,7 @@ def _page(title: str, body: str, description: str = "", path: str = "/"):
 {_nav()}
 {body}
 {_footer()}
-{_CHAT_WIDGET_HTML}
+{_localized_chat_widget_html('no')}
 <script>{_CHAT_JS}</script>
 </body>
 </html>"""
