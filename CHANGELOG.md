@@ -2,6 +2,15 @@
 
 All notable changes to Thai2Drive are documented in this file.
 
+## [0.2.2.0] - 2026-10-07
+
+### Security
+
+- Retire anonymous campaign grants with a permanent no-write HTTP 410 response.
+- Remove the legacy campaign enrollment UI and mark its historical status inactive.
+- Preserve normal signup, existing entitlements and all historical data; document the remaining signup campaign and safe recovery baseline.
+- Add an aggregate-only, read-only historical campaign inspection script.
+
 ## [0.2.1.0] - 2026-10-07
 
 ### Fixed

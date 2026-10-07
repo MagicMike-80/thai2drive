@@ -3243,7 +3243,7 @@ def _normalize_campaign_lang(lang: Optional[str]) -> str:
 @api_router.get("/campaign/status")
 @app.get("/api/campaign/status")
 async def get_campaign_status():
-    """Return live campaign capacity and remaining spots."""
+    """Return historical counts; legacy campaign enrollment is permanently closed."""
     count = await db.campaign_users.count_documents({})
     remaining = max(0, 50 - count)
     return JSONResponse({
@@ -3251,114 +3251,22 @@ async def get_campaign_status():
         "total_seats": 50,
         "registered": count,
         "remaining": remaining,
-        "is_active": remaining > 0,
+        "is_active": False,
     })
 
 
 @api_router.post("/campaign/register")
 @app.post("/api/campaign/register")
-async def register_campaign_user(req: CampaignRegisterRequest):
+async def register_campaign_user():
+    """Retired unsafe anonymous grant route. Never restore contact-based writes.
+
+    Keep this tombstone for cached clients. A future campaign must use a separate,
+    authenticated ownership-verified activation path. No database access here.
     """
-    Register user for the 50-user campaign with 30 days free Premium.
-    Enforces maximum 50 users, checks duplicates, and ensures 100% language isolation.
-    """
-    lang = _normalize_campaign_lang(req.language)
-
-    clean_name = (req.name or "").strip()
-    clean_email = (req.email or "").strip().lower()
-    clean_phone = re.sub(r'[\s\-\(\)]', '', (req.phone or "").strip())
-
-    if not clean_name or not clean_email or not clean_phone or "@" not in clean_email:
-        msg = CAMPAIGN_INVALID_MSG[lang]
-        return JSONResponse(
-            status_code=400,
-            content={
-                "success": False,
-                "error": "invalid_input",
-                "detail": msg,
-                "message": msg,
-            }
-        )
-
-    # Check for duplicate registration in db.campaign_users
-    existing = await db.campaign_users.find_one({
-        "$or": [
-            {"email": clean_email},
-            {"phone": clean_phone}
-        ]
-    })
-    if existing:
-        msg = CAMPAIGN_DUPLICATE_MSG[lang]
-        return JSONResponse(
-            status_code=400,
-            content={
-                "success": False,
-                "error": "already_registered",
-                "detail": msg,
-                "message": msg,
-            }
-        )
-
-    # Check capacity limit (max 50 users)
-    current_count = await db.campaign_users.count_documents({})
-    if current_count >= 50:
-        msg = CAMPAIGN_SOLD_OUT_MSG[lang]
-        return JSONResponse(
-            status_code=400,
-            content={
-                "success": False,
-                "error": "campaign_sold_out",
-                "detail": msg,
-                "message": msg,
-                "total_seats": 50,
-                "registered": current_count,
-                "remaining": 0,
-            }
-        )
-
-    campaign_index = current_count + 1
-    now = datetime.now(timezone.utc)
-    expires_at = now + timedelta(days=30)
-    premium_until = expires_at.isoformat()
-
-    campaign_doc = {
-        "name": clean_name,
-        "email": clean_email,
-        "phone": clean_phone,
-        "language": lang,
-        "is_premium": True,
-        "has_premium": True,
-        "premium_until": premium_until,
-        "campaign_index": campaign_index,
-        "created_at": now.isoformat(),
-    }
-    await db.campaign_users.insert_one(campaign_doc)
-
-    # If this user also has an existing account in db.users, grant Premium immediately
-    await db.users.update_many(
-        {"$or": [{"email": clean_email}, {"phone": clean_phone}]},
-        {"$set": {
-            "is_premium": True,
-            "has_premium": True,
-            "premium_expires_at": premium_until,
-            "trial_expires_at": premium_until,
-            "campaign_index": campaign_index,
-        }}
-    )
-
-    success_msg = CAMPAIGN_SUCCESS_MSG[lang].format(idx=campaign_index)
     return JSONResponse(
-        status_code=200,
-        content={
-            "success": True,
-            "message": success_msg,
-            "detail": success_msg,
-            "campaign_index": campaign_index,
-            "is_premium": True,
-            "has_premium": True,
-            "premium_until": premium_until,
-            "remaining_seats": max(0, 50 - campaign_index),
-        }
+        status_code=410,
+        content={"success": False, "error": "campaign_closed", "detail": "", "message": ""},
+        headers={"Cache-Control": "no-store"},
     )
 
 
