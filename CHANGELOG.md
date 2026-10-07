@@ -2,6 +2,14 @@
 
 All notable changes to Thai2Drive are documented in this file.
 
+## [0.2.4.0] - 2026-10-07
+
+### Fixed
+
+- Ordinary Michael conversations preserve explanations instead of reducing replies to a final question or restarting the guided onboarding flow.
+- Guided quiz and document practice retain their staged teaching flow; ordinary chat can acknowledge missing student results without inventing readiness evidence.
+- Add isolated reply-preservation regressions across Norwegian, Thai and English. Mobile, payments, quotas and legacy campaign containment are unchanged.
+
 ## [0.2.3.0] - 2026-10-07
 
 ### Fixed
