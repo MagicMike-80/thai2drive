@@ -4851,18 +4851,7 @@ a { color:inherit; text-decoration:none; }
         </div>
       </div>
 
-      <!-- 50-Brukers Kampanje Banner -->
-      <div class="campaign-banner" id="homeCampaignBanner" style="display:none" onclick="openCampaignModal()">
-        <div class="cb-left">
-          <span class="cb-icon">🎁</span>
-          <div class="cb-info">
-            <div class="cb-badge" data-key="campaign_badge">⚡ Begrenset tilbud</div>
-            <h4 class="cb-title" data-key="campaign_title">🎁 30 dagers gratis Premium!</h4>
-            <p class="cb-desc" id="cbRemainingText" data-key="campaign_desc_init">Kun 50 av 50 plasser igjen!</p>
-          </div>
-        </div>
-        <button class="cb-btn" onclick="event.stopPropagation();openCampaignModal()" data-key="campaign_claim_btn">Sikre din plass</button>
-      </div>
+      <!-- Legacy campaign enrollment retired (A1). -->
     </div>
 
     <div class="michael-quiz-coach" id="michaelQuizCoach" role="dialog" aria-live="polite" aria-label="Michael">
@@ -5381,36 +5370,6 @@ a { color:inherit; text-decoration:none; }
   </div>
 
 </div><!-- /app -->
-
-<!-- ═══ 50-USER CAMPAIGN MODAL ═══ -->
-<div class="campaign-modal-backdrop" id="campaignModal" style="display:none" onclick="if(event.target===this)closeCampaignModal()">
-  <div class="campaign-modal-card">
-    <button class="campaign-modal-close" onclick="closeCampaignModal()">&times;</button>
-    <div class="cm-header">
-      <div class="cm-badge" data-key="campaign_badge">🎁 30 DAGER PREMIUM</div>
-      <h3 class="cm-title" data-key="campaign_modal_title">Registrer deg for 30 dagers gratis Premium</h3>
-      <p class="cm-sub" id="cmModalSubText" data-key="campaign_modal_sub">For de 50 første elevene — sikre deg plass nå!</p>
-    </div>
-    <form id="campaignForm" onsubmit="submitCampaignRegistration(event)">
-      <div class="cm-field">
-        <label data-key="campaign_name_label">Fullt navn</label>
-        <input type="text" id="campName" required placeholder="" autocomplete="name" />
-      </div>
-      <div class="cm-field">
-        <label data-key="campaign_email_label">E-postadresse</label>
-        <input type="email" id="campEmail" required placeholder="navn@epost.no" data-placeholder-key="email_placeholder" autocomplete="email" />
-      </div>
-      <div class="cm-field">
-        <label data-key="campaign_phone_label">Telefonnummer</label>
-        <input type="tel" id="campPhone" required placeholder="+47 000 00 000" autocomplete="tel" />
-      </div>
-      <div class="cm-feedback" id="campFeedback" style="display:none"></div>
-      <button type="submit" class="cm-submit-btn" id="campSubmitBtn" data-key="campaign_submit_btn">
-        ✨ Få 30 dager gratis Premium
-      </button>
-    </form>
-  </div>
-</div>
 
 <!-- ═══ LIGHTBOX MODAL (Image Enlarge) ═══ -->
 <div class="t2d-lightbox" id="t2dLightbox" onclick="closeLightbox(event)" aria-hidden="true" role="dialog">
@@ -8125,118 +8084,22 @@ async function loadHome() {
   checkCampaignStatus();
 }
 
-// ═══ 50-USER CAMPAIGN LOGIC ═══
-var campaignSeatsRemaining = 50;
-
-async function checkCampaignStatus() {
+// Legacy campaign enrollment is permanently retired. Keep inert handlers for
+// callers in cached UI fragments; no API request or local Premium mutation.
+function checkCampaignStatus() {
   var banner = document.getElementById('homeCampaignBanner');
-  if (!banner) return;
-  // If user is already active premium, hide campaign banner
-  if (user && user.is_premium) {
-    banner.style.display = 'none';
-    return;
-  }
-  try {
-    var res = await api('GET', '/api/campaign/status');
-    if (res && res.success) {
-      campaignSeatsRemaining = res.remaining != null ? res.remaining : 0;
-      var remEl = document.getElementById('cbRemainingText');
-      if (remEl) {
-        remEl.textContent = tf('campaign_desc', { remaining: campaignSeatsRemaining });
-      }
-      if (res.is_active && campaignSeatsRemaining > 0) {
-        banner.style.display = 'flex';
-      } else {
-        banner.style.display = 'none';
-      }
-    }
-  } catch (e) {
-    console.debug('Campaign status check error:', e);
-  }
+  if (banner) banner.style.display = 'none';
+  closeCampaignModal();
 }
-
-function openCampaignModal() {
-  var modal = document.getElementById('campaignModal');
-  if (!modal) return;
-  var nameEl = document.getElementById('campName');
-  var emailEl = document.getElementById('campEmail');
-  var phoneEl = document.getElementById('campPhone');
-  var feedback = document.getElementById('campFeedback');
-  if (feedback) { feedback.style.display = 'none'; feedback.textContent = ''; feedback.className = 'cm-feedback'; }
-  if (user) {
-    if (nameEl && !nameEl.value) nameEl.value = user.name || user.full_name || '';
-    if (emailEl && !emailEl.value) emailEl.value = user.email || '';
-    if (phoneEl && !phoneEl.value) phoneEl.value = user.phone || '';
-  }
-  modal.style.display = 'flex';
-}
-
+function openCampaignModal() { closeCampaignModal(); }
 function closeCampaignModal() {
   var modal = document.getElementById('campaignModal');
   if (modal) modal.style.display = 'none';
 }
-
-async function submitCampaignRegistration(event) {
+function submitCampaignRegistration(event) {
   if (event) event.preventDefault();
-  var nameEl = document.getElementById('campName');
-  var emailEl = document.getElementById('campEmail');
-  var phoneEl = document.getElementById('campPhone');
-  var feedback = document.getElementById('campFeedback');
-  var submitBtn = document.getElementById('campSubmitBtn');
-
-  var name = nameEl ? nameEl.value.trim() : '';
-  var email = emailEl ? emailEl.value.trim() : '';
-  var phone = phoneEl ? phoneEl.value.trim() : '';
-
-  if (!name || !email || !phone) return;
-
-  if (submitBtn) { submitBtn.disabled = true; submitBtn.style.opacity = '0.7'; }
-  if (feedback) { feedback.style.display = 'none'; }
-
-  try {
-    var response = await fetch('/api/campaign/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        name: name,
-        email: email,
-        phone: phone,
-        language: appLang || 'th'
-      })
-    });
-    var data = await response.json();
-    if (response.ok && data.success) {
-      if (feedback) {
-        feedback.className = 'cm-feedback success';
-        feedback.textContent = data.message || 'Gratulerer! Du har fått 30 dagers gratis Premium.';
-        feedback.style.display = 'block';
-      }
-      if (user) {
-        user.is_premium = true;
-        user.has_premium = true;
-        user.premium_until = data.premium_until;
-      }
-      setTimeout(function() {
-        closeCampaignModal();
-        checkCampaignStatus();
-        renderPremiumBanner();
-      }, 2200);
-    } else {
-      if (feedback) {
-        feedback.className = 'cm-feedback error';
-        feedback.textContent = data.detail || data.message || 'Feil ved registrering. Prøv igjen.';
-        feedback.style.display = 'block';
-      }
-    }
-  } catch (err) {
-    if (feedback) {
-      feedback.className = 'cm-feedback error';
-      feedback.textContent = err.message || 'Nettverksfeil. Prøv igjen.';
-      feedback.style.display = 'block';
-    }
-  } finally {
-    if (submitBtn) { submitBtn.disabled = false; submitBtn.style.opacity = '1'; }
-  }
+  closeCampaignModal();
+  return false;
 }
 
 function _getMediaLangBadge(item) {
