@@ -2,6 +2,16 @@
 
 All notable changes to Thai2Drive are documented in this file.
 
+## [0.2.1.0] - 2026-10-07
+
+### Fixed
+
+- Guests see their answered-question result before choosing a free account, and signup/login carry their guest identity into the existing history migration.
+- History and answer review use the selected language and hide legacy text whose language cannot be established.
+- Quiz keyboard shortcuts respect focused controls and wait for the answer response before advancing.
+- Public pricing links lead to a price section backed by the current pricing endpoint; the unsupported savings badge is removed.
+- Support chat labels render correctly on legacy pages and no longer borrow Norwegian text for other languages.
+
 ## [0.2.0.3] - 2026-09-23
 
 ### Fixed
