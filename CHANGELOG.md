@@ -2,6 +2,13 @@
 
 All notable changes to Thai2Drive are documented in this file.
 
+## [0.2.3.0] - 2026-10-07
+
+### Fixed
+
+- Result buttons retain their own translated labels after language updates, including the guest account action, Michael, Home and categories.
+- Regressions exercise the full language updater and result handlers across Norwegian, Thai, English and back to Norwegian. Legacy campaign containment remains unchanged.
+
 ## [0.2.2.0] - 2026-10-07
 
 ### Security

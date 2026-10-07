@@ -6269,11 +6269,6 @@ function applyUILang() {
   var sbInfo = document.getElementById('sbNavInfo');
   if (sbInfo && (!_sbLoaded || !_sbChapters.length)) sbInfo.textContent = t('studybook_loading');
   if (sbInfo && _sbLoaded && _sbChapters.length) sbRender();
-  // end screen buttons
-  var er = document.querySelector('.end-btn-pri'); if(er) er.textContent = t('result_retry');
-  var endSecBtns = document.querySelectorAll('.end-btn-sec');
-  if (endSecBtns[0]) endSecBtns[0].textContent = t('home');
-  if (endSecBtns[1]) endSecBtns[1].innerHTML = t('pickcat');
   // next buttons
   document.querySelectorAll('#qNextBig,#qNextMobile').forEach(function(b){ b.textContent = t('next'); });
   var spPractice = document.querySelector('.sp-btn-primary');

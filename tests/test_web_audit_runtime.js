@@ -110,3 +110,59 @@ assert(!source.includes('data-key="pw_best_value"'), 'unsubstantiated discount i
   }
   console.log('Web audit runtime: history NO/TH/EN, quota finish, keyboard, signup migration and discount checks passed.');
 })().catch(error=>{console.error(error);process.exitCode=1;});
+
+// Exercise the COMPLETE language updater against the actual result-button markup.
+// This catches late positional overwrites after the generic data-key pass.
+const resultMarkup = source.slice(source.indexOf('<div class="end-btns">'), source.indexOf('<!-- ═══ PAYWALL SCREEN'));
+const resultButtons = [...resultMarkup.matchAll(/<button\s+([^>]+)>(.*?)<\/button>/gs)].map(match => {
+  const attrs = Object.fromEntries([...match[1].matchAll(/([\w-]+)="([^"]*)"/g)].map(a => [a[1],a[2]]));
+  return {attrs, textContent:match[2], style:{}, getAttribute:key=>attrs[key],
+    set innerHTML(value){this.textContent=value;}};
+});
+const resultState = {screen:null, tab:null};
+const bars = {topBar:{style:{}}, bottomNav:{style:{}}};
+const resultLang = vm.createContext({
+  appLang:'no', window:{console}, console,
+  renderPremiumBanner(){}, renderPaywallSub(){}, renderPremiumPricing(){},
+  stopAllSpeech(){}, stopExamTimer(){},
+  showScreen(id){resultState.screen=id;}, switchTab(id){resultState.tab=id;},
+  showTab(id){resultState.tab=id;}, consultMichaelFromExam(){resultState.tab='coach';},
+  retryQuiz(){resultState.tab='retry';},
+  document:{documentElement:{},
+    getElementById:id=>resultButtons.find(b=>b.attrs.id===id)||bars[id]||null,
+    querySelector(selector){return this.querySelectorAll(selector)[0]||null;},
+    querySelectorAll(selector){
+      if(selector==='[data-key]')return resultButtons;
+      if(selector==='.end-btn-pri'||selector==='.end-btn-sec')
+        return resultButtons.filter(b=>b.attrs.class.split(' ').includes(selector.slice(1)));
+      return [];
+    }
+  }
+});
+vm.runInContext(source.slice(source.indexOf('var UI = {'),source.indexOf('\nfunction t(key)')),resultLang);
+vm.runInContext(fn('t'),resultLang);
+const updaterStart=source.indexOf('function applyUILang()');
+vm.runInContext(source.slice(updaterStart,source.indexOf('\nvar catsLoaded',updaterStart)),resultLang);
+vm.runInContext(fn('openGuestRegistration'),resultLang);
+const actionContracts = [
+  ['openGuestRegistration()', 'create_account', 'register'],
+  ['consultMichaelFromExam()', 'result_michael_coach', 'coach'],
+  ['retryQuiz()', 'result_retry', 'retry'],
+  ["showTab('teacher')", 'result_michael', 'teacher'],
+  ["showTab('home')", 'home', 'home'],
+  ["showTab('cats')", 'pickcat', 'cats'],
+];
+for(const language of ['no','th','en','no']) {
+  resultLang.appLang=language;
+  resultLang.applyUILang();
+  for(const [handler,key,destination] of actionContracts) {
+    const button=resultButtons.find(b=>b.attrs.onclick===handler);
+    assert(button,handler);
+    assert.equal(button.textContent,resultLang.UI[key][language],`${language}: ${handler}`);
+    resultState.tab=null; resultState.screen=null;
+    vm.runInContext(button.attrs.onclick,resultLang);
+    assert.equal(resultState.tab,destination,`${language}: actual inline handler`);
+    if(destination==='register') assert.equal(resultState.screen,'screenAuth');
+  }
+}
+console.log('Result actions: full applyUILang, NO→TH→EN→NO labels and all six handlers passed.');
