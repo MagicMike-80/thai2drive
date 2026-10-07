@@ -5215,6 +5215,7 @@ a { color:inherit; text-decoration:none; }
         <div class="end-score-quiet" id="endScoreQuiet"></div>
         <div class="end-heading" id="endHeading" data-key="result_done"></div>
         <p class="end-body" id="endBody"></p>
+        <p class="end-body" id="endAccessHint" style="display:none;"></p>
         <div class="end-focus card-neon" id="endFocus" style="display:none">
           <div style="flex:1;">
             <div class="end-focus-label" data-key="result_focus">Anbefalt øvelse</div>
@@ -5227,6 +5228,7 @@ a { color:inherit; text-decoration:none; }
           <div class="end-exam-errors-list" id="endExamErrorsList"></div>
         </div>
         <div class="end-btns">
+          <button class="end-btn-pri" id="endRegisterBtn" onclick="openGuestRegistration()" data-key="create_account" style="display:none;"></button>
           <button class="end-btn-pri end-btn-coach btn-neon" id="endCoachMichaelPriBtn" onclick="consultMichaelFromExam()" data-key="result_michael_coach" style="display:none;">💬 Gå gjennom med Michael AI</button>
           <button class="end-btn-pri" id="endRetryBtn" onclick="retryQuiz()" data-key="result_retry">Prøv igjen</button>
           <button class="end-btn-sec" onclick="showTab('teacher')" data-key="result_michael">Gå til Michael</button>
@@ -5241,7 +5243,8 @@ a { color:inherit; text-decoration:none; }
       <div class="paywall-card">
         <div class="paywall-gem">💎</div>
         <div class="paywall-title"><span data-key="pw_title"></span></div>
-        <div class="paywall-sub" data-key="pw_sub"></div>
+        <div class="paywall-sub"></div>
+        <button class="end-btn-pri" id="paywallRegisterBtn" onclick="openGuestRegistration()" data-key="create_account" style="display:none;"></button>
         <ul class="paywall-features">
           <li><span class="pf-check">✓</span><span data-key="pw_f1"></span></li>
           <li><span class="pf-check">✓</span><span data-key="pw_f2"></span></li>
@@ -5256,7 +5259,6 @@ a { color:inherit; text-decoration:none; }
             <div class="ppc-per" data-key="pw_per_month"></div>
           </div>
           <div class="paywall-price-card" onclick="buyPremium('three_months',this)" data-plan="three_months" style="position:relative">
-            <div class="ppc-badge" data-key="pw_best_value"></div>
             <div class="ppc-period" data-key="pw_three_months"></div>
             <div class="ppc-price" data-price-plan="three_months">299 NOK</div>
             <div class="ppc-per" data-key="pw_per_three_months"></div>
@@ -5269,6 +5271,7 @@ a { color:inherit; text-decoration:none; }
         </div>
         <button class="paywall-buy-btn" onclick="buyPremium()">⭐ <span data-key="pw_buy"></span></button>
         <button class="paywall-skip" onclick="restorePurchase()" data-key="pw_restore_purchase"></button>
+        <button class="paywall-skip" onclick="hidePaywall();showTab('home')" data-key="backhome"></button>
         <div class="paywall-skip" style="border:none;background:transparent;cursor:default" data-key="pw_cancel_anytime"></div>
       </div>
     </div>
@@ -5519,6 +5522,7 @@ var questions = [];
 var qIdx = 0;
 var qScore = 0;
 var qAnswered = false;
+var _answerPending = false;
 var quizStartedAt = null;
 var _lastSavedAttempt = null; // local mirror of the most recent saved attempt
 var _sessionAnswers   = []; // per-question answer log — powers history detail panel
@@ -7936,6 +7940,15 @@ function enterGuest() {
   enterApp();
 }
 
+function openGuestRegistration() {
+  stopAllSpeech();
+  stopExamTimer();
+  showScreen('screenAuth');
+  switchTab('register');
+  document.getElementById('topBar').style.display = 'none';
+  document.getElementById('bottomNav').style.display = 'none';
+}
+
 
 async function doLogin() {
   clearAuthMessages();
@@ -7945,7 +7958,7 @@ async function doLogin() {
   var btn = document.querySelector('#formLogin .auth-btn');
   btn.disabled = true; btn.textContent = t('login_loading');
   try {
-    var r = await api('POST', '/api/auth/login', { email: email, password: pass });
+    var r = await api('POST', '/api/auth/login', { email: email, password: pass, device_id: guestDeviceForAuth() });
     token = r.token; user = r.user;
     deviceId = user._id || user.id || null;
     _ls.set('t2d_token', token);
@@ -7954,6 +7967,12 @@ async function doLogin() {
     showAuthError(e.message);
     btn.disabled = false; btn.textContent = t('login');
   }
+}
+
+function guestDeviceForAuth() {
+  // Only migrate the active guest identity created on this browser, never an account id.
+  var stored = _ls.get('t2d_guest_device_id');
+  return !token && deviceId === stored && /^web_guest_[a-z0-9-]{16,}$/i.test(stored || '') ? stored : null;
 }
 
 async function doRegister() {
@@ -7967,7 +7986,7 @@ async function doRegister() {
   var btn = document.querySelector('#formRegister .auth-btn');
   btn.disabled = true; btn.textContent = t('register_loading');
   try {
-    var r = await api('POST', '/api/auth/signup', { full_name: name, email: email, phone: phone, password: pass });
+    var r = await api('POST', '/api/auth/signup', { full_name: name, email: email, phone: phone, password: pass, device_id: guestDeviceForAuth() });
     token = r.token; user = r.user;
     deviceId = user._id || user.id || null;
     _ls.set('t2d_token', token);
@@ -8548,8 +8567,14 @@ function renderPremiumBanner() {
 function renderPaywallSub() {
   var el = document.querySelector('#screenPaywall .paywall-sub');
   if (!el) return;
-  var spent = !!(user && user.trial_used === true) && !isTrialActive();
-  el.textContent = t('pw_sub');
+  // A Premium feature may be opened before any free question is used.
+  el.textContent = accessEndMessage() || t('pw_f1');
+}
+
+function accessEndMessage() {
+  if (!accessState || accessState.can_answer !== false) return '';
+  var messages = accessState.message || {};
+  return typeof messages[appLang] === 'string' ? messages[appLang] : '';
 }
 
 // Oppmuntrende varsel de to siste dagene — maks én gang per dag per tilstand.
@@ -8612,6 +8637,8 @@ function showPaywall() {
   stopAllSpeech();
   stopExamTimer();
   applyUILang();
+  renderPaywallSub();
+  document.getElementById('paywallRegisterBtn').style.display = token ? 'none' : 'block';
   showScreen('screenPaywall');
   // Hide bottom nav while paywall is shown
   document.getElementById('topBar').style.display = 'flex';
@@ -9192,7 +9219,11 @@ async function selectAns(btn, picked) {
   var _curQ = questions[qIdx];
   if (!isExamMode) {
     qAnswered = true;
-    if (!(await consumeQuestionAccess(_curQ))) { qAnswered = false; return; }
+    _answerPending = true;
+    var allowed;
+    try { allowed = await consumeQuestionAccess(_curQ); }
+    finally { _answerPending = false; }
+    if (!allowed) { qAnswered = false; return; }
   }
 
   if (isExamMode) {
@@ -9228,6 +9259,8 @@ async function selectAns(btn, picked) {
 
   // Record this answer for the history detail panel
   _sessionAnswers.push({
+    language:      appLang,
+    question_obj:  _curQ,
     question_id:   String(_curQ._id || _curQ.id || _curQ.question_id || ''),
     question_text: (pickLang(_curQ.question) || pickField(_curQ, 'question_text') || '').slice(0, 200),
     user_answer:   picked.toUpperCase(),
@@ -9945,7 +9978,7 @@ function renderReviewCard() {
     return;
   }
 
-  var q = _reviewQuestions[_reviewIdx];
+  var q = historyAnswerForLanguage(_reviewQuestions[_reviewIdx]);
   var isLast = (_reviewIdx + 1 >= _reviewQuestions.length);
   var nextLabel = isLast ? t('review_finish') : t('next');
 
@@ -10357,6 +10390,7 @@ function prevQ() {
 }
 
 function nextQ() {
+  if (_answerPending) return;
   stopAllSpeech();
   closeMichaelQuizCoach();
   if (_aiPanelTimer) { clearTimeout(_aiPanelTimer); _aiPanelTimer = null; } // never let a delayed panel land on the next question
@@ -10369,6 +10403,12 @@ function nextQ() {
   }
   qIdx++;
   if (qIdx >= questions.length) { showEnd(); return; }
+  // Finish the answered practice session before offering the next access level.
+  if (!isExamMode && _sessionAnswers.length && !isPremium()
+      && ((accessState && accessState.can_answer === false) || (!accessState && qIdx >= FREE_LIMIT))) {
+    showEnd();
+    return;
+  }
   if (!checkPaywall()) return;
   renderQuestion();
   // Scroll back to top of quiz body so new question starts at the top
@@ -10669,6 +10709,24 @@ async function loadHistory() {
   }
 }
 
+function historyAnswerForLanguage(answer) {
+  var result = Object.assign({}, answer);
+  var source = answer.question_obj || {};
+  function textFor(field, sourceField) {
+    var value = source[sourceField];
+    if (value && typeof value === 'object' && typeof value[appLang] === 'string') return value[appLang];
+    var suffixed = source[field + '_' + appLang];
+    if (typeof suffixed === 'string') return suffixed;
+    var saved = answer[field];
+    if (saved && typeof saved === 'object') return typeof saved[appLang] === 'string' ? saved[appLang] : '';
+    // Old unlabelled snapshots cannot safely be assigned to any language.
+    return answer.language === appLang && typeof saved === 'string' ? saved : '';
+  }
+  result.question_text = textFor('question_text', 'question');
+  result.explanation = textFor('explanation', 'explanation');
+  return result;
+}
+
 function openHistDetail(idx) {
   _histOpenIdx = idx;
   var a = _histAttempts[idx];
@@ -10705,7 +10763,7 @@ function openHistDetail(idx) {
     + '<div class="hp-stat"><div class="hp-stat-num">' + total + '</div><div class="hp-stat-lbl">' + escH(t('total_count')) + '</div></div>';
 
   // Wrong questions body
-  var qs = Array.isArray(a.questions_answered) ? a.questions_answered : [];
+  var qs = Array.isArray(a.questions_answered) ? a.questions_answered.map(historyAnswerForLanguage) : [];
   var wrongQs = qs.filter(function(q) { return q.is_correct === false; });
   var bodyHtml = '';
   if (wrongQs.length) {
@@ -10852,7 +10910,12 @@ function showEnd() {
   stopAllSpeech();
   stopExamTimer();
   showScreen('screenEnd');
-  var total  = questions.length;
+  var total  = isExamMode ? questions.length : _sessionAnswers.length;
+  document.getElementById('endRegisterBtn').style.display = token ? 'none' : 'block';
+  document.getElementById('endRetryBtn').style.display = !token && accessState && accessState.can_answer === false ? 'none' : '';
+  var accessHint = document.getElementById('endAccessHint');
+  accessHint.textContent = accessEndMessage();
+  accessHint.style.display = accessHint.textContent ? '' : 'none';
 
   if (isExamMode) {
     qScore = 0;
@@ -10892,6 +10955,7 @@ function showEnd() {
       });
 
       var ansRecord = {
+        language: appLang,
         question_id: qId,
         question_text: qText.slice(0, 200),
         user_answer: userPick,
@@ -13483,6 +13547,10 @@ function escH(s) {
 //  KEYBOARD
 // ════════════════════════════════════════════
 document.addEventListener('keydown', function(e) {
+  // Let focused controls handle their own native activation (especially explanations).
+  if (e.defaultPrevented || e.isComposing || e.repeat || e.ctrlKey || e.metaKey || e.altKey) return;
+  var target = e.target;
+  var interactive = target && target.closest && target.closest('button,a,input,textarea,select,[contenteditable="true"],[role="button"]');
   var active = document.querySelector('.screen.active');
   if (!active) return;
   var id = active.id;
@@ -13498,6 +13566,11 @@ document.addEventListener('keydown', function(e) {
     else if (fr && fr.style.display !== 'none') doResetPassword();
   }
 
+  if (id === 'screenQuiz' && interactive) return;
+  if (id === 'screenQuiz' && Array.prototype.some.call(document.querySelectorAll('[role="dialog"]'), function(dialog) {
+    var style = getComputedStyle(dialog);
+    return dialog.getClientRects().length > 0 && style.visibility !== 'hidden' && style.opacity !== '0';
+  })) return;
   if (id === 'screenQuiz' && qAnswered) {
     if (e.key === 'Enter' || e.key === 'ArrowRight' || e.key === ' ') {
       e.preventDefault(); nextQ();

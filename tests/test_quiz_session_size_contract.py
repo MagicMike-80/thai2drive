@@ -21,7 +21,8 @@ class QuizSessionSizeContractTests(unittest.TestCase):
         self.assertGreaterEqual(WEBAPP.count("count=' + QUIZ_SESSION_SIZE"), 4)
 
     def test_progress_and_summary_offer_expected_next_steps(self):
-        self.assertIn('id="qProgLbl">Spørsmål 1 av 10</div>', WEBAPP)
+        self.assertIn('id="qProgLbl"></div>', WEBAPP)
+        self.assertIn("textContent  = t('question') + ' '", WEBAPP)
         self.assertIn("(qIdx + 1) + ' ' + t('of') + ' ' + displayTotal", WEBAPP)
         self.assertIn('onclick="retryQuiz()" data-key="result_retry"', WEBAPP)
         self.assertIn('onclick="showTab(\'teacher\')" data-key="result_michael"', WEBAPP)
