@@ -60,7 +60,7 @@ const results = vm.createContext({
   document:{getElementById:id=>endNodes[id] || (endNodes[id]={style:{},classList:{remove(){}}})},
   console
 });
-vm.runInContext(fn('showEnd'), results);
+vm.runInContext(fn('renderEndResult') + '\n' + fn('showEnd'), results);
 results.showEnd();
 assert.equal(endNodes.endScoreQuiet.textContent,'3/5', 'summary counts answers, not fetched questions');
 assert.equal(endNodes.endRegisterBtn.style.display,'block');
@@ -166,3 +166,94 @@ for(const language of ['no','th','en','no']) {
   }
 }
 console.log('Result actions: full applyUILang, NO→TH→EN→NO labels and all six handlers passed.');
+
+// Switch a visible result repeatedly without saving, changing score or replacing
+// the original answer snapshot. Exercise real translation and rendering code.
+const dynamicNodes = {};
+for (const id of ['screenEnd','endScoreQuiet','endHeading','endBody','endFocus',
+  'endFocusTopic','endAccessHint','endExamErrorsContainer','endExamErrorsTitle','endExamErrorsList']) {
+  dynamicNodes[id] = {textContent:'', innerHTML:'', style:{},
+    classList:{contains:()=>true,add(){},remove(){}}};
+}
+const originalGet = resultLang.document.getElementById;
+resultLang.document.getElementById = id=>dynamicNodes[id]||originalGet(id);
+Object.assign(resultLang, {
+  isExamMode:false, questions:Array(10), _sessionAnswers:Array(5), qScore:3,
+  _topicErrors:{Vikeplikt:2}, _examErrors:[],
+  accessState:{can_answer:false,message:{no:'NORSK KVOTE',th:'ไทยโควตา',en:'ENGLISH QUOTA'}},
+  api(){throw Error('Language refresh must not write');},
+  showEnd(){throw Error('Language refresh must not complete the attempt again');},
+  escH:s=>String(s), pickStrict:value=>value[resultLang.appLang]||'',
+});
+for (const name of ['tf','accessEndMessage','topicLabel','_buildDebrief',
+  'historyAnswerForLanguage','resultAnswerForLanguage','renderEndResult']) {
+  vm.runInContext(fn(name),resultLang);
+}
+const translations = {no:'NORSK', th:'ภาษาไทย', en:'ENGLISH'};
+const savedError = {language:'no',question_index:1,user_answer:'A',correct_answer:'B',
+  question_text:'NORSK',explanation:'NORSK',user_answer_text:'NORSK',correct_answer_text:'NORSK',
+  question_obj:{question:translations,explanation:translations,
+    options:[{id:'A',text:translations},{id:'B',text:translations}]}};
+const snapshot = JSON.stringify(savedError);
+for (const exam of [false,true]) {
+  resultLang.isExamMode=exam;
+  resultLang._examErrors=[savedError];
+  for (const language of ['no','th','en','no']) {
+    resultLang.appLang=language;
+    resultLang.applyUILang();
+    const total=exam?10:5;
+    assert.equal(dynamicNodes.endScoreQuiet.textContent,resultLang.tf('result_score',{correct:3,total}));
+    assert.equal(dynamicNodes.endHeading.textContent,resultLang._buildDebrief(Math.round(300/total),total).heading);
+    assert.equal(dynamicNodes.endBody.textContent,resultLang._buildDebrief(Math.round(300/total),total).body);
+    assert.equal(dynamicNodes.endFocusTopic.textContent,resultLang.topicLabel('Vikeplikt'));
+    assert.equal(dynamicNodes.endAccessHint.textContent,resultLang.accessState.message[language]);
+    if(exam) {
+      assert(dynamicNodes.endExamErrorsList.innerHTML.includes(translations[language]));
+      for(const other of ['no','th','en'].filter(l=>l!==language))
+        assert(!dynamicNodes.endExamErrorsList.innerHTML.includes(translations[other]));
+    }
+    assert.equal(resultLang.qScore,3);
+    assert.equal(resultLang._sessionAnswers.length,5);
+    assert.equal(JSON.stringify(savedError),snapshot,'render leaves saved history untouched');
+  }
+}
+resultLang.appLang='th';
+resultLang._examErrors=[{...savedError,question_obj:{}}];
+resultLang.accessState.message={no:'NORSK'};
+resultLang.applyUILang();
+assert(!dynamicNodes.endExamErrorsList.innerHTML.includes('NORSK'),'missing translation never falls back to saved Norwegian');
+assert.equal(dynamicNodes.endAccessHint.textContent,'');
+assert.equal(dynamicNodes.endAccessHint.style.display,'none');
+resultLang._examErrors=[];
+resultLang.applyUILang();
+assert.equal(dynamicNodes.endExamErrorsList.innerHTML,'');
+assert.equal(dynamicNodes.endExamErrorsTitle.textContent,resultLang.t('exam_all_correct'));
+console.log('Result language refresh: practice/exam NO→TH→EN→NO, missing translations, immutable score/history and no resave passed.');
+const remapped = {...savedError,question_obj:{...savedError.question_obj,
+  options:[{id:'A',text:{th:'ตัวเลือกหนึ่ง'}},{id:'B',text:{th:'ตัวเลือกสอง'}}],
+  _shuffledOpts:{opts:[{id:'A',sourceId:'B'},{id:'B',sourceId:'A'}]}}};
+assert.equal(resultLang.resultAnswerForLanguage(remapped).user_answer_text,'ตัวเลือกสอง');
+assert.equal(resultLang.resultAnswerForLanguage(remapped).correct_answer_text,'ตัวเลือกหนึ่ง');
+const oldShuffle = {...savedError,question_obj:{...savedError.question_obj,
+  _shuffledOpts:{opts:[{id:'A'},{id:'B'}]}}};
+for(const language of ['no','th','en']) {
+  resultLang.appLang=language;
+  assert.equal(resultLang.resultAnswerForLanguage(oldShuffle).user_answer_text,'');
+  assert.equal(resultLang.resultAnswerForLanguage(oldShuffle).correct_answer_text,'');
+}
+resultLang.appLang='th';
+vm.runInContext(fn('shuffleOpts'),resultLang);
+const shuffled = resultLang.shuffleOpts([{id:'A',text:'first'},{id:'B',text:'second'}],'A');
+for(const option of shuffled.opts) assert.equal(option.sourceId,option.text==='first'?'A':'B');
+let coachDisplay;
+Object.assign(resultLang,{setTimeout:callback=>callback(),switchTeacherSession(){},
+  teacherSend:(_prompt,display)=>{coachDisplay=display;}});
+vm.runInContext(fn('consultMichaelFromExamQuestion'),resultLang);
+resultLang._examErrors=[savedError];
+resultLang.consultMichaelFromExamQuestion(0);
+assert(coachDisplay.includes(translations.th));
+assert(!coachDisplay.includes(translations.no));
+coachDisplay=null;
+resultLang._examErrors=[{...savedError,question_obj:{}}];
+resultLang.consultMichaelFromExamQuestion(0);
+assert.equal(coachDisplay,null,'missing translated question cannot launch misleading coaching');
