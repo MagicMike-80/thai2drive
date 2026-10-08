@@ -2,6 +2,14 @@
 
 All notable changes to Thai2Drive are documented in this file.
 
+## [0.2.5.0] - 2026-10-08
+
+### Fixed
+
+- Result summaries and exam review cards refresh when the UI language changes, without saving another attempt or changing scores.
+- Translated answers retain their original option identity after shuffling; missing translations fail closed. Question coaching uses the selected language.
+- Add NO/TH/EN result, action, immutable-history and shuffled-answer regressions. Mobile, quotas, payment and campaign logic remain unchanged.
+
 ## [0.2.4.0] - 2026-10-07
 
 ### Fixed

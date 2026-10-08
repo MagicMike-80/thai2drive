@@ -6310,6 +6310,8 @@ function applyUILang() {
     if (Array.isArray(_flashcardTerms) && _flashcardTerms.length) renderSituationFlashcard();
   }
   renderPremiumPricing();
+  var endScreen = document.getElementById('screenEnd');
+  if (endScreen && endScreen.classList.contains('active')) renderEndResult();
 }
 var catsLoaded = false;
 var bookmarkedIds = {};
@@ -8972,6 +8974,7 @@ function shuffleOpts(opts, correctId) {
   var newCorrect = correctId; // fallback if not found
   arr.forEach(function(o, i) {
     if (o.id === correctId) newCorrect = letters[i];
+    o.sourceId = o.sourceId || o.id;
     o.id = letters[i]; // rebind display letter to shuffled position
   });
   return { opts: arr, correct: newCorrect };
@@ -10764,6 +10767,102 @@ function _buildDebrief(pct, total) {
   return { heading: heading, body: body, topTopic: topTopic };
 }
 
+function resultAnswerForLanguage(answer) {
+  var result = historyAnswerForLanguage(answer);
+  var question = answer.question_obj || {};
+  function optionText(id, savedField) {
+    var shuffled = question._shuffledOpts && question._shuffledOpts.opts;
+    if (Array.isArray(shuffled)) {
+      var displayed = shuffled.find(function(o) { return o.id === id; });
+      if (!displayed || !displayed.sourceId) return '';
+      id = displayed.sourceId;
+    }
+    var options = Array.isArray(question.options) ? question.options : [];
+    var option = options.find(function(o) { return String(o.id || o.key || '').toUpperCase() === String(id || '').toUpperCase(); });
+    var value = option && option.text;
+    if (value && typeof value === 'object') return typeof value[appLang] === 'string' ? value[appLang] : '';
+    var field = 'answer_' + String(id || '').toLowerCase();
+    var translated = question[field];
+    if (translated && typeof translated === 'object') return typeof translated[appLang] === 'string' ? translated[appLang] : '';
+    if (typeof question[field + '_' + appLang] === 'string') return question[field + '_' + appLang];
+    return answer.language === appLang && typeof answer[savedField] === 'string' ? answer[savedField] : '';
+  }
+  result.user_answer_text = optionText(answer.user_answer, 'user_answer_text');
+  result.correct_answer_text = optionText(answer.correct_answer, 'correct_answer_text');
+  return result;
+}
+
+// Rendering only: language changes must never save or recompute an attempt.
+function renderEndResult() {
+  var total = isExamMode ? questions.length : _sessionAnswers.length;
+  var pct = total > 0 ? Math.round(qScore / total * 100) : 0;
+  // Display errors must not prevent showEnd from saving the completed attempt.
+  try {
+  var accessHint = document.getElementById('endAccessHint');
+  accessHint.textContent = accessEndMessage();
+  accessHint.style.display = accessHint.textContent ? '' : 'none';
+    var debrief = _buildDebrief(pct, total);
+    var el;
+    el = document.getElementById('endScoreQuiet'); if (el) el.textContent = tf('result_score', {correct:qScore, total:total});
+    el = document.getElementById('endHeading');    if (el) el.textContent = debrief.heading;
+    el = document.getElementById('endBody');       if (el) el.textContent = debrief.body;
+    var focusEl = document.getElementById('endFocus');
+    var focusTopicEl = document.getElementById('endFocusTopic');
+    if (debrief.topTopic && focusEl && focusTopicEl) {
+      focusTopicEl.textContent = topicLabel(debrief.topTopic);
+      focusEl.style.display = '';
+    } else if (focusEl) {
+      focusEl.style.display = 'none';
+    }
+    var coachPriBtn = document.getElementById('endCoachMichaelPriBtn');
+    if (coachPriBtn) {
+      coachPriBtn.style.display = isExamMode ? 'inline-flex' : 'none';
+    }
+
+    var errContainer = document.getElementById('endExamErrorsContainer');
+    var errTitle = document.getElementById('endExamErrorsTitle');
+    var errList = document.getElementById('endExamErrorsList');
+    var endScreenEl = document.getElementById('screenEnd');
+
+    if (isExamMode && errContainer && errTitle && errList) {
+      if (_examErrors.length === 0) {
+        errTitle.textContent = t('exam_all_correct');
+        errList.innerHTML = '';
+        errContainer.style.display = 'block';
+        if (endScreenEl) endScreenEl.classList.remove('has-errors');
+      } else {
+        errTitle.textContent = tf('exam_errors_heading', {count: _examErrors.length});
+        if (endScreenEl) endScreenEl.classList.add('has-errors');
+        var errHtml = _examErrors.map(function(savedError, errIdx) {
+          var err = resultAnswerForLanguage(savedError);
+          var userStr = err.user_answer ? ('[' + escH(err.user_answer) + '] ' + escH(err.user_answer_text || '')) : escH(t('exam_unanswered'));
+          var correctStr = '[' + escH(err.correct_answer) + '] ' + escH(err.correct_answer_text || '');
+          var explHtml = err.explanation ? ('<div class="exam-error-expl">' + escH(err.explanation) + '</div>') : '';
+          return '<div class="exam-error-card">'
+            + '<div class="exam-error-header">'
+              + '<span class="exam-error-num">#' + err.question_index + '</span>'
+              + '<span class="exam-error-qtext">' + escH(err.question_text) + '</span>'
+            + '</div>'
+            + '<div class="exam-error-ans-row">'
+              + '<div class="exam-error-user">❌ ' + escH(t('exam_your_answer')) + ': ' + userStr + '</div>'
+              + '<div class="exam-error-correct">✓ ' + escH(t('exam_correct_answer')) + ': ' + correctStr + '</div>'
+            + '</div>'
+            + explHtml
+            + (err.question_text ? '<button class="exam-error-btn" onclick="consultMichaelFromExamQuestion(' + errIdx + ')">'
+              + t('ask_michael_ai')
+            + '</button>' : '')
+            + '</div>';
+        }).join('');
+        errList.innerHTML = errHtml;
+        errContainer.style.display = 'block';
+      }
+    } else if (errContainer) {
+      errContainer.style.display = 'none';
+      if (endScreenEl) endScreenEl.classList.remove('has-errors');
+    }
+  } catch(displayErr) { console.warn('Result display error:', displayErr); }
+}
+
 function showEnd() {
   stopAllSpeech();
   stopExamTimer();
@@ -10771,9 +10870,6 @@ function showEnd() {
   var total  = isExamMode ? questions.length : _sessionAnswers.length;
   document.getElementById('endRegisterBtn').style.display = token ? 'none' : 'block';
   document.getElementById('endRetryBtn').style.display = !token && accessState && accessState.can_answer === false ? 'none' : '';
-  var accessHint = document.getElementById('endAccessHint');
-  accessHint.textContent = accessEndMessage();
-  accessHint.style.display = accessHint.textContent ? '' : 'none';
 
   if (isExamMode) {
     qScore = 0;
@@ -10838,67 +10934,7 @@ function showEnd() {
 
   var pct    = total > 0 ? Math.round(qScore / total * 100) : 0;
 
-  // ── Display (wrapped in try so a DOM error never blocks the save) ──
-  try {
-    var debrief = _buildDebrief(pct, total);
-    var el;
-    el = document.getElementById('endScoreQuiet'); if (el) el.textContent = tf('result_score', {correct:qScore, total:total});
-    el = document.getElementById('endHeading');    if (el) el.textContent = debrief.heading;
-    el = document.getElementById('endBody');       if (el) el.textContent = debrief.body;
-    var focusEl = document.getElementById('endFocus');
-    var focusTopicEl = document.getElementById('endFocusTopic');
-    if (debrief.topTopic && focusEl && focusTopicEl) {
-      focusTopicEl.textContent = topicLabel(debrief.topTopic);
-      focusEl.style.display = '';
-    } else if (focusEl) {
-      focusEl.style.display = 'none';
-    }
-    var coachPriBtn = document.getElementById('endCoachMichaelPriBtn');
-    if (coachPriBtn) {
-      coachPriBtn.style.display = isExamMode ? 'inline-flex' : 'none';
-    }
-
-    var errContainer = document.getElementById('endExamErrorsContainer');
-    var errTitle = document.getElementById('endExamErrorsTitle');
-    var errList = document.getElementById('endExamErrorsList');
-    var endScreenEl = document.getElementById('screenEnd');
-
-    if (isExamMode && errContainer && errTitle && errList) {
-      if (_examErrors.length === 0) {
-        errTitle.textContent = t('exam_all_correct');
-        errList.innerHTML = '';
-        errContainer.style.display = 'block';
-        if (endScreenEl) endScreenEl.classList.remove('has-errors');
-      } else {
-        errTitle.textContent = tf('exam_errors_heading', {count: _examErrors.length});
-        if (endScreenEl) endScreenEl.classList.add('has-errors');
-        var errHtml = _examErrors.map(function(err, errIdx) {
-          var userStr = err.user_answer ? ('[' + escH(err.user_answer) + '] ' + escH(err.user_answer_text || '')) : escH(t('exam_unanswered'));
-          var correctStr = '[' + escH(err.correct_answer) + '] ' + escH(err.correct_answer_text || '');
-          var explHtml = err.explanation ? ('<div class="exam-error-expl">' + escH(err.explanation) + '</div>') : '';
-          return '<div class="exam-error-card">'
-            + '<div class="exam-error-header">'
-              + '<span class="exam-error-num">#' + err.question_index + '</span>'
-              + '<span class="exam-error-qtext">' + escH(err.question_text) + '</span>'
-            + '</div>'
-            + '<div class="exam-error-ans-row">'
-              + '<div class="exam-error-user">❌ ' + escH(t('exam_your_answer')) + ': ' + userStr + '</div>'
-              + '<div class="exam-error-correct">✓ ' + escH(t('exam_correct_answer')) + ': ' + correctStr + '</div>'
-            + '</div>'
-            + explHtml
-            + '<button class="exam-error-btn" onclick="consultMichaelFromExamQuestion(' + errIdx + ')">'
-              + t('ask_michael_ai')
-            + '</button>'
-            + '</div>';
-        }).join('');
-        errList.innerHTML = errHtml;
-        errContainer.style.display = 'block';
-      }
-    } else if (errContainer) {
-      errContainer.style.display = 'none';
-      if (endScreenEl) endScreenEl.classList.remove('has-errors');
-    }
-  } catch(displayErr) { console.warn('showEnd display error:', displayErr); }
+  renderEndResult();
 
   // ── Save attempt — always runs, even if display above failed ──
   if (deviceId && total > 0) {
@@ -11030,8 +11066,10 @@ function consultMichaelFromExam() {
 }
 
 function consultMichaelFromExamQuestion(errorIdx) {
-  var err = _examErrors[errorIdx];
-  if (!err) return;
+  var savedError = _examErrors[errorIdx];
+  if (!savedError) return;
+  var err = resultAnswerForLanguage(savedError);
+  if (!err.question_text) return;
   var userAnsDisplay = err.user_answer ? ('(' + err.user_answer + ') ' + err.user_answer_text) : t('exam_unanswered');
   var correctAnsDisplay = '(' + err.correct_answer + ') ' + err.correct_answer_text;
 
