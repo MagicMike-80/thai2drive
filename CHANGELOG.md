@@ -2,6 +2,15 @@
 
 All notable changes to Thai2Drive are documented in this file.
 
+## [0.2.5.1] - 2026-10-08
+
+### Fixed
+
+- Remove the remaining attempt-completion call from the language selector. Result language changes now render without saving again.
+- Ignore trailing Next/answer activations until a 450 ms quiet interval after advancing a question.
+- Move focus from a completed, focused practice answer to the visible Next button, without overriding focus moved elsewhere.
+- Exercise the real setLang entry point and transition/focus behavior in runtime regressions. No historical data cleanup.
+
 ## [0.2.5.0] - 2026-10-08
 
 ### Fixed
