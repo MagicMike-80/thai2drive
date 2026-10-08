@@ -10,6 +10,7 @@ from pymongo.errors import DuplicateKeyError
 import os
 import logging
 import hashlib
+import hmac
 import smtplib
 from pathlib import Path
 from email.mime.text import MIMEText
@@ -425,6 +426,7 @@ def create_token(
     is_premium: bool = False,
     premium_until: Optional[str] = None,
     premium_status: str = "none",
+    admin_password_fingerprint: Optional[str] = None,
 ) -> str:
     # Tokenet lever i 168 timer (uendret). Men tilgangen kan utløpe før tokenet gjør
     # det — en gratisuke tar slutt, et abonnement går ut. Derfor bærer payloaden sin
@@ -439,6 +441,8 @@ def create_token(
         "exp": datetime.now(timezone.utc) + timedelta(hours=JWT_EXPIRE_HOURS),
         "iat": datetime.now(timezone.utc),
     }
+    if admin_password_fingerprint is not None:
+        payload["admin_password_fingerprint"] = admin_password_fingerprint
     return jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
 
 def verify_token(token: str) -> Optional[dict]:
@@ -3014,6 +3018,9 @@ async def login(data: AuthLogin):
         is_premium=is_premium_active,
         premium_until=_access_expires_at(user),
         premium_status=_user_premium_status(user),
+        admin_password_fingerprint=(
+            hashlib.sha256(password_hash.encode("utf-8")).hexdigest() if is_admin else None
+        ),
     )
 
     # ── Segment track ──
@@ -4403,6 +4410,14 @@ async def require_admin(credentials: HTTPAuthorizationCredentials = Depends(secu
     admin_entry = await db.admin_users.find_one({"email": email})
     if not admin_entry:
         raise HTTPException(status_code=403, detail="Admin access required")
+    user = await db.users.find_one({"id": payload.get("sub")}, {"_id": 0, "password_hash": 1})
+    password_hash = user.get("password_hash") if user else None
+    expected_fingerprint = (
+        hashlib.sha256(password_hash.encode("utf-8")).hexdigest() if password_hash else ""
+    )
+    token_fingerprint = payload.get("admin_password_fingerprint", "")
+    if not token_fingerprint or not hmac.compare_digest(token_fingerprint, expected_fingerprint):
+        raise HTTPException(status_code=401, detail="Admin session invalidated")
     return payload
 
 
