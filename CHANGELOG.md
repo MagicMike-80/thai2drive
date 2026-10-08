@@ -2,6 +2,13 @@
 
 All notable changes to Thai2Drive are documented in this file.
 
+## [0.2.5.2] - 2026-10-08
+
+### Security
+
+- Require valid account authentication for statistics and attempt-history reads; reject mismatched account IDs and filter only by authenticated ownership.
+- Preserve anonymous quiz submission and local results. Anonymous server-history readers, including older mobile calls without tokens, are now denied.
+
 ## [0.2.5.1] - 2026-10-08
 
 ### Fixed

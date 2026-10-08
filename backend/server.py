@@ -2365,13 +2365,24 @@ async def stripe_webhook(request: Request):
 
     return {"received": True, "handled": handled}
 
+def _owned_attempt_filter(device_id: str, current_user: dict) -> dict:
+    """Only explicit account ownership authorizes access; device IDs are not credentials."""
+    user_id = current_user.get("sub")
+    if not isinstance(user_id, str) or not user_id.strip():
+        raise HTTPException(status_code=401, detail="Invalid account identity")
+    if device_id != user_id:
+        raise HTTPException(status_code=403, detail="Account identity mismatch")
+    return {"user_id": user_id}
+
+
 @api_router.get("/stats/me")
-async def get_my_stats(device_id: str):
-    """Per-category accuracy for a device, based on quiz_attempts."""
+async def get_my_stats(device_id: str, current_user: dict = Depends(get_current_user)):
+    """Per-category accuracy for the authenticated account."""
+    owner_filter = _owned_attempt_filter(device_id, current_user)
     # Aggregate by category across all attempts
     pipeline = [
         {"$match": {
-            "$or": [{"device_id": device_id}, {"user_id": device_id}],
+            **owner_filter,
             "total_questions": {"$gt": 0},
             "category": {"$nin": [None, "", "None"]}
         }},
@@ -2399,7 +2410,7 @@ async def get_my_stats(device_id: str):
 
     # Overall totals
     totals = await db.quiz_attempts.aggregate([
-        {"$match": {"$or": [{"device_id": device_id}, {"user_id": device_id}]}},
+        {"$match": owner_filter},
         {"$group": {
             "_id": None,
             "total_q":       {"$sum": "$total_questions"},
@@ -2797,9 +2808,13 @@ async def save_quiz_attempt(
     return doc
 
 @api_router.get("/quiz-attempts/{device_id}")
-async def get_quiz_attempts(device_id: str, limit: int = Query(default=20, le=50)):
+async def get_quiz_attempts(
+    device_id: str, limit: int = Query(default=20, le=50),
+    current_user: dict = Depends(get_current_user),
+):
+    owner_filter = _owned_attempt_filter(device_id, current_user)
     attempts = await db.quiz_attempts.find(
-        {"$or": [{"device_id": device_id}, {"user_id": device_id}]}, {"_id": 0}
+        owner_filter, {"_id": 0}
     ).sort("completed_at", -1).limit(limit).to_list(limit)
     return attempts
 
