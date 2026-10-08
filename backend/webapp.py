@@ -5482,6 +5482,7 @@ var qIdx = 0;
 var qScore = 0;
 var qAnswered = false;
 var _answerPending = false;
+var _quizTransitionUntil = 0;
 var quizStartedAt = null;
 var _lastSavedAttempt = null; // local mirror of the most recent saved attempt
 var _sessionAnswers   = []; // per-question answer log — powers history detail panel
@@ -9075,7 +9076,23 @@ function topicLabel(label) {
   return item ? (pickStrict(item) || label) : label;
 }
 
+function quizTransitionBlocked() {
+  var now = Date.now();
+  if (now >= _quizTransitionUntil) return false;
+  // Require a quiet interval after Next; trailing taps must not answer a new card.
+  _quizTransitionUntil = now + 450;
+  return true;
+}
+
+function focusQuizNext(answerButton, hadFocus) {
+  if (!hadFocus || (document.activeElement !== answerButton && document.activeElement !== document.body)) return;
+  var next = document.getElementById('qNextMobile');
+  if (next && !next.disabled && next.getClientRects().length) next.focus({preventScroll:true});
+}
+
 async function selectAns(btn, picked) {
+  if (quizTransitionBlocked()) return;
+  var answerHadFocus = document.activeElement === btn;
   if (!isExamMode && qAnswered) return;
   var _curQ = questions[qIdx];
   if (!isExamMode) {
@@ -9148,6 +9165,8 @@ async function selectAns(btn, picked) {
   var nm = document.getElementById('qNextMobile');
   if (nb) nb.disabled = false;
   if (nm) nm.disabled = false;
+
+  focusQuizNext(btn, answerHadFocus);
 
   // Scroll Next button into view after a short delay (DOM paint + feedback render)
   setTimeout(function() {
@@ -10251,7 +10270,7 @@ function prevQ() {
 }
 
 function nextQ() {
-  if (_answerPending) return;
+  if (_answerPending || quizTransitionBlocked()) return;
   stopAllSpeech();
   closeMichaelQuizCoach();
   if (_aiPanelTimer) { clearTimeout(_aiPanelTimer); _aiPanelTimer = null; } // never let a delayed panel land on the next question
@@ -10262,6 +10281,7 @@ function nextQ() {
     confirmSubmitExam();
     return;
   }
+  _quizTransitionUntil = Date.now() + 450;
   qIdx++;
   if (qIdx >= questions.length) { showEnd(); return; }
   // Finish the answered practice session before offering the next access level.
@@ -11416,10 +11436,7 @@ function setLang(lang) {
   if (quizScreen && quizScreen.classList.contains('active') && questions.length) {
     renderQuestion();
   }
-  var endScreen = document.getElementById('screenEnd');
-  if (endScreen && endScreen.classList.contains('active') && questions.length) {
-    showEnd();
-  }
+  // applyUILang already refreshes the result; never complete/save on language change.
   // Re-render bookmarks if active
   var bmScreen = document.getElementById('screenBookmarks');
   if (bmScreen && bmScreen.classList.contains('active')) {

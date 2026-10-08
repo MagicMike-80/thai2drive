@@ -32,7 +32,7 @@ let ended = 0, paywallChecked = 0, rendered = 0;
 const quiz = vm.createContext({
   stopAllSpeech(){}, closeMichaelQuizCoach(){}, _aiPanelTimer:null, _reviewMode:false, _answerPending:false,
   isExamMode:false, qAnswered:true, qIdx:4, questions:Array(10), _sessionAnswers:Array(5),
-  isPremium:()=>false, accessState:{can_answer:false}, FREE_LIMIT:5,
+  quizTransitionBlocked:()=>false, isPremium:()=>false, accessState:{can_answer:false}, FREE_LIMIT:5,
   showEnd(){ended++;}, checkPaywall(){paywallChecked++;return true;}, renderQuestion(){rendered++;},
   document:{querySelector:()=>null}
 });
@@ -257,3 +257,62 @@ coachDisplay=null;
 resultLang._examErrors=[{...savedError,question_obj:{}}];
 resultLang.consultMichaelFromExamQuestion(0);
 assert.equal(coachDisplay,null,'missing translated question cannot launch misleading coaching');
+
+// Regression: real language-selector entry point must not complete/save again.
+Object.assign(resultLang, {
+  _ls:{set(){}}, syncAppLanguagePath(){}, _msOnLangChange(){},
+  signsLoaded:false, catsLoaded:false, _videosCached:null, _podcastsCached:null,
+  _signPanelData:null, resetTeacherForLanguage(){}, toast(){},
+});
+vm.runInContext(fn('setLang'), resultLang);
+for (const exam of [false,true]) {
+  resultLang.isExamMode=exam;
+  resultLang._examErrors=[savedError];
+  resultLang.accessState.message={no:'NORSK KVOTE',th:'ไทยโควตา',en:'ENGLISH QUOTA'};
+  for (const language of ['no','th','en','no','no']) {
+    resultLang.setLang(language);
+    assert.equal(resultLang.appLang,language);
+    assert.equal(dynamicNodes.endScoreQuiet.textContent,resultLang.tf('result_score',{correct:3,total:exam?10:5}));
+    assert.equal(dynamicNodes.endAccessHint.textContent,resultLang.accessState.message[language]);
+    assert.equal(resultLang.qScore,3);
+    assert.equal(resultLang._sessionAnswers.length,5);
+    assert.equal(JSON.stringify(savedError),snapshot);
+  }
+}
+console.log('Actual setLang entry point: repeated NO/TH/EN switches preserve results without completion or writes.');
+(async function transitionChecks() {
+  let now=1000, consumes=0, focused=0;
+  const answer={}; const body={};
+  const next={disabled:false,getClientRects:()=>[{}],focus(){focused++;}};
+  const ctx=vm.createContext({
+    Date:{now:()=>now},_quizTransitionUntil:0,_answerPending:false,
+    _reviewMode:false,_aiPanelTimer:null,isExamMode:false,qAnswered:true,qIdx:0,
+    questions:[{}, {}, {}],_sessionAnswers:[],FREE_LIMIT:5,
+    stopAllSpeech(){},closeMichaelQuizCoach(){},isPremium:()=>false,
+    accessState:{can_answer:true},checkPaywall:()=>true,
+    renderQuestion(){ctx.qAnswered=false;},
+    consumeQuestionAccess:async()=>{consumes++;return false;},
+    document:{activeElement:answer,body,querySelector:()=>null,getElementById:()=>next},
+  });
+  for(const name of ['quizTransitionBlocked','focusQuizNext','nextQ','selectAns'])
+    vm.runInContext(fn(name),ctx);
+  ctx.nextQ(); assert.equal(ctx.qIdx,1);
+  for(const tick of [1100,1250,1500,1800]) {
+    now=tick; ctx.nextQ(); await ctx.selectAns(answer,'A');
+    assert.equal(ctx.qIdx,1); assert.equal(consumes,0); assert.equal(ctx.qAnswered,false);
+  }
+  now=2251; await ctx.selectAns(answer,'A');
+  assert.equal(consumes,1,'intentional answer after quiet interval reaches access policy');
+  assert.equal(ctx._answerPending,false);
+  for(const language of ['no','th','en']) {
+    ctx.appLang=language;ctx.document.activeElement=answer;
+    ctx.focusQuizNext(answer,true);
+  }
+  assert.equal(focused,3,'visible Next reachable after focused answer in every language');
+  ctx.document.activeElement={};ctx.focusQuizNext(answer,true);
+  ctx.document.activeElement=answer;ctx.focusQuizNext(answer,false);
+  next.disabled=true;ctx.focusQuizNext(answer,true);
+  next.disabled=false;next.getClientRects=()=>[];ctx.focusQuizNext(answer,true);
+  assert.equal(focused,3,'do not steal moved focus or focus a disabled/hidden Next');
+  console.log('Next burst: no answer consumption during trailing taps; quiet-interval recovery and focus handoff passed.');
+})().catch(error=>{console.error(error);process.exitCode=1;});
