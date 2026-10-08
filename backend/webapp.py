@@ -13461,7 +13461,12 @@ function escH(s) {
 // ════════════════════════════════════════════
 document.addEventListener('keydown', function(e) {
   // Let focused controls handle their own native activation (especially explanations).
-  if (e.defaultPrevented || e.isComposing || e.repeat || e.ctrlKey || e.metaKey || e.altKey) return;
+  if (e.defaultPrevented || e.isComposing || e.ctrlKey || e.metaKey || e.altKey) return;
+  if (e.repeat) {
+    var repeatScreen = document.querySelector('.screen.active');
+    if (repeatScreen && repeatScreen.id === 'screenQuiz' && (e.key === 'Enter' || e.key === ' ')) e.preventDefault();
+    return;
+  }
   var target = e.target;
   var interactive = target && target.closest && target.closest('button,a,input,textarea,select,[contenteditable="true"],[role="button"]');
   var active = document.querySelector('.screen.active');

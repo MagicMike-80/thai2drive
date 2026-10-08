@@ -316,3 +316,7 @@ console.log('Actual setLang entry point: repeated NO/TH/EN switches preserve res
   assert.equal(focused,3,'do not steal moved focus or focus a disabled/hidden Next');
   console.log('Next burst: no answer consumption during trailing taps; quiet-interval recovery and focus handoff passed.');
 })().catch(error=>{console.error(error);process.exitCode=1;});
+let preventedRepeats=0;
+for (const key of ['Enter',' ']) handler({key,repeat:true,target:{closest:()=>({tagName:'BUTTON'})},preventDefault(){preventedRepeats++;}});
+assert.equal(preventedRepeats,2,'held activation must prevent native clicks after focus transfers to Next');
+assert.equal(advanced,1,'held activation must not advance');
