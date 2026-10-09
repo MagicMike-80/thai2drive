@@ -1,0 +1,2793 @@
+{
+ "pack": "bildebok_pilot_s11_s35",
+ "book": "Lærebok Klasse B",
+ "scope": {
+  "printed_pages": [
+   11,
+   35
+  ],
+  "pdf_pages": [
+   6,
+   30
+  ],
+  "page_count": 25
+ },
+ "pages": [
+  {
+   "id": "bb-s11",
+   "book": "Lærebok Klasse B",
+   "printed_page": 11,
+   "pdf_page": 6,
+   "chapter": "Del 1 Innledning",
+   "section": "1.1 Informasjon",
+   "asset_id": "bb_s11_samordnet-undervisning",
+   "image_file": "bb_s11_samordnet-undervisning.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Teori og praksis hører sammen",
+    "th": "ทฤษฎีและภาคปฏิบัติไปด้วยกัน",
+    "en": "Theory and practice go together"
+   },
+   "core_sentence": {
+    "no": "Ta teorikurset tidlig, så henger det sammen med kjøringen.",
+    "th": "เรียนทฤษฎีให้เร็ว เพื่อให้เชื่อมโยงกับการขับรถจริง",
+    "en": "Take the theory course early so it connects with your driving."
+   },
+   "points": [
+    {
+     "no": "Du kan øvelseskjøre fra 16 år, etter trafikalt grunnkurs.",
+     "th": "ฝึกขับได้เมื่ออายุ 16 ปี หลังเรียนหลักสูตรพื้นฐานการจราจร",
+     "en": "You can practise from age 16, after the basic traffic course."
+    },
+    {
+     "no": "Privat: ledsager må være 25 år og ha hatt førerkort i samme klasse i 5 år.",
+     "th": "ฝึกขับส่วนตัว: ผู้นั่งกำกับต้องอายุ 25 ปี และมีใบขับขี่ชั้นเดียวกันมาแล้ว 5 ปี",
+     "en": "Private practice: your supervisor must be 25 and have held a licence in the same class for 5 years."
+    },
+    {
+     "no": "Trafikalt grunnkurs er 17 timer og kan tas fra 15 år.",
+     "th": "หลักสูตรพื้นฐานการจราจร 17 ชั่วโมง เริ่มเรียนได้ตั้งแต่อายุ 15 ปี",
+     "en": "The basic traffic course is 17 hours and can be taken from age 15."
+    }
+   ],
+   "michael_says": {
+    "no": "Rolig. Teori først gjør kjøretimene lettere.",
+    "th": "ใจเย็น ๆ เรียนทฤษฎีก่อน การฝึกขับจะง่ายขึ้น",
+    "en": "Take it easy. Theory first makes lessons easier."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du er 17 og vil øvelseskjøre privat med en slektning (28 år, førerkort i 2 år). Går det?",
+     "th": "คุณอายุ 17 อยากฝึกขับส่วนตัวกับญาติ (อายุ 28 มีใบขับขี่มา 2 ปี) ได้ไหม?",
+     "en": "You are 17 and want to practise privately with a relative (28 years old, licence for 2 years). Is that allowed?"
+    },
+    "options": [
+     {
+      "no": "Nei – ledsager må ha hatt førerkort i 5 år",
+      "th": "ไม่ได้ – ผู้นั่งกำกับต้องมีใบขับขี่มาแล้ว 5 ปี",
+      "en": "No – the supervisor must have held a licence for 5 years"
+     },
+     {
+      "no": "Ja – han er over 25",
+      "th": "ได้ – เขาอายุเกิน 25",
+      "en": "Yes – he is over 25"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Elev",
+     "th": "ผู้เรียน",
+     "en": "Learner"
+    },
+    {
+     "no": "Ledsager",
+     "th": "ผู้นั่งกำกับ",
+     "en": "Supervisor"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian residential road, daytime, view from the back seat of an adult supervisor beside a young learner driver at the wheel, both wearing seat belts, calm atmosphere, no text, no letters. Master image 3:2 landscape. Keep every key element (Learner, Supervisor) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "rule_ref": "",
+   "note": "",
+   "michael_basis": {
+    "no": "Myndighetene krever at teori og praktisk opplæring henger sammen. Du kan øvelseskjøre fra 16 år etter trafikalt grunnkurs (17 timer; kan tas fra 15 år på trafikkskole eller i 10. klasse). Over 25 år er du fritatt for deler av kurset, men må ta mørkekjøring og plikter ved trafikkuhell og førstehjelp. Ledsager ved privat øvelseskjøring må ha fylt 25 år og ha hatt førerkort i samme klasse sammenhengende de siste 5 årene.",
+    "th": "หน่วยงานรัฐกำหนดให้ทฤษฎีและการฝึกปฏิบัติสอดคล้องกัน คุณฝึกขับได้ตั้งแต่อายุ 16 ปี หลังเรียนหลักสูตรพื้นฐานการจราจร (17 ชั่วโมง เรียนได้ตั้งแต่อายุ 15 ปีที่โรงเรียนสอนขับรถหรือในชั้นมัธยมต้นปีสุดท้าย) ผู้อายุเกิน 25 ปีได้รับยกเว้นบางส่วนของหลักสูตร แต่ต้องเรียนขับกลางคืนและเรื่องหน้าที่เมื่อเกิดอุบัติเหตุและการปฐมพยาบาล ผู้นั่งกำกับเมื่อฝึกขับส่วนตัวต้องอายุ 25 ปีขึ้นไป และมีใบขับขี่ชั้นเดียวกันต่อเนื่องในช่วง 5 ปีที่ผ่านมา",
+    "en": "Authorities require theory and practical training to fit together. You can practise from age 16 after the basic traffic course (17 hours; it can be taken from age 15 at a driving school or in year 10). Over 25 you are exempt from parts of the course but must still do night driving and the duties after an accident and first aid. A supervisor for private practice must be 25 and have held a licence in the same class continuously for the last 5 years."
+   },
+   "open_questions": [],
+   "next_step": "bb-s12",
+   "source_ref": "Lærebok Klasse B, trykt s. 11 (PDF-s. 6)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "official_check": "2026-10-09",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   }
+  },
+  {
+   "id": "bb-s12",
+   "book": "Lærebok Klasse B",
+   "printed_page": 12,
+   "pdf_page": 7,
+   "chapter": "Del 1 Innledning",
+   "section": "1.1 Informasjon – Trinnvis opplæring og mørkekjøring",
+   "asset_id": "bb_s12_trinn-og-morkekjoring",
+   "image_file": "bb_s12_trinn-og-morkekjoring.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Fire trinn til førerprøven",
+    "th": "สี่ขั้นสู่การสอบขับขี่",
+    "en": "Four steps to the driving test"
+   },
+   "core_sentence": {
+    "no": "Opplæringen går i fire trinn, ett om gangen.",
+    "th": "การเรียนมี 4 ขั้น ทำทีละขั้น",
+    "en": "Training has four steps, one at a time."
+   },
+   "points": [
+    {
+     "no": "1 trafikalt grunnkurs · 2 grunnleggende opplæring · 3 trafikal del · 4 avsluttende opplæring.",
+     "th": "1 หลักสูตรพื้นฐานการจราจร · 2 การเรียนพื้นฐาน · 3 ส่วนการจราจร · 4 การเรียนขั้นสุดท้าย",
+     "en": "1 basic traffic course · 2 basic training · 3 traffic part · 4 final training."
+    },
+    {
+     "no": "Sikkerhetskurs på bane (4 timer) og på veg (13 timer) hører til trinn 3 og 4.",
+     "th": "คอร์สความปลอดภัยบนลานฝึก (4 ชั่วโมง) และบนถนน (13 ชั่วโมง) อยู่ในขั้น 3 และ 4",
+     "en": "Safety courses on a closed track (4 h) and on the road (13 h) belong to steps 3 and 4."
+    },
+    {
+     "no": "For å øvelseskjøre mellom 1. november og 15. mars må du ha tatt mørkekjøring.",
+     "th": "การฝึกขับระหว่าง 1 พฤศจิกายนถึง 15 มีนาคม ต้องผ่านการเรียนขับรถกลางคืนก่อน",
+     "en": "To practise between 1 November and 15 March you must have done night driving."
+    }
+   ],
+   "michael_says": {
+    "no": "Gå trinn for trinn. Du trenger ikke kunne alt i dag.",
+    "th": "ไปทีละขั้น ไม่ต้องรู้ทุกอย่างวันนี้",
+    "en": "Go step by step. You don't need to know everything today."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du tok trafikalt grunnkurs i juli og vil øvelseskjøre i desember. Hva må du ha tatt først?",
+     "th": "คุณเรียนหลักสูตรพื้นฐานการจราจรเดือนกรกฎาคมและอยากฝึกขับเดือนธันวาคม ต้องผ่านอะไรก่อน?",
+     "en": "You took the basic traffic course in July and want to practise in December. What must you have done first?"
+    },
+    "options": [
+     {
+      "no": "Mørkekjøring",
+      "th": "การเรียนขับรถกลางคืน",
+      "en": "The night-driving course"
+     },
+     {
+      "no": "Ingenting mer",
+      "th": "ไม่ต้องอะไรเพิ่ม",
+      "en": "Nothing more"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Dag",
+     "th": "กลางวัน",
+     "en": "Day"
+    },
+    {
+     "no": "Natt",
+     "th": "กลางคืน",
+     "en": "Night"
+    }
+   ],
+   "image_brief": "Photorealistic split image of the same Norwegian country road: left half in bright summer daylight, right half at night with car headlights lit, driver's-eye view, no text. Master image 3:2 landscape. Keep every key element (Day, Night) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "rule_ref": "",
+   "note": "Datoer og trinn følger boken (ca. 2010). Sjekkes mot gjeldende læreplan før live.",
+   "michael_basis": {
+    "no": "Trinnene: trafikalt grunnkurs, grunnleggende opplæring, trafikal del og avsluttende opplæring. Sikkerhetskurs på bane (4 timer) tas mot slutten av trinn 3, og sikkerhetskurs på veg (13 timer) hører til trinn 4. For å øvelseskjøre mellom 1. november og 15. mars må du ha tatt mørkekjøring. Mellom 16. mars og 31. oktober er det ikke mørkt nok til mørkekjøring: et grunnkurs tatt da gir et bevis som gjelder til 1. november, og etter mørkekjøring får du et nytt bevis som gjelder hele året.",
+    "th": "ขั้นตอน: หลักสูตรพื้นฐานการจราจร การเรียนพื้นฐาน ส่วนการจราจร และการเรียนขั้นสุดท้าย คอร์สความปลอดภัยบนลานฝึก (4 ชั่วโมง) เรียนช่วงท้ายของขั้น 3 และคอร์สความปลอดภัยบนถนน (13 ชั่วโมง) อยู่ในขั้น 4 การฝึกขับระหว่าง 1 พฤศจิกายนถึง 15 มีนาคม ต้องผ่านการเรียนขับรถกลางคืน ระหว่าง 16 มีนาคมถึง 31 ตุลาคมไม่มืดพอจะเรียนขับกลางคืน หากเรียนหลักสูตรพื้นฐานช่วงนั้นจะได้หลักฐานที่ใช้ได้ถึง 1 พฤศจิกายน และหลังเรียนขับกลางคืนจะได้หลักฐานใหม่ที่ใช้ได้ทั้งปี",
+    "en": "The steps: basic traffic course, basic training, traffic part and final training. The track safety course (4 hours) comes near the end of step 3 and the road safety course (13 hours) belongs to step 4. To practise between 1 November and 15 March you must have done night driving. Between 16 March and 31 October it is not dark enough for night driving: a basic course taken then gives a certificate valid until 1 November, and after night driving you get a new certificate valid all year."
+   },
+   "open_questions": [],
+   "next_step": "bb-s13",
+   "source_ref": "Lærebok Klasse B, trykt s. 12 (PDF-s. 7)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "official_check": "2026-10-09",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   }
+  },
+  {
+   "id": "bb-s13",
+   "book": "Lærebok Klasse B",
+   "printed_page": 13,
+   "pdf_page": 8,
+   "chapter": "Del 1 Innledning",
+   "section": "1.1 Informasjon – Sikkerhetskurs på veg, L-merket og ekstra speil",
+   "asset_id": "bb_s13_sikkerhetskurs-l-merke",
+   "image_file": "bb_s13_sikkerhetskurs-l-merke.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Sikkerhetskurs og L-merke",
+    "th": "คอร์สความปลอดภัยและป้าย L",
+    "en": "Safety course and L-sign"
+   },
+   "core_sentence": {
+    "no": "Du tar sikkerhetskursene mot slutten av opplæringen.",
+    "th": "คอร์สความปลอดภัยเรียนช่วงท้ายของการฝึก",
+    "en": "You take the safety courses near the end of training."
+   },
+   "points": [
+    {
+     "no": "Sikkerhetskurs på bane: 4 timer. På veg: 13 timer.",
+     "th": "คอร์สบนลานฝึก 4 ชั่วโมง คอร์สบนถนน 13 ชั่วโมง",
+     "en": "Track course: 4 hours. Road course: 13 hours."
+    },
+    {
+     "no": "Bilen skal ha rød L på hvit bakgrunn bak, og ekstra speil til ledsageren.",
+     "th": "รถต้องมีป้าย L สีแดงบนพื้นขาวด้านหลัง และกระจกเสริมสำหรับผู้นั่งกำกับ",
+     "en": "The car needs a red L on white at the back and an extra mirror for the supervisor."
+    },
+    {
+     "no": "Ta av L-merket når øvelseskjøringen er slutt.",
+     "th": "ถอดป้าย L ออกเมื่อฝึกขับเสร็จ",
+     "en": "Take off the L-sign when practice is over."
+    }
+   ],
+   "michael_says": {
+    "no": "L-merket sier: her øver en elev. Gi litt ekstra plass.",
+    "th": "ป้าย L บอกว่ามีผู้เรียนกำลังฝึก ให้พื้นที่เพิ่มอีกนิด",
+    "en": "The L-sign says: a learner is practising. Give a little extra room."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du har øvelseskjørt og parkerer hjemme. Hva gjør du med L-merket?",
+     "th": "คุณฝึกขับเสร็จและจอดรถที่บ้าน ควรทำอย่างไรกับป้าย L?",
+     "en": "You have finished practising and park at home. What do you do with the L-sign?"
+    },
+    "options": [
+     {
+      "no": "Tar det av",
+      "th": "ถอดออก",
+      "en": "Take it off"
+     },
+     {
+      "no": "La det sitte hele uken",
+      "th": "ติดไว้ทั้งสัปดาห์",
+      "en": "Leave it on all week"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "L-merke",
+     "th": "ป้าย L",
+     "en": "L-sign"
+    },
+    {
+     "no": "Ekstra speil",
+     "th": "กระจกเสริม",
+     "en": "Extra mirror"
+    }
+   ],
+   "image_brief": "Photorealistic rear three-quarter view of a car on a Norwegian suburban road with a small red L on white learner sign on the rear window; second small inset showing an extra clip-on rear-view mirror on the windscreen; no other text. Master image 3:2 landscape. Keep every key element (L-sign, Extra mirror) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "rule_ref": "",
+   "note": "",
+   "michael_basis": {
+    "no": "Sikkerhetskurs på bane er 4 timer, mot slutten av trinn 3. Sikkerhetskurs på veg er 13 timer med fire deler: bilkjøring og risiko, landevei og forbikjøring, avsluttende kjøring i trafikken, og refleksjon og oppsummering. Bilen skal ha en godt synlig rød L på hvit bakgrunn bak og ekstra speil til ledsageren. L-skiltet tas av når øvelseskjøringen er slutt.",
+    "th": "คอร์สความปลอดภัยบนลานฝึกมี 4 ชั่วโมง เรียนช่วงท้ายของขั้น 3 คอร์สความปลอดภัยบนถนนมี 13 ชั่วโมง แบ่งเป็นสี่ส่วน: การขับรถและความเสี่ยง ถนนนอกเมืองและการแซง การขับในการจราจรจริงช่วงท้าย และการทบทวนและสรุป รถต้องมีป้าย L สีแดงบนพื้นขาวที่มองเห็นชัดด้านหลัง และมีกระจกเสริมสำหรับผู้นั่งกำกับ ถอดป้าย L ออกเมื่อฝึกขับเสร็จ",
+    "en": "The track safety course is 4 hours, near the end of step 3. The road safety course is 13 hours in four parts: driving and risk, country road and overtaking, final driving in traffic, and reflection and wrap-up. The car needs a clearly visible red L on white at the back and an extra mirror for the supervisor. The L-sign comes off when practice is over."
+   },
+   "open_questions": [],
+   "next_step": "bb-s13b",
+   "source_ref": "Lærebok Klasse B, trykt s. 13 (PDF-s. 8)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "official_check": "2026-10-09",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   }
+  },
+  {
+   "id": "bb-s13b",
+   "book": "Lærebok Klasse B",
+   "printed_page": 13,
+   "pdf_page": 8,
+   "chapter": "Del 1 Innledning",
+   "section": "1.1 Informasjon – Krav til øvelseskjøring og elevens plikter",
+   "asset_id": "bb_s13b_elevens-plikter",
+   "image_file": "bb_s13b_elevens-plikter.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Øv trygt – du har plikter også",
+    "th": "ฝึกอย่างปลอดภัย คุณก็มีหน้าที่",
+    "en": "Practise safely – you have duties too"
+   },
+   "core_sentence": {
+    "no": "Øvelseskjøring skal ikke være til fare eller ulempe for andre.",
+    "th": "การฝึกขับต้องไม่เป็นอันตรายหรือรบกวนผู้อื่น",
+    "en": "Practice driving must not endanger or bother others."
+   },
+   "points": [
+    {
+     "no": "Øvelseskjøring skal ikke være til fare eller unødig ulempe for andre.",
+     "th": "การฝึกขับต้องไม่เป็นอันตรายหรือรบกวนผู้อื่นโดยไม่จำเป็น",
+     "en": "Practice driving must not endanger or unduly bother others."
+    },
+    {
+     "no": "Ikke øv hvis du eller ledsageren er beruset, trøtt, syk eller svekket.",
+     "th": "อย่าฝึกขับถ้าคุณหรือผู้นั่งกำกับเมา เหนื่อย ป่วย หรืออ่อนแอ",
+     "en": "Do not practise if you or your supervisor are intoxicated, tired, ill or impaired."
+    },
+    {
+     "no": "Ha med beviset på trafikalt grunnkurs og legitimasjon med bilde.",
+     "th": "พกหลักฐานการเรียนหลักสูตรพื้นฐานการจราจรและบัตรประจำตัวที่มีรูปติดตัวไว้",
+     "en": "Carry the course certificate and photo ID."
+    }
+   ],
+   "michael_says": {
+    "no": "Det du lærer nå, følger deg resten av livet. Start rolig.",
+    "th": "สิ่งที่เรียนตอนนี้จะอยู่กับคุณไปตลอดชีวิต เริ่มอย่างใจเย็น",
+    "en": "What you learn now stays with you for life. Start calmly."
+   },
+   "check_question": {
+    "q": {
+     "no": "Ledsageren din er trøtt etter en lang vakt. Skal dere øvelseskjøre?",
+     "th": "ผู้นั่งกำกับของคุณเหนื่อยหลังเข้างานยาว ควรฝึกขับไหม?",
+     "en": "Your supervisor is tired after a long shift. Should you practise?"
+    },
+    "options": [
+     {
+      "no": "Nei – ledsageren må ikke være trøtt",
+      "th": "ไม่ควร – ผู้นั่งกำกับต้องไม่เหนื่อยล้า",
+      "en": "No – the supervisor must not be tired"
+     },
+     {
+      "no": "Ja, du kjører jo selv",
+      "th": "ควร เพราะคุณเป็นคนขับเอง",
+      "en": "Yes, you are the one driving"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Hensyn",
+     "th": "ความเกรงใจ",
+     "en": "Consideration"
+    }
+   ],
+   "image_brief": "Photorealistic quiet Norwegian residential street, a learner car with a small L sign driving slowly and leaving generous space to a parked car and a cyclist, daytime, calm, no text. Master image 3:2 landscape. Keep every key element (Consideration) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "rule_ref": "",
+   "note": "",
+   "michael_basis": {
+    "no": "Øvelseskjøring skal ikke være til fare eller unødig ulempe for annen trafikk. Du må ikke øvelseskjøre hvis du eller ledsageren er beruset, trøtt, syk eller på annen måte svekket. Ha med beviset på trafikalt grunnkurs og legitimasjon med bilde. Det du lærer i øvelsesperioden preger kjøringen din lenge.",
+    "th": "การฝึกขับต้องไม่เป็นอันตรายหรือรบกวนการจราจรอื่นโดยไม่จำเป็น ห้ามฝึกขับถ้าคุณหรือผู้นั่งกำกับเมา เหนื่อย ป่วย หรืออ่อนแอด้วยเหตุอื่น พกหลักฐานการเรียนหลักสูตรพื้นฐานการจราจรและบัตรประจำตัวที่มีรูป สิ่งที่เรียนในช่วงฝึกขับมีผลต่อการขับของคุณไปอีกนาน",
+    "en": "Practice driving must not endanger or unduly bother other traffic. Do not practise if you or your supervisor are intoxicated, tired, ill or otherwise impaired. Carry the course certificate and photo ID. What you learn in the practice period shapes your driving for a long time."
+   },
+   "open_questions": [],
+   "next_step": "bb-s14",
+   "source_ref": "Lærebok Klasse B, trykt s. 13 (PDF-s. 8)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "official_check": "2026-10-09",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   }
+  },
+  {
+   "id": "bb-s14",
+   "book": "Lærebok Klasse B",
+   "printed_page": 14,
+   "pdf_page": 9,
+   "chapter": "Del 1 Innledning",
+   "section": "1.2 Kravene til den som vil ha førerkort",
+   "asset_id": "bb_s14_krav-til-forerkort",
+   "image_file": "bb_s14_krav-til-forerkort.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Kravene for å ta førerkort",
+    "th": "เงื่อนไขการรับใบขับขี่",
+    "en": "Requirements for a licence"
+   },
+   "core_sentence": {
+    "no": "Du må ha riktig alder, godt syn og god helse, og bestå teori og oppkjøring.",
+    "th": "ต้องมีอายุถึงเกณฑ์ สายตาและสุขภาพดี และสอบทฤษฎีกับสอบขับให้ผ่าน",
+    "en": "You need the right age, good eyesight and health, and must pass both tests."
+   },
+   "points": [
+    {
+     "no": "Teoriprøven: 45 spørsmål på 90 minutter. 38 riktige gir bestått.",
+     "th": "สอบทฤษฎี: 45 ข้อ เวลา 90 นาที ตอบถูก 38 ข้อจึงผ่าน",
+     "en": "Theory test: 45 questions in 90 minutes. 38 correct answers pass."
+    },
+    {
+     "no": "Består du ikke, må du vente 2 uker før ny prøve.",
+     "th": "ถ้าไม่ผ่านต้องรอ 2 สัปดาห์จึงสอบใหม่ได้",
+     "en": "If you fail, wait 2 weeks before a new test."
+    },
+    {
+     "no": "Bestått teori gjelder i 3 år: oppkjøringen (55–60 min) må bestås innen da.",
+     "th": "ผลสอบทฤษฎีที่ผ่านใช้ได้ 3 ปี ต้องสอบขับ (55–60 นาที) ให้ผ่านภายในเวลานั้น",
+     "en": "A passed theory test counts for 3 years: pass the driving test (55–60 min) within that time."
+    }
+   ],
+   "michael_says": {
+    "no": "Teori først. Så øver vi sammen.",
+    "th": "ทฤษฎีก่อน แล้วเราค่อยฝึกด้วยกัน",
+    "en": "Theory first. Then we practise together."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du besto teorien for 3 år og 2 måneder siden og har ikke tatt oppkjøring. Hva nå?",
+     "th": "คุณสอบทฤษฎีผ่านเมื่อ 3 ปี 2 เดือนก่อนและยังไม่ได้สอบขับ ตอนนี้ต้องทำอย่างไร?",
+     "en": "You passed theory 3 years and 2 months ago and have not taken the driving test. What now?"
+    },
+    "options": [
+     {
+      "no": "Ta teoriprøven på nytt",
+      "th": "สอบทฤษฎีใหม่",
+      "en": "Retake the theory test"
+     },
+     {
+      "no": "Ta oppkjøring som vanlig",
+      "th": "สอบขับได้ตามปกติ",
+      "en": "Take the driving test as normal"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Teori",
+     "th": "ทฤษฎี",
+     "en": "Theory"
+    },
+    {
+     "no": "Praksis",
+     "th": "ปฏิบัติ",
+     "en": "Practical"
+    }
+   ],
+   "image_brief": "Photorealistic exterior of a Norwegian driving-test centre, an examiner and a learner standing beside a car, daytime, no text, no readable signs. Master image 3:2 landscape. Keep every key element (Theory, Practical) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "rule_ref": "",
+   "note": "Prøvetid og gyldighet følger boken (ca. 2010). Sjekkes mot Statens vegvesen før live.",
+   "michael_basis": {
+    "no": "Førerkort klasse B fra 18 år, øvelseskjøring fra 16. Teoriprøven kan tas tidligst 6 måneder før du fyller alderskravet. Teoriprøven for klasse B har 45 oppgaver på 90 minutter, og 38 riktige gir bestått. Består du ikke, må du vente 2 uker. Du må bestå oppkjøringen innen 3 år etter bestått teoriprøve. Oppkjøringen varer 55–60 minutter under varierte vei- og trafikkforhold, med en sikkerhetskontrolloppgave før kjøringen. Søknad sendes til trafikkstasjonen.",
+    "th": "ใบขับขี่ชั้น B ตั้งแต่อายุ 18 ปี ฝึกขับได้ตั้งแต่ 16 ปี สอบทฤษฎีได้เร็วที่สุด 6 เดือนก่อนอายุถึงเกณฑ์ ข้อสอบทฤษฎีชั้น B มี 45 ข้อ เวลา 90 นาที ตอบถูก 38 ข้อจึงผ่าน ถ้าไม่ผ่านต้องรอ 2 สัปดาห์ ต้องสอบขับให้ผ่านภายใน 3 ปีหลังสอบทฤษฎีผ่าน การสอบขับใช้เวลา 55–60 นาทีในสภาพถนนและการจราจรที่หลากหลาย มีงานตรวจความปลอดภัยของรถก่อนขับ ยื่นคำขอที่สถานีจราจร",
+    "en": "Class B licence from age 18, practice from 16. The theory test can be taken at the earliest 6 months before you reach the age requirement. The class B theory test has 45 questions in 90 minutes, and 38 correct answers pass. If you fail, you wait 2 weeks. You must pass the driving test within 3 years of passing theory. The driving test lasts 55–60 minutes in varied road and traffic conditions, with a safety-check task before driving. The application goes to the driving-test office."
+   },
+   "open_questions": [],
+   "next_step": "bb-s14b",
+   "source_ref": "Lærebok Klasse B, trykt s. 14 (PDF-s. 9)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "official_check": "2026-10-09",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   }
+  },
+  {
+   "id": "bb-s14b",
+   "book": "Lærebok Klasse B",
+   "printed_page": 14,
+   "pdf_page": 9,
+   "chapter": "Del 1 Innledning",
+   "section": "1.2 Kravene – Sperrefrist og straffbar handling",
+   "asset_id": "bb_s14b_sperrefrist",
+   "image_file": "bb_s14b_sperrefrist.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Sperrefrist – pause fra førerkort",
+    "th": "ช่วงห้ามขอใบขับขี่",
+    "en": "Barring period – a pause from licensing"
+   },
+   "core_sentence": {
+    "no": "Kjørte du uten førerkort, må du vente før du kan få førerkort.",
+    "th": "ถ้าคุณเคยขับโดยไม่มีใบขับขี่ ต้องรอก่อนจึงจะได้รับใบขับขี่",
+    "en": "If you drove without a licence, you must wait before you can get one."
+   },
+   "points": [
+    {
+     "no": "Tidligst 6 måneder etter den ulovlige kjøringen.",
+     "th": "เร็วที่สุด 6 เดือนหลังการขับที่ผิดกฎหมาย",
+     "en": "At the earliest 6 months after the illegal driving."
+    },
+    {
+     "no": "Er du under minstealderen, løper fristen til 6 måneder etter at du nådde den.",
+     "th": "ถ้าอายุยังไม่ถึงเกณฑ์ ช่วงห้ามจะสิ้นสุดหลังอายุครบเกณฑ์ไปแล้ว 6 เดือน",
+     "en": "If you are under the minimum age, the period runs until 6 months after you reach it."
+    },
+    {
+     "no": "Fristen kan bli lengre ved stor skade eller ruspåvirket kjøring.",
+     "th": "ช่วงห้ามอาจนานขึ้นถ้าก่อความเสียหายมากหรือขับขณะเมา",
+     "en": "The period can be longer after major damage or drink or drug driving."
+    }
+   ],
+   "michael_says": {
+    "no": "Reglene beskytter alle på veien, også deg.",
+    "th": "กฎปกป้องทุกคนบนถนน รวมถึงคุณ",
+    "en": "The rules protect everyone on the road, including you."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du har kjørt bil uten førerkort. Når kan du tidligst få førerkort?",
+     "th": "คุณขับรถโดยไม่มีใบขับขี่ เร็วที่สุดจะรับใบขับขี่ได้เมื่อไร?",
+     "en": "You drove a car without a licence. When can you earliest get a licence?"
+    },
+    "options": [
+     {
+      "no": "Tidligst 6 måneder etter den ulovlige kjøringen",
+      "th": "เร็วที่สุด 6 เดือนหลังการขับที่ผิดกฎหมาย",
+      "en": "At the earliest 6 months after the illegal driving"
+     },
+     {
+      "no": "Med en gang du har bestått teorien",
+      "th": "ทันทีที่สอบทฤษฎีผ่าน",
+      "en": "As soon as you pass theory"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Sperrefrist",
+     "th": "ช่วงห้าม",
+     "en": "Barring period"
+    }
+   ],
+   "image_brief": "Photorealistic close-up of a car key beside an empty licence-card holder on a wooden table in a Norwegian home, soft daylight, no text. Master image 3:2 landscape. Keep every key element (Barring period) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "rule_ref": "Vegtrafikkloven § 24 a",
+   "note": "",
+   "michael_basis": {
+    "no": "Kjøring uten førerrett: du kan ikke få førerrett første gang før det er gått 6 måneder siden den ulovlige kjøringen (vegtrafikkloven § 24 a). Fristen kan bli lengre ved stor skade eller ruspåvirket kjøring. Er du under minstealderen, løper fristen til 6 måneder etter at du nådde minstealderen. Med sperrefrist kan du ikke øvelseskjøre uten politiets skriftlige tillatelse. Teoriprøven kan tas i sperretiden, men oppkjøring først når fristen er over.",
+    "th": "การขับโดยไม่มีสิทธิ์ขับขี่: คุณจะได้รับสิทธิ์ขับขี่ครั้งแรกไม่ได้จนกว่าจะผ่านไป 6 เดือนนับจากการขับที่ผิดกฎหมาย (กฎหมายจราจรทางบก มาตรา 24 a) ช่วงห้ามอาจนานขึ้นถ้าก่อความเสียหายมากหรือขับขณะเมา ถ้าอายุยังไม่ถึงเกณฑ์ ช่วงห้ามสิ้นสุดหลังอายุถึงเกณฑ์ไปแล้ว 6 เดือน ระหว่างช่วงห้ามฝึกขับไม่ได้ถ้าไม่มีหนังสืออนุญาตจากตำรวจ สอบทฤษฎีได้ในช่วงห้าม แต่สอบขับได้เมื่อพ้นช่วงห้ามแล้วเท่านั้น",
+    "en": "Driving without a licence: you cannot get a licence for the first time until 6 months have passed since the illegal driving (Road Traffic Act § 24 a). The period can be longer after major damage or drink or drug driving. If you are under the minimum age, the period runs until 6 months after you reach it. With a barring period you cannot practise without the police's written permission. You can take the theory test during the period, but the driving test only when it is over."
+   },
+   "open_questions": [
+    "Sperrefristens lengde ved rus eller stor skade er ikke tallfestet i elevteksten (følger forskrift om tap av retten til å føre motorvogn). Bekreft at det er greit."
+   ],
+   "next_step": "bb-s15",
+   "source_ref": "Lærebok Klasse B, trykt s. 14 (PDF-s. 9)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "official_check": "2026-10-09",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   }
+  },
+  {
+   "id": "bb-s15",
+   "book": "Lærebok Klasse B",
+   "printed_page": 15,
+   "pdf_page": 10,
+   "chapter": "Del 1 Innledning",
+   "section": "Førerkortklasser – klasse B og tilhenger",
+   "asset_id": "bb_s15_forerkortklasse-b-tilhenger",
+   "image_file": "bb_s15_forerkortklasse-b-tilhenger.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Førerkort klasse B og tilhenger",
+    "th": "ใบขับขี่ชั้น B และรถพ่วง",
+    "en": "Licence class B and trailers"
+   },
+   "core_sentence": {
+    "no": "Klasse B: bil til 3500 kg, med tilhenger opp til 750 kg.",
+    "th": "ชั้น B: รถน้ำหนักถึง 3,500 กก. พ่วงได้ถึง 750 กก.",
+    "en": "Class B: car up to 3,500 kg, trailer up to 750 kg."
+   },
+   "points": [
+    {
+     "no": "Tyngre tilhenger går hvis bil og henger til sammen er maks 3500 kg.",
+     "th": "รถพ่วงที่หนักกว่านั้นได้ ถ้ารถรวมพ่วงหนักรวมไม่เกิน 3,500 กก.",
+     "en": "A heavier trailer is allowed if car and trailer total at most 3,500 kg."
+    },
+    {
+     "no": "Sjekk vognkortet: tillatt totalvekt for bil og henger, og tillatt hengervekt.",
+     "th": "ตรวจเล่มทะเบียน: น้ำหนักรวมที่อนุญาตของรถและรถพ่วง และน้ำหนักรถพ่วงที่อนุญาต",
+     "en": "Check the registration certificate: permitted gross weights of car and trailer, and the permitted trailer weight."
+    },
+    {
+     "no": "Klasse B gir også rett til å kjøre moped (klasse AM).",
+     "th": "ใบขับขี่ชั้น B ขับโมเพด (ชั้น AM) ได้ด้วย",
+     "en": "Class B also covers a moped (class AM)."
+    }
+   ],
+   "michael_says": {
+    "no": "Sjekk vekten før du kobler til hengeren.",
+    "th": "ดูน้ำหนักก่อนต่อรถพ่วง",
+    "en": "Check the weight before you hitch a trailer."
+   },
+   "check_question": {
+    "q": {
+     "no": "Vognkortet sier: bilen har tillatt totalvekt 1800 kg og tillater en tilhenger på 1700 kg. Tilhengeren har tillatt totalvekt 1700 kg. Går dette med klasse B?",
+     "th": "เล่มทะเบียนระบุว่า รถมีน้ำหนักรวมที่อนุญาต 1,800 กก. และอนุญาตให้พ่วงรถพ่วงน้ำหนัก 1,700 กก. รถพ่วงมีน้ำหนักรวมที่อนุญาต 1,700 กก. ใช้ใบขับขี่ชั้น B ได้หรือไม่?",
+     "en": "The registration certificate says: the car has a permitted gross weight of 1,800 kg and allows a 1,700 kg trailer. The trailer has a permitted gross weight of 1,700 kg. Is this allowed with class B?"
+    },
+    "options": [
+     {
+      "no": "Ja – 1800 + 1700 = 3500 kg tillatt totalvekt til sammen, og vognkortet tillater hengeren",
+      "th": "ได้ – 1,800 + 1,700 = 3,500 กก. น้ำหนักรวมที่อนุญาตรวมกัน และเล่มทะเบียนอนุญาตรถพ่วง",
+      "en": "Yes – 1,800 + 1,700 = 3,500 kg permitted gross weight combined, and the certificate allows the trailer"
+     },
+     {
+      "no": "Nei – en tilhenger over 750 kg krever alltid utvidet førerkort",
+      "th": "ไม่ได้ – รถพ่วงที่หนักเกิน 750 กก. ต้องใช้ใบขับขี่ชั้นที่สูงกว่าเสมอ",
+      "en": "No – a trailer over 750 kg always needs an extended licence"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "3500 kg",
+     "th": "3,500 กก.",
+     "en": "3,500 kg"
+    },
+    {
+     "no": "750 kg",
+     "th": "750 กก.",
+     "en": "750 kg"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian estate car pulling a small covered trailer on a paved road, side view, daylight, no text on trailer or number plates. Master image 3:2 landscape. Keep every key element (3,500 kg, 750 kg) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "rule_ref": "",
+   "note": "",
+   "michael_basis": {
+    "no": "Klasse B: motorvogn med tillatt totalvekt høyst 3500 kg og høyst 8 passasjerer i tillegg til fører. Tilhenger med tillatt totalvekt til 750 kg er tillatt; tyngre tilhenger er tillatt hvis bilens og tilhengerens tillatte totalvekt til sammen er høyst 3500 kg. Sjekk alltid vognkortet for tillatt hengervekt: den kan ikke overskrides uansett førerkort. For vogntog opp til 4250 kg kreves kode 96 (7 timer tilleggsopplæring). Klasse B gir også rett til å kjøre moped (klasse AM). Øvelseskjøring fra 16 år, førerkort fra 18 år. Det er tillatt totalvekt som teller, ikke hva lasten faktisk veier.",
+    "th": "ชั้น B: ยานยนต์ที่มีน้ำหนักรวมที่อนุญาตไม่เกิน 3,500 กก. และรับผู้โดยสารได้ไม่เกิน 8 คนนอกจากผู้ขับ พ่วงรถพ่วงที่น้ำหนักรวมที่อนุญาตไม่เกิน 750 กก. ได้ รถพ่วงที่หนักกว่านั้นได้ถ้าน้ำหนักรวมที่อนุญาตของรถและรถพ่วงรวมกันไม่เกิน 3,500 กก. ต้องตรวจเล่มทะเบียนเสมอเพื่อดูน้ำหนักรถพ่วงที่อนุญาต ซึ่งห้ามเกินไม่ว่าจะมีใบขับขี่ชั้นใด รถพ่วงรวมไม่เกิน 4,250 กก. ต้องมีรหัส 96 (เรียนเพิ่ม 7 ชั่วโมง) ชั้น B ขับโมเพด (ชั้น AM) ได้ด้วย ฝึกขับตั้งแต่ 16 ปี ใบขับขี่ตั้งแต่ 18 ปี สิ่งที่นับคือน้ำหนักรวมที่อนุญาต ไม่ใช่น้ำหนักบรรทุกจริง",
+    "en": "Class B: a motor vehicle with a permitted gross weight of at most 3,500 kg and at most 8 passengers besides the driver. A trailer with a permitted gross weight up to 750 kg is allowed; a heavier trailer is allowed if the permitted gross weight of car and trailer together is at most 3,500 kg. Always check the registration certificate for the permitted trailer weight: it cannot be exceeded whatever the licence. Combinations up to 4,250 kg need code 96 (7 hours of extra training). Class B also covers a moped (class AM). Practice from age 16, licence from age 18. What counts is the permitted gross weight, not what the load actually weighs."
+   },
+   "open_questions": [
+    "Bokas egenvektsregel for tilhengere er utelatt fordi den ikke finnes i NAFs gjengivelse av førerkortforskriften § 3-5. Lovdata kunne ikke leses direkte: bekreft mot gjeldende § 3-5."
+   ],
+   "next_step": "bb-s16",
+   "source_ref": "Lærebok Klasse B, trykt s. 15 (PDF-s. 10)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "official_check": "2026-10-09",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   }
+  },
+  {
+   "id": "bb-s16",
+   "book": "Lærebok Klasse B",
+   "printed_page": 16,
+   "pdf_page": 11,
+   "chapter": "Del 1 Innledning",
+   "section": "Utvikling av veitrafikken",
+   "asset_id": "bb_s16_veitrafikk-utvikling",
+   "image_file": "bb_s16_veitrafikk-utvikling.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Flere biler – mindre vei per bil",
+    "th": "รถมากขึ้น ถนนต่อคันน้อยลง",
+    "en": "More cars – less road per car"
+   },
+   "core_sentence": {
+    "no": "Antall biler vokser mye raskere enn veilengden.",
+    "th": "จำนวนรถเพิ่มเร็วกว่าความยาวถนนมาก",
+    "en": "The number of cars grows much faster than road length."
+   },
+   "points": [
+    {
+     "no": "1920: ca. 5000 m vei per bil. 2008: ca. 34 m (bokas tall).",
+     "th": "ปี 1920: ถนนประมาณ 5,000 ม. ต่อรถ 1 คัน ปี 2008: ประมาณ 34 ม. (ตัวเลขจากหนังสือ)",
+     "en": "1920: about 5,000 m of road per car. 2008: about 34 m (book figures)."
+    },
+    {
+     "no": "Mindre plass gir mer behov for samarbeid og forståelse.",
+     "th": "พื้นที่น้อยลง จึงต้องร่วมมือและเข้าใจกันมากขึ้น",
+     "en": "Less space means more need for cooperation and understanding."
+    },
+    {
+     "no": "Det gjelder alle: bil, buss, lastebil, sykkel og gående.",
+     "th": "เรื่องนี้เกี่ยวกับทุกคน: รถยนต์ รถโดยสาร รถบรรทุก จักรยาน และคนเดินเท้า",
+     "en": "It concerns everyone: cars, buses, lorries, bikes and pedestrians."
+    }
+   ],
+   "michael_says": {
+    "no": "Når veien er full, hjelper vi hverandre.",
+    "th": "เมื่อถนนแน่น เราช่วยกันและกัน",
+    "en": "When the road is full, we help each other."
+   },
+   "check_question": {
+    "q": {
+     "no": "Veien er full og du har dårlig tid. Hva er smartest?",
+     "th": "ถนนแน่นและคุณรีบ อะไรคือทางเลือกที่ฉลาดที่สุด?",
+     "en": "The road is full and you are short of time. What is smartest?"
+    },
+    "options": [
+     {
+      "no": "Holde avstand og være tålmodig",
+      "th": "รักษาระยะและอดทน",
+      "en": "Keep your distance and be patient"
+     },
+     {
+      "no": "Presse seg forbi",
+      "th": "เบียดแซงไป",
+      "en": "Push past"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Før",
+     "th": "ในอดีต",
+     "en": "Then"
+    },
+    {
+     "no": "I dag",
+     "th": "ปัจจุบัน",
+     "en": "Today"
+    }
+   ],
+   "image_brief": "Photorealistic two-panel comparison of the same Norwegian valley road: left a single old car on an empty road, right dense modern traffic, no text. Master image 3:2 landscape. Keep every key element (Then, Today) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "rule_ref": "",
+   "note": "Tall er fra boken (ca. 2008–2010) og er merket som bokas tall. Oppdateres hvis rådgiver ber om det.",
+   "michael_basis": {
+    "no": "Veiene har blitt bedre og lengre, men antall biler har økt langt mer. Bokas tall (2008): 93 000 km vei og 2,7 mill. biler, ca. 34 m vei per bil, mot ca. 5000 m i 1920. Tallene er historiske. Resultatet er mindre plass per bil og økt behov for samarbeid og forståelse.",
+    "th": "ถนนดีขึ้นและยาวขึ้น แต่จำนวนรถเพิ่มขึ้นมากกว่านั้นมาก ตัวเลขจากหนังสือ (ปี 2008): ถนน 93,000 กม. และรถ 2.7 ล้านคัน เฉลี่ยถนนประมาณ 34 ม. ต่อคัน เทียบกับประมาณ 5,000 ม. ในปี 1920 ตัวเลขเหล่านี้เป็นข้อมูลในอดีต ผลคือพื้นที่ต่อคันน้อยลงและต้องร่วมมือและเข้าใจกันมากขึ้น",
+    "en": "Roads have become better and longer, but the number of cars has grown far more. Book figures (2008): 93,000 km of road and 2.7 million cars, about 34 m of road per car, against about 5,000 m in 1920. The figures are historical. The result is less space per car and a greater need for cooperation and understanding."
+   },
+   "open_questions": [
+    "Tallene er historiske tall fra boka (1920/2008) og er merket som det. Bekreft at de kan stå."
+   ],
+   "next_step": "bb-s17",
+   "source_ref": "Lærebok Klasse B, trykt s. 16 (PDF-s. 11)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "official_check": "2026-10-09",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   }
+  },
+  {
+   "id": "bb-s17",
+   "book": "Lærebok Klasse B",
+   "printed_page": 17,
+   "pdf_page": 12,
+   "chapter": "Del 1 Innledning",
+   "section": "Noen tall om trafikkulykker og de vanligste ulykkestypene",
+   "asset_id": "bb_s17_ulykkestall-og-typer",
+   "image_file": "bb_s17_ulykkestall-og-typer.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Vanlige ulykker",
+    "th": "อุบัติเหตุที่พบบ่อย",
+    "en": "Common accidents"
+   },
+   "core_sentence": {
+    "no": "De fleste ulykker skyldes menneskelig svikt.",
+    "th": "อุบัติเหตุส่วนใหญ่เกิดจากความผิดพลาดของคน",
+    "en": "Most accidents are caused by human error."
+   },
+   "points": [
+    {
+     "no": "I 2024 omkom 87 og 578 ble hardt skadd i norsk trafikk (Statens vegvesen).",
+     "th": "ปี 2024 ในการจราจรของนอร์เวย์ มีผู้เสียชีวิต 87 ราย และบาดเจ็บสาหัส 578 ราย (กรมทางหลวงนอร์เวย์)",
+     "en": "In 2024, 87 people died and 578 were seriously injured in Norwegian traffic (Norwegian Public Roads Administration)."
+    },
+    {
+     "no": "Vanligst: brudd på vikeplikt, påkjøring bakfra, rygging, utforkjøring, forbikjøring.",
+     "th": "พบบ่อย: ไม่ให้ทาง ชนท้าย ถอยหลัง ตกถนน และการแซง",
+     "en": "Most common: failing to yield, rear-end hits, reversing, running off the road, overtaking."
+    }
+   ],
+   "michael_says": {
+    "no": "Kjenner du de vanligste feilene, kan du unngå dem.",
+    "th": "ถ้ารู้ข้อผิดพลาดที่พบบ่อย ก็หลีกเลี่ยงได้",
+    "en": "If you know the common mistakes, you can avoid them."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du kjører tett bak en bil i fart, og den bremser hardt. Hvilken ulykke risikerer du?",
+     "th": "คุณขับตามหลังรถคันหน้าชิดมาก และเขาเบรกกะทันหัน คุณเสี่ยงอุบัติเหตุแบบใด?",
+     "en": "You follow a car closely at speed and it brakes hard. Which accident do you risk?"
+    },
+    "options": [
+     {
+      "no": "Påkjøring bakfra",
+      "th": "ชนท้าย",
+      "en": "A rear-end collision"
+     },
+     {
+      "no": "Utforkjøring",
+      "th": "ตกถนน",
+      "en": "Running off the road"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Vikeplikt",
+     "th": "การให้ทาง",
+     "en": "Yielding"
+    },
+    {
+     "no": "Påkjøring bakfra",
+     "th": "ชนท้าย",
+     "en": "Rear-end hit"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian junction, a car braking late behind another stopped car at a red light on a wet road, tense but no collision shown, no text. Master image 3:2 landscape. Keep every key element (Yielding, Rear-end hit) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "rule_ref": "",
+   "note": "",
+   "michael_basis": {
+    "no": "Statens vegvesen: 87 personer omkom og 578 ble hardt skadd i norsk vegtrafikk i 2024. De vanligste ulykkestypene (ifølge boka) er brudd på vikeplikt, påkjøring bakfra, rygging, utforkjøring og forbikjøring. De fleste ulykker skyldes menneskelig svikt. Norge har et av Europas laveste dødstall i trafikken.",
+    "th": "กรมทางหลวงนอร์เวย์: ปี 2024 มีผู้เสียชีวิต 87 ราย และบาดเจ็บสาหัส 578 รายในการจราจรทางถนนของนอร์เวย์ อุบัติเหตุที่พบบ่อยที่สุด (ตามหนังสือ) คือ ไม่ให้ทางตามกฎ ชนท้าย ถอยหลัง ตกถนน และการแซง อุบัติเหตุส่วนใหญ่เกิดจากความผิดพลาดของคน นอร์เวย์มีอัตราผู้เสียชีวิตในการจราจรต่ำที่สุดแห่งหนึ่งในยุโรป",
+    "en": "Norwegian Public Roads Administration: 87 people died and 578 were seriously injured in Norwegian road traffic in 2024. The most common accident types (according to the book) are failing to yield, rear-end collisions, reversing, running off the road and overtaking. Most accidents are caused by human error. Norway has one of the lowest road death rates in Europe."
+   },
+   "open_questions": [],
+   "next_step": "bb-s17b",
+   "source_ref": "Lærebok Klasse B, trykt s. 17 (PDF-s. 12)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "official_check": "2026-10-09",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   }
+  },
+  {
+   "id": "bb-s17b",
+   "book": "Lærebok Klasse B",
+   "printed_page": 17,
+   "pdf_page": 12,
+   "chapter": "Del 1 Innledning",
+   "section": "Trafikant – kjøretøy – vei",
+   "asset_id": "bb_s17b_trafikant-kjoretoy-vei",
+   "image_file": "bb_s17b_trafikant-kjoretoy-vei.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Trafikant – kjøretøy – vei",
+    "th": "ผู้ใช้ถนน – ยานพาหนะ – ถนน",
+    "en": "Road user – vehicle – road"
+   },
+   "core_sentence": {
+    "no": "Trygg trafikk er samspill mellom deg, bilen og veien.",
+    "th": "ความปลอดภัยคือการทำงานร่วมกันของคุณ รถ และถนน",
+    "en": "Safe traffic is the interplay of you, the car and the road."
+   },
+   "points": [
+    {
+     "no": "Du er en av mange trafikanter. Tenk ansvar for hverandre.",
+     "th": "คุณเป็นหนึ่งในผู้ใช้ถนนจำนวนมาก คิดถึงความรับผิดชอบต่อกัน",
+     "en": "You are one of many road users. Think of responsibility for each other."
+    },
+    {
+     "no": "Ikke bare «min rett» – ha klarsyn og hjelp dem som er svakere.",
+     "th": "ไม่ใช่แค่ “สิทธิ์ของฉัน” ให้มองให้ชัดและช่วยผู้ที่อ่อนแอกว่า",
+     "en": "Not just “my right” – keep a clear head and help those who are weaker."
+    }
+   ],
+   "michael_says": {
+    "no": "Vi deler veien. Det gjør oss tryggere.",
+    "th": "เราใช้ถนนร่วมกัน ทำให้เราปลอดภัยขึ้น",
+    "en": "We share the road. That makes us safer."
+   },
+   "check_question": {
+    "q": {
+     "no": "En gående står ved gangfeltet og du har det travelt. Hva viser at du tenker på andre?",
+     "th": "คนเดินเท้ายืนอยู่ที่ทางม้าลายและคุณรีบ อะไรแสดงว่าคุณคิดถึงผู้อื่น?",
+     "en": "A pedestrian waits at the crossing and you are in a hurry. What shows you think of others?"
+    },
+    "options": [
+     {
+      "no": "Du stanser og slipper henne over",
+      "th": "คุณหยุดและให้เธอข้าม",
+      "en": "You stop and let her cross"
+     },
+     {
+      "no": "Du øker farten",
+      "th": "คุณเร่งความเร็ว",
+      "en": "You speed up"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Trafikant",
+     "th": "ผู้ใช้ถนน",
+     "en": "Road user"
+    },
+    {
+     "no": "Kjøretøy",
+     "th": "ยานพาหนะ",
+     "en": "Vehicle"
+    },
+    {
+     "no": "Vei",
+     "th": "ถนน",
+     "en": "Road"
+    }
+   ],
+   "image_brief": "Photorealistic composite of three linked areas: a driver at the wheel (inset), a car on a Norwegian road, and the road surface with lane markings, no text, no arrows. Master image 3:2 landscape. Keep every key element (Road user, Vehicle, Road) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "rule_ref": "",
+   "note": "",
+   "michael_basis": {
+    "no": "Trafikant, kjøretøy og vei henger sammen. Som bilfører er du én av mange brikker. Det er umulig å tenke trafikksikkerhet for den enkelte uten å ta ansvar for hverandre. Trafikken har både ressurssterke og ressurssvake mennesker; du skal ha klarsyn og evne til å bære over med og hjelpe dem som ikke mestrer trafikken like godt.",
+    "th": "ผู้ใช้ถนน ยานพาหนะ และถนนเชื่อมโยงกัน ในฐานะผู้ขับขี่ คุณเป็นเพียงหนึ่งในหลายส่วน เป็นไปไม่ได้ที่จะคิดเรื่องความปลอดภัยเฉพาะตัวโดยไม่รับผิดชอบต่อกัน ในการจราจรมีทั้งคนที่มีกำลังและคนที่อ่อนแอ คุณต้องมองให้ชัดและอดทนช่วยเหลือผู้ที่ไม่ถนัดการจราจรเท่าคุณ",
+    "en": "Road user, vehicle and road are connected. As a driver you are one of many pieces. It is impossible to think of individual road safety without taking responsibility for each other. Traffic has both strong and vulnerable people; you should have clear sight and the ability to be patient with and help those who do not handle traffic as well."
+   },
+   "open_questions": [],
+   "next_step": "bb-s18",
+   "source_ref": "Lærebok Klasse B, trykt s. 17 (PDF-s. 12)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "official_check": "2026-10-09",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   }
+  },
+  {
+   "id": "bb-s18",
+   "book": "Lærebok Klasse B",
+   "printed_page": 18,
+   "pdf_page": 13,
+   "chapter": "Del 2 Mennesket i trafikken",
+   "section": "2.1 Trafikkpsykologi og 2.2 Kjøreprosessen – synet",
+   "asset_id": "bb_s18_trafikkpsykologi-syn",
+   "image_file": "bb_s18_trafikkpsykologi-syn.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Synet er viktigst",
+    "th": "การมองเห็นสำคัญที่สุด",
+    "en": "Vision matters most"
+   },
+   "core_sentence": {
+    "no": "Over 90 % av avgjørelsene dine bygger på det du ser.",
+    "th": "การตัดสินใจกว่า 90% ของคุณมาจากสิ่งที่เห็น",
+    "en": "Over 90% of your decisions are based on what you see."
+   },
+   "points": [
+    {
+     "no": "Å kjøre bil er krevende – mye informasjon samtidig.",
+     "th": "การขับรถต้องใช้ความสามารถมาก ข้อมูลเข้ามาพร้อมกันเยอะ",
+     "en": "Driving is demanding – lots of information at once."
+    },
+    {
+     "no": "Trafikkpsykologi hjelper oss å forstå hvorfor vi handler som vi gjør.",
+     "th": "จิตวิทยาการจราจรช่วยให้เข้าใจว่าทำไมเราจึงทำเช่นนั้น",
+     "en": "Traffic psychology helps us understand why we act as we do."
+    },
+    {
+     "no": "Synet er en evne – å se er en kunst.",
+     "th": "การมองเห็นเป็นความสามารถ การมองให้เห็นคือศิลปะ",
+     "en": "Sight is an ability – seeing is an art."
+    }
+   ],
+   "michael_says": {
+    "no": "Se med vilje. Da ser du mer.",
+    "th": "มองอย่างตั้งใจ แล้วคุณจะเห็นมากขึ้น",
+    "en": "Look on purpose. Then you see more."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du nærmer deg et kryss. Hva bør du gjøre med blikket?",
+     "th": "คุณกำลังเข้าใกล้ทางแยก ควรทำอย่างไรกับสายตา?",
+     "en": "You approach a junction. What should you do with your gaze?"
+    },
+    "options": [
+     {
+      "no": "Se langt frem og se deg rundt",
+      "th": "มองไกลไปข้างหน้าและมองรอบตัว",
+      "en": "Look far ahead and look around"
+     },
+     {
+      "no": "Stirre på bilen like foran",
+      "th": "จ้องรถที่อยู่ตรงหน้า",
+      "en": "Stare at the car right in front"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Syn",
+     "th": "การมองเห็น",
+     "en": "Vision"
+    }
+   ],
+   "image_brief": "Photorealistic driver's-eye view through the windscreen of a Norwegian road, focus on the far distance, softly blurred dashboard in the foreground, daylight, no text. Master image 3:2 landscape. Keep every key element (Vision) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "rule_ref": "",
+   "note": "",
+   "michael_basis": {
+    "no": "Over 90 % av avgjørelsene i trafikken bygger på informasjon fra øynene. Kjøreprosessen har fire ledd: se, oppfatte, avgjøre, handle. Boken sier: synet er en evne – å se er en kunst. Trafikkpsykologi hjelper oss å forstå hvorfor vi oppfører oss som vi gjør.",
+    "th": "การตัดสินใจในการจราจรกว่า 90% มาจากข้อมูลทางสายตา กระบวนการขับรถมีสี่ขั้น: มอง รับรู้ ตัดสินใจ ลงมือทำ หนังสือกล่าวว่า การมองเห็นเป็นความสามารถ การมองให้เห็นคือศิลปะ จิตวิทยาการจราจรช่วยให้เข้าใจว่าทำไมเราจึงทำเช่นนั้น",
+    "en": "Over 90% of decisions in traffic are based on information from the eyes. The driving process has four links: see, notice, decide, act. The book says: sight is an ability – seeing is an art. Traffic psychology helps us understand why we behave as we do."
+   },
+   "open_questions": [],
+   "next_step": "bb-s19",
+   "source_ref": "Lærebok Klasse B, trykt s. 18 (PDF-s. 13)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "official_check": "2026-10-09",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   }
+  },
+  {
+   "id": "bb-s19",
+   "book": "Lærebok Klasse B",
+   "printed_page": 19,
+   "pdf_page": 14,
+   "chapter": "Del 2 Mennesket i trafikken",
+   "section": "2.2 Kjøreprosessen – synsfelt og blind flekk",
+   "asset_id": "bb_s19_synsfelt-blind-flekk",
+   "image_file": "bb_s19_synsfelt-blind-flekk.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Skarpt syn i en smal sektor",
+    "th": "มองคมชัดเฉพาะช่วงแคบ",
+    "en": "Sharp vision in a narrow sector"
+   },
+   "core_sentence": {
+    "no": "Du ser skarpt bare i 3–5 grader, men sidesynet er 180 grader.",
+    "th": "คุณมองคมชัดเพียง 3–5 องศา แต่การมองด้านข้างกว้าง 180 องศา",
+    "en": "You see sharply in only 3–5 degrees, but side vision spans 180 degrees."
+   },
+   "points": [
+    {
+     "no": "Sidesynet blir smalere når farten øker.",
+     "th": "ยิ่งเร็ว มุมมองด้านข้างยิ่งแคบลง",
+     "en": "Side vision narrows as speed increases."
+    },
+    {
+     "no": "Øynene er ikke laget for mørke.",
+     "th": "ดวงตาไม่ได้ถูกสร้างมาให้มองในที่มืด",
+     "en": "Eyes are not built for the dark."
+    },
+    {
+     "no": "Hvert øye har en blind flekk – du kan teste den selv.",
+     "th": "ดวงตาแต่ละข้างมีจุดบอด ทดสอบเองได้",
+     "en": "Each eye has a blind spot – you can test it yourself."
+    }
+   ],
+   "michael_says": {
+    "no": "Se deg rundt hele tiden. Ett blikk er ikke nok.",
+    "th": "มองรอบตัวตลอดเวลา การมองครั้งเดียวไม่พอ",
+    "en": "Keep looking around. One glance is not enough."
+   },
+   "check_question": {
+    "q": {
+     "no": "Det er mørkt og du kjører fort. Hva skjer med sidesynet?",
+     "th": "มืดและคุณขับเร็ว การมองด้านข้างจะเป็นอย่างไร?",
+     "en": "It is dark and you are driving fast. What happens to your side vision?"
+    },
+    "options": [
+     {
+      "no": "Det blir smalere – senk farten",
+      "th": "แคบลง – ให้ชะลอความเร็ว",
+      "en": "It gets narrower – slow down"
+     },
+     {
+      "no": "Det blir bredere",
+      "th": "กว้างขึ้น",
+      "en": "It gets wider"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Skarpt 3–5°",
+     "th": "คมชัด 3–5°",
+     "en": "Sharp 3–5°"
+    },
+    {
+     "no": "Sidesyn 180°",
+     "th": "มองข้าง 180°",
+     "en": "Side vision 180°"
+    }
+   ],
+   "image_brief": "Photorealistic driver's-eye view of a Norwegian country road at dusk, a lorry ahead in sharp focus in the centre, the edges of the image softly blurred to show peripheral vision, no text. Master image 3:2 landscape. Keep every key element (Sharp 3–5°, Side vision 180°) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "rule_ref": "",
+   "note": "",
+   "michael_basis": {
+    "no": "Synsfeltet er ikke tilpasset det motoriserte mennesket: skarpt syn bare i en sektor på 3–5 grader, sidesyn 180 grader som smalner når farten øker. Øynene er ikke konstruert for mørke. Blind flekk: hold boka ca. 20 cm fra øynene, lukk det høyre øyet, se på prikken med det venstre og flytt boka til krysset forsvinner.",
+    "th": "ลานสายตาไม่ได้เหมาะกับมนุษย์ที่ใช้ยานยนต์: มองคมชัดเฉพาะช่วง 3–5 องศา มองด้านข้างได้ 180 องศาแต่แคบลงเมื่อเร็วขึ้น ดวงตาไม่ได้ถูกสร้างมาให้มองในที่มืด จุดบอด: ถือหนังสือห่างตาประมาณ 20 ซม. ปิดตาขวา มองจุดด้วยตาซ้าย แล้วค่อย ๆ ขยับหนังสือจนเครื่องหมายกากบาทหายไป",
+    "en": "The field of vision is not adapted to the motorised human: sharp vision only in a 3–5 degree sector, side vision 180 degrees that narrows as speed rises. Eyes are not built for the dark. Blind spot: hold the book about 20 cm from your eyes, close the right eye, look at the dot with the left and move the book until the cross disappears."
+   },
+   "open_questions": [],
+   "next_step": "bb-s20",
+   "source_ref": "Lærebok Klasse B, trykt s. 19 (PDF-s. 14)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "official_check": "2026-10-09",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   }
+  },
+  {
+   "id": "bb-s20",
+   "book": "Lærebok Klasse B",
+   "printed_page": 20,
+   "pdf_page": 15,
+   "chapter": "Del 2 Mennesket i trafikken",
+   "section": "Varslingsrefleks, hørsel og å bedømme fart og avstand",
+   "asset_id": "bb_s20_fart-og-avstand-vurdering",
+   "image_file": "bb_s20_fart-og-avstand-vurdering.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Fart og avstand: vi tar feil",
+    "th": "ความเร็วและระยะทาง: เราประเมินผิดได้",
+    "en": "Speed and distance: we misjudge"
+   },
+   "core_sentence": {
+    "no": "Møtende biler ser lenger unna og saktere ut enn de er.",
+    "th": "รถที่สวนมาดูไกลกว่าและช้ากว่าความเป็นจริง",
+    "en": "Oncoming cars look farther away and slower than they are."
+   },
+   "points": [
+    {
+     "no": "Vanskeligst med små kjøretøy som MC, i mørke og ved dårlig sikt.",
+     "th": "ยากที่สุดกับรถเล็กอย่างมอเตอร์ไซค์ ในที่มืด และทัศนวิสัยไม่ดี",
+     "en": "Hardest with small vehicles like motorbikes, in the dark and in poor visibility."
+    },
+    {
+     "no": "Varslingsrefleks: blikket går automatisk mot noe i sidesynet.",
+     "th": "สัญชาตญาณเตือน: สายตาหันไปหาสิ่งที่ปรากฏด้านข้างโดยอัตโนมัติ",
+     "en": "Warning reflex: your gaze turns automatically to something in your side vision."
+    },
+    {
+     "no": "Hørselen hjelper deg å styre blikket.",
+     "th": "การได้ยินช่วยนำสายตาไปยังจุดที่ถูกต้อง",
+     "en": "Hearing helps direct your gaze."
+    }
+   ],
+   "michael_says": {
+    "no": "Er du usikker, gi mer tid og rom.",
+    "th": "ถ้าไม่แน่ใจ ให้เวลาและพื้นที่มากขึ้น",
+    "en": "If unsure, allow more time and space."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du skal svinge til venstre og ser en MC langt borte i møtende felt. Hva bør du anta?",
+     "th": "คุณจะเลี้ยวซ้ายและเห็นมอเตอร์ไซค์อยู่ไกลในเลนสวน ควรสันนิษฐานอย่างไร?",
+     "en": "You will turn left and see a motorbike far away in the oncoming lane. What should you assume?"
+    },
+    "options": [
+     {
+      "no": "At den er nærmere og raskere enn den ser ut",
+      "th": "ว่ามันอยู่ใกล้กว่าและเร็วกว่าที่เห็น",
+      "en": "That it is closer and faster than it looks"
+     },
+     {
+      "no": "At den er så langt unna at du rekker det",
+      "th": "ว่ามันอยู่ไกลพอที่คุณจะเลี้ยวทัน",
+      "en": "That it is far enough away for you to make it"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Møtende MC",
+     "th": "มอเตอร์ไซค์ที่สวนมา",
+     "en": "Oncoming motorbike"
+    }
+   ],
+   "image_brief": "Photorealistic driver's-eye view from a modern car on a Norwegian two-lane road, a motorcycle with rider approaching far ahead in the oncoming lane, daylight, no text. Master image 3:2 landscape. Keep every key element (Oncoming motorbike) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "rule_ref": "",
+   "note": "",
+   "michael_basis": {
+    "no": "Vi oppfatter møtende biler som lenger unna enn de er og hastigheter som lavere enn de virkelig er. Dette er verst med små kjøretøy som MC, i mørke og ved dårlig sikt. Varslingsrefleksen retter blikket mot noe som plutselig kommer inn i sidesynet. Hørselen hjelper til å styre blikket. Døve kan få førerkort.",
+    "th": "เรามองรถที่สวนมาว่าไกลกว่าความเป็นจริง และมองความเร็วว่าต่ำกว่าที่เป็นจริง ปัญหานี้หนักที่สุดกับรถเล็กอย่างมอเตอร์ไซค์ ในที่มืด และเมื่อทัศนวิสัยไม่ดี สัญชาตญาณเตือนทำให้สายตาหันไปหาสิ่งที่โผล่เข้ามาด้านข้างโดยอัตโนมัติ การได้ยินช่วยนำสายตา คนหูหนวกก็ได้รับใบขับขี่ได้",
+    "en": "We see oncoming cars as farther away than they are and speeds as lower than they really are. This is worst with small vehicles like motorbikes, in the dark and in poor visibility. The warning reflex turns your gaze to something that suddenly enters your side vision. Hearing helps direct your gaze. Deaf people can get a driving licence."
+   },
+   "open_questions": [],
+   "next_step": "bb-s21",
+   "source_ref": "Lærebok Klasse B, trykt s. 20 (PDF-s. 15)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "official_check": "2026-10-09",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   }
+  },
+  {
+   "id": "bb-s21",
+   "book": "Lærebok Klasse B",
+   "printed_page": 21,
+   "pdf_page": 16,
+   "chapter": "Del 2 Mennesket i trafikken",
+   "section": "Fartsblind",
+   "asset_id": "bb_s21_fartsblind",
+   "image_file": "bb_s21_fartsblind.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Fartsblind",
+    "th": "ตาบอดความเร็ว",
+    "en": "Speed blindness"
+   },
+   "core_sentence": {
+    "no": "Etter lang fart virker 50 km/t unaturlig sakte.",
+    "th": "หลังขับเร็วนาน ๆ ความเร็ว 50 กม./ชม. จะรู้สึกช้าผิดปกติ",
+    "en": "After long fast driving, 50 km/h feels unnaturally slow."
+   },
+   "points": [
+    {
+     "no": "Kroppen har vent seg til høyere fart.",
+     "th": "ร่างกายเคยชินกับความเร็วที่สูงกว่า",
+     "en": "Your body has got used to higher speed."
+    },
+    {
+     "no": "Farlig ved tettbebyggelse: gangfelt, barn og biler.",
+     "th": "อันตรายในเขตชุมชน: ทางม้าลาย เด็ก และรถยนต์",
+     "en": "Dangerous in built-up areas: crossings, children and cars."
+    },
+    {
+     "no": "Se på speedometeret, ikke bare på følelsen.",
+     "th": "ดูเข็มวัดความเร็ว อย่าเชื่อแค่ความรู้สึก",
+     "en": "Check the speedometer, not just the feeling."
+    }
+   ],
+   "michael_says": {
+    "no": "Føles det sakte eller fort? Sjekk farten.",
+    "th": "รู้สึกช้าหรือเร็ว? ให้เช็กความเร็ว",
+    "en": "Does it feel slow or fast? Check your speed."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du har kjørt 90 km/t lenge og nærmer deg et tettsted med 50-skilt. Hva gjør du?",
+     "th": "คุณขับ 90 กม./ชม. มานานและกำลังเข้าเขตชุมชนที่มีป้าย 50 ทำอย่างไร?",
+     "en": "You have driven at 90 km/h for a long time and approach a village with a 50 sign. What do you do?"
+    },
+    "options": [
+     {
+      "no": "Bremser ned til 50 og sjekker speedometeret",
+      "th": "ลดเหลือ 50 และเช็กเข็มวัดความเร็ว",
+      "en": "Slow to 50 and check the speedometer"
+     },
+     {
+      "no": "Fortsetter – det føles sakte",
+      "th": "ขับต่อ – รู้สึกว่าช้า",
+      "en": "Carry on – it feels slow"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "50-skilt",
+     "th": "ป้าย 50",
+     "en": "50 sign"
+    },
+    {
+     "no": "Gangfelt",
+     "th": "ทางม้าลาย",
+     "en": "Crossing"
+    }
+   ],
+   "image_brief": "Photorealistic view from a car leaving an open fast road and approaching a Norwegian village edge with a 50 km/h speed-limit sign, houses and a pedestrian crossing ahead, daylight. The speed-limit sign digits are the only text. Master image 3:2 landscape. Keep every key element (50 sign, Crossing) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "rule_ref": "",
+   "note": "",
+   "michael_basis": {
+    "no": "Har du kjørt med høy fart over en lang strekning, virker farten usannsynlig lav når du f.eks. bremser ned til 50 km/t før tettbebyggelse. Kroppen har vent seg til høyere fart. Boken viser en tegning av en tettsted-innkjøring med fartsgrense 50, gangfelt og mange myke trafikanter.",
+    "th": "หลังขับเร็วมานาน เมื่อลดความเร็วเหลือ 50 กม./ชม. ก่อนเข้าเขตชุมชน ความเร็วจะรู้สึกต่ำเกินจริง ร่างกายคุ้นกับความเร็วที่สูงกว่า หนังสือมีภาพการเข้าสู่ชุมชนที่จำกัดความเร็ว 50 มีทางม้าลายและผู้ใช้ถนนที่ไม่มีเครื่องป้องกันจำนวนมาก",
+    "en": "If you have driven at high speed over a long stretch, the speed seems unbelievably low when you slow to 50 km/h before a built-up area. The body has got used to higher speed. The book shows a drawing of entering a village with a 50 speed limit, a crossing and many vulnerable road users."
+   },
+   "open_questions": [
+    "Bildet viser et 50-skilt. Bekreft at skiltsifre i et generert bilde er akseptabelt."
+   ],
+   "next_step": "bb-s22",
+   "source_ref": "Lærebok Klasse B, trykt s. 21 (PDF-s. 16)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "official_check": "2026-10-09",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   }
+  },
+  {
+   "id": "bb-s22",
+   "book": "Lærebok Klasse B",
+   "printed_page": 22,
+   "pdf_page": 17,
+   "chapter": "Del 2 Mennesket i trafikken",
+   "section": "Oppmerksomhet – snever og bred, bremseberedskap",
+   "asset_id": "bb_s22_snever-og-bred-oppmerksomhet",
+   "image_file": "bb_s22_snever-og-bred-oppmerksomhet.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Snever og bred oppmerksomhet",
+    "th": "ความสนใจแคบและกว้าง",
+    "en": "Narrow and wide attention"
+   },
+   "core_sentence": {
+    "no": "Du kan ikke ta inn alt – løft blikket igjen etter å ha fokusert.",
+    "th": "คุณรับทุกอย่างไม่ได้ หลังจ้องจุดเดียวให้เงยมองภาพรวมอีกครั้ง",
+    "en": "You cannot take in everything – lift your gaze again after focusing."
+   },
+   "points": [
+    {
+     "no": "Snever: all oppmerksomhet på ett sted, f.eks. gangfeltet.",
+     "th": "แคบ: ใส่ใจจุดเดียว เช่น ทางม้าลาย",
+     "en": "Narrow: all attention on one spot, e.g. the crossing."
+    },
+    {
+     "no": "Bred: du ser hele trafikkbildet.",
+     "th": "กว้าง: เห็นภาพรวมการจราจรทั้งหมด",
+     "en": "Wide: you see the whole traffic picture."
+    },
+    {
+     "no": "Bremseberedskap: ha foten klar ved bremsepedalen.",
+     "th": "เตรียมเบรก: วางเท้าพร้อมที่แป้นเบรก",
+     "en": "Brake readiness: keep your foot ready at the brake pedal."
+    }
+   ],
+   "michael_says": {
+    "no": "Se på det viktige, men glem ikke resten.",
+    "th": "มองสิ่งสำคัญ แต่อย่าลืมส่วนที่เหลือ",
+    "en": "Watch what matters, but don't forget the rest."
+   },
+   "check_question": {
+    "q": {
+     "no": "En lastebil står stille ved et gangfelt foran deg. Hva bør du forvente?",
+     "th": "รถบรรทุกจอดนิ่งที่ทางม้าลายข้างหน้าคุณ ควรคาดว่าจะเกิดอะไร?",
+     "en": "A lorry stands still at a crossing ahead of you. What should you expect?"
+    },
+    "options": [
+     {
+      "no": "At noen kan komme ut foran lastebilen",
+      "th": "ว่าอาจมีคนเดินออกมาหน้ารถบรรทุก",
+      "en": "That someone may step out in front of the lorry"
+     },
+     {
+      "no": "At veien er fri",
+      "th": "ว่าถนนโล่ง",
+      "en": "That the road is clear"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Gangfelt",
+     "th": "ทางม้าลาย",
+     "en": "Crossing"
+    },
+    {
+     "no": "Bil A",
+     "th": "รถ A",
+     "en": "Car A"
+    },
+    {
+     "no": "Lastebil",
+     "th": "รถบรรทุก",
+     "en": "Lorry"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian junction: a delivery lorry stopped with its rear doors open at a zebra crossing, a car just behind it, a motorcyclist approaching from the left, daylight, no text on the lorry. Master image 3:2 landscape. Keep every key element (Crossing, Car A, Lorry) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "rule_ref": "",
+   "note": "",
+   "michael_basis": {
+    "no": "Oppmerksomheten er begrenset. Snever oppmerksomhet: all oppmerksomhet på ett sted (bil A og fotgjengeren ved gangfeltet). Bred oppmerksomhet: du frigjør blikket for å få oversikt over hele trafikkbildet. Bremseberedskap: lett trykk på bremsepedalen gjør reaksjonstiden mindre, og bilføreren bak ser bremselysene.",
+    "th": "ความสนใจมีจำกัด ความสนใจแคบ: ใส่ใจจุดเดียว (รถ A และคนข้ามที่ทางม้าลาย) ความสนใจกว้าง: ปล่อยสายตาเพื่อดูภาพรวมของการจราจรทั้งหมด เตรียมเบรก: แตะแป้นเบรกเบา ๆ ทำให้เวลาตอบสนองสั้นลง และคนขับด้านหลังเห็นไฟเบรก",
+    "en": "Attention is limited. Narrow attention: all attention on one place (car A and the pedestrian at the crossing). Wide attention: you free your gaze to get an overview of the whole traffic picture. Brake readiness: a light touch on the brake pedal shortens reaction time, and the driver behind sees the brake lights."
+   },
+   "open_questions": [],
+   "next_step": "bb-s23",
+   "source_ref": "Lærebok Klasse B, trykt s. 22 (PDF-s. 17)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "official_check": "2026-10-09",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   }
+  },
+  {
+   "id": "bb-s23",
+   "book": "Lærebok Klasse B",
+   "printed_page": 23,
+   "pdf_page": 18,
+   "chapter": "Del 2 Mennesket i trafikken",
+   "section": "Hva er reaksjon? Reaksjonstid. 2.3 Faktorer som virker inn",
+   "asset_id": "bb_s23_reaksjonstid",
+   "image_file": "bb_s23_reaksjonstid.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Reaksjonstid",
+    "th": "เวลาตอบสนอง",
+    "en": "Reaction time"
+   },
+   "core_sentence": {
+    "no": "Fra du ser faren til du handler tar det 0,3 til 3–4 sekunder.",
+    "th": "ตั้งแต่เห็นอันตรายจนลงมือทำใช้เวลาประมาณ 0.3 ถึง 3–4 วินาที",
+    "en": "From seeing danger to acting takes about 0.3 to 3–4 seconds."
+   },
+   "points": [
+    {
+     "no": "Trening og hvile gir raskere reaksjon.",
+     "th": "การฝึกและการพักผ่อนช่วยให้ตอบสนองเร็วขึ้น",
+     "en": "Practice and rest give a faster reaction."
+    },
+    {
+     "no": "Kompliserte situasjoner tar lengre tid.",
+     "th": "สถานการณ์ซับซ้อนใช้เวลานานกว่า",
+     "en": "Complicated situations take longer."
+    },
+    {
+     "no": "Sinne, tristhet og stor glede tar oppmerksomhet fra kjøringen.",
+     "th": "ความโกรธ ความเศร้า หรือความดีใจมาก ๆ ดึงความสนใจจากการขับรถ",
+     "en": "Anger, sadness or great joy take attention from driving."
+    }
+   ],
+   "michael_says": {
+    "no": "Kjør slik at du får tid til å reagere.",
+    "th": "ขับให้มีเวลาพอที่จะตอบสนอง",
+    "en": "Drive so you have time to react."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du ser en ball trille ut i veien. Når regnes reaksjonstiden fra?",
+     "th": "คุณเห็นลูกบอลกลิ้งออกมาบนถนน เวลาตอบสนองนับตั้งแต่เมื่อไร?",
+     "en": "You see a ball roll into the road. When does reaction time count from?"
+    },
+    "options": [
+     {
+      "no": "Fra du oppfatter faren til du begynner å handle",
+      "th": "ตั้งแต่รับรู้อันตรายจนเริ่มลงมือทำ",
+      "en": "From noticing the danger until you start to act"
+     },
+     {
+      "no": "Fra bilen står stille",
+      "th": "ตั้งแต่รถหยุดนิ่ง",
+      "en": "From when the car has stopped"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Se",
+     "th": "เห็น",
+     "en": "See"
+    },
+    {
+     "no": "Handle",
+     "th": "ลงมือทำ",
+     "en": "Act"
+    }
+   ],
+   "image_brief": "Photorealistic driver's eyes seen in the rear-view mirror looking ahead at a ball rolling into a Norwegian city street, a small inset of a foot hovering over the brake pedal, no text. Master image 3:2 landscape. Keep every key element (See, Act) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "rule_ref": "",
+   "note": "",
+   "michael_basis": {
+    "no": "Reaksjonstiden regnes fra du oppfatter en fare til du begynner å handle, vanligvis 0,3–3–4 sekunder. Den avhenger av hvor komplisert situasjonen er, trening, dagsform og alder. Psykiske problemer, sinne/aggresjon og stor glede kan ta oppmerksomhet fra kjøringen.",
+    "th": "เวลาตอบสนองนับจากรับรู้อันตรายจนเริ่มลงมือทำ โดยทั่วไป 0.3 ถึง 3–4 วินาที ขึ้นกับความซับซ้อนของสถานการณ์ การฝึก สภาพร่างกายวันนั้น และอายุ ปัญหาทางจิตใจ ความโกรธ และความดีใจมากอาจดึงความสนใจจากการขับ",
+    "en": "Reaction time runs from noticing a danger to starting to act, usually 0.3–3–4 seconds. It depends on how complicated the situation is, practice, how you feel that day, and age. Mental problems, anger/aggression and great joy can take attention from driving."
+   },
+   "open_questions": [
+    "Bokas «0,3 til 3–4 sekunder» er uvanlig formulert. Bekreft at intervallet kan stå."
+   ],
+   "next_step": "bb-s24",
+   "source_ref": "Lærebok Klasse B, trykt s. 23 (PDF-s. 18)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "official_check": "2026-10-09",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   }
+  },
+  {
+   "id": "bb-s24",
+   "book": "Lærebok Klasse B",
+   "printed_page": 24,
+   "pdf_page": 19,
+   "chapter": "Del 2 Mennesket i trafikken",
+   "section": "Stress, tretthet, søvn og alder",
+   "asset_id": "bb_s24_stress-trett-sovn",
+   "image_file": "bb_s24_stress-trett-sovn.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Stress, tretthet og søvn",
+    "th": "ความเครียด ความเหนื่อย และการนอน",
+    "en": "Stress, tiredness and sleep"
+   },
+   "core_sentence": {
+    "no": "Tretthet svekker reaksjonen omtrent som alkohol.",
+    "th": "ความเหนื่อยล้าทำให้การตอบสนองช้าลงคล้ายแอลกอฮอล์",
+    "en": "Tiredness slows your reactions much like alcohol."
+   },
+   "points": [
+    {
+     "no": "Mange ulykker skyldes at føreren sovnet bak rattet.",
+     "th": "อุบัติเหตุจำนวนมากเกิดจากคนขับหลับใน",
+     "en": "Many accidents are caused by the driver falling asleep."
+    },
+    {
+     "no": "Stress og hastverk tar fokus fra kjøringen.",
+     "th": "ความเครียดและความรีบทำให้เสียสมาธิ",
+     "en": "Stress and hurry take focus from driving."
+    },
+    {
+     "no": "Er du trett: stopp og hvil.",
+     "th": "ถ้าง่วง: จอดและพัก",
+     "en": "If you are tired: stop and rest."
+    }
+   ],
+   "michael_says": {
+    "no": "Er du trett, stopp og hvil. Det er smart, ikke svakt.",
+    "th": "ถ้าง่วง ให้จอดพัก นั่นคือความฉลาด ไม่ใช่ความอ่อนแอ",
+    "en": "If you're tired, stop and rest. That is smart, not weak."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du har sovet to timer og skal kjøre tre timer. Du begynner å gjespe. Hva gjør du?",
+     "th": "คุณนอนแค่สองชั่วโมงและต้องขับสามชั่วโมง คุณเริ่มหาว ทำอย่างไร?",
+     "en": "You slept two hours and must drive three. You start yawning. What do you do?"
+    },
+    "options": [
+     {
+      "no": "Stopper og hviler",
+      "th": "จอดและพัก",
+      "en": "Stop and rest"
+     },
+     {
+      "no": "Skrur opp musikken",
+      "th": "เปิดเพลงให้ดังขึ้น",
+      "en": "Turn the music up"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Hvile",
+     "th": "พักผ่อน",
+     "en": "Rest"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian motorway rest area at dusk, a driver stretching beside a parked car, calm mood, no text. Master image 3:2 landscape. Keep every key element (Rest) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "rule_ref": "",
+   "note": "",
+   "michael_basis": {
+    "no": "Mangel på søvn svekker reaksjonsevnen omtrent som alkohol og kan føre til at man sovner bak rattet. Stress og hastverk tar fokus fra kjøringen, og stress er ikke det samme som å ha det travelt. Er du trett: stopp og hvil. Eldre kan ha svekket syn og hørsel og kjører ofte langsommere i mørke.",
+    "th": "การอดนอนทำให้การตอบสนองแย่ลงคล้ายแอลกอฮอล์ และอาจทำให้หลับในขณะขับ ความเครียดและความรีบทำให้เสียสมาธิ และความเครียดไม่เหมือนกับการรีบ ถ้าง่วงให้จอดและพัก ผู้สูงอายุอาจมีสายตาและการได้ยินเสื่อมลงและมักขับช้าลงในที่มืด",
+    "en": "Lack of sleep slows reactions much like alcohol and can make you fall asleep at the wheel. Stress and hurry take focus from driving, and stress is not the same as being in a hurry. If you are tired: stop and rest. Older people may have weaker sight and hearing and often drive more slowly in the dark."
+   },
+   "open_questions": [
+    "Sammenligningen søvnmangel/alkohol er generell. Bokas «0,8 promille» og «hver 5. fører» er utelatt fordi de ikke kunne bekreftes."
+   ],
+   "next_step": "bb-s25",
+   "source_ref": "Lærebok Klasse B, trykt s. 24 (PDF-s. 19)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "official_check": "2026-10-09",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   }
+  },
+  {
+   "id": "bb-s25",
+   "book": "Lærebok Klasse B",
+   "printed_page": 25,
+   "pdf_page": 20,
+   "chapter": "Del 2 Mennesket i trafikken",
+   "section": "Svekket hørsel/reaksjon og alkohol og bilførere",
+   "asset_id": "bb_s25_alkohol",
+   "image_file": "bb_s25_alkohol.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Alkohol og bilkjøring",
+    "th": "แอลกอฮอล์กับการขับรถ",
+    "en": "Alcohol and driving"
+   },
+   "core_sentence": {
+    "no": "Grensen er 0,2 promille i blodet – best er null.",
+    "th": "ขีดจำกัดคือ 0.2 ‰ ในเลือด – ดีที่สุดคือศูนย์",
+    "en": "The limit is 0.2 per mille in the blood – zero is best."
+   },
+   "points": [
+    {
+     "no": "Utåndingsluft: 0,1 milligram per liter luft.",
+     "th": "ลมหายใจ: 0.1 มิลลิกรัมต่อลิตร",
+     "en": "Breath: 0.1 milligrams per litre."
+    },
+    {
+     "no": "Synet svekkes, oppmerksomheten og reaksjonen blir dårligere.",
+     "th": "สายตาแย่ลง สมาธิและการตอบสนองแย่ลง",
+     "en": "Vision weakens; attention and reaction get worse."
+    },
+    {
+     "no": "Kroppen forbrenner ca. 0,15 promille i timen – dagen derpå kan du fortsatt være påvirket.",
+     "th": "ร่างกายเผาผลาญประมาณ 0.15 ‰ ต่อชั่วโมง วันรุ่งขึ้นอาจยังได้รับผล",
+     "en": "The body burns about 0.15 per mille an hour – the next day you may still be affected."
+    }
+   ],
+   "michael_says": {
+    "no": "Ikke gamble. Er du i tvil, ikke kjør.",
+    "th": "อย่าเสี่ยง ถ้าไม่แน่ใจ อย่าขับ",
+    "en": "Don't gamble. If in doubt, don't drive."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du drakk alkohol i går kveld og skal kjøre tidlig i dag. Hva bør du tenke på?",
+     "th": "คุณดื่มแอลกอฮอล์เมื่อคืนและต้องขับรถแต่เช้า ควรคิดถึงอะไร?",
+     "en": "You drank alcohol last night and drive early today. What should you think about?"
+    },
+    "options": [
+     {
+      "no": "Du kan fortsatt være påvirket – kroppen forbrenner ca. 0,15 ‰ i timen",
+      "th": "คุณอาจยังได้รับผลอยู่ – ร่างกายเผาผลาญประมาณ 0.15 ‰ ต่อชั่วโมง",
+      "en": "You may still be affected – the body burns about 0.15 per mille an hour"
+     },
+     {
+      "no": "Alt er ute av kroppen når du våkner",
+      "th": "ทุกอย่างหมดไปจากร่างกายเมื่อตื่น",
+      "en": "Everything is gone when you wake up"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "0,2 ‰ grense",
+     "th": "ขีดจำกัด 0.2 ‰",
+     "en": "0.2 ‰ limit"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian evening scene indoors: car keys placed in a bowl next to an untouched glass of water, a taxi waiting outside the window, no text. Master image 3:2 landscape. Keep every key element (0.2 ‰ limit) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "rule_ref": "Vegtrafikkloven § 22",
+   "note": "",
+   "michael_basis": {
+    "no": "Grensen er 0,2 promille i blodet eller 0,1 milligram alkohol per liter utåndingsluft (vegtrafikkloven § 22). Alkohol svekker synet, oppmerksomheten, reaksjonen og vurderingsevnen. Kroppen forbrenner ca. 0,15 promille i timen, med individuelle forskjeller, så du kan være påvirket dagen derpå. Promillekjøring øker ulykkesrisikoen kraftig.",
+    "th": "ขีดจำกัดคือ 0.2 ‰ ในเลือด หรือแอลกอฮอล์ 0.1 มิลลิกรัมต่อลิตรในลมหายใจ (กฎหมายจราจรทางบก มาตรา 22) แอลกอฮอล์ทำให้สายตา สมาธิ การตอบสนอง และการตัดสินใจแย่ลง ร่างกายเผาผลาญประมาณ 0.15 ‰ ต่อชั่วโมง แตกต่างกันตามบุคคล วันรุ่งขึ้นจึงอาจยังได้รับผล การขับขณะเมาเพิ่มความเสี่ยงอุบัติเหตุอย่างมาก",
+    "en": "The limit is 0.2 per mille in the blood or 0.1 milligrams of alcohol per litre of breath (Road Traffic Act § 22). Alcohol weakens vision, attention, reaction and judgement. The body burns about 0.15 per mille an hour, with individual differences, so you may be affected the next day. Drink-driving greatly raises accident risk."
+   },
+   "open_questions": [],
+   "next_step": "bb-s26",
+   "source_ref": "Lærebok Klasse B, trykt s. 25 (PDF-s. 20)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "official_check": "2026-10-09",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   }
+  },
+  {
+   "id": "bb-s26",
+   "book": "Lærebok Klasse B",
+   "printed_page": 26,
+   "pdf_page": 21,
+   "chapter": "Del 2 Mennesket i trafikken",
+   "section": "Narkotiske stoffer og medisiner, distraksjoner, kjørevaner",
+   "asset_id": "bb_s26_medisiner-og-distraksjon",
+   "image_file": "bb_s26_medisiner-og-distraksjon.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Medisiner, rus og distraksjon",
+    "th": "ยา สารเสพติด และสิ่งรบกวนสมาธิ",
+    "en": "Medicines, drugs and distraction"
+   },
+   "core_sentence": {
+    "no": "Kjøring krever 100 % oppmerksomhet – ingenting annet.",
+    "th": "การขับรถต้องใช้สมาธิ 100% ไม่มีอย่างอื่น",
+    "en": "Driving needs 100% attention – nothing else."
+   },
+   "points": [
+    {
+     "no": "Medisin med rød varseltrekant: snakk med legen før du kjører.",
+     "th": "ยาที่มีสามเหลี่ยมสีแดงเตือน: ถามแพทย์ก่อนขับ",
+     "en": "Medicine with a red warning triangle: ask your doctor before driving."
+    },
+    {
+     "no": "Alkohol blandet med narkotiske stoffer er meget farlig.",
+     "th": "การผสมแอลกอฮอล์กับสารเสพติดอันตรายมาก",
+     "en": "Mixing alcohol with narcotic drugs is very dangerous."
+    },
+    {
+     "no": "Mobil og musikk du skifter på, tar oppmerksomheten.",
+     "th": "โทรศัพท์และการเปลี่ยนเพลงดึงความสนใจ",
+     "en": "A phone and changing music take your attention."
+    }
+   ],
+   "michael_says": {
+    "no": "Legg bort telefonen før du starter bilen.",
+    "th": "เก็บโทรศัพท์ก่อนสตาร์ทรถ",
+    "en": "Put the phone away before you start the car."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du har fått ny medisin med rød varseltrekant og skal kjøre til jobb. Hva gjør du?",
+     "th": "คุณได้ยาใหม่ที่มีสามเหลี่ยมสีแดงเตือน และต้องขับไปทำงาน ทำอย่างไร?",
+     "en": "You have a new medicine with a red warning triangle and must drive to work. What do you do?"
+    },
+    "options": [
+     {
+      "no": "Snakker med legen først",
+      "th": "ปรึกษาแพทย์ก่อน",
+      "en": "Talk to the doctor first"
+     },
+     {
+      "no": "Kjører – det er jo bare medisin",
+      "th": "ขับไป – ก็แค่ยา",
+      "en": "Drive – it is only medicine"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Rød trekant",
+     "th": "สามเหลี่ยมแดง",
+     "en": "Red triangle"
+    }
+   ],
+   "image_brief": "Photorealistic close-up of a medicine box with a red warning-triangle symbol beside a car key on a table, soft Norwegian home light, no readable text on the box. Master image 3:2 landscape. Keep every key element (Red triangle) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "rule_ref": "",
+   "note": "Boken nevner kassettskifte som distraksjon. Eksempelet er modernisert til «mobil og musikk» uten å endre poenget.",
+   "michael_basis": {
+    "no": "Medisiner med rød varseltrekant: snakk med legen om det er forsvarlig å kjøre. Alkohol blandet med narkotiske stoffer er meget farlig. Distraksjoner: mobiltelefon, å skifte musikk, røyking. Bilkjøring krever 100 % av tiden og oppmerksomheten. Kjørevaner speiler innstillingen din.",
+    "th": "ยาที่มีสามเหลี่ยมสีแดงเตือน: ปรึกษาแพทย์ว่าขับได้อย่างปลอดภัยหรือไม่ การผสมแอลกอฮอล์กับสารเสพติดอันตรายมาก สิ่งรบกวนสมาธิ: โทรศัพท์ การเปลี่ยนเพลง การสูบบุหรี่ การขับรถต้องใช้เวลาและสมาธิ 100% นิสัยการขับสะท้อนทัศนคติของคุณ",
+    "en": "Medicines with a red warning triangle: talk to the doctor about whether it is safe to drive. Alcohol mixed with narcotic drugs is very dangerous. Distractions: mobile phone, changing music, smoking. Driving takes 100% of your time and attention. Driving habits reflect your attitude."
+   },
+   "open_questions": [
+    "Bokas kassettskifte er modernisert til «mobil og musikk». Godkjenn endringen."
+   ],
+   "next_step": "bb-s27",
+   "source_ref": "Lærebok Klasse B, trykt s. 26 (PDF-s. 21)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "official_check": "2026-10-09",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   }
+  },
+  {
+   "id": "bb-s27",
+   "book": "Lærebok Klasse B",
+   "printed_page": 27,
+   "pdf_page": 22,
+   "chapter": "Del 2 Mennesket i trafikken",
+   "section": "Personlighet og sykdom",
+   "asset_id": "bb_s27_personlighet-og-sykdom",
+   "image_file": "bb_s27_personlighet-og-sykdom.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Personlighet og sykdom",
+    "th": "บุคลิกภาพและการเจ็บป่วย",
+    "en": "Personality and illness"
+   },
+   "core_sentence": {
+    "no": "Vanene dine fra første dag danner grunnlaget for senere kjøring.",
+    "th": "นิสัยที่สร้างตั้งแต่วันแรกเป็นรากฐานของการขับรถต่อไป",
+    "en": "Habits from day one form the base of your later driving."
+   },
+   "points": [
+    {
+     "no": "Behov for fart og spenning hører ikke hjemme i trafikken.",
+     "th": "ความอยากได้ความเร็วและความตื่นเต้นไม่เหมาะกับการจราจร",
+     "en": "A need for speed and thrills does not belong in traffic."
+    },
+    {
+     "no": "Er du syk, for eksempel med feber, bør du la bilen stå.",
+     "th": "ถ้าป่วย เช่น มีไข้ ควรงดขับรถ",
+     "en": "If you are ill, for example with a fever, leave the car."
+    },
+    {
+     "no": "Er du for syk til å jobbe, bør du ikke kjøre.",
+     "th": "ถ้าป่วยเกินกว่าจะทำงาน ไม่ควรขับรถ",
+     "en": "If you are too ill to work, you should not drive."
+    }
+   ],
+   "michael_says": {
+    "no": "Lytt til kroppen din.",
+    "th": "ฟังเสียงร่างกายของคุณ",
+    "en": "Listen to your body."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du har feber og er svimmel, men skal hente barn. Hva gjør du?",
+     "th": "คุณมีไข้และเวียนหัว แต่ต้องไปรับเด็ก ทำอย่างไร?",
+     "en": "You have a fever and feel dizzy, but must pick up children. What do you do?"
+    },
+    "options": [
+     {
+      "no": "Ber noen andre kjøre",
+      "th": "ขอให้คนอื่นขับแทน",
+      "en": "Ask someone else to drive"
+     },
+     {
+      "no": "Kjører sakte selv",
+      "th": "ขับเองช้า ๆ",
+      "en": "Drive slowly yourself"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "38 °",
+     "th": "38 องศา",
+     "en": "38 °"
+    }
+   ],
+   "image_brief": "Photorealistic person at a Norwegian kitchen table with a thermometer and a cup of tea, car keys set aside, tired but at home, soft light, no text. Master image 3:2 landscape. Keep every key element (38 °) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "rule_ref": "",
+   "note": "",
+   "michael_basis": {
+    "no": "Sterke personlighetstrekk som mot og vilje kan være positive, men må holdes i tømme bak rattet. Vanene fra første stund danner grunnlaget for kjøringen i kritiske situasjoner. Er du syk, for eksempel med feber, bør du la bilen stå og lytte til kroppen. Er du for syk til å jobbe, bør du ikke kjøre.",
+    "th": "บุคลิกที่เข้มแข็งอย่างความกล้าและความมุ่งมั่นเป็นข้อดีได้ แต่ต้องควบคุมไว้เมื่ออยู่หลังพวงมาลัย นิสัยที่สร้างตั้งแต่แรกเป็นรากฐานการขับในสถานการณ์วิกฤต ถ้าป่วย เช่น มีไข้ ควรงดขับรถและฟังเสียงร่างกาย ถ้าป่วยเกินกว่าจะทำงาน ไม่ควรขับรถ",
+    "en": "Strong personality traits such as courage and will can be positive but must be held in check behind the wheel. Habits from the start form the basis for driving in critical situations. If you are ill, for example with a fever, leave the car and listen to your body. If you are too ill to work, you should not drive."
+   },
+   "open_questions": [],
+   "next_step": "bb-s28",
+   "source_ref": "Lærebok Klasse B, trykt s. 27 (PDF-s. 22)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "official_check": "2026-10-09",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   }
+  },
+  {
+   "id": "bb-s28",
+   "book": "Lærebok Klasse B",
+   "printed_page": 28,
+   "pdf_page": 23,
+   "chapter": "Del 2 Mennesket i trafikken",
+   "section": "Barn og trafikk – små av vekst, innsnevret sidesyn, hvor kommer lyden fra",
+   "asset_id": "bb_s28_barn-syn-og-lyd",
+   "image_file": "bb_s28_barn-syn-og-lyd.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Barn ser og hører annerledes",
+    "th": "เด็กมองเห็นและได้ยินต่างจากผู้ใหญ่",
+    "en": "Children see and hear differently"
+   },
+   "core_sentence": {
+    "no": "Barn er ikke små voksne – sansene er ikke ferdig utviklet.",
+    "th": "เด็กไม่ใช่ผู้ใหญ่ตัวเล็ก ประสาทสัมผัสยังพัฒนาไม่เต็มที่",
+    "en": "Children are not small adults – their senses are not fully developed."
+   },
+   "points": [
+    {
+     "no": "Små av vekst: de ser lite bak parkerte biler.",
+     "th": "ตัวเล็ก: มองเห็นน้อยมากหลังรถที่จอด",
+     "en": "Small stature: they see little behind parked cars."
+    },
+    {
+     "no": "Synsfelt og hørsel er ikke ferdig utviklet.",
+     "th": "การมองเห็นด้านข้างและการได้ยินยังพัฒนาไม่เต็มที่",
+     "en": "Their field of vision and hearing are not fully developed."
+    },
+    {
+     "no": "De hører dårlig hvor en lyd kommer fra.",
+     "th": "เด็กบอกทิศทางของเสียงได้ไม่ดี",
+     "en": "They find it hard to tell where a sound comes from."
+    }
+   ],
+   "michael_says": {
+    "no": "Se verden fra barnets høyde.",
+    "th": "ลองมองโลกจากความสูงของเด็ก",
+    "en": "See the world from a child's height."
+   },
+   "check_question": {
+    "q": {
+     "no": "Barn står ved en parkert varebil og du kjører forbi. Hva gjør du?",
+     "th": "เด็กยืนอยู่ข้างรถตู้ที่จอดและคุณกำลังขับผ่าน ทำอย่างไร?",
+     "en": "Children stand beside a parked van and you drive past. What do you do?"
+    },
+    "options": [
+     {
+      "no": "Senker farten og er klar til å stoppe",
+      "th": "ชะลอและพร้อมหยุด",
+      "en": "Slow down and be ready to stop"
+     },
+     {
+      "no": "Tuter så barna hører deg",
+      "th": "บีบแตรให้เด็กได้ยิน",
+      "en": "Honk so the children hear you"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Parkert bil",
+     "th": "รถที่จอดอยู่",
+     "en": "Parked car"
+    },
+    {
+     "no": "Barn",
+     "th": "เด็ก",
+     "en": "Child"
+    }
+   ],
+   "image_brief": "Photorealistic low, child's-eye-height view from the pavement between parked cars on a Norwegian residential street, an approaching car beyond, an adult's hand holding the child's hand, daylight, no text. Master image 3:2 landscape. Keep every key element (Parked car, Child) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "rule_ref": "",
+   "note": "",
+   "michael_basis": {
+    "no": "Barn er ikke små voksne. De er lave og har dårligere oversikt, spesielt bak parkerte biler. Synsfelt og hørsel er ikke ferdig utviklet, og de har vansker med å høre hvor en lyd kommer fra, så å bruke hornet kan virke mot sin hensikt. Barn under ca. 7 år kan ikke vurdere avstand og fart. Se verden fra barnets høyde.",
+    "th": "เด็กไม่ใช่ผู้ใหญ่ตัวเล็ก เด็กตัวเตี้ยจึงมองเห็นภาพรวมได้น้อยกว่า โดยเฉพาะหลังรถที่จอด การมองเห็นด้านข้างและการได้ยินยังพัฒนาไม่เต็มที่ เด็กบอกทิศทางของเสียงได้ยาก การบีบแตรใส่เด็กจึงอาจได้ผลตรงข้าม เด็กอายุต่ำกว่าประมาณ 7 ปีประเมินระยะทางและความเร็วไม่ได้ ลองมองโลกจากความสูงของเด็ก",
+    "en": "Children are not small adults. They are low and have a poorer overview, especially behind parked cars. Their field of vision and hearing are not fully developed, and they find it hard to hear where a sound comes from, so honking may backfire. Children under about 7 cannot judge distance and speed. See the world from a child's height."
+   },
+   "open_questions": [
+    "Bokas aldersgrenser (sidesyn 12–14 år) er utelatt fordi de ikke kunne bekreftes i offisiell kilde. Bekreft utelatelsen."
+   ],
+   "next_step": "bb-s29",
+   "source_ref": "Lærebok Klasse B, trykt s. 28 (PDF-s. 23)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "official_check": "2026-10-09",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   }
+  },
+  {
+   "id": "bb-s29",
+   "book": "Lærebok Klasse B",
+   "printed_page": 29,
+   "pdf_page": 24,
+   "chapter": "Del 2 Mennesket i trafikken",
+   "section": "Barn og trafikk – fart og avstand, blikkoppmerksomhet",
+   "asset_id": "bb_s29_barn-fart-og-oppmerksomhet",
+   "image_file": "bb_s29_barn-fart-og-oppmerksomhet.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Barn bedømmer ikke fart",
+    "th": "เด็กประเมินความเร็วไม่ได้",
+    "en": "Children cannot judge speed"
+   },
+   "core_sentence": {
+    "no": "Å bedømme fart og avstand er nærmest umulig for barn.",
+    "th": "การประเมินความเร็วและระยะทางแทบเป็นไปไม่ได้สำหรับเด็ก",
+    "en": "Judging speed and distance is almost impossible for children."
+   },
+   "points": [
+    {
+     "no": "Vær innstilt på at barnet kan løpe i stikk motsatt retning.",
+     "th": "เตรียมรับมือว่าเด็กอาจวิ่งไปทางตรงข้ามกับที่คิด",
+     "en": "Expect that the child may run in the opposite direction."
+    },
+    {
+     "no": "Øynene er rettet mot deg, men oppmerksomheten et annet sted.",
+     "th": "ตามองมาที่คุณ แต่ความสนใจอยู่ที่อื่น",
+     "en": "Their eyes are on you, but their attention is elsewhere."
+    },
+    {
+     "no": "Barn har problemer med å flytte blikket fra nær til fjern.",
+     "th": "เด็กเปลี่ยนสายตาจากใกล้ไปไกลได้ยาก",
+     "en": "Children find it hard to shift their gaze from near to far."
+    }
+   ],
+   "michael_says": {
+    "no": "Ved barn: sakte ned og vær klar.",
+    "th": "เมื่อมีเด็ก: ชะลอและเตรียมพร้อม",
+    "en": "Near children: slow down and be ready."
+   },
+   "check_question": {
+    "q": {
+     "no": "En ball ruller ut i veien og et barn står på fortauet. Hva forventer du?",
+     "th": "ลูกบอลกลิ้งออกมาบนถนนและมีเด็กยืนอยู่บนทางเท้า คุณคาดว่าจะเกิดอะไร?",
+     "en": "A ball rolls into the road and a child stands on the pavement. What do you expect?"
+    },
+    "options": [
+     {
+      "no": "Barnet kan løpe etter ballen",
+      "th": "เด็กอาจวิ่งตามลูกบอล",
+      "en": "The child may run after the ball"
+     },
+     {
+      "no": "Barnet stanser og ser seg for",
+      "th": "เด็กหยุดและมองก่อน",
+      "en": "The child stops and looks"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Barn",
+     "th": "เด็ก",
+     "en": "Child"
+    },
+    {
+     "no": "Bil",
+     "th": "รถ",
+     "en": "Car"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian pavement edge beside a playground, a child chasing a ball toward the road, a car approaching slowly in the distance, driver's-eye view, daylight, no text. Master image 3:2 landscape. Keep every key element (Child, Car) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "rule_ref": "",
+   "note": "",
+   "michael_basis": {
+    "no": "For barn er det nærmest umulig å bedømme fart og avstand. Vær innstilt på at barnet kan løpe i stikk motsatt retning av det du trodde. Barn har øynene festet på deg, men oppmerksomheten kan være rettet mot noe annet. De har problemer med å flytte blikket fra nær til fjern og tenker lett på noe helt annet.",
+    "th": "สำหรับเด็ก การประเมินความเร็วและระยะทางแทบเป็นไปไม่ได้ เตรียมใจไว้ว่าเด็กอาจวิ่งไปทางตรงข้ามกับที่คุณคิด เด็กอาจมองมาที่คุณแต่ความสนใจอยู่ที่อื่น เด็กเปลี่ยนสายตาจากใกล้ไปไกลได้ยากและมักคิดเรื่องอื่นอยู่",
+    "en": "For children it is almost impossible to judge speed and distance. Expect the child may run in the exact opposite direction to what you thought. Children may have their eyes on you while their attention is elsewhere. They find it hard to move their gaze from near to far and easily think of something else."
+   },
+   "open_questions": [],
+   "next_step": "bb-s30",
+   "source_ref": "Lærebok Klasse B, trykt s. 29 (PDF-s. 24)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "official_check": "2026-10-09",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   }
+  },
+  {
+   "id": "bb-s30",
+   "book": "Lærebok Klasse B",
+   "printed_page": 30,
+   "pdf_page": 25,
+   "chapter": "Del 2 Mennesket i trafikken",
+   "section": "Barn i lek, høyre/venstre, trafikkreglene 13.2 a, de eldre i trafikken",
+   "asset_id": "bb_s30_barn-lek-og-regler",
+   "image_file": "bb_s30_barn-lek-og-regler.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Barn i lek og trafikkreglene",
+    "th": "เด็กกับการเล่นและกฎจราจร",
+    "en": "Children at play and the traffic rules"
+   },
+   "core_sentence": {
+    "no": "Hold lav fart og stans om nødvendig når barn er på eller ved veien.",
+    "th": "ขับช้า และหยุดทันทีถ้าจำเป็นเมื่อมีเด็กบนหรือข้างถนน",
+    "en": "Keep speed low and stop if needed when children are on or near the road."
+   },
+   "points": [
+    {
+     "no": "Lek: barn glemmer faren når de er opptatt.",
+     "th": "การเล่น: เด็กลืมอันตรายเมื่อจดจ่อ",
+     "en": "Play: children forget danger when absorbed."
+    },
+    {
+     "no": "Mange barn blander høyre og venstre.",
+     "th": "เด็กหลายคนสับสนซ้ายกับขวา",
+     "en": "Many children mix up left and right."
+    },
+    {
+     "no": "Ord som fortau, gangfelt og vikeplikt forstås ikke alltid.",
+     "th": "คำอย่างทางเท้า ทางม้าลาย การให้ทาง เด็กอาจไม่เข้าใจ",
+     "en": "Words like pavement, crossing and yield are not always understood."
+    }
+   ],
+   "michael_says": {
+    "no": "Barn er barn. Vi voksne tar ansvaret.",
+    "th": "เด็กก็คือเด็ก ผู้ใหญ่อย่างเราต้องรับผิดชอบ",
+    "en": "Children are children. We adults take responsibility."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du kjører forbi en lekeplass der barn leker nær veien. Hva gjør du?",
+     "th": "คุณขับผ่านสนามเด็กเล่นที่เด็ก ๆ เล่นใกล้ถนน ทำอย่างไร?",
+     "en": "You drive past a playground where children play near the road. What do you do?"
+    },
+    "options": [
+     {
+      "no": "Holder lav fart og er klar til å stanse",
+      "th": "ขับช้าและพร้อมหยุด",
+      "en": "Keep speed low and be ready to stop"
+     },
+     {
+      "no": "Kjører som vanlig – de ser deg",
+      "th": "ขับตามปกติ – พวกเขาเห็นคุณ",
+      "en": "Drive as usual – they see you"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Ball",
+     "th": "ลูกบอล",
+     "en": "Ball"
+    },
+    {
+     "no": "Lekeplass",
+     "th": "สนามเด็กเล่น",
+     "en": "Playground"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian residential street with a low hedge, a swing set and a ball by the kerb, a car approaching slowly, driver's-eye view, daylight, no text. Master image 3:2 landscape. Keep every key element (Ball, Playground) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "rule_ref": "Trafikkreglene § 13 nr. 2 a",
+   "note": "",
+   "michael_basis": {
+    "no": "Trafikkreglene § 13 nr. 2 a: kjørende plikter i særlig grad å holde tilstrekkelig liten fart og om nødvendig stanse straks ved passering av barn som oppholder seg på eller ved veien. Barn kan være så opptatt av lek at de glemmer farer. Barn kan blande høyre og venstre og forstår ikke alltid ord som fortau, gangfelt og vikeplikt. De eldre blir ofte redde for trafikken.",
+    "th": "กฎจราจร § 13 ข้อ 2 a: ผู้ขับมีหน้าที่พิเศษที่จะขับช้าพอและหยุดทันทีถ้าจำเป็นเมื่อผ่านเด็กที่อยู่บนหรือข้างถนน เด็กอาจจดจ่อกับการเล่นจนลืมอันตราย เด็กอาจสับสนซ้าย-ขวาและไม่เข้าใจคำอย่างทางเท้า ทางม้าลาย การให้ทางเสมอไป ผู้สูงอายุมักกลัวการจราจร",
+    "en": "Traffic rules § 13 no. 2 a: drivers have a special duty to keep speed low enough and stop immediately if necessary when passing children on or near the road. Children can be so absorbed in play that they forget danger. Children can mix up left and right and do not always understand words like pavement, crossing and yield. Older people are often afraid of traffic."
+   },
+   "open_questions": [],
+   "next_step": "bb-s31",
+   "source_ref": "Lærebok Klasse B, trykt s. 30 (PDF-s. 25)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "official_check": "2026-10-09",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   }
+  },
+  {
+   "id": "bb-s31",
+   "book": "Lærebok Klasse B",
+   "printed_page": 31,
+   "pdf_page": 26,
+   "chapter": "Del 2 Mennesket i trafikken",
+   "section": "De eldre og bilkjøring, funksjonshemmede og trafikk",
+   "asset_id": "bb_s31_eldre-og-funksjonshemmede",
+   "image_file": "bb_s31_eldre-og-funksjonshemmede.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Eldre og funksjonshemmede",
+    "th": "ผู้สูงอายุและผู้พิการ",
+    "en": "Older people and people with disabilities"
+   },
+   "core_sentence": {
+    "no": "Gi eldre og funksjonshemmede god tid og trygghet.",
+    "th": "ให้เวลาและความมั่นใจแก่ผู้สูงอายุและผู้พิการ",
+    "en": "Give older people and people with disabilities time and safety."
+   },
+   "points": [
+    {
+     "no": "Eldre er ofte redde for trafikken og trenger mer tid.",
+     "th": "ผู้สูงอายุมักกลัวการจราจรและต้องการเวลามากขึ้น",
+     "en": "Older people are often afraid of traffic and need more time."
+    },
+    {
+     "no": "Blinde bruker hvit stokk, noen en førerhund.",
+     "th": "คนตาบอดใช้ไม้เท้าขาว บางคนใช้สุนัขนำทาง",
+     "en": "Blind people use a white cane; some use a guide dog."
+    },
+    {
+     "no": "Senk farten og stans i tide.",
+     "th": "ชะลอความเร็วและหยุดให้ทัน",
+     "en": "Slow down and stop in time."
+    }
+   ],
+   "michael_says": {
+    "no": "Tålmodighet er en del av sikker kjøring.",
+    "th": "ความอดทนคือส่วนหนึ่งของการขับขี่อย่างปลอดภัย",
+    "en": "Patience is part of safe driving."
+   },
+   "check_question": {
+    "q": {
+     "no": "En eldre dame med stokk venter ved fortauskanten. Hva gjør du?",
+     "th": "หญิงสูงอายุถือไม้เท้ารออยู่ที่ขอบทางเท้า คุณทำอย่างไร?",
+     "en": "An elderly woman with a stick waits at the kerb. What do you do?"
+    },
+    "options": [
+     {
+      "no": "Senker farten og stanser i tide",
+      "th": "ชะลอและหยุดให้ทัน",
+      "en": "Slow down and stop in time"
+     },
+     {
+      "no": "Kjører forbi raskt",
+      "th": "ขับผ่านไปเร็ว ๆ",
+      "en": "Drive past quickly"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Hvit stokk",
+     "th": "ไม้เท้าขาว",
+     "en": "White cane"
+    }
+   ],
+   "image_brief": "Photorealistic elderly woman with a white cane waiting at a Norwegian kerb, a car stopping politely well before her, daylight, no text. Master image 3:2 landscape. Keep every key element (White cane) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "rule_ref": "",
+   "note": "",
+   "michael_basis": {
+    "no": "Eldre har ofte svekket syn, hørsel, bevegelighet og oppmerksomhet; de trenger tid og trygghet. Mange eldre kjører bil og har den som eneste kontakt med omverdenen. Blinde bruker hvit stokk, noen førerhund. De fleste bevegelseshemmede trenger tydelige signaler før de tør krysse; bremse ned og stans i tide, vis tålmodighet.",
+    "th": "ผู้สูงอายุมักมีสายตา การได้ยิน การเคลื่อนไหว และสมาธิเสื่อมลง ต้องการเวลาและความมั่นใจ ผู้สูงอายุหลายคนขับรถและรถเป็นช่องทางเดียวที่ติดต่อกับโลกภายนอก คนตาบอดใช้ไม้เท้าขาว บางคนใช้สุนัขนำทาง ผู้มีปัญหาการเคลื่อนไหวส่วนใหญ่ต้องการสัญญาณที่ชัดก่อนกล้าข้าม ให้ชะลอและหยุดให้ทัน และอดทน",
+    "en": "Older people often have weakened sight, hearing, mobility and attention; they need time and safety. Many older people drive and the car is their only contact with the world. Blind people use a white cane, some a guide dog. Most people with reduced mobility need very clear signals before they dare cross; slow down and stop in time, be patient."
+   },
+   "open_questions": [],
+   "next_step": "bb-s32",
+   "source_ref": "Lærebok Klasse B, trykt s. 31 (PDF-s. 26)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "official_check": "2026-10-09",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   }
+  },
+  {
+   "id": "bb-s32",
+   "book": "Lærebok Klasse B",
+   "printed_page": 32,
+   "pdf_page": 27,
+   "chapter": "Del 2 Mennesket i trafikken",
+   "section": "Bevegelseshemmede og bilkjøring, 2.4 Interessemotsetninger, yrkessjåførene",
+   "asset_id": "bb_s32_ulike-behov-pa-veien",
+   "image_file": "bb_s32_ulike-behov-pa-veien.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Ulike behov på veien",
+    "th": "ความต้องการที่ต่างกันบนถนน",
+    "en": "Different needs on the road"
+   },
+   "core_sentence": {
+    "no": "Alle har ulike mål – vis hensyn til andres situasjon.",
+    "th": "ทุกคนมีเป้าหมายต่างกัน เกรงใจสถานการณ์ของผู้อื่น",
+    "en": "Everyone has different goals – consider others' situations."
+   },
+   "points": [
+    {
+     "no": "Bevegelseshemmede trenger handicapparkering – ikke ta plassene.",
+     "th": "ผู้พิการต้องใช้ที่จอดเฉพาะ ห้ามจอดแทน",
+     "en": "Disabled drivers need accessible parking – don't take the spaces."
+    },
+    {
+     "no": "Yrkessjåfører har ofte tidspress.",
+     "th": "คนขับอาชีพมักถูกเร่งเวลา",
+     "en": "Professional drivers are often under time pressure."
+    },
+    {
+     "no": "Ikke vær egoist – ta hensyn.",
+     "th": "อย่าเห็นแก่ตัว ให้คิดถึงผู้อื่น",
+     "en": "Don't be selfish – show consideration."
+    }
+   ],
+   "michael_says": {
+    "no": "Alle skal frem. Vi kommer frem sammen.",
+    "th": "ทุกคนต้องไปถึงที่หมาย เราไปถึงด้วยกัน",
+    "en": "Everyone is going somewhere. We get there together."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du har det travelt og ser en ledig handicapparkering. Hva gjør du?",
+     "th": "คุณรีบและเห็นที่จอดผู้พิการว่างอยู่ ทำอย่างไร?",
+     "en": "You are in a hurry and see a free accessible parking bay. What do you do?"
+    },
+    "options": [
+     {
+      "no": "Finner en annen plass",
+      "th": "หาที่จอดอื่น",
+      "en": "Find another space"
+     },
+     {
+      "no": "Tar den – bare noen minutter",
+      "th": "จอดแค่ไม่กี่นาที",
+      "en": "Take it – only a few minutes"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Handicapparkering",
+     "th": "ที่จอดผู้พิการ",
+     "en": "Accessible parking"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian car park with a disabled parking bay, a wheelchair user beside a car, a delivery van in the lane behind with the driver checking his watch, daylight, no readable text. Master image 3:2 landscape. Keep every key element (Accessible parking) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "rule_ref": "",
+   "note": "",
+   "michael_basis": {
+    "no": "Mange bevegelseshemmede har bil og førerkort; bilene er merket slik at andre tar hensyn. Funksjonsfriske som tar handicapparkering gjør livet vanskelig for dem. Yrkessjåfører vil frem fort. Andre har fri og skal ut og kose seg: ikke vær egoist, ta hensyn til andres situasjon. Fjerntrafikk gjennom tettsteder er ofte hindret av tett trafikk.",
+    "th": "ผู้มีปัญหาการเคลื่อนไหวหลายคนมีรถและใบขับขี่ รถมีเครื่องหมายเพื่อให้ผู้อื่นเกรงใจ ผู้ที่แข็งแรงแต่จอดในที่จอดผู้พิการทำให้ชีวิตของพวกเขายากขึ้น คนขับอาชีพต้องการไปให้ถึงเร็ว คนอื่นอาจกำลังพักผ่อนและออกไปเที่ยว อย่าเห็นแก่ตัว ให้คิดถึงสถานการณ์ของผู้อื่น การจราจรระยะไกลผ่านชุมชนมักติดขัดจากรถหนาแน่น",
+    "en": "Many people with reduced mobility have a car and licence; the cars are marked so others show consideration. Able-bodied people who take disabled parking make life hard for them. Professional drivers want to get ahead quickly. Others are off work and out for a pleasant drive: do not be selfish, consider others' situations. Long-distance traffic through towns is often held up by dense traffic."
+   },
+   "open_questions": [],
+   "next_step": "bb-s33",
+   "source_ref": "Lærebok Klasse B, trykt s. 32 (PDF-s. 27)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "official_check": "2026-10-09",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   }
+  },
+  {
+   "id": "bb-s33",
+   "book": "Lærebok Klasse B",
+   "printed_page": 33,
+   "pdf_page": 28,
+   "chapter": "Del 2 Mennesket i trafikken",
+   "section": "Fjern- og nærtrafikk, syklister og gående, moped og MC, hest",
+   "asset_id": "bb_s33_syklister-gaende-mc",
+   "image_file": "bb_s33_syklister-gaende-mc.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Syklister, gående og MC",
+    "th": "นักปั่น คนเดินเท้า และมอเตอร์ไซค์",
+    "en": "Cyclists, pedestrians and motorbikes"
+   },
+   "core_sentence": {
+    "no": "De har ingen beskyttelse – hold god avstand.",
+    "th": "พวกเขาไม่มีเครื่องป้องกัน เว้นระยะให้มาก",
+    "en": "They have no protection – keep a good distance."
+   },
+   "points": [
+    {
+     "no": "Vær ekstra oppmerksom når syklister går av og på sykkelen.",
+     "th": "ระวังเป็นพิเศษเมื่อนักปั่นขึ้นหรือลงจากจักรยาน",
+     "en": "Be extra alert when cyclists get on or off the bike."
+    },
+    {
+     "no": "Ta hensyn til moped og MC ved møting og forbikjøring.",
+     "th": "เกรงใจมอเตอร์ไซค์ทั้งตอนสวนและตอนแซง",
+     "en": "Be considerate of mopeds and motorbikes when meeting and overtaking."
+    },
+    {
+     "no": "Dårlig tid gir irritasjon – det går ut over sikkerheten.",
+     "th": "เวลาไม่พอทำให้หงุดหงิด และกระทบความปลอดภัย",
+     "en": "Lack of time makes you irritated, which hurts safety."
+    }
+   ],
+   "michael_says": {
+    "no": "Syklisten ser ikke alltid deg. Du ser syklisten.",
+    "th": "นักปั่นไม่ได้เห็นคุณเสมอ แต่คุณเห็นนักปั่น",
+    "en": "The cyclist doesn't always see you. You see the cyclist."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du skal forbi en syklist på en smal vei. Hva gjør du?",
+     "th": "คุณจะแซงนักปั่นบนถนนแคบ ทำอย่างไร?",
+     "en": "You are about to pass a cyclist on a narrow road. What do you do?"
+    },
+    "options": [
+     {
+      "no": "Holder god avstand og venter om nødvendig",
+      "th": "เว้นระยะมากและรอถ้าจำเป็น",
+      "en": "Keep a good distance and wait if necessary"
+     },
+     {
+      "no": "Kjører tett forbi raskt",
+      "th": "ขับชิดและแซงเร็ว ๆ",
+      "en": "Pass closely and quickly"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Syklist",
+     "th": "นักปั่นจักรยาน",
+     "en": "Cyclist"
+    },
+    {
+     "no": "MC",
+     "th": "มอเตอร์ไซค์",
+     "en": "Motorbike"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian town road with a cyclist and a motorcyclist, a car passing wide with generous side distance, daylight, no text. Master image 3:2 landscape. Keep every key element (Cyclist, Motorbike) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "rule_ref": "",
+   "note": "",
+   "michael_basis": {
+    "no": "Syklister og gående har ingen fysisk beskyttelse og kjenner ofte ikke lover og regler like godt som bilførere: hold stor avstand og vær særlig oppmerksom når syklister går av og på sykkelen. Moped- og MC-førere er også helt ubeskyttet: ta hensyn ved møting og forbikjøring, særlig på smal vei. Dårlig tid og irritasjon går ut over trafikksikkerheten.",
+    "th": "นักปั่นจักรยานและคนเดินเท้าไม่มีเครื่องป้องกันทางกายภาพ และมักรู้กฎหมายน้อยกว่าผู้ขับรถ ให้เว้นระยะมากและระวังเป็นพิเศษเมื่อนักปั่นขึ้นหรือลงจากจักรยาน ผู้ขับโมเพดและมอเตอร์ไซค์ก็ไม่มีเครื่องป้องกันเช่นกัน ให้เกรงใจทั้งตอนสวนและแซง โดยเฉพาะบนถนนแคบ เวลาไม่พอและความหงุดหงิดกระทบความปลอดภัย",
+    "en": "Cyclists and pedestrians have no physical protection and often know the laws and rules less well than drivers: keep a large distance and be especially alert when cyclists get on or off the bike. Moped and motorbike riders are also completely unprotected: show consideration when meeting and overtaking, especially on narrow roads. Poor time and irritation hurt traffic safety."
+   },
+   "open_questions": [],
+   "next_step": "bb-s34",
+   "source_ref": "Lærebok Klasse B, trykt s. 33 (PDF-s. 28)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "official_check": "2026-10-09",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   }
+  },
+  {
+   "id": "bb-s34",
+   "book": "Lærebok Klasse B",
+   "printed_page": 34,
+   "pdf_page": 29,
+   "chapter": "Del 2 Mennesket i trafikken",
+   "section": "Hest og hestekjøring",
+   "asset_id": "bb_s34_hest-i-trafikken",
+   "image_file": "bb_s34_hest-i-trafikken.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Hest og hestekjører",
+    "th": "ม้าและรถม้า",
+    "en": "Horses and carriages"
+   },
+   "core_sentence": {
+    "no": "Hesten er et fluktdyr – vis ro, avstand og lav fart.",
+    "th": "ม้าเป็นสัตว์ตกใจง่าย ใช้ความสงบ ระยะห่าง และความเร็วต่ำ",
+    "en": "A horse is a flight animal – show calm, distance and low speed."
+   },
+   "points": [
+    {
+     "no": "Avpass farten og hold god avstand til dyrene.",
+     "th": "ปรับความเร็วและเว้นระยะจากสัตว์",
+     "en": "Adjust your speed and keep a good distance from the animals."
+    },
+    {
+     "no": "Ikke rus motoren og ikke press deg fram.",
+     "th": "อย่าเร่งเครื่อง และอย่าเบียดแซง",
+     "en": "Don't rev the engine and don't push past."
+    },
+    {
+     "no": "Kontroller at hesteføreren har sett deg.",
+     "th": "ตรวจสอบว่าผู้ควบม้าเห็นคุณแล้ว",
+     "en": "Check that the rider has seen you."
+    }
+   ],
+   "michael_says": {
+    "no": "Rolig bil, rolig hest.",
+    "th": "รถเงียบ ม้าก็สงบ",
+    "en": "A calm car means a calm horse."
+   },
+   "check_question": {
+    "q": {
+     "no": "En rytter kommer mot deg på landeveien. Hva gjør du?",
+     "th": "ผู้ขี่ม้าสวนมาบนถนนนอกเมือง คุณทำอย่างไร?",
+     "en": "A rider comes towards you on the country road. What do you do?"
+    },
+    "options": [
+     {
+      "no": "Senker farten og passerer rolig",
+      "th": "ชะลอและผ่านไปอย่างสงบ",
+      "en": "Slow down and pass calmly"
+     },
+     {
+      "no": "Ruser motoren for å varsle",
+      "th": "เร่งเครื่องเพื่อเตือน",
+      "en": "Rev the engine to warn"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Hest",
+     "th": "ม้า",
+     "en": "Horse"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian rural road with a rider on a horse, a car slowing and keeping a wide distance, autumn farmland, daylight, no text. Master image 3:2 landscape. Keep every key element (Horse) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "rule_ref": "",
+   "note": "",
+   "michael_basis": {
+    "no": "Hesten er et fluktdyr som kan bli skremt av høye lyder og plutselige bevegelser. Nøkkelen er fartsavpasning og avstand. Ikke rus motoren når du passerer eller møter ridende eller hestekjørere, ikke press deg fram, kontroller at hesteføreren har sett deg, og vær tålmodig. En rytter regnes som kjørende og skal som hovedregel ikke bruke gang- eller sykkelvei eller fortau.",
+    "th": "ม้าเป็นสัตว์ที่ตกใจง่ายจากเสียงดังและการเคลื่อนไหวกะทันหัน หัวใจสำคัญคือปรับความเร็วและเว้นระยะ อย่าเร่งเครื่องเมื่อแซงหรือสวนผู้ขี่ม้าหรือผู้ควบรถม้า อย่าเบียดแซง ตรวจสอบว่าผู้ควบม้าเห็นคุณแล้ว และอดทน ผู้ขี่ม้าถือเป็นผู้ขับขี่ และตามหลักทั่วไปห้ามใช้ทางเดินเท้า ทางจักรยาน หรือทางเท้า",
+    "en": "The horse is a flight animal that can be frightened by loud sounds and sudden movements. The key is adjusted speed and distance. Do not rev the engine when passing or meeting riders or carriage drivers, do not push past, check that the rider has seen you, and be patient. A rider counts as a driver and as a rule may not use a footpath, cycle path or pavement."
+   },
+   "open_questions": [
+    "Rytters bruk av gang-/sykkelvei bygger på sekundærkilde (kommunal veileder). Bekreft mot trafikkreglene på Lovdata."
+   ],
+   "next_step": "bb-s34b",
+   "source_ref": "Lærebok Klasse B, trykt s. 34 (PDF-s. 29)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "official_check": "2026-10-09",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   }
+  },
+  {
+   "id": "bb-s34b",
+   "book": "Lærebok Klasse B",
+   "printed_page": 34,
+   "pdf_page": 29,
+   "chapter": "Del 2 Mennesket i trafikken",
+   "section": "Miljøtiltak, 2.4 Trafikkens krav og menneskets kapasitet, 0-visjonen",
+   "asset_id": "bb_s34b_miljo-og-nullvisjonen",
+   "image_file": "bb_s34b_miljo-og-nullvisjonen.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Miljø og 0-visjonen",
+    "th": "สิ่งแวดล้อมและวิสัยทัศน์ 0",
+    "en": "Environment and Vision Zero"
+   },
+   "core_sentence": {
+    "no": "Målet er at ingen skal bli drept eller alvorlig skadet.",
+    "th": "เป้าหมายคือไม่มีใครเสียชีวิตหรือบาดเจ็บสาหัส",
+    "en": "The goal is that no one is killed or seriously injured."
+   },
+   "points": [
+    {
+     "no": "Mennesker gjør feil – derfor må trafikksystemet være trygt.",
+     "th": "คนเราทำผิดพลาดได้ ระบบจราจรจึงต้องปลอดภัย",
+     "en": "People make mistakes – so the traffic system must be safe."
+    },
+    {
+     "no": "Miljøtiltak: mindre støy, mindre utslipp, bedre dekk.",
+     "th": "มาตรการสิ่งแวดล้อม: ลดเสียง ลดไอเสีย ยางที่ดีกว่า",
+     "en": "Environmental measures: less noise, less exhaust, better tyres."
+    },
+    {
+     "no": "Vi skal ikke bare godta trafikkulykker.",
+     "th": "เราไม่ควรยอมรับว่าอุบัติเหตุเป็นเรื่องธรรมดา",
+     "en": "We should not simply accept traffic accidents."
+    }
+   ],
+   "michael_says": {
+    "no": "Hver av oss er en del av målet.",
+    "th": "เราทุกคนเป็นส่วนหนึ่งของเป้าหมาย",
+    "en": "Each of us is part of the goal."
+   },
+   "check_question": {
+    "q": {
+     "no": "Et kryss har mange ulykker. Hva sier 0-visjonen at vi bør gjøre?",
+     "th": "ทางแยกมีอุบัติเหตุบ่อย วิสัยทัศน์ 0 บอกว่าเราควรทำอย่างไร?",
+     "en": "A junction has many accidents. What does Vision Zero say we should do?"
+    },
+    "options": [
+     {
+      "no": "Gjøre trafikksystemet tryggere",
+      "th": "ทำให้ระบบจราจรปลอดภัยขึ้น",
+      "en": "Make the traffic system safer"
+     },
+     {
+      "no": "Skylde på sjåførene",
+      "th": "โทษคนขับ",
+      "en": "Blame the drivers"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "0 drepte",
+     "th": "ไม่มีผู้เสียชีวิต",
+     "en": "0 deaths"
+    }
+   ],
+   "image_brief": "Photorealistic quiet Norwegian residential street in a low-speed zone, children cycling safely beside a slow car, trees and a noise barrier, sunny, no text. Master image 3:2 landscape. Keep every key element (0 deaths) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "rule_ref": "",
+   "note": "",
+   "michael_basis": {
+    "no": "Mennesket utsettes ofte for situasjoner det ikke har forutsetninger for å løse; det skal ikke føre til «la det skure»-holdning. Boken sier: det er umoralsk å akseptere at trafikkulykker overhodet skal skje. 0-visjonen: ingen skal bli drept eller alvorlig skadet. Miljøtiltak: lydtette gjerder, støyvoller, ledning av tungtrafikk utenom tettsteder, bedre dekk, mindre utslipp.",
+    "th": "มนุษย์มักเจอสถานการณ์ที่เกินความสามารถทางกายหรือใจที่จะรับมือ แต่นั่นไม่ควรนำไปสู่ทัศนคติ ‘ปล่อยไป’ หนังสือกล่าวว่า การยอมรับว่าอุบัติเหตุจราจรต้องเกิดขึ้นเป็นเรื่องผิดศีลธรรม วิสัยทัศน์ 0: ไม่มีใครต้องเสียชีวิตหรือบาดเจ็บสาหัส มาตรการสิ่งแวดล้อม: กำแพงกันเสียง เนินกันเสียง ให้รถหนักเลี่ยงเขตชุมชน ยางที่ดีกว่า ไอเสียน้อยลง",
+    "en": "People are often put in situations they are not equipped to handle; this must not lead to a 'let it be' attitude. The book says it is immoral to accept that traffic accidents must happen at all. Vision Zero: no one should be killed or seriously injured. Environmental measures: soundproof fences, noise banks, routing heavy traffic around towns, better tyres, lower emissions."
+   },
+   "open_questions": [],
+   "next_step": "bb-s35",
+   "source_ref": "Lærebok Klasse B, trykt s. 34 (PDF-s. 29)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "official_check": "2026-10-09",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   }
+  },
+  {
+   "id": "bb-s35",
+   "book": "Lærebok Klasse B",
+   "printed_page": 35,
+   "pdf_page": 30,
+   "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
+   "section": "3.1 Kjøretøyet",
+   "asset_id": "bb_s35_kjoretoy-og-motorvogn",
+   "image_file": "bb_s35_kjoretoy-og-motorvogn.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Kjøretøy og motorvogn",
+    "th": "ยานพาหนะและรถยนต์",
+    "en": "Vehicle and motor vehicle"
+   },
+   "core_sentence": {
+    "no": "Alle motorvogner er kjøretøy, men ikke alle kjøretøy er motorvogner.",
+    "th": "รถยนต์ทุกคันเป็นยานพาหนะ แต่ยานพาหนะไม่ใช่รถยนต์ทุกคัน",
+    "en": "All motor vehicles are vehicles, but not all vehicles are motor vehicles."
+   },
+   "points": [
+    {
+     "no": "En tråsykkel eller tilhenger er kjøretøy, ikke motorvogn.",
+     "th": "จักรยานหรือรถพ่วงเป็นยานพาหนะ ไม่ใช่รถยนต์",
+     "en": "A bicycle or trailer is a vehicle, not a motor vehicle."
+    },
+    {
+     "no": "Du er trafikant også når du er passasjer.",
+     "th": "คุณเป็นผู้ใช้ถนนแม้เป็นผู้โดยสาร",
+     "en": "You are a road user even as a passenger."
+    },
+    {
+     "no": "Slitasje på bil gir mer risiko og mer utslipp.",
+     "th": "ชิ้นส่วนที่สึกหรอเพิ่มความเสี่ยงและไอเสีย",
+     "en": "Worn parts add risk and emissions."
+    }
+   ],
+   "michael_says": {
+    "no": "Du er ansvarlig for at bilen din er i orden.",
+    "th": "คุณรับผิดชอบให้รถอยู่ในสภาพดี",
+    "en": "You are responsible for keeping your car in order."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du sitter på bakseten i en bil. Er du trafikant?",
+     "th": "คุณนั่งเบาะหลังในรถ คุณเป็นผู้ใช้ถนนหรือไม่?",
+     "en": "You sit on the back seat of a car. Are you a road user?"
+    },
+    "options": [
+     {
+      "no": "Ja – også som passasjer",
+      "th": "ใช่ – แม้เป็นผู้โดยสาร",
+      "en": "Yes – also as a passenger"
+     },
+     {
+      "no": "Nei – bare føreren",
+      "th": "ไม่ใช่ – เฉพาะคนขับ",
+      "en": "No – only the driver"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Motorvogn",
+     "th": "รถยนต์",
+     "en": "Motor vehicle"
+    },
+    {
+     "no": "Sykkel",
+     "th": "จักรยาน",
+     "en": "Bicycle"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian street with a car, a bicycle and a small trailer parked in a row, side view, daylight, neutral background, no text. Master image 3:2 landscape. Keep every key element (Motor vehicle, Bicycle) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "rule_ref": "",
+   "note": "",
+   "michael_basis": {
+    "no": "Et kjøretøy er alt som er bestemt til å kjøres på bakken uten skinner. En motorvogn er alltid kjøretøy, men en tråsykkel, tilhenger eller hestekjerre er kjøretøy som ikke er motorvogner. Er du i et kjøretøy, også som passasjer, er du trafikant. Slitasje på bremser og styring kan gi ulykker; slitt motor gir unødvendig mye giftige gasser.",
+    "th": "ยานพาหนะคือสิ่งที่ออกแบบให้วิ่งบนพื้นโดยไม่มีราง รถยนต์ (มีเครื่องยนต์) เป็นยานพาหนะเสมอ แต่จักรยาน รถพ่วง หรือรถม้าเป็นยานพาหนะที่ไม่ใช่รถยนต์ เมื่ออยู่ในยานพาหนะ แม้เป็นผู้โดยสาร คุณก็เป็นผู้ใช้ถนน ชิ้นส่วนเบรกและระบบบังคับเลี้ยวที่สึกหรออาจทำให้เกิดอุบัติเหตุ เครื่องยนต์ที่สึกปล่อยไอเสียมากเกินจำเป็น",
+    "en": "A vehicle is anything meant to be driven on the ground without rails. A motor vehicle is always a vehicle, but a bicycle, trailer or horse carriage is a vehicle that is not a motor vehicle. If you are in a vehicle, also as a passenger, you are a road user. Worn brakes and steering can cause accidents; a worn engine produces unnecessarily much toxic gas."
+   },
+   "open_questions": [],
+   "next_step": null,
+   "source_ref": "Lærebok Klasse B, trykt s. 35 (PDF-s. 30)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "official_check": "2026-10-09",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   }
+  }
+ ],
+ "global_open_questions": [
+  "Skal thai-teksten vise norsk fagord i parentes (thai-forklaring (norsk fagord)) slik Michaels glossarformat? Pakken viser det ikke.",
+  "Er lisens til å bruke boka som kilde i et kommersielt produkt avklart?",
+  "Lovdata kunne ikke leses direkte i regelkontrollen. Reglene er sjekket mot vegvesen.no, Lovdata-sitater og NAF. Se docs/bildebok/REGELKONTROLL.md."
+ ]
+}

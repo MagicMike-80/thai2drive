@@ -1,0 +1,1254 @@
+<!doctype html>
+<html lang="no"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Michaels bildebok</title>
+<style>
+:root{--bg:#0f1720;--card:#16212d;--ink:#eef3f8;--mut:#9fb0c1;--acc:#4cc2ff;--ok:#3ecf8e;--bad:#ff7a7a}
+@media (prefers-color-scheme:light){:root{--bg:#f3f6fa;--card:#fff;--ink:#14202b;--mut:#51636f;--acc:#0a6fb5;--ok:#157a50;--bad:#b3261e}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,sans-serif}
+header{position:sticky;top:0;background:var(--bg);padding:12px 16px;display:flex;gap:8px;align-items:center;z-index:2;border-bottom:1px solid #8883}
+header b{flex:1}header button{border:1px solid var(--acc);background:none;color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
+header button.on{background:var(--acc);color:#fff}
+main{max-width:680px;margin:0 auto;padding:16px}
+.card{background:var(--card);border-radius:16px;overflow:hidden;margin:0 0 20px;box-shadow:0 2px 10px #0003}
+.media{position:relative;aspect-ratio:4/5;background:#223}@media(min-width:520px){.media{aspect-ratio:4/3}}
+.media img{width:100%;height:100%;object-fit:cover;display:block}
+.ph{position:absolute;inset:0;display:grid;place-items:center;background:repeating-linear-gradient(45deg,#2a3a4a,#2a3a4a 14px,#25333f 14px,#25333f 28px);color:#cfe}
+.pills{position:absolute;left:10px;bottom:10px;display:flex;gap:6px;flex-wrap:wrap}
+.pill{background:#000b;color:#fff;border-radius:999px;padding:3px 10px;font-size:13px}
+.body{padding:10px 14px 12px;font-size:15px}h2{margin:0 0 2px;font-size:18px}.core{font-weight:600;margin:0 0 6px}.more summary{cursor:pointer;color:var(--acc);margin-top:6px}
+ul{margin:0 0 6px;padding-left:18px}li{margin:1px 0}
+.michael{background:#4cc2ff22;border-left:4px solid var(--acc);padding:8px 10px;border-radius:6px;margin:10px 0}
+.q{margin:8px 0 6px;font-weight:600}.opt{display:block;width:100%;text-align:left;margin:4px 0;padding:10px;border-radius:10px;border:1px solid #8886;background:none;color:var(--ink);font:inherit;cursor:pointer}
+.opt.good{border-color:var(--ok);background:#3ecf8e22}.opt.bad{border-color:var(--bad);background:#ff7a7a22}
+.fb{min-height:1.2em;margin:4px 0;font-weight:600}.src{color:var(--mut);font-size:13px;margin:8px 0 0}
+.brief{color:var(--mut);font-size:12px;margin-top:6px}
+</style></head><body>
+<header><b id="ttl">Michaels bildebok</b><button data-l="no" class="on" aria-label="Norsk">NO</button><button data-l="th" aria-label="ภาษาไทย">ไทย</button><button data-l="en" aria-label="English">EN</button></header>
+<main><section class="view" id="v-no" hidden>
+<article class="card" data-id="bb-s11">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Elev</span><span class="pill">Ledsager</span></div></div>
+  <div class="body">
+    <h2>Teori og praksis hører sammen</h2>
+    <p class="core">Ta teorikurset tidlig, så henger det sammen med kjøringen.</p>
+    <ul><li>Du kan øvelseskjøre fra 16 år, etter trafikalt grunnkurs.</li><li>Privat: ledsager må være 25 år og ha hatt førerkort i samme klasse i 5 år.</li><li>Trafikalt grunnkurs er 17 timer og kan tas fra 15 år.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 11</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Rolig. Teori først gjør kjøretimene lettere.</p>
+    <div class="quiz"><p class="q">Du er 17 og vil øvelseskjøre privat med en slektning (28 år, førerkort i 2 år). Går det?</p><button class="opt" data-ok="1">Nei – ledsager må ha hatt førerkort i 5 år</button><button class="opt" data-ok="0">Ja – han er over 25</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s12">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Dag</span><span class="pill">Natt</span></div></div>
+  <div class="body">
+    <h2>Fire trinn til førerprøven</h2>
+    <p class="core">Opplæringen går i fire trinn, ett om gangen.</p>
+    <ul><li>1 trafikalt grunnkurs · 2 grunnleggende opplæring · 3 trafikal del · 4 avsluttende opplæring.</li><li>Sikkerhetskurs på bane (4 timer) og på veg (13 timer) hører til trinn 3 og 4.</li><li>For å øvelseskjøre mellom 1. november og 15. mars må du ha tatt mørkekjøring.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 12</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Gå trinn for trinn. Du trenger ikke kunne alt i dag.</p>
+    <div class="quiz"><p class="q">Du tok trafikalt grunnkurs i juli og vil øvelseskjøre i desember. Hva må du ha tatt først?</p><button class="opt" data-ok="1">Mørkekjøring</button><button class="opt" data-ok="0">Ingenting mer</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s13">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">L-merke</span><span class="pill">Ekstra speil</span></div></div>
+  <div class="body">
+    <h2>Sikkerhetskurs og L-merke</h2>
+    <p class="core">Du tar sikkerhetskursene mot slutten av opplæringen.</p>
+    <ul><li>Sikkerhetskurs på bane: 4 timer. På veg: 13 timer.</li><li>Bilen skal ha rød L på hvit bakgrunn bak, og ekstra speil til ledsageren.</li><li>Ta av L-merket når øvelseskjøringen er slutt.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 13</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> L-merket sier: her øver en elev. Gi litt ekstra plass.</p>
+    <div class="quiz"><p class="q">Du har øvelseskjørt og parkerer hjemme. Hva gjør du med L-merket?</p><button class="opt" data-ok="1">Tar det av</button><button class="opt" data-ok="0">La det sitte hele uken</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s13b">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Hensyn</span></div></div>
+  <div class="body">
+    <h2>Øv trygt – du har plikter også</h2>
+    <p class="core">Øvelseskjøring skal ikke være til fare eller ulempe for andre.</p>
+    <ul><li>Øvelseskjøring skal ikke være til fare eller unødig ulempe for andre.</li><li>Ikke øv hvis du eller ledsageren er beruset, trøtt, syk eller svekket.</li><li>Ha med beviset på trafikalt grunnkurs og legitimasjon med bilde.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 13</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Det du lærer nå, følger deg resten av livet. Start rolig.</p>
+    <div class="quiz"><p class="q">Ledsageren din er trøtt etter en lang vakt. Skal dere øvelseskjøre?</p><button class="opt" data-ok="1">Nei – ledsageren må ikke være trøtt</button><button class="opt" data-ok="0">Ja, du kjører jo selv</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s14">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Teori</span><span class="pill">Praksis</span></div></div>
+  <div class="body">
+    <h2>Kravene for å ta førerkort</h2>
+    <p class="core">Du må ha riktig alder, godt syn og god helse, og bestå teori og oppkjøring.</p>
+    <ul><li>Teoriprøven: 45 spørsmål på 90 minutter. 38 riktige gir bestått.</li><li>Består du ikke, må du vente 2 uker før ny prøve.</li><li>Bestått teori gjelder i 3 år: oppkjøringen (55–60 min) må bestås innen da.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 14</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Teori først. Så øver vi sammen.</p>
+    <div class="quiz"><p class="q">Du besto teorien for 3 år og 2 måneder siden og har ikke tatt oppkjøring. Hva nå?</p><button class="opt" data-ok="1">Ta teoriprøven på nytt</button><button class="opt" data-ok="0">Ta oppkjøring som vanlig</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s14b">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Sperrefrist</span></div></div>
+  <div class="body">
+    <h2>Sperrefrist – pause fra førerkort</h2>
+    <p class="core">Kjørte du uten førerkort, må du vente før du kan få førerkort.</p>
+    <ul><li>Tidligst 6 måneder etter den ulovlige kjøringen.</li><li>Er du under minstealderen, løper fristen til 6 måneder etter at du nådde den.</li><li>Fristen kan bli lengre ved stor skade eller ruspåvirket kjøring.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 14</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Reglene beskytter alle på veien, også deg.</p>
+    <div class="quiz"><p class="q">Du har kjørt bil uten førerkort. Når kan du tidligst få førerkort?</p><button class="opt" data-ok="1">Tidligst 6 måneder etter den ulovlige kjøringen</button><button class="opt" data-ok="0">Med en gang du har bestått teorien</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s15">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">3500 kg</span><span class="pill">750 kg</span></div></div>
+  <div class="body">
+    <h2>Førerkort klasse B og tilhenger</h2>
+    <p class="core">Klasse B: bil til 3500 kg, med tilhenger opp til 750 kg.</p>
+    <ul><li>Tyngre tilhenger går hvis bil og henger til sammen er maks 3500 kg.</li><li>Sjekk vognkortet: tillatt totalvekt for bil og henger, og tillatt hengervekt.</li><li>Klasse B gir også rett til å kjøre moped (klasse AM).</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 15</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Sjekk vekten før du kobler til hengeren.</p>
+    <div class="quiz"><p class="q">Vognkortet sier: bilen har tillatt totalvekt 1800 kg og tillater en tilhenger på 1700 kg. Tilhengeren har tillatt totalvekt 1700 kg. Går dette med klasse B?</p><button class="opt" data-ok="1">Ja – 1800 + 1700 = 3500 kg tillatt totalvekt til sammen, og vognkortet tillater hengeren</button><button class="opt" data-ok="0">Nei – en tilhenger over 750 kg krever alltid utvidet førerkort</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s16">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Før</span><span class="pill">I dag</span></div></div>
+  <div class="body">
+    <h2>Flere biler – mindre vei per bil</h2>
+    <p class="core">Antall biler vokser mye raskere enn veilengden.</p>
+    <ul><li>1920: ca. 5000 m vei per bil. 2008: ca. 34 m (bokas tall).</li><li>Mindre plass gir mer behov for samarbeid og forståelse.</li><li>Det gjelder alle: bil, buss, lastebil, sykkel og gående.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 16</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Når veien er full, hjelper vi hverandre.</p>
+    <div class="quiz"><p class="q">Veien er full og du har dårlig tid. Hva er smartest?</p><button class="opt" data-ok="1">Holde avstand og være tålmodig</button><button class="opt" data-ok="0">Presse seg forbi</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s17">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Vikeplikt</span><span class="pill">Påkjøring bakfra</span></div></div>
+  <div class="body">
+    <h2>Vanlige ulykker</h2>
+    <p class="core">De fleste ulykker skyldes menneskelig svikt.</p>
+    <ul><li>I 2024 omkom 87 og 578 ble hardt skadd i norsk trafikk (Statens vegvesen).</li><li>Vanligst: brudd på vikeplikt, påkjøring bakfra, rygging, utforkjøring, forbikjøring.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 17</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Kjenner du de vanligste feilene, kan du unngå dem.</p>
+    <div class="quiz"><p class="q">Du kjører tett bak en bil i fart, og den bremser hardt. Hvilken ulykke risikerer du?</p><button class="opt" data-ok="1">Påkjøring bakfra</button><button class="opt" data-ok="0">Utforkjøring</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s17b">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Trafikant</span><span class="pill">Kjøretøy</span><span class="pill">Vei</span></div></div>
+  <div class="body">
+    <h2>Trafikant – kjøretøy – vei</h2>
+    <p class="core">Trygg trafikk er samspill mellom deg, bilen og veien.</p>
+    <ul><li>Du er en av mange trafikanter. Tenk ansvar for hverandre.</li><li>Ikke bare «min rett» – ha klarsyn og hjelp dem som er svakere.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 17</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Vi deler veien. Det gjør oss tryggere.</p>
+    <div class="quiz"><p class="q">En gående står ved gangfeltet og du har det travelt. Hva viser at du tenker på andre?</p><button class="opt" data-ok="1">Du stanser og slipper henne over</button><button class="opt" data-ok="0">Du øker farten</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s18">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Syn</span></div></div>
+  <div class="body">
+    <h2>Synet er viktigst</h2>
+    <p class="core">Over 90 % av avgjørelsene dine bygger på det du ser.</p>
+    <ul><li>Å kjøre bil er krevende – mye informasjon samtidig.</li><li>Trafikkpsykologi hjelper oss å forstå hvorfor vi handler som vi gjør.</li><li>Synet er en evne – å se er en kunst.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 18</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Se med vilje. Da ser du mer.</p>
+    <div class="quiz"><p class="q">Du nærmer deg et kryss. Hva bør du gjøre med blikket?</p><button class="opt" data-ok="1">Se langt frem og se deg rundt</button><button class="opt" data-ok="0">Stirre på bilen like foran</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s19">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Skarpt 3–5°</span><span class="pill">Sidesyn 180°</span></div></div>
+  <div class="body">
+    <h2>Skarpt syn i en smal sektor</h2>
+    <p class="core">Du ser skarpt bare i 3–5 grader, men sidesynet er 180 grader.</p>
+    <ul><li>Sidesynet blir smalere når farten øker.</li><li>Øynene er ikke laget for mørke.</li><li>Hvert øye har en blind flekk – du kan teste den selv.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 19</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Se deg rundt hele tiden. Ett blikk er ikke nok.</p>
+    <div class="quiz"><p class="q">Det er mørkt og du kjører fort. Hva skjer med sidesynet?</p><button class="opt" data-ok="1">Det blir smalere – senk farten</button><button class="opt" data-ok="0">Det blir bredere</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s20">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Møtende MC</span></div></div>
+  <div class="body">
+    <h2>Fart og avstand: vi tar feil</h2>
+    <p class="core">Møtende biler ser lenger unna og saktere ut enn de er.</p>
+    <ul><li>Vanskeligst med små kjøretøy som MC, i mørke og ved dårlig sikt.</li><li>Varslingsrefleks: blikket går automatisk mot noe i sidesynet.</li><li>Hørselen hjelper deg å styre blikket.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 20</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Er du usikker, gi mer tid og rom.</p>
+    <div class="quiz"><p class="q">Du skal svinge til venstre og ser en MC langt borte i møtende felt. Hva bør du anta?</p><button class="opt" data-ok="1">At den er nærmere og raskere enn den ser ut</button><button class="opt" data-ok="0">At den er så langt unna at du rekker det</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s21">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">50-skilt</span><span class="pill">Gangfelt</span></div></div>
+  <div class="body">
+    <h2>Fartsblind</h2>
+    <p class="core">Etter lang fart virker 50 km/t unaturlig sakte.</p>
+    <ul><li>Kroppen har vent seg til høyere fart.</li><li>Farlig ved tettbebyggelse: gangfelt, barn og biler.</li><li>Se på speedometeret, ikke bare på følelsen.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 21</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Føles det sakte eller fort? Sjekk farten.</p>
+    <div class="quiz"><p class="q">Du har kjørt 90 km/t lenge og nærmer deg et tettsted med 50-skilt. Hva gjør du?</p><button class="opt" data-ok="1">Bremser ned til 50 og sjekker speedometeret</button><button class="opt" data-ok="0">Fortsetter – det føles sakte</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s22">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Gangfelt</span><span class="pill">Bil A</span><span class="pill">Lastebil</span></div></div>
+  <div class="body">
+    <h2>Snever og bred oppmerksomhet</h2>
+    <p class="core">Du kan ikke ta inn alt – løft blikket igjen etter å ha fokusert.</p>
+    <ul><li>Snever: all oppmerksomhet på ett sted, f.eks. gangfeltet.</li><li>Bred: du ser hele trafikkbildet.</li><li>Bremseberedskap: ha foten klar ved bremsepedalen.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 22</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Se på det viktige, men glem ikke resten.</p>
+    <div class="quiz"><p class="q">En lastebil står stille ved et gangfelt foran deg. Hva bør du forvente?</p><button class="opt" data-ok="1">At noen kan komme ut foran lastebilen</button><button class="opt" data-ok="0">At veien er fri</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s23">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Se</span><span class="pill">Handle</span></div></div>
+  <div class="body">
+    <h2>Reaksjonstid</h2>
+    <p class="core">Fra du ser faren til du handler tar det 0,3 til 3–4 sekunder.</p>
+    <ul><li>Trening og hvile gir raskere reaksjon.</li><li>Kompliserte situasjoner tar lengre tid.</li><li>Sinne, tristhet og stor glede tar oppmerksomhet fra kjøringen.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 23</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Kjør slik at du får tid til å reagere.</p>
+    <div class="quiz"><p class="q">Du ser en ball trille ut i veien. Når regnes reaksjonstiden fra?</p><button class="opt" data-ok="1">Fra du oppfatter faren til du begynner å handle</button><button class="opt" data-ok="0">Fra bilen står stille</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s24">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Hvile</span></div></div>
+  <div class="body">
+    <h2>Stress, tretthet og søvn</h2>
+    <p class="core">Tretthet svekker reaksjonen omtrent som alkohol.</p>
+    <ul><li>Mange ulykker skyldes at føreren sovnet bak rattet.</li><li>Stress og hastverk tar fokus fra kjøringen.</li><li>Er du trett: stopp og hvil.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 24</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Er du trett, stopp og hvil. Det er smart, ikke svakt.</p>
+    <div class="quiz"><p class="q">Du har sovet to timer og skal kjøre tre timer. Du begynner å gjespe. Hva gjør du?</p><button class="opt" data-ok="1">Stopper og hviler</button><button class="opt" data-ok="0">Skrur opp musikken</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s25">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">0,2 ‰ grense</span></div></div>
+  <div class="body">
+    <h2>Alkohol og bilkjøring</h2>
+    <p class="core">Grensen er 0,2 promille i blodet – best er null.</p>
+    <ul><li>Utåndingsluft: 0,1 milligram per liter luft.</li><li>Synet svekkes, oppmerksomheten og reaksjonen blir dårligere.</li><li>Kroppen forbrenner ca. 0,15 promille i timen – dagen derpå kan du fortsatt være påvirket.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 25</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Ikke gamble. Er du i tvil, ikke kjør.</p>
+    <div class="quiz"><p class="q">Du drakk alkohol i går kveld og skal kjøre tidlig i dag. Hva bør du tenke på?</p><button class="opt" data-ok="1">Du kan fortsatt være påvirket – kroppen forbrenner ca. 0,15 ‰ i timen</button><button class="opt" data-ok="0">Alt er ute av kroppen når du våkner</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s26">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Rød trekant</span></div></div>
+  <div class="body">
+    <h2>Medisiner, rus og distraksjon</h2>
+    <p class="core">Kjøring krever 100 % oppmerksomhet – ingenting annet.</p>
+    <ul><li>Medisin med rød varseltrekant: snakk med legen før du kjører.</li><li>Alkohol blandet med narkotiske stoffer er meget farlig.</li><li>Mobil og musikk du skifter på, tar oppmerksomheten.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 26</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Legg bort telefonen før du starter bilen.</p>
+    <div class="quiz"><p class="q">Du har fått ny medisin med rød varseltrekant og skal kjøre til jobb. Hva gjør du?</p><button class="opt" data-ok="1">Snakker med legen først</button><button class="opt" data-ok="0">Kjører – det er jo bare medisin</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s27">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">38 °</span></div></div>
+  <div class="body">
+    <h2>Personlighet og sykdom</h2>
+    <p class="core">Vanene dine fra første dag danner grunnlaget for senere kjøring.</p>
+    <ul><li>Behov for fart og spenning hører ikke hjemme i trafikken.</li><li>Er du syk, for eksempel med feber, bør du la bilen stå.</li><li>Er du for syk til å jobbe, bør du ikke kjøre.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 27</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Lytt til kroppen din.</p>
+    <div class="quiz"><p class="q">Du har feber og er svimmel, men skal hente barn. Hva gjør du?</p><button class="opt" data-ok="1">Ber noen andre kjøre</button><button class="opt" data-ok="0">Kjører sakte selv</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s28">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Parkert bil</span><span class="pill">Barn</span></div></div>
+  <div class="body">
+    <h2>Barn ser og hører annerledes</h2>
+    <p class="core">Barn er ikke små voksne – sansene er ikke ferdig utviklet.</p>
+    <ul><li>Små av vekst: de ser lite bak parkerte biler.</li><li>Synsfelt og hørsel er ikke ferdig utviklet.</li><li>De hører dårlig hvor en lyd kommer fra.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 28</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Se verden fra barnets høyde.</p>
+    <div class="quiz"><p class="q">Barn står ved en parkert varebil og du kjører forbi. Hva gjør du?</p><button class="opt" data-ok="1">Senker farten og er klar til å stoppe</button><button class="opt" data-ok="0">Tuter så barna hører deg</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s29">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Barn</span><span class="pill">Bil</span></div></div>
+  <div class="body">
+    <h2>Barn bedømmer ikke fart</h2>
+    <p class="core">Å bedømme fart og avstand er nærmest umulig for barn.</p>
+    <ul><li>Vær innstilt på at barnet kan løpe i stikk motsatt retning.</li><li>Øynene er rettet mot deg, men oppmerksomheten et annet sted.</li><li>Barn har problemer med å flytte blikket fra nær til fjern.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 29</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Ved barn: sakte ned og vær klar.</p>
+    <div class="quiz"><p class="q">En ball ruller ut i veien og et barn står på fortauet. Hva forventer du?</p><button class="opt" data-ok="1">Barnet kan løpe etter ballen</button><button class="opt" data-ok="0">Barnet stanser og ser seg for</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s30">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Ball</span><span class="pill">Lekeplass</span></div></div>
+  <div class="body">
+    <h2>Barn i lek og trafikkreglene</h2>
+    <p class="core">Hold lav fart og stans om nødvendig når barn er på eller ved veien.</p>
+    <ul><li>Lek: barn glemmer faren når de er opptatt.</li><li>Mange barn blander høyre og venstre.</li><li>Ord som fortau, gangfelt og vikeplikt forstås ikke alltid.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 30</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Barn er barn. Vi voksne tar ansvaret.</p>
+    <div class="quiz"><p class="q">Du kjører forbi en lekeplass der barn leker nær veien. Hva gjør du?</p><button class="opt" data-ok="1">Holder lav fart og er klar til å stanse</button><button class="opt" data-ok="0">Kjører som vanlig – de ser deg</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s31">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Hvit stokk</span></div></div>
+  <div class="body">
+    <h2>Eldre og funksjonshemmede</h2>
+    <p class="core">Gi eldre og funksjonshemmede god tid og trygghet.</p>
+    <ul><li>Eldre er ofte redde for trafikken og trenger mer tid.</li><li>Blinde bruker hvit stokk, noen en førerhund.</li><li>Senk farten og stans i tide.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 31</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Tålmodighet er en del av sikker kjøring.</p>
+    <div class="quiz"><p class="q">En eldre dame med stokk venter ved fortauskanten. Hva gjør du?</p><button class="opt" data-ok="1">Senker farten og stanser i tide</button><button class="opt" data-ok="0">Kjører forbi raskt</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s32">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Handicapparkering</span></div></div>
+  <div class="body">
+    <h2>Ulike behov på veien</h2>
+    <p class="core">Alle har ulike mål – vis hensyn til andres situasjon.</p>
+    <ul><li>Bevegelseshemmede trenger handicapparkering – ikke ta plassene.</li><li>Yrkessjåfører har ofte tidspress.</li><li>Ikke vær egoist – ta hensyn.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 32</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Alle skal frem. Vi kommer frem sammen.</p>
+    <div class="quiz"><p class="q">Du har det travelt og ser en ledig handicapparkering. Hva gjør du?</p><button class="opt" data-ok="1">Finner en annen plass</button><button class="opt" data-ok="0">Tar den – bare noen minutter</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s33">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Syklist</span><span class="pill">MC</span></div></div>
+  <div class="body">
+    <h2>Syklister, gående og MC</h2>
+    <p class="core">De har ingen beskyttelse – hold god avstand.</p>
+    <ul><li>Vær ekstra oppmerksom når syklister går av og på sykkelen.</li><li>Ta hensyn til moped og MC ved møting og forbikjøring.</li><li>Dårlig tid gir irritasjon – det går ut over sikkerheten.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 33</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Syklisten ser ikke alltid deg. Du ser syklisten.</p>
+    <div class="quiz"><p class="q">Du skal forbi en syklist på en smal vei. Hva gjør du?</p><button class="opt" data-ok="1">Holder god avstand og venter om nødvendig</button><button class="opt" data-ok="0">Kjører tett forbi raskt</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s34">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Hest</span></div></div>
+  <div class="body">
+    <h2>Hest og hestekjører</h2>
+    <p class="core">Hesten er et fluktdyr – vis ro, avstand og lav fart.</p>
+    <ul><li>Avpass farten og hold god avstand til dyrene.</li><li>Ikke rus motoren og ikke press deg fram.</li><li>Kontroller at hesteføreren har sett deg.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 34</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Rolig bil, rolig hest.</p>
+    <div class="quiz"><p class="q">En rytter kommer mot deg på landeveien. Hva gjør du?</p><button class="opt" data-ok="1">Senker farten og passerer rolig</button><button class="opt" data-ok="0">Ruser motoren for å varsle</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s34b">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">0 drepte</span></div></div>
+  <div class="body">
+    <h2>Miljø og 0-visjonen</h2>
+    <p class="core">Målet er at ingen skal bli drept eller alvorlig skadet.</p>
+    <ul><li>Mennesker gjør feil – derfor må trafikksystemet være trygt.</li><li>Miljøtiltak: mindre støy, mindre utslipp, bedre dekk.</li><li>Vi skal ikke bare godta trafikkulykker.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 34</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Hver av oss er en del av målet.</p>
+    <div class="quiz"><p class="q">Et kryss har mange ulykker. Hva sier 0-visjonen at vi bør gjøre?</p><button class="opt" data-ok="1">Gjøre trafikksystemet tryggere</button><button class="opt" data-ok="0">Skylde på sjåførene</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s35">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Motorvogn</span><span class="pill">Sykkel</span></div></div>
+  <div class="body">
+    <h2>Kjøretøy og motorvogn</h2>
+    <p class="core">Alle motorvogner er kjøretøy, men ikke alle kjøretøy er motorvogner.</p>
+    <ul><li>En tråsykkel eller tilhenger er kjøretøy, ikke motorvogn.</li><li>Du er trafikant også når du er passasjer.</li><li>Slitasje på bil gir mer risiko og mer utslipp.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 35</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Du er ansvarlig for at bilen din er i orden.</p>
+    <div class="quiz"><p class="q">Du sitter på bakseten i en bil. Er du trafikant?</p><button class="opt" data-ok="1">Ja – også som passasjer</button><button class="opt" data-ok="0">Nei – bare føreren</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article></section>
+<section class="view" id="v-th" hidden>
+<article class="card" data-id="bb-s11">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">ผู้เรียน</span><span class="pill">ผู้นั่งกำกับ</span></div></div>
+  <div class="body">
+    <h2>ทฤษฎีและภาคปฏิบัติไปด้วยกัน</h2>
+    <p class="core">เรียนทฤษฎีให้เร็ว เพื่อให้เชื่อมโยงกับการขับรถจริง</p>
+    <ul><li>ฝึกขับได้เมื่ออายุ 16 ปี หลังเรียนหลักสูตรพื้นฐานการจราจร</li><li>ฝึกขับส่วนตัว: ผู้นั่งกำกับต้องอายุ 25 ปี และมีใบขับขี่ชั้นเดียวกันมาแล้ว 5 ปี</li><li>หลักสูตรพื้นฐานการจราจร 17 ชั่วโมง เริ่มเรียนได้ตั้งแต่อายุ 15 ปี</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 11</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> ใจเย็น ๆ เรียนทฤษฎีก่อน การฝึกขับจะง่ายขึ้น</p>
+    <div class="quiz"><p class="q">คุณอายุ 17 อยากฝึกขับส่วนตัวกับญาติ (อายุ 28 มีใบขับขี่มา 2 ปี) ได้ไหม?</p><button class="opt" data-ok="1">ไม่ได้ – ผู้นั่งกำกับต้องมีใบขับขี่มาแล้ว 5 ปี</button><button class="opt" data-ok="0">ได้ – เขาอายุเกิน 25</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s12">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">กลางวัน</span><span class="pill">กลางคืน</span></div></div>
+  <div class="body">
+    <h2>สี่ขั้นสู่การสอบขับขี่</h2>
+    <p class="core">การเรียนมี 4 ขั้น ทำทีละขั้น</p>
+    <ul><li>1 หลักสูตรพื้นฐานการจราจร · 2 การเรียนพื้นฐาน · 3 ส่วนการจราจร · 4 การเรียนขั้นสุดท้าย</li><li>คอร์สความปลอดภัยบนลานฝึก (4 ชั่วโมง) และบนถนน (13 ชั่วโมง) อยู่ในขั้น 3 และ 4</li><li>การฝึกขับระหว่าง 1 พฤศจิกายนถึง 15 มีนาคม ต้องผ่านการเรียนขับรถกลางคืนก่อน</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 12</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> ไปทีละขั้น ไม่ต้องรู้ทุกอย่างวันนี้</p>
+    <div class="quiz"><p class="q">คุณเรียนหลักสูตรพื้นฐานการจราจรเดือนกรกฎาคมและอยากฝึกขับเดือนธันวาคม ต้องผ่านอะไรก่อน?</p><button class="opt" data-ok="1">การเรียนขับรถกลางคืน</button><button class="opt" data-ok="0">ไม่ต้องอะไรเพิ่ม</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s13">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">ป้าย L</span><span class="pill">กระจกเสริม</span></div></div>
+  <div class="body">
+    <h2>คอร์สความปลอดภัยและป้าย L</h2>
+    <p class="core">คอร์สความปลอดภัยเรียนช่วงท้ายของการฝึก</p>
+    <ul><li>คอร์สบนลานฝึก 4 ชั่วโมง คอร์สบนถนน 13 ชั่วโมง</li><li>รถต้องมีป้าย L สีแดงบนพื้นขาวด้านหลัง และกระจกเสริมสำหรับผู้นั่งกำกับ</li><li>ถอดป้าย L ออกเมื่อฝึกขับเสร็จ</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 13</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> ป้าย L บอกว่ามีผู้เรียนกำลังฝึก ให้พื้นที่เพิ่มอีกนิด</p>
+    <div class="quiz"><p class="q">คุณฝึกขับเสร็จและจอดรถที่บ้าน ควรทำอย่างไรกับป้าย L?</p><button class="opt" data-ok="1">ถอดออก</button><button class="opt" data-ok="0">ติดไว้ทั้งสัปดาห์</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s13b">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">ความเกรงใจ</span></div></div>
+  <div class="body">
+    <h2>ฝึกอย่างปลอดภัย คุณก็มีหน้าที่</h2>
+    <p class="core">การฝึกขับต้องไม่เป็นอันตรายหรือรบกวนผู้อื่น</p>
+    <ul><li>การฝึกขับต้องไม่เป็นอันตรายหรือรบกวนผู้อื่นโดยไม่จำเป็น</li><li>อย่าฝึกขับถ้าคุณหรือผู้นั่งกำกับเมา เหนื่อย ป่วย หรืออ่อนแอ</li><li>พกหลักฐานการเรียนหลักสูตรพื้นฐานการจราจรและบัตรประจำตัวที่มีรูปติดตัวไว้</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 13</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> สิ่งที่เรียนตอนนี้จะอยู่กับคุณไปตลอดชีวิต เริ่มอย่างใจเย็น</p>
+    <div class="quiz"><p class="q">ผู้นั่งกำกับของคุณเหนื่อยหลังเข้างานยาว ควรฝึกขับไหม?</p><button class="opt" data-ok="1">ไม่ควร – ผู้นั่งกำกับต้องไม่เหนื่อยล้า</button><button class="opt" data-ok="0">ควร เพราะคุณเป็นคนขับเอง</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s14">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">ทฤษฎี</span><span class="pill">ปฏิบัติ</span></div></div>
+  <div class="body">
+    <h2>เงื่อนไขการรับใบขับขี่</h2>
+    <p class="core">ต้องมีอายุถึงเกณฑ์ สายตาและสุขภาพดี และสอบทฤษฎีกับสอบขับให้ผ่าน</p>
+    <ul><li>สอบทฤษฎี: 45 ข้อ เวลา 90 นาที ตอบถูก 38 ข้อจึงผ่าน</li><li>ถ้าไม่ผ่านต้องรอ 2 สัปดาห์จึงสอบใหม่ได้</li><li>ผลสอบทฤษฎีที่ผ่านใช้ได้ 3 ปี ต้องสอบขับ (55–60 นาที) ให้ผ่านภายในเวลานั้น</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 14</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> ทฤษฎีก่อน แล้วเราค่อยฝึกด้วยกัน</p>
+    <div class="quiz"><p class="q">คุณสอบทฤษฎีผ่านเมื่อ 3 ปี 2 เดือนก่อนและยังไม่ได้สอบขับ ตอนนี้ต้องทำอย่างไร?</p><button class="opt" data-ok="1">สอบทฤษฎีใหม่</button><button class="opt" data-ok="0">สอบขับได้ตามปกติ</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s14b">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">ช่วงห้าม</span></div></div>
+  <div class="body">
+    <h2>ช่วงห้ามขอใบขับขี่</h2>
+    <p class="core">ถ้าคุณเคยขับโดยไม่มีใบขับขี่ ต้องรอก่อนจึงจะได้รับใบขับขี่</p>
+    <ul><li>เร็วที่สุด 6 เดือนหลังการขับที่ผิดกฎหมาย</li><li>ถ้าอายุยังไม่ถึงเกณฑ์ ช่วงห้ามจะสิ้นสุดหลังอายุครบเกณฑ์ไปแล้ว 6 เดือน</li><li>ช่วงห้ามอาจนานขึ้นถ้าก่อความเสียหายมากหรือขับขณะเมา</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 14</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> กฎปกป้องทุกคนบนถนน รวมถึงคุณ</p>
+    <div class="quiz"><p class="q">คุณขับรถโดยไม่มีใบขับขี่ เร็วที่สุดจะรับใบขับขี่ได้เมื่อไร?</p><button class="opt" data-ok="1">เร็วที่สุด 6 เดือนหลังการขับที่ผิดกฎหมาย</button><button class="opt" data-ok="0">ทันทีที่สอบทฤษฎีผ่าน</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s15">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">3,500 กก.</span><span class="pill">750 กก.</span></div></div>
+  <div class="body">
+    <h2>ใบขับขี่ชั้น B และรถพ่วง</h2>
+    <p class="core">ชั้น B: รถน้ำหนักถึง 3,500 กก. พ่วงได้ถึง 750 กก.</p>
+    <ul><li>รถพ่วงที่หนักกว่านั้นได้ ถ้ารถรวมพ่วงหนักรวมไม่เกิน 3,500 กก.</li><li>ตรวจเล่มทะเบียน: น้ำหนักรวมที่อนุญาตของรถและรถพ่วง และน้ำหนักรถพ่วงที่อนุญาต</li><li>ใบขับขี่ชั้น B ขับโมเพด (ชั้น AM) ได้ด้วย</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 15</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> ดูน้ำหนักก่อนต่อรถพ่วง</p>
+    <div class="quiz"><p class="q">เล่มทะเบียนระบุว่า รถมีน้ำหนักรวมที่อนุญาต 1,800 กก. และอนุญาตให้พ่วงรถพ่วงน้ำหนัก 1,700 กก. รถพ่วงมีน้ำหนักรวมที่อนุญาต 1,700 กก. ใช้ใบขับขี่ชั้น B ได้หรือไม่?</p><button class="opt" data-ok="1">ได้ – 1,800 + 1,700 = 3,500 กก. น้ำหนักรวมที่อนุญาตรวมกัน และเล่มทะเบียนอนุญาตรถพ่วง</button><button class="opt" data-ok="0">ไม่ได้ – รถพ่วงที่หนักเกิน 750 กก. ต้องใช้ใบขับขี่ชั้นที่สูงกว่าเสมอ</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s16">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">ในอดีต</span><span class="pill">ปัจจุบัน</span></div></div>
+  <div class="body">
+    <h2>รถมากขึ้น ถนนต่อคันน้อยลง</h2>
+    <p class="core">จำนวนรถเพิ่มเร็วกว่าความยาวถนนมาก</p>
+    <ul><li>ปี 1920: ถนนประมาณ 5,000 ม. ต่อรถ 1 คัน ปี 2008: ประมาณ 34 ม. (ตัวเลขจากหนังสือ)</li><li>พื้นที่น้อยลง จึงต้องร่วมมือและเข้าใจกันมากขึ้น</li><li>เรื่องนี้เกี่ยวกับทุกคน: รถยนต์ รถโดยสาร รถบรรทุก จักรยาน และคนเดินเท้า</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 16</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> เมื่อถนนแน่น เราช่วยกันและกัน</p>
+    <div class="quiz"><p class="q">ถนนแน่นและคุณรีบ อะไรคือทางเลือกที่ฉลาดที่สุด?</p><button class="opt" data-ok="1">รักษาระยะและอดทน</button><button class="opt" data-ok="0">เบียดแซงไป</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s17">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">การให้ทาง</span><span class="pill">ชนท้าย</span></div></div>
+  <div class="body">
+    <h2>อุบัติเหตุที่พบบ่อย</h2>
+    <p class="core">อุบัติเหตุส่วนใหญ่เกิดจากความผิดพลาดของคน</p>
+    <ul><li>ปี 2024 ในการจราจรของนอร์เวย์ มีผู้เสียชีวิต 87 ราย และบาดเจ็บสาหัส 578 ราย (กรมทางหลวงนอร์เวย์)</li><li>พบบ่อย: ไม่ให้ทาง ชนท้าย ถอยหลัง ตกถนน และการแซง</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 17</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> ถ้ารู้ข้อผิดพลาดที่พบบ่อย ก็หลีกเลี่ยงได้</p>
+    <div class="quiz"><p class="q">คุณขับตามหลังรถคันหน้าชิดมาก และเขาเบรกกะทันหัน คุณเสี่ยงอุบัติเหตุแบบใด?</p><button class="opt" data-ok="1">ชนท้าย</button><button class="opt" data-ok="0">ตกถนน</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s17b">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">ผู้ใช้ถนน</span><span class="pill">ยานพาหนะ</span><span class="pill">ถนน</span></div></div>
+  <div class="body">
+    <h2>ผู้ใช้ถนน – ยานพาหนะ – ถนน</h2>
+    <p class="core">ความปลอดภัยคือการทำงานร่วมกันของคุณ รถ และถนน</p>
+    <ul><li>คุณเป็นหนึ่งในผู้ใช้ถนนจำนวนมาก คิดถึงความรับผิดชอบต่อกัน</li><li>ไม่ใช่แค่ “สิทธิ์ของฉัน” ให้มองให้ชัดและช่วยผู้ที่อ่อนแอกว่า</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 17</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> เราใช้ถนนร่วมกัน ทำให้เราปลอดภัยขึ้น</p>
+    <div class="quiz"><p class="q">คนเดินเท้ายืนอยู่ที่ทางม้าลายและคุณรีบ อะไรแสดงว่าคุณคิดถึงผู้อื่น?</p><button class="opt" data-ok="1">คุณหยุดและให้เธอข้าม</button><button class="opt" data-ok="0">คุณเร่งความเร็ว</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s18">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">การมองเห็น</span></div></div>
+  <div class="body">
+    <h2>การมองเห็นสำคัญที่สุด</h2>
+    <p class="core">การตัดสินใจกว่า 90% ของคุณมาจากสิ่งที่เห็น</p>
+    <ul><li>การขับรถต้องใช้ความสามารถมาก ข้อมูลเข้ามาพร้อมกันเยอะ</li><li>จิตวิทยาการจราจรช่วยให้เข้าใจว่าทำไมเราจึงทำเช่นนั้น</li><li>การมองเห็นเป็นความสามารถ การมองให้เห็นคือศิลปะ</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 18</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> มองอย่างตั้งใจ แล้วคุณจะเห็นมากขึ้น</p>
+    <div class="quiz"><p class="q">คุณกำลังเข้าใกล้ทางแยก ควรทำอย่างไรกับสายตา?</p><button class="opt" data-ok="1">มองไกลไปข้างหน้าและมองรอบตัว</button><button class="opt" data-ok="0">จ้องรถที่อยู่ตรงหน้า</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s19">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">คมชัด 3–5°</span><span class="pill">มองข้าง 180°</span></div></div>
+  <div class="body">
+    <h2>มองคมชัดเฉพาะช่วงแคบ</h2>
+    <p class="core">คุณมองคมชัดเพียง 3–5 องศา แต่การมองด้านข้างกว้าง 180 องศา</p>
+    <ul><li>ยิ่งเร็ว มุมมองด้านข้างยิ่งแคบลง</li><li>ดวงตาไม่ได้ถูกสร้างมาให้มองในที่มืด</li><li>ดวงตาแต่ละข้างมีจุดบอด ทดสอบเองได้</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 19</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> มองรอบตัวตลอดเวลา การมองครั้งเดียวไม่พอ</p>
+    <div class="quiz"><p class="q">มืดและคุณขับเร็ว การมองด้านข้างจะเป็นอย่างไร?</p><button class="opt" data-ok="1">แคบลง – ให้ชะลอความเร็ว</button><button class="opt" data-ok="0">กว้างขึ้น</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s20">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">มอเตอร์ไซค์ที่สวนมา</span></div></div>
+  <div class="body">
+    <h2>ความเร็วและระยะทาง: เราประเมินผิดได้</h2>
+    <p class="core">รถที่สวนมาดูไกลกว่าและช้ากว่าความเป็นจริง</p>
+    <ul><li>ยากที่สุดกับรถเล็กอย่างมอเตอร์ไซค์ ในที่มืด และทัศนวิสัยไม่ดี</li><li>สัญชาตญาณเตือน: สายตาหันไปหาสิ่งที่ปรากฏด้านข้างโดยอัตโนมัติ</li><li>การได้ยินช่วยนำสายตาไปยังจุดที่ถูกต้อง</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 20</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> ถ้าไม่แน่ใจ ให้เวลาและพื้นที่มากขึ้น</p>
+    <div class="quiz"><p class="q">คุณจะเลี้ยวซ้ายและเห็นมอเตอร์ไซค์อยู่ไกลในเลนสวน ควรสันนิษฐานอย่างไร?</p><button class="opt" data-ok="1">ว่ามันอยู่ใกล้กว่าและเร็วกว่าที่เห็น</button><button class="opt" data-ok="0">ว่ามันอยู่ไกลพอที่คุณจะเลี้ยวทัน</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s21">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">ป้าย 50</span><span class="pill">ทางม้าลาย</span></div></div>
+  <div class="body">
+    <h2>ตาบอดความเร็ว</h2>
+    <p class="core">หลังขับเร็วนาน ๆ ความเร็ว 50 กม./ชม. จะรู้สึกช้าผิดปกติ</p>
+    <ul><li>ร่างกายเคยชินกับความเร็วที่สูงกว่า</li><li>อันตรายในเขตชุมชน: ทางม้าลาย เด็ก และรถยนต์</li><li>ดูเข็มวัดความเร็ว อย่าเชื่อแค่ความรู้สึก</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 21</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> รู้สึกช้าหรือเร็ว? ให้เช็กความเร็ว</p>
+    <div class="quiz"><p class="q">คุณขับ 90 กม./ชม. มานานและกำลังเข้าเขตชุมชนที่มีป้าย 50 ทำอย่างไร?</p><button class="opt" data-ok="1">ลดเหลือ 50 และเช็กเข็มวัดความเร็ว</button><button class="opt" data-ok="0">ขับต่อ – รู้สึกว่าช้า</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s22">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">ทางม้าลาย</span><span class="pill">รถ A</span><span class="pill">รถบรรทุก</span></div></div>
+  <div class="body">
+    <h2>ความสนใจแคบและกว้าง</h2>
+    <p class="core">คุณรับทุกอย่างไม่ได้ หลังจ้องจุดเดียวให้เงยมองภาพรวมอีกครั้ง</p>
+    <ul><li>แคบ: ใส่ใจจุดเดียว เช่น ทางม้าลาย</li><li>กว้าง: เห็นภาพรวมการจราจรทั้งหมด</li><li>เตรียมเบรก: วางเท้าพร้อมที่แป้นเบรก</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 22</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> มองสิ่งสำคัญ แต่อย่าลืมส่วนที่เหลือ</p>
+    <div class="quiz"><p class="q">รถบรรทุกจอดนิ่งที่ทางม้าลายข้างหน้าคุณ ควรคาดว่าจะเกิดอะไร?</p><button class="opt" data-ok="1">ว่าอาจมีคนเดินออกมาหน้ารถบรรทุก</button><button class="opt" data-ok="0">ว่าถนนโล่ง</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s23">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">เห็น</span><span class="pill">ลงมือทำ</span></div></div>
+  <div class="body">
+    <h2>เวลาตอบสนอง</h2>
+    <p class="core">ตั้งแต่เห็นอันตรายจนลงมือทำใช้เวลาประมาณ 0.3 ถึง 3–4 วินาที</p>
+    <ul><li>การฝึกและการพักผ่อนช่วยให้ตอบสนองเร็วขึ้น</li><li>สถานการณ์ซับซ้อนใช้เวลานานกว่า</li><li>ความโกรธ ความเศร้า หรือความดีใจมาก ๆ ดึงความสนใจจากการขับรถ</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 23</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> ขับให้มีเวลาพอที่จะตอบสนอง</p>
+    <div class="quiz"><p class="q">คุณเห็นลูกบอลกลิ้งออกมาบนถนน เวลาตอบสนองนับตั้งแต่เมื่อไร?</p><button class="opt" data-ok="1">ตั้งแต่รับรู้อันตรายจนเริ่มลงมือทำ</button><button class="opt" data-ok="0">ตั้งแต่รถหยุดนิ่ง</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s24">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">พักผ่อน</span></div></div>
+  <div class="body">
+    <h2>ความเครียด ความเหนื่อย และการนอน</h2>
+    <p class="core">ความเหนื่อยล้าทำให้การตอบสนองช้าลงคล้ายแอลกอฮอล์</p>
+    <ul><li>อุบัติเหตุจำนวนมากเกิดจากคนขับหลับใน</li><li>ความเครียดและความรีบทำให้เสียสมาธิ</li><li>ถ้าง่วง: จอดและพัก</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 24</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> ถ้าง่วง ให้จอดพัก นั่นคือความฉลาด ไม่ใช่ความอ่อนแอ</p>
+    <div class="quiz"><p class="q">คุณนอนแค่สองชั่วโมงและต้องขับสามชั่วโมง คุณเริ่มหาว ทำอย่างไร?</p><button class="opt" data-ok="1">จอดและพัก</button><button class="opt" data-ok="0">เปิดเพลงให้ดังขึ้น</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s25">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">ขีดจำกัด 0.2 ‰</span></div></div>
+  <div class="body">
+    <h2>แอลกอฮอล์กับการขับรถ</h2>
+    <p class="core">ขีดจำกัดคือ 0.2 ‰ ในเลือด – ดีที่สุดคือศูนย์</p>
+    <ul><li>ลมหายใจ: 0.1 มิลลิกรัมต่อลิตร</li><li>สายตาแย่ลง สมาธิและการตอบสนองแย่ลง</li><li>ร่างกายเผาผลาญประมาณ 0.15 ‰ ต่อชั่วโมง วันรุ่งขึ้นอาจยังได้รับผล</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 25</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> อย่าเสี่ยง ถ้าไม่แน่ใจ อย่าขับ</p>
+    <div class="quiz"><p class="q">คุณดื่มแอลกอฮอล์เมื่อคืนและต้องขับรถแต่เช้า ควรคิดถึงอะไร?</p><button class="opt" data-ok="1">คุณอาจยังได้รับผลอยู่ – ร่างกายเผาผลาญประมาณ 0.15 ‰ ต่อชั่วโมง</button><button class="opt" data-ok="0">ทุกอย่างหมดไปจากร่างกายเมื่อตื่น</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s26">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">สามเหลี่ยมแดง</span></div></div>
+  <div class="body">
+    <h2>ยา สารเสพติด และสิ่งรบกวนสมาธิ</h2>
+    <p class="core">การขับรถต้องใช้สมาธิ 100% ไม่มีอย่างอื่น</p>
+    <ul><li>ยาที่มีสามเหลี่ยมสีแดงเตือน: ถามแพทย์ก่อนขับ</li><li>การผสมแอลกอฮอล์กับสารเสพติดอันตรายมาก</li><li>โทรศัพท์และการเปลี่ยนเพลงดึงความสนใจ</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 26</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> เก็บโทรศัพท์ก่อนสตาร์ทรถ</p>
+    <div class="quiz"><p class="q">คุณได้ยาใหม่ที่มีสามเหลี่ยมสีแดงเตือน และต้องขับไปทำงาน ทำอย่างไร?</p><button class="opt" data-ok="1">ปรึกษาแพทย์ก่อน</button><button class="opt" data-ok="0">ขับไป – ก็แค่ยา</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s27">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">38 องศา</span></div></div>
+  <div class="body">
+    <h2>บุคลิกภาพและการเจ็บป่วย</h2>
+    <p class="core">นิสัยที่สร้างตั้งแต่วันแรกเป็นรากฐานของการขับรถต่อไป</p>
+    <ul><li>ความอยากได้ความเร็วและความตื่นเต้นไม่เหมาะกับการจราจร</li><li>ถ้าป่วย เช่น มีไข้ ควรงดขับรถ</li><li>ถ้าป่วยเกินกว่าจะทำงาน ไม่ควรขับรถ</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 27</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> ฟังเสียงร่างกายของคุณ</p>
+    <div class="quiz"><p class="q">คุณมีไข้และเวียนหัว แต่ต้องไปรับเด็ก ทำอย่างไร?</p><button class="opt" data-ok="1">ขอให้คนอื่นขับแทน</button><button class="opt" data-ok="0">ขับเองช้า ๆ</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s28">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">รถที่จอดอยู่</span><span class="pill">เด็ก</span></div></div>
+  <div class="body">
+    <h2>เด็กมองเห็นและได้ยินต่างจากผู้ใหญ่</h2>
+    <p class="core">เด็กไม่ใช่ผู้ใหญ่ตัวเล็ก ประสาทสัมผัสยังพัฒนาไม่เต็มที่</p>
+    <ul><li>ตัวเล็ก: มองเห็นน้อยมากหลังรถที่จอด</li><li>การมองเห็นด้านข้างและการได้ยินยังพัฒนาไม่เต็มที่</li><li>เด็กบอกทิศทางของเสียงได้ไม่ดี</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 28</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> ลองมองโลกจากความสูงของเด็ก</p>
+    <div class="quiz"><p class="q">เด็กยืนอยู่ข้างรถตู้ที่จอดและคุณกำลังขับผ่าน ทำอย่างไร?</p><button class="opt" data-ok="1">ชะลอและพร้อมหยุด</button><button class="opt" data-ok="0">บีบแตรให้เด็กได้ยิน</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s29">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">เด็ก</span><span class="pill">รถ</span></div></div>
+  <div class="body">
+    <h2>เด็กประเมินความเร็วไม่ได้</h2>
+    <p class="core">การประเมินความเร็วและระยะทางแทบเป็นไปไม่ได้สำหรับเด็ก</p>
+    <ul><li>เตรียมรับมือว่าเด็กอาจวิ่งไปทางตรงข้ามกับที่คิด</li><li>ตามองมาที่คุณ แต่ความสนใจอยู่ที่อื่น</li><li>เด็กเปลี่ยนสายตาจากใกล้ไปไกลได้ยาก</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 29</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> เมื่อมีเด็ก: ชะลอและเตรียมพร้อม</p>
+    <div class="quiz"><p class="q">ลูกบอลกลิ้งออกมาบนถนนและมีเด็กยืนอยู่บนทางเท้า คุณคาดว่าจะเกิดอะไร?</p><button class="opt" data-ok="1">เด็กอาจวิ่งตามลูกบอล</button><button class="opt" data-ok="0">เด็กหยุดและมองก่อน</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s30">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">ลูกบอล</span><span class="pill">สนามเด็กเล่น</span></div></div>
+  <div class="body">
+    <h2>เด็กกับการเล่นและกฎจราจร</h2>
+    <p class="core">ขับช้า และหยุดทันทีถ้าจำเป็นเมื่อมีเด็กบนหรือข้างถนน</p>
+    <ul><li>การเล่น: เด็กลืมอันตรายเมื่อจดจ่อ</li><li>เด็กหลายคนสับสนซ้ายกับขวา</li><li>คำอย่างทางเท้า ทางม้าลาย การให้ทาง เด็กอาจไม่เข้าใจ</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 30</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> เด็กก็คือเด็ก ผู้ใหญ่อย่างเราต้องรับผิดชอบ</p>
+    <div class="quiz"><p class="q">คุณขับผ่านสนามเด็กเล่นที่เด็ก ๆ เล่นใกล้ถนน ทำอย่างไร?</p><button class="opt" data-ok="1">ขับช้าและพร้อมหยุด</button><button class="opt" data-ok="0">ขับตามปกติ – พวกเขาเห็นคุณ</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s31">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">ไม้เท้าขาว</span></div></div>
+  <div class="body">
+    <h2>ผู้สูงอายุและผู้พิการ</h2>
+    <p class="core">ให้เวลาและความมั่นใจแก่ผู้สูงอายุและผู้พิการ</p>
+    <ul><li>ผู้สูงอายุมักกลัวการจราจรและต้องการเวลามากขึ้น</li><li>คนตาบอดใช้ไม้เท้าขาว บางคนใช้สุนัขนำทาง</li><li>ชะลอความเร็วและหยุดให้ทัน</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 31</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> ความอดทนคือส่วนหนึ่งของการขับขี่อย่างปลอดภัย</p>
+    <div class="quiz"><p class="q">หญิงสูงอายุถือไม้เท้ารออยู่ที่ขอบทางเท้า คุณทำอย่างไร?</p><button class="opt" data-ok="1">ชะลอและหยุดให้ทัน</button><button class="opt" data-ok="0">ขับผ่านไปเร็ว ๆ</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s32">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">ที่จอดผู้พิการ</span></div></div>
+  <div class="body">
+    <h2>ความต้องการที่ต่างกันบนถนน</h2>
+    <p class="core">ทุกคนมีเป้าหมายต่างกัน เกรงใจสถานการณ์ของผู้อื่น</p>
+    <ul><li>ผู้พิการต้องใช้ที่จอดเฉพาะ ห้ามจอดแทน</li><li>คนขับอาชีพมักถูกเร่งเวลา</li><li>อย่าเห็นแก่ตัว ให้คิดถึงผู้อื่น</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 32</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> ทุกคนต้องไปถึงที่หมาย เราไปถึงด้วยกัน</p>
+    <div class="quiz"><p class="q">คุณรีบและเห็นที่จอดผู้พิการว่างอยู่ ทำอย่างไร?</p><button class="opt" data-ok="1">หาที่จอดอื่น</button><button class="opt" data-ok="0">จอดแค่ไม่กี่นาที</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s33">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">นักปั่นจักรยาน</span><span class="pill">มอเตอร์ไซค์</span></div></div>
+  <div class="body">
+    <h2>นักปั่น คนเดินเท้า และมอเตอร์ไซค์</h2>
+    <p class="core">พวกเขาไม่มีเครื่องป้องกัน เว้นระยะให้มาก</p>
+    <ul><li>ระวังเป็นพิเศษเมื่อนักปั่นขึ้นหรือลงจากจักรยาน</li><li>เกรงใจมอเตอร์ไซค์ทั้งตอนสวนและตอนแซง</li><li>เวลาไม่พอทำให้หงุดหงิด และกระทบความปลอดภัย</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 33</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> นักปั่นไม่ได้เห็นคุณเสมอ แต่คุณเห็นนักปั่น</p>
+    <div class="quiz"><p class="q">คุณจะแซงนักปั่นบนถนนแคบ ทำอย่างไร?</p><button class="opt" data-ok="1">เว้นระยะมากและรอถ้าจำเป็น</button><button class="opt" data-ok="0">ขับชิดและแซงเร็ว ๆ</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s34">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">ม้า</span></div></div>
+  <div class="body">
+    <h2>ม้าและรถม้า</h2>
+    <p class="core">ม้าเป็นสัตว์ตกใจง่าย ใช้ความสงบ ระยะห่าง และความเร็วต่ำ</p>
+    <ul><li>ปรับความเร็วและเว้นระยะจากสัตว์</li><li>อย่าเร่งเครื่อง และอย่าเบียดแซง</li><li>ตรวจสอบว่าผู้ควบม้าเห็นคุณแล้ว</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 34</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> รถเงียบ ม้าก็สงบ</p>
+    <div class="quiz"><p class="q">ผู้ขี่ม้าสวนมาบนถนนนอกเมือง คุณทำอย่างไร?</p><button class="opt" data-ok="1">ชะลอและผ่านไปอย่างสงบ</button><button class="opt" data-ok="0">เร่งเครื่องเพื่อเตือน</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s34b">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">ไม่มีผู้เสียชีวิต</span></div></div>
+  <div class="body">
+    <h2>สิ่งแวดล้อมและวิสัยทัศน์ 0</h2>
+    <p class="core">เป้าหมายคือไม่มีใครเสียชีวิตหรือบาดเจ็บสาหัส</p>
+    <ul><li>คนเราทำผิดพลาดได้ ระบบจราจรจึงต้องปลอดภัย</li><li>มาตรการสิ่งแวดล้อม: ลดเสียง ลดไอเสีย ยางที่ดีกว่า</li><li>เราไม่ควรยอมรับว่าอุบัติเหตุเป็นเรื่องธรรมดา</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 34</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> เราทุกคนเป็นส่วนหนึ่งของเป้าหมาย</p>
+    <div class="quiz"><p class="q">ทางแยกมีอุบัติเหตุบ่อย วิสัยทัศน์ 0 บอกว่าเราควรทำอย่างไร?</p><button class="opt" data-ok="1">ทำให้ระบบจราจรปลอดภัยขึ้น</button><button class="opt" data-ok="0">โทษคนขับ</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s35">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">รถยนต์</span><span class="pill">จักรยาน</span></div></div>
+  <div class="body">
+    <h2>ยานพาหนะและรถยนต์</h2>
+    <p class="core">รถยนต์ทุกคันเป็นยานพาหนะ แต่ยานพาหนะไม่ใช่รถยนต์ทุกคัน</p>
+    <ul><li>จักรยานหรือรถพ่วงเป็นยานพาหนะ ไม่ใช่รถยนต์</li><li>คุณเป็นผู้ใช้ถนนแม้เป็นผู้โดยสาร</li><li>ชิ้นส่วนที่สึกหรอเพิ่มความเสี่ยงและไอเสีย</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 35</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> คุณรับผิดชอบให้รถอยู่ในสภาพดี</p>
+    <div class="quiz"><p class="q">คุณนั่งเบาะหลังในรถ คุณเป็นผู้ใช้ถนนหรือไม่?</p><button class="opt" data-ok="1">ใช่ – แม้เป็นผู้โดยสาร</button><button class="opt" data-ok="0">ไม่ใช่ – เฉพาะคนขับ</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article></section>
+<section class="view" id="v-en" hidden>
+<article class="card" data-id="bb-s11">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Learner</span><span class="pill">Supervisor</span></div></div>
+  <div class="body">
+    <h2>Theory and practice go together</h2>
+    <p class="core">Take the theory course early so it connects with your driving.</p>
+    <ul><li>You can practise from age 16, after the basic traffic course.</li><li>Private practice: your supervisor must be 25 and have held a licence in the same class for 5 years.</li><li>The basic traffic course is 17 hours and can be taken from age 15.</li></ul>
+    <p class="src">📖 Class B textbook · page 11</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Take it easy. Theory first makes lessons easier.</p>
+    <div class="quiz"><p class="q">You are 17 and want to practise privately with a relative (28 years old, licence for 2 years). Is that allowed?</p><button class="opt" data-ok="1">No – the supervisor must have held a licence for 5 years</button><button class="opt" data-ok="0">Yes – he is over 25</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s12">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Day</span><span class="pill">Night</span></div></div>
+  <div class="body">
+    <h2>Four steps to the driving test</h2>
+    <p class="core">Training has four steps, one at a time.</p>
+    <ul><li>1 basic traffic course · 2 basic training · 3 traffic part · 4 final training.</li><li>Safety courses on a closed track (4 h) and on the road (13 h) belong to steps 3 and 4.</li><li>To practise between 1 November and 15 March you must have done night driving.</li></ul>
+    <p class="src">📖 Class B textbook · page 12</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Go step by step. You don&#x27;t need to know everything today.</p>
+    <div class="quiz"><p class="q">You took the basic traffic course in July and want to practise in December. What must you have done first?</p><button class="opt" data-ok="1">The night-driving course</button><button class="opt" data-ok="0">Nothing more</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s13">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">L-sign</span><span class="pill">Extra mirror</span></div></div>
+  <div class="body">
+    <h2>Safety course and L-sign</h2>
+    <p class="core">You take the safety courses near the end of training.</p>
+    <ul><li>Track course: 4 hours. Road course: 13 hours.</li><li>The car needs a red L on white at the back and an extra mirror for the supervisor.</li><li>Take off the L-sign when practice is over.</li></ul>
+    <p class="src">📖 Class B textbook · page 13</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> The L-sign says: a learner is practising. Give a little extra room.</p>
+    <div class="quiz"><p class="q">You have finished practising and park at home. What do you do with the L-sign?</p><button class="opt" data-ok="1">Take it off</button><button class="opt" data-ok="0">Leave it on all week</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s13b">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Consideration</span></div></div>
+  <div class="body">
+    <h2>Practise safely – you have duties too</h2>
+    <p class="core">Practice driving must not endanger or bother others.</p>
+    <ul><li>Practice driving must not endanger or unduly bother others.</li><li>Do not practise if you or your supervisor are intoxicated, tired, ill or impaired.</li><li>Carry the course certificate and photo ID.</li></ul>
+    <p class="src">📖 Class B textbook · page 13</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> What you learn now stays with you for life. Start calmly.</p>
+    <div class="quiz"><p class="q">Your supervisor is tired after a long shift. Should you practise?</p><button class="opt" data-ok="1">No – the supervisor must not be tired</button><button class="opt" data-ok="0">Yes, you are the one driving</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s14">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Theory</span><span class="pill">Practical</span></div></div>
+  <div class="body">
+    <h2>Requirements for a licence</h2>
+    <p class="core">You need the right age, good eyesight and health, and must pass both tests.</p>
+    <ul><li>Theory test: 45 questions in 90 minutes. 38 correct answers pass.</li><li>If you fail, wait 2 weeks before a new test.</li><li>A passed theory test counts for 3 years: pass the driving test (55–60 min) within that time.</li></ul>
+    <p class="src">📖 Class B textbook · page 14</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Theory first. Then we practise together.</p>
+    <div class="quiz"><p class="q">You passed theory 3 years and 2 months ago and have not taken the driving test. What now?</p><button class="opt" data-ok="1">Retake the theory test</button><button class="opt" data-ok="0">Take the driving test as normal</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s14b">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Barring period</span></div></div>
+  <div class="body">
+    <h2>Barring period – a pause from licensing</h2>
+    <p class="core">If you drove without a licence, you must wait before you can get one.</p>
+    <ul><li>At the earliest 6 months after the illegal driving.</li><li>If you are under the minimum age, the period runs until 6 months after you reach it.</li><li>The period can be longer after major damage or drink or drug driving.</li></ul>
+    <p class="src">📖 Class B textbook · page 14</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> The rules protect everyone on the road, including you.</p>
+    <div class="quiz"><p class="q">You drove a car without a licence. When can you earliest get a licence?</p><button class="opt" data-ok="1">At the earliest 6 months after the illegal driving</button><button class="opt" data-ok="0">As soon as you pass theory</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s15">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">3,500 kg</span><span class="pill">750 kg</span></div></div>
+  <div class="body">
+    <h2>Licence class B and trailers</h2>
+    <p class="core">Class B: car up to 3,500 kg, trailer up to 750 kg.</p>
+    <ul><li>A heavier trailer is allowed if car and trailer total at most 3,500 kg.</li><li>Check the registration certificate: permitted gross weights of car and trailer, and the permitted trailer weight.</li><li>Class B also covers a moped (class AM).</li></ul>
+    <p class="src">📖 Class B textbook · page 15</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Check the weight before you hitch a trailer.</p>
+    <div class="quiz"><p class="q">The registration certificate says: the car has a permitted gross weight of 1,800 kg and allows a 1,700 kg trailer. The trailer has a permitted gross weight of 1,700 kg. Is this allowed with class B?</p><button class="opt" data-ok="1">Yes – 1,800 + 1,700 = 3,500 kg permitted gross weight combined, and the certificate allows the trailer</button><button class="opt" data-ok="0">No – a trailer over 750 kg always needs an extended licence</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s16">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Then</span><span class="pill">Today</span></div></div>
+  <div class="body">
+    <h2>More cars – less road per car</h2>
+    <p class="core">The number of cars grows much faster than road length.</p>
+    <ul><li>1920: about 5,000 m of road per car. 2008: about 34 m (book figures).</li><li>Less space means more need for cooperation and understanding.</li><li>It concerns everyone: cars, buses, lorries, bikes and pedestrians.</li></ul>
+    <p class="src">📖 Class B textbook · page 16</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> When the road is full, we help each other.</p>
+    <div class="quiz"><p class="q">The road is full and you are short of time. What is smartest?</p><button class="opt" data-ok="1">Keep your distance and be patient</button><button class="opt" data-ok="0">Push past</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s17">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Yielding</span><span class="pill">Rear-end hit</span></div></div>
+  <div class="body">
+    <h2>Common accidents</h2>
+    <p class="core">Most accidents are caused by human error.</p>
+    <ul><li>In 2024, 87 people died and 578 were seriously injured in Norwegian traffic (Norwegian Public Roads Administration).</li><li>Most common: failing to yield, rear-end hits, reversing, running off the road, overtaking.</li></ul>
+    <p class="src">📖 Class B textbook · page 17</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> If you know the common mistakes, you can avoid them.</p>
+    <div class="quiz"><p class="q">You follow a car closely at speed and it brakes hard. Which accident do you risk?</p><button class="opt" data-ok="1">A rear-end collision</button><button class="opt" data-ok="0">Running off the road</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s17b">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Road user</span><span class="pill">Vehicle</span><span class="pill">Road</span></div></div>
+  <div class="body">
+    <h2>Road user – vehicle – road</h2>
+    <p class="core">Safe traffic is the interplay of you, the car and the road.</p>
+    <ul><li>You are one of many road users. Think of responsibility for each other.</li><li>Not just “my right” – keep a clear head and help those who are weaker.</li></ul>
+    <p class="src">📖 Class B textbook · page 17</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> We share the road. That makes us safer.</p>
+    <div class="quiz"><p class="q">A pedestrian waits at the crossing and you are in a hurry. What shows you think of others?</p><button class="opt" data-ok="1">You stop and let her cross</button><button class="opt" data-ok="0">You speed up</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s18">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Vision</span></div></div>
+  <div class="body">
+    <h2>Vision matters most</h2>
+    <p class="core">Over 90% of your decisions are based on what you see.</p>
+    <ul><li>Driving is demanding – lots of information at once.</li><li>Traffic psychology helps us understand why we act as we do.</li><li>Sight is an ability – seeing is an art.</li></ul>
+    <p class="src">📖 Class B textbook · page 18</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Look on purpose. Then you see more.</p>
+    <div class="quiz"><p class="q">You approach a junction. What should you do with your gaze?</p><button class="opt" data-ok="1">Look far ahead and look around</button><button class="opt" data-ok="0">Stare at the car right in front</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s19">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Sharp 3–5°</span><span class="pill">Side vision 180°</span></div></div>
+  <div class="body">
+    <h2>Sharp vision in a narrow sector</h2>
+    <p class="core">You see sharply in only 3–5 degrees, but side vision spans 180 degrees.</p>
+    <ul><li>Side vision narrows as speed increases.</li><li>Eyes are not built for the dark.</li><li>Each eye has a blind spot – you can test it yourself.</li></ul>
+    <p class="src">📖 Class B textbook · page 19</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Keep looking around. One glance is not enough.</p>
+    <div class="quiz"><p class="q">It is dark and you are driving fast. What happens to your side vision?</p><button class="opt" data-ok="1">It gets narrower – slow down</button><button class="opt" data-ok="0">It gets wider</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s20">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Oncoming motorbike</span></div></div>
+  <div class="body">
+    <h2>Speed and distance: we misjudge</h2>
+    <p class="core">Oncoming cars look farther away and slower than they are.</p>
+    <ul><li>Hardest with small vehicles like motorbikes, in the dark and in poor visibility.</li><li>Warning reflex: your gaze turns automatically to something in your side vision.</li><li>Hearing helps direct your gaze.</li></ul>
+    <p class="src">📖 Class B textbook · page 20</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> If unsure, allow more time and space.</p>
+    <div class="quiz"><p class="q">You will turn left and see a motorbike far away in the oncoming lane. What should you assume?</p><button class="opt" data-ok="1">That it is closer and faster than it looks</button><button class="opt" data-ok="0">That it is far enough away for you to make it</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s21">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">50 sign</span><span class="pill">Crossing</span></div></div>
+  <div class="body">
+    <h2>Speed blindness</h2>
+    <p class="core">After long fast driving, 50 km/h feels unnaturally slow.</p>
+    <ul><li>Your body has got used to higher speed.</li><li>Dangerous in built-up areas: crossings, children and cars.</li><li>Check the speedometer, not just the feeling.</li></ul>
+    <p class="src">📖 Class B textbook · page 21</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Does it feel slow or fast? Check your speed.</p>
+    <div class="quiz"><p class="q">You have driven at 90 km/h for a long time and approach a village with a 50 sign. What do you do?</p><button class="opt" data-ok="1">Slow to 50 and check the speedometer</button><button class="opt" data-ok="0">Carry on – it feels slow</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s22">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Crossing</span><span class="pill">Car A</span><span class="pill">Lorry</span></div></div>
+  <div class="body">
+    <h2>Narrow and wide attention</h2>
+    <p class="core">You cannot take in everything – lift your gaze again after focusing.</p>
+    <ul><li>Narrow: all attention on one spot, e.g. the crossing.</li><li>Wide: you see the whole traffic picture.</li><li>Brake readiness: keep your foot ready at the brake pedal.</li></ul>
+    <p class="src">📖 Class B textbook · page 22</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Watch what matters, but don&#x27;t forget the rest.</p>
+    <div class="quiz"><p class="q">A lorry stands still at a crossing ahead of you. What should you expect?</p><button class="opt" data-ok="1">That someone may step out in front of the lorry</button><button class="opt" data-ok="0">That the road is clear</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s23">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">See</span><span class="pill">Act</span></div></div>
+  <div class="body">
+    <h2>Reaction time</h2>
+    <p class="core">From seeing danger to acting takes about 0.3 to 3–4 seconds.</p>
+    <ul><li>Practice and rest give a faster reaction.</li><li>Complicated situations take longer.</li><li>Anger, sadness or great joy take attention from driving.</li></ul>
+    <p class="src">📖 Class B textbook · page 23</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Drive so you have time to react.</p>
+    <div class="quiz"><p class="q">You see a ball roll into the road. When does reaction time count from?</p><button class="opt" data-ok="1">From noticing the danger until you start to act</button><button class="opt" data-ok="0">From when the car has stopped</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s24">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Rest</span></div></div>
+  <div class="body">
+    <h2>Stress, tiredness and sleep</h2>
+    <p class="core">Tiredness slows your reactions much like alcohol.</p>
+    <ul><li>Many accidents are caused by the driver falling asleep.</li><li>Stress and hurry take focus from driving.</li><li>If you are tired: stop and rest.</li></ul>
+    <p class="src">📖 Class B textbook · page 24</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> If you&#x27;re tired, stop and rest. That is smart, not weak.</p>
+    <div class="quiz"><p class="q">You slept two hours and must drive three. You start yawning. What do you do?</p><button class="opt" data-ok="1">Stop and rest</button><button class="opt" data-ok="0">Turn the music up</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s25">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">0.2 ‰ limit</span></div></div>
+  <div class="body">
+    <h2>Alcohol and driving</h2>
+    <p class="core">The limit is 0.2 per mille in the blood – zero is best.</p>
+    <ul><li>Breath: 0.1 milligrams per litre.</li><li>Vision weakens; attention and reaction get worse.</li><li>The body burns about 0.15 per mille an hour – the next day you may still be affected.</li></ul>
+    <p class="src">📖 Class B textbook · page 25</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Don&#x27;t gamble. If in doubt, don&#x27;t drive.</p>
+    <div class="quiz"><p class="q">You drank alcohol last night and drive early today. What should you think about?</p><button class="opt" data-ok="1">You may still be affected – the body burns about 0.15 per mille an hour</button><button class="opt" data-ok="0">Everything is gone when you wake up</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s26">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Red triangle</span></div></div>
+  <div class="body">
+    <h2>Medicines, drugs and distraction</h2>
+    <p class="core">Driving needs 100% attention – nothing else.</p>
+    <ul><li>Medicine with a red warning triangle: ask your doctor before driving.</li><li>Mixing alcohol with narcotic drugs is very dangerous.</li><li>A phone and changing music take your attention.</li></ul>
+    <p class="src">📖 Class B textbook · page 26</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Put the phone away before you start the car.</p>
+    <div class="quiz"><p class="q">You have a new medicine with a red warning triangle and must drive to work. What do you do?</p><button class="opt" data-ok="1">Talk to the doctor first</button><button class="opt" data-ok="0">Drive – it is only medicine</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s27">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">38 °</span></div></div>
+  <div class="body">
+    <h2>Personality and illness</h2>
+    <p class="core">Habits from day one form the base of your later driving.</p>
+    <ul><li>A need for speed and thrills does not belong in traffic.</li><li>If you are ill, for example with a fever, leave the car.</li><li>If you are too ill to work, you should not drive.</li></ul>
+    <p class="src">📖 Class B textbook · page 27</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Listen to your body.</p>
+    <div class="quiz"><p class="q">You have a fever and feel dizzy, but must pick up children. What do you do?</p><button class="opt" data-ok="1">Ask someone else to drive</button><button class="opt" data-ok="0">Drive slowly yourself</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s28">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Parked car</span><span class="pill">Child</span></div></div>
+  <div class="body">
+    <h2>Children see and hear differently</h2>
+    <p class="core">Children are not small adults – their senses are not fully developed.</p>
+    <ul><li>Small stature: they see little behind parked cars.</li><li>Their field of vision and hearing are not fully developed.</li><li>They find it hard to tell where a sound comes from.</li></ul>
+    <p class="src">📖 Class B textbook · page 28</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> See the world from a child&#x27;s height.</p>
+    <div class="quiz"><p class="q">Children stand beside a parked van and you drive past. What do you do?</p><button class="opt" data-ok="1">Slow down and be ready to stop</button><button class="opt" data-ok="0">Honk so the children hear you</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s29">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Child</span><span class="pill">Car</span></div></div>
+  <div class="body">
+    <h2>Children cannot judge speed</h2>
+    <p class="core">Judging speed and distance is almost impossible for children.</p>
+    <ul><li>Expect that the child may run in the opposite direction.</li><li>Their eyes are on you, but their attention is elsewhere.</li><li>Children find it hard to shift their gaze from near to far.</li></ul>
+    <p class="src">📖 Class B textbook · page 29</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Near children: slow down and be ready.</p>
+    <div class="quiz"><p class="q">A ball rolls into the road and a child stands on the pavement. What do you expect?</p><button class="opt" data-ok="1">The child may run after the ball</button><button class="opt" data-ok="0">The child stops and looks</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s30">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Ball</span><span class="pill">Playground</span></div></div>
+  <div class="body">
+    <h2>Children at play and the traffic rules</h2>
+    <p class="core">Keep speed low and stop if needed when children are on or near the road.</p>
+    <ul><li>Play: children forget danger when absorbed.</li><li>Many children mix up left and right.</li><li>Words like pavement, crossing and yield are not always understood.</li></ul>
+    <p class="src">📖 Class B textbook · page 30</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Children are children. We adults take responsibility.</p>
+    <div class="quiz"><p class="q">You drive past a playground where children play near the road. What do you do?</p><button class="opt" data-ok="1">Keep speed low and be ready to stop</button><button class="opt" data-ok="0">Drive as usual – they see you</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s31">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">White cane</span></div></div>
+  <div class="body">
+    <h2>Older people and people with disabilities</h2>
+    <p class="core">Give older people and people with disabilities time and safety.</p>
+    <ul><li>Older people are often afraid of traffic and need more time.</li><li>Blind people use a white cane; some use a guide dog.</li><li>Slow down and stop in time.</li></ul>
+    <p class="src">📖 Class B textbook · page 31</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Patience is part of safe driving.</p>
+    <div class="quiz"><p class="q">An elderly woman with a stick waits at the kerb. What do you do?</p><button class="opt" data-ok="1">Slow down and stop in time</button><button class="opt" data-ok="0">Drive past quickly</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s32">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Accessible parking</span></div></div>
+  <div class="body">
+    <h2>Different needs on the road</h2>
+    <p class="core">Everyone has different goals – consider others&#x27; situations.</p>
+    <ul><li>Disabled drivers need accessible parking – don&#x27;t take the spaces.</li><li>Professional drivers are often under time pressure.</li><li>Don&#x27;t be selfish – show consideration.</li></ul>
+    <p class="src">📖 Class B textbook · page 32</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Everyone is going somewhere. We get there together.</p>
+    <div class="quiz"><p class="q">You are in a hurry and see a free accessible parking bay. What do you do?</p><button class="opt" data-ok="1">Find another space</button><button class="opt" data-ok="0">Take it – only a few minutes</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s33">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Cyclist</span><span class="pill">Motorbike</span></div></div>
+  <div class="body">
+    <h2>Cyclists, pedestrians and motorbikes</h2>
+    <p class="core">They have no protection – keep a good distance.</p>
+    <ul><li>Be extra alert when cyclists get on or off the bike.</li><li>Be considerate of mopeds and motorbikes when meeting and overtaking.</li><li>Lack of time makes you irritated, which hurts safety.</li></ul>
+    <p class="src">📖 Class B textbook · page 33</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> The cyclist doesn&#x27;t always see you. You see the cyclist.</p>
+    <div class="quiz"><p class="q">You are about to pass a cyclist on a narrow road. What do you do?</p><button class="opt" data-ok="1">Keep a good distance and wait if necessary</button><button class="opt" data-ok="0">Pass closely and quickly</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s34">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Horse</span></div></div>
+  <div class="body">
+    <h2>Horses and carriages</h2>
+    <p class="core">A horse is a flight animal – show calm, distance and low speed.</p>
+    <ul><li>Adjust your speed and keep a good distance from the animals.</li><li>Don&#x27;t rev the engine and don&#x27;t push past.</li><li>Check that the rider has seen you.</li></ul>
+    <p class="src">📖 Class B textbook · page 34</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> A calm car means a calm horse.</p>
+    <div class="quiz"><p class="q">A rider comes towards you on the country road. What do you do?</p><button class="opt" data-ok="1">Slow down and pass calmly</button><button class="opt" data-ok="0">Rev the engine to warn</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s34b">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">0 deaths</span></div></div>
+  <div class="body">
+    <h2>Environment and Vision Zero</h2>
+    <p class="core">The goal is that no one is killed or seriously injured.</p>
+    <ul><li>People make mistakes – so the traffic system must be safe.</li><li>Environmental measures: less noise, less exhaust, better tyres.</li><li>We should not simply accept traffic accidents.</li></ul>
+    <p class="src">📖 Class B textbook · page 34</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Each of us is part of the goal.</p>
+    <div class="quiz"><p class="q">A junction has many accidents. What does Vision Zero say we should do?</p><button class="opt" data-ok="1">Make the traffic system safer</button><button class="opt" data-ok="0">Blame the drivers</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s35">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Motor vehicle</span><span class="pill">Bicycle</span></div></div>
+  <div class="body">
+    <h2>Vehicle and motor vehicle</h2>
+    <p class="core">All motor vehicles are vehicles, but not all vehicles are motor vehicles.</p>
+    <ul><li>A bicycle or trailer is a vehicle, not a motor vehicle.</li><li>You are a road user even as a passenger.</li><li>Worn parts add risk and emissions.</li></ul>
+    <p class="src">📖 Class B textbook · page 35</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> You are responsible for keeping your car in order.</p>
+    <div class="quiz"><p class="q">You sit on the back seat of a car. Are you a road user?</p><button class="opt" data-ok="1">Yes – also as a passenger</button><button class="opt" data-ok="0">No – only the driver</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article></section></main>
+<script>
+const TT={"no": "Michaels bildebok", "th": "หนังสือภาพของไมเคิล", "en": "Michael's picture book"};
+const show=l=>{document.getElementById('ttl').textContent=TT[l];document.title=TT[l];document.querySelectorAll('.view').forEach(v=>v.hidden=v.id!=='v-'+l);
+document.querySelectorAll('header button').forEach(b=>b.classList.toggle('on',b.dataset.l===l));document.documentElement.lang=l==='th'?'th':l;};
+document.querySelectorAll('header button').forEach(b=>b.onclick=()=>show(b.dataset.l));
+document.addEventListener('click',e=>{const o=e.target.closest('.opt');if(!o)return;
+const q=o.closest('.quiz'),fb=q.querySelector('.fb'),ok=o.dataset.ok==='1';
+o.classList.add(ok?'good':'bad');fb.textContent=ok?fb.dataset.ok:fb.dataset.no;fb.style.color=ok?'var(--ok)':'var(--bad)';});
+show('no');
+</script></body></html>
