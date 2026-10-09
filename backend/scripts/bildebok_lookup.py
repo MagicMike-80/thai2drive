@@ -35,9 +35,18 @@ def load_pack(path: Path = PACK) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def load_all_packs() -> dict:
+    """Alle innholdspakker (pilot, batch2, ...) slått sammen i bokrekkefølge."""
+    rows = []
+    for f in sorted(PACK.parent.glob("*_s*_s*.json")):
+        rows += load_pack(f)["pages"]
+    rows.sort(key=lambda r: (r["printed_page"], r["id"]))
+    return {"pages": rows}
+
+
 def find_pages(question: str, lang: str, pack: dict | None = None, k: int = 3) -> list[dict]:
     """Topp-k rader (best først). Tittel og bildeetiketter veier dobbelt. Tom liste hvis ingen treff."""
-    pack = pack or load_pack()
+    pack = pack or load_all_packs()
     rows = pack["pages"]
     head = [_grams(r["title"][lang] + " " + " ".join(l[lang] for l in r.get("image_labels", []))) for r in rows]
     body = [_grams(_row_text(r, lang)) for r in rows]

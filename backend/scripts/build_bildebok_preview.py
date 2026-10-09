@@ -148,7 +148,9 @@ def build_approval(pack: dict) -> str:
 
 
 def build_map(pack: dict) -> str:
-    out = ["# Sidekart – Bilde-bok pilot (trykt s. 11–35)", "",
+    sc = pack["scope"]["printed_pages"]
+    label = "pilot" if sc[0] == 11 else "batch 2"
+    out = [f"# Sidekart – Bilde-bok {label} (trykt s. {sc[0]}–{sc[1]})", "",
            "| Innholds-ID | Kapittel | Avsnitt | Bildefil | Kilde | Neste steg | Åpne spørsmål |",
            "|---|---|---|---|---|---|---|"]
     for r in pack["pages"]:
@@ -158,7 +160,7 @@ def build_map(pack: dict) -> str:
 
 
 def build_briefs(pack: dict) -> str:
-    out = ["# Bildebriefer samlet til ChatGPT (29 bilder)", "",
+    out = [f"# Bildebriefer samlet til ChatGPT ({len(pack['pages'])} bilder)", "",
            "Lim inn ett bilde av gangen. Be om fotorealistisk bilde i 3:2 liggende format uten tekst (unntatt skiltsifre i bb-s21).",
            "Lagre hvert bilde som oppgitt filnavn og legg det i `backend/public_assets/bildebok/`.",
            "Kontroller hvert bilde: høyrekjøring, norske forhold, ingen tekst, riktige aktører, og at alle sentrale elementer",
@@ -169,7 +171,7 @@ def build_briefs(pack: dict) -> str:
 
 
 def build_content(pack: dict) -> str:
-    out = ["# Innhold for alle 29 rader (til faglig godkjenning)", "",
+    out = [f"# Innhold for alle {len(pack['pages'])} rader (til faglig godkjenning)", "",
            "Åpne spørsmål som gjelder alle rader:", ""]
     out += [f"- {q}" for q in pack["global_open_questions"]]
     for r in pack["pages"]:
@@ -194,18 +196,54 @@ def build_content(pack: dict) -> str:
     return NL.join(out) + NL
 
 
+PACKS = [("", ROOT / "backend" / "content_packs" / "bildebok" / "pilot_s11_s35.json"),
+         ("_BATCH2", ROOT / "backend" / "content_packs" / "bildebok" / "batch2_s36_s60.json")]
+INDEX = ROOT / "backend" / "content_packs" / "bildebok" / "book_index.json"
+
+
+def build_index(packs: list[dict]) -> dict:
+    """Samlet Michael-indeks over alle pakker i bokrekkefølge. next = global neste rad."""
+    rows = [r for pk in packs for r in pk["pages"]]
+    rows.sort(key=lambda r: (r["printed_page"], r["id"]))
+    pages = {}
+    for i, r in enumerate(rows):
+        pages[r["id"]] = {
+            "printed_page": r["printed_page"], "pdf_page": r["pdf_page"], "chapter": r["chapter"], "section": r["section"],
+            "title": r["title"], "image_file": r["image_file"], "quiz_category": r.get("quiz_category"),
+            "next": rows[i + 1]["id"] if i + 1 < len(rows) else None,
+        }
+    return {"version": 1, "note": "quiz_category følger normalize_categories.py og er ikke verifisert mot live DB", "pages": pages}
+
+
+def paths(tag: str) -> dict:
+    d = ROOT / "docs" / "bildebok"
+    return {
+        "html": ROOT / "output" / "bildebok" / f"elevvisning{tag.lower()}.html",
+        "md": d / f"RAPPORT{tag or '_25_SIDER'}.md",
+        "map": d / f"SIDEKART{tag}.md",
+        "content": d / f"INNHOLD{tag or '_ALLE_RADER'}.md",
+        "briefs": d / f"BILDEBRIEFER{tag or ''}_TIL_CHATGPT.md",
+        "approval": d / f"GODKJENNING{tag}.md",
+    }
+
+
 def main() -> None:
-    pack = json.loads(PACK.read_text(encoding="utf-8"))
-    OUT_HTML.parent.mkdir(parents=True, exist_ok=True)
-    OUT_HTML.write_text(build_html(pack), encoding="utf-8")
-    OUT_MD.parent.mkdir(parents=True, exist_ok=True)
-    OUT_MD.write_text(build_md(pack), encoding="utf-8")
-    OUT_MAP.write_text(build_map(pack), encoding="utf-8")
-    OUT_CONTENT.write_text(build_content(pack), encoding="utf-8")
-    OUT_BRIEFS.write_text(build_briefs(pack), encoding="utf-8")
-    if not OUT_APPROVAL.exists():
-        OUT_APPROVAL.write_text(build_approval(pack), encoding="utf-8")
-    print(f"wrote {OUT_HTML}, {OUT_MD}, {OUT_MAP}, {OUT_CONTENT}")
+    loaded = []
+    for tag, path in PACKS:
+        pack = json.loads(path.read_text(encoding="utf-8"))
+        loaded.append(pack)
+        o = paths(tag)
+        o["html"].parent.mkdir(parents=True, exist_ok=True)
+        o["html"].write_text(build_html(pack), encoding="utf-8")
+        o["md"].write_text(build_md(pack), encoding="utf-8")
+        o["map"].write_text(build_map(pack), encoding="utf-8")
+        o["content"].write_text(build_content(pack), encoding="utf-8")
+        o["briefs"].write_text(build_briefs(pack), encoding="utf-8")
+        if not o["approval"].exists():
+            o["approval"].write_text(build_approval(pack), encoding="utf-8")
+        print("wrote", tag or "pilot", [str(v.name) for v in o.values()])
+    INDEX.write_text(json.dumps(build_index(loaded), ensure_ascii=False, indent=1), encoding="utf-8")
+    print("wrote", INDEX.name)
 
 
 if __name__ == "__main__":

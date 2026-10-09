@@ -9,7 +9,8 @@ from pathlib import Path
 LANGS = ("no", "th", "en")
 THAI = re.compile(r"[฀-๿]")
 NO_LETTERS = re.compile(r"[æøåÆØÅ]")
-ASSET_RE = re.compile(r"^bb_s\d{2}[a-z]?_[a-z0-9-]+$")
+ASSET_RE = re.compile(r"^bb_s\d{2,3}[a-z]?_[a-z0-9-]+$")
+QUIZ_CATEGORIES = {"Traffic Signs", "Road Rules", "Right of Way", "Speed Limits", "Safety", "Driving Conditions", "Situations", "Traffic Rules", "Road Conditions"}  # fra normalize_categories.py; ikke verifisert mot live DB
 
 
 def _i18n(path: str, value, errs: list[str]) -> None:
@@ -28,7 +29,7 @@ def _i18n(path: str, value, errs: list[str]) -> None:
             errs.append(f"{path}.en: norske bokstaver i engelsk felt")
 
 
-def validate_pack(pack: dict) -> list[str]:
+def validate_pack(pack: dict, known_ids: set[str] | None = None) -> list[str]:
     errs: list[str] = []
     ids: set[str] = set()
     assets: set[str] = set()
@@ -72,10 +73,12 @@ def validate_pack(pack: dict) -> list[str]:
         if not p.get("source_ref"):
             errs.append(f"{pid}.source_ref: mangler")
         nxt = p.get("next_step")
-        if nxt is not None and nxt not in {x.get("id") for x in pack.get("pages", [])}:
+        if nxt is not None and nxt not in ((known_ids or set()) | {x.get("id") for x in pack.get("pages", [])}):
             errs.append(f"{pid}.next_step: ukjent id {nxt}")
         for i, lab in enumerate(p.get("image_labels") or []):
             _i18n(f"{pid}.image_labels[{i}]", lab, errs)
+        if p.get("quiz_category") is not None and p["quiz_category"] not in QUIZ_CATEGORIES:
+            errs.append(f"{pid}.quiz_category: ukjent kategori {p['quiz_category']}")
         if not p.get("image_brief"):
             errs.append(f"{pid}.image_brief: mangler")
     return errs

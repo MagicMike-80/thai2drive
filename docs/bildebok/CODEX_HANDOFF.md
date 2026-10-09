@@ -129,3 +129,22 @@ Tester: test_bildebok_pilot (19), test_bildebok_michael (<n>), test_bildebok_web
 Godkjenning: <hvem, dato>; GODKJENNING.md
 Kjente mangler: <liste>
 ```
+
+## 6. Batch 2 (trykt s. 36–60) — tilleggspakke, ikke blokkerende for piloten
+Levert av Deep som egen pakke, uten å røre pilotens `pilot_s11_s35.json` (pilotens innhold og hasher er uendret).
+Pilotens oppgaver T1–T8 går først. Batch 2 bygges inn **etter** at piloten er godkjent og live, med samme tekniske løype, og krever eget faglig kontrollpunkt.
+
+| Fil | Innhold |
+|---|---|
+| `backend/content_packs/bildebok/batch2_s36_s60.json` | 39 rader / 25 originalsider (PDF-s. 31–55), NO/TH/EN, situasjonsbaserte spørsmål, bildebriefer, Michael-grunnlag, `quiz_category`, `open_questions` |
+| `backend/content_packs/bildebok/book_index.json` | Samlet Michael-indeks for pilot + batch 2 i bokrekkefølge: id, side, kapittel, tittel, bildefil, `quiz_category`, `next` (global neste rad, `bb-s35` → `bb-s36`). `quiz_category` følger `normalize_categories.py` og er **ikke verifisert mot live DB** |
+| `docs/bildebok/{SIDEKART,INNHOLD,RAPPORT,GODKJENNING}_BATCH2.md`, `BILDEBRIEFER_BATCH2_TIL_CHATGPT.md` | Samme dokumenttyper som for piloten |
+| `docs/bildebok/REGELKONTROLL_BATCH2.md` | Regelkontroll mot Statens vegvesen/Lovdata. **Skiltforskriften, kjøretøyforskriften og N302 er ikke lest direkte** |
+| `backend/tests/test_bildebok_batch2.py` | 12 offline-tester (gyldighet, språkinnhold, ingen id-/asset-kollisjon, indeks, oppslag på tre språk) |
+| `output/bildebok/elevvisning_batch2.html` | Layoutreferanse (samme begrensning som pilotens: viser fasit i klientdata, ikke sikker elevsvarflyt) |
+
+Regler for batch 2:
+- **Ingen rad er publiseringsgodkjent.** Rader med `open_questions` må avklares mot primærkilde før live (se 0b.1). Særlig: lyssignal, pilsignal, politiets tegn, fareskilt-avstander, piggdekkperiode, kollektivfelt, vognkort.
+- **Skilt og signaler skal ikke tegnes av KI.** Briefene for `bb-s53`, `s55`, `s56`, `s56b`, `s57`, `s59b`, `s60`, `s60b` krever offisielle skiltfiler (`Michael Trafikklærer AI materialer/traffic-signs`, bare fareskilt, påbud og vikeplikt finnes der) eller kontroll av hvert symbol mot offisielt skilt.
+- `book_index.json` er et hjelpemiddel. Michael skal fortsatt bruke godkjenningsgate, kortversjon og servervalidert elevsvar (se `HINDRINGER.md`). `find_pages` er bare en referanse.
+- Kjør: `cd backend && python -m pytest tests/test_bildebok_pilot.py tests/test_bildebok_batch2.py -q` (31 består).
