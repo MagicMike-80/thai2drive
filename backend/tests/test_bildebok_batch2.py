@@ -83,10 +83,10 @@ def test_batch2_student_view_has_all_cards_per_language():
 
 
 def test_book_index_chains_all_rows_in_book_order_and_matches_file():
-    idx = build_index([PILOT, B2])
+    idx = build_index([load_pack(path) for _, path in PACKS])
     assert json.loads(INDEX.read_text(encoding="utf-8")) == idx
     order = list(idx["pages"])
-    assert len(order) == 29 + len(B2["pages"])
+    assert len(order) == sum(len(load_pack(path)["pages"]) for _, path in PACKS)
     assert order[28] == "bb-s35" and order[29] == "bb-s36"
     assert idx["pages"]["bb-s35"]["next"] == "bb-s36"
     assert idx["pages"][order[-1]]["next"] is None

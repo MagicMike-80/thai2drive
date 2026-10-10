@@ -148,3 +148,17 @@ Regler for batch 2:
 - **Skilt og signaler skal ikke tegnes av KI.** Briefene for `bb-s53`, `s55`, `s56`, `s56b`, `s57`, `s59b`, `s60`, `s60b` krever offisielle skiltfiler (`Michael Trafikklærer AI materialer/traffic-signs`, bare fareskilt, påbud og vikeplikt finnes der) eller kontroll av hvert symbol mot offisielt skilt.
 - `book_index.json` er et hjelpemiddel. Michael skal fortsatt bruke godkjenningsgate, kortversjon og servervalidert elevsvar (se `HINDRINGER.md`). `find_pages` er bare en referanse.
 - Kjør: `cd backend && python -m pytest tests/test_bildebok_pilot.py tests/test_bildebok_batch2.py -q` (31 består).
+
+## 7. Batch 3 (trykt s. 61–85) — tilleggspakke, ikke blokkerende for piloten
+Samme regler som batch 2 (seksjon 6). Levert som egen pakke, pilotens og batch 2s innhold er uendret.
+
+| Fil | Innhold |
+|---|---|
+| `backend/content_packs/bildebok/batch3_s61_s85.json` | 35 rader / 25 originalsider (PDF-s. 56–80): skiltgrupper, myndighetspyramiden, Del 4 Atferd (HAV, observasjonsteknikk og se-regler, signal og tegn, fartstilpasning, stopp- og bremselengde, veigrep, plassering og avstand) |
+| `docs/bildebok/{SIDEKART,INNHOLD,RAPPORT,GODKJENNING}_BATCH3.md`, `BILDEBRIEFER_BATCH3_TIL_CHATGPT.md`, `output/bildebok/elevvisning_batch3.html` | Samme dokumenttyper |
+| `docs/bildebok/REGELKONTROLL_BATCH3.md` | Regelkontroll. Bokas fartstabell for spesielle kjøretøy (60 km/t) er **utdatert og ikke brukt**; § 13 nr. 4 følges |
+| `backend/tests/test_bildebok_batch3.py` | 10 offline-tester |
+| `backend/content_packs/bildebok/book_index.json` | Oppdatert: pilot + batch 2 + batch 3 (`bb-s85b` er siste rad) |
+
+Kjør: `cd backend && python -m pytest tests/test_bildebok_pilot.py tests/test_bildebok_batch2.py tests/test_bildebok_batch3.py -q` (42 består).
+Åpne spørsmål (ikke publiseringsgodkjent): skiltforskriften (forbudsskiltets rekkevidde), § 2 (utrykning), § 6 nr. 2 (svinging), reaksjonstid og tre-sekundersregel som tommelfingerregler, tegn «i god tid».

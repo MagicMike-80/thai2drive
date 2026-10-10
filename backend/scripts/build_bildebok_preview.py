@@ -149,7 +149,7 @@ def build_approval(pack: dict) -> str:
 
 def build_map(pack: dict) -> str:
     sc = pack["scope"]["printed_pages"]
-    label = "pilot" if sc[0] == 11 else "batch 2"
+    label = {11: "pilot", 36: "batch 2", 61: "batch 3"}.get(sc[0], f"s. {sc[0]}")
     out = [f"# Sidekart – Bilde-bok {label} (trykt s. {sc[0]}–{sc[1]})", "",
            "| Innholds-ID | Kapittel | Avsnitt | Bildefil | Kilde | Neste steg | Åpne spørsmål |",
            "|---|---|---|---|---|---|---|"]
@@ -197,7 +197,8 @@ def build_content(pack: dict) -> str:
 
 
 PACKS = [("", ROOT / "backend" / "content_packs" / "bildebok" / "pilot_s11_s35.json"),
-         ("_BATCH2", ROOT / "backend" / "content_packs" / "bildebok" / "batch2_s36_s60.json")]
+         ("_BATCH2", ROOT / "backend" / "content_packs" / "bildebok" / "batch2_s36_s60.json"),
+         ("_BATCH3", ROOT / "backend" / "content_packs" / "bildebok" / "batch3_s61_s85.json")]
 INDEX = ROOT / "backend" / "content_packs" / "bildebok" / "book_index.json"
 
 

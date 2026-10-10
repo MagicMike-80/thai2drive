@@ -1,0 +1,3488 @@
+{
+ "pack": "bildebok_batch3_s61_s85",
+ "book": "Lærebok Klasse B",
+ "scope": {
+  "printed_pages": [
+   61,
+   85
+  ],
+  "pdf_pages": [
+   56,
+   80
+  ],
+  "page_count": 25
+ },
+ "pages": [
+  {
+   "id": "bb-s61",
+   "book": "Lærebok Klasse B",
+   "printed_page": 61,
+   "pdf_page": 56,
+   "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
+   "section": "Trafikkskiltene – Forbuds- og påbudsskilt",
+   "asset_id": "bb_s61_forbuds-og-paabudsskilt",
+   "image_file": "bb_s61_forbuds-og-paabudsskilt.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Forbudsskilt og påbudsskilt",
+    "th": "ป้ายห้ามและป้ายบังคับ",
+    "en": "Prohibition and mandatory signs"
+   },
+   "core_sentence": {
+    "no": "Forbudsskilt er runde med rød ring. Påbudsskilt er runde og blå.",
+    "th": "ป้ายห้ามเป็นวงกลมขอบแดง ป้ายบังคับเป็นวงกลมสีน้ำเงิน",
+    "en": "Prohibition signs are round with a red ring. Mandatory signs are round and blue."
+   },
+   "points": [
+    {
+     "no": "Forbudsskilt gjelder fra skiltet og fram til nærmeste kryss.",
+     "th": "ป้ายห้ามมีผลตั้งแต่ป้ายไปจนถึงทางแยกถัดไป",
+     "en": "A prohibition sign applies from the sign to the nearest junction."
+    },
+    {
+     "no": "Eksempler: forbudt for alle kjøretøyer, forbikjøringsforbud, fartsgrense.",
+     "th": "ตัวอย่าง: ห้ามยานพาหนะทุกชนิด ห้ามแซง ขีดจำกัดความเร็ว",
+     "en": "Examples: no vehicles, no overtaking, speed limit."
+    },
+    {
+     "no": "Påbudsskilt: påbudt kjøreretning, kjørefelt og rundkjøring.",
+     "th": "ป้ายบังคับ: ทิศทางที่ต้องขับ เลน และวงเวียน",
+     "en": "Mandatory signs: required direction, lane and roundabout."
+    }
+   ],
+   "michael_says": {
+    "no": "Rød ring betyr forbud. Blå sirkel betyr at du må.",
+    "th": "ขอบแดงคือห้าม วงกลมน้ำเงินคือต้องทำ",
+    "en": "A red ring means forbidden. A blue circle means you must."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du ser et rundt skilt med rød ring og to biler, den ene rød. Hva betyr det?",
+     "th": "คุณเห็นป้ายกลมขอบแดงมีรถสองคัน คันหนึ่งสีแดง หมายความว่าอย่างไร?",
+     "en": "You see a round sign with a red ring and two cars, one of them red. What does it mean?"
+    },
+    "options": [
+     {
+      "no": "Det er forbudt å kjøre forbi",
+      "th": "ห้ามแซง",
+      "en": "Overtaking is prohibited"
+     },
+     {
+      "no": "Det er påbudt å kjøre forbi",
+      "th": "ต้องแซง",
+      "en": "Overtaking is mandatory"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Forbudsskilt",
+     "th": "ป้ายห้าม",
+     "en": "Prohibition sign"
+    },
+    {
+     "no": "Påbudsskilt",
+     "th": "ป้ายบังคับ",
+     "en": "Mandatory sign"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian roadside in daylight with two round signs on separate posts: a no-overtaking sign with a red ring and a blue mandatory-direction sign, along a straight country road. Do NOT let AI draw the sign symbols: use the official Statens vegvesen sign files (Michael Trafikklærer AI materialer/traffic-signs, which only has warning, mandatory and give-way signs) on a neutral roadside photo, or check every symbol against the official sign before approval. Master image 3:2 landscape. Keep every key element (Prohibition sign, Mandatory sign) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "",
+   "note": "",
+   "michael_basis": {
+    "no": "Forbudsskilt er runde og gjelder i kjøreretningen fra der de er satt opp og fram til nærmeste veikryss, hvis ikke noe annet er bestemt for det enkelte skilt, angitt på underskilt, eller det finnes ny skilting. Eksempler: forbudt for alle kjøretøyer, forbikjøringsforbud, fartsgrense. Påbudsskiltene er også runde, men alle i gruppen er blå: påbudt kjøreretning, påbudt kjørefelt, påbudt rundkjøring.",
+    "th": "ป้ายห้ามเป็นวงกลมและมีผลในทิศทางการขับตั้งแต่จุดที่ติดตั้งไปจนถึงทางแยกถัดไป เว้นแต่จะกำหนดไว้เป็นอย่างอื่นสำหรับป้ายนั้น ระบุในป้ายเสริม หรือมีป้ายใหม่ ตัวอย่าง: ห้ามยานพาหนะทุกชนิด ห้ามแซง ขีดจำกัดความเร็ว ป้ายบังคับก็เป็นวงกลมเช่นกัน แต่ทุกป้ายในกลุ่มนี้เป็นสีน้ำเงิน: บังคับทิศทางการขับ บังคับเลน บังคับวงเวียน",
+    "en": "Prohibition signs are round and apply in the direction of travel from where they are put up to the nearest junction, unless something else is decided for the individual sign, stated on a plate, or there is new signing. Examples: no vehicles, no overtaking, speed limit. Mandatory signs are also round, but all in the group are blue: mandatory direction, mandatory lane, mandatory roundabout."
+   },
+   "open_questions": [
+    "Bekreft gyldighetsregelen «til nærmeste kryss» mot skiltforskriften (ikke lest direkte)."
+   ],
+   "quiz_category": "Traffic Signs",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 61 (PDF-s. 56)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s61b"
+  },
+  {
+   "id": "bb-s61b",
+   "book": "Lærebok Klasse B",
+   "printed_page": 61,
+   "pdf_page": 56,
+   "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
+   "section": "Trafikkskiltene – Opplysningsskilt",
+   "asset_id": "bb_s61b_opplysningsskilt",
+   "image_file": "bb_s61b_opplysningsskilt.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Opplysningsskilt gir deg informasjon",
+    "th": "ป้ายข้อมูลให้ข้อมูลแก่คุณ",
+    "en": "Information signs give you information"
+   },
+   "core_sentence": {
+    "no": "Opplysningsskilt er firkantede og forteller deg hva som gjelder.",
+    "th": "ป้ายข้อมูลเป็นรูปสี่เหลี่ยมและบอกว่ามีอะไรบ้างที่ใช้บังคับ",
+    "en": "Information signs are rectangular and tell you what applies."
+   },
+   "points": [
+    {
+     "no": "Eksempler: motorvei, kollektivfelt for buss og felt for fartsøkning.",
+     "th": "ตัวอย่าง: มอเตอร์เวย์ เลนรถโดยสาร และเลนเร่งความเร็ว",
+     "en": "Examples: motorway, bus lane and acceleration lane."
+    },
+    {
+     "no": "Mange er blå med et symbol.",
+     "th": "หลายป้ายเป็นสีน้ำเงินมีสัญลักษณ์",
+     "en": "Many are blue with a symbol."
+    },
+    {
+     "no": "Skiltene forteller også om regler som gjelder på stedet.",
+     "th": "ป้ายยังบอกกฎที่ใช้ในที่นั้นด้วย",
+     "en": "The signs also tell about rules that apply on the spot."
+    }
+   ],
+   "michael_says": {
+    "no": "Les symbolet og forklaringen, ikke bare fargen.",
+    "th": "อ่านสัญลักษณ์และคำอธิบาย ไม่ใช่แค่สี",
+    "en": "Read the symbol and the explanation, not just the colour."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du ser et blått firkantet skilt med en buss. Hva forteller det?",
+     "th": "คุณเห็นป้ายสี่เหลี่ยมสีน้ำเงินมีรูปรถโดยสาร บอกอะไร?",
+     "en": "You see a blue rectangular sign with a bus. What does it tell you?"
+    },
+    "options": [
+     {
+      "no": "At feltet er et kollektivfelt for buss",
+      "th": "ว่าเลนนั้นเป็นเลนสำหรับรถโดยสาร",
+      "en": "That the lane is a bus lane"
+     },
+     {
+      "no": "At bussen må kjøre sakte",
+      "th": "ว่ารถโดยสารต้องขับช้า",
+      "en": "That buses must drive slowly"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Motorvei",
+     "th": "มอเตอร์เวย์",
+     "en": "Motorway"
+    },
+    {
+     "no": "Kollektivfelt",
+     "th": "เลนรถโดยสาร",
+     "en": "Bus lane"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian motorway entrance in daylight with a blue rectangular information sign on a post, a bus lane beside the road, no readable text. Do NOT let AI draw the sign symbols: use the official Statens vegvesen sign files (Michael Trafikklærer AI materialer/traffic-signs, which only has warning, mandatory and give-way signs) on a neutral roadside photo, or check every symbol against the official sign before approval. Master image 3:2 landscape. Keep every key element (Motorway, Bus lane) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "",
+   "note": "",
+   "michael_basis": {
+    "no": "Opplysningsskiltene er firkantede. Eksempler i boka: motorvei, kollektivfelt for buss, felt for fartsøkning.",
+    "th": "ป้ายข้อมูลเป็นรูปสี่เหลี่ยม ตัวอย่างในหนังสือ: มอเตอร์เวย์ เลนรถโดยสาร เลนเร่งความเร็ว",
+    "en": "Information signs are rectangular. Examples in the book: motorway, bus lane, acceleration lane."
+   },
+   "open_questions": [],
+   "quiz_category": "Traffic Signs",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 61 (PDF-s. 56)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s62"
+  },
+  {
+   "id": "bb-s62",
+   "book": "Lærebok Klasse B",
+   "printed_page": 62,
+   "pdf_page": 57,
+   "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
+   "section": "Trafikkskiltene – Service-, veivisnings-, under- og markeringsskilt",
+   "asset_id": "bb_s62_service-veivisning-under-markering",
+   "image_file": "bb_s62_service-veivisning-under-markering.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Service-, veivisnings-, under- og markeringsskilt",
+    "th": "ป้ายบริการ ป้ายบอกทาง ป้ายเสริม และป้ายทำเครื่องหมาย",
+    "en": "Service, direction, plate and marking signs"
+   },
+   "core_sentence": {
+    "no": "Disse fire gruppene er også firkantede.",
+    "th": "สี่กลุ่มนี้ก็เป็นรูปสี่เหลี่ยมเช่นกัน",
+    "en": "These four groups are also rectangular."
+   },
+   "points": [
+    {
+     "no": "Serviceskilt: f.eks. bensinstasjon og hytter.",
+     "th": "ป้ายบริการ: เช่น ปั๊มน้ำมันและกระท่อม",
+     "en": "Service signs: e.g. petrol station and cabins."
+    },
+    {
+     "no": "Veivisningsskilt: orienteringstavle, avkjøringstavle, veinummerskilt (E6).",
+     "th": "ป้ายบอกทาง: ป้ายแจ้งทิศทาง ป้ายทางออก และป้ายหมายเลขถนน (E6)",
+     "en": "Direction signs: information board, exit board, road-number sign (E6)."
+    },
+    {
+     "no": "Underskilt utfyller et skilt. Markeringsskilt viser hindringer.",
+     "th": "ป้ายเสริมเสริมป้ายอื่น ป้ายทำเครื่องหมายแสดงสิ่งกีดขวาง",
+     "en": "Plates add to another sign. Marking signs show obstacles."
+    }
+   ],
+   "michael_says": {
+    "no": "Underskiltet forteller deg detaljene.",
+    "th": "ป้ายเสริมบอกรายละเอียดแก่คุณ",
+    "en": "The plate tells you the details."
+   },
+   "check_question": {
+    "q": {
+     "no": "Under et fartsgrenseskilt står et lite skilt med «100 m». Hva betyr det?",
+     "th": "ใต้ป้ายจำกัดความเร็วมีป้ายเล็กเขียนว่า “100 ม.” หมายความว่าอย่างไร?",
+     "en": "Under a speed limit sign is a small plate saying '100 m'. What does it mean?"
+    },
+    "options": [
+     {
+      "no": "Det viser avstand fram til et sted som gjelder",
+      "th": "บอกระยะทางไปยังจุดที่เกี่ยวข้อง",
+      "en": "It shows the distance to a place that applies"
+     },
+     {
+      "no": "Fartsgrensen er 100 km/t",
+      "th": "ขีดจำกัดความเร็วคือ 100 กม./ชม.",
+      "en": "The speed limit is 100 km/h"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Underskilt",
+     "th": "ป้ายเสริม",
+     "en": "Plate"
+    },
+    {
+     "no": "Veivisning",
+     "th": "ป้ายบอกทาง",
+     "en": "Direction sign"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian roadside near a junction with a green and blue direction signs on posts and a small plate under another sign, daylight. Do NOT let AI draw the sign symbols: use the official Statens vegvesen sign files (Michael Trafikklærer AI materialer/traffic-signs, which only has warning, mandatory and give-way signs) on a neutral roadside photo, or check every symbol against the official sign before approval. Master image 3:2 landscape. Keep every key element (Plate, Direction sign) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "",
+   "note": "",
+   "michael_basis": {
+    "no": "Serviceskilt (bensinstasjon, hytter, severdighet), veivisningsskilt (orienteringstavle, avkjøringstavle, veinummerskilt som E6), underskilt (forløp av forkjørsvei, avstand, gjelder i begge kjøreretninger) og markeringsskilt (bakgrunnsmarkering, avkjøringsmarkering, hindermarkering) er også firkantede.",
+    "th": "ป้ายบริการ (ปั๊มน้ำมัน กระท่อม สถานที่น่าชม) ป้ายบอกทาง (ป้ายแจ้งทิศทาง ป้ายทางออก ป้ายหมายเลขถนนอย่าง E6) ป้ายเสริม (แนวทางเอก ระยะทาง ใช้ทั้งสองทิศทาง) และป้ายทำเครื่องหมาย (ป้ายพื้นหลัง ป้ายทางออก ป้ายสิ่งกีดขวาง) ก็เป็นรูปสี่เหลี่ยมเช่นกัน",
+    "en": "Service signs (petrol station, cabins, sights), direction signs (information board, exit board, road-number signs such as E6), plates (course of priority road, distance, applies in both directions) and marking signs (background marking, exit marking, obstacle marking) are also rectangular."
+   },
+   "open_questions": [],
+   "quiz_category": "Traffic Signs",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 62 (PDF-s. 57)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s63"
+  },
+  {
+   "id": "bb-s63",
+   "book": "Lærebok Klasse B",
+   "printed_page": 63,
+   "pdf_page": 58,
+   "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
+   "section": "Myndighetspyramiden",
+   "asset_id": "bb_s63_myndighetspyramiden",
+   "image_file": "bb_s63_myndighetspyramiden.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Hvem har høyest myndighet?",
+    "th": "ใครมีอำนาจสูงสุด?",
+    "en": "Who has the highest authority?"
+   },
+   "core_sentence": {
+    "no": "Politiet går foran lyssignal, skilt, oppmerking og vanlige regler.",
+    "th": "ตำรวจมาก่อนสัญญาณไฟ ป้าย เส้นบนถนน และกฎทั่วไป",
+    "en": "The police come before light signals, signs, markings and ordinary rules."
+   },
+   "points": [
+    {
+     "no": "Rangorden: politi, lyssignal, skilt, oppmerking, regler om trafikk.",
+     "th": "ลำดับ: ตำรวจ สัญญาณไฟ ป้าย เส้นบนถนน กฎจราจร",
+     "en": "Order: police, light signals, signs, markings, traffic rules."
+    },
+    {
+     "no": "Lyssignal går foran vikepliktskilt.",
+     "th": "สัญญาณไฟมาก่อนป้ายให้ทาง",
+     "en": "A light signal comes before a give-way sign."
+    },
+    {
+     "no": "Skilt og oppmerking går foran trafikkreglene.",
+     "th": "ป้ายและเส้นบนถนนมาก่อนกฎจราจร",
+     "en": "Signs and markings come before the traffic rules."
+    }
+   ],
+   "michael_says": {
+    "no": "Spørsmålet er: hvem har sagt noe til meg nå?",
+    "th": "คำถามคือ ตอนนี้ใครสั่งฉันอยู่?",
+    "en": "The question is: who has told me something right now?"
+   },
+   "check_question": {
+    "q": {
+     "no": "Lyset er grønt for deg, men politiet står i krysset og viser at du skal stoppe. Hva gjør du?",
+     "th": "ไฟเป็นสีเขียวสำหรับคุณ แต่ตำรวจยืนที่ทางแยกและแสดงให้คุณหยุด ทำอย่างไร?",
+     "en": "The light is green for you, but a police officer in the junction shows you to stop. What do you do?"
+    },
+    "options": [
+     {
+      "no": "Stopper – politiet går foran lyset",
+      "th": "หยุด – ตำรวจมาก่อนไฟ",
+      "en": "Stop – the police come before the light"
+     },
+     {
+      "no": "Kjører – lyset er grønt",
+      "th": "ไป – ไฟเป็นสีเขียว",
+      "en": "Go – the light is green"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Politi",
+     "th": "ตำรวจ",
+     "en": "Police"
+    },
+    {
+     "no": "Lys",
+     "th": "ไฟ",
+     "en": "Light"
+    },
+    {
+     "no": "Skilt",
+     "th": "ป้าย",
+     "en": "Sign"
+    },
+    {
+     "no": "Oppmerking",
+     "th": "เส้นบนถนน",
+     "en": "Markings"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian junction, a police officer in uniform with a raised hand standing in front of a green traffic light, with a stop sign and road markings visible, cars waiting, daylight, no readable text. Master image 3:2 landscape. Keep every key element (Police, Light, Sign, Markings) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "Trafikkreglene § 3",
+   "note": "",
+   "michael_basis": {
+    "no": "Myndighetspyramiden viser rangordenen du skal følge i trafikken. Politiets anvisning går foran lyssignal, som går foran skilt, som går foran oppmerking, som går foran de generelle reglene om trafikk. Trafikkreglene § 3: signaler fra trafikklys, skilt eller oppmerking går foran trafikkreglene; politiets anvisning går foran andre anvisninger; trafikklys går foran vikepliktskilt.",
+    "th": "พีระมิดอำนาจแสดงลำดับที่คุณต้องทำตามในการจราจร คำสั่งของตำรวจมาก่อนสัญญาณไฟ ซึ่งมาก่อนป้าย ซึ่งมาก่อนเส้นบนถนน ซึ่งมาก่อนกฎจราจรทั่วไป กฎจราจร § 3: สัญญาณไฟ ป้าย หรือเส้นบนถนนมาก่อนกฎจราจร คำสั่งของตำรวจมาก่อนคำสั่งอื่น สัญญาณไฟมาก่อนป้ายให้ทาง",
+    "en": "The authority pyramid shows the order you must follow in traffic. The police's direction comes before light signals, which come before signs, which come before markings, which come before the general traffic rules. Traffic rules § 3: signals from lights, signs or markings come before the traffic rules; the police's direction comes before other directions; a traffic light comes before a give-way sign."
+   },
+   "open_questions": [],
+   "quiz_category": "Road Rules",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 63 (PDF-s. 58)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s64"
+  },
+  {
+   "id": "bb-s64",
+   "book": "Lærebok Klasse B",
+   "printed_page": 64,
+   "pdf_page": 59,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "Del 4 – Risiko og falsk trygghet",
+   "asset_id": "bb_s64_risiko-og-falsk-trygghet",
+   "image_file": "bb_s64_risiko-og-falsk-trygghet.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Bilkjøring er risikofylt",
+    "th": "การขับรถมีความเสี่ยง",
+    "en": "Driving carries risk"
+   },
+   "core_sentence": {
+    "no": "Du er alltid utsatt for risiko. Ikke la vanen gi deg falsk trygghet.",
+    "th": "คุณเสี่ยงอยู่เสมอ อย่าให้ความเคยชินทำให้คุณรู้สึกปลอดภัยเกินจริง",
+    "en": "You are always exposed to risk. Do not let routine give you false safety."
+   },
+   "points": [
+    {
+     "no": "Bilkjøring er en av de mest risikofylte aktivitetene vi driver med.",
+     "th": "การขับรถเป็นหนึ่งในกิจกรรมที่เสี่ยงที่สุดที่เราทำ",
+     "en": "Driving is one of the riskiest activities we do."
+    },
+    {
+     "no": "Nytt førerkort gir lett en følelse av falsk trygghet.",
+     "th": "ใบขับขี่ใหม่ทำให้รู้สึกปลอดภัยเกินจริงได้ง่าย",
+     "en": "A new licence easily gives a feeling of false safety."
+    },
+    {
+     "no": "Det tar mange år å bli en erfaren bilfører. Du setter selv grensen for risiko.",
+     "th": "ต้องใช้เวลาหลายปีกว่าจะเป็นผู้ขับที่มีประสบการณ์ คุณกำหนดระดับความเสี่ยงเอง",
+     "en": "It takes many years to become an experienced driver. You set the limit for risk yourself."
+    }
+   ],
+   "michael_says": {
+    "no": "Vær trygg, men ikke for trygg.",
+    "th": "มั่นใจได้ แต่อย่ามั่นใจเกินไป",
+    "en": "Be confident, but not too confident."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du har hatt førerkort i tre uker og kjører lett og trygt. Hva bør du huske?",
+     "th": "คุณมีใบขับขี่ได้สามสัปดาห์และขับได้สบาย ๆ ควรจำอะไร?",
+     "en": "You have had your licence for three weeks and drive easily. What should you remember?"
+    },
+    "options": [
+     {
+      "no": "At det tar mange år å bli erfaren, og at du setter grensen for risiko",
+      "th": "ว่าต้องใช้เวลาหลายปีกว่าจะมีประสบการณ์ และคุณกำหนดระดับความเสี่ยงเอง",
+      "en": "That it takes many years to become experienced, and you set the limit for risk"
+     },
+     {
+      "no": "At nå kan du ikke gjøre feil",
+      "th": "ว่าตอนนี้คุณทำผิดไม่ได้อีกแล้ว",
+      "en": "That now you cannot make mistakes"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Risiko",
+     "th": "ความเสี่ยง",
+     "en": "Risk"
+    }
+   ],
+   "image_brief": "Photorealistic young driver relaxed behind the wheel on a clear straight Norwegian road, a hazard (a stopped vehicle with hazard lights) far ahead small in the windscreen, daylight, no text. Master image 3:2 landscape. Keep every key element (Risk) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "",
+   "note": "",
+   "michael_basis": {
+    "no": "Som trafikant er du alltid utsatt for en viss risiko. Bilkjøring er en av de mest risikofylte aktivitetene vi daglig befatter oss med, men vi tenker ikke så ofte over det. Vi har lett for å tenke at ulykker er noe som rammer andre. Likevel bør vi en gang imellom tenke alvorlig over hva bilkjøring er, ellers kan vi lett få en følelse av falsk trygghet. Med nytt førerkort føler du deg sikkert trygg. Det tar mange år å bli en erfaren bilfører; du setter selv grensen for risiko.",
+    "th": "ในฐานะผู้ใช้ถนน คุณเสี่ยงอยู่เสมอในระดับหนึ่ง การขับรถเป็นหนึ่งในกิจกรรมที่เสี่ยงที่สุดที่เราทำทุกวัน แต่เรามักไม่ค่อยคิดถึงเรื่องนี้ เรามักคิดง่าย ๆ ว่าอุบัติเหตุเป็นเรื่องของคนอื่น แต่ควรหยุดคิดอย่างจริงจังเป็นครั้งคราวว่าการขับรถคืออะไร ไม่เช่นนั้นเราจะรู้สึกปลอดภัยเกินจริงได้ง่าย เมื่อได้ใบขับขี่ใหม่คุณคงรู้สึกมั่นใจ ต้องใช้เวลาหลายปีกว่าจะเป็นผู้ขับที่มีประสบการณ์ คุณกำหนดระดับความเสี่ยงเอง",
+    "en": "As a road user you are always exposed to some risk. Driving is one of the riskiest activities we do every day, but we do not often think about it. It is easy to think that accidents are something that hits others. Still, now and then we should think seriously about what driving is, otherwise we easily get a feeling of false safety. With a new licence you surely feel safe. It takes many years to become an experienced driver; you set the limit for risk yourself."
+   },
+   "open_questions": [],
+   "quiz_category": "Safety",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 64 (PDF-s. 59)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s64b"
+  },
+  {
+   "id": "bb-s64b",
+   "book": "Lærebok Klasse B",
+   "printed_page": 64,
+   "pdf_page": 59,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.1 Grunnregler for atferd i trafikken – HAV",
+   "asset_id": "bb_s64b_hav-hensynsfull-aktpaagivende-varsom",
+   "image_file": "bb_s64b_hav-hensynsfull-aktpaagivende-varsom.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "HAV: hensynsfull, aktpågivende, varsom",
+    "th": "HAV: เกรงใจ ตื่นตัว ระมัดระวัง",
+    "en": "HAV: considerate, alert, careful"
+   },
+   "core_sentence": {
+    "no": "Enhver skal ferdes hensynsfullt og være aktpågivende og varsom.",
+    "th": "ทุกคนต้องใช้ถนนอย่างเกรงใจ ตื่นตัว และระมัดระวัง",
+    "en": "Everyone must travel considerately and be alert and careful."
+   },
+   "points": [
+    {
+     "no": "Hensynsfull: tenk på eldre, syke og funksjonshemmede.",
+     "th": "เกรงใจ: คิดถึงผู้สูงอายุ ผู้ป่วย และผู้พิการ",
+     "en": "Considerate: think of older people, the ill and people with disabilities."
+    },
+    {
+     "no": "Aktpågivende: se med hjernen, også farer øyet ennå ikke ser.",
+     "th": "ตื่นตัว: มองด้วยสมอง รวมถึงอันตรายที่ตายังไม่เห็น",
+     "en": "Alert: see with your brain, also dangers the eye does not yet see."
+    },
+    {
+     "no": "Varsom: gjør hva du kan for å følge lover og regler.",
+     "th": "ระมัดระวัง: ทำทุกอย่างเพื่อปฏิบัติตามกฎหมายและกฎ",
+     "en": "Careful: do what you can to follow laws and rules."
+    }
+   ],
+   "michael_says": {
+    "no": "HAV er en huskeregel du kan ta med deg.",
+    "th": "HAV คือคำช่วยจำที่คุณพกติดตัวได้",
+    "en": "HAV is a memory aid you can take with you."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du kjører forbi en eldre mann som går sakte over veien. Hva er hensynsfullt?",
+     "th": "คุณขับผ่านชายสูงอายุที่ข้ามถนนช้า ๆ อะไรคือการเกรงใจ?",
+     "en": "You drive past an elderly man crossing the road slowly. What is considerate?"
+    },
+    "options": [
+     {
+      "no": "Senke farten og gi ham tid",
+      "th": "ชะลอและให้เวลาเขา",
+      "en": "Slow down and give him time"
+     },
+     {
+      "no": "Tute så han skynder seg",
+      "th": "บีบแตรให้เขารีบ",
+      "en": "Honk so he hurries"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Hensynsfull",
+     "th": "เกรงใจ",
+     "en": "Considerate"
+    },
+    {
+     "no": "Aktpågivende",
+     "th": "ตื่นตัว",
+     "en": "Alert"
+    },
+    {
+     "no": "Varsom",
+     "th": "ระมัดระวัง",
+     "en": "Careful"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian residential street, a driver slowing down well before an elderly man crossing slowly, calm daylight, no text. Master image 3:2 landscape. Keep every key element (Considerate, Alert, Careful) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "Vegtrafikkloven § 3",
+   "note": "",
+   "michael_basis": {
+    "no": "Vegtrafikkloven § 3 gir summen av hvordan vi skal oppføre oss i trafikken, og gjelder for alle trafikantgrupper: «Enhver skal ferdes hensynsfullt og være aktpågivende og varsom så det ikke kan oppstå fare eller voldes skade og slik at annen trafikk ikke unødig blir hindret eller forstyrret. Veifarende skal også vise hensyn mot dem som bor eller oppholder seg ved vegen.» Huskeregel HAV: Hensynsfull, Aktpågivende, Varsom. Hensynsfull betyr å hjelpe andre, f.eks. eldre, syke og funksjonshemmede. Aktpågivende er å se med hjernen, også farer øyet ennå ikke har mulighet til å registrere. Varsom er å gjøre hva du kan for å følge lover og regler.",
+    "th": "กฎหมายจราจรทางบก § 3 สรุปวิธีที่เราต้องประพฤติในการจราจร และใช้กับผู้ใช้ถนนทุกกลุ่ม: ทุกคนต้องใช้ถนนอย่างเกรงใจ ตื่นตัว และระมัดระวัง เพื่อไม่ให้เกิดอันตรายหรือความเสียหาย และไม่ขวางหรือรบกวนการจราจรอื่นโดยไม่จำเป็น ผู้ใช้ถนนต้องเกรงใจผู้ที่อาศัยหรืออยู่ใกล้ถนนด้วย คำช่วยจำ HAV: เกรงใจ ตื่นตัว ระมัดระวัง เกรงใจหมายถึงการช่วยผู้อื่น เช่น ผู้สูงอายุ ผู้ป่วย และผู้พิการ ตื่นตัวคือการมองด้วยสมอง รวมถึงอันตรายที่ตายังไม่เห็น ระมัดระวังคือทำทุกอย่างเพื่อปฏิบัติตามกฎหมายและกฎ",
+    "en": "Road Traffic Act § 3 gives the sum of how we must behave in traffic, and applies to all road-user groups: everyone must travel considerately and be alert and careful so that no danger or harm can arise and other traffic is not unnecessarily obstructed or disturbed. Road users must also show consideration for those who live or stay near the road. Memory aid HAV: considerate, alert, careful. Considerate means helping others, e.g. older people, the ill and people with disabilities. Alert is seeing with your brain, also dangers the eye cannot yet register. Careful is doing what you can to follow laws and rules."
+   },
+   "open_questions": [],
+   "quiz_category": "Safety",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 64 (PDF-s. 59)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s65"
+  },
+  {
+   "id": "bb-s65",
+   "book": "Lærebok Klasse B",
+   "printed_page": 65,
+   "pdf_page": 60,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.1 Aktpågivende og varsom",
+   "asset_id": "bb_s65_aktpaagivende-bak-hekken",
+   "image_file": "bb_s65_aktpaagivende-bak-hekken.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Ikke ta for gitt at det ikke skjuler seg noe bak hekken",
+    "th": "อย่าคิดว่าไม่มีอะไรซ่อนอยู่หลังพุ่มไม้",
+    "en": "Don't assume nothing hides behind the hedge"
+   },
+   "core_sentence": {
+    "no": "Tenk på det du ikke ser. Det kan skjule seg en fare.",
+    "th": "คิดถึงสิ่งที่คุณมองไม่เห็น อาจมีอันตรายซ่อนอยู่",
+    "en": "Think of what you cannot see. A hazard may be hiding."
+   },
+   "points": [
+    {
+     "no": "Aktpågivende er mer enn å se det øyet ser i øyeblikket.",
+     "th": "การตื่นตัวมากกว่าการมองสิ่งที่ตาเห็นในขณะนั้น",
+     "en": "Being alert is more than seeing what the eye sees at that moment."
+    },
+    {
+     "no": "Sjåfører med trafikal fantasi og de uten er forskjellige.",
+     "th": "ผู้ขับที่มีจินตนาการด้านการจราจรและที่ไม่มีนั้นต่างกัน",
+     "en": "Drivers with traffic imagination and those without are different."
+    },
+    {
+     "no": "Er du varsom, følger du lover og regler så godt du kan.",
+     "th": "ถ้าคุณระมัดระวัง คุณปฏิบัติตามกฎหมายและกฎอย่างเต็มที่",
+     "en": "If you are careful, you follow laws and rules as well as you can."
+    }
+   ],
+   "michael_says": {
+    "no": "Bruk fantasien. Hva kan komme bak hekken?",
+    "th": "ใช้จินตนาการ อะไรอาจมาจากหลังพุ่มไม้?",
+    "en": "Use your imagination. What could come from behind the hedge?"
+   },
+   "check_question": {
+    "q": {
+     "no": "Du nærmer deg en sving der en høy hekk skjuler sikten. Hva antar du?",
+     "th": "คุณเข้าใกล้โค้งที่พุ่มไม้สูงบังทัศนวิสัย คุณสันนิษฐานว่าอย่างไร?",
+     "en": "You approach a bend where a tall hedge blocks your view. What do you assume?"
+    },
+    "options": [
+     {
+      "no": "At det kan komme noen mot meg, så jeg tilpasser farten",
+      "th": "ว่าอาจมีใครมาสวน จึงปรับความเร็ว",
+      "en": "That someone may come towards me, so I adjust my speed"
+     },
+     {
+      "no": "At veien er fri siden jeg ikke ser noen",
+      "th": "ว่าถนนโล่งเพราะไม่เห็นใคร",
+      "en": "That the road is clear because I see nobody"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Hekk",
+     "th": "พุ่มไม้",
+     "en": "Hedge"
+    },
+    {
+     "no": "Skjult fare",
+     "th": "อันตรายที่ซ่อนอยู่",
+     "en": "Hidden hazard"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian country road bend hidden behind a tall dense hedge, a red estate car approaching the bend at low speed, two motorcyclists just visible beyond the hedge top in the distance, daylight, no text. Master image 3:2 landscape. Keep every key element (Hedge, Hidden hazard) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "",
+   "note": "",
+   "michael_basis": {
+    "no": "Å være aktpågivende er ikke bare å være oppmerksom på det øyet i øyeblikket kan se. Det er i enda større grad å se med hjernen, å se de farene som øyet ennå ikke har mulighet til å registrere. Her avsløres store forskjeller på sjåfører som har trafikal fantasi og de som ikke har det. Ta ikke for gitt at det ikke skjuler seg noe bak hekken. Varsom: hvis du er hensynsfull og aktpågivende og gjør hva du kan for å følge lover og regler, kan du kalle deg en varsom bilfører.",
+    "th": "การตื่นตัวไม่ใช่แค่ใส่ใจสิ่งที่ตามองเห็นในขณะนั้น แต่คือการมองด้วยสมอง มองอันตรายที่ตายังไม่มีโอกาสเห็นยิ่งกว่านั้น จุดนี้เผยความต่างอย่างมากระหว่างผู้ขับที่มีจินตนาการด้านการจราจรกับผู้ที่ไม่มี อย่าคิดเอาเองว่าไม่มีอะไรซ่อนอยู่หลังพุ่มไม้ ระมัดระวัง: ถ้าคุณเกรงใจ ตื่นตัว และทำทุกอย่างเพื่อปฏิบัติตามกฎหมายและกฎ คุณเรียกตัวเองว่าผู้ขับที่ระมัดระวังได้",
+    "en": "Being alert is not only paying attention to what the eye can see at the moment. It is to an even greater degree seeing with your brain, seeing the dangers the eye cannot yet register. Here big differences show between drivers who have traffic imagination and those who do not. Do not assume nothing hides behind the hedge. Careful: if you are considerate and alert and do what you can to follow laws and rules, you can call yourself a careful driver."
+   },
+   "open_questions": [],
+   "quiz_category": "Situations",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 65 (PDF-s. 60)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s65b"
+  },
+  {
+   "id": "bb-s65b",
+   "book": "Lærebok Klasse B",
+   "printed_page": 65,
+   "pdf_page": 60,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "Fra tanke til handling",
+   "asset_id": "bb_s65b_fra-tanke-til-handling",
+   "image_file": "bb_s65b_fra-tanke-til-handling.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Fra tanke til handling",
+    "th": "จากความคิดสู่การกระทำ",
+    "en": "From thought to action"
+   },
+   "core_sentence": {
+    "no": "Fortell andre hva du skal gjøre: med tegn, fartstilpassing og plassering.",
+    "th": "บอกผู้อื่นว่าคุณจะทำอะไร: ด้วยสัญญาณ การปรับความเร็ว และตำแหน่งรถ",
+    "en": "Tell others what you will do: with signals, speed adjustment and position."
+   },
+   "points": [
+    {
+     "no": "Tre typer handling: tegn og signal, fartstilpassing, plassering.",
+     "th": "การกระทำสามแบบ: สัญญาณและเครื่องหมาย การปรับความเร็ว ตำแหน่งรถ",
+     "en": "Three types of action: signs and signals, speed adjustment, position."
+    },
+    {
+     "no": "Andre skal i god tid og så tydelig som mulig vite hva du vil gjøre.",
+     "th": "ผู้อื่นต้องรู้ล่วงหน้าและชัดเจนที่สุดว่าคุณจะทำอะไร",
+     "en": "Others should know in good time and as clearly as possible what you will do."
+    },
+    {
+     "no": "Du trenger overblikk og fantasi for å forutse hva som kan skje.",
+     "th": "คุณต้องมีภาพรวมและจินตนาการเพื่อคาดการณ์ว่าจะเกิดอะไร",
+     "en": "You need overview and imagination to foresee what may happen."
+    }
+   ],
+   "michael_says": {
+    "no": "Gjør det lett for de andre å forstå deg.",
+    "th": "ทำให้คนอื่นเข้าใจคุณได้ง่าย",
+    "en": "Make it easy for the others to understand you."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du vil svinge til høyre ved neste kryss. Hvordan forteller du det til de bak deg?",
+     "th": "คุณจะเลี้ยวขวาที่ทางแยกหน้า บอกคนข้างหลังอย่างไร?",
+     "en": "You want to turn right at the next junction. How do you tell those behind you?"
+    },
+    "options": [
+     {
+      "no": "Gir blinklys, senker farten og plasserer bilen til høyre",
+      "th": "เปิดไฟเลี้ยว ชะลอ และชิดขวา",
+      "en": "Indicate, slow down and position the car to the right"
+     },
+     {
+      "no": "Svinger uten å gi tegn – de ser det nok",
+      "th": "เลี้ยวโดยไม่ให้สัญญาณ – คงเห็นเอง",
+      "en": "Turn without signalling – they will see"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Tegn",
+     "th": "สัญญาณ",
+     "en": "Signal"
+    },
+    {
+     "no": "Fart",
+     "th": "ความเร็ว",
+     "en": "Speed"
+    },
+    {
+     "no": "Plassering",
+     "th": "ตำแหน่ง",
+     "en": "Position"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian junction approach, driver's-eye view from behind a car with its right indicator on, slowing and positioned to the right, calm daylight, no text. Master image 3:2 landscape. Keep every key element (Signal, Speed, Position) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "",
+   "note": "",
+   "michael_basis": {
+    "no": "Det er tre hovedtyper handlinger når det gjelder å gi informasjon til andre trafikanter: tegn og signal, fartstilpassing og plassering. Andre veifarende skal i god tid og så tydelig som mulig bli informert om hva du har tenkt å gjøre. For å kunne iverksette handlingene på best mulig måte er det avgjørende at du har nødvendig overblikk over trafikkbildet og tilstrekkelig fantasi til å forutse hva som kan skje.",
+    "th": "มีการกระทำหลักสามแบบในการให้ข้อมูลแก่ผู้ใช้ถนนอื่น: สัญญาณและเครื่องหมาย การปรับความเร็ว และตำแหน่งรถ ผู้ใช้ถนนอื่นต้องได้รับแจ้งล่วงหน้าและชัดเจนที่สุดว่าคุณตั้งใจจะทำอะไร เพื่อทำการกระทำเหล่านี้ได้ดีที่สุด คุณต้องมีภาพรวมของการจราจรและจินตนาการมากพอที่จะคาดการณ์ว่าอาจเกิดอะไร",
+    "en": "There are three main types of action for giving information to other road users: signs and signals, speed adjustment and position. Other road users should be informed in good time and as clearly as possible about what you intend to do. To carry out the actions as well as possible it is crucial that you have the necessary overview of the traffic picture and enough imagination to foresee what may happen."
+   },
+   "open_questions": [],
+   "quiz_category": "Road Rules",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 65 (PDF-s. 60)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s66"
+  },
+  {
+   "id": "bb-s66",
+   "book": "Lærebok Klasse B",
+   "printed_page": 66,
+   "pdf_page": 61,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.1 Sittestilling, speil og hodestøtte – 4.2 Observasjonsteknikk",
+   "asset_id": "bb_s66_sittestilling-speil-hodestotte",
+   "image_file": "bb_s66_sittestilling-speil-hodestotte.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Rett sittestilling, speil og hodestøtte",
+    "th": "ท่านั่ง กระจก และที่พักศีรษะที่ถูกต้อง",
+    "en": "The right seating, mirrors and head restraint"
+   },
+   "core_sentence": {
+    "no": "Sitt avslappet, med begge hender på rattet, før du stiller speilene.",
+    "th": "นั่งผ่อนคลายและวางมือทั้งสองบนพวงมาลัยก่อนปรับกระจก",
+    "en": "Sit relaxed with both hands on the wheel before you set the mirrors."
+   },
+   "points": [
+    {
+     "no": "Feil sittestilling gjør deg ukonsentrert og kjøringen ustø.",
+     "th": "ท่านั่งผิดทำให้ขาดสมาธิและขับไม่นิ่ง",
+     "en": "A bad seating position makes you lose concentration and drive unsteadily."
+    },
+    {
+     "no": "Innvendig speil: se mest mulig av bakvinduet. Sidespeil: se vannrett bakover og litt av bilens sider.",
+     "th": "กระจกมองหลัง: เห็นกระจกหลังให้มากที่สุด กระจกข้าง: เห็นแนวระนาบด้านหลังและตัวรถเล็กน้อย",
+     "en": "Interior mirror: see as much of the rear window as possible. Side mirrors: see level behind and a little of the car's sides."
+    },
+    {
+     "no": "Hodestøtten skal stå så høyt at den tar imot hodet.",
+     "th": "ที่พักศีรษะต้องสูงพอที่จะรับศีรษะ",
+     "en": "The head restraint must be high enough to take the head."
+    }
+   ],
+   "michael_says": {
+    "no": "Bruk to minutter på å stille inn bilen. Det er verdt det.",
+    "th": "ใช้เวลาสองนาทีปรับรถ คุ้มค่า",
+    "en": "Spend two minutes setting up the car. It is worth it."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du setter deg i en bil som en annen har kjørt. Hva gjør du før du starter?",
+     "th": "คุณนั่งในรถที่คนอื่นเพิ่งขับ ทำอะไรก่อนสตาร์ท?",
+     "en": "You get into a car someone else has driven. What do you do before you start?"
+    },
+    "options": [
+     {
+      "no": "Stiller sete, speil og hodestøtte etter deg selv",
+      "th": "ปรับเบาะ กระจก และที่พักศีรษะให้เข้ากับตัวเอง",
+      "en": "Set the seat, mirrors and head restraint to suit you"
+     },
+     {
+      "no": "Starter rett – speilene er sikkert greie",
+      "th": "สตาร์ทเลย – กระจกคงโอเค",
+      "en": "Start straight away – the mirrors are surely fine"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Speil",
+     "th": "กระจก",
+     "en": "Mirrors"
+    },
+    {
+     "no": "Hodestøtte",
+     "th": "ที่พักศีรษะ",
+     "en": "Head restraint"
+    }
+   ],
+   "image_brief": "Photorealistic side-on view inside a car of a relaxed driver in a correct seating position, both hands on the wheel, head restraint at head height, seat belt on, daylight, no text. Master image 3:2 landscape. Keep every key element (Mirrors, Head restraint) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "",
+   "note": "",
+   "michael_basis": {
+    "no": "Når du sitter slik at kroppen er mest mulig avslappet, er du også best i stand til både å se og handle riktig. Feil sittestilling gjør at du etter en stund begynner å få «urolig kropp»; stadige bevegelser gjør kjøringen vinglete og ustø, og du blir ukonsentrert. Speilene innstilles etter at du har inntatt riktig sittestilling. Det innvendige speilet innstilles slik at du ser mest mulig av bakvinduet fra overkant og nedover. Sidespeilene innstilles slik at du ser vannrett bakover og slik at du så vidt skimter bilens sider. Hodestøtten skal stilles så høyt at den tar imot for hodet hvis uhellet skulle være ute. 4.2 Observasjonsteknikk: 90 % av avgjørelsene bygger på synet; fem enkle se-regler hjelper.",
+    "th": "เมื่อคุณนั่งในท่าที่ร่างกายผ่อนคลายที่สุด คุณจะมองและตอบสนองได้ถูกต้องที่สุด ท่านั่งผิดทำให้หลังจากผ่านไปสักพักรู้สึก ‘ร่างกายอยู่ไม่สุข’ การขยับบ่อย ๆ ทำให้ขับส่ายและไม่นิ่ง และคุณขาดสมาธิ ปรับกระจกหลังจากนั่งในท่าที่ถูกต้องแล้ว กระจกมองหลังปรับให้เห็นกระจกหลังให้มากที่สุดจากขอบบนลงมา กระจกข้างปรับให้เห็นแนวระนาบด้านหลังและเห็นตัวรถข้างเพียงเล็กน้อย ที่พักศีรษะต้องสูงพอที่จะรับศีรษะถ้าเกิดอุบัติเหตุ 4.2 เทคนิคการสังเกต: การตัดสินใจ 90% มาจากการมองเห็น กฎการมองห้าข้อช่วยได้",
+    "en": "When you sit with your body as relaxed as possible, you are also best able both to see and to act correctly. A bad seating position means you start to get a 'restless body' after a while; constant movements make driving wobbly and unsteady, and you lose concentration. The mirrors are set after you have taken the right seating position. The interior mirror is set so you see as much of the rear window as possible from the top edge down. The side mirrors are set so you see level behind and just glimpse the car's sides. The head restraint must be high enough to take the head if the accident should happen. 4.2 Observation technique: 90% of decisions are based on sight; five simple seeing rules help."
+   },
+   "open_questions": [],
+   "quiz_category": "Safety",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 66 (PDF-s. 61)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s67"
+  },
+  {
+   "id": "bb-s67",
+   "book": "Lærebok Klasse B",
+   "printed_page": 67,
+   "pdf_page": 62,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.2 Observasjonsteknikk – Se-regel 1 og 2",
+   "asset_id": "bb_s67_se-langt-frem-og-beveg-blikket",
+   "image_file": "bb_s67_se-langt-frem-og-beveg-blikket.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Se langt frem og beveg blikket",
+    "th": "มองไกลไปข้างหน้าและเคลื่อนสายตา",
+    "en": "Look far ahead and move your eyes"
+   },
+   "core_sentence": {
+    "no": "Se langt frem, men stirr ikke. Beveg blikket hele tiden.",
+    "th": "มองไกลแต่ไม่จ้อง เคลื่อนสายตาตลอดเวลา",
+    "en": "Look far ahead, but don't stare. Keep your eyes moving."
+   },
+   "points": [
+    {
+     "no": "Nybegynnere har blikket festet altfor nær bilen.",
+     "th": "ผู้เริ่มขับมักจ้องใกล้รถเกินไป",
+     "en": "Beginners keep their gaze fixed far too near the car."
+    },
+    {
+     "no": "Sidesynet blir smalere når farten øker.",
+     "th": "การมองด้านข้างแคบลงเมื่อความเร็วเพิ่มขึ้น",
+     "en": "Side vision gets narrower as speed increases."
+    },
+    {
+     "no": "Se også til sidene, i speilene og bakover.",
+     "th": "มองด้านข้าง ในกระจก และข้างหลังด้วย",
+     "en": "Also look to the sides, in the mirrors and behind."
+    }
+   ],
+   "michael_says": {
+    "no": "Se langt frem. Da får du tid.",
+    "th": "มองไกล แล้วคุณจะมีเวลา",
+    "en": "Look far ahead. Then you get time."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du kjører på landevei og stirrer på bilen rett foran deg. Hva bør du gjøre?",
+     "th": "คุณขับบนถนนนอกเมืองและจ้องรถที่อยู่ตรงหน้า ควรทำอย่างไร?",
+     "en": "You drive on a country road and stare at the car right in front of you. What should you do?"
+    },
+    "options": [
+     {
+      "no": "Se langt frem og la blikket bevege seg",
+      "th": "มองไกลและให้สายตาเคลื่อนไหว",
+      "en": "Look far ahead and let your gaze move"
+     },
+     {
+      "no": "Fortsette å se på bilen foran",
+      "th": "จ้องรถข้างหน้าต่อไป",
+      "en": "Keep looking at the car in front"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Synsfelt",
+     "th": "ลานสายตา",
+     "en": "Field of vision"
+    },
+    {
+     "no": "Blindsone",
+     "th": "จุดบอด",
+     "en": "Blind zone"
+    }
+   ],
+   "image_brief": "Photorealistic aerial diagram-style photo of a car on a Norwegian road showing a long narrow green cone of attention ahead and shaded blind areas on both sides and behind, drawn as a clean overlay on a real road photo, no text. Master image 3:2 landscape. Keep every key element (Field of vision, Blind zone) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "",
+   "note": "Boka oppgir sidesyn ca. 70 grader ved 70 km/t. Tallet er utelatt (ikke bekreftet).",
+   "michael_basis": {
+    "no": "De 5 se-reglene: se langt frem, beveg blikket, få overblikk, bli sett og forstått, se alltid etter en utvei. Se-regel 1: som nybegynner vil du ha blikket festet altfor nær bilen, noe som gjør kjøringen ustø og du oppdager farer for sent. Ved å se langt frem oppdager du farer og påregnelige farer så tidlig som mulig. Sidesynet innsnevres ved økende fart. Se-regel 2: se langt frem, men ikke stirr eller «bind blikket». Blikket må stadig være i bevegelse for å få overblikk over hele trafikksituasjonen, også trafikken på sidene og bak.",
+    "th": "กฎการมองห้าข้อ: มองไกล เคลื่อนสายตา ดูภาพรวม ให้คนอื่นเห็นและเข้าใจ มองหาทางหนีทีไล่เสมอ กฎข้อ 1: ผู้เริ่มขับมักจ้องใกล้รถเกินไป ทำให้ขับไม่นิ่งและเห็นอันตรายช้า การมองไกลช่วยให้เห็นอันตรายและอันตรายที่คาดได้เร็วที่สุด การมองด้านข้างแคบลงเมื่อเร็วขึ้น กฎข้อ 2: มองไกลแต่อย่าจ้องหรือ ‘ตรึงสายตา’ สายตาต้องเคลื่อนไหวตลอดเพื่อให้เห็นภาพรวมของสถานการณ์ทั้งหมด รวมถึงการจราจรด้านข้างและด้านหลัง",
+    "en": "The 5 seeing rules: look far ahead, move your eyes, get an overview, be seen and understood, always look for a way out. Seeing rule 1: as a beginner you will have your gaze fixed far too near the car, which makes driving unsteady and you discover dangers too late. By looking far ahead you discover dangers and foreseeable dangers as early as possible. Side vision narrows as speed increases. Seeing rule 2: look far ahead, but do not stare or 'bind your gaze'. The gaze must keep moving to get an overview of the whole traffic situation, also the traffic at the sides and behind."
+   },
+   "open_questions": [],
+   "quiz_category": "Safety",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 67 (PDF-s. 62)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s68"
+  },
+  {
+   "id": "bb-s68",
+   "book": "Lærebok Klasse B",
+   "printed_page": 68,
+   "pdf_page": 63,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.2 Observasjonsteknikk – Se-regel 3 og 4",
+   "asset_id": "bb_s68_ta-overblikk-og-bli-sett",
+   "image_file": "bb_s68_ta-overblikk-og-bli-sett.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Ta overblikk og bli sett og forstått",
+    "th": "ดูภาพรวมและทำให้คนอื่นเห็นและเข้าใจ",
+    "en": "Get an overview and be seen and understood"
+   },
+   "core_sentence": {
+    "no": "Se hele bildet, og gi andre tydelige signaler tidlig.",
+    "th": "ดูภาพรวมทั้งหมด และให้สัญญาณชัดเจนแก่ผู้อื่นแต่เนิ่น ๆ",
+    "en": "See the whole picture, and give others clear signals early."
+   },
+   "points": [
+    {
+     "no": "Se-regel 3: ta overblikk når du har fulgt regel 1 og 2.",
+     "th": "กฎข้อ 3: ดูภาพรวมเมื่อทำตามกฎข้อ 1 และ 2 แล้ว",
+     "en": "Seeing rule 3: get an overview once you follow rules 1 and 2."
+    },
+    {
+     "no": "Se-regel 4: bli sett og forstått, med riktig signal og tegn.",
+     "th": "กฎข้อ 4: ให้คนอื่นเห็นและเข้าใจ ด้วยสัญญาณและเครื่องหมายที่ถูกต้อง",
+     "en": "Seeing rule 4: be seen and understood, with the right signal and sign."
+    },
+    {
+     "no": "Riktig fartstilpassing og plassering hjelper andre å forstå deg.",
+     "th": "การปรับความเร็วและตำแหน่งที่ถูกต้องช่วยให้ผู้อื่นเข้าใจคุณ",
+     "en": "Right speed adjustment and position help others understand you."
+    }
+   ],
+   "michael_says": {
+    "no": "Se, og bli sett. Begge deler.",
+    "th": "มอง และให้คนเห็น ทั้งสองอย่าง",
+    "en": "See, and be seen. Both."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du skal svinge til høyre over et sykkelfelt og glemmer blindsonen. Hva kan skje?",
+     "th": "คุณจะเลี้ยวขวาข้ามเลนจักรยานและลืมจุดบอด อาจเกิดอะไร?",
+     "en": "You are about to turn right across a cycle lane and forget the blind zone. What may happen?"
+    },
+    "options": [
+     {
+      "no": "At du ikke ser en syklist og kolliderer",
+      "th": "ว่าคุณมองไม่เห็นผู้ปั่นและชนกัน",
+      "en": "That you do not see a cyclist and collide"
+     },
+     {
+      "no": "Ingenting – syklisten ser deg",
+      "th": "ไม่มีอะไร – ผู้ปั่นเห็นคุณ",
+      "en": "Nothing – the cyclist sees you"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Blindsone",
+     "th": "จุดบอด",
+     "en": "Blind zone"
+    },
+    {
+     "no": "Syklist",
+     "th": "ผู้ปั่นจักรยาน",
+     "en": "Cyclist"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian street, a blue estate car turning right across a red-painted cycle lane while a cyclist approaches from behind in its blind spot, daylight, no text. Master image 3:2 landscape. Keep every key element (Blind zone, Cyclist) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "",
+   "note": "",
+   "michael_basis": {
+    "no": "Se-regel 3 – ta overblikk: hvis du er nøye med å etterleve seregel 1 og 2, har du allerede tilfredsstilt kravet til regel 3. Se-regel 4 – bli sett og forstått: det er ikke bare du selv som trenger å se. Med riktig atferd kan du bidra til at andre ser deg så tidlig og så tydelig som mulig. Dette oppnår du ved å gi riktig signal og tegn, og ved riktig fartstilpassing og plassering. Boka spør hva som kan skje hvis bilføreren glemmer å se i blindsonen.",
+    "th": "กฎการมองข้อ 3 – ดูภาพรวม: ถ้าคุณทำตามกฎข้อ 1 และ 2 อย่างละเอียด ก็ทำตามข้อ 3 แล้ว กฎข้อ 4 – ให้คนอื่นเห็นและเข้าใจ: ไม่ใช่แค่คุณที่ต้องมองเห็น ด้วยพฤติกรรมที่ถูกต้อง คุณช่วยให้ผู้อื่นเห็นคุณเร็วและชัดที่สุด ทำได้โดยให้สัญญาณและเครื่องหมายที่ถูกต้อง และปรับความเร็วและตำแหน่งให้เหมาะสม หนังสือถามว่าจะเกิดอะไรถ้าผู้ขับลืมมองในจุดบอด",
+    "en": "Seeing rule 3 – get an overview: if you are careful to follow rules 1 and 2, you have already met the requirement of rule 3. Seeing rule 4 – be seen and understood: it is not only you who needs to see. With the right behaviour you can help others see you as early and as clearly as possible. You achieve this by giving the right signal and sign, and by right speed adjustment and position. The book asks what can happen if the driver forgets to look in the blind zone."
+   },
+   "open_questions": [],
+   "quiz_category": "Situations",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 68 (PDF-s. 63)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s69"
+  },
+  {
+   "id": "bb-s69",
+   "book": "Lærebok Klasse B",
+   "printed_page": 69,
+   "pdf_page": 64,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.2 Observasjonsteknikk – Se-regel 5 og eksempler",
+   "asset_id": "bb_s69_se-alltid-etter-en-utvei",
+   "image_file": "bb_s69_se-alltid-etter-en-utvei.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Se alltid etter en utvei",
+    "th": "มองหาทางหนีทีไล่เสมอ",
+    "en": "Always look for a way out"
+   },
+   "core_sentence": {
+    "no": "Ha en løsning klar hvis noe uventet skjer.",
+    "th": "เตรียมทางออกไว้ถ้ามีเรื่องไม่คาดคิดเกิดขึ้น",
+    "en": "Have a solution ready if something unexpected happens."
+   },
+   "points": [
+    {
+     "no": "Se etter en utvei er det samme som å se etter påregnelige farer.",
+     "th": "การหาทางหนีคือการมองหาอันตรายที่คาดได้",
+     "en": "Looking for a way out is the same as looking for foreseeable dangers."
+    },
+    {
+     "no": "Sving til høyre: fart ned, speil, tegn i tide, høyre sidespeil og høyre blindsone.",
+     "th": "เลี้ยวขวา: ลดความเร็ว กระจก ให้สัญญาณทัน กระจกข้างขวาและจุดบอดขวา",
+     "en": "Turn right: speed down, mirror, signal in time, right side mirror and right blind zone."
+    },
+    {
+     "no": "Sving til venstre: kontroller venstre sidespeil og blindsone. Avstand i speil kan være forvrengt.",
+     "th": "เลี้ยวซ้าย: ตรวจกระจกข้างซ้ายและจุดบอด ระยะในกระจกอาจเพี้ยน",
+     "en": "Turn left: check the left side mirror and blind zone. Distance in mirrors can be misleading."
+    }
+   ],
+   "michael_says": {
+    "no": "Spør deg selv: hva gjør jeg hvis det skjer?",
+    "th": "ถามตัวเองว่า ถ้าเกิดขึ้นฉันจะทำอย่างไร?",
+    "en": "Ask yourself: what do I do if it happens?"
+   },
+   "check_question": {
+    "q": {
+     "no": "Du skal svinge til høyre i et kryss og så en motorsyklist rett bak deg på høyre side. Hva gjør du?",
+     "th": "คุณจะเลี้ยวขวาที่ทางแยกและเห็นมอเตอร์ไซค์ด้านขวาหลังคุณ ทำอย่างไร?",
+     "en": "You are about to turn right at a junction and saw a motorcyclist just behind on your right. What do you do?"
+    },
+    "options": [
+     {
+      "no": "Venter, sjekker blindsonen igjen og svinger når det er trygt",
+      "th": "รอ ตรวจจุดบอดอีกครั้ง และเลี้ยวเมื่อปลอดภัย",
+      "en": "Wait, check the blind zone again and turn when it is safe"
+     },
+     {
+      "no": "Svinger straks – han stanser nok",
+      "th": "เลี้ยวทันที – เขาคงหยุดเอง",
+      "en": "Turn at once – he will probably stop"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Utvei",
+     "th": "ทางหนีทีไล่",
+     "en": "Way out"
+    },
+    {
+     "no": "Blindsone",
+     "th": "จุดบอด",
+     "en": "Blind zone"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian junction, a blue car preparing a right turn with a motorcycle just behind on its right side, driver's mirror view hint, daylight, no text. Master image 3:2 landscape. Keep every key element (Way out, Blind zone) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "",
+   "note": "",
+   "michael_basis": {
+    "no": "Se-regel 5 – se alltid etter en utvei: dette vil si det samme som å være oppmerksom på påregnelige farer. Oppstår det noe «uventet», har du en løsning klar. Kanskje må du gi full gass for å slippe unna en farlig situasjon, kanskje må du foreta en rask unnamanøver. Har du på forhånd tenkt over en mulig utvei, kan du spare verdifull tid. Eksempel 1: sving til høyre i veikryss: farten ned, sjekk speilet, gi tegn i god tid, sjekk høyre sidespeil og høyre blindsone før plassering; om nødvendig ny blindsonekontroll før det svinges. Eksempel 2: samme teknikk, men venstre sidespeil og blindsone; avstand i sidespeil gir ofte et forminsket bilde.",
+    "th": "กฎการมองข้อ 5 – มองหาทางหนีทีไล่เสมอ: หมายถึงใส่ใจอันตรายที่คาดได้ ถ้ามีเรื่อง ‘ไม่คาดคิด’ คุณมีทางออกพร้อม บางทีอาจต้องเร่งเต็มที่เพื่อหลบสถานการณ์อันตราย หรือหักหลบอย่างรวดเร็ว ถ้าคิดทางออกไว้ก่อนจะประหยัดเวลาอันมีค่า ตัวอย่าง 1: เลี้ยวขวาที่ทางแยก: ลดความเร็ว ดูกระจก ให้สัญญาณทัน ตรวจกระจกข้างขวาและจุดบอดขวาก่อนวางตำแหน่ง ถ้าจำเป็นตรวจจุดบอดอีกครั้งก่อนเลี้ยว ตัวอย่าง 2: เทคนิคเดียวกันแต่ใช้กระจกข้างซ้ายและจุดบอดซ้าย ระยะในกระจกข้างมักทำให้ภาพดูเล็กลง",
+    "en": "Seeing rule 5 – always look for a way out: this means the same as being alert to foreseeable dangers. If something 'unexpected' happens, you have a solution ready. Maybe you must give full throttle to escape a dangerous situation, maybe make a quick evasive manoeuvre. If you have thought over a possible way out beforehand, you can save valuable time. Example 1: turn right at a junction: speed down, check the mirror, signal in good time, check the right side mirror and right blind zone before positioning; if needed a new blind-zone check before turning. Example 2: same technique, but the left side mirror and blind zone; distance in a side mirror often gives a diminished picture."
+   },
+   "open_questions": [],
+   "quiz_category": "Situations",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 69 (PDF-s. 64)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s70"
+  },
+  {
+   "id": "bb-s70",
+   "book": "Lærebok Klasse B",
+   "printed_page": 70,
+   "pdf_page": 65,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.2 Observasjonsteknikk – Eksempler 3 og 4",
+   "asset_id": "bb_s70_seteknikk-lastebil-og-kryss",
+   "image_file": "bb_s70_seteknikk-lastebil-og-kryss.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Seteknikk i praksis: lastebil og kryss",
+    "th": "เทคนิคการมองในทางปฏิบัติ: รถบรรทุกและทางแยก",
+    "en": "Seeing technique in practice: lorry and junction"
+   },
+   "core_sentence": {
+    "no": "Se hvilke se-regler føreren bryter, og hva du ville gjort.",
+    "th": "ดูว่าผู้ขับฝ่าฝืนกฎการมองข้อใด และคุณจะทำอย่างไร",
+    "en": "See which seeing rules the driver breaks, and what you would do."
+   },
+   "points": [
+    {
+     "no": "Eksempel 3: kan føreren av den rosa bilen utføre riktig seteknikk?",
+     "th": "ตัวอย่าง 3: ผู้ขับรถสีชมพูใช้เทคนิคการมองที่ถูกต้องได้หรือไม่?",
+     "en": "Example 3: can the driver of the pink car use the right seeing technique?"
+    },
+    {
+     "no": "Eksempel 4: den blå bilen bør ikke kjøre før bilen fra høyre har passert krysset.",
+     "th": "ตัวอย่าง 4: รถสีน้ำเงินไม่ควรขับก่อนที่รถจากขวาจะผ่านทางแยก",
+     "en": "Example 4: the blue car should not drive before the car from the right has passed the junction."
+    },
+    {
+     "no": "Se i innvendig speil i samme øyeblikk du kommer ut på kryssende vei.",
+     "th": "ดูกระจกมองหลังในจังหวะที่คุณออกสู่ถนนที่ตัดผ่าน",
+     "en": "Look in the interior mirror at the moment you come out onto the crossing road."
+    }
+   ],
+   "michael_says": {
+    "no": "Prøv å finne ut hvor mange se-regler som brytes.",
+    "th": "ลองหาว่ามีกฎการมองกี่ข้อที่ถูกฝ่าฝืน",
+    "en": "Try to find out how many seeing rules are broken."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du venter i en sidevei og en bil fra høyre nærmer seg. Når kjører du ut?",
+     "th": "คุณรอที่ถนนแยกและรถจากขวากำลังมา ออกเมื่อไร?",
+     "en": "You wait at a side road and a car from the right approaches. When do you pull out?"
+    },
+    "options": [
+     {
+      "no": "Etter at bilen fra høyre har passert krysset og jeg har sett meg godt for",
+      "th": "หลังจากรถจากขวาผ่านทางแยกแล้วและฉันมองรอบดีแล้ว",
+      "en": "After the car from the right has passed the junction and I have looked carefully"
+     },
+     {
+      "no": "Straks – jeg rekker det",
+      "th": "ทันที – ฉันทัน",
+      "en": "Straight away – I will make it"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Lastebil",
+     "th": "รถบรรทุก",
+     "en": "Lorry"
+    },
+    {
+     "no": "Kryss",
+     "th": "ทางแยก",
+     "en": "Junction"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian junction, a loaded lorry turning left with a pink car close behind it and a blue car waiting in the side road, aerial view, daylight, no text. Master image 3:2 landscape. Keep every key element (Lorry, Junction) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "",
+   "note": "",
+   "michael_basis": {
+    "no": "Eksempel 3: lastebil i kryss; boka spør hvilken mulighet føreren av den rosa bilen har til å utføre riktig seteknikk og hvor mange av de fem se-reglene føreren bryter. Eksempel 4: den blå bilen bør ikke kjøre før bilen fra høyre har passert krysset. Kommer det en bil fra venstre, vil den ha mulighet til å kjøre forbi. Se i innvendig speil i samme øyeblikk du kommer ut på kryssende vei. Kanskje må du gi full gass for ikke å hindre trafikk fra venstre.",
+    "th": "ตัวอย่าง 3: รถบรรทุกที่ทางแยก หนังสือถามว่าผู้ขับรถสีชมพูมีโอกาสใช้เทคนิคการมองที่ถูกต้องอย่างไร และฝ่าฝืนกฎการมองห้าข้อกี่ข้อ ตัวอย่าง 4: รถสีน้ำเงินไม่ควรขับก่อนที่รถจากขวาจะผ่านทางแยก ถ้ามีรถจากซ้ายมา รถนั้นจะมีโอกาสผ่านไปได้ ดูกระจกมองหลังในจังหวะที่คุณออกสู่ถนนที่ตัดผ่าน บางทีอาจต้องเร่งเต็มที่เพื่อไม่ให้ขวางการจราจรจากซ้าย",
+    "en": "Example 3: a lorry in a junction; the book asks what possibility the pink car's driver has to use the right seeing technique and how many of the five seeing rules the driver breaks. Example 4: the blue car should not drive before the car from the right has passed the junction. If a car comes from the left, it will have the chance to drive past. Look in the interior mirror at the moment you come out onto the crossing road. Maybe you must give full throttle so as not to obstruct traffic from the left."
+   },
+   "open_questions": [],
+   "quiz_category": "Situations",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 70 (PDF-s. 65)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s71"
+  },
+  {
+   "id": "bb-s71",
+   "book": "Lærebok Klasse B",
+   "printed_page": 71,
+   "pdf_page": 66,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.3 Signal og tegn",
+   "asset_id": "bb_s71_signal-og-tegn",
+   "image_file": "bb_s71_signal-og-tegn.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Signal og tegn",
+    "th": "สัญญาณและเครื่องหมาย",
+    "en": "Signals and signs"
+   },
+   "core_sentence": {
+    "no": "Bruk lys- og lydhorn bare for å avverge eller forebygge fare.",
+    "th": "ใช้ไฟและแตรเพื่อป้องกันหรือหลีกเลี่ยงอันตรายเท่านั้น",
+    "en": "Use light and sound horn only to avert or prevent danger."
+   },
+   "points": [
+    {
+     "no": "Unødig eller hensynsløs bruk av lyd- eller lyssignal er forbudt.",
+     "th": "ห้ามใช้สัญญาณเสียงหรือแสงโดยไม่จำเป็นหรือโดยไม่ไว้หน้า",
+     "en": "Unnecessary or reckless use of sound or light signals is prohibited."
+    },
+    {
+     "no": "Tegn gis med retningslys. Bremselysene gir også tegn.",
+     "th": "ให้เครื่องหมายด้วยไฟเลี้ยว ไฟเบรกก็ให้สัญญาณด้วย",
+     "en": "Signs are given with indicators. Brake lights also give a sign."
+    },
+    {
+     "no": "Ved svinging eller vesentlig endring av plassering i sideretning skal det gis tegn.",
+     "th": "เมื่อเลี้ยวหรือเปลี่ยนตำแหน่งด้านข้างอย่างมาก ต้องให้เครื่องหมาย",
+     "en": "When turning or significantly changing your sideways position, a sign must be given."
+    }
+   ],
+   "michael_says": {
+    "no": "Blinklys er et språk. Bruk det til andres beste.",
+    "th": "ไฟเลี้ยวคือภาษา ใช้เพื่อประโยชน์ของผู้อื่น",
+    "en": "The indicator is a language. Use it for others' good."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du er irritert på bilen foran og vil tute for å få ham til å kjøre fortere. Er det lov?",
+     "th": "คุณหงุดหงิดรถคันหน้าและอยากบีบแตรให้เขาขับเร็วขึ้น ทำได้ไหม?",
+     "en": "You are annoyed at the car ahead and want to honk to make him drive faster. Is it allowed?"
+    },
+    "options": [
+     {
+      "no": "Nei – unødig bruk av lydhorn er forbudt",
+      "th": "ไม่ได้ – การใช้แตรโดยไม่จำเป็นเป็นสิ่งต้องห้าม",
+      "en": "No – unnecessary use of the horn is prohibited"
+     },
+     {
+      "no": "Ja, hvis du er lei av å vente",
+      "th": "ได้ ถ้าเบื่อรอ",
+      "en": "Yes, if you are tired of waiting"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Blinklys",
+     "th": "ไฟเลี้ยว",
+     "en": "Indicator"
+    },
+    {
+     "no": "Bremselys",
+     "th": "ไฟเบรก",
+     "en": "Brake lights"
+    }
+   ],
+   "image_brief": "Photorealistic rear view of a Norwegian car with its left indicator flashing and brake lights lit at a junction on a damp evening road, shallow depth of field, no text. Master image 3:2 landscape. Keep every key element (Indicator, Brake lights) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "Trafikkreglene § 14 nr. 1 og nr. 2",
+   "note": "",
+   "michael_basis": {
+    "no": "Som bilfører må du ikke bare motta og tolke informasjon, men også selv gi nødvendig informasjon. Signal gis med lys- og lydhorn og skal bare brukes til å avverge eller forebygge fare. Trafikkreglene § 14 nr. 1: unødig eller hensynsløs bruk av lyd- eller lyssignal er forbudt. Tegn gis med retningslys; bremselysene gir også tegn. Trafikkreglene § 14 nr. 2: ved svinging eller annen vesentlig endring av kjøretøyets plassering i sideretning skal det til veiledning for annen trafikant gis tegn. Bokas definisjon av «vesentlig» (ca. 1 meter) og 5-sekundersregelen er ikke bekreftet i primærkilde og brukes ikke som regel: tegn skal gis tydelig og i god tid.",
+    "th": "ในฐานะผู้ขับ คุณไม่ใช่แค่รับและตีความข้อมูล แต่ต้องให้ข้อมูลที่จำเป็นด้วย สัญญาณให้ด้วยไฟและแตร และใช้เพื่อป้องกันหรือหลีกเลี่ยงอันตรายเท่านั้น กฎจราจร § 14 ข้อ 1: ห้ามใช้สัญญาณเสียงหรือแสงโดยไม่จำเป็นหรือโดยไม่ไว้หน้า เครื่องหมายให้ด้วยไฟเลี้ยว ไฟเบรกก็ให้สัญญาณด้วย กฎจราจร § 14 ข้อ 2: เมื่อเลี้ยวหรือเปลี่ยนตำแหน่งด้านข้างของรถอย่างมาก ต้องให้เครื่องหมายเพื่อชี้แนะผู้ใช้ถนนอื่น นิยามคำว่า ‘อย่างมาก’ (ประมาณ 1 เมตร) และกฎ 5 วินาทีของหนังสือยังไม่ได้รับการยืนยันจากแหล่งหลัก จึงไม่ใช้เป็นกฎ: ให้ให้เครื่องหมายอย่างชัดเจนและทันเวลา",
+    "en": "As a driver you must not only receive and interpret information, but also give necessary information yourself. Signals are given with lights and the sound horn and may only be used to avert or prevent danger. Traffic rules § 14 no. 1: unnecessary or reckless use of sound or light signals is prohibited. Signs are given with indicators; brake lights also give a sign. Traffic rules § 14 no. 2: when turning or otherwise significantly changing the vehicle's sideways position, a sign must be given to guide other road users. The book's definition of 'significant' (about 1 metre) and the 5-second rule are not confirmed in a primary source and are not used as rules: signs must be given clearly and in good time."
+   },
+   "open_questions": [
+    "Bokas «vesentlig = ca. 1 meter» og «tegn ca. 5 sekunder før handling» er ikke bekreftet (Lovdata § 14 definerer ikke dette). Utelatt som regel."
+   ],
+   "quiz_category": "Road Rules",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 71 (PDF-s. 66)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s72"
+  },
+  {
+   "id": "bb-s72",
+   "book": "Lærebok Klasse B",
+   "printed_page": 72,
+   "pdf_page": 67,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.3 Signal og tegn – Tegn i god tid",
+   "asset_id": "bb_s72_tegn-i-god-tid",
+   "image_file": "bb_s72_tegn-i-god-tid.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Gi tegn i god tid – bruk skjønn",
+    "th": "ให้สัญญาณทันเวลา – ใช้วิจารณญาณ",
+    "en": "Signal in good time – use judgement"
+   },
+   "core_sentence": {
+    "no": "Tegn skal være tydelig og gis i rett tid. Bruk egen fornuft.",
+    "th": "เครื่องหมายต้องชัดเจนและให้ถูกเวลา ใช้วิจารณญาณของคุณเอง",
+    "en": "A sign must be clear and given at the right time. Use your own judgement."
+   },
+   "points": [
+    {
+     "no": "Vanligvis er god tid ca. 5 sekunder før handling, men ikke bind deg til eksakte tall.",
+     "th": "โดยทั่วไปทันเวลาคือประมาณ 5 วินาทีก่อนลงมือ แต่อย่ายึดติดกับตัวเลขตายตัว",
+     "en": "Usually good time is about 5 seconds before acting, but don't bind yourself to exact numbers."
+    },
+    {
+     "no": "Tegnet bør opphøre senest når handlingen er avsluttet.",
+     "th": "เครื่องหมายควรหยุดอย่างช้าที่สุดเมื่อการกระทำเสร็จสิ้น",
+     "en": "The sign should stop at the latest when the action is finished."
+    },
+    {
+     "no": "I en lang sving mot en avkjørsel kan 5 sekunder bli feil.",
+     "th": "ในโค้งยาวที่นำไปสู่ทางออก 5 วินาทีอาจผิดได้",
+     "en": "In a long bend leading to an exit, 5 seconds can be wrong."
+    }
+   ],
+   "michael_says": {
+    "no": "Tenk på hvem som ser tegnet ditt, og når.",
+    "th": "คิดว่าใครเห็นเครื่องหมายของคุณ และเมื่อไร",
+    "en": "Think about who sees your sign, and when."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du kjører i en lang sving og skal ut til en avkjørsel like etter svingen. Når gir du tegn?",
+     "th": "คุณขับในโค้งยาวและจะออกที่ทางแยกเข้าหลังโค้ง ให้สัญญาณเมื่อไร?",
+     "en": "You drive in a long bend and will turn off just after it. When do you signal?"
+    },
+    "options": [
+     {
+      "no": "Når det er tydelig for de bak hva du skal, ikke for tidlig og ikke for sent",
+      "th": "เมื่อคนข้างหลังเข้าใจชัดว่าคุณจะทำอะไร ไม่เร็วหรือช้าเกินไป",
+      "en": "When it is clear to those behind what you will do, not too early and not too late"
+     },
+     {
+      "no": "Nøyaktig 5 sekunder før, uansett",
+      "th": "5 วินาทีพอดีก่อนเสมอ",
+      "en": "Exactly 5 seconds before, regardless"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Avkjørsel",
+     "th": "ทางออก",
+     "en": "Exit"
+    },
+    {
+     "no": "Lang sving",
+     "th": "โค้งยาว",
+     "en": "Long bend"
+    }
+   ],
+   "image_brief": "Photorealistic aerial view of a Norwegian country road with a long right-hand bend leading to a side exit, a pink car in the bend with its indicator on and a lorry coming up behind, daylight, no text. Master image 3:2 landscape. Keep every key element (Exit, Long bend) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "Trafikkreglene § 14 nr. 2",
+   "note": "",
+   "michael_basis": {
+    "no": "Tegn skal være tydelig og gis til rett tid. Vanligvis er god tid å gi tegn ca. 5 sekunder før handling, men det er farlig å binde seg til slike eksakte tall. Bruk egen fornuft og forståelse for å finne hva som er god tid i det enkelte tilfellet. Tegnet bør opphøre senest når den varslede handling er avsluttet. Eksempelet i boka: personbilen skal kjøre mot Dale (avkjørsel etter en lang sving); synes du 5-sekundersregelen er grei her?",
+    "th": "เครื่องหมายต้องชัดเจนและให้ถูกเวลา โดยทั่วไปการให้ทันเวลาคือประมาณ 5 วินาทีก่อนลงมือ แต่เป็นอันตรายถ้ายึดติดกับตัวเลขตายตัวเช่นนี้ ใช้วิจารณญาณและความเข้าใจของคุณเองเพื่อหาว่าในแต่ละกรณีอะไรคือทันเวลา เครื่องหมายควรหยุดอย่างช้าที่สุดเมื่อการกระทำที่แจ้งไว้เสร็จสิ้น ตัวอย่างในหนังสือ: รถยนต์ต้องไปทางเดล (ทางออกหลังโค้งยาว) คุณคิดว่ากฎ 5 วินาทีเหมาะสมที่นี่หรือไม่?",
+    "en": "A sign must be clear and given at the right time. Usually good time to signal is about 5 seconds before acting, but it is dangerous to bind yourself to such exact numbers. Use your own judgement and understanding to find what is good time in the individual case. The sign should stop at the latest when the announced action is finished. The book's example: the car is to drive towards Dale (an exit after a long bend); do you think the 5-second rule is fine here?"
+   },
+   "open_questions": [
+    "«5 sekunder» er bokas rettesnor, ikke en regel. Elevteksten sier «vanligvis ca. 5 sekunder, bruk skjønn». Bekreft formuleringen."
+   ],
+   "quiz_category": "Road Rules",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 72 (PDF-s. 67)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s73"
+  },
+  {
+   "id": "bb-s73",
+   "book": "Lærebok Klasse B",
+   "printed_page": 73,
+   "pdf_page": 68,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.3 Signal og tegn – Blinklys før du bremser",
+   "asset_id": "bb_s73_blinklys-for-du-bremser",
+   "image_file": "bb_s73_blinklys-for-du-bremser.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Gi tegn med blinklys før du bremser",
+    "th": "ให้สัญญาณไฟเลี้ยวก่อนเบรก",
+    "en": "Signal with the indicator before you brake"
+   },
+   "core_sentence": {
+    "no": "Ved avkjørsel: blinklys først, så brems. Da forstår de bak hvorfor.",
+    "th": "ตอนออกทางแยก: ไฟเลี้ยวก่อน แล้วค่อยเบรก คนข้างหลังจะเข้าใจเหตุผล",
+    "en": "At an exit: indicator first, then brake. Then those behind understand why."
+   },
+   "points": [
+    {
+     "no": "Når du bruker fotbremsen, gir du tegn med bremselysene.",
+     "th": "เมื่อใช้เบรกเท้า คุณให้สัญญาณด้วยไฟเบรก",
+     "en": "When you use the foot brake, you give a sign with the brake lights."
+    },
+    {
+     "no": "Ved svinging i kryss og ved avkjørsler gir du tegn med blinklys før du bremser.",
+     "th": "ตอนเลี้ยวที่ทางแยกและทางออก ให้สัญญาณไฟเลี้ยวก่อนเบรก",
+     "en": "When turning at junctions and at exits, you signal with the indicator before you brake."
+    },
+    {
+     "no": "Tegngiving alene er ikke nok. Fartstilpassing og plassering må følge med.",
+     "th": "การให้สัญญาณอย่างเดียวไม่พอ ต้องปรับความเร็วและตำแหน่งควบคู่กัน",
+     "en": "Signalling alone is not enough. Speed adjustment and position must go with it."
+    }
+   ],
+   "michael_says": {
+    "no": "Først blinklys, så brems.",
+    "th": "ไฟเลี้ยวก่อน แล้วค่อยเบรก",
+    "en": "Indicator first, then brake."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du skal ta av til en avkjørsel og skal bremse ned. Hva gjør du først?",
+     "th": "คุณจะออกทางแยกเข้าและต้องชะลอ ทำอะไรก่อน?",
+     "en": "You are about to turn off at an exit and must slow down. What do you do first?"
+    },
+    "options": [
+     {
+      "no": "Gir tegn med blinklys, og bremser så",
+      "th": "ให้ไฟเลี้ยว แล้วจึงเบรก",
+      "en": "Signal with the indicator, then brake"
+     },
+     {
+      "no": "Bremser hardt og blinker til slutt",
+      "th": "เบรกแรงแล้วเปิดไฟเลี้ยวทีหลัง",
+      "en": "Brake hard and indicate at the end"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Blinklys",
+     "th": "ไฟเลี้ยว",
+     "en": "Indicator"
+    },
+    {
+     "no": "Avkjørsel",
+     "th": "ทางออก",
+     "en": "Exit"
+    }
+   ],
+   "image_brief": "Photorealistic aerial view of a Norwegian main road with a priority-road sign and a side exit, an orange car signalling right and slowing at the exit, daylight, no text. Do NOT let AI draw the sign symbols: use the official Statens vegvesen sign files (Michael Trafikklærer AI materialer/traffic-signs, which only has warning, mandatory and give-way signs) on a neutral roadside photo, or check every symbol against the official sign before approval. Master image 3:2 landscape. Keep every key element (Indicator, Exit) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "",
+   "note": "",
+   "michael_basis": {
+    "no": "Når du bruker fotbremsen, gir du tegn med bremselysene. Ved svinging i veikryss og ved avkjørsler skal du gi tegn med blinklys før du bremser. Da vil de bakenforkjørende forstå hvorfor du bremser. Tegngivning alene gir ikke alltid tilfredsstillende informasjon, men sammen med fartstilpassing og plassering blir informasjonen så god som det lar seg gjøre. Boka spør: du skal kjøre mot Gran – hva kan skje hvis du gir tegn 5 sekunder før avkjørselen?",
+    "th": "เมื่อใช้เบรกเท้า คุณให้สัญญาณด้วยไฟเบรก เมื่อเลี้ยวที่ทางแยกและทางออก ให้ให้สัญญาณไฟเลี้ยวก่อนเบรก คนที่ตามหลังจะเข้าใจว่าทำไมคุณเบรก การให้สัญญาณอย่างเดียวไม่ได้ให้ข้อมูลที่เพียงพอเสมอ แต่เมื่อรวมกับการปรับความเร็วและตำแหน่ง ข้อมูลก็ดีที่สุดเท่าที่ทำได้ หนังสือถามว่า: คุณจะไปทางเกรน จะเกิดอะไรถ้าให้สัญญาณ 5 วินาทีก่อนถึงทางออก?",
+    "en": "When you use the foot brake, you give a sign with the brake lights. When turning at junctions and at exits, you must signal with the indicator before you brake. Then those behind will understand why you brake. Signalling alone does not always give satisfactory information, but together with speed adjustment and position the information becomes as good as it can be. The book asks: you are to drive towards Gran – what can happen if you signal 5 seconds before the exit?"
+   },
+   "open_questions": [],
+   "quiz_category": "Road Rules",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 73 (PDF-s. 68)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s74"
+  },
+  {
+   "id": "bb-s74",
+   "book": "Lærebok Klasse B",
+   "printed_page": 74,
+   "pdf_page": 69,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.3 Signal og tegn – Å tolke andres tegn",
+   "asset_id": "bb_s74_tolke-andres-blinklys",
+   "image_file": "bb_s74_tolke-andres-blinklys.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Når en annen blinker, men ikke senker farten",
+    "th": "เมื่ออีกคนเปิดไฟเลี้ยวแต่ไม่ชะลอ",
+    "en": "When another driver indicates but does not slow down"
+   },
+   "core_sentence": {
+    "no": "Tegn og fart må passe sammen. Er du i tvil, vent.",
+    "th": "สัญญาณและความเร็วต้องสอดคล้องกัน ถ้าไม่แน่ใจ ให้รอ",
+    "en": "Sign and speed must fit together. If in doubt, wait."
+   },
+   "points": [
+    {
+     "no": "Bil A blinker til høyre, men senker ikke farten. Våger du å kjøre?",
+     "th": "รถ A เปิดไฟเลี้ยวขวาแต่ไม่ชะลอ คุณกล้าขับหรือไม่?",
+     "en": "Car A indicates right but does not slow down. Do you dare to drive?"
+    },
+    {
+     "no": "Han kan ha glemt å slå av et tidligere tegn.",
+     "th": "เขาอาจลืมปิดสัญญาณเดิม",
+     "en": "He may have forgotten to cancel an earlier sign."
+    },
+    {
+     "no": "Senker A farten og plasserer seg til høyre uten tegn, blir du usikker. Slike situasjoner irriterer og er unødvendige.",
+     "th": "ถ้า A ชะลอและชิดขวาโดยไม่ให้สัญญาณ คุณจะไม่แน่ใจ สถานการณ์แบบนี้น่ารำคาญและไม่จำเป็น",
+     "en": "If A slows and moves right with no sign, you become unsure. Such situations annoy and are unnecessary."
+    }
+   ],
+   "michael_says": {
+    "no": "Tegn og handling skal samsvare. Vær tydelig selv.",
+    "th": "สัญญาณและการกระทำต้องตรงกัน ทำให้ชัดเจนเอง",
+    "en": "Sign and action should match. Be clear yourself."
+   },
+   "check_question": {
+    "q": {
+     "no": "En bil foran blinker til høyre, men holder samme fart rett fram mot krysset. Du har vikeplikt mot den. Hva gjør du?",
+     "th": "รถคันหน้าเปิดไฟเลี้ยวขวาแต่ขับตรงด้วยความเร็วเดิมเข้าหาทางแยก คุณต้องให้ทางรถคันนั้น ทำอย่างไร?",
+     "en": "A car ahead indicates right but keeps its speed straight towards the junction. You must give way to it. What do you do?"
+    },
+    "options": [
+     {
+      "no": "Venter til jeg forstår hva han gjør",
+      "th": "รอจนเข้าใจว่าเขาจะทำอะไร",
+      "en": "Wait until I understand what he is doing"
+     },
+     {
+      "no": "Kjører – han skal jo svinge",
+      "th": "ขับ – เขาจะเลี้ยวอยู่แล้ว",
+      "en": "Drive – he is turning anyway"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Bil A",
+     "th": "รถ A",
+     "en": "Car A"
+    },
+    {
+     "no": "Bil B",
+     "th": "รถ B",
+     "en": "Car B"
+    }
+   ],
+   "image_brief": "Photorealistic aerial view of a Norwegian junction with a pink car (A) indicating right at speed on the main road and a blue car (B) waiting in the side road, daylight, no text. Master image 3:2 landscape. Keep every key element (Car A, Car B) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "",
+   "note": "",
+   "michael_basis": {
+    "no": "Boka viser to situasjoner. Du kjører bil B. Bil A blinker til høyre, men han senker ikke farten: våger du å kjøre? Kan bilfører A ha satt på tegnet tidligere av en eller annen grunn og så glemt å ta det av igjen? Situasjon 2: bil A senker farten og plasserer seg til høyre, men ingen tegn er gitt: våger du å kjøre? Slike situasjoner irriterer, og de skulle være helt unødvendige. Lærdom: hvis tegn og fart ikke stemmer overens, vent til du forstår.",
+    "th": "หนังสือแสดงสองสถานการณ์ คุณขับรถ B รถ A เปิดไฟเลี้ยวขวาแต่ไม่ชะลอ คุณกล้าขับหรือไม่? ผู้ขับ A อาจเปิดสัญญาณไว้ก่อนด้วยเหตุผลบางอย่างแล้วลืมปิด สถานการณ์ 2: รถ A ชะลอและชิดขวา แต่ไม่ได้ให้สัญญาณ คุณกล้าขับหรือไม่? สถานการณ์เช่นนี้น่ารำคาญและไม่จำเป็นเลย บทเรียน: ถ้าสัญญาณและความเร็วไม่ตรงกัน ให้รอจนเข้าใจ",
+    "en": "The book shows two situations. You drive car B. Car A indicates right, but does not slow down: do you dare to drive? Can driver A have switched on the sign earlier for some reason and then forgotten to cancel it? Situation 2: car A slows down and moves right, but no sign is given: do you dare to drive? Such situations annoy, and they should be completely unnecessary. Lesson: if sign and speed do not match, wait until you understand."
+   },
+   "open_questions": [],
+   "quiz_category": "Right of Way",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 74 (PDF-s. 69)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s75"
+  },
+  {
+   "id": "bb-s75",
+   "book": "Lærebok Klasse B",
+   "printed_page": 75,
+   "pdf_page": 70,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.3 Utrykningskjøretøyer og blinkende gule lys",
+   "asset_id": "bb_s75_utrykningskjoretoy-og-gult-blink",
+   "image_file": "bb_s75_utrykningskjoretoy-og-gult-blink.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Utrykningskjøretøy og blinkende gule lys",
+    "th": "รถฉุกเฉินและไฟเหลืองกะพริบ",
+    "en": "Emergency vehicles and flashing yellow lights"
+   },
+   "core_sentence": {
+    "no": "Utrykningskjøretøy kan kreve fri vei med blått blinklys og sirene.",
+    "th": "รถฉุกเฉินเรียกร้องให้เปิดทางได้ด้วยไฟสีน้ำเงินกะพริบและไซเรน",
+    "en": "Emergency vehicles can demand a clear road with blue flashing light and siren."
+   },
+   "points": [
+    {
+     "no": "Blått blinklys er det som brukes. Sirenen kan brukes i tillegg.",
+     "th": "ใช้ไฟน้ำเงินกะพริบ ไซเรนใช้เพิ่มได้",
+     "en": "Blue flashing light is used. The siren may be added."
+    },
+    {
+     "no": "Blinkende gule lys brukes ved veiarbeid og lignende.",
+     "th": "ไฟเหลืองกะพริบใช้ในงานทางและลักษณะคล้ายกัน",
+     "en": "Flashing yellow lights are used at roadworks and the like."
+    },
+    {
+     "no": "Slike kjøretøy kan fravike en del av trafikkreglene når det er nødvendig.",
+     "th": "ยานพาหนะเหล่านี้เบี่ยงเบนจากกฎจราจรบางข้อได้เมื่อจำเป็น",
+     "en": "Such vehicles may depart from some traffic rules when necessary."
+    }
+   ],
+   "michael_says": {
+    "no": "Gi plass i god tid. Det kan redde liv.",
+    "th": "ให้ทางล่วงหน้า อาจช่วยชีวิตได้",
+    "en": "Make room in good time. It can save lives."
+   },
+   "check_question": {
+    "q": {
+     "no": "En ambulanse med blått lys og sirene kommer bak deg i et kryss. Hva gjør du?",
+     "th": "รถพยาบาลเปิดไฟน้ำเงินและไซเรนมาข้างหลังคุณที่ทางแยก ทำอย่างไร?",
+     "en": "An ambulance with blue light and siren comes up behind you at a junction. What do you do?"
+    },
+    "options": [
+     {
+      "no": "Gir plass uten å skape fare for andre",
+      "th": "ให้ทางโดยไม่สร้างอันตรายแก่ผู้อื่น",
+      "en": "Make room without creating danger for others"
+     },
+     {
+      "no": "Fortsetter som før",
+      "th": "ขับต่อเหมือนเดิม",
+      "en": "Carry on as before"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Blått lys",
+     "th": "ไฟน้ำเงิน",
+     "en": "Blue light"
+    },
+    {
+     "no": "Gult blink",
+     "th": "ไฟเหลืองกะพริบ",
+     "en": "Flashing yellow"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian road with an ambulance using blue flashing lights approaching from behind and cars pulling aside, a road-works vehicle with yellow flashing light further ahead, daylight, no text. Master image 3:2 landscape. Keep every key element (Blue light, Flashing yellow) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "Trafikkreglene § 2",
+   "note": "",
+   "michael_basis": {
+    "no": "Fører av utrykningskjøretøy kan kreve fri vei når dette er nødvendig. Da brukes blinkende blått lys. Lydsignal (sirene) kan brukes i tillegg når dette er påkrevd for å få nødvendig oppmerksomhet. Dette gjelder også for annet kjøretøy i politiets tjeneste. Blinkende gule lys kan brukes på kjøretøy som nyttes til veiarbeid eller lignende, i vegtrafikktilsynets tjeneste eller til offentlig kontroll av parkering (Trafikkreglene § 2). De nevnte kjøretøyene kan fravike en del av trafikkbestemmelsene når det er nødvendig eller til vesentlig lette i arbeidet.",
+    "th": "ผู้ขับรถฉุกเฉินเรียกร้องให้เปิดทางได้เมื่อจำเป็น โดยใช้ไฟน้ำเงินกะพริบ สัญญาณเสียง (ไซเรน) ใช้เพิ่มได้เมื่อจำเป็นเพื่อดึงความสนใจ ใช้กับยานพาหนะอื่นในหน้าที่ของตำรวจด้วย ไฟเหลืองกะพริบใช้กับยานพาหนะที่ใช้ในงานทางหรือคล้ายกัน ในงานตรวจสอบการจราจร หรือการตรวจสอบที่จอดรถโดยรัฐ (กฎจราจร § 2) ยานพาหนะดังกล่าวเบี่ยงเบนจากข้อกำหนดจราจรบางข้อได้เมื่อจำเป็นหรือเพื่ออำนวยความสะดวกในการทำงานอย่างมาก",
+    "en": "The driver of an emergency vehicle can demand a clear road when this is necessary. Flashing blue light is then used. A sound signal (siren) can be used in addition when this is needed to get the necessary attention. This also applies to other vehicles in police service. Flashing yellow lights may be used on vehicles used for roadworks or the like, in the road-traffic inspectorate's service or for public parking control (Traffic rules § 2). The mentioned vehicles may depart from some traffic provisions when necessary or to substantially ease the work."
+   },
+   "open_questions": [
+    "Bekreft ordlyden om utrykningskjøretøy og blinkende gult mot Trafikkreglene § 2 (kun delvis lest)."
+   ],
+   "quiz_category": "Road Rules",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 75 (PDF-s. 70)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s75b"
+  },
+  {
+   "id": "bb-s75b",
+   "book": "Lærebok Klasse B",
+   "printed_page": 75,
+   "pdf_page": 70,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.4 Fartsavpasning – Fartsgrense og fartstilpasning",
+   "asset_id": "bb_s75b_fartstilpasning-og-fartsgrense",
+   "image_file": "bb_s75b_fartstilpasning-og-fartsgrense.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Fartstilpasning og fartsgrense er ikke det samme",
+    "th": "การปรับความเร็วกับขีดจำกัดความเร็วไม่เหมือนกัน",
+    "en": "Speed adjustment and speed limit are not the same"
+   },
+   "core_sentence": {
+    "no": "Fartsgrensen er høyeste lovlige fart. Farten må tilpasses forholdene.",
+    "th": "ขีดจำกัดความเร็วคือความเร็วสูงสุดที่ถูกกฎหมาย ต้องปรับความเร็วตามสภาพ",
+    "en": "The speed limit is the highest legal speed. Speed must be adjusted to conditions."
+   },
+   "points": [
+    {
+     "no": "Tilpass farten etter sted, føre, sikt og trafikkforholdene.",
+     "th": "ปรับความเร็วตามสถานที่ สภาพถนน ทัศนวิสัย และสภาพการจราจร",
+     "en": "Adjust speed to place, surface, visibility and traffic conditions."
+    },
+    {
+     "no": "Du må kunne stanse på den veistrekningen du har oversikt over.",
+     "th": "คุณต้องหยุดได้ภายในช่วงถนนที่คุณมองเห็น",
+     "en": "You must be able to stop within the stretch of road you can see."
+    },
+    {
+     "no": "Og foran enhver påregnelig hindring.",
+     "th": "และก่อนถึงสิ่งกีดขวางที่คาดได้ทุกอย่าง",
+     "en": "And before any foreseeable obstacle."
+    }
+   ],
+   "michael_says": {
+    "no": "Fartsgrensen er et tak, ikke et mål.",
+    "th": "ขีดจำกัดความเร็วคือเพดาน ไม่ใช่เป้าหมาย",
+    "en": "The speed limit is a ceiling, not a target."
+   },
+   "check_question": {
+    "q": {
+     "no": "Det er tåke og fartsgrensen er 80. Hva er riktig fart?",
+     "th": "มีหมอกและขีดจำกัดความเร็วคือ 80 ความเร็วที่ถูกต้องคือเท่าไร?",
+     "en": "It is foggy and the speed limit is 80. What is the right speed?"
+    },
+    "options": [
+     {
+      "no": "Lavere enn 80, så jeg kan stanse på det jeg ser",
+      "th": "ต่ำกว่า 80 เพื่อให้หยุดได้ในระยะที่เห็น",
+      "en": "Lower than 80, so I can stop within what I can see"
+     },
+     {
+      "no": "80, for det er tillatt",
+      "th": "80 เพราะอนุญาต",
+      "en": "80, because it is allowed"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Fartsgrense",
+     "th": "ขีดจำกัดความเร็ว",
+     "en": "Speed limit"
+    },
+    {
+     "no": "Sikt",
+     "th": "ทัศนวิสัย",
+     "en": "Visibility"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian country road in fog with a car driving slowly with fog lamps, a 80 km/h speed-limit sign faintly visible on the roadside, dusk, no other text. Do NOT let AI draw the sign symbols: use the official Statens vegvesen sign files (Michael Trafikklærer AI materialer/traffic-signs, which only has warning, mandatory and give-way signs) on a neutral roadside photo, or check every symbol against the official sign before approval. Master image 3:2 landscape. Keep every key element (Speed limit, Visibility) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "Trafikkreglene § 13 nr. 1",
+   "note": "",
+   "michael_basis": {
+    "no": "Fartsavpasning og fartsgrenser må ikke blandes sammen. Fartsgrensene gir den høyeste lovlige fart på stedet, men farten må til enhver tid avpasses etter forholdene i øyeblikket. Vegtrafikkloven påbyr å avpasse farten etter sted, føre, sikt og trafikkforholdene. Trafikkreglene § 13 nr. 1: kjørende må kunne stanse på den veistrekning som den kjørende har oversikt over, og foran enhver påregnelig hindring. Bevegelsesenergi: øker farten fra 40 til 80 km/t, firedobles energien (kvadratet av fartsøkningen).",
+    "th": "ห้ามสับสนระหว่างการปรับความเร็วกับขีดจำกัดความเร็ว ขีดจำกัดความเร็วคือความเร็วสูงสุดที่ถูกกฎหมายในที่นั้น แต่ต้องปรับความเร็วตามสภาพขณะนั้นเสมอ กฎหมายจราจรทางบกกำหนดให้ปรับความเร็วตามสถานที่ สภาพถนน ทัศนวิสัย และสภาพการจราจร กฎจราจร § 13 ข้อ 1: ผู้ขับต้องหยุดได้ภายในช่วงถนนที่ตนเห็น และก่อนถึงสิ่งกีดขวางที่คาดได้ทุกอย่าง พลังงานจลน์: ถ้าเพิ่มความเร็วจาก 40 เป็น 80 กม./ชม. พลังงานเพิ่มเป็นสี่เท่า (กำลังสองของการเพิ่มความเร็ว)",
+    "en": "Speed adjustment and speed limits must not be confused. Speed limits give the highest legal speed at the place, but speed must at all times be adjusted to the conditions at the moment. The Road Traffic Act requires adjusting speed to place, surface, visibility and traffic conditions. Traffic rules § 13 no. 1: drivers must be able to stop within the stretch of road they have a view of, and before any foreseeable obstacle. Kinetic energy: if speed rises from 40 to 80 km/h, energy rises four times (the square of the speed increase)."
+   },
+   "open_questions": [],
+   "quiz_category": "Speed Limits",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 75 (PDF-s. 70)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s76"
+  },
+  {
+   "id": "bb-s76",
+   "book": "Lærebok Klasse B",
+   "printed_page": 76,
+   "pdf_page": 71,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.4 Fartsavpasning – Stopplengde og reaksjonslengde",
+   "asset_id": "bb_s76_stopplengde",
+   "image_file": "bb_s76_stopplengde.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Stopplengde = reaksjonslengde + bremselengde",
+    "th": "ระยะหยุด = ระยะตอบสนอง + ระยะเบรก",
+    "en": "Stopping distance = reaction distance + braking distance"
+   },
+   "core_sentence": {
+    "no": "Bilen går en strekning før du rekker å bremse, og en til før den stopper.",
+    "th": "รถเคลื่อนไปช่วงหนึ่งก่อนที่คุณจะเบรกทัน และอีกช่วงก่อนที่จะหยุด",
+    "en": "The car travels a distance before you manage to brake, and another before it stops."
+   },
+   "points": [
+    {
+     "no": "Reaksjonslengde er strekningen fra du oppdager fare til du begynner å handle.",
+     "th": "ระยะตอบสนองคือระยะจากที่คุณเห็นอันตรายจนเริ่มลงมือทำ",
+     "en": "Reaction distance is the distance from noticing danger until you start to act."
+    },
+    {
+     "no": "Vi regner i gjennomsnitt 1 sekunds reaksjonstid.",
+     "th": "โดยเฉลี่ยเราคิดเวลาตอบสนอง 1 วินาที",
+     "en": "On average we count 1 second of reaction time."
+    },
+    {
+     "no": "50 km/t er ca. 14 m i sekundet, 80 km/t ca. 22 m i sekundet.",
+     "th": "50 กม./ชม. คือประมาณ 14 ม./วินาที 80 กม./ชม. ประมาณ 22 ม./วินาที",
+     "en": "50 km/h is about 14 m a second, 80 km/h about 22 m a second."
+    }
+   ],
+   "michael_says": {
+    "no": "Før du bremser, har du allerede kjørt en bit.",
+    "th": "ก่อนเบรก คุณขับไปแล้วช่วงหนึ่ง",
+    "en": "Before you brake, you have already driven a stretch."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du kjører 50 km/t og en ball ruller ut. Omtrent hvor langt kjører du i løpet av ett sekunds reaksjonstid?",
+     "th": "คุณขับ 50 กม./ชม. และลูกบอลกลิ้งออกมา ในเวลาตอบสนอง 1 วินาที คุณขับไปประมาณเท่าไร?",
+     "en": "You drive at 50 km/h and a ball rolls out. About how far do you drive during one second of reaction time?"
+    },
+    "options": [
+     {
+      "no": "Ca. 14 meter",
+      "th": "ประมาณ 14 เมตร",
+      "en": "About 14 metres"
+     },
+     {
+      "no": "Ca. 2 meter",
+      "th": "ประมาณ 2 เมตร",
+      "en": "About 2 metres"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Reaksjonslengde",
+     "th": "ระยะตอบสนอง",
+     "en": "Reaction distance"
+    },
+    {
+     "no": "Bremselengde",
+     "th": "ระยะเบรก",
+     "en": "Braking distance"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian residential road with a car braking after a ball rolled out, tyre marks on the dry road, a child's ball at the kerb, daylight, no text, no measurement overlays. Master image 3:2 landscape. Keep every key element (Reaction distance, Braking distance) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "",
+   "note": "",
+   "michael_basis": {
+    "no": "Stopplengde = reaksjonslengde + bremselengde. Reaksjonslengden er strekningen bilen tilbakelegger fra du oppdager fare til du begynner å handle. Vi regner i gjennomsnitt en reaksjonstid på ett sekund. Boka omregner km/t til m/sek: 20 km/t – 5,5 m/sek; 40 – 11; 50 – 14; 60 – 17; 80 – 22; 90 – 25. Bevegelsesenergien må brukes opp før bilen stopper, derfor øker bremselengden med kvadratet av fartsøkningen.",
+    "th": "ระยะหยุด = ระยะตอบสนอง + ระยะเบรก ระยะตอบสนองคือระยะที่รถเคลื่อนไปตั้งแต่คุณเห็นอันตรายจนเริ่มลงมือทำ โดยเฉลี่ยเราคิดเวลาตอบสนอง 1 วินาที หนังสือแปลง กม./ชม. เป็น ม./วินาที: 20 กม./ชม. – 5.5 ม./วินาที 40 – 11 50 – 14 60 – 17 80 – 22 90 – 25 พลังงานจลน์ต้องถูกใช้หมดก่อนรถหยุด ระยะเบรกจึงเพิ่มตามกำลังสองของการเพิ่มความเร็ว",
+    "en": "Stopping distance = reaction distance + braking distance. Reaction distance is the distance the car travels from when you notice danger until you start to act. We count on average one second of reaction time. The book converts km/h to m/s: 20 km/h – 5.5 m/s; 40 – 11; 50 – 14; 60 – 17; 80 – 22; 90 – 25. The kinetic energy must be used up before the car stops, so braking distance rises with the square of the speed increase."
+   },
+   "open_questions": [
+    "Tall for reaksjonstid (1 s) og omregning er bokas gjennomsnitt og matematikk. Bekreft at 1 sekund kan brukes som gjennomsnitt i elevteksten."
+   ],
+   "quiz_category": "Speed Limits",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 76 (PDF-s. 71)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s76b"
+  },
+  {
+   "id": "bb-s76b",
+   "book": "Lærebok Klasse B",
+   "printed_page": 76,
+   "pdf_page": 71,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.4 Fartsavpasning – Forhold mellom fartsøkning og bremselengde",
+   "asset_id": "bb_s76b_bremselengde-og-kvadratet",
+   "image_file": "bb_s76b_bremselengde-og-kvadratet.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Dobbel fart gir firedoblet bremselengde",
+    "th": "ความเร็วสองเท่าทำให้ระยะเบรกสี่เท่า",
+    "en": "Double speed gives four times the braking distance"
+   },
+   "core_sentence": {
+    "no": "Bremselengden øker med kvadratet av fartsøkningen.",
+    "th": "ระยะเบรกเพิ่มตามกำลังสองของการเพิ่มความเร็ว",
+    "en": "Braking distance rises with the square of the speed increase."
+   },
+   "points": [
+    {
+     "no": "Boka (flat vei, sommerføre): 20 km/t ca. 2 m, 40 ca. 8 m, 60 ca. 18 m, 80 ca. 32 m.",
+     "th": "หนังสือ (ถนนราบ ฤดูร้อน): 20 กม./ชม. ประมาณ 2 ม. 40 ประมาณ 8 ม. 60 ประมาณ 18 ม. 80 ประมาณ 32 ม.",
+     "en": "The book (flat road, summer conditions): 20 km/h about 2 m, 40 about 8 m, 60 about 18 m, 80 about 32 m."
+    },
+    {
+     "no": "Dobler du farten, blir bremselengden fire ganger så lang.",
+     "th": "ถ้าคุณเพิ่มความเร็วเป็นสองเท่า ระยะเบรกจะยาวขึ้นสี่เท่า",
+     "en": "If you double your speed, the braking distance becomes four times as long."
+    },
+    {
+     "no": "På glatt føre og våt asfalt kan bremselengden øke betraktelig.",
+     "th": "บนถนนลื่นและยางมะตอยเปียก ระยะเบรกอาจเพิ่มขึ้นมาก",
+     "en": "On slippery surfaces and wet asphalt the braking distance can increase considerably."
+    }
+   ],
+   "michael_says": {
+    "no": "Litt mer fart gir mye lengre bremselengde.",
+    "th": "ความเร็วเพิ่มนิดเดียวทำให้ระยะเบรกยาวขึ้นมาก",
+    "en": "A little more speed gives a much longer braking distance."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du øker farten fra 40 til 80 km/t. Hva skjer med bremselengden?",
+     "th": "คุณเพิ่มความเร็วจาก 40 เป็น 80 กม./ชม. ระยะเบรกเป็นอย่างไร?",
+     "en": "You raise your speed from 40 to 80 km/h. What happens to the braking distance?"
+    },
+    "options": [
+     {
+      "no": "Den blir omtrent fire ganger så lang",
+      "th": "ยาวขึ้นประมาณสี่เท่า",
+      "en": "It becomes about four times as long"
+     },
+     {
+      "no": "Den blir dobbelt så lang",
+      "th": "ยาวขึ้นสองเท่า",
+      "en": "It becomes twice as long"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "20 km/t",
+     "th": "20 กม./ชม.",
+     "en": "20 km/h"
+    },
+    {
+     "no": "80 km/t",
+     "th": "80 กม./ชม.",
+     "en": "80 km/h"
+    }
+   ],
+   "image_brief": "Photorealistic side-by-side comparison on the same dry Norwegian road: a car braking to a stop at a short distance (left) and a car braking to a stop at four times that distance (right), tyre marks, daylight, no text, no numbers. Master image 3:2 landscape. Keep every key element (20 km/h, 80 km/h) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "",
+   "note": "",
+   "michael_basis": {
+    "no": "Forholdet mellom fartsøkning og bremselengde: bremselengden øker med kvadratet av fartsøkningen. Bokas eksempel: ved 15 km/t bremselengde 3 m; øker farten til 45 km/t (3 ganger), blir bremselengden 3 x 3 x 3 = 27 m. Fart 25 km/t – 4 m; ved 50 km/t (2 ganger) blir den 4 x 4 = 16 m. Tallene gjelder flat vei på sommerføre; ved glatt og vått føre, og ved høye hastigheter, kan bremselengden øke betraktelig.",
+    "th": "ความสัมพันธ์ระหว่างการเพิ่มความเร็วกับระยะเบรก: ระยะเบรกเพิ่มตามกำลังสองของการเพิ่มความเร็ว ตัวอย่างในหนังสือ: ที่ 15 กม./ชม. ระยะเบรก 3 ม. ถ้าเพิ่มเป็น 45 กม./ชม. (3 เท่า) ระยะเบรกเป็น 3 x 3 x 3 = 27 ม. ที่ 25 กม./ชม. – 4 ม. ที่ 50 กม./ชม. (2 เท่า) เป็น 4 x 4 = 16 ม. ตัวเลขใช้กับถนนราบฤดูร้อน บนถนนลื่นและเปียก และที่ความเร็วสูง ระยะเบรกอาจเพิ่มขึ้นมาก",
+    "en": "The relation between speed increase and braking distance: braking distance rises with the square of the speed increase. The book's example: at 15 km/h braking distance 3 m; if speed rises to 45 km/h (3 times), the braking distance becomes 3 x 3 x 3 = 27 m. Speed 25 km/h – 4 m; at 50 km/h (2 times) it becomes 4 x 4 = 16 m. The figures apply to a flat road in summer conditions; on slippery and wet surfaces, and at high speeds, braking distance can increase considerably."
+   },
+   "open_questions": [
+    "Tallene er bokas eksempler. Elevteksten gir dem som «boka» og «ca.». Bekreft at de kan stå."
+   ],
+   "quiz_category": "Speed Limits",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 76 (PDF-s. 71)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s77"
+  },
+  {
+   "id": "bb-s77",
+   "book": "Lærebok Klasse B",
+   "printed_page": 77,
+   "pdf_page": 72,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.4 Fartsavpasning – Bevegelsesenergi og bråbremsing",
+   "asset_id": "bb_s77_bevegelsesenergi-folgesvenn",
+   "image_file": "bb_s77_bevegelsesenergi-folgesvenn.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Bevegelsesenergi – en farlig følgesvenn",
+    "th": "พลังงานจลน์ – เพื่อนร่วมทางที่อันตราย",
+    "en": "Kinetic energy – a dangerous companion"
+   },
+   "core_sentence": {
+    "no": "Det som bilen ikke rekker å bremse bort, tas ut i kollisjonen.",
+    "th": "สิ่งที่รถเบรกไม่ทันจะถูกปลดปล่อยในการชน",
+    "en": "What the car cannot brake away is released in the collision."
+   },
+   "points": [
+    {
+     "no": "Bil i 50 km/t rekker å bruke opp energien ved å bremse.",
+     "th": "รถที่ขับ 50 กม./ชม. เบรกใช้พลังงานหมดได้ทัน",
+     "en": "A car at 50 km/h manages to use up the energy by braking."
+    },
+    {
+     "no": "Ved 60 km/t må noe av energien brukes opp i kollisjonen.",
+     "th": "ที่ 60 กม./ชม. พลังงานส่วนหนึ่งต้องถูกใช้ในการชน",
+     "en": "At 60 km/h some of the energy must be used up in the collision."
+    },
+    {
+     "no": "Løse gjenstander i bilen kan bli dødbringende ved bråbremsing.",
+     "th": "สิ่งของที่หลวมในรถอาจเป็นอันตรายถึงชีวิตเมื่อเบรกกะทันหัน",
+     "en": "Loose objects in the car can be deadly in a sudden stop."
+    }
+   ],
+   "michael_says": {
+    "no": "Sikre last og gjenstander. Farten teller.",
+    "th": "ยึดสิ่งของให้แน่น ความเร็วมีผล",
+    "en": "Secure loads and objects. Speed counts."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du har en tung veske løst på baksetet og må bråbremse. Hva kan skje?",
+     "th": "คุณวางกระเป๋าหนักไว้หลวม ๆ บนเบาะหลังและต้องเบรกกะทันหัน จะเกิดอะไร?",
+     "en": "You have a heavy bag loose on the back seat and must brake hard. What can happen?"
+    },
+    "options": [
+     {
+      "no": "Den kan kastes fremover og skade deg",
+      "th": "อาจพุ่งไปข้างหน้าและทำร้ายคุณ",
+      "en": "It can be thrown forward and hurt you"
+     },
+     {
+      "no": "Ingenting, den blir liggende",
+      "th": "ไม่มีอะไร มันอยู่ที่เดิม",
+      "en": "Nothing, it stays put"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "50 km/t",
+     "th": "50 กม./ชม.",
+     "en": "50 km/h"
+    },
+    {
+     "no": "60 km/t",
+     "th": "60 กม./ชม.",
+     "en": "60 km/h"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian curve with a warning sign and a stopped vehicle ahead, a car braking and a second car slightly faster entering the same scene, driver's-eye view, daylight, no text, no arrows or numbers. Master image 3:2 landscape. Keep every key element (50 km/h, 60 km/h) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "",
+   "note": "",
+   "michael_basis": {
+    "no": "Bilen i 50 km/t har greid «å bruke opp» bevegelsesenergien ved å bremse. Ved 60 km/t måtte noe av bevegelsesenergien brukes opp i kollisjonen. Ved bråbremsing eller kollisjon vil løse gjenstander i bilen ofte utgjøre en dødbringende kraft i det øyeblikket de kommer farende.",
+    "th": "รถที่ขับ 50 กม./ชม. เบรกใช้พลังงานจลน์หมดได้ ที่ 60 กม./ชม. พลังงานจลน์ส่วนหนึ่งต้องถูกใช้ในการชน เมื่อเบรกกะทันหันหรือชน สิ่งของที่หลวมในรถมักกลายเป็นแรงที่อันตรายถึงชีวิตในขณะที่พุ่งมา",
+    "en": "The car at 50 km/h has managed to 'use up' the kinetic energy by braking. At 60 km/h some of the kinetic energy had to be used up in the collision. In a sudden stop or collision loose objects in the car often become a deadly force the moment they come flying."
+   },
+   "open_questions": [],
+   "quiz_category": "Safety",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 77 (PDF-s. 72)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s77b"
+  },
+  {
+   "id": "bb-s77b",
+   "book": "Lærebok Klasse B",
+   "printed_page": 77,
+   "pdf_page": 72,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.4 Fartsavpasning – ABS og bremseassistent",
+   "asset_id": "bb_s77b_abs-og-bremseassistent",
+   "image_file": "bb_s77b_abs-og-bremseassistent.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "ABS og bremseassistent",
+    "th": "ABS และระบบช่วยเบรก",
+    "en": "ABS and brake assist"
+   },
+   "core_sentence": {
+    "no": "Tråkk hardt og bli stående på bremsen. Systemene gjør resten.",
+    "th": "เหยียบแรง ๆ แล้วกดค้างไว้ ระบบจะทำส่วนที่เหลือ",
+    "en": "Press hard and stay on the brake. The systems do the rest."
+   },
+   "points": [
+    {
+     "no": "Bremseassistenten øker bremsetrykket ved hurtig trykk på pedalen.",
+     "th": "ระบบช่วยเบรกเพิ่มแรงเบรกเมื่อกดแป้นอย่างรวดเร็ว",
+     "en": "Brake assist increases the braking force on a quick press of the pedal."
+    },
+    {
+     "no": "Mange trår ikke hardt nok, i frykt for å ødelegge bremsene.",
+     "th": "หลายคนเหยียบไม่แรงพอเพราะกลัวเบรกเสีย",
+     "en": "Many do not press hard enough, for fear of ruining the brakes."
+    },
+    {
+     "no": "Trår du ikke hardt nok, kan du ikke stoppe i tide.",
+     "th": "ถ้าเหยียบไม่แรงพอ คุณหยุดไม่ทัน",
+     "en": "If you do not press hard enough, you cannot stop in time."
+    }
+   ],
+   "michael_says": {
+    "no": "Ikke vær redd for bremsepedalen i en nødsituasjon.",
+    "th": "อย่ากลัวแป้นเบรกในสถานการณ์ฉุกเฉิน",
+    "en": "Don't be afraid of the brake pedal in an emergency."
+   },
+   "check_question": {
+    "q": {
+     "no": "Et barn løper ut foran deg og bilen har ABS. Hvordan bremser du?",
+     "th": "เด็กวิ่งออกมาหน้าคุณและรถมี ABS คุณเบรกอย่างไร?",
+     "en": "A child runs out in front of you and the car has ABS. How do you brake?"
+    },
+    "options": [
+     {
+      "no": "Tråkker hardt og holder pedalen inne",
+      "th": "เหยียบแรงและกดแป้นค้าง",
+      "en": "Press hard and hold the pedal down"
+     },
+     {
+      "no": "Tråkker forsiktig for å skåne bremsene",
+      "th": "เหยียบเบา ๆ เพื่อถนอมเบรก",
+      "en": "Press gently to spare the brakes"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Bremsepedal",
+     "th": "แป้นเบรก",
+     "en": "Brake pedal"
+    }
+   ],
+   "image_brief": "Photorealistic close-up of a driver's foot pressing the brake pedal firmly in a modern car, a child running into the road blurred in the windscreen behind, daylight, no text. Master image 3:2 landscape. Keep every key element (Brake pedal) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "",
+   "note": "",
+   "michael_basis": {
+    "no": "Bremseassistent: normalt øker bremsetrykket proporsjonalt med fottrykket. Ved hurtig trykk på pedalen, f.eks. i en krisesituasjon, vil bremseassistenten effektivisere hele bremsesystemet slik at du stopper fortere. Bilprodusentene har utviklet den fordi mange førere ikke behersker nødbrems. Bremselengden påvirkes av fart, veigrep og din bremseteknikk. Det er viktig at du tråkker hardt nok på bremsepedalen for at ABS-bremsen skal virke optimalt; mange tråkker ikke hardt nok i frykt for at bremsene skal ødelegges. Dette er feil problemstilling.",
+    "th": "ระบบช่วยเบรก: ปกติแรงเบรกเพิ่มตามสัดส่วนแรงเท้า เมื่อกดแป้นอย่างรวดเร็ว เช่น ในสถานการณ์วิกฤต ระบบช่วยเบรกจะเพิ่มประสิทธิภาพของระบบเบรกทั้งหมดเพื่อให้หยุดเร็วขึ้น ผู้ผลิตรถพัฒนาขึ้นเพราะผู้ขับจำนวนมากเบรกฉุกเฉินไม่เป็น ระยะเบรกขึ้นกับความเร็ว การยึดเกาะ และเทคนิคการเบรกของคุณ สำคัญที่ต้องเหยียบแป้นเบรกแรงพอเพื่อให้ ABS ทำงานดีที่สุด หลายคนเหยียบไม่แรงพอเพราะกลัวเบรกเสีย นี่เป็นความเข้าใจผิด",
+    "en": "Brake assist: normally braking force rises in proportion to foot pressure. With a quick press of the pedal, e.g. in a crisis, brake assist makes the whole brake system more effective so you stop faster. Car makers developed it because many drivers do not master emergency braking. Braking distance is affected by speed, grip and your braking technique. It is important that you press hard enough on the brake pedal for the ABS brake to work optimally; many do not press hard enough for fear of ruining the brakes. This is the wrong way to think about it."
+   },
+   "open_questions": [],
+   "quiz_category": "Safety",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 77 (PDF-s. 72)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s78"
+  },
+  {
+   "id": "bb-s78",
+   "book": "Lærebok Klasse B",
+   "printed_page": 78,
+   "pdf_page": 73,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.4 Fartsavpasning – Veigrep",
+   "asset_id": "bb_s78_veigrep",
+   "image_file": "bb_s78_veigrep.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Veigrep brukes til tre ting",
+    "th": "การยึดเกาะถนนใช้สามอย่าง",
+    "en": "Grip is used for three things"
+   },
+   "core_sentence": {
+    "no": "Bruker du hele veigrepet til å bremse, kan du ikke styre.",
+    "th": "ถ้าใช้การยึดเกาะทั้งหมดเพื่อเบรก คุณจะบังคับเลี้ยวไม่ได้",
+    "en": "If you use all the grip to brake, you cannot steer."
+   },
+   "points": [
+    {
+     "no": "Veigrep (friksjon) brukes til bremsing, styring og fartsøkning.",
+     "th": "การยึดเกาะ (แรงเสียดทาน) ใช้สำหรับเบรก เลี้ยว และเร่งความเร็ว",
+     "en": "Grip (friction) is used for braking, steering and accelerating."
+    },
+    {
+     "no": "Det avhenger av veiunderlag, føre, dekktype og mønsterdybde.",
+     "th": "ขึ้นกับพื้นผิวถนน สภาพถนน ชนิดยาง และความลึกดอกยาง",
+     "en": "It depends on road surface, conditions, tyre type and tread depth."
+    },
+    {
+     "no": "Bruk veigrepet fornuftig mellom bremsing og styring.",
+     "th": "ใช้การยึดเกาะอย่างเหมาะสมระหว่างเบรกและเลี้ยว",
+     "en": "Use the grip sensibly between braking and steering."
+    }
+   ],
+   "michael_says": {
+    "no": "Veigrepet er en felles kasse. Del den smart.",
+    "th": "การยึดเกาะคือกล่องรวม แบ่งใช้อย่างชาญฉลาด",
+    "en": "Grip is a shared pot. Share it wisely."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du bremser så hardt at hjulene nesten låser seg i en sving. Hva mister du?",
+     "th": "คุณเบรกแรงจนล้อแทบล็อกในโค้ง คุณสูญเสียอะไร?",
+     "en": "You brake so hard that the wheels almost lock in a bend. What do you lose?"
+    },
+    "options": [
+     {
+      "no": "Evnen til å styre",
+      "th": "ความสามารถในการบังคับเลี้ยว",
+      "en": "The ability to steer"
+     },
+     {
+      "no": "Ingenting",
+      "th": "ไม่เสียอะไร",
+      "en": "Nothing"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Bremsing",
+     "th": "เบรก",
+     "en": "Braking"
+    },
+    {
+     "no": "Styring",
+     "th": "บังคับเลี้ยว",
+     "en": "Steering"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian wet road curve with a car braking while turning, slight slide visible, a tyre contact-patch inset photo at the bottom, daylight, no text. Master image 3:2 landscape. Keep every key element (Braking, Steering) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "",
+   "note": "",
+   "michael_basis": {
+    "no": "Veigrep er det samme som friksjon; det er grepet mellom dekkene og veiunderlaget. Veigrepet brukes til: 1 bremsing, 2 styring, 3 fartsøkning. Bruker du hele veigrepet til å bremse, har du ikke mulighet til å styre bilen. Veigrepet bestemmes av: 1 veiunderlaget (asfalt, betong, grus, leire), 2 føret (is, snø, vann), 3 dekktype (piggdekk, vinterdekk med eller uten pigg, sommerdekk), 4 dybde på slitemønsteret.",
+    "th": "การยึดเกาะถนนก็คือแรงเสียดทาน คือการยึดเกาะระหว่างยางกับพื้นผิวถนน การยึดเกาะใช้สำหรับ 1 เบรก 2 เลี้ยว 3 เร่งความเร็ว ถ้าใช้การยึดเกาะทั้งหมดเพื่อเบรก คุณจะบังคับรถไม่ได้ การยึดเกาะขึ้นกับ 1 พื้นผิวถนน (ยางมะตอย คอนกรีต กรวด ดินเหนียว) 2 สภาพถนน (น้ำแข็ง หิมะ น้ำ) 3 ชนิดยาง (ยางสตัด ยางหน้าหนาวมีหรือไม่มีสตัด ยางหน้าร้อน) 4 ความลึกดอกยาง",
+    "en": "Grip is the same as friction; it is the hold between the tyres and the road surface. Grip is used for: 1 braking, 2 steering, 3 accelerating. If you use all the grip to brake, you have no possibility to steer the car. Grip is determined by: 1 road surface (asphalt, concrete, gravel, clay), 2 conditions (ice, snow, water), 3 tyre type (studded tyres, winter tyres with or without studs, summer tyres), 4 tread depth."
+   },
+   "open_questions": [],
+   "quiz_category": "Driving Conditions",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 78 (PDF-s. 73)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s78b"
+  },
+  {
+   "id": "bb-s78b",
+   "book": "Lærebok Klasse B",
+   "printed_page": 78,
+   "pdf_page": 73,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.4 Fartsavpasning – Svingkraft, skrens og utforkjøring",
+   "asset_id": "bb_s78b_svingkraft-og-utforkjoring",
+   "image_file": "bb_s78b_svingkraft-og-utforkjoring.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Svingkraft og utforkjøring",
+    "th": "แรงเหวี่ยงและการตกถนน",
+    "en": "Cornering force and running off the road"
+   },
+   "core_sentence": {
+    "no": "Svingkraften øker med kvadratet av fartsøkningen. Er den større enn veigrepet, havner du utenfor.",
+    "th": "แรงเหวี่ยงเพิ่มตามกำลังสองของความเร็ว ถ้ามากกว่าการยึดเกาะ คุณจะตกถนน",
+    "en": "Cornering force grows with speed squared. Beyond grip, you leave the road."
+   },
+   "points": [
+    {
+     "no": "Dreier du på rattet, tvinger du bilen ut av kursen. Det krever veigrep.",
+     "th": "เมื่อหมุนพวงมาลัยคุณบังคับรถออกจากแนวตรง ซึ่งต้องใช้การยึดเกาะ",
+     "en": "When you turn the wheel, you force the car off its course. That needs grip."
+    },
+    {
+     "no": "Dobler du farten, blir svingkraften firedoblet. Fra 30 til 60 km/t: 4 ganger.",
+     "th": "ถ้าเพิ่มความเร็วเป็นสองเท่า แรงเหวี่ยงเป็นสี่เท่า จาก 30 เป็น 60 กม./ชม.: 4 เท่า",
+     "en": "Double the speed and the cornering force quadruples. From 30 to 60 km/h: 4 times."
+    },
+    {
+     "no": "Utforkjøring er hovedproblemet for unge, ferske førere. Lær å oppfatte veien riktig.",
+     "th": "การตกถนนเป็นปัญหาหลักของผู้ขับหนุ่มสาวมือใหม่ เรียนรู้ที่จะอ่านถนนให้ถูกต้อง",
+     "en": "Running off the road is the main problem for young, new drivers. Learn to read the road correctly."
+    }
+   ],
+   "michael_says": {
+    "no": "Senk farten før svingen, ikke i den.",
+    "th": "ลดความเร็วก่อนโค้ง ไม่ใช่ในโค้ง",
+    "en": "Slow down before the bend, not in it."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du kommer for fort inn i en sving og dreier mer på rattet. Hva er risikoen?",
+     "th": "คุณเข้าโค้งเร็วเกินไปและหมุนพวงมาลัยเพิ่ม ความเสี่ยงคืออะไร?",
+     "en": "You enter a bend too fast and turn the wheel more. What is the risk?"
+    },
+    "options": [
+     {
+      "no": "At svingkraften blir større enn veigrepet og du glir ut",
+      "th": "ว่าแรงเหวี่ยงมากกว่าการยึดเกาะและคุณไถลออก",
+      "en": "That the cornering force exceeds grip and you slide out"
+     },
+     {
+      "no": "Ingen – mer rattutslag gir mer grep",
+      "th": "ไม่มี – หมุนมากขึ้นก็ยึดเกาะมากขึ้น",
+      "en": "None – more steering gives more grip"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Svingkraft",
+     "th": "แรงเหวี่ยง",
+     "en": "Cornering force"
+    },
+    {
+     "no": "Veigrep",
+     "th": "การยึดเกาะ",
+     "en": "Grip"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian wet road bend, a car entering too fast beginning to slide wide toward the verge, a road-edge post visible, daylight, no text, no arrows. Master image 3:2 landscape. Keep every key element (Cornering force, Grip) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "",
+   "note": "",
+   "michael_basis": {
+    "no": "Et kjøretøy i bevegelse som ikke blir utsatt for ytre krefter, vil fortsette rett fram. Dreier du på rattet, tvinger du bilen ut av denne kursen; for å få til en slik kursendring må du bruke veigrep. Det er med svingkraften som med bremselengden: den øker med kvadratet av fartsøkningen. Øker farten fra 30 til 60 km/t, vil svingkraften øke 4 ganger. Blir svingkraften større enn veigrepet, farer du ut av veien. Utforkjøringsulykker er hovedproblemet for unge, ferske førere. Bokas tall om risikoreduksjon (ca. 70 % første år) er utelatt, ikke bekreftet.",
+    "th": "ยานพาหนะที่เคลื่อนที่โดยไม่มีแรงภายนอกจะเคลื่อนตรงต่อไป เมื่อหมุนพวงมาลัย คุณบังคับรถออกจากแนวนี้ ต้องใช้การยึดเกาะ แรงเหวี่ยงเป็นเช่นเดียวกับระยะเบรก: เพิ่มตามกำลังสองของความเร็ว ถ้าเพิ่มจาก 30 เป็น 60 กม./ชม. แรงเหวี่ยงเพิ่ม 4 เท่า ถ้าแรงเหวี่ยงมากกว่าการยึดเกาะ คุณจะพุ่งออกนอกถนน อุบัติเหตุตกถนนเป็นปัญหาหลักของผู้ขับหนุ่มสาวมือใหม่ ตัวเลขของหนังสือเรื่องความเสี่ยงลดลง (ประมาณ 70% ในปีแรก) ไม่ได้นำมาใส่เพราะไม่ได้รับการยืนยัน",
+    "en": "A moving vehicle that is not acted on by outside forces will continue straight ahead. If you turn the wheel, you force the car off this course; to achieve such a change of course you must use grip. It is the same with cornering force as with braking distance: it rises with the square of the speed increase. If speed rises from 30 to 60 km/h, cornering force rises 4 times. If cornering force exceeds grip, you go off the road. Running-off-the-road accidents are the main problem for young, new drivers. The book's figure for risk reduction (about 70% in the first year) is omitted, not confirmed."
+   },
+   "open_questions": [],
+   "quiz_category": "Driving Conditions",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 78 (PDF-s. 73)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s79"
+  },
+  {
+   "id": "bb-s79",
+   "book": "Lærebok Klasse B",
+   "printed_page": 79,
+   "pdf_page": 74,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.4 Fartsavpasning – Førerhjelpsystemer, skrens og nødbremsing",
+   "asset_id": "bb_s79_forerhjelpsystemer-og-skrens",
+   "image_file": "bb_s79_forerhjelpsystemer-og-skrens.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Førerhjelpsystemer og skrens",
+    "th": "ระบบช่วยผู้ขับและการลื่นไถล",
+    "en": "Driver-assistance systems and skids"
+   },
+   "core_sentence": {
+    "no": "Systemene hjelper deg, men kjører du for fort, kan ingen system redde deg.",
+    "th": "ระบบช่วยคุณได้ แต่ถ้าขับเร็วเกินไป ไม่มีระบบใดช่วยได้",
+    "en": "The systems help you, but if you drive too fast, no system can save you."
+   },
+   "points": [
+    {
+     "no": "ABS: hjulene låser seg ikke. BAS: hjelper deg å trå hardt nok.",
+     "th": "ABS: ล้อไม่ล็อก BAS: ช่วยให้เหยียบแรงพอ",
+     "en": "ABS: the wheels do not lock. BAS: helps you press hard enough."
+    },
+    {
+     "no": "Antispinn hindrer hjulspinn. Antiskrens (ESP, DSC) hjelper når bilen skrenser.",
+     "th": "ระบบกันลื่นไถลป้องกันล้อหมุนฟรี ระบบกันสะบัด (ESP, DSC) ช่วยเมื่อรถลื่นไถล",
+     "en": "Traction control prevents wheelspin. Stability control (ESP, DSC) helps when the car skids."
+    },
+    {
+     "no": "Se etter en utvei, styr presist og bruk pedalene presist.",
+     "th": "มองหาทางหนี บังคับเลี้ยวให้แม่นยำ และใช้แป้นให้แม่นยำ",
+     "en": "Look for a way out, steer precisely and use the pedals precisely."
+    }
+   ],
+   "michael_says": {
+    "no": "Kjenn bilens systemer. De hjelper bare hvis du kan bruke dem.",
+    "th": "รู้จักระบบของรถ มันช่วยได้ถ้าคุณใช้เป็น",
+    "en": "Know your car's systems. They only help if you can use them."
+   },
+   "check_question": {
+    "q": {
+     "no": "Bilen begynner å skrense i en sving. Hva er viktigst?",
+     "th": "รถเริ่มลื่นไถลในโค้ง อะไรสำคัญที่สุด?",
+     "en": "The car begins to skid in a bend. What matters most?"
+    },
+    "options": [
+     {
+      "no": "Se hvor du vil, styr presist og bruk pedalene rolig",
+      "th": "มองไปที่ที่ต้องการ บังคับเลี้ยวให้แม่นยำ และใช้แป้นอย่างนุ่มนวล",
+      "en": "Look where you want to go, steer precisely and use the pedals calmly"
+     },
+     {
+      "no": "Brems hardt og snu rattet kraftig",
+      "th": "เบรกแรงและหักพวงมาลัยแรง",
+      "en": "Brake hard and turn the wheel sharply"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "ABS",
+     "th": "ระบบ ABS",
+     "en": "ABS"
+    },
+    {
+     "no": "ESP",
+     "th": "ระบบ ESP",
+     "en": "ESP"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian wet road bend with a modern car correcting a small skid smoothly, driver's hands steering calmly seen in an inset, daylight, no text. Master image 3:2 landscape. Keep every key element (ABS, ESP) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "",
+   "note": "",
+   "michael_basis": {
+    "no": "Selv med god trening vil du gjøre feil som medfører at du får en skrens, må nødbremse eller må styre unna et hinder. Førerhjelpsystemer (ABS, BAS, ESP, DSC osv.) har oppgaver: hjelpe deg når du må bråbremse (ABS låser ikke hjulene; BAS hjelper deg å trå hardt nok), hjelpe ved igangsetting eller fartsøkning (antispinn) og hjelpe når du får skrens (antiskrens). NB! Kjører du for fort, kan ingen systemer i verden hjelpe deg. Hovedprinsipper: se etter en utvei og se dit du vil; styr presist; bruk pedalene presist. For å komme ut av en skrens må veigrepet prioriteres til styring. Låser hjulene seg, har du ingen mulighet til å styre; hjulene må rulle.",
+    "th": "แม้ฝึกดีก็ยังทำผิดพลาดจนเกิดการลื่นไถล ต้องเบรกฉุกเฉิน หรือต้องหักหลบสิ่งกีดขวาง ระบบช่วยผู้ขับ (ABS, BAS, ESP, DSC ฯลฯ) มีหน้าที่: ช่วยเมื่อต้องเบรกกะทันหัน (ABS ไม่ให้ล้อล็อก BAS ช่วยให้เหยียบแรงพอ) ช่วยตอนออกตัวหรือเร่ง (ระบบกันล้อหมุนฟรี) และช่วยเมื่อเกิดการลื่นไถล (ระบบกันลื่นไถล) หมายเหตุ! ถ้าขับเร็วเกินไป ไม่มีระบบใดในโลกช่วยคุณได้ หลักสำคัญ: มองหาทางหนีและมองไปที่ที่ต้องการ บังคับเลี้ยวให้แม่นยำ ใช้แป้นให้แม่นยำ เพื่อออกจากการลื่นไถล ต้องให้ความสำคัญกับการยึดเกาะเพื่อการบังคับเลี้ยว ถ้าล้อล็อก คุณบังคับรถไม่ได้ ล้อต้องหมุน",
+    "en": "Even with good training you will make mistakes that cause a skid, an emergency stop or steering away from an obstacle. Driver-assistance systems (ABS, BAS, ESP, DSC etc.) have tasks: help when you must brake hard (ABS does not lock the wheels; BAS helps you press hard enough), help when starting off or accelerating (traction control) and help when you skid (stability control). NB! If you drive too fast, no system in the world can help you. Main principles: look for a way out and look where you want to go; steer precisely; use the pedals precisely. To get out of a skid, grip must be prioritised for steering. If the wheels lock, you cannot steer; the wheels must roll."
+   },
+   "open_questions": [],
+   "quiz_category": "Driving Conditions",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 79 (PDF-s. 74)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s80"
+  },
+  {
+   "id": "bb-s80",
+   "book": "Lærebok Klasse B",
+   "printed_page": 80,
+   "pdf_page": 75,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.4 Fartsavpasning – Føret forandrer seg",
+   "asset_id": "bb_s80_foret-forandrer-seg",
+   "image_file": "bb_s80_foret-forandrer-seg.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Føret forandrer seg",
+    "th": "สภาพถนนเปลี่ยนไป",
+    "en": "The conditions change"
+   },
+   "core_sentence": {
+    "no": "Halvt veigrep gir dobbelt bremselengde. Vær klar for glatt føre.",
+    "th": "การยึดเกาะครึ่งเดียวทำให้ระยะเบรกสองเท่า เตรียมพร้อมสำหรับถนนลื่น",
+    "en": "Half the grip gives double the braking distance. Be ready for slippery conditions."
+   },
+   "points": [
+    {
+     "no": "Synker veigrepet til det halve, blir bremselengden dobbelt så lang.",
+     "th": "ถ้าการยึดเกาะลดลงครึ่งหนึ่ง ระยะเบรกจะยาวขึ้นสองเท่า",
+     "en": "If grip drops to half, braking distance becomes twice as long."
+    },
+    {
+     "no": "Er veigrepet en tredel, blir bremselengden tre ganger så lang.",
+     "th": "ถ้าการยึดเกาะเหลือหนึ่งในสาม ระยะเบรกจะยาวขึ้นสามเท่า",
+     "en": "If grip is a third, braking distance becomes three times as long."
+    },
+    {
+     "no": "Våt asfalt etter tørke og broer under 0° kan bli svært glatte.",
+     "th": "ยางมะตอยเปียกหลังแล้งยาวและสะพานที่อุณหภูมิต่ำกว่า 0° ลื่นมาก",
+     "en": "Wet asphalt after a dry spell and bridges below 0° can be very slippery."
+    }
+   ],
+   "michael_says": {
+    "no": "Når føret endrer seg, endrer du farten.",
+    "th": "เมื่อสภาพถนนเปลี่ยน คุณก็เปลี่ยนความเร็ว",
+    "en": "When conditions change, you change your speed."
+   },
+   "check_question": {
+    "q": {
+     "no": "Det er akkurat begynt å regne etter en lang tørr periode. Hva forventer du?",
+     "th": "เพิ่งเริ่มฝนตกหลังแล้งยาว คุณคาดว่าจะเป็นอย่างไร?",
+     "en": "It has just begun to rain after a long dry spell. What do you expect?"
+    },
+    "options": [
+     {
+      "no": "Svært glatt asfalt, så jeg senker farten",
+      "th": "ยางมะตอยลื่นมาก จึงลดความเร็ว",
+      "en": "Very slippery asphalt, so I lower my speed"
+     },
+     {
+      "no": "Bedre grep på grunn av vannet",
+      "th": "ยึดเกาะดีขึ้นเพราะน้ำ",
+      "en": "Better grip because of the water"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Glatt",
+     "th": "ลื่น",
+     "en": "Slippery"
+    },
+    {
+     "no": "Bro",
+     "th": "สะพาน",
+     "en": "Bridge"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian road at first rain after dry weather, shiny wet asphalt with a car braking early, a bridge in the background with frost on its edge, dusk, no text. Master image 3:2 landscape. Keep every key element (Slippery, Bridge) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "",
+   "note": "",
+   "michael_basis": {
+    "no": "Hvis veigrepet synker til det halve, vil bremselengden bli dobbelt så lang. Hvis veigrepet øker til det doble, vil bremselengden bli halvparten så lang. Eksempel: ved 20 km/t får du bremselengde 2 meter; synker veigrepet til en tredel, får du 3 ganger så lang bremselengde: 6 meter. OBS: når asfalt får regn etter en lang tørkeperiode, kan den en stund bli svært glatt. Regnvær på nylagt asfalt kan også gi svært glatt kjørebane. Broer kan bli ekstra glatte fordi disse blir avkjølt både over- og underside når temperaturen kryper under 0°.",
+    "th": "ถ้าการยึดเกาะลดลงครึ่งหนึ่ง ระยะเบรกจะยาวขึ้นสองเท่า ถ้าการยึดเกาะเพิ่มเป็นสองเท่า ระยะเบรกจะสั้นลงครึ่งหนึ่ง ตัวอย่าง: ที่ 20 กม./ชม. ระยะเบรก 2 เมตร ถ้าการยึดเกาะเหลือหนึ่งในสาม ระยะเบรกจะยาวขึ้น 3 เท่า: 6 เมตร หมายเหตุ: เมื่อฝนตกบนยางมะตอยหลังแล้งยาว ถนนอาจลื่นมากอยู่ช่วงหนึ่ง ฝนบนยางมะตอยที่ปูใหม่ก็ทำให้ผิวถนนลื่นมากได้ สะพานอาจลื่นเป็นพิเศษเพราะถูกทำให้เย็นทั้งด้านบนและด้านล่างเมื่ออุณหภูมิต่ำกว่า 0°",
+    "en": "If grip drops to half, braking distance becomes twice as long. If grip rises to double, braking distance becomes half as long. Example: at 20 km/h you get a braking distance of 2 metres; if grip drops to a third, you get 3 times as long a braking distance: 6 metres. NB: when asphalt gets rain after a long dry spell, it can be very slippery for a while. Rain on newly laid asphalt can also give a very slippery road. Bridges can be extra slippery because they are cooled both above and below when the temperature creeps below 0°."
+   },
+   "open_questions": [],
+   "quiz_category": "Road Conditions",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 80 (PDF-s. 75)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s80b"
+  },
+  {
+   "id": "bb-s80b",
+   "book": "Lærebok Klasse B",
+   "printed_page": 80,
+   "pdf_page": 75,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.4 Fartsavpasning – Spesielle krav ved passering",
+   "asset_id": "bb_s80b_saerlige-krav-ved-passering",
+   "image_file": "bb_s80b_saerlige-krav-ved-passering.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Ekstra lav fart ved barn og sårbare",
+    "th": "ลดความเร็วเป็นพิเศษเมื่อมีเด็กและผู้เปราะบาง",
+    "en": "Extra low speed near children and vulnerable people"
+   },
+   "core_sentence": {
+    "no": "Hold lav fart og stans om nødvendig ved barn, skolepatrulje og buss.",
+    "th": "ขับช้าและหยุดถ้าจำเป็นเมื่อมีเด็ก เด็กอาสาจราจร และรถโดยสาร",
+    "en": "Keep speed low and stop if needed near children, a school patrol and buses."
+   },
+   "points": [
+    {
+     "no": "Gjelder barn på eller ved veien og skolepatrulje.",
+     "th": "ใช้กับเด็กบนหรือข้างถนนและเด็กอาสาจราจร",
+     "en": "Applies to children on or near the road and a school patrol."
+    },
+    {
+     "no": "Gjelder også person med hvit stokk eller førerhund, og personer som kan antas å lide av lyte eller sykdom.",
+     "th": "ใช้กับผู้ถือไม้เท้าขาวหรือสุนัขนำทางและผู้ที่น่าจะมีความพิการหรือเจ็บป่วย",
+     "en": "Also applies to a person with a white cane or guide dog, and people who may be assumed to have a defect or illness."
+    },
+    {
+     "no": "Og sporvogn eller buss som har stanset eller er i ferd med å stanse ved holdeplass.",
+     "th": "และรถรางหรือรถโดยสารที่หยุดหรือกำลังจะหยุดที่ป้าย",
+     "en": "And a tram or bus that has stopped or is about to stop at a stop."
+    }
+   ],
+   "michael_says": {
+    "no": "Når noen er sårbare, tar du ansvaret.",
+    "th": "เมื่อมีผู้เปราะบาง คุณรับผิดชอบ",
+    "en": "When someone is vulnerable, you take responsibility."
+   },
+   "check_question": {
+    "q": {
+     "no": "En buss står stille ved en holdeplass og folk går av. Hva gjør du?",
+     "th": "รถโดยสารจอดนิ่งที่ป้ายและผู้คนลงจากรถ ทำอย่างไร?",
+     "en": "A bus stands at a stop and people get off. What do you do?"
+    },
+    "options": [
+     {
+      "no": "Holder lav fart og stanser om nødvendig",
+      "th": "ขับช้าและหยุดถ้าจำเป็น",
+      "en": "Keep speed low and stop if necessary"
+     },
+     {
+      "no": "Kjører forbi i normal fart",
+      "th": "ขับผ่านด้วยความเร็วปกติ",
+      "en": "Drive past at normal speed"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Buss",
+     "th": "รถโดยสาร",
+     "en": "Bus"
+    },
+    {
+     "no": "Barn",
+     "th": "เด็ก",
+     "en": "Children"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian street with a city bus at a bus stop with passengers alighting, a child waiting beside, a car approaching slowly, daylight, no readable text. Master image 3:2 landscape. Keep every key element (Bus, Children) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "Trafikkreglene § 13 nr. 2",
+   "note": "",
+   "michael_basis": {
+    "no": "Trafikkreglene § 13 nr. 2: kjørende skal i særlig grad holde tilstrekkelig liten fart og om nødvendig stanse straks ved passering av: a) barn som oppholder seg på eller ved veien, b) skolepatrulje, c) person som nytter hvit stokk eller førerhund for blinde, d) annen person som kan antas å lide av lyte eller sykdom som hemmer vedkommende i trafikken, e) sporvogn eller buss som har stanset eller holder på å stanse ved holdeplass.",
+    "th": "กฎจราจร § 13 ข้อ 2: ผู้ขับมีหน้าที่พิเศษที่ต้องขับช้าพอและหยุดทันทีถ้าจำเป็นเมื่อผ่าน: a) เด็กที่อยู่บนหรือข้างถนน b) เด็กอาสาจราจร c) ผู้ใช้ไม้เท้าขาวหรือสุนัขนำทางสำหรับคนตาบอด d) ผู้อื่นที่น่าจะมีความพิการหรือเจ็บป่วยที่ขัดขวางในการจราจร e) รถรางหรือรถโดยสารที่หยุดหรือกำลังจะหยุดที่ป้าย",
+    "en": "Traffic rules § 13 no. 2: drivers have a special duty to keep speed low enough and stop immediately if necessary when passing: a) children on or near the road, b) a school patrol, c) a person using a white cane or guide dog for the blind, d) another person who may be assumed to have a defect or illness that hinders them in traffic, e) a tram or bus that has stopped or is about to stop at a stop."
+   },
+   "open_questions": [],
+   "quiz_category": "Safety",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 80 (PDF-s. 75)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s81"
+  },
+  {
+   "id": "bb-s81",
+   "book": "Lærebok Klasse B",
+   "printed_page": 81,
+   "pdf_page": 76,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.4 Fartsavpasning – Fareskilt, fartsgrenseskilt, gatetun",
+   "asset_id": "bb_s81_fareskilt-fartsgrenser-gatetun",
+   "image_file": "bb_s81_fareskilt-fartsgrenser-gatetun.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Fareskilt og fartsgrenseskilt",
+    "th": "ป้ายเตือนและป้ายจำกัดความเร็ว",
+    "en": "Warning signs and speed-limit signs"
+   },
+   "core_sentence": {
+    "no": "Fareskilt varsler farer som er vanskelige å oppdage tidlig.",
+    "th": "ป้ายเตือนแจ้งอันตรายที่ยากจะสังเกตได้ทัน",
+    "en": "Warning signs warn of hazards that are hard to spot in time."
+   },
+   "points": [
+    {
+     "no": "Eksempler: glatt kjørebane, veiarbeid, dyr, annen fare (med underskilt).",
+     "th": "ตัวอย่าง: ถนนลื่น งานทาง สัตว์ อันตรายอื่น (พร้อมป้ายเสริม)",
+     "en": "Examples: slippery road, roadworks, animals, other danger (with a plate)."
+    },
+    {
+     "no": "Fartsgrenseskilt: fartsgrense, slutt på særskilt fartsgrense, sone og anbefalt fart.",
+     "th": "ป้ายจำกัดความเร็ว: ขีดจำกัดความเร็ว สิ้นสุดขีดจำกัดพิเศษ เขต และความเร็วแนะนำ",
+     "en": "Speed-limit signs: speed limit, end of special limit, zone and recommended speed."
+    },
+    {
+     "no": "På gatetun og gågate må du ikke kjøre fortere enn gangfart.",
+     "th": "ในย่านถนนคนเดินและถนนคนเดิน ต้องไม่ขับเร็วกว่าความเร็วเดินเท้า",
+     "en": "On a pedestrian street and shared street you must not drive faster than walking pace."
+    }
+   ],
+   "michael_says": {
+    "no": "Skiltet forteller deg hva du skal tilpasse.",
+    "th": "ป้ายบอกว่าคุณต้องปรับอะไร",
+    "en": "The sign tells you what to adjust."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du kjører inn i et gatetun med lekende barn. Hvor fort kan du kjøre?",
+     "th": "คุณขับเข้าย่านถนนคนเดินที่เด็กกำลังเล่น ขับได้เร็วแค่ไหน?",
+     "en": "You drive into a shared street with children playing. How fast may you drive?"
+    },
+    "options": [
+     {
+      "no": "Ikke fortere enn gangfart",
+      "th": "ไม่เร็วกว่าความเร็วเดินเท้า",
+      "en": "No faster than walking pace"
+     },
+     {
+      "no": "Opp til 30 km/t",
+      "th": "ถึง 30 กม./ชม.",
+      "en": "Up to 30 km/h"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Glatt kjørebane",
+     "th": "ถนนลื่น",
+     "en": "Slippery road"
+    },
+    {
+     "no": "Gatetun",
+     "th": "ย่านถนนคนเดิน",
+     "en": "Shared street"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian residential street entering a shared-use zone with children playing, a warning sign for slippery road and a speed-limit zone sign on posts, daylight. Do NOT let AI draw the sign symbols: use the official Statens vegvesen sign files (Michael Trafikklærer AI materialer/traffic-signs, which only has warning, mandatory and give-way signs) on a neutral roadside photo, or check every symbol against the official sign before approval. Master image 3:2 landscape. Keep every key element (Slippery road, Shared street) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "Trafikkreglene § 13 nr. 3",
+   "note": "",
+   "michael_basis": {
+    "no": "Fareskiltene brukes helst for å varsle en fare som er vanskelig å oppdage i tide, eller når faren er vesentlig større enn det som kan forventes. Eksempler på uforutsett fare: glatt kjørebane, veiarbeid, dyr, annen fare (skiltet «annen fare» skal alltid ha underskilt med tekst som nevner den spesielle faren). Skilt som går direkte på fartsgrenser: fartsgrense, slutt på særskilt fartsgrense, fartsgrensesone, anbefalt fart. Trafikkreglene § 13 nr. 3: på gågate eller gatetun må det ikke kjøres fortere enn i gangfart. Bokas tall 5–7 km/t er ikke bekreftet og er utelatt.",
+    "th": "ป้ายเตือนใช้เพื่อเตือนอันตรายที่ยากจะสังเกตได้ทัน หรือเมื่ออันตรายมากกว่าที่คาดไว้มาก ตัวอย่างอันตรายที่ไม่คาดคิด: ถนนลื่น งานทาง สัตว์ อันตรายอื่น (ป้าย ‘อันตรายอื่น’ ต้องมีป้ายเสริมที่ระบุอันตรายนั้นเสมอ) ป้ายที่เกี่ยวกับขีดจำกัดความเร็วโดยตรง: ขีดจำกัดความเร็ว สิ้นสุดขีดจำกัดพิเศษ เขตจำกัดความเร็ว ความเร็วแนะนำ กฎจราจร § 13 ข้อ 3: ในถนนคนเดินหรือย่านถนนคนเดิน ห้ามขับเร็วกว่าความเร็วเดินเท้า ตัวเลข 5–7 กม./ชม. ของหนังสือไม่ได้รับการยืนยันจึงไม่ใส่",
+    "en": "Warning signs are best used to warn of a hazard that is hard to spot in time, or when the hazard is substantially greater than expected. Examples of unexpected hazards: slippery road, roadworks, animals, other danger (the 'other danger' sign must always have a plate with text naming the special danger). Signs that apply directly to speed limits: speed limit, end of special speed limit, speed-limit zone, recommended speed. Traffic rules § 13 no. 3: on a pedestrian street or shared street you must not drive faster than walking pace. The book's figure of 5–7 km/h is not confirmed and omitted."
+   },
+   "open_questions": [],
+   "quiz_category": "Speed Limits",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 81 (PDF-s. 76)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s82"
+  },
+  {
+   "id": "bb-s82",
+   "book": "Lærebok Klasse B",
+   "printed_page": 82,
+   "pdf_page": 77,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.4 Fartsavpasning – Fartsgrense for spesielle kjøretøy",
+   "asset_id": "bb_s82_fartsgrense-spesielle-kjoretoy",
+   "image_file": "bb_s82_fartsgrense-spesielle-kjoretoy.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Fartsgrense for tunge biler og biler med tilhenger",
+    "th": "ขีดจำกัดความเร็วสำหรับรถหนักและรถที่ลากรถพ่วง",
+    "en": "Speed limits for heavy vehicles and vehicles with a trailer"
+   },
+   "core_sentence": {
+    "no": "Tunge biler og biler med tilhenger har egne fartsgrenser.",
+    "th": "รถหนักและรถที่ลากรถพ่วงมีขีดจำกัดความเร็วของตนเอง",
+    "en": "Heavy vehicles and vehicles with a trailer have their own speed limits."
+   },
+   "points": [
+    {
+     "no": "Der fartsgrensen er over 80, kan de som hovedregel ikke kjøre over 80 km/t.",
+     "th": "ในที่ที่ขีดจำกัดเกิน 80 โดยหลักแล้วขับเกิน 80 กม./ชม. ไม่ได้",
+     "en": "Where the limit is above 80, they cannot as a rule drive over 80 km/h."
+    },
+    {
+     "no": "Det finnes unntak, f.eks. for godkjente vogntog og buss.",
+     "th": "มีข้อยกเว้น เช่น ขบวนรถพ่วงที่ได้รับอนุมัติและรถโดยสาร",
+     "en": "There are exceptions, e.g. for approved combinations and buses."
+    },
+    {
+     "no": "Sjekk alltid vognkortet og reglene for din bil og henger.",
+     "th": "ตรวจเล่มทะเบียนและกฎสำหรับรถและรถพ่วงของคุณเสมอ",
+     "en": "Always check the registration certificate and the rules for your car and trailer."
+    }
+   ],
+   "michael_says": {
+    "no": "Sjekk alltid reglene for din bil og henger.",
+    "th": "ตรวจกฎสำหรับรถและรถพ่วงของคุณเสมอ",
+    "en": "Always check the rules for your car and trailer."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du kjører en personbil med campingvogn på en motorvei med skiltet 110. Hvilken fart kan du holde?",
+     "th": "คุณขับรถยนต์ลากคาราวานบนมอเตอร์เวย์ที่ป้ายจำกัด 110 ขับได้เร็วแค่ไหน?",
+     "en": "You drive a car with a caravan on a motorway signed 110. What speed can you keep?"
+    },
+    "options": [
+     {
+      "no": "Maks 80 km/t som hovedregel",
+      "th": "สูงสุด 80 กม./ชม. โดยหลัก",
+      "en": "At most 80 km/h as a rule"
+     },
+     {
+      "no": "110 km/t – skiltet gjelder alle",
+      "th": "110 กม./ชม. – ป้ายใช้กับทุกคน",
+      "en": "110 km/h – the sign applies to everyone"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Tilhenger",
+     "th": "รถพ่วง",
+     "en": "Trailer"
+    },
+    {
+     "no": "80 km/t",
+     "th": "80 กม./ชม.",
+     "en": "80 km/h"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian motorway with a car towing a caravan driving in the right lane and a lorry in front, a speed-limit sign visible in the distance, daylight. Do NOT let AI draw the sign symbols: use the official Statens vegvesen sign files (Michael Trafikklærer AI materialer/traffic-signs, which only has warning, mandatory and give-way signs) on a neutral roadside photo, or check every symbol against the official sign before approval. Master image 3:2 landscape. Keep every key element (Trailer, 80 km/h) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "Trafikkreglene § 13 nr. 4",
+   "note": "Bokas tabell er utdatert og er ikke brukt.",
+   "michael_basis": {
+    "no": "Trafikkreglene § 13 nr. 4: på strekninger med særskilt fartsgrense høyere enn 80 km/t må motorvogn med tillatt totalvekt over 3500 kg, eller motorvogn med tilhenger, ikke kjøres fortere enn 80 km/t. Unntak gjelder blant annet utrykningskjøretøy, personbil (M1) uten tilhenger med tillatt totalvekt til 7500 kg og egnet dekk, buss uten tilhenger i visse klasser (maks 100 km/t), og vogntog som oppfyller særlige krav (maks 100 km/t). Bokas tabell (80 km/t og 60 km/t for tilhenger uten bremser ≥ 300 kg) er utdatert: Statens vegvesen og NAF oppgir at grensen 60 for slike tilhengere ble hevet til 80 i 2022.",
+    "th": "กฎจราจร § 13 ข้อ 4: บนช่วงถนนที่มีขีดจำกัดความเร็วพิเศษสูงกว่า 80 กม./ชม. ยานยนต์ที่มีน้ำหนักรวมที่อนุญาตเกิน 3,500 กก. หรือยานยนต์ที่ลากรถพ่วงต้องไม่ขับเร็วกว่า 80 กม./ชม. มีข้อยกเว้น เช่น รถฉุกเฉิน รถยนต์นั่ง (M1) ที่ไม่ลากรถพ่วงและมีน้ำหนักรวมที่อนุญาตไม่เกิน 7,500 กก. พร้อมยางที่เหมาะสม รถโดยสารที่ไม่ลากรถพ่วงในบางประเภท (สูงสุด 100 กม./ชม.) และขบวนรถพ่วงที่เป็นไปตามข้อกำหนดพิเศษ (สูงสุด 100 กม./ชม.) ตารางของหนังสือ (80 และ 60 กม./ชม. สำหรับรถพ่วงไม่มีเบรกที่หนัก 300 กก. ขึ้นไป) ล้าสมัย: กรมทางหลวงนอร์เวย์และสมาคมยานยนต์นอร์เวย์ ระบุว่าขีดจำกัด 60 สำหรับรถพ่วงดังกล่าวถูกเพิ่มเป็น 80 ในปี 2022",
+    "en": "Traffic rules § 13 no. 4: on stretches with a special speed limit above 80 km/h, a motor vehicle with a permitted gross weight over 3,500 kg, or a motor vehicle with a trailer, must not be driven faster than 80 km/h. Exceptions apply to, among others, emergency vehicles, a passenger car (M1) without a trailer with a permitted gross weight up to 7,500 kg and suitable tyres, a bus without a trailer in certain classes (max 100 km/h), and combinations meeting special requirements (max 100 km/h). The book's table (80 km/h and 60 km/h for a trailer without brakes at 300 kg or more) is out of date: the Norwegian Public Roads Administration and NAF say the 60 limit for such trailers was raised to 80 in 2022."
+   },
+   "open_questions": [
+    "Bekreft nr. 4 (80 km/t og unntakene) og 2022-endringen for tilhenger uten bremser mot gjeldende forskrift. Tabellen i boka er ikke brukt."
+   ],
+   "quiz_category": "Speed Limits",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 82 (PDF-s. 77)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s82b"
+  },
+  {
+   "id": "bb-s82b",
+   "book": "Lærebok Klasse B",
+   "printed_page": 82,
+   "pdf_page": 77,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.5 Kjøretøyets plassering på veien – hovedregelen",
+   "asset_id": "bb_s82b_plassering-hoyre-side",
+   "image_file": "bb_s82b_plassering-hoyre-side.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Kjør på høyre side av veien",
+    "th": "ขับชิดขวาของถนน",
+    "en": "Drive on the right side of the road"
+   },
+   "core_sentence": {
+    "no": "Så langt forholdene tillater det, skal du kjøre på høyre side.",
+    "th": "ให้ขับชิดขวาเท่าที่สภาพเอื้ออำนวย",
+    "en": "As far as conditions allow, drive on the right side."
+   },
+   "points": [
+    {
+     "no": "Plassering gir informasjon til andre trafikanter.",
+     "th": "ตำแหน่งรถให้ข้อมูลแก่ผู้ใช้ถนนอื่น",
+     "en": "Position gives information to other road users."
+    },
+    {
+     "no": "Hovedregelen gjelder selv om det er flere felt i samme retning.",
+     "th": "กฎหลักใช้แม้มีหลายเลนในทิศเดียวกัน",
+     "en": "The main rule applies even with several lanes in the same direction."
+    },
+    {
+     "no": "Hold kjøretøyet godt innenfor kjørefeltet. Normalt kan du plassere deg midt i feltet.",
+     "th": "ให้รถอยู่ภายในเลนอย่างมั่นคง โดยปกติวางตำแหน่งกลางเลน",
+     "en": "Keep the vehicle well within the lane. Normally you can position yourself in the middle of the lane."
+    }
+   ],
+   "michael_says": {
+    "no": "Plassér bilen slik at andre forstår deg.",
+    "th": "วางตำแหน่งรถให้คนอื่นเข้าใจคุณ",
+    "en": "Position the car so others understand you."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du kjører på en vei med to felt i din retning og ingen trafikk. Hvilket felt bruker du?",
+     "th": "คุณขับบนถนนที่มีสองเลนในทิศของคุณและไม่มีรถ ใช้เลนไหน?",
+     "en": "You drive on a road with two lanes in your direction and no traffic. Which lane do you use?"
+    },
+    "options": [
+     {
+      "no": "Høyre felt",
+      "th": "เลนขวา",
+      "en": "The right lane"
+     },
+     {
+      "no": "Venstre felt – det er mest plass",
+      "th": "เลนซ้าย – มีที่มากที่สุด",
+      "en": "The left lane – there is most space"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Høyre side",
+     "th": "ด้านขวา",
+     "en": "Right side"
+    },
+    {
+     "no": "Midt i feltet",
+     "th": "กลางเลน",
+     "en": "Middle of the lane"
+    }
+   ],
+   "image_brief": "Photorealistic aerial view of a Norwegian two-lane-each-direction road with several cars each in the right-hand lane of their direction, a motorcycle visible, daylight, no text. Master image 3:2 landscape. Keep every key element (Right side, Middle of the lane) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "Trafikkreglene § 5 nr. 1",
+   "note": "",
+   "michael_basis": {
+    "no": "4.5 Kjøretøyets plassering på veien: riktig plassering gir god informasjon til andre trafikanter, og det er viktig å utnytte veimiljøet så effektivt som mulig. Trafikkreglene § 5 nr. 1: «Så langt forholdene tillater det skal kjøretøy føres på høyre side av vegen.» Kjøretøy må holdes godt innenfor kjørefeltet (bokas henvisning til §§ 4, 5 og 6). Hovedregelen: kjøretøy skal kjøres på høyre side, også om det er flere felt i kjøreretningen. Normalt kan du plassere deg midt i kjørefeltet.",
+    "th": "4.5 ตำแหน่งของยานพาหนะบนถนน: การวางตำแหน่งที่ถูกต้องให้ข้อมูลที่ดีแก่ผู้ใช้ถนนอื่น และสำคัญที่ต้องใช้สภาพแวดล้อมของถนนอย่างมีประสิทธิภาพที่สุด กฎจราจร § 5 ข้อ 1: ต้องขับยานพาหนะชิดขวาของถนนเท่าที่สภาพเอื้ออำนวย ต้องให้ยานพาหนะอยู่ภายในเลนอย่างมั่นคง (หนังสืออ้างถึง § 4, 5 และ 6) กฎหลัก: ยานพาหนะต้องขับชิดขวา แม้มีหลายเลนในทิศทางการขับ โดยปกติวางตำแหน่งกลางเลนได้",
+    "en": "4.5 The vehicle's position on the road: the right position gives good information to other road users, and it is important to use the road environment as effectively as possible. Traffic rules § 5 no. 1: as far as conditions allow, vehicles must be driven on the right side of the road. The vehicle must be kept well within the lane (the book's reference to §§ 4, 5 and 6). The main rule: vehicles must be driven on the right side, even if there are several lanes in the direction. Normally you can position yourself in the middle of the lane."
+   },
+   "open_questions": [],
+   "quiz_category": "Road Rules",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 82 (PDF-s. 77)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s83"
+  },
+  {
+   "id": "bb-s83",
+   "book": "Lærebok Klasse B",
+   "printed_page": 83,
+   "pdf_page": 78,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.5 Kjøretøyets plassering – Unntak fra hovedregelen",
+   "asset_id": "bb_s83_unntak-fra-hovedregelen",
+   "image_file": "bb_s83_unntak-fra-hovedregelen.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Når du kan bruke venstre felt",
+    "th": "เมื่อใช้เลนซ้ายได้",
+    "en": "When you may use the left lane"
+   },
+   "core_sentence": {
+    "no": "Fire unntak: tett trafikk, blokkert felt, skilt eller oppmerking, forbikjøring.",
+    "th": "สี่ข้อยกเว้น: การจราจรหนาแน่น เลนถูกกีดขวาง ป้ายหรือเส้นบนถนน การแซง",
+    "en": "Four exceptions: dense traffic, blocked lane, sign or marking, overtaking."
+   },
+   "points": [
+    {
+     "no": "Tett trafikk: høyre felt kan ikke alene avvikle trafikken. Hold til høyre igjen når den avtar.",
+     "th": "การจราจรหนาแน่น: เลนขวาเลนเดียวระบายไม่ได้ ชิดขวาอีกเมื่อรถน้อยลง",
+     "en": "Dense traffic: the right lane alone cannot handle it. Move right again when it eases."
+    },
+    {
+     "no": "Hindring: høyre felt er blokkert, f.eks. en parkert bil.",
+     "th": "สิ่งกีดขวาง: เลนขวาถูกปิด เช่น รถจอด",
+     "en": "Obstruction: the right lane is blocked, e.g. a parked car."
+    },
+    {
+     "no": "Skilt eller oppmerking viser at venstre felt er tillatt eller påbudt.",
+     "th": "ป้ายหรือเส้นบนถนนแสดงว่าเลนซ้ายอนุญาตหรือบังคับ",
+     "en": "A sign or marking shows the left lane is allowed or mandatory."
+    }
+   ],
+   "michael_says": {
+    "no": "Høyre er hovedregelen. Unntakene er få og klare.",
+    "th": "ขวาคือกฎหลัก ข้อยกเว้นมีน้อยและชัดเจน",
+    "en": "Right is the main rule. The exceptions are few and clear."
+   },
+   "check_question": {
+    "q": {
+     "no": "Det er rushtrafikk og høyre felt er fullt, men trafikken avtar etter en stund. Hva gjør du da?",
+     "th": "ช่วงเร่งด่วนเลนขวาเต็ม แต่รถลดลงหลังจากนั้น ทำอย่างไร?",
+     "en": "It is rush hour and the right lane is full, but traffic eases after a while. What do you do then?"
+    },
+    "options": [
+     {
+      "no": "Holder til høyre igjen",
+      "th": "กลับมาชิดขวา",
+      "en": "Move back to the right"
+     },
+     {
+      "no": "Blir i venstre felt hele turen",
+      "th": "อยู่เลนซ้ายตลอดทาง",
+      "en": "Stay in the left lane all the way"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Tett trafikk",
+     "th": "การจราจรหนาแน่น",
+     "en": "Dense traffic"
+    },
+    {
+     "no": "Hindring",
+     "th": "สิ่งกีดขวาง",
+     "en": "Obstruction"
+    },
+    {
+     "no": "Skilt",
+     "th": "ป้าย",
+     "en": "Sign"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian city road in rush hour with dense traffic in both lanes of one direction; in a second inset a parked car blocking the right lane with a car passing in the left lane, daylight, no text. Master image 3:2 landscape. Keep every key element (Dense traffic, Obstruction, Sign) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "Trafikkreglene § 5 nr. 1",
+   "note": "",
+   "michael_basis": {
+    "no": "Unntak fra hovedregelen: høyre felt kan ikke alene avvikle trafikken i øyeblikket (rushtrafikk): når trafikken igjen blir mindre, må du holde til høyre; høyre kjørefelt er blokkert, f.eks. av en parkert bil; skilt eller veioppmerking forteller at venstre felt er tillatt eller påbudt; ved forbikjøring.",
+    "th": "ข้อยกเว้นจากกฎหลัก: เลนขวาเลนเดียวระบายการจราจรไม่ได้ในขณะนั้น (ช่วงเร่งด่วน): เมื่อรถน้อยลงต้องชิดขวาอีก เลนขวาถูกกีดขวาง เช่น มีรถจอด ป้ายหรือเส้นบนถนนบอกว่าเลนซ้ายอนุญาตหรือบังคับ และเมื่อแซง",
+    "en": "Exceptions to the main rule: the right lane alone cannot handle the traffic at the moment (rush hour): when traffic eases again you must keep right; the right lane is blocked, e.g. by a parked car; a sign or road marking says the left lane is allowed or mandatory; when overtaking."
+   },
+   "open_questions": [],
+   "quiz_category": "Road Rules",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 83 (PDF-s. 78)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s84"
+  },
+  {
+   "id": "bb-s84",
+   "book": "Lærebok Klasse B",
+   "printed_page": 84,
+   "pdf_page": 79,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.5 Kjøretøyets plassering – Avstand til forankjørende",
+   "asset_id": "bb_s84_avstand-til-forankjorende",
+   "image_file": "bb_s84_avstand-til-forankjorende.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Avstand til forankjørende: 3-sekundersregelen",
+    "th": "ระยะห่างจากรถคันหน้า: กฎ 3 วินาที",
+    "en": "Distance to the vehicle ahead: the 3-second rule"
+   },
+   "core_sentence": {
+    "no": "Hold så stor avstand at du ikke kjører på hvis den foran stanser.",
+    "th": "เว้นระยะมากพอที่จะไม่ชนถ้าคันหน้าหยุด",
+    "en": "Keep enough distance that you don't run into the one ahead if it stops."
+   },
+   "points": [
+    {
+     "no": "Normalt trygg avstand er 3 sekunder. Tell «1001, 1002, 1003».",
+     "th": "ระยะปลอดภัยปกติคือ 3 วินาที นับ “หนึ่งพัน หนึ่งพันหนึ่ง หนึ่งพันสอง”",
+     "en": "A normally safe distance is 3 seconds. Count '1001, 1002, 1003'."
+    },
+    {
+     "no": "Ved 80 km/t er 3 sekunder ca. 66 meter.",
+     "th": "ที่ 80 กม./ชม. 3 วินาทีคือประมาณ 66 เมตร",
+     "en": "At 80 km/h, 3 seconds is about 66 metres."
+    },
+    {
+     "no": "Hold større avstand ved høy fart og på glatt føre.",
+     "th": "เว้นระยะมากขึ้นเมื่อขับเร็วและถนนลื่น",
+     "en": "Keep a larger distance at high speed and on slippery roads."
+    }
+   ],
+   "michael_says": {
+    "no": "Tre sekunder gir deg tid og sparer nakken.",
+    "th": "สามวินาทีให้เวลาและช่วยปกป้องคอ",
+    "en": "Three seconds give you time and protect your neck."
+   },
+   "check_question": {
+    "q": {
+     "no": "Det regner og du kjører 80 km/t bak en bil. Hvor stor avstand bør du ha?",
+     "th": "ฝนตกและคุณขับ 80 กม./ชม. ตามหลังรถคันหนึ่ง ควรเว้นระยะเท่าไร?",
+     "en": "It is raining and you drive at 80 km/h behind a car. How big a distance should you keep?"
+    },
+    "options": [
+     {
+      "no": "Mer enn 3 sekunder",
+      "th": "มากกว่า 3 วินาที",
+      "en": "More than 3 seconds"
+     },
+     {
+      "no": "Mindre enn 3 sekunder, så du ser bedre",
+      "th": "น้อยกว่า 3 วินาที เพื่อให้มองเห็นชัด",
+      "en": "Less than 3 seconds, so you see better"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "3 sekunder",
+     "th": "3 วินาที",
+     "en": "3 seconds"
+    },
+    {
+     "no": "Forankjørende",
+     "th": "รถคันหน้า",
+     "en": "Vehicle ahead"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian two-lane road, a car following another at a clear safe gap with a visible fixed roadside marker post between them, dry daylight, no text, no numbers. Master image 3:2 landscape. Keep every key element (3 seconds, Vehicle ahead) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "Trafikkreglene § 5 nr. 3",
+   "note": "",
+   "michael_basis": {
+    "no": "Trafikkreglene § 5 nr. 3: avstanden til forankjørende skal være så stor at det ikke oppstår fare for påkjørsel dersom den forankjørende saktner farten eller stanser. Ved å holde en avstand til forankjørende på 3 sekunder har du normalt trygg avstand (bokas tommelfingerregel); du må likevel holde større avstand når du kjører med høy hastighet og når det er glatt føre. Tell «1001–1002–1003». Ved 80 km/t utgjør 3 sekunder 22 meter x 3 = 66 meter. Mange av ulykkene skyldes påkjørsel bakfra; nakkeslengskader (whiplash) er en vanlig følge.",
+    "th": "กฎจราจร § 5 ข้อ 3: ระยะห่างจากรถคันหน้าต้องมากพอที่จะไม่เกิดอันตรายจากการชนท้ายถ้ารถคันหน้าชะลอหรือหยุด การเว้นระยะ 3 วินาทีจากรถคันหน้าโดยปกติปลอดภัย (หลักคร่าว ๆ ของหนังสือ) แต่ต้องเว้นระยะมากกว่านี้เมื่อขับเร็วและเมื่อถนนลื่น นับ “หนึ่งพัน หนึ่งพันหนึ่ง หนึ่งพันสอง” ที่ 80 กม./ชม. 3 วินาทีคือ 22 ม. x 3 = 66 ม. อุบัติเหตุจำนวนมากเกิดจากการชนท้าย การบาดเจ็บที่คอ (วิปแลช) เป็นผลที่พบบ่อย",
+    "en": "Traffic rules § 5 no. 3: the distance to the vehicle ahead must be so large that there is no danger of a rear-end collision if the vehicle ahead slows or stops. By keeping a distance of 3 seconds you normally have a safe distance (the book's rule of thumb); you must still keep a larger distance at high speed and when it is slippery. Count '1001–1002–1003'. At 80 km/h, 3 seconds is 22 metres x 3 = 66 metres. Many accidents are caused by rear-end collisions; neck injuries (whiplash) are a common result."
+   },
+   "open_questions": [
+    "Tre-sekundersregelen er bokas tommelfingerregel, ikke et lovkrav. Elevteksten kaller den «normalt trygg avstand». Bekreft formuleringen."
+   ],
+   "quiz_category": "Road Rules",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 84 (PDF-s. 79)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s85"
+  },
+  {
+   "id": "bb-s85",
+   "book": "Lærebok Klasse B",
+   "printed_page": 85,
+   "pdf_page": 80,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.5 Kjøretøyets plassering – Plassering foran og i veikryss: høyresving",
+   "asset_id": "bb_s85_hoyresving",
+   "image_file": "bb_s85_hoyresving.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Høyresving: så nær høyre kant som mulig",
+    "th": "เลี้ยวขวา: ชิดขอบขวาให้มากที่สุด",
+    "en": "Right turn: as near the right edge as possible"
+   },
+   "core_sentence": {
+    "no": "Ved sving til høyre skal du kjøre så nær høyre kant som mulig.",
+    "th": "เมื่อเลี้ยวขวาให้ขับชิดขอบขวาให้มากที่สุด",
+    "en": "When turning right, drive as near the right edge as possible."
+   },
+   "points": [
+    {
+     "no": "Da hindrer du tohjulinger i å presse seg inn på din høyre side.",
+     "th": "คุณจึงป้องกันไม่ให้รถสองล้อแทรกเข้าด้านขวาของคุณ",
+     "en": "That stops two-wheelers pressing in on your right side."
+    },
+    {
+     "no": "Sjekk blindsonen før plassering og om nødvendig før du svinger.",
+     "th": "ตรวจจุดบอดก่อนวางตำแหน่ง และก่อนเลี้ยวถ้าจำเป็น",
+     "en": "Check the blind zone before positioning and if needed before you turn."
+    },
+    {
+     "no": "Ta et blikk inn i veien du skal inn på. Parkerte biler kan hindre sikten.",
+     "th": "มองเข้าไปในถนนที่คุณจะเลี้ยวเข้า รถจอดอาจบังทัศนวิสัย",
+     "en": "Take a look into the road you turn into. Parked cars can block your view."
+    }
+   ],
+   "michael_says": {
+    "no": "Observér, gi tegn, plassér, tilpass farten, sving.",
+    "th": "สังเกต ให้สัญญาณ วางตำแหน่ง ปรับความเร็ว แล้วเลี้ยว",
+    "en": "Observe, signal, position, adjust speed, turn."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du skal svinge til høyre og en syklist ligger bak deg til høyre. Hva gjør du?",
+     "th": "คุณจะเลี้ยวขวาและมีผู้ปั่นจักรยานอยู่ข้างหลังทางขวา ทำอย่างไร?",
+     "en": "You will turn right and a cyclist rides behind you on the right. What do you do?"
+    },
+    "options": [
+     {
+      "no": "Plasserer meg nær høyre kant, sjekker blindsonen og lar syklisten passere først hvis nødvendig",
+      "th": "ชิดขอบขวา ตรวจจุดบอด และให้ผู้ปั่นผ่านก่อนถ้าจำเป็น",
+      "en": "Position near the right edge, check the blind zone and let the cyclist pass first if necessary"
+     },
+     {
+      "no": "Svinger bredt ut til venstre først",
+      "th": "เลี้ยวกว้างออกซ้ายก่อน",
+      "en": "Swing wide to the left first"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Plassering",
+     "th": "ตำแหน่ง",
+     "en": "Position"
+    },
+    {
+     "no": "Observasjon",
+     "th": "การสังเกต",
+     "en": "Observation"
+    }
+   ],
+   "image_brief": "Photorealistic aerial view of a Norwegian junction, an orange car positioned close to the right edge preparing a right turn with its indicator on, a cyclist beside it on the right, daylight, no text, no arrows. Master image 3:2 landscape. Keep every key element (Position, Observation) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "Trafikkreglene § 6 nr. 2",
+   "note": "",
+   "michael_basis": {
+    "no": "Plassering foran og i veikryss, eksempler hvor kjørebanen har ett felt i hver retning. Høyresving, § 6.2 (bokas henvisning): «Ved sving til høyre skal det kjøres så nær høyre kant av kjørebanen som mulig.» Ved å plassere kjøretøyet så nær høyre kant som mulig hindrer du tohjulinger å presse seg inn på din høyre side. Glem likevel ikke blindsone før plassering, og om nødvendig også før du svinger. Husk å ta et blikk inn i den veien du skal inn på; det kan være parkerte biler i høyre felt som hindrer sikten. Du skal være godt innenfor feltet i den veien du kjører inn på. Trafikkreglene § 6 handler om svinging (bekreftet).",
+    "th": "การวางตำแหน่งก่อนและในทางแยก ตัวอย่างที่ช่องการจราจรมีหนึ่งเลนต่อทิศ เลี้ยวขวา § 6.2 (ตามที่หนังสืออ้าง): เมื่อเลี้ยวขวาต้องขับชิดขอบขวาของช่องการจราจรให้มากที่สุด การวางรถชิดขอบขวามากที่สุดป้องกันไม่ให้รถสองล้อแทรกเข้าด้านขวา อย่าลืมตรวจจุดบอดก่อนวางตำแหน่ง และก่อนเลี้ยวถ้าจำเป็น อย่าลืมมองเข้าไปในถนนที่จะเลี้ยวเข้า อาจมีรถจอดในเลนขวาบังทัศนวิสัย ต้องอยู่ภายในเลนของถนนที่เข้าอย่างมั่นคง กฎจราจร § 6 ว่าด้วยการเลี้ยว (ยืนยันแล้ว)",
+    "en": "Positioning in front of and in junctions, examples where the carriageway has one lane in each direction. Right turn, § 6.2 (the book's reference): when turning right, drive as near the right edge of the carriageway as possible. By positioning the vehicle as near the right edge as possible you stop two-wheelers pressing in on your right side. Still do not forget the blind zone before positioning, and if needed also before you turn. Remember to take a look into the road you turn into; there may be parked cars in the right lane blocking the view. You must be well within the lane of the road you turn into. Traffic rules § 6 is about turning (confirmed)."
+   },
+   "open_questions": [
+    "Bokas «§ 6.2» (høyresving nær høyre kant) er ikke lest ordrett; Lovdata bekrefter at § 6 handler om svinging. Bekreft ordlyden."
+   ],
+   "quiz_category": "Road Rules",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 85 (PDF-s. 80)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s85b"
+  },
+  {
+   "id": "bb-s85b",
+   "book": "Lærebok Klasse B",
+   "printed_page": 85,
+   "pdf_page": 80,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.5 Kjøretøyets plassering – Plassering i veikryss: venstresving",
+   "asset_id": "bb_s85b_venstresving",
+   "image_file": "bb_s85b_venstresving.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Venstresving: kjør mot midten, ikke i midten",
+    "th": "เลี้ยวซ้าย: ขับไปทางกลาง ไม่ใช่ในกลาง",
+    "en": "Left turn: drive towards the middle, not in the middle"
+   },
+   "core_sentence": {
+    "no": "På toveis vei kjører du så nær midten som mulig ved venstresving.",
+    "th": "บนถนนสองทิศ ให้ขับชิดกลางถนนให้มากที่สุดเมื่อเลี้ยวซ้าย",
+    "en": "On a two-way road, drive as near the middle as possible when turning left."
+   },
+   "points": [
+    {
+     "no": "Gul midtlinje bestemmer plasseringen din. Mangler oppmerking, finn midten selv.",
+     "th": "เส้นกลางสีเหลืองกำหนดตำแหน่งของคุณ ถ้าไม่มีเส้น ให้หากลางเอง",
+     "en": "The yellow centre line decides your position. If there is no marking, find the middle yourself."
+    },
+    {
+     "no": "Kjør MOT midten, ikke I midten, selv om du har biler bak deg.",
+     "th": "ขับไปทางกลาง ไม่ใช่ในกลาง แม้มีรถตามหลัง",
+     "en": "Drive TOWARDS the middle, not IN the middle, even with cars behind you."
+    },
+    {
+     "no": "Bilene bak kan kjøre forbi på høyre side hvis det er plass.",
+     "th": "รถข้างหลังแซงทางขวาได้ถ้ามีที่",
+     "en": "Cars behind may pass on the right if there is room."
+    }
+   ],
+   "michael_says": {
+    "no": "Mot midten, ikke i midten. Gi plass til de bak.",
+    "th": "ไปทางกลาง ไม่ใช่ในกลาง ให้ที่แก่คนข้างหลัง",
+    "en": "Towards the middle, not in the middle. Make room for those behind."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du skal svinge til venstre og har en bil bak deg. Hvor plasserer du deg?",
+     "th": "คุณจะเลี้ยวซ้ายและมีรถตามหลัง วางตำแหน่งที่ไหน?",
+     "en": "You will turn left and have a car behind you. Where do you position yourself?"
+    },
+    "options": [
+     {
+      "no": "Mot midten av kjørebanen, så de bak kan passere til høyre",
+      "th": "ไปทางกลางถนน เพื่อให้คนข้างหลังผ่านทางขวาได้",
+      "en": "Towards the middle of the carriageway, so those behind can pass on the right"
+     },
+     {
+      "no": "Helt ut til høyre kant",
+      "th": "ชิดขอบขวาสุด",
+      "en": "All the way to the right edge"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Midtlinje",
+     "th": "เส้นกลาง",
+     "en": "Centre line"
+    },
+    {
+     "no": "Plassering",
+     "th": "ตำแหน่ง",
+     "en": "Position"
+    }
+   ],
+   "image_brief": "Photorealistic aerial view of a Norwegian junction, a yellow car positioned just right of the yellow centre line preparing a left turn with its indicator on, a car behind it passing on the right, daylight, no text, no arrows. Master image 3:2 landscape. Keep every key element (Centre line, Position) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "Trafikkreglene § 6 nr. 2",
+   "note": "",
+   "michael_basis": {
+    "no": "Venstresving, § 6.2 (bokas henvisning): «På toveis kjørebane skal det ved sving til venstre kjøres så nær midten av kjørebanen som mulig.» Her er det gul midtlinje (ikke alltid i midten) som bestemmer plasseringen din. Hvis oppmerking mangler, må du selv finne ut hva som er midten av kjørebanen. Husk: du skal kjøre MOT midten, ikke I midten. Dette gjelder selv om du har biler bak deg. Disse kan kjøre forbi på høyre side hvis det er plass. Du skal holde deg godt innenfor feltet i den veien du kjører inn på.",
+    "th": "เลี้ยวซ้าย § 6.2 (ตามที่หนังสืออ้าง): บนช่องการจราจรสองทิศ เมื่อเลี้ยวซ้ายต้องขับชิดกลางของช่องการจราจรให้มากที่สุด ตรงนี้เส้นกลางสีเหลือง (ไม่ได้อยู่กลางเสมอไป) กำหนดตำแหน่งของคุณ ถ้าไม่มีเส้น คุณต้องหาเองว่ากลางช่องการจราจรอยู่ตรงไหน จำไว้: ขับไปทางกลาง ไม่ใช่ในกลาง ใช้แม้มีรถตามหลัง รถเหล่านั้นแซงทางขวาได้ถ้ามีที่ ต้องอยู่ภายในเลนของถนนที่เข้าอย่างมั่นคง",
+    "en": "Left turn, § 6.2 (the book's reference): on a two-way carriageway, when turning left drive as near the middle of the carriageway as possible. Here the yellow centre line (not always in the middle) decides your position. If there is no marking, you must find out yourself what the middle of the carriageway is. Remember: you must drive TOWARDS the middle, not IN the middle. This applies even if you have cars behind you. They may pass on the right if there is room. You must be well within the lane of the road you turn into."
+   },
+   "open_questions": [
+    "Bokas «§ 6.2» (venstresving mot midten) er ikke lest ordrett. Bekreft ordlyden mot Lovdata."
+   ],
+   "quiz_category": "Road Rules",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 85 (PDF-s. 80)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": null
+  }
+ ],
+ "global_open_questions": [
+  "Skal thai-teksten vise norsk fagord i parentes? Pakken viser det ikke.",
+  "Lisens til å bruke boka som kilde kommersielt er ikke avklart.",
+  "Skiltforskriften og enkelte trafikkregel-paragrafer (§ 6 nr. 2, § 2) er ikke lest ordrett. Se REGELKONTROLL_BATCH3.md.",
+  "Skiltbilder: symbolene skal komme fra offisielle skiltfiler, ikke genereres."
+ ]
+}

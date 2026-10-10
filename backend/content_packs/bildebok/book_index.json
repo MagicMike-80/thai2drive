@@ -952,6 +952,496 @@
    },
    "image_file": "bb_s60b_vikeplikt-og-forkjorsskilt.png",
    "quiz_category": "Right of Way",
+   "next": "bb-s61"
+  },
+  "bb-s61": {
+   "printed_page": 61,
+   "pdf_page": 56,
+   "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
+   "section": "Trafikkskiltene – Forbuds- og påbudsskilt",
+   "title": {
+    "no": "Forbudsskilt og påbudsskilt",
+    "th": "ป้ายห้ามและป้ายบังคับ",
+    "en": "Prohibition and mandatory signs"
+   },
+   "image_file": "bb_s61_forbuds-og-paabudsskilt.png",
+   "quiz_category": "Traffic Signs",
+   "next": "bb-s61b"
+  },
+  "bb-s61b": {
+   "printed_page": 61,
+   "pdf_page": 56,
+   "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
+   "section": "Trafikkskiltene – Opplysningsskilt",
+   "title": {
+    "no": "Opplysningsskilt gir deg informasjon",
+    "th": "ป้ายข้อมูลให้ข้อมูลแก่คุณ",
+    "en": "Information signs give you information"
+   },
+   "image_file": "bb_s61b_opplysningsskilt.png",
+   "quiz_category": "Traffic Signs",
+   "next": "bb-s62"
+  },
+  "bb-s62": {
+   "printed_page": 62,
+   "pdf_page": 57,
+   "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
+   "section": "Trafikkskiltene – Service-, veivisnings-, under- og markeringsskilt",
+   "title": {
+    "no": "Service-, veivisnings-, under- og markeringsskilt",
+    "th": "ป้ายบริการ ป้ายบอกทาง ป้ายเสริม และป้ายทำเครื่องหมาย",
+    "en": "Service, direction, plate and marking signs"
+   },
+   "image_file": "bb_s62_service-veivisning-under-markering.png",
+   "quiz_category": "Traffic Signs",
+   "next": "bb-s63"
+  },
+  "bb-s63": {
+   "printed_page": 63,
+   "pdf_page": 58,
+   "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
+   "section": "Myndighetspyramiden",
+   "title": {
+    "no": "Hvem har høyest myndighet?",
+    "th": "ใครมีอำนาจสูงสุด?",
+    "en": "Who has the highest authority?"
+   },
+   "image_file": "bb_s63_myndighetspyramiden.png",
+   "quiz_category": "Road Rules",
+   "next": "bb-s64"
+  },
+  "bb-s64": {
+   "printed_page": 64,
+   "pdf_page": 59,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "Del 4 – Risiko og falsk trygghet",
+   "title": {
+    "no": "Bilkjøring er risikofylt",
+    "th": "การขับรถมีความเสี่ยง",
+    "en": "Driving carries risk"
+   },
+   "image_file": "bb_s64_risiko-og-falsk-trygghet.png",
+   "quiz_category": "Safety",
+   "next": "bb-s64b"
+  },
+  "bb-s64b": {
+   "printed_page": 64,
+   "pdf_page": 59,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.1 Grunnregler for atferd i trafikken – HAV",
+   "title": {
+    "no": "HAV: hensynsfull, aktpågivende, varsom",
+    "th": "HAV: เกรงใจ ตื่นตัว ระมัดระวัง",
+    "en": "HAV: considerate, alert, careful"
+   },
+   "image_file": "bb_s64b_hav-hensynsfull-aktpaagivende-varsom.png",
+   "quiz_category": "Safety",
+   "next": "bb-s65"
+  },
+  "bb-s65": {
+   "printed_page": 65,
+   "pdf_page": 60,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.1 Aktpågivende og varsom",
+   "title": {
+    "no": "Ikke ta for gitt at det ikke skjuler seg noe bak hekken",
+    "th": "อย่าคิดว่าไม่มีอะไรซ่อนอยู่หลังพุ่มไม้",
+    "en": "Don't assume nothing hides behind the hedge"
+   },
+   "image_file": "bb_s65_aktpaagivende-bak-hekken.png",
+   "quiz_category": "Situations",
+   "next": "bb-s65b"
+  },
+  "bb-s65b": {
+   "printed_page": 65,
+   "pdf_page": 60,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "Fra tanke til handling",
+   "title": {
+    "no": "Fra tanke til handling",
+    "th": "จากความคิดสู่การกระทำ",
+    "en": "From thought to action"
+   },
+   "image_file": "bb_s65b_fra-tanke-til-handling.png",
+   "quiz_category": "Road Rules",
+   "next": "bb-s66"
+  },
+  "bb-s66": {
+   "printed_page": 66,
+   "pdf_page": 61,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.1 Sittestilling, speil og hodestøtte – 4.2 Observasjonsteknikk",
+   "title": {
+    "no": "Rett sittestilling, speil og hodestøtte",
+    "th": "ท่านั่ง กระจก และที่พักศีรษะที่ถูกต้อง",
+    "en": "The right seating, mirrors and head restraint"
+   },
+   "image_file": "bb_s66_sittestilling-speil-hodestotte.png",
+   "quiz_category": "Safety",
+   "next": "bb-s67"
+  },
+  "bb-s67": {
+   "printed_page": 67,
+   "pdf_page": 62,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.2 Observasjonsteknikk – Se-regel 1 og 2",
+   "title": {
+    "no": "Se langt frem og beveg blikket",
+    "th": "มองไกลไปข้างหน้าและเคลื่อนสายตา",
+    "en": "Look far ahead and move your eyes"
+   },
+   "image_file": "bb_s67_se-langt-frem-og-beveg-blikket.png",
+   "quiz_category": "Safety",
+   "next": "bb-s68"
+  },
+  "bb-s68": {
+   "printed_page": 68,
+   "pdf_page": 63,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.2 Observasjonsteknikk – Se-regel 3 og 4",
+   "title": {
+    "no": "Ta overblikk og bli sett og forstått",
+    "th": "ดูภาพรวมและทำให้คนอื่นเห็นและเข้าใจ",
+    "en": "Get an overview and be seen and understood"
+   },
+   "image_file": "bb_s68_ta-overblikk-og-bli-sett.png",
+   "quiz_category": "Situations",
+   "next": "bb-s69"
+  },
+  "bb-s69": {
+   "printed_page": 69,
+   "pdf_page": 64,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.2 Observasjonsteknikk – Se-regel 5 og eksempler",
+   "title": {
+    "no": "Se alltid etter en utvei",
+    "th": "มองหาทางหนีทีไล่เสมอ",
+    "en": "Always look for a way out"
+   },
+   "image_file": "bb_s69_se-alltid-etter-en-utvei.png",
+   "quiz_category": "Situations",
+   "next": "bb-s70"
+  },
+  "bb-s70": {
+   "printed_page": 70,
+   "pdf_page": 65,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.2 Observasjonsteknikk – Eksempler 3 og 4",
+   "title": {
+    "no": "Seteknikk i praksis: lastebil og kryss",
+    "th": "เทคนิคการมองในทางปฏิบัติ: รถบรรทุกและทางแยก",
+    "en": "Seeing technique in practice: lorry and junction"
+   },
+   "image_file": "bb_s70_seteknikk-lastebil-og-kryss.png",
+   "quiz_category": "Situations",
+   "next": "bb-s71"
+  },
+  "bb-s71": {
+   "printed_page": 71,
+   "pdf_page": 66,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.3 Signal og tegn",
+   "title": {
+    "no": "Signal og tegn",
+    "th": "สัญญาณและเครื่องหมาย",
+    "en": "Signals and signs"
+   },
+   "image_file": "bb_s71_signal-og-tegn.png",
+   "quiz_category": "Road Rules",
+   "next": "bb-s72"
+  },
+  "bb-s72": {
+   "printed_page": 72,
+   "pdf_page": 67,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.3 Signal og tegn – Tegn i god tid",
+   "title": {
+    "no": "Gi tegn i god tid – bruk skjønn",
+    "th": "ให้สัญญาณทันเวลา – ใช้วิจารณญาณ",
+    "en": "Signal in good time – use judgement"
+   },
+   "image_file": "bb_s72_tegn-i-god-tid.png",
+   "quiz_category": "Road Rules",
+   "next": "bb-s73"
+  },
+  "bb-s73": {
+   "printed_page": 73,
+   "pdf_page": 68,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.3 Signal og tegn – Blinklys før du bremser",
+   "title": {
+    "no": "Gi tegn med blinklys før du bremser",
+    "th": "ให้สัญญาณไฟเลี้ยวก่อนเบรก",
+    "en": "Signal with the indicator before you brake"
+   },
+   "image_file": "bb_s73_blinklys-for-du-bremser.png",
+   "quiz_category": "Road Rules",
+   "next": "bb-s74"
+  },
+  "bb-s74": {
+   "printed_page": 74,
+   "pdf_page": 69,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.3 Signal og tegn – Å tolke andres tegn",
+   "title": {
+    "no": "Når en annen blinker, men ikke senker farten",
+    "th": "เมื่ออีกคนเปิดไฟเลี้ยวแต่ไม่ชะลอ",
+    "en": "When another driver indicates but does not slow down"
+   },
+   "image_file": "bb_s74_tolke-andres-blinklys.png",
+   "quiz_category": "Right of Way",
+   "next": "bb-s75"
+  },
+  "bb-s75": {
+   "printed_page": 75,
+   "pdf_page": 70,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.3 Utrykningskjøretøyer og blinkende gule lys",
+   "title": {
+    "no": "Utrykningskjøretøy og blinkende gule lys",
+    "th": "รถฉุกเฉินและไฟเหลืองกะพริบ",
+    "en": "Emergency vehicles and flashing yellow lights"
+   },
+   "image_file": "bb_s75_utrykningskjoretoy-og-gult-blink.png",
+   "quiz_category": "Road Rules",
+   "next": "bb-s75b"
+  },
+  "bb-s75b": {
+   "printed_page": 75,
+   "pdf_page": 70,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.4 Fartsavpasning – Fartsgrense og fartstilpasning",
+   "title": {
+    "no": "Fartstilpasning og fartsgrense er ikke det samme",
+    "th": "การปรับความเร็วกับขีดจำกัดความเร็วไม่เหมือนกัน",
+    "en": "Speed adjustment and speed limit are not the same"
+   },
+   "image_file": "bb_s75b_fartstilpasning-og-fartsgrense.png",
+   "quiz_category": "Speed Limits",
+   "next": "bb-s76"
+  },
+  "bb-s76": {
+   "printed_page": 76,
+   "pdf_page": 71,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.4 Fartsavpasning – Stopplengde og reaksjonslengde",
+   "title": {
+    "no": "Stopplengde = reaksjonslengde + bremselengde",
+    "th": "ระยะหยุด = ระยะตอบสนอง + ระยะเบรก",
+    "en": "Stopping distance = reaction distance + braking distance"
+   },
+   "image_file": "bb_s76_stopplengde.png",
+   "quiz_category": "Speed Limits",
+   "next": "bb-s76b"
+  },
+  "bb-s76b": {
+   "printed_page": 76,
+   "pdf_page": 71,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.4 Fartsavpasning – Forhold mellom fartsøkning og bremselengde",
+   "title": {
+    "no": "Dobbel fart gir firedoblet bremselengde",
+    "th": "ความเร็วสองเท่าทำให้ระยะเบรกสี่เท่า",
+    "en": "Double speed gives four times the braking distance"
+   },
+   "image_file": "bb_s76b_bremselengde-og-kvadratet.png",
+   "quiz_category": "Speed Limits",
+   "next": "bb-s77"
+  },
+  "bb-s77": {
+   "printed_page": 77,
+   "pdf_page": 72,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.4 Fartsavpasning – Bevegelsesenergi og bråbremsing",
+   "title": {
+    "no": "Bevegelsesenergi – en farlig følgesvenn",
+    "th": "พลังงานจลน์ – เพื่อนร่วมทางที่อันตราย",
+    "en": "Kinetic energy – a dangerous companion"
+   },
+   "image_file": "bb_s77_bevegelsesenergi-folgesvenn.png",
+   "quiz_category": "Safety",
+   "next": "bb-s77b"
+  },
+  "bb-s77b": {
+   "printed_page": 77,
+   "pdf_page": 72,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.4 Fartsavpasning – ABS og bremseassistent",
+   "title": {
+    "no": "ABS og bremseassistent",
+    "th": "ABS และระบบช่วยเบรก",
+    "en": "ABS and brake assist"
+   },
+   "image_file": "bb_s77b_abs-og-bremseassistent.png",
+   "quiz_category": "Safety",
+   "next": "bb-s78"
+  },
+  "bb-s78": {
+   "printed_page": 78,
+   "pdf_page": 73,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.4 Fartsavpasning – Veigrep",
+   "title": {
+    "no": "Veigrep brukes til tre ting",
+    "th": "การยึดเกาะถนนใช้สามอย่าง",
+    "en": "Grip is used for three things"
+   },
+   "image_file": "bb_s78_veigrep.png",
+   "quiz_category": "Driving Conditions",
+   "next": "bb-s78b"
+  },
+  "bb-s78b": {
+   "printed_page": 78,
+   "pdf_page": 73,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.4 Fartsavpasning – Svingkraft, skrens og utforkjøring",
+   "title": {
+    "no": "Svingkraft og utforkjøring",
+    "th": "แรงเหวี่ยงและการตกถนน",
+    "en": "Cornering force and running off the road"
+   },
+   "image_file": "bb_s78b_svingkraft-og-utforkjoring.png",
+   "quiz_category": "Driving Conditions",
+   "next": "bb-s79"
+  },
+  "bb-s79": {
+   "printed_page": 79,
+   "pdf_page": 74,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.4 Fartsavpasning – Førerhjelpsystemer, skrens og nødbremsing",
+   "title": {
+    "no": "Førerhjelpsystemer og skrens",
+    "th": "ระบบช่วยผู้ขับและการลื่นไถล",
+    "en": "Driver-assistance systems and skids"
+   },
+   "image_file": "bb_s79_forerhjelpsystemer-og-skrens.png",
+   "quiz_category": "Driving Conditions",
+   "next": "bb-s80"
+  },
+  "bb-s80": {
+   "printed_page": 80,
+   "pdf_page": 75,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.4 Fartsavpasning – Føret forandrer seg",
+   "title": {
+    "no": "Føret forandrer seg",
+    "th": "สภาพถนนเปลี่ยนไป",
+    "en": "The conditions change"
+   },
+   "image_file": "bb_s80_foret-forandrer-seg.png",
+   "quiz_category": "Road Conditions",
+   "next": "bb-s80b"
+  },
+  "bb-s80b": {
+   "printed_page": 80,
+   "pdf_page": 75,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.4 Fartsavpasning – Spesielle krav ved passering",
+   "title": {
+    "no": "Ekstra lav fart ved barn og sårbare",
+    "th": "ลดความเร็วเป็นพิเศษเมื่อมีเด็กและผู้เปราะบาง",
+    "en": "Extra low speed near children and vulnerable people"
+   },
+   "image_file": "bb_s80b_saerlige-krav-ved-passering.png",
+   "quiz_category": "Safety",
+   "next": "bb-s81"
+  },
+  "bb-s81": {
+   "printed_page": 81,
+   "pdf_page": 76,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.4 Fartsavpasning – Fareskilt, fartsgrenseskilt, gatetun",
+   "title": {
+    "no": "Fareskilt og fartsgrenseskilt",
+    "th": "ป้ายเตือนและป้ายจำกัดความเร็ว",
+    "en": "Warning signs and speed-limit signs"
+   },
+   "image_file": "bb_s81_fareskilt-fartsgrenser-gatetun.png",
+   "quiz_category": "Speed Limits",
+   "next": "bb-s82"
+  },
+  "bb-s82": {
+   "printed_page": 82,
+   "pdf_page": 77,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.4 Fartsavpasning – Fartsgrense for spesielle kjøretøy",
+   "title": {
+    "no": "Fartsgrense for tunge biler og biler med tilhenger",
+    "th": "ขีดจำกัดความเร็วสำหรับรถหนักและรถที่ลากรถพ่วง",
+    "en": "Speed limits for heavy vehicles and vehicles with a trailer"
+   },
+   "image_file": "bb_s82_fartsgrense-spesielle-kjoretoy.png",
+   "quiz_category": "Speed Limits",
+   "next": "bb-s82b"
+  },
+  "bb-s82b": {
+   "printed_page": 82,
+   "pdf_page": 77,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.5 Kjøretøyets plassering på veien – hovedregelen",
+   "title": {
+    "no": "Kjør på høyre side av veien",
+    "th": "ขับชิดขวาของถนน",
+    "en": "Drive on the right side of the road"
+   },
+   "image_file": "bb_s82b_plassering-hoyre-side.png",
+   "quiz_category": "Road Rules",
+   "next": "bb-s83"
+  },
+  "bb-s83": {
+   "printed_page": 83,
+   "pdf_page": 78,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.5 Kjøretøyets plassering – Unntak fra hovedregelen",
+   "title": {
+    "no": "Når du kan bruke venstre felt",
+    "th": "เมื่อใช้เลนซ้ายได้",
+    "en": "When you may use the left lane"
+   },
+   "image_file": "bb_s83_unntak-fra-hovedregelen.png",
+   "quiz_category": "Road Rules",
+   "next": "bb-s84"
+  },
+  "bb-s84": {
+   "printed_page": 84,
+   "pdf_page": 79,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.5 Kjøretøyets plassering – Avstand til forankjørende",
+   "title": {
+    "no": "Avstand til forankjørende: 3-sekundersregelen",
+    "th": "ระยะห่างจากรถคันหน้า: กฎ 3 วินาที",
+    "en": "Distance to the vehicle ahead: the 3-second rule"
+   },
+   "image_file": "bb_s84_avstand-til-forankjorende.png",
+   "quiz_category": "Road Rules",
+   "next": "bb-s85"
+  },
+  "bb-s85": {
+   "printed_page": 85,
+   "pdf_page": 80,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.5 Kjøretøyets plassering – Plassering foran og i veikryss: høyresving",
+   "title": {
+    "no": "Høyresving: så nær høyre kant som mulig",
+    "th": "เลี้ยวขวา: ชิดขอบขวาให้มากที่สุด",
+    "en": "Right turn: as near the right edge as possible"
+   },
+   "image_file": "bb_s85_hoyresving.png",
+   "quiz_category": "Road Rules",
+   "next": "bb-s85b"
+  },
+  "bb-s85b": {
+   "printed_page": 85,
+   "pdf_page": 80,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.5 Kjøretøyets plassering – Plassering i veikryss: venstresving",
+   "title": {
+    "no": "Venstresving: kjør mot midten, ikke i midten",
+    "th": "เลี้ยวซ้าย: ขับไปทางกลาง ไม่ใช่ในกลาง",
+    "en": "Left turn: drive towards the middle, not in the middle"
+   },
+   "image_file": "bb_s85b_venstresving.png",
+   "quiz_category": "Road Rules",
    "next": null
   }
  }

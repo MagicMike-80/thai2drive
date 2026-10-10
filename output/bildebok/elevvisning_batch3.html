@@ -1,0 +1,1506 @@
+<!doctype html>
+<html lang="no"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Michaels bildebok</title>
+<style>
+:root{--bg:#0f1720;--card:#16212d;--ink:#eef3f8;--mut:#9fb0c1;--acc:#4cc2ff;--ok:#3ecf8e;--bad:#ff7a7a}
+@media (prefers-color-scheme:light){:root{--bg:#f3f6fa;--card:#fff;--ink:#14202b;--mut:#51636f;--acc:#0a6fb5;--ok:#157a50;--bad:#b3261e}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,sans-serif}
+header{position:sticky;top:0;background:var(--bg);padding:12px 16px;display:flex;gap:8px;align-items:center;z-index:2;border-bottom:1px solid #8883}
+header b{flex:1}header button{border:1px solid var(--acc);background:none;color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
+header button.on{background:var(--acc);color:#fff}
+main{max-width:680px;margin:0 auto;padding:16px}
+.card{background:var(--card);border-radius:16px;overflow:hidden;margin:0 0 20px;box-shadow:0 2px 10px #0003}
+.media{position:relative;aspect-ratio:4/5;background:#223}@media(min-width:520px){.media{aspect-ratio:4/3}}
+.media img{width:100%;height:100%;object-fit:cover;display:block}
+.ph{position:absolute;inset:0;display:grid;place-items:center;background:repeating-linear-gradient(45deg,#2a3a4a,#2a3a4a 14px,#25333f 14px,#25333f 28px);color:#cfe}
+.pills{position:absolute;left:10px;bottom:10px;display:flex;gap:6px;flex-wrap:wrap}
+.pill{background:#000b;color:#fff;border-radius:999px;padding:3px 10px;font-size:13px}
+.body{padding:10px 14px 12px;font-size:15px}h2{margin:0 0 2px;font-size:18px}.core{font-weight:600;margin:0 0 6px}.more summary{cursor:pointer;color:var(--acc);margin-top:6px}
+ul{margin:0 0 6px;padding-left:18px}li{margin:1px 0}
+.michael{background:#4cc2ff22;border-left:4px solid var(--acc);padding:8px 10px;border-radius:6px;margin:10px 0}
+.q{margin:8px 0 6px;font-weight:600}.opt{display:block;width:100%;text-align:left;margin:4px 0;padding:10px;border-radius:10px;border:1px solid #8886;background:none;color:var(--ink);font:inherit;cursor:pointer}
+.opt.good{border-color:var(--ok);background:#3ecf8e22}.opt.bad{border-color:var(--bad);background:#ff7a7a22}
+.fb{min-height:1.2em;margin:4px 0;font-weight:600}.src{color:var(--mut);font-size:13px;margin:8px 0 0}
+.brief{color:var(--mut);font-size:12px;margin-top:6px}
+</style></head><body>
+<header><b id="ttl">Michaels bildebok</b><button data-l="no" class="on" aria-label="Norsk">NO</button><button data-l="th" aria-label="ภาษาไทย">ไทย</button><button data-l="en" aria-label="English">EN</button></header>
+<main><section class="view" id="v-no" hidden>
+<article class="card" data-id="bb-s61">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Forbudsskilt</span><span class="pill">Påbudsskilt</span></div></div>
+  <div class="body">
+    <h2>Forbudsskilt og påbudsskilt</h2>
+    <p class="core">Forbudsskilt er runde med rød ring. Påbudsskilt er runde og blå.</p>
+    <ul><li>Forbudsskilt gjelder fra skiltet og fram til nærmeste kryss.</li><li>Eksempler: forbudt for alle kjøretøyer, forbikjøringsforbud, fartsgrense.</li><li>Påbudsskilt: påbudt kjøreretning, kjørefelt og rundkjøring.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 61</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Rød ring betyr forbud. Blå sirkel betyr at du må.</p>
+    <div class="quiz"><p class="q">Du ser et rundt skilt med rød ring og to biler, den ene rød. Hva betyr det?</p><button class="opt" data-ok="1">Det er forbudt å kjøre forbi</button><button class="opt" data-ok="0">Det er påbudt å kjøre forbi</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s61b">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Motorvei</span><span class="pill">Kollektivfelt</span></div></div>
+  <div class="body">
+    <h2>Opplysningsskilt gir deg informasjon</h2>
+    <p class="core">Opplysningsskilt er firkantede og forteller deg hva som gjelder.</p>
+    <ul><li>Eksempler: motorvei, kollektivfelt for buss og felt for fartsøkning.</li><li>Mange er blå med et symbol.</li><li>Skiltene forteller også om regler som gjelder på stedet.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 61</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Les symbolet og forklaringen, ikke bare fargen.</p>
+    <div class="quiz"><p class="q">Du ser et blått firkantet skilt med en buss. Hva forteller det?</p><button class="opt" data-ok="1">At feltet er et kollektivfelt for buss</button><button class="opt" data-ok="0">At bussen må kjøre sakte</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s62">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Underskilt</span><span class="pill">Veivisning</span></div></div>
+  <div class="body">
+    <h2>Service-, veivisnings-, under- og markeringsskilt</h2>
+    <p class="core">Disse fire gruppene er også firkantede.</p>
+    <ul><li>Serviceskilt: f.eks. bensinstasjon og hytter.</li><li>Veivisningsskilt: orienteringstavle, avkjøringstavle, veinummerskilt (E6).</li><li>Underskilt utfyller et skilt. Markeringsskilt viser hindringer.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 62</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Underskiltet forteller deg detaljene.</p>
+    <div class="quiz"><p class="q">Under et fartsgrenseskilt står et lite skilt med «100 m». Hva betyr det?</p><button class="opt" data-ok="1">Det viser avstand fram til et sted som gjelder</button><button class="opt" data-ok="0">Fartsgrensen er 100 km/t</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s63">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Politi</span><span class="pill">Lys</span><span class="pill">Skilt</span><span class="pill">Oppmerking</span></div></div>
+  <div class="body">
+    <h2>Hvem har høyest myndighet?</h2>
+    <p class="core">Politiet går foran lyssignal, skilt, oppmerking og vanlige regler.</p>
+    <ul><li>Rangorden: politi, lyssignal, skilt, oppmerking, regler om trafikk.</li><li>Lyssignal går foran vikepliktskilt.</li><li>Skilt og oppmerking går foran trafikkreglene.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 63</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Spørsmålet er: hvem har sagt noe til meg nå?</p>
+    <div class="quiz"><p class="q">Lyset er grønt for deg, men politiet står i krysset og viser at du skal stoppe. Hva gjør du?</p><button class="opt" data-ok="1">Stopper – politiet går foran lyset</button><button class="opt" data-ok="0">Kjører – lyset er grønt</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s64">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Risiko</span></div></div>
+  <div class="body">
+    <h2>Bilkjøring er risikofylt</h2>
+    <p class="core">Du er alltid utsatt for risiko. Ikke la vanen gi deg falsk trygghet.</p>
+    <ul><li>Bilkjøring er en av de mest risikofylte aktivitetene vi driver med.</li><li>Nytt førerkort gir lett en følelse av falsk trygghet.</li><li>Det tar mange år å bli en erfaren bilfører. Du setter selv grensen for risiko.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 64</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Vær trygg, men ikke for trygg.</p>
+    <div class="quiz"><p class="q">Du har hatt førerkort i tre uker og kjører lett og trygt. Hva bør du huske?</p><button class="opt" data-ok="1">At det tar mange år å bli erfaren, og at du setter grensen for risiko</button><button class="opt" data-ok="0">At nå kan du ikke gjøre feil</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s64b">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Hensynsfull</span><span class="pill">Aktpågivende</span><span class="pill">Varsom</span></div></div>
+  <div class="body">
+    <h2>HAV: hensynsfull, aktpågivende, varsom</h2>
+    <p class="core">Enhver skal ferdes hensynsfullt og være aktpågivende og varsom.</p>
+    <ul><li>Hensynsfull: tenk på eldre, syke og funksjonshemmede.</li><li>Aktpågivende: se med hjernen, også farer øyet ennå ikke ser.</li><li>Varsom: gjør hva du kan for å følge lover og regler.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 64</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> HAV er en huskeregel du kan ta med deg.</p>
+    <div class="quiz"><p class="q">Du kjører forbi en eldre mann som går sakte over veien. Hva er hensynsfullt?</p><button class="opt" data-ok="1">Senke farten og gi ham tid</button><button class="opt" data-ok="0">Tute så han skynder seg</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s65">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Hekk</span><span class="pill">Skjult fare</span></div></div>
+  <div class="body">
+    <h2>Ikke ta for gitt at det ikke skjuler seg noe bak hekken</h2>
+    <p class="core">Tenk på det du ikke ser. Det kan skjule seg en fare.</p>
+    <ul><li>Aktpågivende er mer enn å se det øyet ser i øyeblikket.</li><li>Sjåfører med trafikal fantasi og de uten er forskjellige.</li><li>Er du varsom, følger du lover og regler så godt du kan.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 65</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Bruk fantasien. Hva kan komme bak hekken?</p>
+    <div class="quiz"><p class="q">Du nærmer deg en sving der en høy hekk skjuler sikten. Hva antar du?</p><button class="opt" data-ok="1">At det kan komme noen mot meg, så jeg tilpasser farten</button><button class="opt" data-ok="0">At veien er fri siden jeg ikke ser noen</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s65b">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Tegn</span><span class="pill">Fart</span><span class="pill">Plassering</span></div></div>
+  <div class="body">
+    <h2>Fra tanke til handling</h2>
+    <p class="core">Fortell andre hva du skal gjøre: med tegn, fartstilpassing og plassering.</p>
+    <ul><li>Tre typer handling: tegn og signal, fartstilpassing, plassering.</li><li>Andre skal i god tid og så tydelig som mulig vite hva du vil gjøre.</li><li>Du trenger overblikk og fantasi for å forutse hva som kan skje.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 65</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Gjør det lett for de andre å forstå deg.</p>
+    <div class="quiz"><p class="q">Du vil svinge til høyre ved neste kryss. Hvordan forteller du det til de bak deg?</p><button class="opt" data-ok="1">Gir blinklys, senker farten og plasserer bilen til høyre</button><button class="opt" data-ok="0">Svinger uten å gi tegn – de ser det nok</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s66">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Speil</span><span class="pill">Hodestøtte</span></div></div>
+  <div class="body">
+    <h2>Rett sittestilling, speil og hodestøtte</h2>
+    <p class="core">Sitt avslappet, med begge hender på rattet, før du stiller speilene.</p>
+    <ul><li>Feil sittestilling gjør deg ukonsentrert og kjøringen ustø.</li><li>Innvendig speil: se mest mulig av bakvinduet. Sidespeil: se vannrett bakover og litt av bilens sider.</li><li>Hodestøtten skal stå så høyt at den tar imot hodet.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 66</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Bruk to minutter på å stille inn bilen. Det er verdt det.</p>
+    <div class="quiz"><p class="q">Du setter deg i en bil som en annen har kjørt. Hva gjør du før du starter?</p><button class="opt" data-ok="1">Stiller sete, speil og hodestøtte etter deg selv</button><button class="opt" data-ok="0">Starter rett – speilene er sikkert greie</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s67">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Synsfelt</span><span class="pill">Blindsone</span></div></div>
+  <div class="body">
+    <h2>Se langt frem og beveg blikket</h2>
+    <p class="core">Se langt frem, men stirr ikke. Beveg blikket hele tiden.</p>
+    <ul><li>Nybegynnere har blikket festet altfor nær bilen.</li><li>Sidesynet blir smalere når farten øker.</li><li>Se også til sidene, i speilene og bakover.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 67</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Se langt frem. Da får du tid.</p>
+    <div class="quiz"><p class="q">Du kjører på landevei og stirrer på bilen rett foran deg. Hva bør du gjøre?</p><button class="opt" data-ok="1">Se langt frem og la blikket bevege seg</button><button class="opt" data-ok="0">Fortsette å se på bilen foran</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s68">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Blindsone</span><span class="pill">Syklist</span></div></div>
+  <div class="body">
+    <h2>Ta overblikk og bli sett og forstått</h2>
+    <p class="core">Se hele bildet, og gi andre tydelige signaler tidlig.</p>
+    <ul><li>Se-regel 3: ta overblikk når du har fulgt regel 1 og 2.</li><li>Se-regel 4: bli sett og forstått, med riktig signal og tegn.</li><li>Riktig fartstilpassing og plassering hjelper andre å forstå deg.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 68</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Se, og bli sett. Begge deler.</p>
+    <div class="quiz"><p class="q">Du skal svinge til høyre over et sykkelfelt og glemmer blindsonen. Hva kan skje?</p><button class="opt" data-ok="1">At du ikke ser en syklist og kolliderer</button><button class="opt" data-ok="0">Ingenting – syklisten ser deg</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s69">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Utvei</span><span class="pill">Blindsone</span></div></div>
+  <div class="body">
+    <h2>Se alltid etter en utvei</h2>
+    <p class="core">Ha en løsning klar hvis noe uventet skjer.</p>
+    <ul><li>Se etter en utvei er det samme som å se etter påregnelige farer.</li><li>Sving til høyre: fart ned, speil, tegn i tide, høyre sidespeil og høyre blindsone.</li><li>Sving til venstre: kontroller venstre sidespeil og blindsone. Avstand i speil kan være forvrengt.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 69</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Spør deg selv: hva gjør jeg hvis det skjer?</p>
+    <div class="quiz"><p class="q">Du skal svinge til høyre i et kryss og så en motorsyklist rett bak deg på høyre side. Hva gjør du?</p><button class="opt" data-ok="1">Venter, sjekker blindsonen igjen og svinger når det er trygt</button><button class="opt" data-ok="0">Svinger straks – han stanser nok</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s70">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Lastebil</span><span class="pill">Kryss</span></div></div>
+  <div class="body">
+    <h2>Seteknikk i praksis: lastebil og kryss</h2>
+    <p class="core">Se hvilke se-regler føreren bryter, og hva du ville gjort.</p>
+    <ul><li>Eksempel 3: kan føreren av den rosa bilen utføre riktig seteknikk?</li><li>Eksempel 4: den blå bilen bør ikke kjøre før bilen fra høyre har passert krysset.</li><li>Se i innvendig speil i samme øyeblikk du kommer ut på kryssende vei.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 70</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Prøv å finne ut hvor mange se-regler som brytes.</p>
+    <div class="quiz"><p class="q">Du venter i en sidevei og en bil fra høyre nærmer seg. Når kjører du ut?</p><button class="opt" data-ok="1">Etter at bilen fra høyre har passert krysset og jeg har sett meg godt for</button><button class="opt" data-ok="0">Straks – jeg rekker det</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s71">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Blinklys</span><span class="pill">Bremselys</span></div></div>
+  <div class="body">
+    <h2>Signal og tegn</h2>
+    <p class="core">Bruk lys- og lydhorn bare for å avverge eller forebygge fare.</p>
+    <ul><li>Unødig eller hensynsløs bruk av lyd- eller lyssignal er forbudt.</li><li>Tegn gis med retningslys. Bremselysene gir også tegn.</li><li>Ved svinging eller vesentlig endring av plassering i sideretning skal det gis tegn.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 71</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Blinklys er et språk. Bruk det til andres beste.</p>
+    <div class="quiz"><p class="q">Du er irritert på bilen foran og vil tute for å få ham til å kjøre fortere. Er det lov?</p><button class="opt" data-ok="1">Nei – unødig bruk av lydhorn er forbudt</button><button class="opt" data-ok="0">Ja, hvis du er lei av å vente</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s72">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Avkjørsel</span><span class="pill">Lang sving</span></div></div>
+  <div class="body">
+    <h2>Gi tegn i god tid – bruk skjønn</h2>
+    <p class="core">Tegn skal være tydelig og gis i rett tid. Bruk egen fornuft.</p>
+    <ul><li>Vanligvis er god tid ca. 5 sekunder før handling, men ikke bind deg til eksakte tall.</li><li>Tegnet bør opphøre senest når handlingen er avsluttet.</li><li>I en lang sving mot en avkjørsel kan 5 sekunder bli feil.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 72</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Tenk på hvem som ser tegnet ditt, og når.</p>
+    <div class="quiz"><p class="q">Du kjører i en lang sving og skal ut til en avkjørsel like etter svingen. Når gir du tegn?</p><button class="opt" data-ok="1">Når det er tydelig for de bak hva du skal, ikke for tidlig og ikke for sent</button><button class="opt" data-ok="0">Nøyaktig 5 sekunder før, uansett</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s73">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Blinklys</span><span class="pill">Avkjørsel</span></div></div>
+  <div class="body">
+    <h2>Gi tegn med blinklys før du bremser</h2>
+    <p class="core">Ved avkjørsel: blinklys først, så brems. Da forstår de bak hvorfor.</p>
+    <ul><li>Når du bruker fotbremsen, gir du tegn med bremselysene.</li><li>Ved svinging i kryss og ved avkjørsler gir du tegn med blinklys før du bremser.</li><li>Tegngiving alene er ikke nok. Fartstilpassing og plassering må følge med.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 73</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Først blinklys, så brems.</p>
+    <div class="quiz"><p class="q">Du skal ta av til en avkjørsel og skal bremse ned. Hva gjør du først?</p><button class="opt" data-ok="1">Gir tegn med blinklys, og bremser så</button><button class="opt" data-ok="0">Bremser hardt og blinker til slutt</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s74">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Bil A</span><span class="pill">Bil B</span></div></div>
+  <div class="body">
+    <h2>Når en annen blinker, men ikke senker farten</h2>
+    <p class="core">Tegn og fart må passe sammen. Er du i tvil, vent.</p>
+    <ul><li>Bil A blinker til høyre, men senker ikke farten. Våger du å kjøre?</li><li>Han kan ha glemt å slå av et tidligere tegn.</li><li>Senker A farten og plasserer seg til høyre uten tegn, blir du usikker. Slike situasjoner irriterer og er unødvendige.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 74</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Tegn og handling skal samsvare. Vær tydelig selv.</p>
+    <div class="quiz"><p class="q">En bil foran blinker til høyre, men holder samme fart rett fram mot krysset. Du har vikeplikt mot den. Hva gjør du?</p><button class="opt" data-ok="1">Venter til jeg forstår hva han gjør</button><button class="opt" data-ok="0">Kjører – han skal jo svinge</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s75">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Blått lys</span><span class="pill">Gult blink</span></div></div>
+  <div class="body">
+    <h2>Utrykningskjøretøy og blinkende gule lys</h2>
+    <p class="core">Utrykningskjøretøy kan kreve fri vei med blått blinklys og sirene.</p>
+    <ul><li>Blått blinklys er det som brukes. Sirenen kan brukes i tillegg.</li><li>Blinkende gule lys brukes ved veiarbeid og lignende.</li><li>Slike kjøretøy kan fravike en del av trafikkreglene når det er nødvendig.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 75</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Gi plass i god tid. Det kan redde liv.</p>
+    <div class="quiz"><p class="q">En ambulanse med blått lys og sirene kommer bak deg i et kryss. Hva gjør du?</p><button class="opt" data-ok="1">Gir plass uten å skape fare for andre</button><button class="opt" data-ok="0">Fortsetter som før</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s75b">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Fartsgrense</span><span class="pill">Sikt</span></div></div>
+  <div class="body">
+    <h2>Fartstilpasning og fartsgrense er ikke det samme</h2>
+    <p class="core">Fartsgrensen er høyeste lovlige fart. Farten må tilpasses forholdene.</p>
+    <ul><li>Tilpass farten etter sted, føre, sikt og trafikkforholdene.</li><li>Du må kunne stanse på den veistrekningen du har oversikt over.</li><li>Og foran enhver påregnelig hindring.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 75</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Fartsgrensen er et tak, ikke et mål.</p>
+    <div class="quiz"><p class="q">Det er tåke og fartsgrensen er 80. Hva er riktig fart?</p><button class="opt" data-ok="1">Lavere enn 80, så jeg kan stanse på det jeg ser</button><button class="opt" data-ok="0">80, for det er tillatt</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s76">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Reaksjonslengde</span><span class="pill">Bremselengde</span></div></div>
+  <div class="body">
+    <h2>Stopplengde = reaksjonslengde + bremselengde</h2>
+    <p class="core">Bilen går en strekning før du rekker å bremse, og en til før den stopper.</p>
+    <ul><li>Reaksjonslengde er strekningen fra du oppdager fare til du begynner å handle.</li><li>Vi regner i gjennomsnitt 1 sekunds reaksjonstid.</li><li>50 km/t er ca. 14 m i sekundet, 80 km/t ca. 22 m i sekundet.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 76</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Før du bremser, har du allerede kjørt en bit.</p>
+    <div class="quiz"><p class="q">Du kjører 50 km/t og en ball ruller ut. Omtrent hvor langt kjører du i løpet av ett sekunds reaksjonstid?</p><button class="opt" data-ok="1">Ca. 14 meter</button><button class="opt" data-ok="0">Ca. 2 meter</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s76b">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">20 km/t</span><span class="pill">80 km/t</span></div></div>
+  <div class="body">
+    <h2>Dobbel fart gir firedoblet bremselengde</h2>
+    <p class="core">Bremselengden øker med kvadratet av fartsøkningen.</p>
+    <ul><li>Boka (flat vei, sommerføre): 20 km/t ca. 2 m, 40 ca. 8 m, 60 ca. 18 m, 80 ca. 32 m.</li><li>Dobler du farten, blir bremselengden fire ganger så lang.</li><li>På glatt føre og våt asfalt kan bremselengden øke betraktelig.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 76</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Litt mer fart gir mye lengre bremselengde.</p>
+    <div class="quiz"><p class="q">Du øker farten fra 40 til 80 km/t. Hva skjer med bremselengden?</p><button class="opt" data-ok="1">Den blir omtrent fire ganger så lang</button><button class="opt" data-ok="0">Den blir dobbelt så lang</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s77">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">50 km/t</span><span class="pill">60 km/t</span></div></div>
+  <div class="body">
+    <h2>Bevegelsesenergi – en farlig følgesvenn</h2>
+    <p class="core">Det som bilen ikke rekker å bremse bort, tas ut i kollisjonen.</p>
+    <ul><li>Bil i 50 km/t rekker å bruke opp energien ved å bremse.</li><li>Ved 60 km/t må noe av energien brukes opp i kollisjonen.</li><li>Løse gjenstander i bilen kan bli dødbringende ved bråbremsing.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 77</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Sikre last og gjenstander. Farten teller.</p>
+    <div class="quiz"><p class="q">Du har en tung veske løst på baksetet og må bråbremse. Hva kan skje?</p><button class="opt" data-ok="1">Den kan kastes fremover og skade deg</button><button class="opt" data-ok="0">Ingenting, den blir liggende</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s77b">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Bremsepedal</span></div></div>
+  <div class="body">
+    <h2>ABS og bremseassistent</h2>
+    <p class="core">Tråkk hardt og bli stående på bremsen. Systemene gjør resten.</p>
+    <ul><li>Bremseassistenten øker bremsetrykket ved hurtig trykk på pedalen.</li><li>Mange trår ikke hardt nok, i frykt for å ødelegge bremsene.</li><li>Trår du ikke hardt nok, kan du ikke stoppe i tide.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 77</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Ikke vær redd for bremsepedalen i en nødsituasjon.</p>
+    <div class="quiz"><p class="q">Et barn løper ut foran deg og bilen har ABS. Hvordan bremser du?</p><button class="opt" data-ok="1">Tråkker hardt og holder pedalen inne</button><button class="opt" data-ok="0">Tråkker forsiktig for å skåne bremsene</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s78">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Bremsing</span><span class="pill">Styring</span></div></div>
+  <div class="body">
+    <h2>Veigrep brukes til tre ting</h2>
+    <p class="core">Bruker du hele veigrepet til å bremse, kan du ikke styre.</p>
+    <ul><li>Veigrep (friksjon) brukes til bremsing, styring og fartsøkning.</li><li>Det avhenger av veiunderlag, føre, dekktype og mønsterdybde.</li><li>Bruk veigrepet fornuftig mellom bremsing og styring.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 78</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Veigrepet er en felles kasse. Del den smart.</p>
+    <div class="quiz"><p class="q">Du bremser så hardt at hjulene nesten låser seg i en sving. Hva mister du?</p><button class="opt" data-ok="1">Evnen til å styre</button><button class="opt" data-ok="0">Ingenting</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s78b">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Svingkraft</span><span class="pill">Veigrep</span></div></div>
+  <div class="body">
+    <h2>Svingkraft og utforkjøring</h2>
+    <p class="core">Svingkraften øker med kvadratet av fartsøkningen. Er den større enn veigrepet, havner du utenfor.</p>
+    <ul><li>Dreier du på rattet, tvinger du bilen ut av kursen. Det krever veigrep.</li><li>Dobler du farten, blir svingkraften firedoblet. Fra 30 til 60 km/t: 4 ganger.</li><li>Utforkjøring er hovedproblemet for unge, ferske førere. Lær å oppfatte veien riktig.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 78</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Senk farten før svingen, ikke i den.</p>
+    <div class="quiz"><p class="q">Du kommer for fort inn i en sving og dreier mer på rattet. Hva er risikoen?</p><button class="opt" data-ok="1">At svingkraften blir større enn veigrepet og du glir ut</button><button class="opt" data-ok="0">Ingen – mer rattutslag gir mer grep</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s79">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">ABS</span><span class="pill">ESP</span></div></div>
+  <div class="body">
+    <h2>Førerhjelpsystemer og skrens</h2>
+    <p class="core">Systemene hjelper deg, men kjører du for fort, kan ingen system redde deg.</p>
+    <ul><li>ABS: hjulene låser seg ikke. BAS: hjelper deg å trå hardt nok.</li><li>Antispinn hindrer hjulspinn. Antiskrens (ESP, DSC) hjelper når bilen skrenser.</li><li>Se etter en utvei, styr presist og bruk pedalene presist.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 79</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Kjenn bilens systemer. De hjelper bare hvis du kan bruke dem.</p>
+    <div class="quiz"><p class="q">Bilen begynner å skrense i en sving. Hva er viktigst?</p><button class="opt" data-ok="1">Se hvor du vil, styr presist og bruk pedalene rolig</button><button class="opt" data-ok="0">Brems hardt og snu rattet kraftig</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s80">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Glatt</span><span class="pill">Bro</span></div></div>
+  <div class="body">
+    <h2>Føret forandrer seg</h2>
+    <p class="core">Halvt veigrep gir dobbelt bremselengde. Vær klar for glatt føre.</p>
+    <ul><li>Synker veigrepet til det halve, blir bremselengden dobbelt så lang.</li><li>Er veigrepet en tredel, blir bremselengden tre ganger så lang.</li><li>Våt asfalt etter tørke og broer under 0° kan bli svært glatte.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 80</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Når føret endrer seg, endrer du farten.</p>
+    <div class="quiz"><p class="q">Det er akkurat begynt å regne etter en lang tørr periode. Hva forventer du?</p><button class="opt" data-ok="1">Svært glatt asfalt, så jeg senker farten</button><button class="opt" data-ok="0">Bedre grep på grunn av vannet</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s80b">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Buss</span><span class="pill">Barn</span></div></div>
+  <div class="body">
+    <h2>Ekstra lav fart ved barn og sårbare</h2>
+    <p class="core">Hold lav fart og stans om nødvendig ved barn, skolepatrulje og buss.</p>
+    <ul><li>Gjelder barn på eller ved veien og skolepatrulje.</li><li>Gjelder også person med hvit stokk eller førerhund, og personer som kan antas å lide av lyte eller sykdom.</li><li>Og sporvogn eller buss som har stanset eller er i ferd med å stanse ved holdeplass.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 80</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Når noen er sårbare, tar du ansvaret.</p>
+    <div class="quiz"><p class="q">En buss står stille ved en holdeplass og folk går av. Hva gjør du?</p><button class="opt" data-ok="1">Holder lav fart og stanser om nødvendig</button><button class="opt" data-ok="0">Kjører forbi i normal fart</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s81">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Glatt kjørebane</span><span class="pill">Gatetun</span></div></div>
+  <div class="body">
+    <h2>Fareskilt og fartsgrenseskilt</h2>
+    <p class="core">Fareskilt varsler farer som er vanskelige å oppdage tidlig.</p>
+    <ul><li>Eksempler: glatt kjørebane, veiarbeid, dyr, annen fare (med underskilt).</li><li>Fartsgrenseskilt: fartsgrense, slutt på særskilt fartsgrense, sone og anbefalt fart.</li><li>På gatetun og gågate må du ikke kjøre fortere enn gangfart.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 81</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Skiltet forteller deg hva du skal tilpasse.</p>
+    <div class="quiz"><p class="q">Du kjører inn i et gatetun med lekende barn. Hvor fort kan du kjøre?</p><button class="opt" data-ok="1">Ikke fortere enn gangfart</button><button class="opt" data-ok="0">Opp til 30 km/t</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s82">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Tilhenger</span><span class="pill">80 km/t</span></div></div>
+  <div class="body">
+    <h2>Fartsgrense for tunge biler og biler med tilhenger</h2>
+    <p class="core">Tunge biler og biler med tilhenger har egne fartsgrenser.</p>
+    <ul><li>Der fartsgrensen er over 80, kan de som hovedregel ikke kjøre over 80 km/t.</li><li>Det finnes unntak, f.eks. for godkjente vogntog og buss.</li><li>Sjekk alltid vognkortet og reglene for din bil og henger.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 82</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Sjekk alltid reglene for din bil og henger.</p>
+    <div class="quiz"><p class="q">Du kjører en personbil med campingvogn på en motorvei med skiltet 110. Hvilken fart kan du holde?</p><button class="opt" data-ok="1">Maks 80 km/t som hovedregel</button><button class="opt" data-ok="0">110 km/t – skiltet gjelder alle</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s82b">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Høyre side</span><span class="pill">Midt i feltet</span></div></div>
+  <div class="body">
+    <h2>Kjør på høyre side av veien</h2>
+    <p class="core">Så langt forholdene tillater det, skal du kjøre på høyre side.</p>
+    <ul><li>Plassering gir informasjon til andre trafikanter.</li><li>Hovedregelen gjelder selv om det er flere felt i samme retning.</li><li>Hold kjøretøyet godt innenfor kjørefeltet. Normalt kan du plassere deg midt i feltet.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 82</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Plassér bilen slik at andre forstår deg.</p>
+    <div class="quiz"><p class="q">Du kjører på en vei med to felt i din retning og ingen trafikk. Hvilket felt bruker du?</p><button class="opt" data-ok="1">Høyre felt</button><button class="opt" data-ok="0">Venstre felt – det er mest plass</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s83">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Tett trafikk</span><span class="pill">Hindring</span><span class="pill">Skilt</span></div></div>
+  <div class="body">
+    <h2>Når du kan bruke venstre felt</h2>
+    <p class="core">Fire unntak: tett trafikk, blokkert felt, skilt eller oppmerking, forbikjøring.</p>
+    <ul><li>Tett trafikk: høyre felt kan ikke alene avvikle trafikken. Hold til høyre igjen når den avtar.</li><li>Hindring: høyre felt er blokkert, f.eks. en parkert bil.</li><li>Skilt eller oppmerking viser at venstre felt er tillatt eller påbudt.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 83</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Høyre er hovedregelen. Unntakene er få og klare.</p>
+    <div class="quiz"><p class="q">Det er rushtrafikk og høyre felt er fullt, men trafikken avtar etter en stund. Hva gjør du da?</p><button class="opt" data-ok="1">Holder til høyre igjen</button><button class="opt" data-ok="0">Blir i venstre felt hele turen</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s84">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">3 sekunder</span><span class="pill">Forankjørende</span></div></div>
+  <div class="body">
+    <h2>Avstand til forankjørende: 3-sekundersregelen</h2>
+    <p class="core">Hold så stor avstand at du ikke kjører på hvis den foran stanser.</p>
+    <ul><li>Normalt trygg avstand er 3 sekunder. Tell «1001, 1002, 1003».</li><li>Ved 80 km/t er 3 sekunder ca. 66 meter.</li><li>Hold større avstand ved høy fart og på glatt føre.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 84</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Tre sekunder gir deg tid og sparer nakken.</p>
+    <div class="quiz"><p class="q">Det regner og du kjører 80 km/t bak en bil. Hvor stor avstand bør du ha?</p><button class="opt" data-ok="1">Mer enn 3 sekunder</button><button class="opt" data-ok="0">Mindre enn 3 sekunder, så du ser bedre</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s85">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Plassering</span><span class="pill">Observasjon</span></div></div>
+  <div class="body">
+    <h2>Høyresving: så nær høyre kant som mulig</h2>
+    <p class="core">Ved sving til høyre skal du kjøre så nær høyre kant som mulig.</p>
+    <ul><li>Da hindrer du tohjulinger i å presse seg inn på din høyre side.</li><li>Sjekk blindsonen før plassering og om nødvendig før du svinger.</li><li>Ta et blikk inn i veien du skal inn på. Parkerte biler kan hindre sikten.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 85</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Observér, gi tegn, plassér, tilpass farten, sving.</p>
+    <div class="quiz"><p class="q">Du skal svinge til høyre og en syklist ligger bak deg til høyre. Hva gjør du?</p><button class="opt" data-ok="1">Plasserer meg nær høyre kant, sjekker blindsonen og lar syklisten passere først hvis nødvendig</button><button class="opt" data-ok="0">Svinger bredt ut til venstre først</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s85b">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Midtlinje</span><span class="pill">Plassering</span></div></div>
+  <div class="body">
+    <h2>Venstresving: kjør mot midten, ikke i midten</h2>
+    <p class="core">På toveis vei kjører du så nær midten som mulig ved venstresving.</p>
+    <ul><li>Gul midtlinje bestemmer plasseringen din. Mangler oppmerking, finn midten selv.</li><li>Kjør MOT midten, ikke I midten, selv om du har biler bak deg.</li><li>Bilene bak kan kjøre forbi på høyre side hvis det er plass.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 85</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Mot midten, ikke i midten. Gi plass til de bak.</p>
+    <div class="quiz"><p class="q">Du skal svinge til venstre og har en bil bak deg. Hvor plasserer du deg?</p><button class="opt" data-ok="1">Mot midten av kjørebanen, så de bak kan passere til høyre</button><button class="opt" data-ok="0">Helt ut til høyre kant</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article></section>
+<section class="view" id="v-th" hidden>
+<article class="card" data-id="bb-s61">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">ป้ายห้าม</span><span class="pill">ป้ายบังคับ</span></div></div>
+  <div class="body">
+    <h2>ป้ายห้ามและป้ายบังคับ</h2>
+    <p class="core">ป้ายห้ามเป็นวงกลมขอบแดง ป้ายบังคับเป็นวงกลมสีน้ำเงิน</p>
+    <ul><li>ป้ายห้ามมีผลตั้งแต่ป้ายไปจนถึงทางแยกถัดไป</li><li>ตัวอย่าง: ห้ามยานพาหนะทุกชนิด ห้ามแซง ขีดจำกัดความเร็ว</li><li>ป้ายบังคับ: ทิศทางที่ต้องขับ เลน และวงเวียน</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 61</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> ขอบแดงคือห้าม วงกลมน้ำเงินคือต้องทำ</p>
+    <div class="quiz"><p class="q">คุณเห็นป้ายกลมขอบแดงมีรถสองคัน คันหนึ่งสีแดง หมายความว่าอย่างไร?</p><button class="opt" data-ok="1">ห้ามแซง</button><button class="opt" data-ok="0">ต้องแซง</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s61b">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">มอเตอร์เวย์</span><span class="pill">เลนรถโดยสาร</span></div></div>
+  <div class="body">
+    <h2>ป้ายข้อมูลให้ข้อมูลแก่คุณ</h2>
+    <p class="core">ป้ายข้อมูลเป็นรูปสี่เหลี่ยมและบอกว่ามีอะไรบ้างที่ใช้บังคับ</p>
+    <ul><li>ตัวอย่าง: มอเตอร์เวย์ เลนรถโดยสาร และเลนเร่งความเร็ว</li><li>หลายป้ายเป็นสีน้ำเงินมีสัญลักษณ์</li><li>ป้ายยังบอกกฎที่ใช้ในที่นั้นด้วย</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 61</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> อ่านสัญลักษณ์และคำอธิบาย ไม่ใช่แค่สี</p>
+    <div class="quiz"><p class="q">คุณเห็นป้ายสี่เหลี่ยมสีน้ำเงินมีรูปรถโดยสาร บอกอะไร?</p><button class="opt" data-ok="1">ว่าเลนนั้นเป็นเลนสำหรับรถโดยสาร</button><button class="opt" data-ok="0">ว่ารถโดยสารต้องขับช้า</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s62">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">ป้ายเสริม</span><span class="pill">ป้ายบอกทาง</span></div></div>
+  <div class="body">
+    <h2>ป้ายบริการ ป้ายบอกทาง ป้ายเสริม และป้ายทำเครื่องหมาย</h2>
+    <p class="core">สี่กลุ่มนี้ก็เป็นรูปสี่เหลี่ยมเช่นกัน</p>
+    <ul><li>ป้ายบริการ: เช่น ปั๊มน้ำมันและกระท่อม</li><li>ป้ายบอกทาง: ป้ายแจ้งทิศทาง ป้ายทางออก และป้ายหมายเลขถนน (E6)</li><li>ป้ายเสริมเสริมป้ายอื่น ป้ายทำเครื่องหมายแสดงสิ่งกีดขวาง</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 62</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> ป้ายเสริมบอกรายละเอียดแก่คุณ</p>
+    <div class="quiz"><p class="q">ใต้ป้ายจำกัดความเร็วมีป้ายเล็กเขียนว่า “100 ม.” หมายความว่าอย่างไร?</p><button class="opt" data-ok="1">บอกระยะทางไปยังจุดที่เกี่ยวข้อง</button><button class="opt" data-ok="0">ขีดจำกัดความเร็วคือ 100 กม./ชม.</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s63">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">ตำรวจ</span><span class="pill">ไฟ</span><span class="pill">ป้าย</span><span class="pill">เส้นบนถนน</span></div></div>
+  <div class="body">
+    <h2>ใครมีอำนาจสูงสุด?</h2>
+    <p class="core">ตำรวจมาก่อนสัญญาณไฟ ป้าย เส้นบนถนน และกฎทั่วไป</p>
+    <ul><li>ลำดับ: ตำรวจ สัญญาณไฟ ป้าย เส้นบนถนน กฎจราจร</li><li>สัญญาณไฟมาก่อนป้ายให้ทาง</li><li>ป้ายและเส้นบนถนนมาก่อนกฎจราจร</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 63</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> คำถามคือ ตอนนี้ใครสั่งฉันอยู่?</p>
+    <div class="quiz"><p class="q">ไฟเป็นสีเขียวสำหรับคุณ แต่ตำรวจยืนที่ทางแยกและแสดงให้คุณหยุด ทำอย่างไร?</p><button class="opt" data-ok="1">หยุด – ตำรวจมาก่อนไฟ</button><button class="opt" data-ok="0">ไป – ไฟเป็นสีเขียว</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s64">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">ความเสี่ยง</span></div></div>
+  <div class="body">
+    <h2>การขับรถมีความเสี่ยง</h2>
+    <p class="core">คุณเสี่ยงอยู่เสมอ อย่าให้ความเคยชินทำให้คุณรู้สึกปลอดภัยเกินจริง</p>
+    <ul><li>การขับรถเป็นหนึ่งในกิจกรรมที่เสี่ยงที่สุดที่เราทำ</li><li>ใบขับขี่ใหม่ทำให้รู้สึกปลอดภัยเกินจริงได้ง่าย</li><li>ต้องใช้เวลาหลายปีกว่าจะเป็นผู้ขับที่มีประสบการณ์ คุณกำหนดระดับความเสี่ยงเอง</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 64</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> มั่นใจได้ แต่อย่ามั่นใจเกินไป</p>
+    <div class="quiz"><p class="q">คุณมีใบขับขี่ได้สามสัปดาห์และขับได้สบาย ๆ ควรจำอะไร?</p><button class="opt" data-ok="1">ว่าต้องใช้เวลาหลายปีกว่าจะมีประสบการณ์ และคุณกำหนดระดับความเสี่ยงเอง</button><button class="opt" data-ok="0">ว่าตอนนี้คุณทำผิดไม่ได้อีกแล้ว</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s64b">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">เกรงใจ</span><span class="pill">ตื่นตัว</span><span class="pill">ระมัดระวัง</span></div></div>
+  <div class="body">
+    <h2>HAV: เกรงใจ ตื่นตัว ระมัดระวัง</h2>
+    <p class="core">ทุกคนต้องใช้ถนนอย่างเกรงใจ ตื่นตัว และระมัดระวัง</p>
+    <ul><li>เกรงใจ: คิดถึงผู้สูงอายุ ผู้ป่วย และผู้พิการ</li><li>ตื่นตัว: มองด้วยสมอง รวมถึงอันตรายที่ตายังไม่เห็น</li><li>ระมัดระวัง: ทำทุกอย่างเพื่อปฏิบัติตามกฎหมายและกฎ</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 64</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> HAV คือคำช่วยจำที่คุณพกติดตัวได้</p>
+    <div class="quiz"><p class="q">คุณขับผ่านชายสูงอายุที่ข้ามถนนช้า ๆ อะไรคือการเกรงใจ?</p><button class="opt" data-ok="1">ชะลอและให้เวลาเขา</button><button class="opt" data-ok="0">บีบแตรให้เขารีบ</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s65">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">พุ่มไม้</span><span class="pill">อันตรายที่ซ่อนอยู่</span></div></div>
+  <div class="body">
+    <h2>อย่าคิดว่าไม่มีอะไรซ่อนอยู่หลังพุ่มไม้</h2>
+    <p class="core">คิดถึงสิ่งที่คุณมองไม่เห็น อาจมีอันตรายซ่อนอยู่</p>
+    <ul><li>การตื่นตัวมากกว่าการมองสิ่งที่ตาเห็นในขณะนั้น</li><li>ผู้ขับที่มีจินตนาการด้านการจราจรและที่ไม่มีนั้นต่างกัน</li><li>ถ้าคุณระมัดระวัง คุณปฏิบัติตามกฎหมายและกฎอย่างเต็มที่</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 65</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> ใช้จินตนาการ อะไรอาจมาจากหลังพุ่มไม้?</p>
+    <div class="quiz"><p class="q">คุณเข้าใกล้โค้งที่พุ่มไม้สูงบังทัศนวิสัย คุณสันนิษฐานว่าอย่างไร?</p><button class="opt" data-ok="1">ว่าอาจมีใครมาสวน จึงปรับความเร็ว</button><button class="opt" data-ok="0">ว่าถนนโล่งเพราะไม่เห็นใคร</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s65b">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">สัญญาณ</span><span class="pill">ความเร็ว</span><span class="pill">ตำแหน่ง</span></div></div>
+  <div class="body">
+    <h2>จากความคิดสู่การกระทำ</h2>
+    <p class="core">บอกผู้อื่นว่าคุณจะทำอะไร: ด้วยสัญญาณ การปรับความเร็ว และตำแหน่งรถ</p>
+    <ul><li>การกระทำสามแบบ: สัญญาณและเครื่องหมาย การปรับความเร็ว ตำแหน่งรถ</li><li>ผู้อื่นต้องรู้ล่วงหน้าและชัดเจนที่สุดว่าคุณจะทำอะไร</li><li>คุณต้องมีภาพรวมและจินตนาการเพื่อคาดการณ์ว่าจะเกิดอะไร</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 65</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> ทำให้คนอื่นเข้าใจคุณได้ง่าย</p>
+    <div class="quiz"><p class="q">คุณจะเลี้ยวขวาที่ทางแยกหน้า บอกคนข้างหลังอย่างไร?</p><button class="opt" data-ok="1">เปิดไฟเลี้ยว ชะลอ และชิดขวา</button><button class="opt" data-ok="0">เลี้ยวโดยไม่ให้สัญญาณ – คงเห็นเอง</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s66">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">กระจก</span><span class="pill">ที่พักศีรษะ</span></div></div>
+  <div class="body">
+    <h2>ท่านั่ง กระจก และที่พักศีรษะที่ถูกต้อง</h2>
+    <p class="core">นั่งผ่อนคลายและวางมือทั้งสองบนพวงมาลัยก่อนปรับกระจก</p>
+    <ul><li>ท่านั่งผิดทำให้ขาดสมาธิและขับไม่นิ่ง</li><li>กระจกมองหลัง: เห็นกระจกหลังให้มากที่สุด กระจกข้าง: เห็นแนวระนาบด้านหลังและตัวรถเล็กน้อย</li><li>ที่พักศีรษะต้องสูงพอที่จะรับศีรษะ</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 66</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> ใช้เวลาสองนาทีปรับรถ คุ้มค่า</p>
+    <div class="quiz"><p class="q">คุณนั่งในรถที่คนอื่นเพิ่งขับ ทำอะไรก่อนสตาร์ท?</p><button class="opt" data-ok="1">ปรับเบาะ กระจก และที่พักศีรษะให้เข้ากับตัวเอง</button><button class="opt" data-ok="0">สตาร์ทเลย – กระจกคงโอเค</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s67">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">ลานสายตา</span><span class="pill">จุดบอด</span></div></div>
+  <div class="body">
+    <h2>มองไกลไปข้างหน้าและเคลื่อนสายตา</h2>
+    <p class="core">มองไกลแต่ไม่จ้อง เคลื่อนสายตาตลอดเวลา</p>
+    <ul><li>ผู้เริ่มขับมักจ้องใกล้รถเกินไป</li><li>การมองด้านข้างแคบลงเมื่อความเร็วเพิ่มขึ้น</li><li>มองด้านข้าง ในกระจก และข้างหลังด้วย</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 67</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> มองไกล แล้วคุณจะมีเวลา</p>
+    <div class="quiz"><p class="q">คุณขับบนถนนนอกเมืองและจ้องรถที่อยู่ตรงหน้า ควรทำอย่างไร?</p><button class="opt" data-ok="1">มองไกลและให้สายตาเคลื่อนไหว</button><button class="opt" data-ok="0">จ้องรถข้างหน้าต่อไป</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s68">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">จุดบอด</span><span class="pill">ผู้ปั่นจักรยาน</span></div></div>
+  <div class="body">
+    <h2>ดูภาพรวมและทำให้คนอื่นเห็นและเข้าใจ</h2>
+    <p class="core">ดูภาพรวมทั้งหมด และให้สัญญาณชัดเจนแก่ผู้อื่นแต่เนิ่น ๆ</p>
+    <ul><li>กฎข้อ 3: ดูภาพรวมเมื่อทำตามกฎข้อ 1 และ 2 แล้ว</li><li>กฎข้อ 4: ให้คนอื่นเห็นและเข้าใจ ด้วยสัญญาณและเครื่องหมายที่ถูกต้อง</li><li>การปรับความเร็วและตำแหน่งที่ถูกต้องช่วยให้ผู้อื่นเข้าใจคุณ</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 68</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> มอง และให้คนเห็น ทั้งสองอย่าง</p>
+    <div class="quiz"><p class="q">คุณจะเลี้ยวขวาข้ามเลนจักรยานและลืมจุดบอด อาจเกิดอะไร?</p><button class="opt" data-ok="1">ว่าคุณมองไม่เห็นผู้ปั่นและชนกัน</button><button class="opt" data-ok="0">ไม่มีอะไร – ผู้ปั่นเห็นคุณ</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s69">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">ทางหนีทีไล่</span><span class="pill">จุดบอด</span></div></div>
+  <div class="body">
+    <h2>มองหาทางหนีทีไล่เสมอ</h2>
+    <p class="core">เตรียมทางออกไว้ถ้ามีเรื่องไม่คาดคิดเกิดขึ้น</p>
+    <ul><li>การหาทางหนีคือการมองหาอันตรายที่คาดได้</li><li>เลี้ยวขวา: ลดความเร็ว กระจก ให้สัญญาณทัน กระจกข้างขวาและจุดบอดขวา</li><li>เลี้ยวซ้าย: ตรวจกระจกข้างซ้ายและจุดบอด ระยะในกระจกอาจเพี้ยน</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 69</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> ถามตัวเองว่า ถ้าเกิดขึ้นฉันจะทำอย่างไร?</p>
+    <div class="quiz"><p class="q">คุณจะเลี้ยวขวาที่ทางแยกและเห็นมอเตอร์ไซค์ด้านขวาหลังคุณ ทำอย่างไร?</p><button class="opt" data-ok="1">รอ ตรวจจุดบอดอีกครั้ง และเลี้ยวเมื่อปลอดภัย</button><button class="opt" data-ok="0">เลี้ยวทันที – เขาคงหยุดเอง</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s70">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">รถบรรทุก</span><span class="pill">ทางแยก</span></div></div>
+  <div class="body">
+    <h2>เทคนิคการมองในทางปฏิบัติ: รถบรรทุกและทางแยก</h2>
+    <p class="core">ดูว่าผู้ขับฝ่าฝืนกฎการมองข้อใด และคุณจะทำอย่างไร</p>
+    <ul><li>ตัวอย่าง 3: ผู้ขับรถสีชมพูใช้เทคนิคการมองที่ถูกต้องได้หรือไม่?</li><li>ตัวอย่าง 4: รถสีน้ำเงินไม่ควรขับก่อนที่รถจากขวาจะผ่านทางแยก</li><li>ดูกระจกมองหลังในจังหวะที่คุณออกสู่ถนนที่ตัดผ่าน</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 70</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> ลองหาว่ามีกฎการมองกี่ข้อที่ถูกฝ่าฝืน</p>
+    <div class="quiz"><p class="q">คุณรอที่ถนนแยกและรถจากขวากำลังมา ออกเมื่อไร?</p><button class="opt" data-ok="1">หลังจากรถจากขวาผ่านทางแยกแล้วและฉันมองรอบดีแล้ว</button><button class="opt" data-ok="0">ทันที – ฉันทัน</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s71">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">ไฟเลี้ยว</span><span class="pill">ไฟเบรก</span></div></div>
+  <div class="body">
+    <h2>สัญญาณและเครื่องหมาย</h2>
+    <p class="core">ใช้ไฟและแตรเพื่อป้องกันหรือหลีกเลี่ยงอันตรายเท่านั้น</p>
+    <ul><li>ห้ามใช้สัญญาณเสียงหรือแสงโดยไม่จำเป็นหรือโดยไม่ไว้หน้า</li><li>ให้เครื่องหมายด้วยไฟเลี้ยว ไฟเบรกก็ให้สัญญาณด้วย</li><li>เมื่อเลี้ยวหรือเปลี่ยนตำแหน่งด้านข้างอย่างมาก ต้องให้เครื่องหมาย</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 71</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> ไฟเลี้ยวคือภาษา ใช้เพื่อประโยชน์ของผู้อื่น</p>
+    <div class="quiz"><p class="q">คุณหงุดหงิดรถคันหน้าและอยากบีบแตรให้เขาขับเร็วขึ้น ทำได้ไหม?</p><button class="opt" data-ok="1">ไม่ได้ – การใช้แตรโดยไม่จำเป็นเป็นสิ่งต้องห้าม</button><button class="opt" data-ok="0">ได้ ถ้าเบื่อรอ</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s72">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">ทางออก</span><span class="pill">โค้งยาว</span></div></div>
+  <div class="body">
+    <h2>ให้สัญญาณทันเวลา – ใช้วิจารณญาณ</h2>
+    <p class="core">เครื่องหมายต้องชัดเจนและให้ถูกเวลา ใช้วิจารณญาณของคุณเอง</p>
+    <ul><li>โดยทั่วไปทันเวลาคือประมาณ 5 วินาทีก่อนลงมือ แต่อย่ายึดติดกับตัวเลขตายตัว</li><li>เครื่องหมายควรหยุดอย่างช้าที่สุดเมื่อการกระทำเสร็จสิ้น</li><li>ในโค้งยาวที่นำไปสู่ทางออก 5 วินาทีอาจผิดได้</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 72</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> คิดว่าใครเห็นเครื่องหมายของคุณ และเมื่อไร</p>
+    <div class="quiz"><p class="q">คุณขับในโค้งยาวและจะออกที่ทางแยกเข้าหลังโค้ง ให้สัญญาณเมื่อไร?</p><button class="opt" data-ok="1">เมื่อคนข้างหลังเข้าใจชัดว่าคุณจะทำอะไร ไม่เร็วหรือช้าเกินไป</button><button class="opt" data-ok="0">5 วินาทีพอดีก่อนเสมอ</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s73">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">ไฟเลี้ยว</span><span class="pill">ทางออก</span></div></div>
+  <div class="body">
+    <h2>ให้สัญญาณไฟเลี้ยวก่อนเบรก</h2>
+    <p class="core">ตอนออกทางแยก: ไฟเลี้ยวก่อน แล้วค่อยเบรก คนข้างหลังจะเข้าใจเหตุผล</p>
+    <ul><li>เมื่อใช้เบรกเท้า คุณให้สัญญาณด้วยไฟเบรก</li><li>ตอนเลี้ยวที่ทางแยกและทางออก ให้สัญญาณไฟเลี้ยวก่อนเบรก</li><li>การให้สัญญาณอย่างเดียวไม่พอ ต้องปรับความเร็วและตำแหน่งควบคู่กัน</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 73</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> ไฟเลี้ยวก่อน แล้วค่อยเบรก</p>
+    <div class="quiz"><p class="q">คุณจะออกทางแยกเข้าและต้องชะลอ ทำอะไรก่อน?</p><button class="opt" data-ok="1">ให้ไฟเลี้ยว แล้วจึงเบรก</button><button class="opt" data-ok="0">เบรกแรงแล้วเปิดไฟเลี้ยวทีหลัง</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s74">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">รถ A</span><span class="pill">รถ B</span></div></div>
+  <div class="body">
+    <h2>เมื่ออีกคนเปิดไฟเลี้ยวแต่ไม่ชะลอ</h2>
+    <p class="core">สัญญาณและความเร็วต้องสอดคล้องกัน ถ้าไม่แน่ใจ ให้รอ</p>
+    <ul><li>รถ A เปิดไฟเลี้ยวขวาแต่ไม่ชะลอ คุณกล้าขับหรือไม่?</li><li>เขาอาจลืมปิดสัญญาณเดิม</li><li>ถ้า A ชะลอและชิดขวาโดยไม่ให้สัญญาณ คุณจะไม่แน่ใจ สถานการณ์แบบนี้น่ารำคาญและไม่จำเป็น</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 74</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> สัญญาณและการกระทำต้องตรงกัน ทำให้ชัดเจนเอง</p>
+    <div class="quiz"><p class="q">รถคันหน้าเปิดไฟเลี้ยวขวาแต่ขับตรงด้วยความเร็วเดิมเข้าหาทางแยก คุณต้องให้ทางรถคันนั้น ทำอย่างไร?</p><button class="opt" data-ok="1">รอจนเข้าใจว่าเขาจะทำอะไร</button><button class="opt" data-ok="0">ขับ – เขาจะเลี้ยวอยู่แล้ว</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s75">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">ไฟน้ำเงิน</span><span class="pill">ไฟเหลืองกะพริบ</span></div></div>
+  <div class="body">
+    <h2>รถฉุกเฉินและไฟเหลืองกะพริบ</h2>
+    <p class="core">รถฉุกเฉินเรียกร้องให้เปิดทางได้ด้วยไฟสีน้ำเงินกะพริบและไซเรน</p>
+    <ul><li>ใช้ไฟน้ำเงินกะพริบ ไซเรนใช้เพิ่มได้</li><li>ไฟเหลืองกะพริบใช้ในงานทางและลักษณะคล้ายกัน</li><li>ยานพาหนะเหล่านี้เบี่ยงเบนจากกฎจราจรบางข้อได้เมื่อจำเป็น</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 75</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> ให้ทางล่วงหน้า อาจช่วยชีวิตได้</p>
+    <div class="quiz"><p class="q">รถพยาบาลเปิดไฟน้ำเงินและไซเรนมาข้างหลังคุณที่ทางแยก ทำอย่างไร?</p><button class="opt" data-ok="1">ให้ทางโดยไม่สร้างอันตรายแก่ผู้อื่น</button><button class="opt" data-ok="0">ขับต่อเหมือนเดิม</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s75b">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">ขีดจำกัดความเร็ว</span><span class="pill">ทัศนวิสัย</span></div></div>
+  <div class="body">
+    <h2>การปรับความเร็วกับขีดจำกัดความเร็วไม่เหมือนกัน</h2>
+    <p class="core">ขีดจำกัดความเร็วคือความเร็วสูงสุดที่ถูกกฎหมาย ต้องปรับความเร็วตามสภาพ</p>
+    <ul><li>ปรับความเร็วตามสถานที่ สภาพถนน ทัศนวิสัย และสภาพการจราจร</li><li>คุณต้องหยุดได้ภายในช่วงถนนที่คุณมองเห็น</li><li>และก่อนถึงสิ่งกีดขวางที่คาดได้ทุกอย่าง</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 75</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> ขีดจำกัดความเร็วคือเพดาน ไม่ใช่เป้าหมาย</p>
+    <div class="quiz"><p class="q">มีหมอกและขีดจำกัดความเร็วคือ 80 ความเร็วที่ถูกต้องคือเท่าไร?</p><button class="opt" data-ok="1">ต่ำกว่า 80 เพื่อให้หยุดได้ในระยะที่เห็น</button><button class="opt" data-ok="0">80 เพราะอนุญาต</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s76">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">ระยะตอบสนอง</span><span class="pill">ระยะเบรก</span></div></div>
+  <div class="body">
+    <h2>ระยะหยุด = ระยะตอบสนอง + ระยะเบรก</h2>
+    <p class="core">รถเคลื่อนไปช่วงหนึ่งก่อนที่คุณจะเบรกทัน และอีกช่วงก่อนที่จะหยุด</p>
+    <ul><li>ระยะตอบสนองคือระยะจากที่คุณเห็นอันตรายจนเริ่มลงมือทำ</li><li>โดยเฉลี่ยเราคิดเวลาตอบสนอง 1 วินาที</li><li>50 กม./ชม. คือประมาณ 14 ม./วินาที 80 กม./ชม. ประมาณ 22 ม./วินาที</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 76</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> ก่อนเบรก คุณขับไปแล้วช่วงหนึ่ง</p>
+    <div class="quiz"><p class="q">คุณขับ 50 กม./ชม. และลูกบอลกลิ้งออกมา ในเวลาตอบสนอง 1 วินาที คุณขับไปประมาณเท่าไร?</p><button class="opt" data-ok="1">ประมาณ 14 เมตร</button><button class="opt" data-ok="0">ประมาณ 2 เมตร</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s76b">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">20 กม./ชม.</span><span class="pill">80 กม./ชม.</span></div></div>
+  <div class="body">
+    <h2>ความเร็วสองเท่าทำให้ระยะเบรกสี่เท่า</h2>
+    <p class="core">ระยะเบรกเพิ่มตามกำลังสองของการเพิ่มความเร็ว</p>
+    <ul><li>หนังสือ (ถนนราบ ฤดูร้อน): 20 กม./ชม. ประมาณ 2 ม. 40 ประมาณ 8 ม. 60 ประมาณ 18 ม. 80 ประมาณ 32 ม.</li><li>ถ้าคุณเพิ่มความเร็วเป็นสองเท่า ระยะเบรกจะยาวขึ้นสี่เท่า</li><li>บนถนนลื่นและยางมะตอยเปียก ระยะเบรกอาจเพิ่มขึ้นมาก</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 76</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> ความเร็วเพิ่มนิดเดียวทำให้ระยะเบรกยาวขึ้นมาก</p>
+    <div class="quiz"><p class="q">คุณเพิ่มความเร็วจาก 40 เป็น 80 กม./ชม. ระยะเบรกเป็นอย่างไร?</p><button class="opt" data-ok="1">ยาวขึ้นประมาณสี่เท่า</button><button class="opt" data-ok="0">ยาวขึ้นสองเท่า</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s77">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">50 กม./ชม.</span><span class="pill">60 กม./ชม.</span></div></div>
+  <div class="body">
+    <h2>พลังงานจลน์ – เพื่อนร่วมทางที่อันตราย</h2>
+    <p class="core">สิ่งที่รถเบรกไม่ทันจะถูกปลดปล่อยในการชน</p>
+    <ul><li>รถที่ขับ 50 กม./ชม. เบรกใช้พลังงานหมดได้ทัน</li><li>ที่ 60 กม./ชม. พลังงานส่วนหนึ่งต้องถูกใช้ในการชน</li><li>สิ่งของที่หลวมในรถอาจเป็นอันตรายถึงชีวิตเมื่อเบรกกะทันหัน</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 77</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> ยึดสิ่งของให้แน่น ความเร็วมีผล</p>
+    <div class="quiz"><p class="q">คุณวางกระเป๋าหนักไว้หลวม ๆ บนเบาะหลังและต้องเบรกกะทันหัน จะเกิดอะไร?</p><button class="opt" data-ok="1">อาจพุ่งไปข้างหน้าและทำร้ายคุณ</button><button class="opt" data-ok="0">ไม่มีอะไร มันอยู่ที่เดิม</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s77b">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">แป้นเบรก</span></div></div>
+  <div class="body">
+    <h2>ABS และระบบช่วยเบรก</h2>
+    <p class="core">เหยียบแรง ๆ แล้วกดค้างไว้ ระบบจะทำส่วนที่เหลือ</p>
+    <ul><li>ระบบช่วยเบรกเพิ่มแรงเบรกเมื่อกดแป้นอย่างรวดเร็ว</li><li>หลายคนเหยียบไม่แรงพอเพราะกลัวเบรกเสีย</li><li>ถ้าเหยียบไม่แรงพอ คุณหยุดไม่ทัน</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 77</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> อย่ากลัวแป้นเบรกในสถานการณ์ฉุกเฉิน</p>
+    <div class="quiz"><p class="q">เด็กวิ่งออกมาหน้าคุณและรถมี ABS คุณเบรกอย่างไร?</p><button class="opt" data-ok="1">เหยียบแรงและกดแป้นค้าง</button><button class="opt" data-ok="0">เหยียบเบา ๆ เพื่อถนอมเบรก</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s78">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">เบรก</span><span class="pill">บังคับเลี้ยว</span></div></div>
+  <div class="body">
+    <h2>การยึดเกาะถนนใช้สามอย่าง</h2>
+    <p class="core">ถ้าใช้การยึดเกาะทั้งหมดเพื่อเบรก คุณจะบังคับเลี้ยวไม่ได้</p>
+    <ul><li>การยึดเกาะ (แรงเสียดทาน) ใช้สำหรับเบรก เลี้ยว และเร่งความเร็ว</li><li>ขึ้นกับพื้นผิวถนน สภาพถนน ชนิดยาง และความลึกดอกยาง</li><li>ใช้การยึดเกาะอย่างเหมาะสมระหว่างเบรกและเลี้ยว</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 78</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> การยึดเกาะคือกล่องรวม แบ่งใช้อย่างชาญฉลาด</p>
+    <div class="quiz"><p class="q">คุณเบรกแรงจนล้อแทบล็อกในโค้ง คุณสูญเสียอะไร?</p><button class="opt" data-ok="1">ความสามารถในการบังคับเลี้ยว</button><button class="opt" data-ok="0">ไม่เสียอะไร</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s78b">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">แรงเหวี่ยง</span><span class="pill">การยึดเกาะ</span></div></div>
+  <div class="body">
+    <h2>แรงเหวี่ยงและการตกถนน</h2>
+    <p class="core">แรงเหวี่ยงเพิ่มตามกำลังสองของความเร็ว ถ้ามากกว่าการยึดเกาะ คุณจะตกถนน</p>
+    <ul><li>เมื่อหมุนพวงมาลัยคุณบังคับรถออกจากแนวตรง ซึ่งต้องใช้การยึดเกาะ</li><li>ถ้าเพิ่มความเร็วเป็นสองเท่า แรงเหวี่ยงเป็นสี่เท่า จาก 30 เป็น 60 กม./ชม.: 4 เท่า</li><li>การตกถนนเป็นปัญหาหลักของผู้ขับหนุ่มสาวมือใหม่ เรียนรู้ที่จะอ่านถนนให้ถูกต้อง</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 78</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> ลดความเร็วก่อนโค้ง ไม่ใช่ในโค้ง</p>
+    <div class="quiz"><p class="q">คุณเข้าโค้งเร็วเกินไปและหมุนพวงมาลัยเพิ่ม ความเสี่ยงคืออะไร?</p><button class="opt" data-ok="1">ว่าแรงเหวี่ยงมากกว่าการยึดเกาะและคุณไถลออก</button><button class="opt" data-ok="0">ไม่มี – หมุนมากขึ้นก็ยึดเกาะมากขึ้น</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s79">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">ระบบ ABS</span><span class="pill">ระบบ ESP</span></div></div>
+  <div class="body">
+    <h2>ระบบช่วยผู้ขับและการลื่นไถล</h2>
+    <p class="core">ระบบช่วยคุณได้ แต่ถ้าขับเร็วเกินไป ไม่มีระบบใดช่วยได้</p>
+    <ul><li>ABS: ล้อไม่ล็อก BAS: ช่วยให้เหยียบแรงพอ</li><li>ระบบกันลื่นไถลป้องกันล้อหมุนฟรี ระบบกันสะบัด (ESP, DSC) ช่วยเมื่อรถลื่นไถล</li><li>มองหาทางหนี บังคับเลี้ยวให้แม่นยำ และใช้แป้นให้แม่นยำ</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 79</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> รู้จักระบบของรถ มันช่วยได้ถ้าคุณใช้เป็น</p>
+    <div class="quiz"><p class="q">รถเริ่มลื่นไถลในโค้ง อะไรสำคัญที่สุด?</p><button class="opt" data-ok="1">มองไปที่ที่ต้องการ บังคับเลี้ยวให้แม่นยำ และใช้แป้นอย่างนุ่มนวล</button><button class="opt" data-ok="0">เบรกแรงและหักพวงมาลัยแรง</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s80">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">ลื่น</span><span class="pill">สะพาน</span></div></div>
+  <div class="body">
+    <h2>สภาพถนนเปลี่ยนไป</h2>
+    <p class="core">การยึดเกาะครึ่งเดียวทำให้ระยะเบรกสองเท่า เตรียมพร้อมสำหรับถนนลื่น</p>
+    <ul><li>ถ้าการยึดเกาะลดลงครึ่งหนึ่ง ระยะเบรกจะยาวขึ้นสองเท่า</li><li>ถ้าการยึดเกาะเหลือหนึ่งในสาม ระยะเบรกจะยาวขึ้นสามเท่า</li><li>ยางมะตอยเปียกหลังแล้งยาวและสะพานที่อุณหภูมิต่ำกว่า 0° ลื่นมาก</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 80</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> เมื่อสภาพถนนเปลี่ยน คุณก็เปลี่ยนความเร็ว</p>
+    <div class="quiz"><p class="q">เพิ่งเริ่มฝนตกหลังแล้งยาว คุณคาดว่าจะเป็นอย่างไร?</p><button class="opt" data-ok="1">ยางมะตอยลื่นมาก จึงลดความเร็ว</button><button class="opt" data-ok="0">ยึดเกาะดีขึ้นเพราะน้ำ</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s80b">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">รถโดยสาร</span><span class="pill">เด็ก</span></div></div>
+  <div class="body">
+    <h2>ลดความเร็วเป็นพิเศษเมื่อมีเด็กและผู้เปราะบาง</h2>
+    <p class="core">ขับช้าและหยุดถ้าจำเป็นเมื่อมีเด็ก เด็กอาสาจราจร และรถโดยสาร</p>
+    <ul><li>ใช้กับเด็กบนหรือข้างถนนและเด็กอาสาจราจร</li><li>ใช้กับผู้ถือไม้เท้าขาวหรือสุนัขนำทางและผู้ที่น่าจะมีความพิการหรือเจ็บป่วย</li><li>และรถรางหรือรถโดยสารที่หยุดหรือกำลังจะหยุดที่ป้าย</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 80</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> เมื่อมีผู้เปราะบาง คุณรับผิดชอบ</p>
+    <div class="quiz"><p class="q">รถโดยสารจอดนิ่งที่ป้ายและผู้คนลงจากรถ ทำอย่างไร?</p><button class="opt" data-ok="1">ขับช้าและหยุดถ้าจำเป็น</button><button class="opt" data-ok="0">ขับผ่านด้วยความเร็วปกติ</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s81">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">ถนนลื่น</span><span class="pill">ย่านถนนคนเดิน</span></div></div>
+  <div class="body">
+    <h2>ป้ายเตือนและป้ายจำกัดความเร็ว</h2>
+    <p class="core">ป้ายเตือนแจ้งอันตรายที่ยากจะสังเกตได้ทัน</p>
+    <ul><li>ตัวอย่าง: ถนนลื่น งานทาง สัตว์ อันตรายอื่น (พร้อมป้ายเสริม)</li><li>ป้ายจำกัดความเร็ว: ขีดจำกัดความเร็ว สิ้นสุดขีดจำกัดพิเศษ เขต และความเร็วแนะนำ</li><li>ในย่านถนนคนเดินและถนนคนเดิน ต้องไม่ขับเร็วกว่าความเร็วเดินเท้า</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 81</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> ป้ายบอกว่าคุณต้องปรับอะไร</p>
+    <div class="quiz"><p class="q">คุณขับเข้าย่านถนนคนเดินที่เด็กกำลังเล่น ขับได้เร็วแค่ไหน?</p><button class="opt" data-ok="1">ไม่เร็วกว่าความเร็วเดินเท้า</button><button class="opt" data-ok="0">ถึง 30 กม./ชม.</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s82">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">รถพ่วง</span><span class="pill">80 กม./ชม.</span></div></div>
+  <div class="body">
+    <h2>ขีดจำกัดความเร็วสำหรับรถหนักและรถที่ลากรถพ่วง</h2>
+    <p class="core">รถหนักและรถที่ลากรถพ่วงมีขีดจำกัดความเร็วของตนเอง</p>
+    <ul><li>ในที่ที่ขีดจำกัดเกิน 80 โดยหลักแล้วขับเกิน 80 กม./ชม. ไม่ได้</li><li>มีข้อยกเว้น เช่น ขบวนรถพ่วงที่ได้รับอนุมัติและรถโดยสาร</li><li>ตรวจเล่มทะเบียนและกฎสำหรับรถและรถพ่วงของคุณเสมอ</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 82</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> ตรวจกฎสำหรับรถและรถพ่วงของคุณเสมอ</p>
+    <div class="quiz"><p class="q">คุณขับรถยนต์ลากคาราวานบนมอเตอร์เวย์ที่ป้ายจำกัด 110 ขับได้เร็วแค่ไหน?</p><button class="opt" data-ok="1">สูงสุด 80 กม./ชม. โดยหลัก</button><button class="opt" data-ok="0">110 กม./ชม. – ป้ายใช้กับทุกคน</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s82b">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">ด้านขวา</span><span class="pill">กลางเลน</span></div></div>
+  <div class="body">
+    <h2>ขับชิดขวาของถนน</h2>
+    <p class="core">ให้ขับชิดขวาเท่าที่สภาพเอื้ออำนวย</p>
+    <ul><li>ตำแหน่งรถให้ข้อมูลแก่ผู้ใช้ถนนอื่น</li><li>กฎหลักใช้แม้มีหลายเลนในทิศเดียวกัน</li><li>ให้รถอยู่ภายในเลนอย่างมั่นคง โดยปกติวางตำแหน่งกลางเลน</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 82</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> วางตำแหน่งรถให้คนอื่นเข้าใจคุณ</p>
+    <div class="quiz"><p class="q">คุณขับบนถนนที่มีสองเลนในทิศของคุณและไม่มีรถ ใช้เลนไหน?</p><button class="opt" data-ok="1">เลนขวา</button><button class="opt" data-ok="0">เลนซ้าย – มีที่มากที่สุด</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s83">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">การจราจรหนาแน่น</span><span class="pill">สิ่งกีดขวาง</span><span class="pill">ป้าย</span></div></div>
+  <div class="body">
+    <h2>เมื่อใช้เลนซ้ายได้</h2>
+    <p class="core">สี่ข้อยกเว้น: การจราจรหนาแน่น เลนถูกกีดขวาง ป้ายหรือเส้นบนถนน การแซง</p>
+    <ul><li>การจราจรหนาแน่น: เลนขวาเลนเดียวระบายไม่ได้ ชิดขวาอีกเมื่อรถน้อยลง</li><li>สิ่งกีดขวาง: เลนขวาถูกปิด เช่น รถจอด</li><li>ป้ายหรือเส้นบนถนนแสดงว่าเลนซ้ายอนุญาตหรือบังคับ</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 83</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> ขวาคือกฎหลัก ข้อยกเว้นมีน้อยและชัดเจน</p>
+    <div class="quiz"><p class="q">ช่วงเร่งด่วนเลนขวาเต็ม แต่รถลดลงหลังจากนั้น ทำอย่างไร?</p><button class="opt" data-ok="1">กลับมาชิดขวา</button><button class="opt" data-ok="0">อยู่เลนซ้ายตลอดทาง</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s84">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">3 วินาที</span><span class="pill">รถคันหน้า</span></div></div>
+  <div class="body">
+    <h2>ระยะห่างจากรถคันหน้า: กฎ 3 วินาที</h2>
+    <p class="core">เว้นระยะมากพอที่จะไม่ชนถ้าคันหน้าหยุด</p>
+    <ul><li>ระยะปลอดภัยปกติคือ 3 วินาที นับ “หนึ่งพัน หนึ่งพันหนึ่ง หนึ่งพันสอง”</li><li>ที่ 80 กม./ชม. 3 วินาทีคือประมาณ 66 เมตร</li><li>เว้นระยะมากขึ้นเมื่อขับเร็วและถนนลื่น</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 84</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> สามวินาทีให้เวลาและช่วยปกป้องคอ</p>
+    <div class="quiz"><p class="q">ฝนตกและคุณขับ 80 กม./ชม. ตามหลังรถคันหนึ่ง ควรเว้นระยะเท่าไร?</p><button class="opt" data-ok="1">มากกว่า 3 วินาที</button><button class="opt" data-ok="0">น้อยกว่า 3 วินาที เพื่อให้มองเห็นชัด</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s85">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">ตำแหน่ง</span><span class="pill">การสังเกต</span></div></div>
+  <div class="body">
+    <h2>เลี้ยวขวา: ชิดขอบขวาให้มากที่สุด</h2>
+    <p class="core">เมื่อเลี้ยวขวาให้ขับชิดขอบขวาให้มากที่สุด</p>
+    <ul><li>คุณจึงป้องกันไม่ให้รถสองล้อแทรกเข้าด้านขวาของคุณ</li><li>ตรวจจุดบอดก่อนวางตำแหน่ง และก่อนเลี้ยวถ้าจำเป็น</li><li>มองเข้าไปในถนนที่คุณจะเลี้ยวเข้า รถจอดอาจบังทัศนวิสัย</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 85</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> สังเกต ให้สัญญาณ วางตำแหน่ง ปรับความเร็ว แล้วเลี้ยว</p>
+    <div class="quiz"><p class="q">คุณจะเลี้ยวขวาและมีผู้ปั่นจักรยานอยู่ข้างหลังทางขวา ทำอย่างไร?</p><button class="opt" data-ok="1">ชิดขอบขวา ตรวจจุดบอด และให้ผู้ปั่นผ่านก่อนถ้าจำเป็น</button><button class="opt" data-ok="0">เลี้ยวกว้างออกซ้ายก่อน</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s85b">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">เส้นกลาง</span><span class="pill">ตำแหน่ง</span></div></div>
+  <div class="body">
+    <h2>เลี้ยวซ้าย: ขับไปทางกลาง ไม่ใช่ในกลาง</h2>
+    <p class="core">บนถนนสองทิศ ให้ขับชิดกลางถนนให้มากที่สุดเมื่อเลี้ยวซ้าย</p>
+    <ul><li>เส้นกลางสีเหลืองกำหนดตำแหน่งของคุณ ถ้าไม่มีเส้น ให้หากลางเอง</li><li>ขับไปทางกลาง ไม่ใช่ในกลาง แม้มีรถตามหลัง</li><li>รถข้างหลังแซงทางขวาได้ถ้ามีที่</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 85</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> ไปทางกลาง ไม่ใช่ในกลาง ให้ที่แก่คนข้างหลัง</p>
+    <div class="quiz"><p class="q">คุณจะเลี้ยวซ้ายและมีรถตามหลัง วางตำแหน่งที่ไหน?</p><button class="opt" data-ok="1">ไปทางกลางถนน เพื่อให้คนข้างหลังผ่านทางขวาได้</button><button class="opt" data-ok="0">ชิดขอบขวาสุด</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article></section>
+<section class="view" id="v-en" hidden>
+<article class="card" data-id="bb-s61">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Prohibition sign</span><span class="pill">Mandatory sign</span></div></div>
+  <div class="body">
+    <h2>Prohibition and mandatory signs</h2>
+    <p class="core">Prohibition signs are round with a red ring. Mandatory signs are round and blue.</p>
+    <ul><li>A prohibition sign applies from the sign to the nearest junction.</li><li>Examples: no vehicles, no overtaking, speed limit.</li><li>Mandatory signs: required direction, lane and roundabout.</li></ul>
+    <p class="src">📖 Class B textbook · page 61</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> A red ring means forbidden. A blue circle means you must.</p>
+    <div class="quiz"><p class="q">You see a round sign with a red ring and two cars, one of them red. What does it mean?</p><button class="opt" data-ok="1">Overtaking is prohibited</button><button class="opt" data-ok="0">Overtaking is mandatory</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s61b">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Motorway</span><span class="pill">Bus lane</span></div></div>
+  <div class="body">
+    <h2>Information signs give you information</h2>
+    <p class="core">Information signs are rectangular and tell you what applies.</p>
+    <ul><li>Examples: motorway, bus lane and acceleration lane.</li><li>Many are blue with a symbol.</li><li>The signs also tell about rules that apply on the spot.</li></ul>
+    <p class="src">📖 Class B textbook · page 61</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Read the symbol and the explanation, not just the colour.</p>
+    <div class="quiz"><p class="q">You see a blue rectangular sign with a bus. What does it tell you?</p><button class="opt" data-ok="1">That the lane is a bus lane</button><button class="opt" data-ok="0">That buses must drive slowly</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s62">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Plate</span><span class="pill">Direction sign</span></div></div>
+  <div class="body">
+    <h2>Service, direction, plate and marking signs</h2>
+    <p class="core">These four groups are also rectangular.</p>
+    <ul><li>Service signs: e.g. petrol station and cabins.</li><li>Direction signs: information board, exit board, road-number sign (E6).</li><li>Plates add to another sign. Marking signs show obstacles.</li></ul>
+    <p class="src">📖 Class B textbook · page 62</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> The plate tells you the details.</p>
+    <div class="quiz"><p class="q">Under a speed limit sign is a small plate saying &#x27;100 m&#x27;. What does it mean?</p><button class="opt" data-ok="1">It shows the distance to a place that applies</button><button class="opt" data-ok="0">The speed limit is 100 km/h</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s63">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Police</span><span class="pill">Light</span><span class="pill">Sign</span><span class="pill">Markings</span></div></div>
+  <div class="body">
+    <h2>Who has the highest authority?</h2>
+    <p class="core">The police come before light signals, signs, markings and ordinary rules.</p>
+    <ul><li>Order: police, light signals, signs, markings, traffic rules.</li><li>A light signal comes before a give-way sign.</li><li>Signs and markings come before the traffic rules.</li></ul>
+    <p class="src">📖 Class B textbook · page 63</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> The question is: who has told me something right now?</p>
+    <div class="quiz"><p class="q">The light is green for you, but a police officer in the junction shows you to stop. What do you do?</p><button class="opt" data-ok="1">Stop – the police come before the light</button><button class="opt" data-ok="0">Go – the light is green</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s64">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Risk</span></div></div>
+  <div class="body">
+    <h2>Driving carries risk</h2>
+    <p class="core">You are always exposed to risk. Do not let routine give you false safety.</p>
+    <ul><li>Driving is one of the riskiest activities we do.</li><li>A new licence easily gives a feeling of false safety.</li><li>It takes many years to become an experienced driver. You set the limit for risk yourself.</li></ul>
+    <p class="src">📖 Class B textbook · page 64</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Be confident, but not too confident.</p>
+    <div class="quiz"><p class="q">You have had your licence for three weeks and drive easily. What should you remember?</p><button class="opt" data-ok="1">That it takes many years to become experienced, and you set the limit for risk</button><button class="opt" data-ok="0">That now you cannot make mistakes</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s64b">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Considerate</span><span class="pill">Alert</span><span class="pill">Careful</span></div></div>
+  <div class="body">
+    <h2>HAV: considerate, alert, careful</h2>
+    <p class="core">Everyone must travel considerately and be alert and careful.</p>
+    <ul><li>Considerate: think of older people, the ill and people with disabilities.</li><li>Alert: see with your brain, also dangers the eye does not yet see.</li><li>Careful: do what you can to follow laws and rules.</li></ul>
+    <p class="src">📖 Class B textbook · page 64</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> HAV is a memory aid you can take with you.</p>
+    <div class="quiz"><p class="q">You drive past an elderly man crossing the road slowly. What is considerate?</p><button class="opt" data-ok="1">Slow down and give him time</button><button class="opt" data-ok="0">Honk so he hurries</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s65">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Hedge</span><span class="pill">Hidden hazard</span></div></div>
+  <div class="body">
+    <h2>Don&#x27;t assume nothing hides behind the hedge</h2>
+    <p class="core">Think of what you cannot see. A hazard may be hiding.</p>
+    <ul><li>Being alert is more than seeing what the eye sees at that moment.</li><li>Drivers with traffic imagination and those without are different.</li><li>If you are careful, you follow laws and rules as well as you can.</li></ul>
+    <p class="src">📖 Class B textbook · page 65</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Use your imagination. What could come from behind the hedge?</p>
+    <div class="quiz"><p class="q">You approach a bend where a tall hedge blocks your view. What do you assume?</p><button class="opt" data-ok="1">That someone may come towards me, so I adjust my speed</button><button class="opt" data-ok="0">That the road is clear because I see nobody</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s65b">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Signal</span><span class="pill">Speed</span><span class="pill">Position</span></div></div>
+  <div class="body">
+    <h2>From thought to action</h2>
+    <p class="core">Tell others what you will do: with signals, speed adjustment and position.</p>
+    <ul><li>Three types of action: signs and signals, speed adjustment, position.</li><li>Others should know in good time and as clearly as possible what you will do.</li><li>You need overview and imagination to foresee what may happen.</li></ul>
+    <p class="src">📖 Class B textbook · page 65</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Make it easy for the others to understand you.</p>
+    <div class="quiz"><p class="q">You want to turn right at the next junction. How do you tell those behind you?</p><button class="opt" data-ok="1">Indicate, slow down and position the car to the right</button><button class="opt" data-ok="0">Turn without signalling – they will see</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s66">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Mirrors</span><span class="pill">Head restraint</span></div></div>
+  <div class="body">
+    <h2>The right seating, mirrors and head restraint</h2>
+    <p class="core">Sit relaxed with both hands on the wheel before you set the mirrors.</p>
+    <ul><li>A bad seating position makes you lose concentration and drive unsteadily.</li><li>Interior mirror: see as much of the rear window as possible. Side mirrors: see level behind and a little of the car&#x27;s sides.</li><li>The head restraint must be high enough to take the head.</li></ul>
+    <p class="src">📖 Class B textbook · page 66</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Spend two minutes setting up the car. It is worth it.</p>
+    <div class="quiz"><p class="q">You get into a car someone else has driven. What do you do before you start?</p><button class="opt" data-ok="1">Set the seat, mirrors and head restraint to suit you</button><button class="opt" data-ok="0">Start straight away – the mirrors are surely fine</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s67">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Field of vision</span><span class="pill">Blind zone</span></div></div>
+  <div class="body">
+    <h2>Look far ahead and move your eyes</h2>
+    <p class="core">Look far ahead, but don&#x27;t stare. Keep your eyes moving.</p>
+    <ul><li>Beginners keep their gaze fixed far too near the car.</li><li>Side vision gets narrower as speed increases.</li><li>Also look to the sides, in the mirrors and behind.</li></ul>
+    <p class="src">📖 Class B textbook · page 67</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Look far ahead. Then you get time.</p>
+    <div class="quiz"><p class="q">You drive on a country road and stare at the car right in front of you. What should you do?</p><button class="opt" data-ok="1">Look far ahead and let your gaze move</button><button class="opt" data-ok="0">Keep looking at the car in front</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s68">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Blind zone</span><span class="pill">Cyclist</span></div></div>
+  <div class="body">
+    <h2>Get an overview and be seen and understood</h2>
+    <p class="core">See the whole picture, and give others clear signals early.</p>
+    <ul><li>Seeing rule 3: get an overview once you follow rules 1 and 2.</li><li>Seeing rule 4: be seen and understood, with the right signal and sign.</li><li>Right speed adjustment and position help others understand you.</li></ul>
+    <p class="src">📖 Class B textbook · page 68</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> See, and be seen. Both.</p>
+    <div class="quiz"><p class="q">You are about to turn right across a cycle lane and forget the blind zone. What may happen?</p><button class="opt" data-ok="1">That you do not see a cyclist and collide</button><button class="opt" data-ok="0">Nothing – the cyclist sees you</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s69">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Way out</span><span class="pill">Blind zone</span></div></div>
+  <div class="body">
+    <h2>Always look for a way out</h2>
+    <p class="core">Have a solution ready if something unexpected happens.</p>
+    <ul><li>Looking for a way out is the same as looking for foreseeable dangers.</li><li>Turn right: speed down, mirror, signal in time, right side mirror and right blind zone.</li><li>Turn left: check the left side mirror and blind zone. Distance in mirrors can be misleading.</li></ul>
+    <p class="src">📖 Class B textbook · page 69</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Ask yourself: what do I do if it happens?</p>
+    <div class="quiz"><p class="q">You are about to turn right at a junction and saw a motorcyclist just behind on your right. What do you do?</p><button class="opt" data-ok="1">Wait, check the blind zone again and turn when it is safe</button><button class="opt" data-ok="0">Turn at once – he will probably stop</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s70">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Lorry</span><span class="pill">Junction</span></div></div>
+  <div class="body">
+    <h2>Seeing technique in practice: lorry and junction</h2>
+    <p class="core">See which seeing rules the driver breaks, and what you would do.</p>
+    <ul><li>Example 3: can the driver of the pink car use the right seeing technique?</li><li>Example 4: the blue car should not drive before the car from the right has passed the junction.</li><li>Look in the interior mirror at the moment you come out onto the crossing road.</li></ul>
+    <p class="src">📖 Class B textbook · page 70</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Try to find out how many seeing rules are broken.</p>
+    <div class="quiz"><p class="q">You wait at a side road and a car from the right approaches. When do you pull out?</p><button class="opt" data-ok="1">After the car from the right has passed the junction and I have looked carefully</button><button class="opt" data-ok="0">Straight away – I will make it</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s71">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Indicator</span><span class="pill">Brake lights</span></div></div>
+  <div class="body">
+    <h2>Signals and signs</h2>
+    <p class="core">Use light and sound horn only to avert or prevent danger.</p>
+    <ul><li>Unnecessary or reckless use of sound or light signals is prohibited.</li><li>Signs are given with indicators. Brake lights also give a sign.</li><li>When turning or significantly changing your sideways position, a sign must be given.</li></ul>
+    <p class="src">📖 Class B textbook · page 71</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> The indicator is a language. Use it for others&#x27; good.</p>
+    <div class="quiz"><p class="q">You are annoyed at the car ahead and want to honk to make him drive faster. Is it allowed?</p><button class="opt" data-ok="1">No – unnecessary use of the horn is prohibited</button><button class="opt" data-ok="0">Yes, if you are tired of waiting</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s72">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Exit</span><span class="pill">Long bend</span></div></div>
+  <div class="body">
+    <h2>Signal in good time – use judgement</h2>
+    <p class="core">A sign must be clear and given at the right time. Use your own judgement.</p>
+    <ul><li>Usually good time is about 5 seconds before acting, but don&#x27;t bind yourself to exact numbers.</li><li>The sign should stop at the latest when the action is finished.</li><li>In a long bend leading to an exit, 5 seconds can be wrong.</li></ul>
+    <p class="src">📖 Class B textbook · page 72</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Think about who sees your sign, and when.</p>
+    <div class="quiz"><p class="q">You drive in a long bend and will turn off just after it. When do you signal?</p><button class="opt" data-ok="1">When it is clear to those behind what you will do, not too early and not too late</button><button class="opt" data-ok="0">Exactly 5 seconds before, regardless</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s73">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Indicator</span><span class="pill">Exit</span></div></div>
+  <div class="body">
+    <h2>Signal with the indicator before you brake</h2>
+    <p class="core">At an exit: indicator first, then brake. Then those behind understand why.</p>
+    <ul><li>When you use the foot brake, you give a sign with the brake lights.</li><li>When turning at junctions and at exits, you signal with the indicator before you brake.</li><li>Signalling alone is not enough. Speed adjustment and position must go with it.</li></ul>
+    <p class="src">📖 Class B textbook · page 73</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Indicator first, then brake.</p>
+    <div class="quiz"><p class="q">You are about to turn off at an exit and must slow down. What do you do first?</p><button class="opt" data-ok="1">Signal with the indicator, then brake</button><button class="opt" data-ok="0">Brake hard and indicate at the end</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s74">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Car A</span><span class="pill">Car B</span></div></div>
+  <div class="body">
+    <h2>When another driver indicates but does not slow down</h2>
+    <p class="core">Sign and speed must fit together. If in doubt, wait.</p>
+    <ul><li>Car A indicates right but does not slow down. Do you dare to drive?</li><li>He may have forgotten to cancel an earlier sign.</li><li>If A slows and moves right with no sign, you become unsure. Such situations annoy and are unnecessary.</li></ul>
+    <p class="src">📖 Class B textbook · page 74</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Sign and action should match. Be clear yourself.</p>
+    <div class="quiz"><p class="q">A car ahead indicates right but keeps its speed straight towards the junction. You must give way to it. What do you do?</p><button class="opt" data-ok="1">Wait until I understand what he is doing</button><button class="opt" data-ok="0">Drive – he is turning anyway</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s75">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Blue light</span><span class="pill">Flashing yellow</span></div></div>
+  <div class="body">
+    <h2>Emergency vehicles and flashing yellow lights</h2>
+    <p class="core">Emergency vehicles can demand a clear road with blue flashing light and siren.</p>
+    <ul><li>Blue flashing light is used. The siren may be added.</li><li>Flashing yellow lights are used at roadworks and the like.</li><li>Such vehicles may depart from some traffic rules when necessary.</li></ul>
+    <p class="src">📖 Class B textbook · page 75</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Make room in good time. It can save lives.</p>
+    <div class="quiz"><p class="q">An ambulance with blue light and siren comes up behind you at a junction. What do you do?</p><button class="opt" data-ok="1">Make room without creating danger for others</button><button class="opt" data-ok="0">Carry on as before</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s75b">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Speed limit</span><span class="pill">Visibility</span></div></div>
+  <div class="body">
+    <h2>Speed adjustment and speed limit are not the same</h2>
+    <p class="core">The speed limit is the highest legal speed. Speed must be adjusted to conditions.</p>
+    <ul><li>Adjust speed to place, surface, visibility and traffic conditions.</li><li>You must be able to stop within the stretch of road you can see.</li><li>And before any foreseeable obstacle.</li></ul>
+    <p class="src">📖 Class B textbook · page 75</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> The speed limit is a ceiling, not a target.</p>
+    <div class="quiz"><p class="q">It is foggy and the speed limit is 80. What is the right speed?</p><button class="opt" data-ok="1">Lower than 80, so I can stop within what I can see</button><button class="opt" data-ok="0">80, because it is allowed</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s76">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Reaction distance</span><span class="pill">Braking distance</span></div></div>
+  <div class="body">
+    <h2>Stopping distance = reaction distance + braking distance</h2>
+    <p class="core">The car travels a distance before you manage to brake, and another before it stops.</p>
+    <ul><li>Reaction distance is the distance from noticing danger until you start to act.</li><li>On average we count 1 second of reaction time.</li><li>50 km/h is about 14 m a second, 80 km/h about 22 m a second.</li></ul>
+    <p class="src">📖 Class B textbook · page 76</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Before you brake, you have already driven a stretch.</p>
+    <div class="quiz"><p class="q">You drive at 50 km/h and a ball rolls out. About how far do you drive during one second of reaction time?</p><button class="opt" data-ok="1">About 14 metres</button><button class="opt" data-ok="0">About 2 metres</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s76b">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">20 km/h</span><span class="pill">80 km/h</span></div></div>
+  <div class="body">
+    <h2>Double speed gives four times the braking distance</h2>
+    <p class="core">Braking distance rises with the square of the speed increase.</p>
+    <ul><li>The book (flat road, summer conditions): 20 km/h about 2 m, 40 about 8 m, 60 about 18 m, 80 about 32 m.</li><li>If you double your speed, the braking distance becomes four times as long.</li><li>On slippery surfaces and wet asphalt the braking distance can increase considerably.</li></ul>
+    <p class="src">📖 Class B textbook · page 76</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> A little more speed gives a much longer braking distance.</p>
+    <div class="quiz"><p class="q">You raise your speed from 40 to 80 km/h. What happens to the braking distance?</p><button class="opt" data-ok="1">It becomes about four times as long</button><button class="opt" data-ok="0">It becomes twice as long</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s77">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">50 km/h</span><span class="pill">60 km/h</span></div></div>
+  <div class="body">
+    <h2>Kinetic energy – a dangerous companion</h2>
+    <p class="core">What the car cannot brake away is released in the collision.</p>
+    <ul><li>A car at 50 km/h manages to use up the energy by braking.</li><li>At 60 km/h some of the energy must be used up in the collision.</li><li>Loose objects in the car can be deadly in a sudden stop.</li></ul>
+    <p class="src">📖 Class B textbook · page 77</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Secure loads and objects. Speed counts.</p>
+    <div class="quiz"><p class="q">You have a heavy bag loose on the back seat and must brake hard. What can happen?</p><button class="opt" data-ok="1">It can be thrown forward and hurt you</button><button class="opt" data-ok="0">Nothing, it stays put</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s77b">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Brake pedal</span></div></div>
+  <div class="body">
+    <h2>ABS and brake assist</h2>
+    <p class="core">Press hard and stay on the brake. The systems do the rest.</p>
+    <ul><li>Brake assist increases the braking force on a quick press of the pedal.</li><li>Many do not press hard enough, for fear of ruining the brakes.</li><li>If you do not press hard enough, you cannot stop in time.</li></ul>
+    <p class="src">📖 Class B textbook · page 77</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Don&#x27;t be afraid of the brake pedal in an emergency.</p>
+    <div class="quiz"><p class="q">A child runs out in front of you and the car has ABS. How do you brake?</p><button class="opt" data-ok="1">Press hard and hold the pedal down</button><button class="opt" data-ok="0">Press gently to spare the brakes</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s78">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Braking</span><span class="pill">Steering</span></div></div>
+  <div class="body">
+    <h2>Grip is used for three things</h2>
+    <p class="core">If you use all the grip to brake, you cannot steer.</p>
+    <ul><li>Grip (friction) is used for braking, steering and accelerating.</li><li>It depends on road surface, conditions, tyre type and tread depth.</li><li>Use the grip sensibly between braking and steering.</li></ul>
+    <p class="src">📖 Class B textbook · page 78</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Grip is a shared pot. Share it wisely.</p>
+    <div class="quiz"><p class="q">You brake so hard that the wheels almost lock in a bend. What do you lose?</p><button class="opt" data-ok="1">The ability to steer</button><button class="opt" data-ok="0">Nothing</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s78b">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Cornering force</span><span class="pill">Grip</span></div></div>
+  <div class="body">
+    <h2>Cornering force and running off the road</h2>
+    <p class="core">Cornering force grows with speed squared. Beyond grip, you leave the road.</p>
+    <ul><li>When you turn the wheel, you force the car off its course. That needs grip.</li><li>Double the speed and the cornering force quadruples. From 30 to 60 km/h: 4 times.</li><li>Running off the road is the main problem for young, new drivers. Learn to read the road correctly.</li></ul>
+    <p class="src">📖 Class B textbook · page 78</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Slow down before the bend, not in it.</p>
+    <div class="quiz"><p class="q">You enter a bend too fast and turn the wheel more. What is the risk?</p><button class="opt" data-ok="1">That the cornering force exceeds grip and you slide out</button><button class="opt" data-ok="0">None – more steering gives more grip</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s79">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">ABS</span><span class="pill">ESP</span></div></div>
+  <div class="body">
+    <h2>Driver-assistance systems and skids</h2>
+    <p class="core">The systems help you, but if you drive too fast, no system can save you.</p>
+    <ul><li>ABS: the wheels do not lock. BAS: helps you press hard enough.</li><li>Traction control prevents wheelspin. Stability control (ESP, DSC) helps when the car skids.</li><li>Look for a way out, steer precisely and use the pedals precisely.</li></ul>
+    <p class="src">📖 Class B textbook · page 79</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Know your car&#x27;s systems. They only help if you can use them.</p>
+    <div class="quiz"><p class="q">The car begins to skid in a bend. What matters most?</p><button class="opt" data-ok="1">Look where you want to go, steer precisely and use the pedals calmly</button><button class="opt" data-ok="0">Brake hard and turn the wheel sharply</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s80">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Slippery</span><span class="pill">Bridge</span></div></div>
+  <div class="body">
+    <h2>The conditions change</h2>
+    <p class="core">Half the grip gives double the braking distance. Be ready for slippery conditions.</p>
+    <ul><li>If grip drops to half, braking distance becomes twice as long.</li><li>If grip is a third, braking distance becomes three times as long.</li><li>Wet asphalt after a dry spell and bridges below 0° can be very slippery.</li></ul>
+    <p class="src">📖 Class B textbook · page 80</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> When conditions change, you change your speed.</p>
+    <div class="quiz"><p class="q">It has just begun to rain after a long dry spell. What do you expect?</p><button class="opt" data-ok="1">Very slippery asphalt, so I lower my speed</button><button class="opt" data-ok="0">Better grip because of the water</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s80b">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Bus</span><span class="pill">Children</span></div></div>
+  <div class="body">
+    <h2>Extra low speed near children and vulnerable people</h2>
+    <p class="core">Keep speed low and stop if needed near children, a school patrol and buses.</p>
+    <ul><li>Applies to children on or near the road and a school patrol.</li><li>Also applies to a person with a white cane or guide dog, and people who may be assumed to have a defect or illness.</li><li>And a tram or bus that has stopped or is about to stop at a stop.</li></ul>
+    <p class="src">📖 Class B textbook · page 80</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> When someone is vulnerable, you take responsibility.</p>
+    <div class="quiz"><p class="q">A bus stands at a stop and people get off. What do you do?</p><button class="opt" data-ok="1">Keep speed low and stop if necessary</button><button class="opt" data-ok="0">Drive past at normal speed</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s81">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Slippery road</span><span class="pill">Shared street</span></div></div>
+  <div class="body">
+    <h2>Warning signs and speed-limit signs</h2>
+    <p class="core">Warning signs warn of hazards that are hard to spot in time.</p>
+    <ul><li>Examples: slippery road, roadworks, animals, other danger (with a plate).</li><li>Speed-limit signs: speed limit, end of special limit, zone and recommended speed.</li><li>On a pedestrian street and shared street you must not drive faster than walking pace.</li></ul>
+    <p class="src">📖 Class B textbook · page 81</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> The sign tells you what to adjust.</p>
+    <div class="quiz"><p class="q">You drive into a shared street with children playing. How fast may you drive?</p><button class="opt" data-ok="1">No faster than walking pace</button><button class="opt" data-ok="0">Up to 30 km/h</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s82">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Trailer</span><span class="pill">80 km/h</span></div></div>
+  <div class="body">
+    <h2>Speed limits for heavy vehicles and vehicles with a trailer</h2>
+    <p class="core">Heavy vehicles and vehicles with a trailer have their own speed limits.</p>
+    <ul><li>Where the limit is above 80, they cannot as a rule drive over 80 km/h.</li><li>There are exceptions, e.g. for approved combinations and buses.</li><li>Always check the registration certificate and the rules for your car and trailer.</li></ul>
+    <p class="src">📖 Class B textbook · page 82</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Always check the rules for your car and trailer.</p>
+    <div class="quiz"><p class="q">You drive a car with a caravan on a motorway signed 110. What speed can you keep?</p><button class="opt" data-ok="1">At most 80 km/h as a rule</button><button class="opt" data-ok="0">110 km/h – the sign applies to everyone</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s82b">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Right side</span><span class="pill">Middle of the lane</span></div></div>
+  <div class="body">
+    <h2>Drive on the right side of the road</h2>
+    <p class="core">As far as conditions allow, drive on the right side.</p>
+    <ul><li>Position gives information to other road users.</li><li>The main rule applies even with several lanes in the same direction.</li><li>Keep the vehicle well within the lane. Normally you can position yourself in the middle of the lane.</li></ul>
+    <p class="src">📖 Class B textbook · page 82</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Position the car so others understand you.</p>
+    <div class="quiz"><p class="q">You drive on a road with two lanes in your direction and no traffic. Which lane do you use?</p><button class="opt" data-ok="1">The right lane</button><button class="opt" data-ok="0">The left lane – there is most space</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s83">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Dense traffic</span><span class="pill">Obstruction</span><span class="pill">Sign</span></div></div>
+  <div class="body">
+    <h2>When you may use the left lane</h2>
+    <p class="core">Four exceptions: dense traffic, blocked lane, sign or marking, overtaking.</p>
+    <ul><li>Dense traffic: the right lane alone cannot handle it. Move right again when it eases.</li><li>Obstruction: the right lane is blocked, e.g. a parked car.</li><li>A sign or marking shows the left lane is allowed or mandatory.</li></ul>
+    <p class="src">📖 Class B textbook · page 83</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Right is the main rule. The exceptions are few and clear.</p>
+    <div class="quiz"><p class="q">It is rush hour and the right lane is full, but traffic eases after a while. What do you do then?</p><button class="opt" data-ok="1">Move back to the right</button><button class="opt" data-ok="0">Stay in the left lane all the way</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s84">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">3 seconds</span><span class="pill">Vehicle ahead</span></div></div>
+  <div class="body">
+    <h2>Distance to the vehicle ahead: the 3-second rule</h2>
+    <p class="core">Keep enough distance that you don&#x27;t run into the one ahead if it stops.</p>
+    <ul><li>A normally safe distance is 3 seconds. Count &#x27;1001, 1002, 1003&#x27;.</li><li>At 80 km/h, 3 seconds is about 66 metres.</li><li>Keep a larger distance at high speed and on slippery roads.</li></ul>
+    <p class="src">📖 Class B textbook · page 84</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Three seconds give you time and protect your neck.</p>
+    <div class="quiz"><p class="q">It is raining and you drive at 80 km/h behind a car. How big a distance should you keep?</p><button class="opt" data-ok="1">More than 3 seconds</button><button class="opt" data-ok="0">Less than 3 seconds, so you see better</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s85">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Position</span><span class="pill">Observation</span></div></div>
+  <div class="body">
+    <h2>Right turn: as near the right edge as possible</h2>
+    <p class="core">When turning right, drive as near the right edge as possible.</p>
+    <ul><li>That stops two-wheelers pressing in on your right side.</li><li>Check the blind zone before positioning and if needed before you turn.</li><li>Take a look into the road you turn into. Parked cars can block your view.</li></ul>
+    <p class="src">📖 Class B textbook · page 85</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Observe, signal, position, adjust speed, turn.</p>
+    <div class="quiz"><p class="q">You will turn right and a cyclist rides behind you on the right. What do you do?</p><button class="opt" data-ok="1">Position near the right edge, check the blind zone and let the cyclist pass first if necessary</button><button class="opt" data-ok="0">Swing wide to the left first</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s85b">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Centre line</span><span class="pill">Position</span></div></div>
+  <div class="body">
+    <h2>Left turn: drive towards the middle, not in the middle</h2>
+    <p class="core">On a two-way road, drive as near the middle as possible when turning left.</p>
+    <ul><li>The yellow centre line decides your position. If there is no marking, find the middle yourself.</li><li>Drive TOWARDS the middle, not IN the middle, even with cars behind you.</li><li>Cars behind may pass on the right if there is room.</li></ul>
+    <p class="src">📖 Class B textbook · page 85</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Towards the middle, not in the middle. Make room for those behind.</p>
+    <div class="quiz"><p class="q">You will turn left and have a car behind you. Where do you position yourself?</p><button class="opt" data-ok="1">Towards the middle of the carriageway, so those behind can pass on the right</button><button class="opt" data-ok="0">All the way to the right edge</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article></section></main>
+<script>
+const TT={"no": "Michaels bildebok", "th": "หนังสือภาพของไมเคิล", "en": "Michael's picture book"};
+const show=l=>{document.getElementById('ttl').textContent=TT[l];document.title=TT[l];document.querySelectorAll('.view').forEach(v=>v.hidden=v.id!=='v-'+l);
+document.querySelectorAll('header button').forEach(b=>b.classList.toggle('on',b.dataset.l===l));document.documentElement.lang=l==='th'?'th':l;};
+document.querySelectorAll('header button').forEach(b=>b.onclick=()=>show(b.dataset.l));
+document.addEventListener('click',e=>{const o=e.target.closest('.opt');if(!o)return;
+const q=o.closest('.quiz'),fb=q.querySelector('.fb'),ok=o.dataset.ok==='1';
+o.classList.add(ok?'good':'bad');fb.textContent=ok?fb.dataset.ok:fb.dataset.no;fb.style.color=ok?'var(--ok)':'var(--bad)';});
+show('no');
+</script></body></html>
