@@ -2823,6 +2823,16 @@ async def _validate_teacher_response_media(media: list[dict], lang: str) -> list
                 if authoritative and authoritative[0]["url"] == item["url"]:
                     valid.append(authoritative[0])
                 continue
+            if media_id.startswith("bildebok:"):
+                try:
+                    from scripts.bildebok_lookup import get_active_page_by_id, media_card_for_page
+                except ImportError:
+                    from backend.scripts.bildebok_lookup import get_active_page_by_id, media_card_for_page
+                page = get_active_page_by_id(media_id.removeprefix("bildebok:"), lang)
+                canonical = media_card_for_page(page) if page else None
+                if canonical and all(item.get(key) == canonical.get(key) for key in ("type", "url", "title", "caption")):
+                    valid.append(canonical)
+                continue
             if media_id.startswith("micro-lesson:"):
                 from micro_lessons import get_micro_lesson_by_id
                 lesson_id = media_id.removeprefix("micro-lesson:")
@@ -3261,6 +3271,46 @@ def _get_suggestions(reply: str, lang: str, user_msg: str = "") -> list:
     if lang == "th": return ["❓ ถามต่อ", "📖 เปิดหนังสือเรียน", "📊 สถิติของฉัน"]
     if lang == "en": return ["❓ Ask more", "📖 Open study book", "📊 My statistics"]
     return ["❓ Spør videre", "📖 Åpne studiebok", "📊 Min statistikk"]
+
+
+def _find_active_bildebok_page(question: str, lang: str) -> dict | None:
+    """Resolve only an active picture-book row with approved, hash-verified image bytes."""
+    try:
+        try:
+            from scripts.bildebok_lookup import find_active_page
+        except ImportError:
+            from backend.scripts.bildebok_lookup import find_active_page
+        return find_active_page(question, lang)
+    except Exception as exc:
+        logger.warning("Picture-book lookup skipped: %s", type(exc).__name__)
+        return None
+
+
+def _bildebok_prompt_context(page: dict, lang: str) -> str:
+    labels = {
+        "no": ("GODKJENT BILDEBOKLEKSJON", "Elevtekst", "Fagpunkter", "Lærerforklaring"),
+        "th": ("บทเรียนจากหนังสือภาพที่อนุมัติแล้ว", "ข้อความสำหรับผู้เรียน", "ประเด็นการเรียนรู้", "คำอธิบายสำหรับครู"),
+        "en": ("APPROVED PICTURE-BOOK LESSON", "Student text", "Teaching points", "Teacher explanation"),
+    }[lang]
+    points = "\n".join(f"- {point}" for point in page.get("points", []))
+    return (
+        f"{labels[0]} — {page['title']}\n"
+        f"{labels[1]}: {page['core_sentence']}\n"
+        f"{labels[2]}:\n{points}\n"
+        f"{labels[3]}: {page['michael_basis']}"
+    )
+
+
+def _bildebok_media_card(page: dict) -> dict | None:
+    try:
+        try:
+            from scripts.bildebok_lookup import media_card_for_page
+        except ImportError:
+            from backend.scripts.bildebok_lookup import media_card_for_page
+        return media_card_for_page(page)
+    except Exception as exc:
+        logger.warning("Picture-book card unavailable: %s", type(exc).__name__)
+        return None
 
 
 async def _get_curriculum_context(user_msg: str, lang: str) -> str:
@@ -4026,6 +4076,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
     # Call LLM
     context_str = ""
     media = []
+    bildebok_page = None
     # Retrieve for the current request, not every topic discussed since the last reveal.
     topic_query = user_msg
     if is_frustrated and not is_direct_lookup:
@@ -4042,6 +4093,12 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
 
         # Retrieve curriculum context from database (RAG)
         context_str = await _get_curriculum_context(topic_query, lang)
+        if allow_answer and not explicit_sign_ids and not sign_requested:
+            bildebok_page = _find_active_bildebok_page(topic_query, lang)
+            if bildebok_page:
+                context_str = "\n\n".join(
+                    part for part in (context_str, _bildebok_prompt_context(bildebok_page, lang)) if part
+                )
         context_sign_ids = _sign_ids_from_context(context_str) if sign_requested else []
         # Only explicit sign requests may reserve the limited response media slots.
         # RAG context can mention several related signs; preloading those cards can
@@ -4071,6 +4128,10 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         elif allow_answer and not explicit_sign_ids and not approved_media and resolved_concept and resolved_concept.get("media"):
             catalog_media = list(resolved_concept["media"])
         media = _compose_teacher_media(media, catalog_media, explicit_sign_ids)
+        if bildebok_page:
+            lesson_card = _bildebok_media_card(bildebok_page)
+            if lesson_card:
+                media = [lesson_card]
         if allow_answer and not explicit_sign_ids and not media:
             try:
                 from micro_lessons import find_relevant_micro_lesson, get_micro_lesson_media_card
