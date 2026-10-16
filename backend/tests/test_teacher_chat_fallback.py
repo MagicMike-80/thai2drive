@@ -1,6 +1,8 @@
 import asyncio
 import importlib.util
+import json
 import os
+import re
 import sys
 import types
 import unittest
@@ -245,28 +247,41 @@ class TeacherChatFallbackTests(unittest.TestCase):
                 "no",
                 "Når jeg svinger til venstre og har vikeplikt for møtende bil, er dette høyreregelen?",
                 "Nei, dette er ikke høyreregelen.",
-                "Når du skal svinge til venstre",
+                "Korrigering:",
             ),
             (
                 "th",
                 "เมื่อเลี้ยวซ้ายและต้องให้ทางรถสวนทาง นี่คือกฎการให้ทางจากขวาใช่ไหม",
                 "ไม่ใช่กฎมือขวา",
-                "เมื่อคุณจะเลี้ยวซ้าย",
+                "คำแก้ไข:",
             ),
             (
                 "en",
                 "When turning left for oncoming traffic, is this the right-hand rule?",
                 "No, this is not the right-hand rule.",
-                "When you are turning left",
+                "Correction:",
             ),
         )
         for lang, question, wrong_reply, expected_start in cases:
             with self.subTest(lang=lang):
                 corrected = self.module._apply_section_7_2_fail_safe(question, wrong_reply, lang)
-                self.assertTrue(corrected.startswith(expected_start))
-                self.assertNotIn("Nei", corrected)
-                self.assertNotIn("No,", corrected)
-                self.assertNotIn("ไม่ใช่", corrected)
+                self.assertTrue(corrected.startswith(wrong_reply))
+                self.assertIn(expected_start, corrected)
+
+    def test_section_7_2_trigger_excludes_overtaking_and_cyclist_context(self):
+        for question in (
+            "Jeg svinger til venstre for å kjøre forbi en syklist; hva må jeg se etter?",
+            "Hva gjelder når jeg passerer en syklist og det kommer trafikk imot?",
+            "When turning left to overtake a cyclist, what should I watch for?",
+            "เมื่อเลี้ยวซ้ายเพื่อแซงจักรยาน ต้องระวังอะไร",
+        ):
+            with self.subTest(question=question):
+                self.assertFalse(self.module._is_section_7_2_left_turn_query(question))
+                original = "Svar på spørsmålet om forbikjøring."
+                self.assertEqual(
+                    self.module._apply_section_7_2_fail_safe(question, original, "no"),
+                    original,
+                )
 
     def test_section_7_2_fail_safe_has_narrow_boundaries(self):
         cases = (
@@ -291,8 +306,8 @@ class TeacherChatFallbackTests(unittest.TestCase):
             with self.subTest(question=question):
                 self.assertTrue(self.module._is_section_7_2_left_turn_query(question))
                 corrected = self.module._apply_section_7_2_fail_safe(question, original, "no")
-                self.assertIn("tjeneren", corrected)
-                self.assertIn("kongen", corrected)
+                self.assertTrue(corrected.startswith(original))
+                self.assertIn("Presisering:", corrected)
 
     def test_section_7_2_full_citation_contains_both_sentences_and_no_sign(self):
         question = "Hva sier paragraf 7 andre ledd?"
@@ -307,6 +322,80 @@ class TeacherChatFallbackTests(unittest.TestCase):
             self.module._sign_ids_from_reply(reply),
         )
         self.assertEqual(sign_ids, [])
+
+    def test_sign_202_thai_does_not_require_stopping_unless_needed(self):
+        signs = json.loads((Path(__file__).resolve().parents[1] / "signs_content.json").read_text(encoding="utf-8"))
+        sign = next(item for item in signs if item["id"] == "202_0")
+        self.assertEqual(sign["explanation"]["th"], "ให้ทาง หยุดเมื่อจำเป็น")
+        self.assertEqual(sign["driver_action"]["th"], "ให้ทาง หยุดเมื่อจำเป็น")
+
+    def test_selected_language_guard_retries_thai_leak_in_norwegian_mode(self):
+        calls = []
+
+        async def fake_completion(messages, require_vision=False):
+            calls.append(messages)
+            return _response("Vær oppmerksom på trafikksituasjonen.")
+
+        self.module._completion_with_fallback = fake_completion
+        reply = asyncio.run(self.module._guard_selected_language(
+            "โปรดระวังรถ", self.messages, "no"
+        ))
+        self.assertEqual(reply, "Vær oppmerksom på trafikksituasjonen.")
+        self.assertEqual(len(calls), 1)
+        self.assertIn("only in Norwegian", calls[0][-1]["content"])
+
+    def test_selected_language_guard_falls_back_in_active_language(self):
+        async def repeated_thai(messages, require_vision=False):
+            return _response("คำตอบภาษาไทย")
+
+        self.module._completion_with_fallback = repeated_thai
+        no_reply = asyncio.run(self.module._guard_selected_language(
+            "คำตอบภาษาไทย", self.messages, "no"
+        ))
+        en_reply = asyncio.run(self.module._guard_selected_language(
+            "คำตอบภาษาไทย", self.messages, "en"
+        ))
+        self.assertEqual(no_reply, self.module._fallback_reply("no"))
+        self.assertEqual(en_reply, self.module._fallback_reply("en"))
+        self.assertFalse(re.search(r"[\u0e00-\u0e7f]", no_reply))
+        self.assertFalse(re.search(r"[\u0e00-\u0e7f]", en_reply))
+
+        async def repeated_english(messages, require_vision=False):
+            return _response("Please ask again later.")
+
+        self.module._completion_with_fallback = repeated_english
+        th_reply = asyncio.run(self.module._guard_selected_language(
+            "English-only answer", self.messages, "th"
+        ))
+        self.assertEqual(th_reply, self.module._fallback_reply("th"))
+        self.assertTrue(re.search(r"[\u0e00-\u0e7f]", th_reply))
+
+    def test_runtime_trace_metadata_uses_railway_commit_and_deployment_ids(self):
+        previous = {
+            name: os.environ.get(name)
+            for name in ("RAILWAY_GIT_COMMIT_SHA", "RAILWAY_DEPLOYMENT_ID")
+        }
+        try:
+            os.environ["RAILWAY_GIT_COMMIT_SHA"] = "abc123fullhash"
+            os.environ["RAILWAY_DEPLOYMENT_ID"] = "deploy-test-42"
+            self.assertEqual(self.module._runtime_trace_metadata(), {
+                "build_commit": "abc123fullhash",
+                "deployment_id": "deploy-test-42",
+            })
+        finally:
+            for name, value in previous.items():
+                if value is None:
+                    os.environ.pop(name, None)
+                else:
+                    os.environ[name] = value
+
+    def test_runtime_trace_metadata_is_in_response_history_and_logs(self):
+        source = (Path(__file__).resolve().parents[1] / "teacher_chat.py").read_text(encoding="utf-8")
+        self.assertIn("build_commit: Optional[str] = None", source)
+        self.assertIn("deployment_id: Optional[str] = None", source)
+        self.assertIn('"build_commit": os.environ.get("RAILWAY_GIT_COMMIT_SHA") or None', source)
+        self.assertIn('"deployment_id": os.environ.get("RAILWAY_DEPLOYMENT_ID") or None', source)
+        self.assertEqual(source.count("**trace_metadata"), 4)
 
     def test_strict_sign_validation_ignores_unrelated_rag_context(self):
         unrelated_context = "Traffic Sign 334_0: Forbikjøring forbudt for lastebil"

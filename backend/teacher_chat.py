@@ -2158,6 +2158,13 @@ def _is_section_7_2_left_turn_query(user_msg: str) -> bool:
     """Match queries about left-turn right-of-way, oncoming traffic, and Section 7(2)."""
     raw = (user_msg or "").casefold()
     message = raw.replace("i mot", "imot").replace("i-mot", "imot")
+    unrelated_manoeuvre_terms = (
+        "forbikjør", "forbikjor", "forbikjøring", "forbikjoring", "passere", "passerer",
+        "passering", "syklist", "syklister", "sykkel", "overtak", "overtake", "overtaking",
+        "passing", "cyclist", "cyclists", "bicycle", "แซง", "นักปั่น", "จักรยาน",
+    )
+    if any(term in message for term in unrelated_manoeuvre_terms):
+        return False
     left_turn_terms = (
         "venstresving", "svinger til venstre", "svinge til venstre", "svinge venstre",
         "svinger venstre", "sving venstre", "sving til venstre", "venstre",
@@ -2173,13 +2180,9 @@ def _is_section_7_2_left_turn_query(user_msg: str) -> bool:
         "oncoming", "opposing traffic", "cross my path", "on my right", "on your right",
         "right-hand side", "right side", "รถสวนทาง", "รถที่สวนมา", "ด้านขวา", "ทางขวามือ"
     )
-    is_left_opposing = any(t in message for t in left_turn_terms) and any(t in message for t in opposing_or_oncoming_terms)
-    is_direct_oncoming = any(t in message for t in (
-        "kjører imot", "kjøre imot", "koer imot", "koere imot", "køyrer imot", "køyre imot",
-        "kjem imot", "kommer imot", "bil imot", "biler imot", "møtende bil", "møtende trafikk",
-        "oncoming traffic", "รถสวนทาง"
-    ))
-    return is_left_opposing or is_direct_oncoming
+    return any(t in message for t in left_turn_terms) and any(
+        t in message for t in opposing_or_oncoming_terms
+    )
 
 
 def _is_section_7_2_citation_query(user_msg: str) -> bool:
@@ -2203,7 +2206,7 @@ def _is_section_7_2_citation_query(user_msg: str) -> bool:
 
 
 def _apply_section_7_2_fail_safe(user_msg: str, reply_text: str, lang: str) -> str:
-    """Return a controlled, pedagogically and legally correct answer for the § 7 no. 2 left-turn scenario."""
+    """Append a narrowly scoped, verified § 7(2) clarification without discarding the answer."""
     is_left_turn = _is_section_7_2_left_turn_query(user_msg)
     is_citation = _is_section_7_2_citation_query(user_msg)
 
@@ -2215,39 +2218,29 @@ def _apply_section_7_2_fail_safe(user_msg: str, reply_text: str, lang: str) -> s
         or "høyreregelen gjelder ikke når" in reply_lower
         or "ikke vikeplikt for møtende" in reply_lower
         or "møtende trafikk har vike" in reply_lower
+        or "ikke høyreregelen" in reply_lower
+        or "not the right-hand rule" in reply_lower
+        or "not right-hand rule" in reply_lower
+        or "the right-hand rule does not apply" in reply_lower
+        or "ไม่ใช่กฎมือขวา" in reply_lower
+        or "กฎมือขวาใช้ไม่ได้" in reply_lower
     )
 
     if not is_left_turn and not is_citation and not has_dangerous_negation:
         return reply_text
 
-    pedagogical_explanations = {
-        "no": (
-            "Når du skal svinge til venstre, vil den møtende bilen havne på din høyre side. "
-            "Det betyr at du har vikeplikt etter høyreregelen (§ 7 nr. 2). "
-            "Du er tjeneren, og den møtende bilen er kongen – du må la kongen kjøre først!\n\n"
-            "Trafikkreglene § 7 nr. 2 slår fast: «Kjørende har vikeplikt for kjøretøy som kommer fra høyre. "
-            "Det samme gjelder når kjørende som vil svinge til venstre, vil få kjøretøy på sin høyre side.»"
-        ),
-        "th": (
-            "เมื่อคุณจะเลี้ยวซ้าย รถที่สวนทางมาจะอยู่ทางขวามือของคุณครับ "
-            "นั่นหมายความว่าคุณมีหน้าที่ต้องให้ทางตามกฎการให้ทางจากขวา (§ 7 ข้อ 2) "
-            "คุณคือคนรับใช้ และรถที่สวนมาคือพระราชา – คุณต้องให้พระราชาไปก่อนเสมอครับผม!\n\n"
-            "กฎจราจรนอร์เวย์ § 7 ข้อ 2 ระบุว่า: «ผู้ขับขี่ต้องให้ทางแก่รถที่มาจากด้านขวา "
-            "กฎเดียวกันนี้ใช้เมื่อผู้ขับขี่ต้องการเลี้ยวซ้ายและจะมีรถอยู่ทางขวามือของตน»"
-        ),
-        "en": (
-            "When you are turning left, the oncoming car will be on your right-hand side. "
-            "This means you have right-of-way duty under the right-hand rule (§ 7 no. 2). "
-            "You are the servant, and the oncoming car is the king – you must let the king drive first!\n\n"
-            "Section 7(2) of the Norwegian traffic rules states: “A driver must yield to vehicles coming from the right. "
-            "The same applies when a driver who intends to turn left will have a vehicle on their right-hand side.”"
-        )
+    # Keep the explanation attached to the learner's actual question. The legal
+    # sentence is an addition; never replace the complete LLM answer with it.
+    left_turn_supplements = {
+        "no": "Presisering: Ved venstresving gjelder vikeplikten når du vil få et kjøretøy på din høyre side.",
+        "th": "คำชี้แจง: เมื่อเลี้ยวซ้าย คุณต้องให้ทางเมื่อมีรถอยู่ทางขวามือของคุณตามสถานการณ์นั้น",
+        "en": "Clarification: When turning left, you must yield when a vehicle will be on your right-hand side in that situation.",
     }
-
-    if is_left_turn or has_dangerous_negation:
-        return _strict_lang_map(pedagogical_explanations, lang) or reply_text
-
-    # Ren sitatforespørsel
+    dangerous_reply_corrections = {
+        "no": "Korrigering: Påstanden over var feil. Ved venstresving gjelder vikeplikten når du vil få et kjøretøy på din høyre side.",
+        "th": "คำแก้ไข: ข้อความก่อนหน้านี้ไม่ถูกต้อง เมื่อเลี้ยวซ้าย คุณต้องให้ทางเมื่อมีรถอยู่ทางขวามือของคุณตามสถานการณ์นั้น",
+        "en": "Correction: The statement above was incorrect. When turning left, you must yield when a vehicle will be on your right-hand side in that situation.",
+    }
     statute_replies = {
         "no": (
             "Trafikkreglene § 7 nr. 2 sier: «Kjørende har vikeplikt for kjøretøy som "
@@ -2265,7 +2258,20 @@ def _apply_section_7_2_fail_safe(user_msg: str, reply_text: str, lang: str) -> s
             "intends to turn left will have a vehicle on their right-hand side.”"
         ),
     }
-    return _strict_lang_map(statute_replies, lang) or reply_text
+    if has_dangerous_negation:
+        supplement = _strict_lang_map(dangerous_reply_corrections, lang)
+    elif is_citation:
+        supplement = _strict_lang_map(statute_replies, lang)
+    elif is_left_turn:
+        supplement = _strict_lang_map(left_turn_supplements, lang)
+    else:
+        return reply_text
+
+    if not supplement or supplement.casefold() in (reply_text or "").casefold():
+        return reply_text
+    if not (reply_text or "").strip():
+        return supplement
+    return f"{reply_text.rstrip()}\n\n{supplement}"
 
 
 def _apply_right_rule_definition_fail_safe(user_msg: str, reply_text: str, lang: str) -> str:
@@ -3881,6 +3887,8 @@ class TeacherChatResponse(BaseModel):
     suggestions: list = []
     sign_ids: list[str] = Field(default_factory=list)
     media: list[dict] = Field(default_factory=list)
+    build_commit: Optional[str] = None
+    deployment_id: Optional[str] = None
 
 
 @teacher_router.post("/teacher/chat", response_model=TeacherChatResponse)
@@ -4344,6 +4352,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         reply_text = _weak_topic_start(weak_topic, lang)
     if lang == "th":
         reply_text = _sanitize_gender_particles(reply_text)
+    reply_text = await _guard_selected_language(reply_text, messages, lang)
     reply_sign_ids = _sign_ids_from_reply(reply_text) if allow_answer and explicit_sign_ids else []
     sign_ids = _strict_response_sign_ids(explicit_sign_ids, reply_sign_ids) if allow_answer and sign_requested else []
 
@@ -4360,6 +4369,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
     # Persist both messages. Chat history is helpful, but it must never block a
     # completed teacher response when MongoDB is temporarily read-only/full.
     now = datetime.now(timezone.utc)
+    trace_metadata = _runtime_trace_metadata()
     try:
         if not error_str:
             await _chat_col.insert_many([
@@ -4370,6 +4380,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
                     "language": lang,
                     "quiz_key": current_quiz_key,
                     "quiz_context": quiz_context_str or None,
+                    **trace_metadata,
                     "ts": now,
                 },
                 {
@@ -4380,6 +4391,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
                     "sign_ids": sign_ids,
                     "v4_stage": v4_stage,
                     "guided_mode": guided_mode,
+                    **trace_metadata,
                     "ts": now,
                 },
             ])
@@ -4396,6 +4408,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             "question": user_msg,
             "response_time": duration,
             "error": error_str,
+            **trace_metadata,
             "ts": datetime.now(timezone.utc)
         }
         await _db["teacher_chat_logs"].insert_one(log_doc)
@@ -4412,6 +4425,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         suggestions=[],
         sign_ids=sign_ids,
         media=media,
+        **trace_metadata,
     )
 
 
@@ -4432,6 +4446,49 @@ def _fallback_reply(lang: str) -> str:
     if lang == "en":
         return "Sorry, Michael is not available right now. Please try again in a moment."
     return "Beklager, Michael er ikke tilgjengelig akkurat nå. Prøv igjen om litt."
+
+
+def _contains_thai_script(text: str) -> bool:
+    return bool(re.search(r"[\u0e00-\u0e7f]", text or ""))
+
+
+def _reply_matches_language_script(text: str, lang: str) -> bool:
+    if lang == "th":
+        return _contains_thai_script(text) and not re.search(r"[A-Za-z]", text or "")
+    return not _contains_thai_script(text)
+
+
+async def _guard_selected_language(reply: str, messages: list, lang: str) -> str:
+    """Retry one mixed-script answer, then return a fallback in the selected language."""
+    if lang not in SUPPORTED_LANGUAGES:
+        return _fallback_reply("no")
+    if _reply_matches_language_script(reply, lang):
+        return reply
+
+    language = {"no": "Norwegian", "th": "Thai", "en": "English"}[lang]
+    retry_messages = list(messages or []) + [{
+        "role": "system",
+        "content": (
+            f"FINAL LANGUAGE LOCK: Answer only in {language}. Keep the original answer's meaning "
+            "and address the learner's original question. Do not mention this correction."
+        ),
+    }]
+    try:
+        response = await _completion_with_fallback(retry_messages)
+        candidate = (response.choices[0].message.content or "").strip()
+        if _reply_matches_language_script(candidate, lang):
+            return candidate
+    except Exception:
+        logger.exception("Selected-language retry failed")
+    return _fallback_reply(lang)
+
+
+def _runtime_trace_metadata() -> dict[str, Optional[str]]:
+    """Return Railway build identifiers for the response and persisted transcript."""
+    return {
+        "build_commit": os.environ.get("RAILWAY_GIT_COMMIT_SHA") or None,
+        "deployment_id": os.environ.get("RAILWAY_DEPLOYMENT_ID") or None,
+    }
 
 
 # ─── Feedback ─────────────────────────────────────────────────────────────────

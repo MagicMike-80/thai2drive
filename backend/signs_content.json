@@ -9,12 +9,12 @@
     },
     "explanation": {
       "no": "Du skal vike for trafikk i krysset.",
-      "th": "คุณต้องหยุดรอและให้รถอื่นผ่านก่อน",
+      "th": "ให้ทาง หยุดเมื่อจำเป็น",
       "en": "You must yield to traffic at the intersection."
     },
     "driver_action": {
       "no": "Du skal vike for trafikk i krysset.",
-      "th": "คุณต้องหยุดรอและให้รถอื่นผ่านก่อน",
+      "th": "ให้ทาง หยุดเมื่อจำเป็น",
       "en": "You must yield to traffic at the intersection."
     }
   },
