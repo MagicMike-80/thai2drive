@@ -1,0 +1,132 @@
+{
+  "pack": "bildebok_bb_s22_v1",
+  "book": "Lærebok Klasse B",
+  "scope": {
+    "printed_pages": [
+      22,
+      22
+    ],
+    "pdf_pages": [
+      17,
+      17
+    ],
+    "page_count": 1
+  },
+  "pages": [
+    {
+      "id": "bb-s22",
+      "book": "Lærebok Klasse B",
+      "printed_page": 22,
+      "pdf_page": 17,
+      "chapter": "Del 2 Mennesket i trafikken",
+      "section": "Oppmerksomhet – snever og bred, bremseberedskap",
+      "asset_id": "bb_s22_snever-og-bred-oppmerksomhet",
+      "image_file": "bb_s22_advisor_v1_40ab410483d4.png",
+      "image_status": "godkjent",
+      "status": "aktiv",
+      "title": {
+        "no": "Snever og bred oppmerksomhet",
+        "th": "ความสนใจแคบและกว้าง",
+        "en": "Narrow and wide attention"
+      },
+      "core_sentence": {
+        "no": "Ikke lås blikket på lastebilen og fotgjengeren. Se også motorsykkelen i krysset.",
+        "th": "อย่าจ้องรถบรรทุกและคนเดินเท้าเพียงอย่างเดียว เงยสายตาขึ้นเพื่อมองเห็นรถจักรยานยนต์ที่ทางแยกด้วย",
+        "en": "Look beyond the lorry and pedestrian; notice the motorcycle at the junction."
+      },
+      "points": [
+        {
+          "no": "Snever oppmerksomhet kan låse blikket på lastebilen og fotgjengeren.",
+          "th": "ความสนใจแบบแคบอาจทำให้คุณจ้องอยู่ที่รถบรรทุกและคนเดินเท้า",
+          "en": "Narrow attention can keep your gaze on the lorry and pedestrian."
+        },
+        {
+          "no": "Bred oppmerksomhet hjelper deg å oppfatte motorsykkelen og hele krysset.",
+          "th": "ความสนใจแบบกว้างช่วยให้คุณสังเกตรถจักรยานยนต์และมองเห็นภาพรวมของทางแยก",
+          "en": "Wide attention helps you notice the motorcycle and see the whole junction."
+        },
+        {
+          "no": "Bremseberedskap kan korte ned reaksjonstiden. Et lett trykk tenner bremselysene og varsler bilen bak.",
+          "th": "การเตรียมเบรกช่วยลดเวลาตอบสนอง การกดแป้นเบรกเบา ๆ ทำให้ไฟเบรกเตือนรถคันหลัง",
+          "en": "Brake readiness can shorten reaction time. A light touch lights the brake lamps and warns the driver behind."
+        }
+      ],
+      "michael_says": {
+        "no": "Løft blikket etter at du har fokusert, så får du med hele trafikkbildet.",
+        "th": "หลังจากเพ่งมองจุดสำคัญแล้ว ให้เงยสายตาขึ้นเพื่อมองภาพรวมของการจราจร",
+        "en": "After focusing on one detail, lift your gaze to take in the whole traffic scene."
+      },
+      "check_question": {
+        "q": {
+          "no": "En lastebil står stille ved et gangfelt foran deg. Hva bør du gjøre?",
+          "th": "มีรถบรรทุกจอดนิ่งอยู่ข้างทางม้าลายข้างหน้าคุณ คุณควรทำอย่างไร?",
+          "en": "A lorry is stationary beside a pedestrian crossing ahead. What should you do?"
+        },
+        "options": [
+          {
+            "no": "Innta bremseberedskap. En fotgjenger kan skjule seg bak lastebilen, og du må holde oversikt over hele krysset.",
+            "th": "เตรียมเบรก เพราะอาจมีคนเดินเท้าซ่อนอยู่หลังรถบรรทุก และคุณต้องมองภาพรวมของทางแยก",
+            "en": "Be ready to brake. A pedestrian may be hidden behind the lorry, and you need to keep the whole junction in view."
+          },
+          {
+            "no": "Kjøre forbi lastebilen uten å senke farten siden du har grønt lys.",
+            "th": "ขับผ่านรถบรรทุกโดยไม่ลดความเร็ว เพราะคุณได้สัญญาณไฟเขียว",
+            "en": "Pass the lorry without slowing down because you have a green light."
+          },
+          {
+            "no": "Gjøre full stopp midt i veien og vente på at lastebilen kjører.",
+            "th": "หยุดรถสนิทกลางถนน แล้วรอให้รถบรรทุกขับออกไป",
+            "en": "Stop completely in the middle of the road and wait for the lorry to drive away."
+          }
+        ],
+        "answer": 0
+      },
+      "image_labels": [
+        {
+          "no": "Gangfelt",
+          "th": "ทางม้าลาย",
+          "en": "Pedestrian crossing"
+        },
+        {
+          "no": "Bil A",
+          "th": "รถยนต์ A",
+          "en": "Car A"
+        },
+        {
+          "no": "Lastebil med åpen bakpart",
+          "th": "รถบรรทุกที่เปิดท้าย",
+          "en": "Lorry with open rear"
+        },
+        {
+          "no": "Motorsykkel som svinger til høyre",
+          "th": "รถจักรยานยนต์ที่กำลังเลี้ยวขวา",
+          "en": "Motorcycle turning right"
+        }
+      ],
+      "image_brief": "Photorealistic Norwegian junction: a delivery lorry stopped with its rear doors open at a zebra crossing, a car just behind it, a motorcyclist approaching from the left, daylight, no text on the lorry. Master image 3:2 landscape. Keep every key element (Crossing, Car A, Lorry) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+      "rule_ref": "",
+      "note": "",
+      "michael_basis": {
+        "no": "Føreren av bil A kan rette all oppmerksomhet mot gangfeltet fordi hen tror en fotgjenger vil gå ut foran lastebilen. Da kan motorsyklisten som skal svinge til høyre i krysset, og bilen bak, bli oversett. Løft blikket for å få oversikt over hele trafikkbildet. Et lett trykk på bremsepedalen gjør reaksjonstiden vesentlig mindre, og bremselysene viser bilen bak at føreren er i beredskap.",
+        "th": "ผู้ขับรถ A อาจจดจ่อกับทางม้าลาย เพราะคิดว่าคนเดินเท้าจะเดินออกมาหน้ารถบรรทุก จึงอาจไม่ทันสังเกตรถจักรยานยนต์ที่กำลังเลี้ยวขวาในทางแยกและรถที่ตามหลังมา ให้เงยสายตาขึ้นเพื่อมองภาพรวม การกดแป้นเบรกเบา ๆ ช่วยลดเวลาตอบสนองอย่างมาก และไฟเบรกแสดงให้รถคันหลังเห็นว่าผู้ขับพร้อมเบรก",
+        "en": "The driver of car A may focus entirely on the crossing because they think a pedestrian will step out in front of the lorry. They may then miss the motorcyclist turning right at the junction and the car behind. Lift your gaze to take in the whole traffic scene. A light touch on the brake pedal makes reaction time considerably shorter, and the brake lamps show the driver behind that the driver is ready."
+      },
+      "open_questions": [],
+      "next_step": null,
+      "source_ref": "Lærebok Klasse B, trykt s. 22 (PDF-s. 17)",
+      "language_status": {
+        "no": "skrevet",
+        "th": "skrevet",
+        "en": "skrevet"
+      },
+      "official_check": "2026-10-09",
+      "image_focus": {
+        "x": 50,
+        "y": 55
+      },
+      "image_sha256": "365d06775e542244723736cf3668938072967fc992ccac1888e46664f3f1ba66",
+      "approval_hash": "f3f90240e121"
+    }
+  ],
+  "global_open_questions": []
+}

@@ -326,8 +326,9 @@ class TeacherChatFallbackTests(unittest.TestCase):
     def test_sign_202_thai_does_not_require_stopping_unless_needed(self):
         signs = json.loads((Path(__file__).resolve().parents[1] / "signs_content.json").read_text(encoding="utf-8"))
         sign = next(item for item in signs if item["id"] == "202_0")
-        self.assertEqual(sign["explanation"]["th"], "ให้ทาง หยุดเมื่อจำเป็น")
-        self.assertEqual(sign["driver_action"]["th"], "ให้ทาง หยุดเมื่อจำเป็น")
+        expected = "คุณต้องให้ทางโดยไม่กีดขวางหรือรบกวนรถอื่น ชะลอความเร็วหรือหยุดเมื่อจำเป็นเท่านั้น"
+        self.assertEqual(sign["explanation"]["th"], expected)
+        self.assertEqual(sign["driver_action"]["th"], expected)
 
     def test_selected_language_guard_retries_thai_leak_in_norwegian_mode(self):
         calls = []
