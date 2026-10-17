@@ -235,12 +235,12 @@ class TeacherChatFallbackTests(unittest.TestCase):
 
     def test_section_7_2_prompt_is_explicit_in_every_language(self):
         prompts = {lang: self.module._build_system_prompt(lang) for lang in ("no", "th", "en")}
-        self.assertIn("TRAFIKKREGLENE § 7 NR. 2", prompts["no"])
-        self.assertIn("Du må ALDRI si", prompts["no"])
-        self.assertIn("กฎจราจรนอร์เวย์ § 7 ข้อ 2", prompts["th"])
-        self.assertIn("ห้ามบอก", prompts["th"])
-        self.assertIn("NORWEGIAN TRAFFIC RULES SECTION 7(2)", prompts["en"])
-        self.assertIn("NEVER claim", prompts["en"])
+        for lang, prompt in prompts.items():
+            with self.subTest(lang=lang):
+                self.assertIn("Going straight does NOT by itself confer priority", prompt)
+                self.assertIn("traffic lights, signs or other applicable rules", prompt)
+                self.assertNotIn("UBETINGET VIKEPLIKT", prompt)
+                self.assertNotIn("MUST ALWAYS yield", prompt)
 
     def test_section_7_2_fail_safe_corrects_wrong_model_reply_in_each_language(self):
         cases = (
@@ -586,8 +586,15 @@ class KaiPloyLogicTests(unittest.TestCase):
         message = "Min egen studieplan er 10 minutter om dagen: vikeplikt mandag og stopplengde tirsdag. I dag mandag har jeg svart på seks vikepliktspørsmål: fire riktige og to feil."
         result = self.tc._study_plan_after_reply({}, message, "Plan: vikeplikt mandag, stopplengde tirsdag.")
         self.assertEqual(result["reported_progress"], [message])
+        self.assertEqual(result["learner_requests"], [message])
         self.assertNotIn("completed_minutes", result)
         self.assertNotIn("completed_session", result)
+
+    def test_actual_progress_report_does_not_open_tomorrows_distance_card(self):
+        message = "My study plan is yielding on Monday and stopping distance on Tuesday. I answered six yielding questions today."
+        card = {"id":"material_stoppelengde_40", "title":"Stopping distance", "caption":"Stopping distance at 40 km/h"}
+        self.assertFalse(self.tc._material_relevant(card, message))
+        self.assertTrue(self.tc._material_relevant(card, message + " Show the stopping distance card."))
 
     def test_actual_thai_bus_threshold_correction_preserves_city_limit(self):
         reply = "ในเขตจำกัดความเร็ว 50 กิโลเมตรต่อชั่วโมงหรือต่ำกว่า คุณต้องให้ทางรถเมล์ ในเขต 70 รถเมล์ต้องให้ทางคุณ ในเขตเมืองปกติ 50 กิโลเมตรต่อชั่วโมง"
@@ -599,6 +606,13 @@ class KaiPloyLogicTests(unittest.TestCase):
     def test_bus_guard_preserves_seventy_zone_and_second_question(self):
         reply = "I 70-sone må bussen vike for deg. I byen er grensen 50 km/t hvis ikke annet er skiltet."
         self.assertEqual(self.tc._apply_bus_rule_definition_fail_safe("Buss fra holdeplass i 70-sone. Og fartsgrensen i byen?", reply, "no"), reply)
+
+    def test_actual_thai_bus_summary_threshold_without_units_is_corrected(self):
+        reply = "เขตเมืองปกติ 50 กิโลเมตรต่อชั่วโมง ง่าย ๆ คือ 50 หรือต่ำกว่า คุณให้รถเมล์ ส่วน 70 ขึ้นไป รถเมล์ให้คุณ"
+        fixed = self.tc._apply_bus_rule_definition_fail_safe("รถเมล์เปิดไฟเลี้ยวออกจากป้ายในเขต 50 และ 70", reply, "th")
+        self.assertIn("60 หรือต่ำกว่า คุณให้รถเมล์", fixed)
+        self.assertIn("เขตเมืองปกติ 50 กิโลเมตรต่อชั่วโมง", fixed)
+        self.assertIn("70 ขึ้นไป รถเมล์ให้คุณ", fixed)
 
     def test_incomplete_provider_reply_is_regenerated_with_larger_budget(self):
         cut = types.SimpleNamespace(choices=[types.SimpleNamespace(finish_reason="length",message=types.SimpleNamespace(content="Day 1..."))])
@@ -651,6 +665,19 @@ class KaiPloyLogicTests(unittest.TestCase):
         self.assertEqual(updated["reported_progress"], ["I completed today's practice"])
         self.assertNotIn("mastery", updated)
         self.assertEqual(self.tc._study_plan_after_reply(plan, "Okay", "Great"), plan)
+
+    def test_new_plan_does_not_persist_its_obsolete_no_plan_preamble(self):
+        reply = "We have no plan yet. Here is a proposal:\nDay 1: yielding\nDay 2: signs\nDay 3: review"
+        stored = self.tc._study_plan_after_reply({}, "Make a plan", reply)
+        self.assertEqual(stored["summary"], "Day 1: yielding\nDay 2: signs\nDay 3: review")
+        self.assertNotIn("no plan yet", self.tc._plan_steps_summary(reply))
+
+    def test_plan_recall_is_not_a_new_plan_or_progress_report(self):
+        plan = {"summary":"Day 1: yielding\nDay 2: signs\nDay 3: review"}
+        question = "What have I completed and what was my plan?"
+        result = self.tc._study_plan_after_reply(plan, question, "A partial recollection")
+        self.assertEqual(result["summary"], plan["summary"])
+        self.assertNotIn("reported_progress", result)
 
     def test_final_contract_preserves_all_parts_and_verified_plan(self):
         instruction = self.tc._complete_request_contract({"summary":"Week 1: yielding"}, {"weak_topic":{"name":"right-of-way", "accuracy":30}})

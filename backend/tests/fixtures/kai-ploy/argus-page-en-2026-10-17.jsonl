@@ -1,0 +1,3 @@
+{"student": "Explain this page.", "lang": "en", "document_id": "bb-s22", "source_record": "2026-10-17/argus-943044a/en-bb_generic_valid.json", "expected_media_id": "bildebok:bb-s22"}
+{"student": "Explain page 22 about narrow and wide attention. What should I learn from the picture?", "lang": "en", "document_id": "bb-s22", "source_record": "2026-10-17/argus-943044a/en-bb_natural_valid.json", "expected_media_id": "bildebok:bb-s22"}
+{"student": "A bus signals out from its stop. Who must yield in a 50 zone and a 70 zone, and what is the normal speed limit in a built-up area?", "lang": "en", "document_id": "bb-s22", "source_record": "2026-10-17/argus-943044a/en-bus_document.json"}
