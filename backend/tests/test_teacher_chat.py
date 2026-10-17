@@ -311,7 +311,7 @@ class TestWrongQuizAnswerReplyIsThaiOnly(unittest.TestCase):
         material = {
             "id": "lesson-1", "type": "image", "active": True,
             "approved_for_michael": True, "source_url": "/api/assets/lesson.jpg",
-            "title": {"no": "Norsk tittel", "th": "ชื่อภาษาไทย", "en": "English title"},
+            "title": {"no": "Norsk tittel", "th": "ชื่อภาษาไทย ความสนใจ", "en": "English title"},
             "caption": {"no": "Norsk beskrivelse", "th": "คำอธิบายภาษาไทย", "en": "English description"},
         }
         tc._db = _Database({"michael_materials": _Collection([material])})
@@ -330,13 +330,13 @@ class TestWrongQuizAnswerReplyIsThaiOnly(unittest.TestCase):
 
         with patch.object(tc, "_get_relevant_michael_materials", new=materials), patch.object(
             tc, "_get_relevant_catalog_media", new=no_catalog
-        ), patch.object(tc, "_v4_next_stage", return_value="5"
+        ), patch.object(tc, "_find_active_bildebok_page", return_value=None), patch.object(tc, "_v4_next_stage", return_value="5"
         ):
             response, _ = self._chat_with_mock_model(
-                TeacherChatRequest(message="อธิบายภาพนี้", language="th"), "คำอธิบายสั้น ๆ"
+                TeacherChatRequest(message="อธิบายความสนใจในภาพนี้", language="th"), "คำอธิบายสั้น ๆ"
             )
         self.assertEqual([item["id"] for item in response.media], ["lesson-1"])
-        self.assertEqual(response.media[0]["title"], "ชื่อภาษาไทย")
+        self.assertEqual(response.media[0]["title"], "ชื่อภาษาไทย ความสนใจ")
         self.assertEqual(response.media[0]["caption"], "คำอธิบายภาษาไทย")
 
     def test_quiz_coach_hides_correct_answer_on_first_turn(self):

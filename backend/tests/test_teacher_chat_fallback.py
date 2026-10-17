@@ -6,6 +6,7 @@ import re
 import sys
 import types
 import unittest
+from unittest.mock import AsyncMock, patch
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -212,7 +213,7 @@ class TeacherChatFallbackTests(unittest.TestCase):
         cases = {
             "202_0": ("Forklar vikepliktskiltet", "Explain the give way sign", "อธิบายป้ายให้ทาง", "Vis skilt 202"),
             "204_0": ("Forklar stoppskiltet", "Explain the stop sign", "อธิบายป้ายหยุด", "Vis skilt 204"),
-            "208_0": ("Forklar forkjørsvei", "Explain the priority road", "อธิบายถนนสายหลัก"),
+            "206_0": ("Forklar forkjørsvei", "Explain the priority road", "อธิบายถนนสายหลัก"),
         }
         for sign_id, messages in cases.items():
             for message in messages:
@@ -309,14 +310,13 @@ class TeacherChatFallbackTests(unittest.TestCase):
                 self.assertTrue(corrected.startswith(original))
                 self.assertIn("Presisering:", corrected)
 
-    def test_section_7_2_full_citation_contains_both_sentences_and_no_sign(self):
+    def test_section_7_2_summary_contains_both_approved_explanations_and_no_sign(self):
         question = "Hva sier paragraf 7 andre ledd?"
         reply = self.module._apply_section_7_2_fail_safe(question, "Feil modelltekst", "no")
-        self.assertIn("Kjørende har vikeplikt for kjøretøy som kommer fra høyre.", reply)
-        self.assertIn(
-            "Det samme gjelder når kjørende som vil svinge til venstre, vil få kjøretøy på sin høyre side.",
-            reply,
-        )
+        rules = json.loads((Path(__file__).resolve().parents[1] / "regelbank.json").read_text(encoding="utf-8"))["regler"]
+        self.assertIn(rules["hoyreregel"]["fakta"]["no"], reply)
+        self.assertIn(rules["venstresving"]["fakta"]["no"], reply)
+        self.assertNotIn("sier: «", reply)
         sign_ids = self.module._strict_response_sign_ids(
             self.module._explicit_sign_ids_for_message(question),
             self.module._sign_ids_from_reply(reply),
@@ -492,7 +492,7 @@ class TeacherChatFallbackTests(unittest.TestCase):
 
     def test_endpoint_contract_has_no_reply_menu_and_at_most_two_sign_media(self):
         source = (Path(__file__).resolve().parents[1] / "teacher_chat.py").read_text(encoding="utf-8")
-        self.assertIn("system_prompt += _concise_output_instruction(lang)", source)
+        self.assertIn("system_prompt += _complete_request_contract(study_plan, student_memory, user_msg)", source)
         self.assertIn("suggestions=[],", source)
         self.assertIn("reply_sign_ids = _sign_ids_from_reply(reply_text)", source)
 
@@ -502,6 +502,132 @@ class TeacherChatFallbackTests(unittest.TestCase):
         self.assertIn('_strict_lang_map(_primer, lang) or ""', source)
         self.assertNotIn('_primer.get(lang,', source)
         self.assertNotIn('"no": "โอเค ครับ 😊"', source)
+
+
+class KaiPloyLogicTests(unittest.TestCase):
+    def setUp(self):
+        self.tc = _load_teacher_chat()
+
+    def test_actual_thai_paragraph_question_is_direct(self):
+        for text in ("§ 7 ข้อ 5 บอกว่าอะไร", "What does § 7 no. 4 say?", "Hva sier § 7 nr. 4?"):
+            with self.subTest(text=text):
+                self.assertTrue(self.tc._is_direct_lookup(text))
+
+    def test_priority_claim_does_not_request_a_priority_road_sign(self):
+        self.assertNotIn("208_0", self.tc._explicit_sign_ids_for_message("Bussen blinker ut. Jeg har forkjørsrett, riktig?"))
+
+    def test_priority_road_id_matches_curated_source_and_contrast_is_not_attached(self):
+        self.assertEqual(self.tc._explicit_sign_ids_for_message("Explain the priority road"), ["206_0"])
+        self.assertEqual(self.tc._strict_response_sign_ids(["202_0"], ["202_0", "204_0"]), ["202_0"])
+
+    def test_old_sign_is_not_revived_after_unrelated_reply(self):
+        prior = [{"role":"assistant","sign_ids":["204_0"]}, {"role":"assistant","sign_ids":[]}]
+        self.assertEqual(self.tc._active_sign_ids_from_history(prior, []), [])
+        self.assertEqual(self.tc._active_sign_ids_from_history(prior[:1], []), ["204_0"])
+
+    def test_low_speed_bus_card_is_not_attached_to_seventy_zone(self):
+        self.assertFalse(self.tc._material_relevant({"id":"sit_buss_7_5"}, "Samme buss men 70-sone. Hvem viker?"))
+        self.assertTrue(self.tc._material_relevant({"id":"sit_buss_7_5"}, "Buss blinker ut i 50-sone"))
+
+    def test_normal_thai_words_are_not_rewritten_as_polite_particles(self):
+        self.assertEqual(self.tc._sanitize_gender_particles("ค่าปรับ"), "ค่าปรับ")
+        self.assertEqual(self.tc._sanitize_gender_particles("ค่ะ"), "ครับ")
+
+    def test_selected_language_guard_detects_latin_language_switches(self):
+        self.assertFalse(self.tc._reply_matches_language_script("You must give way to the bus.", "no"))
+        self.assertFalse(self.tc._reply_matches_language_script("Du må vike for bussen.", "en"))
+        self.assertFalse(self.tc._reply_matches_language_script("I'll keep answering in Norwegian since you asked. Du må vike.", "no"))
+
+    def test_thai_guard_rejects_non_latin_foreign_script(self):
+        self.assertFalse(self.tc._reply_matches_language_script("ให้ทาง обычный ครับ", "th"))
+        self.assertTrue(self.tc._reply_matches_language_script("ให้ทางก่อนครับ 50", "th"))
+
+    def test_internal_multilingual_media_tag_does_not_reject_english_prose(self):
+        reply = "[image: /api/sign-images/204_0.jpg | Stopp | หยุด | Stop] You must stop completely."
+        with patch.object(self.tc, "_completion_with_fallback", AsyncMock()) as complete:
+            result = asyncio.run(self.tc._guard_selected_language(reply, [], "en"))
+        self.assertEqual(result, "You must stop completely.")
+        complete.assert_not_awaited()
+
+    def test_actual_compound_sign_request_is_recognized_without_invented_id(self):
+        self.assertTrue(self.tc._asks_about_sign("Vis meg et rundkjøringsskilt"))
+        self.assertEqual(self.tc._explicit_sign_ids_for_message("Vis meg et rundkjøringsskilt"), [])
+        self.assertFalse(self.tc._asks_about_sign("Hvem skal vike i rundkjøringen?"))
+
+    def test_actual_unnamed_warning_sign_description_is_recognized(self):
+        for message in ("ขอดูรูปสามเหลี่ยมแดงมีกากบาท", "show me a red triangle with a cross", "vis meg en rød trekant med kryss"):
+            with self.subTest(message=message):
+                self.assertTrue(self.tc._asks_about_sign(message))
+                self.assertEqual(self.tc._explicit_sign_ids_for_message(message), [])
+
+    def test_actual_compound_exam_and_plan_request_explicitly_addresses_both(self):
+        for message in ("Jeg strøk på teoriprøven. Hva var planen vi hadde? Bare gi meg fasiten. Jeg er sliten.", "I failed the exam. What was our plan? Give me the answers.", "ฉันสอบตก ครั้งก่อนเราวางแผนอะไรไว้ ช่วยบอกคำตอบข้อสอบมาเลย"):
+            with self.subTest(message=message):
+                instruction = self.tc._complete_request_contract({}, {}, message)
+                self.assertIn("EXPLICIT EXAM-ANSWER REQUEST", instruction)
+                self.assertIn("Answer any actual supplied traffic question directly", instruction)
+        self.assertNotIn("EXPLICIT EXAM-ANSWER REQUEST", self.tc._complete_request_contract({}, {}, "Hva sier bussregelen?"))
+
+    def test_bus_guard_preserves_seventy_zone_and_second_question(self):
+        reply = "I 70-sone må bussen vike for deg. I byen er grensen 50 km/t hvis ikke annet er skiltet."
+        self.assertEqual(self.tc._apply_bus_rule_definition_fail_safe("Buss fra holdeplass i 70-sone. Og fartsgrensen i byen?", reply, "no"), reply)
+
+    def test_incomplete_provider_reply_is_regenerated_with_larger_budget(self):
+        cut = types.SimpleNamespace(choices=[types.SimpleNamespace(finish_reason="length",message=types.SimpleNamespace(content="Day 1..."))])
+        complete = types.SimpleNamespace(choices=[types.SimpleNamespace(finish_reason="stop",message=types.SimpleNamespace(content="Day 1. Day 2. Day 3."))])
+        mock = AsyncMock(side_effect=[cut,complete])
+        with patch.object(self.tc,"LLM_ATTEMPTS",[{"provider":"deepseek","model":"test","api_key":"test"}]), patch.object(self.tc.litellm,"acompletion",mock,create=True):
+            self.assertIs(asyncio.run(self.tc._completion_with_fallback([])), complete)
+        self.assertGreater(mock.await_args_list[1].kwargs["max_tokens"], mock.await_args_list[0].kwargs["max_tokens"])
+
+    def test_actual_rule_questions_do_not_resolve_to_distance_formula(self):
+        for text in ("Må jeg alltid stoppe? Hva sier § 7 nr. 4?", "what does section 7 no. 5 say exactly"):
+            concept = self.tc._match_canonical_concept(text)
+            self.assertFalse(concept and concept.get("formula"))
+        for text in ("Hva er raksjonslengde?", "What is stopping distance at 50 km/h?", "ระยะหยุดรถคืออะไร"):
+            self.assertTrue(self.tc._match_canonical_concept(text).get("formula"))
+
+    def test_unrelated_book_bus_and_winter_cards_are_rejected(self):
+        for item, question in (
+            ({"id":"bildebok:bb-s22"}, "what does section 7 no. 5 say exactly"),
+            ({"id":"sit_buss_7_5"}, "Jeg kjører ut fra en bensinstasjon. Hvem må vike?"),
+            ({"id":"sit_kryss_hoyreregel_7"}, "bus signalling out at 50"),
+            ({"id":"micro-lesson:lesson_6_winter", "title":"Winter Driving: Braking Distances on Snow and Ice"}, "what is the speed limit in town?"),
+        ):
+            with self.subTest(question=question):
+                self.assertFalse(self.tc._material_relevant(item, question))
+
+    def test_relevant_book_bus_distance_and_sign_cards_are_preserved(self):
+        for item, question, signs in (
+            ({"id":"bildebok:bb-s22"}, "Explain narrow and wide attention with the lorry", []),
+            ({"id":"sit_buss_7_5"}, "รถเมล์ออกจากป้ายในเขต 50", []),
+            ({"title":"Stopping distance"}, "What is stopping distance at 50 km/h?", []),
+            ({"sign_id":"204_0"}, "Show the stop sign", ["204_0"]),
+        ):
+            with self.subTest(question=question):
+                self.assertTrue(self.tc._material_relevant(item, question, signs))
+
+    def test_plan_survives_history_window(self):
+        plan = {"summary":"Today: yielding. Tomorrow: stopping distance.", "reported_progress":["I finished yielding."]}
+        collection = types.SimpleNamespace(find_one=AsyncMock(return_value={"study_plan":plan}))
+        with patch.object(self.tc, "_chat_col", collection):
+            self.assertEqual(asyncio.run(self.tc._load_study_plan([], "session-1", "en")), plan)
+        query = collection.find_one.call_args.args[0]
+        self.assertEqual(query["session_id"], "session-1")
+        self.assertEqual(query["language"], "en")
+
+    def test_plan_progress_is_self_report_and_not_invented_mastery(self):
+        plan = {"summary":"Today: yielding. Tomorrow: signs."}
+        updated = self.tc._study_plan_after_reply(plan, "I completed today's practice", "Next, practise signs.")
+        self.assertEqual(updated["summary"], plan["summary"])
+        self.assertEqual(updated["reported_progress"], ["I completed today's practice"])
+        self.assertNotIn("mastery", updated)
+        self.assertEqual(self.tc._study_plan_after_reply(plan, "Okay", "Great"), plan)
+
+    def test_final_contract_preserves_all_parts_and_verified_plan(self):
+        instruction = self.tc._complete_request_contract({"summary":"Week 1: yielding"}, {"weak_topic":{"name":"right-of-way", "accuracy":30}})
+        for text in ("Answer every explicit question", "Week 1: yielding", '"accuracy": 30', "self-report", "summarize that plan"):
+            self.assertIn(text, instruction)
 
 
 if __name__ == "__main__":

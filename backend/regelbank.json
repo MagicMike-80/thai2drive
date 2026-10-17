@@ -1,0 +1,209 @@
+{
+  "versjon": "2026-10-10",
+  "status": "GODKJENT av eier 2026-10-10. SSOT for trafikkreglene § 7 nr. 1–6 i Michael.",
+  "regler": {
+    "hoyreregel": {
+      "kilde": "Trafikkreglene § 7 nr. 2, 1. punktum (eierens lovtekst)",
+      "fakta": {
+        "no": "Høyreregelen (trafikkreglene § 7 nr. 2): Du har vikeplikt for kjøretøy som kommer fra høyre.",
+        "th": "กฎทางขวา (Trafikkreglene § 7 ข้อ 2): คุณต้องให้ทางรถที่มาจากทางขวา",
+        "en": "The right-hand rule (Trafikkreglene § 7 no. 2): you must give way to vehicles coming from your right."
+      },
+      "triggere": [
+        "høyreregel",
+        "høyre regel",
+        "§ 7",
+        "§7",
+        "kjøretøy fra høyre",
+        "right-hand rule",
+        "right of way from right",
+        "กฎทางขวา",
+        "รถจากทางขวา"
+      ]
+    },
+    "venstresving": {
+      "kilde": "Trafikkreglene § 7 nr. 2, 2. punktum (eier: hjemmel for vikeplikt mot møtende ved venstresving – møtende bil kommer på førerens høyre side idet du krysser kjørefeltet)",
+      "fakta": {
+        "no": "Når du svinger til venstre på tvers av møtende kjørefelt, får du den møtende bilen på din høyre side. Da har du vikeplikt (trafikkreglene § 7 nr. 2, andre punktum). Du er tjeneren og den møtende er kongen: ikke få den til å bremse eller tvile.",
+        "th": "เมื่อคุณเลี้ยวซ้ายตัดผ่านเลนรถสวนทาง รถสวนทางจะมาอยู่ทางขวามือของคุณ คุณจึงต้องให้ทาง (Trafikkreglene § 7 ข้อ 2 ประโยคที่สอง) คุณคือผู้รับใช้ รถสวนทางคือกษัตริย์ อย่าทำให้เขาต้องเบรกหรือลังเล",
+        "en": "When you turn left across the oncoming lane, the oncoming car ends up on your right side. That is what gives you the duty to give way (Trafikkreglene § 7 no. 2, second sentence). You are the servant and the oncoming car is the king: do not make it brake or hesitate."
+      },
+      "triggere": [
+        "venstresving",
+        "svinge til venstre",
+        "svinger til venstre",
+        "turning left",
+        "turn left",
+        "left turn",
+        "เลี้ยวซ้าย"
+      ]
+    },
+    "fartsgrense_tettbygd": {
+      "fakta": {
+        "no": "I tettbygd strøk er fartsgrensen 50 km/t hvis ikke annet er skiltet. 30 km/t gjelder bare der det er skiltet eller i skiltet 30-sone.",
+        "th": "ในเขตชุมชนหนาแน่น ความเร็วสูงสุดคือ 50 กม./ชม. เว้นแต่มีป้ายระบุอย่างอื่น 30 กม./ชม. ใช้เฉพาะที่มีป้ายหรือในโซน 30 เท่านั้น",
+        "en": "In built-up areas the speed limit is 50 km/h unless signed otherwise. 30 km/h applies only where a sign or a signed 30 zone says so."
+      },
+      "triggere": [
+        "fartsgrense",
+        "boligområde",
+        "speed limit",
+        "residential",
+        "ความเร็วสูงสุด",
+        "ย่านที่พัก"
+      ]
+    },
+    "hav_vegtrafikkloven_3": {
+      "kilde": "Vegtrafikkloven § 3 (ikke trafikkreglene)",
+      "fakta": {
+        "no": "HAV-regelen (vegtrafikkloven § 3): Hensynsfull, Aktpågivende, Varsom.",
+        "th": "กฎ HAV (Vegtrafikkloven § 3): ห่วงใยผู้อื่น, ระมัดระวัง, ไม่ประมาท",
+        "en": "The HAV rule (Vegtrafikkloven § 3): considerate, attentive, careful."
+      },
+      "triggere": [
+        "hav",
+        "§ 3",
+        "§3",
+        "hensynsfull",
+        "aktpågivende",
+        "varsom",
+        "กฎ hav"
+      ]
+    },
+    "bot_og_ventetid": {
+      "fakta": {
+        "no": "Jeg gir ikke beløp eller ventetid her, for de endres. Se offisiell tariff og venteinformasjon hos Statens vegvesen eller politiet.",
+        "th": "ผมไม่บอกจำนวนเงินหรือเวลารอที่นี่ เพราะเปลี่ยนแปลงได้ ดูอัตราและข้อมูลล่าสุดจาก Statens vegvesen หรือตำรวจ",
+        "en": "I do not give amounts or waiting times here, because they change. Check the official tariff and waiting information at Statens vegvesen or the police."
+      },
+      "triggere": [
+        "bot",
+        "bøter",
+        "ventetid",
+        "fine",
+        "waiting time",
+        "ค่าปรับ",
+        "เวลารอ"
+      ]
+    },
+    "vikeplikt_grunnregel": {
+      "kilde": "Trafikkreglene § 7 nr. 1",
+      "fakta": {
+        "no": "Den du skal vike for, må ikke hindres eller forstyrres. Vis tydelig at du viker ved å sette ned farten i god tid eller stanse (trafikkreglene § 7 nr. 1).",
+        "th": "คุณต้องไม่กีดขวางหรือรบกวนคนที่คุณต้องให้ทาง แสดงให้ชัดเจนด้วยการลดความเร็วตั้งแต่เนิ่น ๆ หรือหยุด (Trafikkreglene § 7 ข้อ 1)",
+        "en": "You must not hinder or disturb the road user you give way to. Show it clearly by slowing down in good time or stopping (Trafikkreglene § 7 no. 1)."
+      },
+      "triggere": [
+        "vikeplikt",
+        "give way",
+        "yield",
+        "การให้ทาง"
+      ]
+    },
+    "myke_trafikanter_svinging": {
+      "kilde": "Trafikkreglene § 7 nr. 3",
+      "fakta": {
+        "no": "Når du svinger, har du vikeplikt for gående, syklende og liten elektrisk motorvogn som skal rett fram. Svinger du inn over fortau, har du vikeplikt for dem som ferdes på fortauet (trafikkreglene § 7 nr. 3).",
+        "th": "เมื่อเลี้ยว คุณต้องให้ทางคนเดินเท้า คนขี่จักรยาน และยานยนต์ไฟฟ้าขนาดเล็กที่จะตรงไป ถ้าเลี้ยวข้ามทางเท้า คุณต้องให้ทางผู้ที่ใช้ทางเท้า (Trafikkreglene § 7 ข้อ 3)",
+        "en": "When you turn, you must give way to pedestrians, cyclists and small electric vehicles going straight ahead. If you turn across a pavement, you must give way to those on the pavement (Trafikkreglene § 7 no. 3)."
+      },
+      "triggere": [
+        "gående",
+        "fotgjenger",
+        "syklist",
+        "fortau",
+        "pedestrian",
+        "cyclist",
+        "pavement",
+        "คนเดิน",
+        "จักรยาน"
+      ]
+    },
+    "utkjoring_eiendom": {
+      "kilde": "Trafikkreglene § 7 nr. 4 (eierens lovtekst)",
+      "fakta": {
+        "no": "Kommer du fra parkeringsplass, holdeplass, torg, eiendom, bensinstasjon, gågate, gatetun eller liknende, har du vikeplikt for annen trafikant. Det samme gjelder fra gårdsveg og veg som ikke er åpen for alminnelig ferdsel. Fra sykkelveg, gangveg eller fortau har du vikeplikt for trafikant på vegen (trafikkreglene § 7 nr. 4).",
+        "th": "ถ้าคุณออกมาจากที่จอดรถ ที่จอดป้ายรถ ลานกว้าง บริเวณบ้าน ปั๊มน้ำมัน ถนนคนเดิน หรือพื้นที่ลักษณะเดียวกัน คุณต้องให้ทางผู้ใช้ถนนอื่น เช่นเดียวกันเมื่อออกจากถนนส่วนบุคคลหรือถนนที่ไม่เปิดสำหรับสัญจรทั่วไป และเมื่อออกจากทางจักรยาน ทางเดินเท้า หรือทางเท้า คุณต้องให้ทางผู้ที่อยู่บนถนน (Trafikkreglene § 7 ข้อ 4)",
+        "en": "If you come from a car park, stop, square, property, petrol station, pedestrian street or similar area, you must give way to other road users. The same applies from a farm road or a road not open to general traffic. From a cycle path, footway or pavement you must give way to traffic on the road (Trafikkreglene § 7 no. 4)."
+      },
+      "triggere": [
+        "utkjøring",
+        "parkeringsplass",
+        "bensinstasjon",
+        "gågate",
+        "eiendom",
+        "exit from",
+        "petrol station",
+        "car park",
+        "ที่จอดรถ",
+        "ปั๊มน้ำมัน"
+      ],
+      "merknad": "Lovens ordlyd ligger i bunn («vikeplikt for annen trafikant»). «Alltid tjener» er Michaels faste pedagogiske knagg og SKAL med i elevteksten.",
+      "laeringsregel": {
+        "no": "Husk-regel: Du er tjeneren for alle på veien når du kommer ut fra eiendom, parkering eller bensinstasjon.",
+        "th": "กฎช่วยจำ: เมื่อออกจากบริเวณบ้าน ที่จอดรถ หรือปั๊มน้ำมัน คุณเป็นผู้รับใช้ของทุกคนบนถนน",
+        "en": "Memory rule: when you come out of a property, car park or petrol station, you are the servant to everyone on the road."
+      }
+    },
+    "bussregelen": {
+      "kilde": "Trafikkreglene § 7 nr. 5 (eierens lovtekst)",
+      "fakta": {
+        "no": "På veg med fartsgrense 60 km/t eller lavere har du vikeplikt for buss når føreren gir tegn om at bussen skal forlate holdeplass. Bussføreren skal unngå fare (trafikkreglene § 7 nr. 5).",
+        "th": "บนถนนที่จำกัดความเร็ว 60 กม./ชม. หรือต่ำกว่า คุณต้องให้ทางรถบัสเมื่อคนขับให้สัญญาณว่าจะออกจากป้ายรถ คนขับรถบัสต้องหลีกเลี่ยงอันตราย (Trafikkreglene § 7 ข้อ 5)",
+        "en": "On roads with a speed limit of 60 km/h or lower, you must give way to a bus when its driver signals that it is leaving a stop. The bus driver must avoid danger (Trafikkreglene § 7 no. 5)."
+      },
+      "triggere": [
+        "buss",
+        "bussregelen",
+        "bus rule",
+        "รถบัส"
+      ],
+      "merknad": "Lovteksten (§ 7 nr. 5) sier kun «60 km/t eller lavere». Husk-regelen er pedagogisk (masterdokument/video-manus). Michael skal forklare den, men aldri påstå at 70 står i lovteksten.",
+      "laeringsregel": {
+        "no": "Husk-regel: I 70-sone eller høyere har bussen vikeplikt for deg.",
+        "th": "กฎช่วยจำ: ในโซน 70 หรือสูงกว่า รถบัสต้องให้ทางคุณ",
+        "en": "Memory rule: in a 70 zone or higher, the bus must give way to you."
+      }
+    },
+    "smal_vei": {
+      "kilde": "Trafikkreglene § 7 nr. 6 (eierens lovtekst)",
+      "fakta": {
+        "no": "Møtes dere på smal veg, skal du om nødvendig i god tid vike tilstrekkelig til høyre og kjøre sakte eller stanse. Er en del av vegen sperret, har den vikeplikt som har sperringen på sin side (trafikkreglene § 7 nr. 6).",
+        "th": "เมื่อสวนกันบนถนนแคบ ถ้าจำเป็นให้หลบไปทางขวาให้เพียงพอตั้งแต่เนิ่น ๆ และขับช้าหรือหยุด ถ้าถนนส่วนหนึ่งถูกปิด ผู้ที่อยู่ฝั่งที่มีสิ่งกีดขวางต้องให้ทาง (Trafikkreglene § 7 ข้อ 6)",
+        "en": "When you meet on a narrow road, if necessary move well to the right in good time and drive slowly or stop. If part of the road is blocked, the driver on the blocked side must give way (Trafikkreglene § 7 no. 6)."
+      },
+      "triggere": [
+        "smal veg",
+        "smal vei",
+        "narrow road",
+        "sperret",
+        "ถนนแคบ"
+      ]
+    }
+  },
+  "forbudte_pastander": {
+    "_merknad": "Regex, casefold. Treff i svaret = regenerer én gang med korreksjon, ellers send fakta-teksten over. Vedlikehold sammen med Michael. Mønstre om «møtende på din høyre side» er FJERNET 2026-10-10: eier bekreftet at det er riktig juss.",
+    "no": [
+      "møtende[^.]{0,40}(har )?(vikeplikt|må vike) for deg",
+      "du har forkjørsrett (når|ved) (du )?sv(inger|ing) til venstre",
+      "(?:30\\s*km/?t[^.]{0,40}(?:boligområde|vanlig|generell)|(?:boligområde|vanlig|generell)[^.]{0,40}30\\s*km/?t)",
+      "\bordrett\b[^.]{0,40}§"
+    ],
+    "th": [
+      "รถสวนทาง[^.]{0,30}ต้องให้ทางคุณ",
+      "(?:30\\s*กม(?:\\./ชม\\.)?[^.]{0,40}(?:ย่านที่พัก|ทั่วไป)|(?:ย่านที่พัก|ทั่วไป)[^.]{0,40}30\\s*กม(?:\\./ชม\\.)?)"
+    ],
+    "en": [
+      "oncoming[^.]{0,40}(must|has to) (give way|yield) to you",
+      "you have priority when turning left",
+      "(?:30\\s*km/?h[^.]{0,40}(?:residential|default|general)|(?:residential|default|general)[^.]{0,40}30\\s*km/?h)"
+    ]
+  },
+  "ikke_tillatt_uten_kilde": [
+    "ordrett lovtekst",
+    "paragrafnummer som ikke står i regelbanken eller godkjent kontekst",
+    "beløp for bøter eller ventetid",
+    "skiltnummer som ikke er slått opp i skilt-databasen"
+  ],
+  "ssot": "Eneste sannhetskilde for § 7 nr. 1–6. Master-dokumenter og prompt-tekst som motsier denne filen skal rettes eller ignoreres."
+}
