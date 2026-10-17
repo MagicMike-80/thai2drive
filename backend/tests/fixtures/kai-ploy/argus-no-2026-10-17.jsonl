@@ -1,0 +1,7 @@
+{"student": "Jeg skal svinge til venstre i et kryss og møter en bil rett fram. Så skal jeg svinge til høyre over et fortau der en syklist kommer. Hvem skal jeg vike for i hver situasjon, og hvilke punkter i § 7 gjelder?", "lang": "no", "source_record": "2026-10-17/argus-current/no-compound.json"}
+{"student": "Jeg kjører ut fra en bensinstasjon. Hvem har vikeplikt, og hvilken paragraf gjelder?", "lang": "no", "source_record": "2026-10-17/argus-current/no-property.json"}
+{"student": "En buss blinker ut fra holdeplassen. Hvem har vikeplikt i 50-sone og i 70-sone, og hva er vanlig fartsgrense i tettbygd strøk?", "lang": "no", "source_record": "2026-10-17/argus-current/no-bus.json"}
+{"student": "Svar på engelsk fra nå av. Forklar hvem som viker når jeg kjører ut fra en bensinstasjon.", "lang": "no", "source_record": "2026-10-17/argus-current/no-switch.json"}
+{"student": "Min egen studieplan er 10 minutter om dagen: vikeplikt mandag og stopplengde tirsdag. I dag mandag har jeg svart på seks vikepliktspørsmål: fire riktige og to feil. Husk det i denne samtalen.", "lang": "no", "source_record": "2026-10-17/argus-current/no-plan_start.json"}
+{"student": "Hva har jeg faktisk gjort i dag, hva bør jeg følge opp nå, og hva er planen min i morgen?", "lang": "no", "source_record": "2026-10-17/argus-current/no-plan_follow.json"}
+{"student": "Forklar siden bb-s22. Hva bør jeg lære av bildet?", "lang": "no", "source_record": "2026-10-17/argus-current/no-bb_s22.json", "document_id": "bb-s22", "expected_media_id": "bildebok:bb-s22"}

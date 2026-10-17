@@ -568,6 +568,34 @@ class KaiPloyLogicTests(unittest.TestCase):
                 self.assertIn("Answer any actual supplied traffic question directly", instruction)
         self.assertNotIn("EXPLICIT EXAM-ANSWER REQUEST", self.tc._complete_request_contract({}, {}, "Hva sier bussregelen?"))
 
+    def test_actual_argus_page_reference_resolves_verified_content(self):
+        for lang, question in (("no", "Forklar siden bb-s22. Hva bør jeg lære av bildet?"), ("en", "Explain page bb-s22. What should I learn from the picture?"), ("th", "ช่วยอธิบายหน้า bb-s22 ฉันควรเรียนรู้อะไรจากภาพนี้")):
+            with self.subTest(lang=lang):
+                page = self.tc._find_active_bildebok_page(question, lang)
+                self.assertEqual(page["id"], "bb-s22")
+                self.assertTrue(self.tc._material_relevant(self.tc._bildebok_media_card(page), question))
+        self.assertEqual(self.tc._requested_bildebok_id("Forklar siden", "bb-s22"), "bb-s22")
+        self.assertIsNone(self.tc._requested_bildebok_id("Hvem viker for bussen i 50-sone?", "bb-s22"))
+        self.assertIsNone(self.tc._find_active_bildebok_page("Explain page bb-s99999", "en"))
+
+    def test_actual_argus_hav_gloss_is_not_english(self):
+        self.assertFalse(self.tc._reply_matches_language_script("Be hensynsfull, aktpågivende and varsom, even when you have priority.", "en"))
+        self.assertTrue(self.tc._reply_matches_language_script("Be considerate, attentive and cautious.", "en"))
+
+    def test_actual_argus_question_count_is_saved_as_raw_progress(self):
+        message = "Min egen studieplan er 10 minutter om dagen: vikeplikt mandag og stopplengde tirsdag. I dag mandag har jeg svart på seks vikepliktspørsmål: fire riktige og to feil."
+        result = self.tc._study_plan_after_reply({}, message, "Plan: vikeplikt mandag, stopplengde tirsdag.")
+        self.assertEqual(result["reported_progress"], [message])
+        self.assertNotIn("completed_minutes", result)
+        self.assertNotIn("completed_session", result)
+
+    def test_actual_thai_bus_threshold_correction_preserves_city_limit(self):
+        reply = "ในเขตจำกัดความเร็ว 50 กิโลเมตรต่อชั่วโมงหรือต่ำกว่า คุณต้องให้ทางรถเมล์ ในเขต 70 รถเมล์ต้องให้ทางคุณ ในเขตเมืองปกติ 50 กิโลเมตรต่อชั่วโมง"
+        fixed = self.tc._apply_bus_rule_definition_fail_safe("รถเมล์เปิดไฟเลี้ยวออกจากป้ายในเขต 50 และ 70 และความเร็วในเมือง", reply, "th")
+        self.assertIn("60 กิโลเมตรต่อชั่วโมงหรือต่ำกว่า", fixed)
+        self.assertIn("ในเขต 70 รถเมล์ต้องให้ทางคุณ", fixed)
+        self.assertIn("ในเขตเมืองปกติ 50 กิโลเมตรต่อชั่วโมง", fixed)
+
     def test_bus_guard_preserves_seventy_zone_and_second_question(self):
         reply = "I 70-sone må bussen vike for deg. I byen er grensen 50 km/t hvis ikke annet er skiltet."
         self.assertEqual(self.tc._apply_bus_rule_definition_fail_safe("Buss fra holdeplass i 70-sone. Og fartsgrensen i byen?", reply, "no"), reply)
