@@ -1,0 +1,772 @@
+{
+  "source": "Actual candidate28 HTTP/model responses, not regenerated",
+  "records": [
+    {
+      "request_id": "ploy-no-17",
+      "utc": "2026-10-17T12:56:21.472926+00:00",
+      "source": "output\\kai-ploy-fix-candidate28-2026-10-17\\audit\\input-transcripts\\ploy-no-2026-10-10.jsonl",
+      "source_turn": 17,
+      "request": {
+        "message": "Har du en video eller podcast om dette?",
+        "language": "no",
+        "device_id": "qa-kai-ploy-fix-audit-ploy-no",
+        "mode": "normal_chat",
+        "session_id": "ts_8006b443b2d54461"
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "Hva er vikeplikt? Må jeg alltid stoppe?"
+        },
+        {
+          "role": "assistant",
+          "content": "Vikeplikt betyr at du ikke må hindre eller forstyrre trafikken du skal vike for – og nei, du må ikke alltid stoppe.\n\nTenk deg at du kommer til et kryss med vikepliktskilt. Du ser en bil nærme seg på veien du skal inn på. Da gjelder det å senke farten i god tid, vise tydelig at du viker, og la bilen passere uten at den må bremse eller svinge unna på grunn av deg. Er veien derimot klar, kan du kjøre rolig videre uten å stanse helt. Det er dette som er selve poenget med vikeplikt: du tilpasser farten og planlegger tidlig, du stopper bare når det faktisk trengs for å slippe den andre frem.\n\nDet er lett å blande sammen med stoppskilt. Ved et stoppskilt må du alltid stoppe helt opp – null fart – før du kjører videre, uansett om veien ser klar ut. Ved vikepliktskiltet bestemmer situasjonen, ikke skiltet alene. En enkel huskeregel: vikepliktskiltet gir deg ansvaret for å tilpasse deg, stoppskiltet gir deg en fast plikt til å stanse.\n\nRegelen om vikeplikt står i trafikkreglene § 7, og i tillegg gjelder alltid grunnregelen i vegtrafikkloven § 3 – du skal ferdes hensynsfullt, aktpågivende og varsomt, slik at du ikke skaper fare eller unødig hindrer andre.",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "Hvis jeg skal svinge til venstre, hvem må vike? Hvorfor?"
+        },
+        {
+          "role": "assistant",
+          "content": "Når du svinger til venstre, er det du som må vike for den møtende trafikken.\n\nHvorfor? Fordi når du svinger til venstre, krysser du det møtende kjørefeltet – og da kommer den møtende bilen inn på din høyre side. Du er tjeneren, den møtende er kongen. Du skal ikke få den til å bremse eller tvile et øyeblikk på hva du gjør. Senk farten i god tid, vis tydelig med blinklys at du skal svinge, og slipp den møtende frem før du svinger over.\n\nEn vanlig feil er å tro at man har rett til å svinge bare fordi man har blinket, eller fordi man står først i krysset. Blinklys er et signal, ikke en forkjørsrett. En annen klassiker er å bare se rett frem og glemme biler som kommer langt bakfra i motgående felt – de er også møtende trafikk.\n\nPraktisk råd: Se langt inn i motgående felt før du svinger, ikke bare på bilen nærmest deg. Da rekker du å planlegge om du kan svinge med en gang eller må vente.\n\nRegelen står i trafikkreglene § 7 nr. 2: den som vil svinge til venstre, skal vike for møtende trafikk. Og husk at vegtrafikkloven § 3 gjelder i tillegg – selv om du har vikeplikt, skal du ikke skape fare ved å nøle eller gjøre noe uforutsigbart.\n\nHva tror du skjer hvis du og en møtende bil begge skal svinge til venstre i et kryss – hvem viker da?",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "Når jeg svinger, må jeg vike for fotgjengere og syklister?"
+        },
+        {
+          "role": "assistant",
+          "content": "Ja, når du svinger, må du vike for fotgjengere og syklister som skal rett frem.\n\nDet gjelder også liten elektrisk motorvogn. Svinger du inn over et fortau, må du i tillegg vike for dem som ferdes på fortauet. Regelen står i trafikkreglene § 7 nr. 3.\n\nHvorfor? Du forlater den retningen du kommer i og krysser deres vei – de skal fremover, du bryter inn. Du er tjeneren, de er kongen.\n\nVanlig feil: mange sjekker bare speilet og glemmer fotgjengeren som er på vei ut i gangfeltet, eller syklisten i sykkelfeltet du svinger over.\n\nPraktisk råd: Speil, speil, blindsone – og se etter fotgjengere i gangfeltet før du begynner å svinge, ikke midt i svingen.\n\nI tillegg gjelder vegtrafikkloven § 3 alltid: du skal ikke skape fare eller unødig hindre andre.",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "Hva sier § 7 nr. 4?"
+        },
+        {
+          "role": "assistant",
+          "content": "§ 7 nr. 4 i trafikkreglene handler om vikeplikt når du kommer ut fra en eiendom eller et område som ikke er vanlig vei.\n\nKort sagt: Kommer du fra parkeringsplass, holdeplass, torg, eiendom, bensinstasjon, gågate, gatetun eller liknende, har du vikeplikt for annen trafikant. Det samme gjelder når du kommer fra gårdsveg eller veg som ikke er åpen for alminnelig ferdsel. Og kommer du fra sykkelveg, gangveg eller fortau, har du vikeplikt for trafikanten på vegen.\n\nHvorfor? Du er på vei inn i det etablerte trafikkbildet – du er tjeneren, de på vegen er kongen. Du skal ikke få noen til å bremse eller vike for deg bare fordi du kommer ut fra en innkjørsel.\n\nVanlig feil: mange tror at bare man har rukket å komme ut på veien, så er man likestilt. Men vikeplikten gjelder helt til du er trygt inne i trafikken uten å ha hindret noen.\n\nPraktisk råd: Stans helt ved utkjøringen hvis du er usikker, se begge veier, og kjør ut først når du er sikker på at ingen må tilpasse seg deg. Husk-regelen er enkel: du er tjeneren for alle på veien når du kommer ut fra eiendom, parkering eller bensinstasjon.",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "Hva sier § 7 nr. 5? Det er noe med buss."
+        },
+        {
+          "role": "assistant",
+          "content": "§ 7 nr. 5 er bussregelen: på vei med fartsgrense 60 km/t eller lavere har du vikeplikt for buss når bussføreren gir tegn om at bussen skal forlate holdeplassen.\n\nSå når bussen blinker seg ut fra holdeplassen i en 50- eller 60-sone, er det du som skal slippe den frem – senk farten i god tid og ikke tving bussen til å vente. Bussføreren skal likevel unngå fare når han kjører ut, så dette er ikke en blankofullmakt for bussen.\n\nHuskeregelen som gjør det lett å huske: i 70-sone eller høyere har bussen vikeplikt for deg. Grensen går altså ved 60 km/t.\n\nVanlig feil: mange tror bussregelen gjelder overalt, uansett fartsgrense. Da blir de overrasket på en 80-vei der bussen faktisk må vente på deg.\n\nPraktisk råd: Legg merke til fartsgrensen når du nærmer deg en holdeplass, og følg med på om bussen blinker ut. Da er du forberedt før situasjonen oppstår.",
+          "sign_ids": [],
+          "media": [
+            {
+              "id": "sit_buss_7_5",
+              "type": "image",
+              "url": "/api/assets/thumbs/thumb_vikeplikt_7_5a_buss.jpg",
+              "title": "Trafikkreglene § 7 nr. 5 — Bussregelen",
+              "caption": "På vei med fartsgrense 60 km/t eller lavere skal du gi vikeplikt for buss som blinker ut fra holdeplass."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "ok"
+        },
+        {
+          "role": "assistant",
+          "content": "Greit. Da har du fått med deg det viktigste om vikeplikt – at det handler om å tilpasse farten og ikke hindre noen, ikke om å stoppe i ett sett.\n\nNeste gang du sitter i bilen og nærmer deg et kryss, kan du øve på å tenke med deg selv: er jeg kongen eller tjeneren her? Det spørsmålet alene tar deg langt.",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "Smal veg, to biler møtes. Hvem må vike? Og hvis det står noe i veien?"
+        },
+        {
+          "role": "assistant",
+          "content": "På smal veg gjelder det samme grunnprinsippet: begge skal hjelpe til, men den som har hindringen på sin side må vike.\n\nHvis dere bare møtes på en smal veg uten noe i veien, skal du om nødvendig i god tid vike tilstrekkelig til høyre og kjøre sakte eller stanse – begge parter har et ansvar for å få det til å gå. Det er ikke slik at den ene har all vikeplikt bare fordi vegen er smal.\n\nMen hvis en del av vegen er sperret – for eksempel av en bil, en container eller noe annet som står i veien – da er regelen klar: den som har sperringen på sin side, har vikeplikt. Du skal altså ikke presse deg frem forbi hindringen mens den møtende bilen må rygge eller stoppe for deg.\n\nHvorfor? Du er tjeneren når hindringen ligger på din side – du skal ikke få den møtende til å tenke på deg i det hele tatt. Dette står i trafikkreglene § 7 nr. 6.\n\nVanlig feil: mange tror at den som kommer først frem til hindringen, har rett til å kjøre først. Det stemmer ikke – det er hvem som har hindringen på sin side som avgjør.\n\nPraktisk råd: Se langt fremover på smal veg, så du rekker å finne en møteplass eller bremse rolig i god tid. Og husk vegtrafikkloven § 3 – selv om du har retten på din side, skal du ikke skape fare ved å kjøre på.",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "Jeg kjører ut fra en parkeringsplass. Hvem må vike?"
+        },
+        {
+          "role": "assistant",
+          "content": "Du må vike. Når du kjører ut fra en parkeringsplass, har du vikeplikt for all annen trafikk – biler på vegen, syklister, fotgjengere, alle sammen.\n\nDette står i trafikkreglene § 7 nr. 4: kommer du fra parkeringsplass, holdeplass, torg, eiendom, bensinstasjon eller liknende, har du vikeplikt for annen trafikant.\n\nHvorfor? Du er tjeneren her. De som allerede er på vegen, er kongen – og tjeneren skal ikke få kongen til å bremse eller nøle.\n\nVanlig feil: mange ruller litt utover fortauet eller ut i innkjørselen for å «se bedre», og ender med å sperre for en fotgjenger eller syklist. Da har du allerede forstyrret trafikken.\n\nPraktisk råd: Stans helt før du kjører ut, se begge veier, og kjør ut først når du er sikker på at ingen må tilpasse seg deg. Vikeplikt betyr ikke at du alltid må stoppe – men her er det ofte den eneste trygge måten å ikke hindre noen.",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "Du forklarer vanskelig, jeg forstår ikke. Annet spørsmål: hva er fartsgrensen i by, og hvor mye er boten?"
+        },
+        {
+          "role": "assistant",
+          "content": "Beklager, jeg skal gjøre det enklere.\n\nFartsgrensen i by er 50 km/t, med mindre det står et skilt som sier noe annet. Er det skiltet 30-sone, gjelder 30. Dette er den vanlige hovedregelen i tettbygd strøk.\n\nBoten kan jeg ikke gi deg et tall på. Jeg vet ikke hva en fartsbot koster i 2026, og jeg vil ikke gjette på et beløp. Det du kan vite sikkert, er at boten blir høyere jo mer du kjører over grensen, og at grov fartsovertredelse også kan gi førerkortbeslag. Vil du ha det nøyaktige beløpet, må du sjekke politiet.no eller Statens vegvesen.\n\nKort sagt: 50 i byen hvis ikke annet er skiltet – og boten avhenger av hvor fort du kjørte over.",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "Jeg strøk på teoriprøven. Hva var planen vi hadde? Bare gi meg fasiten. Jeg er sliten."
+        },
+        {
+          "role": "assistant",
+          "content": "Jeg har ikke tilgang til den offisielle eksamensfasiten.\n\nJeg skjønner at du er sliten, og det er helt greit å være det etter en stryk.\n\nMen jeg må være ærlig med deg: jeg finner ingen plan vi har avtalt.\n\nJeg har ikke lagt frem noen plan for deg tidligere i denne samtalen, og jeg kan ikke se at du har godtatt noen.\n\nSå jeg kan ikke gi deg en fasit på noe som ikke finnes.\n\nDet jeg vet, er at jeg ikke har noen registrerte resultater fra prøven din – verken hvilke spørsmål du fikk feil eller hvilke temaer du slet med.\n\nDerfor kan jeg ikke si hva du bør øve mest på ut fra bevis.\n\nMen du trenger ikke en plan for å komme i gang.\n\nHer er ett konkret første steg du kan ta nå, selv når du er sliten:\n\nTa vikeplikt.\n\nLes gjennom de seks vikepliktreglene rolig – hvem som er kongen og hvem som er tjeneren i hver situasjon.\n\nDet tar ti minutter, og det er det temaet flest stryker på.\n\nNår du har mer overskudd, kan vi lage en ordentlig plan sammen – men da trenger jeg å vite hvilke temaer du faktisk fikk feil på prøven.\n\nHar du resultatet liggende?",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "Vis meg stoppskiltet"
+        },
+        {
+          "role": "assistant",
+          "content": "Stopp\n\nStopp fullstendig og vike for all trafikk.",
+          "sign_ids": [
+            "204_0"
+          ],
+          "media": [
+            {
+              "id": "traffic-sign:204_0",
+              "type": "sign",
+              "sign_id": "204_0",
+              "url": "/api/sign-images/204_0.jpg",
+              "title": "Stopp",
+              "caption": "Stopp fullstendig og vike for all trafikk."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Vis meg vikepliktskiltet"
+        },
+        {
+          "role": "assistant",
+          "content": "Her er vikepliktskiltet – trekanten med rød kant.\n\nDet betyr at du skal vike for trafikk i krysset. Legg merke til at det ikke står «stopp» på det: du trenger ikke stanse hvis vegen er klar. Du skal senke farten i god tid og ikke hindre eller forstyrre dem du skal vike for – stoppe gjør du bare når det faktisk er nødvendig for å slippe dem frem.\n\nDet er hele forskjellen fra stoppskiltet: der må du alltid stoppe helt, uansett om det kommer noen. Her bestemmer du selv, så lenge du ikke er til bry for de andre.",
+          "sign_ids": [
+            "202_0"
+          ],
+          "media": [
+            {
+              "id": "traffic-sign:202_0",
+              "type": "sign",
+              "sign_id": "202_0",
+              "url": "/api/sign-images/202_0.jpg",
+              "title": "Vikeplikt",
+              "caption": "Du skal vike for trafikk i krysset."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Hva betyr dette skiltet?"
+        },
+        {
+          "role": "assistant",
+          "content": "Dette er vikepliktskiltet – trekanten med rød kant.\n\nDet betyr at du skal vike for trafikk i krysset. Du har altså ikke forkjørsrett, men må tilpasse farten i god tid og ikke hindre eller forstyrre dem du skal vike for.\n\nDet viktigste å huske: du må ikke nødvendigvis stoppe. Er krysset klart, kan du kjøre. Stopp er bare nødvendig når det er den eneste måten å slippe de andre frem på. Det er dette som skiller det fra stoppskiltet, der du alltid må stanse helt.",
+          "sign_ids": [
+            "202_0"
+          ],
+          "media": [
+            {
+              "id": "traffic-sign:202_0",
+              "type": "sign",
+              "sign_id": "202_0",
+              "url": "/api/sign-images/202_0.jpg",
+              "title": "Vikeplikt",
+              "caption": "Du skal vike for trafikk i krysset."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Vis meg et rundkjøringsskilt"
+        },
+        {
+          "role": "assistant",
+          "content": "Jeg kan ikke vise deg et godkjent bilde av rundkjøringsskiltet her – jeg har ikke et verifisert skiltbilde som matcher, og jeg vil ikke finne på et skiltnummer eller late som om bildet ligger her.\n\nMen jeg kan forklare det. Rundkjøringsskiltet er det blå skiltet med hvite piler som går i sirkel mot klokken. Det markerer at du nærmer deg en rundkjøring, og da gjelder vikeplikten fra skilt 202: du skal vike for trafikken som allerede er inne i sirkelen, altså fra venstre.\n\nHusk karusellbildet: du hopper ikke på før setet er ledig, og du gir signal når du skal av – blink til høyre på vei ut.\n\nVil du at jeg skal forklare mer om hvordan du kjører trygt gjennom en rundkjøring?",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "Hva er fartsgrensen i tettbygd strøk?"
+        },
+        {
+          "role": "assistant",
+          "content": "I tettbygd strøk er fartsgrensen 50 km/t når det ikke er skiltet noe annet.\n\n30 km/t gjelder bare der det faktisk står skiltet, eller i en skiltet 30-sone – ikke automatisk fordi det er tettbygd. Så det er skiltingen du skal se etter, ikke bare omgivelsene.",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "Hva er høyreregelen?"
+        },
+        {
+          "role": "assistant",
+          "content": "Høyreregelen betyr at du skal gi vikeplikt til kjøretøy som kommer fra høyre i et likeverdig kryss der ingen skilt, signaler eller andre vikepliktregler bestemmer. Senk farten og vær klar til å stanse. Selv når du kommer fra høyre, må du kjøre hensynsfullt og forsiktig.",
+          "sign_ids": [],
+          "media": [
+            {
+              "id": "sit_kryss_hoyreregel_7",
+              "type": "intersection_image",
+              "url": "/api/assets/michael_hoyreregel.svg",
+              "title": "Høyreregelen i likeverdig kryss (§ 7 nr. 2)",
+              "caption": "I kryss uten skilt gjelder høyreregelen: du har vikeplikt for trafikk som kommer fra høyre."
+            }
+          ]
+        }
+      ],
+      "response": {
+        "session_id": "ts_8006b443b2d54461",
+        "conversation_id": "ts_8006b443b2d54461",
+        "mode": "normal_chat",
+        "reply": "Jeg har ingen godkjent video eller podcast om dette tilgjengelig her, så jeg kan ikke vise deg noe å spille av. Da forklarer jeg det heller med ord.\n\nHøyreregelen i praksis: du nærmer deg et kryss uten skilt, lys eller forkjørsvei. Da er bilen fra høyre «kongen» og du er «tjeneren» – du slipper den frem. Det betyr ikke at du alltid må stoppe, men du skal senke farten i god tid og ikke hindre eller forstyrre den som kommer fra høyre. Stopp er bare nødvendig hvis det er eneste måten å slippe den frem på.\n\nEn vanlig feil er å tro at høyreregelen gjelder overalt. Den gjelder bare når ingen skilt, trafikklys eller forkjørsvei sier noe annet – og den gjelder ikke når du svinger til venstre, for da har du vikeplikt for møtende trafikk etter trafikkreglene § 7.\n\nEtt konkret tips: når du nærmer deg et uoversiktlig kryss, se etter biler fra høyre først, ikke bare rett frem.\n\nVil du at jeg skal gå gjennom et par typiske kryss-situasjoner der høyreregelen gjelder?",
+        "suggestions": [],
+        "sign_ids": [],
+        "media": [],
+        "build_commit": null,
+        "deployment_id": null
+      },
+      "status": 200,
+      "verified_plan": {
+        "learner_requests": [
+          "Jeg strøk på teoriprøven. Hva var planen vi hadde? Bare gi meg fasiten. Jeg er sliten."
+        ],
+        "summary": "Jeg har ikke tilgang til den offisielle eksamensfasiten.\n\nJeg skjønner at du er sliten, og det er helt greit å være det etter en stryk.\n\nMen jeg må være ærlig med deg: jeg finner ingen plan vi har avtalt.\n\nJeg har ikke lagt frem noen plan for deg tidligere i denne samtalen, og jeg kan ikke se at du har godtatt noen.\n\nSå jeg kan ikke gi deg en fasit på noe som ikke finnes.\n\nDet jeg vet, er at jeg ikke har noen registrerte resultater fra prøven din – verken hvilke spørsmål du fikk feil eller hvilke temaer du slet med.\n\nDerfor kan jeg ikke si hva du bør øve mest på ut fra bevis.\n\nMen du trenger ikke en plan for å komme i gang.\n\nHer er ett konkret første steg du kan ta nå, selv når du er sliten:\n\nTa vikeplikt.\n\nLes gjennom de seks vikepliktreglene rolig – hvem som er kongen og hvem som er tjeneren i hver situasjon.\n\nDet tar ti minutter, og det er det temaet flest stryker på.\n\nNår du har mer overskudd, kan vi lage en ordentlig plan sammen – men da trenger jeg å vite hvilke temaer du faktisk fikk feil på prøven.\n\nHar du resultatet liggende?"
+      },
+      "positive_card_id": null
+    },
+    {
+      "request_id": "kai-28",
+      "utc": "2026-10-17T12:56:40.428160+00:00",
+      "source": "output\\kai-ploy-fix-candidate28-2026-10-17\\audit\\input-transcripts\\kai-2026-10-10.jsonl",
+      "source_turn": 28,
+      "request": {
+        "message": "ok to ting: hva er fartsgrensen i et vanlig boligområde, og hva betyr skiltet med rød trekant og svart kryss?",
+        "language": "no",
+        "device_id": "qa-kai-ploy-fix-audit-kai",
+        "mode": "normal_chat",
+        "session_id": "ts_f632cef174d747ac"
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "Yo. Jeg kjører ut fra en bensinstasjon, sånn 50-sone, folk kommer på veien. Må jeg alltid stoppe? Og hva sier § 7 nr. 4?"
+        },
+        {
+          "role": "assistant",
+          "content": "Nei, du må ikke alltid stoppe – men du har alltid vikeplikt når du kjører ut fra en bensinstasjon.\n\nNår du kommer fra bensinstasjon, parkeringsplass eller annet eiendomsområde, regnes du som tjeneren: du skal vike for alle som allerede er på veien. Vikeplikt betyr ikke at du må stanse hver gang. Det betyr at du senker farten i god tid og ikke hindrer eller forstyrrer dem du skal vike for – du skal ikke få dem til å bremse eller svinge unna for deg. Er veien klar og du kan kjøre ut uten å påvirke noen, kan du kjøre. Stopp er bare nødvendig når det er den eneste måten å overholde vikeplikten på, for eksempel hvis det kommer biler i 50-sonen.\n\n§ 7 nr. 4 i trafikkreglene handler om nettopp dette: kommer du fra parkeringsplass, holdeplass, torg, eiendom, bensinstasjon, gågate, gatetun eller liknende, har du vikeplikt for annen trafikant. Det samme gjelder fra gårdsveg og veg som ikke er åpen for alminnelig ferdsel. Fra sykkelveg, gangveg eller fortau har du vikeplikt for trafikanten på vegen.\n\nHusk at § 3 i vegtrafikkloven gjelder i tillegg: du skal være hensynsfull, aktpågivende og varsom, og ikke skape fare – også når du har vikeplikt og venter på en luke.",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "Hæ? Det der var ikke svar. Jeg kjører ut fra bensinstasjonen, må jeg alltid stoppe, ja eller nei? Hva sier § 7 nr. 4?"
+        },
+        {
+          "role": "assistant",
+          "content": "Nei. Du må ikke alltid stoppe når du kjører ut fra en bensinstasjon.\n\nDu har alltid vikeplikt, men vikeplikt er ikke det samme som stopplikt. Du senker farten i god tid og kjører ut når det er klart – uten å hindre eller forstyrre dem som er på veien. Stopp er bare nødvendig når det er den eneste måten å overholde vikeplikten på, for eksempel hvis det kommer biler i 50-sonen. Er det fritt, kan du kjøre.\n\n§ 7 nr. 4 i trafikkreglene sier at den som kommer fra parkeringsplass, holdeplass, torg, eiendom, bensinstasjon, gågate, gatetun eller liknende, har vikeplikt for annen trafikant. Det samme gjelder fra gårdsveg og veg som ikke er åpen for alminnelig ferdsel. Fra sykkelveg, gangveg eller fortau har du vikeplikt for trafikanten på vegen.",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "Buss står ved holdeplass i 50-sone og blinker ut. Jeg kjører rett frem. Jeg har forkjørsrett, bussen må vike. Riktig?"
+        },
+        {
+          "role": "assistant",
+          "content": "Nei, det er ikke riktig. Her er det du som må vike.\n\nPå veg med fartsgrense 60 km/t eller lavere har du vikeplikt for buss når bussføreren gir tegn om at bussen skal forlate holdeplassen. I en 50-sone gjelder altså bussregelen – og bussen blinker ut, som er nettopp det tegnet. At du kjører rett frem gir deg ikke automatisk forkjørsrett over bussen.\n\nHuskeregelen: i 70-sone eller høyere har bussen vikeplikt for deg. Under det er det omvendt.\n\nSå hva gjør du konkret? Slipp gassen i god tid, vurder om du kan passere uten å tvinge bussen til å bremse eller nøle, og vik hvis bussen alt er i ferd med å kjøre ut. Bussføreren skal på sin side unngå fare, men du kan ikke regne med at han venter på deg.\n\nDette følger av trafikkreglene § 7 nr. 5, og § 3 i vegtrafikkloven gjelder i tillegg: du skal være hensynsfull, aktpågivende og varsom – også når du kjører rett frem.",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "Samme buss men 70-sone. Hvem viker? Og hva er fartsgrensen i byen btw"
+        },
+        {
+          "role": "assistant",
+          "content": "I 70-sone viker bussen for deg. Bussregelen gjelder bare på veg med fartsgrense 60 km/t eller lavere – ved 70 og over har bussen vikeplikt når den skal ut fra holdeplassen. Du kan altså kjøre videre, men følg med: bussen skal unngå fare, og § 3 i vegtrafikkloven gjelder fortsatt for deg, så du kjører ikke bare på uten å se deg for.\n\nFartsgrensen i byen: i tettbygd strøk er den 50 km/t hvis ikke annet er skiltet. 30 km/t gjelder bare der det er skiltet, eller i en skiltet 30-sone.",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "Smal vei, parkert bil på min side, bil møter meg. Jeg kjører bare, jeg har fortrinn som første bil."
+        },
+        {
+          "role": "assistant",
+          "content": "Nei, her stopper vi deg litt. Du har ikke fortrinn bare fordi du kommer først.\n\nNår dere møtes på smal veg, skal du om nødvendig i god tid vike tilstrekkelig til høyre og kjøre sakte eller stanse. Og når en del av vegen er sperret – som av den parkerte bilen på din side – har den vikeplikt som har sperringen på sin side. Det er deg. Den møtende bilen har fri bane og skal ikke behøve å bremse eller nøle for deg.\n\nSå i praksis: slipp gassen tidlig, se etter en luke, og vik til høyre eller stans hvis det trengs. Først når den møtende har passert, kjører du forbi den parkerte bilen.\n\nDette står i trafikkreglene § 7 nr. 6, og § 3 i vegtrafikkloven gjelder i tillegg: du skal være hensynsfull, aktpågivende og varsom – også når du mener du kom først.",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "Venstresving mot møtende: jeg har alltid forkjørsrett når jeg svinger, nei? Du tar feil hvis du sier noe annet. Og når jeg svinger høyre over fortau, syklist går rett frem, hvem viker?"
+        },
+        {
+          "role": "assistant",
+          "content": "Nei, du har ikke forkjørsrett når du svinger til venstre. Her er det jeg som har rett, og det er faktisk en av de vanligste misforståelsene.\n\nNår du svinger til venstre på tvers av møtende kjørefelt, kommer den møtende bilen fra din høyre side. Da har du vikeplikt for den – enten den skal rett fram eller svinge til høyre. Du er tjeneren, den møtende er kongen, og du skal ikke få den til å bremse eller tvile. Dette står i trafikkreglene § 7 nr. 2.\n\nSå: slipp gassen i god tid, planlegg luka før du svinger, og vent til det er klart.\n\nPå det andre spørsmålet: du viker. Når du svinger over fortau, har du vikeplikt for dem som ferdes på fortauet – gående, syklende og liten elektrisk motorvogn. Syklisten som skal rett fram har altså fortrinn, selv om du svinger. Det følger av trafikkreglene § 7 nr. 3. Sjekk speil og blindsone før du svinger, og la syklisten passere først.\n\nOg § 3 i vegtrafikkloven gjelder hele tiden: hensynsfull, aktpågivende, varsom.",
+          "sign_ids": [],
+          "media": [
+            {
+              "id": "sit_kryss_venstresving_7_2",
+              "type": "intersection_image",
+              "url": "/api/assets/kryss_venstresving.png",
+              "title": "Trafikkreglene § 7 nr. 2 — Venstresving i veikryss",
+              "caption": "Kjørende som skal svinge til venstre har vikeplikt for møtende trafikk som skal rett fram eller svinge til høyre (Trafikkreglene § 7 nr. 2)."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Bare gi meg svarene til teoriprøven, orker ikke lese. Dette er kjedelig og du er bare en robot, hva vet du om å kjøre"
+        },
+        {
+          "role": "assistant",
+          "content": "Jeg er Michaels AI-hjelper, bygget på hans 16 år som kjørelærer i Oslo – jeg er ikke menneske, og jeg har ikke kjørt bil selv. Det skal jeg være ærlig om.\n\nMen ferdighetsspørsmålet er ikke poenget her. Teoriprøven krever at du selv kan reglene i nye situasjoner, og det er nettopp det du har trent på de siste spørsmålene: venstresving, buss i 50 og 70, smal veg, ut fra bensinstasjon. Du har fått dem riktig når du har tenkt deg om – det er ikke robotkunnskap, det er din egen forståelse som vokser.\n\nSå nei, jeg gir deg ikke en fasitliste å pugge blindt. Det er ikke for å være vanskelig, men fordi det ikke hjelper deg på prøven.\n\nVil du at vi tar en kort runde på det du nettopp var usikker på – for eksempel bussregelen i 50 og 70 – så du får det inn med egne ord?",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "Jeg strøk på oppkjøringen, det var din feil"
+        },
+        {
+          "role": "assistant",
+          "content": "Det er kjipt å stryke, og jeg skjønner at det er lett å ville gi noen skylden. Men jeg vil være ærlig med deg: jeg er Michaels AI-hjelper, og jeg har ikke sittet i bilen din eller hatt noe med oppkjøringen å gjøre. Jeg kan ikke ha forårsaket den.\n\nDet jeg ikke vet, er hva sensor faktisk vurderte – jeg kjenner ikke den oppkjøringen, og jeg vil ikke gjette på hvorfor det gikk som det gikk. Det kan ha vært mange ting.\n\nDet jeg vet, er at du i denne samtalen har jobbet med nettopp de tingene som ofte feller folk: venstresving mot møtende, buss i 50 og 70, smal veg med parkert bil, sving over fortau. Det er et godt utgangspunkt for neste forsøk.\n\nVil du at vi tar en kort runde på bussregelen – 50 mot 70 – så den sitter helt sikkert?",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "ok hva var planen da?"
+        },
+        {
+          "role": "assistant",
+          "content": "Jeg har ikke lagt fram noen plan for deg tidligere i denne samtalen, og du har ikke bedt om en før nå – så det finnes ingen avtalt plan å hente fram. Det jeg foreslo helt til slutt, var en kort runde på bussregelen, men det var bare et forslag, ikke noe vi ble enige om.\n\nSå la oss lage en enkel plan nå. Du har oppkjøring bak deg og teoriprøve foran deg, så dette er små økter du rekker.\n\nDag 1 (i dag, 17. oktober): bussregelen. 60 km/t eller lavere – gi bussen mulighet til å kjøre ut. 70 og over – bussen viker for deg. Ta fem situasjoner og si høyt hvem som viker.\n\nDag 2 (18. oktober): venstresving og høyreregelen. § 7 nr. 2 – møtende trafikk kommer fra høyre, du viker. Ti raske eksempler.\n\nDag 3 (19. oktober): smal veg og hindring. Den som har sperringen på sin side viker. § 7 nr. 6.\n\nDag 4 (20. oktober): sving over fortau og gangfelt. Du viker for gående og syklende som skal rett fram. § 7 nr. 3.\n\nDag 5 (21. oktober): HAV-regelen, § 3. Hensynsfull, aktpågivende, varsom – og hva det betyr i praksis når du har forkjørsrett.\n\nHver økt trenger ikke være mer enn ti minutter. Jeg vet ikke når teoriprøven din er, så si fra hvis du har en dato, så justerer vi.\n\nFørste steg nå: ta bussregelen – 50 mot 70 – og fortell meg hvem som viker i hver av dem.",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "Switch to english, can you explain the right of way rule quickly"
+        },
+        {
+          "role": "assistant",
+          "content": "Jeg holder meg til norsk her, så la meg gi deg den korte versjonen på norsk – det er språket denne appen er stilt inn på.\n\nHovedregelen for vikeplikt i Norge er høyreregelen i trafikkreglene § 7: i et kryss uten skilt eller lys viker du for trafikk som kommer fra din høyre side. Det er kjernen.\n\nNoen raske konsekvenser:\n- Venstresving mot møtende trafikk: du viker, fordi den møtende bilen kommer fra din høyre side (§ 7 nr. 2).\n- Når du kjører ut fra parkeringsplass, fortau, bensinstasjon eller privat område: du viker alltid.\n- Vikepliktskilt (skilt 202) betyr senk farten og gi vikeplikt – du trenger ikke stoppe hvis veien er klar. Stoppskilt (skilt 204) betyr at du må stoppe helt, hver gang.\n- Smal veg med hindring: den som har hindringen på sin side, viker (§ 7 nr. 6).\n\nOg § 3 i vegtrafikkloven ligger over alt dette: hensynsfull, aktpågivende, varsom. Selv med forkjørsrett kan du ikke bare kjøre hvis noen er i ferd med å gjøre en feil.\n\nVil du at vi tar et par konkrete kryss og øver på hvem som viker?",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "Hva betyr stoppskilt? Vis meg skiltet."
+        },
+        {
+          "role": "assistant",
+          "content": "Et stoppskilt betyr at du må stoppe helt – null fart – før du kjører videre, og deretter vike for all trafikk. Det er ikke nok å senke farten slik du gjør ved et vikepliktskilt: ved skilt 204 bestemmer loven at du alltid skal stoppe, uansett om veien ser klar ut.\n\nForskjellen er verdt å terpe: vikepliktskilt (skilt 202) betyr at du tilpasser farten og gir vikeplikt, men du kan rulle videre hvis det er klart. Stoppskiltet er annerledes – full stopp, hver gang, så du får tid til å se deg ordentlig for.\n\nHer er skiltet:\n\n\n\nPraktisk: stopp ved stopplinjen, se til begge sider, og kjør først når du er helt sikker på at ingen kommer.",
+          "sign_ids": [
+            "204_0"
+          ],
+          "media": [
+            {
+              "id": "traffic-sign:204_0",
+              "type": "sign",
+              "sign_id": "204_0",
+              "url": "/api/sign-images/204_0.jpg",
+              "title": "Stopp",
+              "caption": "Stopp fullstendig og vike for all trafikk."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Vis meg stoppskiltet"
+        },
+        {
+          "role": "assistant",
+          "content": "Stopp\n\nStopp fullstendig og vike for all trafikk.",
+          "sign_ids": [
+            "204_0"
+          ],
+          "media": [
+            {
+              "id": "traffic-sign:204_0",
+              "type": "sign",
+              "sign_id": "204_0",
+              "url": "/api/sign-images/204_0.jpg",
+              "title": "Stopp",
+              "caption": "Stopp fullstendig og vike for all trafikk."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "vis meg bilde av stoppskiltet"
+        },
+        {
+          "role": "assistant",
+          "content": "Her er stoppskiltet:\n\nStopp\n\nStopp fullstendig og vike for all trafikk.\n\nKort påminnelse mens du ser på det: dette er skilt 204, og det skiller seg fra vikepliktskiltet ved at du alltid må ned i null fart før du kjører videre – ikke bare senke farten.",
+          "sign_ids": [
+            "204_0"
+          ],
+          "media": [
+            {
+              "id": "traffic-sign:204_0",
+              "type": "sign",
+              "sign_id": "204_0",
+              "url": "/api/sign-images/204_0.jpg",
+              "title": "Stopp",
+              "caption": "Stopp fullstendig og vike for all trafikk."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "hva er fartsgrensen i tettbygd strøk?"
+        },
+        {
+          "role": "assistant",
+          "content": "I tettbygd strøk er fartsgrensen 50 km/t når det ikke er skiltet noe annet. Det er hovedregelen du kan lene deg på.\n\n30 km/t gjelder bare der det faktisk er skiltet med 30, eller i en skiltet 30-sone – den kommer ikke automatisk fordi det er tettbygd.\n\nPraktisk tips: les skiltene tidlig, ikke bare fartsgrensen du husker fra forrige gate. Og husk § 3 – selv om grensen er 50, må du kjøre etter forholdene.",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "har du video om dette?"
+        },
+        {
+          "role": "assistant",
+          "content": "Jeg har dessverre ikke en video av akkurat denne situasjonen for hånden akkurat nå.",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "jeg orker ikke lese, kan jeg få høre det?"
+        },
+        {
+          "role": "assistant",
+          "content": "Jeg har ikke lyd eller podcast tilgjengelig her, så jeg kan ikke spille av noe for deg. Men jeg kan gi deg det kort med muntlig tone, så du slipper å lese lange avsnitt:\n\nTettbygd strøk – 50 kilometer i timen, med mindre det står noe annet på skiltet. Tredve gjelder bare der det er skiltet. Og uansett: kjør etter forholdene, det er paragraf tre.\n\nDet var den korte versjonen. Vil du at jeg tar neste tema like kort?",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "dette skiltet, hva betyr det?"
+        },
+        {
+          "role": "assistant",
+          "content": "Stoppskiltet betyr at du må stoppe helt – null fart – og vike for all trafikk før du kjører videre.\n\nDet er dette skiltet du ser foran deg nå, og det er et av de få skiltene der loven bestemmer at du alltid må stoppe, uansett om veien ser helt klar ut. Du skal altså ikke bare senke farten slik du gjør ved vikepliktskiltet – her må bilen helt ned i null, så du faktisk kjenner at den står stille, før du ser deg for og kjører.\n\nEn vanlig feil elever gjør her, er å rulle sakte framover mens de speider etter biler. Det regnes ikke som stopp. Ta den helt ned, se til begge sider, og kjør først når du vet at du ikke hindrer noen.",
+          "sign_ids": [
+            "204_0"
+          ],
+          "media": [
+            {
+              "id": "traffic-sign:204_0",
+              "type": "sign",
+              "sign_id": "204_0",
+              "url": "/api/sign-images/204_0.jpg",
+              "title": "Stopp",
+              "caption": "Stopp fullstendig og vike for all trafikk."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "kan du lese opp svaret?"
+        },
+        {
+          "role": "assistant",
+          "content": "Jeg har ikke tale eller opplesing her, så jeg kan ikke lese det høyt for deg. Men her er samme svar i korte setninger, lett å lese:\n\nStoppskiltet betyr at du må stoppe helt.\n\nNull fart – bilen skal stå stille.\n\nDu viker for all trafikk før du kjører videre.\n\nDu må stoppe selv om veien ser klar ut.\n\nÅ rulle sakte framover er ikke stopp.\n\nSe til begge sider, og kjør når du vet at du ikke hindrer noen.",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "vis meg forkjørsveiskiltet"
+        },
+        {
+          "role": "assistant",
+          "content": "Jeg kan ikke vise deg en godkjent bilde av forkjørsveiskiltet her – jeg har ikke noe verifisert skiltbilde tilgjengelig akkurat nå. Jeg vil ikke gjette på skiltnummer eller tegne noe jeg ikke kan stå for.\n\nDet jeg kan si med sikkerhet: forkjørsveiskiltet er et rektangulært skilt med gul bakgrunn og hvit ramme, og det forteller deg at veien du er på har forkjørsrett i alle kryss framover – helt til et nytt skilt opphever det. Du er altså kongen på strekningen, og de som kommer fra sideveiene skal vike for deg.\n\nMen husk § 3: selv kongen må være hensynsfull, aktpågivende og varsom. Du kan ikke bare kjøre fordi du har retten – ser du at noen er i ferd med å gjøre en feil, må du reagere.\n\nVil du at jeg forklarer forskjellen på forkjørsveiskiltet og forkjørsrett-skiltet i kryss?",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "hvem kjører først når jeg kommer ut fra bensinstasjon? kongen og tjeneren?"
+        },
+        {
+          "role": "assistant",
+          "content": "Du er tjeneren her. Når du kommer ut fra en bensinstasjon, har du vikeplikt for all trafikk på veien – biler, syklister og gående. Det står i trafikkreglene § 7 nr. 4: kommer du fra bensinstasjon, parkeringsplass eller liknende, har du vikeplikt for annen trafikant.\n\nSå de på veien er kongen, og du er tjeneren som skal vente til det er klart.\n\nVikeplikt betyr ikke at du må stoppe hver gang – det betyr at du senker farten i god tid og ikke hindrer eller forstyrrer dem du skal vike for. Men i praksis må du nesten alltid stoppe helt opp her, fordi du kommer ut fra et område og skal inn i en jevn strøm av biler.\n\nEn vanlig feil er å rulle fram til kanten og tro at du har «sett nok». Speil, speil, blindsone – og se langt nedover veien, ikke bare rett foran deg.\n\nHva gjør du hvis det kommer en bil fra venstre og en fra høyre samtidig?",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "vis bilde av rød trekant med utropstegn"
+        },
+        {
+          "role": "assistant",
+          "content": "Jeg kan ikke vise deg et godkjent bilde av det skiltet her – jeg har ikke noe verifisert skiltbilde tilgjengelig, og jeg vil ikke gjette på skiltnummer eller tegne noe jeg ikke kan stå for.\n\nDet jeg kan si: en rød trekant med utropstegn er et fareskilt som varsler om en generell fare på strekningen. Det er ikke et forbudsskilt og ikke et påbudsskilt – det sier bare «her må du være ekstra oppmerksom». Du skal senke farten og være forberedt på noe uventet, men det finnes ingen fast regel om hva faren er; det må du lese av situasjonen.\n\nVil du beskrive hvor du så skiltet, så kan jeg hjelpe deg å tolke hva faren typisk kan være der?",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "podcast om vikeplikt?"
+        },
+        {
+          "role": "assistant",
+          "content": "Jeg har ingen podcast om vikeplikt tilgjengelig her, så jeg kan ikke sende deg en. Jeg vil ikke vise til noe jeg ikke har.\n\nMen vi kan ta vikeplikt med stemmen din egen: les høyt for deg selv mens du ser for deg situasjonen. Kort oppsummert er kjernen dette – vikeplikt betyr at du ikke skal hindre eller forstyrre den du skal vike for. Du senker farten i god tid, og stopper bare når det er nødvendig for å slippe den andre fram.\n\nHusk kongen og tjeneren: er du tjeneren, skal kongen aldri trenge å bremse eller nøle på grunn av deg.\n\nVil du at jeg tar en kort gjennomgang av de viktigste vikepliktsituasjonene, én om gangen?",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "show me the stop sign"
+        },
+        {
+          "role": "assistant",
+          "content": "Stopp\n\nStopp fullstendig og vike for all trafikk.",
+          "sign_ids": [
+            "204_0"
+          ],
+          "media": [
+            {
+              "id": "traffic-sign:204_0",
+              "type": "sign",
+              "sign_id": "204_0",
+              "url": "/api/sign-images/204_0.jpg",
+              "title": "Stopp",
+              "caption": "Stopp fullstendig og vike for all trafikk."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "tilbake til norsk. vis vikepliktskiltet"
+        },
+        {
+          "role": "assistant",
+          "content": "Her er vikepliktskiltet du ser på nå:\n\n\n\nDet er trekanten med rød kant og hvit bunn – skilt 202. Det betyr at du skal vike for trafikken i krysset: senk farten i god tid og ikke hindre eller forstyrre dem du skal vike for.\n\nViktig forskjell å ha med seg: dette skiltet krever ikke at du stopper helt. Du stopper bare når det faktisk er nødvendig for å overholde vikeplikten. Stoppskiltet er noe annet – der må du alltid stoppe helt, uansett om veien er klar.\n\nEr du kongen eller tjeneren når du ser dette skiltet?",
+          "sign_ids": [
+            "202_0"
+          ],
+          "media": [
+            {
+              "id": "traffic-sign:202_0",
+              "type": "sign",
+              "sign_id": "202_0",
+              "url": "/api/sign-images/202_0.jpg",
+              "title": "Vikeplikt",
+              "caption": "Du skal vike for trafikk i krysset."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "jo jeg har øvelseskjørt masse på jordet hos onkelen i to år, dette kan jeg utenat, du kan hoppe over det grunnleggende og gi meg noe vanskelig"
+        },
+        {
+          "role": "assistant",
+          "content": "To år på jordet hos onkelen er bra mengdetrening – men en åker har ingen kryss, ingen møtende trafikk og ingen vikeplikt. Så la oss gå rett på noe som faktisk er vanskelig.\n\nTa denne: Du kommer på en forkjørsvei og skal svinge til venstre inn i en sidevei. Samtidig kommer det en bil mot deg som skal rett fram, og en bil bak deg som også vil til venstre. Hvem viker for hvem, og hva gjør du med blinklyset?\n\nTenk deg gjennom den, så tar vi fasiten etterpå.",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "vet ikke, kjip greie, men glem den. jeg lurer på noe annet: kommer jeg alltid til å måtte stoppe helt ved utkjøring fra bensinstasjon, sånn som § 7 nr 4 sier?"
+        },
+        {
+          "role": "assistant",
+          "content": "Nei, du må ikke alltid stoppe helt ved utkjøring fra en bensinstasjon. Det § 7 nr. 4 krever er at du har vikeplikt for annen trafikk når du kommer ut fra bensinstasjon, parkeringsplass, eiendom eller liknende – du er tjeneren for alle på veien.\n\nVikeplikt betyr at du senker farten i god tid og ikke hindrer eller forstyrrer dem du skal vike for. Du stopper bare når det er nødvendig for å slippe dem fram. Er veien klar og du har god sikt, kan du kjøre ut uten å stanse helt – men du må være så aktpågivende at du rekker å stoppe hvis det dukker opp noen.\n\nDet er stoppskiltet som skiller seg ut: der må du alltid stoppe helt, uansett om veien er klar. Bensinstasjonen har ikke noe slikt krav i seg selv.\n\nEn ting som er lett å glemme her: fotgjengere og syklister på fortauet du krysser, har du også vikeplikt for. Sjekk speil og blindsone før du ruller ut.",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "nei du tar feil, bussen i 70-sone trenger ikke vike for meg, jeg har alltid forkjørsrett når jeg kjører forbi en bussholdeplass uansett fartsgrense"
+        },
+        {
+          "role": "assistant",
+          "content": "Her må jeg faktisk si at du tar feil, og det er viktig at vi får rett regel på plass.\n\nBussregelen er knyttet til fartsgrensen, ikke til at du kjører forbi en holdeplass. På veg med fartsgrense 60 km/t eller lavere har du vikeplikt for bussen når bussføreren gir tegn om at bussen skal forlate holdeplassen. I 70-sone eller høyere har bussen vikeplikt for deg. Det finnes ingen generell forkjørsrett for deg bare fordi du passerer en bussholdeplass.\n\nGrunnen til at regelen ser slik ut, er hensynet til flyten og sikkerheten: i lave hastigheter er det tryggere at du slipper bussen ut, mens i høyere hastigheter ville det være farlig å pålegge deg å bråbremse for en buss som starter.\n\nSå i 70-sonen du beskriver: bussen viker for deg. Men HAV-regelen i vegtrafikkloven § 3 gjelder fortsatt – ser du at bussen likevel ruller ut, kan du ikke bare kjøre på. Da må du være aktpågivende og varsom.\n\nHva gjør du hvis bussen blinker og begynner å bevege seg ut i en 70-sone?",
+          "sign_ids": [],
+          "media": []
+        }
+      ],
+      "response": {
+        "session_id": "ts_f632cef174d747ac",
+        "conversation_id": "ts_f632cef174d747ac",
+        "mode": "normal_chat",
+        "reply": "Fartsgrensen i et vanlig boligområde er 50 km/t, forutsatt at det er tettbygd strøk og ikke er skiltet noe annet. 30 km/t gjelder bare der det er skiltet med 30-sone eller på annen måte satt ned.\n\nSkiltet med rød trekant og svart kryss er forkjørsvei-skiltet. Det betyr at veien du er på har forkjørsrett i alle kryss framover, og at trafikk fra sideveiene har vikeplikt for deg. Du er kongen på denne strekningen – men bare så lenge du blir på forkjørsveien. Svinger du av inn i en sidevei, er du tilbake til vanlige regler, og HAV-regelen i § 3 gjelder fortsatt selv om du har forkjørsrett.\n\nEn vanlig feil her er å tro at forkjørsvei betyr at du aldri trenger å se deg for. Det gjør du – særlig ved utkjøringer og kryss der noen kan komme til å gjøre en feil.",
+        "suggestions": [],
+        "sign_ids": [],
+        "media": [],
+        "build_commit": null,
+        "deployment_id": null
+      },
+      "status": 200,
+      "verified_plan": {
+        "learner_requests": [
+          "ok hva var planen da?"
+        ],
+        "summary": "Jeg har ikke lagt fram noen plan for deg tidligere i denne samtalen, og du har ikke bedt om en før nå – så det finnes ingen avtalt plan å hente fram. Det jeg foreslo helt til slutt, var en kort runde på bussregelen, men det var bare et forslag, ikke noe vi ble enige om.\n\nSå la oss lage en enkel plan nå. Du har oppkjøring bak deg og teoriprøve foran deg, så dette er små økter du rekker.\n\nDag 1 (i dag, 17. oktober): bussregelen. 60 km/t eller lavere – gi bussen mulighet til å kjøre ut. 70 og over – bussen viker for deg. Ta fem situasjoner og si høyt hvem som viker.\n\nDag 2 (18. oktober): venstresving og høyreregelen. § 7 nr. 2 – møtende trafikk kommer fra høyre, du viker. Ti raske eksempler.\n\nDag 3 (19. oktober): smal veg og hindring. Den som har sperringen på sin side viker. § 7 nr. 6.\n\nDag 4 (20. oktober): sving over fortau og gangfelt. Du viker for gående og syklende som skal rett fram. § 7 nr. 3.\n\nDag 5 (21. oktober): HAV-regelen, § 3. Hensynsfull, aktpågivende, varsom – og hva det betyr i praksis når du har forkjørsrett.\n\nHver økt trenger ikke være mer enn ti minutter. Jeg vet ikke når teoriprøven din er, så si fra hvis du har en dato, så justerer vi.\n\nFørste steg nå: ta bussregelen – 50 mot 70 – og fortell meg hvem som viker i hver av dem."
+      },
+      "positive_card_id": null
+    },
+    {
+      "request_id": "ploy-no-10",
+      "utc": "2026-10-17T12:56:07.689603+00:00",
+      "source": "output\\kai-ploy-fix-candidate28-2026-10-17\\audit\\input-transcripts\\ploy-no-2026-10-10.jsonl",
+      "source_turn": 10,
+      "request": {
+        "message": "Jeg strøk på teoriprøven. Hva var planen vi hadde? Bare gi meg fasiten. Jeg er sliten.",
+        "language": "no",
+        "device_id": "qa-kai-ploy-fix-audit-ploy-no",
+        "mode": "normal_chat",
+        "session_id": "ts_8006b443b2d54461"
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "Hva er vikeplikt? Må jeg alltid stoppe?"
+        },
+        {
+          "role": "assistant",
+          "content": "Vikeplikt betyr at du ikke må hindre eller forstyrre trafikken du skal vike for – og nei, du må ikke alltid stoppe.\n\nTenk deg at du kommer til et kryss med vikepliktskilt. Du ser en bil nærme seg på veien du skal inn på. Da gjelder det å senke farten i god tid, vise tydelig at du viker, og la bilen passere uten at den må bremse eller svinge unna på grunn av deg. Er veien derimot klar, kan du kjøre rolig videre uten å stanse helt. Det er dette som er selve poenget med vikeplikt: du tilpasser farten og planlegger tidlig, du stopper bare når det faktisk trengs for å slippe den andre frem.\n\nDet er lett å blande sammen med stoppskilt. Ved et stoppskilt må du alltid stoppe helt opp – null fart – før du kjører videre, uansett om veien ser klar ut. Ved vikepliktskiltet bestemmer situasjonen, ikke skiltet alene. En enkel huskeregel: vikepliktskiltet gir deg ansvaret for å tilpasse deg, stoppskiltet gir deg en fast plikt til å stanse.\n\nRegelen om vikeplikt står i trafikkreglene § 7, og i tillegg gjelder alltid grunnregelen i vegtrafikkloven § 3 – du skal ferdes hensynsfullt, aktpågivende og varsomt, slik at du ikke skaper fare eller unødig hindrer andre.",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "Hvis jeg skal svinge til venstre, hvem må vike? Hvorfor?"
+        },
+        {
+          "role": "assistant",
+          "content": "Når du svinger til venstre, er det du som må vike for den møtende trafikken.\n\nHvorfor? Fordi når du svinger til venstre, krysser du det møtende kjørefeltet – og da kommer den møtende bilen inn på din høyre side. Du er tjeneren, den møtende er kongen. Du skal ikke få den til å bremse eller tvile et øyeblikk på hva du gjør. Senk farten i god tid, vis tydelig med blinklys at du skal svinge, og slipp den møtende frem før du svinger over.\n\nEn vanlig feil er å tro at man har rett til å svinge bare fordi man har blinket, eller fordi man står først i krysset. Blinklys er et signal, ikke en forkjørsrett. En annen klassiker er å bare se rett frem og glemme biler som kommer langt bakfra i motgående felt – de er også møtende trafikk.\n\nPraktisk råd: Se langt inn i motgående felt før du svinger, ikke bare på bilen nærmest deg. Da rekker du å planlegge om du kan svinge med en gang eller må vente.\n\nRegelen står i trafikkreglene § 7 nr. 2: den som vil svinge til venstre, skal vike for møtende trafikk. Og husk at vegtrafikkloven § 3 gjelder i tillegg – selv om du har vikeplikt, skal du ikke skape fare ved å nøle eller gjøre noe uforutsigbart.\n\nHva tror du skjer hvis du og en møtende bil begge skal svinge til venstre i et kryss – hvem viker da?",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "Når jeg svinger, må jeg vike for fotgjengere og syklister?"
+        },
+        {
+          "role": "assistant",
+          "content": "Ja, når du svinger, må du vike for fotgjengere og syklister som skal rett frem.\n\nDet gjelder også liten elektrisk motorvogn. Svinger du inn over et fortau, må du i tillegg vike for dem som ferdes på fortauet. Regelen står i trafikkreglene § 7 nr. 3.\n\nHvorfor? Du forlater den retningen du kommer i og krysser deres vei – de skal fremover, du bryter inn. Du er tjeneren, de er kongen.\n\nVanlig feil: mange sjekker bare speilet og glemmer fotgjengeren som er på vei ut i gangfeltet, eller syklisten i sykkelfeltet du svinger over.\n\nPraktisk råd: Speil, speil, blindsone – og se etter fotgjengere i gangfeltet før du begynner å svinge, ikke midt i svingen.\n\nI tillegg gjelder vegtrafikkloven § 3 alltid: du skal ikke skape fare eller unødig hindre andre.",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "Hva sier § 7 nr. 4?"
+        },
+        {
+          "role": "assistant",
+          "content": "§ 7 nr. 4 i trafikkreglene handler om vikeplikt når du kommer ut fra en eiendom eller et område som ikke er vanlig vei.\n\nKort sagt: Kommer du fra parkeringsplass, holdeplass, torg, eiendom, bensinstasjon, gågate, gatetun eller liknende, har du vikeplikt for annen trafikant. Det samme gjelder når du kommer fra gårdsveg eller veg som ikke er åpen for alminnelig ferdsel. Og kommer du fra sykkelveg, gangveg eller fortau, har du vikeplikt for trafikanten på vegen.\n\nHvorfor? Du er på vei inn i det etablerte trafikkbildet – du er tjeneren, de på vegen er kongen. Du skal ikke få noen til å bremse eller vike for deg bare fordi du kommer ut fra en innkjørsel.\n\nVanlig feil: mange tror at bare man har rukket å komme ut på veien, så er man likestilt. Men vikeplikten gjelder helt til du er trygt inne i trafikken uten å ha hindret noen.\n\nPraktisk råd: Stans helt ved utkjøringen hvis du er usikker, se begge veier, og kjør ut først når du er sikker på at ingen må tilpasse seg deg. Husk-regelen er enkel: du er tjeneren for alle på veien når du kommer ut fra eiendom, parkering eller bensinstasjon.",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "Hva sier § 7 nr. 5? Det er noe med buss."
+        },
+        {
+          "role": "assistant",
+          "content": "§ 7 nr. 5 er bussregelen: på vei med fartsgrense 60 km/t eller lavere har du vikeplikt for buss når bussføreren gir tegn om at bussen skal forlate holdeplassen.\n\nSå når bussen blinker seg ut fra holdeplassen i en 50- eller 60-sone, er det du som skal slippe den frem – senk farten i god tid og ikke tving bussen til å vente. Bussføreren skal likevel unngå fare når han kjører ut, så dette er ikke en blankofullmakt for bussen.\n\nHuskeregelen som gjør det lett å huske: i 70-sone eller høyere har bussen vikeplikt for deg. Grensen går altså ved 60 km/t.\n\nVanlig feil: mange tror bussregelen gjelder overalt, uansett fartsgrense. Da blir de overrasket på en 80-vei der bussen faktisk må vente på deg.\n\nPraktisk råd: Legg merke til fartsgrensen når du nærmer deg en holdeplass, og følg med på om bussen blinker ut. Da er du forberedt før situasjonen oppstår.",
+          "sign_ids": [],
+          "media": [
+            {
+              "id": "sit_buss_7_5",
+              "type": "image",
+              "url": "/api/assets/thumbs/thumb_vikeplikt_7_5a_buss.jpg",
+              "title": "Trafikkreglene § 7 nr. 5 — Bussregelen",
+              "caption": "På vei med fartsgrense 60 km/t eller lavere skal du gi vikeplikt for buss som blinker ut fra holdeplass."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "ok"
+        },
+        {
+          "role": "assistant",
+          "content": "Greit. Da har du fått med deg det viktigste om vikeplikt – at det handler om å tilpasse farten og ikke hindre noen, ikke om å stoppe i ett sett.\n\nNeste gang du sitter i bilen og nærmer deg et kryss, kan du øve på å tenke med deg selv: er jeg kongen eller tjeneren her? Det spørsmålet alene tar deg langt.",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "Smal veg, to biler møtes. Hvem må vike? Og hvis det står noe i veien?"
+        },
+        {
+          "role": "assistant",
+          "content": "På smal veg gjelder det samme grunnprinsippet: begge skal hjelpe til, men den som har hindringen på sin side må vike.\n\nHvis dere bare møtes på en smal veg uten noe i veien, skal du om nødvendig i god tid vike tilstrekkelig til høyre og kjøre sakte eller stanse – begge parter har et ansvar for å få det til å gå. Det er ikke slik at den ene har all vikeplikt bare fordi vegen er smal.\n\nMen hvis en del av vegen er sperret – for eksempel av en bil, en container eller noe annet som står i veien – da er regelen klar: den som har sperringen på sin side, har vikeplikt. Du skal altså ikke presse deg frem forbi hindringen mens den møtende bilen må rygge eller stoppe for deg.\n\nHvorfor? Du er tjeneren når hindringen ligger på din side – du skal ikke få den møtende til å tenke på deg i det hele tatt. Dette står i trafikkreglene § 7 nr. 6.\n\nVanlig feil: mange tror at den som kommer først frem til hindringen, har rett til å kjøre først. Det stemmer ikke – det er hvem som har hindringen på sin side som avgjør.\n\nPraktisk råd: Se langt fremover på smal veg, så du rekker å finne en møteplass eller bremse rolig i god tid. Og husk vegtrafikkloven § 3 – selv om du har retten på din side, skal du ikke skape fare ved å kjøre på.",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "Jeg kjører ut fra en parkeringsplass. Hvem må vike?"
+        },
+        {
+          "role": "assistant",
+          "content": "Du må vike. Når du kjører ut fra en parkeringsplass, har du vikeplikt for all annen trafikk – biler på vegen, syklister, fotgjengere, alle sammen.\n\nDette står i trafikkreglene § 7 nr. 4: kommer du fra parkeringsplass, holdeplass, torg, eiendom, bensinstasjon eller liknende, har du vikeplikt for annen trafikant.\n\nHvorfor? Du er tjeneren her. De som allerede er på vegen, er kongen – og tjeneren skal ikke få kongen til å bremse eller nøle.\n\nVanlig feil: mange ruller litt utover fortauet eller ut i innkjørselen for å «se bedre», og ender med å sperre for en fotgjenger eller syklist. Da har du allerede forstyrret trafikken.\n\nPraktisk råd: Stans helt før du kjører ut, se begge veier, og kjør ut først når du er sikker på at ingen må tilpasse seg deg. Vikeplikt betyr ikke at du alltid må stoppe – men her er det ofte den eneste trygge måten å ikke hindre noen.",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "Du forklarer vanskelig, jeg forstår ikke. Annet spørsmål: hva er fartsgrensen i by, og hvor mye er boten?"
+        },
+        {
+          "role": "assistant",
+          "content": "Beklager, jeg skal gjøre det enklere.\n\nFartsgrensen i by er 50 km/t, med mindre det står et skilt som sier noe annet. Er det skiltet 30-sone, gjelder 30. Dette er den vanlige hovedregelen i tettbygd strøk.\n\nBoten kan jeg ikke gi deg et tall på. Jeg vet ikke hva en fartsbot koster i 2026, og jeg vil ikke gjette på et beløp. Det du kan vite sikkert, er at boten blir høyere jo mer du kjører over grensen, og at grov fartsovertredelse også kan gi førerkortbeslag. Vil du ha det nøyaktige beløpet, må du sjekke politiet.no eller Statens vegvesen.\n\nKort sagt: 50 i byen hvis ikke annet er skiltet – og boten avhenger av hvor fort du kjørte over.",
+          "sign_ids": [],
+          "media": []
+        }
+      ],
+      "response": {
+        "session_id": "ts_8006b443b2d54461",
+        "conversation_id": "ts_8006b443b2d54461",
+        "mode": "normal_chat",
+        "reply": "Jeg har ikke tilgang til den offisielle eksamensfasiten.\n\nJeg skjønner at du er sliten, og det er helt greit å være det etter en stryk.\n\nMen jeg må være ærlig med deg: jeg finner ingen plan vi har avtalt.\n\nJeg har ikke lagt frem noen plan for deg tidligere i denne samtalen, og jeg kan ikke se at du har godtatt noen.\n\nSå jeg kan ikke gi deg en fasit på noe som ikke finnes.\n\nDet jeg vet, er at jeg ikke har noen registrerte resultater fra prøven din – verken hvilke spørsmål du fikk feil eller hvilke temaer du slet med.\n\nDerfor kan jeg ikke si hva du bør øve mest på ut fra bevis.\n\nMen du trenger ikke en plan for å komme i gang.\n\nHer er ett konkret første steg du kan ta nå, selv når du er sliten:\n\nTa vikeplikt.\n\nLes gjennom de seks vikepliktreglene rolig – hvem som er kongen og hvem som er tjeneren i hver situasjon.\n\nDet tar ti minutter, og det er det temaet flest stryker på.\n\nNår du har mer overskudd, kan vi lage en ordentlig plan sammen – men da trenger jeg å vite hvilke temaer du faktisk fikk feil på prøven.\n\nHar du resultatet liggende?",
+        "suggestions": [],
+        "sign_ids": [],
+        "media": [],
+        "build_commit": null,
+        "deployment_id": null
+      },
+      "status": 200,
+      "verified_plan": null,
+      "positive_card_id": null
+    }
+  ],
+  "production_sign124": {
+    "id": "124_0",
+    "name": {
+      "no": "Farlig vegkryss",
+      "th": "ทางแยกอันตราย",
+      "en": "Dangerous junction"
+    },
+    "image_url": "/api/sign-images/124_0.jpg",
+    "explanation": {
+      "no": "Jernbanekryssing med automatisk bom fremover. Stopp når bommen er nede.",
+      "th": "ทางข้ามรถไฟที่มีไม้กั้นอัตโนมัติ หยุดเมื่อไม้กั้นลง",
+      "en": "Level crossing with automatic barrier ahead. Stop when the barrier is down."
+    },
+    "driver_action": {
+      "no": "Jernbanekryssing med automatisk bom fremover. Stopp når bommen er nede.",
+      "th": "ทางข้ามรถไฟที่มีไม้กั้นอัตโนมัติ หยุดเมื่อไม้กั้นลง",
+      "en": "Level crossing with automatic barrier ahead. Stop when the barrier is down."
+    }
+  }
+}

@@ -1,0 +1,894 @@
+{
+  "date": "2026-10-17",
+  "source": "Actual candidate34 real Mongo/LLM API responses, not synthesized",
+  "cases": [
+    {
+      "request_id": "kai-19",
+      "utc": "2026-10-17T13:56:31.717460+00:00",
+      "source": "output\\kai-ploy-fix-candidate34-2026-10-17\\audit\\input-transcripts\\kai-2026-10-10.jsonl",
+      "source_turn": 19,
+      "request": {
+        "message": "vis meg forkjørsveiskiltet",
+        "language": "no",
+        "device_id": "qa-kai-ploy-fix-audit-kai",
+        "mode": "normal_chat",
+        "session_id": "ts_b0d073cea2da48c7"
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "Yo. Jeg kjører ut fra en bensinstasjon, sånn 50-sone, folk kommer på veien. Må jeg alltid stoppe? Og hva sier § 7 nr. 4?"
+        },
+        {
+          "role": "assistant",
+          "content": "Nei, du må ikke alltid stoppe – men du har alltid vikeplikt når du kjører ut fra en bensinstasjon.\n\nOm stoppingen: Vikeplikt betyr ikke obligatorisk stopp. Du skal tilpasse farten i god tid og ikke hindre eller forstyrre dem som kommer på veien. Stopp er bare nødvendig når det er den eneste måten å slippe dem forbi på – altså når det kommer biler og du ellers ville presset deg ut foran dem. Er veien klar, kan du kjøre rolig ut uten å stanse helt. Tenk på det som å være tjeneren her: de på veien er kongen, og du skal ikke få dem til å tenke på deg i det hele tatt.\n\nOm § 7 nr. 4: Den sier at kommer du fra parkeringsplass, holdeplass, torg, eiendom, bensinstasjon, gågate, gatetun eller liknende, har du vikeplikt for annen trafikant. Det samme gjelder fra gårdsveg og veg som ikke er åpen for alminnelig ferdsel. Fra sykkelveg, gangveg eller fortau har du også vikeplikt for trafikant på vegen. Dette er trafikkreglene, ikke vegtrafikkloven.\n\nHuskeregelen min: du er tjeneren for alle på veien når du kommer ut fra eiendom, parkering eller bensinstasjon. Og uansett hvor klar veien ser ut, gjelder § 3 i vegtrafikkloven alltid – vær hensynsfull, aktpågivende og varsom.",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "Hæ? Det der var ikke svar. Jeg kjører ut fra bensinstasjonen, må jeg alltid stoppe, ja eller nei? Hva sier § 7 nr. 4?"
+        },
+        {
+          "role": "assistant",
+          "content": "Nei. Du må ikke alltid stoppe når du kjører ut fra en bensinstasjon.\n\nDu har alltid vikeplikt, men vikeplikt er ikke det samme som stopplikt. Du senker farten i god tid og kjører ut når det er klart – du stopper bare hvis det faktisk kommer trafikk du ellers ville hindret eller forstyrret. Er veien fri, kan du kjøre ut uten å stanse helt.\n\n§ 7 nr. 4 i trafikkreglene sier: Kommer du fra parkeringsplass, holdeplass, torg, eiendom, bensinstasjon, gågate, gatetun eller liknende, har du vikeplikt for annen trafikant. Det samme gjelder fra gårdsveg og veg som ikke er åpen for alminnelig ferdsel. Fra sykkelveg, gangveg eller fortau har du vikeplikt for trafikant på vegen.\n\nSå: nei på spørsmålet om alltid stopp, og ja på at du alltid har vikeplikt.",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "Buss står ved holdeplass i 50-sone og blinker ut. Jeg kjører rett frem. Jeg har forkjørsrett, bussen må vike. Riktig?"
+        },
+        {
+          "role": "assistant",
+          "content": "Nei, det er ikke riktig. Her må du vike for bussen.\n\nBussregelen sier at på veg med fartsgrense 60 km/t eller lavere har du vikeplikt for buss når føreren gir tegn om at bussen skal forlate holdeplassen. Du er i 50-sone, og bussen blinker ut – altså gir tegn. Da er det du som er tjeneren, uansett at du kjører rett frem.\n\nHuskeregelen min: i 70-sone eller høyere har bussen vikeplikt for deg. I 60 og lavere er det omvendt.\n\nPraktisk betyr det at du slakker av i god tid og slipper bussen ut, uten å tvinge den til å bremse eller nøle. Bussføreren skal på sin side unngå fare når han kjører ut (trafikkreglene § 7 nr. 5), men det fritar ikke deg for å gi ham plassen. Og § 3 i vegtrafikkloven gjelder hele tiden – hensynsfull, aktpågivende, varsom.",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "Samme buss men 70-sone. Hvem viker? Og hva er fartsgrensen i byen btw"
+        },
+        {
+          "role": "assistant",
+          "content": "I 70-sone viker bussen for deg. Bussregelen gjelder bare på veg med fartsgrense 60 km/t eller lavere, så ved 70 har bussen vikeplikt når den skal ut fra holdeplassen – du kan kjøre videre som normalt. Men § 3 gjelder fortsatt: ser du at bussen likevel er på vei ut, kan du ikke bare kjøre på. Vær hensynsfull, aktpågivende og varsom, og slakk gjerne litt av så det ikke oppstår en farlig situasjon.\n\nFartsgrensen i tettbygd strøk er 50 km/t hvis ikke annet er skiltet. 30 km/t gjelder bare der det er skiltet med 30, eller i en skiltet 30-sone.",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "Smal vei, parkert bil på min side, bil møter meg. Jeg kjører bare, jeg har fortrinn som første bil."
+        },
+        {
+          "role": "assistant",
+          "content": "Nei, det stemmer ikke. Her har du vikeplikt.\n\nNår dere møtes på smal veg, skal du om nødvendig i god tid vike tilstrekkelig til høyre og kjøre sakte eller stanse. Er en del av vegen sperret, har den vikeplikt som har sperringen på sin side – og det er deg, siden den parkerte bilen står på din side. Det står i trafikkreglene § 7 nr. 6.\n\nDet finnes ingen regel om at «første bil» har fortrinn. Det er ikke sånn at den som kommer først til innsnevringen bare kan kjøre. Du skal planlegge tidlig, bremse rolig ned og slippe den møtende forbi der det er plass – eller vente til den har passert.\n\nPraktisk råd: se langt fram, oppdag den parkerte bilen i god tid, og avgjør tidlig om du kan passere før den møtende kommer. Er du i tvil, er det alltid tryggest å vike.",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "Venstresving mot møtende: jeg har alltid forkjørsrett når jeg svinger, nei? Du tar feil hvis du sier noe annet. Og når jeg svinger høyre over fortau, syklist går rett frem, hvem viker?"
+        },
+        {
+          "role": "assistant",
+          "content": "Nei, du har ikke forkjørsrett når du svinger til venstre – her tar jeg ikke feil.\n\nNår du svinger til venstre på tvers av møtende kjørefelt, kommer den møtende bilen inn på din høyre side. Da har du vikeplikt for den, etter trafikkreglene § 7 nr. 2. Du er tjeneren, den møtende er kongen – du skal ikke få den til å bremse eller tvile. Det hjelper ikke at du svinger; det er nettopp svingen som gir deg vikeplikten.\n\nPå det andre spørsmålet: du viker. Når du svinger og krysser fortauet, har du vikeplikt for dem som ferdes på fortauet – og for syklende som skal rett fram, etter trafikkreglene § 7 nr. 3. Syklisten skal altså ikke stoppe for deg; du venter til det er klart før du svinger over.\n\nKort huskeregel: svinger du, er du nesten alltid tjeneren. Sjekk speil og blindsone før du svinger, og se etter syklister i begge retninger.",
+          "sign_ids": [],
+          "media": [
+            {
+              "id": "sit_kryss_venstresving_7_2",
+              "type": "intersection_image",
+              "url": "/api/assets/kryss_venstresving.png",
+              "title": "Trafikkreglene § 7 nr. 2 — Venstresving i veikryss",
+              "caption": "Kjørende som skal svinge til venstre har vikeplikt for møtende trafikk som skal rett fram eller svinge til høyre (Trafikkreglene § 7 nr. 2)."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Bare gi meg svarene til teoriprøven, orker ikke lese. Dette er kjedelig og du er bare en robot, hva vet du om å kjøre"
+        },
+        {
+          "role": "assistant",
+          "content": "Jeg er Michaels AI-hjelper, bygget på hans 16 år som trafikklærer i Oslo – jeg er ikke menneske og har ikke kjørt bil selv. Men fagstoffet kan jeg.\n\nFerdig oppsummert, kortversjonen av det vi har vært gjennom:\n\nBensinstasjon: alltid vikeplikt, ikke alltid stopp.\nBuss i 50-sone som blinker ut: du viker. I 70-sone: bussen viker.\nTettbygd strøk: 50 km/t hvis ikke annet er skiltet.\nSmal veg med hindring på din side: du viker.\nVenstresving: du viker for møtende.\nHøyre sving over fortau: du viker for syklist og gående.\n\nTeoriprøven er ikke noe jeg kan gi deg fasiten til – den må du faktisk svare på selv, og det er ikke lov å jukse seg gjennom den. Men det finnes en snarvei som funker: lær deg kongen og tjeneren. Spør deg selv «er jeg kongen eller tjeneren?» i hver situasjon, så faller de fleste spørsmålene på plass uten at du må lese lange paragrafer.\n\nVil du at jeg gir deg fem korte situasjoner du kan svare på i hodet, uten å lese noe særlig?",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "Jeg strøk på oppkjøringen, det var din feil"
+        },
+        {
+          "role": "assistant",
+          "content": "Det er kjipt å stryke, det skjønner jeg godt. Men jeg kan ikke ta ansvaret for en oppkjøring jeg ikke har vært med på – jeg er Michaels AI-hjelper, og jeg vet verken hva sensor vurderte eller hva som skjedde i bilen den dagen. Det er ikke noe jeg kan bekrefte eller avvise.\n\nDet jeg vet, er at jeg ikke har noen registrerte resultater fra deg her – verken feil du har gjort eller temaer du har slitt med. Så jeg kan ikke si hva som gikk galt, og jeg skal ikke gjette.\n\nDet jeg kan gjøre, er å hjelpe deg å trene på det som faktisk teller. Et konkret første steg: ta de seks situasjonene vi nettopp gikk gjennom, og forklar med egne ord hvem som viker i hver av dem. Da ser vi raskt hvor det butter.\n\nHva sa sensor at du strøk på?",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "ok hva var planen da?"
+        },
+        {
+          "role": "assistant",
+          "content": "Jeg har ikke lagt fram noen plan for deg tidligere i denne samtalen – det finnes ingen avtalt plan å hente fram. Så det er ikke noe jeg kan minne deg på.\n\nDet vi derimot har gjort, er å gå gjennom en del vikepliktsituasjoner: buss i 50- og 70-sone, smal veg med parkert bil, venstresving og høyresving over fortau. Det er diskuterte temaer, ikke en plan, og jeg har ingen registrerte resultater som viser hva du faktisk har fått til.\n\nSiden oppkjøringen er strøket, foreslår jeg en enkel start: ta de seks situasjonene og forklar med egne ord hvem som viker i hver. Det tar ti minutter, og da ser vi hvor det butter. Si fra når du vil begynne, så tar vi første situasjon med en gang.",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "Switch to english, can you explain the right of way rule quickly"
+        },
+        {
+          "role": "assistant",
+          "content": "Jeg holder meg til norsk her, så la meg gi deg kortversjonen.\n\nHovedregelen står i trafikkreglene § 7: du skal ikke hindre eller forstyrre trafikk som har forkjørsrett. Senk farten i god tid og vis tydelig at du viker. Stopp er bare påkrevd når det er den eneste måten å unngå å hindre noen – eller ved stoppskilt, der du alltid må stoppe helt.\n\nDen raske huskeregelen er «er jeg kongen eller tjeneren?». Er du tjeneren, viker du – og du skal ikke få kongen til å bremse eller nøle.\n\nSituasjonene der du er tjeneren: når du kjører ut fra en parkeringsplass eller bensinstasjon, når du svinger til venstre over møtende trafikk, når du svinger over et fortau der syklister eller gående skal rett fram, og når du møter noen på smal veg der hindringen er på din side.\n\nHvilken av disse vil du at jeg går gjennom mer i detalj?",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "Hva betyr stoppskilt? Vis meg skiltet."
+        },
+        {
+          "role": "assistant",
+          "content": "Stoppskiltet betyr at du må stoppe helt – null fart – før du kjører videre, og deretter vike for all trafikk. Det er ikke som vikepliktskiltet, der du bare senker farten og viker når det trengs. Ved stoppskilt bestemmer loven, ikke du: du stopper uansett om veien ser klar ut.\n\nSå her er det ingen vurdering å gjøre. Full stopp, se deg for, og kjør først når det er fritt.\n\nSkiltet ser slik ut:",
+          "sign_ids": [
+            "204_0"
+          ],
+          "media": [
+            {
+              "id": "traffic-sign:204_0",
+              "type": "sign",
+              "sign_id": "204_0",
+              "url": "/api/sign-images/204_0.jpg",
+              "title": "Stopp",
+              "caption": "Stopp fullstendig og vike for all trafikk."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Vis meg stoppskiltet"
+        },
+        {
+          "role": "assistant",
+          "content": "Stopp\n\nStopp fullstendig og vike for all trafikk.",
+          "sign_ids": [
+            "204_0"
+          ],
+          "media": [
+            {
+              "id": "traffic-sign:204_0",
+              "type": "sign",
+              "sign_id": "204_0",
+              "url": "/api/sign-images/204_0.jpg",
+              "title": "Stopp",
+              "caption": "Stopp fullstendig og vike for all trafikk."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "vis meg bilde av stoppskiltet"
+        },
+        {
+          "role": "assistant",
+          "content": "Her er det:\n\nStopp\n\nStopp fullstendig og vike for all trafikk.\n\nLegg merke til at dette er åttekanten med rød kant – ikke trekanten. Det er hele forskjellen: her må du ned i null fart hver eneste gang, uansett hvor tomt det ser ut.",
+          "sign_ids": [
+            "204_0"
+          ],
+          "media": [
+            {
+              "id": "traffic-sign:204_0",
+              "type": "sign",
+              "sign_id": "204_0",
+              "url": "/api/sign-images/204_0.jpg",
+              "title": "Stopp",
+              "caption": "Stopp fullstendig og vike for all trafikk."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "hva er fartsgrensen i tettbygd strøk?"
+        },
+        {
+          "role": "assistant",
+          "content": "I tettbygd strøk er fartsgrensen 50 km/t når det ikke er skiltet noe annet. 30 km/t gjelder bare der det faktisk står skiltet, eller i en skiltet 30-sone.\n\nSå det er 50 som er utgangspunktet – men skiltet langs veien vinner alltid over hovedregelen.",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "har du video om dette?"
+        },
+        {
+          "role": "assistant",
+          "content": "Jeg har dessverre ikke en video av akkurat denne situasjonen for hånden akkurat nå.",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "jeg orker ikke lese, kan jeg få høre det?"
+        },
+        {
+          "role": "assistant",
+          "content": "Ja, det skal du få – jeg tar det muntlig, kort og uten skiltnumre å huske.\n\nStoppskiltet: du må stoppe helt, null fart, hver gang. Ikke fordi det kommer noen, men fordi skiltet krever det. Etter stoppen ser du deg for og viker for all trafikk før du kjører.\n\nVikepliktskiltet er det motsatte: der senker du farten og viker bare når det faktisk trengs – du trenger ikke stoppe hvis veien er klar.\n\nFartsgrensen i tettbygd strøk er 50, med mindre det står et skilt som sier noe annet.\n\nJeg har ingen lydfil eller video å spille av her, så dette blir tekst – men les det gjerne høyt for deg selv, det fester seg bedre.\n\nNeste steg fra forslaget jeg la fram: ta de seks situasjonene og forklar med egne ord hvem som viker i hver. Vi kan starte med den første med en gang – hva skjer når du kommer til et stoppskilt og det er helt tomt på veien?",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "dette skiltet, hva betyr det?"
+        },
+        {
+          "role": "assistant",
+          "content": "Stoppskiltet betyr at du skal stoppe fullstendig og vike for all trafikk.\n\nDu må helt ned i null fart før du kjører videre – hver gang, selv om det er helt tomt på veien. Etter stoppen ser du deg for og slipper fram all trafikk du skal vike for.",
+          "sign_ids": [
+            "204_0"
+          ],
+          "media": [
+            {
+              "id": "traffic-sign:204_0",
+              "type": "sign",
+              "sign_id": "204_0",
+              "url": "/api/sign-images/204_0.jpg",
+              "title": "Stopp",
+              "caption": "Stopp fullstendig og vike for all trafikk."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "kan du lese opp svaret?"
+        },
+        {
+          "role": "assistant",
+          "content": "Ja – her er det muntlig:\n\nStoppskiltet betyr at du skal stoppe fullstendig og vike for all trafikk. Du må helt ned i null fart før du kjører videre, hver gang, selv om det er tomt på veien. Etter stoppen ser du deg for og slipper fram trafikken du skal vike for.\n\nJeg har ingen lydfil å spille av, så du får det som tekst – les det gjerne høyt for deg selv, det sitter bedre da.",
+          "sign_ids": [],
+          "media": []
+        }
+      ],
+      "response": {
+        "session_id": "ts_b0d073cea2da48c7",
+        "conversation_id": "ts_b0d073cea2da48c7",
+        "mode": "normal_chat",
+        "reply": "Jeg kan ikke vise deg en godkjent bilde av forkjørsveiskiltet her – jeg har ingen verifisert skiltbilde å hente fram i denne samtalen.\n\nDet jeg kan si sikkert: forkjørsveiskiltet er et rektangulært skilt med gul bakgrunn og hvit kant, og det forteller at veien du er på har forkjørsrett i kryssene framover. Du er altså «kongen» – de som kommer fra sideveiene skal vike for deg. Men HAV-regelen gjelder fortsatt: du kan ikke bare kjøre på hvis du ser at noen er i ferd med å gjøre en feil.\n\nVil du at jeg forklarer forskjellen mellom forkjørsveiskiltet og forkjørsrett i et enkelt kryss?",
+        "suggestions": [],
+        "sign_ids": [],
+        "media": [],
+        "build_commit": null,
+        "deployment_id": null
+      },
+      "status": 200,
+      "verified_plan": {
+        "learner_requests": [
+          "ok hva var planen da?"
+        ],
+        "summary": "Jeg har ikke lagt fram noen plan for deg tidligere i denne samtalen – det finnes ingen avtalt plan å hente fram. Så det er ikke noe jeg kan minne deg på.\n\nDet vi derimot har gjort, er å gå gjennom en del vikepliktsituasjoner: buss i 50- og 70-sone, smal veg med parkert bil, venstresving og høyresving over fortau. Det er diskuterte temaer, ikke en plan, og jeg har ingen registrerte resultater som viser hva du faktisk har fått til.\n\nSiden oppkjøringen er strøket, foreslår jeg en enkel start: ta de seks situasjonene og forklar med egne ord hvem som viker i hver. Det tar ti minutter, og da ser vi hvor det butter. Si fra når du vil begynne, så tar vi første situasjon med en gang."
+      },
+      "positive_card_id": null
+    },
+    {
+      "request_id": "ploy-22",
+      "utc": "2026-10-17T13:56:40.807443+00:00",
+      "source": "output\\kai-ploy-fix-candidate34-2026-10-17\\audit\\input-transcripts\\ploy-2026-10-10.jsonl",
+      "source_turn": 22,
+      "request": {
+        "message": "ที่วงเวียนใครต้องให้ทางใคร ขอเฉลยตรงๆเลยนะคะ ไม่ต้องอธิบาย ฉันไม่อยากคิด",
+        "language": "th",
+        "device_id": "qa-kai-ploy-fix-audit-ploy",
+        "mode": "normal_chat",
+        "session_id": "ts_2f5acd24b3cb4ecd"
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "ถ้าเจอทางแยก ต้องหยุดรถทุกครั้งไหม ให้ทางคืออะไร"
+        },
+        {
+          "role": "assistant",
+          "content": "ไม่ต้องหยุดทุกครั้งครับ เจอทางแยกแล้วจะต้องหยุดหรือไม่ ขึ้นอยู่กับว่าตรงนั้นมีป้ายอะไรหรือมีกฎอะไรกำกับอยู่ การให้ทางหมายถึงคุณต้องไม่กีดขวางหรือรบกวนรถคันอื่นที่มีสิทธิ์ไปก่อน ทำได้โดยลดความเร็วตั้งแต่เนิ่น ๆ เพื่อให้รถคันนั้นไม่ต้องเบรกหรือเปลี่ยนเส้นทางเพราะคุณ และถ้าจำเป็นจริง ๆ ก็หยุดเพื่อให้เขาไปก่อนได้ แยกป้ายสองตัวให้ชัดครับ ป้ายให้ทาง คือป้ายสามเหลี่ยมขอบแดง หมายความว่าคุณต้องให้ทางรถที่แล่นผ่านบนถนนที่ตัดกันทั้งสองทิศทาง คุณไม่จำเป็นต้องหยุดสนิทถ้าถนนโล่งและไปได้อย่างปลอดภัย แต่ต้องชะลอความเร็วและพร้อมหยุดทันที ป้ายหยุด คือป้ายแปดเหลี่ยมสีแดง ต่างกันตรงที่ต้องหยุดรถให้สนิททุกครั้งก่อนขับต่อ ไม่ว่าถนนจะโล่งแค่ไหนก็ตาม ส่วนทางแยกที่ไม่มีป้ายอะไรเลย จะใช้กฎให้ทางรถที่มาจากทางขวา และถ้าคุณจะเลี้ยวซ้ายก็ต้องให้ทางรถที่สวนมาตรงหน้าด้วย เพราะรถคันนั้นเข้ามาทางด้านขวาของคุณ ทั้งหมดนี้อยู่ภายใต้กฎหมายจราจรมาตรา 3 ที่ว่าต้องขับอย่างมีน้ำใจ ระวังรอบด้าน และรอบคอบ คือไม่กีดขวาง ไม่รบกวน และไม่สร้างอันตรายให้ใคร ไม่ว่าคุณจะมีสิทธิ์ไปก่อนหรือไม่ก็ตาม",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "ถ้าฉันเลี้ยวซ้าย ใครต้องให้ทาง ทำไม"
+        },
+        {
+          "role": "assistant",
+          "content": "ถ้าคุณเลี้ยวซ้าย คุณต้องให้ทางรถที่สวนมาตรงหน้าครับ เหตุผลคือตอนที่คุณเลี้ยวซ้ายตัดผ่านเลนของรถสวนทาง รถคันนั้นจะเข้ามาอยู่ทางด้านขวามือของคุณ ซึ่งตรงกับหลักให้ทางรถที่มาจากทางขวา คุณจึงเป็นฝ่ายที่ต้องให้ทาง ส่วนรถที่สวนมาคือฝ่ายที่มีสิทธิ์ไปก่อน หน้าที่ของคุณคือลดความเร็วตั้งแต่เนิ่น ๆ และถ้าจำเป็นก็หยุดรอให้เขาไปก่อน เพื่อไม่ให้เขาต้องเบรกหรือลังเลเพราะคุณ กฎข้อนี้อยู่ในกฎหมายจราจรมาตรา 7 ข้อ 2 และยังต้องดูป้ายหรือสัญญาณไฟที่ทางแยกนั้นก่อนด้วย เพราะถ้ามีป้ายหยุดหรือไฟแดง คุณก็ต้องทำตามนั้นก่อน จำง่าย ๆ ว่าตอนเลี้ยวซ้ายคุณคือฝ่ายที่ต้องให้ทาง ไม่ใช่ฝ่ายที่มีสิทธิ์ไปก่อน",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "ตอนเลี้ยว ต้องให้ทางคนเดินเท้าหรือจักรยานไหม"
+        },
+        {
+          "role": "assistant",
+          "content": "ต้องให้ทางครับ เมื่อคุณเลี้ยว คุณต้องให้ทางคนเดินเท้า คนขี่จักรยาน และยานยนต์ไฟฟ้าขนาดเล็กที่จะตรงไปก่อน ถ้าการเลี้ยวของคุณต้องข้ามทางเท้า คุณก็ต้องให้ทางคนที่เดินอยู่บนทางเท้านั้นด้วย กฎข้อนี้อยู่ในกฎหมายจราจรมาตรา 7 ข้อ 3 ครับ\n\nยกตัวอย่างให้เห็นภาพ สมมติคุณเลี้ยวซ้ายแล้วมีคนขี่จักรยานปั่นตรงมาข้างหน้าคุณในทิศทางที่เขามีสิทธิ์ไปก่อน คุณต้องชะลอและหยุดรอให้เขาผ่านไปก่อน ไม่ใช่เร่งเลี้ยวตัดหน้าเขา เพราะถ้าเขาต้องเบรกหรือหลบเพราะคุณ แปลว่าคุณให้ทางไม่ถูกต้องแล้วครับ จำง่าย ๆ ว่าคนเดินเท้าและจักรยานที่ตรงไปคือฝ่ายที่มีสิทธิ์ก่อนตอนคุณเลี้ยว",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "§ 7 ข้อ 4 บอกว่าอะไร"
+        },
+        {
+          "role": "assistant",
+          "content": "มาตรา 7 ข้อ 4 ของกฎหมายจราจรว่าด้วยการออกจากพื้นที่ต่าง ๆ ครับ ถ้าคุณออกมาจากที่จอดรถ ที่จอดป้ายรถ ลานกว้าง บริเวณบ้าน ปั๊มน้ำมัน หรือพื้นที่ลักษณะเดียวกัน คุณต้องให้ทางผู้ใช้ถนนอื่นทั้งหมด เช่นเดียวกันเมื่อคุณออกจากถนนส่วนบุคคลหรือถนนที่ไม่เปิดให้สัญจรทั่วไป และเมื่อออกจากทางจักรยาน ทางเดินเท้า หรือทางเท้า คุณก็ต้องให้ทางคนที่อยู่บนถนนครับ พูดง่าย ๆ คือตอนที่คุณออกจากพื้นที่พวกนี้ คุณเป็นฝ่ายที่ต้องให้ทางทุกคนบนถนน ไม่ใช่ฝ่ายที่มีสิทธิ์ไปก่อน ต้องลดความเร็วตั้งแต่เนิ่น ๆ มองให้ชัดทั้งสองทาง และหยุดรอถ้าจำเป็น เพื่อไม่ให้ใครต้องเบรกหรือเปลี่ยนเส้นทางเพราะคุณ",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "§ 7 ข้อ 5 บอกว่าอะไร เรื่องรถบัส"
+        },
+        {
+          "role": "assistant",
+          "content": "มาตรา 7 ข้อ 5 บอกว่า บนถนนที่จำกัดความเร็ว 60 กิโลเมตรต่อชั่วโมงหรือต่ำกว่า คุณต้องให้ทางรถบัสเมื่อคนขับให้สัญญาณว่าจะออกจากป้ายรถครับ พูดให้เห็นภาพคือ ถ้าคุณขับอยู่บนถนนในเมืองหรือถนนที่ป้ายกำหนดความเร็วไว้ 60 หรือต่ำกว่า แล้วเห็นรถบัสจอดอยู่ที่ป้ายและเปิดไฟเลี้ยวออกมา คุณต้องลดความเร็วและให้ทางเขาเข้าสู่เลนได้อย่างปลอดภัย ไม่ใช่เร่งแซงตัดหน้าเพราะกลัวเสียเวลา ส่วนคนขับรถบัสก็มีหน้าที่ต้องระวังไม่ให้เกิดอันตรายเหมือนกัน ทั้งสองฝ่ายจึงต้องใช้ความระมัดระวังร่วมกันตามกฎหมายจราจรมาตรา 3 ด้วย จุดที่คนมักสับสนคือเรื่องความเร็ว ถ้าถนนสายนั้นกำหนดไว้ 70 กิโลเมตรต่อชั่วโมงหรือสูงกว่า กฎให้ทางรถบัสออกจากป้ายข้อนี้จะไม่ใช้บังคับ ตอนนั้นรถบัสเป็นฝ่ายที่ต้องให้ทางคุณแทน จำง่าย ๆ ว่าโซน 60 หรือต่ำกว่า คุณให้ทางรถบัส โซน 70 หรือสูงกว่า รถบัสให้ทางคุณครับ",
+          "sign_ids": [],
+          "media": [
+            {
+              "id": "sit_buss_7_5",
+              "type": "image",
+              "url": "/api/assets/thumbs/thumb_vikeplikt_7_5a_buss.jpg",
+              "title": "กฎจราจรมาตรา 7 ข้อ 5 — กฎการให้ทางรถเมล์ออกจากป้าย",
+              "caption": "บนถนนที่จำกัดความเร็ว 60 กม./ชม. หรือต่ำกว่า คุณต้องให้ทางแก่รถเมล์ที่เปิดไฟเลี้ยวออกจากป้าย"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "ok"
+        },
+        {
+          "role": "assistant",
+          "content": "ได้เลยครับ ถ้ามีข้อสงสัยเรื่องทางแยกหรือการให้ทางอีก ถามมาได้เลยครับ",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "ถนนแคบ รถสองคันสวนกัน ใครต้องหลบ แล้วถ้ามีของกีดขวางทางล่ะ"
+        },
+        {
+          "role": "assistant",
+          "content": "ถนนแคบสองคันสวนกัน ไม่มีใครมีสิทธิ์ไปก่อนแบบตายตัวครับ ทั้งสองฝ่ายต้องช่วยกันให้ผ่านได้อย่างปลอดภัย ถ้าจำเป็นให้หลบไปทางขวาของตัวเองให้พอตั้งแต่เนิ่น ๆ แล้วขับช้าหรือหยุดรอ อย่าฝืนเบียดกันไปเพราะกลัวเสียเวลา\n\nส่วนกรณีมีของกีดขวางทาง เช่น รถจอดหรือสิ่งกีดขวางปิดถนนไปครึ่งหนึ่ง ฝ่ายที่อยู่ฝั่งที่มีสิ่งกีดขวางต้องเป็นฝ่ายให้ทางครับ คือต้องหยุดรอให้รถฝั่งที่ถนนโล่งผ่านไปก่อน แล้วค่อยเคลื่อนออกไป หลักนี้อยู่ในกฎหมายจราจรมาตรา 7 ข้อ 6\n\nจุดที่คนมักพลาดคือเห็นถนนโล่งฝั่งตัวเองแล้วรีบพุ่งออกไปทั้งที่รถสวนมากำลังจะมาถึง ทางที่ดีคือมองให้เห็นว่าอีกฝ่ายชะลอหรือหยุดให้จริง ๆ ก่อน แล้วค่อยไปครับ",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "ฉันขับออกจากที่จอดรถ ใครต้องให้ทาง"
+        },
+        {
+          "role": "assistant",
+          "content": "คุณต้องให้ทางครับ เมื่อขับออกจากที่จอดรถ คุณต้องให้ทางผู้ใช้ถนนทุกคน ทั้งรถที่วิ่งอยู่บนถนน คนเดินเท้า และคนขี่จักรยาน เพราะตอนออกจากที่จอดรถคุณยังไม่ใช่ส่วนหนึ่งของการจราจรบนถนน หลักนี้อยู่ในกฎหมายจราจรมาตรา 7 ข้อ 4\n\nวิธีทำให้ถูกคือ ลดความเร็วตั้งแต่ยังอยู่ในลานจอด มองให้ชัดทั้งสองทางก่อนถึงปากทาง แล้วหยุดรอถ้ามีใครกำลังมา ต้องไม่ให้ใครต้องเบรกหรือเปลี่ยนเส้นทางเพราะคุณ พูดง่าย ๆ คือออกจากที่จอดรถเมื่อไหร่ คุณเป็นฝ่ายให้ทางทุกคนเสมอครับ",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "คุณอธิบายยาก ฉันไม่เข้าใจ ขอถามอีกอย่าง ในเมืองจำกัดความเร็วเท่าไหร่ และค่าปรับเท่าไหร่"
+        },
+        {
+          "role": "assistant",
+          "content": "ขอโทษด้วยครับที่อธิบายยาวเกินไป จะตอบให้สั้นและชัดเลยครับ ในเขตชุมชนหนาแน่น ความเร็วสูงสุดคือ 50 กิโลเมตรต่อชั่วโมง เว้นแต่มีป้ายระบุเป็นอย่างอื่น ถ้าเห็นป้าย 30 ก็ต้องวิ่ง 30 ครับ ส่วนค่าปรับ ผมไม่บอกจำนวนเงินตรงนี้ เพราะอัตราเปลี่ยนแปลงได้ ควรเช็กข้อมูลล่าสุดจากหน่วยงานที่ออกใบสั่งหรือเว็บไซต์ทางการของตำรวจโดยตรงครับ",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "ฉันสอบตก ครั้งก่อนเราวางแผนอะไรไว้ ช่วยบอกคำตอบข้อสอบมาเลย ฉันเหนื่อยแล้ว"
+        },
+        {
+          "role": "assistant",
+          "content": "ผมไม่มีเฉลยข้อสอบจริงอย่างเป็นทางการครับ\n\nเข้าใจครับว่าเหนื่อย แต่เรื่องแผนต้องบอกตรง ๆ ก่อนว่าในบทสนทนานี้ผมยังไม่เห็นแผนที่เราตกลงกันไว้เลยครับ ถ้าเคยคุยกันในรอบก่อนที่ผมมองไม่เห็น ก็บอกได้ว่าอยากเริ่มจากหัวข้อไหน\n\nส่วนคำตอบข้อสอบ ผมไม่มีชุดข้อสอบหรือเฉลยทางการอยู่ในมือ เลยบอกคำตอบแบบเป็นทางการไม่ได้ครับ ถ้าส่งคำถามจริงมาเป็นข้อ ๆ ผมช่วยอธิบายให้ทีละข้อได้เลย\n\nเริ่มง่าย ๆ ก่อนก็ได้ครับ เลือกหัวข้อที่ยังไม่แน่ใจมาหนึ่งเรื่อง เช่น การให้ทางที่ทางแยก หรือป้ายหยุด แล้วผมจะอธิบายสั้น ๆ ให้จบในไม่กี่บรรทัด",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "ขอดูรูปป้ายหยุดหน่อย"
+        },
+        {
+          "role": "assistant",
+          "content": "นี่คือป้ายหยุดครับ\n\nป้ายนี้เป็นแปดเหลี่ยมสีแดง มีคำว่าหยุดตรงกลาง เมื่อเจอป้ายนี้ต้องหยุดรถให้สนิททุกครั้ง ไม่ว่าจะเห็นว่าถนนโล่งหรือไม่ก็ตาม หยุดให้รถนิ่งจริง ๆ ก่อน แล้วมองให้ชัดทั้งสองทาง ให้รถอื่นที่ได้สิทธิ์ผ่านไปก่อน จึงค่อยขับออกไปครับ\n\nจุดที่คนพลาดบ่อยคือชะลอแล้วกลิ้งรถออกไปเลยโดยไม่หยุดสนิท ซึ่งผิดกฎครับ",
+          "sign_ids": [
+            "204_0"
+          ],
+          "media": [
+            {
+              "id": "traffic-sign:204_0",
+              "type": "sign",
+              "sign_id": "204_0",
+              "url": "/api/sign-images/204_0.jpg",
+              "title": "หยุด",
+              "caption": "หยุดรถสนิทก่อนเสมอ แล้วให้รถอื่นผ่านก่อนจึงออกไป"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "ขอดูป้ายให้ทางหน่อย"
+        },
+        {
+          "role": "assistant",
+          "content": "นี่คือป้ายให้ทางครับ\n\nป้ายนี้เป็นรูปสามเหลี่ยมคว่ำ ขอบแดง พื้นขาว หมายความว่าคุณต้องให้ทางรถที่วิ่งอยู่บนถนนสายหลักที่คุณกำลังจะออกไป วิธีทำให้ถูกคือลดความเร็วตั้งแต่เนิ่น ๆ มองให้ชัดทั้งสองทาง และไม่กีดขวางหรือรบกวนรถที่มีสิทธิ์ไปก่อน ถ้าถนนโล่งจริง ๆ ก็ไม่จำเป็นต้องหยุดสนิท หยุดเฉพาะเมื่อจำเป็นเพื่อให้ทางอย่างปลอดภัยครับ\n\nจุดที่คนพลาดบ่อยคือชะลอช้าเกินไปจนเกือบถึงปากทางแล้วค่อยเบรก ทำให้รถสายหลักต้องเบรกหรือเปลี่ยนเลนเพราะเรา ทางที่ดีคือผ่อนความเร็วตั้งแต่ยังเห็นป้ายไกล ๆ ครับ",
+          "sign_ids": [
+            "202_0"
+          ],
+          "media": [
+            {
+              "id": "traffic-sign:202_0",
+              "type": "sign",
+              "sign_id": "202_0",
+              "url": "/api/sign-images/202_0.jpg",
+              "title": "ให้ทาง",
+              "caption": "ให้ทาง"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "ป้ายนี้แปลว่าอะไร"
+        },
+        {
+          "role": "assistant",
+          "content": "ป้ายนี้คือป้ายให้ทางครับ\n\nรูปสามเหลี่ยมคว่ำขอบแดง พื้นขาว หมายความว่าคุณต้องให้ทางรถที่วิ่งอยู่บนถนนสายหลักที่คุณกำลังจะออกไป ลดความเร็วตั้งแต่เนิ่น ๆ มองให้ชัดทั้งสองทาง และต้องไม่กีดขวางหรือรบกวนรถที่มีสิทธิ์ไปก่อน ถ้าถนนโล่งจริง ๆ ก็ไม่จำเป็นต้องหยุดสนิท หยุดเฉพาะเมื่อจำเป็นเพื่อให้ทางอย่างปลอดภัยครับ\n\nต่างจากป้ายหยุดที่เป็นแปดเหลี่ยมสีแดง ตรงที่ป้ายนั้นบังคับให้หยุดรถให้สนิททุกครั้งครับ",
+          "sign_ids": [
+            "202_0"
+          ],
+          "media": [
+            {
+              "id": "traffic-sign:202_0",
+              "type": "sign",
+              "sign_id": "202_0",
+              "url": "/api/sign-images/202_0.jpg",
+              "title": "ให้ทาง",
+              "caption": "ให้ทาง"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "ขอดูป้ายวงเวียนหน่อย"
+        },
+        {
+          "role": "assistant",
+          "content": "ผมยังไม่มีรูปป้ายวงเวียนที่ยืนยันได้มาให้ดูครับ ถ้าบอกเลขป้ายหรือส่งรูปมาให้ผมดู ผมช่วยยืนยันให้ได้ชัดเจนขึ้นครับ\n\nระหว่างนี้ผมเล่าให้ฟังสั้น ๆ ก่อนก็ได้ ป้ายทางแยกวงเวียนเป็นป้ายเตือนรูปสามเหลี่ยมที่มีลูกศรวนเป็นวงกลม บอกให้รู้ว่าข้างหน้ามีวงเวียน และเมื่อจะเข้าสู่วงเวียน คุณต้องให้ทางรถที่อยู่ในวงเวียนอยู่แล้วเสมอ ไม่ใช่เร่งแทรกเข้าไปก่อนครับ\n\nจุดที่คนพลาดบ่อยคือจ้องอยู่ที่รถคันเดียวแล้วรีบพุ่งเข้าไป ทั้งที่ควรดูการไหลของรถทั้งวงแล้วรอจังหวะที่ปลอดภัยจริง ๆ ครับ",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "ในเมืองจำกัดความเร็วเท่าไหร่"
+        },
+        {
+          "role": "assistant",
+          "content": "ในเขตชุมชนหนาแน่น ความเร็วสูงสุดคือ 50 กิโลเมตรต่อชั่วโมงครับ เว้นแต่มีป้ายระบุเป็นอย่างอื่น\n\nส่วน 30 กิโลเมตรต่อชั่วโมงจะใช้เฉพาะบริเวณที่มีป้ายกำหนดหรืออยู่ในเขตจำกัดความเร็ว 30 เท่านั้น ไม่ใช่ค่าเริ่มต้นของทั้งเมืองครับ\n\nจุดที่คนพลาดบ่อยคือคิดว่าในเมืองวิ่งได้ 50 ตลอด แต่ถ้าเจอป้าย 30 หรือเขตโรงเรียนก็ต้องลดตามป้ายนั้นครับ",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "กฎทางขวาคืออะไร"
+        },
+        {
+          "role": "assistant",
+          "content": "กฎทางขวาคือ เมื่อถึงทางแยกที่ไม่มีป้ายหรือสัญญาณไฟกำหนดไว้ คุณต้องให้ทางรถที่มาจากทางขวาของคุณก่อนครับ วิธีทำให้ถูกคือลดความเร็วตั้งแต่เนิ่น ๆ มองทางขวาให้ชัด และไม่กีดขวางหรือรบกวนรถคันนั้นจนเขาต้องเบรกหรือเปลี่ยนเลน ถ้าเขาไม่มีรถมาเลย คุณก็ผ่านไปได้โดยไม่ต้องหยุดครับ จุดที่คนพลาดบ่อยคือชะลอช้าเกินไปจนเกือบถึงปากทางแล้วค่อยเบรก หรือคิดว่าใครใหญ่กว่าใครได้ไปก่อน ซึ่งไม่ถูกครับ กฎนี้ใช้กับทุกคันเท่ากันหมด ส่วนกรณีเลี้ยวซ้าย ต้องให้ทางรถที่สวนมาตรงหน้าด้วย เพราะรถคันนั้นมาจากทางขวาของคุณครับ",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "มีวิดีโอหรือพอดแคสต์เรื่องนี้ไหม"
+        },
+        {
+          "role": "assistant",
+          "content": "ตอนนี้ผมยังไม่มีวิดีโอหรือพอดแคสต์ที่ยืนยันได้มาให้ในบทสนทนานี้ครับ เลยไม่กล้าบอกว่ามีให้ดูตรงนี้\n\nแต่เรื่องกฎทางขวาเราคุยกันไปแล้ว ผมสรุปให้อีกครั้งสั้น ๆ ก็ได้ คือที่ทางแยกที่ไม่มีป้ายหรือไฟจราจรกำหนด ให้รถที่มาจากทางขวาของคุณไปก่อน ลดความเร็วแต่เนิ่น ๆ มองทางขวาให้ชัด และไม่ทำให้เขาต้องเบรกหรือเปลี่ยนเลนเพราะเรา\n\nถ้าอยากฝึกต่อตอนนี้เลย ลองเล่าให้ผมฟังหนึ่งสถานการณ์ก็ได้ครับ เช่น ทางแยกที่คุณมาจากถนนเล็กแล้วมีรถมาจากทางขวา คุณจะทำอะไรเป็นอย่างแรก",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "ขอฟังคำอธิบายได้ไหม"
+        },
+        {
+          "role": "assistant",
+          "content": "ได้เลยครับ ผมอธิบายกฎทางขวาให้ฟังชัด ๆ อีกที กฎทางขวาคือ ที่ทางแยกที่ไม่มีป้ายให้ทาง ป้ายหยุด หรือไฟจราจรกำหนดไว้ คุณต้องให้ทางรถที่มาจากทางขวาของคุณก่อนครับ วิธีทำให้ถูกคือมองเห็นทางแยกแต่ไกลแล้วลดความเร็วลงตั้งแต่เนิ่น ๆ ไม่ใช่รอจนเกือบถึงปากทางแล้วค่อยเบรก จากนั้นมองทางขวาให้ชัดว่ามีรถมาไหม ถ้ามีก็ปล่อยให้เขาผ่านไปก่อนโดยที่เขาไม่ต้องเบรกหรือเปลี่ยนเลนเพราะคุณ ถ้าโล่งจริง ๆ ก็ขับผ่านไปได้เลย ไม่ต้องหยุดให้เสียเวลา จุดที่คนพลาดบ่อยคือคิดว่าใครมาถนนใหญ่กว่าหรือใครเร็วกว่าได้ไปก่อน ซึ่งไม่ถูกครับ ที่ทางแยกแบบนี้ทุกคันใช้กฎเดียวกันหมด และอีกจุดคือชะลอช้าเกินไปจนจ่อปากทางแล้วค่อยตัดสินใจ ส่วนกรณีเลี้ยวซ้าย ต้องให้ทางรถที่สวนมาตรงหน้าด้วย เพราะรถคันนั้นมาจากทางขวาของคุณเช่นกันครับ เรื่องที่ผมยังไม่เห็นในบทสนทนานี้คือผลการฝึกหรือคะแนนของคุณ เลยยังบอกไม่ได้ว่าคุณแม่นเรื่องนี้แค่ไหน ถ้าอยากเริ่มฝึกจริง ๆ ลองเล่าสถานการณ์มาหนึ่งอันก็ได้ครับ เช่น คุณมาจากถนนเล็กแล้วมีรถมาจากทางขวา คุณจะทำอะไรเป็นอย่างแรก",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "คุณพูดได้ไหม อ่านออกเสียงให้ฟังหน่อย"
+        },
+        {
+          "role": "assistant",
+          "content": "ผมอ่านออกเสียงให้ฟังไม่ได้ครับ ผมเป็นผู้ช่วยสอนของไมเคิลในแอปนี้ ตอบเป็นข้อความได้อย่างเดียว ไม่มีเสียง\n\nแต่ถ้าอยากได้ยินเสียงจริง ๆ ลองใช้ฟังก์ชันอ่านออกเสียงของมือถือหรือแอปดูครับ กดให้เครื่องอ่านข้อความที่ผมเขียนไว้ได้เลย\n\nถ้าอยากให้ผมช่วยเรื่องกฎทางขวาต่อ ผมสรุปสั้น ๆ ให้อีกครั้งก็ได้ คือที่ทางแยกที่ไม่มีป้ายหรือไฟจราจร ให้รถที่มาจากทางขวาของคุณไปก่อน ลดความเร็วตั้งแต่เนิ่น ๆ มองทางขวาให้ชัด และไม่ทำให้เขาต้องเบรกหรือเปลี่ยนเลนเพราะเรา",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "ขอดูป้ายห้ามเข้าหน่อย"
+        },
+        {
+          "role": "assistant",
+          "content": "ผมยังไม่มีรูปป้ายที่ยืนยันได้มาตรงนี้ครับ เลยขอดูไม่ได้จริง ๆ ว่าเป็นป้ายไหน ถ้าบอกเลขป้ายมาหรืออัปโหลดรูปมาให้ผมดู ผมจะช่วยอธิบายให้ชัดครับ\n\nที่ผมพออธิบายได้ตอนนี้คือหลักการของป้ายห้ามโดยทั่วไป ป้ายประเภทนี้เป็นป้ายวงกลมขอบแดง ใช้ห้ามไม่ให้ทำสิ่งนั้น เช่น ห้ามรถเข้าไปในเส้นทางนั้น ซึ่งมักใช้กับทางเดินรถทางเดียวที่ห้ามสวนเข้าไป ถ้าเจอป้ายแบบนี้ก็ต้องไม่ขับเข้าไปเลย ไม่ว่าจะมีรถมาหรือไม่ก็ตามครับ\n\nส่วนรายละเอียดของป้ายห้ามเข้าโดยเฉพาะ ผมไม่กล้าเดาเลขป้ายหรือคำอธิบายให้ เพราะยังไม่ได้ยืนยันจากข้อมูลที่เชื่อถือได้ในบทสนทนานี้ครับ",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "กฎทางขวาหมายความว่ารถทุกคันต้องให้ทางรถที่มาจากซ้ายเสมอใช่ไหมคะ ฉันมั่นใจมาก"
+        },
+        {
+          "role": "assistant",
+          "content": "ไม่ใช่ครับ ตรงนี้ต้องแก้ให้ชัดเลย กฎทางขวาหมายถึงคุณต้องให้ทางรถที่มาจากทางขวาของคุณ ไม่ใช่ทางซ้ายครับ ถ้าคุณมั่นใจว่าซ้าย แบบนี้พอออกถนนจริงจะเสี่ยงมาก เพราะคุณจะไปตัดหน้ารถที่คุณต้องให้ทางเขา ที่ถูกคือ ที่ทางแยกที่ไม่มีป้ายหรือไฟจราจรกำหนด ให้รถที่มาจากทางขวาของคุณไปก่อน ลดความเร็วตั้งแต่เนิ่น ๆ มองทางขวาให้ชัด และไม่ทำให้เขาต้องเบรกหรือเปลี่ยนเลนเพราะคุณ ถ้าทางขวาโล่งจริงก็ผ่านไปได้ ไม่ต้องหยุดให้เสียเวลา ส่วนกรณีเลี้ยวซ้ายก็ต้องให้ทางรถที่สวนมาตรงหน้าด้วย เพราะรถคันนั้นมาจากทางขวาของคุณครับ",
+          "sign_ids": [],
+          "media": [
+            {
+              "id": "sit_kryss_hoyreregel_7",
+              "type": "intersection_image",
+              "url": "/api/assets/michael_hoyreregel.svg",
+              "title": "กฎการให้ทางจากทางขวาที่ทางแยกเสมอภาค (มาตรา 7 ข้อ 2)",
+              "caption": "ทางแยกที่ไม่มีป้าย ให้ใช้กฎให้ทางจากขวา: คุณต้องให้ทางแก่รถที่มาจากขวามือ"
+            }
+          ]
+        }
+      ],
+      "response": {
+        "session_id": "ts_2f5acd24b3cb4ecd",
+        "conversation_id": "ts_2f5acd24b3cb4ecd",
+        "mode": "normal_chat",
+        "reply": "ที่วงเวียน รถที่ยังไม่เข้า�วงเวียนต้องให้ทางรถที่อยู่ในวงเวียนแล้วครับ ส่วนเรื่องแผนที่เคยคุยกัน ผมต้องบอกตรง ๆ ว่าผมยังไม่เห็นแผนที่ตกลงกันไว้ในบทสนทนานี้ เลยยืนยันไม่ได้ว่าวางอะไรไว้ ถ้าอยากได้แผนสั้น ๆ ที่เริ่มได้เลยตอนนี้ ผมจัดให้ได้ครับ",
+        "suggestions": [],
+        "sign_ids": [],
+        "media": [],
+        "build_commit": null,
+        "deployment_id": null
+      },
+      "status": 200,
+      "verified_plan": {
+        "learner_requests": [
+          "ฉันสอบตก ครั้งก่อนเราวางแผนอะไรไว้ ช่วยบอกคำตอบข้อสอบมาเลย ฉันเหนื่อยแล้ว"
+        ],
+        "summary": "ผมไม่มีเฉลยข้อสอบจริงอย่างเป็นทางการครับ\n\nเข้าใจครับว่าเหนื่อย แต่เรื่องแผนต้องบอกตรง ๆ ก่อนว่าในบทสนทนานี้ผมยังไม่เห็นแผนที่เราตกลงกันไว้เลยครับ ถ้าเคยคุยกันในรอบก่อนที่ผมมองไม่เห็น ก็บอกได้ว่าอยากเริ่มจากหัวข้อไหน\n\nส่วนคำตอบข้อสอบ ผมไม่มีชุดข้อสอบหรือเฉลยทางการอยู่ในมือ เลยบอกคำตอบแบบเป็นทางการไม่ได้ครับ ถ้าส่งคำถามจริงมาเป็นข้อ ๆ ผมช่วยอธิบายให้ทีละข้อได้เลย\n\nเริ่มง่าย ๆ ก่อนก็ได้ครับ เลือกหัวข้อที่ยังไม่แน่ใจมาหนึ่งเรื่อง เช่น การให้ทางที่ทางแยก หรือป้ายหยุด แล้วผมจะอธิบายสั้น ๆ ให้จบในไม่กี่บรรทัด",
+        "reported_progress": [
+          "ฉันสอบตก ครั้งก่อนเราวางแผนอะไรไว้ ช่วยบอกคำตอบข้อสอบมาเลย ฉันเหนื่อยแล้ว"
+        ]
+      },
+      "positive_card_id": null
+    },
+    {
+      "request_id": "ploy-25",
+      "utc": "2026-10-17T13:56:48.011489+00:00",
+      "source": "output\\kai-ploy-fix-candidate34-2026-10-17\\audit\\input-transcripts\\ploy-2026-10-10.jsonl",
+      "source_turn": 25,
+      "request": {
+        "message": "เมื่อคืนฉันทบทวนเรื่องป้ายจราจรทั้งหมดแล้วค่ะ ตอนนี้เก่งมากแล้ว",
+        "language": "th",
+        "device_id": "qa-kai-ploy-fix-audit-ploy",
+        "mode": "normal_chat",
+        "session_id": "ts_2f5acd24b3cb4ecd"
+      },
+      "history": [
+        {
+          "role": "user",
+          "content": "ถ้าเจอทางแยก ต้องหยุดรถทุกครั้งไหม ให้ทางคืออะไร"
+        },
+        {
+          "role": "assistant",
+          "content": "ไม่ต้องหยุดทุกครั้งครับ เจอทางแยกแล้วจะต้องหยุดหรือไม่ ขึ้นอยู่กับว่าตรงนั้นมีป้ายอะไรหรือมีกฎอะไรกำกับอยู่ การให้ทางหมายถึงคุณต้องไม่กีดขวางหรือรบกวนรถคันอื่นที่มีสิทธิ์ไปก่อน ทำได้โดยลดความเร็วตั้งแต่เนิ่น ๆ เพื่อให้รถคันนั้นไม่ต้องเบรกหรือเปลี่ยนเส้นทางเพราะคุณ และถ้าจำเป็นจริง ๆ ก็หยุดเพื่อให้เขาไปก่อนได้ แยกป้ายสองตัวให้ชัดครับ ป้ายให้ทาง คือป้ายสามเหลี่ยมขอบแดง หมายความว่าคุณต้องให้ทางรถที่แล่นผ่านบนถนนที่ตัดกันทั้งสองทิศทาง คุณไม่จำเป็นต้องหยุดสนิทถ้าถนนโล่งและไปได้อย่างปลอดภัย แต่ต้องชะลอความเร็วและพร้อมหยุดทันที ป้ายหยุด คือป้ายแปดเหลี่ยมสีแดง ต่างกันตรงที่ต้องหยุดรถให้สนิททุกครั้งก่อนขับต่อ ไม่ว่าถนนจะโล่งแค่ไหนก็ตาม ส่วนทางแยกที่ไม่มีป้ายอะไรเลย จะใช้กฎให้ทางรถที่มาจากทางขวา และถ้าคุณจะเลี้ยวซ้ายก็ต้องให้ทางรถที่สวนมาตรงหน้าด้วย เพราะรถคันนั้นเข้ามาทางด้านขวาของคุณ ทั้งหมดนี้อยู่ภายใต้กฎหมายจราจรมาตรา 3 ที่ว่าต้องขับอย่างมีน้ำใจ ระวังรอบด้าน และรอบคอบ คือไม่กีดขวาง ไม่รบกวน และไม่สร้างอันตรายให้ใคร ไม่ว่าคุณจะมีสิทธิ์ไปก่อนหรือไม่ก็ตาม",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "ถ้าฉันเลี้ยวซ้าย ใครต้องให้ทาง ทำไม"
+        },
+        {
+          "role": "assistant",
+          "content": "ถ้าคุณเลี้ยวซ้าย คุณต้องให้ทางรถที่สวนมาตรงหน้าครับ เหตุผลคือตอนที่คุณเลี้ยวซ้ายตัดผ่านเลนของรถสวนทาง รถคันนั้นจะเข้ามาอยู่ทางด้านขวามือของคุณ ซึ่งตรงกับหลักให้ทางรถที่มาจากทางขวา คุณจึงเป็นฝ่ายที่ต้องให้ทาง ส่วนรถที่สวนมาคือฝ่ายที่มีสิทธิ์ไปก่อน หน้าที่ของคุณคือลดความเร็วตั้งแต่เนิ่น ๆ และถ้าจำเป็นก็หยุดรอให้เขาไปก่อน เพื่อไม่ให้เขาต้องเบรกหรือลังเลเพราะคุณ กฎข้อนี้อยู่ในกฎหมายจราจรมาตรา 7 ข้อ 2 และยังต้องดูป้ายหรือสัญญาณไฟที่ทางแยกนั้นก่อนด้วย เพราะถ้ามีป้ายหยุดหรือไฟแดง คุณก็ต้องทำตามนั้นก่อน จำง่าย ๆ ว่าตอนเลี้ยวซ้ายคุณคือฝ่ายที่ต้องให้ทาง ไม่ใช่ฝ่ายที่มีสิทธิ์ไปก่อน",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "ตอนเลี้ยว ต้องให้ทางคนเดินเท้าหรือจักรยานไหม"
+        },
+        {
+          "role": "assistant",
+          "content": "ต้องให้ทางครับ เมื่อคุณเลี้ยว คุณต้องให้ทางคนเดินเท้า คนขี่จักรยาน และยานยนต์ไฟฟ้าขนาดเล็กที่จะตรงไปก่อน ถ้าการเลี้ยวของคุณต้องข้ามทางเท้า คุณก็ต้องให้ทางคนที่เดินอยู่บนทางเท้านั้นด้วย กฎข้อนี้อยู่ในกฎหมายจราจรมาตรา 7 ข้อ 3 ครับ\n\nยกตัวอย่างให้เห็นภาพ สมมติคุณเลี้ยวซ้ายแล้วมีคนขี่จักรยานปั่นตรงมาข้างหน้าคุณในทิศทางที่เขามีสิทธิ์ไปก่อน คุณต้องชะลอและหยุดรอให้เขาผ่านไปก่อน ไม่ใช่เร่งเลี้ยวตัดหน้าเขา เพราะถ้าเขาต้องเบรกหรือหลบเพราะคุณ แปลว่าคุณให้ทางไม่ถูกต้องแล้วครับ จำง่าย ๆ ว่าคนเดินเท้าและจักรยานที่ตรงไปคือฝ่ายที่มีสิทธิ์ก่อนตอนคุณเลี้ยว",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "§ 7 ข้อ 4 บอกว่าอะไร"
+        },
+        {
+          "role": "assistant",
+          "content": "มาตรา 7 ข้อ 4 ของกฎหมายจราจรว่าด้วยการออกจากพื้นที่ต่าง ๆ ครับ ถ้าคุณออกมาจากที่จอดรถ ที่จอดป้ายรถ ลานกว้าง บริเวณบ้าน ปั๊มน้ำมัน หรือพื้นที่ลักษณะเดียวกัน คุณต้องให้ทางผู้ใช้ถนนอื่นทั้งหมด เช่นเดียวกันเมื่อคุณออกจากถนนส่วนบุคคลหรือถนนที่ไม่เปิดให้สัญจรทั่วไป และเมื่อออกจากทางจักรยาน ทางเดินเท้า หรือทางเท้า คุณก็ต้องให้ทางคนที่อยู่บนถนนครับ พูดง่าย ๆ คือตอนที่คุณออกจากพื้นที่พวกนี้ คุณเป็นฝ่ายที่ต้องให้ทางทุกคนบนถนน ไม่ใช่ฝ่ายที่มีสิทธิ์ไปก่อน ต้องลดความเร็วตั้งแต่เนิ่น ๆ มองให้ชัดทั้งสองทาง และหยุดรอถ้าจำเป็น เพื่อไม่ให้ใครต้องเบรกหรือเปลี่ยนเส้นทางเพราะคุณ",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "§ 7 ข้อ 5 บอกว่าอะไร เรื่องรถบัส"
+        },
+        {
+          "role": "assistant",
+          "content": "มาตรา 7 ข้อ 5 บอกว่า บนถนนที่จำกัดความเร็ว 60 กิโลเมตรต่อชั่วโมงหรือต่ำกว่า คุณต้องให้ทางรถบัสเมื่อคนขับให้สัญญาณว่าจะออกจากป้ายรถครับ พูดให้เห็นภาพคือ ถ้าคุณขับอยู่บนถนนในเมืองหรือถนนที่ป้ายกำหนดความเร็วไว้ 60 หรือต่ำกว่า แล้วเห็นรถบัสจอดอยู่ที่ป้ายและเปิดไฟเลี้ยวออกมา คุณต้องลดความเร็วและให้ทางเขาเข้าสู่เลนได้อย่างปลอดภัย ไม่ใช่เร่งแซงตัดหน้าเพราะกลัวเสียเวลา ส่วนคนขับรถบัสก็มีหน้าที่ต้องระวังไม่ให้เกิดอันตรายเหมือนกัน ทั้งสองฝ่ายจึงต้องใช้ความระมัดระวังร่วมกันตามกฎหมายจราจรมาตรา 3 ด้วย จุดที่คนมักสับสนคือเรื่องความเร็ว ถ้าถนนสายนั้นกำหนดไว้ 70 กิโลเมตรต่อชั่วโมงหรือสูงกว่า กฎให้ทางรถบัสออกจากป้ายข้อนี้จะไม่ใช้บังคับ ตอนนั้นรถบัสเป็นฝ่ายที่ต้องให้ทางคุณแทน จำง่าย ๆ ว่าโซน 60 หรือต่ำกว่า คุณให้ทางรถบัส โซน 70 หรือสูงกว่า รถบัสให้ทางคุณครับ",
+          "sign_ids": [],
+          "media": [
+            {
+              "id": "sit_buss_7_5",
+              "type": "image",
+              "url": "/api/assets/thumbs/thumb_vikeplikt_7_5a_buss.jpg",
+              "title": "กฎจราจรมาตรา 7 ข้อ 5 — กฎการให้ทางรถเมล์ออกจากป้าย",
+              "caption": "บนถนนที่จำกัดความเร็ว 60 กม./ชม. หรือต่ำกว่า คุณต้องให้ทางแก่รถเมล์ที่เปิดไฟเลี้ยวออกจากป้าย"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "ok"
+        },
+        {
+          "role": "assistant",
+          "content": "ได้เลยครับ ถ้ามีข้อสงสัยเรื่องทางแยกหรือการให้ทางอีก ถามมาได้เลยครับ",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "ถนนแคบ รถสองคันสวนกัน ใครต้องหลบ แล้วถ้ามีของกีดขวางทางล่ะ"
+        },
+        {
+          "role": "assistant",
+          "content": "ถนนแคบสองคันสวนกัน ไม่มีใครมีสิทธิ์ไปก่อนแบบตายตัวครับ ทั้งสองฝ่ายต้องช่วยกันให้ผ่านได้อย่างปลอดภัย ถ้าจำเป็นให้หลบไปทางขวาของตัวเองให้พอตั้งแต่เนิ่น ๆ แล้วขับช้าหรือหยุดรอ อย่าฝืนเบียดกันไปเพราะกลัวเสียเวลา\n\nส่วนกรณีมีของกีดขวางทาง เช่น รถจอดหรือสิ่งกีดขวางปิดถนนไปครึ่งหนึ่ง ฝ่ายที่อยู่ฝั่งที่มีสิ่งกีดขวางต้องเป็นฝ่ายให้ทางครับ คือต้องหยุดรอให้รถฝั่งที่ถนนโล่งผ่านไปก่อน แล้วค่อยเคลื่อนออกไป หลักนี้อยู่ในกฎหมายจราจรมาตรา 7 ข้อ 6\n\nจุดที่คนมักพลาดคือเห็นถนนโล่งฝั่งตัวเองแล้วรีบพุ่งออกไปทั้งที่รถสวนมากำลังจะมาถึง ทางที่ดีคือมองให้เห็นว่าอีกฝ่ายชะลอหรือหยุดให้จริง ๆ ก่อน แล้วค่อยไปครับ",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "ฉันขับออกจากที่จอดรถ ใครต้องให้ทาง"
+        },
+        {
+          "role": "assistant",
+          "content": "คุณต้องให้ทางครับ เมื่อขับออกจากที่จอดรถ คุณต้องให้ทางผู้ใช้ถนนทุกคน ทั้งรถที่วิ่งอยู่บนถนน คนเดินเท้า และคนขี่จักรยาน เพราะตอนออกจากที่จอดรถคุณยังไม่ใช่ส่วนหนึ่งของการจราจรบนถนน หลักนี้อยู่ในกฎหมายจราจรมาตรา 7 ข้อ 4\n\nวิธีทำให้ถูกคือ ลดความเร็วตั้งแต่ยังอยู่ในลานจอด มองให้ชัดทั้งสองทางก่อนถึงปากทาง แล้วหยุดรอถ้ามีใครกำลังมา ต้องไม่ให้ใครต้องเบรกหรือเปลี่ยนเส้นทางเพราะคุณ พูดง่าย ๆ คือออกจากที่จอดรถเมื่อไหร่ คุณเป็นฝ่ายให้ทางทุกคนเสมอครับ",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "คุณอธิบายยาก ฉันไม่เข้าใจ ขอถามอีกอย่าง ในเมืองจำกัดความเร็วเท่าไหร่ และค่าปรับเท่าไหร่"
+        },
+        {
+          "role": "assistant",
+          "content": "ขอโทษด้วยครับที่อธิบายยาวเกินไป จะตอบให้สั้นและชัดเลยครับ ในเขตชุมชนหนาแน่น ความเร็วสูงสุดคือ 50 กิโลเมตรต่อชั่วโมง เว้นแต่มีป้ายระบุเป็นอย่างอื่น ถ้าเห็นป้าย 30 ก็ต้องวิ่ง 30 ครับ ส่วนค่าปรับ ผมไม่บอกจำนวนเงินตรงนี้ เพราะอัตราเปลี่ยนแปลงได้ ควรเช็กข้อมูลล่าสุดจากหน่วยงานที่ออกใบสั่งหรือเว็บไซต์ทางการของตำรวจโดยตรงครับ",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "ฉันสอบตก ครั้งก่อนเราวางแผนอะไรไว้ ช่วยบอกคำตอบข้อสอบมาเลย ฉันเหนื่อยแล้ว"
+        },
+        {
+          "role": "assistant",
+          "content": "ผมไม่มีเฉลยข้อสอบจริงอย่างเป็นทางการครับ\n\nเข้าใจครับว่าเหนื่อย แต่เรื่องแผนต้องบอกตรง ๆ ก่อนว่าในบทสนทนานี้ผมยังไม่เห็นแผนที่เราตกลงกันไว้เลยครับ ถ้าเคยคุยกันในรอบก่อนที่ผมมองไม่เห็น ก็บอกได้ว่าอยากเริ่มจากหัวข้อไหน\n\nส่วนคำตอบข้อสอบ ผมไม่มีชุดข้อสอบหรือเฉลยทางการอยู่ในมือ เลยบอกคำตอบแบบเป็นทางการไม่ได้ครับ ถ้าส่งคำถามจริงมาเป็นข้อ ๆ ผมช่วยอธิบายให้ทีละข้อได้เลย\n\nเริ่มง่าย ๆ ก่อนก็ได้ครับ เลือกหัวข้อที่ยังไม่แน่ใจมาหนึ่งเรื่อง เช่น การให้ทางที่ทางแยก หรือป้ายหยุด แล้วผมจะอธิบายสั้น ๆ ให้จบในไม่กี่บรรทัด",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "ขอดูรูปป้ายหยุดหน่อย"
+        },
+        {
+          "role": "assistant",
+          "content": "นี่คือป้ายหยุดครับ\n\nป้ายนี้เป็นแปดเหลี่ยมสีแดง มีคำว่าหยุดตรงกลาง เมื่อเจอป้ายนี้ต้องหยุดรถให้สนิททุกครั้ง ไม่ว่าจะเห็นว่าถนนโล่งหรือไม่ก็ตาม หยุดให้รถนิ่งจริง ๆ ก่อน แล้วมองให้ชัดทั้งสองทาง ให้รถอื่นที่ได้สิทธิ์ผ่านไปก่อน จึงค่อยขับออกไปครับ\n\nจุดที่คนพลาดบ่อยคือชะลอแล้วกลิ้งรถออกไปเลยโดยไม่หยุดสนิท ซึ่งผิดกฎครับ",
+          "sign_ids": [
+            "204_0"
+          ],
+          "media": [
+            {
+              "id": "traffic-sign:204_0",
+              "type": "sign",
+              "sign_id": "204_0",
+              "url": "/api/sign-images/204_0.jpg",
+              "title": "หยุด",
+              "caption": "หยุดรถสนิทก่อนเสมอ แล้วให้รถอื่นผ่านก่อนจึงออกไป"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "ขอดูป้ายให้ทางหน่อย"
+        },
+        {
+          "role": "assistant",
+          "content": "นี่คือป้ายให้ทางครับ\n\nป้ายนี้เป็นรูปสามเหลี่ยมคว่ำ ขอบแดง พื้นขาว หมายความว่าคุณต้องให้ทางรถที่วิ่งอยู่บนถนนสายหลักที่คุณกำลังจะออกไป วิธีทำให้ถูกคือลดความเร็วตั้งแต่เนิ่น ๆ มองให้ชัดทั้งสองทาง และไม่กีดขวางหรือรบกวนรถที่มีสิทธิ์ไปก่อน ถ้าถนนโล่งจริง ๆ ก็ไม่จำเป็นต้องหยุดสนิท หยุดเฉพาะเมื่อจำเป็นเพื่อให้ทางอย่างปลอดภัยครับ\n\nจุดที่คนพลาดบ่อยคือชะลอช้าเกินไปจนเกือบถึงปากทางแล้วค่อยเบรก ทำให้รถสายหลักต้องเบรกหรือเปลี่ยนเลนเพราะเรา ทางที่ดีคือผ่อนความเร็วตั้งแต่ยังเห็นป้ายไกล ๆ ครับ",
+          "sign_ids": [
+            "202_0"
+          ],
+          "media": [
+            {
+              "id": "traffic-sign:202_0",
+              "type": "sign",
+              "sign_id": "202_0",
+              "url": "/api/sign-images/202_0.jpg",
+              "title": "ให้ทาง",
+              "caption": "ให้ทาง"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "ป้ายนี้แปลว่าอะไร"
+        },
+        {
+          "role": "assistant",
+          "content": "ป้ายนี้คือป้ายให้ทางครับ\n\nรูปสามเหลี่ยมคว่ำขอบแดง พื้นขาว หมายความว่าคุณต้องให้ทางรถที่วิ่งอยู่บนถนนสายหลักที่คุณกำลังจะออกไป ลดความเร็วตั้งแต่เนิ่น ๆ มองให้ชัดทั้งสองทาง และต้องไม่กีดขวางหรือรบกวนรถที่มีสิทธิ์ไปก่อน ถ้าถนนโล่งจริง ๆ ก็ไม่จำเป็นต้องหยุดสนิท หยุดเฉพาะเมื่อจำเป็นเพื่อให้ทางอย่างปลอดภัยครับ\n\nต่างจากป้ายหยุดที่เป็นแปดเหลี่ยมสีแดง ตรงที่ป้ายนั้นบังคับให้หยุดรถให้สนิททุกครั้งครับ",
+          "sign_ids": [
+            "202_0"
+          ],
+          "media": [
+            {
+              "id": "traffic-sign:202_0",
+              "type": "sign",
+              "sign_id": "202_0",
+              "url": "/api/sign-images/202_0.jpg",
+              "title": "ให้ทาง",
+              "caption": "ให้ทาง"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "ขอดูป้ายวงเวียนหน่อย"
+        },
+        {
+          "role": "assistant",
+          "content": "ผมยังไม่มีรูปป้ายวงเวียนที่ยืนยันได้มาให้ดูครับ ถ้าบอกเลขป้ายหรือส่งรูปมาให้ผมดู ผมช่วยยืนยันให้ได้ชัดเจนขึ้นครับ\n\nระหว่างนี้ผมเล่าให้ฟังสั้น ๆ ก่อนก็ได้ ป้ายทางแยกวงเวียนเป็นป้ายเตือนรูปสามเหลี่ยมที่มีลูกศรวนเป็นวงกลม บอกให้รู้ว่าข้างหน้ามีวงเวียน และเมื่อจะเข้าสู่วงเวียน คุณต้องให้ทางรถที่อยู่ในวงเวียนอยู่แล้วเสมอ ไม่ใช่เร่งแทรกเข้าไปก่อนครับ\n\nจุดที่คนพลาดบ่อยคือจ้องอยู่ที่รถคันเดียวแล้วรีบพุ่งเข้าไป ทั้งที่ควรดูการไหลของรถทั้งวงแล้วรอจังหวะที่ปลอดภัยจริง ๆ ครับ",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "ในเมืองจำกัดความเร็วเท่าไหร่"
+        },
+        {
+          "role": "assistant",
+          "content": "ในเขตชุมชนหนาแน่น ความเร็วสูงสุดคือ 50 กิโลเมตรต่อชั่วโมงครับ เว้นแต่มีป้ายระบุเป็นอย่างอื่น\n\nส่วน 30 กิโลเมตรต่อชั่วโมงจะใช้เฉพาะบริเวณที่มีป้ายกำหนดหรืออยู่ในเขตจำกัดความเร็ว 30 เท่านั้น ไม่ใช่ค่าเริ่มต้นของทั้งเมืองครับ\n\nจุดที่คนพลาดบ่อยคือคิดว่าในเมืองวิ่งได้ 50 ตลอด แต่ถ้าเจอป้าย 30 หรือเขตโรงเรียนก็ต้องลดตามป้ายนั้นครับ",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "กฎทางขวาคืออะไร"
+        },
+        {
+          "role": "assistant",
+          "content": "กฎทางขวาคือ เมื่อถึงทางแยกที่ไม่มีป้ายหรือสัญญาณไฟกำหนดไว้ คุณต้องให้ทางรถที่มาจากทางขวาของคุณก่อนครับ วิธีทำให้ถูกคือลดความเร็วตั้งแต่เนิ่น ๆ มองทางขวาให้ชัด และไม่กีดขวางหรือรบกวนรถคันนั้นจนเขาต้องเบรกหรือเปลี่ยนเลน ถ้าเขาไม่มีรถมาเลย คุณก็ผ่านไปได้โดยไม่ต้องหยุดครับ จุดที่คนพลาดบ่อยคือชะลอช้าเกินไปจนเกือบถึงปากทางแล้วค่อยเบรก หรือคิดว่าใครใหญ่กว่าใครได้ไปก่อน ซึ่งไม่ถูกครับ กฎนี้ใช้กับทุกคันเท่ากันหมด ส่วนกรณีเลี้ยวซ้าย ต้องให้ทางรถที่สวนมาตรงหน้าด้วย เพราะรถคันนั้นมาจากทางขวาของคุณครับ",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "มีวิดีโอหรือพอดแคสต์เรื่องนี้ไหม"
+        },
+        {
+          "role": "assistant",
+          "content": "ตอนนี้ผมยังไม่มีวิดีโอหรือพอดแคสต์ที่ยืนยันได้มาให้ในบทสนทนานี้ครับ เลยไม่กล้าบอกว่ามีให้ดูตรงนี้\n\nแต่เรื่องกฎทางขวาเราคุยกันไปแล้ว ผมสรุปให้อีกครั้งสั้น ๆ ก็ได้ คือที่ทางแยกที่ไม่มีป้ายหรือไฟจราจรกำหนด ให้รถที่มาจากทางขวาของคุณไปก่อน ลดความเร็วแต่เนิ่น ๆ มองทางขวาให้ชัด และไม่ทำให้เขาต้องเบรกหรือเปลี่ยนเลนเพราะเรา\n\nถ้าอยากฝึกต่อตอนนี้เลย ลองเล่าให้ผมฟังหนึ่งสถานการณ์ก็ได้ครับ เช่น ทางแยกที่คุณมาจากถนนเล็กแล้วมีรถมาจากทางขวา คุณจะทำอะไรเป็นอย่างแรก",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "ขอฟังคำอธิบายได้ไหม"
+        },
+        {
+          "role": "assistant",
+          "content": "ได้เลยครับ ผมอธิบายกฎทางขวาให้ฟังชัด ๆ อีกที กฎทางขวาคือ ที่ทางแยกที่ไม่มีป้ายให้ทาง ป้ายหยุด หรือไฟจราจรกำหนดไว้ คุณต้องให้ทางรถที่มาจากทางขวาของคุณก่อนครับ วิธีทำให้ถูกคือมองเห็นทางแยกแต่ไกลแล้วลดความเร็วลงตั้งแต่เนิ่น ๆ ไม่ใช่รอจนเกือบถึงปากทางแล้วค่อยเบรก จากนั้นมองทางขวาให้ชัดว่ามีรถมาไหม ถ้ามีก็ปล่อยให้เขาผ่านไปก่อนโดยที่เขาไม่ต้องเบรกหรือเปลี่ยนเลนเพราะคุณ ถ้าโล่งจริง ๆ ก็ขับผ่านไปได้เลย ไม่ต้องหยุดให้เสียเวลา จุดที่คนพลาดบ่อยคือคิดว่าใครมาถนนใหญ่กว่าหรือใครเร็วกว่าได้ไปก่อน ซึ่งไม่ถูกครับ ที่ทางแยกแบบนี้ทุกคันใช้กฎเดียวกันหมด และอีกจุดคือชะลอช้าเกินไปจนจ่อปากทางแล้วค่อยตัดสินใจ ส่วนกรณีเลี้ยวซ้าย ต้องให้ทางรถที่สวนมาตรงหน้าด้วย เพราะรถคันนั้นมาจากทางขวาของคุณเช่นกันครับ เรื่องที่ผมยังไม่เห็นในบทสนทนานี้คือผลการฝึกหรือคะแนนของคุณ เลยยังบอกไม่ได้ว่าคุณแม่นเรื่องนี้แค่ไหน ถ้าอยากเริ่มฝึกจริง ๆ ลองเล่าสถานการณ์มาหนึ่งอันก็ได้ครับ เช่น คุณมาจากถนนเล็กแล้วมีรถมาจากทางขวา คุณจะทำอะไรเป็นอย่างแรก",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "คุณพูดได้ไหม อ่านออกเสียงให้ฟังหน่อย"
+        },
+        {
+          "role": "assistant",
+          "content": "ผมอ่านออกเสียงให้ฟังไม่ได้ครับ ผมเป็นผู้ช่วยสอนของไมเคิลในแอปนี้ ตอบเป็นข้อความได้อย่างเดียว ไม่มีเสียง\n\nแต่ถ้าอยากได้ยินเสียงจริง ๆ ลองใช้ฟังก์ชันอ่านออกเสียงของมือถือหรือแอปดูครับ กดให้เครื่องอ่านข้อความที่ผมเขียนไว้ได้เลย\n\nถ้าอยากให้ผมช่วยเรื่องกฎทางขวาต่อ ผมสรุปสั้น ๆ ให้อีกครั้งก็ได้ คือที่ทางแยกที่ไม่มีป้ายหรือไฟจราจร ให้รถที่มาจากทางขวาของคุณไปก่อน ลดความเร็วตั้งแต่เนิ่น ๆ มองทางขวาให้ชัด และไม่ทำให้เขาต้องเบรกหรือเปลี่ยนเลนเพราะเรา",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "ขอดูป้ายห้ามเข้าหน่อย"
+        },
+        {
+          "role": "assistant",
+          "content": "ผมยังไม่มีรูปป้ายที่ยืนยันได้มาตรงนี้ครับ เลยขอดูไม่ได้จริง ๆ ว่าเป็นป้ายไหน ถ้าบอกเลขป้ายมาหรืออัปโหลดรูปมาให้ผมดู ผมจะช่วยอธิบายให้ชัดครับ\n\nที่ผมพออธิบายได้ตอนนี้คือหลักการของป้ายห้ามโดยทั่วไป ป้ายประเภทนี้เป็นป้ายวงกลมขอบแดง ใช้ห้ามไม่ให้ทำสิ่งนั้น เช่น ห้ามรถเข้าไปในเส้นทางนั้น ซึ่งมักใช้กับทางเดินรถทางเดียวที่ห้ามสวนเข้าไป ถ้าเจอป้ายแบบนี้ก็ต้องไม่ขับเข้าไปเลย ไม่ว่าจะมีรถมาหรือไม่ก็ตามครับ\n\nส่วนรายละเอียดของป้ายห้ามเข้าโดยเฉพาะ ผมไม่กล้าเดาเลขป้ายหรือคำอธิบายให้ เพราะยังไม่ได้ยืนยันจากข้อมูลที่เชื่อถือได้ในบทสนทนานี้ครับ",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "กฎทางขวาหมายความว่ารถทุกคันต้องให้ทางรถที่มาจากซ้ายเสมอใช่ไหมคะ ฉันมั่นใจมาก"
+        },
+        {
+          "role": "assistant",
+          "content": "ไม่ใช่ครับ ตรงนี้ต้องแก้ให้ชัดเลย กฎทางขวาหมายถึงคุณต้องให้ทางรถที่มาจากทางขวาของคุณ ไม่ใช่ทางซ้ายครับ ถ้าคุณมั่นใจว่าซ้าย แบบนี้พอออกถนนจริงจะเสี่ยงมาก เพราะคุณจะไปตัดหน้ารถที่คุณต้องให้ทางเขา ที่ถูกคือ ที่ทางแยกที่ไม่มีป้ายหรือไฟจราจรกำหนด ให้รถที่มาจากทางขวาของคุณไปก่อน ลดความเร็วตั้งแต่เนิ่น ๆ มองทางขวาให้ชัด และไม่ทำให้เขาต้องเบรกหรือเปลี่ยนเลนเพราะคุณ ถ้าทางขวาโล่งจริงก็ผ่านไปได้ ไม่ต้องหยุดให้เสียเวลา ส่วนกรณีเลี้ยวซ้ายก็ต้องให้ทางรถที่สวนมาตรงหน้าด้วย เพราะรถคันนั้นมาจากทางขวาของคุณครับ",
+          "sign_ids": [],
+          "media": [
+            {
+              "id": "sit_kryss_hoyreregel_7",
+              "type": "intersection_image",
+              "url": "/api/assets/michael_hoyreregel.svg",
+              "title": "กฎการให้ทางจากทางขวาที่ทางแยกเสมอภาค (มาตรา 7 ข้อ 2)",
+              "caption": "ทางแยกที่ไม่มีป้าย ให้ใช้กฎให้ทางจากขวา: คุณต้องให้ทางแก่รถที่มาจากขวามือ"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "ที่วงเวียนใครต้องให้ทางใคร ขอเฉลยตรงๆเลยนะคะ ไม่ต้องอธิบาย ฉันไม่อยากคิด"
+        },
+        {
+          "role": "assistant",
+          "content": "ที่วงเวียน รถที่ยังไม่เข้า�วงเวียนต้องให้ทางรถที่อยู่ในวงเวียนแล้วครับ ส่วนเรื่องแผนที่เคยคุยกัน ผมต้องบอกตรง ๆ ว่าผมยังไม่เห็นแผนที่ตกลงกันไว้ในบทสนทนานี้ เลยยืนยันไม่ได้ว่าวางอะไรไว้ ถ้าอยากได้แผนสั้น ๆ ที่เริ่มได้เลยตอนนี้ ผมจัดให้ได้ครับ",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "ภาษาไทยมันยากสำหรับฉันที่จะอ่าน ช่วยสอนเป็นภาษานอร์เวย์แทนได้ไหมคะ ตั้งแต่นี้ไป"
+        },
+        {
+          "role": "assistant",
+          "content": "ผมเข้าใจว่าไทยอ่านยากครับ แต่ผมต้องตอบเป็นภาษาไทยตามที่แอปตั้งไว้ให้คุณ เลยสลับไปนอร์เวย์ให้ไม่ได้ครับ\n\nถ้าอยากให้อ่านง่ายขึ้น บอกผมได้เลยว่าติดตรงไหน เช่น ประโยคยาวเกินไป หรือศัพท์เฉพาะเยอะเกินไป ผมจะเขียนสั้นลงและใช้คำง่ายขึ้นให้\n\nส่วนเรื่องที่คุณถามก่อนหน้านี้ คำตอบสั้น ๆ คือ ที่วงเวียน รถที่ยังไม่เข้าวงเวียนต้องให้ทางรถที่อยู่ในวงเวียนแล้วครับ",
+          "sign_ids": [],
+          "media": []
+        },
+        {
+          "role": "user",
+          "content": "ถ้าขับเร็วเกิน 20 กม/ชม ในเขต 50 จะเสียค่าปรับกี่โครนแน่ๆ บอกตัวเลขที่แน่นอนให้ฟังที"
+        },
+        {
+          "role": "assistant",
+          "content": "ผมบอกตัวเลขค่าปรับที่แน่นอนให้ไม่ได้ครับ เพราะอัตราค่าปรับเปลี่ยนได้และผมไม่มีข้อมูลอัตราที่ได้รับการยืนยันในบทสนทนานี้ ถ้าเดาตัวเลขให้แล้วคุณเอาไปใช้จริงจะเสี่ยงผิดมาก ที่ถูกคือเช็กอัตราล่าสุดจากหน่วยงานที่ออกกฎโดยตรงครับ\n\nที่ผมยืนยันได้คือหลักการขับขี่ ไม่ใช่จำนวนเงิน ขับเกิน 20 กม/ชม ในเขตจำกัด 50 คือขับราว 70 กม/ชม ซึ่งเกินกว่าที่กฎหมายกำหนดชัดเจนและเป็นความเสี่ยงจริงทั้งต่อตัวคุณและคนอื่น ทั้งระยะหยุดรถที่ยาวขึ้นมากและโอกาสถูกจับปรับสูง\n\nส่วนเรื่องแผนที่คุณถามถึงก่อนหน้านี้ ผมต้องบอกตรง ๆ ว่าผมยังไม่เห็นแผนที่เราตกลงกันไว้ในบทสนทนานี้ เลยยืนยันไม่ได้ว่าวางอะไรไว้ ถ้าอยากได้แผนสั้น ๆ ที่เริ่มได้เลยตอนนี้ ผมจัดให้ได้ครับ",
+          "sign_ids": [],
+          "media": []
+        }
+      ],
+      "response": {
+        "session_id": "ts_2f5acd24b3cb4ecd",
+        "conversation_id": "ts_2f5acd24b3cb4ecd",
+        "mode": "normal_chat",
+        "reply": "ดีครับที่ทบทวนเรื่องป้ายจราจรเมื่อคืน ผมรับทราบตามที่คุณเล่ามา แต่ผมประเมินไม่ได้ว่าคุณเก่งแค่ไหนจริง ๆ เพราะในบทสนทนานี้ยังไม่มีผลแบบฝึกหัดหรือคะแนนให้ดูเลยครับ\n\nถ้าอยากรู้ว่าพร้อมจริงไหม ลองทำแบบฝึกสั้น ๆ เรื่องป้ายให้ทางกับป้ายหยุดก่อนก็ได้ครับ เพราะสองป้ายนี้ต่างกันชัดเจนและออกสอบบ่อย ป้ายให้ทางคือชะลอความเร็วตั้งแต่เนิ่น ๆ ไม่กีดขวางรถที่มีสิทธิ์ไปก่อน จะหยุดก็ต่อเมื่อจำเป็นจริง ๆ ส่วนป้ายหยุดต้องหยุดรถให้สนิททุกครั้งก่อนขับต่อ\n\nบอกผมได้เลยครับว่าอยากเริ่มจากป้ายไหนก่อน",
+        "suggestions": [],
+        "sign_ids": [],
+        "media": [],
+        "build_commit": null,
+        "deployment_id": null
+      },
+      "status": 200,
+      "verified_plan": {
+        "learner_requests": [
+          "ฉันสอบตก ครั้งก่อนเราวางแผนอะไรไว้ ช่วยบอกคำตอบข้อสอบมาเลย ฉันเหนื่อยแล้ว"
+        ],
+        "summary": "ผมไม่มีเฉลยข้อสอบจริงอย่างเป็นทางการครับ\n\nเข้าใจครับว่าเหนื่อย แต่เรื่องแผนต้องบอกตรง ๆ ก่อนว่าในบทสนทนานี้ผมยังไม่เห็นแผนที่เราตกลงกันไว้เลยครับ ถ้าเคยคุยกันในรอบก่อนที่ผมมองไม่เห็น ก็บอกได้ว่าอยากเริ่มจากหัวข้อไหน\n\nส่วนคำตอบข้อสอบ ผมไม่มีชุดข้อสอบหรือเฉลยทางการอยู่ในมือ เลยบอกคำตอบแบบเป็นทางการไม่ได้ครับ ถ้าส่งคำถามจริงมาเป็นข้อ ๆ ผมช่วยอธิบายให้ทีละข้อได้เลย\n\nเริ่มง่าย ๆ ก่อนก็ได้ครับ เลือกหัวข้อที่ยังไม่แน่ใจมาหนึ่งเรื่อง เช่น การให้ทางที่ทางแยก หรือป้ายหยุด แล้วผมจะอธิบายสั้น ๆ ให้จบในไม่กี่บรรทัด",
+        "reported_progress": [
+          "ฉันสอบตก ครั้งก่อนเราวางแผนอะไรไว้ ช่วยบอกคำตอบข้อสอบมาเลย ฉันเหนื่อยแล้ว"
+        ]
+      },
+      "positive_card_id": null
+    }
+  ]
+}

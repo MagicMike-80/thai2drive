@@ -173,3 +173,17 @@ def test_marked_guided_conversation_continues_then_releases_normal_chat(chat, mo
         assert history.rows[-1]['guided_mode'] == mode
     expected = 'Jeg har ingen resultater om deg her. Start med en øvingsøkt.'
     assert invoke(chat, 'no', CASES['no'][4], expected).reply == expected
+
+
+@pytest.mark.parametrize('language', CASES)
+def test_frustrated_question_does_not_inject_unverified_factual_error_admission(chat, language):
+    replies = {
+        'no':'Vikeplikt betyr å ikke hindre andre. Stopp bare når det er nødvendig.',
+        'th':'การให้ทางหมายถึงไม่กีดขวางผู้อื่น หยุดเมื่อจำเป็นเท่านั้นครับ',
+        'en':'Giving way means not obstructing others. Stop only when necessary.',
+    }
+    result = invoke(chat, language, 'du forstår ikke, må jeg alltid stoppe ved vikeplikt?', replies[language])
+    assert result.reply == replies[language]
+    system = chat[1].await_args.args[0][0]['content']
+    assert 'After one short apology' not in system
+    assert 'never admit a factual error automatically' in system

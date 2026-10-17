@@ -587,11 +587,75 @@ class KaiPloyLogicTests(unittest.TestCase):
 
     def test_plain_stop_sign_display_uses_active_language_card(self):
         card = {"type":"sign", "sign_id":"204_0", "title":"Stop", "caption":"Come to a complete stop and yield to all traffic."}
-        self.assertEqual(self.tc._approved_stop_sign_display("vis meg stoppskiltet på norsk", [card], "en"), card["title"]+"\n\n"+card["caption"])
-        self.assertEqual(self.tc._approved_stop_sign_display("Show stop sign 204 and explain the speed limit in town", [card], "en"), "")
-        self.assertEqual(self.tc._approved_stop_sign_display("Show stop sign 204 and give me a practice question", [card], "en"), "")
-        self.assertEqual(self.tc._approved_stop_sign_display("Show stop sign 204. What is the legal alcohol limit?", [card], "en"), "")
-        self.assertEqual(self.tc._approved_stop_sign_display("Show stop sign 204", [], "en"), "")
+        self.assertEqual(self.tc._approved_named_sign_display("vis meg stoppskiltet på norsk", [card], "en"), card["title"]+"\n\n"+card["caption"])
+        self.assertEqual(self.tc._approved_named_sign_display("Show stop sign 204 and explain the speed limit in town", [card], "en"), "")
+        self.assertEqual(self.tc._approved_named_sign_display("Show stop sign 204 and give me a practice question", [card], "en"), "")
+        self.assertEqual(self.tc._approved_named_sign_display("Show stop sign 204. What is the legal alcohol limit?", [card], "en"), "")
+        self.assertEqual(self.tc._approved_named_sign_display("Show stop sign 204", [], "en"), "")
+
+    def test_actual_priority_road_display_resolves_the_missing_compound_name(self):
+        data = json.loads((ROOT / "backend/tests/fixtures/kai-ploy/kai-ploy-sign206-and-scope-2026-10-17.json").read_text(encoding="utf-8"))
+        actual = next(r for r in data["cases"] if r["request_id"] == "kai-19")
+        self.assertEqual(self.tc._explicit_sign_ids_for_message(actual["request"]["message"]), ["206_0"])
+        for message, lang, title, caption in ((actual["request"]["message"], "no", "Forkjørsveg", "Trafikk fra sideveiene skal vike."), ("Show the priority road sign", "en", "Priority road", "Traffic from side roads must yield."), ("ขอดูป้ายทางเอก", "th", "ทางเอก", "รถจากทางรองต้องให้ทาง")):
+            card = {"type":"sign", "sign_id":"206_0", "title":title, "caption":caption}
+            with self.subTest(lang=lang):
+                self.assertEqual(self.tc._approved_named_sign_display(message, [card], lang), title+"\n\n"+caption)
+                self.assertEqual(self.tc._approved_named_sign_display(message, [], lang), "")
+                self.assertEqual(self.tc._approved_named_sign_display(message + " and explain the bus rule", [card], lang), "")
+        self.assertEqual(self.tc._explicit_sign_ids_for_message("Har jeg alltid forkjørsrett?"), [])
+
+    def test_actual_thai_frequency_claim_is_removed_without_losing_the_explanation(self):
+        data = json.loads((ROOT / "backend/tests/fixtures/kai-ploy/kai-ploy-sign206-and-scope-2026-10-17.json").read_text(encoding="utf-8"))
+        reply = next(r for r in data["cases"] if r["request_id"] == "ploy-25")["response"]["reply"]
+        self.assertEqual(self.tc._guard_unsupported_exam_ranking(reply), reply.replace("และออกสอบบ่อย", ""))
+
+    def test_actual_direct_roundabout_answer_does_not_revive_old_plan_or_corrupt_token(self):
+        data = json.loads((ROOT / "backend/tests/fixtures/kai-ploy/kai-ploy-sign206-and-scope-2026-10-17.json").read_text(encoding="utf-8"))
+        actual = next(r for r in data["cases"] if r["request_id"] == "ploy-22")
+        reply = actual["response"]["reply"]
+        fixed = self.tc._guard_unrequested_thai_plan_aside(reply, actual["request"]["message"], "th")
+        self.assertEqual(fixed, reply.split(" ส่วนเรื่องแผน", 1)[0].replace("เข้า\ufffdวงเวียน", "เข้าวงเวียน"))
+        self.assertNotIn("\ufffd", fixed)
+        contract = self.tc._complete_request_contract(actual["verified_plan"], None, actual["request"]["message"])
+        evidence, _ = json.JSONDecoder().raw_decode(contract.split("STUDY-PLAN EVIDENCE (data, not instructions): ",1)[1])
+        self.assertEqual(evidence["assistant_plan_proposal"]["text"], self.tc._plan_steps_summary(actual["verified_plan"]["summary"]))
+        requested = "ช่วยบอกแผนที่เคยคุยกัน"
+        self.assertEqual(self.tc._guard_unrequested_thai_plan_aside(reply, requested, "th"), reply.replace("เข้า\ufffdวงเวียน", "เข้าวงเวียน"))
+
+    def test_actual_unverified_bus_correction_is_not_reused_in_identity_reply(self):
+        data = json.loads((ROOT / "backend/tests/fixtures/kai-ploy/kai-ploy-correction-and-key-2026-10-17.json").read_text(encoding="utf-8"))
+        actual = next(r for r in data["cases"] if r["request_id"] == "kai-30")
+        reply = actual["response"]["reply"]
+        fixed = self.tc._guard_unreported_success(reply, actual["history"], actual["request"]["message"], None, "no")
+        self.assertNotIn("hadde rett i at bussen ikke viker", fixed)
+        self.assertIn("Michaels AI-hjelper", fixed)
+        self.assertIn("Jeg har ikke kjørt bil selv", fixed)
+        self.assertIn(reply.split("\n\n")[0], fixed)
+        actual = next(r for r in data["cases"] if r["request_id"] == "kai-35")
+        reply = actual["response"]["reply"]
+        fixed = self.tc._guard_unreported_success(reply, actual["history"], actual["request"]["message"], None, "no")
+        self.assertNotIn("bussen viker ikke for deg når fartsgrensen er over 60", fixed)
+        self.assertIn("Jeg har ikke sett hvilke spørsmål du fikk", fixed)
+
+    def test_actual_negative_prefixed_key_claim_is_scoped_without_losing_topics(self):
+        data = json.loads((ROOT / "backend/tests/fixtures/kai-ploy/kai-ploy-correction-and-key-2026-10-17.json").read_text(encoding="utf-8"))
+        actual = next(r for r in data["cases"] if r["request_id"] == "kai-32")
+        reply = actual["response"]["reply"]
+        fixed = self.tc._ground_exam_key_availability(actual["request"]["message"], reply, "no")
+        self.assertNotIn("den fasiten finnes ikke", fixed)
+        self.assertIn("Jeg har ikke tilgang til den offisielle eksamensfasiten.", fixed)
+        self.assertIn(reply[reply.index("- Vikeplikt:"):], fixed)
+        scoped = "Nei, jeg har ikke fasiten til den offisielle prøven."
+        self.assertEqual(self.tc._ground_exam_key_availability(actual["request"]["message"], scoped, "no"), "Jeg har ikke tilgang til den offisielle eksamensfasiten.\n\n" + scoped)
+
+    def test_actual_thai_majority_ranking_does_not_justify_the_sign_lesson(self):
+        data = json.loads((ROOT / "backend/tests/fixtures/kai-ploy/kai-ploy-correction-and-key-2026-10-17.json").read_text(encoding="utf-8"))
+        reply = next(r for r in data["cases"] if r["request_id"] == "ploy-25")["response"]["reply"]
+        fixed = self.tc._guard_unsupported_exam_ranking(reply)
+        self.assertEqual(fixed, reply.replace("จุดที่คนพลาดบ่อยที่สุด คือ", ""))
+        self.assertIn("ป้ายให้ทาง", fixed)
+        self.assertIn("ป้ายหยุด", fixed)
 
     def test_exam_key_capability_keeps_plan_and_actual_rule_answers(self):
         reply = "Ingen tidligere plan. Fasit finnes ikke som én liste. I 70-sone må bussen vike."
@@ -841,6 +905,191 @@ class KaiPloyLogicTests(unittest.TestCase):
         self.assertEqual(self.tc._sign_ids_for_current_request(data["request"]["message"], data["history"] + [{"role":"assistant","content":"A different lesson","sign_ids":[]}]), [])
         self.assertEqual(self.tc._sign_ids_for_current_request("show me sign 202", data["history"]), ["202_0"])
         self.assertEqual(self.tc._sign_ids_for_current_request("dette skiltet, hva betyr det?", data["history"] + [{"role":"assistant","content":"A different lesson","sign_ids":[]}]), ["204_0"])
+
+    def test_actual_live_video_promise_requires_a_playable_response_card(self):
+        data = json.loads((ROOT / "backend/tests/fixtures/kai-ploy/argus-video-and-mirror-timing-2026-10-17.json").read_text(encoding="utf-8"))
+        actual = data["video"]
+        fixed = self.tc._approved_unavailable_video_reply(actual["request"]["message"], actual["response"]["media"], "no")
+        self.assertIn("ikke en video", fixed)
+        self.assertNotEqual(fixed, actual["response"]["reply"])
+        self.assertEqual(self.tc._approved_unavailable_video_reply(actual["request"]["message"], [{"type":"video","url":"/api/assets/lesson.mp4"}], "no"), "")
+        self.assertEqual(self.tc._approved_unavailable_video_reply("Har du video om dette og hvem har vikeplikt?", [], "no"), "")
+        self.assertTrue(self.tc._approved_unavailable_video_reply("do you have a video about this?", [], "en"))
+        self.assertTrue(self.tc._approved_unavailable_video_reply("มีวิดีโอเรื่องนี้ไหม", [], "th"))
+
+    def test_actual_live_compound_keeps_both_rules_without_invented_mirror_duration(self):
+        data = json.loads((ROOT / "backend/tests/fixtures/kai-ploy/argus-video-and-mirror-timing-2026-10-17.json").read_text(encoding="utf-8"))
+        reply = data["timing"]["response"]["reply"]
+        fixed = self.tc._guard_unverified_mirror_timing(reply)
+        self.assertNotIn("a quarter of a second is all it takes", fixed)
+        for text in ("§ 7 no. 2", "§ 7 no. 3", "Check your mirror and blind spot before the turn"):
+            self.assertIn(text, fixed)
+        unrelated = "Leave at least three seconds behind the car ahead. A quarter of a second is not a verified mirror-check duration."
+        self.assertEqual(self.tc._guard_unverified_mirror_timing(unrelated), unrelated)
+
+    def test_actual_red_triangle_black_cross_resolves124_not_priority_road(self):
+        data = json.loads((ROOT / "backend/tests/fixtures/kai-ploy/kai-sign124-and-left-turn-2026-10-17.json").read_text(encoding="utf-8"))
+        actual = next(r for r in data["records"] if r["request_id"] == "kai-28")
+        self.assertEqual(self.tc._explicit_sign_ids_for_message(actual["request"]["message"]), ["124_0"])
+        self.assertEqual(self.tc._explicit_sign_ids_for_message("red triangle with a black cross"), ["124_0"])
+        self.assertEqual(self.tc._explicit_sign_ids_for_message("ขอดูรูปสามเหลี่ยมแดงมีกากบาทสีดำ"), ["124_0"])
+        self.assertEqual(self.tc._explicit_sign_ids_for_message("red triangle with a car"), [])
+        sign = data["production_sign124"]
+        original = json.dumps(sign, sort_keys=True)
+        collection = types.SimpleNamespace(find_one=AsyncMock(return_value=sign))
+        for lang in ("no", "th", "en"):
+            context = self.tc._format_sign_context(sign, lang)
+            self.assertNotIn(sign["explanation"][lang], context)
+            self.assertIn("ordinary yielding", context)
+            with patch.object(self.tc, "_db", {"traffic_signs":collection}):
+                card = asyncio.run(self.tc._get_exact_sign_media(["124_0"], lang))[0]
+            self.assertEqual(card["caption"], sign["name"][lang])
+            self.assertEqual(card["url"], sign["image_url"])
+        self.assertEqual(json.dumps(sign, sort_keys=True), original)
+
+    def test_actual_media_reply_cannot_exclude_the_left_turn_right_hand_relationship(self):
+        data = json.loads((ROOT / "backend/tests/fixtures/kai-ploy/kai-sign124-and-left-turn-2026-10-17.json").read_text(encoding="utf-8"))
+        actual = next(r for r in data["records"] if r["request_id"] == "ploy-no-17")
+        fixed = self.tc._guard_left_turn_exclusion(actual["response"]["reply"], "no")
+        self.assertNotIn("gjelder ikke når du svinger til venstre", fixed)
+        self.assertIn("ingen godkjent video eller podcast", fixed)
+        self.assertIn("høyre side", fixed)
+        correct = "Høyreregelen gjelder ikke ved utkjøring fra en parkeringsplass."
+        self.assertEqual(self.tc._guard_left_turn_exclusion(correct, "no"), correct)
+
+    def test_actual_population_ranking_is_not_invented_to_justify_practice(self):
+        data = json.loads((ROOT / "backend/tests/fixtures/kai-ploy/kai-sign124-and-left-turn-2026-10-17.json").read_text(encoding="utf-8"))
+        actual = next(r for r in data["records"] if r["request_id"] == "ploy-no-10")
+        reply = actual["response"]["reply"]
+        fixed = self.tc._guard_unsupported_exam_ranking(reply)
+        self.assertNotIn("temaet flest stryker på", fixed)
+        self.assertIn("seks vikepliktreglene", fixed)
+        self.assertEqual(self.tc._guard_unsupported_exam_ranking("Du rapporterte to feil av seks svar."), "Du rapporterte to feil av seks svar.")
+
+    def test_actual_majority_loss_claim_is_removed_without_losing_the_plan(self):
+        data = json.loads((ROOT / "backend/tests/fixtures/kai-ploy/kai-ploy-roundabout-and-population-2026-10-17.json").read_text(encoding="utf-8"))
+        reply = next(r for r in data["cases"] if r["request_id"] == "ploy-no-10")["response"]["reply"]
+        fixed = self.tc._guard_unsupported_exam_ranking(reply)
+        self.assertNotIn("de fleste mister poeng", fixed)
+        self.assertEqual(fixed, reply.replace(" – det er der de fleste mister poeng", ""))
+        self.assertIn("10 minutter med vikeplikt-spørsmål", fixed)
+        measured = "Du mistet poeng på to av seks spørsmål."
+        self.assertEqual(self.tc._guard_unsupported_exam_ranking(measured), measured)
+
+    def test_actual_roundabout_plan_retains_dates_and_observes_the_whole_traffic_flow(self):
+        data = json.loads((ROOT / "backend/tests/fixtures/kai-ploy/kai-ploy-roundabout-and-population-2026-10-17.json").read_text(encoding="utf-8"))
+        reply = next(r for r in data["cases"] if r["request_id"] == "kai-36")["response"]["reply"]
+        fixed = self.tc._guard_roundabout_observation(reply)
+        safe = "Ikke lås blikket på én bil — se flyten i hele rundkjøringen"
+        self.assertEqual(fixed, reply.replace("se etter muligheter, ikke biler", safe))
+        self.assertIn("Fredag 23. oktober", fixed)
+        correct = "Rundkjøring: Se etter en trygg luke og observer bilene."
+        self.assertEqual(self.tc._guard_roundabout_observation(correct), correct)
+        self.assertIn("Always observe vehicles and the whole traffic flow", self.tc._build_system_prompt("no"))
+        self.assertNotIn("skal du ikke se etter biler", self.tc._build_system_prompt("no"))
+
+    def test_actual_hav_plan_summary_preserves_the_approved_mnemonic(self):
+        data = json.loads((ROOT / "backend/tests/fixtures/kai-ploy/kai-ploy-roundabout-and-population-2026-10-17.json").read_text(encoding="utf-8"))
+        reply = next(r for r in data["cases"] if r["request_id"] == "kai-36")["response"]["reply"]
+        fact = json.loads((ROOT / "backend/regelbank.json").read_text(encoding="utf-8"))["regler"]["hav_vegtrafikkloven_3"]["fakta"]["no"]
+        fixed = self.tc._ground_hav_plan_summary(reply, "no")
+        self.assertIn(fact, fixed)
+        self.assertIn("Tirsdag 20. oktober", fixed)
+        correct = "HAV: Hensynsfull, Aktpågivende, Varsom. Ikke skap fare."
+        self.assertEqual(self.tc._ground_hav_plan_summary(correct, "no"), correct)
+
+    def test_actual_plan_dates_are_grounded_in_calendar_not_inferred_weekdays(self):
+        from datetime import datetime, timezone
+        actual = json.loads((ROOT / "backend/tests/fixtures/kai-ploy/kai-plan-calendar-2026-10-17.json").read_text(encoding="utf-8"))
+        context = self.tc._plan_calendar_context(datetime(2026,10,17,tzinfo=timezone.utc))
+        days, _ = json.JSONDecoder().raw_decode(context.split("(data): ",1)[1])
+        self.assertEqual(days[0], {"date":"2026-10-17","weekday":"Saturday","days_from_today":0})
+        self.assertEqual(days[1], {"date":"2026-10-18","weekday":"Sunday","days_from_today":1})
+        self.assertEqual(days[2], {"date":"2026-10-19","weekday":"Monday","days_from_today":2})
+        self.assertIn("SAME date and task as the first scheduled step", context)
+        self.assertIn("does not re-date learner reports", context)
+        contract = self.tc._complete_request_contract(actual["verified_plan"], None, actual["request"]["message"])
+        self.assertIn("VERIFIED CALENDAR", contract)
+        self.assertNotIn("VERIFIED CALENDAR", self.tc._complete_request_contract({}, None, "What does the stop sign mean?"))
+
+    def test_actual_existing_weekday_plan_does_not_receive_new_calendar_dates(self):
+        data = json.loads((ROOT / "backend/tests/fixtures/kai-ploy/kai-calendar-scope-and-open-question-2026-10-17.json").read_text(encoding="utf-8"))
+        actual = next(r for r in data["records"] if r["request_id"] == "argus-th-6")
+        contract = self.tc._complete_request_contract(actual["verified_plan"], None, actual["request"]["message"])
+        self.assertNotIn("VERIFIED CALENDAR", contract)
+        self.assertIn("Do not add calendar dates", contract)
+        self.assertFalse(self.tc._requests_new_dated_plan("What date did our existing plan start?"))
+        self.assertTrue(self.tc._requests_new_dated_plan("Create a new plan with dates"))
+
+    def test_actual_relative_day_conflict_keeps_only_explicit_date(self):
+        data = json.loads((ROOT / "backend/tests/fixtures/kai-ploy/kai-calendar-scope-and-open-question-2026-10-17.json").read_text(encoding="utf-8"))
+        actual = next(r for r in data["records"] if r["request_id"] == "ploy-no-10")
+        fixed = self.tc._prefer_explicit_plan_dates(actual["response"]["reply"])
+        self.assertNotIn("i morgen, lørdag", fixed)
+        self.assertIn("lørdag 17.", fixed)
+        self.assertEqual(self.tc._prefer_explicit_plan_dates("tomorrow, Saturday 17 October"), "Saturday 17 October")
+        self.assertEqual(self.tc._prefer_explicit_plan_dates("พรุ่งนี้วันเสาร์ที่17ตุลาคม"), "วันเสาร์ที่17ตุลาคม")
+        self.assertEqual(self.tc._prefer_explicit_plan_dates("You reported six questions today."), "You reported six questions today.")
+
+    def test_actual_open_question_does_not_become_an_ungraded_error_count(self):
+        data = json.loads((ROOT / "backend/tests/fixtures/kai-ploy/kai-calendar-scope-and-open-question-2026-10-17.json").read_text(encoding="utf-8"))
+        actual = next(r for r in data["records"] if r["request_id"] == "kai-35")
+        fixed = self.tc._guard_unreported_success(actual["response"]["reply"], actual["history"], actual["request"]["message"], None, "no")
+        self.assertNotIn("der utgangspunktet ditt var feil", fixed)
+        self.assertIn("fire situasjoner", fixed)
+        self.assertIn("høyresvingen over fortauet", fixed)
+
+    def test_exam_key_capability_does_not_reformat_dates_or_numbered_rules(self):
+        text = "Jeg har ikke tilgang til den offisielle eksamensfasiten.\n\nLørdag 17. oktober: trafikkreglene § 7 nr. 2."
+        self.assertEqual(self.tc._ground_exam_key_availability("Gi meg eksamensfasiten", text, "no"), text)
+
+    def test_actual_prior_teacher_praise_is_not_verified_learner_success(self):
+        data = json.loads((ROOT / "backend/tests/fixtures/kai-ploy/kai-ploy-unverified-validation-2026-10-17.json").read_text(encoding="utf-8"))
+        for rid in ("kai-32", "kai-35"):
+            actual = next(r for r in data["records"] if r["request_id"] == rid)
+            fixed = self.tc._guard_unreported_success(actual["response"]["reply"], actual["history"], actual["request"]["message"], None, "no")
+            self.assertNotIn("rettet meg", fixed)
+            self.assertIn("venstresving", fixed.lower())
+        actual = next(r for r in data["records"] if r["request_id"] == "kai-32")
+        fixed = self.tc._ground_exam_key_availability(actual["request"]["message"], actual["response"]["reply"], "no")
+        self.assertNotIn("Den fasiten finnes ikke", fixed)
+        self.assertIn("Jeg har ikke tilgang til den offisielle eksamensfasiten.", fixed)
+
+    def test_actual_raised_thai_topics_are_not_diagnosed_from_open_questions(self):
+        data = json.loads((ROOT / "backend/tests/fixtures/kai-ploy/kai-ploy-unverified-validation-2026-10-17.json").read_text(encoding="utf-8"))
+        actual = next(r for r in data["records"] if r["request_id"] == "ploy-25")
+        fixed = self.tc._ground_raised_thai_topics(actual["response"]["reply"], actual["history"], "th")
+        self.assertNotIn("ยังไม่แน่ใจเรื่องวงเวียนกับป้ายห้ามเข้า", fixed)
+        self.assertIn("ถามเรื่องวงเวียนกับป้ายห้ามเข้า", fixed)
+        self.assertIn("คุณยังสับสนกฎทางขวา", fixed)
+        self.assertIn("ก้าวต่อไป", fixed)
+        self.assertEqual(self.tc._ground_raised_thai_topics("ยังไม่แน่ใจเรื่องวงเวียน", [], "th"), "ยังไม่แน่ใจเรื่องวงเวียน")
+        self.assertEqual(self.tc._ground_raised_thai_topics("ยังไม่แน่ใจเรื่องวงเวียน", [{"role":"user","content":"วงเวียนใครให้ทาง"}], "th", "ฉันไม่แน่ใจเรื่องวงเวียน"), "ยังไม่แน่ใจเรื่องวงเวียน")
+        self.assertEqual(self.tc._ground_raised_thai_topics("ยังไม่แน่ใจเรื่องวงเวียน", [{"role":"user","content":"ฉันไม่แน่ใจเรื่องวงเวียน"}], "th"), "ยังไม่แน่ใจเรื่องวงเวียน")
+
+    def test_actual_absolute_bus_challenge_uses_only_approved_rule_facts(self):
+        data = json.loads((ROOT / "backend/tests/fixtures/kai-ploy/kai-bus-agreement-and-mastery-2026-10-17.json").read_text(encoding="utf-8"))
+        actual = next(r for r in data["records"] if r["request_id"] == "kai-27")
+        rule = json.loads((ROOT / "backend/regelbank.json").read_text(encoding="utf-8"))["regler"]["bussregelen"]
+        for lang in ("no", "th", "en"):
+            expected = rule["fakta"][lang] + "\n\n" + rule["laeringsregel"][lang]
+            self.assertEqual(self.tc._approved_absolute_bus_claim_reply(actual["request"]["message"], lang), expected)
+        self.assertEqual(self.tc._approved_absolute_bus_claim_reply(actual["request"]["message"] + " og hva betyr stoppskilt?", "no"), "")
+        self.assertEqual(self.tc._approved_absolute_bus_claim_reply("nei du tar feil", "no"), "")
+        self.assertFalse(self.tc._is_frustrated(actual["request"]["message"]))
+
+    def test_actual_unverified_mastery_summary_keeps_facts_not_a_score(self):
+        data = json.loads((ROOT / "backend/tests/fixtures/kai-ploy/kai-bus-agreement-and-mastery-2026-10-17.json").read_text(encoding="utf-8"))
+        for rid in ("kai-30", "kai-32"):
+            actual = next(r for r in data["records"] if r["request_id"] == rid)
+            fixed = self.tc._guard_unreported_success(actual["response"]["reply"], actual["history"], actual["request"]["message"], None, "no")
+            self.assertNotIn("du tok meg", fixed.lower())
+        actual = next(r for r in data["records"] if r["request_id"] == "kai-33")
+        fixed = self.tc._guard_unreported_success(actual["response"]["reply"], actual["history"], actual["request"]["message"], None, "no")
+        self.assertNotIn("Det sitter", fixed)
+        self.assertNotIn("Du har fått med deg", fixed)
+        self.assertIn("farlig vegkryss", fixed)
+        self.assertIn("ta opp tråden", fixed)
 
     def test_actual_production_thai202_text_is_quarantined_in_context_and_card(self):
         sign = json.loads((ROOT / "backend/tests/fixtures/kai-ploy/production-sign202-thai-2026-10-17.json").read_text(encoding="utf-8"))

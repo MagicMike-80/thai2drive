@@ -268,10 +268,12 @@ class DeterministicPromptTests(unittest.TestCase):
                 self.assertIn("DIRECT ANSWER OVERRIDE", system)
                 self.assertEqual([d for d in col.inserted if d.get("role") == "assistant"][0]["v4_stage"], "5")
 
-    def test_frustration_has_apology_and_no_interrogation(self):
+    def test_frustration_checks_facts_without_forcing_an_error_admission(self):
         response, system, _ = _run_chat("Du svarer ikke på det jeg spør om", "no")
         self.assertIn("FRUSTRATION BRAKE", system)
-        self.assertTrue(response.reply.startswith("Beklager"))
+        self.assertIn("Check the approved facts before agreeing", system)
+        self.assertIn("never admit a factual error automatically", system)
+        self.assertEqual(response.reply, "Greit.")
         self.assertNotIn("?", response.reply)
 
     def test_fact_request_does_not_attach_old_sign_context(self):

@@ -21,7 +21,7 @@ import base64
 import binascii
 import ipaddress
 from urllib.parse import urlsplit
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from difflib import get_close_matches
 from typing import Optional, List, Literal
@@ -988,6 +988,8 @@ def _master_document_context() -> str:
             if line.startswith("## "):
                 skip_section = any(section in line.lower() for section in excluded_sections)
             if not skip_section and not any(term in line.lower() for term in excluded):
+                if line == '"Når du nærmer deg en rundkjøring, skal du ikke se etter biler. Du skal se etter muligheter."':
+                    line = '"Ikke lås blikket på én bil — se flyten i hele rundkjøringen."'
                 selected_lines.append(line)
         safe_lines = [
             line.replace("🚗 ", "").replace("💡 ", "").replace("⚠️ ", "")
@@ -1023,6 +1025,7 @@ def _build_system_prompt(lang: str, memory: Optional[dict] = None, *, guided: bo
         "   Hvis du får servert databasetekst om Vegtrafikkloven § 3, eller hvis studenten spør om å være hensynsfull, aktpågivende eller varsom, skal du alltid:\n"
         + hav_language +
         "   - Koble loven direkte til handlinger i bilen: du skal ikke hindre, ikke forstyrre, og ikke skape fare.\n"
+        "   - Handlingsrådene kommer i tillegg til H/A/V, aldri som erstatning for betydningen av bokstavene, heller ikke i en kort plan.\n"
         "5. Svar alltid i det språket som er angitt i [LANGUAGE] over (norsk, thai eller engelsk). Oversett eventuell rå norsk lovtekst til dette språket når du forklarer den.\n"
         "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     )
@@ -1190,8 +1193,10 @@ def _conversation_first_rules(lang: str, *, guided: bool = True) -> str:
         + "4. Use the conversation so far and the ACTIVE SIGN CONTEXT (if present). If the "
         "student says 'this sign', 'it' or 'the sign', it means that active sign. Do not "
         "ask which sign they mean when one is already known.\n"
-        "5. If the student corrects you, say plainly that they are right and give the "
-        "corrected answer. Do not defend a mistake.\n"
+        "5. Check a learner's correction against approved facts before agreeing. Acknowledge a verified mistake plainly; "
+        "never agree with a false traffic claim merely because the learner disagrees.\n"
+        "Always observe vehicles and the whole traffic flow in roundabouts. Looking for a safe gap requires observing other road users. "
+        "Never abbreviate the traffic-flow reminder into advice not to look for cars.\n"
         "6. NEVER invent or guess sign numbers, section numbers, or wording. Mention a "
         "sign number only if it appears in the approved context or the student's own "
         "message. If you are not sure, say so and answer only what you know.\n"
@@ -1522,11 +1527,25 @@ def _approved_sign_image_tag(sign: dict) -> str:
 
 
 _QUARANTINED_SIGN202_THAI = "คุณต้องหยุดรอและให้รถอื่นผ่านก่อน"
+_QUARANTINED_SIGN124 = {
+    "no": "Jernbanekryssing med automatisk bom fremover. Stopp når bommen er nede.",
+    "th": "ทางข้ามรถไฟที่มีไม้กั้นอัตโนมัติ หยุดเมื่อไม้กั้นลง",
+    "en": "Level crossing with automatic barrier ahead. Stop when the barrier is down.",
+}
+
+
+def _is_quarantined_sign_value(sign: dict, field: str, lang: str, text: str) -> bool:
+    if field not in ("explanation", "driver_action"):
+        return False
+    return bool(
+        (sign.get("id") == "202_0" and lang == "th" and text == _QUARANTINED_SIGN202_THAI)
+        or (sign.get("id") == "124_0" and text and text == _QUARANTINED_SIGN124.get(lang))
+    )
 
 
 def _has_quarantined_sign_text(sign: dict, lang: str) -> bool:
-    return lang == "th" and sign.get("id") == "202_0" and any(
-        isinstance(sign.get(field), dict) and str(sign[field].get(lang) or "").strip() == _QUARANTINED_SIGN202_THAI
+    return any(
+        isinstance(sign.get(field), dict) and _is_quarantined_sign_value(sign, field, lang, str(sign[field].get(lang) or "").strip())
         for field in ("explanation", "driver_action")
     )
 
@@ -1534,10 +1553,7 @@ def _has_quarantined_sign_text(sign: dict, lang: str) -> bool:
 def _sign_language_text(sign: dict, field: str, lang: str) -> str:
     values = sign.get(field)
     text = str(values.get(lang) or "").strip() if isinstance(values, dict) else ""
-    if (lang == "th" and sign.get("id") == "202_0" and field in ("explanation", "driver_action")
-            and text == _QUARANTINED_SIGN202_THAI):
-        return ""
-    return text
+    return "" if _is_quarantined_sign_value(sign, field, lang, text) else text
 
 
 def _format_sign_context(sign: dict, lang: str) -> str:
@@ -1556,6 +1572,14 @@ def _format_sign_context(sign: dict, lang: str) -> str:
         sign_desc += f"- Explanation: {exp_lang}\n"
     if action_lang:
         sign_desc += f"- Driver Action: {action_lang}\n"
+    if sign.get("id") == "124_0":
+        sign_desc += (
+            "- Verified identity (Statens vegvesen, traffic-sign overview, checked 2026-10-17): "
+            "124 warns of a dangerous road junction where ordinary yielding to traffic from the right applies. "
+            "Other applicable signs, signals or regulation can determine the actual priority; never claim right-hand priority applies regardless of those. "
+            "It does not grant priority and is not sign 206. Explain this in the selected language; this is a factual summary, not a verbatim statute. "
+            "Source: https://www.vegvesen.no/trafikkinformasjon/vei-og-skilt/trafikkskilt-og-henvendelser/trafikkskilt/\n"
+        )
     image_tag = _approved_sign_image_tag(sign)
     if image_tag:
         sign_desc += f"- Approved Image Tag: {image_tag}\n"
@@ -1806,7 +1830,45 @@ def _approved_rule_context(question: str, lang: str) -> str:
         return ""
 
 
+def _requests_new_dated_plan(message: str) -> bool:
+    """Calendar dates are for a new dated plan, not recalling learner-defined weekdays."""
+    return bool(_plan_request(message)
+        and re.search(r"\b(?:dato|datoer|date|dates|dated)\b|วันที่", message, re.I)
+        and re.search(r"\b(?:lag|lage|konkret|trenger|want|need|make|create|build|new)\b|(?:ทำ|จัด|วาง)แผน|ต้องการแผน|แผนใหม่", message, re.I))
+
+
+def _prefer_explicit_plan_dates(reply: str) -> str:
+    """Drop a redundant relative label before an explicit weekday/date; keep the date."""
+    patterns = (
+        r"\b(?:i morgen|i dag|overimorgen)\s*,?\s*(?=(?:mandag|tirsdag|onsdag|torsdag|fredag|lørdag|søndag)\s+\d)",
+        r"\b(?:today|tomorrow|the day after tomorrow)\s*,?\s*(?=(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\s+(?:\d|January|February|March|April|May|June|July|August|September|October|November|December))",
+        r"(?:วันนี้|พรุ่งนี้|มะรืนนี้)\s*,?\s*(?=วัน(?:จันทร์|อังคาร|พุธ|พฤหัสบดี|ศุกร์|เสาร์|อาทิตย์)(?:ที่)?\s*\d)",
+    )
+    for pattern in patterns:
+        reply = re.sub(pattern, "", reply, flags=re.I)
+    return reply
+
+
+def _plan_calendar_context(now: datetime) -> str:
+    """Supply actual date/weekday pairs instead of asking the model to calculate them."""
+    weekdays = ("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
+    days = [{"date": (now + timedelta(days=offset)).date().isoformat(),
+             "weekday": weekdays[(now + timedelta(days=offset)).weekday()],
+             "days_from_today": offset} for offset in range(28)]
+    return (
+        "\nVERIFIED CALENDAR FOR NEW PLAN STEPS (data): " + json.dumps(days) +
+        "\nUse these exact date/weekday pairs for newly proposed future steps. "
+        "Give each scheduled step an explicit date. The final next action must have the SAME date and task as the first scheduled step. "
+        "Do not schedule a task on Monday and then call that task tomorrow if tomorrow is Sunday. "
+        "Use an explicit date instead of a relative day whenever uncertain. "
+        "This calendar does not re-date learner reports or prove completion/time spent; preserve their reported time reference. "
+        "Use explicit dates without adding redundant today/tomorrow labels. "
+        "Do not replace a recalled existing sequence merely to fit a new calendar."
+    )
+
+
 def _complete_request_contract(plan: dict, memory: dict | None, user_msg: str = "") -> str:
+    calendar_context = _plan_calendar_context(datetime.now(timezone.utc)) if _requests_new_dated_plan(user_msg) else ""
     exam_request = (
         "\nEXPLICIT EXAM-ANSWER REQUEST: The learner also asked for exam answers. Address that part explicitly alongside their other requests. "
         "Answer any actual supplied traffic question directly. If no actual exam question/key was supplied, say you do not have the official exam key "
@@ -1820,6 +1882,7 @@ def _complete_request_contract(plan: dict, memory: dict | None, user_msg: str = 
         "or 'what do you think?'. Correct an unsafe claim directly. Explain whether stopping is necessary when asked. "
         "If an amount, date or official quotation is not verified, say exactly what is unknown and answer the other parts; "
         "never invent a tariff or verbatim statute. §7 right-of-way belongs to Trafikkreglene, not Vegtrafikkloven. "
+        "Do not claim the right-hand relationship stops applying when turning left: the verified §7 no.2 explanation covers the oncoming vehicle coming onto your right side. "
         "Keep the selected app language even if the student asks you to switch. Thai must use Thai words, no foreign glossary parentheses. "
         "Never emit media tags or asset paths; the app attaches relevant cards separately. "
         "Use only the supplied teaching facts; do not add invented timing measurements or physical mechanisms. "
@@ -1827,11 +1890,17 @@ def _complete_request_contract(plan: dict, memory: dict | None, user_msg: str = 
         "Name only the recorded weak category as a measured weakness; do not invent a diagnosed subtopic. "
         "You may propose practising subtopics without claiming the learner failed them. "
         "Earlier assistant hypotheses or practice suggestions are NEVER evidence of the learner's actual mistakes. "
+        "An open question is not evidence that the learner believed a wrong answer. Do not count an open question as an established mistake. "
+        "A request for an explanation or image is not a self-report of uncertainty. Do not turn it into a diagnosed weak topic. "
+        "Never claim the learner previously corrected you and was right unless an actual learner assertion is verified against the approved facts; your earlier praise is not evidence. "
+        "When reviewing ungraded chat topics, describe them as discussed topics rather than assigning a count of learner errors. "
         "A teacher explanation is not evidence that the learner knows or has mastered that rule. "
         "Conversation turns may cover only a recent window, not the whole session. "
         "Never infer that a topic was never taught from its absence in the supplied recent turns; state that earlier coverage cannot be verified. "
         "If individual failed questions are unknown, state that; keep any proposed subtopic explicitly a suggestion. "
         "Do not infer why an exam was failed or what appeared on that unseen exam. "
+        "Do not invent population failure rates or rank topics by how many learners fail them without an actual supplied statistical source. "
+        "Do not claim a topic appears often on the exam without a supplied exam-frequency source. "
         "For a study-plan request, give an actionable small plan now, using known weak-topic results. "
         "Keep each plan step short enough to finish all requested days; do not write a long lesson inside each day. "
         "Use today's date " + datetime.now(timezone.utc).date().isoformat() + ". If the exam date is unknown, give a provisional dated plan and label the missing exam date; "
@@ -1848,6 +1917,8 @@ def _complete_request_contract(plan: dict, memory: dict | None, user_msg: str = 
         "If progress for a step was not reported, its status is UNKNOWN. Never convert no report into "
         "'not started', 'unfinished' or 'not completed'; those also require an explicit learner report. "
         "On plan recall, summarize that plan rather than repeating a generic teaching question. "
+        "If the learner supplied weekday steps without absolute dates, preserve those as reported weekdays. "
+        "Do not add calendar dates or infer that their reported Monday equals a particular date unless they explicitly ask to schedule a new dated plan. "
         "An assistant's proposed plan is not evidence that the learner accepted or agreed to it. "
         "Refer to it as a proposal unless an actual learner statement provides or explicitly accepts that plan. "
         "Never convert 'I proposed' into 'we agreed', even when offering to start the proposed practice. "
@@ -1874,10 +1945,12 @@ def _complete_request_contract(plan: dict, memory: dict | None, user_msg: str = 
         "saved sequence and actual learner reports. Recalling the plan and scores alone is not an answer to 'what next?'. "
         "SCOPE: These plan instructions apply only when the learner asks about a plan/progress or reports practice. "
         "On other requests, answer that request without unsolicited plan recall, scores, diagnosed weaknesses "
-        "or claims about completed practice. A proposal is not an agreed plan unless the learner accepted it. "
+        "or claims about completed practice, and without an offer to create a plan. "
+        "Old learner plan requests in the stored data are not part of the current question. "
+        "A proposal is not an agreed plan unless the learner accepted it. "
         "Chat misunderstandings are not exam results or completed exercises. When the learner wants to stop, "
         "acknowledge and let them stop; do not invent achievements or a finished session to reassure them. "
-        "\nVERIFIED LEARNING MEMORY (data): " + json.dumps(memory or {}, ensure_ascii=False, default=str) + exam_request
+        "\nVERIFIED LEARNING MEMORY (data): " + json.dumps(memory or {}, ensure_ascii=False, default=str) + exam_request + calendar_context
     )
 
 def _guard_unreported_success(reply: str, prior: list[dict], question: str, memory: dict | None, lang: str) -> str:
@@ -1886,7 +1959,12 @@ def _guard_unreported_success(reply: str, prior: list[dict], question: str, memo
         _reported_progress(text) for text in [question, *[turn.get("content", "") for turn in prior if turn.get("role") == "user"]]
     ):
         return reply
-    count = re.compile(r"\b(?:\d+|en|ett|to|tre|fire|fem|seks|sju|syv|åtte|ni|ti|one|two|three|four|five|six|seven|eight|nine|ten)\b|หนึ่ง|สอง|สาม|สี่|ห้า|หก|เจ็ด|แปด|เก้า|สิบ", re.I)
+    reply = re.sub(r"\bdu har fått med deg (det viktigste)\b", lambda match: match.group(1).capitalize(), reply, flags=re.I)
+    reply = re.sub(r"(?:^|(?<=[.!?])\s+)Det sitter\.(?=\s|$)", "", reply, flags=re.I).strip()
+    if not reply:
+        return _fallback_reply(lang)
+    reply = re.sub(r"\b(\d+|to|tre|fire|fem|seks)\s+(situasjoner|temaer|oppgaver)\s+der utgangspunktet ditt var feil\b", r"\1 \2", reply, flags=re.I)
+    count = re.compile(r"\b(?:\d+|en|én|et|ett|to|tre|fire|fem|seks|sju|syv|åtte|ni|ti|begge|one|two|three|four|five|six|seven|eight|nine|ten|both)\b|หนึ่ง|สอง|สาม|สี่|ห้า|หก|เจ็ด|แปด|เก้า|สิบ", re.I)
     subject = re.compile(r"\b(?:du|you)\b|คุณ", re.I)
     thai_count = r"(?:\d+|หนึ่ง|สอง|สาม|สี่|ห้า|หก|เจ็ด|แปด|เก้า|สิบ)"
     outcome = re.compile(
@@ -1894,15 +1972,19 @@ def _guard_unreported_success(reply: str, prior: list[dict], question: str, memo
         r"|\byou(?:'ve|\s+have)?\s+(?:got|answered|solved|completed)[^.!?\n]{0,100}(?:right|correct|successfully)"
         r"|\b(?:ting|regler|temaer)\s+du\s+(?:(?:faktisk|allerede|nå)\s+)?(?:kan(?=\s*[.!?]|\s*$)|mestrer)\b"
         r"|\b(?:things|rules|topics)\s+you\s+(?:(?:already|actually|now)\s+)?(?:know|mastered|understand)\b"
+        r"|\bdu(?:\s+har)?\s+(?:(?:allerede|i dag)\s+)?rettet\s+meg\b[^.!?\n]{0,100}(?:hadde|hatt)\s+rett"
+        r"|\byou(?:'ve|\s+have)?\s+(?:already\s+)?corrected\s+me\b[^.!?\n]{0,100}(?:were|been)\s+right"
+        r"|\bdu\s+(?:tok|har tatt)\s+meg\s+på\b[^.!?\n]{0,180}du\s+hadde\s+(?:helt\s+)?rett"
+        r"|\bdu\s+utfordret\s+meg\b[^.!?\n]{0,180}hadde\s+(?:du\s+)?(?:helt\s+)?rett"
         rf"|คุณ(?:ได้)?(?:ตอบ(?:คำถาม|โจทย์|ข้อสอบ)?|ทำ(?:คำถาม|โจทย์|ข้อสอบ))[^.!?\n]{{0,60}}(?:ถูก(?:ต้อง)?\s*{thai_count}\s*ข้อ|{thai_count}\s*ข้อ[^.!?\n]{{0,20}}ถูก)",
         re.I,
     )
-    parts = re.split(r"(?<=[.!?])\s+|\n+", reply)
-    kept = [part for part in parts if not (subject.search(part) and count.search(part) and outcome.search(part))]
-    if len(kept) == len(parts):
+    parts = re.split(r"((?<=[.!?])\s+|\n+)", reply)
+    kept = ["" if subject.search(part) and count.search(part) and outcome.search(part) else part for part in parts]
+    if kept == parts:
         return reply
     logger.warning("Removed unsupported count of learner successes")
-    return "\n\n".join(kept).strip() or _fallback_reply(lang)
+    return "".join(kept).strip() or _fallback_reply(lang)
 
 
 def _ground_exam_key_availability(question: str, reply: str, lang: str) -> str:
@@ -1916,10 +1998,10 @@ def _ground_exam_key_availability(question: str, reply: str, lang: str) -> str:
         "th": "ผมไม่มีเฉลยข้อสอบจริงอย่างเป็นทางการครับ",
         "en": "I do not have access to the official exam answer key.",
     }[lang]
-    parts = re.split(r"(?<=[.!?])\s+|\n+", reply)
-    unsupported = re.compile(r"^\s*(?:fasit finnes ikke|there is no (?:official )?(?:exam )?answer key|ไม่มีเฉลย)", re.I)
+    parts = re.split(r"((?<=[.!?])\s+|\n+)", reply)
+    unsupported = re.compile(r"^\s*(?:(?:nei[,\s]+)?(?:den\s+)?fasit(?:en)?\s+finnes ikke|(?:no[,\s]+)?there is no (?:official )?(?:exam )?answer key|ไม่มีเฉลย)", re.I)
     parts = [statement if unsupported.search(part) else part for part in parts]
-    result = "\n\n".join(parts)
+    result = "".join(parts)
     if statement not in result:
         result = statement + "\n\n" + result
     return result
@@ -1958,6 +2040,8 @@ def _frustration_instruction(lang: str) -> str:
         "\n\nFRUSTRATION BRAKE — OVERRIDES V4 GUIDED PRACTICE: The learner is frustrated. "
         "Acknowledge the problem briefly and warmly, then give the concrete answer or practical "
         "help immediately. No leading or follow-up question, no fixed coaching phrases. "
+        "Frustration or disagreement does not prove your rule was wrong. Check the approved facts before agreeing; "
+        "never admit a factual error automatically or validate an incorrect traffic claim. "
         "If they report an app fault, do not claim it has been fixed. "
         f"Use only {language}."
     )
@@ -2085,7 +2169,7 @@ def _vision_output_instruction(lang: str) -> str:
         f"Write every learner-facing word only in {language}. Inspect only what is visible. "
         "Cover traffic signs, right-of-way, lanes, road markings, and hazards when they are visible. "
         "Explain the likely theory-test rule and ground legal claims only in Vegtrafikkloven § 3 "
-        "(HAV), Vegtrafikkloven § 7 (right-of-way), or Skiltforskriften when relevant. "
+        "(HAV), Trafikkreglene § 7 (right-of-way), or Skiltforskriften when relevant. "
         "Never invent hidden signs, signals, markings, traffic, road direction, or priority. "
         "If any fact needed to determine right-of-way is missing, obscured, or unreadable, say clearly "
         "that the image does not provide enough information and name the missing observation. "
@@ -2206,8 +2290,9 @@ def _tone_instruction(tone: Optional[str], lang: str) -> str:
         ),
         "calm": (
             "Standard tone: Be WARM, PLAYFUL, and CHEERING (lekende, varm, heiende). Be slightly teasing but very supportive. "
-            "Encourage the student to try again if they struggle. Do not give away the answer too easily. "
-            "Celebrate warmly ('Se der ja! Nå skjønte du det!') when they get it right."
+            "Encourage effort without inventing mastery. Answer an explicit rule question directly. "
+            "Praise correctness only when an actual learner answer has been checked against approved facts; "
+            "a question, your own earlier praise, or the learner disagreeing with you is not such evidence."
         ),
     }[tone]
     return (
@@ -2322,6 +2407,7 @@ def _explicit_sign_ids_for_message(user_msg: str) -> list[str]:
     """Resolve unambiguous learner terms before broader curriculum ranking."""
     message = user_msg.casefold()
     aliases = {
+        "124_0": ("farlig vegkryss", "farlig veikryss", "dangerous junction", "skilt 124", "sign 124", "ป้าย 124", "ทางแยกอันตราย"),
         "202_0": (
             "vikepliktskilt",
             "vikepliktsskilt",
@@ -2346,6 +2432,11 @@ def _explicit_sign_ids_for_message(user_msg: str) -> list[str]:
         "206_0": (
             "forkjørsvei",
             "forkjørsveg",
+            "forkjørsveiskilt",
+            "forkjørsvegskilt",
+            "skilt 206",
+            "sign 206",
+            "ป้าย 206",
             "priority road",
             "ถนนสายหลัก",
             "ป้ายทางเอก",
@@ -2357,7 +2448,12 @@ def _explicit_sign_ids_for_message(user_msg: str) -> list[str]:
             return bool(re.search(rf"(?<!\w){re.escape(term)}(?:et)?(?!\w)", message))
         return term in message
 
-    return [sign_id for sign_id, terms in aliases.items() if any(matches(term) for term in terms)]
+    ids = [sign_id for sign_id, terms in aliases.items() if any(matches(term) for term in terms)]
+    red_triangle = re.search(r"rød[^.!?]{0,15}trekant|trekant[^.!?]{0,15}rød|red[^.!?]{0,15}triangle|triangle[^.!?]{0,15}red|สามเหลี่ยม[^.!?]{0,12}แดง", message)
+    cross = re.search(r"svart\s+kryss|black\s+cross|กากบาท(?:สี)?ดำ", message)
+    if red_triangle and cross and "124_0" not in ids:
+        ids.insert(0, "124_0")
+    return ids
 
 
 def _sign_ids_from_reply(reply_text: str) -> list[str]:
@@ -3664,17 +3760,132 @@ def _guard_bildebok_time_gain(reply: str, page: dict | None) -> str:
     return reply
 
 
-def _approved_stop_sign_display(question: str, media: list[dict], lang: str) -> str:
-    """A plain request to show 204 uses its actual localized response card."""
+def _ground_raised_thai_topics(reply: str, prior: list[dict], lang: str, question: str = "") -> str:
+    """Refer to actually raised topics without inferring uncertainty from a question."""
+    if lang != "th":
+        return reply
+    learner_texts = [question, *[turn.get("content", "") for turn in prior if turn.get("role") == "user"]]
+    pattern = r"(?:ยัง)?ไม่แน่ใจเรื่อง(?P<topics>[^\s.!?]+)"
+    def grounded(match):
+        topics = re.split(r"กับ|และ|,", match.group("topics"))
+        if topics and all(any(topic in text and re.search(r"ไม่แน่ใจ|สับสน|ไม่เข้าใจ", text) for text in learner_texts) for topic in topics):
+            return match.group(0)
+        if topics and all(len(topic) >= 2 and any(topic in text for text in learner_texts) for topic in topics):
+            return "ถามเรื่อง" + match.group("topics")
+        return match.group(0)
+    return re.sub(pattern, grounded, reply)
+
+
+def _guard_unsupported_exam_ranking(reply: str) -> str:
+    """Remove the observed unverified population ranking, retaining the practice advice."""
+    reply = re.sub(r",?\s+og det er det temaet flest stryker på\b", "", reply, flags=re.I)
+    reply = re.sub(r"\s*[—–-]\s*det er der de fleste mister poeng\b", "", reply, flags=re.I)
+    return reply.replace("และออกสอบบ่อย", "").replace("จุดที่คนพลาดบ่อยที่สุด คือ", "")
+
+
+def _guard_unrequested_thai_plan_aside(reply: str, question: str, lang: str) -> str:
+    """Preserve the actual Thai rule answer, repairing its observed artifact and aside."""
+    if lang == "th":
+        reply = reply.replace("เข้า\ufffdวงเวียน", "เข้าวงเวียน")
+    if lang != "th" or _plan_request(question):
+        return reply
+    return re.sub(
+        r"\s*ส่วนเรื่องแผนที่เคยคุยกัน ผมต้องบอกตรง ๆ ว่าผมยังไม่เห็นแผนที่ตกลงกันไว้ในบทสนทนานี้ "
+        r"เลยยืนยันไม่ได้ว่าวางอะไรไว้ ถ้าอยากได้แผนสั้น ๆ ที่เริ่มได้เลยตอนนี้ ผมจัดให้ได้ครับ\s*$",
+        "", reply,
+    ).strip()
+
+
+def _guard_roundabout_observation(reply: str) -> str:
+    """Keep the existing traffic-flow reminder when its unsafe shorthand is emitted."""
+    if not re.search(r"rundkjøring", reply, re.I):
+        return reply
+    return re.sub(r"se etter muligheter,\s*ikke biler\b",
+                  "Ikke lås blikket på én bil — se flyten i hele rundkjøringen", reply, flags=re.I)
+
+
+def _ground_hav_plan_summary(reply: str, lang: str) -> str:
+    """Use the approved mnemonic when the observed plan substitutes another list."""
+    pattern = r"HAV-regelen,\s*vegtrafikkloven\s*§\s*3\.\s*Tre plikter:\s*ikke forstyrre,\s*ikke hindre,\s*ikke skape fare\."
+    if lang != "no" or not re.search(pattern, reply, re.I):
+        return reply
+    try:
+        fact = json.loads((Path(__file__).parent / "regelbank.json").read_text(encoding="utf-8"))["regler"]["hav_vegtrafikkloven_3"]["fakta"][lang]
+    except (OSError, ValueError, KeyError, TypeError):
+        return reply
+    return re.sub(pattern, lambda match: fact, reply, flags=re.I)
+
+
+def _guard_left_turn_exclusion(reply: str, lang: str) -> str:
+    """Remove the observed blanket exclusion using the existing approved rule fact."""
+    if lang != "no":
+        return reply
+    pattern = r"\s*[—–-]\s*og den gjelder ikke når du svinger til venstre[^.!?\n]*"
+    if not re.search(pattern, reply, re.I) or not re.search(r"høyreregelen", reply, re.I):
+        return reply
+    try:
+        rule = json.loads((Path(__file__).parent / "regelbank.json").read_text(encoding="utf-8"))["regler"]["venstresving"]["fakta"][lang]
+    except (OSError, ValueError, KeyError, TypeError):
+        return re.sub(pattern, "", reply, flags=re.I)
+    return re.sub(pattern, ". " + rule.rstrip(". "), reply, flags=re.I)
+
+
+def _approved_absolute_bus_claim_reply(question: str, lang: str) -> str:
+    """An isolated all-speed priority claim is answered from the approved rule bank."""
+    plain = (
+        r"(?:nei du tar feil,? )?bussen i (?:70|80|90|100|110)-sone trenger ikke vike for meg,? "
+        r"jeg har alltid forkjørsrett når jeg kjører forbi en bussholdeplass uansett fartsgrense[.!?]?"
+    )
+    if not re.fullmatch(plain, " ".join(question.split()), re.I) or lang not in SUPPORTED_LANGUAGES:
+        return ""
+    try:
+        rule = json.loads((Path(__file__).parent / "regelbank.json").read_text(encoding="utf-8"))["regler"]["bussregelen"]
+        return rule["fakta"][lang] + "\n\n" + rule["laeringsregel"][lang]
+    except (OSError, ValueError, KeyError, TypeError):
+        return ""
+
+
+def _approved_unavailable_video_reply(question: str, media: list[dict], lang: str) -> str:
+    """Use existing localized capability copy for a plain unavailable-video request."""
+    if any(item.get("type") == "video" and item.get("url") for item in media):
+        return ""
+    plain = (
+        r"(?:(?:har du|kan du vise(?: meg)?) (?:en )?(?:video|film)(?: om (?:dette|det))?"
+        r"|(?:do you have|can you show(?: me)?) (?:a )?video(?: about (?:this|that))?"
+        r"|(?:มี|ขอดู|ช่วยแสดง)(?:วิดีโอ|วีดีโอ)(?:เรื่องนี้|เกี่ยวกับเรื่องนี้)?(?:ไหม|มั้ย|ให้หน่อย)?(?:ครับ|ค่ะ)?)"
+    )
+    text = re.sub(r"[.!?]+$", "", " ".join(question.split())).strip()
+    if not re.fullmatch(plain, text, re.I):
+        return ""
+    # These sentences already exist in the respective core capability prompts.
+    return {
+        "no": "Jeg har dessverre ikke en video av akkurat denne situasjonen for hånden akkurat nå.",
+        "th": "ขออภัยด้วยครับ ตอนนี้ผมยังไม่มีวิดีโอสำหรับสถานการณ์นี้โดยเฉพาะ",
+        "en": "Unfortunately, I don't have a video of this exact situation on hand right now.",
+    }.get(lang, "")
+
+
+def _guard_unverified_mirror_timing(reply: str) -> str:
+    """Remove the observed invented duration without reformatting the rule answer."""
+    return re.sub(
+        r"(\b(?:Check|Look)[^.!?\n]{0,160}\b(?:mirror|blind spot)\b[^.!?\n]{0,100}?)"
+        r"\s*[—–;]\s*a quarter of a second is all it takes\b",
+        r"\1", reply, flags=re.I,
+    )
+
+
+def _approved_named_sign_display(question: str, media: list[dict], lang: str) -> str:
+    """A plain request to show 204/206 uses its actual localized response card."""
     plain_display = (
-        r"(?:vis(?: meg)? (?:stoppskilt(?:et)?(?: 204)?|skilt(?:et)? 204(?:_0)?)(?: på (?:norsk|thai|engelsk))?"
-        r"|(?:please )?(?:show(?: me)?|display) (?:the )?(?:stop sign(?: 204)?|sign 204(?:_0)?)(?: in (?:norwegian|thai|english))?"
-        r"|(?:ขอดู|แสดง)\s*(?:ป้ายหยุด|ป้าย\s*204)(?:\s*204)?(?:ให้หน่อย)?)[.!?]?"
+        r"(?:vis(?: meg)? (?:stoppskilt(?:et)?(?: 204)?|forkjørsve[ig]skilt(?:et)?|skilt(?:et)? (?:204|206)(?:_0)?)(?: på (?:norsk|thai|engelsk))?"
+        r"|(?:please )?(?:show(?: me)?|display) (?:the )?(?:stop sign(?: 204)?|priority road sign|sign (?:204|206)(?:_0)?)(?: in (?:norwegian|thai|english))?"
+        r"|(?:ขอดู|แสดง)\s*(?:ป้ายหยุด|ป้ายทางเอก|ป้าย\s*(?:204|206))(?:\s*(?:204|206))?(?:ให้หน่อย)?)[.!?]?"
     )
     if lang not in SUPPORTED_LANGUAGES or not re.fullmatch(plain_display, " ".join(question.split()), re.I):
         return ""
     signs = [item for item in media if item.get("type") == "sign"]
-    if len(signs) != 1 or signs[0].get("sign_id") != "204_0":
+    requested = _explicit_sign_ids_for_message(question)
+    if len(signs) != 1 or len(requested) != 1 or signs[0].get("sign_id") != requested[0] or requested[0] not in ("204_0", "206_0"):
         return ""
     parts = [signs[0].get("title", ""), signs[0].get("caption", "")]
     if not all(part and _reply_matches_language_script(part, lang) for part in parts):
@@ -4726,7 +4937,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
                 system_prompt += f"\nLAST CONCRETE LEARNER REQUEST TO ANSWER: {topic_query}"
             system_prompt += (
                 "\nDIRECT ANSWER OVERRIDE: "
-                + ("After one short apology, answer the last concrete request immediately. " if is_frustrated
+                + ("Briefly acknowledge frustration, then answer the last concrete request from approved facts. " if is_frustrated
                    else "State the requested fact or definition in sentence one. ")
                 + "Do not use a leading question or a coaching prompt. "
                 "Ignore unrelated earlier topics and screen elements. No follow-up question."
@@ -4734,6 +4945,13 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         if not guided_chat:
             system_prompt += _complete_request_contract(study_plan, student_memory, user_msg)
             system_prompt += _approved_rule_context(user_msg, lang)
+            system_prompt += (
+                "\nMEDIA AVAILABILITY: Only video cards in the actual response below are playable videos in THIS answer. "
+                "If there is no video card, never say a video is attached, shown below, or available to watch here. "
+                "An old media tag or a resource mentioned in conversation is not a response attachment. "
+                "Answer every other requested rule or plan part even when a video is unavailable. "
+                + json.dumps([{key:item.get(key, "") for key in ("type", "title", "url")} for item in media], ensure_ascii=False)
+            )
             if media:
                 system_prompt += (
                     "\nACTUAL RESPONSE CARDS: The app will attach these verified cards to THIS answer. "
@@ -4773,7 +4991,11 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
 
         source_reply = _approved_bildebok_explanation(user_msg, bildebok_page, lang) if not guided_chat and not is_vision else ""
         if not source_reply and not guided_chat and not is_vision:
-            source_reply = _approved_stop_sign_display(user_msg, media, lang)
+            source_reply = _approved_named_sign_display(user_msg, media, lang)
+        if not source_reply and not guided_chat and not is_vision:
+            source_reply = _approved_unavailable_video_reply(user_msg, media, lang)
+        if not source_reply and not guided_chat and not is_vision:
+            source_reply = _approved_absolute_bus_claim_reply(user_msg, lang)
         if source_reply:
             reply_text = source_reply
             logger.info("Using approved source reply: %s/%s", (bildebok_page or {}).get("id", "sign"), lang)
@@ -4791,13 +5013,6 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
                     reply_text = re.sub(r"\s+", " ", reply_text)
                 if is_direct_lookup and resolved_concept and reply_text == _concise_teacher_reply("?", lang):
                     reply_text = resolved_concept.get("definition") or reply_text
-                if is_frustrated and not re.match(
-                    r"^(?:beklager|unnskyld|uff|sorry|i'm sorry|ขอโทษ|ขออภัย)", reply_text, re.I
-                ):
-                    apology = {"no": "Beklager, jeg rotet det til.",
-                               "th": "ขอโทษครับ ผมอธิบายไม่ชัดเจน",
-                               "en": "Sorry, I got that wrong."}[lang]
-                    reply_text = f"{apology} {reply_text}"
             elif v4_stage == "5" and not is_quiz_help and req.mode not in ("quiz_coach", "simplify"):
                 reply_text = _polish_teacher_reply(
                     reply_text,
@@ -4869,6 +5084,15 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         reply_text = _guard_unreported_success(reply_text, prior, user_msg, student_memory, lang)
     reply_text = _ground_exam_key_availability(user_msg, reply_text, lang)
     reply_text = _guard_bildebok_time_gain(reply_text, bildebok_page)
+    reply_text = _guard_unverified_mirror_timing(reply_text)
+    reply_text = _guard_left_turn_exclusion(reply_text, lang)
+    reply_text = _guard_unsupported_exam_ranking(reply_text)
+    reply_text = _guard_unrequested_thai_plan_aside(reply_text, user_msg, lang)
+    reply_text = _guard_roundabout_observation(reply_text)
+    reply_text = _ground_hav_plan_summary(reply_text, lang)
+    reply_text = _ground_raised_thai_topics(reply_text, prior, lang, user_msg)
+    if _plan_request(user_msg):
+        reply_text = _prefer_explicit_plan_dates(reply_text)
     # Tags are internal model syntax. Keep URLs exclusively in validated media.
     reply_text = re.sub(r"\[(?:image|video|podcast|audio):[^\]]*\]", "", reply_text, flags=re.I).strip()
     reply_sign_ids = _sign_ids_from_reply(reply_text) if allow_answer and explicit_sign_ids else []

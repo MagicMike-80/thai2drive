@@ -113,7 +113,8 @@ def test_vision_chat_builds_multimodal_message_with_language_pure_safety_contrac
     assert "Never invent hidden signs" in prompt
     assert "does not provide enough information" in prompt
     assert "Vegtrafikkloven § 3" in prompt
-    assert "Vegtrafikkloven § 7" in prompt
+    assert "Trafikkreglene § 7" in prompt
+    assert "Vegtrafikkloven § 7" not in prompt
     assert "Skiltforskriften" in prompt
     for section in required_sections:
         assert section in prompt
