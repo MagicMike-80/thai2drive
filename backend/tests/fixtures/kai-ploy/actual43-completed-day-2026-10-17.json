@@ -1,0 +1,268 @@
+{
+  "source": "actual candidate43 real teacher_chat responses; not a simulated conversation",
+  "responses": [
+    {
+      "request_id": "control-en-2",
+      "utc": "2026-10-17T15:01:14.400140+00:00",
+      "request": {
+        "message": "I completed all of day 1 on right-of-way, both the reading and all exercises. What should I do next?",
+        "language": "en",
+        "device_id": "qa-local-memory-en",
+        "mode": "normal_chat",
+        "session_id": "ts_bb8532bbb213467d"
+      },
+      "response": {
+        "session_id": "ts_bb8532bbb213467d",
+        "conversation_id": "ts_bb8532bbb213467d",
+        "mode": "normal_chat",
+        "reply": "Nice work getting through Day 1 — that's the reading and the exercises done, as you've reported. I can't see your score from those exercises, so I don't know yet whether the 30% has moved.\n\nNext up is Day 2, road signs:\n\n- Ten minutes: the four sign categories — warning, prohibition, mandatory, information — and the shape and colour each one uses.\n- Ten minutes: the priority signs, especially 202 (Give Way) and 204 (Stop). Give Way means slow down and yield, stopping only if needed; Stop means a full stop every time.\n- Five minutes: pick five signs you saw on your last drive and say out loud what each one requires of you.\n\nYour actual time spent is unknown to me, so treat those ten-minute blocks as targets, not a stopwatch. Concrete next action: start the first block now — go through the four categories, then tell me which one you find hardest to recognise at a glance.",
+        "suggestions": [],
+        "sign_ids": [],
+        "media": [],
+        "build_commit": null,
+        "deployment_id": null
+      },
+      "status": 200,
+      "history": [
+        {
+          "role": "user",
+          "content": "Explain narrow and wide attention with the lorry and motorcycle"
+        },
+        {
+          "role": "assistant",
+          "content": "The driver of car A may focus entirely on the crossing because they think a pedestrian will step out in front of the lorry. They may then miss the motorcyclist turning right at the junction and the car behind. Lift your gaze to take in the whole traffic scene. A light touch on the brake pedal makes reaction time considerably shorter, and the brake lamps show the driver behind that the driver is ready.\n\nNarrow attention can keep your gaze on the lorry and pedestrian.\n\nWide attention helps you notice the motorcycle and see the whole junction.\n\nBrake readiness can shorten reaction time. A light touch lights the brake lamps and warns the driver behind."
+        },
+        {
+          "role": "user",
+          "content": "Make a three-day study plan: first right-of-way, then road signs, then revision."
+        },
+        {
+          "role": "assistant",
+          "content": "Here's a three-day plan built around your recorded weak area, right-of-way rules (30% on your recorded attempts, 10 questions). Your exam date isn't known to me, so treat this as a provisional plan you can shift to fit your actual test day.\n\nDay 1 — Right-of-way\n- Ten minutes: the core idea. Giving way means slowing down in good time so the other road user doesn't have to brake or change course. Stopping is only needed when it's the only way to avoid hindering them, or at a stop sign.\n- Ten minutes: the right-hand rule in unmarked junctions, and left turns across oncoming traffic (Trafikkreglene § 7 no. 2). Ask yourself at each junction: am I the one who must yield here, or the one with priority?\n- Five minutes: sign 202 versus sign 204. Give Way does not require a stop every time; Stop requires a full stop, always.\n\nDay 2 — Road signs\n- Ten minutes: the four sign categories — warning, prohibition, mandatory, information — and what shape and colour each uses.\n- Ten minutes: the signs that decide priority, especially 202 and 204, plus any yield and stop markings you meet in practice.\n- Five minutes: pick five signs you saw on your last drive and say out loud what each one requires of you.\n\nDay 3 — Revision\n- Ten minutes: redo right-of-way questions, since that's your measured weak spot.\n- Ten minutes: mixed sign questions.\n- Five minutes: write down the three rules you got wrong and the correct version of each.\n\nYour actual time spent so far is unknown to me, so I can't tell you how much of this you've already covered. The concrete next action: start Day 1 now by working through the give-way definition above, then answer ten right-of-way questions and tell me your score so we can see whether the 30% is moving."
+        }
+      ],
+      "verified_plan": {
+        "learner_requests": [
+          "Make a three-day study plan: first right-of-way, then road signs, then revision."
+        ],
+        "summary": "Here's a three-day plan built around your recorded weak area, right-of-way rules (30% on your recorded attempts, 10 questions). Your exam date isn't known to me, so treat this as a provisional plan you can shift to fit your actual test day.\n\nDay 1 — Right-of-way\n- Ten minutes: the core idea. Giving way means slowing down in good time so the other road user doesn't have to brake or change course. Stopping is only needed when it's the only way to avoid hindering them, or at a stop sign.\n- Ten minutes: the right-hand rule in unmarked junctions, and left turns across oncoming traffic (Trafikkreglene § 7 no. 2). Ask yourself at each junction: am I the one who must yield here, or the one with priority?\n- Five minutes: sign 202 versus sign 204. Give Way does not require a stop every time; Stop requires a full stop, always.\n\nDay 2 — Road signs\n- Ten minutes: the four sign categories — warning, prohibition, mandatory, information — and what shape and colour each uses.\n- Ten minutes: the signs that decide priority, especially 202 and 204, plus any yield and stop markings you meet in practice.\n- Five minutes: pick five signs you saw on your last drive and say out loud what each one requires of you.\n\nDay 3 — Revision\n- Ten minutes: redo right-of-way questions, since that's your measured weak spot.\n- Ten minutes: mixed sign questions.\n- Five minutes: write down the three rules you got wrong and the correct version of each.\n\nYour actual time spent so far is unknown to me, so I can't tell you how much of this you've already covered. The concrete next action: start Day 1 now by working through the give-way definition above, then answer ten right-of-way questions and tell me your score so we can see whether the 30% is moving."
+      },
+      "verified_memory": {
+        "attempts": 10,
+        "correct": 3,
+        "localized_weak_category": {
+          "key": "vikeplikt",
+          "name": "right-of-way rules",
+          "accuracy": 30.0,
+          "total": 10.0,
+          "source": "ai_attempts",
+          "has_failed_exam": false
+        },
+        "categories": [
+          "vikeplikt"
+        ]
+      },
+      "positive_card_id": null
+    },
+    {
+      "request_id": "control-no-2",
+      "utc": "2026-10-17T15:01:14.750597+00:00",
+      "request": {
+        "message": "Jeg har fullført hele dag 1 om vikeplikt, både lesing og alle oppgavene. Hva gjør jeg videre?",
+        "language": "no",
+        "device_id": "qa-local-memory-no",
+        "mode": "normal_chat",
+        "session_id": "ts_8d65c71d4b104b4f"
+      },
+      "response": {
+        "session_id": "ts_8d65c71d4b104b4f",
+        "conversation_id": "ts_8d65c71d4b104b4f",
+        "mode": "normal_chat",
+        "reply": "Så bra – da er dag 1 om vikeplikt gjennomført, både lesingen og oppgavene. Hvor lang tid du faktisk brukte, vet jeg ikke, men det er heller ikke poenget nå.\n\nNeste steg i planen er dag 2 om trafikkskilt. Start med de fire hovedgruppene: fareskilt, forbudsskilt, påbudsskilt og opplysningsskilt. Bruk deretter god tid på skillet mellom vikepliktskilt (skilt 202) og stoppskilt (skilt 204): ved vikeplikt senker du farten og viker, og du stopper bare når det er nødvendig – ved stoppskilt må du alltid stoppe helt.\n\nKonkret handling nå: ta en kort skilt-quiz, og skriv ned hvilke skilt du blander sammen. De notatene blir utgangspunktet for repetisjonen på dag 3.",
+        "suggestions": [],
+        "sign_ids": [],
+        "media": [],
+        "build_commit": null,
+        "deployment_id": null
+      },
+      "status": 200,
+      "history": [
+        {
+          "role": "user",
+          "content": "Forklar snever og bred oppmerksomhet med lastebilen og motorsykkelen"
+        },
+        {
+          "role": "assistant",
+          "content": "Føreren av bil A kan rette all oppmerksomhet mot gangfeltet fordi hen tror en fotgjenger vil gå ut foran lastebilen. Da kan motorsyklisten som skal svinge til høyre i krysset, og bilen bak, bli oversett. Løft blikket for å få oversikt over hele trafikkbildet. Et lett trykk på bremsepedalen gjør reaksjonstiden vesentlig mindre, og bremselysene viser bilen bak at føreren er i beredskap.\n\nSnever oppmerksomhet kan låse blikket på lastebilen og fotgjengeren.\n\nBred oppmerksomhet hjelper deg å oppfatte motorsykkelen og hele krysset.\n\nBremseberedskap kan korte ned reaksjonstiden. Et lett trykk tenner bremselysene og varsler bilen bak."
+        },
+        {
+          "role": "user",
+          "content": "Lag en studieplan for tre dager: først vikeplikt, så trafikkskilt, så repetisjon."
+        },
+        {
+          "role": "assistant",
+          "content": "Her er en enkel plan for tre dager. Jeg legger opp til korte økter, slik at du rekker alt.\n\n**Dag 1 – Vikeplikt**\n- Repeter kjernen: vikeplikt betyr at du ikke skal hindre eller forstyrre den du viker for. Du senker farten i god tid – du trenger ikke stoppe med mindre det er nødvendig.\n- Øv på høyreregelen og venstresving etter § 7 i trafikkreglene: møtende trafikk kommer inn på din høyre side, og du viker.\n- Gjør en liten runde med oppgaver om vikeplikt, og skriv ned hvilke situasjoner du er usikker på.\n\n**Dag 2 – Trafikkskilt**\n- Gå gjennom de fire hovedgruppene: fareskilt, forbudsskilt, påbudsskilt og opplysningsskilt.\n- Fest deg spesielt ved forskjellen mellom vikepliktskilt (skilt 202) og stoppskilt (skilt 204): ved vikeplikt bestemmer du selv om du må stoppe, ved stoppskilt må du alltid stoppe helt.\n- Ta en kort skilt-quiz og noter hvilke skilt du blander sammen.\n\n**Dag 3 – Repetisjon**\n- Repeter det du noterte som usikkert fra dag 1 og dag 2.\n- Kjør en blandet økt med oppgaver fra begge temaene.\n- Avslutt med å forklare høyreregelen og skiltforskjellen med egne ord – det viser om du har forstått det.\n\nJeg vet ikke når du har eksamen, så dette er en foreløpig plan uten faste datoer. Hvor lang tid regner du med å bruke på hver økt?"
+        }
+      ],
+      "verified_plan": {
+        "learner_requests": [
+          "Lag en studieplan for tre dager: først vikeplikt, så trafikkskilt, så repetisjon."
+        ],
+        "summary": "Her er en enkel plan for tre dager. Jeg legger opp til korte økter, slik at du rekker alt.\n\n**Dag 1 – Vikeplikt**\n- Repeter kjernen: vikeplikt betyr at du ikke skal hindre eller forstyrre den du viker for. Du senker farten i god tid – du trenger ikke stoppe med mindre det er nødvendig.\n- Øv på høyreregelen og venstresving etter § 7 i trafikkreglene: møtende trafikk kommer inn på din høyre side, og du viker.\n- Gjør en liten runde med oppgaver om vikeplikt, og skriv ned hvilke situasjoner du er usikker på.\n\n**Dag 2 – Trafikkskilt**\n- Gå gjennom de fire hovedgruppene: fareskilt, forbudsskilt, påbudsskilt og opplysningsskilt.\n- Fest deg spesielt ved forskjellen mellom vikepliktskilt (skilt 202) og stoppskilt (skilt 204): ved vikeplikt bestemmer du selv om du må stoppe, ved stoppskilt må du alltid stoppe helt.\n- Ta en kort skilt-quiz og noter hvilke skilt du blander sammen.\n\n**Dag 3 – Repetisjon**\n- Repeter det du noterte som usikkert fra dag 1 og dag 2.\n- Kjør en blandet økt med oppgaver fra begge temaene.\n- Avslutt med å forklare høyreregelen og skiltforskjellen med egne ord – det viser om du har forstått det.\n\nJeg vet ikke når du har eksamen, så dette er en foreløpig plan uten faste datoer. Hvor lang tid regner du med å bruke på hver økt?"
+      },
+      "verified_memory": {
+        "attempts": 10,
+        "correct": 3,
+        "localized_weak_category": {
+          "key": "vikeplikt",
+          "name": "vikeplikt og høyreregelen",
+          "accuracy": 30.0,
+          "total": 10.0,
+          "source": "ai_attempts",
+          "has_failed_exam": false
+        },
+        "categories": [
+          "vikeplikt"
+        ]
+      },
+      "positive_card_id": null
+    },
+    {
+      "request_id": "control-th-2",
+      "utc": "2026-10-17T15:01:15.151298+00:00",
+      "request": {
+        "message": "ฝึกเรื่องการให้ทางวันแรกเสร็จแล้ว ทั้งการอ่านและแบบฝึกหัดทั้งหมด ต่อไปควรทำอะไร",
+        "language": "th",
+        "device_id": "qa-local-memory-th",
+        "mode": "normal_chat",
+        "session_id": "ts_083c1becd6534d77"
+      },
+      "response": {
+        "session_id": "ts_083c1becd6534d77",
+        "conversation_id": "ts_083c1becd6534d77",
+        "mode": "normal_chat",
+        "reply": "เยี่ยมครับ ที่คุณอ่านและทำแบบฝึกหัดเรื่องการให้ทางจบแล้ว ผมรับทราบตามที่คุณรายงานนะครับ ส่วนเวลาที่ใช้จริงยังไม่ทราบ เพราะคุณยังไม่ได้บอกไว้\n\nตามลำดับในแผน วันที่หนึ่งยังเหลืออีกขั้นคือทำข้อสอบชุดสั้น ๆ เรื่องการให้ทางและกฎจากขวา ซึ่งเป็นจุดที่ผลบันทึกไว้ยังไม่เต็มที่นัก ลองทำสักสิบนะครับ แล้วดูว่าข้อไหนยังลังเล\n\nถ้าทำเสร็จแล้ว ขั้นถัดไปคือเริ่มวันที่สอง เรื่องป้ายจราจร ไล่ดูหมวดป้ายเตือน ป้ายห้าม ป้ายบังคับ และป้ายข้อมูล พร้อมจำรูปทรงกับสีของแต่ละหมวด\n\nเริ่มลงมือได้เลยครับ ลองทำข้อสอบเรื่องการให้ทางและกฎจากขวาสักสิบข้อ แล้วกลับมาบอกผมว่าพลาดตรงไหนบ้าง",
+        "suggestions": [],
+        "sign_ids": [],
+        "media": [],
+        "build_commit": null,
+        "deployment_id": null
+      },
+      "status": 200,
+      "history": [
+        {
+          "role": "user",
+          "content": "อธิบายความสนใจแบบแคบและกว้างในภาพรถบรรทุกและรถจักรยานยนต์"
+        },
+        {
+          "role": "assistant",
+          "content": "ผู้ขับรถ อาจจดจ่อกับทางม้าลาย เพราะคิดว่าคนเดินเท้าจะเดินออกมาหน้ารถบรรทุก จึงอาจไม่ทันสังเกตรถจักรยานยนต์ที่กำลังเลี้ยวขวาในทางแยกและรถที่ตามหลังมา ให้เงยสายตาขึ้นเพื่อมองภาพรวม การกดแป้นเบรกเบา ๆ ช่วยลดเวลาตอบสนองอย่างมาก และไฟเบรกแสดงให้รถคันหลังเห็นว่าผู้ขับพร้อมเบรก\n\nความสนใจแบบแคบอาจทำให้คุณจ้องอยู่ที่รถบรรทุกและคนเดินเท้า\n\nความสนใจแบบกว้างช่วยให้คุณสังเกตรถจักรยานยนต์และมองเห็นภาพรวมของทางแยก\n\nการเตรียมเบรกช่วยลดเวลาตอบสนอง การกดแป้นเบรกเบา ๆ ทำให้ไฟเบรกเตือนรถคันหลัง"
+        },
+        {
+          "role": "user",
+          "content": "ช่วยวางแผนเรียนสามวัน เริ่มเรื่องการให้ทาง ต่อด้วยป้ายจราจร แล้วทบทวน"
+        },
+        {
+          "role": "assistant",
+          "content": "ได้ครับ นี่คือแผนสามวันตามที่คุณขอ โดยอิงจากผลที่บันทึกไว้ คือเรื่องการให้ทางและกฎจากขวา ซึ่งเป็นจุดที่ยังทำได้ไม่เต็มที่นัก ส่วนป้ายจราจรและการทบทวนยังไม่มีผลวัดที่ชัดเจนในบันทึก ผมจึงจัดเป็นขั้นตอนฝึก ไม่ได้แปลว่าคุณทำผิดมาก่อนครับ\n\nวันที่หนึ่ง การให้ทาง\nทบทวนความหมายหลักก่อนว่าการให้ทางคือการไม่กีดขวางและไม่รบกวนรถที่มีสิทธิ์ไปก่อน ไม่ใช่การหยุดทุกครั้ง แล้วแยกให้ชัดระหว่างป้ายให้ทางกับป้ายหยุด จากนั้นทำข้อสอบชุดสั้น ๆ เรื่องการให้ทางและกฎจากขวา ประมาณสิบนาที\n\nวันที่สอง ป้ายจราจร\nไล่ดูหมวดป้ายเตือน ป้ายห้าม ป้ายบังคับ และป้ายข้อมูล พร้อมจำรูปทรงและสีของแต่ละหมวด แล้วทำข้อสอบชุดสั้น ๆ เรื่องป้ายจราจร ประมาณสิบนาที\n\nวันที่สาม ทบทวน\nทบทวนจุดที่ยังสับสนจากการฝึกสองวันแรก โดยเฉพาะการให้ทางและป้ายที่แยกยาก แล้วทำข้อสอบผสมสั้น ๆ เพื่อดูว่ายังพลาดตรงไหน\n\nตอนนี้ยังไม่ทราบวันสอบของคุณ ผมจึงยังไม่กำหนดวันที่แน่นอนให้ ถ้าบอกวันสอบมาได้ ผมจะจัดลำดับให้พอดีกับเวลาที่เหลือครับ\n\nขั้นตอนถัดไปที่ลงมือได้เลยคือ เริ่มวันที่หนึ่งด้วยการทบทวนความหมายของการให้ทาง แล้วทำข้อสอบเรื่องการให้ทางและกฎจากขวาสิบข้อครับ"
+        }
+      ],
+      "verified_plan": {
+        "learner_requests": [
+          "ช่วยวางแผนเรียนสามวัน เริ่มเรื่องการให้ทาง ต่อด้วยป้ายจราจร แล้วทบทวน"
+        ],
+        "summary": "ได้ครับ นี่คือแผนสามวันตามที่คุณขอ โดยอิงจากผลที่บันทึกไว้ คือเรื่องการให้ทางและกฎจากขวา ซึ่งเป็นจุดที่ยังทำได้ไม่เต็มที่นัก ส่วนป้ายจราจรและการทบทวนยังไม่มีผลวัดที่ชัดเจนในบันทึก ผมจึงจัดเป็นขั้นตอนฝึก ไม่ได้แปลว่าคุณทำผิดมาก่อนครับ\n\nวันที่หนึ่ง การให้ทาง\nทบทวนความหมายหลักก่อนว่าการให้ทางคือการไม่กีดขวางและไม่รบกวนรถที่มีสิทธิ์ไปก่อน ไม่ใช่การหยุดทุกครั้ง แล้วแยกให้ชัดระหว่างป้ายให้ทางกับป้ายหยุด จากนั้นทำข้อสอบชุดสั้น ๆ เรื่องการให้ทางและกฎจากขวา ประมาณสิบนาที\n\nวันที่สอง ป้ายจราจร\nไล่ดูหมวดป้ายเตือน ป้ายห้าม ป้ายบังคับ และป้ายข้อมูล พร้อมจำรูปทรงและสีของแต่ละหมวด แล้วทำข้อสอบชุดสั้น ๆ เรื่องป้ายจราจร ประมาณสิบนาที\n\nวันที่สาม ทบทวน\nทบทวนจุดที่ยังสับสนจากการฝึกสองวันแรก โดยเฉพาะการให้ทางและป้ายที่แยกยาก แล้วทำข้อสอบผสมสั้น ๆ เพื่อดูว่ายังพลาดตรงไหน\n\nตอนนี้ยังไม่ทราบวันสอบของคุณ ผมจึงยังไม่กำหนดวันที่แน่นอนให้ ถ้าบอกวันสอบมาได้ ผมจะจัดลำดับให้พอดีกับเวลาที่เหลือครับ\n\nขั้นตอนถัดไปที่ลงมือได้เลยคือ เริ่มวันที่หนึ่งด้วยการทบทวนความหมายของการให้ทาง แล้วทำข้อสอบเรื่องการให้ทางและกฎจากขวาสิบข้อครับ"
+      },
+      "verified_memory": {
+        "attempts": 10,
+        "correct": 3,
+        "localized_weak_category": {
+          "key": "vikeplikt",
+          "name": "การให้ทางและกฎจากขวา",
+          "accuracy": 30.0,
+          "total": 10.0,
+          "source": "ai_attempts",
+          "has_failed_exam": false
+        },
+        "categories": [
+          "vikeplikt"
+        ]
+      },
+      "positive_card_id": null
+    },
+    {
+      "request_id": "control-th-3",
+      "utc": "2026-10-17T15:01:19.612692+00:00",
+      "request": {
+        "message": "แผนของเราคืออะไร ผมบอกว่าทำอะไรเสร็จแล้ว และต่อไปต้องทำอะไร",
+        "language": "th",
+        "device_id": "qa-local-memory-th",
+        "mode": "normal_chat",
+        "session_id": "ts_083c1becd6534d77"
+      },
+      "response": {
+        "session_id": "ts_083c1becd6534d77",
+        "conversation_id": "ts_083c1becd6534d77",
+        "mode": "normal_chat",
+        "reply": "ได้ครับ สรุปให้ตามที่คุณถามนะครับ\n\nแผนสามวันคือ วันที่หนึ่งเรื่องการให้ทาง วันที่สองเรื่องป้ายจราจร และวันที่สามเป็นการทบทวน โดยผมเป็นคนเสนอแผนนี้ขึ้นมา ยังไม่ถือว่าคุณตอบรับอย่างเป็นทางการนะครับ\n\nสิ่งที่คุณรายงานว่าเสร็จแล้ว คือการอ่านและการทำแบบฝึกหัดทั้งหมดในส่วนของวันที่หนึ่งเรื่องการให้ทาง ส่วนเวลาที่ใช้จริงยังไม่ทราบ เพราะคุณไม่ได้บอกไว้\n\nสิ่งที่ยังไม่ทราบสถานะ คือข้อสอบชุดสั้น ๆ เรื่องการให้ทางและกฎจากขวา ซึ่งอยู่ในขั้นตอนของวันที่หนึ่ง และยังไม่มีการรายงานผลออกมา\n\nขั้นตอนถัดไปที่ลงมือได้เลยคือ ทำข้อสอบเรื่องการให้ทางและกฎจากขวาสักสิบข้อ แล้วกลับมาบอกว่าข้อไหนยังลังเลหรือพลาด เพื่อที่เราจะได้ไปต่อวันที่สองเรื่องป้ายจราจรได้อย่างมั่นใจครับ",
+        "suggestions": [],
+        "sign_ids": [],
+        "media": [],
+        "build_commit": null,
+        "deployment_id": null
+      },
+      "status": 200,
+      "history": [
+        {
+          "role": "user",
+          "content": "อธิบายความสนใจแบบแคบและกว้างในภาพรถบรรทุกและรถจักรยานยนต์"
+        },
+        {
+          "role": "assistant",
+          "content": "ผู้ขับรถ อาจจดจ่อกับทางม้าลาย เพราะคิดว่าคนเดินเท้าจะเดินออกมาหน้ารถบรรทุก จึงอาจไม่ทันสังเกตรถจักรยานยนต์ที่กำลังเลี้ยวขวาในทางแยกและรถที่ตามหลังมา ให้เงยสายตาขึ้นเพื่อมองภาพรวม การกดแป้นเบรกเบา ๆ ช่วยลดเวลาตอบสนองอย่างมาก และไฟเบรกแสดงให้รถคันหลังเห็นว่าผู้ขับพร้อมเบรก\n\nความสนใจแบบแคบอาจทำให้คุณจ้องอยู่ที่รถบรรทุกและคนเดินเท้า\n\nความสนใจแบบกว้างช่วยให้คุณสังเกตรถจักรยานยนต์และมองเห็นภาพรวมของทางแยก\n\nการเตรียมเบรกช่วยลดเวลาตอบสนอง การกดแป้นเบรกเบา ๆ ทำให้ไฟเบรกเตือนรถคันหลัง"
+        },
+        {
+          "role": "user",
+          "content": "ช่วยวางแผนเรียนสามวัน เริ่มเรื่องการให้ทาง ต่อด้วยป้ายจราจร แล้วทบทวน"
+        },
+        {
+          "role": "assistant",
+          "content": "ได้ครับ นี่คือแผนสามวันตามที่คุณขอ โดยอิงจากผลที่บันทึกไว้ คือเรื่องการให้ทางและกฎจากขวา ซึ่งเป็นจุดที่ยังทำได้ไม่เต็มที่นัก ส่วนป้ายจราจรและการทบทวนยังไม่มีผลวัดที่ชัดเจนในบันทึก ผมจึงจัดเป็นขั้นตอนฝึก ไม่ได้แปลว่าคุณทำผิดมาก่อนครับ\n\nวันที่หนึ่ง การให้ทาง\nทบทวนความหมายหลักก่อนว่าการให้ทางคือการไม่กีดขวางและไม่รบกวนรถที่มีสิทธิ์ไปก่อน ไม่ใช่การหยุดทุกครั้ง แล้วแยกให้ชัดระหว่างป้ายให้ทางกับป้ายหยุด จากนั้นทำข้อสอบชุดสั้น ๆ เรื่องการให้ทางและกฎจากขวา ประมาณสิบนาที\n\nวันที่สอง ป้ายจราจร\nไล่ดูหมวดป้ายเตือน ป้ายห้าม ป้ายบังคับ และป้ายข้อมูล พร้อมจำรูปทรงและสีของแต่ละหมวด แล้วทำข้อสอบชุดสั้น ๆ เรื่องป้ายจราจร ประมาณสิบนาที\n\nวันที่สาม ทบทวน\nทบทวนจุดที่ยังสับสนจากการฝึกสองวันแรก โดยเฉพาะการให้ทางและป้ายที่แยกยาก แล้วทำข้อสอบผสมสั้น ๆ เพื่อดูว่ายังพลาดตรงไหน\n\nตอนนี้ยังไม่ทราบวันสอบของคุณ ผมจึงยังไม่กำหนดวันที่แน่นอนให้ ถ้าบอกวันสอบมาได้ ผมจะจัดลำดับให้พอดีกับเวลาที่เหลือครับ\n\nขั้นตอนถัดไปที่ลงมือได้เลยคือ เริ่มวันที่หนึ่งด้วยการทบทวนความหมายของการให้ทาง แล้วทำข้อสอบเรื่องการให้ทางและกฎจากขวาสิบข้อครับ"
+        },
+        {
+          "role": "user",
+          "content": "ฝึกเรื่องการให้ทางวันแรกเสร็จแล้ว ทั้งการอ่านและแบบฝึกหัดทั้งหมด ต่อไปควรทำอะไร"
+        },
+        {
+          "role": "assistant",
+          "content": "เยี่ยมครับ ที่คุณอ่านและทำแบบฝึกหัดเรื่องการให้ทางจบแล้ว ผมรับทราบตามที่คุณรายงานนะครับ ส่วนเวลาที่ใช้จริงยังไม่ทราบ เพราะคุณยังไม่ได้บอกไว้\n\nตามลำดับในแผน วันที่หนึ่งยังเหลืออีกขั้นคือทำข้อสอบชุดสั้น ๆ เรื่องการให้ทางและกฎจากขวา ซึ่งเป็นจุดที่ผลบันทึกไว้ยังไม่เต็มที่นัก ลองทำสักสิบนะครับ แล้วดูว่าข้อไหนยังลังเล\n\nถ้าทำเสร็จแล้ว ขั้นถัดไปคือเริ่มวันที่สอง เรื่องป้ายจราจร ไล่ดูหมวดป้ายเตือน ป้ายห้าม ป้ายบังคับ และป้ายข้อมูล พร้อมจำรูปทรงกับสีของแต่ละหมวด\n\nเริ่มลงมือได้เลยครับ ลองทำข้อสอบเรื่องการให้ทางและกฎจากขวาสักสิบข้อ แล้วกลับมาบอกผมว่าพลาดตรงไหนบ้าง"
+        }
+      ],
+      "verified_plan": {
+        "learner_requests": [
+          "ช่วยวางแผนเรียนสามวัน เริ่มเรื่องการให้ทาง ต่อด้วยป้ายจราจร แล้วทบทวน"
+        ],
+        "summary": "ได้ครับ นี่คือแผนสามวันตามที่คุณขอ โดยอิงจากผลที่บันทึกไว้ คือเรื่องการให้ทางและกฎจากขวา ซึ่งเป็นจุดที่ยังทำได้ไม่เต็มที่นัก ส่วนป้ายจราจรและการทบทวนยังไม่มีผลวัดที่ชัดเจนในบันทึก ผมจึงจัดเป็นขั้นตอนฝึก ไม่ได้แปลว่าคุณทำผิดมาก่อนครับ\n\nวันที่หนึ่ง การให้ทาง\nทบทวนความหมายหลักก่อนว่าการให้ทางคือการไม่กีดขวางและไม่รบกวนรถที่มีสิทธิ์ไปก่อน ไม่ใช่การหยุดทุกครั้ง แล้วแยกให้ชัดระหว่างป้ายให้ทางกับป้ายหยุด จากนั้นทำข้อสอบชุดสั้น ๆ เรื่องการให้ทางและกฎจากขวา ประมาณสิบนาที\n\nวันที่สอง ป้ายจราจร\nไล่ดูหมวดป้ายเตือน ป้ายห้าม ป้ายบังคับ และป้ายข้อมูล พร้อมจำรูปทรงและสีของแต่ละหมวด แล้วทำข้อสอบชุดสั้น ๆ เรื่องป้ายจราจร ประมาณสิบนาที\n\nวันที่สาม ทบทวน\nทบทวนจุดที่ยังสับสนจากการฝึกสองวันแรก โดยเฉพาะการให้ทางและป้ายที่แยกยาก แล้วทำข้อสอบผสมสั้น ๆ เพื่อดูว่ายังพลาดตรงไหน\n\nตอนนี้ยังไม่ทราบวันสอบของคุณ ผมจึงยังไม่กำหนดวันที่แน่นอนให้ ถ้าบอกวันสอบมาได้ ผมจะจัดลำดับให้พอดีกับเวลาที่เหลือครับ\n\nขั้นตอนถัดไปที่ลงมือได้เลยคือ เริ่มวันที่หนึ่งด้วยการทบทวนความหมายของการให้ทาง แล้วทำข้อสอบเรื่องการให้ทางและกฎจากขวาสิบข้อครับ",
+        "reported_progress": [
+          "ฝึกเรื่องการให้ทางวันแรกเสร็จแล้ว ทั้งการอ่านและแบบฝึกหัดทั้งหมด ต่อไปควรทำอะไร"
+        ]
+      },
+      "verified_memory": {
+        "attempts": 10,
+        "correct": 3,
+        "localized_weak_category": {
+          "key": "vikeplikt",
+          "name": "การให้ทางและกฎจากขวา",
+          "accuracy": 30.0,
+          "total": 10.0,
+          "source": "ai_attempts",
+          "has_failed_exam": false
+        },
+        "categories": [
+          "vikeplikt"
+        ]
+      },
+      "positive_card_id": null
+    }
+  ]
+}

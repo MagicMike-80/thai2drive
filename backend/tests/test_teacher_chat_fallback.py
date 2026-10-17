@@ -657,6 +657,123 @@ class KaiPloyLogicTests(unittest.TestCase):
         self.assertIn("ป้ายให้ทาง", fixed)
         self.assertIn("ป้ายหยุด", fixed)
 
+    def test_actual_live_default_speed_question_receives_the_approved_rule(self):
+        data = json.loads((ROOT / "backend/tests/fixtures/kai-ploy/live70fcb3b-thai-source-defects-2026-10-17.json").read_text(encoding="utf-8"))
+        for key in ("no-sign124_compound", "th-sign124_compound", "en-sign124_compound"):
+            request = data["responses"][key]["request"]
+            with self.subTest(lang=request["language"]):
+                self.assertIn("speed", self.tc._situation_topics(request["message"]))
+                context = self.tc._approved_rule_context(request["message"], request["language"])
+                self.assertIn('"fartsgrense_tettbygd"', context)
+                self.assertIn("50", context)
+                self.assertIn("30", context)
+        self.assertNotIn("speed", self.tc._situation_topics("What is normal speed on a motorway?"))
+        self.assertNotIn("speed", self.tc._situation_topics("ความเร็วปกติบนทางหลวงคือเท่าไร"))
+
+    def test_only_actual_incorrect_chapter_values_are_quarantined_in_each_language(self):
+        data = json.loads((ROOT / "backend/tests/fixtures/kai-ploy/live70fcb3b-thai-source-defects-2026-10-17.json").read_text(encoding="utf-8"))
+        chapter = data["production_chapter2"]["chapter"]
+        for lang in ("no", "th", "en"):
+            with self.subTest(lang=lang):
+                self.assertTrue(self.tc._is_quarantined_chapter(chapter, lang))
+                changed = dict(chapter, **{"content_"+lang:chapter["content_"+lang]+" " + lang})
+                self.assertFalse(self.tc._is_quarantined_chapter(changed, lang))
+                self.assertFalse(self.tc._is_quarantined_chapter(data["production_chapter2"]["companion_chapter"], lang))
+        self.assertFalse(self.tc._is_quarantined_chapter(chapter, "xx"))
+
+    def test_actual_thai_rag_drops_only_the_quarantined_chapter(self):
+        import types
+        data = json.loads((ROOT / "backend/tests/fixtures/kai-ploy/live70fcb3b-thai-source-defects-2026-10-17.json").read_text(encoding="utf-8"))
+        class Cursor:
+            def __init__(self, docs): self.docs = docs
+            async def to_list(self, length): return self.docs[:length]
+        class Collection:
+            def __init__(self, docs): self.docs = docs
+            def find(self, query): return Cursor(self.docs)
+            async def find_one(self, query): return next((d for d in self.docs if d.get("id") == query.get("id")), None)
+        chapters = data["production_chapter2"]
+        db = types.SimpleNamespace(traffic_signs=Collection([]), studiebok_chapters=Collection([chapters["chapter"], chapters["companion_chapter"]]), learning_videos=Collection([]))
+        with patch.object(self.tc, "_db", db):
+            context = asyncio.run(self.tc._get_curriculum_context(data["responses"]["th-sign124_compound"]["request"]["message"], "th"))
+        self.assertNotIn("Studybook Chapter 2:", context)
+        self.assertIn("Studybook Chapter 9:", context)
+
+    def test_actual_thai206_stop_fields_fail_closed_without_changing_the_sign(self):
+        data = json.loads((ROOT / "backend/tests/fixtures/kai-ploy/live70fcb3b-thai-source-defects-2026-10-17.json").read_text(encoding="utf-8"))
+        sign = data["production_sign206"]
+        original = json.dumps(sign, sort_keys=True)
+        self.assertEqual(self.tc._sign_language_text(sign, "explanation", "th"), "")
+        self.assertEqual(self.tc._sign_language_text(sign, "driver_action", "th"), "")
+        self.assertEqual(self.tc._sign_language_text(sign, "name", "th"), sign["name"]["th"])
+        context = self.tc._format_sign_context(sign, "th")
+        self.assertNotIn(self.tc._QUARANTINED_SIGN206_THAI, context)
+        self.assertIn("GIVE WAY", context)
+        self.assertIn("does not require an unconditional stop", context)
+        self.assertEqual(self.tc._sign_language_text(sign, "explanation", "en"), sign["explanation"]["en"])
+        card = {"type":"sign", "sign_id":"206_0", "title":sign["name"]["th"], "caption":sign["name"]["th"]}
+        self.assertEqual(self.tc._approved_named_sign_display("ขอดูป้ายทางเอก", [card], "th"), sign["name"]["th"])
+        self.assertEqual(json.dumps(sign, sort_keys=True), original)
+
+    def test_actual_thai124_colour_correction_keeps_every_other_answer_part(self):
+        data = json.loads((ROOT / "backend/tests/fixtures/kai-ploy/live70fcb3b-thai-source-defects-2026-10-17.json").read_text(encoding="utf-8"))
+        reply = data["responses"]["th-sign124_compound"]["response"]["reply"]
+        self.assertEqual(self.tc._ground_sign124_colour(reply, ["124_0"], "th"), reply.replace("ขอบแดงพื้นเหลือง", "ขอบแดงพื้นขาว"))
+        self.assertEqual(self.tc._ground_sign124_colour(reply, ["206_0"], "th"), reply)
+        self.assertEqual(self.tc._ground_sign124_colour(reply, ["124_0"], "en"), reply)
+
+    def test_actual_thai_priority_sign_display_uses_the_card_without_inventing_lettering(self):
+        data = json.loads((ROOT / "backend/tests/fixtures/kai-ploy/live70fcb3b-thai-source-defects-2026-10-17.json").read_text(encoding="utf-8"))
+        actual = data["additional_local39_sign206_replay"]["record"]
+        self.assertIn("ข้อความบนป้ายบอกว่า", actual["response"]["reply"])
+        request = actual["request"]["message"]
+        card = actual["response"]["media"][0]
+        self.assertEqual(self.tc._explicit_sign_ids_for_message(request), ["206_0"])
+        self.assertEqual(self.tc._approved_named_sign_display(request, [card], "th"), card["title"])
+        self.assertEqual(self.tc._approved_named_sign_display(request + " และอธิบายกฎรถเมล์", [card], "th"), "")
+        self.assertEqual(self.tc._approved_named_sign_display(request, [], "th"), "")
+        self.assertIn("wordless symbol", self.tc._format_sign_context(data["production_sign206"], "th"))
+
+    def test_actual_warning_sign_recap_keeps_its_identity_instead_of_becoming_yield(self):
+        data = json.loads((ROOT / "backend/tests/fixtures/kai-ploy/live70fcb3b-thai-source-defects-2026-10-17.json").read_text(encoding="utf-8"))
+        actual = next(r for r in data["additional_local40_sign124_recall"]["records"] if r["request_id"] == "kai-35")
+        reply = actual["response"]["reply"]
+        shown = next(r for r in data["additional_local40_sign124_recall"]["records"] if r["request_id"] == "kai-28")["response"]
+        class StoredChat:
+            def __init__(self): self.queries = []
+            async def find_one(self, query, **kwargs):
+                self.queries.append(query)
+                return {"sign_ids":shown["sign_ids"]}
+        stored = StoredChat()
+        recent = actual["history"][-10:]
+        self.assertFalse(any(turn.get("sign_ids") for turn in recent))
+        with patch.object(self.tc, "_chat_col", stored):
+            sign_ids = asyncio.run(self.tc._load_recalled_sign_ids(recent, [], "actual-regression-session", "no"))
+            explicit = asyncio.run(self.tc._load_recalled_sign_ids(recent, ["202_0"], "actual-regression-session", "no"))
+        self.assertEqual(sign_ids, ["124_0"])
+        self.assertEqual(explicit, ["202_0"])
+        self.assertEqual(len(stored.queries), 1)
+        self.assertEqual(stored.queries[0], {"session_id":"actual-regression-session", "language":"no", "role":"assistant", "sign_ids.0":{"$exists":True}})
+        fixed = self.tc._ground_sign124_recall(reply, sign_ids, "no")
+        self.assertEqual(fixed, reply.replace("det røde trekant-skiltet er et vikepliktskilt", "det røde trekant-skiltet er et fareskilt"))
+        self.assertIn("WARNING sign, not yield sign 202", self.tc._recent_sign_recall_context(actual["request"]["message"], sign_ids))
+        self.assertEqual(self.tc._recent_sign_recall_context("Hva er stoppelengde?", sign_ids), "")
+        self.assertEqual(self.tc._ground_sign124_recall(reply, explicit, "no"), reply)
+        self.assertEqual(self.tc._ground_sign124_recall(reply, [], "no"), reply)
+        self.assertEqual(self.tc._ground_sign124_recall(reply, ["202_0"], "no"), reply)
+
+    def test_actual_recorded_category_count_is_not_denied_or_converted_to_elapsed_time(self):
+        data = json.loads((ROOT / "backend/tests/fixtures/kai-ploy/live70fcb3b-thai-source-defects-2026-10-17.json").read_text(encoding="utf-8"))
+        actual = data["additional_local42_recorded_count"]["record"]
+        reply = actual["response"]["reply"]
+        memory = {"weak_topic":actual["verified_memory"]["localized_weak_category"]}
+        fixed = self.tc._ground_recorded_question_count(reply, memory, "no")
+        self.assertEqual(fixed, reply.replace(" eller hvor mange oppgaver du har gjort", ""))
+        self.assertIn("Jeg vet ikke hvor lang tid du har brukt", fixed)
+        self.assertIn(reply[:reply.index("Jeg vet ikke")], fixed)
+        self.assertEqual(self.tc._ground_recorded_question_count(reply, None, "no"), reply)
+        self.assertEqual(self.tc._ground_recorded_question_count(reply, {"weak_topic":{"total":0}}, "no"), reply)
+        self.assertIn("Recorded database quiz results", self.tc._complete_request_contract({}, memory, actual["request"]["message"]))
+
     def test_exam_key_capability_keeps_plan_and_actual_rule_answers(self):
         reply = "Ingen tidligere plan. Fasit finnes ikke som én liste. I 70-sone må bussen vike."
         fixed = self.tc._ground_exam_key_availability("Jeg strøk på teoriprøven. Hva var planen? Gi meg fasiten.", reply, "no")
