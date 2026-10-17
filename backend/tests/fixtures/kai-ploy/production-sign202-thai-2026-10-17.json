@@ -1,0 +1,19 @@
+{
+  "id": "202_0",
+  "name": {
+    "no": "Vikeplikt",
+    "th": "ให้ทาง",
+    "en": "Give way"
+  },
+  "image_url": "/api/sign-images/202_0.jpg",
+  "explanation": {
+    "no": "Du skal vike for trafikk i krysset.",
+    "th": "คุณต้องหยุดรอและให้รถอื่นผ่านก่อน",
+    "en": "You must yield to traffic at the intersection."
+  },
+  "driver_action": {
+    "en": "You must yield to traffic at the intersection.",
+    "no": "Du skal vike for trafikk i krysset.",
+    "th": "คุณต้องหยุดรอและให้รถอื่นผ่านก่อน"
+  }
+}

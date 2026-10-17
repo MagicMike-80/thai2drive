@@ -343,7 +343,8 @@ class TeacherChatFallbackTests(unittest.TestCase):
         ))
         self.assertEqual(reply, "Vær oppmerksom på trafikksituasjonen.")
         self.assertEqual(len(calls), 1)
-        self.assertIn("only in Norwegian", calls[0][-1]["content"])
+        self.assertIn("Norwegian", calls[0][-1]["content"])
+        self.assertIn({"role":"assistant", "content":"\u0e42\u0e1b\u0e23\u0e14\u0e23\u0e30\u0e27\u0e31\u0e07\u0e23\u0e16"}, calls[0])
 
     def test_selected_language_guard_falls_back_in_active_language(self):
         async def repeated_thai(messages, require_vision=False):
@@ -537,10 +538,21 @@ class KaiPloyLogicTests(unittest.TestCase):
         self.assertFalse(self.tc._reply_matches_language_script("You must give way to the bus.", "no"))
         self.assertFalse(self.tc._reply_matches_language_script("Du må vike for bussen.", "en"))
         self.assertFalse(self.tc._reply_matches_language_script("I'll keep answering in Norwegian since you asked. Du må vike.", "no"))
+        self.assertFalse(self.tc._reply_matches_language_script("The Norwegian stop sign is stoppskilt, unlike vikepliktskilt.", "en"))
+        self.assertFalse(self.tc._reply_matches_language_script("This is a stoppskilt.", "en"))
 
     def test_thai_guard_rejects_non_latin_foreign_script(self):
         self.assertFalse(self.tc._reply_matches_language_script("ให้ทาง обычный ครับ", "th"))
         self.assertTrue(self.tc._reply_matches_language_script("ให้ทางก่อนครับ 50", "th"))
+
+    def test_thai_language_repair_receives_the_actual_rejected_answer(self):
+        rejected = "ขั้นที่สามคือทำข้อสอบเรื่องป้าย วันละสิบ minutos ต่อเรื่องครับ"
+        corrected = "ขั้นที่สามคือทำข้อสอบเรื่องป้าย วันละสิบนาทีต่อเรื่องครับ"
+        response = types.SimpleNamespace(choices=[types.SimpleNamespace(message=types.SimpleNamespace(content=corrected))])
+        with patch.object(self.tc, "_completion_with_fallback", AsyncMock(return_value=response)) as complete:
+            result = asyncio.run(self.tc._guard_selected_language(rejected, [{"role":"user","content":"ขั้นที่สามคืออะไร"}], "th"))
+        self.assertEqual(result, corrected)
+        self.assertIn({"role":"assistant", "content":rejected}, complete.call_args.args[0])
 
     def test_internal_multilingual_media_tag_does_not_reject_english_prose(self):
         reply = "[image: /api/sign-images/204_0.jpg | Stopp | หยุด | Stop] You must stop completely."
@@ -568,6 +580,28 @@ class KaiPloyLogicTests(unittest.TestCase):
                 self.assertIn("Answer any actual supplied traffic question directly", instruction)
         self.assertNotIn("EXPLICIT EXAM-ANSWER REQUEST", self.tc._complete_request_contract({}, {}, "Hva sier bussregelen?"))
 
+    def test_thai_bus_stop_is_not_a_road_sign_request(self):
+        self.assertFalse(self.tc._asks_about_sign("อธิบายหน้า bb-s22 แล้วใครต้องให้ทางเมื่อรถเมล์ออกจากป้ายในเขต 50 และ 70"))
+        self.assertFalse(self.tc._asks_about_sign("รถเมล์กำลังออกจากป้ายรถเมล์"))
+        self.assertTrue(self.tc._asks_about_sign("ขอดูป้าย 202 ข้างป้ายรถเมล์"))
+
+    def test_plain_stop_sign_display_uses_active_language_card(self):
+        card = {"type":"sign", "sign_id":"204_0", "title":"Stop", "caption":"Come to a complete stop and yield to all traffic."}
+        self.assertEqual(self.tc._approved_stop_sign_display("vis meg stoppskiltet på norsk", [card], "en"), card["title"]+"\n\n"+card["caption"])
+        self.assertEqual(self.tc._approved_stop_sign_display("Show stop sign 204 and explain the speed limit in town", [card], "en"), "")
+        self.assertEqual(self.tc._approved_stop_sign_display("Show stop sign 204 and give me a practice question", [card], "en"), "")
+        self.assertEqual(self.tc._approved_stop_sign_display("Show stop sign 204. What is the legal alcohol limit?", [card], "en"), "")
+        self.assertEqual(self.tc._approved_stop_sign_display("Show stop sign 204", [], "en"), "")
+
+    def test_exam_key_capability_keeps_plan_and_actual_rule_answers(self):
+        reply = "Ingen tidligere plan. Fasit finnes ikke som én liste. I 70-sone må bussen vike."
+        fixed = self.tc._ground_exam_key_availability("Jeg strøk på teoriprøven. Hva var planen? Gi meg fasiten.", reply, "no")
+        self.assertIn("Jeg har ikke tilgang til den offisielle eksamensfasiten.", fixed)
+        self.assertNotIn("Fasit finnes ikke", fixed)
+        self.assertIn("Ingen tidligere plan.", fixed)
+        self.assertIn("I 70-sone må bussen vike.", fixed)
+        self.assertEqual(self.tc._ground_exam_key_availability("Hva gjelder i 70-sone?", reply, "no"), reply)
+
     def test_actual_argus_page_reference_resolves_verified_content(self):
         for lang, question in (("no", "Forklar siden bb-s22. Hva bør jeg lære av bildet?"), ("en", "Explain page bb-s22. What should I learn from the picture?"), ("th", "ช่วยอธิบายหน้า bb-s22 ฉันควรเรียนรู้อะไรจากภาพนี้")):
             with self.subTest(lang=lang):
@@ -581,6 +615,57 @@ class KaiPloyLogicTests(unittest.TestCase):
     def test_actual_argus_hav_gloss_is_not_english(self):
         self.assertFalse(self.tc._reply_matches_language_script("Be hensynsfull, aktpågivende and varsom, even when you have priority.", "en"))
         self.assertTrue(self.tc._reply_matches_language_script("Be considerate, attentive and cautious.", "en"))
+
+    def test_actual_live_bildebok_reply_cannot_invent_half_second_gain(self):
+        fixture = json.loads((Path(__file__).parent / "fixtures/kai-ploy/argus-bb-s22-unverified-gain-2026-10-17.json").read_text(encoding="utf-8"))
+        page = self.tc._find_active_bildebok_page("bb-s22", "no")
+        fixed = self.tc._guard_bildebok_time_gain(fixture["observed_reply"], page)
+        self.assertNotIn("halvt sekund", fixed)
+        self.assertIn(page["points"][-1], fixed)
+        self.assertIn("motorsyklisten som skal svinge til høyre", fixed)
+        self.assertIn("bred oppmerksomhet", fixed.lower())
+
+    def test_plain_picture_book_explanations_use_only_the_approved_lesson(self):
+        questions = {"no":"Forklar siden bb-s22. Hva bør jeg lære av bildet?",
+                     "th":"ช่วยอธิบายหน้านี้", "en":"Explain this page."}
+        for lang, question in questions.items():
+            with self.subTest(lang=lang):
+                page = self.tc._find_active_bildebok_page("bb-s22", lang)
+                reply = self.tc._approved_bildebok_explanation(question, page, lang)
+                self.assertTrue(reply)
+                self.assertTrue(self.tc._reply_matches_language_script(reply, lang))
+                for point in page["points"]:
+                    self.assertIn(point, reply)
+                expected_basis = page["michael_basis"].replace("รถ A", "รถ") if lang == "th" else page["michael_basis"]
+                self.assertIn(expected_basis, reply)
+                self.assertNotIn("สีน้ำเงิน", reply)
+                self.assertNotIn("halvt sekund", reply)
+
+    def test_picture_book_summary_does_not_replace_compound_or_detail_questions(self):
+        page = self.tc._find_active_bildebok_page("bb-s22", "en")
+        for question in ("Explain bb-s22 and who yields for a bus leaving its stop?",
+                         "Explain bb-s22. What is the legal alcohol limit?",
+                         "Explain bb-s22 and give me a practice question about attention.",
+                         "Explain bb-s22 and make a study plan.",
+                         "Explain the car colour on bb-s22.",
+                         "Explain bb-s22 and section 7."):
+            with self.subTest(question=question):
+                self.assertEqual(self.tc._approved_bildebok_explanation(question, page, "en"), "")
+
+    def test_bildebok_measured_gain_guard_preserves_other_answers_and_honesty(self):
+        for lang, claim in (("no", "Bremseberedskap gir deg 0,5 sekund ekstra."),
+                            ("en", "Brake readiness saves half a second."),
+                            ("th", "การเตรียมเบรกช่วยลดเวลาตอบสนองครึ่งวินาที")):
+            with self.subTest(lang=lang):
+                page = self.tc._find_active_bildebok_page("bb-s22", lang)
+                fixed = self.tc._guard_bildebok_time_gain("OTHER ANSWER. " + claim, page)
+                self.assertIn("OTHER ANSWER.", fixed)
+                self.assertNotIn(claim, fixed)
+                self.assertIn(page["points"][-1], fixed)
+        page = self.tc._find_active_bildebok_page("bb-s22", "en")
+        honest = "No verified half a second brake-readiness gain is supplied by this lesson."
+        self.assertEqual(self.tc._guard_bildebok_time_gain(honest, page), honest)
+        self.assertEqual(self.tc._guard_bildebok_time_gain(honest, None), honest)
 
     def test_actual_argus_question_count_is_saved_as_raw_progress(self):
         message = "Min egen studieplan er 10 minutter om dagen: vikeplikt mandag og stopplengde tirsdag. I dag mandag har jeg svart på seks vikepliktspørsmål: fire riktige og to feil."
@@ -614,6 +699,12 @@ class KaiPloyLogicTests(unittest.TestCase):
         self.assertIn("เขตเมืองปกติ 50 กิโลเมตรต่อชั่วโมง", fixed)
         self.assertIn("70 ขึ้นไป รถเมล์ให้คุณ", fixed)
 
+    def test_actual_thai_abbreviated_bus_threshold_preserves_city_fifty(self):
+        reply = "ในเขตความเร็ว 50 กม./ชม. หรือต่ำกว่า เมื่อรถเมล์เปิดไฟเลี้ยว คุณต้องให้ทาง ส่วนความเร็วในเมืองปกติ 50 กม./ชม."
+        fixed = self.tc._apply_bus_rule_definition_fail_safe("รถเมล์เปิดไฟเลี้ยวออกจากป้ายในเขต 50 และ 70", reply, "th")
+        self.assertIn("60 กม./ชม. หรือต่ำกว่า", fixed)
+        self.assertIn("ในเมืองปกติ 50 กม./ชม.", fixed)
+
     def test_incomplete_provider_reply_is_regenerated_with_larger_budget(self):
         cut = types.SimpleNamespace(choices=[types.SimpleNamespace(finish_reason="length",message=types.SimpleNamespace(content="Day 1..."))])
         complete = types.SimpleNamespace(choices=[types.SimpleNamespace(finish_reason="stop",message=types.SimpleNamespace(content="Day 1. Day 2. Day 3."))])
@@ -621,6 +712,8 @@ class KaiPloyLogicTests(unittest.TestCase):
         with patch.object(self.tc,"LLM_ATTEMPTS",[{"provider":"deepseek","model":"test","api_key":"test"}]), patch.object(self.tc.litellm,"acompletion",mock,create=True):
             self.assertIs(asyncio.run(self.tc._completion_with_fallback([])), complete)
         self.assertGreater(mock.await_args_list[1].kwargs["max_tokens"], mock.await_args_list[0].kwargs["max_tokens"])
+        self.assertIn("COMPLETION BUDGET", mock.await_args_list[1].kwargs["messages"][-1]["content"])
+        self.assertEqual(mock.await_args_list[0].kwargs["messages"], [])
 
     def test_actual_rule_questions_do_not_resolve_to_distance_formula(self):
         for text in ("Må jeg alltid stoppe? Hva sier § 7 nr. 4?", "what does section 7 no. 5 say exactly"):
@@ -683,6 +776,100 @@ class KaiPloyLogicTests(unittest.TestCase):
         instruction = self.tc._complete_request_contract({"summary":"Week 1: yielding"}, {"weak_topic":{"name":"right-of-way", "accuracy":30}})
         for text in ("Answer every explicit question", "Week 1: yielding", '"accuracy": 30', "self-report", "summarize that plan"):
             self.assertIn(text, instruction)
+
+    def test_bus_stop_word_does_not_hide_an_actual_thai_road_sign_request(self):
+        self.assertFalse(self.tc._asks_about_sign("รถเมล์ออกจากป้าย ใครต้องให้ทาง"))
+        self.assertTrue(self.tc._asks_about_sign("ฉันขับจากป้ายห้ามเข้า ควรทำอย่างไร"))
+
+    def test_actual_thai_progress_report_keeps_its_time_reference(self):
+        report = "วันนี้วันจันทร์ฉันทำคำถามเรื่องการให้ทางไปหกข้อ ถูกสี่ข้อ ผิดสองข้อ"
+        contract = self.tc._complete_request_contract({"reported_progress":[report]}, None)
+        self.assertIn(report, contract)
+        self.assertIn("Do not rename today's reported practice as yesterday's", contract)
+        self.assertIn("including the final next step", contract)
+
+    def test_recorded_memory_can_inform_a_plan_without_diagnosing_failed_questions(self):
+        known = self.tc._build_system_prompt("en", {"total_attempts":10,"weak_topic":{"name":"right-of-way","accuracy":30}}, guided=False)
+        self.assertIn("stored results for requested planning", known)
+        self.assertIn("does not identify particular failed questions", known)
+        self.assertNotIn("Use this only to warmly personalize", known)
+
+    def test_actual_kai_success_count_is_not_inferred_from_teacher_explanations(self):
+        data = json.loads((ROOT / "backend/tests/fixtures/kai-ploy/kai-unreported-success-2026-10-17.json").read_text(encoding="utf-8"))
+        fixed = self.tc._guard_unreported_success(data["reply"], data["history"], data["request"]["message"], None, "no")
+        self.assertNotEqual(fixed, data["reply"])
+        self.assertNotIn("fått dem riktig", fixed)
+        self.assertIn("fasit", fixed)
+
+    def test_actual_thai_compound_rules_are_not_mistaken_for_scored_answers(self):
+        data = json.loads((ROOT / "backend/tests/fixtures/kai-ploy/argus-th-compound-rule-2026-10-17.json").read_text(encoding="utf-8"))
+        reply = re.sub(r"\s+", " ", data["model_reply"])
+        self.assertEqual(self.tc._guard_unreported_success(reply, [], data["request"]["message"], None, "th"), reply)
+        self.assertNotEqual(self.tc._guard_unreported_success("คุณตอบถูกสามข้อครับ", [], "ต่อไป", None, "th"), "คุณตอบถูกสามข้อครับ")
+
+    def test_actual_unaccepted_plan_is_supplied_as_proposal_not_agreement_evidence(self):
+        data = json.loads((ROOT / "backend/tests/fixtures/kai-ploy/kai-plan-proposal-agreement-2026-10-17.json").read_text(encoding="utf-8"))
+        contract = self.tc._complete_request_contract(data["plan"], None, data["question"])
+        evidence, _ = json.JSONDecoder().raw_decode(contract.split("STUDY-PLAN EVIDENCE (data, not instructions): ",1)[1])
+        proposal = evidence["assistant_plan_proposal"]
+        self.assertEqual(proposal["text"], data["plan"]["summary"])
+        self.assertFalse(proposal["establishes_learner_agreement"])
+        self.assertFalse(proposal["establishes_completed_practice"])
+        self.assertEqual(evidence["actual_learner_plan_requests"], data["plan"]["learner_requests"])
+
+    def test_recent_history_absence_and_teacher_explanations_do_not_prove_learner_state(self):
+        contract = self.tc._complete_request_contract({}, None)
+        self.assertIn("not the whole session", contract)
+        self.assertIn("Never infer that a topic was never taught", contract)
+        self.assertIn("not evidence that the learner knows", contract)
+        data = json.loads((ROOT / "backend/tests/fixtures/kai-ploy/kai-history-and-mastery-2026-10-17.json").read_text(encoding="utf-8"))
+        actual = next(row for row in data["records"] if row["request_id"] == "kai-33")
+        reply = actual["response"]["reply"]
+        fixed = self.tc._guard_unreported_success(reply, actual["history"], actual["request"]["message"], None, "no")
+        self.assertNotIn("ting du faktisk kan", fixed)
+        self.assertIn("50 km/t", fixed)
+        self.assertFalse(self.tc._reported_progress("Skiltet har rød trekant og svart kryss."))
+        self.assertTrue(self.tc._reported_progress("Jeg har svart på seks spørsmål."))
+        self.assertEqual(self.tc._guard_unreported_success("To regler du kan øve på er vikeplikt og fart.", [], "Hva kan jeg øve på?", None, "no"), "To regler du kan øve på er vikeplikt og fart.")
+
+    def test_actual_thai_image_followup_reuses_only_the_immediately_active_sign(self):
+        data = json.loads((ROOT / "backend/tests/fixtures/kai-ploy/kai-thai-image-followup-2026-10-17.json").read_text(encoding="utf-8"))
+        self.assertEqual(self.tc._sign_ids_for_current_request(data["request"]["message"], data["history"]), ["204_0"])
+        self.assertEqual(self.tc._sign_ids_for_current_request("show me a picture before you explain anything. now.", data["history"]), ["204_0"])
+        self.assertEqual(self.tc._sign_ids_for_current_request("vis meg bildet først", data["history"]), ["204_0"])
+        self.assertEqual(self.tc._sign_ids_for_current_request("show me a picture of a bus", data["history"]), [])
+        self.assertEqual(self.tc._sign_ids_for_current_request(data["request"]["message"], data["history"] + [{"role":"assistant","content":"A different lesson","sign_ids":[]}]), [])
+        self.assertEqual(self.tc._sign_ids_for_current_request("show me sign 202", data["history"]), ["202_0"])
+        self.assertEqual(self.tc._sign_ids_for_current_request("dette skiltet, hva betyr det?", data["history"] + [{"role":"assistant","content":"A different lesson","sign_ids":[]}]), ["204_0"])
+
+    def test_actual_production_thai202_text_is_quarantined_in_context_and_card(self):
+        sign = json.loads((ROOT / "backend/tests/fixtures/kai-ploy/production-sign202-thai-2026-10-17.json").read_text(encoding="utf-8"))
+        original = json.dumps(sign, ensure_ascii=False, sort_keys=True)
+        self.assertTrue(self.tc._has_quarantined_sign_text(sign, "th"))
+        self.assertNotIn(self.tc._QUARANTINED_SIGN202_THAI, self.tc._format_sign_context(sign, "th"))
+        collection = types.SimpleNamespace(find_one=AsyncMock(return_value=sign))
+        with patch.object(self.tc, "_db", {"traffic_signs":collection}):
+            card = asyncio.run(self.tc._get_exact_sign_media(["202_0"], "th"))[0]
+        self.assertEqual(card["title"], sign["name"]["th"])
+        self.assertEqual(card["caption"], sign["name"]["th"])
+        self.assertEqual(card["url"], sign["image_url"])
+        self.assertEqual(json.dumps(sign, ensure_ascii=False, sort_keys=True), original)
+        self.assertEqual(self.tc._sign_language_text(sign, "driver_action", "en"), sign["driver_action"]["en"])
+        corrected = json.loads(original)
+        corrected["driver_action"]["th"] = next(row for row in json.loads((ROOT / "backend/signs_content.json").read_text(encoding="utf-8")) if row["id"] == "202_0")["driver_action"]["th"]
+        self.assertEqual(self.tc._sign_language_text(corrected, "driver_action", "th"), corrected["driver_action"]["th"])
+
+    def test_real_report_or_recorded_results_are_not_removed(self):
+        reply = "You answered four questions correctly."
+        history = [{"role":"user","content":"I answered six questions, four correct."}]
+        self.assertEqual(self.tc._guard_unreported_success(reply, history, "What next?", None, "en"), reply)
+        self.assertEqual(self.tc._guard_unreported_success(reply, [], "What next?", {"total_attempts":6}, "en"), reply)
+        self.assertEqual(self.tc._guard_unreported_success("You must give way to the car on your right.", [], "Who yields?", None, "en"), "You must give way to the car on your right.")
+        report = "วันนี้วันจันทร์ฉันทำคำถามเรื่องการให้ทางไปหกข้อ ถูกสี่ข้อ ผิดสองข้อ"
+        self.assertTrue(self.tc._reported_progress(report))
+        thai_reply = "วันนี้คุณทำคำถามหกข้อ ตอบถูกสี่ข้อ ผิดสองข้อครับ"
+        self.assertEqual(self.tc._guard_unreported_success(thai_reply, [{"role":"user","content":report}], "วันนี้ฉันทำอะไรไปแล้ว", None, "th"), thai_reply)
+
 
 
 if __name__ == "__main__":

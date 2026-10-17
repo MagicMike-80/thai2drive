@@ -79,7 +79,7 @@ class BildebokLessonTests(unittest.TestCase):
                 self.assertEqual(card["title"], row["title"][lang])
                 self.assertEqual(card["caption"], row["core_sentence"][lang])
 
-    def test_teacher_chat_uses_approved_bb_s22_context_and_image_in_all_languages(self):
+    def test_teacher_chat_serves_approved_bb_s22_text_and_image_without_model_invention(self):
         old_db, old_chat = tc._db, tc._chat_col
         tc._db, tc._chat_col = Database(), Collection()
         messages = {
@@ -87,17 +87,12 @@ class BildebokLessonTests(unittest.TestCase):
             "th": "อธิบายความสนใจแบบแคบและกว้างในภาพรถบรรทุกและรถจักรยานยนต์",
             "en": "Explain narrow and wide attention with the lorry and motorcycle",
         }
-        replies = {
-            "no": "Løft blikket og se hele krysset.",
-            "th": "เงยสายตาขึ้นและมองภาพรวมของทางแยก",
-            "en": "Lift your gaze and look across the whole junction.",
-        }
         try:
             for lang in ("no", "th", "en"):
                 captured = {}
                 async def completion(prompt):
                     captured["prompt"] = prompt
-                    return SimpleNamespace(choices=[SimpleNamespace(message=SimpleNamespace(content=replies[lang]))])
+                    raise AssertionError("Plain approved lesson must not be regenerated")
 
                 req = tc.TeacherChatRequest(message=messages[lang], language=lang, session_id=f"bb-s22-{lang}")
                 with patch.object(tc, "LLM_KEY", "mock-only"), \
@@ -113,8 +108,10 @@ class BildebokLessonTests(unittest.TestCase):
                     response = asyncio.run(tc.teacher_chat(req))
 
                 with self.subTest(lang=lang):
-                    self.assertIn(tc._bildebok_prompt_context(find_active_page(messages[lang], lang), lang), captured["prompt"][0]["content"])
-                    self.assertEqual(response.reply, replies[lang])
+                    self.assertEqual(captured, {})
+                    page = find_active_page(messages[lang], lang)
+                    basis = page["michael_basis"].replace("รถ A", "รถ") if lang == "th" else page["michael_basis"]
+                    self.assertEqual(response.reply, "\n\n".join([basis, *page["points"]]))
                     self.assertEqual(len(response.media), 1)
                     self.assertEqual(response.media[0]["id"], "bildebok:bb-s22")
                     self.assertEqual(response.media[0]["type"], "image")

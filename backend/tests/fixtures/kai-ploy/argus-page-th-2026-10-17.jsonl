@@ -1,3 +1,4 @@
 {"student": "ช่วยอธิบายหน้านี้", "lang": "th", "document_id": "bb-s22", "source_record": "2026-10-17/argus-943044a/th-bb_generic_valid.json", "expected_media_id": "bildebok:bb-s22"}
 {"student": "ช่วยอธิบายหน้า 22 เรื่องความสนใจแคบและกว้าง ฉันควรเรียนรู้อะไรจากภาพนี้", "lang": "th", "document_id": "bb-s22", "source_record": "2026-10-17/argus-943044a/th-bb_natural_valid.json", "expected_media_id": "bildebok:bb-s22"}
 {"student": "รถเมล์เปิดไฟเลี้ยวออกจากป้าย ใครต้องให้ทางในเขต 50 และเขต 70 และปกติในเขตเมืองจำกัดความเร็วเท่าไหร่", "lang": "th", "document_id": "bb-s22", "source_record": "2026-10-17/argus-943044a/th-bus_document.json"}
+{"student": "ป้าย 202 ต้องหยุดรถสนิททุกครั้งไหมคะ", "lang": "th", "source_record": "2026-10-17/argus-9fb3e81/th-sign202.json", "expected_media_id": "traffic-sign:202_0"}

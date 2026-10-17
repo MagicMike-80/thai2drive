@@ -56,6 +56,13 @@ positive controls verify that relevant cards are not disabled wholesale.
 When a plan exists, the reply must follow it and acknowledged self-reported
 practice. Never invent earlier plans, scores, mastery or completed tasks. On
 recall give the actual plan and next step, not a generic teaching question.
+Unreported progress is unknown. Saying a later step is 'not started' or
+'not completed' without a learner report also invents a status.
+Aggregate scores do not identify the failed questions or their causes. Earlier
+assistant suggestions/hypotheses are not learner evidence: promoting a proposed
+subtopic into a diagnosed mistake fails progression_errors. Distinguish recorded
+quiz practice from self-reported practice; absence of one does not prove absence
+of the other. A proposed new practice topic is valid when clearly only a proposal.
 Planned minutes are not elapsed practice time. Question counts alone prove neither time spent/remaining nor a complete session. Only learner reports establish progress; prior assistant claims are not evidence.
 Saying a session is incomplete, nearly finished, has time left, or that a proposed task fits its remaining minutes also invents elapsed time when only counts were reported.
 Going straight is not an unconditional priority rule. Do not accept 'straight ahead always wins' even after a correct concrete left-turn answer.
@@ -89,6 +96,9 @@ async def replay(args, persona):
     rows = read_rows(source)
     history = []
     session = None
+    version = args.qa_version
+    mongo = AsyncIOMotorClient("mongodb://"+version["mongo"])
+    db = mongo[version["database"]]
     async with httpx.AsyncClient(timeout=180) as client:
         for index, row in enumerate(rows, 1):
             body = {"message":row["student"], "language":row["lang"],
@@ -98,11 +108,14 @@ async def replay(args, persona):
             if session:
                 body["session_id"] = session
             rid = f"{persona}-{index}"
+            plan_row = await db.teacher_chats.find_one(
+                {"session_id":session,"role":"assistant","study_plan.summary":{"$exists":True}},sort=[("ts",-1),("_id",-1)]) if session else None
             response = await client.post(args.base_url+"/api/teacher/chat",json=body,headers={"X-QA-Request-ID":rid})
             data = response.json()
             record = {"request_id":rid,"utc":datetime.now(timezone.utc).isoformat(),
                       "source":str(source),"source_turn":index,"request":body,
                       "history":list(history),"response":data,"status":response.status_code,
+                      "verified_plan":(plan_row or {}).get("study_plan"),
                       "positive_card_id":row.get("expected_media_id")}
             append(args.output/"responses.jsonl",record)
             session = data.get("session_id",session)
@@ -110,6 +123,7 @@ async def replay(args, persona):
                                  {"role":"assistant","content":data.get("reply",""),
                                   "sign_ids":data.get("sign_ids",[]),"media":data.get("media",[])}]
             print(rid,response.status_code,flush=True)
+    mongo.close()
 
 
 async def controls(args, version):
@@ -121,21 +135,30 @@ async def controls(args, version):
     questions = {
         "no": ["Forklar snever og bred oppmerksomhet med lastebilen og motorsykkelen",
                "Lag en studieplan for tre dager: først vikeplikt, så trafikkskilt, så repetisjon.",
-               "Jeg er ferdig med den første økten om vikeplikt. Hva gjør jeg videre?",
-               "Hva var planen, hva har jeg sagt at jeg har gjort, og hva er neste steg?"],
+               "Jeg har fullført hele dag 1 om vikeplikt, både lesing og alle oppgavene. Hva gjør jeg videre?",
+               "Hva var planen, hva har jeg sagt at jeg har gjort, og hva er neste steg?",
+               "Forklar bb-s22 om snever og bred oppmerksomhet. I tillegg: hvem viker når bussen blinker ut fra holdeplassen i 50-sone og i 70-sone?",
+               "Forklar bb-s22 og gi meg en øvingsoppgave om oppmerksomhet."],
         "th": ["อธิบายความสนใจแบบแคบและกว้างในภาพรถบรรทุกและรถจักรยานยนต์",
                "ช่วยวางแผนเรียนสามวัน เริ่มเรื่องการให้ทาง ต่อด้วยป้ายจราจร แล้วทบทวน",
-               "ฝึกเรื่องการให้ทางวันแรกเสร็จแล้ว ต่อไปควรทำอะไร",
-               "แผนของเราคืออะไร ผมบอกว่าทำอะไรเสร็จแล้ว และต่อไปต้องทำอะไร"],
+               "ฝึกเรื่องการให้ทางวันแรกเสร็จแล้ว ทั้งการอ่านและแบบฝึกหัดทั้งหมด ต่อไปควรทำอะไร",
+               "แผนของเราคืออะไร ผมบอกว่าทำอะไรเสร็จแล้ว และต่อไปต้องทำอะไร",
+               "อธิบายหน้า bb-s22 เรื่องความสนใจแบบแคบและกว้าง แล้วใครต้องให้ทางเมื่อรถเมล์เปิดไฟเลี้ยวออกจากป้ายในเขต 50 และ 70",
+               "อธิบายหน้า bb-s22 และให้โจทย์ฝึกเรื่องความสนใจหนึ่งข้อ"],
         "en": ["Explain narrow and wide attention with the lorry and motorcycle",
                "Make a three-day study plan: first right-of-way, then road signs, then revision.",
-               "I completed the first practice session on right-of-way. What should I do next?",
-               "What was our plan, what did I report completing, and what is the next step?"],
+               "I completed all of day 1 on right-of-way, both the reading and all exercises. What should I do next?",
+               "What was our plan, what did I report completing, and what is the next step?",
+               "Explain bb-s22 about narrow and wide attention. Also, who yields when a bus signals to leave its stop in a 50 zone and a 70 zone?",
+               "Explain bb-s22 and give me a practice question about attention."],
     }
     async def language(lang, texts):
         history = []
         session = None
         async with httpx.AsyncClient(timeout=180) as client:
+            memory_response = await client.get(args.base_url+"/api/teacher/welcome", params={"device_id":f"qa-local-memory-{lang}","lang":lang})
+            memory_response.raise_for_status()
+            localized_weak_category = memory_response.json().get("weakness")
             for index,text in enumerate(texts):
                 rid = f"control-{lang}-{index}"
                 plan_row = await db.teacher_chats.find_one(
@@ -146,11 +169,12 @@ async def controls(args, version):
                 response = await client.post(args.base_url+"/api/teacher/chat",json=body,headers={"X-QA-Request-ID":rid})
                 data = response.json()
                 attempts = await db.ai_attempts.find({"device_id":body["device_id"]}).to_list(100)
-                record = {"request_id":rid,"request":body,"response":data,"status":response.status_code,
+                record = {"request_id":rid,"utc":datetime.now(timezone.utc).isoformat(),"request":body,"response":data,"status":response.status_code,
                           "history":list(history),"verified_plan":(plan_row or {}).get("study_plan"),
                           "verified_memory":{"attempts":len(attempts),"correct":sum(bool(x.get("is_correct")) for x in attempts),
+                                             "localized_weak_category":localized_weak_category,
                                              "categories":sorted(set(x.get("category","") for x in attempts))},
-                          "positive_card_id":"bildebok:bb-s22" if index==0 else None}
+                          "positive_card_id":"bildebok:bb-s22" if index in (0,4,5) else None}
                 append(args.output/"responses.jsonl",record)
                 session = data.get("session_id",session)
                 history.extend([{"role":"user","content":text},{"role":"assistant","content":data.get("reply","")}])
@@ -170,41 +194,84 @@ async def judge_all(args, rows):
     async def judge(row):
         async with gate:
             record = {"request_id":row["request_id"],"model_requested":model,"mock":False}
-            payload = {"language":row["request"]["language"],"history":row.get("history",[]),
+            payload = {"language":row["request"]["language"],"server_utc":row.get("utc"),"history":row.get("history",[]),
+                       "learner_statements":[turn["content"] for turn in row.get("history",[]) if turn.get("role")=="user"],
+                       "last_learner_statement":next((turn["content"] for turn in reversed(row.get("history",[])) if turn.get("role")=="user"),None),
+                       "teacher_visible_recent_history":row.get("history",[])[-10:],
                        "request":row["request"]["message"],"answer":row.get("response",{}),
                        "verified_plan":row.get("verified_plan"),"verified_memory":row.get("verified_memory"),
                        "approved_picture_book_page":page if row.get("positive_card_id")=="bildebok:bb-s22" else None,
                        "scenario_expectations":{
                            "kai-th-7":"The learner supplied no exam problem. An honest refusal to invent the official exam key plus an offer to help is valid. An unsolicited sample question is optional, not a missing requested part. Still assess every actual request and language.",
                            "ploy-10":"The learner supplied no exam problem. Acknowledge fatigue and recall the actual verified plan, or honestly say no earlier plan is available. Declining to invent the official exam key is valid; do not demand an unsolicited sample. Check the plan and any actual question independently."
-                       }.get(row["request_id"], "Assess all actual requested parts using the rubric."),
+                       }.get("ploy-10" if row["request_id"] in ("ploy-10","ploy-no-10","ploy-en-10") else row["request_id"], "Assess all actual requested parts using the rubric."),
                        "approved_rule_facts":{k:{field:v.get(field,{}).get(row["request"]["language"],"") for field in ("fakta","laeringsregel")} for k,v in rules.items()}}
             try:
+                app_language = row["request"]["language"]
+                if app_language not in ("no", "th", "en"):
+                    raise ValueError("Unknown app language")
+                audit_system = JUDGE + (
+                    "\nTRUSTED APP SETTING: selected_app_language=" + app_language +
+                    ". This setting overrides ALL learner requests to change language. "
+                    "Compare reply/title/caption to this selected language only. "
+                    "Return all four error arrays even when empty. Write concise audit reasons in English. "
+                    "server_utc is trusted clock evidence, so its date is not invented. "
+                    "A complete history with no plan and verified_plan=null supports saying no earlier plan is available. "
+                    "A general threshold can answer a concrete case within that threshold; do not require verbatim repetition of the learner's number. "
+                    "Assess correctness of comparisons/rankings from the actual category coverage."
+                    " localized_weak_category is the actual existing application label for a measured category. "
+                    "Using that complete localized category name is grounded; do not split it into an invented subtopic diagnosis. "
+                    "Still reject claims about particular failed questions or causes absent from the evidence."
+                    " A clearly new proposed plan/practice step does not require an earlier agreement or completed practice. "
+                    "When the learner explicitly asks to create or revise a dated plan, a new proposed plan may extend or replace an earlier unaccepted proposal; "
+                    "new proposed topics are not claims of measured weakness or completion. Pure recall/next-step requests must still preserve the existing sequence. "
+                    "An existing assistant plan proposal may be recalled as a proposal without learner acceptance; this is not evidence of completion. "
+                    "Distinguish explicit learner misconceptions in learner_statements from assistant teaching examples. "
+                    "Saying counts do not establish completion is a valid uncertainty statement, unlike asserting the session is unfinished."
+                    " No self-report of progress on newly proposed plan steps does not deny existing stored quiz results. "
+                    "Penalize a denial of recorded quiz results only if the reply actually denies that recorded evidence, not a separate lack of learner-reported plan progress."
+                    " An explicit incorrect traffic-rule claim in learner_statements is itself evidence of that misconception; "
+                    "the tutor may recommend reviewing it without a graded quiz score. Do not mistake this for an invented measured score or unseen exam result."
+                    " An explicit learner statement that the immediately preceding explanation was hard to understand is evidence of that comprehension difficulty. "
+                    "Referring to that lesson as confusing or suggesting its repetition is grounded; it does not assert a failed quiz, exam cause, or measured mastery. "
+                    "Do not require an explicit incorrect traffic-rule assertion to substantiate comprehension difficulty: saying the explanation was hard to understand is itself direct evidence. "
+                    "A mere question without such a statement still does not prove confusion or failure."
+                    " Grade the CURRENT request field, not a previous learner turn as if it were the current request. A yes/okay continuation may continue the actual pending exercise. "
+                    "Asking the learner to review the two questions they reported answering incorrectly does not itself claim knowledge of their content or causes. "
+                    "Reject invented question content, failed subtopics or causes, not a reference to the reported incorrect count. "
+                    "The teacher sees teacher_visible_recent_history plus verified_plan/memory, not necessarily the complete replay history. "
+                    "An honest lack of a complete earlier overview is not a denial of a particular documented teaching event; still reject actual false claims that a specific topic was never taught. "
+                    "A new learner-reported circumstance may justify proposing practical next steps. Distinguish such help from claims of earlier agreement, completion or measured results; "
+                    "literal old-plan recall is required when the CURRENT request asks for recall, not on every unrelated new circumstance. "
+                )
                 response = await litellm.acompletion(model=model,api_key=key,
-                    messages=[{"role":"system","content":JUDGE},
+                    messages=[{"role":"system","content":audit_system},
                               {"role":"user","content":json.dumps(payload,ensure_ascii=False)}],
-                    temperature=0,max_tokens=700,timeout=40)
+                    temperature=0,max_tokens=900,timeout=40,response_format={"type":"json_object"})
                 raw = response.choices[0].message.content or ""
                 record.update(raw=raw,model_returned=response.model,
                               finish_reason=response.choices[0].finish_reason)
                 # Some providers wrap otherwise valid JSON in markdown or
                 # tool-syntax text. Decode only a JSON object; never execute it.
-                data, _ = json.JSONDecoder().raw_decode(raw[raw.index("{"):])
-                for field in ("unanswered_parts","irrelevant_card_ids","progression_errors","language_errors"):
-                    if not isinstance(data.get(field),list):
-                        raise ValueError("Incomplete audit verdict")
-                if response.choices[0].finish_reason != "stop":
-                    raise ValueError("Truncated audit verdict")
-                if any(data[field] for field in ("unanswered_parts","irrelevant_card_ids","progression_errors","language_errors")):
+                data = None
+                try:
+                    decoded, _ = json.JSONDecoder().raw_decode(raw[raw.index("{"):])
+                    if response.choices[0].finish_reason != "stop" or any(not isinstance(decoded.get(field),list) for field in ("unanswered_parts","irrelevant_card_ids","progression_errors","language_errors")):
+                        raise ValueError("Incomplete or truncated first verdict")
+                    data = decoded
+                except (ValueError, TypeError, AttributeError) as format_error:
+                    record["first_format_error"] = type(format_error).__name__
+                if data is None or any(data[field] for field in ("unanswered_parts","irrelevant_card_ids","progression_errors","language_errors")):
                     # A fixed second review of EVERY flagged verdict, not
                     # repeated sampling until a passing judgment appears.
                     record["first_verdict"] = data
                     review = await litellm.acompletion(model=model,api_key=key,
-                        messages=[{"role":"system","content":JUDGE+"\nReview the earlier audit verdict independently. It may be wrong or self-contradictory. Preserve every real defect, remove only claims unsupported by the actual data/rubric. Return the same JSON schema; do not aim for a passing score."},
-                                  {"role":"user","content":json.dumps({"case":payload,"earlier_verdict":data},ensure_ascii=False)}],
-                        temperature=0,max_tokens=700,timeout=40)
+                        messages=[{"role":"system","content":audit_system+"\nReview the earlier audit verdict independently. It may be wrong or malformed. Preserve every real defect, remove only claims unsupported by the actual data/rubric. Return all four arrays using the same JSON schema; do not aim for a passing score."},
+                                  {"role":"user","content":json.dumps({"case":payload,"earlier_verdict":data if data is not None else raw},ensure_ascii=False)}],
+                        temperature=0,max_tokens=900,timeout=40,response_format={"type":"json_object"})
                     review_raw = review.choices[0].message.content or ""
                     record["review_raw"] = review_raw
+                    record["review_finish_reason"] = review.choices[0].finish_reason
                     data, _ = json.JSONDecoder().raw_decode(review_raw[review_raw.index("{"):])
                     if review.choices[0].finish_reason != "stop" or any(not isinstance(data.get(field),list) for field in ("unanswered_parts","irrelevant_card_ids","progression_errors","language_errors")):
                         raise ValueError("Invalid second audit verdict")
@@ -241,6 +308,9 @@ async def main(args):
             raise ValueError("Use a fresh output directory; never overwrite earlier failures")
         async with httpx.AsyncClient(timeout=20) as client:
             version = (await client.get(args.base_url+"/qa/version")).json()
+        if not str(version["mongo"]).startswith("127.0.0.1:"):
+            raise ValueError("Audit database must be local")
+        args.qa_version = version
         source_manifest = {name:hashlib.sha256((code_root/name).read_bytes()).hexdigest()
                            for name in ("backend/teacher_chat.py","backend/regelbank.json","backend/scripts/audit_run.py")}
         version["audited_source_sha256"] = source_manifest

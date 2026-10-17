@@ -1,3 +1,4 @@
 {"student": "Forklar denne siden.", "lang": "no", "document_id": "bb-s22", "source_record": "2026-10-17/argus-943044a/no-bb_generic_valid.json", "expected_media_id": "bildebok:bb-s22"}
 {"student": "Forklar side 22 om snever og bred oppmerksomhet. Hva bør jeg lære av bildet?", "lang": "no", "document_id": "bb-s22", "source_record": "2026-10-17/argus-943044a/no-bb_natural_valid.json", "expected_media_id": "bildebok:bb-s22"}
 {"student": "En buss blinker ut fra holdeplassen. Hvem har vikeplikt i 50-sone og i 70-sone, og hva er vanlig fartsgrense i tettbygd strøk?", "lang": "no", "document_id": "bb-s22", "source_record": "2026-10-17/argus-943044a/no-bus_document.json"}
+{"student": "Betyr skilt 202 at jeg alltid må stoppe helt?", "lang": "no", "source_record": "2026-10-17/argus-9fb3e81/no-sign202.json", "expected_media_id": "traffic-sign:202_0"}
