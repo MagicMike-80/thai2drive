@@ -9,7 +9,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from bildebok_lookup import find_page, find_pages, load_all_packs, load_pack  # noqa: E402
-from build_bildebok_preview import INDEX, PACKS, build_html, build_index, build_map, paths, row_hash  # noqa: E402
+from build_bildebok_preview import INDEX, PACKS, SIDECAR_MARKER, build_html, build_index, build_map, map_with_preserved_sidecar, paths, row_hash  # noqa: E402
 from test_bildebok_pilot import language_errors  # noqa: E402
 from validate_bildebok import validate_pack  # noqa: E402
 
@@ -66,7 +66,11 @@ def test_open_questions_are_marked_where_primary_sources_were_not_read():
 
 def test_batch2_generated_files_are_current():
     o = paths("_BATCH2")
-    assert o["map"].read_text(encoding="utf-8") == build_map(B2)
+    current_map = o["map"].read_text(encoding="utf-8")
+    generated, marker, sidecar = current_map.partition(SIDECAR_MARKER)
+    assert marker and sidecar.strip()
+    assert generated.rstrip() == build_map(B2).rstrip()
+    assert map_with_preserved_sidecar(current_map, build_map(B2)).endswith(SIDECAR_MARKER + "\n" + sidecar.lstrip("\r\n"))
     text = o["approval"].read_text(encoding="utf-8")
     for r in B2["pages"]:
         assert f"| {r['id']} | `{row_hash(r)}` |" in text, r["id"]
@@ -96,7 +100,7 @@ def test_book_index_chains_all_rows_in_book_order_and_matches_file():
 def test_all_packs_lookup_finds_batch2_rows_in_three_languages():
     allp = load_all_packs()
     cases = [("no", "Hva er mønsterdybde på vinterdekk?", "bb-s41"), ("th", "ความลึกดอกยางหน้าหนาวขั้นต่ำเท่าไร", "bb-s41"),
-             ("en", "What does a solid yellow line mean?", "bb-s51b"), ("no", "Hva betyr rødt og gult lys samtidig?", "bb-s55b"),
+             ("en", "What does a barrier line mean?", "bb-s51b"), ("no", "Hva betyr rødt og gult lys samtidig?", "bb-s55b"),
              ("th", "ไฟแดงและเหลืองพร้อมกันหมายความว่าอย่างไร", "bb-s55b"), ("en", "How does the police arm raised signal work?", "bb-s58b")]
     for lang, q, rid in cases:
         hits = [h["id"] for h in find_pages(q, lang, allp, 3)]

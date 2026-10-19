@@ -162,3 +162,43 @@ Samme regler som batch 2 (seksjon 6). Levert som egen pakke, pilotens og batch 2
 
 Kjør: `cd backend && python -m pytest tests/test_bildebok_pilot.py tests/test_bildebok_batch2.py tests/test_bildebok_batch3.py -q` (42 består).
 Åpne spørsmål (ikke publiseringsgodkjent): skiltforskriften (forbudsskiltets rekkevidde), § 2 (utrykning), § 6 nr. 2 (svinging), reaksjonstid og tre-sekundersregel som tommelfingerregler, tegn «i god tid».
+
+## 8. Batch 4 (trykt s. 86–110) og skillet lovkrav / rettesnor / uavklart
+Ikke blokkerende for piloten. Samme regler som seksjon 6 og 7. Ingen commit eller deploy er gjort for denne batchen.
+
+| Fil | Innhold |
+|---|---|
+| `backend/content_packs/bildebok/batch4_s86_s110.json` | 30 rader / 25 originalsider (PDF-s. 81–105): svinging og feltvalg, enveiskjøring, rundkjøring, feltskifte og fletting, kollektivfelt, påbudsskilt, vikeplikt (høyre, svinging, lyskryss, andre situasjoner, syklister) |
+| `docs/bildebok/REGELKONTROLL_BATCH4.md` | Klassifisering per påstand og kilde |
+| `docs/bildebok/INDEKS_KONTROLL.md` | Svar på 99 vs. 103: indeksen hadde 103 rader, feilen var i min rapport. Nå 133 rader, hver nøyaktig én gang |
+| `backend/tests/test_bildebok_batch4.py`, `test_bildebok_index.py` | 12 + 6 offline-tester |
+| `docs/bildebok/{SIDEKART,INNHOLD,RAPPORT,GODKJENNING}_BATCH4.md`, `BILDEBRIEFER_BATCH4_TIL_CHATGPT.md`, `output/bildebok/elevvisning_batch4.html` | Samme dokumenttyper |
+
+**Krav til Michael (skal følges i integrasjonen):**
+- Hver rad i batch 4 har `michael_claims` med `kind` = `lov` | `rettesnor` | `apent`. `michael_basis` er generert fra dem med lokalisert merkelapp per påstand («Lovkrav:», «Rettesnor (ikke lovkrav):», «Uavklart (ikke undervis som sikker regel):»).
+- Michael kan forklare `lov` som regel. `rettesnor` skal formuleres som råd. `apent` skal **ikke** undervises som sikker regel: Michael sier at dette er uavklart eller at han ikke er sikker, og henviser til kilden.
+- Elevtekst (`points`) inneholder bare `lov` og `rettesnor` (`points_kinds`). `apent` forekommer aldri i elevkortet.
+- `book_index.json` har nå `open_questions`, `claim_kinds` og `teach_open_claims_as_rules: false` for alle 133 rader, og `find_pages` returnerer det samme. Pilot, batch 2 og batch 3 har ikke `michael_claims`; der betyr en ikke-tom `open_questions` at radens Michael-grunnlag kan inneholde påstander som ikke skal undervises som sikre regler.
+
+Kjør: `cd backend && python -m pytest tests/test_bildebok_pilot.py tests/test_bildebok_batch2.py tests/test_bildebok_batch3.py tests/test_bildebok_batch4.py tests/test_bildebok_index.py -q` (59 består).
+
+## 9. Batch 5 (trykt s. 111–126, slutten av boka) og fysisk skille mellom lærerbasis og redaksjonelle notater
+Ikke blokkerende for piloten. Ingen commit, push eller deploy er gjort for denne batchen. Pilotens, batch 2s og batch 3s pakkefiler er **uendret**.
+
+| Fil | Innhold |
+|---|---|
+| `backend/content_packs/bildebok/batch5_s111_s126.json` | 19 rader / 16 originalsider (PDF-s. 106–121): vikeplikt (buss, sperring, forkjørsvei, utrykning, planovergang), rygging og vending, stans og parkering (§ 17) |
+| `backend/content_packs/bildebok/michael_safe_overrides.json` | **Trygg lærerbasis for 31 rader i pilot, batch 2 og batch 3.** Overstyrer `michael_basis` uten å endre pakkene. Hver lovpåstand har kilde og `checked_at` |
+| `docs/bildebok/AVKLARINGER_PILOT.md` | Utfall, kilde og kontrolltidspunkt for de 9 åpne pilotradene |
+| `docs/bildebok/RETTINGSFORSLAG_TIDLIGERE_BATCHER.{json,md}` | 16 kildebelagte forslag til elevtekst i pilot og batch 2 (NO/TH/EN). **Ikke innlagt**: filene eies av andre |
+| `docs/bildebok/REGELKONTROLL_BATCH5.md`, revisjon i `REGELKONTROLL_BATCH4.md` | Klassifisering per påstand |
+| `backend/tests/test_bildebok_batch5.py`, `test_bildebok_safe_export.py` | 10 + 8 offline-tester |
+
+**Krav til integrasjonen (må gjøres teknisk, et flagg alene er ikke nok):**
+1. Til læreren skal det **bare** gå `michael_payload(row, lang)` fra `backend/scripts/bildebok_lookup.py` (flytt til `bildebok_michael.py`): `basis` (lov og rettesnor, merket per påstand), `uncertainty_notice` (generisk varsel når raden har uavklarte påstander) og kilde. `open_questions`, `editor_notes`, `michael_claims` med `kind = apent` og `image_brief` skal **aldri** sendes.
+2. Bruk `michael_safe_overrides.json` for rader som finnes der (pilot, batch 2, batch 3), ellers radens egen `michael_basis`. Batch 4 og 5 har claims som genererer basis direkte.
+3. Når `uncertainty_notice` finnes, skal Michael si at han ikke er sikker på detaljer og henvise til kilden, ikke gi dem som regler.
+4. `book_index.json` har `has_unconfirmed`, `open_question_count` og `teach_open_claims_as_rules: false` per rad (152 rader), men ingen påstandstekst.
+5. Redaksjonelle spørsmål (bb-s16, bb-s21, kassettskifte i bb-s26) er for Michael, ikke for læreren.
+
+Kjør: `cd backend && python -m pytest tests/test_bildebok_pilot.py tests/test_bildebok_batch2.py tests/test_bildebok_batch3.py tests/test_bildebok_batch4.py tests/test_bildebok_batch5.py tests/test_bildebok_index.py tests/test_bildebok_safe_export.py -q` (79 består).

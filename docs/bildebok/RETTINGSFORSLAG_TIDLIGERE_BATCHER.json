@@ -1,0 +1,278 @@
+{
+ "checked_at": "2026-10-10T04:29+02:00",
+ "note": "Forslag til innholdseier/PL. Ingen pakkefil er endret av Deep. Boken er ca. 2010. NO/TH/EN i forslaget skal settes inn samtidig.",
+ "proposals": [
+  {
+   "id": "bb-s14b",
+   "pack": "pilot_s11_s35",
+   "field": "points[2]",
+   "current_no": "Fristen kan bli lengre ved stor skade eller ruspåvirket kjøring.",
+   "proposed": {
+    "no": "Er det voldt større skade, er sperrefristen ett år.",
+    "th": "ถ้าก่อความเสียหายมากกว่าปกติ ช่วงห้ามคือหนึ่งปี",
+    "en": "If major damage was caused, the barring period is one year."
+   },
+   "source": "Vegtrafikkloven § 24 a",
+   "source_url": "https://lovdata.no/lov/1965-06-18-4/§24a",
+   "checked_at": "2026-10-10T04:29+02:00",
+   "reason": "§ 24 a første ledd nevner større skade (ett år), ikke ruspåvirkning.",
+   "status": "foreslått",
+   "applies_to_files_owned_by": "Codex/PL (pakkefilen er ikke endret av Deep)"
+  },
+  {
+   "id": "bb-s23",
+   "pack": "pilot_s11_s35",
+   "field": "core_sentence",
+   "current_no": "Fra du ser faren til du handler tar det 0,3 til 3–4 sekunder.",
+   "proposed": {
+    "no": "Fra du ser faren til du handler tar det ofte rundt ett sekund.",
+    "th": "ตั้งแต่เห็นอันตรายจนลงมือทำมักใช้เวลาประมาณ 1 วินาที",
+    "en": "From seeing the danger to acting often takes about one second."
+   },
+   "source": "Store norske leksikon, reaksjonstid (sekundær)",
+   "source_url": "https://snl.no/reaksjonstid_-_psykologi",
+   "checked_at": "2026-10-10T04:29+02:00",
+   "reason": "Bokas intervall er ikke bekreftet. Ett sekund er tommelfingerregel i sekundærkilde (rettesnor, ikke lovkrav).",
+   "status": "foreslått",
+   "applies_to_files_owned_by": "Codex/PL (pakkefilen er ikke endret av Deep)"
+  },
+  {
+   "id": "bb-s24",
+   "pack": "pilot_s11_s35",
+   "field": "core_sentence",
+   "current_no": "Tretthet svekker reaksjonen omtrent som alkohol.",
+   "proposed": {
+    "no": "Du må ikke kjøre når du er trett.",
+    "th": "ห้ามขับเมื่อคุณง่วงหรือเหนื่อย",
+    "en": "You must not drive when you are tired."
+   },
+   "source": "Vegtrafikkloven § 21",
+   "source_url": "https://lovdata.no/lov/1965-06-18-4/§21",
+   "checked_at": "2026-10-10T04:29+02:00",
+   "reason": "Vegtrafikkloven § 21 forbyr å kjøre når du er syk, svekket, sliten eller trett. Sammenligningen med alkohol har ikke primærkilde.",
+   "status": "foreslått",
+   "applies_to_files_owned_by": "Codex/PL (pakkefilen er ikke endret av Deep)"
+  },
+  {
+   "id": "bb-s26",
+   "pack": "pilot_s11_s35",
+   "field": "points[2]",
+   "current_no": "Mobil og musikk du skifter på, tar oppmerksomheten.",
+   "proposed": {
+    "no": "Du må ikke bruke mobiltelefon under kjøring, bortsett fra håndfritt eller i holder.",
+    "th": "ห้ามใช้โทรศัพท์มือถือขณะขับ ยกเว้นแบบแฮนด์ฟรีหรืออยู่ในที่ยึด",
+    "en": "You must not use a mobile phone while driving, except hands-free or in a holder."
+   },
+   "source": "Forskrift om førers bruk av mobiltelefon (FOR-1999-12-17-1309) § 2",
+   "source_url": "https://lovdata.no/forskrift/1999-12-17-1309",
+   "checked_at": "2026-10-10T04:29+02:00",
+   "reason": "Mobilbruk er et lovkrav i forskriften. Selve moderniseringen av kassettskifte er en redaksjonell endring som Michael må godkjenne separat.",
+   "status": "foreslått",
+   "applies_to_files_owned_by": "Codex/PL (pakkefilen er ikke endret av Deep)"
+  },
+  {
+   "id": "bb-s42",
+   "pack": "batch2_s36_s60",
+   "field": "points[2]",
+   "current_no": "Har bilen pigger, må alle fire dekk ha pigger. Det gjelder også tilhenger med bremser.",
+   "proposed": {
+    "no": "Vinterperioden er fra 1. november til første søndag etter 2. påskedag.",
+    "th": "ช่วงฤดูหนาวคือ 1 พฤศจิกายนถึงวันอาทิตย์แรกหลังวันอีสเตอร์วันที่สอง",
+    "en": "The winter period is 1 November to the first Sunday after Easter Monday."
+   },
+   "source": "Statens vegvesen, Dekk og kjetting",
+   "source_url": "https://www.vegvesen.no/kjoretoy/eie-og-vedlikeholde/dekk-og-kjetting/",
+   "checked_at": "2026-10-10T04:29+02:00",
+   "reason": "Kravet om pigger på alle hjul er ikke bekreftet i primærkilde. Fjernes fra elevtekst til det er kontrollert (core_sentence bør også fjerne «alle hjul må ha pigger»).",
+   "status": "foreslått",
+   "applies_to_files_owned_by": "Codex/PL (pakkefilen er ikke endret av Deep)"
+  },
+  {
+   "id": "bb-s53b",
+   "pack": "batch2_s36_s60",
+   "field": "points[1]",
+   "current_no": "Drosje kan bare bruke feltet hvis det er angitt på skiltet.",
+   "proposed": {
+    "no": "Drosje kan bare bruke kollektivfelt når den har taklykt (skilt 508).",
+    "th": "แท็กซี่ใช้เลนรถโดยสารได้เมื่อมีไฟหลังคา (ป้าย 508)",
+    "en": "A taxi may only use a bus lane when it has a roof light (sign 508)."
+   },
+   "source": "Skiltforskriften § 12 (skilt 508/509)",
+   "source_url": "https://lovdata.no/forskrift/2005-10-07-1219/§12",
+   "checked_at": "2026-10-10T04:29+02:00",
+   "reason": "Skiltforskriften skilt 508 sier at drosje bare kan brukes i kollektivfelt med taklykt.",
+   "status": "foreslått",
+   "applies_to_files_owned_by": "Codex/PL (pakkefilen er ikke endret av Deep)"
+  },
+  {
+   "id": "bb-s55b",
+   "pack": "batch2_s36_s60",
+   "field": "core_sentence",
+   "current_no": "Rødt: stopp. Gult: stans hvis du kan. Grønt: kjør hvis det er trygt.",
+   "proposed": {
+    "no": "Rødt: ikke passer signalet. Gult: du skal stanse. Grønt: du kan kjøre hvis vegen er fri.",
+    "th": "แดง: ห้ามผ่านสัญญาณ เหลือง: ต้องหยุด เขียว: ไปได้ถ้าถนนว่าง",
+    "en": "Red: do not pass the signal. Yellow: you must stop. Green: you may go if the road is clear."
+   },
+   "source": "Skiltforskriften § 24",
+   "source_url": "https://lovdata.no/forskrift/2005-10-07-1219/§24",
+   "checked_at": "2026-10-10T04:29+02:00",
+   "reason": "§ 24: ved gult lys alene skal kjørende stanse; bokas «hvis du kan» er ikke i teksten som ble lest.",
+   "status": "foreslått",
+   "applies_to_files_owned_by": "Codex/PL (pakkefilen er ikke endret av Deep)"
+  },
+  {
+   "id": "bb-s55b",
+   "pack": "batch2_s36_s60",
+   "field": "points[1]",
+   "current_no": "Gult: stans hvis det kan skje uten fare. Er du kommet inn i krysset, må du ut.",
+   "proposed": {
+    "no": "Gult alene varsler at rødt kommer straks, og at du skal stanse.",
+    "th": "ไฟเหลืองอย่างเดียวเตือนว่าจะเป็นแดงทันทีและคุณต้องหยุด",
+    "en": "Yellow alone warns that red is coming at once, and that you must stop."
+   },
+   "source": "Skiltforskriften § 24",
+   "source_url": "https://lovdata.no/forskrift/2005-10-07-1219/§24",
+   "checked_at": "2026-10-10T04:29+02:00",
+   "reason": "Bokas nyanse for dem som alt er i krysset er ikke bekreftet og er flyttet til uavklart.",
+   "status": "foreslått",
+   "applies_to_files_owned_by": "Codex/PL (pakkefilen er ikke endret av Deep)"
+  },
+  {
+   "id": "bb-s55b",
+   "pack": "batch2_s36_s60",
+   "field": "check_question",
+   "current_no": "Lyset skifter til gult når du er langt fra stopplinjen … Stanser hvis du kan gjøre det uten fare",
+   "proposed": {
+    "no": "Svaret bør være «Stanser – gult betyr at rødt kommer straks».",
+    "th": "คำตอบควรเป็น “หยุด – ไฟเหลืองหมายความว่าแดงจะมาทันที”",
+    "en": "The answer should be 'Stop – yellow means red comes at once'."
+   },
+   "source": "Skiltforskriften § 24",
+   "source_url": "https://lovdata.no/forskrift/2005-10-07-1219/§24",
+   "checked_at": "2026-10-10T04:29+02:00",
+   "reason": "Samme grunn som over.",
+   "status": "foreslått",
+   "applies_to_files_owned_by": "Codex/PL (pakkefilen er ikke endret av Deep)"
+  },
+  {
+   "id": "bb-s56",
+   "pack": "batch2_s36_s60",
+   "field": "core_sentence",
+   "current_no": "Grønn eller rød pil gjelder bare deg hvis du skal i pilens retning.",
+   "proposed": {
+    "no": "Pilsignal gjelder bare for dem som vil kjøre i pilens retning.",
+    "th": "สัญญาณลูกศรใช้กับผู้ที่จะขับไปในทิศทางของลูกศรเท่านั้น",
+    "en": "An arrow signal applies only to those who want to drive in the arrow's direction."
+   },
+   "source": "Skiltforskriften § 24",
+   "source_url": "https://lovdata.no/forskrift/2005-10-07-1219/§24",
+   "checked_at": "2026-10-10T04:29+02:00",
+   "reason": "«Rød pil» er ikke beskrevet som eget signal i § 24.",
+   "status": "foreslått",
+   "applies_to_files_owned_by": "Codex/PL (pakkefilen er ikke endret av Deep)"
+  },
+  {
+   "id": "bb-s56",
+   "pack": "batch2_s36_s60",
+   "field": "points[1]",
+   "current_no": "Rød pil oppe til venstre: vent til den slukkes hvis du skal til venstre.",
+   "proposed": {
+    "no": "Pilsignalet gjelder bare for dem som skal i pilens retning.",
+    "th": "สัญญาณลูกศรใช้เฉพาะผู้ที่จะไปในทิศของลูกศร",
+    "en": "The arrow signal applies only to those going in the arrow's direction."
+   },
+   "source": "Skiltforskriften § 24",
+   "source_url": "https://lovdata.no/forskrift/2005-10-07-1219/§24",
+   "checked_at": "2026-10-10T04:29+02:00",
+   "reason": "Rød pil er ikke bekreftet; fjern fra elevtekst og spørsmål/bilde der den er brukt.",
+   "status": "foreslått",
+   "applies_to_files_owned_by": "Codex/PL (pakkefilen er ikke endret av Deep)"
+  },
+  {
+   "id": "bb-s58b",
+   "pack": "batch2_s36_s60",
+   "field": "points[0]",
+   "current_no": "Kjørende fra sidene må stoppe (som gult lys).",
+   "proposed": {
+    "no": "Er politiets arm rettet oppad, skal enhver trafikant stanse.",
+    "th": "ถ้าแขนของตำรวจชี้ขึ้น ผู้ใช้ถนนทุกคนต้องหยุด",
+    "en": "If the police officer's arm is held up, every road user must stop."
+   },
+   "source": "Skiltforskriften § 25",
+   "source_url": "https://lovdata.no/forskrift/2005-10-07-1219/§25",
+   "checked_at": "2026-10-10T04:29+02:00",
+   "reason": "§ 25: enhver trafikant skal stanse. Sammenligning med gult lys er ikke i teksten.",
+   "status": "foreslått",
+   "applies_to_files_owned_by": "Codex/PL (pakkefilen er ikke endret av Deep)"
+  },
+  {
+   "id": "bb-s58b",
+   "pack": "batch2_s36_s60",
+   "field": "points[2]",
+   "current_no": "Er du så langt fram at du ikke kan stanse uten fare, kan du kjøre videre.",
+   "proposed": {
+    "no": "(Fjernes.)",
+    "th": "(ลบออก)",
+    "en": "(Remove.)"
+   },
+   "source": "Skiltforskriften § 25",
+   "source_url": "https://lovdata.no/forskrift/2005-10-07-1219/§25",
+   "checked_at": "2026-10-10T04:29+02:00",
+   "reason": "Unntaket finnes ikke i § 25 slik den ble lest; det er flyttet til uavklart.",
+   "status": "foreslått",
+   "applies_to_files_owned_by": "Codex/PL (pakkefilen er ikke endret av Deep)"
+  },
+  {
+   "id": "bb-s52",
+   "pack": "batch2_s36_s60",
+   "field": "points[0]",
+   "current_no": "Varsellinje: lang strek og kort mellomrom varsler at sikten er begrenset.",
+   "proposed": {
+    "no": "Gul varsellinje: sikten fremover er for kort til vanlig forbikjøring.",
+    "th": "เส้นเตือนสีเหลือง: ทัศนวิสัยข้างหน้าสั้นเกินกว่าจะแซงตามปกติ",
+    "en": "Yellow warning line: the sight ahead is too short for ordinary overtaking."
+   },
+   "source": "Skiltforskriften §§ 21–22",
+   "source_url": "https://lovdata.no/forskrift/2005-10-07-1219/§22",
+   "checked_at": "2026-10-10T04:29+02:00",
+   "reason": "Presiserer til skiltforskriftens ordlyd.",
+   "status": "foreslått",
+   "applies_to_files_owned_by": "Codex/PL (pakkefilen er ikke endret av Deep)"
+  },
+  {
+   "id": "bb-s59",
+   "pack": "batch2_s36_s60",
+   "field": "points[2]",
+   "current_no": "Senk farten og vær klar til å stanse ved gangfeltet.",
+   "proposed": {
+    "no": "Ved passering av skolepatrulje skal du holde tilstrekkelig liten fart og om nødvendig stanse straks.",
+    "th": "เมื่อผ่านเด็กอาสาจราจร ต้องขับช้าพอและหยุดทันทีถ้าจำเป็น",
+    "en": "When passing a school patrol you must keep speed low enough and stop immediately if necessary."
+   },
+   "source": "Trafikkreglene § 13 nr. 2 b",
+   "source_url": "https://lovdata.no/forskrift/1986-03-21-747/§13",
+   "checked_at": "2026-10-10T04:29+02:00",
+   "reason": "Skolepatruljens status er nå belagt i § 13 nr. 2 b.",
+   "status": "foreslått",
+   "applies_to_files_owned_by": "Codex/PL (pakkefilen er ikke endret av Deep)"
+  },
+  {
+   "id": "bb-s60",
+   "pack": "batch2_s36_s60",
+   "field": "points[0] og points[1]",
+   "current_no": "Utenfor tettbygd strøk står skiltet normalt 150–250 m før faren. / I tettbygd strøk … 50–100 m.",
+   "proposed": {
+    "no": "Fareskilt står i så god tid før faren at du får tid til å reagere.",
+    "th": "ป้ายเตือนตั้งก่อนถึงอันตรายล่วงหน้าพอที่คุณจะมีเวลาตอบสนอง",
+    "en": "Warning signs stand far enough before the hazard that you have time to react."
+   },
+   "source": "Skiltforskriften §§ 21–22",
+   "source_url": "https://lovdata.no/forskrift/2005-10-07-1219/§22",
+   "checked_at": "2026-10-10T04:29+02:00",
+   "reason": "Avstandene 150–250/50–100 m er ikke bekreftet (skiltforskriften kapittel 2 er ikke lest). Behold bare uavklart.",
+   "status": "foreslått (tallene fjernes inntil kontroll)",
+   "applies_to_files_owned_by": "Codex/PL (pakkefilen er ikke endret av Deep)"
+  }
+ ]
+}

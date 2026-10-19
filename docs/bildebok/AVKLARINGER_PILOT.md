@@ -1,0 +1,23 @@
+# Avklaring av de 9 åpne pilotradene — 10. oktober 2026
+
+Alle kilder er lest 10. oktober 2026 mellom kl. 04:10 og 04:30 (Europe/Oslo). Ingen pilotfil er endret. Rettingsforslag for elevtekst ligger i [RETTINGSFORSLAG_TIDLIGERE_BATCHER.json](RETTINGSFORSLAG_TIDLIGERE_BATCHER.json). Trygg lærerbasis for radene ligger i `backend/content_packs/bildebok/michael_safe_overrides.json`, som overstyrer `michael_basis` uten å røre pakkene.
+
+Skille: **redaksjonelt notat** = beslutning for Michael/rådgiver, aldri sendt til læreren. **Lærerbasis** = bare lov og rettesnor. **Uavklart (`apent`)** = ikke sendt til læreren; lov blir ikke rettesnor fordi kilde mangler.
+
+| Rad | Åpent punkt | Resultat | Kilde og tidspunkt | Status |
+|---|---|---|---|---|
+| bb-s14b | Sperrefrist: lengde ved rus/stor skade | **Avklart.** § 24 a: 6 måneder etter ulovlig kjøring; under minstealder 6 mnd etter at alderen er nådd; **større skade: ett år**. Ruspåvirkning står ikke i § 24 a, og den delen av elevteksten bør fjernes. Straff: sperrefrist ikke kortere enn tapstiden (annet ledd). Øvelseskjøring med sperrefrist krever skriftlig politiløyve | [Vegtrafikkloven § 24 a](https://lovdata.no/lov/1965-06-18-4/§24a) (04:12); [Vegvesen, generelt om øvelseskjøring](https://www.vegvesen.no/forerkort/ta-forerkort/ovelseskjoring/generelt-om-ovelseskjoring/) (04:05) | Lukket for lovdelen. Teori i sperretiden er bare sekundærkilde og er utelatt |
+| bb-s15 | Tilhenger og egenvekt | **Delvis avklart.** Offisiell veiledning: tilhenger ≤ 750 kg; tyngre hvis bil + henger ≤ 3500 kg, og henger innenfor det bilen er godkjent til å trekke; kode 96 til 4250 kg; moped = klasse AM. Ingen egenvektsregel i veiledningen. Presisert etter PL: totalvekt-regelen gjelder valg av førerkort, bilens tekniske grenser (vognkort) gjelder i tillegg | [Vegvesen, Personbil klasse B](https://www.vegvesen.no/forerkort/har-forerkort/forerkortklasser/personbil-klasse-b/) (04:17) | Avklart mot offisiell veiledning. **Førerkortforskriften § 3-5 er ikke lest** (404 på Lovdata) |
+| bb-s16 | Historiske tall 1920/2008 | **Redaksjonelt.** Ikke et lov- eller kildespørsmål. Tallene er historiske og skal ikke gis som nåtall | – | **Åpent for Michael** (beholde som «bokas tall» eller fjerne) |
+| bb-s21 | 50-skilt i generert bilde | **Redaksjonelt.** Bilde-/symbolkontroll | – | **Åpent for Michael** |
+| bb-s23 | Reaksjonstid «0,3–3–4 s» | **Delvis.** Bokas intervall er ubekreftet og er flyttet til uavklart (sendes ikke til læreren). Ett sekund er tommelfingerregel i Store norske leksikon (sekundær) og brukes bare som rettesnor | [SNL reaksjonstid](https://snl.no/reaksjonstid_-_psykologi) (04:25) | Intervallet **fortsatt åpent**; rettesnor på ett sekund |
+| bb-s24 | Søvnmangel og alkohol | **Delvis.** Lovdelen: § 21 forbyr å kjøre når du er syk, svekket, sliten eller trett. Promille-ekvivalenter (0,5 / 0,8 ‰) finnes bare i sekundære kilder som er uenige, og er uavklart | [Vegtrafikkloven § 21](https://lovdata.no/lov/1965-06-18-4/§21) (04:24); sekundær: Tidsskriftet (leserbrev) | Lovdel lukket; sammenligningen **åpen** |
+| bb-s26 | Kassettskifte → mobil | **Delvis.** Mobilbruk er lovregulert: fører må ikke bruke mobiltelefon under kjøring, unntatt håndfritt eller i fastmontert holder; «bruk» er enhver betjening. Selve moderniseringen av eksempelet er en redaksjonell endring | [Forskrift om mobiltelefon (FOR-1999-12-17-1309) § 2](https://lovdata.no/forskrift/1999-12-17-1309) (04:27); [§ 21](https://lovdata.no/lov/1965-06-18-4/§21) | Lovdel lukket; **redaksjonell godkjenning gjenstår hos Michael** |
+| bb-s28 | Barns sanser, aldersgrenser | **Åpent.** Offisiell kilde med alder ikke funnet; Trygg Trafikk-quiz har ingen fasit i det som kunne hentes; kommunal kilde oppgir «under ca. 7 år». Alle aldre er fjernet fra lærerbasis | Søk 04:21 (sekundære) | **Åpent.** Tallpåstander holdes borte fra læreren |
+| bb-s34 | Rytter og gang-/sykkelvei | **Delvis.** Trafikkreglene § 2 nr. 2: reglene om trafikk med kjøretøy gjelder for rytter «så langt de passer». Rytteren omtales ikke som «kjørende», og fortau/sykkelvei nevnes ikke der. Forbudet mot å kjøre på fortau står i § 4 nr. 1 (gjelder «kjørende»); om det gjelder ryttere avhenger av hva som «passer» | [Trafikkreglene § 2](https://lovdata.no/forskrift/1986-03-21-747/§2) (04:13) | **Påstanden om gang-/sykkelvei er fortsatt uavklart** og sendes ikke til læreren. Ikke nedgradert til råd |
+
+## Oppsummert
+- **Lukket for lovdelen (4):** bb-s14b, bb-s15 (mot offisiell veiledning), bb-s24 (§ 21), bb-s26 (mobilforskriften).
+- **Delvis åpne (3):** bb-s23, bb-s34, bb-s28.
+- **Redaksjonelle (2), for Michael:** bb-s16 og bb-s21.
+- Ingen rad er publiseringsgodkjent. Elevtekstendringer er forslag til filens eier.

@@ -1,12 +1,22 @@
 {
- "version": 1,
- "note": "quiz_category følger normalize_categories.py og er ikke verifisert mot live DB",
+ "version": 2,
+ "structure": "book_structure.json (4 hoveddeler)",
+ "image_collection": "Michael Trafikklærer AI materialer/Bilder til læreboken",
+ "note": "quiz_category følger normalize_categories.py og er ikke verifisert mot live DB. Rader med has_unconfirmed har uavklarte påstander. De sendes aldri til læreren (se michael_safe_overrides.json og michael_basis).",
+ "row_count": 152,
  "pages": {
   "bb-s11": {
    "printed_page": 11,
    "pdf_page": 6,
    "chapter": "Del 1 Innledning",
    "section": "1.1 Informasjon",
+   "part": 1,
+   "section_no": "1.1",
+   "section_title": "Informasjon",
+   "collection_images": [
+    "bb_s11_samordnet-undervisning.png",
+    "bb_s11_samordnet-undervisning_variant_6d1e943b2734.png"
+   ],
    "title": {
     "no": "Teori og praksis hører sammen",
     "th": "ทฤษฎีและภาคปฏิบัติไปด้วยกัน",
@@ -14,13 +24,24 @@
    },
    "image_file": "bb_s11_samordnet-undervisning.png",
    "quiz_category": null,
-   "next": "bb-s12"
+   "next": "bb-s12",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s12": {
    "printed_page": 12,
    "pdf_page": 7,
    "chapter": "Del 1 Innledning",
    "section": "1.1 Informasjon – Trinnvis opplæring og mørkekjøring",
+   "part": 1,
+   "section_no": "1.1",
+   "section_title": "Informasjon",
+   "collection_images": [
+    "bb_s12_trinn-og-morkekjoring.png",
+    "bb_s12_trinn-og-morkekjoring_variant_6c4139de6df1.png"
+   ],
    "title": {
     "no": "Fire trinn til førerprøven",
     "th": "สี่ขั้นสู่การสอบขับขี่",
@@ -28,13 +49,27 @@
    },
    "image_file": "bb_s12_trinn-og-morkekjoring.png",
    "quiz_category": null,
-   "next": "bb-s13"
+   "next": "bb-s13",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s13": {
    "printed_page": 13,
    "pdf_page": 8,
    "chapter": "Del 1 Innledning",
    "section": "1.1 Informasjon – Sikkerhetskurs på veg, L-merket og ekstra speil",
+   "part": 1,
+   "section_no": "1.1",
+   "section_title": "Informasjon",
+   "collection_images": [
+    "bb_s13_advisor_v1_d8e08585b2cc.png",
+    "bb_s13_radgiver_20261010_d8e08585.png",
+    "bb_s13_sikkerhetskurs-l-merke-v2.png",
+    "bb_s13_sikkerhetskurs-l-merke.png",
+    "bb_s13_sikkerhetskurs-l-merke_variant_e39cb997befc.png"
+   ],
    "title": {
     "no": "Sikkerhetskurs og L-merke",
     "th": "คอร์สความปลอดภัยและป้าย L",
@@ -42,13 +77,24 @@
    },
    "image_file": "bb_s13_sikkerhetskurs-l-merke.png",
    "quiz_category": null,
-   "next": "bb-s13b"
+   "next": "bb-s13b",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s13b": {
    "printed_page": 13,
    "pdf_page": 8,
    "chapter": "Del 1 Innledning",
    "section": "1.1 Informasjon – Krav til øvelseskjøring og elevens plikter",
+   "part": 1,
+   "section_no": "1.1",
+   "section_title": "Informasjon",
+   "collection_images": [
+    "bb_s13b_elevens-plikter.png",
+    "bb_s13b_elevens-plikter_variant_ac8d2c3e17a1.png"
+   ],
    "title": {
     "no": "Øv trygt – du har plikter også",
     "th": "ฝึกอย่างปลอดภัย คุณก็มีหน้าที่",
@@ -56,13 +102,24 @@
    },
    "image_file": "bb_s13b_elevens-plikter.png",
    "quiz_category": null,
-   "next": "bb-s14"
+   "next": "bb-s14",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s14": {
    "printed_page": 14,
    "pdf_page": 9,
    "chapter": "Del 1 Innledning",
    "section": "1.2 Kravene til den som vil ha førerkort",
+   "part": 1,
+   "section_no": "1.2",
+   "section_title": "Kravene til den som vil ha førerkort",
+   "collection_images": [
+    "bb_s14_krav-til-forerkort.png",
+    "bb_s14_krav-til-forerkort_variant_0fc80d013d0a.png"
+   ],
    "title": {
     "no": "Kravene for å ta førerkort",
     "th": "เงื่อนไขการรับใบขับขี่",
@@ -70,13 +127,24 @@
    },
    "image_file": "bb_s14_krav-til-forerkort.png",
    "quiz_category": null,
-   "next": "bb-s14b"
+   "next": "bb-s14b",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s14b": {
    "printed_page": 14,
    "pdf_page": 9,
    "chapter": "Del 1 Innledning",
    "section": "1.2 Kravene – Sperrefrist og straffbar handling",
+   "part": 1,
+   "section_no": "1.2",
+   "section_title": "Kravene til den som vil ha førerkort",
+   "collection_images": [
+    "bb_s14b_sperrefrist.png",
+    "bb_s14b_sperrefrist_variant_e1fb31014fd6.png"
+   ],
    "title": {
     "no": "Sperrefrist – pause fra førerkort",
     "th": "ช่วงห้ามขอใบขับขี่",
@@ -84,13 +152,26 @@
    },
    "image_file": "bb_s14b_sperrefrist.png",
    "quiz_category": null,
-   "next": "bb-s15"
+   "next": "bb-s15",
+   "has_unconfirmed": false,
+   "open_question_count": 1,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s15": {
    "printed_page": 15,
    "pdf_page": 10,
    "chapter": "Del 1 Innledning",
    "section": "Førerkortklasser – klasse B og tilhenger",
+   "part": 1,
+   "section_no": "1.2",
+   "section_title": "Kravene til den som vil ha førerkort",
+   "collection_images": [
+    "bb_s15_advisor_v1_77d7a00345a5.png",
+    "bb_s15_forerkortklasse-b-tilhenger.png",
+    "bb_s15_forerkortklasse-b-tilhenger_variant_c8f3dc046727.png",
+    "bb_s15_radgiver_20261010_77d7a003.png"
+   ],
    "title": {
     "no": "Førerkort klasse B og tilhenger",
     "th": "ใบขับขี่ชั้น B และรถพ่วง",
@@ -98,13 +179,24 @@
    },
    "image_file": "bb_s15_forerkortklasse-b-tilhenger.png",
    "quiz_category": null,
-   "next": "bb-s16"
+   "next": "bb-s16",
+   "has_unconfirmed": false,
+   "open_question_count": 1,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s16": {
    "printed_page": 16,
    "pdf_page": 11,
    "chapter": "Del 1 Innledning",
    "section": "Utvikling av veitrafikken",
+   "part": 1,
+   "section_no": "1.2",
+   "section_title": "Kravene til den som vil ha førerkort",
+   "collection_images": [
+    "bb_s16_veitrafikk-utvikling.png",
+    "bb_s16_veitrafikk-utvikling_variant_1d429914ed2e.png"
+   ],
    "title": {
     "no": "Flere biler – mindre vei per bil",
     "th": "รถมากขึ้น ถนนต่อคันน้อยลง",
@@ -112,13 +204,24 @@
    },
    "image_file": "bb_s16_veitrafikk-utvikling.png",
    "quiz_category": null,
-   "next": "bb-s17"
+   "next": "bb-s17",
+   "has_unconfirmed": true,
+   "open_question_count": 1,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s17": {
    "printed_page": 17,
    "pdf_page": 12,
    "chapter": "Del 1 Innledning",
    "section": "Noen tall om trafikkulykker og de vanligste ulykkestypene",
+   "part": 1,
+   "section_no": "1.2",
+   "section_title": "Kravene til den som vil ha førerkort",
+   "collection_images": [
+    "bb_s17_ulykkestall-og-typer.png",
+    "bb_s17_ulykkestall-og-typer_variant_cbd8549cdc20.png"
+   ],
    "title": {
     "no": "Vanlige ulykker",
     "th": "อุบัติเหตุที่พบบ่อย",
@@ -126,13 +229,24 @@
    },
    "image_file": "bb_s17_ulykkestall-og-typer.png",
    "quiz_category": null,
-   "next": "bb-s17b"
+   "next": "bb-s17b",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s17b": {
    "printed_page": 17,
    "pdf_page": 12,
    "chapter": "Del 1 Innledning",
    "section": "Trafikant – kjøretøy – vei",
+   "part": 1,
+   "section_no": "1.2",
+   "section_title": "Kravene til den som vil ha førerkort",
+   "collection_images": [
+    "bb_s17b_trafikant-kjoretoy-vei.png",
+    "bb_s17b_trafikant-kjoretoy-vei_variant_6d430ed3cf32.png"
+   ],
    "title": {
     "no": "Trafikant – kjøretøy – vei",
     "th": "ผู้ใช้ถนน – ยานพาหนะ – ถนน",
@@ -140,13 +254,24 @@
    },
    "image_file": "bb_s17b_trafikant-kjoretoy-vei.png",
    "quiz_category": null,
-   "next": "bb-s18"
+   "next": "bb-s18",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s18": {
    "printed_page": 18,
    "pdf_page": 13,
    "chapter": "Del 2 Mennesket i trafikken",
    "section": "2.1 Trafikkpsykologi og 2.2 Kjøreprosessen – synet",
+   "part": 2,
+   "section_no": "2.1",
+   "section_title": "Trafikkpsykologi",
+   "collection_images": [
+    "bb_s18_trafikkpsykologi-syn.png",
+    "bb_s18_trafikkpsykologi-syn_variant_0b580a900292.png"
+   ],
    "title": {
     "no": "Synet er viktigst",
     "th": "การมองเห็นสำคัญที่สุด",
@@ -154,13 +279,24 @@
    },
    "image_file": "bb_s18_trafikkpsykologi-syn.png",
    "quiz_category": null,
-   "next": "bb-s19"
+   "next": "bb-s19",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s19": {
    "printed_page": 19,
    "pdf_page": 14,
    "chapter": "Del 2 Mennesket i trafikken",
    "section": "2.2 Kjøreprosessen – synsfelt og blind flekk",
+   "part": 2,
+   "section_no": "2.2",
+   "section_title": "Kjøreprosessen",
+   "collection_images": [
+    "bb_s19_synsfelt-blind-flekk.png",
+    "bb_s19_synsfelt-blind-flekk_variant_31ab7e1586a5.png"
+   ],
    "title": {
     "no": "Skarpt syn i en smal sektor",
     "th": "มองคมชัดเฉพาะช่วงแคบ",
@@ -168,13 +304,24 @@
    },
    "image_file": "bb_s19_synsfelt-blind-flekk.png",
    "quiz_category": null,
-   "next": "bb-s20"
+   "next": "bb-s20",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s20": {
    "printed_page": 20,
    "pdf_page": 15,
    "chapter": "Del 2 Mennesket i trafikken",
    "section": "Varslingsrefleks, hørsel og å bedømme fart og avstand",
+   "part": 2,
+   "section_no": "2.2",
+   "section_title": "Kjøreprosessen",
+   "collection_images": [
+    "bb_s20_fart-og-avstand-vurdering.png",
+    "bb_s20_fart-og-avstand-vurdering_variant_92ec96536e85.png"
+   ],
    "title": {
     "no": "Fart og avstand: vi tar feil",
     "th": "ความเร็วและระยะทาง: เราประเมินผิดได้",
@@ -182,13 +329,24 @@
    },
    "image_file": "bb_s20_fart-og-avstand-vurdering.png",
    "quiz_category": null,
-   "next": "bb-s21"
+   "next": "bb-s21",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s21": {
    "printed_page": 21,
    "pdf_page": 16,
    "chapter": "Del 2 Mennesket i trafikken",
    "section": "Fartsblind",
+   "part": 2,
+   "section_no": "2.2",
+   "section_title": "Kjøreprosessen",
+   "collection_images": [
+    "bb_s21_fartsblind.png",
+    "bb_s21_fartsblind_variant_7e7dbc96b41b.png"
+   ],
    "title": {
     "no": "Fartsblind",
     "th": "ตาบอดความเร็ว",
@@ -196,27 +354,52 @@
    },
    "image_file": "bb_s21_fartsblind.png",
    "quiz_category": null,
-   "next": "bb-s22"
+   "next": "bb-s22",
+   "has_unconfirmed": true,
+   "open_question_count": 1,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s22": {
    "printed_page": 22,
    "pdf_page": 17,
    "chapter": "Del 2 Mennesket i trafikken",
    "section": "Oppmerksomhet – snever og bred, bremseberedskap",
+   "part": 2,
+   "section_no": "2.2",
+   "section_title": "Kjøreprosessen",
+   "collection_images": [
+    "bb_s22_advisor_v1_40ab410483d4.png",
+    "bb_s22_snever-og-bred-oppmerksomhet-v2.png",
+    "bb_s22_snever-og-bred-oppmerksomhet.png",
+    "bb_s22_snever-og-bred-oppmerksomhet_variant_37a98305ad8d.png",
+    "bb_s22_snever-og-bred-oppmerksomhet_variant_54eeff969353.png"
+   ],
    "title": {
     "no": "Snever og bred oppmerksomhet",
     "th": "ความสนใจแคบและกว้าง",
     "en": "Narrow and wide attention"
    },
-   "image_file": "bb_s22_snever-og-bred-oppmerksomhet.png",
+   "image_file": "bb_s22_advisor_v1_40ab410483d4.png",
    "quiz_category": null,
-   "next": "bb-s23"
+   "next": "bb-s23",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s23": {
    "printed_page": 23,
    "pdf_page": 18,
    "chapter": "Del 2 Mennesket i trafikken",
    "section": "Hva er reaksjon? Reaksjonstid. 2.3 Faktorer som virker inn",
+   "part": 2,
+   "section_no": "2.3",
+   "section_title": "Faktorer som virker inn på våre handlinger i trafikken",
+   "collection_images": [
+    "bb_s23_reaksjonstid.png",
+    "bb_s23_reaksjonstid_variant_ecc626bc5ff8.png"
+   ],
    "title": {
     "no": "Reaksjonstid",
     "th": "เวลาตอบสนอง",
@@ -224,13 +407,24 @@
    },
    "image_file": "bb_s23_reaksjonstid.png",
    "quiz_category": null,
-   "next": "bb-s24"
+   "next": "bb-s24",
+   "has_unconfirmed": true,
+   "open_question_count": 1,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s24": {
    "printed_page": 24,
    "pdf_page": 19,
    "chapter": "Del 2 Mennesket i trafikken",
    "section": "Stress, tretthet, søvn og alder",
+   "part": 2,
+   "section_no": "2.3",
+   "section_title": "Faktorer som virker inn på våre handlinger i trafikken",
+   "collection_images": [
+    "bb_s24_stress-trett-sovn.png",
+    "bb_s24_stress-trett-sovn_variant_541c599e8f44.png"
+   ],
    "title": {
     "no": "Stress, tretthet og søvn",
     "th": "ความเครียด ความเหนื่อย และการนอน",
@@ -238,13 +432,27 @@
    },
    "image_file": "bb_s24_stress-trett-sovn.png",
    "quiz_category": null,
-   "next": "bb-s25"
+   "next": "bb-s25",
+   "has_unconfirmed": true,
+   "open_question_count": 1,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s25": {
    "printed_page": 25,
    "pdf_page": 20,
    "chapter": "Del 2 Mennesket i trafikken",
    "section": "Svekket hørsel/reaksjon og alkohol og bilførere",
+   "part": 2,
+   "section_no": "2.3",
+   "section_title": "Faktorer som virker inn på våre handlinger i trafikken",
+   "collection_images": [
+    "bb_s25_alkohol-text-v1-web.png",
+    "bb_s25_alkohol-v2.png",
+    "bb_s25_alkohol.png",
+    "bb_s25_alkohol_variant_a2c5cff9b176.png",
+    "bb_s25_compression-first.png"
+   ],
    "title": {
     "no": "Alkohol og bilkjøring",
     "th": "แอลกอฮอล์กับการขับรถ",
@@ -252,13 +460,24 @@
    },
    "image_file": "bb_s25_alkohol.png",
    "quiz_category": null,
-   "next": "bb-s26"
+   "next": "bb-s26",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s26": {
    "printed_page": 26,
    "pdf_page": 21,
    "chapter": "Del 2 Mennesket i trafikken",
    "section": "Narkotiske stoffer og medisiner, distraksjoner, kjørevaner",
+   "part": 2,
+   "section_no": "2.3",
+   "section_title": "Faktorer som virker inn på våre handlinger i trafikken",
+   "collection_images": [
+    "bb_s26_medisiner-og-distraksjon.png",
+    "bb_s26_medisiner-og-distraksjon_variant_e1f38810775e.png"
+   ],
    "title": {
     "no": "Medisiner, rus og distraksjon",
     "th": "ยา สารเสพติด และสิ่งรบกวนสมาธิ",
@@ -266,13 +485,24 @@
    },
    "image_file": "bb_s26_medisiner-og-distraksjon.png",
    "quiz_category": null,
-   "next": "bb-s27"
+   "next": "bb-s27",
+   "has_unconfirmed": false,
+   "open_question_count": 1,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s27": {
    "printed_page": 27,
    "pdf_page": 22,
    "chapter": "Del 2 Mennesket i trafikken",
    "section": "Personlighet og sykdom",
+   "part": 2,
+   "section_no": "2.3",
+   "section_title": "Faktorer som virker inn på våre handlinger i trafikken",
+   "collection_images": [
+    "bb_s27_personlighet-og-sykdom.png",
+    "bb_s27_personlighet-og-sykdom_variant_572926487a61.png"
+   ],
    "title": {
     "no": "Personlighet og sykdom",
     "th": "บุคลิกภาพและการเจ็บป่วย",
@@ -280,13 +510,25 @@
    },
    "image_file": "bb_s27_personlighet-og-sykdom.png",
    "quiz_category": null,
-   "next": "bb-s28"
+   "next": "bb-s28",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s28": {
    "printed_page": 28,
    "pdf_page": 23,
    "chapter": "Del 2 Mennesket i trafikken",
    "section": "Barn og trafikk – små av vekst, innsnevret sidesyn, hvor kommer lyden fra",
+   "part": 2,
+   "section_no": "2.3",
+   "section_title": "Faktorer som virker inn på våre handlinger i trafikken",
+   "collection_images": [
+    "bb_s28_barn-syn-og-lyd-v2.png",
+    "bb_s28_barn-syn-og-lyd.png",
+    "bb_s28_barn-syn-og-lyd_variant_2f260401cf14.png"
+   ],
    "title": {
     "no": "Barn ser og hører annerledes",
     "th": "เด็กมองเห็นและได้ยินต่างจากผู้ใหญ่",
@@ -294,13 +536,24 @@
    },
    "image_file": "bb_s28_barn-syn-og-lyd.png",
    "quiz_category": null,
-   "next": "bb-s29"
+   "next": "bb-s29",
+   "has_unconfirmed": true,
+   "open_question_count": 1,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s29": {
    "printed_page": 29,
    "pdf_page": 24,
    "chapter": "Del 2 Mennesket i trafikken",
    "section": "Barn og trafikk – fart og avstand, blikkoppmerksomhet",
+   "part": 2,
+   "section_no": "2.3",
+   "section_title": "Faktorer som virker inn på våre handlinger i trafikken",
+   "collection_images": [
+    "bb_s29_barn-fart-og-oppmerksomhet.png",
+    "bb_s29_barn-fart-og-oppmerksomhet_variant_a4661bead83b.png"
+   ],
    "title": {
     "no": "Barn bedømmer ikke fart",
     "th": "เด็กประเมินความเร็วไม่ได้",
@@ -308,13 +561,24 @@
    },
    "image_file": "bb_s29_barn-fart-og-oppmerksomhet.png",
    "quiz_category": null,
-   "next": "bb-s30"
+   "next": "bb-s30",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s30": {
    "printed_page": 30,
    "pdf_page": 25,
    "chapter": "Del 2 Mennesket i trafikken",
    "section": "Barn i lek, høyre/venstre, trafikkreglene 13.2 a, de eldre i trafikken",
+   "part": 2,
+   "section_no": "2.3",
+   "section_title": "Faktorer som virker inn på våre handlinger i trafikken",
+   "collection_images": [
+    "bb_s30_barn-lek-og-regler.png",
+    "bb_s30_barn-lek-og-regler_variant_e31c1b8be84d.png"
+   ],
    "title": {
     "no": "Barn i lek og trafikkreglene",
     "th": "เด็กกับการเล่นและกฎจราจร",
@@ -322,13 +586,27 @@
    },
    "image_file": "bb_s30_barn-lek-og-regler.png",
    "quiz_category": null,
-   "next": "bb-s31"
+   "next": "bb-s31",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s31": {
    "printed_page": 31,
    "pdf_page": 26,
    "chapter": "Del 2 Mennesket i trafikken",
    "section": "De eldre og bilkjøring, funksjonshemmede og trafikk",
+   "part": 2,
+   "section_no": "2.3",
+   "section_title": "Faktorer som virker inn på våre handlinger i trafikken",
+   "collection_images": [
+    "bb_s31_eldre-og-funksjonshemmede-v2.png",
+    "bb_s31_eldre-og-funksjonshemmede-v3.png",
+    "bb_s31_eldre-og-funksjonshemmede.png",
+    "bb_s31_eldre-og-funksjonshemmede_variant_03302624bdbe.png",
+    "bb_s31_eldre-og-funksjonshemmede_variant_dac795e1ba84.png"
+   ],
    "title": {
     "no": "Eldre og funksjonshemmede",
     "th": "ผู้สูงอายุและผู้พิการ",
@@ -336,13 +614,24 @@
    },
    "image_file": "bb_s31_eldre-og-funksjonshemmede.png",
    "quiz_category": null,
-   "next": "bb-s32"
+   "next": "bb-s32",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s32": {
    "printed_page": 32,
    "pdf_page": 27,
    "chapter": "Del 2 Mennesket i trafikken",
    "section": "Bevegelseshemmede og bilkjøring, 2.4 Interessemotsetninger, yrkessjåførene",
+   "part": 2,
+   "section_no": "2.4",
+   "section_title": "Interessemotsetninger i trafikkmiljøet",
+   "collection_images": [
+    "bb_s32_ulike-behov-pa-veien.png",
+    "bb_s32_ulike-behov-pa-veien_variant_cf591f874a91.png"
+   ],
    "title": {
     "no": "Ulike behov på veien",
     "th": "ความต้องการที่ต่างกันบนถนน",
@@ -350,13 +639,24 @@
    },
    "image_file": "bb_s32_ulike-behov-pa-veien.png",
    "quiz_category": null,
-   "next": "bb-s33"
+   "next": "bb-s33",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s33": {
    "printed_page": 33,
    "pdf_page": 28,
    "chapter": "Del 2 Mennesket i trafikken",
    "section": "Fjern- og nærtrafikk, syklister og gående, moped og MC, hest",
+   "part": 2,
+   "section_no": "2.4",
+   "section_title": "Interessemotsetninger i trafikkmiljøet",
+   "collection_images": [
+    "bb_s33_syklister-gaende-mc.png",
+    "bb_s33_syklister-gaende-mc_variant_be2ed5dfdfae.png"
+   ],
    "title": {
     "no": "Syklister, gående og MC",
     "th": "นักปั่น คนเดินเท้า และมอเตอร์ไซค์",
@@ -364,13 +664,24 @@
    },
    "image_file": "bb_s33_syklister-gaende-mc.png",
    "quiz_category": null,
-   "next": "bb-s34"
+   "next": "bb-s34",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s34": {
    "printed_page": 34,
    "pdf_page": 29,
    "chapter": "Del 2 Mennesket i trafikken",
    "section": "Hest og hestekjøring",
+   "part": 2,
+   "section_no": "2.4",
+   "section_title": "Interessemotsetninger i trafikkmiljøet",
+   "collection_images": [
+    "bb_s34_hest-i-trafikken.png",
+    "bb_s34_hest-i-trafikken_variant_180cfbea2c17.png"
+   ],
    "title": {
     "no": "Hest og hestekjører",
     "th": "ม้าและรถม้า",
@@ -378,13 +689,24 @@
    },
    "image_file": "bb_s34_hest-i-trafikken.png",
    "quiz_category": null,
-   "next": "bb-s34b"
+   "next": "bb-s34b",
+   "has_unconfirmed": true,
+   "open_question_count": 1,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s34b": {
    "printed_page": 34,
    "pdf_page": 29,
    "chapter": "Del 2 Mennesket i trafikken",
    "section": "Miljøtiltak, 2.4 Trafikkens krav og menneskets kapasitet, 0-visjonen",
+   "part": 2,
+   "section_no": "2.4",
+   "section_title": "Interessemotsetninger i trafikkmiljøet",
+   "collection_images": [
+    "bb_s34b_miljo-og-nullvisjonen.png",
+    "bb_s34b_miljo-og-nullvisjonen_variant_4144762366e0.png"
+   ],
    "title": {
     "no": "Miljø og 0-visjonen",
     "th": "สิ่งแวดล้อมและวิสัยทัศน์ 0",
@@ -392,13 +714,24 @@
    },
    "image_file": "bb_s34b_miljo-og-nullvisjonen.png",
    "quiz_category": null,
-   "next": "bb-s35"
+   "next": "bb-s35",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s35": {
    "printed_page": 35,
    "pdf_page": 30,
    "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
    "section": "3.1 Kjøretøyet",
+   "part": 3,
+   "section_no": "3.1",
+   "section_title": "Kjøretøyet",
+   "collection_images": [
+    "bb_s35_kjoretoy-og-motorvogn.png",
+    "bb_s35_kjoretoy-og-motorvogn_variant_6892585b1198.png"
+   ],
    "title": {
     "no": "Kjøretøy og motorvogn",
     "th": "ยานพาหนะและรถยนต์",
@@ -406,13 +739,24 @@
    },
    "image_file": "bb_s35_kjoretoy-og-motorvogn.png",
    "quiz_category": null,
-   "next": "bb-s36"
+   "next": "bb-s36",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s36": {
    "printed_page": 36,
    "pdf_page": 31,
    "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
    "section": "3.1 Kjøretøyet – Ansvar for kjøretøyets stand",
+   "part": 3,
+   "section_no": "3.1",
+   "section_title": "Kjøretøyet",
+   "collection_images": [
+    "bb_s36_ansvar-for-bilens-stand-v1.png",
+    "bb_s36_ansvar-for-bilens-stand.png"
+   ],
    "title": {
     "no": "Du er ansvarlig for bilens stand",
     "th": "คุณรับผิดชอบสภาพรถ",
@@ -420,13 +764,21 @@
    },
    "image_file": "bb_s36_ansvar-for-bilens-stand.png",
    "quiz_category": "Safety",
-   "next": "bb-s36b"
+   "next": "bb-s36b",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s36b": {
    "printed_page": 36,
    "pdf_page": 31,
    "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
    "section": "3.1 Kjøretøyet – Motor og drivverk, kløtsj",
+   "part": 3,
+   "section_no": "3.1",
+   "section_title": "Kjøretøyet",
+   "collection_images": [],
    "title": {
     "no": "Kløtsjen kobler motor og hjul",
     "th": "คลัตช์เชื่อมเครื่องยนต์กับล้อ",
@@ -434,13 +786,21 @@
    },
    "image_file": "bb_s36b_kloetsj.png",
    "quiz_category": "Driving Conditions",
-   "next": "bb-s37"
+   "next": "bb-s37",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s37": {
    "printed_page": 37,
    "pdf_page": 32,
    "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
    "section": "3.1 Kjøretøyet – Kløtsjen brukes, girkassen",
+   "part": 3,
+   "section_no": "3.1",
+   "section_title": "Kjøretøyet",
+   "collection_images": [],
    "title": {
     "no": "Riktig gir sparer penger og miljø",
     "th": "เกียร์ที่เหมาะสมประหยัดเงินและรักษาสิ่งแวดล้อม",
@@ -448,13 +808,21 @@
    },
    "image_file": "bb_s37_giring-og-miljoe.png",
    "quiz_category": "Driving Conditions",
-   "next": "bb-s37b"
+   "next": "bb-s37b",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s37b": {
    "printed_page": 37,
    "pdf_page": 32,
    "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
    "section": "3.1 Kjøretøyet – Bremser: fotbrems og parkeringsbrems",
+   "part": 3,
+   "section_no": "3.1",
+   "section_title": "Kjøretøyet",
+   "collection_images": [],
    "title": {
     "no": "To bremser: fot og parkering",
     "th": "เบรกสองระบบ: เบรกเท้าและเบรกมือ",
@@ -462,13 +830,21 @@
    },
    "image_file": "bb_s37b_fotbrems-og-parkeringsbrems.png",
    "quiz_category": "Safety",
-   "next": "bb-s38"
+   "next": "bb-s38",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s38": {
    "printed_page": 38,
    "pdf_page": 33,
    "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
    "section": "3.1 Kjøretøyet – Bremsekraftforsterker, trykkprøve, tauing",
+   "part": 3,
+   "section_no": "3.1",
+   "section_title": "Kjøretøyet",
+   "collection_images": [],
    "title": {
     "no": "Test bremsene med trykkprøve",
     "th": "ทดสอบเบรกด้วยการกดแป้นเบรก",
@@ -476,13 +852,21 @@
    },
    "image_file": "bb_s38_bremsekraftforsterker-og-trykkprove.png",
    "quiz_category": "Safety",
-   "next": "bb-s39"
+   "next": "bb-s39",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s39": {
    "printed_page": 39,
    "pdf_page": 34,
    "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
    "section": "3.1 Kjøretøyet – Bremsing med motor, vann på bremsene",
+   "part": 3,
+   "section_no": "3.1",
+   "section_title": "Kjøretøyet",
+   "collection_images": [],
    "title": {
     "no": "Bruk motoren til å bremse i bakker",
     "th": "ใช้เครื่องยนต์ช่วยเบรกบนเนิน",
@@ -490,13 +874,21 @@
    },
    "image_file": "bb_s39_motorbremsing-og-vaate-bremser.png",
    "quiz_category": "Safety",
-   "next": "bb-s39b"
+   "next": "bb-s39b",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s39b": {
    "printed_page": 39,
    "pdf_page": 34,
    "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
    "section": "3.1 Kjøretøyet – To-krets bremser, ABS",
+   "part": 3,
+   "section_no": "3.1",
+   "section_title": "Kjøretøyet",
+   "collection_images": [],
    "title": {
     "no": "To-krets bremser og ABS",
     "th": "เบรกสองวงจรและ ABS",
@@ -504,13 +896,21 @@
    },
    "image_file": "bb_s39b_to-krets-bremser-og-abs.png",
    "quiz_category": "Safety",
-   "next": "bb-s40"
+   "next": "bb-s40",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s40": {
    "printed_page": 40,
    "pdf_page": 35,
    "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
    "section": "3.1 Kjøretøyet – Varsellampe, bremsevæske, krav til bremser",
+   "part": 3,
+   "section_no": "3.1",
+   "section_title": "Kjøretøyet",
+   "collection_images": [],
    "title": {
     "no": "Bremsevæske og varsellampe",
     "th": "น้ำมันเบรกและไฟเตือน",
@@ -518,13 +918,21 @@
    },
    "image_file": "bb_s40_bremsevaeske-og-varsellampe.png",
    "quiz_category": "Safety",
-   "next": "bb-s41"
+   "next": "bb-s41",
+   "has_unconfirmed": true,
+   "open_question_count": 1,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s41": {
    "printed_page": 41,
    "pdf_page": 36,
    "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
    "section": "3.1 Kjøretøyet – Hjul og dekk",
+   "part": 3,
+   "section_no": "3.1",
+   "section_title": "Kjøretøyet",
+   "collection_images": [],
    "title": {
     "no": "Riktige dekk gir veigrep",
     "th": "ยางที่เหมาะสมให้การยึดเกาะถนน",
@@ -532,13 +940,21 @@
    },
    "image_file": "bb_s41_dekk-og-moensterdybde.png",
    "quiz_category": "Driving Conditions",
-   "next": "bb-s42"
+   "next": "bb-s42",
+   "has_unconfirmed": true,
+   "open_question_count": 1,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s42": {
    "printed_page": 42,
    "pdf_page": 37,
    "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
    "section": "3.1 Kjøretøyet – Piggdekk",
+   "part": 3,
+   "section_no": "3.1",
+   "section_title": "Kjøretøyet",
+   "collection_images": [],
    "title": {
     "no": "Piggdekk: bare i vinterperioden",
     "th": "ยางสตัด: เฉพาะช่วงฤดูหนาว",
@@ -546,13 +962,21 @@
    },
    "image_file": "bb_s42_piggdekk-og-vinterperiode.png",
    "quiz_category": "Driving Conditions",
-   "next": "bb-s42b"
+   "next": "bb-s42b",
+   "has_unconfirmed": true,
+   "open_question_count": 2,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s42b": {
    "printed_page": 42,
    "pdf_page": 37,
    "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
    "section": "3.1 Kjøretøyet – Vannplaning og dekkslitasje",
+   "part": 3,
+   "section_no": "3.1",
+   "section_title": "Kjøretøyet",
+   "collection_images": [],
    "title": {
     "no": "Vannplaning: dekkene mister veien",
     "th": "ไฮโดรเพลนนิง: ยางเสียการสัมผัสถนน",
@@ -560,13 +984,21 @@
    },
    "image_file": "bb_s42b_vannplaning.png",
    "quiz_category": "Driving Conditions",
-   "next": "bb-s43"
+   "next": "bb-s43",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s43": {
    "printed_page": 43,
    "pdf_page": 38,
    "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
    "section": "3.1 Kjøretøyet – Styring",
+   "part": 3,
+   "section_no": "3.1",
+   "section_title": "Kjøretøyet",
+   "collection_images": [],
    "title": {
     "no": "Styringen må ikke ha for stor dødgang",
     "th": "พวงมาลัยต้องไม่หลวมเกินไป",
@@ -574,13 +1006,21 @@
    },
    "image_file": "bb_s43_styring-og-doedgang.png",
    "quiz_category": "Safety",
-   "next": "bb-s44"
+   "next": "bb-s44",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s44": {
    "printed_page": 44,
    "pdf_page": 39,
    "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
    "section": "3.1 Kjøretøyet – Overstyring og understyring",
+   "part": 3,
+   "section_no": "3.1",
+   "section_title": "Kjøretøyet",
+   "collection_images": [],
    "title": {
     "no": "Overstyring og understyring",
     "th": "โอเวอร์สเตียร์และอันเดอร์สเตียร์",
@@ -588,13 +1028,21 @@
    },
    "image_file": "bb_s44_overstyring-og-understyring.png",
    "quiz_category": "Driving Conditions",
-   "next": "bb-s45"
+   "next": "bb-s45",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s45": {
    "printed_page": 45,
    "pdf_page": 40,
    "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
    "section": "3.1 Kjøretøyet – Kjøring med tilhenger, servostyring",
+   "part": 3,
+   "section_no": "3.1",
+   "section_title": "Kjøretøyet",
+   "collection_images": [],
    "title": {
     "no": "Rett lastet tilhenger gir stødig bil",
     "th": "รถพ่วงที่บรรทุกถูกต้องทำให้รถนิ่ง",
@@ -602,13 +1050,21 @@
    },
    "image_file": "bb_s45_tilhenger-og-kuletrykk.png",
    "quiz_category": "Driving Conditions",
-   "next": "bb-s45b"
+   "next": "bb-s45b",
+   "has_unconfirmed": true,
+   "open_question_count": 1,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s45b": {
    "printed_page": 45,
    "pdf_page": 40,
    "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
    "section": "3.1 Kjøretøyet – Lys og lysutstyr: se og bli sett",
+   "part": 3,
+   "section_no": "3.1",
+   "section_title": "Kjøretøyet",
+   "collection_images": [],
    "title": {
     "no": "Lys: se godt og bli sett",
     "th": "ไฟ: มองเห็นชัดและให้คนอื่นเห็นคุณ",
@@ -616,13 +1072,21 @@
    },
    "image_file": "bb_s45b_lys-se-og-bli-sett.png",
    "quiz_category": "Safety",
-   "next": "bb-s46"
+   "next": "bb-s46",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s46": {
    "printed_page": 46,
    "pdf_page": 41,
    "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
    "section": "3.1 Kjøretøyet – Påbudte lys foran, fjernlys, nærlys",
+   "part": 3,
+   "section_no": "3.1",
+   "section_title": "Kjøretøyet",
+   "collection_images": [],
    "title": {
     "no": "Lys foran på bilen",
     "th": "ไฟด้านหน้ารถ",
@@ -630,13 +1094,21 @@
    },
    "image_file": "bb_s46_lys-foran.png",
    "quiz_category": "Road Rules",
-   "next": "bb-s47"
+   "next": "bb-s47",
+   "has_unconfirmed": true,
+   "open_question_count": 1,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s47": {
    "printed_page": 47,
    "pdf_page": 42,
    "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
    "section": "3.1 Kjøretøyet – Lys bak, tåkebaklys, tilhenger",
+   "part": 3,
+   "section_no": "3.1",
+   "section_title": "Kjøretøyet",
+   "collection_images": [],
    "title": {
     "no": "Lys bak på bilen og tilhengeren",
     "th": "ไฟท้ายรถและรถพ่วง",
@@ -644,13 +1116,21 @@
    },
    "image_file": "bb_s47_lys-bak-og-tilhenger.png",
    "quiz_category": "Road Rules",
-   "next": "bb-s48"
+   "next": "bb-s48",
+   "has_unconfirmed": true,
+   "open_question_count": 1,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s48": {
    "printed_page": 48,
    "pdf_page": 43,
    "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
    "section": "3.1 Kjøretøyet – Vognkort",
+   "part": 3,
+   "section_no": "3.1",
+   "section_title": "Kjøretøyet",
+   "collection_images": [],
    "title": {
     "no": "Vognkortet forteller om bilen",
     "th": "เล่มทะเบียนบอกข้อมูลรถ",
@@ -658,13 +1138,21 @@
    },
    "image_file": "bb_s48_vognkortet.png",
    "quiz_category": "Road Rules",
-   "next": "bb-s49"
+   "next": "bb-s49",
+   "has_unconfirmed": true,
+   "open_question_count": 1,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s49": {
    "printed_page": 49,
    "pdf_page": 44,
    "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
    "section": "3.1 Kjøretøyet – Tillatt og faktisk totalvekt",
+   "part": 3,
+   "section_no": "3.1",
+   "section_title": "Kjøretøyet",
+   "collection_images": [],
    "title": {
     "no": "Tillatt og faktisk totalvekt",
     "th": "น้ำหนักรวมที่อนุญาตและน้ำหนักจริง",
@@ -672,13 +1160,21 @@
    },
    "image_file": "bb_s49_tillatt-og-faktisk-totalvekt.png",
    "quiz_category": "Road Rules",
-   "next": "bb-s49b"
+   "next": "bb-s49b",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s49b": {
    "printed_page": 49,
    "pdf_page": 44,
    "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
    "section": "3.2 Veien – Forklaring av ord: vei, kjørebane, kjørefelt",
+   "part": 3,
+   "section_no": "3.2",
+   "section_title": "Veien",
+   "collection_images": [],
    "title": {
     "no": "Hva er en vei, kjørebane og kjørefelt?",
     "th": "ถนน ช่องการจราจร และเลนคืออะไร?",
@@ -686,13 +1182,21 @@
    },
    "image_file": "bb_s49b_hva-er-en-vei.png",
    "quiz_category": "Road Rules",
-   "next": "bb-s50"
+   "next": "bb-s50",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s50": {
    "printed_page": 50,
    "pdf_page": 45,
    "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
    "section": "3.2 Veien – Veiskulder, anlegg i kjørebanen, veikryss",
+   "part": 3,
+   "section_no": "3.2",
+   "section_title": "Veien",
+   "collection_images": [],
    "title": {
     "no": "Veiskulder, spesialfelt og veikryss",
     "th": "ไหล่ทาง เลนพิเศษ และทางแยก",
@@ -700,13 +1204,21 @@
    },
    "image_file": "bb_s50_veiskulder-felt-og-veikryss.png",
    "quiz_category": "Road Rules",
-   "next": "bb-s51"
+   "next": "bb-s51",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s51": {
    "printed_page": 51,
    "pdf_page": 46,
    "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
    "section": "3.2 Veien – Veioppmerking: gul og hvit",
+   "part": 3,
+   "section_no": "3.2",
+   "section_title": "Veien",
+   "collection_images": [],
    "title": {
     "no": "Gul og hvit oppmerking",
     "th": "เส้นสีเหลืองและสีขาว",
@@ -714,13 +1226,21 @@
    },
    "image_file": "bb_s51_gul-og-hvit-oppmerking.png",
    "quiz_category": "Traffic Signs",
-   "next": "bb-s51b"
+   "next": "bb-s51b",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s51b": {
    "printed_page": 51,
    "pdf_page": 46,
    "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
    "section": "3.2 Veien – Langsgående linjer: sperrelinje og kjørefeltlinje",
+   "part": 3,
+   "section_no": "3.2",
+   "section_title": "Veien",
+   "collection_images": [],
    "title": {
     "no": "Sperrelinje og kjørefeltlinje",
     "th": "เส้นห้ามข้ามและเส้นแบ่งเลน",
@@ -728,13 +1248,21 @@
    },
    "image_file": "bb_s51b_sperrelinje-og-kjorefeltlinje.png",
    "quiz_category": "Traffic Signs",
-   "next": "bb-s52"
+   "next": "bb-s52",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s52": {
    "printed_page": 52,
    "pdf_page": 47,
    "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
    "section": "3.2 Veien – Varsellinje, dobbel sperrelinje, kantlinje, kombinerte linjer",
+   "part": 3,
+   "section_no": "3.2",
+   "section_title": "Veien",
+   "collection_images": [],
    "title": {
     "no": "Varsellinje og andre linjer",
     "th": "เส้นเตือนและเส้นอื่น ๆ",
@@ -742,13 +1270,21 @@
    },
    "image_file": "bb_s52_varsellinje-og-andre-linjer.png",
    "quiz_category": "Traffic Signs",
-   "next": "bb-s53"
+   "next": "bb-s53",
+   "has_unconfirmed": true,
+   "open_question_count": 1,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s53": {
    "printed_page": 53,
    "pdf_page": 48,
    "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
    "section": "3.2 Veien – Reversible felt",
+   "part": 3,
+   "section_no": "3.2",
+   "section_title": "Veien",
+   "collection_images": [],
    "title": {
     "no": "Reversible felt: lyset styrer feltet",
     "th": "เลนกลับทิศ: สัญญาณไฟควบคุมเลน",
@@ -756,13 +1292,21 @@
    },
    "image_file": "bb_s53_reversible-felt.png",
    "quiz_category": "Road Rules",
-   "next": "bb-s53b"
+   "next": "bb-s53b",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s53b": {
    "printed_page": 53,
    "pdf_page": 48,
    "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
    "section": "3.2 Veien – Kollektivfelt og busslomme",
+   "part": 3,
+   "section_no": "3.2",
+   "section_title": "Veien",
+   "collection_images": [],
    "title": {
     "no": "Kollektivfelt for buss",
     "th": "เลนสำหรับรถโดยสารประจำทาง",
@@ -770,13 +1314,21 @@
    },
    "image_file": "bb_s53b_kollektivfelt.png",
    "quiz_category": "Road Rules",
-   "next": "bb-s54"
+   "next": "bb-s54",
+   "has_unconfirmed": false,
+   "open_question_count": 1,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s54": {
    "printed_page": 54,
    "pdf_page": 49,
    "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
    "section": "3.2 Veien – Sykkelfelt og sykkelvei",
+   "part": 3,
+   "section_no": "3.2",
+   "section_title": "Veien",
+   "collection_images": [],
    "title": {
     "no": "Sykkelfelt og sykkelvei",
     "th": "เลนจักรยานและทางจักรยาน",
@@ -784,13 +1336,21 @@
    },
    "image_file": "bb_s54_sykkelfelt-og-sykkelvei.png",
    "quiz_category": "Road Rules",
-   "next": "bb-s54b"
+   "next": "bb-s54b",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s54b": {
    "printed_page": 54,
    "pdf_page": 49,
    "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
    "section": "3.2 Veien – Felt for fartsøkning og nedbremsing",
+   "part": 3,
+   "section_no": "3.2",
+   "section_title": "Veien",
+   "collection_images": [],
    "title": {
     "no": "Felt for fartsøkning og nedbremsing",
     "th": "เลนเร่งความเร็วและเลนชะลอ",
@@ -798,13 +1358,21 @@
    },
    "image_file": "bb_s54b_felt-for-fartsokning-og-nedbremsing.png",
    "quiz_category": "Road Rules",
-   "next": "bb-s55"
+   "next": "bb-s55",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s55": {
    "printed_page": 55,
    "pdf_page": 50,
    "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
    "section": "3.2 Veien – Linjer på tvers: vikelinje og stopplinje",
+   "part": 3,
+   "section_no": "3.2",
+   "section_title": "Veien",
+   "collection_images": [],
    "title": {
     "no": "Vikelinje og stopplinje",
     "th": "เส้นให้ทางและเส้นหยุด",
@@ -812,13 +1380,21 @@
    },
    "image_file": "bb_s55_vikelinje-og-stopplinje.png",
    "quiz_category": "Right of Way",
-   "next": "bb-s55b"
+   "next": "bb-s55b",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s55b": {
    "printed_page": 55,
    "pdf_page": 50,
    "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
    "section": "3.2 Veien – Trafikklyssignaler",
+   "part": 3,
+   "section_no": "3.2",
+   "section_title": "Veien",
+   "collection_images": [],
    "title": {
     "no": "Trafikklys: rødt, gult, grønt",
     "th": "สัญญาณไฟจราจร: แดง เหลือง เขียว",
@@ -826,13 +1402,21 @@
    },
    "image_file": "bb_s55b_trafikklys.png",
    "quiz_category": "Road Rules",
-   "next": "bb-s56"
+   "next": "bb-s56",
+   "has_unconfirmed": true,
+   "open_question_count": 1,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s56": {
    "printed_page": 56,
    "pdf_page": 51,
    "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
    "section": "3.2 Veien – Pilsignal",
+   "part": 3,
+   "section_no": "3.2",
+   "section_title": "Veien",
+   "collection_images": [],
    "title": {
     "no": "Pilsignal: bare for deg i pilens retning",
     "th": "สัญญาณลูกศร: ใช้เฉพาะทิศของลูกศร",
@@ -840,13 +1424,21 @@
    },
    "image_file": "bb_s56_pilsignal.png",
    "quiz_category": "Road Rules",
-   "next": "bb-s56b"
+   "next": "bb-s56b",
+   "has_unconfirmed": true,
+   "open_question_count": 1,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s56b": {
    "printed_page": 56,
    "pdf_page": 51,
    "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
    "section": "3.2 Veien – Kjørefeltsignal og blinkende rødt",
+   "part": 3,
+   "section_no": "3.2",
+   "section_title": "Veien",
+   "collection_images": [],
    "title": {
     "no": "Kjørefeltsignal og blinkende rødt",
     "th": "สัญญาณเลนและไฟแดงกะพริบ",
@@ -854,13 +1446,21 @@
    },
    "image_file": "bb_s56b_kjorefeltsignal-og-blinkende-rodt.png",
    "quiz_category": "Road Rules",
-   "next": "bb-s57"
+   "next": "bb-s57",
+   "has_unconfirmed": false,
+   "open_question_count": 1,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s57": {
    "printed_page": 57,
    "pdf_page": 52,
    "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
    "section": "3.2 Veien – Gult blink, lyspil, kollektivsignal, sykkelsignal",
+   "part": 3,
+   "section_no": "3.2",
+   "section_title": "Veien",
+   "collection_images": [],
    "title": {
     "no": "Gult blink, lyspil, buss- og sykkelsignal",
     "th": "ไฟเหลืองกะพริบ ลูกศรไฟ สัญญาณรถโดยสารและจักรยาน",
@@ -868,13 +1468,21 @@
    },
    "image_file": "bb_s57_gult-blink-lyspil-kollektiv-sykkel.png",
    "quiz_category": "Road Rules",
-   "next": "bb-s58"
+   "next": "bb-s58",
+   "has_unconfirmed": true,
+   "open_question_count": 1,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s58": {
    "printed_page": 58,
    "pdf_page": 53,
    "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
    "section": "3.2 Veien – Politiets tegn: begge armer ut",
+   "part": 3,
+   "section_no": "3.2",
+   "section_title": "Veien",
+   "collection_images": [],
    "title": {
     "no": "Politiet med armene ut til siden",
     "th": "ตำรวจกางแขนออกด้านข้าง",
@@ -882,13 +1490,21 @@
    },
    "image_file": "bb_s58_politiet-begge-armer-ut.png",
    "quiz_category": "Road Rules",
-   "next": "bb-s58b"
+   "next": "bb-s58b",
+   "has_unconfirmed": false,
+   "open_question_count": 1,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s58b": {
    "printed_page": 58,
    "pdf_page": 53,
    "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
    "section": "3.2 Veien – Politiets tegn: en arm opp",
+   "part": 3,
+   "section_no": "3.2",
+   "section_title": "Veien",
+   "collection_images": [],
    "title": {
     "no": "Politiet med én arm opp",
     "th": "ตำรวจยกแขนหนึ่งข้างขึ้น",
@@ -896,13 +1512,21 @@
    },
    "image_file": "bb_s58b_politiet-en-arm-opp.png",
    "quiz_category": "Road Rules",
-   "next": "bb-s59"
+   "next": "bb-s59",
+   "has_unconfirmed": true,
+   "open_question_count": 1,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s59": {
    "printed_page": 59,
    "pdf_page": 54,
    "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
    "section": "3.2 Veien – Skolepatrulje",
+   "part": 3,
+   "section_no": "3.2",
+   "section_title": "Veien",
+   "collection_images": [],
    "title": {
     "no": "Skolepatruljen passer på barna",
     "th": "เด็กอาสาจราจรโรงเรียนดูแลเด็ก ๆ",
@@ -910,13 +1534,21 @@
    },
    "image_file": "bb_s59_skolepatrulje.png",
    "quiz_category": "Road Rules",
-   "next": "bb-s59b"
+   "next": "bb-s59b",
+   "has_unconfirmed": false,
+   "open_question_count": 1,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s59b": {
    "printed_page": 59,
    "pdf_page": 54,
    "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
    "section": "3.2 Veien – Trafikkskiltene og de ni skiltgruppene",
+   "part": 3,
+   "section_no": "3.2",
+   "section_title": "Veien",
+   "collection_images": [],
    "title": {
     "no": "De ni skiltgruppene",
     "th": "ป้ายจราจรเก้ากลุ่ม",
@@ -924,13 +1556,21 @@
    },
    "image_file": "bb_s59b_de-ni-skiltgruppene.png",
    "quiz_category": "Traffic Signs",
-   "next": "bb-s60"
+   "next": "bb-s60",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s60": {
    "printed_page": 60,
    "pdf_page": 55,
    "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
    "section": "3.2 Veien – Fareskilt og avstand",
+   "part": 3,
+   "section_no": "3.2",
+   "section_title": "Veien",
+   "collection_images": [],
    "title": {
     "no": "Fareskilt er trekantede",
     "th": "ป้ายเตือนอันตรายเป็นรูปสามเหลี่ยม",
@@ -938,13 +1578,21 @@
    },
    "image_file": "bb_s60_fareskilt-og-avstand.png",
    "quiz_category": "Traffic Signs",
-   "next": "bb-s60b"
+   "next": "bb-s60b",
+   "has_unconfirmed": true,
+   "open_question_count": 1,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s60b": {
    "printed_page": 60,
    "pdf_page": 55,
    "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
    "section": "3.2 Veien – Vikeplikt- og forkjørsskilt",
+   "part": 3,
+   "section_no": "3.2",
+   "section_title": "Veien",
+   "collection_images": [],
    "title": {
     "no": "Vikeplikt- og forkjørsskilt",
     "th": "ป้ายให้ทางและป้ายทางเอก",
@@ -952,13 +1600,21 @@
    },
    "image_file": "bb_s60b_vikeplikt-og-forkjorsskilt.png",
    "quiz_category": "Right of Way",
-   "next": "bb-s61"
+   "next": "bb-s61",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s61": {
    "printed_page": 61,
    "pdf_page": 56,
    "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
    "section": "Trafikkskiltene – Forbuds- og påbudsskilt",
+   "part": 3,
+   "section_no": "3.2",
+   "section_title": "Veien",
+   "collection_images": [],
    "title": {
     "no": "Forbudsskilt og påbudsskilt",
     "th": "ป้ายห้ามและป้ายบังคับ",
@@ -966,13 +1622,21 @@
    },
    "image_file": "bb_s61_forbuds-og-paabudsskilt.png",
    "quiz_category": "Traffic Signs",
-   "next": "bb-s61b"
+   "next": "bb-s61b",
+   "has_unconfirmed": false,
+   "open_question_count": 1,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s61b": {
    "printed_page": 61,
    "pdf_page": 56,
    "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
    "section": "Trafikkskiltene – Opplysningsskilt",
+   "part": 3,
+   "section_no": "3.2",
+   "section_title": "Veien",
+   "collection_images": [],
    "title": {
     "no": "Opplysningsskilt gir deg informasjon",
     "th": "ป้ายข้อมูลให้ข้อมูลแก่คุณ",
@@ -980,13 +1644,21 @@
    },
    "image_file": "bb_s61b_opplysningsskilt.png",
    "quiz_category": "Traffic Signs",
-   "next": "bb-s62"
+   "next": "bb-s62",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s62": {
    "printed_page": 62,
    "pdf_page": 57,
    "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
    "section": "Trafikkskiltene – Service-, veivisnings-, under- og markeringsskilt",
+   "part": 3,
+   "section_no": "3.2",
+   "section_title": "Veien",
+   "collection_images": [],
    "title": {
     "no": "Service-, veivisnings-, under- og markeringsskilt",
     "th": "ป้ายบริการ ป้ายบอกทาง ป้ายเสริม และป้ายทำเครื่องหมาย",
@@ -994,13 +1666,21 @@
    },
    "image_file": "bb_s62_service-veivisning-under-markering.png",
    "quiz_category": "Traffic Signs",
-   "next": "bb-s63"
+   "next": "bb-s63",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s63": {
    "printed_page": 63,
    "pdf_page": 58,
    "chapter": "Del 3 Kjøretøyet, veien og trafikkmiljøet",
    "section": "Myndighetspyramiden",
+   "part": 3,
+   "section_no": "3.2",
+   "section_title": "Veien",
+   "collection_images": [],
    "title": {
     "no": "Hvem har høyest myndighet?",
     "th": "ใครมีอำนาจสูงสุด?",
@@ -1008,13 +1688,21 @@
    },
    "image_file": "bb_s63_myndighetspyramiden.png",
    "quiz_category": "Road Rules",
-   "next": "bb-s64"
+   "next": "bb-s64",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s64": {
    "printed_page": 64,
    "pdf_page": 59,
    "chapter": "Del 4 Atferd i trafikken",
    "section": "Del 4 – Risiko og falsk trygghet",
+   "part": 4,
+   "section_no": "4.0",
+   "section_title": "Risiko (innledning til Del 4)",
+   "collection_images": [],
    "title": {
     "no": "Bilkjøring er risikofylt",
     "th": "การขับรถมีความเสี่ยง",
@@ -1022,13 +1710,21 @@
    },
    "image_file": "bb_s64_risiko-og-falsk-trygghet.png",
    "quiz_category": "Safety",
-   "next": "bb-s64b"
+   "next": "bb-s64b",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s64b": {
    "printed_page": 64,
    "pdf_page": 59,
    "chapter": "Del 4 Atferd i trafikken",
    "section": "4.1 Grunnregler for atferd i trafikken – HAV",
+   "part": 4,
+   "section_no": "4.1",
+   "section_title": "Grunnregler for atferd i trafikken",
+   "collection_images": [],
    "title": {
     "no": "HAV: hensynsfull, aktpågivende, varsom",
     "th": "HAV: เกรงใจ ตื่นตัว ระมัดระวัง",
@@ -1036,13 +1732,21 @@
    },
    "image_file": "bb_s64b_hav-hensynsfull-aktpaagivende-varsom.png",
    "quiz_category": "Safety",
-   "next": "bb-s65"
+   "next": "bb-s65",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s65": {
    "printed_page": 65,
    "pdf_page": 60,
    "chapter": "Del 4 Atferd i trafikken",
    "section": "4.1 Aktpågivende og varsom",
+   "part": 4,
+   "section_no": "4.1",
+   "section_title": "Grunnregler for atferd i trafikken",
+   "collection_images": [],
    "title": {
     "no": "Ikke ta for gitt at det ikke skjuler seg noe bak hekken",
     "th": "อย่าคิดว่าไม่มีอะไรซ่อนอยู่หลังพุ่มไม้",
@@ -1050,13 +1754,21 @@
    },
    "image_file": "bb_s65_aktpaagivende-bak-hekken.png",
    "quiz_category": "Situations",
-   "next": "bb-s65b"
+   "next": "bb-s65b",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s65b": {
    "printed_page": 65,
    "pdf_page": 60,
    "chapter": "Del 4 Atferd i trafikken",
    "section": "Fra tanke til handling",
+   "part": 4,
+   "section_no": "4.1",
+   "section_title": "Grunnregler for atferd i trafikken",
+   "collection_images": [],
    "title": {
     "no": "Fra tanke til handling",
     "th": "จากความคิดสู่การกระทำ",
@@ -1064,13 +1776,21 @@
    },
    "image_file": "bb_s65b_fra-tanke-til-handling.png",
    "quiz_category": "Road Rules",
-   "next": "bb-s66"
+   "next": "bb-s66",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s66": {
    "printed_page": 66,
    "pdf_page": 61,
    "chapter": "Del 4 Atferd i trafikken",
    "section": "4.1 Sittestilling, speil og hodestøtte – 4.2 Observasjonsteknikk",
+   "part": 4,
+   "section_no": "4.1",
+   "section_title": "Grunnregler for atferd i trafikken",
+   "collection_images": [],
    "title": {
     "no": "Rett sittestilling, speil og hodestøtte",
     "th": "ท่านั่ง กระจก และที่พักศีรษะที่ถูกต้อง",
@@ -1078,13 +1798,21 @@
    },
    "image_file": "bb_s66_sittestilling-speil-hodestotte.png",
    "quiz_category": "Safety",
-   "next": "bb-s67"
+   "next": "bb-s67",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s67": {
    "printed_page": 67,
    "pdf_page": 62,
    "chapter": "Del 4 Atferd i trafikken",
    "section": "4.2 Observasjonsteknikk – Se-regel 1 og 2",
+   "part": 4,
+   "section_no": "4.2",
+   "section_title": "Observasjonsteknikk",
+   "collection_images": [],
    "title": {
     "no": "Se langt frem og beveg blikket",
     "th": "มองไกลไปข้างหน้าและเคลื่อนสายตา",
@@ -1092,13 +1820,21 @@
    },
    "image_file": "bb_s67_se-langt-frem-og-beveg-blikket.png",
    "quiz_category": "Safety",
-   "next": "bb-s68"
+   "next": "bb-s68",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s68": {
    "printed_page": 68,
    "pdf_page": 63,
    "chapter": "Del 4 Atferd i trafikken",
    "section": "4.2 Observasjonsteknikk – Se-regel 3 og 4",
+   "part": 4,
+   "section_no": "4.2",
+   "section_title": "Observasjonsteknikk",
+   "collection_images": [],
    "title": {
     "no": "Ta overblikk og bli sett og forstått",
     "th": "ดูภาพรวมและทำให้คนอื่นเห็นและเข้าใจ",
@@ -1106,13 +1842,21 @@
    },
    "image_file": "bb_s68_ta-overblikk-og-bli-sett.png",
    "quiz_category": "Situations",
-   "next": "bb-s69"
+   "next": "bb-s69",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s69": {
    "printed_page": 69,
    "pdf_page": 64,
    "chapter": "Del 4 Atferd i trafikken",
    "section": "4.2 Observasjonsteknikk – Se-regel 5 og eksempler",
+   "part": 4,
+   "section_no": "4.2",
+   "section_title": "Observasjonsteknikk",
+   "collection_images": [],
    "title": {
     "no": "Se alltid etter en utvei",
     "th": "มองหาทางหนีทีไล่เสมอ",
@@ -1120,13 +1864,21 @@
    },
    "image_file": "bb_s69_se-alltid-etter-en-utvei.png",
    "quiz_category": "Situations",
-   "next": "bb-s70"
+   "next": "bb-s70",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s70": {
    "printed_page": 70,
    "pdf_page": 65,
    "chapter": "Del 4 Atferd i trafikken",
    "section": "4.2 Observasjonsteknikk – Eksempler 3 og 4",
+   "part": 4,
+   "section_no": "4.2",
+   "section_title": "Observasjonsteknikk",
+   "collection_images": [],
    "title": {
     "no": "Seteknikk i praksis: lastebil og kryss",
     "th": "เทคนิคการมองในทางปฏิบัติ: รถบรรทุกและทางแยก",
@@ -1134,13 +1886,21 @@
    },
    "image_file": "bb_s70_seteknikk-lastebil-og-kryss.png",
    "quiz_category": "Situations",
-   "next": "bb-s71"
+   "next": "bb-s71",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s71": {
    "printed_page": 71,
    "pdf_page": 66,
    "chapter": "Del 4 Atferd i trafikken",
    "section": "4.3 Signal og tegn",
+   "part": 4,
+   "section_no": "4.3",
+   "section_title": "Signal og tegn",
+   "collection_images": [],
    "title": {
     "no": "Signal og tegn",
     "th": "สัญญาณและเครื่องหมาย",
@@ -1148,13 +1908,21 @@
    },
    "image_file": "bb_s71_signal-og-tegn.png",
    "quiz_category": "Road Rules",
-   "next": "bb-s72"
+   "next": "bb-s72",
+   "has_unconfirmed": true,
+   "open_question_count": 1,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s72": {
    "printed_page": 72,
    "pdf_page": 67,
    "chapter": "Del 4 Atferd i trafikken",
    "section": "4.3 Signal og tegn – Tegn i god tid",
+   "part": 4,
+   "section_no": "4.3",
+   "section_title": "Signal og tegn",
+   "collection_images": [],
    "title": {
     "no": "Gi tegn i god tid – bruk skjønn",
     "th": "ให้สัญญาณทันเวลา – ใช้วิจารณญาณ",
@@ -1162,13 +1930,21 @@
    },
    "image_file": "bb_s72_tegn-i-god-tid.png",
    "quiz_category": "Road Rules",
-   "next": "bb-s73"
+   "next": "bb-s73",
+   "has_unconfirmed": true,
+   "open_question_count": 1,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s73": {
    "printed_page": 73,
    "pdf_page": 68,
    "chapter": "Del 4 Atferd i trafikken",
    "section": "4.3 Signal og tegn – Blinklys før du bremser",
+   "part": 4,
+   "section_no": "4.3",
+   "section_title": "Signal og tegn",
+   "collection_images": [],
    "title": {
     "no": "Gi tegn med blinklys før du bremser",
     "th": "ให้สัญญาณไฟเลี้ยวก่อนเบรก",
@@ -1176,13 +1952,21 @@
    },
    "image_file": "bb_s73_blinklys-for-du-bremser.png",
    "quiz_category": "Road Rules",
-   "next": "bb-s74"
+   "next": "bb-s74",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s74": {
    "printed_page": 74,
    "pdf_page": 69,
    "chapter": "Del 4 Atferd i trafikken",
    "section": "4.3 Signal og tegn – Å tolke andres tegn",
+   "part": 4,
+   "section_no": "4.3",
+   "section_title": "Signal og tegn",
+   "collection_images": [],
    "title": {
     "no": "Når en annen blinker, men ikke senker farten",
     "th": "เมื่ออีกคนเปิดไฟเลี้ยวแต่ไม่ชะลอ",
@@ -1190,13 +1974,21 @@
    },
    "image_file": "bb_s74_tolke-andres-blinklys.png",
    "quiz_category": "Right of Way",
-   "next": "bb-s75"
+   "next": "bb-s75",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s75": {
    "printed_page": 75,
    "pdf_page": 70,
    "chapter": "Del 4 Atferd i trafikken",
    "section": "4.3 Utrykningskjøretøyer og blinkende gule lys",
+   "part": 4,
+   "section_no": "4.3",
+   "section_title": "Signal og tegn",
+   "collection_images": [],
    "title": {
     "no": "Utrykningskjøretøy og blinkende gule lys",
     "th": "รถฉุกเฉินและไฟเหลืองกะพริบ",
@@ -1204,13 +1996,21 @@
    },
    "image_file": "bb_s75_utrykningskjoretoy-og-gult-blink.png",
    "quiz_category": "Road Rules",
-   "next": "bb-s75b"
+   "next": "bb-s75b",
+   "has_unconfirmed": false,
+   "open_question_count": 1,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s75b": {
    "printed_page": 75,
    "pdf_page": 70,
    "chapter": "Del 4 Atferd i trafikken",
    "section": "4.4 Fartsavpasning – Fartsgrense og fartstilpasning",
+   "part": 4,
+   "section_no": "4.4",
+   "section_title": "Fartsavpasning",
+   "collection_images": [],
    "title": {
     "no": "Fartstilpasning og fartsgrense er ikke det samme",
     "th": "การปรับความเร็วกับขีดจำกัดความเร็วไม่เหมือนกัน",
@@ -1218,13 +2018,21 @@
    },
    "image_file": "bb_s75b_fartstilpasning-og-fartsgrense.png",
    "quiz_category": "Speed Limits",
-   "next": "bb-s76"
+   "next": "bb-s76",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s76": {
    "printed_page": 76,
    "pdf_page": 71,
    "chapter": "Del 4 Atferd i trafikken",
    "section": "4.4 Fartsavpasning – Stopplengde og reaksjonslengde",
+   "part": 4,
+   "section_no": "4.4",
+   "section_title": "Fartsavpasning",
+   "collection_images": [],
    "title": {
     "no": "Stopplengde = reaksjonslengde + bremselengde",
     "th": "ระยะหยุด = ระยะตอบสนอง + ระยะเบรก",
@@ -1232,13 +2040,21 @@
    },
    "image_file": "bb_s76_stopplengde.png",
    "quiz_category": "Speed Limits",
-   "next": "bb-s76b"
+   "next": "bb-s76b",
+   "has_unconfirmed": false,
+   "open_question_count": 1,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s76b": {
    "printed_page": 76,
    "pdf_page": 71,
    "chapter": "Del 4 Atferd i trafikken",
    "section": "4.4 Fartsavpasning – Forhold mellom fartsøkning og bremselengde",
+   "part": 4,
+   "section_no": "4.4",
+   "section_title": "Fartsavpasning",
+   "collection_images": [],
    "title": {
     "no": "Dobbel fart gir firedoblet bremselengde",
     "th": "ความเร็วสองเท่าทำให้ระยะเบรกสี่เท่า",
@@ -1246,13 +2062,21 @@
    },
    "image_file": "bb_s76b_bremselengde-og-kvadratet.png",
    "quiz_category": "Speed Limits",
-   "next": "bb-s77"
+   "next": "bb-s77",
+   "has_unconfirmed": true,
+   "open_question_count": 1,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s77": {
    "printed_page": 77,
    "pdf_page": 72,
    "chapter": "Del 4 Atferd i trafikken",
    "section": "4.4 Fartsavpasning – Bevegelsesenergi og bråbremsing",
+   "part": 4,
+   "section_no": "4.4",
+   "section_title": "Fartsavpasning",
+   "collection_images": [],
    "title": {
     "no": "Bevegelsesenergi – en farlig følgesvenn",
     "th": "พลังงานจลน์ – เพื่อนร่วมทางที่อันตราย",
@@ -1260,13 +2084,21 @@
    },
    "image_file": "bb_s77_bevegelsesenergi-folgesvenn.png",
    "quiz_category": "Safety",
-   "next": "bb-s77b"
+   "next": "bb-s77b",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s77b": {
    "printed_page": 77,
    "pdf_page": 72,
    "chapter": "Del 4 Atferd i trafikken",
    "section": "4.4 Fartsavpasning – ABS og bremseassistent",
+   "part": 4,
+   "section_no": "4.4",
+   "section_title": "Fartsavpasning",
+   "collection_images": [],
    "title": {
     "no": "ABS og bremseassistent",
     "th": "ABS และระบบช่วยเบรก",
@@ -1274,13 +2106,21 @@
    },
    "image_file": "bb_s77b_abs-og-bremseassistent.png",
    "quiz_category": "Safety",
-   "next": "bb-s78"
+   "next": "bb-s78",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s78": {
    "printed_page": 78,
    "pdf_page": 73,
    "chapter": "Del 4 Atferd i trafikken",
    "section": "4.4 Fartsavpasning – Veigrep",
+   "part": 4,
+   "section_no": "4.4",
+   "section_title": "Fartsavpasning",
+   "collection_images": [],
    "title": {
     "no": "Veigrep brukes til tre ting",
     "th": "การยึดเกาะถนนใช้สามอย่าง",
@@ -1288,13 +2128,21 @@
    },
    "image_file": "bb_s78_veigrep.png",
    "quiz_category": "Driving Conditions",
-   "next": "bb-s78b"
+   "next": "bb-s78b",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s78b": {
    "printed_page": 78,
    "pdf_page": 73,
    "chapter": "Del 4 Atferd i trafikken",
    "section": "4.4 Fartsavpasning – Svingkraft, skrens og utforkjøring",
+   "part": 4,
+   "section_no": "4.4",
+   "section_title": "Fartsavpasning",
+   "collection_images": [],
    "title": {
     "no": "Svingkraft og utforkjøring",
     "th": "แรงเหวี่ยงและการตกถนน",
@@ -1302,13 +2150,21 @@
    },
    "image_file": "bb_s78b_svingkraft-og-utforkjoring.png",
    "quiz_category": "Driving Conditions",
-   "next": "bb-s79"
+   "next": "bb-s79",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s79": {
    "printed_page": 79,
    "pdf_page": 74,
    "chapter": "Del 4 Atferd i trafikken",
    "section": "4.4 Fartsavpasning – Førerhjelpsystemer, skrens og nødbremsing",
+   "part": 4,
+   "section_no": "4.4",
+   "section_title": "Fartsavpasning",
+   "collection_images": [],
    "title": {
     "no": "Førerhjelpsystemer og skrens",
     "th": "ระบบช่วยผู้ขับและการลื่นไถล",
@@ -1316,13 +2172,21 @@
    },
    "image_file": "bb_s79_forerhjelpsystemer-og-skrens.png",
    "quiz_category": "Driving Conditions",
-   "next": "bb-s80"
+   "next": "bb-s80",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s80": {
    "printed_page": 80,
    "pdf_page": 75,
    "chapter": "Del 4 Atferd i trafikken",
    "section": "4.4 Fartsavpasning – Føret forandrer seg",
+   "part": 4,
+   "section_no": "4.4",
+   "section_title": "Fartsavpasning",
+   "collection_images": [],
    "title": {
     "no": "Føret forandrer seg",
     "th": "สภาพถนนเปลี่ยนไป",
@@ -1330,13 +2194,21 @@
    },
    "image_file": "bb_s80_foret-forandrer-seg.png",
    "quiz_category": "Road Conditions",
-   "next": "bb-s80b"
+   "next": "bb-s80b",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s80b": {
    "printed_page": 80,
    "pdf_page": 75,
    "chapter": "Del 4 Atferd i trafikken",
    "section": "4.4 Fartsavpasning – Spesielle krav ved passering",
+   "part": 4,
+   "section_no": "4.4",
+   "section_title": "Fartsavpasning",
+   "collection_images": [],
    "title": {
     "no": "Ekstra lav fart ved barn og sårbare",
     "th": "ลดความเร็วเป็นพิเศษเมื่อมีเด็กและผู้เปราะบาง",
@@ -1344,13 +2216,21 @@
    },
    "image_file": "bb_s80b_saerlige-krav-ved-passering.png",
    "quiz_category": "Safety",
-   "next": "bb-s81"
+   "next": "bb-s81",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s81": {
    "printed_page": 81,
    "pdf_page": 76,
    "chapter": "Del 4 Atferd i trafikken",
    "section": "4.4 Fartsavpasning – Fareskilt, fartsgrenseskilt, gatetun",
+   "part": 4,
+   "section_no": "4.4",
+   "section_title": "Fartsavpasning",
+   "collection_images": [],
    "title": {
     "no": "Fareskilt og fartsgrenseskilt",
     "th": "ป้ายเตือนและป้ายจำกัดความเร็ว",
@@ -1358,13 +2238,21 @@
    },
    "image_file": "bb_s81_fareskilt-fartsgrenser-gatetun.png",
    "quiz_category": "Speed Limits",
-   "next": "bb-s82"
+   "next": "bb-s82",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s82": {
    "printed_page": 82,
    "pdf_page": 77,
    "chapter": "Del 4 Atferd i trafikken",
    "section": "4.4 Fartsavpasning – Fartsgrense for spesielle kjøretøy",
+   "part": 4,
+   "section_no": "4.4",
+   "section_title": "Fartsavpasning",
+   "collection_images": [],
    "title": {
     "no": "Fartsgrense for tunge biler og biler med tilhenger",
     "th": "ขีดจำกัดความเร็วสำหรับรถหนักและรถที่ลากรถพ่วง",
@@ -1372,13 +2260,21 @@
    },
    "image_file": "bb_s82_fartsgrense-spesielle-kjoretoy.png",
    "quiz_category": "Speed Limits",
-   "next": "bb-s82b"
+   "next": "bb-s82b",
+   "has_unconfirmed": false,
+   "open_question_count": 1,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s82b": {
    "printed_page": 82,
    "pdf_page": 77,
    "chapter": "Del 4 Atferd i trafikken",
    "section": "4.5 Kjøretøyets plassering på veien – hovedregelen",
+   "part": 4,
+   "section_no": "4.5",
+   "section_title": "Kjøretøyets plassering på veien",
+   "collection_images": [],
    "title": {
     "no": "Kjør på høyre side av veien",
     "th": "ขับชิดขวาของถนน",
@@ -1386,13 +2282,21 @@
    },
    "image_file": "bb_s82b_plassering-hoyre-side.png",
    "quiz_category": "Road Rules",
-   "next": "bb-s83"
+   "next": "bb-s83",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s83": {
    "printed_page": 83,
    "pdf_page": 78,
    "chapter": "Del 4 Atferd i trafikken",
    "section": "4.5 Kjøretøyets plassering – Unntak fra hovedregelen",
+   "part": 4,
+   "section_no": "4.5",
+   "section_title": "Kjøretøyets plassering på veien",
+   "collection_images": [],
    "title": {
     "no": "Når du kan bruke venstre felt",
     "th": "เมื่อใช้เลนซ้ายได้",
@@ -1400,13 +2304,21 @@
    },
    "image_file": "bb_s83_unntak-fra-hovedregelen.png",
    "quiz_category": "Road Rules",
-   "next": "bb-s84"
+   "next": "bb-s84",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s84": {
    "printed_page": 84,
    "pdf_page": 79,
    "chapter": "Del 4 Atferd i trafikken",
    "section": "4.5 Kjøretøyets plassering – Avstand til forankjørende",
+   "part": 4,
+   "section_no": "4.5",
+   "section_title": "Kjøretøyets plassering på veien",
+   "collection_images": [],
    "title": {
     "no": "Avstand til forankjørende: 3-sekundersregelen",
     "th": "ระยะห่างจากรถคันหน้า: กฎ 3 วินาที",
@@ -1414,13 +2326,21 @@
    },
    "image_file": "bb_s84_avstand-til-forankjorende.png",
    "quiz_category": "Road Rules",
-   "next": "bb-s85"
+   "next": "bb-s85",
+   "has_unconfirmed": false,
+   "open_question_count": 1,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s85": {
    "printed_page": 85,
    "pdf_page": 80,
    "chapter": "Del 4 Atferd i trafikken",
    "section": "4.5 Kjøretøyets plassering – Plassering foran og i veikryss: høyresving",
+   "part": 4,
+   "section_no": "4.5",
+   "section_title": "Kjøretøyets plassering på veien",
+   "collection_images": [],
    "title": {
     "no": "Høyresving: så nær høyre kant som mulig",
     "th": "เลี้ยวขวา: ชิดขอบขวาให้มากที่สุด",
@@ -1428,13 +2348,21 @@
    },
    "image_file": "bb_s85_hoyresving.png",
    "quiz_category": "Road Rules",
-   "next": "bb-s85b"
+   "next": "bb-s85b",
+   "has_unconfirmed": false,
+   "open_question_count": 1,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
   },
   "bb-s85b": {
    "printed_page": 85,
    "pdf_page": 80,
    "chapter": "Del 4 Atferd i trafikken",
    "section": "4.5 Kjøretøyets plassering – Plassering i veikryss: venstresving",
+   "part": 4,
+   "section_no": "4.5",
+   "section_title": "Kjøretøyets plassering på veien",
+   "collection_images": [],
    "title": {
     "no": "Venstresving: kjør mot midten, ikke i midten",
     "th": "เลี้ยวซ้าย: ขับไปทางกลาง ไม่ใช่ในกลาง",
@@ -1442,7 +2370,1243 @@
    },
    "image_file": "bb_s85b_venstresving.png",
    "quiz_category": "Road Rules",
-   "next": null
+   "next": "bb-s86",
+   "has_unconfirmed": false,
+   "open_question_count": 1,
+   "claim_kinds": [],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s86": {
+   "printed_page": 86,
+   "pdf_page": 81,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.5 Kjøretøyets plassering – «så nær som mulig»",
+   "part": 4,
+   "section_no": "4.5",
+   "section_title": "Kjøretøyets plassering på veien",
+   "collection_images": [],
+   "title": {
+    "no": "Store kjøretøy og svinger",
+    "th": "ยานพาหนะขนาดใหญ่และการเลี้ยว",
+    "en": "Large vehicles and turns"
+   },
+   "image_file": "bb_s86_saa-naer-som-mulig.png",
+   "quiz_category": "Road Rules",
+   "next": "bb-s87",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [
+    "lov",
+    "rettesnor"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s87": {
+   "printed_page": 87,
+   "pdf_page": 82,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.5 Kjøretøyets plassering – Svinging på vei med flere felt",
+   "part": 4,
+   "section_no": "4.5",
+   "section_title": "Kjøretøyets plassering på veien",
+   "collection_images": [],
+   "title": {
+    "no": "Flere felt: riktig felt før du svinger",
+    "th": "หลายเลน: ใช้เลนที่ถูกต้องก่อนเลี้ยว",
+    "en": "Several lanes: the right lane before you turn"
+   },
+   "image_file": "bb_s87_svinging-flere-felt.png",
+   "quiz_category": "Road Rules",
+   "next": "bb-s88",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [
+    "lov",
+    "rettesnor"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s88": {
+   "printed_page": 88,
+   "pdf_page": 83,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.5 Kjøretøyets plassering – Plassering etter kryss",
+   "part": 4,
+   "section_no": "4.5",
+   "section_title": "Kjøretøyets plassering på veien",
+   "collection_images": [],
+   "title": {
+    "no": "Hvilket felt velger du etter svingen?",
+    "th": "เลือกเลนใดหลังเลี้ยว?",
+    "en": "Which lane do you choose after the turn?"
+   },
+   "image_file": "bb_s88_plassering-etter-kryss.png",
+   "quiz_category": "Road Rules",
+   "next": "bb-s89",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [
+    "lov",
+    "rettesnor"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s89": {
+   "printed_page": 89,
+   "pdf_page": 84,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.5 Kjøretøyets plassering – Venstresving for hverandre",
+   "part": 4,
+   "section_no": "4.5",
+   "section_title": "Kjøretøyets plassering på veien",
+   "collection_images": [],
+   "title": {
+    "no": "Møtende kan svinge til venstre for hverandre",
+    "th": "รถสวนเลี้ยวซ้ายผ่านกันได้",
+    "en": "Oncoming vehicles may turn left past each other"
+   },
+   "image_file": "bb_s89_venstresving-for-hverandre.png",
+   "quiz_category": "Road Rules",
+   "next": "bb-s90",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [
+    "lov",
+    "rettesnor"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s90": {
+   "printed_page": 90,
+   "pdf_page": 85,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.5 Kjøretøyets plassering – Gater med enveiskjøring",
+   "part": 4,
+   "section_no": "4.5",
+   "section_title": "Kjøretøyets plassering på veien",
+   "collection_images": [],
+   "title": {
+    "no": "Enveiskjørte gater",
+    "th": "ถนนวันเวย์",
+    "en": "One-way streets"
+   },
+   "image_file": "bb_s90_enveiskjorte-gater.png",
+   "quiz_category": "Traffic Signs",
+   "next": "bb-s91",
+   "has_unconfirmed": true,
+   "open_question_count": 1,
+   "claim_kinds": [
+    "apent",
+    "lov",
+    "rettesnor"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s91": {
+   "printed_page": 91,
+   "pdf_page": 86,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.5 Kjøretøyets plassering – Venstresving ut av enveiskjørt gate",
+   "part": 4,
+   "section_no": "4.5",
+   "section_title": "Kjøretøyets plassering på veien",
+   "collection_images": [],
+   "title": {
+    "no": "Venstresving ut av enveiskjørt gate",
+    "th": "เลี้ยวซ้ายออกจากถนนวันเวย์",
+    "en": "Left turn out of a one-way street"
+   },
+   "image_file": "bb_s91_venstresving-ut-av-enveis.png",
+   "quiz_category": "Situations",
+   "next": "bb-s92",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [
+    "lov",
+    "rettesnor"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s92": {
+   "printed_page": 92,
+   "pdf_page": 87,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.5 Kjøring i rundkjøringer – Skilt og oversikt",
+   "part": 4,
+   "section_no": "4.5",
+   "section_title": "Kjøretøyets plassering på veien",
+   "collection_images": [],
+   "title": {
+    "no": "Rundkjøring: skiltene og oversikten",
+    "th": "วงเวียน: ป้ายและภาพรวม",
+    "en": "Roundabouts: the signs and the overview"
+   },
+   "image_file": "bb_s92_rundkjoring-og-skilt.png",
+   "quiz_category": "Situations",
+   "next": "bb-s92b",
+   "has_unconfirmed": true,
+   "open_question_count": 1,
+   "claim_kinds": [
+    "apent",
+    "rettesnor"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s92b": {
+   "printed_page": 92,
+   "pdf_page": 87,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.5 Kjøring i rundkjøringer – Vikeplikt",
+   "part": 4,
+   "section_no": "4.5",
+   "section_title": "Kjøretøyets plassering på veien",
+   "collection_images": [],
+   "title": {
+    "no": "Hvem har vikeplikt i rundkjøring?",
+    "th": "ใครต้องให้ทางในวงเวียน?",
+    "en": "Who must yield in a roundabout?"
+   },
+   "image_file": "bb_s92b_vikeplikt-i-rundkjoring.png",
+   "quiz_category": "Right of Way",
+   "next": "bb-s93",
+   "has_unconfirmed": true,
+   "open_question_count": 1,
+   "claim_kinds": [
+    "apent",
+    "lov",
+    "rettesnor"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s93": {
+   "printed_page": 93,
+   "pdf_page": 88,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.5 Kjøring i rundkjøringer – Plassering med ett felt",
+   "part": 4,
+   "section_no": "4.5",
+   "section_title": "Kjøretøyets plassering på veien",
+   "collection_images": [],
+   "title": {
+    "no": "Rundkjøring med ett felt i hver retning",
+    "th": "วงเวียนที่มีหนึ่งเลนต่อทิศ",
+    "en": "Roundabout with one lane in each direction"
+   },
+   "image_file": "bb_s93_rundkjoring-ett-felt.png",
+   "quiz_category": "Road Rules",
+   "next": "bb-s94",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [
+    "lov",
+    "rettesnor"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s94": {
+   "printed_page": 94,
+   "pdf_page": 89,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.5 Kjøring i rundkjøringer – Stor rundkjøring med flere felt",
+   "part": 4,
+   "section_no": "4.5",
+   "section_title": "Kjøretøyets plassering på veien",
+   "collection_images": [],
+   "title": {
+    "no": "Stor rundkjøring med flere felt",
+    "th": "วงเวียนใหญ่หลายเลน",
+    "en": "Large roundabout with several lanes"
+   },
+   "image_file": "bb_s94_stor-rundkjoring.png",
+   "quiz_category": "Road Rules",
+   "next": "bb-s95",
+   "has_unconfirmed": true,
+   "open_question_count": 1,
+   "claim_kinds": [
+    "apent",
+    "rettesnor"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s95": {
+   "printed_page": 95,
+   "pdf_page": 90,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.5 Kjøring i rundkjøringer – Tegngiving",
+   "part": 4,
+   "section_no": "4.5",
+   "section_title": "Kjøretøyets plassering på veien",
+   "collection_images": [],
+   "title": {
+    "no": "Tegngiving i rundkjøring",
+    "th": "การให้สัญญาณในวงเวียน",
+    "en": "Signalling in a roundabout"
+   },
+   "image_file": "bb_s95_tegngiving-i-rundkjoring.png",
+   "quiz_category": "Road Rules",
+   "next": "bb-s96",
+   "has_unconfirmed": true,
+   "open_question_count": 1,
+   "claim_kinds": [
+    "apent",
+    "rettesnor"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s96": {
+   "printed_page": 96,
+   "pdf_page": 91,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.5 Plassendring og feltskifte",
+   "part": 4,
+   "section_no": "4.5",
+   "section_title": "Kjøretøyets plassering på veien",
+   "collection_images": [],
+   "title": {
+    "no": "Feltskifte: vikeplikt og rutine",
+    "th": "เปลี่ยนเลน: การให้ทางและขั้นตอน",
+    "en": "Changing lanes: yielding and routine"
+   },
+   "image_file": "bb_s96_feltskifte.png",
+   "quiz_category": "Right of Way",
+   "next": "bb-s97",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [
+    "lov",
+    "rettesnor"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s97": {
+   "printed_page": 97,
+   "pdf_page": 92,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.5 Plassering/skilt – Felt for nedbremsing",
+   "part": 4,
+   "section_no": "4.5",
+   "section_title": "Kjøretøyets plassering på veien",
+   "collection_images": [],
+   "title": {
+    "no": "Felt for nedbremsing ved avkjørsel",
+    "th": "เลนชะลอที่ทางออก",
+    "en": "Deceleration lane at an exit"
+   },
+   "image_file": "bb_s97_felt-for-nedbremsing-avkjorsel.png",
+   "quiz_category": "Road Rules",
+   "next": "bb-s98",
+   "has_unconfirmed": true,
+   "open_question_count": 1,
+   "claim_kinds": [
+    "apent",
+    "rettesnor"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s98": {
+   "printed_page": 98,
+   "pdf_page": 93,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.5 Plassering/skilt – Felt for fartsøkning",
+   "part": 4,
+   "section_no": "4.5",
+   "section_title": "Kjøretøyets plassering på veien",
+   "collection_images": [],
+   "title": {
+    "no": "Felt for fartsøkning og flettereglen",
+    "th": "เลนเร่งความเร็วและกฎการสอดสลับ",
+    "en": "Acceleration lane and the merging rule"
+   },
+   "image_file": "bb_s98_felt-for-fartsokning-flettereglen.png",
+   "quiz_category": "Road Rules",
+   "next": "bb-s99",
+   "has_unconfirmed": true,
+   "open_question_count": 2,
+   "claim_kinds": [
+    "apent",
+    "lov",
+    "rettesnor"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s99": {
+   "printed_page": 99,
+   "pdf_page": 94,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.5 Plassering/skilt – Kollektivfelt og sambruksfelt",
+   "part": 4,
+   "section_no": "4.5",
+   "section_title": "Kjøretøyets plassering på veien",
+   "collection_images": [],
+   "title": {
+    "no": "Kollektivfelt og sambruksfelt",
+    "th": "เลนรถโดยสารและเลนใช้ร่วม",
+    "en": "Bus lanes and shared-use lanes"
+   },
+   "image_file": "bb_s99_kollektivfelt-og-sambruksfelt.png",
+   "quiz_category": "Road Rules",
+   "next": "bb-s100",
+   "has_unconfirmed": true,
+   "open_question_count": 1,
+   "claim_kinds": [
+    "apent",
+    "lov"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s100": {
+   "printed_page": 100,
+   "pdf_page": 95,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.5 Plassering/skilt – Påbudsskilt: kjøreretning",
+   "part": 4,
+   "section_no": "4.5",
+   "section_title": "Kjøretøyets plassering på veien",
+   "collection_images": [],
+   "title": {
+    "no": "Påbudt kjøreretning",
+    "th": "บังคับทิศทางการขับ",
+    "en": "Mandatory direction of travel"
+   },
+   "image_file": "bb_s100_paabudt-kjoreretning.png",
+   "quiz_category": "Traffic Signs",
+   "next": "bb-s101",
+   "has_unconfirmed": false,
+   "open_question_count": 1,
+   "claim_kinds": [
+    "lov",
+    "rettesnor"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s101": {
+   "printed_page": 101,
+   "pdf_page": 96,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.5 Plassering/skilt – Påbudsskilt: påbudt kjørefelt med skråpil",
+   "part": 4,
+   "section_no": "4.5",
+   "section_title": "Kjøretøyets plassering på veien",
+   "collection_images": [],
+   "title": {
+    "no": "Påbudt kjørefelt: pass forbi på pilens side",
+    "th": "บังคับเลน: ผ่านไปทางด้านที่ลูกศรชี้",
+    "en": "Mandatory lane: pass on the arrow's side"
+   },
+   "image_file": "bb_s101_paabudt-kjorefelt-skraapil.png",
+   "quiz_category": "Traffic Signs",
+   "next": "bb-s102",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [
+    "lov",
+    "rettesnor"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s102": {
+   "printed_page": 102,
+   "pdf_page": 97,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.5 Plassering/skilt – Opplysningsskilt: valgfritt kjørefelt og lede trafikk",
+   "part": 4,
+   "section_no": "4.5",
+   "section_title": "Kjøretøyets plassering på veien",
+   "collection_images": [],
+   "title": {
+    "no": "Skilt som viser felt",
+    "th": "ป้ายที่แสดงเลน",
+    "en": "Signs that show lanes"
+   },
+   "image_file": "bb_s102_valgfritt-kjorefelt.png",
+   "quiz_category": "Traffic Signs",
+   "next": "bb-s103",
+   "has_unconfirmed": true,
+   "open_question_count": 1,
+   "claim_kinds": [
+    "apent",
+    "rettesnor"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s103": {
+   "printed_page": 103,
+   "pdf_page": 98,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.5 Plassering/skilt – Sammenfletting",
+   "part": 4,
+   "section_no": "4.5",
+   "section_title": "Kjøretøyets plassering på veien",
+   "collection_images": [],
+   "title": {
+    "no": "Sammenfletting: bytt på",
+    "th": "การสอดสลับ: ผลัดกันไป",
+    "en": "Merging: take turns"
+   },
+   "image_file": "bb_s103_sammenfletting.png",
+   "quiz_category": "Road Rules",
+   "next": "bb-s104",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [
+    "lov",
+    "rettesnor"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s104": {
+   "printed_page": 104,
+   "pdf_page": 99,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.5 Plassering/skilt – Kjørefelt begynner og slutter",
+   "part": 4,
+   "section_no": "4.5",
+   "section_title": "Kjøretøyets plassering på veien",
+   "collection_images": [],
+   "title": {
+    "no": "Skilt: kjørefelt begynner og slutter",
+    "th": "ป้าย: เลนเริ่มและสิ้นสุด",
+    "en": "Signs: lane begins and ends"
+   },
+   "image_file": "bb_s104_kjorefelt-begynner-og-slutter.png",
+   "quiz_category": "Traffic Signs",
+   "next": "bb-s104b",
+   "has_unconfirmed": true,
+   "open_question_count": 1,
+   "claim_kinds": [
+    "apent",
+    "lov",
+    "rettesnor"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s104b": {
+   "printed_page": 104,
+   "pdf_page": 99,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.6 Vikeplikt – Hva er vikeplikt?",
+   "part": 4,
+   "section_no": "4.6",
+   "section_title": "Vikeplikt",
+   "collection_images": [],
+   "title": {
+    "no": "Hva betyr vikeplikt?",
+    "th": "การให้ทางหมายความว่าอะไร?",
+    "en": "What does yielding mean?"
+   },
+   "image_file": "bb_s104b_hva-er-vikeplikt.png",
+   "quiz_category": "Right of Way",
+   "next": "bb-s105",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [
+    "lov",
+    "rettesnor"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s105": {
+   "printed_page": 105,
+   "pdf_page": 100,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.6 Vikeplikt – Vikeplikt for kjøretøy fra høyre",
+   "part": 4,
+   "section_no": "4.6",
+   "section_title": "Vikeplikt",
+   "collection_images": [],
+   "title": {
+    "no": "Vikeplikt for kjøretøy fra høyre",
+    "th": "ให้ทางแก่ยานพาหนะจากทางขวา",
+    "en": "Yield to vehicles from the right"
+   },
+   "image_file": "bb_s105_vikeplikt-fra-hoyre.png",
+   "quiz_category": "Right of Way",
+   "next": "bb-s106",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [
+    "lov",
+    "rettesnor"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s106": {
+   "printed_page": 106,
+   "pdf_page": 101,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.6 Vikeplikt – Vikeplikt ved svinging",
+   "part": 4,
+   "section_no": "4.6",
+   "section_title": "Vikeplikt",
+   "collection_images": [],
+   "title": {
+    "no": "Vikeplikt for gående og syklende ved svinging",
+    "th": "ให้ทางแก่คนเดินเท้าและผู้ปั่นเมื่อเลี้ยว",
+    "en": "Yield to pedestrians and cyclists when turning"
+   },
+   "image_file": "bb_s106_vikeplikt-ved-svinging.png",
+   "quiz_category": "Right of Way",
+   "next": "bb-s106b",
+   "has_unconfirmed": true,
+   "open_question_count": 1,
+   "claim_kinds": [
+    "apent",
+    "lov",
+    "rettesnor"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s106b": {
+   "printed_page": 106,
+   "pdf_page": 101,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.6 Vikeplikt – Hvor skal du stanse når du får vikeplikt?",
+   "part": 4,
+   "section_no": "4.6",
+   "section_title": "Vikeplikt",
+   "collection_images": [],
+   "title": {
+    "no": "Ikke stans på gangfeltet",
+    "th": "ห้ามหยุดบนทางม้าลาย",
+    "en": "Do not stop on the pedestrian crossing"
+   },
+   "image_file": "bb_s106b_hvor-skal-du-stanse.png",
+   "quiz_category": "Right of Way",
+   "next": "bb-s107",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [
+    "lov",
+    "rettesnor"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s107": {
+   "printed_page": 107,
+   "pdf_page": 102,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.6 Vikeplikt – Lyskryss: rett fram",
+   "part": 4,
+   "section_no": "4.6",
+   "section_title": "Vikeplikt",
+   "collection_images": [],
+   "title": {
+    "no": "Lyskryss: rett fram",
+    "th": "ทางแยกที่มีสัญญาณไฟ: ตรงไป",
+    "en": "Signalised junction: straight ahead"
+   },
+   "image_file": "bb_s107_lyskryss-rett-fram.png",
+   "quiz_category": "Right of Way",
+   "next": "bb-s107b",
+   "has_unconfirmed": true,
+   "open_question_count": 1,
+   "claim_kinds": [
+    "apent",
+    "lov",
+    "rettesnor"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s107b": {
+   "printed_page": 107,
+   "pdf_page": 102,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.6 Vikeplikt – Høyresving i lyskryss",
+   "part": 4,
+   "section_no": "4.6",
+   "section_title": "Vikeplikt",
+   "collection_images": [],
+   "title": {
+    "no": "Høyresving i lyskryss",
+    "th": "เลี้ยวขวาที่ทางแยกสัญญาณไฟ",
+    "en": "Right turn at a signalised junction"
+   },
+   "image_file": "bb_s107b_hoyresving-i-lyskryss.png",
+   "quiz_category": "Right of Way",
+   "next": "bb-s108",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [
+    "lov",
+    "rettesnor"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s108": {
+   "printed_page": 108,
+   "pdf_page": 103,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.6 Vikeplikt – Venstresving i lyskryss",
+   "part": 4,
+   "section_no": "4.6",
+   "section_title": "Vikeplikt",
+   "collection_images": [],
+   "title": {
+    "no": "Venstresving i lyskryss",
+    "th": "เลี้ยวซ้ายที่ทางแยกสัญญาณไฟ",
+    "en": "Left turn at a signalised junction"
+   },
+   "image_file": "bb_s108_venstresving-i-lyskryss.png",
+   "quiz_category": "Right of Way",
+   "next": "bb-s108b",
+   "has_unconfirmed": true,
+   "open_question_count": 1,
+   "claim_kinds": [
+    "apent",
+    "lov",
+    "rettesnor"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s108b": {
+   "printed_page": 108,
+   "pdf_page": 103,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.6 Vikeplikt – Pilsignaler og blinkende gult",
+   "part": 4,
+   "section_no": "4.6",
+   "section_title": "Vikeplikt",
+   "collection_images": [],
+   "title": {
+    "no": "Pilsignal og gult blinksignal",
+    "th": "สัญญาณลูกศรและสัญญาณเหลืองกะพริบ",
+    "en": "Arrow signal and flashing yellow signal"
+   },
+   "image_file": "bb_s108b_pilsignaler-og-blinkende-gult.png",
+   "quiz_category": "Right of Way",
+   "next": "bb-s109",
+   "has_unconfirmed": true,
+   "open_question_count": 1,
+   "claim_kinds": [
+    "apent",
+    "lov"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s109": {
+   "printed_page": 109,
+   "pdf_page": 104,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.6 Vikeplikt – Andre vikepliktsituasjoner",
+   "part": 4,
+   "section_no": "4.6",
+   "section_title": "Vikeplikt",
+   "collection_images": [],
+   "title": {
+    "no": "Andre situasjoner der du har vikeplikt",
+    "th": "สถานการณ์อื่นที่คุณต้องให้ทาง",
+    "en": "Other situations where you must yield"
+   },
+   "image_file": "bb_s109_andre-vikepliktsituasjoner.png",
+   "quiz_category": "Right of Way",
+   "next": "bb-s110",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [
+    "lov"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s110": {
+   "printed_page": 110,
+   "pdf_page": 105,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.6 Vikeplikt – Vikeplikt for syklister",
+   "part": 4,
+   "section_no": "4.6",
+   "section_title": "Vikeplikt",
+   "collection_images": [],
+   "title": {
+    "no": "Vikeplikt og syklister: sykkelfelt og sykkelvei",
+    "th": "การให้ทางและผู้ปั่น: เลนจักรยานและทางจักรยาน",
+    "en": "Yielding and cyclists: cycle lane and cycle path"
+   },
+   "image_file": "bb_s110_vikeplikt-for-syklister.png",
+   "quiz_category": "Right of Way",
+   "next": "bb-s111",
+   "has_unconfirmed": true,
+   "open_question_count": 1,
+   "claim_kinds": [
+    "apent",
+    "lov",
+    "rettesnor"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s111": {
+   "printed_page": 111,
+   "pdf_page": 106,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.6 Vikeplikt – Sykkelfelt, sykkelvei, fortau og veiskulder",
+   "part": 4,
+   "section_no": "4.6",
+   "section_title": "Vikeplikt",
+   "collection_images": [],
+   "title": {
+    "no": "Syklister: sykkelfelt, sykkelvei og fortau",
+    "th": "ผู้ปั่น: เลนจักรยาน ทางจักรยาน และทางเท้า",
+    "en": "Cyclists: cycle lane, cycle path and pavement"
+   },
+   "image_file": "bb_s111_sykkelfelt-sykkelvei-fortau.png",
+   "quiz_category": "Right of Way",
+   "next": "bb-s112",
+   "has_unconfirmed": true,
+   "open_question_count": 1,
+   "claim_kinds": [
+    "apent",
+    "lov"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s112": {
+   "printed_page": 112,
+   "pdf_page": 107,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.6 Vikeplikt – Vikeplikt for buss",
+   "part": 4,
+   "section_no": "4.6",
+   "section_title": "Vikeplikt",
+   "collection_images": [],
+   "title": {
+    "no": "Vikeplikt for buss som forlater holdeplass",
+    "th": "ให้ทางแก่รถโดยสารที่ออกจากป้าย",
+    "en": "Yield to a bus leaving a stop"
+   },
+   "image_file": "bb_s112_vikeplikt-for-buss.png",
+   "quiz_category": "Right of Way",
+   "next": "bb-s112b",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [
+    "lov",
+    "rettesnor"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s112b": {
+   "printed_page": 112,
+   "pdf_page": 107,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.6 Vikeplikt – Vikeplikt gitt med skilt: vikelinje og stopplinje",
+   "part": 4,
+   "section_no": "4.6",
+   "section_title": "Vikeplikt",
+   "collection_images": [],
+   "title": {
+    "no": "Vikelinje og stopplinje ved skilt",
+    "th": "เส้นให้ทางและเส้นหยุดที่ป้าย",
+    "en": "Give-way line and stop line at a sign"
+   },
+   "image_file": "bb_s112b_vikelinje-og-stopplinje-ved-skilt.png",
+   "quiz_category": "Right of Way",
+   "next": "bb-s113",
+   "has_unconfirmed": true,
+   "open_question_count": 1,
+   "claim_kinds": [
+    "apent",
+    "lov",
+    "rettesnor"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s113": {
+   "printed_page": 113,
+   "pdf_page": 108,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.6 Vikeplikt – Sperring i veien og møtende kjøretøy",
+   "part": 4,
+   "section_no": "4.6",
+   "section_title": "Vikeplikt",
+   "collection_images": [],
+   "title": {
+    "no": "Sperring i veien: hvem må vike?",
+    "th": "สิ่งกีดขวางบนถนน: ใครต้องให้ทาง?",
+    "en": "A barrier in the road: who must yield?"
+   },
+   "image_file": "bb_s113_sperring-i-veien.png",
+   "quiz_category": "Right of Way",
+   "next": "bb-s114",
+   "has_unconfirmed": true,
+   "open_question_count": 1,
+   "claim_kinds": [
+    "apent",
+    "lov"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s114": {
+   "printed_page": 114,
+   "pdf_page": 109,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.6 Vikeplikt – Forkjørsvei og forkjørskryss",
+   "part": 4,
+   "section_no": "4.6",
+   "section_title": "Vikeplikt",
+   "collection_images": [],
+   "title": {
+    "no": "Forkjørsvei og forkjørskryss",
+    "th": "ทางเอกและทางแยกมีทางเอก",
+    "en": "Priority road and priority junction"
+   },
+   "image_file": "bb_s114_forkjorsvei-og-forkjorskryss.png",
+   "quiz_category": "Right of Way",
+   "next": "bb-s115",
+   "has_unconfirmed": true,
+   "open_question_count": 1,
+   "claim_kinds": [
+    "apent",
+    "rettesnor"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s115": {
+   "printed_page": 115,
+   "pdf_page": 110,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.6 Vikeplikt – Fri vei for utrykningskjøretøy",
+   "part": 4,
+   "section_no": "4.6",
+   "section_title": "Vikeplikt",
+   "collection_images": [],
+   "title": {
+    "no": "Gi fri vei for utrykningskjøretøy",
+    "th": "เปิดทางให้รถฉุกเฉิน",
+    "en": "Give way to emergency vehicles"
+   },
+   "image_file": "bb_s115_fri-vei-for-utrykning.png",
+   "quiz_category": "Road Rules",
+   "next": "bb-s115b",
+   "has_unconfirmed": true,
+   "open_question_count": 1,
+   "claim_kinds": [
+    "apent",
+    "lov",
+    "rettesnor"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s115b": {
+   "printed_page": 115,
+   "pdf_page": 110,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.6 Vikeplikt – Sporvogn, jernbanetog og planovergang",
+   "part": 4,
+   "section_no": "4.6",
+   "section_title": "Vikeplikt",
+   "collection_images": [],
+   "title": {
+    "no": "Planovergang: se etter tog",
+    "th": "ทางตัดทางรถไฟ: มองหาขบวนรถไฟ",
+    "en": "Level crossing: look for trains"
+   },
+   "image_file": "bb_s115b_planovergang-og-tog.png",
+   "quiz_category": "Right of Way",
+   "next": "bb-s116",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [
+    "lov",
+    "rettesnor"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s116": {
+   "printed_page": 116,
+   "pdf_page": 111,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.6 Vikeplikt – Spesielle forhold: ikke hindre eller forstyrre",
+   "part": 4,
+   "section_no": "4.6",
+   "section_title": "Vikeplikt",
+   "collection_images": [],
+   "title": {
+    "no": "Ikke hindre eller forstyrre prosesjoner og kolonner",
+    "th": "อย่าขัดขวางหรือรบกวนขบวนและแถว",
+    "en": "Do not hinder or disturb processions and columns"
+   },
+   "image_file": "bb_s116_ikke-hindre-prosesjon-og-kolonne.png",
+   "quiz_category": "Road Rules",
+   "next": "bb-s116b",
+   "has_unconfirmed": true,
+   "open_question_count": 1,
+   "claim_kinds": [
+    "apent",
+    "lov"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s116b": {
+   "printed_page": 116,
+   "pdf_page": 111,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.7 Rygging og vending – vikeplikt og forbud",
+   "part": 4,
+   "section_no": "4.7",
+   "section_title": "Rygging og vending",
+   "collection_images": [],
+   "title": {
+    "no": "Rygging og vending: du har vikeplikt",
+    "th": "ถอยหลังและกลับรถ: คุณต้องให้ทาง",
+    "en": "Reversing and turning round: you must yield"
+   },
+   "image_file": "bb_s116b_rygging-og-vending-regler.png",
+   "quiz_category": "Road Rules",
+   "next": "bb-s117",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [
+    "lov",
+    "rettesnor"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s117": {
+   "printed_page": 117,
+   "pdf_page": 112,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.7 Rygging og vending – Gode råd før du rygger",
+   "part": 4,
+   "section_no": "4.7",
+   "section_title": "Rygging og vending",
+   "collection_images": [],
+   "title": {
+    "no": "Gode råd før du rygger",
+    "th": "คำแนะนำที่ดีก่อนถอยหลัง",
+    "en": "Good advice before you reverse"
+   },
+   "image_file": "bb_s117_gode-rad-for-du-rygger.png",
+   "quiz_category": "Situations",
+   "next": "bb-s118",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [
+    "rettesnor"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s118": {
+   "printed_page": 118,
+   "pdf_page": 113,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.7 Rygging og vending – Snu i veikryss og vendingsforbud",
+   "part": 4,
+   "section_no": "4.7",
+   "section_title": "Rygging og vending",
+   "collection_images": [],
+   "title": {
+    "no": "Snu i veikryss",
+    "th": "กลับรถที่ทางแยก",
+    "en": "Turning round in a junction"
+   },
+   "image_file": "bb_s118_snu-i-veikryss.png",
+   "quiz_category": "Road Rules",
+   "next": "bb-s119",
+   "has_unconfirmed": true,
+   "open_question_count": 1,
+   "claim_kinds": [
+    "apent",
+    "lov",
+    "rettesnor"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s119": {
+   "printed_page": 119,
+   "pdf_page": 114,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.7 Rygging og vending – Hjelper og tilhenger",
+   "part": 4,
+   "section_no": "4.7",
+   "section_title": "Rygging og vending",
+   "collection_images": [],
+   "title": {
+    "no": "Rygging med hjelper og med tilhenger",
+    "th": "ถอยหลังพร้อมผู้ช่วยและรถพ่วง",
+    "en": "Reversing with a helper and with a trailer"
+   },
+   "image_file": "bb_s119_rygge-med-hjelper-og-tilhenger.png",
+   "quiz_category": "Situations",
+   "next": "bb-s120",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [
+    "lov",
+    "rettesnor"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s120": {
+   "printed_page": 120,
+   "pdf_page": 115,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.7 Vending – Metoder; 4.8 Stans og parkering",
+   "part": 4,
+   "section_no": "4.7",
+   "section_title": "Rygging og vending",
+   "collection_images": [],
+   "title": {
+    "no": "Å vende bilen, og stans og parkering",
+    "th": "การกลับรถ และการหยุดและจอด",
+    "en": "Turning the car round, and stopping and parking"
+   },
+   "image_file": "bb_s120_vendemetoder-og-stans-parkering.png",
+   "quiz_category": "Road Rules",
+   "next": "bb-s121",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [
+    "lov",
+    "rettesnor"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s121": {
+   "printed_page": 121,
+   "pdf_page": 116,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.8 Stans og parkering – Hva er parkering og hva er stans?",
+   "part": 4,
+   "section_no": "4.8",
+   "section_title": "Stans og parkering",
+   "collection_images": [],
+   "title": {
+    "no": "Hva er parkering, og hva er stans?",
+    "th": "การจอดคืออะไร และการหยุดคืออะไร?",
+    "en": "What is parking, and what is stopping?"
+   },
+   "image_file": "bb_s121_hva-er-parkering-og-stans.png",
+   "quiz_category": "Road Rules",
+   "next": "bb-s122",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [
+    "lov"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s122": {
+   "printed_page": 122,
+   "pdf_page": 117,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.8 Stans og parkering – Hvor er det forbudt å stanse? (a–d)",
+   "part": 4,
+   "section_no": "4.8",
+   "section_title": "Stans og parkering",
+   "collection_images": [],
+   "title": {
+    "no": "Forbudt å stanse: sted a–d",
+    "th": "ห้ามหยุด: จุด a–d",
+    "en": "Stopping forbidden: places a–d"
+   },
+   "image_file": "bb_s122_forbud-mot-a-stanse-a-d.png",
+   "quiz_category": "Road Rules",
+   "next": "bb-s123",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [
+    "lov"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s123": {
+   "printed_page": 123,
+   "pdf_page": 118,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.8 Stans og parkering – Forbud mot å stanse (e–h) og å parkere",
+   "part": 4,
+   "section_no": "4.8",
+   "section_title": "Stans og parkering",
+   "collection_images": [],
+   "title": {
+    "no": "Forbudt å stanse (e–h) og forbudt å parkere",
+    "th": "ห้ามหยุด (e–h) และห้ามจอด",
+    "en": "Stopping forbidden (e–h) and parking forbidden"
+   },
+   "image_file": "bb_s123_forbud-mot-a-stanse-e-h-og-parkere.png",
+   "quiz_category": "Road Rules",
+   "next": "bb-s124",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [
+    "lov"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s124": {
+   "printed_page": 124,
+   "pdf_page": 119,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.8 Stans og parkering – 5-metersreglene",
+   "part": 4,
+   "section_no": "4.8",
+   "section_title": "Stans og parkering",
+   "collection_images": [],
+   "title": {
+    "no": "5-metersreglene",
+    "th": "กฎ 5 เมตร",
+    "en": "The 5-metre rules"
+   },
+   "image_file": "bb_s124_fem-meter-regler.png",
+   "quiz_category": "Road Rules",
+   "next": "bb-s125",
+   "has_unconfirmed": true,
+   "open_question_count": 1,
+   "claim_kinds": [
+    "apent",
+    "lov"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s125": {
+   "printed_page": 125,
+   "pdf_page": 120,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.8 Stans og parkering – Holdeplass for buss",
+   "part": 4,
+   "section_no": "4.8",
+   "section_title": "Stans og parkering",
+   "collection_images": [],
+   "title": {
+    "no": "Holdeplass for buss, drosje og sporvogn",
+    "th": "ป้ายรถโดยสาร แท็กซี่ และรถราง",
+    "en": "A stop for buses, taxis and trams"
+   },
+   "image_file": "bb_s125_holdeplass-for-buss.png",
+   "quiz_category": "Road Rules",
+   "next": "bb-s126",
+   "has_unconfirmed": false,
+   "open_question_count": 0,
+   "claim_kinds": [
+    "lov",
+    "rettesnor"
+   ],
+   "teach_open_claims_as_rules": false
+  },
+  "bb-s126": {
+   "printed_page": 126,
+   "pdf_page": 121,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.8 Stans og parkering – Parkering på forkjørsvei og venstre side",
+   "part": 4,
+   "section_no": "4.8",
+   "section_title": "Stans og parkering",
+   "collection_images": [],
+   "title": {
+    "no": "Parkering på forkjørsvei: over 50 km/t",
+    "th": "การจอดบนทางเอก: เกิน 50 กม./ชม.",
+    "en": "Parking on a priority road: above 50 km/h"
+   },
+   "image_file": "bb_s126_parkering-pa-forkjorsvei.png",
+   "quiz_category": "Road Rules",
+   "next": null,
+   "has_unconfirmed": true,
+   "open_question_count": 1,
+   "claim_kinds": [
+    "apent",
+    "lov",
+    "rettesnor"
+   ],
+   "teach_open_claims_as_rules": false
   }
  }
 }

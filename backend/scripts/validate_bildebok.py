@@ -10,6 +10,7 @@ LANGS = ("no", "th", "en")
 THAI = re.compile(r"[฀-๿]")
 NO_LETTERS = re.compile(r"[æøåÆØÅ]")
 ASSET_RE = re.compile(r"^bb_s\d{2,3}[a-z]?_[a-z0-9-]+$")
+CLAIM_KINDS = {"lov", "rettesnor", "apent"}
 QUIZ_CATEGORIES = {"Traffic Signs", "Road Rules", "Right of Way", "Speed Limits", "Safety", "Driving Conditions", "Situations", "Traffic Rules", "Road Conditions"}  # fra normalize_categories.py; ikke verifisert mot live DB
 
 
@@ -41,6 +42,11 @@ def validate_pack(pack: dict, known_ids: set[str] | None = None) -> list[str]:
         for key in ("book", "printed_page", "pdf_page", "chapter", "section", "image_file", "status"):
             if not p.get(key):
                 errs.append(f"{pid}.{key}: mangler")
+        if p.get("status") == "aktiv":
+            if p.get("image_status") != "godkjent":
+                errs.append(f"{pid}: aktiv rad må ha godkjent bilde")
+            if not re.fullmatch(r"[0-9a-fA-F]{64}", str(p.get("image_sha256", ""))):
+                errs.append(f"{pid}: aktiv rad mangler gyldig image_sha256")
         if p.get("printed_page") and p.get("pdf_page") and p["printed_page"] != p["pdf_page"] + 5:
             errs.append(f"{pid}: trykt side og PDF-side stemmer ikke (forventer +5)")
         if not ASSET_RE.match(str(p.get("asset_id", ""))):
@@ -77,6 +83,37 @@ def validate_pack(pack: dict, known_ids: set[str] | None = None) -> list[str]:
             errs.append(f"{pid}.next_step: ukjent id {nxt}")
         for i, lab in enumerate(p.get("image_labels") or []):
             _i18n(f"{pid}.image_labels[{i}]", lab, errs)
+        claims = p.get("michael_claims")
+        if claims is not None:
+            kinds = set()
+            for i, c in enumerate(claims):
+                if c.get("kind") not in CLAIM_KINDS:
+                    errs.append(f"{pid}.michael_claims[{i}].kind: ugyldig")
+                kinds.add(c.get("kind"))
+                _i18n(f"{pid}.michael_claims[{i}].text", c.get("text"), errs)
+                if c.get("kind") == "lov" and not (c.get("source") and c.get("checked_at")):
+                    errs.append(f"{pid}.michael_claims[{i}]: lovkrav mangler source/checked_at")
+                if isinstance(c.get("text"), dict):
+                    for lang in LANGS:
+                        t = c["text"].get(lang, "")
+                        in_basis = t in (p.get("michael_basis") or {}).get(lang, "")
+                        if c.get("kind") == "apent" and in_basis:
+                            errs.append(f"{pid}.michael_basis.{lang}: uavklart påstand {i} er sendt til Michael")
+                        if c.get("kind") != "apent" and not in_basis:
+                            errs.append(f"{pid}.michael_basis.{lang}: mangler claim {i}")
+                        if c.get("kind") == "apent":
+                            visible = json.dumps([p.get("title"), p.get("core_sentence"), p.get("points"), p.get("check_question"), p.get("michael_says")], ensure_ascii=False)
+                            if t and t in visible:
+                                errs.append(f"{pid}: uavklart påstand {i} står i elevtekst")
+            pk = p.get("points_kinds")
+            if not isinstance(pk, list) or len(pk) != len(p.get("points") or []) or any(k not in ("lov", "rettesnor") for k in pk):
+                errs.append(f"{pid}.points_kinds: må ha samme lengde som points og bare lov/rettesnor (aldri apent i elevtekst)")
+            if bool(p.get("has_unconfirmed")) != ("apent" in kinds):
+                errs.append(f"{pid}.has_unconfirmed: stemmer ikke med claims")
+            if "apent" in kinds and not p.get("editor_notes"):
+                errs.append(f"{pid}: apent claim uten editor_notes")
+            if "apent" in kinds and not p.get("open_questions"):
+                errs.append(f"{pid}: har apent claim men ingen open_questions")
         if p.get("quiz_category") is not None and p["quiz_category"] not in QUIZ_CATEGORIES:
             errs.append(f"{pid}.quiz_category: ukjent kategori {p['quiz_category']}")
         if not p.get("image_brief"):

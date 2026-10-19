@@ -1,0 +1,1010 @@
+{
+ "purpose": "Trygg Michael-basis for rader i pilot, batch 2 og batch 3. Overstyrer michael_basis i pakkene uten å endre dem. Uavklarte påstander (apent) sendes aldri til læreren; bare lov og rettesnor, merket per påstand. has_unconfirmed gir et generisk varsel uten påstandsinnhold.",
+ "checked_at": "2026-10-10",
+ "notice": {
+  "no": "Merk: enkelte detaljer på dette temaet er ikke bekreftet. Ikke påstå dem som regler. Si at du ikke er sikker, og henvis eleven til Statens vegvesen eller læreren.",
+  "th": "หมายเหตุ: รายละเอียดบางอย่างในหัวข้อนี้ยังไม่ได้รับการยืนยัน อย่าอ้างว่าเป็นกฎ ให้บอกว่าไม่แน่ใจ และแนะนำให้นักเรียนตรวจกับกรมทางหลวงหรือครู",
+  "en": "Note: some details on this topic are not confirmed. Do not state them as rules. Say you are not sure, and refer the student to the Road Administration or the teacher."
+ },
+ "rows": {
+  "bb-s14b": {
+   "claims": [
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Vegtrafikkloven § 24 a: den som har kjørt motorvogn uten førerett kan ikke få førerett første gang før det er gått 6 måneder siden den ulovlige kjøringen. Er du yngre enn minstealderen, løper fristen til 6 måneder etter at du nådde minstealderen. Er det voldt større skade ved kjøringen, er sperrefristen ett år.",
+      "th": "กฎหมายจราจรทางบก § 24 a: ผู้ที่ขับยานยนต์โดยไม่มีสิทธิ์ขับขี่จะได้รับสิทธิ์ขับขี่ครั้งแรกไม่ได้จนกว่าจะผ่านไป 6 เดือนนับจากการขับที่ผิดกฎหมาย ถ้าอายุยังไม่ถึงเกณฑ์ ช่วงห้ามสิ้นสุดหลังอายุถึงเกณฑ์ไปแล้ว 6 เดือน ถ้าก่อความเสียหายมากกว่าปกติ ช่วงห้ามคือหนึ่งปี",
+      "en": "Road Traffic Act § 24 a: anyone who has driven a motor vehicle without a licence cannot get a licence for the first time until 6 months have passed since the illegal driving. If you are under the minimum age, the period runs until 6 months after you reach it. If major damage was caused, the barring period is one year."
+     },
+     "source": "Vegtrafikkloven § 24 a — https://lovdata.no/lov/1965-06-18-4/§24a",
+     "checked_at": "2026-10-10"
+    },
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Blir en person uten førerett straffet for en overtredelse som ville gitt tap av førerett, skal dommen eller forelegget fastsette en sperrefrist som ikke er kortere enn tapstiden (§ 24 a annet ledd).",
+      "th": "ถ้าบุคคลที่ไม่มีสิทธิ์ขับขี่ถูกลงโทษสำหรับความผิดที่จะทำให้สูญเสียสิทธิ์ขับขี่ คำพิพากษาหรือค่าปรับต้องกำหนดช่วงห้ามที่ไม่สั้นกว่าช่วงที่สูญเสียสิทธิ์ (§ 24 a วรรคสอง)",
+      "en": "If a person without a licence is punished for an offence that would give loss of licence, the judgment or fine must set a barring period no shorter than the loss period (§ 24 a second paragraph)."
+     },
+     "source": "Vegtrafikkloven § 24 a — https://lovdata.no/lov/1965-06-18-4/§24a",
+     "checked_at": "2026-10-10"
+    },
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Med sperrefrist kan du ikke øvelseskjøre før du har skriftlig tillatelse av politiet.",
+      "th": "ระหว่างช่วงห้าม ฝึกขับไม่ได้จนกว่าจะมีหนังสืออนุญาตจากตำรวจ",
+      "en": "With a barring period you cannot practise until you have written permission from the police."
+     },
+     "source": "Statens vegvesen, Generelt om øvelseskjøring — https://www.vegvesen.no/forerkort/ta-forerkort/ovelseskjoring/generelt-om-ovelseskjoring/",
+     "checked_at": "2026-10-10"
+    }
+   ],
+   "michael_basis": {
+    "no": "Lovkrav: Vegtrafikkloven § 24 a: den som har kjørt motorvogn uten førerett kan ikke få førerett første gang før det er gått 6 måneder siden den ulovlige kjøringen. Er du yngre enn minstealderen, løper fristen til 6 måneder etter at du nådde minstealderen. Er det voldt større skade ved kjøringen, er sperrefristen ett år. Lovkrav: Blir en person uten førerett straffet for en overtredelse som ville gitt tap av førerett, skal dommen eller forelegget fastsette en sperrefrist som ikke er kortere enn tapstiden (§ 24 a annet ledd). Lovkrav: Med sperrefrist kan du ikke øvelseskjøre før du har skriftlig tillatelse av politiet.",
+    "th": "ข้อกำหนดตามกฎหมาย: กฎหมายจราจรทางบก § 24 a: ผู้ที่ขับยานยนต์โดยไม่มีสิทธิ์ขับขี่จะได้รับสิทธิ์ขับขี่ครั้งแรกไม่ได้จนกว่าจะผ่านไป 6 เดือนนับจากการขับที่ผิดกฎหมาย ถ้าอายุยังไม่ถึงเกณฑ์ ช่วงห้ามสิ้นสุดหลังอายุถึงเกณฑ์ไปแล้ว 6 เดือน ถ้าก่อความเสียหายมากกว่าปกติ ช่วงห้ามคือหนึ่งปี ข้อกำหนดตามกฎหมาย: ถ้าบุคคลที่ไม่มีสิทธิ์ขับขี่ถูกลงโทษสำหรับความผิดที่จะทำให้สูญเสียสิทธิ์ขับขี่ คำพิพากษาหรือค่าปรับต้องกำหนดช่วงห้ามที่ไม่สั้นกว่าช่วงที่สูญเสียสิทธิ์ (§ 24 a วรรคสอง) ข้อกำหนดตามกฎหมาย: ระหว่างช่วงห้าม ฝึกขับไม่ได้จนกว่าจะมีหนังสืออนุญาตจากตำรวจ",
+    "en": "Legal requirement: Road Traffic Act § 24 a: anyone who has driven a motor vehicle without a licence cannot get a licence for the first time until 6 months have passed since the illegal driving. If you are under the minimum age, the period runs until 6 months after you reach it. If major damage was caused, the barring period is one year. Legal requirement: If a person without a licence is punished for an offence that would give loss of licence, the judgment or fine must set a barring period no shorter than the loss period (§ 24 a second paragraph). Legal requirement: With a barring period you cannot practise until you have written permission from the police."
+   },
+   "has_unconfirmed": false,
+   "editor_notes": []
+  },
+  "bb-s15": {
+   "claims": [
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Klasse B: personbil med tillatt totalvekt maks 3500 kg og godkjent for maks 8 passasjerer i tillegg til føreren. Du kan trekke tilhenger når tilhengerens tillatte totalvekt er maks 750 kg. Tyngre tilhenger er tillatt hvis bilens og tilhengerens tillatte totalvekt til sammen er maks 3500 kg, og tilhengeren må ligge innenfor det bilen er godkjent til å trekke. Kode 96 gir rett til kombinasjoner med samlet tillatt totalvekt over 3500 kg og opp til 4250 kg.",
+      "th": "ชั้น B: รถยนต์นั่งที่มีน้ำหนักรวมที่อนุญาตไม่เกิน 3,500 กก. และรับผู้โดยสารได้ไม่เกิน 8 คนนอกจากผู้ขับ ลากรถพ่วงได้เมื่อน้ำหนักรวมที่อนุญาตของรถพ่วงไม่เกิน 750 กก. รถพ่วงที่หนักกว่านั้นได้ถ้าน้ำหนักรวมที่อนุญาตของรถและรถพ่วงรวมกันไม่เกิน 3,500 กก. และรถพ่วงต้องอยู่ในขอบเขตที่รถได้รับอนุมัติให้ลาก รหัส 96 ให้สิทธิ์ขับขบวนที่มีน้ำหนักรวมที่อนุญาตเกิน 3,500 กก. และไม่เกิน 4,250 กก.",
+      "en": "Class B: a passenger car with a permitted gross weight of at most 3,500 kg and approved for at most 8 passengers besides the driver. You may tow a trailer whose permitted gross weight is at most 750 kg. A heavier trailer is allowed if the permitted gross weight of car and trailer together is at most 3,500 kg, and the trailer must be within what the car is approved to tow. Code 96 gives the right to combinations with a permitted gross weight above 3,500 kg and up to 4,250 kg."
+     },
+     "source": "Statens vegvesen, Personbil klasse B — https://www.vegvesen.no/forerkort/har-forerkort/forerkortklasser/personbil-klasse-b/",
+     "checked_at": "2026-10-10"
+    },
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Klasse B dekker også moped; det står som klasse AM på førerkortet. Når du vurderer hvilket førerkort som kreves, er det tillatte totalvekter som teller, ikke hva lasten faktisk veier. Bilens tekniske grenser for hengervekt (vognkortet) gjelder i tillegg.",
+      "th": "ชั้น B ครอบคลุมโมเพดด้วย บนใบขับขี่ระบุเป็นชั้น AM เมื่อพิจารณาว่าต้องใช้ใบขับขี่ชั้นใด สิ่งที่นับคือน้ำหนักรวมที่อนุญาต ไม่ใช่น้ำหนักบรรทุกจริง ขีดจำกัดทางเทคนิคของรถเรื่องน้ำหนักรถพ่วง (เล่มทะเบียน) ใช้เพิ่มเติม",
+      "en": "Class B also covers mopeds; it is marked as class AM on the licence. When working out which licence is required, it is the permitted gross weights that count, not what the load actually weighs. The car's technical limits for trailer weight (the registration certificate) apply in addition."
+     },
+     "source": "Statens vegvesen, Personbil klasse B — https://www.vegvesen.no/forerkort/har-forerkort/forerkortklasser/personbil-klasse-b/",
+     "checked_at": "2026-10-10"
+    }
+   ],
+   "michael_basis": {
+    "no": "Lovkrav: Klasse B: personbil med tillatt totalvekt maks 3500 kg og godkjent for maks 8 passasjerer i tillegg til føreren. Du kan trekke tilhenger når tilhengerens tillatte totalvekt er maks 750 kg. Tyngre tilhenger er tillatt hvis bilens og tilhengerens tillatte totalvekt til sammen er maks 3500 kg, og tilhengeren må ligge innenfor det bilen er godkjent til å trekke. Kode 96 gir rett til kombinasjoner med samlet tillatt totalvekt over 3500 kg og opp til 4250 kg. Lovkrav: Klasse B dekker også moped; det står som klasse AM på førerkortet. Når du vurderer hvilket førerkort som kreves, er det tillatte totalvekter som teller, ikke hva lasten faktisk veier. Bilens tekniske grenser for hengervekt (vognkortet) gjelder i tillegg.",
+    "th": "ข้อกำหนดตามกฎหมาย: ชั้น B: รถยนต์นั่งที่มีน้ำหนักรวมที่อนุญาตไม่เกิน 3,500 กก. และรับผู้โดยสารได้ไม่เกิน 8 คนนอกจากผู้ขับ ลากรถพ่วงได้เมื่อน้ำหนักรวมที่อนุญาตของรถพ่วงไม่เกิน 750 กก. รถพ่วงที่หนักกว่านั้นได้ถ้าน้ำหนักรวมที่อนุญาตของรถและรถพ่วงรวมกันไม่เกิน 3,500 กก. และรถพ่วงต้องอยู่ในขอบเขตที่รถได้รับอนุมัติให้ลาก รหัส 96 ให้สิทธิ์ขับขบวนที่มีน้ำหนักรวมที่อนุญาตเกิน 3,500 กก. และไม่เกิน 4,250 กก. ข้อกำหนดตามกฎหมาย: ชั้น B ครอบคลุมโมเพดด้วย บนใบขับขี่ระบุเป็นชั้น AM เมื่อพิจารณาว่าต้องใช้ใบขับขี่ชั้นใด สิ่งที่นับคือน้ำหนักรวมที่อนุญาต ไม่ใช่น้ำหนักบรรทุกจริง ขีดจำกัดทางเทคนิคของรถเรื่องน้ำหนักรถพ่วง (เล่มทะเบียน) ใช้เพิ่มเติม",
+    "en": "Legal requirement: Class B: a passenger car with a permitted gross weight of at most 3,500 kg and approved for at most 8 passengers besides the driver. You may tow a trailer whose permitted gross weight is at most 750 kg. A heavier trailer is allowed if the permitted gross weight of car and trailer together is at most 3,500 kg, and the trailer must be within what the car is approved to tow. Code 96 gives the right to combinations with a permitted gross weight above 3,500 kg and up to 4,250 kg. Legal requirement: Class B also covers mopeds; it is marked as class AM on the licence. When working out which licence is required, it is the permitted gross weights that count, not what the load actually weighs. The car's technical limits for trailer weight (the registration certificate) apply in addition."
+   },
+   "has_unconfirmed": false,
+   "editor_notes": []
+  },
+  "bb-s23": {
+   "claims": [
+    {
+     "kind": "rettesnor",
+     "text": {
+      "no": "Som tommelfingerregel regner man ca. ett sekund fra du oppdager en hindring til foten når bremsepedalen. Reaksjonstiden varierer med alder, sinnstilstand, tretthet, medisiner og alkohol.",
+      "th": "หลักคร่าว ๆ คิดประมาณ 1 วินาทีตั้งแต่เห็นสิ่งกีดขวางจนเท้าถึงแป้นเบรก เวลาตอบสนองต่างกันไปตามอายุ อารมณ์ ความเหนื่อย ยา และแอลกอฮอล์",
+      "en": "As a rule of thumb about one second is counted from noticing an obstacle until the foot reaches the brake pedal. Reaction time varies with age, mood, tiredness, medicines and alcohol."
+     },
+     "source": "Store norske leksikon, reaksjonstid (sekundær) — https://snl.no/reaksjonstid_-_psykologi",
+     "checked_at": "2026-10-10"
+    },
+    {
+     "kind": "rettesnor",
+     "text": {
+      "no": "Kompliserte situasjoner, trening, dagsform og følelser som sinne og stor glede kan påvirke oppmerksomheten.",
+      "th": "สถานการณ์ซับซ้อน การฝึก สภาพร่างกายวันนั้น และอารมณ์อย่างความโกรธและความดีใจมาก อาจกระทบสมาธิ",
+      "en": "Complicated situations, practice, how you feel that day and emotions such as anger and great joy can affect attention."
+     }
+    },
+    {
+     "kind": "apent",
+     "text": {
+      "no": "Bokas intervall «0,3 til 3–4 sekunder» for reaksjonstid.",
+      "th": "ช่วง “0.3 ถึง 3–4 วินาที” ของหนังสือ",
+      "en": "The book's interval '0.3 to 3–4 seconds' for reaction time."
+     }
+    }
+   ],
+   "michael_basis": {
+    "no": "Rettesnor (ikke lovkrav): Som tommelfingerregel regner man ca. ett sekund fra du oppdager en hindring til foten når bremsepedalen. Reaksjonstiden varierer med alder, sinnstilstand, tretthet, medisiner og alkohol. Rettesnor (ikke lovkrav): Kompliserte situasjoner, trening, dagsform og følelser som sinne og stor glede kan påvirke oppmerksomheten.",
+    "th": "หลักคร่าว ๆ (ไม่ใช่ข้อบังคับ): หลักคร่าว ๆ คิดประมาณ 1 วินาทีตั้งแต่เห็นสิ่งกีดขวางจนเท้าถึงแป้นเบรก เวลาตอบสนองต่างกันไปตามอายุ อารมณ์ ความเหนื่อย ยา และแอลกอฮอล์ หลักคร่าว ๆ (ไม่ใช่ข้อบังคับ): สถานการณ์ซับซ้อน การฝึก สภาพร่างกายวันนั้น และอารมณ์อย่างความโกรธและความดีใจมาก อาจกระทบสมาธิ",
+    "en": "Rule of thumb (not a legal requirement): As a rule of thumb about one second is counted from noticing an obstacle until the foot reaches the brake pedal. Reaction time varies with age, mood, tiredness, medicines and alcohol. Rule of thumb (not a legal requirement): Complicated situations, practice, how you feel that day and emotions such as anger and great joy can affect attention."
+   },
+   "has_unconfirmed": true,
+   "editor_notes": [
+    "Bokas intervall «0,3 til 3–4 sekunder» for reaksjonstid."
+   ]
+  },
+  "bb-s24": {
+   "claims": [
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Vegtrafikkloven § 21: ingen må føre eller forsøke å føre kjøretøy når han er i en slik tilstand at han ikke kan anses skikket til å kjøre på trygg måte, enten det skyldes alkohol eller annet berusende middel eller at han er syk, svekket, sliten eller trett.",
+      "th": "กฎหมายจราจรทางบก § 21: ห้ามขับหรือพยายามขับยานพาหนะเมื่ออยู่ในสภาพที่ถือว่าไม่เหมาะจะขับอย่างปลอดภัย ไม่ว่าจะเกิดจากแอลกอฮอล์หรือสารเสพติด หรือเกิดจากการป่วย อ่อนแอ เหนื่อย หรือง่วง",
+      "en": "Road Traffic Act § 21: no one may drive or try to drive a vehicle when in a condition that means he cannot be considered fit to drive safely, whether from alcohol or another intoxicant or because he is ill, weakened, worn out or tired."
+     },
+     "source": "Vegtrafikkloven § 21 — https://lovdata.no/lov/1965-06-18-4/§21",
+     "checked_at": "2026-10-10"
+    },
+    {
+     "kind": "rettesnor",
+     "text": {
+      "no": "Er du trett: stopp og hvil. Stress og hastverk tar fokus fra kjøringen.",
+      "th": "ถ้าง่วง: จอดและพัก ความเครียดและความรีบทำให้เสียสมาธิ",
+      "en": "If you are tired: stop and rest. Stress and hurry take focus from driving."
+     }
+    },
+    {
+     "kind": "apent",
+     "text": {
+      "no": "At søvnmangel tilsvarer et bestemt promillenivå (0,5 eller 0,8 ‰) og «hver 5. fører sovnet».",
+      "th": "ที่ว่าการอดนอนเทียบเท่าระดับแอลกอฮอล์ที่แน่นอน (0.5 หรือ 0.8 ‰) และ “ผู้ขับทุกห้าคนหลับใน”",
+      "en": "That sleep deprivation equals a specific alcohol level (0.5 or 0.8 per mille) and 'every 5th driver fell asleep'."
+     }
+    }
+   ],
+   "michael_basis": {
+    "no": "Lovkrav: Vegtrafikkloven § 21: ingen må føre eller forsøke å føre kjøretøy når han er i en slik tilstand at han ikke kan anses skikket til å kjøre på trygg måte, enten det skyldes alkohol eller annet berusende middel eller at han er syk, svekket, sliten eller trett. Rettesnor (ikke lovkrav): Er du trett: stopp og hvil. Stress og hastverk tar fokus fra kjøringen.",
+    "th": "ข้อกำหนดตามกฎหมาย: กฎหมายจราจรทางบก § 21: ห้ามขับหรือพยายามขับยานพาหนะเมื่ออยู่ในสภาพที่ถือว่าไม่เหมาะจะขับอย่างปลอดภัย ไม่ว่าจะเกิดจากแอลกอฮอล์หรือสารเสพติด หรือเกิดจากการป่วย อ่อนแอ เหนื่อย หรือง่วง หลักคร่าว ๆ (ไม่ใช่ข้อบังคับ): ถ้าง่วง: จอดและพัก ความเครียดและความรีบทำให้เสียสมาธิ",
+    "en": "Legal requirement: Road Traffic Act § 21: no one may drive or try to drive a vehicle when in a condition that means he cannot be considered fit to drive safely, whether from alcohol or another intoxicant or because he is ill, weakened, worn out or tired. Rule of thumb (not a legal requirement): If you are tired: stop and rest. Stress and hurry take focus from driving."
+   },
+   "has_unconfirmed": true,
+   "editor_notes": [
+    "At søvnmangel tilsvarer et bestemt promillenivå (0,5 eller 0,8 ‰) og «hver 5. fører sovnet»."
+   ]
+  },
+  "bb-s26": {
+   "claims": [
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Forskriften om mobiltelefon § 2: fører av motorvogn må ikke bruke mobiltelefon under kjøring. Unntak: du kan starte, gjennomføre og avslutte en samtale når telefonen er håndfri eller står i en holder som er forsvarlig fastmontert nær rattet. «Bruk» er enhver betjening av telefonens funksjoner.",
+      "th": "ข้อบังคับเรื่องโทรศัพท์มือถือ § 2: ผู้ขับยานยนต์ต้องไม่ใช้โทรศัพท์มือถือขณะขับ ข้อยกเว้น: เริ่ม คุย และจบสายได้เมื่อโทรศัพท์เป็นแบบแฮนด์ฟรีหรืออยู่ในที่ยึดที่ติดตั้งมั่นคงใกล้พวงมาลัย “การใช้” คือการใช้งานฟังก์ชันใด ๆ ของโทรศัพท์",
+      "en": "The mobile-phone regulation § 2: a driver of a motor vehicle must not use a mobile phone while driving. Exception: you may start, carry out and end a call when the phone is hands-free or sits in a holder securely fixed near the wheel. 'Use' is any operation of the phone's functions."
+     },
+     "source": "Forskrift om forbud mot førers bruk av håndholdt mobiltelefon (FOR-1999-12-17-1309) § 2 — https://lovdata.no/forskrift/1999-12-17-1309",
+     "checked_at": "2026-10-10"
+    },
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Vegtrafikkloven § 21: du må ikke kjøre når du er syk, svekket, sliten eller trett eller påvirket av alkohol eller annet berusende middel.",
+      "th": "กฎหมายจราจรทางบก § 21: ห้ามขับเมื่อป่วย อ่อนแอ เหนื่อย ง่วง หรืออยู่ภายใต้ฤทธิ์แอลกอฮอล์หรือสารเสพติดอื่น",
+      "en": "Road Traffic Act § 21: you must not drive when ill, weakened, worn out or tired, or under the influence of alcohol or another intoxicant."
+     },
+     "source": "Vegtrafikkloven § 21 — https://lovdata.no/lov/1965-06-18-4/§21",
+     "checked_at": "2026-10-10"
+    },
+    {
+     "kind": "rettesnor",
+     "text": {
+      "no": "Medisin med rød varseltrekant: snakk med legen om det er forsvarlig å kjøre. Alkohol blandet med narkotiske stoffer er meget farlig. Kjøring krever hele oppmerksomheten din.",
+      "th": "ยาที่มีสามเหลี่ยมสีแดงเตือน: ปรึกษาแพทย์ว่าขับได้อย่างปลอดภัยหรือไม่ การผสมแอลกอฮอล์กับสารเสพติดอันตรายมาก การขับรถต้องใช้สมาธิทั้งหมดของคุณ",
+      "en": "Medicine with a red warning triangle: talk to the doctor about whether it is safe to drive. Alcohol mixed with narcotic drugs is very dangerous. Driving needs your full attention."
+     }
+    }
+   ],
+   "michael_basis": {
+    "no": "Lovkrav: Forskriften om mobiltelefon § 2: fører av motorvogn må ikke bruke mobiltelefon under kjøring. Unntak: du kan starte, gjennomføre og avslutte en samtale når telefonen er håndfri eller står i en holder som er forsvarlig fastmontert nær rattet. «Bruk» er enhver betjening av telefonens funksjoner. Lovkrav: Vegtrafikkloven § 21: du må ikke kjøre når du er syk, svekket, sliten eller trett eller påvirket av alkohol eller annet berusende middel. Rettesnor (ikke lovkrav): Medisin med rød varseltrekant: snakk med legen om det er forsvarlig å kjøre. Alkohol blandet med narkotiske stoffer er meget farlig. Kjøring krever hele oppmerksomheten din.",
+    "th": "ข้อกำหนดตามกฎหมาย: ข้อบังคับเรื่องโทรศัพท์มือถือ § 2: ผู้ขับยานยนต์ต้องไม่ใช้โทรศัพท์มือถือขณะขับ ข้อยกเว้น: เริ่ม คุย และจบสายได้เมื่อโทรศัพท์เป็นแบบแฮนด์ฟรีหรืออยู่ในที่ยึดที่ติดตั้งมั่นคงใกล้พวงมาลัย “การใช้” คือการใช้งานฟังก์ชันใด ๆ ของโทรศัพท์ ข้อกำหนดตามกฎหมาย: กฎหมายจราจรทางบก § 21: ห้ามขับเมื่อป่วย อ่อนแอ เหนื่อย ง่วง หรืออยู่ภายใต้ฤทธิ์แอลกอฮอล์หรือสารเสพติดอื่น หลักคร่าว ๆ (ไม่ใช่ข้อบังคับ): ยาที่มีสามเหลี่ยมสีแดงเตือน: ปรึกษาแพทย์ว่าขับได้อย่างปลอดภัยหรือไม่ การผสมแอลกอฮอล์กับสารเสพติดอันตรายมาก การขับรถต้องใช้สมาธิทั้งหมดของคุณ",
+    "en": "Legal requirement: The mobile-phone regulation § 2: a driver of a motor vehicle must not use a mobile phone while driving. Exception: you may start, carry out and end a call when the phone is hands-free or sits in a holder securely fixed near the wheel. 'Use' is any operation of the phone's functions. Legal requirement: Road Traffic Act § 21: you must not drive when ill, weakened, worn out or tired, or under the influence of alcohol or another intoxicant. Rule of thumb (not a legal requirement): Medicine with a red warning triangle: talk to the doctor about whether it is safe to drive. Alcohol mixed with narcotic drugs is very dangerous. Driving needs your full attention."
+   },
+   "has_unconfirmed": false,
+   "editor_notes": []
+  },
+  "bb-s28": {
+   "claims": [
+    {
+     "kind": "rettesnor",
+     "text": {
+      "no": "Barn er ikke små voksne. De er lave og har dårligere oversikt, særlig bak parkerte biler. Synsfelt og hørsel er ikke ferdig utviklet, og små barn har vansker med å høre hvor en lyd kommer fra, så å bruke hornet kan virke mot sin hensikt. Små barn kan ikke vurdere avstand og fart. Se verden fra barnets høyde.",
+      "th": "เด็กไม่ใช่ผู้ใหญ่ตัวเล็ก เด็กตัวเตี้ยจึงมองเห็นภาพรวมได้น้อยกว่า โดยเฉพาะหลังรถที่จอด การมองเห็นด้านข้างและการได้ยินยังพัฒนาไม่เต็มที่ เด็กเล็กบอกทิศทางของเสียงได้ยาก การบีบแตรจึงอาจได้ผลตรงข้าม เด็กเล็กประเมินระยะทางและความเร็วไม่ได้ ลองมองโลกจากความสูงของเด็ก",
+      "en": "Children are not small adults. They are low and have a poorer overview, especially behind parked cars. Their field of vision and hearing are not fully developed, and small children find it hard to hear where a sound comes from, so honking may backfire. Small children cannot judge distance and speed. See the world from a child's height."
+     }
+    },
+    {
+     "kind": "apent",
+     "text": {
+      "no": "Bokas aldersgrenser (sidesyn ferdig utviklet 12–14 år; «under ca. 7 år» for fart og avstand).",
+      "th": "ขีดอายุของหนังสือ (การมองด้านข้างพัฒนาเต็มที่ 12–14 ปี “ต่ำกว่าประมาณ 7 ปี” สำหรับความเร็วและระยะทาง)",
+      "en": "The book's age limits (side vision fully developed at 12–14; 'under about 7' for speed and distance)."
+     }
+    }
+   ],
+   "michael_basis": {
+    "no": "Rettesnor (ikke lovkrav): Barn er ikke små voksne. De er lave og har dårligere oversikt, særlig bak parkerte biler. Synsfelt og hørsel er ikke ferdig utviklet, og små barn har vansker med å høre hvor en lyd kommer fra, så å bruke hornet kan virke mot sin hensikt. Små barn kan ikke vurdere avstand og fart. Se verden fra barnets høyde.",
+    "th": "หลักคร่าว ๆ (ไม่ใช่ข้อบังคับ): เด็กไม่ใช่ผู้ใหญ่ตัวเล็ก เด็กตัวเตี้ยจึงมองเห็นภาพรวมได้น้อยกว่า โดยเฉพาะหลังรถที่จอด การมองเห็นด้านข้างและการได้ยินยังพัฒนาไม่เต็มที่ เด็กเล็กบอกทิศทางของเสียงได้ยาก การบีบแตรจึงอาจได้ผลตรงข้าม เด็กเล็กประเมินระยะทางและความเร็วไม่ได้ ลองมองโลกจากความสูงของเด็ก",
+    "en": "Rule of thumb (not a legal requirement): Children are not small adults. They are low and have a poorer overview, especially behind parked cars. Their field of vision and hearing are not fully developed, and small children find it hard to hear where a sound comes from, so honking may backfire. Small children cannot judge distance and speed. See the world from a child's height."
+   },
+   "has_unconfirmed": true,
+   "editor_notes": [
+    "Bokas aldersgrenser (sidesyn ferdig utviklet 12–14 år; «under ca. 7 år» for fart og avstand)."
+   ]
+  },
+  "bb-s34": {
+   "claims": [
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Trafikkreglene § 2 nr. 2: reglene om trafikk med kjøretøy gjelder for rytter så langt de passer.",
+      "th": "กฎจราจร § 2 ข้อ 2: กฎการจราจรสำหรับยานพาหนะใช้กับผู้ขี่ม้าเท่าที่เหมาะสม",
+      "en": "Traffic rules § 2 no. 2: the rules on traffic with vehicles apply to riders as far as they fit."
+     },
+     "source": "Trafikkreglene § 2 — https://lovdata.no/forskrift/1986-03-21-747/§2",
+     "checked_at": "2026-10-10"
+    },
+    {
+     "kind": "rettesnor",
+     "text": {
+      "no": "Hesten er et fluktdyr som kan bli skremt av høye lyder og plutselige bevegelser. Avpass farten, hold god avstand, ikke rus motoren, ikke press deg fram, kontroller at hesteføreren har sett deg, og vær tålmodig.",
+      "th": "ม้าเป็นสัตว์ที่ตกใจง่ายจากเสียงดังและการเคลื่อนไหวกะทันหัน ปรับความเร็ว เว้นระยะ อย่าเร่งเครื่อง อย่าเบียดแซง ตรวจสอบว่าผู้ควบม้าเห็นคุณแล้ว และอดทน",
+      "en": "The horse is a flight animal that can be frightened by loud sounds and sudden movements. Adjust speed, keep a good distance, do not rev the engine, do not push past, check that the rider has seen you, and be patient."
+     }
+    },
+    {
+     "kind": "apent",
+     "text": {
+      "no": "At rytter regnes som «kjørende» og ikke kan bruke gang-, sykkelvei eller fortau (Trafikkreglene § 2 nr. 2 sier bare «så langt de passer»).",
+      "th": "ที่ว่าผู้ขี่ม้าถือเป็น “ผู้ขับขี่” และใช้ทางเดิน ทางจักรยาน หรือทางเท้าไม่ได้ (กฎจราจร § 2 ข้อ 2 ระบุเพียง “เท่าที่เหมาะสม”)",
+      "en": "That a rider counts as a 'driver' and cannot use a footpath, cycle path or pavement (Traffic rules § 2 no. 2 only says 'as far as they fit')."
+     }
+    }
+   ],
+   "michael_basis": {
+    "no": "Lovkrav: Trafikkreglene § 2 nr. 2: reglene om trafikk med kjøretøy gjelder for rytter så langt de passer. Rettesnor (ikke lovkrav): Hesten er et fluktdyr som kan bli skremt av høye lyder og plutselige bevegelser. Avpass farten, hold god avstand, ikke rus motoren, ikke press deg fram, kontroller at hesteføreren har sett deg, og vær tålmodig.",
+    "th": "ข้อกำหนดตามกฎหมาย: กฎจราจร § 2 ข้อ 2: กฎการจราจรสำหรับยานพาหนะใช้กับผู้ขี่ม้าเท่าที่เหมาะสม หลักคร่าว ๆ (ไม่ใช่ข้อบังคับ): ม้าเป็นสัตว์ที่ตกใจง่ายจากเสียงดังและการเคลื่อนไหวกะทันหัน ปรับความเร็ว เว้นระยะ อย่าเร่งเครื่อง อย่าเบียดแซง ตรวจสอบว่าผู้ควบม้าเห็นคุณแล้ว และอดทน",
+    "en": "Legal requirement: Traffic rules § 2 no. 2: the rules on traffic with vehicles apply to riders as far as they fit. Rule of thumb (not a legal requirement): The horse is a flight animal that can be frightened by loud sounds and sudden movements. Adjust speed, keep a good distance, do not rev the engine, do not push past, check that the rider has seen you, and be patient."
+   },
+   "has_unconfirmed": true,
+   "editor_notes": [
+    "At rytter regnes som «kjørende» og ikke kan bruke gang-, sykkelvei eller fortau (Trafikkreglene § 2 nr. 2 sier bare «så langt de passer»)."
+   ]
+  },
+  "bb-s40": {
+   "claims": [
+    {
+     "kind": "rettesnor",
+     "text": {
+      "no": "Faller bremsevæskenivået under et nivå (lekkasje eller slitte bremseklosser), tennes en varsellampe. Er lampen tent, bør du bare kjøre til nærmeste verksted. Nivået kontrolleres mellom min- og maks-strek. Bremsene skal virke sikkert, hurtig og effektivt.",
+      "th": "ถ้าระดับน้ำมันเบรกต่ำลง (รั่ว หรือผ้าเบรกสึก) ไฟเตือนจะติด เมื่อไฟติด ควรขับไปอู่ที่ใกล้ที่สุดเท่านั้น ตรวจระดับระหว่างขีดต่ำสุดและสูงสุด เบรกต้องทำงานอย่างปลอดภัย รวดเร็ว และมีประสิทธิภาพ",
+      "en": "If the brake fluid level drops (a leak or worn pads), a warning lamp lights. With the lamp on, you should drive only to the nearest garage. The level is checked between the min and max marks. The brakes must work safely, quickly and effectively."
+     }
+    },
+    {
+     "kind": "apent",
+     "text": {
+      "no": "Bokas tommelfingerregel om 2/3 pedalvandring og 100 kg trykk.",
+      "th": "หลักคร่าว ๆ ของหนังสือเรื่องระยะแป้น 2/3 และแรงกด 100 กก.",
+      "en": "The book's rule of thumb of 2/3 pedal travel and 100 kg of pressure."
+     }
+    }
+   ],
+   "michael_basis": {
+    "no": "Rettesnor (ikke lovkrav): Faller bremsevæskenivået under et nivå (lekkasje eller slitte bremseklosser), tennes en varsellampe. Er lampen tent, bør du bare kjøre til nærmeste verksted. Nivået kontrolleres mellom min- og maks-strek. Bremsene skal virke sikkert, hurtig og effektivt.",
+    "th": "หลักคร่าว ๆ (ไม่ใช่ข้อบังคับ): ถ้าระดับน้ำมันเบรกต่ำลง (รั่ว หรือผ้าเบรกสึก) ไฟเตือนจะติด เมื่อไฟติด ควรขับไปอู่ที่ใกล้ที่สุดเท่านั้น ตรวจระดับระหว่างขีดต่ำสุดและสูงสุด เบรกต้องทำงานอย่างปลอดภัย รวดเร็ว และมีประสิทธิภาพ",
+    "en": "Rule of thumb (not a legal requirement): If the brake fluid level drops (a leak or worn pads), a warning lamp lights. With the lamp on, you should drive only to the nearest garage. The level is checked between the min and max marks. The brakes must work safely, quickly and effectively."
+   },
+   "has_unconfirmed": true,
+   "editor_notes": [
+    "Bokas tommelfingerregel om 2/3 pedalvandring og 100 kg trykk."
+   ]
+  },
+  "bb-s42": {
+   "claims": [
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Statens vegvesen: vinterperioden er 1. november til og med første søndag etter 2. påskedag. For Nordland, Troms og Finnmark er den 16. oktober til og med 30. april.",
+      "th": "กรมทางหลวงนอร์เวย์: ช่วงฤดูหนาวคือ 1 พฤศจิกายนถึงวันอาทิตย์แรกหลังวันอีสเตอร์วันที่สอง สำหรับนอร์ดแลนด์ ทรอมส์ และฟินน์มาร์ก คือ 16 ตุลาคมถึง 30 เมษายน",
+      "en": "Norwegian Public Roads Administration: the winter period is 1 November to and including the first Sunday after Easter Monday. For Nordland, Troms and Finnmark it is 16 October to and including 30 April."
+     },
+     "source": "Statens vegvesen, Dekk og kjetting — https://www.vegvesen.no/kjoretoy/eie-og-vedlikeholde/dekk-og-kjetting/",
+     "checked_at": "2026-10-10"
+    },
+    {
+     "kind": "rettesnor",
+     "text": {
+      "no": "Piggdekk sliter ned asfalten og lager støy og forurensning.",
+      "th": "ยางสตัดทำให้ผิวถนนสึก เกิดเสียงและมลพิษ",
+      "en": "Studded tyres wear down the asphalt and cause noise and pollution."
+     }
+    },
+    {
+     "kind": "apent",
+     "text": {
+      "no": "Bokas datoer for forbud mot piggdekk, og at alle hjul skal ha pigger som lovkrav.",
+      "th": "วันที่ห้ามใช้ยางสตัดของหนังสือ และที่ว่าต้องมีสตัดทุกล้อเป็นข้อบังคับตามกฎหมาย",
+      "en": "The book's dates for the ban on studded tyres, and that all wheels must have studs as a legal requirement."
+     }
+    }
+   ],
+   "michael_basis": {
+    "no": "Lovkrav: Statens vegvesen: vinterperioden er 1. november til og med første søndag etter 2. påskedag. For Nordland, Troms og Finnmark er den 16. oktober til og med 30. april. Rettesnor (ikke lovkrav): Piggdekk sliter ned asfalten og lager støy og forurensning.",
+    "th": "ข้อกำหนดตามกฎหมาย: กรมทางหลวงนอร์เวย์: ช่วงฤดูหนาวคือ 1 พฤศจิกายนถึงวันอาทิตย์แรกหลังวันอีสเตอร์วันที่สอง สำหรับนอร์ดแลนด์ ทรอมส์ และฟินน์มาร์ก คือ 16 ตุลาคมถึง 30 เมษายน หลักคร่าว ๆ (ไม่ใช่ข้อบังคับ): ยางสตัดทำให้ผิวถนนสึก เกิดเสียงและมลพิษ",
+    "en": "Legal requirement: Norwegian Public Roads Administration: the winter period is 1 November to and including the first Sunday after Easter Monday. For Nordland, Troms and Finnmark it is 16 October to and including 30 April. Rule of thumb (not a legal requirement): Studded tyres wear down the asphalt and cause noise and pollution."
+   },
+   "has_unconfirmed": true,
+   "editor_notes": [
+    "Bokas datoer for forbud mot piggdekk, og at alle hjul skal ha pigger som lovkrav."
+   ]
+  },
+  "bb-s45": {
+   "claims": [
+    {
+     "kind": "rettesnor",
+     "text": {
+      "no": "Er tilhengeren (f.eks. campingvogn) feil lastet, kan det ha mye å si for bilens retningsstabilitet. Se i bilens instruksjonsbok for riktig kuletrykk. Styreservoen gjør det lettere å styre, men motoren må være i gang. Kontroller servo-oljenivået jevnlig.",
+      "th": "ถ้ารถพ่วง (เช่น คาราวาน) บรรทุกผิด จะกระทบการทรงตัวของรถมาก ดูคู่มือรถเพื่อหาแรงกดที่หัวลากที่ถูกต้อง พาวเวอร์พวงมาลัยช่วยให้เลี้ยวง่ายขึ้น แต่เครื่องต้องติด ตรวจระดับน้ำมันพาวเวอร์สม่ำเสมอ",
+      "en": "If the trailer (e.g. a caravan) is wrongly loaded, it can matter a lot for the car's directional stability. See the car's manual for the right nose weight. Power steering makes steering easier, but the engine must be running. Check the power-steering oil level regularly."
+     }
+    },
+    {
+     "kind": "apent",
+     "text": {
+      "no": "Bokas tall «kuletrykk ca. 70 kg».",
+      "th": "ตัวเลข “แรงกดที่หัวลากประมาณ 70 กก.” ของหนังสือ",
+      "en": "The book's figure 'nose weight about 70 kg'."
+     }
+    }
+   ],
+   "michael_basis": {
+    "no": "Rettesnor (ikke lovkrav): Er tilhengeren (f.eks. campingvogn) feil lastet, kan det ha mye å si for bilens retningsstabilitet. Se i bilens instruksjonsbok for riktig kuletrykk. Styreservoen gjør det lettere å styre, men motoren må være i gang. Kontroller servo-oljenivået jevnlig.",
+    "th": "หลักคร่าว ๆ (ไม่ใช่ข้อบังคับ): ถ้ารถพ่วง (เช่น คาราวาน) บรรทุกผิด จะกระทบการทรงตัวของรถมาก ดูคู่มือรถเพื่อหาแรงกดที่หัวลากที่ถูกต้อง พาวเวอร์พวงมาลัยช่วยให้เลี้ยวง่ายขึ้น แต่เครื่องต้องติด ตรวจระดับน้ำมันพาวเวอร์สม่ำเสมอ",
+    "en": "Rule of thumb (not a legal requirement): If the trailer (e.g. a caravan) is wrongly loaded, it can matter a lot for the car's directional stability. See the car's manual for the right nose weight. Power steering makes steering easier, but the engine must be running. Check the power-steering oil level regularly."
+   },
+   "has_unconfirmed": true,
+   "editor_notes": [
+    "Bokas tall «kuletrykk ca. 70 kg»."
+   ]
+  },
+  "bb-s48": {
+   "claims": [
+    {
+     "kind": "rettesnor",
+     "text": {
+      "no": "Vognkortet har to deler. Viktige opplysninger er bilens egenvekt, lengde og bredde, nyttelast, tillatt totalvekt, hvor stor tilhenger bilen kan trekke og dekkdimensjon.",
+      "th": "เล่มทะเบียนมีสองส่วน ข้อมูลสำคัญคือ น้ำหนักตัวรถ ความยาว ความกว้าง น้ำหนักบรรทุก น้ำหนักรวมที่อนุญาต ขนาดรถพ่วงที่ลากได้ และขนาดยาง",
+      "en": "The registration certificate has two parts. Key information is the car's own weight, length and width, payload, permitted gross weight, how large a trailer the car can tow and tyre size."
+     }
+    },
+    {
+     "kind": "apent",
+     "text": {
+      "no": "At vognkort del 1 alltid skal medbringes i bilen under kjøring, og at Vegvesenet, politiet og tollvesenet kan forlange å se vognkortet.",
+      "th": "ที่ว่าต้องพกเล่มทะเบียนส่วนที่ 1 ไว้ในรถตลอดการขับ และว่ากรมทางหลวง ตำรวจ และศุลกากรขอดูเล่มทะเบียนได้",
+      "en": "That registration certificate part 1 must always be carried in the car while driving, and that the road authority, police and customs can demand to see it."
+     }
+    }
+   ],
+   "michael_basis": {
+    "no": "Rettesnor (ikke lovkrav): Vognkortet har to deler. Viktige opplysninger er bilens egenvekt, lengde og bredde, nyttelast, tillatt totalvekt, hvor stor tilhenger bilen kan trekke og dekkdimensjon.",
+    "th": "หลักคร่าว ๆ (ไม่ใช่ข้อบังคับ): เล่มทะเบียนมีสองส่วน ข้อมูลสำคัญคือ น้ำหนักตัวรถ ความยาว ความกว้าง น้ำหนักบรรทุก น้ำหนักรวมที่อนุญาต ขนาดรถพ่วงที่ลากได้ และขนาดยาง",
+    "en": "Rule of thumb (not a legal requirement): The registration certificate has two parts. Key information is the car's own weight, length and width, payload, permitted gross weight, how large a trailer the car can tow and tyre size."
+   },
+   "has_unconfirmed": true,
+   "editor_notes": [
+    "At vognkort del 1 alltid skal medbringes i bilen under kjøring, og at Vegvesenet, politiet og tollvesenet kan forlange å se vognkortet."
+   ]
+  },
+  "bb-s51b": {
+   "claims": [
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Skiltforskriften: det må ikke kjøres på eller over sperrelinje, eller til venstre for gul sperrelinje. Kjørefeltlinje kan overskrides når det skjer i samsvar med trafikkreglene. Gul varsellinje angir at sikten fremover er for kort til vanlig forbikjøring.",
+      "th": "ข้อบังคับป้าย: ห้ามขับทับหรือข้ามเส้นห้ามข้าม หรือไปทางซ้ายของเส้นห้ามข้ามสีเหลือง เส้นแบ่งเลนข้ามได้เมื่อเป็นไปตามกฎจราจร เส้นเตือนสีเหลืองแสดงว่าทัศนวิสัยข้างหน้าสั้นเกินกว่าจะแซงตามปกติ",
+      "en": "The sign regulation: you must not drive on or over a barrier line, or to the left of a yellow barrier line. A lane line may be crossed when this is done in accordance with the traffic rules. A yellow warning line shows that the sight ahead is too short for ordinary overtaking."
+     },
+     "source": "Skiltforskriften §§ 21–22 vegoppmerking — https://lovdata.no/forskrift/2005-10-07-1219/§22",
+     "checked_at": "2026-10-10"
+    }
+   ],
+   "michael_basis": {
+    "no": "Lovkrav: Skiltforskriften: det må ikke kjøres på eller over sperrelinje, eller til venstre for gul sperrelinje. Kjørefeltlinje kan overskrides når det skjer i samsvar med trafikkreglene. Gul varsellinje angir at sikten fremover er for kort til vanlig forbikjøring.",
+    "th": "ข้อกำหนดตามกฎหมาย: ข้อบังคับป้าย: ห้ามขับทับหรือข้ามเส้นห้ามข้าม หรือไปทางซ้ายของเส้นห้ามข้ามสีเหลือง เส้นแบ่งเลนข้ามได้เมื่อเป็นไปตามกฎจราจร เส้นเตือนสีเหลืองแสดงว่าทัศนวิสัยข้างหน้าสั้นเกินกว่าจะแซงตามปกติ",
+    "en": "Legal requirement: The sign regulation: you must not drive on or over a barrier line, or to the left of a yellow barrier line. A lane line may be crossed when this is done in accordance with the traffic rules. A yellow warning line shows that the sight ahead is too short for ordinary overtaking."
+   },
+   "has_unconfirmed": false,
+   "editor_notes": []
+  },
+  "bb-s52": {
+   "claims": [
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Skiltforskriften: gul varsellinje angir at sikten fremover er for kort til vanlig forbikjøring. Hvit varsellinje angir fare ved å skifte kjørefelt.",
+      "th": "ข้อบังคับป้าย: เส้นเตือนสีเหลืองแสดงว่าทัศนวิสัยข้างหน้าสั้นเกินกว่าจะแซงตามปกติ เส้นเตือนสีขาวแสดงอันตรายเมื่อเปลี่ยนเลน",
+      "en": "The sign regulation: a yellow warning line shows that the sight ahead is too short for ordinary overtaking. A white warning line shows danger in changing lane."
+     },
+     "source": "Skiltforskriften §§ 21–22 vegoppmerking — https://lovdata.no/forskrift/2005-10-07-1219/§22",
+     "checked_at": "2026-10-10"
+    },
+    {
+     "kind": "rettesnor",
+     "text": {
+      "no": "Statens vegvesens datakatalog oppgir standard varsellinje 9+3 over 50 km/t og 3+1 ved 50 km/t eller lavere. Kombinerte linjer: rett deg etter den som er nærmest.",
+      "th": "แคตตาล็อกข้อมูลของกรมทางหลวงระบุเส้นเตือนมาตรฐาน 9+3 เมื่อเกิน 50 กม./ชม. และ 3+1 ที่ 50 กม./ชม. หรือต่ำกว่า เส้นผสม: ทำตามเส้นที่อยู่ใกล้ที่สุด",
+      "en": "The Road Administration's data catalogue gives the standard warning line as 9+3 above 50 km/h and 3+1 at 50 km/h or lower. Combined lines: follow the one nearest you."
+     }
+    },
+    {
+     "kind": "apent",
+     "text": {
+      "no": "Dobbel sperrelinje og stiplet kantlinje (kjørebane smalere enn 6 m) slik boka beskriver dem.",
+      "th": "เส้นห้ามข้ามคู่และเส้นขอบประ (ช่องการจราจรแคบกว่า 6 ม.) ตามที่หนังสืออธิบาย",
+      "en": "The double barrier line and dashed edge line (carriageway narrower than 6 m) as the book describes them."
+     }
+    }
+   ],
+   "michael_basis": {
+    "no": "Lovkrav: Skiltforskriften: gul varsellinje angir at sikten fremover er for kort til vanlig forbikjøring. Hvit varsellinje angir fare ved å skifte kjørefelt. Rettesnor (ikke lovkrav): Statens vegvesens datakatalog oppgir standard varsellinje 9+3 over 50 km/t og 3+1 ved 50 km/t eller lavere. Kombinerte linjer: rett deg etter den som er nærmest.",
+    "th": "ข้อกำหนดตามกฎหมาย: ข้อบังคับป้าย: เส้นเตือนสีเหลืองแสดงว่าทัศนวิสัยข้างหน้าสั้นเกินกว่าจะแซงตามปกติ เส้นเตือนสีขาวแสดงอันตรายเมื่อเปลี่ยนเลน หลักคร่าว ๆ (ไม่ใช่ข้อบังคับ): แคตตาล็อกข้อมูลของกรมทางหลวงระบุเส้นเตือนมาตรฐาน 9+3 เมื่อเกิน 50 กม./ชม. และ 3+1 ที่ 50 กม./ชม. หรือต่ำกว่า เส้นผสม: ทำตามเส้นที่อยู่ใกล้ที่สุด",
+    "en": "Legal requirement: The sign regulation: a yellow warning line shows that the sight ahead is too short for ordinary overtaking. A white warning line shows danger in changing lane. Rule of thumb (not a legal requirement): The Road Administration's data catalogue gives the standard warning line as 9+3 above 50 km/h and 3+1 at 50 km/h or lower. Combined lines: follow the one nearest you."
+   },
+   "has_unconfirmed": true,
+   "editor_notes": [
+    "Dobbel sperrelinje og stiplet kantlinje (kjørebane smalere enn 6 m) slik boka beskriver dem."
+   ]
+  },
+  "bb-s53b": {
+   "claims": [
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Trafikkreglene § 5 nr. 2: kjøring i kollektivfelt og sambruksfelt er bare tillatt som angitt på offentlig trafikkskilt. Likevel kan elektrisk eller hydrogendrevet motorvogn, tohjuls motorsykkel uten sidevogn, tohjuls moped, sykkel, liten elektrisk motorvogn eller uniformert utrykningskjøretøy nytte slike felt.",
+      "th": "กฎจราจร § 5 ข้อ 2: การขับในเลนรถโดยสารและเลนใช้ร่วมทำได้ตามที่ป้ายจราจรสาธารณะระบุเท่านั้น อย่างไรก็ตาม ยานยนต์ไฟฟ้าหรือไฮโดรเจน มอเตอร์ไซค์สองล้อไม่มีรถพ่วงข้าง โมเพดสองล้อ จักรยาน ยานยนต์ไฟฟ้าขนาดเล็ก หรือรถฉุกเฉินที่แต่งเครื่องแบบ ใช้เลนเช่นนี้ได้",
+      "en": "Traffic rules § 5 no. 2: driving in bus lanes and shared-use lanes is only allowed as stated on public traffic signs. Nevertheless an electric or hydrogen motor vehicle, a two-wheeled motorcycle without sidecar, a two-wheeled moped, a bicycle, a small electric motor vehicle or a uniformed emergency vehicle may use such lanes."
+     },
+     "source": "Trafikkreglene § 5 — https://lovdata.no/forskrift/1986-03-21-747/§5",
+     "checked_at": "2026-10-10"
+    },
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Skiltforskriften (skilt 508): drosje kan bare brukes i kollektivfelt når drosjen er utstyrt med taklykt. Buss med opptil 16 passasjerseter kan bare bruke feltet ved konsesjonert persontransport eller med minst 7 passasjerer.",
+      "th": "ข้อบังคับป้าย (ป้าย 508): แท็กซี่ใช้เลนรถโดยสารได้เมื่อมีไฟหลังคา รถโดยสารที่มีที่นั่งผู้โดยสารไม่เกิน 16 ที่นั่งใช้ได้เฉพาะการขนส่งผู้โดยสารที่ได้รับอนุญาตหรือมีผู้โดยสารอย่างน้อย 7 คน",
+      "en": "The sign regulation (sign 508): a taxi may be used in a bus lane only when it is fitted with a roof light. A bus with up to 16 passenger seats may use the lane only for licensed passenger transport or with at least 7 passengers."
+     },
+     "source": "Skiltforskriften § 12 — https://lovdata.no/forskrift/2005-10-07-1219/§12",
+     "checked_at": "2026-10-10"
+    }
+   ],
+   "michael_basis": {
+    "no": "Lovkrav: Trafikkreglene § 5 nr. 2: kjøring i kollektivfelt og sambruksfelt er bare tillatt som angitt på offentlig trafikkskilt. Likevel kan elektrisk eller hydrogendrevet motorvogn, tohjuls motorsykkel uten sidevogn, tohjuls moped, sykkel, liten elektrisk motorvogn eller uniformert utrykningskjøretøy nytte slike felt. Lovkrav: Skiltforskriften (skilt 508): drosje kan bare brukes i kollektivfelt når drosjen er utstyrt med taklykt. Buss med opptil 16 passasjerseter kan bare bruke feltet ved konsesjonert persontransport eller med minst 7 passasjerer.",
+    "th": "ข้อกำหนดตามกฎหมาย: กฎจราจร § 5 ข้อ 2: การขับในเลนรถโดยสารและเลนใช้ร่วมทำได้ตามที่ป้ายจราจรสาธารณะระบุเท่านั้น อย่างไรก็ตาม ยานยนต์ไฟฟ้าหรือไฮโดรเจน มอเตอร์ไซค์สองล้อไม่มีรถพ่วงข้าง โมเพดสองล้อ จักรยาน ยานยนต์ไฟฟ้าขนาดเล็ก หรือรถฉุกเฉินที่แต่งเครื่องแบบ ใช้เลนเช่นนี้ได้ ข้อกำหนดตามกฎหมาย: ข้อบังคับป้าย (ป้าย 508): แท็กซี่ใช้เลนรถโดยสารได้เมื่อมีไฟหลังคา รถโดยสารที่มีที่นั่งผู้โดยสารไม่เกิน 16 ที่นั่งใช้ได้เฉพาะการขนส่งผู้โดยสารที่ได้รับอนุญาตหรือมีผู้โดยสารอย่างน้อย 7 คน",
+    "en": "Legal requirement: Traffic rules § 5 no. 2: driving in bus lanes and shared-use lanes is only allowed as stated on public traffic signs. Nevertheless an electric or hydrogen motor vehicle, a two-wheeled motorcycle without sidecar, a two-wheeled moped, a bicycle, a small electric motor vehicle or a uniformed emergency vehicle may use such lanes. Legal requirement: The sign regulation (sign 508): a taxi may be used in a bus lane only when it is fitted with a roof light. A bus with up to 16 passenger seats may use the lane only for licensed passenger transport or with at least 7 passengers."
+   },
+   "has_unconfirmed": false,
+   "editor_notes": []
+  },
+  "bb-s55b": {
+   "claims": [
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Skiltforskriften § 24 (hovedsignal): ved rødt lys må kjørende ikke passere signal eller stopplinje. Rødt sammen med gult varsler at veksling til grønt vil skje straks. Ved grønt lys kan kjørende passere signal eller stopplinje dersom vegen er fri. Gult lys alene varsler at veksling til rødt vil skje straks, og at kjørende skal stanse.",
+      "th": "ข้อบังคับป้าย § 24 (สัญญาณหลัก): เมื่อไฟแดง ผู้ขับต้องไม่ผ่านสัญญาณหรือเส้นหยุด แดงพร้อมเหลืองเตือนว่าจะเปลี่ยนเป็นเขียวทันที เมื่อไฟเขียว ผู้ขับผ่านสัญญาณหรือเส้นหยุดได้ถ้าถนนว่าง ไฟเหลืองอย่างเดียวเตือนว่าจะเปลี่ยนเป็นแดงทันที และผู้ขับต้องหยุด",
+      "en": "Sign regulation § 24 (main signal): at a red light drivers must not pass the signal or stop line. Red together with yellow warns that the change to green will happen immediately. At a green light drivers may pass the signal or stop line if the road is clear. Yellow alone warns that the change to red will happen immediately, and that drivers must stop."
+     },
+     "source": "Skiltforskriften § 24 (FOR-2005-10-07-1219) — https://lovdata.no/forskrift/2005-10-07-1219/§24",
+     "checked_at": "2026-10-10"
+    },
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Gult blinksignal angir at trafikantene må vise særlig aktpågivenhet og varsomhet.",
+      "th": "สัญญาณเหลืองกะพริบแสดงว่าผู้ใช้ถนนต้องตื่นตัวและระมัดระวังเป็นพิเศษ",
+      "en": "A flashing yellow signal shows that road users must show special alertness and care."
+     },
+     "source": "Skiltforskriften § 24 (FOR-2005-10-07-1219) — https://lovdata.no/forskrift/2005-10-07-1219/§24",
+     "checked_at": "2026-10-10"
+    },
+    {
+     "kind": "apent",
+     "text": {
+      "no": "Bokas nyanse om gult lys: «stans hvis det kan skje uten fare (trafikk bak); har du kommet inn i krysset, må du ut».",
+      "th": "ความละเอียดของหนังสือเรื่องไฟเหลือง: “หยุดถ้าทำได้โดยไม่อันตราย (มีรถตามหลัง) ถ้าเข้าทางแยกแล้วต้องออกให้พ้น”",
+      "en": "The book's nuance on yellow: 'stop if it can be done safely (traffic behind); if you have already entered the junction, you must drive out'."
+     }
+    }
+   ],
+   "michael_basis": {
+    "no": "Lovkrav: Skiltforskriften § 24 (hovedsignal): ved rødt lys må kjørende ikke passere signal eller stopplinje. Rødt sammen med gult varsler at veksling til grønt vil skje straks. Ved grønt lys kan kjørende passere signal eller stopplinje dersom vegen er fri. Gult lys alene varsler at veksling til rødt vil skje straks, og at kjørende skal stanse. Lovkrav: Gult blinksignal angir at trafikantene må vise særlig aktpågivenhet og varsomhet.",
+    "th": "ข้อกำหนดตามกฎหมาย: ข้อบังคับป้าย § 24 (สัญญาณหลัก): เมื่อไฟแดง ผู้ขับต้องไม่ผ่านสัญญาณหรือเส้นหยุด แดงพร้อมเหลืองเตือนว่าจะเปลี่ยนเป็นเขียวทันที เมื่อไฟเขียว ผู้ขับผ่านสัญญาณหรือเส้นหยุดได้ถ้าถนนว่าง ไฟเหลืองอย่างเดียวเตือนว่าจะเปลี่ยนเป็นแดงทันที และผู้ขับต้องหยุด ข้อกำหนดตามกฎหมาย: สัญญาณเหลืองกะพริบแสดงว่าผู้ใช้ถนนต้องตื่นตัวและระมัดระวังเป็นพิเศษ",
+    "en": "Legal requirement: Sign regulation § 24 (main signal): at a red light drivers must not pass the signal or stop line. Red together with yellow warns that the change to green will happen immediately. At a green light drivers may pass the signal or stop line if the road is clear. Yellow alone warns that the change to red will happen immediately, and that drivers must stop. Legal requirement: A flashing yellow signal shows that road users must show special alertness and care."
+   },
+   "has_unconfirmed": true,
+   "editor_notes": [
+    "Bokas nyanse om gult lys: «stans hvis det kan skje uten fare (trafikk bak); har du kommet inn i krysset, må du ut»."
+   ]
+  },
+  "bb-s56": {
+   "claims": [
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Skiltforskriften § 24 (pilsignal): signalet gjelder for dem som vil kjøre i den retning pilen viser.",
+      "th": "ข้อบังคับป้าย § 24 (สัญญาณลูกศร): สัญญาณใช้กับผู้ที่จะขับไปในทิศทางที่ลูกศรชี้",
+      "en": "Sign regulation § 24 (arrow signal): the signal applies to those who want to drive in the direction the arrow shows."
+     },
+     "source": "Skiltforskriften § 24 (FOR-2005-10-07-1219) — https://lovdata.no/forskrift/2005-10-07-1219/§24",
+     "checked_at": "2026-10-10"
+    },
+    {
+     "kind": "rettesnor",
+     "text": {
+      "no": "Er du i tvil, følg hovedlyset og se deg godt for.",
+      "th": "ถ้าไม่แน่ใจ ให้ทำตามไฟหลักและมองให้ดี",
+      "en": "If in doubt, follow the main light and look carefully."
+     }
+    },
+    {
+     "kind": "apent",
+     "text": {
+      "no": "Bokas beskrivelse av «rød pil» (vent til den røde pilen slukkes). Rød pil er ikke beskrevet som eget signal i skiltforskriften § 24.",
+      "th": "คำอธิบาย “ลูกศรแดง” ของหนังสือ (รอจนลูกศรแดงดับ) ลูกศรแดงไม่ได้อธิบายเป็นสัญญาณแยกใน § 24 ของข้อบังคับป้าย",
+      "en": "The book's description of a 'red arrow' (wait until the red arrow goes out). A red arrow is not described as a separate signal in sign regulation § 24."
+     }
+    }
+   ],
+   "michael_basis": {
+    "no": "Lovkrav: Skiltforskriften § 24 (pilsignal): signalet gjelder for dem som vil kjøre i den retning pilen viser. Rettesnor (ikke lovkrav): Er du i tvil, følg hovedlyset og se deg godt for.",
+    "th": "ข้อกำหนดตามกฎหมาย: ข้อบังคับป้าย § 24 (สัญญาณลูกศร): สัญญาณใช้กับผู้ที่จะขับไปในทิศทางที่ลูกศรชี้ หลักคร่าว ๆ (ไม่ใช่ข้อบังคับ): ถ้าไม่แน่ใจ ให้ทำตามไฟหลักและมองให้ดี",
+    "en": "Legal requirement: Sign regulation § 24 (arrow signal): the signal applies to those who want to drive in the direction the arrow shows. Rule of thumb (not a legal requirement): If in doubt, follow the main light and look carefully."
+   },
+   "has_unconfirmed": true,
+   "editor_notes": [
+    "Bokas beskrivelse av «rød pil» (vent til den røde pilen slukkes). Rød pil er ikke beskrevet som eget signal i skiltforskriften § 24."
+   ]
+  },
+  "bb-s56b": {
+   "claims": [
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Skiltforskriften § 24 (kjørefeltsignal): rødt kryss angir forbud mot å nytte feltet i retning mot signalet. Grønn pil angir at feltet kan nyttes. Gul pil angir at feltet vil bli stengt, og at kjørende straks må foreta feltskifte i den retning pilen viser.",
+      "th": "ข้อบังคับป้าย § 24 (สัญญาณเลน): กากบาทแดงแสดงว่าห้ามใช้เลนในทิศทางที่ตรงกับสัญญาณ ลูกศรเขียวแสดงว่าใช้เลนได้ ลูกศรเหลืองแสดงว่าเลนจะถูกปิด และผู้ขับต้องเปลี่ยนเลนทันทีไปทางที่ลูกศรชี้",
+      "en": "Sign regulation § 24 (lane signal): a red cross shows a ban on using the lane in the direction towards the signal. A green arrow shows the lane may be used. A yellow arrow shows the lane will be closed, and drivers must immediately change lane in the direction the arrow shows."
+     },
+     "source": "Skiltforskriften § 24 (FOR-2005-10-07-1219) — https://lovdata.no/forskrift/2005-10-07-1219/§24",
+     "checked_at": "2026-10-10"
+    },
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Rødt stoppblinksignal: trafikant må ikke passere signalet.",
+      "th": "สัญญาณหยุดแดงกะพริบ: ผู้ใช้ถนนต้องไม่ผ่านสัญญาณ",
+      "en": "Red stop flasher: a road user must not pass the signal."
+     },
+     "source": "Skiltforskriften § 24 (FOR-2005-10-07-1219) — https://lovdata.no/forskrift/2005-10-07-1219/§24",
+     "checked_at": "2026-10-10"
+    }
+   ],
+   "michael_basis": {
+    "no": "Lovkrav: Skiltforskriften § 24 (kjørefeltsignal): rødt kryss angir forbud mot å nytte feltet i retning mot signalet. Grønn pil angir at feltet kan nyttes. Gul pil angir at feltet vil bli stengt, og at kjørende straks må foreta feltskifte i den retning pilen viser. Lovkrav: Rødt stoppblinksignal: trafikant må ikke passere signalet.",
+    "th": "ข้อกำหนดตามกฎหมาย: ข้อบังคับป้าย § 24 (สัญญาณเลน): กากบาทแดงแสดงว่าห้ามใช้เลนในทิศทางที่ตรงกับสัญญาณ ลูกศรเขียวแสดงว่าใช้เลนได้ ลูกศรเหลืองแสดงว่าเลนจะถูกปิด และผู้ขับต้องเปลี่ยนเลนทันทีไปทางที่ลูกศรชี้ ข้อกำหนดตามกฎหมาย: สัญญาณหยุดแดงกะพริบ: ผู้ใช้ถนนต้องไม่ผ่านสัญญาณ",
+    "en": "Legal requirement: Sign regulation § 24 (lane signal): a red cross shows a ban on using the lane in the direction towards the signal. A green arrow shows the lane may be used. A yellow arrow shows the lane will be closed, and drivers must immediately change lane in the direction the arrow shows. Legal requirement: Red stop flasher: a road user must not pass the signal."
+   },
+   "has_unconfirmed": false,
+   "editor_notes": []
+  },
+  "bb-s58": {
+   "claims": [
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Skiltforskriften § 25: er politiets arm rettet utad, skal trafikant som nærmer seg forfra eller bakfra stanse. Trafikant fra siden kan passere.",
+      "th": "ข้อบังคับป้าย § 25: ถ้าแขนของตำรวจชี้ออกด้านข้าง ผู้ใช้ถนนที่เข้ามาจากด้านหน้าหรือด้านหลังต้องหยุด ผู้ที่มาจากด้านข้างผ่านได้",
+      "en": "Sign regulation § 25: if the police officer's arm is held out, a road user approaching from the front or behind must stop. A road user from the side may pass."
+     },
+     "source": "Skiltforskriften § 25 — https://lovdata.no/forskrift/2005-10-07-1219/§25",
+     "checked_at": "2026-10-10"
+    },
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Trafikkreglene § 3 nr. 2: anvisning gitt av politiet gjelder foran anvisning gitt på annen måte.",
+      "th": "กฎจราจร § 3 ข้อ 2: คำสั่งของตำรวจมาก่อนคำสั่งที่ให้ด้วยวิธีอื่น",
+      "en": "Traffic rules § 3 no. 2: a direction from the police takes precedence over a direction given in another way."
+     },
+     "source": "Trafikkreglene § 3 — https://lovdata.no/forskrift/1986-03-21-747/§3",
+     "checked_at": "2026-10-10"
+    }
+   ],
+   "michael_basis": {
+    "no": "Lovkrav: Skiltforskriften § 25: er politiets arm rettet utad, skal trafikant som nærmer seg forfra eller bakfra stanse. Trafikant fra siden kan passere. Lovkrav: Trafikkreglene § 3 nr. 2: anvisning gitt av politiet gjelder foran anvisning gitt på annen måte.",
+    "th": "ข้อกำหนดตามกฎหมาย: ข้อบังคับป้าย § 25: ถ้าแขนของตำรวจชี้ออกด้านข้าง ผู้ใช้ถนนที่เข้ามาจากด้านหน้าหรือด้านหลังต้องหยุด ผู้ที่มาจากด้านข้างผ่านได้ ข้อกำหนดตามกฎหมาย: กฎจราจร § 3 ข้อ 2: คำสั่งของตำรวจมาก่อนคำสั่งที่ให้ด้วยวิธีอื่น",
+    "en": "Legal requirement: Sign regulation § 25: if the police officer's arm is held out, a road user approaching from the front or behind must stop. A road user from the side may pass. Legal requirement: Traffic rules § 3 no. 2: a direction from the police takes precedence over a direction given in another way."
+   },
+   "has_unconfirmed": false,
+   "editor_notes": []
+  },
+  "bb-s58b": {
+   "claims": [
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Skiltforskriften § 25: er politiets arm rettet oppad, skal enhver trafikant stanse.",
+      "th": "ข้อบังคับป้าย § 25: ถ้าแขนของตำรวจชี้ขึ้น ผู้ใช้ถนนทุกคนต้องหยุด",
+      "en": "Sign regulation § 25: if the police officer's arm is held up, every road user must stop."
+     },
+     "source": "Skiltforskriften § 25 — https://lovdata.no/forskrift/2005-10-07-1219/§25",
+     "checked_at": "2026-10-10"
+    },
+    {
+     "kind": "apent",
+     "text": {
+      "no": "Bokas tillegg: «er du så langt fram at du ikke kan stanse uten fare, kan du kjøre videre», og at kjørende fra sidene tilsvarer gult lys.",
+      "th": "ส่วนเพิ่มของหนังสือ: “ถ้าคุณอยู่ไกลเข้าไปจนหยุดไม่ได้อย่างปลอดภัย ขับต่อได้” และว่ารถจากด้านข้างเทียบเท่าไฟเหลือง",
+      "en": "The book's addition: 'if you are so far forward that you cannot stop safely, you may drive on', and that traffic from the sides equals yellow."
+     }
+    }
+   ],
+   "michael_basis": {
+    "no": "Lovkrav: Skiltforskriften § 25: er politiets arm rettet oppad, skal enhver trafikant stanse.",
+    "th": "ข้อกำหนดตามกฎหมาย: ข้อบังคับป้าย § 25: ถ้าแขนของตำรวจชี้ขึ้น ผู้ใช้ถนนทุกคนต้องหยุด",
+    "en": "Legal requirement: Sign regulation § 25: if the police officer's arm is held up, every road user must stop."
+   },
+   "has_unconfirmed": true,
+   "editor_notes": [
+    "Bokas tillegg: «er du så langt fram at du ikke kan stanse uten fare, kan du kjøre videre», og at kjørende fra sidene tilsvarer gult lys."
+   ]
+  },
+  "bb-s59": {
+   "claims": [
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Trafikkreglene § 13 nr. 2 b: kjørende skal i særlig grad holde tilstrekkelig liten fart og om nødvendig stanse straks ved passering av skolepatrulje.",
+      "th": "กฎจราจร § 13 ข้อ 2 b: ผู้ขับมีหน้าที่พิเศษที่ต้องขับช้าพอและหยุดทันทีถ้าจำเป็นเมื่อผ่านเด็กอาสาจราจร",
+      "en": "Traffic rules § 13 no. 2 b: drivers have a special duty to keep speed low enough and stop immediately if necessary when passing a school patrol."
+     },
+     "source": "Trafikkreglene § 13 — https://lovdata.no/forskrift/1986-03-21-747/§13",
+     "checked_at": "2026-10-10"
+    },
+    {
+     "kind": "rettesnor",
+     "text": {
+      "no": "Skolepatruljen gjør et godt og viktig arbeid for elevenes sikkerhet. Vær meget nøye med å følge anvisningene deres.",
+      "th": "เด็กอาสาจราจรทำงานที่ดีและสำคัญเพื่อความปลอดภัยของนักเรียน ทำตามคำสั่งของพวกเขาอย่างระมัดระวังมาก",
+      "en": "The school patrol does good and important work for pupils' safety. Be very careful to follow their directions."
+     }
+    }
+   ],
+   "michael_basis": {
+    "no": "Lovkrav: Trafikkreglene § 13 nr. 2 b: kjørende skal i særlig grad holde tilstrekkelig liten fart og om nødvendig stanse straks ved passering av skolepatrulje. Rettesnor (ikke lovkrav): Skolepatruljen gjør et godt og viktig arbeid for elevenes sikkerhet. Vær meget nøye med å følge anvisningene deres.",
+    "th": "ข้อกำหนดตามกฎหมาย: กฎจราจร § 13 ข้อ 2 b: ผู้ขับมีหน้าที่พิเศษที่ต้องขับช้าพอและหยุดทันทีถ้าจำเป็นเมื่อผ่านเด็กอาสาจราจร หลักคร่าว ๆ (ไม่ใช่ข้อบังคับ): เด็กอาสาจราจรทำงานที่ดีและสำคัญเพื่อความปลอดภัยของนักเรียน ทำตามคำสั่งของพวกเขาอย่างระมัดระวังมาก",
+    "en": "Legal requirement: Traffic rules § 13 no. 2 b: drivers have a special duty to keep speed low enough and stop immediately if necessary when passing a school patrol. Rule of thumb (not a legal requirement): The school patrol does good and important work for pupils' safety. Be very careful to follow their directions."
+   },
+   "has_unconfirmed": false,
+   "editor_notes": []
+  },
+  "bb-s60": {
+   "claims": [
+    {
+     "kind": "rettesnor",
+     "text": {
+      "no": "En fare bør varsles i så god tid at trafikantene får tid til å reagere. Fareskiltene er trekantede. Skiltet «Gangfelt» har avstandsskilt.",
+      "th": "ควรเตือนอันตรายล่วงหน้าพอที่ผู้ใช้ถนนจะมีเวลาตอบสนอง ป้ายเตือนอันตรายเป็นรูปสามเหลี่ยม ป้าย “ทางม้าลาย” มีป้ายบอกระยะ",
+      "en": "A hazard should be warned of in time for road users to react. Warning signs are triangular. The 'Pedestrian crossing' sign has a distance plate."
+     }
+    },
+    {
+     "kind": "apent",
+     "text": {
+      "no": "Avstandene 150–250 m (utenfor tettbygd strøk) og 50–100 m (i tettbygd strøk) før faren.",
+      "th": "ระยะ 150–250 ม. (นอกเขตชุมชน) และ 50–100 ม. (ในเขตชุมชน) ก่อนถึงอันตราย",
+      "en": "The distances 150–250 m (outside built-up areas) and 50–100 m (in built-up areas) before the hazard."
+     }
+    }
+   ],
+   "michael_basis": {
+    "no": "Rettesnor (ikke lovkrav): En fare bør varsles i så god tid at trafikantene får tid til å reagere. Fareskiltene er trekantede. Skiltet «Gangfelt» har avstandsskilt.",
+    "th": "หลักคร่าว ๆ (ไม่ใช่ข้อบังคับ): ควรเตือนอันตรายล่วงหน้าพอที่ผู้ใช้ถนนจะมีเวลาตอบสนอง ป้ายเตือนอันตรายเป็นรูปสามเหลี่ยม ป้าย “ทางม้าลาย” มีป้ายบอกระยะ",
+    "en": "Rule of thumb (not a legal requirement): A hazard should be warned of in time for road users to react. Warning signs are triangular. The 'Pedestrian crossing' sign has a distance plate."
+   },
+   "has_unconfirmed": true,
+   "editor_notes": [
+    "Avstandene 150–250 m (utenfor tettbygd strøk) og 50–100 m (i tettbygd strøk) før faren."
+   ]
+  },
+  "bb-s61": {
+   "claims": [
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Skiltforskriften § 7: forbudsskilt angir at det gjelder et forbud på vedkommende vegstrekning eller sted. Forbudsskilt gjelder i kjøreretningen fra der skiltet er satt opp og fram til nærmeste vegkryss, med mindre § 8 bestemmer noe annet for det enkelte skilt.",
+      "th": "ข้อบังคับป้าย § 7: ป้ายห้ามแสดงว่ามีข้อห้ามบนช่วงถนนหรือสถานที่นั้น ป้ายห้ามมีผลในทิศทางการขับตั้งแต่จุดที่ติดตั้งไปจนถึงทางแยกถัดไป เว้นแต่ § 8 กำหนดไว้เป็นอย่างอื่นสำหรับป้ายนั้น",
+      "en": "Sign regulation § 7: a prohibition sign shows that a ban applies on the road stretch or place in question. A prohibition sign applies in the direction of travel from where the sign is put up to the nearest junction, unless § 8 decides otherwise for the individual sign."
+     },
+     "source": "Skiltforskriften § 7 — https://lovdata.no/forskrift/2005-10-07-1219/§7",
+     "checked_at": "2026-10-10"
+    },
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Påbudt kjøreretning (402): kjørende skal forlate vegkrysset i den retning som er angitt på skiltet. Påbudt kjørefelt (404): kjørende skal passere skiltet på den side som pilen peker mot.",
+      "th": "บังคับทิศทางการขับ (402): ผู้ขับต้องออกจากทางแยกไปทางที่ป้ายระบุ บังคับเลน (404): ผู้ขับต้องผ่านป้ายทางด้านที่ลูกศรชี้",
+      "en": "Mandatory direction (402): drivers must leave the junction in the direction shown on the sign. Mandatory lane (404): drivers must pass the sign on the side the arrow points to."
+     },
+     "source": "Skiltforskriften §§ 9–10 — https://lovdata.no/forskrift/2005-10-07-1219/§10",
+     "checked_at": "2026-10-10"
+    }
+   ],
+   "michael_basis": {
+    "no": "Lovkrav: Skiltforskriften § 7: forbudsskilt angir at det gjelder et forbud på vedkommende vegstrekning eller sted. Forbudsskilt gjelder i kjøreretningen fra der skiltet er satt opp og fram til nærmeste vegkryss, med mindre § 8 bestemmer noe annet for det enkelte skilt. Lovkrav: Påbudt kjøreretning (402): kjørende skal forlate vegkrysset i den retning som er angitt på skiltet. Påbudt kjørefelt (404): kjørende skal passere skiltet på den side som pilen peker mot.",
+    "th": "ข้อกำหนดตามกฎหมาย: ข้อบังคับป้าย § 7: ป้ายห้ามแสดงว่ามีข้อห้ามบนช่วงถนนหรือสถานที่นั้น ป้ายห้ามมีผลในทิศทางการขับตั้งแต่จุดที่ติดตั้งไปจนถึงทางแยกถัดไป เว้นแต่ § 8 กำหนดไว้เป็นอย่างอื่นสำหรับป้ายนั้น ข้อกำหนดตามกฎหมาย: บังคับทิศทางการขับ (402): ผู้ขับต้องออกจากทางแยกไปทางที่ป้ายระบุ บังคับเลน (404): ผู้ขับต้องผ่านป้ายทางด้านที่ลูกศรชี้",
+    "en": "Legal requirement: Sign regulation § 7: a prohibition sign shows that a ban applies on the road stretch or place in question. A prohibition sign applies in the direction of travel from where the sign is put up to the nearest junction, unless § 8 decides otherwise for the individual sign. Legal requirement: Mandatory direction (402): drivers must leave the junction in the direction shown on the sign. Mandatory lane (404): drivers must pass the sign on the side the arrow points to."
+   },
+   "has_unconfirmed": false,
+   "editor_notes": []
+  },
+  "bb-s71": {
+   "claims": [
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Trafikkreglene § 14 nr. 1: unødig eller hensynsløs bruk av lyd- eller lyssignal er forbudt. § 14 nr. 2: ved svinging eller annen vesentlig endring av kjøretøyets plassering i sideretning skal det til veiledning for annen trafikant gis tegn.",
+      "th": "กฎจราจร § 14 ข้อ 1: ห้ามใช้สัญญาณเสียงหรือแสงโดยไม่จำเป็นหรือโดยไม่ไว้หน้า § 14 ข้อ 2: เมื่อเลี้ยวหรือเปลี่ยนตำแหน่งด้านข้างของรถอย่างมาก ต้องให้เครื่องหมายเพื่อชี้แนะผู้ใช้ถนนอื่น",
+      "en": "Traffic rules § 14 no. 1: unnecessary or reckless use of sound or light signals is prohibited. § 14 no. 2: when turning or otherwise significantly changing the vehicle's sideways position, a sign must be given to guide other road users."
+     },
+     "source": "Trafikkreglene § 14 — https://lovdata.no/forskrift/1986-03-21-747/§14",
+     "checked_at": "2026-10-10"
+    },
+    {
+     "kind": "rettesnor",
+     "text": {
+      "no": "Tegn skal gis tydelig og i god tid. Tegn gis med retningslys; bremselysene gir også tegn. Lys- og lydhorn skal bare brukes til å avverge eller forebygge fare.",
+      "th": "ต้องให้เครื่องหมายอย่างชัดเจนและทันเวลา ให้เครื่องหมายด้วยไฟเลี้ยว ไฟเบรกก็ให้สัญญาณด้วย ใช้ไฟและแตรเพื่อป้องกันหรือหลีกเลี่ยงอันตรายเท่านั้น",
+      "en": "Signs must be given clearly and in good time. Signs are given with indicators; brake lights also give a sign. Light and sound horn should only be used to avert or prevent danger."
+     }
+    },
+    {
+     "kind": "apent",
+     "text": {
+      "no": "Bokas definisjon «vesentlig = ca. 1 meter» og «tegn ca. 5 sekunder før handling» som regler.",
+      "th": "นิยาม “อย่างมาก = ประมาณ 1 เมตร” และ “เครื่องหมายประมาณ 5 วินาทีก่อนลงมือ” ของหนังสือในฐานะกฎ",
+      "en": "The book's definition 'significant = about 1 metre' and 'sign about 5 seconds before acting' as rules."
+     }
+    }
+   ],
+   "michael_basis": {
+    "no": "Lovkrav: Trafikkreglene § 14 nr. 1: unødig eller hensynsløs bruk av lyd- eller lyssignal er forbudt. § 14 nr. 2: ved svinging eller annen vesentlig endring av kjøretøyets plassering i sideretning skal det til veiledning for annen trafikant gis tegn. Rettesnor (ikke lovkrav): Tegn skal gis tydelig og i god tid. Tegn gis med retningslys; bremselysene gir også tegn. Lys- og lydhorn skal bare brukes til å avverge eller forebygge fare.",
+    "th": "ข้อกำหนดตามกฎหมาย: กฎจราจร § 14 ข้อ 1: ห้ามใช้สัญญาณเสียงหรือแสงโดยไม่จำเป็นหรือโดยไม่ไว้หน้า § 14 ข้อ 2: เมื่อเลี้ยวหรือเปลี่ยนตำแหน่งด้านข้างของรถอย่างมาก ต้องให้เครื่องหมายเพื่อชี้แนะผู้ใช้ถนนอื่น หลักคร่าว ๆ (ไม่ใช่ข้อบังคับ): ต้องให้เครื่องหมายอย่างชัดเจนและทันเวลา ให้เครื่องหมายด้วยไฟเลี้ยว ไฟเบรกก็ให้สัญญาณด้วย ใช้ไฟและแตรเพื่อป้องกันหรือหลีกเลี่ยงอันตรายเท่านั้น",
+    "en": "Legal requirement: Traffic rules § 14 no. 1: unnecessary or reckless use of sound or light signals is prohibited. § 14 no. 2: when turning or otherwise significantly changing the vehicle's sideways position, a sign must be given to guide other road users. Rule of thumb (not a legal requirement): Signs must be given clearly and in good time. Signs are given with indicators; brake lights also give a sign. Light and sound horn should only be used to avert or prevent danger."
+   },
+   "has_unconfirmed": true,
+   "editor_notes": [
+    "Bokas definisjon «vesentlig = ca. 1 meter» og «tegn ca. 5 sekunder før handling» som regler."
+   ]
+  },
+  "bb-s75": {
+   "claims": [
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Trafikkreglene § 10 nr. 1: trafikant skal gi fri veg for utrykningskjøretøy når føreren varsler med blinkende blått lys; om nødvendig skal trafikanten stanse. § 14 nr. 3: særskilt lydsignal kan nyttes i tillegg, men bare når det er nødvendig.",
+      "th": "กฎจราจร § 10 ข้อ 1: ผู้ใช้ถนนต้องเปิดทางให้รถฉุกเฉินเมื่อผู้ขับส่งสัญญาณด้วยไฟน้ำเงินกะพริบ ถ้าจำเป็นต้องหยุด § 14 ข้อ 3: ใช้สัญญาณเสียงพิเศษเพิ่มได้ แต่เฉพาะเมื่อจำเป็น",
+      "en": "Traffic rules § 10 no. 1: a road user must give way to an emergency vehicle when the driver warns with flashing blue light; if necessary the road user must stop. § 14 no. 3: a special sound signal may be used in addition, but only when necessary."
+     },
+     "source": "Trafikkreglene § 10 — https://lovdata.no/forskrift/1986-03-21-747/§10",
+     "checked_at": "2026-10-10"
+    },
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Trafikkreglene § 2 nr. 4: fører av utrykningskjøretøy kan fravike bestemmelser når det er nødvendig eller til vesentlig lette i tjenesten, men skal alltid følge anvisning gitt av politiet. Kjøretøy brukt til vegarbeid skal varsle med blinkende gult lys når det er nødvendig for å hindre fare (§ 14 nr. 3).",
+      "th": "กฎจราจร § 2 ข้อ 4: ผู้ขับรถฉุกเฉินเบี่ยงเบนจากข้อกำหนดได้เมื่อจำเป็นหรือเพื่ออำนวยความสะดวกในหน้าที่อย่างมาก แต่ต้องทำตามคำสั่งของตำรวจเสมอ ยานพาหนะที่ใช้ในงานทางต้องส่งสัญญาณด้วยไฟเหลืองกะพริบเมื่อจำเป็นเพื่อป้องกันอันตราย (§ 14 ข้อ 3)",
+      "en": "Traffic rules § 2 no. 4: the driver of an emergency vehicle may depart from provisions when necessary or to substantially ease the service, but must always follow directions from the police. A vehicle used for roadworks must warn with flashing yellow light when necessary to prevent danger (§ 14 no. 3)."
+     },
+     "source": "Trafikkreglene § 2 — https://lovdata.no/forskrift/1986-03-21-747/§2",
+     "checked_at": "2026-10-10"
+    }
+   ],
+   "michael_basis": {
+    "no": "Lovkrav: Trafikkreglene § 10 nr. 1: trafikant skal gi fri veg for utrykningskjøretøy når føreren varsler med blinkende blått lys; om nødvendig skal trafikanten stanse. § 14 nr. 3: særskilt lydsignal kan nyttes i tillegg, men bare når det er nødvendig. Lovkrav: Trafikkreglene § 2 nr. 4: fører av utrykningskjøretøy kan fravike bestemmelser når det er nødvendig eller til vesentlig lette i tjenesten, men skal alltid følge anvisning gitt av politiet. Kjøretøy brukt til vegarbeid skal varsle med blinkende gult lys når det er nødvendig for å hindre fare (§ 14 nr. 3).",
+    "th": "ข้อกำหนดตามกฎหมาย: กฎจราจร § 10 ข้อ 1: ผู้ใช้ถนนต้องเปิดทางให้รถฉุกเฉินเมื่อผู้ขับส่งสัญญาณด้วยไฟน้ำเงินกะพริบ ถ้าจำเป็นต้องหยุด § 14 ข้อ 3: ใช้สัญญาณเสียงพิเศษเพิ่มได้ แต่เฉพาะเมื่อจำเป็น ข้อกำหนดตามกฎหมาย: กฎจราจร § 2 ข้อ 4: ผู้ขับรถฉุกเฉินเบี่ยงเบนจากข้อกำหนดได้เมื่อจำเป็นหรือเพื่ออำนวยความสะดวกในหน้าที่อย่างมาก แต่ต้องทำตามคำสั่งของตำรวจเสมอ ยานพาหนะที่ใช้ในงานทางต้องส่งสัญญาณด้วยไฟเหลืองกะพริบเมื่อจำเป็นเพื่อป้องกันอันตราย (§ 14 ข้อ 3)",
+    "en": "Legal requirement: Traffic rules § 10 no. 1: a road user must give way to an emergency vehicle when the driver warns with flashing blue light; if necessary the road user must stop. § 14 no. 3: a special sound signal may be used in addition, but only when necessary. Legal requirement: Traffic rules § 2 no. 4: the driver of an emergency vehicle may depart from provisions when necessary or to substantially ease the service, but must always follow directions from the police. A vehicle used for roadworks must warn with flashing yellow light when necessary to prevent danger (§ 14 no. 3)."
+   },
+   "has_unconfirmed": false,
+   "editor_notes": []
+  },
+  "bb-s76": {
+   "claims": [
+    {
+     "kind": "rettesnor",
+     "text": {
+      "no": "Stopplengde = reaksjonslengde + bremselengde. Som tommelfingerregel regner man ca. ett sekunds reaksjonstid. Omregning: 50 km/t er ca. 14 m i sekundet, 80 km/t ca. 22 m i sekundet.",
+      "th": "ระยะหยุด = ระยะตอบสนอง + ระยะเบรก หลักคร่าว ๆ คิดเวลาตอบสนองประมาณ 1 วินาที การแปลง: 50 กม./ชม. ประมาณ 14 ม./วินาที 80 กม./ชม. ประมาณ 22 ม./วินาที",
+      "en": "Stopping distance = reaction distance + braking distance. As a rule of thumb about one second of reaction time is counted. Conversion: 50 km/h is about 14 m a second, 80 km/h about 22 m a second."
+     }
+    },
+    {
+     "kind": "rettesnor",
+     "text": {
+      "no": "Bevegelsesenergien må brukes opp før bilen stopper, derfor øker bremselengden med kvadratet av fartsøkningen.",
+      "th": "พลังงานจลน์ต้องถูกใช้หมดก่อนรถหยุด ระยะเบรกจึงเพิ่มตามกำลังสองของการเพิ่มความเร็ว",
+      "en": "The kinetic energy must be used up before the car stops, so braking distance rises with the square of the speed increase."
+     }
+    }
+   ],
+   "michael_basis": {
+    "no": "Rettesnor (ikke lovkrav): Stopplengde = reaksjonslengde + bremselengde. Som tommelfingerregel regner man ca. ett sekunds reaksjonstid. Omregning: 50 km/t er ca. 14 m i sekundet, 80 km/t ca. 22 m i sekundet. Rettesnor (ikke lovkrav): Bevegelsesenergien må brukes opp før bilen stopper, derfor øker bremselengden med kvadratet av fartsøkningen.",
+    "th": "หลักคร่าว ๆ (ไม่ใช่ข้อบังคับ): ระยะหยุด = ระยะตอบสนอง + ระยะเบรก หลักคร่าว ๆ คิดเวลาตอบสนองประมาณ 1 วินาที การแปลง: 50 กม./ชม. ประมาณ 14 ม./วินาที 80 กม./ชม. ประมาณ 22 ม./วินาที หลักคร่าว ๆ (ไม่ใช่ข้อบังคับ): พลังงานจลน์ต้องถูกใช้หมดก่อนรถหยุด ระยะเบรกจึงเพิ่มตามกำลังสองของการเพิ่มความเร็ว",
+    "en": "Rule of thumb (not a legal requirement): Stopping distance = reaction distance + braking distance. As a rule of thumb about one second of reaction time is counted. Conversion: 50 km/h is about 14 m a second, 80 km/h about 22 m a second. Rule of thumb (not a legal requirement): The kinetic energy must be used up before the car stops, so braking distance rises with the square of the speed increase."
+   },
+   "has_unconfirmed": false,
+   "editor_notes": []
+  },
+  "bb-s78b": {
+   "claims": [
+    {
+     "kind": "rettesnor",
+     "text": {
+      "no": "Svingkraften øker med kvadratet av fartsøkningen. Øker farten fra 30 til 60 km/t, øker svingkraften 4 ganger. Blir svingkraften større enn veigrepet, farer du ut av veien. Utforkjøring er et hovedproblem for unge, ferske førere. Lær å oppfatte veien riktig.",
+      "th": "แรงเหวี่ยงเพิ่มตามกำลังสองของความเร็ว ถ้าเพิ่มจาก 30 เป็น 60 กม./ชม. แรงเหวี่ยงเพิ่ม 4 เท่า ถ้าแรงเหวี่ยงมากกว่าการยึดเกาะ คุณจะพุ่งออกนอกถนน การตกถนนเป็นปัญหาหลักของผู้ขับหนุ่มสาวมือใหม่ เรียนรู้ที่จะอ่านถนนให้ถูกต้อง",
+      "en": "Cornering force rises with the square of the speed increase. If speed rises from 30 to 60 km/h, cornering force rises 4 times. If cornering force exceeds grip, you go off the road. Running off the road is a main problem for young, new drivers. Learn to read the road correctly."
+     }
+    }
+   ],
+   "michael_basis": {
+    "no": "Rettesnor (ikke lovkrav): Svingkraften øker med kvadratet av fartsøkningen. Øker farten fra 30 til 60 km/t, øker svingkraften 4 ganger. Blir svingkraften større enn veigrepet, farer du ut av veien. Utforkjøring er et hovedproblem for unge, ferske førere. Lær å oppfatte veien riktig.",
+    "th": "หลักคร่าว ๆ (ไม่ใช่ข้อบังคับ): แรงเหวี่ยงเพิ่มตามกำลังสองของความเร็ว ถ้าเพิ่มจาก 30 เป็น 60 กม./ชม. แรงเหวี่ยงเพิ่ม 4 เท่า ถ้าแรงเหวี่ยงมากกว่าการยึดเกาะ คุณจะพุ่งออกนอกถนน การตกถนนเป็นปัญหาหลักของผู้ขับหนุ่มสาวมือใหม่ เรียนรู้ที่จะอ่านถนนให้ถูกต้อง",
+    "en": "Rule of thumb (not a legal requirement): Cornering force rises with the square of the speed increase. If speed rises from 30 to 60 km/h, cornering force rises 4 times. If cornering force exceeds grip, you go off the road. Running off the road is a main problem for young, new drivers. Learn to read the road correctly."
+   },
+   "has_unconfirmed": false,
+   "editor_notes": []
+  },
+  "bb-s81": {
+   "claims": [
+    {
+     "kind": "rettesnor",
+     "text": {
+      "no": "Fareskiltene brukes helst for å varsle en fare som er vanskelig å oppdage i tide. Eksempler: glatt kjørebane, veiarbeid, dyr, annen fare (med underskilt). Fartsgrenseskilt: fartsgrense, slutt på særskilt fartsgrense, fartsgrensesone, anbefalt fart.",
+      "th": "ป้ายเตือนใช้เพื่อเตือนอันตรายที่ยากจะสังเกตได้ทัน ตัวอย่าง: ถนนลื่น งานทาง สัตว์ อันตรายอื่น (พร้อมป้ายเสริม) ป้ายจำกัดความเร็ว: ขีดจำกัดความเร็ว สิ้นสุดขีดจำกัดพิเศษ เขตจำกัดความเร็ว ความเร็วแนะนำ",
+      "en": "Warning signs are best used to warn of a hazard that is hard to spot in time. Examples: slippery road, roadworks, animals, other danger (with a plate). Speed-limit signs: speed limit, end of special speed limit, speed-limit zone, recommended speed."
+     }
+    },
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Trafikkreglene § 13 nr. 3: på gågate eller gatetun må det ikke kjøres fortere enn i gangfart.",
+      "th": "กฎจราจร § 13 ข้อ 3: ในถนนคนเดินหรือย่านถนนคนเดิน ห้ามขับเร็วกว่าความเร็วเดินเท้า",
+      "en": "Traffic rules § 13 no. 3: on a pedestrian street or shared street you must not drive faster than walking pace."
+     },
+     "source": "Trafikkreglene § 13 — https://lovdata.no/forskrift/1986-03-21-747/§13",
+     "checked_at": "2026-10-10"
+    }
+   ],
+   "michael_basis": {
+    "no": "Rettesnor (ikke lovkrav): Fareskiltene brukes helst for å varsle en fare som er vanskelig å oppdage i tide. Eksempler: glatt kjørebane, veiarbeid, dyr, annen fare (med underskilt). Fartsgrenseskilt: fartsgrense, slutt på særskilt fartsgrense, fartsgrensesone, anbefalt fart. Lovkrav: Trafikkreglene § 13 nr. 3: på gågate eller gatetun må det ikke kjøres fortere enn i gangfart.",
+    "th": "หลักคร่าว ๆ (ไม่ใช่ข้อบังคับ): ป้ายเตือนใช้เพื่อเตือนอันตรายที่ยากจะสังเกตได้ทัน ตัวอย่าง: ถนนลื่น งานทาง สัตว์ อันตรายอื่น (พร้อมป้ายเสริม) ป้ายจำกัดความเร็ว: ขีดจำกัดความเร็ว สิ้นสุดขีดจำกัดพิเศษ เขตจำกัดความเร็ว ความเร็วแนะนำ ข้อกำหนดตามกฎหมาย: กฎจราจร § 13 ข้อ 3: ในถนนคนเดินหรือย่านถนนคนเดิน ห้ามขับเร็วกว่าความเร็วเดินเท้า",
+    "en": "Rule of thumb (not a legal requirement): Warning signs are best used to warn of a hazard that is hard to spot in time. Examples: slippery road, roadworks, animals, other danger (with a plate). Speed-limit signs: speed limit, end of special speed limit, speed-limit zone, recommended speed. Legal requirement: Traffic rules § 13 no. 3: on a pedestrian street or shared street you must not drive faster than walking pace."
+   },
+   "has_unconfirmed": false,
+   "editor_notes": []
+  },
+  "bb-s82": {
+   "claims": [
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Trafikkreglene § 13 nr. 4: på strekninger med særskilt fartsgrense høyere enn 80 km/t må motorvogn med tillatt totalvekt over 3500 kg, eller motorvogn med tilhenger, ikke kjøres fortere enn 80 km/t. Unntak gjelder blant annet utrykningskjøretøy, personbil (M1) uten tilhenger med tillatt totalvekt til 7500 kg og egnet dekk, buss uten tilhenger i visse klasser (maks 100 km/t), og vogntog som oppfyller særlige krav (maks 100 km/t).",
+      "th": "กฎจราจร § 13 ข้อ 4: บนช่วงถนนที่มีขีดจำกัดความเร็วพิเศษสูงกว่า 80 กม./ชม. ยานยนต์ที่มีน้ำหนักรวมที่อนุญาตเกิน 3,500 กก. หรือยานยนต์ที่ลากรถพ่วงต้องไม่ขับเร็วกว่า 80 กม./ชม. มีข้อยกเว้น เช่น รถฉุกเฉิน รถยนต์นั่ง (M1) ที่ไม่ลากรถพ่วงและมีน้ำหนักรวมที่อนุญาตไม่เกิน 7,500 กก. พร้อมยางที่เหมาะสม รถโดยสารที่ไม่ลากรถพ่วงในบางประเภท (สูงสุด 100 กม./ชม.) และขบวนรถพ่วงที่เป็นไปตามข้อกำหนดพิเศษ (สูงสุด 100 กม./ชม.)",
+      "en": "Traffic rules § 13 no. 4: on stretches with a special speed limit above 80 km/h, a motor vehicle with a permitted gross weight over 3,500 kg, or a motor vehicle with a trailer, must not be driven faster than 80 km/h. Exceptions apply to, among others, emergency vehicles, a passenger car (M1) without a trailer with a permitted gross weight up to 7,500 kg and suitable tyres, a bus without a trailer in certain classes (max 100 km/h), and combinations meeting special requirements (max 100 km/h)."
+     },
+     "source": "Trafikkreglene § 13 — https://lovdata.no/forskrift/1986-03-21-747/§13",
+     "checked_at": "2026-10-10"
+    },
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Statens vegvesen (2022): grensen på 60 km/t for tilhenger uten bremser er opphevet; samme fartsgrenser gjelder som for andre kjøretøy så lenge veien har fartsgrense inntil 80 km/t.",
+      "th": "กรมทางหลวงนอร์เวย์ (2022): ขีดจำกัด 60 กม./ชม. สำหรับรถพ่วงไม่มีเบรกถูกยกเลิก ใช้ขีดจำกัดเดียวกับยานพาหนะอื่นตราบที่ถนนมีขีดจำกัดไม่เกิน 80 กม./ชม.",
+      "en": "Norwegian Public Roads Administration (2022): the 60 km/h limit for a trailer without brakes has been abolished; the same speed limits apply as for other vehicles as long as the road has a limit of up to 80 km/h."
+     },
+     "source": "Statens vegvesen, nye fartsgrenser for tilhengere (2022) — https://www.vegvesen.no/om-oss/presse/aktuelt/nasjonalt/nye-fartsgrenser-for-tilhengere/",
+     "checked_at": "2026-10-10"
+    }
+   ],
+   "michael_basis": {
+    "no": "Lovkrav: Trafikkreglene § 13 nr. 4: på strekninger med særskilt fartsgrense høyere enn 80 km/t må motorvogn med tillatt totalvekt over 3500 kg, eller motorvogn med tilhenger, ikke kjøres fortere enn 80 km/t. Unntak gjelder blant annet utrykningskjøretøy, personbil (M1) uten tilhenger med tillatt totalvekt til 7500 kg og egnet dekk, buss uten tilhenger i visse klasser (maks 100 km/t), og vogntog som oppfyller særlige krav (maks 100 km/t). Lovkrav: Statens vegvesen (2022): grensen på 60 km/t for tilhenger uten bremser er opphevet; samme fartsgrenser gjelder som for andre kjøretøy så lenge veien har fartsgrense inntil 80 km/t.",
+    "th": "ข้อกำหนดตามกฎหมาย: กฎจราจร § 13 ข้อ 4: บนช่วงถนนที่มีขีดจำกัดความเร็วพิเศษสูงกว่า 80 กม./ชม. ยานยนต์ที่มีน้ำหนักรวมที่อนุญาตเกิน 3,500 กก. หรือยานยนต์ที่ลากรถพ่วงต้องไม่ขับเร็วกว่า 80 กม./ชม. มีข้อยกเว้น เช่น รถฉุกเฉิน รถยนต์นั่ง (M1) ที่ไม่ลากรถพ่วงและมีน้ำหนักรวมที่อนุญาตไม่เกิน 7,500 กก. พร้อมยางที่เหมาะสม รถโดยสารที่ไม่ลากรถพ่วงในบางประเภท (สูงสุด 100 กม./ชม.) และขบวนรถพ่วงที่เป็นไปตามข้อกำหนดพิเศษ (สูงสุด 100 กม./ชม.) ข้อกำหนดตามกฎหมาย: กรมทางหลวงนอร์เวย์ (2022): ขีดจำกัด 60 กม./ชม. สำหรับรถพ่วงไม่มีเบรกถูกยกเลิก ใช้ขีดจำกัดเดียวกับยานพาหนะอื่นตราบที่ถนนมีขีดจำกัดไม่เกิน 80 กม./ชม.",
+    "en": "Legal requirement: Traffic rules § 13 no. 4: on stretches with a special speed limit above 80 km/h, a motor vehicle with a permitted gross weight over 3,500 kg, or a motor vehicle with a trailer, must not be driven faster than 80 km/h. Exceptions apply to, among others, emergency vehicles, a passenger car (M1) without a trailer with a permitted gross weight up to 7,500 kg and suitable tyres, a bus without a trailer in certain classes (max 100 km/h), and combinations meeting special requirements (max 100 km/h). Legal requirement: Norwegian Public Roads Administration (2022): the 60 km/h limit for a trailer without brakes has been abolished; the same speed limits apply as for other vehicles as long as the road has a limit of up to 80 km/h."
+   },
+   "has_unconfirmed": false,
+   "editor_notes": []
+  },
+  "bb-s84": {
+   "claims": [
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Trafikkreglene § 5 nr. 3: avstanden til forankjørende skal være så stor at det ikke oppstår fare for påkjøring dersom den forankjørende saktner farten eller stanser, og slik at forbikjørende uten fare kan kjøre inn mellom kjøretøyene.",
+      "th": "กฎจราจร § 5 ข้อ 3: ระยะห่างจากรถคันหน้าต้องมากพอที่จะไม่เกิดอันตรายจากการชนท้ายถ้ารถคันหน้าชะลอหรือหยุด และให้รถที่แซงเข้ามาระหว่างยานพาหนะได้โดยปลอดภัย",
+      "en": "Traffic rules § 5 no. 3: the distance to the vehicle ahead must be so large that there is no danger of a rear-end collision if the vehicle ahead slows or stops, and so that overtaking vehicles can safely move in between the vehicles."
+     },
+     "source": "Trafikkreglene § 5 — https://lovdata.no/forskrift/1986-03-21-747/§5",
+     "checked_at": "2026-10-10"
+    },
+    {
+     "kind": "rettesnor",
+     "text": {
+      "no": "Tre sekunder er en vanlig tommelfingerregel for trygg avstand (tell «1001, 1002, 1003»). Hold større avstand ved høy fart og på glatt føre. Ved 80 km/t er 3 sekunder ca. 66 meter.",
+      "th": "สามวินาทีเป็นหลักคร่าว ๆ ทั่วไปสำหรับระยะปลอดภัย (นับ “หนึ่งพัน หนึ่งพันหนึ่ง หนึ่งพันสอง”) เว้นระยะมากขึ้นเมื่อขับเร็วและถนนลื่น ที่ 80 กม./ชม. 3 วินาทีคือประมาณ 66 เมตร",
+      "en": "Three seconds is a common rule of thumb for a safe distance (count '1001, 1002, 1003'). Keep a larger distance at high speed and on slippery roads. At 80 km/h, 3 seconds is about 66 metres."
+     }
+    }
+   ],
+   "michael_basis": {
+    "no": "Lovkrav: Trafikkreglene § 5 nr. 3: avstanden til forankjørende skal være så stor at det ikke oppstår fare for påkjøring dersom den forankjørende saktner farten eller stanser, og slik at forbikjørende uten fare kan kjøre inn mellom kjøretøyene. Rettesnor (ikke lovkrav): Tre sekunder er en vanlig tommelfingerregel for trygg avstand (tell «1001, 1002, 1003»). Hold større avstand ved høy fart og på glatt føre. Ved 80 km/t er 3 sekunder ca. 66 meter.",
+    "th": "ข้อกำหนดตามกฎหมาย: กฎจราจร § 5 ข้อ 3: ระยะห่างจากรถคันหน้าต้องมากพอที่จะไม่เกิดอันตรายจากการชนท้ายถ้ารถคันหน้าชะลอหรือหยุด และให้รถที่แซงเข้ามาระหว่างยานพาหนะได้โดยปลอดภัย หลักคร่าว ๆ (ไม่ใช่ข้อบังคับ): สามวินาทีเป็นหลักคร่าว ๆ ทั่วไปสำหรับระยะปลอดภัย (นับ “หนึ่งพัน หนึ่งพันหนึ่ง หนึ่งพันสอง”) เว้นระยะมากขึ้นเมื่อขับเร็วและถนนลื่น ที่ 80 กม./ชม. 3 วินาทีคือประมาณ 66 เมตร",
+    "en": "Legal requirement: Traffic rules § 5 no. 3: the distance to the vehicle ahead must be so large that there is no danger of a rear-end collision if the vehicle ahead slows or stops, and so that overtaking vehicles can safely move in between the vehicles. Rule of thumb (not a legal requirement): Three seconds is a common rule of thumb for a safe distance (count '1001, 1002, 1003'). Keep a larger distance at high speed and on slippery roads. At 80 km/h, 3 seconds is about 66 metres."
+   },
+   "has_unconfirmed": false,
+   "editor_notes": []
+  },
+  "bb-s85": {
+   "claims": [
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Trafikkreglene § 6 nr. 2: ved sving til høyre skal det kjøres så nær høyre kant av kjørebanen som mulig. På tovegs kjørebane skal det ved sving til venstre kjøres så nær midten av kjørebanen som mulig.",
+      "th": "กฎจราจร § 6 ข้อ 2: เมื่อเลี้ยวขวาต้องขับชิดขอบขวาของช่องการจราจรให้มากที่สุด บนช่องการจราจรสองทิศเมื่อเลี้ยวซ้ายต้องขับชิดกลางให้มากที่สุด",
+      "en": "Traffic rules § 6 no. 2: when turning right, drive as near the right edge of the carriageway as possible. On a two-way carriageway, when turning left drive as near the middle as possible."
+     },
+     "source": "Trafikkreglene § 6 — https://lovdata.no/forskrift/1986-03-21-747/§6",
+     "checked_at": "2026-10-10"
+    },
+    {
+     "kind": "rettesnor",
+     "text": {
+      "no": "Sjekk blindsonen før plassering og om nødvendig før du svinger. Ta et blikk inn i veien du skal inn på; parkerte biler kan hindre sikten.",
+      "th": "ตรวจจุดบอดก่อนวางตำแหน่ง และก่อนเลี้ยวถ้าจำเป็น มองเข้าไปในถนนที่จะเลี้ยวเข้า รถจอดอาจบังทัศนวิสัย",
+      "en": "Check the blind zone before positioning and if needed before you turn. Take a look into the road you turn into; parked cars can block the view."
+     }
+    }
+   ],
+   "michael_basis": {
+    "no": "Lovkrav: Trafikkreglene § 6 nr. 2: ved sving til høyre skal det kjøres så nær høyre kant av kjørebanen som mulig. På tovegs kjørebane skal det ved sving til venstre kjøres så nær midten av kjørebanen som mulig. Rettesnor (ikke lovkrav): Sjekk blindsonen før plassering og om nødvendig før du svinger. Ta et blikk inn i veien du skal inn på; parkerte biler kan hindre sikten.",
+    "th": "ข้อกำหนดตามกฎหมาย: กฎจราจร § 6 ข้อ 2: เมื่อเลี้ยวขวาต้องขับชิดขอบขวาของช่องการจราจรให้มากที่สุด บนช่องการจราจรสองทิศเมื่อเลี้ยวซ้ายต้องขับชิดกลางให้มากที่สุด หลักคร่าว ๆ (ไม่ใช่ข้อบังคับ): ตรวจจุดบอดก่อนวางตำแหน่ง และก่อนเลี้ยวถ้าจำเป็น มองเข้าไปในถนนที่จะเลี้ยวเข้า รถจอดอาจบังทัศนวิสัย",
+    "en": "Legal requirement: Traffic rules § 6 no. 2: when turning right, drive as near the right edge of the carriageway as possible. On a two-way carriageway, when turning left drive as near the middle as possible. Rule of thumb (not a legal requirement): Check the blind zone before positioning and if needed before you turn. Take a look into the road you turn into; parked cars can block the view."
+   },
+   "has_unconfirmed": false,
+   "editor_notes": []
+  },
+  "bb-s85b": {
+   "claims": [
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Trafikkreglene § 6 nr. 2: på tovegs kjørebane skal det ved sving til venstre kjøres så nær midten av kjørebanen som mulig. Ved sving til høyre så nær høyre kant som mulig.",
+      "th": "กฎจราจร § 6 ข้อ 2: บนช่องการจราจรสองทิศเมื่อเลี้ยวซ้ายต้องขับชิดกลางให้มากที่สุด เมื่อเลี้ยวขวาชิดขอบขวาให้มากที่สุด",
+      "en": "Traffic rules § 6 no. 2: on a two-way carriageway, when turning left drive as near the middle as possible. When turning right, as near the right edge as possible."
+     },
+     "source": "Trafikkreglene § 6 — https://lovdata.no/forskrift/1986-03-21-747/§6",
+     "checked_at": "2026-10-10"
+    },
+    {
+     "kind": "rettesnor",
+     "text": {
+      "no": "Kjør MOT midten, ikke I midten. Bilene bak kan kjøre forbi på høyre side hvis det er plass. Hold deg godt innenfor feltet i veien du kjører inn på.",
+      "th": "ขับไปทางกลาง ไม่ใช่ในกลาง รถข้างหลังแซงทางขวาได้ถ้ามีที่ ให้อยู่ภายในเลนของถนนที่เข้าอย่างมั่นคง",
+      "en": "Drive TOWARDS the middle, not IN the middle. Cars behind may pass on the right if there is room. Stay well within the lane of the road you turn into."
+     }
+    }
+   ],
+   "michael_basis": {
+    "no": "Lovkrav: Trafikkreglene § 6 nr. 2: på tovegs kjørebane skal det ved sving til venstre kjøres så nær midten av kjørebanen som mulig. Ved sving til høyre så nær høyre kant som mulig. Rettesnor (ikke lovkrav): Kjør MOT midten, ikke I midten. Bilene bak kan kjøre forbi på høyre side hvis det er plass. Hold deg godt innenfor feltet i veien du kjører inn på.",
+    "th": "ข้อกำหนดตามกฎหมาย: กฎจราจร § 6 ข้อ 2: บนช่องการจราจรสองทิศเมื่อเลี้ยวซ้ายต้องขับชิดกลางให้มากที่สุด เมื่อเลี้ยวขวาชิดขอบขวาให้มากที่สุด หลักคร่าว ๆ (ไม่ใช่ข้อบังคับ): ขับไปทางกลาง ไม่ใช่ในกลาง รถข้างหลังแซงทางขวาได้ถ้ามีที่ ให้อยู่ภายในเลนของถนนที่เข้าอย่างมั่นคง",
+    "en": "Legal requirement: Traffic rules § 6 no. 2: on a two-way carriageway, when turning left drive as near the middle as possible. When turning right, as near the right edge as possible. Rule of thumb (not a legal requirement): Drive TOWARDS the middle, not IN the middle. Cars behind may pass on the right if there is room. Stay well within the lane of the road you turn into."
+   },
+   "has_unconfirmed": false,
+   "editor_notes": []
+  }
+ }
+}

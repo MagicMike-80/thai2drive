@@ -1,0 +1,67 @@
+{
+  "version": 1,
+  "locked_at": "2026-10-20",
+  "source": "Lærebok Klasse B, innholdsfortegnelse (PDF s. 2–3, trykt innhold)",
+  "rule": "Bildeboka har nøyaktig 4 hoveddeler. Avsnitt bruker bokas egne nummer (1.1, 2.3, 3.2, 4.6). Uten nummer i boka er innslaget en underseksjon (subsection) av avsnittet foran, slik innholdsfortegnelsen viser det. Ingen ch01–ch28-inndeling.",
+  "parts": [
+    {"part": 1, "title": {"no": "Innledning", "th": "บทนำ", "en": "Introduction"}, "first_page": 11,
+     "sections": [
+       {"section_no": "1.1", "title": "Informasjon", "first_page": 11, "subsections": []},
+       {"section_no": "1.2", "title": "Kravene til den som vil ha førerkort", "first_page": 14,
+        "subsections": [{"title": "Utvikling av veitrafikken", "first_page": 16}, {"title": "Tall om trafikk og trafikkulykker", "first_page": 16}, {"title": "Ulykker", "first_page": 16}]}
+     ]},
+    {"part": 2, "title": {"no": "Mennesket i trafikken", "th": "มนุษย์ในการจราจร", "en": "People in traffic"}, "first_page": 18,
+     "sections": [
+       {"section_no": "2.1", "title": "Trafikkpsykologi", "first_page": 18, "subsections": []},
+       {"section_no": "2.2", "title": "Kjøreprosessen", "first_page": 18,
+        "subsections": [{"title": "Hvordan bedømmer vi fart og avstand", "first_page": 20}, {"title": "Oppmerksomhet", "first_page": 22}, {"title": "Hva er reaksjon?", "first_page": 22}]},
+       {"section_no": "2.3", "title": "Faktorer som virker inn på våre handlinger i trafikken", "first_page": 23,
+        "subsections": [{"title": "Alkohol og bilførere", "first_page": 25}, {"title": "Kjørevaner og personlighet", "first_page": 26}, {"title": "Sykdom", "first_page": 27}, {"title": "Barn og trafikk", "first_page": 27}, {"title": "De eldre i trafikken", "first_page": 30}, {"title": "Funksjonshemmede og trafikk", "first_page": 31}]},
+       {"section_no": "2.4", "title": "Interessemotsetninger i trafikkmiljøet", "first_page": 32,
+        "subsections": [{"title": "Trafikkens krav og menneskets kapasitet", "first_page": 34}]}
+     ]},
+    {"part": 3, "title": {"no": "Kjøretøyet, veien og trafikkmiljøet", "th": "ยานพาหนะ ถนน และสภาพแวดล้อมการจราจร", "en": "The vehicle, the road and the traffic environment"}, "first_page": 35,
+     "sections": [
+       {"section_no": "3.1", "title": "Kjøretøyet", "first_page": 35,
+        "subsections": [{"title": "Bremser", "first_page": 37}, {"title": "Hjul og dekk", "first_page": 41}, {"title": "Styring", "first_page": 43}, {"title": "Lys og lysutstyr", "first_page": 45}, {"title": "Vognkort", "first_page": 48}]},
+       {"section_no": "3.2", "title": "Veien", "first_page": 49,
+        "subsections": [{"title": "Veioppmerking", "first_page": 51}, {"title": "Trafikklyssignaler", "first_page": 55}, {"title": "Trafikkskiltene", "first_page": 59}, {"title": "Myndighetspyramiden", "first_page": 63}]}
+     ]},
+    {"part": 4, "title": {"no": "Atferd i trafikken", "th": "พฤติกรรมในการจราจร", "en": "Behaviour in traffic"}, "first_page": 64,
+     "sections": [
+       {"section_no": "4.0", "title": "Risiko (innledning til Del 4)", "first_page": 64, "derived": true, "subsections": []},
+       {"section_no": "4.1", "title": "Grunnregler for atferd i trafikken", "first_page": 64, "subsections": []},
+       {"section_no": "4.2", "title": "Observasjonsteknikk", "first_page": 66, "subsections": []},
+       {"section_no": "4.3", "title": "Signal og tegn", "first_page": 71, "subsections": []},
+       {"section_no": "4.4", "title": "Fartsavpasning", "first_page": 75,
+        "subsections": [{"title": "Veigrep", "first_page": 78}, {"title": "Fartstilpassing og fareskilt", "first_page": 81}, {"title": "Fartsgrense for spesielle kjøretøyer", "first_page": 82}]},
+       {"section_no": "4.5", "title": "Kjøretøyets plassering på veien", "first_page": 82,
+        "subsections": [{"title": "Plassering foran og i veikryss", "first_page": 85}, {"title": "Gater med enveiskjøring", "first_page": 90}, {"title": "Kjøring i rundkjøringer", "first_page": 92}, {"title": "Plassendring og feltskifte", "first_page": 96}, {"title": "Kollektivfelt og sambruksfelt", "first_page": 99}]},
+       {"section_no": "4.6", "title": "Vikeplikt", "first_page": 104, "subsections": []},
+       {"section_no": "4.7", "title": "Rygging og vending", "first_page": 116, "subsections": []},
+       {"section_no": "4.8", "title": "Stans og parkering", "first_page": 120, "subsections": []},
+       {"section_no": "4.9", "title": "Risiko", "first_page": 129, "subsections": []},
+       {"section_no": "4.10", "title": "Mørkekjøring", "first_page": 133,
+        "subsections": [{"title": "Fartstilpassing i mørke", "first_page": 133}, {"title": "Lysbruk ved forbikjøring", "first_page": 136}, {"title": "Parkering i mørke", "first_page": 137}, {"title": "Nødstopp i mørke", "first_page": 139}]},
+       {"section_no": "4.11", "title": "Planovergang", "first_page": 139, "subsections": [{"title": "Sporvogn", "first_page": 140}]},
+       {"section_no": "4.12", "title": "Motorvei og motortrafikkvei", "first_page": 141, "subsections": []},
+       {"section_no": "4.13", "title": "Landeveiskjøring", "first_page": 143, "subsections": []},
+       {"section_no": "4.14", "title": "Forbikjøring", "first_page": 151, "subsections": []}
+     ]}
+  ],
+  "outside_locked_structure": {
+    "note": "Finnes i boka, men er ikke en av de 4 låste hoveddelene. Ingen rader er laget ennå. Krever eget valg: legges som vedlegg/oppslag, eller tas med som egen del senere.",
+    "items": [
+      {"title": "Del 5 Bilføreransvaret (5.1–5.6)", "first_page": 158, "last_page": 173},
+      {"title": "Trafikkreglene", "first_page": 174},
+      {"title": "Trafikkskilter med skiltforskrift", "first_page": 181},
+      {"title": "Veioppmerking", "first_page": 201},
+      {"title": "Trafikklyssignaler og anvisning gitt av politiet", "first_page": 204},
+      {"title": "Veitrafikkloven", "first_page": 206}
+    ],
+    "front_matter": ["Forord (s. 5)", "Noen gode råd før du begynner (s. 6)", "En viktig avgjørelse (s. 8)"]
+  },
+  "deprecated_models": [
+    {"name": "28-kapittelmodellen (CH01–CH28)", "where": "backend/studybook_web.py (CH01–CH28), MongoDB studiebok_chapters, /api/studiebok, backend/seed_studiebok.py, content_packs/studiebok_i18n*.json", "status": "utfaset i bildebok-datamodellen. Ikke slettet i produksjon: krever sikkerhetskopi og eget oppdrag til Anti (se docs/bildebok/UTFASING_28_KAPITLER.md)"}
+  ]
+}

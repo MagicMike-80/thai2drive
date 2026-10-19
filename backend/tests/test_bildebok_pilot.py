@@ -7,8 +7,8 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
-from bildebok_lookup import find_page, find_pages, load_pack  # noqa: E402
-from build_bildebok_preview import build_html, build_map, OUT_MAP, OUT_APPROVAL, row_hash  # noqa: E402
+from bildebok_lookup import find_page, find_pages, load_pack, safe_basis  # noqa: E402
+from build_bildebok_preview import build_html, build_map, map_with_preserved_sidecar, SIDECAR_MARKER, OUT_MAP, OUT_APPROVAL, row_hash  # noqa: E402
 from validate_bildebok import validate_pack  # noqa: E402
 
 PACK = load_pack()
@@ -81,7 +81,11 @@ def test_known_uncertain_rows_are_marked_for_the_adviser():
 
 
 def test_sidekart_file_matches_pack():
-    assert OUT_MAP.read_text(encoding="utf-8") == build_map(PACK)
+    text = OUT_MAP.read_text(encoding="utf-8")
+    generated, marker, sidecar = text.partition(SIDECAR_MARKER)
+    assert marker and sidecar.strip()
+    assert generated.rstrip() == build_map(PACK).rstrip()
+    assert map_with_preserved_sidecar(text, build_map(PACK)).endswith(SIDECAR_MARKER + "\n" + sidecar.lstrip("\r\n"))
 
 
 def test_student_view_has_29_cards_per_language_with_one_correct_answer_each():
@@ -104,7 +108,7 @@ def test_michael_lookup_finds_every_row_by_title_in_all_languages():
 def test_check_questions_are_situation_based_and_complete_in_all_languages():
     for r in PACK["pages"]:
         cq = r["check_question"]
-        assert len(cq["options"]) == 2 and cq["answer"] in (0, 1), r["id"]
+        assert 2 <= len(cq["options"]) <= 4 and 0 <= cq["answer"] < len(cq["options"]), r["id"]
         assert len(cq["q"]["no"].split()) >= 6 and cq["q"]["no"].rstrip().endswith(("?", ".")), r["id"]
         assert all(cq["q"][l].strip() for l in ("no", "th", "en")), r["id"]
 
@@ -134,7 +138,8 @@ def test_golden_michael_cases_three_languages():
     for lang, question, rid, image in GOLDEN:
         hit = find_page(question, lang, PACK)
         assert hit and hit["id"] == rid and hit["image_file"] == image, (lang, question, hit and hit["id"])
-        assert hit["michael_basis"] == next(r for r in PACK["pages"] if r["id"] == rid)["michael_basis"][lang]
+        row = next(r for r in PACK["pages"] if r["id"] == rid)
+        assert hit["michael_basis"] == safe_basis(row, lang)  # trygg lærerbasis, ikke råpakkens basis
 
 
 def test_approval_table_lists_every_row_with_current_hash():
@@ -148,8 +153,8 @@ import re  # noqa: E402
 
 _EN_ONLY = {"the", "and", "you", "your", "are", "with", "must", "not", "of", "it", "if", "when", "from", "should", "can", "an"}
 _NO_ONLY = {"og", "ikke", "du", "på", "til", "som", "det", "med", "har", "kan", "må", "er", "skal", "å", "hva", "eller", "når"}
-_NO_BIG = _NO_ONLY | {"en", "et", "av", "fra", "ved", "om", "men", "seg", "så", "bil", "bilen", "vei", "veien", "barn", "sjåfør", "hvis", "også", "alle", "mer", "mindre", "før", "etter", "kjøring", "kjører", "bremse", "stopp", "hold", "vær", "ta", "ser", "se", "teori", "år", "timer", "dag", "natt", "ned", "opp", "fart", "farten", "tid", "tiden", "trafikk", "trafikken", "øvelseskjøring", "ledsager", "førerkort", "oppkjøring", "henger", "vognkortet", "trafikalt", "grunnkurs", "grunnleggende", "opplæring", "trinn", "antall", "biler", "vokser", "raskere", "veilengden", "ulykker", "skyldes", "menneskelig", "svikt", "fleste", "vanskeligst", "små", "kjøretøy", "mange", "føreren", "sovnet", "rattet", "utåndingsluft", "milligram", "liter", "luft", "hensyn", "ta", "blikket", "automatisk", "mot", "noe", "sidesynet", "tar", "bare", "noen", "minutter", "halvveis", "platene", "sluring", "kraften", "overføres", "delvis", "stå", "ro", "motor", "gang", "trykk", "hardt", "sekunder", "bruk", "giret", "bakkene", "bremsene", "hvile", "riktig", "lufttrykk", "står", "instruksjonsbok", "mye", "last", "bak", "gir", "overstyring", "foran", "understyring", "bilen", "bilens", "dekk", "dekkene", "veien", "lys", "lyset", "linjen", "feltet", "fortsetter", "blir", "stående", "helt", "bredt", "først", "svinger", "venstre", "høyre", "kant", "ut", "rett", "forbikjøring", "rushtrafikk", "fartsøkning", "bremselengden", "bremselengde", "dobbelt", "ganger", "kvadratet", "passerer", "plass", "tegn", "signal", "underskilt", "farten", "tilpass", "hindring", "parkert", "bilene", "høyt", "avstand", "stopplengde", "reaksjonslengde", "bevegelsesenergi", "farlig", "følgesvenn", "tiden", "sekunder", "sekund", "regner", "gjennomsnitt", "sekunds", "reaksjonstid", "gul", "midtlinje", "bestemmer", "plasseringen", "mangler", "oppmerking", "finn", "midten", "selv"}
-_EN_BIG = _EN_ONLY | {"is", "be", "have", "has", "will", "car", "road", "child", "children", "driver", "drive", "driving", "speed", "keep", "take", "see", "look", "stop", "learner", "hours", "years", "day", "night", "more", "less", "before", "after", "all", "also", "but", "slow", "down", "traffic", "time", "practice", "supervisor", "licence", "trailer", "certificate", "test", "week", "weeks", "months", "theory", "first", "then", "we", "practise", "together", "tiredness", "sharp", "vision", "narrow", "sector", "people", "use", "white", "cane", "some", "guide", "dog", "think", "easy", "only", "road", "carriageway", "lane", "private", "public", "brake", "brakes", "pedal", "steering", "load", "tyres", "light", "lights", "line", "signal", "no", "yes", "that", "this", "plates", "add", "adds", "marking", "markings", "signs", "obstacles", "stopping", "distance", "reaction", "braking", "kinetic", "energy", "companion", "dangerous", "emergency", "vehicles", "vehicle", "flashing", "yellow", "blue", "clear", "help", "helps", "situations", "ambulance", "bus", "stops", "stop", "turn", "turns", "left", "right", "lanes", "edge", "middle", "position", "passes", "pass", "signals", "slowly", "fast", "faster", "limit", "wet", "dry", "grip", "skid", "steer", "second", "seconds", "double", "four", "times", "make", "room", "without", "creating", "danger", "others", "most", "rule", "as"}
+_NO_BIG = _NO_ONLY | {"en", "et", "av", "fra", "ved", "om", "men", "seg", "så", "bil", "bilen", "vei", "veien", "barn", "sjåfør", "hvis", "også", "alle", "mer", "mindre", "før", "etter", "kjøring", "kjører", "bremse", "stopp", "hold", "vær", "ta", "ser", "se", "teori", "år", "timer", "dag", "natt", "ned", "opp", "fart", "farten", "tid", "tiden", "trafikk", "trafikken", "øvelseskjøring", "ledsager", "førerkort", "oppkjøring", "henger", "vognkortet", "trafikalt", "grunnkurs", "grunnleggende", "opplæring", "trinn", "antall", "biler", "vokser", "raskere", "veilengden", "ulykker", "skyldes", "menneskelig", "svikt", "fleste", "vanskeligst", "små", "kjøretøy", "mange", "føreren", "sovnet", "rattet", "utåndingsluft", "milligram", "liter", "luft", "hensyn", "ta", "blikket", "automatisk", "mot", "noe", "sidesynet", "tar", "bare", "noen", "minutter", "halvveis", "platene", "sluring", "kraften", "overføres", "delvis", "stå", "ro", "motor", "gang", "trykk", "hardt", "sekunder", "bruk", "giret", "bakkene", "bremsene", "hvile", "riktig", "lufttrykk", "står", "instruksjonsbok", "mye", "last", "bak", "gir", "overstyring", "foran", "understyring", "bilen", "bilens", "dekk", "dekkene", "veien", "lys", "lyset", "linjen", "feltet", "fortsetter", "blir", "stående", "helt", "bredt", "først", "svinger", "venstre", "høyre", "kant", "ut", "rett", "forbikjøring", "rushtrafikk", "fartsøkning", "bremselengden", "bremselengde", "dobbelt", "ganger", "kvadratet", "passerer", "plass", "tegn", "signal", "underskilt", "farten", "tilpass", "hindring", "parkert", "bilene", "høyt", "avstand", "stopplengde", "reaksjonslengde", "bevegelsesenergi", "farlig", "følgesvenn", "tiden", "sekunder", "sekund", "regner", "gjennomsnitt", "sekunds", "reaksjonstid", "gul", "midtlinje", "bestemmer", "plasseringen", "mangler", "oppmerking", "finn", "midten", "selv", "påbudt", "kjøreretning", "forbyr", "venstresving", "høyresving", "vikeplikt", "gående", "syklende", "kryss", "gangfelt", "svinger", "slipper", "viser", "ser", "stanser", "stans", "snu", "veikryss", "tegngiving", "rundkjøring"}
+_EN_BIG = _EN_ONLY | {"is", "be", "have", "has", "will", "car", "road", "child", "children", "driver", "drive", "driving", "speed", "keep", "take", "see", "look", "stop", "learner", "hours", "years", "day", "night", "more", "less", "before", "after", "all", "also", "but", "slow", "down", "traffic", "time", "practice", "supervisor", "licence", "trailer", "certificate", "test", "week", "weeks", "months", "theory", "first", "then", "we", "practise", "together", "tiredness", "sharp", "vision", "narrow", "sector", "people", "use", "white", "cane", "some", "guide", "dog", "think", "easy", "only", "road", "carriageway", "lane", "private", "public", "brake", "brakes", "pedal", "steering", "load", "tyres", "light", "lights", "line", "signal", "no", "yes", "that", "this", "plates", "add", "adds", "marking", "markings", "signs", "obstacles", "stopping", "distance", "reaction", "braking", "kinetic", "energy", "companion", "dangerous", "emergency", "vehicles", "vehicle", "flashing", "yellow", "blue", "clear", "help", "helps", "situations", "ambulance", "bus", "stops", "stop", "turn", "turns", "left", "right", "lanes", "edge", "middle", "position", "passes", "pass", "signals", "slowly", "fast", "faster", "limit", "wet", "dry", "grip", "skid", "steer", "second", "seconds", "double", "four", "times", "make", "room", "without", "creating", "danger", "others", "most", "rule", "as", "because", "turning", "turn", "wholly", "partly", "pavement", "footpath", "path", "crossing", "nearer", "metres", "front", "places", "round", "yield", "cyclist", "cyclists", "straight", "ahead"}
 _LATIN_OK_IN_TH = {"AM", "ABS", "BAS", "ESP", "DSC", "HAV"}
 
 

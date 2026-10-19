@@ -1,0 +1,2495 @@
+{
+ "pack": "bildebok_batch5_s111_s126",
+ "book": "Lærebok Klasse B",
+ "scope": {
+  "printed_pages": [
+   111,
+   126
+  ],
+  "pdf_pages": [
+   106,
+   121
+  ],
+  "page_count": 16
+ },
+ "pages": [
+  {
+   "id": "bb-s111",
+   "book": "Lærebok Klasse B",
+   "printed_page": 111,
+   "pdf_page": 106,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.6 Vikeplikt – Sykkelfelt, sykkelvei, fortau og veiskulder",
+   "asset_id": "bb_s111_sykkelfelt-sykkelvei-fortau",
+   "image_file": "bb_s111_sykkelfelt-sykkelvei-fortau.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Syklister: sykkelfelt, sykkelvei og fortau",
+    "th": "ผู้ปั่น: เลนจักรยาน ทางจักรยาน และทางเท้า",
+    "en": "Cyclists: cycle lane, cycle path and pavement"
+   },
+   "core_sentence": {
+    "no": "Når du svinger, har du vikeplikt for syklende som skal rett fram.",
+    "th": "เมื่อเลี้ยว คุณต้องให้ทางแก่ผู้ปั่นที่ไปตรง",
+    "en": "When you turn, you must yield to cyclists going straight ahead."
+   },
+   "points": [
+    {
+     "no": "Sykkelfelt er et kjørefelt som ved skilt og oppmerking er bestemt for syklende.",
+     "th": "เลนจักรยานคือเลนที่กำหนดไว้สำหรับผู้ปั่นด้วยป้ายและเส้นบนถนน",
+     "en": "A cycle lane is a lane set aside for cyclists by sign and marking."
+    },
+    {
+     "no": "Svingende har vikeplikt for syklende som skal rett fram på kjørebanen eller vegens skulder.",
+     "th": "ผู้เลี้ยวต้องให้ทางแก่ผู้ปั่นที่ไปตรงบนช่องการจราจรหรือไหล่ทาง",
+     "en": "A turning driver must yield to cyclists going straight on the carriageway or shoulder."
+    },
+    {
+     "no": "Kommer du fra sykkelvei, gangvei eller fortau og vil inn på veien, har du vikeplikt for trafikanten på veien.",
+     "th": "ถ้าคุณมาจากทางจักรยาน ทางเดิน หรือทางเท้าและจะเข้าถนน คุณต้องให้ทางแก่ผู้ใช้ถนน",
+     "en": "If you come from a cycle path, footpath or pavement and want to enter the road, you must yield to road users on the road."
+    }
+   ],
+   "points_kinds": [
+    "lov",
+    "lov",
+    "lov"
+   ],
+   "michael_says": {
+    "no": "Se en gang til etter syklisten før du svinger.",
+    "th": "มองหาผู้ปั่นอีกครั้งก่อนเลี้ยว",
+    "en": "Look once more for the cyclist before you turn."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du skal svinge til høyre, og en syklist kommer rett fram i sykkelfeltet ved siden av deg. Hvem har vikeplikt?",
+     "th": "คุณจะเลี้ยวขวาและมีผู้ปั่นไปตรงในเลนจักรยานข้างคุณ ใครต้องให้ทาง?",
+     "en": "You will turn right, and a cyclist comes straight ahead in the cycle lane beside you. Who must yield?"
+    },
+    "options": [
+     {
+      "no": "Jeg, fordi jeg svinger",
+      "th": "ฉัน เพราะฉันเลี้ยว",
+      "en": "I do, because I am turning"
+     },
+     {
+      "no": "Syklisten, fordi jeg kjører på kjørebanen",
+      "th": "ผู้ปั่น เพราะฉันขับบนช่องการจราจร",
+      "en": "The cyclist, because I drive on the carriageway"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Sykkelfelt",
+     "th": "เลนจักรยาน",
+     "en": "Cycle lane"
+    },
+    {
+     "no": "Sving",
+     "th": "เลี้ยว",
+     "en": "Turn"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian street junction in daylight, a red-painted cycle lane in the carriageway with a cyclist going straight, a yellow van beside it beginning a right turn, no text, no arrows. Do NOT let AI draw road signs or markings: use official Statens vegvesen sign files (Michael Trafikklærer AI materialer/traffic-signs) or check every symbol against the official sign before approval. Master image 3:2 landscape. Keep every key element (Cycle lane, Turn) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "Trafikkreglene § 7 nr. 3 og nr. 4",
+   "note": "",
+   "michael_claims": [
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Trafikkreglene § 1 g: sykkelfelt er kjørefelt som ved offentlig trafikkskilt og oppmerking er bestemt for syklende. § 7 nr. 3: kjørende som vil svinge har vikeplikt for gående, syklende og fører av liten elektrisk motorvogn som skal rett fram på kjørebanen eller vegens skulder. § 7 nr. 4: kjørende som vil inn på eller krysse veg fra sykkelveg, gangveg eller fortau, har vikeplikt for trafikant på vegen.",
+      "th": "กฎจราจร § 1 g: เลนจักรยานคือเลนที่ป้ายจราจรสาธารณะและเส้นบนถนนกำหนดไว้สำหรับผู้ปั่น § 7 ข้อ 3: ผู้ขับที่จะเลี้ยวต้องให้ทางแก่คนเดินเท้า ผู้ปั่น และผู้ขับยานยนต์ไฟฟ้าขนาดเล็กที่ไปตรงบนช่องการจราจรหรือไหล่ทาง § 7 ข้อ 4: ผู้ขับที่จะเข้าหรือข้ามถนนจากทางจักรยาน ทางเดิน หรือทางเท้า ต้องให้ทางแก่ผู้ใช้ถนนบนถนน",
+      "en": "Traffic rules § 1 g: a cycle lane is a lane set aside for cyclists by public traffic sign and marking. § 7 no. 3: a driver who will turn must yield to pedestrians, cyclists and drivers of small electric motor vehicles going straight on the carriageway or shoulder. § 7 no. 4: a driver who wants to enter or cross a road from a cycle path, footpath or pavement must yield to road users on the road."
+     },
+     "exports_to_michael": true,
+     "source": "Trafikkreglene § 7 — https://lovdata.no/forskrift/1986-03-21-747/§7",
+     "checked_at": "2026-10-10"
+    },
+    {
+     "kind": "apent",
+     "text": {
+      "no": "Bokas påstand at en syklist i sykkelfelt «befinner seg i et felt, og vanlig høyreregel vil gjelde», og at syklisten da får vikeplikt for bil på forkjørsvei.",
+      "th": "ข้ออ้างของหนังสือว่าผู้ปั่นในเลนจักรยาน “อยู่ในเลน และใช้กฎขวาปกติ” และผู้ปั่นไม่ได้สิทธิ์ก่อนรถบนทางเอก",
+      "en": "The book's claim that a cyclist in a cycle lane 'is in a lane, and the normal right-hand rule applies', and that the cyclist then does not get priority over a car on a priority road."
+     },
+     "exports_to_michael": false
+    }
+   ],
+   "michael_basis": {
+    "no": "Lovkrav: Trafikkreglene § 1 g: sykkelfelt er kjørefelt som ved offentlig trafikkskilt og oppmerking er bestemt for syklende. § 7 nr. 3: kjørende som vil svinge har vikeplikt for gående, syklende og fører av liten elektrisk motorvogn som skal rett fram på kjørebanen eller vegens skulder. § 7 nr. 4: kjørende som vil inn på eller krysse veg fra sykkelveg, gangveg eller fortau, har vikeplikt for trafikant på vegen.",
+    "th": "ข้อกำหนดตามกฎหมาย: กฎจราจร § 1 g: เลนจักรยานคือเลนที่ป้ายจราจรสาธารณะและเส้นบนถนนกำหนดไว้สำหรับผู้ปั่น § 7 ข้อ 3: ผู้ขับที่จะเลี้ยวต้องให้ทางแก่คนเดินเท้า ผู้ปั่น และผู้ขับยานยนต์ไฟฟ้าขนาดเล็กที่ไปตรงบนช่องการจราจรหรือไหล่ทาง § 7 ข้อ 4: ผู้ขับที่จะเข้าหรือข้ามถนนจากทางจักรยาน ทางเดิน หรือทางเท้า ต้องให้ทางแก่ผู้ใช้ถนนบนถนน",
+    "en": "Legal requirement: Traffic rules § 1 g: a cycle lane is a lane set aside for cyclists by public traffic sign and marking. § 7 no. 3: a driver who will turn must yield to pedestrians, cyclists and drivers of small electric motor vehicles going straight on the carriageway or shoulder. § 7 no. 4: a driver who wants to enter or cross a road from a cycle path, footpath or pavement must yield to road users on the road."
+   },
+   "has_unconfirmed": true,
+   "editor_notes": [
+    "Bokas påstand at en syklist i sykkelfelt «befinner seg i et felt, og vanlig høyreregel vil gjelde», og at syklisten da får vikeplikt for bil på forkjørsvei.",
+    "Bokas regel om syklist i sykkelfelt mot bil på forkjørsvei er ikke bekreftet."
+   ],
+   "open_questions": [
+    "Bokas regel om syklist i sykkelfelt mot bil på forkjørsvei er ikke bekreftet."
+   ],
+   "quiz_category": "Right of Way",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 111 (PDF-s. 106)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s112"
+  },
+  {
+   "id": "bb-s112",
+   "book": "Lærebok Klasse B",
+   "printed_page": 112,
+   "pdf_page": 107,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.6 Vikeplikt – Vikeplikt for buss",
+   "asset_id": "bb_s112_vikeplikt-for-buss",
+   "image_file": "bb_s112_vikeplikt-for-buss.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Vikeplikt for buss som forlater holdeplass",
+    "th": "ให้ทางแก่รถโดยสารที่ออกจากป้าย",
+    "en": "Yield to a bus leaving a stop"
+   },
+   "core_sentence": {
+    "no": "På vei med fartsgrense 60 eller lavere må du vike for buss som skal ut.",
+    "th": "บนถนนที่จำกัดความเร็ว 60 หรือต่ำกว่า ให้ทางแก่รถโดยสารที่จะออก",
+    "en": "At 60 km/h or lower, you must yield to a bus pulling out."
+   },
+   "points": [
+    {
+     "no": "Fartsgrensen er 60 km/t eller lavere, og bussen gir tegn om å forlate holdeplassen.",
+     "th": "ขีดจำกัดความเร็ว 60 กม./ชม. หรือต่ำกว่า และรถโดยสารให้สัญญาณว่าจะออกจากป้าย",
+     "en": "The speed limit is 60 km/h or lower, and the bus signals that it will leave the stop."
+    },
+    {
+     "no": "Da har du vikeplikt for bussen. Bussjåføren skal unngå fare.",
+     "th": "คุณต้องให้ทางแก่รถโดยสาร ผู้ขับรถโดยสารต้องหลีกเลี่ยงอันตราย",
+     "en": "Then you must yield to the bus. The bus driver must avoid danger."
+    },
+    {
+     "no": "Det er fartsgrensen som avgjør, ikke hva slags vei du kjører på.",
+     "th": "ขีดจำกัดความเร็วเป็นตัวตัดสิน ไม่ใช่ชนิดของถนน",
+     "en": "It is the speed limit that decides, not what kind of road you drive on."
+    }
+   ],
+   "points_kinds": [
+    "lov",
+    "lov",
+    "rettesnor"
+   ],
+   "michael_says": {
+    "no": "Buss som blinker ut: gi den plass.",
+    "th": "รถโดยสารที่เปิดไฟเลี้ยวออก: ให้ที่แก่มัน",
+    "en": "A bus that indicates out: give it room."
+   },
+   "check_question": {
+    "q": {
+     "no": "Fartsgrensen er 50, og en buss blinker ut fra holdeplassen foran deg. Hva gjør du?",
+     "th": "ขีดจำกัดความเร็วคือ 50 และรถโดยสารเปิดไฟเลี้ยวออกจากป้ายข้างหน้าคุณ ทำอย่างไร?",
+     "en": "The speed limit is 50, and a bus indicates out from the stop ahead of you. What do you do?"
+    },
+    "options": [
+     {
+      "no": "Gir vei – jeg har vikeplikt for bussen",
+      "th": "ให้ทาง – ฉันต้องให้ทางแก่รถโดยสาร",
+      "en": "Give way – I must yield to the bus"
+     },
+     {
+      "no": "Kjører forbi – jeg har forkjørsrett",
+      "th": "ขับผ่าน – ฉันมีสิทธิ์ก่อน",
+      "en": "Drive past – I have priority"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Buss",
+     "th": "รถโดยสาร",
+     "en": "Bus"
+    },
+    {
+     "no": "60 km/t",
+     "th": "60 กม./ชม.",
+     "en": "60 km/h"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian road with a red city bus signalling and pulling out from a bus stop, a yellow car approaching slowly behind it, daylight, a 60 speed-limit sign faintly visible. Do NOT let AI draw road signs or markings: use official Statens vegvesen sign files (Michael Trafikklærer AI materialer/traffic-signs) or check every symbol against the official sign before approval. Master image 3:2 landscape. Keep every key element (Bus, 60 km/h) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "Trafikkreglene § 7 nr. 5",
+   "note": "",
+   "michael_claims": [
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Trafikkreglene § 7 nr. 5: på veg med fartsgrense 60 km i timen eller lavere har kjørende vikeplikt for buss når føreren gir tegn om at bussen skal forlate holdeplass. Bussføreren skal unngå fare.",
+      "th": "กฎจราจร § 7 ข้อ 5: บนถนนที่จำกัดความเร็ว 60 กม./ชม. หรือต่ำกว่า ผู้ขับต้องให้ทางแก่รถโดยสารเมื่อผู้ขับให้สัญญาณว่าจะออกจากป้าย ผู้ขับรถโดยสารต้องหลีกเลี่ยงอันตราย",
+      "en": "Traffic rules § 7 no. 5: on a road with a speed limit of 60 km/h or lower, drivers must yield to a bus when its driver signals that the bus will leave the stop. The bus driver must avoid danger."
+     },
+     "exports_to_michael": true,
+     "source": "Trafikkreglene § 7 — https://lovdata.no/forskrift/1986-03-21-747/§7",
+     "checked_at": "2026-10-10"
+    },
+    {
+     "kind": "rettesnor",
+     "text": {
+      "no": "Boka: det er fartsgrensen som avgjør om du får vikeplikt, ikke hva slags vei du kjører på.",
+      "th": "หนังสือ: ขีดจำกัดความเร็วเป็นตัวตัดสินว่าคุณต้องให้ทางหรือไม่ ไม่ใช่ชนิดของถนน",
+      "en": "The book: it is the speed limit that decides whether you must yield, not what kind of road you drive on."
+     },
+     "exports_to_michael": true
+    }
+   ],
+   "michael_basis": {
+    "no": "Lovkrav: Trafikkreglene § 7 nr. 5: på veg med fartsgrense 60 km i timen eller lavere har kjørende vikeplikt for buss når føreren gir tegn om at bussen skal forlate holdeplass. Bussføreren skal unngå fare. Rettesnor (ikke lovkrav): Boka: det er fartsgrensen som avgjør om du får vikeplikt, ikke hva slags vei du kjører på.",
+    "th": "ข้อกำหนดตามกฎหมาย: กฎจราจร § 7 ข้อ 5: บนถนนที่จำกัดความเร็ว 60 กม./ชม. หรือต่ำกว่า ผู้ขับต้องให้ทางแก่รถโดยสารเมื่อผู้ขับให้สัญญาณว่าจะออกจากป้าย ผู้ขับรถโดยสารต้องหลีกเลี่ยงอันตราย หลักคร่าว ๆ (ไม่ใช่ข้อบังคับ): หนังสือ: ขีดจำกัดความเร็วเป็นตัวตัดสินว่าคุณต้องให้ทางหรือไม่ ไม่ใช่ชนิดของถนน",
+    "en": "Legal requirement: Traffic rules § 7 no. 5: on a road with a speed limit of 60 km/h or lower, drivers must yield to a bus when its driver signals that the bus will leave the stop. The bus driver must avoid danger. Rule of thumb (not a legal requirement): The book: it is the speed limit that decides whether you must yield, not what kind of road you drive on."
+   },
+   "has_unconfirmed": false,
+   "editor_notes": [],
+   "open_questions": [],
+   "quiz_category": "Right of Way",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 112 (PDF-s. 107)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s112b"
+  },
+  {
+   "id": "bb-s112b",
+   "book": "Lærebok Klasse B",
+   "printed_page": 112,
+   "pdf_page": 107,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.6 Vikeplikt – Vikeplikt gitt med skilt: vikelinje og stopplinje",
+   "asset_id": "bb_s112b_vikelinje-og-stopplinje-ved-skilt",
+   "image_file": "bb_s112b_vikelinje-og-stopplinje-ved-skilt.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Vikelinje og stopplinje ved skilt",
+    "th": "เส้นให้ทางและเส้นหยุดที่ป้าย",
+    "en": "Give-way line and stop line at a sign"
+   },
+   "core_sentence": {
+    "no": "Vikelinjen viser hvor vikeplikten inntrer. Stopplinjen viser hvor du stanser.",
+    "th": "เส้นให้ทางแสดงจุดที่การให้ทางเริ่มมีผล เส้นหยุดแสดงจุดที่ต้องหยุด",
+    "en": "The give-way line shows where yielding begins; the stop line where you stop."
+   },
+   "points": [
+    {
+     "no": "Vikelinjen viser det stedet der vikeplikten inntrer.",
+     "th": "เส้นให้ทางแสดงจุดที่การให้ทางเริ่มมีผล",
+     "en": "The give-way line shows the place where the duty to yield begins."
+    },
+    {
+     "no": "Stopplinjen viser hvor kjøretøy skal stanses når skilt eller lyssignal påbyr stans.",
+     "th": "เส้นหยุดแสดงจุดที่ยานพาหนะต้องหยุดเมื่อป้ายหรือสัญญาณไฟบังคับให้หยุด",
+     "en": "The stop line shows where vehicles must stop when a sign or light signal requires a stop."
+    },
+    {
+     "no": "Skiltet står ikke alltid helt fram ved krysset.",
+     "th": "ป้ายไม่ได้ตั้งชิดทางแยกเสมอไป",
+     "en": "The sign does not always stand right up at the junction."
+    }
+   ],
+   "points_kinds": [
+    "lov",
+    "lov",
+    "rettesnor"
+   ],
+   "michael_says": {
+    "no": "Stans ved linjen, og se deg godt for.",
+    "th": "หยุดที่เส้นและมองให้ดี",
+    "en": "Stop at the line, and look carefully."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du kommer til en vikelinje, og en bil med fortrinn nærmer seg. Hva gjør du?",
+     "th": "คุณมาถึงเส้นให้ทางและมีรถที่มีสิทธิ์ก่อนเข้ามา ทำอย่างไร?",
+     "en": "You come to a give-way line, and a car with priority approaches. What do you do?"
+    },
+    "options": [
+     {
+      "no": "Setter ned farten eller stanser ved linjen i god tid",
+      "th": "ชะลอหรือหยุดที่เส้นล่วงหน้า",
+      "en": "Slow down or stop at the line in good time"
+     },
+     {
+      "no": "Kjører over linjen og håper den andre bremser",
+      "th": "ขับข้ามเส้นและหวังว่าอีกคนเบรก",
+      "en": "Drive over the line and hope the other brakes"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Vikelinje",
+     "th": "เส้นให้ทาง",
+     "en": "Give-way line"
+    },
+    {
+     "no": "Stopplinje",
+     "th": "เส้นหยุด",
+     "en": "Stop line"
+    }
+   ],
+   "image_brief": "Photorealistic driver's-eye view from a car at a Norwegian junction, a row of white triangles on the road ahead as the give-way line, a second small inset showing a solid white stop line, daylight, no text. Do NOT let AI draw road signs or markings: use official Statens vegvesen sign files (Michael Trafikklærer AI materialer/traffic-signs) or check every symbol against the official sign before approval. Master image 3:2 landscape. Keep every key element (Give-way line, Stop line) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "Skiltforskriften 1020 og 1022",
+   "note": "",
+   "michael_claims": [
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Skiltforskriften (vegoppmerking): vikelinje (1022) viser det sted hvor vikeplikten inntrer. Stopplinje (1020) angir hvor kjøretøy skal stanses når offentlig trafikkskilt eller trafikklyssignal påbyr stans. Trafikkreglene § 7 nr. 1: den som har vikeplikt, skal tydelig vise dette ved i god tid å sette ned farten eller stanse.",
+      "th": "ข้อบังคับป้าย (เส้นบนถนน): เส้นให้ทาง (1022) แสดงจุดที่การให้ทางเริ่มมีผล เส้นหยุด (1020) แสดงจุดที่ยานพาหนะต้องหยุดเมื่อป้ายจราจรสาธารณะหรือสัญญาณไฟบังคับให้หยุด กฎจราจร § 7 ข้อ 1: ผู้ที่ต้องให้ทางต้องแสดงอย่างชัดเจนโดยชะลอหรือหยุดล่วงหน้า",
+      "en": "Sign regulation (road markings): the give-way line (1022) shows the place where the duty to yield begins. The stop line (1020) shows where vehicles must stop when a public traffic sign or light signal requires a stop. Traffic rules § 7 no. 1: whoever must yield must clearly show this by slowing down or stopping in good time."
+     },
+     "exports_to_michael": true,
+     "source": "Skiltforskriften §§ 21–22 — https://lovdata.no/forskrift/2005-10-07-1219/§22",
+     "checked_at": "2026-10-10"
+    },
+    {
+     "kind": "rettesnor",
+     "text": {
+      "no": "Boka: skiltet står ikke alltid helt fram ved krysset.",
+      "th": "หนังสือ: ป้ายไม่ได้ตั้งชิดทางแยกเสมอไป",
+      "en": "The book: the sign does not always stand right up at the junction."
+     },
+     "exports_to_michael": true
+    },
+    {
+     "kind": "apent",
+     "text": {
+      "no": "Bokas regler om stoppskilt («først stoppeplikt, siden vikeplikt»; «ser du ikke stopplinjen, stans ved krysset eller når du får sikt til begge sider») og at kryss i andre nordiske land kan reguleres bare med vikelinje.",
+      "th": "กฎของหนังสือเรื่องป้ายหยุด (“ก่อนอื่นต้องหยุด แล้วจึงให้ทาง” “ถ้าไม่เห็นเส้นหยุด ให้หยุดที่ทางแยกหรือเมื่อเห็นทั้งสองข้าง”) และว่าทางแยกในประเทศนอร์ดิกอื่นอาจควบคุมด้วยเส้นให้ทางอย่างเดียว",
+      "en": "The book's rules about the stop sign ('first a duty to stop, then a duty to yield'; 'if you cannot see the stop line, stop at the junction or when you get a view both ways') and that junctions in other Nordic countries may be regulated with a give-way line only."
+     },
+     "exports_to_michael": false
+    }
+   ],
+   "michael_basis": {
+    "no": "Lovkrav: Skiltforskriften (vegoppmerking): vikelinje (1022) viser det sted hvor vikeplikten inntrer. Stopplinje (1020) angir hvor kjøretøy skal stanses når offentlig trafikkskilt eller trafikklyssignal påbyr stans. Trafikkreglene § 7 nr. 1: den som har vikeplikt, skal tydelig vise dette ved i god tid å sette ned farten eller stanse. Rettesnor (ikke lovkrav): Boka: skiltet står ikke alltid helt fram ved krysset.",
+    "th": "ข้อกำหนดตามกฎหมาย: ข้อบังคับป้าย (เส้นบนถนน): เส้นให้ทาง (1022) แสดงจุดที่การให้ทางเริ่มมีผล เส้นหยุด (1020) แสดงจุดที่ยานพาหนะต้องหยุดเมื่อป้ายจราจรสาธารณะหรือสัญญาณไฟบังคับให้หยุด กฎจราจร § 7 ข้อ 1: ผู้ที่ต้องให้ทางต้องแสดงอย่างชัดเจนโดยชะลอหรือหยุดล่วงหน้า หลักคร่าว ๆ (ไม่ใช่ข้อบังคับ): หนังสือ: ป้ายไม่ได้ตั้งชิดทางแยกเสมอไป",
+    "en": "Legal requirement: Sign regulation (road markings): the give-way line (1022) shows the place where the duty to yield begins. The stop line (1020) shows where vehicles must stop when a public traffic sign or light signal requires a stop. Traffic rules § 7 no. 1: whoever must yield must clearly show this by slowing down or stopping in good time. Rule of thumb (not a legal requirement): The book: the sign does not always stand right up at the junction."
+   },
+   "has_unconfirmed": true,
+   "editor_notes": [
+    "Bokas regler om stoppskilt («først stoppeplikt, siden vikeplikt»; «ser du ikke stopplinjen, stans ved krysset eller når du får sikt til begge sider») og at kryss i andre nordiske land kan reguleres bare med vikelinje.",
+    "Skiltforskriften om stoppskilt (stoppeplikt) er ikke lest. Bokas stopp-regler er ikke bekreftet."
+   ],
+   "open_questions": [
+    "Skiltforskriften om stoppskilt (stoppeplikt) er ikke lest. Bokas stopp-regler er ikke bekreftet."
+   ],
+   "quiz_category": "Right of Way",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 112 (PDF-s. 107)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s113"
+  },
+  {
+   "id": "bb-s113",
+   "book": "Lærebok Klasse B",
+   "printed_page": 113,
+   "pdf_page": 108,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.6 Vikeplikt – Sperring i veien og møtende kjøretøy",
+   "asset_id": "bb_s113_sperring-i-veien",
+   "image_file": "bb_s113_sperring-i-veien.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Sperring i veien: hvem må vike?",
+    "th": "สิ่งกีดขวางบนถนน: ใครต้องให้ทาง?",
+    "en": "A barrier in the road: who must yield?"
+   },
+   "core_sentence": {
+    "no": "Den som har sperringen på sin side, må vike.",
+    "th": "ฝ่ายที่มีสิ่งกีดขวางอยู่ด้านตนต้องให้ทาง",
+    "en": "Whoever has the barrier on his side must yield."
+   },
+   "points": [
+    {
+     "no": "Møtende kjøretøy skal i god tid vike tilstrekkelig til høyre og kjøre sakte eller stanse om nødvendig.",
+     "th": "ยานพาหนะที่สวนกันต้องหลบไปทางขวาให้เพียงพอล่วงหน้าและขับช้าหรือหยุดถ้าจำเป็น",
+     "en": "Oncoming vehicles must in good time move far enough to the right and drive slowly or stop if necessary."
+    },
+    {
+     "no": "Er en del av veien sperret, har den vikeplikt som har sperringen på sin side.",
+     "th": "ถ้าส่วนหนึ่งของถนนถูกปิด ฝ่ายที่มีสิ่งกีดขวางอยู่ด้านตนต้องให้ทาง",
+     "en": "If part of the road is blocked, whoever has the barrier on his side must yield."
+    },
+    {
+     "no": "Ta kontakt med øynene, så dere forstår hverandre.",
+     "th": "สบตากันเพื่อให้เข้าใจกัน",
+     "en": "Make eye contact so you understand each other."
+    }
+   ],
+   "points_kinds": [
+    "lov",
+    "lov",
+    "rettesnor"
+   ],
+   "michael_says": {
+    "no": "Se hvilken side sperringen står på.",
+    "th": "ดูว่าสิ่งกีดขวางอยู่ด้านไหน",
+    "en": "See which side the barrier is on."
+   },
+   "check_question": {
+    "q": {
+     "no": "Det er en sperring på din side av veien, og en bil kommer mot deg. Hvem har vikeplikt?",
+     "th": "มีสิ่งกีดขวางด้านคุณของถนนและมีรถสวนมา ใครต้องให้ทาง?",
+     "en": "There is a barrier on your side of the road, and a car comes towards you. Who must yield?"
+    },
+    "options": [
+     {
+      "no": "Jeg, fordi sperringen er på min side",
+      "th": "ฉัน เพราะสิ่งกีดขวางอยู่ด้านฉัน",
+      "en": "I do, because the barrier is on my side"
+     },
+     {
+      "no": "Den møtende bilen",
+      "th": "รถที่สวนมา",
+      "en": "The oncoming car"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Sperring",
+     "th": "สิ่งกีดขวาง",
+     "en": "Barrier"
+    },
+    {
+     "no": "Møtende",
+     "th": "รถสวน",
+     "en": "Oncoming"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian rural road with a roadworks barrier and traffic cones on one side, a yellow car stopping before the barrier and an oncoming red car passing, daylight, no text. Do NOT let AI draw road signs or markings: use official Statens vegvesen sign files (Michael Trafikklærer AI materialer/traffic-signs) or check every symbol against the official sign before approval. Master image 3:2 landscape. Keep every key element (Barrier, Oncoming) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "Trafikkreglene § 7 nr. 6",
+   "note": "",
+   "michael_claims": [
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Trafikkreglene § 7 nr. 6: om nødvendig skal kjørende som møtes, i god tid vike tilstrekkelig til høyre og kjøre sakte eller stanse. Er en del av vegen sperret, har den vikeplikt som har sperringen på sin side.",
+      "th": "กฎจราจร § 7 ข้อ 6: ถ้าจำเป็น ผู้ขับที่สวนกันต้องหลบไปทางขวาให้เพียงพอล่วงหน้าและขับช้าหรือหยุด ถ้าส่วนหนึ่งของถนนถูกปิด ฝ่ายที่มีสิ่งกีดขวางอยู่ด้านตนต้องให้ทาง",
+      "en": "Traffic rules § 7 no. 6: if necessary, drivers who meet must in good time move far enough to the right and drive slowly or stop. If part of the road is blocked, whoever has the barrier on his side must yield."
+     },
+     "exports_to_michael": true,
+     "source": "Trafikkreglene § 7 — https://lovdata.no/forskrift/1986-03-21-747/§7",
+     "checked_at": "2026-10-10"
+    },
+    {
+     "kind": "apent",
+     "text": {
+      "no": "Bokas skilt «vikeplikt for møtende kjøretøy» og påstanden at skiltene bare brukes når førerne kan ha øyekontakt.",
+      "th": "ป้าย “ให้ทางแก่ยานพาหนะสวน” ของหนังสือและข้ออ้างว่าใช้ป้ายเฉพาะเมื่อผู้ขับสบตากันได้",
+      "en": "The book's 'give way to oncoming vehicles' sign and the claim that the signs are only used when drivers can make eye contact."
+     },
+     "exports_to_michael": false
+    }
+   ],
+   "michael_basis": {
+    "no": "Lovkrav: Trafikkreglene § 7 nr. 6: om nødvendig skal kjørende som møtes, i god tid vike tilstrekkelig til høyre og kjøre sakte eller stanse. Er en del av vegen sperret, har den vikeplikt som har sperringen på sin side.",
+    "th": "ข้อกำหนดตามกฎหมาย: กฎจราจร § 7 ข้อ 6: ถ้าจำเป็น ผู้ขับที่สวนกันต้องหลบไปทางขวาให้เพียงพอล่วงหน้าและขับช้าหรือหยุด ถ้าส่วนหนึ่งของถนนถูกปิด ฝ่ายที่มีสิ่งกีดขวางอยู่ด้านตนต้องให้ทาง",
+    "en": "Legal requirement: Traffic rules § 7 no. 6: if necessary, drivers who meet must in good time move far enough to the right and drive slowly or stop. If part of the road is blocked, whoever has the barrier on his side must yield."
+   },
+   "has_unconfirmed": true,
+   "editor_notes": [
+    "Bokas skilt «vikeplikt for møtende kjøretøy» og påstanden at skiltene bare brukes når førerne kan ha øyekontakt.",
+    "Skiltene for vikeplikt mot møtende er ikke lest i skiltforskriften."
+   ],
+   "open_questions": [
+    "Skiltene for vikeplikt mot møtende er ikke lest i skiltforskriften."
+   ],
+   "quiz_category": "Right of Way",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 113 (PDF-s. 108)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s114"
+  },
+  {
+   "id": "bb-s114",
+   "book": "Lærebok Klasse B",
+   "printed_page": 114,
+   "pdf_page": 109,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.6 Vikeplikt – Forkjørsvei og forkjørskryss",
+   "asset_id": "bb_s114_forkjorsvei-og-forkjorskryss",
+   "image_file": "bb_s114_forkjorsvei-og-forkjorskryss.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Forkjørsvei og forkjørskryss",
+    "th": "ทางเอกและทางแยกมีทางเอก",
+    "en": "Priority road and priority junction"
+   },
+   "core_sentence": {
+    "no": "Forkjørsvei og forkjørskryss er ikke det samme. Les skiltet.",
+    "th": "ทางเอกและทางแยกมีทางเอกไม่เหมือนกัน อ่านป้าย",
+    "en": "Priority road and priority junction are not the same. Read the sign."
+   },
+   "points": [
+    {
+     "no": "Du må ikke blande sammen forkjørsvei og forkjørskryss.",
+     "th": "อย่าสับสนระหว่างทางเอกกับทางแยกมีทางเอก",
+     "en": "Do not mix up a priority road and a priority junction."
+    },
+    {
+     "no": "Skiltene forteller om du har forkjørsrett, eller om krysset er farlig.",
+     "th": "ป้ายบอกว่าคุณมีสิทธิ์ก่อนหรือทางแยกอันตราย",
+     "en": "The signs tell whether you have priority or the junction is dangerous."
+    },
+    {
+     "no": "Er du i tvil om vikeplikten, vis forsiktighet og la andre gå først.",
+     "th": "ถ้าไม่แน่ใจเรื่องการให้ทาง ให้ระมัดระวังและให้คนอื่นไปก่อน",
+     "en": "If you are unsure about yielding, show care and let others go first."
+    }
+   ],
+   "points_kinds": [
+    "rettesnor",
+    "rettesnor",
+    "rettesnor"
+   ],
+   "michael_says": {
+    "no": "Forkjørsrett er en rett. Bruk den med omtanke.",
+    "th": "สิทธิ์ทางเอกคือสิทธิ์ ใช้อย่างรอบคอบ",
+    "en": "Priority is a right. Use it with care."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du er usikker på om du har forkjørsrett i et kryss. Hva gjør du?",
+     "th": "คุณไม่แน่ใจว่ามีสิทธิ์ทางเอกในทางแยกหรือไม่ ทำอย่างไร?",
+     "en": "You are unsure whether you have priority in a junction. What do you do?"
+    },
+    "options": [
+     {
+      "no": "Leser skiltene, viser forsiktighet og lar andre gå først hvis jeg er i tvil",
+      "th": "อ่านป้าย ระมัดระวัง และให้คนอื่นไปก่อนถ้าไม่แน่ใจ",
+      "en": "Read the signs, show care and let others go first if in doubt"
+     },
+     {
+      "no": "Kjører først – jeg har sikkert forkjørsrett",
+      "th": "ไปก่อน – คงมีสิทธิ์ทางเอก",
+      "en": "Drive first – I surely have priority"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Forkjørsvei",
+     "th": "ทางเอก",
+     "en": "Priority road"
+    },
+    {
+     "no": "Forkjørskryss",
+     "th": "ทางแยกมีทางเอก",
+     "en": "Priority junction"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian rural junction in daylight, a main road with a car and a side road with a car waiting, two sign posts at the roadside, no readable text. Do NOT let AI draw road signs or markings: use official Statens vegvesen sign files (Michael Trafikklærer AI materialer/traffic-signs) or check every symbol against the official sign before approval. Master image 3:2 landscape. Keep every key element (Priority road, Priority junction) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "",
+   "note": "",
+   "michael_claims": [
+    {
+     "kind": "rettesnor",
+     "text": {
+      "no": "Boka: du må ikke blande sammen forkjørsvei og forkjørskryss. Er du i tvil om vikeplikten, vis forsiktighet.",
+      "th": "หนังสือ: อย่าสับสนระหว่างทางเอกกับทางแยกมีทางเอก ถ้าไม่แน่ใจเรื่องการให้ทาง ให้ระมัดระวัง",
+      "en": "The book: do not mix up a priority road and a priority junction. If unsure about yielding, show care."
+     },
+     "exports_to_michael": true
+    },
+    {
+     "kind": "apent",
+     "text": {
+      "no": "Bokas påstander om forkjørsvei: tre skilt kan oppheve forkjørsvei («slutt på forkjørsvei», «vikeplikt», «stopp»); forkjørskryss betyr at kryssende vei er pålagt vikeplikt ved skilt men krysset er farlig; etter krysset gjelder vanlig vikeplikt for trafikk fra høyre igjen; skiltet «Farlig kryss» kan ikke brukes på forkjørsvei.",
+      "th": "ข้ออ้างของหนังสือเรื่องทางเอก: มีสามป้ายที่ยกเลิกทางเอกได้ (“สิ้นสุดทางเอก” “ให้ทาง” “หยุด”) ทางแยกมีทางเอกหมายความว่าถนนที่ตัดต้องให้ทางตามป้ายแต่ทางแยกอันตราย หลังทางแยกใช้การให้ทางปกติแก่รถจากขวาอีกครั้ง ป้าย “ทางแยกอันตราย” ใช้บนทางเอกไม่ได้",
+      "en": "The book's claims about the priority road: three signs can cancel it ('end of priority road', 'give way', 'stop'); a priority junction means the crossing road must yield by sign but the junction is dangerous; after the junction the normal yielding to traffic from the right applies again; the 'Dangerous junction' sign cannot be used on a priority road."
+     },
+     "exports_to_michael": false
+    }
+   ],
+   "michael_basis": {
+    "no": "Rettesnor (ikke lovkrav): Boka: du må ikke blande sammen forkjørsvei og forkjørskryss. Er du i tvil om vikeplikten, vis forsiktighet.",
+    "th": "หลักคร่าว ๆ (ไม่ใช่ข้อบังคับ): หนังสือ: อย่าสับสนระหว่างทางเอกกับทางแยกมีทางเอก ถ้าไม่แน่ใจเรื่องการให้ทาง ให้ระมัดระวัง",
+    "en": "Rule of thumb (not a legal requirement): The book: do not mix up a priority road and a priority junction. If unsure about yielding, show care."
+   },
+   "has_unconfirmed": true,
+   "editor_notes": [
+    "Bokas påstander om forkjørsvei: tre skilt kan oppheve forkjørsvei («slutt på forkjørsvei», «vikeplikt», «stopp»); forkjørskryss betyr at kryssende vei er pålagt vikeplikt ved skilt men krysset er farlig; etter krysset gjelder vanlig vikeplikt for trafikk fra høyre igjen; skiltet «Farlig kryss» kan ikke brukes på forkjørsvei.",
+    "Skiltforskriften kapittel 3 (vikeplikt- og forkjørsskilt) er ikke lest. Bokas regler om forkjørsvei og forkjørskryss er ikke bekreftet."
+   ],
+   "open_questions": [
+    "Skiltforskriften kapittel 3 (vikeplikt- og forkjørsskilt) er ikke lest. Bokas regler om forkjørsvei og forkjørskryss er ikke bekreftet."
+   ],
+   "quiz_category": "Right of Way",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 114 (PDF-s. 109)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s115"
+  },
+  {
+   "id": "bb-s115",
+   "book": "Lærebok Klasse B",
+   "printed_page": 115,
+   "pdf_page": 110,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.6 Vikeplikt – Fri vei for utrykningskjøretøy",
+   "asset_id": "bb_s115_fri-vei-for-utrykning",
+   "image_file": "bb_s115_fri-vei-for-utrykning.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Gi fri vei for utrykningskjøretøy",
+    "th": "เปิดทางให้รถฉุกเฉิน",
+    "en": "Give way to emergency vehicles"
+   },
+   "core_sentence": {
+    "no": "Når et utrykningskjøretøy varsler med blått lys, gir du fri vei.",
+    "th": "เมื่อรถฉุกเฉินส่งสัญญาณไฟน้ำเงิน ให้เปิดทาง",
+    "en": "When an emergency vehicle warns with blue light, you give way."
+   },
+   "points": [
+    {
+     "no": "Du skal gi fri vei når føreren varsler med blinkende blått lys.",
+     "th": "ต้องเปิดทางเมื่อผู้ขับส่งสัญญาณด้วยไฟน้ำเงินกะพริบ",
+     "en": "You must give way when the driver warns with flashing blue light."
+    },
+    {
+     "no": "Om nødvendig skal du stanse.",
+     "th": "ถ้าจำเป็นต้องหยุด",
+     "en": "If necessary you must stop."
+    },
+    {
+     "no": "Det viktigste er å gi fri vei, og det hviler et stort ansvar på deg.",
+     "th": "สิ่งสำคัญที่สุดคือการเปิดทาง และคุณมีความรับผิดชอบมาก",
+     "en": "The most important thing is to give way, and great responsibility rests on you."
+    }
+   ],
+   "points_kinds": [
+    "lov",
+    "lov",
+    "rettesnor"
+   ],
+   "michael_says": {
+    "no": "Gi plass i god tid, rolig og trygt.",
+    "th": "ให้ที่ล่วงหน้า อย่างสงบและปลอดภัย",
+    "en": "Make room in good time, calmly and safely."
+   },
+   "check_question": {
+    "q": {
+     "no": "En ambulanse med blått blinklys kommer bak deg. Hva må du gjøre?",
+     "th": "รถพยาบาลที่เปิดไฟน้ำเงินกะพริบมาข้างหลังคุณ ต้องทำอย่างไร?",
+     "en": "An ambulance with flashing blue light comes up behind you. What must you do?"
+    },
+    "options": [
+     {
+      "no": "Gi fri vei, og stanse om nødvendig",
+      "th": "เปิดทาง และหยุดถ้าจำเป็น",
+      "en": "Give way, and stop if necessary"
+     },
+     {
+      "no": "Øke farten så jeg kommer meg unna",
+      "th": "เร่งความเร็วเพื่อหนี",
+      "en": "Speed up to get away"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Ambulanse",
+     "th": "รถพยาบาล",
+     "en": "Ambulance"
+    },
+    {
+     "no": "Fri vei",
+     "th": "เปิดทาง",
+     "en": "Clear way"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian road with an ambulance using flashing blue lights approaching from behind, cars pulling aside to the right and one stopping, daylight, no text. Master image 3:2 landscape. Keep every key element (Ambulance, Clear way) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "Trafikkreglene § 10 nr. 1",
+   "note": "",
+   "michael_claims": [
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Trafikkreglene § 10 nr. 1: trafikant skal gi fri veg for utrykningskjøretøy når føreren varsler med blinkende blått lys; om nødvendig skal trafikanten stanse.",
+      "th": "กฎจราจร § 10 ข้อ 1: ผู้ใช้ถนนต้องเปิดทางให้รถฉุกเฉินเมื่อผู้ขับส่งสัญญาณด้วยไฟน้ำเงินกะพริบ ถ้าจำเป็นต้องหยุด",
+      "en": "Traffic rules § 10 no. 1: a road user must give way to an emergency vehicle when the driver warns with flashing blue light; if necessary the road user must stop."
+     },
+     "exports_to_michael": true,
+     "source": "Trafikkreglene § 10 — https://lovdata.no/forskrift/1986-03-21-747/§10",
+     "checked_at": "2026-10-10"
+    },
+    {
+     "kind": "rettesnor",
+     "text": {
+      "no": "Boka: det viktigste er å gi fri vei, og det hviler et stort ansvar på deg.",
+      "th": "หนังสือ: สิ่งสำคัญที่สุดคือการเปิดทาง และคุณมีความรับผิดชอบมาก",
+      "en": "The book: the most important thing is to give way, and great responsibility rests on you."
+     },
+     "exports_to_michael": true
+    },
+    {
+     "kind": "apent",
+     "text": {
+      "no": "Bokas råd om at du kanskje må kjøre inn på fortau, sykkelfelt eller kollektivfelt for å gi plass.",
+      "th": "คำแนะนำของหนังสือว่าอาจต้องขับขึ้นทางเท้า เลนจักรยาน หรือเลนรถโดยสารเพื่อให้ที่",
+      "en": "The book's advice that you may have to drive onto a pavement, cycle lane or bus lane to make room."
+     },
+     "exports_to_michael": false
+    }
+   ],
+   "michael_basis": {
+    "no": "Lovkrav: Trafikkreglene § 10 nr. 1: trafikant skal gi fri veg for utrykningskjøretøy når føreren varsler med blinkende blått lys; om nødvendig skal trafikanten stanse. Rettesnor (ikke lovkrav): Boka: det viktigste er å gi fri vei, og det hviler et stort ansvar på deg.",
+    "th": "ข้อกำหนดตามกฎหมาย: กฎจราจร § 10 ข้อ 1: ผู้ใช้ถนนต้องเปิดทางให้รถฉุกเฉินเมื่อผู้ขับส่งสัญญาณด้วยไฟน้ำเงินกะพริบ ถ้าจำเป็นต้องหยุด หลักคร่าว ๆ (ไม่ใช่ข้อบังคับ): หนังสือ: สิ่งสำคัญที่สุดคือการเปิดทาง และคุณมีความรับผิดชอบมาก",
+    "en": "Legal requirement: Traffic rules § 10 no. 1: a road user must give way to an emergency vehicle when the driver warns with flashing blue light; if necessary the road user must stop. Rule of thumb (not a legal requirement): The book: the most important thing is to give way, and great responsibility rests on you."
+   },
+   "has_unconfirmed": true,
+   "editor_notes": [
+    "Bokas råd om at du kanskje må kjøre inn på fortau, sykkelfelt eller kollektivfelt for å gi plass.",
+    "Om det er lov å kjøre inn på fortau, sykkelfelt eller kollektivfelt for å gi plass til utrykning er ikke bekreftet."
+   ],
+   "open_questions": [
+    "Om det er lov å kjøre inn på fortau, sykkelfelt eller kollektivfelt for å gi plass til utrykning er ikke bekreftet."
+   ],
+   "quiz_category": "Road Rules",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 115 (PDF-s. 110)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s115b"
+  },
+  {
+   "id": "bb-s115b",
+   "book": "Lærebok Klasse B",
+   "printed_page": 115,
+   "pdf_page": 110,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.6 Vikeplikt – Sporvogn, jernbanetog og planovergang",
+   "asset_id": "bb_s115b_planovergang-og-tog",
+   "image_file": "bb_s115b_planovergang-og-tog.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Planovergang: se etter tog",
+    "th": "ทางตัดทางรถไฟ: มองหาขบวนรถไฟ",
+    "en": "Level crossing: look for trains"
+   },
+   "core_sentence": {
+    "no": "Gi fri vei for tog og sporvogn, og se deg godt for ved planovergang.",
+    "th": "เปิดทางให้รถไฟและรถรางและมองให้ดีที่ทางตัดทางรถไฟ",
+    "en": "Give way to trains and trams, and look carefully at a level crossing."
+   },
+   "points": [
+    {
+     "no": "Du skal gi fri vei og om nødvendig stanse for sporvogn og jernbanetog.",
+     "th": "ต้องเปิดทางและหยุดถ้าจำเป็นเมื่อมีรถรางและรถไฟ",
+     "en": "You must give way and stop if necessary for trams and trains."
+    },
+    {
+     "no": "Før du kjører over en planovergang, skal du være oppmerksom på om tog eller sporvogn nærmer seg.",
+     "th": "ก่อนข้ามทางตัดทางรถไฟ ต้องตื่นตัวว่ามีรถไฟหรือรถรางเข้ามาหรือไม่",
+     "en": "Before you cross a level crossing, you must be alert as to whether a train or tram is approaching."
+    },
+    {
+     "no": "Hold så liten fart at du kan stanse trygt før overgangen.",
+     "th": "ขับช้าพอที่จะหยุดได้อย่างปลอดภัยก่อนถึงทางตัด",
+     "en": "Keep your speed low enough to stop safely before the crossing."
+    }
+   ],
+   "points_kinds": [
+    "lov",
+    "lov",
+    "rettesnor"
+   ],
+   "michael_says": {
+    "no": "Stopp, se, lytt. Selv om overgangen er sikret.",
+    "th": "หยุด มอง ฟัง แม้ทางตัดจะมีระบบความปลอดภัย",
+    "en": "Stop, look, listen. Even if the crossing is protected."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du nærmer deg en planovergang som er sikret med bom. Hva gjør du?",
+     "th": "คุณเข้าใกล้ทางตัดทางรถไฟที่มีไม้กั้น ทำอย่างไร?",
+     "en": "You approach a level crossing protected with barriers. What do you do?"
+    },
+    "options": [
+     {
+      "no": "Er oppmerksom på tog og holder så liten fart at jeg kan stanse trygt",
+      "th": "ตื่นตัวต่อรถไฟและขับช้าพอที่จะหยุดได้อย่างปลอดภัย",
+      "en": "Stay alert for trains and keep speed low enough to stop safely"
+     },
+     {
+      "no": "Kjører rett over – bommen sørger for sikkerheten",
+      "th": "ขับข้ามเลย – ไม้กั้นดูแลความปลอดภัย",
+      "en": "Drive straight across – the barrier takes care of safety"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Planovergang",
+     "th": "ทางตัดทางรถไฟ",
+     "en": "Level crossing"
+    },
+    {
+     "no": "Tog",
+     "th": "รถไฟ",
+     "en": "Train"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian level crossing with raised barriers and a train approaching in the distance, a car slowing before the crossing, daylight, no text. Master image 3:2 landscape. Keep every key element (Level crossing, Train) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "Trafikkreglene § 10 nr. 2",
+   "note": "",
+   "michael_claims": [
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Trafikkreglene § 10 nr. 2: trafikant skal gi fri veg og om nødvendig stanse for sporvogn og jernbanetog. Før passering av planovergang skal trafikant være oppmerksom på om jernbanetog eller sporvogn nærmer seg.",
+      "th": "กฎจราจร § 10 ข้อ 2: ผู้ใช้ถนนต้องเปิดทางและหยุดถ้าจำเป็นเมื่อมีรถรางและรถไฟ ก่อนข้ามทางตัดทางรถไฟ ผู้ใช้ถนนต้องตื่นตัวว่ามีรถไฟหรือรถรางเข้ามาหรือไม่",
+      "en": "Traffic rules § 10 no. 2: a road user must give way and, if necessary, stop for trams and trains. Before passing a level crossing the road user must be alert as to whether a train or tram is approaching."
+     },
+     "exports_to_michael": true,
+     "source": "Trafikkreglene § 10 — https://lovdata.no/forskrift/1986-03-21-747/§10",
+     "checked_at": "2026-10-10"
+    },
+    {
+     "kind": "rettesnor",
+     "text": {
+      "no": "Boka: dette gjelder selv om overgangen er særskilt sikret; hold så liten fart at stans om nødvendig kan skje i trygg avstand fra overgangen.",
+      "th": "หนังสือ: ใช้แม้ทางตัดมีระบบความปลอดภัยพิเศษ ขับช้าพอที่จะหยุดได้ในระยะปลอดภัยจากทางตัดถ้าจำเป็น",
+      "en": "The book: this applies even if the crossing is specially protected; keep speed low enough that a stop can be made at a safe distance from the crossing if necessary."
+     },
+     "exports_to_michael": true
+    }
+   ],
+   "michael_basis": {
+    "no": "Lovkrav: Trafikkreglene § 10 nr. 2: trafikant skal gi fri veg og om nødvendig stanse for sporvogn og jernbanetog. Før passering av planovergang skal trafikant være oppmerksom på om jernbanetog eller sporvogn nærmer seg. Rettesnor (ikke lovkrav): Boka: dette gjelder selv om overgangen er særskilt sikret; hold så liten fart at stans om nødvendig kan skje i trygg avstand fra overgangen.",
+    "th": "ข้อกำหนดตามกฎหมาย: กฎจราจร § 10 ข้อ 2: ผู้ใช้ถนนต้องเปิดทางและหยุดถ้าจำเป็นเมื่อมีรถรางและรถไฟ ก่อนข้ามทางตัดทางรถไฟ ผู้ใช้ถนนต้องตื่นตัวว่ามีรถไฟหรือรถรางเข้ามาหรือไม่ หลักคร่าว ๆ (ไม่ใช่ข้อบังคับ): หนังสือ: ใช้แม้ทางตัดมีระบบความปลอดภัยพิเศษ ขับช้าพอที่จะหยุดได้ในระยะปลอดภัยจากทางตัดถ้าจำเป็น",
+    "en": "Legal requirement: Traffic rules § 10 no. 2: a road user must give way and, if necessary, stop for trams and trains. Before passing a level crossing the road user must be alert as to whether a train or tram is approaching. Rule of thumb (not a legal requirement): The book: this applies even if the crossing is specially protected; keep speed low enough that a stop can be made at a safe distance from the crossing if necessary."
+   },
+   "has_unconfirmed": false,
+   "editor_notes": [],
+   "open_questions": [],
+   "quiz_category": "Right of Way",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 115 (PDF-s. 110)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s116"
+  },
+  {
+   "id": "bb-s116",
+   "book": "Lærebok Klasse B",
+   "printed_page": 116,
+   "pdf_page": 111,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.6 Vikeplikt – Spesielle forhold: ikke hindre eller forstyrre",
+   "asset_id": "bb_s116_ikke-hindre-prosesjon-og-kolonne",
+   "image_file": "bb_s116_ikke-hindre-prosesjon-og-kolonne.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Ikke hindre eller forstyrre prosesjoner og kolonner",
+    "th": "อย่าขัดขวางหรือรบกวนขบวนและแถว",
+    "en": "Do not hinder or disturb processions and columns"
+   },
+   "core_sentence": {
+    "no": "Visse grupper skal du ikke hindre eller forstyrre.",
+    "th": "บางกลุ่มคุณต้องไม่ขัดขวางหรือรบกวน",
+    "en": "Certain groups you must not hinder or disturb."
+   },
+   "points": [
+    {
+     "no": "Gående i gruppe under tilsyn av leder, prosesjon og begravelsesfølge.",
+     "th": "คนเดินเท้าเป็นกลุ่มภายใต้การดูแลของหัวหน้า ขบวนแห่ และขบวนศพ",
+     "en": "Pedestrians in a group under the supervision of a leader, a procession and a funeral procession."
+    },
+    {
+     "no": "Militær kjøretøykolonne og sivilforsvarskolonne.",
+     "th": "ขบวนยานพาหนะทหารและขบวนป้องกันพลเรือน",
+     "en": "A military vehicle column and a civil-defence column."
+    },
+    {
+     "no": "Vis hensyn og ta det rolig.",
+     "th": "เกรงใจและใจเย็น",
+     "en": "Show consideration and take it calmly."
+    }
+   ],
+   "points_kinds": [
+    "lov",
+    "lov",
+    "rettesnor"
+   ],
+   "michael_says": {
+    "no": "Venter du litt, får alle det bedre.",
+    "th": "ถ้ารอสักหน่อย ทุกคนก็สบายขึ้น",
+    "en": "If you wait a little, everyone is better off."
+   },
+   "check_question": {
+    "q": {
+     "no": "En begravelsesfølge går langs veien foran deg. Hva gjør du?",
+     "th": "ขบวนศพเดินตามถนนอยู่ข้างหน้าคุณ ทำอย่างไร?",
+     "en": "A funeral procession moves along the road ahead of you. What do you do?"
+    },
+    "options": [
+     {
+      "no": "Hindrer og forstyrrer den ikke, og tar det rolig",
+      "th": "ไม่ขัดขวางหรือรบกวน และใจเย็น",
+      "en": "Do not hinder or disturb it, and take it calmly"
+     },
+     {
+      "no": "Kjører forbi så fort jeg kan",
+      "th": "ขับผ่านให้เร็วที่สุด",
+      "en": "Drive past as fast as I can"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Prosesjon",
+     "th": "ขบวนแห่",
+     "en": "Procession"
+    },
+    {
+     "no": "Kolonne",
+     "th": "แถว",
+     "en": "Column"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian country road with a quiet funeral procession of people walking on the roadside and a car waiting patiently behind at a distance, daylight, no text. Master image 3:2 landscape. Keep every key element (Procession, Column) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "Trafikkreglene § 10 nr. 3",
+   "note": "",
+   "michael_claims": [
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Trafikkreglene § 10 nr. 3: trafikant må ikke hindre eller forstyrre gående i gruppe under tilsyn av leder, prosesjon, begravelsesfølge, militær kjøretøykolonne eller sivilforsvarskolonne.",
+      "th": "กฎจราจร § 10 ข้อ 3: ผู้ใช้ถนนต้องไม่ขัดขวางหรือรบกวนคนเดินเท้าเป็นกลุ่มภายใต้การดูแลของหัวหน้า ขบวนแห่ ขบวนศพ ขบวนยานพาหนะทหาร หรือขบวนป้องกันพลเรือน",
+      "en": "Traffic rules § 10 no. 3: a road user must not hinder or disturb pedestrians in a group under the supervision of a leader, a procession, a funeral procession, a military vehicle column or a civil-defence column."
+     },
+     "exports_to_michael": true,
+     "source": "Trafikkreglene § 10 — https://lovdata.no/forskrift/1986-03-21-747/§10",
+     "checked_at": "2026-10-10"
+    },
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Trafikkreglene § 1: en militær kjøretøykolonne eller sivilforsvarskolonne er fire eller flere kjøretøyer som tilhører Forsvaret eller Sivilforsvaret, kjørt i rekke med blått flagg eller lys på det første og grønt flagg eller lys på det siste.",
+      "th": "กฎจราจร § 1: ขบวนยานพาหนะทหารหรือขบวนป้องกันพลเรือนคือยานพาหนะสี่คันขึ้นไปของกองทัพหรือป้องกันพลเรือนที่ขับเป็นแถว มีธงหรือไฟสีน้ำเงินคันแรกและสีเขียวคันสุดท้าย",
+      "en": "Traffic rules § 1: a military vehicle column or civil-defence column is four or more vehicles belonging to the Armed Forces or Civil Defence, driven in a row with a blue flag or light on the first and a green flag or light on the last."
+     },
+     "exports_to_michael": true,
+     "source": "Trafikkreglene § 1 — https://lovdata.no/forskrift/1986-03-21-747/§1",
+     "checked_at": "2026-10-10"
+    },
+    {
+     "kind": "apent",
+     "text": {
+      "no": "Bokas skille mellom dag (flagg) og mørke (lys) for kolonnemerking.",
+      "th": "ข้อแยกของหนังสือระหว่างกลางวัน (ธง) และกลางคืน (ไฟ) สำหรับการทำเครื่องหมายแถว",
+      "en": "The book's distinction between day (flag) and dark (light) for column marking."
+     },
+     "exports_to_michael": false
+    }
+   ],
+   "michael_basis": {
+    "no": "Lovkrav: Trafikkreglene § 10 nr. 3: trafikant må ikke hindre eller forstyrre gående i gruppe under tilsyn av leder, prosesjon, begravelsesfølge, militær kjøretøykolonne eller sivilforsvarskolonne. Lovkrav: Trafikkreglene § 1: en militær kjøretøykolonne eller sivilforsvarskolonne er fire eller flere kjøretøyer som tilhører Forsvaret eller Sivilforsvaret, kjørt i rekke med blått flagg eller lys på det første og grønt flagg eller lys på det siste.",
+    "th": "ข้อกำหนดตามกฎหมาย: กฎจราจร § 10 ข้อ 3: ผู้ใช้ถนนต้องไม่ขัดขวางหรือรบกวนคนเดินเท้าเป็นกลุ่มภายใต้การดูแลของหัวหน้า ขบวนแห่ ขบวนศพ ขบวนยานพาหนะทหาร หรือขบวนป้องกันพลเรือน ข้อกำหนดตามกฎหมาย: กฎจราจร § 1: ขบวนยานพาหนะทหารหรือขบวนป้องกันพลเรือนคือยานพาหนะสี่คันขึ้นไปของกองทัพหรือป้องกันพลเรือนที่ขับเป็นแถว มีธงหรือไฟสีน้ำเงินคันแรกและสีเขียวคันสุดท้าย",
+    "en": "Legal requirement: Traffic rules § 10 no. 3: a road user must not hinder or disturb pedestrians in a group under the supervision of a leader, a procession, a funeral procession, a military vehicle column or a civil-defence column. Legal requirement: Traffic rules § 1: a military vehicle column or civil-defence column is four or more vehicles belonging to the Armed Forces or Civil Defence, driven in a row with a blue flag or light on the first and a green flag or light on the last."
+   },
+   "has_unconfirmed": true,
+   "editor_notes": [
+    "Bokas skille mellom dag (flagg) og mørke (lys) for kolonnemerking.",
+    "Bokas dag/mørke-detaljer for kolonnemerking er ikke kontrollert."
+   ],
+   "open_questions": [
+    "Bokas dag/mørke-detaljer for kolonnemerking er ikke kontrollert."
+   ],
+   "quiz_category": "Road Rules",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 116 (PDF-s. 111)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s116b"
+  },
+  {
+   "id": "bb-s116b",
+   "book": "Lærebok Klasse B",
+   "printed_page": 116,
+   "pdf_page": 111,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.7 Rygging og vending – vikeplikt og forbud",
+   "asset_id": "bb_s116b_rygging-og-vending-regler",
+   "image_file": "bb_s116b_rygging-og-vending-regler.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Rygging og vending: du har vikeplikt",
+    "th": "ถอยหลังและกลับรถ: คุณต้องให้ทาง",
+    "en": "Reversing and turning round: you must yield"
+   },
+   "core_sentence": {
+    "no": "Den som rygger eller vender, har vikeplikt for annen trafikant.",
+    "th": "ผู้ที่ถอยหลังหรือกลับรถต้องให้ทางแก่ผู้ใช้ถนนอื่น",
+    "en": "Whoever reverses or turns round must yield to other road users."
+   },
+   "points": [
+    {
+     "no": "Er utsikten ikke god nok, må du ikke rygge uten at en annen passer på, eller du har forvisset deg selv om at det ikke kan oppstå fare.",
+     "th": "ถ้าทัศนวิสัยไม่เพียงพอ ห้ามถอยหลังโดยไม่มีคนช่วยดู หรือคุณต้องแน่ใจด้วยตนเองว่าไม่เกิดอันตราย",
+     "en": "If the view is not good enough, you must not reverse unless someone else watches, or you have made sure yourself that no danger can arise."
+    },
+    {
+     "no": "Rygging og vending er forbudt på motorvei og inn- eller utkjøringsvei til motorvei.",
+     "th": "ห้ามถอยหลังและกลับรถบนมอเตอร์เวย์และทางเข้า-ออกมอเตอร์เวย์",
+     "en": "Reversing and turning round are forbidden on a motorway and on its entry or exit roads."
+    },
+    {
+     "no": "Barn er nysgjerrige på lyden og oppfatter den kanskje ikke som et faresignal.",
+     "th": "เด็กอยากรู้อยากเห็นเสียงและอาจไม่รู้ว่าเป็นสัญญาณเตือน",
+     "en": "Children are curious about the sound and may not take it as a danger signal."
+    }
+   ],
+   "points_kinds": [
+    "lov",
+    "lov",
+    "rettesnor"
+   ],
+   "michael_says": {
+    "no": "Se deg godt for. Barn kommer fra sidene.",
+    "th": "มองให้ดี เด็กมาจากด้านข้าง",
+    "en": "Look carefully. Children come from the sides."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du skal rygge ut av en innkjørsel og ser dårlig bak bilen. Hva må du gjøre?",
+     "th": "คุณจะถอยหลังออกจากทางเข้าบ้านและมองหลังรถไม่ชัด ต้องทำอย่างไร?",
+     "en": "You will reverse out of a driveway and see poorly behind the car. What must you do?"
+    },
+    "options": [
+     {
+      "no": "Be en annen passe på, eller forvisse meg selv om at det ikke kan oppstå fare",
+      "th": "ให้คนอื่นช่วยดู หรือแน่ใจด้วยตนเองว่าไม่เกิดอันตราย",
+      "en": "Ask someone else to watch, or make sure myself that no danger can arise"
+     },
+     {
+      "no": "Rygge sakte og håpe at det går bra",
+      "th": "ถอยหลังช้า ๆ และหวังว่าจะไม่เป็นไร",
+      "en": "Reverse slowly and hope it goes well"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Rygging",
+     "th": "ถอยหลัง",
+     "en": "Reversing"
+    },
+    {
+     "no": "Barn",
+     "th": "เด็ก",
+     "en": "Child"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian residential driveway with a blue van reversing slowly out, a helper standing visibly beside the van, a child with a sledge near the snowy pavement, daylight, no text. Master image 3:2 landscape. Keep every key element (Reversing, Child) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "Trafikkreglene § 11 nr. 1 og nr. 2",
+   "note": "",
+   "michael_claims": [
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Trafikkreglene § 11 nr. 1: den som rygger eller vender, har vikeplikt for annen trafikant. Er utsikten ikke tilstrekkelig, må det ikke foretas rygging eller vending uten at en annen passer på, eller fører ved selvsyn har forvisset seg om at det ikke kan oppstå fare eller skade. § 11 nr. 2: rygging og vending er forbudt på motorveg og motortrafikkveg eller på inn- eller utkjøringsveg til motorveg og motortrafikkveg.",
+      "th": "กฎจราจร § 11 ข้อ 1: ผู้ที่ถอยหลังหรือกลับรถต้องให้ทางแก่ผู้ใช้ถนนอื่น ถ้าทัศนวิสัยไม่เพียงพอ ห้ามถอยหลังหรือกลับรถโดยไม่มีคนช่วยดู หรือผู้ขับต้องแน่ใจด้วยตาตนเองว่าไม่เกิดอันตรายหรือความเสียหาย § 11 ข้อ 2: ห้ามถอยหลังและกลับรถบนมอเตอร์เวย์ ถนนมอเตอร์ทราฟฟิก หรือทางเข้า-ออกของถนนเหล่านั้น",
+      "en": "Traffic rules § 11 no. 1: whoever reverses or turns round must yield to other road users. If the view is not sufficient, reversing or turning round must not be done unless someone else watches, or the driver has made sure by his own eyes that no danger or harm can arise. § 11 no. 2: reversing and turning round are forbidden on a motorway and motor-traffic road or on an entry or exit road to them."
+     },
+     "exports_to_michael": true,
+     "source": "Trafikkreglene § 11 — https://lovdata.no/forskrift/1986-03-21-747/§11",
+     "checked_at": "2026-10-10"
+    },
+    {
+     "kind": "rettesnor",
+     "text": {
+      "no": "Boka: det skjer dessverre en del ulykker under rygging, og særlig er barn utsatt. Innretninger som gir lyd når du rygger kan være til hjelp, men kan også gi falsk trygghet.",
+      "th": "หนังสือ: น่าเสียดายที่มีอุบัติเหตุขณะถอยหลังอยู่บ้าง และเด็กเสี่ยงเป็นพิเศษ อุปกรณ์ที่ส่งเสียงเมื่อถอยหลังช่วยได้ แต่ก็ทำให้รู้สึกปลอดภัยเกินจริงได้",
+      "en": "The book: unfortunately some accidents happen while reversing, and children are especially at risk. Devices that sound when you reverse can help, but can also give false safety."
+     },
+     "exports_to_michael": true
+    }
+   ],
+   "michael_basis": {
+    "no": "Lovkrav: Trafikkreglene § 11 nr. 1: den som rygger eller vender, har vikeplikt for annen trafikant. Er utsikten ikke tilstrekkelig, må det ikke foretas rygging eller vending uten at en annen passer på, eller fører ved selvsyn har forvisset seg om at det ikke kan oppstå fare eller skade. § 11 nr. 2: rygging og vending er forbudt på motorveg og motortrafikkveg eller på inn- eller utkjøringsveg til motorveg og motortrafikkveg. Rettesnor (ikke lovkrav): Boka: det skjer dessverre en del ulykker under rygging, og særlig er barn utsatt. Innretninger som gir lyd når du rygger kan være til hjelp, men kan også gi falsk trygghet.",
+    "th": "ข้อกำหนดตามกฎหมาย: กฎจราจร § 11 ข้อ 1: ผู้ที่ถอยหลังหรือกลับรถต้องให้ทางแก่ผู้ใช้ถนนอื่น ถ้าทัศนวิสัยไม่เพียงพอ ห้ามถอยหลังหรือกลับรถโดยไม่มีคนช่วยดู หรือผู้ขับต้องแน่ใจด้วยตาตนเองว่าไม่เกิดอันตรายหรือความเสียหาย § 11 ข้อ 2: ห้ามถอยหลังและกลับรถบนมอเตอร์เวย์ ถนนมอเตอร์ทราฟฟิก หรือทางเข้า-ออกของถนนเหล่านั้น หลักคร่าว ๆ (ไม่ใช่ข้อบังคับ): หนังสือ: น่าเสียดายที่มีอุบัติเหตุขณะถอยหลังอยู่บ้าง และเด็กเสี่ยงเป็นพิเศษ อุปกรณ์ที่ส่งเสียงเมื่อถอยหลังช่วยได้ แต่ก็ทำให้รู้สึกปลอดภัยเกินจริงได้",
+    "en": "Legal requirement: Traffic rules § 11 no. 1: whoever reverses or turns round must yield to other road users. If the view is not sufficient, reversing or turning round must not be done unless someone else watches, or the driver has made sure by his own eyes that no danger or harm can arise. § 11 no. 2: reversing and turning round are forbidden on a motorway and motor-traffic road or on an entry or exit road to them. Rule of thumb (not a legal requirement): The book: unfortunately some accidents happen while reversing, and children are especially at risk. Devices that sound when you reverse can help, but can also give false safety."
+   },
+   "has_unconfirmed": false,
+   "editor_notes": [],
+   "open_questions": [],
+   "quiz_category": "Road Rules",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 116 (PDF-s. 111)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s117"
+  },
+  {
+   "id": "bb-s117",
+   "book": "Lærebok Klasse B",
+   "printed_page": 117,
+   "pdf_page": 112,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.7 Rygging og vending – Gode råd før du rygger",
+   "asset_id": "bb_s117_gode-rad-for-du-rygger",
+   "image_file": "bb_s117_gode-rad-for-du-rygger.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Gode råd før du rygger",
+    "th": "คำแนะนำที่ดีก่อนถอยหลัง",
+    "en": "Good advice before you reverse"
+   },
+   "core_sentence": {
+    "no": "Rygg aldri fort, og se bakover så lenge bilen beveger seg bakover.",
+    "th": "อย่าถอยหลังเร็ว และมองไปข้างหลังตราบที่รถยังเคลื่อนไปข้างหลัง",
+    "en": "Never reverse fast, and look behind as long as the car moves backwards."
+   },
+   "points": [
+    {
+     "no": "Ta aldri venstre fot fra kløtsjen når du rygger.",
+     "th": "อย่ายกเท้าซ้ายออกจากคลัตช์ขณะถอยหลัง",
+     "en": "Never take your left foot off the clutch when reversing."
+    },
+    {
+     "no": "Ta korte blikk fremover. Vær oppmerksom når du dreier rattet og bilen slår ut foran.",
+     "th": "มองไปข้างหน้าสั้น ๆ ระวังเมื่อหมุนพวงมาลัยแล้วหน้ารถสะบัดออก",
+     "en": "Take short looks forward. Be alert when you turn the wheel and the front of the car swings out."
+    },
+    {
+     "no": "Sjekk at det er klart bak før du begynner, og rygg på den siden som volder minst ulempe for andre.",
+     "th": "ตรวจว่าด้านหลังว่างก่อนเริ่ม และถอยหลังชิดด้านที่รบกวนผู้อื่นน้อยที่สุด",
+     "en": "Check that it is clear behind before you start, and reverse on the side that causes the least inconvenience to others."
+    }
+   ],
+   "points_kinds": [
+    "rettesnor",
+    "rettesnor",
+    "rettesnor"
+   ],
+   "michael_says": {
+    "no": "Sakte og med blikket der bilen skal.",
+    "th": "ช้า ๆ และมองไปที่ที่รถจะไป",
+    "en": "Slowly and with your eyes where the car is going."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du rygger og dreier rattet. Hva må du være ekstra oppmerksom på?",
+     "th": "คุณถอยหลังและหมุนพวงมาลัย ต้องระวังเป็นพิเศษเรื่องอะไร?",
+     "en": "You reverse and turn the wheel. What must you be extra alert to?"
+    },
+    "options": [
+     {
+      "no": "At bilen slår ut foran",
+      "th": "ว่าหน้ารถสะบัดออก",
+      "en": "That the front of the car swings out"
+     },
+     {
+      "no": "Bare bakenden",
+      "th": "เฉพาะท้ายรถ",
+      "en": "Only the rear"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Rygg sakte",
+     "th": "ถอยหลังช้า",
+     "en": "Reverse slowly"
+    },
+    {
+     "no": "Korrekt sittestilling",
+     "th": "ท่านั่งที่ถูกต้อง",
+     "en": "Correct seating"
+    }
+   ],
+   "image_brief": "Photorealistic side-on view inside a car of a driver turned to look over the shoulder while reversing slowly, seat belt on, left foot on the clutch pedal inset, daylight, no text. Master image 3:2 landscape. Keep every key element (Reverse slowly, Correct seating) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "",
+   "note": "",
+   "michael_claims": [
+    {
+     "kind": "rettesnor",
+     "text": {
+      "no": "Boka (gode råd før du rygger): rygg aldri fort; ta aldri venstre fot fra kløtsjen; se bakover så lenge bilen beveger seg bakover; ta korte blikk framover; vær særlig oppmerksom når du dreier på rattet og bilen slår ut foran; pass på at det er klart bak før du begynner; rygg på den side av kjørebanen hvor du volder minst ulempe for andre. For å se tilstrekkelig under rygging er det nødvendig med korrekt sittestilling.",
+      "th": "หนังสือ (คำแนะนำก่อนถอยหลัง): อย่าถอยหลังเร็ว อย่ายกเท้าซ้ายออกจากคลัตช์ มองไปข้างหลังตราบที่รถเคลื่อนไปข้างหลัง มองไปข้างหน้าสั้น ๆ ระวังเป็นพิเศษเมื่อหมุนพวงมาลัยแล้วหน้ารถสะบัดออก ตรวจว่าด้านหลังว่างก่อนเริ่ม ถอยหลังชิดด้านของช่องการจราจรที่รบกวนผู้อื่นน้อยที่สุด เพื่อให้เห็นเพียงพอขณะถอยหลัง ต้องนั่งในท่าที่ถูกต้อง",
+      "en": "The book (good advice before you reverse): never reverse fast; never take your left foot off the clutch; look behind as long as the car moves backwards; take short looks forward; be especially alert when you turn the wheel and the front of the car swings out; make sure it is clear behind before you start; reverse on the side of the carriageway where you cause the least inconvenience to others. To see well enough while reversing, a correct seating position is necessary."
+     },
+     "exports_to_michael": true
+    }
+   ],
+   "michael_basis": {
+    "no": "Rettesnor (ikke lovkrav): Boka (gode råd før du rygger): rygg aldri fort; ta aldri venstre fot fra kløtsjen; se bakover så lenge bilen beveger seg bakover; ta korte blikk framover; vær særlig oppmerksom når du dreier på rattet og bilen slår ut foran; pass på at det er klart bak før du begynner; rygg på den side av kjørebanen hvor du volder minst ulempe for andre. For å se tilstrekkelig under rygging er det nødvendig med korrekt sittestilling.",
+    "th": "หลักคร่าว ๆ (ไม่ใช่ข้อบังคับ): หนังสือ (คำแนะนำก่อนถอยหลัง): อย่าถอยหลังเร็ว อย่ายกเท้าซ้ายออกจากคลัตช์ มองไปข้างหลังตราบที่รถเคลื่อนไปข้างหลัง มองไปข้างหน้าสั้น ๆ ระวังเป็นพิเศษเมื่อหมุนพวงมาลัยแล้วหน้ารถสะบัดออก ตรวจว่าด้านหลังว่างก่อนเริ่ม ถอยหลังชิดด้านของช่องการจราจรที่รบกวนผู้อื่นน้อยที่สุด เพื่อให้เห็นเพียงพอขณะถอยหลัง ต้องนั่งในท่าที่ถูกต้อง",
+    "en": "Rule of thumb (not a legal requirement): The book (good advice before you reverse): never reverse fast; never take your left foot off the clutch; look behind as long as the car moves backwards; take short looks forward; be especially alert when you turn the wheel and the front of the car swings out; make sure it is clear behind before you start; reverse on the side of the carriageway where you cause the least inconvenience to others. To see well enough while reversing, a correct seating position is necessary."
+   },
+   "has_unconfirmed": false,
+   "editor_notes": [],
+   "open_questions": [],
+   "quiz_category": "Situations",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 117 (PDF-s. 112)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s118"
+  },
+  {
+   "id": "bb-s118",
+   "book": "Lærebok Klasse B",
+   "printed_page": 118,
+   "pdf_page": 113,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.7 Rygging og vending – Snu i veikryss og vendingsforbud",
+   "asset_id": "bb_s118_snu-i-veikryss",
+   "image_file": "bb_s118_snu-i-veikryss.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Snu i veikryss",
+    "th": "กลับรถที่ทางแยก",
+    "en": "Turning round in a junction"
+   },
+   "core_sentence": {
+    "no": "Rygg inn på den veien som er minst trafikkert.",
+    "th": "ถอยเข้าถนนที่มีรถน้อยที่สุด",
+    "en": "Reverse into the road that is least trafficked."
+   },
+   "points": [
+    {
+     "no": "Den som vender, har vikeplikt for annen trafikant.",
+     "th": "ผู้ที่กลับรถต้องให้ทางแก่ผู้ใช้ถนนอื่น",
+     "en": "Whoever turns round must yield to other road users."
+    },
+    {
+     "no": "Rygging og vending er forbudt på motorvei.",
+     "th": "ห้ามถอยหลังและกลับรถบนมอเตอร์เวย์",
+     "en": "Reversing and turning round are forbidden on a motorway."
+    },
+    {
+     "no": "Når du snur i et kryss, rygg inn på den veien som er minst trafikkert.",
+     "th": "เมื่อกลับรถที่ทางแยก ให้ถอยเข้าถนนที่มีรถน้อยที่สุด",
+     "en": "When you turn round in a junction, reverse into the road that is least trafficked."
+    }
+   ],
+   "points_kinds": [
+    "lov",
+    "lov",
+    "rettesnor"
+   ],
+   "michael_says": {
+    "no": "Snu der det er rolig, ikke der det er travelt.",
+    "th": "กลับรถที่ที่เงียบ ไม่ใช่ที่ที่ยุ่ง",
+    "en": "Turn round where it is quiet, not where it is busy."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du skal snu i et T-kryss. Hvilken vei bør du rygge inn på?",
+     "th": "คุณจะกลับรถที่ทางแยกรูปตัวที ควรถอยเข้าถนนใด?",
+     "en": "You will turn round in a T-junction. Which road should you reverse into?"
+    },
+    "options": [
+     {
+      "no": "Den minst trafikkerte veien",
+      "th": "ถนนที่มีรถน้อยที่สุด",
+      "en": "The least trafficked road"
+     },
+     {
+      "no": "Hovedveien med mest trafikk",
+      "th": "ถนนหลักที่มีรถมากที่สุด",
+      "en": "The main road with the most traffic"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Minst trafikk",
+     "th": "รถน้อยที่สุด",
+     "en": "Least traffic"
+    },
+    {
+     "no": "Snu",
+     "th": "กลับรถ",
+     "en": "Turn round"
+    }
+   ],
+   "image_brief": "Photorealistic aerial view of a quiet Norwegian T-junction where a yellow car reverses into the small side road to turn round, a busier main road beside it, daylight, no text, no arrows. Master image 3:2 landscape. Keep every key element (Least traffic, Turn round) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "Trafikkreglene § 11",
+   "note": "",
+   "michael_claims": [
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Trafikkreglene § 11 nr. 1: den som rygger eller vender, har vikeplikt for annen trafikant. § 11 nr. 2: rygging og vending er forbudt på motorveg og motortrafikkveg og på inn- eller utkjøringsveg til motorveg og motortrafikkveg.",
+      "th": "กฎจราจร § 11 ข้อ 1: ผู้ที่ถอยหลังหรือกลับรถต้องให้ทางแก่ผู้ใช้ถนนอื่น § 11 ข้อ 2: ห้ามถอยหลังและกลับรถบนมอเตอร์เวย์และถนนมอเตอร์ทราฟฟิกและทางเข้า-ออกของถนนเหล่านั้น",
+      "en": "Traffic rules § 11 no. 1: whoever reverses or turns round must yield to other road users. § 11 no. 2: reversing and turning round are forbidden on a motorway and motor-traffic road and on an entry or exit road to them."
+     },
+     "exports_to_michael": true,
+     "source": "Trafikkreglene § 11 — https://lovdata.no/forskrift/1986-03-21-747/§11",
+     "checked_at": "2026-10-10"
+    },
+    {
+     "kind": "rettesnor",
+     "text": {
+      "no": "Boka: når du snur i veikryss, husk å rygge inn på den veien som er minst trafikkert.",
+      "th": "หนังสือ: เมื่อกลับรถที่ทางแยก อย่าลืมถอยเข้าถนนที่มีรถน้อยที่สุด",
+      "en": "The book: when turning round in a junction, remember to reverse into the road that is least trafficked."
+     },
+     "exports_to_michael": true
+    },
+    {
+     "kind": "apent",
+     "text": {
+      "no": "Bokas påstander at det er forbudt å rygge eller vende før du har kommet forbi krysset, og at skiltet «Vendingsforbud» er det eneste forbudsskiltet som gjelder til og med første veikryss (skiltforskriften § 7 sier at forbudsskilt gjelder fram til nærmeste kryss).",
+      "th": "ข้ออ้างของหนังสือว่าห้ามถอยหลังหรือกลับรถก่อนผ่านทางแยก และว่าป้าย “ห้ามกลับรถ” เป็นป้ายห้ามเพียงป้ายเดียวที่มีผลถึงและรวมทางแยกแรก (ข้อบังคับป้าย § 7 ระบุว่าป้ายห้ามมีผลจนถึงทางแยกถัดไป)",
+      "en": "The book's claims that it is forbidden to reverse or turn round before you have passed the junction, and that the 'No U-turn' sign is the only prohibition sign that applies up to and including the first junction (sign regulation § 7 says prohibition signs apply up to the nearest junction)."
+     },
+     "exports_to_michael": false
+    }
+   ],
+   "michael_basis": {
+    "no": "Lovkrav: Trafikkreglene § 11 nr. 1: den som rygger eller vender, har vikeplikt for annen trafikant. § 11 nr. 2: rygging og vending er forbudt på motorveg og motortrafikkveg og på inn- eller utkjøringsveg til motorveg og motortrafikkveg. Rettesnor (ikke lovkrav): Boka: når du snur i veikryss, husk å rygge inn på den veien som er minst trafikkert.",
+    "th": "ข้อกำหนดตามกฎหมาย: กฎจราจร § 11 ข้อ 1: ผู้ที่ถอยหลังหรือกลับรถต้องให้ทางแก่ผู้ใช้ถนนอื่น § 11 ข้อ 2: ห้ามถอยหลังและกลับรถบนมอเตอร์เวย์และถนนมอเตอร์ทราฟฟิกและทางเข้า-ออกของถนนเหล่านั้น หลักคร่าว ๆ (ไม่ใช่ข้อบังคับ): หนังสือ: เมื่อกลับรถที่ทางแยก อย่าลืมถอยเข้าถนนที่มีรถน้อยที่สุด",
+    "en": "Legal requirement: Traffic rules § 11 no. 1: whoever reverses or turns round must yield to other road users. § 11 no. 2: reversing and turning round are forbidden on a motorway and motor-traffic road and on an entry or exit road to them. Rule of thumb (not a legal requirement): The book: when turning round in a junction, remember to reverse into the road that is least trafficked."
+   },
+   "has_unconfirmed": true,
+   "editor_notes": [
+    "Bokas påstander at det er forbudt å rygge eller vende før du har kommet forbi krysset, og at skiltet «Vendingsforbud» er det eneste forbudsskiltet som gjelder til og med første veikryss (skiltforskriften § 7 sier at forbudsskilt gjelder fram til nærmeste kryss).",
+    "Bokas «forbudt å rygge eller vende før du har kommet forbi krysset» finnes ikke i § 11. Vendingsforbudsskiltet er ikke lest i skiltforskriften § 8."
+   ],
+   "open_questions": [
+    "Bokas «forbudt å rygge eller vende før du har kommet forbi krysset» finnes ikke i § 11. Vendingsforbudsskiltet er ikke lest i skiltforskriften § 8."
+   ],
+   "quiz_category": "Road Rules",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 118 (PDF-s. 113)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s119"
+  },
+  {
+   "id": "bb-s119",
+   "book": "Lærebok Klasse B",
+   "printed_page": 119,
+   "pdf_page": 114,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.7 Rygging og vending – Hjelper og tilhenger",
+   "asset_id": "bb_s119_rygge-med-hjelper-og-tilhenger",
+   "image_file": "bb_s119_rygge-med-hjelper-og-tilhenger.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Rygging med hjelper og med tilhenger",
+    "th": "ถอยหลังพร้อมผู้ช่วยและรถพ่วง",
+    "en": "Reversing with a helper and with a trailer"
+   },
+   "core_sentence": {
+    "no": "Øv på rygging før du kjører med tilhenger.",
+    "th": "ฝึกถอยหลังก่อนลากรถพ่วง",
+    "en": "Practise reversing before you drive with a trailer."
+   },
+   "points": [
+    {
+     "no": "Er sikten dårlig, bør en annen passe på. Hjelperen kan se og snakke med føreren og se farene bak.",
+     "th": "ถ้าทัศนวิสัยไม่ดี ควรให้คนอื่นช่วยดู ผู้ช่วยมองเห็นและคุยกับผู้ขับได้ และเห็นอันตรายด้านหลัง",
+     "en": "If the view is poor, someone else should watch. The helper can see and talk to the driver and see the dangers behind."
+    },
+    {
+     "no": "Barn føler seg ofte trygge når de skjuler seg.",
+     "th": "เด็กมักรู้สึกปลอดภัยเมื่อซ่อนตัว",
+     "en": "Children often feel safe when they hide."
+    },
+    {
+     "no": "Klasse B: tilhenger med tillatt totalvekt til 750 kg. Tyngre går hvis vogntoget til sammen er maks 3500 kg.",
+     "th": "ชั้น B: รถพ่วงที่มีน้ำหนักรวมที่อนุญาตไม่เกิน 750 กก. หนักกว่านั้นได้ถ้าขบวนรวมกันไม่เกิน 3,500 กก.",
+     "en": "Class B: a trailer with a permitted gross weight up to 750 kg. A heavier one is allowed if the combination totals at most 3,500 kg."
+    }
+   ],
+   "points_kinds": [
+    "rettesnor",
+    "rettesnor",
+    "lov"
+   ],
+   "michael_says": {
+    "no": "Øv først, så kjører du trygt av sted.",
+    "th": "ฝึกก่อน แล้วคุณจะออกรถได้อย่างปลอดภัย",
+    "en": "Practise first, then you drive off safely."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du skal rygge med en campingvogn for første gang. Hva er smart?",
+     "th": "คุณจะถอยหลังพร้อมคาราวานเป็นครั้งแรก อะไรคือวิธีที่ฉลาด?",
+     "en": "You will reverse with a caravan for the first time. What is smart?"
+    },
+    "options": [
+     {
+      "no": "Øve først og la en hjelper stå der han kan se bak",
+      "th": "ฝึกก่อนและให้ผู้ช่วยยืนในที่ที่เห็นด้านหลัง",
+      "en": "Practise first and have a helper stand where he can see behind"
+     },
+     {
+      "no": "Rygge fort for å få det unnagjort",
+      "th": "ถอยหลังเร็วเพื่อให้เสร็จ",
+      "en": "Reverse fast to get it over with"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Hjelper",
+     "th": "ผู้ช่วย",
+     "en": "Helper"
+    },
+    {
+     "no": "Tilhenger",
+     "th": "รถพ่วง",
+     "en": "Trailer"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian estate car backing a caravan carefully on a driveway, a helper standing beside the caravan clearly visible to the driver in the mirror, a child with a sledge at a safe distance, daylight, no text. Master image 3:2 landscape. Keep every key element (Helper, Trailer) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "Statens vegvesen, klasse B",
+   "note": "",
+   "michael_claims": [
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Statens vegvesen: du kan trekke tilhenger etter en personbil når tilhengerens tillatte totalvekt er maks 750 kg. Tyngre tilhenger er tillatt hvis bilens og tilhengerens tillatte totalvekt til sammen er maks 3500 kg.",
+      "th": "กรมทางหลวงนอร์เวย์: ลากรถพ่วงได้เมื่อน้ำหนักรวมที่อนุญาตของรถพ่วงไม่เกิน 750 กก. รถพ่วงที่หนักกว่านั้นได้ถ้าน้ำหนักรวมที่อนุญาตของรถและรถพ่วงรวมกันไม่เกิน 3,500 กก.",
+      "en": "Norwegian Public Roads Administration: you may tow a trailer behind a passenger car when the trailer's permitted gross weight is at most 750 kg. A heavier trailer is allowed if the permitted gross weight of car and trailer together is at most 3,500 kg."
+     },
+     "exports_to_michael": true,
+     "source": "Statens vegvesen, Personbil klasse B — https://www.vegvesen.no/forerkort/har-forerkort/forerkortklasser/personbil-klasse-b/",
+     "checked_at": "2026-10-10"
+    },
+    {
+     "kind": "rettesnor",
+     "text": {
+      "no": "Boka: er sikten dårlig, bør en annen passe på. Hjelperen kan både se og snakke med sjåføren og se farene bak. Barn føler seg ofte trygge når de skjuler seg. Ikke kjør av sted med en tilhenger uten at du har øvd skikkelig på rygging.",
+      "th": "หนังสือ: ถ้าทัศนวิสัยไม่ดี ควรให้คนอื่นช่วยดู ผู้ช่วยมองเห็นและคุยกับผู้ขับได้และเห็นอันตรายด้านหลัง เด็กมักรู้สึกปลอดภัยเมื่อซ่อนตัว อย่าออกรถพร้อมรถพ่วงโดยไม่ได้ฝึกถอยหลังให้ดี",
+      "en": "The book: if the view is poor, someone else should watch. The helper can both see and talk to the driver and see the dangers behind. Children often feel safe when they hide. Do not drive off with a trailer without having practised reversing properly."
+     },
+     "exports_to_michael": true
+    }
+   ],
+   "michael_basis": {
+    "no": "Lovkrav: Statens vegvesen: du kan trekke tilhenger etter en personbil når tilhengerens tillatte totalvekt er maks 750 kg. Tyngre tilhenger er tillatt hvis bilens og tilhengerens tillatte totalvekt til sammen er maks 3500 kg. Rettesnor (ikke lovkrav): Boka: er sikten dårlig, bør en annen passe på. Hjelperen kan både se og snakke med sjåføren og se farene bak. Barn føler seg ofte trygge når de skjuler seg. Ikke kjør av sted med en tilhenger uten at du har øvd skikkelig på rygging.",
+    "th": "ข้อกำหนดตามกฎหมาย: กรมทางหลวงนอร์เวย์: ลากรถพ่วงได้เมื่อน้ำหนักรวมที่อนุญาตของรถพ่วงไม่เกิน 750 กก. รถพ่วงที่หนักกว่านั้นได้ถ้าน้ำหนักรวมที่อนุญาตของรถและรถพ่วงรวมกันไม่เกิน 3,500 กก. หลักคร่าว ๆ (ไม่ใช่ข้อบังคับ): หนังสือ: ถ้าทัศนวิสัยไม่ดี ควรให้คนอื่นช่วยดู ผู้ช่วยมองเห็นและคุยกับผู้ขับได้และเห็นอันตรายด้านหลัง เด็กมักรู้สึกปลอดภัยเมื่อซ่อนตัว อย่าออกรถพร้อมรถพ่วงโดยไม่ได้ฝึกถอยหลังให้ดี",
+    "en": "Legal requirement: Norwegian Public Roads Administration: you may tow a trailer behind a passenger car when the trailer's permitted gross weight is at most 750 kg. A heavier trailer is allowed if the permitted gross weight of car and trailer together is at most 3,500 kg. Rule of thumb (not a legal requirement): The book: if the view is poor, someone else should watch. The helper can both see and talk to the driver and see the dangers behind. Children often feel safe when they hide. Do not drive off with a trailer without having practised reversing properly."
+   },
+   "has_unconfirmed": false,
+   "editor_notes": [],
+   "open_questions": [],
+   "quiz_category": "Situations",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 119 (PDF-s. 114)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s120"
+  },
+  {
+   "id": "bb-s120",
+   "book": "Lærebok Klasse B",
+   "printed_page": 120,
+   "pdf_page": 115,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.7 Vending – Metoder; 4.8 Stans og parkering",
+   "asset_id": "bb_s120_vendemetoder-og-stans-parkering",
+   "image_file": "bb_s120_vendemetoder-og-stans-parkering.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Å vende bilen, og stans og parkering",
+    "th": "การกลับรถ และการหยุดและจอด",
+    "en": "Turning the car round, and stopping and parking"
+   },
+   "core_sentence": {
+    "no": "Husk vikeplikten når du vender. Stans og parkering er ikke det samme.",
+    "th": "จำการให้ทางเมื่อกลับรถ การหยุดและการจอดไม่เหมือนกัน",
+    "en": "Remember to yield when you turn round. Stopping and parking are not the same."
+   },
+   "points": [
+    {
+     "no": "Den som vender, har vikeplikt for annen trafikant.",
+     "th": "ผู้ที่กลับรถต้องให้ทางแก่ผู้ใช้ถนนอื่น",
+     "en": "Whoever turns round must yield to other road users."
+    },
+    {
+     "no": "Reglene om stans og parkering er omfattende, for å unngå kaos og for sikkerheten.",
+     "th": "กฎเรื่องการหยุดและการจอดมีมาก เพื่อป้องกันความวุ่นวายและเพื่อความปลอดภัย",
+     "en": "The rules on stopping and parking are extensive, to avoid chaos and for safety."
+    },
+    {
+     "no": "Det er lett å blande stans og parkering. Studer § 17 godt.",
+     "th": "สับสนระหว่างการหยุดกับการจอดได้ง่าย ศึกษา § 17 ให้ดี",
+     "en": "It is easy to mix up stopping and parking. Study § 17 well."
+    }
+   ],
+   "points_kinds": [
+    "lov",
+    "rettesnor",
+    "rettesnor"
+   ],
+   "michael_says": {
+    "no": "Først vikeplikt, så snu.",
+    "th": "ให้ทางก่อน แล้วจึงกลับรถ",
+    "en": "Yield first, then turn round."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du vender bilen i en innkjørsel ut mot veien. Hvem har vikeplikt?",
+     "th": "คุณกลับรถในทางเข้าบ้านออกสู่ถนน ใครต้องให้ทาง?",
+     "en": "You turn the car round in a driveway towards the road. Who must yield?"
+    },
+    "options": [
+     {
+      "no": "Jeg, fordi jeg vender",
+      "th": "ฉัน เพราะฉันกลับรถ",
+      "en": "I do, because I am turning round"
+     },
+     {
+      "no": "Trafikken på veien",
+      "th": "การจราจรบนถนน",
+      "en": "The traffic on the road"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Vending",
+     "th": "กลับรถ",
+     "en": "Turning round"
+    },
+    {
+     "no": "§ 17",
+     "th": "มาตรา 17",
+     "en": "§ 17"
+    }
+   ],
+   "image_brief": "Photorealistic aerial view of a yellow car turning round in a driveway by a Norwegian road, a car passing on the road, two small insets showing two ways of turning round, daylight, no text, no arrows. Master image 3:2 landscape. Keep every key element (Turning round, § 17) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "Trafikkreglene § 11 nr. 1 og § 17",
+   "note": "",
+   "michael_claims": [
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Trafikkreglene § 11 nr. 1: den som rygger eller vender, har vikeplikt for annen trafikant.",
+      "th": "กฎจราจร § 11 ข้อ 1: ผู้ที่ถอยหลังหรือกลับรถต้องให้ทางแก่ผู้ใช้ถนนอื่น",
+      "en": "Traffic rules § 11 no. 1: whoever reverses or turns round must yield to other road users."
+     },
+     "exports_to_michael": true,
+     "source": "Trafikkreglene § 11 — https://lovdata.no/forskrift/1986-03-21-747/§11",
+     "checked_at": "2026-10-10"
+    },
+    {
+     "kind": "rettesnor",
+     "text": {
+      "no": "Boka: reglene om stans og parkering er ganske omfattende, for at det ikke skal bli kaos i et tett trafikkmiljø og for at sikkerheten for alle trafikantgrupper skal ivaretas. Det er fort gjort å blande uttrykkene stans og parkering; studer § 17.",
+      "th": "หนังสือ: กฎเรื่องการหยุดและการจอดค่อนข้างมาก เพื่อไม่ให้เกิดความวุ่นวายในสภาพจราจรหนาแน่นและเพื่อความปลอดภัยของผู้ใช้ถนนทุกกลุ่ม สับสนระหว่างคำว่าหยุดกับจอดได้ง่าย ศึกษา § 17",
+      "en": "The book: the rules on stopping and parking are fairly extensive, so there is no chaos in dense traffic and so safety for all road-user groups is looked after. It is easy to mix up the terms stopping and parking; study § 17."
+     },
+     "exports_to_michael": true
+    }
+   ],
+   "michael_basis": {
+    "no": "Lovkrav: Trafikkreglene § 11 nr. 1: den som rygger eller vender, har vikeplikt for annen trafikant. Rettesnor (ikke lovkrav): Boka: reglene om stans og parkering er ganske omfattende, for at det ikke skal bli kaos i et tett trafikkmiljø og for at sikkerheten for alle trafikantgrupper skal ivaretas. Det er fort gjort å blande uttrykkene stans og parkering; studer § 17.",
+    "th": "ข้อกำหนดตามกฎหมาย: กฎจราจร § 11 ข้อ 1: ผู้ที่ถอยหลังหรือกลับรถต้องให้ทางแก่ผู้ใช้ถนนอื่น หลักคร่าว ๆ (ไม่ใช่ข้อบังคับ): หนังสือ: กฎเรื่องการหยุดและการจอดค่อนข้างมาก เพื่อไม่ให้เกิดความวุ่นวายในสภาพจราจรหนาแน่นและเพื่อความปลอดภัยของผู้ใช้ถนนทุกกลุ่ม สับสนระหว่างคำว่าหยุดกับจอดได้ง่าย ศึกษา § 17",
+    "en": "Legal requirement: Traffic rules § 11 no. 1: whoever reverses or turns round must yield to other road users. Rule of thumb (not a legal requirement): The book: the rules on stopping and parking are fairly extensive, so there is no chaos in dense traffic and so safety for all road-user groups is looked after. It is easy to mix up the terms stopping and parking; study § 17."
+   },
+   "has_unconfirmed": false,
+   "editor_notes": [],
+   "open_questions": [],
+   "quiz_category": "Road Rules",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 120 (PDF-s. 115)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s121"
+  },
+  {
+   "id": "bb-s121",
+   "book": "Lærebok Klasse B",
+   "printed_page": 121,
+   "pdf_page": 116,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.8 Stans og parkering – Hva er parkering og hva er stans?",
+   "asset_id": "bb_s121_hva-er-parkering-og-stans",
+   "image_file": "bb_s121_hva-er-parkering-og-stans.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Hva er parkering, og hva er stans?",
+    "th": "การจอดคืออะไร และการหยุดคืออะไร?",
+    "en": "What is parking, and what is stopping?"
+   },
+   "core_sentence": {
+    "no": "Parkering er enhver hensetting av kjøretøy, selv om føreren blir i bilen.",
+    "th": "การจอดคือการทิ้งยานพาหนะไว้ทุกกรณี แม้ผู้ขับจะอยู่ในรถ",
+    "en": "Parking is any leaving of a vehicle, even if the driver stays in it."
+   },
+   "points": [
+    {
+     "no": "Parkering: enhver hensetting av kjøretøy, selv om føreren ikke forlater det.",
+     "th": "การจอด: การทิ้งยานพาหนะไว้ทุกกรณี แม้ผู้ขับไม่ได้ออกจากรถ",
+     "en": "Parking: any leaving of a vehicle, even if the driver does not leave it."
+    },
+    {
+     "no": "Kortest mulig stans for av- eller påstigning eller av- eller pålessing er ikke parkering.",
+     "th": "การหยุดให้สั้นที่สุดเพื่อให้คนลงหรือขึ้นหรือขนของลงหรือขึ้นไม่ใช่การจอด",
+     "en": "The shortest possible stop for getting on or off, or loading or unloading, is not parking."
+    },
+    {
+     "no": "Står du og venter i bilen der parkering er forbudt, er det ulovlig parkering.",
+     "th": "ถ้าคุณรอในรถที่ที่ห้ามจอด ถือเป็นการจอดที่ผิดกฎหมาย",
+     "en": "If you wait in the car where parking is forbidden, it is illegal parking."
+    }
+   ],
+   "points_kinds": [
+    "lov",
+    "lov",
+    "rettesnor"
+   ],
+   "michael_says": {
+    "no": "Stans kort, parkering er å sette fra seg bilen.",
+    "th": "หยุดสั้น ๆ ส่วนการจอดคือการทิ้งรถไว้",
+    "en": "A short stop; parking is leaving the car."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du setter av en passasjer og kjører straks videre. Er det parkering?",
+     "th": "คุณส่งผู้โดยสารลงและขับต่อทันที เป็นการจอดหรือไม่?",
+     "en": "You drop off a passenger and drive straight on. Is it parking?"
+    },
+    "options": [
+     {
+      "no": "Nei – kortest mulig stans for av- eller påstigning er ikke parkering",
+      "th": "ไม่ใช่ – การหยุดสั้นที่สุดเพื่อให้คนลงหรือขึ้นไม่ใช่การจอด",
+      "en": "No – the shortest possible stop for getting on or off is not parking"
+     },
+     {
+      "no": "Ja – all stans er parkering",
+      "th": "ใช่ – การหยุดทุกอย่างคือการจอด",
+      "en": "Yes – all stopping is parking"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Stans",
+     "th": "หยุด",
+     "en": "Stop"
+    },
+    {
+     "no": "Parkering",
+     "th": "จอด",
+     "en": "Parking"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian roadside kiosk with a red car stopped briefly while a passenger gets out, and in a second small inset another red car waiting with the driver inside beside a no-parking sign, daylight. Do NOT let AI draw road signs or markings: use official Statens vegvesen sign files (Michael Trafikklærer AI materialer/traffic-signs) or check every symbol against the official sign before approval. Master image 3:2 landscape. Keep every key element (Stop, Parking) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "Trafikkreglene § 1 k",
+   "note": "",
+   "michael_claims": [
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Trafikkreglene § 1 k: parkering er enhver hensetting av kjøretøy, selv om føreren ikke forlater det. Unntatt er kortest mulig stans for av- eller påstigning eller av- eller pålessing.",
+      "th": "กฎจราจร § 1 k: การจอดคือการทิ้งยานพาหนะไว้ทุกกรณี แม้ผู้ขับไม่ได้ออกจากรถ ยกเว้นการหยุดที่สั้นที่สุดเพื่อให้คนลงหรือขึ้นหรือขนของลงหรือขึ้น",
+      "en": "Traffic rules § 1 k: parking is any leaving of a vehicle, even if the driver does not leave it. Excepted is the shortest possible stop for getting on or off, or loading or unloading."
+     },
+     "exports_to_michael": true,
+     "source": "Trafikkreglene § 1 — https://lovdata.no/forskrift/1986-03-21-747/§1",
+     "checked_at": "2026-10-10"
+    }
+   ],
+   "michael_basis": {
+    "no": "Lovkrav: Trafikkreglene § 1 k: parkering er enhver hensetting av kjøretøy, selv om føreren ikke forlater det. Unntatt er kortest mulig stans for av- eller påstigning eller av- eller pålessing.",
+    "th": "ข้อกำหนดตามกฎหมาย: กฎจราจร § 1 k: การจอดคือการทิ้งยานพาหนะไว้ทุกกรณี แม้ผู้ขับไม่ได้ออกจากรถ ยกเว้นการหยุดที่สั้นที่สุดเพื่อให้คนลงหรือขึ้นหรือขนของลงหรือขึ้น",
+    "en": "Legal requirement: Traffic rules § 1 k: parking is any leaving of a vehicle, even if the driver does not leave it. Excepted is the shortest possible stop for getting on or off, or loading or unloading."
+   },
+   "has_unconfirmed": false,
+   "editor_notes": [],
+   "open_questions": [],
+   "quiz_category": "Road Rules",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 121 (PDF-s. 116)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s122"
+  },
+  {
+   "id": "bb-s122",
+   "book": "Lærebok Klasse B",
+   "printed_page": 122,
+   "pdf_page": 117,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.8 Stans og parkering – Hvor er det forbudt å stanse? (a–d)",
+   "asset_id": "bb_s122_forbud-mot-a-stanse-a-d",
+   "image_file": "bb_s122_forbud-mot-a-stanse-a-d.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Forbudt å stanse: sted a–d",
+    "th": "ห้ามหยุด: จุด a–d",
+    "en": "Stopping forbidden: places a–d"
+   },
+   "core_sentence": {
+    "no": "Du må ikke stanse i uoversiktlig kurve, i kryss, på fortau eller på gangfelt.",
+    "th": "ห้ามหยุดในโค้งที่มองไม่เห็น ในทางแยก บนทางเท้า หรือบนทางม้าลาย",
+    "en": "Don't stop in a blind bend, a junction, on a pavement or a crossing."
+   },
+   "points": [
+    {
+     "no": "Uoversiktlig kurve, tunnel, bakketopp eller annet uoversiktlig sted.",
+     "th": "โค้งที่มองไม่เห็น อุโมงค์ ยอดเนิน หรือที่อื่นที่มองไม่เห็น",
+     "en": "A blind bend, tunnel, hilltop or other place with poor view."
+    },
+    {
+     "no": "I vegkryss eller nærmere enn 5 meter fra krysset.",
+     "th": "ในทางแยกหรือใกล้กว่า 5 เมตรจากทางแยก",
+     "en": "In a junction or nearer than 5 metres from the junction."
+    },
+    {
+     "no": "Helt eller delvis på fortau, gangveg eller sykkelvei. På gangfelt eller sykkelkryssing, eller nærmere enn 5 meter foran.",
+     "th": "บนทางเท้า ทางเดิน หรือทางจักรยานทั้งหมดหรือบางส่วน บนทางม้าลายหรือทางข้ามจักรยาน หรือใกล้กว่า 5 เมตรข้างหน้า",
+     "en": "Wholly or partly on a pavement, footpath or cycle path. On a pedestrian crossing or cycle crossing, or nearer than 5 metres in front."
+    }
+   ],
+   "points_kinds": [
+    "lov",
+    "lov",
+    "lov"
+   ],
+   "michael_says": {
+    "no": "Tenk: ser de andre meg her?",
+    "th": "คิดว่า คนอื่นเห็นฉันที่นี่ไหม?",
+    "en": "Think: can the others see me here?"
+   },
+   "check_question": {
+    "q": {
+     "no": "Du vil stanse 3 meter foran et gangfelt for å slippe av en passasjer. Er det lov?",
+     "th": "คุณอยากหยุดห่างทางม้าลาย 3 เมตรเพื่อส่งผู้โดยสารลง ได้หรือไม่?",
+     "en": "You want to stop 3 metres in front of a pedestrian crossing to drop off a passenger. Is it allowed?"
+    },
+    "options": [
+     {
+      "no": "Nei – det er forbudt å stanse nærmere enn 5 meter foran gangfelt",
+      "th": "ไม่ได้ – ห้ามหยุดใกล้กว่า 5 เมตรข้างหน้าทางม้าลาย",
+      "en": "No – it is forbidden to stop nearer than 5 metres in front of a pedestrian crossing"
+     },
+     {
+      "no": "Ja, det er bare kort",
+      "th": "ได้ เพราะแค่สั้น ๆ",
+      "en": "Yes, it is only brief"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "5 meter",
+     "th": "5 เมตร",
+     "en": "5 metres"
+    },
+    {
+     "no": "Gangfelt",
+     "th": "ทางม้าลาย",
+     "en": "Pedestrian crossing"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian roadside seen from a car's driver position, a pedestrian crossing ahead and a car correctly stopped well before it, a blind bend further ahead, daylight, no text, no measurement overlays. Do NOT let AI draw road signs or markings: use official Statens vegvesen sign files (Michael Trafikklærer AI materialer/traffic-signs) or check every symbol against the official sign before approval. Master image 3:2 landscape. Keep every key element (5 metres, Pedestrian crossing) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "Trafikkreglene § 17 nr. 1 a–d",
+   "note": "",
+   "michael_claims": [
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Trafikkreglene § 17 nr. 1: det er forbudt å stanse a) i uoversiktlig kurve, i tunnel, på bakketopp eller på annet uoversiktlig sted, b) i vegkryss eller nærmere enn 5 meter fra vegkrysset (avstanden regnes fra det punkt hvor fortaukant, kantlinje eller vegkant begynner å runde), c) helt eller delvis på fortau, gangveg eller sykkelveg, d) på gangfelt eller sykkelkryssing eller nærmere enn 5 meter foran slike steder.",
+      "th": "กฎจราจร § 17 ข้อ 1: ห้ามหยุด a) ในโค้งที่มองไม่เห็น ในอุโมงค์ บนยอดเนิน หรือที่อื่นที่มองไม่เห็น b) ในทางแยกหรือใกล้กว่า 5 เมตรจากทางแยก (วัดจากจุดที่ขอบทางเท้า เส้นขอบ หรือขอบถนนเริ่มโค้ง) c) บนทางเท้า ทางเดิน หรือทางจักรยานทั้งหมดหรือบางส่วน d) บนทางม้าลายหรือทางข้ามจักรยานหรือใกล้กว่า 5 เมตรข้างหน้าจุดเหล่านั้น",
+      "en": "Traffic rules § 17 no. 1: it is forbidden to stop a) in a blind bend, in a tunnel, on a hilltop or in another place with poor view, b) in a junction or nearer than 5 metres from the junction (the distance is measured from the point where the pavement edge, edge line or road edge begins to curve), c) wholly or partly on a pavement, footpath or cycle path, d) on a pedestrian crossing or cycle crossing or nearer than 5 metres in front of such places."
+     },
+     "exports_to_michael": true,
+     "source": "Trafikkreglene § 17 — https://lovdata.no/forskrift/1986-03-21-747/§17",
+     "checked_at": "2026-10-10"
+    }
+   ],
+   "michael_basis": {
+    "no": "Lovkrav: Trafikkreglene § 17 nr. 1: det er forbudt å stanse a) i uoversiktlig kurve, i tunnel, på bakketopp eller på annet uoversiktlig sted, b) i vegkryss eller nærmere enn 5 meter fra vegkrysset (avstanden regnes fra det punkt hvor fortaukant, kantlinje eller vegkant begynner å runde), c) helt eller delvis på fortau, gangveg eller sykkelveg, d) på gangfelt eller sykkelkryssing eller nærmere enn 5 meter foran slike steder.",
+    "th": "ข้อกำหนดตามกฎหมาย: กฎจราจร § 17 ข้อ 1: ห้ามหยุด a) ในโค้งที่มองไม่เห็น ในอุโมงค์ บนยอดเนิน หรือที่อื่นที่มองไม่เห็น b) ในทางแยกหรือใกล้กว่า 5 เมตรจากทางแยก (วัดจากจุดที่ขอบทางเท้า เส้นขอบ หรือขอบถนนเริ่มโค้ง) c) บนทางเท้า ทางเดิน หรือทางจักรยานทั้งหมดหรือบางส่วน d) บนทางม้าลายหรือทางข้ามจักรยานหรือใกล้กว่า 5 เมตรข้างหน้าจุดเหล่านั้น",
+    "en": "Legal requirement: Traffic rules § 17 no. 1: it is forbidden to stop a) in a blind bend, in a tunnel, on a hilltop or in another place with poor view, b) in a junction or nearer than 5 metres from the junction (the distance is measured from the point where the pavement edge, edge line or road edge begins to curve), c) wholly or partly on a pavement, footpath or cycle path, d) on a pedestrian crossing or cycle crossing or nearer than 5 metres in front of such places."
+   },
+   "has_unconfirmed": false,
+   "editor_notes": [],
+   "open_questions": [],
+   "quiz_category": "Road Rules",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 122 (PDF-s. 117)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s123"
+  },
+  {
+   "id": "bb-s123",
+   "book": "Lærebok Klasse B",
+   "printed_page": 123,
+   "pdf_page": 118,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.8 Stans og parkering – Forbud mot å stanse (e–h) og å parkere",
+   "asset_id": "bb_s123_forbud-mot-a-stanse-e-h-og-parkere",
+   "image_file": "bb_s123_forbud-mot-a-stanse-e-h-og-parkere.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Forbudt å stanse (e–h) og forbudt å parkere",
+    "th": "ห้ามหยุด (e–h) และห้ามจอด",
+    "en": "Stopping forbidden (e–h) and parking forbidden"
+   },
+   "core_sentence": {
+    "no": "Ikke stans på motorvei eller i kollektivfelt. Ikke parker foran innkjørsel.",
+    "th": "ห้ามหยุดบนมอเตอร์เวย์หรือในเลนรถโดยสาร ห้ามจอดหน้าทางเข้า",
+    "en": "No stopping on motorways or in bus lanes. No parking at driveways."
+   },
+   "points": [
+    {
+     "no": "Stans er forbudt på motorvei, nærmere planovergang enn 5 meter og i kollektiv-, sambruks- og sykkelfelt.",
+     "th": "ห้ามหยุดบนมอเตอร์เวย์ ใกล้ทางตัดทางรถไฟกว่า 5 เมตร และในเลนรถโดยสาร เลนใช้ร่วม และเลนจักรยาน",
+     "en": "Stopping is forbidden on a motorway, nearer than 5 metres to a level crossing and in bus, shared-use and cycle lanes."
+    },
+    {
+     "no": "Parkering er forbudt foran inn- eller utkjørsel, på møteplass, på gågate og på gatetun utenom anviste plasser.",
+     "th": "ห้ามจอดหน้าทางเข้า-ออก ในที่หลบรถ บนถนนคนเดิน และในย่านถนนคนเดินนอกจุดที่กำหนด",
+     "en": "Parking is forbidden in front of an entrance or exit, in a passing place, on a pedestrian street and on a shared street except at designated places."
+    },
+    {
+     "no": "Nær en holdeplass for buss, drosje eller sporvogn gjelder egne forbud.",
+     "th": "ใกล้ป้ายรถโดยสาร แท็กซี่ หรือรถราง มีข้อห้ามเฉพาะ",
+     "en": "Near a stop for buses, taxis or trams, special bans apply."
+    }
+   ],
+   "points_kinds": [
+    "lov",
+    "lov",
+    "lov"
+   ],
+   "michael_says": {
+    "no": "Har du tenkt på hvem du hindrer?",
+    "th": "คุณคิดหรือยังว่าคุณขัดขวางใคร?",
+    "en": "Have you thought about whom you are blocking?"
+   },
+   "check_question": {
+    "q": {
+     "no": "Du vil parkere foran en innkjørsel i fem minutter. Er det lov?",
+     "th": "คุณอยากจอดหน้าทางเข้าบ้านห้านาที ได้หรือไม่?",
+     "en": "You want to park in front of a driveway for five minutes. Is it allowed?"
+    },
+    "options": [
+     {
+      "no": "Nei – det er forbudt å parkere foran inn- eller utkjørsel",
+      "th": "ไม่ได้ – ห้ามจอดหน้าทางเข้า-ออก",
+      "en": "No – parking in front of an entrance or exit is forbidden"
+     },
+     {
+      "no": "Ja, hvis det bare er fem minutter",
+      "th": "ได้ ถ้าแค่ห้านาที",
+      "en": "Yes, if it is only five minutes"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Innkjørsel",
+     "th": "ทางเข้า",
+     "en": "Driveway"
+    },
+    {
+     "no": "Kollektivfelt",
+     "th": "เลนรถโดยสาร",
+     "en": "Bus lane"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian residential street, a car parked wrongly in front of a driveway with a person unable to get out, and a bus lane with a bus in the background, daylight, no text. Do NOT let AI draw road signs or markings: use official Statens vegvesen sign files (Michael Trafikklærer AI materialer/traffic-signs) or check every symbol against the official sign before approval. Master image 3:2 landscape. Keep every key element (Driveway, Bus lane) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "Trafikkreglene § 17 nr. 1 e–h og nr. 2",
+   "note": "",
+   "michael_claims": [
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Trafikkreglene § 17 nr. 1: det er forbudt å stanse e) på motorveg og motortrafikkveg eller på inn- eller utkjøringsveg til motorveg, f) nærmere planovergang enn 5 meter, g) i kollektivfelt, sambruksfelt eller sykkelfelt, unntatt for buss eller sporvogn på holdeplass, h) på vegutvidelse for holdeplass for buss, drosje eller sporvogn eller nærmere enn 20 meter fra offentlig trafikkskilt for slik holdeplass. § 17 nr. 2: det er forbudt å parkere a) foran inn- eller utkjørsel, b) på møteplass i vegens hele bredde så langt kjørebanen er utvidet, c) på gågate, d) på gatetun utenom særskilt anviste plasser.",
+      "th": "กฎจราจร § 17 ข้อ 1: ห้ามหยุด e) บนมอเตอร์เวย์และถนนมอเตอร์ทราฟฟิกหรือทางเข้า-ออกมอเตอร์เวย์ f) ใกล้ทางตัดทางรถไฟกว่า 5 เมตร g) ในเลนรถโดยสาร เลนใช้ร่วม หรือเลนจักรยาน ยกเว้นรถโดยสารหรือรถรางที่ป้าย h) บนส่วนขยายถนนสำหรับป้ายรถโดยสาร แท็กซี่ หรือรถราง หรือใกล้กว่า 20 เมตรจากป้ายจราจรสาธารณะของป้ายเช่นนั้น § 17 ข้อ 2: ห้ามจอด a) หน้าทางเข้า-ออก b) ในที่หลบรถตลอดความกว้างของถนนเท่าที่ช่องการจราจรขยายออก c) บนถนนคนเดิน d) ในย่านถนนคนเดินนอกจุดที่กำหนดเป็นพิเศษ",
+      "en": "Traffic rules § 17 no. 1: it is forbidden to stop e) on a motorway and motor-traffic road or on an entry or exit road to a motorway, f) nearer a level crossing than 5 metres, g) in a bus lane, shared-use lane or cycle lane, except for a bus or tram at a stop, h) on a road widening for a stop for buses, taxis or trams or nearer than 20 metres from a public traffic sign for such a stop. § 17 no. 2: it is forbidden to park a) in front of an entrance or exit, b) in a passing place across the whole width of the road as far as the carriageway is widened, c) on a pedestrian street, d) on a shared street except at specially designated places."
+     },
+     "exports_to_michael": true,
+     "source": "Trafikkreglene § 17 — https://lovdata.no/forskrift/1986-03-21-747/§17",
+     "checked_at": "2026-10-10"
+    }
+   ],
+   "michael_basis": {
+    "no": "Lovkrav: Trafikkreglene § 17 nr. 1: det er forbudt å stanse e) på motorveg og motortrafikkveg eller på inn- eller utkjøringsveg til motorveg, f) nærmere planovergang enn 5 meter, g) i kollektivfelt, sambruksfelt eller sykkelfelt, unntatt for buss eller sporvogn på holdeplass, h) på vegutvidelse for holdeplass for buss, drosje eller sporvogn eller nærmere enn 20 meter fra offentlig trafikkskilt for slik holdeplass. § 17 nr. 2: det er forbudt å parkere a) foran inn- eller utkjørsel, b) på møteplass i vegens hele bredde så langt kjørebanen er utvidet, c) på gågate, d) på gatetun utenom særskilt anviste plasser.",
+    "th": "ข้อกำหนดตามกฎหมาย: กฎจราจร § 17 ข้อ 1: ห้ามหยุด e) บนมอเตอร์เวย์และถนนมอเตอร์ทราฟฟิกหรือทางเข้า-ออกมอเตอร์เวย์ f) ใกล้ทางตัดทางรถไฟกว่า 5 เมตร g) ในเลนรถโดยสาร เลนใช้ร่วม หรือเลนจักรยาน ยกเว้นรถโดยสารหรือรถรางที่ป้าย h) บนส่วนขยายถนนสำหรับป้ายรถโดยสาร แท็กซี่ หรือรถราง หรือใกล้กว่า 20 เมตรจากป้ายจราจรสาธารณะของป้ายเช่นนั้น § 17 ข้อ 2: ห้ามจอด a) หน้าทางเข้า-ออก b) ในที่หลบรถตลอดความกว้างของถนนเท่าที่ช่องการจราจรขยายออก c) บนถนนคนเดิน d) ในย่านถนนคนเดินนอกจุดที่กำหนดเป็นพิเศษ",
+    "en": "Legal requirement: Traffic rules § 17 no. 1: it is forbidden to stop e) on a motorway and motor-traffic road or on an entry or exit road to a motorway, f) nearer a level crossing than 5 metres, g) in a bus lane, shared-use lane or cycle lane, except for a bus or tram at a stop, h) on a road widening for a stop for buses, taxis or trams or nearer than 20 metres from a public traffic sign for such a stop. § 17 no. 2: it is forbidden to park a) in front of an entrance or exit, b) in a passing place across the whole width of the road as far as the carriageway is widened, c) on a pedestrian street, d) on a shared street except at specially designated places."
+   },
+   "has_unconfirmed": false,
+   "editor_notes": [],
+   "open_questions": [],
+   "quiz_category": "Road Rules",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 123 (PDF-s. 118)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s124"
+  },
+  {
+   "id": "bb-s124",
+   "book": "Lærebok Klasse B",
+   "printed_page": 124,
+   "pdf_page": 119,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.8 Stans og parkering – 5-metersreglene",
+   "asset_id": "bb_s124_fem-meter-regler",
+   "image_file": "bb_s124_fem-meter-regler.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "5-metersreglene",
+    "th": "กฎ 5 เมตร",
+    "en": "The 5-metre rules"
+   },
+   "core_sentence": {
+    "no": "Fra veikryss og foran gangfelt og sykkelkryssing gjelder 5 meter.",
+    "th": "จากทางแยกและข้างหน้าทางม้าลายและทางข้ามจักรยานใช้ 5 เมตร",
+    "en": "5 metres applies from a junction and in front of crossings."
+   },
+   "points": [
+    {
+     "no": "Fra veikryss regnes de 5 meterne fra der fortaukant, kantlinje eller veikant begynner å runde.",
+     "th": "จากทางแยก 5 เมตรวัดจากจุดที่ขอบทางเท้า เส้นขอบ หรือขอบถนนเริ่มโค้ง",
+     "en": "From a junction the 5 metres are measured from where the pavement edge, edge line or road edge begins to curve."
+    },
+    {
+     "no": "Det er forbudt å stanse på gangfelt eller sykkelkryssing, eller nærmere enn 5 meter foran slike steder.",
+     "th": "ห้ามหยุดบนทางม้าลายหรือทางข้ามจักรยาน หรือใกล้กว่า 5 เมตรข้างหน้าจุดเหล่านั้น",
+     "en": "It is forbidden to stop on a pedestrian crossing or cycle crossing, or nearer than 5 metres in front of such places."
+    },
+    {
+     "no": "Tegningene i boka viser 5 m fra krysset og foran gangfelt og sykkelkryssing.",
+     "th": "ภาพในหนังสือแสดง 5 ม. จากทางแยกและข้างหน้าทางม้าลายและทางข้ามจักรยาน",
+     "en": "The drawings in the book show 5 m from the junction and in front of pedestrian and cycle crossings."
+    }
+   ],
+   "points_kinds": [
+    "lov",
+    "lov",
+    "rettesnor"
+   ],
+   "michael_says": {
+    "no": "Fem meter er ca. en bils lengde. Tenk avstand.",
+    "th": "ห้าเมตรประมาณความยาวหนึ่งคัน คิดถึงระยะห่าง",
+    "en": "Five metres is about one car length. Think distance."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du vil stanse ved et kryss. Hvor målers 5 meter fra?",
+     "th": "คุณอยากหยุดที่ทางแยก 5 เมตรวัดจากที่ไหน?",
+     "en": "You want to stop at a junction. Where are the 5 metres measured from?"
+    },
+    "options": [
+     {
+      "no": "Fra der fortaukant, kantlinje eller veikant begynner å runde",
+      "th": "จากที่ขอบทางเท้า เส้นขอบ หรือขอบถนนเริ่มโค้ง",
+      "en": "From where the pavement edge, edge line or road edge begins to curve"
+     },
+     {
+      "no": "Fra midten av krysset",
+      "th": "จากกลางทางแยก",
+      "en": "From the middle of the junction"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "5 m",
+     "th": "5 ม.",
+     "en": "5 m"
+    },
+    {
+     "no": "Kryss",
+     "th": "ทางแยก",
+     "en": "Junction"
+    }
+   ],
+   "image_brief": "Photorealistic aerial view of a Norwegian junction with a car correctly stopped a car length from the curve of the corner, and a second view with a car stopped a car length before a pedestrian crossing, daylight, no text, no measurement overlays, no arrows. Do NOT let AI draw road signs or markings: use official Statens vegvesen sign files (Michael Trafikklærer AI materialer/traffic-signs) or check every symbol against the official sign before approval. Master image 3:2 landscape. Keep every key element (5 m, Junction) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "Trafikkreglene § 17 nr. 1 b og d",
+   "note": "",
+   "michael_claims": [
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Trafikkreglene § 17 nr. 1 b og d: stans er forbudt i vegkryss eller nærmere enn 5 meter fra vegkrysset (avstanden regnes fra det punkt hvor fortaukant, kantlinje eller vegkant begynner å runde), og på gangfelt eller sykkelkryssing eller nærmere enn 5 meter foran slike steder.",
+      "th": "กฎจราจร § 17 ข้อ 1 b และ d: ห้ามหยุดในทางแยกหรือใกล้กว่า 5 เมตรจากทางแยก (วัดจากจุดที่ขอบทางเท้า เส้นขอบ หรือขอบถนนเริ่มโค้ง) และบนทางม้าลายหรือทางข้ามจักรยานหรือใกล้กว่า 5 เมตรข้างหน้าจุดเหล่านั้น",
+      "en": "Traffic rules § 17 no. 1 b and d: stopping is forbidden in a junction or nearer than 5 metres from the junction (measured from the point where the pavement edge, edge line or road edge begins to curve), and on a pedestrian crossing or cycle crossing or nearer than 5 metres in front of such places."
+     },
+     "exports_to_michael": true,
+     "source": "Trafikkreglene § 17 — https://lovdata.no/forskrift/1986-03-21-747/§17",
+     "checked_at": "2026-10-10"
+    },
+    {
+     "kind": "apent",
+     "text": {
+      "no": "Bokas formulering at «både parkering og stans er forbudt nærmere enn 5 meter fra veikryss» og at forbudet foran gangfelt «gjelder i kjøreretningen» (§ 17 nr. 1 omtaler stans, og «foran slike steder»).",
+      "th": "ถ้อยคำของหนังสือว่า “ห้ามทั้งจอดและหยุดใกล้กว่า 5 เมตรจากทางแยก” และว่าข้อห้ามหน้าทางม้าลาย “ใช้ในทิศทางการขับ” (§ 17 ข้อ 1 ว่าด้วยการหยุดและ “ข้างหน้าจุดเหล่านั้น”)",
+      "en": "The book's wording that 'both parking and stopping are forbidden nearer than 5 metres from a junction' and that the ban in front of a crossing 'applies in the direction of travel' (§ 17 no. 1 concerns stopping and 'in front of such places')."
+     },
+     "exports_to_michael": false
+    }
+   ],
+   "michael_basis": {
+    "no": "Lovkrav: Trafikkreglene § 17 nr. 1 b og d: stans er forbudt i vegkryss eller nærmere enn 5 meter fra vegkrysset (avstanden regnes fra det punkt hvor fortaukant, kantlinje eller vegkant begynner å runde), og på gangfelt eller sykkelkryssing eller nærmere enn 5 meter foran slike steder.",
+    "th": "ข้อกำหนดตามกฎหมาย: กฎจราจร § 17 ข้อ 1 b และ d: ห้ามหยุดในทางแยกหรือใกล้กว่า 5 เมตรจากทางแยก (วัดจากจุดที่ขอบทางเท้า เส้นขอบ หรือขอบถนนเริ่มโค้ง) และบนทางม้าลายหรือทางข้ามจักรยานหรือใกล้กว่า 5 เมตรข้างหน้าจุดเหล่านั้น",
+    "en": "Legal requirement: Traffic rules § 17 no. 1 b and d: stopping is forbidden in a junction or nearer than 5 metres from the junction (measured from the point where the pavement edge, edge line or road edge begins to curve), and on a pedestrian crossing or cycle crossing or nearer than 5 metres in front of such places."
+   },
+   "has_unconfirmed": true,
+   "editor_notes": [
+    "Bokas formulering at «både parkering og stans er forbudt nærmere enn 5 meter fra veikryss» og at forbudet foran gangfelt «gjelder i kjøreretningen» (§ 17 nr. 1 omtaler stans, og «foran slike steder»).",
+    "Bokas «både parkering og stans» og «i kjøreretningen» er ikke bekreftet i § 17 (som omtaler stans)."
+   ],
+   "open_questions": [
+    "Bokas «både parkering og stans» og «i kjøreretningen» er ikke bekreftet i § 17 (som omtaler stans)."
+   ],
+   "quiz_category": "Road Rules",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 124 (PDF-s. 119)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s125"
+  },
+  {
+   "id": "bb-s125",
+   "book": "Lærebok Klasse B",
+   "printed_page": 125,
+   "pdf_page": 120,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.8 Stans og parkering – Holdeplass for buss",
+   "asset_id": "bb_s125_holdeplass-for-buss",
+   "image_file": "bb_s125_holdeplass-for-buss.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Holdeplass for buss, drosje og sporvogn",
+    "th": "ป้ายรถโดยสาร แท็กซี่ และรถราง",
+    "en": "A stop for buses, taxis and trams"
+   },
+   "core_sentence": {
+    "no": "Ved holdeplassen kan du la folk gå av og på hvis det ikke hindrer bussen.",
+    "th": "ที่ป้าย คุณให้คนขึ้นลงได้เฉพาะเมื่อไม่ขัดขวางรถโดยสาร",
+    "en": "At a stop you may let people off if it does not hinder buses."
+   },
+   "points": [
+    {
+     "no": "Forbudt å stanse på vegutvidelse for holdeplass, eller nærmere enn 20 meter fra skiltet for den.",
+     "th": "ห้ามหยุดบนส่วนขยายถนนของป้าย หรือใกล้กว่า 20 เมตรจากป้ายของมัน",
+     "en": "Stopping is forbidden on the road widening for a stop, or nearer than 20 metres from its sign."
+    },
+    {
+     "no": "Unntatt er av- eller påstigning når den ikke er til hinder for buss, drosje eller sporvogn.",
+     "th": "ยกเว้นการขึ้นหรือลงเมื่อไม่ขัดขวางรถโดยสาร แท็กซี่ หรือรถราง",
+     "en": "Excepted is getting on or off when it does not hinder a bus, taxi or tram."
+    },
+    {
+     "no": "Av- og pålessing er ikke tillatt der.",
+     "th": "ห้ามขนของขึ้นลงที่นั่น",
+     "en": "Loading and unloading is not allowed there."
+    }
+   ],
+   "points_kinds": [
+    "lov",
+    "lov",
+    "rettesnor"
+   ],
+   "michael_says": {
+    "no": "Bussen kommer først. Gi den plass.",
+    "th": "รถโดยสารมาก่อน ให้ที่แก่มัน",
+    "en": "The bus comes first. Give it room."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du vil la et barn gå av på en vegutvidelse for bussholdeplass. Når er det lov?",
+     "th": "คุณอยากให้เด็กลงบนส่วนขยายถนนของป้ายรถโดยสาร เมื่อไรได้?",
+     "en": "You want to let a child out on the widening for a bus stop. When is it allowed?"
+    },
+    "options": [
+     {
+      "no": "Bare når av- eller påstigning ikke er til hinder for bussen",
+      "th": "เฉพาะเมื่อการขึ้นลงไม่ขัดขวางรถโดยสาร",
+      "en": "Only when getting on or off does not hinder the bus"
+     },
+     {
+      "no": "Alltid, det tar jo bare et øyeblikk",
+      "th": "เสมอ เพราะใช้เวลาแป๊บเดียว",
+      "en": "Always, it only takes a moment"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "Holdeplass",
+     "th": "ป้ายรถโดยสาร",
+     "en": "Bus stop"
+    },
+    {
+     "no": "Buss",
+     "th": "รถโดยสาร",
+     "en": "Bus"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian bus stop with a widened road and a yellow car letting a passenger out where it does not block the bus waiting behind, daylight, no text. Do NOT let AI draw road signs or markings: use official Statens vegvesen sign files (Michael Trafikklærer AI materialer/traffic-signs) or check every symbol against the official sign before approval. Master image 3:2 landscape. Keep every key element (Bus stop, Bus) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "Trafikkreglene § 17 nr. 1 h",
+   "note": "",
+   "michael_claims": [
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Trafikkreglene § 17 nr. 1 h: det er forbudt å stanse på vegutvidelse for holdeplass for buss, drosje eller sporvogn eller nærmere enn 20 meter fra offentlig trafikkskilt for slik holdeplass. Unntatt er av- eller påstigning når den ikke er til hinder for buss, drosje eller sporvogn.",
+      "th": "กฎจราจร § 17 ข้อ 1 h: ห้ามหยุดบนส่วนขยายถนนสำหรับป้ายรถโดยสาร แท็กซี่ หรือรถราง หรือใกล้กว่า 20 เมตรจากป้ายจราจรสาธารณะของป้ายเช่นนั้น ยกเว้นการขึ้นหรือลงเมื่อไม่ขัดขวางรถโดยสาร แท็กซี่ หรือรถราง",
+      "en": "Traffic rules § 17 no. 1 h: it is forbidden to stop on a road widening for a stop for buses, taxis or trams or nearer than 20 metres from a public traffic sign for such a stop. Excepted is getting on or off when it does not hinder a bus, taxi or tram."
+     },
+     "exports_to_michael": true,
+     "source": "Trafikkreglene § 17 — https://lovdata.no/forskrift/1986-03-21-747/§17",
+     "checked_at": "2026-10-10"
+    },
+    {
+     "kind": "rettesnor",
+     "text": {
+      "no": "Boka: du kan ikke foreta av- eller pålessing der, selv om det er kortest mulig stans.",
+      "th": "หนังสือ: คุณขนของขึ้นลงที่นั่นไม่ได้ แม้เป็นการหยุดที่สั้นที่สุด",
+      "en": "The book: you cannot load or unload there, even if it is the shortest possible stop."
+     },
+     "exports_to_michael": true
+    }
+   ],
+   "michael_basis": {
+    "no": "Lovkrav: Trafikkreglene § 17 nr. 1 h: det er forbudt å stanse på vegutvidelse for holdeplass for buss, drosje eller sporvogn eller nærmere enn 20 meter fra offentlig trafikkskilt for slik holdeplass. Unntatt er av- eller påstigning når den ikke er til hinder for buss, drosje eller sporvogn. Rettesnor (ikke lovkrav): Boka: du kan ikke foreta av- eller pålessing der, selv om det er kortest mulig stans.",
+    "th": "ข้อกำหนดตามกฎหมาย: กฎจราจร § 17 ข้อ 1 h: ห้ามหยุดบนส่วนขยายถนนสำหรับป้ายรถโดยสาร แท็กซี่ หรือรถราง หรือใกล้กว่า 20 เมตรจากป้ายจราจรสาธารณะของป้ายเช่นนั้น ยกเว้นการขึ้นหรือลงเมื่อไม่ขัดขวางรถโดยสาร แท็กซี่ หรือรถราง หลักคร่าว ๆ (ไม่ใช่ข้อบังคับ): หนังสือ: คุณขนของขึ้นลงที่นั่นไม่ได้ แม้เป็นการหยุดที่สั้นที่สุด",
+    "en": "Legal requirement: Traffic rules § 17 no. 1 h: it is forbidden to stop on a road widening for a stop for buses, taxis or trams or nearer than 20 metres from a public traffic sign for such a stop. Excepted is getting on or off when it does not hinder a bus, taxi or tram. Rule of thumb (not a legal requirement): The book: you cannot load or unload there, even if it is the shortest possible stop."
+   },
+   "has_unconfirmed": false,
+   "editor_notes": [],
+   "open_questions": [],
+   "quiz_category": "Road Rules",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 125 (PDF-s. 120)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": "bb-s126"
+  },
+  {
+   "id": "bb-s126",
+   "book": "Lærebok Klasse B",
+   "printed_page": 126,
+   "pdf_page": 121,
+   "chapter": "Del 4 Atferd i trafikken",
+   "section": "4.8 Stans og parkering – Parkering på forkjørsvei og venstre side",
+   "asset_id": "bb_s126_parkering-pa-forkjorsvei",
+   "image_file": "bb_s126_parkering-pa-forkjorsvei.png",
+   "image_status": "planlagt",
+   "status": "bygget",
+   "title": {
+    "no": "Parkering på forkjørsvei: over 50 km/t",
+    "th": "การจอดบนทางเอก: เกิน 50 กม./ชม.",
+    "en": "Parking on a priority road: above 50 km/h"
+   },
+   "core_sentence": {
+    "no": "På forkjørsvei med fartsgrense over 50 km/t er det forbudt å parkere på kjørebanen.",
+    "th": "บนทางเอกที่จำกัดความเร็วเกิน 50 กม./ชม. ห้ามจอดบนช่องการจราจร",
+    "en": "On a priority road above 50 km/h, parking on the carriageway is forbidden."
+   },
+   "points": [
+    {
+     "no": "Forbudet gjelder når fartsgrensen er høyere enn 50 km/t.",
+     "th": "ข้อห้ามใช้เมื่อขีดจำกัดความเร็วสูงกว่า 50 กม./ชม.",
+     "en": "The ban applies when the speed limit is higher than 50 km/h."
+    },
+    {
+     "no": "Parkering er enhver hensetting av kjøretøy, også om føreren blir i bilen.",
+     "th": "การจอดคือการทิ้งยานพาหนะไว้ทุกกรณี แม้ผู้ขับอยู่ในรถ",
+     "en": "Parking is any leaving of a vehicle, also if the driver stays in the car."
+    },
+    {
+     "no": "Vær alltid aktpågivende og varsom, også når du parkerer.",
+     "th": "ตื่นตัวและระมัดระวังเสมอ แม้ตอนจอด",
+     "en": "Always be alert and careful, also when you park."
+    }
+   ],
+   "points_kinds": [
+    "lov",
+    "lov",
+    "rettesnor"
+   ],
+   "michael_says": {
+    "no": "Parkerer du, tenk på dem som kommer forbi.",
+    "th": "ถ้าจอด ให้คิดถึงคนที่ผ่านมา",
+    "en": "If you park, think of those who pass."
+   },
+   "check_question": {
+    "q": {
+     "no": "Du vil parkere på kjørebanen på en forkjørsvei med fartsgrense 60 km/t. Er det lov?",
+     "th": "คุณอยากจอดบนช่องการจราจรบนทางเอกที่จำกัดความเร็ว 60 กม./ชม. ได้หรือไม่?",
+     "en": "You want to park on the carriageway of a priority road with a speed limit of 60 km/h. Is it allowed?"
+    },
+    "options": [
+     {
+      "no": "Nei – det er forbudt ved fartsgrense høyere enn 50 km/t",
+      "th": "ไม่ได้ – ห้ามเมื่อขีดจำกัดสูงกว่า 50 กม./ชม.",
+      "en": "No – it is forbidden at a speed limit above 50 km/h"
+     },
+     {
+      "no": "Ja – forbudet gjelder bare fra 70 km/t",
+      "th": "ได้ – ข้อห้ามใช้เฉพาะตั้งแต่ 70 กม./ชม.",
+      "en": "Yes – the ban only applies from 70 km/h"
+     }
+    ],
+    "answer": 0
+   },
+   "image_labels": [
+    {
+     "no": "60-skilt",
+     "th": "ป้าย 60",
+     "en": "60 sign"
+    },
+    {
+     "no": "Forkjørsvei",
+     "th": "ทางเอก",
+     "en": "Priority road"
+    }
+   ],
+   "image_brief": "Photorealistic Norwegian priority road with a 60 speed-limit sign and a yellow car parked correctly off the carriageway on the shoulder, daylight. Do NOT let AI draw road signs or markings: use official Statens vegvesen sign files (Michael Trafikklærer AI materialer/traffic-signs) or check every symbol against the official sign before approval. Master image 3:2 landscape. Keep every key element (60 sign, Priority road) fully inside the central safe area (middle 70% width, middle 80% height) so that 4:5 portrait and 4:3 crops lose nothing important.",
+   "image_focus": {
+    "x": 50,
+    "y": 55
+   },
+   "rule_ref": "Trafikkreglene § 17 nr. 3",
+   "note": "",
+   "michael_claims": [
+    {
+     "kind": "lov",
+     "text": {
+      "no": "Trafikkreglene § 17 nr. 3: på forkjørsveg med høyere fartsgrense enn 50 km i timen er det forbudt å parkere på kjørebanen.",
+      "th": "กฎจราจร § 17 ข้อ 3: บนทางเอกที่จำกัดความเร็วสูงกว่า 50 กม./ชม. ห้ามจอดบนช่องการจราจร",
+      "en": "Traffic rules § 17 no. 3: on a priority road with a speed limit higher than 50 km/h it is forbidden to park on the carriageway."
+     },
+     "exports_to_michael": true,
+     "source": "Trafikkreglene § 17 — https://lovdata.no/forskrift/1986-03-21-747/§17",
+     "checked_at": "2026-10-10"
+    },
+    {
+     "kind": "rettesnor",
+     "text": {
+      "no": "Boka: vær alltid aktpågivende og varsom, også når du parkerer. Repeter grunnregelen.",
+      "th": "หนังสือ: ตื่นตัวและระมัดระวังเสมอ แม้ตอนจอด ทบทวนกฎพื้นฐาน",
+      "en": "The book: always be alert and careful, also when you park. Repeat the basic rule."
+     },
+     "exports_to_michael": true
+    },
+    {
+     "kind": "apent",
+     "text": {
+      "no": "Bokas påstand at det ikke er forbudt å parkere på venstre side av kjørebanen (§ 17 nevner ikke venstre side).",
+      "th": "ข้ออ้างของหนังสือว่าไม่ห้ามจอดด้านซ้ายของช่องการจราจร (§ 17 ไม่กล่าวถึงด้านซ้าย)",
+      "en": "The book's claim that it is not forbidden to park on the left side of the carriageway (§ 17 does not mention the left side)."
+     },
+     "exports_to_michael": false
+    }
+   ],
+   "michael_basis": {
+    "no": "Lovkrav: Trafikkreglene § 17 nr. 3: på forkjørsveg med høyere fartsgrense enn 50 km i timen er det forbudt å parkere på kjørebanen. Rettesnor (ikke lovkrav): Boka: vær alltid aktpågivende og varsom, også når du parkerer. Repeter grunnregelen.",
+    "th": "ข้อกำหนดตามกฎหมาย: กฎจราจร § 17 ข้อ 3: บนทางเอกที่จำกัดความเร็วสูงกว่า 50 กม./ชม. ห้ามจอดบนช่องการจราจร หลักคร่าว ๆ (ไม่ใช่ข้อบังคับ): หนังสือ: ตื่นตัวและระมัดระวังเสมอ แม้ตอนจอด ทบทวนกฎพื้นฐาน",
+    "en": "Legal requirement: Traffic rules § 17 no. 3: on a priority road with a speed limit higher than 50 km/h it is forbidden to park on the carriageway. Rule of thumb (not a legal requirement): The book: always be alert and careful, also when you park. Repeat the basic rule."
+   },
+   "has_unconfirmed": true,
+   "editor_notes": [
+    "Bokas påstand at det ikke er forbudt å parkere på venstre side av kjørebanen (§ 17 nevner ikke venstre side).",
+    "Bokas «60 km/t eller mer» er utdatert; § 17 nr. 3 sier «høyere enn 50». Parkering på venstre side er ikke bekreftet."
+   ],
+   "open_questions": [
+    "Bokas «60 km/t eller mer» er utdatert; § 17 nr. 3 sier «høyere enn 50». Parkering på venstre side er ikke bekreftet."
+   ],
+   "quiz_category": "Road Rules",
+   "official_check": "2026-10-10",
+   "source_ref": "Lærebok Klasse B, trykt s. 126 (PDF-s. 121)",
+   "language_status": {
+    "no": "skrevet",
+    "th": "skrevet",
+    "en": "skrevet"
+   },
+   "next_step": null
+  }
+ ],
+ "claim_policy": {
+  "kinds": {
+   "lov": "Lovkrav lest i primærkilde. Krever source og checked_at.",
+   "rettesnor": "Pedagogisk rettesnor fra boka. Ikke lovkrav.",
+   "apent": "Uavklart. Sendes ALDRI til læreren og står ikke i elevtekst. Bare i editor_notes."
+  },
+  "rule": "Lovregler blir ikke rettesnorer fordi kilde mangler: de er apent til de er kontrollert."
+ },
+ "global_open_questions": [
+  "Skal thai-teksten vise norsk fagord i parentes? Pakken viser det ikke.",
+  "Lisens til å bruke boka som kilde kommersielt er ikke avklart.",
+  "Skiltforskriften kapittel 3 (vikeplikt- og forkjørsskilt) og stoppskilt er ikke lest."
+ ]
+}

@@ -1,0 +1,1296 @@
+<!doctype html>
+<html lang="no"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Michaels bildebok</title>
+<style>
+:root{--bg:#0f1720;--card:#16212d;--ink:#eef3f8;--mut:#9fb0c1;--acc:#4cc2ff;--ok:#3ecf8e;--bad:#ff7a7a}
+@media (prefers-color-scheme:light){:root{--bg:#f3f6fa;--card:#fff;--ink:#14202b;--mut:#51636f;--acc:#0a6fb5;--ok:#157a50;--bad:#b3261e}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,sans-serif}
+header{position:sticky;top:0;background:var(--bg);padding:12px 16px;display:flex;gap:8px;align-items:center;z-index:2;border-bottom:1px solid #8883}
+header b{flex:1}header button{border:1px solid var(--acc);background:none;color:var(--ink);padding:6px 12px;border-radius:8px;cursor:pointer}
+header button.on{background:var(--acc);color:#fff}
+main{max-width:680px;margin:0 auto;padding:16px}
+.card{background:var(--card);border-radius:16px;overflow:hidden;margin:0 0 20px;box-shadow:0 2px 10px #0003}
+.media{position:relative;aspect-ratio:4/5;background:#223}@media(min-width:520px){.media{aspect-ratio:4/3}}
+.media img{width:100%;height:100%;object-fit:cover;display:block}
+.ph{position:absolute;inset:0;display:grid;place-items:center;background:repeating-linear-gradient(45deg,#2a3a4a,#2a3a4a 14px,#25333f 14px,#25333f 28px);color:#cfe}
+.pills{position:absolute;left:10px;bottom:10px;display:flex;gap:6px;flex-wrap:wrap}
+.pill{background:#000b;color:#fff;border-radius:999px;padding:3px 10px;font-size:13px}
+.body{padding:10px 14px 12px;font-size:15px}h2{margin:0 0 2px;font-size:18px}.core{font-weight:600;margin:0 0 6px}.more summary{cursor:pointer;color:var(--acc);margin-top:6px}
+ul{margin:0 0 6px;padding-left:18px}li{margin:1px 0}
+.michael{background:#4cc2ff22;border-left:4px solid var(--acc);padding:8px 10px;border-radius:6px;margin:10px 0}
+.q{margin:8px 0 6px;font-weight:600}.opt{display:block;width:100%;text-align:left;margin:4px 0;padding:10px;border-radius:10px;border:1px solid #8886;background:none;color:var(--ink);font:inherit;cursor:pointer}
+.opt.good{border-color:var(--ok);background:#3ecf8e22}.opt.bad{border-color:var(--bad);background:#ff7a7a22}
+.fb{min-height:1.2em;margin:4px 0;font-weight:600}.src{color:var(--mut);font-size:13px;margin:8px 0 0}
+.brief{color:var(--mut);font-size:12px;margin-top:6px}
+</style></head><body>
+<header><b id="ttl">Michaels bildebok</b><button data-l="no" class="on" aria-label="Norsk">NO</button><button data-l="th" aria-label="ภาษาไทย">ไทย</button><button data-l="en" aria-label="English">EN</button></header>
+<main><section class="view" id="v-no" hidden>
+<article class="card" data-id="bb-s86">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Lastebil</span><span class="pill">Sving</span></div></div>
+  <div class="body">
+    <h2>Store kjøretøy og svinger</h2>
+    <p class="core">Ved høyresving kjører du så nær høyre kant som mulig.</p>
+    <ul><li>Venstresving på tovegs vei: så nær midten av kjørebanen som mulig.</li><li>Et langt vogntog kan trenge en annen plassering for å klare svingen.</li><li>Da hviler det et stort ansvar på føreren.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 86</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Store biler trenger plass. Gi dem den, og vær ekstra forsiktig selv.</p>
+    <div class="quiz"><p class="q">En lang lastebil står og venter til å svinge til høyre i et trangt kryss. Hva gjør du som bilist bak?</p><button class="opt" data-ok="1">Holder god avstand og lar den svinge</button><button class="opt" data-ok="0">Presser meg inn ved siden av</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s87">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Venstre felt</span><span class="pill">Høyre felt</span></div></div>
+  <div class="body">
+    <h2>Flere felt: riktig felt før du svinger</h2>
+    <p class="core">Ved høyresving bruker du høyre felt. Ved venstresving bruker du venstre felt.</p>
+    <ul><li>Kjør inn i riktig felt i god tid før svingen.</li><li>Lengst til høyre ved høyresving. Lengst til venstre ved venstresving.</li><li>Se på oppmerking og skilt: de kan vise et annet felt.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 87</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Velg felt tidlig. Da slipper du hastverk i krysset.</p>
+    <div class="quiz"><p class="q">Du kjører på en vei med to felt i din retning og skal svinge til venstre. Hvilket felt velger du i god tid før krysset?</p><button class="opt" data-ok="1">Venstre felt</button><button class="opt" data-ok="0">Høyre felt</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s88">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Bil A</span><span class="pill">Bil B</span></div></div>
+  <div class="body">
+    <h2>Hvilket felt velger du etter svingen?</h2>
+    <p class="core">Etter en sving kan du velge det feltet som passer best.</p>
+    <ul><li>Ved sving inn på vei med flere felt kan du kjøre inn i det feltet som passer best.</li><li>Skal du rett fram etter svingen, passer som regel høyre felt best.</li><li>Skal du til venstre like etter, kan det være lurt å velge venstre felt med en gang. Da slipper du å skifte felt unødig.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 88</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Tenk ett skritt fram. Hvor skal du etter svingen?</p>
+    <div class="quiz"><p class="q">Du svinger til høyre og skal til venstre ved neste kryss rett etter. Hvilket felt kan være lurt å velge?</p><button class="opt" data-ok="1">Venstre felt, så slipper jeg å skifte felt</button><button class="opt" data-ok="0">Høyre felt – det er alltid riktig</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s89">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Mest vanlig</span><span class="pill">Slik kan det kjøres</span></div></div>
+  <div class="body">
+    <h2>Møtende kan svinge til venstre for hverandre</h2>
+    <p class="core">Kjøretøy fra motsatte retninger kan svinge til venstre for hverandre.</p>
+    <ul><li>Det står «kan», ikke «skal».</li><li>Hva som går, avhenger ofte av kjøretøyets størrelse og utformingen av krysset.</li><li>Mest vanlig er å passere foran hverandre. Du kan også svinge bak hverandre.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 89</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Se hva den andre gjør før du bestemmer deg.</p>
+    <div class="quiz"><p class="q">Du og en møtende bil skal begge svinge til venstre i samme kryss. Hva er riktig?</p><button class="opt" data-ok="1">Dere kan svinge til venstre for hverandre, ofte i hver sin bue</button><button class="opt" data-ok="0">Bare den ene kan svinge, den andre må vente alltid</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s90">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Innkjøring forbudt</span><span class="pill">Enveiskjøring</span></div></div>
+  <div class="body">
+    <h2>Enveiskjørte gater</h2>
+    <p class="core">Enveiskjørte gater har egne skilt. Se etter dem.</p>
+    <ul><li>Byene bruker ofte enveisregulering for å lette trafikkavviklingen.</li><li>Skilt 302 «Innkjøring forbudt»: forbud mot å kjøre forbi skiltet.</li><li>Skilt 526 «Envegskjøring»: kjøring er bare tillatt i pilens retning fram til første vegkryss.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 90</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Blå pil og rødt rundt skilt: les dem begge.</p>
+    <div class="quiz"><p class="q">Du ser et rundt rødt skilt med hvit stripe når du skal inn i en gate. Hva betyr det?</p><button class="opt" data-ok="1">Innkjøring forbudt – jeg kan ikke kjøre inn her</button><button class="opt" data-ok="0">Jeg må kjøre inn</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s91">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Bil fra venstre</span><span class="pill">Gående</span></div></div>
+  <div class="body">
+    <h2>Venstresving ut av enveiskjørt gate</h2>
+    <p class="core">Bruk venstre felt, og vær klar for biler fra venstre og for gående.</p>
+    <ul><li>Plassér deg i god tid i venstre felt, som regel så langt til venstre som mulig.</li><li>Biler fra venstre kjører ofte fort i forhold til sikt og vikeplikt.</li><li>Gående venter ikke biler på venstre side av kjørebanen.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 91</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Ekstra fare: ingen venter deg fra den siden.</p>
+    <div class="quiz"><p class="q">Du skal svinge til venstre ut av en enveiskjørt gate. Hva er ekstra viktig?</p><button class="opt" data-ok="1">Se godt etter gående og biler fra venstre</button><button class="opt" data-ok="0">Ingenting – det er samme som alltid</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s92">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Rundkjøring</span><span class="pill">Vogntog</span></div></div>
+  <div class="body">
+    <h2>Rundkjøring: skiltene og oversikten</h2>
+    <p class="core">Reduser farten i god tid og skaff deg oversikt før du kjører inn.</p>
+    <ul><li>Rundkjøringen demper farten og regulerer trafikkstrømmen.</li><li>Fareskiltet «rundkjøring» varsler bare at du kommer til en. Det sier ikke noe om vikeplikt.</li><li>Ta spesielt hensyn til store kjøretøy, særlig vogntog, som trenger stor plass.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 92</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Ukjent rundkjøring? Da senker du farten tidlig.</p>
+    <div class="quiz"><p class="q">Du nærmer deg en rundkjøring du ikke kjenner. Hva gjør du?</p><button class="opt" data-ok="1">Reduserer farten i god tid og leter etter skilt og oppmerking</button><button class="opt" data-ok="0">Holder farten og følger de andre</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s92b">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Vikepliktskilt</span><span class="pill">Vikelinje</span></div></div>
+  <div class="body">
+    <h2>Hvem har vikeplikt i rundkjøring?</h2>
+    <p class="core">Les skilt og oppmerking ved innkjøringen. De avgjør vikeplikten.</p>
+    <ul><li>Vikelinjen viser stedet der vikeplikten inntrer.</li><li>Se etter vikepliktskilt og vikelinje ved innkjøringen.</li><li>Er du i tvil, la trafikken i rundkjøringen gå først.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 92</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Se etter vikepliktskiltet. Det avgjør alt.</p>
+    <div class="quiz"><p class="q">Du er usikker på hvem som har vikeplikt når du kommer til en rundkjøring. Hva gjør du?</p><button class="opt" data-ok="1">Leser skilt og oppmerking, og lar trafikken i rundkjøringen gå først hvis jeg er i tvil</button><button class="opt" data-ok="0">Kjører først – jeg har sikkert fortrinn</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s93">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Høyresving</span><span class="pill">Rett fram</span></div></div>
+  <div class="body">
+    <h2>Rundkjøring med ett felt i hver retning</h2>
+    <p class="core">Hold kjøretøyet godt innenfor kjørefeltet hele veien.</p>
+    <ul><li>Høyresving: kjør så nær høyre kant som mulig før rundkjøringen.</li><li>Venstresving: kjør så nær midten som mulig før rundkjøringen, hvis det ikke er gul midtlinje eller midtrabatt.</li><li>Rett fram: hold kjøretøyet godt innenfor kjørefeltet.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 93</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Plassering før rundkjøringen sier hva du skal.</p>
+    <div class="quiz"><p class="q">Du skal ta første avkjøring til høyre i en rundkjøring med ett felt. Hvor plasserer du deg før den?</p><button class="opt" data-ok="1">Så nær høyre kant som mulig</button><button class="opt" data-ok="0">Mot midten av veien</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s94">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Høyre felt</span><span class="pill">Venstre felt</span></div></div>
+  <div class="body">
+    <h2>Stor rundkjøring med flere felt</h2>
+    <p class="core">Bruk riktig felt i god tid før rundkjøringen.</p>
+    <ul><li>Høyresving: bruk høyre felt i god tid før rundkjøringen.</li><li>Venstresving: bruk venstre felt i god tid.</li><li>Rett fram: følg skilt eller oppmerking. Finnes ingen, bruk det feltet som passer best, og husk hovedregelen om å holde til høyre.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 94</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Velg felt før du kommer til rundkjøringen, ikke i den.</p>
+    <div class="quiz"><p class="q">Du skal rett fram i en stor rundkjøring med to felt, og det finnes verken skilt eller oppmerking. Hva gjør du?</p><button class="opt" data-ok="1">Bruker det feltet som passer best, og holder til høyre som hovedregel</button><button class="opt" data-ok="0">Alltid venstre felt</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s95">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Tegn</span><span class="pill">Utkjørsel</span></div></div>
+  <div class="body">
+    <h2>Tegngiving i rundkjøring</h2>
+    <p class="core">Gi tegn som gir informasjon. La være å gi tegn som kan misforstås.</p>
+    <ul><li>Høyresving: gi tegn til høyre i god tid før rundkjøringen og behold det til du er ute.</li><li>Rett fram: gi tegn til høyre ved utkjørselen og avslutt når du er ute.</li><li>Venstresving: tegn til venstre før, og tegn til høyre ved utkjørselen. Husk vikeplikt ved feltskifte.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 95</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Tegn som hjelper de andre, er gode tegn.</p>
+    <div class="quiz"><p class="q">Du skal rett fram gjennom en rundkjøring. Når gir du tegn til høyre?</p><button class="opt" data-ok="1">Når du skal ut av rundkjøringen</button><button class="opt" data-ok="0">Før du kjører inn</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s96">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Observasjon</span><span class="pill">Blindsone</span></div></div>
+  <div class="body">
+    <h2>Feltskifte: vikeplikt og rutine</h2>
+    <p class="core">Den som skifter felt, har vikeplikt for dem i feltet han skal inn i.</p>
+    <ul><li>Vikeplikten gjelder både ved feltskifte til høyre og venstre.</li><li>Rutine: observér, gi tegn, kontroller blindsonen, avpass farten, skift felt.</li><li>Skift felt jevnt, ikke med brå rattbevegelse. Ikke vik unødig fra plassen din.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 96</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Et feltskifte er en liten samtale med de andre.</p>
+    <div class="quiz"><p class="q">Du vil skifte fra høyre til venstre felt, og en bil nærmer seg bak i venstre felt. Hvem har vikeplikt?</p><button class="opt" data-ok="1">Jeg, som skifter felt</button><button class="opt" data-ok="0">Bilen bak – den må alltid vike</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s97">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Orienteringstavle</span><span class="pill">Nedbremsingsfelt</span></div></div>
+  <div class="body">
+    <h2>Felt for nedbremsing ved avkjørsel</h2>
+    <p class="core">Ved avkjøring kjører du snarest mulig inn på feltet for nedbremsing.</p>
+    <ul><li>Se orienteringstavlen. Den forteller at du nærmer deg avkjørselen.</li><li>Ved starten av feltet står et skilt med skråpil.</li><li>På veier med mye trafikk er det hensiktsmessig med eget felt for avkjøring. Om vinteren kan feltet være glattere enn hovedveien.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 97</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Gå inn i feltet tidlig og bremse der.</p>
+    <div class="quiz"><p class="q">Du skal ut på en avkjørsel med felt for nedbremsing på en motorvei. Hvor bremser du ned?</p><button class="opt" data-ok="1">I feltet for nedbremsing</button><button class="opt" data-ok="0">På hovedveien før feltet</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s98">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Fartsøkning</span><span class="pill">Vikesymbol</span></div></div>
+  <div class="body">
+    <h2>Felt for fartsøkning og flettereglen</h2>
+    <p class="core">I feltet for fartsøkning tilpasser du farten til trafikken du skal inn i.</p>
+    <ul><li>Kjørende i felt for fartsøkning skal tilpasse farten til trafikken i feltet de skal kjøre inn i.</li><li>Trafikken på hovedveien bør lette innkjøringen for deg.</li><li>Bruk hele feltet til å få opp farten.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 98</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Bruk hele feltet til å få opp farten.</p>
+    <div class="quiz"><p class="q">Du kjører inn på en motorvei via felt for fartsøkning. Hva gjør du?</p><button class="opt" data-ok="1">Øker farten i feltet og tilpasser den til trafikken jeg skal inn i</button><button class="opt" data-ok="0">Kjører sakte inn og lar de andre bremse</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s99">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Buss</span><span class="pill">Taxi</span><span class="pill">2+</span></div></div>
+  <div class="body">
+    <h2>Kollektivfelt og sambruksfelt</h2>
+    <p class="core">Kjøring i kollektivfelt er bare tillatt som skiltet angir.</p>
+    <ul><li>Noen kan likevel bruke feltene, f.eks. elektrisk eller hydrogendrevet bil, tohjuls motorsykkel, moped og sykkel.</li><li>Drosje kan bare bruke kollektivfelt når den har taklykt (skilt 508).</li><li>Uniformert utrykningskjøretøy kan også bruke feltene.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 99</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Les skiltet. Det sier hvem som får kjøre her.</p>
+    <div class="quiz"><p class="q">Du kjører en elbil og ser et kollektivfelt med skilt som bare viser en buss. Hva sier trafikkreglene?</p><button class="opt" data-ok="1">Elektriske biler kan likevel nytte slike felt etter trafikkreglene § 5 nr. 2</button><button class="opt" data-ok="0">Nei – bare busser får kjøre her, alltid</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s100">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Påbudt retning</span><span class="pill">Bil A</span><span class="pill">Bil B</span></div></div>
+  <div class="body">
+    <h2>Påbudt kjøreretning</h2>
+    <p class="core">Blå runde skilt med hvit pil forteller hvilken retning du må kjøre.</p>
+    <ul><li>Påbudt kjøreretning (skilt 402): kjørende skal forlate vegkrysset i den retning som er angitt på skiltet.</li><li>Påbudsskilt er runde med blå bunn og hvite piler.</li><li>Eksempel: bil A må svinge til venstre. Bil B kan velge rett fram eller til høyre.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 100</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Blå pil er et påbud, ikke et råd.</p>
+    <div class="quiz"><p class="q">Du står i en bil bak et skilt som bare viser påbudt retning mot høyre. Kan du svinge til venstre?</p><button class="opt" data-ok="1">Nei – påbudt kjøreretning forbyr venstresving</button><button class="opt" data-ok="0">Ja, hvis ingen ser det</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s101">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Skråpil</span><span class="pill">Sperring</span></div></div>
+  <div class="body">
+    <h2>Påbudt kjørefelt: pass forbi på pilens side</h2>
+    <p class="core">Skråpilen viser hvilken side du må kjøre forbi skiltet på.</p>
+    <ul><li>Påbudt kjørefelt (skilt 404): kjørende skal passere skiltet på den side som pilen peker mot.</li><li>Du ser det ofte ved veiarbeid eller en sperring.</li><li>Følg pilen og ta hensyn til hindringen.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 101</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Pilen viser veien rundt hindringen.</p>
+    <div class="quiz"><p class="q">Det står et blått skilt med skråpil mot venstre foran en sperring i veien. Hvilken side kjører du forbi på?</p><button class="opt" data-ok="1">Til venstre, slik pilen viser</button><button class="opt" data-ok="0">Til høyre, som vanlig</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s102">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Skilt</span><span class="pill">E18 / E6 (veinummer)</span></div></div>
+  <div class="body">
+    <h2>Skilt som viser felt</h2>
+    <p class="core">Les skiltene som viser felt, og velg felt i god tid.</p>
+    <ul><li>Les skiltet før du velger felt.</li><li>Velg felt i god tid.</li><li>Er du i tvil, senk farten og se deg godt for.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 102</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Se opp i tide og velg felt.</p>
+    <div class="quiz"><p class="q">Du kommer til en trafikkøy med et blått skilt som viser felt. Hva gjør du først?</p><button class="opt" data-ok="1">Leser skiltet og velger felt i god tid</button><button class="opt" data-ok="0">Kjører rett frem uten å se på skiltet</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s103">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Sammenfletting</span></div></div>
+  <div class="body">
+    <h2>Sammenfletting: bytt på</h2>
+    <p class="core">Når antall felt reduseres, tilpasser dere farten og slipper inn vekselvis.</p>
+    <ul><li>Når vanlige felt i samme retning reduseres, gjelder ikke vikeplikt ved feltskifte.</li><li>Farten skal gjensidig tilpasses slik at de kjørende vekselvis kan fortsette uten unødig hinder.</li><li>Regelen gjelder også selv om fletteskiltet ikke er satt opp.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 103</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Ett i hver. Det er hele hemmeligheten.</p>
+    <div class="quiz"><p class="q">Dere er to biler i hvert sitt felt, og ett felt tar slutt. Hva er riktig?</p><button class="opt" data-ok="1">Dere tilpasser farten og slipper inn vekselvis</button><button class="opt" data-ok="0">Den som er først, tar plassen uansett</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s104">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Felt slutter</span><span class="pill">Skift felt</span></div></div>
+  <div class="body">
+    <h2>Skilt: kjørefelt begynner og slutter</h2>
+    <p class="core">Er feltet ditt i ferd med å slutte, skal du skifte felt.</p>
+    <ul><li>Skilt viser at kjørefelt begynner eller slutter. Se opp i tide.</li><li>Skilt 532 «Kjørefelt slutter»: kjørende i felt som slutter, skal skifte felt og har vikeplikt i samsvar med trafikkreglene.</li><li>Skift felt i god tid og se deg for.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 104</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Se på pilfargen. Den sier hvem som må vike.</p>
+    <div class="quiz"><p class="q">Du kjører i et felt som snart slutter, og skiltet «Kjørefelt slutter» står foran deg. Hva må du gjøre?</p><button class="opt" data-ok="1">Skifte felt og vike i samsvar med trafikkreglene</button><button class="opt" data-ok="0">Fortsette og la de andre vike for meg</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s104b">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Vikeplikt</span></div></div>
+  <div class="body">
+    <h2>Hva betyr vikeplikt?</h2>
+    <p class="core">Vikeplikt betyr at du må stanse hvis det er nødvendig.</p>
+    <ul><li>Den du skal vike for, må ikke hindres eller forstyrres.</li><li>Du viser tydelig vikeplikten ved å sette ned farten eller stanse i god tid.</li><li>Hold vikeplikt, stoppeplikt, fri vei og fletting fra hverandre.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 104</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Vikeplikt er å vise at du ser den andre.</p>
+    <div class="quiz"><p class="q">Du har vikeplikt og ser en bil komme. Hvordan viser du det?</p><button class="opt" data-ok="1">Setter ned farten eller stanser i god tid</button><button class="opt" data-ok="0">Holder farten og håper den andre bremser</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s105">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Fra høyre</span><span class="pill">Skolebuss</span></div></div>
+  <div class="body">
+    <h2>Vikeplikt for kjøretøy fra høyre</h2>
+    <p class="core">Hovedregelen: du har vikeplikt for kjøretøy som kommer fra høyre.</p>
+    <ul><li>Det samme gjelder når du svinger til venstre og får kjøretøy på din høyre side.</li><li>Vurder om kjøretøyet fra høyre kan bli hindret eller forstyrret.</li><li>Vi vurderer fart og avstand dårlig. Gi mer tid enn du tror.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 105</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Høyre først. Så vurderer du resten.</p>
+    <div class="quiz"><p class="q">Du kommer til et uregulert kryss og ser en bil langt borte til høyre. Hva gjør du?</p><button class="opt" data-ok="1">Gir vei – jeg har vikeplikt for bilen fra høyre</button><button class="opt" data-ok="0">Kjører – den er langt unna</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s106">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Gående</span><span class="pill">Syklist</span></div></div>
+  <div class="body">
+    <h2>Vikeplikt for gående og syklende ved svinging</h2>
+    <p class="core">Når du svinger, har du vikeplikt for gående og syklende der du kjører inn.</p>
+    <ul><li>Svingende har vikeplikt for gående, syklende og liten el-motorvogn som skal rett fram på kjørebanen eller vegens skulder.</li><li>Svinger du inn over fortau, har du vikeplikt for dem som ferdes på fortauet.</li><li>Se alltid en gang til etter gående og syklende.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 106</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Svingen er der de myke trafikantene krysser.</p>
+    <div class="quiz"><p class="q">Du svinger til høyre og en fotgjenger går over veien du skal inn i, ved siden av et gangfelt. Hva gjør du?</p><button class="opt" data-ok="1">Slipper ham over – jeg har vikeplikt også uten gangfelt</button><button class="opt" data-ok="0">Kjører – han er ikke i gangfeltet</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s106b">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Gangfelt</span><span class="pill">Stopp her</span></div></div>
+  <div class="body">
+    <h2>Ikke stans på gangfeltet</h2>
+    <p class="core">Kjør slik at du ikke må stanse til hinder for kryssende trafikk eller på gangfeltet.</p>
+    <ul><li>Når du nærmer deg eller kjører inn i kryss: ikke stans til unødig hinder for den kryssende veien.</li><li>Unngå stans på gangfelt.</li><li>Ikke hindre de gående. Kjør så langt frem at du får sikt til begge sider, når det er klart.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 106</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Stans før gangfeltet, ikke på det.</p>
+    <div class="quiz"><p class="q">Du har vikeplikt i et kryss med gangfelt rett foran deg, og en fotgjenger er i gangfeltet. Hvor stanser du?</p><button class="opt" data-ok="1">Før gangfeltet, så jeg ikke hindrer de gående</button><button class="opt" data-ok="0">På gangfeltet, så jeg ser bedre</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s107">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Grønt lys</span><span class="pill">Kø</span></div></div>
+  <div class="body">
+    <h2>Lyskryss: rett fram</h2>
+    <p class="core">Grønt lys betyr at du kan kjøre hvis vegen er fri.</p>
+    <ul><li>Ved grønt lys kan du passere signalet dersom vegen er fri.</li><li>Kjør slik at du ikke må stanse til unødig hinder for kryssende trafikk.</li><li>Fotgjengere kan ha gått ut i gangfeltet på grønt: la dem komme over.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 107</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Grønt betyr ikke at alt er fritt. Se deg for.</p>
+    <div class="quiz"><p class="q">Du har grønt rett fram, men køen står stille på andre siden av krysset. Hva gjør du?</p><button class="opt" data-ok="1">Venter til det er plass til meg på andre siden</button><button class="opt" data-ok="0">Kjører ut og blir stående midt i krysset</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s107b">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Høyresving</span><span class="pill">Gående</span></div></div>
+  <div class="body">
+    <h2>Høyresving i lyskryss</h2>
+    <p class="core">Ved høyresving på grønt har du vikeplikt for gående i gangfeltet du kjører inn på.</p>
+    <ul><li>Svinger du, har du vikeplikt for gående og syklende der du kjører inn.</li><li>Er det gående i feltet, kjør rolig frem og vent til det er klart.</li><li>Har lyset eget signal for gående, følg med på hvilket lys de har. Det kan være grønt samtidig med ditt.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 107</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Grønt for deg kan være grønt for dem også.</p>
+    <div class="quiz"><p class="q">Du har grønt og skal til høyre, og gående krysser i gangfeltet du kjører inn på. Hva gjør du?</p><button class="opt" data-ok="1">Venter og lar dem gå over først</button><button class="opt" data-ok="0">Kjører – jeg har jo grønt</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s108">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Venstresving</span><span class="pill">Møtende</span></div></div>
+  <div class="body">
+    <h2>Venstresving i lyskryss</h2>
+    <p class="core">Ved venstresving på grønt har du vikeplikt for møtende og for gående.</p>
+    <ul><li>Vent på en trygg luke i motgående trafikk.</li><li>Ikke kjør så langt frem at du stenger for motgående som skal svinge til sin venstre side.</li><li>Stå med hjulene rett fram mens du venter. Blir du påkjørt bakfra, kastes du rett fram.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 108</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Hjulene rett fram mens du venter. Det er en billig forsikring.</p>
+    <div class="quiz"><p class="q">Du venter midt i et lyskryss på luke for å svinge til venstre. Hvordan står hjulene?</p><button class="opt" data-ok="1">Rett fram</button><button class="opt" data-ok="0">Dreid mot venstre, klar til å svinge</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s108b">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Gult blink</span><span class="pill">Pilsignal</span></div></div>
+  <div class="body">
+    <h2>Pilsignal og gult blinksignal</h2>
+    <p class="core">Pilsignal gjelder bare for dem som vil kjøre i pilens retning.</p>
+    <ul><li>Pilsignal gjelder for dem som vil kjøre i den retning pilen viser.</li><li>Gult blinksignal: vis særlig aktpågivenhet og varsomhet.</li><li>Husk rekkefølgen: politiet, lyssignal, skilt, oppmerking, regler.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 108</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Når lyset ikke virker, er det vanlige regler.</p>
+    <div class="quiz"><p class="q">Alle lysene i et kryss blinker gult. Hva må du gjøre?</p><button class="opt" data-ok="1">Vise særlig aktpågivenhet og varsomhet</button><button class="opt" data-ok="0">Kjøre først uten å se meg for</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s109">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Bensinstasjon</span><span class="pill">Sykkelvei</span></div></div>
+  <div class="body">
+    <h2>Andre situasjoner der du har vikeplikt</h2>
+    <p class="core">Du har vikeplikt når du kommer ut fra et sted ved siden av veien.</p>
+    <ul><li>Fra parkeringsplass, holdeplass, torg, eiendom og bensinstasjon.</li><li>Fra sykkelvei, gangvei eller fortau når du vil inn på eller krysse veien.</li><li>Når du rygger, vender, kjører ut fra veikant, skifter felt eller har sperring på din side.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 109</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Kommer du ut fra siden, venter du på dem på veien.</p>
+    <div class="quiz"><p class="q">Du kjører ut fra en bensinstasjon og ut på veien. Hvem har vikeplikt?</p><button class="opt" data-ok="1">Jeg har vikeplikt for trafikken på veien</button><button class="opt" data-ok="0">Trafikken på veien må vente på meg</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s110">
+  <div class="media"><div class="ph"><span>Bilde kommer</span></div><div class="pills"><span class="pill">Sykkelfelt</span><span class="pill">Sykkelvei</span></div></div>
+  <div class="body">
+    <h2>Vikeplikt og syklister: sykkelfelt og sykkelvei</h2>
+    <p class="core">Reglene er vanskelige. Ikke regn med at syklende kan dem.</p>
+    <ul><li>Sykkelfelt er et kjørefelt som ved offentlig trafikkskilt og oppmerking er bestemt for syklende.</li><li>Kjørende som vil inn på eller krysse veg fra sykkelveg, gangveg eller fortau, har vikeplikt for trafikant på vegen.</li><li>Som fører av motorvogn kan du ikke regne med at syklende kjenner reglene.</li></ul>
+    <p class="src">📖 Lærebok Klasse B · side 110</p>
+    <details class="more"><summary>🧑‍🏫 Michael sier · Sjekk deg selv</summary>
+    <p class="michael"><b>Michael sier:</b> Ikke stol på at andre kan reglene. Vær klar til å stanse.</p>
+    <div class="quiz"><p class="q">Du kjører på en vei med en sykkelvei skilt fra veien med grøft. Syklisten kommer fra sykkelveien mot krysset. Hvem har vikeplikt?</p><button class="opt" data-ok="1">Syklisten, som kommer fra sykkelvei</button><button class="opt" data-ok="0">Jeg – sykklister har alltid fortrinn</button><p class="fb" data-ok="Riktig!" data-no="Prøv igjen"></p></div>
+    </details>
+  </div>
+</article></section>
+<section class="view" id="v-th" hidden>
+<article class="card" data-id="bb-s86">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">รถบรรทุก</span><span class="pill">โค้งเลี้ยว</span></div></div>
+  <div class="body">
+    <h2>ยานพาหนะขนาดใหญ่และการเลี้ยว</h2>
+    <p class="core">เมื่อเลี้ยวขวา ให้ขับชิดขอบขวาให้มากที่สุด</p>
+    <ul><li>เลี้ยวซ้ายบนถนนสองทิศ: ชิดกลางช่องการจราจรให้มากที่สุด</li><li>รถพ่วงยาวอาจต้องวางตำแหน่งต่างออกไปเพื่อเลี้ยวให้ผ่าน</li><li>ผู้ขับจึงรับผิดชอบมาก</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 86</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> รถใหญ่ต้องการพื้นที่ ให้พื้นที่แก่เขา และระวังเป็นพิเศษ</p>
+    <div class="quiz"><p class="q">รถบรรทุกยาวรอเลี้ยวขวาที่ทางแยกแคบ คุณในฐานะผู้ขับรถตามหลังทำอย่างไร?</p><button class="opt" data-ok="1">เว้นระยะมากและให้มันเลี้ยว</button><button class="opt" data-ok="0">เบียดเข้าไปข้าง ๆ</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s87">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">เลนซ้าย</span><span class="pill">เลนขวา</span></div></div>
+  <div class="body">
+    <h2>หลายเลน: ใช้เลนที่ถูกต้องก่อนเลี้ยว</h2>
+    <p class="core">เลี้ยวขวาใช้เลนขวา เลี้ยวซ้ายใช้เลนซ้าย</p>
+    <ul><li>เข้าเลนที่ถูกต้องล่วงหน้าก่อนเลี้ยว</li><li>ขวาสุดเมื่อเลี้ยวขวา ซ้ายสุดเมื่อเลี้ยวซ้าย</li><li>ดูเส้นบนถนนและป้าย: อาจบอกเลนอื่น</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 87</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> เลือกเลนแต่เนิ่น ๆ แล้วคุณไม่ต้องรีบที่ทางแยก</p>
+    <div class="quiz"><p class="q">คุณขับบนถนนที่มีสองเลนในทิศของคุณและจะเลี้ยวซ้าย เลือกเลนใดล่วงหน้าก่อนทางแยก?</p><button class="opt" data-ok="1">เลนซ้าย</button><button class="opt" data-ok="0">เลนขวา</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s88">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">รถ A</span><span class="pill">รถ B</span></div></div>
+  <div class="body">
+    <h2>เลือกเลนใดหลังเลี้ยว?</h2>
+    <p class="core">หลังเลี้ยวคุณเลือกเลนที่เหมาะที่สุดได้</p>
+    <ul><li>เมื่อเลี้ยวเข้าถนนที่มีหลายเลน เข้าเลนที่เหมาะที่สุดได้</li><li>ถ้าจะไปตรงต่อหลังเลี้ยว เลนขวามักเหมาะที่สุด</li><li>ถ้าจะเลี้ยวซ้ายทันทีหลังจากนั้น เลือกเลนซ้ายตั้งแต่แรกอาจดี จะได้ไม่ต้องเปลี่ยนเลนโดยไม่จำเป็น</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 88</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> คิดล่วงหน้าหนึ่งก้าว หลังเลี้ยวคุณจะไปไหน?</p>
+    <div class="quiz"><p class="q">คุณเลี้ยวขวาและจะเลี้ยวซ้ายที่ทางแยกถัดไปทันที เลือกเลนใดจึงดี?</p><button class="opt" data-ok="1">เลนซ้าย จะได้ไม่ต้องเปลี่ยนเลน</button><button class="opt" data-ok="0">เลนขวา – ถูกเสมอ</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s89">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">ที่พบบ่อยที่สุด</span><span class="pill">ทำได้เช่นนี้</span></div></div>
+  <div class="body">
+    <h2>รถสวนเลี้ยวซ้ายผ่านกันได้</h2>
+    <p class="core">ยานพาหนะจากทิศตรงข้ามเลี้ยวซ้ายผ่านกันได้</p>
+    <ul><li>ใช้คำว่า “ได้” ไม่ใช่ “ต้อง”</li><li>สิ่งที่ทำได้มักขึ้นกับขนาดรถและรูปแบบทางแยก</li><li>ที่พบบ่อยคือผ่านหน้ากัน แต่ก็เลี้ยวหลังกันได้</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 89</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> ดูว่าอีกฝ่ายทำอะไรก่อนตัดสินใจ</p>
+    <div class="quiz"><p class="q">คุณและรถสวนจะเลี้ยวซ้ายที่ทางแยกเดียวกัน ข้อใดถูก?</p><button class="opt" data-ok="1">เลี้ยวซ้ายผ่านกันได้ มักเป็นคนละโค้ง</button><button class="opt" data-ok="0">เลี้ยวได้ทีละคัน อีกคันต้องรอเสมอ</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s90">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">ห้ามเข้า</span><span class="pill">วันเวย์</span></div></div>
+  <div class="body">
+    <h2>ถนนวันเวย์</h2>
+    <p class="core">ถนนวันเวย์มีป้ายเฉพาะ ให้มองหาป้าย</p>
+    <ul><li>เมืองมักใช้ถนนวันเวย์เพื่อให้การจราจรคล่องตัว</li><li>ป้าย 302 “ห้ามเข้า”: ห้ามขับผ่านป้าย</li><li>ป้าย 526 “วันเวย์”: ขับได้เฉพาะทิศทางของลูกศรจนถึงทางแยกแรก</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 90</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> ลูกศรสีน้ำเงินและป้ายกลมสีแดง: อ่านทั้งสอง</p>
+    <div class="quiz"><p class="q">คุณเห็นป้ายกลมสีแดงมีแถบขาวเมื่อจะเข้าถนน หมายความว่าอย่างไร?</p><button class="opt" data-ok="1">ห้ามเข้า – ฉันเข้าที่นี่ไม่ได้</button><button class="opt" data-ok="0">ฉันต้องเข้า</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s91">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">รถจากซ้าย</span><span class="pill">คนเดินเท้า</span></div></div>
+  <div class="body">
+    <h2>เลี้ยวซ้ายออกจากถนนวันเวย์</h2>
+    <p class="core">ใช้เลนซ้าย และเตรียมพร้อมสำหรับรถจากทางซ้ายและคนเดินเท้า</p>
+    <ul><li>วางตำแหน่งในเลนซ้ายล่วงหน้า มักชิดซ้ายให้มากที่สุด</li><li>รถจากทางซ้ายมักขับเร็วเมื่อเทียบกับทัศนวิสัยและการให้ทาง</li><li>คนเดินเท้าไม่คาดว่าจะมีรถทางด้านซ้ายของช่องการจราจร</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 91</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> อันตรายพิเศษ: ไม่มีใครคาดว่าคุณมาจากด้านนั้น</p>
+    <div class="quiz"><p class="q">คุณจะเลี้ยวซ้ายออกจากถนนวันเวย์ อะไรสำคัญเป็นพิเศษ?</p><button class="opt" data-ok="1">มองหาคนเดินเท้าและรถจากทางซ้ายให้ดี</button><button class="opt" data-ok="0">ไม่มีอะไร – เหมือนปกติ</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s92">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">วงเวียน</span><span class="pill">รถพ่วง</span></div></div>
+  <div class="body">
+    <h2>วงเวียน: ป้ายและภาพรวม</h2>
+    <p class="core">ชะลอความเร็วล่วงหน้าและดูภาพรวมก่อนเข้า</p>
+    <ul><li>วงเวียนชะลอความเร็วและควบคุมการไหลของรถ</li><li>ป้ายเตือน “วงเวียน” แจ้งเพียงว่าคุณกำลังจะถึง ไม่ได้บอกเรื่องการให้ทาง</li><li>เกรงใจรถขนาดใหญ่เป็นพิเศษ โดยเฉพาะรถพ่วง ซึ่งต้องการพื้นที่มาก</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 92</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> วงเวียนที่ไม่รู้จัก? ชะลอแต่เนิ่น ๆ</p>
+    <div class="quiz"><p class="q">คุณเข้าใกล้วงเวียนที่ไม่รู้จัก ทำอย่างไร?</p><button class="opt" data-ok="1">ชะลอล่วงหน้าและมองหาป้ายและเส้นบนถนน</button><button class="opt" data-ok="0">คงความเร็วและตามคนอื่น</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s92b">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">ป้ายให้ทาง</span><span class="pill">เส้นให้ทาง</span></div></div>
+  <div class="body">
+    <h2>ใครต้องให้ทางในวงเวียน?</h2>
+    <p class="core">อ่านป้ายและเส้นบนถนนที่ทางเข้า สิ่งเหล่านี้ตัดสินการให้ทาง</p>
+    <ul><li>เส้นให้ทางแสดงจุดที่การให้ทางเริ่มมีผล</li><li>มองหาป้ายให้ทางและเส้นให้ทางที่ทางเข้า</li><li>ถ้าไม่แน่ใจ ให้รถในวงเวียนไปก่อน</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 92</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> มองหาป้ายให้ทาง มันตัดสินทุกอย่าง</p>
+    <div class="quiz"><p class="q">คุณไม่แน่ใจว่าใครต้องให้ทางเมื่อมาถึงวงเวียน ทำอย่างไร?</p><button class="opt" data-ok="1">อ่านป้ายและเส้นบนถนน และให้รถในวงเวียนไปก่อนถ้าไม่แน่ใจ</button><button class="opt" data-ok="0">ไปก่อน – คงมีสิทธิ์ก่อน</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s93">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">เลี้ยวขวา</span><span class="pill">ตรงไป</span></div></div>
+  <div class="body">
+    <h2>วงเวียนที่มีหนึ่งเลนต่อทิศ</h2>
+    <p class="core">ให้รถอยู่ภายในเลนอย่างมั่นคงตลอดทาง</p>
+    <ul><li>เลี้ยวขวา: ชิดขอบขวาให้มากที่สุดก่อนถึงวงเวียน</li><li>เลี้ยวซ้าย: ชิดกลางให้มากที่สุดก่อนถึงวงเวียน ถ้าไม่มีเส้นกลางสีเหลืองหรือเกาะกลาง</li><li>ตรงไป: ให้รถอยู่ภายในเลนอย่างมั่นคง</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 93</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> ตำแหน่งก่อนวงเวียนบอกว่าคุณจะทำอะไร</p>
+    <div class="quiz"><p class="q">คุณจะออกทางแรกทางขวาในวงเวียนที่มีหนึ่งเลน วางตำแหน่งตรงไหนก่อนถึง?</p><button class="opt" data-ok="1">ชิดขอบขวาให้มากที่สุด</button><button class="opt" data-ok="0">ไปทางกลางถนน</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s94">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">เลนขวา</span><span class="pill">เลนซ้าย</span></div></div>
+  <div class="body">
+    <h2>วงเวียนใหญ่หลายเลน</h2>
+    <p class="core">ใช้เลนที่ถูกต้องล่วงหน้าก่อนถึงวงเวียน</p>
+    <ul><li>เลี้ยวขวา: ใช้เลนขวาล่วงหน้าก่อนถึงวงเวียน</li><li>เลี้ยวซ้าย: ใช้เลนซ้ายล่วงหน้า</li><li>ตรงไป: ทำตามป้ายหรือเส้นบนถนน ถ้าไม่มี ใช้เลนที่เหมาะที่สุด และจำกฎหลักเรื่องชิดขวา</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 94</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> เลือกเลนก่อนถึงวงเวียน ไม่ใช่ในวงเวียน</p>
+    <div class="quiz"><p class="q">คุณจะไปตรงในวงเวียนใหญ่สองเลนที่ไม่มีทั้งป้ายและเส้นบนถนน ทำอย่างไร?</p><button class="opt" data-ok="1">ใช้เลนที่เหมาะที่สุด และชิดขวาเป็นหลัก</button><button class="opt" data-ok="0">เลนซ้ายเสมอ</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s95">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">สัญญาณ</span><span class="pill">ทางออก</span></div></div>
+  <div class="body">
+    <h2>การให้สัญญาณในวงเวียน</h2>
+    <p class="core">ให้สัญญาณที่ให้ข้อมูล และเลี่ยงสัญญาณที่เข้าใจผิดได้</p>
+    <ul><li>เลี้ยวขวา: ให้สัญญาณขวาล่วงหน้าก่อนวงเวียนและคงไว้จนออก</li><li>ตรงไป: ให้สัญญาณขวาตอนจะออกและหยุดเมื่อออกแล้ว</li><li>เลี้ยวซ้าย: สัญญาณซ้ายก่อน และสัญญาณขวาตอนออก จำการให้ทางเมื่อเปลี่ยนเลน</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 95</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> สัญญาณที่ช่วยคนอื่นคือสัญญาณที่ดี</p>
+    <div class="quiz"><p class="q">คุณจะไปตรงผ่านวงเวียน ให้สัญญาณขวาเมื่อไร?</p><button class="opt" data-ok="1">เมื่อจะออกจากวงเวียน</button><button class="opt" data-ok="0">ก่อนเข้า</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s96">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">สังเกต</span><span class="pill">จุดบอด</span></div></div>
+  <div class="body">
+    <h2>เปลี่ยนเลน: การให้ทางและขั้นตอน</h2>
+    <p class="core">ผู้เปลี่ยนเลนต้องให้ทางแก่รถในเลนที่จะเข้า</p>
+    <ul><li>การให้ทางใช้ทั้งเมื่อเปลี่ยนเลนขวาและซ้าย</li><li>ขั้นตอน: สังเกต ให้สัญญาณ ตรวจจุดบอด ปรับความเร็ว แล้วเปลี่ยนเลน</li><li>เปลี่ยนเลนอย่างนุ่มนวล ไม่หักพวงมาลัยกะทันหัน อย่าเบี่ยงจากตำแหน่งโดยไม่จำเป็น</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 96</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> การเปลี่ยนเลนคือการสนทนาเล็ก ๆ กับคนอื่น</p>
+    <div class="quiz"><p class="q">คุณจะเปลี่ยนจากเลนขวาไปเลนซ้ายและมีรถใกล้เข้ามาข้างหลังในเลนซ้าย ใครต้องให้ทาง?</p><button class="opt" data-ok="1">ฉัน ผู้เปลี่ยนเลน</button><button class="opt" data-ok="0">รถข้างหลัง – ต้องให้ทางเสมอ</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s97">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">ป้ายแจ้งทิศทาง</span><span class="pill">เลนชะลอ</span></div></div>
+  <div class="body">
+    <h2>เลนชะลอที่ทางออก</h2>
+    <p class="core">เมื่อออกทางแยก ให้เข้าเลนชะลอโดยเร็วที่สุด</p>
+    <ul><li>ดูป้ายแจ้งทิศทาง บอกว่าคุณใกล้ถึงทางออก</li><li>ที่จุดเริ่มต้นของเลนมีป้ายลูกศรเฉียง</li><li>บนถนนที่มีรถมาก การมีเลนออกแยกเป็นประโยชน์ ในฤดูหนาวเลนอาจลื่นกว่าถนนหลัก</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 97</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> เข้าเลนเร็วและเบรกที่นั่น</p>
+    <div class="quiz"><p class="q">คุณจะออกทางแยกที่มีเลนชะลอบนมอเตอร์เวย์ ชะลอที่ไหน?</p><button class="opt" data-ok="1">ในเลนชะลอ</button><button class="opt" data-ok="0">บนถนนหลักก่อนถึงเลน</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s98">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">เร่งความเร็ว</span><span class="pill">สัญลักษณ์ให้ทาง</span></div></div>
+  <div class="body">
+    <h2>เลนเร่งความเร็วและกฎการสอดสลับ</h2>
+    <p class="core">ในเลนเร่งความเร็วคุณปรับความเร็วให้เข้ากับการจราจรที่จะเข้า</p>
+    <ul><li>ผู้ขับในเลนเร่งความเร็วต้องปรับความเร็วให้เข้ากับการจราจรในเลนที่จะเข้า</li><li>การจราจรบนถนนหลักควรช่วยให้คุณเข้าได้ง่าย</li><li>ใช้เลนทั้งหมดเพื่อเพิ่มความเร็ว</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 98</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> ใช้เลนทั้งหมดเพื่อเพิ่มความเร็ว</p>
+    <div class="quiz"><p class="q">คุณเข้ามอเตอร์เวย์ผ่านเลนเร่งความเร็ว ทำอย่างไร?</p><button class="opt" data-ok="1">เร่งความเร็วในเลนและปรับให้เข้ากับการจราจรที่จะเข้า</button><button class="opt" data-ok="0">ขับช้าเข้าไปและให้คนอื่นเบรก</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s99">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">รถโดยสาร</span><span class="pill">แท็กซี่</span><span class="pill">2+ คน</span></div></div>
+  <div class="body">
+    <h2>เลนรถโดยสารและเลนใช้ร่วม</h2>
+    <p class="core">การขับในเลนรถโดยสารทำได้ตามที่ป้ายระบุเท่านั้น</p>
+    <ul><li>บางประเภทใช้เลนได้ เช่น รถไฟฟ้าหรือรถไฮโดรเจน มอเตอร์ไซค์สองล้อ โมเพด และจักรยาน</li><li>แท็กซี่ใช้เลนรถโดยสารได้เมื่อมีไฟหลังคา (ป้าย 508)</li><li>รถฉุกเฉินที่แต่งเครื่องแบบก็ใช้ได้</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 99</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> อ่านป้าย มันบอกว่าใครขับที่นี่ได้</p>
+    <div class="quiz"><p class="q">คุณขับรถไฟฟ้าและเห็นเลนรถโดยสารที่ป้ายแสดงเพียงรถโดยสาร กฎจราจรว่าอย่างไร?</p><button class="opt" data-ok="1">รถไฟฟ้าใช้เลนเช่นนี้ได้ตามกฎจราจร § 5 ข้อ 2</button><button class="opt" data-ok="0">ไม่ – เฉพาะรถโดยสารเท่านั้นเสมอ</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s100">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">บังคับทิศทาง</span><span class="pill">รถ A</span><span class="pill">รถ B</span></div></div>
+  <div class="body">
+    <h2>บังคับทิศทางการขับ</h2>
+    <p class="core">ป้ายกลมสีน้ำเงินลูกศรขาวบอกทิศทางที่ต้องขับ</p>
+    <ul><li>บังคับทิศทางการขับ (ป้าย 402): ผู้ขับต้องออกจากทางแยกไปทางที่ป้ายระบุ</li><li>ป้ายบังคับเป็นวงกลมพื้นสีน้ำเงินลูกศรสีขาว</li><li>ตัวอย่าง: รถ A ต้องเลี้ยวซ้าย รถ B เลือกไปตรงหรือเลี้ยวขวาได้</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 100</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> ลูกศรสีน้ำเงินคือข้อบังคับ ไม่ใช่คำแนะนำ</p>
+    <div class="quiz"><p class="q">คุณอยู่ในรถหลังป้ายที่แสดงเพียงบังคับให้ไปทางขวา เลี้ยวซ้ายได้ไหม?</p><button class="opt" data-ok="1">ไม่ได้ – บังคับทิศทางห้ามเลี้ยวซ้าย</button><button class="opt" data-ok="0">ได้ ถ้าไม่มีใครเห็น</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s101">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">ลูกศรเฉียง</span><span class="pill">สิ่งกีดขวาง</span></div></div>
+  <div class="body">
+    <h2>บังคับเลน: ผ่านไปทางด้านที่ลูกศรชี้</h2>
+    <p class="core">ลูกศรเฉียงบอกว่าคุณต้องขับผ่านป้ายทางด้านไหน</p>
+    <ul><li>บังคับเลน (ป้าย 404): ผู้ขับต้องผ่านป้ายทางด้านที่ลูกศรชี้</li><li>มักเห็นที่งานทางหรือสิ่งกีดขวาง</li><li>ทำตามลูกศรและระวังสิ่งกีดขวาง</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 101</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> ลูกศรบอกทางอ้อมสิ่งกีดขวาง</p>
+    <div class="quiz"><p class="q">มีป้ายสีน้ำเงินลูกศรเฉียงชี้ซ้ายหน้าสิ่งกีดขวางบนถนน คุณขับผ่านทางด้านไหน?</p><button class="opt" data-ok="1">ทางซ้ายตามที่ลูกศรชี้</button><button class="opt" data-ok="0">ทางขวาตามปกติ</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s102">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">ป้าย</span><span class="pill">ป้ายทางหลวง E18 / E6</span></div></div>
+  <div class="body">
+    <h2>ป้ายที่แสดงเลน</h2>
+    <p class="core">อ่านป้ายที่แสดงเลน และเลือกเลนล่วงหน้า</p>
+    <ul><li>อ่านป้ายก่อนเลือกเลน</li><li>เลือกเลนล่วงหน้า</li><li>ถ้าไม่แน่ใจ ให้ชะลอและมองให้ดี</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 102</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> มองขึ้นล่วงหน้าและเลือกเลน</p>
+    <div class="quiz"><p class="q">คุณมาถึงเกาะกลางถนนที่มีป้ายสีน้ำเงินแสดงเลน ทำอะไรก่อน?</p><button class="opt" data-ok="1">อ่านป้ายและเลือกเลนล่วงหน้า</button><button class="opt" data-ok="0">ขับตรงไปโดยไม่ดูป้าย</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s103">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">การสอดสลับ</span></div></div>
+  <div class="body">
+    <h2>การสอดสลับ: ผลัดกันไป</h2>
+    <p class="core">เมื่อจำนวนเลนลดลง ปรับความเร็วและผลัดกันให้เข้า</p>
+    <ul><li>เมื่อเลนปกติในทิศเดียวกันลดลง ไม่ใช้การให้ทางเมื่อเปลี่ยนเลน</li><li>ต้องปรับความเร็วซึ่งกันและกันเพื่อให้ผลัดกันไปต่อโดยไม่ขัดขวางโดยไม่จำเป็น</li><li>กฎนี้ใช้แม้ไม่มีป้ายการสอดสลับ</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 103</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> คันละหนึ่ง นี่คือความลับทั้งหมด</p>
+    <div class="quiz"><p class="q">คุณกับอีกคันอยู่คนละเลนและเลนหนึ่งสิ้นสุด ข้อใดถูก?</p><button class="opt" data-ok="1">ปรับความเร็วและผลัดกันให้เข้า</button><button class="opt" data-ok="0">คันที่มาถึงก่อนเอาที่ไปเสมอ</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s104">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">เลนสิ้นสุด</span><span class="pill">เปลี่ยนเลน</span></div></div>
+  <div class="body">
+    <h2>ป้าย: เลนเริ่มและสิ้นสุด</h2>
+    <p class="core">ถ้าเลนของคุณกำลังจะสิ้นสุด คุณต้องเปลี่ยนเลน</p>
+    <ul><li>ป้ายแสดงว่าเลนเริ่มหรือสิ้นสุด มองขึ้นล่วงหน้า</li><li>ป้าย 532 “เลนสิ้นสุด”: ผู้ขับในเลนที่สิ้นสุดต้องเปลี่ยนเลนและต้องให้ทางตามกฎจราจร</li><li>เปลี่ยนเลนล่วงหน้าและมองรอบ ๆ</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 104</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> ดูสีลูกศร มันบอกว่าใครต้องให้ทาง</p>
+    <div class="quiz"><p class="q">คุณขับในเลนที่ใกล้สิ้นสุดและป้าย “เลนสิ้นสุด” อยู่ข้างหน้า ต้องทำอย่างไร?</p><button class="opt" data-ok="1">เปลี่ยนเลนและให้ทางตามกฎจราจร</button><button class="opt" data-ok="0">ขับต่อและให้คนอื่นให้ทางฉัน</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s104b">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">การให้ทาง</span></div></div>
+  <div class="body">
+    <h2>การให้ทางหมายความว่าอะไร?</h2>
+    <p class="core">การให้ทางหมายความว่าคุณต้องหยุดถ้าจำเป็น</p>
+    <ul><li>ผู้ที่คุณต้องให้ทางต้องไม่ถูกขัดขวางหรือรบกวน</li><li>คุณแสดงการให้ทางอย่างชัดเจนโดยชะลอหรือหยุดล่วงหน้า</li><li>แยกการให้ทาง การหยุดบังคับ การเปิดทาง และการสอดสลับ ออกจากกัน</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 104</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> การให้ทางคือการแสดงว่าคุณเห็นอีกฝ่าย</p>
+    <div class="quiz"><p class="q">คุณต้องให้ทางและเห็นรถกำลังมา คุณแสดงอย่างไร?</p><button class="opt" data-ok="1">ชะลอหรือหยุดล่วงหน้า</button><button class="opt" data-ok="0">คงความเร็วและหวังให้อีกคนเบรก</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s105">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">จากขวา</span><span class="pill">รถโรงเรียน</span></div></div>
+  <div class="body">
+    <h2>ให้ทางแก่ยานพาหนะจากทางขวา</h2>
+    <p class="core">กฎหลัก: คุณต้องให้ทางแก่ยานพาหนะที่มาจากทางขวา</p>
+    <ul><li>เช่นเดียวกันเมื่อเลี้ยวซ้ายและมียานพาหนะอยู่ทางขวาของคุณ</li><li>ประเมินว่ายานพาหนะจากขวาจะถูกขัดขวางหรือรบกวนหรือไม่</li><li>เราประเมินความเร็วและระยะทางได้ไม่ดี ให้เวลามากกว่าที่คิด</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 105</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> ขวาก่อน แล้วค่อยประเมินที่เหลือ</p>
+    <div class="quiz"><p class="q">คุณมาถึงทางแยกที่ไม่มีการควบคุมและเห็นรถอยู่ไกลทางขวา ทำอย่างไร?</p><button class="opt" data-ok="1">ให้ทาง – ฉันต้องให้ทางแก่รถจากขวา</button><button class="opt" data-ok="0">ไป – มันอยู่ไกล</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s106">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">คนเดินเท้า</span><span class="pill">ผู้ปั่น</span></div></div>
+  <div class="body">
+    <h2>ให้ทางแก่คนเดินเท้าและผู้ปั่นเมื่อเลี้ยว</h2>
+    <p class="core">เมื่อเลี้ยว คุณต้องให้ทางแก่คนเดินเท้าและผู้ปั่นที่ทางที่คุณเข้า</p>
+    <ul><li>ผู้เลี้ยวต้องให้ทางแก่คนเดินเท้า ผู้ปั่น และยานยนต์ไฟฟ้าขนาดเล็กที่ไปตรงบนช่องการจราจรหรือไหล่ทาง</li><li>ถ้าเลี้ยวเข้าข้ามทางเท้า คุณต้องให้ทางแก่ผู้ที่ใช้ทางเท้า</li><li>มองหาคนเดินเท้าและผู้ปั่นอีกครั้งเสมอ</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 106</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> โค้งเลี้ยวคือที่ที่ผู้ใช้ถนนเปราะบางข้าม</p>
+    <div class="quiz"><p class="q">คุณเลี้ยวขวาและคนเดินเท้าข้ามถนนที่คุณจะเข้าข้างทางม้าลาย ทำอย่างไร?</p><button class="opt" data-ok="1">ให้เขาข้าม – ฉันต้องให้ทางแม้ไม่มีทางม้าลาย</button><button class="opt" data-ok="0">ไป – เขาไม่ได้อยู่ในทางม้าลาย</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s106b">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">ทางม้าลาย</span><span class="pill">หยุดที่นี่</span></div></div>
+  <div class="body">
+    <h2>ห้ามหยุดบนทางม้าลาย</h2>
+    <p class="core">ขับให้ไม่ต้องหยุดขวางการจราจรที่ตัดผ่านหรือบนทางม้าลาย</p>
+    <ul><li>เมื่อเข้าใกล้หรือเข้าทางแยก: อย่าหยุดขวางถนนที่ตัดผ่านโดยไม่จำเป็น</li><li>หลีกเลี่ยงการหยุดบนทางม้าลาย</li><li>อย่าขัดขวางคนเดินเท้า ขับไปข้างหน้าจนเห็นทั้งสองข้างเมื่อไม่มีใคร</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 106</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> หยุดก่อนถึงทางม้าลาย ไม่ใช่บนทางม้าลาย</p>
+    <div class="quiz"><p class="q">คุณต้องให้ทางที่ทางแยกที่มีทางม้าลายอยู่ข้างหน้าและมีคนเดินเท้าอยู่บนทางม้าลาย คุณหยุดที่ไหน?</p><button class="opt" data-ok="1">ก่อนถึงทางม้าลาย เพื่อไม่ขัดขวางคนเดินเท้า</button><button class="opt" data-ok="0">บนทางม้าลาย เพื่อให้เห็นชัดขึ้น</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s107">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">ไฟเขียว</span><span class="pill">แถวรถ</span></div></div>
+  <div class="body">
+    <h2>ทางแยกที่มีสัญญาณไฟ: ตรงไป</h2>
+    <p class="core">ไฟเขียวหมายความว่าคุณไปได้ถ้าถนนว่าง</p>
+    <ul><li>เมื่อไฟเขียว ผ่านสัญญาณได้ถ้าถนนว่าง</li><li>ขับให้ไม่ต้องหยุดขวางการจราจรที่ตัดผ่านโดยไม่จำเป็น</li><li>คนเดินเท้าอาจออกไปในทางม้าลายด้วยไฟเขียวแล้ว ให้เขาข้ามได้</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 107</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> ไฟเขียวไม่ได้แปลว่าทุกอย่างโล่ง มองรอบ ๆ</p>
+    <div class="quiz"><p class="q">คุณได้ไฟเขียวไปตรง แต่แถวรถนิ่งอยู่อีกฝั่งของทางแยก ทำอย่างไร?</p><button class="opt" data-ok="1">รอจนมีที่ว่างสำหรับฉันอีกฝั่ง</button><button class="opt" data-ok="0">ขับออกไปและติดอยู่กลางทางแยก</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s107b">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">เลี้ยวขวา</span><span class="pill">คนเดินเท้า</span></div></div>
+  <div class="body">
+    <h2>เลี้ยวขวาที่ทางแยกสัญญาณไฟ</h2>
+    <p class="core">เมื่อเลี้ยวขวาด้วยไฟเขียว คุณต้องให้ทางแก่คนเดินเท้าในทางม้าลายที่คุณเข้า</p>
+    <ul><li>เมื่อเลี้ยว คุณต้องให้ทางแก่คนเดินเท้าและผู้ปั่นที่ทางที่เข้า</li><li>ถ้ามีคนเดินเท้าในทางม้าลาย ให้ขับไปช้า ๆ และรอจนว่าง</li><li>ถ้ามีสัญญาณแยกสำหรับคนเดินเท้า ดูว่าเขาได้ไฟอะไร อาจเป็นสีเขียวพร้อมกับของคุณ</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 107</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> ไฟเขียวสำหรับคุณอาจเป็นไฟเขียวสำหรับพวกเขาด้วย</p>
+    <div class="quiz"><p class="q">คุณได้ไฟเขียวและจะเลี้ยวขวา และคนเดินเท้าข้ามทางม้าลายที่คุณจะเข้า ทำอย่างไร?</p><button class="opt" data-ok="1">รอและให้พวกเขาข้ามก่อน</button><button class="opt" data-ok="0">ไป – ฉันได้ไฟเขียว</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s108">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">เลี้ยวซ้าย</span><span class="pill">รถสวน</span></div></div>
+  <div class="body">
+    <h2>เลี้ยวซ้ายที่ทางแยกสัญญาณไฟ</h2>
+    <p class="core">เมื่อเลี้ยวซ้ายด้วยไฟเขียว คุณต้องให้ทางแก่รถสวนและคนเดินเท้า</p>
+    <ul><li>รอช่องว่างที่ปลอดภัยในการจราจรสวน</li><li>อย่าขับไปไกลจนขวางรถสวนที่จะเลี้ยวซ้ายของเขา</li><li>ตั้งล้อตรงขณะรอ ถ้าถูกชนท้าย คุณจะถูกผลักตรงไปข้างหน้า</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 108</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> ล้อตรงขณะรอ เป็นประกันราคาถูก</p>
+    <div class="quiz"><p class="q">คุณรออยู่กลางทางแยกสัญญาณไฟเพื่อหาช่องเลี้ยวซ้าย ล้ออยู่ในลักษณะใด?</p><button class="opt" data-ok="1">ตรงไปข้างหน้า</button><button class="opt" data-ok="0">หักซ้ายพร้อมเลี้ยว</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s108b">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">ไฟเหลืองกะพริบ</span><span class="pill">สัญญาณลูกศร</span></div></div>
+  <div class="body">
+    <h2>สัญญาณลูกศรและสัญญาณเหลืองกะพริบ</h2>
+    <p class="core">สัญญาณลูกศรใช้กับผู้ที่จะขับไปทางทิศของลูกศรเท่านั้น</p>
+    <ul><li>สัญญาณลูกศรใช้กับผู้ที่จะขับไปในทิศทางที่ลูกศรชี้</li><li>สัญญาณเหลืองกะพริบ: ตื่นตัวและระมัดระวังเป็นพิเศษ</li><li>จำลำดับ: ตำรวจ สัญญาณไฟ ป้าย เส้นบนถนน กฎ</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 108</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> เมื่อไฟใช้ไม่ได้ ให้ใช้กฎปกติ</p>
+    <div class="quiz"><p class="q">ไฟทุกดวงในทางแยกกะพริบสีเหลือง ต้องทำอย่างไร?</p><button class="opt" data-ok="1">ตื่นตัวและระมัดระวังเป็นพิเศษ</button><button class="opt" data-ok="0">ไปก่อนโดยไม่ต้องมองรอบ</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s109">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">ปั๊มน้ำมัน</span><span class="pill">ทางจักรยาน</span></div></div>
+  <div class="body">
+    <h2>สถานการณ์อื่นที่คุณต้องให้ทาง</h2>
+    <p class="core">คุณต้องให้ทางเมื่อออกมาจากที่ข้างถนน</p>
+    <ul><li>จากที่จอดรถ ป้ายหยุดรถ ตลาด ที่ดิน และปั๊มน้ำมัน</li><li>จากทางจักรยาน ทางเดิน หรือทางเท้า เมื่อจะเข้าหรือข้ามถนน</li><li>เมื่อถอยหลัง กลับรถ ขับออกจากขอบถนน เปลี่ยนเลน หรือมีสิ่งกีดขวางด้านคุณ</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 109</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> ถ้าคุณออกมาจากข้างทาง ให้รอคนบนถนน</p>
+    <div class="quiz"><p class="q">คุณขับออกจากปั๊มน้ำมันสู่ถนน ใครต้องให้ทาง?</p><button class="opt" data-ok="1">ฉันต้องให้ทางแก่การจราจรบนถนน</button><button class="opt" data-ok="0">การจราจรบนถนนต้องรอฉัน</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s110">
+  <div class="media"><div class="ph"><span>ภาพกำลังจะมา</span></div><div class="pills"><span class="pill">เลนจักรยาน</span><span class="pill">ทางจักรยาน</span></div></div>
+  <div class="body">
+    <h2>การให้ทางและผู้ปั่น: เลนจักรยานและทางจักรยาน</h2>
+    <p class="core">กฎเหล่านี้ยาก อย่าคิดว่าผู้ปั่นรู้</p>
+    <ul><li>เลนจักรยานคือเลนที่ป้ายจราจรสาธารณะและเส้นบนถนนกำหนดไว้สำหรับผู้ปั่น</li><li>ผู้ขับที่จะเข้าหรือข้ามถนนจากทางจักรยาน ทางเดิน หรือทางเท้า ต้องให้ทางแก่ผู้ใช้ถนนบนถนน</li><li>ในฐานะผู้ขับยานยนต์ คุณคิดไม่ได้ว่าผู้ปั่นรู้กฎ</li></ul>
+    <p class="src">📖 หนังสือเรียนชั้น B · หน้า 110</p>
+    <details class="more"><summary>🧑‍🏫 ไมเคิลพูดว่า · ทดสอบตัวเอง</summary>
+    <p class="michael"><b>ไมเคิลพูดว่า:</b> อย่าเชื่อว่าคนอื่นรู้กฎ เตรียมพร้อมหยุด</p>
+    <div class="quiz"><p class="q">คุณขับบนถนนที่มีทางจักรยานแยกด้วยคู ผู้ปั่นมาจากทางจักรยานเข้าหาทางแยก ใครต้องให้ทาง?</p><button class="opt" data-ok="1">ผู้ปั่น ซึ่งมาจากทางจักรยาน</button><button class="opt" data-ok="0">ฉัน – ผู้ปั่นมีสิทธิ์ก่อนเสมอ</button><p class="fb" data-ok="ถูกต้อง!" data-no="ลองอีกครั้ง"></p></div>
+    </details>
+  </div>
+</article></section>
+<section class="view" id="v-en" hidden>
+<article class="card" data-id="bb-s86">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Lorry</span><span class="pill">Turn</span></div></div>
+  <div class="body">
+    <h2>Large vehicles and turns</h2>
+    <p class="core">When turning right, drive as near the right edge as possible.</p>
+    <ul><li>Left turn on a two-way road: as near the middle of the carriageway as possible.</li><li>A long lorry combination may need a different position to make the turn.</li><li>Then great responsibility rests on the driver.</li></ul>
+    <p class="src">📖 Class B textbook · page 86</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Big vehicles need room. Give it to them, and take extra care yourself.</p>
+    <div class="quiz"><p class="q">A long lorry waits to turn right in a tight junction. What do you do as the driver behind?</p><button class="opt" data-ok="1">Keep a good distance and let it turn</button><button class="opt" data-ok="0">Squeeze in beside it</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s87">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Left lane</span><span class="pill">Right lane</span></div></div>
+  <div class="body">
+    <h2>Several lanes: the right lane before you turn</h2>
+    <p class="core">Use the right lane to turn right. Use the left lane to turn left.</p>
+    <ul><li>Get into the right lane in good time before the turn.</li><li>Furthest right for a right turn. Furthest left for a left turn.</li><li>Look at markings and signs: they may show another lane.</li></ul>
+    <p class="src">📖 Class B textbook · page 87</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Choose your lane early. Then you avoid hurry in the junction.</p>
+    <div class="quiz"><p class="q">You drive on a road with two lanes in your direction and will turn left. Which lane do you choose in good time before the junction?</p><button class="opt" data-ok="1">The left lane</button><button class="opt" data-ok="0">The right lane</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s88">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Car A</span><span class="pill">Car B</span></div></div>
+  <div class="body">
+    <h2>Which lane do you choose after the turn?</h2>
+    <p class="core">After a turn you may choose the lane that suits best.</p>
+    <ul><li>When turning onto a road with several lanes you may enter the lane that suits best.</li><li>If you are going straight on after the turn, the right lane usually suits best.</li><li>If you are going left just after, it can be smart to pick the left lane at once. Then you avoid an unnecessary lane change.</li></ul>
+    <p class="src">📖 Class B textbook · page 88</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Think one step ahead. Where are you going after the turn?</p>
+    <div class="quiz"><p class="q">You turn right and will turn left at the next junction just after. Which lane can be smart to choose?</p><button class="opt" data-ok="1">The left lane, so I avoid changing lanes</button><button class="opt" data-ok="0">The right lane – it is always right</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s89">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Most common</span><span class="pill">This may be done</span></div></div>
+  <div class="body">
+    <h2>Oncoming vehicles may turn left past each other</h2>
+    <p class="core">Vehicles from opposite directions may turn left past each other.</p>
+    <ul><li>It says &#x27;may&#x27;, not &#x27;must&#x27;.</li><li>What works often depends on the size of the vehicle and the layout of the junction.</li><li>Most common is to pass in front of each other. You can also turn behind each other.</li></ul>
+    <p class="src">📖 Class B textbook · page 89</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> See what the other does before you decide.</p>
+    <div class="quiz"><p class="q">You and an oncoming car will both turn left in the same junction. What is right?</p><button class="opt" data-ok="1">You may turn left past each other, often in separate arcs</button><button class="opt" data-ok="0">Only one may turn, the other must always wait</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s90">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">No entry</span><span class="pill">One-way</span></div></div>
+  <div class="body">
+    <h2>One-way streets</h2>
+    <p class="core">One-way streets have their own signs. Look for them.</p>
+    <ul><li>Towns often use one-way regulation to ease traffic flow.</li><li>Sign 302 &#x27;No entry&#x27;: a ban on driving past the sign.</li><li>Sign 526 &#x27;One-way&#x27;: driving is only allowed in the arrow&#x27;s direction up to the first junction.</li></ul>
+    <p class="src">📖 Class B textbook · page 90</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Blue arrow and red round sign: read both.</p>
+    <div class="quiz"><p class="q">You see a round red sign with a white bar as you are about to enter a street. What does it mean?</p><button class="opt" data-ok="1">No entry – I cannot drive in here</button><button class="opt" data-ok="0">I must drive in</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s91">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Car from the left</span><span class="pill">Pedestrian</span></div></div>
+  <div class="body">
+    <h2>Left turn out of a one-way street</h2>
+    <p class="core">Use the left lane, and be ready for cars from the left and for pedestrians.</p>
+    <ul><li>Position yourself in good time in the left lane, usually as far left as possible.</li><li>Cars from the left often drive fast in relation to visibility and yielding.</li><li>Pedestrians do not expect cars on the left side of the carriageway.</li></ul>
+    <p class="src">📖 Class B textbook · page 91</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Extra danger: nobody expects you from that side.</p>
+    <div class="quiz"><p class="q">You will turn left out of a one-way street. What is extra important?</p><button class="opt" data-ok="1">Look carefully for pedestrians and cars from the left</button><button class="opt" data-ok="0">Nothing – it is the same as always</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s92">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Roundabout</span><span class="pill">Lorry</span></div></div>
+  <div class="body">
+    <h2>Roundabouts: the signs and the overview</h2>
+    <p class="core">Reduce speed in good time and get an overview before you enter.</p>
+    <ul><li>The roundabout slows speed and regulates the flow of traffic.</li><li>The &#x27;roundabout&#x27; warning sign only warns that you are arriving at one. It says nothing about yielding.</li><li>Show special consideration to large vehicles, especially lorry combinations, that need much room.</li></ul>
+    <p class="src">📖 Class B textbook · page 92</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Unknown roundabout? Then slow down early.</p>
+    <div class="quiz"><p class="q">You approach a roundabout you do not know. What do you do?</p><button class="opt" data-ok="1">Reduce speed in good time and look for signs and markings</button><button class="opt" data-ok="0">Keep speed and follow the others</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s92b">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Give-way sign</span><span class="pill">Give-way line</span></div></div>
+  <div class="body">
+    <h2>Who must yield in a roundabout?</h2>
+    <p class="core">Read the signs and markings at the entry. They decide who yields.</p>
+    <ul><li>The give-way line shows the place where the duty to yield begins.</li><li>Look for a give-way sign and give-way line at the entry.</li><li>If in doubt, let the traffic in the roundabout go first.</li></ul>
+    <p class="src">📖 Class B textbook · page 92</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Look for the give-way sign. It decides everything.</p>
+    <div class="quiz"><p class="q">You are unsure who must yield when you arrive at a roundabout. What do you do?</p><button class="opt" data-ok="1">Read signs and markings, and let the traffic in the roundabout go first if in doubt</button><button class="opt" data-ok="0">Go first – I surely have priority</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s93">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Right turn</span><span class="pill">Straight ahead</span></div></div>
+  <div class="body">
+    <h2>Roundabout with one lane in each direction</h2>
+    <p class="core">Keep the vehicle well within the lane all the way.</p>
+    <ul><li>Right turn: drive as near the right edge as possible before the roundabout.</li><li>Left turn: drive as near the middle as possible before the roundabout, if there is no yellow centre line or median.</li><li>Straight ahead: keep the vehicle well within the lane.</li></ul>
+    <p class="src">📖 Class B textbook · page 93</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Your position before the roundabout shows what you will do.</p>
+    <div class="quiz"><p class="q">You will take the first exit on the right in a one-lane roundabout. Where do you position yourself before it?</p><button class="opt" data-ok="1">As near the right edge as possible</button><button class="opt" data-ok="0">Towards the middle of the road</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s94">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Right lane</span><span class="pill">Left lane</span></div></div>
+  <div class="body">
+    <h2>Large roundabout with several lanes</h2>
+    <p class="core">Use the right lane in good time before the roundabout.</p>
+    <ul><li>Right turn: use the right lane in good time before the roundabout.</li><li>Left turn: use the left lane in good time.</li><li>Straight ahead: follow signs or markings. If there are none, use the lane that suits best, and remember the main rule of keeping right.</li></ul>
+    <p class="src">📖 Class B textbook · page 94</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Choose your lane before the roundabout, not in it.</p>
+    <div class="quiz"><p class="q">You will go straight ahead in a large two-lane roundabout, and there are neither signs nor markings. What do you do?</p><button class="opt" data-ok="1">Use the lane that suits best, and keep right as the main rule</button><button class="opt" data-ok="0">Always the left lane</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s95">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Signal</span><span class="pill">Exit</span></div></div>
+  <div class="body">
+    <h2>Signalling in a roundabout</h2>
+    <p class="core">Give signals that inform. Leave out signals that can be misunderstood.</p>
+    <ul><li>Right turn: signal right in good time before the roundabout and keep it on until you are out.</li><li>Straight ahead: signal right at your exit and stop once you are out.</li><li>Left turn: signal left before, and right at your exit. Remember to yield when changing lanes.</li></ul>
+    <p class="src">📖 Class B textbook · page 95</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Signals that help the others are good signals.</p>
+    <div class="quiz"><p class="q">You will go straight through a roundabout. When do you signal right?</p><button class="opt" data-ok="1">When you are about to leave the roundabout</button><button class="opt" data-ok="0">Before you drive in</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s96">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Observation</span><span class="pill">Blind zone</span></div></div>
+  <div class="body">
+    <h2>Changing lanes: yielding and routine</h2>
+    <p class="core">Whoever changes lane must yield to those in the lane he is entering.</p>
+    <ul><li>The duty to yield applies both when changing lane to the right and to the left.</li><li>Routine: observe, signal, check the blind zone, adjust speed, change lane.</li><li>Change lane smoothly, not with abrupt steering. Do not move aside unnecessarily from your place.</li></ul>
+    <p class="src">📖 Class B textbook · page 96</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> A lane change is a small conversation with the others.</p>
+    <div class="quiz"><p class="q">You want to change from the right to the left lane, and a car approaches from behind in the left lane. Who must yield?</p><button class="opt" data-ok="1">I do, as the one changing lane</button><button class="opt" data-ok="0">The car behind – it must always yield</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s97">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Information board</span><span class="pill">Deceleration lane</span></div></div>
+  <div class="body">
+    <h2>Deceleration lane at an exit</h2>
+    <p class="core">When leaving, drive into the deceleration lane as soon as possible.</p>
+    <ul><li>Watch the information board. It tells you you are nearing the exit.</li><li>At the start of the lane there is a sign with a diagonal arrow.</li><li>On roads with heavy traffic a separate exit lane is practical. In winter the lane can be more slippery than the main road.</li></ul>
+    <p class="src">📖 Class B textbook · page 97</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Go into the lane early and brake there.</p>
+    <div class="quiz"><p class="q">You will take an exit with a deceleration lane on a motorway. Where do you slow down?</p><button class="opt" data-ok="1">In the deceleration lane</button><button class="opt" data-ok="0">On the main road before the lane</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s98">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Acceleration</span><span class="pill">Give-way symbol</span></div></div>
+  <div class="body">
+    <h2>Acceleration lane and the merging rule</h2>
+    <p class="core">In the acceleration lane you adjust your speed to the traffic you are joining.</p>
+    <ul><li>A driver in an acceleration lane must adjust speed to the traffic in the lane being entered.</li><li>Traffic on the main road should make it easy for you to join.</li><li>Use the whole lane to get up speed.</li></ul>
+    <p class="src">📖 Class B textbook · page 98</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Use the whole lane to get up speed.</p>
+    <div class="quiz"><p class="q">You join a motorway via an acceleration lane. What do you do?</p><button class="opt" data-ok="1">Build speed in the lane and adjust it to the traffic I am joining</button><button class="opt" data-ok="0">Drive in slowly and let the others brake</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s99">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Bus</span><span class="pill">Taxi</span><span class="pill">2+</span></div></div>
+  <div class="body">
+    <h2>Bus lanes and shared-use lanes</h2>
+    <p class="core">Driving in a bus lane is only allowed as the sign states.</p>
+    <ul><li>Some may still use the lanes, e.g. electric or hydrogen cars, two-wheeled motorcycles, mopeds and bicycles.</li><li>A taxi may only use a bus lane when it has a roof light (sign 508).</li><li>A uniformed emergency vehicle may also use the lanes.</li></ul>
+    <p class="src">📖 Class B textbook · page 99</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Read the sign. It says who may drive here.</p>
+    <div class="quiz"><p class="q">You drive an electric car and see a bus lane with a sign showing only a bus. What do the traffic rules say?</p><button class="opt" data-ok="1">Electric cars may still use such lanes under traffic rules § 5 no. 2</button><button class="opt" data-ok="0">No – only buses may drive here, always</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s100">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Mandatory direction</span><span class="pill">Car A</span><span class="pill">Car B</span></div></div>
+  <div class="body">
+    <h2>Mandatory direction of travel</h2>
+    <p class="core">Blue round signs with a white arrow tell the direction you must drive.</p>
+    <ul><li>Mandatory direction (sign 402): drivers must leave the junction in the direction shown on the sign.</li><li>Mandatory signs are round with a blue background and white arrows.</li><li>Example: car A must turn left. Car B may choose straight ahead or right.</li></ul>
+    <p class="src">📖 Class B textbook · page 100</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> A blue arrow is an order, not advice.</p>
+    <div class="quiz"><p class="q">You are in a car behind a sign that only shows mandatory direction to the right. May you turn left?</p><button class="opt" data-ok="1">No – mandatory direction forbids a left turn</button><button class="opt" data-ok="0">Yes, if nobody sees</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s101">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Diagonal arrow</span><span class="pill">Barrier</span></div></div>
+  <div class="body">
+    <h2>Mandatory lane: pass on the arrow&#x27;s side</h2>
+    <p class="core">The diagonal arrow shows which side you must drive past the sign.</p>
+    <ul><li>Mandatory lane (sign 404): drivers must pass the sign on the side the arrow points to.</li><li>You often see it at roadworks or a barrier.</li><li>Follow the arrow and take the obstruction into account.</li></ul>
+    <p class="src">📖 Class B textbook · page 101</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> The arrow shows the way around the obstruction.</p>
+    <div class="quiz"><p class="q">There is a blue sign with a diagonal arrow pointing left in front of an obstruction in the road. Which side do you pass on?</p><button class="opt" data-ok="1">On the left, as the arrow shows</button><button class="opt" data-ok="0">On the right, as usual</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s102">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Sign</span><span class="pill">E18 / E6 (road numbers)</span></div></div>
+  <div class="body">
+    <h2>Signs that show lanes</h2>
+    <p class="core">Read the signs that show lanes, and choose your lane in good time.</p>
+    <ul><li>Read the sign before you choose a lane.</li><li>Choose your lane in good time.</li><li>If in doubt, slow down and look carefully.</li></ul>
+    <p class="src">📖 Class B textbook · page 102</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Look up in time and choose a lane.</p>
+    <div class="quiz"><p class="q">You come to a traffic island with a blue sign showing lanes. What do you do first?</p><button class="opt" data-ok="1">Read the sign and choose a lane in good time</button><button class="opt" data-ok="0">Drive straight on without looking at the sign</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s103">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Merging</span></div></div>
+  <div class="body">
+    <h2>Merging: take turns</h2>
+    <p class="core">When the number of lanes is reduced, adjust speed and let in alternately.</p>
+    <ul><li>When ordinary lanes in the same direction are reduced, the yielding rule for lane changes does not apply.</li><li>Speed must be mutually adjusted so the drivers can continue alternately without undue hindrance.</li><li>The rule also applies even if the merging sign is not put up.</li></ul>
+    <p class="src">📖 Class B textbook · page 103</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> One each. That is the whole secret.</p>
+    <div class="quiz"><p class="q">You and another car are in separate lanes, and one lane ends. What is right?</p><button class="opt" data-ok="1">Adjust speed and let in alternately</button><button class="opt" data-ok="0">Whoever is first takes the space regardless</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s104">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Lane ends</span><span class="pill">Change lane</span></div></div>
+  <div class="body">
+    <h2>Signs: lane begins and ends</h2>
+    <p class="core">If your lane is about to end, you must change lane.</p>
+    <ul><li>Signs show that a lane begins or ends. Look up in time.</li><li>Sign 532 &#x27;Lane ends&#x27;: drivers in a lane that ends must change lane and must yield in accordance with the traffic rules.</li><li>Change lane in good time and look around.</li></ul>
+    <p class="src">📖 Class B textbook · page 104</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Look at the arrow colour. It says who must yield.</p>
+    <div class="quiz"><p class="q">You drive in a lane that is about to end, and the &#x27;Lane ends&#x27; sign stands ahead of you. What must you do?</p><button class="opt" data-ok="1">Change lane and yield in accordance with the traffic rules</button><button class="opt" data-ok="0">Carry on and let the others yield to me</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s104b">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Yielding</span></div></div>
+  <div class="body">
+    <h2>What does yielding mean?</h2>
+    <p class="core">Yielding means you must stop if it is necessary.</p>
+    <ul><li>The person you must yield to must not be hindered or disturbed.</li><li>You show your yielding clearly by slowing down or stopping in good time.</li><li>Keep yielding, stopping duty, free passage and merging apart.</li></ul>
+    <p class="src">📖 Class B textbook · page 104</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Yielding is showing that you see the other.</p>
+    <div class="quiz"><p class="q">You must yield and see a car coming. How do you show it?</p><button class="opt" data-ok="1">Slow down or stop in good time</button><button class="opt" data-ok="0">Keep speed and hope the other brakes</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s105">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">From the right</span><span class="pill">School bus</span></div></div>
+  <div class="body">
+    <h2>Yield to vehicles from the right</h2>
+    <p class="core">The main rule: you yield to vehicles coming from the right.</p>
+    <ul><li>The same applies when you turn left and get a vehicle on your right side.</li><li>Assess whether the vehicle from the right may be hindered or disturbed.</li><li>We judge speed and distance poorly. Give more time than you think.</li></ul>
+    <p class="src">📖 Class B textbook · page 105</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Right first. Then you assess the rest.</p>
+    <div class="quiz"><p class="q">You come to an uncontrolled junction and see a car far away on the right. What do you do?</p><button class="opt" data-ok="1">Yield – I must give way to the car from the right</button><button class="opt" data-ok="0">Go – it is far away</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s106">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Pedestrian</span><span class="pill">Cyclist</span></div></div>
+  <div class="body">
+    <h2>Yield to pedestrians and cyclists when turning</h2>
+    <p class="core">When you turn, you must yield to pedestrians and cyclists where you drive in.</p>
+    <ul><li>A turning driver must yield to pedestrians, cyclists and small electric motor vehicles going straight on the carriageway or shoulder.</li><li>If you turn in across a pavement, you must yield to those using the pavement.</li><li>Always look once more for pedestrians and cyclists.</li></ul>
+    <p class="src">📖 Class B textbook · page 106</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> The turn is where vulnerable road users cross.</p>
+    <div class="quiz"><p class="q">You turn right and a pedestrian crosses the road you are entering, beside a pedestrian crossing. What do you do?</p><button class="opt" data-ok="1">Let him cross – I must yield even without a crossing</button><button class="opt" data-ok="0">Drive – he is not in the crossing</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s106b">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Pedestrian crossing</span><span class="pill">Stop here</span></div></div>
+  <div class="body">
+    <h2>Do not stop on the pedestrian crossing</h2>
+    <p class="core">Don&#x27;t stop in the way of crossing traffic or on the pedestrian crossing.</p>
+    <ul><li>When approaching or entering a junction: do not stop to the undue hindrance of the crossing road.</li><li>Avoid stopping on a pedestrian crossing.</li><li>Do not hinder the pedestrians. Drive far enough to see both ways, once it is clear.</li></ul>
+    <p class="src">📖 Class B textbook · page 106</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Stop before the crossing, not on it.</p>
+    <div class="quiz"><p class="q">You must yield at a junction with a pedestrian crossing right ahead, and a pedestrian is on the crossing. Where do you stop?</p><button class="opt" data-ok="1">Before the crossing, so I do not hinder the pedestrians</button><button class="opt" data-ok="0">On the crossing, so I see better</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s107">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Green light</span><span class="pill">Queue</span></div></div>
+  <div class="body">
+    <h2>Signalised junction: straight ahead</h2>
+    <p class="core">A green light means you may go if the road is clear.</p>
+    <ul><li>At a green light you may pass the signal if the road is clear.</li><li>Drive so you do not have to stop to the undue hindrance of crossing traffic.</li><li>Pedestrians may have stepped onto the crossing on green: let them across.</li></ul>
+    <p class="src">📖 Class B textbook · page 107</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Green does not mean everything is free. Look around.</p>
+    <div class="quiz"><p class="q">You have green straight ahead, but the queue stands still on the other side of the junction. What do you do?</p><button class="opt" data-ok="1">Wait until there is room for me on the other side</button><button class="opt" data-ok="0">Drive out and get stuck in the middle of the junction</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s107b">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Right turn</span><span class="pill">Pedestrians</span></div></div>
+  <div class="body">
+    <h2>Right turn at a signalised junction</h2>
+    <p class="core">Turning right on green, yield to pedestrians in the crossing you enter.</p>
+    <ul><li>When you turn, you must yield to pedestrians and cyclists where you drive in.</li><li>If there are pedestrians in the crossing, drive forward calmly and wait until it is clear.</li><li>If the light has its own signal for pedestrians, watch which light they have. It may be green at the same time as yours.</li></ul>
+    <p class="src">📖 Class B textbook · page 107</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Green for you can be green for them too.</p>
+    <div class="quiz"><p class="q">You have green and are turning right, and pedestrians cross in the crossing you drive into. What do you do?</p><button class="opt" data-ok="1">Wait and let them cross first</button><button class="opt" data-ok="0">Drive – I have green</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s108">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Left turn</span><span class="pill">Oncoming</span></div></div>
+  <div class="body">
+    <h2>Left turn at a signalised junction</h2>
+    <p class="core">When turning left on green you must yield to oncoming traffic and pedestrians.</p>
+    <ul><li>Wait for a safe gap in the oncoming traffic.</li><li>Do not drive so far forward that you block oncoming traffic turning to its left.</li><li>Wait with the wheels straight ahead. If hit from behind, you are thrown straight ahead.</li></ul>
+    <p class="src">📖 Class B textbook · page 108</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Wheels straight while you wait. It is cheap insurance.</p>
+    <div class="quiz"><p class="q">You wait in the middle of a signalised junction for a gap to turn left. How are the wheels?</p><button class="opt" data-ok="1">Straight ahead</button><button class="opt" data-ok="0">Turned left, ready to turn</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s108b">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Flashing yellow</span><span class="pill">Arrow signal</span></div></div>
+  <div class="body">
+    <h2>Arrow signal and flashing yellow signal</h2>
+    <p class="core">An arrow signal applies only to those who want to drive in the arrow&#x27;s direction.</p>
+    <ul><li>An arrow signal applies to those who want to drive in the direction the arrow shows.</li><li>Flashing yellow signal: show special alertness and care.</li><li>Remember the order: police, light signal, sign, marking, rules.</li></ul>
+    <p class="src">📖 Class B textbook · page 108</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> When the light does not work, the normal rules apply.</p>
+    <div class="quiz"><p class="q">All the lights in a junction flash yellow. What must you do?</p><button class="opt" data-ok="1">Show special alertness and care</button><button class="opt" data-ok="0">Drive first without looking around</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s109">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Petrol station</span><span class="pill">Cycle path</span></div></div>
+  <div class="body">
+    <h2>Other situations where you must yield</h2>
+    <p class="core">You must yield when you come out from a place beside the road.</p>
+    <ul><li>From a parking place, a stop, a square, a property and a petrol station.</li><li>From a cycle path, footpath or pavement when you want to enter or cross the road.</li><li>When you reverse, turn round, pull out from the kerb, change lane or have the barrier on your side.</li></ul>
+    <p class="src">📖 Class B textbook · page 109</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> If you come out from the side, you wait for those on the road.</p>
+    <div class="quiz"><p class="q">You drive out of a petrol station onto the road. Who must yield?</p><button class="opt" data-ok="1">I must yield to the traffic on the road</button><button class="opt" data-ok="0">The traffic on the road must wait for me</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article>
+
+<article class="card" data-id="bb-s110">
+  <div class="media"><div class="ph"><span>Image coming</span></div><div class="pills"><span class="pill">Cycle lane</span><span class="pill">Cycle path</span></div></div>
+  <div class="body">
+    <h2>Yielding and cyclists: cycle lane and cycle path</h2>
+    <p class="core">The rules are difficult. Do not count on cyclists knowing them.</p>
+    <ul><li>A cycle lane is a lane set aside for cyclists by public traffic sign and marking.</li><li>A driver who wants to enter or cross a road from a cycle path, footpath or pavement must yield to road users on the road.</li><li>As a motor-vehicle driver you cannot count on cyclists knowing the rules.</li></ul>
+    <p class="src">📖 Class B textbook · page 110</p>
+    <details class="more"><summary>🧑‍🏫 Michael says · Check yourself</summary>
+    <p class="michael"><b>Michael says:</b> Don&#x27;t trust others to know the rules. Be ready to stop.</p>
+    <div class="quiz"><p class="q">You drive on a road with a cycle path separated by a ditch. The cyclist comes from the cycle path towards the junction. Who must yield?</p><button class="opt" data-ok="1">The cyclist, coming from the cycle path</button><button class="opt" data-ok="0">I do – cyclists always have priority</button><p class="fb" data-ok="Correct!" data-no="Try again"></p></div>
+    </details>
+  </div>
+</article></section></main>
+<script>
+const TT={"no": "Michaels bildebok", "th": "หนังสือภาพของไมเคิล", "en": "Michael's picture book"};
+const show=l=>{document.getElementById('ttl').textContent=TT[l];document.title=TT[l];document.querySelectorAll('.view').forEach(v=>v.hidden=v.id!=='v-'+l);
+document.querySelectorAll('header button').forEach(b=>b.classList.toggle('on',b.dataset.l===l));document.documentElement.lang=l==='th'?'th':l;};
+document.querySelectorAll('header button').forEach(b=>b.onclick=()=>show(b.dataset.l));
+document.addEventListener('click',e=>{const o=e.target.closest('.opt');if(!o)return;
+const q=o.closest('.quiz'),fb=q.querySelector('.fb'),ok=o.dataset.ok==='1';
+o.classList.add(ok?'good':'bad');fb.textContent=ok?fb.dataset.ok:fb.dataset.no;fb.style.color=ok?'var(--ok)':'var(--bad)';});
+show('no');
+</script></body></html>

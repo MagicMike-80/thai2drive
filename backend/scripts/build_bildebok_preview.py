@@ -9,8 +9,14 @@ from __future__ import annotations
 import html
 import json
 from pathlib import Path
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from bildebok_lookup import load_overrides, row_has_unconfirmed  # noqa: E402
+from bildebok_structure import assign_section, build_tree_md, image_files, load_structure  # noqa: E402
 
 NL = chr(10)
+SIDECAR_MARKER = "<!-- BEGIN HAND-MAINTAINED STATUS; generator preserves everything below -->"
 
 ROOT = Path(__file__).resolve().parents[2]
 PACK = ROOT / "backend" / "content_packs" / "bildebok" / "pilot_s11_s35.json"
@@ -134,6 +140,13 @@ APPROVAL_FIELDS = ("id", "asset_id", "title", "core_sentence", "points", "michae
 def row_hash(row: dict) -> str:
     import hashlib
     payload = json.dumps({k: row[k] for k in APPROVAL_FIELDS}, ensure_ascii=False, sort_keys=True)
+    # New image-bound approvals must name the exact bytes. Keep legacy row hashes stable.
+    if row.get("image_sha256"):
+        binding = json.dumps(
+            {"image_file": row.get("image_file"), "image_sha256": row["image_sha256"]},
+            ensure_ascii=False, sort_keys=True,
+        )
+        payload = json.dumps({"content": payload, "image_binding": binding}, ensure_ascii=False, sort_keys=True)
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()[:12]
 
 
@@ -149,7 +162,7 @@ def build_approval(pack: dict) -> str:
 
 def build_map(pack: dict) -> str:
     sc = pack["scope"]["printed_pages"]
-    label = {11: "pilot", 36: "batch 2", 61: "batch 3"}.get(sc[0], f"s. {sc[0]}")
+    label = {11: "pilot", 36: "batch 2", 61: "batch 3", 86: "batch 4", 111: "batch 5"}.get(sc[0], f"s. {sc[0]}")
     out = [f"# Sidekart – Bilde-bok {label} (trykt s. {sc[0]}–{sc[1]})", "",
            "| Innholds-ID | Kapittel | Avsnitt | Bildefil | Kilde | Neste steg | Åpne spørsmål |",
            "|---|---|---|---|---|---|---|"]
@@ -157,6 +170,14 @@ def build_map(pack: dict) -> str:
         out.append(f"| {r['id']} | {r['chapter']} | {r['section']} | `{r['image_file']}` | {r['source_ref']} | "
                    f"{r['next_step'] or '— (slutt på pilot)'} | {len(r['open_questions'])} |")
     return NL.join(out) + NL
+
+
+def map_with_preserved_sidecar(existing: str, generated: str) -> str:
+    """Replace the generated map while retaining dated manual status below its marker."""
+    if SIDECAR_MARKER not in existing:
+        return generated
+    sidecar = existing.split(SIDECAR_MARKER, 1)[1].lstrip("\r\n")
+    return generated.rstrip("\r\n") + NL + NL + SIDECAR_MARKER + NL + sidecar
 
 
 def build_briefs(pack: dict) -> str:
@@ -186,6 +207,13 @@ def build_content(pack: dict) -> str:
             out.append(f"- Spørsmål: {cq['q'][lang]} → {cq['options'][cq['answer']][lang]}")
             out.append(f"- Michael-grunnlag: {r['michael_basis'][lang]}")
             out.append("")
+        if r.get("michael_claims"):
+            out.append("**Påstander (klassifisering, kilde og kontrolltidspunkt):**")
+            for c in r["michael_claims"]:
+                src = f" · kilde: {c['source']} · kontrollert {c['checked_at']}" if c.get("source") else ""
+                sent = "sendt til Michael" if c["kind"] != "apent" else "IKKE sendt til Michael"
+                out.append(f"- **{c['kind']}** ({sent}){src}: {c['text']['no']}")
+            out.append("")
         out.append(f"**Bildebrief (engelsk, til Codex/ChatGPT):** {r['image_brief']}")
         out.append("")
         if r["open_questions"]:
@@ -198,22 +226,32 @@ def build_content(pack: dict) -> str:
 
 PACKS = [("", ROOT / "backend" / "content_packs" / "bildebok" / "pilot_s11_s35.json"),
          ("_BATCH2", ROOT / "backend" / "content_packs" / "bildebok" / "batch2_s36_s60.json"),
-         ("_BATCH3", ROOT / "backend" / "content_packs" / "bildebok" / "batch3_s61_s85.json")]
+         ("_BATCH3", ROOT / "backend" / "content_packs" / "bildebok" / "batch3_s61_s85.json"),
+         ("_BATCH4", ROOT / "backend" / "content_packs" / "bildebok" / "batch4_s86_s110.json"),
+         ("_BATCH5", ROOT / "backend" / "content_packs" / "bildebok" / "batch5_s111_s126.json")]
 INDEX = ROOT / "backend" / "content_packs" / "bildebok" / "book_index.json"
 
 
 def build_index(packs: list[dict]) -> dict:
     """Samlet Michael-indeks over alle pakker i bokrekkefølge. next = global neste rad."""
+    ov = load_overrides()
+    struct = load_structure()
     rows = [r for pk in packs for r in pk["pages"]]
     rows.sort(key=lambda r: (r["printed_page"], r["id"]))
     pages = {}
     for i, r in enumerate(rows):
         pages[r["id"]] = {
             "printed_page": r["printed_page"], "pdf_page": r["pdf_page"], "chapter": r["chapter"], "section": r["section"],
+            "part": assign_section(r, struct)[0], "section_no": assign_section(r, struct)[1], "section_title": assign_section(r, struct)[2],
+            "collection_images": image_files(r),
             "title": r["title"], "image_file": r["image_file"], "quiz_category": r.get("quiz_category"),
             "next": rows[i + 1]["id"] if i + 1 < len(rows) else None,
+            "has_unconfirmed": row_has_unconfirmed(r, ov),
+            "open_question_count": len(r.get("open_questions", [])),
+            "claim_kinds": sorted({c["kind"] for c in r.get("michael_claims", [])}),
+            "teach_open_claims_as_rules": False,
         }
-    return {"version": 1, "note": "quiz_category følger normalize_categories.py og er ikke verifisert mot live DB", "pages": pages}
+    return {"version": 2, "structure": "book_structure.json (4 hoveddeler)", "image_collection": "Michael Trafikklærer AI materialer/Bilder til læreboken", "note": "quiz_category følger normalize_categories.py og er ikke verifisert mot live DB. Rader med has_unconfirmed har uavklarte påstander. De sendes aldri til læreren (se michael_safe_overrides.json og michael_basis).", "row_count": len(rows), "pages": pages}
 
 
 def paths(tag: str) -> dict:
@@ -237,13 +275,16 @@ def main() -> None:
         o["html"].parent.mkdir(parents=True, exist_ok=True)
         o["html"].write_text(build_html(pack), encoding="utf-8")
         o["md"].write_text(build_md(pack), encoding="utf-8")
-        o["map"].write_text(build_map(pack), encoding="utf-8")
+        old_map = o["map"].read_text(encoding="utf-8") if o["map"].exists() else ""
+        o["map"].write_text(map_with_preserved_sidecar(old_map, build_map(pack)), encoding="utf-8")
         o["content"].write_text(build_content(pack), encoding="utf-8")
         o["briefs"].write_text(build_briefs(pack), encoding="utf-8")
         if not o["approval"].exists():
             o["approval"].write_text(build_approval(pack), encoding="utf-8")
         print("wrote", tag or "pilot", [str(v.name) for v in o.values()])
-    INDEX.write_text(json.dumps(build_index(loaded), ensure_ascii=False, indent=1), encoding="utf-8")
+    idx = build_index(loaded)
+    INDEX.write_text(json.dumps(idx, ensure_ascii=False, indent=1), encoding="utf-8")
+    (ROOT / "docs" / "bildebok" / "BOKSTRUKTUR.md").write_text(build_tree_md(idx), encoding="utf-8")
     print("wrote", INDEX.name)
 
 
