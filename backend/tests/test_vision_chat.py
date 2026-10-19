@@ -19,16 +19,22 @@ WEBAPP = (ROOT / "backend" / "webapp.py").read_text(encoding="utf-8")
 
 
 class _Cursor:
+    def __init__(self, language=None):
+        self.language = language
+
     def sort(self, *args, **kwargs):
         return self
 
     async def to_list(self, length=None):
-        return [{"role": "assistant", "v4_stage": "3", "content": "What do you think?"}]
+        return [{"role": "assistant", "v4_stage": "3", "content": "What do you think?", "language":self.language}]
 
 
 class _Collection:
+    def __init__(self, language=None):
+        self.language = language
+
     def find(self, *args, **kwargs):
-        return _Cursor()
+        return _Cursor(self.language)
 
     async def find_one(self, *args, **kwargs):
         return None
@@ -98,7 +104,7 @@ def test_vision_chat_builds_multimodal_message_with_language_pure_safety_contrac
         )
 
     request = TeacherChatRequest(message=message, language=lang, image_data=PNG_DATA)
-    with patch.object(tc, "_db", _Database()), patch.object(tc, "_chat_col", _Collection()), patch.object(
+    with patch.object(tc, "_db", _Database()), patch.object(tc, "_chat_col", _Collection(lang)), patch.object(
         tc, "LLM_KEY", "test-key"
     ), patch.object(tc, "_completion_with_fallback", new=complete):
         response = asyncio.run(teacher_chat(request))

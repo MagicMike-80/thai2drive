@@ -45,7 +45,7 @@ _SIGN = {
 class TokenBudgetTests(unittest.TestCase):
     def test_normal_replies_have_room_to_finish_sentences(self):
         self.assertGreaterEqual(tc._TEACHER_CHAT_MAX_TOKENS, 400)
-        self.assertEqual(tc._TEACHER_HISTORY_LIMIT, 10)
+        self.assertIsNone(tc._TEACHER_HISTORY_LIMIT)
 
 
 class PromptRuleTests(unittest.TestCase):

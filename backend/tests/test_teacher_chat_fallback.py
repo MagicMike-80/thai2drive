@@ -1000,7 +1000,7 @@ class KaiPloyLogicTests(unittest.TestCase):
 
     def test_recent_history_absence_and_teacher_explanations_do_not_prove_learner_state(self):
         contract = self.tc._complete_request_contract({}, None)
-        self.assertIn("not the whole session", contract)
+        self.assertIn("full persisted session", contract)
         self.assertIn("Never infer that a topic was never taught", contract)
         self.assertIn("not evidence that the learner knows", contract)
         data = json.loads((ROOT / "backend/tests/fixtures/kai-ploy/kai-history-and-mastery-2026-10-17.json").read_text(encoding="utf-8"))

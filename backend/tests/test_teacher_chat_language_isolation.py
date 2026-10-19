@@ -280,17 +280,13 @@ class TheoryHelpShortcutLanguagePurityTests(unittest.TestCase):
         self.assertTrue(all(doc["language"] == "en" for doc in tc._chat_col.inserted))
 
 
-class ChatHistoryFilteredByLanguageOnDisk(unittest.TestCase):
-    """The prior-conversation fetch must scope by language, not just session_id,
-    so a language switch never replays the old language's turns into the prompt."""
-
-    def test_history_query_includes_language_filter_in_source(self):
+class SessionHistoryAndLanguageStateTests(unittest.TestCase):
+    """All languages are historical evidence; current quiz/plan state stays isolated."""
+    def test_full_history_is_forwarded_but_state_is_language_scoped(self):
         source = (Path(__file__).resolve().parents[1] / "teacher_chat.py").read_text(encoding="utf-8")
-        self.assertIn('{"session_id": session_id, "language": lang}', source)
-        self.assertNotIn(
-            'prior = await _chat_col.find(\n        {"session_id": session_id}\n    )',
-            source,
-        )
+        self.assertIn("session_history = await _load_session_history(session_id)", source)
+        self.assertIn('prior = [row for row in session_history if row.get("language") == lang]', source)
+        self.assertIn("conversation: List[dict] = _history_messages(session_history)", source)
 
 
 class LiveThaiQuizCoachIsolationTests(unittest.TestCase):
