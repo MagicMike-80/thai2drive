@@ -133,6 +133,16 @@ class HistoryAndLeftTurnTests(unittest.TestCase):
         self.assertNotIn("(Trafikkreglene § 7 no. 1)",fixed)
         self.assertEqual("Slowing early is section7 no1.",self.tc._ground_right_rule_citation("Slowing early is section7 no1.","en"))
 
+    def test_actual_live_left_example_does_not_reverse_right_hand_duty(self):
+        row = json.loads((Path(__file__).parent / "fixtures/kai-ploy/production-a5fe5b0-left-example-2026-10-19.json").read_text(encoding="utf-8"))
+        raw = row["response"]["reply"]
+        bad_example = ", when coming from the right in an unmarked junction"
+        self.assertIn(bad_example, raw)
+        self.assertEqual(raw.replace(bad_example, ""), self.tc._ground_right_rule_citation(raw, "en"))
+        valid = "You have priority when coming from the right in an unmarked junction."
+        self.assertEqual(valid, self.tc._ground_right_rule_citation(valid, "en"))
+        self.assertEqual(raw, self.tc._ground_right_rule_citation(raw, "no"))
+
     def test_actual_unknown_remaining_time_is_not_inferred(self):
         data = json.loads((Path(__file__).parent / "fixtures/kai-ploy/actual-history-left-turn-candidate02-2026-10-19.json").read_text(encoding="utf-8"))
         row = next(r for r in data["records"] if r["request_id"] == "argus-no-5")

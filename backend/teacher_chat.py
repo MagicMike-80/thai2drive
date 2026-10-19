@@ -2090,12 +2090,19 @@ def _ground_recorded_question_count(reply: str, memory: dict | None, lang: str) 
 
 
 def _ground_right_rule_citation(reply: str, lang: str) -> str:
-    """Correct the observed unambiguous right-hand definition's subsection only."""
+    """Ground the observed English citation and remove one reversed-duty example."""
     if lang != "en":
         return reply
-    return re.sub(
+    reply = re.sub(
         r"((?:priority-to-the-right|right-hand) rule means[^()\n]*?you must give way to traffic coming from your right\s*)\(Trafikkreglene § 7 no\. 1\)",
         r"\1(Trafikkreglene § 7 no. 2)", reply, flags=re.I,
+    )
+
+    # Actual production counterexample: coming FROM the right does not itself
+    # create the stated duty. Remove that list item, keeping valid examples.
+    return re.sub(
+        r"(duty to give way[^.\n]{0,300}), when coming from the right in an unmarked junction",
+        r"\1", reply, flags=re.I,
     )
 
 

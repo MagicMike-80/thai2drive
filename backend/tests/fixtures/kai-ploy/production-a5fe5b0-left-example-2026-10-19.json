@@ -1,0 +1,36 @@
+{
+  "start": "2026-10-19T18:16:49.450167+00:00",
+  "end": "2026-10-19T18:16:54.418023+00:00",
+  "request": {
+    "message": "Explain traffic rules section 7(2) for left turns and distinguish section 7(3) for vulnerable road users. Does going straight always give priority?",
+    "language": "en",
+    "mode": "normal_chat",
+    "device_id": "qa-argus-history19c03-en-75bf6689615b4d60a96f434e71e52a83",
+    "session_id": "ts_892480d10281427d"
+  },
+  "status": 200,
+  "response": {
+    "session_id": "ts_892480d10281427d",
+    "conversation_id": "ts_892480d10281427d",
+    "mode": "normal_chat",
+    "reply": "Section 7(2) of the Traffic Rules covers left turns: when you turn left across the oncoming lane, the oncoming vehicle ends up on your right side, and that is what creates your duty to give way. You are the servant and the oncoming car is the king — you must not make it brake or hesitate. Slow down in good time and wait for a safe gap.\n\nSection 7(3) is a separate rule about vulnerable road users. When you turn, you must give way to pedestrians, cyclists and riders of small electric vehicles who are going straight ahead and whose path you cross. If your turn crosses a pavement, you must also give way to those using the pavement. Keep this distinct from 7(2): 7(2) is about the oncoming vehicle, 7(3) is about the soft road users in the path of your turn. Both can apply in the same turn, and you must satisfy both.\n\nAnd no — going straight does not always give priority. That is a common oversimplification. Going straight gives no automatic right of way in itself. What matters is which rule applies in the concrete situation: signs, lights, road markings, police directions, the right-hand rule, and the give-way duties in section 7. A vehicle going straight can still have a duty to give way — for example at a give-way sign or stop sign, when coming from the right in an unmarked junction, or when entering a roundabout. So the correct habit is to ask \"which rule applies here and who is the servant?\" rather than \"I'm going straight, so I win.\"\n\nOne practical point for your left turn: check mirrors and blind spot before you turn, because a cyclist travelling in your own direction can arrive faster than you expect and is easy to miss.",
+    "suggestions": [],
+    "sign_ids": [],
+    "media": [],
+    "build_commit": "a5fe5b0f19104c1879b37829e67d4471b0153b95",
+    "deployment_id": "6ce43f2e-b4c8-4890-921a-6e9e33aa02fb"
+  },
+  "headers": {
+    "content-type": "application/json",
+    "date": "Mon, 19 Oct 2026 18:16:54 GMT",
+    "server": "railway-hikari",
+    "x-railway-request-id": "DnmvrV-6T4qH8rQFCx5-qw",
+    "x-response-time-ms": "4845",
+    "content-encoding": "gzip",
+    "x-hikari-trace": "ams1.kxr8,lhr1.1t7d",
+    "x-railway-edge": "ams1",
+    "vary": "accept-encoding",
+    "transfer-encoding": "chunked",
+    "connection": "keep-alive"
+  }
+}
