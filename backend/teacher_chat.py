@@ -1734,7 +1734,7 @@ _SITUATION_PATTERNS = {
     "left_turn": r"venstresving|sving\w*\s+(?:til\s+)?venstre|turn\w*\s+left|left turn|เลี้ยวซ้าย",
     "turning_crossing": r"syklist|syklende|cyclist|pedestrian.*turn|fortau|footpath|pavement|ทางเท้า|คนเดินเท้า|(?:§|section|paragraf)\s*7\s*(?:nr\.?|no\.?|ข้อ)\s*3",
     "narrow_road": r"smal\w*\s+(?:vei|veg)|narrow road|sperring|obstacle|blocked|ถนนแคบ|กีดขวาง|(?:§|section|paragraf)\s*7\s*(?:nr\.?|no\.?|ข้อ)\s*6",
-    "right_hand": r"høyre.?regel|hoyre.?regel|right.hand rule|from (?:the )?right|fra høyre|กฎ.*ขวา|จากขวา",
+    "right_hand": r"høyre.?regel|hoyre.?regel|right.hand rule|priority[ -](?:to[ -](?:the[ -])?)?right(?:[ -]rule)?|from (?:the )?right|fra høyre|กฎ.*ขวา|จากขวา",
     "distance": r"(?:stopp?e?|brems[ee]?|reaksjons?|raksjons?)leng\w+|(?:stopping|braking|reaction|brake)\s+distances?|reaction time|ระยะ(?:หยุด|เบรก|ตอบสนอง|ปฏิกิริยา)",
     "attention": r"oppmerksom|attention|bremseberedskap|brake readiness|ความสนใจ|เตรียมเบรก|lastebil.*(?:gangfelt|motorsykkel)|lorry.*(?:crossing|motorcycle)|รถบรรทุก.*(?:ทางม้าลาย|จักรยานยนต์)",
     "roundabout": r"rundkjøring|rundkjoring|roundabout|วงเวียน",
@@ -2075,6 +2075,7 @@ def _guard_unsupported_practice_claims(reply: str, lang: str) -> str:
     if lang == "th":
         return reply.replace("ให้จบภายในเวลาที่เหลือของวันนี้", "")
     if lang == "no":
+        reply = reply.replace("bruker resten av økta på", "fortsetter med")
         reply = reply.replace("Hvis jeg ga deg «svarene», ville du strøket på oppkjøringen igjen, fordi sensor ser etter forståelse, ikke oppramsing.", "")
         return reply.replace("Det du ikke har trent på, er kryss, møtende trafikk og vikeplikt – og det er nettopp der reglene gjelder. ", "")
     return reply
@@ -2086,6 +2087,16 @@ def _ground_recorded_question_count(reply: str, memory: dict | None, lang: str) 
     if lang == "no" and isinstance(total, (int, float)) and not isinstance(total, bool) and total > 0:
         return reply.replace(" eller hvor mange oppgaver du har gjort", "")
     return reply
+
+
+def _ground_right_rule_citation(reply: str, lang: str) -> str:
+    """Correct the observed unambiguous right-hand definition's subsection only."""
+    if lang != "en":
+        return reply
+    return re.sub(
+        r"((?:priority-to-the-right|right-hand) rule means[^()\n]*?you must give way to traffic coming from your right\s*)\(Trafikkreglene § 7 no\. 1\)",
+        r"\1(Trafikkreglene § 7 no. 2)", reply, flags=re.I,
+    )
 
 
 def _ground_exam_key_availability(question: str, reply: str, lang: str) -> str:
@@ -2670,6 +2681,7 @@ def _is_right_hand_rule_query(user_msg: str) -> bool:
         "høyreregel",
         "right-hand rule",
         "right hand rule",
+        "priority to the right rule",
         "กฎการให้ทางจากขวา",
         "กฎมือขวา",
     )
@@ -2735,19 +2747,37 @@ def _apply_section_7_2_fail_safe(user_msg: str, reply_text: str, lang: str) -> s
     # Fang opp eventuelle farlige feilpåstander fra LLM-en
     reply_lower = (reply_text or "").casefold()
     reply_lower = re.sub(r"(?:en vanlig feil er å tro at|det er feil å tro at)[^.\n]*(?:\.|$)", "", reply_lower)
-    has_dangerous_negation = (
-        "høyreregelen gjelder ikke for møtende" in reply_lower
-        or "gjelder ikke for møtende" in reply_lower
-        or "høyreregelen gjelder ikke når" in reply_lower
-        or "ikke vikeplikt for møtende" in reply_lower
-        or "møtende trafikk har vike" in reply_lower
-        or "ikke høyreregelen" in reply_lower
-        or "not the right-hand rule" in reply_lower
-        or "not right-hand rule" in reply_lower
-        or "the right-hand rule does not apply" in reply_lower
-        or "ไม่ใช่กฎมือขวา" in reply_lower
-        or "กฎมือขวาใช้ไม่ได้" in reply_lower
-    )
+    # Assess the claim being corrected, not unrelated regulation sentences.
+    clauses = re.split(r"(?<=[.!?;])\s+|\n+|,?\s+(?:og|and|but|men)\s+(?=(?:du|you|høyreregelen|the right-hand rule)\b)", reply_lower)
+    def regulated_claim(clause: str) -> bool:
+        return bool(re.search(
+            r"\b(?:skilt\w*|trafikklys\w*|politi\w*|traffic lights?|traffic signals?|signs?|police)\b|ป้าย|ไฟจราจร|เจ้าหน้าที่", clause)
+            and re.search(r"\b(?:overrid\w*|decid\w*|follow\w*|obey\w*|reguler\w*|styr\w*)\b|gjelder foran|ควบคุม|กำหนด|ต้องทำตาม", clause))
+    has_regulated_claim = any(regulated_claim(clause) for clause in clauses)
+    has_dangerous_negation = False
+    for clause in clauses:
+        if regulated_claim(clause):
+            continue
+        local_left_claim = "left_turn" in _situation_topics(clause)
+        if not local_left_claim and not (is_left_turn or is_citation):
+            continue
+        if (
+        "høyreregelen gjelder ikke for møtende" in clause
+        or "gjelder ikke for møtende" in clause
+        or "høyreregelen gjelder ikke når" in clause
+        or "ikke vikeplikt for møtende" in clause
+        or "møtende trafikk har vike" in clause
+        or "ikke høyreregelen" in clause
+        or "not the right-hand rule" in clause
+        or "not right-hand rule" in clause
+        or "the right-hand rule does not apply" in clause
+        or "ไม่ใช่กฎมือขวา" in clause
+        or "กฎมือขวาใช้ไม่ได้" in clause
+        ):
+            has_dangerous_negation = True
+            break
+    if has_regulated_claim and not has_dangerous_negation:
+        return reply_text
 
     if not is_left_turn and not is_citation and not has_dangerous_negation:
         return reply_text
@@ -3342,6 +3372,12 @@ def _safe_teacher_response_media_url(value: str) -> bool:
     return parsed.scheme == "https" and bool(parsed.netloc) and not parsed.username and not parsed.password
 
 
+def _is_quarantined_micro_lesson(lesson: dict | None, lang: str) -> bool:
+    """Withhold the observed absolute-stop lesson until its owner repairs all languages."""
+    return bool(lesson and lesson.get("id") == "lesson_2_pedestrians"
+                and lang in SUPPORTED_LANGUAGES)
+
+
 async def _validate_teacher_response_media(media: list[dict], lang: str) -> list[dict]:
     """Recheck response cards against existing records and their selected-language text."""
     valid = []
@@ -3372,7 +3408,7 @@ async def _validate_teacher_response_media(media: list[dict], lang: str) -> list
                 from micro_lessons import get_micro_lesson_by_id
                 lesson_id = media_id.removeprefix("micro-lesson:")
                 lesson = get_micro_lesson_by_id(lesson_id, lang)
-                if lesson and item.get("url") == f"/api/micro-lessons/{lesson_id}":
+                if lesson and not _is_quarantined_micro_lesson(lesson, lang) and item.get("url") == f"/api/micro-lessons/{lesson_id}":
                     valid.append({
                         "id": f"micro-lesson:{lesson_id}",
                         "type": "micro_lesson",
@@ -4137,7 +4173,7 @@ async def _get_curriculum_context(user_msg: str, lang: str) -> str:
         try:
             from micro_lessons import find_relevant_micro_lesson, format_micro_lesson_context
             micro_lesson = find_relevant_micro_lesson(clean_msg or user_msg, lang)
-            if micro_lesson:
+            if micro_lesson and not _is_quarantined_micro_lesson(micro_lesson, lang):
                 micro_ctx = format_micro_lesson_context(micro_lesson, lang)
                 if micro_ctx:
                     context_parts.append(micro_ctx)
@@ -4945,7 +4981,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             try:
                 from micro_lessons import find_relevant_micro_lesson, get_micro_lesson_media_card
                 matched_ml = find_relevant_micro_lesson(topic_query, lang)
-                if matched_ml:
+                if matched_ml and not _is_quarantined_micro_lesson(matched_ml, lang):
                     ml_card = get_micro_lesson_media_card(matched_ml, lang)
                     if ml_card and not any(m.get("id") == ml_card["id"] for m in media):
                         media.append(ml_card)
@@ -5266,6 +5302,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
     if not guided_chat:
         reply_text = _guard_unreported_success(reply_text, prior, user_msg, student_memory, lang)
     reply_text = _ground_exam_key_availability(user_msg, reply_text, lang)
+    reply_text = _ground_right_rule_citation(reply_text, lang)
     reply_text = _ground_completed_first_day(reply_text, study_plan, user_msg, lang)
     reply_text = _ground_recorded_question_count(reply_text, student_memory, lang)
     reply_text = _guard_unsupported_practice_claims(reply_text, lang)
