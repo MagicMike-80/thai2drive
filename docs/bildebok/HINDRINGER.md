@@ -32,3 +32,28 @@ Minste løsning er lagringsleveransen beskrevet i PRIVATE_PREVIEW_DEPLOY.md.
 
 Dette er kodegrenens leveranselogg. Hovedarbeidskopiens historiske rapporter og den
 private kontrollpakken bevares separat.
+
+## 21.10.2026 kl.18:00 UTC – faktisk leveransestatus
+
+- Railway bekreftet kl.17:45 UTC at bygg og deploy fortsatt er stanset.
+- Lesende produksjonskontroll kl.18:00:40 UTC: `/api/health` og `/th` svarte 200;
+  bokinngang, bokvisning, katalog, direkte bilde og rå private ressursstier svarte
+  404. Dette viser ikke at den nye tilgangssperren er verifisert i produksjon.
+  Råbevis: lokal `output/private-book-20261021/live-guest-proof.json`.
+- Ren kodecommit er `90172b55306c7e57efdd931b416db51020d636ab`, dokumentasjon
+  `cf9463faef2c2a5abe504813db3e1dd11cc8d896`. Begge er pushet på kodegrenen.
+  Ny kontroll av `merge-base --is-ancestor 418dac6 HEAD` ga exit 1.
+- GitHub-integrasjonen avviste PR-oppretting med 403, «Resource not accessible
+  by integration». Nettleseren viste ingen innlogget GitHub-konto. Ingen PR ble
+  opprettet. Berørt: PR-integrasjon. Minste løsning er eksisterende autorisert
+  GitHub-tilgang med PR-skriverettighet; ingen utvidede rettigheter er gitt her.
+- Claude CLI med direkte native executable løste tidligere spawn-feil, men
+  nettverkstilgjengelig kjøring ble avvist: organisasjonen har deaktivert Claude
+  subscription access for Claude Code. Ingen Claude-kontroll er bestått.
+  En separat agents faktiske kodekontroll er gjennomført; lagringsgrenser ble
+  rettet og testet. Den kontrollen beviser ikke privat bucket eller live-flyt.
+  Råbevis for CLI: lokal `output/private-book-20261021/outside-review-native.json`.
+
+Privat opplasting, read-back av faktiske lagrede bytes, anonym bucket-avvisning,
+ny deploy-ID og innlogget produksjonskontroll gjenstår. Ingen fungerende privat
+lenke er levert, og ingen leksjoner er åpnet for elever.
