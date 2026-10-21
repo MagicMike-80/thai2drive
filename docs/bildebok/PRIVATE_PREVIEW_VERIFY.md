@@ -6,8 +6,28 @@ prevents provisioning and deployments. This report does not claim completion of
 the full book objective.
 
 Code-only branch: `feat/private-book-code-20261021`, based on production commit
-`5caceb1b98b5c365c2cfe45014967d95bbbea654`. Tests below cover the uncommitted code
-snapshot; record the resulting commit and deployment before claiming live delivery.
+`5caceb1b98b5c365c2cfe45014967d95bbbea654`. The tested code snapshot is recorded
+below. A successful deployment and authenticated production checks remain required
+before claiming live delivery.
+
+## Recorded code commit and basetemp run
+
+Tested code was committed without backend changes as
+`90172b55306c7e57efdd931b416db51020d636ab`. A clean backend diff against that commit
+was checked after commit. The focused command was:
+
+```powershell
+D:/thai2drive-main/work/thai2drive/.venv/Scripts/python.exe -m pytest backend/tests/test_private_book_access.py backend/tests/test_private_book_storage.py backend/tests/test_private_book_upload.py backend/tests/test_private_book_completion.py -q -p no:cacheprovider --basetemp D:/thai2drive-main/work/thai2drive/output/private-book-20261021/pytest-temp-20261021-1748
+```
+
+Result: **36 passed**, one dependency warning, 1.56 seconds. Raw output is retained
+locally in `output/private-book-20261021/public-code-36-tests-20261021.txt`.
+
+`git merge-base --is-ancestor 418dac6 HEAD` returned exit 1: the private commit is
+not an ancestor. The sole new code commit has only the 18 reviewed code, synthetic
+test and documentation paths. Neither private content directory nor private image
+bytes were introduced in the branch or its new history. Existing public content
+already present in the production base has not been removed or reclassified.
 
 ## Code-only regression run
 
@@ -47,7 +67,8 @@ and do not substitute for testing that adapter against the provisioned bucket.
 
 Provision and verify private storage; verify anonymous bucket access is denied;
 upload and verify immutable objects; pin the release and account allowlist;
-review and commit only public-safe code; push and deploy from the current
-production base. Verify runtime version, Michael access, guest/other-account
+deploy the reviewed public-safe code from the current production base. The code
+commit above has been pushed to the feature branch; this is not a deployment.
+Verify runtime version, Michael access, guest/other-account
 denial, protected resources and actual book flow. Provide the private URL and
 copyable Argus control message only with accurately labelled evidence.
