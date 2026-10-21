@@ -105,3 +105,7 @@ context/agent-pact.md
 
 # temporary scratch files
 scratch/
+
+# Private editorial book content is deployed through authenticated object storage.
+/backend/private_book_assets/
+/backend/private_book_data/

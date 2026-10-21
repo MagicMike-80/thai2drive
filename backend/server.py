@@ -6478,6 +6478,11 @@ app.include_router(support_chat_router, prefix="/api")
 from teacher_chat import teacher_router  # noqa: E402
 app.include_router(teacher_router, prefix="/api")
 
+# Private editorial book: disabled unless explicitly enabled for persisted account IDs.
+from private_book import create_private_book_router  # noqa: E402
+from private_book_completion import complete_private_book  # noqa: E402
+app.include_router(create_private_book_router(lambda: db, verify_token, complete_private_book))
+
 # ==================== STUDENT DOCUMENT UPLOAD ====================
 try:
     from document_routes import document_router  # noqa: E402

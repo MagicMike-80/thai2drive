@@ -2,6 +2,18 @@
 
 All notable changes to Thai2Drive are documented in this file.
 
+## [0.3.0.0] - 2026-10-21
+
+### Added
+
+- Add an account-restricted editorial book preview with 152 Class B lessons, original page order, NO/TH/EN selection, protected images and explicit draft, candidate and missing-content labels.
+- Bind private answer attempts to the authenticated reviewer, lesson version, language and image hash; reveal answers and controlled teacher explanations only after a valid answer. Editorial attempts do not update learner progress.
+- Add bounded Michael explanations based on checked teacher material, with replay protection and guards against model regrading. Preserve independent approval of unchanged image bytes and mark revised bb-s22 text for Michael's review.
+
+### Access
+
+- Default to disabled and require a server-controlled reviewer allowlist. This release does not open new lessons to learners or change existing payment rules.
+
 ## [0.2.5.2] - 2026-10-08
 
 ### Security
