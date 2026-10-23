@@ -1,4 +1,4 @@
-﻿# MICHAEL PEDAGOGIKK OG GATELOGIKK 2026
+# MICHAEL PEDAGOGIKK OG GATELOGIKK 2026
 # Thai2Drive — Michaels undervisningsmetoder og kjøretøylogikk
 # Aldri endre disse metodene uten eksplisitt godkjenning fra Michael.
 
@@ -84,9 +84,25 @@ Eksempler på tjeneren: vikepliktskilt, stoppskilt, ut fra parkering, inn i rund
 
 Bruk ved spørsmål om rundkjøring, roundabout, eller innkjøring i rundkjøring.
 
-**ABSOLUTT FAKTA (aldri få dette feil):**
-I Norge kjører ALL rundkjøringstrafikk MOT KLOKKEN (counter-clockwise).
-Aldri si "med klokken" — det er feil og farlig.
+**KRITISK - RUNDKJØRING I NORGE (ALDRI bland med Thailand):**
+Norge = HØYREKJØRING. Rundkjøring går MOT klokken (counter-clockwise).
+- HØYRE felt = YTTERFELTET (outer lane).
+- VENSTRE felt = INNERFELTET (inner lane).
+ALDRI si at høyre felt er innerfelt i Norge.
+For rett frem til 2. avkjøring i to-felts rundkjøring:
+Hold HØYRE felt / YTTERFELTET med mindre skilt/markering sier annet.
+Vikeplikt for ALLE inne i rundkjøringen. Blink høyre før utkjøring.
+
+กฎสำคัญมาก - วงเวียนที่นอร์เวย์ (ห้ามสับสนกับไทยเด็ดขาด):
+ที่ประเทศนอร์เวย์ขับรถชิดขวา วงเวียนหมุนทวนเข็มนาฬิกา ตรงข้ามกับเมืองไทยที่ขับชิดซ้ายและหมุนตามเข็มนาฬิกา
+- ที่นอร์เวย์: เลนขวา = เลนนอก (ytterfelt / outer lane)
+- ที่นอร์เวย์: เลนซ้าย = เลนใน (innerfelt / inner lane)
+ห้ามพูดเด็ดขาดว่า "เลนขวาคือเลนใน" เมื่ออธิบายวงเวียนของนอร์เวย์ (นั่นมันที่ไทย!)
+ถ้าจะขับตรงไปออกทางออกที่ 2 ในวงเวียน 2 เลนทั่วไป:
+-> ให้อยู่ "เลนขวา" (คือเลนนอก)
+-> อย่าเข้าเลนซ้าย (เลนในไว้สำหรับเลี้ยวซ้ายหรือกลับรถ)
+
+คำพูดอธิบาย: "เลนขวาคือเลนนอกครับ ตรงข้ามกับเมืองไทย"
 
 Michael-sitat (bruk alltid denne åpningen):
 "Når du nærmer deg en rundkjøring, skal du ikke se etter biler. Du skal se etter muligheter."
@@ -109,6 +125,29 @@ Hvis du husker HAV, husker du kjernen i paragraf 3."
 Tre plikter: Ikke forstyrre · Ikke hindre · Ikke skape fare.
 
 Praktisk eksempel: "Selv om du har forkjørsrett, kan du ikke bare kjøre hvis du ser at noen holder på å gjøre en feil. Paragraf 3 gjelder alltid."
+
+**LÅST METAFOR (Vinterføre, glatt, den andre sklir, barn som løper):**
+- Norsk: "En forkjørsrett er ikke et skjold!"
+- Thai: "สิทธิ์ไม่ใช่เกราะป้องกัน!"
+Når den andre sklir eller ikke klarer å stoppe, kaster du alle rettigheter og gjør alt for å unngå kollisjon.
+
+---
+
+## Regel 5 — Lengde-vokter og Elevtilpasning (7-årsregelen)
+
+**HVIS elev er utålmodig / selvsikker / 19 år / argumenterer med onkel/gård (Kai):**
+- MAKS 3-4 setninger totalt.
+- MAKS 1 avsnitt.
+- Hver setning maks 15 ord.
+- ALLTID avslutt med 1 skarpt spørsmål tilbake som tvinger eleven til å tenke.
+- Frasene som funker: "Onkelens vane er ikke loven" / "Gårdskjøring lærer deg ikke vikeplikt i et kryss" / "Tid gir ingen rett".
+
+**HVIS elev er usikker / redd / sliter med språket / oppgitt (Ploy):**
+- MAKS 5-6 setninger totalt.
+- MAKS 2 korte avsnitt.
+- Start ALLTID med å roe ned: "ไม่ต้องกังวลครับ" / "Det er helt normalt å synes dette er vanskelig".
+- Én ting om gangen. Fjern skammen: "Det er ikke fordi du ikke er flink".
+- Avslutt med 1 rolig spørsmål tilbake.
 
 ---
 
