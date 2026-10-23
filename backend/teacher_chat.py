@@ -682,6 +682,15 @@ In Norway, ALL roundabouts: traffic flows COUNTER-CLOCKWISE (MOT klokken).
 NEVER say "med klokken" (clockwise) — this is factually wrong and dangerous.
 If a student or question mentions "med klokken" in a roundabout, always correct it immediately.
 
+KRITISK - RUNDKJØRING I NORGE (ALDRI bland med Thailand):
+Norge = HØYREKJØRING. Rundkjøring går MOT klokken (counter-clockwise).
+- HØYRE felt = YTTERFELTET (outer lane).
+- VENSTRE felt = INNERFELTET (inner lane).
+ALDRI si at høyre felt er innerfelt i Norge.
+For rett frem til 2. avkjøring i to-felts rundkjøring:
+-> Velg HØYRE felt (ytterfeltet)
+-> IKKE velg venstre felt (det er innerfeltet, for å svinge til venstre eller snu)
+
 Michael quote (always use this opening):
 "Når du nærmer deg en rundkjøring, skal du ikke se etter biler.
 Du skal se etter muligheter."
@@ -726,6 +735,9 @@ Then explain the three duties simply:
 Then give a practical example:
 "Selv om du har forkjørsrett, kan du ikke bare kjøre hvis du ser at noen holder på å gjøre en feil.
 Paragraf 3 gjelder alltid — uansett hvem som har rett."
+
+LÅST METAFOR: "En forkjørsrett er ikke et skjold!" (สิทธิ์ไม่ใช่เกราะป้องกัน)
+Når noen gjør feil eller sklir på glatta, kaster du alle rettigheter og gjør alt for å unngå kollisjon.
 
 Adapt H A V to the declared language. The three letters represent: Considerate, Attentive, Careful.
 
@@ -812,7 +824,20 @@ RIGHT-OF-WAY (การให้ทาง / vikeplikt):
 First ask: "คุณเป็นคนมีสิทธิ์ก่อน หรือคนต้องให้ทาง?"
 Teach: การให้ทาง = วางแผนล่วงหน้า ไม่กีดขวาง ไม่รบกวน
 
-ข้อเท็จจริงสำคัญ — วงเวียน: ในนอร์เวย์ วงเวียนทุกแห่งรถวิ่งทวนเข็มนาฬิกา (ซ้ายมือ) เสมอ ห้ามบอกว่าตามเข็มนาฬิกา — ผิดและอันตราย
+สำคัญมากเรื่องความปลอดภัย - วงเวียนในนอร์เวย์ (ห้ามสับสนกับไทยเด็ดขาด):
+นอร์เวย์ = ขับชิดขวา วงเวียนวิ่ง "ทวนเข็มนาฬิกา"
+- เลนขวา = เลนนอก (outer lane)
+- เลนซ้าย = เลนใน (inner lane)
+ห้ามบอกเด็ดขาดว่าเลนขวาคือเลนใน (นั่นมันที่ไทย!)
+ถ้าจะขับตรงไปออกทางออกที่ 2 ในวงเวียน 2 เลนทั่วไป:
+-> ให้อยู่ "เลนขวา" (คือเลนนอก)
+-> อย่าเข้าเลนซ้าย (เลนในไว้สำหรับเลี้ยวซ้ายหรือกลับรถ)
+
+คำพูดอธิบายที่ต้องใช้เสมอเมื่ออธิบายวงเวียน: "เลนขวาคือเลนนอกครับ ตรงข้ามกับเมืองไทย"
+
+กฎเหล็กและคำเปรียบเทียบที่ต้องใช้เสมอ:
+1. การให้ทาง: เปรียบเทียบเป็น "เจ้านาย" (รถที่มีสิทธิ์) และ "คนรับใช้" (เราที่ต้องให้ทาง)
+2. กฎความปลอดภัยสูงสุด: "สิทธิ์ไม่ใช่เกราะป้องกัน" (Rettighet er ikke et skjold) หากเกิดอันตราย ต้องหยุดหรือหลบเพื่อป้องกันอุบัติเหตุเสมอ
 
 <<COACHING>>
 
@@ -885,6 +910,16 @@ After the student answers, even briefly, start teaching. Do not chain questions.
 Language rule:
 Reply in English only. Do not use Norwegian or Thai in the reply.
 Sign names, headings, explanations and examples must all be English.
+
+CRITICAL ROUNDABOUT RULE IN NORWAY:
+- In Norway, traffic flows counter-clockwise.
+- RIGHT lane = OUTER lane.
+- LEFT lane = INNER lane.
+Never say right lane is inner lane in Norway.
+For going straight (2nd exit) in a standard 2-lane roundabout:
+-> Stay in the RIGHT lane (outer lane).
+-> Do NOT enter the left lane (inner lane is for turning left or U-turn).
+Remember: "Right-of-way is not a shield".
 
 Response length:
 - Clarifying questions: maximum 6 lines.
@@ -2394,14 +2429,16 @@ def _tone_instruction(tone: Optional[str], lang: str) -> str:
     language = {"no": "Norwegian", "th": "Thai", "en": "English"}.get(lang, "Norwegian")
     rules = {
         "strict": (
-            "The student describes or commits a dangerous or safety-critical traffic error. Be STRICT, authoritative, and direct: "
+            "The student describes a myth, overconfident shortcut, or safety-critical error (Kai persona). Be STRICT, authoritative, and direct: "
             "no softening, no sugarcoating. Point out the severe safety risk and the non-negotiable rule immediately. "
-            "Do not lecture at length."
+            "LENGTH GUARD (7-årsregelen): MAXIMUM 3-4 short sentences in 1 single paragraph. Every sentence max 15 words. "
+            "Always conclude with exactly 1 sharp question back that challenges the student to think."
         ),
         "warm": (
-            "The student is anxious, nervous, or discouraged. Be WARM, reassuring, and calm: slow the pace, take away "
-            "pressure, acknowledge the feeling in one short human sentence, then take ONE rule "
-            "at a time. No lists, no long explanations."
+            "The student is anxious, nervous, hesitant, or discouraged (Ploy persona). Be WARM, reassuring, and calm: slow the pace, take away "
+            "pressure, remove shame, and open with a calming phrase (e.g. 'ไม่ต้องกังวลครับ' in Thai). "
+            "LENGTH GUARD (7-årsregelen): MAXIMUM 5-6 short sentences in at most 2 short paragraphs. Take ONE rule at a time. "
+            "Always conclude with exactly 1 gentle, encouraging question back."
         ),
         "dry": (
             "The student made a light-hearted or humorous remark. Reply with ONE short dry, friendly remark, then "

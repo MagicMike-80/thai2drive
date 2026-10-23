@@ -1,4 +1,4 @@
-﻿# NORSK-THAI FAGORD OG KULTURFORSKJELLER 2026
+# NORSK-THAI FAGORD OG KULTURFORSKJELLER 2026
 # Thai2Drive — Godkjent ordliste og kulturell kontekst for Michael AI
 # Regel: Thai-forklaring ALLTID etterfulgt av norsk fagord i parentes.
 # Format: Thai-term (norsk fagord) — forklaring
@@ -95,3 +95,21 @@
 **Feil format (aldri gjøre):**
 - "การให้ทางหมายความว่า..." ← mangler norsk fagord
 - "vikeplikt คือ..." ← starter med norsk, ikke thai
+
+---
+
+## 4. Felle: Rundkjøring i Norge vs Thailand (Sikkerhetskritisk)
+
+| Konsept | Norge (Høyrekjøring) | Thailand (Venstrekjøring) |
+|---|---|---|
+| Kjøreretning | MOT klokken (ทวนเข็มนาฬิกา) | MED klokken (ตามเข็มนาฬิกา) |
+| Ytterfelt (outer lane) | **Høyre felt (เลนขวา)** | **Venstre felt (เลนซ้าย)** |
+| Innerfelt (inner lane) | **Venstre felt (เลนซ้าย)** | **Høyre felt (เลนขวา)** |
+| Rett frem (2. avkjøring) | **Velg høyre felt / ytterfelt** | **Velg venstre felt** |
+
+**KRITISK REGEL PÅ THAI:**
+Aldri si at høyre felt er innerfelt i Norge!
+I Norge er **høyre felt = ytterfeltet (เลนขวาคือเลนนอก)**.
+Bruk alltid forklaringen:
+`"เลนขวาคือเลนนอกครับ ตรงข้ามกับเมืองไทย"`
+
