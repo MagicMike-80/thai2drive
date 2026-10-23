@@ -4765,6 +4765,14 @@ a { color:inherit; text-decoration:none; }
         <span data-key="home_exam_action"></span>
       </button>
 
+      <div class="campaign-banner" id="homeCampaignBanner" style="display:none">
+        <div class="cb-left"><span class="cb-icon" aria-hidden="true">🎁</span><div class="cb-info">
+          <div class="cb-badge" data-key="campaign_badge"></div><h4 class="cb-title" data-key="campaign_title"></h4>
+          <p class="cb-desc" id="cbRemainingText"></p>
+        </div></div>
+        <button class="cb-btn" type="button" onclick="event.stopPropagation();openCampaignModal()" data-key="campaign_claim_btn"></button>
+      </div>
+
       <div class="home-main-actions">
         <button class="home-main-choice" onclick="showTab('teacher')">
           <img class="home-main-choice-icon michael-photo" src="/api/assets/michael_profile.jpg" alt="Michael">
@@ -5371,6 +5379,20 @@ a { color:inherit; text-decoration:none; }
 
 </div><!-- /app -->
 
+<div class="campaign-modal-backdrop" id="campaignModal" style="display:none" onclick="if(event.target===this)closeCampaignModal()">
+  <section class="campaign-modal-card" role="dialog" aria-modal="true" aria-labelledby="campaignModalTitle">
+    <button class="campaign-modal-close" type="button" onclick="closeCampaignModal()" data-label-key="close" aria-label="Lukk">&times;</button>
+    <div class="cm-header">
+      <div class="cm-badge" data-key="campaign_badge"></div>
+      <h3 class="cm-title" id="campaignModalTitle" data-key="campaign_modal_title"></h3>
+      <p class="cm-sub" data-key="campaign_modal_sub"></p>
+      <p class="cm-sub" data-key="campaign_includes"></p>
+    </div>
+    <div class="cm-feedback" id="campFeedback" style="display:none" role="status" aria-live="polite"></div>
+    <button class="cm-submit-btn" type="button" id="campSubmitBtn" onclick="submitCampaignRegistration(event)" data-key="campaign_submit_btn"></button>
+  </section>
+</div>
+
 <!-- ═══ LIGHTBOX MODAL (Image Enlarge) ═══ -->
 <div class="t2d-lightbox" id="t2dLightbox" onclick="closeLightbox(event)" aria-hidden="true" role="dialog">
   <div class="t2d-lightbox-content" onclick="event.stopPropagation()">
@@ -5385,7 +5407,7 @@ a { color:inherit; text-decoration:none; }
     <button class="flashcard-demo-close" type="button" onclick="closeSituationFlashcard()" data-label-key="fc_close" aria-label="ปิด">✕</button>
     <h2 class="flashcard-demo-title" id="flashcardDemoTitle" data-key="fc_title">Fagordkort</h2>
     <p class="flashcard-demo-count" id="flashcardDemoCount" aria-live="polite"></p>
-    <button class="flashcard-sfx-toggle" id="flashcardSfxMuteBtn" type="button" onclick="toggleFlashcardSfxMute()" data-label-key="fc_sound_on" aria-label="Lyd på" aria-pressed="false"><span id="flashcardSfxIcon" aria-hidden="true">🔊</span><span id="flashcardSfxLabel">Lyd på</span></button>
+    <button class="flashcard-sfx-toggle" id="flashcardSfxMuteBtn" type="button" onclick="toggleFlashcardSfxMute()" data-label-key="fc_sound_state_on" aria-label="Lyd er på" aria-pressed="false"><span id="flashcardSfxIcon" aria-hidden="true">🔊</span><span id="flashcardSfxLabel">Lyd er på</span></button>
     <div class="flashcard-demo-scene">
       <div class="flashcard-demo-card" id="flashcardDemoCard" aria-live="polite">
         <article class="flashcard-demo-face" id="flashcardFront" aria-hidden="false">
@@ -5475,6 +5497,7 @@ var _ls = {
 };
 var token = _ls.get('t2d_token');
 var user = null;
+var campaignClaimPending = new URLSearchParams(window.location.search || '').get('campaign') === 'free30';
 var deviceId = null;
 var QUIZ_SESSION_SIZE = 10;
 var questions = [];
@@ -5591,8 +5614,8 @@ var UI = {
   fc_next:               {th:'ถัดไป', no:'Neste', en:'Next'},
   fc_norwegian_term:     {th:'คำศัพท์นอร์เวย์', no:'Norsk fagord', en:'Norwegian term'},
   fc_counter:            {th:'การ์ด {current} จาก {total}', no:'Kort {current} av {total}', en:'Card {current} of {total}'},
-  fc_sound_on:           {th:'เปิดเสียง', no:'Lyd på', en:'Sound on'},
-  fc_sound_off:          {th:'ปิดเสียง', no:'Lyd av', en:'Sound off'},
+  fc_sound_state_on:     {th:'เปิดเสียงอยู่', no:'Lyd er på', en:'Sound is on'},
+  fc_sound_state_off:    {th:'ปิดเสียงอยู่', no:'Lyd er av', en:'Sound is off'},
   fc_rating_prompt:      {th:'คุณรู้เรื่องนี้แค่ไหน?', no:'Hvor godt kan du dette?', en:'How well do you know this?'},
   fc_rating_group:       {th:'ประเมินความเข้าใจของคุณ', no:'Vurder hvor godt du kan dette', en:'Rate your confidence'},
   fc_know:               {th:'รู้แล้ว', no:'Kan det', en:'I know it'},
@@ -5627,12 +5650,21 @@ var UI = {
   campaign_desc:         {th:'เหลือเพียง {remaining} จาก 50 ที่นั่ง!', no:'Kun {remaining} av 50 plasser igjen!', en:'Only {remaining} of 50 spots left!'},
   campaign_claim_btn:    {th:'รับสิทธิ์ทันที', no:'Sikre din plass', en:'Claim Your Spot'},
   campaign_modal_title:  {th:'ลงทะเบียนรับสิทธิ์ Premium ฟรี 30 วัน', no:'Registrer deg for 30 dagers gratis Premium', en:'Register for 30 Days Free Premium'},
-  campaign_modal_sub:    {th:'สำหรับนักเรียน 50 ท่านแรก — รีบรับสิทธิ์ก่อนเต็ม!', no:'For de 50 første elevene — sikre deg plass nå!', en:'For the first 50 students — claim your spot now!'},
+  campaign_modal_sub:    {th:'เข้าสู่ระบบด้วยบัญชีที่ต้องการรับสิทธิ์ ไม่มีการเรียกเก็บเงินอัตโนมัติ', no:'Logg inn med kontoen som skal få prøveperioden. Det opprettes ingen automatisk betaling.', en:'Log in with the account that should receive the trial. No automatic payment is created.'},
+  campaign_includes:     {th:'ทดลองใช้ Premium 30 วัน พร้อมฝึกได้ไม่จำกัดและรับคำแนะนำเชิงลึกจาก Michael', no:'Prøv Premium i 30 dager med ubegrenset øving og dypere veiledning fra Michael.', en:'Try Premium for 30 days with unlimited practice and deeper guidance from Michael.'},
   campaign_name_label:   {th:'ชื่อ - นามสกุล', no:'Fullt navn', en:'Full Name'},
   campaign_email_label:  {th:'อีเมล', no:'E-postadresse', en:'Email Address'},
   campaign_phone_label:  {th:'เบอร์โทรศัพท์', no:'Telefonnummer', en:'Phone Number'},
   campaign_submit_btn:   {th:'✨ ยืนยันรับสิทธิ์ฟรี 30 วัน', no:'✨ Få 30 dager gratis Premium', en:'✨ Get 30 Days Free Premium'},
   campaign_sold_out:     {th:'แคมเปญนี้เต็มแล้วครับ (ครบ 50 ที่นั่งแล้ว)', no:'Kampanjen er nå fulltegnet (50 av 50 plasser er tatt)', en:'Campaign is now fully booked (50 of 50 spots taken)'},
+  campaign_login_required:{th:'สมัครหรือเข้าสู่ระบบก่อน แล้วรับสิทธิ์ด้วยบัญชีของคุณ', no:'Registrer deg eller logg inn først. Deretter kan du aktivere prøveperioden på kontoen din.', en:'Sign up or log in first, then claim the trial on your account.'},
+  campaign_language_error:{th:'โปรดเลือกภาษาที่รองรับแล้วลองอีกครั้ง', no:'Velg norsk, thai eller engelsk, og prøv igjen.', en:'Choose Norwegian, Thai or English, and try again.'},
+  campaign_network_error:{th:'ส่งคำขอไม่ได้ในขณะนี้ โปรดลองอีกครั้ง', no:'Forespørselen kunne ikke sendes nå. Prøv igjen.', en:'The request could not be sent right now. Please try again.'},
+  campaign_duplicate:{th:'บัญชีนี้ลงทะเบียนในแคมเปญแล้วครับ', no:'Denne kontoen er allerede registrert i kampanjen.', en:'This account is already registered for the campaign.'},
+  campaign_active:{th:'บัญชีนี้มี Premium ที่ใช้งานอยู่แล้ว', no:'Kontoen har allerede aktiv Premium-tilgang.', en:'This account already has active Premium access.'},
+  campaign_used:{th:'บัญชีนี้เคยใช้ช่วงทดลอง Premium แล้ว', no:'Denne kontoen har allerede brukt en Premium-prøveperiode.', en:'This account has already used a Premium trial.'},
+  campaign_rejected:{th:'ไม่สามารถรับสิทธิ์นี้ได้ โปรดลองอีกครั้งหรือติดต่อฝ่ายสนับสนุน', no:'Du kan ikke få denne prøveperioden nå. Prøv igjen eller kontakt brukerstøtte.', en:'This trial could not be claimed. Please try again or contact support.'},
+  campaign_success_fallback:{th:'เปิดใช้งาน Premium ฟรี 30 วันแล้ว', no:'30 dagers gratis Premium er aktivert.', en:'30 days of free Premium are now active.'},
 
   meta_description:{th:'ฝึกข้อสอบทฤษฎีใบขับขี่นอร์เวย์ด้วยภาษาไทย นอร์เวย์ และอังกฤษกับ Thai2Drive', no:'Øv til norsk teoriprøve på thai, norsk og engelsk med Thai2Drive.', en:'Practise for the Norwegian driving theory test in Thai, Norwegian and English with Thai2Drive.'},
   toggle_password:{th:'แสดงหรือซ่อนรหัสผ่าน', no:'Vis eller skjul passord', en:'Show or hide password'},
@@ -5653,10 +5685,10 @@ var UI = {
   startquiz:   {th:'▶  เริ่มควิซ',      no:'▶  Start quiz',   en:'▶  Start quiz'},
   home_choose_action:{th:'เลือกสิ่งที่คุณต้องการฝึก', no:'Velg hva du vil gjøre', en:'Choose what you want to do'},
   home_primary_action:{th:'▶ เริ่มควิซ / แบบทดสอบประจำวัน', no:'▶ Start quiz / daglig test', en:'▶ Start quiz / daily test'},
-  home_exam_action:{th:'📝 เริ่มทำข้อสอบทฤษฎีเสมือนจริง (45 ข้อ – 90 นาที)', no:'📝 Start Offisiell Teoriprøve (45 spørsmål – 90 min)', en:'📝 Start Official Theory Exam (45 questions – 90 min)'},
-  home_exam_sub:   {th:'รูปแบบ Statens vegvesen • ผิดได้ไม่เกิน 7 ข้อ', no:'Statens vegvesen-format • Maks 7 feil', en:'Official test format • Max 7 mistakes'},
+  home_exam_action:{th:'📝 เริ่มข้อสอบฝึกหัด Thai2Drive (45 ข้อ – 90 นาที)', no:'📝 Start Thai2Drives øvingsprøve (45 spørsmål – 90 min)', en:'📝 Start Thai2Drive practice test (45 questions – 90 min)'},
+  home_exam_sub:   {th:'แบบฝึกหัดตามรูปแบบการสอบในนอร์เวย์ • ผิดได้ไม่เกิน 7 ข้อ', no:'Øvingsformat inspirert av den norske teoriprøven • Maks 7 feil', en:'Practice format based on the Norwegian theory test • Max 7 mistakes'},
   exam_submit:     {th:'ส่งข้อสอบ', no:'Lever prøve', en:'Submit exam'},
-  exam_submit_confirm:{th:'คุณแน่ใจหรือไม่ว่าต้องการส่งข้อสอบตอนนี้?', no:'Er du sikker på at du vil levere teoriprøven nå?', en:'Are you sure you want to submit the exam now?'},
+  exam_submit_confirm:{th:'คุณแน่ใจหรือไม่ว่าต้องการส่งข้อสอบฝึกหัดตอนนี้?', no:'Vil du levere øvingsprøven nå?', en:'Are you sure you want to submit this practice test now?'},
   prev:            {th:'‹ ก่อนหน้า', no:'‹ Forrige', en:'‹ Previous'},
   exam_finish:     {th:'ส่งข้อสอบ', no:'Fullfør', en:'Finish'},
   exam_errors_heading:{th:'ทบทวนข้อที่ตอบผิด ({count} ข้อ)', no:'Gjennomgang av feil ({count})', en:'Review of mistakes ({count})'},
@@ -6475,9 +6507,11 @@ var PREMIUM_PRICING = {
       _ls.remove('t2d_token');
       token = null;
       showScreen('screenAuth');
+      if (campaignClaimPending) switchTab('register');
     }
   } else {
     showScreen('screenAuth');
+    if (campaignClaimPending) switchTab('register');
   }
 })();
 
@@ -6823,7 +6857,7 @@ function flashcardValue(term, field) {
 function flashcardUpdateSfxMuteButton() {
   var button = document.getElementById('flashcardSfxMuteBtn');
   if (!button) return;
-  var key = _flashcardSfxMuted ? 'fc_sound_off' : 'fc_sound_on';
+  var key = _flashcardSfxMuted ? 'fc_sound_state_off' : 'fc_sound_state_on';
   button.setAttribute('data-label-key', key);
   button.setAttribute('aria-label', t(key));
   button.setAttribute('aria-pressed', _flashcardSfxMuted ? 'true' : 'false');
@@ -8082,22 +8116,75 @@ async function loadHome() {
   checkCampaignStatus();
 }
 
-// Legacy campaign enrollment is permanently retired. Keep inert handlers for
-// callers in cached UI fragments; no API request or local Premium mutation.
-function checkCampaignStatus() {
+async function checkCampaignStatus() {
   var banner = document.getElementById('homeCampaignBanner');
   if (banner) banner.style.display = 'none';
-  closeCampaignModal();
+  if (!banner) return;
+  if (user && (isPremium() || user.trial_used)) return;
+  try {
+    var result = await api('GET', '/api/campaign/status');
+    if (!result || !result.success) return;
+    var remaining = Math.max(0, Number(result.remaining || 0));
+    var remainingText = document.getElementById('cbRemainingText');
+    if (remainingText) remainingText.textContent = tf('campaign_desc', {remaining: remaining});
+    banner.style.display = result.is_active && remaining > 0 ? 'flex' : 'none';
+    if (campaignClaimPending && user && result.is_active && remaining > 0) openCampaignModal();
+  } catch (e) {
+    console.debug('FREE30 status unavailable');
+  }
 }
-function openCampaignModal() { closeCampaignModal(); }
+function openCampaignModal() {
+  if (!user || !token) {
+    campaignClaimPending = true;
+    openGuestRegistration();
+    return;
+  }
+  campaignClaimPending = false;
+  var feedback = document.getElementById('campFeedback');
+  if (feedback) { feedback.style.display = 'none'; feedback.textContent = ''; feedback.className = 'cm-feedback'; }
+  var modal = document.getElementById('campaignModal');
+  if (modal) modal.style.display = 'flex';
+  applyUILang();
+}
 function closeCampaignModal() {
   var modal = document.getElementById('campaignModal');
   if (modal) modal.style.display = 'none';
 }
-function submitCampaignRegistration(event) {
+async function submitCampaignRegistration(event) {
   if (event) event.preventDefault();
-  closeCampaignModal();
-  return false;
+  if (!token || !user) { openCampaignModal(); return false; }
+  var feedback = document.getElementById('campFeedback');
+  var submit = document.getElementById('campSubmitBtn');
+  if (submit) submit.disabled = true;
+  try {
+    var response = await fetch('/api/campaign/register', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token},
+      body: JSON.stringify({language: appLang})
+    });
+    var data = await response.json();
+    if (!response.ok || !data.success) {
+      var errorKey = {
+        unsupported_language: 'campaign_language_error',
+        already_registered: 'campaign_duplicate',
+        premium_already_active: 'campaign_active',
+        trial_already_used: 'campaign_used',
+        campaign_sold_out: 'campaign_sold_out'
+      }[data.error] || 'campaign_rejected';
+      if (feedback) { feedback.className = 'cm-feedback error'; feedback.textContent = t(errorKey); feedback.style.display = 'block'; }
+      return false;
+    }
+    await refreshCurrentUser();
+    renderPremiumBanner();
+    if (feedback) { feedback.className = 'cm-feedback success'; feedback.textContent = data.message || t('campaign_success_fallback'); feedback.style.display = 'block'; }
+    setTimeout(closeCampaignModal, 3500);
+    return true;
+  } catch (e) {
+    if (feedback) { feedback.className = 'cm-feedback error'; feedback.textContent = t('campaign_network_error'); feedback.style.display = 'block'; }
+    return false;
+  } finally {
+    if (submit) submit.disabled = false;
+  }
 }
 
 function _getMediaLangBadge(item) {

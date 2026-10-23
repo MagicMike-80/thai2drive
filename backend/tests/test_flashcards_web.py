@@ -78,4 +78,5 @@ def test_flashcard_confidence_choices_and_mute_are_localized():
     assert "fc_know:" in source and "no:'Kan det'" in source and "en:'I know it'" in source
     assert "fc_unsure:" in source and "no:'Usikker'" in source and "en:'Not sure'" in source
     assert "fc_cant:" in source and "no:'Kan ikke'" in source and "en:'Not yet'" in source
-    assert "fc_sound_on:" in source and "fc_sound_off:" in source
+    assert "fc_sound_state_on:" in source and "fc_sound_state_off:" in source
+    assert "no:'Lyd er på'" in source and "no:'Lyd er av'" in source

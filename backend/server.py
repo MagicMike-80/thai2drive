@@ -3215,10 +3215,7 @@ async def link_device(
 # ==================== 50-USER CAMPAIGN (30 DAYS FREE PREMIUM) ====================
 
 class CampaignRegisterRequest(BaseModel):
-    name: str
-    email: str
-    phone: str
-    language: Optional[str] = "th"
+    language: Optional[str] = None
 
 CAMPAIGN_SOLD_OUT_MSG = {
     "th": "แคมเปญนี้เต็มแล้วครับ (ครบ 50 ที่นั่งแล้ว) โปรดติดตามข้อเสนอใหม่เร็วๆ นี้ครับผม",
@@ -3227,9 +3224,9 @@ CAMPAIGN_SOLD_OUT_MSG = {
 }
 
 CAMPAIGN_DUPLICATE_MSG = {
-    "th": "อีเมลหรือเบอร์โทรศัพท์นี้ลงทะเบียนในแคมเปญแล้วครับ",
-    "no": "Denne e-postadressen eller telefonnummeret er allerede registrert i kampanjen.",
-    "en": "This email or phone number is already registered for the campaign."
+    "th": "บัญชีนี้ลงทะเบียนในแคมเปญแล้วครับ",
+    "no": "Denne kontoen er allerede registrert i kampanjen.",
+    "en": "This account is already registered for the campaign."
 }
 
 CAMPAIGN_SUCCESS_MSG = {
@@ -3238,51 +3235,147 @@ CAMPAIGN_SUCCESS_MSG = {
     "en": "Congratulations! You have secured 30 days of free Premium (spot {idx} of 50)."
 }
 
-CAMPAIGN_INVALID_MSG = {
-    "th": "กรุณากรอกชื่อ อีเมล และเบอร์โทรศัพท์ให้ครบถ้วนครับ",
-    "no": "Vennligst fyll ut navn, e-post og telefonnummer.",
-    "en": "Please fill in your name, email and phone number."
+CAMPAIGN_ACTIVE_MSG = {
+    "th": "บัญชีนี้มี Premium ที่ใช้งานอยู่แล้ว",
+    "no": "Kontoen har allerede aktiv Premium-tilgang.",
+    "en": "This account already has active Premium access.",
 }
 
-def _normalize_campaign_lang(lang: Optional[str]) -> str:
-    clean = (lang or "th").strip().lower()
+CAMPAIGN_USED_MSG = {
+    "th": "บัญชีนี้เคยใช้ช่วงทดลอง Premium แล้ว",
+    "no": "Denne kontoen har allerede brukt en Premium-prøveperiode.",
+    "en": "This account has already used a Premium trial.",
+}
+
+def _normalize_campaign_lang(lang: Optional[str]) -> Optional[str]:
+    clean = (lang or "").strip().lower()
     if clean in ("th", "thai"):
         return "th"
     if clean in ("no", "nb", "norwegian", "norsk"):
         return "no"
     if clean in ("en", "english"):
         return "en"
-    return "th"
+    return None
 
 
 @api_router.get("/campaign/status")
 @app.get("/api/campaign/status")
 async def get_campaign_status():
-    """Return historical counts; legacy campaign enrollment is permanently closed."""
-    count = await db.campaign_users.count_documents({})
+    """Return the number of securely claimed seats in the current FREE30 campaign."""
+    count = await db.campaign_users.count_documents({"campaign_id": "free30-2026-10"})
     remaining = max(0, 50 - count)
     return JSONResponse({
         "success": True,
         "total_seats": 50,
         "registered": count,
         "remaining": remaining,
-        "is_active": False,
+        "is_active": remaining > 0,
     })
 
 
 @api_router.post("/campaign/register")
 @app.post("/api/campaign/register")
-async def register_campaign_user():
-    """Retired unsafe anonymous grant route. Never restore contact-based writes.
+async def register_campaign_user(
+    req: CampaignRegisterRequest,
+    current_user: dict = Depends(get_current_user),
+):
+    """Claim one 30-day FREE30 trial for the authenticated account only."""
+    lang = _normalize_campaign_lang(req.language)
+    if lang is None:
+        return JSONResponse(status_code=400, content={"success": False, "error": "unsupported_language"})
 
-    Keep this tombstone for cached clients. A future campaign must use a separate,
-    authenticated ownership-verified activation path. No database access here.
-    """
-    return JSONResponse(
-        status_code=410,
-        content={"success": False, "error": "campaign_closed", "detail": "", "message": ""},
-        headers={"Cache-Control": "no-store"},
+    user_id = str(current_user.get("sub") or "").strip()
+    if not user_id:
+        return JSONResponse(status_code=401, content={"success": False, "error": "authentication_required"})
+    user_doc = await db.users.find_one({"id": user_id}, {"_id": 0, "password_hash": 0})
+    if not user_doc or user_doc.get("deleted_at") or user_doc.get("disabled"):
+        return JSONResponse(status_code=401, content={"success": False, "error": "authentication_required"})
+
+    if user_doc.get("is_admin") or _paid_premium_active(user_doc) or _user_has_active_trial(user_doc):
+        msg = CAMPAIGN_ACTIVE_MSG[lang]
+        return JSONResponse(status_code=400, content={"success": False, "error": "premium_already_active", "detail": msg, "message": msg})
+    if user_doc.get("trial_used") or user_doc.get("is_premium") or user_doc.get("trial_started_at"):
+        msg = CAMPAIGN_USED_MSG[lang]
+        return JSONResponse(status_code=400, content={"success": False, "error": "trial_already_used", "detail": msg, "message": msg})
+
+    existing = await db.campaign_users.find_one({"campaign_id": "free30-2026-10", "user_id": user_id})
+    if existing:
+        msg = CAMPAIGN_DUPLICATE_MSG[lang]
+        return JSONResponse(status_code=400, content={"success": False, "error": "already_registered", "detail": msg, "message": msg})
+
+    current_count = await db.campaign_users.count_documents({"campaign_id": "free30-2026-10"})
+    if current_count >= 50:
+        msg = CAMPAIGN_SOLD_OUT_MSG[lang]
+        return JSONResponse(status_code=400, content={"success": False, "error": "campaign_sold_out", "detail": msg, "message": msg, "total_seats": 50, "registered": current_count, "remaining": 0})
+
+    await db.campaign_counters.update_one(
+        {"_id": "free30-2026-10"},
+        {"$setOnInsert": {"sequence": current_count}},
+        upsert=True,
     )
+    position_doc = await db.campaign_counters.find_one_and_update(
+        {"_id": "free30-2026-10", "sequence": {"$lt": 50}},
+        {"$inc": {"sequence": 1}},
+        return_document=ReturnDocument.AFTER,
+    )
+    if not position_doc:
+        msg = CAMPAIGN_SOLD_OUT_MSG[lang]
+        return JSONResponse(status_code=400, content={"success": False, "error": "campaign_sold_out", "detail": msg, "message": msg, "total_seats": 50, "registered": 50, "remaining": 0})
+
+    campaign_index = position_doc["sequence"]
+    now = datetime.now(timezone.utc)
+    premium_until = (now + timedelta(days=30)).isoformat()
+    campaign_doc = {
+        "_id": f"free30-2026-10:{user_id}",
+        "campaign_id": "free30-2026-10",
+        "user_id": user_id,
+        "language": lang,
+        "campaign_index": campaign_index,
+        "trial_started_at": now.isoformat(),
+        "trial_expires_at": premium_until,
+        "created_at": now.isoformat(),
+    }
+    try:
+        await db.campaign_users.insert_one(campaign_doc)
+    except DuplicateKeyError:
+        msg = CAMPAIGN_DUPLICATE_MSG[lang]
+        return JSONResponse(status_code=400, content={"success": False, "error": "already_registered", "detail": msg, "message": msg})
+
+    update_result = await db.users.update_one(
+        {
+            "id": user_id,
+            "trial_used": {"$ne": True},
+            "is_admin": {"$ne": True},
+            "is_premium": {"$ne": True},
+            "trial_started_at": {"$in": [None, ""]},
+            "premium_expires_at": {"$in": [None, ""]},
+            "trial_expires_at": {"$in": [None, ""]},
+        },
+        {"$set": {
+            "is_premium": False,
+            "has_premium": True,
+            "trial_started_at": now.isoformat(),
+            "trial_expires_at": premium_until,
+            "trial_used": True,
+            "campaign_index": campaign_index,
+        }},
+    )
+    if not getattr(update_result, "modified_count", 0):
+        await db.campaign_users.delete_one({"_id": campaign_doc["_id"]})
+        msg = CAMPAIGN_USED_MSG[lang]
+        return JSONResponse(status_code=409, content={"success": False, "error": "trial_already_used", "detail": msg, "message": msg})
+
+    success_msg = CAMPAIGN_SUCCESS_MSG[lang].format(idx=campaign_index)
+    return JSONResponse(status_code=200, content={
+        "success": True,
+        "message": success_msg,
+        "detail": success_msg,
+        "campaign_index": campaign_index,
+        "is_premium": True,
+        "has_premium": True,
+        "premium_until": premium_until,
+        "remaining_seats": max(0, 50 - campaign_index),
+    })
 
 
 # ==================== ADMIN ROUTES ====================
