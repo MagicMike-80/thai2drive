@@ -575,7 +575,7 @@ footer p{color:#64748B;font-size:13px}
 """
 
 
-def _nav_html(lang: str = "th") -> str:
+def _nav_html(lang: str = "th", app_query: str = "") -> str:
     return f"""
 <nav class="nav">
   <div class="nav-inner">
@@ -595,7 +595,7 @@ def _nav_html(lang: str = "th") -> str:
         <span data-lang="en">Pricing</span>
       </a></li>
       <li><a href="/{lang}/guide" class="guide-blink">📖 Guide</a></li>
-      <li><a href="/{lang}/app" style="display:inline-flex;align-items:center;gap:6px;background:#FF9933;color:#0F172A;font-weight:800;font-size:13px;padding:7px 14px;border-radius:8px;transition:opacity .15s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">🚀 <span data-lang="th">เปิดเว็บแอป</span><span data-lang="no">Åpne web-appen</span><span data-lang="en">Open web app</span></a></li>
+      <li><a href="/{lang}/app{app_query}" style="display:inline-flex;align-items:center;gap:6px;background:#FF9933;color:#0F172A;font-weight:800;font-size:13px;padding:7px 14px;border-radius:8px;transition:opacity .15s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">🚀 <span data-lang="th">เปิดเว็บแอป</span><span data-lang="no">Åpne web-appen</span><span data-lang="en">Open web app</span></a></li>
       <li><a href="https://www.facebook.com/profile.php?id=61565991554372" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:6px;color:#CBD5E1">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.267h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
         Facebook
@@ -646,7 +646,7 @@ def _footer_html(lang: str = "th") -> str:
 """
 
 
-def _hero_html(lang: str = "th") -> str:
+def _hero_html(lang: str = "th", app_query: str = "") -> str:
     return f"""
 <section class="hero">
   <div class="container">
@@ -693,7 +693,7 @@ def _hero_html(lang: str = "th") -> str:
         <span data-lang="no">🚀 Prøv gratis</span>
         <span data-lang="en">🚀 Try free</span>
       </a>
-      <a href="/{lang}/app" class="cta-btn cta-primary landing-onboard-target landing-onboard-web" style="background:#fff;color:#0F172A;box-shadow:0 16px 40px rgba(255,255,255,.15)">
+      <a href="/{lang}/app{app_query}" class="cta-btn cta-primary landing-onboard-target landing-onboard-web" style="background:#fff;color:#0F172A;box-shadow:0 16px 40px rgba(255,255,255,.15)">
         <span class="landing-onboard-label landing-onboard-label-web">
           <span data-lang="th">2. เปิดเว็บแอป</span>
           <span data-lang="no">2. Åpne web-appen</span>
@@ -1266,7 +1266,7 @@ def _road_photos_html(lang: str = "th") -> str:
 """
 
 
-def _bottom_cta_html(lang: str = "th") -> str:
+def _bottom_cta_html(lang: str = "th", app_query: str = "") -> str:
     return f"""
 <section class="cta-band">
   <div class="container">
@@ -1286,7 +1286,7 @@ def _bottom_cta_html(lang: str = "th") -> str:
         <span data-lang="no">🚀 Prøv gratis</span>
         <span data-lang="en">🚀 Try free</span>
       </a>
-      <a href="/{lang}/app" class="cta-btn cta-secondary">
+      <a href="/{lang}/app{app_query}" class="cta-btn cta-secondary">
         💻 <span data-lang="th">เปิดเว็บแอป</span><span data-lang="no">Åpne web-appen</span><span data-lang="en">Open web app</span>
       </a>
     </div>
@@ -1643,7 +1643,7 @@ LANDING_JS = r"""
 """
 
 
-def build_landing_page(chat_css: str, chat_widget_html: str, chat_js: str, lang: str = "th") -> str:
+def build_landing_page(chat_css: str, chat_widget_html: str, chat_js: str, lang: str = "th", campaign: str = "") -> str:
     """Build the full landing HTML including the existing chat bubble.
 
     `lang` is the language this specific URL (/th, /no, /en) serves — it drives
@@ -1657,6 +1657,7 @@ def build_landing_page(chat_css: str, chat_widget_html: str, chat_js: str, lang:
         filter_landing_html,
     )
     lang = normalize_lang(lang)
+    app_query = "?campaign=free30" if campaign == "free30" else ""
     meta = seo_meta("home", lang)
     canon = canonical_for(lang, "")
     og_image = public_site_url() + HEADER_URL  # absolute URL for social previews
@@ -1692,8 +1693,8 @@ def build_landing_page(chat_css: str, chat_widget_html: str, chat_js: str, lang:
 <script>{LANG_SWITCH_JS}</script>
 </head>
 <body>
-{_nav_html(lang)}
-{_hero_html(lang)}
+{_nav_html(lang, app_query)}
+{_hero_html(lang, app_query)}
 {_stats_html()}
 {_try_html(lang)}
 {_video_html(lang)}
@@ -1703,7 +1704,7 @@ def build_landing_page(chat_css: str, chat_widget_html: str, chat_js: str, lang:
 {_screenshots_html()}
 {_road_photos_html(lang)}
 {_trust_html()}
-{_bottom_cta_html(lang)}
+{_bottom_cta_html(lang, app_query)}
 {_footer_html(lang)}
 {chat_widget_html}
 <script>{LANDING_JS}</script>

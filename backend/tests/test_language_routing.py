@@ -28,6 +28,7 @@ if str(BACKEND_DIR) not in sys.path:
 from website import website_router  # noqa: E402
 from webapp import webapp_router  # noqa: E402
 from i18n_routing import canonical_for, public_site_url  # noqa: E402
+from landing import build_landing_page  # noqa: E402
 
 app = FastAPI()
 # Mirror production's dual mount (server.py mounts both routers at "" and "/api").
@@ -221,6 +222,17 @@ class GuideLanguageRouteTests(unittest.TestCase):
     def test_guide_cta_links_to_clean_language_app(self):
         html = client.get("/no/guide").text
         self.assertIn('href="/no/app"', html)
+
+    def test_free30_campaign_is_preserved_by_landing_app_links_for_all_languages(self):
+        for lang in ("th", "no", "en"):
+            with self.subTest(lang=lang):
+                html = build_landing_page("", "", "", lang=lang, campaign="free30")
+                self.assertGreaterEqual(html.count(f'href="/{lang}/app?campaign=free30"'), 3)
+
+    def test_regular_landing_app_links_do_not_add_campaign(self):
+        html = build_landing_page("", "", "", lang="no")
+        self.assertGreaterEqual(html.count('href="/no/app"'), 3)
+        self.assertNotIn('href="/no/app?campaign=free30"', html)
 
     def test_th_guide_has_zero_parallel_sentences(self):
         html = client.get("/th/guide").text

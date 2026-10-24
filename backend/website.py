@@ -1268,6 +1268,7 @@ def landing_lang(request: Request):
         chat_widget_html=_localized_chat_widget_html(lang),
         chat_js=_CHAT_JS,
         lang=lang,
+        campaign=request.query_params.get("campaign", ""),
     )
     response = HTMLResponse(html)
     set_lang_cookie(response, lang)
