@@ -1,5 +1,5 @@
 """
-Etappe 1 — clean per-language entry points and exam-mode language forcing.
+Etappe 1 — clean per-language entry points and isolated learner language.
 Etappe 2 (language cleanup) — /web* now redirects to /app*; /app* serves the
 content and gets server-side <html lang>/<title>/meta/hreflang per language.
 ----------------------------------------------------------------------------
@@ -9,10 +9,8 @@ content and gets server-side <html lang>/<title>/meta/hreflang per language.
 - /web, /web/no, /web/th, /web/en: legacy URLs, now 301 redirects to the
   matching /app* URL with the query string preserved (critical for the
   Stripe checkout return query params).
-- Exam mode ("Simulert prøvedag"): question and option TEXT must be pure
-  Norwegian regardless of the student's selected UI language — matching the
-  real Statens vegvesen theory test. UI chrome (buttons, timer, labels)
-  keeps following the student's chosen language; only exam content is forced.
+- Practice-exam questions and options follow the selected language, like
+  their UI controls. Missing translations must never fall back to Norwegian.
 
 Route tests run through a real FastAPI TestClient (no network, no DB —
 webapp.py has no import-time DB dependency). The exam-mode assertions are
@@ -22,6 +20,9 @@ tests/test_sign_api_contract.py) since there is no JS execution harness for
 this file.
 """
 import sys
+import json
+import re
+import subprocess
 import unittest
 from pathlib import Path
 
@@ -211,15 +212,39 @@ class LanguageEntryPointRouteTests(unittest.TestCase):
         self.assertIsNone(re.search(r"title_(?:th|en|no)\s*\|\|", podcast_card.group(1)), "Podcast title fallback leaks other languages")
 
 
-class ExamModeForcesNorwegianContentTests(unittest.TestCase):
+class ExamModeLanguageIsolationTests(unittest.TestCase):
     def test_question_text_picker_is_exam_aware(self):
         self.assertIn("function pickQuestionLang(obj)", WEBAPP_HTML)
 
     def test_field_picker_is_exam_aware(self):
         self.assertIn("function pickFieldForQuestion(q, base)", WEBAPP_HTML)
 
-    def test_exam_mode_forces_norwegian_suffix_for_fields(self):
-        self.assertIn("isExamMode ? 'no' : appLang", WEBAPP_HTML)
+    def test_real_question_pickers_preserve_language_in_quiz_and_exam(self):
+        functions = []
+        for name in ('pickStrict', 'pickLang', 'pickField', 'pickQuestionLang', 'pickFieldForQuestion'):
+            match = re.search(r'function ' + name + r'\([^)]*\) \{.*?\n\}', WEBAPP_HTML, re.S)
+            self.assertIsNotNone(match, name)
+            functions.append(match.group(0))
+        script = '\n'.join(functions) + '''
+var results = [];
+for (var isExamMode of [false, true]) {
+  for (var appLang of ['no', 'th', 'en']) {
+    var localized = {no:'NORSK', th:'ไทย', en:'ENGLISH'};
+    var fields = {answer_a_no:'NORSK', answer_a_th:'ไทย', answer_a_en:'ENGLISH'};
+    results.push([isExamMode, appLang, pickQuestionLang(localized), pickFieldForQuestion(fields, 'answer_a')]);
+    delete localized[appLang]; delete fields['answer_a_' + appLang];
+    results.push([isExamMode, appLang, pickQuestionLang(localized), pickFieldForQuestion(fields, 'answer_a')]);
+  }
+}
+console.log(JSON.stringify(results));
+'''
+        result = subprocess.run(['node', '-e', script], check=True, text=True, encoding='utf-8', capture_output=True)
+        rows = json.loads(result.stdout)
+        self.assertEqual(len(rows), 12)
+        for index, row in enumerate(rows):
+            _, language, question, option = row
+            expected = {'no': 'NORSK', 'th': 'ไทย', 'en': 'ENGLISH'}[language] if index % 2 == 0 else ''
+            self.assertEqual((question, option), (expected, expected), row)
 
     def test_render_question_uses_exam_aware_pickers_for_question_text(self):
         self.assertIn("pickQuestionLang(q.question)", WEBAPP_HTML)
