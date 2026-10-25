@@ -5256,8 +5256,9 @@ a { color:inherit; text-decoration:none; }
             <div class="ppc-per" data-key="pw_per_month"></div>
           </div>
           <div class="paywall-price-card" onclick="buyPremium('three_months',this)" data-plan="three_months" style="position:relative">
+            <div class="ppc-badge" data-key="pw_best_value"></div>
             <div class="ppc-period" data-key="pw_three_months"></div>
-            <div class="ppc-price" data-price-plan="three_months">299 NOK</div>
+            <div class="ppc-price" data-price-plan="three_months">249 NOK</div>
             <div class="ppc-per" data-key="pw_per_three_months"></div>
           </div>
           <div class="paywall-price-card" onclick="buyPremium('lifetime',this)" data-plan="lifetime">
@@ -6040,7 +6041,7 @@ var UI = {
   pw_per_month:{th:'ต่อเดือน', no:'per måned', en:'per month'},
   pw_per_three_months:{th:'ต่อ 3 เดือน', no:'per 3 måneder', en:'per 3 months'},
   pw_per_lifetime:{th:'จ่ายครั้งเดียว', no:'engangsbetaling', en:'one-time payment'},
-  pw_best_value:{th:'คุ้มค่าที่สุด – ประหยัด 34%', no:'Best verdi – spar 34%', en:'Best value – save 34%'},
+  pw_best_value:{th:'คุ้มค่าที่สุด', no:'Beste verdi', en:'Best value'},
   pw_lifetime_note:{th:'จ่ายครั้งเดียว – ใช้งานได้ตลอดไป', no:'Betal én gang – bruk for alltid', en:'Pay once – use forever'},
   pw_buy:      {th:'ปลดล็อกพรีเมียมเพื่อเข้าถึงแบบไม่จำกัด', no:'Lås opp Premium for ubegrenset tilgang', en:'Unlock Premium for unlimited access'},
   pw_restore_purchase:{th:'กู้คืนการซื้อ', no:'Gjenopprett kjøp', en:'Restore purchase'},
@@ -6479,7 +6480,7 @@ function catName(raw) {
 
 var PREMIUM_PRICING = {
   monthly: { display:'99 NOK', period:{no:'per måned', th:'ต่อเดือน', en:'per month'} },
-  three_months: { display:'299 NOK', period:{no:'per 3 måneder', th:'ต่อ 3 เดือน', en:'per 3 months'} },
+  three_months: { display:'249 NOK', period:{no:'per 3 måneder', th:'ต่อ 3 เดือน', en:'per 3 months'} },
   lifetime: { display:'699 NOK', period:{no:'engangsbetaling', th:'จ่ายครั้งเดียว', en:'one-time payment'} }
 };
 

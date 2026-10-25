@@ -1030,7 +1030,12 @@ PUBLIC_PRICING_JS = r"""
         if (!plan || typeof label !== 'string' || !label ||
             typeof period !== 'string' || !period || typeof plan.display !== 'string' || !plan.display) return;
         const card = document.createElement('div');
-        card.className = 'plan-mini';
+        card.className = id === 'three_months' ? 'plan-mini best' : 'plan-mini';
+        if (id === 'three_months') {
+          const badge = document.createElement('div');
+          badge.textContent = {no:'Beste verdi', th:'คุ้มค่าที่สุด', en:'Best value'}[lang] || '';
+          card.appendChild(badge);
+        }
         const title = document.createElement('h4');
         title.textContent = label;
         const price = document.createElement('div');
@@ -1617,7 +1622,7 @@ LANDING_JS = r"""
         <p>${subs[lang]}</p>
         <div class="plans-row">
           <div class="plan-mini"><h4>${monthLbl}</h4><div class="p">99 kr<small> / ${perMo}</small></div></div>
-          <div class="plan-mini best"><h4>${threeLbl}</h4><div class="p">299 kr<small> / 3 ${perMo}</small></div></div>
+          <div class="plan-mini best"><div>${{no:'Beste verdi', th:'คุ้มค่าที่สุด', en:'Best value'}[lang] || ''}</div><h4>${threeLbl}</h4><div class="p">249 kr<small> / 3 ${perMo}</small></div></div>
           <div class="plan-mini"><h4>${lifeLbl}</h4><div class="p">699 kr<small> / ${once}</small></div></div>
         </div>
         <a href="/${lang}/app${new URLSearchParams(window.location.search).get('campaign') === 'free30' ? '?campaign=free30' : ''}" class="cta-btn cta-primary" style="margin-top:8px">${ctas[lang]} →</a>

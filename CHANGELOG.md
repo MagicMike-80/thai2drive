@@ -2,6 +2,14 @@
 
 All notable changes to Thai2Drive are documented in this file.
 
+## [0.3.1.0] - 2026-10-25
+
+### Fixed
+
+- Use each Stripe product's default price for public pricing and new checkout sessions, so the three-month plan uses 249 NOK instead of the retained 299 NOK price.
+- Align web paywall and mini-quiz prices with 99 / 249 / 699 NOK and label three months as best value in Norwegian, Thai, and English.
+- Keep existing subscriptions unchanged and cover both Stripe price-list orders with isolated regression tests.
+
 ## [0.2.5.2] - 2026-10-08
 
 ### Security
