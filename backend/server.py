@@ -198,9 +198,9 @@ PUBLIC_PRICING_FALLBACK = {
         "id": "three_months",
         "stripe_product_name": "Thai2Drive 3 Months",
         "label": {"no": "3 måneder", "th": "3 เดือน", "en": "3 months"},
-        "amount": 299,
+        "amount": 249,
         "currency": "NOK",
-        "display": "299 kr",
+        "display": "249 kr",
         "period": {"no": "per 3 måneder", "th": "ต่อ 3 เดือน", "en": "per 3 months"},
     },
     "lifetime": {
@@ -1691,7 +1691,11 @@ def _get_live_stripe_plan_prices_sync() -> Optional[dict]:
         for price in prices.data:
             product = getattr(price, "product", None)
             name = getattr(product, "name", "") if product else ""
-            if name:
+            default_price = getattr(product, "default_price", None) if product else None
+            default_id = default_price if isinstance(default_price, str) else getattr(default_price, "id", None)
+            # A product may retain old active prices for existing subscribers.
+            # Both public pricing and new checkout must use its default price.
+            if name and default_id and getattr(price, "id", None) == default_id:
                 by_name[name.strip().lower()] = price
 
         plans = []
