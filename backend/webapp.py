@@ -8176,6 +8176,7 @@ async function submitCampaignRegistration(event) {
     }
     await refreshCurrentUser();
     renderPremiumBanner();
+    await checkCampaignStatus();
     if (feedback) { feedback.className = 'cm-feedback success'; feedback.textContent = data.message || t('campaign_success_fallback'); feedback.style.display = 'block'; }
     setTimeout(closeCampaignModal, 3500);
     return true;
