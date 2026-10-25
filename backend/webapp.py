@@ -926,16 +926,16 @@ a { color:inherit; text-decoration:none; }
   margin-top:5px; letter-spacing:.4px; text-transform:uppercase;
 }
 
-/* Premium badge — green pill matching mobile */
+/* Opaque badge stays readable over the flag background. */
 .premium-banner {
-  background:rgba(16,185,129,.1);
-  border:1px solid rgba(16,185,129,.25);
+  background:#0B1730;
+  border:1px solid rgba(0,245,255,.45);
   border-radius:50px; padding:10px 20px;
   display:flex; align-items:center; justify-content:center; gap:8px;
   align-self:center;
 }
 .premium-banner .pb-icon { font-size:1rem; }
-.premium-banner .pb-text h4 { font-size:.85rem; font-weight:800; color:var(--green); }
+.premium-banner .pb-text h4 { font-size:.85rem; font-weight:800; color:#F8FAFC; }
 .premium-banner .pb-text p { display:none; }
 .premium-badge {
   display:inline-flex; align-items:center; gap:4px;
@@ -4147,7 +4147,11 @@ a { color:inherit; text-decoration:none; }
   #screenTeacher { background:#071326; }
   .teacher-header { width:100%; height:72px; max-height:72px; min-height:72px; padding:10px 12px; }
   .teacher-avatar { width:48px; height:48px; border-radius:50%; }
-  .teacher-name { font-size:1rem; }
+  .teacher-header { gap:8px; }
+  .teacher-header-info { flex:1; overflow:hidden; }
+  .teacher-name { font-size:1rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .teacher-meta-wrap { flex-wrap:wrap; gap:4px; }
+  .teacher-header .ms-open-btn { max-width:110px; flex-shrink:0; }
   .teacher-meta-line { font-size:.69rem; }
   .teacher-online-badge { font-size:.58rem; padding:2px 6px; }
   .teacher-messages { width:100%; padding:14px 12px 18px; gap:12px; }
@@ -6095,14 +6099,14 @@ var UI = {
   vp_mc_no:        {th:'ยังไม่ค่อยเข้าใจ',       no:'Ikke helt',           en:'Not quite'},
   vp_mc_correct:   {th:'⭐ เยี่ยมมาก! ฝึกต่อไปแล้วจะจำได้แน่นอน', no:'⭐ Topp! Fortsett å øve, så sitter det!', en:'⭐ Great! Keep practising and it will stick!'},
 
-  // ── Gratisuke: 7 dagers prøveperiode ───────────────────────────────────────
-  // Ingen emoji i strengene — .pb-icon bærer 🎁 mens prøveuken varer.
-  trial_active:    {th:'สัปดาห์ทดลองใช้ฟรีของคุณกำลังทำงานอยู่', no:'Gratisuken din er i gang', en:'Your free week is running'},
-  trial_days_left: {th:'เหลืออีก {days} วันของสัปดาห์ทดลองใช้ฟรี', no:'{days} dager igjen av gratisuken', en:'{days} days left of your free week'},
-  trial_two_days:  {th:'เหลืออีกแค่ 2 วันของสัปดาห์ทดลองใช้ฟรี! คุณทำได้ดีมาก', no:'Bare 2 dager igjen av gratisuken! Du gjør det bra.', en:'Only 2 days left of your free week! You are doing great.'},
+  // Prøveperiodens lengde kommer fra backend; samme tekst støtter 7 og 30 dager.
+  // Ingen emoji i strengene — .pb-icon bærer 🎁 mens prøveperioden varer.
+  trial_active:    {th:'ช่วงทดลองใช้ฟรีของคุณกำลังใช้งานอยู่', no:'Prøveperioden din er i gang', en:'Your free trial is active'},
+  trial_days_left: {th:'เหลืออีก {days} วันในช่วงทดลองใช้ฟรี', no:'{days} dager igjen av prøveperioden', en:'{days} days left of your free trial'},
+  trial_two_days:  {th:'เหลืออีก 2 วันในช่วงทดลองใช้ฟรี คุณทำได้ดีมาก', no:'2 dager igjen av prøveperioden. Du gjør det bra.', en:'2 days left of your free trial. You are doing great.'},
   trial_last_day:  {th:'วันสุดท้ายของการใช้งานฟรี — อีกนิดเดียวเท่านั้น!', no:'Siste dag med gratis tilgang — du er nesten i mål!', en:'Last day of free access — you are almost there!'},
-  trial_sub:       {th:'คุณใช้ได้ทุกฟีเจอร์ในระหว่างสัปดาห์ทดลองใช้ฟรี', no:'Du har tilgang til alle funksjoner i gratisuken', en:'You have access to all features during your free week'},
-  trial_ended:     {th:'สัปดาห์ทดลองใช้ฟรีของคุณสิ้นสุดแล้ว เลือกแพ็กเกจเพื่อฝึกต่อ', no:'Gratisuken din er over. Velg et abonnement for å fortsette å øve.', en:'Your free week has ended. Choose a plan to keep practising.'},
+  trial_sub:       {th:'คุณใช้ได้ทุกฟีเจอร์ในช่วงทดลองใช้ฟรี', no:'Du har tilgang til alle funksjoner i prøveperioden', en:'You have access to all features during your free trial'},
+  trial_ended:     {th:'ช่วงทดลองใช้ฟรีสิ้นสุดแล้ว คุณยังฝึกด้วยคำถามฟรีประจำวันได้', no:'Prøveperioden er over. Du kan fortsatt øve med de daglige gratisspørsmålene.', en:'Your free trial has ended. You can still practise with the daily free questions.'},
 
   // ── Retur fra Stripe-checkout ──────────────────────────────────────────────
   premium_activated_toast:  {th:'เปิดใช้ Premium แล้ว', no:'Premium er aktivert', en:'Premium activated'},
@@ -8498,7 +8502,7 @@ function trialBannerText() {
   return tf('trial_days_left', {days: d});
 }
 
-// Gjenbruker den eksisterende grønne pillen #homePremiumBanner — ingen ny design.
+// Gjenbruker det eksisterende Premium-banneret.
 function renderPremiumBanner() {
   var pb = document.getElementById('homePremiumBanner');
   if (!pb) return;
@@ -8775,21 +8779,23 @@ function pickField(q, base) {
   return q[base + '_' + appLang] || '';
 }
 
-// Exam content must always be pure Norwegian (Statens vegvesen format),
-// regardless of the student's selected UI language. UI chrome (buttons,
-// timer, labels) keeps following appLang via pickLang/pickField as normal.
+// Practice-exam content follows the selected language, just like quiz content.
+// The 45-question / 90-minute format does not override language isolation.
 function pickQuestionLang(obj) {
-  if (isExamMode) {
-    if (!obj) return '';
-    if (typeof obj === 'string') return obj;
-    return (typeof obj.no === 'string' && obj.no.trim() !== '') ? obj.no : pickStrict(obj);
-  }
   return pickLang(obj);
 }
 
 function pickFieldForQuestion(q, base) {
-  var suffix = isExamMode ? 'no' : appLang;
-  return q[base + '_' + suffix] || '';
+  return pickField(q, base);
+}
+
+function questionOptionText(q, option) {
+  var sourceId = String(option.sourceId || option.id || '').toUpperCase();
+  if (Array.isArray(q.options) && q.options.length) {
+    var source = q.options.find(function(o) { return String(o.id || o.key || '').toUpperCase() === sourceId; });
+    return source ? (pickQuestionLang(source.text) || pickQuestionLang(source)) : '';
+  }
+  return pickFieldForQuestion(q, 'answer_' + sourceId.toLowerCase());
 }
 
 var _michaelCorrectAudio = null;
@@ -8858,16 +8864,15 @@ function renderQuestion() {
   } else {
     if (q.options && Array.isArray(q.options) && q.options.length) {
       opts = q.options.map(function(o) {
-        return { id: String(o.id || o.key || '').toUpperCase(), text: pickQuestionLang(o.text) || pickQuestionLang(o) || String(o.text || '') };
+        return { id: String(o.id || o.key || '').toUpperCase(), text: pickQuestionLang(o.text) || pickQuestionLang(o) };
       });
     } else {
       ['A','B','C','D'].forEach(function(l) {
         var base = 'answer_' + l.toLowerCase();
         var val = pickFieldForQuestion(q, base);
-        if (val) opts.push({ id: l, text: val });
+        opts.push({ id: l, text: val });
       });
     }
-    opts = opts.filter(function(o) { return o.text; });
     if (opts.length > 1) {
       var shuffled = shuffleOpts(opts, currentCorrect);
       opts = shuffled.opts;
@@ -8875,6 +8880,13 @@ function renderQuestion() {
     }
     q._shuffledOpts = { opts: opts, correct: currentCorrect };
   }
+
+  // Keep the shuffled answer letters stable while refreshing only their language.
+  opts = opts.map(function(o) {
+    return {id: o.id, sourceId: o.sourceId, text: questionOptionText(q, o)};
+  });
+  q._shuffledOpts.opts = opts;
+  opts = opts.filter(function(o) { return o.text; });
 
   var chosenOption = isExamMode ? (examAnswers[qIdx] || '') : '';
   var qCard = document.getElementById('qCard');

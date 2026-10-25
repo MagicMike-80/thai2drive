@@ -2,6 +2,15 @@
 
 All notable changes to Thai2Drive are documented in this file.
 
+## [0.3.2.0] - 2026-10-25
+
+### Fixed
+
+- Keep practice-exam questions and answers in the selected Norwegian, Thai, or English language while preserving the 45-question, 90-minute format.
+- Refresh translated answer text without changing shuffled answer letters or the correct answer, and hide missing translations instead of rendering objects.
+- Use duration-neutral free-trial labels, readable Premium-banner colors, a compact mobile Michael header, and a localized guide navigation label.
+- Add isolated language regressions and real local Mongo transaction tests for FREE30 capacity, duplicate claims, expiry, and account isolation.
+
 ## [0.3.1.0] - 2026-10-25
 
 ### Fixed
