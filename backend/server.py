@@ -2916,39 +2916,14 @@ async def signup(payload: dict = Body(...)):
     admin_entry = await db.admin_users.find_one({"email": email})
     is_admin = admin_entry is not None
 
-    # Reserve each position atomically. Initialize from the existing user count
-    # so accounts created before this campaign also consume a position.
-    user_count = await db.users.count_documents({})
-    try:
-        await db.campaign_counters.update_one(
-            {"_id": "signup_50"}, {"$setOnInsert": {"sequence": user_count}}, upsert=True
-        )
-    except DuplicateKeyError:
-        pass  # Another request initialized the counter first.
-    position_doc = await db.campaign_counters.find_one_and_update(
-        {"_id": "signup_50"}, {"$inc": {"sequence": 1}},
-        return_document=ReturnDocument.AFTER,
-    )
-    campaign_position = position_doc["sequence"]
+    # New trials are granted only by the account-bound FREE30 endpoint.
+    # Existing subscriptions/trials and the historical signup counter are untouched.
     now = datetime.now(timezone.utc)
     now_iso = now.isoformat()
-
-    if is_admin:
-        is_premium = True
-        has_premium = True
-        premium_expires_at = None
-        trial_expires_at = None
-    elif campaign_position <= 50:
-        is_premium = False
-        has_premium = True
-        expires_30d = (now + timedelta(days=30)).isoformat()
-        premium_expires_at = None
-        trial_expires_at = expires_30d
-    else:
-        is_premium = False
-        has_premium = False
-        premium_expires_at = None
-        trial_expires_at = None
+    is_premium = is_admin
+    has_premium = is_admin
+    premium_expires_at = None
+    trial_expires_at = None
 
     user_doc = {
         "id": user_id,
@@ -2962,10 +2937,10 @@ async def signup(payload: dict = Body(...)):
         "has_premium": has_premium,
         "premium_expires_at": premium_expires_at,
         "device_id": data.device_id or None,
-        "trial_started_at": now_iso if (campaign_position <= 50 and not is_admin) else None,
+        "trial_started_at": None,
         "trial_expires_at": trial_expires_at,
-        "trial_used": (campaign_position <= 50 and not is_admin),
-        "campaign_index": campaign_position,
+        "trial_used": False,
+        "campaign_index": None,
         "created_at": now_iso,
     }
     await db.users.insert_one(user_doc)
@@ -2981,7 +2956,7 @@ async def signup(payload: dict = Body(...)):
     # ── Segment track ──
     if SEGMENT_WRITE_KEY:
         segment_analytics.identify(user_id, {"email": email, "name": full_name, "phone": phone, "is_premium": is_premium, "is_admin": is_admin})
-        segment_analytics.track(user_id, "User Signed Up", {"email": email, "method": "email", "is_premium": is_premium, "campaign_eligible": (campaign_position <= 50)})
+        segment_analytics.track(user_id, "User Signed Up", {"email": email, "method": "email", "is_premium": is_premium, "campaign_eligible": not is_admin})
 
     has_access = _user_has_active_premium(user_doc)
     token = create_token(
@@ -3273,6 +3248,11 @@ async def get_campaign_status():
     })
 
 
+class _CampaignClaimConflict(Exception):
+    def __init__(self, response):
+        self.response = response
+
+
 @api_router.post("/campaign/register")
 @app.post("/api/campaign/register")
 async def register_campaign_user(
@@ -3287,95 +3267,102 @@ async def register_campaign_user(
     user_id = str(current_user.get("sub") or "").strip()
     if not user_id:
         return JSONResponse(status_code=401, content={"success": False, "error": "authentication_required"})
-    user_doc = await db.users.find_one({"id": user_id}, {"_id": 0, "password_hash": 0})
-    if not user_doc or user_doc.get("deleted_at") or user_doc.get("disabled"):
-        return JSONResponse(status_code=401, content={"success": False, "error": "authentication_required"})
-
-    if user_doc.get("is_admin") or _paid_premium_active(user_doc) or _user_has_active_trial(user_doc):
-        msg = CAMPAIGN_ACTIVE_MSG[lang]
-        return JSONResponse(status_code=400, content={"success": False, "error": "premium_already_active", "detail": msg, "message": msg})
-    if user_doc.get("trial_used") or user_doc.get("is_premium") or user_doc.get("trial_started_at"):
-        msg = CAMPAIGN_USED_MSG[lang]
-        return JSONResponse(status_code=400, content={"success": False, "error": "trial_already_used", "detail": msg, "message": msg})
-
-    existing = await db.campaign_users.find_one({"campaign_id": "free30-2026-10", "user_id": user_id})
-    if existing:
-        msg = CAMPAIGN_DUPLICATE_MSG[lang]
-        return JSONResponse(status_code=400, content={"success": False, "error": "already_registered", "detail": msg, "message": msg})
-
-    current_count = await db.campaign_users.count_documents({"campaign_id": "free30-2026-10"})
-    if current_count >= 50:
-        msg = CAMPAIGN_SOLD_OUT_MSG[lang]
-        return JSONResponse(status_code=400, content={"success": False, "error": "campaign_sold_out", "detail": msg, "message": msg, "total_seats": 50, "registered": current_count, "remaining": 0})
-
-    await db.campaign_counters.update_one(
-        {"_id": "free30-2026-10"},
-        {"$setOnInsert": {"sequence": current_count}},
-        upsert=True,
-    )
-    position_doc = await db.campaign_counters.find_one_and_update(
-        {"_id": "free30-2026-10", "sequence": {"$lt": 50}},
-        {"$inc": {"sequence": 1}},
-        return_document=ReturnDocument.AFTER,
-    )
-    if not position_doc:
-        msg = CAMPAIGN_SOLD_OUT_MSG[lang]
-        return JSONResponse(status_code=400, content={"success": False, "error": "campaign_sold_out", "detail": msg, "message": msg, "total_seats": 50, "registered": 50, "remaining": 0})
-
-    campaign_index = position_doc["sequence"]
-    now = datetime.now(timezone.utc)
-    premium_until = (now + timedelta(days=30)).isoformat()
-    campaign_doc = {
-        "_id": f"free30-2026-10:{user_id}",
-        "campaign_id": "free30-2026-10",
-        "user_id": user_id,
-        "language": lang,
-        "campaign_index": campaign_index,
-        "trial_started_at": now.isoformat(),
-        "trial_expires_at": premium_until,
-        "created_at": now.isoformat(),
-    }
+    # Initialize only a serialization document; this does not grant a seat.
     try:
-        await db.campaign_users.insert_one(campaign_doc)
+        await db.campaign_counters.update_one(
+            {"_id": "free30-2026-10"}, {"$setOnInsert": {"sequence": 0}}, upsert=True,
+        )
     except DuplicateKeyError:
-        msg = CAMPAIGN_DUPLICATE_MSG[lang]
-        return JSONResponse(status_code=400, content={"success": False, "error": "already_registered", "detail": msg, "message": msg})
+        pass
 
-    update_result = await db.users.update_one(
-        {
-            "id": user_id,
-            "trial_used": {"$ne": True},
-            "is_admin": {"$ne": True},
-            "is_premium": {"$ne": True},
-            "trial_started_at": {"$in": [None, ""]},
-            "premium_expires_at": {"$in": [None, ""]},
-            "trial_expires_at": {"$in": [None, ""]},
-        },
-        {"$set": {
-            "is_premium": False,
-            "has_premium": True,
+    async def claim(session):
+        # Every claimant writes the same document first. Mongo retries conflicts
+        # with a fresh snapshot; capacity is the committed claim count, not sequence.
+        await db.campaign_counters.find_one_and_update(
+            {"_id": "free30-2026-10"}, {"$inc": {"claim_revision": 1}},
+            return_document=ReturnDocument.AFTER, session=session,
+        )
+        user_doc = await db.users.find_one({"id": user_id}, {"_id": 0, "password_hash": 0}, session=session)
+        if not user_doc or user_doc.get("deleted_at") or user_doc.get("disabled"):
+            return JSONResponse(status_code=401, content={"success": False, "error": "authentication_required"})
+
+        if user_doc.get("is_admin") or _paid_premium_active(user_doc) or _user_has_active_trial(user_doc):
+            msg = CAMPAIGN_ACTIVE_MSG[lang]
+            return JSONResponse(status_code=400, content={"success": False, "error": "premium_already_active", "detail": msg, "message": msg})
+        if user_doc.get("trial_used") or user_doc.get("is_premium") or user_doc.get("trial_started_at"):
+            msg = CAMPAIGN_USED_MSG[lang]
+            return JSONResponse(status_code=400, content={"success": False, "error": "trial_already_used", "detail": msg, "message": msg})
+
+        existing = await db.campaign_users.find_one({"campaign_id": "free30-2026-10", "user_id": user_id}, session=session)
+        if existing:
+            msg = CAMPAIGN_DUPLICATE_MSG[lang]
+            return JSONResponse(status_code=400, content={"success": False, "error": "already_registered", "detail": msg, "message": msg})
+
+        current_count = await db.campaign_users.count_documents({"campaign_id": "free30-2026-10"}, session=session)
+        if current_count >= 50:
+            msg = CAMPAIGN_SOLD_OUT_MSG[lang]
+            return JSONResponse(status_code=400, content={"success": False, "error": "campaign_sold_out", "detail": msg, "message": msg, "total_seats": 50, "registered": current_count, "remaining": 0})
+
+        campaign_index = current_count + 1
+        now = datetime.now(timezone.utc)
+        premium_until = (now + timedelta(days=30)).isoformat()
+        campaign_doc = {
+            "_id": f"free30-2026-10:{user_id}",
+            "campaign_id": "free30-2026-10",
+            "user_id": user_id,
+            "language": lang,
+            "campaign_index": campaign_index,
             "trial_started_at": now.isoformat(),
             "trial_expires_at": premium_until,
-            "trial_used": True,
-            "campaign_index": campaign_index,
-        }},
-    )
-    if not getattr(update_result, "modified_count", 0):
-        await db.campaign_users.delete_one({"_id": campaign_doc["_id"]})
-        msg = CAMPAIGN_USED_MSG[lang]
-        return JSONResponse(status_code=409, content={"success": False, "error": "trial_already_used", "detail": msg, "message": msg})
+            "created_at": now.isoformat(),
+        }
+        try:
+            await db.campaign_users.insert_one(campaign_doc, session=session)
+        except DuplicateKeyError:
+            msg = CAMPAIGN_DUPLICATE_MSG[lang]
+            raise _CampaignClaimConflict(JSONResponse(status_code=400, content={"success": False, "error": "already_registered", "detail": msg, "message": msg}))
 
-    success_msg = CAMPAIGN_SUCCESS_MSG[lang].format(idx=campaign_index)
-    return JSONResponse(status_code=200, content={
-        "success": True,
-        "message": success_msg,
-        "detail": success_msg,
-        "campaign_index": campaign_index,
-        "is_premium": True,
-        "has_premium": True,
-        "premium_until": premium_until,
-        "remaining_seats": max(0, 50 - campaign_index),
-    })
+        update_result = await db.users.update_one(
+            {
+                "id": user_id,
+                "trial_used": {"$ne": True},
+                "is_admin": {"$ne": True},
+                "is_premium": {"$ne": True},
+                "trial_started_at": {"$in": [None, ""]},
+                "premium_expires_at": {"$in": [None, ""]},
+                "trial_expires_at": {"$in": [None, ""]},
+            },
+            {"$set": {
+                "is_premium": False,
+                "has_premium": True,
+                "trial_started_at": now.isoformat(),
+                "trial_expires_at": premium_until,
+                "trial_used": True,
+                "campaign_index": campaign_index,
+            }},
+            session=session,
+        )
+        if not getattr(update_result, "modified_count", 0):
+            msg = CAMPAIGN_USED_MSG[lang]
+            raise _CampaignClaimConflict(JSONResponse(status_code=409, content={"success": False, "error": "trial_already_used", "detail": msg, "message": msg}))
+
+        success_msg = CAMPAIGN_SUCCESS_MSG[lang].format(idx=campaign_index)
+        return JSONResponse(status_code=200, content={
+            "success": True,
+            "message": success_msg,
+            "detail": success_msg,
+            "campaign_index": campaign_index,
+            "is_premium": True,
+            "has_premium": True,
+            "premium_until": premium_until,
+            "remaining_seats": max(0, 50 - current_count - 1),
+        })
+
+    try:
+        async with await db.client.start_session() as session:
+            return await session.with_transaction(claim)
+    except _CampaignClaimConflict as conflict:
+        return conflict.response
 
 
 # ==================== ADMIN ROUTES ====================

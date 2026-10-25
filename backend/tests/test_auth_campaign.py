@@ -65,26 +65,18 @@ def test_duplicate_contact_in_mongo_is_400(campaign, duplicate):
     database.users.insert_one.assert_not_awaited()
 
 
-@pytest.mark.parametrize("existing,expected", [(49, True), (50, False)])
-def test_campaign_boundary(campaign, existing, expected):
+@pytest.mark.parametrize("existing", [0, 49, 50, 100])
+def test_signup_never_grants_a_separate_campaign_trial(campaign, existing):
     client, database = campaign
     database.users.count_documents.return_value = existing
-    database.campaign_counters.find_one_and_update.return_value = {"sequence": existing + 1}
-    with patch.object(server, "_find_user_by_email", new_callable=AsyncMock,
-                      return_value=None):
+    with patch.object(server, "_find_user_by_email", new_callable=AsyncMock, return_value=None):
         response = signup(client)
     assert response.status_code == 200
     user = database.users.insert_one.await_args.args[0]
-    assert user["has_premium"] is expected
-    assert response.json()["user"]["has_premium"] is expected
-    assert user["full_name"] == "Test Bruker"
-    assert user["email"] == "test@example.com"
-    assert user["phone"] == "+4790012345"
-    if expected:
-        expires = datetime.fromisoformat(user["trial_expires_at"])
-        duration = expires - datetime.fromisoformat(user["trial_started_at"])
-        assert duration.days == 30
-        assert response.json()["user"]["premium_status"] == "trialing"
-    else:
-        assert user["trial_expires_at"] is None
-        assert response.json()["user"]["premium_status"] == "none"
+    assert user["has_premium"] is False
+    assert user["trial_used"] is False
+    assert user["trial_started_at"] is None
+    assert user["trial_expires_at"] is None
+    assert response.json()["user"]["premium_status"] == "none"
+    database.campaign_counters.update_one.assert_not_awaited()
+    database.campaign_counters.find_one_and_update.assert_not_awaited()

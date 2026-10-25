@@ -998,7 +998,7 @@ document.addEventListener('keydown', function(e) {{
 """
 
 
-def _pricing_html(lang: str) -> str:
+def _pricing_html(lang: str, app_query: str = "") -> str:
     # Labels already used by the landing page. Prices come from the public
     # pricing endpoint; no duplicated amounts or checkout logic live here.
     heading = {"th": "ราคา", "no": "Priser", "en": "Pricing"}[lang]
@@ -1008,7 +1008,7 @@ def _pricing_html(lang: str) -> str:
   <div class="container" style="text-align:center">
     <div class="sec-head"><h2>{heading}</h2></div>
     <div class="plans-row" id="publicPricingPlans" aria-live="polite"></div>
-    <a href="/{lang}/app" class="cta-btn cta-primary">{cta} →</a>
+    <a href="/{lang}/app{app_query}" class="cta-btn cta-primary">{cta} →</a>
   </div>
 </section>
 """
@@ -1620,7 +1620,7 @@ LANDING_JS = r"""
           <div class="plan-mini best"><h4>${threeLbl}</h4><div class="p">299 kr<small> / 3 ${perMo}</small></div></div>
           <div class="plan-mini"><h4>${lifeLbl}</h4><div class="p">699 kr<small> / ${once}</small></div></div>
         </div>
-        <a href="/${lang}/app" class="cta-btn cta-primary" style="margin-top:8px">${ctas[lang]} →</a>
+        <a href="/${lang}/app${new URLSearchParams(window.location.search).get('campaign') === 'free30' ? '?campaign=free30' : ''}" class="cta-btn cta-primary" style="margin-top:8px">${ctas[lang]} →</a>
         <p style="margin-top:14px;font-size:13px;color:#94A3B8">${scoreLbl}: <strong style="color:#FF9933">${score} / ${TOTAL}</strong></p>
       </div>`;
     nextBtn.disabled = true;
@@ -1698,7 +1698,7 @@ def build_landing_page(chat_css: str, chat_widget_html: str, chat_js: str, lang:
 {_stats_html()}
 {_try_html(lang)}
 {_video_html(lang)}
-{_pricing_html(lang)}
+{_pricing_html(lang, app_query)}
 {_why_html()}
 {_features_html()}
 {_screenshots_html()}

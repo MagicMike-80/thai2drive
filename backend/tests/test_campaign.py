@@ -39,6 +39,19 @@ class TestCampaignBackend(unittest.TestCase):
         self.mock_db.users = self.mock_users
         self.mock_counters = MagicMock()
         self.mock_db.campaign_counters = self.mock_counters
+        self.transaction_aborted = False
+        test = self
+        class Session:
+            async def __aenter__(self): return self
+            async def __aexit__(self, *args): return False
+            async def with_transaction(self, callback):
+                try:
+                    return await callback(self)
+                except Exception:
+                    test.transaction_aborted = True
+                    raise
+        self.session = Session()
+        self.mock_db.client.start_session = AsyncMock(return_value=self.session)
         self.mock_counters.update_one = AsyncMock()
         self.mock_counters.find_one_and_update = AsyncMock(return_value={"sequence": 1})
         self.mock_campaign_users.find_one = AsyncMock(return_value=None)
@@ -92,7 +105,7 @@ class TestCampaignBackend(unittest.TestCase):
         self.assertFalse(THAI_REGEX.search(data["message"]))
 
         self.mock_users.find_one.assert_awaited_once_with(
-            {"id": "synthetic-user-001"}, {"_id": 0, "password_hash": 0}
+            {"id": "synthetic-user-001"}, {"_id": 0, "password_hash": 0}, session=self.session
         )
         user_filter, user_update = self.mock_users.update_one.await_args.args
         self.assertEqual(user_filter["id"], "synthetic-user-001")
@@ -179,23 +192,31 @@ class TestCampaignBackend(unittest.TestCase):
         self.mock_campaign_users.insert_one.assert_not_awaited()
         self.mock_users.update_one.assert_not_awaited()
 
-    def test_atomic_campaign_counter_can_reject_after_concurrent_reservations(self):
+    def test_50th_claim_uses_committed_count_not_old_sequence(self):
         self.mock_campaign_users.count_documents.return_value = 49
-        self.mock_counters.find_one_and_update.return_value = None
+        self.mock_counters.find_one_and_update.return_value = {"sequence": 999}
         response = self.register("en")
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()["error"], "campaign_sold_out")
-        self.mock_counters.update_one.assert_awaited_once()
-        self.mock_campaign_users.insert_one.assert_not_awaited()
-        self.mock_users.update_one.assert_not_awaited()
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["campaign_index"], 50)
+        self.assertEqual(response.json()["remaining_seats"], 0)
+        for operation in (self.mock_campaign_users.insert_one, self.mock_users.update_one,
+                          self.mock_campaign_users.count_documents,
+                          self.mock_counters.find_one_and_update):
+            self.assertIs(operation.await_args.kwargs["session"], self.session)
 
-    def test_failed_conditional_account_update_removes_pending_claim(self):
+    def test_failed_conditional_account_update_aborts_entire_claim(self):
         self.mock_users.update_one.return_value = SimpleNamespace(modified_count=0)
         response = self.register("no")
         self.assertEqual(response.status_code, 409)
-        self.assertEqual(response.json()["error"], "trial_already_used")
-        self.mock_campaign_users.delete_one.assert_awaited_once_with({"_id": "free30-2026-10:synthetic-user-001"})
-        self.assertNotIn("email", self.mock_campaign_users.insert_one.await_args.args[0])
+        self.assertTrue(self.transaction_aborted)
+        self.mock_campaign_users.delete_one.assert_not_awaited()
+
+    def test_duplicate_insert_aborts_transaction(self):
+        self.mock_campaign_users.insert_one.side_effect = server.DuplicateKeyError("duplicate")
+        response = self.register("no")
+        self.assertEqual(response.status_code, 400)
+        self.assertTrue(self.transaction_aborted)
+        self.mock_users.update_one.assert_not_awaited()
 
     def test_expired_trial_returns_to_free_status_using_synthetic_data(self):
         expired = {

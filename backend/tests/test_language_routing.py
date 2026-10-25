@@ -227,7 +227,8 @@ class GuideLanguageRouteTests(unittest.TestCase):
         for lang in ("th", "no", "en"):
             with self.subTest(lang=lang):
                 html = build_landing_page("", "", "", lang=lang, campaign="free30")
-                self.assertGreaterEqual(html.count(f'href="/{lang}/app?campaign=free30"'), 3)
+                self.assertGreaterEqual(html.count(f'href="/{lang}/app?campaign=free30"'), 4)
+                self.assertNotIn(f'href="/{lang}/app"', html)
 
     def test_regular_landing_app_links_do_not_add_campaign(self):
         html = build_landing_page("", "", "", lang="no")
