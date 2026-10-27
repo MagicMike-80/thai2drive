@@ -1113,15 +1113,7 @@ def _hero_html(lang: str = "th", app_query: str = "") -> str:
           </div>
         </div>
 
-        <!-- Social Proof Bar -->
-        <div class="hero-social-proof">
-          <img src="/api/assets/student-avatars.png" alt="Elever" class="student-avatar-img" />
-          <span class="student-proof-text">
-            <span data-lang="th">นักเรียนไทยกว่า 2,400+ คนในนอร์เวย์ไว้วางใจ 🇳🇴</span>
-            <span data-lang="no">Trusted by 2,400+ thai students in Norway 🇳🇴</span>
-            <span data-lang="en">Trusted by 2,400+ thai students in Norway 🇳🇴</span>
-          </span>
-        </div>
+
       </div>
 
       <!-- HERO RIGHT COLUMN (Spacer for background visual) -->
