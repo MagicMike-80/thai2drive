@@ -140,26 +140,26 @@ a:hover { text-decoration: underline; }
 .hero-section {
   position: relative;
   width: 100%;
-  min-height: 90vh;
+  min-height: 88vh;
   background-color: #07070A;
   background-image: url('assets/hero-michael-sunset.webp');
   background-size: cover;
-  background-position: 65% 0%;
+  background-position: right top;
   background-repeat: no-repeat;
   display: flex;
   align-items: center;
   overflow: hidden;
-  padding: 40px 0 60px;
+  padding: 30px 0 50px;
 }
 @media (min-width: 768px) {
   .hero-section {
-    background-position: 60% 0%;
+    background-position: right top;
   }
 }
 @media (min-width: 1024px) {
   .hero-section {
-    background-position: 65% 0%;
-    min-height: 88vh;
+    background-position: right top;
+    min-height: 86vh;
   }
 }
 .hero-overlay {
@@ -186,8 +186,9 @@ a:hover { text-decoration: underline; }
   position: relative;
   z-index: 10;
   width: 100%;
-  max-width: 1440px;
+  max-width: 1680px;
   margin: 0 auto;
+  padding: 0 40px;
   display: grid;
   grid-template-columns: 1fr;
   align-items: center;
@@ -195,17 +196,23 @@ a:hover { text-decoration: underline; }
 }
 @media (min-width: 1024px) {
   .hero-wrap {
-    grid-template-columns: 560px 1fr;
+    grid-template-columns: min(450px, 32vw) 1fr;
     gap: 48px;
+    padding: 0 60px;
   }
 }
 
 /* Left Hero */
 .hero-left {
-  max-width: 490px;
+  max-width: min(440px, 32vw);
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 16px;
+}
+@media (max-width: 1023px) {
+  .hero-left {
+    max-width: 100%;
+  }
 }
 
 .hero-badge-pill {

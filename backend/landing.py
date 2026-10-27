@@ -195,24 +195,24 @@ html.landing-onboard-active .onboard-arrow{display:block;animation:landingArrowB
   position: relative;
   overflow: hidden;
   width: 100%;
-  min-height: 90vh;
+  min-height: 88vh;
   background-color: #07070A;
   background-image: url('/api/assets/hero-michael-sunset.webp');
   background-size: cover;
-  background-position: 65% 0%;
+  background-position: right top;
   background-repeat: no-repeat;
   display: flex;
   align-items: center;
 }
 @media (min-width: 768px) {
   .hero-wrap {
-    background-position: 60% 0%;
+    background-position: right top;
   }
 }
 @media (min-width: 1024px) {
   .hero-wrap {
-    background-position: 65% 0%;
-    min-height: 88vh;
+    background-position: right top;
+    min-height: 86vh;
   }
 }
 .hero-social-proof {
@@ -279,13 +279,13 @@ html.landing-onboard-active .onboard-arrow{display:block;animation:landingArrowB
   position: relative;
   z-index: 10;
   width: 100%;
-  max-width: 1440px;
+  max-width: 1680px;
   margin: 0 auto;
-  padding: 40px 24px 100px;
+  padding: 40px 32px 80px;
 }
 @media (min-width: 1024px) {
   .hero-container {
-    padding: 60px 48px 60px;
+    padding: 50px 60px 50px;
   }
 }
 .hero-flex {
@@ -296,12 +296,12 @@ html.landing-onboard-active .onboard-arrow{display:block;animation:landingArrowB
 }
 @media (min-width: 1024px) {
   .hero-flex {
-    grid-template-columns: 560px 1fr;
+    grid-template-columns: min(450px, 32vw) 1fr;
     gap: 48px;
   }
 }
 .hero-left {
-  max-width: 560px;
+  max-width: min(440px, 32vw);
   text-align: left;
 }
 .hero-eyebrow {
@@ -1124,37 +1124,8 @@ def _hero_html(lang: str = "th", app_query: str = "") -> str:
         </div>
       </div>
 
-      <div class="hero-right">
-        <!-- Live App Badge -->
-        <div class="hero-live-badge">
-          <span class="hero-live-dot"></span>
-          <span>Nett-App</span>
-          <span class="hero-trust-sep">•</span>
-          <span class="hero-live-tag">LIVE</span>
-        </div>
-
-        <!-- Floating Teacher Card -->
-        <div class="teacher-profile-card">
-          <div class="teacher-avatar-wrap">
-            <img src="/api/assets/michael-avatar.png" alt="Michael S." onerror="this.src='/api/assets/hero-michael-sunset.webp'"/>
-          </div>
-          <div class="teacher-text-col">
-            <span class="teacher-name-title">
-              <span data-lang="th">ครูไมเคิล ครูสอนขับรถ</span>
-              <span data-lang="no">Michael S. Trafikklærer</span>
-              <span data-lang="en">Michael S. Driving Instructor</span>
-            </span>
-            <span class="teacher-sub-title">
-              <span data-lang="th">ประสบการณ์ 16 ปีในออสโล • <span class="teacher-online-highlight">ออนไลน์ตอนนี้</span></span>
-              <span data-lang="no">16 års erfaring i Oslo • <span class="teacher-online-highlight">Online nå</span></span>
-              <span data-lang="en">16 yrs experience in Oslo • <span class="teacher-online-highlight">Online now</span></span>
-            </span>
-          </div>
-          <a href="/{lang}/app{app_query}" class="teacher-arrow-btn" aria-label="Gå til Michael">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
-          </a>
-        </div>
-      </div>
+      <!-- HERO RIGHT COLUMN (Spacer for background visual) -->
+      <div class="hero-right"></div>
     </div>
   </div>
 </section>
