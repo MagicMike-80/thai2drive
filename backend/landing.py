@@ -190,374 +190,363 @@ html.landing-onboard-active .onboard-arrow{display:block;animation:landingArrowB
   font-style: italic !important;
 }
 
-/* Hero Section */
+/* Hero Section - Exact Approved Layout */
 .hero-wrap {
   position: relative;
   overflow: hidden;
-  padding: 40px 0 60px;
+  width: 100%;
+  min-height: 92vh;
+  background-color: #07070A;
+  background-image: url('/api/assets/hero-michael-sunset.webp');
+  background-size: cover;
+  background-position: 62% 18%;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+}
+@media (min-width: 768px) {
+  .hero-wrap {
+    background-position: 50% 22%;
+  }
+}
+@media (min-width: 1024px) {
+  .hero-wrap {
+    background-position: 55% 28%;
+    min-height: 88vh;
+  }
+}
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background: linear-gradient(to right, #07070A 0%, rgba(7, 7, 10, 0.75) 45%, rgba(7, 7, 10, 0.15) 75%, transparent 100%);
+}
+@media (min-width: 1024px) {
+  .hero-overlay {
+    background: linear-gradient(to right, #07070A 0%, rgba(7, 7, 10, 0.92) 38%, rgba(7, 7, 10, 0.55) 55%, transparent 80%);
+  }
+}
+.hero-overlay-top-bottom {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background: linear-gradient(to bottom, rgba(7, 7, 10, 0.6) 0%, transparent 25%, transparent 75%, #07070A 100%);
 }
 .hero-container {
-  max-width: 1240px;
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 1440px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 40px 24px 100px;
+}
+@media (min-width: 1024px) {
+  .hero-container {
+    padding: 60px 48px 60px;
+  }
 }
 .hero-flex {
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: 1fr;
   align-items: center;
-  justify-content: space-between;
-  gap: 48px;
+  gap: 32px;
 }
-@media (max-width: 960px) {
+@media (min-width: 1024px) {
   .hero-flex {
-    flex-direction: column;
-    text-align: center;
-    gap: 36px;
+    grid-template-columns: 560px 1fr;
+    gap: 48px;
   }
 }
 .hero-left {
-  flex: 1 1 54%;
-  max-width: 620px;
+  max-width: 560px;
   text-align: left;
 }
-@media (max-width: 960px) {
-  .hero-left {
-    max-width: 100%;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-}
-.hero-right {
-  flex: 1 1 46%;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 540px;
-}
-@media (max-width: 960px) {
-  .hero-right {
-    min-height: 500px;
-    width: 100%;
-  }
-}
-
-/* Eyebrow badge */
 .hero-eyebrow {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  background: #1A2332;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 9999px;
-  padding: 8px 18px;
-  font-size: 13px;
+  padding: 6px 14px;
+  font-size: 12px;
   font-weight: 500;
-  color: #CBD5E1;
+  letter-spacing: 0.01em;
+  color: rgba(255, 255, 255, 0.85);
   margin-bottom: 20px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 .eyebrow-pulse {
   width: 8px;
   height: 8px;
-  background: #FF8C42;
   border-radius: 50%;
-  box-shadow: 0 0 10px rgba(255, 140, 66, 0.85);
+  background: #FF5C1A;
+  box-shadow: 0 0 10px rgba(255, 92, 26, 0.8);
   animation: pulseDot 2s infinite ease-in-out;
 }
 @keyframes pulseDot {
   0%, 100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.45; transform: scale(0.85); }
 }
-
-/* Hero Typography */
+.hero-left h1, .hero-h1 {
+  font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 900;
+  line-height: 0.90;
+  letter-spacing: -0.04em;
+  font-size: clamp(38px, 5.5vw, 62px);
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.6);
+  margin: 0 0 18px;
+}
 .hero-h1-white {
-  font-size: clamp(38px, 5.5vw, 60px);
-  font-weight: 800;
-  line-height: 1.0;
-  letter-spacing: -0.025em;
   color: #FFFFFF;
-  margin: 0;
+  display: block;
 }
 .hero-h2-orange {
-  font-size: clamp(38px, 5.5vw, 62px);
-  line-height: 1.05;
-  letter-spacing: -0.01em;
-  color: #FF8C42;
-  margin: 4px 0 20px;
+  color: #FF6A2E;
+  display: block;
+  font-weight: 900;
 }
 .hero-subtext {
-  font-size: clamp(16px, 2vw, 18px);
-  line-height: 1.6;
-  color: #94A3B8;
-  max-width: 520px;
-  margin: 0 0 28px;
-  font-weight: 450;
+  font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: clamp(14px, 1.8vw, 15px);
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.7);
+  max-width: 500px;
+  margin: 0 0 24px;
+  font-weight: 400;
 }
-
-/* Action Buttons */
 .hero-btn-row {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   flex-wrap: wrap;
-  margin-bottom: 24px;
-}
-@media (max-width: 960px) {
-  .hero-btn-row {
-    justify-content: center;
-  }
+  margin-bottom: 20px;
 }
 .btn-primary-orange {
-  height: 48px;
+  height: 44px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   border-radius: 9999px;
-  background: #FF8C42;
+  background: #FF5C1A;
   color: #FFFFFF !important;
-  font-weight: 700;
-  font-size: 16px;
-  padding: 0 28px;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 0 24px;
   text-decoration: none;
-  box-shadow: 0 8px 24px rgba(255, 140, 66, 0.35);
+  box-shadow: 0 8px 24px rgba(255, 92, 26, 0.35);
   transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
   border: none;
   cursor: pointer;
 }
 .btn-primary-orange:hover {
-  background: #FF7A24;
-  transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(255, 140, 66, 0.45);
+  background: #FF6E2F;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 28px rgba(255, 92, 26, 0.45);
 }
 .btn-secondary-glass {
-  height: 48px;
+  height: 44px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   border-radius: 9999px;
-  background: rgba(30, 41, 59, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   color: #FFFFFF !important;
-  font-weight: 600;
-  font-size: 15px;
+  font-weight: 500;
+  font-size: 13px;
   padding: 0 24px;
   text-decoration: none;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  transition: transform 0.15s ease, background 0.15s ease;
+  transition: background 0.15s ease, transform 0.15s ease;
   cursor: pointer;
 }
 .btn-secondary-glass:hover {
-  background: rgba(37, 52, 78, 0.9);
-  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-1px);
 }
-
-/* Feature Chips */
 .hero-chips-row {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   flex-wrap: wrap;
-}
-@media (max-width: 960px) {
-  .hero-chips-row {
-    justify-content: center;
-  }
+  margin-bottom: 22px;
 }
 .hero-chip {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  background: #151E2F;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 9999px;
-  padding: 8px 16px;
-  font-size: 13px;
+  padding: 5px 12px;
+  font-size: 11px;
   font-weight: 500;
-  color: #CBD5E1;
+  color: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
 }
-.hero-chip-check {
-  color: #22C55E;
+.hero-chip-bullet {
+  color: #FF6A2E;
   font-weight: bold;
 }
-
-/* Michael Visual Showcase */
-.showcase-glow {
-  position: absolute;
-  width: 480px;
-  height: 480px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 140, 66, 0.22) 0%, rgba(255, 140, 66, 0.08) 50%, transparent 70%);
-  filter: blur(45px);
-  pointer-events: none;
-  z-index: 1;
-}
-.michael-img-card {
-  position: relative;
-  z-index: 10;
-  width: 100%;
-  max-width: 420px;
-  aspect-ratio: 4/5;
-  border-radius: 28px;
-  overflow: hidden;
-  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.65), 0 0 40px rgba(255, 140, 66, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: #0B1220;
-}
-.michael-img-card img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 8%;
-  display: block;
-}
-.michael-fade-overlay {
-  position: absolute;
-  inset-inline: 0;
-  bottom: 0;
-  height: 25%;
-  background: linear-gradient(to top, #0B1220 0%, rgba(11, 18, 32, 0.7) 45%, transparent 100%);
-  pointer-events: none;
-}
-
-/* Floating Badges */
-.badge-bubble {
-  position: absolute;
-  z-index: 25;
-  border-radius: 9999px;
-  padding: 7px 15px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+.hero-trust-line {
   display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.45);
+}
+.hero-trust-check {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  color: #FFFFFF;
+}
+.hero-trust-sep {
+  opacity: 0.3;
+}
+.hero-trust-extra {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* Hero Right Column */
+.hero-right {
+  position: relative;
+  min-height: 440px;
+  pointer-events: none;
+}
+@media (min-width: 1024px) {
+  .hero-right {
+    min-height: 600px;
+  }
+}
+
+/* Badge LIVE on right side */
+.hero-live-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 20;
+  display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-weight: 600;
-  line-height: 1;
-  white-space: nowrap;
-}
-.badge-bubble-top-r {
-  top: 12px;
-  right: 8px;
-  background: #FFFFFF;
-  color: #0B1220;
-  font-size: 12px;
-}
-.badge-bubble-top-l {
-  top: 60px;
-  left: 6px;
-  background: #151E2F;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #FFFFFF;
-  font-size: 13px;
-}
-.badge-bubble-mid-l {
-  top: 130px;
-  left: -8px;
-  background: #E0F2FE;
-  color: #0B1220;
-  font-size: 14px;
-  font-weight: 500;
-}
-.badge-bubble-mid-r {
-  top: 150px;
-  right: -6px;
-  background: #FFFFFF;
-  color: #0B1220;
-  font-size: 13px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #0F172A;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  font-size: 11px;
   font-weight: 700;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  pointer-events: auto;
 }
-.badge-bubble-low-l {
-  bottom: 110px;
-  left: 4px;
-  background: #FCE7F3;
-  color: #831843;
-  font-size: 13px;
-}
-.badge-bubble-low-r {
-  bottom: 100px;
-  right: 4px;
-  background: #FFF1E6;
-  color: #7C3A1A;
-  font-size: 13px;
-}
-.badge-bubble-center-low {
-  bottom: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #1A2332;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #FFFFFF;
-  font-size: 12px;
-}
-
-/* Teacher Card Bottom */
-.teacher-profile-card {
-  position: absolute;
-  bottom: -16px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 30;
-  width: 90%;
-  max-width: 320px;
-  background: #FFFFFF;
-  border-radius: 18px;
-  padding: 12px 16px;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.teacher-avatar-wrap {
-  position: relative;
-  flex-shrink: 0;
-  width: 44px;
-  height: 44px;
-}
-.teacher-avatar-wrap img {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  object-fit: cover;
-  display: block;
-}
-.teacher-online-dot {
-  position: absolute;
-  bottom: -1px;
-  right: -1px;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: #22C55E;
-  border: 2px solid #FFFFFF;
-}
-.teacher-text-col {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.25;
-}
-.teacher-name-title {
-  font-size: 14px;
-  font-weight: 700;
-  color: #0B1220;
-}
-.teacher-sub-title {
-  font-size: 12px;
-  font-weight: 500;
-  color: #64748B;
-  margin-top: 2px;
-}
-.teacher-pulse-indicator {
-  margin-left: auto;
+.hero-live-dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
   background: #22C55E;
-  box-shadow: 0 0 8px rgba(34, 197, 94, 0.8);
-  animation: pulseDot 2s infinite ease-in-out;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.25);
+  animation: pulseDot 1.8s infinite ease-in-out;
+}
+.hero-live-tag {
+  color: #16A34A;
+  font-weight: 800;
+}
+
+/* Floating Teacher Profile Card (Lower Right) */
+.teacher-profile-card {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  z-index: 25;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: #FFFFFF;
+  border-radius: 9999px;
+  padding: 7px 8px 7px 8px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  max-width: 420px;
+  pointer-events: auto;
+}
+@media (max-width: 768px) {
+  .teacher-profile-card {
+    position: relative;
+    bottom: auto;
+    right: auto;
+    margin: 20px auto 0;
+  }
+}
+.teacher-avatar-wrap {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.teacher-avatar-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  display: block;
+}
+.teacher-text-col {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+  min-width: 0;
+}
+.teacher-name-title {
+  font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: #111827;
+  white-space: nowrap;
+}
+.teacher-sub-title {
+  font-size: 10px;
+  font-weight: 500;
+  color: #6B7280;
+  white-space: nowrap;
+}
+.teacher-online-highlight {
+  color: #16A34A;
+  font-weight: 600;
+}
+.teacher-arrow-btn {
+  margin-left: 8px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #111827;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.teacher-arrow-btn:hover {
+  background: #000000;
 }
 
 /* STATS */
@@ -996,6 +985,8 @@ def _footer_html(lang: str = "th") -> str:
 def _hero_html(lang: str = "th", app_query: str = "") -> str:
     return f"""
 <section class="hero-wrap">
+  <div class="hero-overlay"></div>
+  <div class="hero-overlay-top-bottom"></div>
   <div class="hero-container">
     <div class="hero-flex">
       <div class="hero-left">
@@ -1007,14 +998,14 @@ def _hero_html(lang: str = "th", app_query: str = "") -> str:
           <span data-lang="en">Created by licensed driving instructor — explained in Thai</span>
         </div>
 
-        <!-- H1 Heading: White + Orange Serif Italic -->
+        <!-- H1 Heading: White + Orange Heavy Sans -->
         <h1>
           <span class="hero-h1-white block">
             <span data-lang="th">ทฤษฎีภาษาไทย</span>
             <span data-lang="no">Teori på thai.</span>
             <span data-lang="en">Theory in Thai.</span>
           </span>
-          <span class="hero-h2-orange serif-italic block">
+          <span class="hero-h2-orange block">
             <span data-lang="th">ขับขี่ปลอดภัยบนถนนนอร์เวย์</span>
             <span data-lang="no">Trygg på norsk vei.</span>
             <span data-lang="en">Safe on Norwegian roads.</span>
@@ -1022,9 +1013,9 @@ def _hero_html(lang: str = "th", app_query: str = "") -> str:
         </h1>
 
         <p class="hero-subtext">
-          <span data-lang="th">ทฤษฎีใบขับขี่นอร์เวย์อธิบายด้วยภาษาไทย เข้าใจง่าย ไม่ต้องเดา เตรียมพร้อมด้วยเนื้อหาหลักสูตร Klasse B ทีละขั้นตอน</span>
-          <span data-lang="no">Norsk førerkortteori forklart på ditt eget morsmål. Ingen vanskelige ord, ingen gjetning – bare ren forståelse. Forbered deg med ekte pensum for Klasse B.</span>
-          <span data-lang="en">Norwegian driving theory explained in your native tongue. No confusing jargon, no guessing – clear understanding for Class B, step by step.</span>
+          <span data-lang="th">ผ่านการสอบทฤษฎีได้เร็วขึ้น ครูไมเคิลอธิบายทุกอย่างเป็นภาษาไทย — สถานการณ์จริงบนถนนนอร์เวย์ ข้อสอบกว่า 1000+ ข้อ และดูแลเป็นรายบุคคล</span>
+          <span data-lang="no">Bestå teoriprøven raskere. Michael forklarer alt på thai – med ekte norske veisituasjoner, 1000+ spørsmål og personlig oppfølging.</span>
+          <span data-lang="en">Pass the theory test faster. Michael explains everything in Thai — real Norwegian road scenarios, 1000+ questions, and personal coaching.</span>
         </p>
 
         <div class="hero-btn-row">
@@ -1040,7 +1031,6 @@ def _hero_html(lang: str = "th", app_query: str = "") -> str:
             <span data-lang="en">Try free test →</span>
           </a>
           <a href="/{lang}/app{app_query}" class="btn-secondary-glass">
-            <span>○</span>
             <span data-lang="th">เปิดเว็บแอป</span>
             <span data-lang="no">Åpne web-appen</span>
             <span data-lang="en">Open web app</span>
@@ -1049,87 +1039,74 @@ def _hero_html(lang: str = "th", app_query: str = "") -> str:
 
         <div class="hero-chips-row">
           <div class="hero-chip">
-            <span class="hero-chip-check">✓</span>
+            <span class="hero-chip-bullet">•</span>
             <span data-lang="th">มากกว่า 1000 ข้อ</span>
             <span data-lang="no">1000+ spørsmål</span>
             <span data-lang="en">1000+ questions</span>
           </div>
           <div class="hero-chip">
-            <span class="hero-chip-check">✓</span>
-            <span data-lang="th">คำอธิบายภาษาไทย</span>
-            <span data-lang="no">Forklaringer på thai</span>
-            <span data-lang="en">Explanations in Thai</span>
+            <span class="hero-chip-bullet">•</span>
+            <span data-lang="th">วิดีโอภาษาไทย</span>
+            <span data-lang="no">Video på thai</span>
+            <span data-lang="en">Video in Thai</span>
           </div>
           <div class="hero-chip">
-            <span class="hero-chip-check">✓</span>
-            <span data-lang="th">Klasse B • ประสบการณ์ 16 ปี</span>
-            <span data-lang="no">Klasse B • 16 års erfaring</span>
-            <span data-lang="en">Class B • 16 yrs experience</span>
+            <span class="hero-chip-bullet">•</span>
+            <span data-lang="th">ครูสอนได้รับอนุญาต</span>
+            <span data-lang="no">Godkjent lærer</span>
+            <span data-lang="en">Certified teacher</span>
           </div>
+          <div class="hero-chip">
+            <span class="hero-chip-bullet">•</span>
+            <span data-lang="th">เว็บแอป</span>
+            <span data-lang="no">Nett-App</span>
+            <span data-lang="en">Web App</span>
+          </div>
+        </div>
+
+        <div class="hero-trust-line">
+          <span class="hero-trust-check">✓</span>
+          <span data-lang="th">อิงตามหลักสูตรของ Statens vegvesen</span>
+          <span data-lang="no">Basert på Statens vegvesens læreplan</span>
+          <span data-lang="en">Based on Statens vegvesen curriculum</span>
+          <span class="hero-trust-sep">•</span>
+          <span class="hero-trust-extra">
+            <span data-lang="th">เว็บแอป + วิดีโอ + การดูแล</span>
+            <span data-lang="no">Nett-App + Video + Oppfølging</span>
+            <span data-lang="en">Web App + Video + Coaching</span>
+          </span>
         </div>
       </div>
 
       <div class="hero-right">
-        <div class="showcase-glow"></div>
-        
-        <div class="michael-img-card">
-          <img src="/api/assets/michael-hero.webp" alt="Trafikklærer Michael" />
-          <div class="michael-fade-overlay"></div>
+        <!-- Live App Badge -->
+        <div class="hero-live-badge">
+          <span class="hero-live-dot"></span>
+          <span>Nett-App</span>
+          <span class="hero-trust-sep">•</span>
+          <span class="hero-live-tag">LIVE</span>
         </div>
 
-        <!-- Floating Badges -->
-        <div class="badge-bubble badge-bubble-top-r">
-          <span style="width:8px;height:8px;border-radius:50%;background:#22C55E;box-shadow:0 0 8px rgba(34,197,94,0.8)"></span>
-          <span data-lang="th">เว็บแอป</span>
-          <span data-lang="no">Nett-App</span>
-          <span data-lang="en">Web App</span>
-          <span style="background:#22C55E;color:#FFFFFF;border-radius:9999px;padding:2px 6px;font-size:10px;font-weight:800;margin-left:2px">LIVE</span>
-        </div>
-
-        <div class="badge-bubble badge-bubble-top-l">
-          <span>Web App →</span>
-        </div>
-
-        <div class="badge-bubble badge-bubble-mid-l">
-          <span>เพื่อง่าย</span>
-        </div>
-
-        <div class="badge-bubble badge-bubble-mid-r">
-          <span>Web App</span>
-        </div>
-
-        <div class="badge-bubble badge-bubble-low-l">
-          <span data-lang="th">เว็บแอป</span>
-          <span data-lang="no">Nett-App</span>
-          <span data-lang="en">Web App</span>
-        </div>
-
-        <div class="badge-bubble badge-bubble-low-r">
-          <span>เพื่อไทย • for enkelhet</span>
-        </div>
-
-        <div class="badge-bubble badge-bubble-center-low">
-          <span>🎓</span>
-          <span data-lang="th">Klasse B • รถยนต์ส่วนบุคคล</span>
-          <span data-lang="no">Klasse B • Personbil</span>
-          <span data-lang="en">Class B • Passenger car</span>
-        </div>
-
-        <!-- Bottom Teacher Card -->
+        <!-- Floating Teacher Card -->
         <div class="teacher-profile-card">
           <div class="teacher-avatar-wrap">
-            <img src="/api/assets/michael-avatar.png" alt="Michael" />
-            <span class="teacher-online-dot"></span>
+            <img src="/api/assets/michael-avatar.png" alt="Michael S." onerror="this.src='/api/assets/hero-michael-sunset.webp'"/>
           </div>
           <div class="teacher-text-col">
-            <span class="teacher-name-title">Michael S. Trafikklærer</span>
+            <span class="teacher-name-title">
+              <span data-lang="th">ครูไมเคิล ครูสอนขับรถ</span>
+              <span data-lang="no">Michael S. Trafikklærer</span>
+              <span data-lang="en">Michael S. Driving Instructor</span>
+            </span>
             <span class="teacher-sub-title">
-              <span data-lang="th">ประสบการณ์ 16 ปี • ออนไลน์</span>
-              <span data-lang="no">16 års erfaring i Oslo • Online nå</span>
-              <span data-lang="en">16 yrs experience in Oslo • Online</span>
+              <span data-lang="th">ประสบการณ์ 16 ปีในออสโล • <span class="teacher-online-highlight">ออนไลน์ตอนนี้</span></span>
+              <span data-lang="no">16 års erfaring i Oslo • <span class="teacher-online-highlight">Online nå</span></span>
+              <span data-lang="en">16 yrs experience in Oslo • <span class="teacher-online-highlight">Online now</span></span>
             </span>
           </div>
-          <span class="teacher-pulse-indicator"></span>
+          <a href="/{lang}/app{app_query}" class="teacher-arrow-btn" aria-label="Gå til Michael">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+          </a>
         </div>
       </div>
     </div>
@@ -2075,7 +2052,7 @@ def build_landing_page(chat_css: str, chat_widget_html: str, chat_js: str, lang:
 <head>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800;900&family=Noto+Sans+Thai:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>{meta['title']}</title>

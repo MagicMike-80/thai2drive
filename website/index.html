@@ -19,7 +19,7 @@
 <link rel="apple-touch-icon" href="assets/t2d-icon.png"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800;900&family=Noto+Sans+Thai:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="styles.css?v=2.0"/>
 </head>
 <body>
@@ -107,9 +107,10 @@
 <main>
 
   <!-- HERO SECTION -->
+  <!-- HERO SECTION - Exact Approved Layout -->
   <section class="hero-section">
-    <div class="hero-grid-bg"></div>
-    <div class="hero-glow-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-overlay-top-bottom"></div>
 
     <div class="container hero-wrap">
       
@@ -119,42 +120,39 @@
         <!-- BADGE PILL -->
         <div class="hero-badge-pill">
           <span class="pulse-dot"></span>
-          <span data-lang="no">Laget av godkjent trafikklærer — forklart på thai, godkjent på norsk</span>
-          <span data-lang="th">สร้างโดยครูสอนขับรถที่ได้รับใบอนุญาต — อธิบายภาษาไทย ได้มาตรฐานนอร์เวย์</span>
-          <span data-lang="en">Built by certified driving instructor — explained in Thai, approved in Norwegian</span>
+          <span data-lang="no">Laget av godkjent trafikklærer — forklart på thai</span>
+          <span data-lang="th">สร้างโดยครูสอนขับรถที่ได้รับใบอนุญาต — อธิบายเป็นภาษาไทย</span>
+          <span data-lang="en">Created by licensed driving instructor — explained in Thai</span>
         </div>
 
         <!-- MAIN TITLE -->
         <div class="hero-title-group">
           <h1>
-            <span data-lang="no">Teori på thai.</span>
-            <span data-lang="th">ทฤษฎีภาษาไทย</span>
-            <span data-lang="en">Theory in Thai.</span>
+            <span class="hero-h1-white" data-lang="no">Teori på thai.</span>
+            <span class="hero-h1-white" data-lang="th">ทฤษฎีภาษาไทย</span>
+            <span class="hero-h1-white" data-lang="en">Theory in Thai.</span>
+            <span class="hero-h2-orange" data-lang="no">Trygg på norsk vei.</span>
+            <span class="hero-h2-orange" data-lang="th">ขับขี่ปลอดภัยบนถนนนอร์เวย์</span>
+            <span class="hero-h2-orange" data-lang="en">Safe on Norwegian roads.</span>
           </h1>
-          <div class="hero-italic-sub">
-            <span data-lang="no">Trygg på norsk vei.</span>
-            <span data-lang="th">ขับขี่ปลอดภัยบนถนนนอร์เวย์</span>
-            <span data-lang="en">Safe on Norwegian roads.</span>
-          </div>
         </div>
 
         <!-- INGRESS / LEDE -->
         <p class="hero-lede">
-          <span data-lang="no">Norsk teoriprøve forklart på ditt eget morsmål. Ingen vanskelige ord, ingen gjetning – bare ren forståelse for trygg kjøring i Norge.</span>
-          <span data-lang="th">ข้อสอบใบขับขี่นอร์เวย์อธิบายเป็นภาษาไทย เข้าใจกฎจราจรได้ง่าย ไม่ต้องเดา เข้าใจอย่างแท้จริงเพื่อการขับขี่ที่ปลอดภัยในนอร์เวย์</span>
-          <span data-lang="en">The Norwegian theory test explained in Thai. No confusing jargon, no guessing — just clear understanding for safe driving in Norway.</span>
+          <span data-lang="no">Bestå teoriprøven raskere. Michael forklarer alt på thai – med ekte norske veisituasjoner, 1000+ spørsmål og personlig oppfølging.</span>
+          <span data-lang="th">ผ่านการสอบทฤษฎีได้เร็วขึ้น ครูไมเคิลอธิบายทุกอย่างเป็นภาษาไทย — สถานการณ์จริงบนถนนนอร์เวย์ ข้อสอบกว่า 1000+ ข้อ และดูแลเป็นรายบุคคล</span>
+          <span data-lang="en">Pass the theory test faster. Michael explains everything in Thai — real Norwegian road scenarios, 1000+ questions, and personal coaching.</span>
         </p>
 
         <!-- CTA BUTTONS -->
         <div class="hero-cta-group">
           <a class="btn-cta-main" href="https://thai2drive.no" id="play-store-link">
-            <span data-lang="no">Prøv gratis →</span>
-            <span data-lang="th">ทดลองใช้ฟรี →</span>
-            <span data-lang="en">Try for free →</span>
+            <span data-lang="no">Prøv gratis nå →</span>
+            <span data-lang="th">ทดลองทำข้อสอบฟรี →</span>
+            <span data-lang="en">Try free test →</span>
           </a>
 
           <a class="btn-cta-ghost" href="https://thai2drive.no">
-            <span class="circle-bullet">○</span>
             <span data-lang="no">Åpne web-appen</span>
             <span data-lang="th">เปิดเว็บแอป</span>
             <span data-lang="en">Open web app</span>
@@ -164,125 +162,80 @@
         <!-- VALUE BADGES PILLS -->
         <div class="hero-pills">
           <div class="val-pill">
-            <span class="check">✓</span>
+            <span class="hero-chip-bullet">•</span>
             <span data-lang="no">1000+ spørsmål</span>
-            <span data-lang="th">กว่า 1,000 ข้อสอบ</span>
+            <span data-lang="th">มากกว่า 1000 ข้อ</span>
             <span data-lang="en">1000+ questions</span>
           </div>
           <div class="val-pill">
-            <span class="check">✓</span>
-            <span data-lang="no">Forklaringer på thai</span>
-            <span data-lang="th">คำอธิบายภาษาไทย</span>
-            <span data-lang="en">Explanations in Thai</span>
+            <span class="hero-chip-bullet">•</span>
+            <span data-lang="no">Video på thai</span>
+            <span data-lang="th">วิดีโอภาษาไทย</span>
+            <span data-lang="en">Video in Thai</span>
           </div>
           <div class="val-pill">
-            <span class="check">✓</span>
-            <span data-lang="no">Laget av trafikklærer</span>
-            <span data-lang="th">สร้างโดยครูสอนขับรถ</span>
-            <span data-lang="en">Built by driving instructor</span>
+            <span class="hero-chip-bullet">•</span>
+            <span data-lang="no">Godkjent lærer</span>
+            <span data-lang="th">ครูสอนได้รับอนุญาต</span>
+            <span data-lang="en">Certified teacher</span>
+          </div>
+          <div class="val-pill">
+            <span class="hero-chip-bullet">•</span>
+            <span data-lang="no">Nett-App</span>
+            <span data-lang="th">เว็บแอป</span>
+            <span data-lang="en">Web App</span>
           </div>
         </div>
 
-        <!-- TRUST & INTEGRITY BAR (100% SANNE PÅSTANDER) -->
+        <!-- TRUST & INTEGRITY BAR -->
         <div class="hero-trust-bar">
-          <div class="trust-star-item">
-            <div class="avatar-stack">
-              <img src="assets/michael-avatar.png" alt="Instruktør" class="av"/>
-              <div class="av">T2D</div>
-              <div class="av">NO</div>
-            </div>
-            <div class="trust-text">
-              <span class="trust-star">★</span>
-              <span data-lang="no">Trygg og pedagogisk veiledning</span>
-              <span data-lang="th">แนะนำเข้าใจง่าย เป็นกันเอง</span>
-              <span data-lang="en">Supportive & pedagogical guidance</span>
-            </div>
-          </div>
-
-          <div class="trust-sep"></div>
-
-          <div class="trust-gov-item">
-            <span class="norway-flag-mini">
-              <span style="position:absolute;left:32%;top:0;bottom:0;width:28%;background:#fff;"></span>
-              <span style="position:absolute;left:36%;top:0;bottom:0;width:12%;background:#002868;"></span>
-              <span style="position:absolute;top:36%;left:0;right:0;height:28%;background:#fff;"></span>
-              <span style="position:absolute;top:40%;left:0;right:0;height:12%;background:#002868;"></span>
+          <div class="hero-trust-line">
+            <span class="hero-trust-check">✓</span>
+            <span data-lang="no">Basert på Statens vegvesens læreplan</span>
+            <span data-lang="th">อิงตามหลักสูตรของ Statens vegvesen</span>
+            <span data-lang="en">Based on Statens vegvesen curriculum</span>
+            <span class="hero-trust-sep">•</span>
+            <span class="hero-trust-extra">
+              <span data-lang="no">Nett-App + Video + Oppfølging</span>
+              <span data-lang="th">เว็บแอป + วิดีโอ + การดูแล</span>
+              <span data-lang="en">Web App + Video + Coaching</span>
             </span>
-            <span data-lang="no">Offisielt pensum for Klasse B</span>
-            <span data-lang="th">หลักสูตรมาตรฐานสำหรับ Klasse B</span>
-            <span data-lang="en">Official Class B curriculum</span>
           </div>
         </div>
 
       </div>
 
-      <!-- HERO RIGHT (MICHAEL SHOWCASE) -->
+      <!-- HERO RIGHT (MICHAEL SHOWCASE & TEACHER CARD) -->
       <div class="hero-right">
-        
-        <!-- AMBIENT ORANGE GLOW -->
-        <div class="michael-glow"></div>
-
-        <!-- PORTRAIT CARD -->
-        <div class="michael-portrait-wrap">
-          <img src="assets/michael-hero.webp" alt="Michael S. Trafikklærer" class="michael-img"/>
-          <div class="michael-bottom-fade"></div>
-        </div>
-
-        <!-- FLOATING PILLS & BUBBLES -->
-        <div class="float-badge badge-live">
-          <span style="width:8px;height:8px;border-radius:50%;background:#22C55E;box-shadow:0 0 8px rgba(34,197,94,0.8);"></span>
+        <!-- Live App Badge -->
+        <div class="hero-live-badge">
+          <span class="hero-live-dot"></span>
           <span>Nett-App</span>
-          <span class="badge-live-tag">LIVE</span>
+          <span class="hero-trust-sep">•</span>
+          <span class="hero-live-tag">LIVE</span>
         </div>
 
-        <div class="float-badge badge-web-arrow">
-          <span>Web App →</span>
-        </div>
-
-        <div class="float-badge badge-th-easy">
-          <span>เพื่อง่าย</span>
-        </div>
-
-        <div class="float-badge badge-web-white">
-          <span>Web App</span>
-        </div>
-
-        <div class="float-badge badge-pink-app">
-          <span>Nett-App</span>
-        </div>
-
-        <div class="float-badge badge-peach-tag">
-          <span>เพื่อไทย • for enkelhet</span>
-        </div>
-
-        <div class="float-badge badge-class-b">
-          <span>🎓</span>
-          <span data-lang="no">Klasse B • Personbil</span>
-          <span data-lang="th">ใบขับขี่ Klasse B • รถยนต์</span>
-          <span data-lang="en">Class B • Passenger car</span>
-        </div>
-
-        <!-- TEACHER PROFILE CARD -->
-        <div class="teacher-card">
-          <div class="teacher-av-wrap">
-            <img src="assets/michael-avatar.png" alt="Michael" class="teacher-av"/>
-            <span class="online-dot"></span>
+        <!-- Floating Teacher Card -->
+        <div class="teacher-profile-card">
+          <div class="teacher-avatar-wrap">
+            <img src="assets/michael-avatar.png" alt="Michael S." onerror="this.src='assets/hero-michael-sunset.webp'"/>
           </div>
-          <div class="teacher-info">
-            <span class="teacher-name">
+          <div class="teacher-text-col">
+            <span class="teacher-name-title">
               <span data-lang="no">Michael S. Trafikklærer</span>
-              <span data-lang="th">ครูไมเคิล S. (Michael)</span>
+              <span data-lang="th">ครูไมเคิล ครูสอนขับรถ</span>
               <span data-lang="en">Michael S. Driving Instructor</span>
             </span>
-            <span class="teacher-sub">
-              <span data-lang="no">Trafikklærer i Oslo · 16 års erfaring</span>
-              <span data-lang="th">สอนในออสโลกว่า 16 ปี · ออนไลน์อยู่</span>
-              <span data-lang="en">Instructor in Oslo · 16 years experience</span>
+            <span class="teacher-sub-title">
+              <span data-lang="no">16 års erfaring i Oslo • <span class="teacher-online-highlight">Online nå</span></span>
+              <span data-lang="th">ประสบการณ์ 16 ปีในออสโล • <span class="teacher-online-highlight">ออนไลน์ตอนนี้</span></span>
+              <span data-lang="en">16 yrs experience in Oslo • <span class="teacher-online-highlight">Online now</span></span>
             </span>
           </div>
-          <div class="teacher-pulse-indicator"></div>
+          <a href="https://thai2drive.no" class="teacher-arrow-btn" aria-label="Gå til Michael">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+          </a>
         </div>
-
       </div>
 
     </div>
