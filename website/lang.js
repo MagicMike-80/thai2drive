@@ -7,14 +7,17 @@
     if (!['no', 'th', 'en'].includes(lang)) lang = DEFAULT;
     document.documentElement.lang = lang;
     try { localStorage.setItem(STORAGE_KEY, lang); } catch {}
-    document.querySelectorAll('.lang-switch button').forEach(btn => {
+    document.querySelectorAll('[data-set-lang]').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.setLang === lang);
     });
   }
 
-  // Wire up the language pills
-  document.querySelectorAll('.lang-switch button').forEach(btn => {
-    btn.addEventListener('click', () => setLang(btn.dataset.setLang));
+  // Wire up all language toggle buttons (pills and flag buttons)
+  document.querySelectorAll('[data-set-lang]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      setLang(btn.dataset.setLang);
+    });
   });
 
   // Initial language: saved > browser > default

@@ -182,6 +182,191 @@ html.landing-onboard-active .onboard-arrow{display:block;animation:landingArrowB
   pointer-events:none;z-index:-1;
 }
 .hero-icon{width:130px;height:130px;border-radius:32px;box-shadow:0 40px 100px rgba(0,0,0,.45);margin-bottom:28px}
+
+/* Hero showcase grid */
+.hero-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px 20px;
+}
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 48px;
+  align-items: center;
+}
+@media (max-width: 900px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+.hero-text {
+  text-align: left;
+}
+@media (max-width: 900px) {
+  .hero-text {
+    text-align: center;
+  }
+}
+.hero-showcase {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.hero-michael-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  aspect-ratio: 4/5;
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 153, 51, 0.35);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 40px rgba(255, 153, 51, 0.15);
+  background: radial-gradient(circle at 50% 30%, rgba(255, 153, 51, 0.12), transparent 70%), #0d1527;
+}
+.hero-michael-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+.hero-badge-top {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: rgba(13, 21, 39, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 153, 51, 0.4);
+  color: #FF9933;
+  padding: 6px 14px;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.hero-badge-live {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: rgba(13, 21, 39, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 209, 255, 0.4);
+  color: #00D1FF;
+  padding: 6px 14px;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+}
+.hero-badge-live .pulse-dot {
+  width: 8px;
+  height: 8px;
+  background: #00D1FF;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #00D1FF;
+  animation: pulseDot 2s infinite;
+}
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+.hero-teacher-card {
+  margin-top: -36px;
+  position: relative;
+  z-index: 2;
+  width: 90%;
+  max-width: 400px;
+  background: rgba(15, 23, 42, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+  padding: 16px 20px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 25px rgba(0, 209, 255, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.teacher-avatar-img {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 2px solid #FF9933;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.teacher-info {
+  flex: 1;
+  min-width: 0;
+}
+.teacher-name-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.teacher-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+.teacher-role {
+  font-size: 12px;
+  color: #94A3B8;
+  margin-top: 2px;
+}
+.teacher-stars {
+  color: #FFB800;
+  font-size: 12px;
+  display: flex;
+  gap: 2px;
+  margin-top: 4px;
+}
+.teacher-tag {
+  font-size: 11px;
+  color: #00D1FF;
+  font-weight: 600;
+}
+.hero-trust-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+}
+@media (max-width: 900px) {
+  .hero-trust-row {
+    justify-content: center;
+  }
+}
+.hero-trust-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 13px;
+  color: #CBD5E1;
+}
+.hero-trust-chip svg {
+  color: #00D1FF;
+  flex-shrink: 0;
+}
+
 .hero h1{
   font-size:clamp(48px,8vw,88px);font-weight:900;letter-spacing:-.03em;
   line-height:1.05;color:#fff;margin-bottom:22px;
@@ -649,89 +834,126 @@ def _footer_html(lang: str = "th") -> str:
 def _hero_html(lang: str = "th", app_query: str = "") -> str:
     return f"""
 <section class="hero">
-  <div class="container">
-    <img src="{ICON_URL}" alt="Thai2Drive" class="hero-icon"/>
+  <div class="container hero-container">
+    <div class="hero-grid">
+      <div class="hero-text">
+        <!-- Language switcher -->
+        <div class="lang-row landing-onboard-target landing-onboard-lang" role="group" aria-label="Language" style="margin-bottom:24px">
+          <span class="landing-onboard-label landing-onboard-label-lang">
+            <span data-lang="th">1. เลือกภาษา</span>
+            <span data-lang="no">1. Velg språk</span>
+            <span data-lang="en">1. Choose language</span>
+            <button class="landing-onboard-dismiss" type="button">×</button>
+          </span>
+          <svg class="onboard-arrow onboard-arrow-lang" viewBox="0 0 120 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M12 10 C 50 14, 76 36, 86 64" fill="none" stroke="#fff" stroke-width="16" stroke-linecap="round"/>
+            <path d="M99 104 L109 56 L62 73 Z" fill="#fff"/>
+          </svg>
+          <button class="lang-btn{' active' if lang == 'th' else ''}" data-set-lang="th" title="ภาษาไทย">
+            <span class="cflag"><svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg"><rect width="900" height="600" fill="#A51931"/><rect width="900" height="480" y="60" fill="#F4F5F8"/><rect width="900" height="320" y="140" fill="#241D4F"/></svg></span>
+          </button>
+          <button class="lang-btn{' active' if lang == 'no' else ''}" data-set-lang="no" title="Norsk">
+            <span class="cflag"><svg viewBox="0 0 22 16" xmlns="http://www.w3.org/2000/svg"><rect width="22" height="16" fill="#EF2B2D"/><rect x="6" width="4" height="16" fill="#fff"/><rect y="6" width="22" height="4" fill="#fff"/><rect x="7" width="2" height="16" fill="#002868"/><rect y="7" width="2" height="2" fill="#002868"/></svg></span>
+          </button>
+          <button class="lang-btn{' active' if lang == 'en' else ''}" data-set-lang="en" title="English">
+            <span class="cflag"><svg viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg"><rect width="60" height="30" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#C8102E" stroke-width="4"/><rect y="11" width="60" height="8" fill="#fff"/><rect x="26" width="8" height="30" fill="#fff"/><rect y="12" width="60" height="6" fill="#C8102E"/><rect x="27" width="6" height="30" fill="#C8102E"/></svg></span>
+          </button>
+        </div>
 
-    <!-- Language switcher — also in hero so it's instantly visible -->
-    <div class="lang-row landing-onboard-target landing-onboard-lang" role="group" aria-label="Language" style="justify-content:center;margin-bottom:20px">
-      <span class="landing-onboard-label landing-onboard-label-lang">
-        <span data-lang="th">1. เลือกภาษา</span>
-        <span data-lang="no">1. Velg språk</span>
-        <span data-lang="en">1. Choose language</span>
-        <button class="landing-onboard-dismiss" type="button">×</button>
-      </span>
-      <svg class="onboard-arrow onboard-arrow-lang" viewBox="0 0 120 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <path d="M12 10 C 50 14, 76 36, 86 64" fill="none" stroke="#fff" stroke-width="16" stroke-linecap="round"/>
-        <path d="M99 104 L109 56 L62 73 Z" fill="#fff"/>
-      </svg>
-      <button class="lang-btn{' active' if lang == 'th' else ''}" data-set-lang="th" title="ภาษาไทย">
-        <span class="cflag"><svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg"><rect width="900" height="600" fill="#A51931"/><rect width="900" height="480" y="60" fill="#F4F5F8"/><rect width="900" height="320" y="140" fill="#241D4F"/></svg></span>
-      </button>
-      <button class="lang-btn{' active' if lang == 'no' else ''}" data-set-lang="no" title="Norsk">
-        <span class="cflag"><svg viewBox="0 0 22 16" xmlns="http://www.w3.org/2000/svg"><rect width="22" height="16" fill="#EF2B2D"/><rect x="6" width="4" height="16" fill="#fff"/><rect y="6" width="22" height="4" fill="#fff"/><rect x="7" width="2" height="16" fill="#002868"/><rect y="7" width="22" height="2" fill="#002868"/></svg></span>
-      </button>
-      <button class="lang-btn{' active' if lang == 'en' else ''}" data-set-lang="en" title="English">
-        <span class="cflag"><svg viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg"><rect width="60" height="30" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#C8102E" stroke-width="4"/><rect y="11" width="60" height="8" fill="#fff"/><rect x="26" width="8" height="30" fill="#fff"/><rect y="12" width="60" height="6" fill="#C8102E"/><rect x="27" width="6" height="30" fill="#C8102E"/></svg></span>
-      </button>
-    </div>
+        <h1>
+          <span data-lang="th" class="block">ทฤษฎีภาษาไทย <em>ขับขี่ปลอดภัยบนถนนนอร์เวย์</em></span>
+          <span data-lang="no" class="block">Teori på thai. <em>Trygg på norsk vei.</em></span>
+          <span data-lang="en" class="block">Theory in Thai. <em>Safe on Norwegian roads.</em></span>
+        </h1>
 
-    <h1>
-      <span data-lang="th" class="block">สอบใบขับขี่นอร์เวย์ให้ <em>ผ่านครั้งแรก</em></span>
-      <span data-lang="no" class="block">Bestå teoriprøven <em>på første forsøk</em></span>
-      <span data-lang="en" class="block">Pass the Norwegian theory test <em>on your first try</em></span>
-    </h1>
+        <p class="sub">
+          <span data-lang="th" class="block">เรียนทฤษฎีใบขับขี่นอร์เวย์กับครูไมเคิล (AI) ทั้งภาษาไทยและนอร์เวย์ ข้อสอบและบทเรียน Klasse B ทีละขั้นตอน</span>
+          <span data-lang="no" class="block">Lær norsk førerkortteori med AI-lærer Michael på thai og norsk. Ekte pensum for Klasse B, trinn for trinn.</span>
+          <span data-lang="en" class="block">Learn Norwegian driving theory with AI teacher Michael in Thai and Norwegian. Official Class B curriculum, step by step.</span>
+        </p>
 
-    <p class="sub">
-      <span data-lang="th" class="block">ฝึกด้วยคำถามมากกว่า 1000 ข้อ พร้อมคำอธิบาย ใน 3 ภาษา</span>
-      <span data-lang="no" class="block">Øv med 1000+ spørsmål med forklaringer på 3 språk</span>
-      <span data-lang="en" class="block">Practice with 1000+ questions with explanations in 3 languages</span>
-    </p>
+        <div class="cta-row" style="margin-top:28px">
+          <a href="#quicktest" class="cta-btn cta-primary landing-onboard-target landing-onboard-test">
+            <span class="landing-onboard-label landing-onboard-label-test">
+              <span data-lang="th">2. เริ่มทดสอบฟรี</span>
+              <span data-lang="no">2. Start gratis prøve</span>
+              <span data-lang="en">2. Start free test</span>
+              <button class="landing-onboard-dismiss" type="button">×</button>
+            </span>
+            <svg class="onboard-arrow onboard-arrow-test" viewBox="0 0 120 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M12 10 C 50 14, 76 36, 86 64" fill="none" stroke="#fff" stroke-width="16" stroke-linecap="round"/>
+              <path d="M99 104 L109 56 L62 73 Z" fill="#fff"/>
+            </svg>
+            <span data-lang="th">🚀 ทดลองทำข้อสอบฟรี</span>
+            <span data-lang="no">🚀 Prøv gratis nå</span>
+            <span data-lang="en">🚀 Try free test</span>
+          </a>
+          <a href="/{lang}/app{app_query}" class="cta-btn cta-secondary">
+            💻 <span data-lang="th">เปิดเว็บแอป</span><span data-lang="no">Åpne web-appen</span><span data-lang="en">Open web app</span>
+          </a>
+        </div>
 
-    <div class="cta-group">
-      <a href="#try" class="cta-btn cta-primary">
-        <span data-lang="th">🚀 เริ่มฝึกฟรี</span>
-        <span data-lang="no">🚀 Prøv gratis</span>
-        <span data-lang="en">🚀 Try free</span>
-      </a>
-      <a href="/{lang}/app{app_query}" class="cta-btn cta-primary landing-onboard-target landing-onboard-web" style="background:#fff;color:#0F172A;box-shadow:0 16px 40px rgba(255,255,255,.15)">
-        <span class="landing-onboard-label landing-onboard-label-web">
-          <span data-lang="th">2. เปิดเว็บแอป</span>
-          <span data-lang="no">2. Åpne web-appen</span>
-          <span data-lang="en">2. Open web app</span>
-          <button class="landing-onboard-dismiss" type="button">×</button>
-        </span>
-        <svg class="onboard-arrow onboard-arrow-web" viewBox="0 0 90 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path d="M58 8 C 34 36, 30 72, 40 112" fill="none" stroke="#fff" stroke-width="17" stroke-linecap="round"/>
-          <path d="M50 154 L66 105 L15 119 Z" fill="#fff"/>
-        </svg>
-        💻
-        <span data-lang="th">เปิดเว็บแอป</span>
-        <span data-lang="no">Åpne web-appen</span>
-        <span data-lang="en">Open web app</span>
-      </a>
-    </div>
+        <div class="hero-trust-row">
+          <div class="hero-trust-chip">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span data-lang="th">Klasse B • รถยนต์ส่วนบุคคล</span>
+            <span data-lang="no">Klasse B • Personbil</span>
+            <span data-lang="en">Class B • Passenger car</span>
+          </div>
+          <div class="hero-trust-chip">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span data-lang="th">ประสบการณ์สอน 16 ปี</span>
+            <span data-lang="no">16 års erfaring</span>
+            <span data-lang="en">16 years experience</span>
+          </div>
+          <div class="hero-trust-chip">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            <span data-lang="th">ครอบคลุมเนื้อหา 100%</span>
+            <span data-lang="no">100% pensumdekning</span>
+            <span data-lang="en">100% syllabus coverage</span>
+          </div>
+        </div>
+      </div>
 
-    <div class="hero-badges">
-      <span class="badge-chip"><span class="ok"></span>
-        <span data-lang="th">มากกว่า 1000 ข้อ</span>
-        <span data-lang="no">1000+ spørsmål</span>
-        <span data-lang="en">1000+ questions</span>
-      </span>
-      <span class="badge-chip">🇹🇭🇳🇴
-        <span data-lang="th">ใช้โดยคนไทยในนอร์เวย์</span>
-        <span data-lang="no">Brukt av thai i Norge</span>
-        <span data-lang="en">Used by Thai in Norway</span>
-      </span>
-      <span class="badge-chip">📜
-        <span data-lang="th">อัปเดตตามกฎล่าสุด</span>
-        <span data-lang="no">Oppdatert etter regler</span>
-        <span data-lang="en">Updated to latest rules</span>
-      </span>
-    </div>
+      <div class="hero-showcase">
+        <div class="hero-michael-wrap">
+          <img src="/api/assets/michael-hero.webp" alt="Trafikklærer Michael" class="hero-michael-img"/>
+          <div class="hero-badge-top">
+            <span>✨</span>
+            <span data-lang="th">เข้าใจง่าย</span>
+            <span data-lang="no">Pedagogisk</span>
+            <span data-lang="en">Easy to learn</span>
+          </div>
+          <div class="hero-badge-live">
+            <span class="pulse-dot"></span>
+            <span data-lang="th">เว็บแอป LIVE</span>
+            <span data-lang="no">Nett-App LIVE</span>
+            <span data-lang="en">Web App LIVE</span>
+          </div>
+        </div>
 
-    <!-- Feature header image -->
-    <div style="margin-top:48px;border-radius:20px;overflow:hidden;box-shadow:0 40px 100px rgba(0,0,0,.5);max-width:900px;margin-left:auto;margin-right:auto">
-      <img src="{HEADER_URL}" alt="Thai2Drive app" style="width:100%;display:block;object-fit:cover;max-height:420px"/>
+        <div class="hero-teacher-card">
+          <img src="/api/assets/michael-avatar.png" alt="Michael Avatar" class="teacher-avatar-img"/>
+          <div class="teacher-info">
+            <div class="teacher-name-row">
+              <span class="teacher-name">Michael</span>
+              <span class="teacher-tag">AI-Lærer</span>
+            </div>
+            <div class="teacher-role">
+              <span data-lang="th">ครูสอนขับรถในออสโล • ประสบการณ์ 16 ปี</span>
+              <span data-lang="no">Trafikklærer i Oslo • 16 års erfaring</span>
+              <span data-lang="en">Driving instructor in Oslo • 16 yrs exp</span>
+            </div>
+            <div class="teacher-stars">
+              ★★★★★ <span style="color:#94A3B8;margin-left:6px;font-size:11px;">
+                <span data-lang="th">คำอธิบายที่เข้าใจง่าย</span>
+                <span data-lang="no">Tålmodig forklaring</span>
+                <span data-lang="en">Patient guidance</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
