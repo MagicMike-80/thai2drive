@@ -1070,7 +1070,7 @@ class KaiPloyLogicTests(unittest.TestCase):
         fixed = self.tc._guard_left_turn_exclusion(actual["response"]["reply"], "no")
         self.assertNotIn("gjelder ikke når du svinger til venstre", fixed)
         self.assertIn("ingen godkjent video eller podcast", fixed)
-        self.assertIn("høyre side", fixed)
+        self.assertIn("vikeplikt for møtende trafikk", fixed)
         correct = "Høyreregelen gjelder ikke ved utkjøring fra en parkeringsplass."
         self.assertEqual(self.tc._guard_left_turn_exclusion(correct, "no"), correct)
 
@@ -1128,6 +1128,14 @@ class KaiPloyLogicTests(unittest.TestCase):
         contract = self.tc._complete_request_contract(actual["verified_plan"], None, actual["request"]["message"])
         self.assertIn("VERIFIED CALENDAR", contract)
         self.assertNotIn("VERIFIED CALENDAR", self.tc._complete_request_contract({}, None, "What does the stop sign mean?"))
+
+    def test_rundkjoring_feltvalg_in_regelbank(self):
+        bank = json.loads((ROOT / "backend/regelbank.json").read_text(encoding="utf-8"))
+        rule = bank["regler"]["rundkjoring_feltvalg"]
+        self.assertIn("Sinsenkrysset", rule["fakta"]["no"])
+        self.assertIn("siste utkjøring", rule["fakta"]["no"])
+        self.assertIn("inner lane", rule["fakta"]["en"])
+        self.assertIn("Sinsenkrysset", rule["fakta"]["th"])
 
     def test_actual_existing_weekday_plan_does_not_receive_new_calendar_dates(self):
         data = json.loads((ROOT / "backend/tests/fixtures/kai-ploy/kai-calendar-scope-and-open-question-2026-10-17.json").read_text(encoding="utf-8"))

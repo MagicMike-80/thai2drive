@@ -128,8 +128,8 @@ class TestDynamicToneSelection(unittest.TestCase):
 class TestThaiGlossaryAndLanguagePurity(unittest.TestCase):
     def test_thai_output_contract_enforces_glossary_parentheses(self):
         contract = tc._master_output_contract("th")
-        self.assertIn("thai-forklaring (norsk fagord)", contract)
-        self.assertIn("Zero English allowed", contract)
+        self.assertIn("Never insert a Norwegian technical term in parentheses", contract)
+        self.assertIn("No English glosses or Latin acronyms", contract)
 
     def test_thai_quiz_purity_block_allows_norwegian_parentheses_and_bans_english(self):
         block = tc._thai_quiz_purity_block()

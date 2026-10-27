@@ -179,6 +179,33 @@
         "sperret",
         "ถนนแคบ"
       ]
+    },
+    "rundkjoring_feltvalg": {
+      "kilde": "Trafikkreglene § 7 / Skiltforskriften / Michaels kjøremønster i rundkjøring",
+      "fakta": {
+        "no": "Er det skiltet (som i Sinsenkrysset), følger du alltid skiltingen. Så lenge du ikke skal til siste utkjøring, velger du alltid høyre plassering. Skal du til siste utkjøring (venstre), velger du venstre plassering. Blink alltid til høyre før du kjører ut av rundkjøringen.",
+        "th": "ถ้ามีป้ายหรือลูกศรบนพื้น (เช่นที่ Sinsenkrysset) ให้ทำตามป้ายเสมอ ตราบใดที่คุณไม่ได้จะออกทางออกสุดท้าย ให้เลือกอยู่เลนขวา (เลนนอก) เสมอ ถ้าจะออกทางออกสุดท้าย (เลี้ยวซ้าย) ให้เข้าเลนซ้าย (เลนใน) และเปิดไฟเลี้ยวขวาก่อนออกจากวงเวียนเสมอ",
+        "en": "If signs or lane arrows indicate otherwise (like at Sinsenkrysset), always follow the signs. As long as you are not taking the last exit, always choose the right lane (outer lane). If you are taking the last exit (turning left), choose the left lane (inner lane). Always signal right before exiting the roundabout."
+      },
+      "triggere": [
+        "rundkjøring",
+        "roundabout",
+        "3rd exit",
+        "tredje avkjøring",
+        "3. avkjøring",
+        "siste utkjøring",
+        "feltvalg rundkjøring",
+        "innerfelt",
+        "ytterfelt",
+        "sinsenkrysset",
+        "วงเวียน"
+      ],
+      "merknad": "Michaels faste huskeregel for rundkjøring: Skilt først, deretter høyre med mindre du skal til siste utkjøring.",
+      "laeringsregel": {
+        "no": "Husk-regel: Er det skiltet (som i Sinsenkrysset), følger du alltid skiltingen. Så lenge du ikke skal til siste utkjøring, velger du alltid høyre plassering. Skal du til siste utkjøring (venstre), velger du venstre plassering.",
+        "th": "กฎช่วยจำ: ถ้ามีป้าย (เช่นที่ Sinsenkrysset) ให้ทำตามป้ายเสมอ ตราบใดที่ไม่ใช่ทางออกสุดท้าย ให้อยู่เลนขวาเสมอ ถ้าจะออกทางออกสุดท้าย ให้เข้าเลนซ้าย",
+        "en": "Memory rule: If it is signed (like at Sinsenkrysset), always follow the signs. As long as you are not taking the last exit, always choose the right lane. If taking the last exit (left), choose the left lane."
+      }
     }
   },
   "forbudte_pastander": {
@@ -187,16 +214,19 @@
       "møtende[^.]{0,40}(har )?(vikeplikt|må vike) for deg",
       "du har forkjørsrett (når|ved) (du )?sv(inger|ing) til venstre",
       "(?:30\\s*km/?t[^.]{0,40}(?:boligområde|vanlig|generell)|(?:boligområde|vanlig|generell)[^.]{0,40}30\\s*km/?t)",
-      "\bordrett\b[^.]{0,40}§"
+      "\bordrett\b[^.]{0,40}§",
+      "(?:3\\.|tredje|siste)\\s*(?:avkjøring|utkjøring)[^.]{0,40}høyre\\s*felt"
     ],
     "th": [
       "รถสวนทาง[^.]{0,30}ต้องให้ทางคุณ",
-      "(?:30\\s*กม(?:\\./ชม\\.)?[^.]{0,40}(?:ย่านที่พัก|ทั่วไป)|(?:ย่านที่พัก|ทั่วไป)[^.]{0,40}30\\s*กม(?:\\./ชม\\.)?)"
+      "(?:30\\s*กม(?:\\./ชม\\.)?[^.]{0,40}(?:ย่านที่พัก|ทั่วไป)|(?:ย่านที่พัก|ทั่วไป)[^.]{0,40}30\\s*กม(?:\\./ชม\\.)?)",
+      "(?:ทางออกที่\\s*3|ทางออกสุดท้าย)[^.]{0,30}เลนขวา"
     ],
     "en": [
       "oncoming[^.]{0,40}(must|has to) (give way|yield) to you",
       "you have priority when turning left",
-      "(?:30\\s*km/?h[^.]{0,40}(?:residential|default|general)|(?:residential|default|general)[^.]{0,40}30\\s*km/?h)"
+      "(?:30\\s*km/?h[^.]{0,40}(?:residential|default|general)|(?:residential|default|general)[^.]{0,40}30\\s*km/?h)",
+      "(?:3rd|third|last)\\s*exit[^.]{0,40}(?:right\\s*lane|outer\\s*lane)"
     ]
   },
   "ikke_tillatt_uten_kilde": [

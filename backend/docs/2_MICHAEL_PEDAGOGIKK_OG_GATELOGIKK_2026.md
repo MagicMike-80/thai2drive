@@ -89,20 +89,27 @@ Norge = HØYREKJØRING. Rundkjøring går MOT klokken (counter-clockwise).
 - HØYRE felt = YTTERFELTET (outer lane).
 - VENSTRE felt = INNERFELTET (inner lane).
 ALDRI si at høyre felt er innerfelt i Norge.
-For rett frem til 2. avkjøring i to-felts rundkjøring:
-Hold HØYRE felt / YTTERFELTET med mindre skilt/markering sier annet.
-Vikeplikt for ALLE inne i rundkjøringen. Blink høyre før utkjøring.
+
+Michael-huskeregel for feltvalg og plassering i rundkjøring:
+«Er det skiltet (som i Sinsenkrysset), følger du alltid skiltingen. Så lenge du ikke skal til siste utkjøring, velger du alltid høyre plassering. Skal du til siste utkjøring (venstre), velger du venstre plassering.»
+
+Grunnregel: Uten skilt er det alltid høyreplassering. Når du gjør dette, skaper du plass for dem som vil kjøre raskere forbi deg, uten å irritere eller hindre trafikkflyten.
+
+Kjøremønster i 2-felts rundkjøring:
+1. Skilt/veioppmerking: Følg alltid piler og skilt hvis det finnes (som i Sinsenkrysset).
+2. Ikke siste utkjøring (høyre / rett frem): Velg HØYRE felt (ytterfeltet) inn.
+3. Siste utkjøring (svinge til venstre / mer enn halvt rundt): Velg VENSTRE felt (innerfeltet) inn.
+4. Blinklys: Blink høyre i god tid før du kjører ut (idet du passerer avkjøringen før din).
+5. Vikeplikt for ALLE inne i rundkjøringen (skilt 202).
 
 กฎสำคัญมาก - วงเวียนที่นอร์เวย์ (ห้ามสับสนกับไทยเด็ดขาด):
-ที่ประเทศนอร์เวย์ขับรถชิดขวา วงเวียนหมุนทวนเข็มนาฬิกา ตรงข้ามกับเมืองไทยที่ขับชิดซ้ายและหมุนตามเข็มนาฬิกา
-- ที่นอร์เวย์: เลนขวา = เลนนอก (ytterfelt / outer lane)
-- ที่นอร์เวย์: เลนซ้าย = เลนใน (innerfelt / inner lane)
-ห้ามพูดเด็ดขาดว่า "เลนขวาคือเลนใน" เมื่ออธิบายวงเวียนของนอร์เวย์ (นั่นมันที่ไทย!)
-ถ้าจะขับตรงไปออกทางออกที่ 2 ในวงเวียน 2 เลนทั่วไป:
--> ให้อยู่ "เลนขวา" (คือเลนนอก)
--> อย่าเข้าเลนซ้าย (เลนในไว้สำหรับเลี้ยวซ้ายหรือกลับรถ)
+ที่ประเทศนอร์เวย์ขับรถชิดขวา วงเวียนหมุนทวนเข็มนาฬิกา
+- เลนขวา = เลนนอก (ytterfelt / outer lane)
+- เลนซ้าย = เลนใน (innerfelt / inner lane)
 
-คำพูดอธิบาย: "เลนขวาคือเลนนอกครับ ตรงข้ามกับเมืองไทย"
+กฎช่วยจำของ Michael:
+"ถ้ามีป้ายจราจรหรือลูกศรบนพื้นถนน (เช่นที่ Sinsenkrysset) ให้ปฏิบัติตามป้ายเสมอ ตราบใดที่คุณไม่ได้จะออกทางออกสุดท้าย ให้เลือกอยู่เลนขวา (เลนนอก) เสมอ แต่ถ้าจะออกทางออกสุดท้าย (เลี้ยวซ้ายหรือกลับรถ) ให้เข้าเลนซ้าย (เลนใน)"
+และเปิดไฟเลี้ยวขวาก่อนออกจากวงเวียนเสมอ
 
 Michael-sitat (bruk alltid denne åpningen):
 "Når du nærmer deg en rundkjøring, skal du ikke se etter biler. Du skal se etter muligheter."
