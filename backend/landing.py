@@ -7,6 +7,8 @@ from __future__ import annotations
 
 ICON_URL = "/api/assets/developer-icon-512.png"
 HEADER_URL = "/api/assets/developer-header-4096x2304.jpg"
+MICHAEL_HERO_URL = "/api/assets/michael-hero.webp"
+MICHAEL_AVATAR_URL = "/api/assets/michael-avatar.png"
 
 # ── YouTube video ─────────────────────────────────────────────
 # Paste your YouTube video ID here (the part after ?v= in the URL)
@@ -572,6 +574,286 @@ footer p{color:#64748B;font-size:13px}
   70%       {transform:scale(1);    box-shadow:none; border-color:rgba(255,255,255,.2);}
 }
 .lang-row .lang-btn.active{border-color:var(--neon-cyan)!important;box-shadow:0 0 0 3px rgba(0,245,255,.4)!important}
+
+/* ── NEW HERO SHOWCASE WITH MICHAEL ── */
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap");
+
+.hero-section {
+  position: relative; width: 100%;
+  background-color: #0B1226;
+  overflow: hidden;
+  padding: 36px 0 60px;
+}
+.hero-grid-bg {
+  pointer-events: none; position: absolute; inset: 0;
+  background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.16) 1px, transparent 0);
+  background-size: 24px 24px; opacity: 0.22;
+}
+.hero-glow-bg {
+  pointer-events: none; position: absolute; inset: 0;
+  background: radial-gradient(circle at 75% 45%, rgba(255, 140, 66, 0.12), transparent 55%),
+              radial-gradient(circle at 20% 20%, rgba(0, 229, 204, 0.05), transparent 45%);
+}
+
+.hero-wrap {
+  position: relative; z-index: 10;
+  display: flex; flex-direction: column;
+  gap: 36px;
+}
+@media (min-width: 1024px) {
+  .hero-wrap {
+    flex-direction: row; align-items: center; justify-content: space-between;
+    gap: 24px;
+  }
+}
+
+.hero-left {
+  flex: 1 1 54%; max-width: 660px;
+  display: flex; flex-direction: column; gap: 20px;
+  text-align: left;
+}
+
+.hero-badge-pill {
+  display: inline-flex; width: fit-content; align-items: center; gap: 10px;
+  background: #1A2332; border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 8px 16px; border-radius: 9999px;
+  font-size: 13px; color: #CBD5E1; font-weight: 500;
+}
+.pulse-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #FF8C42;
+  box-shadow: 0 0 10px rgba(255, 140, 66, 0.85);
+  animation: dotPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+@keyframes dotPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.85); }
+}
+
+.hero-title-group h1 {
+  font-size: clamp(38px, 5.2vw, 56px);
+  font-weight: 900;
+  letter-spacing: -0.025em;
+  line-height: 1.0;
+  color: #FFFFFF;
+  margin: 0;
+}
+.hero-title-group .hero-italic-sub {
+  font-family: "Instrument Serif", Georgia, serif;
+  font-style: italic;
+  font-size: clamp(38px, 5.2vw, 58px);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: #FF8C42;
+  margin-top: 6px;
+  font-weight: 400;
+  display: block;
+}
+
+.hero-lede {
+  color: #94A3B8;
+  font-size: clamp(16px, 1.8vw, 17.5px);
+  line-height: 1.6;
+  max-width: 530px;
+}
+
+.hero-cta-group {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 14px;
+  padding-top: 6px;
+}
+.btn-cta-main {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  height: 52px; padding: 0 30px; border-radius: 9999px;
+  background: #FF8C42; color: #fff;
+  font-size: 16px; font-weight: 700;
+  box-shadow: 0 8px 24px rgba(255, 140, 66, 0.38);
+  transition: background 140ms, transform 140ms;
+  text-decoration: none;
+}
+.btn-cta-main:hover {
+  background: #FF7A24; color: #fff;
+  text-decoration: none; transform: translateY(-1px);
+}
+.btn-cta-ghost {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  height: 52px; padding: 0 24px; border-radius: 9999px;
+  background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff; font-size: 15px; font-weight: 600;
+  backdrop-filter: blur(8px);
+  transition: background 140ms;
+  text-decoration: none;
+}
+.btn-cta-ghost:hover {
+  background: rgba(37, 52, 78, 0.85); color: #fff; text-decoration: none;
+}
+.circle-bullet {
+  width: 18px; height: 18px; border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 9px;
+}
+
+.hero-pills {
+  display: flex; flex-wrap: wrap; gap: 10px; padding-top: 4px;
+}
+.val-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: #151E2F; border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9999px; padding: 7px 14px;
+  font-size: 13px; font-weight: 500; color: #CBD5E1;
+}
+.val-pill span.check { color: #22C55E; font-weight: 700; }
+
+.hero-trust-bar {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 16px;
+  padding-top: 14px; margin-top: 6px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+.trust-star-item { display: flex; align-items: center; gap: 10px; }
+.avatar-stack { display: flex; margin-right: 2px; }
+.avatar-stack .av {
+  width: 30px; height: 30px; border-radius: 50%;
+  border: 2px solid #0B1226; object-fit: cover;
+  margin-left: -8px; background: #2A3A56;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; color: #fff;
+}
+.avatar-stack .av:first-child { margin-left: 0; }
+.trust-text { font-size: 13px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 6px; }
+.trust-star { color: #FFD60A; }
+.trust-sep { width: 1px; height: 22px; background: rgba(255, 255, 255, 0.12); }
+.trust-gov-item {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12px; font-weight: 600; color: #94A3B8;
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.norway-flag-mini {
+  width: 28px; height: 20px; border-radius: 3px; position: relative;
+  background: #EF2B2D; overflow: hidden; display: inline-block;
+}
+
+.hero-right {
+  position: relative; width: 100%;
+  max-width: 520px; margin: 0 auto;
+  min-height: 560px;
+  display: flex; align-items: flex-end; justify-content: center;
+}
+@media (min-width: 1024px) {
+  .hero-right {
+    flex: 1 1 46%; margin: 0; min-height: 640px;
+    justify-content: flex-end;
+  }
+}
+
+.michael-glow {
+  pointer-events: none; position: absolute;
+  bottom: 8%; left: 50%; transform: translateX(-50%);
+  width: 480px; height: 480px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 140, 66, 0.22) 0%, rgba(255, 140, 66, 0.08) 45%, transparent 70%);
+  filter: blur(44px);
+}
+
+.michael-portrait-wrap {
+  position: relative; z-index: 10;
+  width: 92%; max-width: 440px;
+  aspect-ratio: 4 / 5;
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.65);
+}
+.michael-img {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center 12%;
+  display: block;
+}
+.michael-bottom-fade {
+  pointer-events: none; position: absolute; inset-x: 0; bottom: 0; height: 35%;
+  background: linear-gradient(to top, #0B1226 0%, rgba(11, 18, 38, 0.7) 60%, transparent 100%);
+}
+
+.float-badge {
+  position: absolute; z-index: 25;
+  border-radius: 9999px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.32);
+  display: inline-flex; align-items: center; gap: 8px;
+  white-space: nowrap; transition: transform 200ms ease;
+}
+.float-badge:hover { transform: translateY(-2px); }
+
+.badge-live {
+  top: 4%; right: 4%;
+  background: #FFFFFF; color: #0B1220;
+  padding: 8px 14px; font-size: 12px; font-weight: 700;
+}
+.badge-live-tag {
+  background: #22C55E; color: #fff;
+  font-size: 10px; font-weight: 900;
+  padding: 2px 7px; border-radius: 9999px;
+}
+
+.badge-web-arrow {
+  top: 18%; left: 2%;
+  background: #151E2F; border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #fff; font-size: 13px; font-weight: 600;
+  padding: 8px 16px;
+}
+
+.badge-th-easy {
+  top: 34%; left: -2%;
+  background: #E0F2FE; color: #0B1220;
+  font-size: 14px; font-weight: 600;
+  padding: 8px 16px;
+}
+
+.badge-web-white {
+  top: 38%; right: 4%;
+  background: #FFFFFF; color: #0B1220;
+  font-size: 13px; font-weight: 700;
+  padding: 8px 16px;
+}
+
+.badge-pink-app {
+  top: 52%; left: 4%;
+  background: #FCE7F3; color: #831843;
+  font-size: 13px; font-weight: 700;
+  padding: 8px 16px;
+}
+
+.badge-peach-tag {
+  top: 54%; right: 6%;
+  background: #FFF1E6; color: #7C3A1A;
+  font-size: 13px; font-weight: 600;
+  padding: 8px 16px;
+}
+
+.badge-class-b {
+  bottom: 22%; left: 50%; transform: translateX(-50%);
+  background: #1A2332; border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #fff; font-size: 12.5px; font-weight: 600;
+  padding: 8px 16px;
+}
+
+.teacher-card {
+  position: absolute; bottom: 4%; left: 50%; transform: translateX(-50%);
+  z-index: 30; width: 90%; max-width: 360px;
+  background: #FFFFFF; border-radius: 18px;
+  padding: 12px 16px; box-shadow: 0 16px 42px rgba(0, 0, 0, 0.45);
+  display: flex; align-items: center; gap: 12px;
+}
+.teacher-av-wrap { position: relative; flex-shrink: 0; }
+.teacher-av { width: 46px; height: 46px; border-radius: 50%; object-fit: cover; }
+.online-dot {
+  position: absolute; bottom: 0; right: 0;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: #22C55E; border: 2px solid #FFFFFF;
+}
+.teacher-info { display: flex; flex-direction: column; line-height: 1.25; }
+.teacher-name { font-size: 14px; font-weight: 800; color: #0B1220; }
+.teacher-sub { font-size: 12px; font-weight: 500; color: #64748B; }
+.teacher-pulse-indicator {
+  margin-left: auto; width: 8px; height: 8px; border-radius: 50%;
+  background: #22C55E; animation: dotPulse 2s infinite;
+}
 """
 
 
@@ -648,12 +930,13 @@ def _footer_html(lang: str = "th") -> str:
 
 def _hero_html(lang: str = "th") -> str:
     return f"""
-<section class="hero">
-  <div class="container">
-    <img src="{ICON_URL}" alt="Thai2Drive" class="hero-icon"/>
+<section class="hero-section">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow-bg"></div>
 
-    <!-- Language switcher — also in hero so it's instantly visible -->
-    <div class="lang-row landing-onboard-target landing-onboard-lang" role="group" aria-label="Language" style="justify-content:center;margin-bottom:20px">
+  <div class="container">
+    <!-- Language switcher row in hero -->
+    <div class="lang-row landing-onboard-target landing-onboard-lang" role="group" aria-label="Language" style="justify-content:center;margin-bottom:28px">
       <span class="landing-onboard-label landing-onboard-label-lang">
         <span data-lang="th">1. เลือกภาษา</span>
         <span data-lang="no">1. Velg språk</span>
@@ -675,63 +958,190 @@ def _hero_html(lang: str = "th") -> str:
       </button>
     </div>
 
-    <h1>
-      <span data-lang="th" class="block">สอบใบขับขี่นอร์เวย์ให้ <em>ผ่านครั้งแรก</em></span>
-      <span data-lang="no" class="block">Bestå teoriprøven <em>på første forsøk</em></span>
-      <span data-lang="en" class="block">Pass the Norwegian theory test <em>on your first try</em></span>
-    </h1>
+    <div class="hero-wrap">
+      
+      <!-- HERO LEFT -->
+      <div class="hero-left">
+        
+        <!-- BADGE PILL -->
+        <div class="hero-badge-pill">
+          <span class="pulse-dot"></span>
+          <span data-lang="no">Laget av godkjent trafikklærer — forklart på thai, godkjent på norsk</span>
+          <span data-lang="th">สร้างโดยครูสอนขับรถที่ได้รับใบอนุญาต — อธิบายภาษาไทย ได้มาตรฐานนอร์เวย์</span>
+          <span data-lang="en">Built by certified driving instructor — explained in Thai, approved in Norwegian</span>
+        </div>
 
-    <p class="sub">
-      <span data-lang="th" class="block">ฝึกด้วยคำถามมากกว่า 1000 ข้อ พร้อมคำอธิบาย ใน 3 ภาษา</span>
-      <span data-lang="no" class="block">Øv med 1000+ spørsmål med forklaringer på 3 språk</span>
-      <span data-lang="en" class="block">Practice with 1000+ questions with explanations in 3 languages</span>
-    </p>
+        <!-- MAIN TITLE -->
+        <div class="hero-title-group">
+          <h1>
+            <span data-lang="no" class="block">Teori på thai.</span>
+            <span data-lang="th" class="block">ทฤษฎีภาษาไทย</span>
+            <span data-lang="en" class="block">Theory in Thai.</span>
+          </h1>
+          <div class="hero-italic-sub">
+            <span data-lang="no" class="block">Trygg på norsk vei.</span>
+            <span data-lang="th" class="block">ขับขี่ปลอดภัยบนถนนนอร์เวย์</span>
+            <span data-lang="en" class="block">Safe on Norwegian roads.</span>
+          </div>
+        </div>
 
-    <div class="cta-group">
-      <a href="#try" class="cta-btn cta-primary">
-        <span data-lang="th">🚀 เริ่มฝึกฟรี</span>
-        <span data-lang="no">🚀 Prøv gratis</span>
-        <span data-lang="en">🚀 Try free</span>
-      </a>
-      <a href="/{lang}/app" class="cta-btn cta-primary landing-onboard-target landing-onboard-web" style="background:#fff;color:#0F172A;box-shadow:0 16px 40px rgba(255,255,255,.15)">
-        <span class="landing-onboard-label landing-onboard-label-web">
-          <span data-lang="th">2. เปิดเว็บแอป</span>
-          <span data-lang="no">2. Åpne web-appen</span>
-          <span data-lang="en">2. Open web app</span>
-          <button class="landing-onboard-dismiss" type="button">×</button>
-        </span>
-        <svg class="onboard-arrow onboard-arrow-web" viewBox="0 0 90 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path d="M58 8 C 34 36, 30 72, 40 112" fill="none" stroke="#fff" stroke-width="17" stroke-linecap="round"/>
-          <path d="M50 154 L66 105 L15 119 Z" fill="#fff"/>
-        </svg>
-        💻
-        <span data-lang="th">เปิดเว็บแอป</span>
-        <span data-lang="no">Åpne web-appen</span>
-        <span data-lang="en">Open web app</span>
-      </a>
-    </div>
+        <!-- INGRESS / LEDE -->
+        <p class="hero-lede">
+          <span data-lang="no" class="block">Norsk teoriprøve forklart på ditt eget morsmål. Ingen vanskelige ord, ingen gjetning – bare ren forståelse for trygg kjøring i Norge.</span>
+          <span data-lang="th" class="block">ข้อสอบใบขับขี่นอร์เวย์อธิบายเป็นภาษาไทย เข้าใจกฎจราจรได้ง่าย ไม่ต้องเดา เข้าใจอย่างแท้จริงเพื่อการขับขี่ที่ปลอดภัยในนอร์เวย์</span>
+          <span data-lang="en" class="block">The Norwegian theory test explained in Thai. No confusing jargon, no guessing — just clear understanding for safe driving in Norway.</span>
+        </p>
 
-    <div class="hero-badges">
-      <span class="badge-chip"><span class="ok"></span>
-        <span data-lang="th">มากกว่า 1000 ข้อ</span>
-        <span data-lang="no">1000+ spørsmål</span>
-        <span data-lang="en">1000+ questions</span>
-      </span>
-      <span class="badge-chip">🇹🇭🇳🇴
-        <span data-lang="th">ใช้โดยคนไทยในนอร์เวย์</span>
-        <span data-lang="no">Brukt av thai i Norge</span>
-        <span data-lang="en">Used by Thai in Norway</span>
-      </span>
-      <span class="badge-chip">📜
-        <span data-lang="th">อัปเดตตามกฎล่าสุด</span>
-        <span data-lang="no">Oppdatert etter regler</span>
-        <span data-lang="en">Updated to latest rules</span>
-      </span>
-    </div>
+        <!-- CTA BUTTONS -->
+        <div class="hero-cta-group">
+          <a class="btn-cta-main" href="#try">
+            <span data-lang="no">🚀 Prøv gratis →</span>
+            <span data-lang="th">🚀 เริ่มฝึกฟรี →</span>
+            <span data-lang="en">🚀 Try free →</span>
+          </a>
 
-    <!-- Feature header image -->
-    <div style="margin-top:48px;border-radius:20px;overflow:hidden;box-shadow:0 40px 100px rgba(0,0,0,.5);max-width:900px;margin-left:auto;margin-right:auto">
-      <img src="{HEADER_URL}" alt="Thai2Drive app" style="width:100%;display:block;object-fit:cover;max-height:420px"/>
+          <a class="btn-cta-ghost landing-onboard-target landing-onboard-web" href="/{lang}/app">
+            <span class="landing-onboard-label landing-onboard-label-web">
+              <span data-lang="th">2. เปิดเว็บแอป</span>
+              <span data-lang="no">2. Åpne web-appen</span>
+              <span data-lang="en">2. Open web app</span>
+              <button class="landing-onboard-dismiss" type="button">×</button>
+            </span>
+            <svg class="onboard-arrow onboard-arrow-web" viewBox="0 0 90 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M58 8 C 34 36, 30 72, 40 112" fill="none" stroke="#fff" stroke-width="17" stroke-linecap="round"/>
+              <path d="M50 154 L66 105 L15 119 Z" fill="#fff"/>
+            </svg>
+            <span class="circle-bullet">○</span>
+            <span data-lang="no">💻 Åpne web-appen</span>
+            <span data-lang="th">💻 เปิดเว็บแอป</span>
+            <span data-lang="en">💻 Open web app</span>
+          </a>
+        </div>
+
+        <!-- VALUE BADGES PILLS -->
+        <div class="hero-pills">
+          <div class="val-pill">
+            <span class="check">✓</span>
+            <span data-lang="no">1000+ spørsmål</span>
+            <span data-lang="th">กว่า 1,000 ข้อสอบ</span>
+            <span data-lang="en">1000+ questions</span>
+          </div>
+          <div class="val-pill">
+            <span class="check">✓</span>
+            <span data-lang="no">Forklaringer på thai</span>
+            <span data-lang="th">คำอธิบายภาษาไทย</span>
+            <span data-lang="en">Explanations in Thai</span>
+          </div>
+          <div class="val-pill">
+            <span class="check">✓</span>
+            <span data-lang="no">Laget av trafikklærer</span>
+            <span data-lang="th">สร้างโดยครูสอนขับรถ</span>
+            <span data-lang="en">Built by driving instructor</span>
+          </div>
+        </div>
+
+        <!-- TRUST & INTEGRITY BAR (100% SANNE PÅSTANDER) -->
+        <div class="hero-trust-bar">
+          <div class="trust-star-item">
+            <div class="avatar-stack">
+              <img src="{MICHAEL_AVATAR_URL}" alt="Instruktør" class="av"/>
+              <div class="av">T2D</div>
+              <div class="av">NO</div>
+            </div>
+            <div class="trust-text">
+              <span class="trust-star">★</span>
+              <span data-lang="no">Trygg og pedagogisk veiledning</span>
+              <span data-lang="th">แนะนำเข้าใจง่าย เป็นกันเอง</span>
+              <span data-lang="en">Supportive & pedagogical guidance</span>
+            </div>
+          </div>
+
+          <div class="trust-sep"></div>
+
+          <div class="trust-gov-item">
+            <span class="norway-flag-mini">
+              <span style="position:absolute;left:32%;top:0;bottom:0;width:28%;background:#fff;"></span>
+              <span style="position:absolute;left:36%;top:0;bottom:0;width:12%;background:#002868;"></span>
+              <span style="position:absolute;top:36%;left:0;right:0;height:28%;background:#fff;"></span>
+              <span style="position:absolute;top:40%;left:0;right:0;height:12%;background:#002868;"></span>
+            </span>
+            <span data-lang="no">Offisielt pensum for Klasse B</span>
+            <span data-lang="th">หลักสูตรมาตรฐานสำหรับ Klasse B</span>
+            <span data-lang="en">Official Class B curriculum</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- HERO RIGHT (MICHAEL SHOWCASE) -->
+      <div class="hero-right">
+        
+        <!-- AMBIENT ORANGE GLOW -->
+        <div class="michael-glow"></div>
+
+        <!-- PORTRAIT CARD -->
+        <div class="michael-portrait-wrap">
+          <img src="{MICHAEL_HERO_URL}" alt="Michael S. Trafikklærer" class="michael-img"/>
+          <div class="michael-bottom-fade"></div>
+        </div>
+
+        <!-- FLOATING PILLS & BUBBLES -->
+        <div class="float-badge badge-live">
+          <span style="width:8px;height:8px;border-radius:50%;background:#22C55E;box-shadow:0 0 8px rgba(34,197,94,0.8);"></span>
+          <span>Nett-App</span>
+          <span class="badge-live-tag">LIVE</span>
+        </div>
+
+        <div class="float-badge badge-web-arrow">
+          <span>Web App →</span>
+        </div>
+
+        <div class="float-badge badge-th-easy">
+          <span>เพื่อง่าย</span>
+        </div>
+
+        <div class="float-badge badge-web-white">
+          <span>Web App</span>
+        </div>
+
+        <div class="float-badge badge-pink-app">
+          <span>Nett-App</span>
+        </div>
+
+        <div class="float-badge badge-peach-tag">
+          <span>เพื่อไทย • for enkelhet</span>
+        </div>
+
+        <div class="float-badge badge-class-b">
+          <span>🎓</span>
+          <span data-lang="no">Klasse B • Personbil</span>
+          <span data-lang="th">ใบขับขี่ Klasse B • รถยนต์</span>
+          <span data-lang="en">Class B • Passenger car</span>
+        </div>
+
+        <!-- TEACHER PROFILE CARD -->
+        <div class="teacher-card">
+          <div class="teacher-av-wrap">
+            <img src="{MICHAEL_AVATAR_URL}" alt="Michael" class="teacher-av"/>
+            <span class="online-dot"></span>
+          </div>
+          <div class="teacher-info">
+            <span class="teacher-name">
+              <span data-lang="no">Michael S. Trafikklærer</span>
+              <span data-lang="th">ครูไมเคิล S. (Michael)</span>
+              <span data-lang="en">Michael S. Driving Instructor</span>
+            </span>
+            <span class="teacher-sub">
+              <span data-lang="no">Trafikklærer i Oslo · 16 års erfaring</span>
+              <span data-lang="th">สอนในออสโลกว่า 16 ปี · ออนไลน์อยู่</span>
+              <span data-lang="en">Instructor in Oslo · 16 years experience</span>
+            </span>
+          </div>
+          <div class="teacher-pulse-indicator"></div>
+        </div>
+
+      </div>
+
     </div>
   </div>
 </section>

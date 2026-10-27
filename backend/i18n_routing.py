@@ -31,16 +31,16 @@ _COOKIE_MAX_AGE = 365 * 24 * 3600
 SEO_META = {
     "home": {
         "th": {
-            "title": "สอบทฤษฎีใบขับขี่นอร์เวย์ ภาษาไทย | Thai2Drive",
-            "description": "ฝึกสอบทฤษฎีใบขับขี่นอร์เวย์ด้วยภาษาไทย กว่า 1000 ข้อพร้อมคำอธิบาย เตรียมพร้อมสำหรับการสอบจริง",
+            "title": "สอบทฤษฎีใบขับขี่นอร์เวย์ ภาษาไทย | Thai2Drive — ทฤษฎีภาษาไทย",
+            "description": "ข้อสอบใบขับขี่นอร์เวย์อธิบายเป็นภาษาไทย เข้าใจกฎจราจรได้ง่าย ไม่ต้องเดา มั่นใจทุกการขับขี่ในนอร์เวย์",
         },
         "no": {
-            "title": "Teoriprøven på thai – øv med 1000+ spørsmål | Thai2Drive",
-            "description": "Bestå den norske teoriprøven lettere – over 1000 spørsmål med forklaringer på thai, norsk og engelsk.",
+            "title": "Teoriprøven på thai – Trygg på norsk vei | Thai2Drive",
+            "description": "Norsk teoriprøve forklart på ditt eget morsmål. 1000+ spørsmål på thai, norsk og engelsk. Laget av godkjent trafikklærer.",
         },
         "en": {
-            "title": "Norwegian driving theory test in Thai | Thai2Drive",
-            "description": "Practice for the Norwegian driving theory test with 1000+ questions and explanations in Thai, Norwegian and English.",
+            "title": "Norwegian driving theory test in Thai — Safe on Norwegian roads | Thai2Drive",
+            "description": "The Norwegian driving theory test explained in Thai. No confusing jargon, no guessing — clear understanding for safe driving.",
         },
     },
     "guide": {

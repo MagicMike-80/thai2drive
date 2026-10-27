@@ -61,26 +61,26 @@ class HomeLanguageRouteTests(unittest.TestCase):
         h1_match = re.search(r"<h1>(.*?)</h1>", html, re.DOTALL)
         self.assertIsNotNone(h1_match)
         h1_content = h1_match.group(1)
-        self.assertIn("Bestå teoriprøven", h1_content)
+        self.assertIn("Teori på thai", h1_content)
         self.assertIsNone(THAI_SCRIPT_REGEX.search(h1_content), "Norwegian <h1> must contain 0 Thai characters")
-        self.assertNotIn("Pass the Norwegian", h1_content)
+        self.assertNotIn("Theory in Thai", h1_content)
 
     def test_th_home_h1_has_zero_norwegian_headline_text(self):
         html = client.get("/th").text
         h1_match = re.search(r"<h1>(.*?)</h1>", html, re.DOTALL)
         self.assertIsNotNone(h1_match)
         h1_content = h1_match.group(1)
-        self.assertIn("สอบใบขับขี่นอร์เวย์ให้", h1_content)
-        self.assertNotIn("Bestå teoriprøven", h1_content)
-        self.assertNotIn("Pass the Norwegian", h1_content)
+        self.assertIn("ทฤษฎีภาษาไทย", h1_content)
+        self.assertNotIn("Teori på thai", h1_content)
+        self.assertNotIn("Theory in Thai", h1_content)
 
     def test_en_home_h1_has_zero_thai_script_or_norwegian_headline_text(self):
         html = client.get("/en").text
         h1_match = re.search(r"<h1>(.*?)</h1>", html, re.DOTALL)
         self.assertIsNotNone(h1_match)
         h1_content = h1_match.group(1)
-        self.assertIn("Pass the Norwegian theory test", h1_content)
-        self.assertNotIn("Bestå teoriprøven", h1_content)
+        self.assertIn("Theory in Thai", h1_content)
+        self.assertNotIn("Teori på thai", h1_content)
         self.assertIsNone(THAI_SCRIPT_REGEX.search(h1_content))
 
     def test_no_home_has_hreflang_alternates_for_all_languages(self):
