@@ -13,6 +13,8 @@ Michael trenger bare si hva han ønsker — resten skjer av seg selv.
 ---
 
 ## ✅ LEVERT
+- ✅ **Skarpt Michael-portrett i webappens ikoner (web først, mobil etter godkjenning)**
+  - Det runde portrettet vises i Michael-kortet, bunnmenyen og øvrige webvisninger. Live på Railway i commit `96b2fb0`.
 - ✅ Kompakt knapp-layout (ExpandableButtonGroup)
 - ✅ ElevenLabs voice (TTS) i app og web (Codex)
 - ✅ **Bibliotek (Library) — Ryggraden for repetisjon**
@@ -27,6 +29,12 @@ Michael trenger bare si hva han ønsker — resten skjer av seg selv.
   - `fetch_student_learning_memory` henter svakeste tema via `_get_student_weakness` (`backend/teacher_chat.py:3723-3726`), som bruker `ai_learning.get_teacher_category_stats` (`backend/teacher_chat.py:3625`). Denne leser `exam_results` sammen med `ai_attempts` og `quiz_attempts` (`backend/ai_learning.py:423-477`). `_build_system_prompt` (`backend/teacher_chat.py:1006`) leser ikke tabellene selv; den bruker læringsminnet som sendes inn. Dermed er Argus-forbeholdet om eksamenshistorikk lukket på kodenivå.
 - ✅ **Neon design — markedsføringssiden (landing.py)**
   - Cyan #00F5FF hero-knapper, aurora bakgrunn, magenta #FF00E5 eyebrows, gull #FFD700 stats og hero-highlight. Commit 7f2e747.
+- ✅ **Hero redesign med godkjent solnedgangsmotiv (landing.py & styles.css)**
+  - Ny ren hero med `hero-michael-sunset.webp`, 3-linjers overskrift med «Trygg på» i oransje (#FF8A3D) og dynamiske talebobler.
+- ✅ **Michael AI pedagogisk finjustering (teacher_chat.py & micro_lessons.py)**
+  - Hard konsishets-vokter for utålmodige elever (Kai: maks 3–4 setninger ved snarveier).
+  - Nøytral kultur-RAG (ingen uoppfordrede Thailand-antakelser ved engelsk/norsk tale).
+  - Presis § 7 nr. 2 forklaring for venstresving uten forvirrende vinkling. Commit `39cee71`.
 
 ---
 
