@@ -998,16 +998,19 @@ def _hero_html(lang: str = "th", app_query: str = "") -> str:
           <span data-lang="en">Created by licensed driving instructor — explained in Thai</span>
         </div>
 
-        <!-- H1 Heading: White + Orange Heavy Sans -->
+        <!-- H1 Heading: White + Orange Heavy Sans (Exact 3 lines) -->
         <h1>
           <span class="hero-h1-white block">
             <span data-lang="th">ทฤษฎีภาษาไทย</span>
             <span data-lang="no">Teori på thai.</span>
             <span data-lang="en">Theory in Thai.</span>
           </span>
+          <span class="hero-h1-white block">
+            <span data-lang="no">Trygg på</span>
+          </span>
           <span class="hero-h2-orange block">
             <span data-lang="th">ขับขี่ปลอดภัยบนถนนนอร์เวย์</span>
-            <span data-lang="no">Trygg på norsk vei.</span>
+            <span data-lang="no">norsk vei.</span>
             <span data-lang="en">Safe on Norwegian roads.</span>
           </span>
         </h1>
