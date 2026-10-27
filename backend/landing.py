@@ -220,11 +220,11 @@ html.landing-onboard-active .onboard-arrow{display:block;animation:landingArrowB
   inset: 0;
   pointer-events: none;
   z-index: 1;
-  background: linear-gradient(to right, #07070A 0%, rgba(7, 7, 10, 0.75) 45%, rgba(7, 7, 10, 0.15) 75%, transparent 100%);
+  background: linear-gradient(to right, #07070A 0%, rgba(7, 7, 10, 0.95) 18%, rgba(7, 7, 10, 0.55) 28%, transparent 40%);
 }
 @media (min-width: 1024px) {
   .hero-overlay {
-    background: linear-gradient(to right, #07070A 0%, rgba(7, 7, 10, 0.92) 38%, rgba(7, 7, 10, 0.55) 55%, transparent 80%);
+    background: linear-gradient(to right, #07070A 0%, rgba(7, 7, 10, 0.95) 18%, rgba(7, 7, 10, 0.55) 28%, transparent 40%);
   }
 }
 .hero-overlay-top-bottom {

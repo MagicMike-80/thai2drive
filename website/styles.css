@@ -163,11 +163,11 @@ a:hover { text-decoration: underline; }
   inset: 0;
   pointer-events: none;
   z-index: 1;
-  background: linear-gradient(to right, #07070A 0%, rgba(7, 7, 10, 0.75) 45%, rgba(7, 7, 10, 0.15) 75%, transparent 100%);
+  background: linear-gradient(to right, #07070A 0%, rgba(7, 7, 10, 0.95) 18%, rgba(7, 7, 10, 0.55) 28%, transparent 40%);
 }
 @media (min-width: 1024px) {
   .hero-overlay {
-    background: linear-gradient(to right, #07070A 0%, rgba(7, 7, 10, 0.92) 38%, rgba(7, 7, 10, 0.55) 55%, transparent 80%);
+    background: linear-gradient(to right, #07070A 0%, rgba(7, 7, 10, 0.95) 18%, rgba(7, 7, 10, 0.55) 28%, transparent 40%);
   }
 }
 .hero-overlay-top-bottom {
@@ -175,7 +175,7 @@ a:hover { text-decoration: underline; }
   inset: 0;
   pointer-events: none;
   z-index: 1;
-  background: linear-gradient(to bottom, rgba(7, 7, 10, 0.6) 0%, transparent 25%, transparent 75%, #07070A 100%);
+  background: linear-gradient(to bottom, rgba(7, 7, 10, 0.5) 0%, transparent 20%, transparent 80%, #07070A 100%);
 }
 
 .hero-wrap {
@@ -198,7 +198,7 @@ a:hover { text-decoration: underline; }
 
 /* Left Hero */
 .hero-left {
-  max-width: 560px;
+  max-width: 490px;
   display: flex;
   flex-direction: column;
   gap: 18px;
@@ -236,19 +236,25 @@ a:hover { text-decoration: underline; }
 .hero-title-group h1 {
   font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
   font-weight: 900;
-  line-height: 0.90;
+  line-height: 0.92;
   letter-spacing: -0.04em;
-  font-size: clamp(38px, 5.5vw, 62px);
+  font-size: clamp(34px, 4.2vw, 54px);
   text-shadow: 0 2px 24px rgba(0, 0, 0, 0.6);
   margin: 0;
 }
+html[lang="no"] .hero-title-group h1 [data-lang="no"],
+html[data-current-lang="no"] .hero-title-group h1 [data-lang="no"],
+html[lang="th"] .hero-title-group h1 [data-lang="th"],
+html[data-current-lang="th"] .hero-title-group h1 [data-lang="th"],
+html[lang="en"] .hero-title-group h1 [data-lang="en"],
+html[data-current-lang="en"] .hero-title-group h1 [data-lang="en"] {
+  display: block !important;
+}
 .hero-h1-white {
   color: #FFFFFF;
-  display: block;
 }
 .hero-h2-orange {
   color: #FF6A2E;
-  display: block;
   font-weight: 900;
 }
 
@@ -418,6 +424,87 @@ a:hover { text-decoration: underline; }
 .hero-live-tag {
   color: #16A34A;
   font-weight: 800;
+}
+
+/* Speech Bubbles over Michael's hand */
+.speech-bubble {
+  position: absolute;
+  z-index: 24;
+  pointer-events: auto;
+}
+.speech-bubble-cyan {
+  top: 10%;
+  left: 10%;
+  background: #2E74C0;
+  color: #FFFFFF;
+  padding: 10px 22px;
+  border-radius: 22px 22px 22px 6px;
+  font-family: 'Noto Sans Thai', sans-serif;
+  font-weight: 700;
+  font-size: 26px;
+  line-height: 1;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+.tail-cyan {
+  position: absolute;
+  bottom: -10px;
+  left: 26px;
+  width: 18px;
+  height: 16px;
+  background: #2E74C0;
+  transform: rotate(18deg);
+  clip-path: polygon(0 0, 100% 0, 20% 100%);
+}
+.speech-bubble-white {
+  top: 30%;
+  left: 22%;
+  background: #FFFFFF;
+  color: #0F172A;
+  padding: 8px 20px;
+  border-radius: 18px 18px 6px 18px;
+  font-family: 'Geist', sans-serif;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 1;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+}
+.tail-white {
+  position: absolute;
+  bottom: -9px;
+  right: 22px;
+  width: 16px;
+  height: 14px;
+  background: #FFFFFF;
+  transform: rotate(-8deg);
+  clip-path: polygon(0 0, 100% 0, 80% 100%);
+}
+.speech-bubble-coral {
+  top: 46%;
+  left: 7%;
+  background: #FF6B6B;
+  color: #FFFFFF;
+  padding: 8px 20px;
+  border-radius: 16px 16px 16px 6px;
+  font-family: 'Geist', sans-serif;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 1;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+}
+.tail-coral {
+  position: absolute;
+  bottom: -9px;
+  right: 38%;
+  width: 14px;
+  height: 12px;
+  background: #FF6B6B;
+  transform: rotate(12deg);
+  clip-path: polygon(0 0, 100% 0, 30% 100%);
+}
+@media (max-width: 960px) {
+  .speech-bubble {
+    display: none;
+  }
 }
 
 /* Teacher Card Bottom */
