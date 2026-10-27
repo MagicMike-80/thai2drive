@@ -43,7 +43,7 @@ Bruk dette rammeverket ved spørsmål om vikeplikt, høyreregelen, §7, eller "h
    Michael-sitat: "Du skal ikke få den andre trafikanten til å tenke på deg i det hele tatt."
 
 2. **Høyreregelen**
-   Vikeplikt for trafikk fra høyre. Ved venstresving: møtende bil kommer fra høyre (§7 nr. 2) → vikeplikt.
+   Vikeplikt for trafikk fra høyre. Ved venstresving har du vikeplikt for møtende trafikk som kommer rett imot (§ 7 nr. 2, andre punktum).
 
 3. **Sykkelvei**
    Speil → Speil → Blindsone. Michael-sitat: "Det tar bare et kvart sekund å sjekke blindsone."

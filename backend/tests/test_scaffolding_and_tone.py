@@ -90,6 +90,18 @@ class TestDynamicToneSelection(unittest.TestCase):
         self.assertEqual(tc._detect_tone("เครียดมาก กลัวสอบไม่ผ่าน"), "warm")
         self.assertEqual(tc._detect_tone("I am so stressed and nervous about the test"), "warm")
 
+    def test_detect_impatient_tone(self):
+        self.assertEqual(tc._detect_tone("Dette kan jeg fra før, hopp over"), "impatient")
+        self.assertEqual(tc._detect_tone("Orker ikke lese hele boka"), "impatient")
+        self.assertEqual(tc._detect_tone("Onkelen min sa at jeg har forkjørsrett"), "impatient")
+        self.assertEqual(tc._detect_tone("Bare gi meg svarene til teoriprøven"), "impatient")
+        self.assertEqual(tc._detect_tone("Du er bare en robot"), "impatient")
+        self.assertEqual(tc._detect_tone("ขี้เกียจอ่าน เอาคำตอบเลย"), "impatient")
+        self.assertEqual(tc._detect_tone("Already know this, skip reading"), "impatient")
+        impatient_p = tc._tone_instruction("impatient", "no")
+        self.assertIn("IMPATIENT", impatient_p)
+        self.assertIn("MAXIMUM 3 TO 4 SHORT SENTENCES", impatient_p)
+
     def test_detect_dry_tone_from_humour(self):
         self.assertEqual(tc._detect_tone("haha lol 555"), "dry")
         self.assertEqual(tc._detect_tone("hjernen min består av spaghetti"), "dry")

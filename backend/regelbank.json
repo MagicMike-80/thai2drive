@@ -22,11 +22,11 @@
       ]
     },
     "venstresving": {
-      "kilde": "Trafikkreglene § 7 nr. 2, 2. punktum (eier: hjemmel for vikeplikt mot møtende ved venstresving – møtende bil kommer på førerens høyre side idet du krysser kjørefeltet)",
+      "kilde": "Trafikkreglene § 7 nr. 2, 2. punktum (eier: hjemmel for vikeplikt mot møtende ved venstresving)",
       "fakta": {
-        "no": "Når du svinger til venstre på tvers av møtende kjørefelt, får du den møtende bilen på din høyre side. Da har du vikeplikt (trafikkreglene § 7 nr. 2, andre punktum). Du er tjeneren og den møtende er kongen: ikke få den til å bremse eller tvile.",
-        "th": "เมื่อคุณเลี้ยวซ้ายตัดผ่านเลนรถสวนทาง รถสวนทางจะมาอยู่ทางขวามือของคุณ คุณจึงต้องให้ทาง (Trafikkreglene § 7 ข้อ 2 ประโยคที่สอง) คุณคือผู้รับใช้ รถสวนทางคือกษัตริย์ อย่าทำให้เขาต้องเบรกหรือลังเล",
-        "en": "When you turn left across the oncoming lane, the oncoming car ends up on your right side. That is what gives you the duty to give way (Trafikkreglene § 7 no. 2, second sentence). You are the servant and the oncoming car is the king: do not make it brake or hesitate."
+        "no": "Når du svinger til venstre på tvers av møtende kjørefelt, har du vikeplikt for møtende trafikk som kommer rett imot (trafikkreglene § 7 nr. 2, andre punktum). Du er tjeneren og den møtende er kongen: ikke få den til å bremse eller tvile.",
+        "th": "เมื่อคุณจะเลี้ยวซ้ายตัดผ่านเลนรถสวนทาง คุณมีหน้าที่ต้องให้ทางแก่รถที่แล่นสวนทางมาตรงหน้า (Trafikkreglene § 7 ข้อ 2 ประโยคที่สอง) คุณคือผู้รับใช้ รถสวนทางคือกษัตริย์: อย่าทำให้เขาต้องเบรกหรือลังเล",
+        "en": "When turning left across an oncoming lane, you must give way to oncoming traffic coming straight ahead (Trafikkreglene § 7 no. 2, second sentence). You are the servant and the oncoming car is the king: do not make it brake or hesitate."
       },
       "triggere": [
         "venstresving",

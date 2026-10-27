@@ -1198,6 +1198,7 @@ def _build_system_prompt(lang: str, memory: Optional[dict] = None, *, guided: bo
             "Acknowledge uncertainty in a teaching context when useful, for example "
             "'This is an easy place to get unsure', in the selected language. "
             "Do not claim to feel emotions or describe your own feelings. "
+            "Do NOT assume that an English- or Norwegian-speaking student is from Thailand or used to left-hand traffic unless they explicitly mention Thailand themselves. "
             "Keep every learner-facing word in the selected language."
         )
         + _conversation_first_rules(l, guided=guided)
@@ -2406,6 +2407,16 @@ _TONE_KEYWORDS = {
         "drink and drive", "skip the mirror", "run a red", "red light", "stop sign", "text while driving",
         "drunk driving", "no seatbelt", "speeding",
     ),
+    "impatient": (
+        "kan alt fra før", "kan det fra før", "kan jeg fra før", "kan alt", "hopp over",
+        "trenger ikke lese", "orker ikke lese",
+        "snarvei", "snarveier", "onkelen min", "onkel", "på jordet", "jorde",
+        "gi meg svarene", "bare svarene", "fasit", "kjedelig", "du er bare en robot",
+        "bare en datamaskin", "hvorfor høre på deg", "fortell meg bare",
+        "ขี้เกียจอ่าน", "เอาคำตอบเลย", "ทางลัด", "ลุงบอกว่า", "ขับเป็นแล้ว", "แค่หุ่นยนต์",
+        "already know", "skip reading", "shortcut", "my uncle", "cheat",
+        "just give me the answers", "too long", "boring", "just a robot", "just a computer",
+    ),
     "dry": (
         "haha", "hehe", "lol", "555", "😂", "🤣", "hjernen min består", "hjernen min er",
         "my brain is just",
@@ -2414,9 +2425,9 @@ _TONE_KEYWORDS = {
 
 
 def _detect_tone(message: str, quiz_context: str = "") -> Optional[str]:
-    """Pick Michael's tone register. Safety beats warmth beats humour."""
+    """Pick Michael's tone register. Safety beats impatience beats warmth beats humour."""
     text = f"{message or ''} {quiz_context or ''}".casefold()
-    for tone in ("strict", "warm", "dry"):
+    for tone in ("strict", "impatient", "warm", "dry"):
         if any(term in text for term in _TONE_KEYWORDS[tone]):
             return tone
     return None
@@ -2429,10 +2440,17 @@ def _tone_instruction(tone: Optional[str], lang: str) -> str:
     language = {"no": "Norwegian", "th": "Thai", "en": "English"}.get(lang, "Norwegian")
     rules = {
         "strict": (
-            "The student describes a myth, overconfident shortcut, or safety-critical error (Kai persona). Be STRICT, authoritative, and direct: "
+            "The student describes a safety-critical traffic error or dangerous driving. Be STRICT, authoritative, and direct: "
             "no softening, no sugarcoating. Point out the severe safety risk and the non-negotiable rule immediately. "
-            "LENGTH GUARD (7-årsregelen): MAXIMUM 3-4 short sentences in 1 single paragraph. Every sentence max 15 words. "
-            "Always conclude with exactly 1 sharp question back that challenges the student to think."
+            "Do not lecture at length."
+        ),
+        "impatient": (
+            "The student is impatient, overconfident, or seeking shortcuts (Kai persona). "
+            "STRICT CONCISENESS RULE (MANDATORY): "
+            "1. MAXIMUM 3 TO 4 SHORT SENTENCES TOTAL. Maximum 1 paragraph. Every sentence max 15 words. "
+            "2. No bullet lists. No long lectures. "
+            "3. Dispel shortcuts firmly ('Onkelens vane er ikke loven' / 'Tid gir ingen rett'). "
+            "4. ALWAYS conclude with exactly 1 sharp follow-up question that forces the student to think."
         ),
         "warm": (
             "The student is anxious, nervous, hesitant, or discouraged (Ploy persona). Be WARM, reassuring, and calm: slow the pace, take away "

@@ -407,11 +407,21 @@ def format_micro_lesson_context(lesson: Dict[str, Any], language: str = "th") ->
     hdr = headers.get(lang, headers["th"])
     lbl = labels.get(lang, labels["th"])
 
+    th_habit_text = lesson.get('thailand_habit', '')
+    if lang == "en" and th_habit_text:
+        th_habit_line = f"• {lbl['th_habit']} (Optional comparison only; do not assume the student is from Thailand): {th_habit_text}\n"
+    elif lang == "no" and th_habit_text:
+        th_habit_line = f"• {lbl['th_habit']} (Valgfri kultursammenligning; ikke anta at eleven er fra Thailand): {th_habit_text}\n"
+    elif th_habit_text:
+        th_habit_line = f"• {lbl['th_habit']}: {th_habit_text}\n"
+    else:
+        th_habit_line = ""
+
     return (
         f"\n{hdr}\n"
         f"• {lbl['topic']}: {lesson.get('title', '')} ({lesson.get('topic', '')})\n"
         f"• {lbl['law']}: {lesson.get('law_ref', '')}\n"
-        f"• {lbl['th_habit']}: {lesson.get('thailand_habit', '')}\n"
+        f"{th_habit_line}"
         f"• {lbl['no_rule']}: {lesson.get('norway_rule', '')}\n"
         f"• {lbl['metafor']}: {lesson.get('metafor', '')}\n"
         "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
