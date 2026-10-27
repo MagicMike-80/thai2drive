@@ -4779,7 +4779,7 @@ a { color:inherit; text-decoration:none; }
 
       <div class="home-main-actions">
         <button class="home-main-choice" onclick="showTab('teacher')">
-          <img class="home-main-choice-icon michael-photo" src="/api/assets/michael_profile.jpg" alt="Michael">
+          <img class="home-main-choice-icon michael-photo" src="/api/assets/michael-avatar.png" alt="Michael">
           <span class="home-main-choice-copy">
             <span class="home-main-choice-title" data-key="home_ask_michael">Spør Michael AI</span>
             <span class="home-main-choice-sub" data-key="teacher_sub">Still et spørsmål om trafikk</span>
@@ -4836,7 +4836,7 @@ a { color:inherit; text-decoration:none; }
 
       <!-- Michael bio card -->
       <div class="home-michael-bio" id="homeMichaelBio" style="display:flex;align-items:flex-start;gap:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,153,51,.18);border-radius:16px;padding:14px 16px;margin:12px 0;">
-        <img src="/api/assets/michael_profile.jpg" alt="Michael" style="width:48px;height:48px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid rgba(255,153,51,.5);">
+        <img src="/api/assets/michael-avatar.png" alt="Michael" style="width:48px;height:48px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid rgba(255,153,51,.5);">
         <div style="flex:1;min-width:0;">
           <div style="font-weight:700;font-size:.95rem;color:#F8FAFC;margin-bottom:4px;">Michael</div>
           <div id="michaelBioHome" data-key="michael_bio" style="font-size:.82rem;color:rgba(248,250,252,.7);line-height:1.55;"></div>
@@ -4868,7 +4868,7 @@ a { color:inherit; text-decoration:none; }
 
     <div class="michael-quiz-coach" id="michaelQuizCoach" role="dialog" aria-live="polite" aria-label="Michael">
       <div class="mqc-head">
-        <img class="mqc-avatar" src="/api/assets/michael_profile.jpg" alt="Michael">
+        <img class="mqc-avatar" src="/api/assets/michael-avatar.png" alt="Michael">
         <div class="mqc-title" data-key="coach_title">Michael อธิบาย</div>
         <button class="mqc-close" onclick="closeMichaelQuizCoach()" data-label-key="close" aria-label="ปิด">×</button>
       </div>
@@ -5125,7 +5125,7 @@ a { color:inherit; text-decoration:none; }
               <div style="color:var(--muted);font-size:.78rem;font-weight:700;background:rgba(255,255,255,.07);padding:3px 9px;border-radius:20px;">v2.0</div>
             </div>
             <div class="settings-row" style="align-items:flex-start;gap:12px;">
-              <img src="/api/assets/michael_profile.jpg" alt="Michael" style="width:44px;height:44px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid rgba(255,153,51,.45);">
+              <img src="/api/assets/michael-avatar.png" alt="Michael" style="width:44px;height:44px;border-radius:50%;object-fit:cover;flex-shrink:0;border:2px solid rgba(255,153,51,.45);">
               <div class="sr-label">
                 <div class="sr-title">Michael</div>
                 <div class="sr-sub" id="michaelBioSettings" data-key="michael_bio" style="white-space:normal;line-height:1.55;"></div>
@@ -5289,7 +5289,7 @@ a { color:inherit; text-decoration:none; }
           <button class="teacher-sidebar-toggle" id="teacherSidebarToggle" type="button" onclick="toggleTeacherSidebar()" aria-controls="teacherSidePanel" aria-expanded="false" data-label-key="teacher_topics_open" aria-label="Vis sidefelt" title="Vis sidefelt">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/></svg>
           </button>
-          <img class="teacher-avatar" src="/api/assets/michael_profile.jpg" alt="Michael">
+          <img class="teacher-avatar" src="/api/assets/michael-avatar.png" alt="Michael">
           <div class="teacher-header-info">
             <div class="teacher-name" id="teacherNameLbl" data-key="teacher_name">Michael Trafikklærer</div>
             <div class="teacher-meta-wrap">
@@ -5363,7 +5363,7 @@ a { color:inherit; text-decoration:none; }
       <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span><span class="bn-label" data-key="history">Historikk</span>
     </button>
     <button class="bn-tab bn-tab-michael" id="bnTeacher" onclick="showTab('teacher')">
-      <span class="bn-icon"><img src="/api/assets/michael_profile.jpg" alt="Michael"></span><span class="bn-label" data-key="teacher">Michael</span>
+      <span class="bn-icon"><img src="/api/assets/michael-avatar.png" alt="Michael"></span><span class="bn-label" data-key="teacher">Michael</span>
     </button>
     <button class="bn-tab" id="bnLibrary" onclick="showTab('library')">
       <span class="bn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></span><span class="bn-label" data-key="lib_videos">Videoer</span>
@@ -6211,7 +6211,7 @@ function applyUILang() {
   var nsg= document.getElementById('bnSigns');     if(nsg) nsg.innerHTML = '<span class="bn-icon">' + NAV_SVG.signs + '</span><span class="bn-label">' + t('signs') + '</span>';
   var nbm= document.getElementById('bnBookmarks'); if(nbm) nbm.innerHTML = '<span class="bn-icon">' + NAV_SVG.bookmarks + '</span><span class="bn-label">' + t('bookmarks') + '</span>';
   var ns = document.getElementById('bnSettings');  if(ns) ns.innerHTML = '<span class="bn-icon">' + NAV_SVG.settings + '</span><span class="bn-label">' + t('settings') + '</span>';
-  var nt = document.getElementById('bnTeacher');   if(nt) nt.innerHTML = '<span class="bn-icon"><img src="/api/assets/michael_profile.jpg" alt="Michael"></span><span class="bn-label">' + t('teacher') + '</span>';
+  var nt = document.getElementById('bnTeacher');   if(nt) nt.innerHTML = '<span class="bn-icon"><img src="/api/assets/michael-avatar.png" alt="Michael"></span><span class="bn-label">' + t('teacher') + '</span>';
   var nl = document.getElementById('bnLibrary');   if(nl) nl.innerHTML = '<span class="bn-icon">' + NAV_SVG.library + '</span><span class="bn-label">' + t('lib_videos') + '</span>';
   var nsb= document.getElementById('bnStudybook'); if(nsb) nsb.innerHTML = '<span class="bn-icon">' + NAV_SVG.studybook + '</span><span class="bn-label">' + t('sb_nav') + '</span>';
   // Update teacher UI if visible
@@ -12543,8 +12543,8 @@ function _teacherAppendBubble(role, text) {
   if (role === 'assistant') {
     var av = document.createElement('img');
     av.className = 'tm-av';
-    av.src = '/api/assets/michael_profile.jpg';
-    av.onerror = function() { this.onerror = null; this.src = '/api/assets/michael_avatar.png'; };
+    av.src = '/api/assets/michael-avatar.png';
+    av.onerror = function() { this.onerror = null; this.src = '/api/assets/michael_profile.jpg'; };
     av.alt = 'Michael';
     row.appendChild(av);
   }
@@ -13064,7 +13064,7 @@ function _teacherShowTyping() {
   row.id = 'teacherTypingRow';
   var av = document.createElement('img');
   av.className = 'tm-av';
-  av.src = '/api/assets/michael_profile.jpg';
+  av.src = '/api/assets/michael-avatar.png';
   av.alt = 'Michael';
   row.appendChild(av);
   var bubble = document.createElement('div');

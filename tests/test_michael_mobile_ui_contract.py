@@ -1,4 +1,5 @@
 import re
+import struct
 import unittest
 from pathlib import Path
 
@@ -9,10 +10,13 @@ WEBAPP = (ROOT / "backend" / "webapp.py").read_text(encoding="utf-8")
 
 class MichaelMobileUiContractTests(unittest.TestCase):
     def test_real_michael_portrait_is_packaged_and_used(self):
-        portrait = ROOT / "backend" / "public_assets" / "michael_profile.jpg"
+        portrait = ROOT / "backend" / "public_assets" / "michael-avatar.png"
         self.assertTrue(portrait.is_file())
         self.assertGreater(portrait.stat().st_size, 10_000)
-        self.assertGreaterEqual(WEBAPP.count("/api/assets/michael_profile.jpg"), 6)
+        with portrait.open("rb") as image:
+            self.assertEqual(image.read(16)[:8], b"\x89PNG\r\n\x1a\n")
+            self.assertEqual(struct.unpack(">II", image.read(8)), (256, 256))
+        self.assertGreaterEqual(WEBAPP.count("/api/assets/michael-avatar.png"), 6)
 
     def test_topics_are_in_a_toggleable_sidebar(self):
         self.assertIn('id="teacherSidebarToggle"', WEBAPP)
