@@ -183,220 +183,382 @@ html.landing-onboard-active .onboard-arrow{display:block;animation:landingArrowB
 }
 .hero-icon{width:130px;height:130px;border-radius:32px;box-shadow:0 40px 100px rgba(0,0,0,.45);margin-bottom:28px}
 
-/* Hero showcase grid */
+
+/* Instrument Serif italic */
+.serif-italic {
+  font-family: 'Instrument Serif', Georgia, serif !important;
+  font-style: italic !important;
+}
+
+/* Hero Section */
+.hero-wrap {
+  position: relative;
+  overflow: hidden;
+  padding: 40px 0 60px;
+}
 .hero-container {
-  max-width: 1200px;
+  max-width: 1240px;
   margin: 0 auto;
-  padding: 40px 20px 20px;
+  padding: 0 24px;
 }
-.hero-grid {
-  display: grid;
-  grid-template-columns: 1.15fr 0.85fr;
-  gap: 48px;
+.hero-flex {
+  display: flex;
+  flex-direction: row;
   align-items: center;
+  justify-content: space-between;
+  gap: 48px;
 }
-@media (max-width: 900px) {
-  .hero-grid {
-    grid-template-columns: 1fr;
-    gap: 32px;
+@media (max-width: 960px) {
+  .hero-flex {
+    flex-direction: column;
+    text-align: center;
+    gap: 36px;
   }
 }
-.hero-text {
+.hero-left {
+  flex: 1 1 54%;
+  max-width: 620px;
   text-align: left;
 }
-@media (max-width: 900px) {
-  .hero-text {
+@media (max-width: 960px) {
+  .hero-left {
+    max-width: 100%;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 }
-.hero-showcase {
+.hero-right {
+  flex: 1 1 46%;
   position: relative;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
+  min-height: 540px;
 }
-.hero-michael-wrap {
-  position: relative;
-  width: 100%;
-  max-width: 440px;
-  aspect-ratio: 4/5;
-  border-radius: 24px;
-  overflow: hidden;
-  border: 1px solid rgba(255, 153, 51, 0.35);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 40px rgba(255, 153, 51, 0.15);
-  background: radial-gradient(circle at 50% 30%, rgba(255, 153, 51, 0.12), transparent 70%), #0d1527;
+@media (max-width: 960px) {
+  .hero-right {
+    min-height: 500px;
+    width: 100%;
+  }
 }
-.hero-michael-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center top;
-  display: block;
-}
-.hero-badge-top {
-  position: absolute;
-  top: 16px;
-  left: 16px;
-  background: rgba(13, 21, 39, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 153, 51, 0.4);
-  color: #FF9933;
-  padding: 6px 14px;
-  border-radius: 30px;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-  display: flex;
+
+/* Eyebrow badge */
+.hero-eyebrow {
+  display: inline-flex;
   align-items: center;
-  gap: 6px;
-}
-.hero-badge-live {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  background: rgba(13, 21, 39, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(0, 209, 255, 0.4);
-  color: #00D1FF;
-  padding: 6px 14px;
-  border-radius: 30px;
+  gap: 10px;
+  background: #1A2332;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+  padding: 8px 18px;
   font-size: 13px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+  font-weight: 500;
+  color: #CBD5E1;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
 }
-.hero-badge-live .pulse-dot {
+.eyebrow-pulse {
   width: 8px;
   height: 8px;
-  background: #00D1FF;
+  background: #FF8C42;
   border-radius: 50%;
-  box-shadow: 0 0 8px #00D1FF;
-  animation: pulseDot 2s infinite;
+  box-shadow: 0 0 10px rgba(255, 140, 66, 0.85);
+  animation: pulseDot 2s infinite ease-in-out;
 }
 @keyframes pulseDot {
   0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.4; transform: scale(0.85); }
+  50% { opacity: 0.45; transform: scale(0.85); }
 }
-.hero-teacher-card {
-  margin-top: -36px;
-  position: relative;
-  z-index: 2;
-  width: 90%;
-  max-width: 400px;
-  background: rgba(15, 23, 42, 0.92);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 18px;
-  padding: 16px 20px;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 25px rgba(0, 209, 255, 0.1);
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-.teacher-avatar-img {
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  border: 2px solid #FF9933;
-  object-fit: cover;
-  flex-shrink: 0;
-}
-.teacher-info {
-  flex: 1;
-  min-width: 0;
-}
-.teacher-name-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-}
-.teacher-name {
-  font-size: 16px;
-  font-weight: 700;
+
+/* Hero Typography */
+.hero-h1-white {
+  font-size: clamp(38px, 5.5vw, 60px);
+  font-weight: 800;
+  line-height: 1.0;
+  letter-spacing: -0.025em;
   color: #FFFFFF;
+  margin: 0;
 }
-.teacher-role {
-  font-size: 12px;
+.hero-h2-orange {
+  font-size: clamp(38px, 5.5vw, 62px);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: #FF8C42;
+  margin: 4px 0 20px;
+}
+.hero-subtext {
+  font-size: clamp(16px, 2vw, 18px);
+  line-height: 1.6;
   color: #94A3B8;
-  margin-top: 2px;
+  max-width: 520px;
+  margin: 0 0 28px;
+  font-weight: 450;
 }
-.teacher-stars {
-  color: #FFB800;
-  font-size: 12px;
+
+/* Action Buttons */
+.hero-btn-row {
   display: flex;
-  gap: 2px;
-  margin-top: 4px;
-}
-.teacher-tag {
-  font-size: 11px;
-  color: #00D1FF;
-  font-weight: 600;
-}
-.hero-trust-row {
-  display: flex;
+  align-items: center;
+  gap: 14px;
   flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 28px;
+  margin-bottom: 24px;
 }
-@media (max-width: 900px) {
-  .hero-trust-row {
+@media (max-width: 960px) {
+  .hero-btn-row {
     justify-content: center;
   }
 }
-.hero-trust-chip {
+.btn-primary-orange {
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 9999px;
+  background: #FF8C42;
+  color: #FFFFFF !important;
+  font-weight: 700;
+  font-size: 16px;
+  padding: 0 28px;
+  text-decoration: none;
+  box-shadow: 0 8px 24px rgba(255, 140, 66, 0.35);
+  transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+  border: none;
+  cursor: pointer;
+}
+.btn-primary-orange:hover {
+  background: #FF7A24;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(255, 140, 66, 0.45);
+}
+.btn-secondary-glass {
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 9999px;
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #FFFFFF !important;
+  font-weight: 600;
+  font-size: 15px;
+  padding: 0 24px;
+  text-decoration: none;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: transform 0.15s ease, background 0.15s ease;
+  cursor: pointer;
+}
+.btn-secondary-glass:hover {
+  background: rgba(37, 52, 78, 0.9);
+  transform: translateY(-2px);
+}
+
+/* Feature Chips */
+.hero-chips-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+@media (max-width: 960px) {
+  .hero-chips-row {
+    justify-content: center;
+  }
+}
+.hero-chip {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 16px;
-  border-radius: 30px;
-  background: rgba(255, 255, 255, 0.04);
+  background: #151E2F;
   border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+  padding: 8px 16px;
   font-size: 13px;
+  font-weight: 500;
   color: #CBD5E1;
 }
-.hero-trust-chip svg {
-  color: #00D1FF;
+.hero-chip-check {
+  color: #22C55E;
+  font-weight: bold;
+}
+
+/* Michael Visual Showcase */
+.showcase-glow {
+  position: absolute;
+  width: 480px;
+  height: 480px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 140, 66, 0.22) 0%, rgba(255, 140, 66, 0.08) 50%, transparent 70%);
+  filter: blur(45px);
+  pointer-events: none;
+  z-index: 1;
+}
+.michael-img-card {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 420px;
+  aspect-ratio: 4/5;
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.65), 0 0 40px rgba(255, 140, 66, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #0B1220;
+}
+.michael-img-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 8%;
+  display: block;
+}
+.michael-fade-overlay {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 25%;
+  background: linear-gradient(to top, #0B1220 0%, rgba(11, 18, 32, 0.7) 45%, transparent 100%);
+  pointer-events: none;
+}
+
+/* Floating Badges */
+.badge-bubble {
+  position: absolute;
+  z-index: 25;
+  border-radius: 9999px;
+  padding: 7px 15px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+}
+.badge-bubble-top-r {
+  top: 12px;
+  right: 8px;
+  background: #FFFFFF;
+  color: #0B1220;
+  font-size: 12px;
+}
+.badge-bubble-top-l {
+  top: 60px;
+  left: 6px;
+  background: #151E2F;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+  font-size: 13px;
+}
+.badge-bubble-mid-l {
+  top: 130px;
+  left: -8px;
+  background: #E0F2FE;
+  color: #0B1220;
+  font-size: 14px;
+  font-weight: 500;
+}
+.badge-bubble-mid-r {
+  top: 150px;
+  right: -6px;
+  background: #FFFFFF;
+  color: #0B1220;
+  font-size: 13px;
+  font-weight: 700;
+}
+.badge-bubble-low-l {
+  bottom: 110px;
+  left: 4px;
+  background: #FCE7F3;
+  color: #831843;
+  font-size: 13px;
+}
+.badge-bubble-low-r {
+  bottom: 100px;
+  right: 4px;
+  background: #FFF1E6;
+  color: #7C3A1A;
+  font-size: 13px;
+}
+.badge-bubble-center-low {
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1A2332;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+  font-size: 12px;
+}
+
+/* Teacher Card Bottom */
+.teacher-profile-card {
+  position: absolute;
+  bottom: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 30;
+  width: 90%;
+  max-width: 320px;
+  background: #FFFFFF;
+  border-radius: 18px;
+  padding: 12px 16px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.teacher-avatar-wrap {
+  position: relative;
   flex-shrink: 0;
+  width: 44px;
+  height: 44px;
 }
-
-.hero h1{
-  font-size:clamp(48px,8vw,88px);font-weight:900;letter-spacing:-.03em;
-  line-height:1.05;color:#fff;margin-bottom:22px;
-  max-width:960px;margin-left:auto;margin-right:auto;
+.teacher-avatar-wrap img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
 }
-.hero h1 em{font-style:normal;color:#FF9933}
-.hero .sub{font-size:clamp(20px,3vw,30px);color:#94A3B8;max-width:740px;margin:0 auto 32px;line-height:1.5}
-.cta-group{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:12px}
-.cta-btn{
-  display:inline-flex;align-items:center;gap:8px;padding:16px 28px;border-radius:12px;
-  font-weight:800;font-size:16px;cursor:pointer;border:none;transition:transform .15s,opacity .15s;
-  text-decoration:none;
+.teacher-online-dot {
+  position: absolute;
+  bottom: -1px;
+  right: -1px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #22C55E;
+  border: 2px solid #FFFFFF;
 }
-.cta-btn:hover{transform:translateY(-2px)}
-.cta-primary{background:#FF9933;color:#0F172A;box-shadow:0 16px 40px rgba(255,153,51,.35)}
-.cta-secondary{background:rgba(255,255,255,.06);color:#fff;border:1.5px solid rgba(255,255,255,.15)}
-
-.qr-box{
-  display:inline-flex;align-items:center;gap:14px;
-  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
-  padding:14px 18px 14px 14px;border-radius:14px;margin-top:24px;
+.teacher-text-col {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
 }
-.qr-box img{width:96px;height:96px;border-radius:8px;background:#fff;padding:6px;flex-shrink:0}
-.qr-text{text-align:left;font-size:13px;color:#CBD5E1;font-weight:600;max-width:200px}
-.qr-text small{display:block;color:#64748B;font-weight:500;margin-top:3px;font-size:11px}
-
-/* badges */
-.hero-badges{display:flex;justify-content:center;gap:12px;margin-top:36px;flex-wrap:wrap}
-.badge-chip{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:999px;font-size:16px;color:#CBD5E1;font-weight:500}
-.badge-chip .ok{width:8px;height:8px;background:#10B981;border-radius:50%}
+.teacher-name-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0B1220;
+}
+.teacher-sub-title {
+  font-size: 12px;
+  font-weight: 500;
+  color: #64748B;
+  margin-top: 2px;
+}
+.teacher-pulse-indicator {
+  margin-left: auto;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22C55E;
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.8);
+  animation: pulseDot 2s infinite ease-in-out;
+}
 
 /* STATS */
 .stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:24px;margin:56px 0}
@@ -833,125 +995,141 @@ def _footer_html(lang: str = "th") -> str:
 
 def _hero_html(lang: str = "th", app_query: str = "") -> str:
     return f"""
-<section class="hero">
-  <div class="container hero-container">
-    <div class="hero-grid">
-      <div class="hero-text">
-        <!-- Language switcher -->
-        <div class="lang-row landing-onboard-target landing-onboard-lang" role="group" aria-label="Language" style="margin-bottom:24px">
-          <span class="landing-onboard-label landing-onboard-label-lang">
-            <span data-lang="th">1. เลือกภาษา</span>
-            <span data-lang="no">1. Velg språk</span>
-            <span data-lang="en">1. Choose language</span>
-            <button class="landing-onboard-dismiss" type="button">×</button>
-          </span>
-          <svg class="onboard-arrow onboard-arrow-lang" viewBox="0 0 120 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M12 10 C 50 14, 76 36, 86 64" fill="none" stroke="#fff" stroke-width="16" stroke-linecap="round"/>
-            <path d="M99 104 L109 56 L62 73 Z" fill="#fff"/>
-          </svg>
-          <button class="lang-btn{' active' if lang == 'th' else ''}" data-set-lang="th" title="ภาษาไทย">
-            <span class="cflag"><svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg"><rect width="900" height="600" fill="#A51931"/><rect width="900" height="480" y="60" fill="#F4F5F8"/><rect width="900" height="320" y="140" fill="#241D4F"/></svg></span>
-          </button>
-          <button class="lang-btn{' active' if lang == 'no' else ''}" data-set-lang="no" title="Norsk">
-            <span class="cflag"><svg viewBox="0 0 22 16" xmlns="http://www.w3.org/2000/svg"><rect width="22" height="16" fill="#EF2B2D"/><rect x="6" width="4" height="16" fill="#fff"/><rect y="6" width="22" height="4" fill="#fff"/><rect x="7" width="2" height="16" fill="#002868"/><rect y="7" width="2" height="2" fill="#002868"/></svg></span>
-          </button>
-          <button class="lang-btn{' active' if lang == 'en' else ''}" data-set-lang="en" title="English">
-            <span class="cflag"><svg viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg"><rect width="60" height="30" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#C8102E" stroke-width="4"/><rect y="11" width="60" height="8" fill="#fff"/><rect x="26" width="8" height="30" fill="#fff"/><rect y="12" width="60" height="6" fill="#C8102E"/><rect x="27" width="6" height="30" fill="#C8102E"/></svg></span>
-          </button>
+<section class="hero-wrap">
+  <div class="hero-container">
+    <div class="hero-flex">
+      <div class="hero-left">
+        <!-- Eyebrow badge -->
+        <div class="hero-eyebrow">
+          <span class="eyebrow-pulse"></span>
+          <span data-lang="th">สร้างโดยครูสอนขับรถที่ได้รับใบอนุญาต — อธิบายเป็นภาษาไทย</span>
+          <span data-lang="no">Laget av godkjent trafikklærer — forklart på thai</span>
+          <span data-lang="en">Created by licensed driving instructor — explained in Thai</span>
         </div>
 
+        <!-- H1 Heading: White + Orange Serif Italic -->
         <h1>
-          <span data-lang="th" class="block">ทฤษฎีภาษาไทย <em>ขับขี่ปลอดภัยบนถนนนอร์เวย์</em></span>
-          <span data-lang="no" class="block">Teori på thai. <em>Trygg på norsk vei.</em></span>
-          <span data-lang="en" class="block">Theory in Thai. <em>Safe on Norwegian roads.</em></span>
+          <span class="hero-h1-white block">
+            <span data-lang="th">ทฤษฎีภาษาไทย</span>
+            <span data-lang="no">Teori på thai.</span>
+            <span data-lang="en">Theory in Thai.</span>
+          </span>
+          <span class="hero-h2-orange serif-italic block">
+            <span data-lang="th">ขับขี่ปลอดภัยบนถนนนอร์เวย์</span>
+            <span data-lang="no">Trygg på norsk vei.</span>
+            <span data-lang="en">Safe on Norwegian roads.</span>
+          </span>
         </h1>
 
-        <p class="sub">
-          <span data-lang="th" class="block">เรียนทฤษฎีใบขับขี่นอร์เวย์กับครูไมเคิล (AI) ทั้งภาษาไทยและนอร์เวย์ ข้อสอบและบทเรียน Klasse B ทีละขั้นตอน</span>
-          <span data-lang="no" class="block">Lær norsk førerkortteori med AI-lærer Michael på thai og norsk. Ekte pensum for Klasse B, trinn for trinn.</span>
-          <span data-lang="en" class="block">Learn Norwegian driving theory with AI teacher Michael in Thai and Norwegian. Official Class B curriculum, step by step.</span>
+        <p class="hero-subtext">
+          <span data-lang="th">ทฤษฎีใบขับขี่นอร์เวย์อธิบายด้วยภาษาไทย เข้าใจง่าย ไม่ต้องเดา เตรียมพร้อมด้วยเนื้อหาหลักสูตร Klasse B ทีละขั้นตอน</span>
+          <span data-lang="no">Norsk førerkortteori forklart på ditt eget morsmål. Ingen vanskelige ord, ingen gjetning – bare ren forståelse. Forbered deg med ekte pensum for Klasse B.</span>
+          <span data-lang="en">Norwegian driving theory explained in your native tongue. No confusing jargon, no guessing – clear understanding for Class B, step by step.</span>
         </p>
 
-        <div class="cta-row" style="margin-top:28px">
-          <a href="#quicktest" class="cta-btn cta-primary landing-onboard-target landing-onboard-test">
+        <div class="hero-btn-row">
+          <a href="#quicktest" class="btn-primary-orange landing-onboard-target landing-onboard-test">
             <span class="landing-onboard-label landing-onboard-label-test">
-              <span data-lang="th">2. เริ่มทดสอบฟรี</span>
-              <span data-lang="no">2. Start gratis prøve</span>
-              <span data-lang="en">2. Start free test</span>
+              <span data-lang="th">เริ่มทดสอบฟรี</span>
+              <span data-lang="no">Start gratis prøve</span>
+              <span data-lang="en">Start free test</span>
               <button class="landing-onboard-dismiss" type="button">×</button>
             </span>
-            <svg class="onboard-arrow onboard-arrow-test" viewBox="0 0 120 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <path d="M12 10 C 50 14, 76 36, 86 64" fill="none" stroke="#fff" stroke-width="16" stroke-linecap="round"/>
-              <path d="M99 104 L109 56 L62 73 Z" fill="#fff"/>
-            </svg>
-            <span data-lang="th">🚀 ทดลองทำข้อสอบฟรี</span>
-            <span data-lang="no">🚀 Prøv gratis nå</span>
-            <span data-lang="en">🚀 Try free test</span>
+            <span data-lang="th">ทดลองทำข้อสอบฟรี →</span>
+            <span data-lang="no">Prøv gratis nå →</span>
+            <span data-lang="en">Try free test →</span>
           </a>
-          <a href="/{lang}/app{app_query}" class="cta-btn cta-secondary">
-            💻 <span data-lang="th">เปิดเว็บแอป</span><span data-lang="no">Åpne web-appen</span><span data-lang="en">Open web app</span>
+          <a href="/{lang}/app{app_query}" class="btn-secondary-glass">
+            <span>○</span>
+            <span data-lang="th">เปิดเว็บแอป</span>
+            <span data-lang="no">Åpne web-appen</span>
+            <span data-lang="en">Open web app</span>
           </a>
         </div>
 
-        <div class="hero-trust-row">
-          <div class="hero-trust-chip">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            <span data-lang="th">Klasse B • รถยนต์ส่วนบุคคล</span>
-            <span data-lang="no">Klasse B • Personbil</span>
-            <span data-lang="en">Class B • Passenger car</span>
+        <div class="hero-chips-row">
+          <div class="hero-chip">
+            <span class="hero-chip-check">✓</span>
+            <span data-lang="th">มากกว่า 1000 ข้อ</span>
+            <span data-lang="no">1000+ spørsmål</span>
+            <span data-lang="en">1000+ questions</span>
           </div>
-          <div class="hero-trust-chip">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            <span data-lang="th">ประสบการณ์สอน 16 ปี</span>
-            <span data-lang="no">16 års erfaring</span>
-            <span data-lang="en">16 years experience</span>
+          <div class="hero-chip">
+            <span class="hero-chip-check">✓</span>
+            <span data-lang="th">คำอธิบายภาษาไทย</span>
+            <span data-lang="no">Forklaringer på thai</span>
+            <span data-lang="en">Explanations in Thai</span>
           </div>
-          <div class="hero-trust-chip">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            <span data-lang="th">ครอบคลุมเนื้อหา 100%</span>
-            <span data-lang="no">100% pensumdekning</span>
-            <span data-lang="en">100% syllabus coverage</span>
+          <div class="hero-chip">
+            <span class="hero-chip-check">✓</span>
+            <span data-lang="th">Klasse B • ประสบการณ์ 16 ปี</span>
+            <span data-lang="no">Klasse B • 16 års erfaring</span>
+            <span data-lang="en">Class B • 16 yrs experience</span>
           </div>
         </div>
       </div>
 
-      <div class="hero-showcase">
-        <div class="hero-michael-wrap">
-          <img src="/api/assets/michael-hero.webp" alt="Trafikklærer Michael" class="hero-michael-img"/>
-          <div class="hero-badge-top">
-            <span>✨</span>
-            <span data-lang="th">เข้าใจง่าย</span>
-            <span data-lang="no">Pedagogisk</span>
-            <span data-lang="en">Easy to learn</span>
-          </div>
-          <div class="hero-badge-live">
-            <span class="pulse-dot"></span>
-            <span data-lang="th">เว็บแอป LIVE</span>
-            <span data-lang="no">Nett-App LIVE</span>
-            <span data-lang="en">Web App LIVE</span>
-          </div>
+      <div class="hero-right">
+        <div class="showcase-glow"></div>
+        
+        <div class="michael-img-card">
+          <img src="/api/assets/michael-hero.webp" alt="Trafikklærer Michael" />
+          <div class="michael-fade-overlay"></div>
         </div>
 
-        <div class="hero-teacher-card">
-          <img src="/api/assets/michael-avatar.png" alt="Michael Avatar" class="teacher-avatar-img"/>
-          <div class="teacher-info">
-            <div class="teacher-name-row">
-              <span class="teacher-name">Michael</span>
-              <span class="teacher-tag">AI-Lærer</span>
-            </div>
-            <div class="teacher-role">
-              <span data-lang="th">ครูสอนขับรถในออสโล • ประสบการณ์ 16 ปี</span>
-              <span data-lang="no">Trafikklærer i Oslo • 16 års erfaring</span>
-              <span data-lang="en">Driving instructor in Oslo • 16 yrs exp</span>
-            </div>
-            <div class="teacher-stars">
-              ★★★★★ <span style="color:#94A3B8;margin-left:6px;font-size:11px;">
-                <span data-lang="th">คำอธิบายที่เข้าใจง่าย</span>
-                <span data-lang="no">Tålmodig forklaring</span>
-                <span data-lang="en">Patient guidance</span>
-              </span>
-            </div>
+        <!-- Floating Badges -->
+        <div class="badge-bubble badge-bubble-top-r">
+          <span style="width:8px;height:8px;border-radius:50%;background:#22C55E;box-shadow:0 0 8px rgba(34,197,94,0.8)"></span>
+          <span data-lang="th">เว็บแอป</span>
+          <span data-lang="no">Nett-App</span>
+          <span data-lang="en">Web App</span>
+          <span style="background:#22C55E;color:#FFFFFF;border-radius:9999px;padding:2px 6px;font-size:10px;font-weight:800;margin-left:2px">LIVE</span>
+        </div>
+
+        <div class="badge-bubble badge-bubble-top-l">
+          <span>Web App →</span>
+        </div>
+
+        <div class="badge-bubble badge-bubble-mid-l">
+          <span>เพื่อง่าย</span>
+        </div>
+
+        <div class="badge-bubble badge-bubble-mid-r">
+          <span>Web App</span>
+        </div>
+
+        <div class="badge-bubble badge-bubble-low-l">
+          <span data-lang="th">เว็บแอป</span>
+          <span data-lang="no">Nett-App</span>
+          <span data-lang="en">Web App</span>
+        </div>
+
+        <div class="badge-bubble badge-bubble-low-r">
+          <span>เพื่อไทย • for enkelhet</span>
+        </div>
+
+        <div class="badge-bubble badge-bubble-center-low">
+          <span>🎓</span>
+          <span data-lang="th">Klasse B • รถยนต์ส่วนบุคคล</span>
+          <span data-lang="no">Klasse B • Personbil</span>
+          <span data-lang="en">Class B • Passenger car</span>
+        </div>
+
+        <!-- Bottom Teacher Card -->
+        <div class="teacher-profile-card">
+          <div class="teacher-avatar-wrap">
+            <img src="/api/assets/michael-avatar.png" alt="Michael" />
+            <span class="teacher-online-dot"></span>
           </div>
+          <div class="teacher-text-col">
+            <span class="teacher-name-title">Michael S. Trafikklærer</span>
+            <span class="teacher-sub-title">
+              <span data-lang="th">ประสบการณ์ 16 ปี • ออนไลน์</span>
+              <span data-lang="no">16 års erfaring i Oslo • Online nå</span>
+              <span data-lang="en">16 yrs experience in Oslo • Online</span>
+            </span>
+          </div>
+          <span class="teacher-pulse-indicator"></span>
         </div>
       </div>
     </div>
@@ -1895,6 +2073,9 @@ def build_landing_page(chat_css: str, chat_widget_html: str, chat_js: str, lang:
     raw_html = f"""<!doctype html>
 <html lang="{HTML_LANG[lang]}" data-current-lang="{lang}">
 <head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>{meta['title']}</title>
