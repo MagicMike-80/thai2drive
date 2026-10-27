@@ -5,7 +5,7 @@ so language switching is INSTANT with no server round-trip.
 """
 from __future__ import annotations
 
-ICON_URL = "/api/assets/developer-icon-512.png"
+ICON_URL = "/api/assets/t2d-logo.png"
 HEADER_URL = "/api/assets/developer-header-4096x2304.jpg"
 
 # ── YouTube video ─────────────────────────────────────────────
@@ -195,25 +195,66 @@ html.landing-onboard-active .onboard-arrow{display:block;animation:landingArrowB
   position: relative;
   overflow: hidden;
   width: 100%;
-  min-height: 92vh;
+  min-height: 90vh;
   background-color: #07070A;
   background-image: url('/api/assets/hero-michael-sunset.webp');
   background-size: cover;
-  background-position: 62% 18%;
+  background-position: 65% 0%;
   background-repeat: no-repeat;
   display: flex;
   align-items: center;
 }
 @media (min-width: 768px) {
   .hero-wrap {
-    background-position: 50% 22%;
+    background-position: 60% 0%;
   }
 }
 @media (min-width: 1024px) {
   .hero-wrap {
-    background-position: 55% 28%;
+    background-position: 65% 0%;
     min-height: 88vh;
   }
+}
+.hero-social-proof {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 14px;
+}
+.student-avatar-img {
+  height: 26px;
+  width: auto;
+  border-radius: 13px;
+  object-fit: contain;
+}
+.student-proof-text {
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.75);
+}
+.nav-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  margin-left: 6px;
+}
+.eyebrow-bolt {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #FF6A2E;
+  color: #FFFFFF;
+  font-size: 11px;
+  margin-right: 4px;
 }
 .hero-overlay {
   position: absolute;
@@ -918,6 +959,7 @@ def _nav_html(lang: str = "th", app_query: str = "") -> str:
     <a href="/{lang}" class="brand">
       <img src="{ICON_URL}" alt="T2D"/>
       <span>Thai<span class="t2d">2</span>Drive</span>
+      <span class="nav-badge-pill">Lære</span>
     </a>
     <ul class="nav-links">
       <li><a href="#features">
@@ -931,10 +973,14 @@ def _nav_html(lang: str = "th", app_query: str = "") -> str:
         <span data-lang="en">Pricing</span>
       </a></li>
       <li><a href="/{lang}/guide" class="guide-blink">📖 <span data-lang="th">คู่มือ</span><span data-lang="no">Veiledning</span><span data-lang="en">Guide</span></a></li>
-      <li><a href="/{lang}/app{app_query}" style="display:inline-flex;align-items:center;gap:6px;background:#FF9933;color:#0F172A;font-weight:800;font-size:13px;padding:7px 14px;border-radius:8px;transition:opacity .15s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">🚀 <span data-lang="th">เปิดเว็บแอป</span><span data-lang="no">Åpne web-appen</span><span data-lang="en">Open web app</span></a></li>
+      <li><a href="/{lang}/app{app_query}" style="display:inline-flex;align-items:center;gap:6px;background:#FF9933;color:#0F172A;font-weight:800;font-size:13px;padding:7px 14px;border-radius:8px;transition:opacity .15s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">⚡ <span data-lang="th">เปิดเว็บแอป</span><span data-lang="no">Åpne web-appen</span><span data-lang="en">Open web app</span></a></li>
       <li><a href="https://www.facebook.com/profile.php?id=61565991554372" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:6px;color:#CBD5E1">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.267h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
         Facebook
+      </a></li>
+      <li><a href="https://www.tiktok.com/@thai2drive" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:6px;color:#CBD5E1">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.298-.002.595.042.88.13V9.4a6.33 6.33 0 0 0-1-.08A6.34 6.34 0 0 0 3 15.66a6.34 6.34 0 0 0 10.82 4.47 6.27 6.27 0 0 0 1.95-4.47V8.62a8.27 8.27 0 0 0 4.82 1.54V6.69z"/></svg>
+        TikTok
       </a></li>
     </ul>
     <div class="lang-row" role="group" aria-label="Language">
@@ -992,7 +1038,7 @@ def _hero_html(lang: str = "th", app_query: str = "") -> str:
       <div class="hero-left">
         <!-- Eyebrow badge -->
         <div class="hero-eyebrow">
-          <span class="eyebrow-pulse"></span>
+          <span class="eyebrow-bolt">⚡</span>
           <span data-lang="th">สร้างโดยครูสอนขับรถที่ได้รับใบอนุญาต — อธิบายเป็นภาษาไทย</span>
           <span data-lang="no">Laget av godkjent trafikklærer — forklart på thai</span>
           <span data-lang="en">Created by licensed driving instructor — explained in Thai</span>
@@ -1067,16 +1113,13 @@ def _hero_html(lang: str = "th", app_query: str = "") -> str:
           </div>
         </div>
 
-        <div class="hero-trust-line">
-          <span class="hero-trust-check">✓</span>
-          <span data-lang="th">อิงตามหลักสูตรของ Statens vegvesen</span>
-          <span data-lang="no">Basert på Statens vegvesens læreplan</span>
-          <span data-lang="en">Based on Statens vegvesen curriculum</span>
-          <span class="hero-trust-sep">•</span>
-          <span class="hero-trust-extra">
-            <span data-lang="th">เว็บแอป + วิดีโอ + การดูแล</span>
-            <span data-lang="no">Nett-App + Video + Oppfølging</span>
-            <span data-lang="en">Web App + Video + Coaching</span>
+        <!-- Social Proof Bar -->
+        <div class="hero-social-proof">
+          <img src="/api/assets/student-avatars.png" alt="Elever" class="student-avatar-img" />
+          <span class="student-proof-text">
+            <span data-lang="th">นักเรียนไทยกว่า 2,400+ คนในนอร์เวย์ไว้วางใจ 🇳🇴</span>
+            <span data-lang="no">Trusted by 2,400+ thai students in Norway 🇳🇴</span>
+            <span data-lang="en">Trusted by 2,400+ thai students in Norway 🇳🇴</span>
           </span>
         </div>
       </div>
