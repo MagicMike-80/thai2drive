@@ -1005,7 +1005,7 @@ def _hero_html(lang: str = "th", app_query: str = "") -> str:
             <span data-lang="no">Teori på thai.</span>
             <span data-lang="en">Theory in Thai.</span>
           </span>
-          <span class="hero-h1-white block">
+          <span class="hero-h2-orange block">
             <span data-lang="no">Trygg på</span>
           </span>
           <span class="hero-h2-orange block">
