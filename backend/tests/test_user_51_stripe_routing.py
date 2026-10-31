@@ -67,7 +67,8 @@ def test_user_51_signup_has_no_premium(mock_app_context):
     assert user["trial_days_left"] == 0
 
     inserted_doc = database.users.insert_one.await_args.args[0]
-    assert inserted_doc["campaign_index"] == 51
+    # FREE30 is claimed separately; signup never grants a campaign slot.
+    assert inserted_doc["campaign_index"] is None
     assert inserted_doc["has_premium"] is False
     assert inserted_doc["is_premium"] is False
     assert inserted_doc["trial_expires_at"] is None

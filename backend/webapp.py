@@ -5812,11 +5812,12 @@ var UI = {
   mode_daily:  {th:'ทดสอบรายวัน',          no:'Daglig test',      en:'Daily test'},
   mode_random: {th:'ควิซสุ่ม',              no:'Tilfeldig quiz',   en:'Random quiz'},
   mode_mistakes:{th:'แบบฝึกหัดข้อที่เคยตอบผิด', no:'Øv på mine feil', en:'Practice my mistakes'},
-  readiness_title:{th:'ความพร้อมสำหรับการสอบ', no:'Klar for prøven', en:'Ready for the test'},
+  readiness_title:{th:'คะแนนความพร้อมสอบ', no:'Klar-score', en:'Readiness score'},
   readiness_keep:{th:'ฝึกต่อไป!', no:'Fortsett å øve!', en:'Keep practising!'},
   readiness_close:{th:'ใกล้พร้อมแล้ว!', no:'Nærmer seg klar!', en:'Getting close!'},
   readiness_ready:{th:'คุณพร้อมสอบทฤษฎีกับ Statens vegvesen แล้ว! 🚗', no:'Du er klar for teoriprøven hos Statens vegvesen! 🚗', en:'You are ready for the theory test at Statens vegvesen! 🚗'},
   readiness_breakdown:{th:'50 ข้อล่าสุด: {accuracy}% · ฝึกข้อผิดสำเร็จ: {mastery}%', no:'Siste 50: {accuracy}% · Mestret feil: {mastery}%', en:'Last 50: {accuracy}% · Mistakes mastered: {mastery}%'},
+  readiness_exam_breakdown:{th:'คะแนนเฉลี่ยจากข้อสอบฝึกหัด {count} ครั้งล่าสุด', no:'Snitt fra {count} siste øvingsprøver', en:'Average of the last {count} practice exams'},
   coach_title:{th:'Michael อธิบาย', no:'Michael forklarer', en:'Michael explains'},
   coach_loading:{th:'Michael กำลังดูคำถาม…', no:'Michael ser på spørsmålet…', en:'Michael is reviewing the question…'},
   coach_unavailable:{th:'ตอนนี้ Michael ตอบไม่ได้ อ่านคำอธิบายปกติและทำแบบทดสอบต่อได้เลย', no:'Michael svarer ikke akkurat nå. Bruk den vanlige forklaringen og fortsett quizen.', en:'Michael is unavailable right now. Use the regular explanation and continue the quiz.'},
@@ -5829,6 +5830,7 @@ var UI = {
   categories_load_error:{th:'โหลดหมวดหมู่ไม่ได้<br>ตรวจสอบการเชื่อมต่ออินเทอร์เน็ต', no:'Kunne ikke laste kategorier.<br>Sjekk internettforbindelsen.', en:'Could not load categories.<br>Check your internet connection.'},
   questions_loading:{th:'กำลังโหลดคำถาม…', no:'Laster spørsmål…', en:'Loading questions…'},
   questions_empty:{th:'ไม่พบคำถามที่มีรูปภาพ<br>ลองหมวดหมู่อื่น', no:'Ingen spørsmål med bilde funnet.<br>Prøv en annen kategori.', en:'No image questions found.<br>Try another category.'},
+  exam_incomplete:{th:'ตอนนี้มีคำถามไม่ครบ 45 ข้อ โปรดลองอีกครั้งภายหลัง', no:'Prøven har ikke 45 spørsmål akkurat nå. Prøv igjen senere.', en:'The test does not have 45 questions right now. Please try again later.'},
   time_is_up:  {th:'หมดเวลาแล้ว! ⏰',      no:'Tid er ute! ⏰',    en:'Time is up! ⏰'},
   ai_waiting:  {th:'รอคำตอบ…',             no:'Venter på svar…',  en:'Waiting for answer…'},
   traffic_situation:{th:'📸 สถานการณ์จราจร', no:'📸 Trafikksituasjon', en:'📸 Traffic situation'},
@@ -5896,7 +5898,7 @@ var UI = {
   result_michael_coach:{th:'💬 วิเคราะห์ข้อผิดพลาดกับไมเคิล AI', no:'💬 Gå gjennom med Michael AI', en:'💬 Review mistakes with Michael AI'},
   result_exam_pass_head:{th:'ผ่าน',          no:'Bestått.',         en:'Passed.'},
   result_exam_pass_body:{th:'คุณพร้อมสำหรับการสอบทฤษฎีแล้ว ลองทำอีกหนึ่งรอบเพื่อเพิ่มความมั่นใจ', no:'Du er klar for teoriprøven. Gjennomfør gjerne enda en runde for å bygge selvtillit.', en:'You are ready for the theory test. Do one more round to build confidence.'},
-  result_exam_fail_head:{th:'ครั้งนี้ยังไม่ผ่าน', no:'Ikke bestått denne gangen.', en:'Not passed this time.'},
+  result_exam_fail_head:{th:'ครั้งนี้ยังไม่ผ่าน', no:'Stryk denne gangen.', en:'Not passed this time.'},
   result_exam_focus_body:{th:'ควรใช้เวลาเพิ่มกับเรื่อง {topic} ฝึกต่อแล้วลองอีกครั้ง', no:'Det er verdt å bruke litt mer tid på {topic}. Øv på det og prøv igjen.', en:'It is worth spending more time on {topic}. Practice it and try again.'},
   result_solid_head:{th:'ทำได้มั่นคง',       no:'Solid gjennomkjøring.', en:'Solid run-through.'},
   result_solid_body:{th:'คุณเริ่มจำสถานการณ์จราจรและตัดสินใจได้ถูกต้อง นี่คือสิ่งสำคัญในการขับจริง', no:'Du gjenkjenner trafikksituasjonene godt og vurderer riktig. Det er det som teller i praksis.', en:'You recognize traffic situations well and make sound decisions. That is what matters in real driving.'},
@@ -8094,7 +8096,8 @@ async function loadHome() {
   if (token) {
     try {
       var readiness = await api('GET', '/api/user/readiness?_=' + Date.now());
-      var rScore = Math.max(0, Math.min(100, Number(readiness.score || 0)));
+      var examCount = Number(readiness.exam_attempt_count || 0);
+      var rScore = Math.max(0, Math.min(100, Number(examCount ? readiness.exam_score : readiness.score) || 0));
       var rState = rScore >= 85
         ? {cls:'good', key:'readiness_ready', color:'var(--green)'}
         : rScore >= 60
@@ -8102,10 +8105,12 @@ async function loadHome() {
           : {cls:'bad', key:'readiness_keep', color:'#EF4444'};
       document.getElementById('hrDot').className = 'hr-dot hr-dot-' + rState.cls;
       document.getElementById('hrStatus').textContent = t(rState.key);
-      document.getElementById('hrSub').textContent = tf('readiness_breakdown', {
-        accuracy: Math.round(Number(readiness.recent_accuracy || 0)),
-        mastery: Math.round(Number(readiness.mistake_mastery || 0))
-      });
+      document.getElementById('hrSub').textContent = examCount
+        ? tf('readiness_exam_breakdown', {count: examCount})
+        : tf('readiness_breakdown', {
+            accuracy: Math.round(Number(readiness.recent_accuracy || 0)),
+            mastery: Math.round(Number(readiness.mistake_mastery || 0))
+          });
       document.getElementById('hrPct').textContent = rScore + '%';
       document.getElementById('hrPct').style.color = rState.color;
       var gauge = document.getElementById('hrGaugeFill');
@@ -8458,6 +8463,7 @@ var examAnswers = {};
 var _examErrors = [];
 var examTimerInterval = null;
 var examSecondsLeft = 0;
+var examDeadline = 0;
 
 // ════════════════════════════════════════════
 //  PREMIUM / PAYWALL
@@ -8680,6 +8686,7 @@ function confirmSubmitExam() {
 function startExamTimer() {
   if (examTimerInterval) clearInterval(examTimerInterval);
   examSecondsLeft = 90 * 60; // 90 minutes
+  examDeadline = Date.now() + examSecondsLeft * 1000;
   var badge = document.getElementById('examTimerBadge');
   var lbl   = document.getElementById('examTimerLbl');
   var submitBtn = document.getElementById('examSubmitBtn');
@@ -8687,7 +8694,7 @@ function startExamTimer() {
   if (submitBtn) submitBtn.style.display = 'inline-flex';
   updateTimerLabel(lbl, examSecondsLeft);
   examTimerInterval = setInterval(function() {
-    examSecondsLeft--;
+    examSecondsLeft = Math.max(0, Math.ceil((examDeadline - Date.now()) / 1000));
     updateTimerLabel(lbl, examSecondsLeft);
     if (examSecondsLeft <= 60) {
       badge.style.background = 'rgba(239,68,68,.35)';
@@ -8703,6 +8710,7 @@ function startExamTimer() {
 
 function stopExamTimer() {
   if (examTimerInterval) { clearInterval(examTimerInterval); examTimerInterval = null; }
+  examDeadline = 0;
   var badge = document.getElementById('examTimerBadge');
   if (badge) badge.style.display = 'none';
   var submitBtn = document.getElementById('examSubmitBtn');
@@ -8739,6 +8747,12 @@ async function loadQuiz(url) {
       var u = q.bildeUrl || q.image_url || '';
       return u && typeof u === 'string' && u.length > 0;
     });
+    if (isExamMode && questions.length !== 45) {
+      isExamMode = false;
+      questions = [];
+      qCard.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="es-icon">📭</div><p>' + t('exam_incomplete') + '</p></div>';
+      return;
+    }
     if (!questions.length && currentCat) {
       var r2 = await api('GET', '/api/questions/random?count=' + QUIZ_SESSION_SIZE + '&has_image=true');
       if (!Array.isArray(r2)) r2 = r2.questions || [];

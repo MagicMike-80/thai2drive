@@ -37,6 +37,9 @@ def _matches(document, query):
         elif isinstance(value, dict) and "$in" in value:
             if document.get(key) not in value["$in"]:
                 return False
+        elif isinstance(value, dict) and "$nin" in value:
+            if document.get(key) in value["$nin"]:
+                return False
         elif document.get(key) != value:
             return False
     return True
@@ -287,13 +290,19 @@ class TestQuizAttempts:
         assert attempt["id"]
 
     def test_get_quiz_attempts(self, api):
-        client, _ = api
+        client, database = api
         client.post("/api/quiz-attempts", json={
             "device_id": TEST_DEVICE_ID, "mode": "practice", "total_questions": 10,
             "correct_answers": 7, "score_percentage": 70.0, "questions_answered": [],
             "started_at": "2026-01-01T10:00:00Z",
         })
-        response = client.get(f"/api/quiz-attempts/{TEST_DEVICE_ID}", params={"limit": 20})
+        assert client.get(f"/api/quiz-attempts/{TEST_DEVICE_ID}").status_code == 401
+        database.quiz_attempts.documents[0]["user_id"] = TEST_DEVICE_ID
+        token = server.create_token(TEST_DEVICE_ID, "learner@example.com")
+        response = client.get(
+            f"/api/quiz-attempts/{TEST_DEVICE_ID}", params={"limit": 20},
+            headers={"Authorization": f"Bearer {token}"},
+        )
         assert response.status_code == 200
         attempts = response.json()
         assert len(attempts) == 1
