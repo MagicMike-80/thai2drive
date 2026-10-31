@@ -5121,7 +5121,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         guided_chat = True
         v4_stage = "1"
     is_frustrated = _is_frustrated(user_msg)
-    direct_answer = (is_direct_lookup or is_frustrated) and not is_quiz_help and not is_vision and req.mode == "normal_chat"
+    direct_answer = (is_frustrated or (is_direct_lookup and not _is_hint_request(user_msg))) and not is_quiz_help and not is_vision and req.mode == "normal_chat"
     if direct_answer:
         v4_stage = "5"
     allow_answer = not guided_chat or v4_stage == "5"
@@ -5432,6 +5432,14 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
                     "Ask for the sign number or an uploaded image. Do not invent a sign number, "
                     "name, image, or claim that an image is displayed. Answer any other supplied rule questions."
                 )
+        if not guided_chat and _is_hint_request(user_msg) and not is_frustrated:
+            system_prompt += (
+                "\nEXPLICIT SOCRATIC HINT REQUEST — FINAL OUTPUT OVERRIDE: The learner asked for a hint, "
+                "not a complete answer. Give one or two short, factually grounded hint sentences, "
+                "then exactly one pedagogical question. No greeting, reassurance, extra examples, "
+                "second question, or full answer. This overrides ordinary request-completeness formatting. "
+                "Use only the selected app language."
+            )
         messages = [{"role": "system", "content": system_prompt}]
         messages.extend(conversation)
         if is_vision:
