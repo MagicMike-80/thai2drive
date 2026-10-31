@@ -215,18 +215,18 @@
       "du har forkjørsrett (når|ved) (du )?sv(inger|ing) til venstre",
       "(?:30\\s*km/?t[^.]{0,40}(?:boligområde|vanlig|generell)|(?:boligområde|vanlig|generell)[^.]{0,40}30\\s*km/?t)",
       "\bordrett\b[^.]{0,40}§",
-      "(?:3\\.|tredje|siste)\\s*(?:avkjøring|utkjøring)[^.]{0,40}høyre\\s*felt"
+      "(?:3\\.|tredje|siste)\\s*(?:avkjøring|utkjøring).*?høyre\\s*felt"
     ],
     "th": [
       "รถสวนทาง[^.]{0,30}ต้องให้ทางคุณ",
       "(?:30\\s*กม(?:\\./ชม\\.)?[^.]{0,40}(?:ย่านที่พัก|ทั่วไป)|(?:ย่านที่พัก|ทั่วไป)[^.]{0,40}30\\s*กม(?:\\./ชม\\.)?)",
-      "(?:ทางออกที่\\s*3|ทางออกสุดท้าย)[^.]{0,30}เลนขวา"
+      "(?:ทางออกที่\\s*3|ทางออกสุดท้าย).*?เลนขวา"
     ],
     "en": [
       "oncoming[^.]{0,40}(must|has to) (give way|yield) to you",
       "you have priority when turning left",
       "(?:30\\s*km/?h[^.]{0,40}(?:residential|default|general)|(?:residential|default|general)[^.]{0,40}30\\s*km/?h)",
-      "(?:3rd|third|last)\\s*exit[^.]{0,40}(?:right\\s*lane|outer\\s*lane)"
+      "(?:3rd|third|last)\\s*exit.*?(?:right\\s*lane|outer\\s*lane)"
     ]
   },
   "ikke_tillatt_uten_kilde": [
