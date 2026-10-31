@@ -3795,7 +3795,7 @@ def _visualization_media_card(topic: str, lang: str) -> dict | None:
     filename, titles, captions = assets[topic]
     if not (Path(__file__).parent / "public_assets" / filename).is_file():
         return None
-    return {"id": f"teacher-visual:{topic}", "type": "image",
+    return {"id": f"teacher-visual:{topic}", "media_id": f"teacher-visual:{topic}", "type": "image",
             "url": f"/api/assets/{filename}", "title": titles[lang], "caption": captions[lang]}
 
 
