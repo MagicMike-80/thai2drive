@@ -5436,7 +5436,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             system_prompt += (
                 "\nEXPLICIT SOCRATIC HINT REQUEST — FINAL OUTPUT OVERRIDE: The learner asked for a hint, "
                 "not a complete answer. Give one or two short, factually grounded hint sentences, "
-                "then exactly one pedagogical question. No greeting, reassurance, extra examples, "
+                "then exactly one pedagogical question. Point to what the learner should observe; do not state the rule, the conclusion, or who has priority in the hint itself. Let the learner derive that from your question. No greeting, reassurance, extra examples, "
                 "second question, or full answer. This overrides ordinary request-completeness formatting. "
                 "Use only the selected app language."
             )
