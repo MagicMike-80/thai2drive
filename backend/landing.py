@@ -190,47 +190,38 @@ html.landing-onboard-active .onboard-arrow{display:block;animation:landingArrowB
   font-style: italic !important;
 }
 
-/* Hero Section - Exact Approved Layout */
+/* Hero Section - Exact Approved Layout (v1.0: Mobil / iPad / PC / TV) */
 .hero-wrap {
   position: relative;
   overflow: hidden;
   width: 100%;
-  min-height: 88vh;
+  min-height: 640px;
   background-color: #07070A;
-  background-image: url('/api/assets/hero-michael-sunset.webp');
-  background-size: cover;
-  background-position: right top;
-  background-repeat: no-repeat;
   display: flex;
   align-items: center;
 }
 @media (min-width: 768px) {
   .hero-wrap {
-    background-position: right top;
+    background-image: url('/api/assets/hero-michael-sunset.webp');
+    background-size: cover;
+    background-position: 76% top;
+    background-repeat: no-repeat;
+    min-height: 640px;
   }
 }
 @media (min-width: 1024px) {
   .hero-wrap {
     background-position: right top;
-    min-height: 86vh;
+    min-height: clamp(640px, 86vh, 880px);
   }
 }
-.hero-social-proof {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-top: 14px;
-}
-.student-avatar-img {
-  height: 26px;
-  width: auto;
-  border-radius: 13px;
-  object-fit: contain;
-}
-.student-proof-text {
-  font-size: 12px;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.75);
+/* TV Breakpoint (1920px - 3840px): Crisp & smooth skin filter + fluid scaling */
+@media (min-width: 1920px) {
+  .hero-wrap {
+    min-height: clamp(780px, 84vh, 1180px);
+    image-rendering: -webkit-optimize-contrast;
+    filter: contrast(1.02) saturate(1.03);
+  }
 }
 .nav-badge-pill {
   display: inline-flex;
@@ -244,36 +235,28 @@ html.landing-onboard-active .onboard-arrow{display:block;animation:landingArrowB
   color: rgba(255, 255, 255, 0.7);
   margin-left: 6px;
 }
-.eyebrow-bolt {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 18px;
-  height: 18px;
+.eyebrow-dot-orange {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
-  background: #FF6A2E;
-  color: #FFFFFF;
-  font-size: 11px;
-  margin-right: 4px;
+  background: #FF6A2B;
+  box-shadow: 0 0 10px rgba(255, 106, 43, 0.85);
+  flex-shrink: 0;
 }
 .hero-overlay {
   position: absolute;
   inset: 0;
   pointer-events: none;
   z-index: 1;
-  background: linear-gradient(to right, #07070A 0%, rgba(7, 7, 10, 0.95) 18%, rgba(7, 7, 10, 0.55) 28%, transparent 40%);
-}
-@media (min-width: 1024px) {
-  .hero-overlay {
-    background: linear-gradient(to right, #07070A 0%, rgba(7, 7, 10, 0.95) 18%, rgba(7, 7, 10, 0.55) 28%, transparent 40%);
-  }
+  background: linear-gradient(to right, #07070A 0%, rgba(7, 7, 10, 0.92) 22%, rgba(7, 7, 10, 0.45) 36%, transparent 48%);
 }
 .hero-overlay-top-bottom {
   position: absolute;
   inset: 0;
   pointer-events: none;
   z-index: 1;
-  background: linear-gradient(to bottom, rgba(7, 7, 10, 0.6) 0%, transparent 25%, transparent 75%, #07070A 100%);
+  background: linear-gradient(to bottom, rgba(7, 7, 10, 0.35) 0%, transparent 18%, transparent 82%, #07070A 100%);
 }
 .hero-container {
   position: relative;
@@ -281,313 +264,361 @@ html.landing-onboard-active .onboard-arrow{display:block;animation:landingArrowB
   width: 100%;
   max-width: 1680px;
   margin: 0 auto;
-  padding: 40px 32px 80px;
+  padding: 24px 28px 36px;
 }
 @media (min-width: 1024px) {
   .hero-container {
-    padding: 50px 60px 50px;
+    padding: 28px 54px 34px;
+  }
+}
+@media (min-width: 1920px) {
+  .hero-container {
+    max-width: 2100px;
+    padding: 44px 80px;
   }
 }
 .hero-flex {
   display: grid;
   grid-template-columns: 1fr;
   align-items: center;
-  gap: 32px;
+  gap: 24px;
 }
+/* iPad (768px - 1023px): 2 columns */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .hero-flex {
+    grid-template-columns: 45% 55%;
+    gap: 20px;
+  }
+}
+/* PC & TV (>=1024px) */
 @media (min-width: 1024px) {
   .hero-flex {
-    grid-template-columns: min(450px, 32vw) 1fr;
-    gap: 48px;
+    grid-template-columns: min(430px, 33vw) 1fr;
+    gap: 40px;
+  }
+}
+@media (min-width: 1920px) {
+  .hero-flex {
+    grid-template-columns: min(560px, 32vw) 1fr;
   }
 }
 .hero-left {
-  max-width: min(440px, 32vw);
+  max-width: 430px;
   text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+@media (min-width: 1920px) {
+  .hero-left {
+    max-width: 560px;
+    gap: 16px;
+  }
 }
 .hero-eyebrow {
   display: inline-flex;
+  width: fit-content;
   align-items: center;
   gap: 8px;
   background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 9999px;
-  padding: 6px 14px;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.01em;
-  color: rgba(255, 255, 255, 0.85);
-  margin-bottom: 20px;
+  padding: 5px 14px;
+  font-size: clamp(11px, 0.85vw, 15px);
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 }
-.eyebrow-pulse {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #FF5C1A;
-  box-shadow: 0 0 10px rgba(255, 92, 26, 0.8);
-  animation: pulseDot 2s infinite ease-in-out;
-}
-@keyframes pulseDot {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.45; transform: scale(0.85); }
-}
 .hero-left h1, .hero-h1 {
-  font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Geist', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   font-weight: 900;
-  line-height: 0.90;
+  line-height: 0.92;
   letter-spacing: -0.04em;
-  font-size: clamp(38px, 5.5vw, 62px);
-  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.6);
-  margin: 0 0 18px;
+  font-size: clamp(36px, 4.3vw, 68px);
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.65);
+  margin: 0;
 }
 .hero-h1-white {
   color: #FFFFFF;
   display: block;
 }
 .hero-h2-orange {
-  color: #FF6A2E;
+  color: #FF6A2B;
   display: block;
   font-weight: 900;
 }
 .hero-subtext {
-  font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: clamp(14px, 1.8vw, 15px);
-  line-height: 1.55;
-  color: rgba(255, 255, 255, 0.7);
-  max-width: 500px;
-  margin: 0 0 24px;
+  font-family: 'Geist', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: clamp(13px, 1.05vw, 18px);
+  line-height: 1.48;
+  color: rgba(255, 255, 255, 0.78);
+  max-width: 440px;
+  margin: 0;
   font-weight: 400;
 }
-.hero-btn-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
-}
-.btn-primary-orange {
-  height: 44px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  border-radius: 9999px;
-  background: #FF5C1A;
-  color: #FFFFFF !important;
-  font-weight: 600;
-  font-size: 14px;
-  padding: 0 24px;
-  text-decoration: none;
-  box-shadow: 0 8px 24px rgba(255, 92, 26, 0.35);
-  transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
-  border: none;
-  cursor: pointer;
-}
-.btn-primary-orange:hover {
-  background: #FF6E2F;
-  transform: translateY(-1px);
-  box-shadow: 0 10px 28px rgba(255, 92, 26, 0.45);
-}
-.btn-secondary-glass {
-  height: 44px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #FFFFFF !important;
-  font-weight: 500;
-  font-size: 13px;
-  padding: 0 24px;
-  text-decoration: none;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  transition: background 0.15s ease, transform 0.15s ease;
-  cursor: pointer;
-}
-.btn-secondary-glass:hover {
-  background: rgba(255, 255, 255, 0.15);
-  transform: translateY(-1px);
-}
-.hero-chips-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-bottom: 22px;
-}
-.hero-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 9999px;
-  padding: 5px 12px;
-  font-size: 11px;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-}
-.hero-chip-bullet {
-  color: #FF6A2E;
-  font-weight: bold;
-}
-.hero-trust-line {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.45);
-}
-.hero-trust-check {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 9px;
-  color: #FFFFFF;
-}
-.hero-trust-sep {
-  opacity: 0.3;
-}
-.hero-trust-extra {
-  color: rgba(255, 255, 255, 0.3);
+@media (min-width: 1920px) {
+  .hero-subtext {
+    max-width: 540px;
+  }
 }
 
-/* Hero Right Column */
+/* Ring 2 — 8 Funksjoner Bunn Venstre */
+.hero-features-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  max-width: 380px;
+  margin-top: 4px;
+}
+@media (min-width: 1920px) {
+  .hero-features-list {
+    max-width: 480px;
+    gap: 8px;
+  }
+}
+.hero-feat-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 16px;
+  border-radius: 10px;
+  background: rgba(16, 20, 28, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  color: rgba(255, 255, 255, 0.92) !important;
+  font-size: clamp(13px, 0.95vw, 18px);
+  font-weight: 700;
+  text-decoration: none !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: transform 0.16s ease, border-color 0.16s ease, background 0.16s ease, box-shadow 0.16s ease;
+}
+.hero-feat-pill:hover {
+  transform: translateX(4px);
+  background: rgba(28, 34, 46, 0.92);
+  border-color: rgba(255, 106, 43, 0.45);
+  text-decoration: none !important;
+}
+.hero-feat-pill .feat-num {
+  color: #FF6A2B;
+  font-weight: 800;
+  min-width: 18px;
+}
+/* 1. Spør Michael AI — Størst, 1. plass, oransje glød */
+.hero-feat-pill.highlight {
+  padding: 9px 18px;
+  font-size: clamp(15px, 1.15vw, 21px);
+  font-weight: 800;
+  color: #FFFFFF !important;
+  background: linear-gradient(90deg, rgba(255, 106, 43, 0.34) 0%, rgba(255, 106, 43, 0.14) 100%);
+  border: 1.5px solid rgba(255, 106, 43, 0.88);
+  box-shadow: 0 0 28px rgba(255, 106, 43, 0.65), 0 0 12px rgba(255, 106, 43, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  transform: scale(1.04);
+  transform-origin: left center;
+  margin-bottom: 2px;
+}
+.hero-feat-pill.highlight:hover {
+  transform: scale(1.05) translateX(3px);
+  box-shadow: 0 0 34px rgba(255, 106, 43, 0.8), 0 0 16px rgba(255, 106, 43, 0.55);
+}
+
+/* Ring 1 — Interactive Hand Tags & 10s Video Popup */
 .hero-right {
   position: relative;
-  min-height: 440px;
-  pointer-events: none;
+  min-height: 540px;
 }
 @media (min-width: 1024px) {
   .hero-right {
     min-height: 600px;
   }
 }
-
-/* Badge LIVE on right side */
-.hero-live-badge {
+.hero-mobile-img {
+  display: none;
+}
+.hand-tags-layer {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 20;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  color: #0F172A;
-  padding: 6px 14px;
-  border-radius: 9999px;
-  font-size: 11px;
-  font-weight: 700;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  pointer-events: auto;
-}
-.hero-live-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #22C55E;
-  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.25);
-  animation: pulseDot 1.8s infinite ease-in-out;
-}
-.hero-live-tag {
-  color: #16A34A;
-  font-weight: 800;
-}
-
-/* Floating Teacher Profile Card (Lower Right) */
-.teacher-profile-card {
-  position: absolute;
-  bottom: 0;
-  right: 0;
+  inset: 0;
   z-index: 25;
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  background: #FFFFFF;
-  border-radius: 9999px;
-  padding: 7px 8px 7px 8px;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.85);
-  max-width: 420px;
+  pointer-events: none;
+}
+.hand-tag-hotspot {
+  position: absolute;
   pointer-events: auto;
+  touch-action: manipulation;
+  cursor: pointer;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.01);
+  border: 2px solid transparent;
+  transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
 }
-@media (max-width: 768px) {
-  .teacher-profile-card {
-    position: relative;
-    bottom: auto;
-    right: auto;
-    margin: 20px auto 0;
-  }
+.hand-tag-hotspot:hover,
+.hand-tag-hotspot.active {
+  border-color: rgba(255, 106, 43, 0.85);
+  box-shadow: 0 0 20px rgba(255, 106, 43, 0.55);
+  transform: scale(1.04);
 }
-.teacher-avatar-wrap {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
+/* Positions aligned with the 3 speech bubbles near Michael's hand */
+.hand-tag-hotspot.tag-easy {
+  left: 9.5%;
+  top: 16.5%;
+  width: 204px;
+  height: 76px;
+}
+.hand-tag-hotspot.tag-web {
+  left: 15.5%;
+  top: 27.5%;
+  width: 214px;
+  height: 76px;
+}
+.hand-tag-hotspot.tag-nett {
+  left: 10%;
+  top: 41%;
+  width: 208px;
+  height: 76px;
+}
+
+.hand-video-popup {
+  position: absolute;
+  left: 4%;
+  top: 56%;
+  z-index: 40;
+  width: 290px;
+  border-radius: 14px;
   overflow: hidden;
-  flex-shrink: 0;
+  background: rgba(10, 12, 18, 0.96);
+  border: 1px solid rgba(255, 106, 43, 0.5);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85), 0 0 24px rgba(255, 106, 43, 0.3);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  pointer-events: auto;
+  display: none;
 }
-.teacher-avatar-wrap img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top;
+.hand-video-popup.open {
   display: block;
+  animation: fadeInPopup 0.18s ease-out;
 }
-.teacher-text-col {
+@keyframes fadeInPopup {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.hvp-screen {
+  aspect-ratio: 16 / 9;
+  background: linear-gradient(135deg, rgba(255, 106, 43, 0.22) 0%, rgba(15, 23, 42, 0.95) 100%);
   display: flex;
   flex-direction: column;
-  line-height: 1.2;
-  min-width: 0;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+  text-align: center;
+  position: relative;
 }
-.teacher-name-title {
-  font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 12px;
-  font-weight: 700;
-  color: #111827;
-  white-space: nowrap;
-}
-.teacher-sub-title {
-  font-size: 10px;
-  font-weight: 500;
-  color: #6B7280;
-  white-space: nowrap;
-}
-.teacher-online-highlight {
-  color: #16A34A;
-  font-weight: 600;
-}
-.teacher-arrow-btn {
-  margin-left: 8px;
-  width: 36px;
-  height: 36px;
+.hvp-play-icon {
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
-  background: #111827;
-  color: #FFFFFF;
+  background: #FF6A2B;
+  color: #000000;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
-  border: none;
-  cursor: pointer;
-  transition: background 0.15s ease;
+  font-size: 14px;
+  font-weight: 900;
+  margin-bottom: 8px;
+  box-shadow: 0 0 18px rgba(255, 106, 43, 0.7);
 }
-.teacher-arrow-btn:hover {
-  background: #000000;
+.hvp-title {
+  font-size: 12px;
+  font-weight: 800;
+  color: #FFFFFF;
+}
+.hvp-sub {
+  font-size: 10.5px;
+  color: #CBD5E1;
+  margin-top: 2px;
+}
+.hvp-meta {
+  padding: 10px 12px;
+  background: rgba(15, 18, 26, 0.98);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 10.5px;
+  color: #94A3B8;
+}
+.hvp-bars {
+  display: flex;
+  gap: 5px;
+  margin-top: 6px;
+}
+.hvp-bar-active {
+  height: 4px;
+  width: 44px;
+  border-radius: 999px;
+  background: #FF6A2B;
+}
+.hvp-bar-dim {
+  height: 4px;
+  width: 16px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+/* Mobil (320px - 767px) */
+@media (max-width: 767px) {
+  html, body { overflow-x: hidden; max-width: 100%; }
+  .nav-inner { padding: 10px 12px !important; gap: 8px !important; }
+  .brand { font-size: 16px !important; gap: 6px !important; }
+  .brand img { width: 30px !important; height: 30px !important; }
+  .lang-row { gap: 6px !important; }
+  .lang-btn { width: 32px !important; height: 32px !important; }
+  .hero-feat-pill.highlight { transform: none !important; }
+  .hero-wrap {
+    background-image: none !important;
+    min-height: auto;
+    padding: 8px 0 28px;
+  }
+  .hero-overlay, .hero-overlay-top-bottom {
+    display: none;
+  }
+  .hero-container {
+    padding: 12px 16px 24px;
+  }
+  .hero-flex {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .hero-right {
+    order: -1;
+    width: 100%;
+    min-height: auto;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55);
+  }
+  .hero-mobile-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+  .hand-tag-hotspot.tag-easy { left: 10%; top: 22%; width: 24%; height: 11%; }
+  .hand-tag-hotspot.tag-web { left: 17%; top: 34%; width: 25%; height: 11%; }
+  .hand-tag-hotspot.tag-nett { left: 11%; top: 45%; width: 25%; height: 11%; }
+  .hand-video-popup {
+    left: 50%;
+    top: 52%;
+    transform: translateX(-50%);
+    width: 88%;
+    max-width: 300px;
+  }
+  .hero-left {
+    max-width: 100%;
+    width: 100%;
+  }
+  .hero-features-list {
+    max-width: 100%;
+  }
 }
 
 /* STATS */
@@ -1038,13 +1069,13 @@ def _hero_html(lang: str = "th", app_query: str = "") -> str:
       <div class="hero-left">
         <!-- Eyebrow badge -->
         <div class="hero-eyebrow">
-          <span class="eyebrow-bolt">⚡</span>
-          <span data-lang="th">สร้างโดยครูสอนขับรถที่ได้รับใบอนุญาต — อธิบายเป็นภาษาไทย</span>
-          <span data-lang="no">Laget av godkjent trafikklærer — forklart på thai</span>
-          <span data-lang="en">Created by licensed driving instructor — explained in Thai</span>
+          <span class="eyebrow-dot-orange"></span>
+          <span data-lang="th">สร้างโดยครูสอนขับรถที่ได้รับการรับรอง — อธิบายเป็นภาษาไทย</span>
+          <span data-lang="no">Laget av godkjent trafikklærer — forklar på thai</span>
+          <span data-lang="en">Made by certified driving instructor — explains in Thai</span>
         </div>
 
-        <!-- H1 Heading: White + Orange Heavy Sans (Exact 3 lines) -->
+        <!-- H1 Heading: White + Orange Heavy Sans -->
         <h1>
           <span class="hero-h1-white block">
             <span data-lang="th">ทฤษฎีภาษาไทย</span>
@@ -1067,57 +1098,91 @@ def _hero_html(lang: str = "th", app_query: str = "") -> str:
           <span data-lang="en">Pass the theory test faster. Michael explains everything in Thai — real Norwegian road scenarios, 1000+ questions, and personal coaching.</span>
         </p>
 
-        <div class="hero-btn-row">
-          <a href="#quicktest" class="btn-primary-orange landing-onboard-target landing-onboard-test">
-            <span class="landing-onboard-label landing-onboard-label-test">
-              <span data-lang="th">เริ่มทดสอบฟรี</span>
-              <span data-lang="no">Start gratis prøve</span>
-              <span data-lang="en">Start free test</span>
-              <button class="landing-onboard-dismiss" type="button">×</button>
-            </span>
-            <span data-lang="th">ทดลองทำข้อสอบฟรี →</span>
-            <span data-lang="no">Prøv gratis nå →</span>
-            <span data-lang="en">Try free test →</span>
+        <!-- Ring 2: 8 Funksjoner Bunn Venstre (Låst rekkefølge, #1 størst med oransje glød) -->
+        <div class="hero-features-list">
+          <a href="/{lang}/app{app_query}" class="hero-feat-pill highlight">
+            <span class="feat-num">1.</span>
+            <span data-lang="th">ถาม Michael AI</span>
+            <span data-lang="no">Spør Michael AI</span>
+            <span data-lang="en">Ask Michael AI</span>
           </a>
-          <a href="/{lang}/app{app_query}" class="btn-secondary-glass">
-            <span data-lang="th">เปิดเว็บแอป</span>
-            <span data-lang="no">Åpne web-appen</span>
-            <span data-lang="en">Open web app</span>
+          <a href="/{lang}/app{app_query}" class="hero-feat-pill">
+            <span class="feat-num">2.</span>
+            <span data-lang="th">เริ่มทำแบบทดสอบรายวัน</span>
+            <span data-lang="no">Start quiz / daglig test</span>
+            <span data-lang="en">Start quiz / daily test</span>
+          </a>
+          <a href="/{lang}/app{app_query}" class="hero-feat-pill">
+            <span class="feat-num">3.</span>
+            <span data-lang="th">ข้อสอบจำลอง 45 ข้อ - 90 นาที</span>
+            <span data-lang="no">Øvingsprøve 45 spm - 90 min</span>
+            <span data-lang="en">Practice test 45 Q - 90 min</span>
+          </a>
+          <a href="/{lang}/app{app_query}" class="hero-feat-pill">
+            <span class="feat-num">4.</span>
+            <span data-lang="th">ระยะเบรก</span>
+            <span data-lang="no">Stopplengde</span>
+            <span data-lang="en">Braking distance</span>
+          </a>
+          <a href="#videos" class="hero-feat-pill">
+            <span class="feat-num">5.</span>
+            <span data-lang="th">วิดีโอคอร์ส &amp; พอดแคสต์</span>
+            <span data-lang="no">Videokurs &amp; Podkaster</span>
+            <span data-lang="en">Video course &amp; Podcasts</span>
+          </a>
+          <a href="/{lang}/app{app_query}" class="hero-feat-pill">
+            <span class="feat-num">6.</span>
+            <span data-lang="th">ฝึกจากข้อผิดพลาด &amp; ป้ายจราจร</span>
+            <span data-lang="no">Øv på mine feil &amp; skiltkatalog</span>
+            <span data-lang="en">Practice my mistakes &amp; sign catalog</span>
+          </a>
+          <a href="/{lang}/app{app_query}" class="hero-feat-pill">
+            <span class="feat-num">7.</span>
+            <span data-lang="th">ฝึกคำศัพท์จราจร</span>
+            <span data-lang="no">Øv på trafikkbegreper</span>
+            <span data-lang="en">Practice traffic terms</span>
+          </a>
+          <a href="/{lang}/app{app_query}" class="hero-feat-pill">
+            <span class="feat-num">8.</span>
+            <span data-lang="th">Flipp Flopp - มีเสียง &amp; เกม</span>
+            <span data-lang="no">Flipp Flopp</span>
+            <span data-lang="en">Flipp Flopp - with sound &amp; game feel</span>
           </a>
         </div>
-
-        <div class="hero-chips-row">
-          <div class="hero-chip">
-            <span class="hero-chip-bullet">•</span>
-            <span data-lang="th">มากกว่า 1000 ข้อ</span>
-            <span data-lang="no">1000+ spørsmål</span>
-            <span data-lang="en">1000+ questions</span>
-          </div>
-          <div class="hero-chip">
-            <span class="hero-chip-bullet">•</span>
-            <span data-lang="th">วิดีโอภาษาไทย</span>
-            <span data-lang="no">Video på thai</span>
-            <span data-lang="en">Video in Thai</span>
-          </div>
-          <div class="hero-chip">
-            <span class="hero-chip-bullet">•</span>
-            <span data-lang="th">ครูสอนได้รับอนุญาต</span>
-            <span data-lang="no">Godkjent lærer</span>
-            <span data-lang="en">Certified teacher</span>
-          </div>
-          <div class="hero-chip">
-            <span class="hero-chip-bullet">•</span>
-            <span data-lang="th">เว็บแอป</span>
-            <span data-lang="no">Nett-App</span>
-            <span data-lang="en">Web App</span>
-          </div>
-        </div>
-
-
       </div>
 
-      <!-- HERO RIGHT COLUMN (Spacer for background visual) -->
-      <div class="hero-right"></div>
+      <!-- HERO RIGHT COLUMN: Ring 1 Hand Tags + Ring 3 Portrait -->
+      <div class="hero-right">
+        <img src="/api/assets/hero-michael-card.webp" alt="Michael S. Trafikklærer" class="hero-mobile-img" />
+        <div class="hand-tags-layer">
+          <button type="button" class="hand-tag-hotspot tag-easy" data-tag-id="easy" aria-label="เพื่อง่าย Video Preview"></button>
+          <button type="button" class="hand-tag-hotspot tag-web" data-tag-id="web" aria-label="Web App Video Preview"></button>
+          <button type="button" class="hand-tag-hotspot tag-nett" data-tag-id="nett" aria-label="Nett-App Video Preview"></button>
+          <div class="hand-video-popup" id="handVideoPopup" role="dialog" aria-label="Video preview">
+            <div class="hvp-screen">
+              <div class="hvp-play-icon">▶</div>
+              <div class="hvp-title">
+                <span data-lang="th">วิดีโอเร็วๆ นี้ - 10 วินาที</span>
+                <span data-lang="no">Video kommer snart - 10 sec</span>
+                <span data-lang="en">Video coming soon - 10 sec</span>
+              </div>
+              <div class="hvp-sub" id="hvpTagLabel">Walkthrough • 1080p</div>
+            </div>
+            <div class="hvp-meta">
+              <div>
+                <span data-lang="th">VO: เสียงครูไมเคิลผ่าน 11Labs • 3 ภาษา</span>
+                <span data-lang="no">VO: Michaels stemme via 11Labs • Samme video, 3 språk VO</span>
+                <span data-lang="en">VO: Michael's voice via 11Labs • Same video, 3 languages VO</span>
+              </div>
+              <div class="hvp-bars">
+                <span class="hvp-bar-active"></span>
+                <span class="hvp-bar-dim"></span>
+                <span class="hvp-bar-dim"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -1712,6 +1777,51 @@ LANDING_JS = r"""
       ev.stopPropagation();
       hideOnboarding();
     });
+  });
+})();
+
+
+// ─── Ring 1: Hand Tags Hover (PC) & Tap (Mobil/iPad) Video Popup ───
+(function(){
+  var popup = document.getElementById('handVideoPopup');
+  var subLbl = document.getElementById('hvpTagLabel');
+  var hotspots = document.querySelectorAll('.hand-tag-hotspot');
+  if (!popup || !hotspots.length) return;
+  var labels = {
+    easy: 'เพื่อง่าย • Walkthrough',
+    web: 'Web App • PWA Walkthrough',
+    nett: 'Nett-App • Norsk Walkthrough'
+  };
+  var pinned = null;
+  function showTag(id) {
+    if (subLbl && labels[id]) subLbl.textContent = labels[id];
+    popup.classList.add('open');
+    hotspots.forEach(function(h){ h.classList.toggle('active', h.getAttribute('data-tag-id') === id); });
+  }
+  function hideTag() {
+    popup.classList.remove('open');
+    hotspots.forEach(function(h){ h.classList.remove('active'); });
+  }
+  hotspots.forEach(function(btn){
+    var id = btn.getAttribute('data-tag-id');
+    btn.addEventListener('mouseenter', function(){
+      if (window.matchMedia('(min-width: 1024px)').matches) showTag(id);
+    });
+    btn.addEventListener('mouseleave', function(){
+      if (window.matchMedia('(min-width: 1024px)').matches && !pinned) hideTag();
+    });
+    btn.addEventListener('click', function(ev){
+      ev.preventDefault();
+      ev.stopPropagation();
+      if (pinned === id) { pinned = null; hideTag(); }
+      else { pinned = id; showTag(id); }
+    });
+  });
+  document.addEventListener('click', function(ev){
+    if (pinned && !popup.contains(ev.target)) {
+      pinned = null;
+      hideTag();
+    }
   });
 })();
 
