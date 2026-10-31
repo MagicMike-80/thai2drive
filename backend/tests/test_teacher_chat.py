@@ -588,6 +588,7 @@ class TestSocraticHintAndVariedWelcome(unittest.TestCase):
              patch.object(tc, "LLM_KEY", "test-key"), patch.object(tc, "_completion_with_fallback", new=complete):
             response = asyncio.run(teacher_chat(request))
         self.assertIn("EXPLICIT SOCRATIC HINT REQUEST", captured["system"])
+        self.assertIn("do not state the rule, the conclusion, or who has priority", captured["system"])
         self.assertNotIn("DIRECT ANSWER OVERRIDE", captured["system"])
         self.assertEqual(response.reply, reply)
 
