@@ -525,5 +525,67 @@ class TestRoundaboutLaneSafety(unittest.TestCase):
         self.assertNotIn("use the outer lane", response.reply)
 
 
+class TestSocraticHintAndVariedWelcome(unittest.TestCase):
+    def test_hint_instruction_is_present_without_overriding_direct_answers(self):
+        for lang in ("no", "th", "en"):
+            with self.subTest(lang=lang):
+                prompt = tc._build_system_prompt(lang, guided=False)
+                self.assertIn("HINT-MODUS: Når eleven stiller et åpent eller usikkert spørsmål", prompt)
+                self.assertIn("Gi et kort hint (1–2 setninger)", prompt)
+                self.assertIn("Answer direct requests completely", prompt)
+                self.assertIn("one guiding question", prompt)
+
+    def test_open_question_can_return_hint_and_guiding_question(self):
+        reply = "Se først på hvordan bilene nærmer seg krysset. Hvem må du ta hensyn til?"
+        captured = {}
+
+        async def complete(messages):
+            captured["system"] = messages[0]["content"]
+            return SimpleNamespace(choices=[SimpleNamespace(message=SimpleNamespace(content=reply))])
+
+        request = TeacherChatRequest(
+            message="Jeg er usikker på situasjonen i krysset. Hvordan bør jeg tenke?",
+            language="no", mode="normal_chat", device_id="hint-mode-test",
+        )
+        with patch.object(tc, "_db", _Database()), patch.object(tc, "_chat_col", _Collection()), \
+             patch.object(tc, "LLM_KEY", "test-key"), patch.object(tc, "_completion_with_fallback", new=complete):
+            response = asyncio.run(teacher_chat(request))
+        self.assertIn("HINT-MODUS", captured["system"])
+        self.assertEqual(response.reply, reply)
+
+    def test_six_openings_per_language_are_distinct_and_language_pure(self):
+        for lang, openings in tc._WELCOME_OPENINGS.items():
+            with self.subTest(lang=lang):
+                self.assertEqual(len(openings), 6)
+                self.assertEqual(len(set(openings)), 6)
+                if lang == "th":
+                    self.assertTrue(all(re.search(r"[\u0e00-\u0e7f]", text) for text in openings))
+                    self.assertTrue(all(not re.search(r"[A-Za-zÆØÅæøå]", text) for text in openings))
+                else:
+                    self.assertTrue(all(not re.search(r"[\u0e00-\u0e7f]", text) for text in openings))
+
+    def test_welcome_selects_different_openings_and_keeps_topic_focus(self):
+        async def no_memory(*args):
+            return None
+
+        for lang in ("no", "th", "en"):
+            openings = tc._WELCOME_OPENINGS[lang]
+            with self.subTest(lang=lang), patch.object(tc, "fetch_student_learning_memory", new=no_memory), \
+                 patch.object(tc.secrets, "choice", side_effect=[openings[0], openings[-1]]):
+                first = asyncio.run(tc.teacher_welcome(lang=lang))["welcome"]
+                second = asyncio.run(tc.teacher_welcome(lang=lang))["welcome"]
+                self.assertNotEqual(first, second)
+                self.assertTrue(first.startswith(openings[0]))
+                self.assertTrue(second.startswith(openings[-1]))
+                self.assertIn(tc._V4_COPY[lang]["0"], first)
+
+        async def weak_memory(*args):
+            return {"weak_topic": {"name": "vikeplikt", "accuracy": 40}, "current_streak": 0}
+
+        with patch.object(tc, "fetch_student_learning_memory", new=weak_memory):
+            focused = asyncio.run(tc.teacher_welcome(lang="no"))["welcome"]
+        self.assertIn("vikeplikt", focused)
+        self.assertNotIn("Hva kan jeg hjelpe", focused)
+
 if __name__ == "__main__":
     unittest.main()
