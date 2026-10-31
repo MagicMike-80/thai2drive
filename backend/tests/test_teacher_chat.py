@@ -553,6 +553,25 @@ class TestSocraticHintAndVariedWelcome(unittest.TestCase):
         self.assertIn("HINT-MODUS", captured["system"])
         self.assertEqual(response.reply, reply)
 
+    def test_direct_fact_request_still_asks_for_a_complete_answer(self):
+        captured = {}
+
+        async def complete(messages):
+            captured["system"] = messages[0]["content"]
+            return SimpleNamespace(choices=[SimpleNamespace(message=SimpleNamespace(
+                content="Vikeplikt betyr at du ikke skal hindre trafikken du skal gi vei til."
+            ))])
+
+        request = TeacherChatRequest(
+            message="Hva betyr vikeplikt?", language="no", mode="normal_chat",
+            device_id="direct-fact-test",
+        )
+        with patch.object(tc, "_db", _Database()), patch.object(tc, "_chat_col", _Collection()), \
+             patch.object(tc, "LLM_KEY", "test-key"), patch.object(tc, "_completion_with_fallback", new=complete):
+            response = asyncio.run(teacher_chat(request))
+        self.assertIn("DIRECT ANSWER OVERRIDE", captured["system"])
+        self.assertNotIn("?", response.reply)
+
     def test_six_openings_per_language_are_distinct_and_language_pure(self):
         for lang, openings in tc._WELCOME_OPENINGS.items():
             with self.subTest(lang=lang):
