@@ -204,15 +204,15 @@ html.landing-onboard-active .onboard-arrow{display:block;animation:landingArrowB
   .hero-wrap {
     background-image: url('/api/assets/hero-michael-sunset.webp');
     background-size: cover;
-    background-position: 76% top;
+    background-position: right bottom;
     background-repeat: no-repeat;
     min-height: 640px;
   }
 }
 @media (min-width: 1024px) {
   .hero-wrap {
-    background-position: right top;
-    min-height: clamp(640px, 86vh, 880px);
+    background-position: right bottom;
+    min-height: 600px;
   }
 }
 /* TV Breakpoint (1920px - 3840px): Crisp & smooth skin filter + fluid scaling */
@@ -256,7 +256,7 @@ html.landing-onboard-active .onboard-arrow{display:block;animation:landingArrowB
   inset: 0;
   pointer-events: none;
   z-index: 1;
-  background: linear-gradient(to bottom, rgba(7, 7, 10, 0.35) 0%, transparent 18%, transparent 82%, #07070A 100%);
+  background: linear-gradient(to bottom, rgba(7, 7, 10, 0.25) 0%, transparent 14%, transparent 96%, rgba(7, 7, 10, 0.85) 100%);
 }
 .hero-container {
   position: relative;
@@ -268,7 +268,7 @@ html.landing-onboard-active .onboard-arrow{display:block;animation:landingArrowB
 }
 @media (min-width: 1024px) {
   .hero-container {
-    padding: 28px 54px 34px;
+    padding: 16px 54px 20px;
   }
 }
 @media (min-width: 1920px) {
@@ -430,7 +430,7 @@ html.landing-onboard-active .onboard-arrow{display:block;animation:landingArrowB
 }
 @media (min-width: 1024px) {
   .hero-right {
-    min-height: 600px;
+    min-height: 520px;
   }
 }
 .hero-mobile-img {
@@ -460,22 +460,22 @@ html.landing-onboard-active .onboard-arrow{display:block;animation:landingArrowB
 }
 /* Positions aligned with the 3 speech bubbles near Michael's hand */
 .hand-tag-hotspot.tag-easy {
-  left: 9.5%;
-  top: 16.5%;
-  width: 204px;
-  height: 76px;
+  left: 34%;
+  top: 56%;
+  width: 175px;
+  height: 58px;
 }
 .hand-tag-hotspot.tag-web {
-  left: 15.5%;
-  top: 27.5%;
-  width: 214px;
-  height: 76px;
+  left: 44%;
+  top: 66%;
+  width: 185px;
+  height: 58px;
 }
 .hand-tag-hotspot.tag-nett {
-  left: 10%;
-  top: 41%;
-  width: 208px;
-  height: 76px;
+  left: 38%;
+  top: 76%;
+  width: 180px;
+  height: 58px;
 }
 
 .hand-video-popup {
@@ -619,6 +619,436 @@ html.landing-onboard-active .onboard-arrow{display:block;animation:landingArrowB
   .hero-features-list {
     max-width: 100%;
   }
+}
+
+
+/* Ring 3 — Bottom-Right Profile Bubble (100% same portrait avatar) */
+.hero-profile-bubble {
+  position: absolute;
+  right: 0px;
+  bottom: -14px;
+  z-index: 30;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(248, 250, 252, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 9999px;
+  padding: 5px 12px 5px 6px;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.45);
+  text-decoration: none !important;
+  transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+.hero-profile-bubble:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.55);
+}
+.hero-profile-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #FF6A2B;
+  flex-shrink: 0;
+}
+.hero-profile-info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+.hero-profile-name {
+  font-size: 12px;
+  font-weight: 800;
+  color: #0F172A;
+}
+.hero-profile-sub {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #475569;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.hero-online-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #1FE86D;
+  display: inline-block;
+  box-shadow: 0 0 8px rgba(31, 232, 109, 0.8);
+}
+.hero-profile-arrow {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #0F172A;
+  color: #FFFFFF;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 800;
+  margin-left: 2px;
+}
+
+/* Ring 2 — Centered Hub-and-Spoke Hover Diagram Popup (#heroDiagramPopup) */
+.hero-diagram-popup {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(0.97);
+  z-index: 65;
+  width: min(690px, 92vw);
+  background: #0B1528;
+  border: 2.5px solid #FF6A2B;
+  border-radius: 18px;
+  padding: 18px 20px 14px;
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.88), 0 0 40px rgba(255, 106, 43, 0.55);
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s ease;
+}
+.hero-diagram-popup.open {
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
+  transform: translate(-50%, -50%) scale(1);
+}
+.hdp-header {
+  text-align: center;
+  margin-bottom: 12px;
+}
+.hdp-title {
+  font-size: clamp(18px, 1.8vw, 24px);
+  font-weight: 900;
+  color: #FFFFFF;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+.hdp-subtitle {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.82);
+  margin-top: 3px;
+}
+.hdp-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1.25fr 1fr;
+  gap: 10px;
+  align-items: center;
+}
+.hdp-connectors {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+.hdp-col, .hdp-col-center {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.hdp-node {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  background: #111F38;
+  border: 1px solid rgba(255, 106, 43, 0.45);
+  border-radius: 12px;
+  padding: 8px 10px;
+  text-decoration: none !important;
+  transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+.hdp-node:hover {
+  transform: translateY(-2px);
+  border-color: #FF6A2B;
+  background: #162847;
+}
+.hdp-node-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #FF6A2B;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 800;
+  flex-shrink: 0;
+  box-shadow: 0 0 12px rgba(255, 106, 43, 0.5);
+}
+.hdp-node-title {
+  font-size: 11px;
+  font-weight: 800;
+  color: #FFFFFF;
+  line-height: 1.2;
+}
+.hdp-node-sub {
+  font-size: 9.5px;
+  color: rgba(255, 255, 255, 0.72);
+  line-height: 1.25;
+  margin-top: 2px;
+}
+.hdp-center-hub {
+  background: #101E38;
+  border: 2.5px solid #FF6A2B;
+  border-radius: 15px;
+  padding: 12px;
+  box-shadow: 0 0 26px rgba(255, 106, 43, 0.35);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.hdp-hub-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.hdp-hub-avatar {
+  width: 74px;
+  height: 74px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2.5px solid #FF6A2B;
+  flex-shrink: 0;
+}
+.hdp-hub-title {
+  font-size: 16px;
+  font-weight: 900;
+  color: #FF6A2B;
+  line-height: 1.05;
+}
+.hdp-hub-sub {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin-top: 2px;
+}
+.hdp-hub-badge {
+  display: inline-block;
+  margin-top: 5px;
+  background: #FF6A2B;
+  color: #FFFFFF;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 3px 7px;
+  border-radius: 6px;
+  line-height: 1.25;
+}
+.hdp-hub-btn {
+  align-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 106, 43, 0.65);
+  color: #FFFFFF !important;
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 5px 14px;
+  border-radius: 999px;
+  text-decoration: none !important;
+  transition: background 0.15s ease;
+}
+.hdp-hub-btn:hover {
+  background: #FF6A2B;
+}
+.hdp-footer {
+  margin-top: 12px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.hdp-footer-icons {
+  display: flex;
+  gap: 8px;
+}
+.hdp-footer-ico {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1.5px solid #FF6A2B;
+  color: #FF6A2B;
+  font-size: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.hdp-footer-text {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.88);
+}
+@media (max-width: 767px) {
+  .hdp-grid {
+    grid-template-columns: 1fr;
+  }
+  .hdp-connectors {
+    display: none;
+  }
+  .hero-profile-bubble {
+    position: relative;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    width: 100%;
+    border-radius: 0 0 14px 14px;
+    padding: 8px 14px;
+    justify-content: space-between;
+    pointer-events: auto;
+  }
+}
+
+/* Ring 1 — 10-Second Video Modal (#heroVideoModal) before App Redirect */
+.hero-video-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(5, 8, 16, 0.82);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.hero-video-modal-backdrop.open {
+  display: flex;
+}
+.hero-video-modal {
+  width: 100%;
+  max-width: 500px;
+  border-radius: 22px;
+  background: #121824;
+  border: 1.5px solid rgba(255, 106, 43, 0.45);
+  overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.75);
+}
+.hvm-video-box {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: linear-gradient(135deg, rgba(255, 106, 43, 0.22) 0%, rgba(43, 157, 240, 0.14) 50%, rgba(11, 21, 40, 0.98) 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+}
+.hvm-live-pill {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: #12261A;
+  border: 1px solid rgba(31, 232, 109, 0.4);
+  color: #1FE86D;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+.hvm-close-x {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 800;
+}
+.hvm-play-circle {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  color: #0F172A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 900;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+}
+.hvm-placeholder-title {
+  margin-top: 10px;
+  font-size: 12px;
+  font-weight: 800;
+  color: #FFFFFF;
+  letter-spacing: 0.04em;
+}
+.hvm-placeholder-sub {
+  margin-top: 3px;
+  font-size: 10.5px;
+  color: rgba(255, 255, 255, 0.65);
+}
+.hvm-progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.12);
+}
+.hvm-progress-bar {
+  width: 38%;
+  height: 100%;
+  background: #FF6A2B;
+}
+.hvm-body {
+  padding: 20px 22px 22px;
+}
+.hvm-heading {
+  font-size: 18px;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin: 0;
+}
+.hvm-desc {
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.68);
+  margin: 6px 0 18px;
+  line-height: 1.45;
+}
+.hvm-actions {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 10px;
+}
+.hvm-btn-close {
+  height: 44px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #FFFFFF;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.hvm-btn-open {
+  height: 44px;
+  border-radius: 999px;
+  background: #FF6A2B;
+  color: #FFFFFF !important;
+  font-size: 13px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none !important;
+  box-shadow: 0 8px 22px rgba(255, 106, 43, 0.45);
 }
 
 /* STATS */
@@ -1180,6 +1610,246 @@ def _hero_html(lang: str = "th", app_query: str = "") -> str:
                 <span class="hvp-bar-dim"></span>
               </div>
             </div>
+          </div>
+        </div>
+        <!-- Ring 3: Bottom-Right Profile Card (100% same portrait face) -->
+        <a href="/{lang}/app{app_query}" class="hero-profile-bubble">
+            <img src="/api/assets/michael-avatar-v1.webp" alt="Michael S." class="hero-profile-avatar" />
+            <div class="hero-profile-info">
+              <div class="hero-profile-name">
+                <span data-lang="th">Michael S. ครูสอนขับรถ</span>
+                <span data-lang="no">Michael S. Trafikklærer</span>
+                <span data-lang="en">Michael S. Driving Instructor</span>
+              </div>
+              <div class="hero-profile-sub">
+                <span data-lang="th">ประสบการณ์ 16 ปีในออสโล • ออนไลน์ตอนนี้</span>
+                <span data-lang="no">16 års erfaring i Oslo • Online nå</span>
+                <span data-lang="en">16 yrs experience in Oslo • Online now</span>
+                <span class="hero-online-dot"></span>
+              </div>
+            </div>
+            <span class="hero-profile-arrow">›</span>
+          </a>
+      </div>
+    </div>
+
+    <!-- Ring 2 Hover Diagram Popup: Thai2Drive App - Alt på ett sted -->
+    <div class="hero-diagram-popup" id="heroDiagramPopup" role="dialog" aria-label="Thai2Drive App Oversikt">
+      <div class="hdp-header">
+        <h3 class="hdp-title">
+          <span data-lang="th">แอป Thai2Drive - ครบจบในที่เดียว</span>
+          <span data-lang="no">Thai2Drive App - Alt på ett sted</span>
+          <span data-lang="en">Thai2Drive App - All in one place</span>
+        </h3>
+        <div class="hdp-subtitle">
+          <span data-lang="th">ภาพรวม 8 ฟีเจอร์หลัก • ออกแบบเพื่อการเรียนที่เข้าใจง่ายและได้ผลจริงทั้งภาษาไทยและนอร์เวย์</span>
+          <span data-lang="no">Oversikt over 8 kjernefunksjoner • Designet for enkel og effektiv læring på thai &amp; norsk</span>
+          <span data-lang="en">Overview of 8 core features • Designed for simple and effective learning in Thai &amp; Norwegian</span>
+        </div>
+      </div>
+      <div class="hdp-grid">
+        <svg class="hdp-connectors" viewBox="0 0 640 260" preserveAspectRatio="none">
+          <line x1="320" y1="145" x2="140" y2="42" stroke="#FF6A2B" stroke-width="1.6" stroke-opacity="0.65" />
+          <line x1="320" y1="145" x2="140" y2="130" stroke="#FF6A2B" stroke-width="1.6" stroke-opacity="0.65" />
+          <line x1="320" y1="145" x2="140" y2="218" stroke="#FF6A2B" stroke-width="1.6" stroke-opacity="0.65" />
+          <line x1="320" y1="145" x2="320" y2="38" stroke="#FF6A2B" stroke-width="1.6" stroke-opacity="0.65" />
+          <line x1="320" y1="145" x2="500" y2="42" stroke="#FF6A2B" stroke-width="1.6" stroke-opacity="0.65" />
+          <line x1="320" y1="145" x2="500" y2="130" stroke="#FF6A2B" stroke-width="1.6" stroke-opacity="0.65" />
+          <line x1="320" y1="145" x2="500" y2="218" stroke="#FF6A2B" stroke-width="1.6" stroke-opacity="0.65" />
+        </svg>
+        <!-- Left Column -->
+        <div class="hdp-col">
+          <a href="/{lang}/app{app_query}" class="hdp-node">
+            <span class="hdp-node-icon">▶</span>
+            <div>
+              <div class="hdp-node-title">
+                <span data-lang="th">เริ่มทำแบบทดสอบรายวัน</span>
+                <span data-lang="no">Start quiz / daglig test</span>
+                <span data-lang="en">Start quiz / daily test</span>
+              </div>
+              <div class="hdp-node-sub">
+                <span data-lang="th">ฝึกทุกวันด้วยคำถามใหม่</span>
+                <span data-lang="no">Øv daglig med nye spørsmål</span>
+                <span data-lang="en">Practice daily with new questions</span>
+              </div>
+            </div>
+          </a>
+          <a href="/{lang}/app{app_query}" class="hdp-node">
+            <span class="hdp-node-icon">🎮</span>
+            <div>
+              <div class="hdp-node-title">
+                <span data-lang="th">Flipp Flopp - เกมจราจรสั้นๆ</span>
+                <span data-lang="no">Flipp Flopp - Korte trafikkspill</span>
+                <span data-lang="en">Flipp Flopp - Short traffic games</span>
+              </div>
+              <div class="hdp-node-sub">
+                <span data-lang="th">เรียนผ่านเกม • สนุกและเข้าใจไว</span>
+                <span data-lang="no">Lær gjennom spill • Rask &amp; moro</span>
+                <span data-lang="en">Learn through play • Fast &amp; fun</span>
+              </div>
+            </div>
+          </a>
+          <a href="/{lang}/app{app_query}" class="hdp-node">
+            <span class="hdp-node-icon">📖</span>
+            <div>
+              <div class="hdp-node-title">
+                <span data-lang="th">ฝึกคำศัพท์จราจร</span>
+                <span data-lang="no">Øv på trafikkbegreper</span>
+                <span data-lang="en">Practice traffic terms</span>
+              </div>
+              <div class="hdp-node-sub">
+                <span data-lang="th">อธิบายคำศัพท์ • บัตรคำและคลังศัพท์</span>
+                <span data-lang="no">Begreper forklart • Huskelapp &amp; begrepsliste</span>
+                <span data-lang="en">Terms explained • Flashcards &amp; glossary</span>
+              </div>
+            </div>
+          </a>
+        </div>
+        <!-- Center Column -->
+        <div class="hdp-col-center">
+          <a href="/{lang}/app{app_query}" class="hdp-node">
+            <span class="hdp-node-icon">📋</span>
+            <div>
+              <div class="hdp-node-title">
+                <span data-lang="th">ข้อสอบจำลอง (45 ข้อ - 90 นาที)</span>
+                <span data-lang="no">Øvingsprøve (45 spørsmål - 90 min)</span>
+                <span data-lang="en">Practice test (45 questions - 90 min)</span>
+              </div>
+              <div class="hdp-node-sub">
+                <span data-lang="th">รูปแบบข้อสอบจริง - จับเวลา</span>
+                <span data-lang="no">Offisiell prøveformat - Tidsbegrenset</span>
+                <span data-lang="en">Official exam format - Timed</span>
+              </div>
+            </div>
+          </a>
+          <div class="hdp-center-hub">
+            <div class="hdp-hub-top">
+              <img src="/api/assets/michael-avatar-v1.webp" alt="Michael S." class="hdp-hub-avatar" />
+              <div>
+                <div class="hdp-hub-title">
+                  <span data-lang="th">ถาม Michael AI</span>
+                  <span data-lang="no">Spør Michael AI</span>
+                  <span data-lang="en">Ask Michael AI</span>
+                </div>
+                <div class="hdp-hub-sub">
+                  <span data-lang="th">ถามคำถามเกี่ยวกับการจราจร</span>
+                  <span data-lang="no">Still et spørsmål om trafikk</span>
+                  <span data-lang="en">Ask a traffic question</span>
+                </div>
+                <div class="hdp-hub-badge">
+                  <span data-lang="th">💬 รับคำตอบทันที • อธิบายเป็นภาษาไทยและนอร์เวย์</span>
+                  <span data-lang="no">💬 Få svar umiddelbart • Forklart på thai &amp; norsk</span>
+                  <span data-lang="en">💬 Get instant answers • Explained in Thai &amp; Norwegian</span>
+                </div>
+              </div>
+            </div>
+            <a href="/{lang}/app{app_query}" class="hdp-hub-btn">
+              <span data-lang="th">เปิดผู้ช่วย AI 💬</span>
+              <span data-lang="no">Åpne AI-assistenten 💬</span>
+              <span data-lang="en">Open AI assistant 💬</span>
+            </a>
+          </div>
+        </div>
+        <!-- Right Column -->
+        <div class="hdp-col">
+          <a href="/{lang}/app{app_query}" class="hdp-node">
+            <span class="hdp-node-icon">🚗</span>
+            <div>
+              <div class="hdp-node-title">
+                <span data-lang="th">ระยะเบรก - ดูจุดที่รถหยุด</span>
+                <span data-lang="no">Stopplengde - Se hvor bilen stopper</span>
+                <span data-lang="en">Braking distance - See where the car stops</span>
+              </div>
+              <div class="hdp-node-sub">
+                <span data-lang="th">เรียนรู้ระยะตอบสนองและระยะเบรก</span>
+                <span data-lang="no">Lær reaksjon, brems &amp; stoppdistansen</span>
+                <span data-lang="en">Learn reaction, brake &amp; stopping distance</span>
+              </div>
+            </div>
+          </a>
+          <a href="/{lang}/app{app_query}" class="hdp-node">
+            <span class="hdp-node-icon">🎬</span>
+            <div>
+              <div class="hdp-node-title">
+                <span data-lang="th">วิดีโอคอร์ส &amp; พอดแคสต์</span>
+                <span data-lang="no">Videokurs &amp; Podkaster</span>
+                <span data-lang="en">Video course &amp; Podcasts</span>
+              </div>
+              <div class="hdp-node-sub">
+                <span data-lang="th">ดูและเรียนรู้ • คำอธิบายจากผู้เชี่ยวชาญ</span>
+                <span data-lang="no">Se og lær • Ekspertforklaringer på video</span>
+                <span data-lang="en">Watch and learn • Expert video explanations</span>
+              </div>
+            </div>
+          </a>
+          <a href="/{lang}/app{app_query}" class="hdp-node">
+            <span class="hdp-node-icon">🎯</span>
+            <div>
+              <div class="hdp-node-title">
+                <span data-lang="th">ฝึกจากข้อผิดพลาด &amp; ป้ายจราจร</span>
+                <span data-lang="no">Øv på mine feil &amp; skiltkatalog</span>
+                <span data-lang="en">Practice my mistakes &amp; sign catalog</span>
+              </div>
+              <div class="hdp-node-sub">
+                <span data-lang="th">ทบทวนข้อที่ผิด • อธิบายป้ายจราจรทั้งหมด</span>
+                <span data-lang="no">Gjennomgå feil • Alle skilt forklart</span>
+                <span data-lang="en">Review mistakes • All signs explained</span>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="hdp-footer">
+        <div class="hdp-footer-icons">
+          <span class="hdp-footer-ico">✓</span>
+          <span class="hdp-footer-ico">🌐</span>
+          <span class="hdp-footer-ico">📱</span>
+        </div>
+        <div class="hdp-footer-text">
+          <span data-lang="th">คำถามกว่า 1000+ ข้อ • ไทย &amp; นอร์เวย์ • ใช้งานได้ทั้งใน Nett-App และ Web App</span>
+          <span data-lang="no">1000+ spørsmål • Norsk &amp; Thai • Tilgjengelig i Nett-App og Web App</span>
+          <span data-lang="en">1000+ questions • Norwegian &amp; Thai • Available in Nett-App and Web App</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ring 1 Video Modal (10s Video Placeholder before redirect) -->
+    <div class="hero-video-modal-backdrop" id="heroVideoModal" role="dialog" aria-label="10s Video Intro">
+      <div class="hero-video-modal">
+        <div class="hvm-video-box">
+          <span class="hvm-live-pill">Nett-App LIVE</span>
+          <button type="button" class="hvm-close-x" id="heroVideoModalCloseX" aria-label="Close">✕</button>
+          <div class="hvm-play-circle">▶</div>
+          <div class="hvm-placeholder-title">10 SEC VIDEO PLACEHOLDER</div>
+          <div class="hvm-placeholder-sub" id="hvmTagSub">
+            <span data-lang="th">วิดีโอเร็วๆ นี้ - 10 วินาที - เสียง 11Labs พร้อม • เล่นอัตโนมัติ</span>
+            <span data-lang="no">video kommer snart - 10 sec - 11Labs VO klar • autoplay muted • Thai + Norsk voice</span>
+            <span data-lang="en">video coming soon - 10 sec - 11Labs VO ready • autoplay muted • Thai + Norwegian voice</span>
+          </div>
+          <div class="hvm-progress"><div class="hvm-progress-bar"></div></div>
+        </div>
+        <div class="hvm-body">
+          <h4 class="hvm-heading">
+            <span data-lang="th">พร้อมฝึกทำข้อสอบทฤษฎีเป็นภาษาไทยหรือยัง?</span>
+            <span data-lang="no">Klar til å øve teori på thai?</span>
+            <span data-lang="en">Ready to practice driving theory in Thai?</span>
+          </h4>
+          <p class="hvm-desc">
+            <span data-lang="th">วิดีโอ 10 วินาที - พร้อมคำบรรยายภาษาไทย - เสียงจาก 11Labs</span>
+            <span data-lang="no">Se 10 sek introduksjon med Michaels stemme (11Labs VO) eller åpne web-appen direkte.</span>
+            <span data-lang="en">Watch a 10 sec intro with Michael's voice (11Labs VO) or open the web app directly.</span>
+          </p>
+          <div class="hvm-actions">
+            <button type="button" class="hvm-btn-close" id="heroVideoModalCloseBtn">
+              <span data-lang="th">ปิด</span>
+              <span data-lang="no">Lukk</span>
+              <span data-lang="en">Close</span>
+            </button>
+            <a href="/{lang}/app{app_query}" class="hvm-btn-open">
+              <span data-lang="th">เปิดแอปเลย</span>
+              <span data-lang="no">Åpne app</span>
+              <span data-lang="en">Open app</span>
+            </a>
           </div>
         </div>
       </div>
@@ -1781,48 +2451,79 @@ LANDING_JS = r"""
 })();
 
 
-// ─── Ring 1: Hand Tags Hover (PC) & Tap (Mobil/iPad) Video Popup ───
+// ─── Ring 1 & Ring 2: Hand Tags (Hover Preview + 10s Video Modal) & #1 Spør Michael AI Hover Diagram ───
 (function(){
   var popup = document.getElementById('handVideoPopup');
   var subLbl = document.getElementById('hvpTagLabel');
+  var modal = document.getElementById('heroVideoModal');
+  var closeX = document.getElementById('heroVideoModalCloseX');
+  var closeBtn = document.getElementById('heroVideoModalCloseBtn');
   var hotspots = document.querySelectorAll('.hand-tag-hotspot');
-  if (!popup || !hotspots.length) return;
   var labels = {
     easy: 'เพื่อง่าย • Walkthrough',
     web: 'Web App • PWA Walkthrough',
     nett: 'Nett-App • Norsk Walkthrough'
   };
-  var pinned = null;
-  function showTag(id) {
+  function showPreview(id) {
+    if (!popup) return;
     if (subLbl && labels[id]) subLbl.textContent = labels[id];
     popup.classList.add('open');
     hotspots.forEach(function(h){ h.classList.toggle('active', h.getAttribute('data-tag-id') === id); });
   }
-  function hideTag() {
+  function hidePreview() {
+    if (!popup) return;
     popup.classList.remove('open');
     hotspots.forEach(function(h){ h.classList.remove('active'); });
+  }
+  function openModal(id) {
+    hidePreview();
+    if (modal) modal.classList.add('open');
+  }
+  function closeModal() {
+    if (modal) modal.classList.remove('open');
   }
   hotspots.forEach(function(btn){
     var id = btn.getAttribute('data-tag-id');
     btn.addEventListener('mouseenter', function(){
-      if (window.matchMedia('(min-width: 1024px)').matches) showTag(id);
+      if (window.matchMedia('(min-width: 1024px)').matches) showPreview(id);
     });
     btn.addEventListener('mouseleave', function(){
-      if (window.matchMedia('(min-width: 1024px)').matches && !pinned) hideTag();
+      if (window.matchMedia('(min-width: 1024px)').matches) hidePreview();
     });
     btn.addEventListener('click', function(ev){
       ev.preventDefault();
       ev.stopPropagation();
-      if (pinned === id) { pinned = null; hideTag(); }
-      else { pinned = id; showTag(id); }
+      openModal(id);
     });
   });
-  document.addEventListener('click', function(ev){
-    if (pinned && !popup.contains(ev.target)) {
-      pinned = null;
-      hideTag();
+  if (closeX) closeX.addEventListener('click', closeModal);
+  if (closeBtn) closeBtn.addEventListener('click', closeModal);
+  if (modal) {
+    modal.addEventListener('click', function(ev){
+      if (ev.target === modal) closeModal();
+    });
+  }
+
+  // Ring 2: Hover Diagram Popup on "1. Spør Michael AI" (.hero-feat-pill.highlight)
+  var aiPill = document.querySelector('.hero-feat-pill.highlight');
+  var diag = document.getElementById('heroDiagramPopup');
+  var diagTimer = null;
+  if (aiPill && diag) {
+    function openDiag() {
+      clearTimeout(diagTimer);
+      diag.classList.add('open');
     }
-  });
+    function scheduleCloseDiag() {
+      clearTimeout(diagTimer);
+      diagTimer = setTimeout(function(){ diag.classList.remove('open'); }, 160);
+    }
+    aiPill.addEventListener('mouseenter', function(){
+      if (window.matchMedia('(min-width: 768px)').matches) openDiag();
+    });
+    aiPill.addEventListener('mouseleave', scheduleCloseDiag);
+    diag.addEventListener('mouseenter', openDiag);
+    diag.addEventListener('mouseleave', scheduleCloseDiag);
+  }
 })();
 
 // ─── Language switcher ───
