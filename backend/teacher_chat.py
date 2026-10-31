@@ -1829,7 +1829,7 @@ def _material_relevant(item: dict, question: str, explicit_sign_ids: list[str] |
     if identity.startswith("teacher-visual:"):
         topic = identity.removeprefix("teacher-visual:")
         topics = _situation_topics(question)
-        return _user_requested_image(question) and (
+        return (_user_requested_image(question) or _user_requested_video(question)) and (
             topic == "roundabout" and "roundabout" in topics
             or topic == "yield" and "yield" in topics
         )
@@ -4179,18 +4179,26 @@ def _approved_unavailable_video_reply(question: str, media: list[dict], lang: st
         return ""
     plain = (
         r"(?:(?:har du|kan du vise(?: meg)?) (?:en )?(?:video|film)(?: om (?:dette|det))?"
+        r"|(?:vis(?: meg)?|kan du vise(?: meg)?) (?:en )?(?:video|film) (?:av|om) (?:rundkjøring|rundkjoring|vikeplikt)"
         r"|(?:do you have|can you show(?: me)?) (?:a )?video(?: about (?:this|that))?"
-        r"|(?:มี|ขอดู|ช่วยแสดง)(?:วิดีโอ|วีดีโอ)(?:เรื่องนี้|เกี่ยวกับเรื่องนี้)?(?:ไหม|มั้ย|ให้หน่อย)?(?:ครับ|ค่ะ)?)"
+        r"|(?:มี|ขอดู|ช่วยแสดง)(?:วิดีโอ|วีดีโอ)(?:เรื่องนี้|เกี่ยวกับเรื่องนี้|วงเวียน|การให้ทาง)?(?:ไหม|มั้ย|ให้หน่อย)?(?:ครับ|ค่ะ)?)"
     )
     text = re.sub(r"[.!?]+$", "", " ".join(question.split())).strip()
     if not re.fullmatch(plain, text, re.I):
         return ""
     # These sentences already exist in the respective core capability prompts.
-    return {
+    unavailable = {
         "no": "Jeg har dessverre ikke en video av akkurat denne situasjonen for hånden akkurat nå.",
         "th": "ขออภัยด้วยครับ ตอนนี้ผมยังไม่มีวิดีโอสำหรับสถานการณ์นี้โดยเฉพาะ",
         "en": "Unfortunately, I don't have a video of this exact situation on hand right now.",
     }.get(lang, "")
+    image = next((item for item in media if item.get("type") == "image"), None)
+    if image:
+        visual = {"no": "Her er en illustrasjon i stedet.",
+                  "th": "ผมมีภาพประกอบให้ดูแทนครับ",
+                  "en": "Here is an illustration instead."}.get(lang, "")
+        return f"{unavailable} {visual}".strip()
+    return unavailable
 
 
 def _ground_missing_visual_file_reply(question: str, reply: str, media: list[dict], lang: str) -> str:
@@ -5146,6 +5154,12 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         media = await _validate_teacher_response_media(media, lang)
         if requested_video_type:
             media = [item for item in media if item.get("type") == "video"]
+            if not media and not explicit_sign_ids:
+                topics = _situation_topics(topic_query)
+                visual_topic = "roundabout" if "roundabout" in topics else "yield" if "yield" in topics else ""
+                visual_card = _visualization_media_card(visual_topic, lang)
+                if visual_card:
+                    media = await _validate_teacher_response_media([visual_card], lang)
         media = [item for item in media if _material_relevant(item, topic_query, explicit_sign_ids)]
 
         if not LLM_KEY:

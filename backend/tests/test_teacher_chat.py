@@ -405,17 +405,18 @@ class TestWrongQuizAnswerReplyIsThaiOnly(unittest.TestCase):
             self.assertTrue(tc._reply_matches_language_script(response.reply, language))
             self.assertNotIn("file", response.reply.lower())
 
-    def test_missing_roundabout_video_never_returns_phantom_media_or_english_error(self):
+    def test_missing_roundabout_video_shows_verified_image_and_localized_reply(self):
         for message, language in (("Vis video av rundkjøring", "no"), ("ขอดูวิดีโอวงเวียน", "th")):
             with self.subTest(language=language), patch.object(tc, "_v4_next_stage", return_value="5"), patch.object(
                 tc, "_find_active_bildebok_page", return_value=None
-            ):
-                response, _ = self._chat_with_mock_model(
-                    TeacherChatRequest(message=message, language=language), "File not found."
-                )
-            self.assertEqual(response.media, [])
+            ), patch.object(tc, "LLM_KEY", "test-key"):
+                response = asyncio.run(teacher_chat(TeacherChatRequest(message=message, language=language)))
+            self.assertEqual([item["id"] for item in response.media], ["teacher-visual:roundabout"])
+            self.assertEqual(response.media[0]["type"], "image")
+            self.assertEqual(response.media[0]["media_id"], "teacher-visual:roundabout")
             self.assertTrue(tc._reply_matches_language_script(response.reply, language))
             self.assertNotIn("file", response.reply.lower())
+            self.assertNotIn("Her er videoen", response.reply)
 
     def test_quiz_coach_hides_correct_answer_on_first_turn(self):
         request = TeacherChatRequest(
