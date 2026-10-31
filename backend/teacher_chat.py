@@ -1826,6 +1826,13 @@ def _material_relevant(item: dict, question: str, explicit_sign_ids: list[str] |
             and not re.search(r"\b(?:vis|vise|show|display)\b|แสดง|ขอดู", question, re.I)):
         return False
     identity = str(item.get("id") or item.get("media_id") or "").lower()
+    if identity.startswith("teacher-visual:"):
+        topic = identity.removeprefix("teacher-visual:")
+        topics = _situation_topics(question)
+        return _user_requested_image(question) and (
+            topic == "roundabout" and "roundabout" in topics
+            or topic == "yield" and "yield" in topics
+        )
     if identity.startswith("bildebok:") and _requested_bildebok_id(question) == identity.split(":", 1)[1]:
         return True
     # A specialized resource remains specialized even when its caption also
@@ -3460,6 +3467,11 @@ async def _validate_teacher_response_media(media: list[dict], lang: str) -> list
         if not media_id or not _safe_teacher_response_media_url(item.get("url")):
             continue
         try:
+            if media_id.startswith("teacher-visual:"):
+                canonical = _visualization_media_card(media_id.removeprefix("teacher-visual:"), lang)
+                if canonical and all(item.get(key) == canonical.get(key) for key in ("id", "type", "url", "title", "caption")):
+                    valid.append(canonical)
+                continue
             if media_id.startswith("traffic-sign:"):
                 sign_id = media_id.removeprefix("traffic-sign:")
                 authoritative = await _get_exact_sign_media([sign_id], lang, limit=1)
@@ -3590,6 +3602,7 @@ async def _get_relevant_michael_materials(
     explicit_sign_ids: Optional[List[str]] = None,
     extra_context: str = "",
     limit: int = 2,
+    media_type: str = "",
 ) -> list[dict]:
     """Rank approved admin references deterministically and return safe localized media."""
     try:
@@ -3618,6 +3631,8 @@ async def _get_relevant_michael_materials(
 
             material_type = str(material.get("type", "")).strip()
             if material_type not in {"sign", "intersection_image", "image", "video", "podcast", "audio", "document"}:
+                continue
+            if media_type and material_type != media_type:
                 continue
             source_id = str(material.get("source_id", "")).strip()
             linked_sign_ids = {
@@ -3753,10 +3768,42 @@ def _user_requested_image(user_msg: str) -> bool:
     return False
 
 
+def _user_requested_video(user_msg: str) -> bool:
+    return bool(re.search(r"\b(?:video|film)\b|วิดีโอ|วีดีโอ", user_msg or "", re.I))
+
+
+def _visualization_media_card(topic: str, lang: str) -> dict | None:
+    """Serve only a bundled, localized illustration with an existing asset."""
+    assets = {
+        "roundabout": (
+            "rundkjoring1.jpg",
+            {"no": "Kjøring i rundkjøring", "th": "การขับขี่ในวงเวียน", "en": "Driving in a roundabout"},
+            {"no": "Se trafikken som allerede er inne før du kjører inn.",
+             "th": "มองรถที่อยู่ในวงเวียนก่อนขับเข้าไป",
+             "en": "Check traffic already in the roundabout before entering."},
+        ),
+        "yield": (
+            "michael_hoyreregel.svg",
+            {"no": "Vikeplikt i kryss", "th": "การให้ทางที่ทางแยก", "en": "Yielding at an intersection"},
+            {"no": "Et eksempel på vikeplikt i et kryss uten skilt.",
+             "th": "ตัวอย่างการให้ทางที่ทางแยกไม่มีป้าย",
+             "en": "An example of yielding at an unsigned intersection."},
+        ),
+    }
+    if lang not in SUPPORTED_LANGUAGES or topic not in assets:
+        return None
+    filename, titles, captions = assets[topic]
+    if not (Path(__file__).parent / "public_assets" / filename).is_file():
+        return None
+    return {"id": f"teacher-visual:{topic}", "type": "image",
+            "url": f"/api/assets/{filename}", "title": titles[lang], "caption": captions[lang]}
+
+
 async def _get_relevant_catalog_media(
     user_msg: str,
     language: str,
     extra_context: str = "",
+    media_type: str = "",
 ) -> list[dict]:
     """Fail-soft lookup of at most one curated, language-compatible resource."""
     if language not in SUPPORTED_LANGUAGES:
@@ -3767,10 +3814,15 @@ async def _get_relevant_catalog_media(
             "approved_for_michael": True,
             "content_language": {"$in": [language, "neutral"]},
         }).to_list(length=200)
+        if media_type:
+            documents = [document for document in documents if document.get("type") == media_type]
         law_tags = expand_law_synonyms(f"{user_msg} {extra_context}")
+        topics = _situation_topics(user_msg)
+        visual_tags = ("rundkjoring" if "roundabout" in topics else
+                       "vikeplikt" if "yield" in topics else "")
         return rank_catalog_media(
             documents,
-            f"{user_msg} {extra_context} {' '.join(law_tags)}",
+            f"{user_msg} {extra_context} {' '.join(law_tags)} {visual_tags}",
             language,
             limit=1,
         )
@@ -4139,6 +4191,26 @@ def _approved_unavailable_video_reply(question: str, media: list[dict], lang: st
         "th": "ขออภัยด้วยครับ ตอนนี้ผมยังไม่มีวิดีโอสำหรับสถานการณ์นี้โดยเฉพาะ",
         "en": "Unfortunately, I don't have a video of this exact situation on hand right now.",
     }.get(lang, "")
+
+
+def _ground_missing_visual_file_reply(question: str, reply: str, media: list[dict], lang: str) -> str:
+    """Replace model file-error boilerplate with a truthful, localized media status."""
+    if not (_user_requested_image(question) or _user_requested_video(question)):
+        return reply
+    if not re.search(r"\b(?:file not found|file is missing|missing file|no such file or directory|(?:couldn'?t|can't|cannot) (?:find|access|locate) (?:the|a|any) (?:files?|images?|videos?))\b", reply, re.I):
+        return reply
+    if media:
+        title = media[0].get("title", "")
+        if media[0].get("type") == "video":
+            return {"no": f"Her er videoen: {title}.",
+                    "th": f"นี่คือวิดีโอเรื่อง{title}ครับ",
+                    "en": f"Here is the video: {title}."}.get(lang, "")
+        return {"no": f"Her er illustrasjonen: {title}.",
+                "th": f"นี่คือภาพประกอบเรื่อง{title}ครับ",
+                "en": f"Here is the illustration: {title}."}.get(lang, "")
+    return {"no": "Jeg finner ikke et godkjent bilde eller en video for dette akkurat nå.",
+            "th": "ตอนนี้ผมยังไม่มีภาพหรือวิดีโอที่ตรวจสอบแล้วสำหรับเรื่องนี้ครับ",
+            "en": "I don't have a verified image or video for this yet."}.get(lang, "")
 
 
 def _guard_unverified_mirror_timing(reply: str) -> str:
@@ -5003,6 +5075,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
     recall_sign_ids = (await _load_recalled_sign_ids(prior, explicit_sign_ids, session_id, lang)
                        if not guided_chat and _requests_exam_failure_review(user_msg) else [])
     sign_requested = bool(explicit_sign_ids) or _asks_about_sign(user_msg)
+    requested_video_type = "video" if _user_requested_video(topic_query) and not _user_requested_image(topic_query) else ""
     requested_page = _requested_bildebok_id(topic_query, req.document_id)
     if requested_page:
         topic_query += " " + requested_page
@@ -5030,6 +5103,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             sign_ids=context_sign_ids,
             explicit_sign_ids=explicit_sign_ids,
             extra_context=quiz_context_str,
+            media_type=requested_video_type,
         ) if allow_answer else []
         exact_sign_ids_in_media = {item.get("sign_id") for item in exact_sign_media}
         media = exact_sign_media + [
@@ -5042,11 +5116,18 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
                 topic_query,
                 requested_language,
                 extra_context=quiz_context_str,
+                media_type=requested_video_type,
             )
             if not catalog_media and not approved_media and resolved_concept and resolved_concept.get("media"):
                 catalog_media = list(resolved_concept["media"])
         elif allow_answer and not explicit_sign_ids and not approved_media and resolved_concept and resolved_concept.get("media"):
             catalog_media = list(resolved_concept["media"])
+        if allow_answer and not explicit_sign_ids and _user_requested_image(topic_query):
+            topics = _situation_topics(topic_query)
+            visual_topic = "roundabout" if "roundabout" in topics else "yield" if "yield" in topics else ""
+            visual_card = _visualization_media_card(visual_topic, lang)
+            if visual_card:
+                catalog_media = [visual_card]
         media = _compose_teacher_media(media, catalog_media, explicit_sign_ids)
         if bildebok_page:
             lesson_card = _bildebok_media_card(bildebok_page)
@@ -5063,6 +5144,8 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             except Exception as ml_media_err:
                 logger.debug("Micro-lesson media card error: %s", ml_media_err)
         media = await _validate_teacher_response_media(media, lang)
+        if requested_video_type:
+            media = [item for item in media if item.get("type") == "video"]
         media = [item for item in media if _material_relevant(item, topic_query, explicit_sign_ids)]
 
         if not LLM_KEY:
@@ -5373,6 +5456,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             reply_text = re.sub(re.escape(bildebok_page["id"]), bildebok_page["id"].split("-s")[-1], reply_text, flags=re.I)
     if source_reply:
         reply_text = source_reply
+    reply_text = _ground_missing_visual_file_reply(user_msg, reply_text, media, lang)
     reply_text = await _guard_selected_language(reply_text, messages, lang)
     if not guided_chat:
         reply_text = _guard_unreported_success(reply_text, prior, user_msg, student_memory, lang)
