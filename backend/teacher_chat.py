@@ -1480,6 +1480,14 @@ def _needs_topic_focus(topic: Optional[dict]) -> bool:
     ))
 
 
+def _is_plain_greeting(message: str) -> bool:
+    """A greeting alone leaves room to start with a verified failed-exam topic."""
+    return bool(re.fullmatch(
+        r"(?:hei|hallo|hello|hi|สวัสดี)(?:\s+(?:michael|ไมเคิล))?[\s!.?]*",
+        message.strip(), re.I,
+    ))
+
+
 _BROAD_TOPIC_PROMPTS = (
     "hva føler", "hva synes", "hva er vanskelig", "hva sliter du med",
     "hvilket tema", "hva vil du øve", "hva bør vi se på",
@@ -4954,9 +4962,12 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
     student_memory = await fetch_student_learning_memory(req.device_id, req.user_id, lang)
     weak_topic = student_memory.get("weak_topic") if student_memory else None
     weak_result = _needs_topic_focus(weak_topic)
-    # Learning memory informs free chat; it must not replace the learner's request
-    # with a staged weak-topic lesson unless that mode was explicitly requested.
-    focus_weak_topic = bool(weak_topic and is_weak_topics)
+    # A plain greeting after a failed exam can start on the verified weak topic.
+    # A concrete free-chat question still takes precedence over learning memory.
+    focus_weak_topic = bool(weak_topic and (is_weak_topics or (
+        req.mode == "normal_chat" and weak_topic.get("has_failed_exam")
+        and _is_plain_greeting(user_msg)
+    )))
     if focus_weak_topic:
         # A failed exam or weak result starts with the subject, not topic selection.
         guided_chat = True

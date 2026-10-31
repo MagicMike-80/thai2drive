@@ -1,5 +1,8 @@
 """Offline unit tests for official theory exam UI and logic in webapp.py."""
+import json
 import re
+import shutil
+import subprocess
 import unittest
 from pathlib import Path
 
@@ -85,9 +88,10 @@ class TestExamUI(unittest.TestCase):
 
     def test_exam_translations_isolation(self):
         """All exam-related keys must have non-empty translations in NO, TH, and EN."""
-        keys = ["home_exam_action", "home_exam_sub", "exam_submit", "exam_submit_confirm"]
+        keys = ["home_exam_action", "home_exam_sub", "exam_submit", "exam_submit_confirm",
+                "exam_incomplete", "readiness_exam_breakdown"]
         for key in keys:
-            pattern = rf"{key}\s*:\s*\{{([^}}]+)\}}"
+            pattern = rf"{key}\s*:\s*\{{((?:[^{{}}]|\{{[^{{}}]*\}})*)\}}"
             match = re.search(pattern, self.content)
             self.assertIsNotNone(match, f"Translation key '{key}' must be defined in TRANSLATIONS")
             trans_body = match.group(1)
@@ -105,6 +109,64 @@ class TestExamUI(unittest.TestCase):
             self.content,
             r"t\('(exam_submit_confirm|time_is_up)'\)\s*\|\|\s*['\"]",
         )
+
+    def test_runtime_requires_45_image_questions_before_starting_timer(self):
+        node = shutil.which("node")
+        self.assertIsNotNone(node)
+        code = self.content.split("async function loadQuiz(url) {", 1)[1].split("\nfunction pickLang(", 1)[0]
+        script = "async function loadQuiz(url) {" + code + """
+var questions, isExamMode, currentCat, qCard, timerStarted, rendered;
+var document = {getElementById: function() {return qCard;}};
+function showScreen() {}
+async function loadAccessStatus() {}
+function t(key) {return key;}
+function stopExamTimer() {}
+function startExamTimer() {timerStarted = true;}
+function renderQuestion() {rendered = true;}
+async function run(count) {
+  isExamMode = true; currentCat = null; qCard = {innerHTML:''};
+  timerStarted = false; rendered = false;
+  api = async function() {return Array.from({length:count}, function() {return {bildeUrl:'/image.jpg'};});};
+  await loadQuiz('/api/questions/random?mode=exam');
+  return {count:questions.length, exam:isExamMode, timer:timerStarted,
+          rendered:rendered, message:qCard.innerHTML.includes('exam_incomplete')};
+}
+(async function() {console.log(JSON.stringify([await run(44), await run(45)]));})();
+"""
+        result = subprocess.run([node, "-e", script], capture_output=True, text=True, encoding="utf-8", check=True)
+        short, full = json.loads(result.stdout)
+        self.assertEqual(short, {"count": 0, "exam": False, "timer": False,
+                                 "rendered": False, "message": True})
+        self.assertEqual(full["count"], 45)
+        self.assertTrue(full["exam"] and full["timer"] and full["rendered"])
+
+    def test_runtime_timer_uses_elapsed_time(self):
+        node = shutil.which("node")
+        self.assertIsNotNone(node)
+        code = self.content.split("function startExamTimer() {", 1)[1].split("\nasync function startQuiz(", 1)[0]
+        script = "function startExamTimer() {" + code + """
+var examTimerInterval = null, examSecondsLeft = 0, examDeadline = 0, now = 0, tick, ended = false;
+var elements = {};
+var document = {getElementById: function(id) {
+  return elements[id] || (elements[id] = {style:{}, textContent:''});
+}};
+Date.now = function() {return now;};
+function setInterval(fn) {tick = fn; return 1;}
+function clearInterval() {}
+function toast() {}
+function t(key) {return key;}
+function showEnd() {ended = true;}
+startExamTimer();
+var initial = examSecondsLeft;
+now = 60000; tick();
+var afterMinute = examSecondsLeft;
+now = 5400000; tick();
+console.log(JSON.stringify({initial:initial, afterMinute:afterMinute,
+                            final:examSecondsLeft, ended:ended}));
+"""
+        result = subprocess.run([node, "-e", script], capture_output=True, text=True, encoding="utf-8", check=True)
+        self.assertEqual(json.loads(result.stdout),
+                         {"initial": 5400, "afterMinute": 5340, "final": 0, "ended": True})
 
 
 if __name__ == "__main__":

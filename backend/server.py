@@ -87,6 +87,8 @@ def normalize_question(q: dict) -> dict:
     # Create a copy to avoid side-effects on shared memory
     q = dict(q)
     q.pop("_id", None)
+    if q.get("id") == "fe7657b8-5755-495b-aefd-56b595c73194":
+        q["bildeUrl"] = "/api/sign-images/135_0.jpg"
     
     # Ensure it's in v2 structure
     if not isinstance(q.get("question"), dict):
@@ -936,7 +938,12 @@ async def health():
 
 # App-wide image-only filter: ALL quiz modes (Practice, Exam, Daily Test)
 # must ONLY return questions that have an image (bildeUrl present and non-empty).
-IMAGE_ONLY_FILTER = {"bildeUrl": {"$exists": True, "$nin": [None, ""]}}
+HELD_QUESTION_IDS = ("q016", "03e1d9e8-3bfc-4636-8536-fe84ad1506cc")
+AVAILABLE_QUESTION_FILTER = {"id": {"$nin": list(HELD_QUESTION_IDS)}}
+IMAGE_ONLY_FILTER = {
+    **AVAILABLE_QUESTION_FILTER,
+    "bildeUrl": {"$exists": True, "$nin": [None, ""]},
+}
 
 @api_router.get("/questions/debug")
 async def debug_questions():
@@ -951,7 +958,7 @@ async def debug_questions():
 
 @api_router.get("/questions")
 async def get_questions(category: Optional[str] = None, difficulty: Optional[str] = None, limit: int = Query(default=50, le=200)):
-    query: dict = {}
+    query: dict = dict(AVAILABLE_QUESTION_FILTER)
     if category:
         query["category"] = category
     if difficulty:
@@ -1003,13 +1010,13 @@ async def _get_exam_questions(
     hard_slot   = max(0, round((approved - wrong_slot) * 0.90))
     medium_slot = max(0, approved - wrong_slot - hard_slot)
 
-    exclude_ids = []  # track fetched IDs to avoid duplicates
+    exclude_ids = list(HELD_QUESTION_IDS)  # keep held questions out of every exam slot
 
     # ── Step 3: wrong questions (any difficulty, prioritised) ─────────────
     wrong_qs: list = []
     if wrong_ids and wrong_slot > 0:
         wrong_qs = await db.questions.aggregate([
-            {"$match": {**image_filter, "id": {"$in": wrong_ids}}},
+            {"$match": {**image_filter, "id": {"$in": [qid for qid in wrong_ids if qid not in HELD_QUESTION_IDS]}}},
             {"$sample": {"size": wrong_slot}},
             {"$project": {"_id": 0}},
         ]).to_list(wrong_slot)
@@ -1086,7 +1093,7 @@ async def get_random_questions(
 
     # ── Normal / category practice: existing random behaviour ─────────────
     pipeline = []
-    match_stage: dict = {}
+    match_stage: dict = dict(AVAILABLE_QUESTION_FILTER)
     if category:
         match_stage["category"] = category
     if sign_id:
@@ -1101,8 +1108,7 @@ async def get_random_questions(
         ]
     if has_image is True:
         match_stage["bildeUrl"] = {"$exists": True, "$nin": [None, ""]}
-    if match_stage:
-        pipeline.append({"$match": match_stage})
+    pipeline.append({"$match": match_stage})
     pipeline.append({"$sample": {"size": approved}})
     pipeline.append({"$project": {"_id": 0}})
     questions = await db.questions.aggregate(pipeline).to_list(approved)
@@ -1110,7 +1116,7 @@ async def get_random_questions(
     # must never silently pretend that an unrelated question belongs to the sign.
     if not questions and category and has_image and not sign_id:
         pipeline2 = [
-            {"$match": {"bildeUrl": {"$exists": True, "$nin": [None, ""]}}},
+            {"$match": IMAGE_ONLY_FILTER},
             {"$sample": {"size": approved}},
             {"$project": {"_id": 0}}
         ]
@@ -1119,6 +1125,8 @@ async def get_random_questions(
 
 @api_router.get("/questions/{question_id}")
 async def get_question(question_id: str):
+    if question_id in HELD_QUESTION_IDS:
+        raise HTTPException(status_code=404, detail="Question not found")
     question = await db.questions.find_one({"id": question_id}, {"_id": 0})
     if not question:
         raise HTTPException(status_code=404, detail="Question not found")
@@ -1147,7 +1155,8 @@ async def get_quiz_mistakes(
         return {"count": 0, "questions": []}
 
     question_docs = await db.questions.find(
-        {"id": {"$in": question_ids}, **IMAGE_ONLY_FILTER}, {"_id": 0}
+        {"id": {"$in": [qid for qid in question_ids if qid not in HELD_QUESTION_IDS]},
+         "bildeUrl": IMAGE_ONLY_FILTER["bildeUrl"]}, {"_id": 0}
     ).to_list(len(question_ids))
     by_id = {str(q.get("id")): normalize_question(q) for q in question_docs}
     ordered = [by_id[qid] for qid in question_ids if qid in by_id]
@@ -1177,16 +1186,29 @@ async def get_user_readiness(current_user: dict = Depends(get_current_user)):
     ]).to_list(1)
     recent_stats = recent[0] if recent else {"total": 0, "correct": 0}
 
+    exam_history = await db.quiz_attempts.aggregate([
+        {"$match": {"$or": identities, "mode": "exam", "total_questions": 45,
+                    "score_percentage": {"$type": "number"}}},
+        {"$sort": {"completed_at": -1}},
+        {"$limit": 5},
+        {"$group": {"_id": None, "count": {"$sum": 1},
+                    "average_score": {"$avg": "$score_percentage"}}},
+    ]).to_list(1)
+
     active_count, mastered_count = await asyncio.gather(
         db.user_mistakes.count_documents({"user_id": user_id, "active": True}),
         db.user_mistakes.count_documents({"user_id": user_id, "mastered": True}),
     )
-    return compute_user_readiness(
+    readiness = compute_user_readiness(
         recent_correct=recent_stats.get("correct", 0),
         recent_total=recent_stats.get("total", 0),
         mastered_mistakes=mastered_count,
         active_mistakes=active_count,
     )
+    exam_stats = exam_history[0] if exam_history else {}
+    readiness["exam_attempt_count"] = exam_stats.get("count", 0)
+    readiness["exam_score"] = max(0, min(100, int((exam_stats.get("average_score") or 0) + 0.5)))
+    return readiness
 
 
 # ==================== ELEVFREMDIRFT & DASHBOARD ====================
@@ -2869,7 +2891,7 @@ async def get_bookmarks(device_id: str):
 @api_router.get("/bookmarked-questions/{device_id}")
 async def get_bookmarked_questions(device_id: str):
     bookmarks = await db.bookmarks.find({"device_id": device_id}, {"_id": 0}).to_list(500)
-    question_ids = [b["question_id"] for b in bookmarks]
+    question_ids = [b["question_id"] for b in bookmarks if b["question_id"] not in HELD_QUESTION_IDS]
     questions = await db.questions.find({"id": {"$in": question_ids}}, {"_id": 0}).to_list(500)
     return questions
 

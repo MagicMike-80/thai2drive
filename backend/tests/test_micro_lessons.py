@@ -291,7 +291,7 @@ class TestTeacherChatIntegration(unittest.TestCase):
                 f"Bleed-through: found Thai characters in English chip: '{chip}'"
             )
 
-    def test_curriculum_context_injects_micro_lesson(self):
+    def test_curriculum_context_injects_safe_micro_lesson(self):
         import asyncio
         from unittest.mock import MagicMock
         with patch.object(tc, "_db") as mock_db:
@@ -304,9 +304,11 @@ class TestTeacherChatIntegration(unittest.TestCase):
             mock_db.studiebok_chapters = mock_col
             mock_db.learning_videos = mock_col
 
-            ctx_th = asyncio.run(tc._get_curriculum_context("ทางม้าลายในนอร์เวย์หยุดไหม", "th"))
+            ctx_th = asyncio.run(tc._get_curriculum_context("วงเวียนในนอร์เวย์", "th"))
             self.assertIn("บทเรียนพิเศษ", ctx_th)
-            self.assertIn("ทางม้าลาย", ctx_th)
+            self.assertIn("วงเวียน", ctx_th)
+            quarantined = asyncio.run(tc._get_curriculum_context("ทางม้าลายในนอร์เวย์หยุดไหม", "th"))
+            self.assertNotIn("บทเรียนพิเศษ", quarantined)
 
 
 if __name__ == "__main__":
