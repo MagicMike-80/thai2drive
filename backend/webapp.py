@@ -5260,18 +5260,18 @@ a { color:inherit; text-decoration:none; }
         <div class="paywall-price-row">
           <div class="paywall-price-card selected" onclick="buyPremium('monthly',this)" data-plan="monthly">
             <div class="ppc-period" data-key="pw_month"></div>
-            <div class="ppc-price" data-price-plan="monthly">99 NOK</div>
+            <div class="ppc-price" data-price-plan="monthly">99</div>
             <div class="ppc-per" data-key="pw_per_month"></div>
           </div>
           <div class="paywall-price-card" onclick="buyPremium('three_months',this)" data-plan="three_months" style="position:relative">
             <div class="ppc-badge" data-key="pw_best_value"></div>
             <div class="ppc-period" data-key="pw_three_months"></div>
-            <div class="ppc-price" data-price-plan="three_months">249 NOK</div>
+            <div class="ppc-price" data-price-plan="three_months">249</div>
             <div class="ppc-per" data-key="pw_per_three_months"></div>
           </div>
           <div class="paywall-price-card" onclick="buyPremium('lifetime',this)" data-plan="lifetime">
             <div class="ppc-period" data-key="pw_lifetime"></div>
-            <div class="ppc-price" data-price-plan="lifetime">699 NOK</div>
+            <div class="ppc-price" data-price-plan="lifetime">699</div>
             <div class="ppc-per" data-key="pw_lifetime_note"></div>
           </div>
         </div>
@@ -6133,7 +6133,7 @@ var UI = {
   trial_ended:     {th:'ช่วงทดลองใช้ฟรีสิ้นสุดแล้ว คุณยังฝึกด้วยคำถามฟรีประจำวันได้', no:'Prøveperioden er over. Du kan fortsatt øve med de daglige gratisspørsmålene.', en:'Your free trial has ended. You can still practise with the daily free questions.'},
 
   // ── Retur fra Stripe-checkout ──────────────────────────────────────────────
-  premium_activated_toast:  {th:'เปิดใช้ Premium แล้ว', no:'Premium er aktivert', en:'Premium activated'},
+  premium_activated_toast:  {th:'เปิดใช้สิทธิ์พรีเมียมแล้ว', no:'Premium er aktivert', en:'Premium activated'},
   payment_unconfirmed_toast:{th:'ยังยืนยันการชำระเงินไม่ได้', no:'Betalingen kunne ikke bekreftes ennå', en:'Payment could not be confirmed yet'},
   checkout_unavailable_toast:{th:'ไม่สามารถเปิดการชำระเงินได้ในตอนนี้', no:'Betaling er ikke tilgjengelig akkurat nå', en:'Payment is not available right now'},
   free_questions_left:      {th:'เหลือ {count} คำถามฟรี', no:'{count} gratis spørsmål igjen', en:'{count} free questions left'},
@@ -6507,9 +6507,9 @@ function catName(raw) {
 }
 
 var PREMIUM_PRICING = {
-  monthly: { display:'99 NOK', period:{no:'per måned', th:'ต่อเดือน', en:'per month'} },
-  three_months: { display:'249 NOK', period:{no:'per 3 måneder', th:'ต่อ 3 เดือน', en:'per 3 months'} },
-  lifetime: { display:'699 NOK', period:{no:'engangsbetaling', th:'จ่ายครั้งเดียว', en:'one-time payment'} }
+  monthly: { amount:99, display:'99 kr', period:{no:'per måned', th:'ต่อเดือน', en:'per month'} },
+  three_months: { amount:249, display:'249 kr', period:{no:'per 3 måneder', th:'ต่อ 3 เดือน', en:'per 3 months'} },
+  lifetime: { amount:699, display:'699 kr', period:{no:'engangsbetaling', th:'จ่ายครั้งเดียว', en:'one-time payment'} }
 };
 
 // ════════════════════════════════════════════
@@ -7861,7 +7861,12 @@ function renderPremiumPricing() {
   Object.keys(PREMIUM_PRICING || {}).forEach(function(planId) {
     var plan = PREMIUM_PRICING[planId] || {};
     var priceEl = document.querySelector('[data-price-plan="' + planId + '"]');
-    if (priceEl) priceEl.textContent = plan.display || priceEl.textContent;
+    if (priceEl) {
+      var amount = Number(plan.amount);
+      priceEl.textContent = appLang === 'th' && Number.isFinite(amount)
+        ? amount + ' โครน'
+        : (plan.display || priceEl.textContent);
+    }
     var card = document.querySelector('[data-plan="' + planId + '"]');
     if (!card) return;
     var labelEl = card.querySelector('.ppc-period');

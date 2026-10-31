@@ -96,6 +96,9 @@ def test_user_51_stripe_checkout_session_success(mock_app_context, language, str
     mock_price = MagicMock()
     mock_price.id = "price_monthly_live"
     mock_price.livemode = True
+    mock_price.recurring.interval = "month"
+    mock_price.recurring.interval_count = 1
+    mock_price.tax_behavior = "unspecified"
 
     mock_session = MagicMock()
     mock_session.id = "cs_live_user51_checkout_test"
@@ -111,7 +114,8 @@ def test_user_51_stripe_checkout_session_success(mock_app_context, language, str
             {
                 "id": "monthly",
                 "name": "Månedlig",
-                "price": 199,
+                "amount": 99,
+                "amount_minor": 9900,
                 "currency": "nok",
                 "stripe_price": mock_price,
             }
@@ -144,6 +148,13 @@ def test_user_51_stripe_checkout_session_success(mock_app_context, language, str
     assert body["session_id"] == "cs_live_user51_checkout_test"
     assert body["url"] == "https://checkout.stripe.com/c/pay/cs_live_user51_checkout_test"
     assert mock_stripe.checkout.Session.create.call_args.kwargs["locale"] == stripe_locale
+    line_item = mock_stripe.checkout.Session.create.call_args.kwargs["line_items"][0]
+    if language == "th":
+        assert line_item["price_data"]["unit_amount"] == 9900
+        assert line_item["price_data"]["product_data"]["name"] == "สิทธิ์พรีเมียม 1 เดือน"
+        assert line_item["price_data"]["recurring"] == {"interval": "month", "interval_count": 1}
+    else:
+        assert line_item == {"price": "price_monthly_live", "quantity": 1}
     database.checkout_sessions.update_one.assert_awaited_once()
 
 
@@ -299,8 +310,20 @@ def test_paywall_initial_and_fallback_prices_match_backend():
 
     for plan_id, plan in server.PUBLIC_PRICING_FALLBACK.items():
         amount = plan["amount"]
-        assert f'data-price-plan="{plan_id}">{amount} NOK' in webapp_code
+        assert f'data-price-plan="{plan_id}">{amount}</div>' in webapp_code
         assert re.search(
-            rf"(?m)^\s*{plan_id}: \{{ display:'{amount} NOK'",
+            rf"(?m)^\s*{plan_id}: \{{ amount:{amount}, display:'{amount} kr'",
             webapp_code,
         )
+    assert "appLang === 'th' && Number.isFinite(amount)" in webapp_code
+    assert "amount + ' โครน'" in webapp_code
+
+
+def test_thai_checkout_return_messages_contain_no_latin_words():
+    webapp_code = (BACKEND_DIR / "webapp.py").read_text(encoding="utf-8")
+    for key in ("premium_activated_toast", "payment_unconfirmed_toast", "checkout_unavailable_toast"):
+        match = re.search(rf"\b{key}\s*:\s*\{{([^}}]+)\}}", webapp_code)
+        assert match, f"Missing {key}"
+        thai = re.search(r"th\s*:\s*['\"]([^'\"]+)['\"]", match.group(1))
+        assert thai and thai.group(1).strip()
+        assert not re.search(r"[A-Za-zÆØÅæøå]{2,}", thai.group(1)), key

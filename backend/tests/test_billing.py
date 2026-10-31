@@ -19,6 +19,7 @@ if str(BACKEND_DIR) not in sys.path:
     sys.path.insert(0, str(BACKEND_DIR))
 
 import billing  # noqa: E402
+import server  # noqa: E402
 
 
 def _run(coro):
@@ -27,6 +28,10 @@ def _run(coro):
 
 def _body(response):
     return json.loads(response.body)
+
+
+def _auth(user_id):
+    return "Bearer " + server.create_token(user_id, "billing@example.test")
 
 
 class TestRevenueCatApiKeyFromEnv(unittest.TestCase):
@@ -78,7 +83,7 @@ class TestSuccessfulSubscriptionCheck(unittest.TestCase):
         }
         mock_client = self._mock_client(200, payload)
         with mock.patch.object(billing.httpx, "AsyncClient", return_value=mock_client):
-            response = _run(billing.check_user_subscription(app_user_id="user-1", authorization=None))
+            response = _run(billing.check_user_subscription(app_user_id="user-1", authorization=_auth("user-1")))
 
         body = _body(response)
         self.assertTrue(body["success"])
@@ -89,7 +94,7 @@ class TestSuccessfulSubscriptionCheck(unittest.TestCase):
         payload = {"subscriber": {"entitlements": {}}}
         mock_client = self._mock_client(200, payload)
         with mock.patch.object(billing.httpx, "AsyncClient", return_value=mock_client):
-            response = _run(billing.check_user_subscription(app_user_id="user-2", authorization=None))
+            response = _run(billing.check_user_subscription(app_user_id="user-2", authorization=_auth("user-2")))
 
         body = _body(response)
         self.assertTrue(body["success"])
@@ -98,12 +103,37 @@ class TestSuccessfulSubscriptionCheck(unittest.TestCase):
     def test_non_200_from_revenuecat_reports_failure_without_premium(self):
         mock_client = self._mock_client(404, {})
         with mock.patch.object(billing.httpx, "AsyncClient", return_value=mock_client):
-            response = _run(billing.check_user_subscription(app_user_id="user-3", authorization=None))
+            response = _run(billing.check_user_subscription(app_user_id="user-3", authorization=_auth("user-3")))
 
         body = _body(response)
         self.assertFalse(body["success"])
         self.assertFalse(body["premium"])
         self.assertEqual(body["status_code"], 404)
+
+
+    def test_lifetime_entitlement_has_premium_access(self):
+        payload = {"subscriber": {"entitlements": {"pro": {
+            "expires_date": None, "purchase_date": "2026-01-01T00:00:00Z",
+            "product_identifier": "lifetime",
+        }}}}
+        with mock.patch.object(billing.httpx, "AsyncClient", return_value=self._mock_client(200, payload)):
+            response = _run(billing.check_user_subscription(app_user_id="user-life", authorization=_auth("user-life")))
+        self.assertTrue(_body(response)["premium"])
+
+    def test_expired_entitlement_does_not_grant_access(self):
+        payload = {"subscriber": {"entitlements": {"premium": {
+            "expires_date": "2020-01-01T00:00:00Z", "purchase_date": "2019-12-01T00:00:00Z",
+        }}}}
+        with mock.patch.object(billing.httpx, "AsyncClient", return_value=self._mock_client(200, payload)):
+            response = _run(billing.check_user_subscription(app_user_id="user-old", authorization=_auth("user-old")))
+        self.assertFalse(_body(response)["premium"])
+
+    def test_lookup_requires_account_owner(self):
+        with mock.patch.object(billing.httpx, "AsyncClient", side_effect=AssertionError("must not call RevenueCat")):
+            unauthenticated = _run(billing.check_user_subscription(app_user_id="user-1", authorization=None))
+            other_user = _run(billing.check_user_subscription(app_user_id="user-1", authorization=_auth("user-2")))
+        self.assertEqual(unauthenticated.status_code, 401)
+        self.assertEqual(other_user.status_code, 403)
 
 
 class TestFailSoftOnError(unittest.TestCase):
@@ -116,7 +146,7 @@ class TestFailSoftOnError(unittest.TestCase):
     def tearDown(self):
         billing.REVENUECAT_API_KEY = self._orig_key
 
-    def test_network_exception_triggers_fail_soft_grace_access(self):
+    def test_network_exception_fails_closed(self):
         mock_client = mock.AsyncMock()
         mock_client.__aenter__.return_value = mock_client
         mock_client.__aexit__.return_value = None
@@ -124,12 +154,12 @@ class TestFailSoftOnError(unittest.TestCase):
 
         with mock.patch.object(billing.httpx, "AsyncClient", return_value=mock_client):
             # Must not raise: the endpoint has to handle the exception internally.
-            response = _run(billing.check_user_subscription(app_user_id="user-4", authorization=None))
+            response = _run(billing.check_user_subscription(app_user_id="user-4", authorization=_auth("user-4")))
 
         body = _body(response)
-        self.assertTrue(body["success"])
-        self.assertTrue(body["premium"])
-        self.assertTrue(body["offline_fallback"])
+        self.assertFalse(body["success"])
+        self.assertFalse(body["premium"])
+        self.assertEqual(response.status_code, 503)
 
 
 class TestNoHardcodedKeyLeaksWithoutEnvVar(unittest.TestCase):
@@ -159,11 +189,11 @@ class TestNoHardcodedKeyLeaksWithoutEnvVar(unittest.TestCase):
 
             # No key configured must never attempt a real network call.
             with mock.patch.object(billing.httpx, "AsyncClient", side_effect=AssertionError("must not call RevenueCat")):
-                response = _run(billing.check_user_subscription(app_user_id="user-5", authorization=None))
+                response = _run(billing.check_user_subscription(app_user_id="user-5", authorization=_auth("user-5")))
 
         body = _body(response)
-        self.assertEqual(body.get("status"), "sandbox_mode")
-        self.assertTrue(body.get("sandbox"))
+        self.assertEqual(response.status_code, 503)
+        self.assertFalse(body.get("success"))
         self.assertFalse(body.get("premium"))
 
 
