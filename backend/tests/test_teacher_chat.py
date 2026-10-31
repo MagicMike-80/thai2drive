@@ -504,6 +504,15 @@ class TestRoundaboutLaneSafety(unittest.TestCase):
             prompt = tc._build_system_prompt(lang)
             self.assertIn("Skal du ta 3. avkjøring / venstre / siste utgang", prompt)
 
+    def test_missing_rulebank_does_not_release_third_exit_advice(self):
+        wrong = "For the third exit, observe the traffic well before you enter the roundabout. Then use the right lane."
+        with patch.object(tc.Path, "read_text", side_effect=OSError("unavailable")):
+            fixed = tc._guard_roundabout_lane_claim(wrong, "en")
+            unrelated = tc._guard_roundabout_lane_claim("Check your lights before driving.", "en")
+        self.assertIn("left lane", fixed)
+        self.assertNotIn("right lane", fixed)
+        self.assertEqual(unrelated, "Check your lights before driving.")
+
     def test_chat_pipeline_never_returns_long_wrong_lane_claim(self):
         wrong = "For the third exit, look carefully at the signs and all the other cars before you enter. Then use the outer lane."
         completion = SimpleNamespace(choices=[SimpleNamespace(message=SimpleNamespace(content=wrong))])
