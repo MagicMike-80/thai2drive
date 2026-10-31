@@ -7,7 +7,9 @@ kunder aldri blir låst ute under eksterne driftsbrudd.
 """
 import os
 import logging
+from datetime import datetime, timezone
 from typing import Optional
+from urllib.parse import quote
 from fastapi import APIRouter, Header, Query
 from fastapi.responses import JSONResponse
 import httpx
@@ -32,15 +34,22 @@ async def check_user_subscription(
     if not app_user_id:
         return JSONResponse({"premium": False, "error": "Missing app_user_id"}, status_code=400)
 
-    # Hvis ingen produksjonsnøkkel er satt, gi respons uten ekstern nettverksfeil
+    # The caller may only inspect their own RevenueCat customer. Import lazily
+    # because server.py includes this router after defining verify_token.
+    from server import verify_token
+    if not authorization or not authorization.startswith("Bearer "):
+        return JSONResponse({"premium": False, "error": "Not authenticated"}, status_code=401)
+    claims = verify_token(authorization.removeprefix("Bearer ").strip())
+    if not claims:
+        return JSONResponse({"premium": False, "error": "Invalid token"}, status_code=401)
+    if claims.get("sub") != app_user_id:
+        return JSONResponse({"premium": False, "error": "Forbidden"}, status_code=403)
+
+    # Never claim a sandbox state or access when the server key is missing.
     if not REVENUECAT_API_KEY:
-        logger.info("RevenueCat sandbox mode for user %s", app_user_id)
-        return JSONResponse({
-            "premium": False,
-            "sandbox": True,
-            "entitlements": {},
-            "status": "sandbox_mode"
-        })
+        logger.warning("RevenueCat API key is not configured")
+        return JSONResponse({"success": False, "premium": False,
+                             "error": "RevenueCat is not configured"}, status_code=503)
 
     headers = {
         "Authorization": f"Bearer {REVENUECAT_API_KEY}",
@@ -50,7 +59,7 @@ async def check_user_subscription(
     try:
         async with httpx.AsyncClient(timeout=5.0) as client:
             response = await client.get(
-                f"{REVENUECAT_API_URL}/subscribers/{app_user_id}",
+                f"{REVENUECAT_API_URL}/subscribers/{quote(app_user_id, safe='')}",
                 headers=headers
             )
 
@@ -59,9 +68,17 @@ async def check_user_subscription(
                 entitlements = data.get("subscriber", {}).get("entitlements", {})
                 premium_entitlement = entitlements.get("premium") or entitlements.get("pro") or entitlements.get("teori_tilgang")
                 is_premium = False
-                if premium_entitlement:
+                if isinstance(premium_entitlement, dict) and premium_entitlement:
                     expires_date = premium_entitlement.get("expires_date")
-                    is_premium = expires_date is not None
+                    if expires_date is None:
+                        # A non-expiring entitlement is a lifetime purchase.
+                        is_premium = bool(premium_entitlement.get("purchase_date"))
+                    else:
+                        try:
+                            expires_at = datetime.fromisoformat(str(expires_date).replace("Z", "+00:00"))
+                            is_premium = expires_at > datetime.now(timezone.utc)
+                        except (TypeError, ValueError):
+                            is_premium = False
 
                 return JSONResponse({
                     "success": True,
@@ -75,14 +92,12 @@ async def check_user_subscription(
                     "premium": False,
                     "status_code": response.status_code,
                     "error": "Unable to verify with RevenueCat"
-                })
+                }, status_code=503)
 
     except Exception as e:
-        # Hvis nettverket eller RevenueCat er nede, kjør fail-soft så kunden ikke låses ute!
-        logger.error("RevenueCat tilkoblingsfeil: %s — aktiverer fail-soft", e)
+        logger.error("RevenueCat connection error: %s", e)
         return JSONResponse({
-            "success": True,
-            "premium": True,
-            "offline_fallback": True,
-            "warning": "External billing provider unavailable, temporary grace access granted."
-        })
+            "success": False,
+            "premium": False,
+            "error": "Unable to verify with RevenueCat"
+        }, status_code=503)
