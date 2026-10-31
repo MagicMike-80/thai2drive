@@ -4103,6 +4103,13 @@ def _guard_roundabout_lane_claim(reply: str, lang: str) -> str:
         pattern = next(pattern for pattern in patterns if markers[lang] in pattern)
     except (OSError, ValueError, KeyError, StopIteration, TypeError):
         logger.error("Roundabout lane safety pattern unavailable for %s", lang)
+        exit_cue = {
+            "no": r"(?:3\.|tredje|siste)\s*(?:avkjøring|utkjøring)",
+            "th": r"(?:ทางออกที่\s*3|ทางออกสุดท้าย)",
+            "en": r"(?:3rd|third|last)\s*exit",
+        }[lang]
+        if re.search(exit_cue, reply, flags=re.I | re.S):
+            return safe_reply[lang]
         return reply
     if re.search(pattern, reply, flags=re.I | re.S):
         logger.warning("Replaced unsafe roundabout lane claim in %s reply", lang)
