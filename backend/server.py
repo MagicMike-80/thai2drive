@@ -1830,6 +1830,33 @@ def _checkout_mode_for_price(plan_id: str, price: Any) -> str:
     return "payment"
 
 
+def _checkout_line_item(plan: dict, price: Any, language: str) -> dict:
+    if language != "th":
+        return {"price": price.id, "quantity": 1}
+    # Stripe shows the Product's name in Checkout and receipts. The catalog's
+    # shared English Product name must not leak into a Thai checkout.
+    names = {
+        "monthly": "สิทธิ์พรีเมียม 1 เดือน",
+        "three_months": "สิทธิ์พรีเมียม 3 เดือน",
+        "lifetime": "สิทธิ์พรีเมียมตลอดชีพ",
+    }
+    price_data: Dict[str, Any] = {
+        "currency": "nok",
+        "unit_amount": plan["amount_minor"],
+        "product_data": {"name": names[plan["id"]]},
+    }
+    recurring = getattr(price, "recurring", None)
+    if recurring:
+        price_data["recurring"] = {
+            "interval": getattr(recurring, "interval"),
+            "interval_count": getattr(recurring, "interval_count", 1) or 1,
+        }
+    tax_behavior = getattr(price, "tax_behavior", None)
+    if tax_behavior in ("inclusive", "exclusive"):
+        price_data["tax_behavior"] = tax_behavior
+    return {"price_data": price_data, "quantity": 1}
+
+
 # ── RevenueCat webhook secret helper ─────────────────────────────────────────
 
 def _rc_webhook_secret() -> str:
@@ -2086,7 +2113,10 @@ async def _set_user_premium(
     if stripe_session_id:
         update["stripe_checkout_session_id"] = stripe_session_id
     if current_period_end:
-        update["premium_current_period_end"] = datetime.fromtimestamp(current_period_end, timezone.utc).isoformat()
+        period_end_iso = datetime.fromtimestamp(current_period_end, timezone.utc).isoformat()
+        update["premium_current_period_end"] = period_end_iso
+        if not lifetime:
+            update["premium_expires_at"] = period_end_iso
     if expires_at:
         update["premium_expires_at"] = expires_at.astimezone(timezone.utc).isoformat()
     if lifetime:
@@ -2218,7 +2248,7 @@ async def create_checkout_session(data: CheckoutSessionRequest, current_user: di
 
     session_kwargs = {
         "mode": mode,
-        "line_items": [{"price": price.id, "quantity": 1}],
+        "line_items": [_checkout_line_item(plan, price, data.language)],
         "locale": {"no": "nb", "th": "th", "en": "en"}[data.language],
         "success_url": success_url,
         "cancel_url": cancel_url,
@@ -2299,7 +2329,8 @@ async def stripe_webhook(request: Request):
     event_type = event.get("type") or "unknown"
     is_live = event.get("livemode") is True
     if not is_live:
-        logger.warning("Processing test-mode Stripe event %s type=%s", event_id, event_type)
+        logger.warning("Rejecting non-live Stripe event %s type=%s", event_id, event_type)
+        raise HTTPException(status_code=400, detail="Only live Stripe events are allowed")
 
     # Idempotency guard: skip events already successfully handled to protect against
     # Stripe retries and duplicate deliveries without re-running side effects.
@@ -2319,8 +2350,8 @@ async def stripe_webhook(request: Request):
         data_obj = (event.get("data") or {}).get("object") or {}
         handled = True
 
-        if event_type == "checkout.session.completed":
-            await _activate_from_checkout_session(data_obj)
+        if event_type in ("checkout.session.completed", "checkout.session.async_payment_succeeded"):
+            handled = await _activate_from_checkout_session(data_obj)
         elif event_type == "customer.subscription.created":
             if data_obj.get("status") in ("active", "trialing"):
                 metadata = data_obj.get("metadata") or {}
