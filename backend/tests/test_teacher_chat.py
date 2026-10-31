@@ -360,6 +360,7 @@ class TestWrongQuizAnswerReplyIsThaiOnly(unittest.TestCase):
                     TeacherChatRequest(message=message, language=language), reply
                 )
             self.assertEqual([item["id"] for item in response.media], [expected_id])
+            self.assertEqual(response.media[0]["media_id"], expected_id)
             self.assertTrue(response.media[0]["url"].endswith(filename))
             self.assertTrue(tc._reply_matches_language_script(response.media[0]["title"], language))
             self.assertTrue(tc._reply_matches_language_script(response.media[0]["caption"], language))
