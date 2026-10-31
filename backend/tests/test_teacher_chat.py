@@ -572,6 +572,25 @@ class TestSocraticHintAndVariedWelcome(unittest.TestCase):
         self.assertIn("DIRECT ANSWER OVERRIDE", captured["system"])
         self.assertNotIn("?", response.reply)
 
+    def test_explicit_hint_request_overrides_direct_lookup(self):
+        captured = {}
+        reply = "Se på trafikken fra siden. Hvem nærmer seg fra høyre?"
+
+        async def complete(messages):
+            captured["system"] = messages[0]["content"]
+            return SimpleNamespace(choices=[SimpleNamespace(message=SimpleNamespace(content=reply))])
+
+        request = TeacherChatRequest(
+            message="Hva betyr vikeplikt? Kan jeg få et hint?", language="no",
+            mode="normal_chat", device_id="explicit-hint-test",
+        )
+        with patch.object(tc, "_db", _Database()), patch.object(tc, "_chat_col", _Collection()), \
+             patch.object(tc, "LLM_KEY", "test-key"), patch.object(tc, "_completion_with_fallback", new=complete):
+            response = asyncio.run(teacher_chat(request))
+        self.assertIn("EXPLICIT SOCRATIC HINT REQUEST", captured["system"])
+        self.assertNotIn("DIRECT ANSWER OVERRIDE", captured["system"])
+        self.assertEqual(response.reply, reply)
+
     def test_six_openings_per_language_are_distinct_and_language_pure(self):
         for lang, openings in tc._WELCOME_OPENINGS.items():
             with self.subTest(lang=lang):
