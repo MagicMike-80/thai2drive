@@ -41,13 +41,14 @@ def test_wide_web_screen_and_all_controls():
         assert f'data-speed="{speed}"' in SCREEN
     for condition in ('dry', 'wet', 'snow', 'ice'):
         assert f'data-condition="{condition}"' in SCREEN
-    assert all(f'data-seconds="{seconds}"' in SCREEN for seconds in (1, 2, 3))
-    assert 'stop-gap-danger' in SCREEN and 'data-key="stop_gap_unsafe"' in SCREEN
-    assert "[1,2,3].indexOf(Number(seconds))>=0" in SCRIPT
+    assert all(f'data-reaction="{seconds}"' in SCREEN for seconds in (1, 2, 3))
+    assert 'id="stopFollowing"' in SCREEN and 'data-key="stop_follow_intro"' in SCREEN
+    assert 'setStoppingReaction(seconds)' in SCRIPT
     assert 'aria-expanded="false"' in SCREEN
     assert 'closeStopping()' in SCREEN
     assert 'tesla-red' in HOME and 'tesla-road' in SCREEN
-    assert 'reaction=1' in SCRIPT
+    assert "'&reaction='+reactionSeconds" in SCRIPT
+    assert "'&seconds=3'" in SCRIPT
     assert 'car.animate' in SCRIPT
     assert 'request!==stoppingState.request' in SCRIPT
     assert "stopEl('stopResults').hidden=true" in SCRIPT
@@ -70,31 +71,31 @@ def test_every_new_label_has_three_languages_without_fallback():
 
 def test_existing_math_all_speeds_and_conditions():
     for speed in (30, 50, 80, 100, 120):
-        for condition, multiplier in [('dry', 1), ('wet', 2), ('snow', 4), ('ice', 8)]:
+        for condition, multiplier in [('dry', 1), ('wet', 2), ('snow', 4), ('ice', 4)]:
             response = client.get('/api/math/stopping-distance', params={'speed': speed, 'condition': condition, 'reaction': 1})
             assert response.status_code == 200
             data = response.json()
             r = data['results']
-            assert r['braking_distance_m'] == (speed / 10) ** 2 * multiplier
+            assert r['braking_distance_m'] == (speed / 10) ** 2 / 2 * multiplier
             assert r['stopping_distance_m'] == round(r['reaction_distance_m'] + r['braking_distance_m'], 1)
             assert len(data['steps']) == 4
             for step in data['steps']:
                 assert all(step['label'][lang] for lang in ('no', 'th', 'en'))
     r = client.get('/api/math/stopping-distance?speed=80&condition=dry&reaction=1').json()['results']
-    assert (r['reaction_distance_m'], r['braking_distance_m'], r['stopping_distance_m']) == (22.2, 64.0, 86.2)
+    assert (r['reaction_distance_m'], r['braking_distance_m'], r['stopping_distance_m']) == (24.0, 32.0, 56.0)
+    for seconds, expected in [(1, 24.0), (2, 48.0), (3, 72.0)]:
+        data = client.get('/api/math/stopping-distance', params={'speed': 80, 'condition': 'dry', 'reaction': seconds}).json()
+        assert data['results']['reaction_distance_m'] == expected
     for seconds, expected in [(1, 22.2), (2, 44.4), (3, 66.7)]:
         data = client.get(f'/api/math/following-distance?speed=80&seconds={seconds}').json()
         assert data['results']['following_distance_m'] == expected
 
 
-def test_one_second_gap_is_explicitly_marked_unsafe_in_every_language():
-    match = re.search(r'stop_gap_unsafe:\{([^}]+)\}', SCRIPT)
-    assert match
-    translations = match.group(1)
-    assert "no:'Altfor kort – Farlig avstand'" in translations
-    assert "th:'ระยะห่างน้อยเกินไป – อันตราย'" in translations
-    assert "en:'Too short – Dangerous distance'" in translations
-    assert ".stop-button.stop-gap-danger" in CSS
+def test_following_distance_is_separate_from_reaction_time_in_the_screen():
+    assert SCREEN.index('id="stopResults"') < SCREEN.index('id="stopFollowing"')
+    assert 'data-seconds=' not in SCREEN
+    assert "stopEl('stopFollowingNote').textContent" in SCRIPT
+    assert "seconds=3'" in SCRIPT
 
 
 def test_install_does_not_remove_any_existing_markup():
@@ -112,7 +113,7 @@ def test_actual_javascript_behaviors():
     node = shutil.which('node')
     assert node, 'Node is required for the executable JavaScript regression test'
     harness = Path(__file__).with_name('stopping_distance_harness.cjs')
-    payload = {'script': SCRIPT, 'payloads': [traffic_math.stopping_distance_full(80, 'dry'), traffic_math.following_distance(80, 2)]}
+    payload = {'script': SCRIPT, 'payloads': [traffic_math.stopping_distance_full(80, 'dry'), traffic_math.following_distance(80, 3)]}
     result = subprocess.run([node, str(harness)], input=json.dumps(payload), text=True, capture_output=True, timeout=20)
     assert result.returncode == 0, result.stdout + result.stderr
     assert 'PASS' in result.stdout

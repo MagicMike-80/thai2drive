@@ -18,9 +18,11 @@ from webapp import webapp_router
 from traffic_math_routes import math_router
 
 app = FastAPI()
+app.include_router(webapp_router)
 app.include_router(webapp_router, prefix='/api')
 app.include_router(math_router, prefix='/api')
 app.mount('/api/assets', StaticFiles(directory=backend / 'public_assets'), name='assets')
+
 
 if __name__ == '__main__':
     uvicorn.run(app, host='127.0.0.1', port=8088)

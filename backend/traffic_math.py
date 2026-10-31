@@ -7,9 +7,9 @@ Zero external dependencies. Zero database calls. Zero AI.
 All public functions return plain dicts — structured for any
 consumer (API, test, future UI component, AI explanation layer).
 
-Norwegian theory standard formulas:
-  reaction_distance = speed_ms × reaction_time_s
-  braking_distance  = (speed_kmh / 10)² × road_multiplier
+Educational theory shortcuts (not measured stopping performance):
+  reaction_distance = (speed_kmh / 10) × 3 × reaction_time_s
+  braking_distance  = (speed_kmh / 10)² / 2 × road_multiplier
   stopping_distance = reaction + braking
   kinetic_energy    ∝ v²  (doubling speed → ×4 energy)
   following_distance = speed_ms × seconds
@@ -43,11 +43,11 @@ ROAD_CONDITIONS: dict[str, dict] = {
     },
     "ice": {
         "key":        "ice",
-        "multiplier": 8.0,
+        "multiplier": 4.0,
         "label":      {"no": "Glatt is",       "th": "ถนนน้ำแข็ง",     "en": "Black ice"},
-        "note":       {"no": "8× bremseavstand — ekstremt farlig",
-                       "th": "ระยะเบรก 8 เท่า — อันตรายมาก",
-                       "en": "8× braking distance — extremely dangerous"},
+        "note":       {"no": "4× bremseavstand i denne teorimodellen",
+                       "th": "ระยะเบรก 4 เท่าในแบบจำลองนี้",
+                       "en": "4× braking distance in this theory model"},
     },
 }
 
@@ -65,18 +65,18 @@ def kmh_to_ms(speed_kmh: float) -> float:
 
 
 def reaction_distance_m(speed_kmh: float, reaction_time_s: float = DEFAULT_REACTION_TIME_S) -> float:
-    """Distance covered during driver reaction (before braking starts)."""
-    return round(kmh_to_ms(speed_kmh) * reaction_time_s, 1)
+    """Theory shortcut for distance travelled before braking starts."""
+    return round((speed_kmh / 10) * 3 * reaction_time_s, 1)
 
 
 def braking_distance_m(speed_kmh: float, condition: str = "dry") -> float:
     """
     Braking distance using the Norwegian theory formula:
-        bremseavstand = (fart ÷ 10)²  (dry road)
+        bremseavstand = (fart ÷ 10)² ÷ 2  (dry road)
     Multiplied by road condition factor for other surfaces.
     """
     multiplier = ROAD_CONDITIONS.get(condition, ROAD_CONDITIONS["dry"])["multiplier"]
-    base = (speed_kmh / 10) ** 2
+    base = (speed_kmh / 10) ** 2 / 2
     return round(base * multiplier, 1)
 
 
@@ -127,6 +127,7 @@ def stopping_distance_full(
         condition = "dry"
 
     speed_ms     = kmh_to_ms(speed_kmh)
+    reaction_one_second_m = reaction_distance_m(speed_kmh)
     react_m      = reaction_distance_m(speed_kmh, reaction_time_s)
     brake_m      = braking_distance_m(speed_kmh, condition)
     stop_m       = round(react_m + brake_m, 1)
@@ -136,22 +137,22 @@ def stopping_distance_full(
     steps = [
         {
             "order":   1,
-            "concept": "speed_conversion",
-            "label":   {"no": "Fart i m/s",         "th": "ความเร็วในหน่วย ม./วินาที", "en": "Speed in m/s"},
-            "formula": f"{speed_kmh} ÷ 3.6",
-            "result":  speed_ms,
-            "unit":    "m/s",
+            "concept": "reaction_shortcut",
+            "label":   {"no": "Reaksjonsregel per sekund", "th": "สูตรระยะตอบสนองต่อวินาที", "en": "Reaction shortcut per second"},
+            "formula": f"({speed_kmh} ÷ 10) × 3",
+            "result":  reaction_one_second_m,
+            "unit":    "m",
             "note":    {
-                "no": f"Bilen tilbakelegger {speed_ms} meter hvert sekund",
-                "th": f"รถเคลื่อนที่ {speed_ms} เมตรต่อวินาที",
-                "en": f"The car covers {speed_ms} metres every second",
+                "no": "Forenklet teoriregel, ikke fysisk måling",
+                "th": "สูตรประมาณสำหรับการเรียน ไม่ใช่ค่าที่วัดจริง",
+                "en": "Simplified theory shortcut, not a physical measurement",
             },
         },
         {
             "order":   2,
             "concept": "reaction_distance",
             "label":   {"no": "Reaksjonsavstand",    "th": "ระยะปฏิกิริยา",   "en": "Reaction distance"},
-            "formula": f"{speed_ms} × {reaction_time_s}",
+            "formula": f"{reaction_one_second_m} × {reaction_time_s}",
             "result":  react_m,
             "unit":    "m",
             "note":    {
@@ -165,9 +166,9 @@ def stopping_distance_full(
             "concept": "braking_distance",
             "label":   {"no": "Bremseavstand",       "th": "ระยะเบรก",         "en": "Braking distance"},
             "formula": (
-                f"({speed_kmh} ÷ 10)² × {multiplier}"
+                f"({speed_kmh} ÷ 10)² ÷ 2 × {multiplier}"
                 if multiplier != 1.0
-                else f"({speed_kmh} ÷ 10)²"
+                else f"({speed_kmh} ÷ 10)² ÷ 2"
             ),
             "result":  brake_m,
             "unit":    "m",
@@ -196,6 +197,7 @@ def stopping_distance_full(
         },
         "results": {
             "speed_ms":             speed_ms,
+            "reaction_per_second_m": reaction_one_second_m,
             "reaction_distance_m":  react_m,
             "braking_distance_m":   brake_m,
             "stopping_distance_m":  stop_m,
@@ -268,10 +270,10 @@ def compare_speeds(
 
 # ─── Following distance ───────────────────────────────────────────────────────
 
-def following_distance(speed_kmh: float, seconds: float = 2.0) -> dict:
+def following_distance(speed_kmh: float, seconds: float = 3.0) -> dict:
     """
-    Recommended following distance using the time-gap rule.
-    Norwegian theory: minimum 2 seconds, recommended 3 seconds.
+    Following-distance illustration using a time gap, separate from reaction time.
+    Three seconds is a memory aid, not a fixed legal minimum.
     """
     if speed_kmh <= 0:
         raise ValueError("speed_kmh must be positive")
@@ -281,12 +283,9 @@ def following_distance(speed_kmh: float, seconds: float = 2.0) -> dict:
     car_lengths = round(dist_m / CAR_LENGTH_M, 1)
 
     rule_note = {
-        "no": (
-            "2-sekunders regel er minimum. "
-            "I dårlig vær: bruk 3-4 sekunder."
-        ),
-        "th": "กฎ 2 วินาทีคือขั้นต่ำ สภาพอากาศเลว: ใช้ 3-4 วินาที",
-        "en": "2-second rule is the minimum. Bad weather: use 3-4 seconds.",
+        "no": "3 sekunder er en huskeregel. Hold større avstand når forholdene krever det (§ 5 nr. 3).",
+        "th": "3 วินาทีเป็นแนวทางจำง่าย ควรเว้นระยะมากขึ้นเมื่อสภาพถนนต้องการ",
+        "en": "Three seconds is a memory aid. Leave more room when conditions require it.",
     }
 
     return {

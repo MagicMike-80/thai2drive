@@ -19,8 +19,7 @@ CSS = r"""
 .stop-reaction{background:#ff951e;width:26%;border-right:2px solid white}.stop-braking{background:#fa3358;flex:1}.stop-marker{position:absolute;right:5%;bottom:74px;background:#9f1830;border:2px solid white;border-radius:8px;padding:6px 10px;color:white;font-weight:700}
 .stop-caption{position:absolute;bottom:12px;left:0;right:0;text-align:center;color:white;font-size:16px;background:#081426cc;padding:4px}
 .stop-results{margin-top:16px}.stop-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stop-metrics strong{display:block;font-size:26px;margin-top:6px}.stop-orange{color:#ffab4b}.stop-red{color:#ff6b86}.stop-total{color:#fff}
-.stop-equation{font-size:22px;text-align:center;margin:18px 0}.stop-muted{color:#b8c9df;font-size:16px;line-height:1.5}.stop-follow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:18px 0}.stop-follow strong{font-size:22px}
-.stop-button.stop-gap-danger{border-color:#fa3358;color:#ffb7c4}.stop-button.stop-gap-danger[aria-pressed=true]{background:#7d1830;border-color:#ff6b86;box-shadow:0 0 0 1px #ff6b86}.stop-gap-warning{color:#ff9aae;font-weight:700}
+.stop-equation{font-size:22px;text-align:center;margin:18px 0}.stop-muted{color:#b8c9df;font-size:16px;line-height:1.5}.stop-follow-panel{margin-top:18px;background:#102039;border:1px solid #304e6e;border-radius:16px;padding:20px}.stop-follow-panel h2{font-size:20px;margin:0 0 8px}.stop-follow-panel strong{display:block;font-size:26px;margin:8px 0;color:#fff}
 .stop-button:hover:not(:disabled),.stop-home:hover{box-shadow:0 0 0 1px #00F5FF;filter:brightness(1.08)}
 .stop-steps{margin-top:16px}.stop-steps ol{padding-left:24px;margin:0}.stop-steps li{padding:12px 0;border-bottom:1px solid #304e6e}.stop-steps li:last-child{border-bottom:0}.stop-steps code{display:block;margin-top:8px;font-size:18px;white-space:normal;color:#fff}.stop-status{min-height:22px;margin-top:12px}
 @media(min-width:700px){#app.stopping-mode{width:min(1100px,96vw);max-width:none;margin:auto;border-radius:16px}#app.stopping-mode .flag-bg{display:none}}
@@ -43,7 +42,9 @@ SCREEN = r"""
       <fieldset><legend data-key="stop_surface"></legend><div class="stop-buttons" id="stopConditions">
         <button class="stop-button" onclick="setStoppingCondition('dry')" data-condition="dry" data-key="stop_dry"></button><button class="stop-button" onclick="setStoppingCondition('wet')" data-condition="wet" data-key="stop_wet"></button><button class="stop-button" onclick="setStoppingCondition('snow')" data-condition="snow" data-key="stop_snow"></button><button class="stop-button" onclick="setStoppingCondition('ice')" data-condition="ice" data-key="stop_ice"></button>
       </div></fieldset>
-      <p class="stop-muted" data-key="stop_reaction_time"></p>
+      <fieldset><legend data-key="stop_reaction_time"></legend><div class="stop-buttons" id="stopReactionTimes">
+        <button class="stop-button" onclick="setStoppingReaction(1)" data-reaction="1" data-key="stop_one_second"></button><button class="stop-button" onclick="setStoppingReaction(2)" data-reaction="2" data-key="stop_two_seconds"></button><button class="stop-button" onclick="setStoppingReaction(3)" data-reaction="3" data-key="stop_three_seconds"></button>
+      </div></fieldset>
       <button class="stop-button stop-run" id="stopRun" onclick="loadStopping(true)" data-key="stop_show"></button>
       <div class="stop-status stop-muted" id="stopStatus" role="status" aria-live="polite"></div>
     </section>
@@ -52,13 +53,13 @@ SCREEN = r"""
       <div class="stop-results" id="stopResults" hidden>
         <div class="stop-metrics"><div class="stop-orange"><span data-key="stop_reaction"></span><strong id="stopReactionValue"></strong></div><div class="stop-red"><span data-key="stop_braking"></span><strong id="stopBrakingValue"></strong></div><div class="stop-total"><span data-key="stop_total"></span><strong id="stopTotalValue"></strong></div></div>
         <p class="stop-equation" id="stopEquation"></p><p class="stop-muted" id="stopConditionNote"></p>
-        <div class="stop-follow"><span data-key="stop_follow"></span><button class="stop-button stop-gap-danger" data-seconds="1" onclick="setStoppingGap(1)">1 s</button><button class="stop-button" data-seconds="2" onclick="setStoppingGap(2)">2 s</button><button class="stop-button" data-seconds="3" onclick="setStoppingGap(3)">3 s</button><strong id="stopFollowingValue"></strong><span class="stop-gap-warning" id="stopGapWarning" data-key="stop_gap_unsafe" hidden></span></div>
         <button class="stop-button" id="stopStepsToggle" aria-expanded="false" aria-controls="stopSteps" onclick="toggleStoppingSteps()" data-key="stop_steps"></button>
         <div class="stop-steps" id="stopSteps" hidden><ol id="stopStepList"></ol></div>
         <p class="stop-muted" data-key="stop_estimate"></p>
       </div>
     </section>
   </div>
+  <section class="stop-follow-panel" id="stopFollowing" hidden><h2 data-key="stop_follow"></h2><p class="stop-muted" data-key="stop_follow_intro"></p><strong id="stopFollowingValue"></strong><p class="stop-muted" id="stopFollowingNote"></p></section>
 </div>
 """
 
@@ -69,20 +70,22 @@ Object.assign(UI, {
   stop_speed:{no:'Hastighet (km/t)',th:'ความเร็ว (กม./ชม.)',en:'Speed (km/h)'},
   stop_speed_unit:{no:'km/t',th:'กม./ชม.',en:'km/h'},
   stop_surface:{no:'Veiføre',th:'สภาพถนน',en:'Road conditions'},
-  stop_dry:{no:'Tørr',th:'แห้ง',en:'Dry'},stop_wet:{no:'Våt',th:'เปียก',en:'Wet'},stop_snow:{no:'Snø',th:'หิมะ',en:'Snow'},stop_ice:{no:'Is',th:'น้ำแข็ง',en:'Ice'},
-  stop_reaction_time:{no:'Reaksjonstid: 1 sekund',th:'เวลาปฏิกิริยา: 1 วินาที',en:'Reaction time: 1 second'},
+  stop_dry:{no:'Tørr asfalt',th:'ถนนแห้ง',en:'Dry asphalt'},stop_wet:{no:'Våt vei (2×)',th:'ถนนเปียก (2×)',en:'Wet road (2×)'},stop_snow:{no:'Snø (4×)',th:'หิมะ (4×)',en:'Snow (4×)'},stop_ice:{no:'Glatt is (4×)',th:'ถนนน้ำแข็ง (4×)',en:'Icy road (4×)'},
+  stop_reaction_time:{no:'Reaksjonstid',th:'เวลาตอบสนอง',en:'Reaction time'},
+  stop_one_second:{no:'1 s',th:'1 วินาที',en:'1 s'},stop_two_seconds:{no:'2 s',th:'2 วินาที',en:'2 s'},stop_three_seconds:{no:'3 s',th:'3 วินาที',en:'3 s'},
+  stop_length_unit:{no:'m',th:'ม.',en:'m'},
   stop_show:{no:'Vis stopplengde',th:'แสดงระยะหยุดรถ',en:'Show stopping distance'},
   stop_point:{no:'Stopp',th:'หยุด',en:'Stop'},
   stop_reaction:{no:'Reaksjon',th:'ปฏิกิริยา',en:'Reaction'},stop_braking:{no:'Brems',th:'เบรก',en:'Braking'},stop_total:{no:'Totalt',th:'รวม',en:'Total'},
   stop_follow:{no:'Følgeavstand',th:'ระยะห่างจากรถคันหน้า',en:'Following distance'},
-  stop_gap_unsafe:{no:'Altfor kort – Farlig avstand',th:'ระยะห่างน้อยเกินไป – อันตราย',en:'Too short – Dangerous distance'},
+  stop_follow_intro:{no:'Egen beregning: 3-sekunders huskeregel ved valgt fart. Dette er ikke reaksjonstid eller stopplengde.',th:'คำนวณแยก: ระยะห่าง 3 วินาทีตามความเร็วที่เลือก ไม่ใช่เวลาตอบสนองหรือระยะหยุดรถ',en:'Separate calculation: a three-second following gap at the selected speed. This is not reaction time or stopping distance.'},
   stop_steps:{no:'Slik regner vi',th:'วิธีคำนวณ',en:'How we calculate'},
   stop_scale:{no:'Illustrasjon – skalaen tilpasses avstanden',th:'ภาพประกอบ – มาตราส่วนปรับตามระยะทาง',en:'Illustration – scale adapts to the distance'},
-  stop_estimate:{no:'Veiledende beregning. Virkelig stopplengde varierer med dekk, føre og fører.',th:'การคำนวณโดยประมาณ ระยะหยุดจริงขึ้นอยู่กับยาง สภาพถนน และผู้ขับขี่',en:'Approximate calculation. Actual stopping distance varies with tyres, road conditions and driver.'},
+  stop_estimate:{no:'Veiledende teoriformel, ikke en målt stopplengde. Faktisk avstand varierer med dekk, føre og fører.',th:'สูตรประมาณเพื่อการเรียน ไม่ใช่ระยะหยุดที่วัดจริง ระยะจริงขึ้นอยู่กับยาง สภาพถนน และผู้ขับขี่',en:'Educational shortcut, not a measured stopping distance. Actual distance varies with tyres, road conditions and driver.'},
   stop_loading:{no:'Beregner …',th:'กำลังคำนวณ …',en:'Calculating …'},
   stop_error:{no:'Kunne ikke beregne. Prøv igjen.',th:'คำนวณไม่ได้ กรุณาลองอีกครั้ง',en:'Could not calculate. Please try again.'}
 });
-var stoppingState = {speed:80,condition:'dry',seconds:2,data:null,following:null,request:0,animation:null,statusKey:''};
+var stoppingState = {speed:80,condition:'dry',reactionSeconds:1,data:null,following:null,request:0,animation:null,statusKey:''};
 function stopEl(id){return document.getElementById(id);}
 function stoppingNumber(value,precision){return new Intl.NumberFormat(appLang === 'no' ? 'nb-NO' : appLang === 'th' ? 'th-TH' : 'en-GB',{maximumFractionDigits:precision || 1}).format(value);}
 function deactivateStopping(){++stoppingState.request;if(stoppingState.animation){stoppingState.animation.cancel();stoppingState.animation=null;}stoppingState.statusKey='';stopEl('stopRun').disabled=false;}
@@ -95,41 +98,41 @@ function updateStoppingControls(){
   stopEl('stopSpeedValue').textContent=stoppingState.speed+' '+t('stop_speed_unit');
   document.querySelectorAll('[data-speed]').forEach(function(b){b.setAttribute('aria-pressed',String(Number(b.dataset.speed)===stoppingState.speed));});
   document.querySelectorAll('[data-condition]').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.condition===stoppingState.condition));});
-  document.querySelectorAll('[data-seconds]').forEach(function(b){b.setAttribute('aria-pressed',String(Number(b.dataset.seconds)===stoppingState.seconds));});
-  stopEl('stopGapWarning').hidden=stoppingState.seconds!==1;
+  document.querySelectorAll('[data-reaction]').forEach(function(b){b.setAttribute('aria-pressed',String(Number(b.dataset.reaction)===stoppingState.reactionSeconds));});
 }
 function setStoppingSpeed(speed){stoppingState.speed=Math.min(120,Math.max(30,Number(speed)));updateStoppingControls();loadStopping(false);}
 function setStoppingCondition(condition){if(['dry','wet','snow','ice'].indexOf(condition)<0)return;stoppingState.condition=condition;updateStoppingControls();loadStopping(false);}
-function setStoppingGap(seconds){stoppingState.seconds=[1,2,3].indexOf(Number(seconds))>=0?Number(seconds):2;updateStoppingControls();loadStopping(false);}
+function setStoppingReaction(seconds){if([1,2,3].indexOf(Number(seconds))<0)return;stoppingState.reactionSeconds=Number(seconds);updateStoppingControls();loadStopping(false);}
 function toggleStoppingSteps(){var panel=stopEl('stopSteps');panel.hidden=!panel.hidden;stopEl('stopStepsToggle').setAttribute('aria-expanded',String(!panel.hidden));}
 function renderStopping(){
   updateStoppingControls();stopEl('stopStatus').textContent=stoppingState.statusKey?t(stoppingState.statusKey):'';var data=stoppingState.data;if(!data)return;
-  var r=data.results;['Reaction','Braking','Total'].forEach(function(name,i){stopEl('stop'+name+'Value').textContent=stoppingNumber([r.reaction_distance_m,r.braking_distance_m,r.stopping_distance_m][i])+' m';});
-  stopEl('stopEquation').textContent=stoppingNumber(r.reaction_distance_m)+' + '+stoppingNumber(r.braking_distance_m)+' = '+stoppingNumber(r.stopping_distance_m)+' m';
+  var r=data.results;['Reaction','Braking','Total'].forEach(function(name,i){stopEl('stop'+name+'Value').textContent=stoppingNumber([r.reaction_distance_m,r.braking_distance_m,r.stopping_distance_m][i])+' '+t('stop_length_unit');});
+  stopEl('stopEquation').textContent=stoppingNumber(r.reaction_distance_m)+' + '+stoppingNumber(r.braking_distance_m)+' = '+stoppingNumber(r.stopping_distance_m)+' '+t('stop_length_unit');
   stopEl('stopReactionTrack').style.width=(100*r.reaction_distance_m/r.stopping_distance_m)+'%';
   stopEl('stopConditionNote').textContent=data.condition_info.note[appLang] || '';
-  stopEl('stopRoad').setAttribute('aria-label',t('stop_reaction')+' '+stoppingNumber(r.reaction_distance_m)+' m, '+t('stop_braking')+' '+stoppingNumber(r.braking_distance_m)+' m, '+t('stop_total')+' '+stoppingNumber(r.stopping_distance_m)+' m');
-  stopEl('stopFollowingValue').textContent=stoppingState.following?stoppingNumber(stoppingState.following.results.following_distance_m)+' m':'';
-  var list=stopEl('stopStepList');list.replaceChildren();data.steps.forEach(function(step){var li=document.createElement('li');li.textContent=step.label[appLang] || '';var formula=document.createElement('code');formula.textContent=step.formula.replace(/\d+(?:\.\d+)?/g,function(n){return stoppingNumber(Number(n),2);})+' = '+stoppingNumber(step.result,step.unit==='m/s'?2:1)+' '+step.unit;li.appendChild(formula);list.appendChild(li);});
+  stopEl('stopRoad').setAttribute('aria-label',t('stop_reaction')+' '+stoppingNumber(r.reaction_distance_m)+' '+t('stop_length_unit')+', '+t('stop_braking')+' '+stoppingNumber(r.braking_distance_m)+' '+t('stop_length_unit')+', '+t('stop_total')+' '+stoppingNumber(r.stopping_distance_m)+' '+t('stop_length_unit'));
+  stopEl('stopFollowingValue').textContent=stoppingState.following?stoppingNumber(stoppingState.following.results.following_distance_m)+' '+t('stop_length_unit'):'';
+  stopEl('stopFollowingNote').textContent=stoppingState.following?stoppingState.following.rule_note[appLang] || '':'';
+  var list=stopEl('stopStepList');list.replaceChildren();data.steps.forEach(function(step){var li=document.createElement('li');li.textContent=step.label[appLang] || '';var formula=document.createElement('code');formula.textContent=step.formula.replace(/\d+(?:\.\d+)?/g,function(n){return stoppingNumber(Number(n),2);})+' = '+stoppingNumber(step.result,step.unit==='m/s'?2:1)+' '+(step.unit==='m'?t('stop_length_unit'):step.unit);li.appendChild(formula);list.appendChild(li);});
 }
 async function loadStopping(animate){
   updateStoppingControls();var request=++stoppingState.request;
   if(stoppingState.animation){stoppingState.animation.cancel();stoppingState.animation=null;}
-  stoppingState.statusKey='stop_loading';stopEl('stopResults').hidden=true;stopEl('stopRun').disabled=true;stopEl('stopStatus').textContent=t(stoppingState.statusKey);
-  var speed=stoppingState.speed,condition=stoppingState.condition,seconds=stoppingState.seconds;
+  stoppingState.statusKey='stop_loading';stopEl('stopResults').hidden=true;stopEl('stopFollowing').hidden=true;stopEl('stopRun').disabled=true;stopEl('stopStatus').textContent=t(stoppingState.statusKey);
+  var speed=stoppingState.speed,condition=stoppingState.condition,reactionSeconds=stoppingState.reactionSeconds;
   try{
-    var responses=await Promise.all([fetch('/api/math/stopping-distance?speed='+speed+'&condition='+condition+'&reaction=1'),fetch('/api/math/following-distance?speed='+speed+'&seconds='+seconds)]);
+    var responses=await Promise.all([fetch('/api/math/stopping-distance?speed='+speed+'&condition='+condition+'&reaction='+reactionSeconds),fetch('/api/math/following-distance?speed='+speed+'&seconds=3')]);
     if(responses.some(function(r){return !r.ok;}))throw new Error('math response');
     var payloads=await Promise.all(responses.map(function(r){return r.json();}));
     if(request!==stoppingState.request)return;
     if(!payloads[0].results || !Array.isArray(payloads[0].steps) || !payloads[1].results)throw new Error('math payload');
-    stoppingState.statusKey='';stoppingState.data=payloads[0];stoppingState.following=payloads[1];renderStopping();stopEl('stopResults').hidden=false;
+    stoppingState.statusKey='';stoppingState.data=payloads[0];stoppingState.following=payloads[1];renderStopping();stopEl('stopResults').hidden=false;stopEl('stopFollowing').hidden=false;
     if(animate && !window.matchMedia('(prefers-reduced-motion: reduce)').matches){
       var road=stopEl('stopRoad'),car=stopEl('stopTesla');var travel=Math.max(0,road.clientWidth*.92-car.clientWidth-road.clientWidth*.03);
       var ratio=payloads[0].results.reaction_distance_m/payloads[0].results.stopping_distance_m;
       stoppingState.animation=car.animate([{transform:'translateX(0)',offset:0},{transform:'translateX('+travel*ratio+'px)',offset:.35},{transform:'translateX('+travel+'px)',offset:1}],{duration:2200,fill:'forwards',easing:'ease-out'});
     }
-  }catch(error){if(request===stoppingState.request){stoppingState.statusKey='stop_error';stoppingState.data=null;stoppingState.following=null;stopEl('stopStatus').textContent=t(stoppingState.statusKey);}}
+  }catch(error){if(request===stoppingState.request){stoppingState.statusKey='stop_error';stoppingState.data=null;stoppingState.following=null;stopEl('stopFollowing').hidden=true;stopEl('stopStatus').textContent=t(stoppingState.statusKey);}}
   finally{if(request===stoppingState.request)stopEl('stopRun').disabled=false;}
 }
 """

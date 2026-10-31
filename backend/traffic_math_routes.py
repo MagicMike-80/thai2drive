@@ -86,12 +86,12 @@ def get_speed_comparison(
 @math_router.get("/math/following-distance")
 def get_following_distance(
     speed:   float = Query(...,  description="Speed in km/h", gt=0, le=250),
-    seconds: float = Query(2.0, description="Time gap in seconds (2 = minimum, 3 = recommended)", gt=0, le=10),
+    seconds: float = Query(3.0, description="Following time gap in seconds (3 is a memory aid, not a legal minimum)", gt=0, le=10),
 ):
     """
     Recommended following distance using the time-gap rule.
 
-    Norwegian theory: minimum 2 seconds, recommended 3 seconds in good weather.
+    Three seconds is a memory aid; traffic rules require a safe gap for conditions.
     Returns distance in metres, car lengths, and the formula string.
     """
     try:
