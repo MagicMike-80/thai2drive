@@ -153,6 +153,20 @@ class QuizTermsTests(unittest.TestCase):
         term_nos = [t["term_no"] for t in result["terms"]]
         self.assertIn("Vikeplikt", term_nos)
 
+    def test_live_question_schema_matches_in_all_three_languages(self):
+        question = {
+            "question": {"no": "Hvem har vikeplikt i rundkjøring?", "th": "ใครต้องให้ทาง?", "en": "Who yields?"},
+            "category": "Right of Way",
+        }
+        for lang in ("no", "th", "en"):
+            with self.subTest(lang=lang):
+                result = self.module._build_terms_response("live-q", question, _fake_cache(), lang)
+                self.assertEqual(result["lang"], lang)
+                self.assertEqual(
+                    {term["term_no"] for term in result["terms"]},
+                    {"Vikeplikt", "Rundkjøring"},
+                )
+
     def test_question_without_match_returns_empty(self):
         question = {"question_text_no": "Hvilken farge har bilen?", "category": "Diverse"}
         result = self.module._build_terms_response("q2", question, _fake_cache(), "th")
@@ -265,10 +279,19 @@ class WebappQuizGlossaryContractTests(unittest.TestCase):
         self.assertIn("glossaryBtnWrap", self.webapp_content)
         self.assertIn("glossary-term-btn", self.webapp_content)
         self.assertIn("glossary-panel", self.webapp_content)
-        self.assertIn("📖 ดูคำศัพท์นอร์เวย์", self.webapp_content)
+        self.assertIn("escH(t('teacher_show_norwegian_term'))", self.webapp_content)
         self.assertIn("loadGlossaryTerms", self.webapp_content)
         self.assertIn("toggleGlossaryPanel", self.webapp_content)
         self.assertIn("resetGlossaryTerms", self.webapp_content)
+
+    def test_quiz_button_uses_selected_language_and_reveals_only_one_term(self):
+        glossary_js = self.webapp_content.split("function renderGlossaryButton()", 1)[1].split("function shuffleOpts(", 1)[0]
+        self.assertNotIn("appLang === 'th'", glossary_js)
+        self.assertNotIn("appLang !== 'th'", glossary_js)
+        self.assertIn("encodeURIComponent(appLang)", glossary_js)
+        self.assertIn("panel.textContent = currentTerms[0].term_no", glossary_js)
+        self.assertNotIn("term.definition_th", glossary_js)
+        self.assertNotIn("term.term_th", glossary_js)
 
     def test_webapp_glossary_neon_palette_compliance(self):
         # Extract CSS block for glossary styles
