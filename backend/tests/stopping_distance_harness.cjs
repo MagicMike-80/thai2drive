@@ -17,9 +17,9 @@ function element(id) {
 }
 const presets = [30,50,80,100,120].map(n=>Object.assign(element('speed'+n),{dataset:{speed:String(n)}}));
 const conditions = ['dry','wet','snow','ice'].map(n=>Object.assign(element('condition'+n),{dataset:{condition:n}}));
-const gaps = [2,3].map(n=>Object.assign(element('gap'+n),{dataset:{seconds:String(n)}}));
+const reactions = [1,2,3].map(n=>Object.assign(element('reaction'+n),{dataset:{reaction:String(n)}}));
 global.UI={};global.appLang='no';
-global.document={getElementById:element,createElement:()=>({textContent:'',children:[],appendChild(e){this.children.push(e);}}),querySelectorAll:s=>s==='[data-speed]'?presets:s==='[data-condition]'?conditions:gaps};
+global.document={getElementById:element,createElement:()=>({textContent:'',children:[],appendChild(e){this.children.push(e);}}),querySelectorAll:s=>s==='[data-speed]'?presets:s==='[data-condition]'?conditions:reactions};
 global.window={location:{href:'http://localhost/api/web',search:''},matchMedia:()=>({matches:reduced}),addEventListener(name,fn){this[name]=fn;}};
 global.history={pushState(a,b,u){window.location.href=String(u);},replaceState(a,b,u){window.location.href=String(u);}};
 global.showTab=tab=>{global.lastTab=tab;};global.t=key=>UI[key]?.[appLang] || '';
@@ -33,19 +33,20 @@ async function main(){
   let task=loadStopping(false), pair=requests.splice(0);
   assert.equal(element('stopRun').disabled,true);
   assert.match(pair[0].url,/speed=80&condition=dry&reaction=1/);
-  assert.match(pair[1].url,/seconds=2/);
+  assert.match(pair[1].url,/seconds=3/);
   appLang='th';renderStopping();assert.equal(element('stopStatus').textContent,UI.stop_loading.th);
   appLang='no';respond(pair);await task;
-  assert.equal(element('stopTotalValue').textContent,'86,2 m');
-  assert.equal(element('stopFollowingValue').textContent,'44,4 m');
+  assert.equal(element('stopTotalValue').textContent,'56 m');
+  assert.equal(element('stopFollowingValue').textContent,'66,7 m');
   assert.equal(element('stopResults').hidden,false);
+  assert.equal(element('stopFollowing').hidden,false);
   assert.equal(element('stopStepList').children.length,4);
-  assert.match(element('stopStepList').children[0].children[0].textContent,/80 ÷ 3,6 = 22,22 m\/s/);
+  assert.match(element('stopStepList').children[0].children[0].textContent,/80 ÷ 10.*× 3 = 24 m/);
   for(const lang of ['no','th','en']){appLang=lang;renderStopping();assert.equal(element('stopConditionNote').textContent,input.payloads[0].condition_info.note[lang]);}
   element('stopSteps').hidden=true;toggleStoppingSteps();assert.equal(element('stopSteps').hidden,false);assert.equal(element('stopStepsToggle').attrs['aria-expanded'],'true');toggleStoppingSteps();assert.equal(element('stopSteps').hidden,true);
   appLang='no';setStoppingSpeed(120);pair=requests.splice(0);assert.equal(stoppingState.speed,120);assert.equal(presets[4].attrs['aria-pressed'],'true');respond(pair);await settle();
   setStoppingCondition('ice');pair=requests.splice(0);assert.equal(stoppingState.condition,'ice');respond(pair);await settle();
-  setStoppingGap(3);pair=requests.splice(0);assert.match(pair[1].url,/seconds=3/);respond(pair);await settle();
+  setStoppingReaction(3);pair=requests.splice(0);assert.match(pair[0].url,/reaction=3/);assert.match(pair[1].url,/seconds=3/);assert.equal(reactions[2].attrs['aria-pressed'],'true');respond(pair);await settle();
   // Newer request wins even when the older one finishes last.
   const old=loadStopping(false), oldPair=requests.splice(0);
   const latest=loadStopping(false), latestPair=requests.splice(0);
@@ -55,6 +56,7 @@ async function main(){
   // HTTP and malformed JSON failures hide stale results, allow retry and translate status.
   task=loadStopping(false);pair=requests.splice(0);pair[0].resolve({ok:false});pair[1].resolve({ok:true});await task;
   assert.equal(element('stopResults').hidden,true);assert.equal(element('stopRun').disabled,false);
+  assert.equal(element('stopFollowing').hidden,true);
   appLang='th';renderStopping();assert.equal(element('stopStatus').textContent,UI.stop_error.th);
   task=loadStopping(false);pair=requests.splice(0);respond(pair,[{},{}]);await task;assert.equal(stoppingState.data,null);
   task=loadStopping(false);pair=requests.splice(0);pair[0].reject(new Error('offline'));pair[1].resolve({ok:true,json:async()=>input.payloads[1]});await task;assert.equal(stoppingState.statusKey,'stop_error');assert.equal(element('stopRun').disabled,false);
