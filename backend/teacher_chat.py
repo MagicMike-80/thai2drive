@@ -1257,6 +1257,7 @@ def _conversation_first_rules(lang: str, *, guided: bool = True) -> str:
         "ROUNDABOUT RULE: If signs or lane arrows indicate otherwise (like at Sinsenkrysset), always follow the signs. "
         "Otherwise: As long as you are not taking the last exit, always choose the right lane (outer lane). "
         "If taking the last exit (turning left / >180°), choose the left lane (inner lane) on entry (NEVER the right lane). "
+        "Skal du ta 3. avkjøring / venstre / siste utgang i en rundkjøring, skal du ALLTID instruere eleven om å velge venstre felt (innerfeltet) ved innkjøring. "
         "Signal right before exiting. Always observe vehicles and the whole traffic flow in roundabouts.\n"
         "6. NEVER invent or guess sign numbers, section numbers, or wording. Mention a "
         "sign number only if it appears in the approved context or the student's own "
@@ -4086,6 +4087,29 @@ def _guard_roundabout_observation(reply: str) -> str:
                   "Ikke lås blikket på én bil — se flyten i hele rundkjøringen", reply, flags=re.I)
 
 
+def _guard_roundabout_lane_claim(reply: str, lang: str) -> str:
+    """Fail closed when a reply assigns the outer lane to the third/last exit."""
+    markers = {"no": "avkjøring|utkjøring", "th": "ทางออก", "en": "3rd|third|last"}
+    safe_reply = {
+        "no": "Ved 3. avkjøring, venstresving eller siste utkjøring: Velg venstre felt (innerfeltet) ved innkjøring i en vanlig tofelts rundkjøring. Følg skilt og feltpiler dersom de viser noe annet. Blink til høyre før du kjører ut.",
+        "th": "หากจะใช้ทางออกที่สาม เลี้ยวซ้าย หรือออกทางสุดท้าย ให้เลือกช่องทางซ้ายด้านในเมื่อเข้าวงเวียนสองช่องทางทั่วไป หากป้ายหรือลูกศรบนถนนกำหนดต่างออกไป ให้ทำตามป้าย และเปิดไฟเลี้ยวขวาก่อนออกจากวงเวียน",
+        "en": "For the third exit, a left turn or the last exit, choose the left lane (inner lane) when entering a standard two-lane roundabout. Follow signs and lane arrows if they direct otherwise. Signal right before exiting.",
+    }
+    if lang not in markers or not reply:
+        return reply
+    try:
+        data = json.loads((Path(__file__).parent / "regelbank.json").read_text(encoding="utf-8"))
+        patterns = data["forbudte_pastander"][lang]
+        pattern = next(pattern for pattern in patterns if markers[lang] in pattern)
+    except (OSError, ValueError, KeyError, StopIteration, TypeError):
+        logger.error("Roundabout lane safety pattern unavailable for %s", lang)
+        return reply
+    if re.search(pattern, reply, flags=re.I | re.S):
+        logger.warning("Replaced unsafe roundabout lane claim in %s reply", lang)
+        return safe_reply[lang]
+    return reply
+
+
 def _ground_sign124_colour(reply: str, sign_ids: list[str], lang: str) -> str:
     """Bind the observed Thai red-border description to the actual Norwegian image."""
     if lang == "th" and "124_0" in sign_ids:
@@ -5485,6 +5509,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
     reply_text = _guard_unsupported_exam_ranking(reply_text)
     reply_text = _guard_unrequested_thai_plan_aside(reply_text, user_msg, lang)
     reply_text = _guard_roundabout_observation(reply_text)
+    reply_text = _guard_roundabout_lane_claim(reply_text, lang)
     reply_text = _ground_sign124_colour(reply_text, explicit_sign_ids, lang)
     reply_text = _ground_sign124_recall(reply_text, recall_sign_ids, lang)
     reply_text = _ground_hav_plan_summary(reply_text, lang)
