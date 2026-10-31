@@ -2310,7 +2310,11 @@ a { color:inherit; text-decoration:none; }
 .micro-lesson.open .micro-lesson-chevron { transform:rotate(180deg); }
 .micro-lesson-body { display:none; padding:0 14px 15px 68px; color:var(--muted); font-size:.8rem; line-height:1.55; }
 .micro-lesson.open .micro-lesson-body { display:block; }
+.micro-lesson-comparison { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; }
+.micro-lesson-place { padding:10px; border:1px solid rgba(0,245,255,.14); border-radius:10px; background:rgba(0,245,255,.04); }
+.micro-lesson-place strong { display:block; margin-bottom:4px; color:var(--text); }
 .micro-lesson-action { margin-top:8px; color:var(--orange); font-weight:750; }
+@media (max-width:520px) { .micro-lesson-comparison { grid-template-columns:1fr; } .micro-lesson-body { padding-left:14px; } }
 .lib-scroll::-webkit-scrollbar-track { background:transparent; }
 .lib-scroll::-webkit-scrollbar-thumb { background:rgba(255,255,255,.12); border-radius:2px; }
 .library-grid {
@@ -5959,6 +5963,24 @@ var UI = {
   lib_videos:{th:'วิดีโอ', no:'Videoer', en:'Videos'},
   lib_podcasts:{th:'พอดแคสต์', no:'Podcaster', en:'Podcasts'},
   lib_micro:{th:'ไทยกับนอร์เวย์', no:'Thailand vs. Norge', en:'Thailand vs. Norway'},
+  micro_in_thailand:{th:'ในไทย', no:'I Thailand', en:'In Thailand'},
+  micro_in_norway:{th:'ในนอร์เวย์', no:'I Norge', en:'In Norway'},
+  micro_priority_title:{th:'การให้ทาง: ดูป้ายและสัญญาณก่อน', no:'Vikeplikt: Se etter skilt og signaler', en:'Yielding: Check signs and signals first'},
+  micro_priority_thailand:{th:'คุณอาจคุ้นกับทางแยกที่มีรูปแบบการจราจรต่างกัน อย่าใช้ความเคยชินเดิมตัดสินว่าใครไปก่อน', no:'Du kan være vant til kryss som fungerer annerledes. Ikke la gamle vaner avgjøre hvem som kjører først.', en:'You may be used to intersections that work differently. Do not let old habits decide who goes first.'},
+  micro_priority_norway:{th:'ตรวจป้ายให้ทาง ป้ายหยุด สัญญาณไฟ และเส้นบนถนนก่อนเข้าทางแยก ปฏิบัติตามสิ่งที่ควบคุมทางแยกนั้น', no:'Se etter vikepliktskilt, stoppskilt, trafikklys og oppmerking før krysset. Følg reguleringen som gjelder der.', en:'Check yield signs, stop signs, traffic lights and road markings before entering. Follow the controls at that intersection.'},
+  micro_priority_action:{th:'ลดความเร็วแต่เนิ่น ๆ และเตรียมหยุดเมื่อคุณต้องให้ทาง', no:'Senk farten i god tid og vær klar til å stanse når du har vikeplikt.', en:'Slow down early and be ready to stop when you must yield.'},
+  micro_right_title:{th:'กฎให้ทางรถจากด้านขวา', no:'Høyreregelen', en:'The right-hand rule'},
+  micro_right_thailand:{th:'อย่าคาดเดาลำดับการผ่านทางแยกจากความเคยชินในการขับที่ไทย', no:'Ikke anta rekkefølgen i et kryss ut fra kjørevaner fra Thailand.', en:'Do not assume the order at an intersection from driving habits in Thailand.'},
+  micro_right_norway:{th:'ในทางแยกที่ไม่มีป้ายหรือไฟจราจรกำหนดเป็นอย่างอื่น โดยทั่วไปต้องให้ทางรถที่มาจากด้านขวา', no:'I kryss uten skilt eller lys som bestemmer noe annet, har du som hovedregel vikeplikt for trafikk fra høyre.', en:'At intersections without signs or signals saying otherwise, you generally yield to traffic from the right.'},
+  micro_right_action:{th:'มองด้านขวาให้ชัด ลดความเร็ว และตรวจป้ายก่อนตัดสินใจ', no:'Sjekk høyre side, senk farten og les skiltene før du kjører.', en:'Check to your right, slow down and read the signs before proceeding.'},
+  micro_pedestrian_title:{th:'คนเดินเท้าที่ทางม้าลาย', no:'Fotgjengere ved gangfelt', en:'Pedestrians at crossings'},
+  micro_pedestrian_thailand:{th:'อย่านำความคาดหวังเดิมเกี่ยวกับการข้ามถนนมาใช้กับทางม้าลายในนอร์เวย์', no:'Ikke bruk tidligere forventninger om kryssing når du nærmer deg et norsk gangfelt.', en:'Do not rely on previous expectations about crossing when approaching a Norwegian pedestrian crossing.'},
+  micro_pedestrian_norway:{th:'ผู้ขับรถต้องให้ทางคนเดินเท้าที่อยู่ในทางม้าลายหรือกำลังจะก้าวลงไป เมื่อไม่มีสัญญาณไฟกำหนดเป็นอย่างอื่น', no:'Bilførere har vikeplikt for gående som er i gangfeltet eller på vei ut i det, når trafikklys ikke bestemmer noe annet.', en:'Drivers yield to pedestrians in or about to enter a crossing, unless traffic lights direct otherwise.'},
+  micro_pedestrian_action:{th:'ลดความเร็ว มองทั้งสองข้างของทางม้าลาย และพร้อมหยุด', no:'Senk farten, se på begge sider av gangfeltet og vær klar til å stanse.', en:'Slow down, scan both sides of the crossing and be ready to stop.'},
+  micro_dark_title:{th:'การขับรถในความมืด', no:'Mørkekjøring', en:'Driving in the dark'},
+  micro_dark_thailand:{th:'หากคุณคุ้นกับเส้นทางที่สว่างกว่า อย่าคาดว่าคนเดินเท้าหรือขอบถนนจะมองเห็นได้เร็วเท่าเดิม', no:'Er du vant til lysere veier, må du ikke regne med å oppdage gående eller veikanten like tidlig.', en:'If you are used to brighter roads, do not expect to spot pedestrians or the road edge as early.'},
+  micro_dark_norway:{th:'ในช่วงที่มืดของนอร์เวย์ ทัศนวิสัยลดลง ใช้ไฟรถให้เหมาะสม และปรับความเร็วตามระยะที่มองเห็น', no:'I norsk mørketid blir sikten kortere. Bruk lysene riktig og tilpass farten til det du kan se.', en:'During Norway’s dark season, visibility is reduced. Use lights correctly and match your speed to what you can see.'},
+  micro_dark_action:{th:'ตรวจไฟรถก่อนออกเดินทาง และมองหาคนเดินเท้าที่ไม่มีแผ่นสะท้อนแสง', no:'Sjekk lysene før turen, og se aktivt etter gående uten refleks.', en:'Check your lights before driving and look actively for pedestrians without reflectors.'},
   micro_intro:{th:'บทเรียนสั้น ๆ สำหรับผู้ขับขี่ชาวไทยที่กำลังเรียนกฎจราจรของนอร์เวย์ แตะบทเรียนเพื่อเปิด', no:'Korte leksjoner for thai-førere som lærer norske trafikkregler. Trykk for å åpne.', en:'Short lessons for Thai drivers learning Norwegian traffic rules. Tap to open.'},
   micro_road_side_title:{th:'ขับชิดขวาในนอร์เวย์ เทียบกับขับชิดซ้ายในไทย', no:'Høyrekjøring i Norge vs. venstrekjøring i Thailand', en:'Driving on the right in Norway vs. the left in Thailand'},
   micro_road_side_body:{th:'ในนอร์เวย์ คุณต้องขับทางด้านขวาของถนน การเลี้ยวและตำแหน่งรถในทางแยกจึงกลับด้านจากที่คุ้นเคยในไทย', no:'I Norge kjører du på høyre side. Plassering før sving og gjennom kryss blir derfor motsatt av vanen fra Thailand.', en:'In Norway you drive on the right. Positioning before turns and through intersections is therefore opposite to the habit from Thailand.'},
@@ -6792,8 +6814,10 @@ function setLibraryTab(tab) {
 function renderMicroLessons(container) {
   var lessons = [
     {id:'road-side', icon:'↔️', title:'micro_road_side_title', body:'micro_road_side_body', action:'micro_road_side_action'},
-    {id:'yield', icon:'🔺', title:'micro_yield_title', body:'micro_yield_body', action:'micro_yield_action'},
-    {id:'winter', icon:'❄️', title:'micro_winter_title', body:'micro_winter_body', action:'micro_winter_action'},
+    {id:'priority', icon:'🔺', title:'micro_priority_title', thailand:'micro_priority_thailand', norway:'micro_priority_norway', action:'micro_priority_action'},
+    {id:'right', icon:'➡️', title:'micro_right_title', thailand:'micro_right_thailand', norway:'micro_right_norway', action:'micro_right_action'},
+    {id:'pedestrian', icon:'🚶', title:'micro_pedestrian_title', thailand:'micro_pedestrian_thailand', norway:'micro_pedestrian_norway', action:'micro_pedestrian_action'},
+    {id:'dark', icon:'🌙', title:'micro_dark_title', thailand:'micro_dark_thailand', norway:'micro_dark_norway', action:'micro_dark_action'},
     {id:'roundabout', icon:'🔄', title:'micro_roundabout_title', body:'micro_roundabout_body', action:'micro_roundabout_action'}
   ];
   var html = '<p class="micro-intro">' + escH(t('micro_intro')) + '</p><div class="micro-lessons">';
@@ -6803,7 +6827,10 @@ function renderMicroLessons(container) {
       '<span class="micro-lesson-icon">' + lesson.icon + '</span>' +
       '<span class="micro-lesson-title">' + escH(t(lesson.title)) + '</span>' +
       '<span class="micro-lesson-chevron">⌄</span></button>' +
-      '<div class="micro-lesson-body"><div>' + escH(t(lesson.body)) + '</div>' +
+      '<div class="micro-lesson-body">' + (lesson.thailand ?
+      '<div class="micro-lesson-comparison"><div class="micro-lesson-place"><strong>' + escH(t('micro_in_thailand')) + '</strong>' + escH(t(lesson.thailand)) + '</div>' +
+      '<div class="micro-lesson-place"><strong>' + escH(t('micro_in_norway')) + '</strong>' + escH(t(lesson.norway)) + '</div></div>' :
+      '<div>' + escH(t(lesson.body)) + '</div>') +
       '<div class="micro-lesson-action">✓ ' + escH(t(lesson.action)) + '</div></div></article>';
   });
   container.innerHTML = html + '</div>';
