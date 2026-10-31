@@ -9011,10 +9011,12 @@ var currentCorrect = '';
 var currentExpl = '';
 var currentQText = '';
 
-// ── Fagordkortet (glossary term card) — Thai UI only, see renderQuestion() ──
+// ── Fagordkortet (glossary term card) ──
 var currentTerms = [];
+var glossaryRequestId = 0;
 
 function resetGlossaryTerms() {
+  glossaryRequestId++;
   currentTerms = [];
   var wrap = document.getElementById('glossaryBtnWrap');
   if (wrap) wrap.innerHTML = '';
@@ -9023,26 +9025,23 @@ function resetGlossaryTerms() {
 function renderGlossaryButton() {
   var wrap = document.getElementById('glossaryBtnWrap');
   if (!wrap) return;
-  if (appLang === 'th' && currentTerms.length > 0) {
-    wrap.innerHTML = '<button class="glossary-term-btn" id="glossaryTermBtn" aria-expanded="false" onclick="toggleGlossaryPanel()">📖 ดูคำศัพท์นอร์เวย์</button>';
+  if (currentTerms.length > 0) {
+    wrap.innerHTML = '<button class="glossary-term-btn" id="glossaryTermBtn" aria-expanded="false" onclick="toggleGlossaryPanel()">📖 ' + escH(t('teacher_show_norwegian_term')) + '</button>';
   } else {
     wrap.innerHTML = '';
   }
 }
 
 function loadGlossaryTerms(qId) {
-  if (appLang !== 'th') {
-    currentTerms = [];
-    renderGlossaryButton();
-    return;
-  }
+  var requestId = glossaryRequestId;
   fetch('/api/quiz/terms?question_id=' + encodeURIComponent(qId) + '&lang=' + encodeURIComponent(appLang))
     .then(function(r) { return r.json(); })
     .then(function(data) {
-      currentTerms = (data && data.terms) || [];
+      if (requestId !== glossaryRequestId) return;
+      currentTerms = ((data && data.terms) || []).filter(function(term) { return term && term.term_no; });
       renderGlossaryButton();
     })
-    .catch(function() { currentTerms = []; renderGlossaryButton(); });
+    .catch(function() { if (requestId === glossaryRequestId) { currentTerms = []; renderGlossaryButton(); } });
 }
 
 function toggleGlossaryPanel() {
@@ -9056,19 +9055,12 @@ function toggleGlossaryPanel() {
     return;
   }
 
-  var itemsHtml = currentTerms.map(function(term) {
-    if (!term.definition_th) return ''; // defensive — API already filters this
-    return '<div class="glossary-term-item">'
-      + '<div class="glossary-term-heading">' + escH(term.term_th) + ' ➔ ' + escH(term.term_no) + '</div>'
-      + '<div class="glossary-term-def">' + escH(term.definition_th) + '</div>'
-      + '</div>';
-  }).join('');
-  if (!itemsHtml) return;
+  if (!currentTerms.length || !currentTerms[0].term_no) return;
 
   var panel = document.createElement('div');
   panel.id = 'glossaryPanel';
   panel.className = 'glossary-panel';
-  panel.innerHTML = itemsHtml;
+  panel.textContent = currentTerms[0].term_no;
   wrap.appendChild(panel);
   if (btn) btn.setAttribute('aria-expanded', 'true');
 }

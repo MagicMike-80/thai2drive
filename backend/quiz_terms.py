@@ -6,9 +6,7 @@ GET /api/quiz/terms?question_id=<id>&lang=<no|th|en>
 Matches a quiz question against the learning_glossary collection and returns
 up to 4 relevant Norwegian traffic terms. Fail-stop language purity: a term
 is only included if it has a non-empty definition in the requested language —
-never a fallback to another language. Per the current UI (webapp.py), this
-endpoint is only called with lang=th; no/en are supported by the contract but
-unused today.
+never a fallback to another language.
 """
 from __future__ import annotations
 
@@ -42,9 +40,8 @@ _GLOSSARY_CACHE: list[dict] = []
 _CACHE_LOADED_AT: Optional[datetime] = None
 
 # Which glossary field must be non-empty for a term to qualify for a given lang.
-# The returned payload always carries definition_th (see _filter_language_purity) —
-# only th is wired up in the UI today, but the purity check is defined for all three
-# languages so a future no/en caller degrades safely instead of leaking a fallback.
+# The returned payload always carries definition_th (see _filter_language_purity).
+# Require the selected language's own definition before returning a term.
 _LANG_DEFINITION_FIELD = {"no": "definition_no", "th": "definition_th", "en": "definition_en"}
 
 
@@ -81,7 +78,10 @@ def _match_terms(question: dict, cache: list[dict]) -> list[dict]:
     Text match (whole word, æøå-safe) = weight 2. Tag match = weight 1.
     Sorted by weight desc, then term_no alphabetically. Capped to 4.
     """
-    text = (question.get("question_text_no") or "").lower()
+    localized = question.get("question")
+    text = (question.get("question_text_no") or (
+        localized.get("no") if isinstance(localized, dict) else ""
+    ) or "").lower()
     cat = (question.get("category") or "").strip().lower()
 
     scored = []
