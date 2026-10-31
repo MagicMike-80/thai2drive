@@ -480,5 +480,41 @@ class TestWrongQuizAnswerReplyIsThaiOnly(unittest.TestCase):
         self.assertEqual(response.media, [])
 
 
+class TestRoundaboutLaneSafety(unittest.TestCase):
+    def test_long_wrong_lane_claims_are_replaced_in_all_languages(self):
+        cases = (
+            ("en", "For the 3rd exit, keep watching the signs and nearby traffic before you enter. Then choose the RIGHT lane.", "left lane"),
+            ("en", "For the third exit, first check the traffic ahead.\nThere may be several cars around you, but stay in the outer lane.", "left lane"),
+            ("en", "For the LAST exit, take your time to observe the whole roundabout. Even when it is busy, use the right lane.", "left lane"),
+            ("no", "For 3. avkjøring må du først se etter andre trafikanter og tilpasse farten rolig. Deretter velger du høyre felt.", "venstre felt"),
+            ("th", "สำหรับทางออกที่ 3 ให้สังเกตรถคันอื่นและชะลอความเร็วก่อนเข้าวงเวียนอย่างระมัดระวัง จากนั้นใช้เลนขวา", "ช่องทางซ้าย"),
+        )
+        for lang, wrong, correct_lane in cases:
+            with self.subTest(lang=lang, wrong=wrong[:25]):
+                self.assertGreater(len(wrong), 60)
+                fixed = tc._guard_roundabout_lane_claim(wrong, lang)
+                self.assertNotEqual(fixed, wrong)
+                self.assertIn(correct_lane, fixed)
+                self.assertEqual(tc._guard_roundabout_lane_claim(fixed, lang), fixed)
+
+    def test_safe_advice_passes_and_prompt_names_third_exit(self):
+        self.assertEqual(tc._guard_roundabout_lane_claim("For the third exit, choose the left lane.", "en"),
+                         "For the third exit, choose the left lane.")
+        for lang in ("no", "th", "en"):
+            prompt = tc._build_system_prompt(lang)
+            self.assertIn("Skal du ta 3. avkjøring / venstre / siste utgang", prompt)
+
+    def test_chat_pipeline_never_returns_long_wrong_lane_claim(self):
+        wrong = "For the third exit, look carefully at the signs and all the other cars before you enter. Then use the outer lane."
+        completion = SimpleNamespace(choices=[SimpleNamespace(message=SimpleNamespace(content=wrong))])
+        request = TeacherChatRequest(message="Which lane should I use for the third exit in a roundabout?", language="en")
+        with patch.object(tc, "_db", _Database()), patch.object(tc, "_chat_col", _Collection()), \
+             patch.object(tc, "LLM_KEY", "test-key"), \
+             patch.object(tc, "_completion_with_fallback", new=AsyncMock(return_value=completion)):
+            response = asyncio.run(teacher_chat(request))
+        self.assertIn("left lane", response.reply)
+        self.assertNotIn("use the outer lane", response.reply)
+
+
 if __name__ == "__main__":
     unittest.main()
