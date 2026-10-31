@@ -59,6 +59,11 @@ class _Collection:
         return None
 
 
+class _ReadableCollection(_Collection):
+    def find(self, *args, **kwargs):
+        return _Cursor(self.items)
+
+
 class _WriteFailingCollection(_Collection):
     async def insert_many(self, *args, **kwargs):
         raise RuntimeError("MongoDB storage quota exceeded")
@@ -338,6 +343,78 @@ class TestWrongQuizAnswerReplyIsThaiOnly(unittest.TestCase):
         self.assertEqual([item["id"] for item in response.media], ["lesson-1"])
         self.assertEqual(response.media[0]["title"], "ชื่อภาษาไทย ความสนใจ")
         self.assertEqual(response.media[0]["caption"], "คำอธิบายภาษาไทย")
+
+    def test_explicit_roundabout_and_yield_images_are_attached_in_selected_language(self):
+        cases = (
+            ("Vis bilde av rundkjøring", "no", "teacher-visual:roundabout", "rundkjoring1.jpg"),
+            ("ขอดูภาพวงเวียน", "th", "teacher-visual:roundabout", "rundkjoring1.jpg"),
+            ("Vis bilde av vikeplikt", "no", "teacher-visual:yield", "michael_hoyreregel.svg"),
+            ("ขอดูภาพการให้ทาง", "th", "teacher-visual:yield", "michael_hoyreregel.svg"),
+        )
+        for message, language, expected_id, filename in cases:
+            with self.subTest(message=message), patch.object(tc, "_v4_next_stage", return_value="5"), patch.object(
+                tc, "_find_active_bildebok_page", return_value=None
+            ):
+                reply = "Her er bildet." if language == "no" else "นี่คือภาพครับ"
+                response, _ = self._chat_with_mock_model(
+                    TeacherChatRequest(message=message, language=language), reply
+                )
+            self.assertEqual([item["id"] for item in response.media], [expected_id])
+            self.assertTrue(response.media[0]["url"].endswith(filename))
+            self.assertTrue(tc._reply_matches_language_script(response.media[0]["title"], language))
+            self.assertTrue(tc._reply_matches_language_script(response.media[0]["caption"], language))
+
+    def test_roundabout_video_request_uses_verified_video_id(self):
+        video = {
+            "media_id": "vid_vike_02", "type": "video", "category": "vikeplikt",
+            "tags": ["rundkjoring", "vikeplikt"],
+            "media_url": "/api/assets/video_vikeplikt_oversikt.mp4",
+            "thumbnail_url": "/api/assets/thumbs/thumb_vikeplikt_oversikt.jpg",
+            "is_active": True, "approved_for_michael": True, "content_language": "neutral",
+            "i18n": {
+                "no": {"title": "Video om rundkjøring", "description": "Se trafikken i rundkjøringen."},
+                "th": {"title": "วิดีโอเรื่องวงเวียน", "description": "ดูการจราจรในวงเวียน"},
+                "en": {"title": "Roundabout video", "description": "Watch the traffic in the roundabout."},
+            },
+        }
+        tc._db = _Database({"media_catalog": _ReadableCollection([video])})
+        for message, language, reply in (
+            ("Vis video av rundkjøring", "no", "Her er videoen."),
+            ("ขอดูวิดีโอวงเวียน", "th", "นี่คือวิดีโอครับ"),
+        ):
+            with self.subTest(language=language), patch.object(tc, "_v4_next_stage", return_value="5"), patch.object(
+                tc, "_find_active_bildebok_page", return_value=None
+            ):
+                response, _ = self._chat_with_mock_model(
+                    TeacherChatRequest(message=message, language=language), reply
+                )
+            self.assertEqual([item["id"] for item in response.media], ["vid_vike_02"])
+            self.assertEqual(response.media[0]["type"], "video")
+            self.assertTrue(tc._reply_matches_language_script(response.media[0]["title"], language))
+
+    def test_english_missing_file_reply_is_localized_for_visual_request(self):
+        for message, language in (("Vis bilde av rundkjøring", "no"), ("ขอดูภาพวงเวียน", "th")):
+            with self.subTest(language=language), patch.object(tc, "_v4_next_stage", return_value="5"), patch.object(
+                tc, "_find_active_bildebok_page", return_value=None
+            ):
+                response, _ = self._chat_with_mock_model(
+                    TeacherChatRequest(message=message, language=language), "I couldn't find the file."
+                )
+            self.assertEqual(len(response.media), 1)
+            self.assertTrue(tc._reply_matches_language_script(response.reply, language))
+            self.assertNotIn("file", response.reply.lower())
+
+    def test_missing_roundabout_video_never_returns_phantom_media_or_english_error(self):
+        for message, language in (("Vis video av rundkjøring", "no"), ("ขอดูวิดีโอวงเวียน", "th")):
+            with self.subTest(language=language), patch.object(tc, "_v4_next_stage", return_value="5"), patch.object(
+                tc, "_find_active_bildebok_page", return_value=None
+            ):
+                response, _ = self._chat_with_mock_model(
+                    TeacherChatRequest(message=message, language=language), "File not found."
+                )
+            self.assertEqual(response.media, [])
+            self.assertTrue(tc._reply_matches_language_script(response.reply, language))
+            self.assertNotIn("file", response.reply.lower())
 
     def test_quiz_coach_hides_correct_answer_on_first_turn(self):
         request = TeacherChatRequest(
