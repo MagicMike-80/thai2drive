@@ -1051,6 +1051,417 @@ html.landing-onboard-active .onboard-arrow{display:block;animation:landingArrowB
   box-shadow: 0 8px 22px rgba(255, 106, 43, 0.45);
 }
 
+
+/* ─── TRUST BAR (56px) + 5-STJERNERS VEGGEN (#anmeldelser) ─── */
+.t2d-trust-bar {
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(10, 15, 30, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.t2d-trust-bar-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 8px 24px;
+  min-height: 56px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.t2d-trust-left {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+.t2d-trust-stars {
+  color: #FFC93C;
+  font-size: 16px;
+  letter-spacing: 1px;
+  text-shadow: 0 0 12px rgba(255, 201, 60, 0.45);
+}
+.t2d-trust-text {
+  font-size: 13px;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+.t2d-trust-avatars {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 8px;
+  padding-left: 12px;
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
+}
+.t2d-avatar-stack {
+  display: inline-flex;
+}
+.t2d-avatar-chip {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid #0a0f1e;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin-left: -6px;
+}
+.t2d-avatar-chip:first-child {
+  margin-left: 0;
+}
+.t2d-trust-names {
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.55);
+}
+.t2d-trust-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: rgba(255, 107, 26, 0.15);
+  border: 1px solid rgba(255, 107, 26, 0.35);
+  color: #FF6B1A !important;
+  text-decoration: none !important;
+  transition: background 0.15s ease;
+}
+.t2d-trust-cta:hover {
+  background: rgba(255, 107, 26, 0.28);
+}
+
+.t2d-reviews-wall {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(180deg, #0a0f1e 0%, #101a33 52%, #070b18 100%);
+  padding: 64px 20px 72px;
+}
+.t2d-falling-stars {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0.32;
+}
+@keyframes t2dStarFall {
+  0% { transform: translateY(-10%) translateX(0) rotate(0deg); opacity: 0; }
+  12% { opacity: 1; }
+  88% { opacity: 1; }
+  100% { transform: translateY(1100%) translateX(36px) rotate(180deg); opacity: 0; }
+}
+.t2d-fstar {
+  position: absolute;
+  top: -24px;
+  color: #FFC93C;
+  user-select: none;
+  animation: t2dStarFall 10s linear infinite;
+}
+.t2d-reviews-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+.t2d-reviews-top {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 28px;
+}
+@media (min-width: 1024px) {
+  .t2d-reviews-top {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+}
+.t2d-reviews-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(255, 201, 60, 0.1);
+  border: 1px solid rgba(255, 201, 60, 0.25);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #FFC93C;
+}
+.t2d-reviews-h2 {
+  font-size: clamp(32px, 4.5vw, 54px);
+  font-weight: 900;
+  line-height: 0.94;
+  letter-spacing: -0.03em;
+  color: #FFFFFF;
+  margin: 10px 0 0;
+}
+.t2d-reviews-sub {
+  margin: 10px 0 0;
+  font-size: 14.5px;
+  color: #FF6B1A;
+  font-weight: 600;
+  max-width: 580px;
+}
+.t2d-reviews-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.t2d-rev-filter-btn {
+  height: 36px;
+  padding: 0 15px;
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 700;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.72);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.t2d-rev-filter-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #FFFFFF;
+}
+.t2d-rev-filter-btn.active {
+  background: #FF6B1A;
+  border-color: #FF6B1A;
+  color: #FFFFFF;
+  box-shadow: 0 0 20px rgba(255, 107, 26, 0.45);
+}
+.t2d-rev-video-proof-btn {
+  height: 36px;
+  padding: 0 15px;
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 800;
+  border: 1px solid rgba(255, 201, 60, 0.45);
+  background: rgba(255, 201, 60, 0.14);
+  color: #FFC93C;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+.t2d-rev-video-proof-btn:hover {
+  background: #FFC93C;
+  color: #080c19;
+}
+.t2d-rev-share-btn {
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  background: #FFFFFF;
+  color: #080c19;
+  border: none;
+  cursor: pointer;
+}
+
+.t2d-masonry-grid {
+  column-count: 1;
+  column-gap: 16px;
+}
+@media (min-width: 640px) {
+  .t2d-masonry-grid {
+    column-count: 2;
+  }
+}
+@media (min-width: 1024px) {
+  .t2d-masonry-grid {
+    column-count: 3;
+  }
+}
+.t2d-review-card {
+  break-inside: avoid;
+  margin-bottom: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 107, 26, 0.22);
+  border-radius: 16px;
+  padding: 18px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: transform 0.16s ease, border-color 0.16s ease;
+}
+.t2d-review-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 107, 26, 0.55);
+}
+.t2d-review-card.hidden-card {
+  display: none !important;
+}
+.t2d-rc-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.t2d-rc-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.t2d-rc-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 800;
+  color: #FFFFFF;
+  flex-shrink: 0;
+}
+.t2d-rc-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1.2;
+}
+.t2d-rc-date {
+  font-size: 10.5px;
+  color: rgba(255, 255, 255, 0.45);
+  margin-top: 2px;
+}
+.t2d-rc-tag {
+  font-size: 9.5px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.85);
+  white-space: nowrap;
+}
+.t2d-rc-stars {
+  color: #FFC93C;
+  font-size: 13px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.t2d-rc-stars span {
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 10.5px;
+  font-weight: 700;
+}
+.t2d-rc-quote {
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.86);
+  margin: 0 0 12px;
+}
+.t2d-rc-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 10px;
+}
+.t2d-rc-video-link {
+  color: #FF6B1A;
+  font-weight: 700;
+  font-size: 11.5px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.t2d-rc-video-link:hover {
+  text-decoration: underline;
+}
+
+/* Video Lightbox Modal for 5stjerner.mp4 & Min_film_16_Kopi.mp4 */
+.t2d-proof-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 220;
+  background: rgba(5, 8, 16, 0.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.t2d-proof-modal-backdrop.open {
+  display: flex;
+}
+.t2d-proof-modal {
+  width: 100%;
+  max-width: 680px;
+  background: #0e1428;
+  border: 1.5px solid rgba(255, 201, 60, 0.45);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.85);
+}
+.t2d-pm-head .hvm-close-x { position: static; }
+.t2d-pm-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.t2d-pm-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: #FFC93C;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.t2d-pm-tabs {
+  display: flex;
+  gap: 8px;
+  padding: 10px 18px;
+  background: rgba(0, 0, 0, 0.25);
+}
+.t2d-pm-tab {
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.75);
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+.t2d-pm-tab.active {
+  background: #FF6B1A;
+  color: #FFFFFF;
+}
+.t2d-pm-video-wrap {
+  background: #000000;
+  aspect-ratio: 16 / 9;
+  width: 100%;
+}
+.t2d-pm-video-wrap video {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
 /* STATS */
 .stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:24px;margin:56px 0}
 .stat{text-align:center;padding:28px 16px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.11);border-radius:18px}
@@ -1859,6 +2270,468 @@ def _hero_html(lang: str = "th", app_query: str = "") -> str:
 """
 
 
+
+def _reviews_wall_html() -> str:
+    return """
+<!-- SEKSJON 1: TRUST BAR (56px høy rett under Hero) -->
+<div class="t2d-trust-bar">
+  <div class="t2d-trust-bar-inner">
+    <div class="t2d-trust-left">
+      <span class="t2d-trust-stars">★★★★★</span>
+      <span class="t2d-trust-text">
+        <span data-lang="th">5.0 บน Google • 30+ รีวิวจากนักเรียนจริง • วิธีสอนเดียวกับในแอป</span>
+        <span data-lang="no">5.0 på Google • 30+ anmeldelser • Ekte elever fra Oslo Team og Flyt</span>
+        <span data-lang="en">5.0 on Google • 30+ reviews • Real students from Oslo Team og Flyt</span>
+      </span>
+      <div class="t2d-trust-avatars">
+        <div class="t2d-avatar-stack"><div class="t2d-avatar-chip" style="background:#FF6B1A">I</div><div class="t2d-avatar-chip" style="background:#4A90E2">R</div><div class="t2d-avatar-chip" style="background:#7C4DFF">D</div><div class="t2d-avatar-chip" style="background:#FF4081">F</div></div>
+        <span class="t2d-trust-names">Iscare, Reuben, Dive + 27</span>
+      </div>
+    </div>
+    <a href="#anmeldelser" class="t2d-trust-cta">
+      <span data-lang="th">ดูรีวิว 5 ดาว ↓</span>
+      <span data-lang="no">SE 5-STJERNERS VEGGEN ↓</span>
+      <span data-lang="en">SEE 5-STAR WALL ↓</span>
+    </a>
+  </div>
+</div>
+
+<!-- SEKSJON 2: 5-STJERNERS VEGGEN (#anmeldelser) -->
+<section id="anmeldelser" class="t2d-reviews-wall">
+  <div class="t2d-falling-stars" aria-hidden="true"><div class="t2d-fstar" style="left:0%;font-size:12px;animation-duration:9s;animation-delay:0.0s">★</div><div class="t2d-fstar" style="left:47%;font-size:15px;animation-duration:10s;animation-delay:0.7s">★</div><div class="t2d-fstar" style="left:94%;font-size:18px;animation-duration:11s;animation-delay:1.4s">★</div><div class="t2d-fstar" style="left:41%;font-size:21px;animation-duration:12s;animation-delay:2.1s">★</div><div class="t2d-fstar" style="left:88%;font-size:12px;animation-duration:13s;animation-delay:2.8s">★</div><div class="t2d-fstar" style="left:35%;font-size:15px;animation-duration:9s;animation-delay:3.5s">★</div><div class="t2d-fstar" style="left:82%;font-size:18px;animation-duration:10s;animation-delay:4.2s">★</div><div class="t2d-fstar" style="left:29%;font-size:21px;animation-duration:11s;animation-delay:4.9s">★</div><div class="t2d-fstar" style="left:76%;font-size:12px;animation-duration:12s;animation-delay:5.6s">★</div><div class="t2d-fstar" style="left:23%;font-size:15px;animation-duration:13s;animation-delay:0.3s">★</div><div class="t2d-fstar" style="left:70%;font-size:18px;animation-duration:9s;animation-delay:1.0s">★</div><div class="t2d-fstar" style="left:17%;font-size:21px;animation-duration:10s;animation-delay:1.7s">★</div><div class="t2d-fstar" style="left:64%;font-size:12px;animation-duration:11s;animation-delay:2.4s">★</div><div class="t2d-fstar" style="left:11%;font-size:15px;animation-duration:12s;animation-delay:3.1s">★</div><div class="t2d-fstar" style="left:58%;font-size:18px;animation-duration:13s;animation-delay:3.8s">★</div><div class="t2d-fstar" style="left:5%;font-size:21px;animation-duration:9s;animation-delay:4.5s">★</div></div>
+  <div class="t2d-reviews-inner">
+    <div class="t2d-reviews-top">
+      <div>
+        <div class="t2d-reviews-badge">
+          <span>★</span>
+          <span data-lang="th">รีวิว 5 ดาวที่ได้รับการยืนยัน • GOOGLE REVIEWS</span>
+          <span data-lang="no">VERIFISERTE GOOGLE-ANMELDELSER • 5.0 SNITT</span>
+          <span data-lang="en">VERIFIED GOOGLE REVIEWS • 5.0 AVERAGE</span>
+        </div>
+        <h2 class="t2d-reviews-h2">
+          <span data-lang="th">5 ดาว ทุกครั้ง</span>
+          <span data-lang="no">5 STJERNER. HVER GANG.</span>
+          <span data-lang="en">5 STARS. EVERY TIME.</span>
+        </h2>
+        <p class="t2d-reviews-sub">
+          <span data-lang="th">นี่คือสิ่งที่นักเรียนของฉันพูดถึงตอนสอนที่ Oslo Team og Flyt — วิธีสอนเดียวกันนี้อยู่ในแอป Thai2Drive</span>
+          <span data-lang="no">Dette sa elevene mine hos Oslo Team og Flyt – samme metode i appen</span>
+          <span data-lang="en">What my students said at Oslo Team og Flyt – the exact same method in the app</span>
+        </p>
+      </div>
+      <div class="t2d-reviews-controls">
+        <button type="button" class="t2d-rev-filter-btn active" data-rev-filter="all">
+          <span data-lang="th">ทั้งหมด (10)</span>
+          <span data-lang="no">Alle (10)</span>
+          <span data-lang="en">All (10)</span>
+        </button>
+        <button type="button" class="t2d-rev-filter-btn" data-rev-filter="no">
+          <span data-lang="th">ภาษานอร์เวย์</span>
+          <span data-lang="no">Norske</span>
+          <span data-lang="en">Norwegian</span>
+        </button>
+        <button type="button" class="t2d-rev-filter-btn" data-rev-filter="en">
+          <span data-lang="th">ภาษาอังกฤษ</span>
+          <span data-lang="no">Engelske</span>
+          <span data-lang="en">English</span>
+        </button>
+        <button type="button" class="t2d-rev-filter-btn" data-rev-filter="first">
+          <span data-lang="th">ผ่านในครั้งแรก</span>
+          <span data-lang="no">Første forsøk</span>
+          <span data-lang="en">First attempt</span>
+        </button>
+        <button type="button" class="t2d-rev-video-proof-btn" data-open-proof-video="/api/assets/5stjerner.mp4">
+          <span data-lang="th">▶ ดูวิดีโอรีวิว Google</span>
+          <span data-lang="no">▶ Se rå Google-opptak</span>
+          <span data-lang="en">▶ Watch raw Google proof</span>
+        </button>
+        <button type="button" class="t2d-rev-share-btn" id="t2dShareWallBtn">
+          <span data-lang="th">🔗 แชร์รีวิว</span>
+          <span data-lang="no">🔗 Del veggen</span>
+          <span data-lang="en">🔗 Share wall</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="t2d-masonry-grid" id="t2dReviewsGrid">
+      
+      <div class="t2d-review-card" data-review-lang="no" data-review-first="true">
+        <div class="t2d-rc-head">
+          <div class="t2d-rc-user">
+            <div class="t2d-rc-avatar" style="background:#FF6B1A">I</div>
+            <div>
+              <div class="t2d-rc-name">Iscare Ur mum</div>
+              <div class="t2d-rc-date">
+                <span data-lang="th">2 ปีที่แล้ว • Google</span>
+                <span data-lang="no">for 2 år siden • Google</span>
+                <span data-lang="en">2 years ago • Google</span>
+              </div>
+            </div>
+          </div>
+          <span class="t2d-rc-tag">
+            <span data-lang="th">ผ่านในครั้งแรก</span>
+            <span data-lang="no">Første forsøk</span>
+            <span data-lang="en">First attempt</span>
+          </span>
+        </div>
+        <div class="t2d-rc-stars">★★★★★ <span>5.0</span></div>
+        <p class="t2d-rc-quote">
+          <span data-lang="th">“ใช้เวลาไม่ถึงเดือนจากที่ไม่รู้กฎจราจรเลยจนขับได้อย่างมั่นใจ ครูไมเคิลอธิบายชัดเจนมาก แนะนำ 10/10!”</span>
+          <span data-lang="no">“På under en måned fra ikke kunne regler til å kjøre perfekt. Michael forklarer så tydelig. 10/10 anbefaler!”</span>
+          <span data-lang="en">“In under a month from not knowing the rules to driving perfectly. Michael explains so clearly. 10/10!”</span>
+        </p>
+        <div class="t2d-rc-foot">
+          <span>👍 4 • VERIFISERT</span>
+          <button type="button" class="t2d-rc-video-link" data-open-proof-video="/api/assets/5stjerner.mp4">
+            <span data-lang="th">▶ ดูวิดีโอบันทึก Google</span>
+            <span data-lang="no">▶ Se Google-opptak</span>
+            <span data-lang="en">▶ Watch Google recording</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="t2d-review-card" data-review-lang="en" data-review-first="true">
+        <div class="t2d-rc-head">
+          <div class="t2d-rc-user">
+            <div class="t2d-rc-avatar" style="background:#4A90E2">R</div>
+            <div>
+              <div class="t2d-rc-name">Reuben Pepperell</div>
+              <div class="t2d-rc-date">
+                <span data-lang="th">1 เดือนที่แล้ว • Google</span>
+                <span data-lang="no">1 måned siden • Google</span>
+                <span data-lang="en">1 month ago • Google</span>
+              </div>
+            </div>
+          </div>
+          <span class="t2d-rc-tag">
+            <span data-lang="th">ผ่านในครั้งแรก</span>
+            <span data-lang="no">First attempt</span>
+            <span data-lang="en">First attempt</span>
+          </span>
+        </div>
+        <div class="t2d-rc-stars">★★★★★ <span>5.0</span></div>
+        <p class="t2d-rc-quote">
+          <span data-lang="th">“ครูฝึกที่ยอดเยี่ยมมาก ระบบการสอนที่ชัดเจนช่วยให้สอบผ่าน ตอนแรกตื่นเต้นมากแต่ไมเคิลทำให้รู้สึกปลอดภัยตลอดทาง”</span>
+          <span data-lang="no">“Incredible instructor, clear system ensured success. I was so nervous but Michael made me feel safe the whole way.”</span>
+          <span data-lang="en">“Incredible instructor, clear system ensured success. I was so nervous but Michael made me feel safe the whole way.”</span>
+        </p>
+        <div class="t2d-rc-foot">
+          <span>👍 8 • VERIFISERT</span>
+          <button type="button" class="t2d-rc-video-link" data-open-proof-video="/api/assets/5stjerner.mp4">
+            <span data-lang="th">▶ ดูวิดีโอบันทึก Google</span>
+            <span data-lang="no">▶ Se Google-opptak</span>
+            <span data-lang="en">▶ Watch Google recording</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="t2d-review-card" data-review-lang="no" data-review-first="false">
+        <div class="t2d-rc-head">
+          <div class="t2d-rc-user">
+            <div class="t2d-rc-avatar" style="background:#7C4DFF">D</div>
+            <div>
+              <div class="t2d-rc-name">Dive Kasindi</div>
+              <div class="t2d-rc-date">
+                <span data-lang="th">3 สัปดาห์ที่แล้ว • Google</span>
+                <span data-lang="no">3 uker siden • Google</span>
+                <span data-lang="en">3 weeks ago • Google</span>
+              </div>
+            </div>
+          </div>
+          <span class="t2d-rc-tag">
+            <span data-lang="th">ใจเย็นมาก</span>
+            <span data-lang="no">Tålmodig</span>
+            <span data-lang="en">Patient</span>
+          </span>
+        </div>
+        <div class="t2d-rc-stars">★★★★★ <span>5.0</span></div>
+        <p class="t2d-rc-quote">
+          <span data-lang="th">“ไม่ใช่แค่ครูที่เก่ง แต่เป็นคนที่ดีเหมือนเพื่อน เป็นครูสอนขับรถที่ดีที่สุดที่เคยเรียนด้วย”</span>
+          <span data-lang="no">“Ikke bare god lærer, men en flott person som en venn. Den beste kjørelæreren jeg har hatt.”</span>
+          <span data-lang="en">“Not only a great teacher, but a wonderful person like a friend. The best driving instructor I have had.”</span>
+        </p>
+        <div class="t2d-rc-foot">
+          <span>👍 12 • VERIFISERT</span>
+          <button type="button" class="t2d-rc-video-link" data-open-proof-video="/api/assets/Min_film_16_Kopi.mp4">
+            <span data-lang="th">▶ ดูวิดีโอบันทึก Google</span>
+            <span data-lang="no">▶ Se Google-opptak</span>
+            <span data-lang="en">▶ Watch Google recording</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="t2d-review-card" data-review-lang="no" data-review-first="true">
+        <div class="t2d-rc-head">
+          <div class="t2d-rc-user">
+            <div class="t2d-rc-avatar" style="background:#FF4081">F</div>
+            <div>
+              <div class="t2d-rc-name">Fanny Klievens</div>
+              <div class="t2d-rc-date">
+                <span data-lang="th">2 เดือนที่แล้ว • Google</span>
+                <span data-lang="no">2 mnd siden • Google</span>
+                <span data-lang="en">2 months ago • Google</span>
+              </div>
+            </div>
+          </div>
+          <span class="t2d-rc-tag">
+            <span data-lang="th">ผ่านในครั้งแรก</span>
+            <span data-lang="no">Første forsøk</span>
+            <span data-lang="en">First attempt</span>
+          </span>
+        </div>
+        <div class="t2d-rc-stars">★★★★★ <span>5.0</span></div>
+        <p class="t2d-rc-quote">
+          <span data-lang="th">“ตรงไปตรงมา สนุก และให้คำแนะนำที่ดีมาก จากแทบขับไม่เป็นเลยจนสอบผ่านในครั้งแรกช่วงซัมเมอร์”</span>
+          <span data-lang="no">“Veldig ærlig, morsom, konstruktiv. Fra nesten ikke kunne kjøre til bestått på første forsøk i sommerferien.”</span>
+          <span data-lang="en">“Very honest, fun, constructive. From barely knowing how to drive to passing on the first attempt.”</span>
+        </p>
+        <div class="t2d-rc-foot">
+          <span>👍 6 • VERIFISERT</span>
+          <button type="button" class="t2d-rc-video-link" data-open-proof-video="/api/assets/5stjerner.mp4">
+            <span data-lang="th">▶ ดูวิดีโอบันทึก Google</span>
+            <span data-lang="no">▶ Se Google-opptak</span>
+            <span data-lang="en">▶ Watch Google recording</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="t2d-review-card" data-review-lang="en" data-review-first="true">
+        <div class="t2d-rc-head">
+          <div class="t2d-rc-user">
+            <div class="t2d-rc-avatar" style="background:#26C6DA">B</div>
+            <div>
+              <div class="t2d-rc-name">Bono Wagemans</div>
+              <div class="t2d-rc-date">
+                <span data-lang="th">3 สัปดาห์ที่แล้ว • Google</span>
+                <span data-lang="no">3 uker siden • Google</span>
+                <span data-lang="en">3 weeks ago • Google</span>
+              </div>
+            </div>
+          </div>
+          <span class="t2d-rc-tag">
+            <span data-lang="th">ผ่านในครั้งแรก</span>
+            <span data-lang="no">10/10</span>
+            <span data-lang="en">Awesome • 10/10</span>
+          </span>
+        </div>
+        <div class="t2d-rc-stars">★★★★★ <span>5.0</span></div>
+        <p class="t2d-rc-quote">
+          <span data-lang="th">“ครูสอนสุดยอดมาก สอบผ่านใบขับขี่ตั้งแต่ครั้งแรก 10/10 วิธีการสอนได้ผลจริง”</span>
+          <span data-lang="no">“Awesome instructor, license first time, 10/10. His method is super effective.”</span>
+          <span data-lang="en">“Awesome instructor, license first time, 10/10. His method is super effective.”</span>
+        </p>
+        <div class="t2d-rc-foot">
+          <span>👍 9 • VERIFISERT</span>
+          <button type="button" class="t2d-rc-video-link" data-open-proof-video="/api/assets/Min_film_16_Kopi.mp4">
+            <span data-lang="th">▶ ดูวิดีโอบันทึก Google</span>
+            <span data-lang="no">▶ Se Google-opptak</span>
+            <span data-lang="en">▶ Watch Google recording</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="t2d-review-card" data-review-lang="en" data-review-first="false">
+        <div class="t2d-rc-head">
+          <div class="t2d-rc-user">
+            <div class="t2d-rc-avatar" style="background:#FFA726">K</div>
+            <div>
+              <div class="t2d-rc-name">Kumar M.</div>
+              <div class="t2d-rc-date">
+                <span data-lang="th">1 เดือนที่แล้ว • Google</span>
+                <span data-lang="no">1 måned siden • Google</span>
+                <span data-lang="en">1 month ago • Google</span>
+              </div>
+            </div>
+          </div>
+          <span class="t2d-rc-tag">
+            <span data-lang="th">มั่นใจและปลอดภัย</span>
+            <span data-lang="no">Trygg</span>
+            <span data-lang="en">Safe & calm</span>
+          </span>
+        </div>
+        <div class="t2d-rc-stars">★★★★★ <span>5.0</span></div>
+        <p class="t2d-rc-quote">
+          <span data-lang="th">“ไม่มีพื้นฐานมาก่อนเลย แต่ครูรู้ว่าเมื่อไหร่นักเรียนพร้อม ไม่เคยกดดันก่อนที่เราจะพร้อม”</span>
+          <span data-lang="no">“No prior experience, knows when student is ready. He never pushes you before you are ready.”</span>
+          <span data-lang="en">“No prior experience, knows when student is ready. He never pushes you before you are ready.”</span>
+        </p>
+        <div class="t2d-rc-foot">
+          <span>👍 3 • VERIFISERT</span>
+          <button type="button" class="t2d-rc-video-link" data-open-proof-video="/api/assets/5stjerner.mp4">
+            <span data-lang="th">▶ ดูวิดีโอบันทึก Google</span>
+            <span data-lang="no">▶ Se Google-opptak</span>
+            <span data-lang="en">▶ Watch Google recording</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="t2d-review-card" data-review-lang="no" data-review-first="true">
+        <div class="t2d-rc-head">
+          <div class="t2d-rc-user">
+            <div class="t2d-rc-avatar" style="background:#66BB6A">A</div>
+            <div>
+              <div class="t2d-rc-name">Aurora Sivertsen</div>
+              <div class="t2d-rc-date">
+                <span data-lang="th">5 วันที่แล้ว • Google</span>
+                <span data-lang="no">5 dager siden • Google</span>
+                <span data-lang="en">5 days ago • Google</span>
+              </div>
+            </div>
+          </div>
+          <span class="t2d-rc-tag">
+            <span data-lang="th">ผ่านในครั้งแรก</span>
+            <span data-lang="no">Fremgang</span>
+            <span data-lang="en">Fast progress</span>
+          </span>
+        </div>
+        <div class="t2d-rc-stars">★★★★★ <span>5.0</span></div>
+        <p class="t2d-rc-quote">
+          <span data-lang="th">“ดูแลเอาใจใส่ดีมาก ก้าวหน้าเร็วในเวลาสั้นๆ สอบผ่านตั้งแต่ครั้งแรก ครูไมเคิลเข้าใจนักเรียนจริงๆ”</span>
+          <span data-lang="no">“God oppfølging, mye fremgang på kort tid, bestod på første forsøk. Michael ser deg.”</span>
+          <span data-lang="en">“Great follow-up, lots of progress in a short time, passed on the first attempt. Michael truly sees you.”</span>
+        </p>
+        <div class="t2d-rc-foot">
+          <span>👍 7 • VERIFISERT</span>
+          <button type="button" class="t2d-rc-video-link" data-open-proof-video="/api/assets/Min_film_16_Kopi.mp4">
+            <span data-lang="th">▶ ดูวิดีโอบันทึก Google</span>
+            <span data-lang="no">▶ Se Google-opptak</span>
+            <span data-lang="en">▶ Watch Google recording</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="t2d-review-card" data-review-lang="no" data-review-first="false">
+        <div class="t2d-rc-head">
+          <div class="t2d-rc-user">
+            <div class="t2d-rc-avatar" style="background:#AB47BC">A</div>
+            <div>
+              <div class="t2d-rc-name">Anna Felicia</div>
+              <div class="t2d-rc-date">
+                <span data-lang="th">2 เดือนที่แล้ว • Google</span>
+                <span data-lang="no">2 mnd siden • Google</span>
+                <span data-lang="en">2 months ago • Google</span>
+              </div>
+            </div>
+          </div>
+          <span class="t2d-rc-tag">
+            <span data-lang="th">เรียนอย่างสบายใจ</span>
+            <span data-lang="no">Trygg</span>
+            <span data-lang="en">Safe learning</span>
+          </span>
+        </div>
+        <div class="t2d-rc-stars">★★★★★ <span>5.0</span></div>
+        <p class="t2d-rc-quote">
+          <span data-lang="th">“รู้สึกปลอดภัยเสมอ ไม่กลัวที่จะทำผิดพลาด ทำให้กล้าเรียนรู้ได้เร็วขึ้นมาก”</span>
+          <span data-lang="no">“Følte meg alltid trygg, aldri redd for å feile. Det gjorde at jeg turte å lære mye fortere.”</span>
+          <span data-lang="en">“Always felt safe, never afraid to make mistakes. That made me learn much faster.”</span>
+        </p>
+        <div class="t2d-rc-foot">
+          <span>👍 5 • VERIFISERT</span>
+          <button type="button" class="t2d-rc-video-link" data-open-proof-video="/api/assets/5stjerner.mp4">
+            <span data-lang="th">▶ ดูวิดีโอบันทึก Google</span>
+            <span data-lang="no">▶ Se Google-opptak</span>
+            <span data-lang="en">▶ Watch Google recording</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="t2d-review-card" data-review-lang="no" data-review-first="true">
+        <div class="t2d-rc-head">
+          <div class="t2d-rc-user">
+            <div class="t2d-rc-avatar" style="background:#EF5350">S</div>
+            <div>
+              <div class="t2d-rc-name">Sarah Santiago</div>
+              <div class="t2d-rc-date">
+                <span data-lang="th">3 วันที่แล้ว • Google</span>
+                <span data-lang="no">3 dager siden • Google</span>
+                <span data-lang="en">3 days ago • Google</span>
+              </div>
+            </div>
+          </div>
+          <span class="t2d-rc-tag">
+            <span data-lang="th">สอบผ่านแล้ว!</span>
+            <span data-lang="no">Bestått!</span>
+            <span data-lang="en">Passed!</span>
+          </span>
+        </div>
+        <div class="t2d-rc-stars">★★★★★ <span>5.0</span></div>
+        <p class="t2d-rc-quote">
+          <span data-lang="th">“สอบผ่านในครั้งแรก! ขอบคุณสำหรับความใจเย็นนะไมเคิล อธิบายทุกอย่างได้ใจเย็นและเข้าใจง่ายมาก”</span>
+          <span data-lang="no">“Bestod på første forsøk! Takk for tålmodigheten, Michael. Du forklarte alt så rolig.”</span>
+          <span data-lang="en">“Passed on the first attempt! Thank you for the patience, Michael. You explained everything so calmly.”</span>
+        </p>
+        <div class="t2d-rc-foot">
+          <span>👍 11 • VERIFISERT</span>
+          <button type="button" class="t2d-rc-video-link" data-open-proof-video="/api/assets/Min_film_16_Kopi.mp4">
+            <span data-lang="th">▶ ดูวิดีโอบันทึก Google</span>
+            <span data-lang="no">▶ Se Google-opptak</span>
+            <span data-lang="en">▶ Watch Google recording</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="t2d-review-card" data-review-lang="no" data-review-first="true">
+        <div class="t2d-rc-head">
+          <div class="t2d-rc-user">
+            <div class="t2d-rc-avatar" style="background:#5C6BC0">E</div>
+            <div>
+              <div class="t2d-rc-name">Elias Nordahl</div>
+              <div class="t2d-rc-date">
+                <span data-lang="th">1 สัปดาห์ที่แล้ว • Google</span>
+                <span data-lang="no">1 uke siden • Google</span>
+                <span data-lang="en">1 week ago • Google</span>
+              </div>
+            </div>
+          </div>
+          <span class="t2d-rc-tag">
+            <span data-lang="th">เข้าใจไว</span>
+            <span data-lang="no">Effektiv</span>
+            <span data-lang="en">Effective</span>
+          </span>
+        </div>
+        <div class="t2d-rc-stars">★★★★★ <span>5.0</span></div>
+        <p class="t2d-rc-quote">
+          <span data-lang="th">“จากที่เคยกังวลทุกครั้งก่อนเรียน กลายเป็นตั้งตารอเรียน ไมเคิลสอนสนุกและได้ผลจริง”</span>
+          <span data-lang="no">“Fra å grue meg til hver time til å glede meg. Michael er morsom og effektiv.”</span>
+          <span data-lang="en">“From dreading every lesson to looking forward to it. Michael is fun and effective.”</span>
+        </p>
+        <div class="t2d-rc-foot">
+          <span>👍 2 • VERIFISERT</span>
+          <button type="button" class="t2d-rc-video-link" data-open-proof-video="/api/assets/5stjerner.mp4">
+            <span data-lang="th">▶ ดูวิดีโอบันทึก Google</span>
+            <span data-lang="no">▶ Se Google-opptak</span>
+            <span data-lang="en">▶ Watch Google recording</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Video Lightbox Modal for 5stjerner.mp4 and Min_film_16_Kopi.mp4 -->
+  <div class="t2d-proof-modal-backdrop" id="t2dProofModal" role="dialog" aria-label="Google Reviews Video Proof">
+    <div class="t2d-proof-modal">
+      <div class="t2d-pm-head">
+        <div class="t2d-pm-title">
+          <span>★★★★★</span>
+          <span data-lang="th">วิดีโอบันทึกรีวิว Google จริงของครูไมเคิล</span>
+          <span data-lang="no">Skjermopptak av Michaels ekte Google-anmeldelser</span>
+          <span data-lang="en">Screen recording of Michael's verified Google reviews</span>
+        </div>
+        <button type="button" class="hvm-close-x" id="t2dProofModalClose" aria-label="Close">✕</button>
+      </div>
+      <div class="t2d-pm-tabs">
+        <button type="button" class="t2d-pm-tab active" data-proof-src="/api/assets/5stjerner.mp4">▶ Opptak 1 (5stjerner.mp4)</button>
+        <button type="button" class="t2d-pm-tab" data-proof-src="/api/assets/Min_film_16_Kopi.mp4">▶ Opptak 2 (Min_film_16_Kopi.mp4)</button>
+      </div>
+      <div class="t2d-pm-video-wrap">
+        <video id="t2dProofVideo" controls playsinline preload="metadata" src="/api/assets/5stjerner.mp4"></video>
+      </div>
+    </div>
+  </div>
+</section>
+"""
+
+
 def _try_html(lang: str) -> str:
     les_hoyt = {"no": "Les høyt", "th": "อ่านออกเสียง", "en": "Read aloud"}.get(lang, "Les høyt")
     return f"""
@@ -2526,6 +3399,73 @@ LANDING_JS = r"""
   }
 })();
 
+
+// ─── 5-Stjerners Veggen (#anmeldelser): Filter + Share + Video Proof Lightbox ───
+(function(){
+  var filterBtns = document.querySelectorAll('.t2d-rev-filter-btn');
+  var cards = document.querySelectorAll('.t2d-review-card');
+  filterBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var f = btn.getAttribute('data-rev-filter');
+      filterBtns.forEach(function(b){ b.classList.toggle('active', b === btn); });
+      cards.forEach(function(c){
+        var rlang = c.getAttribute('data-review-lang');
+        var rfirst = c.getAttribute('data-review-first') === 'true';
+        var show = (f === 'all') || (f === 'no' && rlang === 'no') || (f === 'en' && rlang === 'en') || (f === 'first' && rfirst);
+        c.classList.toggle('hidden-card', !show);
+      });
+    });
+  });
+
+  var shareBtn = document.getElementById('t2dShareWallBtn');
+  if (shareBtn) {
+    shareBtn.addEventListener('click', function(){
+      try {
+        navigator.clipboard.writeText('https://thai2drive.no/#anmeldelser');
+      } catch(e) {}
+      var orig = shareBtn.innerHTML;
+      shareBtn.textContent = '✓ Kopiert!';
+      setTimeout(function(){ shareBtn.innerHTML = orig; }, 2000);
+    });
+  }
+
+  var pModal = document.getElementById('t2dProofModal');
+  var pVideo = document.getElementById('t2dProofVideo');
+  var pClose = document.getElementById('t2dProofModalClose');
+  var pTabs = document.querySelectorAll('.t2d-pm-tab');
+  function openProofVideo(src) {
+    if (!pModal || !pVideo) return;
+    if (src && pVideo.getAttribute('src') !== src) {
+      pVideo.setAttribute('src', src);
+    }
+    pTabs.forEach(function(t){ t.classList.toggle('active', t.getAttribute('data-proof-src') === src); });
+    pModal.classList.add('open');
+    try { pVideo.play(); } catch(e) {}
+  }
+  function closeProofVideo() {
+    if (!pModal || !pVideo) return;
+    try { pVideo.pause(); } catch(e) {}
+    pModal.classList.remove('open');
+  }
+  document.querySelectorAll('[data-open-proof-video]').forEach(function(el){
+    el.addEventListener('click', function(ev){
+      ev.preventDefault();
+      openProofVideo(el.getAttribute('data-open-proof-video'));
+    });
+  });
+  pTabs.forEach(function(tab){
+    tab.addEventListener('click', function(){
+      openProofVideo(tab.getAttribute('data-proof-src'));
+    });
+  });
+  if (pClose) pClose.addEventListener('click', closeProofVideo);
+  if (pModal) {
+    pModal.addEventListener('click', function(ev){
+      if (ev.target === pModal) closeProofVideo();
+    });
+  }
+})();
+
 // ─── Language switcher ───
 // The server already rendered this exact URL (/th, /no or /en) in the right
 // language, so on load we just sync storage to match it — no client-side
@@ -2900,6 +3840,7 @@ def build_landing_page(chat_css: str, chat_widget_html: str, chat_js: str, lang:
 <body>
 {_nav_html(lang, app_query)}
 {_hero_html(lang, app_query)}
+{_reviews_wall_html()}
 {_stats_html()}
 {_try_html(lang)}
 {_video_html(lang)}
