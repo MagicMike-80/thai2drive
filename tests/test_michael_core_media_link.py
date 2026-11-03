@@ -291,7 +291,7 @@ class MichaelCoreMediaLinkTests(unittest.TestCase):
         for question, language, lower_limit, upper_limit in cases:
             with self.subTest(language=language):
                 answer = self.teacher._apply_bus_rule_definition_fail_safe(
-                    question, "truncated model reply", language
+                    question, self.teacher._fallback_reply(language), language
                 )
                 self.assertIn(lower_limit, answer)
                 self.assertIn(upper_limit, answer)
@@ -359,6 +359,11 @@ class MichaelCoreMediaLinkTests(unittest.TestCase):
                 language="no",
                 device_id=None,
                 user_id=None,
+                document_id=None,
+                document_context=None,
+                image_url=None,
+                image_data=None,
+                explain_level=1,
             )
             response = asyncio.run(module.teacher_chat(request))
         finally:
@@ -366,8 +371,8 @@ class MichaelCoreMediaLinkTests(unittest.TestCase):
                 setattr(module, name, value)
 
         self.assertIn("Senk farten", response.reply)
-        self.assertEqual(response.media[0]["id"], RIGHT_RULE_MATERIAL["id"])
-        self.assertEqual(response.media[0]["url"], RIGHT_RULE_MATERIAL["source_url"])
+        self.assertEqual(response.media[0]["id"], "teacher-visual:right_hand")
+        self.assertEqual(response.media[0]["url"], "/api/assets/7.2a_høyreregel_1.jpg")
 
 
 if __name__ == "__main__":

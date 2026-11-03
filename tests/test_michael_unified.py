@@ -59,7 +59,7 @@ class MichaelUnifiedArchitectureTests(unittest.TestCase):
 
     def test_teacher_chat_legal_instructions_and_media_return(self):
         """Verify teacher_chat enforces § 7 nr. 2 and uses the shared media pipeline."""
-        self.assertIn("Trafikkreglene § 7 nr. 2", self.teacher_code)
+        self.assertIn("trafikkreglene § 7 nr. 2", self.teacher_code)
         self.assertIn("media: list[dict]", self.teacher_code)
         self.assertIn("_get_relevant_michael_materials", self.teacher_code)
         self.assertIn("_get_relevant_catalog_media", self.teacher_code)

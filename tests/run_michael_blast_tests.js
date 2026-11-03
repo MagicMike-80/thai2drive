@@ -15,6 +15,8 @@ const sw_code = fs.readFileSync(path.join(ROOT, 'backend', 'service-worker.js'),
 
 console.log('🚀 Running Michael AI BLAST Contract Tests & Missions 1–8 Suite...');
 
+let failures = 0;
+
 function test(name, fn) {
   try {
     fn();
@@ -22,7 +24,7 @@ function test(name, fn) {
   } catch (err) {
     console.error(`  ❌ FAIL: ${name}`);
     console.error(err);
-    process.exit(1);
+    failures += 1;
   }
 }
 
@@ -41,10 +43,11 @@ test('teacher_chat connects to approved media and includes media in TeacherChatR
 
 test('teacher_chat has data-driven weakness coaching and open conversational greetings', () => {
   assert(teacher_code.includes('def _get_student_weakness'), '_get_student_weakness helper must exist');
-  assert(teacher_code.includes('is_theory_help'), 'Dynamic theory help detection must exist');
-  assert(teacher_code.includes('Hva vil du at vi skal øve på i dag?'), 'Open friendly NO greeting must exist');
-  assert(teacher_code.includes('วันนี้อยากให้เราฝึกเรื่องอะไรดีครับ?'), 'Open friendly TH greeting must exist');
-  assert(teacher_code.includes('What would you like us to practice today?'), 'Open friendly EN greeting must exist');
+  assert(teacher_code.includes('def _needs_topic_focus('), 'Verified weak-topic focus must exist');
+  assert(teacher_code.includes('secrets.choice(_WELCOME_OPENINGS[lang])'), 'Welcome must use the selected language');
+  assert(teacher_code.includes('Hei! Jeg er Michaels AI-trafikklærer.'), 'NO welcome must exist');
+  assert(teacher_code.includes('สวัสดีครับ ผมเป็นครูสอนขับรถปัญญาประดิษฐ์ของไมเคิล'), 'TH welcome must exist');
+  assert(teacher_code.includes("Hi! I'm Michael's AI driving teacher."), 'EN welcome must exist');
 });
 
 test('admin_analytics_router mounted in server.py and endpoints defined', () => {
@@ -82,11 +85,11 @@ test('Language purity: no forbidden cross-language fallback patterns', () => {
 });
 
 // ─── Oppdrag 1: Michaels Kognitive Loop & § 7 nr. 2 Venstresving ───
-test('Oppdrag 1: Michaels Kognitive Loop (Se -> Oppfatte -> Avgjore + Thai ครับ/ผม)', () => {
+test('Oppdrag 1: Michaels Kognitive Loop (Se -> Tenke -> Spørre + Thai ครับ/ผม)', () => {
   assert(teacher_code.includes('MICHAELS KOGNITIVE BESLUTNINGSLØKKE'), 'Decision loop header must exist');
-  assert(teacher_code.includes('STEG 1: SE (Spør og lytt!)'), 'Step 1 SE must exist');
-  assert(teacher_code.includes('STEG 2: OPPFATTE'), 'Step 2 OPPFATTE must exist');
-  assert(teacher_code.includes('STEG 3: AVGJØRE'), 'Step 3 AVGJØRE must exist');
+  assert(teacher_code.includes('STEG 1: SE (Les situasjonen, ikke bare ordene)'), 'Step 1 SE must exist');
+  assert(teacher_code.includes('STEG 2: TENKE'), 'Step 2 TENKE must exist');
+  assert(teacher_code.includes('STEG 3: SPØRRE'), 'Step 3 SPØRRE must exist');
   assert(teacher_code.includes('Kongen og tjeneren'), 'Kongen og tjeneren metaphor must exist');
   assert(teacher_code.includes('HAV-regelen'), 'HAV-regelen metaphor must exist');
   assert(teacher_code.includes('ครับ (khrap)'), 'Thai male particle must be required');
@@ -96,8 +99,8 @@ test('Oppdrag 1: Michaels Kognitive Loop (Se -> Oppfatte -> Avgjore + Thai ค�
 });
 
 test('Oppdrag 1: Trafikkreglene § 7 nr. 2 Oncoming traffic & Left-turn exact explanation', () => {
-  assert(teacher_code.includes('Når du skal svinge til venstre, vil den møtende bilen havne på din høyre side.'), 'Must have pedagogical left-turn explanation');
-  assert(teacher_code.includes('Det betyr at du har vikeplikt etter høyreregelen (§ 7 nr. 2). Du er tjeneren, og den møtende bilen er kongen – du må la kongen kjøre først!'), 'Must include King/Servant explanation for oncoming traffic');
+  assert(teacher_code.includes('Når du svinger til venstre, kommer den møtende bilen på din høyre side.'), 'Must have pedagogical left-turn explanation');
+  assert(teacher_code.includes('Dette omfattes av trafikkreglene § 7 nr. 2, og derfor må du vike.'), 'Must identify the right-of-way rule');
   assert(teacher_code.includes('høyreregelen gjelder ikke for møtende'), 'Must catch and sanitize forbidden LLM negation');
 });
 
@@ -123,7 +126,7 @@ test('Oppdrag 5: «Thailand vs Norge» Mikroleksjoner', () => {
   assert(micro_lessons_code.includes('lesson_1_priority'), 'lesson_1_priority must exist');
   assert(micro_lessons_code.includes('lesson_2_pedestrians'), 'lesson_2_pedestrians must exist');
   assert(micro_lessons_code.includes('lesson_3_roundabout'), 'lesson_3_roundabout must exist');
-  assert(micro_lessons_code.includes('lesson_4_winter'), 'lesson_4_winter must exist');
+  assert(micro_lessons_code.includes('lesson_6_winter'), 'winter micro-lesson must exist');
   assert(micro_lessons_code.includes('metafor_th'), 'metafor_th must exist');
 });
 
@@ -142,7 +145,7 @@ test('Oppdrag 7: RevenueCat Billing & Fail-Soft', () => {
   assert(server_code.includes('billing_router'), 'server.py must include billing_router');
   assert(billing_code.includes('/api/billing/subscription'), 'Endpoint /api/billing/subscription must exist');
   assert(billing_code.includes('REVENUECAT_API_KEY'), 'REVENUECAT_API_KEY must be read from env');
-  assert(billing_code.includes('offline_fallback'), 'Fail-soft offline_fallback must exist');
+  assert(billing_code.includes('"premium": False') && billing_code.includes('status_code=503'), 'Billing errors must fail closed without premium access');
 });
 
 // ─── Oppdrag 8 ───
@@ -179,4 +182,9 @@ test('Samsung/Android Hardening: #bottomNav flex-wrap nowrap & Hidden Scrollbars
   assert(webapp_code.includes('-ms-overflow-style: none;'), '#bottomNav must hide scrollbars on all platforms');
 });
 
-console.log('\n🎉 ALL 20/20 CONTRACT & GROUNDING TESTS PASSED! 100% PRODUCTION READY!\n');
+if (failures) {
+  console.error(`\n${failures} BLAST contract test(s) failed.\n`);
+  process.exitCode = 1;
+} else {
+  console.log('\n🎉 ALL BLAST CONTRACT & GROUNDING TESTS PASSED!\n');
+}

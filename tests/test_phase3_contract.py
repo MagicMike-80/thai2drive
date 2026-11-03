@@ -23,9 +23,9 @@ class Phase3ContractTests(TestCase):
         self.assertIn('data-key="home_targeted"', self.webapp)
         self.assertIn("toggleTargetPracticeMenu()", self.webapp)
 
-    def test_library_has_four_micro_lessons(self):
+    def test_library_has_six_micro_lessons(self):
         self.assertIn('data-tab="micro"', self.webapp)
-        for lesson_id in ("road-side", "yield", "winter", "roundabout"):
+        for lesson_id in ("road-side", "priority", "right", "pedestrian", "dark", "roundabout"):
             self.assertEqual(self.webapp.count("{id:'" + lesson_id + "'"), 1)
 
     def test_new_learner_copy_has_all_three_languages(self):

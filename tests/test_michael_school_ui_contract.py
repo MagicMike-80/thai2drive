@@ -31,7 +31,7 @@ class MichaelSchoolUiContract(unittest.TestCase):
             self.assertIn(term, HTML)
 
     def test_king_servant_chip_and_hav_lamps_wired_into_quiz(self):
-        self.assertIn("+ buildKingServantChip(qText)", HTML)
+        self.assertIn("buildSituationLensHtml(currentQText, expl) + buildKingServantChip(currentQText)", HTML)
         self.assertIn("html += buildHavLamps(expl);", HTML)
         self.assertIn("html += buildHintButton();", HTML)
 

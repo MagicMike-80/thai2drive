@@ -25,7 +25,7 @@ class MediaCatalogApiContractTests(unittest.TestCase):
     def test_michael_catalog_is_fail_soft_bounded_and_skips_exact_signs(self):
         self.assertIn("async def _get_relevant_catalog_media(", TEACHER)
         self.assertIn("requested_language in SUPPORTED_LANGUAGES", TEACHER)
-        self.assertIn("if not explicit_sign_ids", TEACHER)
+        self.assertIn("if allow_answer and not explicit_sign_ids and requested_language in SUPPORTED_LANGUAGES:", TEACHER)
         self.assertIn("return approved_media[:1]", TEACHER)
         self.assertIn("catalog_media[:1]", TEACHER)
         self.assertIn('logger.warning("Media catalog lookup skipped:', TEACHER)

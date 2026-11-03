@@ -87,7 +87,9 @@ vm.runInContext(fn('openGuestRegistration'), auth);
 auth.openGuestRegistration();
 assert.equal(screen,'screenAuth'); assert.equal(authTab,'register');
 assert.equal(elements.bottomNav.style.display,'none');
-assert(!source.includes('data-key="pw_best_value"'), 'unsubstantiated discount is not rendered');
+assert(source.includes('data-key="pw_best_value"'), 'best-value badge is present');
+assert(source.includes("badgeEl.textContent = t(badgeEl.getAttribute('data-key'))"), 'best-value badge uses the selected language');
+assert(!source.includes('data-key="pw_discount"'), 'unsubstantiated discount is not rendered');
 (async function authMigrationChecks() {
   for (const action of ['doRegister', 'doLogin']) {
     let payload;
@@ -108,7 +110,7 @@ assert(!source.includes('data-key="pw_best_value"'), 'unsubstantiated discount i
     ctx.token=null;ctx.deviceId='other-account';
     assert.equal(ctx.guestDeviceForAuth(),null,'unrelated id cannot be sent as guest');
   }
-  console.log('Web audit runtime: history NO/TH/EN, quota finish, keyboard, signup migration and discount checks passed.');
+  console.log('Web audit runtime: history NO/TH/EN, quota finish, keyboard, signup migration and pricing-label checks passed.');
 })().catch(error=>{console.error(error);process.exitCode=1;});
 
 // Exercise the COMPLETE language updater against the actual result-button markup.

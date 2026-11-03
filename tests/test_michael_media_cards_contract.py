@@ -27,8 +27,8 @@ class MichaelMediaCardsContractTests(unittest.TestCase):
         response_end = WEBAPP.index("function _renderQuizCoachResponse", response_start)
         response_body = WEBAPP[response_start:response_end]
         self.assertIn("if (!data || !Array.isArray(data.media)) return []", response_body)
-        self.assertIn("media.media_id || media.id", response_body)
-        self.assertIn("legacyId === id", response_body)
+        self.assertIn("String(media.media_id || '').trim()", response_body)
+        self.assertIn("Object.assign({}, media, { id:id })", response_body)
 
         send_start = WEBAPP.index("async function teacherSend(")
         send_end = WEBAPP.index("function toggleSound", send_start)
@@ -84,7 +84,7 @@ class MichaelMediaCardsContractTests(unittest.TestCase):
         self.assertIn("mediaItems.slice(0, 2)", WEBAPP)
         self.assertIn("_teacherMediaSafeUrl(media.url)", WEBAPP)
         self.assertIn("['sign','intersection_image','image','video','podcast','audio','document'].indexOf(media.type)", WEBAPP)
-        self.assertIn("mediaSignIds.indexOf(signId) === -1", WEBAPP)
+        self.assertIn("renderedSignIds.indexOf(id) === -1", WEBAPP)
 
     def test_sign_media_is_compact_and_opens_authoritative_sign_detail(self):
         self.assertIn(".tm-media-card.sign .tm-media-visual", WEBAPP)
@@ -124,12 +124,12 @@ class MichaelMediaCardsContractTests(unittest.TestCase):
         send_start = WEBAPP.index("async function teacherSend(")
         send_end = WEBAPP.index("function toggleSound", send_start)
         send = WEBAPP[send_start:send_end]
-        cards = send.index("await _teacherAppendSignCards(fallbackSignIds, assistantBubble)")
-        chips = send.index("_teacherAppendChips(data.suggestions || [])")
+        cards = send.index("_teacherAppendMediaCards(_teacherResponseMedia(data), assistantBubble)")
+        sign_cards = send.index("await _teacherAppendSignCards(extraSignIds, assistantBubble)")
         scroll = send.index("_teacherScrollToAnswerStart(assistantBubble)")
-        self.assertLess(cards, chips)
-        self.assertLess(chips, scroll)
-        self.assertIn("_teacherAppendChips(data.suggestions || [])", send)
+        self.assertLess(cards, sign_cards)
+        self.assertLess(sign_cards, scroll)
+        self.assertNotIn("_teacherAppendChips(data.suggestions || [])", send)
         self.assertNotIn("_teacherAppendSignActions(signForActions)", send)
         self.assertNotIn("fetchVideoForTopic('Bremsing')", send)
         self.assertIn("_teacherScrollToAnswerStart(assistantBubble)", send)
@@ -198,7 +198,7 @@ class MichaelMediaCardsContractTests(unittest.TestCase):
         send_start = WEBAPP.index("async function teacherSend(")
         send_end = WEBAPP.index("function toggleSound", send_start)
         send_body = WEBAPP[send_start:send_end]
-        self.assertIn("chatPayload.mode = customMode;", send_body)
+        self.assertIn("chatPayload.mode = customMode || 'weak_topics';", send_body)
 
     def test_exam_ui_translations_100_percent_isolated(self):
         self.assertIn("var TR = UI;", WEBAPP)
@@ -227,7 +227,8 @@ class MichaelMediaCardsContractTests(unittest.TestCase):
 
         # 3. Main buttons and UI elements have neon styling applied
         self.assertIn('id="teacherSendBtn"', WEBAPP)
-        self.assertIn('class="teacher-send-btn btn-neon"', WEBAPP)
+        self.assertIn('class="teacher-send-btn" id="teacherSendBtn"', WEBAPP)
+        self.assertIn("#teacherSendBtn,", WEBAPP)
         self.assertIn('id="endCoachMichaelPriBtn"', WEBAPP)
         self.assertIn('btn-neon', WEBAPP[WEBAPP.index('id="endCoachMichaelPriBtn"')-60:WEBAPP.index('id="endCoachMichaelPriBtn"')+60])
         self.assertIn('id="startExamBtn"', WEBAPP)

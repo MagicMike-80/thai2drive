@@ -148,7 +148,7 @@ MAINTENANCE_HTML = """<!DOCTYPE html>
     border: 1px solid rgba(0,245,255,0.3);
     border-radius: 100px;
     padding: 8px 20px;
-    font-size: 13px;
+    font-size:clamp(0.875rem, 0.84rem + 0.2vw, 1rem);
     color: var(--cyan);
     font-weight: 600;
     letter-spacing: 0.05em;
@@ -167,7 +167,7 @@ MAINTENANCE_HTML = """<!DOCTYPE html>
   }
   .footer {
     margin-top: 32px;
-    font-size: 12px;
+    font-size:clamp(0.875rem, 0.84rem + 0.2vw, 1rem);
     color: rgba(255,255,255,0.3);
   }
 </style>
@@ -648,6 +648,8 @@ a { color:inherit; text-decoration:none; }
 .home-logo-row {
   display:flex; flex-direction:column; align-items:center;
   gap:5px; margin-bottom:0;
+  width:min(100%, 280px); padding:8px 12px; border-radius:16px;
+  background:rgba(10,14,30,.82);
 }
 .home-logo-box {
   width:60px; height:60px; border-radius:16px;
@@ -662,7 +664,7 @@ a { color:inherit; text-decoration:none; }
 
 .streak-badge {
   display:inline-flex; align-items:center; gap:7px;
-  background:rgba(255,153,51,.11); border:1px solid rgba(255,153,51,.25);
+  background:rgba(10,14,30,.88); border:1px solid rgba(255,153,51,.35);
   border-radius:50px; padding:5px 14px;
 }
 .streak-fire { font-size:1rem; }
@@ -2588,7 +2590,7 @@ a { color:inherit; text-decoration:none; }
   position:absolute; top:14px; right:14px;
   width:30px; height:30px; border-radius:50%;
   border:none; background:rgba(255,255,255,.08);
-  color:var(--muted); font-size:12px; cursor:pointer;
+  color:var(--muted); font-size:clamp(0.875rem, 0.84rem + 0.2vw, 1rem); cursor:pointer;
   display:flex; align-items:center; justify-content:center;
 }
 .sp-close:hover { background:rgba(255,255,255,.14); color:var(--text); }
@@ -2843,7 +2845,7 @@ a { color:inherit; text-decoration:none; }
   position:absolute; top:10px; right:10px;
   width:28px; height:28px; border-radius:50%;
   border:none; background:rgba(239,68,68,.15);
-  color:#EF4444; font-size:13px; cursor:pointer;
+  color:#EF4444; font-size:clamp(0.875rem, 0.84rem + 0.2vw, 1rem); cursor:pointer;
   display:flex; align-items:center; justify-content:center;
   transition:all .2s;
 }
@@ -3089,7 +3091,7 @@ a { color:inherit; text-decoration:none; }
 .hp-close {
   position:absolute; top:14px; right:14px;
   width:30px; height:30px; border-radius:50%;
-  border:none; background:rgba(255,255,255,.08); color:var(--muted); font-size:12px; cursor:pointer;
+  border:none; background:rgba(255,255,255,.08); color:var(--muted); font-size:clamp(0.875rem, 0.84rem + 0.2vw, 1rem); cursor:pointer;
   display:flex; align-items:center; justify-content:center;
 }
 .hp-close:hover { background:rgba(255,255,255,.14); color:var(--text); }
@@ -3624,7 +3626,7 @@ a { color:inherit; text-decoration:none; }
   width:26px; height:26px; border-radius:8px;
   background:rgba(16,185,129,.15); border:1px solid rgba(16,185,129,.3);
   display:flex; align-items:center; justify-content:center;
-  color:#10B981; font-size:13px; flex-shrink:0;
+  color:#10B981; font-size:clamp(0.875rem, 0.84rem + 0.2vw, 1rem); flex-shrink:0;
 }
 .paywall-price-row {
   display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:8px;

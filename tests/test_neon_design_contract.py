@@ -27,6 +27,7 @@ APPROVED_NEON_HEX = [
 
 
 def extract_webapp_css(code: str) -> str:
+    code = code[code.find('WEBAPP_HTML = r"""'):]
     start = code.find("<style")
     if start == -1:
         return ""
