@@ -365,6 +365,58 @@ class TestWrongQuizAnswerReplyIsThaiOnly(unittest.TestCase):
             self.assertTrue(tc._reply_matches_language_script(response.media[0]["title"], language))
             self.assertTrue(tc._reply_matches_language_script(response.media[0]["caption"], language))
 
+    def test_right_hand_rule_question_attaches_the_7_2a_image(self):
+        cases = (
+            ("Hva er høyreregelen?", "no"),
+            ("กฎให้ทางจากขวาคืออะไร", "th"),
+            ("What is the right-hand rule?", "en"),
+            ("Hva sier § 7 nr. 2?", "no"),
+        )
+        for message, language in cases:
+            with self.subTest(message=message), patch.object(tc, "_find_active_bildebok_page", return_value=None):
+                response, _ = self._chat_with_mock_model(
+                    TeacherChatRequest(message=message, language=language),
+                    {"no": "Du viker for trafikk fra høyre.",
+                     "th": "คุณต้องให้ทางแก่รถที่มาจากด้านขวาครับ",
+                     "en": "Yield to traffic from the right."}[language],
+                )
+            self.assertEqual(response.media[0]["id"], "teacher-visual:right_hand")
+            self.assertEqual(response.media[0]["url"], "/api/assets/7.2a_høyreregel_1.jpg")
+            self.assertTrue((BACKEND_DIR / "public_assets" / "7.2a_høyreregel_1.jpg").is_file())
+            self.assertTrue(tc._reply_matches_language_script(response.media[0]["title"], language))
+            self.assertTrue(tc._reply_matches_language_script(response.media[0]["caption"], language))
+
+    def test_no_image_card_removes_model_claim_that_an_image_is_shown(self):
+        claims = (
+            ("no", "Her er et bilde, se under. Du skal senke farten.", "Du skal senke farten."),
+            ("en", "Here is the image below. Slow down before the crossing.", "Slow down before the crossing."),
+            ("th", "นี่คือภาพด้านล่างครับ\nคุณควรลดความเร็วครับ", "คุณควรลดความเร็วครับ"),
+        )
+        for language, model_reply, expected in claims:
+            with self.subTest(language=language), patch.object(tc, "_get_relevant_michael_materials", new=AsyncMock(return_value=[])), patch.object(
+                tc, "_get_relevant_catalog_media", new=AsyncMock(return_value=[])
+            ), patch.object(tc, "_find_active_bildebok_page", return_value=None):
+                response, prompt = self._chat_with_mock_model(
+                    TeacherChatRequest(message={"no": "Hva er promillegrensen?", "en": "What is the alcohol limit?",
+                                                "th": "ปริมาณแอลกอฮอล์ที่อนุญาตคืออะไร"}[language], language=language),
+                    model_reply,
+                )
+            self.assertIn("ALDRIG påstå eller si at du viser et bilde", prompt)
+            self.assertEqual(response.media, [])
+            self.assertIn(expected, response.reply)
+            self.assertNotIn(model_reply.split(".")[0].split("\n")[0], response.reply)
+
+    def test_image_claim_guard_requires_an_image_not_just_a_video(self):
+        video = [{"type": "video", "url": "/api/assets/lesson.mp4"}]
+        self.assertEqual(
+            tc._guard_unattached_image_claim("Den ligger rett under her. Du må vike.", video, "no"),
+            "Du må vike.",
+        )
+        self.assertEqual(
+            tc._guard_unattached_image_claim("Her er en visuell sak. Du må vike.", [], "no"),
+            "Du må vike.",
+        )
+
     def test_roundabout_video_request_uses_verified_video_id(self):
         video = {
             "media_id": "vid_vike_02", "type": "video", "category": "vikeplikt",

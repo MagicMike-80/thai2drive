@@ -1101,6 +1101,7 @@ def _build_system_prompt(lang: str, memory: Optional[dict] = None, *, guided: bo
         "   - To show an image: Use the exact tag format: [image: image_url | caption_no | caption_th | caption_en]\n"
         "     Only use an exact Approved Image Tag supplied in APPROVED THAI2DRIVE CURRICULUM CONTEXT. Never invent, rewrite, or guess an image URL.\n"
         "     If no Approved Image Tag is supplied, explain with text only.\n"
+        "     ALDRIG påstå eller si at du viser et bilde ('se under', 'her er en visuell sak', 'den ligger rett under her') med mindre en faktisk bilde-URL eller et bildekort sendes med i responsobjektet.\n"
         "2. PEDAGOGICAL PACKAGING (Never just throw a link):\n"
         "   - Only when it helps, set up a short driving situation first.\n"
         "   - Introduce the video/audio: 'Ta en titt på denne korte videoen som viser nøyaktig hvordan vi gjør dette i praksis:' or 'Hør på denne podcasten der vi snakker om dette:'\n"
@@ -1864,9 +1865,11 @@ def _material_relevant(item: dict, question: str, explicit_sign_ids: list[str] |
     if identity.startswith("teacher-visual:"):
         topic = identity.removeprefix("teacher-visual:")
         topics = _situation_topics(question)
-        return (_user_requested_image(question) or _user_requested_video(question)) and (
-            topic == "roundabout" and "roundabout" in topics
-            or topic == "yield" and "yield" in topics
+        return (topic == "right_hand" and _right_hand_image_question(question)) or (
+            (_user_requested_image(question) or _user_requested_video(question)) and (
+                (topic == "roundabout" and "roundabout" in topics)
+                or (topic == "yield" and "yield" in topics)
+            )
         )
     if identity.startswith("bildebok:") and _requested_bildebok_id(question) == identity.split(":", 1)[1]:
         return True
@@ -3827,6 +3830,15 @@ def _visualization_media_card(topic: str, lang: str) -> dict | None:
              "th": "ตัวอย่างการให้ทางที่ทางแยกไม่มีป้าย",
              "en": "An example of yielding at an unsigned intersection."},
         ),
+        "right_hand": (
+            "7.2a_høyreregel_1.jpg",
+            {"no": "Høyreregelen i et kryss uten skilt",
+             "th": "กฎให้ทางแก่รถจากขวาที่ทางแยกไม่มีป้าย",
+             "en": "The right-hand rule at an unsigned intersection"},
+            {"no": "I et likeverdig kryss uten skilt må du gi vikeplikt til kjøretøy fra høyre.",
+             "th": "ที่ทางแยกที่ไม่มีป้าย คุณต้องให้ทางแก่รถที่มาจากด้านขวา",
+             "en": "At an unsigned intersection, yield to vehicles approaching from the right."},
+        ),
     }
     if lang not in SUPPORTED_LANGUAGES or topic not in assets:
         return None
@@ -3835,6 +3847,14 @@ def _visualization_media_card(topic: str, lang: str) -> dict | None:
         return None
     return {"id": f"teacher-visual:{topic}", "media_id": f"teacher-visual:{topic}", "type": "image",
             "url": f"/api/assets/{filename}", "title": titles[lang], "caption": captions[lang]}
+
+
+def _right_hand_image_question(question: str) -> bool:
+    """Match the right-hand rule or an unambiguous § 7(2) request."""
+    topics = _situation_topics(question)
+    return "right_hand" in topics or (
+        _is_section_7_2_citation_query(question) and "left_turn" not in topics
+    )
 
 
 async def _get_relevant_catalog_media(
@@ -4287,6 +4307,36 @@ def _ground_missing_visual_file_reply(question: str, reply: str, media: list[dic
     return {"no": "Jeg finner ikke et godkjent bilde eller en video for dette akkurat nå.",
             "th": "ตอนนี้ผมยังไม่มีภาพหรือวิดีโอที่ตรวจสอบแล้วสำหรับเรื่องนี้ครับ",
             "en": "I don't have a verified image or video for this yet."}.get(lang, "")
+
+
+_UNATTACHED_IMAGE_CLAIMS = {
+    "no": re.compile(
+        r"\b(?:se\s+(?:bildet\s+)?(?:under|nedenfor)|her\s+er\s+(?:(?:et\s+)?bilde|bildet|(?:en\s+)?illustrasjon|illustrasjonen)"
+        r"|her\s+er\s+en\s+visuell\s+(?:sak|fremstilling)|den\s+ligger\s+rett\s+under\s+her"
+        r"|jeg\s+(?:viser|legger\s+ved)\s+(?:deg\s+)?(?:(?:et\s+)?bilde|bildet))\b", re.I,
+    ),
+    "en": re.compile(
+        r"\b(?:see\s+(?:the\s+image\s+)?below|here\s+is\s+(?:the|an?)\s+(?:image|picture|illustration|visual)"
+        r"|(?:the\s+)?(?:image|picture|illustration)\s+is\s+(?:right\s+)?below"
+        r"|i(?:'m|\s+am)\s+showing\s+you\s+(?:an?\s+)?(?:image|picture))\b", re.I,
+    ),
+    "th": re.compile(r"(?:ดูภาพ(?:ด้านล่าง|ข้างล่าง)|นี่คือ(?:ภาพ|รูป)(?:ประกอบ)?(?:ด้านล่าง|ข้างล่าง)?|ภาพอยู่(?:ด้านล่าง|ข้างล่าง)|ผม(?:แสดง|แนบ)(?:ภาพ|รูป))(?:ครับ|ค่ะ)?"),
+}
+
+
+def _guard_unattached_image_claim(reply: str, media: list[dict], lang: str) -> str:
+    """Remove a claim that an image is shown unless a validated image card survived."""
+    if any(item.get("type") in ("image", "sign", "intersection_image")
+           and _safe_teacher_response_media_url(item.get("url")) for item in media):
+        return reply
+    pattern = _UNATTACHED_IMAGE_CLAIMS.get(lang)
+    if not pattern or not pattern.search(reply):
+        return reply
+    if lang == "th":
+        return pattern.sub("", reply).strip() or _fallback_reply(lang)
+    sentences = re.split(r"(?<=[.!?。！？])\s+|\n+", reply)
+    cleaned = [sentence for sentence in sentences if sentence.strip() and not pattern.search(sentence)]
+    return " ".join(cleaned).strip() or _fallback_reply(lang)
 
 
 def _guard_unverified_mirror_timing(reply: str) -> str:
@@ -5211,6 +5261,10 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
             lesson_card = _bildebok_media_card(bildebok_page)
             if lesson_card:
                 media = [lesson_card]
+        if allow_answer and not explicit_sign_ids and not requested_video_type and _right_hand_image_question(topic_query):
+            right_hand_card = _visualization_media_card("right_hand", lang)
+            if right_hand_card:
+                media = [right_hand_card] + [item for item in media if item.get("id") != right_hand_card["id"]][:1]
         if allow_answer and not explicit_sign_ids and not media:
             try:
                 from micro_lessons import find_relevant_micro_lesson, get_micro_lesson_media_card
@@ -5592,6 +5646,7 @@ async def teacher_chat(req: TeacherChatRequest) -> TeacherChatResponse:
         media = await _validate_teacher_response_media(media, lang)
     media = [item for item in media if _material_relevant(item, topic_query, explicit_sign_ids)]
     media = [item for item in media if all(_reply_matches_language_script(item.get(field, ""), lang) for field in ("title", "caption"))]
+    reply_text = _guard_unattached_image_claim(reply_text, media, lang)
 
     # Persist both messages. Chat history is helpful, but it must never block a
     # completed teacher response when MongoDB is temporarily read-only/full.
